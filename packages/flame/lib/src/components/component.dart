@@ -57,7 +57,9 @@ class Component {
   ComponentSet? _children;
 
   @protected
-  _LifecycleManager get lifecycle => _lifecycleManager ??= _LifecycleManager();
+  _LifecycleManager get lifecycle {
+    return _lifecycleManager ??= _LifecycleManager(this);
+  }
   _LifecycleManager? _lifecycleManager;
 
   /// Render priority of this component. This allows you to control the order in
@@ -272,9 +274,8 @@ class Component {
 
   /// Changes the current parent for another parent and prepares the tree under
   /// the new root.
-  void changeParent(Component component) {
-    parent?._children?.remove(this);
-    nextParent = component;
+  void changeParent(Component newParent) {
+    newParent.lifecycle._adoption.add(this);
   }
 
   /// An iterator producing this component's parent, then its parent's parent,
@@ -360,9 +361,9 @@ class Component {
     debugMode |= parent.debugMode;
     parent.lifecycle._children.add(this);
 
-    final root = parent.findGame();
-    if (root != null) {
-      if (!isLoaded) {
+    if (!isLoaded) {
+      final root = parent.findGame();
+      if (root != null) {
         assert(
           root.hasLayout,
           'add() called before the game has a layout. Did you try to add '
@@ -583,6 +584,11 @@ enum LifecycleState {
 /// queues. Which is why these queues are placed into a separate class, so that
 /// they can be easily disposed of at the end.
 class _LifecycleManager {
+  _LifecycleManager(this.parent);
+
+  /// The component which is the owner of this [_LifecycleManager].
+  final Component parent;
+
   /// Queue for adding children to a component.
   ///
   /// When the user `add()`s a child to a component, we immediately place it
@@ -597,15 +603,19 @@ class _LifecycleManager {
   /// finish loading in arbitrary order.
   final Queue<Component> _children = Queue();
 
+  /// Queue for removing children from a component.
   final Queue<Component> _dying = Queue();
 
+  final Queue<Component> _adoption = Queue();
+
   bool get hasPendingEvents {
-    return _children.isNotEmpty || _dying.isNotEmpty;
+    return !(_children.isEmpty && _dying.isEmpty && _adoption.isEmpty);
   }
 
   void processQueues() {
     _processChildrenQueue();
-    _processDeathQueue();
+    _processDyingQueue();
+    _processAdoptionQueue();
   }
 
   /// Attempt to resolve pending events in all lifecycle event queues.
@@ -628,13 +638,22 @@ class _LifecycleManager {
     }
   }
 
-  void _processDeathQueue() {
+  void _processDyingQueue() {
     while (_dying.isNotEmpty) {
       final component = _dying.removeFirst();
       if (component.isMounted) {
         component._remove();
       }
       assert(component._state == LifecycleState.removed);
+    }
+  }
+
+  void _processAdoptionQueue() {
+    while (_adoption.isNotEmpty) {
+      final child = _adoption.removeFirst();
+      child._remove();
+      child._parent = parent;
+      child.mount();
     }
   }
 }
