@@ -34,7 +34,10 @@ class Component {
   }
 
   /// Whether this component is currently added to a component tree.
-  bool get isMounted => _state == LifecycleState.mounted;
+  bool get isMounted {
+    return (_state == LifecycleState.mounted) ||
+        (_state == LifecycleState.removing);
+  }
 
   /// The current parent of the component, or null if there is none.
   Component? get parent => _parent;
@@ -76,6 +79,7 @@ class Component {
   /// FlameGame will remove it.
   @nonVirtual
   bool get shouldRemove => _shouldRemove;
+  @nonVirtual
   set shouldRemove(bool v) => _shouldRemove = v;
   bool _shouldRemove = false;
 
@@ -258,6 +262,7 @@ class Component {
   /// Remove the component from its parent in the next tick.
   void removeFromParent() {
     _parent?.remove(this);
+    _state = LifecycleState.removing;
   }
 
   /// Changes the current parent for another parent and prepares the tree under
@@ -366,8 +371,9 @@ class Component {
 
   /// Removes a component from the component tree, calling [onRemove] for it and
   /// its children.
-  void remove(Component c) {
-    lifecycle._dead.add(c);
+  void remove(Component component) {
+    component._state = LifecycleState.removing;
+    lifecycle._dead.add(component);
   }
 
   /// Removes all the children in the list and calls [onRemove] for all of them
@@ -555,6 +561,8 @@ enum LifecycleState {
   /// The component has finished running its `onMount` step, and was added to
   /// its parent's `children` list.
   mounted,
+
+  removing,
 
   /// The component which was mounted before, is now removed from its parent.
   removed,
