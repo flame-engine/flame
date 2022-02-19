@@ -4,7 +4,7 @@ import 'dart:ui';
 /// Simple utility class that helps handling time counting and implementing
 /// interval like events.
 ///
-/// Timer auto start by default.
+/// Timer auto-starts by default.
 class Timer {
   final double limit;
   VoidCallback? onTick;
