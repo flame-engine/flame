@@ -78,13 +78,16 @@ class Component {
   /// It will be checked once per component per tick, and if it is true,
   /// FlameGame will remove it.
   @nonVirtual
-  bool get shouldRemove => _shouldRemove || _state == LifecycleState.removing;
+  bool get shouldRemove => _state == LifecycleState.removing;
+
   @nonVirtual
+  @Deprecated(
+    'Use `removeFromParent()` instead. This function will be removed in 1.1.0',
+  )
   set shouldRemove(bool value) {
     assert(value, '"Resurrecting" a component is not allowed');
-    _shouldRemove = value;
+    removeFromParent();
   }
-  bool _shouldRemove = false;
 
   /// Returns whether this [Component] is in debug mode or not.
   /// When a child is added to the [Component] it gets the same [debugMode] as
@@ -292,7 +295,6 @@ class Component {
     _children?.forEach((child) => child.onRemove());
     _state = LifecycleState.removed;
     _parent = null;
-    _shouldRemove = false;
     nextParent?.add(this);
     nextParent = null;
   }
@@ -545,8 +547,8 @@ typedef ComponentSetFactory = ComponentSet Function();
 ///
 /// The progression between states happens as follows:
 /// ```
-///   uninitialized -> loading -> loaded -> mounted -> removed -,
-///                                           ^-----------------'
+///   uninitialized -> loading -> loaded -> mounted -> removing -> removed -.
+///                                           ^-----------------------------'
 /// ```
 ///
 /// Publicly visible flags `isLoaded` and `isMounted` are derived from this
