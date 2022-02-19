@@ -5,47 +5,19 @@ import '../extensions.dart';
 
 export '../extensions.dart';
 
-class _Composed {
-  /// The image that will be composed.
-  final Image image;
-
-  /// The position where the [image] will be composed.
-  final Vector2 position;
-
-  /// The source on the [image] that will be composed.
-  final Rect source;
-
-  /// The angle (in radians) used to rotate the [image] around it's [anchor].
-  final double angle;
-
-  /// The point around which the [image] will be rotated
-  /// (defaults to the centre of the [source]).
-  final Vector2 anchor;
-
-  final bool isAntiAlias;
-
-  /// The [BlendMode] that will be used when composing the [image].
-  final BlendMode blendMode;
-
-  _Composed(
-    this.image,
-    this.position,
-    this.source,
-    this.angle,
-    this.anchor,
-    this.isAntiAlias,
-    this.blendMode,
-  );
-}
-
 /// The [ImageComposition] allows for composing multiple images onto a single
 /// image.
 ///
 /// **Note:** Composing images is a heavy async operation and should not be
 /// called inside the game loop.
 class ImageComposition {
+  ImageComposition({
+    this.defaultBlendMode = BlendMode.srcOver,
+    this.defaultAntiAlias = false,
+  });
+
   /// The values that will be used to compose the image
-  final List<_Composed> _composes = [];
+  final List<_Fragment> _composes = [];
 
   /// The [defaultBlendMode] can be used to change how each image will be
   /// blended onto the composition. Defaults to [BlendMode.srcOver].
@@ -53,11 +25,6 @@ class ImageComposition {
 
   /// The [defaultAntiAlias] can be used to if each image will be anti aliased.
   final bool defaultAntiAlias;
-
-  ImageComposition({
-    this.defaultBlendMode = BlendMode.srcOver,
-    this.defaultAntiAlias = false,
-  });
 
   /// Add an image to the [ImageComposition].
   ///
@@ -100,7 +67,7 @@ class ImageComposition {
     );
 
     _composes.add(
-      _Composed(
+      _Fragment(
         image,
         position,
         source,
@@ -157,4 +124,37 @@ class ImageComposition {
         .endRecording()
         .toImage(output.width.toInt(), output.height.toInt());
   }
+}
+
+class _Fragment {
+  _Fragment(
+    this.image,
+    this.position,
+    this.source,
+    this.angle,
+    this.anchor,
+    this.isAntiAlias,
+    this.blendMode,
+  );
+
+  /// The image that will be composed.
+  final Image image;
+
+  /// The position where the [image] will be composed.
+  final Vector2 position;
+
+  /// The source on the [image] that will be composed.
+  final Rect source;
+
+  /// The angle (in radians) used to rotate the [image] around it's [anchor].
+  final double angle;
+
+  /// The point around which the [image] will be rotated
+  /// (defaults to the centre of the [source]).
+  final Vector2 anchor;
+
+  final bool isAntiAlias;
+
+  /// The [BlendMode] that will be used when composing the [image].
+  final BlendMode blendMode;
 }
