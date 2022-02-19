@@ -51,7 +51,9 @@ abstract class CollisionDetection<T extends Hitbox<T>> {
     _lastPotentials.difference(potentials).forEach((tuple) {
       handleCollisionEnd(tuple.a, tuple.b);
     });
-    _lastPotentials = potentials;
+    _lastPotentials
+      ..clear()
+      ..addAll(potentials);
   }
 
   /// Check what the intersection points of two items are,

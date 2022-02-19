@@ -8,7 +8,7 @@ abstract class Broadphase<T extends Hitbox<T>> {
   final List<T> items;
   Broadphase(this.items);
 
-  Set<Potential<T>> query({Function(T) collisionEndHandler});
+  Set<Potential<T>> query();
 }
 
 @immutable

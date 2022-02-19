@@ -206,4 +206,34 @@ void main() {
       expect(hitboxB.endCounter, 1);
     },
   );
+
+  withCollidables.test(
+    'hitbox end callbacks are called when hitbox is moved away fast',
+    (game) async {
+      final blockA = _TestBlock(
+        Vector2.zero(),
+        Vector2.all(10),
+      );
+      final blockB = _TestBlock(
+        Vector2.all(1),
+        Vector2.all(10),
+      );
+      final hitboxA = blockA.hitbox;
+      final hitboxB = blockB.hitbox;
+      await game.ensureAddAll([blockA, blockB]);
+      game.update(0);
+      expect(hitboxA.collidingWith(hitboxB), true);
+      expect(hitboxB.collidingWith(hitboxA), true);
+      expect(hitboxA.activeCollisions.length, 1);
+      expect(hitboxB.activeCollisions.length, 1);
+      blockB.position = Vector2.all(1000);
+      game.update(0);
+      expect(hitboxA.collidingWith(hitboxB), false);
+      expect(hitboxB.collidingWith(hitboxA), false);
+      expect(hitboxA.activeCollisions.length, 0);
+      expect(hitboxB.activeCollisions.length, 0);
+      expect(hitboxA.endCounter, 1);
+      expect(hitboxB.endCounter, 1);
+    },
+  );
 }

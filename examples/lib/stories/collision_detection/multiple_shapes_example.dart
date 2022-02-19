@@ -129,9 +129,6 @@ abstract class MyCollidable extends PositionComponent
     position.add(delta);
     angleDelta = dt * rotationSpeed;
     angle = (angle + angleDelta) % (2 * pi);
-    if (hitbox?.paint.color == _collisionColor && !isColliding) {
-      print('wtf');
-    }
     // Takes rotation into consideration (which topLeftPosition doesn't)
     final topLeft = absoluteCenter - (scaledSize / 2);
     if (topLeft.x + scaledSize.x < 0 ||
@@ -166,11 +163,6 @@ abstract class MyCollidable extends PositionComponent
     if (!isColliding) {
       hitbox?.paint.color = _defaultColor;
     }
-  }
-
-  @override
-  bool onDragStart(DragStartInfo info) {
-    return true;
   }
 
   @override
@@ -240,13 +232,6 @@ class SnowmanPart extends HitboxCircle {
   }
 
   @override
-  void update(double dt) {
-    if (!isColliding) {
-      paint.color = startColor;
-    }
-  }
-
-  @override
   void onCollisionStart(Set<Vector2> intersectionPoints, HitboxShape other) {
     super.onCollisionStart(intersectionPoints, other);
 
@@ -254,6 +239,14 @@ class SnowmanPart extends HitboxCircle {
       paint.color = startColor;
     } else {
       paint.color = hitColor.withOpacity(0.8);
+    }
+  }
+
+  @override
+  void onCollisionEnd(HitboxShape other) {
+    super.onCollisionEnd(other);
+    if (!isColliding) {
+      paint.color = startColor;
     }
   }
 }

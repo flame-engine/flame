@@ -9,7 +9,7 @@ class Sweep<T extends Hitbox<T>> extends Broadphase<T> {
   final Set<Potential<T>> _potentials = {};
 
   @override
-  Set<Potential<T>> query({Function(T)? collisionEndHandler}) {
+  Set<Potential<T>> query() {
     _active.clear();
     _potentials.clear();
     items.sort((a, b) => (a.aabb.min.x - b.aabb.min.x).ceil());
