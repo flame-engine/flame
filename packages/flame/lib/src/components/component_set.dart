@@ -26,12 +26,6 @@ class ComponentSet extends QueryableOrderedSet<Component> {
   // When we switch to Dart 2.15 this can be replaced with constructor tear-off
   static ComponentSet createDefault() => ComponentSet();
 
-  /// Components to be removed on the next update.
-  ///
-  /// The component list is only changed at the start of each update to avoid
-  /// concurrency issues.
-  final Set<Component> _removeLater = {};
-
   /// Components whose priority changed since the last update.
   ///
   /// When priorities change we need to re-balance the component set, but
@@ -96,16 +90,6 @@ class ComponentSet extends QueryableOrderedSet<Component> {
   /// Note: do not call this while iterating the set.
   void updateComponentList() {
     _actuallyUpdatePriorities();
-    _actuallyRemove();
-  }
-
-  void _actuallyRemove() {
-    _removeLater.addAll(where((c) => c.shouldRemove));
-    _removeLater.forEach((c) {
-      c.onRemove();
-      super.remove(c);
-    });
-    _removeLater.clear();
   }
 
   @override
