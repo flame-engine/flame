@@ -104,7 +104,6 @@ class ComponentSet extends QueryableOrderedSet<Component> {
     _removeLater.forEach((c) {
       c.onRemove();
       super.remove(c);
-      c.shouldRemove = false;
     });
     _removeLater.clear();
   }

@@ -128,12 +128,13 @@ void main() {
       'remove and re-add should not double trigger onRemove',
       (game) async {
         final component = _RemoveComponent();
-
         await game.ensureAdd(component);
+
         component.removeFromParent();
         game.update(0);
         expect(component.removeCounter, 1);
-        component.shouldRemove = false;
+        expect(component.isMounted, false);
+
         component.removeCounter = 0;
         await game.ensureAdd(component);
         expect(component.removeCounter, 0);

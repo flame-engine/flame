@@ -78,11 +78,11 @@ class Component {
   /// It will be checked once per component per tick, and if it is true,
   /// FlameGame will remove it.
   @nonVirtual
-  bool get shouldRemove => _shouldRemove;
+  bool get shouldRemove => _shouldRemove || _state == LifecycleState.removing;
   @nonVirtual
-  set shouldRemove(bool v) {
-
-    _shouldRemove = v;
+  set shouldRemove(bool value) {
+    assert(value, '"Resurrecting" a component is not allowed');
+    _shouldRemove = value;
   }
   bool _shouldRemove = false;
 
@@ -292,6 +292,7 @@ class Component {
     _children?.forEach((child) => child.onRemove());
     _state = LifecycleState.removed;
     _parent = null;
+    _shouldRemove = false;
     nextParent?.add(this);
     nextParent = null;
   }
