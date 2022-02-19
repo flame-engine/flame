@@ -7,33 +7,28 @@ import 'package:mocktail/mocktail.dart';
 class MockImage extends Mock implements Image {}
 
 void main() {
-  late final Image image = MockImage();
-
-  setUpAll(() {
+  group('SpriteSheet', () {
+    late final Image image = MockImage();
     when(() => image.width).thenReturn(100);
     when(() => image.height).thenReturn(100);
-  });
 
-  group('SpriteSheet', () {
     test('calculates all field from SpriteSheet', () async {
-      final sprite = SpriteSheet(
+      final spriteSheet = SpriteSheet(
         image: image,
         srcSize: Vector2(1, 2),
       );
 
-      expect(sprite.rows, 50);
-      expect(sprite.columns, 100);
+      expect(spriteSheet.rows, 50);
+      expect(spriteSheet.columns, 100);
     });
-  });
 
-  group('SpriteSheet createAnimationVariable', () {
     test('assign the correct time in sprite', () {
-      final sprite = SpriteSheet(
+      final spriteSheet = SpriteSheet(
         image: image,
         srcSize: Vector2(50, 50),
       );
 
-      final spriteAnimation = sprite.createAnimationWithVariableStepTimes(
+      final spriteAnimation = spriteSheet.createAnimationWithVariableStepTimes(
         row: 1,
         stepTimes: [2.0, 3.0],
       );
@@ -42,8 +37,7 @@ void main() {
     });
 
     test(
-      'throws assertion error when the length of stepTime is different from '
-      'sprite',
+      'error when the length of stepTime is different from sprite',
       () {
         final sprite = SpriteSheet(
           image: image,
@@ -55,7 +49,7 @@ void main() {
             row: 1,
             stepTimes: [2.0],
           ),
-          throwsException,
+          throwsA(isA<ArgumentError>()),
         );
       },
     );

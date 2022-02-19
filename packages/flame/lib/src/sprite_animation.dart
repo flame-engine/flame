@@ -207,10 +207,12 @@ class SpriteAnimation {
     this.loop = true,
   }) {
     if (sprites.isEmpty) {
-      throw Exception('You must have at least one frame!');
+      throw ArgumentError('You must have at least one frame');
     }
     if (stepTimes.length != sprites.length) {
-      throw Exception('The length of stepTimes and sprites must be the same!');
+      throw ArgumentError(
+        'The lengths of stepTimes and sprites must be the same',
+      );
     }
 
     frames = List.generate(
