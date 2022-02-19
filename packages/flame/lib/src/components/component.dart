@@ -56,6 +56,7 @@ class Component {
   _LifecycleManager get lifecycle {
     return _lifecycleManager ??= _LifecycleManager(this);
   }
+
   _LifecycleManager? _lifecycleManager;
 
   /// Render priority of this component. This allows you to control the order in
@@ -564,6 +565,7 @@ enum LifecycleState {
   /// its parent's `children` list.
   mounted,
 
+  /// The component is scheduled to be removed on the next game tick.
   removing,
 
   /// The component which was mounted before, is now removed from its parent.
@@ -598,8 +600,12 @@ class _LifecycleManager {
   final Queue<Component> _children = Queue();
 
   /// Queue for removing children from a component.
+  ///
+  /// Components that were placed into this queue will be removed from [parent]
+  /// when the pending events are resolved.
   final Queue<Component> _dying = Queue();
 
+  /// Queue for moving components from another parent to this one.
   final Queue<Component> _adoption = Queue();
 
   bool get hasPendingEvents {
