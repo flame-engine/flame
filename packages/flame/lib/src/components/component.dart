@@ -43,10 +43,6 @@ class Component {
   Component? get parent => _parent;
   Component? _parent;
 
-  /// If the component should be added to another parent once it has been
-  /// removed from its current parent.
-  Component? nextParent;
-
   /// The children of the current component.
   ///
   /// This getter will automatically create the [ComponentSet] container within
@@ -295,8 +291,6 @@ class Component {
     _children?.forEach((child) => child.onRemove());
     _state = LifecycleState.removed;
     _parent = null;
-    nextParent?.add(this);
-    nextParent = null;
   }
 
   //#region Add/remove components
