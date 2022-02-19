@@ -57,7 +57,6 @@ mixin GenericCollisionCallbacks<T> {
   CollisionEndCallback<T>? collisionEndCallback;
 }
 
-// TODO(spydon): Should this be on any component?
 mixin CollisionCallbacks on Component
     implements GenericCollisionCallbacks<PositionComponent> {
   @override

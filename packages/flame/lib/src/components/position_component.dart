@@ -185,8 +185,10 @@ class PositionComponent extends Component {
   /// The resulting scale after all the ancestors and the components own scale
   /// has been applied.
   Vector2 get absoluteScale {
-    return ancestors<PositionComponent>()
-        .fold<Vector2>(scale, (totalScale, c) => totalScale..multiply(c.scale));
+    return ancestors<PositionComponent>().fold<Vector2>(
+      scale.clone(),
+      (totalScale, c) => totalScale..multiply(c.scale),
+    );
   }
 
   /// Measure the distance (in parent's coordinate space) between this

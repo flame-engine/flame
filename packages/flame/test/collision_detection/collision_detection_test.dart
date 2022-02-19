@@ -271,13 +271,6 @@ void main() {
         ],
       );
       final intersections = geometry.intersections(polygonA, polygonB);
-      print(intersections);
-      //print(polygonA.position);
-      //print(polygonA.anchor);
-      //print(polygonA.size);
-      //print(polygonB.position);
-      //print(polygonB.anchor);
-      //print(polygonB.size);
       expect(
         intersections.contains(Vector2(1.5, 0.5)),
         true,
@@ -375,16 +368,18 @@ void main() {
       final intersections = geometry.intersections(polygonA, polygonB);
       expect(
         intersections.containsAll([
-          Vector2(1, 1),
-          Vector2(1, -1),
-          Vector2(-1, 1),
-          Vector2(-1, -1),
+          Vector2(2, 0),
+          Vector2(2, 2),
+          Vector2(1, 0),
+          Vector2(0, 0),
+          Vector2(0, 1),
+          Vector2(0, 2),
         ]),
         true,
         reason: 'Does not have all the correct intersection points',
       );
       expect(
-        intersections.length == 4,
+        intersections.length == 6,
         true,
         reason: 'Wrong number of intersections',
       );
@@ -433,9 +428,9 @@ void main() {
       final intersections = geometry.intersections(rectangleA, rectangleB);
       expect(
         intersections.containsAll([
-          Vector2(2, -2),
-          Vector2(2, 0),
-          Vector2(2, 2),
+          Vector2(4, 0),
+          Vector2(4, 2),
+          Vector2(4, 4),
         ]),
         true,
         reason: 'Missed intersections',
@@ -450,11 +445,11 @@ void main() {
 
   group('Circle intersections tests', () {
     test('simple collision', () {
-      final circleA = Circle(radius: 4.0, position: Vector2(4, 0));
-      final circleB = Circle(radius: 4.0, position: Vector2.zero());
+      final circleA = Circle(radius: 2.0, position: Vector2(4, 0));
+      final circleB = Circle(radius: 2.0, position: Vector2.zero());
       final intersections = geometry.intersections(circleA, circleB);
       expect(
-        intersections.contains(Vector2(2, 0)),
+        intersections.contains(Vector2(4, 2)),
         true,
         reason: 'Missed one intersection',
       );
@@ -466,16 +461,16 @@ void main() {
     });
 
     test('two point collision', () {
-      final circleA = Circle(radius: 4.0, position: Vector2(3, 0));
-      final circleB = Circle(radius: 4.0, position: Vector2.zero());
-      final intersections = geometry.intersections(circleA, circleB);
+      final circleA = Circle(radius: 2.0, position: Vector2(2, -2));
+      final circleB = Circle(radius: 2.0, position: Vector2(0, -2));
+      final intersections = geometry.intersections(circleA, circleB).toList();
       expect(
-        intersections.contains(Vector2(1.5, -1.3228756555322954)),
+        intersections.contains(Vector2(3.0, -1.7320508075688772)),
         true,
         reason: 'Missed one intersection',
       );
       expect(
-        intersections.contains(Vector2(1.5, 1.3228756555322954)),
+        intersections.contains(Vector2(3.0, 1.7320508075688772)),
         true,
         reason: 'Missed one intersection',
       );
@@ -492,10 +487,10 @@ void main() {
       final intersections = geometry.intersections(circleA, circleB);
       expect(
         intersections.containsAll([
-          Vector2(5, 3),
-          Vector2(3, 5),
-          Vector2(3, 1),
-          Vector2(1, 3),
+          Vector2(11, 7),
+          Vector2(7, 3),
+          Vector2(3, 7),
+          Vector2(7, 11),
         ]),
         true,
         reason: 'Missed intersections',
@@ -508,8 +503,16 @@ void main() {
     });
 
     test('not overlapping', () {
-      final circleA = Circle(radius: 4.0, position: Vector2.all(-1));
-      final circleB = Circle(radius: 4.0, position: Vector2.all(3));
+      final circleA = Circle(
+        radius: 2.0,
+        position: Vector2.all(-1),
+        anchor: Anchor.center,
+      );
+      final circleB = Circle(
+        radius: 2.0,
+        position: Vector2.all(1.83),
+        anchor: Anchor.center,
+      );
       final intersections = geometry.intersections(circleA, circleB);
       expect(
         intersections.isEmpty,
@@ -519,9 +522,18 @@ void main() {
     });
 
     test('in third quadrant', () {
-      final circleA = Circle(radius: 4.0, position: Vector2.all(-1));
-      final circleB = Circle(radius: 4.0, position: Vector2.all(-2));
+      final circleA = Circle(
+        radius: 1.0,
+        position: Vector2.all(-1),
+        anchor: Anchor.center,
+      );
+      final circleB = Circle(
+        radius: 1.0,
+        position: Vector2.all(-2),
+        anchor: Anchor.center,
+      );
       final intersections = geometry.intersections(circleA, circleB).toList();
+      print(intersections);
       expect(
         intersections.any((v) => v.distanceTo(Vector2(-1, -2)) < 0.000001),
         true,
@@ -538,8 +550,16 @@ void main() {
     });
 
     test('in different quadrants', () {
-      final circleA = Circle(radius: 4.0, position: Vector2.all(-1));
-      final circleB = Circle(radius: 4.0, position: Vector2.all(1));
+      final circleA = Circle(
+        radius: 2.0,
+        position: Vector2.all(-1),
+        anchor: Anchor.center,
+      );
+      final circleB = Circle(
+        radius: 2.0,
+        position: Vector2.all(1),
+        anchor: Anchor.center,
+      );
       final intersections = geometry.intersections(circleA, circleB).toList();
       expect(
         intersections.any((v) => v.distanceTo(Vector2(1, -1)) < 0.000001),
@@ -559,13 +579,20 @@ void main() {
 
   group('Circle-Polygon intersections tests', () {
     test('simple circle-polygon intersection', () {
-      final circle = Circle(radius: 2.0, position: Vector2.zero());
-      final polygon = Polygon([
-        Vector2(1, 2),
-        Vector2(2, 1),
-        Vector2(1, 0),
-        Vector2(0, 1),
-      ]);
+      final circle = Circle(
+        radius: 1.0,
+        position: Vector2.zero(),
+        anchor: Anchor.center,
+      );
+      final polygon = Polygon(
+        [
+          Vector2(1, 2),
+          Vector2(2, 1),
+          Vector2(1, 0),
+          Vector2(0, 1),
+        ],
+        anchor: Anchor.center,
+      );
       final intersections = geometry.intersections(circle, polygon);
       expect(
         intersections.containsAll([Vector2(0, 1), Vector2(1, 0)]),
@@ -580,7 +607,11 @@ void main() {
     });
 
     test('single point circle-polygon intersection', () {
-      final circle = Circle(radius: 2.0, position: Vector2(-1, 1));
+      final circle = Circle(
+        radius: 1.0,
+        position: Vector2(-1, 1),
+        anchor: Anchor.center,
+      );
       final polygon = Polygon([
         Vector2(1, 2),
         Vector2(2, 1),
@@ -601,7 +632,11 @@ void main() {
     });
 
     test('four point circle-polygon intersection', () {
-      final circle = Circle(radius: 2.0, position: Vector2.all(1));
+      final circle = Circle(
+        radius: 1.0,
+        position: Vector2.all(1),
+        anchor: Anchor.center,
+      );
       final polygon = Polygon([
         Vector2(1, 2),
         Vector2(2, 1),
@@ -627,7 +662,11 @@ void main() {
     });
 
     test('polygon within circle, no intersections', () {
-      final circle = Circle(radius: 2.1, position: Vector2.all(1));
+      final circle = Circle(
+        radius: 1.1,
+        position: Vector2.all(1),
+        anchor: Anchor.center,
+      );
       final polygon = Polygon([
         Vector2(1, 2),
         Vector2(2, 1),

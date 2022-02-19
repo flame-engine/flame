@@ -26,6 +26,6 @@ export 'src/components/text_box_component.dart';
 export 'src/components/text_component.dart';
 export 'src/components/timer_component.dart';
 export 'src/extensions/vector2.dart';
-export 'src/game/mixins/has_collidables.dart';
+export 'src/game/mixins/has_collision_detection.dart';
 export 'src/text.dart';
 export 'src/timer.dart';

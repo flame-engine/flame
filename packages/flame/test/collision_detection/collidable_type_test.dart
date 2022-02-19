@@ -250,32 +250,84 @@ void main() {
       await game.ensureAddAll([blockA, blockB]);
       expect(blockA.collidingWith(blockB), isFalse);
       game.update(0);
-      print(blockA.intersections(blockB));
-      print(game.collisionDetection.items);
-      print(blockA.absoluteTopLeftPosition);
-      print(blockB.absoluteTopLeftPosition);
-      print(blockA.hitbox.absoluteTopLeftPosition);
-      print(blockB.hitbox.absoluteTopLeftPosition);
-      print(blockA.hitbox.size);
-      print(blockB.hitbox.size);
-      print(blockA.hitbox.vertices);
-      print(blockB.hitbox.vertices);
-      print(blockA.hitbox.absoluteScale);
-      print(blockB.hitbox.absoluteScale);
-      print(blockA.hitbox.globalVertices());
-      print(blockB.hitbox.globalVertices());
       expect(blockA.collidingWith(blockB), isFalse);
       expect(blockB.collidingWith(blockA), isFalse);
       expect(blockA.activeCollisions.length, 0);
       expect(blockB.activeCollisions.length, 0);
       blockA.scale = Vector2.all(2.0);
       game.update(0);
-      print(blockA.hitbox.globalVertices());
-      print(blockB.hitbox.globalVertices());
       expect(blockA.collidingWith(blockB), isTrue);
       expect(blockB.collidingWith(blockA), isTrue);
       expect(blockA.activeCollisions.length, 1);
       expect(blockB.activeCollisions.length, 1);
+    });
+
+    withCollidables.test('detects collision after flip', (game) async {
+      final blockA = _TestBlock(
+        Vector2.zero(),
+        Vector2.all(10),
+        CollidableType.active,
+      );
+      final blockB = _TestBlock(
+        Vector2(11, 0),
+        Vector2.all(10),
+        CollidableType.active,
+      );
+      expect(blockA.collidingWith(blockB), isFalse);
+      await game.ensureAddAll([blockA, blockB]);
+      expect(blockA.collidingWith(blockB), isFalse);
+      game.update(0);
+      expect(blockA.collidingWith(blockB), isFalse);
+      expect(blockB.collidingWith(blockA), isFalse);
+      expect(blockA.activeCollisions.length, 0);
+      expect(blockB.activeCollisions.length, 0);
+      blockB.flipHorizontally();
+      game.update(0);
+      expect(blockA.collidingWith(blockB), isTrue);
+      expect(blockB.collidingWith(blockA), isTrue);
+      expect(blockA.activeCollisions.length, 1);
+      expect(blockB.activeCollisions.length, 1);
+    });
+
+    withCollidables.test('detects collision after scale', (game) async {
+      final blockA = _TestBlock(
+        Vector2.zero(),
+        Vector2.all(10),
+        CollidableType.active,
+      );
+      final blockB = _TestBlock(
+        Vector2.all(11),
+        Vector2.all(10),
+        CollidableType.active,
+      );
+      expect(blockA.collidingWith(blockB), isFalse);
+      await game.ensureAddAll([blockA, blockB]);
+      expect(blockA.collidingWith(blockB), isFalse);
+      game.update(0);
+      expect(blockA.collidingWith(blockB), isFalse);
+      expect(blockB.collidingWith(blockA), isFalse);
+      expect(blockA.activeCollisions.length, 0);
+      expect(blockB.activeCollisions.length, 0);
+      blockA.scale = Vector2.all(2.0);
+      game.update(0);
+      expect(blockA.collidingWith(blockB), isTrue);
+      expect(blockB.collidingWith(blockA), isTrue);
+      expect(blockA.activeCollisions.length, 1);
+      expect(blockB.activeCollisions.length, 1);
+    });
+
+    withCollidables.test('testPoint detects point after flip', (game) async {
+      final blockA = _TestBlock(
+        Vector2.zero(),
+        Vector2.all(10),
+        CollidableType.active,
+      );
+      await game.ensureAdd(blockA);
+      game.update(0);
+      expect(blockA.containsPoint(Vector2(-1, 1)), false);
+      blockA.flipHorizontally();
+      game.update(0);
+      expect(blockA.containsPoint(Vector2(-1, 1)), true);
     });
 
     withCollidables.test('testPoint detects point after scale', (game) async {
@@ -289,8 +341,6 @@ void main() {
       expect(blockA.containsPoint(Vector2.all(11)), false);
       blockA.scale = Vector2.all(2.0);
       game.update(0);
-      print(blockA.hitbox.absoluteScale);
-      print(blockA.hitbox.globalVertices());
       expect(blockA.containsPoint(Vector2.all(11)), true);
     });
 

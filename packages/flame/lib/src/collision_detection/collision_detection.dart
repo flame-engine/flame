@@ -78,17 +78,7 @@ class StandardCollisionDetection extends CollisionDetection<HitboxShape> {
     HitboxShape hitboxA,
     HitboxShape hitboxB,
   ) {
-    final result = hitboxA.intersections(hitboxB);
-    if (result.isNotEmpty) {
-      if (!hitboxA.collidingWith(hitboxB)) {
-        handleCollisionStart(result, hitboxA, hitboxB);
-      }
-      handleCollision(result, hitboxA, hitboxB);
-    } else if (hitboxA.collidingWith(hitboxB)) {
-      handleCollisionEnd(hitboxA, hitboxB);
-    }
-
-    return result;
+    return hitboxA.intersections(hitboxB);
   }
 
   @override

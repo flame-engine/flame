@@ -143,7 +143,7 @@ mixin HitboxShape on Shape implements Hitbox<HitboxShape> {
 
   void fillParent();
 
-  //#region [CollisionCallbacks] methods
+  //#region CollisionCallbacks methods
 
   @override
   @mustCallSuper
@@ -180,6 +180,7 @@ mixin HitboxShape on Shape implements Hitbox<HitboxShape> {
     }
   }
 
+  // TODO: Naming
   @override
   CollisionCallback<HitboxShape>? collisionCallback;
 

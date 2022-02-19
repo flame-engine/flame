@@ -88,6 +88,8 @@ void main() {
       expect(blockB.startCounter, 1);
       expect(blockA.onCollisionCounter, 1);
       expect(blockB.onCollisionCounter, 1);
+      expect(blockA.endCounter, 0);
+      expect(blockB.endCounter, 0);
       game.update(0);
       expect(blockA.activeCollisions.length, 1);
       expect(blockB.activeCollisions.length, 1);
@@ -99,8 +101,6 @@ void main() {
       expect(blockA.endCounter, 0);
       expect(blockB.endCounter, 0);
       game.update(0);
-      print(blockA.topLeftPosition);
-      print(blockB.topLeftPosition);
       expect(blockA.collidingWith(blockB), isFalse);
       expect(blockB.collidingWith(blockA), isFalse);
       expect(blockA.activeCollisions.length, 0);
