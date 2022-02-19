@@ -80,7 +80,10 @@ class Component {
   @nonVirtual
   bool get shouldRemove => _shouldRemove;
   @nonVirtual
-  set shouldRemove(bool v) => _shouldRemove = v;
+  set shouldRemove(bool v) {
+
+    _shouldRemove = v;
+  }
   bool _shouldRemove = false;
 
   /// Returns whether this [Component] is in debug mode or not.
@@ -372,8 +375,10 @@ class Component {
   /// Removes a component from the component tree, calling [onRemove] for it and
   /// its children.
   void remove(Component component) {
-    component._state = LifecycleState.removing;
-    lifecycle._dead.add(component);
+    if (component._state != LifecycleState.removing) {
+      lifecycle._dead.add(component);
+      component._state = LifecycleState.removing;
+    }
   }
 
   /// Removes all the children in the list and calls [onRemove] for all of them
