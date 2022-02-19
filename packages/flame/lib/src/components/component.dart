@@ -80,10 +80,9 @@ class Component {
   @nonVirtual
   bool get shouldRemove => _state == LifecycleState.removing;
 
+  /// Legacy component removal mechanism.
   @nonVirtual
-  @Deprecated(
-    'Use `removeFromParent()` instead. This function will be removed in 1.1.0',
-  )
+  @Deprecated('Use `removeFromParent()` instead. This will be removed in 1.1.0')
   set shouldRemove(bool value) {
     assert(value, '"Resurrecting" a component is not allowed');
     removeFromParent();
@@ -379,7 +378,7 @@ class Component {
   /// its children.
   void remove(Component component) {
     if (component._state != LifecycleState.removing) {
-      lifecycle._dead.add(component);
+      lifecycle._dying.add(component);
       component._state = LifecycleState.removing;
     }
   }
@@ -584,12 +583,12 @@ enum LifecycleState {
 /// queues. Which is why these queues are placed into a separate class, so that
 /// they can be easily disposed of at the end.
 class _LifecycleManager {
-  /// Queues for adding children to a component.
+  /// Queue for adding children to a component.
   ///
   /// When the user `add()`s a child to a component, we immediately place it
-  /// into the component's queue, and only after that do the standard lifecycle
+  /// into that component's queue, and only after that do the standard lifecycle
   /// processing: resizing, loading, mounting, etc. After all that is finished,
-  /// the component is retrieved from the queue and placed into the parent's
+  /// the child component is retrieved from the queue and placed into the
   /// children list.
   ///
   /// Since the components are processed in the FIFO order, this ensures that
@@ -598,10 +597,10 @@ class _LifecycleManager {
   /// finish loading in arbitrary order.
   final Queue<Component> _children = Queue();
 
-  final Queue<Component> _dead = Queue();
+  final Queue<Component> _dying = Queue();
 
   bool get hasPendingEvents {
-    return _children.isNotEmpty || _dead.isNotEmpty;
+    return _children.isNotEmpty || _dying.isNotEmpty;
   }
 
   void processQueues() {
@@ -630,8 +629,8 @@ class _LifecycleManager {
   }
 
   void _processDeathQueue() {
-    while (_dead.isNotEmpty) {
-      final component = _dead.removeFirst();
+    while (_dying.isNotEmpty) {
+      final component = _dying.removeFirst();
       if (component.isMounted) {
         component._remove();
       }
