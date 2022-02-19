@@ -214,6 +214,9 @@ class Component {
   /// ```
   void onMount() {}
 
+  /// Called right before the component is removed from the game.
+  void onRemove() {}
+
   /// This method is called periodically by the game engine to request that your
   /// component updates itself.
   ///
@@ -284,14 +287,6 @@ class Component {
       yield current;
       current = current.parent;
     }
-  }
-
-  /// Called right before the component is removed from the game.
-  @mustCallSuper
-  void onRemove() {
-    _children?.forEach((child) => child.onRemove());
-    _state = LifecycleState.removed;
-    _parent = null;
   }
 
   //#region Add/remove components
@@ -431,9 +426,15 @@ class Component {
   void setMounted() => _state = LifecycleState.mounted;
 
   void _remove() {
-    final p = _parent!;
-    onRemove();
-    p.children.remove(this);
+    propagateToChildren(
+      (Component component) {
+        component.onRemove();
+        _state = LifecycleState.removed;
+        return false;
+      },
+      includeSelf: true,
+    );
+    _parent!.children.remove(this);
     _parent = null;
   }
 
