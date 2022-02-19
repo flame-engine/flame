@@ -23,15 +23,7 @@ class _CustomTextRenderer extends TextRenderer {
 }
 
 void main() {
-  group('Text', () {
-    test('copyWith', () {
-      const style = TextStyle(fontSize: 12, fontFamily: 'Times');
-      final tp = TextPaint(style: style)
-          .copyWith((t) => t.copyWith(fontFamily: 'Helvetica'));
-      expect(tp.style.fontSize, 12);
-      expect(tp.style.fontFamily, 'Helvetica');
-    });
-
+  group('TextRenderer', () {
     test('createDefault', () {
       final tp = TextRenderer.createDefault<TextPaint>();
       expect(tp, isNotNull);
@@ -56,10 +48,15 @@ void main() {
       final tc = TextComponent<_CustomTextRenderer>(text: 'foo');
       expect(tc.textRenderer, isA<_CustomTextRenderer>());
     });
+  });
 
-    test('text component size is set', () {
-      final t = TextComponent(text: 'foobar');
-      expect(t.size, isNot(equals(Vector2.zero())));
+  group('TextPaint', () {
+    test('copyWith', () {
+      const style = TextStyle(fontSize: 12, fontFamily: 'Times');
+      final tp = TextPaint(style: style)
+          .copyWith((t) => t.copyWith(fontFamily: 'Helvetica'));
+      expect(tp.style.fontSize, 12);
+      expect(tp.style.fontFamily, 'Helvetica');
     });
   });
 }
