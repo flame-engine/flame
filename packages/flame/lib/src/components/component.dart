@@ -269,7 +269,6 @@ class Component {
   /// Remove the component from its parent in the next tick.
   void removeFromParent() {
     _parent?.remove(this);
-    _state = LifecycleState.removing;
   }
 
   /// Changes the current parent for another parent and prepares the tree under
