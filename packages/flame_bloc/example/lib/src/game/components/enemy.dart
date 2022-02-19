@@ -33,7 +33,9 @@ class EnemyComponent extends SpriteAnimationComponent
   @override
   void update(double dt) {
     y += enemySpeed * dt;
-    shouldRemove = destroyed || y >= gameRef.size.y;
+    if (destroyed || y >= gameRef.size.y) {
+      removeFromParent();
+    }
   }
 
   void takeHit() {
