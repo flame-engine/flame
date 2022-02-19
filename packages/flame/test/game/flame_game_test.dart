@@ -159,7 +159,7 @@ void main() {
     final component = PositionComponent();
     await game.ensureAdd(component);
     expect(game.children.length, equals(1));
-    component.shouldRemove = true;
+    component.shouldRemove = true; // ignore: deprecated_member_use_from_same_package
     game.updateTree(0);
     expect(game.children.isEmpty, equals(true));
   });
@@ -169,7 +169,7 @@ void main() {
     await game.ensureAddAll(components);
     expect(game.children.length, equals(3));
 
-    game.children.clear();
+    game.children.clear(); // ignore: deprecated_member_use_from_same_package
 
     // Ensure clear does not remove components directly
     expect(game.children.length, equals(3));

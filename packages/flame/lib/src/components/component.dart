@@ -432,7 +432,7 @@ class Component {
   void _remove() {
     final p = _parent!;
     onRemove();
-    p.children.removeNow(this);
+    p.children.remove(this);
     _parent = null;
   }
 
