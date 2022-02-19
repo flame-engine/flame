@@ -97,7 +97,15 @@ mixin HitboxShape on Shape implements Hitbox<HitboxShape> {
   /// Checks whether the [HitboxShape] contains the [point].
   @override
   bool containsPoint(Vector2 point) {
-    return super.containsPoint(point);
+    return _possiblyContainsPoint(point) && super.containsPoint(point);
+  }
+
+  /// Since this is a cheaper calculation than checking towards all shapes this
+  /// check can be done first to see if it even is possible that the shapes can
+  /// contain the point, since the shapes have to be within the size of the
+  /// component.
+  bool _possiblyContainsPoint(Vector2 point) {
+    return aabb.containsVector2(point);
   }
 
   /// Where this [Shape] has intersection points with another shape
@@ -109,6 +117,20 @@ mixin HitboxShape on Shape implements Hitbox<HitboxShape> {
     );
     return intersection_system.intersections(this, other as Shape);
   }
+
+  /// Since this is a cheaper calculation than checking towards all shapes, this
+  /// check can be done first to see if it even is possible that the shapes can
+  /// overlap, since the shapes have to be within the size of the component.
+  @override
+  bool possiblyIntersects(HitboxShape other) {
+    final collisionAllowed =
+        allowSiblingCollision || hitboxParent != other.hitboxParent;
+    return collisionAllowed && aabb.intersectsWithAabb2(other.aabb);
+  }
+
+  /// This determines how the shape should scale if it should try to fill its
+  /// parents boundaries.
+  void fillParent();
 
   Aabb2 _recalculateAabb() {
     final size = absoluteScaledSize;
@@ -122,33 +144,12 @@ mixin HitboxShape on Shape implements Hitbox<HitboxShape> {
       ..rotate(_rotationMatrix);
   }
 
-  /// Since this is a cheaper calculation than checking towards all shapes this
-  /// check can be done first to see if it even is possible that the shapes can
-  /// contain the point, since the shapes have to be within the size of the
-  /// component.
-  @override
-  bool possiblyContainsPoint(Vector2 point) {
-    return aabb.containsVector2(point);
-  }
-
-  /// Since this is a cheaper calculation than checking towards all shapes, this
-  /// check can be done first to see if it even is possible that the shapes can
-  /// overlap, since the shapes have to be within the size of the component.
-  @override
-  bool possiblyOverlapping(HitboxShape other) {
-    final collisionAllowed =
-        allowSiblingCollision || hitboxParent != other.hitboxParent;
-    return collisionAllowed && aabb.intersectsWithAabb2(other.aabb);
-  }
-
-  void fillParent();
-
   //#region CollisionCallbacks methods
 
   @override
   @mustCallSuper
   void onCollision(Set<Vector2> intersectionPoints, HitboxShape other) {
-    collisionCallback?.call(intersectionPoints, other);
+    onCollisionCallback?.call(intersectionPoints, other);
     if (hitboxParent is CollisionCallbacks) {
       (hitboxParent as CollisionCallbacks).onCollision(
         intersectionPoints,
@@ -161,7 +162,7 @@ mixin HitboxShape on Shape implements Hitbox<HitboxShape> {
   @mustCallSuper
   void onCollisionStart(Set<Vector2> intersectionPoints, HitboxShape other) {
     activeCollisions.add(other);
-    collisionStartCallback?.call(intersectionPoints, other);
+    onCollisionStartCallback?.call(intersectionPoints, other);
     if (hitboxParent is CollisionCallbacks) {
       (hitboxParent as CollisionCallbacks).onCollisionStart(
         intersectionPoints,
@@ -174,21 +175,20 @@ mixin HitboxShape on Shape implements Hitbox<HitboxShape> {
   @mustCallSuper
   void onCollisionEnd(HitboxShape other) {
     activeCollisions.remove(other);
-    collisionEndCallback?.call(other);
+    onCollisionEndCallback?.call(other);
     if (hitboxParent is CollisionCallbacks) {
       (hitboxParent as CollisionCallbacks).onCollisionEnd(other.hitboxParent);
     }
   }
 
-  // TODO: Naming
   @override
-  CollisionCallback<HitboxShape>? collisionCallback;
+  CollisionCallback<HitboxShape>? onCollisionCallback;
 
   @override
-  CollisionCallback<HitboxShape>? collisionStartCallback;
+  CollisionCallback<HitboxShape>? onCollisionStartCallback;
 
   @override
-  CollisionEndCallback<HitboxShape>? collisionEndCallback;
+  CollisionEndCallback<HitboxShape>? onCollisionEndCallback;
 
   //#endregion
 }

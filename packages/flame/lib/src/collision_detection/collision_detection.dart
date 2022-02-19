@@ -29,7 +29,7 @@ abstract class CollisionDetection<T extends Hitbox<T>> {
       final itemA = tuple.a;
       final itemB = tuple.b;
 
-      if (itemA.possiblyOverlapping(itemB)) {
+      if (itemA.possiblyIntersects(itemB)) {
         final intersectionPoints = intersections(itemA, itemB);
         if (intersectionPoints.isNotEmpty) {
           if (!itemA.collidingWith(itemB)) {
@@ -39,6 +39,8 @@ abstract class CollisionDetection<T extends Hitbox<T>> {
         } else if (itemA.collidingWith(itemB)) {
           handleCollisionEnd(itemA, itemB);
         }
+      } else if (itemA.collidingWith(itemB)) {
+        handleCollisionEnd(itemA, itemB);
       }
     });
   }

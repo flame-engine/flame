@@ -1,5 +1,4 @@
 import 'package:flame/components.dart';
-import 'package:flame/extensions.dart';
 import 'package:flame/geometry.dart';
 import 'package:flame/geometry.dart' as geometry;
 import 'package:test/test.dart';

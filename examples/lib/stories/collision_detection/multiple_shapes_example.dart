@@ -40,7 +40,7 @@ class MultipleShapesExample extends FlameGame
     add(screenCollidable);
     add(snowman);
     var totalAdded = 1;
-    while (totalAdded < 20) {
+    while (totalAdded < 100) {
       lastToAdd = nextRandomCollidable(lastToAdd, screenCollidable);
       final lastBottomRight =
           lastToAdd.toAbsoluteRect().bottomRight.toVector2();
@@ -93,12 +93,13 @@ class MultipleShapesExample extends FlameGame
 }
 
 abstract class MyCollidable extends PositionComponent
-    with Draggable, CollisionCallbacks {
+    with Draggable, CollisionCallbacks, GestureHitboxes {
   double rotationSpeed = 0.0;
   final Vector2 velocity;
   final delta = Vector2.zero();
   double angleDelta = 0;
   final Color _defaultColor = Colors.blue.withOpacity(0.8);
+  final Color _collisionColor = Colors.green.withOpacity(0.8);
   late final Paint _dragIndicatorPaint;
   final ScreenCollidable screenCollidable;
   HitboxShape? hitbox;
@@ -128,6 +129,9 @@ abstract class MyCollidable extends PositionComponent
     position.add(delta);
     angleDelta = dt * rotationSpeed;
     angle = (angle + angleDelta) % (2 * pi);
+    if (hitbox?.paint.color == _collisionColor && !isColliding) {
+      print('wtf');
+    }
     // Takes rotation into consideration (which topLeftPosition doesn't)
     final topLeft = absoluteCenter - (scaledSize / 2);
     if (topLeft.x + scaledSize.x < 0 ||
@@ -153,32 +157,20 @@ abstract class MyCollidable extends PositionComponent
     PositionComponent other,
   ) {
     super.onCollisionStart(intersectionPoints, other);
-    hitbox?.paint.color = collisionColor(other).withOpacity(0.8);
+    hitbox?.paint.color = _collisionColor;
   }
 
   @override
   void onCollisionEnd(PositionComponent other) {
     super.onCollisionEnd(other);
-    if (activeCollisions.isEmpty) {
+    if (!isColliding) {
       hitbox?.paint.color = _defaultColor;
     }
   }
 
-  Color collisionColor(PositionComponent other) {
-    switch (other.runtimeType) {
-      case ScreenCollidable:
-        return Colors.teal;
-      case CollidablePolygon:
-        return Colors.deepOrange;
-      case CollidableCircle:
-        return Colors.green;
-      case CollidableRectangle:
-        return Colors.cyan;
-      case CollidableSnowman:
-        return Colors.amber;
-      default:
-        return Colors.pink;
-    }
+  @override
+  bool onDragStart(DragStartInfo info) {
+    return true;
   }
 
   @override

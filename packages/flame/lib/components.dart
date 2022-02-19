@@ -6,6 +6,7 @@ export 'src/components/custom_painter_component.dart';
 export 'src/components/input/joystick_component.dart';
 export 'src/components/isometric_tile_map_component.dart';
 export 'src/components/mixins/draggable.dart';
+export 'src/components/mixins/gesture_hitboxes.dart';
 export 'src/components/mixins/has_game_ref.dart';
 export 'src/components/mixins/has_paint.dart';
 export 'src/components/mixins/hoverable.dart';

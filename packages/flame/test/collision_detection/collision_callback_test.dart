@@ -12,13 +12,13 @@ class _TestHitbox extends HitboxRectangle {
   int endCounter = 0;
 
   _TestHitbox() {
-    collisionCallback = (_, __) {
+    onCollisionCallback = (_, __) {
       onCollisionCounter++;
     };
-    collisionStartCallback = (_, __) {
+    onCollisionStartCallback = (_, __) {
       startCounter++;
     };
-    collisionEndCallback = (_) {
+    onCollisionEndCallback = (_) {
       endCounter++;
     };
   }

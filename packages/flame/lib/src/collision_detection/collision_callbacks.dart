@@ -29,32 +29,32 @@ mixin GenericCollisionCallbacks<T> {
 
   @mustCallSuper
   void onCollision(Set<Vector2> intersectionPoints, T other) {
-    collisionCallback?.call(intersectionPoints, other);
+    onCollisionCallback?.call(intersectionPoints, other);
   }
 
   @mustCallSuper
   void onCollisionStart(Set<Vector2> intersectionPoints, T other) {
     activeCollisions.add(other);
-    collisionStartCallback?.call(intersectionPoints, other);
+    onCollisionStartCallback?.call(intersectionPoints, other);
   }
 
   @mustCallSuper
   void onCollisionEnd(T other) {
     activeCollisions.remove(other);
-    collisionEndCallback?.call(other);
+    onCollisionEndCallback?.call(other);
   }
 
   /// Assign your own [CollisionCallback] if you want a callback when this
   /// shape collides with another [T].
-  CollisionCallback<T>? collisionCallback;
+  CollisionCallback<T>? onCollisionCallback;
 
   /// Assign your own [CollisionCallback] if you want a callback when this
   /// shape starts to collide with another [T].
-  CollisionCallback<T>? collisionStartCallback;
+  CollisionCallback<T>? onCollisionStartCallback;
 
   /// Assign your own [CollisionEndCallback] if you want a callback when this
   /// shape stops colliding with another [T].
-  CollisionEndCallback<T>? collisionEndCallback;
+  CollisionEndCallback<T>? onCollisionEndCallback;
 }
 
 mixin CollisionCallbacks on Component
@@ -77,7 +77,7 @@ mixin CollisionCallbacks on Component
   @override
   @mustCallSuper
   void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
-    collisionCallback?.call(intersectionPoints, other);
+    onCollisionCallback?.call(intersectionPoints, other);
   }
 
   @override
@@ -87,30 +87,30 @@ mixin CollisionCallbacks on Component
     PositionComponent other,
   ) {
     activeCollisions.add(other);
-    collisionStartCallback?.call(intersectionPoints, other);
+    onCollisionStartCallback?.call(intersectionPoints, other);
   }
 
   @override
   @mustCallSuper
   void onCollisionEnd(PositionComponent other) {
     activeCollisions.remove(other);
-    collisionEndCallback?.call(other);
+    onCollisionEndCallback?.call(other);
   }
 
   /// Assign your own [CollisionCallback] if you want a callback when this
   /// shape collides with another [PositionComponent].
   @override
-  CollisionCallback<PositionComponent>? collisionCallback;
+  CollisionCallback<PositionComponent>? onCollisionCallback;
 
   /// Assign your own [CollisionCallback] if you want a callback when this
   /// shape starts to collide with another [PositionComponent].
   @override
-  CollisionCallback<PositionComponent>? collisionStartCallback;
+  CollisionCallback<PositionComponent>? onCollisionStartCallback;
 
   /// Assign your own [CollisionEndCallback] if you want a callback when this
   /// shape stops colliding with another [PositionComponent].
   @override
-  CollisionEndCallback<PositionComponent>? collisionEndCallback;
+  CollisionEndCallback<PositionComponent>? onCollisionEndCallback;
 }
 
 typedef CollisionCallback<T> = void Function(
