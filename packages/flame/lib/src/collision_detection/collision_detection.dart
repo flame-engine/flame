@@ -4,7 +4,7 @@ import '../../components.dart';
 abstract class CollisionDetection<T extends Hitbox<T>> {
   final List<T> items = [];
   late final Broadphase<T> broadphase;
-  Set<Potential<T>> _lastPotentials = {};
+  final Set<Potential<T>> _lastPotentials = {};
 
   CollisionDetection({BroadphaseType type = BroadphaseType.sweep}) {
     switch (type) {

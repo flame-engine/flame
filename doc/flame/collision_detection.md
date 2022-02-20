@@ -1,4 +1,5 @@
 # Collision detection
+
 If you want to have a full-blown physics engine in your game we recommend that you use
 Forge2D by adding [flame_forge2d](https://github.com/flame-engine/flame_forge2d) as a dependency.
 But if you have a simpler use-case and just want to check for collisions of components and improve
@@ -9,62 +10,55 @@ If you have the following needs you should at least consider to use
  - Interacting realistic forces
  - Particle systems that can interact with other bodies
  - Joints between bodies
- - Many bodies at the same time (~50+ depends a bit on platform)
 
 It is a good idea to just use the Flame collision detection system if you on the other hand only
-need some of the following things (since it is slightly simpler to not involve Forge2D):
- - The ability to act on when some of your components collide
- - The ability to act on when your components collide with the screen boundaries
+need some of the following things (since it is simpler to not involve Forge2D):
+ - The ability to act on some of your components colliding
+ - The ability to act on your components colliding with the screen boundaries
  - Complex shapes to act as a hitbox for your component so that gestures will be more accurate
  - Hitboxes that can tell what part of a component that collided with something
 
 The collision detection system supports three different types of shapes that you can build hitboxes
-from, these shapes are Polygon, Rectangle and Circle. A hitbox can be represented by many shapes to
+from, these shapes are Polygon, Rectangle and Circle. Multiple hitbox can be added to a component to
 form the area which can be used to either detect collisions or whether it contains a point or not,
 the latter is very useful for accurate gesture detection. The collision detection does not handle
 what should happen when two hitboxes collide, so it is up to the user to implement what will happen
-when for example two position components have intersecting hitboxes.
+when for example two `PositionComponent`s have intersecting hitboxes.
 
 Do note that the built-in collision detection system does not take collisions between two hitboxes
 that overshoot each other into account, this could happen when they either move too fast or `update`
 being called with a large delta time (for example if your app is not in the foreground). This
 behaviour is called tunneling, if you want to read more about it.
 
-Also note that the collision detection system doesn't work properly if you scale ancestors of the
-component that is `Collidable`.
+Also note that the collision detection system has a limitation that makes it not work properly if
+you have certain types of combinations of flips and scales of the ancestors of the hitboxes.
 
-## Mixins
-### HasHitboxes
-The `HasHitboxes` mixin is mainly used for two things; to make detection of collisions with other
-hitboxes and to more accurately recognize gestures on top of your `PositionComponent`s. Say that you
-have a fairly round rock as a `SpriteComponent` for example, then you don't want to register input
-that is in the corner of the image where the rock is not displayed, since an image is always
-rectangular. Then you can use the `HasHitboxes` mixin to define a more accurate polygon (or another
-shape) for which the input should be within for the event to be registered on your component.
 
-You can add new shapes to the `HasHitboxes` just like they are added in the below `Collidable`
-example.
+## Adding hitboxes
 
-### Collidable
-The `Collidable` mixin is added to a `PositionComponent` that has a `HasHitboxes` and it is used for
-detecting collisions with other `Collidable`s. If you do not add a shape to your `HasHitboxes` 
-component it will never collide with anything. If you want the component to have a default 
-rectangular shape that fills the size of your component you can simply do 
-`addHitbox(HitboxRectangle())`.
+The `HitboxShape`s are normal components, so you add them to the component that you want to add
+hitboxes to just like any other component:
 
-To make your component collidable you would start off something like this:
+`component.add(HitboxRectangle());`
+
+If you don't add any arguments to the hitbox, like above, the hitbox will try to fill its parent as
+much as possible. Except for having the hitboxes trying to fill their parents, there are two ways to
+initiate hitboxes and it is with the normal constructor where you define the hitbox by itself, with
+a size and a position etc. The other way is to use the `fromNormals` constructor which defines the
+hitbox in relation to the size of its parent.
+
+
 
 ```dart
-class MyCollidable extends PositionComponent with HasHitboxes, Collidable {
-  MyCollidable() {
-    // This could also be done in onLoad instead of in the constructor
-    final shape = HitboxPolygon([
+class MyCollidable extends PositionComponent {
+  Future<void> onLoad() async {
+    final shape = HitboxPolygon.fromNormals([
       Vector2(0, 1),
       Vector2(1, 0),
       Vector2(0, -1),
       Vector2(-1, 0),
     ]);
-    addHitbox(shape);
+    add(shape);
   }
 }
 ```
@@ -117,6 +111,21 @@ a collision starts you only need to override `onCollision`, and vice versa.
 If you want to check collisions with the screen edges, as we do in the example above, you can use
 the predefined [ScreenCollidable](#screencollidable) class and since that one also is a `Collidable`
 you can implement your own `onCollision` method for that class if needed.
+
+
+## Mixins
+### GestureHitboxes
+The `GestureHitboxes` mixin is used to more accurately recognize gestures on top of your
+`Component`s. Say that you have a fairly round rock as a `SpriteComponent` for example, then you
+don't want to register input that is in the corner of the image where the rock is not displayed,
+since a `PositionComponent` is rectangular by default. Then you can use the `GestureHitboxes` mixin
+to define a more accurate circle or polygon (or another shape) for which the input should be within
+for the event to be registered on your component.
+
+You can add new hitboxes to the component that has the `GestureHitboxes` mixin just like they are
+added in the below `Collidable` example.
+
+### Collidable
 
 #### CollidableType
 By default the `CollidableType` is `active` on your `Collidable`, but there are two other types that

@@ -21,6 +21,21 @@ class HitboxRectangle extends Rectangle with HitboxShape {
           priority: priority,
         );
 
+  HitboxRectangle.fromNormals(
+    List<Vector2> normals, {
+    Vector2? position,
+    required Vector2 size,
+    double angle = 0,
+    Anchor? anchor,
+  })  : shouldFillParent = false,
+        super.fromNormals(
+          normals,
+          position: position,
+          size: size,
+          angle: angle,
+          anchor: anchor,
+        );
+
   @override
   void fillParent() {
     refreshVertices(newVertices: Rectangle.sizeToVertices(size));

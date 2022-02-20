@@ -19,6 +19,21 @@ class HitboxCircle extends Circle with HitboxShape {
           anchor: anchor,
         );
 
+  HitboxCircle.fromNormal(
+    double normal, {
+    Vector2? position,
+    required Vector2 size,
+    double angle = 0,
+    Anchor? anchor,
+  })  : shouldFillParent = false,
+        super.fromNormal(
+          normal,
+          position: position,
+          size: size,
+          angle: angle,
+          anchor: anchor,
+        );
+
   @override
   void fillParent() {
     // There is no need to do anything here since the size already is bound to

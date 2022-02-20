@@ -65,7 +65,7 @@ class Polygon extends Shape {
   }
 
   /// Normals are always defined from the center
-  /// //TODO: add old description here
+  // TODO(spydon): add old description here
   Polygon.fromNormals(
     List<Vector2> normals, {
     required Vector2 size,

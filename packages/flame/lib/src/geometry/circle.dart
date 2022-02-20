@@ -25,6 +25,19 @@ class Circle extends Shape {
           paint: paint,
         );
 
+  Circle.fromNormal(
+    double normal, {
+    Vector2? position,
+    required Vector2 size,
+    double angle = 0,
+    Anchor? anchor,
+  }) : this(
+          radius: normal * (min(size.x, size.y) / 2),
+          position: position,
+          angle: angle,
+          anchor: anchor,
+        );
+
   /// Get the radius of the circle before scaling.
   double get radius {
     return min(size.x, size.y) / 2;

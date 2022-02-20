@@ -39,6 +39,21 @@ class Rectangle extends Polygon {
           paint: paint,
         );
 
+  Rectangle.fromNormals(
+    List<Vector2> normals, {
+    Vector2? position,
+    required Vector2 size,
+    double angle = 0,
+    Anchor? anchor,
+  })  : assert(normals.length == 4, 'A rectangle needs 4 normals'),
+        super.fromNormals(
+          normals,
+          position: position,
+          size: size,
+          angle: angle,
+          anchor: anchor,
+        );
+
   /// This factory will create a [Rectangle] from a positioned [Rect].
   factory Rectangle.fromRect(
     Rect rect, {
