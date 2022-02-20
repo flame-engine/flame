@@ -64,8 +64,13 @@ class PolygonComponent extends ShapeComponent {
     );
   }
 
-  /// Normals are always defined from the center
-  // TODO(spydon): add old description here
+  /// With this constructor you define the [PolygonComponent] in relation to the
+  /// [size] of the shape.
+  ///
+  /// Example: `[[1.0, 0.0], [0.0, -1.0], [-1.0, 0.0], [0.0, 1.0]]`
+  /// This will form a diamond shape within the bounding size box.
+  /// NOTE: Always define your shape in a counter-clockwise fashion (in the
+  /// screen coordinate system).
   PolygonComponent.fromNormals(
     List<Vector2> normals, {
     required Vector2 size,

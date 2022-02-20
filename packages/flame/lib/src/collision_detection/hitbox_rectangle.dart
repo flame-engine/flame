@@ -21,15 +21,18 @@ class HitboxRectangle extends RectangleComponent with HitboxShape {
           priority: priority,
         );
 
+  /// With this constructor you define the [HitboxRectangle] in relation to
+  /// the [size]. For example having [normal] as of (0.8, 0.5) would create a
+  /// rectangle that fills 80% of the width and 50% of the height of [size].
   HitboxRectangle.fromNormals(
-    List<Vector2> normals, {
+    Vector2 normal, {
     Vector2? position,
     required Vector2 size,
     double angle = 0,
     Anchor? anchor,
   })  : shouldFillParent = false,
         super.fromNormals(
-          normals,
+          normal,
           position: position,
           size: size,
           angle: angle,

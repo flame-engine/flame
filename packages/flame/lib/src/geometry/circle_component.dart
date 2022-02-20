@@ -25,6 +25,9 @@ class CircleComponent extends ShapeComponent {
           paint: paint,
         );
 
+  /// With this constructor you define the [CircleComponent] in relation to the
+  /// [size]. For example having a [normal] of 0.5 would create a circle that
+  /// fills half of the [size].
   CircleComponent.fromNormal(
     double normal, {
     Vector2? position,

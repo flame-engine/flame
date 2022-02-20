@@ -19,6 +19,9 @@ class HitboxCircle extends CircleComponent with HitboxShape {
           anchor: anchor,
         );
 
+  /// With this constructor you define the [HitboxCircle] in relation to the
+  /// [size]. For example having a [normal] of 0.5 would create a circle that
+  /// fills half of the [size].
   HitboxCircle.fromNormal(
     double normal, {
     Vector2? position,

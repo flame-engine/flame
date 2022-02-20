@@ -39,15 +39,22 @@ class RectangleComponent extends PolygonComponent {
           paint: paint,
         );
 
+  /// With this constructor you define the [RectangleComponent] in relation to
+  /// the [size]. For example having [normal] as of (0.8, 0.5) would create a
+  /// rectangle that fills 80% of the width and 50% of the height of [size].
   RectangleComponent.fromNormals(
-    List<Vector2> normals, {
+    Vector2 normal, {
     Vector2? position,
     required Vector2 size,
     double angle = 0,
     Anchor? anchor,
-  })  : assert(normals.length == 4, 'A rectangle needs 4 normals'),
-        super.fromNormals(
-          normals,
+  }) : super.fromNormals(
+          [
+            normal.clone(),
+            Vector2(normal.x, -normal.y),
+            -normal,
+            Vector2(-normal.x, normal.y),
+          ],
           position: position,
           size: size,
           angle: angle,
