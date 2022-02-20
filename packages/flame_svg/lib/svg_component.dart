@@ -11,7 +11,7 @@ class SvgComponent extends PositionComponent {
 
   /// Creates an [SvgComponent]
   SvgComponent({
-    required Svg svg,
+    Svg? svg,
     Vector2? position,
     Vector2? size,
     Vector2? scale,
@@ -53,10 +53,7 @@ class SvgComponent extends PositionComponent {
 
   /// Sets a new [svg] instance
   set svg(Svg? svg) {
-    if (_svg != null) {
-      _svg!.dispose();
-    }
-
+    _svg?.dispose();
     _svg = svg;
   }
 

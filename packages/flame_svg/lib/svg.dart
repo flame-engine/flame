@@ -15,11 +15,11 @@ class Svg {
   /// Creates an [Svg] with the received [svgRoot].
   Svg(this.svgRoot);
 
-  final MemoryCache<Vector2, Image> _imageCache = MemoryCache();
+  final MemoryCache<Size, Image> _imageCache = MemoryCache();
 
   final _paint = Paint()..filterQuality = FilterQuality.high;
 
-  final List<Vector2> _lock = [];
+  final List<Size> _lock = [];
 
   /// Loads an [Svg] with the received [cache]. When no [cache] is provided,
   /// the global [Flame.assets] is used.
@@ -31,12 +31,13 @@ class Svg {
 
   /// Renders the svg on the [canvas] using the dimensions provided by [size].
   void render(Canvas canvas, Vector2 size) {
-    final image = _getImage(size);
+    final _size = size.toSize();
+    final image = _getImage(_size);
 
     if (image != null) {
       canvas.drawImage(image, Offset.zero, _paint);
     } else {
-      _render(canvas, size);
+      _render(canvas, _size);
     }
   }
 
@@ -50,7 +51,7 @@ class Svg {
     canvas.renderAt(position, (c) => render(c, size));
   }
 
-  Image? _getImage(Vector2 size) {
+  Image? _getImage(Size size) {
     final image = _imageCache.getValue(size);
 
     if (image == null && !_lock.contains(size)) {
@@ -61,7 +62,7 @@ class Svg {
       _render(canvas, size);
       final _picture = recorder.endRecording();
 
-      _picture.toImage(size.x.toInt(), size.y.toInt()).then((image) {
+      _picture.toImage(size.width.toInt(), size.height.toInt()).then((image) {
         _imageCache.setValue(size, image);
         _lock.remove(size);
         _picture.dispose();
@@ -71,8 +72,8 @@ class Svg {
     return image;
   }
 
-  void _render(Canvas canvas, Vector2 size) {
-    svgRoot.scaleCanvasToViewBox(canvas, size.toSize());
+  void _render(Canvas canvas, Size size) {
+    svgRoot.scaleCanvasToViewBox(canvas, size);
     svgRoot.draw(canvas, svgRoot.viewport.viewBoxRect);
   }
 
