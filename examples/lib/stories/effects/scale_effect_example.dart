@@ -16,17 +16,17 @@ class ScaleEffectExample extends FlameGame with TapDetector {
     The star pulsates randomly using a RandomEffectController.
   ''';
 
-  late Rectangle square;
+  late RectangleComponent square;
   bool grow = true;
 
   @override
   Future<void> onLoad() async {
-    square = Rectangle.square(
+    square = RectangleComponent.square(
       size: 100,
       position: Vector2.all(200),
       paint: BasicPalette.white.paint()..style = PaintingStyle.stroke,
     );
-    final childSquare = Rectangle.square(
+    final childSquare = RectangleComponent.square(
       position: Vector2.all(70),
       size: 20,
     );

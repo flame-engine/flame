@@ -2,7 +2,7 @@ import '../../collision_detection.dart';
 import '../../components.dart';
 import '../../geometry.dart';
 
-class HitboxRectangle extends Rectangle with HitboxShape {
+class HitboxRectangle extends RectangleComponent with HitboxShape {
   @override
   final bool shouldFillParent;
 
@@ -38,6 +38,6 @@ class HitboxRectangle extends Rectangle with HitboxShape {
 
   @override
   void fillParent() {
-    refreshVertices(newVertices: Rectangle.sizeToVertices(size));
+    refreshVertices(newVertices: RectangleComponent.sizeToVertices(size));
   }
 }

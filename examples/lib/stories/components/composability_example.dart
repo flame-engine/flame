@@ -33,7 +33,7 @@ class ComposabilityExample extends FlameGame with HasDraggables {
   }
 }
 
-class ParentSquare extends Rectangle with HasGameRef {
+class ParentSquare extends RectangleComponent with HasGameRef {
   static final defaultPaint = BasicPalette.white.paint()
     ..style = PaintingStyle.stroke;
 
@@ -53,25 +53,25 @@ class ParentSquare extends Rectangle with HasGameRef {
     // All positions here are in relation to the parent's position
     const childSize = 50.0;
     final children = [
-      Rectangle.square(
+      RectangleComponent.square(
         position: Vector2(100, 100),
         size: childSize,
         angle: 2,
         paint: defaultPaint,
       ),
-      Rectangle.square(
+      RectangleComponent.square(
         position: Vector2(160, 100),
         size: childSize,
         angle: 3,
         paint: defaultPaint,
       ),
-      Rectangle.square(
+      RectangleComponent.square(
         position: Vector2(170, 150),
         size: childSize,
         angle: 4,
         paint: defaultPaint,
       ),
-      Rectangle.square(
+      RectangleComponent.square(
         position: Vector2(70, 200),
         size: childSize,
         angle: 5,

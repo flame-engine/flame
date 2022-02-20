@@ -6,7 +6,7 @@ import '../../components.dart';
 /// and angle. It can also have an anchor if it shouldn't be rotated around its
 /// center.
 /// A point can be determined to be within of outside of a shape.
-abstract class Shape extends PositionComponent with HasPaint {
+abstract class ShapeComponent extends PositionComponent with HasPaint {
   // TODO(spydon): is this needed
   final Vector2 initialPosition;
   // TODO(spydon): is this needed
@@ -14,7 +14,7 @@ abstract class Shape extends PositionComponent with HasPaint {
   late void Function() _sizeListener;
   bool renderShape = true;
 
-  Shape({
+  ShapeComponent({
     Vector2? position,
     Vector2? size,
     Vector2? scale,

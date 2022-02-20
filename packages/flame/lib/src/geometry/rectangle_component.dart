@@ -6,8 +6,8 @@ import '../../components.dart';
 import '../../extensions.dart';
 import '../../geometry.dart';
 
-class Rectangle extends Polygon {
-  Rectangle({
+class RectangleComponent extends PolygonComponent {
+  RectangleComponent({
     Vector2? position,
     Vector2? size,
     double? angle,
@@ -23,7 +23,7 @@ class Rectangle extends Polygon {
           paint: paint,
         );
 
-  Rectangle.square({
+  RectangleComponent.square({
     Vector2? position,
     double? size,
     double? angle,
@@ -39,7 +39,7 @@ class Rectangle extends Polygon {
           paint: paint,
         );
 
-  Rectangle.fromNormals(
+  RectangleComponent.fromNormals(
     List<Vector2> normals, {
     Vector2? position,
     required Vector2 size,
@@ -54,14 +54,14 @@ class Rectangle extends Polygon {
           anchor: anchor,
         );
 
-  /// This factory will create a [Rectangle] from a positioned [Rect].
-  factory Rectangle.fromRect(
+  /// This factory will create a [RectangleComponent] from a positioned [Rect].
+  factory RectangleComponent.fromRect(
     Rect rect, {
     double? angle,
     Anchor anchor = Anchor.topLeft,
     int? priority,
   }) {
-    return Rectangle(
+    return RectangleComponent(
       position: anchor == Anchor.topLeft
           ? rect.topLeft.toVector2()
           : Anchor.topLeft.toOtherAnchorPosition(

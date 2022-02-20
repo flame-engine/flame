@@ -14,12 +14,10 @@ void main() {
       final blockA = TestBlock(
         Vector2.zero(),
         Vector2.all(10),
-        type: CollidableType.active,
       );
       final blockB = TestBlock(
         Vector2.all(1),
         Vector2.all(10),
-        type: CollidableType.active,
       );
       await game.ensureAddAll([blockA, blockB]);
       game.update(0);
@@ -67,7 +65,6 @@ void main() {
       final blockA = TestBlock(
         Vector2.zero(),
         Vector2.all(10),
-        type: CollidableType.active,
       );
       final blockB = TestBlock(
         Vector2.all(1),
@@ -91,7 +88,6 @@ void main() {
       final blockB = TestBlock(
         Vector2.all(1),
         Vector2.all(10),
-        type: CollidableType.active,
       );
       await game.ensureAddAll([blockA, blockB]);
       game.update(0);
@@ -139,7 +135,6 @@ void main() {
       final blockA = TestBlock(
         Vector2.zero(),
         Vector2.all(10),
-        type: CollidableType.active,
       );
       final blockB = TestBlock(
         Vector2.all(1),
@@ -161,7 +156,6 @@ void main() {
       final blockB = TestBlock(
         Vector2.all(1),
         Vector2.all(10),
-        type: CollidableType.active,
       );
       await game.ensureAddAll([blockA, blockB]);
       game.update(0);
@@ -202,12 +196,10 @@ void main() {
       final blockA = TestBlock(
         Vector2.zero(),
         Vector2.all(10),
-        type: CollidableType.active,
       );
       final blockB = TestBlock(
         Vector2.all(11),
         Vector2.all(10),
-        type: CollidableType.active,
       );
       expect(blockA.collidingWith(blockB), isFalse);
       await game.ensureAddAll([blockA, blockB]);
@@ -229,12 +221,10 @@ void main() {
       final blockA = TestBlock(
         Vector2.zero(),
         Vector2.all(10),
-        type: CollidableType.active,
       );
       final blockB = TestBlock(
         Vector2(11, 0),
         Vector2.all(10),
-        type: CollidableType.active,
       );
       expect(blockA.collidingWith(blockB), isFalse);
       await game.ensureAddAll([blockA, blockB]);
@@ -256,12 +246,10 @@ void main() {
       final blockA = TestBlock(
         Vector2.zero(),
         Vector2.all(10),
-        type: CollidableType.active,
       );
       final blockB = TestBlock(
         Vector2.all(11),
         Vector2.all(10),
-        type: CollidableType.active,
       );
       expect(blockA.collidingWith(blockB), isFalse);
       await game.ensureAddAll([blockA, blockB]);
@@ -283,7 +271,6 @@ void main() {
       final blockA = TestBlock(
         Vector2.zero(),
         Vector2.all(10),
-        type: CollidableType.active,
       );
       await game.ensureAdd(blockA);
       game.update(0);
@@ -297,7 +284,6 @@ void main() {
       final blockA = TestBlock(
         Vector2.zero(),
         Vector2.all(10),
-        type: CollidableType.active,
       );
       await game.ensureAdd(blockA);
       game.update(0);
@@ -311,13 +297,11 @@ void main() {
       final blockA = TestBlock(
         Vector2.zero(),
         Vector2.all(10),
-        type: CollidableType.active,
         name: 'A',
       );
       final innerBlockA = TestBlock(
         blockA.size / 4,
         blockA.size / 2,
-        type: CollidableType.active,
         name: 'iA',
       );
       blockA.add(innerBlockA);
@@ -325,13 +309,11 @@ void main() {
       final blockB = TestBlock(
         Vector2.all(5),
         Vector2.all(10),
-        type: CollidableType.active,
         name: 'B',
       );
       final innerBlockB = TestBlock(
         blockA.size / 4,
         blockA.size / 2,
-        type: CollidableType.active,
         name: 'iB',
       );
       blockB.add(innerBlockB);

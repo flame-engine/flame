@@ -14,7 +14,7 @@ void main() {
   group('JoystickDirection tests', () {
     withDraggables.test('can convert angle to JoystickDirection', (game) async {
       final joystick = JoystickComponent(
-        knob: Circle(radius: 5.0),
+        knob: CircleComponent(radius: 5.0),
         size: 20,
         margin: const EdgeInsets.only(left: 20, bottom: 20),
       );
@@ -46,7 +46,7 @@ void main() {
       'the size and then the knob is moved slightly back again',
       (game) async {
         final joystick = JoystickComponent(
-          knob: Circle(radius: 5.0),
+          knob: CircleComponent(radius: 5.0),
           size: 20,
           margin: const EdgeInsets.only(left: 20, top: 20),
         );

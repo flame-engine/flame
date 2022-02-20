@@ -5,11 +5,11 @@ import '../../components.dart';
 import '../../extensions.dart';
 import '../../geometry.dart';
 
-class Circle extends Shape {
-  /// With this constructor you can create your [Circle] from a radius and
-  /// a position. It will also calculate the bounding rectangle [size] for the
-  /// [Circle].
-  Circle({
+class CircleComponent extends ShapeComponent {
+  /// With this constructor you can create your [CircleComponent] from a radius
+  /// and a position. It will also calculate the bounding rectangle [size] for
+  /// the [CircleComponent].
+  CircleComponent({
     double? radius,
     Vector2? position,
     double? angle,
@@ -25,7 +25,7 @@ class Circle extends Shape {
           paint: paint,
         );
 
-  Circle.fromNormal(
+  CircleComponent.fromNormal(
     double normal, {
     Vector2? position,
     required Vector2 size,

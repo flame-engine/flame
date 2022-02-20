@@ -2,7 +2,7 @@ import '../../collision_detection.dart';
 import '../../components.dart';
 import '../../geometry.dart';
 
-class HitboxCircle extends Circle with HitboxShape {
+class HitboxCircle extends CircleComponent with HitboxShape {
   @override
   final bool shouldFillParent;
 

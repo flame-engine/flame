@@ -90,8 +90,8 @@ class JoystickAdvancedExample extends FlameGame
     // A button, created from a shape, that adds a rotation effect to the player
     // when it is pressed.
     final shapeButton = HudButtonComponent(
-      button: Circle(radius: 35),
-      buttonDown: Rectangle(
+      button: CircleComponent(radius: 35),
+      buttonDown: RectangleComponent(
         size: buttonSize,
         paint: BasicPalette.blue.paint(),
       ),
@@ -114,13 +114,13 @@ class JoystickAdvancedExample extends FlameGame
     // A button, created from a shape, that adds a scale effect to the player
     // when it is pressed.
     final buttonComponent = ButtonComponent(
-      button: Rectangle(
+      button: RectangleComponent(
         size: Vector2(185, 50),
         paint: Paint()
           ..color = Colors.orange
           ..style = PaintingStyle.stroke,
       ),
-      buttonDown: Rectangle(
+      buttonDown: RectangleComponent(
         size: Vector2(185, 50),
         paint: BasicPalette.magenta.paint(),
       ),

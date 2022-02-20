@@ -8,7 +8,7 @@ import '../../components.dart';
 import '../../extensions.dart';
 import '../../geometry.dart';
 
-class Polygon extends Shape {
+class PolygonComponent extends ShapeComponent {
   final List<Vector2> _vertices;
   UnmodifiableListView<Vector2> get vertices => UnmodifiableListView(_vertices);
   // These lists are used to minimize the amount of objects that are created,
@@ -21,12 +21,12 @@ class Polygon extends Shape {
 
   final _cachedGlobalVertices = ValueCache<List<Vector2>>();
 
-  /// With this constructor you create your [Polygon] from positions in your
-  /// intended space. It will automatically calculate the [size] of the Polygon
-  /// if no size it given.
+  /// With this constructor you create your [PolygonComponent] from positions in
+  /// your intended space. It will automatically calculate the [size] of the
+  /// Polygon if no size it given.
   /// NOTE: Always define your polygon in a counter-clockwise fashion (in the
   /// screen coordinate system).
-  Polygon(
+  PolygonComponent(
     this._vertices, {
     Vector2? position,
     Vector2? size,
@@ -66,7 +66,7 @@ class Polygon extends Shape {
 
   /// Normals are always defined from the center
   // TODO(spydon): add old description here
-  Polygon.fromNormals(
+  PolygonComponent.fromNormals(
     List<Vector2> normals, {
     required Vector2 size,
     Vector2? position,

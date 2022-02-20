@@ -3,14 +3,18 @@ import 'dart:math';
 import '../../extensions.dart';
 import '../../geometry.dart';
 
-abstract class Intersections<T1 extends Shape, T2 extends Shape> {
+abstract class Intersections<T1 extends ShapeComponent,
+    T2 extends ShapeComponent> {
   Set<Vector2> intersect(T1 shapeA, T2 shapeB);
 
-  bool supportsShapes(Shape shapeA, Shape shapeB) {
+  bool supportsShapes(ShapeComponent shapeA, ShapeComponent shapeB) {
     return shapeA is T1 && shapeB is T2 || shapeA is T2 && shapeB is T1;
   }
 
-  Set<Vector2> unorderedIntersect(Shape shapeA, Shape shapeB) {
+  Set<Vector2> unorderedIntersect(
+    ShapeComponent shapeA,
+    ShapeComponent shapeB,
+  ) {
     if (shapeA is T1 && shapeB is T2) {
       return intersect(shapeA, shapeB);
     } else if (shapeA is T2 && shapeB is T1) {
@@ -21,15 +25,16 @@ abstract class Intersections<T1 extends Shape, T2 extends Shape> {
   }
 }
 
-class PolygonPolygonIntersections extends Intersections<Polygon, Polygon> {
+class PolygonPolygonIntersections
+    extends Intersections<PolygonComponent, PolygonComponent> {
   /// Returns the intersection points of [polygonA] and [polygonB]
   /// The two polygons are required to be convex
   /// If they share a segment of a line, both end points and the center point of
   /// that line segment will be counted as collision points
   @override
   Set<Vector2> intersect(
-    Polygon polygonA,
-    Polygon polygonB, {
+    PolygonComponent polygonA,
+    PolygonComponent polygonB, {
     Rect? overlappingRect,
   }) {
     final intersectionPoints = <Vector2>{};
@@ -48,11 +53,12 @@ class PolygonPolygonIntersections extends Intersections<Polygon, Polygon> {
   }
 }
 
-class CirclePolygonIntersections extends Intersections<Circle, Polygon> {
+class CirclePolygonIntersections
+    extends Intersections<CircleComponent, PolygonComponent> {
   @override
   Set<Vector2> intersect(
-    Circle circle,
-    Polygon polygon, {
+    CircleComponent circle,
+    PolygonComponent polygon, {
     Rect? overlappingRect,
   }) {
     final intersectionPoints = <Vector2>{};
@@ -66,9 +72,10 @@ class CirclePolygonIntersections extends Intersections<Circle, Polygon> {
   }
 }
 
-class CircleCircleIntersections extends Intersections<Circle, Circle> {
+class CircleCircleIntersections
+    extends Intersections<CircleComponent, CircleComponent> {
   @override
-  Set<Vector2> intersect(Circle shapeA, Circle shapeB) {
+  Set<Vector2> intersect(CircleComponent shapeA, CircleComponent shapeB) {
     final distance = shapeA.absoluteCenter.distanceTo(shapeB.absoluteCenter);
     final radiusA = shapeA.radius;
     final radiusB = shapeB.radius;
@@ -133,7 +140,7 @@ final List<Intersections> _intersectionSystems = [
   PolygonPolygonIntersections(),
 ];
 
-Set<Vector2> intersections(Shape shapeA, Shape shapeB) {
+Set<Vector2> intersections(ShapeComponent shapeA, ShapeComponent shapeB) {
   final intersectionSystem = _intersectionSystems.firstWhere(
     (system) => system.supportsShapes(shapeA, shapeB),
     orElse: () {

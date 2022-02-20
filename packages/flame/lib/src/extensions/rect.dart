@@ -21,8 +21,8 @@ extension RectExtension on Rect {
   math.Rectangle toMathRectangle() => math.Rectangle(left, top, width, height);
 
   /// Converts this [Rect] into a Rectangle from flame-geom.
-  Rectangle toGeometryRectangle() {
-    return Rectangle(
+  RectangleComponent toGeometryRectangle() {
+    return RectangleComponent(
       position: topLeft.toVector2(),
       size: size.toVector2(),
     );

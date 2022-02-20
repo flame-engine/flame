@@ -8,7 +8,7 @@ import 'package:test/test.dart';
 void main() {
   group('ShapeComponent.containsPoint', () {
     test('circle contains point', () {
-      final component = Circle(
+      final component = CircleComponent(
         radius: 1.0,
         position: Vector2(1, 1),
         anchor: Anchor.center,
@@ -20,7 +20,7 @@ void main() {
     });
 
     test('rectangle contains point', () {
-      final component = Rectangle(
+      final component = RectangleComponent(
         position: Vector2(1, 1),
         size: Vector2(1, 1),
       );
@@ -31,7 +31,7 @@ void main() {
     });
 
     test('polygon contains point', () {
-      final component = Polygon(
+      final component = PolygonComponent(
         [
           Vector2(2, 2),
           Vector2(2, 1),
@@ -47,7 +47,7 @@ void main() {
     });
 
     test('rotated circle does not contain point', () {
-      final component = Circle(
+      final component = CircleComponent(
         radius: 1.0,
         position: Vector2(1, 1),
         angle: pi / 4,
@@ -60,7 +60,7 @@ void main() {
     });
 
     test('rotated rectangle does not contain point', () {
-      final component = Rectangle(
+      final component = RectangleComponent(
         position: Vector2.all(1.0),
         size: Vector2.all(2.0),
         angle: pi / 4,
@@ -73,7 +73,7 @@ void main() {
     });
 
     test('rotated polygon does not contain point', () {
-      final component = Polygon(
+      final component = PolygonComponent(
         [
           Vector2(2, 2),
           Vector2(2, 1),
@@ -90,7 +90,7 @@ void main() {
     });
 
     test('rotated circle contains point', () {
-      final component = Circle(
+      final component = CircleComponent(
         radius: 1.0,
         position: Vector2(1, 1),
         angle: pi / 4,
@@ -103,7 +103,7 @@ void main() {
     });
 
     test('rotated rectangle contains point', () {
-      final component = Rectangle(
+      final component = RectangleComponent(
         position: Vector2.all(1.0),
         size: Vector2.all(2.0),
         angle: pi / 4,
@@ -116,7 +116,7 @@ void main() {
     });
 
     test('rotated polygon contains point', () {
-      final component = Polygon(
+      final component = PolygonComponent(
         [
           Vector2(2, 2),
           Vector2(3, 1),
@@ -133,7 +133,7 @@ void main() {
     });
 
     test('horizontally flipped rectangle contains point', () {
-      final component = Rectangle(
+      final component = RectangleComponent(
         position: Vector2.all(1.0),
         size: Vector2.all(2.0),
         anchor: Anchor.center,
@@ -145,7 +145,7 @@ void main() {
     });
 
     test('initially rotated CircleComponent does not contain point', () {
-      final component = Circle(
+      final component = CircleComponent(
         radius: 1.0,
         position: Vector2(1, 1),
         angle: pi / 4,
@@ -158,7 +158,7 @@ void main() {
     });
 
     test('initially rotated Rectangle does not contain point', () {
-      final component = Rectangle(
+      final component = RectangleComponent(
         position: Vector2.all(1.0),
         size: Vector2.all(2.0),
         angle: pi / 4,
@@ -171,7 +171,7 @@ void main() {
     });
 
     test('initially rotated PolygonComponent does not contain point', () {
-      final component = Polygon(
+      final component = PolygonComponent(
         [
           Vector2(2, 2),
           Vector2(3, 1),
@@ -188,7 +188,7 @@ void main() {
     });
 
     test('rotated PolygonComponent contains point', () {
-      final component = Polygon(
+      final component = PolygonComponent(
         [
           Vector2(2, 2),
           Vector2(3, 1),
@@ -205,7 +205,7 @@ void main() {
     });
 
     test('moved CircleComponent contains point', () {
-      final component = Circle(
+      final component = CircleComponent(
         radius: 1.0,
         position: Vector2(2, 2),
         anchor: Anchor.center,
@@ -217,7 +217,7 @@ void main() {
     });
 
     test('moved Rectangle contains point', () {
-      final component = Rectangle(
+      final component = RectangleComponent(
         position: Vector2(2, 2),
         size: Vector2(1, 1),
         anchor: Anchor.center,
@@ -229,7 +229,7 @@ void main() {
     });
 
     test('moved PolygonComponent contains point', () {
-      final component = Polygon(
+      final component = PolygonComponent(
         [
           Vector2(2, 0),
           Vector2(1, 1),
@@ -245,7 +245,7 @@ void main() {
     });
 
     test('sized up CircleComponent does not contain point', () {
-      final component = Circle(
+      final component = CircleComponent(
         radius: 1.0,
         position: Vector2(1, 1),
         anchor: Anchor.center,
@@ -258,7 +258,7 @@ void main() {
     });
 
     test('sized up Rectangle does not contain point', () {
-      final component = Rectangle(
+      final component = RectangleComponent(
         position: Vector2(1, 1),
         size: Vector2(2, 2),
         anchor: Anchor.center,
@@ -270,7 +270,7 @@ void main() {
     });
 
     test('sized PolygonComponent does not contain point', () {
-      final component = Polygon(
+      final component = PolygonComponent(
         [
           Vector2(2, 0),
           Vector2(1, 1),
@@ -289,7 +289,7 @@ void main() {
     test(
       'rotated CircleComponent with default anchor (topLeft) contains point',
       () {
-        final component = Circle(
+        final component = CircleComponent(
           radius: 1.0,
           position: Vector2.all(1.0),
           angle: pi / 4,
@@ -304,7 +304,7 @@ void main() {
     test(
       'rotated Rectangle with default anchor (topLeft) contains point',
       () {
-        final component = Rectangle(
+        final component = RectangleComponent(
           position: Vector2.all(1.0),
           size: Vector2.all(1.0),
           angle: pi / 4,
@@ -319,7 +319,7 @@ void main() {
     test(
       'rotated PolygonComponent with default anchor (topLeft) contains point',
       () {
-        final component = Polygon(
+        final component = PolygonComponent(
           [
             Vector2(2, 0),
             Vector2(1, 1),
@@ -346,7 +346,7 @@ void main() {
           );
         }
 
-        final component = Circle(
+        final component = CircleComponent(
           radius: 1.0,
           position: Vector2.all(1.0),
           anchor: Anchor.center,
@@ -375,7 +375,7 @@ void main() {
           );
         }
 
-        final component = Rectangle(
+        final component = RectangleComponent(
           size: Vector2.all(1.0),
           position: Vector2.all(1.0),
           anchor: Anchor.center,
@@ -404,7 +404,7 @@ void main() {
           );
         }
 
-        final component = Polygon.fromNormals(
+        final component = PolygonComponent.fromNormals(
           [
             Vector2(1, 0),
             Vector2(0, -1),

@@ -6,7 +6,7 @@ import '../../game.dart';
 import '../../geometry.dart';
 import '../geometry/shape_intersections.dart' as intersection_system;
 
-mixin HitboxShape on Shape implements Hitbox<HitboxShape> {
+mixin HitboxShape on ShapeComponent implements Hitbox<HitboxShape> {
   @override
   CollidableType collidableType = CollidableType.active;
 
@@ -108,14 +108,14 @@ mixin HitboxShape on Shape implements Hitbox<HitboxShape> {
     return aabb.containsVector2(point);
   }
 
-  /// Where this [Shape] has intersection points with another shape
+  /// Where this [ShapeComponent] has intersection points with another shape
   @override
   Set<Vector2> intersections(Hitbox other) {
     assert(
-      other is Shape,
+      other is ShapeComponent,
       'The intersection can only be performed between shapes',
     );
-    return intersection_system.intersections(this, other as Shape);
+    return intersection_system.intersections(this, other as ShapeComponent);
   }
 
   /// Since this is a cheaper calculation than checking towards all shapes, this

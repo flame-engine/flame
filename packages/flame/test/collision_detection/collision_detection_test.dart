@@ -253,7 +253,7 @@ void main() {
 
   group('Polygon intersections tests', () {
     test('simple polygon collision', () {
-      final polygonA = Polygon(
+      final polygonA = PolygonComponent(
         [
           Vector2(2, 2),
           Vector2(3, 1),
@@ -261,7 +261,7 @@ void main() {
           Vector2(1, 1),
         ],
       );
-      final polygonB = Polygon(
+      final polygonB = PolygonComponent(
         [
           Vector2(1, 2),
           Vector2(2, 1),
@@ -288,13 +288,13 @@ void main() {
     });
 
     test('collision on shared line segment', () {
-      final polygonA = Polygon([
+      final polygonA = PolygonComponent([
         Vector2(1, 1),
         Vector2(1, 2),
         Vector2(2, 2),
         Vector2(2, 1),
       ]);
-      final polygonB = Polygon([
+      final polygonB = PolygonComponent([
         Vector2(2, 1),
         Vector2(2, 2),
         Vector2(3, 2),
@@ -318,13 +318,13 @@ void main() {
     });
 
     test('one point collision', () {
-      final polygonA = Polygon([
+      final polygonA = PolygonComponent([
         Vector2(1, 1),
         Vector2(1, 2),
         Vector2(2, 2),
         Vector2(2, 1),
       ]);
-      final polygonB = Polygon([
+      final polygonB = PolygonComponent([
         Vector2(2, 2),
         Vector2(2, 3),
         Vector2(3, 3),
@@ -344,7 +344,7 @@ void main() {
     });
 
     test('collision while no corners are inside the other body', () {
-      final polygonA = Polygon.fromNormals(
+      final polygonA = PolygonComponent.fromNormals(
         [
           Vector2(1, 1),
           Vector2(1, -1),
@@ -354,7 +354,7 @@ void main() {
         position: Vector2.zero(),
         size: Vector2(2, 4),
       );
-      final polygonB = Polygon.fromNormals(
+      final polygonB = PolygonComponent.fromNormals(
         [
           Vector2(1, 1),
           Vector2(1, -1),
@@ -385,14 +385,14 @@ void main() {
     });
 
     test('collision with advanced hitboxes in different quadrants', () {
-      final polygonA = Polygon([
+      final polygonA = PolygonComponent([
         Vector2(0, 0),
         Vector2(-1, 1),
         Vector2(0, 3),
         Vector2(2, 2),
         Vector2(1.5, 0.5),
       ]);
-      final polygonB = Polygon([
+      final polygonB = PolygonComponent([
         Vector2(-2, -2),
         Vector2(-3, 0),
         Vector2(-2, 3),
@@ -416,11 +416,11 @@ void main() {
 
   group('Rectangle intersections tests', () {
     test('simple intersection', () {
-      final rectangleA = Rectangle(
+      final rectangleA = RectangleComponent(
         position: Vector2(4, 0),
         size: Vector2.all(4),
       );
-      final rectangleB = Rectangle(
+      final rectangleB = RectangleComponent(
         position: Vector2.zero(),
         size: Vector2.all(4),
       );
@@ -444,8 +444,8 @@ void main() {
 
   group('Circle intersections tests', () {
     test('simple collision', () {
-      final circleA = Circle(radius: 2.0, position: Vector2(4, 0));
-      final circleB = Circle(radius: 2.0, position: Vector2.zero());
+      final circleA = CircleComponent(radius: 2.0, position: Vector2(4, 0));
+      final circleB = CircleComponent(radius: 2.0, position: Vector2.zero());
       final intersections = geometry.intersections(circleA, circleB);
       expect(
         intersections.contains(Vector2(4, 2)),
@@ -460,8 +460,8 @@ void main() {
     });
 
     test('two point collision', () {
-      final circleA = Circle(radius: 2.0, position: Vector2(2, -2));
-      final circleB = Circle(radius: 2.0, position: Vector2(0, -2));
+      final circleA = CircleComponent(radius: 2.0, position: Vector2(2, -2));
+      final circleB = CircleComponent(radius: 2.0, position: Vector2(0, -2));
       final intersections = geometry.intersections(circleA, circleB).toList();
       expect(
         intersections.contains(Vector2(3.0, -1.7320508075688772)),
@@ -481,8 +481,8 @@ void main() {
     });
 
     test('same size and position', () {
-      final circleA = Circle(radius: 4.0, position: Vector2.all(3));
-      final circleB = Circle(radius: 4.0, position: Vector2.all(3));
+      final circleA = CircleComponent(radius: 4.0, position: Vector2.all(3));
+      final circleB = CircleComponent(radius: 4.0, position: Vector2.all(3));
       final intersections = geometry.intersections(circleA, circleB);
       expect(
         intersections.containsAll([
@@ -502,12 +502,12 @@ void main() {
     });
 
     test('not overlapping', () {
-      final circleA = Circle(
+      final circleA = CircleComponent(
         radius: 2.0,
         position: Vector2.all(-1),
         anchor: Anchor.center,
       );
-      final circleB = Circle(
+      final circleB = CircleComponent(
         radius: 2.0,
         position: Vector2.all(1.83),
         anchor: Anchor.center,
@@ -521,12 +521,12 @@ void main() {
     });
 
     test('in third quadrant', () {
-      final circleA = Circle(
+      final circleA = CircleComponent(
         radius: 1.0,
         position: Vector2.all(-1),
         anchor: Anchor.center,
       );
-      final circleB = Circle(
+      final circleB = CircleComponent(
         radius: 1.0,
         position: Vector2.all(-2),
         anchor: Anchor.center,
@@ -549,12 +549,12 @@ void main() {
     });
 
     test('in different quadrants', () {
-      final circleA = Circle(
+      final circleA = CircleComponent(
         radius: 2.0,
         position: Vector2.all(-1),
         anchor: Anchor.center,
       );
-      final circleB = Circle(
+      final circleB = CircleComponent(
         radius: 2.0,
         position: Vector2.all(1),
         anchor: Anchor.center,
@@ -578,12 +578,12 @@ void main() {
 
   group('Circle-Polygon intersections tests', () {
     test('simple circle-polygon intersection', () {
-      final circle = Circle(
+      final circle = CircleComponent(
         radius: 1.0,
         position: Vector2.zero(),
         anchor: Anchor.center,
       );
-      final polygon = Polygon(
+      final polygon = PolygonComponent(
         [
           Vector2(1, 2),
           Vector2(2, 1),
@@ -606,12 +606,12 @@ void main() {
     });
 
     test('single point circle-polygon intersection', () {
-      final circle = Circle(
+      final circle = CircleComponent(
         radius: 1.0,
         position: Vector2(-1, 1),
         anchor: Anchor.center,
       );
-      final polygon = Polygon([
+      final polygon = PolygonComponent([
         Vector2(1, 2),
         Vector2(2, 1),
         Vector2(1, 0),
@@ -631,12 +631,12 @@ void main() {
     });
 
     test('four point circle-polygon intersection', () {
-      final circle = Circle(
+      final circle = CircleComponent(
         radius: 1.0,
         position: Vector2.all(1),
         anchor: Anchor.center,
       );
-      final polygon = Polygon([
+      final polygon = PolygonComponent([
         Vector2(1, 2),
         Vector2(2, 1),
         Vector2(1, 0),
@@ -661,12 +661,12 @@ void main() {
     });
 
     test('polygon within circle, no intersections', () {
-      final circle = Circle(
+      final circle = CircleComponent(
         radius: 1.1,
         position: Vector2.all(1),
         anchor: Anchor.center,
       );
-      final polygon = Polygon([
+      final polygon = PolygonComponent([
         Vector2(1, 2),
         Vector2(2, 1),
         Vector2(1, 0),

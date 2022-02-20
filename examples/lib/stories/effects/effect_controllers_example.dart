@@ -23,7 +23,7 @@ class EffectControllersExample extends FlameGame {
   void onMount() {
     camera.viewport = FixedResolutionViewport(Vector2(400, 600));
     add(
-      Rectangle.square(
+      RectangleComponent.square(
         position: Vector2(20, 50),
         size: 20,
       )..add(
@@ -34,7 +34,7 @@ class EffectControllersExample extends FlameGame {
         ),
     );
     add(
-      Rectangle.square(
+      RectangleComponent.square(
         position: Vector2(70, 50),
         size: 20,
         paint: Paint()..color = const Color(0xffffbc63),
@@ -51,7 +51,7 @@ class EffectControllersExample extends FlameGame {
     );
 
     add(
-      Rectangle.square(
+      RectangleComponent.square(
         position: Vector2(140, 50),
         size: 20,
         paint: Paint()..color = const Color(0xffbeff63),
@@ -63,7 +63,7 @@ class EffectControllersExample extends FlameGame {
         ),
     );
     add(
-      Rectangle.square(
+      RectangleComponent.square(
         position: Vector2(190, 50),
         size: 10,
         paint: Paint()..color = const Color(0xffb663ff),

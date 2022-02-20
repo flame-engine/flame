@@ -18,7 +18,7 @@ class OverlappingTappablesExample extends FlameGame with HasTappables {
   }
 }
 
-class TappableSquare extends Rectangle with Tappable {
+class TappableSquare extends RectangleComponent with Tappable {
   TappableSquare({Vector2? position})
       : super(
           position: position ?? Vector2.all(100),

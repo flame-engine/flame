@@ -22,7 +22,8 @@ class PriorityExample extends FlameGame with HasTappables {
   }
 }
 
-class Square extends Rectangle with HasGameRef<PriorityExample>, Tappable {
+class Square extends RectangleComponent
+    with HasGameRef<PriorityExample>, Tappable {
   Square(Vector2 position)
       : super(
           position: position,
