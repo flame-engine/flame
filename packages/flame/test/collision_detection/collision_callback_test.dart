@@ -1,80 +1,20 @@
-import 'package:flame/collision_detection.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:test/test.dart';
 
-class _HasCollidablesGame extends FlameGame with HasCollisionDetection {}
-
-class _TestHitbox extends HitboxRectangle {
-  int startCounter = 0;
-  int onCollisionCounter = 0;
-  int endCounter = 0;
-
-  _TestHitbox() {
-    onCollisionCallback = (_, __) {
-      onCollisionCounter++;
-    };
-    onCollisionStartCallback = (_, __) {
-      startCounter++;
-    };
-    onCollisionEndCallback = (_) {
-      endCounter++;
-    };
-  }
-}
-
-class _TestBlock extends PositionComponent with CollisionCallbacks {
-  final hitbox = _TestHitbox();
-  int startCounter = 0;
-  int onCollisionCounter = 0;
-  int endCounter = 0;
-
-  _TestBlock(Vector2 position, Vector2 size)
-      : super(
-          position: position,
-          size: size,
-        ) {
-    add(hitbox);
-  }
-
-  @override
-  bool collidingWith(PositionComponent other) {
-    return activeCollisions.contains(other);
-  }
-
-  @override
-  void onCollisionStart(
-    Set<Vector2> intersectionPoints,
-    PositionComponent other,
-  ) {
-    super.onCollisionStart(intersectionPoints, other);
-    startCounter++;
-  }
-
-  @override
-  void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
-    super.onCollision(intersectionPoints, other);
-    onCollisionCounter++;
-  }
-
-  @override
-  void onCollisionEnd(PositionComponent other) {
-    super.onCollisionEnd(other);
-    endCounter++;
-  }
-}
+import 'collision_test_helpers.dart';
 
 void main() {
-  final withCollidables = FlameTester(() => _HasCollidablesGame());
+  final withCollidables = FlameTester(() => HasCollidablesGame());
 
   group('Collision callbacks', () {
     withCollidables.test('collidable callbacks are called', (game) async {
-      final blockA = _TestBlock(
+      final blockA = TestBlock(
         Vector2.zero(),
         Vector2.all(10),
       );
-      final blockB = _TestBlock(
+      final blockB = TestBlock(
         Vector2.all(1),
         Vector2.all(10),
       );
@@ -113,11 +53,11 @@ void main() {
     withCollidables.test(
       'collidable callbacks are called when removing a Collidable',
       (game) async {
-        final blockA = _TestBlock(
+        final blockA = TestBlock(
           Vector2.zero(),
           Vector2.all(10),
         );
-        final blockB = _TestBlock(
+        final blockB = TestBlock(
           Vector2.all(1),
           Vector2.all(10),
         );
@@ -139,11 +79,11 @@ void main() {
     );
 
     withCollidables.test('hitbox callbacks are called', (game) async {
-      final blockA = _TestBlock(
+      final blockA = TestBlock(
         Vector2.zero(),
         Vector2.all(10),
       );
-      final blockB = _TestBlock(
+      final blockB = TestBlock(
         Vector2.all(1),
         Vector2.all(10),
       );
@@ -180,11 +120,11 @@ void main() {
   withCollidables.test(
     'hitbox callbacks are called when Collidable is removed',
     (game) async {
-      final blockA = _TestBlock(
+      final blockA = TestBlock(
         Vector2.zero(),
         Vector2.all(10),
       );
-      final blockB = _TestBlock(
+      final blockB = TestBlock(
         Vector2.all(1),
         Vector2.all(10),
       );
@@ -210,11 +150,11 @@ void main() {
   withCollidables.test(
     'hitbox end callbacks are called when hitbox is moved away fast',
     (game) async {
-      final blockA = _TestBlock(
+      final blockA = TestBlock(
         Vector2.zero(),
         Vector2.all(10),
       );
-      final blockB = _TestBlock(
+      final blockB = TestBlock(
         Vector2.all(1),
         Vector2.all(10),
       );

@@ -6,7 +6,7 @@ import 'package:flame/game.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:test/test.dart';
 
-class _HasCollidablesGame extends FlameGame with HasCollisionDetection {}
+import 'collision_test_helpers.dart';
 
 class _TestBlock extends PositionComponent with CollisionCallbacks {
   final Vector2 velocity;
@@ -40,8 +40,6 @@ class _TestBlock extends PositionComponent with CollisionCallbacks {
 }
 
 void main() {
-  final withCollidables = FlameTester(() => _HasCollidablesGame());
-
   group('Benchmark collision detection', () {
     withCollidables.test('collidable callbacks are called', (game) async {
       final rng = Random(0);
