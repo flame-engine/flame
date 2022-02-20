@@ -132,6 +132,7 @@ class MyCollidable extends PositionComponent with CollisionCallbacks {
 In this example it can be seen how the Dart `is` keyword is used to check which other
 `PositionComponent` that your component collided with. The set of points is where the edges of the
 hitboxes collided.
+
 Note that the `onCollision` method will be called on both `PositionComponent`s if they have both
 implemented the `onCollision` method, and also on both hitboxes. The same goes for the
 `onCollisionStart` and `onCollisionEnd` methods, which are called when two components and hitboxes
@@ -194,19 +195,19 @@ default calculated from the size of the collidable that they are attached to, bu
 polygon can be made in an infinite number of ways inside of a bounding box you have to add the
 definition in the constructor for this shape.
 
-The `HitboxPolygon` has the same constructors as the ()[#PolygonComponent], so see that section for
+The `HitboxPolygon` has the same constructors as the ()[#PolygonComponent], see that section for
 documentation regarding those.
 
 
 ### HitboxRectangle
 
-The `HitboxRectangle` has the same constructors as the ()[#RectangleComponent], so see that section
+The `HitboxRectangle` has the same constructors as the ()[#RectangleComponent], see that section
 for documentation regarding those.
 
 
 ### HitboxCircle
 
-The `HitboxCircle` has the same constructors as the ()[#CircleComponent], so see that section for
+The `HitboxCircle` has the same constructors as the ()[#CircleComponent], see that section for
 documentation regarding those.
 
 
@@ -217,7 +218,7 @@ different ways of defining how they look, but they all have a size and angle tha
 and the shape definition will scale or rotate the shape accordingly.
 
 These shapes are meant as a tool for using geometrical shapes in a more general way than together
-with the collision detection system, where you want to use the [](#hitboxshapes).
+with the collision detection system, where you want to use the [](#hitboxshape)s.
 
 
 ### PolygonComponent
@@ -245,12 +246,15 @@ For example you could create a diamond shapes polygon like this:
 
 ```dart
 void main() {
-  PolygonComponent.fromNormals([
-    Vector2(0.0, 1.0), // Middle of top wall
-    Vector2(1.0, 0.0), // Middle of right wall
-    Vector2(0.0, -1.0), // Middle of bottom wall
-    Vector2(-1.0, 0.0), // Middle of left wall
-  ]);
+  PolygonComponent.fromNormals(
+    [
+      Vector2(0.0, 1.0), // Middle of top wall
+      Vector2(1.0, 0.0), // Middle of right wall
+      Vector2(0.0, -1.0), // Middle of bottom wall
+      Vector2(-1.0, 0.0), // Middle of left wall
+    ],
+    size: Vector2.all(100),
+  );
 }
 ```
 
