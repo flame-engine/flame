@@ -41,6 +41,8 @@ class HitboxRectangle extends RectangleComponent with HitboxShape {
 
   @override
   void fillParent() {
-    refreshVertices(newVertices: RectangleComponent.sizeToVertices(size));
+    refreshVertices(
+      newVertices: RectangleComponent.sizeToVertices(size, anchor),
+    );
   }
 }

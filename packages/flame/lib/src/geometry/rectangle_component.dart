@@ -15,7 +15,7 @@ class RectangleComponent extends PolygonComponent {
     int? priority,
     Paint? paint,
   }) : super(
-          sizeToVertices(size ?? Vector2.zero()),
+          sizeToVertices(size ?? Vector2.zero(), anchor),
           position: position,
           angle: angle,
           anchor: anchor,
@@ -84,12 +84,16 @@ class RectangleComponent extends PolygonComponent {
   }
 
   @protected
-  static List<Vector2> sizeToVertices(Vector2 size) {
+  static List<Vector2> sizeToVertices(
+    Vector2 size,
+    Anchor? componentAnchor,
+  ) {
+    final anchor = componentAnchor ?? Anchor.topLeft;
     return [
-      Vector2.zero(),
-      Vector2(0, size.y),
-      size.clone(),
-      Vector2(size.x, 0),
+      Vector2(-size.x * anchor.x, -size.y * anchor.y),
+      Vector2(-size.x * anchor.x, size.y - size.y * anchor.y),
+      Vector2(size.x - size.x * anchor.x, size.y - size.y * anchor.y),
+      Vector2(size.x - size.x * anchor.x, -size.y * anchor.y),
     ];
   }
 }

@@ -126,18 +126,16 @@ class PolygonComponent extends ShapeComponent {
       size.setValues(bounds.width, bounds.height);
     }
     final topLeftBounds = bounds.topLeft;
-    if (topLeftBounds.dx != 0 || topLeftBounds.dy != 0) {
-      position.setValues(
-        position.x + topLeftBounds.dx + anchor.x * size.x,
-        position.y + topLeftBounds.dy + anchor.y * size.y,
+    position.setValues(
+      position.x + topLeftBounds.dx + anchor.x * size.x,
+      position.y + topLeftBounds.dy + anchor.y * size.y,
+    );
+    _vertices.forEach((p) {
+      p.setValues(
+        p.x - topLeftBounds.dx,
+        p.y - topLeftBounds.dy,
       );
-      _vertices.forEach((p) {
-        p.setValues(
-          p.x - topLeftBounds.dx,
-          p.y - topLeftBounds.dy,
-        );
-      });
-    }
+    });
   }
 
   /// Gives back the shape vectors multiplied by the size and scale
@@ -145,8 +143,6 @@ class PolygonComponent extends ShapeComponent {
     final scale = absoluteScale;
     final angle = absoluteAngle;
     final position = absoluteTopLeftPosition;
-    final center = absoluteCenter;
-    // TODO(spydon): Is the parent size needed here
     if (!_cachedGlobalVertices.isCacheValid<dynamic>(<dynamic>[
       position,
       scale,

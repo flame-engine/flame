@@ -597,11 +597,7 @@ void main() {
         true,
         reason: 'Missed intersections',
       );
-      expect(
-        intersections.length == 2,
-        true,
-        reason: 'Wrong number of intersections',
-      );
+      expect(intersections.length, 2, reason: 'Wrong number of intersections');
     });
 
     test('single point circle-polygon intersection', () {
