@@ -129,7 +129,6 @@ void main() {
         size: Vector2.all(2.0),
         anchor: Anchor.center,
       )..flipVerticallyAroundCenter();
-      print(component.globalVertices());
       expect(
         component.containsPoint(Vector2(2.0, 2.0)),
         isTrue,
@@ -406,31 +405,19 @@ void main() {
           size: Vector2.all(1.0),
           position: Vector2.all(1.0),
         );
-        print(component.position);
-        print(component.size);
-        print(component.vertices);
-        print(component.globalVertices());
         final grandParent = createParent();
         final parent = createParent();
         grandParent.add(parent);
         parent.add(component);
         game.add(grandParent);
         await game.ready();
-        print(component.position);
-        print(component.absolutePosition);
-        print(component.absoluteTopLeftPosition);
-        print(component.globalVertices());
         expect(
-          component.containsPoint(Vector2(-2.5, -0.5)),
+          component.containsPoint(Vector2(-2.0, 0.01)),
           isTrue,
         );
-        print('==========');
-        print(component.absoluteTopLeftPosition);
         component.angle = pi / 2;
-        print(component.absoluteTopLeftPosition);
-        print('==========');
         expect(
-          component.containsPoint(Vector2(-3.5, -0.5)),
+          component.containsPoint(Vector2(-1.0, 0.01)),
           isTrue,
         );
       },
