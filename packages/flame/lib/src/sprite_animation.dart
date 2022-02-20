@@ -296,7 +296,7 @@ class SpriteAnimation {
   void update(double dt) {
     clock += dt;
     elapsed += dt;
-    if (isSingleFrame || _done) {
+    if (_done) {
       return;
     }
     while (clock >= currentFrame.stepTime) {

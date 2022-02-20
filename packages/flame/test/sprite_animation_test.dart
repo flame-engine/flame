@@ -40,6 +40,21 @@ void main() {
         failsAssert('All step times must be positive'),
       );
     });
+
+    test('onComplete called for single-frame animation', () {
+      var counter = 0;
+      final sprite = MockSprite();
+      final animation =
+          SpriteAnimation.spriteList([sprite], stepTime: 1, loop: false)
+            ..onComplete = () => counter++;
+      expect(counter, 0);
+      animation.update(0.5);
+      expect(counter, 0);
+      animation.update(0.5);
+      expect(counter, 1);
+      animation.update(1);
+      expect(counter, 1);
+    });
   });
 }
 
