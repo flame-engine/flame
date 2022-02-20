@@ -11,21 +11,24 @@ class CollidableAnimationExample extends FlameGame with HasCollisionDetection {
     In this example you can see four animated birds which are flying straight
     along the same route until they hit either another bird or the wall, which
     makes them turn. The birds have PolygonHitboxes which are marked with the
-    green lines and dots.
+    white lines.
   ''';
 
   @override
   Future<void> onLoad() async {
     add(ScreenCollidable());
+    final componentSize = Vector2(150, 100);
     // Top left component
     add(
-      AnimatedComponent(Vector2.all(200), Vector2.all(100))..flipVertically(),
+      AnimatedComponent(Vector2.all(200), Vector2.all(100), componentSize)
+        ..flipVertically(),
     );
     // Bottom right component
     add(
       AnimatedComponent(
         Vector2(-100, -100),
         size.clone()..sub(Vector2.all(200)),
+        componentSize / 2,
       ),
     );
     // Bottom left component
@@ -33,6 +36,7 @@ class CollidableAnimationExample extends FlameGame with HasCollisionDetection {
       AnimatedComponent(
         Vector2(100, -100),
         Vector2(100, size.y - 100),
+        componentSize * 1.5,
         angle: pi / 4,
       ),
     );
@@ -41,6 +45,7 @@ class CollidableAnimationExample extends FlameGame with HasCollisionDetection {
       AnimatedComponent(
         Vector2(-300, 300),
         Vector2(size.x - 100, 100),
+        componentSize / 3,
         angle: pi / 4,
       )..flipVertically(),
     );
@@ -51,15 +56,17 @@ class AnimatedComponent extends SpriteAnimationComponent
     with CollisionCallbacks, HasGameRef {
   final Vector2 velocity;
 
-  AnimatedComponent(this.velocity, Vector2 position, {double angle = -pi / 4})
-      : super(
+  AnimatedComponent(
+    this.velocity,
+    Vector2 position,
+    Vector2 size, {
+    double angle = -pi / 4,
+  }) : super(
           position: position,
-          size: Vector2(150, 100),
+          size: size,
           angle: angle,
           anchor: Anchor.center,
         );
-
-  late HitboxPolygon hitbox;
 
   @override
   Future<void> onLoad() async {
@@ -71,15 +78,22 @@ class AnimatedComponent extends SpriteAnimationComponent
         textureSize: Vector2.all(48),
       ),
     );
-    hitbox = HitboxPolygon([
-      Vector2(0.0, -1.0),
-      Vector2(-1.0, -0.1),
-      Vector2(-0.2, 0.4),
-      Vector2(0.2, 0.4),
-      Vector2(1.0, -0.1),
-    ]);
-    hitbox.debugMode = true;
-    add(hitbox);
+    final hitboxPaint = BasicPalette.white.paint()
+      ..style = PaintingStyle.stroke;
+    add(
+      HitboxPolygon.fromNormals(
+        [
+          Vector2(0.0, -1.0),
+          Vector2(-1.0, -0.1),
+          Vector2(-0.2, 0.4),
+          Vector2(0.2, 0.4),
+          Vector2(1.0, -0.1),
+        ],
+        size: size,
+      )
+        ..paint = hitboxPaint
+        ..renderShape = true,
+    );
   }
 
   @override

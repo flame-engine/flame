@@ -34,14 +34,12 @@ void main() {
       final component = PolygonComponent(
         [
           Vector2(2, 2),
-          Vector2(2, 1),
           Vector2(2, 0),
           Vector2(1, 1),
         ],
-        anchor: Anchor.center,
       );
       expect(
-        component.containsPoint(Vector2(2.0, 1.9)),
+        component.containsPoint(Vector2(1.5, 1.0)),
         isTrue,
       );
     });
@@ -63,30 +61,24 @@ void main() {
       final component = RectangleComponent(
         position: Vector2.all(1.0),
         size: Vector2.all(2.0),
-        angle: pi / 4,
         anchor: Anchor.center,
       );
-      expect(
-        component.containsPoint(Vector2.all(1.9)),
-        isFalse,
-      );
+      expect(component.containsPoint(Vector2.all(2.0)), isTrue);
+      component.angle = pi / 4;
+      expect(component.containsPoint(Vector2.all(2.0)), isFalse);
     });
 
     test('rotated polygon does not contain point', () {
       final component = PolygonComponent(
         [
           Vector2(2, 2),
-          Vector2(2, 1),
           Vector2(2, 0),
           Vector2(1, 1),
         ],
         angle: pi / 4,
         anchor: Anchor.center,
       );
-      expect(
-        component.containsPoint(Vector2.all(1.9)),
-        isFalse,
-      );
+      expect(component.containsPoint(Vector2.all(1.9)), isFalse);
     });
 
     test('rotated circle contains point', () {
@@ -119,15 +111,14 @@ void main() {
       final component = PolygonComponent(
         [
           Vector2(2, 2),
-          Vector2(3, 1),
           Vector2(2, 0),
           Vector2(1, 1),
         ],
-        angle: pi / 4,
+        angle: pi / 2,
         anchor: Anchor.center,
       );
       expect(
-        component.containsPoint(Vector2(2.7, 1.7)),
+        component.containsPoint(Vector2(0.51, 1.5)),
         isTrue,
       );
     });
@@ -138,6 +129,7 @@ void main() {
         size: Vector2.all(2.0),
         anchor: Anchor.center,
       )..flipVerticallyAroundCenter();
+      print(component.globalVertices());
       expect(
         component.containsPoint(Vector2(2.0, 2.0)),
         isTrue,
@@ -406,22 +398,39 @@ void main() {
 
         final component = PolygonComponent.fromNormals(
           [
-            Vector2(1, 0),
-            Vector2(0, -1),
-            Vector2(-1, 0),
-            Vector2(0, 1),
+            Vector2(1, 1),
+            Vector2(1, -1),
+            Vector2(-1, -1),
+            Vector2(-1, 1),
           ],
           size: Vector2.all(1.0),
           position: Vector2.all(1.0),
         );
+        print(component.position);
+        print(component.size);
+        print(component.vertices);
+        print(component.globalVertices());
         final grandParent = createParent();
         final parent = createParent();
         grandParent.add(parent);
         parent.add(component);
         game.add(grandParent);
         await game.ready();
+        print(component.position);
+        print(component.absolutePosition);
+        print(component.absoluteTopLeftPosition);
+        print(component.globalVertices());
         expect(
-          component.containsPoint(Vector2(-1.0, 1.0)),
+          component.containsPoint(Vector2(-2.5, -0.5)),
+          isTrue,
+        );
+        print('==========');
+        print(component.absoluteTopLeftPosition);
+        component.angle = pi / 2;
+        print(component.absoluteTopLeftPosition);
+        print('==========');
+        expect(
+          component.containsPoint(Vector2(-3.5, -0.5)),
           isTrue,
         );
       },

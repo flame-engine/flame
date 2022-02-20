@@ -22,8 +22,8 @@ class PolygonComponent extends ShapeComponent {
   final _cachedGlobalVertices = ValueCache<List<Vector2>>();
 
   /// With this constructor you create your [PolygonComponent] from positions in
-  /// your intended space. It will automatically calculate the [size] of the
-  /// Polygon if no size it given.
+  /// anywhere in the 2d-space. It will automatically calculate the [size] of
+  /// the Polygon (the bounding box) if no size it given.
   /// NOTE: Always define your polygon in a counter-clockwise fashion (in the
   /// screen coordinate system).
   PolygonComponent(
@@ -36,7 +36,7 @@ class PolygonComponent extends ShapeComponent {
     int? priority,
     Paint? paint,
   })  : assert(
-          _vertices.length > 3,
+          _vertices.length > 2,
           'Number of vertices are too few to create a polygon',
         ),
         _manuallySized = size != null,
@@ -121,10 +121,22 @@ class PolygonComponent extends ShapeComponent {
         vertices.map((p) => p.toOffset()).toList(growable: false),
         true,
       );
-    // These bounds also have a start position
     final bounds = _path.getBounds();
     if (!_manuallySized) {
-      size = (bounds.size + bounds.topLeft).toVector2();
+      size.setValues(bounds.width, bounds.height);
+    }
+    final topLeftBounds = bounds.topLeft;
+    if (topLeftBounds.dx != 0 || topLeftBounds.dy != 0) {
+      position.setValues(
+        position.x + topLeftBounds.dx + anchor.x * size.x,
+        position.y + topLeftBounds.dy + anchor.y * size.y,
+      );
+      _vertices.forEach((p) {
+        p.setValues(
+          p.x - topLeftBounds.dx,
+          p.y - topLeftBounds.dy,
+        );
+      });
     }
   }
 
@@ -132,8 +144,9 @@ class PolygonComponent extends ShapeComponent {
   List<Vector2> globalVertices() {
     final scale = absoluteScale;
     final angle = absoluteAngle;
-    final position = absolutePosition;
+    final position = absoluteTopLeftPosition;
     final center = absoluteCenter;
+    // TODO(spydon): Is the parent size needed here
     if (!_cachedGlobalVertices.isCacheValid<dynamic>(<dynamic>[
       position,
       scale,
@@ -145,7 +158,6 @@ class PolygonComponent extends ShapeComponent {
           ..setFrom(vertex)
           ..multiply(scale)
           ..add(position)
-          ..rotate(absoluteAngle - angle, center: center)
           ..rotate(angle, center: position);
         i++;
       }

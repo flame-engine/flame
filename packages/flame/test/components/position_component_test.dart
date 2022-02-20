@@ -8,7 +8,7 @@ import 'package:flame/game.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:test/test.dart';
 
-class _MyHitboxComponent extends PositionComponent {}
+class _MyHitboxComponent extends PositionComponent with GestureHitboxes {}
 
 class _MyDebugComponent extends PositionComponent {
   int? precision = 0;
@@ -99,7 +99,7 @@ void main() {
       expect(component.containsPoint(point), true);
     });
 
-    test('component with hitbox contains point', () {
+    flameGame.test('component with hitbox contains point', (game) async {
       final component = _MyHitboxComponent();
       component.position.setValues(1.0, 1.0);
       component.anchor = Anchor.topLeft;
@@ -111,38 +111,45 @@ void main() {
         Vector2(0, 1),
       ]);
       component.add(hitbox);
+      await game.ensureAdd(component);
 
       final point = component.position + component.size / 4;
       expect(component.containsPoint(point), true);
     });
 
-    test('component with anchor topLeft contains point on edge', () {
-      final component = _MyHitboxComponent();
-      component.position.setValues(-1, -1);
-      component.anchor = Anchor.topLeft;
-      component.size.setValues(2.0, 2.0);
-      final hitbox = HitboxRectangle();
-      component.add(hitbox);
+    flameGame.test(
+      'component with anchor topLeft contains point on edge',
+      (game) async {
+        final component = _MyHitboxComponent();
+        component.position.setValues(-1, -1);
+        component.anchor = Anchor.topLeft;
+        component.size.setValues(2.0, 2.0);
+        component.add(HitboxRectangle());
+        await game.ensureAdd(component);
 
-      expect(component.containsPoint(Vector2(1, 1)), true);
-      expect(component.containsPoint(Vector2(1, -1)), true);
-      expect(component.containsPoint(Vector2(-1, -1)), true);
-      expect(component.containsPoint(Vector2(-1, 1)), true);
-    });
+        expect(component.containsPoint(Vector2(1, 1)), true);
+        expect(component.containsPoint(Vector2(1, -1)), true);
+        expect(component.containsPoint(Vector2(-1, -1)), true);
+        expect(component.containsPoint(Vector2(-1, 1)), true);
+      },
+    );
 
-    test('component with anchor bottomRight contains point on edge', () {
-      final component = _MyHitboxComponent();
-      component.position.setValues(1, 1);
-      component.anchor = Anchor.bottomRight;
-      component.size.setValues(2.0, 2.0);
-      final hitbox = HitboxRectangle();
-      component.add(hitbox);
+    flameGame.test(
+      'component with anchor bottomRight contains point on edge',
+      (game) async {
+        final component = _MyHitboxComponent();
+        component.position.setValues(1, 1);
+        component.anchor = Anchor.bottomRight;
+        component.size.setValues(2.0, 2.0);
+        component.add(HitboxRectangle());
+        await game.ensureAdd(component);
 
-      expect(component.containsPoint(Vector2(1, 1)), true);
-      expect(component.containsPoint(Vector2(1, -1)), true);
-      expect(component.containsPoint(Vector2(-1, -1)), true);
-      expect(component.containsPoint(Vector2(-1, 1)), true);
-    });
+        expect(component.containsPoint(Vector2(1, 1)), true);
+        expect(component.containsPoint(Vector2(1, -1)), true);
+        expect(component.containsPoint(Vector2(-1, -1)), true);
+        expect(component.containsPoint(Vector2(-1, 1)), true);
+      },
+    );
 
     test('component with anchor topRight does not contain close points', () {
       final component = _MyHitboxComponent();

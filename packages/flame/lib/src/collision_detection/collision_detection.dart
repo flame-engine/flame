@@ -65,20 +65,6 @@ class StandardCollisionDetection extends CollisionDetection<HitboxShape> {
   StandardCollisionDetection({Broadphase<HitboxShape>? broadphase})
       : super(broadphase: broadphase ?? Sweep<HitboxShape>());
 
-  /// Removes the [hitbox] from the collision detection, if you just want
-  /// to temporarily inactivate it you can set
-  /// `collidableType = CollidableType.inactive;` instead.
-  /// This calls [CollisionCallbacks.onCollisionEnd] for [HitboxShape]s and
-  /// their hitbox parents if a hitbox that they currently are colliding with is
-  /// removed from the game.
-  @override
-  void remove(HitboxShape hitbox) {
-    hitbox.activeCollisions.toList(growable: false).forEach((otherCollidable) {
-      handleCollisionEnd(hitbox, otherCollidable);
-    });
-    super.remove(hitbox);
-  }
-
   /// Check what the intersection points of two collidables are,
   /// returns an empty list if there are no intersections.
   @override

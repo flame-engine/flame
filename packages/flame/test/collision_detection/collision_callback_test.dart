@@ -6,8 +6,6 @@ import 'package:test/test.dart';
 import 'collision_test_helpers.dart';
 
 void main() {
-  final withCollidables = FlameTester(() => HasCollidablesGame());
-
   group('Collision callbacks', () {
     withCollidables.test('collidable callbacks are called', (game) async {
       final blockA = TestBlock(

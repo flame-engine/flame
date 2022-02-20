@@ -532,7 +532,6 @@ void main() {
         anchor: Anchor.center,
       );
       final intersections = geometry.intersections(circleA, circleB).toList();
-      print(intersections);
       expect(
         intersections.any((v) => v.distanceTo(Vector2(-1, -2)) < 0.000001),
         true,
