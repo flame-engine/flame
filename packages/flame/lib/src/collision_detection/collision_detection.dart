@@ -2,16 +2,11 @@ import '../../collision_detection.dart';
 import '../../components.dart';
 
 abstract class CollisionDetection<T extends Hitbox<T>> {
-  final List<T> items = [];
-  late final Broadphase<T> broadphase;
+  final Broadphase<T> broadphase;
+  List<T> get items => broadphase.items;
   final Set<Potential<T>> _lastPotentials = {};
 
-  CollisionDetection({BroadphaseType type = BroadphaseType.sweep}) {
-    switch (type) {
-      case BroadphaseType.sweep:
-        broadphase = Sweep<T>(items);
-    }
-  }
+  CollisionDetection({required this.broadphase});
 
   void add(T item) => items.add(item);
   void addAll(Iterable<T> items) => items.forEach(add);
@@ -67,8 +62,8 @@ abstract class CollisionDetection<T extends Hitbox<T>> {
 /// Check whether any [HitboxShape]s in [items] collide with each other and
 /// call their callback methods accordingly.
 class StandardCollisionDetection extends CollisionDetection<HitboxShape> {
-  StandardCollisionDetection({BroadphaseType type = BroadphaseType.sweep})
-      : super(type: type);
+  StandardCollisionDetection({Broadphase<HitboxShape>? broadphase})
+      : super(broadphase: broadphase ?? Sweep<HitboxShape>());
 
   /// Removes the [hitbox] from the collision detection, if you just want
   /// to temporarily inactivate it you can set

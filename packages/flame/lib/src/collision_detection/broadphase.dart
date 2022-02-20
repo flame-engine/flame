@@ -2,11 +2,10 @@ import 'package:meta/meta.dart';
 
 import 'hitbox.dart';
 
-enum BroadphaseType { sweep }
-
 abstract class Broadphase<T extends Hitbox<T>> {
   final List<T> items;
-  Broadphase(this.items);
+
+  Broadphase({List<T>? items}) : items = items ?? [];
 
   Set<Potential<T>> query();
 }

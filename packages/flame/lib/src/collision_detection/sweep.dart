@@ -3,7 +3,7 @@ import 'collision_callbacks.dart';
 import 'hitbox.dart';
 
 class Sweep<T extends Hitbox<T>> extends Broadphase<T> {
-  Sweep(List<T> items) : super(items);
+  Sweep({List<T>? items}) : super(items: items);
 
   final List<T> _active = [];
   final Set<Potential<T>> _potentials = {};
