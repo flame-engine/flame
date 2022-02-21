@@ -64,7 +64,7 @@ extension RectExtension on Rect {
   /// **Note:** The transformation will always happen from the center of the
   /// `Rect`.
   Rect transform(Matrix4 matrix) {
-    // For performance reasons we are using the same logic from 
+    // For performance reasons we are using the same logic from
     // `Matrix4.transform2` but without the extra overhead of creating vectors.
     return Rect.fromLTRB(
       (topLeft.dx * matrix.m11) + (topLeft.dy * matrix.m21) + matrix.m41,
