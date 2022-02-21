@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:flame/extensions.dart';
+import 'package:flame_test/flame_test.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -35,6 +36,15 @@ void main() {
       expect(r2.size.y, r1.height);
       expect(r2.position.x, r1.left);
       expect(r2.position.y, r1.top);
+    });
+
+    test('test transform', () {
+      final matrix4 = Matrix4.translation(Vector3(10, 10, 0));
+      const input = Rect.fromLTWH(0, 0, 10, 10);
+      final result = input.transform(matrix4);
+
+      expect(result.topLeft.toVector2(), closeToVector(10, 10));
+      expect(result.bottomRight.toVector2(), closeToVector(20, 20));
     });
   });
 }
