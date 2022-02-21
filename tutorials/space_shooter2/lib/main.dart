@@ -1,26 +1,37 @@
 import 'dart:html';
 import 'package:flame/game.dart';
 import 'package:flutter/widgets.dart';
-import 'chapter1/main.dart' as ch1;
-import 'chapter2/main.dart' as ch2;
+import 'chapter1/main.dart' as chapter1;
+import 'chapter2/main.dart' as chapter2;
 
 void main() {
-  final step = window.location.search;
+  print('line1');
+  var step = window.location.search ?? '';
+  if (step.startsWith('?')) {
+    step = step.substring(1);
+  }
+  print('line2, step=$step');
   late final Game game;
   switch (step) {
     case 'step1':
-      game = ch1.MyGame();
+      game = chapter1.MyGame();
       break;
     case 'step2':
-      game = ch2.MyGame();
+      game = chapter2.MyGame();
       break;
     default:
-      runApp(Text('Invalid page name: $step'));
+      print('line3');
+      runApp(
+        Directionality(
+            textDirection: TextDirection.ltr,
+            child: Text('Invalid page name: [$step]'),
+        ),
+      );
       return;
   }
+  print('line4');
   runApp(GameWidget(game: game));
 }
-
 
 // final routes = _RouteMap()
 //   ..add('step1', (builder) => GameWidget(game: ch1.MyGame()))
