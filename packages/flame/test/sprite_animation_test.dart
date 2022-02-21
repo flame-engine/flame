@@ -5,14 +5,14 @@ import 'package:test/test.dart';
 
 void main() {
   group('SpriteAnimation', () {
-    test('Error on empty list of frames', () {
+    test('Throw assertion error on empty list of frames', () {
       expect(
         () => SpriteAnimation.spriteList([], stepTime: 1),
         failsAssert('There must be at least one animation frame'),
       );
     });
 
-    test('Error on non-positive step time', () {
+    test('Throw assertion error on non-positive step time', () {
       final sprite = MockSprite();
       expect(
         () => SpriteAnimation.spriteList([sprite], stepTime: 0),
@@ -27,7 +27,7 @@ void main() {
       );
     });
 
-    test('Error when setting non-positive step time', () {
+    test('Throw assertion error when setting non-positive step time', () {
       final sprite = MockSprite();
       final animation =
           SpriteAnimation.spriteList([sprite, sprite, sprite], stepTime: 1);
