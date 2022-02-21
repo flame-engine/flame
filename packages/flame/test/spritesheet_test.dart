@@ -37,15 +37,15 @@ void main() {
     });
 
     test(
-      'throws argument error when the length of stepTime is different from sprite',
+      'throws error when stepTimes.length != spriteSheet.length',
       () {
-        final sprite = SpriteSheet(
+        final spriteSheet = SpriteSheet(
           image: image,
           srcSize: Vector2(50, 50),
         );
 
         expect(
-          () => sprite.createAnimationWithVariableStepTimes(
+          () => spriteSheet.createAnimationWithVariableStepTimes(
             row: 1,
             stepTimes: [2.0],
           ),
