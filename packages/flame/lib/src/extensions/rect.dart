@@ -64,9 +64,18 @@ extension RectExtension on Rect {
   /// **Note:** The transformation will always happen from the center of the
   /// `Rect`.
   Rect transform(Matrix4 matrix) {
-    final topLeft = matrix.transform2(this.topLeft.toVector2());
-    final bottomRight = matrix.transform2(this.bottomRight.toVector2());
-    return Rect.fromLTRB(topLeft.x, topLeft.y, bottomRight.x, bottomRight.y);
+    // For performance reasons we are using the same logic from 
+    // `Matrix4.transform2` but without the extra overhead of creating vectors.
+    return Rect.fromLTRB(
+      (topLeft.dx * matrix.m11) + (topLeft.dy * matrix.m21) + matrix.m41,
+      (topLeft.dx * matrix.m12) + (topLeft.dy * matrix.m22) + matrix.m42,
+      (bottomRight.dx * matrix.m11) +
+          (bottomRight.dy * matrix.m21) +
+          matrix.m41,
+      (bottomRight.dx * matrix.m12) +
+          (bottomRight.dy * matrix.m22) +
+          matrix.m42,
+    );
   }
 
   /// Creates bounds in from of a [Rect] from a list of [Vector2]
