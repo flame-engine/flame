@@ -8,12 +8,11 @@ class _PaintComponent extends Component with HasPaint {}
 
 void main() {
   group('ColorEffect', () {
-    flameGame.test('applies the correct color filter', (game) {
+    flameGame.test('applies the correct color filter', (game) async {
       final component = _PaintComponent();
-      game.ensureAdd(component);
+      await game.ensureAdd(component);
       const color = Colors.red;
-
-      component.add(
+      await component.add(
         ColorEffect(color, const Offset(0, 1), EffectController(duration: 1)),
       );
       game.update(0);
@@ -33,33 +32,35 @@ void main() {
       );
     });
 
-    flameGame.test('resets the color filter to the original state', (game) {
-      final component = _PaintComponent();
-      game.ensureAdd(component);
+    flameGame.test(
+      'resets the color filter to the original state',
+      (game) async {
+        final component = _PaintComponent();
+        await game.ensureAdd(component);
 
-      final originalColorFilter = component.paint.colorFilter;
+        final originalColorFilter = component.paint.colorFilter;
+        const color = Colors.red;
 
-      const color = Colors.red;
+        final effect = ColorEffect(
+          color,
+          const Offset(0, 1),
+          EffectController(duration: 1),
+        );
+        await component.add(effect);
+        game.update(0.5);
 
-      final effect = ColorEffect(
-        color,
-        const Offset(0, 1),
-        EffectController(duration: 1),
-      );
-      component.add(effect);
-      game.update(0.5);
+        expect(
+          originalColorFilter,
+          isNot(equals(component.paint.colorFilter)),
+        );
 
-      expect(
-        originalColorFilter,
-        isNot(equals(component.paint.colorFilter)),
-      );
+        effect.reset();
 
-      effect.reset();
-
-      expect(
-        originalColorFilter,
-        equals(component.paint.colorFilter),
-      );
-    });
+        expect(
+          originalColorFilter,
+          equals(component.paint.colorFilter),
+        );
+      },
+    );
   });
 }

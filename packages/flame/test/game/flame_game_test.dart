@@ -177,21 +177,12 @@ void main() {
     expect(game.children.isEmpty, equals(true));
   });
 
-  test("can't add a component to a game that don't have layout yet", () {
+  test("can't add a component to a game without a layout", () {
     final game = FlameGame();
     final component = Component();
-
-    const message = '"prepare/add" called before the game is ready. '
-        'Did you try to access it on the Game constructor? '
-        'Use the "onLoad" or "onMount" method instead.';
-
-    expect(
-      () => game.add(component),
-      throwsA(
-        predicate(
-          (e) => e is AssertionError && e.message == message,
-        ),
-      ),
-    );
+    const message =
+        'add() called before the game has a layout. Did you try to add '
+        'components from the constructor? Use the onLoad() method instead.';
+    expect(() => game.add(component), failsAssert(message));
   });
 }

@@ -18,14 +18,14 @@ extension FlameGameExtension on Component {
   /// returned future to resolve.
   Future<void> ensureAdd(Component component) async {
     await add(component);
-    updateTree(0);
+    await (component.findGame()! as FlameGame).ready();
   }
 
   /// Makes sure that the [components] are added to the tree if you wait for the
   /// returned future to resolve.
   Future<void> ensureAddAll(Iterable<Component> components) async {
     await addAll(components);
-    updateTree(0);
+    await (components.first.findGame()! as FlameGame).ready();
   }
 }
 
@@ -66,6 +66,11 @@ class GameTester<T extends Game> {
   /// By default it will be a 500x500 square.
   final Vector2? gameSize;
 
+  /// If true, the game will be brought into the "fully ready" state (meaning
+  /// all its pending lifecycle events will be resolved) before the start of
+  /// the test.
+  bool makeReady = true;
+
   GameTester(
     this.createGame, {
     this.gameSize,
@@ -81,6 +86,9 @@ class GameTester<T extends Game> {
 
     await game.onLoad();
     game.update(0);
+    if (game is FlameGame && makeReady) {
+      await game.ready();
+    }
     return game;
   }
 

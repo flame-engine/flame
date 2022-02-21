@@ -50,7 +50,7 @@ void main() {
           margin: const EdgeInsets.only(left: 20, top: 20),
         );
         await game.add(joystick);
-        game.update(0);
+        await game.ready();
         expect(joystick.knob!.position, closeToVector(10, 10));
         // Start dragging the joystick
         game.onDragStart(

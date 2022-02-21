@@ -1,14 +1,16 @@
 # Structure
 
-Flame has a proposed structure for your project that includes the standard Flutter `assets` directory in addition to two children: `audio` and `images`.
+Flame has a proposed structure for your project that includes the standard Flutter `assets` 
+directory in addition to two children: `audio` and `images`.
 
 If using the following example code:
-
 ```dart
+void main() {
   FlameAudio.play('explosion.mp3');
 
   Flame.images.load('player.png');
   Flame.images.load('enemy.png');
+}
 ```
 
 The file structure Flame would expect to find the files in would be:

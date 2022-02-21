@@ -119,7 +119,7 @@ An implementation example can be seen in the
 ## Viewport and Camera
 
 `Forge2DGame` is using an implementation of the normal Flame `Viewport` and `Camera`, which can be
-read more about [here](camera_and_viewport.md).
+read more about [here](../flame/camera_and_viewport.md).
 
 If you see your screen as a window and the outside as the Forge2D world, then the `Viewport` is the
 part of the world outside that you can see through the window, so the parts that you can see on

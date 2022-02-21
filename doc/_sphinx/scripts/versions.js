@@ -10,7 +10,7 @@ function getCurrentDocVersion() {
       return parts[1];
     }
   }
-  return '--';
+  return 'local';
 }
 
 // Given a list of versions (as plain strings), convert them into HTML <A/>
@@ -24,7 +24,11 @@ function convertVersionsToHtmlLinks(versionsList, currentVersion) {
     if (version === currentVersion) {
       classes += ' selected';
     }
-    out += `<a href="/${version}/"><button class="${classes}">${version}</button></a>`;
+    out += `<a href="/${version}/">
+      <button class="${classes}">
+        <i class="fa fa-code-branch"></i> ${version}
+      </button>
+    </a>`;
   }
   return out;
 }
@@ -32,15 +36,24 @@ function convertVersionsToHtmlLinks(versionsList, currentVersion) {
 function buildVersionsMenu(data) {
   const currentVersion = getCurrentDocVersion();
   const versionButtons = convertVersionsToHtmlLinks(data.split('\n'), currentVersion);
-  $('div.topbar-main').append(`
-    <div class="dropdown-buttons-trigger" id="versions-menu">
-      <button class="btn btn-secondary topbarbtn">
-        <span class="tag">version:</span>
+  $('div.versions-placeholder').append(`
+    <div id="versions-menu" tabindex="-1">
+      <div class="btn">
+        <i class="fa fa-code-branch"></i>
         <span class="version-id">${currentVersion}</span>
-      </button>
-      <div class="dropdown-buttons">${versionButtons}</div>
+      </div>
+      <div class="dropdown-buttons">
+        <div class="header">View documentation for version:</div>
+        ${versionButtons}
+      </div>
     </div>
   `);
+  $("#versions-menu").on("click", function() {
+    $(this).toggleClass("active");
+  }).on("blur", function() {
+    // A timeout ensures that `click` can propagate to child <A/> elements.
+    setTimeout(() => $(this).removeClass("active"), 200);
+  });
 }
 
 // Start loading the versions list as soon as possible, don't wait for DOM
@@ -51,5 +64,9 @@ const versionsRequest = $.get(
 // Now wait for DOM to finish loading
 $(function() {
   // Lastly, wait for versions to finish loading too.
-  versionsRequest.then(buildVersionsMenu);
+  versionsRequest.then(buildVersionsMenu)
+    .fail(function() {
+      console.log("Failed to load versions.txt, using default version list");
+      buildVersionsMenu("local\nmain\n1.0.0\n");
+    });
 });

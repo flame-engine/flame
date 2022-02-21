@@ -57,19 +57,33 @@ mixin BlocComponent<B extends BlocBase<S>, S> on Component {
 
   @override
   @mustCallSuper
+  void onMount() {
+    super.onMount();
+    assert(
+      findGame()! is FlameBlocGame,
+      'BlocComponent can only be added to a FlameBlocGame',
+    );
+    final game = findGame()! as FlameBlocGame;
+    if (game.isAttached) {
+      subscribe(game);
+    } else {
+      game.subscriptionQueue.add(this);
+    }
+  }
+
+  @override
+  @mustCallSuper
   void onRemove() {
     super.onRemove();
     unsubscribe();
   }
 }
 
-/// {@template flame_bloc_game}
 /// An enhanced [FlameGame] that has the capability to listen
 /// and emit changes to a [Bloc] state.
-///
-/// {@endtemplate}
 class FlameBlocGame extends FlameGame {
-  ///FlameBlocGame contructor with an optional [Camera] as a parameter to FlameGame
+  /// FlameBlocGame constructor with an optional [Camera] as a parameter to
+  /// FlameGame.
   FlameBlocGame({Camera? camera}) : super(camera: camera);
 
   /// Contains a list of all of the [BlocComponent]s with an active
@@ -87,7 +101,6 @@ class FlameBlocGame extends FlameGame {
   @mustCallSuper
   void onRemove() {
     super.onRemove();
-
     _unsubscribe();
   }
 
@@ -104,20 +117,6 @@ class FlameBlocGame extends FlameGame {
     }
 
     return context.read<T>();
-  }
-
-  @override
-  @mustCallSuper
-  void prepareComponent(Component c) {
-    super.prepareComponent(c);
-
-    if (c is BlocComponent) {
-      if (isAttached) {
-        c.subscribe(this);
-      } else {
-        subscriptionQueue.add(c);
-      }
-    }
   }
 
   void _runSubscriptionQueue() {
