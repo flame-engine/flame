@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'dart:ui';
 
 import '../../geometry.dart';
+import 'matrix4.dart';
 import 'offset.dart';
 import 'size.dart';
 import 'vector2.dart';
@@ -50,6 +51,31 @@ extension RectExtension on Rect {
       bottomRight.toVector2(),
       bottomLeft.toVector2(),
     ];
+  }
+
+  /// Transform Rect using the transformation defined by [matrix].
+  ///
+  /// **Note:** Rotation matrices will increase the size of the [Rect] but they
+  /// will not rotate it as [Rect] does not have any rotational values.
+  ///
+  /// **Note:** Only non-negative scale transforms are allowed, if a negative
+  /// scale is applied it will return a zero-based [Rect].
+  ///
+  /// **Note:** The transformation will always happen from the center of the
+  /// `Rect`.
+  Rect transform(Matrix4 matrix) {
+    // For performance reasons we are using the same logic from
+    // `Matrix4.transform2` but without the extra overhead of creating vectors.
+    return Rect.fromLTRB(
+      (topLeft.dx * matrix.m11) + (topLeft.dy * matrix.m21) + matrix.m41,
+      (topLeft.dx * matrix.m12) + (topLeft.dy * matrix.m22) + matrix.m42,
+      (bottomRight.dx * matrix.m11) +
+          (bottomRight.dy * matrix.m21) +
+          matrix.m41,
+      (bottomRight.dx * matrix.m12) +
+          (bottomRight.dy * matrix.m22) +
+          matrix.m42,
+    );
   }
 
   /// Creates bounds in from of a [Rect] from a list of [Vector2]
