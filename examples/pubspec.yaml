@@ -11,8 +11,7 @@ environment:
 
 dependencies:
   flame: ^1.0.0
-  flame_svg:
-    path: ../packages/flame_svg
+  flame_svg: ^1.0.0
   dashbook: 0.1.5
   flutter:
     sdk: flutter
