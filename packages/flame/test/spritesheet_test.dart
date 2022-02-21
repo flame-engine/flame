@@ -1,6 +1,7 @@
 import 'package:flame/sprite.dart';
 import 'package:flame/src/extensions/image.dart';
 import 'package:flame/src/extensions/vector2.dart';
+import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -49,7 +50,7 @@ void main() {
             row: 1,
             stepTimes: [2.0],
           ),
-          throwsA(isA<ArgumentError>()),
+          failsAssert('Lengths of stepTimes and sprites lists must be equal'),
         );
       },
     );
