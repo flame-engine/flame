@@ -60,6 +60,9 @@ extension RectExtension on Rect {
   ///
   /// **Note:** Only non-negative scale transforms are allowed, if a negative
   /// scale is applied it will return a zero-based [Rect].
+  /// 
+  /// **Note:** The transformation will always happen from the center of the 
+  /// `Rect`.
   Rect transform(Matrix4 matrix) {
     final topLeft = matrix.transform2(this.topLeft.toVector2());
     final bottomRight = matrix.transform2(this.bottomRight.toVector2());
