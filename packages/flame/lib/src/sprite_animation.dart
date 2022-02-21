@@ -105,6 +105,112 @@ class SpriteAnimationFrame {
 /// Represents a sprite animation, that is, a list of sprites that change with
 /// time.
 class SpriteAnimation {
+  SpriteAnimation(this.frames, {this.loop = true})
+      : assert(frames.isNotEmpty, 'There must be at least one animation frame'),
+        assert(
+          frames.every((frame) => frame.stepTime > 0),
+          'All frames must have positive durations',
+        );
+
+  /// Create animation from a list of [sprites] all having the same transition
+  /// time [stepTime].
+  factory SpriteAnimation.spriteList(
+    List<Sprite> sprites, {
+    required double stepTime,
+    bool loop = true,
+  }) {
+    return SpriteAnimation(
+      sprites.map((sprite) => SpriteAnimationFrame(sprite, stepTime)).toList(),
+      loop: loop,
+    );
+  }
+
+  /// Create animation from a list of [sprites] each having its own duration
+  /// provided in the [stepTimes] list.
+  factory SpriteAnimation.variableSpriteList(
+    List<Sprite> sprites, {
+    required List<double> stepTimes,
+    bool loop = true,
+  }) {
+    assert(
+      stepTimes.length == sprites.length,
+      'Lengths of stepTimes and sprites lists must be equal',
+    );
+    return SpriteAnimation(
+      [
+        for (var i = 0; i < sprites.length; i++)
+          SpriteAnimationFrame(sprites[i], stepTimes[i])
+      ],
+      loop: loop,
+    );
+  }
+
+  /// Create animation from a single [image] that contains all frames.
+  ///
+  /// The [data] argument provides the description of where the individual
+  /// sprites are located within the main image.
+  factory SpriteAnimation.fromFrameData(
+    Image image,
+    SpriteAnimationData data,
+  ) {
+    return SpriteAnimation(
+      [
+        for (final frameData in data.frames)
+          SpriteAnimationFrame(
+            Sprite(
+              image,
+              srcSize: frameData.srcSize,
+              srcPosition: frameData.srcPosition,
+            ),
+            frameData.stepTime,
+          )
+      ],
+      loop: data.loop,
+    );
+  }
+
+  /// Automatically creates an Animation Object using animation data provided by
+  /// the json file provided by Aseprite.
+  ///
+  /// [image]: sprite sheet animation image.
+  /// [jsonData]: animation's data in json format.
+  factory SpriteAnimation.fromAsepriteData(
+    Image image,
+    Map<String, dynamic> jsonData,
+  ) {
+    final jsonFrames = jsonData['frames'] as Map<String, dynamic>;
+    return SpriteAnimation(
+      jsonFrames.values.map((dynamic value) {
+        final map = value as Map;
+        final frameData = map['frame'] as Map<String, dynamic>;
+        final x = frameData['x'] as int;
+        final y = frameData['y'] as int;
+        final width = frameData['w'] as int;
+        final height = frameData['h'] as int;
+        final stepTime = (map['duration'] as int) / 1000;
+        final sprite = Sprite(
+          image,
+          srcPosition: Vector2Extension.fromInts(x, y),
+          srcSize: Vector2Extension.fromInts(width, height),
+        );
+        return SpriteAnimationFrame(sprite, stepTime);
+      }).toList(),
+    );
+  }
+
+  /// Takes a path of an image, a [SpriteAnimationData] and loads the sprite
+  /// animation.
+  /// When the [images] is omitted, the global [Flame.images] is used.
+  static Future<SpriteAnimation> load(
+    String src,
+    SpriteAnimationData data, {
+    Images? images,
+  }) async {
+    final _images = images ?? Flame.images;
+    final image = await _images.load(src);
+    return SpriteAnimation.fromFrameData(image, data);
+  }
+
   /// The frames that compose this animation.
   List<SpriteAnimationFrame> frames = [];
 
@@ -127,112 +233,6 @@ class SpriteAnimation {
   /// Registered method to be triggered when the animation complete.
   void Function()? onComplete;
 
-  /// Creates an animation given a list of frames.
-  SpriteAnimation(this.frames, {this.loop = true});
-
-  /// Creates an empty animation
-  SpriteAnimation.empty();
-
-  /// Creates an animation based on the parameters.
-  ///
-  /// All frames have the same [stepTime].
-  SpriteAnimation.spriteList(
-    List<Sprite> sprites, {
-    required double stepTime,
-    this.loop = true,
-  }) {
-    if (sprites.isEmpty) {
-      throw Exception('You must have at least one frame!');
-    }
-    frames = sprites.map((s) => SpriteAnimationFrame(s, stepTime)).toList();
-  }
-
-  /// Creates an SpriteAnimation based on its [data].
-  ///
-  /// Check [SpriteAnimationData] constructors for more info.
-  SpriteAnimation.fromFrameData(
-    Image image,
-    SpriteAnimationData data,
-  ) {
-    frames = data.frames.map((frameData) {
-      return SpriteAnimationFrame(
-        Sprite(
-          image,
-          srcSize: frameData.srcSize,
-          srcPosition: frameData.srcPosition,
-        ),
-        frameData.stepTime,
-      );
-    }).toList();
-    loop = data.loop;
-  }
-
-  /// Automatically creates an Animation Object using animation data provided by
-  /// the json file provided by Aseprite.
-  ///
-  /// [image]: sprite sheet animation image.
-  /// [jsonData]: animation's data in json format.
-  SpriteAnimation.fromAsepriteData(
-    Image image,
-    Map<String, dynamic> jsonData,
-  ) {
-    final jsonFrames = jsonData['frames'] as Map<String, dynamic>;
-
-    final frames = jsonFrames.values.map((dynamic value) {
-      final map = value as Map;
-      final frameData = map['frame'] as Map<String, dynamic>;
-      final x = frameData['x'] as int;
-      final y = frameData['y'] as int;
-      final width = frameData['w'] as int;
-      final height = frameData['h'] as int;
-
-      final stepTime = (map['duration'] as int) / 1000;
-
-      final sprite = Sprite(
-        image,
-        srcPosition: Vector2Extension.fromInts(x, y),
-        srcSize: Vector2Extension.fromInts(width, height),
-      );
-
-      return SpriteAnimationFrame(sprite, stepTime);
-    });
-
-    this.frames = frames.toList();
-    loop = true;
-  }
-
-  SpriteAnimation.variableSpriteList(
-    List<Sprite> sprites, {
-    required List<double> stepTimes,
-    this.loop = true,
-  }) {
-    if (sprites.isEmpty) {
-      throw Exception('You must have at least one frame!');
-    }
-    if (stepTimes.length != sprites.length) {
-      throw Exception('The length of stepTimes and sprites must be the same!');
-    }
-
-    frames = List.generate(
-      sprites.length,
-      (i) => SpriteAnimationFrame(sprites[i], stepTimes[i]),
-      growable: false,
-    );
-  }
-
-  /// Takes a path of an image, a [SpriteAnimationData] and loads the sprite
-  /// animation.
-  /// When the [images] is omitted, the global [Flame.images] is used.
-  static Future<SpriteAnimation> load(
-    String src,
-    SpriteAnimationData data, {
-    Images? images,
-  }) async {
-    final _images = images ?? Flame.images;
-    final image = await _images.load(src);
-    return SpriteAnimation.fromFrameData(image, data);
-  }
-
   /// The current frame that should be displayed.
   SpriteAnimationFrame get currentFrame => frames[currentIndex];
 
@@ -248,12 +248,14 @@ class SpriteAnimation {
   set variableStepTimes(List<double> stepTimes) {
     assert(stepTimes.length == frames.length);
     for (var i = 0; i < frames.length; i++) {
+      assert(stepTimes[i] > 0, 'All step times must be positive');
       frames[i].stepTime = stepTimes[i];
     }
   }
 
   /// Sets a fixed step time to all frames.
   set stepTime(double stepTime) {
+    assert(stepTime > 0, 'Step time must be positive');
     frames.forEach((frame) => frame.stepTime = stepTime);
   }
 
@@ -294,7 +296,7 @@ class SpriteAnimation {
   void update(double dt) {
     clock += dt;
     elapsed += dt;
-    if (isSingleFrame || _done) {
+    if (_done) {
       return;
     }
     while (clock >= currentFrame.stepTime) {
