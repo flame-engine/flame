@@ -37,7 +37,7 @@ void main() {
     });
 
     test(
-      'error when the length of stepTime is different from sprite',
+      'throws argument error when the length of stepTime is different from sprite',
       () {
         final sprite = SpriteSheet(
           image: image,

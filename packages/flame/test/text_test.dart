@@ -51,7 +51,7 @@ void main() {
   });
 
   group('TextPaint', () {
-    test('copyWith', () {
+    test('copyWith returns a new instance with the new values', () {
       const style = TextStyle(fontSize: 12, fontFamily: 'Times');
       final tp = TextPaint(style: style)
           .copyWith((t) => t.copyWith(fontFamily: 'Helvetica'));

@@ -5,7 +5,7 @@ import 'package:test/test.dart';
 
 void main() {
   group('Anchor', () {
-    test('parse to and from string', () {
+    test('parses to and from string', () {
       expect(Anchor.center.toString(), 'center');
       expect(Anchor.valueOf('topRight'), Anchor.topRight);
 
@@ -16,7 +16,7 @@ void main() {
       }
     });
 
-    test('parse custom anchor', () {
+    test('parses custom anchor', () {
       const anchor = Anchor(0.2, 0.2);
       expect(anchor.toString(), 'Anchor(0.2, 0.2)');
       expect(Anchor.valueOf('Anchor(0.2, 0.2)'), anchor);
