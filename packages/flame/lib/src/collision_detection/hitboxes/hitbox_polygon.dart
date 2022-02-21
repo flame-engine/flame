@@ -1,7 +1,8 @@
-import '../../collision_detection.dart';
-import '../../components.dart';
-import '../../geometry.dart';
+import '../../../collision_detection.dart';
+import '../../../components.dart';
+import '../../../geometry.dart';
 
+/// A [Hitbox] in the shape of a polygon.
 class HitboxPolygon extends PolygonComponent with HitboxShape {
   HitboxPolygon(
     List<Vector2> vertices, {

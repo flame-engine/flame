@@ -1,6 +1,9 @@
 import '../../collision_detection.dart';
 import '../../components.dart';
 
+/// [CollisionDetection] is the foundation of the collision detection system in
+/// Flame. If the [HasCollisionDetection] mixin is added to the game, [run] is
+/// called every tick to check for collisions
 abstract class CollisionDetection<T extends Hitbox<T>> {
   final Broadphase<T> broadphase;
   List<T> get items => broadphase.items;
@@ -59,8 +62,12 @@ abstract class CollisionDetection<T extends Hitbox<T>> {
   void handleCollisionEnd(T itemA, T itemB);
 }
 
-/// Check whether any [HitboxShape]s in [items] collide with each other and
-/// call their callback methods accordingly.
+/// The default implementation of [CollisionDetection].
+/// Checks whether any [HitboxShape]s in [items] collide with each other and
+/// calls their callback methods accordingly.
+///
+/// By default the [Sweep] broadphase is used, this can be configured by
+/// passing in another [Broadphase] to the constructor.
 class StandardCollisionDetection extends CollisionDetection<HitboxShape> {
   StandardCollisionDetection({Broadphase<HitboxShape>? broadphase})
       : super(broadphase: broadphase ?? Sweep<HitboxShape>());
@@ -75,6 +82,10 @@ class StandardCollisionDetection extends CollisionDetection<HitboxShape> {
     return hitboxA.intersections(hitboxB);
   }
 
+  /// Calls the two colliding hitboxes when they first starts to collide.
+  /// They are called with the [intersectionPoints] and instances of each other,
+  /// so that they can determine what hitbox (and what
+  /// [HitboxShape.hitboxParent] that they have collided with.
   @override
   void handleCollisionStart(
     Set<Vector2> intersectionPoints,
@@ -85,6 +96,10 @@ class StandardCollisionDetection extends CollisionDetection<HitboxShape> {
     hitboxB.onCollisionStart(intersectionPoints, hitboxA);
   }
 
+  /// Calls the two colliding hitboxes every tick when they are colliding.
+  /// They are called with the [intersectionPoints] and instances of each other,
+  /// so that they can determine what hitbox (and what
+  /// [HitboxShape.hitboxParent] that they have collided with.
   @override
   void handleCollision(
     Set<Vector2> intersectionPoints,
@@ -95,6 +110,11 @@ class StandardCollisionDetection extends CollisionDetection<HitboxShape> {
     hitboxB.onCollision(intersectionPoints, hitboxA);
   }
 
+  /// Calls the two colliding hitboxes once when two hitboxes have stopped
+  /// colliding.
+  /// They are called with instances of each other, so that they can determine
+  /// what hitbox (and what [HitboxShape.hitboxParent] that they have stopped
+  /// colliding with.
   @override
   void handleCollisionEnd(HitboxShape hitboxA, HitboxShape hitboxB) {
     hitboxA.onCollisionEnd(hitboxB);

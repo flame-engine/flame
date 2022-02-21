@@ -1,10 +1,11 @@
 export 'src/collision_detection/broadphase.dart';
 export 'src/collision_detection/collision_callbacks.dart';
 export 'src/collision_detection/collision_detection.dart';
-export 'src/collision_detection/hitbox.dart';
-export 'src/collision_detection/hitbox_circle.dart';
-export 'src/collision_detection/hitbox_polygon.dart';
-export 'src/collision_detection/hitbox_rectangle.dart';
-export 'src/collision_detection/hitbox_shape.dart';
-export 'src/collision_detection/screen_collidable.dart';
+export 'src/collision_detection/collision_passthrough.dart';
+export 'src/collision_detection/hitboxes/hitbox.dart';
+export 'src/collision_detection/hitboxes/hitbox_circle.dart';
+export 'src/collision_detection/hitboxes/hitbox_polygon.dart';
+export 'src/collision_detection/hitboxes/hitbox_rectangle.dart';
+export 'src/collision_detection/hitboxes/hitbox_shape.dart';
 export 'src/collision_detection/sweep.dart';
+export 'src/components/screen_collidable.dart';

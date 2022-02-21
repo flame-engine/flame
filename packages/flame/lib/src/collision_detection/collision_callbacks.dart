@@ -15,29 +15,43 @@ enum CollidableType {
   inactive,
 }
 
+/// The [GenericCollisionCallbacks] mixin can be used to get callbacks from the
+/// collision detection system, potentially without using the Flame component
+/// system.
+/// The default implementation used with FCS is [CollisionCallbacks].
 mixin GenericCollisionCallbacks<T> {
   Set<T>? _activeCollisions;
+
+  /// The objects that the object is currently colliding with.
   Set<T> get activeCollisions => _activeCollisions ??= {};
 
+  /// Whether the object is currently colliding or not.
   bool get isColliding {
     return _activeCollisions != null && _activeCollisions!.isNotEmpty;
   }
 
+  /// Whether the object is colliding with [other] or not.
   bool collidingWith(T other) {
     return _activeCollisions != null && activeCollisions.contains(other);
   }
 
+  /// [onCollision] is called in every tick when this object is colliding with
+  /// [other].
   @mustCallSuper
   void onCollision(Set<Vector2> intersectionPoints, T other) {
     onCollisionCallback?.call(intersectionPoints, other);
   }
 
+  /// [onCollisionStart] is called in the first tick when this object starts
+  /// colliding with [other].
   @mustCallSuper
   void onCollisionStart(Set<Vector2> intersectionPoints, T other) {
     activeCollisions.add(other);
     onCollisionStartCallback?.call(intersectionPoints, other);
   }
 
+  /// [onCollisionEnd] is called once when this object has stopped colliding
+  /// with [other].
   @mustCallSuper
   void onCollisionEnd(T other) {
     activeCollisions.remove(other);
@@ -113,9 +127,12 @@ mixin CollisionCallbacks on Component
   CollisionEndCallback<PositionComponent>? onCollisionEndCallback;
 }
 
+/// Can be used used to implement an `onCollisionCallback` or an
+/// `onCollisionStartCallback`.
 typedef CollisionCallback<T> = void Function(
   Set<Vector2> intersectionPoints,
   T other,
 );
 
+/// Can be used used to implement an `onCollisionEndCallback`.
 typedef CollisionEndCallback<T> = void Function(T other);

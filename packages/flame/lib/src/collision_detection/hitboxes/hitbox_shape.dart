@@ -1,11 +1,14 @@
 import 'package:meta/meta.dart';
 
-import '../../collision_detection.dart';
-import '../../components.dart';
-import '../../game.dart';
-import '../../geometry.dart';
-import '../geometry/shape_intersections.dart' as intersection_system;
+import '../../../collision_detection.dart';
+import '../../../components.dart';
+import '../../../game.dart';
+import '../../../geometry.dart';
+import '../../geometry/shape_intersections.dart' as intersection_system;
 
+/// A [HitboxShape] turns a [ShapeComponent] into a [Hitbox].
+/// It is currently used by [HitboxCircle], [HitboxRectangle] and
+/// [HitboxPolygon].
 mixin HitboxShape on ShapeComponent implements Hitbox<HitboxShape> {
   @override
   CollidableType collidableType = CollidableType.active;

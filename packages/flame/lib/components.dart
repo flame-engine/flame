@@ -1,5 +1,6 @@
 /// {@canonicalFor anchor.Anchor}
 export 'src/anchor.dart';
+export 'src/components/screen_collidable.dart';
 export 'src/components/component.dart';
 export 'src/components/component_set.dart';
 export 'src/components/custom_painter_component.dart';

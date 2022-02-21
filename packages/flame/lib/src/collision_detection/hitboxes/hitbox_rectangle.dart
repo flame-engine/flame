@@ -1,7 +1,8 @@
-import '../../collision_detection.dart';
-import '../../components.dart';
-import '../../geometry.dart';
+import '../../../collision_detection.dart';
+import '../../../components.dart';
+import '../../../geometry.dart';
 
+/// A [Hitbox] in the shape of a rectangle (a simplified polygon).
 class HitboxRectangle extends RectangleComponent with HitboxShape {
   @override
   final bool shouldFillParent;

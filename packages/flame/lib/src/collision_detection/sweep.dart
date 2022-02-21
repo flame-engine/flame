@@ -1,6 +1,6 @@
 import 'broadphase.dart';
 import 'collision_callbacks.dart';
-import 'hitbox.dart';
+import 'hitboxes/hitbox.dart';
 
 class Sweep<T extends Hitbox<T>> extends Broadphase<T> {
   Sweep({List<T>? items}) : super(items: items);
