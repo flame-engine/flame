@@ -14,7 +14,7 @@ class MockImage extends Mock implements Image {
 }
 
 void main() {
-  group('ImagesCache', () {
+  group('Images', () {
     test('clear', () {
       final cache = Images();
       final image = MockImage();
