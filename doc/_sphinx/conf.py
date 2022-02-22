@@ -5,6 +5,9 @@
 # https://www.sphinx-doc.org/en/master/usage/configuration.html
 import docutils
 import os
+import sys
+sys.path.insert(0, os.path.abspath('.'))
+
 
 # -- Project information -----------------------------------------------------
 
@@ -22,6 +25,7 @@ root_doc = "index"
 extensions = [
     'myst_parser',  # Markdown support
     'sphinxcontrib.mermaid',
+    'extensions.flutter_app',
 ]
 
 # Configuration options for MyST:

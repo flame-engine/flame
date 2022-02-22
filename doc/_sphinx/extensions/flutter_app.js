@@ -1,0 +1,32 @@
+'strict';
+
+function run_flutter_app(url) {
+  let id = compute_iframe_id(url);
+  if (!$('#flutter-app-overlay').length) {
+    $('body').append($(`
+      <div id="flutter-app-overlay">
+        <button id="flutter-app-close-button" onclick="close_flutter_app()">✖</button>
+      </div>`
+    ));
+  }
+  if (!$('#' + id).length) {
+    $('#flutter-app-overlay').append($(
+      `<iframe id="${id}" class="flutter-app" src="${url}"></iframe>`
+    ));
+  }
+  $('#flutter-app-overlay').addClass('active');
+  $('#' + id).addClass('active');
+}
+
+function close_flutter_app() {
+  $('#flutter-app-overlay iframe').removeClass('active');
+  $('#flutter-app-overlay').removeClass('active');
+}
+
+function compute_iframe_id(url) {
+  if (url.startsWith('_static/')) {
+    url = url.substr(8);
+  }
+  let matches = url.matchAll(new RegExp('\\w+', 'g'));
+  return Array.from(matches, m => m[0]).join('-');
+}
