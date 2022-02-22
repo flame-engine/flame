@@ -24,4 +24,6 @@ class MemoryCache<K, V> {
   bool containsKey(K key) => _cache.containsKey(key);
 
   int get size => _cache.length;
+
+  Iterable<K> get keys => _cache.keys;
 }
