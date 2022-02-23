@@ -76,6 +76,7 @@ class JoystickComponent extends HudMarginComponent with Draggable {
   @override
   @mustCallSuper
   void onMount() {
+    super.onMount();
     assert(
       knob != null,
       'The knob has to either be passed in as an argument or set in onLoad',

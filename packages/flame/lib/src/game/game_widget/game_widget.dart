@@ -1,9 +1,10 @@
+import 'dart:developer';
+
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
 import '../../../extensions.dart';
 import '../../../input.dart';
-import '../../extensions/size.dart';
 import '../game_render_box.dart';
 import '../mixins/game.dart';
 import 'gestures.dart';
@@ -138,6 +139,7 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
   MouseCursor? _mouseCursor;
 
   Future<void> get loaderFuture => _loaderFuture ??= (() async {
+        assert(widget.game.hasLayout);
         final onLoad = widget.game.onLoadFuture;
         if (onLoad != null) {
           await onLoad;
@@ -316,13 +318,27 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
             color: game.backgroundColor(),
             child: LayoutBuilder(
               builder: (_, BoxConstraints constraints) {
-                game.onGameResize(constraints.biggest.toVector2());
+                final size = constraints.biggest.toVector2();
+                if (size.isZero()) {
+                  return widget.loadingBuilder?.call(context) ?? Container();
+                }
+                game.onGameResize(size);
                 return FutureBuilder(
                   future: loaderFuture,
                   builder: (_, snapshot) {
                     if (snapshot.hasError) {
                       final errorBuilder = widget.errorBuilder;
                       if (errorBuilder == null) {
+                        // @Since('2.16')
+                        // throw Error.throwWithStackTrace(
+                        //   snapshot.error!,
+                        //   snapshot.stackTrace,
+                        // )
+                        log(
+                          'Error while loading Game widget',
+                          error: snapshot.error,
+                          stackTrace: snapshot.stackTrace,
+                        );
                         throw snapshot.error!;
                       } else {
                         return errorBuilder(context, snapshot.error!);

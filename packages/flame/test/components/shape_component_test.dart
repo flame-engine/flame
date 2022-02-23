@@ -355,7 +355,8 @@ void main() {
         final parent = createParent();
         grandParent.add(parent);
         parent.add(component);
-        await game.add(grandParent);
+        game.add(grandParent);
+        await game.ready();
         expect(
           component.containsPoint(Vector2(-1.0, 1.0)),
           isTrue,
@@ -383,7 +384,8 @@ void main() {
         final parent = createParent();
         grandParent.add(parent);
         parent.add(component);
-        await game.add(grandParent);
+        game.add(grandParent);
+        await game.ready();
         expect(
           component.containsPoint(Vector2(-1.0, 1.0)),
           isTrue,
@@ -417,7 +419,8 @@ void main() {
         final parent = createParent();
         grandParent.add(parent);
         parent.add(component);
-        await game.add(grandParent);
+        game.add(grandParent);
+        await game.ready();
         expect(
           component.containsPoint(Vector2(-1.0, 1.0)),
           isTrue,

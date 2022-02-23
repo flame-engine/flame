@@ -9,15 +9,11 @@ void main() {
     flameGame.test(
       "can't add collidables to a game without HasCollidables",
       (game) {
-        const message =
-            'You can only use the HasHitboxes/Collidable feature with games '
-            'that has the HasCollidables mixin';
         expect(
-          () => game.add(_MyCollidable()),
-          throwsA(
-            predicate(
-              (e) => e is AssertionError && e.message == message,
-            ),
+          () => game.ensureAdd(_MyCollidable()),
+          failsAssert(
+            'You can only use the HasHitboxes/Collidable feature with games '
+            'that has the HasCollidables mixin',
           ),
         );
       },

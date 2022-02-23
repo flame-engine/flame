@@ -9,11 +9,11 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('ScaleEffect', () {
-    flameGame.test('relative', (game) {
+    flameGame.test('relative', (game) async {
       final component = PositionComponent();
-      game.ensureAdd(component);
+      await game.ensureAdd(component);
 
-      component.add(
+      await component.add(
         ScaleEffect.by(Vector2.all(2.0), EffectController(duration: 1)),
       );
       game.update(0);
@@ -30,12 +30,12 @@ void main() {
       expect(component.scale, closeToVector(2, 2));
     });
 
-    flameGame.test('absolute', (game) {
+    flameGame.test('absolute', (game) async {
       final component = PositionComponent();
-      game.ensureAdd(component);
+      await game.ensureAdd(component);
 
       component.scale = Vector2.all(1.0);
-      component.add(
+      await component.add(
         ScaleEffect.to(Vector2.all(3.0), EffectController(duration: 1)),
       );
       game.update(0);
@@ -52,15 +52,15 @@ void main() {
       expect(component.scale, closeToVector(3, 3));
     });
 
-    flameGame.test('reset relative', (game) {
+    flameGame.test('reset relative', (game) async {
       final component = PositionComponent();
-      game.ensureAdd(component);
+      await game.ensureAdd(component);
 
       final effect = ScaleEffect.by(
         Vector2.all(2.0),
         EffectController(duration: 1),
       );
-      component.add(effect..removeOnFinish = false);
+      await component.add(effect..removeOnFinish = false);
       var expectedScale = 1.0;
       for (var i = 0; i < 5; i++) {
         // After each reset the object will be scaled up twice
@@ -72,15 +72,15 @@ void main() {
       }
     });
 
-    flameGame.test('reset absolute', (game) {
+    flameGame.test('reset absolute', (game) async {
       final component = PositionComponent();
-      game.ensureAdd(component);
+      await game.ensureAdd(component);
 
       final effect = ScaleEffect.to(
         Vector2.all(1.0),
         EffectController(duration: 1),
       );
-      component.add(effect..removeOnFinish = false);
+      await component.add(effect..removeOnFinish = false);
       for (var i = 0; i < 5; i++) {
         component.scale = Vector2.all(1 + 4.0 * i);
         // After each reset the object will be scaled to the value of
@@ -91,11 +91,11 @@ void main() {
       }
     });
 
-    flameGame.test('scale composition', (game) {
+    flameGame.test('scale composition', (game) async {
       final component = PositionComponent()..flipVertically();
-      game.ensureAdd(component);
+      await game.ensureAdd(component);
 
-      component.add(
+      await component.add(
         ScaleEffect.by(Vector2.all(5), EffectController(duration: 10)),
       );
       component.add(
@@ -124,10 +124,10 @@ void main() {
       expect(component.children.length, 0);
     });
 
-    testRandom('a very long scale change', (Random rng) {
+    testRandom('a very long scale change', (Random rng) async {
       final game = FlameGame()..onGameResize(Vector2(1, 1));
       final component = PositionComponent();
-      game.ensureAdd(component);
+      await game.ensureAdd(component);
 
       final effect = ScaleEffect.by(
         Vector2.all(1.0),
@@ -137,7 +137,7 @@ void main() {
           infinite: true,
         ),
       );
-      component.add(effect);
+      await component.add(effect);
 
       var totalTime = 0.0;
       while (totalTime < 999.9) {
