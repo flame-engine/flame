@@ -12,39 +12,48 @@ from sphinx.util.logging import getLogger
 # `.. flutter-app::` directive
 # ------------------------------------------------------------------------------
 
-def valid_sources(argument):
-    """Validator for the `sources` parameter in FlutterAppDirective."""
-    if argument is None:
-        raise ValueError('Missing required argument :sources:')
-    else:
-        abspath = os.path.abspath(argument)
-        if os.path.isdir(abspath):
-            assert not abspath.endswith('/')
-            return abspath
-        else:
-            raise ValueError(f'{abspath} does not exist or is not a directory')
-
-
-def show_choices(argument):
-    """Validator for the `show` parameter in FlutterAppDirective."""
-    if argument:
-        values = argument.split()
-        for value in values:
-            if value not in ['widget', 'run', 'code']:
-                raise ValueError('Invalid :show: value ' + value)
-        return values
-    else:
-        return ['widget']
-
-
 class FlutterAppDirective(SphinxDirective):
+    """
+    Embed Flutter apps into documentation pages.
+
+    This extension allows inserting precompiled Flutter apps into the
+    generated documentation. The app to be inserted has to be configured for
+    compiling in 'web' mode.
+
+    Example of usage in Markdown:
+
+        ```{flutter-app}
+        :sources: ../../tetris-tutorial
+        :page: page3
+        :show: popup
+        ```
+
+    The following arguments are supported:
+      :sources: - the directory where the app is located, i.e. the directory
+        with the pubspec.yaml file of the app. The path should be relative to
+        the `doc/_sphinx` folder.
+
+      :page: - an additional parameter that will be appended to the URL of the
+        app. The app can retrieve this parameter by checking the property
+        `window.location.search` (where `window` is from `dart:html`), and then
+        display the content based on that. Thus, this parameter allows bundling
+        multiple separate Flutter widgets into one compiled app.
+        In addition, the "code" run mode will try to locate a file or a folder
+        with the matching name.
+
+      :show: - a list of one or more run modes, which could include "widget",
+        "popup", and "code". Each of these modes produces a different output:
+          "widget" - an iframe shown directly inside the docs page;
+          "popup" - a [Run] button which opens the app to (almost) fullscreen;
+          "code" - (NYI) opens a popup showing the code that was compiled.
+    """
     has_content = False
     required_arguments = 0
     optional_arguments = 0
     option_spec = {
-        'sources': valid_sources,
+        'sources': directives.unchanged,
         'page': directives.unchanged,
-        'show': show_choices,
+        'show': directives.unchanged,
     }
     # Static list of targets that were already compiled during the build
     COMPILED = []
@@ -61,8 +70,8 @@ class FlutterAppDirective(SphinxDirective):
 
     def run(self):
         self.logger = getLogger('flutter-app')
-        self.modes = self.options['show']
-        self.source_dir = self.options['sources']
+        self._process_show_option()
+        self._process_sources_option()
         self.source_build_dir = os.path.join(self.source_dir, 'build', 'web')
         self.app_name = os.path.basename(self.source_dir)
         self.html_dir = '_static/apps/' + self.app_name
@@ -70,14 +79,14 @@ class FlutterAppDirective(SphinxDirective):
             os.path.join('..', '_build', 'html', self.html_dir))
         self._ensure_compiled()
 
-        page = self.options['page']
+        page = self.options.get('page', '')
         iframe_url = self.html_dir + '/index.html?' + page
         result = []
-        if 'run' in self.modes:
+        if 'popup' in self.modes:
             result.append(Button(
                 '',
                 nodes.Text('Run'),
-                classes=['flutter-app-button', 'run'],
+                classes=['flutter-app-button', 'popup'],
                 onclick=f'run_flutter_app("{iframe_url}")',
             ))
         if 'code' in self.modes:
@@ -86,9 +95,31 @@ class FlutterAppDirective(SphinxDirective):
             result.append(IFrame(src=iframe_url))
         return result
 
+    def _process_show_option(self):
+        argument = self.options.get('show')
+        if argument:
+            values = argument.split()
+            for value in values:
+                if value not in ['widget', 'popup', 'code']:
+                    raise self.error('Invalid :show: value ' + value)
+            self.modes = values
+        else:
+            self.modes = ['widget']
+
+    def _process_sources_option(self):
+        argument = self.options.get('sources', '')
+        abspath = os.path.abspath(argument)
+        if not argument:
+            raise self.error('Missing required argument :sources:')
+        if not os.path.isdir(abspath):
+            raise self.error(
+                f'sources=`{abspath}` does not exist or is not a directory')
+        assert not abspath.endswith('/')
+        self.source_dir = abspath
+
     def _ensure_compiled(self):
         need_compiling = (
-            ('run' in self.modes or 'widget' in self.modes) and
+            ('popup' in self.modes or 'widget' in self.modes) and
             self.source_dir not in FlutterAppDirective.COMPILED
         )
         if not need_compiling:
