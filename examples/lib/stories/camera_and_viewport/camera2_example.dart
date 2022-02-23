@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flame/components.dart';
+import 'package:flame/extensions.dart' show OffsetExtension;
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flame/src/experimental/camera.dart'; // ignore: implementation_imports
@@ -32,7 +33,7 @@ class Camera2Example extends FlameGame with PanDetector {
     final camera = Camera2(world: world);
     await add(camera);
     final offset = world.curve.boundingRect().center;
-    center = Vector2(offset.dx, offset.dy);
+    center = offset.toVector2();
     camera.viewfinder.position = Vector2(center.x, center.y);
 
     magnifyingGlass = Camera2(world: world, viewport: CircularViewport(radius));
