@@ -9,11 +9,11 @@ from sphinx.util.logging import getLogger
 
 
 # ------------------------------------------------------------------------------
-# Parameter validators
+# `.. flutter-app::` directive
 # ------------------------------------------------------------------------------
 
 def valid_sources(argument):
-    """Validator for the `sources` parameter of the flutter-app directive."""
+    """Validator for the `sources` parameter in FlutterAppDirective."""
     if argument is None:
         raise ValueError('Missing required argument :sources:')
     else:
@@ -26,7 +26,7 @@ def valid_sources(argument):
 
 
 def show_choices(argument):
-    """Validator for the `show` parameter of the flutter-app directive."""
+    """Validator for the `show` parameter in FlutterAppDirective."""
     if argument:
         values = argument.split()
         for value in values:
@@ -36,41 +36,6 @@ def show_choices(argument):
     else:
         return ['widget']
 
-
-# ------------------------------------------------------------------------------
-# Nodes
-# ------------------------------------------------------------------------------
-
-class IFrame(nodes.Element, nodes.General):
-    pass
-
-
-def visit_iframe(self, node):
-    self.body.append(self.starttag(node, 'iframe', src=node.attributes['src']))
-
-
-def depart_iframe(self, _):
-    self.body.append('</iframe>')
-
-
-class Button(nodes.Element, nodes.General):
-    pass
-
-
-def visit_button(self, node):
-    attrs = {}
-    if 'onclick' in node.attributes:
-        attrs['onclick'] = node.attributes['onclick']
-    self.body.append(self.starttag(node, 'button', **attrs).strip())
-
-
-def depart_button(self, _):
-    self.body.append('</button>')
-
-
-# ------------------------------------------------------------------------------
-# Directives
-# ------------------------------------------------------------------------------
 
 class FlutterAppDirective(SphinxDirective):
     has_content = False
@@ -179,18 +144,52 @@ class FlutterAppDirective(SphinxDirective):
 
 
 # ------------------------------------------------------------------------------
+# Nodes
+# ------------------------------------------------------------------------------
+
+class IFrame(nodes.Element, nodes.General):
+    pass
+
+
+def visit_iframe(self, node):
+    self.body.append(self.starttag(node, 'iframe', src=node.attributes['src']))
+
+
+def depart_iframe(self, _):
+    self.body.append('</iframe>')
+
+
+class Button(nodes.Element, nodes.General):
+    pass
+
+
+def visit_button(self, node):
+    attrs = {}
+    if 'onclick' in node.attributes:
+        attrs['onclick'] = node.attributes['onclick']
+    self.body.append(self.starttag(node, 'button', **attrs).strip())
+
+
+def depart_button(self, _):
+    self.body.append('</button>')
+
+
+# ------------------------------------------------------------------------------
 # Extension setup
 # ------------------------------------------------------------------------------
 
 def setup(app):
-    basedir = os.path.dirname(__file__)
+    base_dir = os.path.dirname(__file__)
+    target_dir = os.path.abspath('../_build/html/_static/')
+    os.makedirs(target_dir, exist_ok=True)
+    shutil.copy(os.path.join(base_dir, 'flutter_app.js'), target_dir)
+    shutil.copy(os.path.join(base_dir, 'flutter_app.css'), target_dir)
+
     app.add_node(IFrame, html=(visit_iframe, depart_iframe))
     app.add_node(Button, html=(visit_button, depart_button))
     app.add_directive('flutter-app', FlutterAppDirective)
     app.add_js_file('flutter_app.js')
     app.add_css_file('flutter_app.css')
-    for file in ['flutter_app.js', 'flutter_app.css']:
-        shutil.copy(os.path.join(basedir, file), '../_build/html/_static/')
     return {
         'parallel_read_safe': False,
         'parallel_write_safe': False,
