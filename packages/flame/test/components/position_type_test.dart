@@ -7,24 +7,9 @@ import 'package:flame_test/flame_test.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-class _MyComponent extends Component {
-  @override
-  PositionType positionType;
-
-  _MyComponent(int priority, {this.positionType = PositionType.game})
-      : super(priority: priority);
-
-  @override
-  void render(Canvas canvas) {
-    final p = Vector2Extension.fromInts(priority, priority);
-    final s = Vector2.all(1.0);
-    canvas.drawRect(p & s, BasicPalette.white.paint());
-  }
-}
-
 void main() {
-  group('components are rendered according to their priorities', () {
-    flameGame.test(
+  group('PositionType', () {
+    testWithFlameGame(
       'PositionType.game',
       (game) async {
         await game.ensureAddAll([
@@ -49,7 +34,7 @@ void main() {
       },
     );
 
-    flameGame.test(
+    testWithFlameGame(
       'PositionType.viewport',
       (game) async {
         await game.ensureAddAll([
@@ -71,7 +56,7 @@ void main() {
       },
     );
 
-    flameGame.test(
+    testWithFlameGame(
       'PositionType.widget',
       (game) async {
         await game.ensureAddAll([
@@ -94,7 +79,7 @@ void main() {
       },
     );
 
-    flameGame.test(
+    testWithFlameGame(
       'mixed',
       (game) async {
         await game.ensureAddAll([
@@ -131,4 +116,19 @@ void main() {
       },
     );
   });
+}
+
+class _MyComponent extends Component {
+  _MyComponent(int priority, {this.positionType = PositionType.game})
+      : super(priority: priority);
+
+  @override
+  PositionType positionType;
+
+  @override
+  void render(Canvas canvas) {
+    final p = Vector2.all(priority.toDouble());
+    final s = Vector2.all(1.0);
+    canvas.drawRect(p & s, BasicPalette.white.paint());
+  }
 }
