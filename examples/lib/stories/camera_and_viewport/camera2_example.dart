@@ -475,24 +475,35 @@ class InsectLeg {
     this.l1,
     this.l2,
     this.l3,
-    this.bendDirection,
-  )   : r = l3 / 2,
-        dir = bendDirection ? -1 : 1,
+    bool bendDirection,
+  )   : dir = bendDirection ? -1 : 1,
         path = Path(),
         foot = Vector2.zero() {
     final ok = placeFoot(Vector2(x1, y1));
     assert(ok);
   }
 
+  /// Place where the leg is attached to the body
   final double x0, y0;
+
+  /// Place on the ground where the ant needs to place its foot
   final double x1, y1;
-  final double l1, l2, l3, r;
-  final bool bendDirection;
+
+  /// Lengths of the 3 segments of the leg: [l1] is nearest to the body, [l2]
+  /// is the middle part, and [l3] is the "foot".
+  final double l1, l2, l3;
+
+  /// +1 if the leg bends "forward", or -1 if backwards
   final double dir;
+
+  /// The leg is drawn as a simple [path] polyline consisting of 3 segments.
   final Path path;
+
+  /// This vector stores the position of the foot; it's equal to (x1, y1).
   final Vector2 foot;
 
   bool placeFoot(Vector2 pos) {
+    final r = l3 / 2;
     final rr = distance(pos.x, pos.y, x0, y0);
     if (rr < r) {
       return false;

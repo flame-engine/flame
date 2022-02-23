@@ -19,5 +19,5 @@ class MaxViewport extends Viewport {
   void clip(Canvas canvas) {}
 
   @override
-  void handleResize() {}
+  void onViewportResize() {}
 }

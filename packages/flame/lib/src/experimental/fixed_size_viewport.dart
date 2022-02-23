@@ -19,7 +19,7 @@ class FixedSizeViewport extends Viewport {
   void clip(Canvas canvas) => canvas.clipRect(_clipRect, doAntiAlias: false);
 
   @override
-  void handleResize() {
+  void onViewportResize() {
     final x = size.x / 2;
     final y = size.y / 2;
     _clipRect = Rect.fromLTRB(-x, -y, x, y);

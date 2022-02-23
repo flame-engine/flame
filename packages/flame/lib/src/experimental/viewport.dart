@@ -43,7 +43,7 @@ abstract class Viewport extends Component {
       "Viewport's size cannot be negative: $value",
     );
     _size.setFrom(value);
-    handleResize();
+    onViewportResize();
   }
 
   /// Apply clip mask to the [canvas].
@@ -61,7 +61,7 @@ abstract class Viewport extends Component {
   /// A typical use-case would be to adjust the viewport's clip mask to match
   /// the new size.
   @protected
-  void handleResize();
+  void onViewportResize();
 
   @mustCallSuper
   @override
