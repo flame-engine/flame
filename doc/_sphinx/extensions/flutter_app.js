@@ -1,5 +1,7 @@
-'strict';
+'use strict';
 
+/// Create an overlay with an iframe, the iframe's source is [url]. This also
+/// creates an (x) button to hide the overlay.
 function run_flutter_app(url) {
   let id = compute_iframe_id(url);
   if (!$('#flutter-app-overlay').length) {
@@ -18,11 +20,14 @@ function run_flutter_app(url) {
   $('#' + id).addClass('active');
 }
 
+/// Handler for the (x) close button on an app iframe.
 function close_flutter_app() {
   $('#flutter-app-overlay iframe').removeClass('active');
   $('#flutter-app-overlay').removeClass('active');
 }
 
+/// Convert a URL such as '_static/app/tutorial1/index.html?page1' into a string
+/// that can be used as an id: 'app-tutorial1-index-html-page1'.
 function compute_iframe_id(url) {
   if (url.startsWith('_static/')) {
     url = url.substr(8);
