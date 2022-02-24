@@ -18,8 +18,8 @@ void main() {
   group('ComposedProjector', () {
     test('compose 2 projectors', () {
       final projector = ComposedProjector([
-        ScaleProjector(3),
-        ScaleProjector(-1),
+        _ScaleProjector(3),
+        _ScaleProjector(-1),
       ]);
       checkProjectorReversibility(projector);
       expect(projector.projectVector(Vector2(4, 5)), closeToVector(-12, -15));
@@ -56,8 +56,8 @@ void checkProjectorReversibility(Projector projector) {
   }
 }
 
-class ScaleProjector extends Projector {
-  ScaleProjector(this.scale);
+class _ScaleProjector extends Projector {
+  _ScaleProjector(this.scale);
   final double scale;
 
   @override
