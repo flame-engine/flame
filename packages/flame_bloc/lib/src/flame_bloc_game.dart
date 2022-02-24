@@ -20,7 +20,7 @@ mixin BlocComponent<B extends BlocBase<S>, S> on Component {
   /// Makes this component subscribe to the Bloc changes.
   /// Visible only for test purposes.
   @visibleForTesting
-  void subscribe(FlameBlocGame game) {
+  void subscribe(FlameBloc game) {
     final _bloc = game.read<B>();
     _state = _bloc.state;
 
@@ -60,10 +60,10 @@ mixin BlocComponent<B extends BlocBase<S>, S> on Component {
   void onMount() {
     super.onMount();
     assert(
-      findGame()! is FlameBlocGame,
-      'BlocComponent can only be added to a FlameBlocGame',
+      findGame()! is FlameBloc,
+      'BlocComponent can only be added to a FlameBloc',
     );
-    final game = findGame()! as FlameBlocGame;
+    final game = findGame()! as FlameBloc;
     if (game.isAttached) {
       subscribe(game);
     } else {
@@ -79,13 +79,9 @@ mixin BlocComponent<B extends BlocBase<S>, S> on Component {
   }
 }
 
-/// An enhanced [FlameGame] that has the capability to listen
+/// A mixin that enhances a [FlameGame] enabling features to receive
 /// and emit changes to a [Bloc] state.
-class FlameBlocGame extends FlameGame {
-  /// FlameBlocGame constructor with an optional [Camera] as a parameter to
-  /// FlameGame.
-  FlameBlocGame({Camera? camera}) : super(camera: camera);
-
+mixin FlameBloc on FlameGame {
   /// Contains a list of all of the [BlocComponent]s with an active
   /// subscription. Only visible for testing.
   @visibleForTesting
@@ -131,4 +127,11 @@ class FlameBlocGame extends FlameGame {
       element.unsubscribe();
     });
   }
+}
+
+/// Provides a default, concrete implementation of a [FlameBloc] game.
+class FlameBlocGame extends FlameGame with FlameBloc {
+  /// FlameBlocGame constructor with an optional [Camera] as a parameter to
+  /// FlameGame.
+  FlameBlocGame({Camera? camera}) : super(camera: camera);
 }

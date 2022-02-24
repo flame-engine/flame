@@ -15,6 +15,11 @@ BlocProvider<ExampleGame>(
 )
 ```
 
+To enable the features from `flame_bloc` into your game, you can make your game class inherit from
+`FlameBlocGame`, or if you already is using an enhanced `FlameGame` class (like fir example a
+`Forge2DGame`), the `FlameBloc` mixin can be used instead.
+
+
 To access the bloc from inside your game, the `read` method can be used.
 
 ```dart
