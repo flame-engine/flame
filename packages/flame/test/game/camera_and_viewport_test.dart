@@ -7,62 +7,7 @@ import 'package:flame/game.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-class _TestComponent extends PositionComponent {
-  static final Paint _paint = Paint();
-
-  _TestComponent(Vector2 position)
-      : super(
-          position: position,
-          size: Vector2.all(1.0),
-        );
-
-  @override
-  void render(Canvas c) {
-    c.drawRect(size.toRect(), _paint);
-  }
-}
-
 void main() {
-  group('widget', () {
-    testWithFlameGame(
-      'viewport does not affect component with PositionType.widget',
-      (game) async {
-        game.camera.viewport = FixedResolutionViewport(Vector2.all(50));
-        game.onGameResize(Vector2.all(200.0));
-        await game.ensureAdd(
-          _TestComponent(Vector2.zero())..positionType = PositionType.widget,
-        );
-
-        final canvas = MockCanvas();
-        game.render(canvas);
-        expect(
-          canvas,
-          MockCanvas()
-            ..translate(0, 0) // transform in PositionComponent.renderTree
-            ..drawRect(const Rect.fromLTWH(0, 0, 1, 1)),
-        );
-      },
-    );
-
-    testWithFlameGame(
-      'camera does not affect component with PositionType.widget',
-      (game) async {
-        await game.ensureAdd(
-          _TestComponent(Vector2.zero())..positionType = PositionType.widget,
-        );
-        game.camera.snapTo(Vector2(100, 100));
-
-        final canvas = MockCanvas();
-        game.render(canvas);
-        expect(
-          canvas,
-          MockCanvas()
-            ..translate(0, 0) // transform in PositionComponent.renderTree
-            ..drawRect(const Rect.fromLTWH(0, 0, 1, 1)),
-        );
-      },
-    );
-  });
 
   group('viewport', () {
     testWithFlameGame(
@@ -471,4 +416,19 @@ void main() {
       },
     );
   });
+}
+
+class _TestComponent extends PositionComponent {
+  static final Paint _paint = Paint();
+
+  _TestComponent(Vector2 position)
+      : super(
+    position: position,
+    size: Vector2.all(1.0),
+  );
+
+  @override
+  void render(Canvas c) {
+    c.drawRect(size.toRect(), _paint);
+  }
 }
