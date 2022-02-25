@@ -8,14 +8,10 @@ import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-
-
-
-  group('camera', () {
+  group('Camera', () {
     testWithFlameGame(
       'default camera applies no translation',
       (game) async {
-        game.onGameResize(Vector2.all(100.0));
         expect(game.camera.position, Vector2.zero());
 
         await game.ensureAdd(_TestComponent(Vector2.all(10.0)));
@@ -35,7 +31,6 @@ void main() {
     testWithFlameGame(
       'camera snap movement',
       (game) async {
-        game.onGameResize(Vector2.all(100.0));
         expect(game.camera.position, Vector2.zero());
 
         await game.ensureAdd(_TestComponent(Vector2.all(10.0)));
@@ -62,8 +57,6 @@ void main() {
     testWithFlameGame(
       'camera smooth movement',
       (game) async {
-        game.onGameResize(Vector2.all(100.0));
-
         game.camera.speed = 1; // 1 pixel per second
         game.camera.moveTo(Vector2(0.0, 10.0));
 
@@ -220,7 +213,6 @@ void main() {
     testWithFlameGame(
       'camera zoom',
       (game) async {
-        game.onGameResize(Vector2.all(200.0));
         game.camera.zoom = 2;
 
         final p = _TestComponent(Vector2.all(100.0))..anchor = Anchor.center;
@@ -269,7 +261,6 @@ void main() {
       'camera shake should return to where it started',
       (game) async {
         final camera = game.camera;
-        game.onGameResize(Vector2.all(200.0));
         expect(camera.position, Vector2.zero());
         camera.shake(duration: 9000);
         game.update(5000);
@@ -278,14 +269,11 @@ void main() {
         expect(camera.position, Vector2.zero());
       },
     );
-  });
 
-  group('viewport & camera', () {
     testWithFlameGame(
       'default ratio viewport + camera with world boundaries',
       (game) async {
-        final game = FlameGame()
-          ..camera.viewport = FixedResolutionViewport(Vector2.all(100));
+        game.camera.viewport = FixedResolutionViewport(Vector2.all(100));
         game.onGameResize(Vector2.all(200.0));
         expect(game.canvasSize, Vector2.all(200.00));
         expect(game.size, Vector2.all(100.00));
@@ -295,7 +283,7 @@ void main() {
         game.camera.followComponent(
           p,
           // this could be a typical mario-like platformer, where the player is
-          // more on the bottom left to allow the scenario to be seem
+          // more on the bottom left to allow the level to be seen
           relativeOffset: const Anchor(0.25, 0.25),
           worldBounds: const Rect.fromLTWH(0, 0, 1000, 1000),
         );
@@ -324,16 +312,11 @@ void main() {
 }
 
 class _TestComponent extends PositionComponent {
-  static final Paint _paint = Paint();
-
   _TestComponent(Vector2 position)
-      : super(
-    position: position,
-    size: Vector2.all(1.0),
-  );
+      : super(position: position, size: Vector2.all(1.0));
 
   @override
   void render(Canvas c) {
-    c.drawRect(size.toRect(), _paint);
+    c.drawRect(size.toRect(), Paint());
   }
 }
