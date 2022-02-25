@@ -9,6 +9,15 @@ import 'projector_test.dart';
 
 void main() {
   group('FlameGame', () {
+    testWithFlameGame(
+      'default viewport does not change size',
+      (game) async {
+        game.onGameResize(Vector2(100.0, 200.0));
+        expect(game.canvasSize, Vector2(100.0, 200.00));
+        expect(game.size, Vector2(100.0, 200.00));
+      },
+    );
+
     group('components', () {
       testWithFlameGame(
         'Add component',
