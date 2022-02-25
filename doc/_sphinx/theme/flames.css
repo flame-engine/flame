@@ -63,6 +63,10 @@ p {
   margin-top: 0;
 }
 
+strong {
+  color: white;
+}
+
 div.expander {
   flex: 1;
 }
@@ -460,7 +464,7 @@ div.document-wrapper {
 
 div.document {
   background-color: #282828;
-  color: #c0c0c0;
+  color: #b0b0b0;
   border-radius: 2pt;
   box-shadow: 2px 2px 3px 0 #000;
   padding: var(--document-padding);
