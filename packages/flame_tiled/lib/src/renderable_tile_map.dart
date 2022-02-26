@@ -210,7 +210,7 @@ class RenderableTiledMap {
   }
   
   //Adding getImageLayer
-  ImageLayer getImageLayerFromLayer(String name) {
+  ImageLayer getImageLayer(String name) {
     final i = map.layers.firstWhere((layer) {
       return layer is ImageLayer && layer.name == name;
     });
