@@ -11,7 +11,7 @@ abstract class SpriteBodyComponent<T extends Forge2DGame>
     Sprite sprite,
     Vector2 spriteSize, {
     int? priority,
-  },) : super(
+  }) : super(
           positionComponent: SpriteComponent(
             size: spriteSize,
             sprite: sprite,
