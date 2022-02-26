@@ -9,7 +9,7 @@ the tiles, objects and everything in there.
 Flame also provides a simple `Tiled` class and its component wrapper `TiledComponent`, for the map
 rendering, which renders the tiles on the screen and supports rotations and flips.
 
-At its simplest, you can work with layers in a Tilemap by invoking:
+At its simplest, layers can be retrieved from a Tilemap by invoking:
 
 ```
 getLayer<ObjectLayer>("myObjectLayer");
