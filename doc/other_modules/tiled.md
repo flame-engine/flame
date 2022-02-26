@@ -12,7 +12,7 @@ rendering, which renders the tiles on the screen and supports rotations and flip
 At its simplest, layers can be retrieved from a Tilemap by invoking:
 
 ```
-getLayer<ObjectLayer>("myObjectLayer");
+getLayer<ObjectGroup>("myObjectLayer");
 getLayer<ImageLayer>("myImageLayer");
 getLayer<TileLayer>("myTileLayer");
 getLayer<GroupLayer>("myGroupLayer");
