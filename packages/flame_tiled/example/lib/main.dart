@@ -3,6 +3,7 @@ import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 import 'package:flutter/widgets.dart' hide Animation, Image;
+import 'package:tiled/tiled.dart';
 
 void main() {
   runApp(GameWidget(game: TiledGame()));
@@ -15,9 +16,12 @@ class TiledGame extends FlameGame {
     final tiledMap = await TiledComponent.load('map.tmx', Vector2.all(16));
     add(tiledMap);
 
-    final objGroup = tiledMap.tileMap.getObjectGroupFromLayer('AnimatedCoins');
+    final objGroup = tiledMap.tileMap.getLayer<ObjectGroup>('AnimatedCoins');
     final coins = await Flame.images.load('coins.png');
-    for (final obj in objGroup.objects) {
+
+    // We are 100% sure that an object layer named `AnimatedCoins`
+    // exists in the example `map.tmx`.
+    for (final obj in objGroup!.objects) {
       add(
         SpriteAnimationComponent(
           position: Vector2(obj.x, obj.y),
