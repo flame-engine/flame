@@ -216,4 +216,19 @@ class RenderableTiledMap {
     });
     return i as ImageLayer;
   }
+  //Adding getTileLayer
+  TileLayer getTileLayer(String name) {
+    final t = map.layers.firstWhere((layer) {
+      return layer is TileLayer && layer.name == name;
+    });
+    return t as TileLayer;
+  }
+  //Adding getGroupLayer
+  Group getGroupLayer(String name) {
+    final g = map.layers.firstWhere((layer) {
+      return layer is Group && layer.name == name;
+    });
+    return g as Group;
+  }
+  
 }
