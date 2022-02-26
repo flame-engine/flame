@@ -15,7 +15,7 @@ At its simplest, layers can be retrieved from a Tilemap by invoking:
 getLayer<ObjectGroup>("myObjectLayer");
 getLayer<ImageLayer>("myImageLayer");
 getLayer<TileLayer>("myTileLayer");
-getLayer<GroupLayer>("myGroupLayer");
+getLayer<Group>("myGroupLayer");
 ```
 
 These methods will either return the requested layer type or null if it does not exist.
