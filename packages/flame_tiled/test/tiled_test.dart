@@ -8,6 +8,7 @@ import 'package:flame/flame.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 import 'package:flutter/services.dart' show CachingAssetBundle;
 import 'package:test/test.dart';
+import 'package:tiled/tiled.dart';
 
 void main() {
   test('correct loads the file', () async {
@@ -121,6 +122,53 @@ void main() {
             leftTilePixels[indGreen + 3] == 255;
       }
       expect(allGreen, true);
+    });
+  });
+
+  group('Test getLayer:', () {
+    late RenderableTiledMap _renderableTiledMap;
+    setUp(() async {
+      Flame.bundle = TestAssetBundle(
+        imageNames: ['map-level1.png'],
+        mapPath: 'test/assets/layers_test.tmx',
+      );
+      _renderableTiledMap =
+          await RenderableTiledMap.fromFile('layers_test.tmx', Vector2.all(32));
+    });
+
+    test('Get Tile Layer', () {
+      expect(
+        _renderableTiledMap.getLayer<TileLayer>('MyTileLayer'),
+        isNotNull,
+      );
+    });
+
+    test('Get Object Layer', () {
+      expect(
+        _renderableTiledMap.getLayer<ObjectGroup>('MyObjectLayer'),
+        isNotNull,
+      );
+    });
+
+    test('Get Image Layer', () {
+      expect(
+        _renderableTiledMap.getLayer<ImageLayer>('MyImageLayer'),
+        isNotNull,
+      );
+    });
+
+    test('Get Group Layer', () {
+      expect(
+        _renderableTiledMap.getLayer<Group>('MyGroupLayer'),
+        isNotNull,
+      );
+    });
+
+    test('Get no layer', () {
+      expect(
+        _renderableTiledMap.getLayer<TileLayer>('Nonexistent layer'),
+        isNull,
+      );
     });
   });
 }

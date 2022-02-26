@@ -202,33 +202,27 @@ class RenderableTiledMap {
 
   /// This returns an object group fetch by name from a given layer.
   /// Use this to add custom behaviour to special objects and groups.
+  @Deprecated('This method is deprecated. Use the getLayer() method instead.')
   ObjectGroup getObjectGroupFromLayer(String name) {
     final g = map.layers.firstWhere((layer) {
       return layer is ObjectGroup && layer.name == name;
     });
     return g as ObjectGroup;
   }
-  
-  //Adding getImageLayer
-  ImageLayer getImageLayer(String name) {
-    final i = map.layers.firstWhere((layer) {
-      return layer is ImageLayer && layer.name == name;
-    });
-    return i as ImageLayer;
+
+  /// Returns a layer of type [T] with given [name] from all the layers
+  /// of this map. If no such layer is found, null is returned.
+  T? getLayer<T extends Layer>(String name) {
+    T? foundLayer;
+
+    try {
+      foundLayer = map.layers.firstWhere((layer) {
+        return layer is T && layer.name == name;
+      }) as T;
+    } on StateError {
+      foundLayer = null;
+    }
+
+    return foundLayer;
   }
-  //Adding getTileLayer
-  TileLayer getTileLayer(String name) {
-    final t = map.layers.firstWhere((layer) {
-      return layer is TileLayer && layer.name == name;
-    });
-    return t as TileLayer;
-  }
-  //Adding getGroupLayer
-  Group getGroupLayer(String name) {
-    final g = map.layers.firstWhere((layer) {
-      return layer is Group && layer.name == name;
-    });
-    return g as Group;
-  }
-  
 }
