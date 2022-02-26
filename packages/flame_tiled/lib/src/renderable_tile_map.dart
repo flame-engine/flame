@@ -208,4 +208,12 @@ class RenderableTiledMap {
     });
     return g as ObjectGroup;
   }
+  
+  //Adding getImageLayer
+  ImageLayer getImageLayerFromLayer(String name) {
+    final i = map.layers.firstWhere((layer) {
+      return layer is ImageLayer && layer.name == name;
+    });
+    return i as ImageLayer;
+  }
 }
