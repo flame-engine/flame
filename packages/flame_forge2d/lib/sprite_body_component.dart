@@ -10,10 +10,13 @@ abstract class SpriteBodyComponent<T extends Forge2DGame>
   SpriteBodyComponent(
     Sprite sprite,
     Vector2 spriteSize, {
-    int priority = 0,
-  }) : super(
+    int? priority,
+  },) : super(
           positionComponent: SpriteComponent(
-              size: spriteSize, sprite: sprite, priority: priority),
+            size: spriteSize,
+            sprite: sprite,
+            priority: priority,
+          ),
           size: spriteSize,
         );
 }
