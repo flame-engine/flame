@@ -1,0 +1,85 @@
+
+button.flutter-app-button {
+  background: #e2a73c;
+  border: none;
+  border-radius: 6px;
+  box-shadow: 2px 2px 6px 0 black;
+  color: black;
+  cursor: pointer;
+  font-family: var(--font-sans);
+  font-size: 1.1em;
+  font-weight: bold;
+  line-height: 1em;
+  min-height: 26pt;
+  min-width: 120pt;
+}
+
+button.flutter-app-button:hover {
+  background: #f3dc38;
+}
+
+button.flutter-app-button:active {
+  background: white;
+  left: 1px;
+  position: relative;
+  top: 1px;
+}
+
+button.flutter-app-button:after {
+  content: '\f0da';
+  font-family: var(--font-awesome);
+  margin-left: 4px;
+  position: relative;
+  top: 1px;
+}
+
+#flutter-app-overlay {
+  background: #00000050;
+  display: none;
+  height: 100vh;
+  left: 0;
+  position: fixed;
+  top: 0;
+  width: 100vw;
+  z-index: 10000;
+}
+
+#flutter-app-overlay.active {
+  display: initial;
+}
+
+#flutter-app-overlay.active iframe {
+  border: none;
+  box-shadow: 0px 0px 9px 3px black;
+  display: none;
+  left: 50%;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+#flutter-app-overlay.active iframe.active {
+  display: initial;
+}
+
+#flutter-app-close-button {
+  background: white;
+  border: 1px solid black;
+  border-radius: 50%;
+  color: black;
+  cursor: pointer;
+  font-size: 20px;
+  height: 30px;
+  left: 90%;
+  margin-left: -15px;
+  margin-top: -15px;
+  position: absolute;
+  text-align: center;
+  top: 10%;
+  width: 30px;
+}
+
+#flutter-app-close-button:hover {
+  background: #e38f13;
+  color: white;
+}
