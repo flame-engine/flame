@@ -215,12 +215,12 @@ class RenderableTiledMap {
   T? getLayer<T extends Layer>(String name) {
     T? foundLayer;
 
-    try {
-      foundLayer = map.layers.firstWhere((layer) {
-        return layer is T && layer.name == name;
-      }) as T;
-    } on StateError {
-      foundLayer = null;
+    for (var i = 0; i < map.layers.length; ++i) {
+      final layer = map.layers.elementAt(i);
+      if (layer is T && layer.name == name) {
+        foundLayer = layer;
+        break;
+      }
     }
 
     return foundLayer;
