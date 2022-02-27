@@ -381,14 +381,21 @@ The provided event info is from the mouse move that triggered the action (enteri
 While the mouse movement is kept inside or outside, no events are fired and those mouse move events are
 not propagated. Only when the state is changed the handlers are triggered.
 
+### GestureHitboxes
 
-## HasHitboxes
+The `GestureHitboxes` mixin is used to more accurately recognize gestures on top of your
+`Component`s. Say that you have a fairly round rock as a `SpriteComponent` for example, then you
+don't want to register input that is in the corner of the image where the rock is not displayed,
+since a `PositionComponent` is rectangular by default. Then you can use the `GestureHitboxes` mixin
+to define a more accurate circle or polygon (or another shape) for which the input should be within
+for the event to be registered on your component.
 
-The `HasHitboxes` mixin is used to make detection of gestures on top of your `PositionComponent`s 
-more accurate. Say that you have a fairly round rock as a `SpriteComponent` for example, then you 
-don't want to register input that is in the corner of the image where the rock is not displayed. 
-Then you can use the `HasHitboxes` mixin to define a more accurate polygon for which the input 
-should be within for the event to be counted on your component.
+You can add new hitboxes to the component that has the `GestureHitboxes` mixin just like they are
+added in the below `Collidable` example.
 
-An example of you to use it can be seen
+More information about how to define hitboxes can be found in the hitbox section of the 
+[collision detection](../collision_detection.md#adding-hitboxes) docs.
+
+// TODO(spydon): Add correct example
+An example of how to use it can be seen
 [here](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/).

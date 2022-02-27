@@ -4,7 +4,9 @@
 
 This diagram might look intimidating, but don't worry, it is not as complex as it looks.
 
+
 ## Component
+
 All components inherit from the abstract class `Component`.
 
 If you want to skip reading about abstract classes you can jump directly to
@@ -54,6 +56,7 @@ you can extend the `Component` directly.
 `flame_forge2d` since those components doesn't have their position in relation to the screen, but in
 relation to the Forge2D world.
 
+
 ### Composability of components
 
 Sometimes it is useful to wrap other components inside of your component. For example by grouping
@@ -88,6 +91,7 @@ class GameOverPanel extends PositionComponent with HasGameRef<MyGame> {
 }
 ```
 
+
 ### Querying child components
 
 The children that have been added to a component live in a `QueryableOrderedSet` called
@@ -118,7 +122,8 @@ void update(double dt) {
 }
 ```
 
-### Positioning types
+
+### PositionType
 If you want to create a HUD (Head-up display) or another component that isn't positioned in relation
 to the game coordinates, you can change the `PositionType` of the component.
 The default `PositionType` is `positionType = PositionType.game` and that can be changed to
@@ -150,15 +155,18 @@ sprite. It can also represent a group of positioned components if children are a
 The base of the `PositionComponent` is that it has a `position`, `size`, `scale`, `angle` and
 `anchor` which transforms how the component is rendered.
 
+
 ### Position
 
 The `position` is just a `Vector2` which represents the position of the component's anchor in
 relation to its parent; if the parent is a `FlameGame`, it is in relation to the viewport.
 
+
 ### Size
 
 The `size` of the component when the zoom level of the camera is 1.0 (no zoom, default).
 The `size` is *not* in relation to the parent of the component.
+
 
 ### Scale
 
@@ -166,10 +174,12 @@ The `scale` is how much the component and its children should be scaled. Since i
 by a `Vector2`, you can scale in a uniform way by changing `x` and `y` with the same amount, or in a
 non-uniform way, by change `x` or `y` by different amounts.
 
+
 ### Angle
 
 The `angle` is the rotation angle around the anchor, represented as a double in radians. It is
 relative to the parent's angle.
+
 
 ### Anchor
 
@@ -178,6 +188,7 @@ default is `Anchor.topLeft`). So if you have the anchor set as `Anchor.center` t
 position on the screen will be in the center of the component and if an `angle` is applied, it is
 rotated around the anchor, so in this case around the center of the component. You can think of it
 as the point within the component by which Flame "grabs" it.
+
 
 ### PositionComponent children
 
@@ -201,6 +212,7 @@ Future<void> onLoad() async {
 Remember that most components that are rendered on the screen are `PositionComponent`s, so
 this pattern can be used in for example [](#spritecomponent) and [](#spriteanimationcomponent) too.
 
+
 ### Render PositionComponent
 
 When implementing the `render` method for a component that extends `PositionComponent` remember to
@@ -212,12 +224,14 @@ If you want to know where on the screen the bounding box of the component is you
 `toRect` method.
 
 In the event that you want to change the direction of your components rendering, you can also use
-`flipHorizontally()` and `flipVertically()` to flip anything drawn to canvas during `render(Canvas canvas)`,
-around the anchor point. These methods are available on all `PositionComponent` objects, and are especially
-useful on `SpriteComponent` and `SpriteAnimationComponent`.
+`flipHorizontally()` and `flipVertically()` to flip anything drawn to canvas during
+`render(Canvas canvas)`, around the anchor point. These methods are available on all
+`PositionComponent` objects, and are especially useful on `SpriteComponent` and
+`SpriteAnimationComponent`.
 
-In case you want to flip a component around its center without having to change the anchor to `Anchor.center`,
-you can use `flipHorizontallyAroundCenter()` and `flipVerticallyAroundCenter()`.
+In case you want to flip a component around its center without having to change the anchor to
+`Anchor.center`, you can use `flipHorizontallyAroundCenter()` and `flipVerticallyAroundCenter()`.
+
 
 ## SpriteComponent
 
@@ -243,6 +257,7 @@ class MyGame extends FlameGame {
   }
 }
 ```
+
 
 ## SpriteAnimationComponent
 
@@ -282,6 +297,7 @@ this.player = SpriteAnimationComponent.fromFrameData(
 If you are not using `FlameGame`, don't forget this component needs to be updated, because the
 animation object needs to be ticked to move the frames.
 
+
 ## SpriteAnimationGroup
 
 `SpriteAnimationGroupComponent` is a simple wrapper around `SpriteAnimationComponent` which enables
@@ -314,6 +330,7 @@ final robot = SpriteAnimationGroupComponent<RobotState>(
 robot.current = RobotState.running;
 ```
 
+
 ## SpriteGroup
 
 `SpriteGroupComponent` is pretty similar to its animation counterpart, but especially for sprites.
@@ -338,8 +355,8 @@ class ButtonComponent extends SpriteGroupComponent<ButtonState>
 
   // tap methods handler omitted...
 }
-
 ```
+
 
 ## SvgComponent
 
@@ -357,6 +374,7 @@ final android = SvgComponent.fromSvg(
   size: Vector2.all(100),
 );
 ```
+
 
 ## FlareActorComponent
 
@@ -415,6 +433,7 @@ You can also change the current playing animation by using the `updateAnimation`
 
 For a working example, check the example in the
 [flame_flare repository](https://github.com/flame-engine/flame_flare/tree/main/example).
+
 
 ## ParallaxComponent
 
@@ -535,103 +554,164 @@ It is also possible to create custom renderers by extending the `ParallaxRendere
 Three example implementations can be found in the
 [examples directory](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/parallax).
 
+
 ## ShapeComponents
-The `ShapeComponent` is a basic component that can be used if you want to draw geometrical shapes as
-components on the screen.  Since the `ShapeComponent` is a `PositionComponent`s you can use effects
-on it. All `ShapeComponent`s take a `Paint` as an argument and then arguments to define
-the shape of the specific component, it also takes all the arguments that can be passed to the
-`PositionComponent`.
 
-There are three implementations of `ShapeComponent`, which are the following:
+A `ShapeComponent` is the base class for representing a scalable geometrical shape. The shapes have
+different ways of defining how they look, but they all have a size and angle that can be modified
+and the shape definition will scale or rotate the shape accordingly.
 
-### CircleComponent
-A `CircleComponent` can be created only by defining its `radius`, but you most likely want to pass
-it a `position` and maybe `paint` (the default is white) too.
+These shapes are meant as a tool for using geometrical shapes in a more general way than together
+with the collision detection system, where you want to use the
+[HitboxShape](collision_detection.md#hitboxshape)s.
 
-Example:
-```dart
-final paint = BasicPalette.red.paint()..style = PaintingStyle.stroke;
-final circle = CircleComponent(radius: 200.0, position: Vector2(100, 200), paint: paint);
-```
-
-### RectangleComponent
-A `RectangleComponent` can be created in two ways, depending on if it's a square or not.
-To create a `RectangleComponent` that is 300 in width and 200 in height you can do the following:
-
-Example:
-```dart
-final paint = BasicPalette.red.paint()..style = PaintingStyle.stroke;
-final rectangle = RectangleComponent(
-  size: Vector2(300.0, 200.0),
-  position: Vector2(100, 200),
-  paint: paint,
-);
-```
-
-To create a square you can instead use the slightly simpler named constructor
-`RectangleComponent.square`. This is an example of how to create a red square with width and height
-200:
-
-```dart
-final paint = BasicPalette.red.paint()..style = PaintingStyle.stroke;
-final square = RectangleComponent.square(
-  size: 200.0,
-  position: Vector2(100, 200),
-  paint: paint,
-);
-```
 
 ### PolygonComponent
-The `PolygonComponent` is the most complicated of the `ShapeComponent`s since you'll have to define
-all the "corners" of your polygon. You can create the `PolygonComponent` in two different ways,
-either you use the default constructor which takes a list of `Vector2` where each of them should be
-between -1.0 and 1.0 that describes the ration of the length from the center to the edge of the size
-of the component. So
-`[Vector2(1.0, 1.0), Vector2(1.0, -1.0), Vector2(-1.0, -1.0), Vector2(-1.0, 1.0)]`
-would describe a rectangle that fills the full size of the component. Remember to define the list in
-a counter clockwise manner (if you think in the screen coordinate system where the y-axis is
-flipped, otherwise it is clockwise).
 
-So to create a diamond shaped `PolygonComponent` which is slightly smaller than the defined size you
-would do this:
+A `PolygonComponent` is created by giving it a list of points in the constructor, called vertices.
+This list will be transformed into a polygon with a size, which can still be scaled and rotated.
 
+For example, this would create a square going from (50, 50) to (100, 100), with it's center in
+(75, 75):
 ```dart
-final vertices = ([
-  Vector2(0.0, 0.9),  // Middle of top wall
-  Vector2(-0.9, 0.0), // Middle of left wall
-  Vector2(0.0, -0.9), // Middle of bottom wall
-  Vector2(0.9, 0.0),  // Middle of right wall
-]);
-
-final diamond = PolygonComponent(
-  normalizedVertices: vertices,
-  size: Vector2(200, 300),
-  position: Vector2.all(500),
-)
+void main() {
+  PolygonComponent([
+    Vector2(100, 100),
+    Vector2(100, 50),
+    Vector2(50, 50),
+    Vector2(50, 100),
+  ]);
+}
 ```
 
-If you instead want to define your polygon from absolute points you can do that too with the
-`PolygonComponent.fromPoints` factory. When using that one you don't have to define a `size` or a
-`position` either since it will be calculated for you, but if you decide to add those arguments
-anyways they will override what has been calculated from your list of vertices.
+A `PolygonComponent` can also be created with a list of normals, which is points defined in relation
+to the given size.
 
-Example (diamond shape again):
+For example you could create a diamond shapes polygon like this:
 
 ```dart
-final vertices = ([
-  Vector2(100, 100),  // Middle of top wall
-  Vector2(50, 150), // Middle of left wall
-  Vector2(100, 200), // Middle of bottom wall
-  Vector2(200, 150),  // Middle of right wall
-]);
-
-final diamond = PolygonComponent.fromPoints(vertices);
-)
+void main() {
+  PolygonComponent.fromNormals(
+    [
+      Vector2(0.0, 1.0), // Middle of top wall
+      Vector2(1.0, 0.0), // Middle of right wall
+      Vector2(0.0, -1.0), // Middle of bottom wall
+      Vector2(-1.0, 0.0), // Middle of left wall
+    ],
+    size: Vector2.all(100),
+  );
+}
 ```
+
+The vertices in the example defines percentages of the length from the center to the edge of the
+screen in both x and y axis, so for our first item in our list (`Vector2(0.0, 1.0)`) we are pointing
+on the middle of the top wall of the bounding box, since the coordinate system here is defined from
+the center of the polygon.
+
+![An example of how to define a polygon shape](../images/polygon_shape.png)
+
+In the image you can see how the polygon shape formed by the purple arrows is defined by the red
+arrows.
+
+Remember to define the lists in a counter clockwise manner (if you think in the screen coordinate
+system where the y-axis is flipped, otherwise it is clockwise).
+
+
+### RectangleComponent
+
+A `RectangleComponent` is created very similarly to how a `PositionComponent` is created, since it
+also has a bounding rectangle.
+
+Something like this for example:
+
+```dart
+void main() {
+  RectangleComponent(
+    position: Vector2(10.0, 15.0),
+    size: Vector2.all(10),
+    angle: pi/2,
+    anchor: Anchor.center,
+  );
+}
+```
+
+Dart also already has an excellent way to create rectangles and that class is called `Rect`, you can
+create a Flame `RectangleComponent` from a `Rect` by using the `Rectangle.fromRect` factory, and
+just like when setting the vertices of the `PolygonComponent`, your rectangle will be sized
+according to the `Rect` if you use this constructor.
+
+The following would create a `RectangleComponent` with its top left corner in `(10, 10)` and a size
+of `(100, 50)`.
+
+```dart
+void main() {
+  RectangleComponent.fromRect(
+    Rect.fromLTWH(10, 10, 100, 50),
+  );
+}
+```
+
+You can also create a `RectangleComponent` from a normal, or use the default constructor to build
+your rectangle from a position, size and angle.
+
+In the example below a `RectangleComponent` of size `(25.0, 30.0)` positioned at `(100, 100)` would
+be created.
+
+```dart
+void main() {
+  RectangleComponent.fromNormal(
+    Vector2(0.5, 1.0),
+    position: Vector2.all(100),
+    size: Vector2(50, 30),
+  );
+}
+```
+
+Since a square is a simplified version of a rectangle, there is also a constructor for creating a
+square `RectangleComponent`, the only difference is that the `size` argument is a `double` instead
+of a `Vector2`.
+
+```dart
+void main() {
+  RectangleComponent.square(
+    position: Vector2.all(100),
+    size: 200,
+  );
+}
+```
+
+
+### CircleComponent
+
+If you know how long your circle's position and/or how long the radius is going to be from the start
+you can use the optional arguments `radius` and `position` to set those.
+
+The following would create a `CircleComponent` with its center in `(100, 100)` with a radius of 5,
+and therefore a size of `Vector2(10, 10)`.
+
+```dart
+void main() {
+  CircleComponent(radius: 5, position: Vector2.all(100), anchor: Anchor.center);
+}
+```
+
+When creating a `CircleComponent` with the `fromNormal` constructor you can define how long the
+radius is in comparison to the shortest edge of the of the bounding box defined by `size`.
+
+The following example would result in a `CircleComponent` that defined a circle with a radius of 40
+(a diameter of 80). This is
+
+```dart
+void main() {
+  CircleComponent.fromNormal(0.8, size: Vector2.all(100));
+}
+```
+
 
 ## SpriteBodyComponent
 
 See [SpriteBodyComponent](../other_modules/forge2d.md#spritebodycomponent) in the Forge2D documentation.
+
 
 ## TiledComponent
 
@@ -641,6 +721,7 @@ layers.
 
 An example of how to use the API can be found
 [here](https://github.com/flame-engine/flame_tiled/tree/main/example).
+
 
 ## IsometricTileMapComponent
 
@@ -678,6 +759,7 @@ selector. The code can be found
 [here](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/tile_maps/isometric_tile_map.dart),
 and a live version can be seen [here](https://examples.flame-engine.org/#/Tile%20Maps_Isometric%20Tile%20Map).
 
+
 ## NineTileBoxComponent
 
 A Nine Tile Box is a rectangle drawn using a grid sprite.
@@ -695,6 +777,7 @@ Check the example app
 [nine_tile_box](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/utils/nine_tile_box.dart)
 for details on how to use it.
 
+
 ## CustomPainterComponent
 
 A `CustomPainter` is a Flutter class used with the `CustomPaint` widget to render custom
@@ -709,6 +792,7 @@ widgets.
 Check the example app
 [custom_painter_component](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/widgets/custom_painter_component.dart)
 for details on how to use it.
+
 
 ## Effects
 
