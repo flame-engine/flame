@@ -1,4 +1,4 @@
-import '../../../collision_detection.dart';
+import '../../../collisions.dart';
 import '../../../extensions.dart';
 
 /// The [Hitbox] is the default building block to determine whether two objects

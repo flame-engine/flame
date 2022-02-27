@@ -1,4 +1,4 @@
-import '../../../collision_detection.dart';
+import '../../../collisions.dart';
 import '../../../game.dart';
 
 /// Keeps track of all the [HitboxShape]s in the component tree and initiates

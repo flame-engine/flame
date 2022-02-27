@@ -1,6 +1,6 @@
 import 'package:meta/meta.dart';
 
-import '../../collision_detection.dart';
+import '../../collisions.dart';
 
 /// The [Broadphase] class is used to make collision detection more efficient
 /// by doing a rough estimation of which hitboxes that can collide before their
@@ -13,20 +13,20 @@ abstract class Broadphase<T extends Hitbox<T>> {
 
   Broadphase({List<T>? items}) : items = items ?? [];
 
-  Set<Potential<T>> query();
+  Set<CollisionProspect<T>> query();
 }
 
-/// A [Potential] is a tuple that is used to contain two potentially colliding
-/// hitboxes.
+/// A [CollisionProspect] is a tuple that is used to contain two potentially
+/// colliding hitboxes.
 @immutable
-class Potential<T> {
+class CollisionProspect<T> {
   final T a;
   final T b;
 
-  const Potential(this.a, this.b);
+  const CollisionProspect(this.a, this.b);
 
   @override
-  bool operator ==(Object o) => o is Potential && o.a == a && o.b == b;
+  bool operator ==(Object o) => o is CollisionProspect && o.a == a && o.b == b;
 
   @override
   int get hashCode => Object.hash(a.hashCode, b.hashCode);

@@ -1,4 +1,4 @@
-import '../../../collision_detection.dart';
+import '../../../collisions.dart';
 import '../../../components.dart';
 import '../../../geometry.dart';
 

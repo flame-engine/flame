@@ -2,7 +2,7 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:canvas_test/canvas_test.dart';
-import 'package:flame/collision_detection.dart';
+import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame_test/flame_test.dart';

@@ -1,6 +1,6 @@
 import 'package:meta/meta.dart';
 
-import '../../../collision_detection.dart';
+import '../../../collisions.dart';
 import '../../../components.dart';
 
 /// This mixin can be used if you want to use hitboxes to determine whether

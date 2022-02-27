@@ -1,5 +1,5 @@
 import 'package:flame/components.dart';
-import 'package:flame/src/collision_detection/collision_passthrough.dart';
+import 'package:flame/src/collisions/collision_passthrough.dart';
 import 'package:test/test.dart';
 
 import 'collision_test_helpers.dart';

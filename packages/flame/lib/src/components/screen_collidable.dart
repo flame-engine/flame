@@ -1,7 +1,7 @@
 import '../../components.dart';
 import '../../game.dart';
-import '../collision_detection/collision_callbacks.dart';
-import '../collision_detection/hitboxes/hitbox_rectangle.dart';
+import '../collisions/collision_callbacks.dart';
+import '../collisions/hitboxes/hitbox_rectangle.dart';
 
 /// This component is used to detect hitboxes colliding into the viewport of the
 /// game.

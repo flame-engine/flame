@@ -1,6 +1,6 @@
 import 'package:meta/meta.dart';
 
-import '../../../collision_detection.dart';
+import '../../../collisions.dart';
 import '../../../components.dart';
 import '../../../game.dart';
 import '../../../geometry.dart';
@@ -97,7 +97,8 @@ mixin HitboxShape on ShapeComponent implements Hitbox<HitboxShape> {
     super.onRemove();
   }
 
-  /// Checks whether the [HitboxShape] contains the [point].
+  /// Checks whether the [HitboxShape] contains the [point], where [point] is
+  /// a position in the global coordinate system of your game.
   @override
   bool containsPoint(Vector2 point) {
     return _possiblyContainsPoint(point) && super.containsPoint(point);

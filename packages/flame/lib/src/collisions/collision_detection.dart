@@ -1,4 +1,4 @@
-import '../../collision_detection.dart';
+import '../../collisions.dart';
 import '../../components.dart';
 
 /// [CollisionDetection] is the foundation of the collision detection system in
@@ -7,7 +7,7 @@ import '../../components.dart';
 abstract class CollisionDetection<T extends Hitbox<T>> {
   final Broadphase<T> broadphase;
   List<T> get items => broadphase.items;
-  final Set<Potential<T>> _lastPotentials = {};
+  final Set<CollisionProspect<T>> _lastPotentials = {};
 
   CollisionDetection({required this.broadphase});
 
