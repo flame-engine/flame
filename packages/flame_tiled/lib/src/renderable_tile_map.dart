@@ -213,16 +213,7 @@ class RenderableTiledMap {
   /// Returns a layer of type [T] with given [name] from all the layers
   /// of this map. If no such layer is found, null is returned.
   T? getLayer<T extends Layer>(String name) {
-    T? foundLayer;
-
-    for (var i = 0; i < map.layers.length; ++i) {
-      final layer = map.layers.elementAt(i);
-      if (layer is T && layer.name == name) {
-        foundLayer = layer;
-        break;
-      }
-    }
-
-    return foundLayer;
+    return map.layers
+        .firstWhereOrNull((layer) => layer is T && layer.name == name) as T?;
   }
 }
