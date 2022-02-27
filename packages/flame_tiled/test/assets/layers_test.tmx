@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.5" tiledversion="1.7.2" orientation="orthogonal" renderorder="right-down" width="10" height="6" tilewidth="32" tileheight="32" infinite="0" nextlayerid="5" nextobjectid="10">
+ <layer id="1" name="MyTileLayer" width="10" height="6">
+  <data encoding="base64">
+   AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+  </data>
+ </layer>
+ <objectgroup id="2" name="MyObjectLayer" offsetx="0" offsety="-32">
+  <object id="9" x="64" y="160" width="200" height="40">
+   <text wrap="1" color="#ffffff">Just a dummy map for 
+ testing layers</text>
+  </object>
+ </objectgroup>
+ <imagelayer id="3" name="MyImageLayer">
+  <image source="map-level1.png" width="272" height="128"/>
+ </imagelayer>
+ <group id="4" name="MyGroupLayer"/>
+</map>
