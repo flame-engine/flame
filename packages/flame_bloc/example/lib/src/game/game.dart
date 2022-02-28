@@ -1,4 +1,5 @@
 import 'package:flame/components.dart';
+import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flame_bloc/flame_bloc.dart';
 
@@ -23,8 +24,8 @@ class GameStatsController extends Component
   }
 }
 
-class SpaceShooterGame extends FlameBlocGame
-    with PanDetector, HasCollidables, HasKeyboardHandlerComponents {
+class SpaceShooterGame extends FlameGame
+    with FlameBloc, PanDetector, HasCollidables, HasKeyboardHandlerComponents {
   late PlayerComponent player;
 
   @override

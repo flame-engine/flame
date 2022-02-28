@@ -7,165 +7,11 @@ import 'package:flame/game.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-class _TestComponent extends PositionComponent {
-  static final Paint _paint = Paint();
-
-  _TestComponent(Vector2 position)
-      : super(
-          position: position,
-          size: Vector2.all(1.0),
-        );
-
-  @override
-  void render(Canvas c) {
-    c.drawRect(size.toRect(), _paint);
-  }
-}
-
 void main() {
-  group('widget', () {
-    testWithFlameGame(
-      'viewport does not affect component with PositionType.widget',
-      (game) async {
-        game.camera.viewport = FixedResolutionViewport(Vector2.all(50));
-        game.onGameResize(Vector2.all(200.0));
-        await game.ensureAdd(
-          _TestComponent(Vector2.zero())..positionType = PositionType.widget,
-        );
-
-        final canvas = MockCanvas();
-        game.render(canvas);
-        expect(
-          canvas,
-          MockCanvas()
-            ..translate(0, 0) // transform in PositionComponent.renderTree
-            ..drawRect(const Rect.fromLTWH(0, 0, 1, 1)),
-        );
-      },
-    );
-
-    testWithFlameGame(
-      'camera does not affect component with PositionType.widget',
-      (game) async {
-        await game.ensureAdd(
-          _TestComponent(Vector2.zero())..positionType = PositionType.widget,
-        );
-        game.camera.snapTo(Vector2(100, 100));
-
-        final canvas = MockCanvas();
-        game.render(canvas);
-        expect(
-          canvas,
-          MockCanvas()
-            ..translate(0, 0) // transform in PositionComponent.renderTree
-            ..drawRect(const Rect.fromLTWH(0, 0, 1, 1)),
-        );
-      },
-    );
-  });
-
-  group('viewport', () {
-    testWithFlameGame(
-      'default viewport does not change size',
-      (game) async {
-        game.onGameResize(Vector2(100.0, 200.0));
-        expect(game.canvasSize, Vector2(100.0, 200.00));
-        expect(game.size, Vector2(100.0, 200.00));
-      },
-    );
-
-    testWithFlameGame(
-      'fixed ratio viewport has perfect ratio',
-      (game) async {
-        game.camera.viewport = FixedResolutionViewport(Vector2.all(50));
-        game.onGameResize(Vector2.all(200.0));
-        expect(game.canvasSize, Vector2.all(200.00));
-        expect(game.size, Vector2.all(50.00));
-
-        final viewport = game.camera.viewport as FixedResolutionViewport;
-        expect(viewport.resizeOffset, Vector2.zero());
-        expect(viewport.scaledSize, Vector2(200.0, 200.0));
-        expect(viewport.scale, 4.0);
-
-        await game.ensureAdd(_TestComponent(Vector2.zero()));
-
-        final canvas = MockCanvas();
-        game.render(canvas);
-        expect(
-          canvas,
-          MockCanvas()
-            ..clipRect(const Rect.fromLTWH(0, 0, 200, 200))
-            ..scale(4)
-            ..drawRect(const Rect.fromLTWH(0, 0, 1, 1))
-            ..translate(0, 0), // reset camera
-        );
-      },
-    );
-
-    testWithFlameGame(
-      'fixed ratio viewport maxes width',
-      (game) async {
-        game.camera.viewport = FixedResolutionViewport(Vector2.all(50));
-        game.onGameResize(Vector2(100.0, 200.0));
-        expect(game.canvasSize, Vector2(100.0, 200.00));
-        expect(game.size, Vector2.all(50.00));
-
-        final viewport = game.camera.viewport as FixedResolutionViewport;
-        expect(viewport.resizeOffset, Vector2(0, 50.0));
-        expect(viewport.scaledSize, Vector2(100.0, 100.0));
-        expect(viewport.scale, 2.0);
-
-        await game.ensureAdd(_TestComponent(Vector2.zero()));
-
-        final canvas = MockCanvas();
-        game.render(canvas);
-        expect(
-          canvas,
-          MockCanvas()
-            ..clipRect(const Rect.fromLTWH(0, 50, 100, 100))
-            ..translate(0, 50)
-            ..scale(2)
-            ..drawRect(const Rect.fromLTWH(0, 0, 1, 1))
-            ..translate(0, 0), // reset camera
-        );
-      },
-    );
-
-    testWithFlameGame(
-      'fixed ratio viewport maxes height',
-      (game) async {
-        game.camera.viewport = FixedResolutionViewport(Vector2(100.0, 400.0));
-        game.onGameResize(Vector2(100.0, 200.0));
-        expect(game.canvasSize, Vector2(100.0, 200.00));
-        expect(game.size, Vector2(100.00, 400.0));
-
-        final viewport = game.camera.viewport as FixedResolutionViewport;
-        expect(viewport.resizeOffset, Vector2(25.0, 0));
-        expect(viewport.scaledSize, Vector2(50.0, 200.0));
-        expect(viewport.scale, 0.5);
-
-        await game.ensureAdd(_TestComponent(Vector2.zero()));
-
-        final canvas = MockCanvas();
-        game.render(canvas);
-        expect(
-          canvas,
-          MockCanvas()
-            ..clipRect(const Rect.fromLTWH(25, 0, 50, 200))
-            ..translate(25, 0)
-            ..scale(0.5)
-            ..drawRect(const Rect.fromLTWH(0, 0, 1, 1))
-            ..translate(0, 0), // reset camera
-        );
-      },
-    );
-  });
-
-  group('camera', () {
+  group('Camera', () {
     testWithFlameGame(
       'default camera applies no translation',
       (game) async {
-        game.onGameResize(Vector2.all(100.0));
         expect(game.camera.position, Vector2.zero());
 
         await game.ensureAdd(_TestComponent(Vector2.all(10.0)));
@@ -185,7 +31,6 @@ void main() {
     testWithFlameGame(
       'camera snap movement',
       (game) async {
-        game.onGameResize(Vector2.all(100.0));
         expect(game.camera.position, Vector2.zero());
 
         await game.ensureAdd(_TestComponent(Vector2.all(10.0)));
@@ -212,8 +57,6 @@ void main() {
     testWithFlameGame(
       'camera smooth movement',
       (game) async {
-        game.onGameResize(Vector2.all(100.0));
-
         game.camera.speed = 1; // 1 pixel per second
         game.camera.moveTo(Vector2(0.0, 10.0));
 
@@ -370,7 +213,6 @@ void main() {
     testWithFlameGame(
       'camera zoom',
       (game) async {
-        game.onGameResize(Vector2.all(200.0));
         game.camera.zoom = 2;
 
         final p = _TestComponent(Vector2.all(100.0))..anchor = Anchor.center;
@@ -419,7 +261,6 @@ void main() {
       'camera shake should return to where it started',
       (game) async {
         final camera = game.camera;
-        game.onGameResize(Vector2.all(200.0));
         expect(camera.position, Vector2.zero());
         camera.shake(duration: 9000);
         game.update(5000);
@@ -428,14 +269,11 @@ void main() {
         expect(camera.position, Vector2.zero());
       },
     );
-  });
 
-  group('viewport & camera', () {
     testWithFlameGame(
       'default ratio viewport + camera with world boundaries',
       (game) async {
-        final game = FlameGame()
-          ..camera.viewport = FixedResolutionViewport(Vector2.all(100));
+        game.camera.viewport = FixedResolutionViewport(Vector2.all(100));
         game.onGameResize(Vector2.all(200.0));
         expect(game.canvasSize, Vector2.all(200.00));
         expect(game.size, Vector2.all(100.00));
@@ -445,7 +283,7 @@ void main() {
         game.camera.followComponent(
           p,
           // this could be a typical mario-like platformer, where the player is
-          // more on the bottom left to allow the scenario to be seem
+          // more on the bottom left to allow the level to be seen
           relativeOffset: const Anchor(0.25, 0.25),
           worldBounds: const Rect.fromLTWH(0, 0, 1000, 1000),
         );
@@ -471,4 +309,14 @@ void main() {
       },
     );
   });
+}
+
+class _TestComponent extends PositionComponent {
+  _TestComponent(Vector2 position)
+      : super(position: position, size: Vector2.all(1.0));
+
+  @override
+  void render(Canvas c) {
+    c.drawRect(size.toRect(), Paint());
+  }
 }
