@@ -15,7 +15,7 @@ class HitboxPolygon extends PolygonComponent with HitboxShape {
         );
 
   /// With this constructor you define the [HitboxPolygon] in relation to the
-  /// [size] of the hitbox.
+  /// [parentSize] of the hitbox.
   ///
   /// Example: `[[1.0, 0.0], [0.0, -1.0], [-1.0, 0.0], [0.0, 1.0]]`
   /// This will form a diamond shape within the bounding size box.
@@ -24,15 +24,16 @@ class HitboxPolygon extends PolygonComponent with HitboxShape {
   HitboxPolygon.fromNormals(
     List<Vector2> normals, {
     Vector2? position,
-    required Vector2 size,
+    required Vector2 parentSize,
     double angle = 0,
     Anchor? anchor,
   }) : super.fromNormals(
           normals,
           position: position,
-          size: size,
+          size: parentSize,
           angle: angle,
           anchor: anchor,
+          shrinkToBounds: true,
         );
 
   @override

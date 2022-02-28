@@ -123,6 +123,25 @@ void main() {
       );
     });
 
+    test('non-centered normal polygon contains point', () {
+      final component = PolygonComponent.fromNormals(
+        // Top left quadrant
+        [
+          Vector2(-1, -1),
+          Vector2(-1, 0),
+          Vector2(-0.1, -0.1),
+          Vector2(0, -1),
+        ],
+        size: Vector2.all(100),
+      );
+      print(component.globalVertices());
+      print(component.position);
+      expect(
+        component.containsPoint(Vector2.all(49)),
+        isTrue,
+      );
+    });
+
     test('horizontally flipped rectangle contains point', () {
       final component = RectangleComponent(
         position: Vector2.all(1.0),

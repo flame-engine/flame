@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'dart:ui' hide Canvas;
 
 import 'package:collection/collection.dart';
@@ -17,7 +18,7 @@ class PolygonComponent extends ShapeComponent {
   late final List<Vector2> _globalVertices;
   late final List<LineSegment> _lineSegments;
   final Path _path = Path();
-  final bool _manuallySized;
+  final bool shrinkToBounds;
 
   final _cachedGlobalVertices = ValueCache<List<Vector2>>();
 
@@ -35,11 +36,12 @@ class PolygonComponent extends ShapeComponent {
     Anchor? anchor,
     int? priority,
     Paint? paint,
+    bool? shrinkToBounds,
   })  : assert(
           _vertices.length > 2,
           'Number of vertices are too few to create a polygon',
         ),
-        _manuallySized = size != null,
+        shrinkToBounds = shrinkToBounds ?? false,
         super(
           position: position,
           size: size,
@@ -49,7 +51,7 @@ class PolygonComponent extends ShapeComponent {
           priority: priority,
           paint: paint,
         ) {
-    refreshVertices();
+    refreshVertices(newVertices: _vertices);
 
     final verticesLength = vertices.length;
     _globalVertices = List.generate(
@@ -80,6 +82,7 @@ class PolygonComponent extends ShapeComponent {
     Anchor? anchor,
     int? priority,
     Paint? paint,
+    bool? shrinkToBounds,
   }) : this(
           normalsToVertices(normals, size),
           position: position,
@@ -89,6 +92,7 @@ class PolygonComponent extends ShapeComponent {
           scale: scale,
           priority: priority,
           paint: paint,
+          shrinkToBounds: shrinkToBounds,
         );
 
   @internal
@@ -106,34 +110,43 @@ class PolygonComponent extends ShapeComponent {
         .toList(growable: false);
   }
 
+  // Used to not create new Vector2 objects when calculating the top left of the
+  // bounds of the polygon.
+  final _topLeft = Vector2.zero();
+
   @protected
   void refreshVertices({List<Vector2>? newVertices}) {
     assert(
       newVertices == null || newVertices.length == _vertices.length,
       'A polygon can not change their number of vertices',
     );
-    newVertices?.forEachIndexed((i, vertex) {
-      _vertices[i].setFrom(newVertices[i]);
-    });
+    if (newVertices != null) {
+      _topLeft.setFrom(newVertices[0]);
+      newVertices.forEachIndexed((i, _) {
+        final newVertex = newVertices[i];
+        _vertices[i].setFrom(newVertex);
+        _topLeft.x = min(_topLeft.x, newVertex.x);
+        _topLeft.y = min(_topLeft.y, newVertex.y);
+      });
+    }
     _path
       ..reset()
       ..addPolygon(
-        vertices.map((p) => p.toOffset()).toList(growable: false),
+        vertices.map((p) => (p - _topLeft).toOffset()).toList(growable: false),
         true,
       );
-    final bounds = _path.getBounds();
-    if (!_manuallySized) {
+    if (shrinkToBounds) {
+      final bounds = _path.getBounds();
       size.setValues(bounds.width, bounds.height);
     }
-    final topLeftBounds = bounds.topLeft;
     position.setValues(
-      position.x + topLeftBounds.dx + anchor.x * size.x,
-      position.y + topLeftBounds.dy + anchor.y * size.y,
+      position.x + (shrinkToBounds ? _topLeft.x : 0) + anchor.x * size.x,
+      position.y + (shrinkToBounds ? _topLeft.y : 0) + anchor.y * size.y,
     );
     _vertices.forEach((p) {
       p.setValues(
-        p.x - topLeftBounds.dx,
-        p.y - topLeftBounds.dy,
+        p.x - _topLeft.x,
+        p.y - _topLeft.y,
       );
     });
   }

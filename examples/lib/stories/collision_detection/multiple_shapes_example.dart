@@ -190,7 +190,7 @@ class CollidablePolygon extends MyCollidable {
         Vector2(0, -1.0),
         Vector2(-0.8, -0.8),
       ],
-      size: size,
+      parentSize: size,
     )..renderShape = true;
     add(hitbox!);
   }

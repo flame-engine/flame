@@ -1,19 +1,22 @@
 import 'dart:math';
+import 'dart:ui';
 
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-import 'package:flame/effects.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
+import 'package:flutter/material.dart';
 
 enum Shapes { circle, rectangle, polygon }
 
-class SimpleShapesExample extends FlameGame with HasTappables {
+class GestureHitboxesExample extends FlameGame
+    with HasTappables, HasHoverables {
   static const description = '''
-    An example which adds random shapes on the screen when you tap it, if you
-    tap on an already existing shape it will remove that shape and replace it
-    with a new one.
+    Tap to create a PositionComponent with a randomly shaped hitbox.
+    You can then hover over to shapes to see that they receive the hover events
+    only when the cursor is within the shape. If you tap/click within the shape
+    it is removed.
   ''';
 
   final _rng = Random();
@@ -31,22 +34,20 @@ class SimpleShapesExample extends FlameGame with HasTappables {
           return HitboxRectangle();
         case Shapes.polygon:
           final points = [
-            Vector2.random(_rng),
-            Vector2.random(_rng)..y *= -1,
             -Vector2.random(_rng),
             Vector2.random(_rng)..x *= -1,
+            Vector2.random(_rng),
+            Vector2.random(_rng)..y *= -1,
           ];
-
-          return HitboxPolygon.fromNormals(points, size: shapeSize);
+          return HitboxPolygon.fromNormals(points, parentSize: shapeSize);
       }
     }();
-    hitbox.paint.color = ColorExtension.random(withAlpha: 0.8, base: 100);
-    hitbox.renderShape = true;
     return MyShapeComponent(
+      hitbox: hitbox,
       position: position,
       size: shapeSize,
       angle: shapeAngle,
-    )..add(hitbox);
+    );
   }
 
   @override
@@ -55,32 +56,17 @@ class SimpleShapesExample extends FlameGame with HasTappables {
     final tapPosition = info.eventPosition.game;
     final component = randomShape(tapPosition);
     add(component);
-    component
-      ..add(
-        MoveEffect.to(
-          size / 2,
-          EffectController(
-            duration: 5,
-            reverseDuration: 5,
-            infinite: true,
-          ),
-        ),
-      )
-      ..add(
-        RotateEffect.to(
-          3,
-          EffectController(
-            duration: 1,
-            reverseDuration: 1,
-            infinite: true,
-          ),
-        ),
-      );
   }
 }
 
-class MyShapeComponent extends PositionComponent with Tappable {
+class MyShapeComponent extends PositionComponent
+    with Tappable, Hoverable, GestureHitboxes {
+  final HitboxShape hitbox;
+  late final Color baseColor;
+  late final Color hoverColor;
+
   MyShapeComponent({
+    required this.hitbox,
     Vector2? position,
     Vector2? size,
     double? angle,
@@ -92,8 +78,29 @@ class MyShapeComponent extends PositionComponent with Tappable {
         );
 
   @override
+  Future<void> onLoad() async {
+    super.onLoad();
+    baseColor = ColorExtension.random(withAlpha: 0.8, base: 100);
+    hitbox.paint.color = baseColor;
+    hitbox.renderShape = true;
+    add(hitbox);
+  }
+
+  @override
   bool onTapDown(TapDownInfo _) {
     removeFromParent();
+    return true;
+  }
+
+  @override
+  bool onHoverEnter(PointerHoverInfo info) {
+    hitbox.paint.color = hitbox.paint.color.darken(0.5);
+    return true;
+  }
+
+  @override
+  bool onHoverLeave(PointerHoverInfo info) {
+    hitbox.paint.color = baseColor;
     return true;
   }
 }

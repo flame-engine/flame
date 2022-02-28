@@ -27,7 +27,7 @@ void main() {
       expect(blockB.activeCollisions.length, 1);
     });
 
-    withCollidables.test('sensors do not collide', (game) async {
+    withCollidables.test('passives do not collide', (game) async {
       final blockA = TestBlock(
         Vector2.zero(),
         Vector2.all(10),
@@ -79,7 +79,7 @@ void main() {
       expect(blockB.activeCollisions.length, 1);
     });
 
-    withCollidables.test('sensor collides with active', (game) async {
+    withCollidables.test('passive collides with active', (game) async {
       final blockA = TestBlock(
         Vector2.zero(),
         Vector2.all(10),
@@ -97,7 +97,8 @@ void main() {
       expect(blockB.activeCollisions.length, 1);
     });
 
-    withCollidables.test('sensor does not collide with inactive', (game) async {
+    withCollidables.test('passive does not collide with inactive',
+        (game) async {
       final blockA = TestBlock(
         Vector2.zero(),
         Vector2.all(10),

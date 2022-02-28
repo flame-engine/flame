@@ -89,7 +89,7 @@ class AnimatedComponent extends SpriteAnimationComponent
           Vector2(0.2, 0.4),
           Vector2(1.0, -0.1),
         ],
-        size: size,
+        parentSize: size,
       )
         ..paint = hitboxPaint
         ..renderShape = true,
