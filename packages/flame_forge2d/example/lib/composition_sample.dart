@@ -1,6 +1,6 @@
 import 'package:flame/components.dart';
 import 'package:flame/palette.dart';
-import 'package:flame_forge2d/forge2d_game.dart';
+import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flutter/material.dart';
 
 import 'balls.dart';
