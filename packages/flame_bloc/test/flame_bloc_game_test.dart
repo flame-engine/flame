@@ -31,7 +31,7 @@ class MockInventoryComponent extends Component
   int numSubscribeCalls = 0;
 
   @override
-  void subscribe(FlameBlocGame game) {
+  void subscribe(FlameBloc game) {
     numSubscribeCalls++;
   }
 }
