@@ -61,7 +61,7 @@ mixin BlocComponent<B extends BlocBase<S>, S> on Component {
     super.onMount();
     assert(
       findGame()! is FlameBloc,
-      'BlocComponent can only be added to a FlameBloc',
+      'BlocComponent can only be added to a FlameBloc game',
     );
     final game = findGame()! as FlameBloc;
     if (game.isAttached) {
