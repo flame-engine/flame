@@ -1,3 +1,7 @@
+## 1.1.1
+
+ - Update a dependency to the latest release.
+
 ## 1.1.0
 
  - Add `closeToVector` matcher.

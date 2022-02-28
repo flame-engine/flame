@@ -1,3 +1,7 @@
+## 1.2.2
+
+ - Update a dependency to the latest release.
+
 ## 1.2.1
 
 > Note: This release has breaking changes that were supposed to be in 1.2.0
