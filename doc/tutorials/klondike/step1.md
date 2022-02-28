@@ -17,6 +17,7 @@ void main() {
 }
 ```
 
+
 ## Planning
 
 The start of any project usually feels overwhelming. Where even to begin?
@@ -31,11 +32,18 @@ various objects. These names are the [standard terminology] for solitaire games.
 Which is really lucky, because normally figuring out good names for various
 classes is a quite challenging task.
 
-Looking at this sketch, we can already imagine the high-level overview of the
+Looking at this sketch, we can already imagine the high-level structure of the
 game. Obviously, there will be a `Card` class, but also the `Stock` class, the
 `Waste` class, a `Tableau` containing seven `Pile`s, and 4 `Foundation`s. There
 may also be a `Deck`. All of these components will be tied together via the
 `KlondikeGame` derived from the `FlameGame`.
+
+
+## Assets
+
+Another important aspect in any game development is the game's assets. These
+includes images, sprites, animations, sounds, textures, data files, and so on.
+In such a simple game as Klondike we won't need much 
 
 
 [standard terminology]: https://en.wikipedia.org/wiki/Solitaire_terminology
