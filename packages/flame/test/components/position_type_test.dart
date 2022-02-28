@@ -2,29 +2,15 @@ import 'dart:ui';
 
 import 'package:canvas_test/canvas_test.dart';
 import 'package:flame/components.dart';
+import 'package:flame/game.dart';
 import 'package:flame/palette.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-class _MyComponent extends Component {
-  @override
-  PositionType positionType;
-
-  _MyComponent(int priority, {this.positionType = PositionType.game})
-      : super(priority: priority);
-
-  @override
-  void render(Canvas canvas) {
-    final p = Vector2Extension.fromInts(priority, priority);
-    final s = Vector2.all(1.0);
-    canvas.drawRect(p & s, BasicPalette.white.paint());
-  }
-}
-
 void main() {
-  group('components are rendered according to their priorities', () {
-    flameGame.test(
+  group('PositionType', () {
+    testWithFlameGame(
       'PositionType.game',
       (game) async {
         await game.ensureAddAll([
@@ -49,7 +35,7 @@ void main() {
       },
     );
 
-    flameGame.test(
+    testWithFlameGame(
       'PositionType.viewport',
       (game) async {
         await game.ensureAddAll([
@@ -71,30 +57,67 @@ void main() {
       },
     );
 
-    flameGame.test(
-      'PositionType.widget',
-      (game) async {
-        await game.ensureAddAll([
-          _MyComponent(5, positionType: PositionType.widget),
-          _MyComponent(1, positionType: PositionType.widget),
-          _MyComponent(2, positionType: PositionType.widget),
-        ]);
+    group('PositionType.widget', () {
+      testWithFlameGame(
+        'viewport does not affect component with PositionType.widget',
+        (game) async {
+          game.camera.viewport = FixedResolutionViewport(Vector2.all(50));
+          game.onGameResize(Vector2.all(200.0));
+          await game.ensureAdd(
+            _MyComponent(0, positionType: PositionType.widget),
+          );
 
-        final canvas = MockCanvas();
-        game.camera.snapTo(Vector2(12.0, 18.0));
-        game.render(canvas);
+          final canvas = MockCanvas();
+          game.render(canvas);
+          expect(
+            canvas,
+            MockCanvas()..drawRect(const Rect.fromLTWH(0, 0, 1, 1)),
+          );
+        },
+      );
 
-        expect(
-          canvas,
-          MockCanvas()
-            ..drawRect(const Rect.fromLTWH(1, 1, 1, 1))
-            ..drawRect(const Rect.fromLTWH(2, 2, 1, 1))
-            ..drawRect(const Rect.fromLTWH(5, 5, 1, 1)),
-        );
-      },
-    );
+      testWithFlameGame(
+        'camera does not affect component with PositionType.widget',
+        (game) async {
+          await game.ensureAdd(
+            _MyComponent(0, positionType: PositionType.widget),
+          );
+          game.camera.snapTo(Vector2(100, 100));
 
-    flameGame.test(
+          final canvas = MockCanvas();
+          game.render(canvas);
+          expect(
+            canvas,
+            MockCanvas()..drawRect(const Rect.fromLTWH(0, 0, 1, 1)),
+          );
+        },
+      );
+
+      testWithFlameGame(
+        'Several static components',
+        (game) async {
+          await game.ensureAddAll([
+            _MyComponent(5, positionType: PositionType.widget),
+            _MyComponent(1, positionType: PositionType.widget),
+            _MyComponent(2, positionType: PositionType.widget),
+          ]);
+
+          final canvas = MockCanvas();
+          game.camera.snapTo(Vector2(12.0, 18.0));
+          game.render(canvas);
+
+          expect(
+            canvas,
+            MockCanvas()
+              ..drawRect(const Rect.fromLTWH(1, 1, 1, 1))
+              ..drawRect(const Rect.fromLTWH(2, 2, 1, 1))
+              ..drawRect(const Rect.fromLTWH(5, 5, 1, 1)),
+          );
+        },
+      );
+    });
+
+    testWithFlameGame(
       'mixed',
       (game) async {
         await game.ensureAddAll([
@@ -131,4 +154,19 @@ void main() {
       },
     );
   });
+}
+
+class _MyComponent extends Component {
+  _MyComponent(int priority, {this.positionType = PositionType.game})
+      : super(priority: priority);
+
+  @override
+  PositionType positionType;
+
+  @override
+  void render(Canvas canvas) {
+    final p = Vector2.all(priority.toDouble());
+    final size = Vector2.all(1.0);
+    canvas.drawRect(p & size, BasicPalette.white.paint());
+  }
 }
