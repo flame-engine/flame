@@ -1,8 +1,6 @@
 import 'package:flame/palette.dart';
-import 'package:flame_forge2d/body_component.dart';
-import 'package:flame_forge2d/contact_callbacks.dart';
+import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flutter/material.dart';
-import 'package:forge2d/forge2d.dart';
 
 import 'boundaries.dart';
 

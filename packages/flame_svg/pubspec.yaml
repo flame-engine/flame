@@ -9,7 +9,7 @@ environment:
   flutter: ">=2.5.0"
 
 dependencies:
-  flame: ^1.0.0
+  flame: ^1.1.0-releasecandidate.1
   flutter_svg: ^0.22.0
   flutter:
     sdk: flutter
@@ -17,3 +17,5 @@ dependencies:
 dev_dependencies:
   dartdoc: ^4.1.0
   flame_lint: ^0.0.1
+  test: ^1.17.12
+  mocktail: ^0.2.0
