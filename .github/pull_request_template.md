@@ -20,7 +20,7 @@ relevant checkboxes (`[x]`). This will ensure a smooth and quick review process.
 
 <!-- Does your PR require Flame users to manually update their apps to accommodate your change? 
 
-If the PR is a braking change it should be indicated with a suffixing !. For example, `feat!:`, `fix!:`). As in [Conventional Commit].
+If the PR is a breaking change it should be indicated with a suffixing !. For example, `feat!:`, `fix!:`). As in [Conventional Commit].
 -->
 
 - [ ] Yes, this is a breaking change.
