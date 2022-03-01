@@ -5,7 +5,6 @@ import 'dart:ui';
 import '../../geometry.dart';
 import 'matrix4.dart';
 import 'offset.dart';
-import 'size.dart';
 import 'vector2.dart';
 
 export 'dart:ui' show Rect;
@@ -20,12 +19,9 @@ extension RectExtension on Rect {
   /// Converts this [Rect] into a [math.Rectangle].
   math.Rectangle toMathRectangle() => math.Rectangle(left, top, width, height);
 
-  /// Converts this [Rect] into a Rectangle from flame-geom.
-  RectangleComponent toGeometryRectangle() {
-    return RectangleComponent(
-      position: topLeft.toVector2(),
-      size: size.toVector2(),
-    );
+  /// Converts this [Rect] into a [RectangleComponent].
+  RectangleComponent toRectangleComponent() {
+    return RectangleComponent.fromRect(this);
   }
 
   /// Whether this [Rect] contains a [Vector2] point or not

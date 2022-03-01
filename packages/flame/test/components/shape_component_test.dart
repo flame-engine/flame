@@ -114,11 +114,12 @@ void main() {
           Vector2(2, 0),
           Vector2(1, 1),
         ],
+        position: Vector2(1.5, 1.0),
         angle: pi / 2,
         anchor: Anchor.center,
       );
       expect(
-        component.containsPoint(Vector2(0.51, 1.5)),
+        component.containsPoint(Vector2(2.5, 1.5)),
         isTrue,
       );
     });
@@ -134,10 +135,8 @@ void main() {
         ],
         size: Vector2.all(100),
       );
-      print(component.globalVertices());
-      print(component.position);
       expect(
-        component.containsPoint(Vector2.all(49)),
+        component.containsPoint(Vector2.all(45)),
         isTrue,
       );
     });
@@ -172,10 +171,10 @@ void main() {
         position: Vector2.all(1.0),
         size: Vector2.all(2.0),
         angle: pi / 4,
-        anchor: Anchor.center,
+        anchor: Anchor.topLeft,
       );
       expect(
-        component.containsPoint(Vector2.all(1.9)),
+        component.containsPoint(Vector2(3.0, 1.0)),
         isFalse,
       );
     });

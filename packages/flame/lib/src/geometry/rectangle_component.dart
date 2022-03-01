@@ -17,6 +17,7 @@ class RectangleComponent extends PolygonComponent {
   }) : super(
           sizeToVertices(size ?? Vector2.zero(), anchor),
           position: position,
+          size: size,
           angle: angle,
           anchor: anchor,
           priority: priority,

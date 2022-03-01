@@ -19,6 +19,7 @@ class PolygonComponent extends ShapeComponent {
   late final List<LineSegment> _lineSegments;
   final Path _path = Path();
   final bool shrinkToBounds;
+  final bool manuallyPositioned;
 
   final _cachedGlobalVertices = ValueCache<List<Vector2>>();
 
@@ -41,7 +42,8 @@ class PolygonComponent extends ShapeComponent {
           _vertices.length > 2,
           'Number of vertices are too few to create a polygon',
         ),
-        shrinkToBounds = shrinkToBounds ?? false,
+        shrinkToBounds = shrinkToBounds ?? size == null,
+        manuallyPositioned = position != null,
         super(
           position: position,
           size: size,
@@ -53,7 +55,7 @@ class PolygonComponent extends ShapeComponent {
         ) {
     refreshVertices(newVertices: _vertices);
 
-    final verticesLength = vertices.length;
+    final verticesLength = _vertices.length;
     _globalVertices = List.generate(
       verticesLength,
       (_) => Vector2.zero(),
@@ -115,20 +117,18 @@ class PolygonComponent extends ShapeComponent {
   final _topLeft = Vector2.zero();
 
   @protected
-  void refreshVertices({List<Vector2>? newVertices}) {
+  void refreshVertices({required List<Vector2> newVertices}) {
     assert(
-      newVertices == null || newVertices.length == _vertices.length,
+      newVertices.length == _vertices.length,
       'A polygon can not change their number of vertices',
     );
-    if (newVertices != null) {
-      _topLeft.setFrom(newVertices[0]);
-      newVertices.forEachIndexed((i, _) {
-        final newVertex = newVertices[i];
-        _vertices[i].setFrom(newVertex);
-        _topLeft.x = min(_topLeft.x, newVertex.x);
-        _topLeft.y = min(_topLeft.y, newVertex.y);
-      });
-    }
+    _topLeft.setFrom(newVertices[0]);
+    newVertices.forEachIndexed((i, _) {
+      final newVertex = newVertices[i];
+      _vertices[i].setFrom(newVertex);
+      _topLeft.x = min(_topLeft.x, newVertex.x);
+      _topLeft.y = min(_topLeft.y, newVertex.y);
+    });
     _path
       ..reset()
       ..addPolygon(
@@ -138,11 +138,10 @@ class PolygonComponent extends ShapeComponent {
     if (shrinkToBounds) {
       final bounds = _path.getBounds();
       size.setValues(bounds.width, bounds.height);
+      if (!manuallyPositioned) {
+        position = Anchor.topLeft.toOtherAnchorPosition(_topLeft, anchor, size);
+      }
     }
-    position.setValues(
-      position.x + (shrinkToBounds ? _topLeft.x : 0) + anchor.x * size.x,
-      position.y + (shrinkToBounds ? _topLeft.y : 0) + anchor.y * size.y,
-    );
     _vertices.forEach((p) {
       p.setValues(
         p.x - _topLeft.x,
@@ -151,7 +150,7 @@ class PolygonComponent extends ShapeComponent {
     });
   }
 
-  /// Gives back the shape vectors multiplied by the size and scale
+  /// gives back the shape vectors multiplied by the size and scale
   List<Vector2> globalVertices() {
     final scale = absoluteScale;
     final angle = absoluteAngle;
