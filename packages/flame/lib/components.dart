@@ -1,5 +1,6 @@
 /// {@canonicalFor anchor.Anchor}
 export 'src/anchor.dart';
+export 'src/collisions/has_collision_detection.dart';
 export 'src/components/component.dart';
 export 'src/components/component_set.dart';
 export 'src/components/custom_painter_component.dart';
@@ -27,7 +28,6 @@ export 'src/components/text_box_component.dart';
 export 'src/components/text_component.dart';
 export 'src/components/timer_component.dart';
 export 'src/extensions/vector2.dart';
-export 'src/game/mixins/has_collision_detection.dart';
 export 'src/geometry/circle_component.dart';
 export 'src/geometry/polygon_component.dart';
 export 'src/geometry/rectangle_component.dart';
