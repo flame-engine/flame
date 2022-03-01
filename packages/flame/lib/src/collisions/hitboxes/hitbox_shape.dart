@@ -3,7 +3,6 @@ import 'package:meta/meta.dart';
 import '../../../collisions.dart';
 import '../../../components.dart';
 import '../../../game.dart';
-import '../../../geometry.dart';
 import '../../geometry/shape_intersections.dart' as intersection_system;
 
 /// A [HitboxShape] turns a [ShapeComponent] into a [Hitbox].

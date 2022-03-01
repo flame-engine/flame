@@ -4,7 +4,6 @@ import 'package:meta/meta.dart';
 
 import '../../components.dart';
 import '../../extensions.dart';
-import '../../geometry.dart';
 
 class RectangleComponent extends PolygonComponent {
   RectangleComponent({

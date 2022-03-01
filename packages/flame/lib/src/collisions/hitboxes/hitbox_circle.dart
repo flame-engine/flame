@@ -1,6 +1,5 @@
 import '../../../collisions.dart';
 import '../../../components.dart';
-import '../../../geometry.dart';
 
 /// A [Hitbox] in the shape of a circle.
 class HitboxCircle extends CircleComponent with HitboxShape {
