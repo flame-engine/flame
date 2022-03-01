@@ -2,7 +2,9 @@ import '../../collisions.dart';
 import '../../components.dart';
 
 /// [CollisionDetection] is the foundation of the collision detection system in
-/// Flame. If the [HasCollisionDetection] mixin is added to the game, [run] is
+/// Flame. 
+///
+/// If the [HasCollisionDetection] mixin is added to the game, [run] is
 /// called every tick to check for collisions
 abstract class CollisionDetection<T extends Hitbox<T>> {
   final Broadphase<T> broadphase;
