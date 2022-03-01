@@ -394,8 +394,7 @@ You can add new hitboxes to the component that has the `GestureHitboxes` mixin j
 added in the below `Collidable` example.
 
 More information about how to define hitboxes can be found in the hitbox section of the 
-[collision detection](../collision_detection.md#adding-hitboxes) docs.
+[collision detection](../collision_detection.md#HitboxShape) docs.
 
-// TODO(spydon): Add correct example
 An example of how to use it can be seen
-[here](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/).
+[here](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/input/gesture_hitboxes_example).

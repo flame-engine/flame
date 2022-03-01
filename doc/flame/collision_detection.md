@@ -92,7 +92,13 @@ the predefined [ScreenCollidable](#screencollidable) class.
 The `HitboxShape`s are normal components, so you add them to the component that you want to add
 hitboxes to just like any other component:
 
-`component.add(HitboxRectangle());`
+```dart
+class MyComponent extends PositionComponent {
+  Future<void> onLoad() async {
+    add(HitboxRectangle());
+  }
+}
+```
 
 If you don't add any arguments to the hitbox, like above, the hitbox will try to fill its parent as
 much as possible. Except for having the hitboxes trying to fill their parents, there are two ways to
@@ -182,6 +188,35 @@ with it. Since `ScreenCollidable` has the `CollisionCallbacks` mixin you can add
 object if needed.
 
 
+## Broad phase
+
+Usually you don't have to worry about the broad phase system that is used, so if the standard
+implementation is performant enough for you, you probably don't have to read this section.
+
+A broad phase is the first step of collision detection where potential collisions are calculated.
+To calculate these potential collisions are a lot cheaper to calculate than to check the exact
+intersections from the directly and it removes the need to check all hitboxes against each other
+and therefore avoiding O(n²). The broad phase produces a set of potential collisions (a set of
+`CollisionProspect`s), this set is then used to check the exact intersections between hitboxes, this
+is sometimes called narrow phase.
+
+By default Flame's collision detection is using a sweep and prune broadphase step, if your game
+requires another type of broadphase you can write your own broadphase by extending `Broadphase` and
+manually setting the collision detection system that should be used.
+
+For example if you have implemented a broadphase built on a quad tree instead of the standard
+sweep and prune, then you would do the following:
+
+```dart
+class MyGame extends FlameGame with HasCollisionDetection {
+  MyGame() : super() {
+    collisionDetection = 
+        StandardCollisionDetection(broadphase: QuadTreeBroadphase());
+  }
+}
+```
+
+
 ## Comparison to Forge2D
 
 If you want to have a full-blown physics engine in your game we recommend that you use
@@ -202,33 +237,21 @@ need some of the following things (since it is simpler to not involve Forge2D):
 - Complex shapes to act as a hitbox for your component so that gestures will be more accurate
 - Hitboxes that can tell what part of a component that collided with something
 
-## Broad phase
 
-Usually you don't have to worry about the broad phase system that is used, so if the standard
-implementation is performant enough for you, you probably don't have to read this section.
+## Migration from the collision detection system in v1.0
 
-A broad phase is the first step of collision detection where potential collisions are calculated.
-To calculate these potential collisions are a lot cheaper to calculate than to check the exact
-intersections from the directly and it removes the need to check all hitboxes against each other
-and therefore avoiding O(n²). The broad phase produces a set of potential collisions (a set of 
-`CollisionProspect`s), this set is then used to check the exact intersections between hitboxes, this
-is sometimes called narrow phase.
+The collision detection system introduced in v1.1 is easier to use, and much more efficient than the
+one that was in v1.0, but while making these improvements some breaking changes had to be made.
 
-By default Flame's collision detection is using a sweep and prune broadphase step, if your game
-requires another type of broadphase you can write your own broadphase by extending `Broadphase` and 
-manually setting the collision detection system that should be used.
+There is no longer a `Collidable` mixin, instead your game automatically knows when a hitbox has
+been added to one of your components when the `HasCollisionDetection` mixin is added to your game.
 
-For example if you have implemented a broadphase built on a quad tree instead of the standard
-sweep and prune, then you would do the following:
+To receive the callbacks from collisions that your component is involved in you should add the
+`CollisionCallbacks` mixin to your component, and then override the same methods as you did
+previously.
 
-```dart
-class MyGame extends FlameGame with HasCollisionDetection {
-  MyGame() : super() {
-    collisionDetection = 
-        StandardCollisionDetection(broadphase: QuadTreeBroadphase());
-  }
-}
-```
+Since the hitboxes now are `Component`s you add them to your component with `add` instead of
+`addHitbox` which was used previously.
 
 
 ## Examples
