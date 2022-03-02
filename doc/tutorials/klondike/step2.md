@@ -17,10 +17,33 @@ declare the `KlondikeGame` class inside:
 import 'package:flame/game.dart';
 
 class KlondikeGame extends FlameGame {
-  
 }
 ```
 
+For now this class is empty, which means it provides exactly the same 
+functionality as the base `FlameGame`, but we'll be adding more stuff inside
+very soon.
+
+Let's incorporate this class into the project so that it isn't orphaned. Open
+the `main.dart` find the line which says `final game = FlameGame();` and replace
+the `FlameGame` with `KlondikeGame`. You will need to import the class too.
+After all is done, the file should look like this:
+
+```dart
+import 'package:flame/game.dart';
+import 'package:flutter/widgets.dart';
+import 'klondike_game.dart';
+
+void main() {
+  final game = KlondikeGame();
+  runApp(GameWidget(game: game));
+}
+```
+
+
+
 ```{flutter-app}
 :sources: ../tutorials/klondike/app
+:page: step2
+:show: popup
 ```
