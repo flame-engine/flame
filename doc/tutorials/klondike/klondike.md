@@ -14,4 +14,5 @@ with the [Dart] programming language.
 :hidden:
 
 1. Preparation  <step1.md>
+2. Scaffolding  <step2.md>
 ```

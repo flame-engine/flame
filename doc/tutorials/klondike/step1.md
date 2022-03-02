@@ -92,5 +92,17 @@ Here are the contents of my spritesheet:
     more of these, with a different character for each suite, but I got too
     tired drawing these.
 
+Also, you need to tell Flutter about this image (just having it inside the
+`assets` folder is not enough). In order to do this, let's add the following
+lines into the `pubspec.yaml` file:
+
+```yaml
+flutter:
+  assets:
+    - assets/images/
+```
+
+Alright, enough with preparing -- onward to coding!
+
 
 [standard terminology]: https://en.wikipedia.org/wiki/Solitaire_terminology

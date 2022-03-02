@@ -1,0 +1,12 @@
+name: klondike
+description: Klondike tutorial
+version: 0.0.0
+publish_to: none
+
+environment:
+  sdk: ^2.15.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flame: ^1.0.0

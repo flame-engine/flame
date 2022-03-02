@@ -143,8 +143,8 @@ class FlutterAppDirective(SphinxDirective):
                 check=True,
             )
         except subprocess.CalledProcessError as e:
-            cmd = e.cmd.join(' ')
-            raise self.severe(
+            cmd = ' '.join(e.cmd)
+            raise self.error(
                 f'Command `{cmd}` returned with exit status {e.returncode}\n' +
                 e.output.decode('utf-8'),
             )
