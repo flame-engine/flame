@@ -21,8 +21,8 @@ typedef ContactCallbackFun = void Function(Object a, Object b, Contact contact);
 abstract class ContactCallback<Type1, Type2> {
   ContactTypes<Type1, Type2> types = ContactTypes<Type1, Type2>();
 
-  void begin(Type1 a, Type2 b, Contact contact);
-  void end(Type1 a, Type2 b, Contact contact);
+  void begin(Type1 a, Type2 b, Contact contact) {}
+  void end(Type1 a, Type2 b, Contact contact) {}
   void preSolve(Type1 a, Type2 b, Contact contact, Manifold oldManifold) {}
   void postSolve(Type1 a, Type2 b, Contact contact, ContactImpulse impulse) {}
 }
