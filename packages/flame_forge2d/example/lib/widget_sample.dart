@@ -1,10 +1,8 @@
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flame_forge2d/flame_forge2d.dart' hide Transform;
-import 'package:flame_forge2d/forge2d_game.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:flutter/widgets.dart';
-import 'package:forge2d/forge2d.dart' hide Transform;
 
 import 'boundaries.dart';
 
