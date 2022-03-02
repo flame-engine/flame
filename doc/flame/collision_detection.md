@@ -28,8 +28,7 @@ you have certain types of combinations of flips and scales of the ancestors of t
 ### HasCollisionDetection
 
 If you want to use collision detection in your game you have to add the `HasCollisionDetection`
-mixin to your game so that the game knows that it should use a collision detection system to keep
-track of which components that can collide.
+mixin to your game so that it can keep track of the components that can collide.
 
 Example:
 
