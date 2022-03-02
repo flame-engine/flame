@@ -43,7 +43,54 @@ may also be a `Deck`. All of these components will be tied together via the
 
 Another important aspect in any game development is the game's assets. These
 includes images, sprites, animations, sounds, textures, data files, and so on.
-In such a simple game as Klondike we won't need much 
+In such a simple game as Klondike we won't need lots of fancy graphics, but
+still some sprites will be needed in order to draw the cards.
+
+In order to prepare the graphic assets, I first took a physical playing card and
+measured it to be 63mm × 88mm, which is the ratio of approximately `1.4`. Thus,
+I decided that my in-game cards should be rendered at 1000×1400 pixels, and I 
+should draw all my images with this scale in mind.
+
+Note that the exact pixel dimensions are somewhat irrelevant here, since the 
+images will in the end be scaled up or down, according to the device's actual
+resolution. Here I'm using probably a bigger resolution than necessary for 
+phones, but it would also work nicely for larger devices like an iPad.
+
+And now, without further ado, the graphic assets for the Klondike game (don't
+judge too harsh, I'm not an artist):
+
+![](../../images/tutorials/klondike-sprites.png)
+
+Right-click the image, choose "Save as...", and store it in the `assets/images`
+folder of the project. At this point our project structure looks like this
+(there are other files too, of course, but these are the important ones): 
+```text
+klondike/
+├─assets/
+│ └─images/
+│   └─klondike-sprites.png
+├─lib/
+│  └─main.dart
+└─pubspec.yaml
+```
+
+By the way, this kind of file is called the _spritesheet_: it's just a 
+collection of multiple independent images in a single file. We are using a
+spritesheet here for the simple reason that loading a single large image is
+faster than many small images. In addition, rendering sprites that were
+extracted from a single source image can be faster too, since Flutter will
+optimize multiple such drawing commands into a single `drawAtlas` command.
+
+Here are the contents of my spritesheet:
+  - Numerals 2, 3, 4, ..., K, A. In theory, we could have rendered these in the
+    game as text strings, but then we would need to also include a font as an
+    asset -- seems simpler to just have them as images instead.
+  - Suit marks: ♠, ♥, ♦, ♣. Again, we could have used Unicode characters for
+    these, but images are much easier to position precisely.
+  - Flame logo, for use on the backs of the cards.
+  - Pictures of a Jack, a Queen, and a King. Normally there would be four times
+    more of these, with a different character for each suite, but I got too
+    tired drawing these.
 
 
 [standard terminology]: https://en.wikipedia.org/wiki/Solitaire_terminology
