@@ -1,5 +1,6 @@
 import 'package:meta/meta.dart';
 
+import '../../collisions.dart';
 import '../../components.dart';
 
 /// The [CollidableType] is used to determine which other collidables that it
@@ -19,6 +20,9 @@ enum CollidableType {
 /// collision detection system, potentially without using the Flame component
 /// system.
 /// The default implementation used with FCS is [CollisionCallbacks].
+/// The generic type [T] here is the type of the object that has the hitboxes
+/// are attached to, for example it is [PositionComponent] in the
+/// [StandardCollisionDetection].
 mixin GenericCollisionCallbacks<T> {
   Set<T>? _activeCollisions;
 
