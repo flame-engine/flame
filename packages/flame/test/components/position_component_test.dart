@@ -104,7 +104,7 @@ void main() {
       component.position.setValues(1.0, 1.0);
       component.anchor = Anchor.topLeft;
       component.size.setValues(2.0, 2.0);
-      final hitbox = HitboxPolygon([
+      final hitbox = PolygonHitbox([
         Vector2(1, 0),
         Vector2(0, -1),
         Vector2(-1, 0),
@@ -124,7 +124,7 @@ void main() {
         component.position.setValues(-1, -1);
         component.anchor = Anchor.topLeft;
         component.size.setValues(2.0, 2.0);
-        component.add(HitboxRectangle());
+        component.add(RectangleHitbox());
         await game.ensureAdd(component);
 
         expect(component.containsPoint(Vector2(1, 1)), true);
@@ -141,7 +141,7 @@ void main() {
         component.position.setValues(1, 1);
         component.anchor = Anchor.bottomRight;
         component.size.setValues(2.0, 2.0);
-        component.add(HitboxRectangle());
+        component.add(RectangleHitbox());
         await game.ensureAdd(component);
 
         expect(component.containsPoint(Vector2(1, 1)), true);
@@ -156,7 +156,7 @@ void main() {
       component.position.setValues(1, 1);
       component.anchor = Anchor.topLeft;
       component.size.setValues(2.0, 2.0);
-      final hitbox = HitboxRectangle();
+      final hitbox = RectangleHitbox();
       component.add(hitbox);
 
       expect(component.containsPoint(Vector2(0.0, 0.0)), false);
@@ -171,7 +171,7 @@ void main() {
       component.anchor = Anchor.topLeft;
       component.size.setValues(2.0, 2.0);
       component.add(
-        HitboxPolygon([
+        PolygonHitbox([
           Vector2(1, 0),
           Vector2(0, -1),
           Vector2(-1, 0),

@@ -16,7 +16,7 @@ class _TestBlock extends PositionComponent with CollisionCallbacks {
           position: position,
           size: size,
         ) {
-    add(HitboxCircle());
+    add(CircleHitbox());
   }
 
   @override

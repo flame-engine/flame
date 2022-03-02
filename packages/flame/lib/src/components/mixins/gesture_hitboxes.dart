@@ -6,13 +6,13 @@ import '../../../components.dart';
 /// This mixin can be used if you want to use hitboxes to determine whether
 /// a gesture is within the [Component] or not.
 mixin GestureHitboxes on Component {
-  Iterable<HitboxShape> get hitboxes => children.query<HitboxShape>();
+  Iterable<ShapeHitbox> get hitboxes => children.query<ShapeHitbox>();
 
   @override
   @mustCallSuper
   Future<void> onLoad() async {
     super.onLoad();
-    children.register<HitboxShape>();
+    children.register<ShapeHitbox>();
   }
 
   @override

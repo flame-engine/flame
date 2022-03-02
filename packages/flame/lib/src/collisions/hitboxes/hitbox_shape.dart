@@ -5,10 +5,10 @@ import '../../../components.dart';
 import '../../../game.dart';
 import '../../geometry/shape_intersections.dart' as intersection_system;
 
-/// A [HitboxShape] turns a [ShapeComponent] into a [Hitbox].
-/// It is currently used by [HitboxCircle], [HitboxRectangle] and
-/// [HitboxPolygon].
-mixin HitboxShape on ShapeComponent implements Hitbox<HitboxShape> {
+/// A [ShapeHitbox] turns a [ShapeComponent] into a [Hitbox].
+/// It is currently used by [CircleHitbox], [RectangleHitbox] and
+/// [PolygonHitbox].
+mixin ShapeHitbox on ShapeComponent implements Hitbox<ShapeHitbox> {
   @override
   CollidableType collidableType = CollidableType.active;
 
@@ -22,8 +22,8 @@ mixin HitboxShape on ShapeComponent implements Hitbox<HitboxShape> {
   bool _validAabb = false;
 
   @override
-  Set<HitboxShape> get activeCollisions => _activeCollisions ??= {};
-  Set<HitboxShape>? _activeCollisions;
+  Set<ShapeHitbox> get activeCollisions => _activeCollisions ??= {};
+  Set<ShapeHitbox>? _activeCollisions;
 
   @override
   bool get isColliding {
@@ -96,7 +96,7 @@ mixin HitboxShape on ShapeComponent implements Hitbox<HitboxShape> {
     super.onRemove();
   }
 
-  /// Checks whether the [HitboxShape] contains the [point], where [point] is
+  /// Checks whether the [ShapeHitbox] contains the [point], where [point] is
   /// a position in the global coordinate system of your game.
   @override
   bool containsPoint(Vector2 point) {
@@ -125,7 +125,7 @@ mixin HitboxShape on ShapeComponent implements Hitbox<HitboxShape> {
   /// check can be done first to see if it even is possible that the shapes can
   /// overlap, since the shapes have to be within the size of the component.
   @override
-  bool possiblyIntersects(HitboxShape other) {
+  bool possiblyIntersects(ShapeHitbox other) {
     final collisionAllowed =
         allowSiblingCollision || hitboxParent != other.hitboxParent;
     return collisionAllowed && aabb.intersectsWithAabb2(other.aabb);
@@ -151,7 +151,7 @@ mixin HitboxShape on ShapeComponent implements Hitbox<HitboxShape> {
 
   @override
   @mustCallSuper
-  void onCollision(Set<Vector2> intersectionPoints, HitboxShape other) {
+  void onCollision(Set<Vector2> intersectionPoints, ShapeHitbox other) {
     onCollisionCallback?.call(intersectionPoints, other);
     if (hitboxParent is CollisionCallbacks) {
       (hitboxParent as CollisionCallbacks).onCollision(
@@ -163,7 +163,7 @@ mixin HitboxShape on ShapeComponent implements Hitbox<HitboxShape> {
 
   @override
   @mustCallSuper
-  void onCollisionStart(Set<Vector2> intersectionPoints, HitboxShape other) {
+  void onCollisionStart(Set<Vector2> intersectionPoints, ShapeHitbox other) {
     activeCollisions.add(other);
     onCollisionStartCallback?.call(intersectionPoints, other);
     if (hitboxParent is CollisionCallbacks) {
@@ -176,7 +176,7 @@ mixin HitboxShape on ShapeComponent implements Hitbox<HitboxShape> {
 
   @override
   @mustCallSuper
-  void onCollisionEnd(HitboxShape other) {
+  void onCollisionEnd(ShapeHitbox other) {
     activeCollisions.remove(other);
     onCollisionEndCallback?.call(other);
     if (hitboxParent is CollisionCallbacks) {
@@ -185,13 +185,13 @@ mixin HitboxShape on ShapeComponent implements Hitbox<HitboxShape> {
   }
 
   @override
-  CollisionCallback<HitboxShape>? onCollisionCallback;
+  CollisionCallback<ShapeHitbox>? onCollisionCallback;
 
   @override
-  CollisionCallback<HitboxShape>? onCollisionStartCallback;
+  CollisionCallback<ShapeHitbox>? onCollisionStartCallback;
 
   @override
-  CollisionEndCallback<HitboxShape>? onCollisionEndCallback;
+  CollisionEndCallback<ShapeHitbox>? onCollisionEndCallback;
 
   //#endregion
 }

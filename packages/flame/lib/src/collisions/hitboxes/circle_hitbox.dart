@@ -2,11 +2,11 @@ import '../../../collisions.dart';
 import '../../../components.dart';
 
 /// A [Hitbox] in the shape of a circle.
-class HitboxCircle extends CircleComponent with HitboxShape {
+class CircleHitbox extends CircleComponent with ShapeHitbox {
   @override
   final bool shouldFillParent;
 
-  HitboxCircle({
+  CircleHitbox({
     double? radius,
     Vector2? position,
     double? angle,
@@ -19,10 +19,10 @@ class HitboxCircle extends CircleComponent with HitboxShape {
           anchor: anchor,
         );
 
-  /// With this constructor you define the [HitboxCircle] in relation to the
+  /// With this constructor you define the [CircleHitbox] in relation to the
   /// [size]. For example having a [normal] of 0.5 would create a circle that
   /// fills half of the [size].
-  HitboxCircle.fromNormal(
+  CircleHitbox.fromNormal(
     double normal, {
     Vector2? position,
     required Vector2 size,

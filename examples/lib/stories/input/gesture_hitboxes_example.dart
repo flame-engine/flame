@@ -27,9 +27,9 @@ class GestureHitboxesExample extends FlameGame
     final hitbox = () {
       switch (shapeType) {
         case Shapes.circle:
-          return HitboxCircle();
+          return CircleHitbox();
         case Shapes.rectangle:
-          return HitboxRectangle();
+          return RectangleHitbox();
         case Shapes.polygon:
           final points = [
             -Vector2.random(_rng),
@@ -37,7 +37,7 @@ class GestureHitboxesExample extends FlameGame
             Vector2.random(_rng),
             Vector2.random(_rng)..y *= -1,
           ];
-          return HitboxPolygon.fromNormals(points, parentSize: shapeSize);
+          return PolygonHitbox.fromNormals(points, parentSize: shapeSize);
       }
     }();
     return MyShapeComponent(
@@ -59,7 +59,7 @@ class GestureHitboxesExample extends FlameGame
 
 class MyShapeComponent extends PositionComponent
     with Tappable, Hoverable, GestureHitboxes {
-  final HitboxShape hitbox;
+  final ShapeHitbox hitbox;
   late final Color baseColor;
   late final Color hoverColor;
 

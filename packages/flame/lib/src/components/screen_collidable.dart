@@ -1,7 +1,7 @@
 import '../../components.dart';
 import '../../game.dart';
 import '../collisions/collision_callbacks.dart';
-import '../collisions/hitboxes/hitbox_rectangle.dart';
+import '../collisions/hitboxes/rectangle_hitbox.dart';
 
 /// This component is used to detect hitboxes colliding into the viewport of the
 /// game.
@@ -11,7 +11,7 @@ class ScreenCollidable<T extends FlameGame> extends PositionComponent
   Future<void> onLoad() async {
     await super.onLoad();
     size = gameRef.size;
-    add(HitboxRectangle());
+    add(RectangleHitbox());
   }
 
   final _zeroVector = Vector2.zero();

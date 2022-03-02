@@ -27,7 +27,7 @@ class MyCollidable extends PositionComponent
   late Vector2 velocity;
   final _collisionColor = Colors.amber;
   final _defaultColor = Colors.cyan;
-  late HitboxShape hitbox;
+  late ShapeHitbox hitbox;
 
   MyCollidable(Vector2 position)
       : super(
@@ -41,7 +41,7 @@ class MyCollidable extends PositionComponent
     final defaultPaint = Paint()
       ..color = _defaultColor
       ..style = PaintingStyle.stroke;
-    hitbox = HitboxCircle()
+    hitbox = CircleHitbox()
       ..paint = defaultPaint
       ..renderShape = true;
     add(hitbox);

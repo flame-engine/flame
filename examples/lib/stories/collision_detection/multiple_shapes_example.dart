@@ -102,7 +102,7 @@ abstract class MyCollidable extends PositionComponent
   final Color _collisionColor = Colors.green.withOpacity(0.8);
   late final Paint _dragIndicatorPaint;
   final ScreenCollidable screenCollidable;
-  HitboxShape? hitbox;
+  ShapeHitbox? hitbox;
 
   MyCollidable(
     Vector2 position,
@@ -179,7 +179,7 @@ class CollidablePolygon extends MyCollidable {
     Vector2 velocity,
     ScreenCollidable screenCollidable,
   ) : super(position, size, velocity, screenCollidable) {
-    hitbox = HitboxPolygon.fromNormals(
+    hitbox = PolygonHitbox.fromNormals(
       [
         Vector2(-1.0, 0.0),
         Vector2(-0.8, 0.6),
@@ -203,7 +203,7 @@ class CollidableRectangle extends MyCollidable {
     Vector2 velocity,
     ScreenCollidable screenCollidable,
   ) : super(position, size, velocity, screenCollidable) {
-    hitbox = HitboxRectangle()..renderShape = true;
+    hitbox = RectangleHitbox()..renderShape = true;
     add(hitbox!);
   }
 }
@@ -215,12 +215,12 @@ class CollidableCircle extends MyCollidable {
     Vector2 velocity,
     ScreenCollidable screenCollidable,
   ) : super(position, size, velocity, screenCollidable) {
-    hitbox = HitboxCircle()..renderShape = true;
+    hitbox = CircleHitbox()..renderShape = true;
     add(hitbox!);
   }
 }
 
-class SnowmanPart extends HitboxCircle {
+class SnowmanPart extends CircleHitbox {
   @override
   final renderShape = true;
   final startColor = Colors.white.withOpacity(0.8);
@@ -232,7 +232,7 @@ class SnowmanPart extends HitboxCircle {
   }
 
   @override
-  void onCollisionStart(Set<Vector2> intersectionPoints, HitboxShape other) {
+  void onCollisionStart(Set<Vector2> intersectionPoints, ShapeHitbox other) {
     super.onCollisionStart(intersectionPoints, other);
 
     if (other.hitboxParent is ScreenCollidable) {
@@ -243,7 +243,7 @@ class SnowmanPart extends HitboxCircle {
   }
 
   @override
-  void onCollisionEnd(HitboxShape other) {
+  void onCollisionEnd(ShapeHitbox other) {
     super.onCollisionEnd(other);
     if (!isColliding) {
       paint.color = startColor;

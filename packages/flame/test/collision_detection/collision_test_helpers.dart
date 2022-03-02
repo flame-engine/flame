@@ -7,7 +7,7 @@ class HasCollidablesGame extends FlameGame with HasCollisionDetection {}
 
 final withCollidables = FlameTester(() => HasCollidablesGame());
 
-class TestHitbox extends HitboxRectangle {
+class TestHitbox extends RectangleHitbox {
   int startCounter = 0;
   int onCollisionCounter = 0;
   int endCounter = 0;
@@ -42,7 +42,7 @@ class TestBlock extends PositionComponent with CollisionCallbacks {
           position: position,
           size: size,
         ) {
-    children.register<HitboxShape>();
+    children.register<ShapeHitbox>();
     if (addTestHitbox) {
       add(hitbox..collidableType = type);
     }
@@ -68,8 +68,8 @@ class TestBlock extends PositionComponent with CollisionCallbacks {
 
   Set<Vector2> intersections(TestBlock other) {
     final result = <Vector2>{};
-    for (final hitboxA in children.query<HitboxShape>()) {
-      for (final hitboxB in other.children.query<HitboxShape>()) {
+    for (final hitboxA in children.query<ShapeHitbox>()) {
+      for (final hitboxB in other.children.query<ShapeHitbox>()) {
         result.addAll(hitboxA.intersections(hitboxB));
       }
     }

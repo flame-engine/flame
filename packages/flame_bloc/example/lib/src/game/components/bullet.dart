@@ -23,7 +23,7 @@ class BulletComponent extends SpriteAnimationComponent
   }) : super(position: Vector2(x, y)) {
     size = Vector2(_mapWidth(), 20);
 
-    add(HitboxRectangle());
+    add(RectangleHitbox());
   }
 
   double _mapWidth() {

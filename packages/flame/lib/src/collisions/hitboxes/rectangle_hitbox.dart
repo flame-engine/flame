@@ -2,11 +2,11 @@ import '../../../collisions.dart';
 import '../../../components.dart';
 
 /// A [Hitbox] in the shape of a rectangle (a simplified polygon).
-class HitboxRectangle extends RectangleComponent with HitboxShape {
+class RectangleHitbox extends RectangleComponent with ShapeHitbox {
   @override
   final bool shouldFillParent;
 
-  HitboxRectangle({
+  RectangleHitbox({
     Vector2? position,
     Vector2? size,
     double? angle,
@@ -21,10 +21,10 @@ class HitboxRectangle extends RectangleComponent with HitboxShape {
           priority: priority,
         );
 
-  /// With this constructor you define the [HitboxRectangle] in relation to
+  /// With this constructor you define the [RectangleHitbox] in relation to
   /// the [size]. For example having [normal] as of (0.8, 0.5) would create a
   /// rectangle that fills 80% of the width and 50% of the height of [size].
-  HitboxRectangle.fromNormals(
+  RectangleHitbox.fromNormals(
     Vector2 normal, {
     Vector2? position,
     required Vector2 size,
