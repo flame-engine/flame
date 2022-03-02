@@ -70,9 +70,8 @@ class MyCollidable extends PositionComponent with CollisionCallbacks {
 }
 ```
 
-In this example it can be seen how the Dart `is` keyword is used to check which other
-`PositionComponent` that your component collided with. The set of points is where the edges of the
-hitboxes collided.
+In this example we use Dart's `is` keyword to check what kind of component we collided with. The set of points is where the edges of the
+hitboxes intersect.
 
 Note that the `onCollision` method will be called on both `PositionComponent`s if they have both
 implemented the `onCollision` method, and also on both hitboxes. The same goes for the
