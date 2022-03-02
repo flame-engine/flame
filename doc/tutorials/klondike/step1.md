@@ -59,7 +59,7 @@ phones, but it would also work nicely for larger devices like an iPad.
 And now, without further ado, the graphic assets for the Klondike game (don't
 judge too harsh, I'm not an artist):
 
-![](../../images/tutorials/klondike-sprites.png)
+![](app/assets/images/klondike-sprites.png)
 
 Right-click the image, choose "Save as...", and store it in the `assets/images`
 folder of the project. At this point our project structure looks like this
