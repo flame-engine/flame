@@ -27,7 +27,7 @@ mixin GenericCollisionCallbacks<T> {
 
   /// Whether the object is currently colliding or not.
   bool get isColliding {
-    return _activeCollisions != null && _activeCollisions!.isNotEmpty;
+    return _activeCollisions?.isNotEmpty ?? false;
   }
 
   /// Whether the object is colliding with [other] or not.
