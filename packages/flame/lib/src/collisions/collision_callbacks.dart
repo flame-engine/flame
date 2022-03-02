@@ -32,7 +32,7 @@ mixin GenericCollisionCallbacks<T> {
 
   /// Whether the object is colliding with [other] or not.
   bool collidingWith(T other) {
-    return _activeCollisions != null && activeCollisions.contains(other);
+    return _activeCollisions?.contains(other) ?? false;
   }
 
   /// [onCollision] is called in every tick when this object is colliding with
