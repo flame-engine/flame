@@ -81,9 +81,6 @@ class BallContactCallback extends ContactCallback<Ball, Ball> {
       ball2.paint = ball1.paint;
     }
   }
-
-  @override
-  void end(Ball ball1, Ball ball2, Contact contact) {}
 }
 
 class WhiteBallContactCallback extends ContactCallback<Ball, WhiteBall> {
@@ -91,9 +88,6 @@ class WhiteBallContactCallback extends ContactCallback<Ball, WhiteBall> {
   void begin(Ball ball, WhiteBall whiteBall, Contact contact) {
     ball.giveNudge = true;
   }
-
-  @override
-  void end(Ball ball, WhiteBall whiteBall, Contact contact) {}
 }
 
 class BallWallContactCallback extends ContactCallback<Ball, Wall> {
@@ -101,7 +95,4 @@ class BallWallContactCallback extends ContactCallback<Ball, Wall> {
   void begin(Ball ball, Wall wall, Contact contact) {
     wall.paint = ball.paint;
   }
-
-  @override
-  void end(Ball ball, Wall wall, Contact contact) {}
 }
