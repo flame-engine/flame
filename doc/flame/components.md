@@ -563,7 +563,7 @@ and the shape definition will scale or rotate the shape accordingly.
 
 These shapes are meant as a tool for using geometrical shapes in a more general way than together
 with the collision detection system, where you want to use the
-[HitboxShape](collision_detection.md#hitboxshape)s.
+[ShapeHitbox](collision_detection.md#ShapeHitbox)s.
 
 
 ### PolygonComponent

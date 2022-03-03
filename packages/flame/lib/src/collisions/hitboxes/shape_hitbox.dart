@@ -60,7 +60,7 @@ mixin ShapeHitbox on ShapeComponent implements Hitbox<ShapeHitbox> {
     hitboxParent = ancestors().firstWhere(
       (c) => c is PositionComponent,
       orElse: () {
-        throw StateError('A HitboxShape needs a PositionComponent ancestor');
+        throw StateError('A ShapeHitbox needs a PositionComponent ancestor');
       },
     ) as PositionComponent;
 

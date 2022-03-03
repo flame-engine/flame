@@ -38,7 +38,7 @@ class PolygonHitbox extends PolygonComponent with ShapeHitbox {
   @override
   void fillParent() {
     throw UnsupportedError(
-      'Use the HitboxRectangle if you want to fill the parent',
+      'Use the RectangleHitbox if you want to fill the parent',
     );
   }
 }

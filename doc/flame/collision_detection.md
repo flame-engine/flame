@@ -15,9 +15,9 @@ what should happen when two hitboxes collide, so it is up to the user to impleme
 when for example two `PositionComponent`s have intersecting hitboxes.
 
 Do note that the built-in collision detection system does not take collisions between two hitboxes
-that overshoot each other into account, this could happen when they either move very fast or `update`
-being called with a large delta time (for example if your app is not in the foreground). This
-behaviour is called tunneling, if you want to read more about it.
+that overshoot each other into account, this could happen when they either move very fast or
+`update` being called with a large delta time (for example if your app is not in the foreground).
+This behaviour is called tunneling, if you want to read more about it.
 
 Also note that the collision detection system has a limitation that makes it not work properly if
 you have certain types of combinations of flips and scales of the ancestors of the hitboxes.
@@ -38,7 +38,7 @@ class MyGame extends FlameGame with HasCollisionDetection {
 }
 ```
 
-Now when you add `HitboxShape`s to components that are then added to the game, they will
+Now when you add `ShapeHitbox`s to components that are then added to the game, they will
 automatically be checked for collisions.
 
 
@@ -51,7 +51,7 @@ Example:
 class MyCollidable extends PositionComponent with CollisionCallbacks {
   @override
   void onCollision(Set<Vector2> points, PositionComponent other) {
-    if (other is ScreenCollidable) {
+    if (other is ScreenHitbox) {
       //...
     } else if (other is YourOtherComponent) {
       //...
@@ -60,7 +60,7 @@ class MyCollidable extends PositionComponent with CollisionCallbacks {
 
   @override
   void onCollisionEnd(PositionComponent other) {
-    if (other is ScreenCollidable) {
+    if (other is ScreenHitbox) {
       //...
     } else if (other is YourOtherComponent) {
       //...
@@ -69,8 +69,8 @@ class MyCollidable extends PositionComponent with CollisionCallbacks {
 }
 ```
 
-In this example we use Dart's `is` keyword to check what kind of component we collided with. The set of points is where the edges of the
-hitboxes intersect.
+In this example we use Dart's `is` keyword to check what kind of component we collided with. The set
+of points is where the edges of the hitboxes intersect.
 
 Note that the `onCollision` method will be called on both `PositionComponent`s if they have both
 implemented the `onCollision` method, and also on both hitboxes. The same goes for the
@@ -82,18 +82,18 @@ both `onCollisionStart` and `onCollision` are called, so if you don't need to do
 when a collision starts you only need to override `onCollision`, and vice versa.
 
 If you want to check collisions with the screen edges, as we do in the example above, you can use
-the predefined [ScreenCollidable](#screencollidable) class.
+the predefined [ScreenHitbox](#ScreenHitbox) class.
 
 
-## HitboxShape
+## ShapeHitbox
 
-The `HitboxShape`s are normal components, so you add them to the component that you want to add
+The `ShapeHitbox`s are normal components, so you add them to the component that you want to add
 hitboxes to just like any other component:
 
 ```dart
 class MyComponent extends PositionComponent {
   Future<void> onLoad() async {
-    add(HitboxRectangle());
+    add(RectangleHitbox());
   }
 }
 ```
@@ -107,9 +107,9 @@ hitbox in relation to the size of its parent.
 You can read more about how the different shapes are defined in the
 [ShapeComponents](components.md#ShapeComponents) section.
 
-Remember that you can add as many `HitboxShape`s as you want to your `PositionComponent` to make up
-more complex areas. For example a snowman with a hat could be represented by three `HitboxCircle`s
-and two `HitboxRectangle`s as its hat.
+Remember that you can add as many `ShapeHitbox`s as you want to your `PositionComponent` to make up
+more complex areas. For example a snowman with a hat could be represented by three `CircleHitbox`s
+and two `RectangleHitbox`s as its hat.
 
 A hitbox can be used either for collision detection or for making gesture detection more accurate 
 on top of components, see more regarding the latter in the section about the
@@ -146,7 +146,7 @@ These are just examples of how you could use these types, there will be a lot mo
 them so don't doubt to use them even if your use case isn't listed here.
 
 
-### HitboxPolygon
+### PolygonHitbox
 
 It should be noted that if you want to use collision detection or `containsPoint` on the `Polygon`,
 the polygon needs to be convex. So always use convex polygons or you will most likely run into
@@ -158,32 +158,40 @@ default calculated from the size of the collidable that they are attached to, bu
 polygon can be made in an infinite number of ways inside of a bounding box you have to add the
 definition in the constructor for this shape.
 
-The `HitboxPolygon` has the same constructors as the ()[#PolygonComponent], see that section for
+The `PolygonHitbox` has the same constructors as the ()[#PolygonComponent], see that section for
 documentation regarding those.
 
 
-### HitboxRectangle
+### RectangleHitbox
 
-The `HitboxRectangle` has the same constructors as the ()[#RectangleComponent], see that section
+The `RectangleHitbox` has the same constructors as the ()[#RectangleComponent], see that section
 for documentation regarding those.
 
 
-### HitboxCircle
+### CircleHitbox
 
-The `HitboxCircle` has the same constructors as the ()[#CircleComponent], see that section for
+The `CircleHitbox` has the same constructors as the ()[#CircleComponent], see that section for
 documentation regarding those.
 
 
-## ScreenCollidable
+## ScreenHitbox
 
-`ScreenCollidable` is a pre-made collidable component which represents the edges of your
-game/screen. If you add a `ScreenCollidable` to your game your other collidables will be
-notified when they collide with the edges. It doesn't take any arguments, it only depends on the
-`size` of the game that it is added to. To add it you can just do `add(ScreenCollidable())` in
-your game, if you don't want the `ScreenCollidable` itself to be notified when something collides
-with it. Since `ScreenCollidable` has the `CollisionCallbacks` mixin you can add your own
-`onCollisionCallback`, `onStartCollisionCallback` and `onEndCollisionCallback` functions to that
-object if needed.
+`ScreenHitbox` is a component which represents the edges of your viewport/screen. If you add a
+`ScreenHitbox` to your game your other components with hitboxes will be notified when they
+collide with the edges. It doesn't take any arguments, it only depends on the `size` of the game
+that it is added to. To add it you can just do `add(ScreenHitbox())` in your game, if you don't
+want the `ScreenHitbox` itself to be notified when something collides with it. Since
+`ScreenHitbox` has the `CollisionCallbacks` mixin you can add your own `onCollisionCallback`,
+`onStartCollisionCallback` and `onEndCollisionCallback` functions to that object if needed.
+
+
+## CompositeHitbox
+
+In the `CompositeHitbox` you can add multiple hitboxes so that they emulate being one joined hitbox.
+
+If you want to form a hat for example you might want to use two [RectangleHitbox]s to follow that
+hat's edges properly, then you can add those hitboxes to an instance of this class and react to
+collisions to the whole hat, instead of for just each hitbox separately.
 
 
 ## Broad phase
@@ -250,6 +258,15 @@ previously.
 
 Since the hitboxes now are `Component`s you add them to your component with `add` instead of
 `addHitbox` which was used previously.
+
+
+### Name changes
+
+ - `ScreenCollidable` -> `ScreenHitbox`
+ - `HitboxCircle` -> `CircleHitbox`
+ - `HitboxRectangle` -> `RectangleHitbox`
+ - `HitboxPolygon` -> `PolygonHitbox`
+ - `Collidable` -> `CollisionCallbacks` (Only needed when you want to receive the callbacks)
 
 
 ## Examples

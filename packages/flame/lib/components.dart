@@ -1,6 +1,7 @@
 /// {@canonicalFor anchor.Anchor}
 export 'src/anchor.dart';
 export 'src/collisions/has_collision_detection.dart';
+export 'src/collisions/hitboxes/screen_hitbox.dart';
 export 'src/components/component.dart';
 export 'src/components/component_set.dart';
 export 'src/components/custom_painter_component.dart';
@@ -18,7 +19,6 @@ export 'src/components/parallax_component.dart';
 export 'src/components/particle_component.dart';
 export 'src/components/position_component.dart';
 export 'src/components/position_type.dart';
-export 'src/components/screen_collidable.dart';
 export 'src/components/sprite_animation_component.dart';
 export 'src/components/sprite_animation_group_component.dart';
 export 'src/components/sprite_batch_component.dart';

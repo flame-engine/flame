@@ -13,7 +13,7 @@ class CirclesExample extends FlameGame with HasCollisionDetection, TapDetector {
 
   @override
   Future<void> onLoad() async {
-    add(ScreenCollidable());
+    add(ScreenHitbox());
   }
 
   @override
@@ -62,7 +62,7 @@ class MyCollidable extends PositionComponent
   ) {
     super.onCollisionStart(intersectionPoints, other);
     hitbox.paint.color = _collisionColor;
-    if (other is ScreenCollidable) {
+    if (other is ScreenHitbox) {
       removeFromParent();
       return;
     }

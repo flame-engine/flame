@@ -29,19 +29,19 @@ class MultipleShapesExample extends FlameGame
 
   @override
   Future<void> onLoad() async {
-    final screenCollidable = ScreenCollidable();
+    final screenHitbox = ScreenHitbox();
     final snowman = CollidableSnowman(
       Vector2.all(150),
       Vector2(120, 250),
       Vector2(-100, 100),
-      screenCollidable,
+      screenHitbox,
     );
     MyCollidable lastToAdd = snowman;
-    add(screenCollidable);
+    add(screenHitbox);
     add(snowman);
     var totalAdded = 1;
     while (totalAdded < 100) {
-      lastToAdd = nextRandomCollidable(lastToAdd, screenCollidable);
+      lastToAdd = nextRandomCollidable(lastToAdd, screenHitbox);
       final lastBottomRight =
           lastToAdd.toAbsoluteRect().bottomRight.toVector2();
       if (lastBottomRight.x < size.x && lastBottomRight.y < size.y) {
@@ -58,7 +58,7 @@ class MultipleShapesExample extends FlameGame
 
   MyCollidable nextRandomCollidable(
     MyCollidable lastCollidable,
-    ScreenCollidable screenCollidable,
+    ScreenHitbox screenHitbox,
   ) {
     final collidableSize = Vector2.all(50) + Vector2.random(_rng) * 100;
     final isXOverflow = lastCollidable.position.x +
@@ -76,7 +76,7 @@ class MultipleShapesExample extends FlameGame
       position,
       collidableSize,
       velocity,
-      screenCollidable,
+      screenHitbox,
       rng: _rng,
     );
   }
@@ -101,14 +101,14 @@ abstract class MyCollidable extends PositionComponent
   final Color _defaultColor = Colors.blue.withOpacity(0.8);
   final Color _collisionColor = Colors.green.withOpacity(0.8);
   late final Paint _dragIndicatorPaint;
-  final ScreenCollidable screenCollidable;
+  final ScreenHitbox screenHitbox;
   ShapeHitbox? hitbox;
 
   MyCollidable(
     Vector2 position,
     Vector2 size,
     this.velocity,
-    this.screenCollidable,
+    this.screenHitbox,
   ) : super(position: position, size: size, anchor: Anchor.center) {
     _dragIndicatorPaint = BasicPalette.white.paint();
   }
@@ -133,9 +133,9 @@ abstract class MyCollidable extends PositionComponent
     final topLeft = absoluteCenter - (scaledSize / 2);
     if (topLeft.x + scaledSize.x < 0 ||
         topLeft.y + scaledSize.y < 0 ||
-        topLeft.x > screenCollidable.scaledSize.x ||
-        topLeft.y > screenCollidable.scaledSize.y) {
-      final moduloSize = screenCollidable.scaledSize + scaledSize;
+        topLeft.x > screenHitbox.scaledSize.x ||
+        topLeft.y > screenHitbox.scaledSize.y) {
+      final moduloSize = screenHitbox.scaledSize + scaledSize;
       topLeftPosition = topLeftPosition % moduloSize;
     }
   }
@@ -177,8 +177,8 @@ class CollidablePolygon extends MyCollidable {
     Vector2 position,
     Vector2 size,
     Vector2 velocity,
-    ScreenCollidable screenCollidable,
-  ) : super(position, size, velocity, screenCollidable) {
+    ScreenHitbox screenHitbox,
+  ) : super(position, size, velocity, screenHitbox) {
     hitbox = PolygonHitbox.fromNormals(
       [
         Vector2(-1.0, 0.0),
@@ -201,8 +201,8 @@ class CollidableRectangle extends MyCollidable {
     Vector2 position,
     Vector2 size,
     Vector2 velocity,
-    ScreenCollidable screenCollidable,
-  ) : super(position, size, velocity, screenCollidable) {
+    ScreenHitbox screenHitbox,
+  ) : super(position, size, velocity, screenHitbox) {
     hitbox = RectangleHitbox()..renderShape = true;
     add(hitbox!);
   }
@@ -213,8 +213,8 @@ class CollidableCircle extends MyCollidable {
     Vector2 position,
     Vector2 size,
     Vector2 velocity,
-    ScreenCollidable screenCollidable,
-  ) : super(position, size, velocity, screenCollidable) {
+    ScreenHitbox screenHitbox,
+  ) : super(position, size, velocity, screenHitbox) {
     hitbox = CircleHitbox()..renderShape = true;
     add(hitbox!);
   }
@@ -235,7 +235,7 @@ class SnowmanPart extends CircleHitbox {
   void onCollisionStart(Set<Vector2> intersectionPoints, ShapeHitbox other) {
     super.onCollisionStart(intersectionPoints, other);
 
-    if (other.hitboxParent is ScreenCollidable) {
+    if (other.hitboxParent is ScreenHitbox) {
       paint.color = startColor;
     } else {
       paint.color = hitColor.withOpacity(0.8);
@@ -256,8 +256,8 @@ class CollidableSnowman extends MyCollidable {
     Vector2 position,
     Vector2 size,
     Vector2 velocity,
-    ScreenCollidable screenCollidable,
-  ) : super(position, size, velocity, screenCollidable) {
+    ScreenHitbox screenHitbox,
+  ) : super(position, size, velocity, screenHitbox) {
     rotationSpeed = 0.3;
     anchor = Anchor.topLeft;
     final top = SnowmanPart(
@@ -285,7 +285,7 @@ MyCollidable randomCollidable(
   Vector2 position,
   Vector2 size,
   Vector2 velocity,
-  ScreenCollidable screenCollidable, {
+  ScreenHitbox screenHitbox, {
   Random? rng,
 }) {
   final _rng = rng ?? Random();
@@ -293,13 +293,13 @@ MyCollidable randomCollidable(
   final shapeType = Shapes.values[_rng.nextInt(Shapes.values.length)];
   switch (shapeType) {
     case Shapes.circle:
-      return CollidableCircle(position, size, velocity, screenCollidable)
+      return CollidableCircle(position, size, velocity, screenHitbox)
         ..rotationSpeed = rotationSpeed;
     case Shapes.rectangle:
-      return CollidableRectangle(position, size, velocity, screenCollidable)
+      return CollidableRectangle(position, size, velocity, screenHitbox)
         ..rotationSpeed = rotationSpeed;
     case Shapes.polygon:
-      return CollidablePolygon(position, size, velocity, screenCollidable)
+      return CollidablePolygon(position, size, velocity, screenHitbox)
         ..rotationSpeed = rotationSpeed;
   }
 }

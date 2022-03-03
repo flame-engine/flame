@@ -16,7 +16,7 @@ class CollidableAnimationExample extends FlameGame with HasCollisionDetection {
 
   @override
   Future<void> onLoad() async {
-    add(ScreenCollidable());
+    add(ScreenHitbox());
     final componentSize = Vector2(150, 100);
     // Top left component
     add(
