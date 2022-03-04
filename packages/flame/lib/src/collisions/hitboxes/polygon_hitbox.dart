@@ -29,7 +29,7 @@ class PolygonHitbox extends PolygonComponent with ShapeHitbox {
   }) : super.fromNormals(
           normals,
           position: position,
-          size: parentSize,
+          parentSize: parentSize,
           angle: angle,
           anchor: anchor,
           shrinkToBounds: true,

@@ -652,7 +652,9 @@ void main() {
 ```
 
 You can also create a `RectangleComponent` from a normal, or use the default constructor to build
-your rectangle from a position, size and angle.
+your rectangle from a position, size and angle. The `normal` is a vector defined in relation
+to the parent size, for example a normal that is `Vector2(0.5, 0.8)` would create a rectangle that
+is 50% of the width of the parent's size and 80% of its height.
 
 In the example below a `RectangleComponent` of size `(25.0, 30.0)` positioned at `(100, 100)` would
 be created.
@@ -698,8 +700,8 @@ void main() {
 When creating a `CircleComponent` with the `fromNormal` constructor you can define how long the
 radius is in comparison to the shortest edge of the of the bounding box defined by `size`.
 
-The following example would result in a `CircleComponent` that defined a circle with a radius of 40
-(a diameter of 80). This is
+The following example would result in a `CircleComponent` that defines a circle with a radius of 40
+(a diameter of 80).
 
 ```dart
 void main() {

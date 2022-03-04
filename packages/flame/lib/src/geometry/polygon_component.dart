@@ -69,7 +69,7 @@ class PolygonComponent extends ShapeComponent {
   }
 
   /// With this constructor you define the [PolygonComponent] in relation to the
-  /// [size] of the shape.
+  /// [parentSize] of the shape.
   ///
   /// Example: `[[1.0, 0.0], [0.0, -1.0], [-1.0, 0.0], [0.0, 1.0]]`
   /// This will form a diamond shape within the bounding size box.
@@ -77,7 +77,7 @@ class PolygonComponent extends ShapeComponent {
   /// screen coordinate system).
   PolygonComponent.fromNormals(
     List<Vector2> normals, {
-    required Vector2 size,
+    required Vector2 parentSize,
     Vector2? position,
     Vector2? scale,
     double? angle,
@@ -86,9 +86,9 @@ class PolygonComponent extends ShapeComponent {
     Paint? paint,
     bool? shrinkToBounds,
   }) : this(
-          normalsToVertices(normals, size),
+          normalsToVertices(normals, parentSize),
           position: position,
-          size: size,
+          size: parentSize,
           angle: angle,
           anchor: anchor,
           scale: scale,
