@@ -47,6 +47,47 @@ void main() {
       );
     });
 
+    flameGame.test('component hasMounted completes', (game) async {
+      final component = _MyComponent();
+      await game.add(component);
+      final hasMounted = component.hasMounted;
+
+      await game.ready();
+
+      expect(
+        hasMounted,
+        completes,
+      );
+    });
+
+    flameGame.test(
+      'component hasMounted completes when changing parent',
+      (game) async {
+        final parent = _MyComponent('parent');
+        final child = _MyComponent('child');
+        parent.add(child);
+        game.add(parent);
+
+        var hasMounted = child.hasMounted;
+        await game.ready();
+
+        expect(
+          hasMounted,
+          completes,
+        );
+
+        child.changeParent(game);
+        hasMounted = child.hasMounted;
+        game.update(0);
+        await game.ready();
+
+        expect(
+          hasMounted,
+          completes,
+        );
+      },
+    );
+
     // Obsolete scenario, when we used to have a separate "prepare" stage
     flameGame.test('parent prepares the component', (game) async {
       final parent = _MyComponent('parent');
