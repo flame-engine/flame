@@ -156,7 +156,7 @@ void main() {
         expect(child.parent, parent);
 
         parent.removeFromParent();
-        game.update(0);  // needed until 1385 is merged
+        game.update(0); // needed until 1385 is merged
         await game.ready();
 
         expect(parent.isMounted, false);
