@@ -17,12 +17,20 @@ declare the `KlondikeGame` class inside:
 import 'package:flame/game.dart';
 
 class KlondikeGame extends FlameGame {
+  @override
+  Future<void> onLoad() async {
+    await Images.load('klondike-sprites.png');
+  }
 }
 ```
 
-For now this class is empty, which means it provides exactly the same 
-functionality as the base `FlameGame`, but we'll be adding more stuff inside
-very soon.
+For now we only declared the `onLoad` method, which is a special handler that
+is called when the game instance is attached to the Flutter widget tree for the
+first time. You can think of it as a delayed asynchronous constructor. 
+Currently, the only thing that `onLoad` does is that it loads the sprites image
+into the game; but we will be adding more soon. Any image or other resource that
+you want to use in the game needs to be loaded first, which is a relatively slow
+I/O operation, hence the need for `await` keyword.
 
 Let's incorporate this class into the project so that it isn't orphaned. Open
 the `main.dart` find the line which says `final game = FlameGame();` and replace
@@ -39,6 +47,10 @@ void main() {
   runApp(GameWidget(game: game));
 }
 ```
+
+
+## Layout
+
 
 
 

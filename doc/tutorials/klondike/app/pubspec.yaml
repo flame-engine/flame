@@ -9,7 +9,11 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flame: ^1.0.0
+  flame:
+    git:
+      url: https://github.com/flame-engine/flame.git
+      ref: main
+      path: packages/flame
 
 flutter:
   assets:
