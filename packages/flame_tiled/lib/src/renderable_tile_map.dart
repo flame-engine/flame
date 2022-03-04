@@ -202,10 +202,18 @@ class RenderableTiledMap {
 
   /// This returns an object group fetch by name from a given layer.
   /// Use this to add custom behaviour to special objects and groups.
+  @Deprecated('This method is deprecated. Use the getLayer() method instead.')
   ObjectGroup getObjectGroupFromLayer(String name) {
     final g = map.layers.firstWhere((layer) {
       return layer is ObjectGroup && layer.name == name;
     });
     return g as ObjectGroup;
+  }
+
+  /// Returns a layer of type [T] with given [name] from all the layers
+  /// of this map. If no such layer is found, null is returned.
+  T? getLayer<T extends Layer>(String name) {
+    return map.layers
+        .firstWhereOrNull((layer) => layer is T && layer.name == name) as T?;
   }
 }

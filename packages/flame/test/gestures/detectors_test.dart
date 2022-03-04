@@ -2,28 +2,24 @@ import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-class _MultiDragPanGame extends FlameGame
-    with MultiTouchDragDetector, PanDetector {}
-
-class _MultiTapDoubleTapGame extends FlameGame
-    with MultiTouchTapDetector, DoubleTapDetector {}
-
 void main() {
-  group('apply detectors', () {
+  group('MultiTouchDragDetector', () {
     testWidgets(
-      'game can not have both MultiTouchDragDetector and PanDetector',
+      'Game cannot have both MultiTouchDragDetector and PanDetector',
       (tester) async {
         await tester.pumpWidget(
           GameWidget(
             game: _MultiDragPanGame(),
           ),
         );
-        expect(tester.takeException(), isInstanceOf<AssertionError>());
+        expect(tester.takeException(), isAssertionError);
       },
     );
+  });
 
+  group('MultiTouchTapDetector', () {
     testWidgets(
-      'game can have both MultiTouchTapDetector and DoubleTapDetector',
+      'Game can have both MultiTouchTapDetector and DoubleTapDetector',
       (tester) async {
         await tester.pumpWidget(
           GameWidget(
@@ -35,3 +31,9 @@ void main() {
     );
   });
 }
+
+class _MultiDragPanGame extends FlameGame
+    with MultiTouchDragDetector, PanDetector {}
+
+class _MultiTapDoubleTapGame extends FlameGame
+    with MultiTouchTapDetector, DoubleTapDetector {}
