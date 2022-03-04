@@ -6,7 +6,7 @@ import 'package:vector_math/vector_math_64.dart';
 import '../components/component.dart';
 import 'camera.dart';
 
-/// [Viewport] is a part of a [Camera2] system.
+/// [Viewport] is a part of a [CameraComponent] system.
 ///
 /// The viewport describes a "window" through which the underlying game world
 /// is observed. At the same time, the viewport is agnostic of the game world,
@@ -66,12 +66,15 @@ abstract class Viewport extends Component {
   @mustCallSuper
   @override
   void onMount() {
-    assert(parent! is Camera2, 'A Viewport may only be attached to a Camera2');
+    assert(
+      parent! is CameraComponent,
+      'A Viewport may only be attached to a Camera2',
+    );
   }
 
   @override
   void renderTree(Canvas canvas) {
-    final camera = parent! as Camera2;
+    final camera = parent! as CameraComponent;
     canvas.save();
     canvas.translate(_position.x, _position.y);
     canvas.save();

@@ -9,8 +9,8 @@ import '../game/transform2d.dart';
 import 'camera.dart';
 import 'viewport.dart';
 
-/// [Viewfinder] is a part of a [Camera2] system that controls which part of
-/// the game world is currently visible through a viewport.
+/// [Viewfinder] is a part of a [CameraComponent] system that controls which
+/// part of the game world is currently visible through a viewport.
 ///
 /// The viewfinder contains the game point that is currently at the
 /// "cross-hairs" of the viewport ([position]), the [zoom] level, and the
@@ -46,7 +46,7 @@ class Viewfinder extends Component {
   set angle(double value) => _transform.angle = -value;
 
   /// Reference to the parent camera.
-  Camera2 get camera => parent! as Camera2;
+  CameraComponent get camera => parent! as CameraComponent;
 
   /// How much of a game world ought to be visible through the viewport.
   ///
@@ -98,7 +98,10 @@ class Viewfinder extends Component {
   @mustCallSuper
   @override
   void onMount() {
-    assert(parent! is Camera2, 'Viewfinder can only be mounted to a Camera2');
+    assert(
+      parent! is CameraComponent,
+      'Viewfinder can only be mounted to a Camera2',
+    );
     _initZoom();
   }
 
@@ -112,14 +115,15 @@ class Viewfinder extends Component {
   void renderFromViewport(Canvas canvas) {
     final world = camera.world;
     if (world.isMounted &&
-        Camera2.currentCameras.length < Camera2.maxCamerasDepth) {
+        CameraComponent.currentCameras.length <
+            CameraComponent.maxCamerasDepth) {
       try {
-        Camera2.currentCameras.add(camera);
+        CameraComponent.currentCameras.add(camera);
         canvas.transform(_transform.transformMatrix.storage);
         world.renderFromCamera(canvas);
         super.renderTree(canvas);
       } finally {
-        Camera2.currentCameras.removeLast();
+        CameraComponent.currentCameras.removeLast();
       }
     }
   }

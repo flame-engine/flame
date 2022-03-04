@@ -18,7 +18,7 @@ class Camera2Example extends FlameGame with PanDetector {
     look at the world underneath! 
   ''';
 
-  late final Camera2 magnifyingGlass;
+  late final CameraComponent magnifyingGlass;
   late final Vector2 center;
   static const zoom = 10.0;
   static const radius = 130.0;
@@ -30,13 +30,13 @@ class Camera2Example extends FlameGame with PanDetector {
   Future<void> onLoad() async {
     final world = AntWorld();
     await add(world);
-    final camera = Camera2(world: world);
+    final camera = CameraComponent(world: world);
     await add(camera);
     final offset = world.curve.boundingRect().center;
     center = offset.toVector2();
     camera.viewfinder.position = Vector2(center.x, center.y);
 
-    magnifyingGlass = Camera2(world: world, viewport: CircularViewport(radius));
+    magnifyingGlass = CameraComponent(world: world, viewport: CircularViewport(radius));
     magnifyingGlass.viewport.add(Bezel(radius));
     magnifyingGlass.viewfinder.zoom = zoom;
   }

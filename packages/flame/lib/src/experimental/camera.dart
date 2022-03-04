@@ -6,7 +6,7 @@ import 'viewfinder.dart';
 import 'viewport.dart';
 import 'world.dart';
 
-/// [Camera2] is a component through which a [World] is observed.
+/// [CameraComponent] is a component through which a [World] is observed.
 ///
 /// A camera consists of two main parts: a [Viewport] and a [Viewfinder]. It
 /// also a references a [World] component, and by "references" we mean that the
@@ -20,15 +20,15 @@ import 'world.dart';
 /// the main camera, or even within the world itself. It is even possible to
 /// create a camera that looks at itself.
 ///
-/// Since [Camera2] is a [Component], it is possible to attach other components
-/// to it. In particular, adding components directly to the camera is equivalent
-/// to adding them to the camera's parent. Components added to the viewport will
-/// be affected by the viewport's position, but not by its clip mask. Such
-/// components will be rendered on top of the viewport. Components added to the
-/// viewfinder will be rendered as if they were part of the world. That is, they
-/// will be affected both by the viewport and the viewfinder.
-class Camera2 extends Component {
-  Camera2({
+/// Since [CameraComponent] is a [Component], it is possible to attach other
+/// components to it. In particular, adding components directly to the camera is
+/// equivalent to adding them to the camera's parent. Components added to the
+/// viewport will be affected by the viewport's position, but not by its clip
+/// mask. Such components will be rendered on top of the viewport. Components
+/// added to the viewfinder will be rendered as if they were part of the world.
+/// That is, they will be affected both by the viewport and the viewfinder.
+class CameraComponent extends Component {
+  CameraComponent({
     required this.world,
     Viewport? viewport,
     Viewfinder? viewfinder,
@@ -77,12 +77,12 @@ class Camera2 extends Component {
   /// This variable is set to `this` when we begin rendering the world through
   /// this particular camera, and reset back to `null` at the end. This variable
   /// is not set when rendering components that are attached to the viewport.
-  static Camera2? get currentCamera {
+  static CameraComponent? get currentCamera {
     return currentCameras.isEmpty ? null : currentCameras[0];
   }
 
   /// Stack of all current cameras in the render tree.
-  static final List<Camera2> currentCameras = [];
+  static final List<CameraComponent> currentCameras = [];
 
   /// Maximum number of nested cameras that will be rendered.
   ///
