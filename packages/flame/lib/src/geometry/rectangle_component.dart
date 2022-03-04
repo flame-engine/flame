@@ -40,8 +40,9 @@ class RectangleComponent extends PolygonComponent {
         );
 
   /// With this constructor you define the [RectangleComponent] in relation to
-  /// the [parentSize]. For example having [normal] as of (0.8, 0.5) would create a
-  /// rectangle that fills 80% of the width and 50% of the height of [parentSize].
+  /// the [parentSize]. For example having [normal] as of (0.8, 0.5) would
+  /// create a rectangle that fills 80% of the width and 50% of the height of
+  /// [parentSize].
   RectangleComponent.fromNormal(
     Vector2 normal, {
     Vector2? position,

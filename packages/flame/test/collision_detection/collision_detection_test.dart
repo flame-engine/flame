@@ -352,7 +352,7 @@ void main() {
           Vector2(-1, 1),
         ],
         position: Vector2.zero(),
-        size: Vector2(2, 4),
+        parentSize: Vector2(2, 4),
       );
       final polygonB = PolygonComponent.fromNormals(
         [
@@ -362,7 +362,7 @@ void main() {
           Vector2(-1, 1),
         ],
         position: Vector2.zero(),
-        size: Vector2(4, 2),
+        parentSize: Vector2(4, 2),
       );
       final intersections = geometry.intersections(polygonA, polygonB);
       expect(

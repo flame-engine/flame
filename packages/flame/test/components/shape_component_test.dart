@@ -132,7 +132,7 @@ void main() {
           Vector2(-0.1, -0.1),
           Vector2(0, -1),
         ],
-        size: Vector2.all(100),
+        parentSize: Vector2.all(100),
       );
       expect(
         component.containsPoint(Vector2.all(45)),
@@ -419,7 +419,7 @@ void main() {
             Vector2(-1, -1),
             Vector2(-1, 1),
           ],
-          size: Vector2.all(1.0),
+          parentSize: Vector2.all(1.0),
           position: Vector2.all(1.0),
         );
         final grandParent = createParent();
