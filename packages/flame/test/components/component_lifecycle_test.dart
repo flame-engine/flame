@@ -141,6 +141,38 @@ void main() {
         );
       });
     });
+
+    testWithFlameGame(
+      'Remove and re-add component with children',
+      (game) async {
+        final parent = _MyComponent('parent');
+        final child = _MyComponent('child')..addToParent(parent);
+        await game.add(parent);
+        await game.ready();
+
+        expect(parent.isMounted, true);
+        expect(child.isMounted, true);
+        expect(parent.parent, game);
+        expect(child.parent, parent);
+
+        parent.removeFromParent();
+        game.update(0);  // needed until 1385 is merged
+        await game.ready();
+
+        expect(parent.isMounted, false);
+        expect(child.isMounted, false);
+        expect(parent.parent, isNull);
+        expect(child.parent, isNull);
+
+        await game.add(parent);
+        await game.ready();
+
+        expect(parent.isMounted, true);
+        expect(child.isMounted, true);
+        expect(parent.parent, game);
+        expect(child.parent, parent);
+      },
+    );
   });
 }
 
