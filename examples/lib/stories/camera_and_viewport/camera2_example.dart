@@ -4,7 +4,7 @@ import 'package:flame/components.dart';
 import 'package:flame/extensions.dart' show OffsetExtension;
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
-import 'package:flame/src/experimental/camera.dart'; // ignore: implementation_imports
+import 'package:flame/src/experimental/camera_component.dart'; // ignore: implementation_imports
 import 'package:flame/src/experimental/circular_viewport.dart'; // ignore: implementation_imports
 import 'package:flame/src/experimental/world.dart'; // ignore: implementation_imports
 import 'package:flutter/painting.dart';

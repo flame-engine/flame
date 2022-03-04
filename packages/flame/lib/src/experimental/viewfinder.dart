@@ -6,7 +6,7 @@ import 'package:vector_math/vector_math_64.dart';
 
 import '../components/component.dart';
 import '../game/transform2d.dart';
-import 'camera.dart';
+import 'camera_component.dart';
 import 'viewport.dart';
 
 /// [Viewfinder] is a part of a [CameraComponent] system that controls which

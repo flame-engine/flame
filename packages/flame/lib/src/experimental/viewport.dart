@@ -4,7 +4,7 @@ import 'package:meta/meta.dart';
 import 'package:vector_math/vector_math_64.dart';
 
 import '../components/component.dart';
-import 'camera.dart';
+import 'camera_component.dart';
 
 /// [Viewport] is a part of a [CameraComponent] system.
 ///

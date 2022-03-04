@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:meta/meta.dart';
 
 import '../components/component.dart';
-import 'camera.dart';
+import 'camera_component.dart';
 
 /// The root component for all game world elements.
 ///
