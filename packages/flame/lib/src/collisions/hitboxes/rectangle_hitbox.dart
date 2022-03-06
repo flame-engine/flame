@@ -22,18 +22,18 @@ class RectangleHitbox extends RectangleComponent with ShapeHitbox {
         );
 
   /// With this constructor you define the [RectangleHitbox] in relation to
-  /// the [parentSize]. For example having [normal] as of (0.8, 0.5) would
+  /// the [parentSize]. For example having [relation] as of (0.8, 0.5) would
   /// create a rectangle that fills 80% of the width and 50% of the height of
   /// [parentSize].
-  RectangleHitbox.fromNormal(
-    Vector2 normal, {
+  RectangleHitbox.relative(
+    Vector2 relation, {
     Vector2? position,
     required Vector2 parentSize,
     double angle = 0,
     Anchor? anchor,
   })  : shouldFillParent = false,
-        super.fromNormal(
-          normal,
+        super.relative(
+          relation,
           position: position,
           parentSize: parentSize,
           angle: angle,

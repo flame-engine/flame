@@ -101,8 +101,8 @@ class MyComponent extends PositionComponent {
 If you don't add any arguments to the hitbox, like above, the hitbox will try to fill its parent as
 much as possible. Except for having the hitboxes trying to fill their parents, there are two ways to
 initiate hitboxes and it is with the normal constructor where you define the hitbox by itself, with
-a size and a position etc. The other way is to use the `fromNormals` constructor which defines the
-hitbox in relation to the size of its parent.
+a size and a position etc. The other way is to use the `relative` constructor which defines the
+hitbox in relation to the size of its intended parent.
 
 You can read more about how the different shapes are defined in the
 [ShapeComponents](components.md#ShapeComponents) section.

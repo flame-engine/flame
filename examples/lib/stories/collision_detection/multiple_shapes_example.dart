@@ -179,7 +179,7 @@ class CollidablePolygon extends MyCollidable {
     Vector2 velocity,
     ScreenHitbox screenHitbox,
   ) : super(position, size, velocity, screenHitbox) {
-    hitbox = PolygonHitbox.fromNormals(
+    hitbox = PolygonHitbox.relatve(
       [
         Vector2(-1.0, 0.0),
         Vector2(-0.8, 0.6),

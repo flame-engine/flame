@@ -124,7 +124,7 @@ void main() {
     });
 
     test('non-centered normal polygon contains point', () {
-      final component = PolygonComponent.fromNormals(
+      final component = PolygonComponent.relative(
         // Top left quadrant
         [
           Vector2(-1, -1),
@@ -412,7 +412,7 @@ void main() {
           );
         }
 
-        final component = PolygonComponent.fromNormals(
+        final component = PolygonComponent.relative(
           [
             Vector2(1, 1),
             Vector2(1, -1),

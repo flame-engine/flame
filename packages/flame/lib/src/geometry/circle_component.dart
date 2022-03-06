@@ -26,16 +26,16 @@ class CircleComponent extends ShapeComponent {
         );
 
   /// With this constructor you define the [CircleComponent] in relation to the
-  /// [parentSize]. For example having a [normal] of 0.5 would create a circle
+  /// [parentSize]. For example having a [relation] of 0.5 would create a circle
   /// that fills half of the [parentSize].
-  CircleComponent.fromNormal(
-    double normal, {
+  CircleComponent.relative(
+    double relation, {
     Vector2? position,
     required Vector2 parentSize,
     double angle = 0,
     Anchor? anchor,
   }) : this(
-          radius: normal * (min(parentSize.x, parentSize.y) / 2),
+          radius: relation * (min(parentSize.x, parentSize.y) / 2),
           position: position,
           angle: angle,
           anchor: anchor,

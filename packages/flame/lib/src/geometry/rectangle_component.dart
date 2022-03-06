@@ -40,21 +40,21 @@ class RectangleComponent extends PolygonComponent {
         );
 
   /// With this constructor you define the [RectangleComponent] in relation to
-  /// the [parentSize]. For example having [normal] as of (0.8, 0.5) would
+  /// the [parentSize]. For example having [relation] as of (0.8, 0.5) would
   /// create a rectangle that fills 80% of the width and 50% of the height of
   /// [parentSize].
-  RectangleComponent.fromNormal(
-    Vector2 normal, {
+  RectangleComponent.relative(
+    Vector2 relation, {
     Vector2? position,
     required Vector2 parentSize,
     double angle = 0,
     Anchor? anchor,
-  }) : super.fromNormals(
+  }) : super.relative(
           [
-            normal.clone(),
-            Vector2(normal.x, -normal.y),
-            -normal,
-            Vector2(-normal.x, normal.y),
+            relation.clone(),
+            Vector2(relation.x, -relation.y),
+            -relation,
+            Vector2(-relation.x, relation.y),
           ],
           position: position,
           parentSize: parentSize,

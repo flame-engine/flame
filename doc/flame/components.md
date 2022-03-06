@@ -584,14 +584,14 @@ void main() {
 }
 ```
 
-A `PolygonComponent` can also be created with a list of normals, which is points defined in relation
-to the given size.
+A `PolygonComponent` can also be created with a list of relative vertices, which are points defined
+in relation to the given size, most often the size of the intended parent.
 
 For example you could create a diamond shapes polygon like this:
 
 ```dart
 void main() {
-  PolygonComponent.fromNormals(
+  PolygonComponent.relative(
     [
       Vector2(0.0, 1.0), // Middle of top wall
       Vector2(1.0, 0.0), // Middle of right wall
@@ -651,17 +651,18 @@ void main() {
 }
 ```
 
-You can also create a `RectangleComponent` from a normal, or use the default constructor to build
-your rectangle from a position, size and angle. The `normal` is a vector defined in relation
-to the parent size, for example a normal that is `Vector2(0.5, 0.8)` would create a rectangle that
-is 50% of the width of the parent's size and 80% of its height.
+You can also create a `RectangleComponent` by defining a relation to the intended parent's size,
+you can use the default constructor to build your rectangle from a position, size and angle. The
+`relation` is a vector defined in relation to the parent size, for example a `relation` that is
+`Vector2(0.5, 0.8)` would create a rectangle that is 50% of the width of the parent's size and
+80% of its height.
 
 In the example below a `RectangleComponent` of size `(25.0, 30.0)` positioned at `(100, 100)` would
 be created.
 
 ```dart
 void main() {
-  RectangleComponent.fromNormal(
+  RectangleComponent.relative(
     Vector2(0.5, 1.0),
     position: Vector2.all(100),
     size: Vector2(50, 30),
@@ -697,7 +698,7 @@ void main() {
 }
 ```
 
-When creating a `CircleComponent` with the `fromNormal` constructor you can define how long the
+When creating a `CircleComponent` with the `relative` constructor you can define how long the
 radius is in comparison to the shortest edge of the of the bounding box defined by `size`.
 
 The following example would result in a `CircleComponent` that defines a circle with a radius of 40
@@ -705,7 +706,7 @@ The following example would result in a `CircleComponent` that defines a circle 
 
 ```dart
 void main() {
-  CircleComponent.fromNormal(0.8, size: Vector2.all(100));
+  CircleComponent.relative(0.8, size: Vector2.all(100));
 }
 ```
 

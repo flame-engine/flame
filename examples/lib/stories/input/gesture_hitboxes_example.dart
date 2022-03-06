@@ -37,7 +37,7 @@ class GestureHitboxesExample extends FlameGame
             Vector2.random(_rng),
             Vector2.random(_rng)..y *= -1,
           ];
-          return PolygonHitbox.fromNormals(points, parentSize: shapeSize);
+          return PolygonHitbox.relatve(points, parentSize: shapeSize);
       }
     }();
     return MyShapeComponent(

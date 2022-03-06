@@ -81,7 +81,7 @@ class AnimatedComponent extends SpriteAnimationComponent
     final hitboxPaint = BasicPalette.white.paint()
       ..style = PaintingStyle.stroke;
     add(
-      PolygonHitbox.fromNormals(
+      PolygonHitbox.relatve(
         [
           Vector2(0.0, -1.0),
           Vector2(-1.0, -0.1),

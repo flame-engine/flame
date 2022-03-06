@@ -75,8 +75,8 @@ class PolygonComponent extends ShapeComponent {
   /// This will form a diamond shape within the bounding size box.
   /// NOTE: Always define your shape in a counter-clockwise fashion (in the
   /// screen coordinate system).
-  PolygonComponent.fromNormals(
-    List<Vector2> normals, {
+  PolygonComponent.relative(
+    List<Vector2> relation, {
     required Vector2 parentSize,
     Vector2? position,
     Vector2? scale,
@@ -86,7 +86,7 @@ class PolygonComponent extends ShapeComponent {
     Paint? paint,
     bool? shrinkToBounds,
   }) : this(
-          normalsToVertices(normals, parentSize),
+          normalsToVertices(relation, parentSize),
           position: position,
           size: parentSize,
           angle: angle,

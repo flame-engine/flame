@@ -20,17 +20,17 @@ class CircleHitbox extends CircleComponent with ShapeHitbox {
         );
 
   /// With this constructor you define the [CircleHitbox] in relation to the
-  /// [parentSize]. For example having a [normal] of 0.5 would create a circle
+  /// [parentSize]. For example having a [relation] of 0.5 would create a circle
   /// that fills half of the [parentSize].
-  CircleHitbox.fromNormal(
-    double normal, {
+  CircleHitbox.relative(
+    double relation, {
     Vector2? position,
     required Vector2 parentSize,
     double angle = 0,
     Anchor? anchor,
   })  : shouldFillParent = false,
-        super.fromNormal(
-          normal,
+        super.relative(
+          relation,
           position: position,
           parentSize: parentSize,
           angle: angle,

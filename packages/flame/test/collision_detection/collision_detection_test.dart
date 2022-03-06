@@ -344,7 +344,7 @@ void main() {
     });
 
     test('collision while no corners are inside the other body', () {
-      final polygonA = PolygonComponent.fromNormals(
+      final polygonA = PolygonComponent.relative(
         [
           Vector2(1, 1),
           Vector2(1, -1),
@@ -354,7 +354,7 @@ void main() {
         position: Vector2.zero(),
         parentSize: Vector2(2, 4),
       );
-      final polygonB = PolygonComponent.fromNormals(
+      final polygonB = PolygonComponent.relative(
         [
           Vector2(1, 1),
           Vector2(1, -1),
