@@ -5,6 +5,5 @@ import 'klondike_game.dart';
 
 void main() {
   final game = KlondikeGame();
-  game.debugMode = true;
   runApp(GameWidget(game: game));
 }
