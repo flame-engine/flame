@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../../commons/commons.dart';
 import 'draggables_example.dart';
+import 'gesture_hitboxes_example.dart';
 import 'hoverables_example.dart';
 import 'joystick_advanced_example.dart';
 import 'joystick_example.dart';
@@ -86,6 +87,12 @@ void addInputStories(Dashbook dashbook) {
       (_) => GameWidget(game: OverlappingTappablesExample()),
       codeLink: baseLink('input/overlapping_tappables_example.dart'),
       info: OverlappingTappablesExample.description,
+    )
+    ..add(
+      'Gesture Hitboxes',
+      (_) => GameWidget(game: GestureHitboxesExample()),
+      codeLink: baseLink('collision_detection/simple_shapes_example.dart'),
+      info: GestureHitboxesExample.description,
     )
     ..add(
       'Joystick',
