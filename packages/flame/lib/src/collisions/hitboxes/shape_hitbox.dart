@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:meta/meta.dart';
 
 import '../../../collisions.dart';
@@ -10,7 +12,10 @@ import '../../geometry/shape_intersections.dart' as intersection_system;
 /// [PolygonHitbox].
 mixin ShapeHitbox on ShapeComponent implements Hitbox<ShapeHitbox> {
   @override
-  CollidableType collidableType = CollidableType.active;
+  CollisionType collisionType = CollisionType.active;
+
+  @override
+  Paint get paint => debugPaint;
 
   /// Whether the hitbox is allowed to collide with another hitbox that is
   /// added to the same parent.

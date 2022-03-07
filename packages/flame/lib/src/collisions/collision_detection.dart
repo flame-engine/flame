@@ -18,7 +18,7 @@ abstract class CollisionDetection<T extends Hitbox<T>> {
 
   /// Removes the [item] from the collision detection, if you just want
   /// to temporarily inactivate it you can set
-  /// `collidableType = CollidableType.inactive;` instead.
+  /// `collisionType = CollisionType.inactive;` instead.
   void remove(T item) => items.remove(item);
 
   /// Removes all [items] from the collision detection, see [remove].

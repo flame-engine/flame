@@ -116,26 +116,26 @@ on top of components, see more regarding the latter in the section about the
 [GestureHitboxes](inputs/gesture-input.md#GestureHitboxes) mixin.
 
 
-### CollidableType
+### CollisionType
 
-The hitboxes have a field called `collidableType` which defines when a hitbox should collide with
-another. Usually you want to set as many hitboxes as possible to `CollidableType.passive` to make
-the collision detection more performant. By default the `CollidableType` is `active`.
+The hitboxes have a field called `ollisionType` which defines when a hitbox should collide with
+another. Usually you want to set as many hitboxes as possible to `CollisionType.passive` to make
+the collision detection more performant. By default the `CollisionType` is `active`.
 
-The `CollidableType` enum contains the following values:
+The `CollisionType` enum contains the following values:
 
 - `active` collides with other `Collidable`s of type active or passive
 - `passive` collides with other `Collidable`s of type active
 - `inactive` will not collide with any other `Collidable`s
 
 So if you have hitboxes that you don't need to check collisions against each other you can mark
-them as passive by setting `collidableType = CollidableType.passive`, this could for example be
+them as passive by setting `collisionType = CollisionType.passive`, this could for example be
 ground components or maybe your enemies don't need to check collisions between each other, then they
 could be marked as `passive` too.
 
 Imagine a game where there are a lot of bullets, that can't collide with each other, flying towards
-the player, then the player would be set to `CollidableType.active` and the bullets would be set to
-`CollidableType.passive`.
+the player, then the player would be set to `CollisionType.active` and the bullets would be set to
+`CollisionType.passive`.
 
 Then we have the `inactive` type which simply doesn't get checked at all in the collision detection.
 This could be used for example if you have components outside of the screen that you don't care
@@ -267,6 +267,8 @@ Since the hitboxes now are `Component`s you add them to your component with `add
  - `HitboxRectangle` -> `RectangleHitbox`
  - `HitboxPolygon` -> `PolygonHitbox`
  - `Collidable` -> `CollisionCallbacks` (Only needed when you want to receive the callbacks)
+ - `HasHitboxes` -> `GestureHitboxes` (Only when you need hitboxes for gestures)
+ - `CollidableType` -> `CollisionType`
 
 
 ## Examples
