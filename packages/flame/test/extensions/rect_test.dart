@@ -28,14 +28,14 @@ void main() {
       expect(r2.height, r1.height);
     });
 
-    test('test from ui Rect to geometry Rectangle', () {
+    test('test from ui Rect to RectangleComponent', () {
       const r1 = Rect.fromLTWH(0, 10, 20, 30);
-      final r2 = r1.toGeometryRectangle();
+      final r2 = r1.toRectangleComponent();
       expect(r2.angle, 0);
-      expect(r2.size.x, r1.width);
-      expect(r2.size.y, r1.height);
       expect(r2.position.x, r1.left);
       expect(r2.position.y, r1.top);
+      expect(r2.size.x, r1.width);
+      expect(r2.size.y, r1.height);
     });
 
     test('test transform', () {

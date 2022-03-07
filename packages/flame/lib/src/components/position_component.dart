@@ -164,12 +164,31 @@ class PositionComponent extends Component {
     return Vector2(width * scale.x.abs(), height * scale.y.abs());
   }
 
+  /// The resulting size after all the ancestors and the components own scale
+  /// has been applied.
+  Vector2 get absoluteScaledSize {
+    final absoluteScale = this.absoluteScale;
+    return Vector2(
+      width * absoluteScale.x.abs(),
+      height * absoluteScale.y.abs(),
+    );
+  }
+
   /// The resulting angle after all the ancestors and the components own angle
   /// has been applied.
   double get absoluteAngle {
-    return ancestors()
-        .whereType<PositionComponent>()
+    // TODO(spydon): take scale into consideration
+    return ancestors<PositionComponent>()
         .fold<double>(angle, (totalAngle, c) => totalAngle + c.angle);
+  }
+
+  /// The resulting scale after all the ancestors and the components own scale
+  /// has been applied.
+  Vector2 get absoluteScale {
+    return ancestors<PositionComponent>().fold<Vector2>(
+      scale.clone(),
+      (totalScale, c) => totalScale..multiply(c.scale),
+    );
   }
 
   /// Measure the distance (in parent's coordinate space) between this

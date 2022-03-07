@@ -279,10 +279,12 @@ class Component {
   /// An iterator producing this component's parent, then its parent's parent,
   /// then the great-grand-parent, and so on, until it reaches a component
   /// without a parent.
-  Iterable<Component> ancestors() sync* {
-    var current = parent;
+  Iterable<T> ancestors<T extends Component>({bool includeSelf = false}) sync* {
+    var current = includeSelf ? this : parent;
     while (current != null) {
-      yield current;
+      if (current is T) {
+        yield current;
+      }
       current = current.parent;
     }
   }
@@ -408,9 +410,9 @@ class Component {
   /// and later re-mounted. For these components we need to run [onGameResize]
   /// (since they haven't passed through [add]), but we don't have to add them
   /// to the parent's children because they are already there.
-  @internal
-  void mount({bool existingChild = false}) {
-    assert(_parent!.isMounted);
+  void _mount({Component? parent, bool existingChild = false}) {
+    _parent ??= parent;
+    assert(_parent != null && _parent!.isMounted);
     assert(_state == LifecycleState.loaded || _state == LifecycleState.removed);
     if (existingChild || _state == LifecycleState.removed) {
       onGameResize(findGame()!.canvasSize);
@@ -422,7 +424,9 @@ class Component {
       _parent!.children.add(this);
     }
     if (_children != null) {
-      _children!.forEach((child) => child.mount(existingChild: true));
+      _children!.forEach(
+        (child) => child._mount(parent: this, existingChild: true),
+      );
     }
     _lifecycleManager?.processChildrenQueue();
   }
@@ -599,7 +603,7 @@ class _LifecycleManager {
       final child = _children.first;
       assert(child.parent!.isMounted);
       if (child.isLoaded) {
-        child.mount();
+        child._mount();
         _children.removeFirst();
       } else if (child._state == LifecycleState.loading) {
         break;
