@@ -8,7 +8,7 @@ import 'components/stock.dart';
 import 'components/waste.dart';
 
 class KlondikeGame extends FlameGame {
-  bool _initialized = false; // FIXME
+  bool _initialized = false; // FIXME (#1351)
   late final Stock stock;
   late final Waste waste;
   late final List<Foundation> foundations;
