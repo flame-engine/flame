@@ -706,3 +706,67 @@ div.highlight-box button.close {
   font-size: 20px;
   margin: 0 0 0 20px;
 }
+
+
+/*----------------------------------------------------------------------------*
+ * Admonitions
+ *----------------------------------------------------------------------------*/
+
+div.admonition {
+  background: #333333;
+  border-left: 3px solid var(--admonition-border-color);
+  border-radius: 5px;
+  box-shadow: 1px 1px 4px black;
+  margin: 12pt 0;
+  padding: 0 0 6pt 0;
+  position: relative;
+}
+
+div.admonition > p.admonition-title {
+  background-color: var(--admonition-title-background-color);
+  border-radius: 5px 5px 0 0;
+  color: silver;
+  margin: 0 0 6pt 0;
+  padding: 4px 12px 4px 30px;
+}
+
+div.admonition > p.admonition-title:before {
+  color: var(--admonition-icon-color);
+  content: var(--admonition-icon);
+  font-family: var(--font-awesome);
+  left: 8px;
+  padding-right: 4pt;
+  position: absolute;
+}
+
+div.admonition > p {
+  margin: 0 12px 12px 30px;
+}
+
+div.admonition.warning {
+  --admonition-border-color: orange;
+  --admonition-icon: '\f071';
+  --admonition-icon-color: gold;
+  --admonition-title-background-color: #503e1a;
+}
+
+div.admonition.error {
+  --admonition-border-color: red;
+  --admonition-icon: '\f188';
+  --admonition-icon-color: #ff7c7c;
+  --admonition-title-background-color: #460202;
+}
+
+div.admonition.note {
+  --admonition-border-color: #6eb1cc;
+  --admonition-icon: '\f05a';
+  --admonition-icon-color: #ace3fa;
+  --admonition-title-background-color: #235179;
+}
+
+div.admonition.seealso {
+  --admonition-border-color: #54d452;
+  --admonition-icon: '\f064';
+  --admonition-icon-color: #acfab6;
+  --admonition-title-background-color: #285131;
+}
