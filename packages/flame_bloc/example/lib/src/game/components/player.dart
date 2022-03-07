@@ -1,5 +1,5 @@
+import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-import 'package:flame/geometry.dart';
 import 'package:flame/input.dart';
 import 'package:flame_bloc/flame_bloc.dart';
 import 'package:flutter/services.dart';
@@ -33,8 +33,7 @@ class PlayerController extends Component
 class PlayerComponent extends SpriteAnimationComponent
     with
         HasGameRef<SpaceShooterGame>,
-        HasHitboxes,
-        Collidable,
+        CollisionCallbacks,
         KeyboardHandler,
         BlocComponent<InventoryBloc, InventoryState> {
   bool destroyed = false;
@@ -44,7 +43,7 @@ class PlayerComponent extends SpriteAnimationComponent
       : super(size: Vector2(50, 75), position: Vector2(100, 500)) {
     bulletCreator = Timer(0.5, repeat: true, onTick: _createBullet);
 
-    addHitbox(HitboxRectangle());
+    add(RectangleHitbox());
   }
 
   @override
@@ -88,6 +87,7 @@ class PlayerComponent extends SpriteAnimationComponent
 
   @override
   void update(double dt) {
+    super.update(dt);
     bulletCreator.update(dt);
     shouldRemove = destroyed;
   }
@@ -111,7 +111,8 @@ class PlayerComponent extends SpriteAnimationComponent
   }
 
   @override
-  void onCollision(Set<Vector2> points, Collidable other) {
+  void onCollision(Set<Vector2> points, PositionComponent other) {
+    super.onCollision(points, other);
     if (other is EnemyComponent) {
       takeHit();
       other.takeHit();

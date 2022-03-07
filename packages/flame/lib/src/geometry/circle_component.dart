@@ -1,63 +1,77 @@
 import 'dart:math';
 import 'dart:ui';
 
-import '../../game.dart';
+import '../../components.dart';
+import '../../extensions.dart';
 import '../../geometry.dart';
-import '../extensions/vector2.dart';
 
-class Circle extends Shape {
-  /// The [normalizedRadius] is what ratio (0.0, 1.0] of the shortest edge of
-  /// [size]/2 that the circle should cover.
-  double normalizedRadius = 1.0;
-
-  /// With this constructor you can create your [Circle] from a radius and
-  /// a position. It will also calculate the bounding rectangle [size] for the
-  /// [Circle].
-  Circle({
+class CircleComponent extends ShapeComponent {
+  /// With this constructor you can create your [CircleComponent] from a radius
+  /// and a position. It will also calculate the bounding rectangle [size] for
+  /// the [CircleComponent].
+  CircleComponent({
     double? radius,
     Vector2? position,
-    double angle = 0,
+    double? angle,
+    Anchor? anchor,
+    int? priority,
+    Paint? paint,
   }) : super(
           position: position,
           size: Vector2.all((radius ?? 0) * 2),
           angle: angle,
+          anchor: anchor,
+          priority: priority,
+          paint: paint,
         );
 
-  /// This constructor is used by [HitboxCircle]
-  ///
-  /// [relation] is the relation `[0.0, 1.0]` of the shortest edge of [size]
-  /// that the circle should fill.
-  Circle.fromDefinition({
-    double? relation,
+  /// With this constructor you define the [CircleComponent] in relation to the
+  /// [parentSize]. For example having a [relation] of 0.5 would create a circle
+  /// that fills half of the [parentSize].
+  CircleComponent.relative(
+    double relation, {
     Vector2? position,
-    Vector2? size,
-    double? angle,
-  })  : normalizedRadius = relation ?? 1.0,
-        super(position: position, size: size, angle: angle ?? 0);
+    required Vector2 parentSize,
+    double angle = 0,
+    Anchor? anchor,
+  }) : this(
+          radius: relation * (min(parentSize.x, parentSize.y) / 2),
+          position: position,
+          angle: angle,
+          anchor: anchor,
+        );
+
+  /// Get the radius of the circle before scaling.
+  double get radius {
+    return min(size.x, size.y) / 2;
+  }
 
   // Used to not create new Vector2 objects every time radius is called.
   final Vector2 _scaledSize = Vector2.zero();
 
   /// Get the radius of the circle after it has been sized and scaled.
-  double get radius {
+  double get scaledRadius {
     _scaledSize
       ..setFrom(size)
-      ..multiply(scale);
-    return (min(_scaledSize.x.abs(), _scaledSize.y.abs()) / 2) *
-        normalizedRadius;
+      ..multiply(absoluteScale);
+    return min(_scaledSize.x, _scaledSize.y) / 2;
   }
 
   /// This render method doesn't rotate the canvas according to angle since a
   /// circle will look the same rotated as not rotated.
   @override
-  void render(Canvas canvas, Paint paint) {
-    canvas.drawCircle(localCenter.toOffset(), radius, paint);
+  void render(Canvas canvas) {
+    if (renderShape) {
+      canvas.drawCircle((size / 2).toOffset(), radius, paint);
+    }
   }
 
   /// Checks whether the represented circle contains the [point].
   @override
   bool containsPoint(Vector2 point) {
-    return absoluteCenter.distanceToSquared(point) < radius * radius;
+    final scaledRadius = this.scaledRadius;
+    return absoluteCenter.distanceToSquared(point) <
+        scaledRadius * scaledRadius;
   }
 
   /// Returns the locus of points in which the provided line segment intersect
@@ -108,18 +122,4 @@ class Circle extends Shape {
     result.removeWhere((v) => !line.containsPoint(v));
     return result;
   }
-}
-
-class HitboxCircle extends Circle with HitboxShape {
-  HitboxCircle({
-    double? normalizedRadius,
-    Vector2? position,
-    Vector2? size,
-    double? angle,
-  }) : super.fromDefinition(
-          relation: normalizedRadius,
-          position: position,
-          size: size,
-          angle: angle ?? 0,
-        );
 }

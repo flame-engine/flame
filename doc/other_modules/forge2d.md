@@ -73,7 +73,7 @@ Like this:
 ```dart
 final bodyDef = BodyDef()
   // To be able to know which component that is involved in a collision
-  ..setUserData(this);
+  ..userData = this;
 ```
 
 Now you have to make an implementation of `ContactCallback` where you set which two types that it
@@ -82,7 +82,7 @@ If you have two `BodyComponent`s named `Ball` and `Wall` and you want to do some
 in contact, you could do something like this:
 
 ```dart
-class BallWallCallback implements ContactCallback<Ball, Wall> {
+class BallWallCallback extends ContactCallback<Ball, Wall> {
   BallWallCallback();
 
   @override

@@ -1,11 +1,10 @@
+import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
-import 'package:flame/geometry.dart';
 import 'package:flame/input.dart';
 import 'package:flutter/material.dart' hide Image, Draggable;
 
-class CirclesExample extends FlameGame with HasCollidables, TapDetector {
+class CirclesExample extends FlameGame with HasCollisionDetection, TapDetector {
   static const description = '''
     This example will create a circle every time you tap on the screen. It will
     have the initial velocity towards the center of the screen and if it touches
@@ -14,7 +13,7 @@ class CirclesExample extends FlameGame with HasCollidables, TapDetector {
 
   @override
   Future<void> onLoad() async {
-    add(ScreenCollidable());
+    add(ScreenHitbox());
   }
 
   @override
@@ -24,12 +23,11 @@ class CirclesExample extends FlameGame with HasCollidables, TapDetector {
 }
 
 class MyCollidable extends PositionComponent
-    with HasGameRef<CirclesExample>, HasHitboxes, Collidable {
+    with HasGameRef<CirclesExample>, CollisionCallbacks {
   late Vector2 velocity;
   final _collisionColor = Colors.amber;
   final _defaultColor = Colors.cyan;
-  bool _isWallHit = false;
-  bool _isCollision = false;
+  late ShapeHitbox hitbox;
 
   MyCollidable(Vector2 position)
       : super(
@@ -40,33 +38,41 @@ class MyCollidable extends PositionComponent
 
   @override
   Future<void> onLoad() async {
-    addHitbox(HitboxCircle());
+    final defaultPaint = Paint()
+      ..color = _defaultColor
+      ..style = PaintingStyle.stroke;
+    hitbox = CircleHitbox()
+      ..paint = defaultPaint
+      ..renderShape = true;
+    add(hitbox);
     final center = gameRef.size / 2;
     velocity = (center - position)..scaleTo(150);
   }
 
   @override
   void update(double dt) {
-    if (_isWallHit) {
+    super.update(dt);
+    position.add(velocity * dt);
+  }
+
+  @override
+  void onCollisionStart(
+    Set<Vector2> intersectionPoints,
+    PositionComponent other,
+  ) {
+    super.onCollisionStart(intersectionPoints, other);
+    hitbox.paint.color = _collisionColor;
+    if (other is ScreenHitbox) {
       removeFromParent();
       return;
     }
-    debugColor = _isCollision ? _collisionColor : _defaultColor;
-    position.add(velocity * dt);
-    _isCollision = false;
   }
 
   @override
-  void render(Canvas canvas) {
-    renderHitboxes(canvas);
-  }
-
-  @override
-  void onCollision(Set<Vector2> intersectionPoints, Collidable other) {
-    if (other is ScreenCollidable) {
-      _isWallHit = true;
-      return;
+  void onCollisionEnd(PositionComponent other) {
+    super.onCollisionEnd(other);
+    if (!isColliding) {
+      hitbox.paint.color = _defaultColor;
     }
-    _isCollision = true;
   }
 }
