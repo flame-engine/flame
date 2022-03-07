@@ -54,11 +54,22 @@ void main() {
 
       await game.ready();
 
-      expect(
-        hasMounted,
-        completes,
-      );
+      return expectLater(hasMounted, completes);
     });
+
+    flameGame.test(
+      'component hasMounted completes even after the '
+      'component is already mounted',
+      (game) async {
+        final component = _MyComponent();
+        await game.add(component);
+        await game.ready();
+
+        final hasMounted = component.hasMounted;
+
+        return expectLater(hasMounted, completes);
+      },
+    );
 
     flameGame.test(
       'component hasMounted completes when changing parent',
@@ -71,20 +82,14 @@ void main() {
         var hasMounted = child.hasMounted;
         await game.ready();
 
-        expect(
-          hasMounted,
-          completes,
-        );
+        await expectLater(hasMounted, completes);
 
         child.changeParent(game);
         hasMounted = child.hasMounted;
         game.update(0);
         await game.ready();
 
-        expect(
-          hasMounted,
-          completes,
-        );
+        await expectLater(hasMounted, completes);
       },
     );
 

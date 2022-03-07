@@ -207,10 +207,11 @@ class Component {
   void onMount() {}
 
   /// A future that will complete once the component is mounted on its parent
-  ///
-  /// Note: Calling this method after the component has already mounted will
-  /// give a never ending future.
   Future<void> get hasMounted {
+    if (isMounted) {
+      return Future.value();
+    }
+
     _mountCompleter ??= Completer<void>();
 
     return _mountCompleter!.future;
