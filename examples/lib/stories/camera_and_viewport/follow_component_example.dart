@@ -1,10 +1,10 @@
 import 'dart:math';
 
+import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
-import 'package:flame/geometry.dart';
 import 'package:flame/input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -12,7 +12,7 @@ import 'package:flutter/services.dart';
 import '../../commons/ember.dart';
 
 class FollowComponentExample extends FlameGame
-    with HasCollidables, HasTappables, HasKeyboardHandlerComponents {
+    with HasCollisionDetection, HasTappables, HasKeyboardHandlerComponents {
   static const String description = '''
     Move around with W, A, S, D and notice how the camera follows the ember 
     sprite.\n
@@ -45,7 +45,7 @@ class FollowComponentExample extends FlameGame
 }
 
 class MovableEmber extends Ember<FollowComponentExample>
-    with HasHitboxes, Collidable, KeyboardHandler {
+    with CollisionCallbacks, KeyboardHandler {
   static const double speed = 300;
   static final TextPaint textRenderer = TextPaint(
     style: const TextStyle(color: Colors.white70, fontSize: 12),
@@ -66,25 +66,28 @@ class MovableEmber extends Ember<FollowComponentExample>
       anchor: Anchor.center,
     );
     add(positionText);
-    addHitbox(HitboxCircle());
+    add(CircleHitbox());
   }
 
   @override
   void update(double dt) {
+    super.update(dt);
     final deltaPosition = velocity * (speed * dt);
     position.add(deltaPosition);
     positionText.text = '(${x.toInt()}, ${y.toInt()})';
   }
 
   @override
-  void onCollision(Set<Vector2> points, Collidable other) {
+  void onCollision(Set<Vector2> points, PositionComponent other) {
+    super.onCollision(points, other);
     if (other is Rock) {
       gameRef.camera.setRelativeOffset(Anchor.topCenter);
     }
   }
 
   @override
-  void onCollisionEnd(Collidable other) {
+  void onCollisionEnd(PositionComponent other) {
+    super.onCollisionEnd(other);
     if (other is Rock) {
       gameRef.camera.setRelativeOffset(Anchor.center);
     }
@@ -165,8 +168,7 @@ class Map extends Component {
   }
 }
 
-class Rock extends SpriteComponent
-    with HasGameRef, HasHitboxes, Collidable, Tappable {
+class Rock extends SpriteComponent with HasGameRef, Tappable {
   Rock(Vector2 position)
       : super(
           position: position,
@@ -178,7 +180,7 @@ class Rock extends SpriteComponent
   Future<void> onLoad() async {
     sprite = await gameRef.loadSprite('nine-box.png');
     paint = Paint()..color = Colors.white;
-    addHitbox(HitboxRectangle());
+    add(RectangleHitbox());
   }
 
   @override

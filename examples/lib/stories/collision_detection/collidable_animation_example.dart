@@ -1,32 +1,34 @@
 import 'dart:math';
 import 'dart:ui';
 
+import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
-import 'package:flame/geometry.dart';
 import 'package:flame/palette.dart';
 
-class CollidableAnimationExample extends FlameGame with HasCollidables {
+class CollidableAnimationExample extends FlameGame with HasCollisionDetection {
   static const description = '''
     In this example you can see four animated birds which are flying straight
     along the same route until they hit either another bird or the wall, which
     makes them turn. The birds have PolygonHitboxes which are marked with the
-    green lines and dots.
+    white lines.
   ''';
 
   @override
   Future<void> onLoad() async {
-    add(ScreenCollidable());
+    add(ScreenHitbox());
+    final componentSize = Vector2(150, 100);
     // Top left component
     add(
-      AnimatedComponent(Vector2.all(200), Vector2.all(100))..flipVertically(),
+      AnimatedComponent(Vector2.all(200), Vector2.all(100), componentSize)
+        ..flipVertically(),
     );
     // Bottom right component
     add(
       AnimatedComponent(
         Vector2(-100, -100),
         size.clone()..sub(Vector2.all(200)),
+        componentSize / 2,
       ),
     );
     // Bottom left component
@@ -34,6 +36,7 @@ class CollidableAnimationExample extends FlameGame with HasCollidables {
       AnimatedComponent(
         Vector2(100, -100),
         Vector2(100, size.y - 100),
+        componentSize * 1.5,
         angle: pi / 4,
       ),
     );
@@ -42,6 +45,7 @@ class CollidableAnimationExample extends FlameGame with HasCollidables {
       AnimatedComponent(
         Vector2(-300, 300),
         Vector2(size.x - 100, 100),
+        componentSize / 3,
         angle: pi / 4,
       )..flipVertically(),
     );
@@ -49,19 +53,20 @@ class CollidableAnimationExample extends FlameGame with HasCollidables {
 }
 
 class AnimatedComponent extends SpriteAnimationComponent
-    with HasHitboxes, Collidable, HasGameRef {
+    with CollisionCallbacks, HasGameRef {
   final Vector2 velocity;
-  final List<Collidable> activeCollisions = [];
 
-  AnimatedComponent(this.velocity, Vector2 position, {double angle = -pi / 4})
-      : super(
+  AnimatedComponent(
+    this.velocity,
+    Vector2 position,
+    Vector2 size, {
+    double angle = -pi / 4,
+  }) : super(
           position: position,
-          size: Vector2(150, 100),
+          size: size,
           angle: angle,
           anchor: Anchor.center,
         );
-
-  late HitboxPolygon hitbox;
 
   @override
   Future<void> onLoad() async {
@@ -73,18 +78,27 @@ class AnimatedComponent extends SpriteAnimationComponent
         textureSize: Vector2.all(48),
       ),
     );
-    hitbox = HitboxPolygon([
-      Vector2(0.0, -1.0),
-      Vector2(-1.0, -0.1),
-      Vector2(-0.2, 0.4),
-      Vector2(0.2, 0.4),
-      Vector2(1.0, -0.1),
-    ]);
-    addHitbox(hitbox);
+    final hitboxPaint = BasicPalette.white.paint()
+      ..style = PaintingStyle.stroke;
+    add(
+      PolygonHitbox.relatve(
+        [
+          Vector2(0.0, -1.0),
+          Vector2(-1.0, -0.1),
+          Vector2(-0.2, 0.4),
+          Vector2(0.2, 0.4),
+          Vector2(1.0, -0.1),
+        ],
+        parentSize: size,
+      )
+        ..paint = hitboxPaint
+        ..renderShape = true,
+    );
   }
 
   @override
   void update(double dt) {
+    super.update(dt);
     position += velocity * dt;
   }
 
@@ -93,26 +107,12 @@ class AnimatedComponent extends SpriteAnimationComponent
   final Paint dotPaint = BasicPalette.red.paint()..style = PaintingStyle.stroke;
 
   @override
-  void render(Canvas canvas) {
-    super.render(canvas);
-    // This is just to clearly see the vertices in the hitboxes
-    hitbox.render(canvas, hitboxPaint);
-    hitbox
-        .localVertices()
-        .forEach((p) => canvas.drawCircle(p.toOffset(), 4, dotPaint));
-  }
-
-  @override
-  void onCollision(Set<Vector2> intersectionPoints, Collidable other) {
-    if (!activeCollisions.contains(other)) {
-      velocity.negate();
-      flipVertically();
-      activeCollisions.add(other);
-    }
-  }
-
-  @override
-  void onCollisionEnd(Collidable other) {
-    activeCollisions.remove(other);
+  void onCollisionStart(
+    Set<Vector2> intersectionPoints,
+    PositionComponent other,
+  ) {
+    super.onCollisionStart(intersectionPoints, other);
+    velocity.negate();
+    flipVertically();
   }
 }

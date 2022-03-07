@@ -280,10 +280,12 @@ class Component {
   /// An iterator producing this component's parent, then its parent's parent,
   /// then the great-grand-parent, and so on, until it reaches a component
   /// without a parent.
-  Iterable<Component> ancestors() sync* {
-    var current = parent;
+  Iterable<T> ancestors<T extends Component>({bool includeSelf = false}) sync* {
+    var current = includeSelf ? this : parent;
     while (current != null) {
-      yield current;
+      if (current is T) {
+        yield current;
+      }
       current = current.parent;
     }
   }

@@ -1,19 +1,18 @@
+import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-import 'package:flame/geometry.dart';
 
 import './explosion.dart';
 import '../game.dart';
 
 class EnemyComponent extends SpriteAnimationComponent
-    with HasGameRef<SpaceShooterGame>, HasHitboxes, Collidable {
+    with HasGameRef<SpaceShooterGame>, CollisionCallbacks {
   static const enemySpeed = 50;
 
   bool destroyed = false;
 
   EnemyComponent(double x, double y)
       : super(position: Vector2(x, y), size: Vector2.all(25)) {
-    addHitbox(HitboxRectangle());
-    collidableType = CollidableType.passive;
+    add(RectangleHitbox()..collidableType = CollidableType.passive);
   }
 
   @override
@@ -27,11 +26,11 @@ class EnemyComponent extends SpriteAnimationComponent
         textureSize: Vector2.all(16),
       ),
     );
-    collidableType = CollidableType.passive;
   }
 
   @override
   void update(double dt) {
+    super.update(dt);
     y += enemySpeed * dt;
     if (destroyed || y >= gameRef.size.y) {
       removeFromParent();
