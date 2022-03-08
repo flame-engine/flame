@@ -3,16 +3,16 @@ import 'package:meta/meta.dart';
 import '../../collisions.dart';
 import '../../components.dart';
 
-/// The [CollidableType] is used to determine which other collidables that it
+/// The [CollisionType] is used to determine which other hitboxes that it
 /// should collide with.
-enum CollidableType {
-  /// Collides with other collidables of type active or passive.
+enum CollisionType {
+  /// Collides with other hitboxes of type active or passive.
   active,
 
-  /// Collides with other collidables of type active.
+  /// Collides with other hitboxes of type active.
   passive,
 
-  /// Will not collide with any other collidables.
+  /// Will not collide with any other hitboxes.
   inactive,
 }
 

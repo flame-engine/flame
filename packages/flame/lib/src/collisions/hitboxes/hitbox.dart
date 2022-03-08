@@ -7,11 +7,11 @@ import '../../../extensions.dart';
 abstract class Hitbox<T extends Hitbox<T>>
     implements GenericCollisionCallbacks<T> {
   /// Whether the hitbox should:
-  ///   * [CollidableType.active] - actively collide with other hitboxes.
-  ///   * [CollidableType.passive] - passively collide with other hitboxes (only
+  ///   * [CollisionType.active] - actively collide with other hitboxes.
+  ///   * [CollisionType.passive] - passively collide with other hitboxes (only
   ///   collide with hitboxes that are active, but not other passive ones).
-  ///   * [CollidableType.inactive] - not collide with any other hitboxes.
-  CollidableType get collidableType;
+  ///   * [CollisionType.inactive] - not collide with any other hitboxes.
+  CollisionType get collisionType;
 
   /// The axis-aligned bounding box of the [Hitbox], this is used to make a
   /// rough estimation of whether two hitboxes can possibly collide or not.
