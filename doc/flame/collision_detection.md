@@ -118,7 +118,7 @@ on top of components, see more regarding the latter in the section about the
 
 ### CollisionType
 
-The hitboxes have a field called `ollisionType` which defines when a hitbox should collide with
+The hitboxes have a field called `collisionType` which defines when a hitbox should collide with
 another. Usually you want to set as many hitboxes as possible to `CollisionType.passive` to make
 the collision detection more performant. By default the `CollisionType` is `active`.
 
