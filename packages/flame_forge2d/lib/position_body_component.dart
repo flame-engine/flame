@@ -27,7 +27,7 @@ abstract class PositionBodyComponent<T extends Forge2DGame,
 
   @mustCallSuper
   @override
-  Future<void> onMount() async {
+  void onMount() {
     super.onMount();
     assert(
       positionComponent != null,
