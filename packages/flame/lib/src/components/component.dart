@@ -419,6 +419,7 @@ class Component {
       onGameResize(findGame()!.canvasSize);
     }
     _mountCompleter?.complete();
+    _mountCompleter = null;
     onMount();
     _state = LifecycleState.mounted;
     if (!existingChild) {
