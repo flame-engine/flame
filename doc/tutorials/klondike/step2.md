@@ -119,7 +119,10 @@ mode is on.
 
 ## Layout
 
-So, how do we create a layout?
+So, how do we create a layout? Different games may use different approaches,
+but for this card game we want to create the layout that fits nicely within the
+available screen. In order to do this, we will override the `onGameResize()`
+method in the `KlondikeGame` class.
 
 
 ```{flutter-app}
