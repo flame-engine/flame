@@ -9,7 +9,7 @@ enum CollisionType {
   /// Collides with other hitboxes of type active or passive.
   active,
 
-  /// Collides with other hitboxws of type active.
+  /// Collides with other hitboxes of type active.
   passive,
 
   /// Will not collide with any other hitboxes.
