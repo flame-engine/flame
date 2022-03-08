@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:collection';
 
 import 'package:flutter/painting.dart';
@@ -52,6 +53,8 @@ class Component {
   ComponentSet get children => _children ??= createComponentSet();
   bool get hasChildren => _children?.isNotEmpty ?? false;
   ComponentSet? _children;
+
+  Completer<void>? _mountCompleter;
 
   @protected
   _LifecycleManager get lifecycle => _lifecycleManager ??= _LifecycleManager();
@@ -203,6 +206,17 @@ class Component {
   /// ```
   void onMount() {}
 
+  /// A future that will complete once the component is mounted on its parent
+  Future<void> get mounted {
+    if (isMounted) {
+      return Future.value();
+    }
+
+    _mountCompleter ??= Completer<void>();
+
+    return _mountCompleter!.future;
+  }
+
   /// This method is called periodically by the game engine to request that your
   /// component updates itself.
   ///
@@ -258,6 +272,7 @@ class Component {
   /// Changes the current parent for another parent and prepares the tree under
   /// the new root.
   void changeParent(Component component) {
+    _mountCompleter = null;
     parent?.remove(this);
     nextParent = component;
   }
@@ -403,6 +418,8 @@ class Component {
     if (existingChild || _state == LifecycleState.removed) {
       onGameResize(findGame()!.canvasSize);
     }
+    _mountCompleter?.complete();
+    _mountCompleter = null;
     onMount();
     _state = LifecycleState.mounted;
     if (!existingChild) {
