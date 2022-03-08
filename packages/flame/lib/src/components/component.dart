@@ -207,7 +207,7 @@ class Component {
   void onMount() {}
 
   /// A future that will complete once the component is mounted on its parent
-  Future<void> get hasMounted {
+  Future<void> get mounted {
     if (isMounted) {
       return Future.value();
     }
