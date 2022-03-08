@@ -35,7 +35,7 @@ class TestBlock extends PositionComponent with CollisionCallbacks {
   TestBlock(
     Vector2 position,
     Vector2 size, {
-    CollidableType type = CollidableType.active,
+    CollisionType type = CollisionType.active,
     bool addTestHitbox = true,
     this.name,
   }) : super(
@@ -44,7 +44,7 @@ class TestBlock extends PositionComponent with CollisionCallbacks {
         ) {
     children.register<ShapeHitbox>();
     if (addTestHitbox) {
-      add(hitbox..collidableType = type);
+      add(hitbox..collisionType = type);
     }
   }
 

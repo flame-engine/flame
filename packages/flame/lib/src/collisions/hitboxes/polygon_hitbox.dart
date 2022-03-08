@@ -20,7 +20,7 @@ class PolygonHitbox extends PolygonComponent with ShapeHitbox {
   /// This will form a diamond shape within the bounding size box.
   /// NOTE: Always define your shape in a counter-clockwise fashion (in the
   /// screen coordinate system)
-  PolygonHitbox.relatve(
+  PolygonHitbox.relative(
     List<Vector2> relation, {
     Vector2? position,
     required Vector2 parentSize,

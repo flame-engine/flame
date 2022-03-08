@@ -14,7 +14,7 @@ class Sweep<T extends Hitbox<T>> extends Broadphase<T> {
     _potentials.clear();
     items.sort((a, b) => (a.aabb.min.x - b.aabb.min.x).ceil());
     for (final item in items) {
-      if (item.collidableType == CollidableType.inactive) {
+      if (item.collisionType == CollisionType.inactive) {
         continue;
       }
       if (_active.isEmpty) {
@@ -27,8 +27,8 @@ class Sweep<T extends Hitbox<T>> extends Broadphase<T> {
         final activeItem = _active[i];
         final activeBox = activeItem.aabb;
         if (activeBox.max.x >= currentMin) {
-          if (item.collidableType == CollidableType.active ||
-              activeItem.collidableType == CollidableType.active) {
+          if (item.collisionType == CollisionType.active ||
+              activeItem.collisionType == CollisionType.active) {
             _potentials.add(CollisionProspect<T>(item, activeItem));
           }
         } else {
