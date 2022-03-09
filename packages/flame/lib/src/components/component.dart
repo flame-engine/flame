@@ -600,10 +600,10 @@ enum LifecycleState {
 /// queues. Which is why these queues are placed into a separate class, so that
 /// they can be easily disposed of at the end.
 class _LifecycleManager {
-  _LifecycleManager(this.parent);
+  _LifecycleManager(this.owner);
 
   /// The component which is the owner of this [_LifecycleManager].
-  final Component parent;
+  final Component owner;
 
   /// Queue for adding children to a component.
   ///
@@ -621,7 +621,7 @@ class _LifecycleManager {
 
   /// Queue for removing children from a component.
   ///
-  /// Components that were placed into this queue will be removed from [parent]
+  /// Components that were placed into this queue will be removed from [owner]
   /// when the pending events are resolved.
   final Queue<Component> _removals = Queue();
 
@@ -672,7 +672,7 @@ class _LifecycleManager {
     while (_adoption.isNotEmpty) {
       final child = _adoption.removeFirst();
       child._remove();
-      child._parent = parent;
+      child._parent = owner;
       child._mount();
     }
   }
