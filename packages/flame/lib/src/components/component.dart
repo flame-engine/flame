@@ -82,7 +82,10 @@ class Component {
   @nonVirtual
   bool get shouldRemove => _state == LifecycleState.removing;
 
-  /// Legacy component removal mechanism.
+  /// Setting [shouldRemove] to true will schedule the component to be removed
+  /// from the game tree before the next game cycle.
+  ///
+  /// This property is equivalent to using the method [removeFromParent].
   @nonVirtual
   set shouldRemove(bool value) {
     assert(value, '"Resurrecting" a component is not allowed');
