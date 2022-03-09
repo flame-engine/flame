@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flame/game.dart';
+import 'package:flame/experimental.dart';
 
 import 'components/foundation.dart';
 import 'components/pile.dart';
@@ -17,12 +18,16 @@ class KlondikeGame extends FlameGame {
   @override
   Future<void> onLoad() async {
     await images.load('klondike-sprites.png');
-    stock = Stock();
+    final world = World();
+    stock = Stock()
+      ..size = Vector2(1000, 1400)
+      ..position = Vector2(0, 0)
+      ..addToParent(this);
     waste = Waste();
     foundations = [Foundation(), Foundation(), Foundation(), Foundation()];
     piles = [for (var i = 0; i < 7; i++) Pile()];
 
-    add(stock);
+    // add(stock);
     add(waste);
     addAll(foundations);
     addAll(piles);
@@ -46,9 +51,6 @@ class KlondikeGame extends FlameGame {
     final gap = cardWidth / 8;
     final horizontalPadding = (canvasWidth - 7 * cardWidth - 6 * gap) / 2;
 
-    stock
-      ..size.setValues(cardWidth, cardHeight)
-      ..position.setValues(horizontalPadding, gap);
     waste
       ..size.setValues(cardWidth * 1.5, cardHeight)
       ..position.setValues(horizontalPadding + cardWidth + gap, gap);
