@@ -128,7 +128,8 @@ void main() {
         await game.ensureAddAll(components);
         expect(game.children.length, equals(3));
 
-        game.children.clear();
+        game.children
+            .clear(); // ignore: deprecated_member_use_from_same_package
 
         // Ensure clear does not remove components directly
         expect(game.children.length, equals(3));

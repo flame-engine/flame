@@ -84,7 +84,6 @@ class Component {
 
   /// Legacy component removal mechanism.
   @nonVirtual
-  @Deprecated('Use `removeFromParent()` instead. This will be removed in 1.1.0')
   set shouldRemove(bool value) {
     assert(value, '"Resurrecting" a component is not allowed');
     removeFromParent();
@@ -446,16 +445,16 @@ class Component {
   void setMounted() => _state = LifecycleState.mounted;
 
   void _remove() {
+    _parent!.children.remove(this);
     propagateToChildren(
       (Component component) {
         component.onRemove();
-        _state = LifecycleState.removed;
-        return false;
+        component._state = LifecycleState.removed;
+        component._parent = null;
+        return true;
       },
       includeSelf: true,
     );
-    _parent!.children.remove(this);
-    _parent = null;
   }
 
   //#endregion
