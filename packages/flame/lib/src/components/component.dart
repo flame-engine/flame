@@ -673,7 +673,7 @@ class _LifecycleManager {
       final child = _adoption.removeFirst();
       child._remove();
       child._parent = parent;
-      child.mount();
+      child._mount();
     }
   }
 }
