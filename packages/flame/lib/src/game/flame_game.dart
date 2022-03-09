@@ -72,7 +72,7 @@ class FlameGame extends Component with Game {
 
   @override
   void updateTree(double dt) {
-    lifecycle.processChildrenQueue();
+    lifecycle.processQueues();
     children.updateComponentList();
     if (parent != null) {
       update(dt);

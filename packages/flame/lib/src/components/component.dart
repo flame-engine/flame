@@ -35,15 +35,14 @@ class Component {
   }
 
   /// Whether this component is currently added to a component tree.
-  bool get isMounted => _state == LifecycleState.mounted;
+  bool get isMounted {
+    return (_state == LifecycleState.mounted) ||
+        (_state == LifecycleState.removing);
+  }
 
   /// The current parent of the component, or null if there is none.
   Component? get parent => _parent;
   Component? _parent;
-
-  /// If the component should be added to another parent once it has been
-  /// removed from its current parent.
-  Component? nextParent;
 
   /// The children of the current component.
   ///
@@ -57,7 +56,10 @@ class Component {
   Completer<void>? _mountCompleter;
 
   @protected
-  _LifecycleManager get lifecycle => _lifecycleManager ??= _LifecycleManager();
+  _LifecycleManager get lifecycle {
+    return _lifecycleManager ??= _LifecycleManager(this);
+  }
+
   _LifecycleManager? _lifecycleManager;
 
   /// Render priority of this component. This allows you to control the order in
@@ -77,7 +79,18 @@ class Component {
   ///
   /// It will be checked once per component per tick, and if it is true,
   /// FlameGame will remove it.
-  bool shouldRemove = false;
+  @nonVirtual
+  bool get shouldRemove => _state == LifecycleState.removing;
+
+  /// Setting [shouldRemove] to true will schedule the component to be removed
+  /// from the game tree before the next game cycle.
+  ///
+  /// This property is equivalent to using the method [removeFromParent].
+  @nonVirtual
+  set shouldRemove(bool value) {
+    assert(value, '"Resurrecting" a component is not allowed');
+    removeFromParent();
+  }
 
   /// Returns whether this [Component] is in debug mode or not.
   /// When a child is added to the [Component] it gets the same [debugMode] as
@@ -206,6 +219,9 @@ class Component {
   /// ```
   void onMount() {}
 
+  /// Called right before the component is removed from the game.
+  void onRemove() {}
+
   /// A future that will complete once the component is mounted on its parent
   Future<void> get mounted {
     if (isMounted) {
@@ -233,7 +249,7 @@ class Component {
   /// priority of the direct siblings, not the children or the ancestors.
   void updateTree(double dt) {
     _children?.updateComponentList();
-    _lifecycleManager?.processChildrenQueue();
+    _lifecycleManager?.processQueues();
     update(dt);
     _children?.forEach((c) => c.updateTree(dt));
   }
@@ -267,14 +283,15 @@ class Component {
   }
 
   /// Remove the component from its parent in the next tick.
-  void removeFromParent() => shouldRemove = true;
+  void removeFromParent() {
+    _parent?.remove(this);
+  }
 
   /// Changes the current parent for another parent and prepares the tree under
   /// the new root.
-  void changeParent(Component component) {
+  void changeParent(Component newParent) {
+    newParent.lifecycle._adoption.add(this);
     _mountCompleter = null;
-    parent?.remove(this);
-    nextParent = component;
   }
 
   /// An iterator producing this component's parent, then its parent's parent,
@@ -288,16 +305,6 @@ class Component {
       }
       current = current.parent;
     }
-  }
-
-  /// Called right before the component is removed from the game.
-  @mustCallSuper
-  void onRemove() {
-    _children?.forEach((child) => child.onRemove());
-    _state = LifecycleState.removed;
-    _parent = null;
-    nextParent?.add(this);
-    nextParent = null;
   }
 
   //#region Add/remove components
@@ -362,9 +369,9 @@ class Component {
     debugMode |= parent.debugMode;
     parent.lifecycle._children.add(this);
 
-    final root = parent.findGame();
-    if (root != null) {
-      if (!isLoaded) {
+    if (!isLoaded) {
+      final root = parent.findGame();
+      if (root != null) {
         assert(
           root.hasLayout,
           'add() called before the game has a layout. Did you try to add '
@@ -378,14 +385,17 @@ class Component {
 
   /// Removes a component from the component tree, calling [onRemove] for it and
   /// its children.
-  void remove(Component c) {
-    _children?.remove(c);
+  void remove(Component component) {
+    if (component._state != LifecycleState.removing) {
+      lifecycle._removals.add(component);
+      component._state = LifecycleState.removing;
+    }
   }
 
   /// Removes all the children in the list and calls [onRemove] for all of them
   /// and their children.
-  void removeAll(Iterable<Component> cs) {
-    _children?.removeAll(cs);
+  void removeAll(Iterable<Component> components) {
+    components.forEach(remove);
   }
 
   Future<void>? _load() {
@@ -430,12 +440,25 @@ class Component {
         (child) => child._mount(parent: this, existingChild: true),
       );
     }
-    _lifecycleManager?.processChildrenQueue();
+    _lifecycleManager?.processQueues();
   }
 
   // TODO(st-pasha): remove this after #1351 is done
   @internal
   void setMounted() => _state = LifecycleState.mounted;
+
+  void _remove() {
+    _parent!.children.remove(this);
+    propagateToChildren(
+      (Component component) {
+        component.onRemove();
+        component._state = LifecycleState.removed;
+        component._parent = null;
+        return true;
+      },
+      includeSelf: true,
+    );
+  }
 
   //#endregion
 
@@ -446,7 +469,7 @@ class Component {
   /// Attempt to resolve any pending lifecycle events on this component.
   void processPendingLifecycleEvents() {
     if (_lifecycleManager != null) {
-      _lifecycleManager!.processChildrenQueue();
+      _lifecycleManager!.processQueues();
       if (!_lifecycleManager!.hasPendingEvents) {
         _lifecycleManager = null;
       }
@@ -542,8 +565,8 @@ typedef ComponentSetFactory = ComponentSet Function();
 ///
 /// The progression between states happens as follows:
 /// ```
-///   uninitialized -> loading -> loaded -> mounted -> removed -,
-///                                           ^-----------------'
+///   uninitialized -> loading -> loaded -> mounted -> removing -> removed -.
+///                                           ^-----------------------------'
 /// ```
 ///
 /// Publicly visible flags `isLoaded` and `isMounted` are derived from this
@@ -565,6 +588,9 @@ enum LifecycleState {
   /// its parent's `children` list.
   mounted,
 
+  /// The component is scheduled to be removed on the next game tick.
+  removing,
+
   /// The component which was mounted before, is now removed from its parent.
   removed,
 }
@@ -577,12 +603,17 @@ enum LifecycleState {
 /// queues. Which is why these queues are placed into a separate class, so that
 /// they can be easily disposed of at the end.
 class _LifecycleManager {
-  /// Queues for adding children to a component.
+  _LifecycleManager(this.owner);
+
+  /// The component which is the owner of this [_LifecycleManager].
+  final Component owner;
+
+  /// Queue for adding children to a component.
   ///
   /// When the user `add()`s a child to a component, we immediately place it
-  /// into the component's queue, and only after that do the standard lifecycle
+  /// into that component's queue, and only after that do the standard lifecycle
   /// processing: resizing, loading, mounting, etc. After all that is finished,
-  /// the component is retrieved from the queue and placed into the parent's
+  /// the child component is retrieved from the queue and placed into the
   /// children list.
   ///
   /// Since the components are processed in the FIFO order, this ensures that
@@ -591,8 +622,23 @@ class _LifecycleManager {
   /// finish loading in arbitrary order.
   final Queue<Component> _children = Queue();
 
+  /// Queue for removing children from a component.
+  ///
+  /// Components that were placed into this queue will be removed from [owner]
+  /// when the pending events are resolved.
+  final Queue<Component> _removals = Queue();
+
+  /// Queue for moving components from another parent to this one.
+  final Queue<Component> _adoption = Queue();
+
   bool get hasPendingEvents {
-    return _children.isNotEmpty;
+    return !(_children.isEmpty && _removals.isEmpty && _adoption.isEmpty);
+  }
+
+  void processQueues() {
+    _processChildrenQueue();
+    _processRemovalQueue();
+    _processAdoptionQueue();
   }
 
   /// Attempt to resolve pending events in all lifecycle event queues.
@@ -600,7 +646,7 @@ class _LifecycleManager {
   /// This method must be periodically invoked by the game engine, in order to
   /// ensure that the components get properly added/removed from the component
   /// tree.
-  void processChildrenQueue() {
+  void _processChildrenQueue() {
     while (_children.isNotEmpty) {
       final child = _children.first;
       assert(child.parent!.isMounted);
@@ -612,6 +658,25 @@ class _LifecycleManager {
       } else {
         child._load();
       }
+    }
+  }
+
+  void _processRemovalQueue() {
+    while (_removals.isNotEmpty) {
+      final component = _removals.removeFirst();
+      if (component.isMounted) {
+        component._remove();
+      }
+      assert(component._state == LifecycleState.removed);
+    }
+  }
+
+  void _processAdoptionQueue() {
+    while (_adoption.isNotEmpty) {
+      final child = _adoption.removeFirst();
+      child._remove();
+      child._parent = owner;
+      child._mount();
     }
   }
 }

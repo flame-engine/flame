@@ -26,12 +26,6 @@ class ComponentSet extends QueryableOrderedSet<Component> {
   // When we switch to Dart 2.15 this can be replaced with constructor tear-off
   static ComponentSet createDefault() => ComponentSet();
 
-  /// Components to be removed on the next update.
-  ///
-  /// The component list is only changed at the start of each update to avoid
-  /// concurrency issues.
-  final Set<Component> _removeLater = {};
-
   /// Components whose priority changed since the last update.
   ///
   /// When priorities change we need to re-balance the component set, but
@@ -46,6 +40,12 @@ class ComponentSet extends QueryableOrderedSet<Component> {
   @override
   bool add(Component component) => super.add(component);
 
+  /// Marked as internal, because the users shouldn't be able to remove elements
+  /// from the [ComponentSet] directly, bypassing the normal lifecycle handling.
+  @internal
+  @override
+  bool remove(Component component) => super.remove(component);
+
   /// Prohibit method `addAll()` inherited from the [QueryableOrderedSet]. If
   /// this was allowed, then the user would be able to bypass standard lifecycle
   /// methods of the [Component] class.
@@ -58,27 +58,24 @@ class ComponentSet extends QueryableOrderedSet<Component> {
     );
   }
 
-  /// Marks the component to be removed on the next call to
-  /// `updateComponentList()`.
-  @override
-  bool remove(Component c) {
-    _removeLater.add(c);
-    return true;
-  }
-
-  /// Marks a list of components to be removed from the components list on the
-  /// next game tick. This will return the same list as sent in.
+  /// Prohibit method `removeAll()` inherited from the [QueryableOrderedSet]. If
+  /// this was allowed, then the user would be able to bypass standard lifecycle
+  /// methods of the [Component] class.
+  @Deprecated('Do not use')
   @override
   Iterable<Component> removeAll(Iterable<Component> components) {
-    _removeLater.addAll(components);
-    return components;
+    throw UnsupportedError(
+      'Removing elements directly from a ComponentSet is prohibited; use '
+      'Component.removeAll() instead',
+    );
   }
 
   /// Marks all existing components to be removed from the components list on
   /// the next game tick.
+  @Deprecated('This method will be removed in 1.1.0')
   @override
   void clear() {
-    _removeLater.addAll(this);
+    forEach((element) => element.removeFromParent());
   }
 
   /// Whether the component set contains components or that there are components
@@ -93,17 +90,6 @@ class ComponentSet extends QueryableOrderedSet<Component> {
   /// Note: do not call this while iterating the set.
   void updateComponentList() {
     _actuallyUpdatePriorities();
-    _actuallyRemove();
-  }
-
-  void _actuallyRemove() {
-    _removeLater.addAll(where((c) => c.shouldRemove));
-    _removeLater.forEach((c) {
-      c.onRemove();
-      super.remove(c);
-      c.shouldRemove = false;
-    });
-    _removeLater.clear();
   }
 
   @override

@@ -89,12 +89,14 @@ class PlayerComponent extends SpriteAnimationComponent
   void update(double dt) {
     super.update(dt);
     bulletCreator.update(dt);
-    shouldRemove = destroyed;
+    if (destroyed) {
+      removeFromParent();
+    }
   }
 
   void takeHit() {
     gameRef.add(ExplosionComponent(x, y));
-    shouldRemove = true;
+    removeFromParent();
     gameRef.read<GameStatsBloc>().add(const PlayerDied());
   }
 

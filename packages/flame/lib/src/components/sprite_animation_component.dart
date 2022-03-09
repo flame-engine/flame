@@ -75,15 +75,6 @@ class SpriteAnimationComponent extends PositionComponent with HasPaint {
           priority: priority,
         );
 
-  /// Component will be removed after animation is done and [removeOnFinish] is
-  /// set.
-  ///
-  /// Note: [SpriteAnimationComponent] will not be removed automatically if loop
-  /// property of [SpriteAnimation] is true.
-  @override
-  bool get shouldRemove =>
-      super.shouldRemove || (removeOnFinish && (animation?.done() ?? false));
-
   @mustCallSuper
   @override
   void render(Canvas canvas) {
@@ -98,6 +89,9 @@ class SpriteAnimationComponent extends PositionComponent with HasPaint {
   void update(double dt) {
     if (playing) {
       animation?.update(dt);
+    }
+    if (removeOnFinish && (animation?.done() ?? false)) {
+      removeFromParent();
     }
   }
 }

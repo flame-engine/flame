@@ -12,10 +12,6 @@ class ParticleComponent extends Component {
 
   ParticleComponent(this.particle);
 
-  /// This [ParticleComponent] will be removed by the FlameGame.
-  @override
-  bool get shouldRemove => particle.shouldRemove;
-
   /// Returns progress of the child [Particle].
   ///
   /// Could be used by external code if needed.
@@ -32,5 +28,8 @@ class ParticleComponent extends Component {
   @override
   void update(double dt) {
     particle.update(dt);
+    if (particle.shouldRemove) {
+      removeFromParent();
+    }
   }
 }

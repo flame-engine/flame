@@ -48,7 +48,8 @@ void main() async {
       },
     );
   });
-  group('SpriteAnimationComponent shouldRemove', () {
+
+  group('SpriteAnimationComponent removal', () {
     flameGame.test(
       'removeOnFinish is true and animation#loop is false',
       (game) async {
@@ -67,11 +68,8 @@ void main() async {
 
         await game.ensureAdd(component);
 
-        expect(component.shouldRemove, false);
         expect(game.children.length, 1);
-
         game.update(2);
-        expect(component.shouldRemove, true);
 
         // runs a cycle to remove the component
         game.update(0.1);
