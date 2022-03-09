@@ -21,16 +21,6 @@ if you wish.
 The `onGameResize` method is called whenever the screen is resized, and once in the beginning when
 the component is added to the game via the `add` method.
 
-The `shouldRemove` variable can be overridden or set to true and `FlameGame` will remove the
-component before the next update loop. It will then no longer be rendered or updated. Note that
-`game.remove(Component c)` and `component.removeFromParent()` also can be used to remove components
-from its parent.
-
-The `respectCamera` variable can be overridden or set to `false` (defaults to `true`) to make the
-`FlameGame` ignore the `camera` for this component, making it static in relation to the viewport
-that is.
-Do note that this currently only works if the component is added directly to the root `FlameGame`.
-
 The `onRemove` method can be overridden to run code before the component is removed from the game,
 it is only run once even if the component is removed both by using the parents remove method and
 the `Component` remove method.

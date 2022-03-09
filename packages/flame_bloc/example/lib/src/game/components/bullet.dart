@@ -87,6 +87,8 @@ class BulletComponent extends SpriteAnimationComponent
       x += bulletSpeed * dt * xDirection;
     }
 
-    shouldRemove = destroyed || toRect().bottom <= 0;
+    if (destroyed || toRect().bottom <= 0) {
+      removeFromParent();
+    }
   }
 }

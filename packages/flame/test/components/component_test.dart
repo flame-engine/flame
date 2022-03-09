@@ -112,31 +112,29 @@ void main() {
       expect(anchorPosition.y, 0.0);
     });
 
-    test('remove and shouldRemove', () {
-      final c1 = SpriteComponent();
-      expect(c1.shouldRemove, equals(false));
+    flameGame.test('removeFromParent', (game) async {
+      final c1 = Component()..addToParent(game);
+      await game.ready();
+
+      expect(c1.isMounted, true);
       c1.removeFromParent();
-      expect(c1.shouldRemove, equals(true));
-
-      final c2 = SpriteAnimationComponent();
-      expect(c2.shouldRemove, equals(false));
-      c2.removeFromParent();
-      expect(c2.shouldRemove, equals(true));
-
-      c2.shouldRemove = false;
-      expect(c2.shouldRemove, equals(false));
+      expect(c1.isMounted, true);
+      await game.ready();
+      expect(c1.isMounted, false);
+      expect(game.children.length, 0);
     });
 
     flameGame.test(
       'remove and re-add should not double trigger onRemove',
       (game) async {
         final component = _RemoveComponent();
-
         await game.ensureAdd(component);
+
         component.removeFromParent();
         game.update(0);
         expect(component.removeCounter, 1);
-        component.shouldRemove = false;
+        expect(component.isMounted, false);
+
         component.removeCounter = 0;
         await game.ensureAdd(component);
         expect(component.removeCounter, 0);
