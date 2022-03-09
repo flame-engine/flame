@@ -1,3 +1,8 @@
+## 0.9.0-releasecandidate.2
+
+ - **FIX**: PositionBodyComponent had an async onMount, without needing (#1424). ([7b0fd20a](https://github.com/flame-engine/flame/commit/7b0fd20a2c6d9f6cac0a88877c793608ab4d14c8))
+ - **FEAT**: Make ContactCallback begin end methods optional overrides (#1415). ([29dd1891](https://github.com/flame-engine/flame/commit/29dd1891b6409ed71c54e05272100dbb180d18e7))
+
 ## 0.9.0-releasecandidate.1
 
 > Note: This release has breaking changes.

@@ -31,12 +31,12 @@ void main() {
       final blockA = TestBlock(
         Vector2.zero(),
         Vector2.all(10),
-        type: CollidableType.passive,
+        type: CollisionType.passive,
       );
       final blockB = TestBlock(
         Vector2.all(1),
         Vector2.all(10),
-        type: CollidableType.passive,
+        type: CollisionType.passive,
       );
       await game.ensureAddAll([blockA, blockB]);
       game.update(0);
@@ -48,12 +48,12 @@ void main() {
       final blockA = TestBlock(
         Vector2.zero(),
         Vector2.all(10),
-        type: CollidableType.inactive,
+        type: CollisionType.inactive,
       );
       final blockB = TestBlock(
         Vector2.all(1),
         Vector2.all(10),
-        type: CollidableType.inactive,
+        type: CollisionType.inactive,
       );
       await game.ensureAddAll([blockA, blockB]);
       game.update(0);
@@ -69,7 +69,7 @@ void main() {
       final blockB = TestBlock(
         Vector2.all(1),
         Vector2.all(10),
-        type: CollidableType.passive,
+        type: CollisionType.passive,
       );
       await game.ensureAddAll([blockA, blockB]);
       game.update(0);
@@ -83,7 +83,7 @@ void main() {
       final blockA = TestBlock(
         Vector2.zero(),
         Vector2.all(10),
-        type: CollidableType.passive,
+        type: CollisionType.passive,
       );
       final blockB = TestBlock(
         Vector2.all(1),
@@ -102,12 +102,12 @@ void main() {
       final blockA = TestBlock(
         Vector2.zero(),
         Vector2.all(10),
-        type: CollidableType.passive,
+        type: CollisionType.passive,
       );
       final blockB = TestBlock(
         Vector2.all(1),
         Vector2.all(10),
-        type: CollidableType.inactive,
+        type: CollisionType.inactive,
       );
       await game.ensureAddAll([blockA, blockB]);
       game.update(0);
@@ -119,12 +119,12 @@ void main() {
       final blockA = TestBlock(
         Vector2.zero(),
         Vector2.all(10),
-        type: CollidableType.inactive,
+        type: CollisionType.inactive,
       );
       final blockB = TestBlock(
         Vector2.all(1),
         Vector2.all(10),
-        type: CollidableType.passive,
+        type: CollisionType.passive,
       );
       await game.ensureAddAll([blockA, blockB]);
       game.update(0);
@@ -140,7 +140,7 @@ void main() {
       final blockB = TestBlock(
         Vector2.all(1),
         Vector2.all(10),
-        type: CollidableType.inactive,
+        type: CollisionType.inactive,
       );
       await game.ensureAddAll([blockA, blockB]);
       game.update(0);
@@ -152,7 +152,7 @@ void main() {
       final blockA = TestBlock(
         Vector2.zero(),
         Vector2.all(10),
-        type: CollidableType.inactive,
+        type: CollisionType.inactive,
       );
       final blockB = TestBlock(
         Vector2.all(1),
@@ -168,7 +168,7 @@ void main() {
       'correct collisions with many involved collidables',
       (game) async {
         final rng = Random(0);
-        List<TestBlock> generateBlocks(CollidableType type) {
+        List<TestBlock> generateBlocks(CollisionType type) {
           return List.generate(
             100,
             (_) => TestBlock(
@@ -179,9 +179,9 @@ void main() {
           );
         }
 
-        final actives = generateBlocks(CollidableType.active);
-        final passives = generateBlocks(CollidableType.passive);
-        final inactives = generateBlocks(CollidableType.inactive);
+        final actives = generateBlocks(CollisionType.active);
+        final passives = generateBlocks(CollisionType.passive);
+        final inactives = generateBlocks(CollisionType.inactive);
         await game.ensureAddAll((actives + passives + inactives)..shuffle());
         game.update(0);
         expect(
