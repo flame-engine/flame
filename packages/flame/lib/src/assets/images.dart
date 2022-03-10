@@ -10,21 +10,32 @@ import 'package:flutter/services.dart';
 import '../flame.dart';
 
 class Images {
-  Images({String prefix = 'assets/images/'})
-      : assert(prefix.isEmpty || prefix.endsWith('/'), _assertMessage),
-        _prefix = prefix;
-
-  String _prefix;
-  final Map<String, _ImageAssetLoader> _loadedFiles = {};
-
-  static const _assertMessage = 'Prefix must be empty or end with a "/"';
-
-  set prefix(String value) {
-    assert(prefix.isEmpty || value.endsWith('/'), _assertMessage);
-    _prefix = value;
+  Images({String prefix = 'assets/images/'}) {
+    this.prefix = prefix;
   }
 
+  final Map<String, _ImageAssetLoader> _loadedFiles = {};
+
+  /// Path prefix to the project's directory with images.
+  ///
+  /// This path is relative to the project's root, and the default prefix is
+  /// "assets/images/". If necessary, you may change this prefix at any time.
+  /// A prefix must be a valid directory name and end with "/" (empty prefix is
+  /// also allowed).
+  ///
+  /// The prefix is **not** part of the keys of the images stored in this cache.
+  /// For example, if you load image `player.png`, then it will be searched at
+  /// location `prefix + "player.png"` but stored in the cache under the key
+  /// `"player.png"`.
   String get prefix => _prefix;
+  late String _prefix;
+  set prefix(String value) {
+    assert(
+      value.isEmpty || value.endsWith('/'),
+      'Prefix must be empty or end with a "/"',
+    );
+    _prefix = value;
+  }
 
   /// Adds an [image] into the cache under the key [name].
   void add(String name, Image image) {
