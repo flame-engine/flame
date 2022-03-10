@@ -35,6 +35,7 @@ class Images {
     );
     _prefix = value;
   }
+
   late String _prefix;
 
   /// Adds an [image] into the cache under the key [name].
