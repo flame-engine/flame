@@ -39,6 +39,17 @@ void main() {
       );
     });
 
+    testWithFlameGame(
+      'prefix on game.images can be changed',
+      (game) async {
+        expect(game.images.prefix, 'assets/images/');
+        game.images.prefix = 'assets/pictures/';
+        expect(game.images.prefix, 'assets/pictures/');
+        game.images.prefix = '';
+        expect(game.images.prefix, '');
+      },
+    );
+
     test('throws when setting an invalid prefix', () {
       final images = Images();
 
