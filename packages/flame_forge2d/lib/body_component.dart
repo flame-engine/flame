@@ -14,18 +14,17 @@ import 'sprite_body_component.dart';
 /// it is a good idea to turn on [debugMode] for it so that the bodies can be
 /// seen
 abstract class BodyComponent<T extends Forge2DGame> extends Component
-    with HasGameRef<T> {
+    with HasGameRef<T>, HasPaint {
   static const defaultColor = Color.fromARGB(255, 255, 255, 255);
   late Body body;
-  late Paint paint;
 
-  /// [debugMode] is true by default for body component since otherwise
-  /// nothing is rendered for it, if you render something on top of the
-  /// [BodyComponent], or doesn't want it to be seen, just set it to false.
+  /// [renderBody] is true by default for [BodyComponent], if set to false
+  /// the body wont be rendered. If you render something on top of the
+  /// [BodyComponent], or doesn't want it to be seen, you probably want to set
+  /// it to false.
   /// [SpriteBodyComponent] and [PositionBodyComponent] has it set to false by
   /// default.
-  @override
-  bool debugMode = true;
+  bool renderBody = true;
 
   BodyComponent({Paint? paint}) {
     this.paint = paint ?? (Paint()..color = defaultColor);
@@ -65,12 +64,19 @@ abstract class BodyComponent<T extends Forge2DGame> extends Component
     }
     canvas.save();
     canvas.transform(_transform.storage);
+    if (renderBody) {
+      _renderFixtures(canvas);
+    }
     super.renderTree(canvas);
     canvas.restore();
   }
 
   @override
   void renderDebugMode(Canvas canvas) {
+    _renderFixtures(canvas);
+  }
+
+  void _renderFixtures(Canvas canvas) {
     canvas.transform(_flipYTransform.storage);
 
     for (final fixture in body.fixtures) {

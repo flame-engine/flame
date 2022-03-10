@@ -16,7 +16,7 @@ abstract class PositionBodyComponent<T extends Forge2DGame,
   Vector2 get size => _size!;
 
   @override
-  bool debugMode = false;
+  bool renderBody = false;
 
   /// Make sure that the [size] of the position component matches the bounding
   /// shape of the body that is create in createBody()
