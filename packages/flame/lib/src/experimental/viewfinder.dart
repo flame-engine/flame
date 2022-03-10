@@ -21,8 +21,8 @@ class Viewfinder extends Component {
 
   /// The game coordinates of a point that is to be positioned at the center
   /// of the viewport.
-  Vector2 get position => -_transform.position;
-  set position(Vector2 value) => _transform.position = -value;
+  Vector2 get position => -_transform.offset;
+  set position(Vector2 value) => _transform.offset = -value;
 
   /// Zoom level of the game.
   ///
