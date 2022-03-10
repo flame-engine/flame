@@ -9,7 +9,7 @@ environment:
 
 dependencies:
   flame: ^1.1.0-releasecandidate.2
-  flutter_svg: ^0.22.0
+  flutter_svg: ^1.0.3
   flutter:
     sdk: flutter
 
