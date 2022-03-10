@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flame/assets.dart';
+import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -41,7 +42,10 @@ void main() {
     test('throws when setting an invalid prefix', () {
       final images = Images();
 
-      expect(() => images.prefix = 'adasd', throwsAssertionError);
+      expect(
+        () => images.prefix = 'adasd',
+        failsAssert('Prefix must be empty or end with a "/"'),
+      );
     });
   });
 }

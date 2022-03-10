@@ -11,16 +11,20 @@ import '../flame.dart';
 
 class Images {
   Images({String prefix = 'assets/images/'})
-      : assert(prefix.endsWith('/')),
+      : assert(prefix.isEmpty || prefix.endsWith('/'), _assertMessage),
         _prefix = prefix;
 
   String _prefix;
   final Map<String, _ImageAssetLoader> _loadedFiles = {};
 
+  static const _assertMessage = 'Prefix must be empty or end with a "/"';
+
   set prefix(String value) {
-    assert(value.endsWith('/'));
+    assert(prefix.isEmpty || value.endsWith('/'), _assertMessage);
     _prefix = value;
   }
+
+  String get prefix => _prefix;
 
   /// Adds an [image] into the cache under the key [name].
   void add(String name, Image image) {
