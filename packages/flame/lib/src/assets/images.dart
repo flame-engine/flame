@@ -10,11 +10,21 @@ import 'package:flutter/services.dart';
 import '../flame.dart';
 
 class Images {
-  Images({this.prefix = 'assets/images/'})
-      : assert(prefix.isEmpty || prefix.endsWith('/'));
+  Images({String prefix = 'assets/images/'})
+      : assert(prefix.isEmpty || prefix.endsWith('/'), _assertMessage),
+        _prefix = prefix;
 
-  final String prefix;
+  String _prefix;
   final Map<String, _ImageAssetLoader> _loadedFiles = {};
+
+  static const _assertMessage = 'Prefix must be empty or end with a "/"';
+
+  set prefix(String value) {
+    assert(prefix.isEmpty || value.endsWith('/'), _assertMessage);
+    _prefix = value;
+  }
+
+  String get prefix => _prefix;
 
   /// Adds an [image] into the cache under the key [name].
   void add(String name, Image image) {
@@ -82,8 +92,8 @@ class Images {
     final manifestContent = await rootBundle.loadString('AssetManifest.json');
     final manifestMap = json.decode(manifestContent) as Map<String, dynamic>;
     final imagePaths = manifestMap.keys.where((path) {
-      return path.startsWith(prefix) && path.toLowerCase().contains(pattern);
-    }).map((path) => path.replaceFirst(prefix, ''));
+      return path.startsWith(_prefix) && path.toLowerCase().contains(pattern);
+    }).map((path) => path.replaceFirst(_prefix, ''));
     return loadAll(imagePaths.toList());
   }
 
@@ -130,7 +140,7 @@ class Images {
   }
 
   Future<Image> _fetchToMemory(String name) async {
-    final data = await Flame.bundle.load('$prefix$name');
+    final data = await Flame.bundle.load('$_prefix$name');
     final bytes = Uint8List.view(data.buffer);
     return _loadBytes(bytes);
   }
