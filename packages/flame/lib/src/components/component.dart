@@ -119,7 +119,7 @@ class Component {
     if (!_debugPaintCache.isCacheValid([debugColor])) {
       final paint = Paint()
         ..color = debugColor
-        ..strokeWidth = 1
+        ..strokeWidth = 0 // hairline-width
         ..style = PaintingStyle.stroke;
       _debugPaintCache.updateCache(paint, [debugColor]);
     }
