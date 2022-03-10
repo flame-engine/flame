@@ -28,6 +28,7 @@ class Images {
   /// location `prefix + "player.png"` but stored in the cache under the key
   /// `"player.png"`.
   String get prefix => _prefix;
+  late String _prefix;
   set prefix(String value) {
     assert(
       value.isEmpty || value.endsWith('/'),
@@ -35,8 +36,6 @@ class Images {
     );
     _prefix = value;
   }
-
-  late String _prefix;
 
   /// Adds an [image] into the cache under the key [name].
   void add(String name, Image image) {
