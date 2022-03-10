@@ -10,8 +10,8 @@ environment:
   flutter: ">=2.5.0"
 
 dependencies:
-  flame: ^1.1.0-releasecandidate.2
-  flame_svg: ^1.1.0-releasecandidate.1
+  flame: ^1.1.0-releasecandidate.3
+  flame_svg: ^1.1.0-releasecandidate.2
   dashbook: 0.1.6
   flutter:
     sdk: flutter

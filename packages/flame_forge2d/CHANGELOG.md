@@ -1,3 +1,7 @@
+## 0.9.0-releasecandidate.3
+
+ - Update a dependency to the latest release.
+
 ## 0.9.0-releasecandidate.2
 
  - **FIX**: PositionBodyComponent had an async onMount, without needing (#1424). ([7b0fd20a](https://github.com/flame-engine/flame/commit/7b0fd20a2c6d9f6cac0a88877c793608ab4d14c8))
