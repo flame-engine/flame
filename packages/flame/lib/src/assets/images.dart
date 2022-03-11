@@ -155,11 +155,11 @@ class Images {
     return completer.future;
   }
 
-  Future<Image> fromBase64(String fileName, String base64) async {
-    if (!_assets.containsKey(fileName)) {
-      _assets[fileName] = _ImageAsset.future(_fetchFromBase64(base64));
+  Future<Image> fromBase64(String key, String base64) async {
+    if (!_assets.containsKey(key)) {
+      _assets[key] = _ImageAsset.future(_fetchFromBase64(base64));
     }
-    return _assets[fileName]!.retrieve();
+    return _assets[key]!.retrieve();
   }
 
   Future<Image> _fetchFromBase64(String base64Data) async {
