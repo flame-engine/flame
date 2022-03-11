@@ -1,3 +1,7 @@
+## 0.9.0-releasecandidate.4
+
+ - **FIX**: Don't use debug rendering by default in BodyComponent (#1439). ([33b725e8](https://github.com/flame-engine/flame/commit/33b725e8378d4060e726e99c0452b64f54ef8f67))
+
 ## 0.9.0-releasecandidate.3
 
  - Update a dependency to the latest release.
