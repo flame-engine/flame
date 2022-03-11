@@ -77,8 +77,8 @@ abstract class BodyComponent<T extends Forge2DGame> extends Component
   }
 
   void _renderFixtures(Canvas canvas) {
+    canvas.save();
     canvas.transform(_flipYTransform.storage);
-
     for (final fixture in body.fixtures) {
       switch (fixture.type) {
         case ShapeType.chain:
@@ -95,6 +95,7 @@ abstract class BodyComponent<T extends Forge2DGame> extends Component
           break;
       }
     }
+    canvas.restore();
   }
 
   void _renderChain(Canvas canvas, Fixture fixture) {
