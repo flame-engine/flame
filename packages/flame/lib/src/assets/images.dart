@@ -14,7 +14,7 @@ class Images {
     this.prefix = prefix;
   }
 
-  final Map<String, _ImageAssetLoader> _loadedFiles = {};
+  final Map<String, _ImageAsset> _assets = {};
 
   /// Path prefix to the project's directory with images.
   ///
@@ -37,52 +37,66 @@ class Images {
     _prefix = value;
   }
 
-  /// Adds an [image] into the cache under the key [name].
+  /// Adds the [image] into the cache under the key [name].
+  ///
+  /// The cache will assume the ownership of the [image], and will properly
+  /// dispose of it at the end.
   void add(String name, Image image) {
-    _loadedFiles[name] = _ImageAssetLoader(Future.value(image))
-      ..loadedImage = image;
+    _assets[name] = _ImageAsset.fromImage(image);
   }
 
-  /// Remove the image [name] from the cache.
+  /// Removes the image [name] from the cache.
+  ///
+  /// No error is raised if the image [name] is not present in the cache.
   ///
   /// This calls [Image.dispose], so make sure that you don't use the previously
   /// cached image once it is cleared (removed) from the cache.
   void clear(String name) {
-    _loadedFiles.remove(name)?.loadedImage?.dispose();
+    final removedAsset = _assets.remove(name);
+    removedAsset?.dispose();
   }
 
-  /// Remove all cached images.
+  /// Removes all cached images.
   ///
   /// This calls [Image.dispose] for all images in the cache, so make sure that
   /// you don't use any of the previously cached images once [clearCache] has
   /// been called.
   void clearCache() {
-    _loadedFiles.forEach((_, imageAssetLoader) {
-      imageAssetLoader.loadedImage?.dispose();
-    });
-    _loadedFiles.clear();
+    _assets.forEach((_, asset) => asset.dispose());
+    _assets.clear();
   }
 
-  /// Gets the specified image [name] from the cache.
+  /// Returns the image [name] from the cache.
+  ///
+  /// The image returned can be used as long as it remains in the cache, but
+  /// doesn't need to be explicitly disposed.
+  ///
+  /// If you want to retain the image even after you remove it from the cache,
+  /// then you can call `Image.clone()` on it.
   Image fromCache(String name) {
-    final image = _loadedFiles[name];
+    final asset = _assets[name];
     assert(
-      image?.loadedImage != null,
-      'Tried to access a nonexistent entry on cache "$name", make sure to '
-      'use the load method before accessing a file on the cache',
+      asset != null,
+      'Tried to access an image "$name" that does not exist in the cache. Make '
+      'sure to load() an image before accessing it',
     );
-    return image!.loadedImage!;
+    assert(
+      asset!.image != null,
+      'Tried to access an image "$name" before it was loaded. Make sure to '
+      'await the future from load() before using this method',
+    );
+    return asset!.image!;
   }
 
   /// Loads the specified image with [fileName] into the cache.
   Future<Image> load(String fileName) async {
-    if (!_loadedFiles.containsKey(fileName)) {
-      _loadedFiles[fileName] = _ImageAssetLoader(_fetchToMemory(fileName));
+    if (!_assets.containsKey(fileName)) {
+      _assets[fileName] = _ImageAsset.future(_fetchToMemory(fileName));
     }
-    return _loadedFiles[fileName]!.retrieve();
+    return _assets[fileName]!.retrieve();
   }
 
-  /// Load all images with the specified [fileNames] into the cache.
+  /// Loads all images with the specified [fileNames] into the cache.
   Future<List<Image>> loadAll(List<String> fileNames) async {
     return Future.wait(fileNames.map(load));
   }
@@ -108,7 +122,11 @@ class Images {
     return loadAll(imagePaths.toList());
   }
 
-  /// Convert an array of pixel values into an [Image] object.
+  Future<void> ready() async {
+    await Future.wait(_assets.values.map((asset) => asset.retrieve()));
+  }
+
+  /// Converts an array of pixel values into an [Image] object.
   ///
   /// The [pixels] parameter is the pixel data in the encoding described by
   /// [PixelFormat.rgba8888], the encoding can't be changed to allow for web
@@ -138,10 +156,10 @@ class Images {
   }
 
   Future<Image> fromBase64(String fileName, String base64) async {
-    if (!_loadedFiles.containsKey(fileName)) {
-      _loadedFiles[fileName] = _ImageAssetLoader(_fetchFromBase64(base64));
+    if (!_assets.containsKey(fileName)) {
+      _assets[fileName] = _ImageAsset.future(_fetchFromBase64(base64));
     }
-    return _loadedFiles[fileName]!.retrieve();
+    return _assets[fileName]!.retrieve();
   }
 
   Future<Image> _fetchFromBase64(String base64Data) async {
@@ -163,13 +181,37 @@ class Images {
   }
 }
 
-class _ImageAssetLoader {
-  _ImageAssetLoader(this.future);
+/// Individual entry in the [Images] cache.
+///
+/// This class owns the [Image] object, which can be disposed of using the
+/// [dispose] method.
+class _ImageAsset {
+  _ImageAsset.future(Future<Image> future) : _future = future;
 
-  Image? loadedImage;
-  Future<Image> future;
+  _ImageAsset.fromImage(Image image) : _image = image;
+
+  Image? get image => _image;
+  Image? _image;
+
+  Future<Image>? _future;
 
   Future<Image> retrieve() async {
-    return loadedImage ??= await future;
+    if (_future != null) {
+      _image = await _future;
+      _future = null;
+    }
+    return _image!;
+  }
+
+  /// Properly dispose of an image asset.
+  void dispose() {
+    if (_image != null) {
+      _image!.dispose();
+      _image = null;
+    }
+    if (_future != null) {
+      _future!.then((image) => image.dispose());
+      _future = null;
+    }
   }
 }
