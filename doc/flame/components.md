@@ -10,7 +10,7 @@ This diagram might look intimidating, but don't worry, it is not as complex as i
 All components inherit from the abstract class `Component`.
 
 If you want to skip reading about abstract classes you can jump directly to
-[](#positioncomponent).
+[](#PositionComponent).
 
 Every `Component` has a few methods that you can optionally implement, which are used by the
 `FlameGame` class. If you are not using `FlameGame`, you can use these methods on your own game loop
@@ -62,13 +62,7 @@ class MyGame extends FlameGame {
 ```
 
 To update the priority of a component you have to either just set it to a new value, like 
-`component.priority = 2`, or call `parent?.children.changePriorities` if you want to change the
-priorities of many child components at the same time.
-
-The `changePriorities` method is useful due to the fact that rebalancing the component list is a
-fairly computationally expensive operation if there are a lot of components, so you would rather
-reorder the list once after all the priorities have been changed and not once for each priority
-change, if you have several changes.
+`component.priority = 2`, and it will be updated in the next tick.
 
 Example:
 
