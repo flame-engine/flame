@@ -65,6 +65,7 @@ want to remove a list of components.
 Any component on which the `remove()` method has been called will also be removed. You can do this
 simply by doing `yourComponent.remove();`.
 
+
 ## Lifecycle
 
 ![Game Lifecycle Diagram](../images/component_lifecycle.png)
@@ -75,18 +76,6 @@ in order: `onGameResize`, `onLoad` and `onMount`. After that it goes on to call 
 Once the `GameWidget` is removed from the tree, `onRemove` is called, just like when a normal
 component is removed from the component tree.
 
-## Changing component priorities (render/update order)
-
-To update a component with a new priority you have to call either `FlameGame.changePriority`, or
-`FlameGame.changePriorities` if you want to change the priorities of many components at once.
-This design is due to the fact that the components doesn't always have access to the component list and
-because rebalancing the component list is a fairly computationally expensive operation, so you
-would rather reorder the list once after all the priorities have been changed and not once for each
-priority change, if you have several changes.
-
-The higher a priority is the later it is rendered and updated, which will make it appear closer on
-the screen since it will be rendered on top of any components with lower priority that were rendered
-before it.
 
 ## Debug mode
 
@@ -159,6 +148,7 @@ main() {
 }
 ```
 
+
 ## Game Loop
 
 The `GameLoop` module is a simple abstraction over the game loop concept. Basically most games are
@@ -170,6 +160,7 @@ built upon two methods:
 
 The `GameLoop` is used by all of Flame's `Game` implementations.
 
+
 ## Pause/Resuming game execution
 
 A Flame `Game` can be paused and resumed in two ways:
@@ -179,6 +170,7 @@ A Flame `Game` can be paused and resumed in two ways:
 
 When pausing a Flame `Game`, the `GameLoop` is effectively paused, meaning that no updates or new
 renders will happen until it is resumed.
+
 
 ## Flutter Widgets and Game instances
 
