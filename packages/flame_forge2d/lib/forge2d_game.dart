@@ -12,6 +12,10 @@ class Forge2DGame extends FlameGame {
 
   final ContactCallbacks _contactCallbacks = ContactCallbacks();
 
+  /// The camera translates the coordinate space after the viewport is applied.
+  @override
+  Forge2DCamera get camera => super.camera as Forge2DCamera;
+
   Forge2DGame({
     Vector2? gravity,
     double zoom = defaultZoom,

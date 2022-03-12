@@ -9,7 +9,6 @@ class CameraSample extends DominoSample {
     final position = details.eventPosition.game;
     final pizza = Pizza(position);
     add(pizza);
-    final component = pizza.positionComponent;
-    camera.followComponent(component!);
+    pizza.mounted.whenComplete(() => camera.followBodyComponent(pizza));
   }
 }
