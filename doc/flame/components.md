@@ -10,7 +10,7 @@ This diagram might look intimidating, but don't worry, it is not as complex as i
 All components inherit from the abstract class `Component`.
 
 If you want to skip reading about abstract classes you can jump directly to
-[](#PositionComponent).
+[](#positioncomponent).
 
 Every `Component` has a few methods that you can optionally implement, which are used by the
 `FlameGame` class. If you are not using `FlameGame`, you can use these methods on your own game loop
@@ -54,6 +54,7 @@ Example:
 
 ```dart
 class MyGame extends FlameGame {
+  @override
   Future<void> onLoad() {
     final myComponent = PositionComponent(priority: 5);
     add(myComponent);
@@ -70,7 +71,8 @@ Example:
 class MyComponent extends PositionComponent with Tappable {
   
   MyComponent() : super(priority: 1);
-  
+
+  @override
   void onTap() {
     priority = 2;
   }
