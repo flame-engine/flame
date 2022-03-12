@@ -28,6 +28,7 @@ class SpriteBatchComponent extends Component {
     );
   }
 
+  @mustCallSuper
   @override
   void render(Canvas canvas) {
     spriteBatch?.render(
