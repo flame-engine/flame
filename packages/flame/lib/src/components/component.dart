@@ -72,7 +72,19 @@ class Component {
   /// It can be any integer (negative, zero, or positive).
   /// If two components share the same priority, they will probably be drawn in
   /// the order they were added.
+  ///
+  /// Note that setting the priority is relatively expensive if the component is
+  /// already added to a component tree since all siblings have to be re-added
+  /// to the parent.
   int get priority => _priority;
+  set priority(int newPriority) {
+    if (parent == null) {
+      _priority = newPriority;
+    } else {
+      parent!.children.changePriority(this, newPriority);
+    }
+  }
+
   int _priority;
 
   /// Whether this component should be removed or not.
