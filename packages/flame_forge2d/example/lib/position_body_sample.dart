@@ -6,13 +6,17 @@ import 'package:flame_forge2d/flame_forge2d.dart';
 
 import 'boundaries.dart';
 
-class ChopperBody extends PositionBodyComponent {
+class ChopperBody extends BodyComponent {
   final Vector2 position;
+  final Vector2 size;
 
   ChopperBody(
     this.position,
     PositionComponent component,
-  ) : super(positionComponent: component, size: component.size);
+  ) : size = component.size {
+    renderBody = false;
+    add(component);
+  }
 
   @override
   Body createBody() {
@@ -64,6 +68,7 @@ class PositionBodySample extends Forge2DGame with TapDetector {
     final animationComponent = SpriteAnimationComponent(
       animation: animation,
       size: spriteSize,
+      anchor: Anchor.center,
     );
     add(ChopperBody(position, animationComponent));
   }
