@@ -85,6 +85,7 @@ class SpriteAnimationComponent extends PositionComponent with HasPaint {
         );
   }
 
+  @mustCallSuper
   @override
   void update(double dt) {
     if (playing) {
