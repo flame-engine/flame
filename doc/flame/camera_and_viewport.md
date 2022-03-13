@@ -99,7 +99,7 @@ Example:
 
 ```dart
 class MyGame extends FlameGame {
-  Vector2 someVector = Vector2(100, 100);
+  final someVector = Vector2(100, 100);
 
   Future<void> onLoad() async {
      camera.followVector2(someVector);
