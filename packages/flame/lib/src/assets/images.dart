@@ -122,6 +122,7 @@ class Images {
     return loadAll(imagePaths.toList());
   }
 
+  /// Waits until all currently pending image loading operations complete.
   Future<void> ready() async {
     await Future.wait(_assets.values.map((asset) => asset.retrieve()));
   }
