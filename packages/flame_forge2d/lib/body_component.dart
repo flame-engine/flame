@@ -22,7 +22,7 @@ abstract class BodyComponent<T extends Forge2DGame> extends Component
   /// it to false.
   bool renderBody = true;
 
-  BodyComponent({Paint? paint}) {
+  BodyComponent({Paint? paint, int? priority}) : super(priority: priority) {
     this.paint = paint ?? (Paint()..color = defaultColor);
   }
 
