@@ -158,7 +158,7 @@ default calculated from the size of the collidable that they are attached to, bu
 polygon can be made in an infinite number of ways inside of a bounding box you have to add the
 definition in the constructor for this shape.
 
-The `PolygonHitbox` has the same constructors as the [](components.md#polygoncomponent)(), see that
+The `PolygonHitbox` has the same constructors as the [](components.md#polygoncomponent), see that
 section for documentation regarding those.
 
 
