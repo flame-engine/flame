@@ -292,10 +292,10 @@ your components, they can override the simple methods that enable an easy to use
 components.
 
 ```dart
-  bool onDragStart(int pointerId, DragStartInfo info);
-  bool onDragUpdate(int pointerId, DragUpdateInfo info);
-  bool onDragEnd(int pointerId, DragEndInfo info);
-  bool onDragCancel(int pointerId);
+  bool onDragStart(DragStartInfo info);
+  bool onDragUpdate(DragUpdateInfo info);
+  bool onDragEnd(DragEndInfo info);
+  bool onDragCancel();
 ```
 
 Note that all events take a uniquely generated pointer id so you can, if desired, distinguish
@@ -319,30 +319,31 @@ class DraggableComponent extends PositionComponent with Draggable {
 
   // update and render omitted
 
-  Vector2 dragDeltaPosition;
+  Vector2? dragDeltaPosition;
   bool get isDragging => dragDeltaPosition != null;
 
-  @override
-  bool onDragStart(int pointerId, DragStartInfo info) {
-    dragDeltaPosition = info.eventPosition.game - position;
+  bool onDragStart(DragStartInfo startPosition) {
+    dragDeltaPosition = startPosition.eventPosition.game - position;
     return false;
   }
 
   @override
-  bool onDragUpdate(int pointerId, DragUpdateInfo info) {
-    final localCoords = info.eventPosition.game;
-    position = localCoords - dragDeltaPosition;
+  bool onDragUpdate(DragUpdateInfo event) {
+    if (isDragging) {
+      final localCoords = event.eventPosition.game;
+      position = localCoords - dragDeltaPosition!;
+    }
     return false;
   }
 
   @override
-  bool onDragEnd(int pointerId, DragEndInfo info) {
+  bool onDragEnd(DragEndInfo event) {
     dragDeltaPosition = null;
     return false;
   }
 
   @override
-  bool onDragCancel(int pointerId) {
+  bool onDragCancel() {
     dragDeltaPosition = null;
     return false;
   }
