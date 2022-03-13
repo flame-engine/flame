@@ -87,6 +87,24 @@ if you change the `debugMode` at runtime, it will not affect already added compo
 To read more about the `debugMode` on Flame, please refer to the [Debug Docs](other/debug.md)
 
 
+# Change background color
+
+To change the background color of your `FlameGame` you have to override `backgroundColor()`.
+
+In the following example the background color is set to be fully transparent, so that you can see
+the widgets that are behind the `GameWidget`. The default it opaque black.
+
+```dart
+class MyGame extends FlameGame {
+  @override
+  Color backgroundColor() => const Color(0x00000000);
+}
+```
+
+Note that the background color can't change dynamically while the game is running, but you could
+just draw a background that covers the whole canvas if you would want it to change dynamically.
+
+
 ## SingleGameInstance mixin
 
 An optional mixin `SingleGameInstance` can be applied to your game if you are making a single-game
