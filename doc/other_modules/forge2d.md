@@ -52,7 +52,9 @@ component constructor.
 
 ## SpriteBodyComponent
 
-** DEPRECATED: Add a `SpriteComponent` to a [#BodyComponent] instead. Will be removed in 0.10.0
+```{warning}
+Deprecated: add a `SpriteComponent` to a [#BodyComponent] instead. Will be removed in 0.10.0
+```
 
 Often you want to render a sprite on top of the `BodyComponent` that you are going to use in your
 `Forge2DGame`. This component will handle the scaling and positioning of your sprite on top of the
@@ -61,7 +63,9 @@ body.
 
 ## PositionBodyComponent
 
-** DEPRECATED: Add children to a [#BodyComponent] instead. Will be removed in 0.10.0
+```{warning}
+Deprecated: add children to a [#BodyComponent] instead. Will be removed in 0.10.0
+```
 
 One of the most commonly used classes in Flame is the `PositionComponent`, many of the commonly used
 components in Flame are subclasses of `PositionComponent`. If you want to put a `PositionComponent`

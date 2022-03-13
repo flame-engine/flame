@@ -127,8 +127,9 @@ Example:
 
 ```dart
 class MyGame extends FlameGame {
+  @override
   Future<void> onLoad() async {
-     final sprite = await gameRef.loadSprite('pizza.png');
+     final sprite = await loadSprite('pizza.png');
      final player = SpriteComponent(
        sprite: sprite,
        size: size,

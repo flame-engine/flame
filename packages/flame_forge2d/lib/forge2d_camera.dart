@@ -8,29 +8,21 @@ class Forge2DCamera extends Camera {
   Body? _targetBody;
 
   /// Used to minimize the amount of [Vector2] objects created
-  Vector2? _unprojectVector;
-  Vector2? _projectVector;
+  final Vector2 _unprojectVector = Vector2.zero();
+  final Vector2 _projectVector = Vector2.zero();
 
   @override
   Vector2 unprojectVector(Vector2 screenCoordinates) {
-    if (_unprojectVector == null) {
-      _unprojectVector ??= screenCoordinates.clone();
-    } else {
-      _unprojectVector?.setFrom(screenCoordinates);
-    }
-    return (_unprojectVector! / zoom)
+    _unprojectVector.setFrom(screenCoordinates);
+    return (_unprojectVector / zoom)
       ..add(position)
       ..y *= -1;
   }
 
   @override
   Vector2 projectVector(Vector2 worldCoordinates) {
-    if (_projectVector == null) {
-      _projectVector ??= worldCoordinates.clone();
-    } else {
-      _projectVector?.setFrom(worldCoordinates);
-    }
-    return ((_projectVector!..y *= -1) - position)..scale(zoom);
+    _projectVector.setFrom(worldCoordinates);
+    return ((_projectVector..y *= -1) - position)..scale(zoom);
   }
 
   @override
