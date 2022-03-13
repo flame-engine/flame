@@ -77,7 +77,7 @@ class Component {
     if (parent == null) {
       _priority = newPriority;
     } else {
-      parent?.children.changePriority(this, newPriority);
+      parent!.children.changePriority(this, newPriority);
     }
   }
 
