@@ -31,7 +31,7 @@ class TapableBall extends Ball with Tappable {
   late final TextPaint _textPaint;
 
   TapableBall(Vector2 position) : super(position) {
-    originalPaint = BasicPalette.white.paint();
+    originalPaint = Paint()..color = Colors.amber;
     paint = originalPaint;
   }
 
