@@ -219,7 +219,7 @@ Widget build(BuildContext context) {
   return GameWidget(
     game: game,
     overlayBuilderMap: {
-      'PauseMenu': (ctx) {
+      'PauseMenu': (BuildContext context, MyGame game) {
         return Text('A pause menu');
       },
     },
@@ -227,9 +227,8 @@ Widget build(BuildContext context) {
 }
 ```
 
-The order in which the overlays are declared in the `overlayBuilderMap` defines which order the
-overlays will be rendered.
+The order of rendering for an overlay is determined by the order of the keys in the 
+`overlayBuilderMap`. 
 
-Here you can see a
-[working example](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/system/overlays_example.dart)
-of this feature.
+An example of feature can be found 
+[here](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/system/overlays_example.dart).
