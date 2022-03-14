@@ -195,6 +195,11 @@ Methods:
  - `toVertices`: Turns the four corners of the `Rect` into a list of `Vector2`.
  - `toMathRectangle`: Converts this `Rect` into a `math.Rectangle`.
  - `toGeometryRectangle`: Converts this `Rect` into a `Rectangle` from flame-geom.
+ - `transform`: Transforms the `Rect` using a `Matrix4`.
+
+Factories:
+ - `fromBounds`: Construct a `Rect` that represents the bounds of a list of `Vector2`s.
+ - `fromVector2Center`: Construct a `Rect` from a center point.
 
 ### math.Rectangle
 
