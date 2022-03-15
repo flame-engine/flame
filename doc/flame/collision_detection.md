@@ -5,7 +5,7 @@ other. For example an arrow hitting an enemy or the player picking up a coin.
 
 In most collision detection systems you use something called hitboxes to create more precise
 bounding boxes of your components. In Flame the hitboxes are areas of the component that can react
-to collisions (and make [gesture input](inputs/gesture-input.md#GestureHitboxes) more accurate.
+to collisions (and make [gesture input](inputs/gesture-input.md#gesturehitboxes)) more accurate.
 
 The collision detection system supports three different types of shapes that you can build hitboxes
 from, these shapes are Polygon, Rectangle and Circle. Multiple hitbox can be added to a component to
@@ -82,7 +82,7 @@ both `onCollisionStart` and `onCollision` are called, so if you don't need to do
 when a collision starts you only need to override `onCollision`, and vice versa.
 
 If you want to check collisions with the screen edges, as we do in the example above, you can use
-the predefined [ScreenHitbox](#ScreenHitbox) class.
+the predefined [ScreenHitbox](#screenhitbox) class.
 
 
 ## ShapeHitbox
@@ -158,20 +158,20 @@ default calculated from the size of the collidable that they are attached to, bu
 polygon can be made in an infinite number of ways inside of a bounding box you have to add the
 definition in the constructor for this shape.
 
-The `PolygonHitbox` has the same constructors as the ()[#PolygonComponent], see that section for
-documentation regarding those.
+The `PolygonHitbox` has the same constructors as the [](components.md#polygoncomponent), see that
+section for documentation regarding those.
 
 
 ### RectangleHitbox
 
-The `RectangleHitbox` has the same constructors as the ()[#RectangleComponent], see that section
-for documentation regarding those.
+The `RectangleHitbox` has the same constructors as the [](components.md#rectanglecomponent), see
+that section for documentation regarding those.
 
 
 ### CircleHitbox
 
-The `CircleHitbox` has the same constructors as the ()[#CircleComponent], see that section for
-documentation regarding those.
+The `CircleHitbox` has the same constructors as the [](components.md#circlecomponent), see that
+section for documentation regarding those.
 
 
 ## ScreenHitbox
@@ -189,7 +189,7 @@ want the `ScreenHitbox` itself to be notified when something collides with it. S
 
 In the `CompositeHitbox` you can add multiple hitboxes so that they emulate being one joined hitbox.
 
-If you want to form a hat for example you might want to use two [RectangleHitbox]s to follow that
+If you want to form a hat for example you might want to use two [](#rectanglehitbox)s to follow that
 hat's edges properly, then you can add those hitboxes to an instance of this class and react to
 collisions to the whole hat, instead of for just each hitbox separately.
 
