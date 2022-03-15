@@ -74,7 +74,7 @@ extension RectExtension on Rect {
     );
   }
 
-  /// Creates bounds in from of a [Rect] from a list of [Vector2]
+  /// Creates a [Rect] that represents the bounds of the list [pts].
   static Rect fromBounds(List<Vector2> pts) {
     final minX = pts.map((e) => e.x).reduce(min);
     final maxX = pts.map((e) => e.x).reduce(max);
@@ -83,8 +83,7 @@ extension RectExtension on Rect {
     return Rect.fromPoints(Offset(minX, minY), Offset(maxX, maxY));
   }
 
-  /// Constructs a rectangle from its center point (specified as a Vector2),
-  /// width and height.
+  /// Constructs a [Rect] with a [width] and [height] around the [center] point.
   static Rect fromVector2Center({
     required Vector2 center,
     required double width,
