@@ -1,4 +1,5 @@
 import 'package:dashbook/dashbook.dart';
+import 'package:examples/stories/camera_and_viewport/camera_component_properties_example.dart';
 import 'package:flame/game.dart';
 
 import '../../commons/commons.dart';
@@ -66,5 +67,13 @@ void addCameraAndViewportStories(Dashbook dashbook) {
       (context) => GameWidget(game: CameraComponentExample()),
       codeLink: baseLink('camera_and_viewport/camera_component_example.dart'),
       info: CameraComponentExample.description,
+    )
+    ..add(
+      'CameraComponent properties',
+      (context) => GameWidget(game: CameraComponentPropertiesExample()),
+      codeLink: baseLink(
+        'camera_and_viewport/camera_component_properties_example.dart',
+      ),
+      info: CameraComponentPropertiesExample.description,
     );
 }
