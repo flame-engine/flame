@@ -59,7 +59,6 @@ abstract class Viewport extends Component {
   /// clip mask's shape must match the [size] of the viewport.
   ///
   /// This API must be implemented by all viewports.
-  @protected
   void clip(Canvas canvas);
 
   /// Override in order to perform a custom action upon resize.
@@ -76,18 +75,5 @@ abstract class Viewport extends Component {
       parent! is CameraComponent,
       'A Viewport may only be attached to a CameraComponent',
     );
-  }
-
-  @override
-  void renderTree(Canvas canvas) {
-    canvas.save();
-    canvas.translate(_position.x, _position.y);
-    canvas.save();
-    clip(canvas);
-    camera.viewfinder.renderFromViewport(canvas);
-    canvas.restore();
-    // Render viewport's children
-    super.renderTree(canvas);
-    canvas.restore();
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:meta/meta.dart';
 
 import '../components/component.dart';
@@ -8,17 +10,17 @@ import 'world.dart';
 
 /// [CameraComponent] is a component through which a [World] is observed.
 ///
-/// A camera consists of two main parts: a [Viewport] and a [Viewfinder]. It
-/// also a references a [World] component, and by "references" we mean that the
-/// world is not mounted to the camera, but the camera merely knows about the
-/// world, which may exist anywhere in the game tree.
+/// A camera consists of two parts: a [Viewport], and a [Viewfinder]. It also
+/// references a [World] component, which is not mounted to the camera, but the
+/// camera still knows about it. The world must be mounted somewhere else in
+/// the game tree.
 ///
 /// A camera is a regular component that can be placed anywhere in the game
 /// tree. Most games will have at least one "main" camera for displaying the
 /// main game world. However, additional cameras may also be used for some
 /// special effects. These extra cameras may be placed either in parallel with
-/// the main camera, or even within the world itself. It is even possible to
-/// create a camera that looks at itself.
+/// the main camera, or within the world. It is even possible to create a camera
+/// that looks at itself.
 ///
 /// Since [CameraComponent] is a [Component], it is possible to attach other
 /// components to it. In particular, adding components directly to the camera is
@@ -60,16 +62,28 @@ class CameraComponent extends Component {
   /// itself.
   ///
   /// The [world] component is generally mounted externally to the camera, and
-  /// this variable is a mere reference to it. In practice, the [world] may be
-  /// mounted anywhere in the game tree, including inside the camera if you
-  /// wish so.
+  /// this variable is a mere reference to it.
   World world;
 
   @mustCallSuper
   @override
   Future<void> onLoad() async {
-    await add(viewport);
-    await add(viewfinder);
+    await addAll([viewport, viewfinder]);
+  }
+
+  @override
+  void renderTree(Canvas canvas) {
+    canvas.save();
+    canvas.translate(viewport.position.x, viewport.position.y);
+    {
+      canvas.save();
+      viewport.clip(canvas);
+      viewfinder.renderFromViewport(canvas);
+      canvas.restore();
+    }
+    // Render viewport's children
+    viewport.renderTree(canvas);
+    canvas.restore();
   }
 
   /// A camera that currently performs rendering.
