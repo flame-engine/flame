@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:meta/meta.dart';
 import 'package:vector_math/vector_math_64.dart';
 
+import '../anchor.dart';
 import '../components/component.dart';
 import '../game/transform2d.dart';
 import 'camera_component.dart';
@@ -44,6 +45,13 @@ class Viewfinder extends Component {
   /// The rotation is around the axis that is perpendicular to the screen.
   double get angle => -_transform.angle;
   set angle(double value) => _transform.angle = -value;
+
+  Anchor get anchor => _anchor;
+  Anchor _anchor = Anchor.center;
+  set anchor(Anchor value) {
+    _anchor = value;
+    onViewportResize();
+  }
 
   /// Reference to the parent camera.
   CameraComponent get camera => parent! as CameraComponent;
@@ -95,12 +103,18 @@ class Viewfinder extends Component {
     _initZoom();
   }
 
+  void onViewportResize() {
+    final viewportSize = camera.viewport.size;
+    _transform.position.x = viewportSize.x * (_anchor.x - 0.5);
+    _transform.position.y = viewportSize.y * (_anchor.y - 0.5);
+  }
+
   @mustCallSuper
   @override
   void onMount() {
     assert(
       parent! is CameraComponent,
-      'Viewfinder can only be mounted to a Camera2',
+      'Viewfinder can only be mounted to a CameraComponent',
     );
     _initZoom();
   }
