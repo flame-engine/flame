@@ -66,12 +66,14 @@ class CameraComponentExample extends FlameGame with PanDetector {
   }
 
   void _updateMagnifyingGlassPosition(Vector2 point) {
-    // shifts the original [point] by 1.4142*radius, which happens to be in the
-    // middle of a handle
+    // [point] is in the canvas coordinate system.
+    // This shifts the original [point] by 1.4142*radius, which happens to be
+    // in the middle of the magnifying glass' handle.
     final handlePoint = point - Vector2.all(radius);
-    magnifyingGlass.viewport.position = handlePoint;
-    magnifyingGlass.viewfinder.position =
-        (handlePoint - canvasSize / 2 + center) * zoom;
+    magnifyingGlass
+      ..viewport.position = handlePoint
+      ..viewfinder.position = handlePoint - canvasSize / 2 + center;
+    // print('position = ${magnifyingGlass.viewfinder.position}');
   }
 }
 

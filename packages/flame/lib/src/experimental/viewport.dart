@@ -45,8 +45,8 @@ abstract class Viewport extends Component {
     _size.setFrom(value);
     if (isMounted) {
       camera.viewfinder.onViewportResize();
-      onViewportResize();
     }
+    onViewportResize();
   }
 
   /// Reference to the parent camera.
