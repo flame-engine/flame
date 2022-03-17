@@ -200,6 +200,56 @@ void main() {
       );
     });
   });
+
+  group('Component descendants', () {
+    flameGame.test(
+      'length must be equal to the number of added components',
+      (game) async {
+        final component = Component()..add(Component()..add(Component()));
+        await game.ensureAdd(component);
+
+        expect(game.descendants().length, 3);
+      },
+    );
+
+    flameGame.test(
+      'length must be equal to the number of added components including itself',
+      (game) async {
+        final component = Component()..add(Component()..add(Component()));
+        await game.ensureAdd(component);
+
+        expect(game.descendants(includeSelf: true).length, 4);
+      },
+    );
+
+    flameGame.test(
+      'length must be 0 if [hasPendingLifecycleEvents] is true',
+      (game) async {
+        final component = Component()..add(Component()..add(Component()));
+        game.add(component);
+
+        expect(game.hasPendingLifecycleEvents, true);
+        expect(game.descendants().length, 0);
+      },
+    );
+
+    flameGame.test(
+      'length should not change '
+      'if [hasPendingLifecycleEvents] is true after adding',
+      (game) async {
+        final component = Component()..add(Component()..add(Component()));
+        await game.add(component);
+        game.update(0);
+
+        expect(game.hasPendingLifecycleEvents, false);
+
+        game.add(Component());
+
+        expect(game.hasPendingLifecycleEvents, true);
+        expect(game.descendants().length, 3);
+      },
+    );
+  });
 }
 
 class ComponentWithSizeHistory extends Component {
