@@ -73,7 +73,6 @@ class CameraComponentExample extends FlameGame with PanDetector {
     magnifyingGlass
       ..viewport.position = handlePoint
       ..viewfinder.position = handlePoint - canvasSize / 2 + center;
-    // print('position = ${magnifyingGlass.viewfinder.position}');
   }
 }
 
