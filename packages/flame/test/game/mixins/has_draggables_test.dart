@@ -1,0 +1,107 @@
+import 'dart:ui';
+
+import 'package:flame/components.dart';
+import 'package:flame/game.dart';
+import 'package:flame/input.dart';
+import 'package:flame_test/flame_test.dart';
+import 'package:test/test.dart';
+
+class _GameWithDraggables extends FlameGame with HasDraggables {
+  int handledOnDragStart = 0;
+  int handledOnDragUpdate = 0;
+  int handledOnDragCancel = 0;
+
+  @override
+  bool onDragStart(int pointerId, DragStartInfo info) {
+    final handled = !super.onDragStart(pointerId, info);
+    if (handled) {
+      handledOnDragStart++;
+    }
+    return true;
+  }
+
+  @override
+  bool onDragUpdate(int pointerId, DragUpdateInfo info) {
+    final handled = !super.onDragUpdate(pointerId, info);
+    if (handled) {
+      handledOnDragUpdate++;
+    }
+    return true;
+  }
+
+  @override
+  bool onDragCancel(int pointerId) {
+    final handled = !super.onDragCancel(pointerId);
+    if (handled) {
+      handledOnDragCancel++;
+    }
+    return true;
+  }
+}
+
+class _DraggableComponent extends PositionComponent with Draggable {
+  _DraggableComponent() : super(size: Vector2.all(100));
+
+  @override
+  bool onDragCancel() {
+    return false;
+  }
+
+  @override
+  bool onDragStart(DragStartInfo info) {
+    return false;
+  }
+
+  @override
+  bool onDragUpdate(DragUpdateInfo info) {
+    return false;
+  }
+}
+
+void main() {
+  final withDraggables = FlameTester(() => _GameWithDraggables());
+
+  group('HasDraggables', () {
+    withDraggables.test(
+      'make sure Draggables can be added to valid games',
+      (game) async {
+        await game.ensureAdd(_DraggableComponent());
+      },
+    );
+
+    flameGame.test(
+      'make sure Draggables cannot be added to invalid games',
+      (game) {
+        expect(
+          () => game.ensureAdd(_DraggableComponent()),
+          failsAssert(
+            'Draggable Components can only be added to a FlameGame with '
+            'HasDraggables',
+          ),
+        );
+      },
+    );
+
+    withDraggables.widgetTest(
+      'drag correctly registered handled event',
+      (game, tester) async {
+        await game.ensureAdd(_DraggableComponent());
+        await tester.dragFrom(const Offset(10, 10), const Offset(90, 90));
+        expect(game.handledOnDragStart, 1);
+        expect(game.handledOnDragUpdate > 0, isTrue);
+        expect(game.handledOnDragCancel, 0);
+      },
+    );
+
+    withDraggables.widgetTest(
+      'drag outside of component is not registered as handled',
+      (game, tester) async {
+        await game.ensureAdd(_DraggableComponent());
+        await tester.dragFrom(const Offset(110, 110), const Offset(120, 120));
+        expect(game.handledOnDragStart, 0);
+        expect(game.handledOnDragUpdate, 0);
+        expect(game.handledOnDragCancel, 0);
+      },
+    );
+  });
+}
