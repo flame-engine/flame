@@ -331,6 +331,22 @@ class Component {
     }
   }
 
+  /// An iterator that returns all added components.
+  Iterable<Component> descendants({bool includeSelf = false}) sync* {
+    if (includeSelf) {
+      yield this;
+    }
+    if (!hasChildren) {
+      return;
+    }
+    for (final component in children) {
+      yield component;
+      if (component.hasChildren) {
+        yield* component.descendants();
+      }
+    }
+  }
+
   //#region Add/remove components
 
   /// Schedules [component] to be added as a child to this component.
