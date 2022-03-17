@@ -282,6 +282,25 @@ class MyGame extends FlameGame with HasTappables {
 **Note**: `HasTappables` uses an advanced gesture detector under the hood and as explained
 further up on this page it shouldn't be used alongside basic detectors.
 
+To recognize whether a `Tappable` added to the game handled an event, the `boolean` returned by
+`super` can be checked.
+
+In the following example it can be seen how it is used with `onTapDown`, the same technique can also
+be applied to `onTapUp` and `onTapCancel`.
+
+```dart
+class MyGame extends FlameGame with HasTappables {
+  @override
+  bool onTapDown(TapDownInfo info) {
+    final handled = super.onTapDown(info);
+    if(handled) {
+      // Do something if a child handled the event
+    }
+    return handled;
+  }
+}
+```
+
 
 ### Draggable components
 
@@ -356,6 +375,25 @@ class MyGame extends FlameGame with HasDraggables {
 }
 ```
 
+To recognize whether a `Draggable` added to the game handled an event, the `boolean` returned by
+`super` can be checked.
+
+In the following example it can be seen how it is used with `onDragStart`, the same technique can
+also be applied to `onDragUpdate` and `onDragEnd`.
+
+```dart
+class MyGame extends FlameGame with HasDraggables {
+  @override
+  bool onDragStart(DragStartInfo info) {
+    final handled = super.onDragStart(info);
+    if(handled) {
+      // Do something if a child handled the event
+    }
+    return handled;
+  }
+}
+```
+
 
 ### Hoverable components
 
@@ -381,6 +419,25 @@ you can override if you want to listen to the events.
 The provided event info is from the mouse move that triggered the action (entering or leaving).
 While the mouse movement is kept inside or outside, no events are fired and those mouse move events are
 not propagated. Only when the state is changed the handlers are triggered.
+
+To recognize whether a `Hoverable` added to the game handled an event, the `boolean` returned by
+`super` can be checked.
+
+In the following example it can be seen how it is used with `onHoverEnter`, the same technique can
+also be applied to `onHoverLeave`.
+
+```dart
+class MyGame extends FlameGame with HasHoverables {
+  @override
+  bool onHoverEnter(PointerHoverInfo info) {
+    final handled = super.onTapDown(info);
+    if(handled) {
+      // Do something if a child handled the event
+    }
+    return handled;
+  }
+}
+```
 
 ### GestureHitboxes
 

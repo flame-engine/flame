@@ -26,14 +26,14 @@ class MyGame extends FlameGame with DoubleTapDetector, HasTappables {
   }
 
   @override
-  void onTapUp(int id, TapUpInfo info) {
-    super.onTapUp(id, info);
+  bool onTapUp(int id, TapUpInfo info) {
+    final handled = super.onTapUp(id, info);
     final touchPoint = info.eventPosition.game;
-    final handled = children.any((c) => c.shouldRemove);
 
     if (!handled) {
       add(Square(touchPoint));
     }
+    return handled;
   }
 
   @override
