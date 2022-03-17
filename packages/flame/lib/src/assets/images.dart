@@ -90,7 +90,7 @@ class Images {
   }
 
   /// Loads the specified image with [fileName] into the cache.
-  Future<Image> load(String fileName) async {
+  Future<Image> load(String fileName) {
     if (!_assets.containsKey(fileName)) {
       _assets[fileName] = _ImageAsset.future(_fetchToMemory(fileName));
     }
@@ -98,12 +98,12 @@ class Images {
   }
 
   /// Loads all images with the specified [fileNames] into the cache.
-  Future<List<Image>> loadAll(List<String> fileNames) async {
+  Future<List<Image>> loadAll(List<String> fileNames) {
     return Future.wait(fileNames.map(load));
   }
 
   /// Loads all images from the specified (or default) [prefix] into the cache.
-  Future<List<Image>> loadAllImages() async {
+  Future<List<Image>> loadAllImages() {
     return loadAllFromPattern(
       RegExp(
         r'\.(png|jpg|jpeg|svg|gif|webp|bmp|wbmp)$',
