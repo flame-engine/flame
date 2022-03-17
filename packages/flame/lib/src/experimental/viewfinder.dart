@@ -49,6 +49,15 @@ class Viewfinder extends Component {
   double get angle => -_transform.angle;
   set angle(double value) => _transform.angle = -value;
 
+  /// The point within the viewport that is considered the "logical center" of
+  /// the camera.
+  ///
+  /// This anchor is relative to the viewport's bounding rect, and by default
+  /// is at the center of the viewport.
+  ///
+  /// The "logical center" of the camera means the point within the viewport
+  /// where the viewfinder's focus is located at. It is at this point within
+  /// the viewport that the world's point [position] will be displayed.
   Anchor get anchor => _anchor;
   Anchor _anchor = Anchor.center;
   set anchor(Anchor value) {
@@ -106,6 +115,8 @@ class Viewfinder extends Component {
     _initZoom();
   }
 
+  /// Called by the viewport when its size changes.
+  @internal
   void onViewportResize() {
     if (parent != null) {
       final viewportSize = camera.viewport.size;
