@@ -42,6 +42,7 @@ class Images {
   /// The cache will assume the ownership of the [image], and will properly
   /// dispose of it at the end.
   void add(String name, Image image) {
+    _assets[name]?.dispose();
     _assets[name] = _ImageAsset.fromImage(image);
   }
 
