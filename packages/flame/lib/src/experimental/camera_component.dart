@@ -71,17 +71,29 @@ class CameraComponent extends Component {
     await addAll([viewport, viewfinder]);
   }
 
+  /// Renders the [world] as seen through this camera.
+  ///
+  /// If the world is not mounted yet, only the viewport HUD elements will be
+  /// rendered.
   @override
   void renderTree(Canvas canvas) {
     canvas.save();
     canvas.translate(viewport.position.x, viewport.position.y);
-    {
+    // Render the world through the viewport
+    if (world.isMounted && currentCameras.length < maxCamerasDepth) {
       canvas.save();
       viewport.clip(canvas);
-      viewfinder.renderFromViewport(canvas);
+      try {
+        currentCameras.add(this);
+        canvas.transform(viewfinder.transformMatrix.storage);
+        world.renderFromCamera(canvas);
+        viewfinder.renderTree(canvas);
+      } finally {
+        currentCameras.removeLast();
+      }
       canvas.restore();
     }
-    // Render viewport's children
+    // Now render the HUD elements
     viewport.renderTree(canvas);
     canvas.restore();
   }

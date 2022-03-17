@@ -20,6 +20,9 @@ class Viewfinder extends Component {
   /// Internal transform matrix used by the viewfinder.
   final Transform2D _transform = Transform2D();
 
+  @internal
+  Matrix4 get transformMatrix => _transform.transformMatrix;
+
   /// The game coordinates of a point that is to be positioned at the center
   /// of the viewport.
   Vector2 get position => -_transform.offset;
@@ -120,28 +123,5 @@ class Viewfinder extends Component {
     );
     _initZoom();
     onViewportResize();
-  }
-
-  @override
-  void renderTree(Canvas canvas) {}
-
-  /// Internal rendering method called by the [Viewport] (regular rendering is
-  /// disabled). This ensures that the viewfinder performs its rendering only
-  /// after the viewport applied the necessary transforms / clip mask.
-  @internal
-  void renderFromViewport(Canvas canvas) {
-    final world = camera.world;
-    if (world.isMounted &&
-        CameraComponent.currentCameras.length <
-            CameraComponent.maxCamerasDepth) {
-      try {
-        CameraComponent.currentCameras.add(camera);
-        canvas.transform(_transform.transformMatrix.storage);
-        world.renderFromCamera(canvas);
-        super.renderTree(canvas);
-      } finally {
-        CameraComponent.currentCameras.removeLast();
-      }
-    }
   }
 }
