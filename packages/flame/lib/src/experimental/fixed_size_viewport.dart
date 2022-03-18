@@ -11,9 +11,10 @@ import 'viewport.dart';
 class FixedSizeViewport extends Viewport {
   FixedSizeViewport(double width, double height) {
     size = Vector2(width, height);
+    onViewportResize();
   }
 
-  Rect _clipRect = Rect.zero;
+  late Rect _clipRect;
 
   @override
   void clip(Canvas canvas) => canvas.clipRect(_clipRect, doAntiAlias: false);
