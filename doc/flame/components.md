@@ -38,9 +38,9 @@ on the rest of the game engine).
 
 A component lifecycle state can be checked by a series of getters:
  - `isLoaded`: Returns a bool with the current loaded state
- - `loaded`: Retunrs a future that will complete once the component has finished loading
+ - `loaded`: Returns a future that will complete once the component has finished loading
  - `isMounted`: Returns a bool with the current mounted state
- - `mounted`: Retunrs a future that will complete once the component has finished mounting
+ - `mounted`: Returns a future that will complete once the component has finished mounting
 
 ### Priority
 
