@@ -36,7 +36,7 @@ void main() {
     );
 
     testWithFlameGame(
-      'default camera centers on a given point',
+      'default camera centers on a given world point',
       (game) async {
         final world = World()..addToParent(game);
         final camera = CameraComponent(world: world)
@@ -84,7 +84,7 @@ void main() {
     );
 
     testWithFlameGame(
-      'default camera with zoom > 1 and shifted center',
+      'default camera with zoom > 1 and non-zero position',
       (game) async {
         final world = World()..addToParent(game);
         final camera = CameraComponent(world: world)
@@ -134,6 +134,32 @@ void main() {
           );
           game.update(0.1);
         }
+      },
+    );
+
+    testWithFlameGame(
+      'default camera with non-central anchor and zoom',
+      (game) async {
+        final world = World()
+          ..add(_Rect()..position = Vector2(20, 10))
+          ..addToParent(game);
+        CameraComponent(world: world)
+          ..viewfinder.zoom = 2
+          ..viewfinder.anchor = const Anchor(0.1, 0.7)
+          ..addToParent(game);
+        await game.ready();
+
+        final canvas = MockCanvas();
+        game.render(canvas);
+        expect(
+          canvas,
+          MockCanvas()
+            ..translate(800 * 0.1, 600 * 0.7) // viewfinder logical center
+            ..scale(2) // zoom
+            ..translate(20, 10) // rectangle translate
+            ..drawRect(const Rect.fromLTWH(0, 0, 80, 60))
+            ..translate(0, 0),
+        );
       },
     );
   });

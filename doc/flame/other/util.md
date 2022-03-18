@@ -198,8 +198,8 @@ Methods:
  - `transform`: Transforms the `Rect` using a `Matrix4`.
 
 Factories:
- - `RectExtension.fromBounds`: Construct a `Rect` that represents the bounds of a list of `Vector2`s.
- - `RectExtension.fromVector2Center`: Construct a `Rect` from a center point.
+ - `RectExtension.getBounds`: Construct a `Rect` that represents the bounds of a list of `Vector2`s.
+ - `RectExtension.fromCenter`: Construct a `Rect` from a center point (using `Vector2`).
 
 ### math.Rectangle
 
