@@ -13,12 +13,14 @@ mixin HasTappables on FlameGame {
   @mustCallSuper
   void onTapDown(int pointerId, TapDownInfo info) {
     info.handled = !propagateToChildren(
-        (Tappable child) => child.handleTapDown(pointerId, info));
+      (Tappable child) => child.handleTapDown(pointerId, info),
+    );
   }
 
   @mustCallSuper
   void onTapUp(int pointerId, TapUpInfo info) {
     info.handled = !propagateToChildren(
-        (Tappable child) => child.handleTapUp(pointerId, info));
+      (Tappable child) => child.handleTapUp(pointerId, info),
+    );
   }
 }
