@@ -137,8 +137,8 @@ class BadEffect extends Effect implements MeasurableEffect {
   BadEffect(EffectController controller) : super(controller);
 
   @override
-  double measure() => -1;
+  void apply(double progress) {}
 
   @override
-  void apply(double progress) {}
+  double measure() => -1;
 }
