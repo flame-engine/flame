@@ -5,6 +5,7 @@ import 'package:meta/meta.dart';
 import 'package:vector_math/vector_math_64.dart';
 
 import '../components/component.dart';
+import '../effects/provider_interfaces.dart';
 import '../game/transform2d.dart';
 import 'camera_component.dart';
 import 'viewport.dart';
@@ -15,7 +16,7 @@ import 'viewport.dart';
 /// The viewfinder contains the game point that is currently at the
 /// "cross-hairs" of the viewport ([position]), the [zoom] level, and the
 /// [angle] of rotation of the camera.
-class Viewfinder extends Component {
+class Viewfinder extends Component implements PositionProvider {
   /// Internal transform matrix used by the viewfinder.
   final Transform2D _transform = Transform2D();
 
@@ -127,4 +128,9 @@ class Viewfinder extends Component {
       }
     }
   }
+
+  @override
+  Vector2 get effectPosition => position;
+  @override
+  set effectPosition(Vector2 value) => position = value;
 }

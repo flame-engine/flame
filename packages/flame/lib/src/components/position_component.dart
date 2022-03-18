@@ -2,6 +2,7 @@ import 'dart:math' as math;
 import 'dart:ui' hide Offset;
 
 import '../anchor.dart';
+import '../effects/provider_interfaces.dart';
 import '../extensions/offset.dart';
 import '../extensions/vector2.dart';
 import '../game/notifying_vector2.dart';
@@ -57,7 +58,7 @@ import 'component.dart';
 /// the approximate bounding rectangle of the rendered picture. If you
 /// do not specify the size of a PositionComponent, then it will be
 /// equal to zero and the component won't be able to respond to taps.
-class PositionComponent extends Component {
+class PositionComponent extends Component implements PositionProvider {
   PositionComponent({
     Vector2? position,
     Vector2? size,
@@ -402,4 +403,14 @@ class PositionComponent extends Component {
     size.setValues(rect.width, rect.height);
     topLeftPosition = rect.topLeft.toVector2();
   }
+
+  //#region Effect interfaces
+
+  @override
+  Vector2 get effectPosition => transform.position;
+
+  @override
+  set effectPosition(Vector2 value) => transform.position = value;
+
+  //#endregion
 }

@@ -1,9 +1,10 @@
 import 'package:vector_math/vector_math_64.dart';
 
-import '../components/position_component.dart';
-import 'component_effect.dart';
 import 'controllers/effect_controller.dart';
+import 'effect.dart';
+import 'effect_target.dart';
 import 'measurable_effect.dart';
+import 'provider_interfaces.dart';
 
 /// Move a component to a new position.
 ///
@@ -19,11 +20,17 @@ import 'measurable_effect.dart';
 /// This effect applies incremental changes to the component's position, and
 /// requires that any other effect or update logic applied to the same component
 /// also used incremental updates.
-class MoveEffect extends ComponentEffect<PositionComponent>
+class MoveEffect extends Effect
+    with EffectTarget<PositionProvider>
     implements MeasurableEffect {
-  MoveEffect.by(Vector2 offset, EffectController controller)
-      : _offset = offset.clone(),
-        super(controller);
+  MoveEffect.by(
+    Vector2 offset,
+    EffectController controller, {
+    PositionProvider? target,
+  })  : _offset = offset.clone(),
+        super(controller) {
+    this.target = target;
+  }
 
   factory MoveEffect.to(Vector2 destination, EffectController controller) =>
       _MoveToEffect(destination, controller);
@@ -33,7 +40,7 @@ class MoveEffect extends ComponentEffect<PositionComponent>
   @override
   void apply(double progress) {
     final dProgress = progress - previousProgress;
-    target.position += _offset * dProgress;
+    target.effectPosition += _offset * dProgress;
   }
 
   @override
@@ -42,14 +49,17 @@ class MoveEffect extends ComponentEffect<PositionComponent>
 
 /// Implementation class for [MoveEffect.to]
 class _MoveToEffect extends MoveEffect {
-  _MoveToEffect(Vector2 destination, EffectController controller)
-      : _destination = destination.clone(),
-        super.by(Vector2.zero(), controller);
+  _MoveToEffect(
+    Vector2 destination,
+    EffectController controller, {
+    PositionProvider? target,
+  })  : _destination = destination.clone(),
+        super.by(Vector2.zero(), controller, target: target);
 
   final Vector2 _destination;
 
   @override
   void onStart() {
-    _offset = _destination - target.position;
+    _offset = _destination - target.effectPosition;
   }
 }

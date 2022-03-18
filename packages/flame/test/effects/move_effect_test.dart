@@ -1,7 +1,12 @@
+import 'dart:ui';
+
 import 'package:flame/components.dart';
+import 'package:flame/effects.dart';
 import 'package:flame/game.dart';
 import 'package:flame/src/effects/controllers/linear_effect_controller.dart';
 import 'package:flame/src/effects/move_effect.dart';
+import 'package:flame/src/effects/provider_interfaces.dart';
+import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -41,5 +46,43 @@ void main() {
       expect(object.position.x, closeTo(5, 1e-15));
       expect(object.position.y, closeTo(-1, 1e-15));
     });
+
+    testWithFlameGame('custom target', (game) async {
+      final rectComponent = _RectComponent()
+        ..rect = const Rect.fromLTRB(10, 20, 50, 40)
+        ..addToParent(game);
+      rectComponent.add(
+        MoveEffect.by(
+          Vector2(3, -3),
+          EffectController(duration: 1),
+          target: _TopLeftCorner(rectComponent),
+        ),
+      );
+      await game.ready();
+
+      expect(rectComponent.rect, const Rect.fromLTRB(10, 20, 50, 40));
+      game.update(0.5);
+      expect(rectComponent.rect, const Rect.fromLTRB(11.5, 18.5, 50, 40));
+      game.update(0.5);
+      expect(rectComponent.rect, const Rect.fromLTRB(13, 17, 50, 40));
+    });
   });
+}
+
+class _RectComponent extends Component {
+  Rect rect = Rect.zero;
+}
+
+class _TopLeftCorner implements PositionProvider {
+  _TopLeftCorner(this.target);
+  _RectComponent target;
+
+  @override
+  Vector2 get effectPosition => Vector2(target.rect.left, target.rect.top);
+
+  @override
+  set effectPosition(Vector2 value) {
+    final rect = target.rect;
+    target.rect = Rect.fromLTRB(value.x, value.y, rect.right, rect.bottom);
+  }
 }

@@ -4,6 +4,7 @@ import 'package:meta/meta.dart';
 import 'package:vector_math/vector_math_64.dart';
 
 import '../components/component.dart';
+import '../effects/provider_interfaces.dart';
 import 'camera_component.dart';
 
 /// [Viewport] is a part of a [CameraComponent] system.
@@ -16,7 +17,7 @@ import 'camera_component.dart';
 /// There are several implementations of [Viewport], which differ by their
 /// shape, and also by their behavior in response to changes to the canvas size.
 /// Users may also create their own implementations.
-abstract class Viewport extends Component {
+abstract class Viewport extends Component implements PositionProvider {
   /// Position of the viewport's center in the parent's coordinate frame.
   ///
   /// Changing this position will move the viewport around the screen, but will
@@ -85,4 +86,9 @@ abstract class Viewport extends Component {
     super.renderTree(canvas);
     canvas.restore();
   }
+
+  @override
+  Vector2 get effectPosition => _position;
+  @override
+  set effectPosition(Vector2 value) => _position.setFrom(value);
 }
