@@ -39,17 +39,19 @@ class _TappableComponent extends PositionComponent with Tappable {
 
   @override
   bool onTapCancel() {
-    return false;
+    return true;
   }
 
   @override
   bool onTapDown(TapDownInfo info) {
-    return false;
+    info.handled = true;
+    return true;
   }
 
   @override
   bool onTapUp(TapUpInfo info) {
-    return false;
+    info.handled = true;
+    return true;
   }
 }
 

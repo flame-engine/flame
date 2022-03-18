@@ -20,19 +20,17 @@ class _GameWithDraggables extends FlameGame with HasDraggables {
   }
 
   @override
-  bool onDragUpdate(int pointerId, DragUpdateInfo info) {
+  void onDragUpdate(int pointerId, DragUpdateInfo info) {
     super.onDragUpdate(pointerId, info);
     if (info.handled) {
       handledOnDragUpdate++;
     }
-    return true;
   }
 
   @override
-  bool onDragCancel(int pointerId) {
+  void onDragCancel(int pointerId) {
     super.onDragCancel(pointerId);
     handledOnDragCancel++;
-    return true;
   }
 }
 
@@ -41,17 +39,19 @@ class _DraggableComponent extends PositionComponent with Draggable {
 
   @override
   bool onDragCancel() {
-    return false;
+    return true;
   }
 
   @override
   bool onDragStart(DragStartInfo info) {
-    return false;
+    info.handled = true;
+    return true;
   }
 
   @override
   bool onDragUpdate(DragUpdateInfo info) {
-    return false;
+    info.handled = true;
+    return true;
   }
 }
 

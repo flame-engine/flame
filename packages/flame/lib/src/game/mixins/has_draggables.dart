@@ -7,21 +7,21 @@ import '../../gestures/events.dart';
 mixin HasDraggables on FlameGame {
   @mustCallSuper
   void onDragStart(int pointerId, DragStartInfo info) {
-    info.handled = !propagateToChildren<Draggable>(
+    propagateToChildren<Draggable>(
       (c) => c.handleDragStart(pointerId, info),
     );
   }
 
   @mustCallSuper
   void onDragUpdate(int pointerId, DragUpdateInfo info) {
-    info.handled = !propagateToChildren<Draggable>(
+    propagateToChildren<Draggable>(
       (c) => c.handleDragUpdated(pointerId, info),
     );
   }
 
   @mustCallSuper
   void onDragEnd(int pointerId, DragEndInfo info) {
-    info.handled = !propagateToChildren<Draggable>(
+    propagateToChildren<Draggable>(
       (c) => c.handleDragEnded(pointerId, info),
     );
   }
