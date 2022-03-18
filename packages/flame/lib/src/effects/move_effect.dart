@@ -1,8 +1,9 @@
 import 'package:vector_math/vector_math_64.dart';
 
+import '../components/position_component.dart';
+import 'component_effect.dart';
 import 'controllers/effect_controller.dart';
 import 'measurable_effect.dart';
-import 'transform2d_effect.dart';
 
 /// Move a component to a new position.
 ///
@@ -18,7 +19,8 @@ import 'transform2d_effect.dart';
 /// This effect applies incremental changes to the component's position, and
 /// requires that any other effect or update logic applied to the same component
 /// also used incremental updates.
-class MoveEffect extends Transform2DEffect implements MeasurableEffect {
+class MoveEffect extends ComponentEffect<PositionComponent>
+    implements MeasurableEffect {
   MoveEffect.by(Vector2 offset, EffectController controller)
       : _offset = offset.clone(),
         super(controller);
@@ -32,7 +34,6 @@ class MoveEffect extends Transform2DEffect implements MeasurableEffect {
   void apply(double progress) {
     final dProgress = progress - previousProgress;
     target.position += _offset * dProgress;
-    super.apply(progress);
   }
 
   @override

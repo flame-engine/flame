@@ -113,7 +113,9 @@ abstract class Effect extends Component {
     }
     controller.advance(dt);
     if (_started) {
-      apply(controller.progress);
+      final progress = controller.progress;
+      apply(progress);
+      _lastProgress = progress;
     }
     if (!_finished && controller.completed) {
       _finished = true;
@@ -135,7 +137,9 @@ abstract class Effect extends Component {
       onStart();
     }
     if (_started) {
-      apply(controller.progress);
+      final progress = controller.progress;
+      apply(progress);
+      _lastProgress = progress;
     }
     if (!_finished && controller.completed) {
       _finished = true;
@@ -155,7 +159,9 @@ abstract class Effect extends Component {
     }
     final remainingDt = controller.recede(dt);
     if (_started) {
-      apply(controller.progress);
+      final progress = controller.progress;
+      apply(progress);
+      _lastProgress = progress;
     }
     return remainingDt;
   }
@@ -190,11 +196,7 @@ abstract class Effect extends Component {
   /// [EffectController] for details.
   ///
   /// This is a main method that MUST be implemented in every derived class.
-  /// In the derived class, call `super.apply()` last.
-  @mustCallSuper
-  void apply(double progress) {
-    _lastProgress = progress;
-  }
+  void apply(double progress);
 
   //#endregion
 }

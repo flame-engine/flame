@@ -13,7 +13,6 @@ class _MyEffect extends Effect {
   @override
   void apply(double progress) {
     x = progress;
-    super.apply(progress);
   }
 
   @override

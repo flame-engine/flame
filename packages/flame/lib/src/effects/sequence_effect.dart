@@ -55,6 +55,9 @@ class SequenceEffect extends Effect {
     update(dt);
     // Do not update children: the controller will take care of it
   }
+
+  @override
+  void apply(double progress) {}
 }
 
 /// Helper class that implements the functionality of a [SequenceEffect]. This

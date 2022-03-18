@@ -11,6 +11,5 @@ class RemoveEffect extends Effect {
     if (progress == 1) {
       parent?.removeFromParent();
     }
-    super.apply(progress);
   }
 }
