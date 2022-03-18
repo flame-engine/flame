@@ -71,6 +71,7 @@ class MyCollidable extends PositionComponent
   @override
   void onCollisionEnd(PositionComponent other) {
     super.onCollisionEnd(other);
+    print('on collision end');
     if (!isColliding) {
       hitbox.paint.color = _defaultColor;
     }

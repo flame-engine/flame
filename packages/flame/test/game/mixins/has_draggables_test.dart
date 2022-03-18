@@ -12,18 +12,17 @@ class _GameWithDraggables extends FlameGame with HasDraggables {
   int handledOnDragCancel = 0;
 
   @override
-  bool onDragStart(int pointerId, DragStartInfo info) {
-    final handled = !super.onDragStart(pointerId, info);
-    if (handled) {
+  void onDragStart(int pointerId, DragStartInfo info) {
+    super.onDragStart(pointerId, info);
+    if (info.handled) {
       handledOnDragStart++;
     }
-    return true;
   }
 
   @override
   bool onDragUpdate(int pointerId, DragUpdateInfo info) {
-    final handled = !super.onDragUpdate(pointerId, info);
-    if (handled) {
+    super.onDragUpdate(pointerId, info);
+    if (info.handled) {
       handledOnDragUpdate++;
     }
     return true;
@@ -31,10 +30,8 @@ class _GameWithDraggables extends FlameGame with HasDraggables {
 
   @override
   bool onDragCancel(int pointerId) {
-    final handled = !super.onDragCancel(pointerId);
-    if (handled) {
-      handledOnDragCancel++;
-    }
+    super.onDragCancel(pointerId);
+    handledOnDragCancel++;
     return true;
   }
 }

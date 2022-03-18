@@ -6,7 +6,8 @@ import '../../gestures/events.dart';
 
 mixin HasHoverables on FlameGame {
   @mustCallSuper
-  bool onMouseMove(PointerHoverInfo info) {
-    return propagateToChildren<Hoverable>((c) => c.handleMouseMovement(info));
+  void onMouseMove(PointerHoverInfo info) {
+    info.handled =
+        !propagateToChildren<Hoverable>((c) => c.handleMouseMovement(info));
   }
 }

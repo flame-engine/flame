@@ -12,30 +12,25 @@ class _GameWithTappables extends FlameGame with HasTappables {
   int handledOnTapCancel = 0;
 
   @override
-  bool onTapDown(int pointerId, TapDownInfo info) {
-    final handled = !super.onTapDown(pointerId, info);
-    if (handled) {
+  void onTapDown(int pointerId, TapDownInfo info) {
+    super.onTapDown(pointerId, info);
+    if (info.handled) {
       handledOnTapDown++;
     }
-    return true;
   }
 
   @override
-  bool onTapUp(int pointerId, TapUpInfo info) {
-    final handled = !super.onTapUp(pointerId, info);
-    if (handled) {
+  void onTapUp(int pointerId, TapUpInfo info) {
+    super.onTapUp(pointerId, info);
+    if (info.handled) {
       handledOnTapUp++;
     }
-    return true;
   }
 
   @override
-  bool onTapCancel(int pointerId) {
-    final handled = !super.onTapCancel(pointerId);
-    if (handled) {
-      handledOnTapCancel++;
-    }
-    return true;
+  void onTapCancel(int pointerId) {
+    super.onTapCancel(pointerId);
+    handledOnTapCancel++;
   }
 }
 

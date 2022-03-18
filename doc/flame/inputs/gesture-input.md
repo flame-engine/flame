@@ -291,12 +291,10 @@ be applied to `onTapUp` and `onTapCancel`.
 ```dart
 class MyGame extends FlameGame with HasTappables {
   @override
-  bool onTapDown(int pointerId, TapDownInfo info) {
-    final handled = !super.onTapDown(info);
-    if(handled) {
+  void onTapDown(int pointerId, TapDownInfo info) {
+    if(info.handled) {
       // Do something if a child handled the event
     }
-    return handled;
   }
 }
 ```
@@ -384,12 +382,10 @@ also be applied to `onDragUpdate` and `onDragEnd`.
 ```dart
 class MyGame extends FlameGame with HasDraggables {
   @override
-  bool onDragStart(int pointerId, DragStartInfo info) {
-    final handled = !super.onDragStart(info);
-    if(handled) {
+  void onDragStart(int pointerId, DragStartInfo info) {
+    if(info.handled) {
       // Do something if a child handled the event
     }
-    return handled;
   }
 }
 ```
@@ -429,12 +425,10 @@ also be applied to `onHoverLeave`.
 ```dart
 class MyGame extends FlameGame with HasHoverables {
   @override
-  bool onHoverEnter(PointerHoverInfo info) {
-    final handled = !super.onTapDown(info);
-    if(handled) {
+  void onHoverEnter(PointerHoverInfo info) {
+    if(info.handled) {
       // Do something if a child handled the event
     }
-    return handled;
   }
 }
 ```
