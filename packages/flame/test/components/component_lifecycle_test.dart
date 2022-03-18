@@ -93,6 +93,30 @@ void main() {
       },
     );
 
+    flameGame.test('component loaded completes', (game) async {
+      final component = _MyComponent();
+      await game.add(component);
+      final loaded = component.loaded;
+
+      await game.ready();
+
+      return expectLater(loaded, completes);
+    });
+
+    flameGame.test(
+      'component loaded completes even after the '
+      'component is already loaded',
+      (game) async {
+        final component = _MyComponent();
+        await game.add(component);
+        await game.ready();
+
+        final loaded = component.loaded;
+
+        return expectLater(loaded, completes);
+      },
+    );
+
     // Obsolete scenario, when we used to have a separate "prepare" stage
     flameGame.test('parent prepares the component', (game) async {
       final parent = _MyComponent('parent');
