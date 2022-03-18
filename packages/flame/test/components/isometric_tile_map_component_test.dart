@@ -36,5 +36,26 @@ void main() {
 
       expect(c.getBlockCenterPosition(const Block(0, 0)), closeToVector(0, 0));
     });
+
+    test('variable block conversion returns same value as normal function', () {
+      final c = IsometricTileMapComponent(
+        _MockSpriteSheet(),
+        map,
+        destTileSize: Vector2.all(32.0),
+        tileHeight: 8,
+      );
+      expect(c.getVariableRenderPositionInts(1, 1),
+          c.getBlockRenderPositionInts(1, 1));
+    });
+
+    test('variable block conversion', () {
+      final c = IsometricTileMapComponent(
+        _MockSpriteSheet(),
+        map,
+        destTileSize: Vector2.all(32.0),
+        propSize: Vector2(32, 40),
+      );
+      expect(c.getVariableRenderPositionInts(1, 1), Vector2(-16, 32 - 40));
+    });
   });
 }

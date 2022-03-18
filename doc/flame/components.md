@@ -67,6 +67,7 @@ class MyGame extends FlameGame {
 }
 ```
 
+
 To update the priority of a component you have to either just set it to a new value, like
 `component.priority = 2`, and it will be updated in the next tick.
 
@@ -787,6 +788,18 @@ the height colored in the darker tone:
 This is an example of how a quarter-length map looks like:
 
 ![An example of a isometric map with selector](../images/isometric.png)
+
+The component supports negative indexing starting from -2 *(as -1 is reserved for empty tile)* 
+which returns the sprite from the bottom left to the bottom right using negative indexing and
+wraps to the upper rows on overflow of the tileset's image width. 
+
+Use the `propSize` property to give a custom size to negative indexed elements 
+*(This can be used to add props and art such as tiles which rise higher than most tiles)*.
+
+The following is an example of rendering props as tiles. In this example it is specifically the
+mirrors, some of which are higher than the normal tiles.
+
+![An example use case of props](../images/isometricPropsThumb.png)
 
 Flame's Example app contains a more in-depth example, featuring how to parse coordinates to make a
 selector. The code can be found
