@@ -51,9 +51,6 @@ class SequenceEffect extends Effect {
   SequenceEffect._(EffectController ec) : super(ec);
 
   @override
-  void apply(double progress) {}
-
-  @override
   void updateTree(double dt) {
     update(dt);
     // Do not update children: the controller will take care of it

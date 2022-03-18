@@ -53,6 +53,11 @@ abstract class Effect extends Component {
   bool _started;
   bool _finished;
 
+  /// The effect's `progress` variable as it was the last time that the
+  /// `apply()` method was called. Mostly used by the derived classes.
+  double get previousProgress => _lastProgress;
+  double _lastProgress = 0;
+
   /// Whether the effect is paused or not.
   ///
   /// By default, the effect will not be paused, even when it is in the
@@ -84,6 +89,7 @@ abstract class Effect extends Component {
     _paused = false;
     _started = false;
     _finished = false;
+    _lastProgress = 0;
   }
 
   @mustCallSuper
@@ -91,6 +97,7 @@ abstract class Effect extends Component {
     controller.setToEnd();
     _started = true;
     _finished = true;
+    _lastProgress = 1;
   }
 
   /// Implementation of [Component]'s `update()` method. Derived classes are
@@ -183,7 +190,11 @@ abstract class Effect extends Component {
   /// [EffectController] for details.
   ///
   /// This is a main method that MUST be implemented in every derived class.
-  void apply(double progress);
+  /// In the derived class, call `super.apply()` last.
+  @mustCallSuper
+  void apply(double progress) {
+    _lastProgress = progress;
+  }
 
   //#endregion
 }
