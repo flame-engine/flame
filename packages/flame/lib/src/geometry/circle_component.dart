@@ -57,13 +57,17 @@ class CircleComponent extends ShapeComponent {
     return min(_scaledSize.x, _scaledSize.y) / 2;
   }
 
-  /// This render method doesn't rotate the canvas according to angle since a
-  /// circle will look the same rotated as not rotated.
   @override
   void render(Canvas canvas) {
     if (renderShape) {
       canvas.drawCircle((size / 2).toOffset(), radius, paint);
     }
+  }
+
+  @override
+  void renderDebugMode(Canvas canvas) {
+    super.renderDebugMode(canvas);
+    canvas.drawCircle((size / 2).toOffset(), radius, debugPaint);
   }
 
   /// Checks whether the represented circle contains the [point].

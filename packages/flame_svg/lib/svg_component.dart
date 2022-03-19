@@ -30,8 +30,7 @@ class SvgComponent extends PositionComponent {
 
   /// Creates an [SvgComponent] from an [Svg] instance.
   @Deprecated(
-    'Will be removed on future versions, use the default '
-    'constructor instead',
+    'Will be removed in flame_svg v1.2.0, use the default constructor instead',
   )
   SvgComponent.fromSvg(
     Svg svg, {
