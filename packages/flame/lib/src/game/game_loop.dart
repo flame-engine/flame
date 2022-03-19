@@ -71,12 +71,12 @@ class GameLoop {
     _ticker.dispose();
   }
 
-  @Deprecated('Internal variable')
+  @Deprecated('Internal variable, this will be removed in v1.2.0')
   Duration get previous => _previous;
 
-  @Deprecated('Use stop() instead')
+  @Deprecated('Use stop() instead, this will be removed in v1.2.0')
   void pause() => stop();
 
-  @Deprecated('Use start() instead')
+  @Deprecated('Use start() instead, this will be removed in v1.2.0')
   void resume() => start();
 }

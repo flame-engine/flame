@@ -1,2 +1,2 @@
-@Deprecated('This mixin will be removed after 1.1.0')
+@Deprecated('This mixin will be removed in v1.2.0')
 mixin Loadable {}
