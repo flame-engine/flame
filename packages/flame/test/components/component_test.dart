@@ -41,12 +41,6 @@ class _ParentOnPrepareComponent extends _OnPrepareComponent {
   }
 }
 
-class _OrderCheckingComponent extends Component {
-  final int order;
-
-  _OrderCheckingComponent(this.order);
-}
-
 void main() {
   final prepareGame = FlameTester(() => _PrepareGame());
 
@@ -205,109 +199,103 @@ void main() {
         equals([Vector2(300, 200), Vector2(400, 500)]),
       );
     });
-    testWithFlameGame(
-      'length of descendants must be 0 '
-      'when it is called before being loaded',
-      (game) async {
-        final component = Component()..add(Component()..add(Component()));
 
-        expect(game.descendants().length, 0);
-        await game.ensureAdd(component);
-        expect(game.descendants().length, 3);
-      },
-    );
+    group('descendants', () {
+      testWithFlameGame(
+        'length must be 0 when it is called before being loaded',
+        (game) async {
+          final component = Component()..add(Component()..add(Component()));
 
-    testWithFlameGame(
-      'length of descendants must be 3 when the number of added components is 3',
-      (game) async {
-        final component = Component()..add(Component()..add(Component()));
-        await game.ensureAdd(component);
+          expect(game.descendants().length, 0);
+          await game.ensureAdd(component);
+          expect(game.descendants().length, 3);
+        },
+      );
 
-        expect(game.descendants().length, 3);
-      },
-    );
+      testWithFlameGame(
+        'length must be 3 when the number of added components is 3',
+        (game) async {
+          final component = Component()..add(Component()..add(Component()));
+          await game.ensureAdd(component);
 
-    testWithFlameGame(
-      'length of descendants must be equal to the number of added components '
-      'including itself when the passed parameter includeSelf is true',
-      (game) async {
-        final component = Component()..add(Component()..add(Component()));
-        await game.ensureAdd(component);
+          expect(game.descendants().length, 3);
+        },
+      );
 
-        expect(game.descendants(includeSelf: true).length, 4);
-      },
-    );
+      testWithFlameGame(
+        'length must be equal to the number of added components including '
+        'itself when the passed parameter includeSelf is true',
+        (game) async {
+          final component = Component()..add(Component()..add(Component()));
+          await game.ensureAdd(component);
 
-    testWithFlameGame(
-      'length of descendants must be 0 when hasPendingLifecycleEvents is true',
-      (game) async {
-        final component = Component()..add(Component()..add(Component()));
-        game.add(component);
+          expect(game.descendants(includeSelf: true).length, 4);
+        },
+      );
 
-        expect(game.hasPendingLifecycleEvents, true);
-        expect(game.descendants().length, 0);
-      },
-    );
+      testWithFlameGame(
+        'length must be 0 when hasPendingLifecycleEvents is true',
+        (game) async {
+          final component = Component()..add(Component()..add(Component()));
+          game.add(component);
 
-    testWithFlameGame(
-      'length of descendants should not change '
-      'when hasPendingLifecycleEvents is true after adding',
-      (game) async {
-        final component = Component()..add(Component()..add(Component()));
-        await game.add(component);
-        await game.ready();
+          expect(game.hasPendingLifecycleEvents, true);
+          expect(game.descendants().length, 0);
+        },
+      );
 
-        expect(game.hasPendingLifecycleEvents, false);
+      testWithFlameGame(
+        'length should not change when hasPendingLifecycleEvents is true after '
+        'adding',
+        (game) async {
+          final component = Component()..add(Component()..add(Component()));
+          await game.add(component);
+          await game.ready();
 
-        game.add(Component());
+          expect(game.hasPendingLifecycleEvents, false);
 
-        expect(game.hasPendingLifecycleEvents, true);
-        expect(game.descendants().length, 3);
-      },
-    );
+          game.add(Component());
 
-    testWithFlameGame(
-      'order of descendants must adhere to the "depth-first search" algorithm',
-      (game) async {
-        const expectedOrder = [0, 1, 2, 3, 4, 5];
-        final componentA = _OrderCheckingComponent(0);
-        final componentB = _OrderCheckingComponent(1);
-        final componentC = _OrderCheckingComponent(5);
-        final componentD = _OrderCheckingComponent(2);
-        final componentE = _OrderCheckingComponent(3);
-        final componentF = _OrderCheckingComponent(4);
+          expect(game.hasPendingLifecycleEvents, true);
+          expect(game.descendants().length, 3);
+        },
+      );
 
-        componentE.add(componentF);
-        componentB.addAll([componentD, componentE]);
-        game.addAll([componentA, componentB, componentC]);
-        // The game has the following structure:
-        // Game(
-        //  children: [
-        //    ComponentA(),           -- 0
-        //    ComponentB(             -- 1
-        //      children: [
-        //        ComponentD(),       -- 2
-        //        ComponentE(         -- 3
-        //          children: [
-        //            ComponentF(),   -- 4
-        //          ]
-        //        ),
-        //      ]
-        //    ),
-        //    ComponentC(),           -- 5
-        //  ],
-        // );
-        await game.ready();
+      testWithFlameGame(
+        'order must adhere to the "depth-first search" algorithm',
+        (game) async {
+          final componentA = Component();
+          game.add(componentA);
 
-        final result = game
-            .descendants()
-            .whereType<_OrderCheckingComponent>()
-            .map((e) => e.order)
-            .toList();
+          final componentB = Component();
+          game.add(componentB);
 
-        expect(result, expectedOrder);
-      },
-    );
+          final componentC = Component();
+          game.add(componentC);
+
+          final componentD = Component();
+          final componentE = Component();
+          componentB.addAll([componentD, componentE]);
+
+          final componentF = Component();
+          componentE.add(componentF);
+
+          await game.ready();
+
+          final result = game.descendants().toList();
+          final expectedOrder = [
+            componentA,
+            componentB,
+            componentD,
+            componentE,
+            componentF,
+            componentC,
+          ];
+
+          expect(result, equals(expectedOrder));
+        },
+      );
+    });
   });
 }
 
