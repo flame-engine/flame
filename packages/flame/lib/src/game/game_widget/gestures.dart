@@ -1,11 +1,13 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
 
-import '../../../components.dart';
 import '../../../extensions.dart';
 import '../../gestures/detectors.dart';
 import '../../gestures/events.dart';
 import '../mixins/game.dart';
+import '../mixins/has_draggables.dart';
+import '../mixins/has_hoverables.dart';
+import '../mixins/has_tappables.dart';
 
 bool hasBasicGestureDetectors(Game game) {
   return game is TapDetector ||

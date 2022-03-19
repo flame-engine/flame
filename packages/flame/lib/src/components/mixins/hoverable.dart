@@ -1,8 +1,7 @@
 import 'package:meta/meta.dart';
 
 import '../../../components.dart';
-import '../../../game.dart';
-import '../../game/flame_game.dart';
+import '../../game/mixins/has_hoverables.dart';
 import '../../gestures/events.dart';
 
 mixin Hoverable on Component {
@@ -41,12 +40,5 @@ mixin Hoverable on Component {
       'Hoverable Components can only be added to a FlameGame with '
       'HasHoverables',
     );
-  }
-}
-
-mixin HasHoverables on FlameGame {
-  @mustCallSuper
-  void onMouseMove(PointerHoverInfo info) {
-    propagateToChildren<Hoverable>((c) => c.handleMouseMovement(info));
   }
 }
