@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:meta/meta.dart';
 
 import '../../../collisions.dart';
@@ -13,9 +11,6 @@ import '../../geometry/shape_intersections.dart' as intersection_system;
 mixin ShapeHitbox on ShapeComponent implements Hitbox<ShapeHitbox> {
   @override
   CollisionType collisionType = CollisionType.active;
-
-  @override
-  Paint get paint => debugPaint;
 
   /// Whether the hitbox is allowed to collide with another hitbox that is
   /// added to the same parent.
@@ -48,10 +43,7 @@ mixin ShapeHitbox on ShapeComponent implements Hitbox<ShapeHitbox> {
   final Matrix3 _rotationMatrix = Matrix3.zero();
 
   @override
-  bool get renderShape => _renderShape || debugMode;
-  @override
-  set renderShape(bool shouldRender) => _renderShape = shouldRender;
-  bool _renderShape = false;
+  bool renderShape = false;
 
   @protected
   late PositionComponent hitboxParent;
