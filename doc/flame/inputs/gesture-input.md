@@ -453,7 +453,7 @@ class MyComponent extends PositionComponent with Hoverable {
 class MyGame extends FlameGame with HasHoverables {
   @override
   void onHoverEnter(PointerHoverInfo info) {
-    if(info.handled) {
+    if (info.handled) {
       // Do something if a child handled the event
     }
   }
