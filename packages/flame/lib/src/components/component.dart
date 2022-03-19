@@ -335,9 +335,8 @@ class Component {
   ///
   /// This can be an expensive operation if a large nesting tree is used.
   ///
-  /// In order to filter [descendants]
-  /// it is usually convenient to use [Iterable] lazy methods,
-  /// such as [Iterable.where].
+  /// In order to filter [descendants] it is usually convenient to use 
+  /// [Iterable] lazy methods, such as [Iterable.where].
   Iterable<Component> descendants({bool includeSelf = false}) sync* {
     if (includeSelf) {
       yield this;
