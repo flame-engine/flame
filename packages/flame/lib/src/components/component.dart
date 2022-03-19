@@ -390,7 +390,6 @@ class Component {
           _state == LifecycleState.removed,
     );
     _parent = parent;
-    debugMode |= parent.debugMode;
     parent.lifecycle._children.add(this);
 
     if (!isLoaded) {
@@ -455,6 +454,7 @@ class Component {
     }
     _mountCompleter?.complete();
     _mountCompleter = null;
+    debugMode |= _parent!.debugMode;
     onMount();
     _state = LifecycleState.mounted;
     if (!existingChild) {
