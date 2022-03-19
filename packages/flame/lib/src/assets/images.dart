@@ -91,10 +91,8 @@ class Images {
 
   /// Loads the specified image with [fileName] into the cache.
   Future<Image> load(String fileName) {
-    if (!_assets.containsKey(fileName)) {
-      _assets[fileName] = _ImageAsset.future(_fetchToMemory(fileName));
-    }
-    return _assets[fileName]!.retrieveAsync();
+    return (_assets[fileName] ??= _ImageAsset.future(_fetchToMemory(fileName)))
+        .retrieveAsync();
   }
 
   /// Loads all images with the specified [fileNames] into the cache.
@@ -158,10 +156,8 @@ class Images {
   }
 
   Future<Image> fromBase64(String key, String base64) {
-    if (!_assets.containsKey(key)) {
-      _assets[key] = _ImageAsset.future(_fetchFromBase64(base64));
-    }
-    return _assets[key]!.retrieveAsync();
+    return (_assets[key] ??= _ImageAsset.future(_fetchFromBase64(base64)))
+        .retrieveAsync();
   }
 
   Future<Image> _fetchFromBase64(String base64Data) {
