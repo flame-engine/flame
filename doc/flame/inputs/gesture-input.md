@@ -401,7 +401,7 @@ class MyComponent extends PositionComponent with Draggable {
 class MyGame extends FlameGame with HasDraggables {
   @override
   void onDragStart(int pointerId, DragStartInfo info) {
-    if(info.handled) {
+    if (info.handled) {
       // Do something if a child handled the event
     }
   }
