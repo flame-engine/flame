@@ -207,7 +207,7 @@ void main() {
     });
     testWithFlameGame(
       'length of descendants must be 0 '
-      'when it is called before the add method',
+      'when it is called before being loaded',
       (game) async {
         final component = Component()..add(Component()..add(Component()));
 
