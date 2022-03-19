@@ -94,7 +94,7 @@ class Images {
     if (!_assets.containsKey(fileName)) {
       _assets[fileName] = _ImageAsset.future(_fetchToMemory(fileName));
     }
-    return _assets[fileName]!.retrieve();
+    return _assets[fileName]!.retrieveAsync();
   }
 
   /// Loads all images with the specified [fileNames] into the cache.
@@ -124,8 +124,8 @@ class Images {
   }
 
   /// Waits until all currently pending image loading operations complete.
-  Future<void> ready() async {
-    await Future.wait(_assets.values.map((asset) => asset.retrieve()));
+  Future<void> ready() {
+    return Future.wait(_assets.values.map((asset) => asset.retrieveAsync()));
   }
 
   /// Converts an array of pixel values into an [Image] object.
@@ -157,14 +157,14 @@ class Images {
     return completer.future;
   }
 
-  Future<Image> fromBase64(String key, String base64) async {
+  Future<Image> fromBase64(String key, String base64) {
     if (!_assets.containsKey(key)) {
       _assets[key] = _ImageAsset.future(_fetchFromBase64(base64));
     }
-    return _assets[key]!.retrieve();
+    return _assets[key]!.retrieveAsync();
   }
 
-  Future<Image> _fetchFromBase64(String base64Data) async {
+  Future<Image> _fetchFromBase64(String base64Data) {
     final data = base64Data.substring(base64Data.indexOf(',') + 1);
     final bytes = base64.decode(data);
     return _loadBytes(bytes);
@@ -188,7 +188,12 @@ class Images {
 /// This class owns the [Image] object, which can be disposed of using the
 /// [dispose] method.
 class _ImageAsset {
-  _ImageAsset.future(Future<Image> future) : _future = future;
+  _ImageAsset.future(Future<Image> future) : _future = future {
+    _future!.then((image) {
+      _image = image;
+      _future = null;
+    });
+  }
 
   _ImageAsset.fromImage(Image image) : _image = image;
 
@@ -197,13 +202,7 @@ class _ImageAsset {
 
   Future<Image>? _future;
 
-  Future<Image> retrieve() async {
-    if (_future != null) {
-      _image = await _future;
-      _future = null;
-    }
-    return _image!;
-  }
+  Future<Image> retrieveAsync() => _future ?? Future.value(_image);
 
   /// Properly dispose of an image asset.
   void dispose() {
