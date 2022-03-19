@@ -28,14 +28,19 @@ the `Component` remove method.
 The `onLoad` method can be overridden to run asynchronous initialization code for the component,
 like loading an image for example. This method is executed after `onGameResize`, but before
 `onMount`. This method is guaranteed to execute only once during the lifetime of the component, so
-you can think of it as an "asynchronous constructor". 
+you can think of it as an "asynchronous constructor".
 
-The `onMount` method runs every time when the component is mounted into a game tree. This means that 
+The `onMount` method runs every time when the component is mounted into a game tree. This means that
 you should not initialize `late final` variables here, since this method might run several times
 throughout the component's lifetime. This method will only run if the parent is already mounted.
 If the parent is not mounted yet, then this method will wait in a queue (this will have no effect
-on the rest of the game engine). 
+on the rest of the game engine).
 
+A component lifecycle state can be checked by a series of getters:
+ - `isLoaded`: Returns a bool with the current loaded state
+ - `loaded`: Returns a future that will complete once the component has finished loading
+ - `isMounted`: Returns a bool with the current mounted state
+ - `mounted`: Returns a future that will complete once the component has finished mounting
 
 ### Priority
 
@@ -62,14 +67,14 @@ class MyGame extends FlameGame {
 }
 ```
 
-To update the priority of a component you have to either just set it to a new value, like 
+To update the priority of a component you have to either just set it to a new value, like
 `component.priority = 2`, and it will be updated in the next tick.
 
 Example:
 
 ```dart
 class MyComponent extends PositionComponent with Tappable {
-  
+
   MyComponent() : super(priority: 1);
 
   @override

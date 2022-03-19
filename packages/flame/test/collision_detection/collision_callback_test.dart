@@ -174,4 +174,28 @@ void main() {
       expect(hitboxB.endCounter, 1);
     },
   );
+
+  withCollidables.test(
+    'onCollisionEnd is only called when there previously was a collision',
+    (game) async {
+      final blockA = TestBlock(
+        Vector2.zero(),
+        Vector2.all(10),
+      );
+      final blockB = TestBlock(
+        Vector2(5, 11),
+        Vector2.all(10),
+      );
+      await game.ensureAddAll([blockA, blockB]);
+      game.update(0);
+      blockB.position.x += 2 * blockA.size.x;
+      game.update(0);
+      expect(blockA.startCounter, 0);
+      expect(blockB.startCounter, 0);
+      expect(blockA.onCollisionCounter, 0);
+      expect(blockB.onCollisionCounter, 0);
+      expect(blockA.endCounter, 0);
+      expect(blockB.endCounter, 0);
+    },
+  );
 }

@@ -54,6 +54,7 @@ class Component {
   ComponentSet? _children;
 
   Completer<void>? _mountCompleter;
+  Completer<void>? _loadCompleter;
 
   @protected
   _LifecycleManager get lifecycle {
@@ -207,6 +208,17 @@ class Component {
   /// The engine ensures that this method will be called exactly once during
   /// the lifetime of the [Component] object. Do not call this method manually.
   Future<void>? onLoad() => null;
+
+  /// A future that will complete once this component has finished loading.
+  Future<void> get loaded {
+    if (isLoaded) {
+      return Future.value();
+    }
+
+    _loadCompleter ??= Completer<void>();
+
+    return _loadCompleter!.future;
+  }
 
   /// Called when the component is added to its parent.
   ///
@@ -378,7 +390,6 @@ class Component {
           _state == LifecycleState.removed,
     );
     _parent = parent;
-    debugMode |= parent.debugMode;
     parent.lifecycle._children.add(this);
 
     if (!isLoaded) {
@@ -420,6 +431,7 @@ class Component {
     } else {
       return onLoadFuture.then((_) {
         _state = LifecycleState.loaded;
+        _loadCompleter?.complete();
       });
     }
     return null;
@@ -442,6 +454,7 @@ class Component {
     }
     _mountCompleter?.complete();
     _mountCompleter = null;
+    debugMode |= _parent!.debugMode;
     onMount();
     _state = LifecycleState.mounted;
     if (!existingChild) {
