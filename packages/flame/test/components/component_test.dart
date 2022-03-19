@@ -212,9 +212,7 @@ void main() {
         final component = Component()..add(Component()..add(Component()));
 
         expect(game.descendants().length, 0);
-
         await game.ensureAdd(component);
-
         expect(game.descendants().length, 3);
       },
     );
