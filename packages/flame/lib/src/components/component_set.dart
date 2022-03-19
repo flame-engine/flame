@@ -49,7 +49,7 @@ class ComponentSet extends QueryableOrderedSet<Component> {
   /// Prohibit method `addAll()` inherited from the [QueryableOrderedSet]. If
   /// this was allowed, then the user would be able to bypass standard lifecycle
   /// methods of the [Component] class.
-  @Deprecated('Do not use')
+  @Deprecated('Do not use, will be fully removed in v1.2.0')
   @override
   int addAll(Iterable<Component> c) {
     throw UnsupportedError(
@@ -61,7 +61,7 @@ class ComponentSet extends QueryableOrderedSet<Component> {
   /// Prohibit method `removeAll()` inherited from the [QueryableOrderedSet]. If
   /// this was allowed, then the user would be able to bypass standard lifecycle
   /// methods of the [Component] class.
-  @Deprecated('Do not use')
+  @Deprecated('Do not use, will be fully removed in v1.2.0')
   @override
   Iterable<Component> removeAll(Iterable<Component> components) {
     throw UnsupportedError(
@@ -72,7 +72,7 @@ class ComponentSet extends QueryableOrderedSet<Component> {
 
   /// Marks all existing components to be removed from the components list on
   /// the next game tick.
-  @Deprecated('This method will be removed in 1.1.0')
+  @Deprecated('This method will be removed in v1.2.0')
   @override
   void clear() {
     forEach((element) => element.removeFromParent());

@@ -118,7 +118,7 @@ class Images {
   /// [runAsWeb] to `true`. Keep in mind that it is slightly slower than the
   /// native [ui.decodeImageFromPixels]. By default it is set to [kIsWeb].
   @Deprecated(
-    'Use Image.fromPixels() instead. This function will be removed in 1.2.0',
+    'Use Image.fromPixels() instead. This method will be removed in v1.2.0',
   )
   Future<Image> decodeImageFromPixels(
     Uint8List pixels,
