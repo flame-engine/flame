@@ -49,7 +49,9 @@ abstract class CollisionDetection<T extends Hitbox<T>> {
     // Handles callbacks for an ended collision that the broadphase didn't
     // reports as a potential collision anymore.
     _lastPotentials.difference(potentials).forEach((tuple) {
-      handleCollisionEnd(tuple.a, tuple.b);
+      if (tuple.a.collidingWith(tuple.b)) {
+        handleCollisionEnd(tuple.a, tuple.b);
+      }
     });
     _lastPotentials
       ..clear()
