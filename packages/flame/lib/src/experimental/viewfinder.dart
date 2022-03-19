@@ -1,13 +1,12 @@
 import 'dart:math';
-import 'dart:ui';
 
 import 'package:meta/meta.dart';
 import 'package:vector_math/vector_math_64.dart';
 
+import '../anchor.dart';
 import '../components/component.dart';
 import '../game/transform2d.dart';
 import 'camera_component.dart';
-import 'viewport.dart';
 
 /// [Viewfinder] is a part of a [CameraComponent] system that controls which
 /// part of the game world is currently visible through a viewport.
@@ -18,6 +17,9 @@ import 'viewport.dart';
 class Viewfinder extends Component {
   /// Internal transform matrix used by the viewfinder.
   final Transform2D _transform = Transform2D();
+
+  @internal
+  Matrix4 get transformMatrix => _transform.transformMatrix;
 
   /// The game coordinates of a point that is to be positioned at the center
   /// of the viewport.
@@ -44,6 +46,22 @@ class Viewfinder extends Component {
   /// The rotation is around the axis that is perpendicular to the screen.
   double get angle => -_transform.angle;
   set angle(double value) => _transform.angle = -value;
+
+  /// The point within the viewport that is considered the "logical center" of
+  /// the camera.
+  ///
+  /// This anchor is relative to the viewport's bounding rect, and by default
+  /// is at the center of the viewport.
+  ///
+  /// The "logical center" of the camera means the point within the viewport
+  /// where the viewfinder's focus is located at. It is at this point within
+  /// the viewport that the world's point [position] will be displayed.
+  Anchor get anchor => _anchor;
+  Anchor _anchor = Anchor.center;
+  set anchor(Anchor value) {
+    _anchor = value;
+    onViewportResize();
+  }
 
   /// Reference to the parent camera.
   CameraComponent get camera => parent! as CameraComponent;
@@ -95,36 +113,24 @@ class Viewfinder extends Component {
     _initZoom();
   }
 
+  /// Called by the viewport when its size changes.
+  @internal
+  void onViewportResize() {
+    if (parent != null) {
+      final viewportSize = camera.viewport.size;
+      _transform.position.x = viewportSize.x * (_anchor.x - 0.5);
+      _transform.position.y = viewportSize.y * (_anchor.y - 0.5);
+    }
+  }
+
   @mustCallSuper
   @override
   void onMount() {
     assert(
       parent! is CameraComponent,
-      'Viewfinder can only be mounted to a Camera2',
+      'Viewfinder can only be mounted to a CameraComponent',
     );
     _initZoom();
-  }
-
-  @override
-  void renderTree(Canvas canvas) {}
-
-  /// Internal rendering method called by the [Viewport] (regular rendering is
-  /// disabled). This ensures that the viewfinder performs its rendering only
-  /// after the viewport applied the necessary transforms / clip mask.
-  @internal
-  void renderFromViewport(Canvas canvas) {
-    final world = camera.world;
-    if (world.isMounted &&
-        CameraComponent.currentCameras.length <
-            CameraComponent.maxCamerasDepth) {
-      try {
-        CameraComponent.currentCameras.add(camera);
-        canvas.transform(_transform.transformMatrix.storage);
-        world.renderFromCamera(canvas);
-        super.renderTree(canvas);
-      } finally {
-        CameraComponent.currentCameras.removeLast();
-      }
-    }
+    onViewportResize();
   }
 }
