@@ -344,6 +344,7 @@ class Component {
     if (!hasChildren) {
       return;
     }
+    
     for (final component in children) {
       yield component;
       if (component.hasChildren) {
