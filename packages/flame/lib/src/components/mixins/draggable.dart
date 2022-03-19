@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../components.dart';
-import '../../game/flame_game.dart';
+import '../../game/mixins/has_draggables.dart';
 import '../../gestures/events.dart';
 
 mixin Draggable on Component {
@@ -92,31 +92,5 @@ mixin Draggable on Component {
       'Draggable Components can only be added to a FlameGame with '
       'HasDraggables',
     );
-  }
-}
-
-mixin HasDraggables on FlameGame {
-  @mustCallSuper
-  void onDragStart(int pointerId, DragStartInfo info) {
-    propagateToChildren<Draggable>((c) => c.handleDragStart(pointerId, info));
-  }
-
-  @mustCallSuper
-  void onDragUpdate(int pointerId, DragUpdateInfo details) {
-    propagateToChildren<Draggable>(
-      (c) => c.handleDragUpdated(pointerId, details),
-    );
-  }
-
-  @mustCallSuper
-  void onDragEnd(int pointerId, DragEndInfo details) {
-    propagateToChildren<Draggable>(
-      (c) => c.handleDragEnded(pointerId, details),
-    );
-  }
-
-  @mustCallSuper
-  void onDragCancel(int pointerId) {
-    propagateToChildren<Draggable>((c) => c.handleDragCanceled(pointerId));
   }
 }
