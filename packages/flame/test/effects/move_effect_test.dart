@@ -75,10 +75,10 @@ class _TopLeftCorner implements PositionProvider {
   _RectComponent target;
 
   @override
-  Vector2 get effectPosition => Vector2(target.rect.left, target.rect.top);
+  Vector2 get position => Vector2(target.rect.left, target.rect.top);
 
   @override
-  set effectPosition(Vector2 value) {
+  set position(Vector2 value) {
     final rect = target.rect;
     target.rect = Rect.fromLTRB(value.x, value.y, rect.right, rect.bottom);
   }

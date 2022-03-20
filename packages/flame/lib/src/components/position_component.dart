@@ -93,7 +93,9 @@ class PositionComponent extends Component implements PositionProvider {
   Matrix4 get transformMatrix => transform.transformMatrix;
 
   /// The position of this component's anchor on the screen.
+  @override
   NotifyingVector2 get position => transform.position;
+  @override
   set position(Vector2 position) => transform.position = position;
 
   /// X position of this component's anchor on the screen.
@@ -403,14 +405,4 @@ class PositionComponent extends Component implements PositionProvider {
     size.setValues(rect.width, rect.height);
     topLeftPosition = rect.topLeft.toVector2();
   }
-
-  //#region Effect interfaces
-
-  @override
-  Vector2 get effectPosition => transform.position;
-
-  @override
-  set effectPosition(Vector2 value) => transform.position = value;
-
-  //#endregion
 }

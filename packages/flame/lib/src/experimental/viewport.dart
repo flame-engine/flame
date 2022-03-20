@@ -23,8 +23,10 @@ abstract class Viewport extends Component implements PositionProvider {
   /// Changing this position will move the viewport around the screen, but will
   /// not affect which portion of the game world is visible. Thus, the game
   /// world will appear as a static picture inside the viewport.
+  @override
   Vector2 get position => _position;
   final Vector2 _position = Vector2.zero();
+  @override
   set position(Vector2 value) => _position.setFrom(value);
 
   /// Size of the viewport, i.e. the width and the height.
@@ -77,9 +79,4 @@ abstract class Viewport extends Component implements PositionProvider {
       'A Viewport may only be attached to a CameraComponent',
     );
   }
-
-  @override
-  Vector2 get effectPosition => _position;
-  @override
-  set effectPosition(Vector2 value) => _position.setFrom(value);
 }

@@ -40,7 +40,7 @@ class MoveEffect extends Effect
   @override
   void apply(double progress) {
     final dProgress = progress - previousProgress;
-    target.effectPosition += _offset * dProgress;
+    target.position += _offset * dProgress;
   }
 
   @override
@@ -60,6 +60,6 @@ class _MoveToEffect extends MoveEffect {
 
   @override
   void onStart() {
-    _offset = _destination - target.effectPosition;
+    _offset = _destination - target.position;
   }
 }

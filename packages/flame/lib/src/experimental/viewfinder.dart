@@ -24,7 +24,9 @@ class Viewfinder extends Component implements PositionProvider {
 
   /// The game coordinates of a point that is to be positioned at the center
   /// of the viewport.
+  @override
   Vector2 get position => -_transform.offset;
+  @override
   set position(Vector2 value) => _transform.offset = -value;
 
   /// Zoom level of the game.
@@ -134,9 +136,4 @@ class Viewfinder extends Component implements PositionProvider {
     _initZoom();
     onViewportResize();
   }
-
-  @override
-  Vector2 get effectPosition => position;
-  @override
-  set effectPosition(Vector2 value) => position = value;
 }
