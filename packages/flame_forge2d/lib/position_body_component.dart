@@ -10,7 +10,7 @@ import 'forge2d_game.dart';
 /// You can initialize it either by sending in a [PositionComponent] and a
 /// [size] in the constructor, or set those fields in [onLoad].
 @Deprecated(
-  'Add children to BodyComponent instead. Will be removed in 0.10.0',
+  'Add children to BodyComponent instead. Will be removed in v0.10.0',
 )
 abstract class PositionBodyComponent<T extends Forge2DGame,
     P extends PositionComponent> extends BodyComponent<T> {

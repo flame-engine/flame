@@ -6,6 +6,7 @@ import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
 import 'package:tiled/tiled.dart';
 import 'package:xml/xml.dart';
+
 import 'flame_tsx_provider.dart';
 import 'simple_flips.dart';
 
@@ -34,7 +35,8 @@ class RenderableTiledMap {
 
   /// Cached [SpriteBatch]es of this map.
   @Deprecated(
-    'If you take a direct dependency on batches, use batchesByLayer instead',
+    'If you take a direct dependency on batches, use batchesByLayer instead. '
+    'This will be removed in flame_tiled v1.4.0',
   )
   Map<String, SpriteBatch> get batches => batchesByLayer.isNotEmpty
       ? batchesByLayer.first
@@ -202,7 +204,10 @@ class RenderableTiledMap {
 
   /// This returns an object group fetch by name from a given layer.
   /// Use this to add custom behaviour to special objects and groups.
-  @Deprecated('This method is deprecated. Use the getLayer() method instead.')
+  @Deprecated(
+    'Use the getLayer() method instead. '
+    'This method will be removed in flame_tiled v1.4.0.',
+  )
   ObjectGroup getObjectGroupFromLayer(String name) {
     final g = map.layers.firstWhere((layer) {
       return layer is ObjectGroup && layer.name == name;
