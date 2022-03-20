@@ -52,8 +52,8 @@ component constructor.
 
 ## SpriteBodyComponent
 
-```{warning}
-Deprecated: add a `SpriteComponent` to a [#BodyComponent] instead. Will be removed in 0.10.0
+```{admonition} Deprecated
+Add a `SpriteComponent` to a [](#bodycomponent) instead. Will be removed in 0.10.0
 ```
 
 Often you want to render a sprite on top of the `BodyComponent` that you are going to use in your
@@ -63,8 +63,8 @@ body.
 
 ## PositionBodyComponent
 
-```{warning}
-Deprecated: add children to a [#BodyComponent] instead. Will be removed in 0.10.0
+```{admonition} Deprecated
+Add children to a [](#bodycomponent) instead. Will be removed in 0.10.0
 ```
 
 One of the most commonly used classes in Flame is the `PositionComponent`, many of the commonly used
@@ -147,5 +147,5 @@ a point on the screen is or vice versa.
 
 Just like with normal `PositionComponent`s you can make the `Forge2DCamera` follow `BodyComponent`s
 by calling `camera.followBodyComponent(...)` which works the same as
-[camera.followComponent](../flame/camera_and_viewport.md#Camera.followComponent). When you want to
+[camera.followComponent](../flame/camera_and_viewport.md#camerafollowcomponent). When you want to
 stop following a `BodyComponent` you should call `camera.unfollowBodyComponent`.

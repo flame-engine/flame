@@ -87,7 +87,7 @@ if you change the `debugMode` at runtime, it will not affect already added compo
 To read more about the `debugMode` on Flame, please refer to the [Debug Docs](other/debug.md)
 
 
-# Change background color
+## Change background color
 
 To change the background color of your `FlameGame` you have to override `backgroundColor()`.
 
