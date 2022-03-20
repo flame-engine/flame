@@ -105,7 +105,7 @@ a size and a position etc. The other way is to use the `relative` constructor wh
 hitbox in relation to the size of its intended parent.
 
 You can read more about how the different shapes are defined in the
-[ShapeComponents](components.md#ShapeComponents) section.
+[ShapeComponents](components.md#shapecomponents) section.
 
 Remember that you can add as many `ShapeHitbox`s as you want to your `PositionComponent` to make up
 more complex areas. For example a snowman with a hat could be represented by three `CircleHitbox`s
@@ -113,7 +113,7 @@ and two `RectangleHitbox`s as its hat.
 
 A hitbox can be used either for collision detection or for making gesture detection more accurate 
 on top of components, see more regarding the latter in the section about the
-[GestureHitboxes](inputs/gesture-input.md#GestureHitboxes) mixin.
+[GestureHitboxes](inputs/gesture-input.md#gesturehitboxes) mixin.
 
 
 ### CollisionType
