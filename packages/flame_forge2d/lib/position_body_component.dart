@@ -9,6 +9,9 @@ import 'forge2d_game.dart';
 /// [PositionComponent] and it can only have its anchor in the center.
 /// You can initialize it either by sending in a [PositionComponent] and a
 /// [size] in the constructor, or set those fields in [onLoad].
+@Deprecated(
+  'Add children to BodyComponent instead. Will be removed in v0.10.0',
+)
 abstract class PositionBodyComponent<T extends Forge2DGame,
     P extends PositionComponent> extends BodyComponent<T> {
   P? positionComponent;
@@ -16,7 +19,7 @@ abstract class PositionBodyComponent<T extends Forge2DGame,
   Vector2 get size => _size!;
 
   @override
-  bool debugMode = false;
+  bool renderBody = false;
 
   /// Make sure that the [size] of the position component matches the bounding
   /// shape of the body that is create in createBody()

@@ -1,3 +1,15 @@
+## 1.1.0-releasecandidate.5
+
+ - Update a dependency to the latest release.
+
+## 1.1.0-releasecandidate.4
+
+ - Update a dependency to the latest release.
+
+## 1.1.0-releasecandidate.3
+
+ - Update a dependency to the latest release.
+
 ## 1.1.0-releasecandidate.2
 
  - **REFACTOR**: Remove Loadable, optional onLoads (#1333). ([05f7a4c3](https://github.com/flame-engine/flame/commit/05f7a4c3d6b1e3b67575c4ec920cf270691bbab4))

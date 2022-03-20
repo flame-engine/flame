@@ -28,23 +28,64 @@ the `Component` remove method.
 The `onLoad` method can be overridden to run asynchronous initialization code for the component,
 like loading an image for example. This method is executed after `onGameResize`, but before
 `onMount`. This method is guaranteed to execute only once during the lifetime of the component, so
-you can think of it as an "asynchronous constructor". 
+you can think of it as an "asynchronous constructor".
 
-The `onMount` method runs every time when the component is mounted into a game tree. This means that 
+The `onMount` method runs every time when the component is mounted into a game tree. This means that
 you should not initialize `late final` variables here, since this method might run several times
 throughout the component's lifetime. This method will only run if the parent is already mounted.
 If the parent is not mounted yet, then this method will wait in a queue (this will have no effect
-on the rest of the game engine). 
+on the rest of the game engine).
 
+A component lifecycle state can be checked by a series of getters:
+ - `isLoaded`: Returns a bool with the current loaded state
+ - `loaded`: Returns a future that will complete once the component has finished loading
+ - `isMounted`: Returns a bool with the current mounted state
+ - `mounted`: Returns a future that will complete once the component has finished mounting
 
-## Component
-Usually if you are going to make your own component you want to extend `PositionComponent`, but if
-you want to be able to handle effects and child components but handle the positioning differently
-you can extend the `Component` directly.
+### Priority
 
-`Component` is used by `SpriteBodyComponent`, `PositionBodyComponent`, and `BodyComponent` in
-`flame_forge2d` since those components doesn't have their position in relation to the screen, but in
-relation to the Forge2D world.
+In Flame the order components are rendered (and updated) in is called `priority`, this is sometimes
+referred to as `z-index` in other languages and frameworks. The higher the `priority` is set to, the
+closer the component will appear on the screen, since it will be rendered on top of any components
+with lower priority that were rendered before it.
+
+If you add two components and set one of them to priority 1 for example, then that component will be
+rendered on top of the other component (if they overlap), because the default priority is 0.
+
+All components take in `priority` as a named argument, so if you know the priority that you want
+your component at compile time, then you can pass it in to the constructor.
+
+Example:
+
+```dart
+class MyGame extends FlameGame {
+  @override
+  Future<void> onLoad() {
+    final myComponent = PositionComponent(priority: 5);
+    add(myComponent);
+  }
+}
+```
+
+To update the priority of a component you have to either just set it to a new value, like
+`component.priority = 2`, and it will be updated in the next tick.
+
+Example:
+
+```dart
+class MyComponent extends PositionComponent with Tappable {
+
+  MyComponent() : super(priority: 1);
+
+  @override
+  void onTap() {
+    priority = 2;
+  }
+}
+```
+
+In the example above we first initialize the component with priority 1, and then when the user taps
+the component we change the priority to 2.
 
 
 ### Composability of components

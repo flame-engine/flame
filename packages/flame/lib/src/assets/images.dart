@@ -10,11 +10,32 @@ import 'package:flutter/services.dart';
 import '../flame.dart';
 
 class Images {
-  Images({this.prefix = 'assets/images/'})
-      : assert(prefix.isEmpty || prefix.endsWith('/'));
+  Images({String prefix = 'assets/images/'}) {
+    this.prefix = prefix;
+  }
 
-  final String prefix;
   final Map<String, _ImageAssetLoader> _loadedFiles = {};
+
+  /// Path prefix to the project's directory with images.
+  ///
+  /// This path is relative to the project's root, and the default prefix is
+  /// "assets/images/". If necessary, you may change this prefix at any time.
+  /// A prefix must be a valid directory name and end with "/" (empty prefix is
+  /// also allowed).
+  ///
+  /// The prefix is **not** part of the keys of the images stored in this cache.
+  /// For example, if you load image `player.png`, then it will be searched at
+  /// location `prefix + "player.png"` but stored in the cache under the key
+  /// `"player.png"`.
+  String get prefix => _prefix;
+  late String _prefix;
+  set prefix(String value) {
+    assert(
+      value.isEmpty || value.endsWith('/'),
+      'Prefix must be empty or end with a "/"',
+    );
+    _prefix = value;
+  }
 
   /// Adds an [image] into the cache under the key [name].
   void add(String name, Image image) {
@@ -82,8 +103,8 @@ class Images {
     final manifestContent = await rootBundle.loadString('AssetManifest.json');
     final manifestMap = json.decode(manifestContent) as Map<String, dynamic>;
     final imagePaths = manifestMap.keys.where((path) {
-      return path.startsWith(prefix) && path.toLowerCase().contains(pattern);
-    }).map((path) => path.replaceFirst(prefix, ''));
+      return path.startsWith(_prefix) && path.toLowerCase().contains(pattern);
+    }).map((path) => path.replaceFirst(_prefix, ''));
     return loadAll(imagePaths.toList());
   }
 
@@ -97,7 +118,7 @@ class Images {
   /// [runAsWeb] to `true`. Keep in mind that it is slightly slower than the
   /// native [ui.decodeImageFromPixels]. By default it is set to [kIsWeb].
   @Deprecated(
-    'Use Image.fromPixels() instead. This function will be removed in 1.1.0',
+    'Use Image.fromPixels() instead. This method will be removed in v1.2.0',
   )
   Future<Image> decodeImageFromPixels(
     Uint8List pixels,
@@ -130,7 +151,7 @@ class Images {
   }
 
   Future<Image> _fetchToMemory(String name) async {
-    final data = await Flame.bundle.load('$prefix$name');
+    final data = await Flame.bundle.load('$_prefix$name');
     final bytes = Uint8List.view(data.buffer);
     return _loadBytes(bytes);
   }

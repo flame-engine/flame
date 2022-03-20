@@ -74,18 +74,29 @@ extension RectExtension on Rect {
     );
   }
 
-  /// Creates bounds in from of a [Rect] from a list of [Vector2]
-  static Rect fromBounds(List<Vector2> pts) {
-    final minX = pts.map((e) => e.x).reduce(min);
-    final maxX = pts.map((e) => e.x).reduce(max);
-    final minY = pts.map((e) => e.y).reduce(min);
-    final maxY = pts.map((e) => e.y).reduce(max);
+  /// Creates a [Rect] that represents the bounds of the list [pts].
+  static Rect getBounds(List<Vector2> pts) {
+    final xPoints = pts.map((e) => e.x);
+    final yPoints = pts.map((e) => e.y);
+
+    final minX = xPoints.reduce(min);
+    final maxX = xPoints.reduce(max);
+    final minY = yPoints.reduce(min);
+    final maxY = yPoints.reduce(max);
     return Rect.fromPoints(Offset(minX, minY), Offset(maxX, maxY));
   }
 
-  /// Constructs a rectangle from its center point (specified as a Vector2),
-  /// width and height.
-  static Rect fromVector2Center({
+  /// Creates a [Rect] that represents the bounds of the list [pts].
+  @Deprecated(
+    'Use RectExtension.getBounds() instead. This function will be removed '
+    'in v1.2.0',
+  )
+  static Rect fromBounds(List<Vector2> pts) {
+    return getBounds(pts);
+  }
+
+  /// Constructs a [Rect] with a [width] and [height] around the [center] point.
+  static Rect fromCenter({
     required Vector2 center,
     required double width,
     required double height,
@@ -96,5 +107,18 @@ extension RectExtension on Rect {
       center.x + width / 2,
       center.y + height / 2,
     );
+  }
+
+  /// Constructs a [Rect] with a [width] and [height] around the [center] point.
+  @Deprecated(
+    'Use RectExtension.fromCenter() instead. This function will be removed '
+    'in v1.2.0',
+  )
+  static Rect fromVector2Center({
+    required Vector2 center,
+    required double width,
+    required double height,
+  }) {
+    return fromCenter(center: center, width: width, height: height);
   }
 }

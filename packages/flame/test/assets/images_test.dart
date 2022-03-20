@@ -1,8 +1,9 @@
 import 'dart:ui';
 
 import 'package:flame/assets.dart';
+import 'package:flame_test/flame_test.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:test/test.dart';
 
 class MockImage extends Mock implements Image {
   int disposedCount = 0;
@@ -35,6 +36,26 @@ void main() {
       expect(
         images.fold<int>(0, (agg, image) => agg + image.disposedCount),
         images.length,
+      );
+    });
+
+    testWithFlameGame(
+      'prefix on game.images can be changed',
+      (game) async {
+        expect(game.images.prefix, 'assets/images/');
+        game.images.prefix = 'assets/pictures/';
+        expect(game.images.prefix, 'assets/pictures/');
+        game.images.prefix = '';
+        expect(game.images.prefix, '');
+      },
+    );
+
+    test('throws when setting an invalid prefix', () {
+      final images = Images();
+
+      expect(
+        () => images.prefix = 'adasd',
+        failsAssert('Prefix must be empty or end with a "/"'),
       );
     });
   });

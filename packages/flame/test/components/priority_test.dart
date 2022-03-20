@@ -44,18 +44,36 @@ void main() {
     flameGame.test(
       'changing priority should reorder component list',
       (game) async {
-        final firstCompopnent = _PriorityComponent(-1);
+        final firstComponent = _PriorityComponent(-1);
         final priorityComponents =
             List.generate(10, (i) => _PriorityComponent(i))
-              ..add(firstCompopnent);
+              ..add(firstComponent);
         priorityComponents.shuffle();
         final components = game.children;
         await game.ensureAddAll(priorityComponents);
         componentsSorted(components);
-        expect(components.first, firstCompopnent);
-        game.children.changePriority(firstCompopnent, 11);
+        expect(components.first, firstComponent);
+        game.children.changePriority(firstComponent, 11);
         game.update(0);
-        expect(components.last, firstCompopnent);
+        expect(components.last, firstComponent);
+      },
+    );
+
+    flameGame.test(
+      'changing priority with the priority setter should reorder the list',
+      (game) async {
+        final firstComponent = _PriorityComponent(-1);
+        final priorityComponents =
+            List.generate(10, (i) => _PriorityComponent(i))
+              ..add(firstComponent);
+        priorityComponents.shuffle();
+        final components = game.children;
+        await game.ensureAddAll(priorityComponents);
+        componentsSorted(components);
+        expect(components.first, firstComponent);
+        firstComponent.priority = 11;
+        game.update(0);
+        expect(components.last, firstComponent);
       },
     );
 

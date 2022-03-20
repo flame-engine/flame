@@ -54,6 +54,7 @@ class Component {
   ComponentSet? _children;
 
   Completer<void>? _mountCompleter;
+  Completer<void>? _loadCompleter;
 
   @protected
   _LifecycleManager get lifecycle {
@@ -72,7 +73,19 @@ class Component {
   /// It can be any integer (negative, zero, or positive).
   /// If two components share the same priority, they will probably be drawn in
   /// the order they were added.
+  ///
+  /// Note that setting the priority is relatively expensive if the component is
+  /// already added to a component tree since all siblings have to be re-added
+  /// to the parent.
   int get priority => _priority;
+  set priority(int newPriority) {
+    if (parent == null) {
+      _priority = newPriority;
+    } else {
+      parent!.children.changePriority(this, newPriority);
+    }
+  }
+
   int _priority;
 
   /// Whether this component should be removed or not.
@@ -119,7 +132,7 @@ class Component {
     if (!_debugPaintCache.isCacheValid([debugColor])) {
       final paint = Paint()
         ..color = debugColor
-        ..strokeWidth = 1
+        ..strokeWidth = 0 // hairline-width
         ..style = PaintingStyle.stroke;
       _debugPaintCache.updateCache(paint, [debugColor]);
     }
@@ -195,6 +208,17 @@ class Component {
   /// The engine ensures that this method will be called exactly once during
   /// the lifetime of the [Component] object. Do not call this method manually.
   Future<void>? onLoad() => null;
+
+  /// A future that will complete once this component has finished loading.
+  Future<void> get loaded {
+    if (isLoaded) {
+      return Future.value();
+    }
+
+    _loadCompleter ??= Completer<void>();
+
+    return _loadCompleter!.future;
+  }
 
   /// Called when the component is added to its parent.
   ///
@@ -366,7 +390,6 @@ class Component {
           _state == LifecycleState.removed,
     );
     _parent = parent;
-    debugMode |= parent.debugMode;
     parent.lifecycle._children.add(this);
 
     if (!isLoaded) {
@@ -408,6 +431,7 @@ class Component {
     } else {
       return onLoadFuture.then((_) {
         _state = LifecycleState.loaded;
+        _loadCompleter?.complete();
       });
     }
     return null;
@@ -430,6 +454,7 @@ class Component {
     }
     _mountCompleter?.complete();
     _mountCompleter = null;
+    debugMode |= _parent!.debugMode;
     onMount();
     _state = LifecycleState.mounted;
     if (!existingChild) {

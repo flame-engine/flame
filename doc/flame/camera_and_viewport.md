@@ -85,14 +85,72 @@ When dealing with input events, it is imperative to convert screen coordinates t
 (or, for some reasons, you might want to do the reverse). The Camera provides two functions,
 `screenToWorld` and `worldToScreen` to easily convert between these coordinate spaces.
 
+
+### Camera.followVector2
+
+Immediately snaps the camera to start following a `Vector2`.
+
+This means that the camera will move so that the position vector is in a fixed position on the
+screen. That position is determined by a fraction of screen size defined by the `relativeOffset`
+argument (defaults to the center). The `worldBounds` argument can be optionally set to add
+boundaries to how far the camera is allowed to move.
+
+Example:
+
+```dart
+class MyGame extends FlameGame {
+  final someVector = Vector2(100, 100);
+
+  Future<void> onLoad() async {
+     camera.followVector2(someVector);
+  }
+}
+
+```
+
+
+### Camera.followComponent
+
+Immediately snaps the camera to start following a `PositionComponent`.
+
+This means that the camera will move so that the position vector of the component is in a fixed
+position on the screen. That position is determined by a fraction of screen size defined by the
+`relativeOffset` argument (defaults to the center).
+The `worldBounds` argument can be optionally set to add boundaries to how far the camera is allowed
+to move.
+
+The component is "grabbed" by its anchor (default top left).
+So for example if you want the center of the object to be at the fixed position, set the components
+anchor to center.
+
+Example:
+
+```dart
+class MyGame extends FlameGame {
+  @override
+  Future<void> onLoad() async {
+     final sprite = await loadSprite('pizza.png');
+     final player = SpriteComponent(
+       sprite: sprite,
+       size: size,
+       anchor: Anchor.center,
+     );
+     add(player);
+     
+     camera.followComponent(player);
+  }
+}
+```
+
+
 ### Using the camera with the Game class
 
-If you are not using `FlameGame`, but instead are using the `Game` class, then you need to manage
+If you are not using `FlameGame`, but instead are using the `Game` mixin, then you need to manage
 calling certain camera methods yourself. Let's say we have the following game structure, and we 
 want to add the camera functionality:
 
 ```dart
-class YourGame extends Game {
+class YourGame with Game {
   Camera? camera;
 
   Future<void> onLoad() async {}

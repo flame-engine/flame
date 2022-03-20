@@ -3,6 +3,133 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2022-03-13
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`flame` - `v1.1.0-releasecandidate.5`](#flame---v110-releasecandidate5)
+ - [`flame_forge2d` - `v0.9.0-releasecandidate.5`](#flame_forge2d---v090-releasecandidate5)
+ - [`flame_svg` - `v1.1.0-releasecandidate.4`](#flame_svg---v110-releasecandidate4)
+ - [`flame_test` - `v1.2.0-releasecandidate.5`](#flame_test---v120-releasecandidate5)
+ - [`flame_rive` - `v1.1.0-releasecandidate.5`](#flame_rive---v110-releasecandidate5)
+ - [`flame_tiled` - `v1.3.0-releasecandidate.5`](#flame_tiled---v130-releasecandidate5)
+ - [`flame_bloc` - `v1.2.0-releasecandidate.5`](#flame_bloc---v120-releasecandidate5)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `flame_svg` - `v1.1.0-releasecandidate.4`
+ - `flame_test` - `v1.2.0-releasecandidate.5`
+ - `flame_rive` - `v1.1.0-releasecandidate.5`
+ - `flame_tiled` - `v1.3.0-releasecandidate.5`
+ - `flame_bloc` - `v1.2.0-releasecandidate.5`
+
+---
+
+#### `flame` - `v1.1.0-releasecandidate.5`
+
+ - **FIX**: `@mustCallSuper` missing on components (#1443). ([e01b4b1a](https://github.com/flame-engine/flame/commit/e01b4b1ac3e423037fa313672b4882e7d29210b8))
+ - **FEAT**: Add setter to priority (#1444). ([34284686](https://github.com/flame-engine/flame/commit/342846860af36ed73a1fc0a9a76ed9add12cec71))
+
+#### `flame_forge2d` - `v0.9.0-releasecandidate.5`
+
+ - **FEAT**: `BodyComponent` can properly have normal Flame component children (#1442). ([7fe8b6de](https://github.com/flame-engine/flame/commit/7fe8b6deb18b3579fecc99cc44e0ffea73be5f02))
+
+
+## 2022-03-11
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`flame` - `v1.1.0-releasecandidate.4`](#flame---v110-releasecandidate4)
+ - [`flame_forge2d` - `v0.9.0-releasecandidate.4`](#flame_forge2d---v090-releasecandidate4)
+ - [`flame_svg` - `v1.1.0-releasecandidate.3`](#flame_svg---v110-releasecandidate3)
+ - [`flame_test` - `v1.2.0-releasecandidate.4`](#flame_test---v120-releasecandidate4)
+ - [`flame_rive` - `v1.1.0-releasecandidate.4`](#flame_rive---v110-releasecandidate4)
+ - [`flame_tiled` - `v1.3.0-releasecandidate.4`](#flame_tiled---v130-releasecandidate4)
+ - [`flame_bloc` - `v1.2.0-releasecandidate.4`](#flame_bloc---v120-releasecandidate4)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `flame_svg` - `v1.1.0-releasecandidate.3`
+ - `flame_test` - `v1.2.0-releasecandidate.4`
+ - `flame_rive` - `v1.1.0-releasecandidate.4`
+ - `flame_tiled` - `v1.3.0-releasecandidate.4`
+ - `flame_bloc` - `v1.2.0-releasecandidate.4`
+
+---
+
+#### `flame` - `v1.1.0-releasecandidate.4`
+
+ - **FIX**: Setting images.prefix to empty string (#1437). ([694102bd](https://github.com/flame-engine/flame/commit/694102bd0304736ed3bdfbd596d64901d7adf57f))
+
+#### `flame_forge2d` - `v0.9.0-releasecandidate.4`
+
+ - **FIX**: Don't use debug rendering by default in BodyComponent (#1439). ([33b725e8](https://github.com/flame-engine/flame/commit/33b725e8378d4060e726e99c0452b64f54ef8f67))
+
+
+## 2022-03-10
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`flame` - `v1.1.0-releasecandidate.3`](#flame---v110-releasecandidate3)
+ - [`flame_bloc` - `v1.2.0-releasecandidate.3`](#flame_bloc---v120-releasecandidate3)
+ - [`flame_svg` - `v1.1.0-releasecandidate.2`](#flame_svg---v110-releasecandidate2)
+ - [`flame_test` - `v1.2.0-releasecandidate.3`](#flame_test---v120-releasecandidate3)
+ - [`flame_rive` - `v1.1.0-releasecandidate.3`](#flame_rive---v110-releasecandidate3)
+ - [`flame_forge2d` - `v0.9.0-releasecandidate.3`](#flame_forge2d---v090-releasecandidate3)
+ - [`flame_tiled` - `v1.3.0-releasecandidate.3`](#flame_tiled---v130-releasecandidate3)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `flame_svg` - `v1.1.0-releasecandidate.2`
+ - `flame_test` - `v1.2.0-releasecandidate.3`
+ - `flame_rive` - `v1.1.0-releasecandidate.3`
+ - `flame_forge2d` - `v0.9.0-releasecandidate.3`
+ - `flame_tiled` - `v1.3.0-releasecandidate.3`
+
+---
+
+#### `flame` - `v1.1.0-releasecandidate.3`
+
+ - **REFACTOR**: Parent change and component removal logic (#1385). ([8b9fa352](https://github.com/flame-engine/flame/commit/8b9fa3521cc44f7696c5ce0b396e3007c2ae7e8c))
+ - **FIX**: viewfinders behavior under zoom (#1432). ([f3cf85b6](https://github.com/flame-engine/flame/commit/f3cf85b638cc71058e85756498e79971a1942491))
+ - **FIX**: change strokeWidth in Component (#1431). ([0e174fe8](https://github.com/flame-engine/flame/commit/0e174fe8e5f1262af41c8659c0fce7ed060e69a9))
+ - **FEAT**: allowing changing of the images prefix and allowing empty prefixes (#1433). ([de4d9416](https://github.com/flame-engine/flame/commit/de4d941654710add459cc1c923b92c3923556f15))
+
+#### `flame_bloc` - `v1.2.0-releasecandidate.3`
+
+ - **REFACTOR**: Parent change and component removal logic (#1385). ([8b9fa352](https://github.com/flame-engine/flame/commit/8b9fa3521cc44f7696c5ce0b396e3007c2ae7e8c))
+
+
 ## 2022-03-08
 
 ### Changes

@@ -282,6 +282,32 @@ class MyGame extends FlameGame with HasTappables {
 **Note**: `HasTappables` uses an advanced gesture detector under the hood and as explained
 further up on this page it shouldn't be used alongside basic detectors.
 
+To recognize whether a `Tappable` added to the game handled an event, the `handled` field can be set
+to true in the event can be checked in the corresponding method in the game class, or further down
+the chain if you let the event continue to propagate.
+
+In the following example it can be seen how it is used with `onTapDown`, the same technique can also
+be applied to `onTapUp`.
+
+```dart
+class MyComponent extends PositionComponent with Tappable{
+  @override
+  bool onTapDown(TapDownInfo info) {
+    info.handled = true;
+    return true;
+  } 
+}
+
+class MyGame extends FlameGame with HasTappables {
+  @override
+  void onTapDown(int pointerId, TapDownInfo info) {
+    if(info.handled) {
+      // Do something if a child handled the event
+    }
+  }
+}
+```
+
 
 ### Draggable components
 
@@ -292,10 +318,10 @@ your components, they can override the simple methods that enable an easy to use
 components.
 
 ```dart
-  bool onDragStart(int pointerId, DragStartInfo info);
-  bool onDragUpdate(int pointerId, DragUpdateInfo info);
-  bool onDragEnd(int pointerId, DragEndInfo info);
-  bool onDragCancel(int pointerId);
+  bool onDragStart(DragStartInfo info);
+  bool onDragUpdate(DragUpdateInfo info);
+  bool onDragEnd(DragEndInfo info);
+  bool onDragCancel();
 ```
 
 Note that all events take a uniquely generated pointer id so you can, if desired, distinguish
@@ -319,30 +345,31 @@ class DraggableComponent extends PositionComponent with Draggable {
 
   // update and render omitted
 
-  Vector2 dragDeltaPosition;
+  Vector2? dragDeltaPosition;
   bool get isDragging => dragDeltaPosition != null;
 
-  @override
-  bool onDragStart(int pointerId, DragStartInfo info) {
-    dragDeltaPosition = info.eventPosition.game - position;
+  bool onDragStart(DragStartInfo startPosition) {
+    dragDeltaPosition = startPosition.eventPosition.game - position;
     return false;
   }
 
   @override
-  bool onDragUpdate(int pointerId, DragUpdateInfo info) {
-    final localCoords = info.eventPosition.game;
-    position = localCoords - dragDeltaPosition;
+  bool onDragUpdate(DragUpdateInfo event) {
+    if (isDragging) {
+      final localCoords = event.eventPosition.game;
+      position = localCoords - dragDeltaPosition!;
+    }
     return false;
   }
 
   @override
-  bool onDragEnd(int pointerId, DragEndInfo info) {
+  bool onDragEnd(DragEndInfo event) {
     dragDeltaPosition = null;
     return false;
   }
 
   @override
-  bool onDragCancel(int pointerId) {
+  bool onDragCancel() {
     dragDeltaPosition = null;
     return false;
   }
@@ -351,6 +378,32 @@ class DraggableComponent extends PositionComponent with Draggable {
 class MyGame extends FlameGame with HasDraggables {
   MyGame() {
     add(DraggableComponent());
+  }
+}
+```
+
+To recognize whether a `Draggable` added to the game handled an event, the `handled` field can be
+set to true in the event can be checked in the corresponding method in the game class, or further
+down the chain if you let the event continue to propagate.
+
+In the following example it can be seen how it is used with `onDragStart`, the same technique can
+also be applied to `onDragUpdate` and `onDragEnd`.
+
+```dart
+class MyComponent extends PositionComponent with Draggable {
+ @override
+ bool onDragStart(DragStartInfo info) {
+   info.handled = true;
+   return true;
+ }
+}
+
+class MyGame extends FlameGame with HasDraggables {
+  @override
+  void onDragStart(int pointerId, DragStartInfo info) {
+    if (info.handled) {
+      // Do something if a child handled the event
+    }
   }
 }
 ```
@@ -380,6 +433,32 @@ you can override if you want to listen to the events.
 The provided event info is from the mouse move that triggered the action (entering or leaving).
 While the mouse movement is kept inside or outside, no events are fired and those mouse move events are
 not propagated. Only when the state is changed the handlers are triggered.
+
+To recognize whether a `Hoverable` added to the game handled an event, the `handled` field can be
+set to true in the event can be checked in the corresponding method in the game class, or further
+down the chain if you let the event continue to propagate.
+
+In the following example it can be seen how it is used with `onHoverEnter`, the same technique can
+also be applied to `onHoverLeave`.
+
+```dart
+class MyComponent extends PositionComponent with Hoverable {
+  @override
+  bool onHoverEnter(PointerHoverInfo info) {
+    info.handled = true;
+    return true;
+  }
+}
+
+class MyGame extends FlameGame with HasHoverables {
+  @override
+  void onHoverEnter(PointerHoverInfo info) {
+    if (info.handled) {
+      // Do something if a child handled the event
+    }
+  }
+}
+```
 
 ### GestureHitboxes
 

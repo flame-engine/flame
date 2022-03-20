@@ -189,6 +189,12 @@ class PolygonComponent extends ShapeComponent {
     }
   }
 
+  @override
+  void renderDebugMode(Canvas canvas) {
+    super.renderDebugMode(canvas);
+    canvas.drawPath(_path, debugPaint);
+  }
+
   /// Checks whether the polygon contains the [point].
   /// Note: The polygon needs to be convex for this to work.
   @override

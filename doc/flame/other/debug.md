@@ -28,4 +28,4 @@ have their positions written on the screen. This way, you can visually verify th
 boundaries and positions.
 
 To see a working example of the debugging features of the `FlameGame`, check this
-[example](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/components/debug.dart).
+[example](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/components/debug_example.dart).

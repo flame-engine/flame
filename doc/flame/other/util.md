@@ -163,8 +163,8 @@ Methods:
  - `brighten`: Brighten the shade of the color by an amount between 0 to 1.
 
 Factories:
-- `fromRGBHexString`: Parses an RGB color from a valid hex string (e.g. #1C1C1C).
-- `fromARGBHexString`: Parses an ARGB color from a valid hex string (e.g. #FF1C1C1C).
+- `ColorExtension.fromRGBHexString`: Parses an RGB color from a valid hex string (e.g. #1C1C1C).
+- `ColorExtension.fromARGBHexString`: Parses an ARGB color from a valid hex string (e.g. #FF1C1C1C).
 
 ### Image
 
@@ -195,6 +195,11 @@ Methods:
  - `toVertices`: Turns the four corners of the `Rect` into a list of `Vector2`.
  - `toMathRectangle`: Converts this `Rect` into a `math.Rectangle`.
  - `toGeometryRectangle`: Converts this `Rect` into a `Rectangle` from flame-geom.
+ - `transform`: Transforms the `Rect` using a `Matrix4`.
+
+Factories:
+ - `RectExtension.getBounds`: Construct a `Rect` that represents the bounds of a list of `Vector2`s.
+ - `RectExtension.fromCenter`: Construct a `Rect` from a center point (using `Vector2`).
 
 ### math.Rectangle
 
@@ -228,7 +233,7 @@ Methods:
  - `moveToTarget`: Smoothly moves a Vector2 in the target direction by a given distance.
 
 Factories:
- - `fromInts`: Create a `Vector2` with ints as input.
+ - `Vector2Extension.fromInts`: Create a `Vector2` with ints as input.
 
 Operators:
  - `&`: Combines two `Vector2`s to form a Rect, the origin should be on the left and the size on the
@@ -264,5 +269,5 @@ Getters:
   - `m44`: The fourth row and fourth column.
 
 Factories:
- - `scale`: Create a scaled `Matrix4`. Either by passing a `Vector4` or `Vector2` as it's first 
+ - `Matrix4Extension.scale`: Create a scaled `Matrix4`. Either by passing a `Vector4` or `Vector2` as it's first 
     argument, or by passing x y z doubles.

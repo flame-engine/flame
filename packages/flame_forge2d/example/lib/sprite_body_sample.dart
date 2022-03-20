@@ -22,19 +22,27 @@ class SpriteBodySample extends Forge2DGame with TapDetector {
   }
 }
 
-class Pizza extends PositionBodyComponent {
+class Pizza extends BodyComponent {
   final Vector2 position;
+  final Vector2 size;
 
   Pizza(
     this.position, {
     Vector2? size,
-  }) : super(size: size ?? Vector2(2, 3));
+  }) : size = size ?? Vector2(2, 3);
 
   @override
   Future<void> onLoad() async {
     await super.onLoad();
     final sprite = await gameRef.loadSprite('pizza.png');
-    positionComponent = SpriteComponent(sprite: sprite, size: size);
+    renderBody = false;
+    add(
+      SpriteComponent(
+        sprite: sprite,
+        size: size,
+        anchor: Anchor.center,
+      ),
+    );
   }
 
   @override
