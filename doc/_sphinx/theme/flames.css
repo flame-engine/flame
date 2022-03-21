@@ -770,3 +770,10 @@ div.admonition.seealso {
   --admonition-icon-color: #acfab6;
   --admonition-title-background-color: #285131;
 }
+
+div.admonition.admonition-deprecated {
+  --admonition-border-color: black;
+  --admonition-icon: '\f1f8';
+  --admonition-icon-color: #555;
+  --admonition-title-background-color: #1c1c1c;
+}
