@@ -228,8 +228,12 @@ void main() {
         (game) async {
           final component = Component()..add(Component()..add(Component()));
           await game.ensureAdd(component);
+          final descendants = game.descendants(includeSelf: true);
 
-          expect(game.descendants(includeSelf: true).length, 4);
+          expect(descendants.length, 4);
+          for (final component in descendants) {
+            expect(component.findGame() != null, true);
+          }
         },
       );
 
