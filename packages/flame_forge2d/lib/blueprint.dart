@@ -6,7 +6,6 @@ import 'forge2d_game.dart';
 
 const _attachedErrorMessage = "Can't add callbacks to attached Blueprints";
 
-
 /// A [Blueprint] that provides additional
 /// structures specific to flame_forge2d
 abstract class Forge2DBlueprint extends Blueprint {
