@@ -154,6 +154,48 @@ void update(double dt) {
 ```
 
 
+### Blueprints
+
+Flame also offers a virtual approach for grouping components which allows the developer to keep
+their components grouped "code wise", but the components (or other things, like a
+`ContactCallback` for Forge2d Games) are individually added to the game and there isn't a parent
+component.
+
+This is useful when you have a complex feature that will require different components, but they
+all need to be on the same rendering level of different faatures, a simple example for this is
+a top down view game, we would like to play with the rendering order of things so we can give the
+player the impression of depth, so if the player character goes behind a house, its roofs is
+rendered "above" the player, to be able to achieve that we would need to split our building
+component into more components, for example: `HouseBase`, `HouseSecondFloor` and `HouseRoof`.
+
+So to avoid leaving these components "floating" around, we could create a `Blueprint` to group
+them:
+
+```dart
+class House extends Blueprint {
+  @override
+  void build() {
+    addAll([
+      HouseBase(),
+      HouseSecondFloor(),
+      HouseRoof(),
+    ]);
+  }
+}
+```
+
+And then just add it to the game, quite similar to how simple components would be added:
+
+```dart
+class MyGame extends FlameGame {
+  @override
+  Future<void> onLoad() async {
+    addFromBlueprint(House());
+  }
+}
+```
+
+
 ### PositionType
 If you want to create a HUD (Head-up display) or another component that isn't positioned in relation
 to the game coordinates, you can change the `PositionType` of the component.

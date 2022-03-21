@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:meta/meta.dart';
 
+import '../components/blueprint.dart';
 import '../components/component.dart';
 import '../extensions/vector2.dart';
 import 'camera/camera.dart';
@@ -150,4 +151,10 @@ class FlameGame extends Component with Game {
 
   @override
   Projector get projector => camera.combinedProjector;
+
+  /// Shortcut to attach a [Blueprint] instance to this game
+  /// equivalent to `MyBluepinrt().attach(game)`
+  Future<void> addFromBlueprint(Blueprint blueprint) async {
+    await blueprint.attach(this);
+  }
 }
