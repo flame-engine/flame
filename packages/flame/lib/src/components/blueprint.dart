@@ -5,9 +5,6 @@ import '../game/flame_game.dart';
 
 const _attachedErrorMessage = "Can't add to attached Blueprints";
 
-// so we can experiment with the idea, but this is a
-// potential upstream change on Flame.
-
 /// A [Blueprint] is a virtual way of grouping [Component]s
 /// that are related, but they need to be added directly on
 /// the [FlameGame] level.
