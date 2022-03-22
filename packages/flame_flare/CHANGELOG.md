@@ -1,3 +1,5 @@
+## 1.1.0-releasecandidate.1
+
 # CHANGELOG
 
 ## [1.0.0]
