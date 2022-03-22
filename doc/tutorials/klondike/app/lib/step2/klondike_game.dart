@@ -21,7 +21,7 @@ class KlondikeGame extends FlameGame {
       ..position = Vector2(gap, gap);
     final waste = Waste()
       ..size = Vector2(w * 1.5, h)
-      ..position = Vector2(w + 2*gap, gap);
+      ..position = Vector2(w + 2 * gap, gap);
     final foundations = [
       for (var i = 0; i < 4; i++)
         Foundation()
@@ -32,7 +32,7 @@ class KlondikeGame extends FlameGame {
       for (var i = 0; i < 7; i++)
         Pile()
           ..size = Vector2(w, h)
-          ..position = Vector2(gap + i * (w + gap), h + 2*gap)
+          ..position = Vector2(gap + i * (w + gap), h + 2 * gap)
     ];
 
     final world = World()..addToParent(this);
@@ -42,8 +42,8 @@ class KlondikeGame extends FlameGame {
     world.addAll(piles);
 
     final camera = CameraComponent(world: world)
-      ..viewfinder.visibleGameSize = Vector2(w*7 + gap*8, 4*h + 3*gap)
-      ..viewfinder.position = Vector2(w*3.5 + gap*4, 0)
+      ..viewfinder.visibleGameSize = Vector2(w * 7 + gap * 8, 4 * h + 3 * gap)
+      ..viewfinder.position = Vector2(w * 3.5 + gap * 4, 0)
       ..viewfinder.anchor = Anchor.topCenter;
     add(camera);
   }
