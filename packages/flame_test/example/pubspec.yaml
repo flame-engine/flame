@@ -10,9 +10,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flame: ^1.1.0-releasecandidate.5
+  flame: ^1.1.0-releasecandidate.6
 dev_dependencies:
-  flame_test: ^1.2.0-releasecandidate.5
+  flame_test: ^1.2.0-releasecandidate.6
   flame_lint: ^0.0.1
 
 flutter:
