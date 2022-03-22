@@ -51,7 +51,7 @@ void main() {
 
 ## Other classes
 
-So far we have the main `KlondikeGame` class, so now we need to create objects
+So far we have the main `KlondikeGame` class, and now we need to create objects
 that we will add to the game. In Flame these objects are called _components_,
 and when added to the game they form a "game component tree". All entities that
 exist in the game must be components.
@@ -62,7 +62,7 @@ will defer implementation of that class to the next chapter.
 
 For now, let's create the container classes, as shown on the sketch. These are:
 `Stock`, `Waste`, `Pile` and `Foundation`. In your project directory create a
-sub-directory "components", and then the file `components/stock.dart`. In that
+sub-directory `components`, and then the file `components/stock.dart`. In that
 file write
 
 ```dart
@@ -79,50 +79,173 @@ that we can see it on the screen even though we don't have any rendering logic
 yet.
 
 Likewise, create three more files `components/foundation.dart`,
-`components/pile.dart`, and `components/waste.dart`. For now all 4 classes will
-have exactly the same logic inside, we'll be adding more functionality into 
+`components/pile.dart`, and `components/waste.dart`. For now all four classes
+will have exactly the same logic inside, we'll be adding more functionality into 
 those classes in subsequent chapters.
 
-Once the classes are created, we should add those objects into the game. In 
-order to do that, open the `KlondikeGame` class and add the following:
+
+## Game structure
+
+Once we have some basic components, they need to be added to the game. It is 
+time to make a decision about the high-level structure of the game.
+
+There exist multiple approaches here, which differ in their complexity,
+extendability, and overall philosophy. The approach that we will be taking in
+this tutorial is based on using the [World] component, together with a [Camera].
+
+The idea behind this approach is the following: imagine that your game world
+exists independently from the device, that it exists already in our heads, and
+on the sketch, even though we haven't done any coding yet. This world will have
+a certain size, and each element in the world will have certain coordinates. It
+is up to us to decide what will be the size of the world, and what is the unit
+of measurement for that size. The important part is that the world exists
+independently from the device, and its dimensions likewise do not depend on the
+pixel resolution of the screen.
+
+All elements that are part of the world will be added to the `World` component,
+and the `World` component will be then added to the game.
+
+The second part of the overall structure is a camera (`CameraComponent`). The
+purpose of the camera is to be able to look at the world, to make sure that it
+renders at the right size on the screen of the user's device.
+
+Thus, the overall structure of the component tree will look approximately like 
+this:
+```text
+KlondikeGame
+ ├─ World
+ │   ├─ Stock
+ │   ├─ Waste
+ │   ├─ Foundation (×4)
+ │   └─ Pile (×7)
+ └─ CameraComponent
+```
+
+For this game I've been drawing my image assets having in mind the dimension of
+a single card at 1000×1400 pixels. So, this will serve as the reference size for
+determining the overall layout. Another important measurement that affects the
+layout is the inter-card distance. It seems like it should be somewhere between
+150 to 200 units (relative to the card width), so we will declare it as a 
+variable `gap` that can be adjusted later if needed. For simplicity, both the
+vertical and horizontal inter-card distance will be the same, and the minimum
+padding between the cards and the edges of the screen will also be equal to
+`gap`.
+
+Alright, let's put all this together and implement our `KlondikeGame`:
 
 ```dart
 class KlondikeGame extends FlameGame {
-  late final Stock stock;
-  late final Waste waste;
-  late final List<Foundation> foundations;
-  late final List<Pile> piles;
+   final gap = 175.0;
+   final w = 1000.0;
+   final h = 1400.0;
 
-  @override
-  Future<void> onLoad() async {
-    await images.load('klondike-sprites.png');
-    stock = Stock();
-    waste = Waste();
-    foundations = [for (var i = 0; i < 4; i++) Foundation()];
-    piles = [for (var i = 0; i < 7; i++) Pile()];
+   @override
+   Future<void> onLoad() async {
+      await images.load('klondike-sprites.png');
 
-    add(stock);
-    add(waste);
-    addAll(foundations);
-    addAll(piles);
-  }
+      final stock = Stock()
+         ..size = Vector2(w, h)
+         ..position = Vector2(gap, gap);
+      final waste = Waste()
+         ..size = Vector2(w * 1.5, h)
+         ..position = Vector2(w + 2*gap, gap);
+      final foundations = [
+         for (var i = 0; i < 4; i++)
+            Foundation()
+               ..size = Vector2(w, h)
+               ..position = Vector2((i + 3) * (w + gap) + gap, gap)
+      ];
+      final piles = [
+         for (var i = 0; i < 7; i++)
+            Pile()
+               ..size = Vector2(w, h)
+               ..position = Vector2(gap + i * (w + gap), h + 2*gap)
+      ];
+
+      final world = World()..addToParent(this);
+      world.add(stock);
+      world.add(waste);
+      world.addAll(foundations);
+      world.addAll(piles);
+
+      final camera = CameraComponent(world: world)
+         ..viewfinder.visibleGameSize = Vector2(w*7 + gap*8, 6000)
+         ..viewfinder.position = Vector2(w*3.5 + gap*4, 0)
+         ..viewfinder.anchor = Anchor.topCenter;
+      add(camera);
+   }
 }
 ```
 
-If you run the game at this point, you won't see much difference: it will still
-be a black canvas, although with a small squiggle in the top left corner. This
-is because even though we added the `Stock` etc components to the game, we 
-haven't given them any _layout_ -- and by default the size and position of every
-component is zero. Such components will hardly be visible, even when the debug
-mode is on.
+Let's review what's happening here:
+ * First, we declare constants `w`, `h`, and `gap` which describe the size of a
+   card and the distance between cards.
+ * Then, there is the `onLoad` method that we have had before. It starts with
+   loading the main image asset, as before (though we are not using it yet).
+ * After that, we create components `stock`, `waste`, etc., setting their size
+   and position in the world. The positions are calculated using simple 
+   arithmetics.
+ * Then we create the main `World` component, and add to it all the components
+   that we just created. The world itself is added to the game, using the 
+   `.addToParent(this)` call.
+ * Lastly, we create a camera object to look at the `world`. Internally, the
+   camera consists of two parts: a viewport and a viewfinder. The default
+   viewport is `MaxViewport`, which takes up the entire available screen size --
+   this is exactly what we need for our game, so no need to change anything. The
+   viewfinder, on the other hand, needs to be set up to properly take into 
+   account the dimensions of the underlying world.
+     - We want the entire card layout to be visible on the screen without the
+       need to scroll. In order to accomplish this, we specify that we want the
+       entire world size (which is `7*w + 8*gap` by `4*h + 3*gap`) to be able to
+       fit into the screen. The `.visibleGameSize` setting ensures that no 
+       matter the size of the device, the zoom level will be adjusted such that
+       the specified chunk of the game world will be visible.
+         + The game size calculation is obtained like this: there are 7 cards in
+           the tableau and 6 gaps between them, add 2 more "gaps" to account for
+           padding, and you get the width of `7*w + 8*gap`. Vertically, there
+           are two rows of cards, but in the bottom row we need some extra space
+           to be able to display a tall pile -- by my rough estimate, thrice the
+           height of a card is sufficient for this -- which gives the total
+           height of the game world as `4*h + 3*gap`.
+       
+     - Next, we specify which part of the world will be in the "center" of the
+       viewport. In this case I specify that the "center" of the viewport should
+       be at the top center of the screen, and the corresponding point within 
+       the game world is at coordinates `[(7*w + 8*gap)/2, 0]`.
+       
+       The reason for such choice for the viewfinder's position and anchor is 
+       because of how we want it to respond if the game size becomes too wide or
+       too tall: in case of too wide we want it to be centered on the screen,
+       but if the screen is too tall, we want the content to be aligned at the
+       top.
+ 
+ * You may have noticed that for the `world` component we used 
+   `world.addToParent(this)`, whereas for the `camera` we used 
+   `this.add(camera)`. These too methods are exactly equivalent, you can use
+   whichever you find more convenient.
+   
+ * Another question that you might have is when you need to `await` the result
+   of `add()`, and when you don't.
 
+   The short answer is: usually you don't need to wait, but if you want to, then
+   it won't hurt either.
 
-## Layout
+   If you check the documentation for `.add()` method, you'll see that the 
+   returned future only waits until the component is finished loading, not until
+   it is actually mounted to the game. As such, you only have to wait for the
+   future from `.add()` if your logic requires that the component is fully 
+   loaded before it can proceed. This is not very common.
+   
+   If you don't `await` the future from `.add()`, then the component will be
+   added to the game anyways, and in the same amount of time.
 
-So, how do we create a layout? Different games may use different approaches,
-but for this card game we want to create the layout that fits nicely within the
-available screen. In order to do this, we will override the `onGameResize()`
-method in the `KlondikeGame` class.
+If you run the game now, you should see the placeholders for where the various 
+components will be. If you are running the game in the browser, try resizing the
+window and see how the game responds to this.
+
+And this is it with this step -- we've created the basic game structure upon
+which everything else will be built. In the next step, we'll learn how to render
+the card objects, which are the most important visual objects in this game.
 
 
 ```{flutter-app}
@@ -130,3 +253,6 @@ method in the `KlondikeGame` class.
 :page: step2
 :show: popup
 ```
+
+[World]: ../../flame/camera_component.md#world
+[Camera]: ../../flame/camera_component.md#cameracomponent

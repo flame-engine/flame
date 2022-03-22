@@ -57,7 +57,7 @@ resolution. Here I'm using probably a bigger resolution than necessary for
 phones, but it would also work nicely for larger devices like an iPad.
 
 And now, without further ado, the graphic assets for the Klondike game (don't
-judge too harsh, I'm not an artist):
+judge too harshly, I'm not an artist):
 
 ![](app/assets/images/klondike-sprites.png)
 

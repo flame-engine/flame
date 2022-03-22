@@ -99,7 +99,7 @@ class Viewfinder extends Component {
 
   /// Set [zoom] level based on the [_visibleGameSize].
   void _initZoom() {
-    if (isMounted && _visibleGameSize != null) {
+    if (parent != null && _visibleGameSize != null) {
       final viewportSize = camera.viewport.size;
       final zoomX = viewportSize.x / _visibleGameSize!.x;
       final zoomY = viewportSize.y / _visibleGameSize!.y;
