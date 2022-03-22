@@ -3,6 +3,7 @@
 In this section we will use broad strokes in order to outline the main elements
 of the game. This includes the main game class, and the general layout.
 
+
 ## KlondikeGame
 
 In Flame universe, the `Game` class is the cornerstone of any game. This class
