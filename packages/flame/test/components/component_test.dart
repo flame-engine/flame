@@ -199,6 +199,107 @@ void main() {
         equals([Vector2(300, 200), Vector2(400, 500)]),
       );
     });
+
+    group('descendants', () {
+      testWithFlameGame(
+        'length must be 0 when it is called before being loaded',
+        (game) async {
+          final component = Component()..add(Component()..add(Component()));
+
+          expect(game.descendants().length, 0);
+          await game.ensureAdd(component);
+          expect(game.descendants().length, 3);
+        },
+      );
+
+      testWithFlameGame(
+        'length must be 3 when the number of added components is 3',
+        (game) async {
+          final component = Component()..add(Component()..add(Component()));
+          await game.ensureAdd(component);
+
+          expect(game.descendants().length, 3);
+        },
+      );
+
+      testWithFlameGame(
+        'length must be equal to the number of added components including '
+        'itself when the passed parameter includeSelf is true',
+        (game) async {
+          final component = Component()..add(Component()..add(Component()));
+          await game.ensureAdd(component);
+          final descendants = game.descendants(includeSelf: true);
+
+          expect(descendants.length, 4);
+          for (final component in descendants) {
+            expect(component.findGame() != null, true);
+          }
+        },
+      );
+
+      testWithFlameGame(
+        'length must be 0 when hasPendingLifecycleEvents is true',
+        (game) async {
+          final component = Component()..add(Component()..add(Component()));
+          game.add(component);
+
+          expect(game.hasPendingLifecycleEvents, true);
+          expect(game.descendants().length, 0);
+        },
+      );
+
+      testWithFlameGame(
+        'length should not change when hasPendingLifecycleEvents is true after '
+        'adding',
+        (game) async {
+          final component = Component()..add(Component()..add(Component()));
+          await game.add(component);
+          await game.ready();
+
+          expect(game.hasPendingLifecycleEvents, false);
+
+          game.add(Component());
+
+          expect(game.hasPendingLifecycleEvents, true);
+          expect(game.descendants().length, 3);
+        },
+      );
+
+      testWithFlameGame(
+        'order must adhere to the "depth-first search" algorithm',
+        (game) async {
+          final componentA = Component();
+          game.add(componentA);
+
+          final componentB = Component();
+          game.add(componentB);
+
+          final componentC = Component();
+          game.add(componentC);
+
+          final componentD = Component();
+          final componentE = Component();
+          componentB.addAll([componentD, componentE]);
+
+          final componentF = Component();
+          componentE.add(componentF);
+
+          await game.ready();
+
+          final result = game.descendants().toList();
+          final expectedOrder = [
+            componentA,
+            componentB,
+            componentD,
+            componentE,
+            componentF,
+            componentC,
+          ];
+
+          expect(result, equals(expectedOrder));
+        },
+      );
+    });
   });
 }
 
