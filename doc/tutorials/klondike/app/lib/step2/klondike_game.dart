@@ -39,17 +39,18 @@ class KlondikeGame extends FlameGame {
         ),
     );
 
-    final world = World()..addToParent(this);
-    world.add(stock);
-    world.add(waste);
-    world.addAll(foundations);
-    world.addAll(piles);
-
+    final world = World()
+      ..add(stock)
+      ..add(waste)
+      ..addAll(foundations)
+      ..addAll(piles);
     final camera = CameraComponent(world: world)
       ..viewfinder.visibleGameSize =
           Vector2(cardWidth * 7 + cardGap * 8, 4 * cardHeight + 3 * cardGap)
       ..viewfinder.position = Vector2(cardWidth * 3.5 + cardGap * 4, 0)
       ..viewfinder.anchor = Anchor.topCenter;
+
+    add(world);
     add(camera);
   }
 }

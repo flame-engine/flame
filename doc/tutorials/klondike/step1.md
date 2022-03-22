@@ -3,7 +3,7 @@
 Before you begin any kind of game project, you need to give it a **name**. For
 this tutorial the name will be simply `klondike`.
 
-Having this name in mind, please head over to the [](../bare_flame_game.md) 
+Having this name in mind, please head over to the [](../bare_flame_game.md)
 tutorial and complete the necessary set up steps. When you come back, you should
 already have the `main.dart` file with the following content:
 
@@ -48,12 +48,12 @@ still some sprites will be needed in order to draw the cards.
 
 In order to prepare the graphic assets, I first took a physical playing card and
 measured it to be 63mm × 88mm, which is the ratio of approximately `1.4`. Thus,
-I decided that my in-game cards should be rendered at 1000×1400 pixels, and I 
+I decided that my in-game cards should be rendered at 1000×1400 pixels, and I
 should draw all my images with this scale in mind.
 
-Note that the exact pixel dimensions are somewhat irrelevant here, since the 
+Note that the exact pixel dimensions are somewhat irrelevant here, since the
 images will in the end be scaled up or down, according to the device's actual
-resolution. Here I'm using probably a bigger resolution than necessary for 
+resolution. Here I'm using probably a bigger resolution than necessary for
 phones, but it would also work nicely for larger devices like an iPad.
 
 And now, without further ado, the graphic assets for the Klondike game (don't
@@ -63,7 +63,7 @@ judge too harshly, I'm not an artist):
 
 Right-click the image, choose "Save as...", and store it in the `assets/images`
 folder of the project. At this point our project structure looks like this
-(there are other files too, of course, but these are the important ones): 
+(there are other files too, of course, but these are the important ones):
 ```text
 klondike/
 ├─assets/
@@ -74,7 +74,7 @@ klondike/
 └─pubspec.yaml
 ```
 
-By the way, this kind of file is called the _spritesheet_: it's just a 
+By the way, this kind of file is called the _spritesheet_: it's just a
 collection of multiple independent images in a single file. We are using a
 spritesheet here for the simple reason that loading a single large image is
 faster than many small images. In addition, rendering sprites that were

@@ -6,8 +6,8 @@ of the game. This includes the main game class, and the general layout.
 
 ## KlondikeGame
 
-In Flame universe, the `FlameGame` class is the cornerstone of any game. This 
-class runs the game loop, dispatches events, owns all the components that 
+In Flame universe, the `FlameGame` class is the cornerstone of any game. This
+class runs the game loop, dispatches events, owns all the components that
 comprise the game (the component tree), and usually also serves as the central
 repository for the game's state.
 
@@ -27,7 +27,7 @@ class KlondikeGame extends FlameGame {
 
 For now we only declared the `onLoad` method, which is a special handler that
 is called when the game instance is attached to the Flutter widget tree for the
-first time. You can think of it as a delayed asynchronous constructor. 
+first time. You can think of it as a delayed asynchronous constructor.
 Currently, the only thing that `onLoad` does is that it loads the sprites image
 into the game; but we will be adding more soon. Any image or other resource that
 you want to use in the game needs to be loaded first, which is a relatively slow
@@ -81,13 +81,13 @@ yet.
 
 Likewise, create three more files `components/foundation.dart`,
 `components/pile.dart`, and `components/waste.dart`. For now all four classes
-will have exactly the same logic inside, we'll be adding more functionality into 
+will have exactly the same logic inside, we'll be adding more functionality into
 those classes in subsequent chapters.
 
 
 ## Game structure
 
-Once we have some basic components, they need to be added to the game. It is 
+Once we have some basic components, they need to be added to the game. It is
 time to make a decision about the high-level structure of the game.
 
 There exist multiple approaches here, which differ in their complexity,
@@ -110,7 +110,7 @@ The second part of the overall structure is a camera (`CameraComponent`). The
 purpose of the camera is to be able to look at the world, to make sure that it
 renders at the right size on the screen of the user's device.
 
-Thus, the overall structure of the component tree will look approximately like 
+Thus, the overall structure of the component tree will look approximately like
 this:
 ```text
 KlondikeGame
@@ -126,10 +126,10 @@ For this game I've been drawing my image assets having in mind the dimension of
 a single card at 1000×1400 pixels. So, this will serve as the reference size for
 determining the overall layout. Another important measurement that affects the
 layout is the inter-card distance. It seems like it should be somewhere between
-150 to 200 units (relative to the card width), so we will declare it as a 
-variable `cardGap` that can be adjusted later if needed. For simplicity, both 
-the vertical and horizontal inter-card distance will be the same, and the 
-minimum padding between the cards and the edges of the screen will also be equal 
+150 to 200 units (relative to the card width), so we will declare it as a
+variable `cardGap` that can be adjusted later if needed. For simplicity, both
+the vertical and horizontal inter-card distance will be the same, and the
+minimum padding between the cards and the edges of the screen will also be equal
 to `cardGap`.
 
 Alright, let's put all this together and implement our `KlondikeGame` class:
@@ -167,11 +167,12 @@ class KlondikeGame extends FlameGame {
         ),
     );
 
-    final world = World()..addToParent(this);
-    world.add(stock);
-    world.add(waste);
-    world.addAll(foundations);
-    world.addAll(piles);
+    final world = World()
+      ..add(stock)
+      ..add(waste)
+      ..addAll(foundations)
+      ..addAll(piles);
+    add(world);
 
     final camera = CameraComponent(world: world)
       ..viewfinder.visibleGameSize =
@@ -184,70 +185,68 @@ class KlondikeGame extends FlameGame {
 ```
 
 Let's review what's happening here:
- * First, we declare constants `cardWidth`, `cardHeight`, and `cardGap` which 
+ * First, we declare constants `cardWidth`, `cardHeight`, and `cardGap` which
    describe the size of a card and the distance between cards.
+
  * Then, there is the `onLoad` method that we have had before. It starts with
    loading the main image asset, as before (though we are not using it yet).
+
  * After that, we create components `stock`, `waste`, etc., setting their size
-   and position in the world. The positions are calculated using simple 
+   and position in the world. The positions are calculated using simple
    arithmetics.
- * Then we create the main `World` component, and add to it all the components
-   that we just created. The world itself is added to the game, using the 
-   `.addToParent(this)` call.
+
+ * Then we create the main `World` component, add to it all the components
+   that we just created, and finally add the `world` to the game.
+
  * Lastly, we create a camera object to look at the `world`. Internally, the
    camera consists of two parts: a viewport and a viewfinder. The default
    viewport is `MaxViewport`, which takes up the entire available screen size --
    this is exactly what we need for our game, so no need to change anything. The
-   viewfinder, on the other hand, needs to be set up to properly take into 
+   viewfinder, on the other hand, needs to be set up to properly take into
    account the dimensions of the underlying world.
      - We want the entire card layout to be visible on the screen without the
        need to scroll. In order to accomplish this, we specify that we want the
-       entire world size (which is `7*cardWidth + 8*cardGap` by 
-       `4*cardHeight + 3*cardGap`) to be able to fit into the screen. The 
-       `.visibleGameSize` setting ensures that no matter the size of the device, 
-       the zoom level will be adjusted such that the specified chunk of the game 
+       entire world size (which is `7*cardWidth + 8*cardGap` by
+       `4*cardHeight + 3*cardGap`) to be able to fit into the screen. The
+       `.visibleGameSize` setting ensures that no matter the size of the device,
+       the zoom level will be adjusted such that the specified chunk of the game
        world will be visible.
          + The game size calculation is obtained like this: there are 7 cards in
            the tableau and 6 gaps between them, add 2 more "gaps" to account for
-           padding, and you get the width of `7*cardWidth + 8*cardGap`. 
-           Vertically, there are two rows of cards, but in the bottom row we 
-           need some extra space to be able to display a tall pile -- by my 
-           rough estimate, thrice the height of a card is sufficient for this -- 
-           which gives the total height of the game world as 
+           padding, and you get the width of `7*cardWidth + 8*cardGap`.
+           Vertically, there are two rows of cards, but in the bottom row we
+           need some extra space to be able to display a tall pile -- by my
+           rough estimate, thrice the height of a card is sufficient for this --
+           which gives the total height of the game world as
            `4*cardHeight + 3*cardGap`.
-       
+
      - Next, we specify which part of the world will be in the "center" of the
        viewport. In this case I specify that the "center" of the viewport should
-       be at the top center of the screen, and the corresponding point within 
+       be at the top center of the screen, and the corresponding point within
        the game world is at coordinates `[(7*cardWidth + 8*cardGap)/2, 0]`.
-       
-       The reason for such choice for the viewfinder's position and anchor is 
+
+       The reason for such choice for the viewfinder's position and anchor is
        because of how we want it to respond if the game size becomes too wide or
        too tall: in case of too wide we want it to be centered on the screen,
        but if the screen is too tall, we want the content to be aligned at the
        top.
- 
- * You may have noticed that for the `world` component we used 
-   `world.addToParent(this)`, whereas for the `camera` we used 
-   `this.add(camera)`. These too methods are exactly equivalent, you can use
-   whichever you find more convenient.
-   
- * Another question that you might have is when you need to `await` the result
+
+ * As a side note, you may be wondering when you need to `await` the result
    of `add()`, and when you don't.
 
    The short answer is: usually you don't need to wait, but if you want to, then
    it won't hurt either.
 
-   If you check the documentation for `.add()` method, you'll see that the 
+   If you check the documentation for `.add()` method, you'll see that the
    returned future only waits until the component is finished loading, not until
    it is actually mounted to the game. As such, you only have to wait for the
-   future from `.add()` if your logic requires that the component is fully 
+   future from `.add()` if your logic requires that the component is fully
    loaded before it can proceed. This is not very common.
-   
+
    If you don't `await` the future from `.add()`, then the component will be
    added to the game anyways, and in the same amount of time.
 
-If you run the game now, you should see the placeholders for where the various 
+If you run the game now, you should see the placeholders for where the various
 components will be. If you are running the game in the browser, try resizing the
 window and see how the game responds to this.
 
