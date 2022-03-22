@@ -9,7 +9,7 @@ environment:
 
 dependencies:
   flame: ^1.1.0-releasecandidate.5
-  forge2d: ^0.8.1
+  forge2d: ^0.9.0
 
   flutter:
     sdk: flutter
