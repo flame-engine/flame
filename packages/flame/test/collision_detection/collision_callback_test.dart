@@ -198,4 +198,48 @@ void main() {
       expect(blockB.endCounter, 0);
     },
   );
+
+  withCollidables.test(
+    'callbacks are only called once for hitboxes on each other',
+    (game) async {
+      final blockA = TestBlock(
+        Vector2.zero(),
+        Vector2.all(10),
+      );
+      final blockB = TestBlock(
+        Vector2.zero(),
+        Vector2.all(10),
+      );
+      await game.ensureAddAll([blockA, blockB]);
+      game.update(0);
+      expect(blockA.startCounter, 1);
+      expect(blockB.startCounter, 1);
+      expect(blockA.onCollisionCounter, 1);
+      expect(blockB.onCollisionCounter, 1);
+      expect(blockA.endCounter, 0);
+      expect(blockB.endCounter, 0);
+      game.update(0);
+      expect(blockA.startCounter, 1);
+      expect(blockB.startCounter, 1);
+      expect(blockA.onCollisionCounter, 2);
+      expect(blockB.onCollisionCounter, 2);
+      expect(blockA.endCounter, 0);
+      expect(blockB.endCounter, 0);
+      game.update(0);
+      expect(blockA.startCounter, 1);
+      expect(blockB.startCounter, 1);
+      expect(blockA.onCollisionCounter, 3);
+      expect(blockB.onCollisionCounter, 3);
+      expect(blockA.endCounter, 0);
+      expect(blockB.endCounter, 0);
+      blockB.position.y += 20;
+      game.update(0);
+      expect(blockA.startCounter, 1);
+      expect(blockB.startCounter, 1);
+      expect(blockA.onCollisionCounter, 3);
+      expect(blockB.onCollisionCounter, 3);
+      expect(blockA.endCounter, 1);
+      expect(blockB.endCounter, 1);
+    },
+  );
 }
