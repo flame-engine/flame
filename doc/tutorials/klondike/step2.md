@@ -127,60 +127,65 @@ a single card at 1000×1400 pixels. So, this will serve as the reference size fo
 determining the overall layout. Another important measurement that affects the
 layout is the inter-card distance. It seems like it should be somewhere between
 150 to 200 units (relative to the card width), so we will declare it as a 
-variable `gap` that can be adjusted later if needed. For simplicity, both the
-vertical and horizontal inter-card distance will be the same, and the minimum
-padding between the cards and the edges of the screen will also be equal to
-`gap`.
+variable `cardGap` that can be adjusted later if needed. For simplicity, both 
+the vertical and horizontal inter-card distance will be the same, and the 
+minimum padding between the cards and the edges of the screen will also be equal 
+to `cardGap`.
 
-Alright, let's put all this together and implement our `KlondikeGame`:
+Alright, let's put all this together and implement our `KlondikeGame` class:
 
 ```dart
 class KlondikeGame extends FlameGame {
-   final gap = 175.0;
-   final w = 1000.0;
-   final h = 1400.0;
+  final double cardGap = 175.0;
+  final double cardWidth = 1000.0;
+  final double cardHeight = 1400.0;
 
-   @override
-   Future<void> onLoad() async {
-      await images.load('klondike-sprites.png');
+  @override
+  Future<void> onLoad() async {
+    await images.load('klondike-sprites.png');
 
-      final stock = Stock()
-         ..size = Vector2(w, h)
-         ..position = Vector2(gap, gap);
-      final waste = Waste()
-         ..size = Vector2(w * 1.5, h)
-         ..position = Vector2(w + 2*gap, gap);
-      final foundations = [
-         for (var i = 0; i < 4; i++)
-            Foundation()
-               ..size = Vector2(w, h)
-               ..position = Vector2((i + 3) * (w + gap) + gap, gap)
-      ];
-      final piles = [
-         for (var i = 0; i < 7; i++)
-            Pile()
-               ..size = Vector2(w, h)
-               ..position = Vector2(gap + i * (w + gap), h + 2*gap)
-      ];
+    final stock = Stock()
+      ..size = Vector2(cardWidth, cardHeight)
+      ..position = Vector2(cardGap, cardGap);
+    final waste = Waste()
+      ..size = Vector2(cardWidth * 1.5, cardHeight)
+      ..position = Vector2(cardWidth + 2 * cardGap, cardGap);
+    final foundations = List.generate(
+      4,
+      (i) => Foundation()
+        ..size = Vector2(cardWidth, cardHeight)
+        ..position =
+            Vector2((i + 3) * (cardWidth + cardGap) + cardGap, cardGap),
+    );
+    final piles = List.generate(
+      7,
+      (i) => Pile()
+        ..size = Vector2(cardWidth, cardHeight)
+        ..position = Vector2(
+          cardGap + i * (cardWidth + cardGap),
+          cardHeight + 2 * cardGap,
+        ),
+    );
 
-      final world = World()..addToParent(this);
-      world.add(stock);
-      world.add(waste);
-      world.addAll(foundations);
-      world.addAll(piles);
+    final world = World()..addToParent(this);
+    world.add(stock);
+    world.add(waste);
+    world.addAll(foundations);
+    world.addAll(piles);
 
-      final camera = CameraComponent(world: world)
-         ..viewfinder.visibleGameSize = Vector2(w*7 + gap*8, 6000)
-         ..viewfinder.position = Vector2(w*3.5 + gap*4, 0)
-         ..viewfinder.anchor = Anchor.topCenter;
-      add(camera);
-   }
+    final camera = CameraComponent(world: world)
+      ..viewfinder.visibleGameSize =
+          Vector2(cardWidth * 7 + cardGap * 8, 4 * cardHeight + 3 * cardGap)
+      ..viewfinder.position = Vector2(cardWidth * 3.5 + cardGap * 4, 0)
+      ..viewfinder.anchor = Anchor.topCenter;
+    add(camera);
+  }
 }
 ```
 
 Let's review what's happening here:
- * First, we declare constants `w`, `h`, and `gap` which describe the size of a
-   card and the distance between cards.
+ * First, we declare constants `cardWidth`, `cardHeight`, and `cardGap` which 
+   describe the size of a card and the distance between cards.
  * Then, there is the `onLoad` method that we have had before. It starts with
    loading the main image asset, as before (though we are not using it yet).
  * After that, we create components `stock`, `waste`, etc., setting their size
@@ -197,22 +202,24 @@ Let's review what's happening here:
    account the dimensions of the underlying world.
      - We want the entire card layout to be visible on the screen without the
        need to scroll. In order to accomplish this, we specify that we want the
-       entire world size (which is `7*w + 8*gap` by `4*h + 3*gap`) to be able to
-       fit into the screen. The `.visibleGameSize` setting ensures that no 
-       matter the size of the device, the zoom level will be adjusted such that
-       the specified chunk of the game world will be visible.
+       entire world size (which is `7*cardWidth + 8*cardGap` by 
+       `4*cardHeight + 3*cardGap`) to be able to fit into the screen. The 
+       `.visibleGameSize` setting ensures that no matter the size of the device, 
+       the zoom level will be adjusted such that the specified chunk of the game 
+       world will be visible.
          + The game size calculation is obtained like this: there are 7 cards in
            the tableau and 6 gaps between them, add 2 more "gaps" to account for
-           padding, and you get the width of `7*w + 8*gap`. Vertically, there
-           are two rows of cards, but in the bottom row we need some extra space
-           to be able to display a tall pile -- by my rough estimate, thrice the
-           height of a card is sufficient for this -- which gives the total
-           height of the game world as `4*h + 3*gap`.
+           padding, and you get the width of `7*cardWidth + 8*cardGap`. 
+           Vertically, there are two rows of cards, but in the bottom row we 
+           need some extra space to be able to display a tall pile -- by my 
+           rough estimate, thrice the height of a card is sufficient for this -- 
+           which gives the total height of the game world as 
+           `4*cardHeight + 3*cardGap`.
        
      - Next, we specify which part of the world will be in the "center" of the
        viewport. In this case I specify that the "center" of the viewport should
        be at the top center of the screen, and the corresponding point within 
-       the game world is at coordinates `[(7*w + 8*gap)/2, 0]`.
+       the game world is at coordinates `[(7*cardWidth + 8*cardGap)/2, 0]`.
        
        The reason for such choice for the viewfinder's position and anchor is 
        because of how we want it to respond if the game size becomes too wide or
