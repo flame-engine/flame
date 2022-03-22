@@ -1,6 +1,6 @@
 import 'package:flame/components.dart';
-import 'package:flame/game.dart';
 import 'package:flame/experimental.dart';
+import 'package:flame/game.dart';
 
 import 'components/foundation.dart';
 import 'components/pile.dart';
