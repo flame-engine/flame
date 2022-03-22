@@ -8,9 +8,9 @@ import 'components/stock.dart';
 import 'components/waste.dart';
 
 class KlondikeGame extends FlameGame {
-  final gap = 175.0;
-  final w = 1000.0;
-  final h = 1400.0;
+  final double gap = 175.0;
+  final double w = 1000.0;
+  final double h = 1400.0;
 
   @override
   Future<void> onLoad() async {
