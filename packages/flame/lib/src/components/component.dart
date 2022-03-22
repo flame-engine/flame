@@ -331,6 +331,30 @@ class Component {
     }
   }
 
+  /// Recursively enumerates all nested [children].
+  ///
+  /// The search is depth-first, hence descendants are in postorder. In other
+  /// words, it explores the first child completely before visiting the next
+  /// sibling.
+  ///
+  /// In order to filter descendants it is usually convenient to use [Iterable]
+  /// lazy methods, such as [Iterable.where].
+  Iterable<Component> descendants({bool includeSelf = false}) sync* {
+    if (includeSelf) {
+      yield this;
+    }
+    if (!hasChildren) {
+      return;
+    }
+
+    for (final component in children) {
+      yield component;
+      if (component.hasChildren) {
+        yield* component.descendants();
+      }
+    }
+  }
+
   //#region Add/remove components
 
   /// Schedules [component] to be added as a child to this component.
