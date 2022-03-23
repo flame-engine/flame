@@ -207,10 +207,20 @@ void main() {
         Vector2.all(10),
       );
       final blockB = TestBlock(
-        Vector2.zero(),
+        Vector2.all(100),
         Vector2.all(10),
       );
       await game.ensureAddAll([blockA, blockB]);
+
+      game.update(0);
+      expect(blockA.startCounter, 0);
+      expect(blockB.startCounter, 0);
+      expect(blockA.onCollisionCounter, 0);
+      expect(blockB.onCollisionCounter, 0);
+      expect(blockA.endCounter, 0);
+      expect(blockB.endCounter, 0);
+
+      blockB.position = Vector2.all(5);
       game.update(0);
       expect(blockA.startCounter, 1);
       expect(blockB.startCounter, 1);
@@ -218,6 +228,8 @@ void main() {
       expect(blockB.onCollisionCounter, 1);
       expect(blockA.endCounter, 0);
       expect(blockB.endCounter, 0);
+
+      blockB.position = blockA.position;
       game.update(0);
       expect(blockA.startCounter, 1);
       expect(blockB.startCounter, 1);
@@ -225,6 +237,7 @@ void main() {
       expect(blockB.onCollisionCounter, 2);
       expect(blockA.endCounter, 0);
       expect(blockB.endCounter, 0);
+
       game.update(0);
       expect(blockA.startCounter, 1);
       expect(blockB.startCounter, 1);
@@ -232,6 +245,7 @@ void main() {
       expect(blockB.onCollisionCounter, 3);
       expect(blockA.endCounter, 0);
       expect(blockB.endCounter, 0);
+
       blockB.position.y += 20;
       game.update(0);
       expect(blockA.startCounter, 1);
