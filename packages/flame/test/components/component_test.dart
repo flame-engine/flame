@@ -200,6 +200,38 @@ void main() {
       );
     });
 
+    testWithFlameGame(
+      'propagateToChildren visits children in the correct order',
+      (game) async {
+        final component1 = IntComponent()..addToParent(game);
+        final component2 = IntComponent()..addToParent(game);
+        final component3 = IntComponent()..addToParent(component2);
+        final component4 = IntComponent()..addToParent(component2);
+        await game.ready();
+
+        var order = 0;
+        game.propagateToChildren(
+          (component) {
+            order += 1;
+            if (component is IntComponent) {
+              expect(component.value, 0);
+              component.value = order;
+            } else {
+              expect(component, equals(game));
+              expect(order, 5);
+            }
+            return true;
+          },
+          includeSelf: true,
+        );
+        expect(component4.value, 1);
+        expect(component3.value, 2);
+        expect(component2.value, 3);
+        expect(component1.value, 4);
+        expect(order, 5);
+      },
+    );
+
     group('descendants', () {
       testWithFlameGame(
         'length must be 0 when it is called before being loaded',
@@ -268,25 +300,14 @@ void main() {
       testWithFlameGame(
         'order must adhere to the "depth-first search" algorithm',
         (game) async {
-          final componentA = Component();
-          game.add(componentA);
-
-          final componentB = Component();
-          game.add(componentB);
-
-          final componentC = Component();
-          game.add(componentC);
-
-          final componentD = Component();
-          final componentE = Component();
-          componentB.addAll([componentD, componentE]);
-
-          final componentF = Component();
-          componentE.add(componentF);
-
+          final componentA = Component()..addToParent(game);
+          final componentB = Component()..addToParent(game);
+          final componentC = Component()..addToParent(game);
+          final componentD = Component()..addToParent(componentB);
+          final componentE = Component()..addToParent(componentB);
+          final componentF = Component()..addToParent(componentE);
           await game.ready();
 
-          final result = game.descendants().toList();
           final expectedOrder = [
             componentA,
             componentB,
@@ -295,10 +316,43 @@ void main() {
             componentF,
             componentC,
           ];
-
-          expect(result, equals(expectedOrder));
+          expect(
+            game.descendants().toList(),
+            expectedOrder,
+          );
+          expect(
+            game.descendants(includeSelf: true).toList(),
+            [game, ...expectedOrder],
+          );
+          expect(
+            game.descendants(reversed: true).toList(),
+            expectedOrder.reversed.toList(),
+          );
+          expect(
+            game.descendants(reversed: true, includeSelf: true).toList(),
+            [...expectedOrder.reversed, game],
+          );
         },
       );
+
+      testWithFlameGame('descendants() iterator is lazy', (game) async {
+        final componentA = Visitor()..addToParent(game);
+        final componentB = Visitor()..addToParent(game);
+        final componentC = Visitor()..addToParent(componentB);
+        final componentD = Visitor()..addToParent(componentB);
+        final componentE = Visitor()..addToParent(game);
+        await game.ready();
+
+        game.descendants().whereType<Visitor>().firstWhere((component) {
+          component.visited = true;
+          return component == componentC;
+        });
+        expect(componentA.visited, true);
+        expect(componentB.visited, true);
+        expect(componentC.visited, true);
+        expect(componentD.visited, false);
+        expect(componentE.visited, false);
+      });
     });
   });
 }
@@ -311,4 +365,12 @@ class ComponentWithSizeHistory extends Component {
     super.onGameResize(size);
     history.add(size.clone());
   }
+}
+
+class Visitor extends Component {
+  bool visited = false;
+}
+
+class IntComponent extends Component {
+  int value = 0;
 }
