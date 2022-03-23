@@ -565,27 +565,9 @@ class Component {
     bool Function(T) handler, {
     bool includeSelf = false,
   }) {
-    var shouldContinue = true;
-    if (includeSelf && this is T) {
-      shouldContinue = handler(this as T);
-      if (!shouldContinue) {
-        return false;
-      }
-    }
-    if (_children != null) {
-      for (final child in _children!.reversed()) {
-        shouldContinue = child.propagateToChildren(handler);
-        if (shouldContinue && child is T) {
-          shouldContinue = handler(child);
-        } else if (shouldContinue && child is FlameGame) {
-          shouldContinue = child.propagateToChildren<T>(handler);
-        }
-        if (!shouldContinue) {
-          break;
-        }
-      }
-    }
-    return shouldContinue;
+    return descendants(reversed: true, includeSelf: includeSelf)
+        .whereType<T>()
+        .every(handler);
   }
 
   /// Returns the closest parent further up the hierarchy that satisfies type=T,
