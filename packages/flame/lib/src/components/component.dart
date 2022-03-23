@@ -331,25 +331,34 @@ class Component {
 
   /// Recursively enumerates all nested [children].
   ///
-  /// The search is depth-first, hence descendants are in postorder. In other
-  /// words, it explores the first child completely before visiting the next
-  /// sibling.
+  /// The search is depth-first in preorder. In other words, it explores the
+  /// first child completely before visiting the next sibling, and the root
+  /// component is visited before its children.
   ///
-  /// In order to filter descendants it is usually convenient to use [Iterable]
-  /// lazy methods, such as [Iterable.where].
-  Iterable<Component> descendants({bool includeSelf = false}) sync* {
-    if (includeSelf) {
+  /// This ordering of descendants is considered standard in Flame: it is the
+  /// same order in which the components will normally be updated and rendered
+  /// on every game cycle. The optional parameter [reversed] allows iterating
+  /// through the same set of descendants in reverse order.
+  ///
+  /// The [Iterable] produced by this method is "lazy", which means it will only
+  /// traverse the component tree when required. This allows efficient chaining
+  /// of various iterable methods, such as filtering, early stopping, folding,
+  /// and so on -- see the documentation of the [Iterable] class for details.
+  Iterable<Component> descendants({
+    bool includeSelf = false,
+    bool reversed = false,
+  }) sync* {
+    if (includeSelf && !reversed) {
       yield this;
     }
-    if (!hasChildren) {
-      return;
-    }
-
-    for (final component in children) {
-      yield component;
-      if (component.hasChildren) {
-        yield* component.descendants();
+    if (hasChildren) {
+      final childrenIterable = reversed ? children.reversed() : children;
+      for (final child in childrenIterable) {
+        yield* child.descendants(includeSelf: true, reversed: reversed);
       }
+    }
+    if (includeSelf && reversed) {
+      yield this;
     }
   }
 

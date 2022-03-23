@@ -268,25 +268,14 @@ void main() {
       testWithFlameGame(
         'order must adhere to the "depth-first search" algorithm',
         (game) async {
-          final componentA = Component();
-          game.add(componentA);
-
-          final componentB = Component();
-          game.add(componentB);
-
-          final componentC = Component();
-          game.add(componentC);
-
-          final componentD = Component();
-          final componentE = Component();
-          componentB.addAll([componentD, componentE]);
-
-          final componentF = Component();
-          componentE.add(componentF);
-
+          final componentA = Component()..addToParent(game);
+          final componentB = Component()..addToParent(game);
+          final componentC = Component()..addToParent(game);
+          final componentD = Component()..addToParent(componentB);
+          final componentE = Component()..addToParent(componentB);
+          final componentF = Component()..addToParent(componentE);
           await game.ready();
 
-          final result = game.descendants().toList();
           final expectedOrder = [
             componentA,
             componentB,
@@ -295,10 +284,43 @@ void main() {
             componentF,
             componentC,
           ];
-
-          expect(result, equals(expectedOrder));
+          expect(
+            game.descendants().toList(),
+            expectedOrder,
+          );
+          expect(
+            game.descendants(includeSelf: true).toList(),
+            [game, ...expectedOrder],
+          );
+          expect(
+            game.descendants(reversed: true).toList(),
+            expectedOrder.reversed.toList(),
+          );
+          expect(
+            game.descendants(reversed: true, includeSelf: true).toList(),
+            [...expectedOrder.reversed, game],
+          );
         },
       );
+
+      testWithFlameGame('descendants() iterator is lazy', (game) async {
+        final componentA = Visitor()..addToParent(game);
+        final componentB = Visitor()..addToParent(game);
+        final componentC = Visitor()..addToParent(componentB);
+        final componentD = Visitor()..addToParent(componentB);
+        final componentE = Visitor()..addToParent(game);
+        await game.ready();
+
+        game.descendants().whereType<Visitor>().firstWhere((component) {
+          component.visited = true;
+          return component == componentC;
+        });
+        expect(componentA.visited, true);
+        expect(componentB.visited, true);
+        expect(componentC.visited, true);
+        expect(componentD.visited, false);
+        expect(componentE.visited, false);
+      });
     });
   });
 }
@@ -311,4 +333,8 @@ class ComponentWithSizeHistory extends Component {
     super.onGameResize(size);
     history.add(size.clone());
   }
+}
+
+class Visitor extends Component {
+  bool visited = false;
 }
