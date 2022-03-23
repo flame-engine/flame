@@ -200,6 +200,38 @@ void main() {
       );
     });
 
+    testWithFlameGame(
+      'propagateToChildren visits children in the correct order',
+      (game) async {
+        final component1 = IntComponent()..addToParent(game);
+        final component2 = IntComponent()..addToParent(game);
+        final component3 = IntComponent()..addToParent(component2);
+        final component4 = IntComponent()..addToParent(component2);
+        await game.ready();
+
+        var order = 0;
+        game.propagateToChildren(
+          (component) {
+            order += 1;
+            if (component is IntComponent) {
+              expect(component.value, 0);
+              component.value = order;
+            } else {
+              expect(component, equals(game));
+              expect(order, 5);
+            }
+            return true;
+          },
+          includeSelf: true,
+        );
+        expect(component4.value, 1);
+        expect(component3.value, 2);
+        expect(component2.value, 3);
+        expect(component1.value, 4);
+        expect(order, 5);
+      },
+    );
+
     group('descendants', () {
       testWithFlameGame(
         'length must be 0 when it is called before being loaded',
@@ -337,4 +369,8 @@ class ComponentWithSizeHistory extends Component {
 
 class Visitor extends Component {
   bool visited = false;
+}
+
+class IntComponent extends Component {
+  int value = 0;
 }
