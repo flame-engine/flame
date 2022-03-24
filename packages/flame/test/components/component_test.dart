@@ -199,6 +199,161 @@ void main() {
         equals([Vector2(300, 200), Vector2(400, 500)]),
       );
     });
+
+    testWithFlameGame(
+      'propagateToChildren visits children in the correct order',
+      (game) async {
+        final component1 = IntComponent()..addToParent(game);
+        final component2 = IntComponent()..addToParent(game);
+        final component3 = IntComponent()..addToParent(component2);
+        final component4 = IntComponent()..addToParent(component2);
+        await game.ready();
+
+        var order = 0;
+        game.propagateToChildren(
+          (component) {
+            order += 1;
+            if (component is IntComponent) {
+              expect(component.value, 0);
+              component.value = order;
+            } else {
+              expect(component, equals(game));
+              expect(order, 5);
+            }
+            return true;
+          },
+          includeSelf: true,
+        );
+        expect(component4.value, 1);
+        expect(component3.value, 2);
+        expect(component2.value, 3);
+        expect(component1.value, 4);
+        expect(order, 5);
+      },
+    );
+
+    group('descendants', () {
+      testWithFlameGame(
+        'length must be 0 when it is called before being loaded',
+        (game) async {
+          final component = Component()..add(Component()..add(Component()));
+
+          expect(game.descendants().length, 0);
+          await game.ensureAdd(component);
+          expect(game.descendants().length, 3);
+        },
+      );
+
+      testWithFlameGame(
+        'length must be 3 when the number of added components is 3',
+        (game) async {
+          final component = Component()..add(Component()..add(Component()));
+          await game.ensureAdd(component);
+
+          expect(game.descendants().length, 3);
+        },
+      );
+
+      testWithFlameGame(
+        'length must be equal to the number of added components including '
+        'itself when the passed parameter includeSelf is true',
+        (game) async {
+          final component = Component()..add(Component()..add(Component()));
+          await game.ensureAdd(component);
+          final descendants = game.descendants(includeSelf: true);
+
+          expect(descendants.length, 4);
+          for (final component in descendants) {
+            expect(component.findGame() != null, true);
+          }
+        },
+      );
+
+      testWithFlameGame(
+        'length must be 0 when hasPendingLifecycleEvents is true',
+        (game) async {
+          final component = Component()..add(Component()..add(Component()));
+          game.add(component);
+
+          expect(game.hasPendingLifecycleEvents, true);
+          expect(game.descendants().length, 0);
+        },
+      );
+
+      testWithFlameGame(
+        'length should not change when hasPendingLifecycleEvents is true after '
+        'adding',
+        (game) async {
+          final component = Component()..add(Component()..add(Component()));
+          await game.add(component);
+          await game.ready();
+
+          expect(game.hasPendingLifecycleEvents, false);
+
+          game.add(Component());
+
+          expect(game.hasPendingLifecycleEvents, true);
+          expect(game.descendants().length, 3);
+        },
+      );
+
+      testWithFlameGame(
+        'order must adhere to the "depth-first search" algorithm',
+        (game) async {
+          final componentA = Component()..addToParent(game);
+          final componentB = Component()..addToParent(game);
+          final componentC = Component()..addToParent(game);
+          final componentD = Component()..addToParent(componentB);
+          final componentE = Component()..addToParent(componentB);
+          final componentF = Component()..addToParent(componentE);
+          await game.ready();
+
+          final expectedOrder = [
+            componentA,
+            componentB,
+            componentD,
+            componentE,
+            componentF,
+            componentC,
+          ];
+          expect(
+            game.descendants().toList(),
+            expectedOrder,
+          );
+          expect(
+            game.descendants(includeSelf: true).toList(),
+            [game, ...expectedOrder],
+          );
+          expect(
+            game.descendants(reversed: true).toList(),
+            expectedOrder.reversed.toList(),
+          );
+          expect(
+            game.descendants(reversed: true, includeSelf: true).toList(),
+            [...expectedOrder.reversed, game],
+          );
+        },
+      );
+
+      testWithFlameGame('descendants() iterator is lazy', (game) async {
+        final componentA = Visitor()..addToParent(game);
+        final componentB = Visitor()..addToParent(game);
+        final componentC = Visitor()..addToParent(componentB);
+        final componentD = Visitor()..addToParent(componentB);
+        final componentE = Visitor()..addToParent(game);
+        await game.ready();
+
+        game.descendants().whereType<Visitor>().firstWhere((component) {
+          component.visited = true;
+          return component == componentC;
+        });
+        expect(componentA.visited, true);
+        expect(componentB.visited, true);
+        expect(componentC.visited, true);
+        expect(componentD.visited, false);
+        expect(componentE.visited, false);
+      });
+    });
   });
 }
 
@@ -210,4 +365,12 @@ class ComponentWithSizeHistory extends Component {
     super.onGameResize(size);
     history.add(size.clone());
   }
+}
+
+class Visitor extends Component {
+  bool visited = false;
+}
+
+class IntComponent extends Component {
+  int value = 0;
 }
