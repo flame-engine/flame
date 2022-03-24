@@ -136,7 +136,7 @@ mixin ShapeHitbox on ShapeComponent implements Hitbox<ShapeHitbox> {
     final size = absoluteScaledSize;
     // This has +1 since a point on the edge of the bounding box is currently
     // counted as outside.
-    _halfExtents.setValues(size.x + 1, size.y + 1);
+    _halfExtents.setValues(size.x / 2, size.y / 2);
     _rotationMatrix.setRotationZ(absoluteAngle);
     _validAabb = true;
     return _aabb

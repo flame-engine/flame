@@ -256,4 +256,62 @@ void main() {
       expect(blockB.endCounter, 1);
     },
   );
+
+  withCollidables.test(
+    'end and start callbacks are only called once for hitboxes sharing a side',
+    (game) async {
+      final blockA = TestBlock(
+        Vector2.all(10),
+        Vector2.all(10),
+      );
+      final blockB = TestBlock(
+        Vector2.all(21),
+        Vector2.all(12),
+      );
+      await game.ensureAddAll([blockA, blockB]);
+
+      game.update(0);
+      expect(blockA.startCounter, 0);
+      expect(blockB.startCounter, 0);
+      expect(blockA.onCollisionCounter, 0);
+      expect(blockB.onCollisionCounter, 0);
+      expect(blockA.endCounter, 0);
+      expect(blockB.endCounter, 0);
+
+      blockB.position = Vector2(10, 14);
+      game.update(0);
+      expect(blockA.startCounter, 1);
+      expect(blockB.startCounter, 1);
+      expect(blockA.onCollisionCounter, 1);
+      expect(blockB.onCollisionCounter, 1);
+      expect(blockA.endCounter, 0);
+      expect(blockB.endCounter, 0);
+
+      game.update(0);
+      expect(blockA.startCounter, 1);
+      expect(blockB.startCounter, 1);
+      expect(blockA.onCollisionCounter, 2);
+      expect(blockB.onCollisionCounter, 2);
+      expect(blockA.endCounter, 0);
+      expect(blockB.endCounter, 0);
+
+      game.update(0);
+      expect(blockA.startCounter, 1);
+      expect(blockB.startCounter, 1);
+      expect(blockA.onCollisionCounter, 3);
+      expect(blockB.onCollisionCounter, 3);
+      expect(blockA.endCounter, 0);
+      expect(blockB.endCounter, 0);
+
+      blockB.position =
+          blockA.positionOfAnchor(Anchor.topRight) + Vector2(1, 0);
+      game.update(0);
+      expect(blockA.startCounter, 1);
+      expect(blockB.startCounter, 1);
+      expect(blockA.onCollisionCounter, 3);
+      expect(blockB.onCollisionCounter, 3);
+      expect(blockA.endCounter, 1);
+      expect(blockB.endCounter, 1);
+    },
+  );
 }
