@@ -49,7 +49,7 @@ class Component {
     final match = children.whereType<T>();
 
     final it = match.iterator;
-    return it.moveNext()? it.current : null;
+    return it.moveNext() ? it.current : null;
   }
 
   /// The children of the current component.
