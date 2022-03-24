@@ -45,11 +45,22 @@ class Component {
   Component? _parent;
 
   /// Returns the first child that matches the given type [T].
-  T? child<T extends Component>() {
+  T? firstChild<T extends Component>() {
     final match = children.whereType<T>();
 
     final it = match.iterator;
     return it.moveNext() ? it.current : null;
+  }
+
+  /// Returns the last child that matches the given type [T].
+  T? lastChild<T extends Component>() {
+    final match = children.whereType<T>();
+
+    if (match.isNotEmpty) {
+      return match.last;
+    }
+
+    return null;
   }
 
   /// The children of the current component.
