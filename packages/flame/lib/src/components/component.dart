@@ -48,11 +48,8 @@ class Component {
   T? child<T extends Component>() {
     final match = children.whereType<T>();
 
-    if (match.isNotEmpty) {
-      return match.first;
-    }
-
-    return match.first;
+    final it = match.iterator;
+    return it.moveNext()? it.current : null;
   }
 
   /// The children of the current component.
