@@ -46,13 +46,13 @@ class Component {
 
   /// Returns the first child that matches the given type [T].
   T? child<T extends Component>() {
-     final match = children.whereType<T>();
+    final match = children.whereType<T>();
 
-     if (match.isNotEmpty) {
-       return match.first;
-     }
+    if (match.isNotEmpty) {
+      return match.first;
+    }
 
-     return match.first;
+    return match.first;
   }
 
   /// The children of the current component.
