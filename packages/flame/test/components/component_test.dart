@@ -353,9 +353,32 @@ void main() {
         expect(componentD.visited, false);
         expect(componentE.visited, false);
       });
+
+      testWithFlameGame(
+        'child returns the first child on the matching type',
+        (game) async {
+          await game.ensureAdd(ComponentA());
+          await game.ensureAdd(ComponentB());
+
+          final childA = game.child<ComponentA>();
+          expect(childA, isNotNull);
+          expect(childA, isA<ComponentA>());
+
+          final childB = game.child<ComponentB>();
+          expect(childB, isNotNull);
+          expect(childB, isA<ComponentB>());
+
+          final nonExistentChild = game.child<SpriteComponent>();
+          expect(nonExistentChild, isNull);
+        },
+      );
     });
   });
 }
+
+class ComponentA extends Component {}
+
+class ComponentB extends Component {}
 
 class ComponentWithSizeHistory extends Component {
   List<Vector2> history = [];

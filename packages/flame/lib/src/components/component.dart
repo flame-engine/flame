@@ -44,6 +44,17 @@ class Component {
   Component? get parent => _parent;
   Component? _parent;
 
+  /// Returns the first child that matches the given type [T].
+  T? child<T extends Component>() {
+     final match = children.whereType<T>();
+
+     if (match.isNotEmpty) {
+       return match.first;
+     }
+
+     return match.first;
+  }
+
   /// The children of the current component.
   ///
   /// This getter will automatically create the [ComponentSet] container within
