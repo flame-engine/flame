@@ -10,7 +10,10 @@ flutter:
     - assets/images/enemy.png
 ```
 
-It has to be png files and they can have transparency.
+Images can be in any format supported by Flutter, which include: JPEG, WebP, PNG, GIF, animated GIF,
+animated WebP, BMP, and WBMP. Other formats would require additional libraries. For example, SVG
+images can be loaded via the `flame_svg` library.
+
 
 ## Loading images
 
@@ -24,7 +27,9 @@ an `Image` that can be drawn on the `Canvas` using the `drawImageRect` method.
 It automatically caches any image loaded by filename, so you can safely call it many times.
 
 The methods for loading and clearing the cache are: `load`, `loadAll`, `clear` and `clearCache`.
-They return a `Future` for the loaded Image.
+They return `Future`s for loading the images. These futures must be awaited for before the images
+can be used in any way. If you do not want to await these futures right away, you can initiate 
+multiple `load()` operations and then await for all of them at once using `Images.ready()` method.
 
 To synchronously retrieve a previously cached image, the `fromCache` method can be used. If an image
 with that key was not previously loaded, it will throw an exception.
