@@ -1,21 +1,21 @@
 # Particles
 
 Flame offers a basic, yet robust and extendable particle system. The core concept of this system is
-the `Particle` class, which is very similar in its behavior to the `ParticleComponent`.
+the `Particle` class, which is very similar in its behavior to the `ParticleSystemComponent`.
 
 The most basic usage of a `Particle` with `FlameGame` would look as following:
 
 ```dart
 import 'package:flame/components.dart';
 
-// ... 
+// ...
 
 game.add(
-  // Wrapping a Particle with ParticleComponent
+  // Wrapping a Particle with ParticleSystemComponent
   // which maps Component lifecycle hooks to Particle ones
   // and embeds a trigger for removing the component.
-  ParticleComponent(
-    CircleParticle(),
+  ParticleSystemComponent(
+    particle: CircleParticle(),
   ),
 );
 ```
@@ -40,15 +40,15 @@ Random rnd = Random();
 Vector2 randomVector2() => (Vector2.random(rnd) - Vector2.random(rnd)) * 200;
 
 // Composition.
-// 
-// Defining a particle effect as a set of nested behaviors from top to bottom, one within another: 
-// ParticleComponent 
-//   > ComposedParticle 
-//     > AcceleratedParticle 
+//
+// Defining a particle effect as a set of nested behaviors from top to bottom, one within another:
+// ParticleSystemComponent
+//   > ComposedParticle
+//     > AcceleratedParticle
 //       > CircleParticle
 game.add(
-  ParticleComponent(
-    Particle.generate(
+  ParticleSystemComponent(
+    particle: Particle.generate(
       count: 10,
       generator: (i) => AcceleratedParticle(
         acceleration: randomVector2(),
@@ -61,12 +61,12 @@ game.add(
 );
 
 // Chaining.
-// 
+//
 // Expresses the same behavior as above, but with a more fluent API.
 // Only Particles with SingleChildParticle mixin can be used as chainable behaviors.
 game.add(
-  ParticleComponent(
-    Particle.generate(
+  ParticleSystemComponent(
+    particle: Particle.generate(
       count: 10,
       generator: (i) => pt.CircleParticle(paint: Paint()..color = Colors.red)
     )
@@ -74,19 +74,19 @@ game.add(
 );
 
 // Computed Particle.
-// 
+//
 // All the behaviors are defined explicitly. Offers greater flexibility
 // compared to built-in behaviors.
 game.add(
-  ParticleComponent(
-      Particle.generate(
+  ParticleSystemComponent(
+      particle: Particle.generate(
         count: 10,
         generator: (i) {
           Vector2 position = Vector2.zero();
           Vector2 speed = Vector2.zero();
           final acceleration = randomVector2();
           final paint = Paint()..color = Colors.red;
-          
+
           return ComputedParticle(
             renderer: (canvas, _) {
               speed += acceleration;
@@ -107,10 +107,10 @@ You can find more examples of how to use different built-in particles in various
 ## Lifecycle
 
 A behavior common to all `Particle`s is that all of them accept a `lifespan` argument. This value is
-used to make the `ParticleComponent` remove itself once its internal `Particle` has reached the end
-of its life. Time within the `Particle` itself is tracked using the Flame `Timer` class. It can be
-configured with a `double`, represented in seconds (with microsecond precision) by passing it into
-the corresponding `Particle` constructor.
+used to make the `ParticleSystemComponent` remove itself once its internal `Particle` has reached
+the end of its life. Time within the `Particle` itself is tracked using the Flame `Timer` class. It
+can be configured with a `double`, represented in seconds (with microsecond precision) by passing
+it into the corresponding `Particle` constructor.
 
 ```dart
 Particle(lifespan: .2); // will live for 200ms.
@@ -118,7 +118,7 @@ Particle(lifespan: 4); // will live for 4s.
 ```
 
 It is also possible to reset a `Particle`'s lifespan by using the `setLifespan` method, which also
-accepts a `double` of seconds. 
+accepts a `double` of seconds.
 
 ```dart
 final particle = Particle(lifespan: 2);
@@ -134,7 +134,7 @@ as the `value` property of the `AnimationController` class in Flutter.
 ```dart
 final particle = Particle(lifespan: 2.0);
 
-game.add(ParticleComponent(particle));
+game.add(ParticleSystemComponent(particle: particle));
 
 // Will print values from 0 to 1 with step of .1: 0, 0.1, 0.2 ... 0.9, 1.0.
 Timer.periodic(duration * .1, () => print(particle.progress));
@@ -172,8 +172,8 @@ layer.
 
 ```dart
 game.add(
-  ParticleComponent(
-    TranslatedParticle(
+  ParticleSystemComponent(
+    particle: TranslatedParticle(
       // Will translate the child Particle effect to the center of game canvas.
       offset: game.size / 2,
       child: Particle(),
@@ -189,8 +189,8 @@ Moves the child `Particle` between the `from` and `to` `Vector2`s during its lif
 
 ```dart
 game.add(
-  ParticleComponent(
-    MovingParticle(
+  ParticleSystemComponent(
+    particle: MovingParticle(
       // Will move from corner to corner of the game canvas.
       from: Vector2.zero(),
       to: game.size,
@@ -216,8 +216,8 @@ final rnd = Random();
 Vector2 randomVector2() => (Vector2.random(rnd) - Vector2.random(rnd)) * 100;
 
 game.add(
-  ParticleComponent(
-    AcceleratedParticle(
+  ParticleSystemComponent(
+    particle: AcceleratedParticle(
       // Will fire off in the center of game canvas
       position: game.canvasSize/2,
       // With random initial speed of Vector2(-100..100, 0..-100)
@@ -241,8 +241,8 @@ desired positioning.
 
 ```dart
 game.add(
-  ParticleComponent(
-    CircleParticle(
+  ParticleSystemComponent(
+    particle: CircleParticle(
       radius: game.size.x / 2,
       paint: Paint()..color = Colors.red.withOpacity(.5),
     ),
@@ -256,8 +256,8 @@ Allows you to embed a `Sprite` into your particle effects.
 
 ```dart
 game.add(
-  ParticleComponent(
-    SpriteParticle(
+  ParticleSystemComponent(
+    particle: SpriteParticle(
       sprite: Sprite('sprite.png'),
       size: Vector2(64, 64),
     ),
@@ -267,7 +267,7 @@ game.add(
 
 ## ImageParticle
 
-Renders given `dart:ui` image within the particle tree. 
+Renders given `dart:ui` image within the particle tree.
 
 ```dart
 // During game initialisation
@@ -281,8 +281,8 @@ await Flame.images.loadAll(const [
 final image = await Flame.images.load('image.png');
 
 game.add(
-  ParticleComponent(
-    ImageParticle(
+  ParticleSystemComponent(
+    particle: ImageParticle(
       size: Vector2.all(24),
       image: image,
     );
@@ -303,8 +303,8 @@ final spritesheet = SpriteSheet(
 );
 
 game.add(
-  ParticleComponent(
-    AnimationParticle(
+  ParticleSystemComponent(
+    particle: AnimationParticle(
       animation: spritesheet.createAnimation(0, stepTime: 0.1),
     );
   ),
@@ -322,8 +322,8 @@ to the `game` directly, without the `Particle` in the middle.
 final longLivingRect = RectComponent();
 
 game.add(
-  ParticleComponent(
-    ComponentParticle(
+  ParticleSystemComponent(
+    particle: ComponentParticle(
       component: longLivingRect
     );
   ),
@@ -332,7 +332,7 @@ game.add(
 class RectComponent extends Component {
   void render(Canvas c) {
     c.drawRect(
-      Rect.fromCenter(center: Offset.zero, width: 100, height: 100), 
+      Rect.fromCenter(center: Offset.zero, width: 100, height: 100),
       Paint()..color = Colors.red
     );
   }
@@ -357,13 +357,13 @@ import 'package:flame_flare/flame_flare.dart';
 // Within your game or component's `onLoad` method
 const flareSize = 32.0;
 final flareAnimation = FlareActorAnimation('assets/sparkle.flr');
-flareAnimation.width = flareSize; 
+flareAnimation.width = flareSize;
 flareAnimation.height = flareSize;
 
 // Somewhere in game
 game.add(
-  ParticleComponent(
-    FlareParticle(flare: flareAnimation),
+  ParticleSystemComponent(
+    particle: FlareParticle(flare: flareAnimation),
   ),
 );
 ```
@@ -380,9 +380,9 @@ on each frame to perform necessary computations and render something to the `Can
 
 ```dart
 game.add(
-  ParticleComponent(
+  ParticleSystemComponent(
     // Renders a circle which gradually changes its color and size during the particle lifespan.
-    ComputedParticle(
+    particle: ComputedParticle(
       renderer: (canvas, particle) => canvas.drawCircle(
         Offset.zero,
         particle.progress * 10,
