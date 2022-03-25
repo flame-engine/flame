@@ -353,9 +353,61 @@ void main() {
         expect(componentD.visited, false);
         expect(componentE.visited, false);
       });
+
+      testWithFlameGame(
+        'firstChild returns the first child on the matching type',
+        (game) async {
+          final firstA = ComponentA();
+          final firstB = ComponentB();
+
+          await game.ensureAdd(firstA);
+          await game.ensureAdd(ComponentA());
+          await game.ensureAdd(firstB);
+          await game.ensureAdd(ComponentB());
+
+          final childA = game.firstChild<ComponentA>();
+          expect(childA, isNotNull);
+          expect(childA, equals(firstA));
+
+          final childB = game.firstChild<ComponentB>();
+          expect(childB, isNotNull);
+          expect(childB, equals(firstB));
+
+          final nonExistentChild = game.firstChild<SpriteComponent>();
+          expect(nonExistentChild, isNull);
+        },
+      );
+
+      testWithFlameGame(
+        'lastChild returns the last child on the matching type',
+        (game) async {
+          final lastA = ComponentA();
+          final lastB = ComponentB();
+
+          await game.ensureAdd(ComponentA());
+          await game.ensureAdd(lastA);
+          await game.ensureAdd(ComponentB());
+          await game.ensureAdd(lastB);
+
+          final childA = game.lastChild<ComponentA>();
+          expect(childA, isNotNull);
+          expect(childA, equals(lastA));
+
+          final childB = game.lastChild<ComponentB>();
+          expect(childB, isNotNull);
+          expect(childB, equals(lastB));
+
+          final nonExistentChild = game.lastChild<SpriteComponent>();
+          expect(nonExistentChild, isNull);
+        },
+      );
     });
   });
 }
+
+class ComponentA extends Component {}
+
+class ComponentB extends Component {}
 
 class ComponentWithSizeHistory extends Component {
   List<Vector2> history = [];
