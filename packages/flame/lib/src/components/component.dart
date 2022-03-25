@@ -44,6 +44,21 @@ class Component {
   Component? get parent => _parent;
   Component? _parent;
 
+  /// Returns the first child that matches the given type [T].
+  ///
+  /// As opposed to `children.whereType<T>().first`, this method returns null
+  /// instead of a [StateError] when no matching children are found.
+  T? firstChild<T extends Component>() {
+    final it = children.whereType<T>().iterator;
+    return it.moveNext() ? it.current : null;
+  }
+
+  /// Returns the last child that matches the given type [T].
+  T? lastChild<T extends Component>() {
+    final it = children.reversed().whereType<T>().iterator;
+    return it.moveNext() ? it.current : null;
+  }
+
   /// The children of the current component.
   ///
   /// This getter will automatically create the [ComponentSet] container within
