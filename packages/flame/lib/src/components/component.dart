@@ -45,6 +45,9 @@ class Component {
   Component? _parent;
 
   /// Returns the first child that matches the given type [T].
+  ///
+  /// As opposed to `children.whereType<T>().first`, this method returns null
+  /// instead of a [StateError] when no matching children are found.
   T? firstChild<T extends Component>() {
     final match = children.whereType<T>();
 
