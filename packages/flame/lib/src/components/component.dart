@@ -55,13 +55,8 @@ class Component {
 
   /// Returns the last child that matches the given type [T].
   T? lastChild<T extends Component>() {
-    final match = children.whereType<T>();
-
-    if (match.isNotEmpty) {
-      return match.last;
-    }
-
-    return null;
+    final it = children.reversed().whereType<T>().iterator;
+    return it.moveNext() ? it.current : null;
   }
 
   /// The children of the current component.

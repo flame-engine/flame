@@ -397,7 +397,7 @@ void main() {
           expect(childB, isNotNull);
           expect(childB, equals(lastB));
 
-          final nonExistentChild = game.firstChild<SpriteComponent>();
+          final nonExistentChild = game.lastChild<SpriteComponent>();
           expect(nonExistentChild, isNull);
         },
       );
