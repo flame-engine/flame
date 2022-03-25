@@ -49,9 +49,7 @@ class Component {
   /// As opposed to `children.whereType<T>().first`, this method returns null
   /// instead of a [StateError] when no matching children are found.
   T? firstChild<T extends Component>() {
-    final match = children.whereType<T>();
-
-    final it = match.iterator;
+    final it = children.whereType<T>().iterator;
     return it.moveNext() ? it.current : null;
   }
 
