@@ -230,12 +230,18 @@ class SpriteAnimation {
   /// to the first, or keeps returning the last when done.
   bool loop = true;
 
+  /// Registered method to be triggered when the animation starts.
+  void Function()? onStart;
+  
   /// Registered method to be triggered when the animation complete.
   void Function()? onComplete;
 
   /// The current frame that should be displayed.
   SpriteAnimationFrame get currentFrame => frames[currentIndex];
 
+  /// Returns whether the animation is on the first frame.
+  bool get isFirstFrame => currentIndex == 0;
+  
   /// Returns whether the animation is on the last frame.
   bool get isLastFrame => currentIndex == frames.length - 1;
 
@@ -300,6 +306,9 @@ class SpriteAnimation {
       return;
     }
     while (clock >= currentFrame.stepTime) {
+      if (isFirstFrame){
+        onStart?.call();
+      }
       if (isLastFrame) {
         if (loop) {
           clock -= currentFrame.stepTime;
