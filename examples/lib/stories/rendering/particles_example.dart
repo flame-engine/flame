@@ -96,8 +96,8 @@ class ParticlesExample extends FlameGame with FPSCounter {
       add(
         // Bind all the particles to a [Component] update
         // lifecycle from the [FlameGame].
-        ParticleComponent(
-          TranslatedParticle(
+        ParticleSystemComponent(
+          particle: TranslatedParticle(
             lifespan: 1,
             offset: cellCenter,
             child: particle,
