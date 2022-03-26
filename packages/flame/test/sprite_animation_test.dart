@@ -41,6 +41,19 @@ void main() {
       );
     });
 
+    test('onStart called for single-frame animation', () {
+      var counter = 0;
+      final sprite = MockSprite();
+      final animation =
+          SpriteAnimation.spriteList([sprite], stepTime: 1, loop: false)
+            ..onStart = () => counter++;
+      expect(counter, 0);
+      animation.update(0.5);
+      expect(counter, 1);
+      animation.update(1);
+      expect(counter, 1);
+    });
+    
     test('onComplete called for single-frame animation', () {
       var counter = 0;
       final sprite = MockSprite();
