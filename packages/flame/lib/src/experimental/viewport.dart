@@ -43,8 +43,14 @@ abstract class Viewport extends Component {
       "Viewport's size cannot be negative: $value",
     );
     _size.setFrom(value);
+    if (isMounted) {
+      camera.viewfinder.onViewportResize();
+    }
     onViewportResize();
   }
+
+  /// Reference to the parent camera.
+  CameraComponent get camera => parent! as CameraComponent;
 
   /// Apply clip mask to the [canvas].
   ///
@@ -53,7 +59,6 @@ abstract class Viewport extends Component {
   /// clip mask's shape must match the [size] of the viewport.
   ///
   /// This API must be implemented by all viewports.
-  @protected
   void clip(Canvas canvas);
 
   /// Override in order to perform a custom action upon resize.
@@ -68,21 +73,7 @@ abstract class Viewport extends Component {
   void onMount() {
     assert(
       parent! is CameraComponent,
-      'A Viewport may only be attached to a Camera2',
+      'A Viewport may only be attached to a CameraComponent',
     );
-  }
-
-  @override
-  void renderTree(Canvas canvas) {
-    final camera = parent! as CameraComponent;
-    canvas.save();
-    canvas.translate(_position.x, _position.y);
-    canvas.save();
-    clip(canvas);
-    camera.viewfinder.renderFromViewport(canvas);
-    canvas.restore();
-    // Render viewport's children
-    super.renderTree(canvas);
-    canvas.restore();
   }
 }

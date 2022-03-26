@@ -7,8 +7,6 @@ import 'package:flutter/foundation.dart';
 import 'package:forge2d/forge2d.dart' hide Timer, Vector2;
 
 import 'forge2d_game.dart';
-import 'position_body_component.dart';
-import 'sprite_body_component.dart';
 
 /// Since a pure BodyComponent doesn't have anything drawn on top of it,
 /// it is a good idea to turn on [debugMode] for it so that the bodies can be
@@ -22,11 +20,9 @@ abstract class BodyComponent<T extends Forge2DGame> extends Component
   /// the body wont be rendered. If you render something on top of the
   /// [BodyComponent], or doesn't want it to be seen, you probably want to set
   /// it to false.
-  /// [SpriteBodyComponent] and [PositionBodyComponent] has it set to false by
-  /// default.
   bool renderBody = true;
 
-  BodyComponent({Paint? paint}) {
+  BodyComponent({Paint? paint, int? priority}) : super(priority: priority) {
     this.paint = paint ?? (Paint()..color = defaultColor);
   }
 

@@ -90,6 +90,13 @@ This part of the camera is responsible for knowing which location in the
 underlying game world we are currently looking at. The `Viewfinder` also
 controls the zoom level, and the rotation angle of the view.
 
+The `anchor` property of the viewfinder allows you to designate which point
+inside the viewport serves as a "logical center" of the camera. For example,
+in side-scrolling action games it is common to have the camera focused on the
+main character who is displayed not in the center of the screen but closer to
+the lower-left corner. This off-center position would be the "logical center"
+of the camera, controlled by the viewfinder's `anchor`.
+
 Components added to the `Viewfinder` as children will be rendered as if they
 were part of the world (but on top). It is more useful to add behavioral
 components to the viewfinder, for example [](effects.md) or other controllers.
@@ -109,6 +116,6 @@ Pros:
   - (NYI) Effects can be applied either to the viewport, or to the viewfinder;
   - (NYI) More flexible camera controllers.
 
-Cons (we are planning to address these in the near future):
+Cons (we are planning to eliminate these in the near future):
   - Camera controls are not yet implemented;
   - Events propagation may not always work correctly.

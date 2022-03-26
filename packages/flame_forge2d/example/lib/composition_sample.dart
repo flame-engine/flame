@@ -1,4 +1,5 @@
 import 'package:flame/components.dart';
+import 'package:flame/game.dart';
 import 'package:flame/palette.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flutter/material.dart';
@@ -31,7 +32,7 @@ class TapableBall extends Ball with Tappable {
   late final TextPaint _textPaint;
 
   TapableBall(Vector2 position) : super(position) {
-    originalPaint = BasicPalette.white.paint();
+    originalPaint = Paint()..color = Colors.amber;
     paint = originalPaint;
   }
 

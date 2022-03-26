@@ -11,7 +11,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flame: ^1.1.0-releasecandidate.4
+  flame: ^1.1.0-releasecandidate.6
   flame_svg:
     path: ../
 

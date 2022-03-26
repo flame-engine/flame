@@ -1,3 +1,11 @@
+## 1.1.0-releasecandidate.5
+
+ - Update a dependency to the latest release.
+
+## 1.1.0-releasecandidate.4
+
+ - Update a dependency to the latest release.
+
 ## 1.1.0-releasecandidate.3
 
  - Update a dependency to the latest release.

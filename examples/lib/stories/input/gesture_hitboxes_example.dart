@@ -49,11 +49,12 @@ class GestureHitboxesExample extends FlameGame
   }
 
   @override
-  void onTapDown(int pointerId, TapDownInfo info) {
+  bool onTapDown(int pointerId, TapDownInfo info) {
     super.onTapDown(pointerId, info);
     final tapPosition = info.eventPosition.game;
     final component = randomShape(tapPosition);
     add(component);
+    return true;
   }
 }
 

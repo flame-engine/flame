@@ -13,10 +13,10 @@ in the
 [Forge2D example](https://github.com/flame-engine/flame/tree/main/packages/flame_forge2d/example)
 and in the pub.dev [installation instructions](https://pub.dev/packages/flame_forge2d).
 
-## Forge2DGame (FlameGame extension)
+## Forge2DGame
 
 If you are going to use Forge2D in your project it can be a good idea to use the Forge2D specific
-extension of the `FlameGame` class.
+`FlameGame` class, `Forge2DGame`.
 
 It is called `Forge2DGame` and it will control the adding and removal of Forge2D's `BodyComponents`
 as well as your normal components.
@@ -38,6 +38,7 @@ physics engine to properly update every child.
 A simple `Forge2DGame` implementation examples can be seen in the
 [examples folder](https://github.com/flame-engine/flame/tree/main/packages/flame_forge2d/example).
 
+
 ## BodyComponent
 
 If you don't need to have a sprite on top of your body you should use the plain `BodyComponent`, for
@@ -48,19 +49,30 @@ anything after you have created a `Body` and added the `BodyComponent` to the ga
 turn it off you can either override `debugMode` to set it to false or assign false to it in your
 component constructor.
 
+
 ## SpriteBodyComponent
+
+```{admonition} Deprecated
+Add a `SpriteComponent` to a [](#bodycomponent) instead. Will be removed in 0.10.0
+```
 
 Often you want to render a sprite on top of the `BodyComponent` that you are going to use in your
 `Forge2DGame`. This component will handle the scaling and positioning of your sprite on top of the
 body.
 
+
 ## PositionBodyComponent
+
+```{admonition} Deprecated
+Add children to a [](#bodycomponent) instead. Will be removed in 0.10.0
+```
 
 One of the most commonly used classes in Flame is the `PositionComponent`, many of the commonly used
 components in Flame are subclasses of `PositionComponent`. If you want to put a `PositionComponent`
 or any of its subclasses on top of a Forge2D body you can use the `PositionBodyComponent` and it
 will, just like with the `SpriteBodyComponent`, handle the rotation, positioning and scaling of that
 component so that it follows the underlying `Body`.
+
 
 ## Contact callbacks
 
@@ -116,10 +128,11 @@ parameters of your `ContactCallback` like this:
 An implementation example can be seen in the
 [Flame Forge2D example](https://github.com/flame-engine/flame_forge2d/blob/main/example).
 
+
 ## Viewport and Camera
 
-`Forge2DGame` is using an implementation of the normal Flame `Viewport` and `Camera`, which can be
-read more about [here](../flame/camera_and_viewport.md).
+`Forge2DGame` is using its own implementation of the normal Flame `Viewport` and `Camera`, which can
+be read more about [here](../flame/camera_and_viewport.md).
 
 If you see your screen as a window and the outside as the Forge2D world, then the `Viewport` is the
 part of the world outside that you can see through the window, so the parts that you can see on
@@ -128,3 +141,11 @@ your screen.
 To move around what you see in that window you use the `Camera`, which can also be very useful if
 you want to follow one of your components around in the Forge2D world, or know where in the world
 a point on the screen is or vice versa.
+
+
+### Forge2DCamera.followBodyComponent
+
+Just like with normal `PositionComponent`s you can make the `Forge2DCamera` follow `BodyComponent`s
+by calling `camera.followBodyComponent(...)` which works the same as
+[camera.followComponent](../flame/camera_and_viewport.md#camerafollowcomponent). When you want to
+stop following a `BodyComponent` you should call `camera.unfollowBodyComponent`.
