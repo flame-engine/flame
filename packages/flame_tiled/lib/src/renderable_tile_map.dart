@@ -159,14 +159,20 @@ class RenderableTiledMap {
     );
 
     _renderableTileLayers(map)
-        .map((e) => e.tileData)
-        .whereType<List<List<Gid>>>()
-        .forEachIndexed(_renderLayer);
+        .where((e) => e.tileData != null)
+        .forEachIndexed((mapIndex, layer) {
+      return _renderLayer(
+        mapIndex,
+        layer.tileData!,
+        Vector2(layer.offsetX, layer.offsetY),
+      );
+    });
   }
 
   void _renderLayer(
     int mapIndex,
     List<List<Gid>> tileData,
+    Vector2 layerOffset,
   ) {
     final batchMap = batchesByLayer.elementAt(mapIndex);
     tileData.asMap().forEach((ty, tileRow) {
@@ -185,7 +191,8 @@ class RenderableTiledMap {
           if (batch != null) {
             batch.add(
               source: src,
-              offset: Vector2(tx * size.x, ty * size.y),
+              offset: Vector2(tx * size.x, ty * size.y)
+                ..add(layerOffset * size.x / src.width),
               rotation: flips.angle * math.pi / 2,
               scale: size.x / src.width,
             );
