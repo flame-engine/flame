@@ -46,6 +46,11 @@ class CircleComponent extends ShapeComponent {
     return min(size.x, size.y) / 2;
   }
 
+  /// Set the radius of the circle (and therefore the [size]).
+  set radius(double value) {
+    size.setValues(value * 2, value * 2);
+  }
+
   // Used to not create new Vector2 objects every time radius is called.
   final Vector2 _scaledSize = Vector2.zero();
 
