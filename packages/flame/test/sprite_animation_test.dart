@@ -53,7 +53,7 @@ void main() {
       animation.update(1);
       expect(counter, 1);
     });
-    
+
     test('onComplete called for single-frame animation', () {
       var counter = 0;
       final sprite = MockSprite();

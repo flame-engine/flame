@@ -232,7 +232,7 @@ class SpriteAnimation {
 
   /// Registered method to be triggered when the animation starts.
   void Function()? onStart;
-  
+
   /// Registered method to be triggered when the animation complete.
   void Function()? onComplete;
 
@@ -241,7 +241,7 @@ class SpriteAnimation {
 
   /// Returns whether the animation is on the first frame.
   bool get isFirstFrame => currentIndex == 0;
-  
+
   /// Returns whether the animation is on the last frame.
   bool get isLastFrame => currentIndex == frames.length - 1;
 
@@ -306,7 +306,7 @@ class SpriteAnimation {
       return;
     }
     while (clock >= currentFrame.stepTime) {
-      if (isFirstFrame){
+      if (isFirstFrame) {
         onStart?.call();
       }
       if (isLastFrame) {
