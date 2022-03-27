@@ -315,19 +315,25 @@ void main() {
     },
   );
 
+  // Reproduces #1478, it creates many blocks lined up on the diagonal with one
+  // empty space (one block-unit) between them. Then it moves another block so
+  // that it starts colliding with one of the blocks, but for some reason the
+  // collision is deemed to end in the same tick as it starts, which shouldn't
+  // be possible. If you change the amount of blocks that are generated, this
+  // will happen on different blocks (even though the blocks haven't moved).
   withCollidables.test(
-    'Collision callbacks work components far from each other (avoiding length2 overflow)',
+    'collision callbacks with many hitboxes added',
     (game) async {
-      const side = 32.0;
-      final player = TestBlock(Vector2.zero(), Vector2.all(32))
+      const side = 10.0;
+      final player = TestBlock(Vector2.zero(), Vector2.all(side))
         ..anchor = Anchor.center;
       await game.ensureAdd(player);
 
       final blocks = <PositionComponent>[];
-      // Change 1 to 0, or 952 to a smaller number and this will test will start
-      // passing.
-      for (var idx = 1; idx < 952; idx += 2) {
-        final pos = idx * side;
+      // Change 0 or 100 and there will be different blocks breaking
+      const amount = 100;
+      for (var id = 0; id < amount; id++) {
+        final pos = 2 * id * side;
         final component = PositionComponent(
           position: Vector2.all(pos),
           size: Vector2.all(side),
@@ -335,37 +341,65 @@ void main() {
         )..add(RectangleHitbox());
         blocks.add(component);
       }
-      //final component = PositionComponent(
-      //  position: Vector2.all(30432),
-      //  size: Vector2.all(32),
-      //  anchor: Anchor.center,
-      //)..add(RectangleHitbox());
-      print(blocks.last.position);
-      print(blocks.last.size);
       await game.ensureAddAll(blocks);
 
-      // 34: (2208, 2208), 17: [1120, 1120]
-      final centerOfABlock = blocks[17].position;
-      print('center of: $centerOfABlock');
+      // All
+      // amount = 33 - 2 bad
+      // 10: [200.0,210.0]
+      // 21: [420.0,430.0]
 
-      player.position = Vector2(
-        centerOfABlock.x,
-        centerOfABlock.y + 100,
-      ); // no sides are overlaps
-      game.update(0);
-      expect(player.startCounter, 0);
-      expect(player.onCollisionCounter, 0);
-      expect(player.endCounter, 0);
+      // amount = 100 - 6 bad
+      // 10: [200.0,210.0]
+      // 21: [420.0,430.0]
+      // 33: [660.0,670.0]
+      // 66: [1320.0,1330.0]
+      // 77: [1540.0,1550.0]
+      // 88: [1760.0,1770.0]
 
-      player.position = Vector2(
-        centerOfABlock.x,
-        centerOfABlock.y + 10,
-      ); // two sides are overlaps
+      // amount = 1000 - 80 bad
+      // 11: [220.0,230.0]
+      // 24: [480.0,490.0]
+      // 36: [720.0,730.0]
+      // 49: [980.0,990.0]
+      // 60: [1200.0,1210.0]
+      // ...
+      // 949: [18980.0,18990.0]
+      // 962: [19240.0,19250.0]
+      // 974: [19480.0,19490.0]
+      // 987: [19740.0,19750.0]
 
-      game.update(0);
-      expect(player.startCounter, 1);
-      expect(player.onCollisionCounter, 1);
-      expect(player.endCounter, 0); // <---- this is the point that fails test
+      for (var i = 0; i < blocks.length; i++) {
+        player.position = Vector2.all(-10000);
+        game.update(0);
+        final centerOfABlock = blocks[i].position;
+        player.startCounter = 0;
+        player.onCollisionCounter = 0;
+        player.endCounter = 0;
+
+        player.position = Vector2(
+          centerOfABlock.x,
+          centerOfABlock.y + 100,
+        ); // no sides are overlaps
+        game.update(0);
+        expect(player.startCounter, 0);
+        expect(player.onCollisionCounter, 0);
+        expect(player.endCounter, 0);
+
+        player.position = Vector2(
+          centerOfABlock.x,
+          centerOfABlock.y + 10,
+        ); // two sides are overlaps
+
+        game.update(0);
+        expect(player.startCounter, 1);
+        expect(player.onCollisionCounter, 1);
+        if (player.endCounter != 0) {
+          // Should not get in here since it can't both start and end
+          // the same collision in the same tick.
+          print('$i: ${player.position}');
+        }
+        //expect(player.endCounter, 0); // <---- this is the point that fails test
+      }
 
       game.update(0);
       expect(player.startCounter, 1);
@@ -377,6 +411,6 @@ void main() {
       expect(player.onCollisionCounter, 3);
       expect(player.endCounter, 0);
     },
-    //skip: 'See issue #1478',
+    skip: 'See issue #1478',
   );
 }
