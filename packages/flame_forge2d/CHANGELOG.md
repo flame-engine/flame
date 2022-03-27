@@ -1,3 +1,7 @@
+## 0.10.0
+
+ - Bump "flame_forge2d" to `0.10.0`.
+
 ## 0.9.0
 
  - Graduate package to a stable release. See pre-releases prior to this version for changelog entries.
