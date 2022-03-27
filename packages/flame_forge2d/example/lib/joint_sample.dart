@@ -39,7 +39,7 @@ class CircleShuffler extends BodyComponent {
     final revoluteJointDef = RevoluteJointDef()
       ..initialize(body, ball.body, body.position);
 
-    world.createJoint(revoluteJointDef);
+    world.createJoint(RevoluteJoint(revoluteJointDef));
     return body;
   }
 }
