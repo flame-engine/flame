@@ -60,7 +60,6 @@ class OpacityEffect extends ComponentEffect<HasPaint> {
     }
     nextAlpha = nextAlpha.clamp(0, 255);
     target.setAlpha(nextAlpha, paintId: paintId);
-    super.apply(progress);
   }
 
   @override

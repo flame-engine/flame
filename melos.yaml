@@ -5,6 +5,7 @@ packages:
   - packages/**
   - examples/**
   - tutorials/**
+  - doc/**
 
 command:
   version:
