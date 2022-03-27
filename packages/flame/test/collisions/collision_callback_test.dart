@@ -1,3 +1,4 @@
+import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:test/test.dart';
@@ -312,5 +313,60 @@ void main() {
       expect(blockA.endCounter, 1);
       expect(blockB.endCounter, 1);
     },
+  );
+
+  withCollidables.test(
+    'Very strange behaviour',
+    (game) async {
+      final player = TestBlock(Vector2.zero(), Vector2.all(32))
+        ..anchor = Anchor.center;
+      await game.ensureAdd(player);
+
+      final blocks = <PositionComponent>[];
+      // Change 1 to 0, or 952 to a smaller number and this will test will start
+      // passing.
+      for (var idx = 1; idx < 952; idx += 2) {
+        final pos = idx * 32.0;
+        final component = PositionComponent(
+          position: Vector2(pos, pos),
+          size: Vector2.all(32),
+          anchor: Anchor.center,
+        )..add(RectangleHitbox());
+        blocks.add(component);
+      }
+      await game.ensureAddAll(blocks);
+
+      final centerOfOneOfBlock = Vector2(1120, 1120);
+
+      player.position = Vector2(
+        centerOfOneOfBlock.x,
+        centerOfOneOfBlock.y + 100,
+      ); // no sides are overlaps
+      game.update(0);
+      expect(player.startCounter, 0);
+      expect(player.onCollisionCounter, 0);
+      expect(player.endCounter, 0);
+
+      player.position = Vector2(
+        centerOfOneOfBlock.x,
+        centerOfOneOfBlock.y + 10,
+      ); // two sides are overlaps
+
+      game.update(0);
+      expect(player.startCounter, 1);
+      expect(player.onCollisionCounter, 1);
+      expect(player.endCounter, 0); // <---- this is the point that fails test
+
+      game.update(0);
+      expect(player.startCounter, 1);
+      expect(player.onCollisionCounter, 2);
+      expect(player.endCounter, 0);
+
+      game.update(0);
+      expect(player.startCounter, 1);
+      expect(player.onCollisionCounter, 3);
+      expect(player.endCounter, 0);
+    },
+    skip: 'See issue #1478',
   );
 }
