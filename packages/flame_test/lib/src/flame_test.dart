@@ -98,12 +98,17 @@ class GameTester<T extends Game> {
   @isTest
   void test(
     String description,
-    VerifyFunction<T> verify,
-  ) {
-    flutter_test.test(description, () async {
-      final game = await initializeGame();
-      await verify(game);
-    });
+    VerifyFunction<T> verify, {
+    String? skip,
+  }) {
+    flutter_test.test(
+      description,
+      () async {
+        final game = await initializeGame();
+        await verify(game);
+      },
+      skip: skip,
+    );
   }
 
   /// Creates a [Game] specific test case with given [description]

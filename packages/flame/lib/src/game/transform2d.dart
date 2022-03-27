@@ -1,6 +1,8 @@
 import 'dart:math' as math;
+
 import 'package:flutter/foundation.dart';
 import 'package:vector_math/vector_math_64.dart';
+
 import 'notifying_vector2.dart';
 
 /// This class describes a generic 2D transform, which is a combination of
@@ -52,6 +54,17 @@ class Transform2D extends ChangeNotifier {
     ..position = other.position
     ..scale = other.scale
     ..offset = other.offset;
+
+  /// Clone of this.
+  Transform2D clone() => Transform2D.copy(this);
+
+  /// Set this to the values of the [other] [Transform2D].
+  void setFrom(Transform2D other) {
+    angle = other.angle;
+    position = other.position;
+    scale = other.scale;
+    offset = other.offset;
+  }
 
   /// Check whether this transform is equal to [other], up to the given
   /// [tolerance]. Setting tolerance to zero will check for exact equality.
