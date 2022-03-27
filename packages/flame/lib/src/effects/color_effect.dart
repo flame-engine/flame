@@ -41,7 +41,6 @@ class ColorEffect extends ComponentEffect<HasPaint> {
       max(_tween.transform(progress), 1 / 255),
     );
     target.tint(currentColor, paintId: paintId);
-    super.apply(progress);
   }
 
   @override
