@@ -11,7 +11,7 @@ import 'package:flutter/material.dart';
 import 'joystick_player.dart';
 
 class JoystickAdvancedExample extends FlameGame
-    with HasDraggables, HasTappables {
+    with HasDraggables, HasTappables, HasCollisionDetection {
   static const String description = '''
     In this example we showcase how to use the joystick by creating 
     `SpriteComponent`s that serve as the joystick's knob and background.
@@ -35,6 +35,7 @@ class JoystickAdvancedExample extends FlameGame
       columns: 6,
       rows: 1,
     );
+    add(ScreenHitbox());
     joystick = JoystickComponent(
       knob: SpriteComponent(
         sprite: sheet.getSpriteById(1),
