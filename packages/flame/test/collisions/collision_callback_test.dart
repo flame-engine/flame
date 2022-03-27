@@ -316,8 +316,9 @@ void main() {
   );
 
   withCollidables.test(
-    'Very strange behaviour',
+    'Collision callbacks work components far from each other (avoiding length2 overflow)',
     (game) async {
+      const side = 32.0;
       final player = TestBlock(Vector2.zero(), Vector2.all(32))
         ..anchor = Anchor.center;
       await game.ensureAdd(player);
@@ -326,21 +327,30 @@ void main() {
       // Change 1 to 0, or 952 to a smaller number and this will test will start
       // passing.
       for (var idx = 1; idx < 952; idx += 2) {
-        final pos = idx * 32.0;
+        final pos = idx * side;
         final component = PositionComponent(
-          position: Vector2(pos, pos),
-          size: Vector2.all(32),
+          position: Vector2.all(pos),
+          size: Vector2.all(side),
           anchor: Anchor.center,
         )..add(RectangleHitbox());
         blocks.add(component);
       }
+      //final component = PositionComponent(
+      //  position: Vector2.all(30432),
+      //  size: Vector2.all(32),
+      //  anchor: Anchor.center,
+      //)..add(RectangleHitbox());
+      print(blocks.last.position);
+      print(blocks.last.size);
       await game.ensureAddAll(blocks);
 
-      final centerOfOneOfBlock = Vector2(1120, 1120);
+      // 34: (2208, 2208), 17: [1120, 1120]
+      final centerOfABlock = blocks[17].position;
+      print('center of: $centerOfABlock');
 
       player.position = Vector2(
-        centerOfOneOfBlock.x,
-        centerOfOneOfBlock.y + 100,
+        centerOfABlock.x,
+        centerOfABlock.y + 100,
       ); // no sides are overlaps
       game.update(0);
       expect(player.startCounter, 0);
@@ -348,8 +358,8 @@ void main() {
       expect(player.endCounter, 0);
 
       player.position = Vector2(
-        centerOfOneOfBlock.x,
-        centerOfOneOfBlock.y + 10,
+        centerOfABlock.x,
+        centerOfABlock.y + 10,
       ); // two sides are overlaps
 
       game.update(0);
@@ -367,6 +377,6 @@ void main() {
       expect(player.onCollisionCounter, 3);
       expect(player.endCounter, 0);
     },
-    skip: 'See issue #1478',
+    //skip: 'See issue #1478',
   );
 }
