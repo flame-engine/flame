@@ -1,12 +1,13 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flame/game.dart';
 
 class JoystickPlayer extends SpriteComponent
     with HasGameRef, CollisionCallbacks {
   /// Pixels/s
   double maxSpeed = 300.0;
-  late final Vector2 _lastPosition = position.clone();
-  late double _lastAngle = angle;
+  late final Vector2 _lastSize = size.clone();
+  late final Transform2D _lastTransform = transform.clone();
 
   final JoystickComponent joystick;
 
@@ -23,9 +24,9 @@ class JoystickPlayer extends SpriteComponent
   @override
   void update(double dt) {
     if (!joystick.delta.isZero() && activeCollisions.isEmpty) {
-      _lastPosition.setFrom(position);
+      _lastSize.setFrom(size);
+      _lastTransform.setFrom(transform);
       position.add(joystick.relativeDelta * maxSpeed * dt);
-      _lastAngle = angle;
       angle = joystick.delta.screenAngle();
     }
   }
@@ -33,8 +34,8 @@ class JoystickPlayer extends SpriteComponent
   @override
   void onCollisionStart(Set<Vector2> _, PositionComponent __) {
     super.onCollisionStart(_, __);
-    position.setFrom(_lastPosition);
-    angle = _lastAngle;
+    transform.setFrom(_lastTransform);
+    size.setFrom(_lastSize);
   }
 
   @override
