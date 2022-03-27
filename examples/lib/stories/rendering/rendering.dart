@@ -1,5 +1,6 @@
 import 'package:dashbook/dashbook.dart';
 import 'package:flame/game.dart';
+import 'package:flutter/material.dart';
 
 import '../../commons/commons.dart';
 import 'flip_sprite_example.dart';
@@ -7,6 +8,7 @@ import 'isometric_tile_map_example.dart';
 import 'layers_example.dart';
 import 'nine_tile_box_example.dart';
 import 'particles_example.dart';
+import 'particles_interactive_example.dart';
 import 'text_example.dart';
 
 void addRenderingStories(Dashbook dashbook) {
@@ -46,5 +48,17 @@ void addRenderingStories(Dashbook dashbook) {
       (_) => GameWidget(game: ParticlesExample()),
       codeLink: baseLink('rendering/particles_example.dart'),
       info: ParticlesExample.description,
+    )
+    ..add(
+      'Particles (Interactive)',
+      (context) => GameWidget(
+        game: ParticlesInteractiveExample(
+          from: context.colorProperty('From color', Colors.pink),
+          to: context.colorProperty('To color', Colors.blue),
+          zoom: context.numberProperty('Zoom', 1),
+        ),
+      ),
+      codeLink: baseLink('rendering/particles_interactive_example.dart'),
+      info: ParticlesInteractiveExample.description,
     );
 }

@@ -7,6 +7,7 @@ import 'component.dart';
 /// to a [Component] tree. Could be added either to FlameGame
 /// or an implementation of [Component].
 /// Proxies [Component] lifecycle hooks to nested [Particle].
+@Deprecated('Will be removed after v1.1, use ParticleSystemComponent instead')
 class ParticleComponent extends Component {
   Particle particle;
 
