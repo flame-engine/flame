@@ -33,7 +33,6 @@ class RotateEffect extends Transform2DEffect implements MeasurableEffect {
   void apply(double progress) {
     final dProgress = progress - previousProgress;
     target.angle += _angle * dProgress;
-    super.apply(progress);
   }
 
   @override
