@@ -1,3 +1,7 @@
+## 1.2.0
+
+ - Graduate package to a stable release. See pre-releases prior to this version for changelog entries.
+
 ## 1.2.0-releasecandidate.6
 
  - Update a dependency to the latest release.

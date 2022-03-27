@@ -44,7 +44,7 @@ class CircleShuffler extends BodyComponent {
       ..maxMotorTorque = 1000000.0
       ..enableMotor = true;
 
-    world.createJoint(revoluteJointDef);
+    world.createJoint(RevoluteJoint(revoluteJointDef));
     return body;
   }
 }

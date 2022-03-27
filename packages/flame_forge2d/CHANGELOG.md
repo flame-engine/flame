@@ -1,3 +1,11 @@
+## 0.10.0
+
+ - Bump "flame_forge2d" to `0.10.0`.
+
+## 0.9.0
+
+ - Graduate package to a stable release. See pre-releases prior to this version for changelog entries.
+
 ## 0.9.0-releasecandidate.6
 
  - **FEAT**: updating forge2d version (#1479). ([4678e21a](https://github.com/flame-engine/flame/commit/4678e21a0b714b8344ae2453b1ac6df68adfb4cd))

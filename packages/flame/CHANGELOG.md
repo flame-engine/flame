@@ -1,3 +1,7 @@
+## 1.1.0
+
+ - Graduate package to a stable release. See pre-releases prior to this version for changelog entries.
+
 ## 1.1.0-releasecandidate.6
 
  - **FIX**: Only end collisions where there was a collision (#1471). ([e1e87fc4](https://github.com/flame-engine/flame/commit/e1e87fc42226c1db2f472377901031277349beb3))
