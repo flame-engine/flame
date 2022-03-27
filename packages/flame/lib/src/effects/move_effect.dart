@@ -1,8 +1,10 @@
 import 'package:vector_math/vector_math_64.dart';
 
 import 'controllers/effect_controller.dart';
+import 'effect.dart';
+import 'effect_target.dart';
 import 'measurable_effect.dart';
-import 'transform2d_effect.dart';
+import 'provider_interfaces.dart';
 
 /// Move a component to a new position.
 ///
@@ -18,10 +20,17 @@ import 'transform2d_effect.dart';
 /// This effect applies incremental changes to the component's position, and
 /// requires that any other effect or update logic applied to the same component
 /// also used incremental updates.
-class MoveEffect extends Transform2DEffect implements MeasurableEffect {
-  MoveEffect.by(Vector2 offset, EffectController controller)
-      : _offset = offset.clone(),
-        super(controller);
+class MoveEffect extends Effect
+    with EffectTarget<PositionProvider>
+    implements MeasurableEffect {
+  MoveEffect.by(
+    Vector2 offset,
+    EffectController controller, {
+    PositionProvider? target,
+  })  : _offset = offset.clone(),
+        super(controller) {
+    this.target = target;
+  }
 
   factory MoveEffect.to(Vector2 destination, EffectController controller) =>
       _MoveToEffect(destination, controller);
@@ -32,7 +41,6 @@ class MoveEffect extends Transform2DEffect implements MeasurableEffect {
   void apply(double progress) {
     final dProgress = progress - previousProgress;
     target.position += _offset * dProgress;
-    super.apply(progress);
   }
 
   @override
@@ -41,9 +49,12 @@ class MoveEffect extends Transform2DEffect implements MeasurableEffect {
 
 /// Implementation class for [MoveEffect.to]
 class _MoveToEffect extends MoveEffect {
-  _MoveToEffect(Vector2 destination, EffectController controller)
-      : _destination = destination.clone(),
-        super.by(Vector2.zero(), controller);
+  _MoveToEffect(
+    Vector2 destination,
+    EffectController controller, {
+    PositionProvider? target,
+  })  : _destination = destination.clone(),
+        super.by(Vector2.zero(), controller, target: target);
 
   final Vector2 _destination;
 

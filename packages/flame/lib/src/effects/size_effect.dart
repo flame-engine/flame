@@ -34,7 +34,6 @@ class SizeEffect extends ComponentEffect<PositionComponent> {
     final dProgress = progress - previousProgress;
     target.size += _offset * dProgress;
     target.size.clampScalar(0, double.infinity);
-    super.apply(progress);
   }
 }
 
