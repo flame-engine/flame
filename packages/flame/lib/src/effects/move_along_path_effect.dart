@@ -95,7 +95,6 @@ class MoveAlongPathEffect extends Transform2DEffect
       target.angle += -tangent.angle - _lastAngle;
       _lastAngle = -tangent.angle;
     }
-    super.apply(progress);
   }
 
   @override
