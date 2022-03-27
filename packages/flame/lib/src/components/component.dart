@@ -266,9 +266,7 @@ class Component {
     if (isMounted) {
       return Future.value();
     }
-
     _mountCompleter ??= Completer<void>();
-
     return _mountCompleter!.future;
   }
 
@@ -468,9 +466,10 @@ class Component {
   }
 
   Future<void>? _load() {
+    assert(_parent != null);
     assert(_state == LifecycleState.uninitialized);
     _state = LifecycleState.loading;
-    onGameResize(findGame()!.canvasSize);
+    onGameResize(_parent!.findGame()!.canvasSize);
     final onLoadFuture = onLoad();
     if (onLoadFuture == null) {
       _state = LifecycleState.loaded;
