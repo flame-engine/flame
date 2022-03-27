@@ -37,7 +37,6 @@ class ScaleEffect extends Transform2DEffect {
   void apply(double progress) {
     final dProgress = progress - previousProgress;
     target.scale += _scaleDelta * dProgress;
-    super.apply(progress);
   }
 }
 

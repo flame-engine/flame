@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import os
+import re
 import shutil
 import subprocess
 from docutils import nodes
@@ -73,14 +74,14 @@ class FlutterAppDirective(SphinxDirective):
         self._process_show_option()
         self._process_sources_option()
         self.source_build_dir = os.path.join(self.source_dir, 'build', 'web')
-        self.app_name = os.path.basename(self.source_dir)
+        self.app_name = self._get_app_name()
         self.html_dir = '_static/apps/' + self.app_name
         self.target_dir = os.path.abspath(
             os.path.join('..', '_build', 'html', self.html_dir))
         self._ensure_compiled()
 
         page = self.options.get('page', '')
-        iframe_url = self.html_dir + '/index.html?' + page
+        iframe_url = '/' + self.html_dir + '/index.html?' + page
         result = []
         if 'popup' in self.modes:
             result.append(Button(
@@ -117,6 +118,10 @@ class FlutterAppDirective(SphinxDirective):
         assert not abspath.endswith('/')
         self.source_dir = abspath
 
+    def _get_app_name(self):
+        src = os.path.relpath(self.source_dir)
+        return '-'.join(word for word in re.split(r'\W', src) if word)
+
     def _ensure_compiled(self):
         need_compiling = (
             ('popup' in self.modes or 'widget' in self.modes) and
@@ -143,8 +148,8 @@ class FlutterAppDirective(SphinxDirective):
                 check=True,
             )
         except subprocess.CalledProcessError as e:
-            cmd = e.cmd.join(' ')
-            raise self.severe(
+            cmd = ' '.join(e.cmd)
+            raise self.error(
                 f'Command `{cmd}` returned with exit status {e.returncode}\n' +
                 e.output.decode('utf-8'),
             )
