@@ -81,7 +81,7 @@ class FlutterAppDirective(SphinxDirective):
         self._ensure_compiled()
 
         page = self.options.get('page', '')
-        iframe_url = '/' + self.html_dir + '/index.html?' + page
+        iframe_url = _doc_root() + self.html_dir + '/index.html?' + page
         result = []
         if 'popup' in self.modes:
             result.append(Button(
@@ -172,11 +172,20 @@ class FlutterAppDirective(SphinxDirective):
         with open(target_file, 'wt') as out:
             out.write('<!DOCTYPE html>\n')
             out.write('<html>\n<head>\n')
-            out.write('<base href="/%s/">\n' % self.html_dir)
+            out.write('<base href="%s%s/">\n' % (_doc_root(), self.html_dir))
             out.write('<title>%s</title>\n' % self.app_name)
             out.write('</head>\n<body>\n')
             out.write('<script src="main.dart.js"></script>\n')
             out.write('</body>\n</html>\n')
+
+
+def _doc_root():
+    root = os.environ.get('PUBLISH_PATH', '')
+    if not root.startswith('/'):
+        root = '/' + root
+    if not root.endswith('/'):
+        root = root + '/'
+    return root
 
 
 # ------------------------------------------------------------------------------
