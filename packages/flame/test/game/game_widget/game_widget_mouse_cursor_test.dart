@@ -37,11 +37,13 @@ void main() {
           ),
         ),
       );
+      await tester.pump();
+      expect(game.isAttached, true);
 
       // Making sure this cursor isn't showing yet
       expect(byMouseCursor(SystemMouseCursors.copy), findsNothing);
 
-      game.mouseCursor.value = SystemMouseCursors.copy;
+      game.mouseCursor = SystemMouseCursors.copy;
       await tester.pump();
 
       expect(

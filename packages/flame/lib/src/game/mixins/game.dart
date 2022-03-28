@@ -149,6 +149,7 @@ mixin Game {
       );
     }
     _gameRenderBox = gameRenderBox;
+    overlays._game = this;
 
     onAttach();
   }
@@ -269,7 +270,7 @@ mixin Game {
   VoidCallback? pauseEngineFn;
   VoidCallback? resumeEngineFn;
 
-  /// A property that stores an [ActiveOverlaysNotifier]
+  /// A property that stores an [_ActiveOverlays]
   ///
   /// This is useful to render widgets above a game, like a pause menu for
   /// example.
@@ -286,20 +287,36 @@ mixin Game {
   /// See also:
   /// - GameWidget
   /// - [Game.overlays]
-  final overlays = ActiveOverlaysNotifier();
+  final overlays = _ActiveOverlays();
 
   /// Used to change the mouse cursor of the GameWidget running this game.
   /// Setting the value to null will make the GameWidget defer the choice
   /// of the cursor to the closest region available on the tree.
-  final mouseCursor = ValueNotifier<MouseCursor?>(null);
+  MouseCursor get mouseCursor => _mouseCursor;
+  MouseCursor _mouseCursor = MouseCursor.defer;
+  set mouseCursor(MouseCursor value) {
+    _mouseCursor = value;
+    refreshWidget();
+  }
+
+  Function()? _gameStateListener;
+  set gameStateListener(Function()? value) => _gameStateListener = value;
+
+  /// When a Game is attached to a `GameWidget`, this method will force that
+  /// widget to be rebuilt. This can be used when updating any property which is
+  /// implemented within the Flutter tree.
+  @internal
+  void refreshWidget() {
+    if (isAttached && _gameStateListener != null) {
+      _gameStateListener!();
+    }
+  }
 }
 
-/// A [ChangeNotifier] used to control the visibility of overlays on a [Game]
-/// instance.
-///
-/// To learn more, see:
-/// - [Game.overlays]
-class ActiveOverlaysNotifier extends ChangeNotifier {
+/// A helper class used to control the visibility of overlays on a [Game]
+/// instance. See [Game.overlays].
+class _ActiveOverlays {
+  Game? _game;
   final Set<String> _activeOverlays = {};
 
   /// Mark a, overlay to be rendered.
@@ -310,7 +327,7 @@ class ActiveOverlaysNotifier extends ChangeNotifier {
   bool add(String overlayName) {
     final setChanged = _activeOverlays.add(overlayName);
     if (setChanged) {
-      notifyListeners();
+      _game?.refreshWidget();
     }
     return setChanged;
   }
@@ -323,7 +340,7 @@ class ActiveOverlaysNotifier extends ChangeNotifier {
   bool remove(String overlayName) {
     final hasRemoved = _activeOverlays.remove(overlayName);
     if (hasRemoved) {
-      notifyListeners();
+      _game?.refreshWidget();
     }
     return hasRemoved;
   }
