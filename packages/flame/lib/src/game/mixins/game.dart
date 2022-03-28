@@ -296,19 +296,24 @@ mixin Game {
   MouseCursor _mouseCursor = MouseCursor.defer;
   set mouseCursor(MouseCursor value) {
     _mouseCursor = value;
-    refreshWidget();
+    _refreshWidget();
   }
 
-  Function()? _gameStateListener;
-  set gameStateListener(Function()? value) => _gameStateListener = value;
+  final List<VoidCallback> _gameStateListeners = [];
+  void addGameStateListener(VoidCallback callback) {
+    _gameStateListeners.add(callback);
+  }
+
+  void removeGameStateListener(VoidCallback callback) {
+    _gameStateListeners.remove(callback);
+  }
 
   /// When a Game is attached to a `GameWidget`, this method will force that
   /// widget to be rebuilt. This can be used when updating any property which is
   /// implemented within the Flutter tree.
-  @internal
-  void refreshWidget() {
-    if (isAttached && _gameStateListener != null) {
-      _gameStateListener!();
+  void _refreshWidget() {
+    if (isAttached) {
+      _gameStateListeners.forEach((callback) => callback());
     }
   }
 }
@@ -327,7 +332,7 @@ class _ActiveOverlays {
   bool add(String overlayName) {
     final setChanged = _activeOverlays.add(overlayName);
     if (setChanged) {
-      _game?.refreshWidget();
+      _game?._refreshWidget();
     }
     return setChanged;
   }
@@ -340,7 +345,7 @@ class _ActiveOverlays {
   bool remove(String overlayName) {
     final hasRemoved = _activeOverlays.remove(overlayName);
     if (hasRemoved) {
-      _game?.refreshWidget();
+      _game?._refreshWidget();
     }
     return hasRemoved;
   }

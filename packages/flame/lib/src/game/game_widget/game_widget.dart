@@ -144,7 +144,7 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
   @override
   void initState() {
     super.initState();
-    widget.game.gameStateListener = () => setState(() {});
+    widget.game.addGameStateListener(onGameStateChange);
     _focusNode = widget.focusNode ?? FocusNode();
     if (widget.autofocus) {
       _focusNode.requestFocus();
@@ -165,6 +165,7 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
   @override
   void dispose() {
     super.dispose();
+    widget.game.removeGameStateListener(onGameStateChange);
     widget.game.onRemove();
     // If we received a focus node from the user, they are responsible
     // for disposing it
@@ -173,7 +174,9 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
     }
   }
 
-  //#region Widget overlay methods
+  void onGameStateChange() {
+    setState(() {});
+  }
 
   void _checkOverlays(Set<String> overlays) {
     overlays.forEach((overlayKey) {
@@ -183,8 +186,6 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
       );
     });
   }
-
-  //#endregion
 
   KeyEventResult _handleKeyEvent(FocusNode focusNode, RawKeyEvent event) {
     final game = widget.game;
