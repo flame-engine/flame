@@ -47,7 +47,8 @@ class FlutterAppDirective(SphinxDirective):
         "popup", and "code". Each of these modes produces a different output:
           "widget" - an iframe shown directly inside the docs page;
           "popup" - a [Run] button which opens the app to (almost) fullscreen;
-          "code" - (NYI) opens a popup showing the code that was compiled.
+          "code" - a [Code] button which opens a popup with the code that was
+              compiled.
     """
     has_content = False
     required_arguments = 0
