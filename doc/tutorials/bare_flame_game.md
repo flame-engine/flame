@@ -1,7 +1,7 @@
 # Bare Flame game
 
-This tutorial assumes that you already have [Flutter], [git], and 
-[Android Studio] on your computer (all of these programs are free); and that 
+This tutorial assumes that you already have [Flutter], [git], and
+[Android Studio] on your computer (all of these programs are free); and that
 you have basic familiarity with using the command line. Android Studio is not
 a strict requirement, you can use other IDEs too, such as [Visual Studio Code].
 
@@ -22,7 +22,7 @@ $ flutter doctor
 ```
 
 Your output will be slightly different, but the important thing is to verify
-that no errors are reported, and that your Flutter version is **2.5.0** or 
+that no errors are reported, and that your Flutter version is **2.5.0** or
 above.
 
 
@@ -55,7 +55,7 @@ $ flutter create .
 
 You can verify that the project files were created successfully:
 ```console
-$ ls 
+$ ls
 README.md               android/   lib/           pubspec.yaml   test/
 analysis_options.yaml   ios/       pubspec.lock   syzygy.iml     web/
 ```
@@ -73,13 +73,13 @@ If you see only the `main.dart` file but not the side panel, then click the
 vertical `[Project]` button at the left edge of the window.
 
 Before we proceed, let's fix the view in the left panel. Locate the button
-in the top left corner that says `[Android]` in the screenshot. In this 
+in the top left corner that says `[Android]` in the screenshot. In this
 dropdown select the first option "Project". Your project window should now
 look like this:
 
 ![](../images/tutorials/android-studio-screenshot-2.webp)
 
-The important part is that you should be able to see all files in your 
+The important part is that you should be able to see all files in your
 project directory.
 
 
@@ -110,7 +110,7 @@ After that, press the `[Pub get]` button at the top of the window; or
 alternatively you could run command `flutter pub get` from the terminal. This
 will "apply" the changes in `pubspec` file to your project, in particular it
 will download the Flame library which we have declared as a dependency. In the
-future, you should run `flutter pub get` whenever you make changes to this 
+future, you should run `flutter pub get` whenever you make changes to this
 file.
 
 Now, open file `lib/main.dart` and replace its content with the following:
@@ -138,7 +138,7 @@ selected>`. In that dropdown choose `<Chrome (web)>` instead.
 After that open the `main.dart` file and press the green arrow next to the
 `void main()` function in line 4. Select `[Run main.dart]` from the menu.
 
-This should open a new Chrome window (which may take 10-30 seconds) and run 
+This should open a new Chrome window (which may take 10-30 seconds) and run
 your project in that window. For now it will simply show a black screen, which
 is expected because we created the game in its simplest blank configuration.
 
@@ -151,7 +151,7 @@ assumes that you already have a GitHub account.
 
 Log into your GitHub account, select `[Your repositories]` from your profile
 dropdown, and press the green `[New]` button. In the form enter repository
-name the same as your project name; select type "private"; and opt out of 
+name the same as your project name; select type "private"; and opt out of
 adding initial files like README, license and gitignore.
 
 Now go to your project's directory in the terminal and execute the following
