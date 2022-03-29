@@ -12,7 +12,8 @@ dependencies:
     sdk: flutter
   flame: ^1.1.0
 dev_dependencies:
-  flame_test: ^1.2.0
+  flame_test:
+    path: ../
   flame_lint: ^0.0.1
 
 flutter:

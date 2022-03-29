@@ -79,22 +79,28 @@ void main() {
       },
     );
 
-    withTappables.widgetTest(
+    withTappables.testGameWidget(
       'tap correctly registered handled event',
-      (game, tester) async {
+      setUp: (game, _) async {
         await game.ensureAdd(_TappableComponent());
+      },
+      verify: (game, tester) async {
         await tester.tapAt(const Offset(10, 10));
+        await tester.pump(const Duration(seconds: 1));
         expect(game.handledOnTapDown, 1);
         expect(game.handledOnTapUp, 1);
         expect(game.handledOnTapCancel, 0);
       },
     );
 
-    withTappables.widgetTest(
+    withTappables.testGameWidget(
       'tap outside of component is not registered as handled',
-      (game, tester) async {
+      setUp: (game, _) async {
         await game.ensureAdd(_TappableComponent());
+      },
+      verify: (game, tester) async {
         await tester.tapAt(const Offset(110, 110));
+        await tester.pump(const Duration(seconds: 1));
         expect(game.handledOnTapDown, 0);
         expect(game.handledOnTapUp, 0);
         expect(game.handledOnTapCancel, 0);

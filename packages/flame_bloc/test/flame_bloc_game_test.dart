@@ -56,9 +56,9 @@ void main() {
       },
     );
 
-    blocGame.widgetTest(
+    blocGame.testGameWidget(
       'can emit states',
-      (game, tester) async {
+      verify: (game, tester) async {
         game.read<InventoryCubit>().selectBow();
 
         expect(cubit.state, equals(InventoryState.bow));
@@ -95,40 +95,44 @@ void main() {
       },
     );
 
-    blocGame.widgetTest(
+    blocGame.testGameWidget(
       'init components with the initial state',
-      (game, tester) async {
-        final component = InventoryComponent();
-        game.add(component);
-        await game.ready();
-
-        expect(component.state, equals(InventoryState.sword));
+      setUp: (game, _) async {
+        await game.ensureAdd(InventoryComponent());
+      },
+      verify: (game, tester) async {
+        final component = game.firstChild<InventoryComponent>();
+        expect(component?.state, equals(InventoryState.sword));
       },
     );
 
-    blocGame.widgetTest(
+    blocGame.testGameWidget(
       'Components can be removed',
-      (game, tester) async {
-        final component = InventoryComponent();
-        game.add(component);
-        game.update(0);
+      setUp: (game, tester) async {
+        await game.ensureAdd(InventoryComponent());
+      },
+      verify: (game, tester) async {
         expect(game.children.length, 1);
 
-        game.remove(component);
+        final component = game.firstChild<InventoryComponent>();
+        expect(component, isNotNull);
+
+        game.remove(component!);
         game.update(0);
         expect(game.children.length, 0);
       },
     );
 
-    blocGame.widgetTest(
+    blocGame.testGameWidget(
       'components listen to changes',
-      (game, tester) async {
-        final component = InventoryComponent();
-        game.add(component);
-        await game.ready();
+      setUp: (game, _) async {
+        await game.ensureAdd(InventoryComponent());
+      },
+      verify: (game, tester) async {
+        final component = game.firstChild<InventoryComponent>();
         game.read<InventoryCubit>().selectBow();
 
-        expect(component.state, equals(InventoryState.sword));
+        expect(component?.state, equals(InventoryState.sword));
       },
     );
   });

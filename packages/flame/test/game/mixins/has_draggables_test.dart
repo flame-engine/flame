@@ -79,10 +79,12 @@ void main() {
       },
     );
 
-    withDraggables.widgetTest(
+    withDraggables.testGameWidget(
       'drag correctly registered handled event',
-      (game, tester) async {
+      setUp: (game, _) async {
         await game.ensureAdd(_DraggableComponent());
+      },
+      verify: (game, tester) async {
         await tester.dragFrom(const Offset(10, 10), const Offset(90, 90));
         expect(game.handledOnDragStart, 1);
         expect(game.handledOnDragUpdate > 0, isTrue);
@@ -90,10 +92,12 @@ void main() {
       },
     );
 
-    withDraggables.widgetTest(
+    withDraggables.testGameWidget(
       'drag outside of component is not registered as handled',
-      (game, tester) async {
+      setUp: (game, _) async {
         await game.ensureAdd(_DraggableComponent());
+      },
+      verify: (game, tester) async {
         await tester.dragFrom(const Offset(110, 110), const Offset(120, 120));
         expect(game.handledOnDragStart, 0);
         expect(game.handledOnDragUpdate, 0);
