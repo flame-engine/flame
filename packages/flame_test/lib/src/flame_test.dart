@@ -39,6 +39,10 @@ typedef WidgetVerifyFunction<T extends Game> = Future<void> Function(
   T,
   WidgetTester,
 );
+typedef WidgetSetupFunction<T extends Game> = Future<void> Function(
+  T,
+  WidgetTester,
+);
 typedef PumpWidgetFunction<T extends Game> = Future<void> Function(
   GameWidget<T>,
   WidgetTester tester,
@@ -58,7 +62,7 @@ class GameTester<T extends Game> {
   final GameWidgetCreateFunction<T>? createGameWidget;
 
   /// Use [pumpWidget] to define your own function to pump widgets into
-  /// the Flutter test environment. When omitted, [widgetTest] simply
+  /// the Flutter test environment. When omitted, [testGameWidget] simply
   /// will pass the created game widget instance to the test.
   final PumpWidgetFunction<T>? pumpWidget;
 
@@ -116,10 +120,26 @@ class GameTester<T extends Game> {
   ///
   /// Use [verify] closure to make verifications/assertions.
   @isTest
+  @Deprecated('Use testGameWidget instead')
   void widgetTest(
     String description,
     WidgetVerifyFunction<T>? verify,
   ) {
+    testGameWidget(description, verify: verify);
+  }
+
+  /// Creates a [Game] specific test case with given [description]
+  /// which runs inside the Flutter test environment.
+  ///
+  /// Use [setUp] closure to prepare your game instance (e.g. add components to
+  /// it)
+  /// Use [verify] closure to make verifications/assertions.
+  @isTest
+  void testGameWidget(
+    String description, {
+    WidgetSetupFunction<T>? setUp,
+    WidgetVerifyFunction<T>? verify,
+  }) {
     testWidgets(description, (tester) async {
       final game = createGame();
 
@@ -134,10 +154,15 @@ class GameTester<T extends Game> {
         await _pump(gameWidget, tester);
         await tester.pump();
 
-        if (verify != null) {
-          await verify(game, tester);
+        if (setUp != null) {
+          await setUp.call(game, tester);
+          await tester.pump();
         }
       });
+
+      if (verify != null) {
+        await verify(game, tester);
+      }
     });
   }
 
