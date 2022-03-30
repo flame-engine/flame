@@ -258,7 +258,7 @@ the card objects, which are the most important visual objects in this game.
 ```{flutter-app}
 :sources: ../tutorials/klondike/app
 :page: step2
-:show: popup
+:show: popup code
 ```
 
 [World]: ../../flame/camera_component.md#world
