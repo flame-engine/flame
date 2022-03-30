@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+import glob
 import os
 import re
 import shutil
@@ -46,7 +47,8 @@ class FlutterAppDirective(SphinxDirective):
         "popup", and "code". Each of these modes produces a different output:
           "widget" - an iframe shown directly inside the docs page;
           "popup" - a [Run] button which opens the app to (almost) fullscreen;
-          "code" - (NYI) opens a popup showing the code that was compiled.
+          "code" - a [Code] button which opens a popup with the code that was
+              compiled.
     """
     has_content = False
     required_arguments = 0
@@ -81,7 +83,7 @@ class FlutterAppDirective(SphinxDirective):
         self._ensure_compiled()
 
         page = self.options.get('page', '')
-        iframe_url = '/' + self.html_dir + '/index.html?' + page
+        iframe_url = _doc_root() + self.html_dir + '/index.html?' + page
         result = []
         if 'popup' in self.modes:
             result.append(Button(
@@ -91,7 +93,14 @@ class FlutterAppDirective(SphinxDirective):
                 onclick=f'run_flutter_app("{iframe_url}")',
             ))
         if 'code' in self.modes:
-            pass
+            code_id = self.app_name + "-source"
+            result.append(self._generate_code_listings(code_id))
+            result.append(Button(
+                '',
+                nodes.Text('Code'),
+                classes=['flutter-app-button', 'code'],
+                onclick=f'open_code_listings("{code_id}")',
+            ))
         if 'widget' in self.modes:
             result.append(IFrame(src=iframe_url))
         return result
@@ -132,7 +141,7 @@ class FlutterAppDirective(SphinxDirective):
         self.logger.info('Compiling Flutter app ' + self.app_name)
         self._compile_source()
         self._copy_compiled()
-        self._create_index()
+        self._create_index_html()
         self.logger.info('  + copied into ' + self.target_dir)
         assert os.path.isfile(self.target_dir + '/main.dart.js')
         assert os.path.isfile(self.target_dir + '/index.html')
@@ -167,16 +176,46 @@ class FlutterAppDirective(SphinxDirective):
                 dirs_exist_ok=True,
             )
 
-    def _create_index(self):
+    def _create_index_html(self):
         target_file = os.path.join(self.target_dir, 'index.html')
         with open(target_file, 'wt') as out:
             out.write('<!DOCTYPE html>\n')
             out.write('<html>\n<head>\n')
-            out.write('<base href="/%s/">\n' % self.html_dir)
+            out.write('<base href="%s%s/">\n' % (_doc_root(), self.html_dir))
             out.write('<title>%s</title>\n' % self.app_name)
+            out.write('<style>body { background: black; }</style>\n')
             out.write('</head>\n<body>\n')
             out.write('<script src="main.dart.js"></script>\n')
             out.write('</body>\n</html>\n')
+
+    def _generate_code_listings(self, code_id):
+        code_dir = self.source_dir + '/lib/' + self.options.get('page', '')
+        if not os.path.isdir(code_dir):
+            raise self.error('Cannot find source directory ' + code_dir)
+        files = glob.glob(code_dir + '/**', recursive=True)
+
+        result = nodes.container(classes=['flutter-app-code'], ids=[code_id])
+        for filename in sorted(files):
+            if os.path.isfile(filename):
+                simple_filename = os.path.relpath(filename, code_dir)
+                result += nodes.container(
+                    '', nodes.Text(simple_filename), classes=['filename']
+                )
+                with open(filename, 'rt') as f:
+                    self.state.nested_parse(
+                        ['``````{code-block} dart\n:lineno-start: 1\n'] +
+                        [line.rstrip() for line in f] +
+                        ['``````\n'], 0, result)
+        return result
+
+
+def _doc_root():
+    root = os.environ.get('PUBLISH_PATH', '')
+    if not root.startswith('/'):
+        root = '/' + root
+    if not root.endswith('/'):
+        root = root + '/'
+    return root
 
 
 # ------------------------------------------------------------------------------
