@@ -1,6 +1,7 @@
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
+import 'package:meta/meta.dart';
 
 import 'flame_forge2d.dart';
 
@@ -10,6 +11,12 @@ class Forge2DCamera extends Camera {
   /// Used to minimize the amount of [Vector2] objects created
   final Vector2 _unprojectVector = Vector2.zero();
   final Vector2 _projectVector = Vector2.zero();
+
+  @protected
+  @override
+  Matrix4 transformMatrix(Vector2 position, double zoom) {
+    return super.transformMatrix(position, zoom)..scale(1.0, -1.0, 1.0);
+  }
 
   @override
   Vector2 unprojectVector(Vector2 screenCoordinates) {
