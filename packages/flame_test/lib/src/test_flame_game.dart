@@ -28,7 +28,7 @@ Future<void> testWithFlameGame(
   String testName,
   AsyncGameFunction<FlameGame> testBody,
 ) {
-  return testWithGame<FlameGame>(testName, FlameGame.new, testBody);
+  return testWithGame<FlameGame>(testName, () => FlameGame(), testBody);
 }
 
 /// Utility function for writing tests that require a custom game instance.
