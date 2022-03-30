@@ -3,6 +3,56 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2022-03-30
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`flame_test` - `v1.3.0`](#flame_test---v130)
+
+---
+
+#### `flame_test` - `v1.3.0`
+
+ - **FIX**: Fix calculation of AABB for `ShapeHitbox`es (#1481). ([a559d9a1](https://github.com/flame-engine/flame/commit/a559d9a12bfb42e161469745795fb91cdf161f8b))
+ - **FEAT**: flame tests can now generate golden tests (#1501). ([316a0b3b](https://github.com/flame-engine/flame/commit/316a0b3bb0996ed20a3b93175102524b38bfa3e2))
+
+
+## 2022-03-28
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+- There are no breaking changes in this release.
+
+Packages with other changes:
+
+- There are no other changes in this release.
+
+Packages graduated to a stable release (see pre-releases prior to the stable version for changelog entries):
+
+- `flame` - `v1.1.0`
+- `flame_audio` - `v1.0.1`
+- `flame_bloc` - `v1.2.0`
+- `flame_fire_atlas` - `v1.0.1`
+- `flame_flare` - `v1.1.0`
+- `flame_forge2d` - `v0.9.0`
+- `flame_oxygen` - `v0.1.1`
+- `flame_rive` - `v1.1.0`
+- `flame_svg` - `v1.1.0`
+- `flame_test` - `v1.2.0`
+- `flame_tiled` - `v1.3.0`
+
 ## 2022-03-22
 
 ### Changes

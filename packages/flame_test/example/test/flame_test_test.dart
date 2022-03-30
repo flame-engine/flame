@@ -14,12 +14,26 @@ void main() {
       },
     );
 
-    myGame.widgetTest(
+    myGame.testGameWidget(
       'render the game widget',
-      (game, tester) async {
+      verify: (game, tester) async {
         expect(
           find.byGame<MyGame>(),
           findsOneWidget,
+        );
+      },
+    );
+
+    myGame.testGameWidget(
+      'render the background correctly',
+      setUp: (game, _) async {
+        await game.ready();
+        await game.ensureAdd(Background());
+      },
+      verify: (game, tester) async {
+        await expectLater(
+          find.byGame<MyGame>(),
+          matchesGoldenFile('goldens/game.png'),
         );
       },
     );

@@ -100,7 +100,7 @@ class BlobSample extends Forge2DGame with TapDetector {
     await addAll([
       for (var i = 0; i < 20; i++) BlobPart(i, jointDef, blobRadius, blobCenter)
     ]);
-    world.createJoint(jointDef);
+    world.createJoint(ConstantVolumeJoint(world, jointDef));
   }
 
   @override
