@@ -3,15 +3,19 @@ import 'package:flame/experimental.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 
+import 'components/card.dart';
 import 'components/foundation.dart';
 import 'components/pile.dart';
 import 'components/stock.dart';
 import 'components/waste.dart';
+import 'rank.dart';
+import 'suit.dart';
 
 class KlondikeGame extends FlameGame {
   static double cardGap = 175.0;
   static double cardWidth = 1000.0;
   static double cardHeight = 1400.0;
+  static double cardRadius = 100.0;
 
   @override
   Future<void> onLoad() async {
@@ -53,5 +57,9 @@ class KlondikeGame extends FlameGame {
 
     add(world);
     add(camera);
+
+    Card(Rank.fromInt(2), Suit.fromInt(0))
+      ..position = Vector2(2000, 1300)
+      ..addToParent(world);
   }
 }

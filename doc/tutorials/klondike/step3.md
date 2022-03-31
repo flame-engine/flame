@@ -108,7 +108,7 @@ obtained these numbers, the answer is that I used a free online service
 
 Lastly, I have simple getters to determine the "color" of a suit. This will be
 needed later when we need to enforce the rule that cards can only be placed
-into piles by alternating colors.
+into columns by alternating colors.
 ```dart
   bool get isRed => value <= 1;
   bool get isBlack => value >= 2;
@@ -173,6 +173,27 @@ class Rank {
   final String label;
   final Sprite redSprite;
   final Sprite blackSprite;
+}
+```
+
+
+## Card component
+
+Now that we have the `Rank` and the `Suit` classes, we can finally start
+implementing the `Card` component. Start simple:
+```dart
+import 'package:flame/components.dart';
+import '../../step2/klondike_game.dart';
+import '../rank.dart';
+import '../suit.dart';
+
+class Card extends PositionComponent {
+  Card(this.rank, this.suit)
+      : super(size: Vector2(KlondikeGame.cardWidth, KlondikeGame.cardHeight));
+
+  final Rank rank;
+  final Suit suit;
+  bool isFaceUp = false;
 }
 ```
 
