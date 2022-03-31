@@ -1,5 +1,6 @@
 import 'package:flame/components.dart';
 import 'package:flame/experimental.dart';
+import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 
 import 'components/foundation.dart';
@@ -8,13 +9,13 @@ import 'components/stock.dart';
 import 'components/waste.dart';
 
 class KlondikeGame extends FlameGame {
-  final double cardGap = 175.0;
-  final double cardWidth = 1000.0;
-  final double cardHeight = 1400.0;
+  static double cardGap = 175.0;
+  static double cardWidth = 1000.0;
+  static double cardHeight = 1400.0;
 
   @override
   Future<void> onLoad() async {
-    await images.load('klondike-sprites.png');
+    await Flame.images.load('klondike-sprites.png');
 
     final stock = Stock()
       ..size = Vector2(cardWidth, cardHeight)

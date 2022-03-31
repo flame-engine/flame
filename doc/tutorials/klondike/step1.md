@@ -85,7 +85,7 @@ Here are the contents of my spritesheet:
   - Numerals 2, 3, 4, ..., K, A. In theory, we could have rendered these in the
     game as text strings, but then we would need to also include a font as an
     asset -- seems simpler to just have them as images instead.
-  - Suit marks: ♠, ♥, ♦, ♣. Again, we could have used Unicode characters for
+  - Suit marks: ♥, ♦, ♣, ♠. Again, we could have used Unicode characters for
     these, but images are much easier to position precisely.
   - Flame logo, for use on the backs of the cards.
   - Pictures of a Jack, a Queen, and a King. Normally there would be four times
