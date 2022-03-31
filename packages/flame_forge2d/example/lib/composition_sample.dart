@@ -1,11 +1,14 @@
 import 'package:flame/components.dart';
+import 'package:flame/effects.dart';
 import 'package:flame/game.dart';
-import 'package:flame/palette.dart';
+import 'package:flame/input.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flutter/material.dart';
 
 import 'balls.dart';
 import 'boundaries.dart';
+
+const TextStyle _textStyle = TextStyle(color: Colors.white, fontSize: 4);
 
 class CompositionSample extends Forge2DGame with HasTappables {
   static const info = '''
@@ -19,19 +22,55 @@ component. Click the ball to see the number increment.
   Future<void> onLoad() async {
     final boundaries = createBoundaries(this);
     boundaries.forEach(add);
-    final center = screenToWorld(camera.viewport.effectiveSize / 2);
-    add(TapableBall(center));
+    final viewportCenter = camera.viewport.effectiveSize / 2;
+    add(TappableText(screenToFlameWorld(viewportCenter)..y = 5));
+    add(TappableBall(screenToWorld(viewportCenter)));
   }
 }
 
-class TapableBall extends Ball with Tappable {
+class TappableText extends TextComponent with Tappable {
+  TappableText(Vector2 position)
+      : super(
+          text: 'A normal Flame component',
+          textRenderer: TextPaint(style: _textStyle),
+          position: position,
+          anchor: Anchor.center,
+        );
+
+  @override
+  Future<void> onLoad() async {
+    final scaleEffect = ScaleEffect.by(
+      Vector2.all(1.1),
+      EffectController(
+        duration: 0.7,
+        alternate: true,
+        infinite: true,
+      ),
+    );
+    add(scaleEffect);
+  }
+
+  @override
+  bool onTapDown(TapDownInfo info) {
+    add(
+      MoveEffect.by(
+        Vector2.all(5),
+        EffectController(
+          speed: 5,
+          alternate: true,
+        ),
+      ),
+    );
+    return true;
+  }
+}
+
+class TappableBall extends Ball with Tappable {
   late final TextComponent textComponent;
   int counter = 0;
-  final TextStyle _textStyle =
-      TextStyle(color: BasicPalette.white.color, fontSize: 4);
   late final TextPaint _textPaint;
 
-  TapableBall(Vector2 position) : super(position) {
+  TappableBall(Vector2 position) : super(position) {
     originalPaint = Paint()..color = Colors.amber;
     paint = originalPaint;
   }
