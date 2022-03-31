@@ -1,3 +1,5 @@
+import 'package:flame/components.dart';
+import 'package:flame/flame.dart';
 import 'package:flutter/foundation.dart';
 
 @immutable
@@ -7,24 +9,44 @@ class Rank {
     return _singletons[value - 1];
   }
 
-  const Rank._(this.value, this.label);
+  Rank._(
+    this.value,
+    this.label,
+    double x1,
+    double y1,
+    double x2,
+    double y2,
+    double w,
+    double h,
+  )   : redSprite = Sprite(
+          Flame.images.fromCache('klondike-sprites.png'),
+          srcPosition: Vector2(x1, y1),
+          srcSize: Vector2(w, h),
+        ),
+        blackSprite = Sprite(
+          Flame.images.fromCache('klondike-sprites.png'),
+          srcPosition: Vector2(x2, y2),
+          srcSize: Vector2(w, h),
+        );
 
   static late final List<Rank> _singletons = [
-    const Rank._(1, 'A'),
-    const Rank._(2, '2'),
-    const Rank._(3, '3'),
-    const Rank._(4, '4'),
-    const Rank._(5, '5'),
-    const Rank._(6, '6'),
-    const Rank._(7, '7'),
-    const Rank._(8, '8'),
-    const Rank._(9, '9'),
-    const Rank._(10, '10'),
-    const Rank._(11, 'J'),
-    const Rank._(12, 'Q'),
-    const Rank._(13, 'K'),
+    Rank._(1, 'A', 335, 164, 789, 161, 120, 129),
+    Rank._(2, '2', 20, 19, 15, 322, 83, 125),
+    Rank._(3, '3', 122, 19, 117, 322, 80, 127),
+    Rank._(4, '4', 213, 12, 208, 315, 93, 132),
+    Rank._(5, '5', 314, 21, 309, 324, 85, 125),
+    Rank._(6, '6', 419, 17, 414, 320, 84, 129),
+    Rank._(7, '7', 509, 21, 505, 324, 92, 128),
+    Rank._(8, '8', 612, 19, 607, 322, 78, 127),
+    Rank._(9, '9', 709, 19, 704, 322, 84, 130),
+    Rank._(10, '10', 810, 20, 805, 322, 137, 127),
+    Rank._(11, 'J', 15, 170, 469, 167, 56, 126),
+    Rank._(12, 'Q', 92, 168, 547, 165, 132, 128),
+    Rank._(13, 'K', 243, 170, 696, 167, 92, 123),
   ];
 
   final int value;
   final String label;
+  final Sprite redSprite;
+  final Sprite blackSprite;
 }
