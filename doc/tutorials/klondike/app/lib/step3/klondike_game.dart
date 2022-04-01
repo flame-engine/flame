@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flame/components.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame/flame.dart';
@@ -13,31 +15,33 @@ import 'suit.dart';
 
 class KlondikeGame extends FlameGame {
   static double cardGap = 175.0;
-  static double cardWidth = 1000.0;
-  static double cardHeight = 1400.0;
-  static double cardRadius = 100.0;
+  static const double cardWidth = 1000.0;
+  static const double cardHeight = 1400.0;
+  static const double cardRadius = 100.0;
+  static final Vector2 cardSize = Vector2(cardWidth, cardHeight);
 
   @override
   Future<void> onLoad() async {
     await Flame.images.load('klondike-sprites.png');
+    await Flame.images.load('klondike-sprites.png');
 
     final stock = Stock()
-      ..size = Vector2(cardWidth, cardHeight)
+      ..size = cardSize
       ..position = Vector2(cardGap, cardGap);
     final waste = Waste()
-      ..size = Vector2(cardWidth * 1.5, cardHeight)
+      ..size = cardSize
       ..position = Vector2(cardWidth + 2 * cardGap, cardGap);
     final foundations = List.generate(
       4,
       (i) => Foundation()
-        ..size = Vector2(cardWidth, cardHeight)
+        ..size = cardSize
         ..position =
             Vector2((i + 3) * (cardWidth + cardGap) + cardGap, cardGap),
     );
     final piles = List.generate(
       7,
       (i) => Pile()
-        ..size = Vector2(cardWidth, cardHeight)
+        ..size = cardSize
         ..position = Vector2(
           cardGap + i * (cardWidth + cardGap),
           cardHeight + 2 * cardGap,
@@ -58,8 +62,19 @@ class KlondikeGame extends FlameGame {
     add(world);
     add(camera);
 
-    Card(Rank.fromInt(2), Suit.fromInt(0))
-      ..position = Vector2(2000, 1300)
-      ..addToParent(world);
+    // Card(Rank.fromInt(2), Suit.fromInt(0))
+    //   ..position = Vector2(2000, 1300)
+    //   ..addToParent(world);
+    final random = Random();
+    for (var i = 0; i < 7; i++) {
+      for (var j = 0; j < 3; j++) {
+        final rank = Rank.fromInt(random.nextInt(13) + 1);
+        final suit = Suit.fromInt(random.nextInt(4));
+        Card(rank, suit)
+          ..flipUp()
+          ..position = Vector2(100 + i * 1150, 100 + j * 1500)
+          ..addToParent(world);
+      }
+    }
   }
 }

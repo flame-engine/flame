@@ -180,24 +180,45 @@ class Rank {
 ## Card component
 
 Now that we have the `Rank` and the `Suit` classes, we can finally start
-implementing the `Card` component. Start simple:
+implementing the `Card` component:
 ```dart
 import 'package:flame/components.dart';
-import '../../step2/klondike_game.dart';
+import '../klondike_game.dart';
 import '../rank.dart';
 import '../suit.dart';
 
 class Card extends PositionComponent {
-  Card(this.rank, this.suit)
-      : super(size: Vector2(KlondikeGame.cardWidth, KlondikeGame.cardHeight));
+  Card(this.rank, this.suit) : super(size: KlondikeGame.cardSize);
 
   final Rank rank;
   final Suit suit;
-  bool isFaceUp = false;
+
+  bool get isFaceUp => _faceUp;
+  bool _faceUp = false;
+  void flip() => _faceUp = !_faceUp;
+
+  @override
+  String toString() => rank.label + suit.label;
 }
 ```
 
+In order to be able to see a `Card`, we need to implement its `render()`
+method. Since the card has two distinct states -- face up or down -- we will
+implement rendering for these two states separately. Add the following methods
+into the `Card` class:
+```dart
+  @override
+  void render(Canvas canvas) {
+    if (_faceUp) {
+      _renderFront(canvas);
+    } else {
+      _renderBack(canvas);
+    }
+  }
 
+  void _renderFront(Canvas canvas) {}
+  void _renderBack(Canvas canvas) {}
+```
 
 
 ```{flutter-app}
