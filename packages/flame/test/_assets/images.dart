@@ -1,4 +1,3 @@
-
 import 'dart:ui';
 
 import 'package:flame/assets.dart';
