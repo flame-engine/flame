@@ -33,7 +33,7 @@ class Card extends PositionComponent {
   }
 
   static final Paint backBackgroundPaint = Paint()
-    ..color = const Color(0xff000000);
+    ..color = const Color(0xff380c02);
   static final Paint backBorderPaint1 = Paint()
     ..color = const Color(0xffDBCF58)
     ..style = PaintingStyle.stroke

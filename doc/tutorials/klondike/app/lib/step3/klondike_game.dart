@@ -62,18 +62,17 @@ class KlondikeGame extends FlameGame {
     add(world);
     add(camera);
 
-    // Card(Rank.fromInt(2), Suit.fromInt(0))
-    //   ..position = Vector2(2000, 1300)
-    //   ..addToParent(world);
     final random = Random();
     for (var i = 0; i < 7; i++) {
-      for (var j = 0; j < 3; j++) {
+      for (var j = 0; j < 4; j++) {
         final rank = Rank.fromInt(random.nextInt(13) + 1);
         final suit = Suit.fromInt(random.nextInt(4));
-        Card(rank, suit)
-          ..flipUp()
+        final card = Card(rank, suit)
           ..position = Vector2(100 + i * 1150, 100 + j * 1500)
           ..addToParent(world);
+        if (random.nextDouble() < 0.9) {
+          card.flip();
+        }
       }
     }
   }
