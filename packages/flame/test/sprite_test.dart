@@ -38,7 +38,7 @@ class MyComponent extends PositionComponent {
   @override
   void render(Canvas canvas) {
     canvas.drawRect(
-      Rect.fromLTRB(0, 0, size.x, size.y),
+      size.toRect(),
       Paint()
         ..color = const Color(0xffffffff)
         ..style = PaintingStyle.stroke
