@@ -1,12 +1,12 @@
 # 2. Scaffolding
 
-In this section we will use broad strokes in order to outline the main elements
-of the game. This includes the main game class, and the general layout.
+In this section we will use broad strokes to outline the main elements of the
+game. This includes the main game class, and the general layout.
 
 
 ## KlondikeGame
 
-In Flame universe, the `FlameGame` class is the cornerstone of any game. This
+In Flame universe, the **FlameGame** class is the cornerstone of any game. This
 class runs the game loop, dispatches events, owns all the components that
 comprise the game (the component tree), and usually also serves as the central
 repository for the game's state.
@@ -20,7 +20,7 @@ import 'package:flame/game.dart';
 class KlondikeGame extends FlameGame {
   @override
   Future<void> onLoad() async {
-    await Images.load('klondike-sprites.png');
+    await Flame.images.load('klondike-sprites.png');
   }
 }
 ```
@@ -32,6 +32,27 @@ Currently, the only thing that `onLoad` does is that it loads the sprites image
 into the game; but we will be adding more soon. Any image or other resource that
 you want to use in the game needs to be loaded first, which is a relatively slow
 I/O operation, hence the need for `await` keyword.
+
+I am loading the image into the global `Flame.images` cache here. An alternative
+approach is to load it into the `Game.images` cache instead, but then it would
+have been more difficult to access that image from other classes.
+
+Also note that I am `await`ing the image to finish loading before initializing
+anything else in the game. This is for convenience: it means that by the time
+all other components are initialized, they can assume the spritesheet is already
+loaded. We can even add a helper function to extract a sprite from the common
+spritesheet:
+```dart
+Sprite klondikeSprite(double x, double y, double width, double height) {
+  return Sprite(
+    Flame.images.fromCache('klondike-sprites.png'),
+    srcPosition: Vector2(x, y),
+    srcSize: Vector2(width, height),
+  );
+}
+```
+This helper function won't be needed in this chapter, but will be used
+extensively in the next.
 
 Let's incorporate this class into the project so that it isn't orphaned. Open
 the `main.dart` find the line which says `final game = FlameGame();` and replace
