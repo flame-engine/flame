@@ -9,9 +9,10 @@ import 'components/stock.dart';
 import 'components/waste.dart';
 
 class KlondikeGame extends FlameGame {
-  static double cardGap = 175.0;
-  static double cardWidth = 1000.0;
-  static double cardHeight = 1400.0;
+  static const double cardGap = 175.0;
+  static const double cardWidth = 1000.0;
+  static const double cardHeight = 1400.0;
+  static final Vector2 cardSize = Vector2(cardWidth, cardHeight);
 
   @override
   Future<void> onLoad() async {

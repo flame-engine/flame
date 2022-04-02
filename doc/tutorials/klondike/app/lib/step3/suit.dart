@@ -1,7 +1,6 @@
-import 'package:flame/extensions.dart';
-import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
 import 'package:flutter/foundation.dart';
+import 'klondike_game.dart';
 
 @immutable
 class Suit {
@@ -11,11 +10,7 @@ class Suit {
   }
 
   Suit._(this.value, this.label, double x, double y, double w, double h)
-      : sprite = Sprite(
-          Flame.images.fromCache('klondike-sprites.png'),
-          srcPosition: Vector2(x, y),
-          srcSize: Vector2(w, h),
-        );
+      : sprite = klondikeSprite(x, y, w, h);
 
   static late final List<Suit> _singletons = [
     Suit._(0, '♥', 1176, 17, 172, 183),

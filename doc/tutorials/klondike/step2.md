@@ -136,13 +136,14 @@ Alright, let's put all this together and implement our `KlondikeGame` class:
 
 ```dart
 class KlondikeGame extends FlameGame {
-  final double cardGap = 175.0;
-  final double cardWidth = 1000.0;
-  final double cardHeight = 1400.0;
+  static const double cardGap = 175.0;
+  static const double cardWidth = 1000.0;
+  static const double cardHeight = 1400.0;
+  static final Vector2 cardSize = Vector2(cardWidth, cardHeight);
 
   @override
   Future<void> onLoad() async {
-    await images.load('klondike-sprites.png');
+    await Flame.images.load('klondike-sprites.png');
 
     final stock = Stock()
       ..size = Vector2(cardWidth, cardHeight)

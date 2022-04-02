@@ -2,11 +2,15 @@
 
 In this chapter we will begin implementing the most visible component in the
 game -- the `Card` component, which corresponds to a single real-life card.
-There will be 52 `Card` instances in the game.
+There will be 52 `Card` objects in the game.
 
-Each card is described by its `rank` and `suit`. Rank 1 is an Ace, ranks 2-10
-are self-explanatory, rank 11 is Jack, 12 is Queen, and 13 is King. There are
-also four suits: hearts, diamonds, clubs, and spades.
+Each card is described by its _rank_ and its _suit_. Rank 1 is an Ace, ranks
+2-10 are self-explanatory, rank 11 is Jack, 12 is Queen, and 13 is King. The
+four suits are: hearts (♥), diamonds (♦), clubs (♣), and spades (♠).
+
+Also, each card will have a boolean flag `isFaceUp`, which controls whether
+the card is currently facing up or down. This property is important both for
+rendering, and for certain aspects of the gameplay logic.
 
 The rank and the suit are simple properties of a card, they aren't components,
 so we need to make a decision on how to represent them. There are several
@@ -16,7 +20,7 @@ rank, we will need to be able to tell whether one rank is one higher/lower than
 another rank. Also, we need to produce the text label and a sprite corresponding
 to the given rank. For suits, we need to know whether two suits are of different
 colors, and also produce a text label and a sprite. Given these requirements,
-I decided to represent them as singleton objects.
+I decided to represent both `Rank` and `Suit` as classes.
 
 
 ## Suit
@@ -24,10 +28,9 @@ I decided to represent them as singleton objects.
 Create file `suit.dart` and add the following implementation:
 
 ```dart
-import 'package:flame/extensions.dart';
-import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
 import 'package:flutter/foundation.dart';
+import 'klondike_game.dart';
 
 @immutable
 class Suit {
@@ -37,11 +40,7 @@ class Suit {
   }
 
   Suit._(this.value, this.label, double x, double y, double w, double h)
-      : sprite = Sprite(
-          Flame.images.fromCache('klondike-sprites.png'),
-          srcPosition: Vector2(x, y),
-          srcSize: Vector2(w, h),
-        );
+      : sprite = klondikeSprite(x, y, w, h);
 
   static late final List<Suit> _singletons = [
     Suit._(0, '♥', 1176, 17, 172, 183),
@@ -81,11 +80,19 @@ symbol on the canvas. Note that we base the sprite object on an image which
 we loaded earlier into the global cache.
 ```dart
   Suit._(this.value, this.label, double x, double y, double w, double h)
-      : sprite = Sprite(
-          Flame.images.fromCache('klondike-sprites.png'),
-          srcPosition: Vector2(x, y),
-          srcSize: Vector2(w, h),
-        );
+      : sprite = klondikeSprite(x, y, w, h);
+```
+
+The helper function `klondikeSprite()` we should define in the
+`klondike_game.dart` file, as it will be useful :
+```dart
+Sprite klondikeSprite(double x, double y, double w, double h) {
+  return Sprite(
+    Flame.images.fromCache('klondike-sprites.png'),
+    srcPosition: Vector2(x, y),
+    srcSize: Vector2(w, h),
+  );
+}
 ```
 
 Then comes the static list of all `Suit` objects in the game. Note that we

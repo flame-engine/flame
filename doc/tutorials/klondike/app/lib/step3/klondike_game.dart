@@ -77,3 +77,11 @@ class KlondikeGame extends FlameGame {
     }
   }
 }
+
+Sprite klondikeSprite(double x, double y, double w, double h) {
+  return Sprite(
+    Flame.images.fromCache('klondike-sprites.png'),
+    srcPosition: Vector2(x, y),
+    srcSize: Vector2(w, h),
+  );
+}

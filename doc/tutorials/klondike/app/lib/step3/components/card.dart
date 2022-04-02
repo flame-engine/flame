@@ -42,16 +42,16 @@ class Card extends PositionComponent {
     ..color = const Color(0x5CEF971B)
     ..style = PaintingStyle.stroke
     ..strokeWidth = 35;
-  static final RRect cardRect = RRect.fromRectAndRadius(
-    const Rect.fromLTWH(0, 0, KlondikeGame.cardWidth, KlondikeGame.cardHeight),
+  static final RRect cardRRect = RRect.fromRectAndRadius(
+    KlondikeGame.cardSize.toRect(),
     const Radius.circular(KlondikeGame.cardRadius),
   );
-  static final RRect backRectInner = cardRect.deflate(40);
+  static final RRect backRectInner = cardRRect.deflate(40);
   static late final Sprite backSprite = _getSprite(1367, 6, 357, 501);
 
   void _renderBack(Canvas canvas) {
-    canvas.drawRRect(cardRect, backBackgroundPaint);
-    canvas.drawRRect(cardRect, backBorderPaint1);
+    canvas.drawRRect(cardRRect, backBackgroundPaint);
+    canvas.drawRRect(cardRRect, backBorderPaint1);
     canvas.drawRRect(backRectInner, backBorderPaint2);
     backSprite.render(canvas, position: size / 2, anchor: Anchor.center);
   }
@@ -67,8 +67,13 @@ class Card extends PositionComponent {
   static late final Sprite kingSprite = _getSprite(1305, 532, 407, 549);
 
   void _renderFront(Canvas canvas) {
-    canvas.drawRRect(cardRect, frontBackgroundPaint);
-    canvas.drawRRect(cardRect, frontBorderPaint);
+    canvas.drawRRect(cardRRect, frontBackgroundPaint);
+    canvas.drawRRect(cardRRect, frontBorderPaint);
+    // final paint = Paint()
+    //   ..colorFilter = ColorFilter.mode(Color(0x880d8bff), BlendMode.srcATop);
+    // jackSprite.paint = paint;
+    // queenSprite.paint = paint;
+    // kingSprite.paint = paint;
 
     final rankSprite = suit.isBlack ? rank.blackSprite : rank.redSprite;
     final suitSprite = suit.sprite;
