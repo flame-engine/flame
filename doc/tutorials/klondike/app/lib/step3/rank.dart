@@ -1,6 +1,7 @@
 import 'package:flame/components.dart';
 import 'package:flame/flame.dart';
 import 'package:flutter/foundation.dart';
+import 'package:klondike/step2/klondike_game.dart';
 
 @immutable
 class Rank {
@@ -18,16 +19,13 @@ class Rank {
     double y2,
     double w,
     double h,
-  )   : redSprite = Sprite(
-          Flame.images.fromCache('klondike-sprites.png'),
-          srcPosition: Vector2(x1, y1),
-          srcSize: Vector2(w, h),
-        ),
-        blackSprite = Sprite(
-          Flame.images.fromCache('klondike-sprites.png'),
-          srcPosition: Vector2(x2, y2),
-          srcSize: Vector2(w, h),
-        );
+  )   : redSprite = klondikeSprite(x1, y1, w, h),
+        blackSprite = klondikeSprite(x2, y2, w, h);
+
+  final int value;
+  final String label;
+  final Sprite redSprite;
+  final Sprite blackSprite;
 
   static late final List<Rank> _singletons = [
     Rank._(1, 'A', 335, 164, 789, 161, 120, 129),
@@ -44,9 +42,4 @@ class Rank {
     Rank._(12, 'Q', 92, 168, 547, 165, 132, 128),
     Rank._(13, 'K', 243, 170, 696, 167, 92, 123),
   ];
-
-  final int value;
-  final String label;
-  final Sprite redSprite;
-  final Sprite blackSprite;
 }
