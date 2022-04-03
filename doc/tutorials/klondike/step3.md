@@ -313,6 +313,153 @@ blending mode:
     ..paint = blueFilter;
 ```
 
+Now we can start coding the render method itself. First, draw the background
+and the card border:
+```dart
+  void _renderFront(Canvas canvas) {
+    canvas.drawRRect(cardRRect, frontBackgroundPaint);
+    canvas.drawRRect(
+      cardRRect,
+      suit.isRed ? redBorderPaint : blackBorderPaint,
+    );
+  }
+```
+
+In order to draw the rest of the card, I need one more helper method. This
+method will draw the provided sprite on the canvas at the specified place (the
+location is relative to the dimensions of the card). The sprite can be
+optionally scaled. In addition, if flag `rotate=true` is passed, the sprite
+will be drawn as if it was rotated 180º around the center of the card:
+```dart
+  void _drawSprite(
+    Canvas canvas,
+    Sprite sprite,
+    double relativeX,
+    double relativeY, {
+    double scale = 1,
+    bool rotate = false,
+  }) {
+    if (rotate) {
+      canvas.save();
+      canvas.translate(size.x / 2, size.y / 2);
+      canvas.rotate(pi);
+      canvas.translate(-size.x / 2, -size.y / 2);
+    }
+    sprite.render(
+      canvas,
+      position: Vector2(relativeX * size.x, relativeY * size.y),
+      anchor: Anchor.center,
+      size: sprite.srcSize.scaled(scale),
+    );
+    if (rotate) {
+      canvas.restore();
+    }
+  }
+```
+
+Let's draw the rank and the suit symbols in the corners of the card. Add the
+following to the `_renderFront()` method:
+```dart
+    final rankSprite = suit.isBlack ? rank.blackSprite : rank.redSprite;
+    final suitSprite = suit.sprite;
+    _drawSprite(canvas, rankSprite, 0.1, 0.08);
+    _drawSprite(canvas, rankSprite, 0.1, 0.08, rotate: true);
+    _drawSprite(canvas, suitSprite, 0.1, 0.18, scale: 0.5);
+    _drawSprite(canvas, suitSprite, 0.1, 0.18, scale: 0.5, rotate: true);
+```
+
+The middle of the card is rendered in the same manner: we will create a big
+switch statement on the card's rank, and draw pips accordingly:
+```dart
+    switch (rank.value) {
+      case 1:
+        _drawSprite(canvas, suitSprite, 0.5, 0.5, scale: 2);
+        break;
+      case 2:
+        _drawSprite(canvas, suitSprite, 0.5, 0.25);
+        _drawSprite(canvas, suitSprite, 0.5, 0.25, rotate: true);
+        break;
+      case 3:
+        _drawSprite(canvas, suitSprite, 0.5, 0.2);
+        _drawSprite(canvas, suitSprite, 0.5, 0.5);
+        _drawSprite(canvas, suitSprite, 0.5, 0.2, rotate: true);
+        break;
+      case 4:
+        _drawSprite(canvas, suitSprite, 0.3, 0.25);
+        _drawSprite(canvas, suitSprite, 0.7, 0.25);
+        _drawSprite(canvas, suitSprite, 0.3, 0.25, rotate: true);
+        _drawSprite(canvas, suitSprite, 0.7, 0.25, rotate: true);
+        break;
+      case 5:
+        _drawSprite(canvas, suitSprite, 0.3, 0.25);
+        _drawSprite(canvas, suitSprite, 0.7, 0.25);
+        _drawSprite(canvas, suitSprite, 0.3, 0.25, rotate: true);
+        _drawSprite(canvas, suitSprite, 0.7, 0.25, rotate: true);
+        _drawSprite(canvas, suitSprite, 0.5, 0.5);
+        break;
+      case 6:
+        _drawSprite(canvas, suitSprite, 0.3, 0.25);
+        _drawSprite(canvas, suitSprite, 0.7, 0.25);
+        _drawSprite(canvas, suitSprite, 0.3, 0.5);
+        _drawSprite(canvas, suitSprite, 0.7, 0.5);
+        _drawSprite(canvas, suitSprite, 0.3, 0.25, rotate: true);
+        _drawSprite(canvas, suitSprite, 0.7, 0.25, rotate: true);
+        break;
+      case 7:
+        _drawSprite(canvas, suitSprite, 0.3, 0.2);
+        _drawSprite(canvas, suitSprite, 0.7, 0.2);
+        _drawSprite(canvas, suitSprite, 0.5, 0.35);
+        _drawSprite(canvas, suitSprite, 0.3, 0.5);
+        _drawSprite(canvas, suitSprite, 0.7, 0.5);
+        _drawSprite(canvas, suitSprite, 0.3, 0.2, rotate: true);
+        _drawSprite(canvas, suitSprite, 0.7, 0.2, rotate: true);
+        break;
+      case 8:
+        _drawSprite(canvas, suitSprite, 0.3, 0.2);
+        _drawSprite(canvas, suitSprite, 0.7, 0.2);
+        _drawSprite(canvas, suitSprite, 0.5, 0.35);
+        _drawSprite(canvas, suitSprite, 0.3, 0.5);
+        _drawSprite(canvas, suitSprite, 0.7, 0.5);
+        _drawSprite(canvas, suitSprite, 0.3, 0.2, rotate: true);
+        _drawSprite(canvas, suitSprite, 0.7, 0.2, rotate: true);
+        _drawSprite(canvas, suitSprite, 0.5, 0.35, rotate: true);
+        break;
+      case 9:
+        _drawSprite(canvas, suitSprite, 0.3, 0.2);
+        _drawSprite(canvas, suitSprite, 0.7, 0.2);
+        _drawSprite(canvas, suitSprite, 0.5, 0.3);
+        _drawSprite(canvas, suitSprite, 0.3, 0.4);
+        _drawSprite(canvas, suitSprite, 0.7, 0.4);
+        _drawSprite(canvas, suitSprite, 0.3, 0.2, rotate: true);
+        _drawSprite(canvas, suitSprite, 0.7, 0.2, rotate: true);
+        _drawSprite(canvas, suitSprite, 0.3, 0.4, rotate: true);
+        _drawSprite(canvas, suitSprite, 0.7, 0.4, rotate: true);
+        break;
+      case 10:
+        _drawSprite(canvas, suitSprite, 0.3, 0.2);
+        _drawSprite(canvas, suitSprite, 0.7, 0.2);
+        _drawSprite(canvas, suitSprite, 0.5, 0.3);
+        _drawSprite(canvas, suitSprite, 0.3, 0.4);
+        _drawSprite(canvas, suitSprite, 0.7, 0.4);
+        _drawSprite(canvas, suitSprite, 0.3, 0.2, rotate: true);
+        _drawSprite(canvas, suitSprite, 0.7, 0.2, rotate: true);
+        _drawSprite(canvas, suitSprite, 0.5, 0.3, rotate: true);
+        _drawSprite(canvas, suitSprite, 0.3, 0.4, rotate: true);
+        _drawSprite(canvas, suitSprite, 0.7, 0.4, rotate: true);
+        break;
+      case 11:
+        _drawSprite(canvas, suit.isRed? redJack : blackJack, 0.5, 0.5);
+        break;
+      case 12:
+        _drawSprite(canvas, suit.isRed? redQueen : blackQueen, 0.5, 0.5);
+        break;
+      case 13:
+        _drawSprite(canvas, suit.isRed? redKing : blackKing, 0.5, 0.5);
+        break;
+    }
+```
+
+
 ```{flutter-app}
 :sources: ../tutorials/klondike/app
 :page: step3
