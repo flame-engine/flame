@@ -1,14 +1,12 @@
 # Cards
 
 In this chapter we will begin implementing the most visible component in the
-game -- the `Card` component, which corresponds to a single real-life card.
+game -- the **Card** component, which corresponds to a single real-life card.
 There will be 52 `Card` objects in the game.
 
-Each card is described by its _rank_ and its _suit_. Rank 1 is an Ace, ranks
-2-10 are self-explanatory, rank 11 is Jack, 12 is Queen, and 13 is King. The
-four suits are: hearts (♥), diamonds (♦), clubs (♣), and spades (♠).
-
-Also, each card will have a boolean flag `isFaceUp`, which controls whether
+Each card has a **rank** (from 1 to 13, where 1 is an Ace, and 13 is a King)
+and a **suit** (from 0 to 3: hearts ♥, diamonds ♦, clubs ♣, and spades ♠).
+Also, each card will have a boolean flag **faceUp**, which controls whether
 the card is currently facing up or down. This property is important both for
 rendering, and for certain aspects of the gameplay logic.
 
@@ -25,42 +23,9 @@ I decided to represent both `Rank` and `Suit` as classes.
 
 ## Suit
 
-Create file `suit.dart` and add the following implementation:
-
-```dart
-import 'package:flame/sprite.dart';
-import 'package:flutter/foundation.dart';
-import 'klondike_game.dart';
-
-@immutable
-class Suit {
-  factory Suit.fromInt(int index) {
-    assert(index >= 0 && index <= 3);
-    return _singletons[index];
-  }
-
-  Suit._(this.value, this.label, double x, double y, double w, double h)
-      : sprite = klondikeSprite(x, y, w, h);
-
-  static late final List<Suit> _singletons = [
-    Suit._(0, '♥', 1176, 17, 172, 183),
-    Suit._(1, '♦', 973, 14, 177, 182),
-    Suit._(2, '♣', 974, 226, 184, 172),
-    Suit._(3, '♠', 1178, 220, 176, 182),
-  ];
-
-  final int value;
-  final String label;
-  final Sprite sprite;
-
-  /// Hearts and Diamonds are red, while Clubs and Spades are black.
-  bool get isRed => value <= 1;
-  bool get isBlack => value >= 2;
-}
-```
-
-First, we declare the class as `@immutable`, which is really just a hint for
-us that the objects of this class should not be modified after creation.
+Create file `suit.dart` and declare an `@immutable class Suit` there, with no
+parent. The `@immutable` annotation here is just a hint for us that the objects
+of this class should not be modified after creation.
 
 Next, we define the factory constructor for the class: `Suit.fromInt(i)`. We
 use a factory constructor here in order to enforce the singleton pattern for
@@ -76,23 +41,15 @@ of the pre-built objects that we store in the `_singletons` list:
 After that, there is a private constructor `Suit._()`. This constructor
 initializes the main properties of each `Suit` object: the numeric value, the
 string label, and the sprite object which we will later use to draw the suit
-symbol on the canvas. Note that we base the sprite object on an image which
-we loaded earlier into the global cache.
+symbol on the canvas. The sprite object is initialized using the
+`klondikeSprite()` function that we created in the previous chapter:
 ```dart
   Suit._(this.value, this.label, double x, double y, double w, double h)
       : sprite = klondikeSprite(x, y, w, h);
-```
 
-The helper function `klondikeSprite()` we should define in the
-`klondike_game.dart` file, as it will be useful :
-```dart
-Sprite klondikeSprite(double x, double y, double w, double h) {
-  return Sprite(
-    Flame.images.fromCache('klondike-sprites.png'),
-    srcPosition: Vector2(x, y),
-    srcSize: Vector2(w, h),
-  );
-}
+  final int value;
+  final String label;
+  final Sprite sprite;
 ```
 
 Then comes the static list of all `Suit` objects in the game. Note that we
@@ -117,6 +74,7 @@ Lastly, I have simple getters to determine the "color" of a suit. This will be
 needed later when we need to enforce the rule that cards can only be placed
 into columns by alternating colors.
 ```dart
+  /// Hearts and Diamonds are red, while Clubs and Spades are black.
   bool get isRed => value <= 1;
   bool get isBlack => value >= 2;
 ```
