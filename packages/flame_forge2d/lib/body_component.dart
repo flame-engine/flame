@@ -44,7 +44,6 @@ abstract class BodyComponent<T extends Forge2DGame> extends Component
 
   /// The matrix used for preparing the canvas
   final Matrix4 _transform = Matrix4.identity();
-  final Matrix4 _flipYTransform = Matrix4.identity()..scale(1.0, -1.0);
   double? _lastAngle;
 
   @mustCallSuper
@@ -63,7 +62,6 @@ abstract class BodyComponent<T extends Forge2DGame> extends Component
     if (renderBody) {
       _renderFixtures(canvas);
     }
-    canvas.transform(_flipYTransform.storage);
     super.renderTree(canvas);
     canvas.restore();
   }

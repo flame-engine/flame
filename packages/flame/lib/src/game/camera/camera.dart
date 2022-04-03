@@ -1,7 +1,5 @@
 import 'dart:math' as math;
 
-import 'package:meta/meta.dart';
-
 import '../../../components.dart';
 import '../../../extensions.dart';
 import '../../../game.dart';

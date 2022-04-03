@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'balls.dart';
 import 'boundaries.dart';
 
-const TextStyle _textStyle = TextStyle(color: Colors.white, fontSize: 4);
+const TextStyle _textStyle = TextStyle(color: Colors.white, fontSize: 2);
 
 class CompositionSample extends Forge2DGame with HasTappables {
   static const info = '''
@@ -16,7 +16,7 @@ This example shows how to compose a `BodyComponent` together with a normal Flame
 component. Click the ball to see the number increment.
 ''';
 
-  CompositionSample() : super(zoom: 20, gravity: Vector2(0, -10.0));
+  CompositionSample() : super(zoom: 20, gravity: Vector2(0, 10.0));
 
   @override
   Future<void> onLoad() async {
@@ -31,7 +31,7 @@ component. Click the ball to see the number increment.
 class TappableText extends TextComponent with Tappable {
   TappableText(Vector2 position)
       : super(
-          text: 'A normal Flame component',
+          text: 'A normal tappable Flame component',
           textRenderer: TextPaint(style: _textStyle),
           position: position,
           anchor: Anchor.center,

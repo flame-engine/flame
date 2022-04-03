@@ -1,6 +1,5 @@
 import 'dart:math' as math;
 
-import 'package:flame/components.dart';
 import 'package:flame/input.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 
@@ -84,12 +83,10 @@ class FallingBox extends BodyComponent {
 }
 
 class BlobSample extends Forge2DGame with TapDetector {
-  BlobSample() : super(gravity: Vector2(0, -10.0));
-
   @override
   Future<void> onLoad() async {
     final worldCenter = screenToWorld(size * camera.zoom / 2);
-    final blobCenter = worldCenter + Vector2(0, 30);
+    final blobCenter = worldCenter + Vector2(0, -30);
     final blobRadius = Vector2.all(6.0);
     addAll(createBoundaries(this));
     add(Ground(worldCenter));

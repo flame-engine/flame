@@ -1,4 +1,5 @@
 import 'package:flame/input.dart';
+import 'package:flame_forge2d/flame_forge2d.dart';
 
 import 'domino_sample.dart';
 import 'sprite_body_sample.dart';
