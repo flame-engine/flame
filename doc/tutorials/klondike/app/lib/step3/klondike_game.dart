@@ -64,12 +64,10 @@ class KlondikeGame extends FlameGame {
     final random = Random();
     for (var i = 0; i < 7; i++) {
       for (var j = 0; j < 4; j++) {
-        final rank = Rank.fromInt(random.nextInt(13) + 1);
-        final suit = Suit.fromInt(random.nextInt(4));
-        final card = Card(rank, suit)
+        final card = Card(random.nextInt(13) + 1, random.nextInt(4))
           ..position = Vector2(100 + i * 1150, 100 + j * 1500)
           ..addToParent(world);
-        if (random.nextDouble() < 0.9) {
+        if (random.nextDouble() < 0.9) { // flip face up with 90% probability
           card.flip();
         }
       }

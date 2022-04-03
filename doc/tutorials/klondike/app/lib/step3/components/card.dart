@@ -8,20 +8,21 @@ import '../rank.dart';
 import '../suit.dart';
 
 class Card extends PositionComponent {
-  Card(this.rank, this.suit) : super(size: KlondikeGame.cardSize);
+  Card(int intRank, int intSuit)
+      : rank = Rank.fromInt(intRank),
+        suit = Suit.fromInt(intSuit),
+        _faceUp = false,
+        super(size: KlondikeGame.cardSize);
 
   final Rank rank;
   final Suit suit;
+  bool _faceUp;
 
   bool get isFaceUp => _faceUp;
-  bool _faceUp = false;
-
-  void flipUp() => _faceUp = true;
-  void flipDown() => _faceUp = false;
   void flip() => _faceUp = !_faceUp;
 
   @override
-  String toString() => rank.label + suit.label;
+  String toString() => rank.label + suit.label; // e.g. "Q♠" or "10♦"
 
   @override
   void render(Canvas canvas) {
@@ -35,7 +36,7 @@ class Card extends PositionComponent {
   static final Paint backBackgroundPaint = Paint()
     ..color = const Color(0xff380c02);
   static final Paint backBorderPaint1 = Paint()
-    ..color = const Color(0xffDBCF58)
+    ..color = const Color(0xffdbaf58)
     ..style = PaintingStyle.stroke
     ..strokeWidth = 10;
   static final Paint backBorderPaint2 = Paint()
@@ -46,34 +47,45 @@ class Card extends PositionComponent {
     KlondikeGame.cardSize.toRect(),
     const Radius.circular(KlondikeGame.cardRadius),
   );
-  static final RRect backRectInner = cardRRect.deflate(40);
-  static late final Sprite backSprite = _getSprite(1367, 6, 357, 501);
+  static final RRect backRRectInner = cardRRect.deflate(40);
+  static late final Sprite flameSprite = klondikeSprite(1367, 6, 357, 501);
 
   void _renderBack(Canvas canvas) {
     canvas.drawRRect(cardRRect, backBackgroundPaint);
     canvas.drawRRect(cardRRect, backBorderPaint1);
-    canvas.drawRRect(backRectInner, backBorderPaint2);
-    backSprite.render(canvas, position: size / 2, anchor: Anchor.center);
+    canvas.drawRRect(backRRectInner, backBorderPaint2);
+    flameSprite.render(canvas, position: size / 2, anchor: Anchor.center);
   }
 
   static final Paint frontBackgroundPaint = Paint()
     ..color = const Color(0xff000000);
-  static final Paint frontBorderPaint = Paint()
-    ..color = const Color(0xffcdf3f2)
+  static final Paint redBorderPaint = Paint()
+    ..color = const Color(0xffece8a3)
     ..style = PaintingStyle.stroke
     ..strokeWidth = 10;
-  static late final Sprite jackSprite = _getSprite(81, 565, 562, 488);
-  static late final Sprite queenSprite = _getSprite(717, 541, 486, 515);
-  static late final Sprite kingSprite = _getSprite(1305, 532, 407, 549);
+  static final Paint blackBorderPaint = Paint()
+    ..color = const Color(0xff7ab2e8)
+    ..style = PaintingStyle.stroke
+    ..strokeWidth = 10;
+  static final blueFilter = Paint()
+    ..colorFilter = const ColorFilter.mode(
+      Color(0x880d8bff),
+      BlendMode.srcATop,
+    );
+  static late final Sprite redJack = klondikeSprite(81, 565, 562, 488);
+  static late final Sprite redQueen = klondikeSprite(717, 541, 486, 515);
+  static late final Sprite redKing = klondikeSprite(1305, 532, 407, 549);
+  static late final Sprite blackJack = klondikeSprite(81, 565, 562, 488)
+    ..paint = blueFilter;
+  static late final Sprite blackQueen = klondikeSprite(717, 541, 486, 515)
+    ..paint = blueFilter;
+  static late final Sprite blackKing = klondikeSprite(1305, 532, 407, 549)
+    ..paint = blueFilter;
 
   void _renderFront(Canvas canvas) {
+    final borderPaint = suit.isRed ? redBorderPaint : blackBorderPaint;
     canvas.drawRRect(cardRRect, frontBackgroundPaint);
-    canvas.drawRRect(cardRRect, frontBorderPaint);
-    // final paint = Paint()
-    //   ..colorFilter = ColorFilter.mode(Color(0x880d8bff), BlendMode.srcATop);
-    // jackSprite.paint = paint;
-    // queenSprite.paint = paint;
-    // kingSprite.paint = paint;
+    canvas.drawRRect(cardRRect, borderPaint);
 
     final rankSprite = suit.isBlack ? rank.blackSprite : rank.redSprite;
     final suitSprite = suit.sprite;
@@ -160,13 +172,13 @@ class Card extends PositionComponent {
         _drawSprite(canvas, suitSprite, const Anchor(0.7, 0.4), rotate: true);
         break;
       case 11:
-        _drawSprite(canvas, jackSprite, Anchor.center);
+        _drawSprite(canvas, suit.isRed? redJack : blackJack, Anchor.center);
         break;
       case 12:
-        _drawSprite(canvas, queenSprite, Anchor.center);
+        _drawSprite(canvas, suit.isRed? redQueen : blackQueen, Anchor.center);
         break;
       case 13:
-        _drawSprite(canvas, kingSprite, Anchor.center);
+        _drawSprite(canvas, suit.isRed? redKing : blackKing, Anchor.center);
         break;
     }
   }
@@ -194,12 +206,4 @@ class Card extends PositionComponent {
       canvas.restore();
     }
   }
-}
-
-Sprite _getSprite(double x, double y, double w, double h) {
-  return Sprite(
-    Flame.images.fromCache('klondike-sprites.png'),
-    srcPosition: Vector2(x, y),
-    srcSize: Vector2(w, h),
-  );
 }
