@@ -66,12 +66,12 @@ folder of the project. At this point our project's structure looks like this
 (there are other files too, of course, but these are the important ones):
 ```text
 klondike/
-├─assets/
-│ └─images/
-│   └─klondike-sprites.png
-├─lib/
-│  └─main.dart
-└─pubspec.yaml
+ ├─assets/
+ │  └─images/
+ │     └─klondike-sprites.png
+ ├─lib/
+ │  └─main.dart
+ └─pubspec.yaml
 ```
 
 By the way, this kind of file is called the **spritesheet**: it's just a

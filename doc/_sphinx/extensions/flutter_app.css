@@ -10,7 +10,7 @@ button.flutter-app-button {
   font-size: 1.1em;
   font-weight: bold;
   line-height: 1em;
-  margin-right: 1em;
+  margin: 0 1em 1em 0;
   min-height: 26pt;
   min-width: 120pt;
 }
