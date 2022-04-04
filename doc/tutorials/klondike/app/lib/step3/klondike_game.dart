@@ -10,8 +10,6 @@ import 'components/foundation.dart';
 import 'components/pile.dart';
 import 'components/stock.dart';
 import 'components/waste.dart';
-import 'rank.dart';
-import 'suit.dart';
 
 class KlondikeGame extends FlameGame {
   static const double cardGap = 175.0;
@@ -67,7 +65,8 @@ class KlondikeGame extends FlameGame {
         final card = Card(random.nextInt(13) + 1, random.nextInt(4))
           ..position = Vector2(100 + i * 1150, 100 + j * 1500)
           ..addToParent(world);
-        if (random.nextDouble() < 0.9) { // flip face up with 90% probability
+        // flip the card face-up with 90% probability
+        if (random.nextDouble() < 0.9) {
           card.flip();
         }
       }

@@ -171,13 +171,13 @@ class Card extends PositionComponent {
         _drawSprite(canvas, suitSprite, 0.7, 0.4, rotate: true);
         break;
       case 11:
-        _drawSprite(canvas, suit.isRed? redJack : blackJack, 0.5, 0.5);
+        _drawSprite(canvas, suit.isRed ? redJack : blackJack, 0.5, 0.5);
         break;
       case 12:
-        _drawSprite(canvas, suit.isRed? redQueen : blackQueen, 0.5, 0.5);
+        _drawSprite(canvas, suit.isRed ? redQueen : blackQueen, 0.5, 0.5);
         break;
       case 13:
-        _drawSprite(canvas, suit.isRed? redKing : blackKing, 0.5, 0.5);
+        _drawSprite(canvas, suit.isRed ? redKing : blackKing, 0.5, 0.5);
         break;
     }
   }
