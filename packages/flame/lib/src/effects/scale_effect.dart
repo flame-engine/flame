@@ -16,8 +16,7 @@ import 'provider_interfaces.dart';
 /// This effect applies incremental changes to the component's scale, and
 /// requires that any other effect or update logic applied to the same component
 /// also used incremental updates.
-class ScaleEffect extends Effect
-    with EffectTarget<ScaleProvider> {
+class ScaleEffect extends Effect with EffectTarget<ScaleProvider> {
   ScaleEffect.by(Vector2 scaleFactor, EffectController controller)
       : _scaleFactor = scaleFactor.clone(),
         super(controller);
