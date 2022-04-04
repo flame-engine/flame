@@ -2,7 +2,6 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:flame/components.dart';
-import 'package:flame/flame.dart';
 import '../klondike_game.dart';
 import '../rank.dart';
 import '../suit.dart';
@@ -97,7 +96,7 @@ class Card extends PositionComponent {
     _drawSprite(canvas, suitSprite, 0.1, 0.18, scale: 0.5, rotate: true);
     switch (rank.value) {
       case 1:
-        _drawSprite(canvas, suitSprite, 0.5, 0.5, scale: 2);
+        _drawSprite(canvas, suitSprite, 0.5, 0.5, scale: 2.5);
         break;
       case 2:
         _drawSprite(canvas, suitSprite, 0.5, 0.25);

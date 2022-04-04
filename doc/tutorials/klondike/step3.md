@@ -369,11 +369,13 @@ following to the `_renderFront()` method:
 ```
 
 The middle of the card is rendered in the same manner: we will create a big
-switch statement on the card's rank, and draw pips accordingly:
+switch statement on the card's rank, and draw pips accordingly. The code
+below may seem long, but it is actually quite repetitive and consists only
+of drawing various sprites in different places on the card's face:
 ```dart
     switch (rank.value) {
       case 1:
-        _drawSprite(canvas, suitSprite, 0.5, 0.5, scale: 2);
+        _drawSprite(canvas, suitSprite, 0.5, 0.5, scale: 2.5);
         break;
       case 2:
         _drawSprite(canvas, suitSprite, 0.5, 0.25);
@@ -459,6 +461,14 @@ switch statement on the card's rank, and draw pips accordingly:
     }
 ```
 
+And this is it with the rendering of the `Card` component. If you run the code
+now, you would see four rows of cards neatly spread on the table. Refreshing
+the page will lay down a new set of cards. Remember that we have laid these
+cards in this way only temporarily, in order to be able to check that rendering
+works properly.
+
+In the next chapter we will discuss how to implement interactions with the
+cards, that is, how to make them draggable and tappable.
 
 ```{flutter-app}
 :sources: ../tutorials/klondike/app
