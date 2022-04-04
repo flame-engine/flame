@@ -1,7 +1,9 @@
 import 'package:vector_math/vector_math_64.dart';
 
 import 'controllers/effect_controller.dart';
-import 'transform2d_effect.dart';
+import 'effect.dart';
+import 'effect_target.dart';
+import 'provider_interfaces.dart';
 
 /// Scale a component.
 ///
@@ -14,7 +16,8 @@ import 'transform2d_effect.dart';
 /// This effect applies incremental changes to the component's scale, and
 /// requires that any other effect or update logic applied to the same component
 /// also used incremental updates.
-class ScaleEffect extends Transform2DEffect {
+class ScaleEffect extends Effect
+    with EffectTarget<ScaleProvider> {
   ScaleEffect.by(Vector2 scaleFactor, EffectController controller)
       : _scaleFactor = scaleFactor.clone(),
         super(controller);
