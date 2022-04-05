@@ -44,10 +44,6 @@ class Anchor {
 
   const Anchor(this.x, this.y);
 
-  Vector2 operator *(Vector2 size) {
-    return Vector2(x * size.x, y * size.y);
-  }
-
   Vector2 translate(Vector2 p, Vector2 size) {
     return p - (toVector2()..multiply(size));
   }
