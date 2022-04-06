@@ -8,6 +8,7 @@ import '../extensions/vector2.dart';
 import '../game/notifying_vector2.dart';
 import '../game/transform2d.dart';
 import 'component.dart';
+import 'mixins/coordinate_transform.dart';
 
 /// A [Component] implementation that represents an object that can be
 /// freely moved around the screen, rotated, and scaled.
@@ -58,7 +59,8 @@ import 'component.dart';
 /// the approximate bounding rectangle of the rendered picture. If you
 /// do not specify the size of a PositionComponent, then it will be
 /// equal to zero and the component won't be able to respond to taps.
-class PositionComponent extends Component implements PositionProvider {
+class PositionComponent extends Component
+    implements PositionProvider, CoordinateTransform {
   PositionComponent({
     Vector2? position,
     Vector2? size,
@@ -213,6 +215,12 @@ class PositionComponent extends Component implements PositionProvider {
         (local.x < _size.x) &&
         (local.y < _size.y);
   }
+
+  @override
+  Vector2 parentToLocal(Vector2 point) => transform.globalToLocal(point);
+
+  @override
+  Vector2 localToParent(Vector2 point) => transform.localToGlobal(point);
 
   /// Convert local coordinates of a point [point] inside the component
   /// into the parent's coordinate space.
