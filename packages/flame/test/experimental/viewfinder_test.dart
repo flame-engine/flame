@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:canvas_test/canvas_test.dart';
 import 'package:flame/components.dart';
+import 'package:flame/effects.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -106,6 +107,33 @@ void main() {
             ..drawRect(const Rect.fromLTWH(0, 0, 80, 60))
             ..translate(0, 0),
         );
+      },
+    );
+
+    testWithFlameGame(
+      'camera move effect',
+      (game) async {
+        final world = World()..addToParent(game);
+        final camera = CameraComponent(world: world)..addToParent(game);
+        camera.viewfinder.add(
+          MoveEffect.by(Vector2(5, 13), EffectController(duration: 1)),
+        );
+        camera.viewport.add(
+          MoveEffect.by(Vector2(40, -77), EffectController(duration: 1)),
+        );
+        await game.ready();
+
+        for (var t = 0.0; t < 1.0; t += 0.1) {
+          expect(
+            camera.viewfinder.position,
+            closeToVector(5 * t, 13 * t, epsilon: 1e-14),
+          );
+          expect(
+            camera.viewport.position,
+            closeToVector(400 + 40 * t, 300 - 77 * t, epsilon: 1e-12),
+          );
+          game.update(0.1);
+        }
       },
     );
 

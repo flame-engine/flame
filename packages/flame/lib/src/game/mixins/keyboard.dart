@@ -3,18 +3,7 @@ import 'package:flutter/services.dart';
 
 import '../../../components.dart';
 import '../../../game.dart';
-
-/// A [Component] mixin to add keyboard handling capability to components.
-/// Must be used in components that can only be added to games that are mixed
-/// with [HasKeyboardHandlerComponents].
-mixin KeyboardHandler on Component {
-  bool onKeyEvent(
-    RawKeyEvent event,
-    Set<LogicalKeyboardKey> keysPressed,
-  ) {
-    return true;
-  }
-}
+import '../../components/mixins/keyboard_handler.dart';
 
 /// A [FlameGame] mixin that implements [KeyboardEvents] with keyboard event
 /// propagation to components that are mixed with [KeyboardHandler].

@@ -6,6 +6,9 @@ import 'package:flutter_test/flutter_test.dart';
 
 class _MyEffect extends Transform2DEffect {
   _MyEffect(EffectController controller) : super(controller);
+
+  @override
+  void apply(double progress) {}
 }
 
 void main() {

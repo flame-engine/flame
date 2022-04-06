@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:meta/meta.dart';
 
 import '../../../collisions.dart';
@@ -13,9 +11,6 @@ import '../../geometry/shape_intersections.dart' as intersection_system;
 mixin ShapeHitbox on ShapeComponent implements Hitbox<ShapeHitbox> {
   @override
   CollisionType collisionType = CollisionType.active;
-
-  @override
-  Paint get paint => debugPaint;
 
   /// Whether the hitbox is allowed to collide with another hitbox that is
   /// added to the same parent.
@@ -45,13 +40,11 @@ mixin ShapeHitbox on ShapeComponent implements Hitbox<ShapeHitbox> {
   late Function() _transformListener;
 
   final Vector2 _halfExtents = Vector2.zero();
+  static const double _extentEpsilon = 0.000000000000001;
   final Matrix3 _rotationMatrix = Matrix3.zero();
 
   @override
-  bool get renderShape => _renderShape || debugMode;
-  @override
-  set renderShape(bool shouldRender) => _renderShape = shouldRender;
-  bool _renderShape = false;
+  bool renderShape = false;
 
   @protected
   late PositionComponent hitboxParent;
@@ -142,9 +135,12 @@ mixin ShapeHitbox on ShapeComponent implements Hitbox<ShapeHitbox> {
 
   Aabb2 _recalculateAabb() {
     final size = absoluteScaledSize;
-    // This has +1 since a point on the edge of the bounding box is currently
-    // counted as outside.
-    _halfExtents.setValues(size.x + 1, size.y + 1);
+    // This has double.minPositive since a point on the edge of the AABB is
+    // currently counted as outside.
+    _halfExtents.setValues(
+      size.x / 2 + _extentEpsilon,
+      size.y / 2 + _extentEpsilon,
+    );
     _rotationMatrix.setRotationZ(absoluteAngle);
     _validAabb = true;
     return _aabb

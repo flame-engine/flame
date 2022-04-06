@@ -6,6 +6,7 @@ import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
 import 'package:tiled/tiled.dart';
 import 'package:xml/xml.dart';
+
 import 'flame_tsx_provider.dart';
 import 'simple_flips.dart';
 
@@ -34,7 +35,8 @@ class RenderableTiledMap {
 
   /// Cached [SpriteBatch]es of this map.
   @Deprecated(
-    'If you take a direct dependency on batches, use batchesByLayer instead',
+    'If you take a direct dependency on batches, use batchesByLayer instead. '
+    'This will be removed in flame_tiled v1.4.0',
   )
   Map<String, SpriteBatch> get batches => batchesByLayer.isNotEmpty
       ? batchesByLayer.first
@@ -157,14 +159,20 @@ class RenderableTiledMap {
     );
 
     _renderableTileLayers(map)
-        .map((e) => e.tileData)
-        .whereType<List<List<Gid>>>()
-        .forEachIndexed(_renderLayer);
+        .where((e) => e.tileData != null)
+        .forEachIndexed((mapIndex, layer) {
+      return _renderLayer(
+        mapIndex,
+        layer.tileData!,
+        Vector2(layer.offsetX, layer.offsetY),
+      );
+    });
   }
 
   void _renderLayer(
     int mapIndex,
     List<List<Gid>> tileData,
+    Vector2 layerOffset,
   ) {
     final batchMap = batchesByLayer.elementAt(mapIndex);
     tileData.asMap().forEach((ty, tileRow) {
@@ -183,7 +191,8 @@ class RenderableTiledMap {
           if (batch != null) {
             batch.add(
               source: src,
-              offset: Vector2(tx * size.x, ty * size.y),
+              offset: Vector2(tx * size.x, ty * size.y)
+                ..add(layerOffset * size.x / src.width),
               rotation: flips.angle * math.pi / 2,
               scale: size.x / src.width,
             );
@@ -202,7 +211,10 @@ class RenderableTiledMap {
 
   /// This returns an object group fetch by name from a given layer.
   /// Use this to add custom behaviour to special objects and groups.
-  @Deprecated('This method is deprecated. Use the getLayer() method instead.')
+  @Deprecated(
+    'Use the getLayer() method instead. '
+    'This method will be removed in flame_tiled v1.4.0.',
+  )
   ObjectGroup getObjectGroupFromLayer(String name) {
     final g = map.layers.firstWhere((layer) {
       return layer is ObjectGroup && layer.name == name;

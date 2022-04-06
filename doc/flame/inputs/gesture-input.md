@@ -282,6 +282,32 @@ class MyGame extends FlameGame with HasTappables {
 **Note**: `HasTappables` uses an advanced gesture detector under the hood and as explained
 further up on this page it shouldn't be used alongside basic detectors.
 
+To recognize whether a `Tappable` added to the game handled an event, the `handled` field can be set
+to true in the event can be checked in the corresponding method in the game class, or further down
+the chain if you let the event continue to propagate.
+
+In the following example it can be seen how it is used with `onTapDown`, the same technique can also
+be applied to `onTapUp`.
+
+```dart
+class MyComponent extends PositionComponent with Tappable{
+  @override
+  bool onTapDown(TapDownInfo info) {
+    info.handled = true;
+    return true;
+  } 
+}
+
+class MyGame extends FlameGame with HasTappables {
+  @override
+  void onTapDown(int pointerId, TapDownInfo info) {
+    if(info.handled) {
+      // Do something if a child handled the event
+    }
+  }
+}
+```
+
 
 ### Draggable components
 
@@ -356,6 +382,32 @@ class MyGame extends FlameGame with HasDraggables {
 }
 ```
 
+To recognize whether a `Draggable` added to the game handled an event, the `handled` field can be
+set to true in the event can be checked in the corresponding method in the game class, or further
+down the chain if you let the event continue to propagate.
+
+In the following example it can be seen how it is used with `onDragStart`, the same technique can
+also be applied to `onDragUpdate` and `onDragEnd`.
+
+```dart
+class MyComponent extends PositionComponent with Draggable {
+ @override
+ bool onDragStart(DragStartInfo info) {
+   info.handled = true;
+   return true;
+ }
+}
+
+class MyGame extends FlameGame with HasDraggables {
+  @override
+  void onDragStart(int pointerId, DragStartInfo info) {
+    if (info.handled) {
+      // Do something if a child handled the event
+    }
+  }
+}
+```
+
 
 ### Hoverable components
 
@@ -382,6 +434,32 @@ The provided event info is from the mouse move that triggered the action (enteri
 While the mouse movement is kept inside or outside, no events are fired and those mouse move events are
 not propagated. Only when the state is changed the handlers are triggered.
 
+To recognize whether a `Hoverable` added to the game handled an event, the `handled` field can be
+set to true in the event can be checked in the corresponding method in the game class, or further
+down the chain if you let the event continue to propagate.
+
+In the following example it can be seen how it is used with `onHoverEnter`, the same technique can
+also be applied to `onHoverLeave`.
+
+```dart
+class MyComponent extends PositionComponent with Hoverable {
+  @override
+  bool onHoverEnter(PointerHoverInfo info) {
+    info.handled = true;
+    return true;
+  }
+}
+
+class MyGame extends FlameGame with HasHoverables {
+  @override
+  void onHoverEnter(PointerHoverInfo info) {
+    if (info.handled) {
+      // Do something if a child handled the event
+    }
+  }
+}
+```
+
 ### GestureHitboxes
 
 The `GestureHitboxes` mixin is used to more accurately recognize gestures on top of your
@@ -395,7 +473,7 @@ You can add new hitboxes to the component that has the `GestureHitboxes` mixin j
 added in the below `Collidable` example.
 
 More information about how to define hitboxes can be found in the hitbox section of the 
-[collision detection](../collision_detection.md#ShapeHitbox) docs.
+[collision detection](../collision_detection.md#shapehitbox) docs.
 
 An example of how to use it can be seen
 [here](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/input/gesture_hitboxes_example).

@@ -88,8 +88,8 @@ extension RectExtension on Rect {
 
   /// Creates a [Rect] that represents the bounds of the list [pts].
   @Deprecated(
-    'Use RectExtension.getBounds() instead. This function will be removed'
-    ' in 1.2.0',
+    'Use RectExtension.getBounds() instead. This function will be removed '
+    'in v1.2.0',
   )
   static Rect fromBounds(List<Vector2> pts) {
     return getBounds(pts);
@@ -111,8 +111,8 @@ extension RectExtension on Rect {
 
   /// Constructs a [Rect] with a [width] and [height] around the [center] point.
   @Deprecated(
-    'Use RectExtension.fromCenter() instead. This function will be removed'
-    ' in 1.2.0',
+    'Use RectExtension.fromCenter() instead. This function will be removed '
+    'in v1.2.0',
   )
   static Rect fromVector2Center({
     required Vector2 center,

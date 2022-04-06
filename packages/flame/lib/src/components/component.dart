@@ -44,6 +44,21 @@ class Component {
   Component? get parent => _parent;
   Component? _parent;
 
+  /// Returns the first child that matches the given type [T].
+  ///
+  /// As opposed to `children.whereType<T>().first`, this method returns null
+  /// instead of a [StateError] when no matching children are found.
+  T? firstChild<T extends Component>() {
+    final it = children.whereType<T>().iterator;
+    return it.moveNext() ? it.current : null;
+  }
+
+  /// Returns the last child that matches the given type [T].
+  T? lastChild<T extends Component>() {
+    final it = children.reversed().whereType<T>().iterator;
+    return it.moveNext() ? it.current : null;
+  }
+
   /// The children of the current component.
   ///
   /// This getter will automatically create the [ComponentSet] container within
@@ -251,9 +266,7 @@ class Component {
     if (isMounted) {
       return Future.value();
     }
-
     _mountCompleter ??= Completer<void>();
-
     return _mountCompleter!.future;
   }
 
@@ -321,13 +334,44 @@ class Component {
   /// An iterator producing this component's parent, then its parent's parent,
   /// then the great-grand-parent, and so on, until it reaches a component
   /// without a parent.
-  Iterable<T> ancestors<T extends Component>({bool includeSelf = false}) sync* {
+  Iterable<Component> ancestors({bool includeSelf = false}) sync* {
     var current = includeSelf ? this : parent;
     while (current != null) {
-      if (current is T) {
-        yield current;
-      }
+      yield current;
       current = current.parent;
+    }
+  }
+
+  /// Recursively enumerates all nested [children].
+  ///
+  /// The search is depth-first in preorder. In other words, it explores the
+  /// first child completely before visiting the next sibling, and the root
+  /// component is visited before its children.
+  ///
+  /// This ordering of descendants is considered standard in Flame: it is the
+  /// same order in which the components will normally be updated and rendered
+  /// on every game cycle. The optional parameter [reversed] allows iterating
+  /// through the same set of descendants in reverse order.
+  ///
+  /// The [Iterable] produced by this method is "lazy", which means it will only
+  /// traverse the component tree when required. This allows efficient chaining
+  /// of various iterable methods, such as filtering, early stopping, folding,
+  /// and so on -- see the documentation of the [Iterable] class for details.
+  Iterable<Component> descendants({
+    bool includeSelf = false,
+    bool reversed = false,
+  }) sync* {
+    if (includeSelf && !reversed) {
+      yield this;
+    }
+    if (hasChildren) {
+      final childrenIterable = reversed ? children.reversed() : children;
+      for (final child in childrenIterable) {
+        yield* child.descendants(includeSelf: true, reversed: reversed);
+      }
+    }
+    if (includeSelf && reversed) {
+      yield this;
     }
   }
 
@@ -390,7 +434,6 @@ class Component {
           _state == LifecycleState.removed,
     );
     _parent = parent;
-    debugMode |= parent.debugMode;
     parent.lifecycle._children.add(this);
 
     if (!isLoaded) {
@@ -423,9 +466,10 @@ class Component {
   }
 
   Future<void>? _load() {
+    assert(_parent != null);
     assert(_state == LifecycleState.uninitialized);
     _state = LifecycleState.loading;
-    onGameResize(findGame()!.canvasSize);
+    onGameResize(_parent!.findGame()!.canvasSize);
     final onLoadFuture = onLoad();
     if (onLoadFuture == null) {
       _state = LifecycleState.loaded;
@@ -455,6 +499,7 @@ class Component {
     }
     _mountCompleter?.complete();
     _mountCompleter = null;
+    debugMode |= _parent!.debugMode;
     onMount();
     _state = LifecycleState.mounted;
     if (!existingChild) {
@@ -534,27 +579,9 @@ class Component {
     bool Function(T) handler, {
     bool includeSelf = false,
   }) {
-    var shouldContinue = true;
-    if (includeSelf && this is T) {
-      shouldContinue = handler(this as T);
-      if (!shouldContinue) {
-        return false;
-      }
-    }
-    if (_children != null) {
-      for (final child in _children!.reversed()) {
-        shouldContinue = child.propagateToChildren(handler);
-        if (shouldContinue && child is T) {
-          shouldContinue = handler(child);
-        } else if (shouldContinue && child is FlameGame) {
-          shouldContinue = child.propagateToChildren<T>(handler);
-        }
-        if (!shouldContinue) {
-          break;
-        }
-      }
-    }
-    return shouldContinue;
+    return descendants(reversed: true, includeSelf: includeSelf)
+        .whereType<T>()
+        .every(handler);
   }
 
   /// Returns the closest parent further up the hierarchy that satisfies type=T,

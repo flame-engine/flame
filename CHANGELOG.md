@@ -3,6 +3,120 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2022-03-30
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`flame_test` - `v1.3.0`](#flame_test---v130)
+
+---
+
+#### `flame_test` - `v1.3.0`
+
+ - **FIX**: Fix calculation of AABB for `ShapeHitbox`es (#1481). ([a559d9a1](https://github.com/flame-engine/flame/commit/a559d9a12bfb42e161469745795fb91cdf161f8b))
+ - **FEAT**: flame tests can now generate golden tests (#1501). ([316a0b3b](https://github.com/flame-engine/flame/commit/316a0b3bb0996ed20a3b93175102524b38bfa3e2))
+
+
+## 2022-03-28
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+- There are no breaking changes in this release.
+
+Packages with other changes:
+
+- There are no other changes in this release.
+
+Packages graduated to a stable release (see pre-releases prior to the stable version for changelog entries):
+
+- `flame` - `v1.1.0`
+- `flame_audio` - `v1.0.1`
+- `flame_bloc` - `v1.2.0`
+- `flame_fire_atlas` - `v1.0.1`
+- `flame_flare` - `v1.1.0`
+- `flame_forge2d` - `v0.9.0`
+- `flame_oxygen` - `v0.1.1`
+- `flame_rive` - `v1.1.0`
+- `flame_svg` - `v1.1.0`
+- `flame_test` - `v1.2.0`
+- `flame_tiled` - `v1.3.0`
+
+## 2022-03-22
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`flame_audio` - `v1.0.1-releasecandidate.1`](#flame_audio---v101-releasecandidate1)
+ - [`flame_fire_atlas` - `v1.0.1-releasecandidate.1`](#flame_fire_atlas---v101-releasecandidate1)
+ - [`flame_flare` - `v1.1.0-releasecandidate.1`](#flame_flare---v110-releasecandidate1)
+ - [`flame_oxygen` - `v0.1.1-releasecandidate.1`](#flame_oxygen---v011-releasecandidate1)
+ - [`flame` - `v1.1.0-releasecandidate.6`](#flame---v110-releasecandidate6)
+ - [`flame_bloc` - `v1.2.0-releasecandidate.6`](#flame_bloc---v120-releasecandidate6)
+ - [`flame_forge2d` - `v0.9.0-releasecandidate.6`](#flame_forge2d---v090-releasecandidate6)
+ - [`flame_svg` - `v1.1.0-releasecandidate.5`](#flame_svg---v110-releasecandidate5)
+ - [`flame_test` - `v1.2.0-releasecandidate.6`](#flame_test---v120-releasecandidate6)
+ - [`flame_rive` - `v1.1.0-releasecandidate.6`](#flame_rive---v110-releasecandidate6)
+ - [`flame_tiled` - `v1.3.0-releasecandidate.6`](#flame_tiled---v130-releasecandidate6)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `flame_svg` - `v1.1.0-releasecandidate.5`
+ - `flame_test` - `v1.2.0-releasecandidate.6`
+ - `flame_rive` - `v1.1.0-releasecandidate.6`
+ - `flame_tiled` - `v1.3.0-releasecandidate.6`
+
+---
+
+#### `flame_audio` - `v1.0.1-releasecandidate.1`
+
+#### `flame_fire_atlas` - `v1.0.1-releasecandidate.1`
+
+#### `flame_flare` - `v1.1.0-releasecandidate.1`
+
+#### `flame_oxygen` - `v0.1.1-releasecandidate.1`
+
+#### `flame` - `v1.1.0-releasecandidate.6`
+
+ - **FIX**: Only end collisions where there was a collision (#1471). ([e1e87fc4](https://github.com/flame-engine/flame/commit/e1e87fc42226c1db2f472377901031277349beb3))
+ - **FIX**: `debugMode` should be inherited from parent when mounted (#1469). ([e894d201](https://github.com/flame-engine/flame/commit/e894d20133f6e142c67286c449135e37e892f35b))
+ - **FEAT**: Added method that returned descendants (#1461). ([a41f5376](https://github.com/flame-engine/flame/commit/a41f53762ab49bb3d51f1f96c37b934a7ab83844))
+ - **FEAT**: Possibility to mark gesture events as handled (#1465). ([4c3960c3](https://github.com/flame-engine/flame/commit/4c3960c3418f8ff4d557c1764c6793468238a8da))
+ - **FEAT**: adding loaded future to the component (#1466). ([6434829b](https://github.com/flame-engine/flame/commit/6434829b45cc131719fd950ef2d262d0bfbdff1b))
+ - **FEAT**: Deprecating Rect methods (#1455). ([4ddd90aa](https://github.com/flame-engine/flame/commit/4ddd90aafc40a3f5ce3d9b181a66369436de3c9c))
+ - **FEAT**: Added .anchor property to CameraComponent.Viewfinder (#1458). ([d51dc5e1](https://github.com/flame-engine/flame/commit/d51dc5e132bc3ba5763be4de36131d3739a6c906))
+ - **DOCS**: `Rect` extension docs is out of date (#1451). ([7e505722](https://github.com/flame-engine/flame/commit/7e505722491dd03fea6d2329ff4df2447143d45b))
+
+#### `flame_bloc` - `v1.2.0-releasecandidate.6`
+
+ - **FEAT**: Possibility to mark gesture events as handled (#1465). ([4c3960c3](https://github.com/flame-engine/flame/commit/4c3960c3418f8ff4d557c1764c6793468238a8da))
+
+#### `flame_forge2d` - `v0.9.0-releasecandidate.6`
+
+ - **FEAT**: updating forge2d version (#1479). ([4678e21a](https://github.com/flame-engine/flame/commit/4678e21a0b714b8344ae2453b1ac6df68adfb4cd))
+ - **FEAT**: Possibility to mark gesture events as handled (#1465). ([4c3960c3](https://github.com/flame-engine/flame/commit/4c3960c3418f8ff4d557c1764c6793468238a8da))
+
+
 ## 2022-03-13
 
 ### Changes

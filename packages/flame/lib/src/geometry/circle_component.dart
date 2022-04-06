@@ -46,6 +46,11 @@ class CircleComponent extends ShapeComponent {
     return min(size.x, size.y) / 2;
   }
 
+  /// Set the radius of the circle (and therefore the [size]).
+  set radius(double value) {
+    size.setValues(value * 2, value * 2);
+  }
+
   // Used to not create new Vector2 objects every time radius is called.
   final Vector2 _scaledSize = Vector2.zero();
 
@@ -57,13 +62,17 @@ class CircleComponent extends ShapeComponent {
     return min(_scaledSize.x, _scaledSize.y) / 2;
   }
 
-  /// This render method doesn't rotate the canvas according to angle since a
-  /// circle will look the same rotated as not rotated.
   @override
   void render(Canvas canvas) {
     if (renderShape) {
       canvas.drawCircle((size / 2).toOffset(), radius, paint);
     }
+  }
+
+  @override
+  void renderDebugMode(Canvas canvas) {
+    super.renderDebugMode(canvas);
+    canvas.drawCircle((size / 2).toOffset(), radius, debugPaint);
   }
 
   /// Checks whether the represented circle contains the [point].

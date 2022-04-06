@@ -42,9 +42,8 @@ class MultipleShapesExample extends FlameGame
     var totalAdded = 1;
     while (totalAdded < 100) {
       lastToAdd = nextRandomCollidable(lastToAdd, screenHitbox);
-      final lastBottomRight =
-          lastToAdd.toAbsoluteRect().bottomRight.toVector2();
-      if (lastBottomRight.x < size.x && lastBottomRight.y < size.y) {
+      final lastBottomRight = lastToAdd.toAbsoluteRect().bottomRight;
+      if (lastBottomRight.dx < size.x && lastBottomRight.dy < size.y) {
         add(lastToAdd);
         totalAdded++;
       } else {
@@ -143,7 +142,7 @@ abstract class MyCollidable extends PositionComponent
   @override
   void render(Canvas canvas) {
     if (isDragged) {
-      final localCenter = (scaledSize / 2).toOffset();
+      final localCenter = scaledSize.toOffset() / 2;
       canvas.drawCircle(localCenter, 5, _dragIndicatorPaint);
     }
   }

@@ -2,6 +2,7 @@ import 'dart:math' as math;
 import 'dart:ui' hide Offset;
 
 import '../anchor.dart';
+import '../effects/provider_interfaces.dart';
 import '../extensions/offset.dart';
 import '../extensions/vector2.dart';
 import '../game/notifying_vector2.dart';
@@ -57,7 +58,7 @@ import 'component.dart';
 /// the approximate bounding rectangle of the rendered picture. If you
 /// do not specify the size of a PositionComponent, then it will be
 /// equal to zero and the component won't be able to respond to taps.
-class PositionComponent extends Component {
+class PositionComponent extends Component implements PositionProvider {
   PositionComponent({
     Vector2? position,
     Vector2? size,
@@ -92,7 +93,9 @@ class PositionComponent extends Component {
   Matrix4 get transformMatrix => transform.transformMatrix;
 
   /// The position of this component's anchor on the screen.
+  @override
   NotifyingVector2 get position => transform.position;
+  @override
   set position(Vector2 position) => transform.position = position;
 
   /// X position of this component's anchor on the screen.
@@ -178,17 +181,18 @@ class PositionComponent extends Component {
   /// has been applied.
   double get absoluteAngle {
     // TODO(spydon): take scale into consideration
-    return ancestors<PositionComponent>()
+    return ancestors()
+        .whereType<PositionComponent>()
         .fold<double>(angle, (totalAngle, c) => totalAngle + c.angle);
   }
 
   /// The resulting scale after all the ancestors and the components own scale
   /// has been applied.
   Vector2 get absoluteScale {
-    return ancestors<PositionComponent>().fold<Vector2>(
-      scale.clone(),
-      (totalScale, c) => totalScale..multiply(c.scale),
-    );
+    return ancestors().whereType<PositionComponent>().fold<Vector2>(
+          scale.clone(),
+          (totalScale, c) => totalScale..multiply(c.scale),
+        );
   }
 
   /// Measure the distance (in parent's coordinate space) between this

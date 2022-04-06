@@ -83,14 +83,14 @@ abstract class PositionInfo<T> extends BaseInfo<T> {
   ) : super(raw);
 }
 
-class TapDownInfo extends PositionInfo<TapDownDetails> {
+class TapDownInfo extends PositionInfo<TapDownDetails> with _HandledField {
   TapDownInfo.fromDetails(
     Game game,
     TapDownDetails raw,
   ) : super(game, raw.globalPosition, raw);
 }
 
-class TapUpInfo extends PositionInfo<TapUpDetails> {
+class TapUpInfo extends PositionInfo<TapUpDetails> with _HandledField {
   TapUpInfo.fromDetails(
     Game game,
     TapUpDetails raw,
@@ -139,7 +139,8 @@ class PointerScrollInfo extends PositionInfo<PointerScrollEvent> {
   ) : super(game, raw.position, raw);
 }
 
-class PointerHoverInfo extends PositionInfo<PointerHoverEvent> {
+class PointerHoverInfo extends PositionInfo<PointerHoverEvent>
+    with _HandledField {
   PointerHoverInfo.fromDetails(
     Game game,
     PointerHoverEvent raw,
@@ -153,14 +154,15 @@ class DragDownInfo extends PositionInfo<DragDownDetails> {
   ) : super(game, raw.globalPosition, raw);
 }
 
-class DragStartInfo extends PositionInfo<DragStartDetails> {
+class DragStartInfo extends PositionInfo<DragStartDetails> with _HandledField {
   DragStartInfo.fromDetails(
     Game game,
     DragStartDetails raw,
   ) : super(game, raw.globalPosition, raw);
 }
 
-class DragUpdateInfo extends PositionInfo<DragUpdateDetails> {
+class DragUpdateInfo extends PositionInfo<DragUpdateDetails>
+    with _HandledField {
   late final EventDelta delta = EventDelta(_game, raw.delta);
 
   DragUpdateInfo.fromDetails(
@@ -169,7 +171,7 @@ class DragUpdateInfo extends PositionInfo<DragUpdateDetails> {
   ) : super(game, raw.globalPosition, raw);
 }
 
-class DragEndInfo extends BaseInfo<DragEndDetails> {
+class DragEndInfo extends BaseInfo<DragEndDetails> with _HandledField {
   final Game _game;
   late final Vector2 velocity =
       _game.projector.unscaleVector(raw.velocity.pixelsPerSecond.toVector2());
@@ -218,4 +220,8 @@ class ScaleUpdateInfo extends PositionInfo<ScaleUpdateDetails> {
     Game game,
     ScaleUpdateDetails raw,
   ) : super(game, raw.focalPoint, raw);
+}
+
+mixin _HandledField {
+  bool handled = false;
 }

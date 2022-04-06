@@ -4,13 +4,7 @@
 /// creates an (x) button to hide the overlay.
 function run_flutter_app(url) {
   let id = compute_iframe_id(url);
-  if (!$('#flutter-app-overlay').length) {
-    $('body').append($(`
-      <div id="flutter-app-overlay">
-        <button id="flutter-app-close-button" onclick="close_flutter_app()">✖</button>
-      </div>`
-    ));
-  }
+  create_overlay();
   if (!$('#' + id).length) {
     $('#flutter-app-overlay').append($(
       `<iframe id="${id}" class="flutter-app" src="${url}"></iframe>`
@@ -20,9 +14,29 @@ function run_flutter_app(url) {
   $('#' + id).addClass('active');
 }
 
+function open_code_listings(id) {
+  create_overlay();
+  if (!$('#flutter-app-overlay #' + id).length) {
+    $('#' + id).appendTo($('#flutter-app-overlay'));
+  }
+  $('#flutter-app-overlay').addClass('active');
+  $('#' + id).addClass('active');
+}
+
+function create_overlay() {
+  if (!$('#flutter-app-overlay').length) {
+    $('body').append($(`
+      <div id="flutter-app-overlay">
+        <button id="flutter-app-close-button" onclick="close_flutter_app()">✖</button>
+      </div>`
+    ));
+  }
+}
+
 /// Handler for the (x) close button on an app iframe.
 function close_flutter_app() {
-  $('#flutter-app-overlay iframe').removeClass('active');
+  $('#flutter-app-overlay > iframe').removeClass('active');
+  $('#flutter-app-overlay > div').removeClass('active');
   $('#flutter-app-overlay').removeClass('active');
 }
 

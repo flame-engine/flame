@@ -71,6 +71,14 @@ div.expander {
   flex: 1;
 }
 
+p + ul {
+  margin-top: -0.5em;
+}
+
+ul ul.simple p {
+  margin-bottom: 1em;
+}
+
 
 /*----------------------------------------------------------------------------*
  * Top navigation bar
@@ -587,6 +595,7 @@ pre {
   border-radius: 0.4em;
   box-shadow: 0px 0px 3px black;
   color: #888;
+  font-family: var(--font-mono);
   font-size: 85%;
   line-height: 125%;
   margin: 0;
@@ -769,4 +778,11 @@ div.admonition.seealso {
   --admonition-icon: '\f064';
   --admonition-icon-color: #acfab6;
   --admonition-title-background-color: #285131;
+}
+
+div.admonition.admonition-deprecated {
+  --admonition-border-color: black;
+  --admonition-icon: '\f1f8';
+  --admonition-icon-color: #555;
+  --admonition-title-background-color: #1c1c1c;
 }
