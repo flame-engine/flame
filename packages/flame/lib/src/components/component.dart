@@ -623,7 +623,7 @@ class Component {
   /// in order to translate from the parent's coordinate system into the local
   /// one. Make sure that your component implements this interface if it alters
   /// the coordinate system when rendering.
-  Iterable<Component> componentsAtPoint(covariant Vector2 point) sync* {
+  Iterable<ComponentPoint> componentsAtPoint(covariant Vector2 point) sync* {
     Vector2? localPoint = point;
     if (this is CoordinateTransform) {
       localPoint = (this as CoordinateTransform).parentToLocal(point);
@@ -637,7 +637,7 @@ class Component {
       }
     }
     if (containsPoint(localPoint)) {
-      yield this;
+      yield ComponentPoint(this, localPoint);
     }
   }
 
@@ -777,4 +777,10 @@ class _LifecycleManager {
       child._mount();
     }
   }
+}
+
+class ComponentPoint {
+  ComponentPoint(this.component, this.point);
+  final Component component;
+  final Vector2 point;
 }
