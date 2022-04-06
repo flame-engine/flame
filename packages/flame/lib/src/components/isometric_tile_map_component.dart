@@ -82,7 +82,6 @@ class IsometricTileMapComponent extends PositionComponent {
   /// This is the vertical height of each block; by default it's half the tile size.
   double get effectiveTileHeight => tileHeight ?? (effectiveTileSize.y / 2);
 
-  // render specific variables
   Sprite _renderSprite;
   @override
   void render(Canvas c) {
