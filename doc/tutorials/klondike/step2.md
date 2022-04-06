@@ -6,8 +6,8 @@ game. This includes the main game class, and the general layout.
 
 ## KlondikeGame
 
-In Flame universe, the **FlameGame** class is the cornerstone of any game. This
-class runs the game loop, dispatches events, owns all the components that
+In Flame universe, the **FlameGame** class is the cornerstone of most games.
+This class runs the game loop, dispatches events, owns all the components that
 comprise the game (the component tree), and usually also serves as the central
 repository for the game's state.
 
@@ -250,8 +250,8 @@ Lastly, we create a camera object to look at the `world`. Internally, the camera
 consists of two parts: a **viewport** and a **viewfinder**. The default viewport
 is `MaxViewport`, which takes up the entire available screen size -- this is
 exactly what we need for our game, so no need to change anything. The
-viewfinder, on the other hand, needs to be set up to properly take into account
-the dimensions of the underlying world.
+viewfinder, on the other hand, needs to be set up to properly take the
+dimensions of the underlying world into account.
 
 We want the entire card layout to be visible on the screen without the need to
 scroll. In order to accomplish this, we specify that we want the entire world
