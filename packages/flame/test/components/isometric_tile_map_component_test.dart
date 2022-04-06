@@ -37,25 +37,18 @@ void main() {
       expect(c.getBlockCenterPosition(const Block(0, 0)), closeToVector(0, 0));
     });
 
-    test('variable block conversion returns same value as normal function', () {
+    test('height scaling', () {
       final c = IsometricTileMapComponent(
         _MockSpriteSheet(),
         map,
-        destTileSize: Vector2.all(32.0),
-        tileHeight: 8,
+        destTileSize: Vector2(156, 181),
       );
-      expect(c.getVariableRenderPositionInts(1, 1),
-          c.getBlockRenderPositionInts(1, 1));
-    });
 
-    test('variable block conversion', () {
-      final c = IsometricTileMapComponent(
-        _MockSpriteSheet(),
-        map,
-        destTileSize: Vector2.all(32.0),
-        propSize: Vector2(32, 40),
+      //expect the block to be directly below
+      expect(
+        c.getBlockRenderPositionInts(1, 1),
+        closeToVector(0, 181 / 2),
       );
-      expect(c.getVariableRenderPositionInts(1, 1), Vector2(-16, 32 - 40));
     });
   });
 }

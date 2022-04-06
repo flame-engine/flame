@@ -52,17 +52,11 @@ class IsometricTileMapComponent extends PositionComponent {
   /// Note: this must be measured in the destination space.
   double? tileHeight;
 
-  /// propTile's max size. This size is used to define negative indexed elements.
-  /// Note : Currently this only accounts for variable height, width is disregarded
-  /// and [tileset.srcSize.x] is used instead.
-  Vector2? propSize;
-
   IsometricTileMapComponent(
     this.tileset,
     this.matrix, {
     this.destTileSize,
     this.tileHeight,
-    this.propSize,
     Vector2? position,
     Vector2? size,
     Vector2? scale,
@@ -88,17 +82,8 @@ class IsometricTileMapComponent extends PositionComponent {
   /// This is the vertical height of each block; by default it's half the tile size.
   double get effectiveTileHeight => tileHeight ?? (effectiveTileSize.y / 2);
 
-  /// gets the effective propSize. PropSize should be assigned if prop dimension are different from srcSize of tilset
-  Vector2 get propsMaxSize => propSize ?? effectiveTileSize;
-
   // render specific variables
-
-  /// sourceRenderPosition of the sprite on the image
-  final Vector2 _renderSourcePosition = Vector2.zero();
-
-  /// renderSprite
   Sprite _renderSprite;
-
   @override
   void render(Canvas c) {
     _renderSprite.image = tileset.image;
@@ -107,27 +92,12 @@ class IsometricTileMapComponent extends PositionComponent {
       for (var j = 0; j < matrix[i].length; j++) {
         final element = matrix[i][j];
         if (element != -1) {
-          if (element < -1) {
-            final yRowShift = ((element + 2).abs() /
-                        (tileset.image.width / propsMaxSize.x).floor())
-                    .floor() +
-                1;
-            final xColShift = (element + 2).abs() %
-                (tileset.image.width / propsMaxSize.x).floor();
-            _renderSourcePosition.setValues(
-              propsMaxSize.x * xColShift,
-              tileset.image.height - propsMaxSize.y * yRowShift,
-            );
-            _renderSprite.srcSize = propsMaxSize;
-            _renderSprite.srcPosition = _renderSourcePosition;
-          } else {
-            _renderSprite = tileset.getSpriteById(element);
-          }
-          final p = getVariableRenderPositionInts(j, i);
+          _renderSprite = tileset.getSpriteById(element);
+          final p = getBlockRenderPositionInts(j, i);
           _renderSprite.render(
             c,
             position: p,
-            size: element < -1 ? propsMaxSize : size,
+            size: size,
           );
         }
       }
@@ -146,19 +116,11 @@ class IsometricTileMapComponent extends PositionComponent {
   /// Same as getBlockRenderPosition but the arguments are exploded as integers.
   Vector2 getBlockRenderPositionInts(int i, int j) {
     final halfTile = Vector2(
-        effectiveTileSize.x / 2, (effectiveTileSize.y / 2) / scalingFactor);
+      effectiveTileSize.x / 2,
+      (effectiveTileSize.y / 2) / scalingFactor,
+    );
     final pos = Vector2(i.toDouble(), j.toDouble())..multiply(halfTile);
     return cartToIso(pos) - halfTile;
-  }
-
-  /// Same as [getBlockRenderPositionInts] but is used for props ie. elements with <= -2 values
-  ///
-  /// This accounts for difference in size of the [propSize].
-  Vector2 getVariableRenderPositionInts(int i, int j) {
-    final initialPosition = getBlockRenderPositionInts(i, j);
-    initialPosition.x -= propsMaxSize.x - effectiveTileSize.x;
-    initialPosition.y -= propsMaxSize.y - effectiveTileSize.y;
-    return initialPosition;
   }
 
   /// Get the position of the center of the surface of the isometric tile in
