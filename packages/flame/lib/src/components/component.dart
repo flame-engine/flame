@@ -8,6 +8,7 @@ import '../../components.dart';
 import '../../game.dart';
 import '../../input.dart';
 import '../cache/value_cache.dart';
+import 'mixins/coordinate_transform.dart';
 
 /// [Component]s are the basic building blocks for your game.
 ///
@@ -590,10 +591,55 @@ class Component {
     return (parent is T ? parent : parent?.findParent<T>()) as T?;
   }
 
-  /// Called to check whether the point is to be counted as within the component
-  /// It needs to be overridden to have any effect, like it is in
-  /// PositionComponent.
+  /// Checks whether the [point] is within this component's bounds.
+  ///
+  /// This method should be implemented for any component that has a visual
+  /// representation and non-zero size. The [point] is in the local coordinate
+  /// space.
   bool containsPoint(Vector2 point) => false;
+
+  /// An iterable of descendants intersecting the given [point], which is given
+  /// in the parent's coordinate space.
+  ///
+  /// This method is approximately equivalent to
+  /// ```dart
+  /// descendants(reversed: true, includeSelf: true)
+  ///   .where((c) => c.containsGlobalPoint(point);
+  /// ```
+  /// except that it uses ".containsPoint()" and transforms the [point] between
+  /// the coordinate systems as it goes deeper into the component tree.
+  ///
+  /// More precisely, imagine a ray originating at a certain point (x, y) on
+  /// the screen, and extending perpendicularly to the screen's surface into
+  /// your game's world. The purpose of this method is to find all components
+  /// that intersect with this ray, in the order from those that are closest to
+  /// the user to those that are farthest.
+  ///
+  /// If your component overrides [renderTree], then it almost certainly needs
+  /// to override this method as well, so that this method can find all rendered
+  /// components wherever they are.
+  ///
+  /// The default implementation relies on the [CoordinateTransform] interface
+  /// in order to translate from the parent's coordinate system into the local
+  /// one. Make sure that your component implements this interface if it alters
+  /// the coordinate system when rendering.
+  Iterable<Component> componentsAtPoint(covariant Vector2 point) sync* {
+    Vector2? localPoint = point;
+    if (this is CoordinateTransform) {
+      localPoint = (this as CoordinateTransform).parentToLocal(point);
+      if (localPoint == null) {
+        return;
+      }
+    }
+    if (_children != null) {
+      for (final child in _children!.reversed()) {
+        yield* child.componentsAtPoint(localPoint);
+      }
+    }
+    if (containsPoint(localPoint)) {
+      yield this;
+    }
+  }
 
   /// Usually this is not something that the user would want to call since the
   /// component list isn't re-ordered when it is called.
