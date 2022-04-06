@@ -3,8 +3,10 @@ import 'dart:ui';
 import 'package:flame/components.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame/game.dart' hide Viewport;
+import 'package:flame/input.dart';
 
-class CameraComponentPropertiesExample extends FlameGame {
+class CameraComponentPropertiesExample extends FlameGame
+    with HasTappables {
   static const description = '''
     This example uses FixedSizeViewport which is dynamically sized and 
     positioned based on the size of the game widget.
@@ -13,6 +15,8 @@ class CameraComponentPropertiesExample extends FlameGame {
     green dot being the origin. The viewfinder uses custom anchor in order to
     declare its "center" half-way between the bottom left corner and the true
     center.
+    
+    Click at any point within the viewport to create a circle there.
   ''';
 
   CameraComponent? _camera;
@@ -40,6 +44,19 @@ class CameraComponentPropertiesExample extends FlameGame {
     super.onGameResize(size);
     _camera?.viewport.size = size * 0.7;
     _camera?.viewport.position = size * 0.6;
+  }
+
+
+  @override
+  void onTapDown(int pointerId, TapDownInfo info) { // ignore: must_call_super
+    final canvasPoint = info.eventPosition.widget;
+    for (final pair in componentsAtPoint(canvasPoint)) {
+      if (pair.component is Background) {
+        pair.component.add(
+          ExpandingCircle(pair.point.toOffset()),
+        );
+      }
+    }
   }
 }
 
@@ -84,5 +101,36 @@ class Background extends Component {
     canvas.drawLine(Offset.zero, const Offset(0, 10), axisPaint);
     canvas.drawLine(Offset.zero, const Offset(10, 0), axisPaint);
     canvas.drawCircle(Offset.zero, 1.0, originPaint);
+  }
+
+  @override
+  bool containsPoint(Vector2 point) => true;
+}
+
+class ExpandingCircle extends Component {
+  ExpandingCircle(this.center);
+
+  static const maxRadius = 50;
+  final Offset center;
+  double _radius = 0;
+  final Paint paint = Paint()
+    ..color = const Color(0xffffffff)
+    ..style = PaintingStyle.stroke
+    ..strokeWidth = 1;
+
+  @override
+  void update(double dt) {
+    _radius += dt * 10;
+    if (_radius >= maxRadius) {
+      removeFromParent();
+    } else {
+      final opacity = 1 - _radius / maxRadius;
+      paint.color = const Color(0xffffffff).withOpacity(opacity);
+    }
+  }
+
+  @override
+  void render(Canvas canvas) {
+    canvas.drawCircle(center, _radius, paint);
   }
 }
