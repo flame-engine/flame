@@ -79,7 +79,8 @@ class IsometricTileMapComponent extends PositionComponent {
   /// The current scaling factor for the isometric view.
   double get scalingFactor => effectiveTileSize.y / effectiveTileSize.x;
 
-  /// This is the vertical height of each block; by default it's half the tile size.
+  /// This is the vertical height of each block; by default it's half the
+  /// tile size.
   double get effectiveTileHeight => tileHeight ?? (effectiveTileSize.y / 2);
 
   Sprite _renderSprite;
