@@ -10,14 +10,19 @@ class CircularViewport extends Viewport {
   }
 
   Path _clipPath = Path();
+  double _halfDiagonalSquared = 0;
 
   @override
   void clip(Canvas canvas) => canvas.clipPath(_clipPath, doAntiAlias: false);
+
+  @override
+  bool containsPoint(Vector2 point) => point.length2 <=_halfDiagonalSquared;
 
   @override
   void onViewportResize() {
     final x = size.x / 2;
     final y = size.y / 2;
     _clipPath = Path()..addOval(Rect.fromLTRB(-x, -y, x, y));
+    _halfDiagonalSquared = size.length2 / 4;
   }
 }

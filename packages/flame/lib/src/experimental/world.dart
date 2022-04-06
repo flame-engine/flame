@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:meta/meta.dart';
+import 'package:vector_math/vector_math_64.dart';
 
 import '../components/component.dart';
 import 'camera_component.dart';
@@ -19,5 +20,14 @@ class World extends Component {
   void renderFromCamera(Canvas canvas) {
     assert(CameraComponent.currentCamera != null);
     super.renderTree(canvas);
+  }
+
+  @override
+  Iterable<ComponentPoint> componentsAtPoint(Vector2 point) {
+    return const Iterable.empty();
+  }
+
+  Iterable<ComponentPoint> componentsAtPointFromCamera(Vector2 point) {
+    return super.componentsAtPoint(point);
   }
 }

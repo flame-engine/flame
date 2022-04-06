@@ -619,7 +619,7 @@ class Component {
   /// If your component overrides [renderTree], then it almost certainly needs
   /// to override this method as well, so that this method can find all rendered
   /// components wherever they are.
-  Iterable<ComponentPoint> componentsAtPoint(covariant Vector2 point) sync* {
+  Iterable<ComponentPoint> componentsAtPoint(Vector2 point) sync* {
     Vector2? localPoint = point;
     if (this is CoordinateTransform) {
       localPoint = (this as CoordinateTransform).parentToLocal(point);
