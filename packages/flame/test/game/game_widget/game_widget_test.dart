@@ -75,9 +75,9 @@ FlameTester<_MyGame> myGame({required bool open}) {
 }
 
 void main() {
-  myGame(open: false).widgetTest(
+  myGame(open: false).testGameWidget(
     'calls onAttach when it enters the tree and onDetach and it leaves',
-    (game, tester) async {
+    verify: (game, tester) async {
       expect(game.onAttachCalled, isFalse);
 
       await tester.tap(find.text('Toggle'));
@@ -95,9 +95,10 @@ void main() {
       expect(game.onDetachCalled, isTrue);
     },
   );
-  myGame(open: true).widgetTest(
+
+  myGame(open: true).testGameWidget(
     'size is kept on game after a detach',
-    (game, tester) async {
+    verify: (game, tester) async {
       expect(game.hasLayout, isTrue);
 
       await tester.tap(find.text('Toggle'));
