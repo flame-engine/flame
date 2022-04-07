@@ -596,10 +596,13 @@ class Component {
   /// This method should be implemented for any component that has a visual
   /// representation and non-zero size. The [point] is in the local coordinate
   /// space.
-  bool containsPoint(Vector2 point) => false;
+  bool containsLocalPoint(Vector2 point) => false;
+
+  @Deprecated('Prefer method containsLocalPoint() instead.')
+  bool containsPoint(Vector2 point) => containsLocalPoint(point);
 
   /// An iterable of descendant components intersecting the given point. The
-  /// [point] is in the parent's coordinate space.
+  /// [point] is in the local coordinate space.
   ///
   /// More precisely, imagine a ray originating at a certain point (x, y) on
   /// the screen, and extending perpendicularly to the screen's surface into
@@ -620,20 +623,19 @@ class Component {
   /// to override this method as well, so that this method can find all rendered
   /// components wherever they are.
   Iterable<ComponentPoint> componentsAtPoint(Vector2 point) sync* {
-    Vector2? localPoint = point;
-    if (this is CoordinateTransform) {
-      localPoint = (this as CoordinateTransform).parentToLocal(point);
-      if (localPoint == null) {
-        return;
-      }
-    }
     if (_children != null) {
       for (final child in _children!.reversed()) {
-        yield* child.componentsAtPoint(localPoint);
+        Vector2? childPoint = point;
+        if (child is CoordinateTransform) {
+          childPoint = (child as CoordinateTransform).parentToLocal(point);
+        }
+        if (childPoint != null) {
+          yield* child.componentsAtPoint(childPoint);
+        }
       }
     }
-    if (containsPoint(localPoint)) {
-      yield ComponentPoint(this, localPoint);
+    if (containsLocalPoint(point)) {
+      yield ComponentPoint(this, point);
     }
   }
 
@@ -775,8 +777,21 @@ class _LifecycleManager {
   }
 }
 
+@immutable
 class ComponentPoint {
-  ComponentPoint(this.component, this.point);
+  const ComponentPoint(this.component, this.point);
   final Component component;
   final Vector2 point;
+
+  @override
+  bool operator ==(Object other) =>
+      other is ComponentPoint &&
+      other.component == component &&
+      other.point == point;
+
+  @override
+  int get hashCode => hashValues(component, point);
+
+  @override
+  String toString() => '<$component, $point>';
 }

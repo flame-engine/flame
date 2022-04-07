@@ -402,6 +402,56 @@ void main() {
         },
       );
     });
+
+    group('componentsAtPoint', () {
+      testWithFlameGame('nested components', (game) async {
+        final componentA = PositionComponent()
+          ..size = Vector2(200, 150)
+          ..scale = Vector2.all(2)
+          ..position = Vector2(350, 50)
+          ..addToParent(game);
+        final componentB = CircleComponent(radius: 10)
+          ..position = Vector2(150, 75)
+          ..anchor = Anchor.center
+          ..addToParent(componentA);
+        await game.ready();
+
+        expect(
+          game.componentsAtPoint(Vector2.zero()).toList(),
+          [ComponentPoint(game, Vector2.zero())],
+        );
+        expect(
+          game.componentsAtPoint(Vector2(400, 100)).toList(),
+          [
+            ComponentPoint(componentA, Vector2(25, 25)),
+            ComponentPoint(game, Vector2(400, 100)),
+          ],
+        );
+        expect(
+          game.componentsAtPoint(Vector2(650, 200)).toList(),
+          [
+            ComponentPoint(componentB, Vector2(10, 10)),
+            ComponentPoint(componentA, Vector2(150, 75)),
+            ComponentPoint(game, Vector2(650, 200)),
+          ],
+        );
+        expect(
+          game.componentsAtPoint(Vector2(664, 214)).toList(),
+          [
+            ComponentPoint(componentB, Vector2(17, 17)),
+            ComponentPoint(componentA, Vector2(157, 82)),
+            ComponentPoint(game, Vector2(664, 214)),
+          ],
+        );
+        expect(
+          game.componentsAtPoint(Vector2(664, 216)).toList(),
+          [
+            ComponentPoint(componentA, Vector2(157, 83)),
+            ComponentPoint(game, Vector2(664, 216)),
+          ],
+        );
+      });
+    });
   });
 }
 

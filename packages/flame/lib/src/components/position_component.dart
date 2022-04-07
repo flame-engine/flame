@@ -208,12 +208,16 @@ class PositionComponent extends Component
   /// component. The top and the left borders of the component are inclusive,
   /// while the bottom and the right borders are exclusive.
   @override
+  bool containsLocalPoint(Vector2 point) {
+    return (point.x >= 0) &&
+        (point.y >= 0) &&
+        (point.x < _size.x) &&
+        (point.y < _size.y);
+  }
+
+  @override
   bool containsPoint(Vector2 point) {
-    final local = absoluteToLocal(point);
-    return (local.x >= 0) &&
-        (local.y >= 0) &&
-        (local.x < _size.x) &&
-        (local.y < _size.y);
+    return containsLocalPoint(absoluteToLocal(point));
   }
 
   @override

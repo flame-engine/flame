@@ -83,6 +83,11 @@ class CircleComponent extends ShapeComponent {
         scaledRadius * scaledRadius;
   }
 
+  @override
+  bool containsLocalPoint(Vector2 point) {
+    return (point * 2 - size).length2 <= size.x * size.x;
+  }
+
   /// Returns the locus of points in which the provided line segment intersect
   /// the circle.
   ///
