@@ -3,12 +3,16 @@ import 'dart:collection';
 
 import 'package:flutter/painting.dart';
 import 'package:meta/meta.dart';
+import 'package:vector_math/vector_math_64.dart';
 
-import '../../components.dart';
-import '../../game.dart';
-import '../../input.dart';
 import '../cache/value_cache.dart';
+import '../game/mixins/game.dart';
+import '../gestures/events.dart';
+import '../text.dart';
+import 'component_point.dart';
+import 'component_set.dart';
 import 'mixins/coordinate_transform.dart';
+import 'position_type.dart';
 
 /// [Component]s are the basic building blocks for your game.
 ///
@@ -778,25 +782,4 @@ class _LifecycleManager {
       child._mount();
     }
   }
-}
-
-/// A simple tuple of a component and a point. This is a helper class for
-/// [Component.componentsAtPoint] method.
-@immutable
-class ComponentPoint {
-  const ComponentPoint(this.component, this.point);
-  final Component component;
-  final Vector2 point;
-
-  @override
-  bool operator ==(Object other) =>
-      other is ComponentPoint &&
-      other.component == component &&
-      other.point == point;
-
-  @override
-  int get hashCode => hashValues(component, point);
-
-  @override
-  String toString() => '<$component, $point>';
 }

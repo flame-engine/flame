@@ -4,6 +4,7 @@ import 'package:meta/meta.dart';
 import 'package:vector_math/vector_math_64.dart';
 
 import '../components/component.dart';
+import '../components/component_point.dart';
 import 'max_viewport.dart';
 import 'viewfinder.dart';
 import 'viewport.dart';
