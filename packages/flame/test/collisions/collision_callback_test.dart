@@ -393,12 +393,7 @@ void main() {
         game.update(0);
         expect(player.startCounter, 1);
         expect(player.onCollisionCounter, 1);
-        if (player.endCounter != 0) {
-          // Should not get in here since it can't both start and end
-          // the same collision in the same tick.
-          print('$i: ${player.position}');
-        }
-        //expect(player.endCounter, 0); // <---- this is the point that fails test
+        expect(player.endCounter, 0);
       }
 
       game.update(0);
@@ -411,6 +406,5 @@ void main() {
       expect(player.onCollisionCounter, 3);
       expect(player.endCounter, 0);
     },
-    skip: 'See issue #1478',
   );
 }

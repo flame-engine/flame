@@ -26,8 +26,10 @@ class CollisionProspect<T> {
   const CollisionProspect(this.a, this.b);
 
   @override
-  bool operator ==(Object o) => o is CollisionProspect && o.a == a && o.b == b;
+  bool operator ==(Object o) =>
+      o is CollisionProspect &&
+      ((o.a == a && o.b == b) || (o.a == b && o.b == a));
 
   @override
-  int get hashCode => Object.hash(a.hashCode, b.hashCode);
+  int get hashCode => Object.hashAllUnordered([a, b]);
 }
