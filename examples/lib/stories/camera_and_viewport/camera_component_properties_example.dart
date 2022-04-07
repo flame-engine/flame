@@ -46,8 +46,8 @@ class CameraComponentPropertiesExample extends FlameGame with HasTappables {
   }
 
   @override
+  // ignore: must_call_super
   void onTapDown(int pointerId, TapDownInfo info) {
-    // ignore: must_call_super
     final canvasPoint = info.eventPosition.widget;
     for (final cp in componentsAtPoint(canvasPoint)) {
       if (cp.component is Background) {
