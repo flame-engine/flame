@@ -67,10 +67,10 @@ abstract class Viewport extends Component implements PositionProvider {
   /// Tests whether the given point lies within the viewport.
   ///
   /// This method must be consistent with the action of [clip], in the sense
-  /// that [containsPoint] must return true if and only if that point on the
-  /// canvas is not clipped by [clip].
+  /// that [containsLocalPoint] must return true if and only if that point on
+  /// the canvas is not clipped by [clip].
   @override
-  bool containsPoint(Vector2 point);
+  bool containsLocalPoint(Vector2 point);
 
   /// Override in order to perform a custom action upon resize.
   ///

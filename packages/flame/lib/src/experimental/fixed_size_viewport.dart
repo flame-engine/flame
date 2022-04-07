@@ -20,7 +20,7 @@ class FixedSizeViewport extends Viewport {
   void clip(Canvas canvas) => canvas.clipRect(_clipRect, doAntiAlias: false);
 
   @override
-  bool containsPoint(Vector2 point) {
+  bool containsLocalPoint(Vector2 point) {
     return point.x.abs() <= size.x / 2 && point.y.abs() <= size.y / 2;
   }
 

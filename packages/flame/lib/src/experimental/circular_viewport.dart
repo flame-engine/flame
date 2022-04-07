@@ -16,7 +16,7 @@ class CircularViewport extends Viewport {
   void clip(Canvas canvas) => canvas.clipPath(_clipPath, doAntiAlias: false);
 
   @override
-  bool containsPoint(Vector2 point) => point.length2 <= _radiusSquared;
+  bool containsLocalPoint(Vector2 point) => point.length2 <= _radiusSquared;
 
   @override
   void onViewportResize() {
