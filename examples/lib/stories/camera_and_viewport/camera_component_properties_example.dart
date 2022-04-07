@@ -104,7 +104,7 @@ class Background extends Component {
   }
 
   @override
-  bool containsPoint(Vector2 point) => true;
+  bool containsLocalPoint(Vector2 point) => true;
 }
 
 class ExpandingCircle extends Component {
