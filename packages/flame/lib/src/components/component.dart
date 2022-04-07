@@ -780,6 +780,8 @@ class _LifecycleManager {
   }
 }
 
+/// A simple tuple of a component and a point. This is a helper class for
+/// [Component.componentsAtPoint] method.
 @immutable
 class ComponentPoint {
   const ComponentPoint(this.component, this.point);

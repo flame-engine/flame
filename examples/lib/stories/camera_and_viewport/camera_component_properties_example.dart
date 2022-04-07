@@ -50,10 +50,10 @@ class CameraComponentPropertiesExample extends FlameGame
   @override
   void onTapDown(int pointerId, TapDownInfo info) { // ignore: must_call_super
     final canvasPoint = info.eventPosition.widget;
-    for (final pair in componentsAtPoint(canvasPoint)) {
-      if (pair.component is Background) {
-        pair.component.add(
-          ExpandingCircle(pair.point.toOffset()),
+    for (final cp in componentsAtPoint(canvasPoint)) {
+      if (cp.component is Background) {
+        cp.component.add(
+          ExpandingCircle(cp.point.toOffset()),
         );
       }
     }
