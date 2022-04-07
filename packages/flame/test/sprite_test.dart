@@ -32,7 +32,7 @@ class MyComponent extends PositionComponent {
 
   @override
   Future<void> onLoad() async {
-    sprite = Sprite(await loadFlameImage());
+    sprite = Sprite(await loadImage('flame.png'));
   }
 
   @override
