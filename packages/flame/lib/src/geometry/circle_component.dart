@@ -100,7 +100,7 @@ class CircleComponent extends ShapeComponent {
     LineSegment line, {
     double epsilon = double.minPositive,
   }) {
-    double sq(double x) => pow(x, 2).toDouble();
+    double sq(double x) => x * x;
 
     final cx = absoluteCenter.x;
     final cy = absoluteCenter.y;
