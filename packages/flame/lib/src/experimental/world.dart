@@ -27,6 +27,7 @@ class World extends Component {
     return const Iterable.empty();
   }
 
+  @internal
   Iterable<ComponentPoint> componentsAtPointFromCamera(Vector2 point) {
     return super.componentsAtPoint(point);
   }
