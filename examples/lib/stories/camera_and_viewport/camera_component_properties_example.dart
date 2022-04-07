@@ -5,8 +5,7 @@ import 'package:flame/experimental.dart';
 import 'package:flame/game.dart' hide Viewport;
 import 'package:flame/input.dart';
 
-class CameraComponentPropertiesExample extends FlameGame
-    with HasTappables {
+class CameraComponentPropertiesExample extends FlameGame with HasTappables {
   static const description = '''
     This example uses FixedSizeViewport which is dynamically sized and 
     positioned based on the size of the game widget.
@@ -46,9 +45,9 @@ class CameraComponentPropertiesExample extends FlameGame
     _camera?.viewport.position = size * 0.6;
   }
 
-
   @override
-  void onTapDown(int pointerId, TapDownInfo info) { // ignore: must_call_super
+  void onTapDown(int pointerId, TapDownInfo info) {
+    // ignore: must_call_super
     final canvasPoint = info.eventPosition.widget;
     for (final cp in componentsAtPoint(canvasPoint)) {
       if (cp.component is Background) {
