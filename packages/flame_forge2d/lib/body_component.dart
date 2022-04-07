@@ -59,11 +59,15 @@ abstract class BodyComponent<T extends Forge2DGame> extends Component
     }
     canvas.save();
     canvas.transform(_transform.storage);
+    super.renderTree(canvas);
+    canvas.restore();
+  }
+
+  @override
+  void render(Canvas canvas) {
     if (renderBody) {
       _renderFixtures(canvas);
     }
-    super.renderTree(canvas);
-    canvas.restore();
   }
 
   @override
