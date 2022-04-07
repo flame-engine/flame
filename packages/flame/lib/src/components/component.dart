@@ -598,7 +598,10 @@ class Component {
   /// space.
   bool containsLocalPoint(Vector2 point) => false;
 
-  @Deprecated('Prefer method containsLocalPoint() instead.')
+  /// Same as [containsLocalPoint], but for a "global" [point].
+  ///
+  /// This will be deprecated in the future, due to the notion of "global" point
+  /// not being well-defined.
   bool containsPoint(Vector2 point) => containsLocalPoint(point);
 
   /// An iterable of descendant components intersecting the given point. The
