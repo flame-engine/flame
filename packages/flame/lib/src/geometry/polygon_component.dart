@@ -218,6 +218,23 @@ class PolygonComponent extends ShapeComponent {
     return true;
   }
 
+  @override
+  bool containsLocalPoint(Vector2 point) {
+    if (size.x == 0 || size.y == 0) {
+      return false;
+    }
+    for (var i = 0; i < _vertices.length; i++) {
+      final edge = getEdge(i, vertices: vertices);
+      final isOutside = (edge.to.x - edge.from.x) * (point.y - edge.from.y) -
+              (point.x - edge.from.x) * (edge.to.y - edge.from.y) >
+          0;
+      if (isOutside) {
+        return false;
+      }
+    }
+    return true;
+  }
+
   /// Return all vertices as [LineSegment]s that intersect [rect], if [rect]
   /// is null return all vertices as [LineSegment]s.
   List<LineSegment> possibleIntersectionVertices(Rect? rect) {
