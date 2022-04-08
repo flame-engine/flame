@@ -20,22 +20,33 @@ import 'provider_interfaces.dart';
 /// This effect applies incremental changes to the component's position, and
 /// requires that any other effect or update logic applied to the same component
 /// also used incremental updates.
-class MoveEffect extends Effect
+abstract class MoveEffect extends Effect
     with EffectTarget<PositionProvider>
     implements MeasurableEffect {
-  MoveEffect.by(
+  MoveEffect._(EffectController controller) : super(controller);
+
+  factory MoveEffect.by(
+    Vector2 offset,
+    EffectController controller, {
+    PositionProvider? target,
+  }) =>
+      MoveByEffect(offset, controller, target: target);
+
+  factory MoveEffect.to(Vector2 destination, EffectController controller) =>
+      MoveToEffect(destination, controller);
+}
+
+class MoveByEffect extends MoveEffect {
+  MoveByEffect(
     Vector2 offset,
     EffectController controller, {
     PositionProvider? target,
   })  : _offset = offset.clone(),
-        super(controller) {
+        super._(controller) {
     this.target = target;
   }
 
-  factory MoveEffect.to(Vector2 destination, EffectController controller) =>
-      _MoveToEffect(destination, controller);
-
-  Vector2 _offset;
+  final Vector2 _offset;
 
   @override
   void apply(double progress) {
@@ -48,18 +59,31 @@ class MoveEffect extends Effect
 }
 
 /// Implementation class for [MoveEffect.to]
-class _MoveToEffect extends MoveEffect {
-  _MoveToEffect(
+class MoveToEffect extends MoveEffect {
+  MoveToEffect(
     Vector2 destination,
     EffectController controller, {
     PositionProvider? target,
   })  : _destination = destination.clone(),
-        super.by(Vector2.zero(), controller, target: target);
+        _offset = Vector2.zero(),
+        super._(controller) {
+    this.target = target;
+  }
 
   final Vector2 _destination;
+  final Vector2 _offset;
 
   @override
   void onStart() {
-    _offset = _destination - target.position;
+    _offset.setFrom(_destination - target.position);
   }
+
+  @override
+  void apply(double progress) {
+    final dProgress = progress - previousProgress;
+    target.position += _offset * dProgress;
+  }
+
+  @override
+  double measure() => _offset.length;
 }
