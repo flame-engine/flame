@@ -1,10 +1,24 @@
 import 'package:vector_math/vector_math_64.dart';
 
 import 'controllers/effect_controller.dart';
+import 'move_by_effect.dart';
 import 'move_effect.dart';
 import 'provider_interfaces.dart';
 
-/// Implementation class for [MoveEffect.to]
+/// A [MoveEffect] that moves its target towards the given destination point.
+///
+/// This effect will move its target in a straight line towards the provided
+/// `destination` position. The `controller` can be used to change the timing
+/// of the movement: when it starts, the speed, whether the motion is uniform
+/// or not, and so on. Refer to [EffectController] for details.
+///
+/// This effect applies incremental changes to the target's position, which
+/// allows it to be combined with other [MoveEffect]s. Care must be taken to
+/// compose effects in a sensible way. For example, applying a [MoveToEffect]
+/// towards point A, and simultaneously another [MoveToEffect] towards point B
+/// will end up moving the target towards point A+B. A more interesting
+/// combination of move effects is to have a [MoveToEffect], together with one
+/// or more [MoveByEffect]s that produce oscillating motion.
 class MoveToEffect extends MoveEffect {
   MoveToEffect(
     Vector2 destination,

@@ -11,7 +11,8 @@ import 'provider_interfaces.dart';
 ///
 /// The `controller` can be used to change the timing of the movement: when the
 /// move starts, how fast it is, whether the motion is uniform or not, and so
-/// on. Refer to [EffectController] for details.
+/// on. The [EffectController] can even be used to create oscillating or random
+/// motions.
 ///
 /// This effect applies incremental changes to the target's position, which
 /// allows it to be combined with other [MoveEffect]s. When several
