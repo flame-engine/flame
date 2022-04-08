@@ -8,20 +8,13 @@ import 'move_by_effect.dart';
 import 'move_to_effect.dart';
 import 'provider_interfaces.dart';
 
-/// Move a component to a new position.
+/// Base class for effects that affect the `position` of their targets.
 ///
-/// The following constructors are provided:
+/// The main purpose of this class is for reflection, for example to select
+/// all effects on the target that are of "move" type.
 ///
-///   - [MoveEffect.by] will move the target in a straight line to a new
-///     position that is at an `offset` from the target's position at the onset
-///     of the effect;
-///
-///   - [MoveEffect.to] will move the target in a straight line to the specified
-///     coordinates;
-///
-/// This effect applies incremental changes to the component's position, and
-/// requires that any other effect or update logic applied to the same component
-/// also used incremental updates.
+/// Factory constructors [MoveEffect.by] and [MoveEffect.to] are also provided,
+/// but they may be deprecated in the future.
 abstract class MoveEffect extends Effect
     with EffectTarget<PositionProvider>
     implements MeasurableEffect {
