@@ -1,13 +1,15 @@
 import 'dart:math';
-import 'dart:ui' hide Canvas;
+import 'dart:ui';
 
 import 'package:collection/collection.dart';
 import 'package:meta/meta.dart';
 
-import '../../cache.dart';
-import '../../components.dart';
-import '../../extensions.dart';
-import '../../geometry.dart';
+import '../anchor.dart';
+import '../cache/value_cache.dart';
+import '../extensions/rect.dart';
+import '../extensions/vector2.dart';
+import 'line_segment.dart';
+import 'shape_component.dart';
 
 class PolygonComponent extends ShapeComponent {
   final List<Vector2> _vertices;
