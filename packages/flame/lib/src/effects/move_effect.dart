@@ -4,6 +4,8 @@ import 'controllers/effect_controller.dart';
 import 'effect.dart';
 import 'effect_target.dart';
 import 'measurable_effect.dart';
+import 'move_by_effect.dart';
+import 'move_to_effect.dart';
 import 'provider_interfaces.dart';
 
 /// Move a component to a new position.
@@ -23,7 +25,10 @@ import 'provider_interfaces.dart';
 abstract class MoveEffect extends Effect
     with EffectTarget<PositionProvider>
     implements MeasurableEffect {
-  MoveEffect._(EffectController controller) : super(controller);
+  MoveEffect(EffectController controller, PositionProvider? target)
+      : super(controller) {
+    this.target = target;
+  }
 
   factory MoveEffect.by(
     Vector2 offset,
@@ -32,58 +37,10 @@ abstract class MoveEffect extends Effect
   }) =>
       MoveByEffect(offset, controller, target: target);
 
-  factory MoveEffect.to(Vector2 destination, EffectController controller) =>
-      MoveToEffect(destination, controller);
-}
-
-class MoveByEffect extends MoveEffect {
-  MoveByEffect(
-    Vector2 offset,
-    EffectController controller, {
-    PositionProvider? target,
-  })  : _offset = offset.clone(),
-        super._(controller) {
-    this.target = target;
-  }
-
-  final Vector2 _offset;
-
-  @override
-  void apply(double progress) {
-    final dProgress = progress - previousProgress;
-    target.position += _offset * dProgress;
-  }
-
-  @override
-  double measure() => _offset.length;
-}
-
-/// Implementation class for [MoveEffect.to]
-class MoveToEffect extends MoveEffect {
-  MoveToEffect(
+  factory MoveEffect.to(
     Vector2 destination,
     EffectController controller, {
     PositionProvider? target,
-  })  : _destination = destination.clone(),
-        _offset = Vector2.zero(),
-        super._(controller) {
-    this.target = target;
-  }
-
-  final Vector2 _destination;
-  final Vector2 _offset;
-
-  @override
-  void onStart() {
-    _offset.setFrom(_destination - target.position);
-  }
-
-  @override
-  void apply(double progress) {
-    final dProgress = progress - previousProgress;
-    target.position += _offset * dProgress;
-  }
-
-  @override
-  double measure() => _offset.length;
+  }) =>
+      MoveToEffect(destination, controller, target: target);
 }
