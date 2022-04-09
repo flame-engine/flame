@@ -5,3 +5,9 @@ abstract class PositionProvider {
   Vector2 get position;
   set position(Vector2 value);
 }
+
+/// Interface for a component that can be affected by scale effects.
+abstract class ScaleProvider {
+  Vector2 get scale;
+  set scale(Vector2 value);
+}
