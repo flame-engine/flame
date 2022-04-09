@@ -66,11 +66,10 @@ void main() {
         map,
         destTileSize: tileSize,
       );
-
       //expect the block to be directly below
       expect(
         c.getBlockRenderPositionInts(1, 1),
-        closeToVector(0, 181 / 2),
+        closeToVector(-156 / 2, 12.5, epsilon: 1e-13),
       );
     });
   });
