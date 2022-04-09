@@ -135,6 +135,8 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
           await onLoad;
         }
         widget.game.onMount();
+        await null;
+        setState(() {});
       })();
 
   Future<void>? _loaderFuture;

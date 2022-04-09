@@ -51,5 +51,28 @@ void main() {
         findsOneWidget,
       );
     });
+
+    testWidgets(
+      'can set mouseCursor during onLoad',
+      (tester) async {
+        final game = GameWithMouseCursorSetDuringOnLoad();
+        await tester.pumpWidget(
+          GameWidget(game: game),
+        );
+        await tester.pump();
+        expect(
+          byMouseCursor(SystemMouseCursors.alias),
+          findsOneWidget,
+        );
+      },
+    );
   });
+}
+
+class GameWithMouseCursorSetDuringOnLoad extends FlameGame {
+  @override
+  Future<void>? onLoad() {
+    mouseCursor = SystemMouseCursors.alias;
+    return null;
+  }
 }
