@@ -62,6 +62,7 @@ class IsometricTileMapComponent extends PositionComponent {
     Vector2? scale,
     double? angle,
     Anchor? anchor,
+    Iterable<Component>? children,
     int? priority,
   }) : super(
           position: position,
@@ -69,6 +70,7 @@ class IsometricTileMapComponent extends PositionComponent {
           scale: scale,
           angle: angle,
           anchor: anchor,
+          children: children,
           priority: priority,
         );
 
