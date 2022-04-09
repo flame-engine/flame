@@ -101,7 +101,7 @@ class Sprite {
     final drawSize = size ?? srcSize;
 
     final delta = anchor.toVector2()..multiply(drawSize);
-    final drawRect = (drawPosition + delta).toPositionedRect(drawSize);
+    final drawRect = (drawPosition - delta).toPositionedRect(drawSize);
 
     final drawPaint = overridePaint ?? paint;
 

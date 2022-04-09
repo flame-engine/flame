@@ -162,6 +162,23 @@ void main() {
         );
       },
     );
+
+    testWithFlameGame(
+      'camera zoom effect',
+      (game) async {
+        final world = World()..addToParent(game);
+        final camera = CameraComponent(world: world)..addToParent(game);
+        camera.viewfinder.add(
+          ScaleEffect.to(Vector2.all(2), EffectController(duration: 1)),
+        );
+        await game.ready();
+
+        for (var t = 0.0; t < 1.0; t += 0.1) {
+          expect(camera.viewfinder.zoom, closeTo(1 + t, 1e-14));
+          game.update(0.1);
+        }
+      },
+    );
   });
 }
 

@@ -15,7 +15,7 @@ import 'camera_component.dart';
 /// The viewfinder contains the game point that is currently at the
 /// "cross-hairs" of the viewport ([position]), the [zoom] level, and the
 /// [angle] of rotation of the camera.
-class Viewfinder extends Component implements PositionProvider {
+class Viewfinder extends Component implements PositionProvider, ScaleProvider {
   /// Internal transform matrix used by the viewfinder.
   final Transform2D _transform = Transform2D();
 
@@ -135,5 +135,20 @@ class Viewfinder extends Component implements PositionProvider {
     );
     _initZoom();
     onViewportResize();
+  }
+
+  /// [ScaleProvider]'s API.
+  @internal
+  @override
+  Vector2 get scale => _transform.scale;
+  @internal
+  @override
+  set scale(Vector2 value) {
+    assert(
+      value.x == value.y,
+      'Non-uniform scale cannot be applied to a Viewfinder: $value',
+    );
+    assert(value.x > 0, 'Zoom must be positive: ${value.x}');
+    _transform.scale = value;
   }
 }
