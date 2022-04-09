@@ -59,7 +59,7 @@ import 'component.dart';
 /// do not specify the size of a PositionComponent, then it will be
 /// equal to zero and the component won't be able to respond to taps.
 class PositionComponent extends Component
-    implements PositionProvider, ScaleProvider, AngleProvider {
+    implements AngleProvider, PositionProvider, ScaleProvider {
   PositionComponent({
     Vector2? position,
     Vector2? size,
