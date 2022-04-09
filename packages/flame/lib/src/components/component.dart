@@ -17,7 +17,12 @@ import '../cache/value_cache.dart';
 /// called automatically once the component is added to the component tree in
 /// your game (with `game.add`).
 class Component {
-  Component({int? priority}) : _priority = priority ?? 0;
+  Component({Iterable<Component>? children, int? priority})
+      : _priority = priority ?? 0 {
+    if (children != null) {
+      addAll(children);
+    }
+  }
 
   /// What coordinate system this component should respect (i.e. should it
   /// observe camera, viewport, or use the raw canvas).
