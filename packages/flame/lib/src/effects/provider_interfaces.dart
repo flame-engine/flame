@@ -11,3 +11,9 @@ abstract class ScaleProvider {
   Vector2 get scale;
   set scale(Vector2 value);
 }
+
+/// Interface for a component that can be affected by rotation effects.
+abstract class AngleProvider {
+  double get angle;
+  set angle(double value);
+}
