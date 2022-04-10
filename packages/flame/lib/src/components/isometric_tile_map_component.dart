@@ -64,7 +64,8 @@ class IsometricTileMapComponent extends PositionComponent {
     Anchor? anchor,
     Iterable<Component>? children,
     int? priority,
-  }) : super(
+  })  : _renderSprite = Sprite(tileset.image),
+        super(
           position: position,
           size: size,
           scale: scale,
@@ -77,20 +78,29 @@ class IsometricTileMapComponent extends PositionComponent {
   /// This is the size the tiles will be drawn (either original or overwritten).
   Vector2 get effectiveTileSize => destTileSize ?? tileset.srcSize;
 
-  /// This is the vertical height of each block; by default it's half the tile
-  /// size.
+  /// The current scaling factor for the isometric view.
+  double get scalingFactor => effectiveTileSize.y / effectiveTileSize.x;
+
+  /// This is the vertical height of each block; by default it's half the
+  /// tile size.
   double get effectiveTileHeight => tileHeight ?? (effectiveTileSize.y / 2);
 
+  Sprite _renderSprite;
   @override
   void render(Canvas c) {
+    _renderSprite.image = tileset.image;
     final size = effectiveTileSize;
     for (var i = 0; i < matrix.length; i++) {
       for (var j = 0; j < matrix[i].length; j++) {
         final element = matrix[i][j];
         if (element != -1) {
-          final sprite = tileset.getSpriteById(element);
+          _renderSprite = tileset.getSpriteById(element);
           final p = getBlockRenderPositionInts(j, i);
-          sprite.render(c, position: p, size: size);
+          _renderSprite.render(
+            c,
+            position: p,
+            size: size,
+          );
         }
       }
     }
@@ -107,7 +117,10 @@ class IsometricTileMapComponent extends PositionComponent {
 
   /// Same as getBlockRenderPosition but the arguments are exploded as integers.
   Vector2 getBlockRenderPositionInts(int i, int j) {
-    final halfTile = effectiveTileSize / 2;
+    final halfTile = Vector2(
+      effectiveTileSize.x / 2,
+      (effectiveTileSize.y / 2) / scalingFactor,
+    );
     final pos = Vector2(i.toDouble(), j.toDouble())..multiply(halfTile);
     return cartToIso(pos) - halfTile;
   }
@@ -124,15 +137,15 @@ class IsometricTileMapComponent extends PositionComponent {
 
   /// Converts a coordinate from the isometric space to the cartesian space.
   Vector2 isoToCart(Vector2 p) {
-    final x = (2 * p.y + p.x) / 2;
-    final y = (2 * p.y - p.x) / 2;
+    final x = p.y / scalingFactor + p.x / 2;
+    final y = p.y - p.x * scalingFactor / 2;
     return Vector2(x, y);
   }
 
   /// Converts a coordinate from the cartesian space to the isometric space.
   Vector2 cartToIso(Vector2 p) {
     final x = p.x - p.y;
-    final y = (p.x + p.y) / 2;
+    final y = ((p.x + p.y) * scalingFactor) / 2;
     return Vector2(x, y);
   }
 
