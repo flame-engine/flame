@@ -59,6 +59,9 @@ turn it off you can just set (or override) `renderBody` to false.
 Just like any other Flame component you can add children to the `BodyComponent`, which can be very
 useful if you want to add for example animations or other components on top of your body.
 
+The body that you create in `createBody` should be defined according to Flame's coordinate system,
+not according to the coordinate system of Forge2D (where the Y-axis is flipped).
+
 
 ## Contact callbacks
 
