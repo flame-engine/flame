@@ -159,6 +159,7 @@ class PolygonComponent extends ShapeComponent {
     final position = absoluteTopLeftPosition;
     if (!_cachedGlobalVertices.isCacheValid<dynamic>(<dynamic>[
       position,
+      size,
       scale,
       angle,
     ])) {
@@ -178,7 +179,7 @@ class PolygonComponent extends ShapeComponent {
       }
       _cachedGlobalVertices.updateCache<dynamic>(
         _globalVertices,
-        <dynamic>[position.clone(), scale.clone(), angle],
+        <dynamic>[position.clone(), size.clone(), scale.clone(), angle],
       );
     }
     return _cachedGlobalVertices.value!;
