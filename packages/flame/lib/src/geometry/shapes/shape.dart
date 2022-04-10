@@ -2,6 +2,8 @@ import 'dart:ui';
 
 import 'package:vector_math/vector_math_64.dart';
 
+import '../../game/transform2d.dart';
+
 /// Base class for various 2D geometric primitives defined on a Cartesian
 /// coordinate plane.
 ///
@@ -46,12 +48,12 @@ abstract class Shape {
   /// faithfully, an approximate path can be returned.
   Path asPath();
 
-  /// Applies an affine transformation via the [transformMatrix].
+  /// Returns the result of applying an affine transformation to the shape.
   ///
   /// Certain shapes may be transformed into shapes of a different kind during
   /// the projection. For example, a `Circle` may transform into an `Ellipse`,
   /// and `Rectangle` into a `Polygon`.
-  Shape project(Matrix4 transformMatrix);
+  Shape project(Transform2D transform);
 
   /// Finds the intersection of this shape with another one, if it exists.
   // Intersection? intersection(GeometricPrimitive other);
