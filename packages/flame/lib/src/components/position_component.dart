@@ -66,11 +66,12 @@ class PositionComponent extends Component
     Vector2? scale,
     double? angle,
     Anchor? anchor,
+    Iterable<Component>? children,
     int? priority,
   })  : transform = Transform2D(),
         _anchor = anchor ?? Anchor.topLeft,
         _size = NotifyingVector2.copy(size ?? Vector2.zero()),
-        super(priority: priority) {
+        super(children: children, priority: priority) {
     if (position != null) {
       transform.position = position;
     }

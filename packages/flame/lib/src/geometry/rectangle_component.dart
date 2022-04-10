@@ -11,6 +11,7 @@ class RectangleComponent extends PolygonComponent {
     Vector2? size,
     double? angle,
     Anchor? anchor,
+    Iterable<Component>? children,
     int? priority,
     Paint? paint,
   }) : super(
@@ -19,6 +20,7 @@ class RectangleComponent extends PolygonComponent {
           size: size,
           angle: angle,
           anchor: anchor,
+          children: children,
           priority: priority,
           paint: paint,
         );
