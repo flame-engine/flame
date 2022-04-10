@@ -17,8 +17,7 @@ class SpriteBatchComponent extends Component {
     this.blendMode,
     this.cullRect,
     this.paint,
-    Iterable<Component>? children,
-  }) : super(children: children);
+  });
 
   @override
   @mustCallSuper
