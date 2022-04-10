@@ -218,6 +218,10 @@ class Transform2D extends ChangeNotifier {
   /// (vertical).
   bool get isAxisAligned => _angle == 0;
 
+  /// Whether the transform includes a reflection, i.e. it flips the orientation
+  /// of the coordinate system.
+  bool get hasReflection => _scale.x.sign * _scale.y.sign == -1;
+
   void _markAsModified() {
     _recalculate = true;
     notifyListeners();

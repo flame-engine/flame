@@ -1,11 +1,17 @@
 import 'dart:math';
 import 'dart:ui';
 
+import 'package:meta/meta.dart';
 import 'package:vector_math/vector_math_64.dart';
 
 import '../../game/transform2d.dart';
 import 'shape.dart';
 
+/// A line segment between points [from] and [to]. The points must be distinct.
+///
+/// The segment is undirected, meaning a `LineSegment(from, to)` is considered
+/// to be equivalent to a `LineSegment(to, from)`.
+@immutable
 class LineSegment extends Shape {
   LineSegment(this.from, this.to)
       : assert(from != to, 'Two distinct points required for a LineSegment');
@@ -56,4 +62,17 @@ class LineSegment extends Shape {
     final newTo = transform.localToGlobal(to);
     return LineSegment(newFrom, newTo);
   }
+
+  @override
+  bool operator ==(Object other) =>
+      other is LineSegment &&
+      ((from == other.from && to == other.to) ||
+          (from == other.to && to == other.from));
+
+  @override
+  int get hashCode => hashValues(from, to);
+
+  @override
+  String toString() =>
+      'LineSegment([${from.x}, ${from.y}], [${to.x}, ${to.y}])';
 }

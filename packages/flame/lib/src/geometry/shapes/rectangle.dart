@@ -1,23 +1,27 @@
 import 'dart:math';
 import 'dart:ui';
 
+import 'package:meta/meta.dart';
 import 'package:vector_math/vector_math_64.dart';
 
 import '../../game/transform2d.dart';
 import 'shape.dart';
 
+@immutable
 class Rectangle extends Shape {
   Rectangle.fromLTRB(double left, double top, double right, double bottom)
       : _min = Vector2(left, top),
         _max = Vector2(right, bottom);
 
-  Rectangle.fromPoints(Vector2 a, Vector2 b)
-      : _min = Vector2(min(a.x, b.x), min(a.y, b.y)),
-        _max = Vector2(max(a.x, b.x), max(a.y, b.y));
+  factory Rectangle.fromPoints(Vector2 a, Vector2 b) => Rectangle.fromLTRB(
+        min(a.x, b.x),
+        min(a.y, b.y),
+        max(a.x, b.x),
+        max(a.y, b.y),
+      );
 
-  Rectangle.fromRect(Rect rect)
-      : _min = Vector2(rect.left, rect.top),
-        _max = Vector2(rect.right, rect.bottom);
+  factory Rectangle.fromRect(Rect rect) =>
+      Rectangle.fromLTRB(rect.left, rect.top, rect.right, rect.bottom);
 
   final Vector2 _min;
   final Vector2 _max;
@@ -63,4 +67,15 @@ class Rectangle extends Shape {
     }
     throw UnimplementedError();
   }
+
+  @override
+  bool operator ==(Object other) =>
+      other is Rectangle && _min == other._min && _max == other._max;
+
+  @override
+  int get hashCode => hashValues(_min, _max);
+
+  @override
+  String toString() =>
+      'Rectangle([${_min.x}, ${_min.y}], [${_max.x}, ${_max.y}])';
 }
