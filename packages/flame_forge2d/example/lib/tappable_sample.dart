@@ -7,7 +7,7 @@ import 'balls.dart';
 import 'boundaries.dart';
 
 class TappableSample extends Forge2DGame with HasTappables {
-  TappableSample() : super(zoom: 20, gravity: Vector2(0, -10.0));
+  TappableSample() : super(zoom: 20, gravity: Vector2(0, 10.0));
 
   @override
   Future<void> onLoad() async {
