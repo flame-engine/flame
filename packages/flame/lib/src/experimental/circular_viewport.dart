@@ -1,11 +1,13 @@
 import 'dart:ui';
 import 'package:vector_math/vector_math_64.dart';
 
+import '../components/component.dart';
 import 'viewport.dart';
 
 /// A fixed-size viewport in the shape of a circle.
 class CircularViewport extends Viewport {
-  CircularViewport(double radius) {
+  CircularViewport(double radius, {Iterable<Component>? children})
+      : super(children: children) {
     size = Vector2.all(2 * radius);
   }
 

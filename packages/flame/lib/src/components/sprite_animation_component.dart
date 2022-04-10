@@ -29,6 +29,7 @@ class SpriteAnimationComponent extends PositionComponent with HasPaint {
     Vector2? scale,
     double? angle,
     Anchor? anchor,
+    Iterable<Component>? children,
     int? priority,
   })  : removeOnFinish = removeOnFinish ?? false,
         playing = playing ?? true,
@@ -38,6 +39,7 @@ class SpriteAnimationComponent extends PositionComponent with HasPaint {
           scale: scale,
           angle: angle,
           anchor: anchor,
+          children: children,
           priority: priority,
         ) {
     if (paint != null) {
