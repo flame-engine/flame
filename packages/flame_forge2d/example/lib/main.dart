@@ -2,6 +2,7 @@ import 'package:dashbook/dashbook.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 
+import 'animated_body_sample.dart';
 import 'blob_sample.dart';
 import 'camera_sample.dart';
 import 'circle_stress_sample.dart';
@@ -11,7 +12,6 @@ import 'domino_sample.dart';
 import 'draggable_sample.dart';
 import 'joint_sample.dart';
 import 'mouse_joint_sample.dart';
-import 'position_body_sample.dart';
 import 'raycast_sample.dart';
 import 'sprite_body_sample.dart';
 import 'tappable_sample.dart';
@@ -59,7 +59,7 @@ void main() async {
     ..add(
       'PositionBodyComponent',
       (DashbookContext ctx) => GameWidget(game: PositionBodySample()),
-      codeLink: link('position_body_sample.dart'),
+      codeLink: link('animated_body_sample.dart'),
     )
     ..add(
       'Tappable Body',
