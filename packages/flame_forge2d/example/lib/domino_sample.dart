@@ -47,7 +47,7 @@ class DominoBrick extends BodyComponent {
 class DominoSample extends Forge2DGame with TapDetector {
   late Image pizzaImage;
 
-  DominoSample() : super(gravity: Vector2(0, -10.0));
+  DominoSample() : super(gravity: Vector2(0, 10.0));
 
   @override
   Future<void> onLoad() async {
@@ -55,17 +55,17 @@ class DominoSample extends Forge2DGame with TapDetector {
     boundaries.forEach(add);
     final center = screenToWorld(camera.viewport.effectiveSize / 2);
 
-    for (var i = 0; i < 8; i++) {
-      final position = center + Vector2(0.0, -30.0 + 5 * i);
+    const numberOfRows = 7;
+    for (var i = 0; i < numberOfRows - 2; i++) {
+      final position = center + Vector2(0.0, 5.0 * i);
       add(Platform(position));
     }
 
-    const numberOfRows = 10;
     const numberPerRow = 25;
     for (var i = 0; i < numberOfRows; ++i) {
       for (var j = 0; j < numberPerRow; j++) {
         final position = center +
-            Vector2(-14.75 + j * (29.5 / (numberPerRow - 1)), -27.7 + 5 * i);
+            Vector2(-14.75 + j * (29.5 / (numberPerRow - 1)), -12.7 + 5 * i);
         add(DominoBrick(position));
       }
     }
@@ -75,6 +75,6 @@ class DominoSample extends Forge2DGame with TapDetector {
   void onTapDown(TapDownInfo details) {
     super.onTapDown(details);
     final position = details.eventPosition.game;
-    add(Pizza(position));
+    add(Pizza(position)..renderBody = true);
   }
 }

@@ -27,6 +27,7 @@ class SpriteButtonComponent extends SpriteGroupComponent<_ButtonState>
     Vector2? scale,
     double? angle,
     Anchor? anchor,
+    Iterable<Component>? children,
     int? priority,
   }) : super(
           current: _ButtonState.up,
@@ -35,6 +36,7 @@ class SpriteButtonComponent extends SpriteGroupComponent<_ButtonState>
           scale: scale,
           angle: angle,
           anchor: anchor,
+          children: children,
           priority: priority,
         );
 
