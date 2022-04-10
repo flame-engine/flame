@@ -153,6 +153,11 @@ The two approaches can be combined freely: the children specified within the
 constructor will be added first, and then any additional child components
 after.
 
+Note that the children added via either methods are only guaranteed to be
+available eventually: after they are loaded and mounted. We can only assure
+that they will appear in the children list in the same order as they were
+scheduled for addition.
+
 
 ### Querying child components
 
