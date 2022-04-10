@@ -2,12 +2,12 @@ import 'dart:ui';
 
 import 'package:vector_math/vector_math_64.dart';
 
-/// Base class for various 2D geometric shapes defined on a Cartesian coordinate
-/// plane.
+/// Base class for various 2D geometric primitives defined on a Cartesian
+/// coordinate plane.
 ///
 /// Implementations include:
 ///   -
-abstract class GeometricPrimitive {
+abstract class Shape {
   /// True if the shape is "closed", in the sense that it has an interior. For
   /// example, a closed shape can be filled with a paint.
   bool get isClosed;
@@ -41,9 +41,9 @@ abstract class GeometricPrimitive {
   /// points that lie _exactly_ on the boundary.
   bool containsPoint(Vector2 point, {double epsilon = 1e-5});
 
-  /// Converts the geometric primitive to a [Path] object, suitable for
-  /// rendering on a canvas. If a particular shape cannot be represented as a
-  /// [Path] faithfully, an approximate path can be returned.
+  /// Converts the shape to a [Path] object, suitable for rendering on a canvas.
+  /// If a particular geometric primitive cannot be represented as a [Path]
+  /// faithfully, an approximate path can be returned.
   Path asPath();
 
   /// Applies an affine transformation via the [transformMatrix].
@@ -51,7 +51,7 @@ abstract class GeometricPrimitive {
   /// Certain shapes may be transformed into shapes of a different kind during
   /// the projection. For example, a `Circle` may transform into an `Ellipse`,
   /// and `Rectangle` into a `Polygon`.
-  GeometricPrimitive project(Matrix4 transformMatrix);
+  Shape project(Matrix4 transformMatrix);
 
   /// Finds the intersection of this shape with another one, if it exists.
   // Intersection? intersection(GeometricPrimitive other);
