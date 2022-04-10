@@ -21,7 +21,8 @@ export 'src/effects/effect_target.dart';
 export 'src/effects/move_along_path_effect.dart';
 export 'src/effects/move_effect.dart';
 export 'src/effects/opacity_effect.dart';
-export 'src/effects/provider_interfaces.dart' show PositionProvider;
+export 'src/effects/provider_interfaces.dart'
+    show PositionProvider, ScaleProvider, AngleProvider;
 export 'src/effects/remove_effect.dart';
 export 'src/effects/rotate_effect.dart';
 export 'src/effects/scale_effect.dart';
