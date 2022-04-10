@@ -45,7 +45,7 @@ class CircleShuffler extends BodyComponent {
 }
 
 class JointSample extends Forge2DGame with TapDetector {
-  JointSample() : super(gravity: Vector2(0, -10.0));
+  JointSample() : super(gravity: Vector2(0, 10.0));
 
   @override
   Future<void> onLoad() async {
