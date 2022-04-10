@@ -208,6 +208,10 @@ class Transform2D extends ChangeNotifier {
     );
   }
 
+  bool get isTranslation {
+    return _angle == 0 && _scale.x == 1 && _scale.y == 1;
+  }
+
   void _markAsModified() {
     _recalculate = true;
     notifyListeners();

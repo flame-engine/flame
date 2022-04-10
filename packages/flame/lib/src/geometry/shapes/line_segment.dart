@@ -52,8 +52,8 @@ class LineSegment extends Shape {
 
   @override
   Shape project(Transform2D transform) {
-    final start = transform.localToGlobal(from);
-    final end = transform.localToGlobal(to);
-    return LineSegment(start, end);
+    final newFrom = transform.localToGlobal(from);
+    final newTo = transform.localToGlobal(to);
+    return LineSegment(newFrom, newTo);
   }
 }
