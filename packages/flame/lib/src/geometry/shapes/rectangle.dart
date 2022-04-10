@@ -7,11 +7,13 @@ import 'package:vector_math/vector_math_64.dart';
 import '../../game/transform2d.dart';
 import 'shape.dart';
 
+/// An axis-aligned rectangle.
 @immutable
 class Rectangle extends Shape {
   Rectangle.fromLTRB(double left, double top, double right, double bottom)
       : _min = Vector2(left, top),
-        _max = Vector2(right, bottom);
+        _max = Vector2(right, bottom),
+        assert(left < right && top < bottom);
 
   factory Rectangle.fromPoints(Vector2 a, Vector2 b) => Rectangle.fromLTRB(
         min(a.x, b.x),
