@@ -208,9 +208,15 @@ class Transform2D extends ChangeNotifier {
     );
   }
 
+  /// Whether the transform represents a pure translation, i.e. a transform of
+  /// the form `(x, y) -> (x + Δx, y + Δy)`.
   bool get isTranslation {
     return _angle == 0 && _scale.x == 1 && _scale.y == 1;
   }
+
+  /// Whether the transform keeps horizontal (vertical) lines as horizontal
+  /// (vertical).
+  bool get isAxisAligned => _angle == 0;
 
   void _markAsModified() {
     _recalculate = true;
