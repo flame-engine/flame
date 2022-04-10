@@ -10,8 +10,8 @@ import 'shape.dart';
 @immutable
 class Circle extends Shape {
   Circle(Vector2 center, this.radius)
-    : _center = center.clone(),
-      assert(radius > 0, 'Radius must be positive: $radius');
+      : _center = center.clone(),
+        assert(radius > 0, 'Radius must be positive: $radius');
 
   final Vector2 _center;
   final double radius;

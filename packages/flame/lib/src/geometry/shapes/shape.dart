@@ -6,6 +6,7 @@ import '../../game/transform2d.dart';
 import 'circle.dart';
 import 'line_segment.dart';
 import 'rectangle.dart';
+import 'rounded_rectangle.dart';
 
 /// Base class for various 2D geometric primitives defined on a Cartesian
 /// coordinate plane.
@@ -14,6 +15,7 @@ import 'rectangle.dart';
 ///   - [Circle]
 ///   - [LineSegment]
 ///   - [Rectangle]
+///   - [RoundedRectangle]
 abstract class Shape {
   /// True if the shape is "closed", in the sense that it has an interior. For
   /// example, a closed shape can be filled with a paint.
