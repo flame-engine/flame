@@ -62,8 +62,8 @@ class CornerRamp extends BodyComponent {
     final diff = 2.0 * mirrorFactor;
     final vertices = [
       Vector2(diff, 0),
-      Vector2(diff + 20.0 * mirrorFactor, 20.0),
-      Vector2(diff + 35.0 * mirrorFactor, 30.0),
+      Vector2(diff + 20.0 * mirrorFactor, -20.0),
+      Vector2(diff + 35.0 * mirrorFactor, -30.0),
     ];
     shape.createLoop(vertices);
 
@@ -80,8 +80,6 @@ class CornerRamp extends BodyComponent {
 }
 
 class CircleStressSample extends Forge2DGame with TapDetector {
-  CircleStressSample() : super(gravity: Vector2(0, -10.0));
-
   @override
   Future<void> onLoad() async {
     final boundaries = createBoundaries(this);

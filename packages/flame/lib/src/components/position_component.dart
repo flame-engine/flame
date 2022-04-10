@@ -58,18 +58,20 @@ import 'component.dart';
 /// the approximate bounding rectangle of the rendered picture. If you
 /// do not specify the size of a PositionComponent, then it will be
 /// equal to zero and the component won't be able to respond to taps.
-class PositionComponent extends Component implements PositionProvider {
+class PositionComponent extends Component
+    implements AngleProvider, PositionProvider, ScaleProvider {
   PositionComponent({
     Vector2? position,
     Vector2? size,
     Vector2? scale,
     double? angle,
     Anchor? anchor,
+    Iterable<Component>? children,
     int? priority,
   })  : transform = Transform2D(),
         _anchor = anchor ?? Anchor.topLeft,
         _size = NotifyingVector2.copy(size ?? Vector2.zero()),
-        super(priority: priority) {
+        super(children: children, priority: priority) {
     if (position != null) {
       transform.position = position;
     }
@@ -109,14 +111,18 @@ class PositionComponent extends Component implements PositionProvider {
   /// Rotation angle (in radians) of the component. The component will be
   /// rotated around its anchor point in the clockwise direction if the
   /// angle is positive, or counterclockwise if the angle is negative.
+  @override
   double get angle => transform.angle;
+  @override
   set angle(double a) => transform.angle = a;
 
   /// The scale factor of this component. The scale can be different along
   /// the X and Y dimensions. A scale greater than 1 makes the component
   /// bigger, and less than 1 smaller. The scale can also be negative,
   /// which results in a mirror reflection along the corresponding axis.
+  @override
   NotifyingVector2 get scale => transform.scale;
+  @override
   set scale(Vector2 scale) => transform.scale = scale;
 
   /// Anchor point for this component. An anchor point describes a point

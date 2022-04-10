@@ -15,6 +15,7 @@ abstract class ShapeComponent extends PositionComponent with HasPaint {
     Vector2? scale,
     double? angle,
     Anchor? anchor,
+    Iterable<Component>? children,
     int? priority,
     Paint? paint,
   }) : super(
@@ -23,6 +24,7 @@ abstract class ShapeComponent extends PositionComponent with HasPaint {
           scale: scale,
           angle: angle,
           anchor: anchor,
+          children: children,
           priority: priority,
         ) {
     this.paint = paint ?? this.paint;

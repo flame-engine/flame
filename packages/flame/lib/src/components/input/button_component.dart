@@ -26,6 +26,7 @@ class ButtonComponent extends PositionComponent with Tappable {
     Vector2? scale,
     double? angle,
     Anchor? anchor,
+    Iterable<Component>? children,
     int? priority,
   }) : super(
           position: position,
@@ -33,6 +34,7 @@ class ButtonComponent extends PositionComponent with Tappable {
           scale: scale,
           angle: angle,
           anchor: anchor,
+          children: children,
           priority: priority,
         );
 
