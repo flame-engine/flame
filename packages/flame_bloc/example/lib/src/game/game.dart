@@ -3,6 +3,7 @@ import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flame_bloc/flame_bloc.dart';
 
+import '../inventory/bloc/inventory_bloc.dart';
 import './components/enemy.dart';
 import './components/enemy_creator.dart';
 import './components/player.dart';
@@ -25,12 +26,16 @@ class GameStatsController extends Component
 }
 
 class SpaceShooterGame extends FlameGame
-    with
-        FlameBloc,
-        PanDetector,
-        HasCollisionDetection,
-        HasKeyboardHandlerComponents {
+    with PanDetector, HasCollisionDetection, HasKeyboardHandlerComponents {
   late PlayerComponent player;
+
+  final GameStatsBloc statsBloc;
+  final InventoryBloc inventoryBloc;
+
+  SpaceShooterGame({
+    required this.statsBloc,
+    required this.inventoryBloc,
+  });
 
   @override
   Future<void> onLoad() async {
@@ -64,6 +69,6 @@ class SpaceShooterGame extends FlameGame
   }
 
   void increaseScore() {
-    read<GameStatsBloc>().add(const ScoreEventAdded(100));
+    statsBloc.add(const ScoreEventAdded(100));
   }
 }
