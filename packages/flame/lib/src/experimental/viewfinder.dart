@@ -15,7 +15,8 @@ import 'camera_component.dart';
 /// The viewfinder contains the game point that is currently at the
 /// "cross-hairs" of the viewport ([position]), the [zoom] level, and the
 /// [angle] of rotation of the camera.
-class Viewfinder extends Component implements PositionProvider, ScaleProvider {
+class Viewfinder extends Component
+    implements AngleProvider, PositionProvider, ScaleProvider {
   /// Internal transform matrix used by the viewfinder.
   final Transform2D _transform = Transform2D();
 
@@ -47,7 +48,9 @@ class Viewfinder extends Component implements PositionProvider, ScaleProvider {
   /// Rotation angle of the game world, in radians.
   ///
   /// The rotation is around the axis that is perpendicular to the screen.
+  @override
   double get angle => -_transform.angle;
+  @override
   set angle(double value) => _transform.angle = -value;
 
   /// The point within the viewport that is considered the "logical center" of

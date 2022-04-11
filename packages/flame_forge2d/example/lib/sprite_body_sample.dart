@@ -7,7 +7,7 @@ import 'package:flame_forge2d/flame_forge2d.dart';
 import 'boundaries.dart';
 
 class SpriteBodySample extends Forge2DGame with TapDetector {
-  SpriteBodySample() : super(gravity: Vector2(0, -10.0));
+  SpriteBodySample() : super(gravity: Vector2(0, 10.0));
 
   @override
   Future<void> onLoad() async {
@@ -50,9 +50,9 @@ class Pizza extends BodyComponent {
     final shape = PolygonShape();
 
     final vertices = [
-      Vector2(-size.x / 2, -size.y / 2),
-      Vector2(size.x / 2, -size.y / 2),
-      Vector2(0, size.y / 2),
+      Vector2(-size.x / 2, size.y / 2),
+      Vector2(size.x / 2, size.y / 2),
+      Vector2(0, -size.y / 2),
     ];
     shape.set(vertices);
 
