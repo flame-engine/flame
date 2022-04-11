@@ -27,9 +27,23 @@ void main() {
       );
     });
 
-    test('aabbs', () {
+    test('aabb', () {
       final circle = Circle(Vector2(-3, 14), 2.0);
-      // expect(circle.aabb, Aabb2.minMax(Vector2(-5, 12), Vector2(-1, 16)));
+      // expect(
+      //   circle.aabb,
+      //   closeToAabb(Aabb2.minMax(Vector2(-5, 12), Vector2(-1, 16))),
+      // );
+    });
+
+    testRandom('containsPoint', (Random random) {
+      final center = Vector2(5, 12);
+      const radius = 2.5;
+      final circle = Circle(center, radius);
+      for (var i = 0; i < 100; i++) {
+        final point = (Vector2.random(random) - Vector2.all(0.5)) * 9 + center;
+        final inside = (point - center).length <= radius;
+        expect(circle.containsPoint(point), inside);
+      }
     });
   });
 }
