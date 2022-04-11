@@ -62,6 +62,8 @@ abstract class Shape {
   /// and `Rectangle` into a `Polygon`.
   Shape project(Transform2D transform);
 
+  void move(Vector2 offset) {}
+
   /// Finds the intersection of this shape with another one, if it exists.
   // Intersection? intersection(GeometricPrimitive other);
 }
