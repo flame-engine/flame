@@ -56,16 +56,19 @@ class Pizza extends BodyComponent {
     ];
     shape.set(vertices);
 
-    final fixtureDef = FixtureDef(shape)
-      ..userData = this // To be able to determine object in collision
-      ..restitution = 0.4
-      ..density = 1.0
-      ..friction = 0.5;
+    final fixtureDef = FixtureDef(
+      shape,
+      userData: this, // To be able to determine object in collision
+      restitution: 0.4,
+      density: 1.0,
+      friction: 0.5,
+    );
 
-    final bodyDef = BodyDef()
-      ..position = position
-      ..angle = (position.x + position.y) / 2 * pi
-      ..type = BodyType.dynamic;
+    final bodyDef = BodyDef(
+      position: position,
+      angle: (position.x + position.y) / 2 * pi,
+      type: BodyType.dynamic,
+    );
     return world.createBody(bodyDef)..createFixture(fixtureDef);
   }
 }

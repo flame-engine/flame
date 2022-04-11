@@ -13,9 +13,10 @@ class CircleShuffler extends BodyComponent {
 
   @override
   Body createBody() {
-    final bodyDef = BodyDef()
-      ..type = BodyType.dynamic
-      ..position = _center + Vector2(0.0, -25.0);
+    final bodyDef = BodyDef(
+      type: BodyType.dynamic,
+      position: _center + Vector2(0.0, -25.0),
+    );
     const numPieces = 5;
     const radius = 6.0;
     final body = world.createBody(bodyDef);
@@ -28,10 +29,12 @@ class CircleShuffler extends BodyComponent {
         ..radius = 1.2
         ..position.setValues(xPos, yPos);
 
-      final fixtureDef = FixtureDef(shape)
-        ..density = 50.0
-        ..friction = .1
-        ..restitution = .9;
+      final fixtureDef = FixtureDef(
+        shape,
+        density: 50.0,
+        friction: .1,
+        restitution: .9,
+      );
 
       body.createFixture(fixtureDef);
     }
@@ -67,10 +70,7 @@ class CornerRamp extends BodyComponent {
     ];
     shape.createLoop(vertices);
 
-    final fixtureDef = FixtureDef(shape)
-      ..restitution = 0.0
-      ..friction = 0.1;
-
+    final fixtureDef = FixtureDef(shape, friction: 0.1);
     final bodyDef = BodyDef()
       ..position = _center
       ..type = BodyType.static;
