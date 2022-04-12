@@ -14,6 +14,7 @@ class InventoryListener extends Component
 
   @override
   void onNewState(InventoryState state) {
+    super.onNewState(state);
     lastState = state;
   }
 }
@@ -80,6 +81,34 @@ void main() {
         bloc.selectBow();
         await Future<void>.microtask(() {});
         expect(component.lastState, equals(InventoryState.bow));
+      });
+    });
+
+    group('onRemove', () {
+      testWithFlameGame('dispose created blocs', (game) async {
+        final provider = FlameBlocProvider<InventoryCubit, InventoryState>(
+          create: () => InventoryCubit(),
+        );
+        await game.ensureAdd(provider);
+        expect(provider.bloc.isClosed, isFalse);
+
+        provider.removeFromParent();
+        await game.ready();
+        expect(provider.bloc.isClosed, isTrue);
+      });
+
+      testWithFlameGame("don't dispose value bloc", (game) async {
+        final bloc = InventoryCubit();
+        final provider =
+            FlameBlocProvider<InventoryCubit, InventoryState>.value(
+          value: bloc,
+        );
+        await game.ensureAdd(provider);
+        expect(provider.bloc.isClosed, isFalse);
+
+        provider.removeFromParent();
+        await game.ready();
+        expect(provider.bloc.isClosed, isFalse);
       });
     });
   });

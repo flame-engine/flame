@@ -10,7 +10,8 @@ import '../flame_bloc.dart';
 mixin FlameBlocListener<B extends BlocBase<S>, S> on Component {
   late S _state;
   late B _bloc;
-  late StreamSubscription<S> _subscription;
+  @visibleForTesting
+  late StreamSubscription<S> subscription;
 
   @override
   @mustCallSuper
@@ -25,7 +26,7 @@ mixin FlameBlocListener<B extends BlocBase<S>, S> on Component {
     _bloc = provider.bloc;
     _state = _bloc.state;
 
-    _subscription = _bloc.stream.listen((newState) {
+    subscription = _bloc.stream.listen((newState) {
       if (_state != newState) {
         final _callNewState = listenWhen(_state, newState);
         _state = newState;
@@ -52,6 +53,6 @@ mixin FlameBlocListener<B extends BlocBase<S>, S> on Component {
   @mustCallSuper
   void onRemove() {
     super.onRemove();
-    _subscription.cancel();
+    subscription.cancel();
   }
 }
