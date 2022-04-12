@@ -11,9 +11,13 @@ class FlameBlocProvider<B extends BlocBase<S>, S> extends Component {
   /// Will provide the [Bloc] returned by the [create] function,
   /// when this constructor is used, the bloc will only live while
   /// this component is alive.
-  FlameBlocProvider({required B Function() create})
-      : _bloc = create(),
-        _created = true;
+  FlameBlocProvider({
+    required B Function() create,
+    List<Component>? children,
+  })  : _bloc = create(),
+        _created = true {
+    _addChildren(children);
+  }
 
   /// {@macro flame_bloc_provider}
   ///
@@ -22,11 +26,20 @@ class FlameBlocProvider<B extends BlocBase<S>, S> extends Component {
   /// disposing the bloc.
   FlameBlocProvider.value({
     required B value,
+    List<Component>? children,
   })  : _bloc = value,
-        _created = false;
+        _created = false {
+    _addChildren(children);
+  }
 
   final B _bloc;
   final bool _created;
+
+  void _addChildren(List<Component>? children) {
+    if (children != null) {
+      children.forEach(add);
+    }
+  }
 
   /// Return the [Bloc] provided by this [FlameBlocProvider]
   B get bloc => _bloc;

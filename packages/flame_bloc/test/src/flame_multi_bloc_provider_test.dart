@@ -89,5 +89,66 @@ void main() {
       expect(player.lastState, equals(PlayerState.sad));
       expect(inventory.lastState, equals(InventoryState.bow));
     });
+
+    group('when using children on constructor', () {
+      testWithFlameGame('Provides multiple blocs down on the tree',
+          (game) async {
+        final inventoryCubit = InventoryCubit();
+        final playerCubit = PlayerCubit();
+
+        late InventoryReader inventory;
+        late PlayerReader player;
+
+        final provider = FlameMultiBlocProvider(
+          providers: [
+            FlameBlocProvider<InventoryCubit, InventoryState>.value(
+              value: inventoryCubit,
+            ),
+            FlameBlocProvider<PlayerCubit, PlayerState>.value(
+              value: playerCubit,
+            ),
+          ],
+          children: [
+            inventory = InventoryReader(),
+            player = PlayerReader(),
+          ],
+        );
+        await game.ensureAdd(provider);
+
+        expect(inventory.bloc, equals(inventoryCubit));
+        expect(player.bloc, equals(playerCubit));
+      });
+
+      testWithFlameGame('can listen to new state changes', (game) async {
+        final inventoryCubit = InventoryCubit();
+        final playerCubit = PlayerCubit();
+
+        late InventoryListener inventory;
+        late PlayerListener player;
+
+        final provider = FlameMultiBlocProvider(
+          providers: [
+            FlameBlocProvider<InventoryCubit, InventoryState>.value(
+              value: inventoryCubit,
+            ),
+            FlameBlocProvider<PlayerCubit, PlayerState>.value(
+              value: playerCubit,
+            ),
+          ],
+          children: [
+            inventory = InventoryListener(),
+            player = PlayerListener(),
+          ],
+        );
+        await game.ensureAdd(provider);
+
+        playerCubit.makeSad();
+        inventoryCubit.selectBow();
+        await Future<void>.microtask(() {});
+
+        expect(player.lastState, equals(PlayerState.sad));
+        expect(inventory.lastState, equals(InventoryState.bow));
+      });
+    });
   });
 }

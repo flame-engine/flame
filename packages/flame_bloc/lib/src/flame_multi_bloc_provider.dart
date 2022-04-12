@@ -10,10 +10,16 @@ class FlameMultiBlocProvider extends Component {
   /// {@macro flame_multi_bloc_provider}
   FlameMultiBlocProvider({
     required List<FlameBlocProvider> providers,
+    List<Component>? children,
   })  : _providers = providers,
+        _initialChildren = children,
         assert(providers.isNotEmpty, 'At least one provider must be given') {
     _addProviders();
   }
+
+  final List<FlameBlocProvider> _providers;
+  final List<Component>? _initialChildren;
+  FlameBlocProvider? _lastProvider;
 
   Future<void> _addProviders() async {
     final _list = [..._providers];
@@ -27,6 +33,8 @@ class FlameMultiBlocProvider extends Component {
 
     await add(_providers.first);
     _lastProvider = current;
+
+    _initialChildren?.forEach(add);
   }
 
   @override
@@ -36,7 +44,4 @@ class FlameMultiBlocProvider extends Component {
     }
     await _lastProvider?.add(component);
   }
-
-  final List<FlameBlocProvider> _providers;
-  FlameBlocProvider? _lastProvider;
 }
