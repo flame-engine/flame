@@ -15,8 +15,7 @@ class Ground extends BodyComponent {
     final shape = PolygonShape();
     shape.setAsBoxXY(20.0, 0.4);
 
-    final bodyDef = BodyDef();
-    bodyDef.position.setFrom(worldCenter);
+    final bodyDef = BodyDef(position: worldCenter.clone());
     final ground = world.createBody(bodyDef);
     ground.createFixtureFromShape(shape);
 
@@ -49,16 +48,19 @@ class BlobPart extends BodyComponent {
     final x = blobCenter.x + blobRadius.x * math.sin(angle);
     final y = blobCenter.y + blobRadius.y * math.cos(angle);
 
-    final bodyDef = BodyDef()
-      ..fixedRotation = true
-      ..position.setValues(x, y)
-      ..type = BodyType.dynamic;
+    final bodyDef = BodyDef(
+      fixedRotation: true,
+      position: Vector2(x, y),
+      type: BodyType.dynamic,
+    );
     final body = world.createBody(bodyDef);
 
     final shape = CircleShape()..radius = bodyRadius;
-    final fixtureDef = FixtureDef(shape)
-      ..density = 1.0
-      ..filter.groupIndex = -2;
+    final fixtureDef = FixtureDef(
+      shape,
+      density: 1.0,
+      filter: Filter()..groupIndex = -2,
+    );
     body.createFixture(fixtureDef);
     jointDef.addBody(body);
     return body;
@@ -72,9 +74,10 @@ class FallingBox extends BodyComponent {
 
   @override
   Body createBody() {
-    final bodyDef = BodyDef()
-      ..type = BodyType.dynamic
-      ..position = position;
+    final bodyDef = BodyDef(
+      type: BodyType.dynamic,
+      position: position,
+    );
     final shape = PolygonShape()..setAsBoxXY(2, 4);
     final body = world.createBody(bodyDef);
     body.createFixtureFromShape(shape, 1.0);
