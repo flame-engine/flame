@@ -25,18 +25,21 @@ class WidgetSample extends Forge2DGame with TapDetector {
   }
 
   Body createBody() {
-    final bodyDef = BodyDef()
-      ..angularVelocity = 3
-      ..position = screenToWorld(
+    final bodyDef = BodyDef(
+      angularVelocity: 3,
+      position: screenToWorld(
         Vector2.random()..multiply(camera.viewport.effectiveSize),
-      )
-      ..type = BodyType.dynamic;
+      ),
+      type: BodyType.dynamic,
+    );
     final body = world.createBody(bodyDef);
 
     final shape = PolygonShape()..setAsBoxXY(4.6, 0.8);
-    final fixtureDef = FixtureDef(shape)
-      ..density = 1.0
-      ..restitution = 0.95;
+    final fixtureDef = FixtureDef(
+      shape,
+      density: 1.0,
+      restitution: 0.95,
+    );
     body.createFixture(fixtureDef);
     return body;
   }
