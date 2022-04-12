@@ -19,12 +19,8 @@ class Box extends BodyComponent {
   @override
   Body createBody() {
     final shape = PolygonShape()..setAsBoxXY(2.0, 4.0);
-    final fixtureDef = FixtureDef(shape)..userData = this;
-
-    final bodyDef = BodyDef()
-      ..type = BodyType.static
-      ..position = position;
-
+    final fixtureDef = FixtureDef(shape, userData: this);
+    final bodyDef = BodyDef(position: position);
     return world.createBody(bodyDef)..createFixture(fixtureDef);
   }
 }
