@@ -302,6 +302,12 @@ mixin Game {
 class ActiveOverlaysNotifier extends ChangeNotifier {
   final Set<String> _activeOverlays = {};
 
+  /// Clear all active overlays.
+  void clear() {
+    value.clear();
+    notifyListeners();
+  }
+
   /// Mark a, overlay to be rendered.
   ///
   /// See also:
