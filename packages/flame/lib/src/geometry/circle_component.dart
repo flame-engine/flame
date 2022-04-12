@@ -14,6 +14,7 @@ class CircleComponent extends ShapeComponent {
     Vector2? position,
     double? angle,
     Anchor? anchor,
+    Iterable<Component>? children,
     int? priority,
     Paint? paint,
   }) : super(
@@ -21,6 +22,7 @@ class CircleComponent extends ShapeComponent {
           size: Vector2.all((radius ?? 0) * 2),
           angle: angle,
           anchor: anchor,
+          children: children,
           priority: priority,
           paint: paint,
         );
@@ -44,6 +46,11 @@ class CircleComponent extends ShapeComponent {
   /// Get the radius of the circle before scaling.
   double get radius {
     return min(size.x, size.y) / 2;
+  }
+
+  /// Set the radius of the circle (and therefore the [size]).
+  set radius(double value) {
+    size.setValues(value * 2, value * 2);
   }
 
   // Used to not create new Vector2 objects every time radius is called.

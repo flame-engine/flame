@@ -93,6 +93,7 @@ the component we change the priority to 2.
 Sometimes it is useful to wrap other components inside of your component. For example by grouping
 visual components through a hierarchy. You can do this by adding child components to any component,
 for example `PositionComponent`.
+
 When you have child components on a component every time the parent is updated and rendered, all the
 children are rendered and updated with the same conditions.
 
@@ -121,6 +122,41 @@ class GameOverPanel extends PositionComponent with HasGameRef<MyGame> {
   }
 }
 ```
+
+There are two methods for adding children components to your component. First,
+you have methods `add()`, `addAll()`, and `addToParent()`, which can be used
+at any time during the game. Traditionally, children will be created and added
+from the component's `onLoad()` method, but it is also common to add new
+children during the course of the game.
+
+The second method is to use the `children:` parameter in the component's
+constructor. This approach more closely resembles the standard Flutter API:
+```dart
+class MyGame extends FlameGame {
+  @override
+  Future<void> onLoad() async {
+    add(
+      PositionComponent(
+        position: Vector2(30, 0),
+        children: [
+          HighScoreDisplay(),
+          HitPointsDisplay(),
+          FpsCounter(),
+        ],
+      ),
+    );
+  }
+}
+```
+
+The two approaches can be combined freely: the children specified within the
+constructor will be added first, and then any additional child components
+after.
+
+Note that the children added via either methods are only guaranteed to be
+available eventually: after they are loaded and mounted. We can only assure
+that they will appear in the children list in the same order as they were
+scheduled for addition.
 
 
 ### Querying child components
@@ -558,7 +594,7 @@ parallax), you can do it in a few different ways depending on how fine-grained y
 settings for each layer.
 
 They simplest way is to set the named optional parameters `baseVelocity` and
-`velocityMultiplierDelta` in the `load` helper function. For example if you want to move your 
+`velocityMultiplierDelta` in the `load` helper function. For example if you want to move your
 background images along the X-axis with a faster speed the "closer" the image is:
 
 ```dart

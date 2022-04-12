@@ -1,3 +1,11 @@
+## 1.2.0
+
+ - Graduate package to a stable release. See pre-releases prior to this version for changelog entries.
+
+## 1.2.0-releasecandidate.6
+
+ - **FEAT**: Possibility to mark gesture events as handled (#1465). ([4c3960c3](https://github.com/flame-engine/flame/commit/4c3960c3418f8ff4d557c1764c6793468238a8da))
+
 ## 1.2.0-releasecandidate.5
 
  - Update a dependency to the latest release.

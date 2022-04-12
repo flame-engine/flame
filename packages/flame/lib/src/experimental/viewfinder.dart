@@ -5,6 +5,7 @@ import 'package:vector_math/vector_math_64.dart';
 
 import '../anchor.dart';
 import '../components/component.dart';
+import '../effects/provider_interfaces.dart';
 import '../game/transform2d.dart';
 import 'camera_component.dart';
 
@@ -14,7 +15,8 @@ import 'camera_component.dart';
 /// The viewfinder contains the game point that is currently at the
 /// "cross-hairs" of the viewport ([position]), the [zoom] level, and the
 /// [angle] of rotation of the camera.
-class Viewfinder extends Component {
+class Viewfinder extends Component
+    implements AngleProvider, PositionProvider, ScaleProvider {
   /// Internal transform matrix used by the viewfinder.
   final Transform2D _transform = Transform2D();
 
@@ -23,7 +25,9 @@ class Viewfinder extends Component {
 
   /// The game coordinates of a point that is to be positioned at the center
   /// of the viewport.
+  @override
   Vector2 get position => -_transform.offset;
+  @override
   set position(Vector2 value) => _transform.offset = -value;
 
   /// Zoom level of the game.
@@ -44,7 +48,9 @@ class Viewfinder extends Component {
   /// Rotation angle of the game world, in radians.
   ///
   /// The rotation is around the axis that is perpendicular to the screen.
+  @override
   double get angle => -_transform.angle;
+  @override
   set angle(double value) => _transform.angle = -value;
 
   /// The point within the viewport that is considered the "logical center" of
@@ -99,7 +105,7 @@ class Viewfinder extends Component {
 
   /// Set [zoom] level based on the [_visibleGameSize].
   void _initZoom() {
-    if (isMounted && _visibleGameSize != null) {
+    if (parent != null && _visibleGameSize != null) {
       final viewportSize = camera.viewport.size;
       final zoomX = viewportSize.x / _visibleGameSize!.x;
       final zoomY = viewportSize.y / _visibleGameSize!.y;
@@ -132,5 +138,20 @@ class Viewfinder extends Component {
     );
     _initZoom();
     onViewportResize();
+  }
+
+  /// [ScaleProvider]'s API.
+  @internal
+  @override
+  Vector2 get scale => _transform.scale;
+  @internal
+  @override
+  set scale(Vector2 value) {
+    assert(
+      value.x == value.y,
+      'Non-uniform scale cannot be applied to a Viewfinder: $value',
+    );
+    assert(value.x > 0, 'Zoom must be positive: ${value.x}');
+    _transform.scale = value;
   }
 }

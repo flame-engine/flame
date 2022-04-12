@@ -71,9 +71,9 @@ void main() {
     );
   }
 
-  myGame().widgetTest(
+  myGame().testGameWidget(
     'can pause the engine',
-    (game, tester) async {
+    verify: (game, tester) async {
       // Run two frames
       await tester.pump();
       await tester.pump();
@@ -87,9 +87,9 @@ void main() {
     },
   );
 
-  myGame().widgetTest(
+  myGame().testGameWidget(
     'can resume the engine',
-    (game, tester) async {
+    verify: (game, tester) async {
       // Run two frames
       await tester.pump();
       await tester.pump();
@@ -106,9 +106,9 @@ void main() {
     },
   );
 
-  myGame().widgetTest(
+  myGame().testGameWidget(
     "when paused, don't auto start after a rebuild",
-    (game, tester) async {
+    verify: (game, tester) async {
       // Run two frames
       await tester.pump();
       await tester.pump();
@@ -122,9 +122,9 @@ void main() {
     },
   );
 
-  myGame(paused: true).widgetTest(
+  myGame(paused: true).testGameWidget(
     'can start paused',
-    (game, tester) async {
+    verify: (game, tester) async {
       // Run two frames
       await tester.pump();
       await tester.pump();
@@ -133,9 +133,9 @@ void main() {
     },
   );
 
-  myGame(paused: true).widgetTest(
+  myGame(paused: true).testGameWidget(
     'can start paused and resumed later',
-    (game, tester) async {
+    verify: (game, tester) async {
       // Run two frames
       await tester.pump();
       await tester.pump();
