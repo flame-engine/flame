@@ -16,8 +16,7 @@ class Platform extends BodyComponent {
     final shape = PolygonShape()..setAsBoxXY(14.8, 0.125);
     final fixtureDef = FixtureDef(shape);
 
-    final bodyDef = BodyDef();
-    bodyDef.position = position;
+    final bodyDef = BodyDef(position: position);
     final body = world.createBody(bodyDef);
     return body..createFixture(fixtureDef);
   }
@@ -31,15 +30,14 @@ class DominoBrick extends BodyComponent {
   @override
   Body createBody() {
     final shape = PolygonShape()..setAsBoxXY(0.125, 2.0);
-    final fixtureDef = FixtureDef(shape)
-      ..density = 25.0
-      ..restitution = 0.4
-      ..friction = 0.5;
+    final fixtureDef = FixtureDef(
+      shape,
+      density: 25.0,
+      restitution: 0.4,
+      friction: 0.5,
+    );
 
-    final bodyDef = BodyDef()
-      ..type = BodyType.dynamic
-      ..position = position;
-
+    final bodyDef = BodyDef(type: BodyType.dynamic, position: position);
     return world.createBody(bodyDef)..createFixture(fixtureDef);
   }
 }
