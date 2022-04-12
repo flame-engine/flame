@@ -1,3 +1,7 @@
+## 1.2.0
+
+ - **FEAT**: Added children parameter to Component constructor (#1525). ([f0b31fcf](https://github.com/flame-engine/flame/commit/f0b31fcfc0fc6b0f8f96895ef6a68fd5a30a3159))
+
 ## 1.1.0
 
  - Graduate package to a stable release. See pre-releases prior to this version for changelog entries.

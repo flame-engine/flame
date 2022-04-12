@@ -69,6 +69,7 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
     Vector2? scale,
     double? angle,
     Anchor? anchor,
+    Iterable<Component>? children,
     int? priority,
   })  : _boxConfig = boxConfig ?? TextBoxConfig(),
         pixelRatio = pixelRatio ?? window.devicePixelRatio,
@@ -79,6 +80,7 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
           scale: scale,
           angle: angle,
           anchor: anchor,
+          children: children,
           priority: priority,
         );
 
