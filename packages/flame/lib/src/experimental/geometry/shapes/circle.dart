@@ -2,8 +2,8 @@ import 'dart:ui';
 
 import 'package:meta/meta.dart';
 
-import '../../extensions/vector2.dart';
-import '../../game/transform2d.dart';
+import '../../../extensions/vector2.dart';
+import '../../../game/transform2d.dart';
 import 'shape.dart';
 
 /// The circle with a given [center] and [radius].

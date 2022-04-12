@@ -1,9 +1,9 @@
 import 'dart:ui';
 
-import '../../anchor.dart';
-import '../../components/component.dart';
-import '../../components/position_component.dart';
-import '../../extensions/vector2.dart';
+import '../../../anchor.dart';
+import '../../../components/component.dart';
+import '../../../components/position_component.dart';
+import '../../../extensions/vector2.dart';
 import '../shapes/shape.dart';
 
 /// A component that renders a simple geometric shape.

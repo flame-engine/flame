@@ -4,7 +4,7 @@ import 'dart:ui';
 import 'package:meta/meta.dart';
 import 'package:vector_math/vector_math_64.dart';
 
-import '../../game/transform2d.dart';
+import '../../../game/transform2d.dart';
 import 'shape.dart';
 
 /// An axis-aligned rectangle with rounded corners.
