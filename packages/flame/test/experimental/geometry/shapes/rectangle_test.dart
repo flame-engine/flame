@@ -77,26 +77,32 @@ void main() {
       expect(rectangle.containsPoint(Vector2(3, 2)), false);
       expect(rectangle.containsPoint(Vector2(4, 2)), true);
       expect(rectangle.containsPoint(Vector2(5, 2)), true);
-      expect(rectangle.containsPoint(Vector2(6, 2)), false);
+      expect(rectangle.containsPoint(Vector2(6, 2)), true);
       expect(rectangle.containsPoint(Vector2(7, 2)), false);
 
       expect(rectangle.containsPoint(Vector2(3, 3)), false);
       expect(rectangle.containsPoint(Vector2(4, 3)), true);
       expect(rectangle.containsPoint(Vector2(5, 3)), true);
-      expect(rectangle.containsPoint(Vector2(6, 3)), false);
+      expect(rectangle.containsPoint(Vector2(6, 3)), true);
       expect(rectangle.containsPoint(Vector2(7, 3)), false);
 
       expect(rectangle.containsPoint(Vector2(3, 4)), false);
       expect(rectangle.containsPoint(Vector2(4, 4)), true);
       expect(rectangle.containsPoint(Vector2(5, 4)), true);
-      expect(rectangle.containsPoint(Vector2(6, 4)), false);
+      expect(rectangle.containsPoint(Vector2(6, 4)), true);
       expect(rectangle.containsPoint(Vector2(7, 4)), false);
 
       expect(rectangle.containsPoint(Vector2(3, 5)), false);
-      expect(rectangle.containsPoint(Vector2(4, 5)), false);
-      expect(rectangle.containsPoint(Vector2(5, 5)), false);
-      expect(rectangle.containsPoint(Vector2(6, 5)), false);
+      expect(rectangle.containsPoint(Vector2(4, 5)), true);
+      expect(rectangle.containsPoint(Vector2(5, 5)), true);
+      expect(rectangle.containsPoint(Vector2(6, 5)), true);
       expect(rectangle.containsPoint(Vector2(7, 5)), false);
+
+      expect(rectangle.containsPoint(Vector2(3, 6)), false);
+      expect(rectangle.containsPoint(Vector2(4, 6)), false);
+      expect(rectangle.containsPoint(Vector2(5, 6)), false);
+      expect(rectangle.containsPoint(Vector2(6, 6)), false);
+      expect(rectangle.containsPoint(Vector2(7, 6)), false);
     });
 
     test('move', () {

@@ -55,16 +55,12 @@ class Rectangle extends Shape {
     return Path()..addRect(Rect.fromLTRB(_left, _top, _right, _bottom));
   }
 
-  /// Returns true if [point] is inside the rectangle.
-  ///
-  /// The top and the left edges are inclusive, while the bottom and the right
-  /// are exclusive.
   @override
   bool containsPoint(Vector2 point) {
     return point.x >= _left &&
         point.y >= _top &&
-        point.x < _right &&
-        point.y < _bottom;
+        point.x <= _right &&
+        point.y <= _bottom;
   }
 
   @override

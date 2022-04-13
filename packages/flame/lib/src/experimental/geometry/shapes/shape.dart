@@ -47,8 +47,7 @@ abstract class Shape {
   @protected
   Aabb2 calculateAabb();
 
-  /// Returns true if the given [point] is inside (or on the boundary of) the
-  /// shape.
+  /// Returns true if the given [point] is inside the shape or on the boundary.
   bool containsPoint(Vector2 point);
 
   /// Converts the shape to a [Path] object, suitable for rendering on a canvas.

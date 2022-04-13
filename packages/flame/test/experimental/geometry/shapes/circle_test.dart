@@ -44,6 +44,11 @@ void main() {
         final inside = (point - center).length <= radius;
         expect(circle.containsPoint(point), inside);
       }
+      expect(circle.containsPoint(Vector2(7.5, 12)), true);
+      expect(circle.containsPoint(Vector2(2.5, 12)), true);
+      expect(circle.containsPoint(Vector2(5, 14.5)), true);
+      expect(circle.containsPoint(Vector2(5, 9.5)), true);
+      expect(circle.containsPoint(Vector2(5 + 1.5, 12 + 2)), true);
     });
 
     test('move', () {

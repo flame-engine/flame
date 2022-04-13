@@ -54,13 +54,9 @@ class Polygon extends Shape {
 
   @override
   Aabb2 calculateAabb() {
-    final min = _vertices[0].clone();
-    final max = _vertices[0].clone();
-    for (var i = 1; i < _vertices.length; i++) {
-      Vector2.min(min, _vertices[i], min);
-      Vector2.max(max, _vertices[i], max);
-    }
-    return Aabb2.minMax(min, max);
+    final aabb = Aabb2.minMax(_vertices.first, _vertices.first);
+    _vertices.forEach(aabb.hullPoint);
+    return aabb;
   }
 
   @override
