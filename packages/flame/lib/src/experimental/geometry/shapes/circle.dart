@@ -7,6 +7,8 @@ import '../../../game/transform2d.dart';
 import 'shape.dart';
 
 /// The circle with a given [center] and a [radius].
+///
+/// A circle must have a positive (non-zero) radius.
 class Circle extends Shape {
   Circle(Vector2 center, double radius)
       : assert(radius > 0, 'Radius must be positive: $radius'),
@@ -21,9 +23,7 @@ class Circle extends Shape {
   final double _radius;
 
   @override
-  Aabb2 get aabb => _aabb ??= _calculateAabb();
-  Aabb2? _aabb;
-  Aabb2 _calculateAabb() {
+  Aabb2 calculateAabb() {
     return Aabb2.centerAndHalfExtents(_center, Vector2.all(_radius));
   }
 
@@ -56,7 +56,7 @@ class Circle extends Shape {
   @override
   void move(Vector2 offset) {
     _center.add(offset);
-    _aabb = null;
+    super.move(offset);
   }
 
   @override

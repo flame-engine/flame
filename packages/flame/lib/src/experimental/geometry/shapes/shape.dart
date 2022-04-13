@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:meta/meta.dart';
 import 'package:vector_math/vector_math_64.dart';
 
 import '../../../game/transform2d.dart';
@@ -41,7 +42,10 @@ abstract class Shape {
   ///
   /// Implementations are encouraged to cache the computed Aabb in order to
   /// avoid repeated recalculations on every game tick.
-  Aabb2 get aabb;
+  Aabb2 get aabb => _aabb ??= calculateAabb();
+  Aabb2? _aabb;
+  @protected
+  Aabb2 calculateAabb();
 
   /// Returns true if the given [point] is inside (or on the boundary of) the
   /// shape.
@@ -59,7 +63,13 @@ abstract class Shape {
   /// and `Rectangle` into a `Polygon`.
   Shape project(Transform2D transform);
 
-  void move(Vector2 offset) {}
+  @mustCallSuper
+  void move(Vector2 offset) {
+    if (_aabb != null) {
+      _aabb!.min.add(offset);
+      _aabb!.max.add(offset);
+    }
+  }
 
   /// Finds the intersection of this shape with another one, if it exists.
   // Intersection? intersection(GeometricPrimitive other);

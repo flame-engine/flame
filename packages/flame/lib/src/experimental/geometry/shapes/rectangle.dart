@@ -1,18 +1,18 @@
 import 'dart:math';
 import 'dart:ui';
 
-import 'package:meta/meta.dart';
 import 'package:vector_math/vector_math_64.dart';
 
 import '../../../game/transform2d.dart';
 import 'shape.dart';
 
 /// An axis-aligned rectangle.
+///
+/// This is similar to dart:ui's [Rect], except that this class is mutable, and
+/// conforms to the [Shape] API.
 class Rectangle extends Shape {
-  Rectangle.fromLTRB(double left, double top, double right, double bottom)
-      : _min = Vector2(left, top),
-        _max = Vector2(right, bottom),
-        assert(left < right && top < bottom);
+  Rectangle.fromLTRB(this._left, this._top, this._right, this._bottom)
+      : assert(_left < _right && _top < _bottom);
 
   factory Rectangle.fromPoints(Vector2 a, Vector2 b) => Rectangle.fromLTRB(
         min(a.x, b.x),
@@ -24,24 +24,28 @@ class Rectangle extends Shape {
   factory Rectangle.fromRect(Rect rect) =>
       Rectangle.fromLTRB(rect.left, rect.top, rect.right, rect.bottom);
 
-  final Vector2 _min;
-  final Vector2 _max;
+  double _left;
+  double _top;
+  double _right;
+  double _bottom;
+
+  @override
+  Aabb2 calculateAabb() {
+    return Aabb2.minMax(Vector2(_left, _top), Vector2(_right, _bottom));
+  }
 
   @override
   bool get isConvex => true;
 
   @override
-  Vector2 get center => (_min + _max)..scaled(0.5);
+  Vector2 get center => Vector2((_left + _right) / 2, (_top + _bottom) / 2);
 
   @override
-  double get perimeter => 2 * ((_max.x - _min.x) + (_max.y - _min.y));
-
-  @override
-  Aabb2 get aabb => Aabb2.minMax(_min, _max);
+  double get perimeter => 2 * ((_right - _left) + (_bottom - _top));
 
   @override
   Path asPath() {
-    return Path()..addRect(Rect.fromLTRB(_min.x, _min.y, _max.x, _max.y));
+    return Path()..addRect(Rect.fromLTRB(_left, _top, _right, _bottom));
   }
 
   /// Returns true if [point] is inside the rectangle.
@@ -50,23 +54,31 @@ class Rectangle extends Shape {
   /// exclusive.
   @override
   bool containsPoint(Vector2 point) {
-    return point.x >= _min.x &&
-        point.x < _max.x &&
-        point.y >= _min.y &&
-        point.y < _max.y;
+    return point.x >= _left &&
+        point.x < _right &&
+        point.y >= _top &&
+        point.y < _bottom;
   }
 
   @override
   Shape project(Transform2D transform) {
     if (transform.isAxisAligned) {
-      final newMin = transform.localToGlobal(_min);
-      final newMax = transform.localToGlobal(_max);
+      final newMin = transform.localToGlobal(Vector2(_left, _top));
+      final newMax = transform.localToGlobal(Vector2(_right, _bottom));
       return Rectangle.fromPoints(newMin, newMax);
     }
     throw UnimplementedError();
   }
 
   @override
-  String toString() =>
-      'Rectangle([${_min.x}, ${_min.y}], [${_max.x}, ${_max.y}])';
+  void move(Vector2 offset) {
+    _left += offset.x;
+    _right += offset.x;
+    _top += offset.y;
+    _bottom += offset.y;
+    super.move(offset);
+  }
+
+  @override
+  String toString() => 'Rectangle([$_left, $_top], [$_right, $_bottom])';
 }

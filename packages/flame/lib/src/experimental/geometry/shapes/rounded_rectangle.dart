@@ -70,7 +70,7 @@ class RoundedRectangle extends Shape {
   Vector2 get center => (_min + _max)..scaled(0.5);
 
   @override
-  Aabb2 get aabb => Aabb2.minMax(_min, _max);
+  Aabb2 calculateAabb() => Aabb2.minMax(_min, _max);
 
   RRect asRRect() {
     return RRect.fromLTRBR(

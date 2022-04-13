@@ -53,7 +53,7 @@ class Polygon extends Shape {
   }
 
   @override
-  Aabb2 get aabb {
+  Aabb2 calculateAabb() {
     final min = _vertices[0].clone();
     final max = _vertices[0].clone();
     for (var i = 1; i < _vertices.length; i++) {
