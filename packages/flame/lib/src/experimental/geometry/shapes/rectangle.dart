@@ -8,7 +8,6 @@ import '../../../game/transform2d.dart';
 import 'shape.dart';
 
 /// An axis-aligned rectangle.
-@immutable
 class Rectangle extends Shape {
   Rectangle.fromLTRB(double left, double top, double right, double bottom)
       : _min = Vector2(left, top),
@@ -66,13 +65,6 @@ class Rectangle extends Shape {
     }
     throw UnimplementedError();
   }
-
-  @override
-  bool operator ==(Object other) =>
-      other is Rectangle && _min == other._min && _max == other._max;
-
-  @override
-  int get hashCode => hashValues(_min, _max);
 
   @override
   String toString() =>
