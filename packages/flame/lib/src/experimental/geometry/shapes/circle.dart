@@ -28,9 +28,6 @@ class Circle extends Shape {
   }
 
   @override
-  bool get isClosed => true;
-
-  @override
   bool get isConvex => true;
 
   @override

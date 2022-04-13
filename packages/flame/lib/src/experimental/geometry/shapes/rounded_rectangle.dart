@@ -60,9 +60,6 @@ class RoundedRectangle extends Shape {
   static const tau = Transform2D.tau; // 2π
 
   @override
-  bool get isClosed => true;
-
-  @override
   bool get isConvex => true;
 
   @override

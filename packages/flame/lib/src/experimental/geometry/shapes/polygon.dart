@@ -22,9 +22,6 @@ class Polygon extends Shape {
   }
 
   @override
-  bool get isClosed => true;
-
-  @override
   bool get isConvex => _convex ??= _calculateIsConvex();
   bool? _convex;
 

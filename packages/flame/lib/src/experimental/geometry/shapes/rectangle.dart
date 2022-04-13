@@ -29,9 +29,6 @@ class Rectangle extends Shape {
   final Vector2 _max;
 
   @override
-  bool get isClosed => true;
-
-  @override
   bool get isConvex => true;
 
   @override

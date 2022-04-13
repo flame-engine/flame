@@ -19,7 +19,7 @@ import 'rounded_rectangle.dart';
 abstract class Shape {
   /// True if the shape is "closed", in the sense that it has an interior. For
   /// example, a closed shape can be filled with a paint.
-  bool get isClosed;
+  bool get isClosed => true;
 
   /// True if the shape is convex, i.e. a line segment connecting any two points
   /// of the shape would lie completely within the shape.
@@ -38,6 +38,9 @@ abstract class Shape {
   Vector2 get center;
 
   /// The axis-aligned bounding box of the shape.
+  ///
+  /// Implementations are encouraged to cache the computed Aabb in order to
+  /// avoid repeated recalculations on every game tick.
   Aabb2 get aabb;
 
   /// Returns true if the given [point] is inside (or on the boundary of) the
