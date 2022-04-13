@@ -14,6 +14,8 @@ class Rectangle extends Shape {
   Rectangle.fromLTRB(this._left, this._top, this._right, this._bottom)
       : assert(_left < _right && _top < _bottom);
 
+  /// Constructs a [Rectangle] from two opposite corners. The points can be in
+  /// any disposition to each other.
   factory Rectangle.fromPoints(Vector2 a, Vector2 b) => Rectangle.fromLTRB(
         min(a.x, b.x),
         min(a.y, b.y),
@@ -28,6 +30,11 @@ class Rectangle extends Shape {
   double _top;
   double _right;
   double _bottom;
+
+  double get left => _left;
+  double get right => _right;
+  double get top => _top;
+  double get bottom => _bottom;
 
   @override
   Aabb2 calculateAabb() {
@@ -50,13 +57,13 @@ class Rectangle extends Shape {
 
   /// Returns true if [point] is inside the rectangle.
   ///
-  /// The top and left edges are inclusive, while the bottom and right are
-  /// exclusive.
+  /// The top and the left edges are inclusive, while the bottom and the right
+  /// are exclusive.
   @override
   bool containsPoint(Vector2 point) {
     return point.x >= _left &&
-        point.x < _right &&
         point.y >= _top &&
+        point.x < _right &&
         point.y < _bottom;
   }
 

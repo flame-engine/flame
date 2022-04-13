@@ -70,7 +70,7 @@ void main() {
       final metrics = path.computeMetrics().toList();
       expect(metrics.length, 1);
       expect(metrics[0].isClosed, true);
-      expect(metrics[0].length, closeTo(2 * pi * 100, 1.5));
+      expect(metrics[0].length, closeTo(circle.perimeter, 1.5));
     });
 
     test('project', () {
