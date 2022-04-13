@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:flame/experimental.dart';
+import 'package:flame/game.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vector_math/vector_math_64.dart';
@@ -44,6 +45,48 @@ void main() {
         final inside = (point - center).length <= radius;
         expect(circle.containsPoint(point), inside);
       }
+    });
+
+    test('move', () {
+      final circle = Circle(Vector2.zero(), 1);
+      expect(circle.center, closeToVector(0, 0));
+      expect(circle.radius, 1);
+      expect(
+        circle.aabb,
+        closeToAabb(Aabb2.minMax(Vector2(-1, -1), Vector2(1, 1))),
+      );
+
+      circle.move(Vector2(4, 7));
+      expect(circle.center, closeToVector(4, 7));
+      expect(circle.radius, 1);
+      expect(
+        circle.aabb,
+        closeToAabb(Aabb2.minMax(Vector2(3, 6), Vector2(5, 8))),
+      );
+    });
+
+    test('asPath', () {
+      final circle = Circle(Vector2(30, 40), 100);
+      final path = circle.asPath();
+      final metrics = path.computeMetrics().toList();
+      expect(metrics.length, 1);
+      expect(metrics[0].isClosed, true);
+      expect(metrics[0].length, closeTo(2 * pi * 100, 1.5));
+    });
+
+    test('project', () {
+      final circle = Circle(Vector2.zero(), 100);
+      final transform = Transform2D()..position = Vector2(10, 40);
+      final result = circle.project(transform);
+      expect(result, isA<Circle>());
+      expect(result.center, closeToVector(10, 40));
+      expect((result as Circle).radius, 100);
+
+      transform.scale.setValues(1, 2);
+      expect(
+        () => circle.project(transform),
+        throwsUnimplementedError,
+      );
     });
   });
 }
