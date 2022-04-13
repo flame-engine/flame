@@ -37,7 +37,10 @@ class Rectangle extends Shape {
   double get bottom => _bottom;
 
   @override
-  Aabb2 calculateAabb() {
+  Aabb2 get aabb => _aabb ??= _calculateAabb();
+  Aabb2? _aabb;
+
+  Aabb2 _calculateAabb() {
     return Aabb2.minMax(Vector2(_left, _top), Vector2(_right, _bottom));
   }
 
@@ -79,7 +82,10 @@ class Rectangle extends Shape {
     _right += offset.x;
     _top += offset.y;
     _bottom += offset.y;
-    super.move(offset);
+    if (_aabb != null) {
+      _aabb!.min.add(offset);
+      _aabb!.max.add(offset);
+    }
   }
 
   @override

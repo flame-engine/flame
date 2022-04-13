@@ -68,7 +68,10 @@ class RoundedRectangle extends Shape {
   Vector2 get center => Vector2((_left + _right) / 2, (_top + _bottom) / 2);
 
   @override
-  Aabb2 calculateAabb() =>
+  Aabb2 get aabb => _aabb ??= _calculateAabb();
+  Aabb2? _aabb;
+
+  Aabb2 _calculateAabb() =>
       Aabb2.minMax(Vector2(_left, _top), Vector2(_right, _bottom));
 
   /// Converts this shape into an [RRect] from dart:ui.
@@ -97,6 +100,11 @@ class RoundedRectangle extends Shape {
       final newMax = transform.localToGlobal(Vector2(_right, _bottom));
       return RoundedRectangle.fromPoints(newMin, newMax, _radius);
     }
+    throw UnimplementedError();
+  }
+
+  @override
+  void move(Vector2 offset) {
     throw UnimplementedError();
   }
 

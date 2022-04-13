@@ -42,10 +42,7 @@ abstract class Shape {
   ///
   /// Implementations are encouraged to cache the computed Aabb in order to
   /// avoid repeated recalculations on every game tick.
-  Aabb2 get aabb => _aabb ??= calculateAabb();
-  Aabb2? _aabb;
-  @protected
-  Aabb2 calculateAabb();
+  Aabb2 get aabb;
 
   /// Returns true if the given [point] is inside the shape or on the boundary.
   bool containsPoint(Vector2 point);
@@ -67,13 +64,7 @@ abstract class Shape {
   /// should create and return a new [Shape].
   Shape project(Transform2D transform, [Shape? target]);
 
-  @mustCallSuper
-  void move(Vector2 offset) {
-    if (_aabb != null) {
-      _aabb!.min.add(offset);
-      _aabb!.max.add(offset);
-    }
-  }
+  void move(Vector2 offset);
 
   /// Finds the intersection of this shape with another one, if it exists.
   // Intersection? intersection(GeometricPrimitive other);

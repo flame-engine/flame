@@ -218,6 +218,11 @@ class Transform2D extends ChangeNotifier {
   /// (vertical).
   bool get isAxisAligned => _angle == 0;
 
+  /// Whether the transform preserves angles. A conformal transformation may
+  /// consist of a translation, rotation, and uniform scaling. A reflection is
+  /// not considered conformal.
+  bool get isConformal => _scale.x == _scale.y;
+
   /// Whether the transform includes a reflection, i.e. it flips the orientation
   /// of the coordinate system.
   bool get hasReflection => _scale.x.sign * _scale.y.sign == -1;

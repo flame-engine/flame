@@ -20,10 +20,13 @@ class Circle extends Shape {
   final Vector2 _center;
 
   double get radius => _radius;
-  final double _radius;
+  double _radius;
 
   @override
-  Aabb2 calculateAabb() {
+  Aabb2 get aabb => _aabb ??= _calculateAabb();
+  Aabb2? _aabb;
+
+  Aabb2 _calculateAabb() {
     return Aabb2.centerAndHalfExtents(_center, Vector2.all(_radius));
   }
 
@@ -46,9 +49,16 @@ class Circle extends Shape {
 
   @override
   Shape project(Transform2D transform, [Shape? target]) {
-    if (transform.isTranslation) {
+    if (transform.isConformal) {
       final newCenter = transform.localToGlobal(_center);
-      return Circle(newCenter, _radius);
+      final newRadius = transform.scale.x.abs() * _radius;
+      if (target is Circle) {
+        target._center.setFrom(newCenter);
+        target._radius = newRadius;
+        _aabb = null;
+      } else {
+        return Circle(newCenter, newRadius);
+      }
     }
     throw UnimplementedError();
   }
@@ -56,7 +66,10 @@ class Circle extends Shape {
   @override
   void move(Vector2 offset) {
     _center.add(offset);
-    super.move(offset);
+    if (_aabb != null) {
+      _aabb!.min.add(offset);
+      _aabb!.max.add(offset);
+    }
   }
 
   @override

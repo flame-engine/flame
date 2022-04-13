@@ -53,7 +53,10 @@ class Polygon extends Shape {
   }
 
   @override
-  Aabb2 calculateAabb() {
+  Aabb2 get aabb => _aabb ??= _calculateAabb();
+  Aabb2? _aabb;
+
+  Aabb2 _calculateAabb() {
     final aabb = Aabb2.minMax(_vertices.first, _vertices.first);
     _vertices.forEach(aabb.hullPoint);
     return aabb;
@@ -114,5 +117,10 @@ class Polygon extends Shape {
           .map((vertex) => transform.localToGlobal(vertex))
           .toList(growable: false),
     );
+  }
+
+  @override
+  void move(Vector2 offset) {
+    throw UnimplementedError();
   }
 }
