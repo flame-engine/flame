@@ -4,7 +4,7 @@ import 'package:vector_math/vector_math_64.dart';
 
 import '../../../game/transform2d.dart';
 import 'circle.dart';
-import 'line_segment.dart';
+import 'polygon.dart';
 import 'rectangle.dart';
 import 'rounded_rectangle.dart';
 
@@ -13,7 +13,7 @@ import 'rounded_rectangle.dart';
 ///
 /// Implementations include:
 ///   - [Circle]
-///   - [LineSegment]
+///   - [Polygon]
 ///   - [Rectangle]
 ///   - [RoundedRectangle]
 abstract class Shape {

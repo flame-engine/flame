@@ -17,7 +17,6 @@ export 'src/experimental/fixed_size_viewport.dart' show FixedSizeViewport;
 export 'src/experimental/geometry/components/shape_component.dart'
     show ShapeComponent;
 export 'src/experimental/geometry/shapes/circle.dart' show Circle;
-export 'src/experimental/geometry/shapes/line_segment.dart' show LineSegment;
 export 'src/experimental/geometry/shapes/polygon.dart' show Polygon;
 export 'src/experimental/geometry/shapes/rectangle.dart' show Rectangle;
 export 'src/experimental/geometry/shapes/rounded_rectangle.dart'
