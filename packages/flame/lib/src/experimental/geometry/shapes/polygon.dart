@@ -108,7 +108,7 @@ class Polygon extends Shape {
   }
 
   @override
-  Shape project(Transform2D transform) {
+  Shape project(Transform2D transform, [Shape? target]) {
     return Polygon(
       _vertices
           .map((vertex) => transform.localToGlobal(vertex))

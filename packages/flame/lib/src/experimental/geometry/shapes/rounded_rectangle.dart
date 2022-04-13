@@ -91,7 +91,7 @@ class RoundedRectangle extends Shape {
   }
 
   @override
-  Shape project(Transform2D transform) {
+  Shape project(Transform2D transform, [Shape? target]) {
     if (transform.isTranslation) {
       final newMin = transform.localToGlobal(Vector2(_left, _top));
       final newMax = transform.localToGlobal(Vector2(_right, _bottom));

@@ -45,7 +45,7 @@ class Circle extends Shape {
   }
 
   @override
-  Shape project(Transform2D transform) {
+  Shape project(Transform2D transform, [Shape? target]) {
     if (transform.isTranslation) {
       final newCenter = transform.localToGlobal(_center);
       return Circle(newCenter, _radius);

@@ -60,7 +60,12 @@ abstract class Shape {
   /// Certain shapes may be transformed into shapes of a different kind during
   /// the projection. For example, a `Circle` may transform into an `Ellipse`,
   /// and `Rectangle` into a `Polygon`.
-  Shape project(Transform2D transform);
+  ///
+  /// If [target] is provided and it has a proper type, then this method should
+  /// modify the target in-place and return it. If [target] is null, or if its
+  /// type is not compatible with the requested [transform], then the method
+  /// should create and return a new [Shape].
+  Shape project(Transform2D transform, [Shape? target]);
 
   @mustCallSuper
   void move(Vector2 offset) {
