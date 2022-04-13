@@ -7,7 +7,6 @@ import '../../../game/transform2d.dart';
 import 'shape.dart';
 
 /// The circle with a given [center] and [radius].
-@immutable
 class Circle extends Shape {
   Circle(Vector2 center, this.radius)
       : _center = center.clone(),
@@ -51,13 +50,6 @@ class Circle extends Shape {
     }
     throw UnimplementedError();
   }
-
-  @override
-  bool operator ==(Object other) =>
-      other is Circle && _center == other._center && radius == other.radius;
-
-  @override
-  int get hashCode => hashValues(_center, radius);
 
   @override
   String toString() => 'Circle([${center.x}, ${center.y}], $radius)';
