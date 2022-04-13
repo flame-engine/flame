@@ -14,7 +14,6 @@ class Circle extends Shape {
 
   final Vector2 _center;
   final double radius;
-  static const tau = Transform2D.tau; // 2π
 
   @override
   bool get isClosed => true;
@@ -38,8 +37,8 @@ class Circle extends Shape {
   }
 
   @override
-  bool containsPoint(Vector2 point, {double epsilon = 0.00001}) {
-    return (point - _center).length2 <= radius * radius + epsilon;
+  bool containsPoint(Vector2 point) {
+    return (point - _center).length2 <= radius * radius;
   }
 
   @override
@@ -52,5 +51,13 @@ class Circle extends Shape {
   }
 
   @override
+  void move(Vector2 offset) {
+    _center.add(offset);
+  }
+
+  @override
   String toString() => 'Circle([${center.x}, ${center.y}], $radius)';
 }
+
+@internal
+const tau = Transform2D.tau; // 2π

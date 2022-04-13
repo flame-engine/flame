@@ -89,7 +89,7 @@ class RoundedRectangle extends Shape {
   Path asPath() => Path()..addRRect(asRRect());
 
   @override
-  bool containsPoint(Vector2 point, {double epsilon = 1e-5}) {
+  bool containsPoint(Vector2 point) {
     if (point.x < _min.x || point.x > _max.x) {
       return false;
     }

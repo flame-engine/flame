@@ -42,13 +42,7 @@ abstract class Shape {
 
   /// Returns true if the given [point] is inside (or on the boundary of) the
   /// shape.
-  ///
-  /// The parameter [epsilon] can optionally be used to allow points that are
-  /// very close to the boundary of the shape to also be included. This is
-  /// especially important for shapes that are not closed (such as `Line`),
-  /// where due to floating-point rounding errors it might be impossible to find
-  /// points that lie _exactly_ on the boundary.
-  bool containsPoint(Vector2 point, {double epsilon = 1e-5});
+  bool containsPoint(Vector2 point);
 
   /// Converts the shape to a [Path] object, suitable for rendering on a canvas.
   /// If a particular geometric primitive cannot be represented as a [Path]

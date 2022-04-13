@@ -76,7 +76,7 @@ class Polygon extends Shape {
   }
 
   @override
-  bool containsPoint(Vector2 point, {double epsilon = 0.00001}) {
+  bool containsPoint(Vector2 point) {
     final edges = this.edges;
     final n = _vertices.length;
     if (isConvex) {

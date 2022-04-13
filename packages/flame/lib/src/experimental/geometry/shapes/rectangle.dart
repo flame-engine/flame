@@ -51,9 +51,9 @@ class Rectangle extends Shape {
   /// Returns true if [point] is inside the rectangle.
   ///
   /// The top and left edges are inclusive, while the bottom and right are
-  /// exclusive. The [epsilon] parameter is ignored.
+  /// exclusive.
   @override
-  bool containsPoint(Vector2 point, {double epsilon = 0.00001}) {
+  bool containsPoint(Vector2 point) {
     return point.x >= _min.x &&
         point.x < _max.x &&
         point.y >= _min.y &&
