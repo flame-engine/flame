@@ -1,65 +1,50 @@
 import 'package:forge2d/forge2d.dart';
 
-import 'body_component.dart';
+/// Listens to the entire [World] contacts events.
+///
+/// It propagates contact events (begin, end, preSolve, postSolve) when a [Body]
+/// or at least one of its fixtures `userData` must is set to [ContactListener].
+///
+/// If the [Body] `userData` is set to a [ContactListener] the contact events
+/// will be called when any [Body]'s fixture contacts another [Fixture].
+///
+/// If instead you wish to be more specific and only trigger contact events
+/// when a specific [Body]'s fixture contacts with another [Fixture] you can
+/// set the fixture `userData` to a [ContactListener].
+// TODO(alestiago): Make this class protected to the package.
+class WorldContactListener extends ContactListener {
+  Iterable<ContactListener> _contactCallbacks(Contact contact) => {
+        contact.bodyA.userData,
+        contact.fixtureA.userData,
+        contact.bodyB.userData,
+        contact.bodyB.userData,
+      }.whereType<ContactListener>();
 
-/// Listens to contacts events.
-mixin ContactCallback on BodyComponent {
-  void begin(Contact contact) {}
-  void end(Contact contact) {}
-  void preSolve(Contact contact, Manifold oldManifold) {}
-  void postSolve(Contact contact, ContactImpulse contactImpulse) {}
-}
-
-class ContactCallbacks extends ContactListener {
   @override
   void beginContact(Contact contact) {
-    final userDataA = contact.fixtureA.body.userData;
-    final userDataB = contact.fixtureB.body.userData;
-
-    if (userDataA is ContactCallback) {
-      userDataA.begin(contact);
-    }
-    if (userDataB is ContactCallback) {
-      userDataB.begin(contact);
-    }
+    _contactCallbacks(contact).forEach(
+      (contactCallback) => contactCallback.beginContact(contact),
+    );
   }
 
   @override
   void endContact(Contact contact) {
-    final userDataA = contact.fixtureA.body.userData;
-    final userDataB = contact.fixtureB.body.userData;
-
-    if (userDataA is ContactCallback) {
-      userDataA.end(contact);
-    }
-    if (userDataB is ContactCallback) {
-      userDataB.end(contact);
-    }
+    _contactCallbacks(contact).forEach(
+      (contactCallback) => contactCallback.endContact(contact),
+    );
   }
 
   @override
   void preSolve(Contact contact, Manifold oldManifold) {
-    final userDataA = contact.fixtureA.body.userData;
-    final userDataB = contact.fixtureB.body.userData;
-
-    if (userDataA is ContactCallback) {
-      userDataA.preSolve(contact, oldManifold);
-    }
-    if (userDataB is ContactCallback) {
-      userDataB.preSolve(contact, oldManifold);
-    }
+    _contactCallbacks(contact).forEach(
+      (contactCallback) => contactCallback.preSolve(contact, oldManifold),
+    );
   }
 
   @override
   void postSolve(Contact contact, ContactImpulse contactImpulse) {
-    final userDataA = contact.fixtureA.body.userData;
-    final userDataB = contact.fixtureB.body.userData;
-
-    if (userDataA is ContactCallback) {
-      userDataA.postSolve(contact, contactImpulse);
-    }
-    if (userDataB is ContactCallback) {
-      userDataB.postSolve(contact, contactImpulse);
-    }
+    _contactCallbacks(contact).forEach(
+      (contactCallback) => contactCallback.postSolve(contact, contactImpulse),
+    );
   }
 }
