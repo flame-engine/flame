@@ -1,5 +1,5 @@
 import 'dart:math';
-import 'package:flame/src/geometry/shapes/circle.dart';
+import 'package:flame/experimental.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vector_math/vector_math_64.dart';
@@ -29,10 +29,10 @@ void main() {
 
     test('aabb', () {
       final circle = Circle(Vector2(-3, 14), 2.0);
-      // expect(
-      //   circle.aabb,
-      //   closeToAabb(Aabb2.minMax(Vector2(-5, 12), Vector2(-1, 16))),
-      // );
+      expect(
+        circle.aabb,
+        closeToAabb(Aabb2.minMax(Vector2(-5, 12), Vector2(-1, 16))),
+      );
     });
 
     testRandom('containsPoint', (Random random) {
