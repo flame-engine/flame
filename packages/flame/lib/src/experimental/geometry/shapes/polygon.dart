@@ -79,12 +79,39 @@ class Polygon extends Shape {
   bool containsPoint(Vector2 point, {double epsilon = 0.00001}) {
     final edges = this.edges;
     final n = _vertices.length;
-    for (var i = 0; i < n; i++) {
-      if ((point - _vertices[i]).cross(edges[i]) < 0) {
-        return false;
+    if (isConvex) {
+      // For a convex polygon, a point is inside if for each edge the cross-
+      // product of that edge and a vector from the edge's origin to the point
+      // is positive or zero.
+      for (var i = 0; i < n; i++) {
+        if ((point - _vertices[i]).cross(edges[i]) < 0) {
+          return false;
+        }
       }
+      return true;
+    } else {
+      // For a non-convex polygon, we can verify that a point is inside using
+      // the winding theorem: if a point is inside, then any ray coming out of
+      // that point will intersect the polygon an odd number of times. If the
+      // point is outside, the number of intersections will be even.
+      // In this case we choose a horizontal ray that starts at `point` and
+      // goes towards +∞.
+      final x0 = point.x;
+      final y0 = point.y;
+      var intersectionCount = 0;
+      var j = n - 1; // index of previous vertex
+      for (var i = 0; i < n; i++) {
+        final vi = _vertices[i];
+        final vj = _vertices[j];
+        if ((vi.y == y0 && vi.x >= x0) ||
+            (vi.y > y0) != (vj.y > y0) &&
+                ((y0 - vj.y) * (vi.x - vj.x) / (vi.y - vj.y) >= (x0 - vj.x))) {
+          intersectionCount++;
+        }
+        j = i;
+      }
+      return intersectionCount.isOdd;
     }
-    return true;
   }
 
   @override
