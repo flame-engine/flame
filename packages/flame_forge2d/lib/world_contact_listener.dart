@@ -19,7 +19,7 @@ class WorldContactListener extends ContactListener {
         contact.bodyA.userData,
         contact.fixtureA.userData,
         contact.bodyB.userData,
-        contact.bodyB.userData,
+        contact.fixtureB.userData,
       }.whereType<ContactListener>();
 
   @override
