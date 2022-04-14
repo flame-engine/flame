@@ -2,27 +2,13 @@ import 'flame_forge2d.dart';
 
 /// Listens to the entire [World] contacts events.
 ///
-/// It propagates contact events (begin, end, preSolve, postSolve) to other
-/// [ContactListener]s when a [Body] or at least one of its fixtures `userData`
-/// is set to a [ContactListener].
+/// It propagates contact events ([beginContact], [endContact], [preSolve],
+/// [postSolve]) to other [ContactListener]s when a [Body] or at least one of its
+/// fixtures `userData` is set to a [ContactListener].
 ///
 /// If the [Body] `userData` is set to a [ContactListener] the contact events
 /// of this will be called to when any [Body]'s fixture contacts another
 /// [Fixture].
-///
-/// For example:
-/// ```dart
-// class Foo extends BodyComponent with ContactListener {
-///   @override
-///   Body createBody() {
-///     return world.createBody(
-///       BodyDef(userData: this),
-///     )..createFixture(
-///         FixtureDef(CircleShape()..radius = 5),
-///       );
-///  }
-/// }
-/// ```
 ///
 /// If instead you wish to be more specific and only trigger contact events
 /// when a specific [Body]'s fixture contacts with another [Fixture] you can
