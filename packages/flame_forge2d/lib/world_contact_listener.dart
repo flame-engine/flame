@@ -13,7 +13,7 @@ import 'package:forge2d/forge2d.dart';
 /// set the fixture `userData` to a [ContactListener].
 // TODO(alestiago): Make this class protected to the package.
 class WorldContactListener extends ContactListener {
-  Iterable<ContactListener> _contactCallbacks(Contact contact) => {
+  Iterable<ContactListener> _contactListeners(Contact contact) => {
         contact.bodyA.userData,
         contact.fixtureA.userData,
         contact.bodyB.userData,
@@ -22,28 +22,28 @@ class WorldContactListener extends ContactListener {
 
   @override
   void beginContact(Contact contact) {
-    _contactCallbacks(contact).forEach(
+    _contactListeners(contact).forEach(
       (contactCallback) => contactCallback.beginContact(contact),
     );
   }
 
   @override
   void endContact(Contact contact) {
-    _contactCallbacks(contact).forEach(
+    _contactListeners(contact).forEach(
       (contactCallback) => contactCallback.endContact(contact),
     );
   }
 
   @override
   void preSolve(Contact contact, Manifold oldManifold) {
-    _contactCallbacks(contact).forEach(
+    _contactListeners(contact).forEach(
       (contactCallback) => contactCallback.preSolve(contact, oldManifold),
     );
   }
 
   @override
   void postSolve(Contact contact, ContactImpulse contactImpulse) {
-    _contactCallbacks(contact).forEach(
+    _contactListeners(contact).forEach(
       (contactCallback) => contactCallback.postSolve(contact, contactImpulse),
     );
   }
