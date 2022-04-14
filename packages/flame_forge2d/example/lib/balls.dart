@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'boundaries.dart';
 
-class Ball extends BodyComponent {
+class Ball extends BodyComponent with ContactListener {
   late Paint originalPaint;
   bool giveNudge = false;
   final double radius;
@@ -60,39 +60,63 @@ class Ball extends BodyComponent {
       }
     }
   }
+
+  @override
+  void beginContact(Contact contact) {
+    final otherObject = contact.bodyA.userData == this
+        ? contact.bodyB.userData
+        : contact.bodyA.userData;
+
+    if (otherObject is Wall) {
+      otherObject.paint = paint;
+    }
+
+    if (otherObject is WhiteBall) {
+      return;
+    }
+
+    if (otherObject is Ball) {
+      if (paint != originalPaint) {
+        paint = otherObject.paint;
+      } else {
+        otherObject.paint = paint;
+      }
+    }
+  }
+
+  @override
+  void endContact(Contact contact) {}
+
+  @override
+  void postSolve(Contact contact, ContactImpulse impulse) {}
+
+  @override
+  void preSolve(Contact contact, Manifold oldManifold) {}
 }
 
-class WhiteBall extends Ball {
+class WhiteBall extends Ball with ContactListener {
   WhiteBall(Vector2 position) : super(position) {
     originalPaint = BasicPalette.white.paint();
     paint = originalPaint;
   }
-}
 
-class BallContactCallback extends ContactCallback<Ball, Ball> {
   @override
-  void begin(Ball ball1, Ball ball2, Contact contact) {
-    if (ball1 is WhiteBall || ball2 is WhiteBall) {
-      return;
-    }
-    if (ball1.paint != ball1.originalPaint) {
-      ball1.paint = ball2.paint;
-    } else {
-      ball2.paint = ball1.paint;
+  void beginContact(Contact contact) {
+    final otherObject = contact.bodyA.userData == this
+        ? contact.bodyB.userData
+        : contact.bodyA.userData;
+
+    if (otherObject is Ball) {
+      otherObject.giveNudge = true;
     }
   }
-}
 
-class WhiteBallContactCallback extends ContactCallback<Ball, WhiteBall> {
   @override
-  void begin(Ball ball, WhiteBall whiteBall, Contact contact) {
-    ball.giveNudge = true;
-  }
-}
+  void endContact(Contact contact) {}
 
-class BallWallContactCallback extends ContactCallback<Ball, Wall> {
   @override
-  void begin(Ball ball, Wall wall, Contact contact) {
-    wall.paint = ball.paint;
-  }
+  void postSolve(Contact contact, ContactImpulse impulse) {}
+
+  @override
+  void preSolve(Contact contact, Manifold oldManifold) {}
 }
