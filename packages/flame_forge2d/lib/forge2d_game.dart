@@ -1,18 +1,19 @@
 import 'package:flame/game.dart';
 import 'package:forge2d/forge2d.dart';
 
-import 'contact_callbacks.dart';
 import 'forge2d_camera.dart';
+import 'world_contact_listener.dart';
 
 class Forge2DGame extends FlameGame {
   Forge2DGame({
     Vector2? gravity,
     double zoom = defaultZoom,
     Camera? camera,
+    ContactListener? contactListener,
   })  : world = World(gravity ?? defaultGravity),
         super(camera: camera ?? Forge2DCamera()) {
     this.camera.zoom = zoom;
-    world.setContactListener(WorldContactListener());
+    world.setContactListener(contactListener ?? WorldContactListener());
   }
 
   static final Vector2 defaultGravity = Vector2(0, -10.0);
