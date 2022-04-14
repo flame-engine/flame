@@ -18,7 +18,7 @@ import 'flame_forge2d.dart';
 /// contact events. If you wish to implement your own logic you can subclass
 /// [ContactListener] and provide it to your [Forge2DGame].
 class WorldContactListener extends ContactListener {
-  Iterable<ContactListener> _contactListeners(Contact contact) => {
+  static Iterable<ContactListener> _contactListeners(Contact contact) => {
         contact.bodyA.userData,
         contact.fixtureA.userData,
         contact.bodyB.userData,
