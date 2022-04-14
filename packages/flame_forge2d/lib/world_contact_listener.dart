@@ -2,11 +2,13 @@ import 'package:forge2d/forge2d.dart';
 
 /// Listens to the entire [World] contacts events.
 ///
-/// It propagates contact events (begin, end, preSolve, postSolve) when a [Body]
-/// or at least one of its fixtures `userData` must is set to [ContactListener].
+/// It propagates contact events (begin, end, preSolve, postSolve) to other
+/// [ContactListener]s when a [Body] or at least one of its fixtures `userData`
+/// is set to a [ContactListener].
 ///
 /// If the [Body] `userData` is set to a [ContactListener] the contact events
-/// will be called when any [Body]'s fixture contacts another [Fixture].
+/// of this will be called to when any [Body]'s fixture contacts another
+/// [Fixture].
 ///
 /// If instead you wish to be more specific and only trigger contact events
 /// when a specific [Body]'s fixture contacts with another [Fixture] you can
