@@ -123,4 +123,18 @@ class Polygon extends Shape {
   void move(Vector2 offset) {
     throw UnimplementedError();
   }
+
+  @override
+  Vector2 support(Vector2 direction) {
+    var bestProduct = -1.0;
+    late Vector2 bestVertex;
+    for (final vertex in _vertices) {
+      final dotProduct = vertex.dot(direction);
+      if (dotProduct > bestProduct) {
+        bestProduct = dotProduct;
+        bestVertex = vertex;
+      }
+    }
+    return bestVertex;
+  }
 }

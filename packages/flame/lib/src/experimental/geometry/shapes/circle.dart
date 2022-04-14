@@ -74,6 +74,11 @@ class Circle extends Shape {
   }
 
   @override
+  Vector2 support(Vector2 direction) {
+    return direction.normalized()..scale(_radius)..add(_center);
+  }
+
+  @override
   String toString() => 'Circle([${_center.x}, ${_center.y}], $_radius)';
 }
 

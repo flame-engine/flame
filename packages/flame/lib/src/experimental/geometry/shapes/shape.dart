@@ -82,5 +82,5 @@ abstract class Shape {
   /// The [direction] vector may have length not equal to 1.
   ///
   /// This method is only used for convex shapes.
-  // Vector2 support(Vector2 direction);
+  Vector2 support(Vector2 direction);
 }
