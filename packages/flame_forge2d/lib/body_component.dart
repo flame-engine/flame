@@ -26,7 +26,7 @@ abstract class BodyComponent<T extends Forge2DGame> extends Component
 
   /// Specifies if the body's fixtures should be rendered.
   ///
-  /// When [renderBody] is true by default for [BodyComponent], if set to false
+  /// [renderBody] is true by default for [BodyComponent], if set to false
   /// the body wont be rendered.
   ///
   /// If you render something on top of the [BodyComponent], or doesn't want it
