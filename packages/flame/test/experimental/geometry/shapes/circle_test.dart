@@ -92,5 +92,21 @@ void main() {
         throwsUnimplementedError,
       );
     });
+
+    test('project with target', () {
+      final circle = Circle(Vector2.zero(), 100);
+      final target = Circle(Vector2.zero(), 1);
+      final transform = Transform2D()
+        ..position = Vector2(10, 20)
+        ..angle = 1
+        ..scale = Vector2.all(-2);
+      expect(transform.isConformal, true);
+
+      final result = circle.project(transform, target);
+      expect(result, isA<Circle>());
+      expect(result, target);
+      expect(target.radius, 200);
+      expect(target.center, closeToVector(10, 20));
+    });
   });
 }

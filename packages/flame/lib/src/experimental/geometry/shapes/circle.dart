@@ -56,6 +56,7 @@ class Circle extends Shape {
         target._center.setFrom(newCenter);
         target._radius = newRadius;
         _aabb = null;
+        return target;
       } else {
         return Circle(newCenter, newRadius);
       }

@@ -1,6 +1,5 @@
 import 'dart:ui';
 
-import 'package:meta/meta.dart';
 import 'package:vector_math/vector_math_64.dart';
 
 import '../../../game/transform2d.dart';
@@ -64,8 +63,24 @@ abstract class Shape {
   /// should create and return a new [Shape].
   Shape project(Transform2D transform, [Shape? target]);
 
+  /// Translates the shape by the specified [offset] vector, in-place.
+  ///
+  /// This method is a simpler version of [project], since all shapes can be
+  /// moved without changing the shape type, and with little modifications to
+  /// the internal state.
   void move(Vector2 offset);
 
   /// Finds the intersection of this shape with another one, if it exists.
   // Intersection? intersection(GeometricPrimitive other);
+
+  /// Returns a point on the boundary that is furthest in the given [direction].
+  ///
+  /// In other words, this returns such a point `p` within in the shape for
+  /// which the dot-product `p·direction` is maximal. If multiple such points
+  /// exist, then any one of them can be returned.
+  ///
+  /// The [direction] vector may have length not equal to 1.
+  ///
+  /// This method is only used for convex shapes.
+  // Vector2 support(Vector2 direction);
 }
