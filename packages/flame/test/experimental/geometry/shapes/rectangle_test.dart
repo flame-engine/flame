@@ -138,5 +138,21 @@ void main() {
         throwsUnimplementedError,
       );
     });
+
+    test('support', () {
+      final rectangle = Rectangle.fromLTRB(4, 2, 9, 3);
+
+      // For axis-aligned directions, the support points are ambiguous, so test
+      // only their unambiguous coordinates.
+      expect(rectangle.support(Vector2(1, 0)).x, 9);
+      expect(rectangle.support(Vector2(-1, 0)).x, 4);
+      expect(rectangle.support(Vector2(0, 11)).y, 3);
+      expect(rectangle.support(Vector2(0, -1)).y, 2);
+
+      expect(rectangle.support(Vector2(1, 1)), closeToVector(9, 3));
+      expect(rectangle.support(Vector2(-3, 2)), closeToVector(4, 3));
+      expect(rectangle.support(Vector2(-0.13, -2.01)), closeToVector(4, 2));
+      expect(rectangle.support(Vector2(9, -200)), closeToVector(9, 2));
+    });
   });
 }

@@ -69,9 +69,22 @@ class Rectangle extends Shape {
   @override
   Shape project(Transform2D transform, [Shape? target]) {
     if (transform.isAxisAligned) {
-      final newMin = transform.localToGlobal(Vector2(_left, _top));
-      final newMax = transform.localToGlobal(Vector2(_right, _bottom));
-      return Rectangle.fromPoints(newMin, newMax);
+      final v1 = transform.localToGlobal(Vector2(_left, _top));
+      final v2 = transform.localToGlobal(Vector2(_right, _bottom));
+      final newLeft = min(v1.x, v2.x);
+      final newRight = max(v1.x, v2.x);
+      final newTop = min(v1.y, v2.y);
+      final newBottom = max(v1.y, v2.y);
+      if (target is Rectangle) {
+        target._left = newLeft;
+        target._right = newRight;
+        target._top = newTop;
+        target._bottom = newBottom;
+        _aabb = null;
+        return target;
+      } else {
+        return Rectangle.fromLTRB(newLeft, newTop, newRight, newBottom);
+      }
     }
     throw UnimplementedError();
   }
