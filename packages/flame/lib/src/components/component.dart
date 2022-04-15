@@ -18,7 +18,8 @@ import '../cache/value_cache.dart';
 /// your game (with `game.add`).
 class Component {
   Component({Iterable<Component>? children, int? priority})
-      : _priority = priority ?? 0 {
+      : _state = LifecycleState.uninitialized,
+        _priority = priority ?? 0 {
     if (children != null) {
       addAll(children);
     }
@@ -31,7 +32,9 @@ class Component {
   /// to the root `FlameGame`.
   PositionType positionType = PositionType.game;
 
-  var _state = LifecycleState.uninitialized;
+  @visibleForTesting
+  LifecycleState get lifecycleState => _state;
+  LifecycleState _state;
 
   /// Whether this component has completed its [onLoad] step.
   bool get isLoaded {
@@ -458,7 +461,21 @@ class Component {
   /// Removes a component from the component tree, calling [onRemove] for it and
   /// its children.
   void remove(Component component) {
-    if (component._state != LifecycleState.removing) {
+    assert(
+      component._parent != null,
+      "Trying to remove a component that doesn't belong to any parent",
+    );
+    assert(
+      component._parent == this,
+      'Trying to remove a component that belongs to a different parent: this = '
+      "$this, component's parent = ${component._parent}",
+    );
+    if (component._state == LifecycleState.uninitialized) {
+      lifecycle._children.remove(component);
+      component._parent = null;
+    } else if (component._state == LifecycleState.loading) {
+      component._state = LifecycleState.removing;
+    } else if (component._state != LifecycleState.removing) {
       lifecycle._removals.add(component);
       component._state = LifecycleState.removing;
     }
@@ -628,13 +645,16 @@ typedef ComponentSetFactory = ComponentSet Function();
 ///
 /// Publicly visible flags `isLoaded` and `isMounted` are derived from this
 /// state:
-///   - isLoaded = loaded | mounted | removed
-///   - isMounted = mounted
+///   - isLoaded = loaded | mounted | removing | removed
+///   - isMounted = mounted | removing
 enum LifecycleState {
-  /// The original state of a [Component], when it was just constructed.
+  /// The original state of a [Component] when it was just constructed.
   uninitialized,
 
   /// The component is currently running its `onLoad` method.
+  ///
+  /// In this state the component is guaranteed to have a parent, and the root
+  /// `game` is findable via `findGame()`.
   loading,
 
   /// The component has just finished running its `onLoad` step, but before it
