@@ -110,7 +110,7 @@ class RoundedRectangle extends Shape {
 
   @override
   Vector2 support(Vector2 direction) {
-    final result = direction.normalized() ..length = _radius;
+    final result = direction.normalized()..length = _radius;
     result.x += direction.x >= 0 ? _right - _radius : _left + _radius;
     result.y += direction.y >= 0 ? _bottom - _radius : _top + _radius;
     return result;

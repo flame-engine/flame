@@ -90,8 +90,8 @@ class Rectangle extends Shape {
 
   @override
   Vector2 support(Vector2 direction) {
-    final vx = direction.x >= 0? _right : _left;
-    final vy = direction.y >= 0? _bottom : _top;
+    final vx = direction.x >= 0 ? _right : _left;
+    final vy = direction.y >= 0 ? _bottom : _top;
     return Vector2(vx, vy);
   }
 

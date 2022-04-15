@@ -75,7 +75,9 @@ class Circle extends Shape {
 
   @override
   Vector2 support(Vector2 direction) {
-    return direction.normalized()..scale(_radius)..add(_center);
+    return direction.normalized()
+      ..scale(_radius)
+      ..add(_center);
   }
 
   @override
