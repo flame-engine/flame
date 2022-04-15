@@ -7,7 +7,13 @@ import 'balls.dart';
 import 'boundaries.dart';
 
 class ContactCallbacksSample extends Forge2DGame with TapDetector {
-  ContactCallbacksSample() : super(gravity: Vector2(0, -10.0));
+  static const info = '''
+This example shows how `BodyComponent`s can react to collisions with other
+bodies.
+Tap the screen to add balls, the white balls will give an impulse to the balls
+that it collides with.
+''';
+  ContactCallbacksSample() : super(gravity: Vector2(0, 10.0));
 
   @override
   Future<void> onLoad() async {

@@ -45,6 +45,36 @@ void main() {
   final prepareGame = FlameTester(() => _PrepareGame());
 
   group('Component', () {
+    testWithFlameGame('children in the constructor', (game) async {
+      game.add(
+        Component(
+          children: [ComponentA(), ComponentB()],
+        ),
+      );
+      await game.ready();
+
+      expect(game.children.length, 1);
+      expect(game.children.first.children.length, 2);
+      expect(game.children.first.children.elementAt(0), isA<ComponentA>());
+      expect(game.children.first.children.elementAt(1), isA<ComponentB>());
+    });
+
+    testWithFlameGame('children in constructor and onLoad', (game) async {
+      final component = TwoChildrenComponent(
+        children: [ComponentA(), ComponentB()],
+      );
+      game.add(component);
+      await game.ready();
+
+      expect(game.children.length, 1);
+      expect(game.children.first, component);
+      expect(component.children.length, 4);
+      expect(component.children.elementAt(0), isA<ComponentA>());
+      expect(component.children.elementAt(1), isA<ComponentB>());
+      expect(component.children.elementAt(2), component.child1);
+      expect(component.children.elementAt(3), component.child2);
+    });
+
     test('get/set x/y or position', () {
       final PositionComponent c = SpriteComponent();
       c.position.setValues(2.2, 3.4);
@@ -425,4 +455,20 @@ class Visitor extends Component {
 
 class IntComponent extends Component {
   int value = 0;
+}
+
+class TwoChildrenComponent extends Component {
+  TwoChildrenComponent({Iterable<Component>? children})
+      : super(children: children);
+
+  late final Component child1;
+  late final Component child2;
+
+  @override
+  Future<void> onLoad() async {
+    child1 = Component();
+    child2 = Component();
+    add(child1);
+    add(child2);
+  }
 }

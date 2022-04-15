@@ -23,10 +23,10 @@ void main() {
   test('correctly loads external tileset', () async {
     final tsxProvider = await FlameTsxProvider.parse('external_tileset_1.tsx');
 
-    expect(tsxProvider.getChachedSource() != null, true);
+    expect(tsxProvider.getCachedSource() != null, true);
     expect(
       tsxProvider
-              .getChachedSource()!
+              .getCachedSource()!
               .getSingleChild('tileset')
               .getString('name') ==
           'level1',

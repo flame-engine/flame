@@ -15,7 +15,11 @@ class TiledComponent extends Component {
   RenderableTiledMap tileMap;
 
   /// {@macro _tiled_component}
-  TiledComponent(this.tileMap, {int? priority}) : super(priority: priority);
+  TiledComponent(
+    this.tileMap, {
+    Iterable<Component>? children,
+    int? priority,
+  }) : super(children: children, priority: priority);
 
   @override
   void render(Canvas canvas) {
