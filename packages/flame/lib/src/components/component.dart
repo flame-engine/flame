@@ -459,7 +459,9 @@ class Component {
   }
 
   /// Removes a component from the component tree, calling [onRemove] for it and
-  /// its children.
+  /// its children. The [onRemove] handler will only be called if there was an
+  /// [onMount] call previously, i.e. when removing components that are properly
+  /// mounted.
   void remove(Component component) {
     assert(
       component._parent != null,
@@ -473,8 +475,7 @@ class Component {
     if (component._state == LifecycleState.uninitialized) {
       lifecycle._children.remove(component);
       component._parent = null;
-    } else if (component._state == LifecycleState.loading) {
-      component._state = LifecycleState.removing;
+      // TODO(st-pasha): properly handle removal in other states too
     } else if (component._state != LifecycleState.removing) {
       lifecycle._removals.add(component);
       component._state = LifecycleState.removing;
