@@ -108,5 +108,22 @@ void main() {
       expect(target.radius, 200);
       expect(target.center, closeToVector(10, 20));
     });
+
+    test('support', () {
+      final circle = Circle(Vector2(2, 1), 10);
+      expect(circle.support(Vector2(1, 0)), closeToVector(12, 1));
+      expect(circle.support(Vector2(-1, 0)), closeToVector(-8, 1));
+      expect(circle.support(Vector2(0, 3.14)), closeToVector(2, 11));
+      expect(circle.support(Vector2(0, -3)), closeToVector(2, -9));
+      expect(
+        circle.support(Vector2(1, 1)),
+        closeToVector(2 + 10 / sqrt(2), 1 + 10 / sqrt(2)),
+      );
+      expect(circle.support(Vector2(3, 4)), closeToVector(2 + 6, 1 + 8));
+      expect(
+        circle.support(Vector2(-2, -1)),
+        closeToVector(2 - 20 / sqrt(5), 1 - 10 / sqrt(5)),
+      );
+    });
   });
 }
