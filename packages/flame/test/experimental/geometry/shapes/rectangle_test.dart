@@ -139,6 +139,23 @@ void main() {
       );
     });
 
+    test('project with target', () {
+      final rectangle = Rectangle.fromLTRB(0, 0, 1, 1);
+      final transform = Transform2D()
+        ..position = Vector2(3, 5)
+        ..scale = Vector2(2, 1);
+      expect(transform.isAxisAligned, true);
+
+      final target = Rectangle.fromLTRB(0, 0, 10, 10);
+      final result = rectangle.project(transform, target);
+      expect(result, isA<Rectangle>());
+      expect(result, target);
+      expect(target.left, 3);
+      expect(target.right, 5);
+      expect(target.top, 5);
+      expect(target.bottom, 6);
+    });
+
     test('support', () {
       final rectangle = Rectangle.fromLTRB(4, 2, 9, 3);
 
