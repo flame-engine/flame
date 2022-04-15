@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flame_forge2d/body_component.dart';
 import 'package:test/expect.dart';
 import 'package:test/scaffolding.dart';
