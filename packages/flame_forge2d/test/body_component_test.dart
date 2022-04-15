@@ -16,8 +16,7 @@ void main() {
       });
 
       test('sets and gets', () {
-        final body = TestBodyComponent();
-        body..renderBody = false;
+        final body = TestBodyComponent()..renderBody = false;
         expect(body.renderBody, isFalse);
       });
     });
