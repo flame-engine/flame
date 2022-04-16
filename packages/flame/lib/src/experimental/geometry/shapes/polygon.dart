@@ -5,13 +5,48 @@ import 'package:vector_math/vector_math_64.dart';
 import '../../../game/transform2d.dart';
 import 'shape.dart';
 
+/// An arbitrary polygon with 3 or more vertices.
+///
+/// The vertices of the polygon are in the counter-clockwise order, so that the
+/// polygon's interior is in your left-hand side as you traverse the polygon's
+/// vertices.
+///
+/// A polygon can be either convex or not, the [containsPoint] method will work
+/// in both cases, however, the method used with convex polygon is faster.
 class Polygon extends Shape {
-  Polygon(this._vertices)
-      : assert(_vertices.length >= 3, 'At least 3 vertices are required');
+  /// Constructs the polygon from the given list of vertices.
+  ///
+  /// If the list is not in the counter-clockwise order, then it will be
+  /// reversed in-place.
+  ///
+  /// If the [convex] flag is provided, then it serves as a hint about whether
+  /// the polygon is convex or not. With this flag the user promises that the
+  /// vertices are already in the correct CCW order.
+  Polygon(this._vertices, {bool? convex})
+      : assert(_vertices.length >= 3, 'At least 3 vertices are required') {
+    _edges = _calculateEdges();
+    if (convex == null) {
+      _checkOrientation();
+    } else {
+      _convex = convex;
+    }
+  }
 
+  /// The vertices (corners) of the polygon.
+  ///
+  /// Neither the list nor individuals vertices can be modified by the user.
+  List<Vector2> get vertices => _vertices;
   final List<Vector2> _vertices;
 
-  late final List<Vector2> edges = _calculateEdges();
+  /// The edges (sides) of the polygon.
+  ///
+  /// Each `edges[i]` is equal to `vertices[i] - vertices[i-1]`.
+  List<Vector2> get edges => _edges;
+  late final List<Vector2> _edges;
+
+  /// Number of vertices/edges in the polygon.
+  int get n => _vertices.length;
+
   List<Vector2> _calculateEdges() {
     var previousVertex = _vertices.last;
     return _vertices.map((Vector2 vertex) {
@@ -21,23 +56,50 @@ class Polygon extends Shape {
     }).toList(growable: false);
   }
 
-  @override
-  bool get isConvex => _convex ??= _calculateIsConvex();
-  bool? _convex;
-
-  bool _calculateIsConvex() {
-    var previousEdge = edges.last;
-    return edges.every((edge) {
+  void _checkOrientation() {
+    var nInteriorAngles = 0;
+    var nExteriorAngles = 0;
+    var previousEdge = _edges.last;
+    _edges.forEach((edge) {
       final crossProduct = edge.cross(previousEdge);
       previousEdge = edge;
-      return crossProduct > 0;
+      if (crossProduct >= 0) {
+        nInteriorAngles++;
+      }
+      if (crossProduct <= 0) {
+        nExteriorAngles++;
+      }
     });
+    final n = _vertices.length;
+    if (nInteriorAngles < nExteriorAngles) {
+      _reverseVertices(_vertices);
+      _reverseEdges(_edges);
+      nInteriorAngles = nExteriorAngles;
+    }
+    _convex = nInteriorAngles == n;
   }
+
+  static void _reverseVertices(List<Vector2> vertices) {
+    final n = vertices.length;
+    for (var i = 0; i < n / 2; i++) {
+      final j = n - i;
+      final tmp = vertices[i];
+      vertices[i] = vertices[j];
+      vertices[j] = tmp;
+    }
+  }
+
+  static void _reverseEdges(List<Vector2> edges) {
+    edges.forEach((edge) => edge.scale(-1));
+  }
+
+  @override
+  bool get isConvex => _convex;
+  late bool _convex;
 
   @override
   Vector2 get center => _center ??= _calculateCenter();
   Vector2? _center;
-
   Vector2 _calculateCenter() {
     final center = Vector2.zero();
     _vertices.forEach(center.add);
@@ -47,15 +109,13 @@ class Polygon extends Shape {
   @override
   double get perimeter => _perimeter ??= _calculatePerimeter();
   double? _perimeter;
-
   double _calculatePerimeter() {
-    return edges.fold<double>(0, (sum, edge) => sum + edge.length);
+    return _edges.fold<double>(0, (sum, edge) => sum + edge.length);
   }
 
   @override
   Aabb2 get aabb => _aabb ??= _calculateAabb();
   Aabb2? _aabb;
-
   Aabb2 _calculateAabb() {
     final aabb = Aabb2.minMax(_vertices.first, _vertices.first);
     _vertices.forEach(aabb.hullPoint);
@@ -73,14 +133,15 @@ class Polygon extends Shape {
 
   @override
   bool containsPoint(Vector2 point) {
-    final edges = this.edges;
-    final n = _vertices.length;
+    if (!aabb.intersectsWithVector2(point)) {
+      return false;
+    }
     if (isConvex) {
       // For a convex polygon, a point is inside if for each edge the cross-
       // product of that edge and a vector from the edge's origin to the point
       // is positive or zero.
       for (var i = 0; i < n; i++) {
-        if ((point - _vertices[i]).cross(edges[i]) < 0) {
+        if ((point - _vertices[i]).cross(_edges[i]) < 0) {
           return false;
         }
       }
@@ -112,16 +173,33 @@ class Polygon extends Shape {
 
   @override
   Shape project(Transform2D transform, [Shape? target]) {
-    return Polygon(
-      _vertices
-          .map((vertex) => transform.localToGlobal(vertex))
-          .toList(growable: false),
-    );
+    if (target is Polygon && target.n == n) {
+      for (var i = 0; i < n; i++) {
+        target._vertices[i].setFrom(transform.localToGlobal(_vertices[i]));
+      }
+      target._edges = _calculateEdges();
+      target._convex = _convex;
+      if (transform.hasReflection) {
+        _reverseVertices(target._vertices);
+        _reverseEdges(target._edges);
+      }
+      return target;
+    }
+    final newVertices = _vertices
+        .map((vertex) => transform.localToGlobal(vertex))
+        .toList(growable: false);
+    if (transform.hasReflection) {
+      _reverseVertices(newVertices);
+    }
+    return Polygon(newVertices, convex: _convex);
   }
 
   @override
   void move(Vector2 offset) {
-    throw UnimplementedError();
+    _vertices.forEach((vertex) => vertex.add(offset));
+    _center?.add(offset);
+    _aabb?.min.add(offset);
+    _aabb?.max.add(offset);
   }
 
   @override

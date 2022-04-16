@@ -161,10 +161,8 @@ class RoundedRectangle extends Shape {
     _right += offset.x;
     _top += offset.y;
     _bottom += offset.y;
-    if (_aabb != null) {
-      _aabb!.min.add(offset);
-      _aabb!.max.add(offset);
-    }
+    _aabb?.min.add(offset);
+    _aabb?.max.add(offset);
   }
 
   @override
