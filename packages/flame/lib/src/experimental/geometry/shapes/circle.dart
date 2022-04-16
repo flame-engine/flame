@@ -11,7 +11,7 @@ import 'shape.dart';
 /// A circle must have a positive (non-zero) radius.
 class Circle extends Shape {
   Circle(Vector2 center, double radius)
-      : assert(radius > 0, 'Radius must be positive: $radius'),
+      : assert(radius >= 0, 'Radius cannot be negative: $radius'),
         _center = center.clone(),
         _radius = radius;
 

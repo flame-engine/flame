@@ -7,24 +7,36 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('Circle', () {
     test('simple properties', () {
-      final circle = Circle(Vector2(5, 10), 2.5);
+      final center = Vector2(5, 10);
+      final circle = Circle(center, 2.5);
       expect(circle.isClosed, true);
       expect(circle.isConvex, true);
-      expect(circle.center, closeToVector(5, 10));
+      expect(circle.center, center);
       expect(circle.radius, 2.5);
-      expect(circle.perimeter, 2 * 2.5 * pi);
+      expect(circle.perimeter, 2 * pi * 2.5);
       expect('$circle', 'Circle([5.0, 10.0], 2.5)');
+      // Modifying original `center` vector does not affect the shape
+      center.x += 111;
+      expect(circle.center, closeToVector(5, 10));
     });
 
-    test('invalid circles', () {
-      expect(
-        () => Circle(Vector2.zero(), 0),
-        failsAssert('Radius must be positive: 0.0'),
-      );
+    test('negative radius', () {
       expect(
         () => Circle(Vector2.zero(), -1),
-        failsAssert('Radius must be positive: -1.0'),
+        failsAssert('Radius cannot be negative: -1.0'),
       );
+    });
+
+    test('zero-radius circle', () {
+      final center = Vector2(3, 5);
+      final circle = Circle(center, 0);
+      expect(circle.radius, 0);
+      expect(circle.center, center);
+      expect(circle.containsPoint(center), true);
+      expect(circle.perimeter, 0);
+      expect(circle.support(Vector2(1, 1)), center);
+      expect(circle.support(Vector2(-2, 10)), center);
+      expect(circle.aabb, closeToAabb(Aabb2.minMax(center, center)));
     });
 
     test('aabb', () {
@@ -76,6 +88,13 @@ void main() {
       expect(metrics.length, 1);
       expect(metrics[0].isClosed, true);
       expect(metrics[0].length, closeTo(circle.perimeter, 1.5));
+    });
+
+    test('0-radius circle asPath', () {
+      final circle = Circle(Vector2.zero(), 0);
+      final path = circle.asPath();
+      final metrics = path.computeMetrics().toList();
+      expect(metrics.isEmpty, true);
     });
 
     test('project', () {
