@@ -13,22 +13,26 @@ import 'forge2d_game.dart';
 /// seen
 abstract class BodyComponent<T extends Forge2DGame> extends Component
     with HasGameRef<T>, HasPaint {
-  static const defaultColor = Color.fromARGB(255, 255, 255, 255);
-  late Body body;
-
-  /// [renderBody] is true by default for [BodyComponent], if set to false
-  /// the body wont be rendered. If you render something on top of the
-  /// [BodyComponent], or doesn't want it to be seen, you probably want to set
-  /// it to false.
-  bool renderBody = true;
-
   BodyComponent({
     Paint? paint,
     Iterable<Component>? children,
     int? priority,
+    this.renderBody = true,
   }) : super(children: children, priority: priority) {
     this.paint = paint ?? (Paint()..color = defaultColor);
   }
+
+  static const defaultColor = Color.fromARGB(255, 255, 255, 255);
+  late Body body;
+
+  /// Specifies if the body's fixtures should be rendered.
+  ///
+  /// [renderBody] is true by default for [BodyComponent], if set to false
+  /// the body wont be rendered.
+  ///
+  /// If you render something on top of the [BodyComponent], or doesn't want it
+  /// to be seen, you probably want to set it to false.
+  bool renderBody;
 
   /// You should create the Forge2D [Body] in this method when you extend
   /// the BodyComponent
