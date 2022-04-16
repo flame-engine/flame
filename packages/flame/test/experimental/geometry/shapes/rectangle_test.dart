@@ -7,12 +7,14 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('Rectangle', () {
-    test('simple properties', () {
+    test('simple rectangle', () {
       final rectangle = Rectangle.fromLTRB(4, 0, 9, 12);
       expect(rectangle.left, 4);
       expect(rectangle.top, 0);
       expect(rectangle.right, 9);
       expect(rectangle.bottom, 12);
+      expect(rectangle.width, 5);
+      expect(rectangle.height, 12);
       expect(rectangle.isConvex, true);
       expect(rectangle.isClosed, true);
       expect(rectangle.perimeter, 34);
@@ -20,15 +22,20 @@ void main() {
       expect('$rectangle', 'Rectangle([4.0, 0.0], [9.0, 12.0])');
     });
 
-    test('invalid rectangles', () {
-      expect(
-        () => Rectangle.fromLTRB(3, 3, 0, 10),
-        failsAssert(),
-      );
-      expect(
-        () => Rectangle.fromLTRB(3, 3, 10, 0),
-        failsAssert(),
-      );
+    test('rectangle with inverted left-right edges', () {
+      final rectangle = Rectangle.fromLTRB(3, 4, 0, 10);
+      expect(rectangle.left, 0);
+      expect(rectangle.right, 3);
+      expect(rectangle.top, 4);
+      expect(rectangle.bottom, 10);
+    });
+
+    test('rectangle with inverted top-bottom edges', () {
+      final rectangle = Rectangle.fromLTRB(3, 4, 10, 0);
+      expect(rectangle.left, 3);
+      expect(rectangle.right, 10);
+      expect(rectangle.top, 0);
+      expect(rectangle.bottom, 4);
     });
 
     test('.fromPoints', () {
@@ -52,6 +59,28 @@ void main() {
       expect(rectangle.top, 10);
       expect(rectangle.right, 5 + 3);
       expect(rectangle.bottom, 10 + 2);
+    });
+
+    test('fromRect with negative Rect', () {
+      const rect = Rect.fromLTRB(5, 7, 1, 0);
+      final rectangle = Rectangle.fromRect(rect);
+      expect(rectangle.left, 1);
+      expect(rectangle.right, 5);
+      expect(rectangle.top, 0);
+      expect(rectangle.bottom, 7);
+    });
+
+    test('0-size rectangle', () {
+      final rectangle = Rectangle.fromLTRB(0, 0, 0, 0);
+      expect(rectangle.left, 0);
+      expect(rectangle.top, 0);
+      expect(rectangle.right, 0);
+      expect(rectangle.bottom, 0);
+      expect(rectangle.width, 0);
+      expect(rectangle.height, 0);
+      expect(rectangle.perimeter, 0);
+      expect(rectangle.containsPoint(Vector2.zero()), true);
+      expect(rectangle.support(Vector2(2, 9)), Vector2.zero());
     });
 
     test('aabb', () {
