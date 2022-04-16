@@ -112,5 +112,23 @@ void main() {
       expect(metrics.length, 1);
       expect(metrics.first.length, closeTo(rrect.perimeter, 1.0));
     });
+
+    test('move', () {
+      final rrect = RoundedRectangle.fromLTRBR(4, 2, 9, 12, 1);
+      expect(rrect.aabb.min, closeToVector(4, 2));
+      expect(rrect.aabb.max, closeToVector(9, 12));
+
+      rrect.move(Vector2(-3, 1));
+      expect(rrect.left, 4 - 3);
+      expect(rrect.right, 9 - 3);
+      expect(rrect.top, 2 + 1);
+      expect(rrect.bottom, 12 + 1);
+      expect(rrect.radius, 1);
+      expect(rrect.center, closeToVector(6.5 - 3, 7 + 1));
+      expect(
+        rrect.aabb,
+        closeToAabb(Aabb2.minMax(Vector2(1, 3), Vector2(6, 13))),
+      );
+    });
   });
 }

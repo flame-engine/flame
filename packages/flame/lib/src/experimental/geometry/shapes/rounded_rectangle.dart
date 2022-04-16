@@ -102,7 +102,6 @@ class RoundedRectangle extends Shape {
   @override
   Aabb2 get aabb => _aabb ??= _calculateAabb();
   Aabb2? _aabb;
-
   Aabb2 _calculateAabb() =>
       Aabb2.minMax(Vector2(_left, _top), Vector2(_right, _bottom));
 
@@ -137,7 +136,14 @@ class RoundedRectangle extends Shape {
 
   @override
   void move(Vector2 offset) {
-    throw UnimplementedError();
+    _left += offset.x;
+    _right += offset.x;
+    _top += offset.y;
+    _bottom += offset.y;
+    if (_aabb != null) {
+      _aabb!.min.add(offset);
+      _aabb!.max.add(offset);
+    }
   }
 
   @override
