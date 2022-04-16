@@ -10,26 +10,50 @@ import 'shape.dart';
 
 /// An axis-aligned rectangle with rounded corners.
 ///
-/// Unlike [RRect] from dart:ui, this shape has corners of equal radii.
+/// The rounded parts of the rectangle are symmetrical in x- and y-directions,
+/// and across all corners.
 class RoundedRectangle extends Shape {
+  /// Constructs a [RoundedRectangle] with left, top, right and bottom edges,
+  /// and the given radius.
+  ///
+  /// If the edges are given in the wrong order (e.g. `left` is to the right
+  /// from `right`), then they will be swapped.
+  ///
+  /// The radius cannot be negative. At the same time, if the radius is too big,
+  /// it will be reduced so that the rounded edge can fit inside the rectangle.
+  /// In other words, the radius will be adjusted to not exceed the half-width
+  /// or half-height of the rectangle.
   RoundedRectangle.fromLTRBR(
     this._left,
     this._top,
     this._right,
     this._bottom,
     this._radius,
-  )   : assert(_radius > 0),
-        assert(_right - _left >= 2 * _radius && _bottom - _top >= 2 * _radius);
+  ) : assert(_radius >= 0, 'Radius cannot be negative: $_radius') {
+    if (_left > _right) {
+      final tmp = _left;
+      _left = _right;
+      _right = tmp;
+    }
+    if (_top > _bottom) {
+      final tmp = _top;
+      _top = _bottom;
+      _bottom = tmp;
+    }
+    if (_radius > (_right - _left) / 2) {
+      _radius = (_right - _left) / 2;
+    }
+    if (_radius > (_bottom - _top) / 2) {
+      _radius = (_bottom - _top) / 2;
+    }
+  }
 
   factory RoundedRectangle.fromPoints(Vector2 a, Vector2 b, double radius) =>
-      RoundedRectangle.fromLTRBR(
-        min(a.x, b.x),
-        min(a.y, b.y),
-        max(a.x, b.x),
-        max(a.y, b.y),
-        radius,
-      );
+      RoundedRectangle.fromLTRBR(a.x, a.y, b.x, b.y, radius);
 
+  /// Constructs a [RoundedRectangle] from ui's [RRect].
+  ///
+  /// All corners of the `rrect` must have the same circular radii.
   factory RoundedRectangle.fromRRect(RRect rrect) {
     final radius = rrect.brRadiusX;
     assert(
@@ -41,6 +65,7 @@ class RoundedRectangle extends Shape {
           rrect.brRadiusY == radius &&
           rrect.tlRadiusY == radius &&
           rrect.trRadiusY == radius,
+      'Unequal radii in the $rrect',
     );
     return RoundedRectangle.fromLTRBR(
       rrect.left,
@@ -57,12 +82,19 @@ class RoundedRectangle extends Shape {
   double _bottom;
   double _radius;
 
+  double get left => _left;
+  double get right => _right;
+  double get top => _top;
+  double get bottom => _bottom;
+  double get radius => _radius;
+  double get width => _right - _left;
+  double get height => _bottom - _top;
+
   @override
   bool get isConvex => true;
 
   @override
-  double get perimeter =>
-      (tau - 8) * _radius + 2 * ((_right - _left) + (_bottom - _top));
+  double get perimeter => (tau - 8) * _radius + 2 * (width + height);
 
   @override
   Vector2 get center => Vector2((_left + _right) / 2, (_top + _bottom) / 2);
