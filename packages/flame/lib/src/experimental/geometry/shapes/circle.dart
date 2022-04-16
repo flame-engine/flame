@@ -8,7 +8,12 @@ import 'shape.dart';
 
 /// The circle with a given [center] and a [radius].
 ///
-/// A circle must have a positive (non-zero) radius.
+/// A circle's radius cannot be negative, but it can be zero.
+///
+/// A circle transforms into a circle under any conformal transformation, i.e.
+/// a [Transform2D] that contains translations, rotations, and uniform scaling.
+/// Under a generic projection, a circle would turn into an ellipse, however,
+/// this is currently not implemented.
 class Circle extends Shape {
   Circle(Vector2 center, double radius)
       : assert(radius >= 0, 'Radius cannot be negative: $radius'),
