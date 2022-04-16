@@ -126,10 +126,31 @@ class RoundedRectangle extends Shape {
 
   @override
   Shape project(Transform2D transform, [Shape? target]) {
-    if (transform.isTranslation) {
-      final newMin = transform.localToGlobal(Vector2(_left, _top));
-      final newMax = transform.localToGlobal(Vector2(_right, _bottom));
-      return RoundedRectangle.fromPoints(newMin, newMax, _radius);
+    if (transform.isAxisAligned && transform.isConformal) {
+      final v1 = transform.localToGlobal(Vector2(_left, _top));
+      final v2 = transform.localToGlobal(Vector2(_right, _bottom));
+      final newLeft = min(v1.x, v2.x);
+      final newRight = max(v1.x, v2.x);
+      final newTop = min(v1.y, v2.y);
+      final newBottom = max(v1.y, v2.y);
+      final newRadius = transform.scale.x.abs() * _radius;
+      if (target is RoundedRectangle) {
+        target._left = newLeft;
+        target._right = newRight;
+        target._top = newTop;
+        target._bottom = newBottom;
+        target._radius = newRadius;
+        target._aabb = null;
+        return target;
+      } else {
+        return RoundedRectangle.fromLTRBR(
+          newLeft,
+          newTop,
+          newRight,
+          newBottom,
+          newRadius,
+        );
+      }
     }
     throw UnimplementedError();
   }

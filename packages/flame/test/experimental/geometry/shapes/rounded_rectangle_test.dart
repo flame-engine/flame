@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:flame/experimental.dart';
@@ -128,6 +129,103 @@ void main() {
       expect(
         rrect.aabb,
         closeToAabb(Aabb2.minMax(Vector2(1, 3), Vector2(6, 13))),
+      );
+    });
+
+    test('containsPoint', () {
+      final rrect = RoundedRectangle.fromLTRBR(0, 0, 20, 30, 5);
+      expect(rrect.containsPoint(Vector2(0, 0)), false);
+      expect(rrect.containsPoint(Vector2(0, 1)), false);
+      expect(rrect.containsPoint(Vector2(0, 5)), true);
+      expect(rrect.containsPoint(Vector2(10, 15)), true);
+      expect(rrect.containsPoint(Vector2(20, 30)), false);
+      expect(rrect.containsPoint(Vector2(14, 0)), true);
+      expect(rrect.containsPoint(Vector2(20, 10)), true);
+      expect(rrect.containsPoint(Vector2(5, 30)), true);
+      // points on the rounded corners
+      expect(rrect.containsPoint(Vector2(2, 1)), true);
+      expect(rrect.containsPoint(Vector2(18, 1)), true);
+      expect(rrect.containsPoint(Vector2(1, 28)), true);
+      expect(rrect.containsPoint(Vector2(19, 28)), true);
+    });
+
+    testRandom('containsPoint random', (Random random) {
+      final shape = RoundedRectangle.fromLTRBR(
+        random.nextDouble() * 100,
+        random.nextDouble() * 100,
+        random.nextDouble() * 100,
+        random.nextDouble() * 100,
+        random.nextDouble() * 5,
+      );
+      final rrect = shape.asRRect();
+      for (var i = 0; i < 100; i++) {
+        final point = Vector2.random(random)..scaled(100);
+        expect(
+          shape.containsPoint(point),
+          rrect.contains(point.toOffset()),
+        );
+      }
+    });
+
+    testRandom('support random', (Random random) {
+      final rrect = RoundedRectangle.fromLTRBR(0, 0, 20, 30, 5);
+      final rect = Rectangle.fromLTRB(5, 5, 15, 25);
+      final circle = Circle(Vector2.zero(), 5);
+      // In this test we use the fact that `rrect` is the Minkowski sum of the
+      // `rect` and the `circle`.
+      for (var i = 0; i < 100; i++) {
+        final direction = Vector2.random(random);
+        final expected = rect.support(direction) + circle.support(direction);
+        expect(
+          rrect.support(direction),
+          closeToVector(expected.x, expected.y, epsilon: 1e-14),
+        );
+      }
+    });
+
+    test('axis-aligned conformal projection', () {
+      final rrect = RoundedRectangle.fromLTRBR(3, 3, 15, 12, 1);
+      final transform = Transform2D()
+        ..position = Vector2(1, 5)
+        ..scale = Vector2(4, 4);
+      final result = rrect.project(transform);
+      expect(result, isA<RoundedRectangle>());
+      expect((result as RoundedRectangle).left, 3 * 4 + 1);
+      expect(result.right, 15 * 4 + 1);
+      expect(result.top, 3 * 4 + 5);
+      expect(result.bottom, 12 * 4 + 5);
+      expect(result.radius, 1 * 4);
+    });
+
+    test('projection with a target', () {
+      final rrect = RoundedRectangle.fromLTRBR(3, 3, 15, 12, 1);
+      final transform = Transform2D()
+        ..position = Vector2(1, 5)
+        ..scale = Vector2(4, 4);
+      final target = RoundedRectangle.fromLTRBR(0, 0, 0, 0, 0);
+      expect(target.aabb, closeToAabb(Aabb2()));
+      final result = rrect.project(transform, target);
+      expect(result, isA<RoundedRectangle>());
+      expect(result, target);
+      expect(target.left, 3 * 4 + 1);
+      expect(target.right, 15 * 4 + 1);
+      expect(target.top, 3 * 4 + 5);
+      expect(target.bottom, 12 * 4 + 5);
+      expect(target.radius, 1 * 4);
+      expect(
+        target.aabb,
+        closeToAabb(Aabb2.minMax(Vector2(13, 17), Vector2(61, 53))),
+      );
+    });
+
+    test('unsupported projection', () {
+      final rrect = RoundedRectangle.fromLTRBR(3, 3, 15, 12, 1);
+      final transform = Transform2D()
+        ..position = Vector2(1, 5)
+        ..scale = Vector2(2, 4);
+      expect(
+        () => rrect.project(transform),
+        throwsUnimplementedError,
       );
     });
   });

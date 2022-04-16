@@ -175,7 +175,8 @@ void main() {
         ..scale = Vector2(2, 1);
       expect(transform.isAxisAligned, true);
 
-      final target = Rectangle.fromLTRB(0, 0, 10, 10);
+      final target = Rectangle.fromLTRB(0, 0, 0, 0);
+      expect(target.aabb, closeToAabb(Aabb2()));
       final result = rectangle.project(transform, target);
       expect(result, isA<Rectangle>());
       expect(result, target);
@@ -183,6 +184,10 @@ void main() {
       expect(target.right, 5);
       expect(target.top, 5);
       expect(target.bottom, 6);
+      expect(
+        target.aabb,
+        closeToAabb(Aabb2.minMax(Vector2(3, 5), Vector2(5, 6))),
+      );
     });
 
     test('support', () {

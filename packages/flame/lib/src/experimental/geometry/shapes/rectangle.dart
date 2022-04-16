@@ -98,7 +98,7 @@ class Rectangle extends Shape {
         target._right = newRight;
         target._top = newTop;
         target._bottom = newBottom;
-        _aabb = null;
+        target._aabb = null;
         return target;
       } else {
         return Rectangle.fromLTRB(newLeft, newTop, newRight, newBottom);
