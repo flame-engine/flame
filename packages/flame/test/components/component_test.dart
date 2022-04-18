@@ -548,6 +548,5 @@ class _ComponentWithOnLoad extends Component {
   @override
   Future<void> onLoad() async {
     onLoadCalledCount++;
-    await null;
   }
 }
