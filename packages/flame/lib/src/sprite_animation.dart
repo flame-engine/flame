@@ -233,6 +233,9 @@ class SpriteAnimation {
   /// Registered method to be triggered when the animation starts.
   void Function()? onStart;
 
+  /// Registered method to be triggered when the animation frame updates.
+  void Function(int currentIndex)? onFrame;
+
   /// Registered method to be triggered when the animation complete.
   void Function()? onComplete;
 
@@ -306,6 +309,7 @@ class SpriteAnimation {
       return;
     }
     while (clock >= currentFrame.stepTime) {
+      onFrame?.call(currentIndex);
       if (isFirstFrame) {
         onStart?.call();
       }
