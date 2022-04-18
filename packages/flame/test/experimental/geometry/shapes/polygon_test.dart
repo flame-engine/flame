@@ -1,10 +1,24 @@
+import 'dart:math';
+
 import 'package:flame/components.dart';
 import 'package:flame/experimental.dart';
+import 'package:flame/game.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('Polygon', () {
+    test('invalid polygon', () {
+      expect(
+        () => Polygon([]),
+        failsAssert('At least 3 vertices are required'),
+      );
+      expect(
+        () => Polygon([Vector2(1, 5), Vector2.zero()]),
+        failsAssert('At least 3 vertices are required'),
+      );
+    });
+
     test('simple triangle', () {
       final polygon = Polygon(
         [Vector2.zero(), Vector2(0, 60), Vector2(80, 60)],
@@ -40,6 +54,24 @@ void main() {
       expect(polygon1.edges, polygon2.edges);
       expect(polygon1.isConvex, true);
       expect(polygon2.isConvex, true);
+    });
+
+    test('explicit `convex` flag', () {
+      final polygon = Polygon(
+        [Vector2(0, 60), Vector2.zero(), Vector2(80, 60)],
+        convex: true,
+      );
+      // The polygon is marked as "convex", but the vertices are in the wrong
+      // order. As a result, all points will be detected as being "outside".
+      expect(polygon.isConvex, true);
+      expect(polygon.vertices[0], Vector2(0, 60));
+      expect(polygon.vertices[1], Vector2(0, 0));
+      expect(polygon.vertices[2], Vector2(80, 60));
+      expect(polygon.containsPoint(Vector2(0, 0)), false);
+      expect(polygon.containsPoint(Vector2(10, 30)), false);
+      expect(polygon.containsPoint(Vector2(-10, 30)), false);
+      expect(polygon.containsPoint(Vector2(100, 30)), false);
+      expect(polygon.containsPoint(Vector2(100, 100)), false);
     });
 
     test('asPath', () {
@@ -159,6 +191,88 @@ void main() {
       expect(polygon.containsPoint(Vector2(40, 50)), false);
       expect(polygon.containsPoint(Vector2(50, 35)), false);
       expect(polygon.containsPoint(Vector2(60, 49)), false);
+      expect(polygon.containsPoint(Vector2(90, 40)), false);
+      expect(polygon.containsPoint(Vector2(100, 40)), false);
+    });
+
+    test('project', () {
+      final polygon = Polygon([
+        Vector2(0, 20),
+        Vector2(20, 40),
+        Vector2(40, 20),
+        Vector2(20, 0),
+      ]);
+      expect(polygon.isConvex, true);
+      final transform = Transform2D()
+        ..angle = pi / 4
+        ..offset = Vector2(-20, -20);
+      final result = polygon.project(transform);
+      final a = 10 * sqrt(2);
+      expect(result, isA<Polygon>());
+      expect((result as Polygon).n, 4);
+      expect(result.vertices[0], closeToVector(-a, -a, epsilon: 1e-14));
+      expect(result.vertices[1], closeToVector(-a, a, epsilon: 1e-14));
+      expect(result.vertices[2], closeToVector(a, a, epsilon: 1e-14));
+      expect(result.vertices[3], closeToVector(a, -a, epsilon: 1e-14));
+    });
+
+    test('project with target', () {
+      final polygon = Polygon([
+        Vector2(0, 20),
+        Vector2(20, 40),
+        Vector2(40, 20),
+        Vector2(20, 0),
+      ]);
+      final transform = Transform2D()
+        ..position = Vector2(10, 10)
+        ..scale = Vector2(2, 1);
+      final target = Polygon(List.generate(4, (_) => Vector2.zero()));
+      final result = polygon.project(transform, target);
+      expect(result, isA<Polygon>());
+      expect(result, target);
+      expect((result as Polygon).n, 4);
+      expect(result.vertices[0], Vector2(10, 30));
+      expect(result.vertices[1], Vector2(50, 50));
+      expect(result.vertices[2], Vector2(90, 30));
+      expect(result.vertices[3], Vector2(50, 10));
+    });
+
+    test('project with target and reflection transform', () {
+      final polygon = Polygon([
+        Vector2(0, 20),
+        Vector2(20, 40),
+        Vector2(40, 20),
+        Vector2(20, 0),
+      ]);
+      final transform = Transform2D()
+        ..position = Vector2(10, 10)
+        ..scale = Vector2(-2, 1);
+      final target = Polygon(List.generate(4, (_) => Vector2.zero()));
+      final result = polygon.project(transform, target);
+      print(result);
+      expect(result, isA<Polygon>());
+      expect(result, target);
+      expect((result as Polygon).n, 4);
+      expect(result.isConvex, true);
+      expect(result.vertices[0], Vector2(-30, 10));
+      expect(result.vertices[1], Vector2(-70, 30));
+      expect(result.vertices[2], Vector2(-30, 50));
+      expect(result.vertices[3], Vector2(10, 30));
+    });
+
+    test('project with wrong-shape target', () {
+      final z = Vector2.zero();
+      final polygon = Polygon([z, z, z, z, z]);
+      final target = Polygon([z, z, z]);
+      final transform = Transform2D()..angle = 1;
+      final result = polygon.project(transform, target);
+      expect(result == target, false);
+      expect(result, isA<Polygon>());
+      expect((result as Polygon).n, 5);
+      expect(target.n, 3);
+      expect(result.vertices, [z, z, z, z, z]);
+      expect(result.edges, [z, z, z, z, z]);
+      expect(result.isConvex, true);
     });
   });
 }
