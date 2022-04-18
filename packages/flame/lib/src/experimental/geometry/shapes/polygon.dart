@@ -24,7 +24,7 @@ class Polygon extends Shape {
   /// vertices are already in the correct CCW order.
   Polygon(this._vertices, {bool? convex})
       : assert(_vertices.length >= 3, 'At least 3 vertices are required') {
-    _edges = _calculateEdges();
+    _initializeEdges();
     if (convex == null) {
       _checkOrientation();
     } else {
@@ -34,27 +34,29 @@ class Polygon extends Shape {
 
   /// The vertices (corners) of the polygon.
   ///
-  /// Neither the list nor individuals vertices can be modified by the user.
+  /// The user should treat this list as read-only and not attempt to modify
+  /// either the list itself or individual points.
   List<Vector2> get vertices => _vertices;
   final List<Vector2> _vertices;
 
   /// The edges (sides) of the polygon.
   ///
-  /// Each `edges[i]` is equal to `vertices[i] - vertices[i-1]`.
+  /// Each i-th edge is equal to the vector difference between the i-th vertex
+  /// and the preceding vertex. The number of edges is always equal to the
+  /// number of vertices.
   List<Vector2> get edges => _edges;
-  late final List<Vector2> _edges;
-
-  /// Number of vertices/edges in the polygon.
-  int get n => _vertices.length;
-
-  List<Vector2> _calculateEdges() {
+  late List<Vector2> _edges;
+  void _initializeEdges() {
     var previousVertex = _vertices.last;
-    return _vertices.map((Vector2 vertex) {
+    _edges = _vertices.map((Vector2 vertex) {
       final edge = vertex - previousVertex;
       previousVertex = vertex;
       return edge;
     }).toList(growable: false);
   }
+
+  /// Number of vertices/edges in the polygon.
+  int get n => _vertices.length;
 
   void _checkOrientation() {
     var nInteriorAngles = 0;
@@ -63,6 +65,7 @@ class Polygon extends Shape {
     _edges.forEach((edge) {
       final crossProduct = edge.cross(previousEdge);
       previousEdge = edge;
+      // A straight angle counts as both internal and external
       if (crossProduct >= 0) {
         nInteriorAngles++;
       }
@@ -70,27 +73,20 @@ class Polygon extends Shape {
         nExteriorAngles++;
       }
     });
-    final n = _vertices.length;
     if (nInteriorAngles < nExteriorAngles) {
-      _reverseVertices(_vertices);
-      _reverseEdges(_edges);
+      _reverseVertices();
+      _initializeEdges();
       nInteriorAngles = nExteriorAngles;
     }
     _convex = nInteriorAngles == n;
   }
 
-  static void _reverseVertices(List<Vector2> vertices) {
-    final n = vertices.length;
-    for (var i = 0; i < n / 2; i++) {
-      final j = n - i;
-      final tmp = vertices[i];
-      vertices[i] = vertices[j];
-      vertices[j] = tmp;
+  void _reverseVertices() {
+    for (var i = 0, j = n - 1; i < j; i++, j--) {
+      final tmp = _vertices[i];
+      _vertices[i] = _vertices[j];
+      _vertices[j] = tmp;
     }
-  }
-
-  static void _reverseEdges(List<Vector2> edges) {
-    edges.forEach((edge) => edge.scale(-1));
   }
 
   @override
@@ -103,7 +99,7 @@ class Polygon extends Shape {
   Vector2 _calculateCenter() {
     final center = Vector2.zero();
     _vertices.forEach(center.add);
-    return center..scaled(1 / _vertices.length);
+    return center..scale(1 / n);
   }
 
   @override
@@ -177,21 +173,19 @@ class Polygon extends Shape {
       for (var i = 0; i < n; i++) {
         target._vertices[i].setFrom(transform.localToGlobal(_vertices[i]));
       }
-      target._edges = _calculateEdges();
+      target._initializeEdges();
       target._convex = _convex;
       if (transform.hasReflection) {
-        _reverseVertices(target._vertices);
-        _reverseEdges(target._edges);
+        target._reverseVertices();
+        target._initializeEdges();
       }
       return target;
     }
     final newVertices = _vertices
         .map((vertex) => transform.localToGlobal(vertex))
         .toList(growable: false);
-    if (transform.hasReflection) {
-      _reverseVertices(newVertices);
-    }
-    return Polygon(newVertices, convex: _convex);
+    final convex = transform.hasReflection? null : _convex;
+    return Polygon(newVertices, convex: convex);
   }
 
   @override
@@ -215,4 +209,7 @@ class Polygon extends Shape {
     }
     return bestVertex;
   }
+
+  @override
+  String toString() => 'Polygon($vertices)';
 }
