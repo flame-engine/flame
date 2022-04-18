@@ -17,16 +17,14 @@ class AnchorToEffect extends Effect
     implements MeasurableEffect {
   AnchorToEffect(Anchor destination, EffectController controller)
       : _destination = destination,
-        _offset = Vector2.zero(),
         super(controller);
 
   final Anchor _destination;
-  final Vector2 _offset;
+  late Vector2 _offset;
 
   @override
   void onStart() {
-    _offset.x = _destination.x - target.anchor.x;
-    _offset.y = _destination.y - target.anchor.y;
+    _offset = _destination.toVector2() - target.anchor.toVector2();
   }
 
   @override
