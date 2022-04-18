@@ -21,7 +21,9 @@ import 'provider_interfaces.dart';
 /// The `oriented` flag controls the direction of the target as it follows the
 /// path. If this flag is false (default), the target keeps its original
 /// orientation. If the flag is true, the target is automatically rotated as it
-/// follows the path so that it is always oriented tangent to the path.
+/// follows the path so that it is always oriented tangent to the path. When
+/// using this flag, make sure that the effect is applied to a target that
+/// actually supports rotations.
 class MoveAlongPathEffect extends MoveEffect {
   MoveAlongPathEffect(
     Path path,
