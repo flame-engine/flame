@@ -15,9 +15,14 @@ import 'provider_interfaces.dart';
 class AnchorToEffect extends Effect
     with EffectTarget<AnchorProvider>
     implements MeasurableEffect {
-  AnchorToEffect(Anchor destination, EffectController controller)
-      : _destination = destination,
-        super(controller);
+  AnchorToEffect(
+    Anchor destination,
+    EffectController controller, {
+    AnchorProvider? target,
+  })  : _destination = destination,
+        super(controller) {
+    this.target = target;
+  }
 
   final Anchor _destination;
   late Vector2 _offset;
