@@ -40,6 +40,7 @@ There are multiple effects provided by Flame, and you can also
 - [`ScaleEffect.to`](#scaleeffectto)
 - [`SizeEffect.by`](#sizeeffectby)
 - [`SizeEffect.to`](#sizeeffectto)
+- [`AnchorToEffect`](#anchortoeffect)
 - [`OpacityEffect`](#opacityeffect)
 - [`ColorEffect`](#coloreffect)
 - [`SequenceEffect`](#sequenceeffect)
@@ -207,6 +208,15 @@ Changes the size of the target component to the specified size. Target size cann
 
 ```dart
 final effect = SizeEffect.to(Vector2(120, 120), EffectController(duration: 1));
+```
+
+
+### `AnchorToEffect`
+
+Changes the location of the target's anchor.
+
+```dart
+final effect = AnchorToEffect(Anchor.center, EffectController(speed: 1));
 ```
 
 
