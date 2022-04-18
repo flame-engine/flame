@@ -13,9 +13,10 @@ class CircleShuffler extends BodyComponent {
 
   @override
   Body createBody() {
-    final bodyDef = BodyDef()
-      ..type = BodyType.dynamic
-      ..position = _center + Vector2(0.0, -25.0);
+    final bodyDef = BodyDef(
+      type: BodyType.dynamic,
+      position: _center + Vector2(0.0, -25.0),
+    );
     const numPieces = 5;
     const radius = 6.0;
     final body = world.createBody(bodyDef);
@@ -28,10 +29,12 @@ class CircleShuffler extends BodyComponent {
         ..radius = 1.2
         ..position.setValues(xPos, yPos);
 
-      final fixtureDef = FixtureDef(shape)
-        ..density = 50.0
-        ..friction = .1
-        ..restitution = .9;
+      final fixtureDef = FixtureDef(
+        shape,
+        density: 50.0,
+        friction: .1,
+        restitution: .9,
+      );
 
       body.createFixture(fixtureDef);
     }
@@ -44,7 +47,7 @@ class CircleShuffler extends BodyComponent {
       ..maxMotorTorque = 1000000.0
       ..enableMotor = true;
 
-    world.createJoint(revoluteJointDef);
+    world.createJoint(RevoluteJoint(revoluteJointDef));
     return body;
   }
 }
@@ -62,15 +65,12 @@ class CornerRamp extends BodyComponent {
     final diff = 2.0 * mirrorFactor;
     final vertices = [
       Vector2(diff, 0),
-      Vector2(diff + 20.0 * mirrorFactor, 20.0),
-      Vector2(diff + 35.0 * mirrorFactor, 30.0),
+      Vector2(diff + 20.0 * mirrorFactor, -20.0),
+      Vector2(diff + 35.0 * mirrorFactor, -30.0),
     ];
     shape.createLoop(vertices);
 
-    final fixtureDef = FixtureDef(shape)
-      ..restitution = 0.0
-      ..friction = 0.1;
-
+    final fixtureDef = FixtureDef(shape, friction: 0.1);
     final bodyDef = BodyDef()
       ..position = _center
       ..type = BodyType.static;
@@ -80,8 +80,6 @@ class CornerRamp extends BodyComponent {
 }
 
 class CircleStressSample extends Forge2DGame with TapDetector {
-  CircleStressSample() : super(gravity: Vector2(0, -10.0));
-
   @override
   Future<void> onLoad() async {
     final boundaries = createBoundaries(this);

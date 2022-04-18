@@ -53,6 +53,7 @@ class JoystickComponent extends HudMarginComponent with Draggable {
     double? size,
     double? knobRadius,
     Anchor anchor = Anchor.center,
+    Iterable<Component>? children,
     int? priority,
   })  : assert(
           size != null || background != null,
@@ -68,6 +69,7 @@ class JoystickComponent extends HudMarginComponent with Draggable {
           position: position,
           size: background?.size ?? Vector2.all(size ?? 0),
           anchor: anchor,
+          children: children,
           priority: priority,
         ) {
     this.knobRadius = knobRadius ?? this.size.x / 2;

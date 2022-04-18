@@ -27,6 +27,7 @@ class RiveComponent extends PositionComponent {
     Vector2? scale,
     double angle = 0.0,
     Anchor anchor = Anchor.topLeft,
+    Iterable<Component>? children,
     int? priority,
   })  : _renderer = RiveArtboardRenderer(
           antialiasing: antialiasing,
@@ -41,6 +42,7 @@ class RiveComponent extends PositionComponent {
           scale: scale,
           angle: angle,
           anchor: anchor,
+          children: children,
           priority: priority,
         );
 

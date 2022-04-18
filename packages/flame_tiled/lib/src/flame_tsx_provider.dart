@@ -24,7 +24,7 @@ class FlameTsxProvider implements TsxProvider {
   }
 
   @override
-  Parser? getChachedSource() {
+  Parser? getCachedSource() {
     if (data.isEmpty) {
       return null;
     }
