@@ -156,7 +156,11 @@ class Polygon extends Shape {
       for (var i = 0; i < n; i++) {
         final vi = _vertices[i];
         final vj = _vertices[j];
-        if ((vi.y == y0 && vi.x >= x0) ||
+        if (vi.x == x0 && vi.y == y0) {
+          return true;
+        }
+        if ((vi.y == y0 && vi.x > x0) ||
+            (vj.y == y0 && vj.x > x0) ||
             (vi.y > y0) != (vj.y > y0) &&
                 ((y0 - vj.y) * (vi.x - vj.x) / (vi.y - vj.y) >= (x0 - vj.x))) {
           intersectionCount++;
@@ -184,7 +188,7 @@ class Polygon extends Shape {
     final newVertices = _vertices
         .map((vertex) => transform.localToGlobal(vertex))
         .toList(growable: false);
-    final convex = transform.hasReflection? null : _convex;
+    final convex = transform.hasReflection ? null : _convex;
     return Polygon(newVertices, convex: convex);
   }
 
@@ -198,8 +202,8 @@ class Polygon extends Shape {
 
   @override
   Vector2 support(Vector2 direction) {
-    var bestProduct = -1.0;
-    late Vector2 bestVertex;
+    var bestVertex = _vertices.first;
+    var bestProduct = bestVertex.dot(direction);
     for (final vertex in _vertices) {
       final dotProduct = vertex.dot(direction);
       if (dotProduct > bestProduct) {

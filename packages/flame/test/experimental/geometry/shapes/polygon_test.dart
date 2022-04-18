@@ -94,5 +94,71 @@ void main() {
       );
       expect(polygon.center, closeToVector(95 / 3, 30, epsilon: 1e-14));
     });
+
+    test('support', () {
+      final polygon = Polygon([
+        Vector2(10, 0),
+        Vector2(0, 30),
+        Vector2(30, 70),
+        Vector2(80, 40),
+      ]);
+      expect(polygon.isConvex, true);
+
+      expect(polygon.support(Vector2(1, 0)), Vector2(80, 40));
+      expect(polygon.support(Vector2(-1, 0)), Vector2(0, 30));
+      expect(polygon.support(Vector2(0, 1)), Vector2(30, 70));
+      expect(polygon.support(Vector2(0, -1)), Vector2(10, 0));
+      expect(polygon.support(Vector2(-1, -1)), Vector2(10, 0));
+      expect(polygon.support(Vector2(1, 1)), Vector2(80, 40));
+    });
+
+    test('weird-shape polygon', () {
+      final polygon = Polygon([
+        Vector2(20, 40),
+        Vector2(50, 30),
+        Vector2(70, 60),
+        Vector2(50, 40),
+        Vector2(40, 60),
+        Vector2(90, 80),
+        Vector2(100, 20),
+        Vector2(90, 50),
+        Vector2(60, 10),
+        Vector2(40, 25),
+      ]);
+      expect(polygon.n, 10);
+      expect(polygon.isConvex, false);
+      expect(polygon.vertices[0], Vector2(20, 40));
+      expect(
+        polygon.center.x,
+        (20 + 50 + 70 + 50 + 40 + 90 + 100 + 90 + 60 + 40) / 10,
+      );
+      expect(
+        polygon.center.y,
+        (40 + 30 + 60 + 40 + 60 + 80 + 20 + 50 + 10 + 25) / 10,
+      );
+      expect(polygon.aabb.min, Vector2(20, 10));
+      expect(polygon.aabb.max, Vector2(100, 80));
+
+      // containsPoint
+      expect(polygon.containsPoint(Vector2(40, 25)), true);
+      expect(polygon.containsPoint(Vector2(40, 30)), true);
+      expect(polygon.containsPoint(Vector2(40, 60)), true);
+      expect(polygon.containsPoint(Vector2(60, 20)), true);
+      expect(polygon.containsPoint(Vector2(60, 30)), true);
+      expect(polygon.containsPoint(Vector2(65, 25)), true);
+      expect(polygon.containsPoint(Vector2(60, 40)), true);
+      expect(polygon.containsPoint(Vector2(50, 50)), true);
+      expect(polygon.containsPoint(Vector2(60, 60)), true);
+      expect(polygon.containsPoint(Vector2(80, 40)), true);
+      expect(polygon.containsPoint(Vector2(80, 70)), true);
+      expect(polygon.containsPoint(Vector2(90, 80)), true);
+      expect(polygon.containsPoint(Vector2(90, 50)), true);
+      expect(polygon.containsPoint(Vector2(95, 50)), true);
+      expect(polygon.containsPoint(Vector2(97, 30)), true);
+      expect(polygon.containsPoint(Vector2(40, 40)), false);
+      expect(polygon.containsPoint(Vector2(40, 50)), false);
+      expect(polygon.containsPoint(Vector2(50, 35)), false);
+      expect(polygon.containsPoint(Vector2(60, 49)), false);
+    });
   });
 }
