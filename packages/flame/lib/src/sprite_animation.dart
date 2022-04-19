@@ -274,6 +274,7 @@ class SpriteAnimation {
     elapsed = 0.0;
     currentIndex = 0;
     _done = false;
+    _started = false;
   }
 
   /// Sets this animation to be on the last frame.
