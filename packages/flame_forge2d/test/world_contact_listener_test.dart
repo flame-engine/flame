@@ -35,96 +35,6 @@ void main() {
       });
 
       group(
-        'preSolve',
-        () {
-          late Manifold manifold;
-
-          setUp(() {
-            manifold = MockManifold();
-          });
-
-          test(
-            "doesn't callback if userData are null",
-            () {
-              final contactListener = WorldContactListener();
-
-              when(() => bodyA.userData).thenReturn(contactCallback);
-              when(() => bodyB.userData).thenReturn(null);
-              when(() => fixtureA.userData).thenReturn(null);
-              when(() => fixtureB.userData).thenReturn(null);
-
-              contactListener.preSolve(contact, manifold);
-
-              verifyNever(
-                () => contactCallback.preSolve(any(), contact, manifold),
-              );
-            },
-          );
-
-          test(
-            'callbacks for userData when not null',
-            () {
-              final contactListener = WorldContactListener();
-
-              when(() => bodyA.userData).thenReturn(contactCallback);
-              when(() => bodyB.userData).thenReturn(Object());
-              when(() => fixtureA.userData).thenReturn(Object());
-              when(() => fixtureB.userData).thenReturn(Object());
-
-              contactListener.preSolve(contact, manifold);
-
-              verify(
-                () => contactCallback.preSolve(
-                  bodyB.userData!,
-                  contact,
-                  manifold,
-                ),
-              ).called(1);
-              verify(
-                () => contactCallback.preSolve(
-                  fixtureA.userData!,
-                  contact,
-                  manifold,
-                ),
-              ).called(1);
-              verify(
-                () => contactCallback.preSolve(
-                  fixtureB.userData!,
-                  contact,
-                  manifold,
-                ),
-              ).called(1);
-              verify(
-                () => contactCallback.preSolve(
-                  any(),
-                  contact,
-                  manifold,
-                ),
-              ).called(3);
-            },
-          );
-
-          test(
-            "doesn't callback itself",
-            () {
-              final contactListener = WorldContactListener();
-
-              when(() => bodyA.userData).thenReturn(contactCallback);
-              when(() => bodyB.userData).thenReturn(contactCallback);
-              when(() => fixtureA.userData).thenReturn(null);
-              when(() => fixtureB.userData).thenReturn(null);
-
-              contactListener.preSolve(contact, manifold);
-
-              verifyNever(
-                () => contactCallback.preSolve(any(), contact, manifold),
-              );
-            },
-          );
-        },
-      );
-
-      group(
         'beginContact',
         () {
           test(
@@ -254,6 +164,96 @@ void main() {
 
               verifyNever(
                 () => contactCallback.endContact(any(), contact),
+              );
+            },
+          );
+        },
+      );
+
+      group(
+        'preSolve',
+        () {
+          late Manifold manifold;
+
+          setUp(() {
+            manifold = MockManifold();
+          });
+
+          test(
+            "doesn't callback if userData are null",
+            () {
+              final contactListener = WorldContactListener();
+
+              when(() => bodyA.userData).thenReturn(contactCallback);
+              when(() => bodyB.userData).thenReturn(null);
+              when(() => fixtureA.userData).thenReturn(null);
+              when(() => fixtureB.userData).thenReturn(null);
+
+              contactListener.preSolve(contact, manifold);
+
+              verifyNever(
+                () => contactCallback.preSolve(any(), contact, manifold),
+              );
+            },
+          );
+
+          test(
+            'callbacks for userData when not null',
+            () {
+              final contactListener = WorldContactListener();
+
+              when(() => bodyA.userData).thenReturn(contactCallback);
+              when(() => bodyB.userData).thenReturn(Object());
+              when(() => fixtureA.userData).thenReturn(Object());
+              when(() => fixtureB.userData).thenReturn(Object());
+
+              contactListener.preSolve(contact, manifold);
+
+              verify(
+                () => contactCallback.preSolve(
+                  bodyB.userData!,
+                  contact,
+                  manifold,
+                ),
+              ).called(1);
+              verify(
+                () => contactCallback.preSolve(
+                  fixtureA.userData!,
+                  contact,
+                  manifold,
+                ),
+              ).called(1);
+              verify(
+                () => contactCallback.preSolve(
+                  fixtureB.userData!,
+                  contact,
+                  manifold,
+                ),
+              ).called(1);
+              verify(
+                () => contactCallback.preSolve(
+                  any(),
+                  contact,
+                  manifold,
+                ),
+              ).called(3);
+            },
+          );
+
+          test(
+            "doesn't callback itself",
+            () {
+              final contactListener = WorldContactListener();
+
+              when(() => bodyA.userData).thenReturn(contactCallback);
+              when(() => bodyB.userData).thenReturn(contactCallback);
+              when(() => fixtureA.userData).thenReturn(null);
+              when(() => fixtureB.userData).thenReturn(null);
+
+              contactListener.preSolve(contact, manifold);
+
+              verifyNever(
+                () => contactCallback.preSolve(any(), contact, manifold),
               );
             },
           );
