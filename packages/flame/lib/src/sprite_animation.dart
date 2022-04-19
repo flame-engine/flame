@@ -300,6 +300,9 @@ class SpriteAnimation {
   bool _done = false;
   bool done() => _done;
 
+  /// Local flag to determine if the animation has started to prevent multiple calls to [onStart].
+  bool _started = false;
+
   /// Updates this animation, ticking the lifeTime by an amount [dt]
   /// (in seconds).
   void update(double dt) {
@@ -310,8 +313,9 @@ class SpriteAnimation {
     }
     while (clock >= currentFrame.stepTime) {
       onFrame?.call(currentIndex);
-      if (isFirstFrame) {
+      if (isFirstFrame && !_started) {
         onStart?.call();
+        _started = true;
       }
       if (isLastFrame) {
         if (loop) {
