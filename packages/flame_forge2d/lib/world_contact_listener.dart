@@ -1,12 +1,5 @@
 import 'flame_forge2d.dart';
 
-abstract class ContactCallbacks {
-  void beginContact(Object other, Contact contact) {}
-  void endContact(Object other, Contact contact) {}
-  void preSolve(Object other, Contact contact, Manifold oldManifold) {}
-  void postSolve(Object other, Contact contact, ContactImpulse impulse) {}
-}
-
 /// Listens to the entire [World] contacts events.
 ///
 /// It propagates contact events ([beginContact], [endContact], [preSolve],
