@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'boundaries.dart';
 
-class Ball extends BodyComponent with ContactListener {
+class Ball extends BodyComponent with ContactCallback {
   late Paint originalPaint;
   bool giveNudge = false;
   final double radius;
@@ -62,61 +62,35 @@ class Ball extends BodyComponent with ContactListener {
   }
 
   @override
-  void beginContact(Contact contact) {
-    final otherObject = contact.bodyA.userData == this
-        ? contact.bodyB.userData
-        : contact.bodyA.userData;
-
-    if (otherObject is Wall) {
-      otherObject.paint = paint;
+  void beginContact(Object other, Contact contact) {
+    if (other is Wall) {
+      other.paint = paint;
     }
 
-    if (otherObject is WhiteBall) {
+    if (other is WhiteBall) {
       return;
     }
 
-    if (otherObject is Ball) {
+    if (other is Ball) {
       if (paint != originalPaint) {
-        paint = otherObject.paint;
+        paint = other.paint;
       } else {
-        otherObject.paint = paint;
+        other.paint = paint;
       }
     }
   }
-
-  @override
-  void endContact(Contact contact) {}
-
-  @override
-  void postSolve(Contact contact, ContactImpulse impulse) {}
-
-  @override
-  void preSolve(Contact contact, Manifold oldManifold) {}
 }
 
-class WhiteBall extends Ball with ContactListener {
+class WhiteBall extends Ball with ContactCallback {
   WhiteBall(Vector2 position) : super(position) {
     originalPaint = BasicPalette.white.paint();
     paint = originalPaint;
   }
 
   @override
-  void beginContact(Contact contact) {
-    final otherObject = contact.bodyA.userData == this
-        ? contact.bodyB.userData
-        : contact.bodyA.userData;
-
-    if (otherObject is Ball) {
-      otherObject.giveNudge = true;
+  void beginContact(Object other, Contact contact) {
+    if (other is Ball) {
+      other.giveNudge = true;
     }
   }
-
-  @override
-  void endContact(Contact contact) {}
-
-  @override
-  void postSolve(Contact contact, ContactImpulse impulse) {}
-
-  @override
-  void preSolve(Contact contact, Manifold oldManifold) {}
 }
