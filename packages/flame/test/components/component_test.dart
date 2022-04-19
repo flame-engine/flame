@@ -172,6 +172,75 @@ void main() {
       },
     );
 
+    testWithFlameGame(
+      'remove a component before it was ever added',
+      (game) async {
+        expect(
+          () => game.remove(Component()),
+          failsAssert(
+            "Trying to remove a component that doesn't belong to any parent",
+          ),
+        );
+      },
+    );
+
+    testWithFlameGame(
+      'remove a component from a wrong parent',
+      (game) async {
+        final badParent = Component()..addToParent(game);
+        final child = Component()..addToParent(game);
+        await game.ready();
+        expect(
+          () => badParent.remove(child),
+          failsAssert(
+            'Trying to remove a component that belongs to a different parent: '
+            "this = Instance of 'Component', component's parent = Instance of "
+            "'FlameGame'",
+          ),
+        );
+      },
+    );
+
+    testWithFlameGame(
+      'remove an uninitialized component',
+      (game) async {
+        final parent = Component();
+        final child = Component()..addToParent(parent);
+        expect(child.lifecycleState, LifecycleState.uninitialized);
+        child.removeFromParent();
+
+        game.add(parent);
+        await game.ready();
+
+        expect(child.lifecycleState, LifecycleState.uninitialized);
+        expect(parent.lifecycleState, LifecycleState.mounted);
+        expect(parent.children.length, 0);
+        expect(child.parent, isNull);
+      },
+    );
+
+    testWithFlameGame(
+      'remove and re-add uninitialized component with non-trivial onLoad',
+      (game) async {
+        final parent = Component();
+        final component = _ComponentWithOnLoad();
+        parent.add(component);
+        expect(component.lifecycleState, LifecycleState.uninitialized);
+        parent.remove(component);
+        expect(component.lifecycleState, LifecycleState.uninitialized);
+        expect(component.onLoadCalledCount, 0);
+
+        final newParent = Component()..addToParent(game);
+        newParent.add(component);
+        expect(component.lifecycleState, LifecycleState.loading);
+        expect(component.onLoadCalledCount, 1);
+        await game.ready();
+        expect(component.lifecycleState, LifecycleState.mounted);
+        expect(newParent.children.length, 1);
+        expect(newParent.children.first, component);
+      },
+    );
+
     prepareGame.test(
       'adding children to a parent that is not yet added to a game should not '
       'run double onPrepare',
@@ -470,5 +539,14 @@ class TwoChildrenComponent extends Component {
     child2 = Component();
     add(child1);
     add(child2);
+  }
+}
+
+class _ComponentWithOnLoad extends Component {
+  int onLoadCalledCount = 0;
+
+  @override
+  Future<void> onLoad() async {
+    onLoadCalledCount++;
   }
 }
