@@ -1,18 +1,9 @@
 import 'package:flame_forge2d/flame_forge2d.dart';
+import 'package:flame_forge2d/world_contact_listener.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/scaffolding.dart';
 
-class MockContactCallback extends Mock implements ContactCallbacks {}
-
-class MockContact extends Mock implements Contact {}
-
-class MockBody extends Mock implements Body {}
-
-class MockFixture extends Mock implements Fixture {}
-
-class MockManifold extends Mock implements Manifold {}
-
-class MockContactImpulse extends Mock implements ContactImpulse {}
+import 'helpers/helpers.dart';
 
 void main() {
   group(
