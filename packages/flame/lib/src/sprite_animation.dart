@@ -301,7 +301,8 @@ class SpriteAnimation {
   bool _done = false;
   bool done() => _done;
 
-  /// Local flag to determine if the animation has started to prevent multiple calls to [onStart].
+  /// Local flag to determine if the animation has started to prevent multiple
+  /// calls to [onStart].
   bool _started = false;
 
   /// Updates this animation, ticking the lifeTime by an amount [dt]
