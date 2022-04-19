@@ -9,12 +9,12 @@ environment:
 
 dependencies:
   flame: ^1.1.0
-  forge2d: ^0.10.0
-
   flutter:
     sdk: flutter
+  forge2d: ^0.10.0
 
 dev_dependencies:
   dartdoc: ^4.1.0
   flame_lint: ^0.0.1
+  mocktail: ^0.3.0
   test: any
