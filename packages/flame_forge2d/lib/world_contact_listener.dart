@@ -1,6 +1,6 @@
 import 'flame_forge2d.dart';
 
-abstract class ContactCallback {
+abstract class ContactCallbacks {
   void beginContact(Object other, Contact contact) {}
   void endContact(Object other, Contact contact) {}
   void preSolve(Object other, Contact contact, Manifold oldManifold) {}
@@ -10,16 +10,16 @@ abstract class ContactCallback {
 /// Listens to the entire [World] contacts events.
 ///
 /// It propagates contact events ([beginContact], [endContact], [preSolve],
-/// [postSolve]) to other [ContactCallback]s when a [Body] or at least one of
-/// its fixtures `userData` is set to a [ContactCallback].
+/// [postSolve]) to other [ContactCallbacks]s when a [Body] or at least one of
+/// its fixtures `userData` is set to a [ContactCallbacks].
 ///
-/// If the [Body] `userData` is set to a [ContactCallback] the contact events
+/// If the [Body] `userData` is set to a [ContactCallbacks] the contact events
 /// of this will be called to when any [Body]'s fixture contacts another
 /// [Fixture].
 ///
 /// If instead you wish to be more specific and only trigger contact events
 /// when a specific [Body]'s fixture contacts with another [Fixture] you can
-/// set the fixture `userData` to a [ContactCallback].
+/// set the fixture `userData` to a [ContactCallbacks].
 ///
 /// The described behaviour is a simple out of the box solution to propagate
 /// contact events. If you wish to implement your own logic you can subclass
@@ -27,7 +27,7 @@ abstract class ContactCallback {
 class WorldContactListener extends ContactListener {
   void _callback(
     Contact contact,
-    void Function(ContactCallback contactCallback, Object other) callback,
+    void Function(ContactCallbacks contactCallback, Object other) callback,
   ) {
     final userDatas = {
       contact.bodyA.userData,
@@ -36,7 +36,7 @@ class WorldContactListener extends ContactListener {
       contact.fixtureB.userData,
     }.whereType<Object>();
 
-    for (final contactCallback in userDatas.whereType<ContactCallback>()) {
+    for (final contactCallback in userDatas.whereType<ContactCallbacks>()) {
       for (final object in userDatas) {
         if (object != contactCallback) {
           callback(contactCallback, object);

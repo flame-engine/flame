@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'boundaries.dart';
 
-class Ball extends BodyComponent with ContactCallback {
+class Ball extends BodyComponent with ContactCallbacks {
   late Paint originalPaint;
   bool giveNudge = false;
   final double radius;
@@ -81,7 +81,7 @@ class Ball extends BodyComponent with ContactCallback {
   }
 }
 
-class WhiteBall extends Ball with ContactCallback {
+class WhiteBall extends Ball with ContactCallbacks {
   WhiteBall(Vector2 position) : super(position) {
     originalPaint = BasicPalette.white.paint();
     paint = originalPaint;

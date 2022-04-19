@@ -2,7 +2,7 @@ import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/scaffolding.dart';
 
-class MockContactCallback extends Mock implements ContactCallback {}
+class MockContactCallback extends Mock implements ContactCallbacks {}
 
 class MockContact extends Mock implements Contact {}
 
@@ -18,7 +18,7 @@ void main() {
   group(
     'WorldContactListener',
     () {
-      late ContactCallback contactCallback;
+      late ContactCallbacks contactCallback;
       late Contact contact;
       late Body bodyA;
       late Body bodyB;
