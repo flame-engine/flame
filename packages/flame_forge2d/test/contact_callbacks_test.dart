@@ -4,8 +4,6 @@ import 'package:test/scaffolding.dart';
 
 import 'helpers/helpers.dart';
 
-class TestContactCallbacks extends ContactCallbacks {}
-
 void main() {
   group('ContactCallbacks', () {
     late Object other;
@@ -21,7 +19,7 @@ void main() {
     });
 
     test('beginContact calls onBeginContact', () {
-      final contactCallbacks = TestContactCallbacks();
+      final contactCallbacks = ContactCallbacks();
       var called = 0;
       contactCallbacks.onBeginContact = (_, __) => called++;
 
@@ -31,7 +29,7 @@ void main() {
     });
 
     test('endContact calls onEndContact', () {
-      final contactCallbacks = TestContactCallbacks();
+      final contactCallbacks = ContactCallbacks();
       var called = 0;
       contactCallbacks.onEndContact = (_, __) => called++;
 
@@ -41,7 +39,7 @@ void main() {
     });
 
     test('preSolve calls onPreSolve', () {
-      final contactCallbacks = TestContactCallbacks();
+      final contactCallbacks = ContactCallbacks();
       var called = 0;
       contactCallbacks.onPreSolve = (_, __, ___) => called++;
 
@@ -51,7 +49,7 @@ void main() {
     });
 
     test('postSolve calls on postSolve', () {
-      final contactCallbacks = TestContactCallbacks();
+      final contactCallbacks = ContactCallbacks();
       var called = 0;
       contactCallbacks.onPostSolve = (_, __, ___) => called++;
 

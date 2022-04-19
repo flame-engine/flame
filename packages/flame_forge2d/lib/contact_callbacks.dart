@@ -1,6 +1,6 @@
 import 'flame_forge2d.dart';
 
-abstract class ContactCallbacks {
+class ContactCallbacks {
   void beginContact(Object other, Contact contact) {
     onBeginContact?.call(other, contact);
   }
