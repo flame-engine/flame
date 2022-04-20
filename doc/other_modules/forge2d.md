@@ -85,7 +85,7 @@ class Ball extends BodyComponent with ContactCallbacks {
 
 In order for the above to work, the Ball's `userData` must be set to a `ContactCallback`. And if `Wall` is a `BodyComponent` the `userData` must be set to `Wall`. By default `userData` is `null`, and when so, contact events are ignored.
 
-A convinient way of doing so is to assign `this` to `userData` when creating the `Body` inside `createBody`. For example:
+A convinient way of setting `userData` is to assign it when creating the body. For example:
 
 ```dart
 class Ball extends BodyComponent with ContactCallbacks {
@@ -103,7 +103,7 @@ class Ball extends BodyComponent with ContactCallbacks {
 }
 ```
 
-Every time `Ball` and `Wall` gets in contact `begin` will be called, and once the objects stops being in contact `end` will be called.
+Every time `Ball` and `Wall` get in contact `begin` will be called, and once the objects stops being in contact `end` will be called.
 
 An implementation example can be seen in the
 [Flame Forge2D example](https://github.com/flame-engine/flame/blob/main/packages/flame_forge2d/example/lib/balls.dart).
