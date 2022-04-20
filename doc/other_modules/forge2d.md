@@ -65,54 +65,45 @@ not according to the coordinate system of Forge2D (where the Y-axis is flipped).
 
 ## Contact callbacks
 
-If you are using `Forge2DGame` you can take advantage of its way of handling contacts between two
-`BodyComponent`s.
+`Forge2DGame` provides a simple out of the box solution to propagate
+contact events.
 
-When creating the body definition for your `BodyComponent` make sure that you set the userdata to
-the current object, otherwise it will not be possible to detect collisions.
-Like this:
-```dart
-final bodyDef = BodyDef()
-  // To be able to know which component that is involved in a collision
-  ..userData = this;
-```
-
-Now you have to make an implementation of `ContactCallback` where you set which two types that it
-should react when they come in contact.
-If you have two `BodyComponent`s named `Ball` and `Wall` and you want to do something when they come
-in contact, you could do something like this:
+There exist multiple ways to go around it. However, a common approach is
+to mix a `BodyComponent` with `ContactCallbacks`.
 
 ```dart
-class BallWallCallback extends ContactCallback<Ball, Wall> {
-  BallWallCallback();
-
-  @override
-  void begin(Ball ball, Wall wall, Contact contact) {
-    wall.remove();
+class Ball extends BodyComponent with ContactCallbacks {
+  ...
+  void beginContact(Object other, Contact contact) {
+    if (other is Wall) {
+      // Do something here.
+    }
   }
-
-  @override
-  void end(Ball ball, Wall wall, Contact contact) {}
+  ...
 }
 ```
 
-and then you simply add `BallWallCallback` to your `Forge2DGame`:
+In order for the above to work, the Ball's `userData` must be set to a `ContactCallback`. And if `Wall` is a `BodyComponent` the `userData` must be set to `Wall`. By default `userData` is `null`, and when so, contact events are ignored.
+
+A convinient way of doing so is to assign `this` to `userData` when creating the `Body` inside `createBody`. For example:
 
 ```dart
-class MyGame extends Forge2DGame {
-  MyGame(Forge2DComponent box) : super(box) {
-    addContactCallback(BallWallCallback());
+class Ball extends BodyComponent with ContactCallbacks {
+  ...
+
+  @override
+  Body createBody() {
+    ...
+    final bodyDef = BodyDef(
+      userData = this,
+    );
+    ...
   }
+
 }
 ```
 
-Every time `Ball` and `Wall` gets in contact `begin` will be called, and once the objects stop being
-in contact `end` will be called.
-
-If you want an object to interact with all other bodies, put `BodyComponent` as the one of the
-parameters of your `ContactCallback` like this:
-
-`class BallAnythingCallback implements ContactCallback<Ball, BodyComponent> ...`
+Every time `Ball` and `Wall` gets in contact `begin` will be called, and once the objects stops being in contact `end` will be called.
 
 An implementation example can be seen in the
 [Flame Forge2D example](https://github.com/flame-engine/flame_forge2d/blob/main/example).
