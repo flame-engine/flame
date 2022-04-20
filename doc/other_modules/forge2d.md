@@ -68,7 +68,7 @@ not according to the coordinate system of Forge2D (where the Y-axis is flipped).
 `Forge2DGame` provides a simple out of the box solution to propagate
 contact events.
 
-There exist multiple ways to go around it. However, a common approach is
+There are multiple ways to go around it. However, a common approach is
 to mix a `BodyComponent` with `ContactCallbacks`.
 
 ```dart
