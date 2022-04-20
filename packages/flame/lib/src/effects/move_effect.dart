@@ -4,62 +4,36 @@ import 'controllers/effect_controller.dart';
 import 'effect.dart';
 import 'effect_target.dart';
 import 'measurable_effect.dart';
+import 'move_by_effect.dart';
+import 'move_to_effect.dart';
 import 'provider_interfaces.dart';
 
-/// Move a component to a new position.
+/// Base class for effects that affect the `position` of their targets.
 ///
-/// The following constructors are provided:
+/// The main purpose of this class is for reflection, for example to select
+/// all effects on the target that are of "move" type.
 ///
-///   - [MoveEffect.by] will move the target in a straight line to a new
-///     position that is at an `offset` from the target's position at the onset
-///     of the effect;
-///
-///   - [MoveEffect.to] will move the target in a straight line to the specified
-///     coordinates;
-///
-/// This effect applies incremental changes to the component's position, and
-/// requires that any other effect or update logic applied to the same component
-/// also used incremental updates.
-class MoveEffect extends Effect
+/// Factory constructors [MoveEffect.by] and [MoveEffect.to] are also provided,
+/// but they may be deprecated in the future.
+abstract class MoveEffect extends Effect
     with EffectTarget<PositionProvider>
     implements MeasurableEffect {
-  MoveEffect.by(
-    Vector2 offset,
-    EffectController controller, {
-    PositionProvider? target,
-  })  : _offset = offset.clone(),
-        super(controller) {
+  MoveEffect(EffectController controller, PositionProvider? target)
+      : super(controller) {
     this.target = target;
   }
 
-  factory MoveEffect.to(Vector2 destination, EffectController controller) =>
-      _MoveToEffect(destination, controller);
+  factory MoveEffect.by(
+    Vector2 offset,
+    EffectController controller, {
+    PositionProvider? target,
+  }) =>
+      MoveByEffect(offset, controller, target: target);
 
-  Vector2 _offset;
-
-  @override
-  void apply(double progress) {
-    final dProgress = progress - previousProgress;
-    target.position += _offset * dProgress;
-  }
-
-  @override
-  double measure() => _offset.length;
-}
-
-/// Implementation class for [MoveEffect.to]
-class _MoveToEffect extends MoveEffect {
-  _MoveToEffect(
+  factory MoveEffect.to(
     Vector2 destination,
     EffectController controller, {
     PositionProvider? target,
-  })  : _destination = destination.clone(),
-        super.by(Vector2.zero(), controller, target: target);
-
-  final Vector2 _destination;
-
-  @override
-  void onStart() {
-    _offset = _destination - target.position;
-  }
+  }) =>
+      MoveToEffect(destination, controller, target: target);
 }

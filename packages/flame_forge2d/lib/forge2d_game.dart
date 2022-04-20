@@ -3,6 +3,7 @@ import 'package:forge2d/forge2d.dart';
 
 import 'forge2d_camera.dart';
 import 'world_contact_listener.dart';
+import 'contact_callbacks.dart';
 
 class Forge2DGame extends FlameGame {
   Forge2DGame({
@@ -11,7 +12,7 @@ class Forge2DGame extends FlameGame {
     Camera? camera,
     ContactListener? contactListener,
   })  : world = World(gravity ?? defaultGravity),
-        super(camera: camera ?? Forge2DCamera()) {
+        super(camera: camera ?? Camera()) {
     this.camera.zoom = zoom;
     world.setContactListener(contactListener ?? WorldContactListener());
   }
@@ -38,5 +39,9 @@ class Forge2DGame extends FlameGame {
 
   Vector2 screenToWorld(Vector2 position) {
     return projector.unprojectVector(position);
+  }
+
+  Vector2 screenToFlameWorld(Vector2 position) {
+    return screenToWorld(position)..y *= -1;
   }
 }

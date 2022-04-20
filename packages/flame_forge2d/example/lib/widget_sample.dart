@@ -1,8 +1,7 @@
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flame_forge2d/flame_forge2d.dart' hide Transform;
-import 'package:flutter/material.dart' as material;
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 
 import 'boundaries.dart';
 
@@ -17,7 +16,7 @@ class WidgetSample extends Forge2DGame with TapDetector {
 
   Vector2 screenPosition(Body body) => worldToScreen(body.worldCenter);
 
-  WidgetSample() : super(zoom: 20, gravity: Vector2(0, -10.0));
+  WidgetSample() : super(zoom: 20, gravity: Vector2(0, 10.0));
 
   @override
   Future<void> onLoad() async {
@@ -26,18 +25,21 @@ class WidgetSample extends Forge2DGame with TapDetector {
   }
 
   Body createBody() {
-    final bodyDef = BodyDef()
-      ..angularVelocity = 3
-      ..position = screenToWorld(
+    final bodyDef = BodyDef(
+      angularVelocity: 3,
+      position: screenToWorld(
         Vector2.random()..multiply(camera.viewport.effectiveSize),
-      )
-      ..type = BodyType.dynamic;
+      ),
+      type: BodyType.dynamic,
+    );
     final body = world.createBody(bodyDef);
 
     final shape = PolygonShape()..setAsBoxXY(4.6, 0.8);
-    final fixtureDef = FixtureDef(shape)
-      ..density = 1.0
-      ..restitution = 0.95;
+    final fixtureDef = FixtureDef(
+      shape,
+      density: 1.0,
+      restitution: 0.95,
+    );
     body.createFixture(fixtureDef);
     return body;
   }
@@ -117,8 +119,8 @@ class _BodyButtonState extends State<BodyButtonWidget> {
         top: bodyPosition.y - 18,
         left: bodyPosition.x - 90,
         child: Transform.rotate(
-          angle: -body.angle,
-          child: material.ElevatedButton(
+          angle: body.angle,
+          child: ElevatedButton(
             onPressed: () {
               setState(
                 () => body.applyLinearImpulse(Vector2(0.0, 1000)),
