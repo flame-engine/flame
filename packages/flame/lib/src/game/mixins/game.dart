@@ -307,9 +307,7 @@ mixin Game {
   /// widget to be rebuilt. This can be used when updating any property which is
   /// implemented within the Flutter tree.
   void _refreshWidget() {
-    if (isAttached) {
-      _gameStateListeners.forEach((callback) => callback());
-    }
+    _gameStateListeners.forEach((callback) => callback());
   }
 }
 

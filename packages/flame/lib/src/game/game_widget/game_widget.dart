@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:flutter/services.dart';
@@ -135,18 +136,53 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
           await onLoad;
         }
         widget.game.onMount();
-        await null;
-        setState(() {});
       })();
 
   Future<void>? _loaderFuture;
 
   late FocusNode _focusNode;
 
+  /// The number of `build()` functions currently executing.
+  int _buildDepth = 0;
+
+  /// If true, then a fresh build will be scheduled after the current one
+  /// completes. This should only be set to true when the [_buildDepth] is
+  /// non-zero.
+  bool _requiresRebuild = false;
+
+  /// Helper method that arranges to have `_buildDepth > 0` while the [build] is
+  /// executing, and then schedules a re-build if [_requiresRebuild] flag was
+  /// raised during the build.
+  ///
+  /// This is needed because or build function invokes user code, which in turn
+  /// may change some of the [Game]'s properties which would require the
+  /// [GameWidget] to be rebuilt. However, Flutter doesn't allow widgets to be
+  /// marked dirty while they are building. So, this method is needed to avoid
+  /// such a limitation and ensure that the user code can set [Game]'s
+  /// properties freely, and that they will be propagated to the [GameWidget]
+  /// at the earliest opportunity.
+  Widget _protectedBuild(Widget Function() build) {
+    _buildDepth++;
+    final result = build();
+    _buildDepth--;
+    if (_requiresRebuild && _buildDepth == 0) {
+      Future.microtask(_onGameStateChange);
+    }
+    return result;
+  }
+
+  void _onGameStateChange() {
+    if (_buildDepth > 0) {
+      _requiresRebuild = true;
+    } else {
+      setState(() => _requiresRebuild = false);
+    }
+  }
+
   @override
   void initState() {
     super.initState();
-    widget.game.addGameStateListener(onGameStateChange);
+    widget.game.addGameStateListener(_onGameStateChange);
     _focusNode = widget.focusNode ?? FocusNode();
     if (widget.autofocus) {
       _focusNode.requestFocus();
@@ -167,17 +203,13 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
   @override
   void dispose() {
     super.dispose();
-    widget.game.removeGameStateListener(onGameStateChange);
+    widget.game.removeGameStateListener(_onGameStateChange);
     widget.game.onRemove();
     // If we received a focus node from the user, they are responsible
     // for disposing it
     if (widget.focusNode == null) {
       _focusNode.dispose();
     }
-  }
-
-  void onGameStateChange() {
-    setState(() {});
   }
 
   void _checkOverlays(Set<String> overlays) {
@@ -199,95 +231,101 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
 
   @override
   Widget build(BuildContext context) {
-    final game = widget.game;
-    Widget internalGameWidget = _GameRenderObjectWidget(game);
+    return _protectedBuild(() {
+      final game = widget.game;
+      Widget internalGameWidget = _GameRenderObjectWidget(game);
 
-    _checkOverlays(widget.game.overlays.value);
-    assert(
-      !(game is MultiTouchDragDetector && game is PanDetector),
-      'WARNING: Both MultiTouchDragDetector and a PanDetector detected. '
-      'The MultiTouchDragDetector will override the PanDetector and it will '
-      'not receive events',
-    );
-
-    if (hasBasicGestureDetectors(game)) {
-      internalGameWidget = applyBasicGesturesDetectors(
-        game,
-        internalGameWidget,
+      _checkOverlays(widget.game.overlays.value);
+      assert(
+        !(game is MultiTouchDragDetector && game is PanDetector),
+        'WARNING: Both MultiTouchDragDetector and a PanDetector detected. '
+        'The MultiTouchDragDetector will override the PanDetector and it will '
+        'not receive events',
       );
-    }
 
-    if (hasAdvancedGestureDetectors(game)) {
-      internalGameWidget = applyAdvancedGesturesDetectors(
-        game,
-        internalGameWidget,
-      );
-    }
+      if (hasBasicGestureDetectors(game)) {
+        internalGameWidget = applyBasicGesturesDetectors(
+          game,
+          internalGameWidget,
+        );
+      }
 
-    if (hasMouseDetectors(game)) {
-      internalGameWidget = applyMouseDetectors(
-        game,
-        internalGameWidget,
-      );
-    }
+      if (hasAdvancedGestureDetectors(game)) {
+        internalGameWidget = applyAdvancedGesturesDetectors(
+          game,
+          internalGameWidget,
+        );
+      }
 
-    final stackedWidgets = [internalGameWidget];
-    _addBackground(context, stackedWidgets);
-    _addOverlays(context, stackedWidgets);
+      if (hasMouseDetectors(game)) {
+        internalGameWidget = applyMouseDetectors(
+          game,
+          internalGameWidget,
+        );
+      }
 
-    // We can use Directionality.maybeOf when that method lands on stable
-    final textDir = widget.textDirection ?? TextDirection.ltr;
+      final stackedWidgets = [internalGameWidget];
+      _addBackground(context, stackedWidgets);
+      _addOverlays(context, stackedWidgets);
 
-    return Focus(
-      focusNode: _focusNode,
-      autofocus: widget.autofocus,
-      onKey: _handleKeyEvent,
-      child: MouseRegion(
-        cursor: widget.game.mouseCursor,
-        child: Directionality(
-          textDirection: textDir,
-          child: Container(
-            color: game.backgroundColor(),
-            child: LayoutBuilder(
-              builder: (_, BoxConstraints constraints) {
-                final size = constraints.biggest.toVector2();
-                if (size.isZero()) {
-                  return widget.loadingBuilder?.call(context) ?? Container();
-                }
-                game.onGameResize(size);
-                return FutureBuilder(
-                  future: loaderFuture,
-                  builder: (_, snapshot) {
-                    if (snapshot.hasError) {
-                      final errorBuilder = widget.errorBuilder;
-                      if (errorBuilder == null) {
-                        // @Since('2.16')
-                        // throw Error.throwWithStackTrace(
-                        //   snapshot.error!,
-                        //   snapshot.stackTrace,
-                        // )
-                        log(
-                          'Error while loading Game widget',
-                          error: snapshot.error,
-                          stackTrace: snapshot.stackTrace,
-                        );
-                        throw snapshot.error!;
-                      } else {
-                        return errorBuilder(context, snapshot.error!);
-                      }
+      // We can use Directionality.maybeOf when that method lands on stable
+      final textDir = widget.textDirection ?? TextDirection.ltr;
+
+      return Focus(
+        focusNode: _focusNode,
+        autofocus: widget.autofocus,
+        onKey: _handleKeyEvent,
+        child: MouseRegion(
+          cursor: widget.game.mouseCursor,
+          child: Directionality(
+            textDirection: textDir,
+            child: Container(
+              color: game.backgroundColor(),
+              child: LayoutBuilder(
+                builder: (_, BoxConstraints constraints) {
+                  return _protectedBuild(() {
+                    final size = constraints.biggest.toVector2();
+                    if (size.isZero()) {
+                      return widget.loadingBuilder?.call(context) ??
+                          Container();
                     }
-                    if (snapshot.connectionState == ConnectionState.done) {
-                      return Stack(children: stackedWidgets);
-                    }
-                    return widget.loadingBuilder?.call(context) ?? Container();
-                  },
-                );
-              },
+                    game.onGameResize(size);
+                    return FutureBuilder(
+                      future: loaderFuture,
+                      builder: (_, snapshot) {
+                        if (snapshot.hasError) {
+                          final errorBuilder = widget.errorBuilder;
+                          if (errorBuilder == null) {
+                            // @Since('2.16')
+                            // throw Error.throwWithStackTrace(
+                            //   snapshot.error!,
+                            //   snapshot.stackTrace,
+                            // )
+                            log(
+                              'Error while loading Game widget',
+                              error: snapshot.error,
+                              stackTrace: snapshot.stackTrace,
+                            );
+                            throw snapshot.error!;
+                          } else {
+                            return errorBuilder(context, snapshot.error!);
+                          }
+                        }
+                        if (snapshot.connectionState == ConnectionState.done) {
+                          return Stack(children: stackedWidgets);
+                        }
+                        return widget.loadingBuilder?.call(context) ??
+                            Container();
+                      },
+                    );
+                  });
+                },
+              ),
             ),
           ),
         ),
-      ),
-    );
+      );
+    });
   }
 
   List<Widget> _addBackground(BuildContext context, List<Widget> stackWidgets) {
