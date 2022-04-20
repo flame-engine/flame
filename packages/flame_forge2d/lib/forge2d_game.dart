@@ -1,9 +1,7 @@
 import 'package:flame/game.dart';
 import 'package:forge2d/forge2d.dart';
 
-import 'forge2d_camera.dart';
 import 'world_contact_listener.dart';
-import 'contact_callbacks.dart';
 
 class Forge2DGame extends FlameGame {
   Forge2DGame({
@@ -22,10 +20,6 @@ class Forge2DGame extends FlameGame {
   static const double defaultZoom = 10.0;
 
   final World world;
-
-  /// The camera translates the coordinate space after the viewport is applied.
-  @override
-  Forge2DCamera get camera => super.camera as Forge2DCamera;
 
   @override
   void update(double dt) {
