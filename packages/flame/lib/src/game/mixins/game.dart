@@ -272,21 +272,16 @@ mixin Game {
 
   /// A property that stores an [_ActiveOverlays]
   ///
-  /// This is useful to render widgets above a game, like a pause menu for
-  /// example.
-  /// Overlays visible or hidden via [overlays].add or [overlays].remove,
-  /// respectively.
+  /// This is useful to render widgets above a game, such as a pause menu.
+  /// Overlays can be made visible via [overlays].add or hidden via
+  /// [overlays].remove.
   ///
-  /// Ex:
+  /// For example:
   /// ```
   /// final pauseOverlayIdentifier = 'PauseMenu';
   /// overlays.add(pauseOverlayIdentifier); // marks 'PauseMenu' to be rendered.
-  /// overlays.remove(pauseOverlayIdentifier); // marks 'PauseMenu' to not be rendered.
+  /// overlays.remove(pauseOverlayIdentifier); // hides 'PauseMenu'.
   /// ```
-  ///
-  /// See also:
-  /// - GameWidget
-  /// - [Game.overlays]
   final overlays = _ActiveOverlays();
 
   /// Used to change the mouse cursor of the GameWidget running this game.
@@ -326,15 +321,11 @@ class _ActiveOverlays {
 
   /// Clear all active overlays.
   void clear() {
-    value.clear();
-    notifyListeners();
+    _activeOverlays.clear();
+    _game?._refreshWidget();
   }
 
-  /// Mark a, overlay to be rendered.
-  ///
-  /// See also:
-  /// - GameWidget
-  /// - [Game.overlays]
+  /// Marks the [overlayName] to be rendered.
   bool add(String overlayName) {
     final setChanged = _activeOverlays.add(overlayName);
     if (setChanged) {
@@ -343,11 +334,7 @@ class _ActiveOverlays {
     return setChanged;
   }
 
-  /// Mark a, overlay to not be rendered.
-  ///
-  /// See also:
-  /// - GameWidget
-  /// - [Game.overlays]
+  /// Hides the [overlayName].
   bool remove(String overlayName) {
     final hasRemoved = _activeOverlays.remove(overlayName);
     if (hasRemoved) {
@@ -356,7 +343,7 @@ class _ActiveOverlays {
     return hasRemoved;
   }
 
-  /// A [Set] of the active overlay names.
+  /// The names of all currently active overlays.
   Set<String> get value => _activeOverlays;
 
   /// Returns if the given [overlayName] is active
