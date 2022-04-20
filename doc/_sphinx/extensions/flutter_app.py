@@ -138,7 +138,7 @@ class FlutterAppDirective(SphinxDirective):
         )
         if not need_compiling:
             return
-        self.logger.info('Compiling Flutter app ' + self.app_name)
+        self.logger.info('Compiling Flutter app [%s]' % self.app_name)
         self._compile_source()
         self._copy_compiled()
         self._create_index_html()
@@ -150,7 +150,7 @@ class FlutterAppDirective(SphinxDirective):
     def _compile_source(self):
         try:
             subprocess.run(
-                ['flutter', 'build', 'web', '--web-renderer', 'html'],
+                ['flutter', 'build', 'web'],
                 stdout=subprocess.PIPE,
                 stderr=subprocess.STDOUT,
                 cwd=self.source_dir,

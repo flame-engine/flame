@@ -31,8 +31,8 @@ the final value is provided by the user explicitly, and progression over time is
 
 There are multiple effects provided by Flame, and you can also
 [create your own](#creating-new-effects). The following effects are included:
-- [`MoveEffect.by`](#moveeffectby)
-- [`MoveEffect.to`](#moveeffectto)
+- [`MoveByEffect`](#movebyeffect)
+- [`MoveToEffect`](#movetoeffect)
 - [`MoveAlongPathEffect`](#movealongpatheffect)
 - [`RotateEffect.by`](#rotateeffectby)
 - [`RotateEffect.to`](#rotateeffectto)
@@ -91,13 +91,13 @@ functionality inherited by all other effects. This includes:
   - The `reset()` method reverts the effect to its original state, allowing it to run once again.
 
 
-### `MoveEffect.by`
+### `MoveByEffect`
 
 This effect applies to a `PositionComponent` and shifts it by a prescribed `offset` amount. This
 offset is relative to the current position of the target:
 
 ```dart
-final effect = MoveEffect.by(Vector2(0, -10), EffectController(duration: 0.5));
+final effect = MoveByEffect(Vector2(0, -10), EffectController(duration: 0.5));
 ```
 
 If the component is currently at `Vector2(250, 200)`, then at the end of the effect its position
@@ -107,13 +107,13 @@ Multiple move effects can be applied to a component at the same time. The result
 superposition of all the individual effects.
 
 
-### `MoveEffect.to`
+### `MoveToEffect`
 
 This effect moves a `PositionComponent` from its current position to the specified destination
 point in a straight line.
 
 ```dart
-final effect = MoveEffect.to(Vector2(100, 500), EffectController(duration: 3));
+final effect = MoveToEffect(Vector2(100, 500), EffectController(duration: 3));
 ```
 
 It is possible, but not recommended to attach multiple such effects to the same component.
@@ -230,7 +230,7 @@ animate the target into full transparency / full visibility respectively.
 This effect can be used to run multiple other effects one after another. The constituent effects
 may have different types.
 
-The sequence effect can also be alternating (the sequence will first run forward, and then 
+The sequence effect can also be alternating (the sequence will first run forward, and then
 backward); and also repeat a certain predetermined number of times, or infinitely.
 
 ```dart
@@ -359,7 +359,7 @@ EffectController({
 
 - **`infinite`** -- if true, the effect will repeat infinitely and never reach completion. This is
   equivalent to as if `repeatCount` was set to infinity.
-  
+
 - **`startDelay`** -- an additional wait time inserted before the beginning of the effect. This
   wait time is executed only once, even if the effect is repeating. During this time the effect's
   `.started` property returns false. The effect's `onStart()` callback will be executed at the end
@@ -482,7 +482,7 @@ be the subclass of `DurationEffectController`.
 
 The `SpeedEffectController` can only be applied to effects for which the notion of speed is
 well-defined. Such effects must implement the `MeasurableEffect` interface. For example, the
-following effects qualify: [`MoveEffect.by`](#moveeffectby), [`MoveEffect.to`](#moveeffectto),
+following effects qualify: [`MoveByEffect`](#movebyeffect), [`MoveToEffect`](#movetoeffect),
 [`MoveAlongPathEffect`](#movealongpatheffect), [`RotateEffect.by`](#rotateeffectby),
 [`RotateEffect.to`](#rotateeffectto).
 

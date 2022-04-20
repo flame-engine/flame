@@ -7,7 +7,7 @@ import 'package:flame_forge2d/flame_forge2d.dart';
 import 'boundaries.dart';
 
 class SpriteBodySample extends Forge2DGame with TapDetector {
-  SpriteBodySample() : super(gravity: Vector2(0, -10.0));
+  SpriteBodySample() : super(gravity: Vector2(0, 10.0));
 
   @override
   Future<void> onLoad() async {
@@ -50,22 +50,25 @@ class Pizza extends BodyComponent {
     final shape = PolygonShape();
 
     final vertices = [
-      Vector2(-size.x / 2, -size.y / 2),
-      Vector2(size.x / 2, -size.y / 2),
-      Vector2(0, size.y / 2),
+      Vector2(-size.x / 2, size.y / 2),
+      Vector2(size.x / 2, size.y / 2),
+      Vector2(0, -size.y / 2),
     ];
     shape.set(vertices);
 
-    final fixtureDef = FixtureDef(shape)
-      ..userData = this // To be able to determine object in collision
-      ..restitution = 0.4
-      ..density = 1.0
-      ..friction = 0.5;
+    final fixtureDef = FixtureDef(
+      shape,
+      userData: this, // To be able to determine object in collision
+      restitution: 0.4,
+      density: 1.0,
+      friction: 0.5,
+    );
 
-    final bodyDef = BodyDef()
-      ..position = position
-      ..angle = (position.x + position.y) / 2 * pi
-      ..type = BodyType.dynamic;
+    final bodyDef = BodyDef(
+      position: position,
+      angle: (position.x + position.y) / 2 * pi,
+      type: BodyType.dynamic,
+    );
     return world.createBody(bodyDef)..createFixture(fixtureDef);
   }
 }

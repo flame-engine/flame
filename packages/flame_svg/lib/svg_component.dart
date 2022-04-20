@@ -17,6 +17,7 @@ class SvgComponent extends PositionComponent {
     Vector2? scale,
     double? angle,
     Anchor? anchor,
+    Iterable<Component>? children,
     int? priority,
   })  : _svg = svg,
         super(
@@ -25,6 +26,7 @@ class SvgComponent extends PositionComponent {
           scale: scale,
           angle: angle,
           anchor: anchor,
+          children: children,
           priority: priority,
         );
 

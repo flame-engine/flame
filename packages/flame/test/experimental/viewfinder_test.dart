@@ -179,6 +179,23 @@ void main() {
         }
       },
     );
+
+    testWithFlameGame(
+      'camera rotate effect',
+      (game) async {
+        final world = World()..addToParent(game);
+        final camera = CameraComponent(world: world)..addToParent(game);
+        camera.viewfinder.add(
+          RotateEffect.by(1, EffectController(duration: 1)),
+        );
+        await game.ready();
+
+        for (var t = 0.0; t < 1.0; t += 0.1) {
+          expect(camera.viewfinder.angle, closeTo(t, 1e-15));
+          game.update(0.1);
+        }
+      },
+    );
   });
 }
 

@@ -1,3 +1,4 @@
+export 'src/close_to_aabb.dart' show closeToAabb;
 export 'src/close_to_vector.dart';
 export 'src/expect_double.dart';
 export 'src/expect_vector2.dart';
