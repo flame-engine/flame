@@ -15,6 +15,9 @@ import 'flame_forge2d.dart';
 /// when a specific [Body]'s fixture contacts with another [Fixture] you can
 /// set the fixture `userData` to a [ContactCallbacks].
 ///
+/// If the colliding [Fixture] `userData` and [Body] `userData` are `null`, then
+/// the contact events are not called.
+///
 /// The described behaviour is a simple out of the box solution to propagate
 /// contact events. If you wish to implement your own logic you can subclass
 /// [ContactListener] and provide it to your [Forge2DGame].
