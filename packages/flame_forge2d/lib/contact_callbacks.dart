@@ -1,18 +1,44 @@
 import 'flame_forge2d.dart';
 
+/// Used to listens to a [BodyComponent] contacts events.
+///
+/// Contacts events occur whenever two [Fixture] meet each other.
+///
+/// To react to contacts you should assign [ContactCallbacks] to a [Body]'s
+/// userData or/and to [Fixture]'s userData.
+/// {@macro flame_forge2d.world_contact_listner.algorithm}
 class ContactCallbacks {
+  /// Called when two [Fixture]s begin to overlap.
+  ///
+  /// It is called for sensors and non-sensors.
   void beginContact(Object other, Contact contact) {
     onBeginContact?.call(other, contact);
   }
 
+  /// Called when two [Fixture]s cease to overlap.
+  ///
+  /// It is called for sensors and non-sensors.
+  ///
+  /// It may be called when a body is destroyed.
   void endContact(Object other, Contact contact) {
     onEndContact?.call(other, contact);
   }
 
+  /// Called after collision detection, but before collision resolution.
+  ///
+  /// This gives you a chance to disable the [Contact] based on the current
+  /// configuration.
+  ///
+  /// Sensors do not create [Manifold]s.
   void preSolve(Object other, Contact contact, Manifold oldManifold) {
     onPreSolve?.call(other, contact, oldManifold);
   }
 
+  /// Called after collision resolution.
+  ///
+  /// Usually defined to gather collision impulse results.
+  ///
+  /// If one of the colliding objects is a sensor, this will not be called.
   void postSolve(Object other, Contact contact, ContactImpulse impulse) {
     onPostSolve?.call(other, contact, impulse);
   }

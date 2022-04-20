@@ -6,6 +6,7 @@ import 'flame_forge2d.dart';
 /// [postSolve]) to other [ContactCallbacks]s when a [Body] or at least one of
 /// its fixtures `userData` is set to a [ContactCallbacks].
 ///
+/// {@template flame_forge2d.world_contact_listner.algorithm}
 /// If the [Body] `userData` is set to a [ContactCallbacks] the contact events
 /// of this will be called to when any [Body]'s fixture contacts another
 /// [Fixture].
@@ -17,6 +18,7 @@ import 'flame_forge2d.dart';
 /// The described behaviour is a simple out of the box solution to propagate
 /// contact events. If you wish to implement your own logic you can subclass
 /// [ContactListener] and provide it to your [Forge2DGame].
+/// {@endtemplate}
 class WorldContactListener extends ContactListener {
   void _callback(
     Contact contact,
