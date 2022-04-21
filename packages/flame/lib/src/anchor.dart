@@ -113,7 +113,7 @@ class Anchor {
 
   @override
   bool operator ==(Object other) {
-    return other is Anchor && x == other.x && y == other.y;
+    return other is Anchor && hashCode == other.hashCode;
   }
 
   @override
