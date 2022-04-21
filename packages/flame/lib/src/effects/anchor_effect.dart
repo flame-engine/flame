@@ -1,7 +1,7 @@
 import 'package:vector_math/vector_math_64.dart';
 
 import '../anchor.dart';
-// import 'anchor_by_effect.dart';
+import 'anchor_by_effect.dart';
 import 'anchor_to_effect.dart';
 import 'controllers/effect_controller.dart';
 import 'effect.dart';
@@ -24,17 +24,17 @@ abstract class AnchorEffect extends Effect
     this.target = target;
   }
 
-  // factory AnchorEffect.by(
-  //     Vector2 offset,
-  //     EffectController controller, {
-  //       AnchorProvider? target,
-  //     }) =>
-  //     AnchorByEffect(offset, controller, target: target);
+  factory AnchorEffect.by(
+    Vector2 offset,
+    EffectController controller, {
+    AnchorProvider? target,
+  }) =>
+      AnchorByEffect(offset, controller, target: target);
 
   factory AnchorEffect.to(
-      Anchor destination,
-      EffectController controller, {
-        AnchorProvider? target,
-      }) =>
+    Anchor destination,
+    EffectController controller, {
+    AnchorProvider? target,
+  }) =>
       AnchorToEffect(destination, controller, target: target);
 }
