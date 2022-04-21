@@ -1,8 +1,11 @@
 import 'dart:ui';
 
 import 'package:meta/meta.dart';
+import 'package:vector_math/vector_math_64.dart';
 
 import '../components/component.dart';
+import '../effects/provider_interfaces.dart';
+import 'follow_behavior.dart';
 import 'max_viewport.dart';
 import 'viewfinder.dart';
 import 'viewport.dart';
@@ -115,4 +118,51 @@ class CameraComponent extends Component {
   /// This variable helps prevent infinite recursion when a camera is set to
   /// look at the world that contains that camera.
   static int maxCamerasDepth = 4;
+
+  /// Makes the [viewfinder] follow the given [target].
+  ///
+  /// This method adds a [FollowBehavior] to the viewfinder. If there is another
+  /// [FollowBehavior] currently applied to the viewfinder, it will be removed
+  /// first.
+  ///
+  /// Parameters [maxSpeed], [horizontalOnly] and [verticalOnly] have the same
+  /// meaning as in the [FollowBehavior.new] constructor.
+  ///
+  /// If [snap] is true, then the viewfinder's starting position will be set to
+  /// the target's current location. If [snap] is false, then the viewfinder
+  /// will move from its current position to the target's position at the given
+  /// speed.
+  void follow(
+    PositionProvider target, {
+    double maxSpeed = double.infinity,
+    bool horizontalOnly = false,
+    bool verticalOnly = false,
+    bool snap = false,
+  }) {
+    stopFollowing();
+    viewfinder.add(
+      FollowBehavior(
+        target: target,
+        owner: viewfinder,
+        maxSpeed: maxSpeed,
+        horizontalOnly: horizontalOnly,
+        verticalOnly: verticalOnly,
+      ),
+    );
+    if (snap) {
+      viewfinder.position = target.position;
+    }
+  }
+
+  /// Removes current [FollowBehavior]s from the viewfinder, if any.
+  void stopFollowing() {
+    viewfinder.children.whereType<FollowBehavior>().forEach(
+          (child) => child.removeFromParent(),
+        );
+  }
+
+  /// Moves the camera's viewfinder towards the specified [point].
+  void moveTo(Vector2 point, {double speed = double.infinity}) {
+    follow(ValuePositionProvider(point), maxSpeed: speed);
+  }
 }

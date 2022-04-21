@@ -6,6 +6,17 @@ abstract class PositionProvider {
   set position(Vector2 value);
 }
 
+class ValuePositionProvider implements PositionProvider {
+  ValuePositionProvider([Vector2? position])
+      : _position = position?.clone() ?? Vector2.zero();
+
+  @override
+  Vector2 get position => _position;
+  final Vector2 _position;
+  @override
+  set position(Vector2 value) => _position.setFrom(value);
+}
+
 /// Interface for a component that can be affected by scale effects.
 abstract class ScaleProvider {
   Vector2 get scale;
