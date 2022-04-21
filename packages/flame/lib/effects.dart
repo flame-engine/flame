@@ -1,3 +1,5 @@
+export 'src/effects/anchor_by_effect.dart' show AnchorByEffect;
+export 'src/effects/anchor_effect.dart' show AnchorEffect;
 export 'src/effects/anchor_to_effect.dart' show AnchorToEffect;
 export 'src/effects/color_effect.dart';
 export 'src/effects/component_effect.dart';
