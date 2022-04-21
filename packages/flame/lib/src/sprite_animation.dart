@@ -313,12 +313,12 @@ class SpriteAnimation {
     if (_done) {
       return;
     }
+    if (isFirstFrame && !_started) {
+      onStart?.call();
+      _started = true;
+    }
     while (clock >= currentFrame.stepTime) {
       onFrame?.call(currentIndex);
-      if (isFirstFrame && !_started) {
-        onStart?.call();
-        _started = true;
-      }
       if (isLastFrame) {
         if (loop) {
           clock -= currentFrame.stepTime;
