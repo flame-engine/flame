@@ -5,7 +5,6 @@ import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
 import 'package:tiled/tiled.dart';
-import 'package:xml/xml.dart';
 
 import 'flame_tsx_provider.dart';
 import 'simple_flips.dart';
@@ -103,7 +102,18 @@ class RenderableTiledMap {
     String contents,
     Vector2 destTileSize,
   ) async {
-    final map = await _loadMap(contents);
+    final map = await TiledMap.fromString(
+      contents,
+      FlameTsxProvider.parse,
+    );
+    return fromTiledMap(map, destTileSize);
+  }
+
+  /// Parses a [TiledMap] returning a [RenderableTiledMap].
+  static Future<RenderableTiledMap> fromTiledMap(
+    TiledMap map,
+    Vector2 destTileSize,
+  ) async {
     final batchesByLayer = await Future.wait(
       _renderableTileLayers(map).map((e) => _loadImages(map)),
     );
@@ -117,26 +127,6 @@ class RenderableTiledMap {
 
   static Iterable<TileLayer> _renderableTileLayers(TiledMap map) {
     return map.layers.where((layer) => layer.visible).whereType<TileLayer>();
-  }
-
-  static Future<TiledMap> _loadMap(String contents) async {
-    final tsxSourcePaths = XmlDocument.parse(contents)
-        .rootElement
-        .children
-        .whereType<XmlElement>()
-        .where((element) => element.name.local == 'tileset')
-        .map((e) => e.getAttribute('source'));
-
-    final tsxProviders = await Future.wait(
-      tsxSourcePaths
-          .where((key) => key != null)
-          .map((key) async => FlameTsxProvider.parse(key!)),
-    );
-
-    return TileMapParser.parseTmx(
-      contents,
-      tsxList: tsxProviders.isEmpty ? null : tsxProviders,
-    );
   }
 
   static Future<Map<String, SpriteBatch>> _loadImages(TiledMap map) async {

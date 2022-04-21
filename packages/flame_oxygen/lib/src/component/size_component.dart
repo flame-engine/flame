@@ -8,7 +8,7 @@ class SizeComponent extends Component<Vector2> {
   set size(Vector2 position) => _size.setFrom(position);
 
   double get width => _size.x;
-  set width(double x) => _size.x = width;
+  set width(double width) => _size.x = width;
 
   double get height => _size.y;
   set height(double height) => _size.y = height;

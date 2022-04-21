@@ -2,11 +2,15 @@ import 'dart:ui';
 
 import 'package:vector_math/vector_math_64.dart';
 
+import '../components/component.dart';
 import 'viewport.dart';
 
 class FixedAspectRatioViewport extends Viewport {
-  FixedAspectRatioViewport({required this.aspectRatio})
-      : assert(aspectRatio > 0);
+  FixedAspectRatioViewport({
+    required this.aspectRatio,
+    Iterable<Component>? children,
+  })  : assert(aspectRatio > 0),
+        super(children: children);
 
   final double aspectRatio;
   Rect _clipRect = Rect.zero;

@@ -13,9 +13,10 @@ class CircleShuffler extends BodyComponent {
 
   @override
   Body createBody() {
-    final bodyDef = BodyDef()
-      ..type = BodyType.dynamic
-      ..position = ball.body.position.clone();
+    final bodyDef = BodyDef(
+      type: BodyType.dynamic,
+      position: ball.body.position.clone(),
+    );
     const numPieces = 5;
     const radius = 6.0;
     final body = world.createBody(bodyDef);
@@ -28,10 +29,12 @@ class CircleShuffler extends BodyComponent {
         ..radius = 1.2
         ..position.setValues(xPos, yPos);
 
-      final fixtureDef = FixtureDef(shape)
-        ..density = 50.0
-        ..friction = .1
-        ..restitution = .9;
+      final fixtureDef = FixtureDef(
+        shape,
+        density: 50.0,
+        friction: 0.1,
+        restitution: 0.9,
+      );
 
       body.createFixture(fixtureDef);
     }
@@ -45,7 +48,7 @@ class CircleShuffler extends BodyComponent {
 }
 
 class JointSample extends Forge2DGame with TapDetector {
-  JointSample() : super(gravity: Vector2(0, -10.0));
+  JointSample() : super(gravity: Vector2(0, 10.0));
 
   @override
   Future<void> onLoad() async {

@@ -14,6 +14,7 @@ class CircleComponent extends ShapeComponent {
     Vector2? position,
     double? angle,
     Anchor? anchor,
+    Iterable<Component>? children,
     int? priority,
     Paint? paint,
   }) : super(
@@ -21,6 +22,7 @@ class CircleComponent extends ShapeComponent {
           size: Vector2.all((radius ?? 0) * 2),
           angle: angle,
           anchor: anchor,
+          children: children,
           priority: priority,
           paint: paint,
         );

@@ -18,6 +18,8 @@ import 'camera_component.dart';
 /// shape, and also by their behavior in response to changes to the canvas size.
 /// Users may also create their own implementations.
 abstract class Viewport extends Component implements PositionProvider {
+  Viewport({Iterable<Component>? children}) : super(children: children);
+
   /// Position of the viewport's center in the parent's coordinate frame.
   ///
   /// Changing this position will move the viewport around the screen, but will

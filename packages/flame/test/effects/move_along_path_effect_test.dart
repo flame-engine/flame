@@ -3,7 +3,9 @@ import 'dart:ui';
 
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
+import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
+import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -99,6 +101,29 @@ void main() {
         game.update(0.1);
       }
     });
+
+    testWithFlameGame(
+      'oriented effect applied to non-orientable target',
+      (game) async {
+        final world = World()..addToParent(game);
+        final camera = CameraComponent(world: world)..addToParent(game);
+        await game.ready();
+        await camera.viewport.add(
+          MoveAlongPathEffect(
+            Path()..lineTo(10, 10),
+            EffectController(duration: 1),
+            oriented: true,
+          ),
+        );
+        expect(
+          () => game.update(0),
+          failsAssert(
+            'An `oriented` MoveAlongPathEffect cannot be applied to a target '
+            'that does not support rotation',
+          ),
+        );
+      },
+    );
 
     test('errors', () {
       final controller = LinearEffectController(0);

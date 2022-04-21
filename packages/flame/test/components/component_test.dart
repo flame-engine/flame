@@ -45,6 +45,36 @@ void main() {
   final prepareGame = FlameTester(() => _PrepareGame());
 
   group('Component', () {
+    testWithFlameGame('children in the constructor', (game) async {
+      game.add(
+        Component(
+          children: [ComponentA(), ComponentB()],
+        ),
+      );
+      await game.ready();
+
+      expect(game.children.length, 1);
+      expect(game.children.first.children.length, 2);
+      expect(game.children.first.children.elementAt(0), isA<ComponentA>());
+      expect(game.children.first.children.elementAt(1), isA<ComponentB>());
+    });
+
+    testWithFlameGame('children in constructor and onLoad', (game) async {
+      final component = TwoChildrenComponent(
+        children: [ComponentA(), ComponentB()],
+      );
+      game.add(component);
+      await game.ready();
+
+      expect(game.children.length, 1);
+      expect(game.children.first, component);
+      expect(component.children.length, 4);
+      expect(component.children.elementAt(0), isA<ComponentA>());
+      expect(component.children.elementAt(1), isA<ComponentB>());
+      expect(component.children.elementAt(2), component.child1);
+      expect(component.children.elementAt(3), component.child2);
+    });
+
     test('get/set x/y or position', () {
       final PositionComponent c = SpriteComponent();
       c.position.setValues(2.2, 3.4);
@@ -139,6 +169,75 @@ void main() {
         await game.ensureAdd(component);
         expect(component.removeCounter, 0);
         expect(game.children.length, 1);
+      },
+    );
+
+    testWithFlameGame(
+      'remove a component before it was ever added',
+      (game) async {
+        expect(
+          () => game.remove(Component()),
+          failsAssert(
+            "Trying to remove a component that doesn't belong to any parent",
+          ),
+        );
+      },
+    );
+
+    testWithFlameGame(
+      'remove a component from a wrong parent',
+      (game) async {
+        final badParent = Component()..addToParent(game);
+        final child = Component()..addToParent(game);
+        await game.ready();
+        expect(
+          () => badParent.remove(child),
+          failsAssert(
+            'Trying to remove a component that belongs to a different parent: '
+            "this = Instance of 'Component', component's parent = Instance of "
+            "'FlameGame'",
+          ),
+        );
+      },
+    );
+
+    testWithFlameGame(
+      'remove an uninitialized component',
+      (game) async {
+        final parent = Component();
+        final child = Component()..addToParent(parent);
+        expect(child.lifecycleState, LifecycleState.uninitialized);
+        child.removeFromParent();
+
+        game.add(parent);
+        await game.ready();
+
+        expect(child.lifecycleState, LifecycleState.uninitialized);
+        expect(parent.lifecycleState, LifecycleState.mounted);
+        expect(parent.children.length, 0);
+        expect(child.parent, isNull);
+      },
+    );
+
+    testWithFlameGame(
+      'remove and re-add uninitialized component with non-trivial onLoad',
+      (game) async {
+        final parent = Component();
+        final component = _ComponentWithOnLoad();
+        parent.add(component);
+        expect(component.lifecycleState, LifecycleState.uninitialized);
+        parent.remove(component);
+        expect(component.lifecycleState, LifecycleState.uninitialized);
+        expect(component.onLoadCalledCount, 0);
+
+        final newParent = Component()..addToParent(game);
+        newParent.add(component);
+        expect(component.lifecycleState, LifecycleState.loading);
+        expect(component.onLoadCalledCount, 1);
+        await game.ready();
+        expect(component.lifecycleState, LifecycleState.mounted);
+        expect(newParent.children.length, 1);
+        expect(newParent.children.first, component);
       },
     );
 
@@ -475,4 +574,29 @@ class Visitor extends Component {
 
 class IntComponent extends Component {
   int value = 0;
+}
+
+class TwoChildrenComponent extends Component {
+  TwoChildrenComponent({Iterable<Component>? children})
+      : super(children: children);
+
+  late final Component child1;
+  late final Component child2;
+
+  @override
+  Future<void> onLoad() async {
+    child1 = Component();
+    child2 = Component();
+    add(child1);
+    add(child2);
+  }
+}
+
+class _ComponentWithOnLoad extends Component {
+  int onLoadCalledCount = 0;
+
+  @override
+  Future<void> onLoad() async {
+    onLoadCalledCount++;
+  }
 }
