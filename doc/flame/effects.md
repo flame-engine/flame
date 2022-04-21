@@ -40,6 +40,7 @@ There are multiple effects provided by Flame, and you can also
 - [`ScaleEffect.to`](#scaleeffectto)
 - [`SizeEffect.by`](#sizeeffectby)
 - [`SizeEffect.to`](#sizeeffectto)
+- [`AnchorByEffect`](#anchorbyeffect)
 - [`AnchorToEffect`](#anchortoeffect)
 - [`OpacityEffect`](#opacityeffect)
 - [`ColorEffect`](#coloreffect)
@@ -211,9 +212,20 @@ final effect = SizeEffect.to(Vector2(120, 120), EffectController(duration: 1));
 ```
 
 
+### `AnchorByEffect`
+
+Changes the location of the target's anchor by the specified offset. This effect can also be created
+using `AnchorEffect.by()`.
+
+```dart
+final effect = AnchorByEffect(Vector2(0.1, 0.1), EffectController(speed: 1));
+```
+
+
 ### `AnchorToEffect`
 
-Changes the location of the target's anchor.
+Changes the location of the target's anchor. This effect can also be created using
+`AnchorEffect.to()`.
 
 ```dart
 final effect = AnchorToEffect(Anchor.center, EffectController(speed: 1));
