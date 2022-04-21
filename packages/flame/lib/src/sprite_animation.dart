@@ -313,7 +313,7 @@ class SpriteAnimation {
     if (_done) {
       return;
     }
-    if (isFirstFrame && !_started) {
+    if (!_started) {
       onStart?.call();
       _started = true;
     }
