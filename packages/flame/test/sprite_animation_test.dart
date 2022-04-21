@@ -49,7 +49,7 @@ void main() {
             ..onStart = () => counter++;
       expect(counter, 0);
       animation.update(0.5);
-      expect(counter, 0);
+      expect(counter, 1);
       animation.update(1);
       expect(counter, 1);
     });
