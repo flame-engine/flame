@@ -80,7 +80,7 @@ class ViewportFrame extends Component {
 
 class Background extends Component {
   final bgPaint = Paint()..color = const Color(0xffff0000);
-  final originPaint = Paint()..color = const Color(0xff2f8750);
+  final originPaint = Paint()..color = const Color(0xff19bf57);
   final axisPaint = Paint()
     ..strokeWidth = 1
     ..style = PaintingStyle.stroke
@@ -106,30 +106,28 @@ class Background extends Component {
   bool containsLocalPoint(Vector2 point) => true;
 }
 
-class ExpandingCircle extends Component {
-  ExpandingCircle(this.center);
+class ExpandingCircle extends CircleComponent {
+  ExpandingCircle(Offset center)
+      : super(
+          position: Vector2(center.dx, center.dy),
+          anchor: Anchor.center,
+          radius: 0,
+          paint: Paint()
+            ..color = const Color(0xffffffff)
+            ..style = PaintingStyle.stroke
+            ..strokeWidth = 1,
+        );
 
   static const maxRadius = 50;
-  final Offset center;
-  double _radius = 0;
-  final Paint paint = Paint()
-    ..color = const Color(0xffffffff)
-    ..style = PaintingStyle.stroke
-    ..strokeWidth = 1;
 
   @override
   void update(double dt) {
-    _radius += dt * 10;
-    if (_radius >= maxRadius) {
+    radius += dt * 10;
+    if (radius >= maxRadius) {
       removeFromParent();
     } else {
-      final opacity = 1 - _radius / maxRadius;
+      final opacity = 1 - radius / maxRadius;
       paint.color = const Color(0xffffffff).withOpacity(opacity);
     }
-  }
-
-  @override
-  void render(Canvas canvas) {
-    canvas.drawCircle(center, _radius, paint);
   }
 }
