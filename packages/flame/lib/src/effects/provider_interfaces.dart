@@ -6,15 +6,24 @@ abstract class PositionProvider {
   set position(Vector2 value);
 }
 
-class ValuePositionProvider implements PositionProvider {
-  ValuePositionProvider([Vector2? position])
-      : _position = position?.clone() ?? Vector2.zero();
+/// This class allows constructing [PositionProvider]s on the fly, using the
+/// callbacks for the position getter and setter. This class doesn't require
+/// either the getter or the setter, if you do not intend to use those.
+class APositionProvider implements PositionProvider {
+  APositionProvider({
+    Vector2 Function()? getValue,
+    void Function(Vector2)? setValue,
+  })  : _getter = getValue,
+        _setter = setValue;
+
+  final Vector2 Function()? _getter;
+  final void Function(Vector2)? _setter;
 
   @override
-  Vector2 get position => _position;
-  final Vector2 _position;
+  Vector2 get position => _getter!();
+
   @override
-  set position(Vector2 value) => _position.setFrom(value);
+  set position(Vector2 value) => _setter!(value);
 }
 
 /// Interface for a component that can be affected by scale effects.

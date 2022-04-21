@@ -4,6 +4,7 @@ import 'package:meta/meta.dart';
 import 'package:vector_math/vector_math_64.dart';
 
 import '../components/component.dart';
+import '../components/position_component.dart';
 import '../effects/provider_interfaces.dart';
 import 'follow_behavior.dart';
 import 'max_viewport.dart';
@@ -121,6 +122,10 @@ class CameraComponent extends Component {
 
   /// Makes the [viewfinder] follow the given [target].
   ///
+  /// The [target] here can be any read-only [PositionProvider]. For example, a
+  /// [PositionComponent] is the most common choice of target. Alternatively,
+  /// you can use [APositionProvider] to construct the target dynamically.
+  ///
   /// This method adds a [FollowBehavior] to the viewfinder. If there is another
   /// [FollowBehavior] currently applied to the viewfinder, it will be removed
   /// first.
@@ -161,8 +166,9 @@ class CameraComponent extends Component {
         );
   }
 
-  /// Moves the camera's viewfinder towards the specified [point].
+  /// Moves the camera towards the specified world [point].
   void moveTo(Vector2 point, {double speed = double.infinity}) {
-    follow(ValuePositionProvider(point), maxSpeed: speed);
+    final p = point.clone();
+    follow(APositionProvider(getValue: () => p), maxSpeed: speed);
   }
 }
