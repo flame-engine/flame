@@ -129,7 +129,7 @@ position.
 
 ```dart
 final effect = MoveAlongPathEffect(
-  Path() ..quadraticBezierTo(100, 0, 50, -50),
+  Path()..quadraticBezierTo(100, 0, 50, -50),
   EffectController(duration: 1.5),
 );
 ```
