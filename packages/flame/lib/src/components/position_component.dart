@@ -59,7 +59,7 @@ import 'component.dart';
 /// do not specify the size of a PositionComponent, then it will be
 /// equal to zero and the component won't be able to respond to taps.
 class PositionComponent extends Component
-    implements AngleProvider, PositionProvider, ScaleProvider {
+    implements AnchorProvider, AngleProvider, PositionProvider, ScaleProvider {
   PositionComponent({
     Vector2? position,
     Vector2? size,
@@ -138,7 +138,9 @@ class PositionComponent extends Component
   /// which means that visually the component will shift on the screen
   /// so that its new anchor will be at the same screen coordinates as
   /// the old anchor was.
+  @override
   Anchor get anchor => _anchor;
+  @override
   set anchor(Anchor anchor) {
     _anchor = anchor;
     _onModifiedSizeOrAnchor();
