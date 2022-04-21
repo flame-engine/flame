@@ -83,7 +83,9 @@ class Ball extends BodyComponent with ContactCallbacks {
 }
 ```
 
-In order for the above to work, the Ball's `userData` must be set to a `ContactCallback`. And if `Wall` is a `BodyComponent` the `userData` must be set to `Wall`. By default `userData` is `null`, and when so, contact events are ignored.
+In order for the above to work, the Ball's `userData` must be set to a `ContactCallback`. And if `Wall` is a `BodyComponent` its `body.userData` or contacting `fixture.userData` must be set to `Wall`. 
+
+By default `userData` is `null`, and when so, contact events are ignored.
 
 A convinient way of setting `userData` is to assign it when creating the body. For example:
 
