@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:ui';
 
 import 'assets/images.dart';
@@ -233,6 +234,8 @@ class SpriteAnimation {
   /// Registered method to be triggered when the animation complete.
   void Function()? onComplete;
 
+  Completer<void>? _completeCompleter;
+
   /// The current frame that should be displayed.
   SpriteAnimationFrame get currentFrame => frames[currentIndex];
 
@@ -242,6 +245,17 @@ class SpriteAnimation {
   /// Returns whether the animation has only a single frame (and is, thus, a
   /// still image).
   bool get isSingleFrame => frames.length == 1;
+
+  /// A future that will complete when the animation reaches [isLastFrame].
+  Future<void> get completed {
+    if (isLastFrame) {
+      return Future.value();
+    }
+
+    _completeCompleter ??= Completer<void>();
+
+    return _completeCompleter!.future;
+  }
 
   /// Sets a different step time to each frame.
   /// The sizes of the arrays must match.
@@ -307,6 +321,7 @@ class SpriteAnimation {
         } else {
           _done = true;
           onComplete?.call();
+          _completeCompleter?.complete();
           return;
         }
       } else {

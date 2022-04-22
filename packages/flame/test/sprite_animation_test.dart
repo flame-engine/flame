@@ -55,6 +55,30 @@ void main() {
       animation.update(1);
       expect(counter, 1);
     });
+
+    test('completed completes', () {
+      final sprite = MockSprite();
+      final animation =
+          SpriteAnimation.spriteList([sprite], stepTime: 1, loop: false);
+
+      expectLater(animation.completed, completes);
+
+      animation.update(1);
+    });
+
+    test(
+      'completed completes when '
+      'animation has alrady completed',
+      () async {
+        final sprite = MockSprite();
+        final animation =
+            SpriteAnimation.spriteList([sprite], stepTime: 1, loop: false);
+
+        animation.update(1);
+
+        expectLater(animation.completed, completes);
+      },
+    );
   });
 }
 
