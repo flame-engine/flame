@@ -113,7 +113,7 @@ void main() {
     );
 
     test(
-      "completed doesn't completes when animation is looping and on last frame",
+      "completed doesn't complete when animation is looping and on last frame",
       () async {
         final sprite = MockSprite();
         final animation = SpriteAnimation.spriteList([sprite], stepTime: 1);
