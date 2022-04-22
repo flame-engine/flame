@@ -272,7 +272,7 @@ mixin Game {
 
   /// A property that stores an [_ActiveOverlays]
   ///
-  /// This is useful to render widgets above a game, such as a pause menu.
+  /// This is useful to render widgets on top of a game, such as a pause menu.
   /// Overlays can be made visible via [overlays].add or hidden via
   /// [overlays].remove.
   ///
