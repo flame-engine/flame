@@ -70,8 +70,8 @@ not according to the coordinate system of Forge2D (where the Y-axis is flipped).
 Contacts events occur whenever two `Fixture`s meet each other. These events allows listening when
 these `Fixture`s begin to overlap (`beginContact`) and cease overlapping (`endContact`).
 
-There are multiple ways to go around it. However, a common approach is
-to mix a `BodyComponent` with `ContactCallbacks`.
+There are multiple ways to listen to these events. One common way is to use the `ContactCallbacks`
+class as a mixin in the `BodyComponent` where you are interested in these events.
 
 ```dart
 class Ball extends BodyComponent with ContactCallbacks {
