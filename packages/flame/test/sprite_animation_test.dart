@@ -55,7 +55,7 @@ void main() {
     });
 
     test(
-        'onFrame called only for the number of frames in a multi-frame animation',
+        'onFrame called only for number of frames in a multi-frame animation',
         () {
       var counter = 0;
       var i = 0;
