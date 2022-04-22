@@ -1,5 +1,7 @@
 import 'package:vector_math/vector_math_64.dart';
 
+import '../anchor.dart';
+
 /// Interface for a component that can be affected by move effects.
 abstract class PositionProvider {
   Vector2 get position;
@@ -16,4 +18,10 @@ abstract class ScaleProvider {
 abstract class AngleProvider {
   double get angle;
   set angle(double value);
+}
+
+/// Interface for a component that can be affected by anchor effects.
+abstract class AnchorProvider {
+  Anchor get anchor;
+  set anchor(Anchor value);
 }
