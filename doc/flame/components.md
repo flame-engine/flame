@@ -375,7 +375,7 @@ doSomething();
 
 // or alternatively
 
-animation.completed.whenCompleted(doSomething);
+animation.completed.whenComplete(doSomething);
 ```
 
 
