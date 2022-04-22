@@ -55,8 +55,8 @@ void main() {
     });
 
     test(
-        'onFrame called only for the number of frames in a multi-frame animation',
-        () {
+      'onFrame called only for the number of frames in a multi-frame animation',
+      () {
       var counter = 0;
       var i = 0;
       final sprite = MockSprite();
@@ -93,8 +93,8 @@ void main() {
     });
 
     test(
-        'verify call is being made at the first of the frame for multi-frame animation',
-        () {
+      'verify call is being made at first of frame for multi-frame animation',
+      () {
       var timePassed = 0.0;
       const dt = 0.03;
       var timesCalled = 0;
