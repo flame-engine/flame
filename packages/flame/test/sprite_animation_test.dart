@@ -96,7 +96,7 @@ void main() {
         'verify call is being made at the first of the frame for multi-frame animation',
         () {
       var timePassed = 0.0;
-      const dt = 0.5;
+      const dt = 0.03;
       var timesCalled = 0;
       final sprite = MockSprite();
       final spriteList = [sprite, sprite, sprite];
