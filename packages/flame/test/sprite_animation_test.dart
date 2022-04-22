@@ -59,17 +59,17 @@ void main() {
       var i = 0;
       const animationLength = 3;
       final sprite = MockSprite();
-      final animation =
-          SpriteAnimation.spriteList([sprite, sprite, sprite], stepTime: 1, loop: false);
+      final animation = SpriteAnimation.spriteList([sprite, sprite, sprite],
+          stepTime: 1, loop: false);
       animation.onFrame = (index) {
         counter++;
       };
-      for(i = 0; i <= animationLength; i++){
-        expect(counter,i);
+      for (i = 0; i <= animationLength; i++) {
+        expect(counter, i);
         animation.update(1);
       }
-      expect(counter,3);
-      expect(i,4);
+      expect(counter, 3);
+      expect(i, 4);
     });
 
     test('onComplete called for single-frame animation', () {
@@ -93,7 +93,7 @@ void main() {
       var animationComplete = false;
       final sprite = MockSprite();
       final animation =
-      SpriteAnimation.spriteList([sprite], stepTime: 1, loop: false);
+          SpriteAnimation.spriteList([sprite], stepTime: 1, loop: false);
       animation.onStart = () {
         expect(animationStarted, false);
         expect(animationRunning, false);
@@ -101,12 +101,12 @@ void main() {
         animationStarted = true;
       };
       animation.onFrame = (index) {
-        if(index==0) {
+        if (index == 0) {
           expect(animationStarted, true);
           expect(animationRunning, false);
           expect(animationComplete, false);
         }
-        if(index==1) {
+        if (index == 1) {
           expect(animationStarted, true);
           expect(animationRunning, true);
           expect(animationComplete, false);
@@ -122,8 +122,6 @@ void main() {
       animation.update(1);
       expect(animationComplete, true);
     });
-
-
   });
 }
 
