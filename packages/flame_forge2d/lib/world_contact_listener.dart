@@ -1,6 +1,6 @@
 import 'flame_forge2d.dart';
 
-/// Listens to the entire [World] contacts events.
+/// Listens to the entire [World]'s contact events.
 ///
 /// It propagates contact events ([beginContact], [endContact], [preSolve],
 /// [postSolve]) to other [ContactCallbacks]s when a [Body] or at least one of
