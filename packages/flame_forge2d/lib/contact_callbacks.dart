@@ -8,7 +8,7 @@ import 'flame_forge2d.dart';
 /// userData or/and to a [Fixture]'s userData.
 /// {@macro flame_forge2d.world_contact_listener.algorithm}
 class ContactCallbacks {
-  /// Called when two [Fixture]s begin to overlap.
+  /// Called when two [Fixture]s start being in contact.
   ///
   /// It is called for sensors and non-sensors.
   void beginContact(Object other, Contact contact) {
