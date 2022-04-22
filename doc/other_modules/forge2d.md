@@ -91,7 +91,7 @@ set to a `ContactCallback`. And if `Wall` is a `BodyComponent` its `body.userDat
 
 If `userData` is `null` the contact events are ignored, it is set to `null` by default.
 
-A convinient way of setting `userData` is to assign it when creating the body. For example:
+A convenient way of setting `userData` is to assign it when creating the body. For example:
 
 ```dart
 class Ball extends BodyComponent with ContactCallbacks {
