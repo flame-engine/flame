@@ -89,7 +89,7 @@ void main() {
     );
 
     test(
-      "completed doesn't completes when animation is yet to complete",
+      "completed doesn't complete when the animation is yet to complete",
       () async {
         final sprite = MockSprite();
         final animation = SpriteAnimation.spriteList(
