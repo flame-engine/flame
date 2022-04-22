@@ -251,7 +251,7 @@ class SpriteAnimation {
   /// An animation is considered to be completed if it reaches its [isLastFrame]
   /// and is not [loop]ing.
   Future<void> get completed {
-    if (isLastFrame) {
+    if (_done) {
       return Future.value();
     }
 

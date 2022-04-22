@@ -44,9 +44,12 @@ void main() {
     test('onComplete called for single-frame animation', () {
       var counter = 0;
       final sprite = MockSprite();
-      final animation =
-          SpriteAnimation.spriteList([sprite], stepTime: 1, loop: false)
-            ..onComplete = () => counter++;
+      final animation = SpriteAnimation.spriteList(
+        [sprite],
+        stepTime: 1,
+        loop: false,
+      )..onComplete = () => counter++;
+
       expect(counter, 0);
       animation.update(0.5);
       expect(counter, 0);
@@ -58,8 +61,11 @@ void main() {
 
     test('completed completes', () {
       final sprite = MockSprite();
-      final animation =
-          SpriteAnimation.spriteList([sprite], stepTime: 1, loop: false);
+      final animation = SpriteAnimation.spriteList(
+        [sprite],
+        stepTime: 1,
+        loop: false,
+      );
 
       expectLater(animation.completed, completes);
 
@@ -67,16 +73,54 @@ void main() {
     });
 
     test(
-      'completed completes when '
-      'animation has alrady completed',
+      'completed completes when animation has alrady completed',
       () async {
         final sprite = MockSprite();
-        final animation =
-            SpriteAnimation.spriteList([sprite], stepTime: 1, loop: false);
+        final animation = SpriteAnimation.spriteList(
+          [sprite],
+          stepTime: 1,
+          loop: false,
+        );
 
         animation.update(1);
 
         expectLater(animation.completed, completes);
+      },
+    );
+
+    test(
+      "completed doesn't completes when animation is yet to complete",
+      () async {
+        final sprite = MockSprite();
+        final animation = SpriteAnimation.spriteList(
+          [sprite],
+          stepTime: 1,
+          loop: false,
+        );
+
+        expectLater(animation.completed, doesNotComplete);
+      },
+    );
+
+    test(
+      "completed doesn't complete when animation is looping",
+      () async {
+        final sprite = MockSprite();
+        final animation = SpriteAnimation.spriteList([sprite], stepTime: 1);
+
+        expectLater(animation.completed, doesNotComplete);
+      },
+    );
+
+    test(
+      "completed doesn't completes when animation is looping and on last frame",
+      () async {
+        final sprite = MockSprite();
+        final animation = SpriteAnimation.spriteList([sprite], stepTime: 1);
+
+        animation.update(1);
+
+        expectLater(animation.completed, doesNotComplete);
       },
     );
   });
