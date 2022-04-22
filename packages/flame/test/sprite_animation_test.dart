@@ -80,12 +80,9 @@ void main() {
     test('onComplete called for single-frame animation', () {
       var counter = 0;
       final sprite = MockSprite();
-      final animation = SpriteAnimation.spriteList(
-        [sprite],
-        stepTime: 1,
-        loop: false,
-      )..onComplete = () => counter++;
-
+      final animation =
+          SpriteAnimation.spriteList([sprite], stepTime: 1, loop: false)
+            ..onComplete = () => counter++;
       expect(counter, 0);
       animation.update(0.5);
       expect(counter, 0);
@@ -106,7 +103,7 @@ void main() {
       final animation =
           SpriteAnimation.spriteList(spriteList, stepTime: 1, loop: false);
       animation.onFrame = (index) {
-        expect(timePassed, closeTo(index * 1.0, dt/2));
+        expect(timePassed, closeTo(index * 1.0, dt / 2));
         timesCalled++;
       };
       while (timePassed <= spriteList.length) {
