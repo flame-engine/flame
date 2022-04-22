@@ -59,8 +59,11 @@ void main() {
       var i = 0;
       const animationLength = 3;
       final sprite = MockSprite();
-      final animation = SpriteAnimation.spriteList([sprite, sprite, sprite],
-          stepTime: 1, loop: false,);
+      final animation = SpriteAnimation.spriteList(
+        [sprite, sprite, sprite],
+        stepTime: 1,
+        loop: false,
+      );
       animation.onFrame = (index) {
         counter++;
       };
