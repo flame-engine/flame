@@ -99,17 +99,17 @@ void main() {
         'verify call is being made at the first of the frame for multi-frame animation',
         () {
       var timePassed = 0.0;
-      const dt = 0.5;
+      const dt = 0.03;
       var timesCalled = 0;
       final sprite = MockSprite();
       final spriteList = [sprite, sprite, sprite];
       final animation =
           SpriteAnimation.spriteList(spriteList, stepTime: 1, loop: false);
       animation.onFrame = (index) {
-        expect(index, timePassed);
+        expect(timePassed, closeTo(index * 1.0, dt/2));
         timesCalled++;
       };
-      while (timePassed <= 3) {
+      while (timePassed <= spriteList.length) {
         timePassed += dt;
         animation.update(dt);
       }
