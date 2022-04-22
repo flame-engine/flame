@@ -367,6 +367,17 @@ animation object needs to be ticked to move the frames.
 To listen when the animation is done (when it reaches its last frame and is not looping) you can
 use `animation.completed`.
 
+For example, you can:
+
+```dart
+await animation.completed; 
+doSomething();
+
+// or alternatively
+
+animation.completed.whenCompleted(doSomething);
+```
+
 
 ## SpriteAnimationGroup
 
