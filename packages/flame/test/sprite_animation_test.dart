@@ -56,19 +56,20 @@ void main() {
 
     test('onFrame called for single-frame animation', () {
       var counter = 0;
+      var i = 0;
+      const animationLength = 3;
       final sprite = MockSprite();
       final animation =
-          SpriteAnimation.spriteList([sprite], stepTime: 1, loop: false);
+          SpriteAnimation.spriteList([sprite, sprite, sprite], stepTime: 1, loop: false);
       animation.onFrame = (index) {
-        if (index == 0) {
-          expect(counter, 0);
-        }
-        if (index == 1) {
-          expect(counter, 1);
-        }
-        animation.update(1);
         counter++;
       };
+      for(i = 0; i <= animationLength; i++){
+        expect(counter,i);
+        animation.update(1);
+      }
+      expect(counter,3);
+      expect(i,4);
     });
 
     test('onComplete called for single-frame animation', () {
@@ -85,6 +86,44 @@ void main() {
       animation.update(1);
       expect(counter, 1);
     });
+
+    test('test sequence of event lifecycle for an animation', () {
+      var animationStarted = false;
+      var animationRunning = false;
+      var animationComplete = false;
+      final sprite = MockSprite();
+      final animation =
+      SpriteAnimation.spriteList([sprite], stepTime: 1, loop: false);
+      animation.onStart = () {
+        expect(animationStarted, false);
+        expect(animationRunning, false);
+        expect(animationComplete, false);
+        animationStarted = true;
+      };
+      animation.onFrame = (index) {
+        if(index==0) {
+          expect(animationStarted, true);
+          expect(animationRunning, false);
+          expect(animationComplete, false);
+        }
+        if(index==1) {
+          expect(animationStarted, true);
+          expect(animationRunning, true);
+          expect(animationComplete, false);
+        }
+        animationRunning = true;
+      };
+      animation.onComplete = () {
+        expect(animationStarted, true);
+        expect(animationRunning, true);
+        expect(animationComplete, false);
+        animationComplete = true;
+      };
+      animation.update(1);
+
+    });
+
+
   });
 }
 
