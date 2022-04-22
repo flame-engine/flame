@@ -192,14 +192,14 @@ void update(double dt) {
 
 ### Querying components at a specific point on the screen
 
-The method `componentsAtPoint()` allows you to which components have been rendered at a specific
-point on the screen. The returned value is an iterable which contains both the components and the
-coordinates of the query point in those components' local coordinate spaces. The iterable retrieves
-the components in the front-to-back order, i.e. first the components in the front, followed by the
-components in the back.
+The method `componentsAtPoint()` allows you to check which components have been rendered at a
+specific point on the screen. The returned value is an iterable which contains both the components
+and the coordinates of the query point in those components' local coordinates. The iterable
+retrieves the components in the front-to-back order, i.e. first the components in the front,
+followed by the components in the back.
 
 This method can only return components that implement the method `containsLocalPoint()`. The
-`PositionComponent` (which is the base class for many components in Flame) provides an
+`PositionComponent` (which is the base class for many components in Flame) provides such an
 implementation. However, if you're defining a custom class that derives from `Component`, you'd have
 to implement the `containsLocalPoint()` method yourself.
 
@@ -396,7 +396,7 @@ use `animation.completed`.
 Example:
 
 ```dart
-await animation.completed; 
+await animation.completed;
 doSomething();
 
 // or alternatively
