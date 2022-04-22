@@ -2,7 +2,7 @@ import 'flame_forge2d.dart';
 
 /// Used to listens to a [BodyComponent] contacts events.
 ///
-/// Contacts events occur whenever two [Fixture] meet each other.
+/// Contact events occur whenever two [Fixture] meet each other.
 ///
 /// To react to contacts you should assign [ContactCallbacks] to a [Body]'s
 /// userData or/and to [Fixture]'s userData.
