@@ -5,7 +5,7 @@ import 'flame_forge2d.dart';
 /// Contact events occur whenever two [Fixture] meet each other.
 ///
 /// To react to contacts you should assign [ContactCallbacks] to a [Body]'s
-/// userData or/and to [Fixture]'s userData.
+/// userData or/and to a [Fixture]'s userData.
 /// {@macro flame_forge2d.world_contact_listener.algorithm}
 class ContactCallbacks {
   /// Called when two [Fixture]s begin to overlap.
