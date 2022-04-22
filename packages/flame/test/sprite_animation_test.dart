@@ -103,7 +103,7 @@ void main() {
       final animation =
           SpriteAnimation.spriteList(spriteList, stepTime: 1, loop: false);
       animation.onFrame = (index) {
-        expect(index, timePassed);
+        expect(timePassed, closeTo(index * 1.0, dt/2));
         timesCalled++;
       };
       while (timePassed <= 3) {
