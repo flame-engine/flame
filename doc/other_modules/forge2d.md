@@ -65,8 +65,10 @@ not according to the coordinate system of Forge2D (where the Y-axis is flipped).
 
 ## Contact callbacks
 
-`Forge2DGame` provides a simple out of the box solution to propagate
-contact events.
+`Forge2DGame` provides a simple out of the box solution to propagate contact events.
+
+Contacts events occur whenever two `Fixture`s meet each other. These events allows listening when
+these `Fixture`s start (`beginContact`) and cease overlapping (`endContact`).
 
 There are multiple ways to go around it. However, a common approach is
 to mix a `BodyComponent` with `ContactCallbacks`.
