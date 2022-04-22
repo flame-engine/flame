@@ -12,7 +12,7 @@ import 'flame_forge2d.dart';
 /// [Fixture].
 ///
 /// If instead you wish to be more specific and only trigger contact events
-/// when a specific [Body]'s fixture contacts with another [Fixture] you can
+/// when a specific [Body]'s fixture contacts another [Fixture], you can
 /// set the fixture `userData` to a [ContactCallbacks].
 ///
 /// If the colliding [Fixture] `userData` and [Body] `userData` are `null`, then
