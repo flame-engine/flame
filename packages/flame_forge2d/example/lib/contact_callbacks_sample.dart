@@ -19,9 +19,6 @@ that it collides with.
   Future<void> onLoad() async {
     final boundaries = createBoundaries(this);
     boundaries.forEach(add);
-    addContactCallback(BallContactCallback());
-    addContactCallback(BallWallContactCallback());
-    addContactCallback(WhiteBallContactCallback());
   }
 
   @override

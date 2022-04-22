@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'boundaries.dart';
 
-class Ball extends BodyComponent {
+class Ball extends BodyComponent with ContactCallbacks {
   late Paint originalPaint;
   bool giveNudge = false;
   final double radius;
@@ -62,39 +62,37 @@ class Ball extends BodyComponent {
       }
     }
   }
+
+  @override
+  void beginContact(Object other, Contact contact) {
+    if (other is Wall) {
+      other.paint = paint;
+    }
+
+    if (other is WhiteBall) {
+      return;
+    }
+
+    if (other is Ball) {
+      if (paint != originalPaint) {
+        paint = other.paint;
+      } else {
+        other.paint = paint;
+      }
+    }
+  }
 }
 
-class WhiteBall extends Ball {
+class WhiteBall extends Ball with ContactCallbacks {
   WhiteBall(Vector2 position) : super(position) {
     originalPaint = BasicPalette.white.paint();
     paint = originalPaint;
   }
-}
 
-class BallContactCallback extends ContactCallback<Ball, Ball> {
   @override
-  void begin(Ball ball1, Ball ball2, Contact contact) {
-    if (ball1 is WhiteBall || ball2 is WhiteBall) {
-      return;
+  void beginContact(Object other, Contact contact) {
+    if (other is Ball) {
+      other.giveNudge = true;
     }
-    if (ball1.paint != ball1.originalPaint) {
-      ball1.paint = ball2.paint;
-    } else {
-      ball2.paint = ball1.paint;
-    }
-  }
-}
-
-class WhiteBallContactCallback extends ContactCallback<Ball, WhiteBall> {
-  @override
-  void begin(Ball ball, WhiteBall whiteBall, Contact contact) {
-    ball.giveNudge = true;
-  }
-}
-
-class BallWallContactCallback extends ContactCallback<Ball, Wall> {
-  @override
-  void begin(Ball ball, Wall wall, Contact contact) {
-    wall.paint = ball.paint;
   }
 }
