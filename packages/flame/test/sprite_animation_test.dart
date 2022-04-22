@@ -80,9 +80,12 @@ void main() {
     test('onComplete called for single-frame animation', () {
       var counter = 0;
       final sprite = MockSprite();
-      final animation =
-          SpriteAnimation.spriteList([sprite], stepTime: 1, loop: false)
-            ..onComplete = () => counter++;
+      final animation = SpriteAnimation.spriteList(
+        [sprite],
+        stepTime: 1,
+        loop: false,
+      )..onComplete = () => counter++;
+
       expect(counter, 0);
       animation.update(0.5);
       expect(counter, 0);
@@ -141,6 +144,71 @@ void main() {
       animation.update(1);
       expect(animationComplete, true);
     });
+
+    test('completed completes', () {
+      final sprite = MockSprite();
+      final animation = SpriteAnimation.spriteList(
+        [sprite],
+        stepTime: 1,
+        loop: false,
+      );
+
+      expectLater(animation.completed, completes);
+
+      animation.update(1);
+    });
+
+    test(
+      'completed completes when the animation has already completed',
+      () async {
+        final sprite = MockSprite();
+        final animation = SpriteAnimation.spriteList(
+          [sprite],
+          stepTime: 1,
+          loop: false,
+        );
+
+        animation.update(1);
+
+        expectLater(animation.completed, completes);
+      },
+    );
+
+    test(
+      "completed doesn't complete when the animation is yet to complete",
+      () async {
+        final sprite = MockSprite();
+        final animation = SpriteAnimation.spriteList(
+          [sprite],
+          stepTime: 1,
+          loop: false,
+        );
+
+        expectLater(animation.completed, doesNotComplete);
+      },
+    );
+
+    test(
+      "completed doesn't complete when animation is looping",
+      () async {
+        final sprite = MockSprite();
+        final animation = SpriteAnimation.spriteList([sprite], stepTime: 1);
+
+        expectLater(animation.completed, doesNotComplete);
+      },
+    );
+
+    test(
+      "completed doesn't complete when animation is looping and on last frame",
+      () async {
+        final sprite = MockSprite();
+        final animation = SpriteAnimation.spriteList([sprite], stepTime: 1);
+
+        animation.update(1);
+
+        expectLater(animation.completed, doesNotComplete);
+      },
+    );
   });
 }
 
