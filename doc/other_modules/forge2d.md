@@ -68,7 +68,7 @@ not according to the coordinate system of Forge2D (where the Y-axis is flipped).
 `Forge2DGame` provides a simple out of the box solution to propagate contact events.
 
 Contacts events occur whenever two `Fixture`s meet each other. These events allows listening when
-these `Fixture`s start (`beginContact`) and cease overlapping (`endContact`).
+these `Fixture`s begin to overlap (`beginContact`) and cease overlapping (`endContact`).
 
 There are multiple ways to go around it. However, a common approach is
 to mix a `BodyComponent` with `ContactCallbacks`.
@@ -109,8 +109,8 @@ class Ball extends BodyComponent with ContactCallbacks {
 }
 ```
 
-Every time `Ball` and `Wall` get in contact `beginContact` will be called, and once the objects stops
-being in contact `endContact` will be called.
+Every time `Ball` and `Wall` begin to overlap `beginContact` will be called, and once the fixtures 
+stops cease to overlap `endContact` will be called.
 
 An implementation example can be seen in the
 [Flame Forge2D example](https://github.com/flame-engine/flame/blob/main/packages/flame_forge2d/example/lib/balls.dart).
