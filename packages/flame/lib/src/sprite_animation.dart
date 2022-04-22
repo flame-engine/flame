@@ -246,7 +246,10 @@ class SpriteAnimation {
   /// still image).
   bool get isSingleFrame => frames.length == 1;
 
-  /// A future that will complete when the animation reaches [isLastFrame].
+  /// A future that will complete when the animation completes.
+  ///
+  /// An animation is considered to be completed if it reaches its [isLastFrame]
+  /// and is not [loop]ing.
   Future<void> get completed {
     if (isLastFrame) {
       return Future.value();
