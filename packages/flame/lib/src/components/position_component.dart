@@ -61,6 +61,7 @@ import 'mixins/coordinate_transform.dart';
 /// equal to zero and the component won't be able to respond to taps.
 class PositionComponent extends Component
     implements
+        AnchorProvider,
         AngleProvider,
         PositionProvider,
         ScaleProvider,
@@ -143,7 +144,9 @@ class PositionComponent extends Component
   /// which means that visually the component will shift on the screen
   /// so that its new anchor will be at the same screen coordinates as
   /// the old anchor was.
+  @override
   Anchor get anchor => _anchor;
+  @override
   set anchor(Anchor anchor) {
     _anchor = anchor;
     _onModifiedSizeOrAnchor();
