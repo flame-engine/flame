@@ -154,7 +154,7 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
   /// executing, and then schedules a re-build if [_requiresRebuild] flag was
   /// raised during the build.
   ///
-  /// This is needed because or build function invokes user code, which in turn
+  /// This is needed because our build function invokes user code, which in turn
   /// may change some of the [Game]'s properties which would require the
   /// [GameWidget] to be rebuilt. However, Flutter doesn't allow widgets to be
   /// marked dirty while they are building. So, this method is needed to avoid
@@ -162,9 +162,13 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
   /// properties freely, and that they will be propagated to the [GameWidget]
   /// at the earliest opportunity.
   Widget _protectedBuild(Widget Function() build) {
-    _buildDepth++;
-    final result = build();
-    _buildDepth--;
+    late final Widget result;
+    try {
+      _buildDepth++;
+      result = build();
+    } finally {
+      _buildDepth--;
+    }
     if (_requiresRebuild && _buildDepth == 0) {
       Future.microtask(_onGameStateChange);
     }
