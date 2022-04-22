@@ -56,7 +56,7 @@ class SpriteAnimationController extends AnimationController {
     super.notifyListeners();
 
     final now = DateTime.now().millisecond.toDouble();
-    final dt = max(0, (now - (_lastUpdated ?? 0)) / 1000).toDouble();
+    final dt = max<double>(0, (now - (_lastUpdated ?? 0)) / 1000);
     animation.update(dt);
     _lastUpdated = now;
   }
