@@ -18,7 +18,6 @@ class ContactCallbacks {
   /// Called when two [Fixture]s cease being in contact.
   ///
   /// It is called for sensors and non-sensors.
-  ///
   void endContact(Object other, Contact contact) {
     onEndContact?.call(other, contact);
   }
