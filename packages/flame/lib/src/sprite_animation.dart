@@ -318,11 +318,11 @@ class SpriteAnimation {
       _started = true;
     }
     while (clock >= currentFrame.stepTime) {
-      onFrame?.call(currentIndex);
       if (isLastFrame) {
         if (loop) {
           clock -= currentFrame.stepTime;
           currentIndex = 0;
+          onFrame?.call(currentIndex);
         } else {
           _done = true;
           onComplete?.call();
@@ -331,6 +331,7 @@ class SpriteAnimation {
       } else {
         clock -= currentFrame.stepTime;
         currentIndex++;
+        onFrame?.call(currentIndex);
       }
     }
   }

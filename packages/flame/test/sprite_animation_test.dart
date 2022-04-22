@@ -54,25 +54,27 @@ void main() {
       expect(counter, 1);
     });
 
-    test('onFrame called for a multi-frame animation', () {
+    test(
+        'onFrame called only for the number of frames in a multi-frame animation',
+        () {
       var counter = 0;
       var i = 0;
-      const animationLength = 3;
       final sprite = MockSprite();
+      final spriteList = [sprite, sprite, sprite];
       final animation = SpriteAnimation.spriteList(
-        [sprite, sprite, sprite],
+        spriteList,
         stepTime: 1,
         loop: false,
       );
       animation.onFrame = (index) {
         counter++;
       };
-      for (i = 0; i <= animationLength; i++) {
+      for (i = 0; i < spriteList.length; i++) {
         expect(counter, i);
         animation.update(1);
       }
-      expect(counter, 3);
-      expect(i, 4);
+      expect(counter, spriteList.length - 1);
+      expect(i, spriteList.length);
     });
 
     test('onComplete called for single-frame animation', () {
@@ -90,6 +92,27 @@ void main() {
       expect(counter, 1);
     });
 
+    test(
+        'verify call is being made at the first of the frame for multi-frame animation',
+        () {
+      var timePassed = 0.0;
+      const dt = 0.5;
+      var timesCalled = 0;
+      final sprite = MockSprite();
+      final spriteList = [sprite, sprite, sprite];
+      final animation =
+          SpriteAnimation.spriteList(spriteList, stepTime: 1, loop: false);
+      animation.onFrame = (index) {
+        expect(index, timePassed);
+        timesCalled++;
+      };
+      while (timePassed <= 3) {
+        timePassed += dt;
+        animation.update(dt);
+      }
+      expect(timesCalled, spriteList.length - 1);
+    });
+
     test('test sequence of event lifecycle for an animation', () {
       var animationStarted = false;
       var animationRunning = false;
@@ -102,19 +125,12 @@ void main() {
         expect(animationRunning, false);
         expect(animationComplete, false);
         animationStarted = true;
+        animationRunning = true;
       };
       animation.onFrame = (index) {
-        if (index == 0) {
-          expect(animationStarted, true);
-          expect(animationRunning, false);
-          expect(animationComplete, false);
-        }
-        if (index == 1) {
-          expect(animationStarted, true);
-          expect(animationRunning, true);
-          expect(animationComplete, false);
-        }
-        animationRunning = true;
+        expect(animationStarted, true);
+        expect(animationRunning, true);
+        expect(animationComplete, false);
       };
       animation.onComplete = () {
         expect(animationStarted, true);
