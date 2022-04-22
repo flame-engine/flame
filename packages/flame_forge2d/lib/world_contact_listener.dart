@@ -2,9 +2,9 @@ import 'flame_forge2d.dart';
 
 /// Listens to the entire [World]'s contact events.
 ///
-/// It propagates contact events ([beginContact], [endContact], [preSolve],
-/// [postSolve]) to other [ContactCallbacks]s when a [Body] or at least one of
-/// its fixtures `userData` is set to a [ContactCallbacks].
+/// It propagates the contact events ([beginContact], [endContact], [preSolve],
+/// [postSolve]) to [ContactCallbacks]s when a [Body] or at least one of its
+// fixtures' `userData` is set to a [ContactCallbacks].
 ///
 /// {@template flame_forge2d.world_contact_listener.algorithm}
 /// If the [Body] `userData` is set to a [ContactCallbacks] the contact events
