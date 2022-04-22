@@ -4,7 +4,7 @@ import 'package:meta/meta.dart';
 import 'package:vector_math/vector_math_64.dart';
 
 import '../components/component.dart';
-import '../components/component_point.dart';
+import '../components/component_point_pair.dart';
 import 'camera_component.dart';
 
 /// The root component for all game world elements.
@@ -24,12 +24,12 @@ class World extends Component {
   }
 
   @override
-  Iterable<ComponentPoint> componentsAtPoint(Vector2 point) {
+  Iterable<ComponentPointPair> componentsAtPoint(Vector2 point) {
     return const Iterable.empty();
   }
 
   @internal
-  Iterable<ComponentPoint> componentsAtPointFromCamera(Vector2 point) {
+  Iterable<ComponentPointPair> componentsAtPointFromCamera(Vector2 point) {
     return super.componentsAtPoint(point);
   }
 }

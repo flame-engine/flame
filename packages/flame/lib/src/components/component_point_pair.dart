@@ -5,17 +5,17 @@ import 'package:vector_math/vector_math_64.dart';
 
 import 'component.dart';
 
-/// A simple tuple of a component and a point. This is a helper class for
+/// A simple tuple of a component and a point. This is a helper class for the
 /// [Component.componentsAtPoint] method.
 @immutable
-class ComponentPoint {
-  const ComponentPoint(this.component, this.point);
+class ComponentPointPair {
+  const ComponentPointPair(this.component, this.point);
   final Component component;
   final Vector2 point;
 
   @override
   bool operator ==(Object other) =>
-      other is ComponentPoint &&
+      other is ComponentPointPair &&
       other.component == component &&
       other.point == point;
 

@@ -517,36 +517,36 @@ void main() {
 
         expect(
           game.componentsAtPoint(Vector2.zero()).toList(),
-          [ComponentPoint(game, Vector2.zero())],
+          [ComponentPointPair(game, Vector2.zero())],
         );
         expect(
           game.componentsAtPoint(Vector2(400, 100)).toList(),
           [
-            ComponentPoint(componentA, Vector2(25, 25)),
-            ComponentPoint(game, Vector2(400, 100)),
+            ComponentPointPair(componentA, Vector2(25, 25)),
+            ComponentPointPair(game, Vector2(400, 100)),
           ],
         );
         expect(
           game.componentsAtPoint(Vector2(650, 200)).toList(),
           [
-            ComponentPoint(componentB, Vector2(10, 10)),
-            ComponentPoint(componentA, Vector2(150, 75)),
-            ComponentPoint(game, Vector2(650, 200)),
+            ComponentPointPair(componentB, Vector2(10, 10)),
+            ComponentPointPair(componentA, Vector2(150, 75)),
+            ComponentPointPair(game, Vector2(650, 200)),
           ],
         );
         expect(
           game.componentsAtPoint(Vector2(664, 214)).toList(),
           [
-            ComponentPoint(componentB, Vector2(17, 17)),
-            ComponentPoint(componentA, Vector2(157, 82)),
-            ComponentPoint(game, Vector2(664, 214)),
+            ComponentPointPair(componentB, Vector2(17, 17)),
+            ComponentPointPair(componentA, Vector2(157, 82)),
+            ComponentPointPair(game, Vector2(664, 214)),
           ],
         );
         expect(
           game.componentsAtPoint(Vector2(664, 216)).toList(),
           [
-            ComponentPoint(componentA, Vector2(157, 83)),
-            ComponentPoint(game, Vector2(664, 216)),
+            ComponentPointPair(componentA, Vector2(157, 83)),
+            ComponentPointPair(game, Vector2(664, 216)),
           ],
         );
       });

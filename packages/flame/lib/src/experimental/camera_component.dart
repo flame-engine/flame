@@ -4,7 +4,7 @@ import 'package:meta/meta.dart';
 import 'package:vector_math/vector_math_64.dart';
 
 import '../components/component.dart';
-import '../components/component_point.dart';
+import '../components/component_point_pair.dart';
 import 'max_viewport.dart';
 import 'viewfinder.dart';
 import 'viewport.dart';
@@ -101,7 +101,7 @@ class CameraComponent extends Component {
   }
 
   @override
-  Iterable<ComponentPoint> componentsAtPoint(Vector2 point) sync* {
+  Iterable<ComponentPointPair> componentsAtPoint(Vector2 point) sync* {
     final viewportPoint = point - viewport.position;
     if (world.isMounted && currentCameras.length < maxCamerasDepth) {
       if (viewport.containsPoint(viewportPoint)) {

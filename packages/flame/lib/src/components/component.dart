@@ -9,7 +9,7 @@ import '../cache/value_cache.dart';
 import '../game/mixins/game.dart';
 import '../gestures/events.dart';
 import '../text.dart';
-import 'component_point.dart';
+import 'component_point_pair.dart';
 import 'component_set.dart';
 import 'mixins/coordinate_transform.dart';
 import 'position_type.dart';
@@ -642,17 +642,17 @@ class Component {
   ///
   /// The return value is an [Iterable] of `(component, point)` pairs, which
   /// gives not only the components themselves, but also the points of
-  /// intersection, in local coordinates.
+  /// intersection, in their respective local coordinates.
   ///
   /// The default implementation relies on the [CoordinateTransform] interface
-  /// in order to translate from the parent's coordinate system into the local
-  /// one. Make sure that your component implements this interface if it alters
-  /// the coordinate system when rendering.
+  /// to translate from the parent's coordinate system into the local one. Make
+  /// sure that your component implements this interface if it alters the
+  /// coordinate system when rendering.
   ///
   /// If your component overrides [renderTree], then it almost certainly needs
   /// to override this method as well, so that this method can find all rendered
   /// components wherever they are.
-  Iterable<ComponentPoint> componentsAtPoint(Vector2 point) sync* {
+  Iterable<ComponentPointPair> componentsAtPoint(Vector2 point) sync* {
     if (_children != null) {
       for (final child in _children!.reversed()) {
         Vector2? childPoint = point;
@@ -665,7 +665,7 @@ class Component {
       }
     }
     if (containsLocalPoint(point)) {
-      yield ComponentPoint(this, point);
+      yield ComponentPointPair(this, point);
     }
   }
 
