@@ -6,7 +6,7 @@ import 'flame_forge2d.dart';
 /// [postSolve]) to other [ContactCallbacks]s when a [Body] or at least one of
 /// its fixtures `userData` is set to a [ContactCallbacks].
 ///
-/// {@template flame_forge2d.world_contact_listner.algorithm}
+/// {@template flame_forge2d.world_contact_listener.algorithm}
 /// If the [Body] `userData` is set to a [ContactCallbacks] the contact events
 /// of this will be called as well when any [Body]'s fixture contacts another
 /// [Fixture].
