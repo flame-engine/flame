@@ -8,7 +8,7 @@ import 'flame_forge2d.dart';
 ///
 /// {@template flame_forge2d.world_contact_listner.algorithm}
 /// If the [Body] `userData` is set to a [ContactCallbacks] the contact events
-/// of this will be called to when any [Body]'s fixture contacts another
+/// of this will be called as well when any [Body]'s fixture contacts another
 /// [Fixture].
 ///
 /// If instead you wish to be more specific and only trigger contact events
