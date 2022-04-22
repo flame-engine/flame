@@ -106,7 +106,7 @@ class Ball extends BodyComponent with ContactCallbacks {
 }
 ```
 
-Every time `Ball` and `Wall` get in contact `begin` will be called, and once the objects stops
+Every time `Ball` and `Wall` get in contact `beginContact` will be called, and once the objects stops
 being in contact `end` will be called.
 
 An implementation example can be seen in the
