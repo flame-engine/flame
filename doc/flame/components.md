@@ -364,7 +364,7 @@ this.player = SpriteAnimationComponent.fromFrameData(
 If you are not using `FlameGame`, don't forget this component needs to be updated, because the
 animation object needs to be ticked to move the frames.
 
-To listen when the animation is done (when it reaches its last frame and is not looping) you can
+To listen when the animation is done (when it reaches the last frame and is not looping) you can
 use `animation.completed`.
 
 Example:
