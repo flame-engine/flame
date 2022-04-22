@@ -158,6 +158,24 @@ available eventually: after they are loaded and mounted. We can only assure
 that they will appear in the children list in the same order as they were
 scheduled for addition.
 
+#### Ensuring a component has a given parent
+
+When a component requires to be added to a specific parent type the 
+`HasParent` mixin can be used to enforce a strongly typed parent.
+
+Example:
+
+```dart
+class MyComponent extends Component with HasParent<MyParentComponent> {
+  Future<void> onLoad() async {
+    // parent is of type MyParentComponent
+    print(parent.myValue);
+  }
+}
+```
+
+If `MyComponent` is added to a component that is not `MyParentComponent` 
+an assertion error will be thrown stating such.
 
 ### Querying child components
 
@@ -278,7 +296,6 @@ Future<void> onLoad() async {
 
 Remember that most components that are rendered on the screen are `PositionComponent`s, so
 this pattern can be used in for example [](#spritecomponent) and [](#spriteanimationcomponent) too.
-
 
 ### Render PositionComponent
 
