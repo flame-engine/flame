@@ -106,7 +106,7 @@ void main() {
         expect(timePassed, closeTo(index * 1.0, dt/2));
         timesCalled++;
       };
-      while (timePassed <= 3) {
+      while (timePassed <= spriteList.length) {
         timePassed += dt;
         animation.update(dt);
       }
