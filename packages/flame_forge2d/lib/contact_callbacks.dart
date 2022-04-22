@@ -15,7 +15,7 @@ class ContactCallbacks {
     onBeginContact?.call(other, contact);
   }
 
-  /// Called when two [Fixture]s cease to overlap.
+  /// Called when two [Fixture]s cease being in contact.
   ///
   /// It is called for sensors and non-sensors.
   ///
