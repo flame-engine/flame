@@ -19,7 +19,6 @@ class ContactCallbacks {
   ///
   /// It is called for sensors and non-sensors.
   ///
-  /// It may be called when a body is destroyed.
   void endContact(Object other, Contact contact) {
     onEndContact?.call(other, contact);
   }
