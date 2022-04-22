@@ -86,7 +86,7 @@ In order for the above to work, the Ball's `userData` must be set to a `ContactC
 `Wall` is a `BodyComponent` its `body.userData` or contacting `fixture.userData` must be set to
 `Wall`. 
 
-By default `userData` is `null`, and when so, contact events are ignored.
+If `userData` is `null` the contact events are ignored, it is set to `null` by default.
 
 A convinient way of setting `userData` is to assign it when creating the body. For example:
 
