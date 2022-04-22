@@ -107,7 +107,7 @@ class Ball extends BodyComponent with ContactCallbacks {
 ```
 
 Every time `Ball` and `Wall` get in contact `beginContact` will be called, and once the objects stops
-being in contact `end` will be called.
+being in contact `endContact` will be called.
 
 An implementation example can be seen in the
 [Flame Forge2D example](https://github.com/flame-engine/flame/blob/main/packages/flame_forge2d/example/lib/balls.dart).
