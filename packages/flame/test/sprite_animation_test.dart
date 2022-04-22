@@ -55,8 +55,8 @@ void main() {
     });
 
     test(
-      'onFrame called only for the number of frames in a multi-frame animation',
-      () {
+        'onFrame called only for the number of frames in a multi-frame animation',
+        () {
       var counter = 0;
       var i = 0;
       final sprite = MockSprite();
@@ -93,8 +93,8 @@ void main() {
     });
 
     test(
-      'verify call is being made at first of frame for multi-frame animation',
-      () {
+        'verify call is being made at first of frame for multi-frame animation',
+        () {
       var timePassed = 0.0;
       const dt = 0.03;
       var timesCalled = 0;
@@ -103,7 +103,7 @@ void main() {
       final animation =
           SpriteAnimation.spriteList(spriteList, stepTime: 1, loop: false);
       animation.onFrame = (index) {
-        expect(timePassed, closeTo(index * 1.0, dt / 2));
+        expect(timePassed, closeTo(index * 1.0, index + (dt / 2)));
         timesCalled++;
       };
       while (timePassed <= spriteList.length) {
