@@ -73,7 +73,7 @@ void main() {
     });
 
     test(
-      'completed completes when animation has alrady completed',
+      'completed completes when the animation has already completed',
       () async {
         final sprite = MockSprite();
         final animation = SpriteAnimation.spriteList(
