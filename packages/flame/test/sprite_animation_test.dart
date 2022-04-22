@@ -54,7 +54,7 @@ void main() {
       expect(counter, 1);
     });
 
-    test('onFrame called for single-frame animation', () {
+    test('onFrame called for a multi-frame animation', () {
       var counter = 0;
       var i = 0;
       const animationLength = 3;
@@ -120,7 +120,7 @@ void main() {
         animationComplete = true;
       };
       animation.update(1);
-
+      expect(animationComplete, true);
     });
 
 
