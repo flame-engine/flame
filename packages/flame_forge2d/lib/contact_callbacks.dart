@@ -28,7 +28,6 @@ class ContactCallbacks {
   ///
   /// This gives you a chance to disable the [Contact] based on the current
   /// configuration.
-  ///
   /// Sensors do not create [Manifold]s.
   void preSolve(Object other, Contact contact, Manifold oldManifold) {
     onPreSolve?.call(other, contact, oldManifold);
@@ -37,7 +36,6 @@ class ContactCallbacks {
   /// Called after collision resolution.
   ///
   /// Usually defined to gather collision impulse results.
-  ///
   /// If one of the colliding objects is a sensor, this will not be called.
   void postSolve(Object other, Contact contact, ContactImpulse impulse) {
     onPostSolve?.call(other, contact, impulse);
