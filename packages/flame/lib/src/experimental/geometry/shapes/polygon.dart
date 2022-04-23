@@ -26,7 +26,7 @@ class Polygon extends Shape {
       : assert(_vertices.length >= 3, 'At least 3 vertices are required') {
     _initializeEdges();
     if (convex == null) {
-      _checkOrientation();
+      _ensureProperOrientation();
     } else {
       _convex = convex;
     }
@@ -58,7 +58,10 @@ class Polygon extends Shape {
   /// Number of vertices/edges in the polygon.
   int get n => _vertices.length;
 
-  void _checkOrientation() {
+  /// Checks whether the vertices are listed in the CCW order, and if not
+  /// reverses them. In addition, this method also checks whether the polygon
+  /// is convex and sets the [_convex] flag accordingly.
+  void _ensureProperOrientation() {
     var nInteriorAngles = 0;
     var nExteriorAngles = 0;
     var previousEdge = _edges.last;
@@ -81,6 +84,7 @@ class Polygon extends Shape {
     _convex = nInteriorAngles == n;
   }
 
+  /// Reverses the list of vertices in-place.
   void _reverseVertices() {
     for (var i = 0, j = n - 1; i < j; i++, j--) {
       final tmp = _vertices[i];
