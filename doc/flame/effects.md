@@ -40,6 +40,8 @@ There are multiple effects provided by Flame, and you can also
 - [`ScaleEffect.to`](#scaleeffectto)
 - [`SizeEffect.by`](#sizeeffectby)
 - [`SizeEffect.to`](#sizeeffectto)
+- [`AnchorByEffect`](#anchorbyeffect)
+- [`AnchorToEffect`](#anchortoeffect)
 - [`OpacityEffect`](#opacityeffect)
 - [`ColorEffect`](#coloreffect)
 - [`SequenceEffect`](#sequenceeffect)
@@ -128,7 +130,7 @@ position.
 
 ```dart
 final effect = MoveAlongPathEffect(
-  Path() ..quadraticBezierTo(100, 0, 50, -50),
+  Path()..quadraticBezierTo(100, 0, 50, -50),
   EffectController(duration: 1.5),
 );
 ```
@@ -207,6 +209,26 @@ Changes the size of the target component to the specified size. Target size cann
 
 ```dart
 final effect = SizeEffect.to(Vector2(120, 120), EffectController(duration: 1));
+```
+
+
+### `AnchorByEffect`
+
+Changes the location of the target's anchor by the specified offset. This effect can also be created
+using `AnchorEffect.by()`.
+
+```dart
+final effect = AnchorByEffect(Vector2(0.1, 0.1), EffectController(speed: 1));
+```
+
+
+### `AnchorToEffect`
+
+Changes the location of the target's anchor. This effect can also be created using
+`AnchorEffect.to()`.
+
+```dart
+final effect = AnchorToEffect(Anchor.center, EffectController(speed: 1));
 ```
 
 
