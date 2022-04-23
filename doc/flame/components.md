@@ -167,6 +167,7 @@ Example:
 
 ```dart
 class MyComponent extends Component with HasParent<MyParentComponent> {
+  @override
   Future<void> onLoad() async {
     // parent is of type MyParentComponent
     print(parent.myValue);

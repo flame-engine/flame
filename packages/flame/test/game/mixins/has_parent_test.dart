@@ -26,7 +26,10 @@ void main() {
       final parent = DifferentComponent();
       final component = TestComponent();
 
-      expect(() => parent.add(component), throwsAssertionError);
+      expect(
+        () => parent.add(component),
+        failsAssert('Parent must be of type ParentComponent'),
+      );
     });
   });
 }
