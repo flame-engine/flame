@@ -54,29 +54,6 @@ void main() {
       expect(counter, 1);
     });
 
-    test(
-        'onFrame called only for number of frames in a multi-frame animation',
-        () {
-      var counter = 0;
-      var i = 0;
-      final sprite = MockSprite();
-      final spriteList = [sprite, sprite, sprite];
-      final animation = SpriteAnimation.spriteList(
-        spriteList,
-        stepTime: 1,
-        loop: false,
-      );
-      animation.onFrame = (index) {
-        counter++;
-      };
-      for (i = 0; i < spriteList.length; i++) {
-        expect(counter, i);
-        animation.update(1);
-      }
-      expect(counter, spriteList.length - 1);
-      expect(i, spriteList.length);
-    });
-
     test('onComplete called for single-frame animation', () {
       var counter = 0;
       final sprite = MockSprite();
@@ -103,14 +80,14 @@ void main() {
       final animation =
           SpriteAnimation.spriteList(spriteList, stepTime: 1, loop: false);
       animation.onFrame = (index) {
-        expect(timePassed, closeTo(index * 1.0, index + (dt / 2)));
+        expect(timePassed, closeTo(index * 1.0, dt));
         timesCalled++;
       };
       while (timePassed <= spriteList.length) {
         timePassed += dt;
         animation.update(dt);
       }
-      expect(timesCalled, spriteList.length - 1);
+      expect(timesCalled, spriteList.length);
     });
 
     test('test sequence of event lifecycle for an animation', () {
