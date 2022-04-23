@@ -49,11 +49,10 @@ class FollowBehavior extends Component {
   @override
   void onMount() {
     if (_owner == null) {
-      if (parent is! PositionProvider) {
-        throw UnsupportedError(
-          'Can only apply this behavior to a PositionProvider',
-        );
-      }
+      assert(
+        parent is PositionProvider,
+        'Can only apply this behavior to a PositionProvider',
+      );
       _owner = parent! as PositionProvider;
     }
   }
