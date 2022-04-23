@@ -1,5 +1,6 @@
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
+import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 class ParentComponent extends Component {}
@@ -10,23 +11,22 @@ class TestComponent extends Component with HasParent<ParentComponent> {}
 
 void main() {
   group('HasParent', () {
-    test('successfully sets the parent link', () {
+    testWithFlameGame('successfully sets the parent link', (game) async {
       final parent = ParentComponent();
       final component = TestComponent();
 
-      parent.add(component);
+      await parent.add(component);
+      await game.add(parent);
 
       expect(component.parent, isA<ParentComponent>());
-      expect(component.onMount, returnsNormally);
     });
 
-    test('throws assertion error when the wrong parent is used', () {
+    testWithFlameGame('throws assertion error when the wrong parent is used',
+        (game) async {
       final parent = DifferentComponent();
       final component = TestComponent();
 
-      parent.add(component);
-
-      expect(component.onMount, throwsAssertionError);
+      expect(() => parent.add(component), throwsAssertionError);
     });
   });
 }
