@@ -40,10 +40,27 @@ class AcceleratedParticle extends CurvedParticle with SingleChildParticle {
     canvas.restore();
   }
 
+  /// Used to avoid creating new vectors in [update].
+  final _tmpVectors = [Vector2.zero(), Vector2.zero()];
+
   @override
   void update(double dt) {
-    speed += acceleration * dt;
-    position += speed * dt - (acceleration * dt * dt) / 2;
+    speed.add(
+      _tmpVectors[0]
+        ..setFrom(acceleration)
+        ..scale(dt),
+    );
+    position.add(
+      _tmpVectors[0]
+        ..setFrom(speed)
+        ..scale(dt)
+        ..sub(
+          _tmpVectors[1]
+            ..setFrom(acceleration)
+            ..scale(dt * dt)
+            ..scale(0.5),
+        ),
+    );
     super.update(dt);
   }
 }
