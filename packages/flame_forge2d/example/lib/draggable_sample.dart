@@ -33,8 +33,7 @@ class DraggableBall extends Ball with Draggable {
 
   @override
   bool onDragUpdate(DragUpdateInfo info) {
-    final worldDelta = Vector2(1, -1)..multiply(info.delta.game);
-    body.applyLinearImpulse(worldDelta * 1000);
+    body.applyLinearImpulse(info.delta.game * 1000);
     return true;
   }
 

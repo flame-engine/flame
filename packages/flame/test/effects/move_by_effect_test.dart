@@ -7,8 +7,8 @@ import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  group('MoveEffect', () {
-    test('#by', () {
+  group('MoveByEffect', () {
+    test('simple linear motion', () {
       final game = FlameGame();
       game.onGameResize(Vector2(100, 100));
       final object = PositionComponent()..position = Vector2(3, 4);
@@ -16,7 +16,7 @@ void main() {
       game.update(0);
 
       object.add(
-        MoveEffect.by(Vector2(5, -1), LinearEffectController(1)),
+        MoveByEffect(Vector2(5, -1), EffectController(duration: 1)),
       );
       game.update(0.5);
       expect(object.position.x, closeTo(3 + 2.5, 1e-15));

@@ -66,6 +66,7 @@ class ParallaxComponent<T extends FlameGame> extends PositionComponent
     Vector2? scale,
     double? angle,
     Anchor? anchor,
+    Iterable<Component>? children,
     int? priority,
   })  : _parallax = parallax,
         isFullscreen = size == null && !(parallax?.isSized ?? false),
@@ -75,6 +76,7 @@ class ParallaxComponent<T extends FlameGame> extends PositionComponent
           scale: scale,
           angle: angle,
           anchor: anchor,
+          children: children,
           priority: priority,
         );
 

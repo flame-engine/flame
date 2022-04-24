@@ -1,3 +1,6 @@
+export 'src/effects/anchor_by_effect.dart' show AnchorByEffect;
+export 'src/effects/anchor_effect.dart' show AnchorEffect;
+export 'src/effects/anchor_to_effect.dart' show AnchorToEffect;
 export 'src/effects/color_effect.dart';
 export 'src/effects/component_effect.dart';
 export 'src/effects/controllers/curved_effect_controller.dart';
@@ -19,9 +22,12 @@ export 'src/effects/controllers/zigzag_effect_controller.dart';
 export 'src/effects/effect.dart';
 export 'src/effects/effect_target.dart';
 export 'src/effects/move_along_path_effect.dart';
+export 'src/effects/move_by_effect.dart';
 export 'src/effects/move_effect.dart';
+export 'src/effects/move_to_effect.dart';
 export 'src/effects/opacity_effect.dart';
-export 'src/effects/provider_interfaces.dart' show PositionProvider;
+export 'src/effects/provider_interfaces.dart'
+    show AnchorProvider, AngleProvider, PositionProvider, ScaleProvider;
 export 'src/effects/remove_effect.dart';
 export 'src/effects/rotate_effect.dart';
 export 'src/effects/scale_effect.dart';
