@@ -40,10 +40,6 @@ class AcceleratedParticle extends CurvedParticle with SingleChildParticle {
     canvas.restore();
   }
 
-  /// Used to avoid creating new vectors in [update].
-  static final _tmp1 = Vector2.zero();
-  static final _tmp2 = Vector2.zero();
-
   @override
   void update(double dt) {
     speed.addScaled(acceleration, dt);
