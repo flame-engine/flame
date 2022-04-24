@@ -45,7 +45,7 @@ class AcceleratedParticle extends CurvedParticle with SingleChildParticle {
     speed.addScaled(acceleration, dt);
     position
       ..addScaled(speed, dt)
-      ..addScaled(acceleration, -dt*dt*0.5);
+      ..addScaled(acceleration, -dt * dt * 0.5);
     super.update(dt);
   }
 }
