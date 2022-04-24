@@ -1,4 +1,3 @@
-
 import 'package:flame/components.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame_test/flame_test.dart';
@@ -23,7 +22,7 @@ void main() {
     });
 
     testWithFlameGame('follow with snap', (game) async {
-      final world = World() ..addToParent(game);
+      final world = World()..addToParent(game);
       final player = PositionComponent()
         ..position = Vector2(100, 100)
         ..addToParent(world);
