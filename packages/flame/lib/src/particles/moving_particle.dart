@@ -25,7 +25,7 @@ class MovingParticle extends CurvedParticle with SingleChildParticle {
         super(lifespan: lifespan, curve: curve);
 
   /// Used to avoid creating new [Vector2] objects in [update].
-  final _tmpVector = Vector2.zero();
+  static final _tmpVector = Vector2.zero();
 
   @override
   void render(Canvas c) {
