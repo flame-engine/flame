@@ -116,5 +116,37 @@ void main() {
         game.update(dt);
       }
     });
+
+    testWithFlameGame('horizontal-only follow', (game) async {
+      final target = PositionComponent(position: Vector2(20, 10));
+      final pursuer = PositionComponent();
+      pursuer.add(
+        FollowBehavior(target: target, horizontalOnly: true, maxSpeed: 1),
+      );
+      game.addAll([target, pursuer]);
+      await game.ready();
+
+      for (var i = 0; i < 10; i++) {
+        expect(pursuer.position.x, i);
+        expect(pursuer.position.y, 0);
+        game.update(1);
+      }
+    });
+
+    testWithFlameGame('vertical-only follow', (game) async {
+      final target = PositionComponent(position: Vector2(20, 100));
+      final pursuer = PositionComponent();
+      pursuer.add(
+        FollowBehavior(target: target, verticalOnly: true, maxSpeed: 1),
+      );
+      game.addAll([target, pursuer]);
+      await game.ready();
+
+      for (var i = 0; i < 10; i++) {
+        expect(pursuer.position.x, 0);
+        expect(pursuer.position.y, i);
+        game.update(1);
+      }
+    });
   });
 }
