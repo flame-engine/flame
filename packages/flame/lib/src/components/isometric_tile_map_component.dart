@@ -154,7 +154,7 @@ class IsometricTileMapComponent extends PositionComponent {
   /// This can be used to handle clicks or hovers.
   /// This is the opposite of [getBlockCenterPosition].
   Block getBlock(Vector2 p) {
-    final halfTile = effectiveTileSize / 2;
+    final halfTile = (effectiveTileSize / 2)..multiply(scale);
     final multiplier = 1 - halfTile.y / (2 * effectiveTileHeight);
     final delta = halfTile.clone()..multiply(Vector2(1, multiplier));
     final cart = isoToCart(p - position + delta);
