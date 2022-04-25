@@ -124,8 +124,8 @@ Camera has several methods for controlling its behavior:
    Optionally you can limit the maximum speed of movement of the camera, or
    allow it to move horizontally/vertically only.
 
- - `Camera.stopFollowing()` will undo the effect of the previous call and stop
-   the camera at its current position.
+ - `Camera.stop()` will undo the effect of the previous call and stop the camera
+   at its current position.
 
  - `Camera.moveTo()` can be used to move the camera to the designated point on
    the world map. If the camera was already following another component or
