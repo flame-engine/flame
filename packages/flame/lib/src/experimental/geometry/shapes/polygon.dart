@@ -55,9 +55,6 @@ class Polygon extends Shape {
     }).toList(growable: false);
   }
 
-  /// Number of vertices/edges in the polygon.
-  int get n => _vertices.length;
-
   /// Checks whether the vertices are listed in the CCW order, and if not
   /// reverses them. In addition, this method also checks whether the polygon
   /// is convex and sets the [_convex] flag accordingly.
@@ -81,12 +78,12 @@ class Polygon extends Shape {
       _initializeEdges();
       nInteriorAngles = nExteriorAngles;
     }
-    _convex = nInteriorAngles == n;
+    _convex = nInteriorAngles == _vertices.length;
   }
 
   /// Reverses the list of vertices in-place.
   void _reverseVertices() {
-    for (var i = 0, j = n - 1; i < j; i++, j--) {
+    for (var i = 0, j = _vertices.length - 1; i < j; i++, j--) {
       final tmp = _vertices[i];
       _vertices[i] = _vertices[j];
       _vertices[j] = tmp;
@@ -103,7 +100,7 @@ class Polygon extends Shape {
   Vector2 _calculateCenter() {
     final center = Vector2.zero();
     _vertices.forEach(center.add);
-    return center..scale(1 / n);
+    return center..scale(1 / _vertices.length);
   }
 
   @override
@@ -136,6 +133,7 @@ class Polygon extends Shape {
     if (!aabb.intersectsWithVector2(point)) {
       return false;
     }
+    final n = _vertices.length;
     if (isConvex) {
       // For a convex polygon, a point is inside if for each edge the cross-
       // product of that edge and a vector from the edge's origin to the point
@@ -177,7 +175,8 @@ class Polygon extends Shape {
 
   @override
   Shape project(Transform2D transform, [Shape? target]) {
-    if (target is Polygon && target.n == n) {
+    final n = _vertices.length;
+    if (target is Polygon && target.vertices.length == n) {
       for (var i = 0; i < n; i++) {
         target._vertices[i].setFrom(transform.localToGlobal(_vertices[i]));
       }

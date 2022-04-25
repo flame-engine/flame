@@ -22,7 +22,6 @@ void main() {
       final polygon = Polygon(
         [Vector2.zero(), Vector2(0, 60), Vector2(80, 60)],
       );
-      expect(polygon.n, 3);
       expect(polygon.vertices.length, 3);
       expect(polygon.vertices[0], Vector2(0, 0));
       expect(polygon.vertices[1], Vector2(0, 60));
@@ -156,7 +155,7 @@ void main() {
         Vector2(60, 10),
         Vector2(40, 25),
       ]);
-      expect(polygon.n, 10);
+      expect(polygon.edges.length, 10);
       expect(polygon.isConvex, false);
       expect(polygon.vertices[0], Vector2(20, 40));
       expect(
@@ -208,7 +207,7 @@ void main() {
       final result = polygon.project(transform);
       final a = 10 * sqrt(2);
       expect(result, isA<Polygon>());
-      expect((result as Polygon).n, 4);
+      expect((result as Polygon).edges.length, 4);
       expect(result.vertices[0], closeToVector(-a, -a, epsilon: 1e-14));
       expect(result.vertices[1], closeToVector(-a, a, epsilon: 1e-14));
       expect(result.vertices[2], closeToVector(a, a, epsilon: 1e-14));
@@ -229,7 +228,7 @@ void main() {
       final result = polygon.project(transform, target);
       expect(result, isA<Polygon>());
       expect(result, target);
-      expect((result as Polygon).n, 4);
+      expect((result as Polygon).edges.length, 4);
       expect(result.vertices[0], Vector2(10, 30));
       expect(result.vertices[1], Vector2(50, 50));
       expect(result.vertices[2], Vector2(90, 30));
@@ -248,10 +247,9 @@ void main() {
         ..scale = Vector2(-2, 1);
       final target = Polygon(List.generate(4, (_) => Vector2.zero()));
       final result = polygon.project(transform, target);
-      print(result);
       expect(result, isA<Polygon>());
       expect(result, target);
-      expect((result as Polygon).n, 4);
+      expect((result as Polygon).edges.length, 4);
       expect(result.isConvex, true);
       expect(result.vertices[0], Vector2(-30, 10));
       expect(result.vertices[1], Vector2(-70, 30));
@@ -267,8 +265,8 @@ void main() {
       final result = polygon.project(transform, target);
       expect(result == target, false);
       expect(result, isA<Polygon>());
-      expect((result as Polygon).n, 5);
-      expect(target.n, 3);
+      expect((result as Polygon).edges.length, 5);
+      expect(target.edges.length, 3);
       expect(result.vertices, [z, z, z, z, z]);
       expect(result.edges, [z, z, z, z, z]);
       expect(result.isConvex, true);
