@@ -1,8 +1,10 @@
 import 'dart:ui';
 
 import 'package:meta/meta.dart';
+import 'package:vector_math/vector_math_64.dart';
 
 import '../components/component.dart';
+import '../components/component_point_pair.dart';
 import 'camera_component.dart';
 
 /// The root component for all game world elements.
@@ -19,5 +21,15 @@ class World extends Component {
   void renderFromCamera(Canvas canvas) {
     assert(CameraComponent.currentCamera != null);
     super.renderTree(canvas);
+  }
+
+  @override
+  Iterable<ComponentPointPair> componentsAtPoint(Vector2 point) {
+    return const Iterable.empty();
+  }
+
+  @internal
+  Iterable<ComponentPointPair> componentsAtPointFromCamera(Vector2 point) {
+    return super.componentsAtPoint(point);
   }
 }

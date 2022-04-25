@@ -4,6 +4,7 @@ import 'package:meta/meta.dart';
 import 'package:vector_math/vector_math_64.dart';
 
 import '../components/component.dart';
+import '../components/component_point_pair.dart';
 import '../components/position_component.dart';
 import '../effects/controllers/effect_controller.dart';
 import '../effects/move_effect.dart';
@@ -92,7 +93,7 @@ class CameraComponent extends Component {
       viewport.clip(canvas);
       try {
         currentCameras.add(this);
-        canvas.transform(viewfinder.transformMatrix.storage);
+        canvas.transform(viewfinder.transform.transformMatrix.storage);
         world.renderFromCamera(canvas);
         viewfinder.renderTree(canvas);
       } finally {
@@ -103,6 +104,24 @@ class CameraComponent extends Component {
     // Now render the HUD elements
     viewport.renderTree(canvas);
     canvas.restore();
+  }
+
+  @override
+  Iterable<ComponentPointPair> componentsAtPoint(Vector2 point) sync* {
+    final viewportPoint = point - viewport.position;
+    if (world.isMounted && currentCameras.length < maxCamerasDepth) {
+      if (viewport.containsPoint(viewportPoint)) {
+        try {
+          currentCameras.add(this);
+          final worldPoint = viewfinder.transform.globalToLocal(viewportPoint);
+          yield* world.componentsAtPointFromCamera(worldPoint);
+          yield* viewfinder.componentsAtPoint(worldPoint);
+        } finally {
+          currentCameras.removeLast();
+        }
+      }
+    }
+    yield* viewport.componentsAtPoint(viewportPoint);
   }
 
   /// A camera that currently performs rendering.

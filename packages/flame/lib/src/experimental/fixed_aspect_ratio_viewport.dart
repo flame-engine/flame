@@ -23,7 +23,12 @@ class FixedAspectRatioViewport extends Viewport {
   }
 
   @override
-  void clip(Canvas canvas) => canvas.clipRect(_clipRect);
+  void clip(Canvas canvas) => canvas.clipRect(_clipRect, doAntiAlias: false);
+
+  @override
+  bool containsLocalPoint(Vector2 point) {
+    return point.x.abs() <= size.x / 2 && point.y.abs() <= size.y / 2;
+  }
 
   @override
   void onViewportResize() {
