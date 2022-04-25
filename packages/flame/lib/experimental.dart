@@ -15,6 +15,7 @@ export 'src/experimental/circular_viewport.dart' show CircularViewport;
 export 'src/experimental/fixed_aspect_ratio_viewport.dart'
     show FixedAspectRatioViewport;
 export 'src/experimental/fixed_size_viewport.dart' show FixedSizeViewport;
+export 'src/experimental/follow_behavior.dart' show FollowBehavior;
 export 'src/experimental/max_viewport.dart' show MaxViewport;
 export 'src/experimental/viewfinder.dart' show Viewfinder;
 export 'src/experimental/viewport.dart' show Viewport;
