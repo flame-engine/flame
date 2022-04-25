@@ -158,5 +158,5 @@ Pamiętaj, że niektóre artykuły mogą być nieco nieaktualne, ale nadal mogą
 
 ## Uznanie
 
- - Zespół [Blue Fire](https://github.com/orgs/bluefireteam/people), który nieustannie pracuje nad utrzymaniem i ulepszaniem Flame i jego ekosystemu.
- - Wszyscy sympatyczni współpracownicy i ludzie, którzy pomagają w społeczności.
+ - Zespół [Blue Fire](https://github.com/orgs/bluefireteam/people), który nieustannie pracuje nad utrzymaniem i ulepszaniem Flame oraz jego ekosystemu.
+ - Wszyscy sympatyczni współtwórcy i ludzie, którzy pomagają w społeczności.
