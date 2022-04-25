@@ -131,8 +131,8 @@ class FlameGame extends Component with Game {
 
   /// Whether a point is within the boundaries of the visible part of the game.
   @override
-  bool containsPoint(Vector2 p) {
-    return p.x > 0 && p.y > 0 && p.x < size.x && p.y < size.y;
+  bool containsLocalPoint(Vector2 p) {
+    return p.x >= 0 && p.y >= 0 && p.x < size.x && p.y < size.y;
   }
 
   /// Returns the current time in seconds with microseconds precision.

@@ -501,6 +501,56 @@ void main() {
         },
       );
     });
+
+    group('componentsAtPoint', () {
+      testWithFlameGame('nested components', (game) async {
+        final componentA = PositionComponent()
+          ..size = Vector2(200, 150)
+          ..scale = Vector2.all(2)
+          ..position = Vector2(350, 50)
+          ..addToParent(game);
+        final componentB = CircleComponent(radius: 10)
+          ..position = Vector2(150, 75)
+          ..anchor = Anchor.center
+          ..addToParent(componentA);
+        await game.ready();
+
+        expect(
+          game.componentsAtPoint(Vector2.zero()).toList(),
+          [ComponentPointPair(game, Vector2.zero())],
+        );
+        expect(
+          game.componentsAtPoint(Vector2(400, 100)).toList(),
+          [
+            ComponentPointPair(componentA, Vector2(25, 25)),
+            ComponentPointPair(game, Vector2(400, 100)),
+          ],
+        );
+        expect(
+          game.componentsAtPoint(Vector2(650, 200)).toList(),
+          [
+            ComponentPointPair(componentB, Vector2(10, 10)),
+            ComponentPointPair(componentA, Vector2(150, 75)),
+            ComponentPointPair(game, Vector2(650, 200)),
+          ],
+        );
+        expect(
+          game.componentsAtPoint(Vector2(664, 214)).toList(),
+          [
+            ComponentPointPair(componentB, Vector2(17, 17)),
+            ComponentPointPair(componentA, Vector2(157, 82)),
+            ComponentPointPair(game, Vector2(664, 214)),
+          ],
+        );
+        expect(
+          game.componentsAtPoint(Vector2(664, 216)).toList(),
+          [
+            ComponentPointPair(componentA, Vector2(157, 83)),
+            ComponentPointPair(game, Vector2(664, 216)),
+          ],
+        );
+      });
+    });
   });
 }
 
