@@ -72,7 +72,7 @@ class SpriteAnimationData {
 
   /// Specifies the range of the sprite grid.
   ///
-  /// Make sure your sprites are placedleft-to-right and top-to-bottom
+  /// Make sure your sprites are placed left-to-right and top-to-bottom
   SpriteAnimationData.range({
     required int start,
     required int end,
