@@ -11,8 +11,8 @@ abstract class PositionProvider {
 /// This class allows constructing [PositionProvider]s on the fly, using the
 /// callbacks for the position getter and setter. This class doesn't require
 /// either the getter or the setter, if you do not intend to use those.
-class APositionProvider implements PositionProvider {
-  APositionProvider({
+class PositionProviderImpl implements PositionProvider {
+  PositionProviderImpl({
     Vector2 Function()? getValue,
     void Function(Vector2)? setValue,
   })  : _getter = getValue,

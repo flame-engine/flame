@@ -63,7 +63,7 @@ void main() {
       component.add(
         FollowBehavior(
           target: target,
-          owner: APositionProvider(
+          owner: PositionProviderImpl(
             getValue: () => followTarget,
             setValue: followTarget.setFrom,
           ),

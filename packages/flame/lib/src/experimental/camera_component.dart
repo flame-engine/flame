@@ -124,7 +124,7 @@ class CameraComponent extends Component {
   ///
   /// The [target] here can be any read-only [PositionProvider]. For example, a
   /// [PositionComponent] is the most common choice of target. Alternatively,
-  /// you can use [APositionProvider] to construct the target dynamically.
+  /// you can use [PositionProviderImpl] to construct the target dynamically.
   ///
   /// This method adds a [FollowBehavior] to the viewfinder. If there is another
   /// [FollowBehavior] currently applied to the viewfinder, it will be removed
@@ -169,6 +169,6 @@ class CameraComponent extends Component {
   /// Moves the camera towards the specified world [point].
   void moveTo(Vector2 point, {double speed = double.infinity}) {
     final p = point.clone();
-    follow(APositionProvider(getValue: () => p), maxSpeed: speed);
+    follow(PositionProviderImpl(getValue: () => p), maxSpeed: speed);
   }
 }
