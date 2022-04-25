@@ -5,6 +5,12 @@ import 'package:vector_math/vector_math_64.dart';
 
 import '../components/component.dart';
 import '../components/component_point_pair.dart';
+import '../components/position_component.dart';
+import '../effects/controllers/effect_controller.dart';
+import '../effects/move_effect.dart';
+import '../effects/move_to_effect.dart';
+import '../effects/provider_interfaces.dart';
+import 'follow_behavior.dart';
 import 'max_viewport.dart';
 import 'viewfinder.dart';
 import 'viewport.dart';
@@ -135,4 +141,60 @@ class CameraComponent extends Component {
   /// This variable helps prevent infinite recursion when a camera is set to
   /// look at the world that contains that camera.
   static int maxCamerasDepth = 4;
+
+  /// Makes the [viewfinder] follow the given [target].
+  ///
+  /// The [target] here can be any read-only [PositionProvider]. For example, a
+  /// [PositionComponent] is the most common choice of target. Alternatively,
+  /// you can use [PositionProviderImpl] to construct the target dynamically.
+  ///
+  /// This method adds a [FollowBehavior] to the viewfinder. If there is another
+  /// [FollowBehavior] currently applied to the viewfinder, it will be removed
+  /// first.
+  ///
+  /// Parameters [maxSpeed], [horizontalOnly] and [verticalOnly] have the same
+  /// meaning as in the [FollowBehavior.new] constructor.
+  ///
+  /// If [snap] is true, then the viewfinder's starting position will be set to
+  /// the target's current location. If [snap] is false, then the viewfinder
+  /// will move from its current position to the target's position at the given
+  /// speed.
+  void follow(
+    PositionProvider target, {
+    double maxSpeed = double.infinity,
+    bool horizontalOnly = false,
+    bool verticalOnly = false,
+    bool snap = false,
+  }) {
+    stop();
+    viewfinder.add(
+      FollowBehavior(
+        target: target,
+        owner: viewfinder,
+        maxSpeed: maxSpeed,
+        horizontalOnly: horizontalOnly,
+        verticalOnly: verticalOnly,
+      ),
+    );
+    if (snap) {
+      viewfinder.position = target.position;
+    }
+  }
+
+  /// Removes all movement effects or behaviors from the viewfinder.
+  void stop() {
+    viewfinder.children.forEach((child) {
+      if (child is FollowBehavior || child is MoveEffect) {
+        child.removeFromParent();
+      }
+    });
+  }
+
+  /// Moves the camera towards the specified world [point].
+  void moveTo(Vector2 point, {double speed = double.infinity}) {
+    stop();
+    viewfinder.add(
+      MoveToEffect(point, EffectController(speed: speed)),
+    );
+  }
 }
