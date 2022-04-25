@@ -132,7 +132,8 @@ class IsometricTileMapComponent extends PositionComponent {
   Vector2 getBlockCenterPosition(Block block) {
     final tile = effectiveTileSize;
     final result = getBlockRenderPosition(block) +
-        (Vector2(tile.x / 2, tile.y - effectiveTileHeight - tile.y / 4)..multiply(scale));
+        (Vector2(tile.x / 2, tile.y - effectiveTileHeight - tile.y / 4)
+          ..multiply(scale));
     return result;
   }
 
@@ -170,7 +171,9 @@ class IsometricTileMapComponent extends PositionComponent {
   Block getBlockRenderedAt(Vector2 p) {
     final tile = effectiveTileSize;
     return getBlock(
-      p + (Vector2(tile.x / 2, tile.y - effectiveTileHeight - tile.y / 4)..multiply(scale)),
+      p +
+          (Vector2(tile.x / 2, tile.y - effectiveTileHeight - tile.y / 4)
+            ..multiply(scale)),
     );
   }
 
