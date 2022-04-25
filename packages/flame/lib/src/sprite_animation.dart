@@ -231,6 +231,12 @@ class SpriteAnimation {
   /// to the first, or keeps returning the last when done.
   bool loop = true;
 
+  /// Registered method to be triggered when the animation starts.
+  void Function()? onStart;
+
+  /// Registered method to be triggered when the animation frame updates.
+  void Function(int currentIndex)? onFrame;
+
   /// Registered method to be triggered when the animation complete.
   void Function()? onComplete;
 
@@ -238,6 +244,9 @@ class SpriteAnimation {
 
   /// The current frame that should be displayed.
   SpriteAnimationFrame get currentFrame => frames[currentIndex];
+
+  /// Returns whether the animation is on the first frame.
+  bool get isFirstFrame => currentIndex == 0;
 
   /// Returns whether the animation is on the last frame.
   bool get isLastFrame => currentIndex == frames.length - 1;
@@ -282,6 +291,7 @@ class SpriteAnimation {
     elapsed = 0.0;
     currentIndex = 0;
     _done = false;
+    _started = false;
   }
 
   /// Sets this animation to be on the last frame.
@@ -308,6 +318,10 @@ class SpriteAnimation {
   bool _done = false;
   bool done() => _done;
 
+  /// Local flag to determine if the animation has started to prevent multiple
+  /// calls to [onStart].
+  bool _started = false;
+
   /// Updates this animation, ticking the lifeTime by an amount [dt]
   /// (in seconds).
   void update(double dt) {
@@ -316,11 +330,18 @@ class SpriteAnimation {
     if (_done) {
       return;
     }
+    if (!_started) {
+      onStart?.call();
+      onFrame?.call(currentIndex);
+      _started = true;
+    }
+
     while (clock >= currentFrame.stepTime) {
       if (isLastFrame) {
         if (loop) {
           clock -= currentFrame.stepTime;
           currentIndex = 0;
+          onFrame?.call(currentIndex);
         } else {
           _done = true;
           onComplete?.call();
@@ -330,6 +351,7 @@ class SpriteAnimation {
       } else {
         clock -= currentFrame.stepTime;
         currentIndex++;
+        onFrame?.call(currentIndex);
       }
     }
   }
