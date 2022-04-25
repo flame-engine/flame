@@ -5,7 +5,9 @@ import 'package:vector_math/vector_math_64.dart';
 
 import '../components/component.dart';
 import '../components/position_component.dart';
+import '../effects/controllers/effect_controller.dart';
 import '../effects/move_effect.dart';
+import '../effects/move_to_effect.dart';
 import '../effects/provider_interfaces.dart';
 import '../effects/rotate_effect.dart';
 import 'follow_behavior.dart';
@@ -164,9 +166,7 @@ class CameraComponent extends Component {
   /// Removes all movement effects or behaviors from the viewfinder.
   void stop() {
     viewfinder.children.forEach((child) {
-      if (child is FollowBehavior ||
-          child is MoveEffect ||
-          child is RotateEffect) {
+      if (child is FollowBehavior || child is MoveEffect) {
         child.removeFromParent();
       }
     });
@@ -174,7 +174,9 @@ class CameraComponent extends Component {
 
   /// Moves the camera towards the specified world [point].
   void moveTo(Vector2 point, {double speed = double.infinity}) {
-    final p = point.clone();
-    follow(PositionProviderImpl(getValue: () => p), maxSpeed: speed);
+    stop();
+    viewfinder.add(
+      MoveToEffect(point, EffectController(speed: speed)),
+    );
   }
 }
