@@ -149,5 +149,4 @@ void main() {
   });
 }
 
-class ResizableComponent extends PositionComponent implements SizeProvider {
-}
+class ResizableComponent extends PositionComponent implements SizeProvider {}

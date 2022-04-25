@@ -17,7 +17,8 @@ import 'camera_component.dart';
 /// There are several implementations of [Viewport], which differ by their
 /// shape, and also by their behavior in response to changes to the canvas size.
 /// Users may also create their own implementations.
-abstract class Viewport extends Component implements PositionProvider {
+abstract class Viewport extends Component
+    implements PositionProvider, SizeProvider {
   Viewport({Iterable<Component>? children}) : super(children: children);
 
   /// Position of the viewport's center in the parent's coordinate frame.
@@ -40,8 +41,10 @@ abstract class Viewport extends Component implements PositionProvider {
   ///
   /// Changing the size at runtime triggers the [handleResize] event. The size
   /// cannot be negative.
+  @override
   Vector2 get size => _size;
   final Vector2 _size = Vector2.zero();
+  @override
   set size(Vector2 value) {
     assert(
       value.x >= 0 && value.y >= 0,
