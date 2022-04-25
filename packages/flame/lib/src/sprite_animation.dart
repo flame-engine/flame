@@ -70,6 +70,37 @@ class SpriteAnimationData {
     });
   }
 
+  /// Specifies the range of the sprite grid.
+  ///
+  /// Make sure your sprites are placed left-to-right and top-to-bottom
+  SpriteAnimationData.range({
+    required int start,
+    required int end,
+    required int amount,
+    required List<double> stepTimes,
+    required Vector2 textureSize,
+    int? amountPerRow,
+    Vector2? texturePosition,
+    this.loop = true,
+  })  : assert(amountPerRow == null || amount >= amountPerRow),
+        assert(start <= end && start >= 0 && end <= amount),
+        assert(stepTimes.length == end - start) {
+    amountPerRow ??= amount;
+    texturePosition ??= Vector2.zero();
+    frames = List<SpriteAnimationFrameData>.generate(end - start, (index) {
+      final i = index + start;
+      final position = Vector2(
+        texturePosition!.x + (i % amountPerRow!) * textureSize.x,
+        texturePosition.y + (i ~/ amountPerRow) * textureSize.y,
+      );
+      return SpriteAnimationFrameData(
+        stepTime: stepTimes[i],
+        srcPosition: position,
+        srcSize: textureSize,
+      );
+    });
+  }
+
   /// Works just like [SpriteAnimationData.variable] but uses the same
   /// [stepTime] for all frames.
   factory SpriteAnimationData.sequenced({
