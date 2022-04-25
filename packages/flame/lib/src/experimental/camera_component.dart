@@ -9,7 +9,6 @@ import '../effects/controllers/effect_controller.dart';
 import '../effects/move_effect.dart';
 import '../effects/move_to_effect.dart';
 import '../effects/provider_interfaces.dart';
-import '../effects/rotate_effect.dart';
 import 'follow_behavior.dart';
 import 'max_viewport.dart';
 import 'viewfinder.dart';
