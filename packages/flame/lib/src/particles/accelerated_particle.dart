@@ -42,8 +42,10 @@ class AcceleratedParticle extends CurvedParticle with SingleChildParticle {
 
   @override
   void update(double dt) {
-    speed += acceleration * dt;
-    position += speed * dt - (acceleration * dt * dt) / 2;
+    speed.addScaled(acceleration, dt);
+    position
+      ..addScaled(speed, dt)
+      ..addScaled(acceleration, -dt * dt * 0.5);
     super.update(dt);
   }
 }
