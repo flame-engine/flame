@@ -209,6 +209,32 @@ void update(double dt) {
 ```
 
 
+### Querying components at a specific point on the screen
+
+The method `componentsAtPoint()` allows you to check which components have been rendered at a
+specific point on the screen. The returned value is an iterable which contains both the components
+and the coordinates of the query point in those components' local coordinates. The iterable
+retrieves the components in the front-to-back order, i.e. first the components in the front,
+followed by the components in the back.
+
+This method can only return components that implement the method `containsLocalPoint()`. The
+`PositionComponent` (which is the base class for many components in Flame) provides such an
+implementation. However, if you're defining a custom class that derives from `Component`, you'd have
+to implement the `containsLocalPoint()` method yourself.
+
+Here is an example of how `componentsAtPoint()` can be used:
+
+```dart
+void onDragUpdate(DragUpdateInfo info) {
+  game.componentsAtPoint(info.widget).forEach((p) {
+    if (p.component is DropTarget) {
+      p.component.highlight();
+    }
+  });
+}
+```
+
+
 ### PositionType
 If you want to create a HUD (Head-up display) or another component that isn't positioned in relation
 to the game coordinates, you can change the `PositionType` of the component.
@@ -388,7 +414,7 @@ use `animation.completed`.
 Example:
 
 ```dart
-await animation.completed; 
+await animation.completed;
 doSomething();
 
 // or alternatively

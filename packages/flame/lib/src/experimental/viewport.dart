@@ -66,6 +66,14 @@ abstract class Viewport extends Component implements PositionProvider {
   /// This API must be implemented by all viewports.
   void clip(Canvas canvas);
 
+  /// Tests whether the given point lies within the viewport.
+  ///
+  /// This method must be consistent with the action of [clip], in the sense
+  /// that [containsLocalPoint] must return true if and only if that point on
+  /// the canvas is not clipped by [clip].
+  @override
+  bool containsLocalPoint(Vector2 point);
+
   /// Override in order to perform a custom action upon resize.
   ///
   /// A typical use-case would be to adjust the viewport's clip mask to match

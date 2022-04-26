@@ -1,13 +1,16 @@
 import 'dart:math';
-import 'dart:ui' hide Canvas;
+import 'dart:ui';
 
 import 'package:collection/collection.dart';
 import 'package:meta/meta.dart';
 
-import '../../cache.dart';
-import '../../components.dart';
-import '../../extensions.dart';
-import '../../geometry.dart';
+import '../anchor.dart';
+import '../cache/value_cache.dart';
+import '../components/component.dart';
+import '../extensions/rect.dart';
+import '../extensions/vector2.dart';
+import 'line_segment.dart';
+import 'shape_component.dart';
 
 class PolygonComponent extends ShapeComponent {
   final List<Vector2> _vertices;
@@ -215,6 +218,23 @@ class PolygonComponent extends ShapeComponent {
           0;
       if (isOutside) {
         // Point is outside of convex polygon
+        return false;
+      }
+    }
+    return true;
+  }
+
+  @override
+  bool containsLocalPoint(Vector2 point) {
+    if (size.x == 0 || size.y == 0) {
+      return false;
+    }
+    for (var i = 0; i < _vertices.length; i++) {
+      final edge = getEdge(i, vertices: vertices);
+      final isOutside = (edge.to.x - edge.from.x) * (point.y - edge.from.y) -
+              (point.x - edge.from.x) * (edge.to.y - edge.from.y) >
+          0;
+      if (isOutside) {
         return false;
       }
     }
