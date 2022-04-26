@@ -161,12 +161,12 @@ scheduled for addition.
 #### Ensuring a component has a given parent
 
 When a component requires to be added to a specific parent type the 
-`HasParent` mixin can be used to enforce a strongly typed parent.
+`ParentIsA` mixin can be used to enforce a strongly typed parent.
 
 Example:
 
 ```dart
-class MyComponent extends Component with HasParent<MyParentComponent> {
+class MyComponent extends Component with ParentIsA<MyParentComponent> {
   @override
   Future<void> onLoad() async {
     // parent is of type MyParentComponent

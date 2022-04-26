@@ -7,10 +7,10 @@ class ParentComponent extends Component {}
 
 class DifferentComponent extends Component {}
 
-class TestComponent extends Component with HasParent<ParentComponent> {}
+class TestComponent extends Component with ParentIsA<ParentComponent> {}
 
 void main() {
-  group('HasParent', () {
+  group('ParentIsA', () {
     testWithFlameGame('successfully sets the parent link', (game) async {
       final parent = ParentComponent();
       final component = TestComponent();
