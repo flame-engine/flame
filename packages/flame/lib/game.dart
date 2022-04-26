@@ -12,7 +12,6 @@ export 'src/game/mixins/has_draggables.dart';
 export 'src/game/mixins/has_hoverables.dart';
 export 'src/game/mixins/has_tappables.dart';
 export 'src/game/mixins/loadable.dart';
-export 'src/game/mixins/parent_is_a.dart';
 export 'src/game/mixins/single_game_instance.dart';
 export 'src/game/projector.dart';
 export 'src/game/transform2d.dart';

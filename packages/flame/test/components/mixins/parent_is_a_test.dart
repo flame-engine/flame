@@ -1,5 +1,4 @@
 import 'package:flame/components.dart';
-import 'package:flame/game.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -21,13 +20,14 @@ void main() {
       expect(component.parent, isA<ParentComponent>());
     });
 
-    testWithFlameGame('throws assertion error when the wrong parent is used',
-        (game) async {
+    test('throws assertion error when the wrong parent is used', () {
       final parent = DifferentComponent();
       final component = TestComponent();
 
+      parent.add(component);
+
       expect(
-        () => parent.add(component),
+        component.onMount,
         failsAssert('Parent must be of type ParentComponent'),
       );
     });
