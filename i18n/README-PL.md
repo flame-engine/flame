@@ -56,8 +56,8 @@ Oto niektóre z kluczowych dostępnych funkcji:
  - System komponent/obiekt (FCS).
  - Efekty i cząsteczki.
  - Wykrywanie kolizji.
- - Obsługa gestów i wprowadzania danych
- - Obrazy, duszki (sprites) i arkusze duszka
+ - Obsługa gestów i wprowadzania danych.
+ - Obrazy, duszki (sprites) i arkusze duszka.
  - Ogólne narzędzia ułatwiające programowanie.
 
 Oprócz tych funkcji możesz wzmocnić Flame pakietami bridge. Dzięki tym bibliotekom będziesz mógł uzyskać dostęp do powiązań z innymi pakietami, w tym z niestandardowymi komponentami i pomocnikami Flame, aby integracja była bezproblemowa.
