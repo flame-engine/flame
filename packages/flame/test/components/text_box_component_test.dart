@@ -40,7 +40,7 @@ void main() {
 
     flameGame.test(
       'internal image is disposed when component is removed',
-      (game) async {
+      (game) {
         final c = TextBoxComponent(text: 'foo bar');
 
         await game.ensureAdd(c);
