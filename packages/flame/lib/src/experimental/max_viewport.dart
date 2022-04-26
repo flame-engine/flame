@@ -22,5 +22,8 @@ class MaxViewport extends Viewport {
   void clip(Canvas canvas) {}
 
   @override
+  bool containsLocalPoint(Vector2 point) => true;
+
+  @override
   void onViewportResize() {}
 }
