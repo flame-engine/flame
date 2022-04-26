@@ -175,8 +175,8 @@ class MyComponent extends Component with ParentIsA<MyParentComponent> {
 }
 ```
 
-If `MyComponent` is added to a component that is not `MyParentComponent` 
-an assertion error will be thrown stating such.
+If you try to add `MyComponent` to a parent that is not `MyParentComponent`, 
+an assertion error will be thrown.
 
 ### Querying child components
 
