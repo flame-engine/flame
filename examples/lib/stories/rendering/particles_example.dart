@@ -492,7 +492,7 @@ class ParticlesExample extends FlameGame with HasFPS {
     if (debugMode) {
       fpsTextPaint.render(
         canvas,
-        '${fps.toStringAsFixed(2)}fps',
+        '${fps().toStringAsFixed(2)}fps',
         Vector2(0, size.y - 24),
       );
     }
