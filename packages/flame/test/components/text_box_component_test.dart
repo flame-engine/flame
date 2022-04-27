@@ -38,7 +38,7 @@ void main() {
       );
     });
 
-    flameGame.test(
+    testWithFlameGame(
       'internal image is disposed when component is removed',
       (game) {
         final c = TextBoxComponent(text: 'foo bar');
@@ -50,13 +50,13 @@ void main() {
         game.render(canvas);
         game.remove(c);
         game.update(0);
-        expect(imageCache != null, isTrue);
+        expect(imageCache, isNotNull);
         expect(imageCache!.debugDisposed, isTrue);
         expect(c.cache, null);
       },
     );
 
-    flameGame.test(
+    testWithFlameGame(
       'internal image is redrawn when component is re-added',
       (game) async {
         final c = TextBoxComponent(text: 'foo bar');
@@ -65,9 +65,10 @@ void main() {
         game.remove(c);
         game.update(0);
         await game.ensureAdd(c);
-        await c.mounted;
+        expect(c.isMounted, true);
 
-        expect(c.cache != null, isTrue);
+        await null;
+        expect(c.cache, isNotNull);
         expect(c.cache!.debugDisposed, isFalse);
       },
     );
