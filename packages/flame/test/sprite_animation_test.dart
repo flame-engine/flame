@@ -188,7 +188,7 @@ void main() {
 
   group('SpriteAnimationData', () {
     test(
-      'Throw assertion error when amountPerRow is greater than amount',
+      'throws assertion error when amountPerRow is greater than amount',
       () {
         expect(
           () => SpriteAnimationData.variable(
