@@ -1,5 +1,4 @@
 import 'package:flutter/rendering.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart' hide WidgetBuilder;
 
 import 'game_loop.dart';
@@ -38,7 +37,6 @@ class GameRenderBox extends RenderBox with WidgetsBindingObserver {
       gameLoop.start();
     }
 
-    SchedulerBinding.instance!.addPostFrameCallback(game.onPostFrameCallback);
     _bindLifecycleListener();
   }
 

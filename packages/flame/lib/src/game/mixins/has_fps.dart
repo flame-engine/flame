@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
 import '../../../game.dart';
@@ -33,7 +34,13 @@ mixin HasFPS on Game {
   Duration? _previous;
 
   @override
-  void onPostFrameCallback(Duration duration) {
+  @mustCallSuper
+  void onAttach() {
+    super.onAttach();
+    SchedulerBinding.instance!.addPostFrameCallback(_onPostFrameCallback);
+  }
+
+  void _onPostFrameCallback(Duration duration) {
     if (_previous != null) {
       _timings.add(duration - _previous!);
       if (_timings.length > _maxFrames) {
@@ -44,10 +51,10 @@ mixin HasFPS on Game {
     _previous = duration;
 
     if (isAttached) {
-      SchedulerBinding.instance!.addPostFrameCallback(onPostFrameCallback);
+      SchedulerBinding.instance!.addPostFrameCallback(_onPostFrameCallback);
     }
   }
 
-  /// Returns the FPS based on the durations from [onPostFrameCallback].
+  /// Returns the FPS based on the durations from [_onPostFrameCallback].
   double get fps => _timings.isEmpty ? 0 : 1000 / _timings.last.inMilliseconds;
 }

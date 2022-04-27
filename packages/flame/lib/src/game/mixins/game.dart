@@ -96,12 +96,9 @@ mixin Game {
   /// Check [AppLifecycleState] for details about the events received.
   void lifecycleStateChange(AppLifecycleState state) {}
 
-  /// Use for calculating the FPS in `HasFPS`.
-  void onPostFrameCallback(Duration duration) {}
-
   /// Use for calculating the FPS in `FPSCounter`.
   @Deprecated(
-    'This will be removed in favor of `onPostFrameCallback` in v1.3.0',
+    'This will be removed in favor of `HasFPS` in v1.3.0',
   )
   void onTimingsCallback(List<FrameTiming> timings) {}
 
