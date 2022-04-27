@@ -101,7 +101,7 @@ mixin Game {
 
   /// Use for calculating the FPS in `FPSCounter`.
   @Deprecated(
-    'This will be removed in favor of `onPostFrameCallback` in v1.2.0',
+    'This will be removed in favor of `onPostFrameCallback` in v1.3.0',
   )
   void onTimingsCallback(List<FrameTiming> timings) {}
 
