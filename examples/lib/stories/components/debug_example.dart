@@ -43,7 +43,7 @@ class DebugExample extends FlameGame with HasFPS {
     super.render(canvas);
 
     if (debugMode) {
-      fpsTextPaint.render(canvas, fps().toString(), Vector2(0, 50));
+      fpsTextPaint.render(canvas, '${fps()}', Vector2(0, 50));
     }
   }
 }

@@ -96,7 +96,7 @@ mixin Game {
   /// Check [AppLifecycleState] for details about the events received.
   void lifecycleStateChange(AppLifecycleState state) {}
 
-  /// Use for calculating the FPS in `FPSCounter`.
+  /// Use for calculating the FPS in `HasFPS`.
   void onTimingsCallback(List<FrameTiming> timings) {}
 
   /// Method to perform late initialization of the [Game] class.
