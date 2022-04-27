@@ -6,6 +6,7 @@ import 'stories/camera_and_viewport/camera_and_viewport.dart';
 import 'stories/collision_detection/collision_detection.dart';
 import 'stories/components/components.dart';
 import 'stories/effects/effects.dart';
+import 'stories/experimental/experimental.dart';
 import 'stories/input/input.dart';
 import 'stories/parallax/parallax.dart';
 import 'stories/rendering/rendering.dart';
@@ -26,6 +27,7 @@ void main() async {
   addCollisionDetectionStories(dashbook);
   addComponentsStories(dashbook);
   addEffectsStories(dashbook);
+  addExperimentalStories(dashbook);
   addInputStories(dashbook);
   addParallaxStories(dashbook);
   addRenderingStories(dashbook);
