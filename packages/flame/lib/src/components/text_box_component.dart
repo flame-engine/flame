@@ -55,8 +55,10 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
   late int _totalLines;
 
   double _lifeTime = 0.0;
-  Image? _cache;
   int? _previousChar;
+
+  @visibleForTesting
+  Image? cache;
 
   TextBoxConfig get boxConfig => _boxConfig;
 
@@ -98,6 +100,14 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
   Future<void> onLoad() async {
     await super.onLoad();
     await redraw();
+  }
+
+  @override
+  @mustCallSuper
+  void onMount() {
+    if (cache == null) {
+      redraw();
+    }
   }
 
   @override
@@ -190,12 +200,12 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
 
   @override
   void render(Canvas c) {
-    if (_cache == null) {
+    if (cache == null) {
       return;
     }
     c.save();
     c.scale(1 / pixelRatio);
-    c.drawImage(_cache!, Offset.zero, _imagePaint);
+    c.drawImage(cache!, Offset.zero, _imagePaint);
     c.restore();
   }
 
@@ -234,7 +244,8 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
 
   Future<void> redraw() async {
     final newSize = _recomputeSize();
-    _cache = await _fullRenderAsImage(newSize);
+    cache?.dispose();
+    cache = await _fullRenderAsImage(newSize);
     size = newSize;
   }
 
@@ -245,5 +256,13 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
       redraw();
     }
     _previousChar = currentChar;
+  }
+
+  @override
+  @mustCallSuper
+  void onRemove() {
+    super.onRemove();
+    cache?.dispose();
+    cache = null;
   }
 }

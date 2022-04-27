@@ -3,12 +3,14 @@ import 'dart:ui';
 import 'package:meta/meta.dart';
 
 import '../../components.dart';
-
+import '../effects/provider_interfaces.dart';
 export '../sprite_animation.dart';
 
-/// A [PositionComponent] that can have mutiple [Sprite]s and render
+/// A [PositionComponent] that can have multiple [Sprite]s and render
 /// the one mapped with the [current] key.
-class SpriteGroupComponent<T> extends PositionComponent with HasPaint {
+class SpriteGroupComponent<T> extends PositionComponent
+    with HasPaint
+    implements SizeProvider {
   /// Key with the current playing animation
   T? current;
 
