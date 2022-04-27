@@ -16,7 +16,7 @@ void main() {
   runApp(GameWidget(game: ExampleGame()));
 }
 
-class ExampleGame extends OxygenGame with FPSCounter {
+class ExampleGame extends OxygenGame with HasFPS {
   @override
   Future<void> init() async {
     if (kDebugMode) {

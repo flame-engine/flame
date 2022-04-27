@@ -1,20 +1,19 @@
 # Debug features
 
-## FPS counter
+## Tracking FPS
 
-Flame provides the `FPSCounter` mixin for recording the fps; this mixin can be applied on any class
-that extends from `Game`. Once applied you can access the current fps by using the `fps` method,
+Flame provides the `HasFPS` mixin for recording the fps; this mixin can be applied on any class
+that extends from `Game`. Once applied you can access the current fps by using the `fps` property,
 like shown in the example below.
 
 ```dart
-class MyGame extends FlameGame with FPSCounter {
+class MyGame extends FlameGame with HasFPS {
   static final fpsTextConfig = TextConfig(color: BasicPalette.white.color);
 
   @override
   void render(Canvas canvas) {
     super.render(canvas);
-    final fpsCount = fps(120); // The average FPS for the last 120 microseconds.
-    fpsTextConfig.render(canvas, fpsCount.toString(), Vector2(0, 50));
+    fpsTextConfig.render(canvas, '$fps', Vector2(0, 50));
   }
 }
 ```

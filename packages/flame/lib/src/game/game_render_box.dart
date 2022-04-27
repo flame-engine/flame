@@ -1,4 +1,5 @@
 import 'package:flutter/rendering.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart' hide WidgetBuilder;
 
 import 'game_loop.dart';
@@ -10,6 +11,7 @@ class GameRenderBox extends RenderBox with WidgetsBindingObserver {
   GameLoop? gameLoop;
 
   GameRenderBox(this.buildContext, this.game) {
+    SchedulerBinding.instance!.addPostFrameCallback(game.onPostFrameCallback);
     WidgetsBinding.instance!.addTimingsCallback(game.onTimingsCallback);
   }
 

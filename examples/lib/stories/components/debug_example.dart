@@ -2,7 +2,7 @@ import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 
-class DebugExample extends FlameGame with FPSCounter {
+class DebugExample extends FlameGame with HasFPS {
   static const String description = '''
     In this example we show what you will see when setting `debugMode = true` on
     your game. It is a non-interactive example.
@@ -43,7 +43,7 @@ class DebugExample extends FlameGame with FPSCounter {
     super.render(canvas);
 
     if (debugMode) {
-      fpsTextPaint.render(canvas, fps(120).toString(), Vector2(0, 50));
+      fpsTextPaint.render(canvas, fps.toString(), Vector2(0, 50));
     }
   }
 }

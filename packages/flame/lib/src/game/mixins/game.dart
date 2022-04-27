@@ -1,6 +1,5 @@
-import 'dart:ui';
-
 import 'package:flutter/rendering.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
 import 'package:meta/meta.dart';
 
@@ -97,7 +96,14 @@ mixin Game {
   /// Check [AppLifecycleState] for details about the events received.
   void lifecycleStateChange(AppLifecycleState state) {}
 
-  /// Use for calculating the FPS.
+  /// Use for calculating the FPS in `HasFPS`.
+  void onPostFrameCallback(Duration duration) {}
+
+  @Deprecated(
+    'This will be removed in favor of `onPostFrameCallback` in v1.2.0',
+  )
+
+  /// Use for calculating the FPS in `FPSCounter`.
   void onTimingsCallback(List<FrameTiming> timings) {}
 
   /// Method to perform late initialization of the [Game] class.

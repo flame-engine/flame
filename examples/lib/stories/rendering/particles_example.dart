@@ -8,7 +8,7 @@ import 'package:flame/sprite.dart';
 import 'package:flame/timer.dart' as flame_timer;
 import 'package:flutter/material.dart' hide Image;
 
-class ParticlesExample extends FlameGame with FPSCounter {
+class ParticlesExample extends FlameGame with HasFPS {
   static const String description = '''
     In this example we show how to render a lot of different particles.
   ''';
@@ -492,7 +492,7 @@ class ParticlesExample extends FlameGame with FPSCounter {
     if (debugMode) {
       fpsTextPaint.render(
         canvas,
-        '${fps(120).toStringAsFixed(2)}fps',
+        '${fps.toStringAsFixed(2)}fps',
         Vector2(0, size.y - 24),
       );
     }
