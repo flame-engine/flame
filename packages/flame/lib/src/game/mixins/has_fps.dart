@@ -30,18 +30,18 @@ mixin FPSCounter on Game {
 mixin HasFPS on Game {
   List<Duration> _timings = [];
 
-  Duration? _prev;
+  Duration? _previous;
 
   @override
   void onPostFrameCallback(Duration duration) {
-    if (_prev != null) {
-      _timings.add(duration - _prev!);
+    if (_previous != null) {
+      _timings.add(duration - _previous!);
       if (_timings.length > _maxFrames) {
         _timings = _timings.sublist(_timings.length - _maxFrames - 1);
       }
     }
 
-    _prev = duration;
+    _previous = duration;
 
     if (isAttached) {
       SchedulerBinding.instance!.addPostFrameCallback(onPostFrameCallback);
