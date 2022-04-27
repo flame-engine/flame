@@ -73,6 +73,9 @@ class SpriteAnimationData {
   /// Specifies the range of the sprite grid.
   ///
   /// Make sure your sprites are placed left-to-right and top-to-bottom
+  ///
+  /// [start] is the start frame index.
+  /// [end] is the end frame index.
   SpriteAnimationData.range({
     required int start,
     required int end,
