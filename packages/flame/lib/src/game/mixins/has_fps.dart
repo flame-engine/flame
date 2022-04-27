@@ -1,9 +1,11 @@
-import 'package:flutter/material.dart';
+import 'dart:math';
+
+import 'package:collection/collection.dart';
 import 'package:flutter/scheduler.dart';
 
 import '../../../game.dart';
 
-const _maxFrames = 60;
+const _maxFrames = 60.0;
 const frameInterval =
     Duration(microseconds: Duration.microsecondsPerSecond ~/ _maxFrames);
 
@@ -19,42 +21,29 @@ mixin FPSCounter on Game {
 
   /// Returns the FPS based on the frame times from [onTimingsCallback].
   double fps([int average = 1]) {
-    return _previousTimings.length *
-        _maxFrames /
-        _previousTimings.map((t) {
-          return (t.totalSpan.inMicroseconds ~/ frameInterval.inMicroseconds) +
-              1;
-        }).fold(0, (a, b) => a + b);
+    return min(
+      Duration.microsecondsPerSecond /
+          (_previousTimings.map((t) => t.totalSpan.inMicroseconds).sum /
+              _previousTimings.length),
+      _maxFrames,
+    );
   }
 }
 
 mixin HasFPS on Game {
-  List<Duration> _timings = [];
-
-  Duration? _previous;
+  List<FrameTiming> _previousTimings = [];
 
   @override
-  @mustCallSuper
-  void onAttach() {
-    super.onAttach();
-    SchedulerBinding.instance!.addPostFrameCallback(_onPostFrameCallback);
+  void onTimingsCallback(List<FrameTiming> timings) =>
+      _previousTimings = timings;
+
+  /// Returns the FPS based on the frame times from [onTimingsCallback].
+  double get fps {
+    return min(
+      Duration.microsecondsPerSecond /
+          (_previousTimings.map((t) => t.totalSpan.inMicroseconds).sum /
+              _previousTimings.length),
+      _maxFrames,
+    );
   }
-
-  void _onPostFrameCallback(Duration duration) {
-    if (_previous != null) {
-      _timings.add(duration - _previous!);
-      if (_timings.length > _maxFrames) {
-        _timings = _timings.sublist(_timings.length - _maxFrames - 1);
-      }
-    }
-
-    _previous = duration;
-
-    if (isAttached) {
-      SchedulerBinding.instance!.addPostFrameCallback(_onPostFrameCallback);
-    }
-  }
-
-  /// Returns the FPS based on the durations from [_onPostFrameCallback].
-  double get fps => _timings.isEmpty ? 0 : 1000 / _timings.last.inMilliseconds;
 }
