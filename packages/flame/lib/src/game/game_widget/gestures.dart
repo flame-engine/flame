@@ -184,7 +184,6 @@ Widget applyBasicGesturesDetectors(Game game, Widget child) {
 
 Widget applyAdvancedGesturesDetectors(Game game, Widget child) {
   final gestures = <Type, GestureRecognizerFactory>{};
-  var lastGeneratedDragId = 0;
 
   void addAndConfigureRecognizer<T extends GestureRecognizer>(
     T Function() ts,
@@ -207,6 +206,7 @@ Widget applyAdvancedGesturesDetectors(Game game, Widget child) {
     addAndConfigureRecognizer(
       () => ImmediateMultiDragGestureRecognizer(),
       (ImmediateMultiDragGestureRecognizer instance) {
+        var lastGeneratedDragId = 0;
         instance.onStart = (Offset o) {
           final pointerId = lastGeneratedDragId++;
 
