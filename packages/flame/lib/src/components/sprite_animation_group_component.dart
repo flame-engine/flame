@@ -3,10 +3,13 @@ import 'dart:ui';
 import 'package:meta/meta.dart';
 
 import '../../components.dart';
+import '../effects/provider_interfaces.dart';
 
 export '../sprite_animation.dart';
 
-class SpriteAnimationGroupComponent<T> extends PositionComponent with HasPaint {
+class SpriteAnimationGroupComponent<T> extends PositionComponent
+    with HasPaint
+    implements SizeProvider {
   /// Key with the current playing animation
   T? current;
 

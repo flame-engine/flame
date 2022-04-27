@@ -3,10 +3,13 @@ import 'dart:ui';
 import 'package:meta/meta.dart';
 
 import '../../components.dart';
+import '../effects/provider_interfaces.dart';
 
 export '../sprite_animation.dart';
 
-class SpriteAnimationComponent extends PositionComponent with HasPaint {
+class SpriteAnimationComponent extends PositionComponent
+    with HasPaint
+    implements SizeProvider {
   /// The animation used by the component.
   SpriteAnimation? animation;
 
