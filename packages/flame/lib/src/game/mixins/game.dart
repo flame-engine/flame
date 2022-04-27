@@ -99,11 +99,10 @@ mixin Game {
   /// Use for calculating the FPS in `HasFPS`.
   void onPostFrameCallback(Duration duration) {}
 
+  /// Use for calculating the FPS in `FPSCounter`.
   @Deprecated(
     'This will be removed in favor of `onPostFrameCallback` in v1.2.0',
   )
-
-  /// Use for calculating the FPS in `FPSCounter`.
   void onTimingsCallback(List<FrameTiming> timings) {}
 
   /// Method to perform late initialization of the [Game] class.

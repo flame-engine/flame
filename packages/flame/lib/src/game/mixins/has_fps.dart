@@ -43,8 +43,9 @@ mixin HasFPS on Game {
 
     _prev = duration;
 
-    // TODO(wolfen): detect if we are still mounted
-    SchedulerBinding.instance!.addPostFrameCallback(onPostFrameCallback);
+    if (isAttached) {
+      SchedulerBinding.instance!.addPostFrameCallback(onPostFrameCallback);
+    }
   }
 
   /// Returns the FPS based on the durations from [onPostFrameCallback].

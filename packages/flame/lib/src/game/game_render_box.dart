@@ -11,7 +11,6 @@ class GameRenderBox extends RenderBox with WidgetsBindingObserver {
   GameLoop? gameLoop;
 
   GameRenderBox(this.buildContext, this.game) {
-    SchedulerBinding.instance!.addPostFrameCallback(game.onPostFrameCallback);
     WidgetsBinding.instance!.addTimingsCallback(game.onTimingsCallback);
   }
 
@@ -38,6 +37,7 @@ class GameRenderBox extends RenderBox with WidgetsBindingObserver {
       gameLoop.start();
     }
 
+    SchedulerBinding.instance!.addPostFrameCallback(game.onPostFrameCallback);
     _bindLifecycleListener();
   }
 
