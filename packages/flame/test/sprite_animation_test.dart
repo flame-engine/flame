@@ -202,7 +202,7 @@ void main() {
       },
     );
 
-    test('new a SpriteAnimationData using range constructor', () {
+    test('creates a new SpriteAnimationData using the range constructor', () {
       final animationData = SpriteAnimationData.range(
         start: 6,
         end: 11,
