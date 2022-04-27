@@ -1,6 +1,6 @@
 import 'package:flutter/gestures.dart';
 
-import '../game/mixins/has_tappables.dart';
+import 'flame_game_mixins/has_tappables.dart';
 import '../gestures/detectors.dart';
 
 /// Interface that must be implemented by a game in order for it to be eligible

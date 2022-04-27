@@ -2,9 +2,9 @@ import 'package:flutter/gestures.dart';
 import 'package:meta/meta.dart';
 
 import '../../components/mixins/tappable.dart';
-import '../../events/multi_tap_listener.dart';
 import '../../game/flame_game.dart';
 import '../../gestures/events.dart';
+import '../multi_tap_listener.dart';
 
 mixin HasTappables on FlameGame implements MultiTapListener {
   @mustCallSuper

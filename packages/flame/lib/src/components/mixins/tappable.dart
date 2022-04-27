@@ -1,7 +1,7 @@
 import 'package:meta/meta.dart';
 
 import '../../../components.dart';
-import '../../game/mixins/has_tappables.dart';
+import '../../events/flame_game_mixins/has_tappables.dart';
 import '../../gestures/events.dart';
 
 mixin Tappable on Component {
