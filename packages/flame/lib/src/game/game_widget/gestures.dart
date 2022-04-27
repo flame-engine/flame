@@ -8,7 +8,6 @@ import '../../gestures/events.dart';
 import '../mixins/game.dart';
 import '../mixins/has_draggables.dart';
 import '../mixins/has_hoverables.dart';
-import '../../events/flame_game_mixins/has_tappables.dart';
 
 bool hasBasicGestureDetectors(Game game) {
   return game is TapDetector ||
@@ -23,9 +22,8 @@ bool hasBasicGestureDetectors(Game game) {
 }
 
 bool hasAdvancedGestureDetectors(Game game) {
-  return game is MultiTouchTapDetector ||
+  return game is MultiTapListener ||
       game is MultiTouchDragDetector ||
-      game is HasTappables ||
       game is HasDraggables;
 }
 
