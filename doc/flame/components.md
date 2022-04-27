@@ -158,7 +158,7 @@ available eventually: after they are loaded and mounted. We can only assure
 that they will appear in the children list in the same order as they were
 scheduled for addition.
 
-#### Ensuring a component has a given parent
+### Ensuring a component has a given parent
 
 When a component requires to be added to a specific parent type the 
 `ParentIsA` mixin can be used to enforce a strongly typed parent.
