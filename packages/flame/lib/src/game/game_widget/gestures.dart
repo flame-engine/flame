@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
 
 import '../../../extensions.dart';
+import '../../events/multi_tap_listener.dart';
 import '../../gestures/detectors.dart';
 import '../../gestures/events.dart';
 import '../mixins/game.dart';
@@ -192,27 +193,15 @@ Widget applyAdvancedGesturesDetectors(Game game, Widget child) {
     gestures[T] = GestureRecognizerFactoryWithHandlers<T>(factory, handlers);
   }
 
-  if (game is MultiTouchTapDetector) {
+  if (game is MultiTapListener) {
     addRecognizer(
       () => MultiTapGestureRecognizer(),
       (MultiTapGestureRecognizer instance) {
-        instance.onTapDown =
-            (i, d) => game.onTapDown(i, TapDownInfo.fromDetails(game, d));
-        instance.onTapUp =
-            (i, d) => game.onTapUp(i, TapUpInfo.fromDetails(game, d));
-        instance.onTapCancel = game.onTapCancel;
-        instance.onTap = game.onTap;
-      },
-    );
-  } else if (game is HasTappables) {
-    addRecognizer(
-      () => MultiTapGestureRecognizer(),
-      (MultiTapGestureRecognizer instance) {
-        instance.onTapDown =
-            (i, d) => game.onTapDown(i, TapDownInfo.fromDetails(game, d));
-        instance.onTapUp =
-            (i, d) => game.onTapUp(i, TapUpInfo.fromDetails(game, d));
-        instance.onTapCancel = (i) => game.onTapCancel(i);
+        final g = game as MultiTapListener;
+        instance.onTap = g.handleTap;
+        instance.onTapDown = g.handleTapDown;
+        instance.onTapUp = g.handleTapUp;
+        instance.onTapCancel = g.handleTapCancel;
       },
     );
   }

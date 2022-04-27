@@ -1,12 +1,31 @@
+import 'package:flutter/gestures.dart';
+
+import '../events/multi_tap_listener.dart';
 import '../game/mixins/game.dart';
 import 'events.dart';
 
-mixin MultiTouchTapDetector on Game {
+mixin MultiTouchTapDetector on Game implements MultiTapListener {
   void onTap(int pointerId) {}
   void onTapCancel(int pointerId) {}
   void onTapDown(int pointerId, TapDownInfo info) {}
   void onTapUp(int pointerId, TapUpInfo info) {}
   void onLongTapDown(int pointerId, TapDownInfo info) {}
+
+  @override
+  void handleTap(int pointerId) => onTap(pointerId);
+
+  @override
+  void handleTapCancel(int pointerId) => onTapCancel(pointerId);
+
+  @override
+  void handleTapDown(int pointerId, TapDownDetails details) {
+    onTapDown(pointerId, TapDownInfo.fromDetails(this, details));
+  }
+
+  @override
+  void handleTapUp(int pointerId, TapUpDetails details) {
+    onTapUp(pointerId, TapUpInfo.fromDetails(this, details));
+  }
 }
 
 mixin MultiTouchDragDetector on Game {

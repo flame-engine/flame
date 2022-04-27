@@ -1,10 +1,12 @@
+import 'package:flutter/gestures.dart';
 import 'package:meta/meta.dart';
 
-import '../../../components.dart';
-import '../../../game.dart';
+import '../../components/mixins/tappable.dart';
+import '../../events/multi_tap_listener.dart';
+import '../../game/flame_game.dart';
 import '../../gestures/events.dart';
 
-mixin HasTappables on FlameGame {
+mixin HasTappables on FlameGame implements MultiTapListener {
   @mustCallSuper
   void onTapCancel(int pointerId) {
     propagateToChildren(
@@ -24,5 +26,21 @@ mixin HasTappables on FlameGame {
     propagateToChildren(
       (Tappable child) => child.handleTapUp(pointerId, info),
     );
+  }
+
+  @override
+  void handleTap(int pointerId) {}
+
+  @override
+  void handleTapCancel(int pointerId) => onTapCancel(pointerId);
+
+  @override
+  void handleTapDown(int pointerId, TapDownDetails details) {
+    onTapDown(pointerId, TapDownInfo.fromDetails(this, details));
+  }
+
+  @override
+  void handleTapUp(int pointerId, TapUpDetails details) {
+    onTapUp(pointerId, TapUpInfo.fromDetails(this, details));
   }
 }
