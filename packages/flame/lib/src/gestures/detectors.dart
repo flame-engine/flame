@@ -12,6 +12,9 @@ mixin MultiTouchTapDetector on Game implements MultiTapListener {
   void onLongTapDown(int pointerId, TapDownInfo info) {}
 
   @override
+  double get longTapDelay => 0.300;
+
+  @override
   void handleTap(int pointerId) => onTap(pointerId);
 
   @override
@@ -25,6 +28,11 @@ mixin MultiTouchTapDetector on Game implements MultiTapListener {
   @override
   void handleTapUp(int pointerId, TapUpDetails details) {
     onTapUp(pointerId, TapUpInfo.fromDetails(this, details));
+  }
+
+  @override
+  void handleLongTapDown(int pointerId, TapDownDetails details) {
+    onLongTapDown(pointerId, TapDownInfo.fromDetails(this, details));
   }
 }
 

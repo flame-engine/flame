@@ -28,6 +28,16 @@ mixin HasTappables on FlameGame implements MultiTapListener {
     );
   }
 
+  @mustCallSuper
+  void onLongTapDown(int pointerId, TapDownInfo info) {
+    propagateToChildren(
+      (Tappable child) => child.handleLongTapDown(pointerId, info),
+    );
+  }
+
+  @override
+  double get longTapDelay => 0.300;
+
   @override
   void handleTap(int pointerId) {}
 
@@ -42,5 +52,10 @@ mixin HasTappables on FlameGame implements MultiTapListener {
   @override
   void handleTapUp(int pointerId, TapUpDetails details) {
     onTapUp(pointerId, TapUpInfo.fromDetails(this, details));
+  }
+
+  @override
+  void handleLongTapDown(int pointerId, TapDownDetails details) {
+    onLongTapDown(pointerId, TapDownInfo.fromDetails(this, details));
   }
 }

@@ -5,17 +5,15 @@ import '../../game/mixins/has_tappables.dart';
 import '../../gestures/events.dart';
 
 mixin Tappable on Component {
-  bool onTapCancel() {
-    return true;
-  }
+  bool onTap() => true;
 
-  bool onTapDown(TapDownInfo info) {
-    return true;
-  }
+  bool onTapCancel() => true;
 
-  bool onTapUp(TapUpInfo info) {
-    return true;
-  }
+  bool onTapDown(TapDownInfo info) => true;
+
+  bool onTapUp(TapUpInfo info) => true;
+
+  bool onLongTapDown(TapDownInfo info) => true;
 
   int? _currentPointerId;
 
@@ -41,6 +39,14 @@ mixin Tappable on Component {
     if (_checkPointerId(pointerId)) {
       _currentPointerId = null;
       return onTapCancel();
+    }
+    return true;
+  }
+
+  bool handleLongTapDown(int pointerId, TapDownInfo info) {
+    if (containsPoint(eventPosition(info))) {
+      _currentPointerId = pointerId;
+      return onLongTapDown(info);
     }
     return true;
   }
