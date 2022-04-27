@@ -13,7 +13,7 @@ class MyGame extends FlameGame with HasFPS {
   @override
   void render(Canvas canvas) {
     super.render(canvas);
-    fpsTextConfig.render(canvas, '$fps', Vector2(0, 50));
+    fpsTextConfig.render(canvas, '${fps()}', Vector2(0, 50));
   }
 }
 ```

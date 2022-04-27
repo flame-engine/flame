@@ -22,7 +22,9 @@ mixin HasFPS on Game {
       _previousTimings = timings;
 
   /// Returns the FPS based on the frame times from [onTimingsCallback].
-  double fps([int average = 1]) {
+  double fps([
+    @Deprecated('This will be removed in v1.3.0') int average = 1,
+  ]) {
     return min(
       Duration.microsecondsPerSecond /
           (_previousTimings.map((t) => t.totalSpan.inMicroseconds).sum /
