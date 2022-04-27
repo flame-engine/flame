@@ -74,7 +74,7 @@ class SpriteAnimationData {
   ///
   /// Make sure your sprites are placed left-to-right and top-to-bottom
   ///
-  /// [start] start frame index
+  /// [start] is the start frame index.
   /// [end] end frame index
   SpriteAnimationData.range({
     required int start,
