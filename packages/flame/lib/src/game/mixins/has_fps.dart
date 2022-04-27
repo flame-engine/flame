@@ -7,7 +7,7 @@ const frameInterval =
     Duration(microseconds: Duration.microsecondsPerSecond ~/ _maxFrames);
 
 @Deprecated(
-  'This will be removed in favor of `HasFPS` in v1.2.0',
+  'This will be removed in favor of `HasFPS` in v1.3.0',
 )
 mixin FPSCounter on Game {
   List<FrameTiming> _previousTimings = [];
