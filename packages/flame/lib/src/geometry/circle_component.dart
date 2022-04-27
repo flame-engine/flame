@@ -86,6 +86,14 @@ class CircleComponent extends ShapeComponent implements SizeProvider {
         scaledRadius * scaledRadius;
   }
 
+  @override
+  bool containsLocalPoint(Vector2 point) {
+    final radius = size.x / 2;
+    final dx = point.x - radius;
+    final dy = point.y - radius;
+    return dx * dx + dy * dy <= radius * radius;
+  }
+
   /// Returns the locus of points in which the provided line segment intersect
   /// the circle.
   ///
@@ -95,7 +103,7 @@ class CircleComponent extends ShapeComponent implements SizeProvider {
     LineSegment line, {
     double epsilon = double.minPositive,
   }) {
-    double sq(double x) => pow(x, 2).toDouble();
+    double sq(double x) => x * x;
 
     final cx = absoluteCenter.x;
     final cy = absoluteCenter.y;

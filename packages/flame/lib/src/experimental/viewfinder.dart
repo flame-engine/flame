@@ -21,7 +21,7 @@ class Viewfinder extends Component
   final Transform2D _transform = Transform2D();
 
   @internal
-  Matrix4 get transformMatrix => _transform.transformMatrix;
+  Transform2D get transform => _transform;
 
   /// The game coordinates of a point that is to be positioned at the center
   /// of the viewport.
