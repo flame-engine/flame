@@ -1,8 +1,8 @@
 import 'package:meta/meta.dart';
 
 import '../../../components.dart';
-import '../../events/flame_game_mixins/has_tappables.dart';
 import '../../gestures/events.dart';
+import '../flame_game_mixins/has_tappables.dart';
 
 mixin Tappable on Component {
   bool onTap() => true;
