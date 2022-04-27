@@ -1,7 +1,6 @@
-import 'dart:ui' as ui;
+import 'dart:ui';
 
-import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart' hide Image;
 
 import '../../assets.dart';
 import '../../flame.dart';
@@ -13,7 +12,7 @@ export '../nine_tile_box.dart';
 export '../sprite.dart';
 
 class _Painter extends CustomPainter {
-  final ui.Image image;
+  final Image image;
   final double tileSize;
   final double destTileSize;
   late final non_widget.NineTileBox _nineTileBox;
@@ -42,7 +41,7 @@ typedef NineTileBox = NineTileBoxWidget;
 
 /// A [StatelessWidget] that renders NineTileBox
 class NineTileBoxWidget extends StatelessWidget {
-  final Future<ui.Image> Function() _imageFuture;
+  final Future<Image> Function() _imageFuture;
 
   /// The size of the tile on the image
   final double tileSize;
@@ -61,7 +60,7 @@ class NineTileBoxWidget extends StatelessWidget {
   final WidgetBuilder? loadingBuilder;
 
   NineTileBoxWidget({
-    required ui.Image image,
+    required Image image,
     required this.tileSize,
     required this.destTileSize,
     this.width,
@@ -89,7 +88,7 @@ class NineTileBoxWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BaseFutureBuilder<ui.Image>(
+    return BaseFutureBuilder<Image>(
       futureBuilder: _imageFuture,
       builder: (_, image) {
         return _NineTileBox(
@@ -108,7 +107,7 @@ class NineTileBoxWidget extends StatelessWidget {
 }
 
 class _NineTileBox extends StatelessWidget {
-  final ui.Image image;
+  final Image image;
   final double tileSize;
   final double destTileSize;
   final double? width;
