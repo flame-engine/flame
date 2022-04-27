@@ -45,3 +45,9 @@ abstract class AnchorProvider {
   Anchor get anchor;
   set anchor(Anchor value);
 }
+
+/// Interface for a component that can be affected by size effects.
+abstract class SizeProvider {
+  Vector2 get size;
+  set size(Vector2 value);
+}
