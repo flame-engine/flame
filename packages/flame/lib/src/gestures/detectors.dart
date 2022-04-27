@@ -1,6 +1,6 @@
 import 'package:flutter/gestures.dart';
 
-import '../events/multi_tap_listener.dart';
+import '../events/interfaces/multi_tap_listener.dart';
 import '../game/mixins/game.dart';
 import 'events.dart';
 

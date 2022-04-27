@@ -2,7 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
 
 import '../../../extensions.dart';
-import '../../events/multi_tap_listener.dart';
+import '../../events/interfaces/multi_tap_listener.dart';
 import '../../gestures/detectors.dart';
 import '../../gestures/events.dart';
 import '../mixins/game.dart';

@@ -2,7 +2,7 @@ import 'package:flutter/gestures.dart';
 
 import '../../game/mixins/game.dart';
 import '../../gestures/events.dart';
-import '../multi_tap_listener.dart';
+import '../interfaces/multi_tap_listener.dart';
 
 mixin MultiTouchTapDetector on Game implements MultiTapListener {
   void onTap(int pointerId) {}
