@@ -1,7 +1,7 @@
 import 'package:flutter/gestures.dart';
 
 import '../../game/mixins/has_tappables.dart';
-import '../game_mixins/multi_touch_tap_detector.dart';
+import '../../game/mixins/multi_touch_tap_detector.dart';
 
 /// Interface that must be implemented by a game in order for it to be eligible
 /// to receive events from a [MultiTapGestureRecognizer].

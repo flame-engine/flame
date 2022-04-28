@@ -1,9 +1,9 @@
 import 'package:flutter/gestures.dart';
 
-import '../../game/mixins/game.dart';
+import 'game.dart';
 import '../../gestures/events.dart';
-import '../../game/mixins/has_tappables.dart';
-import '../interfaces/multi_tap_listener.dart';
+import 'has_tappables.dart';
+import '../../events/interfaces/multi_tap_listener.dart';
 
 /// Mixin that can be added to a [Game] allowing it to receive tap events.
 ///
