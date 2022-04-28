@@ -3,7 +3,7 @@ import 'package:meta/meta.dart';
 
 import '../../game/flame_game.dart';
 import '../../gestures/events.dart';
-import '../component_mixins/tappable.dart';
+import '../../components/mixins/tappable.dart';
 import '../game_mixins/multi_touch_tap_detector.dart';
 import '../interfaces/multi_tap_listener.dart';
 
