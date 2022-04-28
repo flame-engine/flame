@@ -3,19 +3,51 @@ import 'dart:math';
 import 'package:flame/input.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 
-import 'balls.dart';
-import 'boundaries.dart';
+import 'utils/balls.dart';
+import 'utils/boundaries.dart';
+
+class RevoluteJointExample extends Forge2DGame with TapDetector {
+  static const String description = '''
+    This example showcases a revolute joint, which is the spinning balls in the
+    center.
+    
+    If you tap the screen some colourful balls are added and will
+    interact with the bodies tied to the revolute joint once they have fallen
+    down the funnel.
+  ''';
+
+  @override
+  Future<void> onLoad() async {
+    final boundaries = createBoundaries(this);
+    boundaries.forEach(add);
+    final center = screenToWorld(camera.viewport.effectiveSize / 2);
+    add(CircleShuffler(center));
+    add(CornerRamp(center, isMirrored: true));
+    add(CornerRamp(center));
+  }
+
+  @override
+  void onTapDown(TapDownInfo details) {
+    super.onTapDown(details);
+    final tapPosition = details.eventPosition.game;
+    final random = Random();
+    List.generate(15, (i) {
+      final randomVector = (Vector2.random() - Vector2.all(-0.5)).normalized();
+      add(Ball(tapPosition + randomVector, radius: random.nextDouble()));
+    });
+  }
+}
 
 class CircleShuffler extends BodyComponent {
-  final Vector2 _center;
-
   CircleShuffler(this._center);
+
+  final Vector2 _center;
 
   @override
   Body createBody() {
     final bodyDef = BodyDef(
       type: BodyType.dynamic,
-      position: _center + Vector2(0.0, -25.0),
+      position: _center + Vector2(0.0, 25.0),
     );
     const numPieces = 5;
     const radius = 6.0;
@@ -53,10 +85,10 @@ class CircleShuffler extends BodyComponent {
 }
 
 class CornerRamp extends BodyComponent {
+  CornerRamp(this._center, {this.isMirrored = false});
+
   final bool isMirrored;
   final Vector2 _center;
-
-  CornerRamp(this._center, {this.isMirrored = false});
 
   @override
   Body createBody() {
@@ -76,28 +108,5 @@ class CornerRamp extends BodyComponent {
       ..type = BodyType.static;
 
     return world.createBody(bodyDef)..createFixture(fixtureDef);
-  }
-}
-
-class CircleStressSample extends Forge2DGame with TapDetector {
-  @override
-  Future<void> onLoad() async {
-    final boundaries = createBoundaries(this);
-    boundaries.forEach(add);
-    final center = screenToWorld(camera.viewport.effectiveSize / 2);
-    add(CircleShuffler(center));
-    add(CornerRamp(center, isMirrored: true));
-    add(CornerRamp(center));
-  }
-
-  @override
-  void onTapDown(TapDownInfo details) {
-    super.onTapDown(details);
-    final tapPosition = details.eventPosition.game;
-    final random = Random();
-    List.generate(15, (i) {
-      final randomVector = (Vector2.random() - Vector2.all(-0.5)).normalized();
-      add(Ball(tapPosition + randomVector, radius: random.nextDouble()));
-    });
   }
 }
