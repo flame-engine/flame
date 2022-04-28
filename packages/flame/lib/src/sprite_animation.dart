@@ -73,6 +73,9 @@ class SpriteAnimationData {
   /// Specifies the range of the sprite grid.
   ///
   /// Make sure your sprites are placed left-to-right and top-to-bottom
+  ///
+  /// [start] is the start frame index.
+  /// [end] is the end frame index.
   SpriteAnimationData.range({
     required int start,
     required int end,
@@ -84,17 +87,17 @@ class SpriteAnimationData {
     this.loop = true,
   })  : assert(amountPerRow == null || amount >= amountPerRow),
         assert(start <= end && start >= 0 && end <= amount),
-        assert(stepTimes.length == end - start) {
+        assert(stepTimes.length >= end - start + 1) {
     amountPerRow ??= amount;
     texturePosition ??= Vector2.zero();
-    frames = List<SpriteAnimationFrameData>.generate(end - start, (index) {
+    frames = List<SpriteAnimationFrameData>.generate(end - start + 1, (index) {
       final i = index + start;
       final position = Vector2(
         texturePosition!.x + (i % amountPerRow!) * textureSize.x,
         texturePosition.y + (i ~/ amountPerRow) * textureSize.y,
       );
       return SpriteAnimationFrameData(
-        stepTime: stepTimes[i],
+        stepTime: stepTimes[index],
         srcPosition: position,
         srcSize: textureSize,
       );
