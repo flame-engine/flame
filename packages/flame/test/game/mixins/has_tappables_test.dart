@@ -8,6 +8,7 @@ import 'package:test/test.dart';
 
 class _GameWithTappables extends FlameGame with HasTappables {
   int handledOnTapDown = 0;
+  int handledOnLongTapDown = 0;
   int handledOnTapUp = 0;
   int handledOnTapCancel = 0;
 
@@ -16,6 +17,14 @@ class _GameWithTappables extends FlameGame with HasTappables {
     super.onTapDown(pointerId, info);
     if (info.handled) {
       handledOnTapDown++;
+    }
+  }
+
+  @override
+  void onLongTapDown(int pointerId, TapDownInfo info) {
+    super.onLongTapDown(pointerId, info);
+    if (info.handled) {
+      handledOnLongTapDown++;
     }
   }
 
@@ -44,6 +53,12 @@ class _TappableComponent extends PositionComponent with Tappable {
 
   @override
   bool onTapDown(TapDownInfo info) {
+    info.handled = true;
+    return true;
+  }
+
+  @override
+  bool onLongTapDown(TapDownInfo info) {
     info.handled = true;
     return true;
   }
@@ -88,6 +103,22 @@ void main() {
         await tester.tapAt(const Offset(10, 10));
         await tester.pump(const Duration(seconds: 1));
         expect(game.handledOnTapDown, 1);
+        expect(game.handledOnLongTapDown, 0);
+        expect(game.handledOnTapUp, 1);
+        expect(game.handledOnTapCancel, 0);
+      },
+    );
+
+    withTappables.testGameWidget(
+      'long tap correctly registered handled event',
+      setUp: (game, _) async {
+        await game.ensureAdd(_TappableComponent());
+      },
+      verify: (game, tester) async {
+        await tester.longPressAt(const Offset(10, 10));
+        await tester.pump(const Duration(seconds: 1));
+        expect(game.handledOnTapDown, 1);
+        expect(game.handledOnLongTapDown, 1);
         expect(game.handledOnTapUp, 1);
         expect(game.handledOnTapCancel, 0);
       },
@@ -102,6 +133,7 @@ void main() {
         await tester.tapAt(const Offset(110, 110));
         await tester.pump(const Duration(seconds: 1));
         expect(game.handledOnTapDown, 0);
+        expect(game.handledOnLongTapDown, 0);
         expect(game.handledOnTapUp, 0);
         expect(game.handledOnTapCancel, 0);
       },
