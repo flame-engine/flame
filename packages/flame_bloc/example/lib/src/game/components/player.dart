@@ -13,7 +13,7 @@ import 'explosion.dart';
 class PlayerController extends Component
     with
         HasGameRef<SpaceShooterGame>,
-        BlocComponent<GameStatsBloc, GameStatsState> {
+        FlameBlocListener<GameStatsBloc, GameStatsState> {
   @override
   bool listenWhen(GameStatsState? previousState, GameStatsState newState) {
     return previousState?.status != newState.status;
@@ -23,7 +23,7 @@ class PlayerController extends Component
   void onNewState(GameStatsState state) {
     if (state.status == GameStatus.respawn ||
         state.status == GameStatus.initial) {
-      gameRef.read<GameStatsBloc>().add(const PlayerRespawned());
+      gameRef.statsBloc.add(const PlayerRespawned());
       gameRef.add(gameRef.player = PlayerComponent());
     }
   }
@@ -34,7 +34,7 @@ class PlayerComponent extends SpriteAnimationComponent
         HasGameRef<SpaceShooterGame>,
         CollisionCallbacks,
         KeyboardHandler,
-        BlocComponent<InventoryBloc, InventoryState> {
+        FlameBlocListener<InventoryBloc, InventoryState> {
   bool destroyed = false;
   late Timer bulletCreator;
 
@@ -56,6 +56,13 @@ class PlayerComponent extends SpriteAnimationComponent
         textureSize: Vector2(32, 48),
       ),
     );
+  }
+
+  InventoryState? state;
+
+  @override
+  void onNewState(InventoryState state) {
+    this.state = state;
   }
 
   void _createBullet() {
@@ -96,7 +103,7 @@ class PlayerComponent extends SpriteAnimationComponent
   void takeHit() {
     gameRef.add(ExplosionComponent(x, y));
     removeFromParent();
-    gameRef.read<GameStatsBloc>().add(const PlayerDied());
+    gameRef.statsBloc.add(const PlayerDied());
   }
 
   @override
@@ -105,7 +112,7 @@ class PlayerComponent extends SpriteAnimationComponent
     Set<LogicalKeyboardKey> keysPressed,
   ) {
     if (keysPressed.contains(LogicalKeyboardKey.tab)) {
-      gameRef.read<InventoryBloc>().add(const NextWeaponEquipped());
+      gameRef.inventoryBloc.add(const NextWeaponEquipped());
       return true;
     }
     return false;

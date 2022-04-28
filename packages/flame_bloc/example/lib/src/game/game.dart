@@ -3,16 +3,16 @@ import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flame_bloc/flame_bloc.dart';
 
-import '../inventory/bloc/inventory_bloc.dart';
 import './components/enemy.dart';
 import './components/enemy_creator.dart';
 import './components/player.dart';
 import '../game_stats/bloc/game_stats_bloc.dart';
+import '../inventory/bloc/inventory_bloc.dart';
 
 class GameStatsController extends Component
     with
         HasGameRef<SpaceShooterGame>,
-        BlocComponent<GameStatsBloc, GameStatsState> {
+        FlameBlocListener<GameStatsBloc, GameStatsState> {
   @override
   bool listenWhen(GameStatsState? previousState, GameStatsState newState) {
     return previousState?.status != newState.status &&
@@ -41,11 +41,23 @@ class SpaceShooterGame extends FlameGame
   Future<void> onLoad() async {
     await super.onLoad();
 
-    add(player = PlayerComponent());
-    add(PlayerController());
+    await add(
+      FlameBlocProvider<InventoryBloc, InventoryState>.value(
+        value: inventoryBloc,
+        children: [
+          FlameBlocProvider<GameStatsBloc, GameStatsState>.value(
+            value: statsBloc,
+            children: [
+              player = PlayerComponent(),
+              PlayerController(),
+              GameStatsController(),
+            ],
+          ),
+        ],
+      ),
+    );
 
     add(EnemyCreator());
-    add(GameStatsController());
   }
 
   @override

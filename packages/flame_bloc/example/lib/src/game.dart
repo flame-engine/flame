@@ -23,26 +23,34 @@ class GamePage extends StatelessWidget {
             create: (_) => InventoryBloc(),
           ),
         ],
-        child: Column(
-          children: [
-            const GameStat(),
-            Expanded(
-              child: Stack(
-                children: [
-                  Positioned.fill(
-                    child: GameWidget(
-                      game: SpaceShooterGame(),
-                    ),
+        child: Builder(
+          builder: (context) {
+            return Column(
+              children: [
+                const GameStat(),
+                Expanded(
+                  child: Stack(
+                    children: [
+                      Positioned.fill(
+                        child: GameWidget(
+                          game: SpaceShooterGame(
+                            statsBloc: BlocProvider.of<GameStatsBloc>(context),
+                            inventoryBloc:
+                                BlocProvider.of<InventoryBloc>(context),
+                          ),
+                        ),
+                      ),
+                      const Positioned(
+                        top: 50,
+                        right: 10,
+                        child: Inventory(),
+                      ),
+                    ],
                   ),
-                  const Positioned(
-                    top: 50,
-                    right: 10,
-                    child: Inventory(),
-                  ),
-                ],
-              ),
-            ),
-          ],
+                ),
+              ],
+            );
+          },
         ),
       ),
     );
