@@ -181,9 +181,10 @@ class RenderableTiledMap {
           if (batch != null) {
             batch.add(
               source: src,
-              offset: Vector2(tx * size.x, ty * size.y)
+              offset: Vector2((tx + .5) * size.x, (ty + .5) * size.y)
                 ..add(layerOffset * size.x / src.width),
               rotation: flips.angle * math.pi / 2,
+              anchor: Vector2(src.width / 2, src.height / 2),
               scale: size.x / src.width,
             );
           }
