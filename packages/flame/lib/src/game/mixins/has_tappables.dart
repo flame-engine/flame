@@ -1,11 +1,11 @@
 import 'package:flutter/gestures.dart';
 import 'package:meta/meta.dart';
 
-import '../flame_game.dart';
-import '../../gestures/events.dart';
 import '../../components/mixins/tappable.dart';
-import 'multi_touch_tap_detector.dart';
 import '../../events/interfaces/multi_tap_listener.dart';
+import '../../gestures/events.dart';
+import '../flame_game.dart';
+import 'multi_touch_tap_detector.dart';
 
 /// Mixin that can be added to a [FlameGame] allowing it (and the components
 /// attached to the game) to receive tap events.
