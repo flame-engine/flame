@@ -72,7 +72,7 @@ void main() {
         expect(
           () => game.ensureAdd(_TappableComponent()),
           failsAssert(
-            'Tappable Components can only be added to a FlameGame with '
+            'Tappable components can only be added to a FlameGame with '
             'HasTappables',
           ),
         );

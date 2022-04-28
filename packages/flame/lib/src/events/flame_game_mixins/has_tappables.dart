@@ -4,8 +4,21 @@ import 'package:meta/meta.dart';
 import '../../game/flame_game.dart';
 import '../../gestures/events.dart';
 import '../component_mixins/tappable.dart';
+import '../game_mixins/multi_touch_tap_detector.dart';
 import '../interfaces/multi_tap_listener.dart';
 
+/// Mixin that can be added to a [FlameGame] allowing it (and the components
+/// attached to the game) to receive tap events.
+///
+/// This mixin is similar to [MultiTouchTapDetector] on Game, however, it also
+/// propagates all tap events down the component tree, allowing each individual
+/// component to respond to events that happen on that component.
+///
+/// This mixin **must be** added to a game if you plan to use any components
+/// that are [Tappable].
+///
+/// See [MultiTapGestureRecognizer] for the description of each individual
+/// event.
 mixin HasTappables on FlameGame implements MultiTapListener {
   @mustCallSuper
   void onTapCancel(int pointerId) {
@@ -35,6 +48,7 @@ mixin HasTappables on FlameGame implements MultiTapListener {
     );
   }
 
+  //#region MultiTapListener API
   @override
   double get longTapDelay => 0.300;
 
@@ -58,4 +72,5 @@ mixin HasTappables on FlameGame implements MultiTapListener {
   void handleLongTapDown(int pointerId, TapDownDetails details) {
     onLongTapDown(pointerId, TapDownInfo.fromDetails(this, details));
   }
+  //#endregion
 }
