@@ -15,7 +15,7 @@ class Forge2DGame extends FlameGame {
     world.setContactListener(contactListener ?? WorldContactListener());
   }
 
-  static final Vector2 defaultGravity = Vector2(0, -10.0);
+  static final Vector2 defaultGravity = Vector2(0, 10.0);
 
   static const double defaultZoom = 10.0;
 
