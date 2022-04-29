@@ -24,7 +24,7 @@ class PlayerController extends Component
     if (state.status == GameStatus.respawn ||
         state.status == GameStatus.initial) {
       gameRef.statsBloc.add(const PlayerRespawned());
-      gameRef.add(gameRef.player = PlayerComponent());
+      parent?.add(gameRef.player = PlayerComponent());
     }
   }
 }
