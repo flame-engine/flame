@@ -15,7 +15,7 @@ class GameStatsController extends Component with HasGameRef<SpaceShooterGame> {
     add(
       FlameBlocListenerComponent<GameStatsBloc, GameStatsState>(
         listenWhen: (previousState, newState) {
-          return previousState?.status != newState.status &&
+          return previousState.status != newState.status &&
               newState.status == GameStatus.initial;
         },
         onNewState: (state) {
