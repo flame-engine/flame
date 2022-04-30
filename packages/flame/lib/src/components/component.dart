@@ -510,6 +510,7 @@ class Component {
     final onLoadFuture = onLoad();
     if (onLoadFuture == null) {
       _state |= _loaded;
+      _loadCompleter?.complete();
     } else {
       return onLoadFuture.then((_) {
         _state |= _loaded;
