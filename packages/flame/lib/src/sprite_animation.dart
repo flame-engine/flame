@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:ui';
 
 import 'assets/images.dart';
@@ -63,6 +64,40 @@ class SpriteAnimationData {
       );
       return SpriteAnimationFrameData(
         stepTime: stepTimes[i],
+        srcPosition: position,
+        srcSize: textureSize,
+      );
+    });
+  }
+
+  /// Specifies the range of the sprite grid.
+  ///
+  /// Make sure your sprites are placed left-to-right and top-to-bottom
+  ///
+  /// [start] is the start frame index.
+  /// [end] is the end frame index.
+  SpriteAnimationData.range({
+    required int start,
+    required int end,
+    required int amount,
+    required List<double> stepTimes,
+    required Vector2 textureSize,
+    int? amountPerRow,
+    Vector2? texturePosition,
+    this.loop = true,
+  })  : assert(amountPerRow == null || amount >= amountPerRow),
+        assert(start <= end && start >= 0 && end <= amount),
+        assert(stepTimes.length >= end - start + 1) {
+    amountPerRow ??= amount;
+    texturePosition ??= Vector2.zero();
+    frames = List<SpriteAnimationFrameData>.generate(end - start + 1, (index) {
+      final i = index + start;
+      final position = Vector2(
+        texturePosition!.x + (i % amountPerRow!) * textureSize.x,
+        texturePosition.y + (i ~/ amountPerRow) * textureSize.y,
+      );
+      return SpriteAnimationFrameData(
+        stepTime: stepTimes[index],
         srcPosition: position,
         srcSize: textureSize,
       );
@@ -230,11 +265,22 @@ class SpriteAnimation {
   /// to the first, or keeps returning the last when done.
   bool loop = true;
 
+  /// Registered method to be triggered when the animation starts.
+  void Function()? onStart;
+
+  /// Registered method to be triggered when the animation frame updates.
+  void Function(int currentIndex)? onFrame;
+
   /// Registered method to be triggered when the animation complete.
   void Function()? onComplete;
 
+  Completer<void>? _completeCompleter;
+
   /// The current frame that should be displayed.
   SpriteAnimationFrame get currentFrame => frames[currentIndex];
+
+  /// Returns whether the animation is on the first frame.
+  bool get isFirstFrame => currentIndex == 0;
 
   /// Returns whether the animation is on the last frame.
   bool get isLastFrame => currentIndex == frames.length - 1;
@@ -242,6 +288,20 @@ class SpriteAnimation {
   /// Returns whether the animation has only a single frame (and is, thus, a
   /// still image).
   bool get isSingleFrame => frames.length == 1;
+
+  /// A future that will complete when the animation completes.
+  ///
+  /// An animation is considered to be completed if it reaches its [isLastFrame]
+  /// and is not [loop]ing.
+  Future<void> get completed {
+    if (_done) {
+      return Future.value();
+    }
+
+    _completeCompleter ??= Completer<void>();
+
+    return _completeCompleter!.future;
+  }
 
   /// Sets a different step time to each frame.
   /// The sizes of the arrays must match.
@@ -265,6 +325,7 @@ class SpriteAnimation {
     elapsed = 0.0;
     currentIndex = 0;
     _done = false;
+    _started = false;
   }
 
   /// Sets this animation to be on the last frame.
@@ -291,6 +352,10 @@ class SpriteAnimation {
   bool _done = false;
   bool done() => _done;
 
+  /// Local flag to determine if the animation has started to prevent multiple
+  /// calls to [onStart].
+  bool _started = false;
+
   /// Updates this animation, ticking the lifeTime by an amount [dt]
   /// (in seconds).
   void update(double dt) {
@@ -299,19 +364,28 @@ class SpriteAnimation {
     if (_done) {
       return;
     }
+    if (!_started) {
+      onStart?.call();
+      onFrame?.call(currentIndex);
+      _started = true;
+    }
+
     while (clock >= currentFrame.stepTime) {
       if (isLastFrame) {
         if (loop) {
           clock -= currentFrame.stepTime;
           currentIndex = 0;
+          onFrame?.call(currentIndex);
         } else {
           _done = true;
           onComplete?.call();
+          _completeCompleter?.complete();
           return;
         }
       } else {
         clock -= currentFrame.stepTime;
         currentIndex++;
+        onFrame?.call(currentIndex);
       }
     }
   }

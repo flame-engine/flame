@@ -16,12 +16,12 @@ import 'camera_component.dart';
 /// "cross-hairs" of the viewport ([position]), the [zoom] level, and the
 /// [angle] of rotation of the camera.
 class Viewfinder extends Component
-    implements AngleProvider, PositionProvider, ScaleProvider {
+    implements AnchorProvider, AngleProvider, PositionProvider, ScaleProvider {
   /// Internal transform matrix used by the viewfinder.
   final Transform2D _transform = Transform2D();
 
   @internal
-  Matrix4 get transformMatrix => _transform.transformMatrix;
+  Transform2D get transform => _transform;
 
   /// The game coordinates of a point that is to be positioned at the center
   /// of the viewport.
@@ -62,8 +62,10 @@ class Viewfinder extends Component
   /// The "logical center" of the camera means the point within the viewport
   /// where the viewfinder's focus is located at. It is at this point within
   /// the viewport that the world's point [position] will be displayed.
+  @override
   Anchor get anchor => _anchor;
   Anchor _anchor = Anchor.center;
+  @override
   set anchor(Anchor value) {
     _anchor = value;
     onViewportResize();

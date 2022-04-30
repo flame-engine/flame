@@ -3,8 +3,9 @@ import 'dart:ui';
 import 'package:flame/components.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame/game.dart' hide Viewport;
+import 'package:flame/input.dart';
 
-class CameraComponentPropertiesExample extends FlameGame {
+class CameraComponentPropertiesExample extends FlameGame with HasTappables {
   static const description = '''
     This example uses FixedSizeViewport which is dynamically sized and 
     positioned based on the size of the game widget.
@@ -13,6 +14,8 @@ class CameraComponentPropertiesExample extends FlameGame {
     green dot being the origin. The viewfinder uses custom anchor in order to
     declare its "center" half-way between the bottom left corner and the true
     center.
+    
+    Click at any point within the viewport to create a circle there.
   ''';
 
   CameraComponent? _camera;
@@ -41,6 +44,19 @@ class CameraComponentPropertiesExample extends FlameGame {
     _camera?.viewport.size = size * 0.7;
     _camera?.viewport.position = size * 0.6;
   }
+
+  @override
+  // ignore: must_call_super
+  void onTapDown(int pointerId, TapDownInfo info) {
+    final canvasPoint = info.eventPosition.widget;
+    for (final cp in componentsAtPoint(canvasPoint)) {
+      if (cp.component is Background) {
+        cp.component.add(
+          ExpandingCircle(cp.point.toOffset()),
+        );
+      }
+    }
+  }
 }
 
 class ViewportFrame extends Component {
@@ -64,7 +80,7 @@ class ViewportFrame extends Component {
 
 class Background extends Component {
   final bgPaint = Paint()..color = const Color(0xffff0000);
-  final originPaint = Paint()..color = const Color(0xff2f8750);
+  final originPaint = Paint()..color = const Color(0xff19bf57);
   final axisPaint = Paint()
     ..strokeWidth = 1
     ..style = PaintingStyle.stroke
@@ -84,5 +100,34 @@ class Background extends Component {
     canvas.drawLine(Offset.zero, const Offset(0, 10), axisPaint);
     canvas.drawLine(Offset.zero, const Offset(10, 0), axisPaint);
     canvas.drawCircle(Offset.zero, 1.0, originPaint);
+  }
+
+  @override
+  bool containsLocalPoint(Vector2 point) => true;
+}
+
+class ExpandingCircle extends CircleComponent {
+  ExpandingCircle(Offset center)
+      : super(
+          position: Vector2(center.dx, center.dy),
+          anchor: Anchor.center,
+          radius: 0,
+          paint: Paint()
+            ..color = const Color(0xffffffff)
+            ..style = PaintingStyle.stroke
+            ..strokeWidth = 1,
+        );
+
+  static const maxRadius = 50;
+
+  @override
+  void update(double dt) {
+    radius += dt * 10;
+    if (radius >= maxRadius) {
+      removeFromParent();
+    } else {
+      final opacity = 1 - radius / maxRadius;
+      paint.color = const Color(0xffffffff).withOpacity(opacity);
+    }
   }
 }

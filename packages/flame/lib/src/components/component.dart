@@ -3,11 +3,16 @@ import 'dart:collection';
 
 import 'package:flutter/painting.dart';
 import 'package:meta/meta.dart';
+import 'package:vector_math/vector_math_64.dart';
 
-import '../../components.dart';
-import '../../game.dart';
-import '../../input.dart';
 import '../cache/value_cache.dart';
+import '../game/mixins/game.dart';
+import '../gestures/events.dart';
+import '../text.dart';
+import 'component_point_pair.dart';
+import 'component_set.dart';
+import 'mixins/coordinate_transform.dart';
+import 'position_type.dart';
 
 /// [Component]s are the basic building blocks for your game.
 ///
@@ -18,7 +23,8 @@ import '../cache/value_cache.dart';
 /// your game (with `game.add`).
 class Component {
   Component({Iterable<Component>? children, int? priority})
-      : _priority = priority ?? 0 {
+      : _state = LifecycleState.uninitialized,
+        _priority = priority ?? 0 {
     if (children != null) {
       addAll(children);
     }
@@ -31,7 +37,9 @@ class Component {
   /// to the root `FlameGame`.
   PositionType positionType = PositionType.game;
 
-  var _state = LifecycleState.uninitialized;
+  @visibleForTesting
+  LifecycleState get lifecycleState => _state;
+  LifecycleState _state;
 
   /// Whether this component has completed its [onLoad] step.
   bool get isLoaded {
@@ -456,9 +464,24 @@ class Component {
   }
 
   /// Removes a component from the component tree, calling [onRemove] for it and
-  /// its children.
+  /// its children. The [onRemove] handler will only be called if there was an
+  /// [onMount] call previously, i.e. when removing components that are properly
+  /// mounted.
   void remove(Component component) {
-    if (component._state != LifecycleState.removing) {
+    assert(
+      component._parent != null,
+      "Trying to remove a component that doesn't belong to any parent",
+    );
+    assert(
+      component._parent == this,
+      'Trying to remove a component that belongs to a different parent: this = '
+      "$this, component's parent = ${component._parent}",
+    );
+    if (component._state == LifecycleState.uninitialized) {
+      lifecycle._children.remove(component);
+      component._parent = null;
+      // TODO(st-pasha): properly handle removal in other states too
+    } else if (component._state != LifecycleState.removing) {
       lifecycle._removals.add(component);
       component._state = LifecycleState.removing;
     }
@@ -595,10 +618,56 @@ class Component {
     return (parent is T ? parent : parent?.findParent<T>()) as T?;
   }
 
-  /// Called to check whether the point is to be counted as within the component
-  /// It needs to be overridden to have any effect, like it is in
-  /// PositionComponent.
-  bool containsPoint(Vector2 point) => false;
+  /// Checks whether the [point] is within this component's bounds.
+  ///
+  /// This method should be implemented for any component that has a visual
+  /// representation and non-zero size. The [point] is in the local coordinate
+  /// space.
+  bool containsLocalPoint(Vector2 point) => false;
+
+  /// Same as [containsLocalPoint], but for a "global" [point].
+  ///
+  /// This will be deprecated in the future, due to the notion of "global" point
+  /// not being well-defined.
+  bool containsPoint(Vector2 point) => containsLocalPoint(point);
+
+  /// An iterable of descendant components intersecting the given point. The
+  /// [point] is in the local coordinate space.
+  ///
+  /// More precisely, imagine a ray originating at a certain point (x, y) on
+  /// the screen, and extending perpendicularly to the screen's surface into
+  /// your game's world. The purpose of this method is to find all components
+  /// that intersect with this ray, in the order from those that are closest to
+  /// the user to those that are farthest.
+  ///
+  /// The return value is an [Iterable] of `(component, point)` pairs, which
+  /// gives not only the components themselves, but also the points of
+  /// intersection, in their respective local coordinates.
+  ///
+  /// The default implementation relies on the [CoordinateTransform] interface
+  /// to translate from the parent's coordinate system into the local one. Make
+  /// sure that your component implements this interface if it alters the
+  /// coordinate system when rendering.
+  ///
+  /// If your component overrides [renderTree], then it almost certainly needs
+  /// to override this method as well, so that this method can find all rendered
+  /// components wherever they are.
+  Iterable<ComponentPointPair> componentsAtPoint(Vector2 point) sync* {
+    if (_children != null) {
+      for (final child in _children!.reversed()) {
+        Vector2? childPoint = point;
+        if (child is CoordinateTransform) {
+          childPoint = (child as CoordinateTransform).parentToLocal(point);
+        }
+        if (childPoint != null) {
+          yield* child.componentsAtPoint(childPoint);
+        }
+      }
+    }
+    if (containsLocalPoint(point)) {
+      yield ComponentPointPair(this, point);
+    }
+  }
 
   /// Usually this is not something that the user would want to call since the
   /// component list isn't re-ordered when it is called.
@@ -628,13 +697,16 @@ typedef ComponentSetFactory = ComponentSet Function();
 ///
 /// Publicly visible flags `isLoaded` and `isMounted` are derived from this
 /// state:
-///   - isLoaded = loaded | mounted | removed
-///   - isMounted = mounted
+///   - isLoaded = loaded | mounted | removing | removed
+///   - isMounted = mounted | removing
 enum LifecycleState {
-  /// The original state of a [Component], when it was just constructed.
+  /// The original state of a [Component] when it was just constructed.
   uninitialized,
 
   /// The component is currently running its `onLoad` method.
+  ///
+  /// In this state the component is guaranteed to have a parent, and the root
+  /// `game` is findable via `findGame()`.
   loading,
 
   /// The component has just finished running its `onLoad` step, but before it

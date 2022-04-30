@@ -4,8 +4,9 @@ import 'dart:ui';
 import '../../components.dart';
 import '../../extensions.dart';
 import '../../geometry.dart';
+import '../effects/provider_interfaces.dart';
 
-class CircleComponent extends ShapeComponent {
+class CircleComponent extends ShapeComponent implements SizeProvider {
   /// With this constructor you can create your [CircleComponent] from a radius
   /// and a position. It will also calculate the bounding rectangle [size] for
   /// the [CircleComponent].
@@ -85,6 +86,14 @@ class CircleComponent extends ShapeComponent {
         scaledRadius * scaledRadius;
   }
 
+  @override
+  bool containsLocalPoint(Vector2 point) {
+    final radius = size.x / 2;
+    final dx = point.x - radius;
+    final dy = point.y - radius;
+    return dx * dx + dy * dy <= radius * radius;
+  }
+
   /// Returns the locus of points in which the provided line segment intersect
   /// the circle.
   ///
@@ -94,7 +103,7 @@ class CircleComponent extends ShapeComponent {
     LineSegment line, {
     double epsilon = double.minPositive,
   }) {
-    double sq(double x) => pow(x, 2).toDouble();
+    double sq(double x) => x * x;
 
     final cx = absoluteCenter.x;
     final cy = absoluteCenter.y;
