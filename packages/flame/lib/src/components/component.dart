@@ -23,8 +23,7 @@ import 'position_type.dart';
 /// your game (with `game.add`).
 class Component {
   Component({Iterable<Component>? children, int? priority})
-      : _state = _initial,
-        _priority = priority ?? 0 {
+      : _priority = priority ?? 0 {
     if (children != null) {
       addAll(children);
     }
@@ -37,13 +36,29 @@ class Component {
   /// to the root `FlameGame`.
   PositionType positionType = PositionType.game;
 
-  int _state;
+  /// Bitfield which keeps track of the current state of the component: which
+  /// lifecycle events it has already executed, and which are currently being
+  /// executed.
+  ///
+  /// [_initial]: the original state of the component as it was just created. In
+  ///     this state no events has occurred so far.
+  ///
+  /// [_loading]: this flag is set while the component is running its [onLoad]
+  ///     method, and can be checked via [isLoading] getter. More specifically,
+  ///     this bit is set before invoking [onGameResize], it is on for the
+  ///     duration of [onLoad], and then it is turned off when the component is
+  ///     about to be mounted. After that, the bit is never turned on again.
+  ///
+  /// [_loaded]: this flag is set after the component finishes running its
+  ///     [onLoad] method, and can be checked via the [isLoaded] getter. Once
+  ///     set, this bit is never turned off.
+  int _state = _initial;
 
   static const int _initial = 0;
-  static const int _removing = 1;
-  static const int _loading = 2;
-  static const int _loaded = 4;
-  static const int _mounted = 8;
+  static const int _loading = 1;
+  static const int _loaded = 2;
+  static const int _mounted = 4;
+  static const int _removing = 8;
 
   /// Whether the component is currently executing its [onLoad] step.
   bool get isLoading => (_state & _loading) != 0;
@@ -440,7 +455,7 @@ class Component {
     return Future.wait(futures);
   }
 
-  /// Adds this component to the provided [parent] (see [add] for details).
+  /// Adds this component as a child of [parent] (see [add] for details).
   Future<void>? addToParent(Component parent) {
     assert(
       _parent == null,
@@ -450,7 +465,6 @@ class Component {
     assert(_state == _initial || _state == _loaded);
     _parent = parent;
     parent.lifecycle.enqueueChild(this);
-
     if (!isLoaded && (parent.findGame()?.hasLayout ?? false)) {
       return _load();
     }
@@ -487,16 +501,18 @@ class Component {
   }
 
   Future<void>? _load() {
-    assert(_parent != null);
     assert(_state == _initial);
+    assert(_parent != null);
+    assert(_parent!.findGame() != null);
+    assert(_parent!.findGame()!.hasLayout);
     _state = _loading;
     onGameResize(_parent!.findGame()!.canvasSize);
     final onLoadFuture = onLoad();
     if (onLoadFuture == null) {
-      _state = _loaded;
+      _state |= _loaded;
     } else {
       return onLoadFuture.then((_) {
-        _state = _loaded;
+        _state |= _loaded;
         _loadCompleter?.complete();
       });
     }
@@ -515,10 +531,10 @@ class Component {
     _parent ??= parent;
     assert(_parent != null && _parent!.isMounted);
     assert(isLoaded);
-    if (existingChild) {
-      // || _state == LifecycleState.removed
+    if (existingChild || !isLoading) {
       onGameResize(findGame()!.canvasSize);
     }
+    _state &= ~_loading;
     _mountCompleter?.complete();
     _mountCompleter = null;
     debugMode |= _parent!.debugMode;
@@ -693,30 +709,30 @@ typedef ComponentSetFactory = ComponentSet Function();
 /// state:
 ///   - isLoaded = loaded | mounted | removing | removed
 ///   - isMounted = mounted | removing
-enum LifecycleState {
-  /// The original state of a [Component] when it was just constructed.
-  uninitialized,
-
-  /// The component is currently running its `onLoad` method.
-  ///
-  /// In this state the component is guaranteed to have a parent, and the root
-  /// `game` is findable via `findGame()`.
-  loading,
-
-  /// The component has just finished running its `onLoad` step, but before it
-  /// is mounted.
-  loaded,
-
-  /// The component has finished running its `onMount` step, and was added to
-  /// its parent's `children` list.
-  mounted,
-
-  /// The component is scheduled to be removed on the next game tick.
-  removing,
-
-  /// The component which was mounted before, is now removed from its parent.
-  removed,
-}
+// enum LifecycleState {
+//   /// The original state of a [Component] when it was just constructed.
+//   uninitialized,
+//
+//   /// The component is currently running its `onLoad` method.
+//   ///
+//   /// In this state the component is guaranteed to have a parent, and the root
+//   /// `game` is findable via `findGame()`.
+//   loading,
+//
+//   /// The component has just finished running its `onLoad` step, but before it
+//   /// is mounted.
+//   loaded,
+//
+//   /// The component has finished running its `onMount` step, and was added to
+//   /// its parent's `children` list.
+//   mounted,
+//
+//   /// The component is scheduled to be removed on the next game tick.
+//   removing,
+//
+//   /// The component which was mounted before, is now removed from its parent.
+//   removed,
+// }
 
 /// Helper class to assist [Component] with its lifecycle.
 ///
