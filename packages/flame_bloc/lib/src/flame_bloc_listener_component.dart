@@ -4,7 +4,7 @@ import 'package:flame/components.dart';
 import '../flame_bloc.dart';
 
 /// {@template flame_bloc_listener_component}
-/// A [Component] which exposes the ability to listen to changes in a [Bloc] state.
+/// A [Component] which can listen to changes in a [Bloc] state.
 /// {@endtemplate}
 class FlameBlocListenerComponent<B extends BlocBase<S>, S> extends Component
     with FlameBlocListener<B, S> {
