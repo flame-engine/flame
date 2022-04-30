@@ -9,19 +9,20 @@ import './components/player.dart';
 import '../game_stats/bloc/game_stats_bloc.dart';
 import '../inventory/bloc/inventory_bloc.dart';
 
-class GameStatsController extends Component
-    with
-        HasGameRef<SpaceShooterGame>,
-        FlameBlocListener<GameStatsBloc, GameStatsState> {
+class GameStatsController extends Component with HasGameRef<SpaceShooterGame> {
   @override
-  bool listenWhen(GameStatsState? previousState, GameStatsState newState) {
-    return previousState?.status != newState.status &&
-        newState.status == GameStatus.initial;
-  }
-
-  @override
-  void onNewState(GameStatsState state) {
-    gameRef.children.removeWhere((element) => element is EnemyComponent);
+  Future<void>? onLoad() async {
+    add(
+      FlameBlocListenerComponent<GameStatsBloc, GameStatsState>(
+        listenWhen: (previousState, newState) {
+          return previousState.status != newState.status &&
+              newState.status == GameStatus.initial;
+        },
+        onNewState: (state) {
+          gameRef.children.removeWhere((element) => element is EnemyComponent);
+        },
+      ),
+    );
   }
 }
 
@@ -42,17 +43,19 @@ class SpaceShooterGame extends FlameGame
     await super.onLoad();
 
     await add(
-      FlameBlocProvider<InventoryBloc, InventoryState>.value(
-        value: inventoryBloc,
-        children: [
+      FlameMultiBlocProvider(
+        providers: [
+          FlameBlocProvider<InventoryBloc, InventoryState>.value(
+            value: inventoryBloc,
+          ),
           FlameBlocProvider<GameStatsBloc, GameStatsState>.value(
             value: statsBloc,
-            children: [
-              player = PlayerComponent(),
-              PlayerController(),
-              GameStatsController(),
-            ],
           ),
+        ],
+        children: [
+          player = PlayerComponent(),
+          PlayerController(),
+          GameStatsController(),
         ],
       ),
     );
