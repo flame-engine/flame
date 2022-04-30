@@ -91,6 +91,31 @@ that triggered the callback in the first place. The second is a set of the curre
 The returned value should be `true` to allow the continuous propagation of the key event among other
 components. To not allow any other component to receive the event, return `false`.
 
+Flame also provides a default implementation called `KeyboardComponent` which can be used to handle
+keyboard events which can be composed with a `FlameGame` or any other `Component`:
+
+For example, imagining a `PositionComponent` which has methods to move on the X and Y axis,
+the following code could be used to bind those methods to key events:
+
+```dart
+add(
+  KeyboardComponent(
+    keyUp: {
+      LogicalKeyboardKey.keyA: _stopX,
+      LogicalKeyboardKey.keyD: _stopX,
+      LogicalKeyboardKey.keyW: _stopY,
+      LogicalKeyboardKey.keyS: _stopY,
+    },
+    keyDown: {
+      LogicalKeyboardKey.keyA: () => _moveXUp(),
+      LogicalKeyboardKey.keyD: () => _moveXDown(),
+      LogicalKeyboardKey.keyW: () => _moveYUp(),
+      LogicalKeyboardKey.keyS: () => _moveYDown(),
+    },
+  ),
+);
+```
+
 ### Controlling focus
 
 On the widget level, it is possible to use the
@@ -102,5 +127,5 @@ the game is focused or not.
 By default `GameWidget` has its `autofocus` set to true, which means it will get focused once it is
 mounted. To override that behavior, set `autofocus` to false.
 
-For a more complete example see 
+For a more complete example see
 [here](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/input/keyboard.dart).

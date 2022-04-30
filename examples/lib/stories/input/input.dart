@@ -8,6 +8,7 @@ import 'gesture_hitboxes_example.dart';
 import 'hoverables_example.dart';
 import 'joystick_advanced_example.dart';
 import 'joystick_example.dart';
+import 'keyboard_component_example.dart';
 import 'keyboard_example.dart';
 import 'mouse_cursor_example.dart';
 import 'mouse_movement_example.dart';
@@ -48,6 +49,12 @@ void addInputStories(Dashbook dashbook) {
       (_) => GameWidget(game: KeyboardExample()),
       codeLink: baseLink('input/keyboard_example.dart'),
       info: KeyboardExample.description,
+    )
+    ..add(
+      'Keyboard (Component)',
+      (_) => GameWidget(game: KeyboardComponentExample()),
+      codeLink: baseLink('input/keyboard_component_example.dart'),
+      info: KeyboardComponentExample.description,
     )
     ..add(
       'Mouse Movement',
