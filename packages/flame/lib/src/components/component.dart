@@ -462,11 +462,10 @@ class Component {
       '$this cannot be added to $parent because it already has a parent: '
       '$_parent',
     );
-    assert(_state == _initial || _state == _loaded);
     _parent = parent;
     parent.lifecycle.enqueueChild(this);
     if (!isLoaded && (parent.findGame()?.hasLayout ?? false)) {
-      return _load();
+      return _startLoading();
     }
   }
 
@@ -488,6 +487,8 @@ class Component {
       lifecycle._children.remove(component);
       component._parent = null;
       // TODO(st-pasha): properly handle removal in other states too
+    } else if (isLoading) {
+      component._state |= _removing;
     } else if ((component._state & _removing) == 0) {
       lifecycle._removals.add(component);
       component._state |= _removing;
@@ -500,7 +501,7 @@ class Component {
     components.forEach(remove);
   }
 
-  Future<void>? _load() {
+  Future<void>? _startLoading() {
     assert(_state == _initial);
     assert(_parent != null);
     assert(_parent!.findGame() != null);
@@ -509,15 +510,17 @@ class Component {
     onGameResize(_parent!.findGame()!.canvasSize);
     final onLoadFuture = onLoad();
     if (onLoadFuture == null) {
-      _state |= _loaded;
-      _loadCompleter?.complete();
+      _afterLoad();
     } else {
-      return onLoadFuture.then((_) {
-        _state |= _loaded;
-        _loadCompleter?.complete();
-      });
+      return onLoadFuture.then((_) => _afterLoad());
     }
     return null;
+  }
+
+  void _afterLoad() {
+    _state |= _loaded;
+    _loadCompleter?.complete();
+
   }
 
   /// Mount the component that is already loaded and has a mounted parent.
@@ -777,17 +780,17 @@ class _LifecycleManager {
 
   void enqueueChild(Component c) => _children.add(c);
 
+  /// Attempt to resolve pending events in all lifecycle event queues.
+  ///
+  /// This method must be periodically invoked by the game engine, in order to
+  /// ensure that the components get properly added/removed from the component
+  /// tree.
   void processQueues() {
     _processChildrenQueue();
     _processRemovalQueue();
     _processAdoptionQueue();
   }
 
-  /// Attempt to resolve pending events in all lifecycle event queues.
-  ///
-  /// This method must be periodically invoked by the game engine, in order to
-  /// ensure that the components get properly added/removed from the component
-  /// tree.
   void _processChildrenQueue() {
     while (_children.isNotEmpty) {
       final child = _children.first;
@@ -798,7 +801,7 @@ class _LifecycleManager {
       } else if (child.isLoading) {
         break;
       } else {
-        child._load();
+        child._startLoading();
       }
     }
   }
