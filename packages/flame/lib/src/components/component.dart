@@ -510,17 +510,15 @@ class Component {
     onGameResize(_parent!.findGame()!.canvasSize);
     final onLoadFuture = onLoad();
     if (onLoadFuture == null) {
-      _afterLoad();
+      _finishLoading();
     } else {
-      return onLoadFuture.then((_) => _afterLoad());
+      return onLoadFuture.then((_) => _finishLoading());
     }
-    return null;
   }
 
-  void _afterLoad() {
+  void _finishLoading() {
     _state |= _loaded;
     _loadCompleter?.complete();
-
   }
 
   /// Mount the component that is already loaded and has a mounted parent.
