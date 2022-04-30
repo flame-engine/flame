@@ -290,6 +290,11 @@ class Component {
   void onMount() {}
 
   /// Called right before the component is removed from the game.
+  ///
+  /// This method will only run for a component that was previously mounted into
+  /// a component tree. If a component was never mounted (for example, when it
+  /// is removed before it had a chance to mount), then this callback will not
+  /// trigger.
   void onRemove() {}
 
   /// A future that will complete once the component is mounted on its parent
