@@ -147,14 +147,19 @@ void main() {
         expect(game.children.isEmpty, equals(true));
       });
 
-      test("can't add a component to a game without a layout", () {
-        final game = FlameGame();
-        final component = Component();
-        const message =
-            'add() called before the game has a layout. Did you try to add '
-            'components from the constructor? Use the onLoad() method instead.';
-        expect(() => game.add(component), failsAssert(message));
-      });
+      testWidgets(
+        'can add a component to a game without a layout',
+        (WidgetTester tester) async {
+          final game = FlameGame();
+          final component = Component()..addToParent(game);
+          expect(game.hasLayout, false);
+
+          await tester.pumpWidget(GameWidget(game: game));
+          game.update(0);
+          expect(game.children.length, 1);
+          expect(game.children.first, component);
+        },
+      );
     });
 
     group('projector', () {

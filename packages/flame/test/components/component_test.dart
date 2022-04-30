@@ -206,14 +206,18 @@ void main() {
       (game) async {
         final parent = Component();
         final child = Component()..addToParent(parent);
-        expect(child.lifecycleState, LifecycleState.uninitialized);
+        expect(child.isLoading, false);
+        expect(child.isLoaded, false);
+        expect(child.isMounted, false);
         child.removeFromParent();
 
         game.add(parent);
         await game.ready();
 
-        expect(child.lifecycleState, LifecycleState.uninitialized);
-        expect(parent.lifecycleState, LifecycleState.mounted);
+        expect(child.isLoading, false);
+        expect(child.isLoaded, false);
+        expect(child.isMounted, false);
+        expect(parent.isMounted, true);
         expect(parent.children.length, 0);
         expect(child.parent, isNull);
       },
@@ -225,17 +229,17 @@ void main() {
         final parent = Component();
         final component = _ComponentWithOnLoad();
         parent.add(component);
-        expect(component.lifecycleState, LifecycleState.uninitialized);
+        expect(component.isLoading, false);
         parent.remove(component);
-        expect(component.lifecycleState, LifecycleState.uninitialized);
+        expect(component.isLoading, false);
         expect(component.onLoadCalledCount, 0);
 
         final newParent = Component()..addToParent(game);
         newParent.add(component);
-        expect(component.lifecycleState, LifecycleState.loading);
+        expect(component.isLoading, true);
         expect(component.onLoadCalledCount, 1);
         await game.ready();
-        expect(component.lifecycleState, LifecycleState.mounted);
+        expect(component.isMounted, true);
         expect(newParent.children.length, 1);
         expect(newParent.children.first, component);
       },

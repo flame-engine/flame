@@ -23,7 +23,7 @@ import 'position_type.dart';
 /// your game (with `game.add`).
 class Component {
   Component({Iterable<Component>? children, int? priority})
-      : _state = LifecycleState.uninitialized,
+      : _state = _initial,
         _priority = priority ?? 0 {
     if (children != null) {
       addAll(children);
@@ -37,21 +37,22 @@ class Component {
   /// to the root `FlameGame`.
   PositionType positionType = PositionType.game;
 
-  @visibleForTesting
-  LifecycleState get lifecycleState => _state;
-  LifecycleState _state;
+  int _state;
+
+  static const int _initial = 0;
+  static const int _removing = 1;
+  static const int _loading = 2;
+  static const int _loaded = 4;
+  static const int _mounted = 8;
+
+  /// Whether the component is currently executing its [onLoad] step.
+  bool get isLoading => (_state & _loading) != 0;
 
   /// Whether this component has completed its [onLoad] step.
-  bool get isLoaded {
-    return (_state != LifecycleState.uninitialized) &&
-        (_state != LifecycleState.loading);
-  }
+  bool get isLoaded => (_state & _loaded) != 0;
 
   /// Whether this component is currently added to a component tree.
-  bool get isMounted {
-    return (_state == LifecycleState.mounted) ||
-        (_state == LifecycleState.removing);
-  }
+  bool get isMounted => (_state & _mounted) != 0;
 
   /// The current parent of the component, or null if there is none.
   Component? get parent => _parent;
@@ -121,7 +122,7 @@ class Component {
   /// It will be checked once per component per tick, and if it is true,
   /// FlameGame will remove it.
   @nonVirtual
-  bool get shouldRemove => _state == LifecycleState.removing;
+  bool get shouldRemove => (_state & _removing) != 0;
 
   /// Setting [shouldRemove] to true will schedule the component to be removed
   /// from the game tree before the next game cycle.
@@ -132,6 +133,8 @@ class Component {
     assert(value, '"Resurrecting" a component is not allowed');
     removeFromParent();
   }
+
+  //#region Debug rendering
 
   /// Returns whether this [Component] is in debug mode or not.
   /// When a child is added to the [Component] it gets the same [debugMode] as
@@ -179,6 +182,8 @@ class Component {
     return _debugTextPaintCache.value!;
   }
 
+  //#endregion
+
   //#region Component lifecycle methods
 
   /// Called whenever the size of the top-level Canvas changes.
@@ -193,7 +198,7 @@ class Component {
     _children?.forEach((child) => child.onGameResize(size));
     _lifecycleManager?._children.forEach((child) {
       final state = child._state;
-      if (state == LifecycleState.loading || state == LifecycleState.loaded) {
+      if ((state & (_loading | _loaded)) != 0) {
         child.onGameResize(size);
       }
     });
@@ -442,25 +447,13 @@ class Component {
       '$this cannot be added to $parent because it already has a parent: '
       '$_parent',
     );
-    assert(
-      _state == LifecycleState.uninitialized ||
-          _state == LifecycleState.removed,
-    );
+    assert(_state == _initial || _state == _loaded);
     _parent = parent;
-    parent.lifecycle._children.add(this);
+    parent.lifecycle.enqueueChild(this);
 
-    if (!isLoaded) {
-      final root = parent.findGame();
-      if (root != null) {
-        assert(
-          root.hasLayout,
-          'add() called before the game has a layout. Did you try to add '
-          'components from the constructor? Use the onLoad() method instead.',
-        );
-        return _load();
-      }
+    if (!isLoaded && (parent.findGame()?.hasLayout ?? false)) {
+      return _load();
     }
-    return null;
   }
 
   /// Removes a component from the component tree, calling [onRemove] for it and
@@ -477,13 +470,13 @@ class Component {
       'Trying to remove a component that belongs to a different parent: this = '
       "$this, component's parent = ${component._parent}",
     );
-    if (component._state == LifecycleState.uninitialized) {
+    if (component._state == _initial) {
       lifecycle._children.remove(component);
       component._parent = null;
       // TODO(st-pasha): properly handle removal in other states too
-    } else if (component._state != LifecycleState.removing) {
+    } else if ((component._state & _removing) == 0) {
       lifecycle._removals.add(component);
-      component._state = LifecycleState.removing;
+      component._state |= _removing;
     }
   }
 
@@ -495,15 +488,15 @@ class Component {
 
   Future<void>? _load() {
     assert(_parent != null);
-    assert(_state == LifecycleState.uninitialized);
-    _state = LifecycleState.loading;
+    assert(_state == _initial);
+    _state = _loading;
     onGameResize(_parent!.findGame()!.canvasSize);
     final onLoadFuture = onLoad();
     if (onLoadFuture == null) {
-      _state = LifecycleState.loaded;
+      _state = _loaded;
     } else {
       return onLoadFuture.then((_) {
-        _state = LifecycleState.loaded;
+        _state = _loaded;
         _loadCompleter?.complete();
       });
     }
@@ -521,15 +514,16 @@ class Component {
   void _mount({Component? parent, bool existingChild = false}) {
     _parent ??= parent;
     assert(_parent != null && _parent!.isMounted);
-    assert(_state == LifecycleState.loaded || _state == LifecycleState.removed);
-    if (existingChild || _state == LifecycleState.removed) {
+    assert(isLoaded);
+    if (existingChild) {
+      // || _state == LifecycleState.removed
       onGameResize(findGame()!.canvasSize);
     }
     _mountCompleter?.complete();
     _mountCompleter = null;
     debugMode |= _parent!.debugMode;
     onMount();
-    _state = LifecycleState.mounted;
+    _state |= _mounted;
     if (!existingChild) {
       _parent!.children.add(this);
     }
@@ -543,14 +537,14 @@ class Component {
 
   // TODO(st-pasha): remove this after #1351 is done
   @internal
-  void setMounted() => _state = LifecycleState.mounted;
+  void setMounted() => _state |= _mounted;
 
   void _remove() {
     _parent!.children.remove(this);
     propagateToChildren(
       (Component component) {
         component.onRemove();
-        component._state = LifecycleState.removed;
+        component._state &= ~(_mounted | _removing);
         component._parent = null;
         return true;
       },
@@ -764,6 +758,8 @@ class _LifecycleManager {
     return !(_children.isEmpty && _removals.isEmpty && _adoption.isEmpty);
   }
 
+  void enqueueChild(Component c) => _children.add(c);
+
   void processQueues() {
     _processChildrenQueue();
     _processRemovalQueue();
@@ -782,7 +778,7 @@ class _LifecycleManager {
       if (child.isLoaded) {
         child._mount();
         _children.removeFirst();
-      } else if (child._state == LifecycleState.loading) {
+      } else if (child.isLoading) {
         break;
       } else {
         child._load();
@@ -796,7 +792,7 @@ class _LifecycleManager {
       if (component.isMounted) {
         component._remove();
       }
-      assert(component._state == LifecycleState.removed);
+      assert(!component.isMounted);
     }
   }
 
