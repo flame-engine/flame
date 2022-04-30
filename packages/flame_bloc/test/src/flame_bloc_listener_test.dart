@@ -22,7 +22,7 @@ class SadPlayerListener extends Component
   PlayerState? last;
 
   @override
-  bool listenWhen(PlayerState? previousState, PlayerState newState) {
+  bool listenWhen(PlayerState previousState, PlayerState newState) {
     return newState == PlayerState.sad;
   }
 

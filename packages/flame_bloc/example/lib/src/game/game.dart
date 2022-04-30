@@ -43,17 +43,19 @@ class SpaceShooterGame extends FlameGame
     await super.onLoad();
 
     await add(
-      FlameBlocProvider<InventoryBloc, InventoryState>.value(
-        value: inventoryBloc,
-        children: [
+      FlameMultiBlocProvider(
+        providers: [
+          FlameBlocProvider<InventoryBloc, InventoryState>.value(
+            value: inventoryBloc,
+          ),
           FlameBlocProvider<GameStatsBloc, GameStatsState>.value(
             value: statsBloc,
-            children: [
-              player = PlayerComponent(),
-              PlayerController(),
-              GameStatsController(),
-            ],
           ),
+        ],
+        children: [
+          player = PlayerComponent(),
+          PlayerController(),
+          GameStatsController(),
         ],
       ),
     );

@@ -16,42 +16,45 @@ class GamePage extends StatelessWidget {
     return Scaffold(
       body: MultiBlocProvider(
         providers: [
-          BlocProvider<GameStatsBloc>(
-            create: (_) => GameStatsBloc(),
-          ),
-          BlocProvider<InventoryBloc>(
-            create: (_) => InventoryBloc(),
-          ),
+          BlocProvider<GameStatsBloc>(create: (_) => GameStatsBloc()),
+          BlocProvider<InventoryBloc>(create: (_) => InventoryBloc()),
         ],
-        child: Builder(
-          builder: (context) {
-            return Column(
-              children: [
-                const GameStat(),
-                Expanded(
-                  child: Stack(
-                    children: [
-                      Positioned.fill(
-                        child: GameWidget(
-                          game: SpaceShooterGame(
-                            statsBloc: BlocProvider.of<GameStatsBloc>(context),
-                            inventoryBloc:
-                                BlocProvider.of<InventoryBloc>(context),
-                          ),
-                        ),
-                      ),
-                      const Positioned(
-                        top: 50,
-                        right: 10,
-                        child: Inventory(),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            );
-          },
+        child: const GameView(),
+      ),
+    );
+  }
+}
+
+class GameView extends StatelessWidget {
+  const GameView({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        const GameStat(),
+        Expanded(
+          child: Stack(
+            children: const [
+              Positioned.fill(child: Game()),
+              Positioned(top: 50, right: 10, child: Inventory()),
+            ],
+          ),
         ),
+      ],
+    );
+  }
+}
+
+class Game extends StatelessWidget {
+  const Game({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GameWidget(
+      game: SpaceShooterGame(
+        statsBloc: context.read<GameStatsBloc>(),
+        inventoryBloc: context.read<InventoryBloc>(),
       ),
     );
   }

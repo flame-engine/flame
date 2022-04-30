@@ -15,8 +15,8 @@ class PlayerController extends Component
         HasGameRef<SpaceShooterGame>,
         FlameBlocListener<GameStatsBloc, GameStatsState> {
   @override
-  bool listenWhen(GameStatsState? previousState, GameStatsState newState) {
-    return previousState?.status != newState.status;
+  bool listenWhen(GameStatsState previousState, GameStatsState newState) {
+    return previousState.status != newState.status;
   }
 
   @override
