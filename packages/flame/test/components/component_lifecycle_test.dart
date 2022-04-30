@@ -49,8 +49,8 @@ void main() {
 
     flameGame.test('component mounted completes', (game) async {
       final component = _MyComponent();
-      await game.add(component);
       final mounted = component.mounted;
+      await game.add(component);
 
       await game.ready();
 
@@ -90,6 +90,24 @@ void main() {
         await game.ready();
 
         await expectLater(mounted, completes);
+      },
+    );
+
+    testWithFlameGame(
+      'Component.mounted completes after the component is mounted',
+      (game) async {
+        final child = _MyComponent();
+        var mountedFutureCompleted = false;
+        final future = child.mounted.then((_) {
+          expect(child.isMounted, true);
+          expect(child.events, contains('onMount'));
+          mountedFutureCompleted = true;
+        });
+        game.add(child);
+        await game.ready();
+        expect(child.isMounted, true);
+        await future;
+        expect(mountedFutureCompleted, true);
       },
     );
 
