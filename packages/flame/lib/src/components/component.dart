@@ -262,9 +262,7 @@ class Component {
     if (isLoaded) {
       return Future.value();
     }
-
     _loadCompleter ??= Completer<void>();
-
     return _loadCompleter!.future;
   }
 
@@ -519,6 +517,7 @@ class Component {
   void _finishLoading() {
     _state |= _loaded;
     _loadCompleter?.complete();
+    _loadCompleter = null;
   }
 
   /// Mount the component that is already loaded and has a mounted parent.
