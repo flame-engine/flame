@@ -12,17 +12,24 @@ class _MyComponent extends Component {
 
   @override
   Future<void> onLoad() async {
-    await super.onLoad();
+    expect(isLoading, true);
+    expect(isLoaded, false);
+    expect(isMounted, false);
     events.add('onLoad');
   }
 
   @override
   void onMount() {
+    expect(isLoading, false);
+    expect(isLoaded, true);
+    expect(isMounted, false);
     events.add('onMount');
   }
 
   @override
   void onRemove() {
+    expect(isLoaded, true);
+    expect(isMounted, true);
     events.add('onRemove');
     super.onRemove();
   }

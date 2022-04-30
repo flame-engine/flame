@@ -536,11 +536,11 @@ class Component {
       onGameResize(findGame()!.canvasSize);
     }
     _state &= ~_loading;
-    _mountCompleter?.complete();
-    _mountCompleter = null;
     debugMode |= _parent!.debugMode;
     onMount();
     _state |= _mounted;
+    _mountCompleter?.complete();
+    _mountCompleter = null;
     if (!existingChild) {
       _parent!.children.add(this);
     }
