@@ -4,11 +4,17 @@ import 'package:flame/input.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flutter/material.dart' hide Draggable;
 
-import 'balls.dart';
-import 'boundaries.dart';
+import 'utils/balls.dart';
+import 'utils/boundaries.dart';
 
-class DraggableSample extends Forge2DGame with HasDraggables {
-  DraggableSample() : super(gravity: Vector2.all(0.0));
+class DraggableExample extends Forge2DGame with HasDraggables {
+  static const description = '''
+    In this example we use Flame's normal `Draggable` mixin to give impulses to
+    a ball when we are dragging it around. If you are interested in dragging
+    bodies around, also have a look at the MouseJointExample.
+  ''';
+
+  DraggableExample() : super(gravity: Vector2.all(0.0));
 
   @override
   Future<void> onLoad() async {
