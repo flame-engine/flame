@@ -3,20 +3,21 @@ import 'package:flame/input.dart';
 import 'package:flame_forge2d/flame_forge2d.dart' hide Transform;
 import 'package:flutter/material.dart';
 
-import 'boundaries.dart';
+import 'utils/boundaries.dart';
 
-const widgetSampleDescription = '''
-This examples shows how to render a widget on top of a Forge2D body.
-''';
+class WidgetExample extends Forge2DGame with TapDetector {
+  static const String description = '''
+    This examples shows how to render a widget on top of a Forge2D body outside
+    of Flame.
+  ''';
 
-class WidgetSample extends Forge2DGame with TapDetector {
   List<Function()> updateStates = [];
   Map<int, Body> bodyIdMap = {};
   List<int> addLaterIds = [];
 
   Vector2 screenPosition(Body body) => worldToScreen(body.worldCenter);
 
-  WidgetSample() : super(zoom: 20, gravity: Vector2(0, 10.0));
+  WidgetExample() : super(zoom: 20, gravity: Vector2(0, 10.0));
 
   @override
   Future<void> onLoad() async {
@@ -38,7 +39,8 @@ class WidgetSample extends Forge2DGame with TapDetector {
     final fixtureDef = FixtureDef(
       shape,
       density: 1.0,
-      restitution: 0.95,
+      restitution: 0.8,
+      friction: 0.2,
     );
     body.createFixture(fixtureDef);
     return body;
@@ -59,13 +61,13 @@ class WidgetSample extends Forge2DGame with TapDetector {
   }
 }
 
-class BodyWidgetSample extends StatelessWidget {
-  const BodyWidgetSample({Key? key}) : super(key: key);
+class BodyWidgetExample extends StatelessWidget {
+  const BodyWidgetExample({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return GameWidget<WidgetSample>(
-      game: WidgetSample(),
+    return GameWidget<WidgetExample>(
+      game: WidgetExample(),
       overlayBuilderMap: {
         'button1': (ctx, game) {
           return BodyButtonWidget(game, game.createBodyId());
@@ -80,7 +82,7 @@ class BodyWidgetSample extends StatelessWidget {
 }
 
 class BodyButtonWidget extends StatefulWidget {
-  final WidgetSample _game;
+  final WidgetExample _game;
   final int _bodyId;
 
   const BodyButtonWidget(
@@ -96,7 +98,7 @@ class BodyButtonWidget extends StatefulWidget {
 }
 
 class _BodyButtonState extends State<BodyButtonWidget> {
-  final WidgetSample _game;
+  final WidgetExample _game;
   final int _bodyId;
   Body? _body;
 

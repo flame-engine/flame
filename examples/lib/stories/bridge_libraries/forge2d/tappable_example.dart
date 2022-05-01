@@ -3,11 +3,17 @@ import 'package:flame/game.dart';
 import 'package:flame/palette.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 
-import 'balls.dart';
-import 'boundaries.dart';
+import 'utils/balls.dart';
+import 'utils/boundaries.dart';
 
-class TappableSample extends Forge2DGame with HasTappables {
-  TappableSample() : super(zoom: 20, gravity: Vector2(0, 10.0));
+class TappableExample extends Forge2DGame with HasTappables {
+  static const String description = '''
+    In this example we show how to use Flame's tappable mixin to react to taps
+    on `BodyComponent`s.
+    Tap the ball to give it a random impulse, or the text to add an effect to
+    it.
+  ''';
+  TappableExample() : super(zoom: 20, gravity: Vector2(0, 10.0));
 
   @override
   Future<void> onLoad() async {
