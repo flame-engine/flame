@@ -21,10 +21,12 @@ class Forge2DGame extends FlameGame {
 
   final World world;
 
+  static const _worldStepTime = 1 / 60;
+
   @override
   void update(double dt) {
     super.update(dt);
-    world.stepDt(dt);
+    world.stepDt(_worldStepTime);
   }
 
   Vector2 worldToScreen(Vector2 position) {
