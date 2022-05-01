@@ -78,11 +78,6 @@ class MultipleShapesExample extends FlameGame
       rng: _rng,
     );
   }
-
-  @override
-  void render(Canvas canvas) {
-    super.render(canvas);
-  }
 }
 
 abstract class MyCollidable extends PositionComponent
