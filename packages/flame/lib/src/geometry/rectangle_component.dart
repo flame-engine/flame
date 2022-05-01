@@ -47,10 +47,14 @@ class RectangleComponent extends PolygonComponent {
   /// [parentSize].
   RectangleComponent.relative(
     Vector2 relation, {
-    Vector2? position,
     required Vector2 parentSize,
-    double angle = 0,
+    Vector2? position,
+    Vector2? scale,
+    double? angle = 0,
     Anchor? anchor,
+    int? priority,
+    Paint? paint,
+    bool? shrinkToBounds,
   }) : super.relative(
           [
             relation.clone(),
@@ -59,9 +63,13 @@ class RectangleComponent extends PolygonComponent {
             Vector2(-relation.x, relation.y),
           ],
           position: position,
+          scale: scale,
           parentSize: parentSize,
           angle: angle,
           anchor: anchor,
+          priority: priority,
+          paint: paint,
+          shrinkToBounds: shrinkToBounds,
         );
 
   /// This factory will create a [RectangleComponent] from a positioned [Rect].
