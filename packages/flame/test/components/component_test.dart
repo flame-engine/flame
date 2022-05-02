@@ -142,108 +142,110 @@ void main() {
       expect(anchorPosition.y, 0.0);
     });
 
-    flameGame.test('removeFromParent', (game) async {
-      final c1 = Component()..addToParent(game);
-      await game.ready();
+    group('Remove', () {
+      flameGame.test('removeFromParent', (game) async {
+        final c1 = Component()..addToParent(game);
+        await game.ready();
 
-      expect(c1.isMounted, true);
-      c1.removeFromParent();
-      expect(c1.isMounted, true);
-      await game.ready();
-      expect(c1.isMounted, false);
-      expect(game.children.length, 0);
+        expect(c1.isMounted, true);
+        c1.removeFromParent();
+        expect(c1.isMounted, true);
+        await game.ready();
+        expect(c1.isMounted, false);
+        expect(game.children.length, 0);
+      });
+
+      flameGame.test(
+        'remove and re-add should not double trigger onRemove',
+        (game) async {
+          final component = _RemoveComponent();
+          await game.ensureAdd(component);
+
+          component.removeFromParent();
+          game.update(0);
+          expect(component.removeCounter, 1);
+          expect(component.isMounted, false);
+
+          component.removeCounter = 0;
+          await game.ensureAdd(component);
+          expect(component.removeCounter, 0);
+          expect(game.children.length, 1);
+        },
+      );
+
+      testWithFlameGame(
+        'remove a component before it was ever added',
+        (game) async {
+          expect(
+            () => game.remove(Component()),
+            failsAssert(
+              "Trying to remove a component that doesn't belong to any parent",
+            ),
+          );
+        },
+      );
+
+      testWithFlameGame(
+        'remove a component from a wrong parent',
+        (game) async {
+          final badParent = Component()..addToParent(game);
+          final child = Component()..addToParent(game);
+          await game.ready();
+          expect(
+            () => badParent.remove(child),
+            failsAssert(
+              'Trying to remove a component that belongs to a different '
+              "parent: this = Instance of 'Component', component's parent = "
+              "Instance of 'FlameGame'",
+            ),
+          );
+        },
+      );
+
+      testWithFlameGame(
+        'remove an uninitialized component',
+        (game) async {
+          final parent = Component();
+          final child = Component()..addToParent(parent);
+          expect(child.isLoading, false);
+          expect(child.isLoaded, false);
+          expect(child.isMounted, false);
+          child.removeFromParent();
+
+          game.add(parent);
+          await game.ready();
+
+          expect(child.isLoading, false);
+          expect(child.isLoaded, false);
+          expect(child.isMounted, false);
+          expect(parent.isMounted, true);
+          expect(parent.children.length, 0);
+          expect(child.parent, isNull);
+        },
+      );
+
+      testWithFlameGame(
+        'remove and re-add uninitialized component with non-trivial onLoad',
+        (game) async {
+          final parent = Component();
+          final component = _ComponentWithOnLoad();
+          parent.add(component);
+          expect(component.isLoading, false);
+          parent.remove(component);
+          expect(component.isLoading, false);
+          expect(component.onLoadCalledCount, 0);
+
+          final newParent = Component()..addToParent(game);
+          newParent.add(component);
+          expect(component.isLoading, true);
+          expect(component.onLoadCalledCount, 1);
+          await game.ready();
+          expect(component.isMounted, true);
+          expect(newParent.children.length, 1);
+          expect(newParent.children.first, component);
+        },
+      );
     });
-
-    flameGame.test(
-      'remove and re-add should not double trigger onRemove',
-      (game) async {
-        final component = _RemoveComponent();
-        await game.ensureAdd(component);
-
-        component.removeFromParent();
-        game.update(0);
-        expect(component.removeCounter, 1);
-        expect(component.isMounted, false);
-
-        component.removeCounter = 0;
-        await game.ensureAdd(component);
-        expect(component.removeCounter, 0);
-        expect(game.children.length, 1);
-      },
-    );
-
-    testWithFlameGame(
-      'remove a component before it was ever added',
-      (game) async {
-        expect(
-          () => game.remove(Component()),
-          failsAssert(
-            "Trying to remove a component that doesn't belong to any parent",
-          ),
-        );
-      },
-    );
-
-    testWithFlameGame(
-      'remove a component from a wrong parent',
-      (game) async {
-        final badParent = Component()..addToParent(game);
-        final child = Component()..addToParent(game);
-        await game.ready();
-        expect(
-          () => badParent.remove(child),
-          failsAssert(
-            'Trying to remove a component that belongs to a different parent: '
-            "this = Instance of 'Component', component's parent = Instance of "
-            "'FlameGame'",
-          ),
-        );
-      },
-    );
-
-    testWithFlameGame(
-      'remove an uninitialized component',
-      (game) async {
-        final parent = Component();
-        final child = Component()..addToParent(parent);
-        expect(child.isLoading, false);
-        expect(child.isLoaded, false);
-        expect(child.isMounted, false);
-        child.removeFromParent();
-
-        game.add(parent);
-        await game.ready();
-
-        expect(child.isLoading, false);
-        expect(child.isLoaded, false);
-        expect(child.isMounted, false);
-        expect(parent.isMounted, true);
-        expect(parent.children.length, 0);
-        expect(child.parent, isNull);
-      },
-    );
-
-    testWithFlameGame(
-      'remove and re-add uninitialized component with non-trivial onLoad',
-      (game) async {
-        final parent = Component();
-        final component = _ComponentWithOnLoad();
-        parent.add(component);
-        expect(component.isLoading, false);
-        parent.remove(component);
-        expect(component.isLoading, false);
-        expect(component.onLoadCalledCount, 0);
-
-        final newParent = Component()..addToParent(game);
-        newParent.add(component);
-        expect(component.isLoading, true);
-        expect(component.onLoadCalledCount, 1);
-        await game.ready();
-        expect(component.isMounted, true);
-        expect(newParent.children.length, 1);
-        expect(newParent.children.first, component);
-      },
-    );
 
     prepareGame.test(
       'adding children to a parent that is not yet added to a game should not '
