@@ -13,8 +13,8 @@ mixin FlameBlocListenable<B extends BlocBase<S>, S> on Component {
   B? _bloc;
 
   /// Explicitly set the bloc instance which the component will be listening to.
-  /// This is useful in cases where the bloc being listened to has not be provided
-  /// via [FlameBlocProvider].
+  /// This is useful in cases where the bloc being listened to
+  /// has not be provided via [FlameBlocProvider].
   set bloc(B bloc) {
     assert(
       _bloc == null,
