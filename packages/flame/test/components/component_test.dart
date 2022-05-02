@@ -301,6 +301,35 @@ void main() {
           expect(component.isMounted, false);
         },
       );
+
+      testWithFlameGame(
+        'Quickly removed component can be re-added',
+        (game) async {
+          final component = LifecycleComponent();
+          game.add(component);
+          game.remove(component);
+          await game.ready();
+          component.events.add('--');
+
+          expect(game.children.length, 0);
+          game.add(component);
+          await game.ready();
+
+          expect(game.children.length, 1);
+          expect(component.isMounted, true);
+          expect(component.isLoaded, true);
+          expect(
+            component.events,
+            [
+              'onGameResize [800.0,600.0]',
+              'onLoad',
+              '--',
+              'onGameResize [800.0,600.0]',
+              'onMount',
+            ],
+          );
+        },
+      );
     });
 
     prepareGame.test(

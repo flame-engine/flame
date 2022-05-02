@@ -490,7 +490,7 @@ class Component {
       lifecycle._children.remove(component);
       component._parent = null;
       // TODO(st-pasha): properly handle removal in other states too
-    } else if (isLoading) {
+    } else if (component.isLoading) {
       component._state |= _removing;
     } else if ((component._state & _removing) == 0) {
       lifecycle._removals.add(component);
@@ -543,6 +543,7 @@ class Component {
     _state &= ~_loading;
     if ((_state & _removing) != 0) {
       _parent = null;
+      _state &= ~_removing;
       return;
     }
     debugMode |= _parent!.debugMode;
