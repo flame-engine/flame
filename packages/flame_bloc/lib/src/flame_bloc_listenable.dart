@@ -2,30 +2,44 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:flame/components.dart';
-import 'package:flutter/material.dart';
+import 'package:meta/meta.dart';
 
 import '../flame_bloc.dart';
 
 /// Adds [Bloc] access and listening to a [Component]
 mixin FlameBlocListenable<B extends BlocBase<S>, S> on Component {
   late S _state;
-  late B _bloc;
-  late StreamSubscription<S> _subscription;
+  late final StreamSubscription<S> _subscription;
+  B? _bloc;
+
+  /// Explicitly set the bloc instance which the component will be listening to.
+  /// This is useful in cases where the bloc being listened to has not be provided
+  /// via [FlameBlocProvider].
+  set bloc(B bloc) {
+    assert(
+      _bloc == null,
+      'Cannot update the bloc instance once it has been set.',
+    );
+    _bloc = bloc;
+  }
 
   @override
   @mustCallSuper
   Future<void> onLoad() async {
-    final providers = ancestors().whereType<FlameBlocProvider<B, S>>();
-    assert(
-      providers.isNotEmpty,
-      'No FlameBlocProvider<$B, $S> available on the component tree',
-    );
+    var bloc = _bloc;
+    if (bloc == null) {
+      final providers = ancestors().whereType<FlameBlocProvider<B, S>>();
+      assert(
+        providers.isNotEmpty,
+        'No FlameBlocProvider<$B, $S> available on the component tree',
+      );
 
-    final provider = providers.first;
-    _bloc = provider.bloc;
-    _state = _bloc.state;
+      final provider = providers.first;
+      _bloc = bloc = provider.bloc;
+    }
 
-    _subscription = _bloc.stream.listen((newState) {
+    _state = bloc.state;
+    _subscription = bloc.stream.listen((newState) {
       if (_state != newState) {
         final _callNewState = listenWhen(_state, newState);
         _state = newState;

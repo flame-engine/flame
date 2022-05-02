@@ -10,10 +10,15 @@ class FlameBlocListener<B extends BlocBase<S>, S> extends Component
     with FlameBlocListenable<B, S> {
   /// {@macro flame_bloc_listener}
   FlameBlocListener({
+    B? bloc,
     required void Function(S state) onNewState,
     bool Function(S previousState, S newState)? listenWhen,
   })  : _onNewState = onNewState,
-        _listenWhen = listenWhen;
+        _listenWhen = listenWhen {
+    if (bloc != null) {
+      this.bloc = bloc;
+    }
+  }
 
   final void Function(S state) _onNewState;
   final bool Function(S previousState, S newState)? _listenWhen;

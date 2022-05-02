@@ -48,5 +48,22 @@ void main() {
         expect(states, isEmpty);
       },
     );
+
+    testWithFlameGame(
+      'a bloc can be explicitly passed',
+      (game) async {
+        final bloc = PlayerCubit();
+        final states = <PlayerState>[];
+        final component = FlameBlocListener<PlayerCubit, PlayerState>(
+          bloc: bloc,
+          onNewState: states.add,
+        );
+        await game.ensureAdd(component);
+
+        bloc.kill();
+        await Future.microtask(() {});
+        expect(states, equals([PlayerState.dead]));
+      },
+    );
   });
 }
