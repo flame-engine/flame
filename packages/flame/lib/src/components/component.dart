@@ -541,6 +541,10 @@ class Component {
       onGameResize(findGame()!.canvasSize);
     }
     _state &= ~_loading;
+    if ((_state & _removing) != 0) {
+      _parent = null;
+      return;
+    }
     debugMode |= _parent!.debugMode;
     onMount();
     _state |= _mounted;
@@ -703,42 +707,6 @@ class Component {
 
 typedef ComponentSetFactory = ComponentSet Function();
 
-/// This enum keeps track of the [Component]'s current stage in its lifecycle.
-///
-/// The progression between states happens as follows:
-/// ```
-///   uninitialized -> loading -> loaded -> mounted -> removing -> removed -.
-///                                           ^-----------------------------'
-/// ```
-///
-/// Publicly visible flags `isLoaded` and `isMounted` are derived from this
-/// state:
-///   - isLoaded = loaded | mounted | removing | removed
-///   - isMounted = mounted | removing
-// enum LifecycleState {
-//   /// The original state of a [Component] when it was just constructed.
-//   uninitialized,
-//
-//   /// The component is currently running its `onLoad` method.
-//   ///
-//   /// In this state the component is guaranteed to have a parent, and the root
-//   /// `game` is findable via `findGame()`.
-//   loading,
-//
-//   /// The component has just finished running its `onLoad` step, but before it
-//   /// is mounted.
-//   loaded,
-//
-//   /// The component has finished running its `onMount` step, and was added to
-//   /// its parent's `children` list.
-//   mounted,
-//
-//   /// The component is scheduled to be removed on the next game tick.
-//   removing,
-//
-//   /// The component which was mounted before, is now removed from its parent.
-//   removed,
-// }
 
 /// Helper class to assist [Component] with its lifecycle.
 ///
