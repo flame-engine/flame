@@ -40,7 +40,7 @@ class MultipleShapesExample extends FlameGame
     add(screenHitbox);
     add(snowman);
     var totalAdded = 1;
-    while (totalAdded < 100) {
+    while (totalAdded < 1000) {
       lastToAdd = nextRandomCollidable(lastToAdd, screenHitbox);
       final lastBottomRight = lastToAdd.toAbsoluteRect().bottomRight;
       if (lastBottomRight.dx < size.x && lastBottomRight.dy < size.y) {
