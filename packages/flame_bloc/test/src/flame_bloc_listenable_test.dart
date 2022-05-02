@@ -52,6 +52,15 @@ void main() {
     );
 
     testWithFlameGame(
+      'throws assertion error when the bloc set multiple times',
+      (game) async {
+        final bloc = PlayerCubit();
+        final component = PlayerListener()..bloc = bloc;
+        expect(() => component.bloc = bloc, throwsAssertionError);
+      },
+    );
+
+    testWithFlameGame(
       'closes the subscription when it is removed',
       (game) async {
         final bloc = PlayerCubit();
