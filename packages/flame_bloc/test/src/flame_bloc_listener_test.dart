@@ -1,92 +1,51 @@
-import 'package:flame/components.dart';
 import 'package:flame_bloc/flame_bloc.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import '../inventory_cubit.dart';
 import '../player_cubit.dart';
-
-class PlayerListener extends Component
-    with FlameBlocListener<PlayerCubit, PlayerState> {
-  PlayerState? last;
-  @override
-  void onNewState(PlayerState state) {
-    super.onNewState(state);
-
-    last = state;
-  }
-}
-
-class SadPlayerListener extends Component
-    with FlameBlocListener<PlayerCubit, PlayerState> {
-  PlayerState? last;
-
-  @override
-  bool listenWhen(PlayerState previousState, PlayerState newState) {
-    return newState == PlayerState.sad;
-  }
-
-  @override
-  void onNewState(PlayerState state) {
-    super.onNewState(state);
-
-    last = state;
-  }
-}
 
 void main() {
   group('FlameBlocListener', () {
     testWithFlameGame(
-      'throws assertion error when the bloc is not provided',
-      (game) async {
-        final bloc = InventoryCubit();
-        final provider =
-            FlameBlocProvider<InventoryCubit, InventoryState>.value(
-          value: bloc,
-        );
-        await game.ensureAdd(provider);
-
-        final component = PlayerListener();
-        expect(() => provider.ensureAdd(component), throwsAssertionError);
-      },
-    );
-
-    testWithFlameGame(
-      'closes the subscription when it is removed',
+      'onNewsState is called when state changes',
       (game) async {
         final bloc = PlayerCubit();
         final provider = FlameBlocProvider<PlayerCubit, PlayerState>.value(
           value: bloc,
         );
+        final states = <PlayerState>[];
         await game.ensureAdd(provider);
 
-        final component = PlayerListener();
-        await provider.ensureAdd(component);
-
-        component.removeFromParent();
-        await game.ready();
-
-        bloc.makeSad();
-        await Future.microtask(() {});
-        expect(component.last, isNull);
-      },
-    );
-
-    testWithFlameGame(
-      'listen only listenWhen returns true',
-      (game) async {
-        final bloc = PlayerCubit();
-        final provider = FlameBlocProvider<PlayerCubit, PlayerState>.value(
-          value: bloc,
+        final component = FlameBlocListener<PlayerCubit, PlayerState>(
+          onNewState: states.add,
         );
-        await game.ensureAdd(provider);
-
-        final component = SadPlayerListener();
         await provider.ensureAdd(component);
 
         bloc.kill();
         await Future.microtask(() {});
-        expect(component.last, isNull);
+        expect(states, equals([PlayerState.dead]));
+      },
+    );
+
+    testWithFlameGame(
+      'onNewsState is not called when listenWhen returns false',
+      (game) async {
+        final bloc = PlayerCubit();
+        final provider = FlameBlocProvider<PlayerCubit, PlayerState>.value(
+          value: bloc,
+        );
+        final states = <PlayerState>[];
+        await game.ensureAdd(provider);
+
+        final component = FlameBlocListener<PlayerCubit, PlayerState>(
+          onNewState: states.add,
+          listenWhen: (_, __) => false,
+        );
+        await provider.ensureAdd(component);
+
+        bloc.kill();
+        await Future.microtask(() {});
+        expect(states, isEmpty);
       },
     );
   });

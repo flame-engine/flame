@@ -13,7 +13,7 @@ class GameStatsController extends Component with HasGameRef<SpaceShooterGame> {
   @override
   Future<void>? onLoad() async {
     add(
-      FlameBlocListenerComponent<GameStatsBloc, GameStatsState>(
+      FlameBlocListener<GameStatsBloc, GameStatsState>(
         listenWhen: (previousState, newState) {
           return previousState.status != newState.status &&
               newState.status == GameStatus.initial;

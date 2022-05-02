@@ -9,7 +9,7 @@ class InventoryReader extends Component
     with FlameBlocReader<InventoryCubit, InventoryState> {}
 
 class InventoryListener extends Component
-    with FlameBlocListener<InventoryCubit, InventoryState> {
+    with FlameBlocListenable<InventoryCubit, InventoryState> {
   InventoryState? lastState;
 
   @override

@@ -13,7 +13,7 @@ import 'explosion.dart';
 class PlayerController extends Component
     with
         HasGameRef<SpaceShooterGame>,
-        FlameBlocListener<GameStatsBloc, GameStatsState> {
+        FlameBlocListenable<GameStatsBloc, GameStatsState> {
   @override
   bool listenWhen(GameStatsState previousState, GameStatsState newState) {
     return previousState.status != newState.status;
@@ -34,7 +34,7 @@ class PlayerComponent extends SpriteAnimationComponent
         HasGameRef<SpaceShooterGame>,
         CollisionCallbacks,
         KeyboardHandler,
-        FlameBlocListener<InventoryBloc, InventoryState> {
+        FlameBlocListenable<InventoryBloc, InventoryState> {
   bool destroyed = false;
   late Timer bulletCreator;
 
