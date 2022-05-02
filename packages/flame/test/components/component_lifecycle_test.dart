@@ -142,6 +142,17 @@ void main() {
       },
     );
 
+    testWithFlameGame(
+      '.loaded completes even if accessed before the component added to game',
+      (game) async {
+        final component = Component();
+        final loadedFuture = component.loaded;
+        game.add(component);
+        await game.ready();
+        expectLater(loadedFuture, completes);
+      },
+    );
+
     // Obsolete scenario, when we used to have a separate "prepare" stage
     flameGame.test('parent prepares the component', (game) async {
       final parent = _MyComponent('parent');
