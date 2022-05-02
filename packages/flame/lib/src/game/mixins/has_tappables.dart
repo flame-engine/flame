@@ -8,7 +8,7 @@ import '../flame_game.dart';
 import 'multi_touch_tap_detector.dart';
 
 /// Mixin that can be added to a [FlameGame] allowing it (and the components
-/// attached to the game) to receive tap events.
+/// attached to it) to receive tap events.
 ///
 /// This mixin is similar to [MultiTouchTapDetector] on Game, however, it also
 /// propagates all tap events down the component tree, allowing each individual
