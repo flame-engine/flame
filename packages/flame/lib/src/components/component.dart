@@ -720,7 +720,6 @@ class Component {
 
 typedef ComponentSetFactory = ComponentSet Function();
 
-
 /// Helper class to assist [Component] with its lifecycle.
 ///
 /// Most lifecycle events -- add, remove, change parent -- live for a very short
