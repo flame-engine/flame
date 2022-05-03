@@ -52,6 +52,14 @@ class Component {
   /// [_loaded]: this flag is set after the component finishes running its
   ///     [onLoad] method, and can be checked via the [isLoaded] getter. Once
   ///     set, this bit is never turned off.
+  ///
+  /// [_mounted]: this flag is set when the component becomes properly mounted
+  ///     to the component tree, and then turned off when the component is
+  ///     removed from the tree.
+  ///
+  /// [_removing]: this bit indicates that the component is scheduled for
+  ///     removal at the earliest possible opportunity, and then cleared when
+  ///     the component is actually removed.
   int _state = _initial;
 
   static const int _initial = 0;
