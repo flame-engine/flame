@@ -4,80 +4,16 @@ import 'package:flame/input.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flutter/material.dart' show Colors, Paint, Canvas;
 
-import 'boundaries.dart';
+import 'utils/boundaries.dart';
 
-const raycastSampleDescription = '''
-This example shows how raycasts can be used to find nearest and farthest fixtures.
-Red ray finds the nearest fixture and blue ray finds the farthest fixture.
-''';
-
-class Box extends BodyComponent {
-  final Vector2 position;
-
-  Box(this.position);
-
-  @override
-  Body createBody() {
-    final shape = PolygonShape()..setAsBoxXY(2.0, 4.0);
-    final fixtureDef = FixtureDef(shape, userData: this);
-    final bodyDef = BodyDef(position: position);
-    return world.createBody(bodyDef)..createFixture(fixtureDef);
-  }
-}
-
-class NearestBoxRayCastCallback extends RayCastCallback {
-  Box? box;
-  Vector2? nearestPoint;
-  Vector2? normalAtInter;
-
-  @override
-  double reportFixture(
-    Fixture fixture,
-    Vector2 point,
-    Vector2 normal,
-    double fraction,
-  ) {
-    nearestPoint = point.clone();
-    normalAtInter = normal.clone();
-    box = fixture.userData as Box?;
-
-    // Returning fraction implies that we care only about
-    // fixtures that are closer to ray start point than
-    // the current fixture
-    return fraction;
-  }
-}
-
-class FarthestBoxRayCastCallback extends RayCastCallback {
-  Box? box;
-  Vector2? farthestPoint;
-  Vector2? normalAtInter;
-  double previousFraction = 0.0;
-
-  @override
-  double reportFixture(
-    Fixture fixture,
-    Vector2 point,
-    Vector2 normal,
-    double fraction,
-  ) {
-    // Value of fraction is directly proportional to
-    // the distance of fixture from ray start point.
-    // So we are interested in the current fixture only if
-    // it has a higher fraction value than previousFraction.
-    if (previousFraction < fraction) {
-      farthestPoint = point.clone();
-      normalAtInter = normal.clone();
-      box = fixture.userData as Box?;
-      previousFraction = fraction;
-    }
-
-    return 1;
-  }
-}
-
-class RaycastSample extends Forge2DGame
+class RaycastExample extends Forge2DGame
     with TapDetector, MouseMovementDetector {
+  static const String description = '''
+    This example shows how raycasts can be used to find nearest and farthest
+    fixtures.
+    Red ray finds the nearest fixture and blue ray finds the farthest fixture.
+  ''';
+
   final random = Random();
 
   final redPoints = List<Vector2>.empty(growable: true);
@@ -86,7 +22,7 @@ class RaycastSample extends Forge2DGame
   Box? nearestBox;
   Box? farthestBox;
 
-  RaycastSample() : super(gravity: Vector2.zero());
+  RaycastExample() : super(gravity: Vector2.zero());
 
   @override
   Future<void> onLoad() async {
@@ -190,5 +126,70 @@ class RaycastSample extends Forge2DGame
           ..strokeWidth = 4,
       );
     }
+  }
+}
+
+class Box extends BodyComponent {
+  final Vector2 position;
+
+  Box(this.position);
+
+  @override
+  Body createBody() {
+    final shape = PolygonShape()..setAsBoxXY(2.0, 4.0);
+    final fixtureDef = FixtureDef(shape, userData: this);
+    final bodyDef = BodyDef(position: position);
+    return world.createBody(bodyDef)..createFixture(fixtureDef);
+  }
+}
+
+class NearestBoxRayCastCallback extends RayCastCallback {
+  Box? box;
+  Vector2? nearestPoint;
+  Vector2? normalAtInter;
+
+  @override
+  double reportFixture(
+    Fixture fixture,
+    Vector2 point,
+    Vector2 normal,
+    double fraction,
+  ) {
+    nearestPoint = point.clone();
+    normalAtInter = normal.clone();
+    box = fixture.userData as Box?;
+
+    // Returning fraction implies that we care only about
+    // fixtures that are closer to ray start point than
+    // the current fixture
+    return fraction;
+  }
+}
+
+class FarthestBoxRayCastCallback extends RayCastCallback {
+  Box? box;
+  Vector2? farthestPoint;
+  Vector2? normalAtInter;
+  double previousFraction = 0.0;
+
+  @override
+  double reportFixture(
+    Fixture fixture,
+    Vector2 point,
+    Vector2 normal,
+    double fraction,
+  ) {
+    // Value of fraction is directly proportional to
+    // the distance of fixture from ray start point.
+    // So we are interested in the current fixture only if
+    // it has a higher fraction value than previousFraction.
+    if (previousFraction < fraction) {
+      farthestPoint = point.clone();
+      normalAtInter = normal.clone();
+      box = fixture.userData as Box?;
+      previousFraction = fraction;
+    }
+
+    return 1;
   }
 }

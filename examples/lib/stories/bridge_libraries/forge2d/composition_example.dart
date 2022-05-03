@@ -5,18 +5,18 @@ import 'package:flame/input.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flutter/material.dart';
 
-import 'balls.dart';
-import 'boundaries.dart';
+import 'utils/balls.dart';
+import 'utils/boundaries.dart';
 
 const TextStyle _textStyle = TextStyle(color: Colors.white, fontSize: 2);
 
-class CompositionSample extends Forge2DGame with HasTappables {
-  static const info = '''
-This example shows how to compose a `BodyComponent` together with a normal Flame
-component. Click the ball to see the number increment.
-''';
+class CompositionExample extends Forge2DGame with HasTappables {
+  static const description = '''
+    This example shows how to compose a `BodyComponent` together with a normal
+    Flame component. Click the ball to see the number increment.
+  ''';
 
-  CompositionSample() : super(zoom: 20, gravity: Vector2(0, 10.0));
+  CompositionExample() : super(zoom: 20, gravity: Vector2(0, 10.0));
 
   @override
   Future<void> onLoad() async {

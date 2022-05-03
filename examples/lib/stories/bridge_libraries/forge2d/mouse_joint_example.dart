@@ -1,16 +1,21 @@
 import 'package:flame/input.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 
-import 'balls.dart';
-import 'boundaries.dart';
-import 'circle_stress_sample.dart';
+import 'revolute_joint_example.dart';
+import 'utils/balls.dart';
+import 'utils/boundaries.dart';
 
-class MouseJointSample extends Forge2DGame with MultiTouchDragDetector {
+class MouseJointExample extends Forge2DGame with MultiTouchDragDetector {
+  static const description = '''
+    In this example we use a `MouseJoint` to make the ball follow the mouse
+    when you drag it around.
+  ''';
+
+  MouseJointExample() : super(gravity: Vector2(0, 10.0));
+
   late Ball ball;
   late Body groundBody;
   MouseJoint? mouseJoint;
-
-  MouseJointSample() : super(gravity: Vector2(0, 10.0));
 
   @override
   Future<void> onLoad() async {

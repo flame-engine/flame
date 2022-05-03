@@ -2,6 +2,7 @@ import 'package:dashbook/dashbook.dart';
 import 'package:flutter/material.dart';
 
 import 'stories/animations/animations.dart';
+import 'stories/bridge_libraries/forge2d/flame_forge2d.dart';
 import 'stories/camera_and_viewport/camera_and_viewport.dart';
 import 'stories/collision_detection/collision_detection.dart';
 import 'stories/components/components.dart';
@@ -36,6 +37,9 @@ void main() async {
   addSystemStories(dashbook);
   addUtilsStories(dashbook);
   addWidgetsStories(dashbook);
+
+  // Bridge package examples
+  addForge2DStories(dashbook);
 
   runApp(dashbook);
 }
