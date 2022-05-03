@@ -1,4 +1,5 @@
 import 'package:dashbook/dashbook.dart';
+import 'package:examples/stories/games/games.dart';
 import 'package:flutter/material.dart';
 
 import 'stories/animations/animations.dart';
@@ -23,6 +24,10 @@ void main() async {
     theme: ThemeData.dark(),
   );
 
+  // Some small sample games
+  addGameStories(dashbook);
+
+  // Feature examples
   addAnimationStories(dashbook);
   addCameraAndViewportStories(dashbook);
   addCollisionDetectionStories(dashbook);
