@@ -330,6 +330,20 @@ void main() {
           );
         },
       );
+
+      testWithFlameGame(
+        'remove component from a paused game',
+        (game) async {
+          game.pauseEngine();
+
+          final component = Component();
+          await game.add(component);
+          game.remove(component);
+
+          game.resumeEngine();
+          game.update(0);
+        },
+      );
     });
 
     prepareGame.test(
