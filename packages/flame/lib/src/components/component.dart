@@ -474,7 +474,7 @@ class Component {
       '$_parent',
     );
     _parent = parent;
-    parent.lifecycle.enqueueChild(this);
+    parent.lifecycle._children.add(this);
     if (!isLoaded && (parent.findGame()?.hasLayout ?? false)) {
       return _startLoading();
     }
@@ -759,8 +759,6 @@ class _LifecycleManager {
   bool get hasPendingEvents {
     return !(_children.isEmpty && _removals.isEmpty && _adoption.isEmpty);
   }
-
-  void enqueueChild(Component c) => _children.add(c);
 
   /// Attempt to resolve pending events in all lifecycle event queues.
   ///
