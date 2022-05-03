@@ -58,7 +58,7 @@ class ObstacleManager extends Component with HasGameRef<TRexGame> {
   }
 
   bool duplicateObstacleCheck(ObstacleType nextType) {
-    int duplicateCount = 0;
+    var duplicateCount = 0;
 
     for (final type in history) {
       duplicateCount += type == nextType ? 1 : 0;

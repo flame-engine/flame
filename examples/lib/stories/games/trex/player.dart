@@ -24,17 +24,21 @@ class Player extends SpriteAnimationGroupComponent<PlayerState>
   @override
   Future<void> onLoad() async {
     // Body hitbox
-    add(RectangleHitbox.relative(
-      Vector2(0.7, 0.6),
-      position: Vector2(0, height / 3),
-      parentSize: size,
-    ));
+    add(
+      RectangleHitbox.relative(
+        Vector2(0.7, 0.6),
+        position: Vector2(0, height / 3),
+        parentSize: size,
+      ),
+    );
     // Head hitbox
-    add(RectangleHitbox.relative(
-      Vector2(0.45, 0.35),
-      position: Vector2(width / 2, 0),
-      parentSize: size,
-    ));
+    add(
+      RectangleHitbox.relative(
+        Vector2(0.45, 0.35),
+        position: Vector2(width / 2, 0),
+        parentSize: size,
+      ),
+    );
     animations = {
       PlayerState.running: _getAnimation(
         size: Vector2(88.0, 90.0),
@@ -112,14 +116,15 @@ class Player extends SpriteAnimationGroupComponent<PlayerState>
   }) {
     return SpriteAnimation.spriteList(
       frames
-          .map((vector) => Sprite(
-                TRexGame.spriteImage,
-                srcSize: size,
-                srcPosition: vector,
-              ))
+          .map(
+            (vector) => Sprite(
+              TRexGame.spriteImage,
+              srcSize: size,
+              srcPosition: vector,
+            ),
+          )
           .toList(),
       stepTime: stepTime,
-      loop: true,
     );
   }
 }

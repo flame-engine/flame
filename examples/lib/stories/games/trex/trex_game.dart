@@ -51,10 +51,12 @@ class TRexGame extends FlameGame
       color: Colors.black,
     );
     final textPaint = TextPaint(style: textStyle);
-    add(scoreText = TextComponent(
-      position: Vector2.all(20),
-      textRenderer: textPaint,
-    )..positionType = PositionType.viewport);
+    add(
+      scoreText = TextComponent(
+        position: Vector2.all(20),
+        textRenderer: textPaint,
+      )..positionType = PositionType.viewport,
+    );
     score = 0;
   }
 

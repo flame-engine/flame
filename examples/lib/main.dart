@@ -1,5 +1,4 @@
 import 'package:dashbook/dashbook.dart';
-import 'package:examples/stories/games/games.dart';
 import 'package:flutter/material.dart';
 
 import 'stories/animations/animations.dart';
@@ -9,6 +8,7 @@ import 'stories/collision_detection/collision_detection.dart';
 import 'stories/components/components.dart';
 import 'stories/effects/effects.dart';
 import 'stories/experimental/experimental.dart';
+import 'stories/games/games.dart';
 import 'stories/input/input.dart';
 import 'stories/parallax/parallax.dart';
 import 'stories/rendering/rendering.dart';

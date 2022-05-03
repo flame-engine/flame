@@ -6,7 +6,7 @@ import 'package:flame/components.dart';
 
 import '../obstacle/obstacle_manager.dart';
 import '../trex_game.dart';
-import 'clouds.dart';
+import 'cloud_manager.dart';
 
 class Horizon extends PositionComponent with HasGameRef<TRexGame> {
   Horizon() : super();
@@ -37,7 +37,6 @@ class Horizon extends PositionComponent with HasGameRef<TRexGame> {
   @override
   void update(double dt) {
     super.update(dt);
-    // TODO: What is 50 here?
     final increment = gameRef.currentSpeed * dt;
     for (final line in groundLayers) {
       line.x -= increment;
