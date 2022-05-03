@@ -478,6 +478,7 @@ class Component {
     if (!isLoaded && (parent.findGame()?.hasLayout ?? false)) {
       return _startLoading();
     }
+    return null;
   }
 
   /// Removes a component from the component tree.
@@ -526,6 +527,7 @@ class Component {
     final onLoadFuture = onLoad();
     if (onLoadFuture == null) {
       _finishLoading();
+      return null;
     } else {
       return onLoadFuture.then((_) => _finishLoading());
     }
