@@ -711,6 +711,7 @@ class _SelfRemovingOnLoadComponent extends Component {
   @override
   Future<void>? onLoad() {
     removeFromParent();
+    return null;
   }
 }
 
