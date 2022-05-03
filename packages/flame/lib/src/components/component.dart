@@ -578,7 +578,7 @@ class Component {
 
   // TODO(st-pasha): remove this after #1351 is done
   @internal
-  void setMounted() => _state |= _mounted;
+  void setMounted() => _state |= _mounted | _loaded;
 
   void _remove() {
     _parent!.children.remove(this);
