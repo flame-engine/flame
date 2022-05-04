@@ -19,6 +19,7 @@ class LifecycleComponent extends Component {
     expect(isLoading, true);
     expect(isLoaded, false);
     expect(isMounted, false);
+    expect(isRemoving, false);
     events.add('onLoad');
   }
 
@@ -27,6 +28,7 @@ class LifecycleComponent extends Component {
     expect(isLoading, false);
     expect(isLoaded, true);
     expect(isMounted, false);
+    expect(isRemoving, false);
     events.add('onMount');
   }
 

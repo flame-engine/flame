@@ -60,6 +60,76 @@ class Component {
   /// [_removing]: this bit indicates that the component is scheduled for
   ///     removal at the earliest possible opportunity, and then cleared when
   ///     the component is actually removed.
+  ///
+  /// This is how a typical component's lifecycle progresses:
+  ///  - First, the component is created with the [_state] variable = 0. At this
+  ///    point the only operation that can be done to the component is to [add]
+  ///    it to another component.
+  ///  - When the component is [add]ed to another component (the parent), we do
+  ///    the following:
+  ///    - set the [_parent] variable;
+  ///    - add the component to the parent's queue of pending children;
+  ///    - if the component has been [_loaded] before, then do nothing else and
+  ///      wait until its parent will do the mounting.
+  ///    - otherwise, if the [Game] instance is accessible via [findGame], then
+  ///      we start loading the component;
+  ///    - otherwise we will start loading when the parent becomes mounted. This
+  ///      means we're entering into an execution gap here. During this gap the
+  ///      component is still in the [_initial] state, and it can be [remove]d
+  ///      by the user. When the user removes the component in this state, we
+  ///      simply set the [_parent] to null and remove it from the parent's
+  ///      queue of pending children.
+  ///  - When we [_startLoading] the component, we set the [_loading] bit,
+  ///    invoke the [onGameResize] callback, and then [onLoad] immediately
+  ///    afterwards. The onLoad will be either sync or async, in both cases we
+  ///    arrange to turn on the [_loaded] bit at the end of [onLoad]'s run.
+  ///  - At this point we're in an execution gap: either the async [onLoad] is
+  ///    waiting to be run, or it already completed, or it was sync to begin
+  ///    with -- in either case we're waiting until the component can be
+  ///    mounted, and in that time the [_loading] bit is still on.
+  ///    During this time the user may request to [remove] the component. If at
+  ///    that moment the component is already loaded, then we remove it by
+  ///    setting parent to null and deleting it from the parent's pending
+  ///    children queue. If, on the other hand, the component is not loaded yet,
+  ///    then we turn on the [_removing] flag only -- this is because we don't
+  ///    want to set [_parent] to null while the [onLoad] may still try to
+  ///    access it.
+  ///  - The next step in the component's lifecycle comes when its parent
+  ///    processes own pending events queue, which only happens after the parent
+  ///    gets mounted. For each component in its queue of pending children, the
+  ///    following checks are performed:
+  ///      - if the component is already [_loaded], then it will now be
+  ///        [_mount]ed;
+  ///      - otherwise, if the component is not even [_loading], then it will
+  ///        now [_startLoading];
+  ///      - otherwise do nothing: need to wait until the component finishes
+  ///        loading.
+  ///  - During [_mount]ing, we perform the following sequence:
+  ///      - first check whether we need to run [onGameResize] -- this could
+  ///        happen if mounting a component that was  added to the game earlier
+  ///        and then removed;
+  ///      - check if the component was scheduled for removal while waiting in
+  ///        the queue -- if so, remove it immediately without mounting;
+  ///      - clear the [_loading] flag and start the [onMount] callback;
+  ///      - set the [_mounted] bit;
+  ///      - add the component to parent's list of [children];
+  ///      - if the component has its own list of existing children, then mount
+  ///        those;
+  ///      - if the component has a list of pending children, then process the
+  ///        lifecycle events queue, which would attempt to load and/or mount
+  ///        these pending children.
+  ///
+  /// At this point the component would be at its normal, mounted state. When
+  /// [remove] is invoked in this state, we (1) turn on the [_removing] bit, and
+  /// (2) add the component to the "removals" lifecycle queue of its parent. The
+  /// next time the parent processes its lifecycle event queue, it would take
+  /// all the components from the "removals", and for each one call the
+  /// [onRemove] method, clear the [_mounted] and [_removing] flags, and lastly
+  /// remove the component from the official list of children.
+  ///
+  /// After a component was removed, it will be [_loaded], but not [_mounted],
+  /// and its [_parent] will be null. Such component can be re-added into the
+  /// component tree if needed.
   int _state = _initial;
 
   static const int _initial = 0;
@@ -70,12 +140,22 @@ class Component {
 
   /// Whether the component is currently executing its [onLoad] step.
   bool get isLoading => (_state & _loading) != 0;
+  void _setLoadingBit() => _state |= _loading;
+  void _clearLoadingBit() => _state &= ~_loading;
 
   /// Whether this component has completed its [onLoad] step.
   bool get isLoaded => (_state & _loaded) != 0;
+  void _setLoadedBit() => _state |= _loaded;
 
   /// Whether this component is currently added to a component tree.
   bool get isMounted => (_state & _mounted) != 0;
+  void _setMountedBit() => _state |= _mounted;
+  void _clearMountedBit() => _state &= ~_mounted;
+
+  /// Whether the component is scheduled to be removed.
+  bool get isRemoving => (_state & _removing) != 0;
+  void _setRemovingBit() => _state |= _removing;
+  void _clearRemovingBit() => _state &= ~_removing;
 
   /// The current parent of the component, or null if there is none.
   Component? get parent => _parent;
@@ -145,7 +225,7 @@ class Component {
   /// It will be checked once per component per tick, and if it is true,
   /// FlameGame will remove it.
   @nonVirtual
-  bool get shouldRemove => (_state & _removing) != 0;
+  bool get shouldRemove => isRemoving;
 
   /// Setting [shouldRemove] to true will schedule the component to be removed
   /// from the game tree before the next game cycle.
@@ -220,8 +300,7 @@ class Component {
   void handleResize(Vector2 size) {
     _children?.forEach((child) => child.onGameResize(size));
     _lifecycleManager?._children.forEach((child) {
-      final state = child._state;
-      if ((state & (_loading | _loaded)) != 0) {
+      if (child.isLoading || child.isLoaded) {
         child.onGameResize(size);
       }
     });
@@ -372,7 +451,6 @@ class Component {
   /// the new root.
   void changeParent(Component newParent) {
     newParent.lifecycle._adoption.add(this);
-    _mountCompleter = null;
   }
 
   /// An iterator producing this component's parent, then its parent's parent,
@@ -504,10 +582,16 @@ class Component {
       lifecycle._children.remove(component);
       component._parent = null;
     } else if (component.isLoading) {
-      component._state |= _removing;
-    } else if ((component._state & _removing) == 0) {
+      if (component.isLoaded) {
+        component._parent = null;
+        lifecycle._children.remove(component);
+        component._clearLoadingBit();
+      } else {
+        component._setRemovingBit();
+      }
+    } else if (!component.isRemoving) {
       lifecycle._removals.add(component);
-      component._state |= _removing;
+      component._setRemovingBit();
     }
   }
 
@@ -522,7 +606,7 @@ class Component {
     assert(_parent != null);
     assert(_parent!.findGame() != null);
     assert(_parent!.findGame()!.hasLayout);
-    _state = _loading;
+    _setLoadingBit();
     onGameResize(_parent!.findGame()!.canvasSize);
     final onLoadFuture = onLoad();
     if (onLoadFuture == null) {
@@ -534,7 +618,7 @@ class Component {
   }
 
   void _finishLoading() {
-    _state |= _loaded;
+    _setLoadedBit();
     _loadCompleter?.complete();
     _loadCompleter = null;
   }
@@ -554,15 +638,15 @@ class Component {
     if (existingChild || !isLoading) {
       onGameResize(findGame()!.canvasSize);
     }
-    _state &= ~_loading; // clear 'loading' bit
-    if ((_state & _removing) != 0) {
+    _clearLoadingBit();
+    if (isRemoving) {
       _parent = null;
-      _state &= ~_removing; // clear 'removing' bit
+      _clearRemovingBit();
       return;
     }
     debugMode |= _parent!.debugMode;
     onMount();
-    _state |= _mounted;
+    _setMountedBit();
     _mountCompleter?.complete();
     _mountCompleter = null;
     if (!existingChild) {
@@ -578,15 +662,18 @@ class Component {
 
   // TODO(st-pasha): remove this after #1351 is done
   @internal
-  void setMounted() => _state |= _mounted | _loaded;
+  void setMounted() {
+    _setLoadedBit();
+    _setMountedBit();
+  }
 
   void _remove() {
     _parent!.children.remove(this);
     propagateToChildren(
       (Component component) {
         component.onRemove();
-        // clear both 'mounted' and 'removing' flags
-        component._state &= ~(_mounted | _removing);
+        component._clearMountedBit();
+        component._clearRemovingBit();
         component._parent = null;
         return true;
       },
