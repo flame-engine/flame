@@ -554,10 +554,10 @@ class Component {
     if (existingChild || !isLoading) {
       onGameResize(findGame()!.canvasSize);
     }
-    _state &= ~_loading;
+    _state &= ~_loading; // clear 'loading' bit
     if ((_state & _removing) != 0) {
       _parent = null;
-      _state &= ~_removing;
+      _state &= ~_removing; // clear 'removing' bit
       return;
     }
     debugMode |= _parent!.debugMode;
@@ -585,6 +585,7 @@ class Component {
     propagateToChildren(
       (Component component) {
         component.onRemove();
+        // clear both 'mounted' and 'removing' flags
         component._state &= ~(_mounted | _removing);
         component._parent = null;
         return true;
