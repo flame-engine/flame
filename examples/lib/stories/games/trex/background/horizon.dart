@@ -17,14 +17,14 @@ class Horizon extends PositionComponent with HasGameRef<TRexGame> {
   late final ObstacleManager obstacleManager = ObstacleManager();
 
   late final _softSprite = Sprite(
-    TRexGame.spriteImage,
+    gameRef.spriteImage,
     srcPosition: Vector2(2.0, 104.0),
     srcSize: lineSize,
   );
 
   late final _bumpySprite = Sprite(
-    TRexGame.spriteImage,
-    srcPosition: Vector2(TRexGame.spriteImage.width / 2, 104.0),
+    gameRef.spriteImage,
+    srcPosition: Vector2(gameRef.spriteImage.width / 2, 104.0),
     srcSize: lineSize,
   );
 

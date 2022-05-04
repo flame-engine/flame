@@ -8,7 +8,7 @@ class Obstacle extends SpriteComponent with HasGameRef<TRexGame> {
   Obstacle({
     required this.settings,
     required this.groupIndex,
-  }) : super(sprite: settings.sprite, size: settings.size);
+  }) : super(size: settings.size);
 
   final double _gapCoefficient = 0.6;
   final double _maxGapCoefficient = 1.5;
@@ -22,6 +22,7 @@ class Obstacle extends SpriteComponent with HasGameRef<TRexGame> {
 
   @override
   Future<void> onLoad() async {
+    sprite = settings.sprite(gameRef.spriteImage);
     x = gameRef.size.x + width * groupIndex;
     y = settings.y;
     gap = computeGap(_gapCoefficient, gameRef.currentSpeed);

@@ -4,7 +4,7 @@ import 'package:flame/components.dart';
 
 import 'trex_game.dart';
 
-class GameOverPanel extends Component with HasGameRef<TRexGame> {
+class GameOverPanel extends Component {
   bool visible = false;
 
   @override
@@ -21,46 +21,42 @@ class GameOverPanel extends Component with HasGameRef<TRexGame> {
   }
 }
 
-class GameOverText extends SpriteComponent {
-  GameOverText()
-      : super(
-          size: Vector2(textWidth, textHeight),
-          sprite: Sprite(
-            TRexGame.spriteImage,
-            srcPosition: Vector2(955.0, 26.0),
-            srcSize: Vector2(textWidth, textHeight),
-          ),
-        );
+class GameOverText extends SpriteComponent with HasGameRef<TRexGame> {
+  GameOverText() : super(size: Vector2(382, 25), anchor: Anchor.center);
 
-  static const double textWidth = 382.0;
-  static const double textHeight = 25.0;
+  @override
+  Future<void> onLoad() async {
+    sprite = Sprite(
+      gameRef.spriteImage,
+      srcPosition: Vector2(955.0, 26.0),
+      srcSize: size,
+    );
+  }
 
   @override
   void onGameResize(Vector2 gameSize) {
     super.onGameResize(gameSize);
+    x = gameSize.x / 2;
     y = gameSize.y * .25;
-    x = (gameSize.x / 2) - textWidth / 2;
   }
 }
 
-class GameOverRestart extends SpriteComponent {
-  GameOverRestart()
-      : super(
-          size: Vector2(restartWidth, restartHeight),
-          sprite: Sprite(
-            TRexGame.spriteImage,
-            srcPosition: Vector2.all(2.0),
-            srcSize: Vector2(restartWidth, restartHeight),
-          ),
-        );
+class GameOverRestart extends SpriteComponent with HasGameRef<TRexGame> {
+  GameOverRestart() : super(size: Vector2(72, 64), anchor: Anchor.center);
 
-  static const double restartWidth = 72.0;
-  static const double restartHeight = 64.0;
+  @override
+  Future<void> onLoad() async {
+    sprite = Sprite(
+      gameRef.spriteImage,
+      srcPosition: Vector2.all(2.0),
+      srcSize: size,
+    );
+  }
 
   @override
   void onGameResize(Vector2 gameSize) {
     super.onGameResize(gameSize);
+    x = gameSize.x / 2;
     y = gameSize.y * .75;
-    x = (gameSize.x / 2) - width / 2;
   }
 }

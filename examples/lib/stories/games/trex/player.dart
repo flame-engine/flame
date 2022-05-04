@@ -118,7 +118,7 @@ class Player extends SpriteAnimationGroupComponent<PlayerState>
       frames
           .map(
             (vector) => Sprite(
-              TRexGame.spriteImage,
+              gameRef.spriteImage,
               srcSize: size,
               srcPosition: vector,
             ),

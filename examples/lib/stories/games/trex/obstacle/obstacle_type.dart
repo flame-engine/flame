@@ -1,7 +1,7 @@
+import 'dart:ui';
+
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-
-import '../trex_game.dart';
 
 enum ObstacleType {
   cactusSmall,
@@ -86,8 +86,7 @@ class ObstacleTypeSettings {
     ],
   );
 
-  Sprite get sprite {
-    final spriteImage = TRexGame.spriteImage;
+  Sprite sprite(Image spriteImage) {
     switch (type) {
       case ObstacleType.cactusSmall:
         return Sprite(

@@ -22,7 +22,7 @@ class TRexGame extends FlameGame
     to survive, the more points you get.
   ''';
 
-  static late final Image spriteImage;
+  late final Image spriteImage;
 
   @override
   Color backgroundColor() => const Color(0xFFFFFFFF);
