@@ -6,7 +6,8 @@ import 'package:flutter/material.dart';
 
 import '../flame_bloc.dart';
 
-/// Adds [Bloc] access to a [Component]
+/// Adds [Bloc] access to a [Component].
+///
 /// Useful for components that needs to only read
 /// a bloc current state or to trigger an event on it
 mixin FlameBlocReader<B extends BlocBase<S>, S> on Component {

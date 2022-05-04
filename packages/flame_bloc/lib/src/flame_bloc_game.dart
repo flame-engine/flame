@@ -9,7 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 /// Adds capabilities for a [Component] to listen and have access
 /// to a [Bloc] state.
-@Deprecated('Use FlameBlocProvider and FlameBlocListener instead')
+@Deprecated('Use FlameBlocProvider and FlameBlocListenable instead')
 mixin BlocComponent<B extends BlocBase<S>, S> on Component {
   StreamSubscription<S>? _subscription;
 
