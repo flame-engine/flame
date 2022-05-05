@@ -1,14 +1,6 @@
 import '../game/mixins/game.dart';
 import 'events.dart';
 
-mixin MultiTouchTapDetector on Game {
-  void onTap(int pointerId) {}
-  void onTapCancel(int pointerId) {}
-  void onTapDown(int pointerId, TapDownInfo info) {}
-  void onTapUp(int pointerId, TapUpInfo info) {}
-  void onLongTapDown(int pointerId, TapDownInfo info) {}
-}
-
 mixin MultiTouchDragDetector on Game {
   void onDragStart(int pointerId, DragStartInfo info) {}
   void onDragUpdate(int pointerId, DragUpdateInfo info) {}
