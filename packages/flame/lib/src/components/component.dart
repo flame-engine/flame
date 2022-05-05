@@ -61,10 +61,16 @@ class Component {
   ///     removal at the earliest possible opportunity, and then cleared when
   ///     the component is actually removed.
   ///
+  /// The lifecycle process of a component is quite complicated. This happens
+  /// for several reasons: partly because it consists of several stages, between
+  /// which there are asynchronous or even physical execution gaps. In addition,
+  /// the lifecycle invokes a number of user-provided callbacks, and those
+  /// callbacks may attempt to modify the component.
+  ///
   /// This is how a typical component's lifecycle progresses:
   ///  - First, the component is created with the [_state] variable = 0. At this
-  ///    point the only operation that can be done to the component is to [add]
-  ///    it to another component.
+  ///    point the only operations that can be done are: to [add] it to another
+  ///    component, or to add other components to it.
   ///  - When the component is [add]ed to another component (the parent), we do
   ///    the following:
   ///    - set the [_parent] variable;
