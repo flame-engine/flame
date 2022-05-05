@@ -11,6 +11,7 @@ dependencies:
   flutter:
     sdk: flutter
   bloc: ^8.0.2
+  meta: ^1.7.0
   flame: ^1.1.1
   flutter_bloc: ^8.0.1
 
