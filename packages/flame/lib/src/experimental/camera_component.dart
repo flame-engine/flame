@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:flame/src/experimental/bounded_position_behavior.dart';
 import 'package:meta/meta.dart';
 import 'package:vector_math/vector_math_64.dart';
 
@@ -11,6 +12,7 @@ import '../effects/move_effect.dart';
 import '../effects/move_to_effect.dart';
 import '../effects/provider_interfaces.dart';
 import 'follow_behavior.dart';
+import 'geometry/shapes/shape.dart';
 import 'max_viewport.dart';
 import 'viewfinder.dart';
 import 'viewport.dart';
@@ -196,5 +198,19 @@ class CameraComponent extends Component {
     viewfinder.add(
       MoveToEffect(point, EffectController(speed: speed)),
     );
+  }
+
+  /// Sets or clears the world bound for the camera's viewfinder.
+  void setWorldBound(Shape? bound) {
+    final boundedBehavior = viewfinder.firstChild<BoundedPositionBehavior>();
+    if (bound == null) {
+      boundedBehavior?.removeFromParent();
+    } else if (boundedBehavior == null) {
+      viewfinder.add(
+        BoundedPositionBehavior(bounds: bound, priority: 1000),
+      );
+    } else {
+      boundedBehavior.bounds = bound;
+    }
   }
 }
