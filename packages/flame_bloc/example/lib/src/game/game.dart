@@ -40,7 +40,6 @@ class SpaceShooterGame extends FlameGame
 
   @override
   Future<void> onLoad() async {
-
     await add(
       FlameMultiBlocProvider(
         providers: [

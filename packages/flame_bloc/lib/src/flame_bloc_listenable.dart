@@ -25,7 +25,8 @@ mixin FlameBlocListenable<B extends BlocBase<S>, S> on Component {
 
   @override
   @mustCallSuper
-  Future<void> onLoad() async {
+  void onMount() {
+    super.onMount();
     var bloc = _bloc;
     if (bloc == null) {
       final providers = ancestors().whereType<FlameBlocProvider<B, S>>();
@@ -37,7 +38,6 @@ mixin FlameBlocListenable<B extends BlocBase<S>, S> on Component {
       final provider = providers.first;
       _bloc = bloc = provider.bloc;
     }
-
     _state = bloc.state;
     _subscription = bloc.stream.listen((newState) {
       if (_state != newState) {
