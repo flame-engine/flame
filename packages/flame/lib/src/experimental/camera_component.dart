@@ -1,6 +1,5 @@
 import 'dart:ui';
 
-import 'package:flame/src/experimental/bounded_position_behavior.dart';
 import 'package:meta/meta.dart';
 import 'package:vector_math/vector_math_64.dart';
 
@@ -11,6 +10,7 @@ import '../effects/controllers/effect_controller.dart';
 import '../effects/move_effect.dart';
 import '../effects/move_to_effect.dart';
 import '../effects/provider_interfaces.dart';
+import 'bounded_position_behavior.dart';
 import 'follow_behavior.dart';
 import 'geometry/shapes/shape.dart';
 import 'max_viewport.dart';
