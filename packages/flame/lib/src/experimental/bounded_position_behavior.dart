@@ -1,4 +1,3 @@
-
 import '../components/component.dart';
 import '../effects/provider_interfaces.dart';
 import '../extensions/vector2.dart';
