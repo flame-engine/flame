@@ -269,9 +269,17 @@ class Component {
   ///   position = parent!.size / 2;
   /// }
   /// ```
+  ///
+  /// See also:
+  /// - [onRemove] that is called every time the component is removed from the
+  /// game tree
   void onMount() {}
 
-  /// Called right before the component is removed from the game.
+  /// Called right before the component is removed from the game tree.
+  ///
+  /// See also:
+  /// - [onMount] that is called every time the component is added to the game
+  /// tree.
   void onRemove() {}
 
   /// A future that will complete once the component is mounted on its parent
