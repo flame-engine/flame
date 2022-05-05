@@ -14,7 +14,7 @@ void addGameStories(Dashbook dashbook) {
             child: Text('Loading'),
           ),
         ),
-        codeLink: baseLink('games/tres'),
+        codeLink: baseLink('games/trex'),
         info: TRexGame.description,
       );
 }
