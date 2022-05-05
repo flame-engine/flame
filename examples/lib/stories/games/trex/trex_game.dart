@@ -36,7 +36,7 @@ class TRexGame extends FlameGame
   int get score => _score;
   set score(int newScore) {
     _score = newScore;
-    scoreText.text = 'Score: $score';
+    scoreText.text = 'Score:$score';
   }
 
   @override
@@ -46,14 +46,15 @@ class TRexGame extends FlameGame
     add(player);
     add(gameOverPanel);
 
-    final textStyle = GoogleFonts.secularOne(
-      fontSize: 24,
-      color: Colors.black,
+    final textStyle = GoogleFonts.pressStart2p(
+      fontSize: 20,
+      fontWeight: FontWeight.bold,
+      color: Colors.grey.shade700,
     );
     final textPaint = TextPaint(style: textStyle);
     add(
       scoreText = TextComponent(
-        position: Vector2(20, 40),
+        position: Vector2(60, 20),
         textRenderer: textPaint,
       )..positionType = PositionType.viewport,
     );
@@ -90,17 +91,11 @@ class TRexGame extends FlameGame
   }
 
   void onAction() {
-    if (isGameOver) {
+    if (isGameOver || isIntro) {
       restart();
       return;
     }
     player.jump(currentSpeed);
-  }
-
-  void startGame() {
-    player.current = PlayerState.running;
-    state = GameState.playing;
-    currentSpeed = startSpeed;
   }
 
   void gameOver() {
@@ -126,10 +121,6 @@ class TRexGame extends FlameGame
 
     if (isGameOver) {
       return;
-    }
-
-    if (isIntro && player.x >= player.startXPosition) {
-      startGame();
     }
 
     if (isPlaying) {

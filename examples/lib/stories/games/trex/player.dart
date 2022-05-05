@@ -58,7 +58,7 @@ class Player extends SpriteAnimationGroupComponent<PlayerState>
         frames: [Vector2(1782.0, 6.0)],
       ),
     };
-    current = PlayerState.running;
+    current = PlayerState.waiting;
   }
 
   void jump(double speed) {
