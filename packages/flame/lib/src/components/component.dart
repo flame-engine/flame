@@ -209,6 +209,12 @@ class Component {
   bool get hasChildren => _children?.isNotEmpty ?? false;
   ComponentSet? _children;
 
+  /// Returns the closest parent further up the hierarchy that satisfies type=T,
+  /// or null if no such parent can be found.
+  T? findParent<T extends Component>() {
+    return (_parent is T ? _parent : _parent?.findParent<T>()) as T?;
+  }
+
   /// Returns the first child that matches the given type [T].
   ///
   /// As opposed to `children.whereType<T>().first`, this method returns null
@@ -266,6 +272,13 @@ class Component {
     if (includeSelf && reversed) {
       yield this;
     }
+  }
+
+  @internal
+  static Game? staticGameInstance;
+  Game? findGame() {
+    return staticGameInstance ??
+        ((this is Game) ? (this as Game) : _parent?.findGame());
   }
 
   //#endregion
@@ -708,13 +721,6 @@ class Component {
 
   //#endregion
 
-  @internal
-  static Game? staticGameInstance;
-  Game? findGame() {
-    return staticGameInstance ??
-        ((this is Game) ? (this as Game) : _parent?.findGame());
-  }
-
   /// Whether the children list contains the given component.
   ///
   /// This method uses reference equality.
@@ -744,12 +750,6 @@ class Component {
     return descendants(reversed: true, includeSelf: includeSelf)
         .whereType<T>()
         .every(handler);
-  }
-
-  /// Returns the closest parent further up the hierarchy that satisfies type=T,
-  /// or null if no such parent can be found.
-  T? findParent<T extends Component>() {
-    return (parent is T ? parent : parent?.findParent<T>()) as T?;
   }
 
   //#region Hit Testing
