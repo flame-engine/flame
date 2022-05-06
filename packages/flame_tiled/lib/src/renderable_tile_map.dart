@@ -184,6 +184,7 @@ class RenderableTiledMap {
               offset: Vector2((tx + .5) * size.x, (ty + .5) * size.y)
                 ..add(layerOffset * size.x / src.width),
               rotation: flips.angle * math.pi / 2,
+              flip: flips.flip,
               anchor: Vector2(src.width / 2, src.height / 2),
               scale: size.x / src.width,
             );
