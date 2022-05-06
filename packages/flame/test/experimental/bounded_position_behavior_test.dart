@@ -57,7 +57,6 @@ void main() {
       expect(target.position, closeToVector(10, 0, epsilon: 0.5));
     });
 
-
     testWithFlameGame('adjust target position on shape change', (game) async {
       final shape = Circle(Vector2.zero(), 10);
       final target = PositionComponent(position: Vector2(10, 0));
