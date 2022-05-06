@@ -233,29 +233,6 @@ class Component {
 
   _LifecycleManager? _lifecycleManager;
 
-  /// Render priority of this component. This allows you to control the order in
-  /// which your components are rendered.
-  ///
-  /// Components are always updated and rendered in the order defined by what
-  /// this number is when the component is added to the game.
-  /// The smaller the priority, the sooner your component will be
-  /// updated/rendered.
-  /// It can be any integer (negative, zero, or positive).
-  /// If two components share the same priority, they will probably be drawn in
-  /// the order they were added.
-  ///
-  /// Note that setting the priority is relatively expensive if the component is
-  /// already added to a component tree since all siblings have to be re-added
-  /// to the parent.
-  int get priority => _priority;
-  set priority(int newPriority) {
-    if (parent == null) {
-      _priority = newPriority;
-    } else {
-      parent!.children.changePriority(this, newPriority);
-    }
-  }
-
   int _priority;
 
   /// Whether this component should be removed or not.
@@ -821,6 +798,29 @@ class Component {
     }
     if (containsLocalPoint(point)) {
       yield ComponentPointPair(this, point);
+    }
+  }
+
+  /// Render priority of this component. This allows you to control the order in
+  /// which your components are rendered.
+  ///
+  /// Components are always updated and rendered in the order defined by what
+  /// this number is when the component is added to the game.
+  /// The smaller the priority, the sooner your component will be
+  /// updated/rendered.
+  /// It can be any integer (negative, zero, or positive).
+  /// If two components share the same priority, they will probably be drawn in
+  /// the order they were added.
+  ///
+  /// Note that setting the priority is relatively expensive if the component is
+  /// already added to a component tree since all siblings have to be re-added
+  /// to the parent.
+  int get priority => _priority;
+  set priority(int newPriority) {
+    if (parent == null) {
+      _priority = newPriority;
+    } else {
+      parent!.children.changePriority(this, newPriority);
     }
   }
 
