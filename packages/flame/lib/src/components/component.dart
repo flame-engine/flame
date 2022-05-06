@@ -209,6 +209,16 @@ class Component {
   bool get hasChildren => _children?.isNotEmpty ?? false;
   ComponentSet? _children;
 
+  /// `Component.childrenFactory` is the default method for creating children
+  /// containers within all components. Replace this method if you want to have
+  /// customized (non-default) [ComponentSet] instances in your project.
+  static ComponentSetFactory childrenFactory = ComponentSet.createDefault;
+
+  /// This method creates the children container for the current component.
+  /// Override this method if you need to have a custom [ComponentSet] within
+  /// a particular class.
+  ComponentSet createComponentSet() => childrenFactory();
+
   /// Returns the closest parent further up the hierarchy that satisfies type=T,
   /// or null if no such parent can be found.
   T? findParent<T extends Component>() {
@@ -842,16 +852,6 @@ class Component {
   void reorderChildren() => _children?.rebalanceAll();
 
   //#endregion
-
-  /// `Component.childrenFactory` is the default method for creating children
-  /// containers within all components. Replace this method if you want to have
-  /// customized (non-default) [ComponentSet] instances in your project.
-  static ComponentSetFactory childrenFactory = ComponentSet.createDefault;
-
-  /// This method creates the children container for the current component.
-  /// Override this method if you need to have a custom [ComponentSet] within
-  /// a particular class.
-  ComponentSet createComponentSet() => childrenFactory();
 }
 
 typedef ComponentSetFactory = ComponentSet Function();
