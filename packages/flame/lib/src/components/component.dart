@@ -288,23 +288,6 @@ class Component {
 
   //#endregion
 
-  /// Whether this component should be removed or not.
-  ///
-  /// It will be checked once per component per tick, and if it is true,
-  /// FlameGame will remove it.
-  @nonVirtual
-  bool get shouldRemove => isRemoving;
-
-  /// Setting [shouldRemove] to true will schedule the component to be removed
-  /// from the game tree before the next game cycle.
-  ///
-  /// This property is equivalent to using the method [removeFromParent].
-  @nonVirtual
-  set shouldRemove(bool value) {
-    assert(value, '"Resurrecting" a component is not allowed');
-    removeFromParent();
-  }
-
   //#region Debugging assistance
 
   /// Returns whether this [Component] is in debug mode or not.
@@ -508,18 +491,6 @@ class Component {
 
   //#endregion
 
-  /// Remove the component from its parent in the next tick.
-  void removeFromParent() {
-    _parent?.remove(this);
-  }
-
-  /// Changes the current parent for another parent and prepares the tree under
-  /// the new root.
-  void changeParent(Component newParent) {
-    newParent.lifecycle._adoption.add(this);
-  }
-
-
   //#region Add/remove components
 
   /// Schedules [component] to be added as a child to this component.
@@ -624,6 +595,58 @@ class Component {
     components.forEach(remove);
   }
 
+  /// Remove the component from its parent in the next tick.
+  void removeFromParent() {
+    _parent?.remove(this);
+  }
+
+  /// Whether this component should be removed or not.
+  ///
+  /// It will be checked once per component per tick, and if it is true,
+  /// FlameGame will remove it.
+  @nonVirtual
+  bool get shouldRemove => isRemoving;
+
+  /// Setting [shouldRemove] to true will schedule the component to be removed
+  /// from the game tree before the next game cycle.
+  ///
+  /// This property is equivalent to using the method [removeFromParent].
+  @nonVirtual
+  set shouldRemove(bool value) {
+    assert(value, '"Resurrecting" a component is not allowed');
+    removeFromParent();
+  }
+
+  /// Changes the current parent for another parent and prepares the tree under
+  /// the new root.
+  void changeParent(Component newParent) {
+    newParent.lifecycle._adoption.add(this);
+  }
+
+  //#endregion
+
+  //#region Internal lifecycle management
+
+  @protected
+  _LifecycleManager get lifecycle {
+    return _lifecycleManager ??= _LifecycleManager(this);
+  }
+  _LifecycleManager? _lifecycleManager;
+
+  bool get hasPendingLifecycleEvents {
+    return _lifecycleManager?.hasPendingEvents ?? false;
+  }
+
+  /// Attempt to resolve any pending lifecycle events on this component.
+  void processPendingLifecycleEvents() {
+    if (_lifecycleManager != null) {
+      _lifecycleManager!.processQueues();
+      if (!_lifecycleManager!.hasPendingEvents) {
+        _lifecycleManager = null;
+      }
+    }
+  }
+
   Future<void>? _startLoading() {
     assert(_state == _initial);
     assert(_parent != null);
@@ -677,7 +700,7 @@ class Component {
     }
     if (_children != null) {
       _children!.forEach(
-        (child) => child._mount(parent: this, existingChild: true),
+            (child) => child._mount(parent: this, existingChild: true),
       );
     }
     _lifecycleManager?.processQueues();
@@ -693,7 +716,7 @@ class Component {
   void _remove() {
     _parent!.children.remove(this);
     propagateToChildren(
-      (Component component) {
+          (Component component) {
         component.onRemove();
         component._clearMountedBit();
         component._clearRemovingBit();
@@ -702,30 +725,6 @@ class Component {
       },
       includeSelf: true,
     );
-  }
-
-  //#endregion
-
-  //#region Internal lifecycle management
-
-  @protected
-  _LifecycleManager get lifecycle {
-    return _lifecycleManager ??= _LifecycleManager(this);
-  }
-  _LifecycleManager? _lifecycleManager;
-
-  bool get hasPendingLifecycleEvents {
-    return _lifecycleManager?.hasPendingEvents ?? false;
-  }
-
-  /// Attempt to resolve any pending lifecycle events on this component.
-  void processPendingLifecycleEvents() {
-    if (_lifecycleManager != null) {
-      _lifecycleManager!.processQueues();
-      if (!_lifecycleManager!.hasPendingEvents) {
-        _lifecycleManager = null;
-      }
-    }
   }
 
   //#endregion
