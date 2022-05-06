@@ -158,9 +158,30 @@ class Component {
   void _setRemovingBit() => _state |= _removing;
   void _clearRemovingBit() => _state &= ~_removing;
 
+  Completer<void>? _mountCompleter;
+  Completer<void>? _loadCompleter;
+
+  /// A future that will complete once this component has finished loading.
+  Future<void> get loaded {
+    if (isLoaded) {
+      return Future.value();
+    }
+    _loadCompleter ??= Completer<void>();
+    return _loadCompleter!.future;
+  }
+
+  /// A future that will complete once the component is mounted on its parent
+  Future<void> get mounted {
+    if (isMounted) {
+      return Future.value();
+    }
+    _mountCompleter ??= Completer<void>();
+    return _mountCompleter!.future;
+  }
+
   //#endregion
 
-  //#region The parent and the children
+  //#region Component tree
 
   /// Who owns this component in the component tree.
   ///
@@ -204,9 +225,6 @@ class Component {
   }
 
   //#endregion
-
-  Completer<void>? _mountCompleter;
-  Completer<void>? _loadCompleter;
 
   @protected
   _LifecycleManager get lifecycle {
@@ -364,15 +382,6 @@ class Component {
   /// the lifetime of the [Component] object. Do not call this method manually.
   Future<void>? onLoad() => null;
 
-  /// A future that will complete once this component has finished loading.
-  Future<void> get loaded {
-    if (isLoaded) {
-      return Future.value();
-    }
-    _loadCompleter ??= Completer<void>();
-    return _loadCompleter!.future;
-  }
-
   /// Called when the component is added to its parent.
   ///
   /// This method only runs when the component is fully loaded, i.e. after
@@ -408,15 +417,6 @@ class Component {
   /// trigger. Thus, [onRemove] runs if and only if there was a corresponding
   /// [onMount] call before.
   void onRemove() {}
-
-  /// A future that will complete once the component is mounted on its parent
-  Future<void> get mounted {
-    if (isMounted) {
-      return Future.value();
-    }
-    _mountCompleter ??= Completer<void>();
-    return _mountCompleter!.future;
-  }
 
   /// This method is called periodically by the game engine to request that your
   /// component updates itself.
