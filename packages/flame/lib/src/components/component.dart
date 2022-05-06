@@ -318,58 +318,6 @@ class Component {
 
   //#endregion
 
-  //#region Debugging assistance
-
-  /// Returns whether this [Component] is in debug mode or not.
-  /// When a child is added to the [Component] it gets the same [debugMode] as
-  /// its parent has when it is prepared.
-  ///
-  /// Returns `false` by default. Override it, or set it to true, to use debug
-  /// mode.
-  /// You can use this value to enable debug behaviors for your game and many
-  /// components will
-  /// show extra information on the screen when debug mode is activated.
-  bool debugMode = false;
-
-  /// How many decimal digits to print when displaying coordinates in the
-  /// debug mode. Setting this to null will suppress all coordinates from
-  /// the output.
-  int? get debugCoordinatesPrecision => 0;
-
-  /// The color that the debug output should be rendered with.
-  Color debugColor = const Color(0xFFFF00FF);
-
-  final ValueCache<Paint> _debugPaintCache = ValueCache<Paint>();
-  final ValueCache<TextPaint> _debugTextPaintCache = ValueCache<TextPaint>();
-
-  /// The [debugColor] represented as a [Paint] object.
-  Paint get debugPaint {
-    if (!_debugPaintCache.isCacheValid([debugColor])) {
-      final paint = Paint()
-        ..color = debugColor
-        ..strokeWidth = 0 // hairline-width
-        ..style = PaintingStyle.stroke;
-      _debugPaintCache.updateCache(paint, [debugColor]);
-    }
-    return _debugPaintCache.value!;
-  }
-
-  /// Returns a [TextPaint] object with the [debugColor] set as color for the
-  /// text.
-  TextPaint get debugTextPaint {
-    if (!_debugTextPaintCache.isCacheValid([debugColor])) {
-      final textPaint = TextPaint(
-        style: TextStyle(color: debugColor, fontSize: 12),
-      );
-      _debugTextPaintCache.updateCache(textPaint, [debugColor]);
-    }
-    return _debugTextPaintCache.value!;
-  }
-
-  void renderDebugMode(Canvas canvas) {}
-
-  //#endregion
-
   //#region Component lifecycle methods
 
   /// Called whenever the size of the top-level Canvas changes.
@@ -483,29 +431,6 @@ class Component {
     // Any debug rendering should be rendered on top of everything
     if (debugMode) {
       renderDebugMode(canvas);
-    }
-  }
-
-  //#endregion
-
-  //#region Legacy component placement overrides
-
-  /// What coordinate system this component should respect (i.e. should it
-  /// observe camera, viewport, or use the raw canvas).
-  ///
-  /// Do note that this currently only works if the component is added directly
-  /// to the root `FlameGame`.
-  PositionType positionType = PositionType.game;
-
-  @protected
-  Vector2 eventPosition(PositionInfo info) {
-    switch (positionType) {
-      case PositionType.game:
-        return info.eventPosition.game;
-      case PositionType.viewport:
-        return info.eventPosition.viewport;
-      case PositionType.widget:
-        return info.eventPosition.widget;
     }
   }
 
@@ -645,121 +570,6 @@ class Component {
 
   //#endregion
 
-  //#region Internal lifecycle management
-
-  @protected
-  _LifecycleManager get lifecycle {
-    return _lifecycleManager ??= _LifecycleManager(this);
-  }
-
-  _LifecycleManager? _lifecycleManager;
-
-  bool get hasPendingLifecycleEvents {
-    return _lifecycleManager?.hasPendingEvents ?? false;
-  }
-
-  /// Attempt to resolve any pending lifecycle events on this component.
-  void processPendingLifecycleEvents() {
-    if (_lifecycleManager != null) {
-      _lifecycleManager!.processQueues();
-      if (!_lifecycleManager!.hasPendingEvents) {
-        _lifecycleManager = null;
-      }
-    }
-  }
-
-  @internal
-  void handleResize(Vector2 size) {
-    _children?.forEach((child) => child.onGameResize(size));
-    _lifecycleManager?._children.forEach((child) {
-      if (child.isLoading || child.isLoaded) {
-        child.onGameResize(size);
-      }
-    });
-  }
-
-  Future<void>? _startLoading() {
-    assert(_state == _initial);
-    assert(_parent != null);
-    assert(_parent!.findGame() != null);
-    assert(_parent!.findGame()!.hasLayout);
-    _setLoadingBit();
-    onGameResize(_parent!.findGame()!.canvasSize);
-    final onLoadFuture = onLoad();
-    if (onLoadFuture == null) {
-      _finishLoading();
-      return null;
-    } else {
-      return onLoadFuture.then((_) => _finishLoading());
-    }
-  }
-
-  void _finishLoading() {
-    _setLoadedBit();
-    _loadCompleter?.complete();
-    _loadCompleter = null;
-  }
-
-  /// Mount the component that is already loaded and has a mounted parent.
-  ///
-  /// The flag [existingChild] allows us to distinguish between components that
-  /// are new versus those that are already children of their parents. The
-  /// latter ones may exist if a parent was detached from the component tree,
-  /// and later re-mounted. For these components we need to run [onGameResize]
-  /// (since they haven't passed through [add]), but we don't have to add them
-  /// to the parent's children because they are already there.
-  void _mount({Component? parent, bool existingChild = false}) {
-    _parent ??= parent;
-    assert(_parent != null && _parent!.isMounted);
-    assert(isLoaded);
-    if (existingChild || !isLoading) {
-      onGameResize(findGame()!.canvasSize);
-    }
-    _clearLoadingBit();
-    if (isRemoving) {
-      _parent = null;
-      _clearRemovingBit();
-      return;
-    }
-    debugMode |= _parent!.debugMode;
-    onMount();
-    _setMountedBit();
-    _mountCompleter?.complete();
-    _mountCompleter = null;
-    if (!existingChild) {
-      _parent!.children.add(this);
-    }
-    if (_children != null) {
-      _children!.forEach(
-        (child) => child._mount(parent: this, existingChild: true),
-      );
-    }
-    _lifecycleManager?.processQueues();
-  }
-
-  // TODO(st-pasha): remove this after #1351 is done
-  @internal
-  void setMounted() {
-    _setLoadedBit();
-    _setMountedBit();
-  }
-
-  void _remove() {
-    _parent!.children.remove(this);
-    propagateToChildren(
-      (Component component) {
-        component.onRemove();
-        component._clearMountedBit();
-        component._clearRemovingBit();
-        component._parent = null;
-        return true;
-      },
-      includeSelf: true,
-    );
-  }
-
-  //#endregion
-
   //#region Hit Testing
 
   /// Checks whether the [point] is within this component's bounds.
@@ -853,6 +663,196 @@ class Component {
   void reorderChildren() => _children?.rebalanceAll();
 
   //#endregion
+
+  //#region Internal lifecycle management
+
+  @protected
+  _LifecycleManager get lifecycle {
+    return _lifecycleManager ??= _LifecycleManager(this);
+  }
+
+  _LifecycleManager? _lifecycleManager;
+
+  bool get hasPendingLifecycleEvents {
+    return _lifecycleManager?.hasPendingEvents ?? false;
+  }
+
+  /// Attempt to resolve any pending lifecycle events on this component.
+  void processPendingLifecycleEvents() {
+    if (_lifecycleManager != null) {
+      _lifecycleManager!.processQueues();
+      if (!_lifecycleManager!.hasPendingEvents) {
+        _lifecycleManager = null;
+      }
+    }
+  }
+
+  @internal
+  void handleResize(Vector2 size) {
+    _children?.forEach((child) => child.onGameResize(size));
+    _lifecycleManager?._children.forEach((child) {
+      if (child.isLoading || child.isLoaded) {
+        child.onGameResize(size);
+      }
+    });
+  }
+
+  Future<void>? _startLoading() {
+    assert(_state == _initial);
+    assert(_parent != null);
+    assert(_parent!.findGame() != null);
+    assert(_parent!.findGame()!.hasLayout);
+    _setLoadingBit();
+    onGameResize(_parent!.findGame()!.canvasSize);
+    final onLoadFuture = onLoad();
+    if (onLoadFuture == null) {
+      _finishLoading();
+      return null;
+    } else {
+      return onLoadFuture.then((_) => _finishLoading());
+    }
+  }
+
+  void _finishLoading() {
+    _setLoadedBit();
+    _loadCompleter?.complete();
+    _loadCompleter = null;
+  }
+
+  /// Mount the component that is already loaded and has a mounted parent.
+  ///
+  /// The flag [existingChild] allows us to distinguish between components that
+  /// are new versus those that are already children of their parents. The
+  /// latter ones may exist if a parent was detached from the component tree,
+  /// and later re-mounted. For these components we need to run [onGameResize]
+  /// (since they haven't passed through [add]), but we don't have to add them
+  /// to the parent's children because they are already there.
+  void _mount({Component? parent, bool existingChild = false}) {
+    _parent ??= parent;
+    assert(_parent != null && _parent!.isMounted);
+    assert(isLoaded);
+    if (existingChild || !isLoading) {
+      onGameResize(findGame()!.canvasSize);
+    }
+    _clearLoadingBit();
+    if (isRemoving) {
+      _parent = null;
+      _clearRemovingBit();
+      return;
+    }
+    debugMode |= _parent!.debugMode;
+    onMount();
+    _setMountedBit();
+    _mountCompleter?.complete();
+    _mountCompleter = null;
+    if (!existingChild) {
+      _parent!.children.add(this);
+    }
+    if (_children != null) {
+      _children!.forEach(
+            (child) => child._mount(parent: this, existingChild: true),
+      );
+    }
+    _lifecycleManager?.processQueues();
+  }
+
+  // TODO(st-pasha): remove this after #1351 is done
+  @internal
+  void setMounted() {
+    _setLoadedBit();
+    _setMountedBit();
+  }
+
+  void _remove() {
+    _parent!.children.remove(this);
+    propagateToChildren(
+          (Component component) {
+        component.onRemove();
+        component._clearMountedBit();
+        component._clearRemovingBit();
+        component._parent = null;
+        return true;
+      },
+      includeSelf: true,
+    );
+  }
+
+  //#endregion
+
+  //#region Debugging assistance
+
+  /// Returns whether this [Component] is in debug mode or not.
+  /// When a child is added to the [Component] it gets the same [debugMode] as
+  /// its parent has when it is prepared.
+  ///
+  /// Returns `false` by default. Override it, or set it to true, to use debug
+  /// mode.
+  /// You can use this value to enable debug behaviors for your game and many
+  /// components will
+  /// show extra information on the screen when debug mode is activated.
+  bool debugMode = false;
+
+  /// How many decimal digits to print when displaying coordinates in the
+  /// debug mode. Setting this to null will suppress all coordinates from
+  /// the output.
+  int? get debugCoordinatesPrecision => 0;
+
+  /// The color that the debug output should be rendered with.
+  Color debugColor = const Color(0xFFFF00FF);
+
+  final ValueCache<Paint> _debugPaintCache = ValueCache<Paint>();
+  final ValueCache<TextPaint> _debugTextPaintCache = ValueCache<TextPaint>();
+
+  /// The [debugColor] represented as a [Paint] object.
+  Paint get debugPaint {
+    if (!_debugPaintCache.isCacheValid([debugColor])) {
+      final paint = Paint()
+        ..color = debugColor
+        ..strokeWidth = 0 // hairline-width
+        ..style = PaintingStyle.stroke;
+      _debugPaintCache.updateCache(paint, [debugColor]);
+    }
+    return _debugPaintCache.value!;
+  }
+
+  /// Returns a [TextPaint] object with the [debugColor] set as color for the
+  /// text.
+  TextPaint get debugTextPaint {
+    if (!_debugTextPaintCache.isCacheValid([debugColor])) {
+      final textPaint = TextPaint(
+        style: TextStyle(color: debugColor, fontSize: 12),
+      );
+      _debugTextPaintCache.updateCache(textPaint, [debugColor]);
+    }
+    return _debugTextPaintCache.value!;
+  }
+
+  void renderDebugMode(Canvas canvas) {}
+
+//#endregion
+
+  //#region Legacy component placement overrides
+
+  /// What coordinate system this component should respect (i.e. should it
+  /// observe camera, viewport, or use the raw canvas).
+  ///
+  /// Do note that this currently only works if the component is added directly
+  /// to the root `FlameGame`.
+  PositionType positionType = PositionType.game;
+
+  @protected
+  Vector2 eventPosition(PositionInfo info) {
+    switch (positionType) {
+      case PositionType.game:
+        return info.eventPosition.game;
+      case PositionType.viewport:
+        return info.eventPosition.viewport;
+      case PositionType.widget:
+        return info.eventPosition.widget;
+    }
+  }
+
+//#endregion
 }
 
 typedef ComponentSetFactory = ComponentSet Function();
