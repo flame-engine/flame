@@ -7,7 +7,6 @@ import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flutter/services.dart';
 
-
 class CameraFollowAndWorldBoundsExample extends FlameGame
     with HasKeyboardHandlerComponents {
   static const description = ''' 
@@ -95,6 +94,12 @@ class Player extends PositionComponent with KeyboardHandler {
   final Paint innerPaint = Paint()..color = const Color(0xff9c0051);
   final Paint eyesPaint = Paint()..color = const Color(0xFFFFFFFF);
   final Paint pupilsPaint = Paint()..color = const Color(0xFF000000);
+  final Paint shadowPaint = Paint()
+    ..shader = Gradient.radial(
+      Offset.zero,
+      10,
+      [const Color(0x88000000), const Color(0x00000000)],
+    );
 
   final Vector2 velocity;
   final double runSpeed = 150.0;
@@ -125,6 +130,14 @@ class Player extends PositionComponent with KeyboardHandler {
 
   @override
   void render(Canvas canvas) {
+    {
+      final h = -position.y; // height above the ground
+      canvas.save();
+      canvas.translate(width/2, height + 1 + h * 1.05);
+      canvas.scale(1 - h * 0.003, 0.3 - h * 0.001);
+      canvas.drawCircle(Offset.zero, 10, shadowPaint);
+      canvas.restore();
+    }
     canvas.drawPath(body, innerPaint);
     canvas.drawPath(body, borderPaint);
     canvas.drawPath(eyes, eyesPaint);
