@@ -877,7 +877,7 @@ class Component {
 
   void renderDebugMode(Canvas canvas) {}
 
-//#endregion
+  //#endregion
 
   //#region Legacy component placement overrides
 
@@ -900,7 +900,7 @@ class Component {
     }
   }
 
-//#endregion
+  //#endregion
 }
 
 typedef ComponentSetFactory = ComponentSet Function();
