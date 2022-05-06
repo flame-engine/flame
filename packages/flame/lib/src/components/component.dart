@@ -270,13 +270,6 @@ class Component {
 
   //#endregion
 
-  @protected
-  _LifecycleManager get lifecycle {
-    return _lifecycleManager ??= _LifecycleManager(this);
-  }
-
-  _LifecycleManager? _lifecycleManager;
-
   /// Whether this component should be removed or not.
   ///
   /// It will be checked once per component per tick, and if it is true,
@@ -294,7 +287,7 @@ class Component {
     removeFromParent();
   }
 
-  //#region Debug rendering
+  //#region Debugging assistance
 
   /// Returns whether this [Component] is in debug mode or not.
   /// When a child is added to the [Component] it gets the same [debugMode] as
@@ -691,6 +684,14 @@ class Component {
 
   //#endregion
 
+  //#region Internal lifecycle management
+
+  @protected
+  _LifecycleManager get lifecycle {
+    return _lifecycleManager ??= _LifecycleManager(this);
+  }
+  _LifecycleManager? _lifecycleManager;
+
   bool get hasPendingLifecycleEvents {
     return _lifecycleManager?.hasPendingEvents ?? false;
   }
@@ -704,6 +705,8 @@ class Component {
       }
     }
   }
+
+  //#endregion
 
   @internal
   static Game? staticGameInstance;
@@ -748,6 +751,8 @@ class Component {
   T? findParent<T extends Component>() {
     return (parent is T ? parent : parent?.findParent<T>()) as T?;
   }
+
+  //#region Hit Testing
 
   /// Checks whether the [point] is within this component's bounds.
   ///
@@ -800,6 +805,10 @@ class Component {
     }
   }
 
+  //#endregion
+
+  //#region Priority
+
   /// Render priority of this component. This allows you to control the order in
   /// which your components are rendered.
   ///
@@ -828,6 +837,8 @@ class Component {
   /// component list isn't re-ordered when it is called.
   /// See FlameGame.changePriority instead.
   void changePriorityWithoutResorting(int priority) => _priority = priority;
+
+  //#endregion
 
   /// `Component.childrenFactory` is the default method for creating children
   /// containers within all components. Replace this method if you want to have
