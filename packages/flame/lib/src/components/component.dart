@@ -349,16 +349,6 @@ class Component {
   @mustCallSuper
   void onGameResize(Vector2 size) => handleResize(size);
 
-  @internal
-  void handleResize(Vector2 size) {
-    _children?.forEach((child) => child.onGameResize(size));
-    _lifecycleManager?._children.forEach((child) {
-      if (child.isLoading || child.isLoaded) {
-        child.onGameResize(size);
-      }
-    });
-  }
-
   /// Late initialization method for [Component].
   ///
   /// Usually, this method is the main place where you initialize your
@@ -645,6 +635,16 @@ class Component {
         _lifecycleManager = null;
       }
     }
+  }
+
+  @internal
+  void handleResize(Vector2 size) {
+    _children?.forEach((child) => child.onGameResize(size));
+    _lifecycleManager?._children.forEach((child) {
+      if (child.isLoading || child.isLoaded) {
+        child.onGameResize(size);
+      }
+    });
   }
 
   Future<void>? _startLoading() {
