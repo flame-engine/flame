@@ -6,6 +6,7 @@ import 'package:meta/meta.dart';
 import 'package:vector_math/vector_math_64.dart';
 
 import '../cache/value_cache.dart';
+import '../game/flame_game.dart';
 import '../game/mixins/game.dart';
 import '../gestures/events.dart';
 import '../text.dart';
@@ -14,13 +15,60 @@ import 'component_set.dart';
 import 'mixins/coordinate_transform.dart';
 import 'position_type.dart';
 
-/// [Component]s are the basic building blocks for your game.
+/// [Component]s are the basic building blocks for a [FlameGame].
 ///
-/// Components can be for example bullets flying on the screen, a spaceship, a
-/// timer or an enemy. Anything that either needs to be rendered and/or updated
-/// is a good idea to have as a [Component], since [update] and [render] will be
-/// called automatically once the component is added to the component tree in
-/// your game (with `game.add`).
+/// Components are quite similar to widgets in Flutter, or to GameObjects in
+/// Unity. Any entity within the game can be represented as a Component,
+/// especially if that entity has some visual appearance, or if it changes over
+/// time. For example, the player, the enemies, flying bullets, clouds in the
+/// sky, buildings, rocks, etc -- all can be represented as components. Some
+/// components may also represent more abstract entities: effects, behaviors,
+/// data stores, groups.
+///
+/// Components are designed to be organized into a component tree, where every
+/// component belongs to a single parent and owns any number of children
+/// components. A [Component] must be added to the component tree in order for
+/// it to become fully operational. Typically, the [FlameGame] is the root of
+/// the component tree.
+///
+/// The components are added into the component tree using the [add] method, or
+/// [addToParent]; and then later can be removed using [remove] or
+/// [removeFromParent]. Note that neither adding nor removing are immediate,
+/// typically these operations complete by the next game tick.
+///
+/// Each component goes through several lifecycle stages during its lifetime,
+/// at each stage invoking certain user-defined "lifecycle methods":
+///  - [onGameResize] when the component is first added into the tree;
+///  - [onLoad] immediately after;
+///  - [onMount] when done loading;
+///  - [onRemove] if the component is later removed from the component tree.
+///
+/// The [onLoad] is only invoked once during the lifetime of the component,
+/// which means you can treat it as "async constructor". When [onLoad] is
+/// invoked, we guarantee that the game instance can be found via [findGame],
+/// and that this game instance already has layout (i.e. knows the size of the
+/// canvas).
+///
+/// The [onMount] is invoked when the component is done loading, and when its
+/// parent is properly mounted. If a component is removed from the tree and
+/// later added to another component, the [onMount] will be called again. For
+/// every call to [onMount] there will be a corresponding call to [onRemove].
+///
+/// While the component is mounted, the following user-overridable methods are
+/// invoked:
+///  - [update] on every game tick;
+///  - [render] after all components are done updating;
+///  - [updateTree] and [renderTree] are more advanced versions of the update
+///    and render callbacks, but they rarely need to be overridden by the user;
+///  - [onGameResize] every time the size game's Flutter widget changes.
+///
+/// The [update] and [render] are two most important methods of the component's
+/// lifecycle. On every game tick, first the entire component tree will be
+/// [update]d, and then all the components will be [render]ed.
+///
+/// You may also need to override [containsLocalPoint] if the component needs to
+/// respond to tap events or similar; the [componentsAtPoint] may also need to
+/// be overridden if you have reimplemented [renderTree].
 class Component {
   Component({Iterable<Component>? children, int? priority})
       : _priority = priority ?? 0 {
