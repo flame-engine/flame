@@ -29,12 +29,7 @@ class Component {
     }
   }
 
-  /// What coordinate system this component should respect (i.e. should it
-  /// observe camera, viewport, or use the raw canvas).
-  ///
-  /// Do note that this currently only works if the component is added directly
-  /// to the root `FlameGame`.
-  PositionType positionType = PositionType.game;
+  //#region Lifecycle state
 
   /// Bitfield which keeps track of the current state of the component: which
   /// lifecycle events it has already executed, and which are currently being
@@ -163,9 +158,35 @@ class Component {
   void _setRemovingBit() => _state |= _removing;
   void _clearRemovingBit() => _state &= ~_removing;
 
-  /// The current parent of the component, or null if there is none.
+  //#endregion
+
+  //#region The parent and the children
+
+  /// Who owns this component in the component tree.
+  ///
+  /// This can be null if the component hasn't been added to the component tree
+  /// yet, or if it is the root of component tree.
+  ///
+  /// Setting this property is equivalent to the [changeParent] method, or to
+  /// [removeFromParent] if setting to null.
   Component? get parent => _parent;
   Component? _parent;
+  set parent(Component? newParent) {
+    if (newParent == null) {
+      removeFromParent();
+    } else {
+      changeParent(newParent);
+    }
+  }
+
+  /// The children components of this component.
+  ///
+  /// This getter will automatically create the [ComponentSet] container within
+  /// the current object if it didn't exist before. Check the [hasChildren]
+  /// property in order to avoid instantiating the children container.
+  ComponentSet get children => _children ??= createComponentSet();
+  bool get hasChildren => _children?.isNotEmpty ?? false;
+  ComponentSet? _children;
 
   /// Returns the first child that matches the given type [T].
   ///
@@ -182,14 +203,7 @@ class Component {
     return it.moveNext() ? it.current : null;
   }
 
-  /// The children of the current component.
-  ///
-  /// This getter will automatically create the [ComponentSet] container within
-  /// the current object if it didn't exist before. Check the [hasChildren]
-  /// property in order to avoid instantiating the children container.
-  ComponentSet get children => _children ??= createComponentSet();
-  bool get hasChildren => _children?.isNotEmpty ?? false;
-  ComponentSet? _children;
+  //#endregion
 
   Completer<void>? _mountCompleter;
   Completer<void>? _loadCompleter;
@@ -440,6 +454,13 @@ class Component {
   //#endregion
 
   void renderDebugMode(Canvas canvas) {}
+
+  /// What coordinate system this component should respect (i.e. should it
+  /// observe camera, viewport, or use the raw canvas).
+  ///
+  /// Do note that this currently only works if the component is added directly
+  /// to the root `FlameGame`.
+  PositionType positionType = PositionType.game;
 
   @protected
   Vector2 eventPosition(PositionInfo info) {
