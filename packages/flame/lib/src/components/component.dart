@@ -750,7 +750,7 @@ class Component {
     }
     if (_children != null) {
       _children!.forEach(
-            (child) => child._mount(parent: this, existingChild: true),
+        (child) => child._mount(parent: this, existingChild: true),
       );
     }
     _lifecycleManager?.processQueues();
@@ -766,7 +766,7 @@ class Component {
   void _remove() {
     _parent!.children.remove(this);
     propagateToChildren(
-          (Component component) {
+      (Component component) {
         component.onRemove();
         component._clearMountedBit();
         component._clearRemovingBit();
