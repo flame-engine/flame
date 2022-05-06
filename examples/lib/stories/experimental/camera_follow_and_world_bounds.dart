@@ -26,7 +26,7 @@ class CameraFollowAndWorldBoundsExample extends FlameGame
     camera
       ..viewfinder.visibleGameSize = Vector2(400, 100)
       ..follow(player, horizontalOnly: true)
-      ..setWorldBound(Rectangle.fromLTRB(190, -50, 810, 50));
+      ..setBound(Rectangle.fromLTRB(190, -50, 810, 50));
     add(camera);
     world.add(Ground());
     world.add(player);
@@ -133,7 +133,7 @@ class Player extends PositionComponent with KeyboardHandler {
     {
       final h = -position.y; // height above the ground
       canvas.save();
-      canvas.translate(width/2, height + 1 + h * 1.05);
+      canvas.translate(width / 2, height + 1 + h * 1.05);
       canvas.scale(1 - h * 0.003, 0.3 - h * 0.001);
       canvas.drawCircle(Offset.zero, 10, shadowPaint);
       canvas.restore();
