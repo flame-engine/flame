@@ -284,6 +284,26 @@ class Component {
     }
   }
 
+  /// This method first calls the passed handler on the leaves in the tree,
+  /// the children without any children of their own.
+  /// Then it continues through all other children. The propagation continues
+  /// until the handler returns false, which means "do not continue", or when
+  /// the handler has been called with all children.
+  ///
+  /// This method is important to be used by the engine to propagate actions
+  /// like rendering, taps, etc, but you can call it yourself if you need to
+  /// apply an action to the whole component chain.
+  /// It will only consider components of type T in the hierarchy,
+  /// so use T = Component to target everything.
+  bool propagateToChildren<T extends Component>(
+    bool Function(T) handler, {
+    bool includeSelf = false,
+  }) {
+    return descendants(reversed: true, includeSelf: includeSelf)
+        .whereType<T>()
+        .every(handler);
+  }
+
   @internal
   static Game? staticGameInstance;
   Game? findGame() {
@@ -631,6 +651,7 @@ class Component {
   _LifecycleManager get lifecycle {
     return _lifecycleManager ??= _LifecycleManager(this);
   }
+
   _LifecycleManager? _lifecycleManager;
 
   bool get hasPendingLifecycleEvents {
@@ -710,7 +731,7 @@ class Component {
     }
     if (_children != null) {
       _children!.forEach(
-            (child) => child._mount(parent: this, existingChild: true),
+        (child) => child._mount(parent: this, existingChild: true),
       );
     }
     _lifecycleManager?.processQueues();
@@ -726,7 +747,7 @@ class Component {
   void _remove() {
     _parent!.children.remove(this);
     propagateToChildren(
-          (Component component) {
+      (Component component) {
         component.onRemove();
         component._clearMountedBit();
         component._clearRemovingBit();
@@ -738,26 +759,6 @@ class Component {
   }
 
   //#endregion
-
-  /// This method first calls the passed handler on the leaves in the tree,
-  /// the children without any children of their own.
-  /// Then it continues through all other children. The propagation continues
-  /// until the handler returns false, which means "do not continue", or when
-  /// the handler has been called with all children.
-  ///
-  /// This method is important to be used by the engine to propagate actions
-  /// like rendering, taps, etc, but you can call it yourself if you need to
-  /// apply an action to the whole component chain.
-  /// It will only consider components of type T in the hierarchy,
-  /// so use T = Component to target everything.
-  bool propagateToChildren<T extends Component>(
-    bool Function(T) handler, {
-    bool includeSelf = false,
-  }) {
-    return descendants(reversed: true, includeSelf: includeSelf)
-        .whereType<T>()
-        .every(handler);
-  }
 
   //#region Hit Testing
 
