@@ -281,6 +281,11 @@ class Component {
         ((this is Game) ? (this as Game) : _parent?.findGame());
   }
 
+  /// Whether the children list contains the given component.
+  ///
+  /// This method uses reference equality.
+  bool contains(Component c) => _children?.contains(c) ?? false;
+
   //#endregion
 
   /// Whether this component should be removed or not.
@@ -480,6 +485,8 @@ class Component {
 
   //#endregion
 
+  //#region Legacy component placement overrides
+
   /// What coordinate system this component should respect (i.e. should it
   /// observe camera, viewport, or use the raw canvas).
   ///
@@ -498,6 +505,8 @@ class Component {
         return info.eventPosition.widget;
     }
   }
+
+  //#endregion
 
   /// Remove the component from its parent in the next tick.
   void removeFromParent() {
@@ -721,17 +730,6 @@ class Component {
 
   //#endregion
 
-  /// Whether the children list contains the given component.
-  ///
-  /// This method uses reference equality.
-  bool contains(Component c) => _children?.contains(c) ?? false;
-
-  /// Call this if any of this component's children priorities have changed
-  /// at runtime.
-  ///
-  /// This will call [ComponentSet.rebalanceAll] on the [children] ordered set.
-  void reorderChildren() => _children?.rebalanceAll();
-
   /// This method first calls the passed handler on the leaves in the tree,
   /// the children without any children of their own.
   /// Then it continues through all other children. The propagation continues
@@ -837,6 +835,12 @@ class Component {
   /// component list isn't re-ordered when it is called.
   /// See FlameGame.changePriority instead.
   void changePriorityWithoutResorting(int priority) => _priority = priority;
+
+  /// Call this if any of this component's children priorities have changed
+  /// at runtime.
+  ///
+  /// This will call [ComponentSet.rebalanceAll] on the [children] ordered set.
+  void reorderChildren() => _children?.rebalanceAll();
 
   //#endregion
 
