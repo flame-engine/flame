@@ -224,6 +224,50 @@ class Component {
     return it.moveNext() ? it.current : null;
   }
 
+  /// An iterator producing this component's parent, then its parent's parent,
+  /// then the great-grand-parent, and so on, until it reaches a component
+  /// without a parent.
+  Iterable<Component> ancestors({bool includeSelf = false}) sync* {
+    var current = includeSelf ? this : parent;
+    while (current != null) {
+      yield current;
+      current = current.parent;
+    }
+  }
+
+  /// Recursively enumerates all nested [children].
+  ///
+  /// The search is depth-first in preorder. In other words, it explores the
+  /// first child completely before visiting the next sibling, and the root
+  /// component is visited before its children.
+  ///
+  /// This ordering of descendants is considered standard in Flame: it is the
+  /// same order in which the components will normally be updated and rendered
+  /// on every game cycle. The optional parameter [reversed] allows iterating
+  /// through the same set of descendants in reverse order.
+  ///
+  /// The [Iterable] produced by this method is "lazy", which means it will only
+  /// traverse the component tree when required. This allows efficient chaining
+  /// of various iterable methods, such as filtering, early stopping, folding,
+  /// and so on -- see the documentation of the [Iterable] class for details.
+  Iterable<Component> descendants({
+    bool includeSelf = false,
+    bool reversed = false,
+  }) sync* {
+    if (includeSelf && !reversed) {
+      yield this;
+    }
+    if (hasChildren) {
+      final childrenIterable = reversed ? children.reversed() : children;
+      for (final child in childrenIterable) {
+        yield* child.descendants(includeSelf: true, reversed: reversed);
+      }
+    }
+    if (includeSelf && reversed) {
+      yield this;
+    }
+  }
+
   //#endregion
 
   @protected
@@ -232,8 +276,6 @@ class Component {
   }
 
   _LifecycleManager? _lifecycleManager;
-
-  int _priority;
 
   /// Whether this component should be removed or not.
   ///
@@ -299,6 +341,8 @@ class Component {
     }
     return _debugTextPaintCache.value!;
   }
+
+  void renderDebugMode(Canvas canvas) {}
 
   //#endregion
 
@@ -430,8 +474,6 @@ class Component {
 
   //#endregion
 
-  void renderDebugMode(Canvas canvas) {}
-
   /// What coordinate system this component should respect (i.e. should it
   /// observe camera, viewport, or use the raw canvas).
   ///
@@ -462,49 +504,6 @@ class Component {
     newParent.lifecycle._adoption.add(this);
   }
 
-  /// An iterator producing this component's parent, then its parent's parent,
-  /// then the great-grand-parent, and so on, until it reaches a component
-  /// without a parent.
-  Iterable<Component> ancestors({bool includeSelf = false}) sync* {
-    var current = includeSelf ? this : parent;
-    while (current != null) {
-      yield current;
-      current = current.parent;
-    }
-  }
-
-  /// Recursively enumerates all nested [children].
-  ///
-  /// The search is depth-first in preorder. In other words, it explores the
-  /// first child completely before visiting the next sibling, and the root
-  /// component is visited before its children.
-  ///
-  /// This ordering of descendants is considered standard in Flame: it is the
-  /// same order in which the components will normally be updated and rendered
-  /// on every game cycle. The optional parameter [reversed] allows iterating
-  /// through the same set of descendants in reverse order.
-  ///
-  /// The [Iterable] produced by this method is "lazy", which means it will only
-  /// traverse the component tree when required. This allows efficient chaining
-  /// of various iterable methods, such as filtering, early stopping, folding,
-  /// and so on -- see the documentation of the [Iterable] class for details.
-  Iterable<Component> descendants({
-    bool includeSelf = false,
-    bool reversed = false,
-  }) sync* {
-    if (includeSelf && !reversed) {
-      yield this;
-    }
-    if (hasChildren) {
-      final childrenIterable = reversed ? children.reversed() : children;
-      for (final child in childrenIterable) {
-        yield* child.descendants(includeSelf: true, reversed: reversed);
-      }
-    }
-    if (includeSelf && reversed) {
-      yield this;
-    }
-  }
 
   //#region Add/remove components
 
@@ -816,6 +815,7 @@ class Component {
   /// already added to a component tree since all siblings have to be re-added
   /// to the parent.
   int get priority => _priority;
+  int _priority;
   set priority(int newPriority) {
     if (parent == null) {
       _priority = newPriority;
