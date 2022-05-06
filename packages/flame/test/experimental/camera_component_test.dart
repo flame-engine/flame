@@ -66,5 +66,45 @@ void main() {
       }
       expect(camera.viewfinder.children.length, 1);
     });
+
+    testWithFlameGame('setBound', (game) async {
+      final world = World()..addToParent(game);
+      final camera = CameraComponent(world: world)..addToParent(game);
+      await game.ready();
+
+      camera.setBound(Rectangle.fromLTRB(0, 0, 400, 50));
+      camera.viewfinder.position = Vector2(10, 10);
+      game.update(0);
+      expect(camera.viewfinder.position, Vector2(10, 10));
+      camera.viewfinder.position = Vector2(-10, 10);
+      game.update(0);
+      expect(camera.viewfinder.position, closeToVector(0, 10, epsilon: 0.5));
+
+      camera.moveTo(Vector2(-20, 0), speed: 10);
+      for (var i = 0; i < 20; i++) {
+        expect(camera.viewfinder.position, closeToVector(0, 10, epsilon: 0.5));
+        game.update(0.5);
+      }
+
+      expect(
+        camera.viewfinder.firstChild<BoundedPositionBehavior>(),
+        isNotNull,
+      );
+      expect(
+        camera.viewfinder.firstChild<BoundedPositionBehavior>()!.bounds,
+        isA<Rectangle>(),
+      );
+      camera.setBound(Circle(Vector2.zero(), 100));
+      expect(
+        camera.viewfinder.firstChild<BoundedPositionBehavior>()!.bounds,
+        isA<Circle>(),
+      );
+      camera.setBound(null);
+      game.update(0);
+      expect(
+        camera.viewfinder.firstChild<BoundedPositionBehavior>(),
+        isNull,
+      );
+    });
   });
 }

@@ -23,9 +23,10 @@ class BoundedPositionBehavior extends Component {
     PositionProvider? target,
     double precision = 0.5,
     int? priority,
-  })  : _bounds = bounds,
+  })  : assert(precision > 0, 'Precision must be positive: $precision'),
+        _bounds = bounds,
         _target = target,
-        _previousPosition = bounds.center.clone(),
+        _previousPosition = Vector2.zero(),
         _precision = precision,
         super(priority: priority);
 
@@ -34,18 +35,22 @@ class BoundedPositionBehavior extends Component {
   Shape _bounds;
   set bounds(Shape newBounds) {
     _bounds = newBounds;
-    if (!_bounds.containsPoint(_previousPosition)) {
+    if (!isValidPoint(_previousPosition)) {
       _previousPosition.setFrom(_bounds.center);
       update(0);
     }
   }
 
+  bool isValidPoint(Vector2 point) => _bounds.containsPoint(point);
+
   PositionProvider get target => _target!;
   PositionProvider? _target;
-  final Vector2 _previousPosition;
 
   double get precision => _precision;
   final double _precision;
+
+  /// Saved position from the last game tick.
+  final Vector2 _previousPosition;
 
   @override
   void onMount() {
@@ -56,19 +61,25 @@ class BoundedPositionBehavior extends Component {
       );
       _target = parent! as PositionProvider;
     }
+    if (isValidPoint(target.position)) {
+      _previousPosition.setFrom(target.position);
+    } else {
+      _previousPosition.setFrom(_bounds.center);
+      update(0);
+    }
   }
 
   @override
   void update(double dt) {
     final currentPosition = _target!.position;
-    if (_bounds.containsPoint(currentPosition)) {
+    if (isValidPoint(currentPosition)) {
       _previousPosition.setFrom(currentPosition);
     } else {
       var inBoundsPoint = _previousPosition;
       var outOfBoundsPoint = currentPosition;
       while (inBoundsPoint.taxicabDistanceTo(outOfBoundsPoint) > _precision) {
         final newPoint = (inBoundsPoint + outOfBoundsPoint)..scale(0.5);
-        if (_bounds.containsPoint(newPoint)) {
+        if (isValidPoint(newPoint)) {
           inBoundsPoint = newPoint;
         } else {
           outOfBoundsPoint = newPoint;
