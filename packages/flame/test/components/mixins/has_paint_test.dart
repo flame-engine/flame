@@ -1,17 +1,8 @@
 import 'dart:ui';
 
 import 'package:flame/components.dart';
+import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-class _MyComponent extends PositionComponent with HasPaint {}
-
-enum _MyComponentKeys {
-  background,
-  foreground,
-}
-
-class _MyComponentWithType extends PositionComponent
-    with HasPaint<_MyComponentKeys> {}
 
 void main() {
   group('HasPaint', () {
@@ -52,7 +43,7 @@ void main() {
 
         expect(
           () => comp.getPaint(_MyComponentKeys.background),
-          throwsAssertionError,
+          failsAssert('A generics type is missing on the HasPaint mixin'),
         );
       },
     );
@@ -80,7 +71,7 @@ void main() {
             _MyComponentKeys.background,
             Paint()..color = color,
           ),
-          throwsAssertionError,
+          failsAssert('A generics type is missing on the HasPaint mixin'),
         );
       },
     );
@@ -107,7 +98,7 @@ void main() {
 
         expect(
           () => comp.deletePaint(_MyComponentKeys.background),
-          throwsAssertionError,
+          failsAssert('A generics type is missing on the HasPaint mixin'),
         );
       },
     );
@@ -256,3 +247,13 @@ void main() {
     );
   });
 }
+
+class _MyComponent extends PositionComponent with HasPaint {}
+
+enum _MyComponentKeys {
+  background,
+  foreground,
+}
+
+class _MyComponentWithType extends PositionComponent
+    with HasPaint<_MyComponentKeys> {}
