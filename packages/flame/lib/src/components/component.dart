@@ -875,7 +875,7 @@ class _LifecycleManager {
   void _processChildrenQueue() {
     while (_children.isNotEmpty) {
       final child = _children.first;
-      assert(child.parent!.isMounted);
+      assert(child._parent!.isMounted);
       if (child.isLoaded) {
         child._mount();
         _children.removeFirst();

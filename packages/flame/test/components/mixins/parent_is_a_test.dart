@@ -2,34 +2,35 @@ import 'package:flame/components.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-class ParentComponent extends Component {}
-
-class DifferentComponent extends Component {}
-
-class TestComponent extends Component with ParentIsA<ParentComponent> {}
-
 void main() {
   group('ParentIsA', () {
     testWithFlameGame('successfully sets the parent link', (game) async {
-      final parent = ParentComponent();
-      final component = TestComponent();
+      final parent = _ParentComponent() ..addToParent(game);
+      final component = _TestComponent() ..addToParent(parent);
+      await game.ready();
 
-      await parent.add(component);
-      await game.add(parent);
-
-      expect(component.parent, isA<ParentComponent>());
+      expect(component.isMounted, true);
+      expect(component.parent, isA<_ParentComponent>());
     });
 
-    test('throws assertion error when the wrong parent is used', () {
-      final parent = DifferentComponent();
-      final component = TestComponent();
+    testWithFlameGame(
+      'throws assertion error when the wrong parent is used',
+      (game) async {
+        final parent = _DifferentComponent() ..addToParent(game);
+        await game.ready();
 
-      parent.add(component);
-
-      expect(
-        component.onMount,
-        failsAssert('Parent must be of type ParentComponent'),
-      );
-    });
+        parent.add(_TestComponent());
+        expect(
+          () => game.update(0),
+          failsAssert('Parent must be of type _ParentComponent'),
+        );
+      },
+    );
   });
 }
+
+class _ParentComponent extends Component {}
+
+class _DifferentComponent extends Component {}
+
+class _TestComponent extends Component with ParentIsA<_ParentComponent> {}
