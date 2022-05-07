@@ -19,9 +19,11 @@ void main() {
         final parent = _DifferentComponent()..addToParent(game);
         await game.ready();
 
-        parent.add(_TestComponent());
         expect(
-          () => game.update(0),
+          () {
+            parent.add(_TestComponent());
+            game.update(0);
+          },
           failsAssert('Parent must be of type _ParentComponent'),
         );
       },
