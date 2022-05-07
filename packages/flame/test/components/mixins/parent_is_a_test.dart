@@ -14,7 +14,7 @@ void main() {
     });
 
     testWithFlameGame(
-      'throws assertion error when the wrong parent is used',
+      'throws assertion error if the wrong parent is used',
       (game) async {
         final parent = _DifferentComponent()..addToParent(game);
         await game.ready();
