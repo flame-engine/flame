@@ -97,8 +97,7 @@ void main() {
       expect(blockB.activeCollisions.length, 1);
     });
 
-    testCollidableGame('passive does not collide with inactive',
-        (game) async {
+    testCollidableGame('passive does not collide with inactive', (game) async {
       final blockA = TestBlock(
         Vector2.zero(),
         Vector2.all(10),

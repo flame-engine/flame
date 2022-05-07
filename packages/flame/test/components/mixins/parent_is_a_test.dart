@@ -5,8 +5,8 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('ParentIsA', () {
     testWithFlameGame('successfully sets the parent link', (game) async {
-      final parent = _ParentComponent() ..addToParent(game);
-      final component = _TestComponent() ..addToParent(parent);
+      final parent = _ParentComponent()..addToParent(game);
+      final component = _TestComponent()..addToParent(parent);
       await game.ready();
 
       expect(component.isMounted, true);
@@ -16,7 +16,7 @@ void main() {
     testWithFlameGame(
       'throws assertion error when the wrong parent is used',
       (game) async {
-        final parent = _DifferentComponent() ..addToParent(game);
+        final parent = _DifferentComponent()..addToParent(game);
         await game.ready();
 
         parent.add(_TestComponent());
