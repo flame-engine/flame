@@ -1,4 +1,4 @@
-import 'dart:math' as math;
+import 'dart:ui' as ui;
 
 import 'package:collection/collection.dart';
 import 'package:flame/extensions.dart';
@@ -178,15 +178,23 @@ class RenderableTiledMap {
           final src = ts.computeDrawRect(t).toRect();
           final flips = SimpleFlips.fromFlips(tile.flips);
           final size = destTileSize;
+          final scale = size.x / src.width;
+          final anchorX = src.width / 2;
+          final anchorY = src.height / 2;
+          final offsetX = ((tx + .5) * size.x) + (layerOffset.x * scale);
+          final offsetY = ((ty + .5) * size.y) + (layerOffset.y * scale);
+          final scos = flips.cos * scale;
+          final ssin = flips.sin * scale;
           if (batch != null) {
-            batch.add(
+            batch.addTransform(
               source: src,
-              offset: Vector2((tx + .5) * size.x, (ty + .5) * size.y)
-                ..add(layerOffset * size.x / src.width),
-              rotation: flips.angle * math.pi / 2,
+              transform: ui.RSTransform(
+                scos,
+                ssin,
+                offsetX + -scos * anchorX + ssin * anchorY,
+                offsetY + -ssin * anchorX - scos * anchorY,
+              ),
               flip: flips.flip,
-              anchor: Vector2(src.width / 2, src.height / 2),
-              scale: size.x / src.width,
             );
           }
         }

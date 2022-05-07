@@ -4,8 +4,8 @@ import 'package:tiled/tiled.dart';
 /// Tiled represents all flips and rotation using three possible flips:
 /// horizontal, vertical and diagonal.
 /// This class converts that representation to a simpler one, that uses one
-/// angle (with pi/2 steps) and one flip (Horizontal). All Vertical flips are
-/// represented as Horizontal flips + 180º.
+/// angle (with pi/2 steps) and one flip (horizontal). All vertical flips are
+/// represented as horizontal flips + 180º.
 /// Further reference:
 /// https://doc.mapeditor.org/en/stable/reference/tmx-map-format/#tile-flipping.
 ///
