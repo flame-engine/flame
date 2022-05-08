@@ -5,15 +5,6 @@ import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
-class MockImage extends Mock implements Image {
-  int disposedCount = 0;
-
-  @override
-  void dispose() {
-    disposedCount++;
-  }
-}
-
 void main() {
   // A simple 1x1 pixel encoded as base64 - just so that we have something to
   // load into the Images cache.
@@ -54,7 +45,7 @@ void main() {
 
     test('clear', () {
       final cache = Images();
-      final image = MockImage();
+      final image = _MockImage();
       cache.add('test', image);
       expect(image.disposedCount, 0);
       cache.clear('test');
@@ -63,7 +54,7 @@ void main() {
 
     test('clearCache', () {
       final cache = Images();
-      final images = List.generate(10, (_) => MockImage());
+      final images = List.generate(10, (_) => _MockImage());
       for (var i = 0; i < images.length; i++) {
         cache.add(i.toString(), images[i]);
       }
@@ -105,4 +96,13 @@ void main() {
       expect(images.fromCache('image2'), isNotNull);
     });
   });
+}
+
+class _MockImage extends Mock implements Image {
+  int disposedCount = 0;
+
+  @override
+  void dispose() {
+    disposedCount++;
+  }
 }
