@@ -10,7 +10,9 @@ import '../effects/controllers/effect_controller.dart';
 import '../effects/move_effect.dart';
 import '../effects/move_to_effect.dart';
 import '../effects/provider_interfaces.dart';
+import 'bounded_position_behavior.dart';
 import 'follow_behavior.dart';
+import 'geometry/shapes/shape.dart';
 import 'max_viewport.dart';
 import 'viewfinder.dart';
 import 'viewport.dart';
@@ -202,5 +204,25 @@ class CameraComponent extends Component {
     viewfinder.add(
       MoveToEffect(point, EffectController(speed: speed)),
     );
+  }
+
+  /// Sets or clears the world bounds for the camera's viewfinder.
+  ///
+  /// The bound is a [Shape], given in the world coordinates. The viewfinder's
+  /// position will be restricted to always remain inside this region. Note that
+  /// if you want the camera to never see the empty space outside of the world's
+  /// rendering area, then you should set up the bounds to be smaller than the
+  /// size of the world.
+  void setBounds(Shape? bounds) {
+    final boundedBehavior = viewfinder.firstChild<BoundedPositionBehavior>();
+    if (bounds == null) {
+      boundedBehavior?.removeFromParent();
+    } else if (boundedBehavior == null) {
+      viewfinder.add(
+        BoundedPositionBehavior(bounds: bounds, priority: 1000),
+      );
+    } else {
+      boundedBehavior.bounds = bounds;
+    }
   }
 }
