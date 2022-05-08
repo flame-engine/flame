@@ -38,6 +38,7 @@ class RectangleHitbox extends RectangleComponent with ShapeHitbox {
           parentSize: parentSize,
           angle: angle,
           anchor: anchor,
+          shrinkToBounds: true,
         );
 
   @override
