@@ -1,6 +1,34 @@
 # Debug features
 
-## FPS counter
+## FlameGame features
+
+Flame provides some debugging features for the `FlameGame` class. These features are enabled when
+the `debugMode` property is set to `true` (or overridden to be `true`).
+When `debugMode` is enabled, each `PositionComponent` will be rendered with their bounding size, and
+have their positions written on the screen. This way, you can visually verify the components
+boundaries and positions.
+
+To see a working example of the debugging features of the `FlameGame`, check this
+[example](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/components/debug_example.dart).
+
+
+## FPS
+
+### FPSComponent
+
+The `FPSComponent` can be added to anywhere in the component tree and will keep track of how many
+FPS that the game is currently rendering with. If you want to display this as text in the game, use
+the [](#fpstextcomponent).
+
+
+### FPSTextComponent
+
+The `FPSTextComponent` is simply a [](../rendering/text.md#textcomponent) that wraps an
+[](../rendering/text.md#textcomponent), since you most commonly want to show the current FPS
+somewhere when you the [](#fpscomponent) is used.
+
+
+### FPS counter
 
 Flame provides the `FPSCounter` mixin for recording the fps; this mixin can be applied on any class
 that extends from `Game`. Once applied you can access the current fps by using the `fps` method,
@@ -18,14 +46,3 @@ class MyGame extends FlameGame with FPSCounter {
   }
 }
 ```
-
-## FlameGame features
-
-Flame provides some debugging features for the `FlameGame` class. These features are enabled when
-the `debugMode` property is set to `true` (or overridden to be `true`).
-When `debugMode` is enabled, each `PositionComponent` will be rendered with their bounding size, and
-have their positions written on the screen. This way, you can visually verify the components
-boundaries and positions.
-
-To see a working example of the debugging features of the `FlameGame`, check this
-[example](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/components/debug_example.dart).
