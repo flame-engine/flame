@@ -2,10 +2,17 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame_test/flame_test.dart';
+import 'package:meta/meta.dart';
 
 class HasCollidablesGame extends FlameGame with HasCollisionDetection {}
 
-final withCollidables = FlameTester(() => HasCollidablesGame());
+@isTest
+Future<void> testCollidableGame(
+  String testName,
+  Future Function(HasCollidablesGame) testBody,
+) {
+  return testWithGame(testName, () => HasCollidablesGame(), testBody);
+}
 
 class TestHitbox extends RectangleHitbox {
   int startCounter = 0;
