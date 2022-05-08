@@ -132,6 +132,9 @@ Camera has several methods for controlling its behavior:
    moving towards another point, those behaviors would be automatically
    cancelled.
 
+ - `Camera.setBounds()` allows you to add limits to where the camera is allowed to go. These limits
+   are in the form of a `Shape`, which is commonly a rectangle, but can also be any other shape.
+
 
 ## Comparison to the traditional camera
 
