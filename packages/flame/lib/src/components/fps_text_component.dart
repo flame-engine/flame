@@ -20,7 +20,7 @@ class FPSTextComponent<T extends TextRenderer> extends TextComponent {
           scale: scale,
           angle: angle,
           anchor: anchor,
-          priority: priority,
+          priority: priority ?? double.maxFinite.toInt(),
         );
 
   final int windowSize;
@@ -29,6 +29,7 @@ class FPSTextComponent<T extends TextRenderer> extends TextComponent {
 
   @override
   Future<void> onLoad() async {
+    positionType = PositionType.game;
     add(fpsComponent = FPSComponent(windowSize: windowSize));
   }
 
