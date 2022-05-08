@@ -18,6 +18,9 @@ import 'camera_component.dart';
 /// There are several implementations of [Viewport], which differ by their
 /// shape, and also by their behavior in response to changes to the canvas size.
 /// Users may also create their own implementations.
+///
+/// A viewport establishes its own local coordinate system, with the origin at
+/// the top left corner of the viewport's bounding box.
 abstract class Viewport extends Component
     implements AnchorProvider, PositionProvider, SizeProvider {
   Viewport({Iterable<Component>? children}) : super(children: children);
@@ -33,6 +36,10 @@ abstract class Viewport extends Component
   @override
   set position(Vector2 value) => _position.setFrom(value);
 
+  /// The logical "center" of the viewport.
+  ///
+  /// This point will be used to establish the placement of the viewport in the
+  /// parent's coordinate frame.
   @override
   Anchor anchor = Anchor.topLeft;
 
@@ -67,8 +74,8 @@ abstract class Viewport extends Component
   /// Apply clip mask to the [canvas].
   ///
   /// The mask must be in the viewport's local coordinate system, where the
-  /// center of the viewport has coordinates (0, 0). The overall size of the
-  /// clip mask's shape must match the [size] of the viewport.
+  /// top left corner  of the viewport has coordinates (0, 0). The overall size
+  /// of the clip mask's shape must match the [size] of the viewport.
   ///
   /// This API must be implemented by all viewports.
   void clip(Canvas canvas);
