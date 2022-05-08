@@ -6,6 +6,7 @@ import 'package:meta/meta.dart';
 import 'package:vector_math/vector_math_64.dart';
 
 import '../cache/value_cache.dart';
+import '../game/flame_game.dart';
 import '../game/mixins/game.dart';
 import '../gestures/events.dart';
 import '../text.dart';
@@ -14,13 +15,60 @@ import 'component_set.dart';
 import 'mixins/coordinate_transform.dart';
 import 'position_type.dart';
 
-/// [Component]s are the basic building blocks for your game.
+/// [Component]s are the basic building blocks for a [FlameGame].
 ///
-/// Components can be for example bullets flying on the screen, a spaceship, a
-/// timer or an enemy. Anything that either needs to be rendered and/or updated
-/// is a good idea to have as a [Component], since [update] and [render] will be
-/// called automatically once the component is added to the component tree in
-/// your game (with `game.add`).
+/// Components are quite similar to widgets in Flutter, or to GameObjects in
+/// Unity. Any entity within the game can be represented as a Component,
+/// especially if that entity has some visual appearance, or if it changes over
+/// time. For example, the player, the enemies, flying bullets, clouds in the
+/// sky, buildings, rocks, etc -- all can be represented as components. Some
+/// components may also represent more abstract entities: effects, behaviors,
+/// data stores, groups.
+///
+/// Components are designed to be organized into a component tree, where every
+/// component belongs to a single parent and owns any number of children
+/// components. A [Component] must be added to the component tree in order for
+/// it to become fully operational. Typically, the [FlameGame] is the root of
+/// the component tree.
+///
+/// The components are added into the component tree using the [add] method, or
+/// [addToParent]; and then later can be removed using [remove] or
+/// [removeFromParent]. Note that neither adding nor removing are immediate,
+/// typically these operations complete by the next game tick.
+///
+/// Each component goes through several lifecycle stages during its lifetime,
+/// at each stage invoking certain user-defined "lifecycle methods":
+///  - [onGameResize] when the component is first added into the tree;
+///  - [onLoad] immediately after;
+///  - [onMount] when done loading;
+///  - [onRemove] if the component is later removed from the component tree.
+///
+/// The [onLoad] is only invoked once during the lifetime of the component,
+/// which means you can treat it as "async constructor". When [onLoad] is
+/// invoked, we guarantee that the game instance can be found via [findGame],
+/// and that this game instance already has layout (i.e. knows the size of the
+/// canvas).
+///
+/// The [onMount] is invoked when the component is done loading, and when its
+/// parent is properly mounted. If a component is removed from the tree and
+/// later added to another component, the [onMount] will be called again. For
+/// every call to [onMount] there will be a corresponding call to [onRemove].
+///
+/// While the component is mounted, the following user-overridable methods are
+/// invoked:
+///  - [update] on every game tick;
+///  - [render] after all components are done updating;
+///  - [updateTree] and [renderTree] are more advanced versions of the update
+///    and render callbacks, but they rarely need to be overridden by the user;
+///  - [onGameResize] every time the size game's Flutter widget changes.
+///
+/// The [update] and [render] are two most important methods of the component's
+/// lifecycle. On every game tick, first the entire component tree will be
+/// [update]d, and then all the components will be [render]ed.
+///
+/// You may also need to override [containsLocalPoint] if the component needs to
+/// respond to tap events or similar; the [componentsAtPoint] may also need to
+/// be overridden if you have reimplemented [renderTree].
 class Component {
   Component({Iterable<Component>? children, int? priority})
       : _priority = priority ?? 0 {
@@ -29,12 +77,7 @@ class Component {
     }
   }
 
-  /// What coordinate system this component should respect (i.e. should it
-  /// observe camera, viewport, or use the raw canvas).
-  ///
-  /// Do note that this currently only works if the component is added directly
-  /// to the root `FlameGame`.
-  PositionType positionType = PositionType.game;
+  //#region Lifecycle state
 
   /// Bitfield which keeps track of the current state of the component: which
   /// lifecycle events it has already executed, and which are currently being
@@ -163,9 +206,72 @@ class Component {
   void _setRemovingBit() => _state |= _removing;
   void _clearRemovingBit() => _state &= ~_removing;
 
-  /// The current parent of the component, or null if there is none.
+  Completer<void>? _mountCompleter;
+  Completer<void>? _loadCompleter;
+
+  /// A future that will complete once this component has finished loading.
+  Future<void> get loaded {
+    if (isLoaded) {
+      return Future.value();
+    }
+    _loadCompleter ??= Completer<void>();
+    return _loadCompleter!.future;
+  }
+
+  /// A future that will complete once the component is mounted on its parent
+  Future<void> get mounted {
+    if (isMounted) {
+      return Future.value();
+    }
+    _mountCompleter ??= Completer<void>();
+    return _mountCompleter!.future;
+  }
+
+  //#endregion
+
+  //#region Component tree
+
+  /// Who owns this component in the component tree.
+  ///
+  /// This can be null if the component hasn't been added to the component tree
+  /// yet, or if it is the root of component tree.
+  ///
+  /// Setting this property is equivalent to the [changeParent] method, or to
+  /// [removeFromParent] if setting to null.
   Component? get parent => _parent;
   Component? _parent;
+  set parent(Component? newParent) {
+    if (newParent == null) {
+      removeFromParent();
+    } else {
+      changeParent(newParent);
+    }
+  }
+
+  /// The children components of this component.
+  ///
+  /// This getter will automatically create the [ComponentSet] container within
+  /// the current object if it didn't exist before. Check the [hasChildren]
+  /// property in order to avoid instantiating the children container.
+  ComponentSet get children => _children ??= createComponentSet();
+  bool get hasChildren => _children?.isNotEmpty ?? false;
+  ComponentSet? _children;
+
+  /// `Component.childrenFactory` is the default method for creating children
+  /// containers within all components. Replace this method if you want to have
+  /// customized (non-default) [ComponentSet] instances in your project.
+  static ComponentSetFactory childrenFactory = ComponentSet.createDefault;
+
+  /// This method creates the children container for the current component.
+  /// Override this method if you need to have a custom [ComponentSet] within
+  /// a particular class.
+  ComponentSet createComponentSet() => childrenFactory();
+
+  /// Returns the closest parent further up the hierarchy that satisfies type=T,
+  /// or null if no such parent can be found.
+  T? findParent<T extends Component>() {
+    return (_parent is T ? _parent : _parent?.findParent<T>()) as T?;
+  }
 
   /// Returns the first child that matches the given type [T].
   ///
@@ -180,288 +286,6 @@ class Component {
   T? lastChild<T extends Component>() {
     final it = children.reversed().whereType<T>().iterator;
     return it.moveNext() ? it.current : null;
-  }
-
-  /// The children of the current component.
-  ///
-  /// This getter will automatically create the [ComponentSet] container within
-  /// the current object if it didn't exist before. Check the [hasChildren]
-  /// property in order to avoid instantiating the children container.
-  ComponentSet get children => _children ??= createComponentSet();
-  bool get hasChildren => _children?.isNotEmpty ?? false;
-  ComponentSet? _children;
-
-  Completer<void>? _mountCompleter;
-  Completer<void>? _loadCompleter;
-
-  @protected
-  _LifecycleManager get lifecycle {
-    return _lifecycleManager ??= _LifecycleManager(this);
-  }
-
-  _LifecycleManager? _lifecycleManager;
-
-  /// Render priority of this component. This allows you to control the order in
-  /// which your components are rendered.
-  ///
-  /// Components are always updated and rendered in the order defined by what
-  /// this number is when the component is added to the game.
-  /// The smaller the priority, the sooner your component will be
-  /// updated/rendered.
-  /// It can be any integer (negative, zero, or positive).
-  /// If two components share the same priority, they will probably be drawn in
-  /// the order they were added.
-  ///
-  /// Note that setting the priority is relatively expensive if the component is
-  /// already added to a component tree since all siblings have to be re-added
-  /// to the parent.
-  int get priority => _priority;
-  set priority(int newPriority) {
-    if (parent == null) {
-      _priority = newPriority;
-    } else {
-      parent!.children.changePriority(this, newPriority);
-    }
-  }
-
-  int _priority;
-
-  /// Whether this component should be removed or not.
-  ///
-  /// It will be checked once per component per tick, and if it is true,
-  /// FlameGame will remove it.
-  @nonVirtual
-  bool get shouldRemove => isRemoving;
-
-  /// Setting [shouldRemove] to true will schedule the component to be removed
-  /// from the game tree before the next game cycle.
-  ///
-  /// This property is equivalent to using the method [removeFromParent].
-  @nonVirtual
-  set shouldRemove(bool value) {
-    assert(value, '"Resurrecting" a component is not allowed');
-    removeFromParent();
-  }
-
-  //#region Debug rendering
-
-  /// Returns whether this [Component] is in debug mode or not.
-  /// When a child is added to the [Component] it gets the same [debugMode] as
-  /// its parent has when it is prepared.
-  ///
-  /// Returns `false` by default. Override it, or set it to true, to use debug
-  /// mode.
-  /// You can use this value to enable debug behaviors for your game and many
-  /// components will
-  /// show extra information on the screen when debug mode is activated.
-  bool debugMode = false;
-
-  /// How many decimal digits to print when displaying coordinates in the
-  /// debug mode. Setting this to null will suppress all coordinates from
-  /// the output.
-  int? get debugCoordinatesPrecision => 0;
-
-  /// The color that the debug output should be rendered with.
-  Color debugColor = const Color(0xFFFF00FF);
-
-  final ValueCache<Paint> _debugPaintCache = ValueCache<Paint>();
-  final ValueCache<TextPaint> _debugTextPaintCache = ValueCache<TextPaint>();
-
-  /// The [debugColor] represented as a [Paint] object.
-  Paint get debugPaint {
-    if (!_debugPaintCache.isCacheValid([debugColor])) {
-      final paint = Paint()
-        ..color = debugColor
-        ..strokeWidth = 0 // hairline-width
-        ..style = PaintingStyle.stroke;
-      _debugPaintCache.updateCache(paint, [debugColor]);
-    }
-    return _debugPaintCache.value!;
-  }
-
-  /// Returns a [TextPaint] object with the [debugColor] set as color for the
-  /// text.
-  TextPaint get debugTextPaint {
-    if (!_debugTextPaintCache.isCacheValid([debugColor])) {
-      final textPaint = TextPaint(
-        style: TextStyle(color: debugColor, fontSize: 12),
-      );
-      _debugTextPaintCache.updateCache(textPaint, [debugColor]);
-    }
-    return _debugTextPaintCache.value!;
-  }
-
-  //#endregion
-
-  //#region Component lifecycle methods
-
-  /// Called whenever the size of the top-level Canvas changes.
-  ///
-  /// In addition, this method will be invoked once after the component is
-  /// attached to the game tree, and before [onLoad] is called.
-  @mustCallSuper
-  void onGameResize(Vector2 size) => handleResize(size);
-
-  @internal
-  void handleResize(Vector2 size) {
-    _children?.forEach((child) => child.onGameResize(size));
-    _lifecycleManager?._children.forEach((child) {
-      if (child.isLoading || child.isLoaded) {
-        child.onGameResize(size);
-      }
-    });
-  }
-
-  /// Late initialization method for [Component].
-  ///
-  /// Usually, this method is the main place where you initialize your
-  /// component. This has several advantages over the traditional constructor:
-  ///   - this method can be `async`;
-  ///   - it is invoked when the size of the game canvas is already known.
-  ///
-  /// If your loading logic requires knowing the size of the game canvas, then
-  /// add `HasGameRef` mixin and then query `gameRef.size` or
-  /// `gameRef.canvasSize`.
-  ///
-  /// The default implementation returns `null`, indicating that there is no
-  /// need to await anything. When overriding this method, you have a choice
-  /// whether to create a regular or async function.
-  ///
-  /// If you need an asynchronous [onLoad], make your override return
-  /// non-nullable `Future<void>`:
-  /// ```dart
-  /// @override
-  /// Future<void> onLoad() async {
-  ///   // your code here
-  /// }
-  /// ```
-  ///
-  /// Alternatively, if your [onLoad] function doesn't use any `await`ing, then
-  /// you can declare it as a regular method and then return `null`:
-  /// ```dart
-  /// @override
-  /// Future<void>? onLoad() {
-  ///   // your code here
-  ///   return null;
-  /// }
-  /// ```
-  ///
-  /// The engine ensures that this method will be called exactly once during
-  /// the lifetime of the [Component] object. Do not call this method manually.
-  Future<void>? onLoad() => null;
-
-  /// A future that will complete once this component has finished loading.
-  Future<void> get loaded {
-    if (isLoaded) {
-      return Future.value();
-    }
-    _loadCompleter ??= Completer<void>();
-    return _loadCompleter!.future;
-  }
-
-  /// Called when the component is added to its parent.
-  ///
-  /// This method only runs when the component is fully loaded, i.e. after
-  /// [onLoad]. However, [onLoad] only ever runs once for the component, whereas
-  /// [onMount] runs every time the component is inserted into the game tree.
-  ///
-  /// This method runs when the component is about to be added to its parent.
-  /// At this point the [parent] property already holds a reference to this
-  /// component's parent, however the parent doesn't have this component among
-  /// its [children] yet.
-  ///
-  /// After this method completes, the component is added to the parent's
-  /// children set, and then the flag [isMounted] set to true.
-  ///
-  /// Example:
-  /// ```dart
-  /// @override
-  /// void onMount() {
-  ///   position = parent!.size / 2;
-  /// }
-  /// ```
-  ///
-  /// See also:
-  /// - [onRemove] that is called every time the component is removed from the
-  /// game tree
-  void onMount() {}
-
-  /// Called right before the component is removed from the game.
-  ///
-  /// This method will only run for a component that was previously mounted into
-  /// a component tree. If a component was never mounted (for example, when it
-  /// is removed before it had a chance to mount), then this callback will not
-  /// trigger. Thus, [onRemove] runs if and only if there was a corresponding
-  /// [onMount] call before.
-  void onRemove() {}
-
-  /// A future that will complete once the component is mounted on its parent
-  Future<void> get mounted {
-    if (isMounted) {
-      return Future.value();
-    }
-    _mountCompleter ??= Completer<void>();
-    return _mountCompleter!.future;
-  }
-
-  /// This method is called periodically by the game engine to request that your
-  /// component updates itself.
-  ///
-  /// The time [dt] in seconds (with microseconds precision provided by Flutter)
-  /// since the last update cycle.
-  /// This time can vary according to hardware capacity, so make sure to update
-  /// your state considering this.
-  /// All components in the tree are always updated by the same amount. The time
-  /// each one takes to update adds up to the next update cycle.
-  void update(double dt) {}
-
-  /// This method traverses the component tree and calls [update] on all its
-  /// children according to their [priority] order, relative to the
-  /// priority of the direct siblings, not the children or the ancestors.
-  void updateTree(double dt) {
-    _children?.updateComponentList();
-    _lifecycleManager?.processQueues();
-    update(dt);
-    _children?.forEach((c) => c.updateTree(dt));
-  }
-
-  void render(Canvas canvas) {}
-
-  void renderTree(Canvas canvas) {
-    render(canvas);
-    _children?.forEach((c) => c.renderTree(canvas));
-
-    // Any debug rendering should be rendered on top of everything
-    if (debugMode) {
-      renderDebugMode(canvas);
-    }
-  }
-
-  //#endregion
-
-  void renderDebugMode(Canvas canvas) {}
-
-  @protected
-  Vector2 eventPosition(PositionInfo info) {
-    switch (positionType) {
-      case PositionType.game:
-        return info.eventPosition.game;
-      case PositionType.viewport:
-        return info.eventPosition.viewport;
-      case PositionType.widget:
-        return info.eventPosition.widget;
-    }
-  }
-
-  /// Remove the component from its parent in the next tick.
-  void removeFromParent() {
-    _parent?.remove(this);
-  }
-
-  /// Changes the current parent for another parent and prepares the tree under
-  /// the new root.
-  void changeParent(Component newParent) {
-    newParent.lifecycle._adoption.add(this);
   }
 
   /// An iterator producing this component's parent, then its parent's parent,
@@ -507,6 +331,158 @@ class Component {
       yield this;
     }
   }
+
+  /// This method first calls the passed handler on the leaves in the tree,
+  /// the children without any children of their own.
+  /// Then it continues through all other children. The propagation continues
+  /// until the handler returns false, which means "do not continue", or when
+  /// the handler has been called with all children.
+  ///
+  /// This method is important to be used by the engine to propagate actions
+  /// like rendering, taps, etc, but you can call it yourself if you need to
+  /// apply an action to the whole component chain.
+  /// It will only consider components of type T in the hierarchy,
+  /// so use T = Component to target everything.
+  bool propagateToChildren<T extends Component>(
+    bool Function(T) handler, {
+    bool includeSelf = false,
+  }) {
+    return descendants(reversed: true, includeSelf: includeSelf)
+        .whereType<T>()
+        .every(handler);
+  }
+
+  @internal
+  static Game? staticGameInstance;
+  Game? findGame() {
+    return staticGameInstance ??
+        ((this is Game) ? (this as Game) : _parent?.findGame());
+  }
+
+  /// Whether the children list contains the given component.
+  ///
+  /// This method uses reference equality.
+  bool contains(Component c) => _children?.contains(c) ?? false;
+
+  //#endregion
+
+  //#region Component lifecycle methods
+
+  /// Called whenever the size of the top-level Canvas changes.
+  ///
+  /// In addition, this method will be invoked once after the component is
+  /// attached to the game tree, and before [onLoad] is called.
+  @mustCallSuper
+  void onGameResize(Vector2 size) => handleResize(size);
+
+  /// Late initialization method for [Component].
+  ///
+  /// Usually, this method is the main place where you initialize your
+  /// component. This has several advantages over the traditional constructor:
+  ///   - this method can be `async`;
+  ///   - it is invoked when the size of the game canvas is already known.
+  ///
+  /// If your loading logic requires knowing the size of the game canvas, then
+  /// add `HasGameRef` mixin and then query `gameRef.size` or
+  /// `gameRef.canvasSize`.
+  ///
+  /// The default implementation returns `null`, indicating that there is no
+  /// need to await anything. When overriding this method, you have a choice
+  /// whether to create a regular or async function.
+  ///
+  /// If you need an asynchronous [onLoad], make your override return
+  /// non-nullable `Future<void>`:
+  /// ```dart
+  /// @override
+  /// Future<void> onLoad() async {
+  ///   // your code here
+  /// }
+  /// ```
+  ///
+  /// Alternatively, if your [onLoad] function doesn't use any `await`ing, then
+  /// you can declare it as a regular method and then return `null`:
+  /// ```dart
+  /// @override
+  /// Future<void>? onLoad() {
+  ///   // your code here
+  ///   return null;
+  /// }
+  /// ```
+  ///
+  /// The engine ensures that this method will be called exactly once during
+  /// the lifetime of the [Component] object. Do not call this method manually.
+  Future<void>? onLoad() => null;
+
+  /// Called when the component is added to its parent.
+  ///
+  /// This method only runs when the component is fully loaded, i.e. after
+  /// [onLoad]. However, [onLoad] only ever runs once for the component, whereas
+  /// [onMount] runs every time the component is inserted into the game tree.
+  ///
+  /// This method runs when the component is about to be added to its parent.
+  /// At this point the [parent] property already holds a reference to this
+  /// component's parent, however the parent doesn't have this component among
+  /// its [children] yet.
+  ///
+  /// After this method completes, the component is added to the parent's
+  /// children set, and then the flag [isMounted] set to true.
+  ///
+  /// Example:
+  /// ```dart
+  /// @override
+  /// void onMount() {
+  ///   position = parent!.size / 2;
+  /// }
+  /// ```
+  ///
+  /// See also:
+  /// - [onRemove] that is called every time the component is removed from the
+  /// game tree
+  void onMount() {}
+
+  /// Called right before the component is removed from the game.
+  ///
+  /// This method will only run for a component that was previously mounted into
+  /// a component tree. If a component was never mounted (for example, when it
+  /// is removed before it had a chance to mount), then this callback will not
+  /// trigger. Thus, [onRemove] runs if and only if there was a corresponding
+  /// [onMount] call before.
+  void onRemove() {}
+
+  /// This method is called periodically by the game engine to request that your
+  /// component updates itself.
+  ///
+  /// The time [dt] in seconds (with microseconds precision provided by Flutter)
+  /// since the last update cycle.
+  /// This time can vary according to hardware capacity, so make sure to update
+  /// your state considering this.
+  /// All components in the tree are always updated by the same amount. The time
+  /// each one takes to update adds up to the next update cycle.
+  void update(double dt) {}
+
+  /// This method traverses the component tree and calls [update] on all its
+  /// children according to their [priority] order, relative to the
+  /// priority of the direct siblings, not the children or the ancestors.
+  void updateTree(double dt) {
+    _children?.updateComponentList();
+    _lifecycleManager?.processQueues();
+    update(dt);
+    _children?.forEach((c) => c.updateTree(dt));
+  }
+
+  void render(Canvas canvas) {}
+
+  void renderTree(Canvas canvas) {
+    render(canvas);
+    _children?.forEach((c) => c.renderTree(canvas));
+
+    // Any debug rendering should be rendered on top of everything
+    if (debugMode) {
+      renderDebugMode(canvas);
+    }
+  }
+
+  //#endregion
 
   //#region Add/remove components
 
@@ -612,6 +588,163 @@ class Component {
     components.forEach(remove);
   }
 
+  /// Remove the component from its parent in the next tick.
+  void removeFromParent() {
+    _parent?.remove(this);
+  }
+
+  /// Whether this component should be removed or not.
+  ///
+  /// It will be checked once per component per tick, and if it is true,
+  /// FlameGame will remove it.
+  @nonVirtual
+  bool get shouldRemove => isRemoving;
+
+  /// Setting [shouldRemove] to true will schedule the component to be removed
+  /// from the game tree before the next game cycle.
+  ///
+  /// This property is equivalent to using the method [removeFromParent].
+  @nonVirtual
+  set shouldRemove(bool value) {
+    assert(value, '"Resurrecting" a component is not allowed');
+    removeFromParent();
+  }
+
+  /// Changes the current parent for another parent and prepares the tree under
+  /// the new root.
+  void changeParent(Component newParent) {
+    newParent.lifecycle._adoption.add(this);
+  }
+
+  //#endregion
+
+  //#region Hit Testing
+
+  /// Checks whether the [point] is within this component's bounds.
+  ///
+  /// This method should be implemented for any component that has a visual
+  /// representation and non-zero size. The [point] is in the local coordinate
+  /// space.
+  bool containsLocalPoint(Vector2 point) => false;
+
+  /// Same as [containsLocalPoint], but for a "global" [point].
+  ///
+  /// This will be deprecated in the future, due to the notion of "global" point
+  /// not being well-defined.
+  bool containsPoint(Vector2 point) => containsLocalPoint(point);
+
+  /// An iterable of descendant components intersecting the given point. The
+  /// [point] is in the local coordinate space.
+  ///
+  /// More precisely, imagine a ray originating at a certain point (x, y) on
+  /// the screen, and extending perpendicularly to the screen's surface into
+  /// your game's world. The purpose of this method is to find all components
+  /// that intersect with this ray, in the order from those that are closest to
+  /// the user to those that are farthest.
+  ///
+  /// The return value is an [Iterable] of `(component, point)` pairs, which
+  /// gives not only the components themselves, but also the points of
+  /// intersection, in their respective local coordinates.
+  ///
+  /// The default implementation relies on the [CoordinateTransform] interface
+  /// to translate from the parent's coordinate system into the local one. Make
+  /// sure that your component implements this interface if it alters the
+  /// coordinate system when rendering.
+  ///
+  /// If your component overrides [renderTree], then it almost certainly needs
+  /// to override this method as well, so that this method can find all rendered
+  /// components wherever they are.
+  Iterable<ComponentPointPair> componentsAtPoint(Vector2 point) sync* {
+    if (_children != null) {
+      for (final child in _children!.reversed()) {
+        Vector2? childPoint = point;
+        if (child is CoordinateTransform) {
+          childPoint = (child as CoordinateTransform).parentToLocal(point);
+        }
+        if (childPoint != null) {
+          yield* child.componentsAtPoint(childPoint);
+        }
+      }
+    }
+    if (containsLocalPoint(point)) {
+      yield ComponentPointPair(this, point);
+    }
+  }
+
+  //#endregion
+
+  //#region Priority
+
+  /// Render priority of this component. This allows you to control the order in
+  /// which your components are rendered.
+  ///
+  /// Components are always updated and rendered in the order defined by what
+  /// this number is when the component is added to the game.
+  /// The smaller the priority, the sooner your component will be
+  /// updated/rendered.
+  /// It can be any integer (negative, zero, or positive).
+  /// If two components share the same priority, they will probably be drawn in
+  /// the order they were added.
+  ///
+  /// Note that setting the priority is relatively expensive if the component is
+  /// already added to a component tree since all siblings have to be re-added
+  /// to the parent.
+  int get priority => _priority;
+  int _priority;
+  set priority(int newPriority) {
+    if (parent == null) {
+      _priority = newPriority;
+    } else {
+      parent!.children.changePriority(this, newPriority);
+    }
+  }
+
+  /// Usually this is not something that the user would want to call since the
+  /// component list isn't re-ordered when it is called.
+  /// See FlameGame.changePriority instead.
+  void changePriorityWithoutResorting(int priority) => _priority = priority;
+
+  /// Call this if any of this component's children priorities have changed
+  /// at runtime.
+  ///
+  /// This will call [ComponentSet.rebalanceAll] on the [children] ordered set.
+  void reorderChildren() => _children?.rebalanceAll();
+
+  //#endregion
+
+  //#region Internal lifecycle management
+
+  @protected
+  _LifecycleManager get lifecycle {
+    return _lifecycleManager ??= _LifecycleManager(this);
+  }
+
+  _LifecycleManager? _lifecycleManager;
+
+  bool get hasPendingLifecycleEvents {
+    return _lifecycleManager?.hasPendingEvents ?? false;
+  }
+
+  /// Attempt to resolve any pending lifecycle events on this component.
+  void processPendingLifecycleEvents() {
+    if (_lifecycleManager != null) {
+      _lifecycleManager!.processQueues();
+      if (!_lifecycleManager!.hasPendingEvents) {
+        _lifecycleManager = null;
+      }
+    }
+  }
+
+  @internal
+  void handleResize(Vector2 size) {
+    _children?.forEach((child) => child.onGameResize(size));
+    _lifecycleManager?._children.forEach((child) {
+      if (child.isLoading || child.isLoaded) {
+        child.onGameResize(size);
+      }
+    });
+  }
+
   Future<void>? _startLoading() {
     assert(_state == _initial);
     assert(_parent != null);
@@ -694,129 +827,80 @@ class Component {
 
   //#endregion
 
-  bool get hasPendingLifecycleEvents {
-    return _lifecycleManager?.hasPendingEvents ?? false;
+  //#region Debugging assistance
+
+  /// Returns whether this [Component] is in debug mode or not.
+  /// When a child is added to the [Component] it gets the same [debugMode] as
+  /// its parent has when it is prepared.
+  ///
+  /// Returns `false` by default. Override it, or set it to true, to use debug
+  /// mode.
+  /// You can use this value to enable debug behaviors for your game and many
+  /// components will
+  /// show extra information on the screen when debug mode is activated.
+  bool debugMode = false;
+
+  /// How many decimal digits to print when displaying coordinates in the
+  /// debug mode. Setting this to null will suppress all coordinates from
+  /// the output.
+  int? get debugCoordinatesPrecision => 0;
+
+  /// The color that the debug output should be rendered with.
+  Color debugColor = const Color(0xFFFF00FF);
+
+  final ValueCache<Paint> _debugPaintCache = ValueCache<Paint>();
+  final ValueCache<TextPaint> _debugTextPaintCache = ValueCache<TextPaint>();
+
+  /// The [debugColor] represented as a [Paint] object.
+  Paint get debugPaint {
+    if (!_debugPaintCache.isCacheValid([debugColor])) {
+      final paint = Paint()
+        ..color = debugColor
+        ..strokeWidth = 0 // hairline-width
+        ..style = PaintingStyle.stroke;
+      _debugPaintCache.updateCache(paint, [debugColor]);
+    }
+    return _debugPaintCache.value!;
   }
 
-  /// Attempt to resolve any pending lifecycle events on this component.
-  void processPendingLifecycleEvents() {
-    if (_lifecycleManager != null) {
-      _lifecycleManager!.processQueues();
-      if (!_lifecycleManager!.hasPendingEvents) {
-        _lifecycleManager = null;
-      }
+  /// Returns a [TextPaint] object with the [debugColor] set as color for the
+  /// text.
+  TextPaint get debugTextPaint {
+    if (!_debugTextPaintCache.isCacheValid([debugColor])) {
+      final textPaint = TextPaint(
+        style: TextStyle(color: debugColor, fontSize: 12),
+      );
+      _debugTextPaintCache.updateCache(textPaint, [debugColor]);
+    }
+    return _debugTextPaintCache.value!;
+  }
+
+  void renderDebugMode(Canvas canvas) {}
+
+  //#endregion
+
+  //#region Legacy component placement overrides
+
+  /// What coordinate system this component should respect (i.e. should it
+  /// observe camera, viewport, or use the raw canvas).
+  ///
+  /// Do note that this currently only works if the component is added directly
+  /// to the root `FlameGame`.
+  PositionType positionType = PositionType.game;
+
+  @protected
+  Vector2 eventPosition(PositionInfo info) {
+    switch (positionType) {
+      case PositionType.game:
+        return info.eventPosition.game;
+      case PositionType.viewport:
+        return info.eventPosition.viewport;
+      case PositionType.widget:
+        return info.eventPosition.widget;
     }
   }
 
-  @internal
-  static Game? staticGameInstance;
-  Game? findGame() {
-    return staticGameInstance ??
-        ((this is Game) ? (this as Game) : _parent?.findGame());
-  }
-
-  /// Whether the children list contains the given component.
-  ///
-  /// This method uses reference equality.
-  bool contains(Component c) => _children?.contains(c) ?? false;
-
-  /// Call this if any of this component's children priorities have changed
-  /// at runtime.
-  ///
-  /// This will call [ComponentSet.rebalanceAll] on the [children] ordered set.
-  void reorderChildren() => _children?.rebalanceAll();
-
-  /// This method first calls the passed handler on the leaves in the tree,
-  /// the children without any children of their own.
-  /// Then it continues through all other children. The propagation continues
-  /// until the handler returns false, which means "do not continue", or when
-  /// the handler has been called with all children.
-  ///
-  /// This method is important to be used by the engine to propagate actions
-  /// like rendering, taps, etc, but you can call it yourself if you need to
-  /// apply an action to the whole component chain.
-  /// It will only consider components of type T in the hierarchy,
-  /// so use T = Component to target everything.
-  bool propagateToChildren<T extends Component>(
-    bool Function(T) handler, {
-    bool includeSelf = false,
-  }) {
-    return descendants(reversed: true, includeSelf: includeSelf)
-        .whereType<T>()
-        .every(handler);
-  }
-
-  /// Returns the closest parent further up the hierarchy that satisfies type=T,
-  /// or null if no such parent can be found.
-  T? findParent<T extends Component>() {
-    return (parent is T ? parent : parent?.findParent<T>()) as T?;
-  }
-
-  /// Checks whether the [point] is within this component's bounds.
-  ///
-  /// This method should be implemented for any component that has a visual
-  /// representation and non-zero size. The [point] is in the local coordinate
-  /// space.
-  bool containsLocalPoint(Vector2 point) => false;
-
-  /// Same as [containsLocalPoint], but for a "global" [point].
-  ///
-  /// This will be deprecated in the future, due to the notion of "global" point
-  /// not being well-defined.
-  bool containsPoint(Vector2 point) => containsLocalPoint(point);
-
-  /// An iterable of descendant components intersecting the given point. The
-  /// [point] is in the local coordinate space.
-  ///
-  /// More precisely, imagine a ray originating at a certain point (x, y) on
-  /// the screen, and extending perpendicularly to the screen's surface into
-  /// your game's world. The purpose of this method is to find all components
-  /// that intersect with this ray, in the order from those that are closest to
-  /// the user to those that are farthest.
-  ///
-  /// The return value is an [Iterable] of `(component, point)` pairs, which
-  /// gives not only the components themselves, but also the points of
-  /// intersection, in their respective local coordinates.
-  ///
-  /// The default implementation relies on the [CoordinateTransform] interface
-  /// to translate from the parent's coordinate system into the local one. Make
-  /// sure that your component implements this interface if it alters the
-  /// coordinate system when rendering.
-  ///
-  /// If your component overrides [renderTree], then it almost certainly needs
-  /// to override this method as well, so that this method can find all rendered
-  /// components wherever they are.
-  Iterable<ComponentPointPair> componentsAtPoint(Vector2 point) sync* {
-    if (_children != null) {
-      for (final child in _children!.reversed()) {
-        Vector2? childPoint = point;
-        if (child is CoordinateTransform) {
-          childPoint = (child as CoordinateTransform).parentToLocal(point);
-        }
-        if (childPoint != null) {
-          yield* child.componentsAtPoint(childPoint);
-        }
-      }
-    }
-    if (containsLocalPoint(point)) {
-      yield ComponentPointPair(this, point);
-    }
-  }
-
-  /// Usually this is not something that the user would want to call since the
-  /// component list isn't re-ordered when it is called.
-  /// See FlameGame.changePriority instead.
-  void changePriorityWithoutResorting(int priority) => _priority = priority;
-
-  /// `Component.childrenFactory` is the default method for creating children
-  /// containers within all components. Replace this method if you want to have
-  /// customized (non-default) [ComponentSet] instances in your project.
-  static ComponentSetFactory childrenFactory = ComponentSet.createDefault;
-
-  /// This method creates the children container for the current component.
-  /// Override this method if you need to have a custom [ComponentSet] within
-  /// a particular class.
-  ComponentSet createComponentSet() => childrenFactory();
+  //#endregion
 }
 
 typedef ComponentSetFactory = ComponentSet Function();
