@@ -16,7 +16,6 @@ class FixedSizeViewport extends Viewport {
     Iterable<Component>? children,
   }) : super(children: children) {
     size = Vector2(width, height);
-    position = Vector2(width / 2, height / 2);
     onViewportResize();
   }
 
@@ -27,13 +26,12 @@ class FixedSizeViewport extends Viewport {
 
   @override
   bool containsLocalPoint(Vector2 point) {
-    return point.x.abs() <= size.x / 2 && point.y.abs() <= size.y / 2;
+    final x = point.x, y = point.y;
+    return x >= 0 && x <= size.x && y >= 0 && y <= size.y;
   }
 
   @override
   void onViewportResize() {
-    final x = size.x / 2;
-    final y = size.y / 2;
-    _clipRect = Rect.fromLTRB(-x, -y, x, y);
+    _clipRect = Rect.fromLTWH(0, 0, size.x, size.y);
   }
 }

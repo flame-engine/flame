@@ -126,8 +126,8 @@ class Viewfinder extends Component
   void onViewportResize() {
     if (parent != null) {
       final viewportSize = camera.viewport.size;
-      _transform.position.x = viewportSize.x * (_anchor.x - 0.5);
-      _transform.position.y = viewportSize.y * (_anchor.y - 0.5);
+      _transform.position.x = viewportSize.x * _anchor.x;
+      _transform.position.y = viewportSize.y * _anchor.y;
     }
   }
 

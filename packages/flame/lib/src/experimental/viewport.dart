@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:meta/meta.dart';
 import 'package:vector_math/vector_math_64.dart';
 
+import '../anchor.dart';
 import '../components/component.dart';
 import '../effects/provider_interfaces.dart';
 import 'camera_component.dart';
@@ -18,7 +19,7 @@ import 'camera_component.dart';
 /// shape, and also by their behavior in response to changes to the canvas size.
 /// Users may also create their own implementations.
 abstract class Viewport extends Component
-    implements PositionProvider, SizeProvider {
+    implements AnchorProvider, PositionProvider, SizeProvider {
   Viewport({Iterable<Component>? children}) : super(children: children);
 
   /// Position of the viewport's anchor in the parent's coordinate frame.
@@ -31,6 +32,9 @@ abstract class Viewport extends Component
   final Vector2 _position = Vector2.zero();
   @override
   set position(Vector2 value) => _position.setFrom(value);
+
+  @override
+  Anchor anchor = Anchor.topLeft;
 
   /// Size of the viewport, i.e. its width and height.
   ///

@@ -14,11 +14,11 @@ void main() {
 
       expect(camera.viewport, isA<MaxViewport>());
       expect(camera.viewport.size, Vector2(800, 600));
-      expect(camera.viewport.position, Vector2(400, 300));
+      expect(camera.viewport.position, Vector2(0, 0));
 
       game.onGameResize(Vector2(500, 200));
       expect(camera.viewport.size, Vector2(500, 200));
-      expect(camera.viewport.position, Vector2(250, 100));
+      expect(camera.viewport.position, Vector2(0, 0));
     });
 
     testWithFlameGame('hit-testing', (game) async {

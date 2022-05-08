@@ -18,11 +18,11 @@ void main() {
 
       expect(camera.viewport, isA<FixedSizeViewport>());
       expect(camera.viewport.size, Vector2(300, 100));
-      expect(camera.viewport.position, Vector2(150, 50));
+      expect(camera.viewport.position, Vector2(0, 0));
 
       game.onGameResize(Vector2(200, 200));
       expect(camera.viewport.size, Vector2(300, 100));
-      expect(camera.viewport.position, Vector2(150, 50));
+      expect(camera.viewport.position, Vector2(0, 0));
     });
 
     testWithFlameGame('hit-testing', (game) async {
@@ -36,14 +36,14 @@ void main() {
       final viewport = camera.viewport;
       expect(viewport, isA<FixedSizeViewport>());
       expect(viewport.containsLocalPoint(Vector2(0, 0)), true);
-      expect(viewport.containsLocalPoint(Vector2(-1, -1)), true);
+      expect(viewport.containsLocalPoint(Vector2(-1, -1)), false);
+      expect(viewport.containsLocalPoint(Vector2(400, 100)), true);
       expect(viewport.containsLocalPoint(Vector2(150, 50)), true);
-      expect(viewport.containsLocalPoint(Vector2(-150, -50)), true);
-      expect(viewport.containsLocalPoint(Vector2(-150, 50)), true);
-      expect(viewport.containsLocalPoint(Vector2(150, -50)), true);
-      expect(viewport.containsLocalPoint(Vector2(100, 200)), false);
+      expect(viewport.containsLocalPoint(Vector2(-150, 50)), false);
+      expect(viewport.containsLocalPoint(Vector2(150, -50)), false);
+      expect(viewport.containsLocalPoint(Vector2(100, 20)), true);
       expect(viewport.containsLocalPoint(Vector2(1000, -1000)), false);
-      expect(viewport.containsLocalPoint(Vector2(300, 100)), false);
+      expect(viewport.containsLocalPoint(Vector2(300, 100)), true);
     });
 
     FlameTester(() => FlameGame()).testGameWidget(
@@ -55,6 +55,7 @@ void main() {
           viewport: FixedSizeViewport(500, 200),
         )
           ..viewport.position = Vector2(400, 300)
+          ..viewport.anchor = Anchor.center
           ..viewfinder.position = Vector2.zero();
         world.add(
           CircleComponent(

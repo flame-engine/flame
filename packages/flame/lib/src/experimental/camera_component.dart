@@ -86,7 +86,10 @@ class CameraComponent extends Component {
   @override
   void renderTree(Canvas canvas) {
     canvas.save();
-    canvas.translate(viewport.position.x, viewport.position.y);
+    canvas.translate(
+      viewport.position.x - viewport.anchor.x * viewport.size.x,
+      viewport.position.y - viewport.anchor.y * viewport.size.y,
+    );
     // Render the world through the viewport
     if (world.isMounted && currentCameras.length < maxCamerasDepth) {
       canvas.save();
