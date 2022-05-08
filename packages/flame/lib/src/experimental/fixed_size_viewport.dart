@@ -16,6 +16,7 @@ class FixedSizeViewport extends Viewport {
     Iterable<Component>? children,
   }) : super(children: children) {
     size = Vector2(width, height);
+    position = Vector2(width / 2, height / 2);
     onViewportResize();
   }
 
