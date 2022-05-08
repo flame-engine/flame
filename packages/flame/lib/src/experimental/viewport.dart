@@ -11,8 +11,8 @@ import 'camera_component.dart';
 ///
 /// The viewport describes a "window" through which the underlying game world
 /// is observed. At the same time, the viewport is agnostic of the game world,
-/// and only contain properties that describe the "window". These properties
-/// are: the window's size, shape, and position on the screen.
+/// and only contain properties that describe the "window" itself. These
+/// properties are: the window's size, shape, and position on the screen.
 ///
 /// There are several implementations of [Viewport], which differ by their
 /// shape, and also by their behavior in response to changes to the canvas size.
@@ -21,7 +21,7 @@ abstract class Viewport extends Component
     implements PositionProvider, SizeProvider {
   Viewport({Iterable<Component>? children}) : super(children: children);
 
-  /// Position of the viewport's center in the parent's coordinate frame.
+  /// Position of the viewport's anchor in the parent's coordinate frame.
   ///
   /// Changing this position will move the viewport around the screen, but will
   /// not affect which portion of the game world is visible. Thus, the game
@@ -32,15 +32,15 @@ abstract class Viewport extends Component
   @override
   set position(Vector2 value) => _position.setFrom(value);
 
-  /// Size of the viewport, i.e. the width and the height.
+  /// Size of the viewport, i.e. its width and height.
   ///
   /// This property represents the bounding box of the viewport. If the viewport
   /// is rectangular in shape, then [size] describes the dimensions of that
   /// rectangle. If the viewport has any other shape (for example, circular),
   /// then [size] describes the dimensions of the bounding box of the viewport.
   ///
-  /// Changing the size at runtime triggers the [handleResize] event. The size
-  /// cannot be negative.
+  /// Changing the size at runtime triggers the [onViewportResize] event. The
+  /// size cannot be negative.
   @override
   Vector2 get size => _size;
   final Vector2 _size = Vector2.zero();
