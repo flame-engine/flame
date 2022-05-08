@@ -1,4 +1,3 @@
-
 import 'package:flame/experimental.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -8,8 +7,8 @@ void main() {
   group('MaxViewport', () {
     testWithFlameGame('camera with MaxViewport', (game) async {
       expect(game.size, Vector2(800, 600));
-      final world = World() ..addToParent(game);
-      final camera = CameraComponent(world: world) ..addToParent(game);
+      final world = World()..addToParent(game);
+      final camera = CameraComponent(world: world)..addToParent(game);
       await game.ready();
 
       expect(camera.viewport, isA<MaxViewport>());
@@ -22,8 +21,8 @@ void main() {
     });
 
     testWithFlameGame('hit-testing', (game) async {
-      final world = World() ..addToParent(game);
-      final camera = CameraComponent(world: world) ..addToParent(game);
+      final world = World()..addToParent(game);
+      final camera = CameraComponent(world: world)..addToParent(game);
       await game.ready();
 
       final viewport = camera.viewport;

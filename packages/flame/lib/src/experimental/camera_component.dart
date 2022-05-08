@@ -112,8 +112,8 @@ class CameraComponent extends Component {
   @override
   Iterable<ComponentPointPair> componentsAtPoint(Vector2 point) sync* {
     final viewportPoint = Vector2(
-        point.x - viewport.position.x + viewport.anchor.x * viewport.size.x,
-        point.y - viewport.position.y + viewport.anchor.y * viewport.size.y,
+      point.x - viewport.position.x + viewport.anchor.x * viewport.size.x,
+      point.y - viewport.position.y + viewport.anchor.y * viewport.size.y,
     );
     if (world.isMounted && currentCameras.length < maxCamerasDepth) {
       if (viewport.containsPoint(viewportPoint)) {
