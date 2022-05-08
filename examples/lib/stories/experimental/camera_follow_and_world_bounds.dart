@@ -26,7 +26,7 @@ class CameraFollowAndWorldBoundsExample extends FlameGame
     camera
       ..viewfinder.visibleGameSize = Vector2(400, 100)
       ..follow(player, horizontalOnly: true)
-      ..setBound(Rectangle.fromLTRB(190, -50, 810, 50));
+      ..setBounds(Rectangle.fromLTRB(190, -50, 810, 50));
     add(camera);
     world.add(Ground());
     world.add(player);

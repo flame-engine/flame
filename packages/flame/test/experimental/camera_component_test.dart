@@ -72,7 +72,7 @@ void main() {
       final camera = CameraComponent(world: world)..addToParent(game);
       await game.ready();
 
-      camera.setBound(Rectangle.fromLTRB(0, 0, 400, 50));
+      camera.setBounds(Rectangle.fromLTRB(0, 0, 400, 50));
       camera.viewfinder.position = Vector2(10, 10);
       game.update(0);
       expect(camera.viewfinder.position, Vector2(10, 10));
@@ -94,12 +94,12 @@ void main() {
         camera.viewfinder.firstChild<BoundedPositionBehavior>()!.bounds,
         isA<Rectangle>(),
       );
-      camera.setBound(Circle(Vector2.zero(), 100));
+      camera.setBounds(Circle(Vector2.zero(), 100));
       expect(
         camera.viewfinder.firstChild<BoundedPositionBehavior>()!.bounds,
         isA<Circle>(),
       );
-      camera.setBound(null);
+      camera.setBounds(null);
       game.update(0);
       expect(
         camera.viewfinder.firstChild<BoundedPositionBehavior>(),

@@ -200,23 +200,23 @@ class CameraComponent extends Component {
     );
   }
 
-  /// Sets or clears the world bound for the camera's viewfinder.
+  /// Sets or clears the world bounds for the camera's viewfinder.
   ///
   /// The bound is a [Shape], given in the world coordinates. The viewfinder's
   /// position will be restricted to always remain inside this region. Note that
   /// if you want the camera to never see the empty space outside of the world's
-  /// rendering area, then you should set up the bound to be smaller than the
+  /// rendering area, then you should set up the bounds to be smaller than the
   /// size of the world.
-  void setBound(Shape? bound) {
+  void setBounds(Shape? bounds) {
     final boundedBehavior = viewfinder.firstChild<BoundedPositionBehavior>();
-    if (bound == null) {
+    if (bounds == null) {
       boundedBehavior?.removeFromParent();
     } else if (boundedBehavior == null) {
       viewfinder.add(
-        BoundedPositionBehavior(bounds: bound, priority: 1000),
+        BoundedPositionBehavior(bounds: bounds, priority: 1000),
       );
     } else {
-      boundedBehavior.bounds = bound;
+      boundedBehavior.bounds = bounds;
     }
   }
 }
