@@ -8,11 +8,15 @@ import 'trex/trex_game.dart';
 void addGameStories(Dashbook dashbook) {
   dashbook.storiesOf('Sample Games').add(
         'T-Rex',
-        (_) => ClipRect(
-          child: GameWidget(
-            game: TRexGame(),
-            loadingBuilder: (_) => const Center(
-              child: Text('Loading'),
+        (_) => Container(
+          color: Colors.black,
+          margin: const EdgeInsets.all(45),
+          child: ClipRect(
+            child: GameWidget(
+              game: TRexGame(),
+              loadingBuilder: (_) => const Center(
+                child: Text('Loading'),
+              ),
             ),
           ),
         ),

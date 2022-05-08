@@ -54,7 +54,7 @@ class TRexGame extends FlameGame
     final textPaint = TextPaint(style: textStyle);
     add(
       scoreText = TextComponent(
-        position: Vector2(60, 20),
+        position: Vector2(20, 20),
         textRenderer: textPaint,
       )..positionType = PositionType.viewport,
     );
@@ -118,7 +118,6 @@ class TRexGame extends FlameGame
   @override
   void update(double dt) {
     super.update(dt);
-
     if (isGameOver) {
       return;
     }
@@ -130,16 +129,5 @@ class TRexGame extends FlameGame
         currentSpeed += acceleration * dt;
       }
     }
-  }
-
-  // This is needed since you don't see Dashbook's hamburger menu otherwise.
-  final _cornerRect =
-      RRect.fromLTRBR(-10, -10, 50, 40, const Radius.circular(10));
-  final _cornerPaint = Paint()..color = Colors.grey;
-
-  @override
-  void render(Canvas canvas) {
-    super.render(canvas);
-    canvas.drawRRect(_cornerRect, _cornerPaint);
   }
 }
