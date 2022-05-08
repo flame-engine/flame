@@ -23,7 +23,7 @@ bound by.
 ### FPSComponent
 
 The `FPSComponent` can be added to anywhere in the component tree and will keep track of how many
-FPS that the game is currently rendering with. If you want to display this as text in the game, use
+FPS that the game is currently rendering in. If you want to display this as text in the game, use
 the [](#fpstextcomponent).
 
 
