@@ -8,6 +8,7 @@ import 'stories/collision_detection/collision_detection.dart';
 import 'stories/components/components.dart';
 import 'stories/effects/effects.dart';
 import 'stories/experimental/experimental.dart';
+import 'stories/games/games.dart';
 import 'stories/input/input.dart';
 import 'stories/parallax/parallax.dart';
 import 'stories/rendering/rendering.dart';
@@ -23,6 +24,10 @@ void main() async {
     theme: ThemeData.dark(),
   );
 
+  // Some small sample games
+  addGameStories(dashbook);
+
+  // Feature examples
   addAnimationStories(dashbook);
   addCameraAndViewportStories(dashbook);
   addCollisionDetectionStories(dashbook);
