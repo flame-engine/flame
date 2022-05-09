@@ -16,9 +16,8 @@ class FPSComponent extends Component {
 
   @override
   void update(double dt) {
-    final frameFps = 1 / dt;
-    _window.add(frameFps);
-    _sum += frameFps;
+    _window.addLast(dt);
+    _sum += dt;
     if (_window.length > windowSize) {
       _sum -= _window.removeFirst();
     }
@@ -26,6 +25,6 @@ class FPSComponent extends Component {
 
   /// Get the current average FPS over the last [windowSize] frames.
   double get fps {
-    return _window.isEmpty ? 0 : _sum / _window.length;
+    return _window.isEmpty ? 0 : _window.length / _sum;
   }
 }
