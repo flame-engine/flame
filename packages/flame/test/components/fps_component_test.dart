@@ -36,16 +36,15 @@ void main() {
     });
 
     testWithFlameGame('reports correct FPS with varying dt', (game) async {
-      const windowSize = 40;
-      final fpsComponent = FPSComponent(windowSize: windowSize);
+      final fpsComponent = FPSComponent();
       await game.ensureAdd(fpsComponent);
-      for (var i = 0; i < 1.5 * windowSize; i++) {
+      for (var i = 0; i < fpsComponent.windowSize; i++) {
         // Alternating between 50 and 100 FPS
-        final dt = i.isEven? 1/100 : 1/50;
+        final dt = i.isEven ? 1 / 100 : 1 / 50;
         game.update(dt);
       }
 
-      expect(fpsComponent.fps, 75.0);
+      expect(fpsComponent.fps, closeTo(100 / 1.5, 0.00000000001));
     });
   });
 }

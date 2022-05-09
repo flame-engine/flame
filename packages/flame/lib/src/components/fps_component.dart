@@ -12,22 +12,25 @@ class FPSComponent extends Component {
 
   /// The number of game ticks over which the fps measure will be averaged.
   final int windowSize;
-  /// The queue of the recent game tick durations. The length of this queue will not exceed [windowSize].
-  final Queue<double> _window = Queue();
-  /// The sum of all values in the [_window] queue.
+
+  /// The queue of the recent game tick durations.
+  /// The length of this queue will not exceed [windowSize].
+  final Queue<double> window = Queue();
+
+  /// The sum of all values in the [window] queue.
   double _sum = 0;
 
   @override
   void update(double dt) {
-    _window.addLast(dt);
+    window.addLast(dt);
     _sum += dt;
-    if (_window.length > windowSize) {
-      _sum -= _window.removeFirst();
+    if (window.length > windowSize) {
+      _sum -= window.removeFirst();
     }
   }
 
   /// Get the current average FPS over the last [windowSize] frames.
   double get fps {
-    return _window.isEmpty ? 0 : _window.length / _sum;
+    return window.isEmpty ? 0 : window.length / _sum;
   }
 }
