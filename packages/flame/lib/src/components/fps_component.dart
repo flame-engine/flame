@@ -12,6 +12,7 @@ class FPSComponent extends Component {
 
   final int windowSize;
   final Queue<double> _window = Queue();
+  /// The sum of all values in the [_window] queue.
   double _sum = 0;
 
   @override
