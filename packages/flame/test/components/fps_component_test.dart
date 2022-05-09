@@ -7,6 +7,7 @@ void main() {
     testWithFlameGame('reports correct FPS for 1 frames', (game) async {
       final fpsComponent = FPSComponent();
       await game.ensureAdd(fpsComponent);
+      expect(fpsComponent.fps, 0);
       game.update(1 / 60);
 
       expect(fpsComponent.fps, 60.0);
@@ -40,7 +41,7 @@ void main() {
       await game.ensureAdd(fpsComponent);
       for (var i = 0; i < 1.5 * windowSize; i++) {
         // Alternating between 50 and 100 FPS
-        final dt = 1 / (100 / (1 + i % 2));
+        final dt = i.isEven? 1/100 : 1/50;
         game.update(dt);
       }
 

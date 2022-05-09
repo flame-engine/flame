@@ -12,6 +12,7 @@ class FPSComponent extends Component {
 
   /// The number of game ticks over which the fps measure will be averaged.
   final int windowSize;
+  /// The queue of the recent game tick durations. The length of this queue will not exceed [windowSize].
   final Queue<double> _window = Queue();
   /// The sum of all values in the [_window] queue.
   double _sum = 0;

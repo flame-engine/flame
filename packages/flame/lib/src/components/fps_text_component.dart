@@ -35,6 +35,6 @@ class FPSTextComponent<T extends TextRenderer> extends TextComponent {
 
   @override
   void update(double dt) {
-    text = '${fpsComponent.fps.toStringAsFixed(decimalPlaces)}FPS';
+    text = '${fpsComponent.fps.toStringAsFixed(decimalPlaces)} FPS';
   }
 }
