@@ -10,6 +10,7 @@ class FPSComponent extends Component {
     this.windowSize = 60,
   });
 
+  /// The number of game ticks over which the fps measure will be averaged.
   final int windowSize;
   final Queue<double> _window = Queue();
   /// The sum of all values in the [_window] queue.
