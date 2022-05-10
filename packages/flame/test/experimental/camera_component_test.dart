@@ -112,7 +112,8 @@ void main() {
       final camera = CameraComponent(
         world: world,
         viewport: FixedSizeViewport(600, 400),
-      ) ..viewport.position = Vector2(400, 300)
+      )
+        ..viewport.position = Vector2(400, 300)
         ..viewfinder.position = Vector2(100, 50);
       final component = PositionComponent(
         size: Vector2(300, 100),
