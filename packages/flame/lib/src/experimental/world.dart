@@ -23,6 +23,9 @@ class World extends Component {
   }
 
   @override
+  bool containsLocalPoint(Vector2 point) => true;
+
+  @override
   Iterable<Component> componentsAtPoint(
     Vector2 point, [
     List<Vector2>? nestedPoints,

@@ -112,7 +112,6 @@ class CameraComponent extends Component {
     Vector2 point, [
     List<Vector2>? nestedPoints,
   ]) sync* {
-    nestedPoints?.add(point);
     final viewportPoint = point - viewport.position;
     if (world.isMounted && currentCameras.length < maxCamerasDepth) {
       if (viewport.containsLocalPoint(viewportPoint)) {
@@ -126,8 +125,7 @@ class CameraComponent extends Component {
         }
       }
     }
-    yield* viewport.componentsAtPoint(viewportPoint);
-    nestedPoints?.removeLast();
+    yield* viewport.componentsAtPoint(viewportPoint, nestedPoints);
   }
 
   /// A camera that currently performs rendering.
