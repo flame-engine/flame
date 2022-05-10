@@ -3,7 +3,6 @@ export 'src/anchor.dart';
 export 'src/collisions/has_collision_detection.dart';
 export 'src/collisions/hitboxes/screen_hitbox.dart';
 export 'src/components/component.dart';
-export 'src/components/component_point_pair.dart';
 export 'src/components/component_set.dart';
 export 'src/components/custom_painter_component.dart';
 export 'src/components/input/joystick_component.dart';

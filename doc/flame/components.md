@@ -160,7 +160,7 @@ scheduled for addition.
 
 ### Ensuring a component has a given parent
 
-When a component requires to be added to a specific parent type the 
+When a component requires to be added to a specific parent type the
 `ParentIsA` mixin can be used to enforce a strongly typed parent.
 
 Example:
@@ -175,7 +175,7 @@ class MyComponent extends Component with ParentIsA<MyParentComponent> {
 }
 ```
 
-If you try to add `MyComponent` to a parent that is not `MyParentComponent`, 
+If you try to add `MyComponent` to a parent that is not `MyParentComponent`,
 an assertion error will be thrown.
 
 ### Querying child components
@@ -226,9 +226,9 @@ Here is an example of how `componentsAtPoint()` can be used:
 
 ```dart
 void onDragUpdate(DragUpdateInfo info) {
-  game.componentsAtPoint(info.widget).forEach((p) {
-    if (p.component is DropTarget) {
-      p.component.highlight();
+  game.componentsAtPoint(info.widget).forEach((component) {
+    if (component is DropTarget) {
+      component.highlight();
     }
   });
 }

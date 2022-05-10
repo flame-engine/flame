@@ -10,7 +10,6 @@ import '../game/flame_game.dart';
 import '../game/mixins/game.dart';
 import '../gestures/events.dart';
 import '../text.dart';
-import 'component_point_pair.dart';
 import 'component_set.dart';
 import 'mixins/coordinate_transform.dart';
 import 'position_type.dart';
@@ -642,9 +641,12 @@ class Component {
   /// that intersect with this ray, in the order from those that are closest to
   /// the user to those that are farthest.
   ///
-  /// The return value is an [Iterable] of `(component, point)` pairs, which
-  /// gives not only the components themselves, but also the points of
-  /// intersection, in their respective local coordinates.
+  /// The return value is an [Iterable] of components. If the [nestedPoints]
+  /// parameter is given, then it will also report the points of intersection
+  /// for each component in its local coordinate space. Specifically, the last
+  /// element in the list is the point in the coordinate space of the returned
+  /// component, the element before the last is in that component's parent's
+  /// coordinate space, and so on.
   ///
   /// The default implementation relies on the [CoordinateTransform] interface
   /// to translate from the parent's coordinate system into the local one. Make
@@ -654,7 +656,11 @@ class Component {
   /// If your component overrides [renderTree], then it almost certainly needs
   /// to override this method as well, so that this method can find all rendered
   /// components wherever they are.
-  Iterable<ComponentPointPair> componentsAtPoint(Vector2 point) sync* {
+  Iterable<Component> componentsAtPoint(
+    Vector2 point, [
+    List<Vector2>? nestedPoints,
+  ]) sync* {
+    nestedPoints?.add(point);
     if (_children != null) {
       for (final child in _children!.reversed()) {
         Vector2? childPoint = point;
@@ -662,13 +668,14 @@ class Component {
           childPoint = (child as CoordinateTransform).parentToLocal(point);
         }
         if (childPoint != null) {
-          yield* child.componentsAtPoint(childPoint);
+          yield* child.componentsAtPoint(childPoint, nestedPoints);
         }
       }
     }
     if (containsLocalPoint(point)) {
-      yield ComponentPointPair(this, point);
+      yield this;
     }
+    nestedPoints?.removeLast();
   }
 
   //#endregion

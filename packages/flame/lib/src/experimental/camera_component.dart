@@ -4,7 +4,6 @@ import 'package:meta/meta.dart';
 import 'package:vector_math/vector_math_64.dart';
 
 import '../components/component.dart';
-import '../components/component_point_pair.dart';
 import '../components/position_component.dart';
 import '../effects/controllers/effect_controller.dart';
 import '../effects/move_effect.dart';
@@ -109,21 +108,26 @@ class CameraComponent extends Component {
   }
 
   @override
-  Iterable<ComponentPointPair> componentsAtPoint(Vector2 point) sync* {
+  Iterable<Component> componentsAtPoint(
+    Vector2 point, [
+    List<Vector2>? nestedPoints,
+  ]) sync* {
+    nestedPoints?.add(point);
     final viewportPoint = point - viewport.position;
     if (world.isMounted && currentCameras.length < maxCamerasDepth) {
       if (viewport.containsPoint(viewportPoint)) {
         try {
           currentCameras.add(this);
           final worldPoint = viewfinder.transform.globalToLocal(viewportPoint);
-          yield* world.componentsAtPointFromCamera(worldPoint);
-          yield* viewfinder.componentsAtPoint(worldPoint);
+          yield* world.componentsAtPointFromCamera(worldPoint, nestedPoints);
+          yield* viewfinder.componentsAtPoint(worldPoint, nestedPoints);
         } finally {
           currentCameras.removeLast();
         }
       }
     }
     yield* viewport.componentsAtPoint(viewportPoint);
+    nestedPoints?.removeLast();
   }
 
   /// A camera that currently performs rendering.
