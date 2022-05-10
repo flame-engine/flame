@@ -115,7 +115,7 @@ class CameraComponent extends Component {
     nestedPoints?.add(point);
     final viewportPoint = point - viewport.position;
     if (world.isMounted && currentCameras.length < maxCamerasDepth) {
-      if (viewport.containsPoint(viewportPoint)) {
+      if (viewport.containsLocalPoint(viewportPoint)) {
         try {
           currentCameras.add(this);
           final worldPoint = viewfinder.transform.globalToLocal(viewportPoint);

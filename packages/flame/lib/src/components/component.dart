@@ -646,7 +646,8 @@ class Component {
   /// for each component in its local coordinate space. Specifically, the last
   /// element in the list is the point in the coordinate space of the returned
   /// component, the element before the last is in that component's parent's
-  /// coordinate space, and so on.
+  /// coordinate space, and so on. The [nestedPoints] list must be growable and
+  /// modifiable.
   ///
   /// The default implementation relies on the [CoordinateTransform] interface
   /// to translate from the parent's coordinate system into the local one. Make
