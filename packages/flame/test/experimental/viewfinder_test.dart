@@ -130,7 +130,7 @@ void main() {
           );
           expect(
             camera.viewport.position,
-            closeToVector(400 + 40 * t, 300 - 77 * t, epsilon: 1e-12),
+            closeToVector(40 * t, -77 * t, epsilon: 1e-12),
           );
           game.update(0.1);
         }

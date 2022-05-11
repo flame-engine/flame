@@ -15,7 +15,6 @@ class MaxViewport extends Viewport {
   void onGameResize(Vector2 gameSize) {
     super.onGameResize(gameSize);
     size = gameSize;
-    position = gameSize / 2;
   }
 
   @override
