@@ -27,7 +27,7 @@ class MultipleShapesExample extends FlameGame
 
   @override
   Future<void> onLoad() async {
-    add(FPSTextComponent(position: Vector2(0, size.y - 24)));
+    add(FpsTextComponent(position: Vector2(0, size.y - 24)));
     final screenHitbox = ScreenHitbox();
     final snowman = CollidableSnowman(
       Vector2.all(150),

@@ -20,15 +20,15 @@ game is running in should be the FPS that we are reporting, since that is what o
 bound by.
 
 
-### FPSComponent
+### FpsComponent
 
-The `FPSComponent` can be added to anywhere in the component tree and will keep track of how many
+The `FpsComponent` can be added to anywhere in the component tree and will keep track of how many
 FPS that the game is currently rendering in. If you want to display this as text in the game, use
 the [](#fpstextcomponent).
 
 
-### FPSTextComponent
+### FpsTextComponent
 
-The `FPSTextComponent` is simply a [](../rendering/text.md#textcomponent) that wraps an
+The `FpsTextComponent` is simply a [](../rendering/text.md#textcomponent) that wraps an
 [](../rendering/text.md#textcomponent), since you most commonly want to show the current FPS
 somewhere when you the [](#fpscomponent) is used.

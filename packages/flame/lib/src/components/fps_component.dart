@@ -2,11 +2,11 @@ import 'dart:collection';
 
 import '../../components.dart';
 
-/// The [FPSComponent] is a non-visual component which you can get the current
+/// The [FpsComponent] is a non-visual component which you can get the current
 /// fps of the game with by calling [fps], once the component has been added to
 /// the component tree.
-class FPSComponent extends Component {
-  FPSComponent({
+class FpsComponent extends Component {
+  FpsComponent({
     this.windowSize = 60,
   });
 

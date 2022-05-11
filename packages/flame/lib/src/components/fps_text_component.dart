@@ -1,9 +1,9 @@
 import '../../components.dart';
 
-/// The [FPSTextComponent] is a [TextComponent] that writes out the current FPS.
-/// It has a [FPSComponent] as a child which does the actual calculations.
-class FPSTextComponent<T extends TextRenderer> extends TextComponent {
-  FPSTextComponent({
+/// The [FpsTextComponent] is a [TextComponent] that writes out the current FPS.
+/// It has a [FpsComponent] as a child which does the actual calculations.
+class FpsTextComponent<T extends TextRenderer> extends TextComponent {
+  FpsTextComponent({
     this.windowSize = 60,
     this.decimalPlaces = 0,
     T? textRenderer,
@@ -25,12 +25,12 @@ class FPSTextComponent<T extends TextRenderer> extends TextComponent {
 
   final int windowSize;
   final int decimalPlaces;
-  late final FPSComponent fpsComponent;
+  late final FpsComponent fpsComponent;
 
   @override
   Future<void> onLoad() async {
     positionType = PositionType.game;
-    add(fpsComponent = FPSComponent(windowSize: windowSize));
+    add(fpsComponent = FpsComponent(windowSize: windowSize));
   }
 
   @override

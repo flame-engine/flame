@@ -33,7 +33,7 @@ class DebugExample extends FlameGame {
     add(flame2);
     add(flame3);
 
-    add(FPSTextComponent(position: Vector2(0, size.y - 24)));
+    add(FpsTextComponent(position: Vector2(0, size.y - 24)));
   }
 }
 
