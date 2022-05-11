@@ -10,7 +10,8 @@ class FpsComponent extends Component {
     this.windowSize = 60,
   });
 
-  /// The number of game ticks over which the fps measure will be averaged.
+  /// The sliding window size, i.e. the number of game ticks over which the fps
+  /// measure will be averaged.
   final int windowSize;
 
   /// The queue of the recent game tick durations.
