@@ -6,6 +6,8 @@ export 'src/components/component.dart';
 export 'src/components/component_point_pair.dart';
 export 'src/components/component_set.dart';
 export 'src/components/custom_painter_component.dart';
+export 'src/components/fps_component.dart';
+export 'src/components/fps_text_component.dart';
 export 'src/components/input/joystick_component.dart';
 export 'src/components/isometric_tile_map_component.dart';
 export 'src/components/mixins/draggable.dart';

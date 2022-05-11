@@ -14,6 +14,7 @@ dependencies:
   flame_svg: ^1.2.0
   flame_forge2d: ^0.11.0
   dashbook: 0.1.6
+  google_fonts: 2.2.0
   flutter:
     sdk: flutter
 

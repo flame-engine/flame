@@ -11,7 +11,7 @@ import 'package:flutter/material.dart' hide Image, Draggable;
 enum Shapes { circle, rectangle, polygon }
 
 class MultipleShapesExample extends FlameGame
-    with HasCollisionDetection, HasDraggables, FPSCounter {
+    with HasCollisionDetection, HasDraggables {
   static const description = '''
     An example with many hitboxes that move around on the screen and during
     collisions they change color depending on what it is that they have collided
@@ -25,10 +25,9 @@ class MultipleShapesExample extends FlameGame
     any direction.
   ''';
 
-  final TextPaint fpsTextPaint = TextPaint();
-
   @override
   Future<void> onLoad() async {
+    add(FpsTextComponent(position: Vector2(0, size.y - 24)));
     final screenHitbox = ScreenHitbox();
     final snowman = CollidableSnowman(
       Vector2.all(150),
@@ -77,16 +76,6 @@ class MultipleShapesExample extends FlameGame
       velocity,
       screenHitbox,
       rng: _rng,
-    );
-  }
-
-  @override
-  void render(Canvas canvas) {
-    super.render(canvas);
-    fpsTextPaint.render(
-      canvas,
-      '${fps(120).toStringAsFixed(2)}fps',
-      Vector2(0, size.y - 24),
     );
   }
 }
