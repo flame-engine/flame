@@ -4,7 +4,7 @@ import '../../components.dart';
 /// It has a [FpsComponent] as a child which does the actual calculations.
 class FpsTextComponent<T extends TextRenderer> extends TextComponent {
   FpsTextComponent({
-    this.windowSize = 60,
+    int windowSize = 60,
     this.decimalPlaces = 0,
     T? textRenderer,
     Vector2? position,
@@ -13,7 +13,8 @@ class FpsTextComponent<T extends TextRenderer> extends TextComponent {
     double? angle,
     Anchor? anchor,
     int? priority,
-  }) : super(
+  })  : fpsComponent = FpsComponent(windowSize: windowSize),
+        super(
           textRenderer: textRenderer,
           position: position,
           size: size,
@@ -21,17 +22,13 @@ class FpsTextComponent<T extends TextRenderer> extends TextComponent {
           angle: angle,
           anchor: anchor,
           priority: priority ?? double.maxFinite.toInt(),
-        );
-
-  final int windowSize;
-  final int decimalPlaces;
-  late final FpsComponent fpsComponent;
-
-  @override
-  Future<void> onLoad() async {
-    positionType = PositionType.game;
-    add(fpsComponent = FpsComponent(windowSize: windowSize));
+        ) {
+    positionType = PositionType.viewport;
+    add(fpsComponent);
   }
+
+  final int decimalPlaces;
+  final FpsComponent fpsComponent;
 
   @override
   void update(double dt) {
