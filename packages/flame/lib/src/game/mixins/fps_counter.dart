@@ -6,6 +6,10 @@ const _maxFrames = 60;
 const frameInterval =
     Duration(microseconds: Duration.microsecondsPerSecond ~/ _maxFrames);
 
+@Deprecated(
+  'Use FPSComponent or FPSTextComponent instead. '
+  'FPSCounter will be removed in v1.3.0',
+)
 mixin FPSCounter on Game {
   List<FrameTiming> _previousTimings = [];
 
