@@ -105,14 +105,15 @@ class MyTextBox extends TextBoxComponent {
     : super(text: text, textRenderer: tiny, boxConfig: TextBoxConfig(timePerChar: 0.05));
 
   @override
-  void drawBackground(Canvas c) {
+  void render(Canvas canvas) {
     Rect rect = Rect.fromLTWH(0, 0, width, height);
-    c.drawRect(rect, Paint()..color = Color(0xFFFF00FF));
-    c.drawRect(
+    canvas.drawRect(rect, Paint()..color = Color(0xFFFF00FF));
+    canvas.drawRect(
         rect.deflate(boxConfig.margin),
         BasicPalette.black.Paint()
           ..style = PaintingStyle.stroke,
     );
+    super.render(canvas);
   }
 }
 ```
