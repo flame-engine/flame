@@ -183,7 +183,7 @@ class SpriteBatch {
   static Future<Image> _generateAtlas(Images? images, String path) async {
     final _images = images ?? Flame.images;
     final image = await _images.load(path);
-    final recorder = PictureRecorder();
+    /*final recorder = PictureRecorder();
     final canvas = Canvas(recorder);
     final _emptyPaint = Paint();
     canvas.drawImage(image, Offset.zero, _emptyPaint);
@@ -191,8 +191,8 @@ class SpriteBatch {
     canvas.drawImage(image, Offset(-image.width * 2, 0), _emptyPaint);
 
     final picture = recorder.endRecording();
-    final atlas = picture.toImage(image.width * 2, image.height);
-    return atlas;
+    final atlas = picture.toImage(image.width * 2, image.height);*/
+    return image;
   }
 
   /// Add a new batch item using a RSTransform.
