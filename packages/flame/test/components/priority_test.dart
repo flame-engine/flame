@@ -34,7 +34,7 @@ void main() {
       'components with different priorities are sorted in the list',
       (game) async {
         final priorityComponents =
-            List.generate(10, (i) => _PriorityComponent(i));
+            List.generate(10, _PriorityComponent.new);
         priorityComponents.shuffle();
         await game.ensureAddAll(priorityComponents);
         componentsSorted(game.children);
@@ -46,7 +46,7 @@ void main() {
       (game) async {
         final firstComponent = _PriorityComponent(-1);
         final priorityComponents =
-            List.generate(10, (i) => _PriorityComponent(i))
+            List.generate(10, _PriorityComponent.new)
               ..add(firstComponent);
         priorityComponents.shuffle();
         final components = game.children;
@@ -64,7 +64,7 @@ void main() {
       (game) async {
         final firstComponent = _PriorityComponent(-1);
         final priorityComponents =
-            List.generate(10, (i) => _PriorityComponent(i))
+            List.generate(10, _PriorityComponent.new)
               ..add(firstComponent);
         priorityComponents.shuffle();
         final components = game.children;
@@ -81,7 +81,7 @@ void main() {
       'changing priorities should reorder component list',
       (game) async {
         final priorityComponents =
-            List.generate(10, (i) => _PriorityComponent(i));
+            List.generate(10, _PriorityComponent.new);
         priorityComponents.shuffle();
         final components = game.children;
         await game.ensureAddAll(priorityComponents);
@@ -103,7 +103,7 @@ void main() {
       (game) async {
         final parentComponent = _PriorityComponent(0);
         final priorityComponents =
-            List.generate(10, (i) => _PriorityComponent(i));
+            List.generate(10, _PriorityComponent.new);
         priorityComponents.shuffle();
         await game.ensureAdd(parentComponent);
         await parentComponent.ensureAddAll(priorityComponents);
@@ -122,7 +122,7 @@ void main() {
       (game) async {
         final parentComponent = _PriorityComponent(0);
         final priorityComponents =
-            List.generate(10, (i) => _PriorityComponent(i));
+            List.generate(10, _PriorityComponent.new);
         priorityComponents.shuffle();
         await game.ensureAdd(parentComponent);
         await parentComponent.ensureAddAll(priorityComponents);
@@ -146,7 +146,7 @@ void main() {
         final grandParentComponent = _PriorityComponent(0);
         final parentComponent = _PriorityComponent(0);
         final priorityComponents =
-            List.generate(10, (i) => _PriorityComponent(i));
+            List.generate(10, _PriorityComponent.new);
         priorityComponents.shuffle();
         await game.ensureAdd(grandParentComponent);
         await grandParentComponent.ensureAdd(parentComponent);

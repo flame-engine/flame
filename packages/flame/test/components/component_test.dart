@@ -34,7 +34,7 @@ class _ParentOnPrepareComponent extends _OnPrepareComponent {
 }
 
 void main() {
-  final prepareGame = FlameTester(() => _PrepareGame());
+  final prepareGame = FlameTester(_PrepareGame.new);
 
   group('Component', () {
     testWithFlameGame('children in the constructor', (game) async {

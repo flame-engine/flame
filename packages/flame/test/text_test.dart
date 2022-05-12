@@ -44,7 +44,7 @@ void main() {
 
     test('custom renderer', () {
       TextRenderer.defaultRenderersRegistry[_CustomTextRenderer] =
-          () => _CustomTextRenderer();
+          _CustomTextRenderer.new;
       final tc = TextComponent<_CustomTextRenderer>(text: 'foo');
       expect(tc.textRenderer, isA<_CustomTextRenderer>());
     });

@@ -42,7 +42,7 @@ void main() {
 
       testWithGame<_GameWithTappables>(
         'Add component with onLoad function',
-        () => _GameWithTappables(),
+        _GameWithTappables.new,
         (game) async {
           final component = _MyAsyncComponent();
           await game.ensureAdd(component);
@@ -66,7 +66,7 @@ void main() {
 
       testWithGame<_GameWithTappables>(
         'component can be tapped',
-        () => _GameWithTappables(),
+        _GameWithTappables.new,
         (game) async {
           final component = _MyTappableComponent();
           await game.ensureAdd(component);

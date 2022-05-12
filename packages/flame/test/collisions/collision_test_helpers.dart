@@ -11,7 +11,7 @@ Future<void> testCollidableGame(
   String testName,
   Future Function(HasCollidablesGame) testBody,
 ) {
-  return testWithGame(testName, () => HasCollidablesGame(), testBody);
+  return testWithGame(testName, HasCollidablesGame.new, testBody);
 }
 
 class TestHitbox extends RectangleHitbox {

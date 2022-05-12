@@ -193,7 +193,7 @@ Widget applyAdvancedGesturesDetectors(Game game, Widget child) {
 
   if (game is MultiTapListener) {
     addRecognizer(
-      () => MultiTapGestureRecognizer(),
+      MultiTapGestureRecognizer.new,
       (MultiTapGestureRecognizer instance) {
         final g = game as MultiTapListener;
         instance.longTapDelay = Duration(
@@ -210,7 +210,7 @@ Widget applyAdvancedGesturesDetectors(Game game, Widget child) {
 
   void addDragRecognizer(Drag Function(int, DragStartInfo) config) {
     addRecognizer(
-      () => ImmediateMultiDragGestureRecognizer(),
+      ImmediateMultiDragGestureRecognizer.new,
       (ImmediateMultiDragGestureRecognizer instance) {
         var lastGeneratedDragId = 0;
         instance.onStart = (Offset o) {

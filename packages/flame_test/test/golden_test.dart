@@ -6,7 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('Golden tests', () {
-    final tester = FlameTester(() => FlameGame());
+    final tester = FlameTester(FlameGame.new);
 
     tester.testGameWidget(
       'renders correctly',

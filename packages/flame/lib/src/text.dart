@@ -18,8 +18,8 @@ abstract class TextRenderer {
   /// If you add a new [TextRenderer] child, you can register it by adding it,
   /// together with a provider lambda, to this map.
   static Map<Type, TextRenderer Function()> defaultRenderersRegistry = {
-    TextRenderer: () => TextPaint(),
-    TextPaint: () => TextPaint(),
+    TextRenderer: TextPaint.new,
+    TextPaint: TextPaint.new,
   };
 
   final TextDirection textDirection;
