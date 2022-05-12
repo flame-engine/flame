@@ -66,6 +66,7 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
     String? text,
     T? textRenderer,
     TextBoxConfig? boxConfig,
+    this.align = Anchor.topLeft,
     double? pixelRatio,
     Vector2? position,
     Vector2? scale,
@@ -85,6 +86,9 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
           children: children,
           priority: priority,
         );
+
+  /// Alignment of the text within its bounding box.
+  final Anchor align;
 
   @override
   set text(String value) {
@@ -223,23 +227,32 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
   /// Override this method to provide a custom background to the text box.
   void drawBackground(Canvas c) {}
 
-  void _fullRender(Canvas c) {
-    drawBackground(c);
+  void _fullRender(Canvas canvas) {
+    drawBackground(canvas);
 
-    final _currentLine = currentLine;
+    final nLines = currentLine + 1;
+    final boxWidth = size.x - boxConfig.margins.horizontal;
+    final boxHeight = size.y - boxConfig.margins.vertical;
     var charCount = 0;
-    var dy = _boxConfig.margins.top;
-    for (var line = 0; line < _currentLine; line++) {
-      charCount += _lines[line].length;
-      _drawLine(c, _lines[line], dy);
-      dy += _lineHeight;
+    for (var i = 0; i < nLines; i++) {
+      var line = _lines[i];
+      if (i == nLines - 1) {
+        final nChars = math.min(currentChar - charCount, line.length);
+        line = line.substring(0, nChars);
+      }
+      textRenderer.render(
+        canvas,
+        line,
+        Vector2(
+          boxConfig.margins.left +
+              (boxWidth - textRenderer.measureTextWidth(line)) * align.x,
+          boxConfig.margins.top +
+              (boxHeight - nLines * _lineHeight) * align.y +
+              i * _lineHeight,
+        ),
+      );
+      charCount += _lines[i].length;
     }
-    final max = math.min(currentChar - charCount, _lines[_currentLine].length);
-    _drawLine(c, _lines[_currentLine].substring(0, max), dy);
-  }
-
-  void _drawLine(Canvas c, String line, double dy) {
-    textRenderer.render(c, line, Vector2(_boxConfig.margins.left, dy));
   }
 
   Future<void> redraw() async {
