@@ -101,7 +101,8 @@ Example usage:
 
 ```dart
 class MyTextBox extends TextBoxComponent {
-  MyTextBox(String text) : super(text: text, textRenderer: tiny, boxConfig: TextBoxConfig(timePerChar: 0.05));
+  MyTextBox(String text)
+    : super(text: text, textRenderer: tiny, boxConfig: TextBoxConfig(timePerChar: 0.05));
 
   @override
   void drawBackground(Canvas c) {

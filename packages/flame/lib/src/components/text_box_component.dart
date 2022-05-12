@@ -88,7 +88,18 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
         );
 
   /// Alignment of the text within its bounding box.
-  final Anchor align;
+  ///
+  /// This property combines both the horizontal and vertical alignment. For
+  /// example, setting this property to `Align.center` will make the text
+  /// centered inside its box. Similarly, `Align.bottomRight` will render the
+  /// text that's aligned to the right and to the bottom of the box.
+  ///
+  /// Custom alignment anchors are supported too. For example, if this property
+  /// is set to `Anchor(0.1, 0)`, then the text would be positioned such that
+  /// its every line will have 10% of whitespace on the left, and 90% on the
+  /// right. You can use an `AnchorEffect` to make the text gradually transition
+  /// between different alignment values.
+  Anchor align;
 
   @override
   set text(String value) {
@@ -101,9 +112,8 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
 
   @override
   @mustCallSuper
-  Future<void> onLoad() async {
-    await super.onLoad();
-    await redraw();
+  Future<void> onLoad() {
+    return redraw();
   }
 
   @override
