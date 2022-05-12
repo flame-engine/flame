@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart' hide WidgetBuilder;
 
 import 'game_loop.dart';
 import 'mixins/game.dart';
+//ignore_for_file: unnecessary_non_null_assertion
 
 class GameRenderBox extends RenderBox with WidgetsBindingObserver {
   BuildContext buildContext;
