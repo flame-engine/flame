@@ -74,7 +74,7 @@ void main() {
       },
     );
 
-    FlameTester(() => FlameGame()).testGameWidget(
+    FlameTester(FlameGame.new).testGameWidget(
       'Alignment options',
       setUp: (game, tester) async {
         await game.addAll([
