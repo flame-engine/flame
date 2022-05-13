@@ -26,9 +26,9 @@ class ExampleGame extends OxygenGame {
     world.registerSystem(SpriteSystem());
     world.registerSystem(KawabungaSystem());
 
-    world.registerComponent<TimerComponent, double>(() => TimerComponent());
+    world.registerComponent<TimerComponent, double>(TimerComponent.new);
     world.registerComponent<VelocityComponent, Vector2>(
-      () => VelocityComponent(),
+      VelocityComponent.new,
     );
 
     final random = Random();

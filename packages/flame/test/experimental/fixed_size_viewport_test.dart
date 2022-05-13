@@ -46,7 +46,7 @@ void main() {
       expect(viewport.containsLocalPoint(Vector2(300, 100)), true);
     });
 
-    FlameTester(() => FlameGame()).testGameWidget(
+    FlameTester(FlameGame.new).testGameWidget(
       'Clipping behavior',
       setUp: (game, tester) async {
         final world = World();

@@ -10,7 +10,7 @@ import '_resources/load_image.dart';
 
 void main() {
   group('Sprite', () {
-    FlameTester(() => FlameGame()).testGameWidget(
+    FlameTester(FlameGame.new).testGameWidget(
       'Render with anchor',
       setUp: (game, tester) async {
         game.add(MyComponent()..position = Vector2.all(25));
