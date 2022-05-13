@@ -53,6 +53,8 @@ class NineTileBoxWidget extends StatelessWidget {
 
   final Widget? child;
 
+  final EdgeInsetsGeometry? padding;
+
   /// A builder function that is called if the loading fails
   final WidgetBuilder? errorBuilder;
 
@@ -66,6 +68,7 @@ class NineTileBoxWidget extends StatelessWidget {
     this.width,
     this.height,
     this.child,
+    this.padding,
     this.errorBuilder,
     this.loadingBuilder,
     Key? key,
@@ -80,6 +83,7 @@ class NineTileBoxWidget extends StatelessWidget {
     this.width,
     this.height,
     this.child,
+    this.padding,
     this.errorBuilder,
     this.loadingBuilder,
     Key? key,
@@ -98,6 +102,7 @@ class NineTileBoxWidget extends StatelessWidget {
           width: width,
           height: height,
           child: child,
+          padding: padding,
         );
       },
       errorBuilder: errorBuilder,
