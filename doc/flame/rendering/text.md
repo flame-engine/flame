@@ -109,15 +109,14 @@ class MyTextBox extends TextBoxComponent {
   MyTextBox(String text)
     : super(text: text, textRenderer: tiny, boxConfig: TextBoxConfig(timePerChar: 0.05));
 
+  final bgPaint = Paint()..color = Color(0xFFFF00FF);
+  final borderPaint = Paint()..color = Color(0xFF000000)..style = PaintingStyle.stroke;
+
   @override
   void render(Canvas canvas) {
     Rect rect = Rect.fromLTWH(0, 0, width, height);
-    canvas.drawRect(rect, Paint()..color = Color(0xFFFF00FF));
-    canvas.drawRect(
-        rect.deflate(boxConfig.margin),
-        BasicPalette.black.Paint()
-          ..style = PaintingStyle.stroke,
-    );
+    canvas.drawRect(rect, bgPaint);
+    canvas.drawRect(rect.deflate(boxConfig.margin), borderPaint);
     super.render(canvas);
   }
 }
