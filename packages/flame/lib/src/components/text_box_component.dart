@@ -66,7 +66,7 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
     String? text,
     T? textRenderer,
     TextBoxConfig? boxConfig,
-    this.align = Anchor.topLeft,
+    Anchor? align,
     double? pixelRatio,
     Vector2? position,
     Vector2? size,
@@ -77,6 +77,7 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
     int? priority,
   })  : _boxConfig = boxConfig ?? TextBoxConfig(),
         _fixedSize = size != null,
+        align = align ?? Anchor.topLeft,
         pixelRatio = pixelRatio ?? window.devicePixelRatio,
         super(
           text: text,
@@ -139,12 +140,13 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
   void updateBounds() {
     _lines.clear();
     double? lineHeight;
+    final maxBoxWidth = _fixedSize? width : _boxConfig.maxWidth;
     text.split(' ').forEach((word) {
       final possibleLine = _lines.isEmpty ? word : '${_lines.last} $word';
       lineHeight ??= textRenderer.measureTextHeight(possibleLine);
 
       final textWidth = textRenderer.measureTextWidth(possibleLine);
-      if (textWidth <= _boxConfig.maxWidth - _boxConfig.margins.horizontal) {
+      if (textWidth <= maxBoxWidth - _boxConfig.margins.horizontal) {
         if (_lines.isNotEmpty) {
           _lines.last = possibleLine;
         } else {
