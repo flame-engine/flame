@@ -93,7 +93,12 @@ class MyGame extends FlameGame {
 text inside a bounding box, creating line breaks according to the provided box size.
 
 You can decide if the box should grow as the text is written or if it should be static by the
-`growingBox` variable in the `TextBoxConfig`.
+`growingBox` variable in the `TextBoxConfig`. A static box could either have a fixed size (setting
+the `size` property of the `TextBoxComponent`), or to automatically shrink to fit the text content.
+
+In addition, the `align` property allows you to control the the horizontal and vertical alignment
+of the text content. For example, setting `align` to `Anchor.center` will center the text within
+its bounding box both vertically and horizontally.
 
 If you want to change the margins of the box use the `margins` variable in the `TextBoxConfig`.
 
