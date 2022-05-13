@@ -20,7 +20,7 @@ void main() {
       expect(c.size.y, greaterThan(1));
     });
 
-    flameGame.test('onLoad waits for cache to be done', (game) async {
+    testWithFlameGame('onLoad waits for cache to be done', (game) async {
       final c = TextBoxComponent(text: 'foo bar');
 
       await game.ensureAdd(c);
