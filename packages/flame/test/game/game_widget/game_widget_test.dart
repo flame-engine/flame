@@ -67,7 +67,7 @@ class _MyGame extends FlameGame {
 
 FlameTester<_MyGame> myGame({required bool open}) {
   return FlameTester(
-    () => _MyGame(),
+    _MyGame.new,
     pumpWidget: (gameWidget, tester) async {
       await tester.pumpWidget(_Wrapper(child: gameWidget, open: open));
     },

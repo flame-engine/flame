@@ -1,3 +1,5 @@
+// ignore_for_file: unused_element
+
 import 'dart:ui';
 
 import 'package:flame/collisions.dart';

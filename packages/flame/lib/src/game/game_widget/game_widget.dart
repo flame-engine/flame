@@ -49,7 +49,7 @@ class GameWidget<T extends Game> extends StatefulWidget {
   /// A map to show widgets overlay.
   ///
   /// See also:
-  /// - [new GameWidget]
+  /// - [GameWidget]
   /// - [Game.overlays]
   final Map<String, OverlayWidgetBuilder<T>>? overlayBuilderMap;
 
@@ -58,7 +58,7 @@ class GameWidget<T extends Game> extends StatefulWidget {
   /// To control the overlays that are active use [Game.overlays].
   ///
   /// See also:
-  /// - [new GameWidget]
+  /// - [GameWidget]
   /// - [Game.overlays]
   final List<String>? initialActiveOverlays;
 

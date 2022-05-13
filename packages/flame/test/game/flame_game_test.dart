@@ -5,6 +5,7 @@ import 'package:flame_test/flame_test.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
+
 import 'projector_test.dart';
 
 void main() {
@@ -42,7 +43,7 @@ void main() {
 
       testWithGame<_GameWithTappables>(
         'Add component with onLoad function',
-        () => _GameWithTappables(),
+        _GameWithTappables.new,
         (game) async {
           final component = _MyAsyncComponent();
           await game.ensureAdd(component);
@@ -66,7 +67,7 @@ void main() {
 
       testWithGame<_GameWithTappables>(
         'component can be tapped',
-        () => _GameWithTappables(),
+        _GameWithTappables.new,
         (game) async {
           final component = _MyTappableComponent();
           await game.ensureAdd(component);

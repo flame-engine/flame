@@ -80,8 +80,8 @@ class _SlowLoadParallaxGame extends FlameGame {
 }
 
 void main() {
-  final parallaxGame = FlameTester(() => _ParallaxGame());
-  final slowLoadParallaxGame = FlameTester(() => _SlowLoadParallaxGame());
+  final parallaxGame = FlameTester(_ParallaxGame.new);
+  final slowLoadParallaxGame = FlameTester(_SlowLoadParallaxGame.new);
 
   group('parallax test', () {
     parallaxGame.test(
