@@ -85,8 +85,9 @@ class MyTextBox extends TextBoxComponent {
         );
 
   @override
-  void drawBackground(Canvas c) {
+  void render(Canvas canvas) {
     final rect = Rect.fromLTWH(0, 0, width, height);
-    c.drawRect(rect, Paint()..color = Colors.white10);
+    canvas.drawRect(rect, Paint()..color = Colors.white10);
+    super.render(canvas);
   }
 }

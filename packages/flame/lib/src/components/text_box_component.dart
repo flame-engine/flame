@@ -69,18 +69,21 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
     this.align = Anchor.topLeft,
     double? pixelRatio,
     Vector2? position,
+    Vector2? size,
     Vector2? scale,
     double? angle,
     Anchor? anchor,
     Iterable<Component>? children,
     int? priority,
   })  : _boxConfig = boxConfig ?? TextBoxConfig(),
+        _fixedSize = size != null,
         pixelRatio = pixelRatio ?? window.devicePixelRatio,
         super(
           text: text,
           textRenderer: textRenderer,
           position: position,
           scale: scale,
+          size: size,
           angle: angle,
           anchor: anchor,
           children: children,
@@ -100,6 +103,13 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
   /// right. You can use an `AnchorEffect` to make the text gradually transition
   /// between different alignment values.
   Anchor align;
+
+  /// If true, the size of the component will remain fixed. If false, the size
+  /// will expand or shrink to the fit the text.
+  ///
+  /// This property is set to true if the user has explicitly specified [size]
+  /// in the constructor.
+  final bool _fixedSize;
 
   @override
   set text(String value) {
@@ -188,7 +198,9 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
   }
 
   Vector2 _recomputeSize() {
-    if (_boxConfig.growingBox) {
+    if (_fixedSize) {
+      return size;
+    } else if (_boxConfig.growingBox) {
       var i = 0;
       var totalCharCount = 0;
       final _currentChar = currentChar;
@@ -267,7 +279,7 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
 
   Future<void> redraw() async {
     final newSize = _recomputeSize();
-    cache?.dispose();
+    // cache?.dispose();
     cache = await _fullRenderAsImage(newSize);
     size = newSize;
   }
