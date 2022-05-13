@@ -281,7 +281,7 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
 
   Future<void> redraw() async {
     final newSize = _recomputeSize();
-    // cache?.dispose();
+    cache?.dispose();
     cache = await _fullRenderAsImage(newSize);
     size = newSize;
   }
