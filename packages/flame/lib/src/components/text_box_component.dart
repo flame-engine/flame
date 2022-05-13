@@ -140,7 +140,7 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
   void updateBounds() {
     _lines.clear();
     double? lineHeight;
-    final maxBoxWidth = _fixedSize? width : _boxConfig.maxWidth;
+    final maxBoxWidth = _fixedSize ? width : _boxConfig.maxWidth;
     text.split(' ').forEach((word) {
       final possibleLine = _lines.isEmpty ? word : '${_lines.last} $word';
       lineHeight ??= textRenderer.measureTextHeight(possibleLine);

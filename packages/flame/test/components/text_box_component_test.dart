@@ -146,8 +146,8 @@ class _FramedTextBox extends TextBoxComponent {
   @override
   void render(Canvas canvas) {
     canvas.drawRRect(
-        RRect.fromRectAndRadius(size.toRect(), const Radius.circular(5)),
-        _borderPaint,
+      RRect.fromRectAndRadius(size.toRect(), const Radius.circular(5)),
+      _borderPaint,
     );
     super.render(canvas);
   }
