@@ -1,7 +1,7 @@
-import '../components/component.dart';
-import '../effects/provider_interfaces.dart';
-import '../extensions/vector2.dart';
-import 'geometry/shapes/shape.dart';
+import 'package:flame/src/components/component.dart';
+import 'package:flame/src/effects/provider_interfaces.dart';
+import 'package:flame/src/experimental/geometry/shapes/shape.dart';
+import 'package:flame/src/extensions/vector2.dart';
 
 /// This behavior ensures that the target's position stays within the specified
 /// [bounds].

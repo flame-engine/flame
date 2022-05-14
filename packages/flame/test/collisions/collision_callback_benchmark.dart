@@ -5,7 +5,7 @@ import 'package:flame/components.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:test/test.dart';
 
-import 'collision_test_helpers.dart';
+import '/home/spydon/repos/flame/packages/flame/test/collisions/collision_test_helpers.dart';
 
 class _TestBlock extends PositionComponent with CollisionCallbacks {
   final Vector2 velocity;

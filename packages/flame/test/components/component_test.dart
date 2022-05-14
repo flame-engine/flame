@@ -5,7 +5,7 @@ import 'package:flame/game.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:test/test.dart';
 
-import 'component_lifecycle_test.dart';
+import '/home/spydon/repos/flame/packages/flame/test/components/component_lifecycle_test.dart';
 
 class _PrepareGame extends FlameGame {
   late final _ParentOnPrepareComponent prepareParent;

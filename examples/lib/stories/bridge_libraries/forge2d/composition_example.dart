@@ -1,12 +1,11 @@
+import 'package:examples/stories/bridge_libraries/forge2d/utils/balls.dart';
+import 'package:examples/stories/bridge_libraries/forge2d/utils/boundaries.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flutter/material.dart';
-
-import 'utils/balls.dart';
-import 'utils/boundaries.dart';
 
 const TextStyle _textStyle = TextStyle(color: Colors.white, fontSize: 2);
 

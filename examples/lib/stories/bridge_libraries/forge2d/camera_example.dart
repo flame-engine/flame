@@ -1,8 +1,7 @@
+import 'package:examples/stories/bridge_libraries/forge2d/domino_example.dart';
+import 'package:examples/stories/bridge_libraries/forge2d/sprite_body_example.dart';
 import 'package:flame/input.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
-
-import 'domino_example.dart';
-import 'sprite_body_example.dart';
 
 class CameraExample extends DominoExample {
   static const String description = '''

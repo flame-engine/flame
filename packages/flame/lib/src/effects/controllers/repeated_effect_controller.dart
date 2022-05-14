@@ -1,5 +1,5 @@
-import '../effect.dart';
-import 'effect_controller.dart';
+import 'package:flame/src/effects/controllers/effect_controller.dart';
+import 'package:flame/src/effects/effect.dart';
 
 /// Effect controller that repeats [child] controller a certain number of times.
 ///
