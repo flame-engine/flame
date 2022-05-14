@@ -11,20 +11,10 @@ import '../text.dart';
 ///
 /// See [TextPaint] for the default implementation offered by Flame
 abstract class TextRenderer {
-  /// A registry containing default providers for every [TextRenderer] subclass;
-  /// used by [createDefault] to create default parameter values.
-  ///
-  /// If you add a new [TextRenderer] child, you can register it by adding it,
-  /// together with a provider lambda, to this map.
-  static Map<Type, TextRenderer Function()> defaultRenderersRegistry = {
-    TextRenderer: TextPaint.new,
-    TextPaint: TextPaint.new,
-  };
-
-  final TextDirection textDirection;
-
   TextRenderer({TextDirection? textDirection})
       : textDirection = textDirection ?? TextDirection.ltr;
+
+  final TextDirection textDirection;
 
   /// Renders a given [text] in a given position [position] using the provided
   /// [canvas] and [anchor].
@@ -62,6 +52,16 @@ abstract class TextRenderer {
     );
   }
 
+  /// A registry containing default providers for every [TextRenderer] subclass;
+  /// used by [createDefault] to create default parameter values.
+  ///
+  /// If you add a new [TextRenderer] child, you can register it by adding it,
+  /// together with a provider lambda, to this map.
+  static Map<Type, TextRenderer Function()> defaultRenderersRegistry = {
+    TextRenderer: TextPaint.new,
+    TextPaint: TextPaint.new,
+  };
+
   /// Given a generic type [T], creates a default renderer of that type.
   static T createDefault<T extends TextRenderer>() {
     final creator = defaultRenderersRegistry[T];
@@ -69,7 +69,7 @@ abstract class TextRenderer {
       return creator() as T;
     } else {
       throw 'Unknown implementation of TextRenderer: $T. Please register it '
-          'under [defaultCreatorsRegistry].';
+          'under [defaultRenderersRegistry].';
     }
   }
 }
