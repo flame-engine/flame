@@ -5,7 +5,7 @@ import 'package:meta/meta.dart';
 
 import '../../components.dart';
 import '../../game.dart';
-import '../assets/images.dart';
+import '../cache/images.dart';
 import '../parallax.dart';
 
 extension ParallaxComponentExtension on FlameGame {

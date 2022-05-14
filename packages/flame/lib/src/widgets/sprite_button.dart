@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 
-import '../../assets.dart';
+import '../../cache.dart';
 import '../extensions/size.dart';
 import '../extensions/vector2.dart';
 import '../sprite.dart';

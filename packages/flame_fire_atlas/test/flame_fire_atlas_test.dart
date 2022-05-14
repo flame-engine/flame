@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'dart:ui';
 
-import 'package:flame/assets.dart';
+import 'package:flame/cache.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flame_fire_atlas/flame_fire_atlas.dart';

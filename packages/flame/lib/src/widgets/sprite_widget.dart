@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 
-import '../../assets.dart';
+import '../../cache.dart';
 import '../../extensions.dart';
 import '../anchor.dart';
 import 'animation_widget.dart';

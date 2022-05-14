@@ -90,8 +90,11 @@ class Images {
   }
 
   /// Loads the specified image with [fileName] into the cache.
-  Future<Image> load(String fileName) {
-    return (_assets[fileName] ??= _ImageAsset.future(_fetchToMemory(fileName)))
+  /// By default the key in the cache is the [fileName], if another key is
+  /// desired, specify the optional [key] argument.
+  Future<Image> load(String fileName, {String? key}) {
+    return (_assets[key ?? fileName] ??=
+            _ImageAsset.future(_fetchToMemory(fileName)))
         .retrieveAsync();
   }
 
@@ -120,6 +123,9 @@ class Images {
     }).map((path) => path.replaceFirst(_prefix, ''));
     return loadAll(imagePaths.toList());
   }
+
+  /// Whether the cache contains the specified [key] or not.
+  bool contains(String key) => _assets.containsKey(key);
 
   /// Waits until all currently pending image loading operations complete.
   Future<void> ready() {
