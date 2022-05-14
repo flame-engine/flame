@@ -11,11 +11,6 @@ import '../text.dart';
 ///
 /// See [TextPaint] for the default implementation offered by Flame
 abstract class TextRenderer {
-  TextRenderer({TextDirection? textDirection})
-      : textDirection = textDirection ?? TextDirection.ltr;
-
-  final TextDirection textDirection;
-
   /// Renders a given [text] in a given position [position] using the provided
   /// [canvas] and [anchor].
   ///

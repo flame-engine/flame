@@ -20,11 +20,11 @@ class TextPaint extends TextRenderer {
   final MemoryCache<String, TextPainter> _textPainterCache = MemoryCache();
   final TextStyle style;
 
+  final TextDirection textDirection;
+
   TextPaint({TextStyle? style, TextDirection? textDirection})
       : style = style ?? defaultTextStyle,
-        super(
-          textDirection: textDirection,
-        );
+        textDirection = textDirection ?? TextDirection.ltr;
 
   @override
   void render(
