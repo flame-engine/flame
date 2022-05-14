@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'anchor.dart';
-import 'assets/images.dart';
+import 'cache/images.dart';
 import 'flame.dart';
 import 'image_composition.dart';
 import 'palette.dart';

@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart' hide Animation;
 
 import '../anchor.dart';
-import '../assets/images.dart';
+import '../cache/images.dart';
 import '../sprite_animation.dart';
 import 'base_future_builder.dart';
 import 'sprite_painter.dart';

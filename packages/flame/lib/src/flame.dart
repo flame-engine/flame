@@ -2,8 +2,8 @@ library flame;
 
 import 'package:flutter/services.dart';
 
-import 'assets/assets_cache.dart';
-import 'assets/images.dart';
+import 'cache/assets_cache.dart';
+import 'cache/images.dart';
 import 'device.dart';
 
 /// This class holds static references to some useful objects to use in your
