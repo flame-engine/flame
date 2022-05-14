@@ -3,16 +3,15 @@ import 'dart:ui';
 import 'package:vector_math/vector_math_64.dart';
 
 import '../anchor.dart';
-import '../text.dart';
+import 'text_paint.dart';
 
-/// [TextRenderer] is the abstract API that Flame uses for rendering text.
+/// [TextRenderer] is the abstract API for drawing text.
 /// This class can be extended to provide another implementation of text
 /// rendering in the engine.
 ///
 /// See [TextPaint] for the default implementation offered by Flame
 abstract class TextRenderer {
-  /// Renders a given [text] in a given position [position] using the provided
-  /// [canvas] and [anchor].
+  /// Renders [text] on the [canvas] at a given [position].
   ///
   /// For example, if [Anchor.center] is specified, it's going to be drawn
   /// centered around [position].

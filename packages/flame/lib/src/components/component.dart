@@ -9,7 +9,7 @@ import '../cache/value_cache.dart';
 import '../game/flame_game.dart';
 import '../game/mixins/game.dart';
 import '../gestures/events.dart';
-import '../text.dart';
+import '../text/text_paint.dart';
 import 'component_point_pair.dart';
 import 'component_set.dart';
 import 'mixins/coordinate_transform.dart';

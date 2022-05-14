@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-import 'anchor.dart';
-import 'cache/memory_cache.dart';
-import 'components/text_component.dart';
-import 'extensions/size.dart';
-import 'extensions/vector2.dart';
-import 'text/text_renderer.dart';
+import '../anchor.dart';
+import '../cache/memory_cache.dart';
+import '../components/text_component.dart';
+import '../extensions/size.dart';
+import '../extensions/vector2.dart';
+import 'text_renderer.dart';
 
 /// It does not hold information regarding the position of the text to be
 /// rendered, nor does it contain the text itself (the string).

@@ -15,4 +15,4 @@ export 'src/game/mixins/loadable.dart';
 export 'src/game/mixins/single_game_instance.dart';
 export 'src/game/projector.dart';
 export 'src/game/transform2d.dart';
-export 'src/text.dart';
+export 'src/text/text_paint.dart';
