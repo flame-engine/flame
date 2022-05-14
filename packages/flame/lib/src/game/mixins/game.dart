@@ -4,10 +4,9 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:meta/meta.dart';
 
+import '../../../cache.dart';
 import '../../../components.dart';
-import '../../assets/assets_cache.dart';
-import '../../assets/images.dart';
-import '../../extensions/offset.dart';
+import '../../../extensions.dart';
 import '../game_render_box.dart';
 import '../projector.dart';
 

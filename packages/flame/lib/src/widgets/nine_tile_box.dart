@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart' hide Image;
 
-import '../../assets.dart';
+import '../../cache.dart';
 import '../../flame.dart';
 import '../nine_tile_box.dart' as non_widget;
 import '../sprite.dart';

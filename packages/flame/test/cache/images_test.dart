@@ -1,6 +1,7 @@
 import 'dart:ui';
 
-import 'package:flame/assets.dart';
+import 'package:collection/collection.dart';
+import 'package:flame/cache.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -58,12 +59,23 @@ void main() {
       for (var i = 0; i < images.length; i++) {
         cache.add(i.toString(), images[i]);
       }
-      expect(images.fold<int>(0, (agg, image) => agg + image.disposedCount), 0);
+      expect(images.map((image) => image.disposedCount).sum, 0);
       cache.clearCache();
-      expect(
-        images.fold<int>(0, (agg, image) => agg + image.disposedCount),
-        images.length,
-      );
+      expect(images.map((image) => image.disposedCount).sum, images.length);
+    });
+
+    test('contains', () {
+      final cache = Images();
+      final images = List.generate(10, (_) => _MockImage());
+      for (var i = 0; i < images.length; i++) {
+        final key = i.toString();
+        cache.add(key, images[i]);
+        expect(cache.containsKey(key), isTrue);
+      }
+      cache.clearCache();
+      for (var i = 0; i < images.length; i++) {
+        expect(cache.containsKey(i.toString()), isFalse);
+      }
     });
 
     testWithFlameGame(
