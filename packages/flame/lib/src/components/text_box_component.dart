@@ -7,6 +7,7 @@ import 'package:meta/meta.dart';
 
 import '../../components.dart';
 import '../palette.dart';
+import '../text/text_renderer.dart';
 
 /// A set of configurations for the [TextBoxComponent] itself, as opposed to
 /// the [TextRenderer], which contains the configuration for how to render the

@@ -4,6 +4,7 @@ import 'package:flutter/painting.dart';
 import 'package:meta/meta.dart';
 
 import '../../components.dart';
+import '../text/text_renderer.dart';
 
 class TextComponent<T extends TextRenderer> extends PositionComponent {
   String _text;
