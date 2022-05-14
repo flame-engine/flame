@@ -74,9 +74,7 @@ void main() {
       }
       cache.clearCache();
       for (var i = 0; i < images.length; i++) {
-        final key = i.toString();
-        cache.add(key, images[i]);
-        expect(cache.containsKey(key), isFalse);
+        expect(cache.containsKey(i.toString()), isFalse);
       }
     });
 
