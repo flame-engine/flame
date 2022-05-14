@@ -70,13 +70,13 @@ void main() {
       for (var i = 0; i < images.length; i++) {
         final key = i.toString();
         cache.add(key, images[i]);
-        expect(cache.contains(key), isTrue);
+        expect(cache.containsKey(key), isTrue);
       }
       cache.clearCache();
       for (var i = 0; i < images.length; i++) {
         final key = i.toString();
         cache.add(key, images[i]);
-        expect(cache.contains(key), isFalse);
+        expect(cache.containsKey(key), isFalse);
       }
     });
 

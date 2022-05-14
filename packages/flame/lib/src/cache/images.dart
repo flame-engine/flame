@@ -125,7 +125,7 @@ class Images {
   }
 
   /// Whether the cache contains the specified [key] or not.
-  bool contains(String key) => _assets.containsKey(key);
+  bool containsKey(String key) => _assets.containsKey(key);
 
   /// Waits until all currently pending image loading operations complete.
   Future<void> ready() {
