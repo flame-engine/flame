@@ -3,19 +3,6 @@ import 'package:flame/text.dart';
 import 'package:flutter/material.dart';
 import 'package:test/test.dart';
 
-class _CustomTextRenderer extends TextRenderer {
-  @override
-  Vector2 measureText(String text) => Vector2.zero();
-
-  @override
-  void render(
-    Canvas canvas,
-    String text,
-    Vector2 position, {
-    Anchor anchor = Anchor.topLeft,
-  }) {}
-}
-
 void main() {
   group('TextRenderer', () {
     test('createDefault', () {
@@ -43,14 +30,17 @@ void main() {
       expect(tc.textRenderer, isA<_CustomTextRenderer>());
     });
   });
+}
 
-  group('TextPaint', () {
-    test('copyWith returns a new instance with the new values', () {
-      const style = TextStyle(fontSize: 12, fontFamily: 'Times');
-      final tp = TextPaint(style: style)
-          .copyWith((t) => t.copyWith(fontFamily: 'Helvetica'));
-      expect(tp.style.fontSize, 12);
-      expect(tp.style.fontFamily, 'Helvetica');
-    });
-  });
+class _CustomTextRenderer extends TextRenderer {
+  @override
+  Vector2 measureText(String text) => Vector2.zero();
+
+  @override
+  void render(
+    Canvas canvas,
+    String text,
+    Vector2 position, {
+    Anchor anchor = Anchor.topLeft,
+  }) {}
 }
