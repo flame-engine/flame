@@ -26,5 +26,16 @@ void main() {
         );
       },
     );
+
+    testGolden(
+      'Same test but with testGolden',
+      (game) async {
+        final paint = Paint()..color = Colors.white;
+        game.add(
+          CircleComponent(radius: 10, position: Vector2.all(100), paint: paint),
+        );
+      },
+      goldenFile: 'golden_test.png',
+    );
   });
 }
