@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:flame/game.dart';
 import 'package:flutter/scheduler.dart';
 
@@ -10,19 +12,28 @@ const frameInterval =
   'FPSCounter will be removed in v1.3.0',
 )
 mixin FPSCounter on Game {
-  List<FrameTiming> _previousTimings = [];
+  /// The sliding window size, i.e. the number of game ticks over which the fps
+  /// measure will be averaged.
+  final int windowSize = 60;
+
+  /// The queue of the recent game tick durations.
+  /// The length of this queue will not exceed [windowSize].
+  final Queue<double> window = Queue();
+
+  /// The sum of all values in the [window] queue.
+  double _sum = 0;
 
   @override
-  void onTimingsCallback(List<FrameTiming> timings) =>
-      _previousTimings = timings;
+  void update(double dt) {
+    window.addLast(dt);
+    _sum += dt;
+    if (window.length > windowSize) {
+      _sum -= window.removeFirst();
+    }
+  }
 
-  /// Returns the FPS based on the frame times from [onTimingsCallback].
+  /// Get the current average FPS over the last [windowSize] frames.
   double fps([int average = 1]) {
-    return _previousTimings.length *
-        _maxFrames /
-        _previousTimings.map((t) {
-          return (t.totalSpan.inMicroseconds ~/ frameInterval.inMicroseconds) +
-              1;
-        }).fold(0, (a, b) => a + b);
+    return window.isEmpty ? 0 : window.length / _sum;
   }
 }

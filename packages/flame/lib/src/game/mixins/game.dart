@@ -95,10 +95,6 @@ mixin Game {
   /// Check [AppLifecycleState] for details about the events received.
   void lifecycleStateChange(AppLifecycleState state) {}
 
-  /// Use for calculating the FPS.
-  @Deprecated('Use FPSComponent instead, will be removed in v1.3.0')
-  void onTimingsCallback(List<FrameTiming> timings) {}
-
   /// Method to perform late initialization of the [Game] class.
   ///
   /// Usually, this method is the main place where you initialize your [Game]

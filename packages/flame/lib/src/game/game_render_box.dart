@@ -9,10 +9,7 @@ class GameRenderBox extends RenderBox with WidgetsBindingObserver {
   Game game;
   GameLoop? gameLoop;
 
-  GameRenderBox(this.buildContext, this.game) {
-    //ignore: deprecated_member_use_from_same_package
-    WidgetsBinding.instance!.addTimingsCallback(game.onTimingsCallback);
-  }
+  GameRenderBox(this.buildContext, this.game);
 
   @override
   bool get isRepaintBoundary => true;
