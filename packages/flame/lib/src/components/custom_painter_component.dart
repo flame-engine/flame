@@ -1,6 +1,5 @@
+import 'package:flame/components.dart';
 import 'package:flutter/widgets.dart';
-
-import '../../components.dart';
 
 /// A [PositionComponent] that renders a [CustomPainter] at the designated
 /// position, scaled to have the designated size and rotated to the specified

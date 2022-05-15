@@ -1,12 +1,11 @@
 import 'dart:ui';
 
+import 'package:flame/src/experimental/geometry/shapes/circle.dart';
+import 'package:flame/src/experimental/geometry/shapes/polygon.dart';
+import 'package:flame/src/experimental/geometry/shapes/rectangle.dart';
+import 'package:flame/src/experimental/geometry/shapes/rounded_rectangle.dart';
+import 'package:flame/src/game/transform2d.dart';
 import 'package:vector_math/vector_math_64.dart';
-
-import '../../../game/transform2d.dart';
-import 'circle.dart';
-import 'polygon.dart';
-import 'rectangle.dart';
-import 'rounded_rectangle.dart';
 
 /// Base class for various 2D geometric primitives defined on a Cartesian
 /// coordinate plane.

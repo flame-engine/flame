@@ -1,12 +1,11 @@
 import 'dart:async';
 
+import 'package:flame/components.dart';
+import 'package:flame/game.dart';
+import 'package:flame/src/cache/images.dart';
+import 'package:flame/src/parallax.dart';
 import 'package:flutter/painting.dart';
 import 'package:meta/meta.dart';
-
-import '../../components.dart';
-import '../../game.dart';
-import '../cache/images.dart';
-import '../parallax.dart';
 
 extension ParallaxComponentExtension on FlameGame {
   Future<ParallaxComponent> loadParallaxComponent(

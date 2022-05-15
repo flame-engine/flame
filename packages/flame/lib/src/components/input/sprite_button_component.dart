@@ -1,4 +1,4 @@
-import '../../../components.dart';
+import 'package:flame/components.dart';
 
 enum _ButtonState {
   up,

@@ -2,9 +2,8 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:flame/components.dart';
+import 'package:flame_bloc/flame_bloc.dart';
 import 'package:meta/meta.dart';
-
-import '../flame_bloc.dart';
 
 /// Adds [Bloc] access and listening to a [Component]
 mixin FlameBlocListenable<B extends BlocBase<S>, S> on Component {

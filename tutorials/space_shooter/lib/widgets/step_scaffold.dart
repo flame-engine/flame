@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:markdown/markdown.dart' as md;
 
-import 'code_block.dart';
+import 'package:tutorials_space_shooter/widgets/code_block.dart';
 
 class StepScaffold extends StatelessWidget {
   final List<String> tutorial;

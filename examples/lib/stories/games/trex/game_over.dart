@@ -1,8 +1,7 @@
 import 'dart:ui';
 
+import 'package:examples/stories/games/trex/trex_game.dart';
 import 'package:flame/components.dart';
-
-import 'trex_game.dart';
 
 class GameOverPanel extends Component {
   bool visible = false;

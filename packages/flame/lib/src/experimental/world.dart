@@ -1,11 +1,10 @@
 import 'dart:ui';
 
+import 'package:flame/src/components/component.dart';
+import 'package:flame/src/components/component_point_pair.dart';
+import 'package:flame/src/experimental/camera_component.dart';
 import 'package:meta/meta.dart';
 import 'package:vector_math/vector_math_64.dart';
-
-import '../components/component.dart';
-import '../components/component_point_pair.dart';
-import 'camera_component.dart';
 
 /// The root component for all game world elements.
 ///

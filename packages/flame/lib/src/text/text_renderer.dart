@@ -1,11 +1,10 @@
 import 'dart:ui';
 
+import 'package:flame/src/anchor.dart';
+import 'package:flame/src/components/text_box_component.dart';
+import 'package:flame/src/components/text_component.dart';
+import 'package:flame/src/text/text_paint.dart';
 import 'package:vector_math/vector_math_64.dart';
-
-import '../anchor.dart';
-import '../components/text_box_component.dart';
-import '../components/text_component.dart';
-import 'text_paint.dart';
 
 /// [TextRenderer] is the abstract API for drawing text.
 ///

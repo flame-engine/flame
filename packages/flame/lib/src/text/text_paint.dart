@@ -1,9 +1,8 @@
-import 'package:flutter/material.dart';
-
-import '../anchor.dart';
-import '../cache/memory_cache.dart';
-import '../extensions/vector2.dart';
-import 'text_renderer.dart';
+import 'package:flame/src/anchor.dart';
+import 'package:flame/src/cache/memory_cache.dart';
+import 'package:flame/src/extensions/vector2.dart';
+import 'package:flame/src/text/text_renderer.dart';
+import 'package:flutter/rendering.dart';
 
 /// [TextRenderer] implementation based on Flutter's [TextPainter].
 ///
@@ -23,7 +22,7 @@ class TextPaint extends TextRenderer {
   final MemoryCache<String, TextPainter> _textPainterCache = MemoryCache();
 
   static const TextStyle defaultTextStyle = TextStyle(
-    color: Colors.white,
+    color: Color(0xFFFFFFFF),
     fontFamily: 'Arial',
     fontSize: 24,
   );

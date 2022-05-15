@@ -1,5 +1,5 @@
-import '../../../collisions.dart';
-import '../../../components.dart';
+import 'package:flame/collisions.dart';
+import 'package:flame/components.dart';
 
 /// A [Hitbox] in the shape of a circle.
 class CircleHitbox extends CircleComponent with ShapeHitbox {

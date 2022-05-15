@@ -1,8 +1,7 @@
+import 'package:flame/src/game/game_loop.dart';
+import 'package:flame/src/game/mixins/game.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart' hide WidgetBuilder;
-
-import 'game_loop.dart';
-import 'mixins/game.dart';
 //ignore_for_file: unnecessary_non_null_assertion
 
 class GameRenderBox extends RenderBox with WidgetsBindingObserver {
@@ -10,10 +9,7 @@ class GameRenderBox extends RenderBox with WidgetsBindingObserver {
   Game game;
   GameLoop? gameLoop;
 
-  GameRenderBox(this.buildContext, this.game) {
-    //ignore: deprecated_member_use_from_same_package
-    WidgetsBinding.instance!.addTimingsCallback(game.onTimingsCallback);
-  }
+  GameRenderBox(this.buildContext, this.game);
 
   @override
   bool get isRepaintBoundary => true;

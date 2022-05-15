@@ -1,10 +1,9 @@
 import 'dart:ui';
 
+import 'package:examples/stories/bridge_libraries/forge2d/utils/boundaries.dart';
 import 'package:flame/components.dart';
 import 'package:flame/input.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
-
-import 'utils/boundaries.dart';
 
 class AnimatedBodyExample extends Forge2DGame with TapDetector {
   static const String description = '''
