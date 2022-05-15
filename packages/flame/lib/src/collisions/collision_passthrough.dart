@@ -1,7 +1,6 @@
+import 'package:flame/collisions.dart';
+import 'package:flame/components.dart';
 import 'package:meta/meta.dart';
-
-import '../../collisions.dart';
-import '../../components.dart';
 
 /// This mixin can be used if you want to pass the [CollisionCallbacks] to the
 /// next ancestor that can receive them. It can be used to group hitboxes

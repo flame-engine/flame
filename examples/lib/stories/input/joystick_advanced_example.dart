@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:examples/stories/input/joystick_player.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/game.dart';
@@ -7,8 +8,6 @@ import 'package:flame/input.dart';
 import 'package:flame/palette.dart';
 import 'package:flame/sprite.dart';
 import 'package:flutter/material.dart';
-
-import 'joystick_player.dart';
 
 class JoystickAdvancedExample extends FlameGame
     with HasDraggables, HasTappables, HasCollisionDetection {

@@ -1,12 +1,11 @@
 import 'dart:ui';
 
+import 'package:flame/cache.dart';
+import 'package:flame/flame.dart';
+import 'package:flame/src/nine_tile_box.dart' as non_widget;
+import 'package:flame/src/sprite.dart';
+import 'package:flame/src/widgets/base_future_builder.dart';
 import 'package:flutter/material.dart' hide Image;
-
-import '../../assets.dart';
-import '../../flame.dart';
-import '../nine_tile_box.dart' as non_widget;
-import '../sprite.dart';
-import 'base_future_builder.dart';
 
 export '../nine_tile_box.dart';
 export '../sprite.dart';

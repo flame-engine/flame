@@ -1,8 +1,7 @@
+import 'package:flame/components.dart';
+import 'package:flame/src/game/mixins/has_hoverables.dart';
+import 'package:flame/src/gestures/events.dart';
 import 'package:meta/meta.dart';
-
-import '../../../components.dart';
-import '../../game/mixins/has_hoverables.dart';
-import '../../gestures/events.dart';
 
 mixin Hoverable on Component {
   bool _isHovered = false;

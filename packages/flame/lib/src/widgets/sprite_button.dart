@@ -1,10 +1,9 @@
+import 'package:flame/cache.dart';
+import 'package:flame/src/extensions/size.dart';
+import 'package:flame/src/extensions/vector2.dart';
+import 'package:flame/src/sprite.dart';
+import 'package:flame/src/widgets/base_future_builder.dart';
 import 'package:flutter/widgets.dart';
-
-import '../../assets.dart';
-import '../extensions/size.dart';
-import '../extensions/vector2.dart';
-import '../sprite.dart';
-import 'base_future_builder.dart';
 
 export '../sprite.dart';
 

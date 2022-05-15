@@ -1,7 +1,7 @@
 import 'dart:ui';
 
-import '../particles/particle.dart';
-import 'component.dart';
+import 'package:flame/src/components/component.dart';
+import 'package:flame/src/particles/particle.dart';
 
 /// Base container for [Particle] instances to be attach
 /// to a [Component] tree. Could be added either to FlameGame

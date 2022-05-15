@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:flame/components.dart';
 
-import 'renderable_tile_map.dart';
+import 'package:flame_tiled/src/renderable_tile_map.dart';
 
 /// {@template _tiled_component}
 /// A Flame [Component] to render a Tiled TiledMap.

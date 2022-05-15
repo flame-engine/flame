@@ -1,6 +1,5 @@
+import 'package:flame/src/anchor.dart';
 import 'package:vector_math/vector_math_64.dart';
-
-import '../anchor.dart';
 
 /// Interface for a component that can be affected by move effects.
 abstract class PositionProvider {
