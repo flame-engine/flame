@@ -2,29 +2,31 @@ import 'package:flutter/material.dart';
 
 import '../anchor.dart';
 import '../cache/memory_cache.dart';
-import '../components/text_component.dart';
-import '../extensions/size.dart';
 import '../extensions/vector2.dart';
 import 'text_renderer.dart';
 
-/// It does not hold information regarding the position of the text to be
-/// rendered, nor does it contain the text itself (the string).
-/// To use that information, use the [TextComponent], which uses [TextPaint].
+/// [TextRenderer] implementation based on Flutter's [TextPainter].
+///
+/// This renderer uses a fixed [style] to draw the text. This style cannot be
+/// modified dynamically, if you need to change any attribute of the text at
+/// runtime, such as color, then create a new [TextPaint] object using
+/// [copyWith].
 class TextPaint extends TextRenderer {
+  TextPaint({TextStyle? style, TextDirection? textDirection})
+      : style = style ?? defaultTextStyle,
+        textDirection = textDirection ?? TextDirection.ltr;
+
+  final TextStyle style;
+
+  final TextDirection textDirection;
+
+  final MemoryCache<String, TextPainter> _textPainterCache = MemoryCache();
+
   static const TextStyle defaultTextStyle = TextStyle(
     color: Colors.white,
     fontFamily: 'Arial',
     fontSize: 24,
   );
-
-  final MemoryCache<String, TextPainter> _textPainterCache = MemoryCache();
-  final TextStyle style;
-
-  final TextDirection textDirection;
-
-  TextPaint({TextStyle? style, TextDirection? textDirection})
-      : style = style ?? defaultTextStyle,
-        textDirection = textDirection ?? TextDirection.ltr;
 
   @override
   void render(
@@ -34,8 +36,11 @@ class TextPaint extends TextRenderer {
     Anchor anchor = Anchor.topLeft,
   }) {
     final tp = toTextPainter(text);
-    final translatedPosition = anchor.translate(p, tp.size.toVector2());
-    tp.paint(canvas, translatedPosition.toOffset());
+    final translatedPosition = Offset(
+      p.x - tp.width * anchor.x,
+      p.y - tp.height * anchor.y,
+    );
+    tp.paint(canvas, translatedPosition);
   }
 
   @override
@@ -52,7 +57,7 @@ class TextPaint extends TextRenderer {
   ///
   /// Example usage:
   ///
-  ///   const TextPaint config = TextPaint(fontSize: 48.0, fontFamily: 'Arial');
+  ///   const config = TextPaint(fontSize: 48.0, fontFamily: 'Arial');
   ///   final tp = config.toTextPainter('Score: $score');
   ///   tp.paint(canvas, const Offset(10, 10));
   ///
@@ -61,16 +66,11 @@ class TextPaint extends TextRenderer {
   /// That way, you don't need to perform the math for that yourself.
   TextPainter toTextPainter(String text) {
     if (!_textPainterCache.containsKey(text)) {
-      final span = TextSpan(
-        style: style,
-        text: text,
-      );
       final tp = TextPainter(
-        text: span,
+        text: TextSpan(text: text, style: style),
         textDirection: textDirection,
       );
       tp.layout();
-
       _textPainterCache.setValue(text, tp);
     }
     return _textPainterCache.getValue(text)!;
