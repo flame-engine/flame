@@ -1,5 +1,8 @@
 import 'dart:collection';
+import 'dart:typed_data';
 import 'dart:ui';
+
+import 'package:bitmap/bitmap.dart';
 
 import '../game.dart';
 import 'cache/images.dart';
@@ -183,16 +186,26 @@ class SpriteBatch {
   static Future<Image> _generateAtlas(Images? images, String path) async {
     final _images = images ?? Flame.images;
     final image = await _images.load(path);
-    /*final recorder = PictureRecorder();
-    final canvas = Canvas(recorder);
-    final _emptyPaint = Paint();
-    canvas.drawImage(image, Offset.zero, _emptyPaint);
-    canvas.scale(-1, 1);
-    canvas.drawImage(image, Offset(-image.width * 2, 0), _emptyPaint);
-
-    final picture = recorder.endRecording();
-    final atlas = picture.toImage(image.width * 2, image.height);*/
-    return image;
+    final bytes = await image.toByteData();
+    final imagePixelData = bytes!.buffer.asUint8List();
+    final atlasPixelData = <int>[];
+    final imageBytesWidth = image.width * 4;
+    for (var ind = 0; ind < imagePixelData.length; ind += imageBytesWidth) {
+      atlasPixelData.addAll(
+        imagePixelData.skip(ind).take(imageBytesWidth),
+      );
+      atlasPixelData.addAll(
+        imagePixelData.reversed
+            .skip(imagePixelData.length - (ind + imageBytesWidth))
+            .take(imageBytesWidth),
+      );
+    }
+    final bitmap = Bitmap.fromHeadless(
+      image.width * 2,
+      image.height,
+      Uint8List.fromList(atlasPixelData),
+    );
+    return bitmap.buildImage();
   }
 
   /// Add a new batch item using a RSTransform.
