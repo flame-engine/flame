@@ -6,7 +6,7 @@ import 'package:flame/game.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:test/test.dart';
 
-import '/home/spydon/repos/flame/packages/flame/test/collisions/collision_test_helpers.dart';
+import 'collision_test_helpers.dart';
 
 void main() {
   group('CollisionType', () {

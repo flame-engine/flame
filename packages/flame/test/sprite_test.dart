@@ -6,7 +6,7 @@ import 'package:flame_test/flame_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import '/home/spydon/repos/flame/packages/flame/test/_resources/load_image.dart';
+import '_resources/load_image.dart';
 
 void main() {
   group('Sprite', () {

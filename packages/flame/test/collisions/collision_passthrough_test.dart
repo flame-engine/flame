@@ -2,7 +2,7 @@ import 'package:flame/components.dart';
 import 'package:flame/src/collisions/collision_passthrough.dart';
 import 'package:test/test.dart';
 
-import '/home/spydon/repos/flame/packages/flame/test/collisions/collision_test_helpers.dart';
+import 'collision_test_helpers.dart';
 
 class Passthrough extends TestBlock with CollisionPassthrough {
   Passthrough() : super(Vector2.zero(), Vector2.all(10));
