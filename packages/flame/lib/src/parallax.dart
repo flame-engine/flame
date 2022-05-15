@@ -2,13 +2,12 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:collection/collection.dart';
+import 'package:flame/cache.dart';
+import 'package:flame/extensions.dart';
+import 'package:flame/game.dart';
+import 'package:flame/src/flame.dart';
+import 'package:flame/src/sprite_animation.dart';
 import 'package:flutter/painting.dart';
-
-import '../cache.dart';
-import '../extensions.dart';
-import '../game.dart';
-import 'flame.dart';
-import 'sprite_animation.dart';
 
 extension ParallaxExtension on Game {
   Future<Parallax> loadParallax(

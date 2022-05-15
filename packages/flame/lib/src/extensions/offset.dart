@@ -1,7 +1,7 @@
 import 'dart:math';
 import 'dart:ui';
 
-import 'vector2.dart';
+import 'package:flame/src/extensions/vector2.dart';
 
 export 'dart:ui' show Offset;
 

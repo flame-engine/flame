@@ -1,8 +1,7 @@
+import 'package:examples/stories/bridge_libraries/forge2d/utils/boundaries.dart';
 import 'package:flame/palette.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flutter/material.dart';
-
-import 'boundaries.dart';
 
 class Ball extends BodyComponent with ContactCallbacks {
   late Paint originalPaint;

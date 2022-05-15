@@ -1,6 +1,6 @@
 import 'dart:collection';
 
-import '../../../game.dart';
+import 'package:flame/game.dart';
 
 const _maxFrames = 60;
 const frameInterval =

@@ -1,6 +1,6 @@
 import 'dart:collection';
 
-import '../../components.dart';
+import 'package:flame/components.dart';
 
 /// The [FpsComponent] is a non-visual component which you can get the current
 /// fps of the game with by calling [fps], once the component has been added to

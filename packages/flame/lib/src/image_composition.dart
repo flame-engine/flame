@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:ui';
 
-import '../extensions.dart';
+import 'package:flame/extensions.dart';
 
 export '../extensions.dart';
 

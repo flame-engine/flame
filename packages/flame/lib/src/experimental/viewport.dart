@@ -1,12 +1,11 @@
 import 'dart:ui';
 
+import 'package:flame/src/anchor.dart';
+import 'package:flame/src/components/component.dart';
+import 'package:flame/src/effects/provider_interfaces.dart';
+import 'package:flame/src/experimental/camera_component.dart';
 import 'package:meta/meta.dart';
 import 'package:vector_math/vector_math_64.dart';
-
-import '../anchor.dart';
-import '../components/component.dart';
-import '../effects/provider_interfaces.dart';
-import 'camera_component.dart';
 
 /// [Viewport] is a part of a [CameraComponent] system.
 ///

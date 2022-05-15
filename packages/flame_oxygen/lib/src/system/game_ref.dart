@@ -1,7 +1,6 @@
+import 'package:flame_oxygen/src/flame_world.dart';
+import 'package:flame_oxygen/src/oxygen_game.dart';
 import 'package:oxygen/oxygen.dart';
-
-import '../flame_world.dart';
-import '../oxygen_game.dart';
 
 mixin GameRef<T extends OxygenGame> on System {
   /// The world this system belongs to.

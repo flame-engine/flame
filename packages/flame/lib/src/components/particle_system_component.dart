@@ -1,7 +1,7 @@
 import 'dart:ui';
 
-import '../../components.dart';
-import '../../particles.dart';
+import 'package:flame/components.dart';
+import 'package:flame/particles.dart';
 
 /// {@template particle_system_component}
 /// A [PositionComponent] that renders a [Particle] at the designated

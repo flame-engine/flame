@@ -1,10 +1,10 @@
 import 'dart:math';
 import 'dart:ui';
 
-import '../../components.dart';
-import '../../extensions.dart';
-import '../../geometry.dart';
-import '../effects/provider_interfaces.dart';
+import 'package:flame/components.dart';
+import 'package:flame/extensions.dart';
+import 'package:flame/geometry.dart';
+import 'package:flame/src/effects/provider_interfaces.dart';
 
 class CircleComponent extends ShapeComponent implements SizeProvider {
   /// With this constructor you can create your [CircleComponent] from a radius

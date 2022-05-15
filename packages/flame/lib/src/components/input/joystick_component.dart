@@ -1,11 +1,10 @@
 import 'dart:math';
 
+import 'package:flame/components.dart';
+import 'package:flame/src/components/input/hud_margin_component.dart';
+import 'package:flame/src/gestures/events.dart';
 import 'package:flutter/rendering.dart' show EdgeInsets;
 import 'package:meta/meta.dart';
-
-import '../../../components.dart';
-import '../../gestures/events.dart';
-import 'hud_margin_component.dart';
 
 enum JoystickDirection {
   up,

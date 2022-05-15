@@ -1,12 +1,12 @@
 import 'package:dashbook/dashbook.dart';
 
-import '../../commons/commons.dart';
-import 'custom_painter_example.dart';
-import 'nine_tile_box_example.dart';
-import 'partial_sprite_widget_example.dart';
-import 'sprite_animation_widget_example.dart';
-import 'sprite_button_example.dart';
-import 'sprite_widget_example.dart';
+import 'package:examples/commons/commons.dart';
+import 'package:examples/stories/widgets/custom_painter_example.dart';
+import 'package:examples/stories/widgets/nine_tile_box_example.dart';
+import 'package:examples/stories/widgets/partial_sprite_widget_example.dart';
+import 'package:examples/stories/widgets/sprite_animation_widget_example.dart';
+import 'package:examples/stories/widgets/sprite_button_example.dart';
+import 'package:examples/stories/widgets/sprite_widget_example.dart';
 
 void addWidgetsStories(Dashbook dashbook) {
   dashbook.storiesOf('Widgets')
