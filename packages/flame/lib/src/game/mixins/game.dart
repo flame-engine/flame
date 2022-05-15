@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:meta/meta.dart';
@@ -95,10 +93,6 @@ mixin Game {
   /// The default implementation does nothing; override to use the hook.
   /// Check [AppLifecycleState] for details about the events received.
   void lifecycleStateChange(AppLifecycleState state) {}
-
-  /// Use for calculating the FPS.
-  @Deprecated('Use FPSComponent instead, will be removed in v1.3.0')
-  void onTimingsCallback(List<FrameTiming> timings) {}
 
   /// Method to perform late initialization of the [Game] class.
   ///
