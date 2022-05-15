@@ -6,25 +6,23 @@ import '../anchor.dart';
 import 'text_paint.dart';
 
 /// [TextRenderer] is the abstract API for drawing text.
-/// This class can be extended to provide another implementation of text
-/// rendering in the engine.
 ///
-/// See [TextPaint] for the default implementation offered by Flame
+/// A text renderer usually embodies a particular style for rendering text, such
+/// as font-family, color, size, and so on. At the same time, a text renderer
+/// is not tied to a specific string -- it can render any text fragment that
+/// you give it.
+///
+/// A text renderer object has two functions: to measure the size of a text
+/// string that it will have when rendered, and to actually render that string
+/// onto a canvas.
+///
+/// The following text renderers are included in Flame:
+///  - [TextPaint] which uses the standard Flutter's `TextPainter`;
 abstract class TextRenderer {
   /// Renders [text] on the [canvas] at a given [position].
   ///
   /// For example, if [Anchor.center] is specified, it's going to be drawn
   /// centered around [position].
-  ///
-  /// Example usage (Using TextPaint implementation):
-  ///
-  ///   const TextStyle style = TextStyle(fontSize: 48.0, fontFamily: 'Arial');
-  ///   const TextPaint textPaint = TextPaint(style: style);
-  ///   textPaint.render(
-  ///     canvas,
-  ///     Vector2(size.x - 10, size.y - 10,
-  ///     anchor: Anchor.bottomRight,
-  ///   );
   void render(
     Canvas canvas,
     String text,
