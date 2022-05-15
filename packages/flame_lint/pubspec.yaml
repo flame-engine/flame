@@ -8,4 +8,4 @@ environment:
   sdk: ">=2.16.0 <3.0.0"
 
 dev_dependencies:
-  dartdoc: ^4.1.0
+  dartdoc: ^5.0.1
