@@ -1,7 +1,7 @@
 import 'dart:math' as math;
 
-import '../../../extensions.dart';
-import '../../../game.dart';
+import 'package:flame/extensions.dart';
+import 'package:flame/game.dart';
 
 /// A viewport is a class that potentially translates and resizes the screen.
 /// The reason you might want to have a viewport is to make sure you handle any

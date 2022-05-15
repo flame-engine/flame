@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:flame/components.dart';
 
-import '../flame_bloc.dart';
+import 'package:flame_bloc/flame_bloc.dart';
 
 /// {@template flame_bloc_listener}
 /// A [Component] which can listen to changes in a [Bloc] state.

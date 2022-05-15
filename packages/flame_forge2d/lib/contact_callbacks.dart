@@ -1,4 +1,4 @@
-import 'flame_forge2d.dart';
+import 'package:flame_forge2d/flame_forge2d.dart';
 
 /// Used to listen to a [BodyComponent]'s contact events.
 ///

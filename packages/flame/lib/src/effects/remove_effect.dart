@@ -1,5 +1,5 @@
-import 'controllers/linear_effect_controller.dart';
-import 'effect.dart';
+import 'package:flame/src/effects/controllers/linear_effect_controller.dart';
+import 'package:flame/src/effects/effect.dart';
 
 /// This simple effect, when attached to a component, will cause that component
 /// to be removed from the game tree after `delay` seconds.
