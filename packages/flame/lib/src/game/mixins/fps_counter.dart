@@ -1,7 +1,6 @@
 import 'dart:collection';
 
 import 'package:flame/game.dart';
-import 'package:flutter/scheduler.dart';
 
 const _maxFrames = 60;
 const frameInterval =
