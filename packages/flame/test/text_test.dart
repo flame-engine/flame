@@ -5,14 +5,7 @@ import 'package:test/test.dart';
 
 class _CustomTextRenderer extends TextRenderer {
   @override
-  double measureTextHeight(String text) {
-    return 0;
-  }
-
-  @override
-  double measureTextWidth(String text) {
-    return 0;
-  }
+  Vector2 measureText(String text) => Vector2.zero();
 
   @override
   void render(

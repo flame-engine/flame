@@ -3,6 +3,8 @@ import 'dart:ui';
 import 'package:vector_math/vector_math_64.dart';
 
 import '../anchor.dart';
+import '../components/text_box_component.dart';
+import '../components/text_component.dart';
 import 'text_paint.dart';
 
 /// [TextRenderer] is the abstract API for drawing text.
@@ -16,9 +18,22 @@ import 'text_paint.dart';
 /// string that it will have when rendered, and to actually render that string
 /// onto a canvas.
 ///
-/// The following text renderers are included in Flame:
+/// [TextRenderer] is a low-level API that may be somewhat inconvenient to use
+/// directly. Instead, consider using components such as [TextComponent] or
+/// [TextBoxComponent].
+///
+/// The following text renderers are available in Flame:
 ///  - [TextPaint] which uses the standard Flutter's `TextPainter`;
 abstract class TextRenderer {
+  /// Compute the dimensions of [text] when rendered.
+  Vector2 measureText(String text);
+
+  /// Compute the width of [text] when rendered.
+  double measureTextWidth(String text) => measureText(text).x;
+
+  /// Compute the height of [text] when rendered.
+  double measureTextHeight(String text) => measureText(text).y;
+
   /// Renders [text] on the [canvas] at a given [position].
   ///
   /// For example, if [Anchor.center] is specified, it's going to be drawn
@@ -29,20 +44,6 @@ abstract class TextRenderer {
     Vector2 position, {
     Anchor anchor = Anchor.topLeft,
   });
-
-  /// Given a [text] String, returns the width of that [text].
-  double measureTextWidth(String text);
-
-  /// Given a [text] String, returns the height of that [text].
-  double measureTextHeight(String text);
-
-  /// Given a [text] String, returns a Vector2 with the size of that [text] has.
-  Vector2 measureText(String text) {
-    return Vector2(
-      measureTextWidth(text),
-      measureTextHeight(text),
-    );
-  }
 
   /// A registry containing default providers for every [TextRenderer] subclass;
   /// used by [createDefault] to create default parameter values.

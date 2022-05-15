@@ -39,13 +39,9 @@ class TextPaint extends TextRenderer {
   }
 
   @override
-  double measureTextWidth(String text) {
-    return toTextPainter(text).width;
-  }
-
-  @override
-  double measureTextHeight(String text) {
-    return toTextPainter(text).height;
+  Vector2 measureText(String text) {
+    final tp = toTextPainter(text);
+    return Vector2(tp.width, tp.height);
   }
 
   /// Returns a [TextPainter] that allows for text rendering and size
