@@ -2,7 +2,7 @@ import 'dart:collection';
 import 'dart:ui';
 
 import '../game.dart';
-import 'assets/images.dart';
+import 'cache/images.dart';
 import 'extensions/image.dart';
 import 'flame.dart';
 

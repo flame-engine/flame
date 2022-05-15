@@ -4,10 +4,9 @@ import 'dart:ui';
 import 'package:collection/collection.dart';
 import 'package:flutter/painting.dart';
 
+import '../cache.dart';
+import '../extensions.dart';
 import '../game.dart';
-import 'assets/images.dart';
-import 'extensions/canvas.dart';
-import 'extensions/image.dart';
 import 'flame.dart';
 import 'sprite_animation.dart';
 
