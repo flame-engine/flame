@@ -1,19 +1,18 @@
 import 'dart:async';
 import 'dart:collection';
 
+import 'package:flame/src/cache/value_cache.dart';
+import 'package:flame/src/components/component_point_pair.dart';
+import 'package:flame/src/components/component_set.dart';
+import 'package:flame/src/components/mixins/coordinate_transform.dart';
+import 'package:flame/src/components/position_type.dart';
+import 'package:flame/src/game/flame_game.dart';
+import 'package:flame/src/game/mixins/game.dart';
+import 'package:flame/src/gestures/events.dart';
+import 'package:flame/src/text/text_paint.dart';
 import 'package:flutter/painting.dart';
 import 'package:meta/meta.dart';
 import 'package:vector_math/vector_math_64.dart';
-
-import '../cache/value_cache.dart';
-import '../game/flame_game.dart';
-import '../game/mixins/game.dart';
-import '../gestures/events.dart';
-import '../text.dart';
-import 'component_point_pair.dart';
-import 'component_set.dart';
-import 'mixins/coordinate_transform.dart';
-import 'position_type.dart';
 
 /// [Component]s are the basic building blocks for a [FlameGame].
 ///

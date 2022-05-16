@@ -1,13 +1,12 @@
+import 'package:flame/extensions.dart';
+import 'package:flame/src/events/interfaces/multi_tap_listener.dart';
+import 'package:flame/src/game/mixins/game.dart';
+import 'package:flame/src/game/mixins/has_draggables.dart';
+import 'package:flame/src/game/mixins/has_hoverables.dart';
+import 'package:flame/src/gestures/detectors.dart';
+import 'package:flame/src/gestures/events.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
-
-import '../../../extensions.dart';
-import '../../events/interfaces/multi_tap_listener.dart';
-import '../../gestures/detectors.dart';
-import '../../gestures/events.dart';
-import '../mixins/game.dart';
-import '../mixins/has_draggables.dart';
-import '../mixins/has_hoverables.dart';
 
 bool hasBasicGestureDetectors(Game game) {
   return game is TapDetector ||

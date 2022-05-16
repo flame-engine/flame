@@ -3,11 +3,11 @@ import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flame_bloc/flame_bloc.dart';
 
-import './components/enemy.dart';
-import './components/enemy_creator.dart';
-import './components/player.dart';
-import '../game_stats/bloc/game_stats_bloc.dart';
-import '../inventory/bloc/inventory_bloc.dart';
+import 'package:flame_bloc_example/src/game/components/enemy.dart';
+import 'package:flame_bloc_example/src/game/components/enemy_creator.dart';
+import 'package:flame_bloc_example/src/game/components/player.dart';
+import 'package:flame_bloc_example/src/game_stats/bloc/game_stats_bloc.dart';
+import 'package:flame_bloc_example/src/inventory/bloc/inventory_bloc.dart';
 
 class GameStatsController extends Component with HasGameRef<SpaceShooterGame> {
   @override

@@ -1,12 +1,11 @@
+import 'package:flame/cache.dart';
+import 'package:flame/components.dart';
+import 'package:flame/extensions.dart';
+import 'package:flame/src/game/game_render_box.dart';
+import 'package:flame/src/game/projector.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:meta/meta.dart';
-
-import '../../../cache.dart';
-import '../../../components.dart';
-import '../../../extensions.dart';
-import '../game_render_box.dart';
-import '../projector.dart';
 
 /// This gives access to a low-level game API, to not build everything from a
 /// low level `FlameGame` should be used.

@@ -1,7 +1,6 @@
+import 'package:flame/components.dart';
+import 'package:flame/input.dart';
 import 'package:meta/meta.dart';
-
-import '../../../components.dart';
-import '../../../input.dart';
 
 /// The [ButtonComponent] bundles two [PositionComponent]s, one that shows while
 /// the button is being pressed, and one that shows otherwise.

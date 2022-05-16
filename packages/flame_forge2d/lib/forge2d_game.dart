@@ -1,7 +1,6 @@
 import 'package:flame/game.dart';
+import 'package:flame_forge2d/world_contact_listener.dart';
 import 'package:forge2d/forge2d.dart';
-
-import 'world_contact_listener.dart';
 
 class Forge2DGame extends FlameGame {
   Forge2DGame({

@@ -1,4 +1,5 @@
-import '../../components.dart';
+import 'package:flame/components.dart';
+import 'package:flame/src/text/text_renderer.dart';
 
 /// The [FpsTextComponent] is a [TextComponent] that writes out the current FPS.
 /// It has a [FpsComponent] as a child which does the actual calculations.

@@ -1,8 +1,8 @@
+import 'package:examples/commons/ember.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
-import '../../commons/ember.dart';
 
 class OpacityEffectExample extends FlameGame with TapDetector {
   static const String description = '''

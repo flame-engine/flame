@@ -5,11 +5,11 @@ import 'package:flame/experimental.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 
-import 'components/card.dart';
-import 'components/foundation.dart';
-import 'components/pile.dart';
-import 'components/stock.dart';
-import 'components/waste.dart';
+import 'package:klondike/step3/components/card.dart';
+import 'package:klondike/step3/components/foundation.dart';
+import 'package:klondike/step3/components/pile.dart';
+import 'package:klondike/step3/components/stock.dart';
+import 'package:klondike/step3/components/waste.dart';
 
 class KlondikeGame extends FlameGame {
   static const double cardGap = 175.0;

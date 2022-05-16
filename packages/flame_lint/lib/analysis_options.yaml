@@ -13,6 +13,7 @@ linter:
     - always_declare_return_types
     - always_put_control_body_on_new_line
     - always_require_non_null_named_parameters
+    - always_use_package_imports
     - annotate_overrides
     - avoid_bool_literals_in_conditional_expressions
     - avoid_double_and_int_checks
@@ -101,7 +102,6 @@ linter:
     - prefer_null_aware_operators
     - prefer_single_quotes
     - prefer_spread_collections
-    - prefer_relative_imports
     - prefer_typing_uninitialized_variables
     - prefer_void_to_null
     - provide_deprecation_message

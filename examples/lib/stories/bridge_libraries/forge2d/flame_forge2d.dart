@@ -1,23 +1,22 @@
 import 'package:dashbook/dashbook.dart';
+import 'package:examples/commons/commons.dart';
+import 'package:examples/stories/bridge_libraries/forge2d/animated_body_example.dart';
+import 'package:examples/stories/bridge_libraries/forge2d/blob_example.dart';
+import 'package:examples/stories/bridge_libraries/forge2d/camera_example.dart';
+import 'package:examples/stories/bridge_libraries/forge2d/composition_example.dart';
+import 'package:examples/stories/bridge_libraries/forge2d/contact_callbacks_example.dart';
+import 'package:examples/stories/bridge_libraries/forge2d/domino_example.dart';
+import 'package:examples/stories/bridge_libraries/forge2d/draggable_example.dart';
+import 'package:examples/stories/bridge_libraries/forge2d/joint_example.dart';
+import 'package:examples/stories/bridge_libraries/forge2d/mouse_joint_example.dart';
+import 'package:examples/stories/bridge_libraries/forge2d/raycast_example.dart';
+import 'package:examples/stories/bridge_libraries/forge2d/revolute_joint_example.dart';
+import 'package:examples/stories/bridge_libraries/forge2d/sprite_body_example.dart';
+import 'package:examples/stories/bridge_libraries/forge2d/tappable_example.dart';
+import 'package:examples/stories/bridge_libraries/forge2d/widget_example.dart';
 import 'package:flame/game.dart';
 
-import '../../../commons/commons.dart';
-import 'animated_body_example.dart';
-import 'blob_example.dart';
-import 'camera_example.dart';
-import 'composition_example.dart';
-import 'contact_callbacks_example.dart';
-import 'domino_example.dart';
-import 'draggable_example.dart';
-import 'joint_example.dart';
-import 'mouse_joint_example.dart';
-import 'raycast_example.dart';
-import 'revolute_joint_example.dart';
-import 'sprite_body_example.dart';
-import 'tappable_example.dart';
-import 'widget_example.dart';
-
-String link(String example) => baseLink('bride_libraries/$example');
+String link(String example) => baseLink('bridge_libraries/forge2d/$example');
 
 void addForge2DStories(Dashbook dashbook) {
   dashbook.storiesOf('flame_forge2d')
