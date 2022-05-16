@@ -4,6 +4,7 @@ import 'dart:ui';
 
 import 'package:flame/components.dart';
 import 'package:flame/src/palette.dart';
+import 'package:flame/src/text/text_renderer.dart';
 import 'package:flutter/widgets.dart' hide Image;
 import 'package:meta/meta.dart';
 
@@ -243,7 +244,13 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
 
   Future<void> redraw() async {
     final newSize = _recomputeSize();
-    cache?.dispose();
+    final cachedImage = cache;
+    if (cachedImage != null) {
+      // Do not dispose of the cached image immediately, since it may have been
+      // sent into the rendering pipeline where it is still pending to be used.
+      // See issue #1618 for details.
+      Future.delayed(const Duration(milliseconds: 100), cachedImage.dispose);
+    }
     cache = await _fullRenderAsImage(newSize);
     size = newSize;
   }
