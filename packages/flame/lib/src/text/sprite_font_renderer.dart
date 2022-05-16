@@ -6,16 +6,18 @@ import 'package:flame/src/text/text_renderer.dart';
 import 'package:vector_math/vector_math_64.dart';
 
 class SpriteFontRenderer extends TextRenderer {
-  SpriteFontRenderer(
-    this.source, {
-    this.charWidth,
-    this.charHeight,
+  SpriteFontRenderer({
+    required this.source,
+    required this.charWidth,
+    required this.charHeight,
+    this.letterSpacing = 0,
   });
 
   final Image source;
-  double? charWidth;
-  double? charHeight;
-  bool get isMonospace => charWidth != null;
+  final double charWidth;
+  final double charHeight;
+  double letterSpacing;
+  bool get isMonospace => true;
 
   Map<int, _GlyphInfo> glyphs = {};
   Paint paint = Paint()..color = const Color(0xFFFFFFFF);
@@ -40,35 +42,18 @@ class SpriteFontRenderer extends TextRenderer {
     info.srcRight = srcRight;
     info.srcBottom = srcBottom;
     info.rstSCos = scale;
-    info.width = charWidth ?? (srcRight - srcLeft);
+    info.width = charWidth;
+    info.rstTy = charHeight - (srcBottom - srcTop) * scale;
     glyphs[codePoint] = info;
   }
 
-  Iterable<_GlyphInfo> textToGlyphs(String text) {
-    return text.codeUnits.map(getGlyphFromCodeUnit);
-  }
-
-  _GlyphInfo getGlyphFromCodeUnit(int i) {
-    final glyph = glyphs[i];
-    if (glyph == null) {
-      throw ArgumentError('No glyph for character "${String.fromCharCode(i)}"');
-    }
-    return glyph;
-  }
-
   @override
-  double measureTextHeight(String text) => charHeight!;
+  double measureTextHeight(String text) => charHeight;
 
   @override
   double measureTextWidth(String text) {
-    if (charWidth != null) {
-      return charWidth! * text.length;
-    }
-    var width = 0.0;
-    for (final g in textToGlyphs(text)) {
-      width += g.width;
-    }
-    return width;
+    final n = text.length;
+    return n > 0 ? charWidth * n + letterSpacing * (n - 1) : 0;
   }
 
   @override
@@ -88,7 +73,7 @@ class SpriteFontRenderer extends TextRenderer {
     var j = 0;
     var x0 = position.x;
     final y0 = position.y;
-    for (final glyph in textToGlyphs(text)) {
+    for (final glyph in _textToGlyphs(text)) {
       rects[j + 0] = glyph.srcLeft;
       rects[j + 1] = glyph.srcTop;
       rects[j + 2] = glyph.srcRight;
@@ -97,10 +82,22 @@ class SpriteFontRenderer extends TextRenderer {
       rstTransforms[j + 1] = glyph.rstSSin;
       rstTransforms[j + 2] = x0 + glyph.rstTx;
       rstTransforms[j + 3] = y0 + glyph.rstTy;
-      x0 += glyph.width;
+      x0 += glyph.width + letterSpacing;
       j += 4;
     }
     canvas.drawRawAtlas(source, rstTransforms, rects, null, null, null, paint);
+  }
+
+  Iterable<_GlyphInfo> _textToGlyphs(String text) {
+    return text.codeUnits.map(_getGlyphFromCodeUnit);
+  }
+
+  _GlyphInfo _getGlyphFromCodeUnit(int i) {
+    final glyph = glyphs[i];
+    if (glyph == null) {
+      throw ArgumentError('No glyph for character "${String.fromCharCode(i)}"');
+    }
+    return glyph;
   }
 }
 
