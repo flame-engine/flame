@@ -2,7 +2,7 @@ import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:flame/src/anchor.dart';
-import 'package:flame/src/text.dart';
+import 'package:flame/src/text/text_renderer.dart';
 import 'package:vector_math/vector_math_64.dart';
 
 class SpriteFontRenderer extends TextRenderer {
@@ -69,6 +69,11 @@ class SpriteFontRenderer extends TextRenderer {
       width += g.width;
     }
     return width;
+  }
+
+  @override
+  Vector2 measureText(String text) {
+    return Vector2(measureTextWidth(text), measureTextHeight(text));
   }
 
   @override
