@@ -183,21 +183,27 @@ class SpriteBatch {
     );
   }
 
+  static const String _generatedAtlasKeySuffix = '#withFlipAttached';
+
   static Future<Image> _generateAtlas(Images? images, String path) async {
     final _images = images ?? Flame.images;
+    /*if (_images.containsKey('$path$_generatedAtlasKeySuffix')) {
+      return _images.fromCache('$path$_generatedAtlasKeySuffix');
+    }*/
     final image = await _images.load(path);
     final bytes = await image.toByteData();
     final imagePixelData = bytes!.buffer.asUint8List();
-    final atlasPixelData = <int>[];
+    final flippedImagePixelData =
+        Bitmap.fromHeadless(image.width, image.height, imagePixelData)
+            .apply(BitmapFlip.horizontal());
     final imageBytesWidth = image.width * 4;
+    final atlasPixelData = <int>[];
     for (var ind = 0; ind < imagePixelData.length; ind += imageBytesWidth) {
       atlasPixelData.addAll(
         imagePixelData.skip(ind).take(imageBytesWidth),
       );
       atlasPixelData.addAll(
-        imagePixelData.reversed
-            .skip(imagePixelData.length - (ind + imageBytesWidth))
-            .take(imageBytesWidth),
+        flippedImagePixelData.content.skip(ind).take(imageBytesWidth),
       );
     }
     final bitmap = Bitmap.fromHeadless(
@@ -205,7 +211,9 @@ class SpriteBatch {
       image.height,
       Uint8List.fromList(atlasPixelData),
     );
-    return bitmap.buildImage();
+    final atlas = await bitmap.buildImage();
+    //_images.add('$path$_generatedAtlasKeySuffix', atlas);
+    return atlas;
   }
 
   /// Add a new batch item using a RSTransform.
