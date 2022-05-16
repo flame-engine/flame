@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import 'package:flame/components.dart';
 import 'package:flame/experimental.dart';
-import 'package:flame/game.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -46,9 +45,9 @@ void main() {
       expect(viewport.containsLocalPoint(Vector2(300, 100)), true);
     });
 
-    FlameTester(FlameGame.new).testGameWidget(
+    testGolden(
       'Clipping behavior',
-      setUp: (game, tester) async {
+      (game) async {
         final world = World();
         final camera = CameraComponent(
           world: world,
@@ -74,14 +73,8 @@ void main() {
             )
         ]);
         game.addAll([world, camera]);
-        await game.ready();
       },
-      verify: (game, tester) async {
-        await expectLater(
-          find.byGame<FlameGame>(),
-          matchesGoldenFile('../_goldens/fixed_size_viewport_test_1.png'),
-        );
-      },
+      goldenFile: '../_goldens/fixed_size_viewport_test_1.png',
     );
   });
 }

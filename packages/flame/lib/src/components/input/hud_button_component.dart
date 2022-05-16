@@ -1,8 +1,7 @@
+import 'package:flame/components.dart';
+import 'package:flame/input.dart';
 import 'package:flutter/rendering.dart' show EdgeInsets;
 import 'package:meta/meta.dart';
-
-import '../../../components.dart';
-import '../../../input.dart';
 
 /// The [HudButtonComponent] bundles two [PositionComponent]s, one that shows
 /// when the button is being pressed, and one that shows otherwise.

@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'dart:ui';
 
-import 'assets/images.dart';
-import 'extensions/vector2.dart';
-import 'flame.dart';
-import 'sprite.dart';
+import 'package:flame/src/cache/images.dart';
+import 'package:flame/src/extensions/vector2.dart';
+import 'package:flame/src/flame.dart';
+import 'package:flame/src/sprite.dart';
 
 export 'sprite.dart';
 

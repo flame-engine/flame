@@ -1,8 +1,8 @@
 import 'dart:math';
 
-import '../effect.dart';
-import 'duration_effect_controller.dart';
-import 'effect_controller.dart';
+import 'package:flame/src/effects/controllers/duration_effect_controller.dart';
+import 'package:flame/src/effects/controllers/effect_controller.dart';
+import 'package:flame/src/effects/effect.dart';
 
 /// An [EffectController] that wraps another effect controller [child] and
 /// randomizes its duration after each reset.

@@ -1,13 +1,12 @@
 import 'dart:ui';
 
+import 'package:flame/src/components/component.dart';
+import 'package:flame/src/extensions/vector2.dart';
+import 'package:flame/src/game/camera/camera.dart';
+import 'package:flame/src/game/camera/camera_wrapper.dart';
+import 'package:flame/src/game/mixins/game.dart';
+import 'package:flame/src/game/projector.dart';
 import 'package:meta/meta.dart';
-
-import '../components/component.dart';
-import '../extensions/vector2.dart';
-import 'camera/camera.dart';
-import 'camera/camera_wrapper.dart';
-import 'mixins/game.dart';
-import 'projector.dart';
 
 /// This is a more complete and opinionated implementation of [Game].
 ///

@@ -1,9 +1,8 @@
+import 'package:examples/stories/bridge_libraries/forge2d/revolute_joint_example.dart';
+import 'package:examples/stories/bridge_libraries/forge2d/utils/balls.dart';
+import 'package:examples/stories/bridge_libraries/forge2d/utils/boundaries.dart';
 import 'package:flame/input.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
-
-import 'revolute_joint_example.dart';
-import 'utils/balls.dart';
-import 'utils/boundaries.dart';
 
 class MouseJointExample extends Forge2DGame with MultiTouchDragDetector {
   static const description = '''

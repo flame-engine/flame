@@ -1,2 +1,4 @@
-export 'src/assets/assets_cache.dart';
-export 'src/assets/images.dart';
+@Deprecated('Use the cache.dart file instead')
+export 'src/cache/assets_cache.dart';
+@Deprecated('Use the cache.dart file instead')
+export 'src/cache/images.dart';

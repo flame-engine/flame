@@ -1,9 +1,8 @@
+import 'package:flame/components.dart';
+import 'package:flame/src/game/mixins/has_tappables.dart';
+import 'package:flame/src/gestures/events.dart';
 import 'package:flutter/gestures.dart';
 import 'package:meta/meta.dart';
-
-import '../../../components.dart';
-import '../../game/mixins/has_tappables.dart';
-import '../../gestures/events.dart';
 
 /// Mixin that can be added to any [Component] allowing it to receive tap
 /// events.

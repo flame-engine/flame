@@ -1,13 +1,12 @@
 import 'dart:developer';
 
+import 'package:flame/extensions.dart';
+import 'package:flame/input.dart';
+import 'package:flame/src/game/game_render_box.dart';
+import 'package:flame/src/game/game_widget/gestures.dart';
+import 'package:flame/src/game/mixins/game.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-
-import '../../../extensions.dart';
-import '../../../input.dart';
-import '../game_render_box.dart';
-import '../mixins/game.dart';
-import 'gestures.dart';
 
 typedef GameLoadingWidgetBuilder = Widget Function(
   BuildContext,

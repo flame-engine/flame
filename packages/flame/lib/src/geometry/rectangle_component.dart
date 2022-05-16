@@ -1,9 +1,8 @@
 import 'dart:ui';
 
+import 'package:flame/components.dart';
+import 'package:flame/extensions.dart';
 import 'package:meta/meta.dart';
-
-import '../../components.dart';
-import '../../extensions.dart';
 
 class RectangleComponent extends PolygonComponent {
   RectangleComponent({

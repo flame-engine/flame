@@ -1,9 +1,8 @@
+import 'package:examples/commons/ember.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flutter/material.dart' show Colors;
-
-import '../../commons/ember.dart';
 
 class DraggablesExample extends FlameGame with HasDraggables {
   static const String description = '''
