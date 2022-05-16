@@ -26,8 +26,8 @@ class SpriteFontRenderer extends TextRenderer {
     required String char,
     required num srcLeft,
     required num srcTop,
-     double? srcRight,
-     double? srcBottom,
+    double? srcRight,
+    double? srcBottom,
     double scale = 1,
   }) {
     assert(char.length == 1, 'A glyph must have a single character: "$char"');
