@@ -1,10 +1,9 @@
 import 'package:dashbook/dashbook.dart';
+import 'package:examples/commons/commons.dart';
+import 'package:examples/stories/animations/animation_group_example.dart';
+import 'package:examples/stories/animations/aseprite_example.dart';
+import 'package:examples/stories/animations/basic_animation_example.dart';
 import 'package:flame/game.dart';
-
-import '../../commons/commons.dart';
-import 'animation_group_example.dart';
-import 'aseprite_example.dart';
-import 'basic_animation_example.dart';
 
 void addAnimationStories(Dashbook dashbook) {
   dashbook.storiesOf('Animations')

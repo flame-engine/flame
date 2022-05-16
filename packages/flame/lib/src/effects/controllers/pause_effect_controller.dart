@@ -1,4 +1,4 @@
-import 'duration_effect_controller.dart';
+import 'package:flame/src/effects/controllers/duration_effect_controller.dart';
 
 /// A controller that keeps constant [progress] over [duration] seconds.
 ///

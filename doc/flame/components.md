@@ -141,7 +141,7 @@ class MyGame extends FlameGame {
         children: [
           HighScoreDisplay(),
           HitPointsDisplay(),
-          FpsCounter(),
+          FpsComponent(),
         ],
       ),
     );

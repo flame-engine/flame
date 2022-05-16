@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/widgets.dart';
 
+//ignore_for_file: invalid_null_aware_operator
+
 /// {@template _bgm}
 /// The looping background music class.
 ///

@@ -3,26 +3,26 @@ import 'dart:typed_data';
 
 import 'package:flutter/services.dart' show rootBundle;
 
-/// A class that loads, and cache files
+/// A class that loads, and caches files.
 ///
-/// it automatically looks for files on the assets folder
+/// It automatically looks for files in the `assets` directory.
 class AssetsCache {
   final String prefix;
   final Map<String, _Asset> _files = {};
 
   AssetsCache({this.prefix = 'assets/'});
 
-  /// Removes the file from the cache
+  /// Removes the file from the cache.
   void clear(String file) {
     _files.remove(file);
   }
 
-  /// Removes all the files from the cache
+  /// Removes all the files from the cache.
   void clearCache() {
     _files.clear();
   }
 
-  /// Reads a file from assets folder
+  /// Reads a file from assets folder.
   Future<String> readFile(String fileName) async {
     if (!_files.containsKey(fileName)) {
       _files[fileName] = await _readFile(fileName);
@@ -36,7 +36,7 @@ class AssetsCache {
     return _files[fileName]!.value as String;
   }
 
-  /// Reads a binary file from assets folder
+  /// Reads a binary file from assets folder.
   Future<List<int>> readBinaryFile(String fileName) async {
     if (!_files.containsKey(fileName)) {
       _files[fileName] = await _readBinary(fileName);
@@ -50,6 +50,7 @@ class AssetsCache {
     return _files[fileName]!.value as List<int>;
   }
 
+  /// Reads a json file from the assets folder.
   Future<Map<String, dynamic>> readJson(String fileName) async {
     final content = await readFile(fileName);
     return jsonDecode(content) as Map<String, dynamic>;

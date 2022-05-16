@@ -2,21 +2,20 @@ import 'dart:math';
 
 import 'package:flame/game.dart';
 import 'package:flame_oxygen/flame_oxygen.dart';
+import 'package:flame_oxygen_example/component/timer_component.dart';
+import 'package:flame_oxygen_example/component/velocity_component.dart';
+import 'package:flame_oxygen_example/system/debug_system.dart';
+import 'package:flame_oxygen_example/system/kawabunga_system.dart';
+import 'package:flame_oxygen_example/system/move_system.dart';
+import 'package:flame_oxygen_example/system/sprite_system.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-
-import 'component/timer_component.dart';
-import 'component/velocity_component.dart';
-import 'system/debug_system.dart';
-import 'system/kawabunga_system.dart';
-import 'system/move_system.dart';
-import 'system/sprite_system.dart';
 
 void main() {
   runApp(GameWidget(game: ExampleGame()));
 }
 
-class ExampleGame extends OxygenGame with FPSCounter {
+class ExampleGame extends OxygenGame {
   @override
   Future<void> init() async {
     if (kDebugMode) {
@@ -26,9 +25,9 @@ class ExampleGame extends OxygenGame with FPSCounter {
     world.registerSystem(SpriteSystem());
     world.registerSystem(KawabungaSystem());
 
-    world.registerComponent<TimerComponent, double>(() => TimerComponent());
+    world.registerComponent<TimerComponent, double>(TimerComponent.new);
     world.registerComponent<VelocityComponent, Vector2>(
-      () => VelocityComponent(),
+      VelocityComponent.new,
     );
 
     final random = Random();

@@ -1,9 +1,8 @@
 import 'package:flame/extensions.dart';
+import 'package:flame_oxygen/src/flame_system_manager.dart';
+import 'package:flame_oxygen/src/oxygen_game.dart';
+import 'package:flame_oxygen/src/system.dart';
 import 'package:oxygen/oxygen.dart';
-
-import 'flame_system_manager.dart';
-import 'oxygen_game.dart';
-import 'system.dart';
 
 class FlameWorld extends World {
   /// The game this world belongs to.

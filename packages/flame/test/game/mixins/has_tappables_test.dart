@@ -71,7 +71,7 @@ class _TappableComponent extends PositionComponent with Tappable {
 }
 
 void main() {
-  final withTappables = FlameTester(() => _GameWithTappables());
+  final withTappables = FlameTester(_GameWithTappables.new);
 
   group('HasTappables', () {
     withTappables.test(

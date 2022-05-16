@@ -1,10 +1,9 @@
+import 'package:flame/src/anchor.dart';
+import 'package:flame/src/cache/memory_cache.dart';
+import 'package:flame/src/components/text_component.dart';
+import 'package:flame/src/extensions/size.dart';
+import 'package:flame/src/extensions/vector2.dart';
 import 'package:flutter/material.dart';
-
-import 'anchor.dart';
-import 'cache/memory_cache.dart';
-import 'components/text_component.dart';
-import 'extensions/size.dart';
-import 'extensions/vector2.dart';
 
 /// [TextRenderer] is the abstract API that Flame uses for rendering text.
 /// This class can be extended to provide another implementation of text
@@ -18,8 +17,8 @@ abstract class TextRenderer {
   /// If you add a new [TextRenderer] child, you can register it by adding it,
   /// together with a provider lambda, to this map.
   static Map<Type, TextRenderer Function()> defaultRenderersRegistry = {
-    TextRenderer: () => TextPaint(),
-    TextPaint: () => TextPaint(),
+    TextRenderer: TextPaint.new,
+    TextPaint: TextPaint.new,
   };
 
   final TextDirection textDirection;

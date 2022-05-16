@@ -4,10 +4,9 @@ import 'package:collection/collection.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
+import 'package:flame_tiled/src/flame_tsx_provider.dart';
+import 'package:flame_tiled/src/simple_flips.dart';
 import 'package:tiled/tiled.dart';
-
-import 'flame_tsx_provider.dart';
-import 'simple_flips.dart';
 
 /// {@template _renderable_tiled_map}
 /// This is a wrapper over Tiled's [TiledMap] with pre-computed SpriteBatches

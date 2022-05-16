@@ -1,14 +1,13 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame_bloc/flame_bloc.dart';
+import 'package:flame_bloc_example/src/game/components/bullet.dart';
+import 'package:flame_bloc_example/src/game/components/enemy.dart';
+import 'package:flame_bloc_example/src/game/components/explosion.dart';
+import 'package:flame_bloc_example/src/game/game.dart';
+import 'package:flame_bloc_example/src/game_stats/bloc/game_stats_bloc.dart';
+import 'package:flame_bloc_example/src/inventory/bloc/inventory_bloc.dart';
 import 'package:flutter/services.dart';
-
-import './bullet.dart';
-import '../../game_stats/bloc/game_stats_bloc.dart';
-import '../../inventory/bloc/inventory_bloc.dart';
-import '../game.dart';
-import 'enemy.dart';
-import 'explosion.dart';
 
 class PlayerController extends Component
     with

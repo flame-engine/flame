@@ -1,8 +1,7 @@
+import 'package:examples/stories/games/trex/background/cloud.dart';
+import 'package:examples/stories/games/trex/random_extension.dart';
+import 'package:examples/stories/games/trex/trex_game.dart';
 import 'package:flame/components.dart';
-
-import '../random_extension.dart';
-import '../trex_game.dart';
-import 'cloud.dart';
 
 class CloudManager extends PositionComponent with HasGameRef<TRexGame> {
   final double cloudFrequency = 0.5;

@@ -1,4 +1,4 @@
-import 'duration_effect_controller.dart';
+import 'package:flame/src/effects/controllers/duration_effect_controller.dart';
 
 /// A controller that grows linearly from 1 to 0 over [duration] seconds.
 ///

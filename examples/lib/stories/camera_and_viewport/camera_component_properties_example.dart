@@ -41,6 +41,7 @@ class CameraComponentPropertiesExample extends FlameGame with HasTappables {
   @override
   void onGameResize(Vector2 size) {
     super.onGameResize(size);
+    _camera?.viewport.anchor = Anchor.center;
     _camera?.viewport.size = size * 0.7;
     _camera?.viewport.position = size * 0.6;
   }
@@ -71,7 +72,7 @@ class ViewportFrame extends Component {
     final size = (parent! as Viewport).size;
     canvas.drawRRect(
       RRect.fromRectAndRadius(
-        Rect.fromLTWH(-size.x / 2, -size.y / 2, size.x, size.y),
+        Rect.fromLTWH(0, 0, size.x, size.y),
         const Radius.circular(5),
       ),
       paint,

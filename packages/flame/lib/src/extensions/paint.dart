@@ -1,7 +1,7 @@
 import 'dart:math';
 import 'dart:ui';
 
-import 'color.dart';
+import 'package:flame/src/extensions/color.dart';
 
 export 'dart:ui' show Color;
 
