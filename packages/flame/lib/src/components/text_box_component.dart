@@ -4,6 +4,7 @@ import 'dart:ui';
 
 import 'package:flame/components.dart';
 import 'package:flame/src/palette.dart';
+import 'package:flame/src/text/text_renderer.dart';
 import 'package:flutter/widgets.dart' hide Image;
 import 'package:meta/meta.dart';
 
