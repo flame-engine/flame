@@ -209,25 +209,13 @@ class Component {
   ///
   /// If the component is already loaded (see [isLoaded]), this returns an
   /// already completed future.
-  Future<void> get loaded {
-    if (isLoaded) {
-      return Future.value();
-    }
-    lifecycle._loadCompleter ??= Completer<void>();
-    return lifecycle._loadCompleter!.future;
-  }
+  Future<void> get loaded => isLoaded? Future.value() : lifecycle.loadFuture;
 
   /// A future that will complete once the component is mounted on its parent.
   ///
   /// If the component is already mounted (see [isMounted]), this returns an
   /// already completed future.
-  Future<void> get mounted {
-    if (isMounted) {
-      return Future.value();
-    }
-    lifecycle._mountCompleter ??= Completer<void>();
-    return lifecycle._mountCompleter!.future;
-  }
+  Future<void> get mounted => isMounted? Future.value() : lifecycle.mountFuture;
 
   //#endregion
 
@@ -765,8 +753,7 @@ class Component {
 
   void _finishLoading() {
     _setLoadedBit();
-    _lifecycleManager?._loadCompleter?.complete();
-    _lifecycleManager?._loadCompleter = null;
+    _lifecycleManager?.finishLoading();
   }
 
   /// Mount the component that is already loaded and has a mounted parent.
@@ -793,8 +780,7 @@ class Component {
     debugMode |= _parent!.debugMode;
     onMount();
     _setMountedBit();
-    _lifecycleManager?._mountCompleter?.complete();
-    _lifecycleManager?._mountCompleter = null;
+    _lifecycleManager?.finishMounting();
     if (!existingChild) {
       _parent!.children.add(this);
     }
@@ -922,6 +908,26 @@ class _LifecycleManager {
 
   Completer<void>? _mountCompleter;
   Completer<void>? _loadCompleter;
+
+  Future<void> get loadFuture {
+    _loadCompleter ??= Completer<void>();
+    return _loadCompleter!.future;
+  }
+
+  Future<void> get mountFuture {
+    _mountCompleter ??= Completer<void>();
+    return _mountCompleter!.future;
+  }
+
+  void finishLoading() {
+    _loadCompleter?.complete();
+    _loadCompleter = null;
+  }
+
+  void finishMounting() {
+    _mountCompleter?.complete();
+    _mountCompleter = null;
+  }
 
   /// Queue for adding children to a component.
   ///
