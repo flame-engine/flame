@@ -209,13 +209,14 @@ class Component {
   ///
   /// If the component is already loaded (see [isLoaded]), this returns an
   /// already completed future.
-  Future<void> get loaded => isLoaded? Future.value() : lifecycle.loadFuture;
+  Future<void> get loaded => isLoaded ? Future.value() : lifecycle.loadFuture;
 
   /// A future that will complete once the component is mounted on its parent.
   ///
   /// If the component is already mounted (see [isMounted]), this returns an
   /// already completed future.
-  Future<void> get mounted => isMounted? Future.value() : lifecycle.mountFuture;
+  Future<void> get mounted =>
+      isMounted ? Future.value() : lifecycle.mountFuture;
 
   //#endregion
 
