@@ -24,10 +24,10 @@ class SpriteFontRenderer extends TextRenderer {
 
   void addGlyph({
     required String char,
-    required double srcLeft,
-    required double srcTop,
-    required double srcRight,
-    required double srcBottom,
+    required num srcLeft,
+    required num srcTop,
+     double? srcRight,
+     double? srcBottom,
     double scale = 1,
   }) {
     assert(char.length == 1, 'A glyph must have a single character: "$char"');
@@ -37,13 +37,13 @@ class SpriteFontRenderer extends TextRenderer {
       'A glyph for "$char" has already been added',
     );
     final info = _GlyphInfo();
-    info.srcLeft = srcLeft;
-    info.srcTop = srcTop;
-    info.srcRight = srcRight;
-    info.srcBottom = srcBottom;
+    info.srcLeft = srcLeft.toDouble();
+    info.srcTop = srcTop.toDouble();
+    info.srcRight = srcRight ?? srcLeft + charWidth / scale;
+    info.srcBottom = srcBottom ?? srcTop + charHeight / scale;
     info.rstSCos = scale;
     info.width = charWidth;
-    info.rstTy = charHeight - (srcBottom - srcTop) * scale;
+    info.rstTy = charHeight - (info.srcBottom - srcTop) * scale;
     glyphs[codePoint] = info;
   }
 
