@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import 'package:canvas_test/canvas_test.dart';
 import 'package:flame/components.dart';
-import 'package:flame/game.dart';
 import 'package:flame/palette.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -74,10 +73,10 @@ void main() {
       },
     );
 
-    FlameTester(FlameGame.new).testGameWidget(
+    testGolden(
       'Alignment options',
-      setUp: (game, tester) async {
-        await game.addAll([
+      (game) async {
+        game.addAll([
           _FramedTextBox(
             text: 'I strike quickly, being moved.',
             position: Vector2(10, 10),
@@ -118,14 +117,8 @@ void main() {
             align: Anchor.centerRight,
           ),
         ]);
-        await game.ready();
       },
-      verify: (game, tester) async {
-        await expectLater(
-          find.byGame<FlameGame>(),
-          matchesGoldenFile('../_goldens/text_box_component_test_1.png'),
-        );
-      },
+      goldenFile: '../_goldens/text_box_component_test_1.png',
     );
   });
 }
