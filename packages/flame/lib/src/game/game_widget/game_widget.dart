@@ -1,13 +1,12 @@
 import 'dart:developer';
 
+import 'package:flame/extensions.dart';
+import 'package:flame/input.dart';
+import 'package:flame/src/game/game_render_box.dart';
+import 'package:flame/src/game/game_widget/gestures.dart';
+import 'package:flame/src/game/mixins/game.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-
-import '../../../extensions.dart';
-import '../../../input.dart';
-import '../game_render_box.dart';
-import '../mixins/game.dart';
-import 'gestures.dart';
 
 typedef GameLoadingWidgetBuilder = Widget Function(
   BuildContext,
@@ -49,7 +48,7 @@ class GameWidget<T extends Game> extends StatefulWidget {
   /// A map to show widgets overlay.
   ///
   /// See also:
-  /// - [new GameWidget]
+  /// - [GameWidget]
   /// - [Game.overlays]
   final Map<String, OverlayWidgetBuilder<T>>? overlayBuilderMap;
 
@@ -58,7 +57,7 @@ class GameWidget<T extends Game> extends StatefulWidget {
   /// To control the overlays that are active use [Game.overlays].
   ///
   /// See also:
-  /// - [new GameWidget]
+  /// - [GameWidget]
   /// - [Game.overlays]
   final List<String>? initialActiveOverlays;
 

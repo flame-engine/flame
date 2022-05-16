@@ -1,16 +1,12 @@
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
-import 'package:flutter/material.dart';
 
-class DebugExample extends FlameGame with FPSCounter {
+class DebugExample extends FlameGame {
   static const String description = '''
-    In this example we show what you will see when setting `debugMode = true` on
-    your game. It is a non-interactive example.
+    In this example we show what you will see when setting `debugMode = true`
+    and add the `FPSTextComponent` to your game.
+    This is a non-interactive example.
   ''';
-
-  static final fpsTextPaint = TextPaint(
-    style: const TextStyle(color: Color(0xFFFFFFFF)),
-  );
 
   @override
   bool debugMode = true;
@@ -36,15 +32,8 @@ class DebugExample extends FlameGame with FPSCounter {
     add(flame1);
     add(flame2);
     add(flame3);
-  }
 
-  @override
-  void render(Canvas canvas) {
-    super.render(canvas);
-
-    if (debugMode) {
-      fpsTextPaint.render(canvas, fps(120).toString(), Vector2(0, 50));
-    }
+    add(FpsTextComponent(position: Vector2(0, size.y - 24)));
   }
 }
 

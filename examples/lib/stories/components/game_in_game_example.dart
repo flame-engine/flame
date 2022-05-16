@@ -1,8 +1,7 @@
+import 'package:examples/stories/components/composability_example.dart';
+import 'package:examples/stories/input/draggables_example.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
-
-import '../input/draggables_example.dart';
-import 'composability_example.dart';
 
 class GameInGameExample extends FlameGame with HasDraggables {
   static const String description = '''

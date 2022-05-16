@@ -49,7 +49,7 @@ class _MyAsyncChild extends PositionComponent {
 
 void main() {
   final size = Vector2.all(300);
-  final withTappables = FlameTester(() => _HasTappablesGame());
+  final withTappables = FlameTester(_HasTappablesGame.new);
 
   group('Composability', () {
     testWithFlameGame(

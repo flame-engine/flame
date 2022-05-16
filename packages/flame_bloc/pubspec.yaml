@@ -4,8 +4,8 @@ version: 1.4.0
 homepage: https://github.com/flame-engine/flame/tree/main/packages/flame_bloc
 
 environment:
-  sdk: ">=2.14.0 <3.0.0"
-  flutter: ">=2.5.0"
+  sdk: ">=2.16.0 <3.0.0"
+  flutter: ">=2.10.0"
 
 dependencies:
   flutter:

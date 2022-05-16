@@ -47,7 +47,7 @@ void main() {
     });
 
     final blocGame = FlameTester<MyBlocGame>(
-      () => MyBlocGame(),
+      MyBlocGame.new,
       pumpWidget: (gameWidget, tester) async {
         await tester.pumpWidget(
           BlocProvider<InventoryCubit>.value(

@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import '../../components.dart';
+import 'package:flame/components.dart';
 
 /// A component that uses a [Timer] instance which you can react to when it has
 /// finished.

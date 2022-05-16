@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'particle.dart';
+import 'package:flame/src/particles/particle.dart';
 
 /// A single [Particle] which manages multiple children
 /// by proxying all lifecycle hooks.

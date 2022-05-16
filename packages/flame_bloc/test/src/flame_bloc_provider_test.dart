@@ -87,7 +87,7 @@ void main() {
     group('onRemove', () {
       testWithFlameGame('dispose created blocs', (game) async {
         final provider = FlameBlocProvider<InventoryCubit, InventoryState>(
-          create: () => InventoryCubit(),
+          create: InventoryCubit.new,
         );
         await game.ensureAdd(provider);
         expect(provider.bloc.isClosed, isFalse);

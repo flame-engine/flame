@@ -1,10 +1,10 @@
 import 'dart:ui';
 
-import 'anchor.dart';
-import 'assets/images.dart';
-import 'flame.dart';
-import 'image_composition.dart';
-import 'palette.dart';
+import 'package:flame/src/anchor.dart';
+import 'package:flame/src/cache/images.dart';
+import 'package:flame/src/flame.dart';
+import 'package:flame/src/image_composition.dart';
+import 'package:flame/src/palette.dart';
 
 /// A [Sprite] is a region of an [Image] that can be rendered in the Canvas.
 ///

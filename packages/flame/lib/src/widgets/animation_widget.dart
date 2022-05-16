@@ -1,12 +1,11 @@
 import 'dart:math';
 
+import 'package:flame/src/anchor.dart';
+import 'package:flame/src/cache/images.dart';
+import 'package:flame/src/sprite_animation.dart';
+import 'package:flame/src/widgets/base_future_builder.dart';
+import 'package:flame/src/widgets/sprite_painter.dart';
 import 'package:flutter/material.dart' hide Animation;
-
-import '../anchor.dart';
-import '../assets/images.dart';
-import '../sprite_animation.dart';
-import 'base_future_builder.dart';
-import 'sprite_painter.dart';
 
 export '../sprite_animation.dart';
 

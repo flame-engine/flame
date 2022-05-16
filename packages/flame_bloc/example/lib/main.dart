@@ -1,5 +1,5 @@
+import 'package:flame_bloc_example/src/game.dart';
 import 'package:flutter/material.dart';
-import 'src/game.dart';
 
 void main() {
   runApp(const MyApp());

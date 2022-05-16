@@ -1,7 +1,6 @@
 import 'dart:ui';
 
 import 'package:flame/components.dart';
-import 'package:flame/game.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -10,18 +9,12 @@ import '_resources/load_image.dart';
 
 void main() {
   group('Sprite', () {
-    FlameTester(() => FlameGame()).testGameWidget(
+    testGolden(
       'Render with anchor',
-      setUp: (game, tester) async {
+      (game) async {
         game.add(MyComponent()..position = Vector2.all(25));
-        await game.ready();
       },
-      verify: (game, tester) async {
-        await expectLater(
-          find.byGame<FlameGame>(),
-          matchesGoldenFile('_goldens/sprite_test_1.png'),
-        );
-      },
+      goldenFile: '_goldens/sprite_test_1.png',
     );
   });
 }

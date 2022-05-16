@@ -1,8 +1,8 @@
 import 'dart:ui';
 
-import '../components/mixins/single_child_particle.dart';
-import 'curved_particle.dart';
-import 'particle.dart';
+import 'package:flame/src/components/mixins/single_child_particle.dart';
+import 'package:flame/src/particles/curved_particle.dart';
+import 'package:flame/src/particles/particle.dart';
 
 /// A particle which renders its child with certain [Paint]
 /// Could be used for applying composite effects.
