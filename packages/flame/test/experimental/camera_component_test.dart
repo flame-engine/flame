@@ -113,6 +113,7 @@ void main() {
         world: world,
         viewport: FixedSizeViewport(600, 400),
       )
+        ..viewport.anchor = Anchor.center
         ..viewport.position = Vector2(400, 300)
         ..viewfinder.position = Vector2(100, 50);
       final component = PositionComponent(
@@ -133,7 +134,7 @@ void main() {
       expect(nested, [Vector2(400, 300), Vector2(100, 50)]);
       expect(it.moveNext(), true);
       expect(it.current, camera.viewport);
-      expect(nested, [Vector2(400, 300), Vector2(0, 0)]);
+      expect(nested, [Vector2(400, 300), Vector2(300, 200)]);
       expect(it.moveNext(), true);
       expect(it.current, game);
       expect(nested, [Vector2(400, 300)]);

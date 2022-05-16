@@ -114,7 +114,10 @@ class CameraComponent extends Component {
     Vector2 point, [
     List<Vector2>? nestedPoints,
   ]) sync* {
-    final viewportPoint = point - viewport.position;
+    final viewportPoint = Vector2(
+      point.x - viewport.position.x + viewport.anchor.x * viewport.size.x,
+      point.y - viewport.position.y + viewport.anchor.y * viewport.size.y,
+    );
     if (world.isMounted && currentCameras.length < maxCamerasDepth) {
       if (viewport.containsLocalPoint(viewportPoint)) {
         try {
