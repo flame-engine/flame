@@ -36,9 +36,10 @@ class TRexGame extends FlameGame
   int get score => _score;
   set score(int newScore) {
     _score = newScore;
-    scoreText.text = '${score.toString().padLeft(5, '0')}  '
-        'HI ${_highscore.toString().padLeft(5, '0')}';
+    scoreText.text = '${scoreString(_score)}  HI ${scoreString(_highscore)}';
   }
+
+  String scoreString(int score) => score.toString().padLeft(5, '0');
 
   /// Used for score calculation
   double _distanceTravelled = 0;
