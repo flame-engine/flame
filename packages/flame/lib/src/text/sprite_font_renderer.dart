@@ -5,17 +5,36 @@ import 'package:flame/src/anchor.dart';
 import 'package:flame/src/text/text_renderer.dart';
 import 'package:vector_math/vector_math_64.dart';
 
+/// [TextRenderer] implementation that uses a spritesheet of various font glyphs
+/// to render text.
+///
+/// For example, suppose there is a spritesheet with sprites for characters from
+/// A to Z. Mapping these sprites into a [SpriteFontRenderer] allows then to
+/// write text using these sprite images as the font.
+///
+/// Currently, this class supports monospace fonts only -- the width and the
+/// height of all characters must be the same ([charWidth] and [charHeight]).
+/// Extra space between letters can be added via the [letterSpacing] parameter
+/// (it can also be negative to "squish" characters together). Finally, the
+/// [scale] parameter allows scaling the font to be bigger/smaller relative to
+/// its size in the source image.
+///
+/// The [paint] parameter is used to composite the character images onto the
+/// canvas. Its default value will draw the character images as-is. Changing
+/// the opacity of the paint's color will make the text semi-transparent.
 class SpriteFontRenderer extends TextRenderer {
   SpriteFontRenderer({
     required this.source,
     required this.charWidth,
     required this.charHeight,
     this.letterSpacing = 0,
+    this.scale = 1,
   });
 
   final Image source;
   final double charWidth;
   final double charHeight;
+  final double scale;
   double letterSpacing;
   bool get isMonospace => true;
 
@@ -28,7 +47,6 @@ class SpriteFontRenderer extends TextRenderer {
     required num srcTop,
     double? srcRight,
     double? srcBottom,
-    double scale = 1,
   }) {
     assert(char.length == 1, 'A glyph must have a single character: "$char"');
     final codePoint = char.codeUnitAt(0);
@@ -39,21 +57,21 @@ class SpriteFontRenderer extends TextRenderer {
     final info = _GlyphInfo();
     info.srcLeft = srcLeft.toDouble();
     info.srcTop = srcTop.toDouble();
-    info.srcRight = srcRight ?? srcLeft + charWidth / scale;
-    info.srcBottom = srcBottom ?? srcTop + charHeight / scale;
+    info.srcRight = srcRight ?? srcLeft + charWidth;
+    info.srcBottom = srcBottom ?? srcTop + charHeight;
     info.rstSCos = scale;
-    info.width = charWidth;
-    info.rstTy = charHeight - (info.srcBottom - srcTop) * scale;
+    info.width = charWidth * scale;
+    info.rstTy = (charHeight - (info.srcBottom - srcTop)) * scale;
     glyphs[codePoint] = info;
   }
 
   @override
-  double measureTextHeight(String text) => charHeight;
+  double measureTextHeight(String text) => charHeight * scale;
 
   @override
   double measureTextWidth(String text) {
     final n = text.length;
-    return n > 0 ? charWidth * n + letterSpacing * (n - 1) : 0;
+    return n > 0 ? charWidth * scale * n + letterSpacing * (n - 1) : 0;
   }
 
   @override

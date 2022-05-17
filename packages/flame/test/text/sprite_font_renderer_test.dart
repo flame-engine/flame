@@ -84,8 +84,9 @@ const textSample = 'We hold these truths to be self-evident, that all men are '
 Future<SpriteFontRenderer> createRenderer(double scale) async {
   final spriteFont = SpriteFontRenderer(
     source: await loadImage('alphabet.png'),
-    charWidth: 6 * scale,
-    charHeight: 6 * scale,
+    charWidth: 6,
+    charHeight: 6,
+    scale: scale,
   );
   const lines = [
     'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
@@ -99,7 +100,6 @@ Future<SpriteFontRenderer> createRenderer(double scale) async {
         char: lines[j][i],
         srcLeft: i * 6,
         srcTop: 1 + j * 6,
-        scale: scale,
       );
     }
   }

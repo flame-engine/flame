@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flame/src/anchor.dart';
 import 'package:flame/src/components/text_box_component.dart';
 import 'package:flame/src/components/text_component.dart';
+import 'package:flame/src/text/sprite_font_renderer.dart';
 import 'package:flame/src/text/text_paint.dart';
 import 'package:vector_math/vector_math_64.dart';
 
@@ -23,6 +24,7 @@ import 'package:vector_math/vector_math_64.dart';
 ///
 /// The following text renderers are available in Flame:
 ///  - [TextPaint] which uses the standard Flutter's `TextPainter`;
+///  - [SpriteFontRenderer] which uses a spritesheet as a font file;
 abstract class TextRenderer {
   /// Compute the dimensions of [text] when rendered.
   Vector2 measureText(String text);
