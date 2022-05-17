@@ -91,6 +91,7 @@ class ParallaxComponent<T extends FlameGame> extends PositionComponent
     parallax?.resize(newSize);
   }
 
+  @mustCallSuper
   @override
   void onMount() {
     assert(
@@ -99,6 +100,7 @@ class ParallaxComponent<T extends FlameGame> extends PositionComponent
     );
   }
 
+  @mustCallSuper
   @override
   void update(double dt) {
     parallax?.update(dt);
