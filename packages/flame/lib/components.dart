@@ -37,5 +37,5 @@ export 'src/geometry/circle_component.dart';
 export 'src/geometry/polygon_component.dart';
 export 'src/geometry/rectangle_component.dart';
 export 'src/geometry/shape_component.dart';
-export 'src/text.dart';
+export 'src/text/text_paint.dart';
 export 'src/timer.dart';
