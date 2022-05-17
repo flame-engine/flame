@@ -1,7 +1,6 @@
 import 'dart:ui';
 
 import 'package:flame/src/components/component.dart';
-import 'package:flame/src/components/component_point_pair.dart';
 import 'package:flame/src/components/position_component.dart';
 import 'package:flame/src/effects/controllers/effect_controller.dart';
 import 'package:flame/src/effects/move_effect.dart';
@@ -111,24 +110,27 @@ class CameraComponent extends Component {
   }
 
   @override
-  Iterable<ComponentPointPair> componentsAtPoint(Vector2 point) sync* {
+  Iterable<Component> componentsAtPoint(
+    Vector2 point, [
+    List<Vector2>? nestedPoints,
+  ]) sync* {
     final viewportPoint = Vector2(
       point.x - viewport.position.x + viewport.anchor.x * viewport.size.x,
       point.y - viewport.position.y + viewport.anchor.y * viewport.size.y,
     );
     if (world.isMounted && currentCameras.length < maxCamerasDepth) {
-      if (viewport.containsPoint(viewportPoint)) {
+      if (viewport.containsLocalPoint(viewportPoint)) {
         try {
           currentCameras.add(this);
           final worldPoint = viewfinder.transform.globalToLocal(viewportPoint);
-          yield* world.componentsAtPointFromCamera(worldPoint);
-          yield* viewfinder.componentsAtPoint(worldPoint);
+          yield* world.componentsAtPointFromCamera(worldPoint, nestedPoints);
+          yield* viewfinder.componentsAtPoint(worldPoint, nestedPoints);
         } finally {
           currentCameras.removeLast();
         }
       }
     }
-    yield* viewport.componentsAtPoint(viewportPoint);
+    yield* viewport.componentsAtPoint(viewportPoint, nestedPoints);
   }
 
   /// A camera that currently performs rendering.
