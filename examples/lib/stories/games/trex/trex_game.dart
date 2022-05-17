@@ -51,7 +51,7 @@ class TRexGame extends FlameGame
     add(player);
     add(gameOverPanel);
 
-    final spriteFont = SpriteFontRenderer(
+    final fontBuilder = SpriteFontBuilder(
       source: spriteImage,
       charWidth: 20,
       charHeight: 23,
@@ -59,12 +59,12 @@ class TRexGame extends FlameGame
     );
     const chars = '0123456789HI ';
     for (var i = 0; i < chars.length; i++) {
-      spriteFont.addGlyph(char: chars[i], srcLeft: 954 + 20 * i, srcTop: 0);
+      fontBuilder.addGlyph(char: chars[i], srcLeft: 954 + 20 * i, srcTop: 0);
     }
     add(
       scoreText = TextComponent(
         position: Vector2(20, 20),
-        textRenderer: spriteFont,
+        textRenderer: fontBuilder.build(),
       )..positionType = PositionType.viewport,
     );
     score = 0;

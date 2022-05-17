@@ -19,14 +19,6 @@ void main() {
       expect(renderer.isMonospace, true);
 
       expect(
-        () => renderer.addGlyph(char: 'a', srcLeft: 0, srcTop: 0),
-        failsAssert('A glyph for "a" has already been added'),
-      );
-      expect(
-        () => renderer.addGlyph(char: '🔥', srcLeft: 0, srcTop: 0),
-        failsAssert('A glyph must have a single character: "🔥"'),
-      );
-      expect(
         () => renderer.render(MockCanvas(), 'Ї', Vector2.zero()),
         throwsArgumentError,
       );
@@ -60,6 +52,25 @@ void main() {
       goldenFile: '../_goldens/sprite_font_renderer_1.png',
     );
   });
+
+  group('SpriteFontBuilder', () {
+    test('errors', () async {
+      final builder = SpriteFontBuilder(
+        source: await loadImage('alphabet.png'),
+        charWidth: 6,
+        charHeight: 6,
+      );
+      builder.addGlyph(char: 'a', srcLeft: 0, srcTop: 0);
+      expect(
+        () => builder.addGlyph(char: 'a', srcLeft: 0, srcTop: 0),
+        failsAssert('A glyph for "a" has already been added'),
+      );
+      expect(
+        () => builder.addGlyph(char: '🔥', srcLeft: 0, srcTop: 0),
+        failsAssert('A glyph must have a single character: "🔥"'),
+      );
+    });
+  });
 }
 
 const textSample = 'We hold these truths to be self-evident, that all men are '
@@ -82,7 +93,7 @@ const textSample = 'We hold these truths to be self-evident, that all men are '
     'provide new Guards for their future security.';
 
 Future<SpriteFontRenderer> createRenderer(double scale) async {
-  final spriteFont = SpriteFontRenderer(
+  final spriteFontBuilder = SpriteFontBuilder(
     source: await loadImage('alphabet.png'),
     charWidth: 6,
     charHeight: 6,
@@ -96,12 +107,12 @@ Future<SpriteFontRenderer> createRenderer(double scale) async {
   ];
   for (var j = 0; j < lines.length; j++) {
     for (var i = 0; i < lines[j].length; i++) {
-      spriteFont.addGlyph(
+      spriteFontBuilder.addGlyph(
         char: lines[j][i],
         srcLeft: i * 6,
         srcTop: 1 + j * 6,
       );
     }
   }
-  return spriteFont;
+  return spriteFontBuilder.build();
 }

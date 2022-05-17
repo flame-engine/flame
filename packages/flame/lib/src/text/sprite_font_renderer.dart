@@ -23,13 +23,14 @@ import 'package:vector_math/vector_math_64.dart';
 /// canvas. Its default value will draw the character images as-is. Changing
 /// the opacity of the paint's color will make the text semi-transparent.
 class SpriteFontRenderer extends TextRenderer {
-  SpriteFontRenderer({
+  SpriteFontRenderer._({
     required this.source,
     required this.charWidth,
     required this.charHeight,
-    this.letterSpacing = 0,
-    this.scale = 1,
-  });
+    required Map<int, _GlyphInfo> glyphs,
+    required this.letterSpacing,
+    required this.scale,
+  }) : _glyphs = glyphs;
 
   final Image source;
   final double charWidth;
@@ -38,32 +39,8 @@ class SpriteFontRenderer extends TextRenderer {
   double letterSpacing;
   bool get isMonospace => true;
 
-  final Map<int, _GlyphInfo> _glyphs = {};
+  final Map<int, _GlyphInfo> _glyphs;
   Paint paint = Paint()..color = const Color(0xFFFFFFFF);
-
-  void addGlyph({
-    required String char,
-    required num srcLeft,
-    required num srcTop,
-    double? srcRight,
-    double? srcBottom,
-  }) {
-    assert(char.length == 1, 'A glyph must have a single character: "$char"');
-    final codePoint = char.codeUnitAt(0);
-    assert(
-      !_glyphs.containsKey(codePoint),
-      'A glyph for "$char" has already been added',
-    );
-    final info = _GlyphInfo();
-    info.srcLeft = srcLeft.toDouble();
-    info.srcTop = srcTop.toDouble();
-    info.srcRight = srcRight ?? srcLeft + charWidth;
-    info.srcBottom = srcBottom ?? srcTop + charHeight;
-    info.rstSCos = scale;
-    info.width = charWidth * scale;
-    info.rstTy = (charHeight - (info.srcBottom - srcTop)) * scale;
-    _glyphs[codePoint] = info;
-  }
 
   @override
   double measureTextHeight(String text) => charHeight * scale;
@@ -116,6 +93,60 @@ class SpriteFontRenderer extends TextRenderer {
       throw ArgumentError('No glyph for character "${String.fromCharCode(i)}"');
     }
     return glyph;
+  }
+}
+
+/// Helper class for creating [SpriteFontRenderer] instances.
+class SpriteFontBuilder {
+  SpriteFontBuilder({
+    required this.source,
+    required this.charWidth,
+    required this.charHeight,
+    this.letterSpacing = 0,
+    this.scale = 1,
+  });
+
+  final Image source;
+  final double charWidth;
+  final double charHeight;
+  final double letterSpacing;
+  final double scale;
+
+  final Map<int, _GlyphInfo> _glyphs = {};
+
+  void addGlyph({
+    required String char,
+    required num srcLeft,
+    required num srcTop,
+    double? srcRight,
+    double? srcBottom,
+  }) {
+    assert(char.length == 1, 'A glyph must have a single character: "$char"');
+    final codePoint = char.codeUnitAt(0);
+    assert(
+      !_glyphs.containsKey(codePoint),
+      'A glyph for "$char" has already been added',
+    );
+    final info = _GlyphInfo();
+    info.srcLeft = srcLeft.toDouble();
+    info.srcTop = srcTop.toDouble();
+    info.srcRight = srcRight ?? srcLeft + charWidth;
+    info.srcBottom = srcBottom ?? srcTop + charHeight;
+    info.rstSCos = scale;
+    info.width = charWidth * scale;
+    info.rstTy = (charHeight - (info.srcBottom - srcTop)) * scale;
+    _glyphs[codePoint] = info;
+  }
+
+  SpriteFontRenderer build() {
+    return SpriteFontRenderer._(
+      source: source,
+      charWidth: charWidth,
+      charHeight: charHeight,
+      glyphs: _glyphs,
+      letterSpacing: letterSpacing,
+      scale: scale,
+    );
   }
 }
 
