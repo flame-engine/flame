@@ -6,6 +6,7 @@ import 'package:examples/stories/input/hoverables_example.dart';
 import 'package:examples/stories/input/joystick_advanced_example.dart';
 import 'package:examples/stories/input/joystick_example.dart';
 import 'package:examples/stories/input/keyboard_example.dart';
+import 'package:examples/stories/input/keyboard_listener_component_example.dart';
 import 'package:examples/stories/input/mouse_cursor_example.dart';
 import 'package:examples/stories/input/mouse_movement_example.dart';
 import 'package:examples/stories/input/multitap_advanced_example.dart';
@@ -50,9 +51,9 @@ void addInputStories(Dashbook dashbook) {
     )
     ..add(
       'Keyboard (Component)',
-      (_) => GameWidget(game: KeyboardComponentExample()),
+      (_) => GameWidget(game: KeyboardListenerComponentExample()),
       codeLink: baseLink('input/keyboard_component_example.dart'),
-      info: KeyboardComponentExample.description,
+      info: KeyboardListenerComponentExample.description,
     )
     ..add(
       'Mouse Movement',

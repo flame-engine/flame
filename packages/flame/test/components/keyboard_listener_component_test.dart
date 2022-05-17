@@ -24,12 +24,12 @@ RawKeyUpEvent _mockKeyUp(LogicalKeyboardKey key) {
 }
 
 void main() {
-  group('KeyboardComponent', () {
+  group('KeyboardListenerComponent', () {
     test('calls registered handlers', () {
       final stub = KeyCallStub();
       when(stub.onCall).thenReturn(true);
 
-      final input = KeyboardComponent(
+      final input = KeyboardListenerComponent(
         keyUp: {
           LogicalKeyboardKey.arrowUp: stub.onCall,
         },
@@ -45,7 +45,7 @@ void main() {
         final stub = KeyCallStub();
         when(stub.onCall).thenReturn(false);
 
-        final input = KeyboardComponent(
+        final input = KeyboardListenerComponent(
           keyUp: {
             LogicalKeyboardKey.arrowUp: stub.onCall,
           },
@@ -64,7 +64,7 @@ void main() {
         final stub = KeyCallStub();
         when(stub.onCall).thenReturn(true);
 
-        final input = KeyboardComponent();
+        final input = KeyboardListenerComponent();
 
         expect(
           input.onKeyEvent(_mockKeyUp(LogicalKeyboardKey.arrowUp), {}),

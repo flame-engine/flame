@@ -1,19 +1,19 @@
+import 'package:flame/components.dart';
+import 'package:flame/game.dart';
+import 'package:flame/src/game/mixins/keyboard.dart';
 import 'package:flutter/services.dart';
-import '../../../components.dart';
-import '../../../game.dart';
-import '../../game/mixins/keyboard.dart';
 
 /// The signature for a key handle function
 typedef KeyHandlerCallback = bool Function();
 
-/// {@template keyboard_component}
+/// {@template keyboard_listener_component}
 /// A [Component] that receives keyboard input and executes registered methods.
 /// This component is based on [KeyboardHandler], which requires the [FlameGame]
 /// which it is used to be mixed with [HasKeyboardHandlerComponents]
 /// {@endtemplate}
-class KeyboardComponent extends Component with KeyboardHandler {
-  /// {@macro keyboard_component}
-  KeyboardComponent({
+class KeyboardListenerComponent extends Component with KeyboardHandler {
+  /// {@macro keyboard_listener_component}
+  KeyboardListenerComponent({
     Map<LogicalKeyboardKey, KeyHandlerCallback> keyUp = const {},
     Map<LogicalKeyboardKey, KeyHandlerCallback> keyDown = const {},
   })  : _keyUp = keyUp,

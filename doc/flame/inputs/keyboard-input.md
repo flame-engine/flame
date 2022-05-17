@@ -91,7 +91,7 @@ that triggered the callback in the first place. The second is a set of the curre
 The returned value should be `true` to allow the continuous propagation of the key event among other
 components. To not allow any other component to receive the event, return `false`.
 
-Flame also provides a default implementation called `KeyboardComponent` which can be used to handle
+Flame also provides a default implementation called `KeyboardListenerComponent` which can be used to handle
 keyboard events which can be composed with a `FlameGame` or any other `Component`:
 
 For example, imagining a `PositionComponent` which has methods to move on the X and Y axis,
@@ -99,7 +99,7 @@ the following code could be used to bind those methods to key events:
 
 ```dart
 add(
-  KeyboardComponent(
+  KeyboardListenerComponent(
     keyUp: {
       LogicalKeyboardKey.keyA: _stopX,
       LogicalKeyboardKey.keyD: _stopX,

@@ -1,3 +1,4 @@
+import 'package:examples/commons/ember.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
@@ -5,13 +6,11 @@ import 'package:flame/palette.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
-import '../../commons/ember.dart';
-
-class KeyboardComponentExample extends FlameGame
+class KeyboardListenerComponentExample extends FlameGame
     with HasKeyboardHandlerComponents {
   static const String description = '''
     Similar to the default Keyboard example, but shows a different implementation approach,
-    which uses Flame's KeyboardComponent to handle input.
+    which uses Flame's KeyboardListenerComponent to handle input.
     Usage: Use A S D W to steer Ember.
   ''';
 
@@ -27,7 +26,7 @@ class KeyboardComponentExample extends FlameGame
     add(ember);
 
     add(
-      KeyboardComponent(
+      KeyboardListenerComponent(
         keyUp: {
           LogicalKeyboardKey.keyA: _stopX,
           LogicalKeyboardKey.keyD: _stopX,
