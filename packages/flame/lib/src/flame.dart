@@ -1,10 +1,9 @@
 library flame;
 
+import 'package:flame/src/cache/assets_cache.dart';
+import 'package:flame/src/cache/images.dart';
+import 'package:flame/src/device.dart';
 import 'package:flutter/services.dart';
-
-import 'assets/assets_cache.dart';
-import 'assets/images.dart';
-import 'device.dart';
 
 /// This class holds static references to some useful objects to use in your
 /// game.

@@ -5,15 +5,7 @@ import 'package:flame/game.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:test/test.dart';
 
-class _RemoveComponent extends Component {
-  int removeCounter = 0;
-
-  @override
-  void onRemove() {
-    super.onRemove();
-    removeCounter++;
-  }
-}
+import 'component_lifecycle_test.dart';
 
 class _PrepareGame extends FlameGame {
   late final _ParentOnPrepareComponent prepareParent;
@@ -42,7 +34,7 @@ class _ParentOnPrepareComponent extends _OnPrepareComponent {
 }
 
 void main() {
-  final prepareGame = FlameTester(() => _PrepareGame());
+  final prepareGame = FlameTester(_PrepareGame.new);
 
   group('Component', () {
     testWithFlameGame('children in the constructor', (game) async {
@@ -142,104 +134,217 @@ void main() {
       expect(anchorPosition.y, 0.0);
     });
 
-    flameGame.test('removeFromParent', (game) async {
-      final c1 = Component()..addToParent(game);
-      await game.ready();
+    group('Remove', () {
+      testWithFlameGame(
+        'removeFromParent',
+        (game) async {
+          final component = Component()..addToParent(game);
+          await game.ready();
 
-      expect(c1.isMounted, true);
-      c1.removeFromParent();
-      expect(c1.isMounted, true);
-      await game.ready();
-      expect(c1.isMounted, false);
-      expect(game.children.length, 0);
+          expect(component.isMounted, true);
+          component.removeFromParent();
+          await game.ready();
+
+          expect(component.isMounted, false);
+          expect(component.isLoaded, true);
+          expect(game.children.length, 0);
+        },
+      );
+
+      testWithFlameGame(
+        'remove and re-add should not double trigger onRemove',
+        (game) async {
+          final component = LifecycleComponent();
+          await game.ensureAdd(component);
+
+          component.removeFromParent();
+          game.update(0);
+          expect(component.countEvents('onRemove'), 1);
+          expect(component.isMounted, false);
+
+          game.add(component);
+          await game.ready();
+          expect(component.countEvents('onRemove'), 1);
+          expect(game.children.length, 1);
+        },
+      );
+
+      testWithFlameGame(
+        'try to remove a component before it was ever added',
+        (game) async {
+          expect(
+            () => game.remove(Component()),
+            failsAssert(
+              "Trying to remove a component that doesn't belong to any parent",
+            ),
+          );
+        },
+      );
+
+      testWithFlameGame(
+        'try to remove a component from a wrong parent',
+        (game) async {
+          final badParent = Component()..addToParent(game);
+          final child = Component()..addToParent(game);
+          await game.ready();
+          expect(
+            () => badParent.remove(child),
+            failsAssert(
+              'Trying to remove a component that belongs to a different '
+              "parent: this = Instance of 'Component', component's parent = "
+              "Instance of 'FlameGame'",
+            ),
+          );
+        },
+      );
+
+      testWithFlameGame(
+        'remove an uninitialized component',
+        (game) async {
+          final parent = Component();
+          final child = Component()..addToParent(parent);
+          expect(child.isLoading, false);
+          expect(child.isLoaded, false);
+          expect(child.isMounted, false);
+          child.removeFromParent();
+
+          game.add(parent);
+          await game.ready();
+
+          expect(child.isLoading, false);
+          expect(child.isLoaded, false);
+          expect(child.isMounted, false);
+          expect(parent.isMounted, true);
+          expect(parent.children.length, 0);
+          expect(child.parent, isNull);
+        },
+      );
+
+      testWithFlameGame(
+        'remove and re-add uninitialized component with non-trivial onLoad',
+        (game) async {
+          final parent = Component();
+          final component = _SlowLoadingComponent();
+          parent.add(component);
+          expect(component.isLoading, false);
+          parent.remove(component);
+          expect(component.isLoading, false);
+          expect(component.onLoadCalledCount, 0);
+
+          final newParent = Component()..addToParent(game);
+          newParent.add(component);
+          expect(component.isLoading, true);
+          expect(component.onLoadCalledCount, 1);
+          await game.ready();
+          expect(component.isMounted, true);
+          expect(newParent.children.length, 1);
+          expect(newParent.children.first, component);
+        },
+      );
+
+      testWithFlameGame(
+        'remove component immediately after adding',
+        (game) async {
+          final component = LifecycleComponent();
+          game.add(component);
+          expect(component.isLoading, true);
+          expect(component.isLoaded, false);
+          game.remove(component);
+          await game.ready();
+
+          expect(game.children.length, 0);
+          expect(component.isLoaded, true);
+          expect(component.isMounted, false);
+          // onRemove shouldn't be called because there was never an onMount
+          expect(component.events, ['onGameResize [800.0,600.0]', 'onLoad']);
+        },
+      );
+
+      testWithFlameGame(
+        'remove slow-loading component immediately after adding',
+        (game) async {
+          final component = _SlowLoadingComponent();
+          game.add(component);
+          expect(component.isLoading, true);
+          expect(component.isLoaded, false);
+          game.remove(component);
+          await game.ready();
+
+          expect(game.children.length, 0);
+          expect(component.isLoaded, true);
+          expect(component.isMounted, false);
+        },
+      );
+
+      testWithFlameGame(
+        'component removes itself from onLoad',
+        (game) async {
+          final component = _SelfRemovingOnLoadComponent();
+          game.add(component);
+          await game.ready();
+
+          expect(game.children.length, 0);
+          expect(component.isLoaded, true);
+          expect(component.isMounted, false);
+        },
+      );
+
+      testWithFlameGame(
+        'component removes itself from onMount',
+        (game) async {
+          final component = _SelfRemovingOnMountComponent();
+          game.add(component);
+          await game.ready();
+
+          expect(game.children.length, 0);
+          expect(component.isLoaded, true);
+          expect(component.isMounted, false);
+        },
+      );
+
+      testWithFlameGame(
+        'Quickly removed component can be re-added',
+        (game) async {
+          final component = LifecycleComponent();
+          game.add(component);
+          game.remove(component);
+          await game.ready();
+          component.events.add('--');
+
+          expect(game.children.length, 0);
+          game.add(component);
+          await game.ready();
+
+          expect(game.children.length, 1);
+          expect(component.isMounted, true);
+          expect(component.isLoaded, true);
+          expect(
+            component.events,
+            [
+              'onGameResize [800.0,600.0]',
+              'onLoad',
+              '--',
+              'onGameResize [800.0,600.0]',
+              'onMount',
+            ],
+          );
+        },
+      );
+
+      testWithFlameGame(
+        'remove component from a paused game',
+        (game) async {
+          game.pauseEngine();
+
+          final component = Component();
+          await game.add(component);
+          game.remove(component);
+
+          game.resumeEngine();
+          game.update(0);
+        },
+      );
     });
-
-    flameGame.test(
-      'remove and re-add should not double trigger onRemove',
-      (game) async {
-        final component = _RemoveComponent();
-        await game.ensureAdd(component);
-
-        component.removeFromParent();
-        game.update(0);
-        expect(component.removeCounter, 1);
-        expect(component.isMounted, false);
-
-        component.removeCounter = 0;
-        await game.ensureAdd(component);
-        expect(component.removeCounter, 0);
-        expect(game.children.length, 1);
-      },
-    );
-
-    testWithFlameGame(
-      'remove a component before it was ever added',
-      (game) async {
-        expect(
-          () => game.remove(Component()),
-          failsAssert(
-            "Trying to remove a component that doesn't belong to any parent",
-          ),
-        );
-      },
-    );
-
-    testWithFlameGame(
-      'remove a component from a wrong parent',
-      (game) async {
-        final badParent = Component()..addToParent(game);
-        final child = Component()..addToParent(game);
-        await game.ready();
-        expect(
-          () => badParent.remove(child),
-          failsAssert(
-            'Trying to remove a component that belongs to a different parent: '
-            "this = Instance of 'Component', component's parent = Instance of "
-            "'FlameGame'",
-          ),
-        );
-      },
-    );
-
-    testWithFlameGame(
-      'remove an uninitialized component',
-      (game) async {
-        final parent = Component();
-        final child = Component()..addToParent(parent);
-        expect(child.lifecycleState, LifecycleState.uninitialized);
-        child.removeFromParent();
-
-        game.add(parent);
-        await game.ready();
-
-        expect(child.lifecycleState, LifecycleState.uninitialized);
-        expect(parent.lifecycleState, LifecycleState.mounted);
-        expect(parent.children.length, 0);
-        expect(child.parent, isNull);
-      },
-    );
-
-    testWithFlameGame(
-      'remove and re-add uninitialized component with non-trivial onLoad',
-      (game) async {
-        final parent = Component();
-        final component = _ComponentWithOnLoad();
-        parent.add(component);
-        expect(component.lifecycleState, LifecycleState.uninitialized);
-        parent.remove(component);
-        expect(component.lifecycleState, LifecycleState.uninitialized);
-        expect(component.onLoadCalledCount, 0);
-
-        final newParent = Component()..addToParent(game);
-        newParent.add(component);
-        expect(component.lifecycleState, LifecycleState.loading);
-        expect(component.onLoadCalledCount, 1);
-        await game.ready();
-        expect(component.lifecycleState, LifecycleState.mounted);
-        expect(newParent.children.length, 1);
-        expect(newParent.children.first, component);
-      },
-    );
 
     prepareGame.test(
       'adding children to a parent that is not yet added to a game should not '
@@ -504,51 +609,50 @@ void main() {
 
     group('componentsAtPoint', () {
       testWithFlameGame('nested components', (game) async {
-        final componentA = PositionComponent()
+        final compA = PositionComponent()
           ..size = Vector2(200, 150)
           ..scale = Vector2.all(2)
           ..position = Vector2(350, 50)
           ..addToParent(game);
-        final componentB = CircleComponent(radius: 10)
+        final compB = CircleComponent(radius: 10)
           ..position = Vector2(150, 75)
           ..anchor = Anchor.center
-          ..addToParent(componentA);
+          ..addToParent(compA);
         await game.ready();
 
-        expect(
-          game.componentsAtPoint(Vector2.zero()).toList(),
-          [ComponentPointPair(game, Vector2.zero())],
-        );
-        expect(
-          game.componentsAtPoint(Vector2(400, 100)).toList(),
-          [
-            ComponentPointPair(componentA, Vector2(25, 25)),
-            ComponentPointPair(game, Vector2(400, 100)),
-          ],
-        );
-        expect(
-          game.componentsAtPoint(Vector2(650, 200)).toList(),
-          [
-            ComponentPointPair(componentB, Vector2(10, 10)),
-            ComponentPointPair(componentA, Vector2(150, 75)),
-            ComponentPointPair(game, Vector2(650, 200)),
-          ],
-        );
-        expect(
-          game.componentsAtPoint(Vector2(664, 214)).toList(),
-          [
-            ComponentPointPair(componentB, Vector2(17, 17)),
-            ComponentPointPair(componentA, Vector2(157, 82)),
-            ComponentPointPair(game, Vector2(664, 214)),
-          ],
-        );
-        expect(
-          game.componentsAtPoint(Vector2(664, 216)).toList(),
-          [
-            ComponentPointPair(componentA, Vector2(157, 83)),
-            ComponentPointPair(game, Vector2(664, 216)),
-          ],
-        );
+        void matchComponentsAtPoint(Vector2 point, List<_Pair> expected) {
+          final nested = <Vector2>[];
+          var i = 0;
+          for (final component in game.componentsAtPoint(point, nested)) {
+            expect(i, lessThan(expected.length));
+            expect(component, expected[i].component);
+            expect(nested, expected[i].points);
+            i++;
+          }
+          expect(i, expected.length);
+        }
+
+        matchComponentsAtPoint(Vector2(0, 0), [
+          _Pair(game, [Vector2(0, 0)])
+        ]);
+        matchComponentsAtPoint(Vector2(400, 100), [
+          _Pair(compA, [Vector2(400, 100), Vector2(25, 25)]),
+          _Pair(game, [Vector2(400, 100)]),
+        ]);
+        matchComponentsAtPoint(Vector2(650, 200), [
+          _Pair(compB, [Vector2(650, 200), Vector2(150, 75), Vector2(10, 10)]),
+          _Pair(compA, [Vector2(650, 200), Vector2(150, 75)]),
+          _Pair(game, [Vector2(650, 200)]),
+        ]);
+        matchComponentsAtPoint(Vector2(664, 214), [
+          _Pair(compB, [Vector2(664, 214), Vector2(157, 82), Vector2(17, 17)]),
+          _Pair(compA, [Vector2(664, 214), Vector2(157, 82)]),
+          _Pair(game, [Vector2(664, 214)]),
+        ]);
+        matchComponentsAtPoint(Vector2(664, 216), [
+          _Pair(compA, [Vector2(664, 216), Vector2(157, 83)]),
+          _Pair(game, [Vector2(664, 216)]),
+        ]);
       });
     });
   });
@@ -592,11 +696,33 @@ class TwoChildrenComponent extends Component {
   }
 }
 
-class _ComponentWithOnLoad extends Component {
+class _SlowLoadingComponent extends Component {
   int onLoadCalledCount = 0;
 
   @override
   Future<void> onLoad() async {
     onLoadCalledCount++;
+    await Future<void>.delayed(const Duration(milliseconds: 10));
   }
+}
+
+class _SelfRemovingOnLoadComponent extends Component {
+  @override
+  Future<void>? onLoad() {
+    removeFromParent();
+    return null;
+  }
+}
+
+class _SelfRemovingOnMountComponent extends Component {
+  @override
+  void onMount() {
+    removeFromParent();
+  }
+}
+
+class _Pair {
+  _Pair(this.component, this.points);
+  final Component component;
+  final List<Vector2> points;
 }

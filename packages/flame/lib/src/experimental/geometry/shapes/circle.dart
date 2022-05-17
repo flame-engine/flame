@@ -1,10 +1,9 @@
 import 'dart:ui';
 
+import 'package:flame/src/experimental/geometry/shapes/shape.dart';
+import 'package:flame/src/extensions/vector2.dart';
+import 'package:flame/src/game/transform2d.dart';
 import 'package:meta/meta.dart';
-
-import '../../../extensions/vector2.dart';
-import '../../../game/transform2d.dart';
-import 'shape.dart';
 
 /// The circle with a given [center] and a [radius].
 ///

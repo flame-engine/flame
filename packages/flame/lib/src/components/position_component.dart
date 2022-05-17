@@ -1,14 +1,14 @@
 import 'dart:math' as math;
 import 'dart:ui' hide Offset;
 
-import '../anchor.dart';
-import '../effects/provider_interfaces.dart';
-import '../extensions/offset.dart';
-import '../extensions/vector2.dart';
-import '../game/notifying_vector2.dart';
-import '../game/transform2d.dart';
-import 'component.dart';
-import 'mixins/coordinate_transform.dart';
+import 'package:flame/src/anchor.dart';
+import 'package:flame/src/components/component.dart';
+import 'package:flame/src/components/mixins/coordinate_transform.dart';
+import 'package:flame/src/effects/provider_interfaces.dart';
+import 'package:flame/src/extensions/offset.dart';
+import 'package:flame/src/extensions/vector2.dart';
+import 'package:flame/src/game/notifying_vector2.dart';
+import 'package:flame/src/game/transform2d.dart';
 
 /// A [Component] implementation that represents an object that can be
 /// freely moved around the screen, rotated, and scaled.

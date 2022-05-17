@@ -4,25 +4,38 @@ import 'package:flame_test/flame_test.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-class _MyComponent extends Component {
+class LifecycleComponent extends Component {
   final List<String> events = [];
   final String? name;
 
-  _MyComponent([this.name]);
+  LifecycleComponent([this.name]);
+
+  int countEvents(String event) {
+    return events.where((e) => e == event).length;
+  }
 
   @override
   Future<void> onLoad() async {
-    await super.onLoad();
+    expect(isLoading, true);
+    expect(isLoaded, false);
+    expect(isMounted, false);
+    expect(isRemoving, false);
     events.add('onLoad');
   }
 
   @override
   void onMount() {
+    expect(isLoading, false);
+    expect(isLoaded, true);
+    expect(isMounted, false);
+    expect(isRemoving, false);
     events.add('onMount');
   }
 
   @override
   void onRemove() {
+    expect(isLoaded, true);
+    expect(isMounted, true);
     events.add('onRemove');
     super.onRemove();
   }
@@ -37,7 +50,7 @@ class _MyComponent extends Component {
 void main() {
   group('Component Lifecycle', () {
     flameGame.test('correct order', (game) async {
-      final component = _MyComponent();
+      final component = LifecycleComponent();
       await game.add(component);
       await game.ready();
 
@@ -48,9 +61,9 @@ void main() {
     });
 
     flameGame.test('component mounted completes', (game) async {
-      final component = _MyComponent();
-      await game.add(component);
+      final component = LifecycleComponent();
       final mounted = component.mounted;
+      await game.add(component);
 
       await game.ready();
 
@@ -61,7 +74,7 @@ void main() {
       'component mounted completes even after the '
       'component is already mounted',
       (game) async {
-        final component = _MyComponent();
+        final component = LifecycleComponent();
         await game.add(component);
         await game.ready();
 
@@ -74,8 +87,8 @@ void main() {
     flameGame.test(
       'component mounted completes when changing parent',
       (game) async {
-        final parent = _MyComponent('parent');
-        final child = _MyComponent('child');
+        final parent = LifecycleComponent('parent');
+        final child = LifecycleComponent('child');
         parent.add(child);
         game.add(parent);
 
@@ -93,8 +106,26 @@ void main() {
       },
     );
 
+    testWithFlameGame(
+      'Component.mounted completes after the component is mounted',
+      (game) async {
+        final child = LifecycleComponent();
+        var mountedFutureCompleted = false;
+        final future = child.mounted.then((_) {
+          expect(child.isMounted, true);
+          expect(child.events, contains('onMount'));
+          mountedFutureCompleted = true;
+        });
+        game.add(child);
+        await game.ready();
+        expect(child.isMounted, true);
+        await future;
+        expect(mountedFutureCompleted, true);
+      },
+    );
+
     flameGame.test('component loaded completes', (game) async {
-      final component = _MyComponent();
+      final component = LifecycleComponent();
       await game.add(component);
       final loaded = component.loaded;
 
@@ -107,7 +138,7 @@ void main() {
       'component loaded completes even after the '
       'component is already loaded',
       (game) async {
-        final component = _MyComponent();
+        final component = LifecycleComponent();
         await game.add(component);
         await game.ready();
 
@@ -117,10 +148,21 @@ void main() {
       },
     );
 
+    testWithFlameGame(
+      '.loaded completes even if accessed before the component added to game',
+      (game) async {
+        final component = Component();
+        final loadedFuture = component.loaded;
+        game.add(component);
+        await game.ready();
+        expectLater(loadedFuture, completes);
+      },
+    );
+
     // Obsolete scenario, when we used to have a separate "prepare" stage
     flameGame.test('parent prepares the component', (game) async {
-      final parent = _MyComponent('parent');
-      final child = _MyComponent('child');
+      final parent = LifecycleComponent('parent');
+      final child = LifecycleComponent('child');
       await parent.add(child);
       await game.add(parent);
       await game.ready();
@@ -139,8 +181,8 @@ void main() {
     });
 
     flameGame.test('correct lifecycle on parent change', (game) async {
-      final parent = _MyComponent('parent');
-      final child = _MyComponent('child');
+      final parent = LifecycleComponent('parent');
+      final child = LifecycleComponent('child');
       parent.add(child);
       game.add(parent);
       await game.ready();
@@ -197,8 +239,8 @@ void main() {
             ],
           ),
         );
-        final component1 = _MyComponent('A')..addToParent(game1);
-        final component2 = _MyComponent('B')..addToParent(game2);
+        final component1 = LifecycleComponent('A')..addToParent(game1);
+        final component2 = LifecycleComponent('B')..addToParent(game2);
         await game1.ready();
         await game2.ready();
         expect(
@@ -215,8 +257,8 @@ void main() {
     testWithFlameGame(
       'Remove and re-add component with children',
       (game) async {
-        final parent = _MyComponent('parent');
-        final child = _MyComponent('child')..addToParent(parent);
+        final parent = LifecycleComponent('parent');
+        final child = LifecycleComponent('child')..addToParent(parent);
         await game.add(parent);
         await game.ready();
 

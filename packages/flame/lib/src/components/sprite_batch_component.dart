@@ -1,9 +1,8 @@
 import 'dart:ui';
 
+import 'package:flame/src/components/component.dart';
+import 'package:flame/src/sprite_batch.dart';
 import 'package:meta/meta.dart';
-
-import '../sprite_batch.dart';
-import 'component.dart';
 
 class SpriteBatchComponent extends Component {
   SpriteBatch? spriteBatch;

@@ -1,15 +1,14 @@
 import 'dart:math';
 
+import 'package:flame/extensions.dart';
+import 'package:flame/src/particles/accelerated_particle.dart';
+import 'package:flame/src/particles/composed_particle.dart';
+import 'package:flame/src/particles/moving_particle.dart';
+import 'package:flame/src/particles/rotating_particle.dart';
+import 'package:flame/src/particles/scaled_particle.dart';
+import 'package:flame/src/particles/translated_particle.dart';
+import 'package:flame/src/timer.dart';
 import 'package:flutter/animation.dart';
-
-import '../../extensions.dart';
-import '../timer.dart';
-import 'accelerated_particle.dart';
-import 'composed_particle.dart';
-import 'moving_particle.dart';
-import 'rotating_particle.dart';
-import 'scaled_particle.dart';
-import 'translated_particle.dart';
 
 /// A function which returns a [Particle] when called.
 typedef ParticleGenerator = Particle Function(int);

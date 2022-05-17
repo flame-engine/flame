@@ -1,10 +1,10 @@
 import 'dart:collection';
 import 'dart:ui';
 
-import '../game.dart';
-import 'assets/images.dart';
-import 'extensions/image.dart';
-import 'flame.dart';
+import 'package:flame/game.dart';
+import 'package:flame/src/cache/images.dart';
+import 'package:flame/src/extensions/image.dart';
+import 'package:flame/src/flame.dart';
 
 extension SpriteBatchExtension on Game {
   /// Utility method to load and cache the image for a [SpriteBatch] based on
@@ -47,13 +47,16 @@ class BatchItem {
   /// The transform values for this batch item.
   final RSTransform transform;
 
+  /// The flip value for this batch item.
+  final bool flip;
+
   /// The background color for this batch item.
   final Color color;
 
   /// Fallback matrix for the web.
   ///
   /// Because `Canvas.drawAtlas` is not supported on the web we also
-  /// build a `Matrix4` based on the [transform] values.
+  /// build a `Matrix4` based on the [transform] and [flip] values.
   final Matrix4 matrix;
 
   /// Paint object used for the web.
@@ -62,9 +65,10 @@ class BatchItem {
   BatchItem({
     required this.source,
     required this.transform,
+    this.flip = false,
     required this.color,
   })  : matrix = Matrix4(
-          transform.scos, transform.ssin, 0, 0, //
+          transform.scos * (flip ? -1 : 1), transform.ssin, 0, 0, //
           -transform.ssin, transform.scos, 0, 0, //
           0, 0, _defaultScale, 0, //
           transform.tx, transform.ty, 0, 1, //
@@ -167,9 +171,8 @@ class SpriteBatch {
     Images? images,
     bool useAtlas = true,
   }) async {
-    final _images = images ?? Flame.images;
     return SpriteBatch(
-      await _images.load(path),
+      await _generateAtlas(images, path),
       defaultColor: defaultColor,
       defaultTransform: defaultTransform ?? RSTransform(1, 0, 0, 0),
       defaultBlendMode: defaultBlendMode,
@@ -177,12 +180,27 @@ class SpriteBatch {
     );
   }
 
+  static Future<Image> _generateAtlas(Images? images, String path) async {
+    final _images = images ?? Flame.images;
+    final image = await _images.load(path);
+    final recorder = PictureRecorder();
+    final canvas = Canvas(recorder);
+    final _emptyPaint = Paint();
+    canvas.drawImage(image, Offset.zero, _emptyPaint);
+    canvas.scale(-1, 1);
+    canvas.drawImage(image, Offset(-image.width * 2, 0), _emptyPaint);
+
+    final picture = recorder.endRecording();
+    final atlas = picture.toImage(image.width * 2, image.height);
+    return atlas;
+  }
+
   /// Add a new batch item using a RSTransform.
   ///
   /// The [source] parameter is the source location on the [atlas].
   ///
-  /// You can position, rotate and scale it on the canvas using the [transform]
-  /// parameter.
+  /// You can position, rotate, scale and flip it on the canvas using the
+  /// [transform] and [flip] parameters.
   ///
   /// The [color] parameter allows you to render a color behind the batch item,
   /// as a background color.
@@ -195,17 +213,28 @@ class SpriteBatch {
   void addTransform({
     required Rect source,
     RSTransform? transform,
+    bool flip = false,
     Color? color,
   }) {
     final batchItem = BatchItem(
       source: source,
       transform: transform ??= defaultTransform ?? RSTransform(1, 0, 0, 0),
+      flip: flip,
       color: color ?? defaultColor,
     );
 
     _batchItems.add(batchItem);
 
-    _sources.add(batchItem.source);
+    _sources.add(
+      flip
+          ? Rect.fromLTWH(
+              atlas.width - source.left - source.width,
+              source.top,
+              source.width,
+              source.height,
+            )
+          : batchItem.source,
+    );
     _transforms.add(batchItem.transform);
     _colors.add(batchItem.color);
   }
@@ -215,8 +244,8 @@ class SpriteBatch {
   /// The [source] parameter is the source location on the [atlas]. You can
   /// position it on the canvas using the [offset] parameter.
   ///
-  /// You can transform the sprite from its [offset] using [scale], [rotation]
-  /// and [anchor].
+  /// You can transform the sprite from its [offset] using [scale], [rotation],
+  /// [anchor] and [flip].
   ///
   /// The [color] paramater allows you to render a color behind the batch item,
   /// as a background color.
@@ -234,6 +263,7 @@ class SpriteBatch {
     Vector2? anchor,
     double rotation = 0,
     Vector2? offset,
+    bool flip = false,
     Color? color,
   }) {
     anchor ??= Vector2.zero();
@@ -257,7 +287,12 @@ class SpriteBatch {
       );
     }
 
-    addTransform(source: source, transform: transform, color: color);
+    addTransform(
+      source: source,
+      transform: transform,
+      flip: flip,
+      color: color,
+    );
   }
 
   /// Clear the SpriteBatch so it can be reused.

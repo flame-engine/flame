@@ -1,20 +1,20 @@
 import 'dart:ui';
 
+import 'package:flame/src/components/component.dart';
+import 'package:flame/src/components/position_component.dart';
+import 'package:flame/src/effects/controllers/effect_controller.dart';
+import 'package:flame/src/effects/move_effect.dart';
+import 'package:flame/src/effects/move_to_effect.dart';
+import 'package:flame/src/effects/provider_interfaces.dart';
+import 'package:flame/src/experimental/bounded_position_behavior.dart';
+import 'package:flame/src/experimental/follow_behavior.dart';
+import 'package:flame/src/experimental/geometry/shapes/shape.dart';
+import 'package:flame/src/experimental/max_viewport.dart';
+import 'package:flame/src/experimental/viewfinder.dart';
+import 'package:flame/src/experimental/viewport.dart';
+import 'package:flame/src/experimental/world.dart';
 import 'package:meta/meta.dart';
 import 'package:vector_math/vector_math_64.dart';
-
-import '../components/component.dart';
-import '../components/component_point_pair.dart';
-import '../components/position_component.dart';
-import '../effects/controllers/effect_controller.dart';
-import '../effects/move_effect.dart';
-import '../effects/move_to_effect.dart';
-import '../effects/provider_interfaces.dart';
-import 'follow_behavior.dart';
-import 'max_viewport.dart';
-import 'viewfinder.dart';
-import 'viewport.dart';
-import 'world.dart';
 
 /// [CameraComponent] is a component through which a [World] is observed.
 ///
@@ -86,7 +86,10 @@ class CameraComponent extends Component {
   @override
   void renderTree(Canvas canvas) {
     canvas.save();
-    canvas.translate(viewport.position.x, viewport.position.y);
+    canvas.translate(
+      viewport.position.x - viewport.anchor.x * viewport.size.x,
+      viewport.position.y - viewport.anchor.y * viewport.size.y,
+    );
     // Render the world through the viewport
     if (world.isMounted && currentCameras.length < maxCamerasDepth) {
       canvas.save();
@@ -107,21 +110,27 @@ class CameraComponent extends Component {
   }
 
   @override
-  Iterable<ComponentPointPair> componentsAtPoint(Vector2 point) sync* {
-    final viewportPoint = point - viewport.position;
+  Iterable<Component> componentsAtPoint(
+    Vector2 point, [
+    List<Vector2>? nestedPoints,
+  ]) sync* {
+    final viewportPoint = Vector2(
+      point.x - viewport.position.x + viewport.anchor.x * viewport.size.x,
+      point.y - viewport.position.y + viewport.anchor.y * viewport.size.y,
+    );
     if (world.isMounted && currentCameras.length < maxCamerasDepth) {
-      if (viewport.containsPoint(viewportPoint)) {
+      if (viewport.containsLocalPoint(viewportPoint)) {
         try {
           currentCameras.add(this);
           final worldPoint = viewfinder.transform.globalToLocal(viewportPoint);
-          yield* world.componentsAtPointFromCamera(worldPoint);
-          yield* viewfinder.componentsAtPoint(worldPoint);
+          yield* world.componentsAtPointFromCamera(worldPoint, nestedPoints);
+          yield* viewfinder.componentsAtPoint(worldPoint, nestedPoints);
         } finally {
           currentCameras.removeLast();
         }
       }
     }
-    yield* viewport.componentsAtPoint(viewportPoint);
+    yield* viewport.componentsAtPoint(viewportPoint, nestedPoints);
   }
 
   /// A camera that currently performs rendering.
@@ -196,5 +205,25 @@ class CameraComponent extends Component {
     viewfinder.add(
       MoveToEffect(point, EffectController(speed: speed)),
     );
+  }
+
+  /// Sets or clears the world bounds for the camera's viewfinder.
+  ///
+  /// The bound is a [Shape], given in the world coordinates. The viewfinder's
+  /// position will be restricted to always remain inside this region. Note that
+  /// if you want the camera to never see the empty space outside of the world's
+  /// rendering area, then you should set up the bounds to be smaller than the
+  /// size of the world.
+  void setBounds(Shape? bounds) {
+    final boundedBehavior = viewfinder.firstChild<BoundedPositionBehavior>();
+    if (bounds == null) {
+      boundedBehavior?.removeFromParent();
+    } else if (boundedBehavior == null) {
+      viewfinder.add(
+        BoundedPositionBehavior(bounds: bounds, priority: 1000),
+      );
+    } else {
+      boundedBehavior.bounds = bounds;
+    }
   }
 }

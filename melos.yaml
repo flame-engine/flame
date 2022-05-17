@@ -57,3 +57,9 @@ scripts:
     select-package:
       dir-exists: test
     description: Generate coverage for the selected package.
+
+  update-goldens:
+    run: melos exec -- flutter test --update-goldens
+    select-package:
+      dir-exists: test
+    description: Re-generate all golden test files

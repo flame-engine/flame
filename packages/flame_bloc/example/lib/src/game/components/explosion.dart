@@ -1,6 +1,6 @@
 import 'package:flame/components.dart';
 
-import '../game.dart';
+import 'package:flame_bloc_example/src/game/game.dart';
 
 class ExplosionComponent extends SpriteAnimationComponent
     with HasGameRef<SpaceShooterGame> {
