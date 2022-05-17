@@ -38,7 +38,7 @@ class SpriteFontRenderer extends TextRenderer {
   double letterSpacing;
   bool get isMonospace => true;
 
-  Map<int, _GlyphInfo> glyphs = {};
+  final Map<int, _GlyphInfo> _glyphs = {};
   Paint paint = Paint()..color = const Color(0xFFFFFFFF);
 
   void addGlyph({
@@ -51,7 +51,7 @@ class SpriteFontRenderer extends TextRenderer {
     assert(char.length == 1, 'A glyph must have a single character: "$char"');
     final codePoint = char.codeUnitAt(0);
     assert(
-      !glyphs.containsKey(codePoint),
+      !_glyphs.containsKey(codePoint),
       'A glyph for "$char" has already been added',
     );
     final info = _GlyphInfo();
@@ -62,7 +62,7 @@ class SpriteFontRenderer extends TextRenderer {
     info.rstSCos = scale;
     info.width = charWidth * scale;
     info.rstTy = (charHeight - (info.srcBottom - srcTop)) * scale;
-    glyphs[codePoint] = info;
+    _glyphs[codePoint] = info;
   }
 
   @override
@@ -111,7 +111,7 @@ class SpriteFontRenderer extends TextRenderer {
   }
 
   _GlyphInfo _getGlyphFromCodeUnit(int i) {
-    final glyph = glyphs[i];
+    final glyph = _glyphs[i];
     if (glyph == null) {
       throw ArgumentError('No glyph for character "${String.fromCharCode(i)}"');
     }
