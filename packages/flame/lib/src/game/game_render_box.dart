@@ -83,7 +83,5 @@ class GameRenderBox extends RenderBox with WidgetsBindingObserver {
 /// non-nullable can still be used with `!` and `?`
 /// to support older versions of the API as well.
 ///
-/// Todo(karvulf): Remove this after upgrading to flutter v3.0.0
-///
 /// See more: https://docs.flutter.dev/development/tools/sdk/release-notes/release-notes-3.0.0
 T? _ambiguate<T>(T? value) => value;
