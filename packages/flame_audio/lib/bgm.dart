@@ -35,7 +35,7 @@ class Bgm extends WidgetsBindingObserver {
       return;
     }
     _isRegistered = true;
-    WidgetsBinding.instance?.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
   }
 
   /// Dispose the [WidgetsBinding] observer.
@@ -43,7 +43,7 @@ class Bgm extends WidgetsBindingObserver {
     if (!_isRegistered) {
       return;
     }
-    WidgetsBinding.instance?.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
     _isRegistered = false;
   }
 
