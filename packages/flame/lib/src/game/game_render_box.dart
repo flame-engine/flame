@@ -63,11 +63,11 @@ class GameRenderBox extends RenderBox with WidgetsBindingObserver {
   }
 
   void _bindLifecycleListener() {
-    _ambiguate(WidgetsBinding.instance!)!.addObserver(this);
+    _ambiguate(WidgetsBinding.instance)!.addObserver(this);
   }
 
   void _unbindLifecycleListener() {
-    _ambiguate(WidgetsBinding.instance!)!.removeObserver(this);
+    _ambiguate(WidgetsBinding.instance)!.removeObserver(this);
   }
 
   @override
