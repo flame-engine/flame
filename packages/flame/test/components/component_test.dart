@@ -609,51 +609,50 @@ void main() {
 
     group('componentsAtPoint', () {
       testWithFlameGame('nested components', (game) async {
-        final componentA = PositionComponent()
+        final compA = PositionComponent()
           ..size = Vector2(200, 150)
           ..scale = Vector2.all(2)
           ..position = Vector2(350, 50)
           ..addToParent(game);
-        final componentB = CircleComponent(radius: 10)
+        final compB = CircleComponent(radius: 10)
           ..position = Vector2(150, 75)
           ..anchor = Anchor.center
-          ..addToParent(componentA);
+          ..addToParent(compA);
         await game.ready();
 
-        expect(
-          game.componentsAtPoint(Vector2.zero()).toList(),
-          [ComponentPointPair(game, Vector2.zero())],
-        );
-        expect(
-          game.componentsAtPoint(Vector2(400, 100)).toList(),
-          [
-            ComponentPointPair(componentA, Vector2(25, 25)),
-            ComponentPointPair(game, Vector2(400, 100)),
-          ],
-        );
-        expect(
-          game.componentsAtPoint(Vector2(650, 200)).toList(),
-          [
-            ComponentPointPair(componentB, Vector2(10, 10)),
-            ComponentPointPair(componentA, Vector2(150, 75)),
-            ComponentPointPair(game, Vector2(650, 200)),
-          ],
-        );
-        expect(
-          game.componentsAtPoint(Vector2(664, 214)).toList(),
-          [
-            ComponentPointPair(componentB, Vector2(17, 17)),
-            ComponentPointPair(componentA, Vector2(157, 82)),
-            ComponentPointPair(game, Vector2(664, 214)),
-          ],
-        );
-        expect(
-          game.componentsAtPoint(Vector2(664, 216)).toList(),
-          [
-            ComponentPointPair(componentA, Vector2(157, 83)),
-            ComponentPointPair(game, Vector2(664, 216)),
-          ],
-        );
+        void matchComponentsAtPoint(Vector2 point, List<_Pair> expected) {
+          final nested = <Vector2>[];
+          var i = 0;
+          for (final component in game.componentsAtPoint(point, nested)) {
+            expect(i, lessThan(expected.length));
+            expect(component, expected[i].component);
+            expect(nested, expected[i].points);
+            i++;
+          }
+          expect(i, expected.length);
+        }
+
+        matchComponentsAtPoint(Vector2(0, 0), [
+          _Pair(game, [Vector2(0, 0)])
+        ]);
+        matchComponentsAtPoint(Vector2(400, 100), [
+          _Pair(compA, [Vector2(400, 100), Vector2(25, 25)]),
+          _Pair(game, [Vector2(400, 100)]),
+        ]);
+        matchComponentsAtPoint(Vector2(650, 200), [
+          _Pair(compB, [Vector2(650, 200), Vector2(150, 75), Vector2(10, 10)]),
+          _Pair(compA, [Vector2(650, 200), Vector2(150, 75)]),
+          _Pair(game, [Vector2(650, 200)]),
+        ]);
+        matchComponentsAtPoint(Vector2(664, 214), [
+          _Pair(compB, [Vector2(664, 214), Vector2(157, 82), Vector2(17, 17)]),
+          _Pair(compA, [Vector2(664, 214), Vector2(157, 82)]),
+          _Pair(game, [Vector2(664, 214)]),
+        ]);
+        matchComponentsAtPoint(Vector2(664, 216), [
+          _Pair(compA, [Vector2(664, 216), Vector2(157, 83)]),
+          _Pair(game, [Vector2(664, 216)]),
+        ]);
       });
     });
   });
@@ -720,4 +719,10 @@ class _SelfRemovingOnMountComponent extends Component {
   void onMount() {
     removeFromParent();
   }
+}
+
+class _Pair {
+  _Pair(this.component, this.points);
+  final Component component;
+  final List<Vector2> points;
 }

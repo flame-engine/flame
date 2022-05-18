@@ -1,7 +1,6 @@
 import 'dart:ui';
 
 import 'package:flame/src/components/component.dart';
-import 'package:flame/src/components/component_point_pair.dart';
 import 'package:flame/src/experimental/camera_component.dart';
 import 'package:meta/meta.dart';
 import 'package:vector_math/vector_math_64.dart';
@@ -23,12 +22,21 @@ class World extends Component {
   }
 
   @override
-  Iterable<ComponentPointPair> componentsAtPoint(Vector2 point) {
+  bool containsLocalPoint(Vector2 point) => true;
+
+  @override
+  Iterable<Component> componentsAtPoint(
+    Vector2 point, [
+    List<Vector2>? nestedPoints,
+  ]) {
     return const Iterable.empty();
   }
 
   @internal
-  Iterable<ComponentPointPair> componentsAtPointFromCamera(Vector2 point) {
-    return super.componentsAtPoint(point);
+  Iterable<Component> componentsAtPointFromCamera(
+    Vector2 point,
+    List<Vector2>? nestedPoints,
+  ) {
+    return super.componentsAtPoint(point, nestedPoints);
   }
 }
