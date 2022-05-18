@@ -63,11 +63,11 @@ class GameRenderBox extends RenderBox with WidgetsBindingObserver {
   }
 
   void _bindLifecycleListener() {
-    WidgetsBinding.instance!.addObserver(this);
+    _ambiguate(WidgetsBinding.instance)!.addObserver(this);
   }
 
   void _unbindLifecycleListener() {
-    WidgetsBinding.instance!.removeObserver(this);
+    _ambiguate(WidgetsBinding.instance)!.removeObserver(this);
   }
 
   @override
@@ -75,3 +75,13 @@ class GameRenderBox extends RenderBox with WidgetsBindingObserver {
     game.lifecycleStateChange(state);
   }
 }
+
+/// This allows a value of type T or T?
+/// to be treated as a value of type T?.
+///
+/// We use this so that APIs that have become
+/// non-nullable can still be used with `!` and `?`
+/// to support older versions of the API as well.
+///
+/// See more: https://docs.flutter.dev/development/tools/sdk/release-notes/release-notes-3.0.0
+T? _ambiguate<T>(T? value) => value;
