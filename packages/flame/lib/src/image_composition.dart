@@ -122,7 +122,7 @@ class ImageComposition {
 
     return recorder
         .endRecording()
-        .toImage(output.width.toInt(), output.height.toInt());
+        .asImage(output.width.toInt(), output.height.toInt());
   }
 }
 

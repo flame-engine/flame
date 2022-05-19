@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'dart:ui';
 
 import 'package:flame/components.dart';
+import 'package:flame/src/extensions/picture_extension.dart';
 import 'package:flame/src/palette.dart';
 import 'package:flame/src/text/text_renderer.dart';
 import 'package:flutter/widgets.dart' hide Image;
@@ -214,7 +215,7 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
     final c = Canvas(recorder, size.toRect());
     c.scale(pixelRatio);
     _fullRender(c);
-    return recorder.endRecording().toImage(
+    return recorder.endRecording().asImage(
           (width * pixelRatio).ceil(),
           (height * pixelRatio).ceil(),
         );
