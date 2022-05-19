@@ -109,4 +109,35 @@ void main() {
       expect(game.hasLayout, isTrue);
     },
   );
+
+  testWidgets(
+    'fails if neither game or game builder is informed',
+    (tester) async {
+      expect(
+        () async {
+          await tester.pumpWidget(GameWidget());
+        },
+        failsAssert('Neither game or gameBuilder were informed.'),
+      );
+    },
+  );
+
+  testWidgets(
+    'fails if both game or game builder is informed',
+    (tester) async {
+      expect(
+        () async {
+          await tester.pumpWidget(
+            GameWidget(
+              game: _MyGame(),
+              gameBuilder: (_) => _MyGame(),
+            ),
+          );
+        },
+        failsAssert(
+          'Both "game" and "gameBuilder" informed, only one can be used.',
+        ),
+      );
+    },
+  );
 }

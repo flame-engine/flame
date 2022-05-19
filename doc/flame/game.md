@@ -1,3 +1,46 @@
+# GameWidget
+
+A `GameWidget` is the Flutter `Widget` that is used to insert a `Game` inside the flutter widget tree.
+
+It can directly receive a `Game` instance or it can receive a `GameBuilder` function that will be
+used to create the game once the `GameWidget` is inserted on the widget tree.
+
+Example:
+
+```dart
+class MyGamePage extends StatefulWidget {
+  @override
+  State createState() => _MyGamePageState();
+}
+
+class _MyGamePageState extends State<MyGamePage> {
+  late final MyGame _game;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _game = MyGame();
+  }
+
+  @override
+  void build(BuildContext context) {
+    return GameWidget(game: _game);
+  }
+}
+```
+
+or
+
+```dart
+class MyGamePage extends StatelessWidget {
+  @override
+  void build(BuildContext context) {
+    return GameWidget(gameBuilder: (context) => MyGame());
+  }
+}
+```
+
 # FlameGame
 
 `FlameGame` is the most basic and most commonly used `Game` class in Flame.
@@ -29,8 +72,8 @@ class MyCrate extends SpriteComponent {
   @override
   void onGameResize(Vector2 gameSize) {
     super.onGameResize(gameSize);
-    // We don't need to set the position in the constructor, we can set it 
-    // directly here since it will be called once before the first time it 
+    // We don't need to set the position in the constructor, we can set it
+    // directly here since it will be called once before the first time it
     // is rendered.
     position = gameSize / 2;
   }
@@ -108,7 +151,7 @@ just draw a background that covers the whole canvas if you would want it to chan
 ## SingleGameInstance mixin
 
 An optional mixin `SingleGameInstance` can be applied to your game if you are making a single-game
-application. This is a common scenario when building games: there is a single full-screen 
+application. This is a common scenario when building games: there is a single full-screen
 `GameWidget` which hosts a single `Game` instance.
 
 Adding this mixin provides performance advantages in certain scenarios. In particular, a component's
@@ -227,8 +270,8 @@ Widget build(BuildContext context) {
 }
 ```
 
-The order of rendering for an overlay is determined by the order of the keys in the 
-`overlayBuilderMap`. 
+The order of rendering for an overlay is determined by the order of the keys in the
+`overlayBuilderMap`.
 
-An example of feature can be found 
+An example of feature can be found
 [here](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/system/overlays_example.dart).

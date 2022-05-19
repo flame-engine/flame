@@ -12,7 +12,7 @@ void addGameStories(Dashbook dashbook) {
           margin: const EdgeInsets.all(45),
           child: ClipRect(
             child: GameWidget(
-              game: TRexGame(),
+              gameBuilder: (_) => TRexGame(),
               loadingBuilder: (_) => const Center(
                 child: Text('Loading'),
               ),
