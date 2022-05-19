@@ -215,7 +215,7 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
     final c = Canvas(recorder, size.toRect());
     c.scale(pixelRatio);
     _fullRender(c);
-    return recorder.endRecording().asImage(
+    return recorder.endRecording().toImageSafe(
           (width * pixelRatio).ceil(),
           (height * pixelRatio).ceil(),
         );

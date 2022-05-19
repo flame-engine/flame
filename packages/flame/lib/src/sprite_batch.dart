@@ -192,7 +192,7 @@ class SpriteBatch {
     canvas.drawImage(image, Offset(-image.width * 2, 0), _emptyPaint);
 
     final picture = recorder.endRecording();
-    final atlas = picture.asImage(image.width * 2, image.height);
+    final atlas = picture.toImageSafe(image.width * 2, image.height);
     return atlas;
   }
 
