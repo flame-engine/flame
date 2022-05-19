@@ -2,14 +2,13 @@ import 'dart:async';
 import 'dart:collection';
 
 import 'package:flame/src/cache/value_cache.dart';
-import 'package:flame/src/components/component_point_pair.dart';
 import 'package:flame/src/components/component_set.dart';
 import 'package:flame/src/components/mixins/coordinate_transform.dart';
 import 'package:flame/src/components/position_type.dart';
 import 'package:flame/src/game/flame_game.dart';
 import 'package:flame/src/game/mixins/game.dart';
 import 'package:flame/src/gestures/events.dart';
-import 'package:flame/src/text.dart';
+import 'package:flame/src/text/text_paint.dart';
 import 'package:flutter/painting.dart';
 import 'package:meta/meta.dart';
 import 'package:vector_math/vector_math_64.dart';
@@ -205,26 +204,18 @@ class Component {
   void _setRemovingBit() => _state |= _removing;
   void _clearRemovingBit() => _state &= ~_removing;
 
-  Completer<void>? _mountCompleter;
-  Completer<void>? _loadCompleter;
+  /// A future that completes when this component finishes loading.
+  ///
+  /// If the component is already loaded (see [isLoaded]), this returns an
+  /// already completed future.
+  Future<void> get loaded => isLoaded ? Future.value() : lifecycle.loadFuture;
 
-  /// A future that will complete once this component has finished loading.
-  Future<void> get loaded {
-    if (isLoaded) {
-      return Future.value();
-    }
-    _loadCompleter ??= Completer<void>();
-    return _loadCompleter!.future;
-  }
-
-  /// A future that will complete once the component is mounted on its parent
-  Future<void> get mounted {
-    if (isMounted) {
-      return Future.value();
-    }
-    _mountCompleter ??= Completer<void>();
-    return _mountCompleter!.future;
-  }
+  /// A future that will complete once the component is mounted on its parent.
+  ///
+  /// If the component is already mounted (see [isMounted]), this returns an
+  /// already completed future.
+  Future<void> get mounted =>
+      isMounted ? Future.value() : lifecycle.mountFuture;
 
   //#endregion
 
@@ -641,9 +632,13 @@ class Component {
   /// that intersect with this ray, in the order from those that are closest to
   /// the user to those that are farthest.
   ///
-  /// The return value is an [Iterable] of `(component, point)` pairs, which
-  /// gives not only the components themselves, but also the points of
-  /// intersection, in their respective local coordinates.
+  /// The return value is an [Iterable] of components. If the [nestedPoints]
+  /// parameter is given, then it will also report the points of intersection
+  /// for each component in its local coordinate space. Specifically, the last
+  /// element in the list is the point in the coordinate space of the returned
+  /// component, the element before the last is in that component's parent's
+  /// coordinate space, and so on. The [nestedPoints] list must be growable and
+  /// modifiable.
   ///
   /// The default implementation relies on the [CoordinateTransform] interface
   /// to translate from the parent's coordinate system into the local one. Make
@@ -653,7 +648,11 @@ class Component {
   /// If your component overrides [renderTree], then it almost certainly needs
   /// to override this method as well, so that this method can find all rendered
   /// components wherever they are.
-  Iterable<ComponentPointPair> componentsAtPoint(Vector2 point) sync* {
+  Iterable<Component> componentsAtPoint(
+    Vector2 point, [
+    List<Vector2>? nestedPoints,
+  ]) sync* {
+    nestedPoints?.add(point);
     if (_children != null) {
       for (final child in _children!.reversed()) {
         Vector2? childPoint = point;
@@ -661,13 +660,14 @@ class Component {
           childPoint = (child as CoordinateTransform).parentToLocal(point);
         }
         if (childPoint != null) {
-          yield* child.componentsAtPoint(childPoint);
+          yield* child.componentsAtPoint(childPoint, nestedPoints);
         }
       }
     }
     if (containsLocalPoint(point)) {
-      yield ComponentPointPair(this, point);
+      yield this;
     }
+    nestedPoints?.removeLast();
   }
 
   //#endregion
@@ -762,8 +762,7 @@ class Component {
 
   void _finishLoading() {
     _setLoadedBit();
-    _loadCompleter?.complete();
-    _loadCompleter = null;
+    _lifecycleManager?.finishLoading();
   }
 
   /// Mount the component that is already loaded and has a mounted parent.
@@ -790,8 +789,7 @@ class Component {
     debugMode |= _parent!.debugMode;
     onMount();
     _setMountedBit();
-    _mountCompleter?.complete();
-    _mountCompleter = null;
+    _lifecycleManager?.finishMounting();
     if (!existingChild) {
       _parent!.children.add(this);
     }
@@ -917,6 +915,29 @@ class _LifecycleManager {
   /// The component which is the owner of this [_LifecycleManager].
   final Component owner;
 
+  Completer<void>? _mountCompleter;
+  Completer<void>? _loadCompleter;
+
+  Future<void> get loadFuture {
+    _loadCompleter ??= Completer<void>();
+    return _loadCompleter!.future;
+  }
+
+  Future<void> get mountFuture {
+    _mountCompleter ??= Completer<void>();
+    return _mountCompleter!.future;
+  }
+
+  void finishLoading() {
+    _loadCompleter?.complete();
+    _loadCompleter = null;
+  }
+
+  void finishMounting() {
+    _mountCompleter?.complete();
+    _mountCompleter = null;
+  }
+
   /// Queue for adding children to a component.
   ///
   /// When the user `add()`s a child to a component, we immediately place it
@@ -941,7 +962,11 @@ class _LifecycleManager {
   final Queue<Component> _adoption = Queue();
 
   bool get hasPendingEvents {
-    return !(_children.isEmpty && _removals.isEmpty && _adoption.isEmpty);
+    return _children.isNotEmpty ||
+        _removals.isNotEmpty ||
+        _adoption.isNotEmpty ||
+        _mountCompleter != null ||
+        _loadCompleter != null;
   }
 
   /// Attempt to resolve pending events in all lifecycle event queues.
