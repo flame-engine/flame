@@ -2,8 +2,6 @@ import 'dart:collection';
 import 'dart:typed_data';
 import 'dart:ui';
 
-import 'package:bitmap/bitmap.dart';
-
 import '../game.dart';
 import 'cache/images.dart';
 import 'extensions/image.dart';
@@ -187,32 +185,29 @@ class SpriteBatch {
 
   static Future<Image> _generateAtlas(Images? images, String path) async {
     final _images = images ?? Flame.images;
-    /*if (_images.containsKey('$path$_generatedAtlasKeySuffix')) {
+    if (_images.containsKey('$path$_generatedAtlasKeySuffix')) {
       return _images.fromCache('$path$_generatedAtlasKeySuffix');
-    }*/
-    final image = await _images.load(path);
-    final bytes = await image.toByteData();
-    final imagePixelData = bytes!.buffer.asUint8List();
-    final flippedImagePixelData =
-        Bitmap.fromHeadless(image.width, image.height, imagePixelData)
-            .apply(BitmapFlip.horizontal());
-    final imageBytesWidth = image.width * 4;
-    final atlasPixelData = <int>[];
-    for (var ind = 0; ind < imagePixelData.length; ind += imageBytesWidth) {
-      atlasPixelData.addAll(
-        imagePixelData.skip(ind).take(imageBytesWidth),
-      );
-      atlasPixelData.addAll(
-        flippedImagePixelData.content.skip(ind).take(imageBytesWidth),
-      );
     }
-    final bitmap = Bitmap.fromHeadless(
-      image.width * 2,
-      image.height,
+    final image = await _images.load(path);
+    final imagePixelData = await image.pixelsInUint8();
+    final atlasPixelData = <int>[];
+    final imageBytesWidth = image.width * 4;
+    final imageStartingLength = imagePixelData.length;
+    atlasPixelData.addAll(imagePixelData);
+    for (var ind = 0; ind < imageStartingLength; ind += imageBytesWidth) {
+      for (var byteInd = 0; byteInd < imageBytesWidth; byteInd += 4) {
+        atlasPixelData.insertAll(
+          ind + imageStartingLength,
+          imagePixelData.getRange(ind + byteInd, ind + byteInd + 4),
+        );
+      }
+    }
+    final atlas = await ImageExtension.fromPixels(
       Uint8List.fromList(atlasPixelData),
+      image.width,
+      image.height * 2,
     );
-    final atlas = await bitmap.buildImage();
-    //_images.add('$path$_generatedAtlasKeySuffix', atlas);
+    _images.add('$path$_generatedAtlasKeySuffix', atlas);
     return atlas;
   }
 
@@ -249,8 +244,8 @@ class SpriteBatch {
     _sources.add(
       flip
           ? Rect.fromLTWH(
-              atlas.width - source.left - source.width,
-              source.top,
+              atlas.width - source.right,
+              source.top + source.height,
               source.width,
               source.height,
             )

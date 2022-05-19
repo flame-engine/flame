@@ -14,7 +14,6 @@ dependencies:
   collection: ^1.15.0
   ordered_set: ^5.0.0
   vector_math: ^2.1.1
-  bitmap: ^0.1.2
 
 dev_dependencies:
   dartdoc: ^4.1.0
