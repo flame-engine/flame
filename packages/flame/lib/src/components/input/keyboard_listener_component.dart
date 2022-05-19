@@ -9,7 +9,7 @@ typedef KeyHandlerCallback = bool Function(Set<LogicalKeyboardKey>);
 /// {@template keyboard_listener_component}
 /// A [Component] that receives keyboard input and executes registered methods.
 /// This component is based on [KeyboardHandler], which requires the [FlameGame]
-/// which it is used to be mixed with [HasKeyboardHandlerComponents]
+/// which is is used to be mixed with [HasKeyboardHandlerComponents].
 /// {@endtemplate}
 class KeyboardListenerComponent extends Component with KeyboardHandler {
   /// {@macro keyboard_listener_component}
