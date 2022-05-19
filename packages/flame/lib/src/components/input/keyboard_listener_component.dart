@@ -4,7 +4,7 @@ import 'package:flame/src/game/mixins/keyboard.dart';
 import 'package:flutter/services.dart';
 
 /// The signature for a key handle function
-typedef KeyHandlerCallback = bool Function();
+typedef KeyHandlerCallback = bool Function(Set<LogicalKeyboardKey>);
 
 /// {@template keyboard_listener_component}
 /// A [Component] that receives keyboard input and executes registered methods.
@@ -30,7 +30,7 @@ class KeyboardListenerComponent extends Component with KeyboardHandler {
     final handler = handlers[event.logicalKey];
 
     if (handler != null) {
-      return handler();
+      return handler(keysPressed);
     }
 
     return true;

@@ -5,7 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
 abstract class _KeyCallStub {
-  bool onCall();
+  bool onCall(Set<LogicalKeyboardKey> keysPressed);
 }
 
 class KeyCallStub extends Mock implements _KeyCallStub {}
@@ -27,7 +27,7 @@ void main() {
   group('KeyboardListenerComponent', () {
     test('calls registered handlers', () {
       final stub = KeyCallStub();
-      when(stub.onCall).thenReturn(true);
+      when(() => stub.onCall(any())).thenReturn(true);
 
       final input = KeyboardListenerComponent(
         keyUp: {
@@ -36,14 +36,14 @@ void main() {
       );
 
       input.onKeyEvent(_mockKeyUp(LogicalKeyboardKey.arrowUp), {});
-      verify(stub.onCall).called(1);
+      verify(() => stub.onCall({})).called(1);
     });
 
     test(
       'returns false the handler return value',
       () {
         final stub = KeyCallStub();
-        when(stub.onCall).thenReturn(false);
+        when(() => stub.onCall(any())).thenReturn(false);
 
         final input = KeyboardListenerComponent(
           keyUp: {
@@ -62,7 +62,7 @@ void main() {
       'returns true (allowing event to bubble) when no handler is registered',
       () {
         final stub = KeyCallStub();
-        when(stub.onCall).thenReturn(true);
+        when(() => stub.onCall(any())).thenReturn(true);
 
         final input = KeyboardListenerComponent();
 

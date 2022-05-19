@@ -101,16 +101,16 @@ the following code could be used to bind those methods to key events:
 add(
   KeyboardListenerComponent(
     keyUp: {
-      LogicalKeyboardKey.keyA: _stopX,
-      LogicalKeyboardKey.keyD: _stopX,
-      LogicalKeyboardKey.keyW: _stopY,
-      LogicalKeyboardKey.keyS: _stopY,
+      LogicalKeyboardKey.keyA: (keysPressed) { ... },
+      LogicalKeyboardKey.keyD: (keysPressed) { ... },
+      LogicalKeyboardKey.keyW: (keysPressed) { ... },
+      LogicalKeyboardKey.keyS: (keysPressed) { ... },
     },
     keyDown: {
-      LogicalKeyboardKey.keyA: () => _moveXUp(),
-      LogicalKeyboardKey.keyD: () => _moveXDown(),
-      LogicalKeyboardKey.keyW: () => _moveYUp(),
-      LogicalKeyboardKey.keyS: () => _moveYDown(),
+      LogicalKeyboardKey.keyA: (keysPressed) { ... },
+      LogicalKeyboardKey.keyD: (keysPressed) { ... },
+      LogicalKeyboardKey.keyW: (keysPressed) { ... },
+      LogicalKeyboardKey.keyS: (keysPressed) { ... },
     },
   ),
 );

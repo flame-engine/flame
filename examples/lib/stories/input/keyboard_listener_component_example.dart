@@ -28,38 +28,97 @@ class KeyboardListenerComponentExample extends FlameGame
     add(
       KeyboardListenerComponent(
         keyUp: {
-          LogicalKeyboardKey.keyA: _stopX,
-          LogicalKeyboardKey.keyD: _stopX,
-          LogicalKeyboardKey.keyW: _stopY,
-          LogicalKeyboardKey.keyS: _stopY,
+          LogicalKeyboardKey.keyA: (keys) => _handleKey(
+                false,
+                LogicalKeyboardKey.keyA,
+                keys,
+              ),
+          LogicalKeyboardKey.keyD: (keys) => _handleKey(
+                false,
+                LogicalKeyboardKey.keyD,
+                keys,
+              ),
+          LogicalKeyboardKey.keyW: (keys) => _handleKey(
+                false,
+                LogicalKeyboardKey.keyW,
+                keys,
+              ),
+          LogicalKeyboardKey.keyS: (keys) => _handleKey(
+                false,
+                LogicalKeyboardKey.keyS,
+                keys,
+              ),
         },
         keyDown: {
-          LogicalKeyboardKey.keyA: () => _moveX(-1),
-          LogicalKeyboardKey.keyD: () => _moveX(1),
-          LogicalKeyboardKey.keyW: () => _moveY(-1),
-          LogicalKeyboardKey.keyS: () => _moveY(1),
+          LogicalKeyboardKey.keyA: (keys) => _handleKey(
+                true,
+                LogicalKeyboardKey.keyA,
+                keys,
+              ),
+          LogicalKeyboardKey.keyD: (keys) => _handleKey(
+                true,
+                LogicalKeyboardKey.keyD,
+                keys,
+              ),
+          LogicalKeyboardKey.keyW: (keys) => _handleKey(
+                true,
+                LogicalKeyboardKey.keyW,
+                keys,
+              ),
+          LogicalKeyboardKey.keyS: (keys) => _handleKey(
+                true,
+                LogicalKeyboardKey.keyS,
+                keys,
+              ),
         },
       ),
     );
   }
 
-  bool _stopY() {
-    velocity.y = 0;
-    return true;
-  }
+  bool _handleKey(
+    bool isDown,
+    LogicalKeyboardKey key,
+    Set<LogicalKeyboardKey> keysPressed,
+  ) {
+    const w = LogicalKeyboardKey.keyW;
+    const a = LogicalKeyboardKey.keyA;
+    const s = LogicalKeyboardKey.keyS;
+    const d = LogicalKeyboardKey.keyD;
 
-  bool _stopX() {
-    velocity.x = 0;
-    return true;
-  }
+    if (key == w) {
+      if (isDown) {
+        velocity.y = -1;
+      } else if (keysPressed.contains(s)) {
+        velocity.y = 1;
+      } else {
+        velocity.y = 0;
+      }
+    } else if (key == s) {
+      if (isDown) {
+        velocity.y = 1;
+      } else if (keysPressed.contains(w)) {
+        velocity.y = -1;
+      } else {
+        velocity.y = 0;
+      }
+    } else if (key == a) {
+      if (isDown) {
+        velocity.x = -1;
+      } else if (keysPressed.contains(d)) {
+        velocity.x = 1;
+      } else {
+        velocity.x = 0;
+      }
+    } else if (key == d) {
+      if (isDown) {
+        velocity.x = 1;
+      } else if (keysPressed.contains(a)) {
+        velocity.x = -1;
+      } else {
+        velocity.x = 0;
+      }
+    }
 
-  bool _moveX(double value) {
-    velocity.x = value;
-    return true;
-  }
-
-  bool _moveY(double value) {
-    velocity.y = value;
     return true;
   }
 
