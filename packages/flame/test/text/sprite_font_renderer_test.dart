@@ -11,7 +11,7 @@ import '../_resources/load_image.dart';
 void main() {
   group('SpriteFontRenderer', () {
     test('creating SpriteFontRenderer', () async {
-      final renderer = await createRenderer(1);
+      final renderer = await createRenderer();
       expect(renderer.source, isA<Image>());
       expect(renderer.charWidth, 6);
       expect(renderer.charHeight, 6);
@@ -31,18 +31,18 @@ void main() {
           RectangleComponent(size: Vector2(800, 600)),
           TextBoxComponent(
             text: textSample,
-            textRenderer: (await createRenderer(1))..letterSpacing = 1,
+            textRenderer: await createRenderer(letterSpacing: 1),
             boxConfig: TextBoxConfig(maxWidth: 800),
           ),
           TextBoxComponent(
             text: textSample,
-            textRenderer: await createRenderer(2),
+            textRenderer: await createRenderer(scale: 2),
             boxConfig: TextBoxConfig(maxWidth: 800),
             position: Vector2(0, 100),
           ),
           TextComponent(
             text: 'FLAME',
-            textRenderer: (await createRenderer(25))
+            textRenderer: (await createRenderer(scale: 25))
               ..paint.color = const Color(0x44000000),
             position: Vector2(400, 500),
             anchor: Anchor.center,
@@ -92,12 +92,16 @@ const textSample = 'We hold these truths to be self-evident, that all men are '
     'their right, it is their duty, to throw off such Government, and to '
     'provide new Guards for their future security.';
 
-Future<SpriteFontRenderer> createRenderer(double scale) async {
+Future<SpriteFontRenderer> createRenderer({
+  double scale = 1,
+  double letterSpacing = 0,
+}) async {
   final spriteFontBuilder = SpriteFontBuilder(
     source: await loadImage('alphabet.png'),
     charWidth: 6,
     charHeight: 6,
     scale: scale,
+    letterSpacing: letterSpacing,
   );
   const lines = [
     'ABCDEFGHIJKLMNOPQRSTUVWXYZ',

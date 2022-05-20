@@ -36,7 +36,7 @@ class SpriteFontRenderer extends TextRenderer {
   final double charWidth;
   final double charHeight;
   final double scale;
-  double letterSpacing;
+  final double letterSpacing;
   bool get isMonospace => true;
 
   final Map<int, _GlyphInfo> _glyphs;
