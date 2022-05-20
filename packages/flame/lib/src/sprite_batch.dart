@@ -171,7 +171,7 @@ class SpriteBatch {
     RSTransform? defaultTransform,
     Images? images,
     bool useAtlas = true,
-    bool needsFlips = false,
+    bool needsFlips = true,
   }) async {
     final _images = images ?? Flame.images;
     return SpriteBatch(
@@ -204,13 +204,13 @@ class SpriteBatch {
     final _emptyPaint = Paint();
     canvas.drawImage(image, Offset.zero, _emptyPaint);
     canvas.scale(-1, 1);
-    canvas.drawImage(image, Offset(-image.width * 2, 0), _emptyPaint);
+    canvas.drawImage(image,
+        Offset(-image.width.toDouble(), image.height.toDouble()), _emptyPaint);
 
     final picture = recorder.endRecording();
-    return picture.toImage(image.width * 2, image.height);
+    return picture.toImage(image.width, image.height * 2);
   }
 
-  ///See note in addTransform if using _generateAtlas2
   static Future<Image> _generateAtlas2(Images images, String path) async {
     final image = await images.load(path);
     final imagePixelData = await image.pixelsInUint8();
@@ -267,8 +267,7 @@ class SpriteBatch {
       flip
           ? Rect.fromLTWH(
               atlas.width - source.right,
-              source
-                  .top, // NOTE add the following if using _generateAtlas2 "+ source.height,""
+              source.top + source.height,
               source.width,
               source.height,
             )
