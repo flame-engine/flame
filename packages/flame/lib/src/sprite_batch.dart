@@ -171,9 +171,13 @@ class SpriteBatch {
     RSTransform? defaultTransform,
     Images? images,
     bool useAtlas = true,
+    bool needsFlips = false,
   }) async {
+    final _images = images ?? Flame.images;
     return SpriteBatch(
-      await _atlasFromCache(images, path),
+      needsFlips
+          ? await _atlasFromCache(_images, path)
+          : await _images.load(path),
       defaultColor: defaultColor,
       defaultTransform: defaultTransform ?? RSTransform(1, 0, 0, 0),
       defaultBlendMode: defaultBlendMode,
@@ -183,15 +187,14 @@ class SpriteBatch {
 
   static const String _generatedAtlasKeySuffix = '#withFlipAttached';
 
-  static Future<Image> _atlasFromCache(Images? images, String path) async {
-    final _images = images ?? Flame.images;
-    if (!_images.containsKey('$path$_generatedAtlasKeySuffix')) {
-      return _images.addFuture(
+  static Future<Image> _atlasFromCache(Images images, String path) async {
+    if (!images.containsKey('$path$_generatedAtlasKeySuffix')) {
+      return images.addFuture(
         '$path$_generatedAtlasKeySuffix',
-        _generateAtlas1(_images, path),
+        _generateAtlas1(images, path),
       );
     }
-    return _images.fromCacheFuture('$path$_generatedAtlasKeySuffix');
+    return images.fromCacheFuture('$path$_generatedAtlasKeySuffix');
   }
 
   static Future<Image> _generateAtlas1(Images images, String path) async {
