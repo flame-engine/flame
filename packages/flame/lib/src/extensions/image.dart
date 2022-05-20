@@ -2,8 +2,8 @@ import 'dart:async';
 import 'dart:typed_data';
 import 'dart:ui';
 
-import 'color.dart';
-import 'vector2.dart';
+import 'package:flame/src/extensions/color.dart';
+import 'package:flame/src/extensions/vector2.dart';
 
 export 'dart:ui' show Image;
 

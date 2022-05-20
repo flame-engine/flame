@@ -1,10 +1,9 @@
 import 'dart:ui';
 
+import 'package:examples/commons/ember.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
-
-import '../../commons/ember.dart';
 
 class BasicAnimationsExample extends FlameGame with TapDetector {
   static const description = '''

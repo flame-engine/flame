@@ -1,16 +1,15 @@
 import 'package:dashbook/dashbook.dart';
+import 'package:examples/commons/commons.dart';
+import 'package:examples/stories/parallax/advanced_parallax_example.dart';
+import 'package:examples/stories/parallax/animation_parallax_example.dart';
+import 'package:examples/stories/parallax/basic_parallax_example.dart';
+import 'package:examples/stories/parallax/component_parallax_example.dart';
+import 'package:examples/stories/parallax/no_fcs_parallax_example.dart';
+import 'package:examples/stories/parallax/sandbox_layer_parallax_example.dart';
+import 'package:examples/stories/parallax/small_parallax_example.dart';
 import 'package:flame/game.dart';
 import 'package:flame/parallax.dart';
 import 'package:flutter/painting.dart';
-
-import '../../commons/commons.dart';
-import 'advanced_parallax_example.dart';
-import 'animation_parallax_example.dart';
-import 'basic_parallax_example.dart';
-import 'component_parallax_example.dart';
-import 'no_fcs_parallax_example.dart';
-import 'sandbox_layer_parallax_example.dart';
-import 'small_parallax_example.dart';
 
 void addParallaxStories(Dashbook dashbook) {
   dashbook.storiesOf('Parallax')

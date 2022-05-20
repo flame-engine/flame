@@ -1,6 +1,5 @@
+import 'package:flame/src/particles/particle.dart';
 import 'package:flutter/animation.dart';
-
-import 'particle.dart';
 
 /// A [Particle] which applies certain [Curve] for
 /// easing or other purposes to its [progress] getter.

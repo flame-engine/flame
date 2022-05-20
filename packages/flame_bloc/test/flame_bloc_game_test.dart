@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use_from_same_package
+
 import 'package:flame/components.dart';
 import 'package:flame_bloc/flame_bloc.dart';
 import 'package:flame_test/flame_test.dart';
@@ -45,7 +47,7 @@ void main() {
     });
 
     final blocGame = FlameTester<MyBlocGame>(
-      () => MyBlocGame(),
+      MyBlocGame.new,
       pumpWidget: (gameWidget, tester) async {
         await tester.pumpWidget(
           BlocProvider<InventoryCubit>.value(

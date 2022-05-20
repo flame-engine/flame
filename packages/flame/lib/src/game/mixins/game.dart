@@ -1,15 +1,11 @@
-import 'dart:ui';
-
+import 'package:flame/cache.dart';
+import 'package:flame/components.dart';
+import 'package:flame/extensions.dart';
+import 'package:flame/src/game/game_render_box.dart';
+import 'package:flame/src/game/projector.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:meta/meta.dart';
-
-import '../../../components.dart';
-import '../../assets/assets_cache.dart';
-import '../../assets/images.dart';
-import '../../extensions/offset.dart';
-import '../game_render_box.dart';
-import '../projector.dart';
 
 /// This gives access to a low-level game API, to not build everything from a
 /// low level `FlameGame` should be used.
@@ -96,9 +92,6 @@ mixin Game {
   /// The default implementation does nothing; override to use the hook.
   /// Check [AppLifecycleState] for details about the events received.
   void lifecycleStateChange(AppLifecycleState state) {}
-
-  /// Use for calculating the FPS.
-  void onTimingsCallback(List<FrameTiming> timings) {}
 
   /// Method to perform late initialization of the [Game] class.
   ///

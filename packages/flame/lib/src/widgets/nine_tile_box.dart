@@ -1,12 +1,11 @@
 import 'dart:ui';
 
+import 'package:flame/cache.dart';
+import 'package:flame/flame.dart';
+import 'package:flame/src/nine_tile_box.dart' as non_widget;
+import 'package:flame/src/sprite.dart';
+import 'package:flame/src/widgets/base_future_builder.dart';
 import 'package:flutter/material.dart' hide Image;
-
-import '../../assets.dart';
-import '../../flame.dart';
-import '../nine_tile_box.dart' as non_widget;
-import '../sprite.dart';
-import 'base_future_builder.dart';
 
 export '../nine_tile_box.dart';
 export '../sprite.dart';
@@ -53,6 +52,8 @@ class NineTileBoxWidget extends StatelessWidget {
 
   final Widget? child;
 
+  final EdgeInsetsGeometry? padding;
+
   /// A builder function that is called if the loading fails
   final WidgetBuilder? errorBuilder;
 
@@ -66,6 +67,7 @@ class NineTileBoxWidget extends StatelessWidget {
     this.width,
     this.height,
     this.child,
+    this.padding,
     this.errorBuilder,
     this.loadingBuilder,
     Key? key,
@@ -80,6 +82,7 @@ class NineTileBoxWidget extends StatelessWidget {
     this.width,
     this.height,
     this.child,
+    this.padding,
     this.errorBuilder,
     this.loadingBuilder,
     Key? key,
@@ -98,6 +101,7 @@ class NineTileBoxWidget extends StatelessWidget {
           width: width,
           height: height,
           child: child,
+          padding: padding,
         );
       },
       errorBuilder: errorBuilder,

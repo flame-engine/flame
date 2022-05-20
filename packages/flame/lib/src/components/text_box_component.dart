@@ -2,11 +2,12 @@ import 'dart:async';
 import 'dart:math' as math;
 import 'dart:ui';
 
+import 'package:flame/components.dart';
+import 'package:flame/src/extensions/picture_extension.dart';
+import 'package:flame/src/palette.dart';
+import 'package:flame/src/text/text_renderer.dart';
 import 'package:flutter/widgets.dart' hide Image;
 import 'package:meta/meta.dart';
-
-import '../../components.dart';
-import '../palette.dart';
 
 /// A set of configurations for the [TextBoxComponent] itself, as opposed to
 /// the [TextRenderer], which contains the configuration for how to render the
@@ -214,7 +215,7 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
     final c = Canvas(recorder, size.toRect());
     c.scale(pixelRatio);
     _fullRender(c);
-    return recorder.endRecording().toImage(
+    return recorder.endRecording().toImageSafe(
           (width * pixelRatio).ceil(),
           (height * pixelRatio).ceil(),
         );
@@ -244,7 +245,13 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
 
   Future<void> redraw() async {
     final newSize = _recomputeSize();
-    cache?.dispose();
+    final cachedImage = cache;
+    if (cachedImage != null) {
+      // Do not dispose of the cached image immediately, since it may have been
+      // sent into the rendering pipeline where it is still pending to be used.
+      // See issue #1618 for details.
+      Future.delayed(const Duration(milliseconds: 100), cachedImage.dispose);
+    }
     cache = await _fullRenderAsImage(newSize);
     size = newSize;
   }

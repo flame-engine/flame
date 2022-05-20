@@ -1,7 +1,7 @@
 import 'dart:ui';
 
-import '../../../components.dart';
-import '../../palette.dart';
+import 'package:flame/components.dart';
+import 'package:flame/src/palette.dart';
 
 /// Adds a collection of paints to a component
 ///

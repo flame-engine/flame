@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.8" tiledversion="1.8.4" orientation="orthogonal" renderorder="right-down" width="4" height="2" tilewidth="16" tileheight="16" infinite="0" nextlayerid="2" nextobjectid="1">
+ <tileset firstgid="1" name="4_color_sprite" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+  <image source="4_color_sprite.png" width="16" height="16"/>
+ </tileset>
+ <layer id="1" name="Tile Layer 1" width="4" height="2">
+  <data encoding="csv">
+2684354561,3221225473,1073741825,536870913,
+1,1610612737,3758096385,2147483649
+</data>
+ </layer>
+</map>

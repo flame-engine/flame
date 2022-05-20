@@ -1,26 +1,7 @@
 import 'package:flame/components.dart';
+import 'package:flame/text.dart';
 import 'package:flutter/material.dart';
 import 'package:test/test.dart';
-
-class _CustomTextRenderer extends TextRenderer {
-  @override
-  double measureTextHeight(String text) {
-    return 0;
-  }
-
-  @override
-  double measureTextWidth(String text) {
-    return 0;
-  }
-
-  @override
-  void render(
-    Canvas canvas,
-    String text,
-    Vector2 position, {
-    Anchor anchor = Anchor.topLeft,
-  }) {}
-}
 
 void main() {
   group('TextRenderer', () {
@@ -44,19 +25,22 @@ void main() {
 
     test('custom renderer', () {
       TextRenderer.defaultRenderersRegistry[_CustomTextRenderer] =
-          () => _CustomTextRenderer();
+          _CustomTextRenderer.new;
       final tc = TextComponent<_CustomTextRenderer>(text: 'foo');
       expect(tc.textRenderer, isA<_CustomTextRenderer>());
     });
   });
+}
 
-  group('TextPaint', () {
-    test('copyWith returns a new instance with the new values', () {
-      const style = TextStyle(fontSize: 12, fontFamily: 'Times');
-      final tp = TextPaint(style: style)
-          .copyWith((t) => t.copyWith(fontFamily: 'Helvetica'));
-      expect(tp.style.fontSize, 12);
-      expect(tp.style.fontFamily, 'Helvetica');
-    });
-  });
+class _CustomTextRenderer extends TextRenderer {
+  @override
+  Vector2 measureText(String text) => Vector2.zero();
+
+  @override
+  void render(
+    Canvas canvas,
+    String text,
+    Vector2 position, {
+    Anchor anchor = Anchor.topLeft,
+  }) {}
 }

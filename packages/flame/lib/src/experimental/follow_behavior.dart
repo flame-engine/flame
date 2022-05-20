@@ -1,8 +1,8 @@
-import '../components/component.dart';
-import '../components/position_component.dart';
-import '../effects/provider_interfaces.dart';
-import 'viewfinder.dart';
-import 'viewport.dart';
+import 'package:flame/src/components/component.dart';
+import 'package:flame/src/components/position_component.dart';
+import 'package:flame/src/effects/provider_interfaces.dart';
+import 'package:flame/src/experimental/viewfinder.dart';
+import 'package:flame/src/experimental/viewport.dart';
 
 /// This behavior will make the [owner] follow the [target].
 ///

@@ -25,7 +25,7 @@ class _DraggableComponent extends PositionComponent with Draggable {
 }
 
 void main() {
-  final withDraggables = FlameTester(() => _GameHasDraggables());
+  final withDraggables = FlameTester(_GameHasDraggables.new);
 
   group('Draggables', () {
     withDraggables.test(

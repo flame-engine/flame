@@ -3,44 +3,62 @@ import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flame_bloc/flame_bloc.dart';
 
-import './components/enemy.dart';
-import './components/enemy_creator.dart';
-import './components/player.dart';
-import '../game_stats/bloc/game_stats_bloc.dart';
+import 'package:flame_bloc_example/src/game/components/enemy.dart';
+import 'package:flame_bloc_example/src/game/components/enemy_creator.dart';
+import 'package:flame_bloc_example/src/game/components/player.dart';
+import 'package:flame_bloc_example/src/game_stats/bloc/game_stats_bloc.dart';
+import 'package:flame_bloc_example/src/inventory/bloc/inventory_bloc.dart';
 
-class GameStatsController extends Component
-    with
-        HasGameRef<SpaceShooterGame>,
-        BlocComponent<GameStatsBloc, GameStatsState> {
+class GameStatsController extends Component with HasGameRef<SpaceShooterGame> {
   @override
-  bool listenWhen(GameStatsState? previousState, GameStatsState newState) {
-    return previousState?.status != newState.status &&
-        newState.status == GameStatus.initial;
-  }
-
-  @override
-  void onNewState(GameStatsState state) {
-    gameRef.children.removeWhere((element) => element is EnemyComponent);
+  Future<void>? onLoad() async {
+    add(
+      FlameBlocListener<GameStatsBloc, GameStatsState>(
+        listenWhen: (previousState, newState) {
+          return previousState.status != newState.status &&
+              newState.status == GameStatus.initial;
+        },
+        onNewState: (state) {
+          gameRef.children.removeWhere((element) => element is EnemyComponent);
+        },
+      ),
+    );
   }
 }
 
 class SpaceShooterGame extends FlameGame
-    with
-        FlameBloc,
-        PanDetector,
-        HasCollisionDetection,
-        HasKeyboardHandlerComponents {
+    with PanDetector, HasCollisionDetection, HasKeyboardHandlerComponents {
   late PlayerComponent player;
+
+  final GameStatsBloc statsBloc;
+  final InventoryBloc inventoryBloc;
+
+  SpaceShooterGame({
+    required this.statsBloc,
+    required this.inventoryBloc,
+  });
 
   @override
   Future<void> onLoad() async {
-    await super.onLoad();
-
-    add(player = PlayerComponent());
-    add(PlayerController());
+    await add(
+      FlameMultiBlocProvider(
+        providers: [
+          FlameBlocProvider<InventoryBloc, InventoryState>.value(
+            value: inventoryBloc,
+          ),
+          FlameBlocProvider<GameStatsBloc, GameStatsState>.value(
+            value: statsBloc,
+          ),
+        ],
+        children: [
+          player = PlayerComponent(),
+          PlayerController(),
+          GameStatsController(),
+        ],
+      ),
+    );
 
     add(EnemyCreator());
-    add(GameStatsController());
   }
 
   @override
@@ -64,6 +82,6 @@ class SpaceShooterGame extends FlameGame
   }
 
   void increaseScore() {
-    read<GameStatsBloc>().add(const ScoreEventAdded(100));
+    statsBloc.add(const ScoreEventAdded(100));
   }
 }
