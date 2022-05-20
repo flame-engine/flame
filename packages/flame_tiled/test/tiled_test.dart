@@ -59,7 +59,7 @@ void main() {
       overlapMap.render(canvas);
       final picture = canvasRecorder.endRecording();
 
-      final image = await picture.toImage(32, 16);
+      final image = await picture.toImageSafe(32, 16);
       final bytes = await image.toByteData();
       canvasPixelData = bytes!.buffer.asUint8List();
     });
@@ -144,7 +144,7 @@ void main() {
       overlapMap.render(canvas);
       final picture = canvasRecorder.endRecording();
 
-      final image = await picture.toImage(64, 48);
+      final image = await picture.toImageSafe(64, 48);
       final bytes = await image.toByteData();
       canvasPixelData = bytes!.buffer.asUint8List();
     });

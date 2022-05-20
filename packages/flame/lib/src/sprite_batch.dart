@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:flame/game.dart';
 import 'package:flame/src/cache/images.dart';
 import 'package:flame/src/extensions/image.dart';
+import 'package:flame/src/extensions/picture_extension.dart';
 import 'package:flame/src/flame.dart';
 
 extension SpriteBatchExtension on Game {
@@ -191,7 +192,7 @@ class SpriteBatch {
     canvas.drawImage(image, Offset(-image.width * 2, 0), _emptyPaint);
 
     final picture = recorder.endRecording();
-    final atlas = picture.toImage(image.width * 2, image.height);
+    final atlas = picture.toImageSafe(image.width * 2, image.height);
     return atlas;
   }
 
