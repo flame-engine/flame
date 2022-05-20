@@ -188,13 +188,27 @@ class SpriteBatch {
     if (!_images.containsKey('$path$_generatedAtlasKeySuffix')) {
       return _images.addFuture(
         '$path$_generatedAtlasKeySuffix',
-        _generateAtlas(_images, path),
+        _generateAtlas1(_images, path),
       );
     }
     return _images.fromCacheFuture('$path$_generatedAtlasKeySuffix');
   }
 
-  static Future<Image> _generateAtlas(Images images, String path) async {
+  static Future<Image> _generateAtlas1(Images images, String path) async {
+    final image = await images.load(path);
+    final recorder = PictureRecorder();
+    final canvas = Canvas(recorder);
+    final _emptyPaint = Paint();
+    canvas.drawImage(image, Offset.zero, _emptyPaint);
+    canvas.scale(-1, 1);
+    canvas.drawImage(image, Offset(-image.width * 2, 0), _emptyPaint);
+
+    final picture = recorder.endRecording();
+    return picture.toImage(image.width * 2, image.height);
+  }
+
+  ///See note in addTransform if using _generateAtlas2
+  static Future<Image> _generateAtlas2(Images images, String path) async {
     final image = await images.load(path);
     final imagePixelData = await image.pixelsInUint8();
     final atlasPixelData = <int>[];
@@ -250,7 +264,8 @@ class SpriteBatch {
       flip
           ? Rect.fromLTWH(
               atlas.width - source.right,
-              source.top + source.height,
+              source
+                  .top, // NOTE add the following if using _generateAtlas2 "+ source.height,""
               source.width,
               source.height,
             )
