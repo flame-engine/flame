@@ -173,7 +173,7 @@ class SpriteBatch {
     bool useAtlas = true,
   }) async {
     return SpriteBatch(
-      await _generateAtlas(images, path),
+      await _atlasFromCache(images, path),
       defaultColor: defaultColor,
       defaultTransform: defaultTransform ?? RSTransform(1, 0, 0, 0),
       defaultBlendMode: defaultBlendMode,
@@ -183,12 +183,19 @@ class SpriteBatch {
 
   static const String _generatedAtlasKeySuffix = '#withFlipAttached';
 
-  static Future<Image> _generateAtlas(Images? images, String path) async {
+  static Future<Image> _atlasFromCache(Images? images, String path) async {
     final _images = images ?? Flame.images;
-    if (_images.containsKey('$path$_generatedAtlasKeySuffix')) {
-      return _images.fromCache('$path$_generatedAtlasKeySuffix');
+    if (!_images.containsKey('$path$_generatedAtlasKeySuffix')) {
+      return _images.addFuture(
+        '$path$_generatedAtlasKeySuffix',
+        _generateAtlas(_images, path),
+      );
     }
-    final image = await _images.load(path);
+    return _images.fromCacheFuture('$path$_generatedAtlasKeySuffix');
+  }
+
+  static Future<Image> _generateAtlas(Images images, String path) async {
+    final image = await images.load(path);
     final imagePixelData = await image.pixelsInUint8();
     final atlasPixelData = <int>[];
     final imageBytesWidth = image.width * 4;
@@ -202,13 +209,11 @@ class SpriteBatch {
         );
       }
     }
-    final atlas = await ImageExtension.fromPixels(
+    return ImageExtension.fromPixels(
       Uint8List.fromList(atlasPixelData),
       image.width,
       image.height * 2,
     );
-    _images.add('$path$_generatedAtlasKeySuffix', atlas);
-    return atlas;
   }
 
   /// Add a new batch item using a RSTransform.

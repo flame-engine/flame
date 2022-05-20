@@ -46,6 +46,14 @@ class Images {
     _assets[name] = _ImageAsset.fromImage(image);
   }
 
+  /// Adds the [image] into the cache under the key [name] asyncronously.
+  ///
+  /// The cache will assume the ownership of the [image], and will properly
+  /// dispose of it at the end.
+  Future<Image> addFuture(String name, Future<Image> image) {
+    return (_assets[name] ??= _ImageAsset.future(image)).retrieveAsync();
+  }
+
   /// Removes the image [name] from the cache.
   ///
   /// No error is raised if the image [name] is not present in the cache.
@@ -87,6 +95,23 @@ class Images {
       'await the future from load() before using this method',
     );
     return asset!.image!;
+  }
+
+  /// Returns the image [name] from the cache asyncronously.
+  ///
+  /// The image returned can be used as long as it remains in the cache, but
+  /// doesn't need to be explicitly disposed.
+  ///
+  /// If you want to retain the image even after you remove it from the cache,
+  /// then you can call `Image.clone()` on it.
+  Future<Image> fromCacheFuture(String name) {
+    final asset = _assets[name];
+    assert(
+      asset != null,
+      'Tried to access an image "$name" that does not exist in the cache. Make '
+      'sure to load() an image before accessing it',
+    );
+    return asset!.retrieveAsync();
   }
 
   /// Loads the specified image with [fileName] into the cache.
