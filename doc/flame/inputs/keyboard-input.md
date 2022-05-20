@@ -92,10 +92,11 @@ The returned value should be `true` to allow the continuous propagation of the k
 components. To not allow any other component to receive the event, return `false`.
 
 Flame also provides a default implementation called `KeyboardListenerComponent` which can be used to handle
-keyboard events which can be composed with a `FlameGame` or any other `Component`:
+keyboard events. Like any other component, it can be added as a child to a `FlameGame` or another
+`Component`:
 
-For example, imagining a `PositionComponent` which has methods to move on the X and Y axis,
-the following code could be used to bind those methods to key events:
+For example, imagine a `PositionComponent` which has methods to move on the X and Y axis,
+then the following code could be used to bind those methods to key events:
 
 ```dart
 add(
