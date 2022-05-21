@@ -141,7 +141,7 @@ class MyGame extends FlameGame {
         children: [
           HighScoreDisplay(),
           HitPointsDisplay(),
-          FpsCounter(),
+          FpsComponent(),
         ],
       ),
     );
@@ -158,6 +158,25 @@ available eventually: after they are loaded and mounted. We can only assure
 that they will appear in the children list in the same order as they were
 scheduled for addition.
 
+### Ensuring a component has a given parent
+
+When a component requires to be added to a specific parent type the
+`ParentIsA` mixin can be used to enforce a strongly typed parent.
+
+Example:
+
+```dart
+class MyComponent extends Component with ParentIsA<MyParentComponent> {
+  @override
+  Future<void> onLoad() async {
+    // parent is of type MyParentComponent
+    print(parent.myValue);
+  }
+}
+```
+
+If you try to add `MyComponent` to a parent that is not `MyParentComponent`,
+an assertion error will be thrown.
 
 ### Querying child components
 
@@ -186,6 +205,33 @@ the registered component type can be seen below.
 @override
 void update(double dt) {
   final allPositionComponents = children.query<PositionComponent>();
+}
+```
+
+
+### Querying components at a specific point on the screen
+
+The method `componentsAtPoint()` allows you to check which components were rendered at some point
+on the screen. The returned value is an iterable of components, but you can also obtain the
+coordinates of the initial point in each component's local coordinate space by providing a writable
+`List<Vector2>` as a second parameter.
+
+The iterable retrieves the components in the front-to-back order, i.e. first the components in the
+front, followed by the components in the back.
+
+This method can only return components that implement the method `containsLocalPoint()`. The
+`PositionComponent` (which is the base class for many components in Flame) provides such an
+implementation. However, if you're defining a custom class that derives from `Component`, you'd have
+to implement the `containsLocalPoint()` method yourself.
+
+Here is an example of how `componentsAtPoint()` can be used:
+```dart
+void onDragUpdate(DragUpdateInfo info) {
+  game.componentsAtPoint(info.widget).forEach((component) {
+    if (component is DropTarget) {
+      component.highlight();
+    }
+  });
 }
 ```
 
@@ -279,7 +325,6 @@ Future<void> onLoad() async {
 Remember that most components that are rendered on the screen are `PositionComponent`s, so
 this pattern can be used in for example [](#spritecomponent) and [](#spriteanimationcomponent) too.
 
-
 ### Render PositionComponent
 
 When implementing the `render` method for a component that extends `PositionComponent` remember to
@@ -363,6 +408,20 @@ this.player = SpriteAnimationComponent.fromFrameData(
 
 If you are not using `FlameGame`, don't forget this component needs to be updated, because the
 animation object needs to be ticked to move the frames.
+
+To listen when the animation is done (when it reaches the last frame and is not looping) you can
+use `animation.completed`.
+
+Example:
+
+```dart
+await animation.completed;
+doSomething();
+
+// or alternatively
+
+animation.completed.whenComplete(doSomething);
+```
 
 
 ## SpriteAnimationGroup

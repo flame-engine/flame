@@ -1,5 +1,5 @@
-import '../../../collisions.dart';
-import '../../../components.dart';
+import 'package:flame/collisions.dart';
+import 'package:flame/components.dart';
 
 /// A [Hitbox] in the shape of a rectangle (a simplified polygon).
 class RectangleHitbox extends RectangleComponent with ShapeHitbox {
@@ -38,6 +38,7 @@ class RectangleHitbox extends RectangleComponent with ShapeHitbox {
           parentSize: parentSize,
           angle: angle,
           anchor: anchor,
+          shrinkToBounds: true,
         );
 
   @override

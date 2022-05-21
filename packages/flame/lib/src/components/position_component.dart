@@ -1,13 +1,14 @@
 import 'dart:math' as math;
 import 'dart:ui' hide Offset;
 
-import '../anchor.dart';
-import '../effects/provider_interfaces.dart';
-import '../extensions/offset.dart';
-import '../extensions/vector2.dart';
-import '../game/notifying_vector2.dart';
-import '../game/transform2d.dart';
-import 'component.dart';
+import 'package:flame/src/anchor.dart';
+import 'package:flame/src/components/component.dart';
+import 'package:flame/src/components/mixins/coordinate_transform.dart';
+import 'package:flame/src/effects/provider_interfaces.dart';
+import 'package:flame/src/extensions/offset.dart';
+import 'package:flame/src/extensions/vector2.dart';
+import 'package:flame/src/game/notifying_vector2.dart';
+import 'package:flame/src/game/transform2d.dart';
 
 /// A [Component] implementation that represents an object that can be
 /// freely moved around the screen, rotated, and scaled.
@@ -59,7 +60,12 @@ import 'component.dart';
 /// do not specify the size of a PositionComponent, then it will be
 /// equal to zero and the component won't be able to respond to taps.
 class PositionComponent extends Component
-    implements AngleProvider, PositionProvider, ScaleProvider {
+    implements
+        AnchorProvider,
+        AngleProvider,
+        PositionProvider,
+        ScaleProvider,
+        CoordinateTransform {
   PositionComponent({
     Vector2? position,
     Vector2? size,
@@ -138,7 +144,9 @@ class PositionComponent extends Component
   /// which means that visually the component will shift on the screen
   /// so that its new anchor will be at the same screen coordinates as
   /// the old anchor was.
+  @override
   Anchor get anchor => _anchor;
+  @override
   set anchor(Anchor anchor) {
     _anchor = anchor;
     _onModifiedSizeOrAnchor();
@@ -212,13 +220,23 @@ class PositionComponent extends Component
   /// component. The top and the left borders of the component are inclusive,
   /// while the bottom and the right borders are exclusive.
   @override
-  bool containsPoint(Vector2 point) {
-    final local = absoluteToLocal(point);
-    return (local.x >= 0) &&
-        (local.y >= 0) &&
-        (local.x < _size.x) &&
-        (local.y < _size.y);
+  bool containsLocalPoint(Vector2 point) {
+    return (point.x >= 0) &&
+        (point.y >= 0) &&
+        (point.x < _size.x) &&
+        (point.y < _size.y);
   }
+
+  @override
+  bool containsPoint(Vector2 point) {
+    return containsLocalPoint(absoluteToLocal(point));
+  }
+
+  @override
+  Vector2 parentToLocal(Vector2 point) => transform.globalToLocal(point);
+
+  @override
+  Vector2 localToParent(Vector2 point) => transform.localToGlobal(point);
 
   /// Convert local coordinates of a point [point] inside the component
   /// into the parent's coordinate space.

@@ -1,9 +1,9 @@
 import 'dart:ui';
 
+import 'package:flame/components.dart';
+import 'package:flame/src/effects/provider_interfaces.dart';
+import 'package:flame/src/extensions/image.dart';
 import 'package:meta/meta.dart';
-
-import '../../components.dart';
-import '../extensions/image.dart';
 
 export '../sprite.dart';
 
@@ -12,7 +12,9 @@ export '../sprite.dart';
 /// angle.
 ///
 /// This a commonly used subclass of [Component].
-class SpriteComponent extends PositionComponent with HasPaint {
+class SpriteComponent extends PositionComponent
+    with HasPaint
+    implements SizeProvider {
   /// The [sprite] to be rendered by this component.
   Sprite? sprite;
 

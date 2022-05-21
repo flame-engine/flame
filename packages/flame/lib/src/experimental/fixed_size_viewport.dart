@@ -1,9 +1,8 @@
 import 'dart:ui';
 
+import 'package:flame/src/components/component.dart';
+import 'package:flame/src/experimental/viewport.dart';
 import 'package:vector_math/vector_math_64.dart';
-
-import '../components/component.dart';
-import 'viewport.dart';
 
 /// A rectangular viewport with fixed dimensions.
 ///
@@ -25,9 +24,13 @@ class FixedSizeViewport extends Viewport {
   void clip(Canvas canvas) => canvas.clipRect(_clipRect, doAntiAlias: false);
 
   @override
+  bool containsLocalPoint(Vector2 point) {
+    final x = point.x, y = point.y;
+    return x >= 0 && x <= size.x && y >= 0 && y <= size.y;
+  }
+
+  @override
   void onViewportResize() {
-    final x = size.x / 2;
-    final y = size.y / 2;
-    _clipRect = Rect.fromLTRB(-x, -y, x, y);
+    _clipRect = Rect.fromLTWH(0, 0, size.x, size.y);
   }
 }

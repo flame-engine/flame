@@ -1,13 +1,12 @@
 import 'dart:ui';
 
+import 'package:flame/src/components/component.dart';
+import 'package:flame/src/extensions/vector2.dart';
+import 'package:flame/src/game/camera/camera.dart';
+import 'package:flame/src/game/camera/camera_wrapper.dart';
+import 'package:flame/src/game/mixins/game.dart';
+import 'package:flame/src/game/projector.dart';
 import 'package:meta/meta.dart';
-
-import '../components/component.dart';
-import '../extensions/vector2.dart';
-import 'camera/camera.dart';
-import 'camera/camera_wrapper.dart';
-import 'mixins/game.dart';
-import 'projector.dart';
 
 /// This is a more complete and opinionated implementation of [Game].
 ///
@@ -131,8 +130,8 @@ class FlameGame extends Component with Game {
 
   /// Whether a point is within the boundaries of the visible part of the game.
   @override
-  bool containsPoint(Vector2 p) {
-    return p.x > 0 && p.y > 0 && p.x < size.x && p.y < size.y;
+  bool containsLocalPoint(Vector2 p) {
+    return p.x >= 0 && p.y >= 0 && p.x < size.x && p.y < size.y;
   }
 
   /// Returns the current time in seconds with microseconds precision.

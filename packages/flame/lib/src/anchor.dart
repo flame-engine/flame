@@ -1,6 +1,5 @@
+import 'package:flame/src/extensions/vector2.dart';
 import 'package:meta/meta.dart';
-
-import 'extensions/vector2.dart';
 
 /// Represents a relative position inside some 2D object with a rectangular
 /// size or bounding box.
@@ -113,7 +112,7 @@ class Anchor {
 
   @override
   bool operator ==(Object other) {
-    return other is Anchor && hashCode == other.hashCode;
+    return other is Anchor && x == other.x && y == other.y;
   }
 
   @override

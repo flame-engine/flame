@@ -30,7 +30,7 @@ class _NonRepeatingTimerComponent extends TimerComponent {
 
 void main() {
   group('TimerComponent', () {
-    final tester = FlameTester(() => FlameGame());
+    final tester = FlameTester(FlameGame.new);
 
     tester.test('runs the tick method', (game) {
       final timer = _MyTimerComponent();

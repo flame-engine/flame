@@ -1,13 +1,12 @@
 import 'dart:math';
 
+import 'package:flame/src/anchor.dart';
+import 'package:flame/src/components/component.dart';
+import 'package:flame/src/effects/provider_interfaces.dart';
+import 'package:flame/src/experimental/camera_component.dart';
+import 'package:flame/src/game/transform2d.dart';
 import 'package:meta/meta.dart';
 import 'package:vector_math/vector_math_64.dart';
-
-import '../anchor.dart';
-import '../components/component.dart';
-import '../effects/provider_interfaces.dart';
-import '../game/transform2d.dart';
-import 'camera_component.dart';
 
 /// [Viewfinder] is a part of a [CameraComponent] system that controls which
 /// part of the game world is currently visible through a viewport.
@@ -16,12 +15,12 @@ import 'camera_component.dart';
 /// "cross-hairs" of the viewport ([position]), the [zoom] level, and the
 /// [angle] of rotation of the camera.
 class Viewfinder extends Component
-    implements AngleProvider, PositionProvider, ScaleProvider {
+    implements AnchorProvider, AngleProvider, PositionProvider, ScaleProvider {
   /// Internal transform matrix used by the viewfinder.
   final Transform2D _transform = Transform2D();
 
   @internal
-  Matrix4 get transformMatrix => _transform.transformMatrix;
+  Transform2D get transform => _transform;
 
   /// The game coordinates of a point that is to be positioned at the center
   /// of the viewport.
@@ -62,8 +61,10 @@ class Viewfinder extends Component
   /// The "logical center" of the camera means the point within the viewport
   /// where the viewfinder's focus is located at. It is at this point within
   /// the viewport that the world's point [position] will be displayed.
+  @override
   Anchor get anchor => _anchor;
   Anchor _anchor = Anchor.center;
+  @override
   set anchor(Anchor value) {
     _anchor = value;
     onViewportResize();
@@ -124,8 +125,8 @@ class Viewfinder extends Component
   void onViewportResize() {
     if (parent != null) {
       final viewportSize = camera.viewport.size;
-      _transform.position.x = viewportSize.x * (_anchor.x - 0.5);
-      _transform.position.y = viewportSize.y * (_anchor.y - 0.5);
+      _transform.position.x = viewportSize.x * _anchor.x;
+      _transform.position.y = viewportSize.y * _anchor.y;
     }
   }
 

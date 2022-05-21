@@ -1,8 +1,8 @@
 import 'dart:ui';
-import 'package:vector_math/vector_math_64.dart';
 
-import '../components/component.dart';
-import 'viewport.dart';
+import 'package:flame/src/components/component.dart';
+import 'package:flame/src/experimental/viewport.dart';
+import 'package:vector_math/vector_math_64.dart';
 
 /// A fixed-size viewport in the shape of a circle.
 class CircularViewport extends Viewport {
@@ -12,14 +12,19 @@ class CircularViewport extends Viewport {
   }
 
   Path _clipPath = Path();
+  double _radiusSquared = 0;
 
   @override
   void clip(Canvas canvas) => canvas.clipPath(_clipPath, doAntiAlias: false);
 
   @override
+  bool containsLocalPoint(Vector2 point) => point.length2 <= _radiusSquared;
+
+  @override
   void onViewportResize() {
+    assert(size.x == size.y, 'Viewport shape is not circular: $size');
     final x = size.x / 2;
-    final y = size.y / 2;
-    _clipPath = Path()..addOval(Rect.fromLTRB(-x, -y, x, y));
+    _clipPath = Path()..addOval(Rect.fromLTRB(-x, -x, x, x));
+    _radiusSquared = x * x;
   }
 }

@@ -1,10 +1,9 @@
 import 'dart:ui';
 
+import 'package:flame/src/effects/controllers/effect_controller.dart';
+import 'package:flame/src/effects/move_effect.dart';
+import 'package:flame/src/effects/provider_interfaces.dart';
 import 'package:vector_math/vector_math_64.dart';
-
-import 'controllers/effect_controller.dart';
-import 'measurable_effect.dart';
-import 'transform2d_effect.dart';
 
 /// This effect will move the target along the specified path, which may
 /// contain curved segments, but must be simply-connected.
@@ -21,17 +20,19 @@ import 'transform2d_effect.dart';
 /// The `oriented` flag controls the direction of the target as it follows the
 /// path. If this flag is false (default), the target keeps its original
 /// orientation. If the flag is true, the target is automatically rotated as it
-/// follows the path so that it is always oriented tangent to the path.
-class MoveAlongPathEffect extends Transform2DEffect
-    implements MeasurableEffect {
+/// follows the path so that it is always oriented tangent to the path. When
+/// using this flag, make sure that the effect is applied to a target that
+/// actually supports rotations.
+class MoveAlongPathEffect extends MoveEffect {
   MoveAlongPathEffect(
     Path path,
     EffectController controller, {
     bool absolute = false,
     bool oriented = false,
+    PositionProvider? target,
   })  : _isAbsolute = absolute,
         _followDirection = oriented,
-        super(controller) {
+        super(controller, target) {
     final metrics = path.computeMetrics().toList();
     if (metrics.length != 1) {
       throw ArgumentError(
@@ -72,12 +73,19 @@ class MoveAlongPathEffect extends Transform2DEffect
   void onStart() {
     _lastOffset = Vector2.zero();
     _lastAngle = 0;
+    if (_followDirection) {
+      assert(
+        target is AngleProvider,
+        'An `oriented` MoveAlongPathEffect cannot be applied to a target that '
+        'does not support rotation',
+      );
+    }
     if (_isAbsolute) {
       final start = _pathMetric.getTangentForOffset(0)!;
       target.position.x = _lastOffset.x = start.position.dx;
       target.position.y = _lastOffset.y = start.position.dy;
       if (_followDirection) {
-        target.angle = _lastAngle = -start.angle;
+        (target as AngleProvider).angle = _lastAngle = -start.angle;
       }
     }
   }
@@ -92,7 +100,7 @@ class MoveAlongPathEffect extends Transform2DEffect
     _lastOffset.x = offset.dx;
     _lastOffset.y = offset.dy;
     if (_followDirection) {
-      target.angle += -tangent.angle - _lastAngle;
+      (target as AngleProvider).angle += -tangent.angle - _lastAngle;
       _lastAngle = -tangent.angle;
     }
   }
