@@ -208,7 +208,7 @@ class SpriteBatch {
         Offset(-image.width.toDouble(), image.height.toDouble()), _emptyPaint);
 
     final picture = recorder.endRecording();
-    return picture.toImage(image.width, image.height * 2);
+    return picture.toImageSafe(image.width, image.height * 2);
   }
 
   static Future<Image> _generateAtlas2(Images images, String path) async {
