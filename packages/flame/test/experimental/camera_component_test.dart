@@ -67,7 +67,7 @@ void main() {
       expect(camera.viewfinder.children.length, 1);
     });
 
-    testWithFlameGame('setBound', (game) async {
+    testWithFlameGame('setBounds', (game) async {
       final world = World()..addToParent(game);
       final camera = CameraComponent(world: world)..addToParent(game);
       await game.ready();
@@ -105,6 +105,40 @@ void main() {
         camera.viewfinder.firstChild<BoundedPositionBehavior>(),
         isNull,
       );
+    });
+
+    testWithFlameGame('componentsAtPoint', (game) async {
+      final world = World();
+      final camera = CameraComponent(
+        world: world,
+        viewport: FixedSizeViewport(600, 400),
+      )
+        ..viewport.anchor = Anchor.center
+        ..viewport.position = Vector2(400, 300)
+        ..viewfinder.position = Vector2(100, 50);
+      final component = PositionComponent(
+        size: Vector2(300, 100),
+        position: Vector2(50, 30),
+      );
+      world.add(component);
+      game.addAll([world, camera]);
+      await game.ready();
+
+      final nested = <Vector2>[];
+      final it = game.componentsAtPoint(Vector2(400, 300), nested).iterator;
+      expect(it.moveNext(), true);
+      expect(it.current, component);
+      expect(nested, [Vector2(400, 300), Vector2(100, 50), Vector2(50, 20)]);
+      expect(it.moveNext(), true);
+      expect(it.current, world);
+      expect(nested, [Vector2(400, 300), Vector2(100, 50)]);
+      expect(it.moveNext(), true);
+      expect(it.current, camera.viewport);
+      expect(nested, [Vector2(400, 300), Vector2(300, 200)]);
+      expect(it.moveNext(), true);
+      expect(it.current, game);
+      expect(nested, [Vector2(400, 300)]);
+      expect(it.moveNext(), false);
     });
   });
 }

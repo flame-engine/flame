@@ -1,8 +1,7 @@
+import 'package:flame/src/game/game_loop.dart';
+import 'package:flame/src/game/mixins/game.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart' hide WidgetBuilder;
-
-import 'game_loop.dart';
-import 'mixins/game.dart';
 //ignore_for_file: unnecessary_non_null_assertion
 
 class GameRenderBox extends RenderBox with WidgetsBindingObserver {
@@ -10,10 +9,7 @@ class GameRenderBox extends RenderBox with WidgetsBindingObserver {
   Game game;
   GameLoop? gameLoop;
 
-  GameRenderBox(this.buildContext, this.game) {
-    //ignore: deprecated_member_use_from_same_package
-    WidgetsBinding.instance!.addTimingsCallback(game.onTimingsCallback);
-  }
+  GameRenderBox(this.buildContext, this.game);
 
   @override
   bool get isRepaintBoundary => true;
@@ -67,11 +63,11 @@ class GameRenderBox extends RenderBox with WidgetsBindingObserver {
   }
 
   void _bindLifecycleListener() {
-    WidgetsBinding.instance!.addObserver(this);
+    _ambiguate(WidgetsBinding.instance)!.addObserver(this);
   }
 
   void _unbindLifecycleListener() {
-    WidgetsBinding.instance!.removeObserver(this);
+    _ambiguate(WidgetsBinding.instance)!.removeObserver(this);
   }
 
   @override
@@ -79,3 +75,13 @@ class GameRenderBox extends RenderBox with WidgetsBindingObserver {
     game.lifecycleStateChange(state);
   }
 }
+
+/// This allows a value of type T or T?
+/// to be treated as a value of type T?.
+///
+/// We use this so that APIs that have become
+/// non-nullable can still be used with `!` and `?`
+/// to support older versions of the API as well.
+///
+/// See more: https://docs.flutter.dev/development/tools/sdk/release-notes/release-notes-3.0.0
+T? _ambiguate<T>(T? value) => value;

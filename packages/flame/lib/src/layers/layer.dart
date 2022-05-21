@@ -1,8 +1,7 @@
 import 'dart:ui';
 
+import 'package:flame/src/layers/processors.dart';
 import 'package:meta/meta.dart';
-
-import 'processors.dart';
 
 abstract class Layer {
   List<LayerProcessor> preProcessors = [];

@@ -1,10 +1,9 @@
 import 'dart:math';
 
+import 'package:examples/stories/bridge_libraries/forge2d/utils/balls.dart';
+import 'package:examples/stories/bridge_libraries/forge2d/utils/boundaries.dart';
 import 'package:flame/input.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
-
-import 'utils/balls.dart';
-import 'utils/boundaries.dart';
 
 class RevoluteJointExample extends Forge2DGame with TapDetector {
   static const String description = '''

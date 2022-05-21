@@ -2,10 +2,11 @@ import 'dart:collection';
 import 'dart:typed_data';
 import 'dart:ui';
 
-import '../game.dart';
-import 'cache/images.dart';
-import 'extensions/image.dart';
-import 'flame.dart';
+import 'package:flame/game.dart';
+import 'package:flame/src/cache/images.dart';
+import 'package:flame/src/extensions/image.dart';
+import 'package:flame/src/extensions/picture_extension.dart';
+import 'package:flame/src/flame.dart';
 
 extension SpriteBatchExtension on Game {
   /// Utility method to load and cache the image for a [SpriteBatch] based on

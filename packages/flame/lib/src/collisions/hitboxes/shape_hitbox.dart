@@ -1,9 +1,9 @@
+import 'package:flame/collisions.dart';
+import 'package:flame/components.dart';
+import 'package:flame/game.dart';
+import 'package:flame/src/geometry/shape_intersections.dart'
+    as intersection_system;
 import 'package:meta/meta.dart';
-
-import '../../../collisions.dart';
-import '../../../components.dart';
-import '../../../game.dart';
-import '../../geometry/shape_intersections.dart' as intersection_system;
 
 /// A [ShapeHitbox] turns a [ShapeComponent] into a [Hitbox].
 /// It is currently used by [CircleHitbox], [RectangleHitbox] and

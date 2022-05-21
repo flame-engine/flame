@@ -1,8 +1,7 @@
+import 'package:flame/components.dart';
+import 'package:flame/src/game/mixins/has_draggables.dart';
+import 'package:flame/src/gestures/events.dart';
 import 'package:flutter/material.dart';
-
-import '../../../components.dart';
-import '../../game/mixins/has_draggables.dart';
-import '../../gestures/events.dart';
 
 mixin Draggable on Component {
   bool _isDragged = false;

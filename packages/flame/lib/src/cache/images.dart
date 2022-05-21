@@ -4,10 +4,9 @@ import 'dart:typed_data';
 import 'dart:ui';
 import 'dart:ui' as ui show decodeImageFromPixels;
 
+import 'package:flame/src/flame.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-
-import '../flame.dart';
 
 class Images {
   Images({String prefix = 'assets/images/'}) {

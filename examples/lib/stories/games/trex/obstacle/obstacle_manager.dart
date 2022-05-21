@@ -1,11 +1,10 @@
 import 'dart:collection';
 
+import 'package:examples/stories/games/trex/obstacle/obstacle.dart';
+import 'package:examples/stories/games/trex/obstacle/obstacle_type.dart';
+import 'package:examples/stories/games/trex/random_extension.dart';
+import 'package:examples/stories/games/trex/trex_game.dart';
 import 'package:flame/components.dart';
-
-import '../random_extension.dart';
-import '../trex_game.dart';
-import 'obstacle.dart';
-import 'obstacle_type.dart';
 
 class ObstacleManager extends Component with HasGameRef<TRexGame> {
   ObstacleManager();

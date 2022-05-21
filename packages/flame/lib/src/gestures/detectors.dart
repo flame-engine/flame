@@ -1,5 +1,5 @@
-import '../game/mixins/game.dart';
-import 'events.dart';
+import 'package:flame/src/game/mixins/game.dart';
+import 'package:flame/src/gestures/events.dart';
 
 mixin MultiTouchDragDetector on Game {
   void onDragStart(int pointerId, DragStartInfo info) {}

@@ -1,8 +1,7 @@
+import 'package:flame/components.dart';
 import 'package:meta/meta.dart';
 import 'package:ordered_set/comparing.dart';
 import 'package:ordered_set/queryable_ordered_set.dart';
-
-import '../../components.dart';
 
 /// This is a simple wrapper over [QueryableOrderedSet] to be used by
 /// [Component].

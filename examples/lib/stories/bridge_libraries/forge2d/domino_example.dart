@@ -1,10 +1,9 @@
 import 'dart:ui';
 
+import 'package:examples/stories/bridge_libraries/forge2d/sprite_body_example.dart';
+import 'package:examples/stories/bridge_libraries/forge2d/utils/boundaries.dart';
 import 'package:flame/input.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
-
-import 'sprite_body_example.dart';
-import 'utils/boundaries.dart';
 
 class DominoExample extends Forge2DGame with TapDetector {
   static const description = '''

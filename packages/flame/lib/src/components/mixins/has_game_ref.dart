@@ -1,7 +1,6 @@
+import 'package:flame/components.dart';
+import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
-
-import '../../../components.dart';
-import '../../../game.dart';
 
 mixin HasGameRef<T extends FlameGame> on Component {
   T? _gameRef;

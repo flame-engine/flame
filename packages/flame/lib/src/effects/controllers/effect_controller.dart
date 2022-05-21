@@ -1,16 +1,15 @@
+import 'package:flame/src/effects/controllers/curved_effect_controller.dart';
+import 'package:flame/src/effects/controllers/delayed_effect_controller.dart';
+import 'package:flame/src/effects/controllers/infinite_effect_controller.dart';
+import 'package:flame/src/effects/controllers/linear_effect_controller.dart';
+import 'package:flame/src/effects/controllers/pause_effect_controller.dart';
+import 'package:flame/src/effects/controllers/repeated_effect_controller.dart';
+import 'package:flame/src/effects/controllers/reverse_curved_effect_controller.dart';
+import 'package:flame/src/effects/controllers/reverse_linear_effect_controller.dart';
+import 'package:flame/src/effects/controllers/sequence_effect_controller.dart';
+import 'package:flame/src/effects/controllers/speed_effect_controller.dart';
+import 'package:flame/src/effects/effect.dart' show Effect;
 import 'package:flutter/animation.dart' show Curve, Curves;
-
-import '../effect.dart' show Effect;
-import 'curved_effect_controller.dart';
-import 'delayed_effect_controller.dart';
-import 'infinite_effect_controller.dart';
-import 'linear_effect_controller.dart';
-import 'pause_effect_controller.dart';
-import 'repeated_effect_controller.dart';
-import 'reverse_curved_effect_controller.dart';
-import 'reverse_linear_effect_controller.dart';
-import 'sequence_effect_controller.dart';
-import 'speed_effect_controller.dart';
 
 /// Base "controller" class to facilitate animation of effects.
 ///
