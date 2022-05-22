@@ -1,4 +1,6 @@
 
+import 'package:flame/src/text/line_metrics.dart';
+
 /// A span of text that has "inline" placement rules.
 ///
 /// An inline text can potentially span multiple lines, be adjacent to other
@@ -13,5 +15,5 @@ abstract class InlineTextElement {
 
   int get numLinesLaidOut;
 
-  void measureLine();
+  LineMetrics measureLine(int line);
 }
