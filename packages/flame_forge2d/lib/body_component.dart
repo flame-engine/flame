@@ -87,7 +87,18 @@ abstract class BodyComponent<T extends Forge2DGame> extends Component
     );
   }
 
-  void _renderFixture(Canvas canvas, Fixture fixture) {
+  /// Renders a [Fixture] in a [Canvas].
+  ///
+  /// Called for each fixture in [body] when [render]ing. Override this method
+  /// to customize how fixtures are rendered. For example, you can filter out
+  /// fixtures that you don't want to render.
+  ///
+  /// **NOTE**: If [renderBody] is false, no fixtures will be rendered. Hence,
+  /// [renderFixture] is not called when [render]ing.
+  void renderFixture(
+    Canvas canvas,
+    Fixture fixture,
+  ) {
     canvas.save();
     switch (fixture.type) {
       case ShapeType.chain:
@@ -105,20 +116,6 @@ abstract class BodyComponent<T extends Forge2DGame> extends Component
     }
     canvas.restore();
   }
-
-  /// Renders a [Fixture] in a [Canvas].
-  ///
-  /// Called for each fixture in [body] when [render]ing. Override this method
-  /// to customize how fixtures are rendered. For example, you can filter out
-  /// fixtures that you don't want to render.
-  ///
-  /// **NOTE**: If [renderBody] is false, no fixtures will be rendered. Hence,
-  /// [renderFixture] is not called when [render]ing.
-  void renderFixture(
-    Canvas canvas,
-    Fixture fixture,
-  ) =>
-      _renderFixture(canvas, fixture);
 
   void _renderChain(Canvas canvas, Fixture fixture) {
     final chainShape = fixture.shape as ChainShape;
