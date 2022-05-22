@@ -63,12 +63,8 @@ class HudButtonComponent extends HudMarginComponent with Tappable {
   @override
   @mustCallSuper
   bool onTapDown(TapDownInfo info) {
-    if (buttonDown != null) {
-      if (button != null) {
-        remove(button!);
-      }
-      add(buttonDown!);
-    }
+    button?.removeFromParent();
+    buttonDown?.changeParent(this);
     onPressed?.call();
     return false;
   }
@@ -84,12 +80,8 @@ class HudButtonComponent extends HudMarginComponent with Tappable {
   @override
   @mustCallSuper
   bool onTapCancel() {
-    if (buttonDown != null) {
-      remove(buttonDown!);
-      if (button != null) {
-        add(button!);
-      }
-    }
+    buttonDown?.removeFromParent();
+    button?.changeParent(this);
     return false;
   }
 }
