@@ -1,4 +1,5 @@
 import 'package:flame/components.dart';
+import 'package:flame/src/text/inline_text_element.dart';
 import 'package:flame/text.dart';
 import 'package:flutter/material.dart';
 import 'package:test/test.dart';
@@ -43,4 +44,7 @@ class _CustomTextRenderer extends TextRenderer {
     Vector2 position, {
     Anchor anchor = Anchor.topLeft,
   }) {}
+
+  @override
+  InlineTextElement forge(String text) => throw UnimplementedError();
 }

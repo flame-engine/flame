@@ -1,6 +1,9 @@
 import 'package:flame/src/anchor.dart';
 import 'package:flame/src/cache/memory_cache.dart';
 import 'package:flame/src/extensions/vector2.dart';
+import 'package:flame/src/text/inline_text_element.dart';
+import 'package:flame/src/text/line_metrics.dart';
+import 'package:flame/src/text/text_line.dart';
 import 'package:flame/src/text/text_renderer.dart';
 import 'package:flutter/rendering.dart';
 
@@ -80,5 +83,57 @@ class TextPaint extends TextRenderer {
     TextDirection? textDirection,
   }) {
     return TextPaint(style: transform(style), textDirection: textDirection);
+  }
+
+  @override
+  InlineTextElement forge(String text) {
+    return _TextPaintRun(toTextPainter(text));
+  }
+}
+
+class _TextPaintRun extends InlineTextElement implements TextLine {
+  _TextPaintRun(this._textPainter);
+
+  final TextPainter _textPainter;
+  double? _x0;
+  double? _y0;
+
+  @override
+  bool get isLaidOut => _x0 != null && _y0 != null;
+
+  @override
+  int get numLinesLaidOut => _x0 == null ? 0 : 1;
+
+  @override
+  void resetLayout() => _x0 = null;
+
+  @override
+  LayoutStatus layOutNextLine(double x0, double x1, double baseline) {
+    _x0 = x0;
+    _y0 = baseline -
+        _textPainter.computeDistanceToActualBaseline(TextBaseline.alphabetic);
+    return LayoutStatus.done;
+  }
+
+  @override
+  TextLine line(int line) => this;
+
+  @override
+  LineMetrics get metrics {
+    assert(isLaidOut);
+    return LineMetrics(
+      left: _x0!,
+      right: _x0! + _textPainter.width,
+      top: _y0!,
+      bottom: _y0! + _textPainter.height,
+      baseline: _y0! +
+          _textPainter.computeDistanceToActualBaseline(TextBaseline.alphabetic),
+    );
+  }
+
+  @override
+  void render(Canvas canvas) {
+    assert(isLaidOut);
+    _textPainter.paint(canvas, Offset(_x0!, _y0!));
   }
 }

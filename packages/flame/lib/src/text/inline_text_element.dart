@@ -1,5 +1,6 @@
+import 'dart:ui';
 
-import 'package:flame/src/text/line_metrics.dart';
+import 'package:flame/src/text/text_line.dart';
 
 /// A span of text that has "inline" placement rules.
 ///
@@ -8,12 +9,21 @@ import 'package:flame/src/text/line_metrics.dart';
 ///
 /// An [InlineTextElement] can be laid out, and then rendered on a canvas.
 abstract class InlineTextElement {
-
   bool get isLaidOut;
 
   void resetLayout();
 
   int get numLinesLaidOut;
 
-  LineMetrics measureLine(int line);
+  TextLine line(int line);
+
+  LayoutStatus layOutNextLine(double x0, double x1, double baseline);
+
+  void render(Canvas canvas);
+}
+
+enum LayoutStatus {
+  didNotAdvance,
+  unfinished,
+  done,
 }
