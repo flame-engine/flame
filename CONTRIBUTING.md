@@ -153,8 +153,8 @@ deprecated entity should be removed.
 
 There are a few things to think about when doing a release:
  
- - Go through the codebase and look for deprecated methods/fields and remove the ones that are
-   marked for removal in the version that you are intending to release.
+ - Search through the codebase for `@Deprecated` methods/fields and remove the ones that are marked
+   for removal in the version that you are intending to release.
  - Create a PR containing the changes for removing the deprecated entities.
  - Run `melos version -V <package>:<version> -V <package>:<version>` for Melos to generate a
    `CHANGELOG.md` file.
