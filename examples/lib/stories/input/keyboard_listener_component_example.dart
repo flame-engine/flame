@@ -9,8 +9,9 @@ import 'package:flutter/widgets.dart';
 class KeyboardListenerComponentExample extends FlameGame
     with HasKeyboardHandlerComponents {
   static const String description = '''
-    Similar to the default Keyboard example, but shows a different implementation approach,
-    which uses Flame's KeyboardListenerComponent to handle input.
+    Similar to the default Keyboard example, but shows a different
+    implementation approach, which uses Flame's
+    KeyboardListenerComponent to handle input.
     Usage: Use A S D W to steer Ember.
   ''';
 
