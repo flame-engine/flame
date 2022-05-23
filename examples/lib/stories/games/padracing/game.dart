@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:collection/collection.dart';
-import 'package:examples/stories/games/padracing/background.dart';
 import 'package:examples/stories/games/padracing/ball.dart';
 import 'package:examples/stories/games/padracing/car.dart';
 import 'package:examples/stories/games/padracing/game_colors.dart';
@@ -66,7 +65,6 @@ class PadRacingGame extends Forge2DGame with KeyboardEvents {
     final walls = createWalls(trackSize);
     final bigBall = Ball(position: Vector2(200, 245), isMovable: false);
     cameraWorld.addAll([
-      Background(),
       LapLine(1, Vector2(25, 50), Vector2(50, 5), false),
       LapLine(2, Vector2(25, 70), Vector2(50, 5), false),
       LapLine(3, Vector2(52.5, 25), Vector2(5, 50), true),
