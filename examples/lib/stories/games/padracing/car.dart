@@ -11,7 +11,10 @@ import 'package:flutter/material.dart' hide Image, Gradient;
 
 class Car extends BodyComponent<PadRacingGame> {
   Car({required this.playerNumber, required this.cameraComponent})
-      : super(priority: 3);
+      : super(
+          priority: 3,
+          paint: Paint()..color = colors[playerNumber],
+        );
 
   static final colors = [
     GameColors.green.color,
@@ -48,7 +51,6 @@ class Car extends BodyComponent<PadRacingGame> {
     final recorder = PictureRecorder();
     final canvas = Canvas(recorder, _scaledRect);
     final path = Path();
-    paint.color = colors[playerNumber];
     final bodyPaint = Paint()..color = paint.color;
     for (var i = 0.0; i < _scaledRect.width / 4; i++) {
       bodyPaint.color = bodyPaint.color.darken(0.1);
