@@ -15,7 +15,7 @@ class LapText extends PositionComponent with HasGameRef<PadRacingGame> {
 
   @override
   Future<void> onLoad() async {
-    super.onLoad();
+    await super.onLoad();
     final textStyle = GoogleFonts.vt323(
       fontSize: 35,
       color: car.paint.color,
