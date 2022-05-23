@@ -1,7 +1,7 @@
-import 'package:examples/stories/games/trex/background/cloud_manager.dart';
-import 'package:examples/stories/games/trex/random_extension.dart';
-import 'package:examples/stories/games/trex/trex_game.dart';
 import 'package:flame/components.dart';
+import 'package:trex_game/background/cloud_manager.dart';
+import 'package:trex_game/random_extension.dart';
+import 'package:trex_game/trex_game.dart';
 
 class Cloud extends SpriteComponent
     with ParentIsA<CloudManager>, HasGameRef<TRexGame> {
