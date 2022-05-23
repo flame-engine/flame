@@ -14,7 +14,7 @@ class Ball extends BodyComponent<PadRacingGame> with ContactCallbacks {
   final Vector2 position;
   final double rotation;
   final bool isMovable;
-  final Random rng = Random();
+  final rng = Random();
   late final Paint _shaderPaint;
 
   Ball({
