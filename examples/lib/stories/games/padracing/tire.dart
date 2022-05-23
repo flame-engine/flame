@@ -63,7 +63,7 @@ class Tire extends BodyComponent<PadRacingGame> {
 
   @override
   Future<void> onLoad() async {
-    super.onLoad();
+    await super.onLoad();
     gameRef.cameraWorld.add(Trail(car: car, tire: this));
   }
 
