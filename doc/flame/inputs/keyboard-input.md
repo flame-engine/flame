@@ -9,7 +9,7 @@ For other input documents, see also:
 
 ## Intro
 
-The keyboard API on flame relies on the 
+The keyboard API on flame relies on the
 [Flutter's Focus widget](https://api.flutter.dev/flutter/widgets/Focus-class.html).
 
 To customize focus behavior, see [Controlling focus](#controlling-focus).
@@ -91,6 +91,32 @@ that triggered the callback in the first place. The second is a set of the curre
 The returned value should be `true` to allow the continuous propagation of the key event among other
 components. To not allow any other component to receive the event, return `false`.
 
+Flame also provides a default implementation called `KeyboardListenerComponent` which can be used
+to handle keyboard events. Like any other component, it can be added as a child to a `FlameGame`
+or another `Component`:
+
+For example, imagine a `PositionComponent` which has methods to move on the X and Y axis,
+then the following code could be used to bind those methods to key events:
+
+```dart
+add(
+  KeyboardListenerComponent(
+    keyUp: {
+      LogicalKeyboardKey.keyA: (keysPressed) { ... },
+      LogicalKeyboardKey.keyD: (keysPressed) { ... },
+      LogicalKeyboardKey.keyW: (keysPressed) { ... },
+      LogicalKeyboardKey.keyS: (keysPressed) { ... },
+    },
+    keyDown: {
+      LogicalKeyboardKey.keyA: (keysPressed) { ... },
+      LogicalKeyboardKey.keyD: (keysPressed) { ... },
+      LogicalKeyboardKey.keyW: (keysPressed) { ... },
+      LogicalKeyboardKey.keyS: (keysPressed) { ... },
+    },
+  ),
+);
+```
+
 ### Controlling focus
 
 On the widget level, it is possible to use the
@@ -102,5 +128,5 @@ the game is focused or not.
 By default `GameWidget` has its `autofocus` set to true, which means it will get focused once it is
 mounted. To override that behavior, set `autofocus` to false.
 
-For a more complete example see 
+For a more complete example see
 [here](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/input/keyboard.dart).
