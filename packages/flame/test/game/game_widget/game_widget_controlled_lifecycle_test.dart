@@ -46,25 +46,10 @@ class _TitlePage extends StatelessWidget {
   }
 }
 
-class _GamePage extends StatefulWidget {
-  final _MyGame game;
+class _GamePage extends StatelessWidget {
+  const _GamePage(this.events);
 
-  const _GamePage(this.game);
-
-  @override
-  State<StatefulWidget> createState() {
-    return _GamePageState();
-  }
-}
-
-class _GamePageState extends State<_GamePage> {
-  late _MyGame _game;
-
-  @override
-  void initState() {
-    super.initState();
-    _game = widget.game;
-  }
+  final List<String> events;
 
   @override
   Widget build(BuildContext context) {
@@ -72,8 +57,8 @@ class _GamePageState extends State<_GamePage> {
       body: Stack(
         children: [
           Positioned.fill(
-            child: GameWidget(
-              game: _game,
+            child: GameWidget.controlled(
+              create: () => _MyGame(events),
             ),
           ),
           Positioned(
@@ -94,18 +79,15 @@ class _GamePageState extends State<_GamePage> {
 
 class _MyApp extends StatelessWidget {
   final List<String> events;
-  late final _MyGame game;
 
-  _MyApp(this.events) {
-    game = _MyGame(events);
-  }
+  const _MyApp(this.events);
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       routes: {
         '/': (_) => _TitlePage(),
-        '/game': (_) => _GamePage(game),
+        '/game': (_) => _GamePage(events),
       },
     );
   }
@@ -230,6 +212,7 @@ void main() {
           'onMount',
           'onRemove',
           'onGameResize',
+          'onLoad',
           'onMount',
         ],
       );

@@ -1,3 +1,46 @@
+# GameWidget
+
+A `GameWidget` is the Flutter `Widget` that is used to insert a `Game` inside the flutter widget
+tree.
+
+It can directly receive a `Game` instance by using its default construct or it can receive a
+`GameCreate` function on the `controlled` constructor that will be used to create the game
+once the `GameWidget` is inserted on the widget tree.
+
+Example:
+
+```dart
+class MyGamePage extends StatefulWidget {
+  @override
+  State createState() => _MyGamePageState();
+}
+
+class _MyGamePageState extends State<MyGamePage> {
+  late final MyGame _game;
+  @override
+  void initState() {
+    super.initState();
+    _game = MyGame();
+  }
+
+  @override
+  void build(BuildContext context) {
+    return GameWidget(game: _game);
+  }
+}
+```
+
+or
+
+```dart
+class MyGamePage extends StatelessWidget {
+  @override
+  void build(BuildContext context) {
+    return GameWidget(create: MyGame.new);
+  }
+}
+```
+
 # FlameGame
 
 `FlameGame` is the most basic and most commonly used `Game` class in Flame.

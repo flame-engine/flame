@@ -8,6 +8,8 @@ import 'package:flame/src/game/mixins/game.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
+import '../../../components.dart';
+
 typedef GameLoadingWidgetBuilder = Widget Function(
   BuildContext,
 );
@@ -22,11 +24,16 @@ typedef OverlayWidgetBuilder<T extends Game> = Widget Function(
   T game,
 );
 
+typedef GameCreate<T extends Game> = T Function();
+
 /// A [StatefulWidget] that is in charge of attaching a [Game] instance into the
 /// Flutter tree.
 class GameWidget<T extends Game> extends StatefulWidget {
-  /// The game instance in which this widget will render
-  final T game;
+  /// The game instance in which this widget will render.
+  final T? game;
+
+  /// A function that can create a game that this widget will render.
+  final GameCreate<T>? create;
 
   /// The text direction to be used in text elements in a game.
   final TextDirection? textDirection;
@@ -64,10 +71,18 @@ class GameWidget<T extends Game> extends StatefulWidget {
   ///
   /// Ex:
   /// ```
+  /// // Inside a State...
+  /// late MyGameClass game;
+  ///
+  /// @override
+  /// void initState() {
+  ///   super.initState();
+  ///   game = MyGameClass();
+  /// }
   /// ...
   /// Widget build(BuildContext  context) {
   ///   return GameWidget(
-  ///     game: MyGameClass(),
+  ///     game: game,
   ///   )
   /// }
   /// ...
@@ -100,7 +115,7 @@ class GameWidget<T extends Game> extends StatefulWidget {
   /// ```
   GameWidget({
     Key? key,
-    required this.game,
+    required T this.game,
     this.textDirection,
     this.loadingBuilder,
     this.errorBuilder,
@@ -110,14 +125,44 @@ class GameWidget<T extends Game> extends StatefulWidget {
     this.focusNode,
     this.autofocus = true,
     MouseCursor? mouseCursor,
-  }) : super(key: key) {
+  })  : create = null,
+        super(key: key) {
     if (mouseCursor != null) {
-      game.mouseCursor = mouseCursor;
+      game!.mouseCursor = mouseCursor;
     }
     if (initialActiveOverlays != null) {
-      game.overlays.addAll(initialActiveOverlays);
+      game!.overlays.addAll(initialActiveOverlays);
     }
   }
+
+  /// Renders a [game] in a flutter widget tree.
+  ///
+  /// Unlike the default constructor, this creates a [GameWidget] that controls
+  /// the creation of the game instance, removing the necessity of rendering
+  /// this widget inside a [StatefulWidget].
+  ///
+  /// Ex:
+  /// ```
+  /// ...
+  /// Widget build(BuildContext  context) {
+  ///   return GameWidget.controlled(
+  ///     create: MyGameClass.new,
+  ///   )
+  /// }
+  /// ...
+  /// ```
+  const GameWidget.controlled({
+    Key? key,
+    required GameCreate<T> this.create,
+    this.textDirection,
+    this.loadingBuilder,
+    this.errorBuilder,
+    this.backgroundBuilder,
+    this.overlayBuilderMap,
+    this.focusNode,
+    this.autofocus = true,
+  })  : game = null,
+        super(key: key);
 
   /// Renders a [game] in a flutter widget tree alongside widgets overlays.
   ///
@@ -127,13 +172,15 @@ class GameWidget<T extends Game> extends StatefulWidget {
 }
 
 class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
+  late T _currentGame;
+
   Future<void> get loaderFuture => _loaderFuture ??= (() async {
-        assert(widget.game.hasLayout);
-        final onLoad = widget.game.onLoadFuture;
+        assert(_currentGame.hasLayout);
+        final onLoad = _currentGame.onLoadFuture;
         if (onLoad != null) {
           await onLoad;
         }
-        widget.game.onMount();
+        _currentGame.onMount();
       })();
 
   Future<void>? _loaderFuture;
@@ -184,7 +231,8 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
   @override
   void initState() {
     super.initState();
-    widget.game.addGameStateListener(_onGameStateChange);
+    _currentGame = widget.game ?? widget.create!.call();
+    _currentGame.addGameStateListener(_onGameStateChange);
     _focusNode = widget.focusNode ?? FocusNode();
     if (widget.autofocus) {
       _focusNode.requestFocus();
@@ -197,18 +245,20 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
     if (oldWidget.game != widget.game) {
       // Reset the loaderFuture so that onMount will run again
       // (onLoad is still cached).
-      oldWidget.game.removeGameStateListener(_onGameStateChange);
-      oldWidget.game.onRemove();
+      oldWidget.game?.removeGameStateListener(_onGameStateChange);
+      oldWidget.game?.onRemove();
+
+      _currentGame = widget.game ?? widget.create!.call();
+      _currentGame.addGameStateListener(_onGameStateChange);
       _loaderFuture = null;
-      widget.game.addGameStateListener(_onGameStateChange);
     }
   }
 
   @override
   void dispose() {
     super.dispose();
-    widget.game.removeGameStateListener(_onGameStateChange);
-    widget.game.onRemove();
+    _currentGame.removeGameStateListener(_onGameStateChange);
+    _currentGame.onRemove();
     // If we received a focus node from the user, they are responsible
     // for disposing it
     if (widget.focusNode == null) {
@@ -236,34 +286,34 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
   @override
   Widget build(BuildContext context) {
     return _protectedBuild(() {
-      final game = widget.game;
-      Widget internalGameWidget = _GameRenderObjectWidget(game);
+      Widget internalGameWidget = _GameRenderObjectWidget(_currentGame);
 
-      _checkOverlays(widget.game.overlays.value);
+      _checkOverlays(_currentGame.overlays.value);
       assert(
-        !(game is MultiTouchDragDetector && game is PanDetector),
+        !(_currentGame is MultiTouchDragDetector &&
+            _currentGame is PanDetector),
         'WARNING: Both MultiTouchDragDetector and a PanDetector detected. '
         'The MultiTouchDragDetector will override the PanDetector and it will '
         'not receive events',
       );
 
-      if (hasBasicGestureDetectors(game)) {
+      if (hasBasicGestureDetectors(_currentGame)) {
         internalGameWidget = applyBasicGesturesDetectors(
-          game,
+          _currentGame,
           internalGameWidget,
         );
       }
 
-      if (hasAdvancedGestureDetectors(game)) {
+      if (hasAdvancedGestureDetectors(_currentGame)) {
         internalGameWidget = applyAdvancedGesturesDetectors(
-          game,
+          _currentGame,
           internalGameWidget,
         );
       }
 
-      if (hasMouseDetectors(game)) {
+      if (hasMouseDetectors(_currentGame)) {
         internalGameWidget = applyMouseDetectors(
-          game,
+          _currentGame,
           internalGameWidget,
         );
       }
@@ -280,11 +330,11 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
         autofocus: widget.autofocus,
         onKey: _handleKeyEvent,
         child: MouseRegion(
-          cursor: widget.game.mouseCursor,
+          cursor: _currentGame.mouseCursor,
           child: Directionality(
             textDirection: textDir,
             child: Container(
-              color: game.backgroundColor(),
+              color: _currentGame.backgroundColor(),
               child: LayoutBuilder(
                 builder: (_, BoxConstraints constraints) {
                   return _protectedBuild(() {
@@ -293,7 +343,7 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
                       return widget.loadingBuilder?.call(context) ??
                           Container();
                     }
-                    game.onGameResize(size);
+                    _currentGame.onGameResize(size);
                     return FutureBuilder(
                       future: loaderFuture,
                       builder: (_, snapshot) {
@@ -341,11 +391,11 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
     if (widget.overlayBuilderMap == null) {
       return stackWidgets;
     }
-    final widgets = widget.game.overlays.value.map((String overlayKey) {
+    final widgets = _currentGame.overlays.value.map((String overlayKey) {
       final builder = widget.overlayBuilderMap![overlayKey]!;
       return KeyedSubtree(
         key: ValueKey(overlayKey),
-        child: builder(context, widget.game),
+        child: builder(context, _currentGame),
       );
     });
     stackWidgets.addAll(widgets);
