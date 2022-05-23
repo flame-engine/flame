@@ -43,7 +43,7 @@ class Car extends BodyComponent<PadRacingGame> {
 
   @override
   Future<void> onLoad() async {
-    super.onLoad();
+    await super.onLoad();
 
     final recorder = PictureRecorder();
     final canvas = Canvas(recorder, _scaledRect);
