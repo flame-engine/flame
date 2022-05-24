@@ -65,16 +65,27 @@ mixin HasTappableComponents on FlameGame implements MultiTapListener {
         }
       },
     );
-    _onTapCancelImpl(TapCancelEvent(event.pointerId));
-
+    _tapCancelImpl(TapCancelEvent(event.pointerId));
+    if (this is HasLegacyTappables) {
+      final info = event.asInfo(this)..handled = event.handled;
+      propagateToChildren(
+        (Tappable child) => child.handleTapUp(event.pointerId, info),
+      );
+      event.handled = info.handled;
+    }
   }
 
   @mustCallSuper
   void onTapCancel(TapCancelEvent event) {
-    _onTapCancelImpl(event);
+    _tapCancelImpl(event);
+    if (this is HasLegacyTappables) {
+      propagateToChildren(
+        (Tappable child) => child.handleTapCancel(event.pointerId),
+      );
+    }
   }
 
-  void _onTapCancelImpl(TapCancelEvent event) {
+  void _tapCancelImpl(TapCancelEvent event) {
     _record.removeWhere((pair) {
       if (pair.pointerId == event.pointerId) {
         pair.component.onTapCancel(event);

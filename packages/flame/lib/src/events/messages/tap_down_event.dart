@@ -14,7 +14,7 @@ import 'package:flutter/gestures.dart';
 /// [HasTappableComponents] mixin.
 class TapDownEvent extends PositionEvent {
   TapDownEvent(this.pointerId, TapDownDetails details)
-      : deviceKind = details.kind,
+      : deviceKind = details.kind ?? PointerDeviceKind.unknown,
         super(
           canvasPosition: details.localPosition.toVector2(),
           devicePosition: details.globalPosition.toVector2(),
@@ -22,7 +22,7 @@ class TapDownEvent extends PositionEvent {
 
   final int pointerId;
 
-  final PointerDeviceKind? deviceKind;
+  final PointerDeviceKind deviceKind;
 
   TapDownInfo asInfo(Game game) {
     return TapDownInfo.fromDetails(
