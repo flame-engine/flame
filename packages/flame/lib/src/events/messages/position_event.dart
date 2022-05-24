@@ -13,16 +13,15 @@ abstract class PositionEvent extends Event {
 
   Vector2 get localPosition => positionStacktrace.last;
 
-  void deliverToComponentsAtPoint<T extends Component, E extends Event>(
-    Component root,
-    void Function(T, E) handler,
-  ) {
-    assert(this is E);
-    for (final child in root
+  void deliverAtPoint<T extends Component>({
+    required Component rootComponent,
+    required void Function(T component) eventHandler,
+  }) {
+    for (final child in rootComponent
         .componentsAtPoint(canvasPosition, positionStacktrace)
         .whereType<T>()) {
       continuePropagation = false;
-      handler(child, this as E);
+      eventHandler(child);
       if (!continuePropagation) {
         break;
       }
