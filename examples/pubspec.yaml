@@ -17,6 +17,8 @@ dependencies:
   google_fonts: 2.2.0
   flutter:
     sdk: flutter
+  trex_game:
+    path: games/trex
 
 dev_dependencies:
   flame_lint: ^0.0.1

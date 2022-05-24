@@ -1,6 +1,6 @@
-import 'package:examples/stories/games/trex/trex_game.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:trex_game/trex_game.dart';
 
 enum PlayerState { crashed, jumping, running, waiting }
 

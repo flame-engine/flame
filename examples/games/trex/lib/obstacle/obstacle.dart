@@ -1,7 +1,7 @@
-import 'package:examples/stories/games/trex/obstacle/obstacle_type.dart';
-import 'package:examples/stories/games/trex/random_extension.dart';
-import 'package:examples/stories/games/trex/trex_game.dart';
 import 'package:flame/components.dart';
+import 'package:trex_game/obstacle/obstacle_type.dart';
+import 'package:trex_game/random_extension.dart';
+import 'package:trex_game/trex_game.dart';
 
 class Obstacle extends SpriteComponent with HasGameRef<TRexGame> {
   Obstacle({
