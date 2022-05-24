@@ -1,8 +1,5 @@
 import 'dart:ui';
 
-import 'package:examples/stories/games/trex/background/horizon.dart';
-import 'package:examples/stories/games/trex/game_over.dart';
-import 'package:examples/stories/games/trex/player.dart';
 import 'package:flame/components.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
@@ -10,6 +7,9 @@ import 'package:flame/input.dart';
 import 'package:flutter/material.dart' hide Image;
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:trex_game/background/horizon.dart';
+import 'package:trex_game/game_over.dart';
+import 'package:trex_game/player.dart';
 
 enum GameState { playing, intro, gameOver }
 
