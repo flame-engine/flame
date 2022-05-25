@@ -15,6 +15,9 @@ class SpriteAnimationGroupComponent<T> extends PositionComponent
   /// Map with the mapping each state to the flag removeOnFinish
   final Map<T, bool> removeOnFinish;
 
+  /// Map with the mapping each state's finished callback
+  final Map<T, void Function()> onFinish;
+
   /// Map with the available states for this animation group
   Map<T, SpriteAnimation>? animations;
 
@@ -23,6 +26,7 @@ class SpriteAnimationGroupComponent<T> extends PositionComponent
     this.animations,
     this.current,
     Map<T, bool>? removeOnFinish,
+    Map<T, void Function()>? onFinish,
     Paint? paint,
     Vector2? position,
     Vector2? size,
@@ -32,6 +36,7 @@ class SpriteAnimationGroupComponent<T> extends PositionComponent
     Iterable<Component>? children,
     int? priority,
   })  : removeOnFinish = removeOnFinish ?? const {},
+        onFinish = onFinish ?? const {},
         super(
           position: position,
           size: size,
@@ -57,6 +62,7 @@ class SpriteAnimationGroupComponent<T> extends PositionComponent
     Map<T, SpriteAnimationData> data, {
     T? current,
     Map<T, bool>? removeOnFinish,
+    Map<T, void Function()>? onFinish,
     Paint? paint,
     Vector2? position,
     Vector2? size,
@@ -76,6 +82,7 @@ class SpriteAnimationGroupComponent<T> extends PositionComponent
           }),
           current: current,
           removeOnFinish: removeOnFinish,
+          onFinish: onFinish,
           paint: paint,
           position: position,
           size: size,
@@ -101,8 +108,11 @@ class SpriteAnimationGroupComponent<T> extends PositionComponent
   @override
   void update(double dt) {
     animation?.update(dt);
-    if ((removeOnFinish[current] ?? false) && (animation?.done() ?? false)) {
-      removeFromParent();
+    if (animation?.done() ?? false) {
+      if (removeOnFinish[current] ?? false) {
+        removeFromParent();
+      }
+      onFinish[current]?.call();
     }
   }
 }
