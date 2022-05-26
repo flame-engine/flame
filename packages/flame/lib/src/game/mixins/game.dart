@@ -325,6 +325,19 @@ class _ActiveOverlays {
     return setChanged;
   }
 
+  /// Marks [overlayNames] to be rendered.
+  bool addAll(Iterable<String> overlayNames) {
+    final overlayCountBeforeAdded = _activeOverlays.length;
+    _activeOverlays.addAll(overlayNames);
+
+    final overlayCountAfterAdded = _activeOverlays.length;
+    if (overlayCountBeforeAdded != overlayCountAfterAdded) {
+      _game?._refreshWidget();
+      return true;
+    }
+    return false;
+  }
+
   /// Hides the [overlayName].
   bool remove(String overlayName) {
     final hasRemoved = _activeOverlays.remove(overlayName);
@@ -332,6 +345,19 @@ class _ActiveOverlays {
       _game?._refreshWidget();
     }
     return hasRemoved;
+  }
+
+  /// Hides multiple overlays specified in [overlayNames].
+  bool removeAll(Iterable<String> overlayNames) {
+    final overlayCountBeforeRemoved = _activeOverlays.length;
+    _activeOverlays.removeAll(overlayNames);
+
+    final overlayCountAfterRemoved = _activeOverlays.length;
+    if (overlayCountBeforeRemoved != overlayCountAfterRemoved) {
+      _game?._refreshWidget();
+      return true;
+    }
+    return false;
   }
 
   /// The names of all currently active overlays.
