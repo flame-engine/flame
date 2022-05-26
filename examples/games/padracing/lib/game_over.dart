@@ -1,6 +1,7 @@
-import 'package:examples/stories/games/padracing/game.dart';
-import 'package:examples/stories/games/padracing/menu_card.dart';
 import 'package:flutter/material.dart' hide Image, Gradient;
+
+import 'package:padracing/menu_card.dart';
+import 'package:padracing/padracing_game.dart';
 
 class GameOver extends StatelessWidget {
   const GameOver(this.game, {Key? key}) : super(key: key);

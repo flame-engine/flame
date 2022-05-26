@@ -1,13 +1,13 @@
 import 'dart:ui';
 
-import 'package:examples/stories/games/padracing/game.dart';
-import 'package:examples/stories/games/padracing/game_colors.dart';
-import 'package:examples/stories/games/padracing/lap_line.dart';
-import 'package:examples/stories/games/padracing/tire.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame_forge2d/flame_forge2d.dart' hide Particle, World;
 import 'package:flutter/material.dart' hide Image, Gradient;
+import 'package:padracing/game_colors.dart';
+import 'package:padracing/lap_line.dart';
+import 'package:padracing/padracing_game.dart';
+import 'package:padracing/tire.dart';
 
 class Car extends BodyComponent<PadRacingGame> {
   Car({required this.playerNumber, required this.cameraComponent})

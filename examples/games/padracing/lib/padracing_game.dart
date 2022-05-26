@@ -1,12 +1,6 @@
 import 'dart:math';
 
 import 'package:collection/collection.dart';
-import 'package:examples/stories/games/padracing/ball.dart';
-import 'package:examples/stories/games/padracing/car.dart';
-import 'package:examples/stories/games/padracing/game_colors.dart';
-import 'package:examples/stories/games/padracing/lap_line.dart';
-import 'package:examples/stories/games/padracing/lap_text.dart';
-import 'package:examples/stories/games/padracing/wall.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/experimental.dart';
@@ -15,6 +9,12 @@ import 'package:flame/input.dart';
 import 'package:flame_forge2d/flame_forge2d.dart' hide Particle, World;
 import 'package:flutter/material.dart' hide Image, Gradient;
 import 'package:flutter/services.dart';
+import 'package:padracing/ball.dart';
+import 'package:padracing/car.dart';
+import 'package:padracing/game_colors.dart';
+import 'package:padracing/lap_line.dart';
+import 'package:padracing/lap_text.dart';
+import 'package:padracing/wall.dart';
 
 final List<Map<LogicalKeyboardKey, LogicalKeyboardKey>> playersKeys = [
   {

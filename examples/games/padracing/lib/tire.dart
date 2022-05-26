@@ -1,10 +1,10 @@
-import 'package:examples/stories/games/padracing/car.dart';
-import 'package:examples/stories/games/padracing/game.dart';
-import 'package:examples/stories/games/padracing/trail.dart';
 import 'package:flame/palette.dart';
 import 'package:flame_forge2d/flame_forge2d.dart' hide Particle, World;
 import 'package:flutter/material.dart' hide Image, Gradient;
 import 'package:flutter/services.dart';
+import 'package:padracing/car.dart';
+import 'package:padracing/padracing_game.dart';
+import 'package:padracing/trail.dart';
 
 class Tire extends BodyComponent<PadRacingGame> {
   Tire({

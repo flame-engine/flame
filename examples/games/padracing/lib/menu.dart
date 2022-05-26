@@ -1,8 +1,8 @@
-import 'package:examples/stories/games/padracing/game.dart';
-import 'package:examples/stories/games/padracing/game_colors.dart';
-import 'package:examples/stories/games/padracing/menu_card.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart' hide Image, Gradient;
+import 'package:padracing/game_colors.dart';
+import 'package:padracing/menu_card.dart';
+import 'package:padracing/padracing_game.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Menu extends StatelessWidget {

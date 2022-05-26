@@ -1,9 +1,10 @@
-import 'package:examples/stories/games/padracing/game.dart';
-import 'package:examples/stories/games/padracing/game_over.dart';
-import 'package:examples/stories/games/padracing/menu.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart' hide Image, Gradient;
 import 'package:google_fonts/google_fonts.dart';
+
+import 'package:padracing/game_over.dart';
+import 'package:padracing/menu.dart';
+import 'package:padracing/padracing_game.dart';
 
 class PadracingWidget extends StatelessWidget {
   const PadracingWidget({Key? key}) : super(key: key);

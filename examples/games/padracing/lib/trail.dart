@@ -1,8 +1,9 @@
 import 'dart:ui';
 
-import 'package:examples/stories/games/padracing/car.dart';
-import 'package:examples/stories/games/padracing/tire.dart';
 import 'package:flame/components.dart';
+
+import 'package:padracing/car.dart';
+import 'package:padracing/tire.dart';
 
 class Trail extends Component with HasPaint {
   Trail({

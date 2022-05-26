@@ -1,13 +1,13 @@
 import 'dart:math';
 import 'dart:ui';
 
-import 'package:examples/stories/games/padracing/car.dart';
-import 'package:examples/stories/games/padracing/game.dart';
-import 'package:examples/stories/games/padracing/game_colors.dart';
-import 'package:examples/stories/games/padracing/wall.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/palette.dart';
 import 'package:flame_forge2d/flame_forge2d.dart' hide Particle, World;
+import 'package:padracing/car.dart';
+import 'package:padracing/game_colors.dart';
+import 'package:padracing/padracing_game.dart';
+import 'package:padracing/wall.dart';
 
 class Ball extends BodyComponent<PadRacingGame> with ContactCallbacks {
   final double radius;
