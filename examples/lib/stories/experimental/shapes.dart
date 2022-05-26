@@ -82,10 +82,10 @@ class DotsComponent extends Component {
 
   @override
   void update(double dt) {
-    generate_point();
+    generatePoint();
   }
 
-  void generate_point() {
+  void generatePoint() {
     final point = Vector2(
       random.nextDouble() * 800,
       random.nextDouble() * 600,
