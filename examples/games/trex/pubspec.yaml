@@ -11,7 +11,7 @@ environment:
 
 dependencies:
   flame: ^1.1.1
-  google_fonts: 2.2.0
+  google_fonts: ^2.3.2
   flutter:
     sdk: flutter
 
