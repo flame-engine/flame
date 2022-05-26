@@ -16,7 +16,6 @@ class TapUpEvent extends PositionEvent {
 
   final PointerDeviceKind deviceKind;
 
-
   TapUpInfo asInfo(Game game) {
     return TapUpInfo.fromDetails(
       game,

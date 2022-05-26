@@ -1,4 +1,3 @@
-
 import 'package:flame/src/components/component.dart';
 import 'package:flame/src/events/messages/tap_cancel_event.dart';
 import 'package:flame/src/events/messages/tap_down_event.dart';
