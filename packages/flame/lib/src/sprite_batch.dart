@@ -132,6 +132,12 @@ class SpriteBatch {
   /// The atlas used by the [SpriteBatch].
   final Image atlas;
 
+  /// The atlas used by the [SpriteBatch] when flips are needed.
+  late final Image? flippableAtlas;
+
+  /// Whether any [BatchItem] needs a flippableAtlas.
+  bool _needsFlips = false;
+
   /// The default color, used as a background color for a [BatchItem].
   final Color defaultColor;
 
@@ -160,6 +166,7 @@ class SpriteBatch {
     this.defaultBlendMode = BlendMode.srcOver,
     this.defaultTransform,
     this.useAtlas = true,
+    this.flippableAtlas,
   });
 
   /// Takes a path of an image, and optional arguments for the SpriteBatch.
@@ -172,48 +179,55 @@ class SpriteBatch {
     RSTransform? defaultTransform,
     Images? images,
     bool useAtlas = true,
-    bool needsFlips = true,
   }) async {
     final _images = images ?? Flame.images;
+    //flippableAtlas = await _atlasFromCache(_images, path);
     return SpriteBatch(
-      needsFlips
-          ? await _atlasFromCache(_images, path)
-          : await _images.load(path),
+      await _images.load(path),
       defaultColor: defaultColor,
       defaultTransform: defaultTransform ?? RSTransform(1, 0, 0, 0),
       defaultBlendMode: defaultBlendMode,
       useAtlas: useAtlas,
+      flippableAtlas: await _images.fetchOrGenerate(
+        '$path$_generatedAtlasKeySuffix',
+        (images) => _generateAtlasFromFile(images, path),
+      ),
     );
   }
 
   static const String _generatedAtlasKeySuffix = '#withFlipAttached';
 
-  static Future<Image> _atlasFromCache(Images images, String path) async {
-    if (!images.containsKey('$path$_generatedAtlasKeySuffix')) {
-      return images.addFuture(
-        '$path$_generatedAtlasKeySuffix',
-        _generateAtlas1(images, path),
-      );
-    }
-    return images.fromCacheFuture('$path$_generatedAtlasKeySuffix');
+  static Future<Image> _generateAtlasFromFile(
+    Images images,
+    String path,
+  ) async {
+    return _generateAtlasFromImage(images, await images.load(path));
   }
 
-  static Future<Image> _generateAtlas1(Images images, String path) async {
-    final image = await images.load(path);
+  static Future<Image> _generateAtlasFromImage(
+    Images images,
+    Image image,
+  ) async {
+    print("Generating Now\n");
     final recorder = PictureRecorder();
     final canvas = Canvas(recorder);
     final _emptyPaint = Paint();
     canvas.drawImage(image, Offset.zero, _emptyPaint);
     canvas.scale(-1, 1);
-    canvas.drawImage(image,
-        Offset(-image.width.toDouble(), image.height.toDouble()), _emptyPaint);
+    canvas.drawImage(
+      image,
+      Offset(-image.width.toDouble(), image.height.toDouble()),
+      _emptyPaint,
+    );
 
     final picture = recorder.endRecording();
     return picture.toImageSafe(image.width, image.height * 2);
   }
 
-  static Future<Image> _generateAtlas2(Images images, String path) async {
-    final image = await images.load(path);
+  static Future<Image> _generateAtlasFromImage2(
+    Images images,
+    Image image,
+  ) async {
     final imagePixelData = await image.pixelsInUint8();
     final atlasPixelData = <int>[];
     final imageBytesWidth = image.width * 4;
@@ -261,6 +275,8 @@ class SpriteBatch {
       flip: flip,
       color: color ?? defaultColor,
     );
+
+    if (flip && useAtlas) _needsFlips = true;
 
     _batchItems.add(batchItem);
 
@@ -371,7 +387,7 @@ class SpriteBatch {
       }
     } else {
       canvas.drawAtlas(
-        atlas,
+        _needsFlips ? flippableAtlas ?? atlas : atlas,
         _transforms,
         _sources,
         _colors,
