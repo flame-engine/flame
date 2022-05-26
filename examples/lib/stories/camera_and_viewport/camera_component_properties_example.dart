@@ -1,11 +1,12 @@
 import 'dart:ui';
 
 import 'package:flame/components.dart';
+import 'package:flame/events.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame/game.dart' hide Viewport;
-import 'package:flame/input.dart';
 
-class CameraComponentPropertiesExample extends FlameGame with HasTappables {
+class CameraComponentPropertiesExample extends FlameGame
+    with HasTappableComponents {
   static const description = '''
     This example uses FixedSizeViewport which is dynamically sized and 
     positioned based on the size of the game widget.
@@ -45,20 +46,6 @@ class CameraComponentPropertiesExample extends FlameGame with HasTappables {
     _camera?.viewport.size = size * 0.7;
     _camera?.viewport.position = size * 0.6;
   }
-
-  @override
-  // ignore: must_call_super
-  void onTapDown(int pointerId, TapDownInfo info) {
-    final canvasPoint = info.eventPosition.widget;
-    final nested = <Vector2>[];
-    for (final component in componentsAtPoint(canvasPoint, nested)) {
-      if (component is Background) {
-        component.add(
-          ExpandingCircle(nested.last.toOffset()),
-        );
-      }
-    }
-  }
 }
 
 class ViewportFrame extends Component {
@@ -80,7 +67,7 @@ class ViewportFrame extends Component {
   }
 }
 
-class Background extends Component {
+class Background extends Component with TapCallbacks {
   final bgPaint = Paint()..color = const Color(0xffff0000);
   final originPaint = Paint()..color = const Color(0xff19bf57);
   final axisPaint = Paint()
@@ -106,6 +93,11 @@ class Background extends Component {
 
   @override
   bool containsLocalPoint(Vector2 point) => true;
+
+  @override
+  void onTapDown(TapDownEvent event) {
+    add(ExpandingCircle(event.localPosition.toOffset()));
+  }
 }
 
 class ExpandingCircle extends CircleComponent {

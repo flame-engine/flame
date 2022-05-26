@@ -1,3 +1,4 @@
+import 'package:flame/experimental.dart';
 import 'package:flame/src/components/component.dart';
 import 'package:flame/src/events/messages/event.dart';
 import 'package:meta/meta.dart';
@@ -49,6 +50,7 @@ abstract class PositionEvent extends Event {
       continuePropagation = false;
       eventHandler(child);
       if (!continuePropagation) {
+        CameraComponent.currentCameras.clear();
         break;
       }
     }
