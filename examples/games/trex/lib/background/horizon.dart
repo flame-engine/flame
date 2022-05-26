@@ -2,10 +2,10 @@ import 'dart:collection';
 import 'dart:math';
 
 import 'package:collection/collection.dart';
-import 'package:examples/stories/games/trex/background/cloud_manager.dart';
-import 'package:examples/stories/games/trex/obstacle/obstacle_manager.dart';
-import 'package:examples/stories/games/trex/trex_game.dart';
 import 'package:flame/components.dart';
+import 'package:trex_game/background/cloud_manager.dart';
+import 'package:trex_game/obstacle/obstacle_manager.dart';
+import 'package:trex_game/trex_game.dart';
 
 class Horizon extends PositionComponent with HasGameRef<TRexGame> {
   Horizon() : super();
