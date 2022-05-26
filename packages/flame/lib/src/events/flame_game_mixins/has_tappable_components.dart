@@ -11,12 +11,35 @@ import 'package:meta/meta.dart';
 /// This mixin allows a [FlameGame] to respond to tap events, and also delivers
 /// those events to components that have the [TapCallbacks] mixin.
 ///
-/// ----
-/// **NOTE**: if your game also uses [Tappable] components, then add the
-/// [HasLegacyTappables] mixin as well (instead of `HasTappables`).
+/// The following events are supported by the mixin: [onTapDown], [onTapUp],
+/// [onTapCancel] and [onLongTapDown] -- see their individual descriptions for
+/// more details. There is no "onTap" event though -- use [onTapUp] instead.
+///
+/// Each event handler can be overridden. One scenario when this could be useful
+/// is to check the `event.handled` property after the event has been sent down
+/// the component tree.
+///
+/// === Usage notes ===
+/// - If your game uses components with [TapCallbacks], then this mixin must be
+///   added to the [FlameGame] in order for [TapCallbacks] to work properly.
+/// - If your game also uses [Tappable] components, then add the
+///   [HasLegacyTappables] mixin as well (instead of `HasTappables`).
+/// - If your game has no tappable components, then do not use this mixin.
+///   Instead, consider `MultiTouchTapDetector`.
 mixin HasTappableComponents on FlameGame implements MultiTapListener {
+  /// The record of all components currently being touched.
   final Set<_PointerComponentPair> _record = {};
 
+  /// Called when the user touches the device screen within the game canvas,
+  /// either with a finger, a stylus, or a mouse.
+  ///
+  /// The handler propagates the [event] to any component located at the point
+  /// of touch and that uses the [TapCallbacks] mixin. The event will be first
+  /// delivered to the topmost such component, and then propagated to the
+  /// components below only if explicitly requested.
+  ///
+  /// Each [event] has an `event.pointerId` to keep track of multiple touches
+  /// that may occur simultaneously.
   @mustCallSuper
   void onTapDown(TapDownEvent event) {
     event.deliverAtPoint(
@@ -35,6 +58,12 @@ mixin HasTappableComponents on FlameGame implements MultiTapListener {
     }
   }
 
+  /// Called after the user has been touching the screen for [longTapDelay]
+  /// seconds without the tap being cancelled.
+  ///
+  /// This event will be delivered to all the components that previously
+  /// received the `onTapDown` event, and who remain at the point where the user
+  /// is touching the screen.
   @mustCallSuper
   void onLongTapDown(TapDownEvent event) {
     event.deliverAtPoint(
@@ -55,6 +84,17 @@ mixin HasTappableComponents on FlameGame implements MultiTapListener {
     }
   }
 
+  /// Called when the user stops touching the device screen within the game
+  /// canvas (and if there was an [onTapDown] event before).
+  ///
+  /// This event is propagated to the components at the point of touch, but only
+  /// if those components have received the `onTapDown` event previously. For
+  /// those components that moved away from the point of touch, an `onTapCancel`
+  /// will be triggered instead.
+  ///
+  /// Note that if a component that was touched moves away from the point of
+  /// touch, then `onTapCancel` will be triggered for this component only when
+  /// the user stops the touch, not when the component moves away.
   @mustCallSuper
   void onTapUp(TapUpEvent event) {
     event.deliverAtPoint(
@@ -75,6 +115,14 @@ mixin HasTappableComponents on FlameGame implements MultiTapListener {
     }
   }
 
+  /// Called when there was an [onTapDown] event previously, but the [onTapUp]
+  /// can no longer occur.
+  ///
+  /// Usually this happens when the user starts a drag gesture, but could also
+  /// occur for other reasons (e.g. another app coming to the foreground).
+  ///
+  /// This event will be propagated to all components that has previously
+  /// received the `onTapDown` event.
   @mustCallSuper
   void onTapCancel(TapCancelEvent event) {
     _tapCancelImpl(event);
@@ -96,27 +144,33 @@ mixin HasTappableComponents on FlameGame implements MultiTapListener {
   }
 
   //#region MultiTapListener API
+
+  /// The delay (in seconds) after which a tap is considered a long tap.
   @override
   double get longTapDelay => 0.300;
 
   @override
   void handleTap(int pointerId) {}
 
+  @internal
   @override
   void handleTapCancel(int pointerId) {
     onTapCancel(TapCancelEvent(pointerId));
   }
 
+  @internal
   @override
   void handleTapDown(int pointerId, TapDownDetails details) {
     onTapDown(TapDownEvent(pointerId, details));
   }
 
+  @internal
   @override
   void handleTapUp(int pointerId, TapUpDetails details) {
     onTapUp(TapUpEvent(pointerId, details));
   }
 
+  @internal
   @override
   void handleLongTapDown(int pointerId, TapDownDetails details) {
     onLongTapDown(TapDownEvent(pointerId, details));
@@ -124,7 +178,12 @@ mixin HasTappableComponents on FlameGame implements MultiTapListener {
   //#endregion
 }
 
-mixin HasLegacyTappables on FlameGame {}
+/// Mixin that can be added to a game to indicate that is has [Tappable]
+/// components (in addition to components with [TapCallbacks]).
+///
+/// This is a temporary mixin to facilitate the transition between the old and
+/// the new event system. In the future it will be deprecated.
+mixin HasLegacyTappables on HasTappableComponents {}
 
 @immutable
 class _PointerComponentPair {
