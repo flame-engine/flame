@@ -839,7 +839,7 @@ void main() {
 
 ## SpriteBodyComponent
 
-See [SpriteBodyComponent](../other_modules/forge2d.md#spritebodycomponent) in the Forge2D documentation.
+See [SpriteBodyComponent](../flame_forge2d/forge2d.md#spritebodycomponent) in the Forge2D documentation.
 
 
 ## TiledComponent
