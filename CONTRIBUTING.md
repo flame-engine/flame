@@ -135,8 +135,9 @@ conventional commit tag and a descriptive title. This is extra important since s
 of the PR doesn't reflect what GitHub defaults to for the merge commit title (if the title has been
 changed during the life time of the PR for example).
 
-All the default text should be removed from the commit message and if the PR is breaking, the
-instructions from the "Migration instruction" should be copied into the commit message.
+All the default text should be removed from the commit message and the PR description and the
+instructions from the "Migration instruction" (if the PR is breaking) should be copied into the
+commit message.
 
 
 ## Breaking changes
