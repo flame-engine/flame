@@ -106,7 +106,7 @@ void main() {
       },
     );
 
-    flameGame.test(
+    testWithFlameGame(
       'component mounted completes when changing parent from a null parent',
       (game) async {
         final parent = LifecycleComponent('parent');
