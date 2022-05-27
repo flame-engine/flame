@@ -2,11 +2,13 @@
 
 Flame has some dedicated classes to help you render text.
 
+
 ## TextRenderer
 
 `TextRenderer` is the abstract class used by Flame to render text. Flame provides one
 implementation for this called `TextPaint` but anyone can implement this abstraction
 and create a custom way to render text.
+
 
 ## TextPaint
 
@@ -61,10 +63,12 @@ If you want to set the anchor of the text you can also do that in the render cal
 textPaint.render(canvas, 'Flame is awesome', Vector2(10, 10), anchor: Anchor.topCenter);
 ```
 
+
 ## Text Components
 
 Flame provides two text components that make it even easier to render text in your game:
 `TextComponent` and `TextBoxComponent`.
+
 
 ### TextComponent
 
@@ -86,6 +90,7 @@ class MyGame extends FlameGame {
   }
 }
 ```
+
 
 ### TextBoxComponent
 
@@ -117,4 +122,4 @@ class MyTextBox extends TextBoxComponent {
 ```
 
 Both components are showcased in an example
-[here](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/rendering/text.dart)
+[here](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/rendering/text_example.dart)

@@ -3,12 +3,14 @@
 Since Flame runs on top of Flutter, so its supported platforms depend on which platforms that are
 supported by Flutter.
 
-At the moment, Flame supports both mobile and web.
+At the moment, Flame supports web, mobile(Android and iOS) and desktop (Windows, MacOS and Linux).
+
 
 ## Flutter channels
 
 Flame keeps it support on the stable channel. The dev, beta and master channel should work, but we
 don't support them. This means that issues happening outside the stable channel are not a priority.
+
 
 ## Flame web
 
@@ -25,6 +27,7 @@ To build the game for production, using skia, use the following:
 ```console
 $ flutter build web --release --web-renderer canvaskit
 ```
+
 
 ## Deploy your game to GitHub Pages
 
@@ -73,6 +76,7 @@ deployed game.
 
 The game should be available at an URL like this:
 `https://YOUR_GITHUB_USERNAME.github.io/YOUR_REPO_NAME/`
+
 
 ### Web support
 
