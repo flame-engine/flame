@@ -586,7 +586,7 @@ final ec = ZigzagEffectController(period: 2);
 
 ## See also
 
-* [Examples of various effects](https://examples.flame-engine.org/#/).
+* [Examples of various effects](https://examples.flame-engine.org/).
 
 
 [tau]: https://en.wikipedia.org/wiki/Tau_(mathematical_constant)

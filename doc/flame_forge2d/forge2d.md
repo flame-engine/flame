@@ -87,8 +87,8 @@ class Ball extends BodyComponent with ContactCallbacks {
 ```
 
 In order for the above to work, the `Ball`'s `body.userData` or contacting `fixture.userData` must be
-set to a `ContactCallback`. And if `Wall` is a `BodyComponent` its `body.userData` or contacting 
-`fixture.userData` must be set to `Wall`. 
+set to a `ContactCallback`. And if `Wall` is a `BodyComponent` its `body.userData` or contacting
+`fixture.userData` must be set to `Wall`.
 
 If `userData` is `null` the contact events are ignored, it is `null` by default.
 
@@ -114,7 +114,7 @@ Every time `Ball` and `Wall` begin to come in contact `beginContact` will be cal
 fixtures cease being in contact, `endContact` will be called.
 
 An implementation example can be seen in the
-[Flame Forge2D example](https://github.com/flame-engine/flame/blob/main/packages/flame_forge2d/example/lib/balls.dart).
+[Flame Forge2D example](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/bridge_libraries/forge2d/utils/balls.dart).
 
 
 ### Forge2DCamera.followBodyComponent

@@ -52,7 +52,7 @@ Simple examples for all features can be found in the
 [examples folder](https://github.com/flame-engine/flame/tree/main/examples).
 
 You can also check out the
-[awesome flame repository](https://github.com/flame-engine/awesome-flame#articles--tutorials),
+[awesome flame repository](https://github.com/flame-engine/awesome-flame#user-content-articles--tutorials),
 It contains quite a lot of good tutorials and articles written by the community to get you started
 with Flame.
 

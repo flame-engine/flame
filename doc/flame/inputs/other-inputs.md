@@ -99,7 +99,7 @@ If you want to create buttons to go with your joystick, check out
 [`HudButtonComponent`](#hudbuttoncomponent).
 
 A full examples of how to use it can be found
-[here](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/input/joystick_example.dart).
+[here](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/input/joystick_example.dart).
 And it can be seen running [here](https://examples.flame-engine.org/#/Controls_Joystick).
 
 

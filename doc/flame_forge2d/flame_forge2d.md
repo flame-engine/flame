@@ -4,5 +4,5 @@
 .. toctree::
     :hidden:
 
-    Forge2D    <flame_forge2d.md>
+    Overview    <forge2d.md>
 ```

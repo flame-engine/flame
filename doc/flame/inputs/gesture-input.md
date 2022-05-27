@@ -482,4 +482,4 @@ More information about how to define hitboxes can be found in the hitbox section
 [collision detection](../collision_detection.md#shapehitbox) docs.
 
 An example of how to use it can be seen
-[here](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/input/gesture_hitboxes_example.dart).
+[here](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/input/gesture_hitboxes_example.dart).
