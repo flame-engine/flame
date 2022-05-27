@@ -273,7 +273,7 @@ Since the hitboxes now are `Component`s you add them to your component with `add
 
 ## Examples
 
-- https://examples.flame-engine.org/#/Collision%20Detection_Circles
-- https://examples.flame-engine.org/#/Collision%20Detection_Multiple%20shapes
-- https://examples.flame-engine.org/#/Collision%20Detection_Shapes%20without%20components
-- https://github.com/flame-engine/flame/tree/main/examples/lib/stories/collision_detection
+ - https://examples.flame-engine.org/#/Collision%20Detection_Collidable%20AnimationComponent
+ - https://examples.flame-engine.org/#/Collision%20Detection_Circles 
+ - https://examples.flame-engine.org/#/Collision%20Detection_Multiple%20shapes 
+ - https://github.com/flame-engine/flame/tree/main/examples/lib/stories/collision_detection
