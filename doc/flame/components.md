@@ -841,11 +841,6 @@ void main() {
 ```
 
 
-## SpriteBodyComponent
-
-See [SpriteBodyComponent](../flame_forge2d/forge2d.md#spritebodycomponent) in the Forge2D documentation.
-
-
 ## TiledComponent
 
 Currently we have a very basic implementation of a Tiled component. This API uses the lib
