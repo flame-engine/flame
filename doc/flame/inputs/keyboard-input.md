@@ -133,4 +133,4 @@ By default `GameWidget` has its `autofocus` set to true, which means it will get
 mounted. To override that behavior, set `autofocus` to false.
 
 For a more complete example see
-[here](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/input/keyboard_example.dart).
+[here](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/input/keyboard_example.dart).
