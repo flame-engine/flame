@@ -95,7 +95,7 @@ class CircleComponent extends ShapeComponent implements SizeProvider {
     return dx * dx + dy * dy <= radius * radius;
   }
 
-  /// Returns the locus of points in which the provided line segment intersect
+  /// Returns the locus of points in which the provided line segment intersects
   /// the circle.
   ///
   /// This can be an empty list (if they don't intersect), one point (if the
