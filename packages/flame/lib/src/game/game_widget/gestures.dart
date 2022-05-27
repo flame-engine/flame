@@ -1,4 +1,5 @@
-import 'package:flame/extensions.dart';
+import 'package:flame/src/events/flame_drag_adapter.dart';
+import 'package:flame/src/events/interfaces/multi_drag_listener.dart';
 import 'package:flame/src/events/interfaces/multi_tap_listener.dart';
 import 'package:flame/src/game/mixins/game.dart';
 import 'package:flame/src/game/mixins/has_draggables.dart';
@@ -206,51 +207,14 @@ Widget applyAdvancedGesturesDetectors(Game game, Widget child) {
       },
     );
   }
-
-  void addDragRecognizer(Drag Function(int, DragStartInfo) config) {
+  if (game is MultiDragListener) {
     addRecognizer(
       ImmediateMultiDragGestureRecognizer.new,
       (ImmediateMultiDragGestureRecognizer instance) {
-        var lastGeneratedDragId = 0;
-        instance.onStart = (Offset o) {
-          final pointerId = lastGeneratedDragId++;
-
-          final global = o;
-          final local = game
-              .convertGlobalToLocalCoordinate(
-                global.toVector2(),
-              )
-              .toOffset();
-
-          final details = DragStartDetails(
-            localPosition: local,
-            globalPosition: global,
-          );
-          return config(
-            pointerId,
-            DragStartInfo.fromDetails(game, details),
-          );
-        };
+        final g = game as MultiDragListener;
+        instance.onStart = (Offset point) => FlameDragAdapter(g, point);
       },
     );
-  }
-
-  if (game is MultiTouchDragDetector) {
-    addDragRecognizer((int pointerId, DragStartInfo info) {
-      game.onDragStart(pointerId, info);
-      return _DragEvent(game)
-        ..onUpdate = ((details) => game.onDragUpdate(pointerId, details))
-        ..onEnd = ((details) => game.onDragEnd(pointerId, details))
-        ..onCancel = (() => game.onDragCancel(pointerId));
-    });
-  } else if (game is HasDraggables) {
-    addDragRecognizer((int pointerId, DragStartInfo position) {
-      game.onDragStart(pointerId, position);
-      return _DragEvent(game)
-        ..onUpdate = ((details) => game.onDragUpdate(pointerId, details))
-        ..onEnd = ((details) => game.onDragEnd(pointerId, details))
-        ..onCancel = (() => game.onDragCancel(pointerId));
-    });
   }
 
   return RawGestureDetector(
@@ -274,30 +238,4 @@ Widget applyMouseDetectors(Game game, Widget child) {
             ? game.onScroll(PointerScrollInfo.fromDetails(game, event))
             : null,
   );
-}
-
-class _DragEvent extends Drag {
-  final Game gameRef;
-  void Function(DragUpdateInfo)? onUpdate;
-  VoidCallback? onCancel;
-  void Function(DragEndInfo)? onEnd;
-
-  _DragEvent(this.gameRef);
-
-  @override
-  void update(DragUpdateDetails details) {
-    final event = DragUpdateInfo.fromDetails(gameRef, details);
-    onUpdate?.call(event);
-  }
-
-  @override
-  void cancel() {
-    onCancel?.call();
-  }
-
-  @override
-  void end(DragEndDetails details) {
-    final event = DragEndInfo.fromDetails(gameRef, details);
-    onEnd?.call(event);
-  }
 }

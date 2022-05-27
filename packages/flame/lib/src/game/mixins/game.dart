@@ -26,6 +26,7 @@ mixin Game {
 
   /// Just a reference back to the render box that is kept up to date by the
   /// engine.
+  GameRenderBox get renderBox => _gameRenderBox!;
   GameRenderBox? _gameRenderBox;
 
   /// Currently attached build context. Can be null if not attached.

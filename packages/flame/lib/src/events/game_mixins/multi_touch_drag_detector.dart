@@ -10,7 +10,7 @@ mixin MultiTouchDragDetector on Game implements MultiDragListener {
   void onDragEnd(int pointerId, DragEndInfo info) {}
   void onDragCancel(int pointerId) {}
 
-  //#region MultiTapListener API
+  //#region MultiDragListener API
   @override
   void handleDragStart(int pointerId, DragStartDetails details) {
     onDragStart(pointerId, DragStartInfo.fromDetails(this, details));
