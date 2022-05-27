@@ -23,23 +23,17 @@ import 'package:vector_math/vector_math_64.dart';
 /// canvas. Its default value will draw the character images as-is. Changing
 /// the opacity of the paint's color will make the text semi-transparent.
 class SpriteFontRenderer extends TextRenderer {
-  SpriteFontRenderer(
-    SpriteFontData data, {
-    this.letterSpacing = 0,
-  })  : source = data.source,
-        charWidth = data.charWidth,
-        charHeight = data.charHeight,
-        _glyphs = data._glyphs,
-        scale = data.scale;
+  SpriteFontRenderer(this._data, {this.letterSpacing = 0});
 
-  final Image source;
-  final double charWidth;
-  final double charHeight;
-  final double scale;
+  final SpriteFontData _data;
   final double letterSpacing;
+
+  Image get source => _data.source;
+  double get charWidth => _data.charWidth;
+  double get charHeight => _data.charHeight;
+  double get scale => _data.scale;
   bool get isMonospace => true;
 
-  final Map<int, _GlyphInfo> _glyphs;
   Paint paint = Paint()..color = const Color(0xFFFFFFFF);
 
   @override
@@ -88,7 +82,7 @@ class SpriteFontRenderer extends TextRenderer {
   }
 
   _GlyphInfo _getGlyphFromCodeUnit(int i) {
-    final glyph = _glyphs[i];
+    final glyph = _data._glyphs[i];
     if (glyph == null) {
       throw ArgumentError('No glyph for character "${String.fromCharCode(i)}"');
     }
