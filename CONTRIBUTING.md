@@ -99,6 +99,23 @@ command once.
  (e.g. `git push origin my-username.my-new-feature`, replace `origin` if you use another remote.)
 
 
+### Breaking changes
+
+When doing breaking changes a deprecation tag should be added when possible and contain a message
+that conveys to the user what which version that the deprecated method/field will be removed in and
+what method they should use instead to perform the task. The version specified should be at least
+two versions after the current one, such that there will be at least one stable release where the
+users get to see the deprecation warning and in the version after that (or a later version) the
+deprecated entity should be removed.
+
+Example (if the current version is v1.1.0):
+
+```dart
+@Deprecated('Will be removed in v1.3.0, use nonDeprecatedFeature() instead')
+void deprecatedFeature() {}
+```
+
+
 ### Open a pull request
 Go to the [pull request page of Flame][PRs] and in the top
 of the page it will ask you if you want to open a pull request from your newly created branch.
@@ -128,6 +145,7 @@ Examples of PR titles:
 
 These instructions are for the maintainers of Flame.
 
+
 ## Merging a pull request
 
 When merging a pull request, make sure that the title of the merge commit has the correct
@@ -138,16 +156,6 @@ changed during the life time of the PR for example).
 All the default text should be removed from the commit message and the PR description and the
 instructions from the "Migration instruction" (if the PR is breaking) should be copied into the
 commit message.
-
-
-## Breaking changes
-
-When doing breaking changes a deprecation tag should be added when possible and contain a message
-that conveys to the user what which version that the deprecated method/field will be removed in and 
-what method they should use instead to perform the task. The version specified should be at least
-two versions after the current one, such that there will be at least one stable release where the
-users get to see the deprecation warning and in the version after that (or a later version) the
-deprecated entity should be removed.
 
 
 ## Creating a release
