@@ -233,8 +233,10 @@ class Component {
   set parent(Component? newParent) {
     if (newParent == null) {
       removeFromParent();
+    } else if (_parent == null) {
+      addToParent(newParent);
     } else {
-      changeParent(newParent);
+      newParent.lifecycle._adoption.add(this);
     }
   }
 
@@ -603,7 +605,7 @@ class Component {
   /// Changes the current parent for another parent and prepares the tree under
   /// the new root.
   void changeParent(Component newParent) {
-    newParent.lifecycle._adoption.add(this);
+    parent = newParent;
   }
 
   //#endregion
