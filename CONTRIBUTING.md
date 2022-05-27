@@ -92,7 +92,7 @@ command once.
 
 ### Performing changes
  - Create a new local branch from `main` (e.g. `git checkout -b my-new-feature`)
- - Make your changes.
+ - Make your changes (try to split them up with one PR per feature/fix).
  - When committing your changes, make sure that each commit message is clear
  (e.g. `git commit -m 'Take in an optional Camera as a parameter to FlameGame'`).
  - Push your new branch to your own fork into the same remote branch
