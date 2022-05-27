@@ -7,6 +7,7 @@ For other input documents, see also:
 - [Gesture Input](gesture-input.md): for mouse and touch pointer gestures
 - [Other Inputs](other-inputs.md): For joysticks, game pads, etc.
 
+
 ## Intro
 
 The keyboard API on flame relies on the
@@ -17,6 +18,7 @@ To customize focus behavior, see [Controlling focus](#controlling-focus).
 There are two ways a game can react to key strokes; at the game level and at a component level.
 For each we have a mixin that can me added to a `Game` or `Component` class.
 
+
 ### Receive keyboard events in a game level
 
 To make a `Game` sub class sensitive to key stroke, mix it with `KeyboardEvents`.
@@ -26,10 +28,10 @@ After that, it will be possible to override an `onKeyEvent` method.
 This method receives two parameters, first the
 [`RawKeyEvent`](https://api.flutter.dev/flutter/services/RawKeyEvent-class.html)
 that triggers the callback in the first place. The second is a set of the currently pressed
-[`LogicalKeyboardKey`](https://api.flutter.dev/flutter/widgets/KeyEventResult-class.html).
+[`LogicalKeyboardKey`](https://api.flutter.dev/flutter/services/LogicalKeyboardKey-class.html).
 
 The return value is a
-[`KeyEventResult`](https://api.flutter.dev/flutter/widgets/KeyEventResult-class.html).
+[`KeyEventResult`](https://api.flutter.dev/flutter/widgets/KeyEventResult.html).
 
 `KeyEventResult.handled` will tell the framework that the key stroke was resolved inside of Flame
 and skip any other keyboard handler widgets apart of `GameWidget`.
@@ -69,6 +71,7 @@ class MyGame extends FlameGame with KeyboardEvents {
 }
 ```
 
+
 ### Receive keyboard events in a component level
 
 To receive keyboard events directly in components, there is the mixin `KeyboardHandler`.
@@ -86,7 +89,7 @@ After applying `KeyboardHandler`, it will be possible to override an `onKeyEvent
 This method receives two parameters. First the
 [`RawKeyEvent`](https://api.flutter.dev/flutter/services/RawKeyEvent-class.html)
 that triggered the callback in the first place. The second is a set of the currently pressed
-[`LogicalKeyboardKey`](https://api.flutter.dev/flutter/widgets/KeyEventResult-class.html)s.
+[`LogicalKeyboardKey`](https://api.flutter.dev/flutter/services/LogicalKeyboardKey-class.html)s.
 
 The returned value should be `true` to allow the continuous propagation of the key event among other
 components. To not allow any other component to receive the event, return `false`.
@@ -117,6 +120,7 @@ add(
 );
 ```
 
+
 ### Controlling focus
 
 On the widget level, it is possible to use the
@@ -129,4 +133,4 @@ By default `GameWidget` has its `autofocus` set to true, which means it will get
 mounted. To override that behavior, set `autofocus` to false.
 
 For a more complete example see
-[here](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/input/keyboard.dart).
+[here](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/input/keyboard_example.dart).

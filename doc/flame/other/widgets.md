@@ -10,6 +10,7 @@ You can also see all the widgets showcased inside a
 [Dashbook](https://github.com/erickzanardo/dashbook) sandbox
 [here](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/widgets)
 
+
 ## Nine Tile Box
 
 A Nine Tile Box is a rectangle drawn using a grid sprite.
@@ -38,6 +39,7 @@ NineTileBox.asset(
 )
 ```
 
+
 ## SpriteButton
 
 `SpriteButton` is a simple widget that creates a button based on Flame sprites. This can be very
@@ -58,6 +60,7 @@ SpriteButton.asset(
 )
 ```
 
+
 ## SpriteWidget
 
 `SpriteWidget` is a widget used to display a [Sprite](../rendering/images.md#sprite) inside a widget
@@ -71,6 +74,7 @@ SpriteWidget.asset(
     anchor: Anchor.center,
 )
 ```
+
 
 ## SpriteAnimationWidget
 
