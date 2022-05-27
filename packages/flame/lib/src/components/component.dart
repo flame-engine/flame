@@ -603,7 +603,11 @@ class Component {
   /// Changes the current parent for another parent and prepares the tree under
   /// the new root.
   void changeParent(Component newParent) {
-    newParent.lifecycle._adoption.add(this);
+    if (_parent == null) {
+      addToParent(newParent);
+    } else {
+      newParent.lifecycle._adoption.add(this);
+    }
   }
 
   //#endregion
