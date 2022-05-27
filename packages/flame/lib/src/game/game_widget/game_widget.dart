@@ -198,8 +198,10 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
     if (oldWidget.game != widget.game) {
       // Reset the loaderFuture so that onMount will run again
       // (onLoad is still cached).
+      oldWidget.game.removeGameStateListener(_onGameStateChange);
       oldWidget.game.onRemove();
       _loaderFuture = null;
+      widget.game.addGameStateListener(_onGameStateChange);
     }
   }
 
