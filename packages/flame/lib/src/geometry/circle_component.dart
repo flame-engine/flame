@@ -5,6 +5,7 @@ import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/geometry.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
+import 'package:flame/src/utils/solve_quadratic.dart';
 
 class CircleComponent extends ShapeComponent implements SizeProvider {
   /// With this constructor you can create your [CircleComponent] from a radius
@@ -103,43 +104,15 @@ class CircleComponent extends ShapeComponent implements SizeProvider {
     LineSegment line, {
     double epsilon = double.minPositive,
   }) {
-    double sq(double x) => x * x;
+    final delta21 = line.to - line.from;
+    final delta10 = line.from - absoluteCenter;
+    final a = delta21.length2;
+    final b = 2 * delta21.dot(delta10);
+    final c = delta10.length2 - radius * radius;
 
-    final cx = absoluteCenter.x;
-    final cy = absoluteCenter.y;
-
-    final point1 = line.from;
-    final point2 = line.to;
-
-    final delta = point2 - point1;
-
-    final A = sq(delta.x) + sq(delta.y);
-    final B = 2 * (delta.x * (point1.x - cx) + delta.y * (point1.y - cy));
-    final C = sq(point1.x - cx) + sq(point1.y - cy) - sq(radius);
-
-    final det = B * B - 4 * A * C;
-    final result = <Vector2>[];
-    if (A <= epsilon || det < 0) {
-      return [];
-    } else if (det == 0) {
-      final t = -B / (2 * A);
-      result.add(Vector2(point1.x + t * delta.x, point1.y + t * delta.y));
-    } else {
-      final t1 = (-B + sqrt(det)) / (2 * A);
-      final i1 = Vector2(
-        point1.x + t1 * delta.x,
-        point1.y + t1 * delta.y,
-      );
-
-      final t2 = (-B - sqrt(det)) / (2 * A);
-      final i2 = Vector2(
-        point1.x + t2 * delta.x,
-        point1.y + t2 * delta.y,
-      );
-
-      result.addAll([i1, i2]);
-    }
-    result.removeWhere((v) => !line.containsPoint(v));
-    return result;
+    return solveQuadratic(a, b, c)
+        .map((t) => line.from + delta21 * t)
+        .where((point) => line.containsPoint(point))
+        .toList();
   }
 }
