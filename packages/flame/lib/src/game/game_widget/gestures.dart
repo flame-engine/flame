@@ -1,11 +1,6 @@
+import 'package:flame/events.dart';
 import 'package:flame/src/events/flame_drag_adapter.dart';
-import 'package:flame/src/events/interfaces/multi_drag_listener.dart';
-import 'package:flame/src/events/interfaces/multi_tap_listener.dart';
 import 'package:flame/src/game/mixins/game.dart';
-import 'package:flame/src/game/mixins/has_draggables.dart';
-import 'package:flame/src/game/mixins/has_hoverables.dart';
-import 'package:flame/src/gestures/detectors.dart';
-import 'package:flame/src/gestures/events.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
 

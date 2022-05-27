@@ -1,13 +1,6 @@
 import 'package:flame/src/game/mixins/game.dart';
 import 'package:flame/src/gestures/events.dart';
 
-mixin MultiTouchDragDetector on Game {
-  void onDragStart(int pointerId, DragStartInfo info) {}
-  void onDragUpdate(int pointerId, DragUpdateInfo info) {}
-  void onDragEnd(int pointerId, DragEndInfo info) {}
-  void onDragCancel(int pointerId) {}
-}
-
 // Basic touch detectors
 mixin TapDetector on Game {
   void onTap() {}
