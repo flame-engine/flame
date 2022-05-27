@@ -165,8 +165,8 @@ There are a few things to think about when doing a release:
  - Search through the codebase for `@Deprecated` methods/fields and remove the ones that are marked
    for removal in the version that you are intending to release.
  - Create a PR containing the changes for removing the deprecated entities.
- - Run `melos version -V <package1>:<version> -V <package2>:<version>` for Melos to generate a
-   `CHANGELOG.md` file.
+ - Run `melos version -V <package1>:<version> -V <package2>:<version>` for Melos to generate
+   `CHANGELOG.md` files.
  - Go through the PRs with breaking changes and add migration documentation to the changelog.
    There should be migration docs on each PR, if they haven't been copied to the commit message.
  - Run `melos publish` to make sure that there aren't any problems with any of the packages and make
