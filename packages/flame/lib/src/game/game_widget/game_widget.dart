@@ -116,7 +116,7 @@ class GameWidget<T extends Game> extends StatefulWidget {
       game.mouseCursor = mouseCursor;
     }
     if (initialActiveOverlays != null) {
-      initialActiveOverlays.forEach(game.overlays.add);
+      game.overlays.addAll(initialActiveOverlays);
     }
   }
 
