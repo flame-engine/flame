@@ -9,6 +9,7 @@ There are two types of layers on Flame:
  - `DynamicLayer`: For things that are moving or changing.
  - `PreRenderedLayer`: For things that are static.
 
+
 ## DynamicLayer
 
 Dynamic layers are layers that are rendered every time that they are drawn on the canvas. As the
@@ -45,6 +46,7 @@ class MyGame extends Game {
 }
 ```
 
+
 ## PreRenderedLayer
 
 Pre-rendered layers are rendered only once, cached in memory and then just
@@ -78,6 +80,7 @@ class MyGame extends Game {
 }
 ```
 
+
 ## Layer Processors
 
 Flame also provides a way to add processors on your layer, which are ways to add effects on the
@@ -105,4 +108,4 @@ class BackgroundLayer extends PreRenderedLayer {
 Custom processors can be created by extending the `LayerProcessor` class.
 
 You can check a working example of layers
-[here](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/rendering/layers.dart).
+[here](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/rendering/layers_example.dart).

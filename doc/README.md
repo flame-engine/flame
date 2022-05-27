@@ -26,6 +26,7 @@ reach out, open issues, PRs and make suggestions.
 
 Give us a star if you want to help give the engine exposure and grow the community. :)
 
+
 ## Installation
 
 Put the pub package as your dependency by putting the following in your `pubspec.yaml`:
@@ -41,6 +42,7 @@ then run `pub get` and you are ready to start using it!
 
 The latest version can be found on [pub.dev](https://pub.dev/packages/flame/install).
 
+
 ## Getting started
 
 There is a set of tutorials that you can follow to get started in the
@@ -50,7 +52,7 @@ Simple examples for all features can be found in the
 [examples folder](https://github.com/flame-engine/flame/tree/main/examples).
 
 You can also check out the
-[awesome flame repository](https://github.com/flame-engine/awesome-flame#articles--tutorials),
+[awesome flame repository](https://github.com/flame-engine/awesome-flame#user-content-articles--tutorials),
 It contains quite a lot of good tutorials and articles written by the community to get you started
 with Flame.
 
@@ -60,6 +62,7 @@ with Flame.
 Games sometimes require complex feature sets depending on what the game is all about. And some of
 those feature sets are outside of the scope of the Flame Engine ecosystem, in this section you can find
 them, and also some recommendations of packages/services that can be used:
+
 
 ### Multiplayer (netcode)
 
@@ -71,6 +74,7 @@ If you are building a multipler game, here are some recommendations of packages/
  to power modern games and apps.
  - [Firebase](https://firebase.google.com/): Provides dozens of services that can be used to write
 simpler multiplayer experiences.
+
 
 ### External assets
 
