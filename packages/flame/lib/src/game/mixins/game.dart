@@ -287,20 +287,22 @@ mixin Game {
     _refreshWidget();
   }
 
-  final List<VoidCallback> _gameStateListeners = [];
+  @visibleForTesting
+  final List<VoidCallback> gameStateListeners = [];
+
   void addGameStateListener(VoidCallback callback) {
-    _gameStateListeners.add(callback);
+    gameStateListeners.add(callback);
   }
 
   void removeGameStateListener(VoidCallback callback) {
-    _gameStateListeners.remove(callback);
+    gameStateListeners.remove(callback);
   }
 
   /// When a Game is attached to a `GameWidget`, this method will force that
   /// widget to be rebuilt. This can be used when updating any property which is
   /// implemented within the Flutter tree.
   void _refreshWidget() {
-    _gameStateListeners.forEach((callback) => callback());
+    gameStateListeners.forEach((callback) => callback());
   }
 }
 
