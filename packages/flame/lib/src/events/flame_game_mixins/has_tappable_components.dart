@@ -28,7 +28,7 @@ import 'package:meta/meta.dart';
 ///   Instead, consider `MultiTouchTapDetector`.
 mixin HasTappableComponents on FlameGame implements MultiTapListener {
   /// The record of all components currently being touched.
-  final Set<_PointerComponentPair> _record = {};
+  final Set<_TaggedComponent> _record = {};
 
   /// Called when the user touches the device screen within the game canvas,
   /// either with a finger, a stylus, or a mouse.
@@ -45,7 +45,7 @@ mixin HasTappableComponents on FlameGame implements MultiTapListener {
     event.deliverAtPoint(
       rootComponent: this,
       eventHandler: (TapCallbacks component) {
-        _record.add(_PointerComponentPair(event.pointerId, component));
+        _record.add(_TaggedComponent(event.pointerId, component));
         component.onTapDown(event);
       },
     );
@@ -69,7 +69,7 @@ mixin HasTappableComponents on FlameGame implements MultiTapListener {
     event.deliverAtPoint(
       rootComponent: this,
       eventHandler: (TapCallbacks component) {
-        final record = _PointerComponentPair(event.pointerId, component);
+        final record = _TaggedComponent(event.pointerId, component);
         if (_record.contains(record)) {
           component.onLongTapDown(event);
         }
@@ -100,7 +100,7 @@ mixin HasTappableComponents on FlameGame implements MultiTapListener {
     event.deliverAtPoint(
       rootComponent: this,
       eventHandler: (TapCallbacks component) {
-        if (_record.remove(_PointerComponentPair(event.pointerId, component))) {
+        if (_record.remove(_TaggedComponent(event.pointerId, component))) {
           component.onTapUp(event);
         }
       },
@@ -186,8 +186,8 @@ mixin HasTappableComponents on FlameGame implements MultiTapListener {
 mixin HasLegacyTappables on HasTappableComponents {}
 
 @immutable
-class _PointerComponentPair {
-  const _PointerComponentPair(this.pointerId, this.component);
+class _TaggedComponent {
+  const _TaggedComponent(this.pointerId, this.component);
   final int pointerId;
   final TapCallbacks component;
 
@@ -196,7 +196,7 @@ class _PointerComponentPair {
 
   @override
   bool operator ==(Object other) {
-    return other is _PointerComponentPair &&
+    return other is _TaggedComponent &&
         other.pointerId == pointerId &&
         other.component == component;
   }
