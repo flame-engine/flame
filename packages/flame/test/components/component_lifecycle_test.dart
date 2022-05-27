@@ -121,6 +121,8 @@ void main() {
         game.update(0);
         await game.ready();
 
+        expect(child.parent, parent);
+        expect(child.isMounted, true);
         await expectLater(mounted, completes);
       },
     );
