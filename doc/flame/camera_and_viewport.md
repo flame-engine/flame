@@ -11,6 +11,7 @@ your game has some sort of game world with an intrinsic coordinate system that d
 screen coordinates. Flame adds two distinct concepts to help transform coordinate spaces. For the
 former, we have the Viewport class. And for the later, we have the Camera class.
 
+
 ## Viewport
 
 The Viewport is an attempt to unify multiple screen (or, rather, game widget) sizes into a single
@@ -32,6 +33,7 @@ render operation, and the `size` property in the game, instead of the logical wi
 the size as seen through the viewport together with the zoom of the camera. If for some reason you
 need to access the original real logical pixel size, you can use `canvasSize`. For a more in depth
 description on what each `Viewport` does and how it operates, check the documentation on its class.
+
 
 ## Camera
 
