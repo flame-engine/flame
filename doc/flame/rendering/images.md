@@ -28,7 +28,7 @@ It automatically caches any image loaded by filename, so you can safely call it 
 
 The methods for loading and clearing the cache are: `load`, `loadAll`, `clear` and `clearCache`.
 They return `Future`s for loading the images. These futures must be awaited for before the images
-can be used in any way. If you do not want to await these futures right away, you can initiate 
+can be used in any way. If you do not want to await these futures right away, you can initiate
 multiple `load()` operations and then await for all of them at once using `Images.ready()` method.
 
 To synchronously retrieve a previously cached image, the `fromCache` method can be used. If an image
@@ -167,7 +167,7 @@ render call.
 `Sprite`s can also be used as widgets, to do so just use `SpriteWidget` class.
 
 A complete example using sprite as widgets can be found
-[here](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/widgets/sprite_widget_example.dart).
+[here](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/widgets/sprite_widget_example.dart).
 
 
 ## SpriteBatch
@@ -183,7 +183,7 @@ You render it with a `Canvas` and an optional `Paint`, `BlendMode` and `CullRect
 A `SpriteBatchComponent` is also available for your convenience.
 
 See the examples
-[here](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/sprites/spritebatch_example.dart).
+[here](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/sprites/spritebatch_example.dart).
 
 
 ## ImageComposition
@@ -322,7 +322,7 @@ Animations are normally used inside `SpriteAnimationComponent`s, but custom comp
 Animations can be created as well.
 
 A complete example of using animations as widgets can be found
-[here](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/widgets/sprite_animation_widget_example.dart).
+[here](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/widgets/sprite_animation_widget_example.dart).
 
 
 ## FlareAnimation
@@ -404,4 +404,4 @@ spritesheet.getSprite(0, 0) // row, column;
 ```
 
 You can see a full example of the `SpriteSheet` class
-[here](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/sprites/spritesheet_example.dart).
+[here](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/sprites/spritesheet_example.dart).

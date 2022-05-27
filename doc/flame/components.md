@@ -928,4 +928,4 @@ Flame provides a set of effects that can be applied to a certain type of compone
 can be used to animate some properties of your components, like position or dimensions.
 You can check the list of those effects [here](effects.md).
 
-Examples of the running effects can be found [here](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/effects);
+Examples of the running effects can be found [here](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/effects);
