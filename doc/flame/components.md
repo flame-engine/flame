@@ -42,6 +42,7 @@ A component lifecycle state can be checked by a series of getters:
  - `isMounted`: Returns a bool with the current mounted state
  - `mounted`: Returns a future that will complete once the component has finished mounting
 
+
 ### Priority
 
 In Flame the order components are rendered (and updated) in is called `priority`, this is sometimes
@@ -158,6 +159,7 @@ available eventually: after they are loaded and mounted. We can only assure
 that they will appear in the children list in the same order as they were
 scheduled for addition.
 
+
 ### Ensuring a component has a given parent
 
 When a component requires to be added to a specific parent type the
@@ -177,6 +179,7 @@ class MyComponent extends Component with ParentIsA<MyParentComponent> {
 
 If you try to add `MyComponent` to a parent that is not `MyParentComponent`,
 an assertion error will be thrown.
+
 
 ### Querying child components
 
@@ -324,6 +327,7 @@ Future<void> onLoad() async {
 
 Remember that most components that are rendered on the screen are `PositionComponent`s, so
 this pattern can be used in for example [](#spritecomponent) and [](#spriteanimationcomponent) too.
+
 
 ### Render PositionComponent
 
@@ -839,7 +843,7 @@ void main() {
 
 ## SpriteBodyComponent
 
-See [SpriteBodyComponent](../other_modules/forge2d.md#spritebodycomponent) in the Forge2D documentation.
+See [SpriteBodyComponent](../flame_forge2d/forge2d.md#spritebodycomponent) in the Forge2D documentation.
 
 
 ## TiledComponent
@@ -885,8 +889,8 @@ This is an example of how a quarter-length map looks like:
 
 Flame's Example app contains a more in-depth example, featuring how to parse coordinates to make a
 selector. The code can be found
-[here](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/tile_maps/isometric_tile_map.dart),
-and a live version can be seen [here](https://examples.flame-engine.org/#/Tile%20Maps_Isometric%20Tile%20Map).
+[here](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/rendering/isometric_tile_map_example.dart),
+and a live version can be seen [here](https://examples.flame-engine.org/#/Rendering_Isometric%20Tile%20Map).
 
 
 ## NineTileBoxComponent
@@ -903,7 +907,7 @@ Using this, you can get a box/rectangle that expands well to any sizes. This is 
 panels, dialogs, borders.
 
 Check the example app
-[nine_tile_box](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/utils/nine_tile_box.dart)
+[nine_tile_box](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/rendering/nine_tile_box_example.dart)
 for details on how to use it.
 
 
@@ -919,7 +923,7 @@ This can be used for sharing custom rendering logic between your Flame game, and
 widgets.
 
 Check the example app
-[custom_painter_component](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/widgets/custom_painter_component.dart)
+[custom_painter_component](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/widgets/custom_painter_example.dart)
 for details on how to use it.
 
 

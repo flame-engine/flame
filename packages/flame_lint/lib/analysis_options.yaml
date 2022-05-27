@@ -68,6 +68,7 @@ linter:
     - no_adjacent_strings_in_list
     - no_duplicate_case_values
     - no_runtimeType_toString
+    - non_constant_identifier_names
     - omit_local_variable_types
     - package_api_docs
     - package_names
