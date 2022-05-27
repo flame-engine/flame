@@ -3,40 +3,34 @@ import 'package:flame/src/game/mixins/game.dart';
 import 'package:flutter/gestures.dart';
 import 'package:meta/meta.dart';
 
+/// Helper class to convert drag API as expected by the
+/// [ImmediateMultiDragGestureRecognizer] into the API expected by Flame's
+/// [MultiDragListener].
 @internal
 class FlameDragAdapter implements Drag {
-  FlameDragAdapter(this._game, Offset startPoint)
-      : _pointerId = _globallyUniqueIdCounter++,
-        assert(_game is Game) {
+  FlameDragAdapter(this._game, Offset startPoint) {
+    _id = _globalIdCounter++;
     start(startPoint);
   }
 
   final MultiDragListener _game;
-  final int _pointerId;
-  static int _globallyUniqueIdCounter = 0;
+  late final int _id;
+  static int _globalIdCounter = 0;
 
   void start(Offset point) {
-    _game.handleDragStart(
-      _pointerId,
-      DragStartDetails(
-        globalPosition: point,
-        localPosition: (_game as Game).renderBox.globalToLocal(point),
-      ),
+    final event = DragStartDetails(
+      globalPosition: point,
+      localPosition: (_game as Game).renderBox.globalToLocal(point),
     );
+    _game.handleDragStart(_id, event);
   }
 
   @override
-  void cancel() {
-    _game.handleDragCancel(_pointerId);
-  }
+  void update(DragUpdateDetails event) => _game.handleDragUpdate(_id, event);
 
   @override
-  void end(DragEndDetails details) {
-    _game.handleDragEnd(_pointerId, details);
-  }
+  void end(DragEndDetails event) => _game.handleDragEnd(_id, event);
 
   @override
-  void update(DragUpdateDetails details) {
-    _game.handleDragUpdate(_pointerId, details);
-  }
+  void cancel() => _game.handleDragCancel(_id);
 }

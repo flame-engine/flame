@@ -1,4 +1,3 @@
-
 import 'package:flame/src/events/interfaces/multi_drag_listener.dart';
 import 'package:flame/src/game/mixins/game.dart';
 import 'package:flame/src/gestures/events.dart';
