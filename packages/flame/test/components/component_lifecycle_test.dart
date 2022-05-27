@@ -113,11 +113,10 @@ void main() {
         final child = LifecycleComponent('child');
         game.add(parent);
 
-        var mounted = child.mounted;
+        final mounted = child.mounted;
         await game.ready();
 
         child.changeParent(parent);
-        mounted = child.mounted;
         game.update(0);
         await game.ready();
 
