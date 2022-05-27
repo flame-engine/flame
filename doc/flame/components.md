@@ -562,7 +562,7 @@ controller.rightHandNode.rotation = math.pi;
 You can also change the current playing animation by using the `updateAnimation` method.
 
 For a working example, check the example in the
-[flame_flare repository](https://github.com/flame-engine/flame_flare/tree/main/example).
+[flame_flare repository](https://github.com/flame-engine/flame/tree/main/packages/flame_flare/example).
 
 
 ## ParallaxComponent

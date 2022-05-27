@@ -330,7 +330,7 @@ A complete example of using animations as widgets can be found
 Do note that Flare is discontinued and [Rive](https://github.com/flame-engine/flame/tree/main/packages/flame_rive)
 is preferred.
 
-Flame provides a simple wrapper of [Flare](https://rive.app/#LearnMore) animations so you can use
+Flame provides a simple wrapper of [Flare](https://flare.rive.app/) animations so you can use
 them in Flame games.
 
 Check the following snippet on how to use this wrapper:
