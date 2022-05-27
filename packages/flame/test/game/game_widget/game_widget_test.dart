@@ -109,4 +109,22 @@ void main() {
       expect(game.hasLayout, isTrue);
     },
   );
+
+  testWidgets('Subscription is valid after game change', (tester) async {
+    const key = Key('flame-game');
+    final game1 = FlameGame();
+    await tester.pumpWidget(GameWidget(key: key, game: game1));
+    expect(game1.isMounted, true);
+    expect(game1.gameStateListeners.length, 1);
+
+    final game2 = FlameGame();
+    await tester.pumpWidget(GameWidget(key: key, game: game2));
+    final widget = tester.firstWidget<GameWidget>(
+      find.byWidgetPredicate((widget) => widget is GameWidget),
+    );
+    expect(widget.game, game2);
+    expect(game2.isMounted, true);
+    expect(game2.gameStateListeners.length, 1);
+    expect(game1.gameStateListeners.length, 0);
+  });
 }
