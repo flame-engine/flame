@@ -55,7 +55,7 @@ void main() {
 
   group('SpriteFontBuilder', () {
     test('errors', () async {
-      final builder = SpriteFontBuilder(
+      final builder = SpriteFontData(
         source: await loadImage('alphabet.png'),
         charWidth: 6,
         charHeight: 6,
@@ -96,12 +96,11 @@ Future<SpriteFontRenderer> createRenderer({
   double scale = 1,
   double letterSpacing = 0,
 }) async {
-  final spriteFontBuilder = SpriteFontBuilder(
+  final fontData = SpriteFontData(
     source: await loadImage('alphabet.png'),
     charWidth: 6,
     charHeight: 6,
     scale: scale,
-    letterSpacing: letterSpacing,
   );
   const lines = [
     'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
@@ -111,12 +110,12 @@ Future<SpriteFontRenderer> createRenderer({
   ];
   for (var j = 0; j < lines.length; j++) {
     for (var i = 0; i < lines[j].length; i++) {
-      spriteFontBuilder.addGlyph(
+      fontData.addGlyph(
         char: lines[j][i],
         srcLeft: i * 6,
         srcTop: 1 + j * 6,
       );
     }
   }
-  return spriteFontBuilder.build();
+  return SpriteFontRenderer(fontData, letterSpacing: letterSpacing);
 }

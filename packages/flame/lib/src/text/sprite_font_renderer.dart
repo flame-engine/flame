@@ -23,14 +23,14 @@ import 'package:vector_math/vector_math_64.dart';
 /// canvas. Its default value will draw the character images as-is. Changing
 /// the opacity of the paint's color will make the text semi-transparent.
 class SpriteFontRenderer extends TextRenderer {
-  SpriteFontRenderer._({
-    required this.source,
-    required this.charWidth,
-    required this.charHeight,
-    required Map<int, _GlyphInfo> glyphs,
-    required this.letterSpacing,
-    required this.scale,
-  }) : _glyphs = glyphs;
+  SpriteFontRenderer(
+    SpriteFontData data, {
+    this.letterSpacing = 0,
+  })  : source = data.source,
+        charWidth = data.charWidth,
+        charHeight = data.charHeight,
+        _glyphs = data._glyphs,
+        scale = data.scale;
 
   final Image source;
   final double charWidth;
@@ -97,19 +97,17 @@ class SpriteFontRenderer extends TextRenderer {
 }
 
 /// Helper class for creating [SpriteFontRenderer] instances.
-class SpriteFontBuilder {
-  SpriteFontBuilder({
+class SpriteFontData {
+  SpriteFontData({
     required this.source,
     required this.charWidth,
     required this.charHeight,
-    this.letterSpacing = 0,
     this.scale = 1,
   });
 
   final Image source;
   final double charWidth;
   final double charHeight;
-  final double letterSpacing;
   final double scale;
 
   final Map<int, _GlyphInfo> _glyphs = {};
@@ -136,17 +134,6 @@ class SpriteFontBuilder {
     info.width = charWidth * scale;
     info.rstTy = (charHeight - (info.srcBottom - srcTop)) * scale;
     _glyphs[codePoint] = info;
-  }
-
-  SpriteFontRenderer build() {
-    return SpriteFontRenderer._(
-      source: source,
-      charWidth: charWidth,
-      charHeight: charHeight,
-      glyphs: _glyphs,
-      letterSpacing: letterSpacing,
-      scale: scale,
-    );
   }
 }
 

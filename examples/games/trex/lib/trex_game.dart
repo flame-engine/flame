@@ -51,20 +51,19 @@ class TRexGame extends FlameGame
     add(player);
     add(gameOverPanel);
 
-    final fontBuilder = SpriteFontBuilder(
+    final fontData = SpriteFontData(
       source: spriteImage,
       charWidth: 20,
       charHeight: 23,
-      letterSpacing: 2,
     );
     const chars = '0123456789HI ';
     for (var i = 0; i < chars.length; i++) {
-      fontBuilder.addGlyph(char: chars[i], srcLeft: 954 + 20 * i, srcTop: 0);
+      fontData.addGlyph(char: chars[i], srcLeft: 954 + 20 * i, srcTop: 0);
     }
     add(
       scoreText = TextComponent(
         position: Vector2(20, 20),
-        textRenderer: fontBuilder.build(),
+        textRenderer: SpriteFontRenderer(fontData, letterSpacing: 2),
       )..positionType = PositionType.viewport,
     );
     score = 0;
