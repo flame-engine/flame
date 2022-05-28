@@ -2,17 +2,17 @@ import 'dart:_internal';
 
 extension IterableExtension<E> on Iterable<E> {
   /// Similar to [map], but also supplies index of each element.
-  Iterable<T> indexedMap<T>(T Function(int index, E e) toElement) =>
-      _MappedIterable<E, T>(this, toElement);
+  Iterable<T> indexedMap<T>(T Function(int index, E e) mapFunction) =>
+      _MappedIterable<E, T>(this, mapFunction);
 }
 
-typedef IndexedMapFn<E, T> = T Function(int index, E element);
+typedef _IndexedMapFn<E, T> = T Function(int index, E element);
 
 class _MappedIterable<E, T> extends Iterable<T> {
   final Iterable<E> _iterable;
-  final IndexedMapFn<E, T> _transform;
+  final _IndexedMapFn<E, T> _transform;
 
-  factory _MappedIterable(Iterable<E> iterable, IndexedMapFn<E, T> function) {
+  factory _MappedIterable(Iterable<E> iterable, _IndexedMapFn<E, T> function) {
     if (iterable is EfficientLengthIterable) {
       return _EfficientMappedIterable<E, T>(iterable, function);
     }
@@ -44,7 +44,7 @@ class _MappedIterable<E, T> extends Iterable<T> {
 
 class _EfficientMappedIterable<E, T> extends _MappedIterable<E, T>
     implements EfficientLengthIterable<T> {
-  _EfficientMappedIterable(Iterable<E> iterable, IndexedMapFn<E, T> function)
+  _EfficientMappedIterable(Iterable<E> iterable, _IndexedMapFn<E, T> function)
       : super._(iterable, function);
 }
 
@@ -54,7 +54,7 @@ class _IndexedMappedIterator<E, T> extends Iterator<T> {
   int _index = 0;
   T? _current;
   final Iterator<E> _iterator;
-  final IndexedMapFn<E, T> _transform;
+  final _IndexedMapFn<E, T> _transform;
 
   @override
   bool moveNext() {
