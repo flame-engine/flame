@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-class BaseFutureBuilder<T> extends StatelessWidget {
+class BaseFutureBuilder<T> extends StatefulWidget {
   final FutureOr<T> Function() futureBuilder;
   final Widget Function(BuildContext, T) builder;
   final WidgetBuilder? errorBuilder;
@@ -17,28 +17,39 @@ class BaseFutureBuilder<T> extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final future = futureBuilder();
+  State<BaseFutureBuilder<T>> createState() => _BaseFutureBuilderState<T>();
+}
 
-    if (future is Future<T>) {
+class _BaseFutureBuilderState<T> extends State<BaseFutureBuilder<T>> {
+  late final FutureOr<T> maybeFuture;
+
+  @override
+  void initState() {
+    maybeFuture = widget.futureBuilder();
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (maybeFuture is Future<T>) {
       return FutureBuilder<T>(
-        future: future,
+        future: maybeFuture as Future<T>,
         builder: (_, snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.waiting:
             case ConnectionState.none:
             case ConnectionState.active:
-              return loadingBuilder?.call(context) ?? Container();
+              return widget.loadingBuilder?.call(context) ?? Container();
             case ConnectionState.done:
               if (snapshot.hasData) {
-                return builder(context, snapshot.data!);
+                return widget.builder(context, snapshot.data!);
               }
-              return loadingBuilder?.call(context) ?? Container();
+              return widget.loadingBuilder?.call(context) ?? Container();
           }
         },
       );
     }
 
-    return builder(context, future);
+    return widget.builder(context, maybeFuture as T);
   }
 }
