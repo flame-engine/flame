@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 import 'dart:ui' hide Offset;
 
+import 'package:collection/collection.dart';
 import 'package:flame/src/anchor.dart';
 import 'package:flame/src/components/component.dart';
 import 'package:flame/src/components/mixins/coordinate_transform.dart';
@@ -197,7 +198,8 @@ class PositionComponent extends Component
     // TODO(spydon): take scale into consideration
     return ancestors()
         .whereType<PositionComponent>()
-        .fold<double>(angle, (totalAngle, c) => totalAngle + c.angle);
+        .map((c) => c.angle)
+        .sum + angle;
   }
 
   /// The resulting scale after all the ancestors and the components own scale
