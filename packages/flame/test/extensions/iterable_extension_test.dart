@@ -36,5 +36,10 @@ void main() {
       final out = src.indexedMap((index, e) => '$e:$index');
       expect(out.single, 'Flame:0');
     });
+
+    test('maybeFirst', () {
+      expect([3, 5, 11, -2].maybeFirst, 3);
+      expect(<int>[].maybeFirst, null);
+    });
   });
 }

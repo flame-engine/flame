@@ -1,4 +1,10 @@
 extension IterableExtension<E> on Iterable<E> {
+  /// Returns the first element, or null if the iterable is empty.
+  E? get maybeFirst {
+    final it = iterator;
+    return it.moveNext() ? it.current : null;
+  }
+
   /// Similar to [map], but also supplies index of each element.
   Iterable<T> indexedMap<T>(T Function(int index, E e) mapFunction) =>
       _MappedIterable<E, T>(this, mapFunction);

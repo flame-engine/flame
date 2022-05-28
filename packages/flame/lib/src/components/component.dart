@@ -5,6 +5,7 @@ import 'package:flame/src/cache/value_cache.dart';
 import 'package:flame/src/components/component_set.dart';
 import 'package:flame/src/components/mixins/coordinate_transform.dart';
 import 'package:flame/src/components/position_type.dart';
+import 'package:flame/src/extensions/iterable.dart';
 import 'package:flame/src/game/flame_game.dart';
 import 'package:flame/src/game/mixins/game.dart';
 import 'package:flame/src/gestures/events.dart';
@@ -269,10 +270,7 @@ class Component {
   ///
   /// As opposed to `children.whereType<T>().first`, this method returns null
   /// instead of a [StateError] when no matching children are found.
-  T? firstChild<T extends Component>() {
-    final it = children.whereType<T>().iterator;
-    return it.moveNext() ? it.current : null;
-  }
+  T? firstChild<T extends Component>() => children.whereType<T>().maybeFirst;
 
   /// Returns the last child that matches the given type [T].
   T? lastChild<T extends Component>() {
