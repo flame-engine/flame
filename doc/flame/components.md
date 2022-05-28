@@ -445,7 +445,7 @@ final animation =
       };
 
 final animation =
-    SpriteAnimation.spriteList(spriteList, stepTime: 1, loop: false)
+    SpriteAnimation.spriteList([sprite], stepTime: 1, loop: false)
       ..onFrame = (index) {
         if (index == 1) {
           //do something for the second frame
