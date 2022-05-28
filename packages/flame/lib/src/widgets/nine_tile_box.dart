@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:ui';
 
 import 'package:flame/cache.dart';
@@ -40,7 +41,7 @@ typedef NineTileBox = NineTileBoxWidget;
 
 /// A [StatelessWidget] that renders NineTileBox
 class NineTileBoxWidget extends StatelessWidget {
-  final Future<Image> Function() _imageFuture;
+  final FutureOr<Image> Function() _imageFuture;
 
   /// The size of the tile on the image
   final double tileSize;
@@ -71,7 +72,7 @@ class NineTileBoxWidget extends StatelessWidget {
     this.errorBuilder,
     this.loadingBuilder,
     Key? key,
-  })  : _imageFuture = (() => Future.value(image)),
+  })  : _imageFuture = (() => image),
         super(key: key);
 
   NineTileBoxWidget.asset({

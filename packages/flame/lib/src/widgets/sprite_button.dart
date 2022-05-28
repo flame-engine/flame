@@ -38,11 +38,31 @@ class SpriteButton extends StatelessWidget {
   /// A builder function that is called while the loading is on the way
   final WidgetBuilder? loadingBuilder;
 
-  final Future<List<Sprite>> Function() _buttonsFuture;
+  final FutureOr<List<Sprite>> Function() _buttonsFuture;
 
   SpriteButton({
-    required FutureOr<Sprite> sprite,
-    required FutureOr<Sprite> pressedSprite,
+    required Sprite sprite,
+    required Sprite pressedSprite,
+    required this.onPressed,
+    required this.width,
+    required this.height,
+    required this.label,
+    this.srcPosition,
+    this.srcSize,
+    this.pressedSrcPosition,
+    this.pressedSrcSize,
+    this.errorBuilder,
+    this.loadingBuilder,
+    Key? key,
+  })  : _buttonsFuture = (() => [
+              sprite,
+              pressedSprite,
+            ]),
+        super(key: key);
+
+  SpriteButton.future({
+    required Future<Sprite> sprite,
+    required Future<Sprite> pressedSprite,
     required this.onPressed,
     required this.width,
     required this.height,
@@ -55,8 +75,8 @@ class SpriteButton extends StatelessWidget {
     this.loadingBuilder,
     Key? key,
   })  : _buttonsFuture = (() => Future.wait([
-              Future.value(sprite),
-              Future.value(pressedSprite),
+              sprite,
+              pressedSprite,
             ])),
         super(key: key);
 

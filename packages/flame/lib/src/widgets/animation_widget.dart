@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:flame/src/anchor.dart';
@@ -17,7 +18,7 @@ class SpriteAnimationWidget extends StatelessWidget {
   /// Should the animation be playing or not
   final bool playing;
 
-  final Future<SpriteAnimation> Function() _animationFuture;
+  final FutureOr<SpriteAnimation> Function() _animationFuture;
 
   /// A builder function that is called if the loading fails
   final WidgetBuilder? errorBuilder;
@@ -32,7 +33,7 @@ class SpriteAnimationWidget extends StatelessWidget {
     this.errorBuilder,
     this.loadingBuilder,
     Key? key,
-  })  : _animationFuture = (() => Future.value(animation)),
+  })  : _animationFuture = (() => animation),
         super(key: key);
 
   SpriteAnimationWidget.asset({

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flame/cache.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/src/anchor.dart';
@@ -29,7 +31,7 @@ class SpriteWidget extends StatelessWidget {
   /// A builder function that is called while the loading is on the way
   final WidgetBuilder? loadingBuilder;
 
-  final Future<Sprite> Function() _spriteFuture;
+  final FutureOr<Sprite> Function() _spriteFuture;
 
   SpriteWidget({
     required Sprite sprite,
@@ -40,7 +42,7 @@ class SpriteWidget extends StatelessWidget {
     this.errorBuilder,
     this.loadingBuilder,
     Key? key,
-  })  : _spriteFuture = (() => Future.value(sprite)),
+  })  : _spriteFuture = (() => sprite),
         super(key: key);
 
   SpriteWidget.asset({
