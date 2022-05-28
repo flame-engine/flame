@@ -9,7 +9,6 @@ import 'package:meta/meta.dart';
 @internal
 class FlameDragAdapter implements Drag {
   FlameDragAdapter(this._game, Offset startPoint) {
-    _id = _globalIdCounter++;
     start(startPoint);
   }
 
@@ -22,6 +21,7 @@ class FlameDragAdapter implements Drag {
       globalPosition: point,
       localPosition: (_game as Game).renderBox.globalToLocal(point),
     );
+    _id = _globalIdCounter++;
     _game.handleDragStart(_id, event);
   }
 
