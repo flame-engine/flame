@@ -41,7 +41,7 @@ typedef NineTileBox = NineTileBoxWidget;
 
 /// A [StatelessWidget] that renders NineTileBox
 class NineTileBoxWidget extends StatelessWidget {
-  final FutureOr<Image> Function() _imageFuture;
+  final FutureOr<Image> _imageFuture;
 
   /// The size of the tile on the image
   final double tileSize;
@@ -61,7 +61,7 @@ class NineTileBoxWidget extends StatelessWidget {
   /// A builder function that is called while the loading is on the way
   final WidgetBuilder? loadingBuilder;
 
-  NineTileBoxWidget({
+  const NineTileBoxWidget({
     required Image image,
     required this.tileSize,
     required this.destTileSize,
@@ -70,7 +70,7 @@ class NineTileBoxWidget extends StatelessWidget {
     this.child,
     this.padding,
     Key? key,
-  })  : _imageFuture = (() => image),
+  })  : _imageFuture = image,
         errorBuilder = null,
         loadingBuilder = null,
         super(key: key);
@@ -92,13 +92,13 @@ class NineTileBoxWidget extends StatelessWidget {
     this.errorBuilder,
     this.loadingBuilder,
     Key? key,
-  })  : _imageFuture = (() => (images ?? Flame.images).load(path)),
+  })  : _imageFuture = (images ?? Flame.images).load(path),
         super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return BaseFutureBuilder<Image>(
-      futureBuilder: _imageFuture,
+      future: _imageFuture,
       builder: (_, image) {
         return InternalNineTileBox(
           image: image,

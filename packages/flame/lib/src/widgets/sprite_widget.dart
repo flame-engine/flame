@@ -31,16 +31,16 @@ class SpriteWidget extends StatelessWidget {
   /// A builder function that is called while the loading is on the way
   final WidgetBuilder? loadingBuilder;
 
-  final FutureOr<Sprite> Function() _spriteFuture;
+  final FutureOr<Sprite> _spriteFuture;
 
-  SpriteWidget({
+  const SpriteWidget({
     required Sprite sprite,
     this.anchor = Anchor.topLeft,
     this.angle = 0,
     this.srcPosition,
     this.srcSize,
     Key? key,
-  })  : _spriteFuture = (() => sprite),
+  })  : _spriteFuture = sprite,
         errorBuilder = null,
         loadingBuilder = null,
         super(key: key);
@@ -60,18 +60,18 @@ class SpriteWidget extends StatelessWidget {
     this.errorBuilder,
     this.loadingBuilder,
     Key? key,
-  })  : _spriteFuture = (() => Sprite.load(
-              path,
-              srcSize: srcSize,
-              srcPosition: srcPosition,
-              images: images,
-            )),
+  })  : _spriteFuture = Sprite.load(
+          path,
+          srcSize: srcSize,
+          srcPosition: srcPosition,
+          images: images,
+        ),
         super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return BaseFutureBuilder<Sprite>(
-      futureBuilder: _spriteFuture,
+      future: _spriteFuture,
       builder: (_, sprite) {
         return InternalSpriteWidget(
           sprite: sprite,

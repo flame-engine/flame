@@ -38,7 +38,7 @@ class SpriteButton extends StatelessWidget {
   /// A builder function that is called while the loading is on the way
   final WidgetBuilder? loadingBuilder;
 
-  final FutureOr<List<Sprite>> Function() _buttonsFuture;
+  final FutureOr<List<Sprite>> _buttonsFuture;
 
   SpriteButton({
     required Sprite sprite,
@@ -52,10 +52,10 @@ class SpriteButton extends StatelessWidget {
     this.pressedSrcPosition,
     this.pressedSrcSize,
     Key? key,
-  })  : _buttonsFuture = (() => [
-              sprite,
-              pressedSprite,
-            ]),
+  })  : _buttonsFuture = [
+          sprite,
+          pressedSprite,
+        ],
         errorBuilder = null,
         loadingBuilder = null,
         super(key: key);
@@ -74,10 +74,10 @@ class SpriteButton extends StatelessWidget {
     this.errorBuilder,
     this.loadingBuilder,
     Key? key,
-  })  : _buttonsFuture = (() => Future.wait([
-              sprite,
-              pressedSprite,
-            ])),
+  })  : _buttonsFuture = Future.wait([
+          sprite,
+          pressedSprite,
+        ]),
         super(key: key);
 
   /// loads image from asset [path], [pressedPath] and renders it as Widget.
@@ -100,26 +100,26 @@ class SpriteButton extends StatelessWidget {
     this.errorBuilder,
     this.loadingBuilder,
     Key? key,
-  })  : _buttonsFuture = (() => Future.wait([
-              Sprite.load(
-                path,
-                srcSize: srcSize,
-                srcPosition: srcPosition,
-                images: images,
-              ),
-              Sprite.load(
-                pressedPath,
-                srcSize: pressedSrcSize,
-                srcPosition: pressedSrcPosition,
-                images: images,
-              ),
-            ])),
+  })  : _buttonsFuture = Future.wait([
+          Sprite.load(
+            path,
+            srcSize: srcSize,
+            srcPosition: srcPosition,
+            images: images,
+          ),
+          Sprite.load(
+            pressedPath,
+            srcSize: pressedSrcSize,
+            srcPosition: pressedSrcPosition,
+            images: images,
+          ),
+        ]),
         super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return BaseFutureBuilder<List<Sprite>>(
-      futureBuilder: _buttonsFuture,
+      future: _buttonsFuture,
       builder: (_, list) {
         final sprite = list[0];
         final pressedSprite = list[1];

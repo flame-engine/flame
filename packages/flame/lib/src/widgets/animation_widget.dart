@@ -18,7 +18,7 @@ class SpriteAnimationWidget extends StatelessWidget {
   /// Should the animation be playing or not
   final bool playing;
 
-  final FutureOr<SpriteAnimation> Function() _animationFuture;
+  final FutureOr<SpriteAnimation> _animationFuture;
 
   /// A builder function that is called if the loading fails
   final WidgetBuilder? errorBuilder;
@@ -26,12 +26,12 @@ class SpriteAnimationWidget extends StatelessWidget {
   /// A builder function that is called while the loading is on the way
   final WidgetBuilder? loadingBuilder;
 
-  SpriteAnimationWidget({
+  const SpriteAnimationWidget({
     required SpriteAnimation animation,
     this.playing = true,
     this.anchor = Anchor.topLeft,
     Key? key,
-  })  : _animationFuture = (() => animation),
+  })  : _animationFuture = animation,
         errorBuilder = null,
         loadingBuilder = null,
         super(key: key);
@@ -50,17 +50,17 @@ class SpriteAnimationWidget extends StatelessWidget {
     this.errorBuilder,
     this.loadingBuilder,
     Key? key,
-  })  : _animationFuture = (() => SpriteAnimation.load(
-              path,
-              data,
-              images: images,
-            )),
+  })  : _animationFuture = SpriteAnimation.load(
+          path,
+          data,
+          images: images,
+        ),
         super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return BaseFutureBuilder<SpriteAnimation>(
-      futureBuilder: _animationFuture,
+      future: _animationFuture,
       builder: (_, spriteAnimation) {
         return InternalSpriteAnimationWidget(
           animation: spriteAnimation,
