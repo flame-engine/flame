@@ -433,29 +433,25 @@ Additionally, this component also has the following optional event callbacks:  `
 and `onComplete`. To listen to these events, you can do the following:
 
 ```dart
+final animation =
+    SpriteAnimation.spriteList([sprite], stepTime: 1, loop: false)
+      ..onStart = () {
+        //do something};
+      };
 
 final animation =
-SpriteAnimation.spriteList([sprite], stepTime: 1, loop: false)
-  ..onStart = () =>
-  {
-    //do something};
-  };
+    SpriteAnimation.spriteList([sprite], stepTime: 1, loop: false)
+      ..onComplete = () {
+        //do something};
+      };
 
 final animation =
-SpriteAnimation.spriteList([sprite], stepTime: 1, loop: false)
-  ..onComplete = () =>
-  {
-    //do something};
-  };
-
-final animation =
-SpriteAnimation.spriteList(spriteList, stepTime: 1, loop: false);
-animation.onFrame = (
-index) {
-if(index===1){
-//do something for the second frame
-}
-};
+    SpriteAnimation.spriteList(spriteList, stepTime: 1, loop: false)
+      ..onFrame = (index) {
+        if (index == 1) {
+          //do something for the second frame
+        }
+      };
 ```
 
 ## SpriteAnimationGroup
