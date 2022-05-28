@@ -30,5 +30,11 @@ void main() {
       expect(out.last, src.last + 3);
       expect(out.elementAt(1), src[1] + 1);
     });
+
+    test('indexedMap.single', () {
+      final src = ['Flame'];
+      final out = src.indexedMap((index, e) => '$e:$index');
+      expect(out.single, 'Flame:0');
+    });
   });
 }
