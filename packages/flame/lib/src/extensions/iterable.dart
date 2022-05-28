@@ -1,4 +1,3 @@
-
 extension IterableExtension<E> on Iterable<E> {
   /// Similar to [map], but also supplies index of each element.
   Iterable<T> indexedMap<T>(T Function(int index, E e) mapFunction) =>
@@ -8,10 +7,10 @@ extension IterableExtension<E> on Iterable<E> {
 typedef _IndexedMapFn<E, T> = T Function(int index, E element);
 
 class _MappedIterable<E, T> extends Iterable<T> {
+  _MappedIterable(this._iterable, this._transform);
+
   final Iterable<E> _iterable;
   final _IndexedMapFn<E, T> _transform;
-
-  _MappedIterable(this._iterable, this._transform);
 
   @override
   Iterator<T> get iterator =>
