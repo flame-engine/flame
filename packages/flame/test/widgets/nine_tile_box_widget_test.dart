@@ -15,10 +15,10 @@ void main() async {
         ),
       );
 
-      final futureBuilder = find.byType(FutureBuilder);
+      final futureBuilderFinder = find.byType(FutureBuilder);
       final nineTileBoxWidgetFinder = find.byType(NineTileBoxWidget);
 
-      expect(futureBuilder, findsNothing);
+      expect(futureBuilderFinder, findsNothing);
       expect(nineTileBoxWidgetFinder, findsOneWidget);
     });
 

@@ -11,10 +11,10 @@ void main() async {
 
       await tester.pumpWidget(SpriteWidget(sprite: sprite));
 
-      final futureBuilder = find.byType(FutureBuilder);
+      final futureBuilderFinder = find.byType(FutureBuilder);
       final spriteWidgetFinder = find.byType(SpriteWidget);
 
-      expect(futureBuilder, findsNothing);
+      expect(futureBuilderFinder, findsNothing);
       expect(spriteWidgetFinder, findsOneWidget);
     });
 
