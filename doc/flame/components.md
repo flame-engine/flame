@@ -461,8 +461,9 @@ if(index===1){
 ## SpriteAnimationGroup
 
 `SpriteAnimationGroupComponent` is a simple wrapper around `SpriteAnimationComponent` which enables
-your component to hold several animations and change the current playing animation in runtime. As
-this component is just a wrapper, the event listeners can also be implemented as detailed above.
+your component to hold several animations and change the current playing animation at runtime. Since
+this component is just a wrapper, the event listeners can be implemented as described in
+[](#spriteanimationcomponent).
 
 Its use is very similar to the `SpriteAnimationComponent` but instead of being initialized with a
 single animation, this component receives a Map of a generic type `T` as key and a
