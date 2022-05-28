@@ -419,7 +419,9 @@ use `animation.completed`.
 Example:
 
 ```dart
-await animation.completed;
+await
+animation.completed;
+
 doSomething();
 
 // or alternatively
@@ -427,11 +429,40 @@ doSomething();
 animation.completed.whenComplete(doSomething);
 ```
 
+Additionally, this component also has the following optional event callbacks:  `onStart`, `onFrame`,
+and `onComplete`. To listen to these events, you can do the following:
+
+```dart
+
+final animation =
+SpriteAnimation.spriteList([sprite], stepTime: 1, loop: false)
+  ..onStart = () =>
+  {
+    //do something};
+  };
+
+final animation =
+SpriteAnimation.spriteList([sprite], stepTime: 1, loop: false)
+  ..onComplete = () =>
+  {
+    //do something};
+  };
+
+final animation =
+SpriteAnimation.spriteList(spriteList, stepTime: 1, loop: false);
+animation.onFrame = (
+index) {
+if(index===1){
+//do something for the second frame
+}
+};
+```
 
 ## SpriteAnimationGroup
 
 `SpriteAnimationGroupComponent` is a simple wrapper around `SpriteAnimationComponent` which enables
-your component to hold several animations and change the current playing animation in runtime.
+your component to hold several animations and change the current playing animation in runtime. As
+this component is just a wrapper, the event listeners can also be implemented as detailed above.
 
 Its use is very similar to the `SpriteAnimationComponent` but instead of being initialized with a
 single animation, this component receives a Map of a generic type `T` as key and a
