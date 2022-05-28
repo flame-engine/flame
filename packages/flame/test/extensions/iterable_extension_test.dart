@@ -41,5 +41,14 @@ void main() {
       expect([3, 5, 11, -2].maybeFirst, 3);
       expect(<int>[].maybeFirst, null);
     });
+
+    test('indexedForEach', () {
+      final src = [3, 7, 12, -11];
+      final out = [0, 0, 0, 0];
+      src.indexedForEach((i, element) {
+        out[i] = element;
+      });
+      expect(out, src);
+    });
   });
 }

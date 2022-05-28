@@ -8,6 +8,16 @@ extension IterableExtension<E> on Iterable<E> {
   /// Similar to [map], but also supplies index of each element.
   Iterable<T> indexedMap<T>(T Function(int index, E e) mapFunction) =>
       _MappedIterable<E, T>(this, mapFunction);
+
+  /// Similar to [forEach], but also supplies index of each element.
+  void indexedForEach(void Function(int index, E element) action) {
+    final it = iterator;
+    var i = 0;
+    while (it.moveNext()) {
+      action(i, it.current);
+      i++;
+    }
+  }
 }
 
 typedef _IndexedMapFn<E, T> = T Function(int index, E element);
