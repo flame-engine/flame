@@ -5,9 +5,9 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() async {
   final image = await generateImage();
-  
+
   group('SpriteWidget', () {
-    testWidgets('has no FutureBuilder when pass sprite', (tester) async {
+    testWidgets('has no FutureBuilder when passed an sprite', (tester) async {
       final sprite = Sprite(image);
 
       await tester.pumpWidget(SpriteWidget(sprite: sprite));
@@ -20,7 +20,7 @@ void main() async {
     });
 
     testWidgets(
-      'has FutureBuilder when pass asset path',
+      'has FutureBuilder when passed an asset path',
       (tester) async {
         ///How can I test this...?
       },

@@ -7,7 +7,8 @@ void main() async {
   final image = await generateImage();
 
   group('NineTileBoxWidget', () {
-    testWidgets('has no FutureBuilder when pass animation', (tester) async {
+    testWidgets('has no FutureBuilder when passed an animation',
+        (tester) async {
       await tester.pumpWidget(
         NineTileBoxWidget(
           image: image,
@@ -24,7 +25,7 @@ void main() async {
     });
 
     testWidgets(
-      'has FutureBuilder when pass asset path',
+      'has FutureBuilder when passed an asset path',
       (tester) async {
         ///How can I test this...?
       },

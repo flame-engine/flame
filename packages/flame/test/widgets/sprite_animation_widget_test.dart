@@ -7,7 +7,8 @@ void main() async {
   final image = await generateImage();
 
   group('SpriteAnimationWidget', () {
-    testWidgets('has no FutureBuilder when pass animation', (tester) async {
+    testWidgets('has no FutureBuilder when passed an animation',
+        (tester) async {
       final sprite1 = Sprite(image);
       final sprite2 = Sprite(image);
       final spriteAnimation = SpriteAnimation.spriteList(
@@ -26,7 +27,7 @@ void main() async {
     });
 
     testWidgets(
-      'has FutureBuilder when pass asset path',
+      'has FutureBuilder when passed an asset path',
       (tester) async {
         ///How can I test this...?
       },
