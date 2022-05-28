@@ -5,6 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() async {
   final image = await generateImage();
+
   group('NineTileBoxWidget', () {
     testWidgets('has no FutureBuilder when pass animation', (tester) async {
       await tester.pumpWidget(

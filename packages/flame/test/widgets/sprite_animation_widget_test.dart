@@ -5,6 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() async {
   final image = await generateImage();
+
   group('SpriteAnimationWidget', () {
     testWidgets('has no FutureBuilder when pass animation', (tester) async {
       final sprite1 = Sprite(image);
