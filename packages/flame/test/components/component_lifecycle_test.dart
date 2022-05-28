@@ -107,6 +107,26 @@ void main() {
     );
 
     testWithFlameGame(
+      'component mounted completes when changing parent from a null parent',
+      (game) async {
+        final parent = LifecycleComponent('parent');
+        final child = LifecycleComponent('child');
+        game.add(parent);
+
+        final mounted = child.mounted;
+        await game.ready();
+
+        child.changeParent(parent);
+        game.update(0);
+        await game.ready();
+
+        expect(child.parent, parent);
+        expect(child.isMounted, true);
+        await expectLater(mounted, completes);
+      },
+    );
+
+    testWithFlameGame(
       'Component.mounted completes after the component is mounted',
       (game) async {
         final child = LifecycleComponent();
