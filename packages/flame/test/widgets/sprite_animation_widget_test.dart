@@ -1,3 +1,5 @@
+import 'package:flame/extensions.dart';
+import 'package:flame/flame.dart';
 import 'package:flame/widgets.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter/material.dart';
@@ -27,11 +29,49 @@ void main() async {
     });
 
     testWidgets(
-      'has FutureBuilder when passed an asset path',
+      'has FutureBuilder and LoadingWidget when passed an asset path',
       (tester) async {
-        ///How can I test this...?
+        const imagePath = 'test_path';
+        Flame.images.add(imagePath, image);
+        final spriteAnimationData = SpriteAnimationData.sequenced(
+          amount: 2,
+          stepTime: 1,
+          textureSize: Vector2(10, 10),
+        );
+
+        await tester.pumpWidget(
+          SpriteAnimationWidget.asset(
+            path: imagePath,
+            data: spriteAnimationData,
+            loadingBuilder: (_) => const _LoadingWidget(),
+          ),
+        );
+
+        final futureBuilderFinder = find.byType(FutureBuilder<SpriteAnimation>);
+        final spriteAnimationWidgetFinder =
+            find.byType(InternalSpriteAnimationWidget);
+        final loadingWidgetFinder = find.byType(_LoadingWidget);
+
+        expect(futureBuilderFinder, findsOneWidget);
+        expect(loadingWidgetFinder, findsOneWidget);
+        expect(spriteAnimationWidgetFinder, findsNothing);
+
+        /// loading to be removed
+        await tester.pump();
+
+        expect(futureBuilderFinder, findsOneWidget);
+        expect(loadingWidgetFinder, findsNothing);
+        expect(spriteAnimationWidgetFinder, findsOneWidget);
       },
-      skip: true,
     );
   });
+}
+
+class _LoadingWidget extends StatelessWidget {
+  const _LoadingWidget({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const SizedBox();
+  }
 }

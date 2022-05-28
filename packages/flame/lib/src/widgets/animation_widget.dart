@@ -62,7 +62,7 @@ class SpriteAnimationWidget extends StatelessWidget {
     return BaseFutureBuilder<SpriteAnimation>(
       futureBuilder: _animationFuture,
       builder: (_, spriteAnimation) {
-        return _SpriteAnimationWidget(
+        return InternalSpriteAnimationWidget(
           animation: spriteAnimation,
           anchor: anchor,
           playing: playing,
@@ -75,7 +75,8 @@ class SpriteAnimationWidget extends StatelessWidget {
 }
 
 /// A [StatefulWidget] that render a [SpriteAnimation].
-class _SpriteAnimationWidget extends StatefulWidget {
+@visibleForTesting
+class InternalSpriteAnimationWidget extends StatefulWidget {
   /// The [SpriteAnimation] to be rendered
   final SpriteAnimation animation;
 
@@ -85,17 +86,19 @@ class _SpriteAnimationWidget extends StatefulWidget {
   /// Should the [animation] be playing or not
   final bool playing;
 
-  const _SpriteAnimationWidget({
+  const InternalSpriteAnimationWidget({
     required this.animation,
     this.playing = true,
     this.anchor = Anchor.topLeft,
-  });
+    Key? key,
+  }) : super(key: key);
 
   @override
-  State createState() => _SpriteAnimationWidgetState();
+  State createState() => _InternalSpriteAnimationWidgetState();
 }
 
-class _SpriteAnimationWidgetState extends State<_SpriteAnimationWidget>
+class _InternalSpriteAnimationWidgetState
+    extends State<InternalSpriteAnimationWidget>
     with SingleTickerProviderStateMixin {
   AnimationController? _controller;
   double? _lastUpdated;
@@ -111,7 +114,7 @@ class _SpriteAnimationWidgetState extends State<_SpriteAnimationWidget>
   }
 
   @override
-  void didUpdateWidget(_SpriteAnimationWidget oldWidget) {
+  void didUpdateWidget(InternalSpriteAnimationWidget oldWidget) {
     super.didUpdateWidget(oldWidget);
 
     if (oldWidget.animation != widget.animation) {

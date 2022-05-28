@@ -1,3 +1,6 @@
+import 'dart:ui' as ui;
+
+import 'package:flame/flame.dart';
 import 'package:flame/widgets.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter/material.dart';
@@ -12,8 +15,8 @@ void main() async {
       await tester.pumpWidget(
         NineTileBoxWidget(
           image: image,
-          tileSize: 1,
-          destTileSize: 1,
+          tileSize: 10,
+          destTileSize: 10,
         ),
       );
 
@@ -25,11 +28,44 @@ void main() async {
     });
 
     testWidgets(
-      'has FutureBuilder when passed an asset path',
+      'has FutureBuilder and LoadingWidget when passed an asset path',
       (tester) async {
-        ///How can I test this...?
+        const imagePath = 'test_path';
+        Flame.images.add(imagePath, image);
+
+        await tester.pumpWidget(
+          NineTileBoxWidget.asset(
+            path: imagePath,
+            tileSize: 10,
+            destTileSize: 10,
+            loadingBuilder: (_) => const _LoadingWidget(),
+          ),
+        );
+
+        final futureBuilderFinder = find.byType(FutureBuilder<ui.Image>);
+        final nineTileBoxWidgetFinder = find.byType(InternalNineTileBox);
+        final loadingWidgetFinder = find.byType(_LoadingWidget);
+
+        expect(futureBuilderFinder, findsOneWidget);
+        expect(loadingWidgetFinder, findsOneWidget);
+        expect(nineTileBoxWidgetFinder, findsNothing);
+
+        /// loading to be removed
+        await tester.pump();
+
+        expect(futureBuilderFinder, findsOneWidget);
+        expect(loadingWidgetFinder, findsNothing);
+        expect(nineTileBoxWidgetFinder, findsOneWidget);
       },
-      skip: true,
     );
   });
+}
+
+class _LoadingWidget extends StatelessWidget {
+  const _LoadingWidget({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const SizedBox();
+  }
 }

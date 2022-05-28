@@ -73,7 +73,7 @@ class SpriteWidget extends StatelessWidget {
     return BaseFutureBuilder<Sprite>(
       futureBuilder: _spriteFuture,
       builder: (_, sprite) {
-        return _SpriteWidget(
+        return InternalSpriteWidget(
           sprite: sprite,
           anchor: anchor,
           angle: angle,
@@ -86,7 +86,8 @@ class SpriteWidget extends StatelessWidget {
 }
 
 /// A [StatefulWidget] that renders a still [Sprite].
-class _SpriteWidget extends StatelessWidget {
+@visibleForTesting
+class InternalSpriteWidget extends StatelessWidget {
   /// The [Sprite] to be rendered
   final Sprite sprite;
 
@@ -96,11 +97,12 @@ class _SpriteWidget extends StatelessWidget {
   /// The angle to rotate this [sprite], in rad. (default = 0)
   final double angle;
 
-  const _SpriteWidget({
+  const InternalSpriteWidget({
     required this.sprite,
     this.anchor = Anchor.topLeft,
     this.angle = 0,
-  });
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(_) {

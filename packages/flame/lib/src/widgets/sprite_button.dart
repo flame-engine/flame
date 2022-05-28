@@ -124,7 +124,7 @@ class SpriteButton extends StatelessWidget {
         final sprite = list[0];
         final pressedSprite = list[1];
 
-        return _SpriteButton(
+        return InternalSpriteButton(
           onPressed: onPressed,
           label: label,
           width: width,
@@ -139,7 +139,8 @@ class SpriteButton extends StatelessWidget {
   }
 }
 
-class _SpriteButton extends StatefulWidget {
+@visibleForTesting
+class InternalSpriteButton extends StatefulWidget {
   final VoidCallback onPressed;
   final Widget label;
   final Sprite sprite;
@@ -147,20 +148,21 @@ class _SpriteButton extends StatefulWidget {
   final double width;
   final double height;
 
-  const _SpriteButton({
+  const InternalSpriteButton({
     required this.onPressed,
     required this.label,
     required this.sprite,
     required this.pressedSprite,
     this.width = 200,
     this.height = 50,
-  });
+    Key? key,
+  }) : super(key: key);
 
   @override
   State createState() => _ButtonState();
 }
 
-class _ButtonState extends State<_SpriteButton> {
+class _ButtonState extends State<InternalSpriteButton> {
   bool _pressed = false;
 
   @override

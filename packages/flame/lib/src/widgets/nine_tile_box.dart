@@ -100,7 +100,7 @@ class NineTileBoxWidget extends StatelessWidget {
     return BaseFutureBuilder<Image>(
       futureBuilder: _imageFuture,
       builder: (_, image) {
-        return _NineTileBox(
+        return InternalNineTileBox(
           image: image,
           tileSize: tileSize,
           destTileSize: destTileSize,
@@ -116,7 +116,8 @@ class NineTileBoxWidget extends StatelessWidget {
   }
 }
 
-class _NineTileBox extends StatelessWidget {
+@visibleForTesting
+class InternalNineTileBox extends StatelessWidget {
   final Image image;
   final double tileSize;
   final double destTileSize;
@@ -127,15 +128,15 @@ class _NineTileBox extends StatelessWidget {
 
   final EdgeInsetsGeometry? padding;
 
-  const _NineTileBox({
+  const InternalNineTileBox({
     required this.image,
     required this.tileSize,
     required this.destTileSize,
-    Key? key,
     this.child,
     this.width,
     this.height,
     this.padding,
+    Key? key,
   }) : super(key: key);
 
   @override
