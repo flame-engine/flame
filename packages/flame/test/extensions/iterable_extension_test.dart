@@ -1,4 +1,3 @@
-
 import 'package:flame/extensions.dart';
 import 'package:test/test.dart';
 
@@ -18,8 +17,8 @@ void main() {
 
     test('indexedMap<int, double>', () {
       final src = <int>[0, 1, 2, 3, 4, 5];
-      final out = src.indexedMap((i, e) => e.toDouble()/(i + 1));
-      expect(out, [0, 1/2, 2/3, 3/4, 4/5, 5/6]);
+      final out = src.indexedMap((i, e) => e.toDouble() / (i + 1));
+      expect(out, [0, 1 / 2, 2 / 3, 3 / 4, 4 / 5, 5 / 6]);
     });
   });
 }
