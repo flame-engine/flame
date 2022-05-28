@@ -69,10 +69,10 @@ class NineTileBoxWidget extends StatelessWidget {
     this.height,
     this.child,
     this.padding,
-    this.errorBuilder,
-    this.loadingBuilder,
     Key? key,
   })  : _imageFuture = (() => image),
+        errorBuilder = null,
+        loadingBuilder = null,
         super(key: key);
 
   NineTileBoxWidget.asset({

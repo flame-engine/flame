@@ -39,10 +39,10 @@ class SpriteWidget extends StatelessWidget {
     this.angle = 0,
     this.srcPosition,
     this.srcSize,
-    this.errorBuilder,
-    this.loadingBuilder,
     Key? key,
   })  : _spriteFuture = (() => sprite),
+        errorBuilder = null,
+        loadingBuilder = null,
         super(key: key);
 
   SpriteWidget.asset({

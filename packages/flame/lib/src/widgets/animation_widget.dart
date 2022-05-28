@@ -42,14 +42,14 @@ class SpriteAnimationWidget extends StatelessWidget {
     Images? images,
     this.playing = true,
     this.anchor = Anchor.topLeft,
-    this.errorBuilder,
-    this.loadingBuilder,
     Key? key,
   })  : _animationFuture = (() => SpriteAnimation.load(
               path,
               data,
               images: images,
             )),
+        errorBuilder = null,
+        loadingBuilder = null,
         super(key: key);
 
   @override
