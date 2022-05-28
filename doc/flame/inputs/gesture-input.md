@@ -21,6 +21,7 @@ of these `mixin`s and its methods:
   - onTap
   - onTapCancel
   - onTapDown
+  - onLongTapDown
   - onTapUp
 
 - SecondaryTapDetector
@@ -215,7 +216,7 @@ class MyGame extends Game with TapDetector {
 ```
 
 You can also check more complete examples
-[here](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/controls/).
+[here](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/input/).
 
 
 ## Tappable, Draggable and Hoverable components
@@ -241,6 +242,7 @@ components, you can override the following methods on your components:
 ```dart
 bool onTapCancel();
 bool onTapDown(TapDownInfo info);
+bool onLongTapDown(TapDownInfo info);
 bool onTapUp(TapUpInfo info);
 ```
 
@@ -295,18 +297,22 @@ class MyComponent extends PositionComponent with Tappable{
   bool onTapDown(TapDownInfo info) {
     info.handled = true;
     return true;
-  } 
+  }
 }
 
 class MyGame extends FlameGame with HasTappables {
   @override
   void onTapDown(int pointerId, TapDownInfo info) {
-    if(info.handled) {
+    if (info.handled) {
       // Do something if a child handled the event
     }
   }
 }
 ```
+
+The event `onLongTapDown` will be triggered on a component after the user "holds" it for a certain
+minimum amount of time. By default, that time is 300ms, but it can be adjusted by overriding the
+`longTapDelay` field of the `HasTappables` mixin.
 
 
 ### Draggable components
@@ -472,8 +478,8 @@ for the event to be registered on your component.
 You can add new hitboxes to the component that has the `GestureHitboxes` mixin just like they are
 added in the below `Collidable` example.
 
-More information about how to define hitboxes can be found in the hitbox section of the 
+More information about how to define hitboxes can be found in the hitbox section of the
 [collision detection](../collision_detection.md#shapehitbox) docs.
 
 An example of how to use it can be seen
-[here](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/input/gesture_hitboxes_example).
+[here](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/input/gesture_hitboxes_example.dart).

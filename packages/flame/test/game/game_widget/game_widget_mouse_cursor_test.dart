@@ -37,11 +37,13 @@ void main() {
           ),
         ),
       );
+      await tester.pump();
+      expect(game.isAttached, true);
 
       // Making sure this cursor isn't showing yet
       expect(byMouseCursor(SystemMouseCursors.copy), findsNothing);
 
-      game.mouseCursor.value = SystemMouseCursors.copy;
+      game.mouseCursor = SystemMouseCursors.copy;
       await tester.pump();
 
       expect(
@@ -49,5 +51,28 @@ void main() {
         findsOneWidget,
       );
     });
+
+    testWidgets(
+      'can set mouseCursor during onLoad',
+      (tester) async {
+        final game = GameWithMouseCursorSetDuringOnLoad();
+        await tester.pumpWidget(
+          GameWidget(game: game),
+        );
+        await tester.pump();
+        expect(
+          byMouseCursor(SystemMouseCursors.alias),
+          findsOneWidget,
+        );
+      },
+    );
   });
+}
+
+class GameWithMouseCursorSetDuringOnLoad extends FlameGame {
+  @override
+  Future<void>? onLoad() {
+    mouseCursor = SystemMouseCursors.alias;
+    return null;
+  }
 }

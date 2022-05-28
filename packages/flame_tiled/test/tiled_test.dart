@@ -59,7 +59,7 @@ void main() {
       overlapMap.render(canvas);
       final picture = canvasRecorder.endRecording();
 
-      final image = await picture.toImage(32, 16);
+      final image = await picture.toImageSafe(32, 16);
       final bytes = await image.toByteData();
       canvasPixelData = bytes!.buffer.asUint8List();
     });
@@ -120,6 +120,64 @@ void main() {
             leftTilePixels[indGreen + 1] == 255 &&
             leftTilePixels[indGreen + 2] == 0 &&
             leftTilePixels[indGreen + 3] == 255;
+      }
+      expect(allGreen, true);
+    });
+  });
+
+  group('Flipped and rotated tiles render correctly with sprite batch', () {
+    late Uint8List canvasPixelData;
+    late RenderableTiledMap overlapMap;
+    setUp(() async {
+      Flame.bundle = TestAssetBundle(
+        imageNames: [
+          '4_color_sprite.png',
+        ],
+        mapPath: 'test/assets/8_tiles-flips.tmx',
+      );
+      overlapMap = await RenderableTiledMap.fromFile(
+        '8_tiles-flips.tmx',
+        Vector2.all(16),
+      );
+      final canvasRecorder = PictureRecorder();
+      final canvas = Canvas(canvasRecorder);
+      overlapMap.render(canvas);
+      final picture = canvasRecorder.endRecording();
+
+      final image = await picture.toImageSafe(64, 48);
+      final bytes = await image.toByteData();
+      canvasPixelData = bytes!.buffer.asUint8List();
+    });
+
+    test('Green tile pixels are in correct spots', () {
+      final leftTilePixels = <int>[];
+      for (var ind = 65 * 8 * 4;
+          ind < ((64 * 23) + (8 * 3)) * 4;
+          ind += 64 * 4) {
+        leftTilePixels.addAll(canvasPixelData.getRange(ind, ind + (16 * 4)));
+      }
+
+      var allGreen = true;
+      for (var indGreen = 0; indGreen < leftTilePixels.length; indGreen += 4) {
+        allGreen &= leftTilePixels[indGreen] == 0 &&
+            leftTilePixels[indGreen + 1] == 255 &&
+            leftTilePixels[indGreen + 2] == 0 &&
+            leftTilePixels[indGreen + 3] == 255;
+      }
+      expect(allGreen, true);
+
+      final rightTilePixels = <int>[];
+      for (var ind = 69 * 8 * 4;
+          ind < ((64 * 23) + (8 * 7)) * 4;
+          ind += 64 * 4) {
+        rightTilePixels.addAll(canvasPixelData.getRange(ind, ind + (16 * 4)));
+      }
+
+      for (var indGreen = 0; indGreen < rightTilePixels.length; indGreen += 4) {
+        allGreen &= rightTilePixels[indGreen] == 0 &&
+            rightTilePixels[indGreen + 1] == 255 &&
+            rightTilePixels[indGreen + 2] == 0 &&
+            rightTilePixels[indGreen + 3] == 255;
       }
       expect(allGreen, true);
     });

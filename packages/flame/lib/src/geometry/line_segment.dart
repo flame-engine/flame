@@ -1,5 +1,5 @@
-import '../../extensions.dart';
-import 'line.dart';
+import 'package:flame/extensions.dart';
+import 'package:flame/src/geometry/line.dart';
 
 /// A [LineSegment] represent a segment of an infinitely long line, it is the
 /// segment between the [from] and [to] vectors (inclusive).

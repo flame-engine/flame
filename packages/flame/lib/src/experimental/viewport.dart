@@ -1,26 +1,30 @@
 import 'dart:ui';
 
+import 'package:flame/src/anchor.dart';
+import 'package:flame/src/components/component.dart';
+import 'package:flame/src/effects/provider_interfaces.dart';
+import 'package:flame/src/experimental/camera_component.dart';
 import 'package:meta/meta.dart';
 import 'package:vector_math/vector_math_64.dart';
-
-import '../components/component.dart';
-import '../effects/provider_interfaces.dart';
-import 'camera_component.dart';
 
 /// [Viewport] is a part of a [CameraComponent] system.
 ///
 /// The viewport describes a "window" through which the underlying game world
 /// is observed. At the same time, the viewport is agnostic of the game world,
-/// and only contain properties that describe the "window". These properties
-/// are: the window's size, shape, and position on the screen.
+/// and only contain properties that describe the "window" itself. These
+/// properties are: the window's size, shape, and position on the screen.
 ///
 /// There are several implementations of [Viewport], which differ by their
 /// shape, and also by their behavior in response to changes to the canvas size.
 /// Users may also create their own implementations.
-abstract class Viewport extends Component implements PositionProvider {
+///
+/// A viewport establishes its own local coordinate system, with the origin at
+/// the top left corner of the viewport's bounding box.
+abstract class Viewport extends Component
+    implements AnchorProvider, PositionProvider, SizeProvider {
   Viewport({Iterable<Component>? children}) : super(children: children);
 
-  /// Position of the viewport's center in the parent's coordinate frame.
+  /// Position of the viewport's anchor in the parent's coordinate frame.
   ///
   /// Changing this position will move the viewport around the screen, but will
   /// not affect which portion of the game world is visible. Thus, the game
@@ -31,17 +35,26 @@ abstract class Viewport extends Component implements PositionProvider {
   @override
   set position(Vector2 value) => _position.setFrom(value);
 
-  /// Size of the viewport, i.e. the width and the height.
+  /// The logical "center" of the viewport.
+  ///
+  /// This point will be used to establish the placement of the viewport in the
+  /// parent's coordinate frame.
+  @override
+  Anchor anchor = Anchor.topLeft;
+
+  /// Size of the viewport, i.e. its width and height.
   ///
   /// This property represents the bounding box of the viewport. If the viewport
   /// is rectangular in shape, then [size] describes the dimensions of that
   /// rectangle. If the viewport has any other shape (for example, circular),
   /// then [size] describes the dimensions of the bounding box of the viewport.
   ///
-  /// Changing the size at runtime triggers the [handleResize] event. The size
-  /// cannot be negative.
+  /// Changing the size at runtime triggers the [onViewportResize] event. The
+  /// size cannot be negative.
+  @override
   Vector2 get size => _size;
   final Vector2 _size = Vector2.zero();
+  @override
   set size(Vector2 value) {
     assert(
       value.x >= 0 && value.y >= 0,
@@ -60,11 +73,19 @@ abstract class Viewport extends Component implements PositionProvider {
   /// Apply clip mask to the [canvas].
   ///
   /// The mask must be in the viewport's local coordinate system, where the
-  /// center of the viewport has coordinates (0, 0). The overall size of the
-  /// clip mask's shape must match the [size] of the viewport.
+  /// top left corner  of the viewport has coordinates (0, 0). The overall size
+  /// of the clip mask's shape must match the [size] of the viewport.
   ///
   /// This API must be implemented by all viewports.
   void clip(Canvas canvas);
+
+  /// Tests whether the given point lies within the viewport.
+  ///
+  /// This method must be consistent with the action of [clip], in the sense
+  /// that [containsLocalPoint] must return true if and only if that point on
+  /// the canvas is not clipped by [clip].
+  @override
+  bool containsLocalPoint(Vector2 point);
 
   /// Override in order to perform a custom action upon resize.
   ///

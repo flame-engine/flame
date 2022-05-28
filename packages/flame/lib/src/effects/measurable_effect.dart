@@ -1,4 +1,4 @@
-import 'controllers/speed_effect_controller.dart';
+import 'package:flame/src/effects/controllers/speed_effect_controller.dart';
 
 /// Interface implemented by several other Effect classes. This interface is
 /// required by [SpeedEffectController]: it allows that controller to compute

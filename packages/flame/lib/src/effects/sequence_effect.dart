@@ -1,7 +1,7 @@
-import 'controllers/effect_controller.dart';
-import 'controllers/infinite_effect_controller.dart';
-import 'controllers/repeated_effect_controller.dart';
-import 'effect.dart';
+import 'package:flame/src/effects/controllers/effect_controller.dart';
+import 'package:flame/src/effects/controllers/infinite_effect_controller.dart';
+import 'package:flame/src/effects/controllers/repeated_effect_controller.dart';
+import 'package:flame/src/effects/effect.dart';
 
 /// Run multiple effects in a sequence, one after another.
 ///

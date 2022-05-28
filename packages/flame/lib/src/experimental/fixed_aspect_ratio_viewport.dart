@@ -1,9 +1,8 @@
 import 'dart:ui';
 
+import 'package:flame/src/components/component.dart';
+import 'package:flame/src/experimental/viewport.dart';
 import 'package:vector_math/vector_math_64.dart';
-
-import '../components/component.dart';
-import 'viewport.dart';
 
 class FixedAspectRatioViewport extends Viewport {
   FixedAspectRatioViewport({
@@ -23,7 +22,12 @@ class FixedAspectRatioViewport extends Viewport {
   }
 
   @override
-  void clip(Canvas canvas) => canvas.clipRect(_clipRect);
+  void clip(Canvas canvas) => canvas.clipRect(_clipRect, doAntiAlias: false);
+
+  @override
+  bool containsLocalPoint(Vector2 point) {
+    return point.x.abs() <= size.x / 2 && point.y.abs() <= size.y / 2;
+  }
 
   @override
   void onViewportResize() {

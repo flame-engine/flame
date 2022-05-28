@@ -18,7 +18,7 @@ void main() {
 
     testWithGame<RecordedGame>(
       'correct event sequence',
-      () => RecordedGame(),
+      RecordedGame.new,
       (game) async {
         var events = <String>[];
         events = game.events;

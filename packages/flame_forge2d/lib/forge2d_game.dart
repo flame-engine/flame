@@ -1,7 +1,6 @@
 import 'package:flame/game.dart';
+import 'package:flame_forge2d/world_contact_listener.dart';
 import 'package:forge2d/forge2d.dart';
-
-import 'world_contact_listener.dart';
 
 class Forge2DGame extends FlameGame {
   Forge2DGame({
@@ -15,7 +14,7 @@ class Forge2DGame extends FlameGame {
     world.setContactListener(contactListener ?? WorldContactListener());
   }
 
-  static final Vector2 defaultGravity = Vector2(0, -10.0);
+  static final Vector2 defaultGravity = Vector2(0, 10.0);
 
   static const double defaultZoom = 10.0;
 

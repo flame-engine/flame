@@ -1,7 +1,6 @@
 import 'package:flame/extensions.dart';
+import 'package:flame_oxygen/src/flame_world.dart';
 import 'package:oxygen/oxygen.dart';
-
-import '../flame_world.dart';
 
 /// Allow a [System] to be part of the render loop from Flame.
 mixin RenderSystem on System {

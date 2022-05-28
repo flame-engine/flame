@@ -1,8 +1,8 @@
 import 'dart:ui';
 
-import '../components/component.dart';
-import '../extensions/vector2.dart';
-import 'particle.dart';
+import 'package:flame/src/components/component.dart';
+import 'package:flame/src/extensions/vector2.dart';
+import 'package:flame/src/particles/particle.dart';
 
 class ComponentParticle extends Particle {
   final Component component;

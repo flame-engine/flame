@@ -1,6 +1,5 @@
+import 'package:examples/commons/ember.dart';
 import 'package:flame/game.dart';
-
-import '../../commons/ember.dart';
 
 class FlipSpriteExample extends FlameGame {
   static const String description = '''

@@ -1,8 +1,8 @@
 import 'dart:math';
 
+import 'package:flame/src/effects/controllers/duration_effect_controller.dart';
 import 'package:flutter/animation.dart' show Curve, Curves;
 import 'package:vector_math/vector_math_64.dart';
-import 'duration_effect_controller.dart';
 
 /// Effect controller that oscillates around 0 following a noise curve.
 ///

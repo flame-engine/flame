@@ -1,11 +1,10 @@
+import 'package:flame/cache.dart';
+import 'package:flame/extensions.dart';
+import 'package:flame/src/anchor.dart';
+import 'package:flame/src/widgets/animation_widget.dart';
+import 'package:flame/src/widgets/base_future_builder.dart';
+import 'package:flame/src/widgets/sprite_painter.dart';
 import 'package:flutter/widgets.dart';
-
-import '../../assets.dart';
-import '../../extensions.dart';
-import '../anchor.dart';
-import 'animation_widget.dart';
-import 'base_future_builder.dart';
-import 'sprite_painter.dart';
 
 export '../sprite.dart';
 

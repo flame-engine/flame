@@ -37,5 +37,40 @@ void main() {
           ),
       );
     });
+
+    testWithFlameGame(
+      'internal image is disposed when component is removed',
+      (game) async {
+        final c = TextBoxComponent(text: 'foo bar');
+
+        await game.ensureAdd(c);
+        final imageCache = c.cache;
+
+        final canvas = MockCanvas();
+        game.render(canvas);
+        game.remove(c);
+        game.update(0);
+        expect(imageCache, isNotNull);
+        expect(imageCache!.debugDisposed, isTrue);
+        expect(c.cache, null);
+      },
+    );
+
+    testWithFlameGame(
+      'internal image is redrawn when component is re-added',
+      (game) async {
+        final c = TextBoxComponent(text: 'foo bar');
+
+        await game.ensureAdd(c);
+        game.remove(c);
+        game.update(0);
+        await game.ensureAdd(c);
+        expect(c.isMounted, true);
+
+        await null;
+        expect(c.cache, isNotNull);
+        expect(c.cache!.debugDisposed, isFalse);
+      },
+    );
   });
 }

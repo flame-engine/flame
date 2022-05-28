@@ -1,5 +1,5 @@
-import '../../../collisions.dart';
-import '../../../components.dart';
+import 'package:flame/collisions.dart';
+import 'package:flame/components.dart';
 
 /// In this [PositionComponent] hitboxes can be added to emulate a hitbox
 /// that is a composition of other hitboxes.

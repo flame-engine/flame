@@ -1,7 +1,7 @@
 import 'dart:ui';
 
-import '../../palette.dart';
-import 'vector2.dart';
+import 'package:flame/palette.dart';
+import 'package:flame/src/extensions/vector2.dart';
 
 export 'dart:ui' show Canvas;
 

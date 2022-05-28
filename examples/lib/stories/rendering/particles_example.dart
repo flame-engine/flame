@@ -8,7 +8,7 @@ import 'package:flame/sprite.dart';
 import 'package:flame/timer.dart' as flame_timer;
 import 'package:flutter/material.dart' hide Image;
 
-class ParticlesExample extends FlameGame with FPSCounter {
+class ParticlesExample extends FlameGame {
   static const String description = '''
     In this example we show how to render a lot of different particles.
   ''';
@@ -25,9 +25,6 @@ class ParticlesExample extends FlameGame with FPSCounter {
   Timer? spawnTimer;
   final StepTween steppedTween = StepTween(begin: 0, end: 5);
   final trafficLight = TrafficLightComponent();
-  final TextPaint fpsTextPaint = TextPaint(
-    style: const TextStyle(color: Colors.white),
-  );
 
   /// Defines the lifespan of all the particles in these examples
   final sceneDuration = const Duration(seconds: 1);
@@ -480,22 +477,6 @@ class ParticlesExample extends FlameGame with FPSCounter {
             .accelerated(acceleration: Vector2(-5, 5)..multiply(halfCellSize)),
       ],
     );
-  }
-
-  @override
-  bool debugMode = true;
-
-  @override
-  void render(Canvas canvas) {
-    super.render(canvas);
-
-    if (debugMode) {
-      fpsTextPaint.render(
-        canvas,
-        '${fps(120).toStringAsFixed(2)}fps',
-        Vector2(0, size.y - 24),
-      );
-    }
   }
 
   /// Returns random [Vector2] within a virtual grid cell

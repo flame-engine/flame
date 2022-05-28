@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use_from_same_package
+
 import 'dart:async';
 
 import 'package:flame/components.dart';
@@ -7,6 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 /// Adds capabilities for a [Component] to listen and have access
 /// to a [Bloc] state.
+@Deprecated('Use FlameBlocProvider and FlameBlocListenable instead')
 mixin BlocComponent<B extends BlocBase<S>, S> on Component {
   StreamSubscription<S>? _subscription;
 
@@ -81,6 +84,7 @@ mixin BlocComponent<B extends BlocBase<S>, S> on Component {
 
 /// A mixin that enhances a [FlameGame] enabling features to receive
 /// and emit changes to a [Bloc] state.
+@Deprecated('Use FlameBlocProvider and FlameBlocListener instead')
 mixin FlameBloc on FlameGame {
   /// Contains a list of all of the [BlocComponent]s with an active
   /// subscription. Only visible for testing.
@@ -130,6 +134,7 @@ mixin FlameBloc on FlameGame {
 }
 
 /// Provides a default, concrete implementation of a [FlameBloc] game.
+@Deprecated('Use FlameBlocProvider and FlameBlocListener instead')
 class FlameBlocGame extends FlameGame with FlameBloc {
   /// FlameBlocGame constructor with an optional [Camera] as a parameter to
   /// FlameGame.

@@ -1,8 +1,7 @@
+import 'package:flame/components.dart';
+import 'package:flame/game.dart';
+import 'package:flame/src/gestures/events.dart';
 import 'package:meta/meta.dart';
-
-import '../../../components.dart';
-import '../../../game.dart';
-import '../../gestures/events.dart';
 
 mixin HasHoverables on FlameGame {
   @mustCallSuper

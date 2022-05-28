@@ -1,8 +1,8 @@
 import 'dart:math' as math;
 
-import '../../../components.dart';
-import '../../../extensions.dart';
-import '../../../game.dart';
+import 'package:flame/components.dart';
+import 'package:flame/extensions.dart';
+import 'package:flame/game.dart';
 
 /// A camera translates your game coordinate system; this is useful when your
 /// world is not 1:1 with your screen size.

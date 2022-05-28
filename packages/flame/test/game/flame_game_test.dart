@@ -5,6 +5,7 @@ import 'package:flame_test/flame_test.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
+
 import 'projector_test.dart';
 
 void main() {
@@ -42,7 +43,7 @@ void main() {
 
       testWithGame<_GameWithTappables>(
         'Add component with onLoad function',
-        () => _GameWithTappables(),
+        _GameWithTappables.new,
         (game) async {
           final component = _MyAsyncComponent();
           await game.ensureAdd(component);
@@ -66,7 +67,7 @@ void main() {
 
       testWithGame<_GameWithTappables>(
         'component can be tapped',
-        () => _GameWithTappables(),
+        _GameWithTappables.new,
         (game) async {
           final component = _MyTappableComponent();
           await game.ensureAdd(component);
@@ -147,14 +148,19 @@ void main() {
         expect(game.children.isEmpty, equals(true));
       });
 
-      test("can't add a component to a game without a layout", () {
-        final game = FlameGame();
-        final component = Component();
-        const message =
-            'add() called before the game has a layout. Did you try to add '
-            'components from the constructor? Use the onLoad() method instead.';
-        expect(() => game.add(component), failsAssert(message));
-      });
+      testWidgets(
+        'can add a component to a game without a layout',
+        (WidgetTester tester) async {
+          final game = FlameGame();
+          final component = Component()..addToParent(game);
+          expect(game.hasLayout, false);
+
+          await tester.pumpWidget(GameWidget(game: game));
+          game.update(0);
+          expect(game.children.length, 1);
+          expect(game.children.first, component);
+        },
+      );
     });
 
     group('projector', () {

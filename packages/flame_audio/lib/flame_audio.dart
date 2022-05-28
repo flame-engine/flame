@@ -1,6 +1,6 @@
 import 'package:audioplayers/audioplayers.dart';
 
-import 'bgm.dart';
+import 'package:flame_audio/bgm.dart';
 
 /// This utility class holds static references to some global audio objects.
 ///

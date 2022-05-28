@@ -1,5 +1,5 @@
-import '../../collisions.dart';
-import '../../components.dart';
+import 'package:flame/collisions.dart';
+import 'package:flame/components.dart';
 
 /// [CollisionDetection] is the foundation of the collision detection system in
 /// Flame.

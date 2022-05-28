@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import '../../extensions.dart';
+import 'package:flame/extensions.dart';
 
 /// This represents a line on the ax + by = c form
 /// If you just want to represent a part of a line, look into LineSegment.

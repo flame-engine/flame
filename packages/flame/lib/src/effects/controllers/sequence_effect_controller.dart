@@ -1,5 +1,5 @@
-import '../effect.dart';
-import 'effect_controller.dart';
+import 'package:flame/src/effects/controllers/effect_controller.dart';
+import 'package:flame/src/effects/effect.dart';
 
 /// An effect controller that executes a list of other controllers one after
 /// another.

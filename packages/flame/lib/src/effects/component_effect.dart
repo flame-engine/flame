@@ -1,6 +1,6 @@
-import '../../components.dart';
-import 'controllers/effect_controller.dart';
-import 'effect.dart';
+import 'package:flame/components.dart';
+import 'package:flame/src/effects/controllers/effect_controller.dart';
+import 'package:flame/src/effects/effect.dart';
 
 /// Base class for effects that target a [Component] of type [T].
 ///

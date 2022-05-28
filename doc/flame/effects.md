@@ -197,10 +197,13 @@ final effect = SizeEffect.by(Vector2(20, -50), EffectController(duration: 1));
 The size of a `PositionComponent` cannot be negative. If an effect attempts to set the size to a
 negative value, the size will be clamped at zero.
 
-Note that for this effect to work, the target component must take its own `size` into account when
-rendering, and not all of them do. In addition, changing the size of a component does not propagate
-to its children, if it has any. An alternative to `SizeEffect` is the `ScaleEffect`, which works
-more generally and scales the children components too.
+Note that for this effect to work, the target component must implement the `SizeProvider` interface
+and take its `size` into account when rendering. Only few of the built-in components implement this
+API, but you can always make your own component work with size effects by adding
+`implements SizeEffect` to the class declaration.
+
+An alternative to `SizeEffect` is the `ScaleEffect`, which works more generally and scales both the
+target component and its children.
 
 
 ### `SizeEffect.to`
@@ -583,7 +586,7 @@ final ec = ZigzagEffectController(period: 2);
 
 ## See also
 
-* [Examples of various effects](https://examples.flame-engine.org/#/).
+* [Examples of various effects](https://examples.flame-engine.org/).
 
 
 [tau]: https://en.wikipedia.org/wiki/Tau_(mathematical_constant)

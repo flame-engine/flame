@@ -1,8 +1,7 @@
+import 'package:flame_oxygen/src/component.dart';
+import 'package:flame_oxygen/src/system.dart';
 import 'package:flutter/material.dart';
 import 'package:oxygen/oxygen.dart';
-
-import '../component.dart';
-import '../system.dart';
 
 /// System that provides base rendering for default components.
 ///

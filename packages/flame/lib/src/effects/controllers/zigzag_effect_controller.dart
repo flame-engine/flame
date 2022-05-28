@@ -1,6 +1,6 @@
-import 'duration_effect_controller.dart';
-import 'infinite_effect_controller.dart';
-import 'repeated_effect_controller.dart';
+import 'package:flame/src/effects/controllers/duration_effect_controller.dart';
+import 'package:flame/src/effects/controllers/infinite_effect_controller.dart';
+import 'package:flame/src/effects/controllers/repeated_effect_controller.dart';
 
 /// This effect controller goes from 0 to 1, then back to 0, then to -1, and
 /// then again to 0.

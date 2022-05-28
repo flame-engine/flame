@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:ui';
 
-import '../extensions.dart';
+import 'package:flame/extensions.dart';
 
 export '../extensions.dart';
 
@@ -122,7 +122,7 @@ class ImageComposition {
 
     return recorder
         .endRecording()
-        .toImage(output.width.toInt(), output.height.toInt());
+        .toImageSafe(output.width.toInt(), output.height.toInt());
   }
 }
 

@@ -29,8 +29,8 @@ class _DoubleTapGame extends FlameGame with DoubleTapDetector {
 }
 
 void main() {
-  final tapGame = FlameTester(() => _TapGame());
-  final doubleTapGame = FlameTester(() => _DoubleTapGame());
+  final tapGame = FlameTester(_TapGame.new);
+  final doubleTapGame = FlameTester(_DoubleTapGame.new);
 
   group('GameWidget - TapDetectors', () {
     tapGame.testGameWidget(

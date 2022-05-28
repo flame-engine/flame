@@ -1,8 +1,7 @@
 import 'package:flame/game.dart';
 import 'package:flame_oxygen/flame_oxygen.dart';
+import 'package:flame_oxygen_example/component/timer_component.dart';
 import 'package:flutter/material.dart';
-
-import '../component/timer_component.dart';
 
 class KawabungaSystem extends BaseSystem with UpdateSystem {
   @override

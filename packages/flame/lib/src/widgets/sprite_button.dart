@@ -1,10 +1,11 @@
-import 'package:flutter/widgets.dart';
+import 'dart:async';
 
-import '../../assets.dart';
-import '../extensions/size.dart';
-import '../extensions/vector2.dart';
-import '../sprite.dart';
-import 'base_future_builder.dart';
+import 'package:flame/cache.dart';
+import 'package:flame/src/extensions/size.dart';
+import 'package:flame/src/extensions/vector2.dart';
+import 'package:flame/src/sprite.dart';
+import 'package:flame/src/widgets/base_future_builder.dart';
+import 'package:flutter/widgets.dart';
 
 export '../sprite.dart';
 
@@ -40,8 +41,8 @@ class SpriteButton extends StatelessWidget {
   final Future<List<Sprite>> Function() _buttonsFuture;
 
   SpriteButton({
-    required Sprite sprite,
-    required Sprite pressedSprite,
+    required FutureOr<Sprite> sprite,
+    required FutureOr<Sprite> pressedSprite,
     required this.onPressed,
     required this.width,
     required this.height,

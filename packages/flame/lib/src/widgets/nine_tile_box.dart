@@ -1,19 +1,17 @@
-import 'dart:ui' as ui;
+import 'dart:ui';
 
-import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-
-import '../../assets.dart';
-import '../../flame.dart';
-import '../nine_tile_box.dart' as non_widget;
-import '../sprite.dart';
-import 'base_future_builder.dart';
+import 'package:flame/cache.dart';
+import 'package:flame/flame.dart';
+import 'package:flame/src/nine_tile_box.dart' as non_widget;
+import 'package:flame/src/sprite.dart';
+import 'package:flame/src/widgets/base_future_builder.dart';
+import 'package:flutter/material.dart' hide Image;
 
 export '../nine_tile_box.dart';
 export '../sprite.dart';
 
 class _Painter extends CustomPainter {
-  final ui.Image image;
+  final Image image;
   final double tileSize;
   final double destTileSize;
   late final non_widget.NineTileBox _nineTileBox;
@@ -42,7 +40,7 @@ typedef NineTileBox = NineTileBoxWidget;
 
 /// A [StatelessWidget] that renders NineTileBox
 class NineTileBoxWidget extends StatelessWidget {
-  final Future<ui.Image> Function() _imageFuture;
+  final Future<Image> Function() _imageFuture;
 
   /// The size of the tile on the image
   final double tileSize;
@@ -54,6 +52,8 @@ class NineTileBoxWidget extends StatelessWidget {
 
   final Widget? child;
 
+  final EdgeInsetsGeometry? padding;
+
   /// A builder function that is called if the loading fails
   final WidgetBuilder? errorBuilder;
 
@@ -61,12 +61,13 @@ class NineTileBoxWidget extends StatelessWidget {
   final WidgetBuilder? loadingBuilder;
 
   NineTileBoxWidget({
-    required ui.Image image,
+    required Image image,
     required this.tileSize,
     required this.destTileSize,
     this.width,
     this.height,
     this.child,
+    this.padding,
     this.errorBuilder,
     this.loadingBuilder,
     Key? key,
@@ -81,6 +82,7 @@ class NineTileBoxWidget extends StatelessWidget {
     this.width,
     this.height,
     this.child,
+    this.padding,
     this.errorBuilder,
     this.loadingBuilder,
     Key? key,
@@ -89,7 +91,7 @@ class NineTileBoxWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BaseFutureBuilder<ui.Image>(
+    return BaseFutureBuilder<Image>(
       futureBuilder: _imageFuture,
       builder: (_, image) {
         return _NineTileBox(
@@ -99,6 +101,7 @@ class NineTileBoxWidget extends StatelessWidget {
           width: width,
           height: height,
           child: child,
+          padding: padding,
         );
       },
       errorBuilder: errorBuilder,
@@ -108,7 +111,7 @@ class NineTileBoxWidget extends StatelessWidget {
 }
 
 class _NineTileBox extends StatelessWidget {
-  final ui.Image image;
+  final Image image;
   final double tileSize;
   final double destTileSize;
   final double? width;

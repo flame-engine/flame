@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import '../../components.dart';
+import 'package:flame/components.dart';
 
 /// A shape can represent any geometrical shape with optionally a size, position
 /// and angle. It can also have an anchor if it shouldn't be rotated around its

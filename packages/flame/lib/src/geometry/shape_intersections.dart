@@ -1,7 +1,7 @@
 import 'dart:math';
 
-import '../../extensions.dart';
-import '../../geometry.dart';
+import 'package:flame/extensions.dart';
+import 'package:flame/geometry.dart';
 
 abstract class Intersections<T1 extends ShapeComponent,
     T2 extends ShapeComponent> {

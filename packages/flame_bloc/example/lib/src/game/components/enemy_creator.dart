@@ -2,8 +2,8 @@ import 'dart:math';
 
 import 'package:flame/components.dart';
 
-import './enemy.dart';
-import '../game.dart';
+import 'package:flame_bloc_example/src/game/components/enemy.dart';
+import 'package:flame_bloc_example/src/game/game.dart';
 
 class EnemyCreator extends TimerComponent with HasGameRef<SpaceShooterGame> {
   Random random = Random();

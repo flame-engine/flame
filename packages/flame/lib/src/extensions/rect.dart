@@ -2,10 +2,10 @@ import 'dart:math' show min, max;
 import 'dart:math' as math;
 import 'dart:ui';
 
-import '../../geometry.dart';
-import 'matrix4.dart';
-import 'offset.dart';
-import 'vector2.dart';
+import 'package:flame/geometry.dart';
+import 'package:flame/src/extensions/matrix4.dart';
+import 'package:flame/src/extensions/offset.dart';
+import 'package:flame/src/extensions/vector2.dart';
 
 export 'dart:ui' show Rect;
 

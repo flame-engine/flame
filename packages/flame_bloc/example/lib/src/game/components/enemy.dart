@@ -1,8 +1,8 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 
-import './explosion.dart';
-import '../game.dart';
+import 'package:flame_bloc_example/src/game/components/explosion.dart';
+import 'package:flame_bloc_example/src/game/game.dart';
 
 class EnemyComponent extends SpriteAnimationComponent
     with HasGameRef<SpaceShooterGame>, CollisionCallbacks {

@@ -1,7 +1,7 @@
 import 'package:dashbook/dashbook.dart';
 import 'package:flutter/material.dart';
 
-import 'steps/1_getting_started/getting_started.dart';
+import 'package:tutorials_space_shooter/steps/1_getting_started/getting_started.dart';
 
 void main() {
   final dashbook = Dashbook.dualTheme(

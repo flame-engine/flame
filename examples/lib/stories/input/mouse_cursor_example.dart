@@ -46,12 +46,12 @@ class MouseCursorExample extends FlameGame with MouseMovementDetector {
       if (hovering) {
         if (!onTarget) {
           //Entered
-          mouseCursor.value = SystemMouseCursors.grab;
+          mouseCursor = SystemMouseCursors.grab;
         }
       } else {
         if (onTarget) {
           // Exited
-          mouseCursor.value = SystemMouseCursors.move;
+          mouseCursor = SystemMouseCursors.move;
         }
       }
       onTarget = hovering;

@@ -1,6 +1,5 @@
+import 'package:flame_oxygen/src/flame_world.dart';
 import 'package:oxygen/oxygen.dart';
-
-import '../flame_world.dart';
 
 /// Allow a [System] to be part of the update loop from Flame.
 mixin UpdateSystem on System {

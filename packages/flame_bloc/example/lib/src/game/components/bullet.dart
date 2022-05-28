@@ -1,9 +1,8 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-
-import '../../inventory/bloc/inventory_bloc.dart';
-import '../game.dart';
-import 'enemy.dart';
+import 'package:flame_bloc_example/src/game/components/enemy.dart';
+import 'package:flame_bloc_example/src/game/game.dart';
+import 'package:flame_bloc_example/src/inventory/bloc/inventory_bloc.dart';
 
 class BulletComponent extends SpriteAnimationComponent
     with HasGameRef<SpaceShooterGame>, CollisionCallbacks {

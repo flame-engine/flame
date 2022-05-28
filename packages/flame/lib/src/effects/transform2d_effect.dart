@@ -1,7 +1,7 @@
-import '../components/position_component.dart';
-import '../game/transform2d.dart';
-import 'component_effect.dart';
-import 'controllers/effect_controller.dart';
+import 'package:flame/src/components/position_component.dart';
+import 'package:flame/src/effects/component_effect.dart';
+import 'package:flame/src/effects/controllers/effect_controller.dart';
+import 'package:flame/src/game/transform2d.dart';
 
 /// Base class for effects that target a [Transform2D] property.
 ///

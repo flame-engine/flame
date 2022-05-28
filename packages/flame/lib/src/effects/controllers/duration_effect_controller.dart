@@ -1,6 +1,5 @@
+import 'package:flame/src/effects/controllers/effect_controller.dart';
 import 'package:meta/meta.dart';
-
-import 'effect_controller.dart';
 
 /// Abstract class for an effect controller that has a predefined [duration].
 ///

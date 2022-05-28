@@ -1,24 +1,5 @@
 # Debug features
 
-## FPS counter
-
-Flame provides the `FPSCounter` mixin for recording the fps; this mixin can be applied on any class
-that extends from `Game`. Once applied you can access the current fps by using the `fps` method,
-like shown in the example below.
-
-```dart
-class MyGame extends FlameGame with FPSCounter {
-  static final fpsTextConfig = TextConfig(color: BasicPalette.white.color);
-
-  @override
-  void render(Canvas canvas) {
-    super.render(canvas);
-    final fpsCount = fps(120); // The average FPS for the last 120 microseconds.
-    fpsTextConfig.render(canvas, fpsCount.toString(), Vector2(0, 50));
-  }
-}
-```
-
 ## FlameGame features
 
 Flame provides some debugging features for the `FlameGame` class. These features are enabled when
@@ -29,3 +10,25 @@ boundaries and positions.
 
 To see a working example of the debugging features of the `FlameGame`, check this
 [example](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/components/debug_example.dart).
+
+
+## FPS
+
+The FPS reported from Flame might be a bit lower than what is reported from for example the Flutter
+DevTools, depending on which platform you are targeting. The source of truth for how many FPS your
+game is running in should be the FPS that we are reporting, since that is what our game loop is
+bound by.
+
+
+### FpsComponent
+
+The `FpsComponent` can be added to anywhere in the component tree and will keep track of how many
+FPS that the game is currently rendering in. If you want to display this as text in the game, use
+the [](#fpstextcomponent).
+
+
+### FpsTextComponent
+
+The `FpsTextComponent` is simply a [](../rendering/text.md#textcomponent) that wraps an
+[](../rendering/text.md#textcomponent), since you most commonly want to show the current FPS
+somewhere when you the [](#fpscomponent) is used.

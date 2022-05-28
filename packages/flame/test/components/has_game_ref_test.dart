@@ -22,7 +22,7 @@ class _BarComponent extends Component with HasGameRef<_MyGame> {}
 class MockFlameGame extends Mock implements _MyGame {}
 
 void main() {
-  final withHasGameRef = FlameTester(() => _MyGame());
+  final withHasGameRef = FlameTester(_MyGame.new);
 
   group('HasGameRef', () {
     withHasGameRef.test('simple test', (game) {

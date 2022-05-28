@@ -1,4 +1,4 @@
-import '../../extensions.dart';
+import 'package:flame/extensions.dart';
 
 /// A simple interface to mark a class that can perform projection operations
 /// from one 2D euclidian coordinate space to another.

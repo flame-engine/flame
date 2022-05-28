@@ -1,21 +1,23 @@
+import 'package:flame/components.dart';
+import 'package:flame/src/game/mixins/has_tappables.dart';
+import 'package:flame/src/gestures/events.dart';
+import 'package:flutter/gestures.dart';
 import 'package:meta/meta.dart';
 
-import '../../../components.dart';
-import '../../game/mixins/has_tappables.dart';
-import '../../gestures/events.dart';
-
+/// Mixin that can be added to any [Component] allowing it to receive tap
+/// events.
+///
+/// When using this mixin, also add [HasTappables] to your game, which handles
+/// propagation of tap events from the root game to individual components.
+///
+/// See [MultiTapGestureRecognizer] for the description of each individual
+/// event.
 mixin Tappable on Component {
-  bool onTapCancel() {
-    return true;
-  }
-
-  bool onTapDown(TapDownInfo info) {
-    return true;
-  }
-
-  bool onTapUp(TapUpInfo info) {
-    return true;
-  }
+  // bool onTap() => true;
+  bool onTapDown(TapDownInfo info) => true;
+  bool onLongTapDown(TapDownInfo info) => true;
+  bool onTapUp(TapUpInfo info) => true;
+  bool onTapCancel() => true;
 
   int? _currentPointerId;
 
@@ -45,14 +47,20 @@ mixin Tappable on Component {
     return true;
   }
 
+  bool handleLongTapDown(int pointerId, TapDownInfo info) {
+    if (_checkPointerId(pointerId) && containsPoint(eventPosition(info))) {
+      return onLongTapDown(info);
+    }
+    return true;
+  }
+
   @override
   @mustCallSuper
   void onMount() {
     super.onMount();
     assert(
       findGame()! is HasTappables,
-      'Tappable Components can only be added to a FlameGame with '
-      'HasTappables',
+      'Tappable components can only be added to a FlameGame with HasTappables',
     );
   }
 }

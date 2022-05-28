@@ -1,6 +1,5 @@
+import 'package:flame/src/effects/controllers/duration_effect_controller.dart';
 import 'package:flutter/animation.dart';
-
-import 'duration_effect_controller.dart';
 
 /// A controller that grows non-linearly from 0 to 1 following the provided
 /// [curve]. The [duration] cannot be 0.

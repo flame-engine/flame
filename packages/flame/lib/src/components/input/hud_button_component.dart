@@ -1,8 +1,7 @@
+import 'package:flame/components.dart';
+import 'package:flame/input.dart';
 import 'package:flutter/rendering.dart' show EdgeInsets;
 import 'package:meta/meta.dart';
-
-import '../../../components.dart';
-import '../../../input.dart';
 
 /// The [HudButtonComponent] bundles two [PositionComponent]s, one that shows
 /// when the button is being pressed, and one that shows otherwise.
@@ -64,12 +63,8 @@ class HudButtonComponent extends HudMarginComponent with Tappable {
   @override
   @mustCallSuper
   bool onTapDown(TapDownInfo info) {
-    if (buttonDown != null) {
-      if (button != null) {
-        remove(button!);
-      }
-      add(buttonDown!);
-    }
+    button?.removeFromParent();
+    buttonDown?.changeParent(this);
     onPressed?.call();
     return false;
   }
@@ -85,12 +80,8 @@ class HudButtonComponent extends HudMarginComponent with Tappable {
   @override
   @mustCallSuper
   bool onTapCancel() {
-    if (buttonDown != null) {
-      remove(buttonDown!);
-      if (button != null) {
-        add(button!);
-      }
-    }
+    buttonDown?.removeFromParent();
+    button?.changeParent(this);
     return false;
   }
 }

@@ -1,7 +1,7 @@
-import '../../../components.dart';
-import '../../../game.dart';
-import '../collision_callbacks.dart';
-import 'rectangle_hitbox.dart';
+import 'package:flame/components.dart';
+import 'package:flame/game.dart';
+import 'package:flame/src/collisions/collision_callbacks.dart';
+import 'package:flame/src/collisions/hitboxes/rectangle_hitbox.dart';
 
 /// This component is used to detect hitboxes colliding into the edges of the
 /// viewport of the game.
