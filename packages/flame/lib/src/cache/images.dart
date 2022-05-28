@@ -52,9 +52,9 @@ class Images {
   /// properly dispose of it at the end.
   Future<Image> fetchOrGenerate(
     String name,
-    Future<Image> Function(Images) ImageGenerator,
+    Future<Image> Function() imageGenerator,
   ) {
-    return (_assets[name] ??= _ImageAsset.future(ImageGenerator(this)))
+    return (_assets[name] ??= _ImageAsset.future(imageGenerator()))
         .retrieveAsync();
   }
 
