@@ -115,20 +115,11 @@ class CircleComponent extends ShapeComponent implements SizeProvider {
     final c = _delta10.length2 - radius * radius;
 
     return solveQuadratic(a, b, c)
-        .indexedMap(
-          (i, t) => _tmp[i]
-            ..setFrom(line.from)
-            ..addScaled(_delta21, t),
-        ) // line.from + t * (line.to - line.from)
+        .map((t) => line.from.clone()..addScaled(_delta21, t))
         .where((point) => line.containsPoint(point))
         .toList();
   }
 
   static final Vector2 _delta21 = Vector2.zero();
   static final Vector2 _delta10 = Vector2.zero();
-  static final List<Vector2> _tmp = [
-    Vector2.zero(),
-    Vector2.zero(),
-    Vector2.zero()
-  ];
 }
