@@ -17,6 +17,7 @@ void main() async {
       expect(futureBuilder, findsNothing);
       expect(spriteWidgetFinder, findsOneWidget);
     });
+
     testWidgets(
       'has FutureBuilder when pass asset path',
       (tester) async {

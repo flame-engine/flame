@@ -27,6 +27,7 @@ void main() async {
       expect(futureBuilder, findsNothing);
       expect(nineTileBoxWidgetFinder, findsOneWidget);
     });
+
     testWidgets(
       'has FutureBuilder when pass asset path',
       (tester) async {

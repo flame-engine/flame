@@ -23,6 +23,7 @@ void main() async {
       expect(futureBuilder, findsNothing);
       expect(spriteAnimationWidgetFinder, findsOneWidget);
     });
+
     testWidgets(
       'has FutureBuilder when pass asset path',
       (tester) async {
