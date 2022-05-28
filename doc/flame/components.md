@@ -419,8 +419,7 @@ use `animation.completed`.
 Example:
 
 ```dart
-await
-animation.completed;
+await animation.completed;
 
 doSomething();
 
