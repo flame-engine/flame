@@ -39,6 +39,6 @@ class BaseFutureBuilder<T> extends StatelessWidget {
       );
     }
 
-    return builder(context, futureBuilder as T);
+    return builder(context, future);
   }
 }
