@@ -263,7 +263,7 @@ class Component {
   /// Returns the closest parent further up the hierarchy that satisfies type=T,
   /// or null if no such parent can be found.
   T? findParent<T extends Component>() {
-    return (_parent is T ? _parent : _parent?.findParent<T>()) as T?;
+    return ancestors().whereType<T>().firstOrNull;
   }
 
   /// Returns the first child that matches the given type [T], or null if there
