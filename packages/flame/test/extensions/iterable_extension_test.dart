@@ -20,5 +20,15 @@ void main() {
       final out = src.indexedMap((i, e) => e.toDouble() / (i + 1));
       expect(out, [0, 1 / 2, 2 / 3, 3 / 4, 4 / 5, 5 / 6]);
     });
+
+    test('indexedMap properties', () {
+      final src = [3, 7, 12, -11];
+      final out = src.indexedMap((i, e) => i + e);
+      expect(out.isEmpty, false);
+      expect(out.length, 4);
+      expect(out.first, src.first + 0);
+      expect(out.last, src.last + 3);
+      expect(out.elementAt(1), src[1] + 1);
+    });
   });
 }
