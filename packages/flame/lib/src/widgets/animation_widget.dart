@@ -30,26 +30,31 @@ class SpriteAnimationWidget extends StatelessWidget {
     required SpriteAnimation animation,
     this.playing = true,
     this.anchor = Anchor.topLeft,
-    this.errorBuilder,
-    this.loadingBuilder,
     Key? key,
   })  : _animationFuture = (() => animation),
+        errorBuilder = null,
+        loadingBuilder = null,
         super(key: key);
 
+  /// loads image from asset [path] and renders it as Widget.
+  /// it has [loadingBuilder] while the image from [path] loads image
+  /// To render without loading or gapless playback when the [path] change,
+  /// consider load [SpriteAnimation] from somewhere and directly pass it to
+  /// default constructor
   SpriteAnimationWidget.asset({
     required String path,
     required SpriteAnimationData data,
     Images? images,
     this.playing = true,
     this.anchor = Anchor.topLeft,
+    this.errorBuilder,
+    this.loadingBuilder,
     Key? key,
   })  : _animationFuture = (() => SpriteAnimation.load(
               path,
               data,
               images: images,
             )),
-        errorBuilder = null,
-        loadingBuilder = null,
         super(key: key);
 
   @override
