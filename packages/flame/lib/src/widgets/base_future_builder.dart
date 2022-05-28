@@ -1,7 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
-class BaseFutureBuilder<T> extends StatefulWidget {
-  final Future<T> Function() futureBuilder;
+class BaseFutureBuilder<T> extends StatelessWidget {
+  final FutureOr<T> Function() futureBuilder;
   final Widget Function(BuildContext, T) builder;
   final WidgetBuilder? errorBuilder;
   final WidgetBuilder? loadingBuilder;
@@ -15,38 +17,28 @@ class BaseFutureBuilder<T> extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() {
-    return _BaseFutureBuilder<T>();
-  }
-}
-
-class _BaseFutureBuilder<T> extends State<BaseFutureBuilder<T>> {
-  late Future<T> future;
-
-  @override
-  void initState() {
-    super.initState();
-
-    future = widget.futureBuilder();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return FutureBuilder<T>(
-      future: future,
-      builder: (_, snapshot) {
-        switch (snapshot.connectionState) {
-          case ConnectionState.waiting:
-          case ConnectionState.none:
-          case ConnectionState.active:
-            return widget.loadingBuilder?.call(context) ?? Container();
-          case ConnectionState.done:
-            if (snapshot.hasData) {
-              return widget.builder(context, snapshot.data!);
-            }
-            return widget.loadingBuilder?.call(context) ?? Container();
-        }
-      },
-    );
+    final future = futureBuilder();
+
+    if (future is Future<T>) {
+      return FutureBuilder<T>(
+        future: future,
+        builder: (_, snapshot) {
+          switch (snapshot.connectionState) {
+            case ConnectionState.waiting:
+            case ConnectionState.none:
+            case ConnectionState.active:
+              return loadingBuilder?.call(context) ?? Container();
+            case ConnectionState.done:
+              if (snapshot.hasData) {
+                return builder(context, snapshot.data!);
+              }
+              return loadingBuilder?.call(context) ?? Container();
+          }
+        },
+      );
+    }
+
+    return builder(context, futureBuilder as T);
   }
 }
