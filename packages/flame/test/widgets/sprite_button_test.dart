@@ -6,12 +6,13 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() async {
   final image = await generateImage();
-  final sprite1 = Sprite(image);
-  final sprite2 = Sprite(image);
 
   group('SpriteButton', () {
     testWidgets('has no FutureBuilder when passed an animation',
         (tester) async {
+      final sprite1 = Sprite(image);
+      final sprite2 = Sprite(image);
+
       await tester.pumpWidget(
         SpriteButton(
           sprite: sprite1,
