@@ -35,7 +35,7 @@ class LineSegment {
       if (overlaps.isNotEmpty) {
         final sum = Vector2.zero();
         overlaps.forEach(sum.add);
-        return [sum..scale(1/overlaps.length)];
+        return [sum..scale(1 / overlaps.length)];
       }
     }
     return [];

@@ -196,10 +196,8 @@ class PositionComponent extends Component
   /// has been applied.
   double get absoluteAngle {
     // TODO(spydon): take scale into consideration
-    return ancestors()
-        .whereType<PositionComponent>()
-        .map((c) => c.angle)
-        .sum + angle;
+    return ancestors().whereType<PositionComponent>().map((c) => c.angle).sum +
+        angle;
   }
 
   /// The resulting scale after all the ancestors and the components own scale
