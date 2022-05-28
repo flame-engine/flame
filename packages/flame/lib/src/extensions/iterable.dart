@@ -1,4 +1,3 @@
-import 'dart:_internal';
 
 extension IterableExtension<E> on Iterable<E> {
   /// Similar to [map], but also supplies index of each element.
@@ -12,14 +11,7 @@ class _MappedIterable<E, T> extends Iterable<T> {
   final Iterable<E> _iterable;
   final _IndexedMapFn<E, T> _transform;
 
-  factory _MappedIterable(Iterable<E> iterable, _IndexedMapFn<E, T> function) {
-    if (iterable is EfficientLengthIterable) {
-      return _EfficientMappedIterable<E, T>(iterable, function);
-    }
-    return _MappedIterable._(iterable, function);
-  }
-
-  _MappedIterable._(this._iterable, this._transform);
+  _MappedIterable(this._iterable, this._transform);
 
   @override
   Iterator<T> get iterator =>
@@ -40,12 +32,6 @@ class _MappedIterable<E, T> extends Iterable<T> {
   T get single => _transform(0, _iterable.single);
   @override
   T elementAt(int index) => _transform(index, _iterable.elementAt(index));
-}
-
-class _EfficientMappedIterable<E, T> extends _MappedIterable<E, T>
-    implements EfficientLengthIterable<T> {
-  _EfficientMappedIterable(Iterable<E> iterable, _IndexedMapFn<E, T> function)
-      : super._(iterable, function);
 }
 
 class _IndexedMappedIterator<E, T> extends Iterator<T> {
