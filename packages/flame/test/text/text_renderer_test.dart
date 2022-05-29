@@ -1,5 +1,6 @@
 import 'package:flame/components.dart';
 import 'package:flame/src/text/inline_text_element.dart';
+import 'package:flame/src/text/line_metrics.dart';
 import 'package:flame/text.dart';
 import 'package:flutter/material.dart';
 import 'package:test/test.dart';
@@ -47,4 +48,7 @@ class _CustomTextRenderer extends TextRenderer {
 
   @override
   InlineTextElement forge(String text) => throw UnimplementedError();
+
+  @override
+  LineMetrics get spaceMetrics => throw UnimplementedError();
 }

@@ -1,9 +1,10 @@
-import 'dart:ui';
+import 'dart:ui' hide LineMetrics;
 
 import 'package:flame/src/anchor.dart';
 import 'package:flame/src/components/text_box_component.dart';
 import 'package:flame/src/components/text_component.dart';
 import 'package:flame/src/text/inline_text_element.dart';
+import 'package:flame/src/text/line_metrics.dart';
 import 'package:flame/src/text/text_paint.dart';
 import 'package:vector_math/vector_math_64.dart';
 
@@ -33,6 +34,10 @@ abstract class TextRenderer {
 
   /// Compute the height of [text] when rendered.
   double measureTextHeight(String text) => measureText(text).y;
+
+  /// The dimensions of a normal space for this text style. The [LineMetrics]
+  /// object should have `.left` and `.top` set to zero.
+  LineMetrics get spaceMetrics;
 
   /// Renders [text] on the [canvas] at a given [position].
   ///

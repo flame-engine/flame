@@ -51,6 +51,19 @@ class TextPaint extends TextRenderer {
     return Vector2(tp.width, tp.height);
   }
 
+  @override
+  late LineMetrics spaceMetrics = _computeSpaceMetrics();
+  LineMetrics _computeSpaceMetrics() {
+    final tp = toTextPainter(' ');
+    return LineMetrics(
+      left: 0,
+      top: 0,
+      right: tp.width,
+      bottom: tp.height,
+      baseline: tp.computeDistanceToActualBaseline(TextBaseline.alphabetic),
+    );
+  }
+
   /// Returns a [TextPainter] that allows for text rendering and size
   /// measuring.
   ///
@@ -116,7 +129,7 @@ class _TextPaintRun extends InlineTextElement implements TextLine {
   }
 
   @override
-  Iterable<TextLine> get lines => _x0 == null? [] : [this];
+  Iterable<TextLine> get lines => _x0 == null ? [] : [this];
 
   @override
   TextLine get lastLine => this;
