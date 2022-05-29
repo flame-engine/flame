@@ -287,20 +287,22 @@ mixin Game {
     _refreshWidget();
   }
 
-  final List<VoidCallback> _gameStateListeners = [];
+  @visibleForTesting
+  final List<VoidCallback> gameStateListeners = [];
+
   void addGameStateListener(VoidCallback callback) {
-    _gameStateListeners.add(callback);
+    gameStateListeners.add(callback);
   }
 
   void removeGameStateListener(VoidCallback callback) {
-    _gameStateListeners.remove(callback);
+    gameStateListeners.remove(callback);
   }
 
   /// When a Game is attached to a `GameWidget`, this method will force that
   /// widget to be rebuilt. This can be used when updating any property which is
   /// implemented within the Flutter tree.
   void _refreshWidget() {
-    _gameStateListeners.forEach((callback) => callback());
+    gameStateListeners.forEach((callback) => callback());
   }
 }
 
@@ -325,6 +327,17 @@ class _ActiveOverlays {
     return setChanged;
   }
 
+  /// Marks [overlayNames] to be rendered.
+  void addAll(Iterable<String> overlayNames) {
+    final overlayCountBeforeAdded = _activeOverlays.length;
+    _activeOverlays.addAll(overlayNames);
+
+    final overlayCountAfterAdded = _activeOverlays.length;
+    if (overlayCountBeforeAdded != overlayCountAfterAdded) {
+      _game?._refreshWidget();
+    }
+  }
+
   /// Hides the [overlayName].
   bool remove(String overlayName) {
     final hasRemoved = _activeOverlays.remove(overlayName);
@@ -332,6 +345,17 @@ class _ActiveOverlays {
       _game?._refreshWidget();
     }
     return hasRemoved;
+  }
+
+  /// Hides multiple overlays specified in [overlayNames].
+  void removeAll(Iterable<String> overlayNames) {
+    final overlayCountBeforeRemoved = _activeOverlays.length;
+    _activeOverlays.removeAll(overlayNames);
+
+    final overlayCountAfterRemoved = _activeOverlays.length;
+    if (overlayCountBeforeRemoved != overlayCountAfterRemoved) {
+      _game?._refreshWidget();
+    }
   }
 
   /// The names of all currently active overlays.

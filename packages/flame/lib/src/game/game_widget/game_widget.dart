@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:flame/extensions.dart';
 import 'package:flame/input.dart';
@@ -116,7 +115,7 @@ class GameWidget<T extends Game> extends StatefulWidget {
       game.mouseCursor = mouseCursor;
     }
     if (initialActiveOverlays != null) {
-      initialActiveOverlays.forEach(game.overlays.add);
+      game.overlays.addAll(initialActiveOverlays);
     }
   }
 
@@ -198,8 +197,10 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
     if (oldWidget.game != widget.game) {
       // Reset the loaderFuture so that onMount will run again
       // (onLoad is still cached).
+      oldWidget.game.removeGameStateListener(_onGameStateChange);
       oldWidget.game.onRemove();
       _loaderFuture = null;
+      widget.game.addGameStateListener(_onGameStateChange);
     }
   }
 
@@ -299,17 +300,10 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
                         if (snapshot.hasError) {
                           final errorBuilder = widget.errorBuilder;
                           if (errorBuilder == null) {
-                            // @Since('2.16')
-                            // throw Error.throwWithStackTrace(
-                            //   snapshot.error!,
-                            //   snapshot.stackTrace,
-                            // )
-                            log(
-                              'Error while loading Game widget',
-                              error: snapshot.error,
-                              stackTrace: snapshot.stackTrace,
+                            throw Error.throwWithStackTrace(
+                              snapshot.error!,
+                              snapshot.stackTrace!,
                             );
-                            throw snapshot.error!;
                           } else {
                             return errorBuilder(context, snapshot.error!);
                           }

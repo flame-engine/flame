@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flame/cache.dart';
 import 'package:flame/src/extensions/size.dart';
 import 'package:flame/src/extensions/vector2.dart';
@@ -39,8 +41,8 @@ class SpriteButton extends StatelessWidget {
   final Future<List<Sprite>> Function() _buttonsFuture;
 
   SpriteButton({
-    required Sprite sprite,
-    required Sprite pressedSprite,
+    required FutureOr<Sprite> sprite,
+    required FutureOr<Sprite> pressedSprite,
     required this.onPressed,
     required this.width,
     required this.height,

@@ -48,6 +48,7 @@ music files.
 You must have an appropriate folder structure and add the files to the `pubspec.yaml` file, as
 explained in [Flame Audio documentation](audio.md).
 
+
 ## Caching music files
 
 The following functions can be used to preload (and unload) music files into the cache. These
@@ -66,6 +67,7 @@ FlameAudio.bgm.loadAll([
 FlameAudio.bgm.clear('adventure-track.mp3');
 FlameAudio.bgm.clearCache();
 ```
+
 
 ## Methods
 
@@ -86,6 +88,7 @@ FlameAudio.bgm.play('bgm/boss-fight/level-382.mp3');
 FlameAudio.bgm.play('bgm/world-map.mp3', volume: .25);
 ```
 
+
 ### Stop
 
 To stop a currently playing background music track, just call `stop`.
@@ -93,6 +96,7 @@ To stop a currently playing background music track, just call `stop`.
 ```dart
 FlameAudio.bgm.stop();
 ```
+
 
 ### Pause and Resume
 
