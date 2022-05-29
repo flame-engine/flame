@@ -31,26 +31,21 @@ abstract class InlineTextElement {
   /// True iff the text has been completely laid out.
   bool get isLaidOut;
 
-  /// The number of lines of text that have been laid out so far.
-  ///
-  /// This should start at 0 before the beginning of the layout process, and
-  /// then increase by 1 after each call to [layOutNextLine] (except when it
-  /// returns [LayoutResult.didNotAdvance]).
-  int get numLinesLaidOut;
-
   /// Performs layout of a single line of text.
   ///
   /// Vertically, the text should be placed on the provided [baseline].
   /// Horizontally, it should start at [x0] and do not go beyond [x1]. The
   /// implementation should attempt to put as much text as possible within these
-  /// bounds, and then increase the [numLinesLaidOut] counter.
+  /// bounds.
   ///
   /// The return status can be one of the following:
   /// - [LayoutResult.done]: the layout is finished;
   /// - [LayoutResult.unfinished]: more calls to [layOutNextLine] are needed;
   /// - [LayoutResult.didNotAdvance]: the amount of space provided is too small
   ///   to place any amount of text. The caller should supply a larger value of
-  ///   `x1 - x0` next time. The counter [numLinesLaidOut] did not increase.
+  ///   `x1 - x0` next time. No new lines were stored in [lines].
+  ///
+  /// This method should only be called if [isLaidOut] is false.
   LayoutResult layOutNextLine(double x0, double x1, double baseline);
 
   /// Returns information about the lines laid out so far.

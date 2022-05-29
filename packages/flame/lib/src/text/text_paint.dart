@@ -102,9 +102,6 @@ class _TextPaintRun extends InlineTextElement implements TextLine {
   bool get isLaidOut => _x0 != null && _y0 != null;
 
   @override
-  int get numLinesLaidOut => _x0 == null ? 0 : 1;
-
-  @override
   void resetLayout() => _x0 = null;
 
   @override
@@ -130,7 +127,7 @@ class _TextPaintRun extends InlineTextElement implements TextLine {
     return LineMetrics(
       left: _x0!,
       right: _x0! + _textPainter.width,
-      top: _y0!,
+      top: _y0,
       bottom: _y0! + _textPainter.height,
       baseline: _y0! +
           _textPainter.computeDistanceToActualBaseline(TextBaseline.alphabetic),

@@ -21,7 +21,9 @@ class InlineTextGroup extends InlineTextElement {
 
   @override
   LayoutResult layOutNextLine(double x0, double x1, double baseline) {
+    assert(!isLaidOut);
     final metric = LineMetrics(left: x0, baseline: baseline);
+    final line = _InlineTextGroupLine(metric);
     while (!isLaidOut) {
       final child = _children[_currentIndex];
       final result = child.layOutNextLine(metric.right, x1, baseline);
@@ -30,16 +32,18 @@ class InlineTextGroup extends InlineTextElement {
           if (metric.left == metric.right) {
             return LayoutResult.didNotAdvance;
           } else {
-            _lines.add(_InlineTextGroupLine(metric));
+            _lines.add(line);
             return LayoutResult.unfinished;
           }
 
         case LayoutResult.unfinished:
-          _lines.add(_InlineTextGroupLine(metric));
+          _lines.add(line);
           return LayoutResult.unfinished;
 
         case LayoutResult.done:
-          final lastMetric = child.lastLine.metrics;
+          final lastLine = child.lastLine;
+          final lastMetric = lastLine.metrics;
+          line.addChild(lastLine);
           metric.right = lastMetric.right;
           metric.top = min(metric.top, lastMetric.top);
           metric.bottom = max(metric.bottom, lastMetric.bottom);
@@ -47,9 +51,7 @@ class InlineTextGroup extends InlineTextElement {
           break;
       }
     }
-    if (metric.left != metric.right) {
-      _lines.add(_InlineTextGroupLine(metric));
-    }
+    _lines.add(line);
     return LayoutResult.done;
   }
 
@@ -58,9 +60,6 @@ class InlineTextGroup extends InlineTextElement {
 
   @override
   TextLine get lastLine => _lines.last;
-
-  @override
-  int get numLinesLaidOut => _lines.length;
 
   @override
   void render(Canvas canvas) {
@@ -81,4 +80,8 @@ class _InlineTextGroupLine implements TextLine {
 
   @override
   final LineMetrics metrics;
+
+  final List<TextLine> _children = [];
+
+  void addChild(TextLine line) => _children.add(line);
 }
