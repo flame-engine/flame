@@ -1,5 +1,5 @@
 import 'dart:math';
-import 'dart:ui';
+import 'dart:ui' hide LineMetrics;
 
 import 'package:flame/src/text/inline_text_element.dart';
 import 'package:flame/src/text/line_metrics.dart';
@@ -20,13 +20,13 @@ class InlineTextGroup extends InlineTextElement {
   bool get isLaidOut => _currentIndex == _children.length;
 
   @override
-  LayoutResult layOutNextLine(double x0, double x1, double baseline) {
+  LayoutResult layOutNextLine(LineMetrics bounds) {
     assert(!isLaidOut);
-    final metric = LineMetrics(left: x0, baseline: baseline);
+    final metric = LineMetrics(left: bounds.left, baseline: bounds.baseline);
     final line = _InlineTextGroupLine(metric);
     while (!isLaidOut) {
       final child = _children[_currentIndex];
-      final result = child.layOutNextLine(metric.right, x1, baseline);
+      final result = child.layOutNextLine(bounds);
       switch (result) {
         case LayoutResult.didNotAdvance:
           if (metric.left == metric.right) {
@@ -47,6 +47,7 @@ class InlineTextGroup extends InlineTextElement {
           metric.right = lastMetric.right;
           metric.top = min(metric.top, lastMetric.top);
           metric.bottom = max(metric.bottom, lastMetric.bottom);
+          bounds.left = metric.right;
           _currentIndex++;
           break;
       }

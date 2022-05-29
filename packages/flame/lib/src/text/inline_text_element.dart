@@ -1,5 +1,6 @@
-import 'dart:ui';
+import 'dart:ui' hide LineMetrics;
 
+import 'package:flame/src/text/line_metrics.dart';
 import 'package:flame/src/text/text_line.dart';
 
 /// Base class describing a span of text that has "inline" placement rules.
@@ -9,9 +10,10 @@ import 'package:flame/src/text/text_line.dart';
 /// then render on a canvas after the layout.
 ///
 /// The layout mechanism used by this class works as follows:
-/// - initially, [isLaidOut] is false, and [numLinesLaidOut] is 0;
+/// - initially, [isLaidOut] is false, and [lines] iterator is empty;
 /// - the owner of the text will call [layOutNextLine], requesting the text to
-///   be placed on the specified baseline between coordinates `x0` and `x1`;
+///   be placed within the specified `bounds`: onto the `baseline` and between
+///   coordinates `left` and `right`;
 /// - if the text can be fit between the requested coordinates, then
 ///   [LayoutResult.done] is returned, and [isLaidOut] becomes true;
 /// - if the text can only fit partially between `x0` and `x1`, then the method
@@ -33,20 +35,21 @@ abstract class InlineTextElement {
 
   /// Performs layout of a single line of text.
   ///
-  /// Vertically, the text should be placed on the provided [baseline].
-  /// Horizontally, it should start at [x0] and do not go beyond [x1]. The
+  /// The [bounds] parameter specifies where the text should be placed: on y-
+  /// axis the text should be placed at `bounds.baseline`; horizontally, it
+  /// should start at `bounds.left` and do not go beyond `bounds.right`. The
   /// implementation should attempt to put as much text as possible within these
-  /// bounds.
+  /// constraints.
   ///
   /// The return status can be one of the following:
   /// - [LayoutResult.done]: the layout is finished;
   /// - [LayoutResult.unfinished]: more calls to [layOutNextLine] are needed;
   /// - [LayoutResult.didNotAdvance]: the amount of space provided is too small
   ///   to place any amount of text. The caller should supply a larger value of
-  ///   `x1 - x0` next time. No new lines were stored in [lines].
+  ///   `right - left` next time. No new lines were stored in [lines].
   ///
   /// This method should only be called if [isLaidOut] is false.
-  LayoutResult layOutNextLine(double x0, double x1, double baseline);
+  LayoutResult layOutNextLine(LineMetrics bounds);
 
   /// Returns information about the lines laid out so far.
   Iterable<TextLine> get lines;

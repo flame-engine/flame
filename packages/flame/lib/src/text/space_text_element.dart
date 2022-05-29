@@ -2,6 +2,7 @@
 import 'dart:ui';
 
 import 'package:flame/src/text/inline_text_element.dart';
+import 'package:flame/src/text/line_metrics.dart';
 import 'package:flame/src/text/text_line.dart';
 
 class SpaceTextElement extends InlineTextElement {
@@ -14,7 +15,7 @@ class SpaceTextElement extends InlineTextElement {
   TextLine get lastLine => throw UnimplementedError();
 
   @override
-  LayoutResult layOutNextLine(double x0, double x1, double baseline) {
+  LayoutResult layOutNextLine(LineMetrics bounds) {
     // TODO: implement layOutNextLine
     throw UnimplementedError();
   }

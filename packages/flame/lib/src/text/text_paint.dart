@@ -105,9 +105,12 @@ class TextPaint extends TextRenderer {
 }
 
 class _TextPaintRun extends InlineTextElement implements TextLine {
-  _TextPaintRun(this._textPainter);
+  _TextPaintRun(this._textPainter)
+      : _ascent = _textPainter
+            .computeDistanceToActualBaseline(TextBaseline.alphabetic);
 
   final TextPainter _textPainter;
+  final double _ascent;
   double? _x0;
   double? _y0;
 
@@ -118,13 +121,12 @@ class _TextPaintRun extends InlineTextElement implements TextLine {
   void resetLayout() => _x0 = null;
 
   @override
-  LayoutResult layOutNextLine(double x0, double x1, double baseline) {
-    if (x1 - x0 < _textPainter.width) {
+  LayoutResult layOutNextLine(LineMetrics bounds) {
+    if (bounds.width < _textPainter.width) {
       return LayoutResult.didNotAdvance;
     }
-    _x0 = x0;
-    _y0 = baseline -
-        _textPainter.computeDistanceToActualBaseline(TextBaseline.alphabetic);
+    _x0 = bounds.left;
+    _y0 = bounds.baseline - _ascent;
     return LayoutResult.done;
   }
 
@@ -142,8 +144,7 @@ class _TextPaintRun extends InlineTextElement implements TextLine {
       right: _x0! + _textPainter.width,
       top: _y0,
       bottom: _y0! + _textPainter.height,
-      baseline: _y0! +
-          _textPainter.computeDistanceToActualBaseline(TextBaseline.alphabetic),
+      baseline: _y0! + _ascent,
     );
   }
 
