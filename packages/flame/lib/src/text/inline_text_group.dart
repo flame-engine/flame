@@ -4,6 +4,10 @@ import 'dart:ui';
 import 'package:flame/src/text/inline_text_element.dart';
 import 'package:flame/src/text/text_line.dart';
 
+/// An [InlineTextElement] containing other [InlineTextElement]s inside.
+///
+/// This class allows forming a tree of [InlineTextElement]s, placing different
+/// kinds of [InlineTextElement]s next to each other.
 class InlineTextGroup extends InlineTextElement {
   InlineTextGroup(this._children);
 
@@ -14,7 +18,7 @@ class InlineTextGroup extends InlineTextElement {
   bool get isLaidOut => _currentElement == _children.length;
 
   @override
-  LayoutStatus layOutNextLine(double x0, double x1, double baseline) {
+  LayoutResult layOutNextLine(double x0, double x1, double baseline) {
     // TODO: implement layOutNextLine
     throw UnimplementedError();
   }

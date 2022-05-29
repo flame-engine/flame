@@ -108,14 +108,14 @@ class _TextPaintRun extends InlineTextElement implements TextLine {
   void resetLayout() => _x0 = null;
 
   @override
-  LayoutStatus layOutNextLine(double x0, double x1, double baseline) {
+  LayoutResult layOutNextLine(double x0, double x1, double baseline) {
     if (x1 - x0 < _textPainter.width) {
-      return LayoutStatus.didNotAdvance;
+      return LayoutResult.didNotAdvance;
     }
     _x0 = x0;
     _y0 = baseline -
         _textPainter.computeDistanceToActualBaseline(TextBaseline.alphabetic);
-    return LayoutStatus.done;
+    return LayoutResult.done;
   }
 
   @override
