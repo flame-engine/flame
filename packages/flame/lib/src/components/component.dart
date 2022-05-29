@@ -253,7 +253,7 @@ class Component {
   /// `Component.childrenFactory` is the default method for creating children
   /// containers within all components. Replace this method if you want to have
   /// customized (non-default) [ComponentSet] instances in your project.
-  static ComponentSetFactory childrenFactory = ComponentSet.createDefault;
+  static ComponentSetFactory childrenFactory = ComponentSet.new;
 
   /// This method creates the children container for the current component.
   /// Override this method if you need to have a custom [ComponentSet] within
