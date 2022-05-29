@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:flame/extensions.dart';
 import 'package:flame/input.dart';
@@ -301,17 +300,10 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
                         if (snapshot.hasError) {
                           final errorBuilder = widget.errorBuilder;
                           if (errorBuilder == null) {
-                            // @Since('2.16')
-                            // throw Error.throwWithStackTrace(
-                            //   snapshot.error!,
-                            //   snapshot.stackTrace,
-                            // )
-                            log(
-                              'Error while loading Game widget',
-                              error: snapshot.error,
-                              stackTrace: snapshot.stackTrace,
+                            throw Error.throwWithStackTrace(
+                              snapshot.error!,
+                              snapshot.stackTrace!,
                             );
-                            throw snapshot.error!;
                           } else {
                             return errorBuilder(context, snapshot.error!);
                           }
