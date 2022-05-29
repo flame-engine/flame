@@ -41,7 +41,7 @@ Some common properties of `TextStyle` are the following (here is the
 [full list](https://api.flutter.dev/flutter/painting/TextStyle-class.html)):
 
  - `fontFamily`: a commonly available font, like Arial (default), or a custom font added in your
- pubspec (see [here](https://flutter.io/custom-fonts/) how to do it).
+ pubspec (see [here](https://docs.flutter.dev/cookbook/design/fonts) how to do it).
  - `fontSize`: font size, in pts (default `24.0`).
  - `height`: height of text line, as a multiple of font size (default `null`).
  - `color`: the color, as a `ui.Color` (default white).
@@ -122,4 +122,4 @@ class MyTextBox extends TextBoxComponent {
 ```
 
 Both components are showcased in an example
-[here](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/rendering/text_example.dart)
+[here](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/rendering/text_example.dart)

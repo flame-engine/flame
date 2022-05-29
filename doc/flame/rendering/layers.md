@@ -108,4 +108,4 @@ class BackgroundLayer extends PreRenderedLayer {
 Custom processors can be created by extending the `LayerProcessor` class.
 
 You can check a working example of layers
-[here](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/rendering/layers_example.dart).
+[here](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/rendering/layers_example.dart).
