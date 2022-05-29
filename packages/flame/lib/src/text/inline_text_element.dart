@@ -22,7 +22,7 @@ import 'package:flame/src/text/text_line.dart';
 ///   [LayoutResult.didNotAdvance] is returned. The caller needs to either
 ///   supply more horizontal distance next time, or apply other mitigation
 ///   strategies;
-/// - at any point the caller can call [line] in order to query the metrics of
+/// - at any point the caller can call [lines] in order to obtain access to the
 ///   lines that were already laid out.
 ///
 /// An inline text can potentially span multiple lines, be adjacent to other
@@ -53,9 +53,13 @@ abstract class InlineTextElement {
   ///   `x1 - x0` next time. The counter [numLinesLaidOut] did not increase.
   LayoutResult layOutNextLine(double x0, double x1, double baseline);
 
-  /// Returns information about one of the laid out lines. The [index] must be
-  /// from 0 to [numLinesLaidOut] exclusive.
-  TextLine line(int index);
+  /// Returns information about the lines laid out so far.
+  Iterable<TextLine> get lines;
+
+  /// Access to the last laid out line. This property is accessed very often
+  /// during the lay out algorithm, so it should be more efficient than
+  /// `lines().last`.
+  TextLine get lastLine;
 
   /// Renders the text on the [canvas], at positions determined during the
   /// layout.

@@ -119,7 +119,10 @@ class _TextPaintRun extends InlineTextElement implements TextLine {
   }
 
   @override
-  TextLine line(int line) => this;
+  Iterable<TextLine> get lines => _x0 == null? [] : [this];
+
+  @override
+  TextLine get lastLine => this;
 
   @override
   LineMetrics get metrics {
