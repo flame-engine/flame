@@ -3,9 +3,9 @@ import 'package:flame/game.dart';
 import 'package:flutter/widgets.dart' show EdgeInsets;
 import 'package:meta/meta.dart';
 
-/// The [ViewportMargin] positions itself by a margin to the edge of the
-/// [Viewport] instead of by an absolute position on the screen or on the game,
-/// so if the game is resized the component will move to keep its margin.
+/// The [ComponentViewportMargin] positions itself by a margin to the edge of
+/// the [Viewport] instead of by an absolute position on the screen or on the
+/// game, so if the game is resized the component will move to keep its margin.
 ///
 /// Note that the margin is calculated to the [Anchor], not to the edge of the
 /// component.
@@ -13,13 +13,13 @@ import 'package:meta/meta.dart';
 /// If you set the position of the component instead of a margin when
 /// initializing the component, the margin to the edge of the screen from that
 /// position will be used.
-mixin ViewportMargin on PositionComponent, HasGameRef {
+mixin ComponentViewportMargin on PositionComponent, HasGameRef {
   @override
   PositionType positionType = PositionType.viewport;
 
   /// Instead of setting a position of the [PositionComponent] that uses
-  /// [ViewportMargin] a margin from the edges of the viewport can be used
-  /// instead.
+  /// [ComponentViewportMargin] a margin from the edges of the viewport can be
+  /// used instead.
   EdgeInsets? margin;
 
   @override

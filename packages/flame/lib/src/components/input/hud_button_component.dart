@@ -1,6 +1,6 @@
 import 'package:flame/components.dart';
 import 'package:flame/input.dart';
-import 'package:flame/src/components/mixins/viewport_margin.dart';
+import 'package:flame/src/components/mixins/component_viewport_margin.dart';
 import 'package:flutter/rendering.dart' show EdgeInsets;
 
 /// The [HudButtonComponent] bundles two [PositionComponent]s, one that shows
@@ -9,7 +9,7 @@ import 'package:flutter/rendering.dart' show EdgeInsets;
 /// Note: You have to set the [button] in [onLoad] if you are not passing it in
 /// through the constructor.
 class HudButtonComponent extends ButtonComponent
-    with HasGameRef, ViewportMargin {
+    with HasGameRef, ComponentViewportMargin {
   HudButtonComponent({
     PositionComponent? button,
     PositionComponent? buttonDown,
