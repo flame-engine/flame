@@ -391,10 +391,9 @@ class PositionComponent extends Component
 
   @override
   void renderTree(RenderContext context) {
-    context.canvas.save();
-    context.canvas.transform(transformMatrix.storage);
+    context.transformCanvas(transformMatrix);
     super.renderTree(context);
-    context.canvas.restore();
+    context.restore();
   }
 
   /// Returns the bounding rectangle for this component.

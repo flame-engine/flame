@@ -85,8 +85,7 @@ class CameraComponent extends Component {
   @override
   void renderTree(RenderContext context) {
     final canvas = context.canvas;
-    canvas.save();
-    canvas.translate(
+    context.translateCanvas(
       viewport.position.x - viewport.anchor.x * viewport.size.x,
       viewport.position.y - viewport.anchor.y * viewport.size.y,
     );
@@ -106,7 +105,7 @@ class CameraComponent extends Component {
     }
     // Now render the HUD elements
     viewport.renderTree(context);
-    canvas.restore();
+    context.restore();
   }
 
   @override
