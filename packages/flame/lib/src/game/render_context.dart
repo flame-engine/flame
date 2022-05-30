@@ -1,16 +1,23 @@
 import 'dart:ui';
 
+import 'package:meta/meta.dart';
 import 'package:vector_math/vector_math_64.dart';
 
+/// Helper class that assists the rendering pipeline in Flame.
+///
+/// This class keeps track of all canvas transformations applied thus far,
+/// allowing downstream components to query this information.
+@experimental
 class RenderContext {
   Canvas get canvas => _canvas!;
   Canvas? _canvas;
 
-  final List<_CanvasOperation> _operations = [];
+  @protected
+  final List<CanvasOperation> operations = [];
 
   void startPipeline(Canvas canvas) {
     _canvas = canvas;
-    _operations.clear();
+    operations.clear();
   }
 
   void finishPipeline() {
@@ -18,31 +25,31 @@ class RenderContext {
   }
 
   void transformCanvas(Matrix4 transform) {
-    _operations.add(_CanvasTransform(transform));
-    _canvas!.save();
-    _canvas!.transform(transform.storage);
+    operations.add(CanvasTransform(transform));
+    canvas.save();
+    canvas.transform(transform.storage);
   }
 
   void translateCanvas(double dx, double dy) {
-    _operations.add(_CanvasTranslation(dx, dy));
-    _canvas!.save();
-    _canvas!.translate(dx, dy);
+    operations.add(CanvasTranslation(dx, dy));
+    canvas.save();
+    canvas.translate(dx, dy);
   }
 
   void restore() {
-    _operations.removeLast();
-    _canvas!.restore();
+    operations.removeLast();
+    canvas.restore();
   }
 }
 
-class _CanvasOperation {}
+class CanvasOperation {}
 
-class _CanvasTransform extends _CanvasOperation {
-  _CanvasTransform(this.matrix);
+class CanvasTransform extends CanvasOperation {
+  CanvasTransform(this.matrix);
   final Matrix4 matrix;
 }
 
-class _CanvasTranslation extends _CanvasOperation {
-  _CanvasTranslation(this.dx, this.dy);
+class CanvasTranslation extends CanvasOperation {
+  CanvasTranslation(this.dx, this.dy);
   final double dx, dy;
 }
