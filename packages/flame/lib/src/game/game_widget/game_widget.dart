@@ -173,6 +173,7 @@ class GameWidget<T extends Game> extends StatefulWidget {
 
 class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
   late T _currentGame;
+  late bool _controlled;
 
   Future<void> get loaderFuture => _loaderFuture ??= (() async {
         assert(_currentGame.hasLayout);
@@ -228,11 +229,23 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
     }
   }
 
+  void initCurrentGame() {
+    final widgetGame = widget.game;
+    _controlled = widgetGame == null;
+    _currentGame = widgetGame ?? widget.create!.call();
+    _currentGame.addGameStateListener(_onGameStateChange);
+    _loaderFuture = null;
+  }
+
+  void disposeCurrentGame() {
+    _currentGame.removeGameStateListener(_onGameStateChange);
+    _currentGame.onRemove();
+  }
+
   @override
   void initState() {
     super.initState();
-    _currentGame = widget.game ?? widget.create!.call();
-    _currentGame.addGameStateListener(_onGameStateChange);
+    initCurrentGame();
     _focusNode = widget.focusNode ?? FocusNode();
     if (widget.autofocus) {
       _focusNode.requestFocus();
@@ -242,23 +255,17 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
   @override
   void didUpdateWidget(GameWidget<T> oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.game != widget.game) {
-      // Reset the loaderFuture so that onMount will run again
-      // (onLoad is still cached).
-      oldWidget.game?.removeGameStateListener(_onGameStateChange);
-      oldWidget.game?.onRemove();
 
-      _currentGame = widget.game ?? widget.create!.call();
-      _currentGame.addGameStateListener(_onGameStateChange);
-      _loaderFuture = null;
+    if (oldWidget.game != widget.game) {
+      disposeCurrentGame();
+      initCurrentGame();
     }
   }
 
   @override
   void dispose() {
     super.dispose();
-    _currentGame.removeGameStateListener(_onGameStateChange);
-    _currentGame.onRemove();
+    disposeCurrentGame();
     // If we received a focus node from the user, they are responsible
     // for disposing it
     if (widget.focusNode == null) {
