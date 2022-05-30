@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/src/game/game_render_box.dart';
@@ -610,8 +611,74 @@ void main() {
           expect(game.projector.unscaleVector(Vector2(8, 16)), Vector2(1, 2));
         },
       );
+
+      testWithGame<FlameGame>(
+        'children in the constructor',
+        () {
+          return FlameGame(
+            children: [_IndexedComponent(1), _IndexedComponent(2)],
+          );
+        },
+        (game) async {
+          game.add(_IndexedComponent(3));
+          game.add(_IndexedComponent(4));
+          await game.ready();
+
+          expect(game.children.length, 4);
+          expect(
+            game.children
+                .whereType<_IndexedComponent>()
+                .map((c) => c.index)
+                .isSorted((a, b) => a.compareTo(b)),
+            isTrue,
+          );
+        },
+      );
+
+      testWithGame<FlameGame>(
+        'children in the constructor and onLoad',
+        () {
+          return _ConstructorChildrenGame(
+            constructorChildren: [_IndexedComponent(1), _IndexedComponent(2)],
+            onLoadChildren: [_IndexedComponent(3), _IndexedComponent(4)],
+          );
+        },
+        (game) async {
+          game.add(_IndexedComponent(5));
+          game.add(_IndexedComponent(6));
+          await game.ready();
+
+          expect(game.children.length, 6);
+          expect(
+            game.children
+                .whereType<_IndexedComponent>()
+                .map((c) => c.index)
+                .isSorted((a, b) => a.compareTo(b)),
+            isTrue,
+          );
+        },
+      );
     });
   });
+}
+
+class _IndexedComponent extends Component {
+  final int index;
+  _IndexedComponent(this.index);
+}
+
+class _ConstructorChildrenGame extends FlameGame {
+  final Iterable<_IndexedComponent> onLoadChildren;
+
+  _ConstructorChildrenGame({
+    required Iterable<_IndexedComponent> constructorChildren,
+    required this.onLoadChildren,
+  }) : super(children: constructorChildren);
+
+  @override
+  Future<void> onLoad() async {
+    addAll(onLoadChildren);
+  }
 }
 
 class _GameWithTappables extends FlameGame with HasTappables {}
