@@ -93,14 +93,12 @@ class CameraComponent extends Component {
     if (world.isMounted && currentCameras.length < maxCamerasDepth) {
       canvas.save();
       viewport.clip(canvas);
-      try {
-        currentCameras.add(this);
-        canvas.transform(viewfinder.transform.transformMatrix.storage);
-        world.renderFromCamera(context);
-        viewfinder.renderTree(context);
-      } finally {
-        currentCameras.removeLast();
-      }
+      currentCameras.add(this);
+      context.transformCanvas(viewfinder.transform.transformMatrix);
+      world.renderFromCamera(context);
+      viewfinder.renderTree(context);
+      context.restore();
+      currentCameras.removeLast();
       canvas.restore();
     }
     // Now render the HUD elements

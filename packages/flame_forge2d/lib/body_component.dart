@@ -64,10 +64,9 @@ abstract class BodyComponent<T extends Forge2DGame> extends Component
       _transform.rotateZ(angle);
       _lastAngle = angle;
     }
-    context.canvas.save();
-    context.canvas.transform(_transform.storage);
+    context.transformCanvas(_transform);
     super.renderTree(context);
-    context.canvas.restore();
+    context.restore();
   }
 
   @override

@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flame/components.dart';
 import 'package:flame/src/experimental/camera_component.dart';
 import 'package:flame/src/game/camera/camera.dart';
