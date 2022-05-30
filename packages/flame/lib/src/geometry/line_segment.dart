@@ -26,22 +26,16 @@ class LineSegment {
       }
     } else {
       // In here we know that the lines are parallel
-      final overlaps = ({
-        from: otherSegment.containsPoint(from),
-        to: otherSegment.containsPoint(to),
-        otherSegment.from: containsPoint(otherSegment.from),
-        otherSegment.to: containsPoint(otherSegment.to),
-      }..removeWhere((_key, onSegment) => !onSegment))
-          .keys
-          .toSet();
+      final overlaps = {
+        if (otherSegment.containsPoint(from)) from,
+        if (otherSegment.containsPoint(to)) to,
+        if (containsPoint(otherSegment.from)) otherSegment.from,
+        if (containsPoint(otherSegment.to)) otherSegment.to,
+      };
       if (overlaps.isNotEmpty) {
-        return [
-          overlaps.fold<Vector2>(
-                Vector2.zero(),
-                (sum, point) => sum + point,
-              ) /
-              overlaps.length.toDouble(),
-        ];
+        final sum = Vector2.zero();
+        overlaps.forEach(sum.add);
+        return [sum..scale(1 / overlaps.length)];
       }
     }
     return [];

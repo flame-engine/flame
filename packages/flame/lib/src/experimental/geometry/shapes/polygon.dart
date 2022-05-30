@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:collection/collection.dart';
 import 'package:flame/src/experimental/geometry/shapes/shape.dart';
 import 'package:flame/src/game/transform2d.dart';
 import 'package:vector_math/vector_math_64.dart';
@@ -105,9 +106,7 @@ class Polygon extends Shape {
   @override
   double get perimeter => _perimeter ??= _calculatePerimeter();
   double? _perimeter;
-  double _calculatePerimeter() {
-    return _edges.fold<double>(0, (sum, edge) => sum + edge.length);
-  }
+  double _calculatePerimeter() => edges.map((e) => e.length).sum;
 
   @override
   Aabb2 get aabb => _aabb ??= _calculateAabb();
