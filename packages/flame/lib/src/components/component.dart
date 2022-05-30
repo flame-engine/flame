@@ -8,6 +8,7 @@ import 'package:flame/src/components/mixins/coordinate_transform.dart';
 import 'package:flame/src/components/position_type.dart';
 import 'package:flame/src/game/flame_game.dart';
 import 'package:flame/src/game/mixins/game.dart';
+import 'package:flame/src/game/render_context.dart';
 import 'package:flame/src/gestures/events.dart';
 import 'package:flame/src/text/text_paint.dart';
 import 'package:flutter/painting.dart';
@@ -462,13 +463,13 @@ class Component {
 
   void render(Canvas canvas) {}
 
-  void renderTree(Canvas canvas) {
-    render(canvas);
-    _children?.forEach((c) => c.renderTree(canvas));
+  void renderTree(RenderContext context) {
+    render(context.canvas);
+    _children?.forEach((c) => c.renderTree(context));
 
     // Any debug rendering should be rendered on top of everything
     if (debugMode) {
-      renderDebugMode(canvas);
+      renderDebugMode(context.canvas);
     }
   }
 

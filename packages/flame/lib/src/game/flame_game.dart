@@ -6,6 +6,7 @@ import 'package:flame/src/game/camera/camera.dart';
 import 'package:flame/src/game/camera/camera_wrapper.dart';
 import 'package:flame/src/game/mixins/game.dart';
 import 'package:flame/src/game/projector.dart';
+import 'package:flame/src/game/render_context.dart';
 import 'package:meta/meta.dart';
 
 /// This is a more complete and opinionated implementation of [Game].
@@ -50,14 +51,14 @@ class FlameGame extends Component with Game {
   @mustCallSuper
   void render(Canvas canvas) {
     if (parent == null) {
-      renderTree(canvas);
+      renderTree(RenderContext(canvas));
     }
   }
 
   @override
-  void renderTree(Canvas canvas) {
+  void renderTree(RenderContext context) {
     // Don't call super.renderTree, since the tree is rendered by the camera
-    _cameraWrapper.render(canvas);
+    _cameraWrapper.render(context);
   }
 
   @override

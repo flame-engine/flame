@@ -1,16 +1,16 @@
 import 'dart:ui';
 
 import 'package:flame/components.dart';
+import 'package:flame/src/experimental/camera_component.dart';
 import 'package:flame/src/game/camera/camera.dart';
+import 'package:flame/src/game/render_context.dart';
 import 'package:meta/meta.dart';
 
-/// This class encapsulates FlameGame's rendering functionality. It will be
-/// converted into a proper Component in a future release, but until then
-/// using it in any code other than the FlameGame class is unsafe and
-/// not recommended.
+/// This class encapsulates FlameGame's rendering functionality.
+///
+/// This class has been superseded by [CameraComponent].
 @internal
 class CameraWrapper {
-  // TODO(st-pasha): extend from Component
   CameraWrapper(this.camera, this.world);
 
   final Camera camera;
@@ -20,7 +20,8 @@ class CameraWrapper {
     camera.update(dt);
   }
 
-  void render(Canvas canvas) {
+  void render(RenderContext context) {
+    final canvas = context.canvas;
     PositionType? _previousType;
     canvas.save();
     world.forEach((component) {
@@ -41,7 +42,7 @@ class CameraWrapper {
           case PositionType.widget:
         }
       }
-      component.renderTree(canvas);
+      component.renderTree(context);
       _previousType = component.positionType;
     });
 
