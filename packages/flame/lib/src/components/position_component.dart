@@ -9,6 +9,7 @@ import 'package:flame/src/effects/provider_interfaces.dart';
 import 'package:flame/src/extensions/offset.dart';
 import 'package:flame/src/extensions/vector2.dart';
 import 'package:flame/src/game/notifying_vector2.dart';
+import 'package:flame/src/game/render_context.dart';
 import 'package:flame/src/game/transform2d.dart';
 
 /// A [Component] implementation that represents an object that can be
@@ -389,11 +390,11 @@ class PositionComponent extends Component
   }
 
   @override
-  void renderTree(Canvas canvas) {
-    canvas.save();
-    canvas.transform(transformMatrix.storage);
-    super.renderTree(canvas);
-    canvas.restore();
+  void renderTree(RenderContext context) {
+    context.canvas.save();
+    context.canvas.transform(transformMatrix.storage);
+    super.renderTree(context);
+    context.canvas.restore();
   }
 
   /// Returns the bounding rectangle for this component.

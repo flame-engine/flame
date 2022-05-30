@@ -55,7 +55,7 @@ abstract class BodyComponent<T extends Forge2DGame> extends Component
 
   @mustCallSuper
   @override
-  void renderTree(Canvas canvas) {
+  void renderTree(RenderContext context) {
     if (_transform.m14 != body.position.x ||
         _transform.m24 != body.position.y ||
         _lastAngle != angle) {
@@ -64,10 +64,10 @@ abstract class BodyComponent<T extends Forge2DGame> extends Component
       _transform.rotateZ(angle);
       _lastAngle = angle;
     }
-    canvas.save();
-    canvas.transform(_transform.storage);
-    super.renderTree(canvas);
-    canvas.restore();
+    context.canvas.save();
+    context.canvas.transform(_transform.storage);
+    super.renderTree(context);
+    context.canvas.restore();
   }
 
   @override

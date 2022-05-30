@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flame/src/components/component.dart';
 import 'package:flame/src/components/position_component.dart';
 import 'package:flame/src/effects/controllers/effect_controller.dart';
@@ -13,6 +11,7 @@ import 'package:flame/src/experimental/max_viewport.dart';
 import 'package:flame/src/experimental/viewfinder.dart';
 import 'package:flame/src/experimental/viewport.dart';
 import 'package:flame/src/experimental/world.dart';
+import 'package:flame/src/game/render_context.dart';
 import 'package:meta/meta.dart';
 import 'package:vector_math/vector_math_64.dart';
 
@@ -84,7 +83,8 @@ class CameraComponent extends Component {
   /// If the world is not mounted yet, only the viewport HUD elements will be
   /// rendered.
   @override
-  void renderTree(Canvas canvas) {
+  void renderTree(RenderContext context) {
+    final canvas = context.canvas;
     canvas.save();
     canvas.translate(
       viewport.position.x - viewport.anchor.x * viewport.size.x,
@@ -97,15 +97,15 @@ class CameraComponent extends Component {
       try {
         currentCameras.add(this);
         canvas.transform(viewfinder.transform.transformMatrix.storage);
-        world.renderFromCamera(canvas);
-        viewfinder.renderTree(canvas);
+        world.renderFromCamera(context);
+        viewfinder.renderTree(context);
       } finally {
         currentCameras.removeLast();
       }
       canvas.restore();
     }
     // Now render the HUD elements
-    viewport.renderTree(canvas);
+    viewport.renderTree(context);
     canvas.restore();
   }
 

@@ -1,6 +1,5 @@
-import 'dart:ui';
-
 import 'package:flame/components.dart';
+import 'package:flame/game.dart';
 import 'package:trex_game/trex_game.dart';
 
 class GameOverPanel extends Component {
@@ -13,9 +12,9 @@ class GameOverPanel extends Component {
   }
 
   @override
-  void renderTree(Canvas canvas) {
+  void renderTree(RenderContext context) {
     if (visible) {
-      super.renderTree(canvas);
+      super.renderTree(context);
     }
   }
 }

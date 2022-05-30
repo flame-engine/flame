@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flame/src/components/component.dart';
 import 'package:flame/src/experimental/camera_component.dart';
+import 'package:flame/src/game/render_context.dart';
 import 'package:meta/meta.dart';
 import 'package:vector_math/vector_math_64.dart';
 
@@ -12,13 +13,13 @@ import 'package:vector_math/vector_math_64.dart';
 /// updates proceed through the world tree normally.
 class World extends Component {
   @override
-  void renderTree(Canvas canvas) {}
+  void renderTree(RenderContext context) {}
 
   /// Internal rendering method invoked by the [CameraComponent].
   @internal
-  void renderFromCamera(Canvas canvas) {
+  void renderFromCamera(RenderContext context) {
     assert(CameraComponent.currentCamera != null);
-    super.renderTree(canvas);
+    super.renderTree(context);
   }
 
   @override
