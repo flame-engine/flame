@@ -8,7 +8,6 @@ import 'package:flame/src/game/mixins/game.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
-import '../../../components.dart';
 
 typedef GameLoadingWidgetBuilder = Widget Function(
   BuildContext,
@@ -32,7 +31,7 @@ class GameWidget<T extends Game> extends StatefulWidget {
   /// The game instance in which this widget will render.
   final T? game;
 
-  /// A function that can create a game that this widget will render.
+  /// A function that can create a [Game] that this widget will render.
   final GameCreate<T>? create;
 
   /// The text direction to be used in text elements in a game.
@@ -135,11 +134,11 @@ class GameWidget<T extends Game> extends StatefulWidget {
     }
   }
 
-  /// Renders a [game] in a flutter widget tree.
+  /// Renders a [Game] in a flutter widget tree.
   ///
-  /// Unlike the default constructor, this creates a [GameWidget] that controls
-  /// the creation of the game instance, removing the necessity of rendering
-  /// this widget inside a [StatefulWidget].
+  /// Unlike the default constructor [GameWidget.new], this creates a
+  /// [GameWidget] that controls the creation of the game instance, r
+  /// removing the necessity of rendering this widget inside a [StatefulWidget].
   ///
   /// Ex:
   /// ```
@@ -172,16 +171,15 @@ class GameWidget<T extends Game> extends StatefulWidget {
 }
 
 class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
-  late T _currentGame;
-  late bool _controlled;
+  late T currentGame;
 
   Future<void> get loaderFuture => _loaderFuture ??= (() async {
-        assert(_currentGame.hasLayout);
-        final onLoad = _currentGame.onLoadFuture;
+        assert(currentGame.hasLayout);
+        final onLoad = currentGame.onLoadFuture;
         if (onLoad != null) {
           await onLoad;
         }
-        _currentGame.onMount();
+        currentGame.onMount();
       })();
 
   Future<void>? _loaderFuture;
@@ -231,15 +229,14 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
 
   void initCurrentGame() {
     final widgetGame = widget.game;
-    _controlled = widgetGame == null;
-    _currentGame = widgetGame ?? widget.create!.call();
-    _currentGame.addGameStateListener(_onGameStateChange);
+    currentGame = widgetGame ?? widget.create!.call();
+    currentGame.addGameStateListener(_onGameStateChange);
     _loaderFuture = null;
   }
 
   void disposeCurrentGame() {
-    _currentGame.removeGameStateListener(_onGameStateChange);
-    _currentGame.onRemove();
+    currentGame.removeGameStateListener(_onGameStateChange);
+    currentGame.onRemove();
   }
 
   @override
@@ -293,34 +290,33 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
   @override
   Widget build(BuildContext context) {
     return _protectedBuild(() {
-      Widget internalGameWidget = _GameRenderObjectWidget(_currentGame);
+      Widget internalGameWidget = _GameRenderObjectWidget(currentGame);
 
-      _checkOverlays(_currentGame.overlays.value);
+      _checkOverlays(currentGame.overlays.value);
       assert(
-        !(_currentGame is MultiTouchDragDetector &&
-            _currentGame is PanDetector),
+        !(currentGame is MultiTouchDragDetector && currentGame is PanDetector),
         'WARNING: Both MultiTouchDragDetector and a PanDetector detected. '
         'The MultiTouchDragDetector will override the PanDetector and it will '
         'not receive events',
       );
 
-      if (hasBasicGestureDetectors(_currentGame)) {
+      if (hasBasicGestureDetectors(currentGame)) {
         internalGameWidget = applyBasicGesturesDetectors(
-          _currentGame,
+          currentGame,
           internalGameWidget,
         );
       }
 
-      if (hasAdvancedGestureDetectors(_currentGame)) {
+      if (hasAdvancedGestureDetectors(currentGame)) {
         internalGameWidget = applyAdvancedGesturesDetectors(
-          _currentGame,
+          currentGame,
           internalGameWidget,
         );
       }
 
-      if (hasMouseDetectors(_currentGame)) {
+      if (hasMouseDetectors(currentGame)) {
         internalGameWidget = applyMouseDetectors(
-          _currentGame,
+          currentGame,
           internalGameWidget,
         );
       }
@@ -337,11 +333,11 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
         autofocus: widget.autofocus,
         onKey: _handleKeyEvent,
         child: MouseRegion(
-          cursor: _currentGame.mouseCursor,
+          cursor: currentGame.mouseCursor,
           child: Directionality(
             textDirection: textDir,
             child: Container(
-              color: _currentGame.backgroundColor(),
+              color: currentGame.backgroundColor(),
               child: LayoutBuilder(
                 builder: (_, BoxConstraints constraints) {
                   return _protectedBuild(() {
@@ -350,7 +346,7 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
                       return widget.loadingBuilder?.call(context) ??
                           Container();
                     }
-                    _currentGame.onGameResize(size);
+                    currentGame.onGameResize(size);
                     return FutureBuilder(
                       future: loaderFuture,
                       builder: (_, snapshot) {
@@ -398,11 +394,11 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
     if (widget.overlayBuilderMap == null) {
       return stackWidgets;
     }
-    final widgets = _currentGame.overlays.value.map((String overlayKey) {
+    final widgets = currentGame.overlays.value.map((String overlayKey) {
       final builder = widget.overlayBuilderMap![overlayKey]!;
       return KeyedSubtree(
         key: ValueKey(overlayKey),
-        child: builder(context, _currentGame),
+        child: builder(context, currentGame),
       );
     });
     stackWidgets.addAll(widgets);
