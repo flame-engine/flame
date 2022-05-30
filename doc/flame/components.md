@@ -7,10 +7,27 @@ This diagram might look intimidating, but don't worry, it is not as complex as i
 
 ## Component
 
-All components inherit from the abstract class `Component`.
+All components inherit from the abstract class `Component` and all components can have other
+`Component`s as children. This is the base of what we call the Flame Component System, or FCS for
+short.
 
-If you want to skip reading about abstract classes you can jump directly to
-[](#positioncomponent).
+Children can be added either with the `add(Component c)` method or directly in the constructor.
+
+Example:
+
+```dart
+void main() {
+  final component1 = Component(children: [Component(), Component()]);
+  final component2 = Component();
+  component2.add(Component());
+  component2.addAll([Component(), Component()]);
+}
+```
+
+`Component` here could of course be any type of `Component`.
+
+If you want to skip reading about the abstract `Component` class you can jump directly to the most
+common `Component` basis, the [`PositionComponent`](#positioncomponent).
 
 Every `Component` has a few methods that you can optionally implement, which are used by the
 `FlameGame` class. If you are not using `FlameGame`, you can use these methods on your own game loop
