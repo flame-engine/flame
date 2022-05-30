@@ -3,27 +3,35 @@ import 'dart:ui';
 import 'package:vector_math/vector_math_64.dart';
 
 class RenderContext {
-  RenderContext(this.canvas);
-
-  final Canvas canvas;
+  Canvas get canvas => _canvas!;
+  Canvas? _canvas;
 
   final List<_CanvasOperation> _operations = [];
 
+  void startPipeline(Canvas canvas) {
+    _canvas = canvas;
+    _operations.clear();
+  }
+
+  void finishPipeline() {
+    _canvas = null;
+  }
+
   void transformCanvas(Matrix4 transform) {
     _operations.add(_CanvasTransform(transform));
-    canvas.save();
-    canvas.transform(transform.storage);
+    _canvas!.save();
+    _canvas!.transform(transform.storage);
   }
 
   void translateCanvas(double dx, double dy) {
     _operations.add(_CanvasTranslation(dx, dy));
-    canvas.save();
-    canvas.translate(dx, dy);
+    _canvas!.save();
+    _canvas!.translate(dx, dy);
   }
 
   void restore() {
     _operations.removeLast();
-    canvas.restore();
+    _canvas!.restore();
   }
 }
 

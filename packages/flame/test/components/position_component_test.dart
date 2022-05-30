@@ -643,7 +643,7 @@ void main() {
         ..position = Vector2(23, 17)
         ..size = Vector2.all(10);
       final canvas = MockCanvas();
-      component.renderTree(RenderContext(canvas));
+      component.renderTree(RenderContext()..startPipeline(canvas));
       expect(
         canvas,
         MockCanvas()
@@ -664,7 +664,7 @@ void main() {
         ..anchor = Anchor.center
         ..precision = null;
       final canvas = MockCanvas();
-      component.renderTree(RenderContext(canvas));
+      component.renderTree(RenderContext()..startPipeline(canvas));
       expect(
         canvas,
         MockCanvas()
