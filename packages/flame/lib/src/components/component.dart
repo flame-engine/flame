@@ -5,7 +5,9 @@ import 'package:collection/collection.dart';
 import 'package:flame/src/cache/value_cache.dart';
 import 'package:flame/src/components/component_set.dart';
 import 'package:flame/src/components/mixins/coordinate_transform.dart';
+import 'package:flame/src/components/position_component.dart';
 import 'package:flame/src/components/position_type.dart';
+import 'package:flame/src/experimental/camera_component.dart';
 import 'package:flame/src/game/flame_game.dart';
 import 'package:flame/src/game/mixins/game.dart';
 import 'package:flame/src/game/render_context.dart';
@@ -461,8 +463,32 @@ class Component {
     _children?.forEach((c) => c.updateTree(dt));
   }
 
+  /// Draws the component onto the [canvas].
+  ///
+  /// This method is responsible for rendering the current component itself, but
+  /// not its children (see [renderTree] for that). If the component performs
+  /// any modifications to the canvas, such as transforms or clipping, then it
+  /// is expected to restore the canvas to its original state in the end.
   void render(Canvas canvas) {}
 
+  /// Renders the current component and all its children.
+  ///
+  /// This method rarely needs to be overridden by the user, but there are some
+  /// situations where this could be desirable. Usually, these situations
+  /// involve altering the way the children components are rendered. For
+  /// example, the [PositionComponent] applies canvas transform that affects all
+  /// its children; the [CameraComponent] applies both a transform and a clip.
+  /// Other possibilities include: changing the order in which the children are
+  /// rendered, choosing not to render some children at all, etc.
+  ///
+  /// If you need to modify the canvas in this method, please do so through the
+  /// [context]'s API instead of modifying the canvas directly. This way the
+  /// context will know the stack of operations currently applied, allowing this
+  /// information to be used by the downstream components.
+  ///
+  /// If overriding this method, consider also overriding the
+  /// [componentsAtPoint], so that pointer events could properly target the
+  /// children of this component.
   void renderTree(RenderContext context) {
     render(context.canvas);
     _children?.forEach((c) => c.renderTree(context));
