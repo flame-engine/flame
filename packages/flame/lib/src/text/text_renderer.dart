@@ -3,7 +3,7 @@ import 'dart:ui' hide LineMetrics;
 import 'package:flame/src/anchor.dart';
 import 'package:flame/src/components/text_box_component.dart';
 import 'package:flame/src/components/text_component.dart';
-import 'package:flame/src/text/inline_text_element.dart';
+import 'package:flame/src/text/inline/text_element.dart';
 import 'package:flame/src/text/line_metrics.dart';
 import 'package:flame/src/text/text_paint.dart';
 import 'package:vector_math/vector_math_64.dart';
@@ -50,7 +50,7 @@ abstract class TextRenderer {
     Anchor anchor = Anchor.topLeft,
   });
 
-  InlineTextElement forge(String text);
+  TextElement forge(String text);
 
   /// A registry containing default providers for every [TextRenderer] subclass;
   /// used by [createDefault] to create default parameter values.

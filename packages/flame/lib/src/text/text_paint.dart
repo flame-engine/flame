@@ -1,7 +1,7 @@
 import 'package:flame/src/anchor.dart';
 import 'package:flame/src/cache/memory_cache.dart';
 import 'package:flame/src/extensions/vector2.dart';
-import 'package:flame/src/text/inline_text_element.dart';
+import 'package:flame/src/text/inline/text_element.dart';
 import 'package:flame/src/text/line_metrics.dart';
 import 'package:flame/src/text/text_line.dart';
 import 'package:flame/src/text/text_renderer.dart';
@@ -99,12 +99,12 @@ class TextPaint extends TextRenderer {
   }
 
   @override
-  InlineTextElement forge(String text) {
+  TextElement forge(String text) {
     return _TextPaintRun(toTextPainter(text));
   }
 }
 
-class _TextPaintRun extends InlineTextElement implements TextLine {
+class _TextPaintRun extends TextElement implements TextLine {
   _TextPaintRun(this._textPainter)
       : _ascent = _textPainter
             .computeDistanceToActualBaseline(TextBaseline.alphabetic);

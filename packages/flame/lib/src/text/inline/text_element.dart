@@ -28,8 +28,8 @@ import 'package:flame/src/text/text_line.dart';
 ///   lines that were already laid out.
 ///
 /// An inline text can potentially span multiple lines, be adjacent to other
-/// [InlineTextElement]s, or contain other [InlineTextElement]s inside.
-abstract class InlineTextElement {
+/// [TextElement]s, or contain other [TextElement]s inside.
+abstract class TextElement {
   /// True iff the text has been completely laid out.
   bool get isLaidOut;
 

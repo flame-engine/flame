@@ -1,18 +1,18 @@
 import 'dart:math';
 import 'dart:ui' hide LineMetrics;
 
-import 'package:flame/src/text/inline_text_element.dart';
+import 'package:flame/src/text/inline/text_element.dart';
 import 'package:flame/src/text/line_metrics.dart';
 import 'package:flame/src/text/text_line.dart';
 
-/// An [InlineTextElement] containing other [InlineTextElement]s inside.
+/// An [TextElement] containing other [TextElement]s inside.
 ///
-/// This class allows forming a tree of [InlineTextElement]s, placing different
-/// kinds of [InlineTextElement]s next to each other.
-class GroupTextElement extends InlineTextElement {
+/// This class allows forming a tree of [TextElement]s, placing different
+/// kinds of [TextElement]s next to each other.
+class GroupTextElement extends TextElement {
   GroupTextElement(this._children);
 
-  final List<InlineTextElement> _children;
+  final List<TextElement> _children;
   final List<TextLine> _lines = [];
   int _currentIndex = 0;
 
