@@ -9,8 +9,8 @@ import 'package:flame/src/text/text_line.dart';
 ///
 /// This class allows forming a tree of [InlineTextElement]s, placing different
 /// kinds of [InlineTextElement]s next to each other.
-class InlineTextGroup extends InlineTextElement {
-  InlineTextGroup(this._children);
+class GroupTextElement extends InlineTextElement {
+  GroupTextElement(this._children);
 
   final List<InlineTextElement> _children;
   final List<TextLine> _lines = [];
