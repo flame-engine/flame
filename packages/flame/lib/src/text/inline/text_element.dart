@@ -17,9 +17,9 @@ import 'package:flame/src/text/text_line.dart';
 /// - if the text can be fit between the requested coordinates, then
 ///   [LayoutResult.done] is returned, and [isLaidOut] becomes true;
 /// - if the text can only fit partially between `x0` and `x1`, then the method
-///   will return [LayoutResult.unfinished], and [numLinesLaidOut] increase. At
-///   this moment the caller should call [layOutNextLine] again, to continue the
-///   layout process;
+///   will return [LayoutResult.unfinished], and place the line just produced
+///   into the [lines] iterable. At this moment the caller should call
+///   [layOutNextLine] again, to continue the layout process;
 /// - if the text cannot fit between `x0` and `x1` at all, even partially, then
 ///   [LayoutResult.didNotAdvance] is returned. The caller needs to either
 ///   supply more horizontal distance next time, or apply other mitigation

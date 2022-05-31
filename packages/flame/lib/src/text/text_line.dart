@@ -1,4 +1,3 @@
-
 import 'package:flame/src/text/inline/text_element.dart';
 import 'package:flame/src/text/line_metrics.dart';
 import 'package:meta/meta.dart';
