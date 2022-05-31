@@ -26,12 +26,8 @@ void main() {
 
 `Component` here could of course be any type of `Component`.
 
-If you want to skip reading about the abstract `Component` class you can jump directly to the most
-common `Component` basis, the [`PositionComponent`](#positioncomponent).
-
 Every `Component` has a few methods that you can optionally implement, which are used by the
-`FlameGame` class. If you are not using `FlameGame`, you can use these methods on your own game loop
-if you wish.
+`FlameGame` class. 
 
 ![Component Lifecycle Diagram](../images/component_lifecycle.png)
 
@@ -54,6 +50,7 @@ If the parent is not mounted yet, then this method will wait in a queue (this wi
 on the rest of the game engine).
 
 A component lifecycle state can be checked by a series of getters:
+
  - `isLoaded`: Returns a bool with the current loaded state
  - `loaded`: Returns a future that will complete once the component has finished loading
  - `isMounted`: Returns a bool with the current mounted state
