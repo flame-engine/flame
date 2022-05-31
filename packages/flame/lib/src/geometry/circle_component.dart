@@ -104,6 +104,11 @@ class CircleComponent extends ShapeComponent implements SizeProvider {
     LineSegment line, {
     double epsilon = double.minPositive,
   }) {
+    // A point on a line is `from + t*(to - from)`. We're trying to solve the
+    // equation `‖point - center‖² == radius²`. Or, denoting `Δ₂₁ = to - from`
+    // and `Δ₁₀ = from - center`, the equation is `‖t*Δ₂₁ + Δ₁₀‖² == radius²`.
+    // Expanding the norm, this becomes a square equation in `t`:
+    // `t²Δ₂₁² + 2tΔ₂₁Δ₁₀ + Δ₁₀² - radius² == 0`.
     _delta21
       ..setFrom(line.to)
       ..sub(line.from); // to - from
@@ -115,8 +120,8 @@ class CircleComponent extends ShapeComponent implements SizeProvider {
     final c = _delta10.length2 - radius * radius;
 
     return solveQuadratic(a, b, c)
+        .where((t) => t >= 0 && t <= 1)
         .map((t) => line.from.clone()..addScaled(_delta21, t))
-        .where((point) => line.containsPoint(point))
         .toList();
   }
 
