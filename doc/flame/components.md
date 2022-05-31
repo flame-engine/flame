@@ -24,10 +24,13 @@ void main() {
 }
 ```
 
-`Component` here could of course be any type of `Component`.
+The `Component()` here could of course be any subclass of `Component`.
 
 Every `Component` has a few methods that you can optionally implement, which are used by the
 `FlameGame` class. 
+
+
+### Component lifecycle
 
 ![Component Lifecycle Diagram](../images/component_lifecycle.png)
 
