@@ -78,8 +78,8 @@ class NineTileBoxWidget extends StatelessWidget {
   /// Loads image from the asset [path] and renders it as a widget.
   ///
   /// It will use the [loadingBuilder] while the image from [path] is loading.
-  /// To render without loading, or when you want to have a gapless playback 
-  /// when the [path] value changes, consider loading the image beforehand 
+  /// To render without loading, or when you want to have a gapless playback
+  /// when the [path] value changes, consider loading the image beforehand
   /// and direct pass it to the default constructor.
   NineTileBoxWidget.asset({
     required String path,
