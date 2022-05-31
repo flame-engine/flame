@@ -441,7 +441,7 @@ final animation =
 final animation =
     SpriteAnimation.spriteList([sprite], stepTime: 1, loop: false)
       ..onComplete = () {
-        //do something};
+        // Do something on completion.
       };
 
 final animation =
