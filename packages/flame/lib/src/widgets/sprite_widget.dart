@@ -45,11 +45,12 @@ class SpriteWidget extends StatelessWidget {
         loadingBuilder = null,
         super(key: key);
 
-  /// loads image from asset [path] and renders it as Widget.
-  /// it has [loadingBuilder] while the image from [path] loads image
-  /// To render without loading or gapless playback when the [path] change,
-  /// consider load an image from somewhere and directly pass it to
-  /// default constructor
+  /// Load the image from the asset [path] and renders it as a widget.
+  ///
+  /// It will use the [loadingBuilder] while the image from [path] is loading.
+  /// To render without loading, or when you want to have a gapless playback 
+  /// when the [path] value changes, consider loading the image beforehand 
+  /// and direct pass it to the default constructor.
   SpriteWidget.asset({
     required String path,
     Images? images,

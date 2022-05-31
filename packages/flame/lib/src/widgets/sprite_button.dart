@@ -80,11 +80,13 @@ class SpriteButton extends StatelessWidget {
         ]),
         super(key: key);
 
-  /// loads image from asset [path], [pressedPath] and renders it as Widget.
-  /// it has [loadingBuilder] while the image is loading.
-  /// To render without loading or gapless playback when the [path] change,
-  /// consider load an image from somewhere and directly pass it to
-  /// default constructor
+  /// Loads the images from the asset [path] and [pressedPath] and renders 
+  /// it as a widget.
+  ///
+  /// It will use the [loadingBuilder] while the image from [path] is loading.
+  /// To render without loading, or when you want to have a gapless playback 
+  /// when the [path] value changes, consider loading the image beforehand 
+  /// and direct pass it to the default constructor.
   SpriteButton.asset({
     required String path,
     required String pressedPath,
