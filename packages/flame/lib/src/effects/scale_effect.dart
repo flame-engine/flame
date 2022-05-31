@@ -16,12 +16,23 @@ import 'package:vector_math/vector_math_64.dart';
 /// requires that any other effect or update logic applied to the same component
 /// also used incremental updates.
 class ScaleEffect extends Effect with EffectTarget<ScaleProvider> {
-  ScaleEffect.by(Vector2 scaleFactor, EffectController controller)
-      : _scaleFactor = scaleFactor.clone(),
-        super(controller);
+  ScaleEffect.by(
+    Vector2 scaleFactor,
+    EffectController controller, {
+    Function()? onFinishCallback,
+  })  : _scaleFactor = scaleFactor.clone(),
+        super(controller, onFinishCallback: onFinishCallback);
 
-  factory ScaleEffect.to(Vector2 targetScale, EffectController controller) =>
-      _ScaleToEffect(targetScale, controller);
+  factory ScaleEffect.to(
+    Vector2 targetScale,
+    EffectController controller, {
+    Function()? onFinishCallback,
+  }) =>
+      _ScaleToEffect(
+        targetScale,
+        controller,
+        onFinishCallback: onFinishCallback,
+      );
 
   final Vector2 _scaleFactor;
   late Vector2 _scaleDelta;
@@ -45,9 +56,16 @@ class ScaleEffect extends Effect with EffectTarget<ScaleProvider> {
 class _ScaleToEffect extends ScaleEffect {
   final Vector2 _targetScale;
 
-  _ScaleToEffect(Vector2 targetScale, EffectController controller)
-      : _targetScale = targetScale.clone(),
-        super.by(Vector2.zero(), controller);
+  _ScaleToEffect(
+    Vector2 targetScale,
+    EffectController controller, {
+    Function()? onFinishCallback,
+  })  : _targetScale = targetScale.clone(),
+        super.by(
+          Vector2.zero(),
+          controller,
+          onFinishCallback: onFinishCallback,
+        );
 
   @override
   void onStart() {

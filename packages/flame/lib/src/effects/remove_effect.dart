@@ -4,7 +4,13 @@ import 'package:flame/src/effects/effect.dart';
 /// This simple effect, when attached to a component, will cause that component
 /// to be removed from the game tree after `delay` seconds.
 class RemoveEffect extends Effect {
-  RemoveEffect({double delay = 0.0}) : super(LinearEffectController(delay));
+  RemoveEffect({
+    double delay = 0.0,
+    Function()? onFinishCallback,
+  }) : super(
+          LinearEffectController(delay),
+          onFinishCallback: onFinishCallback,
+        );
 
   @override
   void apply(double progress) {

@@ -23,8 +23,9 @@ class AnchorByEffect extends AnchorEffect {
     Vector2 offset,
     EffectController controller, {
     AnchorProvider? target,
+    Function()? onFinishCallback,
   })  : _offset = offset.clone(),
-        super(controller, target);
+        super(controller, target, onFinishCallback: onFinishCallback);
 
   final Vector2 _offset;
 

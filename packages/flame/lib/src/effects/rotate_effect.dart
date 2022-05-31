@@ -21,12 +21,26 @@ import 'package:flame/src/effects/provider_interfaces.dart';
 class RotateEffect extends Effect
     with EffectTarget<AngleProvider>
     implements MeasurableEffect {
-  RotateEffect.by(double angle, EffectController controller)
-      : _angle = angle,
-        super(controller);
+  RotateEffect.by(
+    double angle,
+    EffectController controller, {
+    Function()? onFinishCallback,
+  })  : _angle = angle,
+        super(
+          controller,
+          onFinishCallback: onFinishCallback,
+        );
 
-  factory RotateEffect.to(double angle, EffectController controller) {
-    return _RotateToEffect(angle, controller);
+  factory RotateEffect.to(
+    double angle,
+    EffectController controller, {
+    Function()? onFinishCallback,
+  }) {
+    return _RotateToEffect(
+      angle,
+      controller,
+      onFinishCallback: onFinishCallback,
+    );
   }
 
   /// The magnitude of the effect: how much the target should turn as the
@@ -44,9 +58,12 @@ class RotateEffect extends Effect
 }
 
 class _RotateToEffect extends RotateEffect {
-  _RotateToEffect(double angle, EffectController controller)
-      : _destinationAngle = angle,
-        super.by(0, controller);
+  _RotateToEffect(
+    double angle,
+    EffectController controller, {
+    Function()? onFinishCallback,
+  })  : _destinationAngle = angle,
+        super.by(0, controller, onFinishCallback: onFinishCallback);
 
   final double _destinationAngle;
 

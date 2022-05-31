@@ -18,8 +18,11 @@ import 'package:vector_math/vector_math_64.dart';
 abstract class AnchorEffect extends Effect
     with EffectTarget<AnchorProvider>
     implements MeasurableEffect {
-  AnchorEffect(EffectController controller, AnchorProvider? target)
-      : super(controller) {
+  AnchorEffect(
+    EffectController controller,
+    AnchorProvider? target, {
+    Function()? onFinishCallback,
+  }) : super(controller, onFinishCallback: onFinishCallback) {
     this.target = target;
   }
 
@@ -27,13 +30,25 @@ abstract class AnchorEffect extends Effect
     Vector2 offset,
     EffectController controller, {
     AnchorProvider? target,
+    Function()? onFinishCallback,
   }) =>
-      AnchorByEffect(offset, controller, target: target);
+      AnchorByEffect(
+        offset,
+        controller,
+        target: target,
+        onFinishCallback: onFinishCallback,
+      );
 
   factory AnchorEffect.to(
     Anchor destination,
     EffectController controller, {
     AnchorProvider? target,
+    Function()? onFinishCallback,
   }) =>
-      AnchorToEffect(destination, controller, target: target);
+      AnchorToEffect(
+        destination,
+        controller,
+        target: target,
+        onFinishCallback: onFinishCallback,
+      );
 }

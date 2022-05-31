@@ -32,6 +32,7 @@ class SequenceEffect extends Effect {
     bool alternate = false,
     bool infinite = false,
     int repeatCount = 1,
+    Function()? onFinishCallback,
   }) {
     assert(effects.isNotEmpty, 'The list of effects cannot be empty');
     assert(
@@ -45,10 +46,14 @@ class SequenceEffect extends Effect {
       ec = RepeatedEffectController(ec, repeatCount);
     }
     effects.forEach((e) => e.removeOnFinish = false);
-    return SequenceEffect._(ec)..addAll(effects);
+    return SequenceEffect._(ec, onFinishCallback: onFinishCallback)
+      ..addAll(effects);
   }
 
-  SequenceEffect._(EffectController ec) : super(ec);
+  SequenceEffect._(
+    EffectController ec, {
+    Function()? onFinishCallback,
+  }) : super(ec, onFinishCallback: onFinishCallback);
 
   @override
   void apply(double progress) {}

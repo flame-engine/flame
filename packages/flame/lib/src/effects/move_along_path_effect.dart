@@ -30,9 +30,14 @@ class MoveAlongPathEffect extends MoveEffect {
     bool absolute = false,
     bool oriented = false,
     PositionProvider? target,
+    Function()? onFinishCallback,
   })  : _isAbsolute = absolute,
         _followDirection = oriented,
-        super(controller, target) {
+        super(
+          controller,
+          target,
+          onFinishCallback: onFinishCallback,
+        ) {
     final metrics = path.computeMetrics().toList();
     if (metrics.length != 1) {
       throw ArgumentError(

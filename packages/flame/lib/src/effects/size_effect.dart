@@ -20,8 +20,9 @@ class SizeEffect extends Effect with EffectTarget<SizeProvider> {
     Vector2 offset,
     EffectController controller, {
     SizeProvider? target,
+    Function()? onFinishCallback,
   })  : _offset = offset.clone(),
-        super(controller) {
+        super(controller, onFinishCallback: onFinishCallback) {
     this.target = target;
   }
 
@@ -31,8 +32,12 @@ class SizeEffect extends Effect with EffectTarget<SizeProvider> {
   /// of the affected component is `Vector2(100, 100)` at the start of the
   /// affected the effect will peak when the size is `Vector2(200, 100)`, if
   /// there is nothing else affecting the size at the same time.
-  factory SizeEffect.to(Vector2 targetSize, EffectController controller) =>
-      _SizeToEffect(targetSize, controller);
+  factory SizeEffect.to(
+    Vector2 targetSize,
+    EffectController controller, {
+    Function()? onFinishCallback,
+  }) =>
+      _SizeToEffect(targetSize, controller, onFinishCallback: onFinishCallback);
 
   Vector2 _offset;
 
@@ -48,9 +53,16 @@ class SizeEffect extends Effect with EffectTarget<SizeProvider> {
 class _SizeToEffect extends SizeEffect {
   final Vector2 _targetSize;
 
-  _SizeToEffect(Vector2 targetSize, EffectController controller)
-      : _targetSize = targetSize.clone(),
-        super.by(Vector2.zero(), controller);
+  _SizeToEffect(
+    Vector2 targetSize,
+    EffectController controller, {
+    Function()? onFinishCallback,
+  })  : _targetSize = targetSize.clone(),
+        super.by(
+          Vector2.zero(),
+          controller,
+          onFinishCallback: onFinishCallback,
+        );
 
   @override
   void onStart() {

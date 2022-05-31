@@ -25,7 +25,7 @@ import 'package:meta/meta.dart';
 /// changes in the effect's target; and also the `reset()` method if they have
 /// non-trivial internal state.
 abstract class Effect extends Component {
-  Effect(this.controller)
+  Effect(this.controller, {this.onFinishCallback})
       : removeOnFinish = true,
         _paused = false,
         _started = false,

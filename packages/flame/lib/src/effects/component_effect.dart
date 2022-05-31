@@ -7,7 +7,10 @@ import 'package:flame/src/effects/effect.dart';
 /// A general abstraction for creating effects targeting [Component]s, currently
 /// used by `SizeEffect`, `OpacityEffect` and `Transform2DEffect`.
 abstract class ComponentEffect<T extends Component> extends Effect {
-  ComponentEffect(EffectController controller) : super(controller);
+  ComponentEffect(
+    EffectController controller, {
+    Function()? onFinishCallback,
+  }) : super(controller, onFinishCallback: onFinishCallback);
 
   late T target;
 
