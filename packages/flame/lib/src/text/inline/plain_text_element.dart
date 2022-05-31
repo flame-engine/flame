@@ -1,0 +1,57 @@
+
+
+import 'package:flame/src/text/inline/text_element.dart';
+import 'package:flame/src/text/line_metrics.dart';
+import 'package:flame/src/text/text_line.dart';
+import 'package:flutter/rendering.dart';
+
+class PlainTextElement extends TextElement implements TextLine {
+  PlainTextElement(this._textPainter)
+      : _ascent = _textPainter
+      .computeDistanceToActualBaseline(TextBaseline.alphabetic);
+
+  final TextPainter _textPainter;
+  final double _ascent;
+  double? _x0;
+  double? _y0;
+
+  @override
+  bool get isLaidOut => _x0 != null && _y0 != null;
+
+  @override
+  void resetLayout() => _x0 = null;
+
+  @override
+  LayoutResult layOutNextLine(LineMetrics bounds) {
+    if (bounds.width < _textPainter.width) {
+      return LayoutResult.didNotAdvance;
+    }
+    _x0 = bounds.left;
+    _y0 = bounds.baseline - _ascent;
+    return LayoutResult.done;
+  }
+
+  @override
+  Iterable<TextLine> get lines => _x0 == null ? [] : [this];
+
+  @override
+  TextLine get lastLine => this;
+
+  @override
+  LineMetrics get metrics {
+    assert(isLaidOut);
+    return LineMetrics(
+      left: _x0!,
+      right: _x0! + _textPainter.width,
+      top: _y0,
+      bottom: _y0! + _textPainter.height,
+      baseline: _y0! + _ascent,
+    );
+  }
+
+  @override
+  void render(Canvas canvas) {
+    assert(isLaidOut);
+    _textPainter.paint(canvas, Offset(_x0!, _y0!));
+  }
+}
