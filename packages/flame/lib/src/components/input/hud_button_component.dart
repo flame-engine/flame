@@ -1,6 +1,5 @@
 import 'package:flame/components.dart';
 import 'package:flame/input.dart';
-import 'package:flame/src/components/mixins/component_viewport_margin.dart';
 import 'package:flutter/rendering.dart' show EdgeInsets;
 
 /// The [HudButtonComponent] bundles two [PositionComponent]s, one that shows
