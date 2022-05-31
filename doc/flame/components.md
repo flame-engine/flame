@@ -435,7 +435,7 @@ and `onComplete`. To listen to these events, you can do the following:
 final animation =
     SpriteAnimation.spriteList([sprite], stepTime: 1, loop: false)
       ..onStart = () {
-        //do something};
+        // Do something on start.
       };
 
 final animation =
