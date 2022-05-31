@@ -43,6 +43,7 @@ class Anchor {
 
   const Anchor(this.x, this.y);
 
+  @Deprecated('Do not use; will be removed in 1.3.0')
   Vector2 translate(Vector2 p, Vector2 size) {
     return p - (toVector2()..multiply(size));
   }
