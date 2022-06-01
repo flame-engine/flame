@@ -2,8 +2,8 @@ import 'package:flame/src/anchor.dart';
 import 'package:flame/src/cache/memory_cache.dart';
 import 'package:flame/src/extensions/vector2.dart';
 import 'package:flame/src/text/inline/plain_text_element.dart';
+import 'package:flame/src/text/inline/space_text_element.dart';
 import 'package:flame/src/text/inline/text_element.dart';
-import 'package:flame/src/text/line_metrics.dart';
 import 'package:flame/src/text/text_renderer.dart';
 import 'package:flutter/rendering.dart';
 
@@ -16,7 +16,9 @@ import 'package:flutter/rendering.dart';
 class TextPaint extends TextRenderer {
   TextPaint({TextStyle? style, TextDirection? textDirection})
       : style = style ?? defaultTextStyle,
-        textDirection = textDirection ?? TextDirection.ltr;
+        textDirection = textDirection ?? TextDirection.ltr {
+    _computeSpaceMetrics();
+  }
 
   final TextStyle style;
 
@@ -51,18 +53,16 @@ class TextPaint extends TextRenderer {
     return Vector2(tp.width, tp.height);
   }
 
-  @override
-  late LineMetrics spaceMetrics = _computeSpaceMetrics();
-  LineMetrics _computeSpaceMetrics() {
+  void _computeSpaceMetrics() {
     final tp = toTextPainter(' ');
-    return LineMetrics(
-      left: 0,
-      top: 0,
-      right: tp.width,
-      bottom: tp.height,
-      baseline: tp.computeDistanceToActualBaseline(TextBaseline.alphabetic),
-    );
+    spaceWidth = tp.width;
+    spaceHeight = tp.height;
+    spaceBaseline = tp.computeDistanceToActualBaseline(TextBaseline.alphabetic);
   }
+
+  double spaceWidth = 0;
+  double spaceHeight = 0;
+  double spaceBaseline = 0;
 
   /// Returns a [TextPainter] that allows for text rendering and size
   /// measuring.
@@ -100,6 +100,14 @@ class TextPaint extends TextRenderer {
 
   @override
   TextElement forge(String text) {
-    return PlainTextElement(toTextPainter(text));
+    if (text == ' ') {
+      return SpaceTextElement(
+        width: spaceWidth,
+        height: spaceHeight,
+        baseline: spaceBaseline,
+      );
+    } else {
+      return PlainTextElement(toTextPainter(text));
+    }
   }
 }

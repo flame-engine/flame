@@ -35,10 +35,6 @@ abstract class TextRenderer {
   /// Compute the height of [text] when rendered.
   double measureTextHeight(String text) => measureText(text).y;
 
-  /// The dimensions of a normal space for this text style. The [LineMetrics]
-  /// object should have `.left` and `.top` set to zero.
-  LineMetrics get spaceMetrics;
-
   /// Renders [text] on the [canvas] at a given [position].
   ///
   /// For example, if [Anchor.center] is specified, it's going to be drawn
