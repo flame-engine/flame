@@ -139,6 +139,12 @@ class Images {
   /// Whether the cache contains the specified [key] or not.
   bool containsKey(String key) => _assets.containsKey(key);
 
+  String? findKeyForImage(Image image) {
+    return _assets.keys.firstWhere(
+      (k) => image.isCloneOf(_assets[k]!.image),
+    );
+  }
+
   /// Waits until all currently pending image loading operations complete.
   Future<void> ready() {
     return Future.wait(_assets.values.map((asset) => asset.retrieveAsync()));

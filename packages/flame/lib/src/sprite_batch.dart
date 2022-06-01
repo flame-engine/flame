@@ -132,13 +132,28 @@ class SpriteBatch {
   /// The atlas used by the [SpriteBatch].
   Image atlas;
 
-  /// The atlas used by the [SpriteBatch] when flips are needed.
-  late final Future<Image> _flippableAtlas = flippableAtlasGenerator();
+  /// The image cache used by the [SpriteBatch] to store image assets.
+  final Images? _imageCache;
 
-  Future<Image> Function() flippableAtlasGenerator;
+  /// When the [_imageCache] isn't specified, the global [Flame.images] is used.
+  Images get imageCache => _imageCache ?? Flame.images;
 
-  /// Whether any [BatchItem] needs a flippableAtlas.
+  /// The root key use by the [SpriteBatch] to store image assets.
+  final String? _imageKey;
+
+  /// When the [_imageKey] isn't specified [imageKey] will return either the key
+  /// for the [atlas] stored in [imageCache] or a key generated from the
+  /// identityHashCode.
+  String get imageKey =>
+      _imageKey ??
+      imageCache.findKeyForImage(atlas) ??
+      'image[${identityHashCode(atlas)}]';
+
+  /// Whether any [BatchItem]s need a flippableAtlas.
   bool _hasFlips = false;
+
+  /// The status of the atlas image loading operations.
+  bool _atlasReady = true;
 
   /// The default color, used as a background color for a [BatchItem].
   final Color defaultColor;
@@ -168,7 +183,8 @@ class SpriteBatch {
     this.defaultBlendMode = BlendMode.srcOver,
     this.defaultTransform,
     this.useAtlas = true,
-    required this.flippableAtlasGenerator, //#TODO removed required with default
+    this.imageCache,
+    this.imageKey,
   });
 
   /// Takes a path of an image, and optional arguments for the SpriteBatch.
@@ -183,26 +199,31 @@ class SpriteBatch {
     bool useAtlas = true,
   }) async {
     final _images = images ?? Flame.images;
-    final atlas = await _images.load(path);
     return SpriteBatch(
-      atlas,
+      await _images.load(path),
       defaultColor: defaultColor,
       defaultTransform: defaultTransform ?? RSTransform(1, 0, 0, 0),
       defaultBlendMode: defaultBlendMode,
       useAtlas: useAtlas,
-      flippableAtlasGenerator: () => _images.fetchOrGenerate(
-        '$path$_generatedAtlasKeySuffix',
-        () => _generateFlippedAtlas(atlas),
-      ),
+      imageCache: _images,
+      imageKey: path,
     );
   }
 
-  static const String _generatedAtlasKeySuffix = '#withFlipAttached';
+  Future<void> _makeFlippedAtlas() async {
+    _hasFlips = true;
+    _atlasReady = false;
+    final key = '$imageKey#with-flips';
+    atlas = await imageCache.fetchOrGenerate(
+      key,
+      () => _generateFlippedAtlas(atlas),
+    );
+    _atlasReady = true;
+  }
 
-  static Future<Image> _generateFlippedAtlas(
+  Future<Image> _generateFlippedAtlas(
     Image image,
   ) async {
-    print("Generating Now\n");
     final recorder = PictureRecorder();
     final canvas = Canvas(recorder);
     final _emptyPaint = Paint();
@@ -216,29 +237,6 @@ class SpriteBatch {
 
     final picture = recorder.endRecording();
     return picture.toImageSafe(image.width, image.height * 2);
-  }
-
-  static Future<Image> _generateFlippedAtlas2(
-    Image image,
-  ) async {
-    final imagePixelData = await image.pixelsInUint8();
-    final atlasPixelData = <int>[];
-    final imageBytesWidth = image.width * 4;
-    final imageStartingLength = imagePixelData.length;
-    atlasPixelData.addAll(imagePixelData);
-    for (var ind = 0; ind < imageStartingLength; ind += imageBytesWidth) {
-      for (var byteInd = 0; byteInd < imageBytesWidth; byteInd += 4) {
-        atlasPixelData.insertAll(
-          ind + imageStartingLength,
-          imagePixelData.getRange(ind + byteInd, ind + byteInd + 4),
-        );
-      }
-    }
-    return ImageExtension.fromPixels(
-      Uint8List.fromList(atlasPixelData),
-      image.width,
-      image.height * 2,
-    );
   }
 
   /// Add a new batch item using a RSTransform.
@@ -271,7 +269,7 @@ class SpriteBatch {
 
     if (flip && useAtlas && !_hasFlips) {
       _hasFlips = true;
-      atlas = await _flippableAtlas;
+      _makeFlippedAtlas();
     }
 
     _batchItems.add(batchItem);
@@ -365,7 +363,7 @@ class SpriteBatch {
   }) {
     paint ??= _emptyPaint;
 
-    if (!useAtlas) {
+    if (!useAtlas || !_atlasReady) {
       for (final batchItem in _batchItems) {
         paint.blendMode = blendMode ?? paint.blendMode;
 
