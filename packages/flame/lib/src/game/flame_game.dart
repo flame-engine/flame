@@ -16,13 +16,16 @@ import 'package:meta/meta.dart';
 /// This is the recommended base class to use for most games made with Flame.
 /// It is based on the Flame Component System (also known as FCS).
 class FlameGame extends Component with Game {
-  FlameGame({Camera? camera}) {
+  FlameGame({
+    Iterable<Component>? children,
+    Camera? camera,
+  }) : super(children: children) {
     assert(
       Component.staticGameInstance == null,
       '$this instantiated, while another game ${Component.staticGameInstance} '
       'declares itself to be a singleton',
     );
-    _cameraWrapper = CameraWrapper(camera ?? Camera(), children);
+    _cameraWrapper = CameraWrapper(camera ?? Camera(), this.children);
   }
 
   late final CameraWrapper _cameraWrapper;
