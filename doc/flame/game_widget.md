@@ -52,3 +52,6 @@ class MyGamePage extends StatelessWidget {
   }
 }
 ```
+
+Do note that if the `GameWidget.controlled` constructor is used, the `GameWidget.game` field will
+always be null.
