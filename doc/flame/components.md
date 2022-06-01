@@ -7,14 +7,30 @@ This diagram might look intimidating, but don't worry, it is not as complex as i
 
 ## Component
 
-All components inherit from the abstract class `Component`.
+All components inherit from the abstract class `Component` and all components can have other
+`Component`s as children. This is the base of what we call the Flame Component System, or FCS for
+short.
 
-If you want to skip reading about abstract classes you can jump directly to
-[](#positioncomponent).
+Children can be added either with the `add(Component c)` method or directly in the constructor.
+
+Example:
+
+```dart
+void main() {
+  final component1 = Component(children: [Component(), Component()]);
+  final component2 = Component();
+  component2.add(Component());
+  component2.addAll([Component(), Component()]);
+}
+```
+
+The `Component()` here could of course be any subclass of `Component`.
 
 Every `Component` has a few methods that you can optionally implement, which are used by the
-`FlameGame` class. If you are not using `FlameGame`, you can use these methods on your own game loop
-if you wish.
+`FlameGame` class. 
+
+
+### Component lifecycle
 
 ![Component Lifecycle Diagram](../images/component_lifecycle.png)
 
@@ -37,6 +53,7 @@ If the parent is not mounted yet, then this method will wait in a queue (this wi
 on the rest of the game engine).
 
 A component lifecycle state can be checked by a series of getters:
+
  - `isLoaded`: Returns a bool with the current loaded state
  - `loaded`: Returns a future that will complete once the component has finished loading
  - `isMounted`: Returns a bool with the current mounted state
