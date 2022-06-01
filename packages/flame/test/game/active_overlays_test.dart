@@ -19,6 +19,27 @@ void main() {
       });
     });
 
+    group('addAll', () {
+      test('can add multiple overlays at once', () {
+        final overlays = FlameGame().overlays;
+        overlays.addAll(['test', 'test2']);
+        expect(overlays.isActive('test'), true);
+        expect(overlays.isActive('test2'), true);
+      });
+    });
+
+    group('removeAll', () {
+      test('can remove multiple overlays at once', () {
+        final overlays = FlameGame().overlays;
+        overlays.addAll(['test', 'test2']);
+
+        overlays.removeAll(['test', 'test2']);
+
+        expect(overlays.isActive('test'), false);
+        expect(overlays.isActive('test2'), false);
+      });
+    });
+
     group('remove', () {
       test('can remove an overlay', () {
         final overlays = FlameGame().overlays;

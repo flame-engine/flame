@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math' as math;
 import 'dart:ui';
 
+import 'package:collection/collection.dart';
 import 'package:flame/components.dart';
 import 'package:flame/src/extensions/picture_extension.dart';
 import 'package:flame/src/palette.dart';
@@ -149,7 +150,7 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
   bool get finished => _lifeTime > totalCharTime + _boxConfig.dismissDelay;
 
   int get _actualTextLength {
-    return _lines.map((e) => e.length).fold(0, (p, c) => p + c);
+    return _lines.map((e) => e.length).sum;
   }
 
   int get currentChar => _boxConfig.timePerChar == 0.0

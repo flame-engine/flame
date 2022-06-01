@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:collection';
 
+import 'package:collection/collection.dart';
 import 'package:flame/src/cache/value_cache.dart';
 import 'package:flame/src/components/component_set.dart';
 import 'package:flame/src/components/mixins/coordinate_transform.dart';
@@ -233,8 +234,10 @@ class Component {
   set parent(Component? newParent) {
     if (newParent == null) {
       removeFromParent();
+    } else if (_parent == null) {
+      addToParent(newParent);
     } else {
-      changeParent(newParent);
+      newParent.lifecycle._adoption.add(this);
     }
   }
 
@@ -250,7 +253,7 @@ class Component {
   /// `Component.childrenFactory` is the default method for creating children
   /// containers within all components. Replace this method if you want to have
   /// customized (non-default) [ComponentSet] instances in your project.
-  static ComponentSetFactory childrenFactory = ComponentSet.createDefault;
+  static ComponentSetFactory childrenFactory = ComponentSet.new;
 
   /// This method creates the children container for the current component.
   /// Override this method if you need to have a custom [ComponentSet] within
@@ -260,22 +263,19 @@ class Component {
   /// Returns the closest parent further up the hierarchy that satisfies type=T,
   /// or null if no such parent can be found.
   T? findParent<T extends Component>() {
-    return (_parent is T ? _parent : _parent?.findParent<T>()) as T?;
+    return ancestors().whereType<T>().firstOrNull;
   }
 
-  /// Returns the first child that matches the given type [T].
-  ///
-  /// As opposed to `children.whereType<T>().first`, this method returns null
-  /// instead of a [StateError] when no matching children are found.
+  /// Returns the first child that matches the given type [T], or null if there
+  /// are no such children.
   T? firstChild<T extends Component>() {
-    final it = children.whereType<T>().iterator;
-    return it.moveNext() ? it.current : null;
+    return children.whereType<T>().firstOrNull;
   }
 
-  /// Returns the last child that matches the given type [T].
+  /// Returns the last child that matches the given type [T], or null if there
+  /// are no such children.
   T? lastChild<T extends Component>() {
-    final it = children.reversed().whereType<T>().iterator;
-    return it.moveNext() ? it.current : null;
+    return children.reversed().whereType<T>().firstOrNull;
   }
 
   /// An iterator producing this component's parent, then its parent's parent,
@@ -603,7 +603,7 @@ class Component {
   /// Changes the current parent for another parent and prepares the tree under
   /// the new root.
   void changeParent(Component newParent) {
-    newParent.lifecycle._adoption.add(this);
+    parent = newParent;
   }
 
   //#endregion

@@ -2,11 +2,13 @@
 
 On this page you can find documentation for some utility classes and methods.
 
+
 ## Device Class
 
 This class can be accessed from `Flame.device` and it has some methods that can be used to control
 the state of the device, for instance you can change the screen orientation and set whether the
 application should be fullscreen or not.
+
 
 ### `Flame.device.fullScreen()`
 
@@ -14,6 +16,7 @@ When called, this disables all `SystemUiOverlay` making the app full screen.
 When called in the main method, it makes your app full screen (no top nor bottom bars).
 
 **Note:** It has no effect when called on the web.
+
 
 ### `Flame.device.setLandscape()`
 
@@ -24,6 +27,7 @@ orientations. To set the app orientation to landscape on a specific direction, u
 
 **Note:** It has no effect when called on the web.
 
+
 ### `Flame.device.setPortrait()`
 
 This method sets the orientation of the whole application (effectively, also the game) to portrait
@@ -33,6 +37,7 @@ orientations. To set the app orientation to portrait for a specific direction, u
 
 **Note:** It has no effect when called on the web.
 
+
 ### `Flame.device.setOrientation()` and `Flame.device.setOrientations()`
 
 If a finer control of the allowed orientations is required (without having to deal with
@@ -40,6 +45,7 @@ If a finer control of the allowed orientations is required (without having to de
 `setOrientations` (accepts a `List<DeviceOrientation>` for possible orientations) can be used.
 
 **Note:** It has no effect when called on the web.
+
 
 ## Timer
 
@@ -139,12 +145,14 @@ class MyFlameGame extends FlameGame {
 }
 ```
 
+
 ## Extensions
 
 Flame bundles a collection of utility extensions, these extensions are meant to help the developer
 with shortcuts and conversion methods, here you can find the summary of those extensions.
 
 They can all be imported from `package:flame/extensions.dart`
+
 
 ### Canvas
 
@@ -156,6 +164,7 @@ Methods:
   functions to easily manipulate coordinates to render things on the correct places. They change the
   `Canvas` transformation matrix but reset afterwards.
 
+
 ### Color
 
 Methods:
@@ -165,6 +174,7 @@ Methods:
 Factories:
 - `ColorExtension.fromRGBHexString`: Parses an RGB color from a valid hex string (e.g. #1C1C1C).
 - `ColorExtension.fromARGBHexString`: Parses an ARGB color from a valid hex string (e.g. #FF1C1C1C).
+
 
 ### Image
 
@@ -176,6 +186,7 @@ Methods:
  - `darken`: Darken each pixel of the `Image` by an amount between 0 to 1.
  - `brighten`: Brighten each pixel of the `Image` by an amount between 0 to 1.
 
+
 ### Offset
 
 Methods;
@@ -183,6 +194,7 @@ Methods;
  - `toSize`: Creates a `Size` from the `Offset`.
  - `toPoint`: Creates a `Point` from the `Offset`.
  - `toRect`: Creates a `Rect` starting in (0,0) and its bottom right corner is the [Offset].
+
 
 ### Rect
 
@@ -201,10 +213,12 @@ Factories:
  - `RectExtension.getBounds`: Construct a `Rect` that represents the bounds of a list of `Vector2`s.
  - `RectExtension.fromCenter`: Construct a `Rect` from a center point (using `Vector2`).
 
+
 ### math.Rectangle
 
 Methods:
  - `toRect`: Converts this math `Rectangle` into an ui `Rect`.
+
 
 ### Size
 
@@ -213,6 +227,7 @@ Methods:
  - `toOffset`: Creates a `Offset` from the `Size`.
  - `toPoint`: Creates a `Point` from the `Size`.
  - `toRect`: Creates a `Rect` starting in (0,0) with the size of `Size`.
+
 
 ### Vector2
 
@@ -239,6 +254,7 @@ Operators:
  - `&`: Combines two `Vector2`s to form a Rect, the origin should be on the left and the size on the
   right.
  - `%`: Modulo/Remainder of x and y separately of two `Vector2`s.
+
 
 ### Matrix4
 

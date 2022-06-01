@@ -16,6 +16,7 @@ in the
 [Oxygen example](https://github.com/flame-engine/flame/tree/main/packages/flame_oxygen/example)
 and in the `pub.dev` [installation instructions](https://pub.dev/packages/flame_oxygen).
 
+
 ## OxygenGame (Game extension)
 
 If you are going to use Oxygen in your project it can be a good idea to use the Oxygen specific
@@ -34,6 +35,7 @@ A simple `OxygenGame` implementation example can be seen in the
 The `OxygenGame` also comes with it's own `createEntity` method that automatically adds certain
 default components on the entity. This is especially helpful when you are using the 
 [BaseSystem](#basesystem) as your base.
+
 
 ## Systems
 
@@ -57,6 +59,7 @@ to subclass it to your own system. For more information see the
 Systems can be registered to the world using the `world.registerSystem` method on 
 [OxygenGame](#oxygengame-game-extension).
 
+
 ### mixin GameRef
 
 The `GameRef` mixin allows a system to become aware of the `OxygenGame` instance its attached to. This 
@@ -72,6 +75,7 @@ class YourSystem extends System with GameRef<YourGame> {
   // ...
 }
 ```
+
 
 ### mixin RenderSystem
 
@@ -96,6 +100,7 @@ class SimpleRenderSystem extends System with RenderSystem {
 }
 ```
 
+
 ### mixin UpdateSystem
 
 The `MixinSystem` mixin allows a system to be registered for the update loop.
@@ -118,6 +123,7 @@ class SimpleUpdateSystem extends System with UpdateSystem {
   }
 }
 ```
+
 
 ### BaseSystem
 
@@ -153,6 +159,7 @@ class SimpleBaseSystem extends BaseSystem {
 }
 ```
 
+
 ### ParticleSystem
 
 The `ParticleSystem` is a simple system that brings the Particle API from Flame to Oxygen. This
@@ -171,6 +178,7 @@ world.registerComponent<ParticleComponent, Particle>(() => ParticleComponent);
 You can now create a new entity with a `ParticleComponent`. For more info about that see the 
 [ParticleComponent](#particlecomponent) section.
 
+
 ## Components
 
 Components in Oxygen are different than the ones from FCS mainly because instead of containing 
@@ -183,6 +191,7 @@ functionality, they are often accompanied by predefined systems that you can use
 
 Components can be registered to the world using the `world.registerComponent` method on 
 [OxygenGame](#oxygengame-game-extension).
+
 
 ### PositionComponent
 
@@ -205,6 +214,7 @@ world.createEntity()
   ..add<PositionComponent, Vector2>(Vector2(100, 100));
 ```
 
+
 ### SizeComponent
 
 The `SizeComponent` is as its name implies is a component that describe the size of an entity. 
@@ -225,6 +235,7 @@ Creating a sized entity using the World:
 world.createEntity()
   ..add<SizeComponent, Vector2>(Vector2(50, 50));
 ```
+
 
 ### AnchorComponent
 
@@ -251,6 +262,7 @@ world.createEntity()
   ..add<AnchorComponent, Anchor>(Anchor.center);
 ```
 
+
 ### AngleComponent
 
 The `AngleComponent` is as its name implies is a component that describe the angle of an entity. 
@@ -276,6 +288,7 @@ world.createEntity()
   ..add<AngleComponent, double>(1.570796);
 ```
 
+
 ### FlipComponent
 
 The `FlipComponent` can be used to flip your rendering on either the X or Y axis. It is registered 
@@ -300,6 +313,7 @@ Creating an entity that is flipped on it's X axis using the World:
 world.createEntity()
   ..add<FlipComponent, FlipInit>(FlipInit(flipX: true));
 ```
+
 
 ### SpriteComponent
 
@@ -327,6 +341,7 @@ world.createEntity()
     SpriteInit(await game.loadSprite('pizza.png')),
   );
 ```
+
 
 ### TextComponent
 
@@ -361,6 +376,7 @@ world.createEntity()
     ),
   );
 ```
+
 
 ### ParticleComponent
 
