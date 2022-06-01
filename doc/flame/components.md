@@ -42,6 +42,7 @@ A component lifecycle state can be checked by a series of getters:
  - `isMounted`: Returns a bool with the current mounted state
  - `mounted`: Returns a future that will complete once the component has finished mounting
 
+
 ### Priority
 
 In Flame the order components are rendered (and updated) in is called `priority`, this is sometimes
@@ -158,6 +159,7 @@ available eventually: after they are loaded and mounted. We can only assure
 that they will appear in the children list in the same order as they were
 scheduled for addition.
 
+
 ### Ensuring a component has a given parent
 
 When a component requires to be added to a specific parent type the
@@ -177,6 +179,7 @@ class MyComponent extends Component with ParentIsA<MyParentComponent> {
 
 If you try to add `MyComponent` to a parent that is not `MyParentComponent`,
 an assertion error will be thrown.
+
 
 ### Querying child components
 
@@ -325,6 +328,7 @@ Future<void> onLoad() async {
 Remember that most components that are rendered on the screen are `PositionComponent`s, so
 this pattern can be used in for example [](#spritecomponent) and [](#spriteanimationcomponent) too.
 
+
 ### Render PositionComponent
 
 When implementing the `render` method for a component that extends `PositionComponent` remember to
@@ -416,6 +420,7 @@ Example:
 
 ```dart
 await animation.completed;
+
 doSomething();
 
 // or alternatively
@@ -423,11 +428,37 @@ doSomething();
 animation.completed.whenComplete(doSomething);
 ```
 
+Additionally, this component also has the following optional event callbacks:  `onStart`, `onFrame`,
+and `onComplete`. To listen to these events, you can do the following:
+
+```dart
+final animation =
+    SpriteAnimation.spriteList([sprite], stepTime: 1, loop: false)
+      ..onStart = () {
+        // Do something on start.
+      };
+
+final animation =
+    SpriteAnimation.spriteList([sprite], stepTime: 1, loop: false)
+      ..onComplete = () {
+        // Do something on completion.
+      };
+
+final animation =
+    SpriteAnimation.spriteList([sprite], stepTime: 1, loop: false)
+      ..onFrame = (index) {
+        if (index == 1) {
+          // Do something for the second frame.
+        }
+      };
+```
 
 ## SpriteAnimationGroup
 
 `SpriteAnimationGroupComponent` is a simple wrapper around `SpriteAnimationComponent` which enables
-your component to hold several animations and change the current playing animation in runtime.
+your component to hold several animations and change the current playing animation at runtime. Since
+this component is just a wrapper, the event listeners can be implemented as described in
+[](#spriteanimationcomponent).
 
 Its use is very similar to the `SpriteAnimationComponent` but instead of being initialized with a
 single animation, this component receives a Map of a generic type `T` as key and a
@@ -558,7 +589,7 @@ controller.rightHandNode.rotation = math.pi;
 You can also change the current playing animation by using the `updateAnimation` method.
 
 For a working example, check the example in the
-[flame_flare repository](https://github.com/flame-engine/flame_flare/tree/main/example).
+[flame_flare repository](https://github.com/flame-engine/flame/tree/main/packages/flame_flare/example).
 
 
 ## ParallaxComponent
@@ -837,11 +868,6 @@ void main() {
 ```
 
 
-## SpriteBodyComponent
-
-See [SpriteBodyComponent](../flame_forge2d/forge2d.md#spritebodycomponent) in the Forge2D documentation.
-
-
 ## TiledComponent
 
 Currently we have a very basic implementation of a Tiled component. This API uses the lib
@@ -885,8 +911,8 @@ This is an example of how a quarter-length map looks like:
 
 Flame's Example app contains a more in-depth example, featuring how to parse coordinates to make a
 selector. The code can be found
-[here](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/tile_maps/isometric_tile_map.dart),
-and a live version can be seen [here](https://examples.flame-engine.org/#/Tile%20Maps_Isometric%20Tile%20Map).
+[here](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/rendering/isometric_tile_map_example.dart),
+and a live version can be seen [here](https://examples.flame-engine.org/#/Rendering_Isometric%20Tile%20Map).
 
 
 ## NineTileBoxComponent
@@ -903,7 +929,7 @@ Using this, you can get a box/rectangle that expands well to any sizes. This is 
 panels, dialogs, borders.
 
 Check the example app
-[nine_tile_box](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/utils/nine_tile_box.dart)
+[nine_tile_box](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/rendering/nine_tile_box_example.dart)
 for details on how to use it.
 
 
@@ -919,7 +945,7 @@ This can be used for sharing custom rendering logic between your Flame game, and
 widgets.
 
 Check the example app
-[custom_painter_component](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/widgets/custom_painter_component.dart)
+[custom_painter_component](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/widgets/custom_painter_example.dart)
 for details on how to use it.
 
 
@@ -929,4 +955,4 @@ Flame provides a set of effects that can be applied to a certain type of compone
 can be used to animate some properties of your components, like position or dimensions.
 You can check the list of those effects [here](effects.md).
 
-Examples of the running effects can be found [here](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/effects);
+Examples of the running effects can be found [here](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/effects);

@@ -28,7 +28,7 @@ It automatically caches any image loaded by filename, so you can safely call it 
 
 The methods for loading and clearing the cache are: `load`, `loadAll`, `clear` and `clearCache`.
 They return `Future`s for loading the images. These futures must be awaited for before the images
-can be used in any way. If you do not want to await these futures right away, you can initiate 
+can be used in any way. If you do not want to await these futures right away, you can initiate
 multiple `load()` operations and then await for all of them at once using `Images.ready()` method.
 
 To synchronously retrieve a previously cached image, the `fromCache` method can be used. If an image
@@ -42,6 +42,7 @@ You can also use `ImageExtension.fromPixels()` to dynamically create an image du
 For `clear` and `clearCache`, do note that `dispose` is called for each removed image from the
 cache, so make sure that you don't use the image afterwards.
 
+
 ### Standalone usage
 
 It can manually be used by instantiating it:
@@ -53,6 +54,7 @@ Image image = await imagesLoader.load('yourImage.png');
 ```
 
 But Flame also offers two ways of using this class without instantiating it yourself.
+
 
 ### Flame.images
 
@@ -69,6 +71,7 @@ Image image = await Flame.images.load('player.png');
 
 final playerSprite = Sprite(image);
 ```
+
 
 ### Game.images
 
@@ -114,6 +117,7 @@ class MyGame extends Game {
   }
 }
 ```
+
 
 ## Sprite
 
@@ -163,7 +167,8 @@ render call.
 `Sprite`s can also be used as widgets, to do so just use `SpriteWidget` class.
 
 A complete example using sprite as widgets can be found
-[here](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/widget/sprite_widget.dart).
+[here](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/widgets/sprite_widget_example.dart).
+
 
 ## SpriteBatch
 
@@ -178,7 +183,8 @@ You render it with a `Canvas` and an optional `Paint`, `BlendMode` and `CullRect
 A `SpriteBatchComponent` is also available for your convenience.
 
 See the examples
-[here](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/sprites/spritebatch.dart).
+[here](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/sprites/spritebatch_example.dart).
+
 
 ## ImageComposition
 
@@ -204,6 +210,7 @@ Image image = await composition.compose();
 **Note:** Composing images is expensive, we do not recommend you run this every tick as it affect
 the performance badly. Instead we recommend to have your compositions pre-rendered so you can just
 reuse the output image.
+
 
 ## Svg
 
@@ -239,6 +246,7 @@ class MyGame extends FlameGame {
     }
 }
 ```
+
 
 ## Animation
 
@@ -314,11 +322,15 @@ Animations are normally used inside `SpriteAnimationComponent`s, but custom comp
 Animations can be created as well.
 
 A complete example of using animations as widgets can be found
-[here](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/widgets/sprite_animation_widget.dart).
+[here](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/widgets/sprite_animation_widget_example.dart).
+
 
 ## FlareAnimation
 
-Flame provides a simple wrapper of [Flare](https://rive.app/#LearnMore) animations so you can use
+Do note that Flare is discontinued and [Rive](https://github.com/flame-engine/flame/tree/main/packages/flame_rive)
+is preferred.
+
+Flame provides a simple wrapper of [Flare](https://flare.rive.app/) animations so you can use
 them in Flame games.
 
 Check the following snippet on how to use this wrapper:
@@ -362,7 +374,8 @@ FlareAnimations are normally used inside `FlareComponent`s, that way `FlameGame`
 `render` and `update` automatically.
 
 You can see a full example of how to use Flare together with Flame in the example
-[here](https://github.com/flame-engine/flame_flare/tree/main/example).
+[here](https://github.com/flame-engine/flame/tree/main/packages/flame_flare/example).
+
 
 ## SpriteSheet
 
@@ -391,4 +404,4 @@ spritesheet.getSprite(0, 0) // row, column;
 ```
 
 You can see a full example of the `SpriteSheet` class
-[here](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/sprites/spritesheet.dart).
+[here](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/sprites/spritesheet_example.dart).

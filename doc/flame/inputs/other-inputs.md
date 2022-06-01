@@ -7,6 +7,7 @@ For other input documents, see also:
 - [Gesture Input](gesture-input.md): for mouse and touch pointer gestures
 - [Keyboard Input](keyboard-input.md): for keystrokes
 
+
 ## Joystick
 
 Flame provides a component capable of creating a virtual joystick for taking input for your game.
@@ -98,8 +99,13 @@ If you want to create buttons to go with your joystick, check out
 [`HudButtonComponent`](#hudbuttoncomponent).
 
 A full examples of how to use it can be found
-[here](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/input/joystick.dart).
-And it can be seen running [here](https://examples.flame-engine.org/#/Controls_Joystick).
+[here](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/input/joystick_example.dart).
+And it can be seen running [here](https://examples.flame-engine.org/#/Input_Joystick).
+
+There is also a more advanced example
+[here](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/input/joystick_advanced_example.dart)
+which is running [here](https://examples.flame-engine.org/#/Input_Joystick%20Advanced).
+
 
 ## HudButtonComponent
 
@@ -117,10 +123,12 @@ If you want to act upon the button being pressed (which would be the common thin
 you can either pass in callback functions as the `onPressed` and `onReleased` arguments, or you can
 extend the component and override `onTapDown`, `onTapUp` and/or `onTapCancel` and implement your logic there.
 
+
 ## SpriteButtonComponent
 
 A `SpriteButtonComponent` is a button that is defined by two `Sprite`s, one that represents
 when the button is pressed and one that represents when the button is released.
+
 
 ## ButtonComponent
 
@@ -129,6 +137,7 @@ when the button is pressed and one that represents when the button is released. 
 to use sprites for the button, use the [](#spritebuttoncomponent) instead, but this component can be
 good to use if you for example want to have a `SpriteAnimationComponent` as a button, or anything
 else which isn't a pure sprite.
+
 
 ## Gamepad
 
