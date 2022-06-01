@@ -15,6 +15,7 @@ extension SpriteBatchExtension on Game {
     Color defaultColor = const Color(0x00000000),
     BlendMode defaultBlendMode = BlendMode.srcOver,
     RSTransform? defaultTransform,
+    Images? imageCache,
     bool useAtlas = true,
   }) {
     return SpriteBatch.load(
@@ -22,7 +23,7 @@ extension SpriteBatchExtension on Game {
       defaultColor: defaultColor,
       defaultBlendMode: defaultBlendMode,
       defaultTransform: defaultTransform,
-      images: images,
+      images: imageCache ?? images,
       useAtlas: useAtlas,
     );
   }
@@ -95,6 +96,40 @@ class BatchItem {
 /// load method that you are using and each [BatchItem] will be rendered using
 /// the [Canvas.drawImageRect] method instead.
 class SpriteBatch {
+  SpriteBatch(
+    this.atlas, {
+    this.defaultColor = const Color(0x00000000),
+    this.defaultBlendMode = BlendMode.srcOver,
+    this.defaultTransform,
+    this.useAtlas = true,
+    Images? imageCache,
+    String? imageKey,
+  })  : _imageCache = imageCache,
+        _imageKey = imageKey;
+
+  /// Takes a path of an image, and optional arguments for the SpriteBatch.
+  ///
+  /// When the [images] is omitted, the global [Flame.images] is used.
+  static Future<SpriteBatch> load(
+    String path, {
+    Color defaultColor = const Color(0x00000000),
+    BlendMode defaultBlendMode = BlendMode.srcOver,
+    RSTransform? defaultTransform,
+    Images? images,
+    bool useAtlas = true,
+  }) async {
+    final _images = images ?? Flame.images;
+    return SpriteBatch(
+      await _images.load(path),
+      defaultColor: defaultColor,
+      defaultTransform: defaultTransform ?? RSTransform(1, 0, 0, 0),
+      defaultBlendMode: defaultBlendMode,
+      useAtlas: useAtlas,
+      imageCache: _images,
+      imageKey: path,
+    );
+  }
+
   /// List of all the existing batch items.
   final _batchItems = <BatchItem>[];
 
@@ -176,40 +211,6 @@ class SpriteBatch {
   /// Whether to use [Canvas.drawAtlas] or not.
   final bool useAtlas;
 
-  SpriteBatch(
-    this.atlas, {
-    this.defaultColor = const Color(0x00000000),
-    this.defaultBlendMode = BlendMode.srcOver,
-    this.defaultTransform,
-    this.useAtlas = true,
-    Images? imageCache,
-    String? imageKey,
-  })  : _imageCache = imageCache,
-        _imageKey = imageKey;
-
-  /// Takes a path of an image, and optional arguments for the SpriteBatch.
-  ///
-  /// When the [images] is omitted, the global [Flame.images] is used.
-  static Future<SpriteBatch> load(
-    String path, {
-    Color defaultColor = const Color(0x00000000),
-    BlendMode defaultBlendMode = BlendMode.srcOver,
-    RSTransform? defaultTransform,
-    Images? images,
-    bool useAtlas = true,
-  }) async {
-    final _images = images ?? Flame.images;
-    return SpriteBatch(
-      await _images.load(path),
-      defaultColor: defaultColor,
-      defaultTransform: defaultTransform ?? RSTransform(1, 0, 0, 0),
-      defaultBlendMode: defaultBlendMode,
-      useAtlas: useAtlas,
-      imageCache: _images,
-      imageKey: path,
-    );
-  }
-
   Future<void> _makeFlippedAtlas() async {
     _hasFlips = true;
     _atlasReady = false;
@@ -221,9 +222,7 @@ class SpriteBatch {
     _atlasReady = true;
   }
 
-  Future<Image> _generateFlippedAtlas(
-    Image image,
-  ) {
+  Future<Image> _generateFlippedAtlas(Image image) {
     final recorder = PictureRecorder();
     final canvas = Canvas(recorder);
     final _emptyPaint = Paint();
