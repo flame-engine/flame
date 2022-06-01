@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flame/cache.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/src/anchor.dart';
@@ -29,20 +31,26 @@ class SpriteWidget extends StatelessWidget {
   /// A builder function that is called while the loading is on the way
   final WidgetBuilder? loadingBuilder;
 
-  final Future<Sprite> Function() _spriteFuture;
+  final FutureOr<Sprite> _spriteFuture;
 
-  SpriteWidget({
+  const SpriteWidget({
     required Sprite sprite,
     this.anchor = Anchor.topLeft,
     this.angle = 0,
     this.srcPosition,
     this.srcSize,
-    this.errorBuilder,
-    this.loadingBuilder,
     Key? key,
-  })  : _spriteFuture = (() => Future.value(sprite)),
+  })  : _spriteFuture = sprite,
+        errorBuilder = null,
+        loadingBuilder = null,
         super(key: key);
 
+  /// Load the image from the asset [path] and renders it as a widget.
+  ///
+  /// It will use the [loadingBuilder] while the image from [path] is loading.
+  /// To render without loading, or when you want to have a gapless playback
+  /// when the [path] value changes, consider loading the image beforehand
+  /// and direct pass it to the default constructor.
   SpriteWidget.asset({
     required String path,
     Images? images,
@@ -53,20 +61,20 @@ class SpriteWidget extends StatelessWidget {
     this.errorBuilder,
     this.loadingBuilder,
     Key? key,
-  })  : _spriteFuture = (() => Sprite.load(
-              path,
-              srcSize: srcSize,
-              srcPosition: srcPosition,
-              images: images,
-            )),
+  })  : _spriteFuture = Sprite.load(
+          path,
+          srcSize: srcSize,
+          srcPosition: srcPosition,
+          images: images,
+        ),
         super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return BaseFutureBuilder<Sprite>(
-      futureBuilder: _spriteFuture,
+      future: _spriteFuture,
       builder: (_, sprite) {
-        return _SpriteWidget(
+        return InternalSpriteWidget(
           sprite: sprite,
           anchor: anchor,
           angle: angle,
@@ -79,7 +87,8 @@ class SpriteWidget extends StatelessWidget {
 }
 
 /// A [StatefulWidget] that renders a still [Sprite].
-class _SpriteWidget extends StatelessWidget {
+@visibleForTesting
+class InternalSpriteWidget extends StatelessWidget {
   /// The [Sprite] to be rendered
   final Sprite sprite;
 
@@ -89,11 +98,12 @@ class _SpriteWidget extends StatelessWidget {
   /// The angle to rotate this [sprite], in rad. (default = 0)
   final double angle;
 
-  const _SpriteWidget({
+  const InternalSpriteWidget({
     required this.sprite,
     this.anchor = Anchor.topLeft,
     this.angle = 0,
-  });
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(_) {

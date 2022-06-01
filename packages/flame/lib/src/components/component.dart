@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:collection';
 
+import 'package:collection/collection.dart';
 import 'package:flame/src/cache/value_cache.dart';
 import 'package:flame/src/components/component_set.dart';
 import 'package:flame/src/components/mixins/coordinate_transform.dart';
@@ -262,22 +263,19 @@ class Component {
   /// Returns the closest parent further up the hierarchy that satisfies type=T,
   /// or null if no such parent can be found.
   T? findParent<T extends Component>() {
-    return (_parent is T ? _parent : _parent?.findParent<T>()) as T?;
+    return ancestors().whereType<T>().firstOrNull;
   }
 
-  /// Returns the first child that matches the given type [T].
-  ///
-  /// As opposed to `children.whereType<T>().first`, this method returns null
-  /// instead of a [StateError] when no matching children are found.
+  /// Returns the first child that matches the given type [T], or null if there
+  /// are no such children.
   T? firstChild<T extends Component>() {
-    final it = children.whereType<T>().iterator;
-    return it.moveNext() ? it.current : null;
+    return children.whereType<T>().firstOrNull;
   }
 
-  /// Returns the last child that matches the given type [T].
+  /// Returns the last child that matches the given type [T], or null if there
+  /// are no such children.
   T? lastChild<T extends Component>() {
-    final it = children.reversed().whereType<T>().iterator;
-    return it.moveNext() ? it.current : null;
+    return children.reversed().whereType<T>().firstOrNull;
   }
 
   /// An iterator producing this component's parent, then its parent's parent,
