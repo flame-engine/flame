@@ -1,4 +1,1 @@
-
-class TextParser {
-
-}
+class TextParser {}

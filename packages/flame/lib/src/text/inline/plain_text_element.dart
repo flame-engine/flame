@@ -1,5 +1,3 @@
-
-
 import 'package:flame/src/text/inline/text_element.dart';
 import 'package:flame/src/text/line_metrics.dart';
 import 'package:flame/src/text/text_line.dart';
@@ -8,7 +6,7 @@ import 'package:flutter/rendering.dart';
 class PlainTextElement extends TextElement implements TextLine {
   PlainTextElement(this._textPainter)
       : _ascent = _textPainter
-      .computeDistanceToActualBaseline(TextBaseline.alphabetic);
+            .computeDistanceToActualBaseline(TextBaseline.alphabetic);
 
   final TextPainter _textPainter;
   final double _ascent;

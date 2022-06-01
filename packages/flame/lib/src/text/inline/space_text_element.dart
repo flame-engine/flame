@@ -16,12 +16,12 @@ class SpaceTextElement extends TextElement implements TextLine {
     required double height,
     required double baseline,
   }) : metrics = LineMetrics(
-    left: 0,
-    right: width,
-    top: -baseline,
-    bottom: height - baseline,
-    baseline: 0,
-  );
+          left: 0,
+          right: width,
+          top: -baseline,
+          bottom: height - baseline,
+          baseline: 0,
+        );
 
   @override
   final LineMetrics metrics;
