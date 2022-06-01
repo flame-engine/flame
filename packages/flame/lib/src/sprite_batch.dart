@@ -1,5 +1,4 @@
 import 'dart:collection';
-import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:flame/game.dart';
@@ -183,9 +182,10 @@ class SpriteBatch {
     this.defaultBlendMode = BlendMode.srcOver,
     this.defaultTransform,
     this.useAtlas = true,
-    this.imageCache,
-    this.imageKey,
-  });
+    Images? imageCache,
+    String? imageKey,
+  })  : _imageCache = imageCache,
+        _imageKey = imageKey;
 
   /// Takes a path of an image, and optional arguments for the SpriteBatch.
   ///
@@ -223,7 +223,7 @@ class SpriteBatch {
 
   Future<Image> _generateFlippedAtlas(
     Image image,
-  ) async {
+  ) {
     final recorder = PictureRecorder();
     final canvas = Canvas(recorder);
     final _emptyPaint = Paint();
@@ -259,7 +259,7 @@ class SpriteBatch {
     RSTransform? transform,
     bool flip = false,
     Color? color,
-  }) async {
+  }) {
     final batchItem = BatchItem(
       source: source,
       transform: transform ??= defaultTransform ?? RSTransform(1, 0, 0, 0),
@@ -363,7 +363,17 @@ class SpriteBatch {
   }) {
     paint ??= _emptyPaint;
 
-    if (!useAtlas || !_atlasReady) {
+    if (useAtlas && _atlasReady) {
+      canvas.drawAtlas(
+        atlas,
+        _transforms,
+        _sources,
+        _colors,
+        blendMode ?? defaultBlendMode,
+        cullRect,
+        paint,
+      );
+    } else {
       for (final batchItem in _batchItems) {
         paint.blendMode = blendMode ?? paint.blendMode;
 
@@ -379,16 +389,6 @@ class SpriteBatch {
           )
           ..restore();
       }
-    } else {
-      canvas.drawAtlas(
-        atlas,
-        _transforms,
-        _sources,
-        _colors,
-        blendMode ?? defaultBlendMode,
-        cullRect,
-        paint,
-      );
     }
   }
 }

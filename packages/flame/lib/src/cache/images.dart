@@ -46,7 +46,7 @@ class Images {
   }
 
   /// Returns the image [name] from the cache. If no image with [name] exists
-  /// uses [ImageGenerator] to generate and then add the resulting image into
+  /// uses [imageGenerator] to generate and then add the resulting image into
   /// the cache.
   /// The cache will assume the ownership of the resulting image, and will
   /// properly dispose of it at the end.
@@ -141,7 +141,7 @@ class Images {
 
   String? findKeyForImage(Image image) {
     return _assets.keys.firstWhere(
-      (k) => image.isCloneOf(_assets[k]!.image),
+      (k) => _assets[k]?.image?.isCloneOf(image) ?? false,
     );
   }
 
