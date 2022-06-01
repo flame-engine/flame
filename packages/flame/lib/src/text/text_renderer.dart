@@ -4,7 +4,6 @@ import 'package:flame/src/anchor.dart';
 import 'package:flame/src/components/text_box_component.dart';
 import 'package:flame/src/components/text_component.dart';
 import 'package:flame/src/text/inline/text_element.dart';
-import 'package:flame/src/text/line_metrics.dart';
 import 'package:flame/src/text/text_paint.dart';
 import 'package:vector_math/vector_math_64.dart';
 

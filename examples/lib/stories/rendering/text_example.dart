@@ -27,7 +27,7 @@ class TextExample extends FlameGame {
           'is an utterly insignificant little blue-green planet whose '
           'ape-descended life forms are so amazingly primitive that they still '
           'think digital watches are a pretty neat idea.',
-        ) ..width=500,
+        )..width = 500,
       )..position = Vector2(30, 70),
     );
 

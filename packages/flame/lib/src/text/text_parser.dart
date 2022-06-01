@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:ui' hide TextStyle;
 
 import 'package:flame/src/text/block/group_text_block.dart';
 import 'package:flame/src/text/block/plain_text_block.dart';
