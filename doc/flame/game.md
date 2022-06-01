@@ -3,7 +3,7 @@
 `FlameGame` is the most most commonly used `Game` class in Flame.
 
 The `FlameGame` class implements a `Component` based `Game`. Basically it has a tree of `Component`s
-and passes the `update` and `render` calls to all `Component`s that have been added to the game.
+and calls the `update` and `render` methods of all `Component`s that have been added to the game.
 
 We refer to this component based system as the Flame Component System, FCS for short.
 
