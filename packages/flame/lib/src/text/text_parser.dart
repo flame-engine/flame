@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 
 import 'package:flame/src/text/block/group_text_block.dart';
@@ -14,13 +13,20 @@ class TextParser {
     final lines = const LineSplitter().convert(text);
     var i0 = -1;
     for (var i = 0; i < lines.length; i++) {
-      final isEmpty = lines[i].isEmpty;
-      if (isEmpty) {
+      final thisLineIsEmpty = lines[i].isEmpty;
+      if (thisLineIsEmpty) {
         if (i0 >= 0) {
-           blocks.add(_parseParagraph(lines.getRange(i0, i).join(' ')));
-           i0 = -1;
+          blocks.add(_parseParagraph(lines.getRange(i0, i).join(' ')));
+          i0 = -1;
+        }
+      } else {
+        if (i0 == -1) {
+          i0 = i;
         }
       }
+    }
+    if (i0 >= 0) {
+      blocks.add(_parseParagraph(lines.getRange(i0, lines.length).join(' ')));
     }
     return GroupTextBlock(blocks);
   }
