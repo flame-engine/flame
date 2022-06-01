@@ -8,7 +8,6 @@ import 'package:flame/src/game/mixins/game.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
-
 typedef GameLoadingWidgetBuilder = Widget Function(
   BuildContext,
 );
@@ -23,7 +22,7 @@ typedef OverlayWidgetBuilder<T extends Game> = Widget Function(
   T game,
 );
 
-typedef GameCreate<T extends Game> = T Function();
+typedef GameFactory<T extends Game> = T Function();
 
 /// A [StatefulWidget] that is in charge of attaching a [Game] instance into the
 /// Flutter tree.
@@ -31,8 +30,8 @@ class GameWidget<T extends Game> extends StatefulWidget {
   /// The game instance in which this widget will render.
   final T? game;
 
-  /// A function that can create a [Game] that this widget will render.
-  final GameCreate<T>? create;
+  /// A function that creates a [Game] that this widget will render.
+  final GameFactory<T>? gameFactory;
 
   /// The text direction to be used in text elements in a game.
   final TextDirection? textDirection;
@@ -124,7 +123,7 @@ class GameWidget<T extends Game> extends StatefulWidget {
     this.focusNode,
     this.autofocus = true,
     MouseCursor? mouseCursor,
-  })  : create = null,
+  })  : gameFactory = null,
         super(key: key) {
     if (mouseCursor != null) {
       game!.mouseCursor = mouseCursor;
@@ -146,14 +145,14 @@ class GameWidget<T extends Game> extends StatefulWidget {
   /// ...
   /// Widget build(BuildContext  context) {
   ///   return GameWidget.controlled(
-  ///     create: MyGameClass.new,
+  ///     gameFactory: MyGameClass.new,
   ///   )
   /// }
   /// ...
   /// ```
   const GameWidget.controlled({
     Key? key,
-    required GameCreate<T> this.create,
+    required GameFactory<T> this.gameFactory,
     this.textDirection,
     this.loadingBuilder,
     this.errorBuilder,
@@ -230,7 +229,7 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
 
   void initCurrentGame() {
     final widgetGame = widget.game;
-    currentGame = widgetGame ?? widget.create!.call();
+    currentGame = widgetGame ?? widget.gameFactory!.call();
     currentGame.addGameStateListener(_onGameStateChange);
     _loaderFuture = null;
   }

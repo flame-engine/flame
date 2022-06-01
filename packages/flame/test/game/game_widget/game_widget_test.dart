@@ -140,7 +140,7 @@ void main() {
       await tester.pumpWidget(
         GameWidget.controlled(
           key: key,
-          create: () => game2 = FlameGame(),
+          gameFactory: () => game2 = FlameGame(),
         ),
       );
       await tester.pump();
@@ -164,7 +164,7 @@ void main() {
       await tester.pumpWidget(
         GameWidget.controlled(
           key: key,
-          create: () => game1 = FlameGame(),
+          gameFactory: () => game1 = FlameGame(),
         ),
       );
 
@@ -194,7 +194,7 @@ void main() {
       await tester.pumpWidget(
         GameWidget.controlled(
           key: key,
-          create: () => game1 = FlameGame(),
+          gameFactory: () => game1 = FlameGame(),
         ),
       );
 
@@ -205,7 +205,7 @@ void main() {
       await tester.pumpWidget(
         GameWidget.controlled(
           key: key,
-          create: () => game2 = FlameGame(),
+          gameFactory: () => game2 = FlameGame(),
         ),
       );
       await tester.pump();
