@@ -6,4 +6,6 @@ import 'package:meta/meta.dart';
 @internal
 abstract class TextLine {
   LineMetrics get metrics;
+
+  void translate(double dx, double dy);
 }

@@ -85,4 +85,9 @@ class _InlineTextGroupLine implements TextLine {
   final List<TextLine> _children = [];
 
   void addChild(TextLine line) => _children.add(line);
+
+  @override
+  void translate(double dx, double dy) {
+    _children.forEach((line) => line.translate(dx, dy));
+  }
 }

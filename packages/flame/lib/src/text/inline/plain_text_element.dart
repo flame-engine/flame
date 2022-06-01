@@ -50,6 +50,12 @@ class PlainTextElement extends TextElement implements TextLine {
   }
 
   @override
+  void translate(double dx, double dy) {
+    _x0 = _x0! + dx;
+    _y0 = _y0! + dy;
+  }
+
+  @override
   void render(Canvas canvas) {
     assert(isLaidOut);
     _textPainter.paint(canvas, Offset(_x0!, _y0!));

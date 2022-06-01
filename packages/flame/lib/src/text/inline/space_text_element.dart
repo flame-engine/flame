@@ -49,6 +49,15 @@ class SpaceTextElement extends TextElement implements TextLine {
   }
 
   @override
+  void translate(double dx, double dy) {
+    metrics.left += dx;
+    metrics.right += dx;
+    metrics.top += dx;
+    metrics.bottom += dx;
+    metrics.baseline += dx;
+  }
+
+  @override
   void render(Canvas canvas) {}
 
   @override
