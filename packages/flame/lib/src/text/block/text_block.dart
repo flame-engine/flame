@@ -22,6 +22,8 @@ abstract class TextBlock {
     }
   }
 
+  void translate(double dx, double dy);
+
   @mustCallSuper
   void render(Canvas canvas) {
     if (borderRadius == 0) {

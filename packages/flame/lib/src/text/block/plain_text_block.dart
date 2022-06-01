@@ -64,6 +64,12 @@ class PlainTextBlock extends TextBlock {
   }
 
   @override
+  void translate(double dx, double dy) {
+    assert(_text.isLaidOut);
+    _text.lines.forEach((line) => line.translate(dx, dy));
+  }
+
+  @override
   void render(Canvas canvas) {
     super.render(canvas);
     _text.render(canvas);
