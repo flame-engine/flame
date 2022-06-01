@@ -29,12 +29,24 @@ class PlainTextBlock extends TextBlock {
     final rightEdge = (padding?.right ?? 0) + (border?.right ?? 0);
     final bottomEdge = (padding?.bottom ?? 0) + (border?.bottom ?? 0);
 
-    final bounds = LineMetrics(baseline: 0, left: leftEdge, right: rightEdge);
+    final bounds = LineMetrics(
+      baseline: 0,
+      left: leftEdge,
+      right: width - rightEdge,
+    );
+    print(bounds);
     var result = LayoutResult.unfinished;
     while (result == LayoutResult.unfinished) {
-      result = _text.layOutNextLine(bounds);
+      result = _text.layOutNextLine(
+        LineMetrics(
+          baseline: 0,
+          left: leftEdge,
+          right: width - rightEdge,
+        ),
+      );
     }
     final lines = _text.lines;
+    assert(_text.isLaidOut);
 
     // Vertical+horizontal alignment
     final textHeight = lines.map((line) => line.metrics.height).sum +

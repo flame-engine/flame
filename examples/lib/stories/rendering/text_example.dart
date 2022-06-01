@@ -1,6 +1,7 @@
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/palette.dart';
+import 'package:flame/text.dart';
 import 'package:flutter/material.dart';
 
 class TextExample extends FlameGame {
@@ -15,6 +16,19 @@ class TextExample extends FlameGame {
         ..anchor = Anchor.topCenter
         ..x = size.x / 2
         ..y = 32.0,
+    );
+    add(
+      RichTextComponent(
+        TextParser().parse(
+          'Far out in the uncharted backwaters of the unfashionable end of '
+          'the Western Spiral arm of the **Galaxy** lies a small unregarded '
+          'yellow sun.\n\n'
+          'Orbiting this at a distance of roughly ninety-eight million miles '
+          'is an utterly insignificant little blue-green planet whose '
+          'ape-descended life forms are so amazingly primitive that they still '
+          'think digital watches are a pretty neat idea.',
+        ) ..width=500,
+      )..position = Vector2(30, 70),
     );
 
     add(

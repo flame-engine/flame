@@ -18,4 +18,9 @@ class LineMetrics {
 
   double get width => right - left;
   double get height => bottom - top;
+
+  @override
+  String toString() => 'LineMetrics('
+      'left: $left, top: $top, right: $right, bottom: $bottom, '
+      'baseline: $baseline)';
 }

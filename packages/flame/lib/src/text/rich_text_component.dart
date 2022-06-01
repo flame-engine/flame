@@ -1,4 +1,3 @@
-
 import 'dart:ui';
 
 import 'package:flame/src/components/position_component.dart';

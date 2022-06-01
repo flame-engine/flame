@@ -9,6 +9,7 @@ class GroupTextBlock extends TextBlock {
 
   @override
   void layout() {
+    print('GroupTextBlock.layout() width=$width');
     var totalHeight = 0.0;
     for (final child in _children) {
       child.width = width;
