@@ -7,7 +7,18 @@ It can directly receive a `Game` instance in its default constructor or it can r
 `GameFactory` function on the `controlled` constructor that will be used to create the game once the
 `GameWidget` is inserted in the widget tree.
 
-Example:
+## Examples
+
+Directly in `runApp`:
+
+```dart
+void main() {
+  final game = MyGame();
+  runApp(GameWidget(game: game));
+}
+```
+
+In a `StatefulWidget`:
 
 ```dart
 class MyGamePage extends StatefulWidget {
@@ -17,6 +28,7 @@ class MyGamePage extends StatefulWidget {
 
 class _MyGamePageState extends State<MyGamePage> {
   late final MyGame _game;
+  
   @override
   void initState() {
     super.initState();
@@ -30,7 +42,7 @@ class _MyGamePageState extends State<MyGamePage> {
 }
 ```
 
-or
+In a `StatelessWidget` with the `gameFactory` argument:
 
 ```dart
 class MyGamePage extends StatelessWidget {
