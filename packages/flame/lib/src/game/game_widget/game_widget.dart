@@ -140,11 +140,12 @@ class GameWidget<T extends Game> extends StatefulWidget {
   /// renders that game in the Flutter widget tree.
   ///
   /// Unlike the default constructor [GameWidget.new], this creates a
-  /// [GameWidget] that controls the creation of the game instance,
-  /// removing the necessity of rendering this widget inside of a
-  /// [StatefulWidget].
+  /// [GameWidget] that controls the creation of the game instance.
+  /// This removes the necessity of creating the game class outside of the
+  /// widget or to wrap the [GameWidget] inside of a [StatefulWidget], to keep
+  /// the state of the game.
   ///
-  /// Ex:
+  /// Example:
   /// ```
   /// ...
   /// Widget build(BuildContext  context) {
