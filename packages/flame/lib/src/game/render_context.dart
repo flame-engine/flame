@@ -7,7 +7,6 @@ import 'package:vector_math/vector_math_64.dart';
 ///
 /// This class keeps track of all canvas transformations applied thus far,
 /// allowing downstream components to query this information.
-@experimental
 class RenderContext {
   Canvas get canvas => _canvas!;
   Canvas? _canvas;
