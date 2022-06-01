@@ -48,7 +48,7 @@ In a `StatelessWidget` with the `gameFactory` argument:
 class MyGamePage extends StatelessWidget {
   @override
   void build(BuildContext context) {
-    return GameWidget(gameFactory: MyGame.new);
+    return GameWidget.controlled(gameFactory: MyGame.new);
   }
 }
 ```
