@@ -9,12 +9,20 @@ It can directly receive a `Game` instance in its default constructor or it can r
 
 ## Examples
 
-Directly in `runApp`:
+Directly in `runApp`, with either:
 
 ```dart
 void main() {
   final game = MyGame();
   runApp(GameWidget(game: game));
+}
+```
+
+Or:
+
+```dart
+void main() {
+  runApp(GameWidget.controlled(gameFactory: MyGame.new));
 }
 ```
 
