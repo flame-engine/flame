@@ -21,12 +21,15 @@ class PlainTextBlock extends TextBlock {
   final TextAlign _horizontalAlignment;
   final TextAlign _verticalAlignment;
   final double _lineSpacing;
-  double width = 0;
-  double height = 0;
 
   @override
   void layout() {
-    final bounds = LineMetrics(baseline: 0, left: 0, right: width);
+    final topEdge = (padding?.top ?? 0) + (border?.top ?? 0);
+    final leftEdge = (padding?.left ?? 0) + (border?.left ?? 0);
+    final rightEdge = (padding?.right ?? 0) + (border?.right ?? 0);
+    final bottomEdge = (padding?.bottom ?? 0) + (border?.bottom ?? 0);
+
+    final bounds = LineMetrics(baseline: 0, left: leftEdge, right: rightEdge);
     var result = LayoutResult.unfinished;
     while (result == LayoutResult.unfinished) {
       result = _text.layOutNextLine(bounds);
@@ -37,10 +40,10 @@ class PlainTextBlock extends TextBlock {
     final textHeight = lines.map((line) => line.metrics.height).sum +
         (lines.length - 1) * _lineSpacing;
     if (height == 0) {
-      height = textHeight;
+      height = textHeight + topEdge + bottomEdge;
     }
-    final extraHeight = height - textHeight;
-    var y0 = _verticalAlignment == TextAlign.end ? extraHeight : 0;
+    final extraHeight = height - textHeight - topEdge - bottomEdge;
+    var y0 = topEdge + (_verticalAlignment == TextAlign.end ? extraHeight : 0);
     final lineDistance = _lineSpacing +
         (_verticalAlignment == TextAlign.justify && lines.length > 1
             ? extraHeight / (lines.length - 1)
@@ -57,10 +60,12 @@ class PlainTextBlock extends TextBlock {
       line.translate(dx, dy);
       y0 += lineMetrics.height + lineDistance;
     }
+    super.layout();
   }
 
   @override
   void render(Canvas canvas) {
+    super.render(canvas);
     _text.render(canvas);
   }
 }
