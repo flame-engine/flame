@@ -228,14 +228,10 @@ class SpriteBatch {
     final _emptyPaint = Paint();
     canvas.drawImage(image, Offset.zero, _emptyPaint);
     canvas.scale(-1, 1);
-    canvas.drawImage(
-      image,
-      Offset(-image.width.toDouble(), image.height.toDouble()),
-      _emptyPaint,
-    );
+    canvas.drawImage(image, Offset(-image.width * 2, 0), _emptyPaint);
 
     final picture = recorder.endRecording();
-    return picture.toImageSafe(image.width, image.height * 2);
+    return picture.toImageSafe(image.width * 2, image.height);
   }
 
   /// Add a new batch item using a RSTransform.
@@ -277,7 +273,7 @@ class SpriteBatch {
       flip
           ? Rect.fromLTWH(
               atlas.width - source.right,
-              source.top + source.height,
+              source.top,
               source.width,
               source.height,
             )
