@@ -143,7 +143,7 @@ void main() {
         ..onStartCallback = () {
           nStarted++;
         }
-        ..onFinishCallback = () {
+        ..onComplete = () {
           nFinished++;
         };
 

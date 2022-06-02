@@ -13,7 +13,10 @@ import 'package:flame/src/game/transform2d.dart';
 /// but in the future it will be extended to work with any [Transform2D]-based
 /// classes.
 abstract class Transform2DEffect extends ComponentEffect<PositionComponent> {
-  Transform2DEffect(EffectController controller) : super(controller);
+  Transform2DEffect(
+    EffectController controller, {
+    void Function()? onComplete,
+  }) : super(controller, onComplete: onComplete);
 
   late Transform2D transform;
 
