@@ -14,9 +14,9 @@ class AnchorToEffect extends AnchorEffect {
     Anchor destination,
     EffectController controller, {
     AnchorProvider? target,
-    Function()? onFinishCallback,
+    Function()? onComplete,
   })  : _destination = destination,
-        super(controller, target, onFinishCallback: onFinishCallback);
+        super(controller, target, onComplete: onComplete);
 
   final Anchor _destination;
   late Vector2 _offset;

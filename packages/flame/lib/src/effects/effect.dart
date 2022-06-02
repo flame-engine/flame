@@ -25,7 +25,7 @@ import 'package:meta/meta.dart';
 /// changes in the effect's target; and also the `reset()` method if they have
 /// non-trivial internal state.
 abstract class Effect extends Component {
-  Effect(this.controller, {this.onFinishCallback})
+  Effect(this.controller, {this.onComplete})
       : removeOnFinish = true,
         _paused = false,
         _started = false,
@@ -45,7 +45,7 @@ abstract class Effect extends Component {
   bool removeOnFinish;
 
   /// Optional callback function to be invoked once the effect completes.
-  void Function()? onFinishCallback;
+  void Function()? onComplete;
 
   /// Boolean indicators of the effect's state, their purpose is to ensure that
   /// the `onStart()` and `onFinish()` callbacks are called exactly once.
@@ -185,7 +185,7 @@ abstract class Effect extends Component {
   /// the effect has finished again.
   @mustCallSuper
   void onFinish() {
-    onFinishCallback?.call();
+    onComplete?.call();
   }
 
   /// Apply the given [progress] level to the effect's target.

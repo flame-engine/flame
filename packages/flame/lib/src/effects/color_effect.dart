@@ -21,9 +21,9 @@ class ColorEffect extends ComponentEffect<HasPaint> {
     Offset offset,
     EffectController controller, {
     this.paintId,
-    Function()? onFinishCallback,
+    Function()? onComplete,
   })  : _tween = Tween(begin: offset.dx, end: offset.dy),
-        super(controller, onFinishCallback: onFinishCallback);
+        super(controller, onComplete: onComplete);
 
   @override
   Future<void> onMount() async {

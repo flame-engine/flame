@@ -20,8 +20,8 @@ abstract class MoveEffect extends Effect
   MoveEffect(
     EffectController controller,
     PositionProvider? target, {
-    Function()? onFinishCallback,
-  }) : super(controller, onFinishCallback: onFinishCallback) {
+    Function()? onComplete,
+  }) : super(controller, onComplete: onComplete) {
     this.target = target;
   }
 
@@ -29,25 +29,25 @@ abstract class MoveEffect extends Effect
     Vector2 offset,
     EffectController controller, {
     PositionProvider? target,
-    Function()? onFinishCallback,
+    Function()? onComplete,
   }) =>
       MoveByEffect(
         offset,
         controller,
         target: target,
-        onFinishCallback: onFinishCallback,
+        onComplete: onComplete,
       );
 
   factory MoveEffect.to(
     Vector2 destination,
     EffectController controller, {
     PositionProvider? target,
-    Function()? onFinishCallback,
+    Function()? onComplete,
   }) =>
       MoveToEffect(
         destination,
         controller,
         target: target,
-        onFinishCallback: onFinishCallback,
+        onComplete: onComplete,
       );
 }

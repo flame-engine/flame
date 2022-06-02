@@ -9,8 +9,8 @@ import 'package:flame/src/effects/effect.dart';
 abstract class ComponentEffect<T extends Component> extends Effect {
   ComponentEffect(
     EffectController controller, {
-    Function()? onFinishCallback,
-  }) : super(controller, onFinishCallback: onFinishCallback);
+    Function()? onComplete,
+  }) : super(controller, onComplete: onComplete);
 
   late T target;
 

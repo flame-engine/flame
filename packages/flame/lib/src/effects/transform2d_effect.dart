@@ -15,8 +15,8 @@ import 'package:flame/src/game/transform2d.dart';
 abstract class Transform2DEffect extends ComponentEffect<PositionComponent> {
   Transform2DEffect(
     EffectController controller, {
-    Function()? onFinishCallback,
-  }) : super(controller, onFinishCallback: onFinishCallback);
+    Function()? onComplete,
+  }) : super(controller, onComplete: onComplete);
 
   late Transform2D transform;
 

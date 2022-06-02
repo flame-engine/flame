@@ -24,22 +24,22 @@ class RotateEffect extends Effect
   RotateEffect.by(
     double angle,
     EffectController controller, {
-    Function()? onFinishCallback,
+    Function()? onComplete,
   })  : _angle = angle,
         super(
           controller,
-          onFinishCallback: onFinishCallback,
+          onComplete: onComplete,
         );
 
   factory RotateEffect.to(
     double angle,
     EffectController controller, {
-    Function()? onFinishCallback,
+    Function()? onComplete,
   }) {
     return _RotateToEffect(
       angle,
       controller,
-      onFinishCallback: onFinishCallback,
+      onComplete: onComplete,
     );
   }
 
@@ -61,9 +61,9 @@ class _RotateToEffect extends RotateEffect {
   _RotateToEffect(
     double angle,
     EffectController controller, {
-    Function()? onFinishCallback,
+    Function()? onComplete,
   })  : _destinationAngle = angle,
-        super.by(0, controller, onFinishCallback: onFinishCallback);
+        super.by(0, controller, onComplete: onComplete);
 
   final double _destinationAngle;
 

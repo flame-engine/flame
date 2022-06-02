@@ -21,8 +21,8 @@ abstract class AnchorEffect extends Effect
   AnchorEffect(
     EffectController controller,
     AnchorProvider? target, {
-    Function()? onFinishCallback,
-  }) : super(controller, onFinishCallback: onFinishCallback) {
+    Function()? onComplete,
+  }) : super(controller, onComplete: onComplete) {
     this.target = target;
   }
 
@@ -30,25 +30,25 @@ abstract class AnchorEffect extends Effect
     Vector2 offset,
     EffectController controller, {
     AnchorProvider? target,
-    Function()? onFinishCallback,
+    Function()? onComplete,
   }) =>
       AnchorByEffect(
         offset,
         controller,
         target: target,
-        onFinishCallback: onFinishCallback,
+        onComplete: onComplete,
       );
 
   factory AnchorEffect.to(
     Anchor destination,
     EffectController controller, {
     AnchorProvider? target,
-    Function()? onFinishCallback,
+    Function()? onComplete,
   }) =>
       AnchorToEffect(
         destination,
         controller,
         target: target,
-        onFinishCallback: onFinishCallback,
+        onComplete: onComplete,
       );
 }

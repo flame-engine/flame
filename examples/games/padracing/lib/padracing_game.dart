@@ -97,7 +97,7 @@ class PadRacingGame extends Forge2DGame with KeyboardEvents {
         ScaleEffect.to(
           Vector2.all(playZoom),
           EffectController(duration: 1.0),
-        )..onFinishCallback = () => start(numberOfPlayers: numberOfPlayers),
+        )..onComplete = () => start(numberOfPlayers: numberOfPlayers),
       )
       ..add(
         MoveEffect.to(
