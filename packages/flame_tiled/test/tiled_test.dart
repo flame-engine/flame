@@ -207,7 +207,6 @@ void main() {
       for (var i = 69 * 8 * 4; i < ((64 * 23) + (8 * 7)) * 4; i += 64 * 4) {
         rightTilePixels.addAll(canvasPixelData.getRange(i, i + (16 * 4)));
       }
-      print(rightTilePixels);
 
       for (var i = 0; i < rightTilePixels.length; i += 4) {
         allGreen &= rightTilePixels[i] == 0 &&
