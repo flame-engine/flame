@@ -22,8 +22,9 @@ class MoveByEffect extends MoveEffect {
     Vector2 offset,
     EffectController controller, {
     PositionProvider? target,
+    void Function()? onComplete,
   })  : _offset = offset.clone(),
-        super(controller, target);
+        super(controller, target, onComplete: onComplete);
 
   final Vector2 _offset;
 
