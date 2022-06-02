@@ -125,8 +125,8 @@ void main() {
     });
   });
 
-  group('Flipped and rotated tiles render correctly with sprite batch', () {
-    late Uint8List canvasPixelData;
+  group('Flipped and rotated tiles render correctly with sprite batch:', () {
+    late Uint8List canvasPixelData, canvasPixelDataAtlas;
     late RenderableTiledMap overlapMap;
     setUp(() async {
       Flame.bundle = TestAssetBundle(
@@ -147,9 +147,48 @@ void main() {
       final image = await picture.toImageSafe(64, 48);
       final bytes = await image.toByteData();
       canvasPixelData = bytes!.buffer.asUint8List();
+
+      await Flame.images.ready();
+      final canvasRecorderAtlas = PictureRecorder();
+      final canvasAtlas = Canvas(canvasRecorderAtlas);
+      overlapMap.render(canvasAtlas);
+      final pictureAtlas = canvasRecorderAtlas.endRecording();
+
+      final imageAtlas = await pictureAtlas.toImageSafe(64, 48);
+      final bytesAtlas = await imageAtlas.toByteData();
+      canvasPixelDataAtlas = bytesAtlas!.buffer.asUint8List();
     });
 
-    test('Green tile pixels are in correct spots', () {
+    test('[useAtlas = true] Green tile pixels are in correct spots', () {
+      final leftTilePixels = <int>[];
+      for (var i = 65 * 8 * 4; i < ((64 * 23) + (8 * 3)) * 4; i += 64 * 4) {
+        leftTilePixels.addAll(canvasPixelDataAtlas.getRange(i, i + (16 * 4)));
+      }
+
+      var allGreen = true;
+      for (var i = 0; i < leftTilePixels.length; i += 4) {
+        allGreen &= leftTilePixels[i] == 0 &&
+            leftTilePixels[i + 1] == 255 &&
+            leftTilePixels[i + 2] == 0 &&
+            leftTilePixels[i + 3] == 255;
+      }
+      expect(allGreen, true);
+
+      final rightTilePixels = <int>[];
+      for (var i = 69 * 8 * 4; i < ((64 * 23) + (8 * 7)) * 4; i += 64 * 4) {
+        rightTilePixels.addAll(canvasPixelDataAtlas.getRange(i, i + (16 * 4)));
+      }
+
+      for (var i = 0; i < rightTilePixels.length; i += 4) {
+        allGreen &= rightTilePixels[i] == 0 &&
+            rightTilePixels[i + 1] == 255 &&
+            rightTilePixels[i + 2] == 0 &&
+            rightTilePixels[i + 3] == 255;
+      }
+      expect(allGreen, true);
+    });
+
+    test('[useAtlas = false] Green tile pixels are in correct spots', () {
       final leftTilePixels = <int>[];
       for (var i = 65 * 8 * 4; i < ((64 * 23) + (8 * 3)) * 4; i += 64 * 4) {
         leftTilePixels.addAll(canvasPixelData.getRange(i, i + (16 * 4)));
