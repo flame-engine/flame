@@ -19,14 +19,14 @@ class ScaleEffect extends Effect with EffectTarget<ScaleProvider> {
   ScaleEffect.by(
     Vector2 scaleFactor,
     EffectController controller, {
-    Function()? onComplete,
+    void Function()? onComplete,
   })  : _scaleFactor = scaleFactor.clone(),
         super(controller, onComplete: onComplete);
 
   factory ScaleEffect.to(
     Vector2 targetScale,
     EffectController controller, {
-    Function()? onComplete,
+    void Function()? onComplete,
   }) =>
       _ScaleToEffect(
         targetScale,
@@ -59,7 +59,7 @@ class _ScaleToEffect extends ScaleEffect {
   _ScaleToEffect(
     Vector2 targetScale,
     EffectController controller, {
-    Function()? onComplete,
+    void Function()? onComplete,
   })  : _targetScale = targetScale.clone(),
         super.by(
           Vector2.zero(),

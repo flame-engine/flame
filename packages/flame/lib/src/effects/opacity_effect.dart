@@ -18,7 +18,7 @@ class OpacityEffect extends ComponentEffect<HasPaint> {
     double offset,
     EffectController controller, {
     this.paintId,
-    Function()? onComplete,
+    void Function()? onComplete,
   })  : _alphaOffset = (255 * offset).round(),
         super(controller, onComplete: onComplete);
 
@@ -27,7 +27,7 @@ class OpacityEffect extends ComponentEffect<HasPaint> {
     double targetOpacity,
     EffectController controller, {
     String? paintId,
-    Function()? onComplete,
+    void Function()? onComplete,
   }) {
     return _OpacityToEffect(
       targetOpacity,
@@ -40,7 +40,7 @@ class OpacityEffect extends ComponentEffect<HasPaint> {
   factory OpacityEffect.fadeIn(
     EffectController controller, {
     String? paintId,
-    Function()? onComplete,
+    void Function()? onComplete,
   }) {
     return _OpacityToEffect(
       1.0,
@@ -53,7 +53,7 @@ class OpacityEffect extends ComponentEffect<HasPaint> {
   factory OpacityEffect.fadeOut(
     EffectController controller, {
     String? paintId,
-    Function()? onComplete,
+    void Function()? onComplete,
   }) {
     return _OpacityToEffect(
       0.0,
@@ -98,7 +98,7 @@ class _OpacityToEffect extends OpacityEffect {
     this._targetOpacity,
     EffectController controller, {
     String? paintId,
-    Function()? onComplete,
+    void Function()? onComplete,
   }) : super.by(
           0.0,
           controller,

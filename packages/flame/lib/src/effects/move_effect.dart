@@ -20,7 +20,7 @@ abstract class MoveEffect extends Effect
   MoveEffect(
     EffectController controller,
     PositionProvider? target, {
-    Function()? onComplete,
+    void Function()? onComplete,
   }) : super(controller, onComplete: onComplete) {
     this.target = target;
   }
@@ -29,7 +29,7 @@ abstract class MoveEffect extends Effect
     Vector2 offset,
     EffectController controller, {
     PositionProvider? target,
-    Function()? onComplete,
+    void Function()? onComplete,
   }) =>
       MoveByEffect(
         offset,
@@ -42,7 +42,7 @@ abstract class MoveEffect extends Effect
     Vector2 destination,
     EffectController controller, {
     PositionProvider? target,
-    Function()? onComplete,
+    void Function()? onComplete,
   }) =>
       MoveToEffect(
         destination,

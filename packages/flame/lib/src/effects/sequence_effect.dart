@@ -32,7 +32,7 @@ class SequenceEffect extends Effect {
     bool alternate = false,
     bool infinite = false,
     int repeatCount = 1,
-    Function()? onComplete,
+    void Function()? onComplete,
   }) {
     assert(effects.isNotEmpty, 'The list of effects cannot be empty');
     assert(
@@ -51,7 +51,7 @@ class SequenceEffect extends Effect {
 
   SequenceEffect._(
     EffectController ec, {
-    Function()? onComplete,
+    void Function()? onComplete,
   }) : super(ec, onComplete: onComplete);
 
   @override

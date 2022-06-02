@@ -30,7 +30,7 @@ class MoveAlongPathEffect extends MoveEffect {
     bool absolute = false,
     bool oriented = false,
     PositionProvider? target,
-    Function()? onComplete,
+    void Function()? onComplete,
   })  : _isAbsolute = absolute,
         _followDirection = oriented,
         super(

@@ -6,7 +6,7 @@ import 'package:flame/src/effects/effect.dart';
 class RemoveEffect extends Effect {
   RemoveEffect({
     double delay = 0.0,
-    Function()? onComplete,
+    void Function()? onComplete,
   }) : super(
           LinearEffectController(delay),
           onComplete: onComplete,
