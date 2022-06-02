@@ -269,31 +269,29 @@ abstract class Game {
 
   /// Pauses or resume the engine
   set paused(bool value) {
-    if (pauseEngineFn != null && resumeEngineFn != null) {
+    _paused = value;
+
+    final gameLoop = _gameRenderBox?.gameLoop;
+    if (gameLoop != null) {
       if (value) {
-        pauseEngine();
+        gameLoop.stop();
       } else {
-        resumeEngine();
+        gameLoop.start();
       }
-    } else {
-      _paused = value;
     }
   }
 
   /// Pauses the engine game loop execution.
   void pauseEngine() {
     _paused = true;
-    pauseEngineFn?.call();
+    _gameRenderBox?.gameLoop?.stop();
   }
 
   /// Resumes the engine game loop execution.
   void resumeEngine() {
     _paused = false;
-    resumeEngineFn?.call();
+    _gameRenderBox?.gameLoop?.start();
   }
-
-  VoidCallback? pauseEngineFn;
-  VoidCallback? resumeEngineFn;
 
   /// A property that stores an [OverlayManager]
   ///
