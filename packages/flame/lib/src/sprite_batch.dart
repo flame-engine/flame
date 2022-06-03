@@ -263,7 +263,6 @@ class SpriteBatch {
     );
 
     if (flip && useAtlas && !_hasFlips) {
-      _hasFlips = true;
       _makeFlippedAtlas();
     }
 
@@ -272,7 +271,7 @@ class SpriteBatch {
     _sources.add(
       flip
           ? Rect.fromLTWH(
-              atlas.width - source.right,
+              (atlas.width * (!_atlasReady ? 2 : 1)) - source.right,
               source.top,
               source.width,
               source.height,
