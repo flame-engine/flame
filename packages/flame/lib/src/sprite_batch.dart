@@ -30,11 +30,6 @@ extension SpriteBatchExtension on Game {
   }
 }
 
-/// This is the scale value used in [BatchItem.matrix], we can't determine this
-/// from the [BatchItem.transform], but we also don't need to do so because it
-/// is already calculated inside the transform values.
-const _defaultScale = 0.0;
-
 /// A single item in a SpriteBatch.
 ///
 /// Holds all the important information of a batch item,
@@ -47,7 +42,7 @@ class BatchItem {
   })  : matrix = Matrix4(
           transform.scos, transform.ssin, 0, 0, //
           -transform.ssin, transform.scos, 0, 0, //
-          0, 0, _defaultScale, 0, //
+          0, 0, 0, 0, //
           transform.tx, transform.ty, 0, 1, //
         )
           ..translate(source.width / 2, source.height / 2)
