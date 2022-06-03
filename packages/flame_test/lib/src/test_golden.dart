@@ -31,25 +31,26 @@ void testGolden(
   FlameGame? game,
   bool skip = false,
 }) {
-  if (skip) {
-    return;
-  }
-  testWidgets(testName, (tester) async {
-    final gameInstance = game ?? FlameGame();
+  testWidgets(
+    testName,
+    (tester) async {
+      final gameInstance = game ?? FlameGame();
 
-    await tester.runAsync(() async {
-      await tester.pumpWidget(GameWidget(game: gameInstance));
-      await tester.pump();
-      await testBody(gameInstance);
-      await gameInstance.ready();
-      await tester.pump();
-    });
+      await tester.runAsync(() async {
+        await tester.pumpWidget(GameWidget(game: gameInstance));
+        await tester.pump();
+        await testBody(gameInstance);
+        await gameInstance.ready();
+        await tester.pump();
+      });
 
-    await expectLater(
-      find.byWidgetPredicate((widget) => widget is GameWidget),
-      matchesGoldenFile(goldenFile),
-    );
-  });
+      await expectLater(
+        find.byWidgetPredicate((widget) => widget is GameWidget),
+        matchesGoldenFile(goldenFile),
+      );
+    },
+    skip: skip,
+  );
 }
 
 typedef PrepareGameFunction = Future<void> Function(FlameGame game);
