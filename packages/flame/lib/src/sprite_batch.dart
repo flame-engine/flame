@@ -1,5 +1,6 @@
 import 'dart:collection';
 import 'dart:ui';
+import "dart:math" show pi;
 
 import 'package:flame/game.dart';
 import 'package:flame/src/cache/images.dart';
@@ -70,11 +71,14 @@ class BatchItem {
     this.flip = false,
     required this.color,
   })  : matrix = Matrix4(
-          transform.scos * (flip ? -1 : 1), transform.ssin, 0, 0, //
+          transform.scos, transform.ssin, 0, 0, //
           -transform.ssin, transform.scos, 0, 0, //
           0, 0, _defaultScale, 0, //
           transform.tx, transform.ty, 0, 1, //
-        ),
+        )
+          ..translate(source.width / 2, source.height / 2)
+          ..rotateY(flip ? pi : 0)
+          ..translate(-source.width / 2, -source.height / 2),
         paint = Paint()..color = color,
         destination = Offset.zero & source.size;
 }
