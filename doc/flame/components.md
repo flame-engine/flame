@@ -4,6 +4,7 @@
 
 This diagram might look intimidating, but don't worry, it is not as complex as it looks.
 
+
 ## Component
 
 All components inherit from the abstract class `Component` and all components can have other
@@ -26,7 +27,8 @@ void main() {
 The `Component()` here could of course be any subclass of `Component`.
 
 Every `Component` has a few methods that you can optionally implement, which are used by the
-`FlameGame` class.
+`FlameGame` class. 
+
 
 ### Component lifecycle
 
@@ -52,10 +54,11 @@ on the rest of the game engine).
 
 A component lifecycle state can be checked by a series of getters:
 
-- `isLoaded`: Returns a bool with the current loaded state
-- `loaded`: Returns a future that will complete once the component has finished loading
-- `isMounted`: Returns a bool with the current mounted state
-- `mounted`: Returns a future that will complete once the component has finished mounting
+ - `isLoaded`: Returns a bool with the current loaded state
+ - `loaded`: Returns a future that will complete once the component has finished loading
+ - `isMounted`: Returns a bool with the current mounted state
+ - `mounted`: Returns a future that will complete once the component has finished mounting
+
 
 ### Priority
 
@@ -102,6 +105,7 @@ class MyComponent extends PositionComponent with Tappable {
 In the example above we first initialize the component with priority 1, and then when the user taps
 the component we change the priority to 2.
 
+
 ### Composability of components
 
 Sometimes it is useful to wrap other components inside of your component. For example by grouping
@@ -145,7 +149,6 @@ children during the course of the game.
 
 The second method is to use the `children:` parameter in the component's
 constructor. This approach more closely resembles the standard Flutter API:
-
 ```dart
 class MyGame extends FlameGame {
   @override
@@ -173,6 +176,7 @@ available eventually: after they are loaded and mounted. We can only assure
 that they will appear in the children list in the same order as they were
 scheduled for addition.
 
+
 ### Ensuring a component has a given parent
 
 When a component requires to be added to a specific parent type the
@@ -192,6 +196,7 @@ class MyComponent extends Component with ParentIsA<MyParentComponent> {
 
 If you try to add `MyComponent` to a parent that is not `MyParentComponent`,
 an assertion error will be thrown.
+
 
 ### Querying child components
 
@@ -223,6 +228,7 @@ void update(double dt) {
 }
 ```
 
+
 ### Querying components at a specific point on the screen
 
 The method `componentsAtPoint()` allows you to check which components were rendered at some point
@@ -239,7 +245,6 @@ implementation. However, if you're defining a custom class that derives from `Co
 to implement the `containsLocalPoint()` method yourself.
 
 Here is an example of how `componentsAtPoint()` can be used:
-
 ```dart
 void onDragUpdate(DragUpdateInfo info) {
   game.componentsAtPoint(info.widget).forEach((component) {
@@ -250,18 +255,18 @@ void onDragUpdate(DragUpdateInfo info) {
 }
 ```
 
-### PositionType
 
+### PositionType
 If you want to create a HUD (Head-up display) or another component that isn't positioned in relation
 to the game coordinates, you can change the `PositionType` of the component.
 The default `PositionType` is `positionType = PositionType.game` and that can be changed to
 either `PositionType.viewport` or `PositionType.widget` depending on how you want to position
 the component.
 
-- `PositionType.game` (Default) - Respects camera and viewport.
-- `PositionType.viewport` - Respects viewport only (ignores camera).
-- `PositionType.widget` - Position in relation to the coordinate system of the Flutter game
-  widget (i.e. the raw canvas).
+ - `PositionType.game` (Default) - Respects camera and viewport.
+ - `PositionType.viewport` - Respects viewport only (ignores camera).
+ - `PositionType.widget` - Position in relation to the coordinate system of the Flutter game
+   widget (i.e. the raw canvas).
 
 Most of your components will probably be positioned according to `PositionType.game`, since you
 want them to respect the `Camera` and the `Viewport`. But quite often you want for example buttons
@@ -274,6 +279,7 @@ the viewport.
 Do note that this setting is only respected if the component is added directly to the root
 `FlameGame` and not as a child component of another component.
 
+
 ## PositionComponent
 
 This class represent a positioned object on the screen, being a floating rectangle or a rotating
@@ -282,15 +288,18 @@ sprite. It can also represent a group of positioned components if children are a
 The base of the `PositionComponent` is that it has a `position`, `size`, `scale`, `angle` and
 `anchor` which transforms how the component is rendered.
 
+
 ### Position
 
 The `position` is just a `Vector2` which represents the position of the component's anchor in
 relation to its parent; if the parent is a `FlameGame`, it is in relation to the viewport.
 
+
 ### Size
 
 The `size` of the component when the zoom level of the camera is 1.0 (no zoom, default).
-The `size` is _not_ in relation to the parent of the component.
+The `size` is *not* in relation to the parent of the component.
+
 
 ### Scale
 
@@ -298,10 +307,12 @@ The `scale` is how much the component and its children should be scaled. Since i
 by a `Vector2`, you can scale in a uniform way by changing `x` and `y` with the same amount, or in a
 non-uniform way, by change `x` or `y` by different amounts.
 
+
 ### Angle
 
 The `angle` is the rotation angle around the anchor, represented as a double in radians. It is
 relative to the parent's angle.
+
 
 ### Anchor
 
@@ -310,6 +321,7 @@ default is `Anchor.topLeft`). So if you have the anchor set as `Anchor.center` t
 position on the screen will be in the center of the component and if an `angle` is applied, it is
 rotated around the anchor, so in this case around the center of the component. You can think of it
 as the point within the component by which Flame "grabs" it.
+
 
 ### PositionComponent children
 
@@ -333,6 +345,7 @@ Future<void> onLoad() async {
 Remember that most components that are rendered on the screen are `PositionComponent`s, so
 this pattern can be used in for example [](#spritecomponent) and [](#spriteanimationcomponent) too.
 
+
 ### Render PositionComponent
 
 When implementing the `render` method for a component that extends `PositionComponent` remember to
@@ -351,6 +364,7 @@ In the event that you want to change the direction of your components rendering,
 
 In case you want to flip a component around its center without having to change the anchor to
 `Anchor.center`, you can use `flipHorizontallyAroundCenter()` and `flipVerticallyAroundCenter()`.
+
 
 ## SpriteComponent
 
@@ -376,6 +390,7 @@ class MyGame extends FlameGame {
   }
 }
 ```
+
 
 ## SpriteAnimationComponent
 
@@ -430,7 +445,7 @@ doSomething();
 animation.completed.whenComplete(doSomething);
 ```
 
-Additionally, this component also has the following optional event callbacks: `onStart`, `onFrame`,
+Additionally, this component also has the following optional event callbacks:  `onStart`, `onFrame`,
 and `onComplete`. To listen to these events, you can do the following:
 
 ```dart
@@ -489,6 +504,7 @@ final robot = SpriteAnimationGroupComponent<RobotState>(
 robot.current = RobotState.running;
 ```
 
+
 ## SpriteGroup
 
 `SpriteGroupComponent` is pretty similar to its animation counterpart, but especially for sprites.
@@ -515,6 +531,7 @@ class ButtonComponent extends SpriteGroupComponent<ButtonState>
 }
 ```
 
+
 ## SvgComponent
 
 **Note**: To use SVG with Flame, use the [`flame_svg`](https://github.com/flame-engine/flame_svg)
@@ -531,6 +548,7 @@ final android = SvgComponent.fromSvg(
   size: Vector2.all(100),
 );
 ```
+
 
 ## FlareActorComponent
 
@@ -590,6 +608,7 @@ You can also change the current playing animation by using the `updateAnimation`
 For a working example, check the example in the
 [flame_flare repository](https://github.com/flame-engine/flame/tree/main/packages/flame_flare/example).
 
+
 ## ParallaxComponent
 
 This `Component` can be used to render backgrounds with a depth feeling by drawing several
@@ -617,7 +636,7 @@ Future<void> onLoad() async {
 A ParallaxComponent can also "load itself" by implementing the `onLoad` method:
 
 ```dart
-class MyParallaxComponent extends ParallaxComponent<MyGame> {
+class MyParallaxComponent extends ParallaxComponent with HasGameRef<MyGame> {
   @override
   Future<void> onLoad() async {
     parallax = await gameRef.loadParallax([
@@ -667,7 +686,6 @@ behavior, for example if you are not making a side-scrolling game, you can set t
 you then pass in to the `ParallaxComponent`'s constructor.
 
 Advanced example:
-
 ```dart
 final images = [
   loadParallaxImage('stars.jpg', repeat: ImageRepeat.repeat, alignment: Alignment.center, fill: LayerFill.width),
@@ -683,12 +701,12 @@ final parallaxComponent = ParallaxComponent.fromParallax(
 );
 ```
 
-- The stars image in this example will be repeatedly drawn in both axis, align in the center and be
-  scaled to fill the screen width.
-- The planets image will be repeated in Y-axis, aligned to the bottom left of the screen and not be
-  scaled.
-- The dust image will be repeated in X-axis, aligned to the top right and scaled to fill the screen
-  height.
+ - The stars image in this example will be repeatedly drawn in both axis, align in the center and be
+ scaled to fill the screen width.
+ - The planets image will be repeated in Y-axis, aligned to the bottom left of the screen and not be
+ scaled.
+ - The dust image will be repeated in X-axis, aligned to the top right and scaled to fill the screen
+ height.
 
 Once you are done setting up your `ParallaxComponent`, add it to the game like with any other
 component (`game.add(parallaxComponent`).
@@ -710,6 +728,7 @@ It is also possible to create custom renderers by extending the `ParallaxRendere
 Three example implementations can be found in the
 [examples directory](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/parallax).
 
+
 ## ShapeComponents
 
 A `ShapeComponent` is the base class for representing a scalable geometrical shape. The shapes have
@@ -720,6 +739,7 @@ These shapes are meant as a tool for using geometrical shapes in a more general 
 with the collision detection system, where you want to use the
 [ShapeHitbox](collision_detection.md#shapehitbox)es.
 
+
 ### PolygonComponent
 
 A `PolygonComponent` is created by giving it a list of points in the constructor, called vertices.
@@ -727,7 +747,6 @@ This list will be transformed into a polygon with a size, which can still be sca
 
 For example, this would create a square going from (50, 50) to (100, 100), with it's center in
 (75, 75):
-
 ```dart
 void main() {
   PolygonComponent([
@@ -770,6 +789,7 @@ arrows.
 
 Remember to define the lists in a counter clockwise manner (if you think in the screen coordinate
 system where the y-axis is flipped, otherwise it is clockwise).
+
 
 ### RectangleComponent
 
@@ -837,6 +857,7 @@ void main() {
 }
 ```
 
+
 ### CircleComponent
 
 If you know how long your circle's position and/or how long the radius is going to be from the start
@@ -863,6 +884,7 @@ void main() {
 }
 ```
 
+
 ## TiledComponent
 
 Currently we have a very basic implementation of a Tiled component. This API uses the lib
@@ -871,6 +893,7 @@ layers.
 
 An example of how to use the API can be found
 [here](https://github.com/flame-engine/flame_tiled/tree/main/example).
+
 
 ## IsometricTileMapComponent
 
@@ -908,6 +931,7 @@ selector. The code can be found
 [here](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/rendering/isometric_tile_map_example.dart),
 and a live version can be seen [here](https://examples.flame-engine.org/#/Rendering_Isometric%20Tile%20Map).
 
+
 ## NineTileBoxComponent
 
 A Nine Tile Box is a rectangle drawn using a grid sprite.
@@ -925,6 +949,7 @@ Check the example app
 [nine_tile_box](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/rendering/nine_tile_box_example.dart)
 for details on how to use it.
 
+
 ## CustomPainterComponent
 
 A `CustomPainter` is a Flutter class used with the `CustomPaint` widget to render custom
@@ -939,6 +964,7 @@ widgets.
 Check the example app
 [custom_painter_component](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/widgets/custom_painter_example.dart)
 for details on how to use it.
+
 
 ## Effects
 
