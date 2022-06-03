@@ -7,14 +7,30 @@ This diagram might look intimidating, but don't worry, it is not as complex as i
 
 ## Component
 
-All components inherit from the abstract class `Component`.
+All components inherit from the abstract class `Component` and all components can have other
+`Component`s as children. This is the base of what we call the Flame Component System, or FCS for
+short.
 
-If you want to skip reading about abstract classes you can jump directly to
-[](#positioncomponent).
+Children can be added either with the `add(Component c)` method or directly in the constructor.
+
+Example:
+
+```dart
+void main() {
+  final component1 = Component(children: [Component(), Component()]);
+  final component2 = Component();
+  component2.add(Component());
+  component2.addAll([Component(), Component()]);
+}
+```
+
+The `Component()` here could of course be any subclass of `Component`.
 
 Every `Component` has a few methods that you can optionally implement, which are used by the
-`FlameGame` class. If you are not using `FlameGame`, you can use these methods on your own game loop
-if you wish.
+`FlameGame` class. 
+
+
+### Component lifecycle
 
 ![Component Lifecycle Diagram](../images/component_lifecycle.png)
 
@@ -37,6 +53,7 @@ If the parent is not mounted yet, then this method will wait in a queue (this wi
 on the rest of the game engine).
 
 A component lifecycle state can be checked by a series of getters:
+
  - `isLoaded`: Returns a bool with the current loaded state
  - `loaded`: Returns a future that will complete once the component has finished loading
  - `isMounted`: Returns a bool with the current mounted state
@@ -420,6 +437,7 @@ Example:
 
 ```dart
 await animation.completed;
+
 doSomething();
 
 // or alternatively
@@ -427,11 +445,37 @@ doSomething();
 animation.completed.whenComplete(doSomething);
 ```
 
+Additionally, this component also has the following optional event callbacks:  `onStart`, `onFrame`,
+and `onComplete`. To listen to these events, you can do the following:
+
+```dart
+final animation =
+    SpriteAnimation.spriteList([sprite], stepTime: 1, loop: false)
+      ..onStart = () {
+        // Do something on start.
+      };
+
+final animation =
+    SpriteAnimation.spriteList([sprite], stepTime: 1, loop: false)
+      ..onComplete = () {
+        // Do something on completion.
+      };
+
+final animation =
+    SpriteAnimation.spriteList([sprite], stepTime: 1, loop: false)
+      ..onFrame = (index) {
+        if (index == 1) {
+          // Do something for the second frame.
+        }
+      };
+```
 
 ## SpriteAnimationGroup
 
 `SpriteAnimationGroupComponent` is a simple wrapper around `SpriteAnimationComponent` which enables
-your component to hold several animations and change the current playing animation in runtime.
+your component to hold several animations and change the current playing animation at runtime. Since
+this component is just a wrapper, the event listeners can be implemented as described in
+[](#spriteanimationcomponent).
 
 Its use is very similar to the `SpriteAnimationComponent` but instead of being initialized with a
 single animation, this component receives a Map of a generic type `T` as key and a
@@ -592,7 +636,7 @@ Future<void> onLoad() async {
 A ParallaxComponent can also "load itself" by implementing the `onLoad` method:
 
 ```dart
-class MyParallaxComponent extends ParallaxComponent with HasGameRef<MyGame> {
+class MyParallaxComponent extends ParallaxComponent<MyGame> {
   @override
   Future<void> onLoad() async {
     parallax = await gameRef.loadParallax([
