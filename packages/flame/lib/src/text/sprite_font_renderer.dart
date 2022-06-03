@@ -12,8 +12,8 @@ import 'package:vector_math/vector_math_64.dart';
 /// A to Z. Mapping these sprites into a [SpriteFontRenderer] allows then to
 /// write text using these sprite images as the font.
 ///
-/// Currently, this class supports monospace fonts only -- the width and the
-/// height of all characters must be the same ([charWidth] and [charHeight]).
+/// Currently, this class supports monospace fonts only -- the widths and the
+/// heights of all characters must be the same.
 /// Extra space between letters can be added via the [letterSpacing] parameter
 /// (it can also be negative to "squish" characters together). Finally, the
 /// [scale] parameter allows scaling the font to be bigger/smaller relative to
@@ -23,26 +23,49 @@ import 'package:vector_math/vector_math_64.dart';
 /// canvas. Its default value will draw the character images as-is. Changing
 /// the opacity of the paint's color will make the text semi-transparent.
 class SpriteFontRenderer extends TextRenderer {
-  SpriteFontRenderer(this._data, {this.letterSpacing = 0});
+  SpriteFontRenderer({
+    required this.source,
+    required double charWidth,
+    required double charHeight,
+    required Map<String, GlyphData> glyphs,
+    this.scale = 1,
+    this.letterSpacing = 0,
+  })  : scaledCharWidth = charWidth * scale,
+        scaledCharHeight = charHeight * scale,
+        _glyphs = glyphs.map((char, rect) {
+          assert(
+            char.length == 1,
+            'A glyph must have a single character: "$char"',
+          );
+          final info = _GlyphInfo();
+          info.srcLeft = rect.left;
+          info.srcTop = rect.top;
+          info.srcRight = rect.right ?? rect.left + charWidth;
+          info.srcBottom = rect.bottom ?? rect.top + charHeight;
+          info.rstSCos = scale;
+          info.rstTy = (charHeight - (info.srcBottom - info.srcTop)) * scale;
+          info.width = charWidth * scale;
+          info.height = charHeight * scale;
+          return MapEntry(char.codeUnitAt(0), info);
+        });
 
-  final SpriteFontData _data;
+  final Image source;
+  final Map<int, _GlyphInfo> _glyphs;
   final double letterSpacing;
-
-  Image get source => _data.source;
-  double get charWidth => _data.charWidth;
-  double get charHeight => _data.charHeight;
-  double get scale => _data.scale;
+  final double scale;
+  final double scaledCharWidth;
+  final double scaledCharHeight;
   bool get isMonospace => true;
 
   Paint paint = Paint()..color = const Color(0xFFFFFFFF);
 
   @override
-  double measureTextHeight(String text) => charHeight * scale;
+  double measureTextHeight(String text) => scaledCharHeight;
 
   @override
   double measureTextWidth(String text) {
     final n = text.length;
-    return n > 0 ? charWidth * scale * n + letterSpacing * (n - 1) : 0;
+    return n > 0 ? scaledCharWidth * n + letterSpacing * (n - 1) : 0;
   }
 
   @override
@@ -82,7 +105,7 @@ class SpriteFontRenderer extends TextRenderer {
   }
 
   _GlyphInfo _getGlyphFromCodeUnit(int i) {
-    final glyph = _data._glyphs[i];
+    final glyph = _glyphs[i];
     if (glyph == null) {
       throw ArgumentError('No glyph for character "${String.fromCharCode(i)}"');
     }
@@ -90,45 +113,24 @@ class SpriteFontRenderer extends TextRenderer {
   }
 }
 
-/// Helper class for creating [SpriteFontRenderer] instances.
-class SpriteFontData {
-  SpriteFontData({
-    required this.source,
-    required this.charWidth,
-    required this.charHeight,
-    this.scale = 1,
+class GlyphData {
+  const GlyphData({
+    required this.left,
+    required this.top,
+    this.right,
+    this.bottom,
   });
 
-  final Image source;
-  final double charWidth;
-  final double charHeight;
-  final double scale;
+  const GlyphData.fromLTWH(this.left, this.top, double width, double height)
+      : right = left + width,
+        bottom = top + height;
 
-  final Map<int, _GlyphInfo> _glyphs = {};
+  const GlyphData.fromLTRB(this.left, this.top, this.right, this.bottom);
 
-  void addGlyph({
-    required String char,
-    required num srcLeft,
-    required num srcTop,
-    double? srcRight,
-    double? srcBottom,
-  }) {
-    assert(char.length == 1, 'A glyph must have a single character: "$char"');
-    final codePoint = char.codeUnitAt(0);
-    assert(
-      !_glyphs.containsKey(codePoint),
-      'A glyph for "$char" has already been added',
-    );
-    final info = _GlyphInfo();
-    info.srcLeft = srcLeft.toDouble();
-    info.srcTop = srcTop.toDouble();
-    info.srcRight = srcRight ?? srcLeft + charWidth;
-    info.srcBottom = srcBottom ?? srcTop + charHeight;
-    info.rstSCos = scale;
-    info.width = charWidth * scale;
-    info.rstTy = (charHeight - (info.srcBottom - srcTop)) * scale;
-    _glyphs[codePoint] = info;
-  }
+  final double left;
+  final double top;
+  final double? right;
+  final double? bottom;
 }
 
 class _GlyphInfo {
@@ -141,4 +143,5 @@ class _GlyphInfo {
   double rstTx = 0;
   double rstTy = 0;
   double width = 0;
+  double height = 0;
 }

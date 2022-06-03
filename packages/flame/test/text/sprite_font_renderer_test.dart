@@ -13,8 +13,8 @@ void main() {
     test('creating SpriteFontRenderer', () async {
       final renderer = await createRenderer();
       expect(renderer.source, isA<Image>());
-      expect(renderer.charWidth, 6);
-      expect(renderer.charHeight, 6);
+      expect(renderer.scaledCharWidth, 6);
+      expect(renderer.scaledCharHeight, 6);
       expect(renderer.letterSpacing, 0);
       expect(renderer.isMonospace, true);
 
@@ -51,22 +51,17 @@ void main() {
       },
       goldenFile: '../_goldens/sprite_font_renderer_1.png',
     );
-  });
 
-  group('SpriteFontBuilder', () {
     test('errors', () async {
-      final builder = SpriteFontData(
-        source: await loadImage('alphabet.png'),
-        charWidth: 6,
-        charHeight: 6,
-      );
-      builder.addGlyph(char: 'a', srcLeft: 0, srcTop: 0);
+      const rect = GlyphData.fromLTWH(0, 0, 6, 6);
+      final image = await loadImage('alphabet.png');
       expect(
-        () => builder.addGlyph(char: 'a', srcLeft: 0, srcTop: 0),
-        failsAssert('A glyph for "a" has already been added'),
-      );
-      expect(
-        () => builder.addGlyph(char: '🔥', srcLeft: 0, srcTop: 0),
+        () => SpriteFontRenderer(
+          source: image,
+          charWidth: 6,
+          charHeight: 6,
+          glyphs: {'🔥': rect},
+        ),
         failsAssert('A glyph must have a single character: "🔥"'),
       );
     });
@@ -96,26 +91,22 @@ Future<SpriteFontRenderer> createRenderer({
   double scale = 1,
   double letterSpacing = 0,
 }) async {
-  final fontData = SpriteFontData(
-    source: await loadImage('alphabet.png'),
-    charWidth: 6,
-    charHeight: 6,
-    scale: scale,
-  );
   const lines = [
     'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
     'abcdefghijklmnopqrstuvwxyz',
     '0123456789.,:;—_!?@\$%+-=/*',
     '#^&()[]{}<>|\\\'"`~←→↑↓ ',
   ];
-  for (var j = 0; j < lines.length; j++) {
-    for (var i = 0; i < lines[j].length; i++) {
-      fontData.addGlyph(
-        char: lines[j][i],
-        srcLeft: i * 6,
-        srcTop: 1 + j * 6,
-      );
-    }
-  }
-  return SpriteFontRenderer(fontData, letterSpacing: letterSpacing);
+  return SpriteFontRenderer(
+    source: await loadImage('alphabet.png'),
+    charHeight: 6,
+    charWidth: 6,
+    scale: scale,
+    glyphs: {
+      for (var j = 0; j < lines.length; j++)
+        for (var i = 0; i < lines[j].length; i++)
+          lines[j][i]: GlyphData(left: i * 6, top: 1 + j * 6)
+    },
+    letterSpacing: letterSpacing,
+  );
 }
