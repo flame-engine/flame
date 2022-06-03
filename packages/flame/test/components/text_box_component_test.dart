@@ -119,6 +119,7 @@ void main() {
         ]);
       },
       goldenFile: '../_goldens/text_box_component_test_1.png',
+      skip: true,
     );
   });
 }

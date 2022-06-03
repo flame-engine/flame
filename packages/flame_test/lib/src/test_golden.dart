@@ -29,7 +29,11 @@ void testGolden(
   PrepareGameFunction testBody, {
   required String goldenFile,
   FlameGame? game,
+  bool skip = false,
 }) {
+  if (skip) {
+    return;
+  }
   testWidgets(testName, (tester) async {
     final gameInstance = game ?? FlameGame();
 
