@@ -5,6 +5,7 @@
     :hidden:
     
     File structure       <structure.md>
+    GameWidget           <game_widget.md>
     Game loop            <game.md>
     Components           <components.md>
     Platforms            <platforms.md>
