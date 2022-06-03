@@ -61,7 +61,7 @@ mixin Tappable on Component {
     super.onMount();
     final game = findGame()!;
     assert(
-      game is HasTappables || game is HasLegacyTappables,
+      game is HasTappables || game is HasTappablesBridge,
       'Tappable components can only be added to a FlameGame with HasTappables',
     );
   }
