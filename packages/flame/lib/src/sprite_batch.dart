@@ -1,6 +1,6 @@
 import 'dart:collection';
+import 'dart:math' show pi;
 import 'dart:ui';
-import "dart:math" show pi;
 
 import 'package:flame/game.dart';
 import 'package:flame/src/cache/images.dart';
@@ -10,7 +10,7 @@ import 'package:flame/src/flame.dart';
 
 extension SpriteBatchExtension on Game {
   /// Utility method to load and cache the image for a [SpriteBatch] based on
-  /// its options
+  /// its options.
   Future<SpriteBatch> loadSpriteBatch(
     String path, {
     Color defaultColor = const Color(0x00000000),
@@ -39,6 +39,23 @@ const _defaultScale = 0.0;
 ///
 /// Holds all the important information of a batch item,
 class BatchItem {
+  BatchItem({
+    required this.source,
+    required this.transform,
+    this.flip = false,
+    required this.color,
+  })  : matrix = Matrix4(
+          transform.scos, transform.ssin, 0, 0, //
+          -transform.ssin, transform.scos, 0, 0, //
+          0, 0, _defaultScale, 0, //
+          transform.tx, transform.ty, 0, 1, //
+        )
+          ..translate(source.width / 2, source.height / 2)
+          ..rotateY(flip ? pi : 0)
+          ..translate(-source.width / 2, -source.height / 2),
+        paint = Paint()..color = color,
+        destination = Offset.zero & source.size;
+
   /// The source rectangle on the [SpriteBatch.atlas].
   final Rect source;
 
@@ -64,23 +81,6 @@ class BatchItem {
 
   /// Paint object used for the web.
   final Paint paint;
-
-  BatchItem({
-    required this.source,
-    required this.transform,
-    this.flip = false,
-    required this.color,
-  })  : matrix = Matrix4(
-          transform.scos, transform.ssin, 0, 0, //
-          -transform.ssin, transform.scos, 0, 0, //
-          0, 0, _defaultScale, 0, //
-          transform.tx, transform.ty, 0, 1, //
-        )
-          ..translate(source.width / 2, source.height / 2)
-          ..rotateY(flip ? pi : 0)
-          ..translate(-source.width / 2, -source.height / 2),
-        paint = Paint()..color = color,
-        destination = Offset.zero & source.size;
 }
 
 /// The SpriteBatch API allows for rendering multiple items at once.
