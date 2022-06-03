@@ -5,10 +5,6 @@ export 'src/events/interfaces/multi_tap_listener.dart' show MultiTapListener;
 export 'src/events/messages/tap_cancel_event.dart' show TapCancelEvent;
 export 'src/events/messages/tap_down_event.dart' show TapDownEvent;
 export 'src/events/messages/tap_up_event.dart' show TapUpEvent;
-export 'src/events/game_mixins/multi_touch_drag_detector.dart'
-    show MultiTouchDragDetector;
-export 'src/events/interfaces/multi_drag_listener.dart' show MultiDragListener;
-export 'src/events/interfaces/multi_tap_listener.dart' show MultiTapListener;
 export 'src/game/mixins/has_draggables.dart' show HasDraggables;
 export 'src/game/mixins/has_hoverables.dart' show HasHoverables;
 export 'src/game/mixins/has_tappables.dart' show HasTappables;
