@@ -187,7 +187,7 @@ class SpriteBatch {
       imageCache.findKeyForImage(atlas) ??
       'image[${identityHashCode(atlas)}]';
 
-  /// Whether any [BatchItem]s need a flippableAtlas.
+  /// Whether any [BatchItem]s needs a flippable atlas.
   bool _hasFlips = false;
 
   /// The status of the atlas image loading operations.
