@@ -42,9 +42,9 @@ void main() {
         },
       );
 
-      testWithGame<_GameWithTappables>(
+      testWithGame<GameWithTappables>(
         'Add component with onLoad function',
-        _GameWithTappables.new,
+        GameWithTappables.new,
         (game) async {
           final component = _MyAsyncComponent();
           await game.ensureAdd(component);
@@ -66,9 +66,9 @@ void main() {
         },
       );
 
-      testWithGame<_GameWithTappables>(
+      testWithGame<GameWithTappables>(
         'component can be tapped',
-        _GameWithTappables.new,
+        GameWithTappables.new,
         (game) async {
           final component = _MyTappableComponent();
           await game.ensureAdd(component);
@@ -681,7 +681,7 @@ class _ConstructorChildrenGame extends FlameGame {
   }
 }
 
-class _GameWithTappables extends FlameGame with HasTappables {}
+class GameWithTappables extends FlameGame with HasTappables {}
 
 class _MyTappableComponent extends _MyComponent with Tappable {
   bool tapped = false;
