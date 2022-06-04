@@ -43,11 +43,12 @@ abstract class PositionEvent extends Event {
   void deliverAtPoint<T extends Component>({
     required Component rootComponent,
     required void Function(T component) eventHandler,
+    bool deliverToAll = false,
   }) {
     for (final child in rootComponent
         .componentsAtPoint(canvasPosition, renderingTrace)
         .whereType<T>()) {
-      continuePropagation = false;
+      continuePropagation = deliverToAll;
       eventHandler(child);
       if (!continuePropagation) {
         CameraComponent.currentCameras.clear();

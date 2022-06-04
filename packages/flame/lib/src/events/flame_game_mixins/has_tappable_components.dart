@@ -74,6 +74,7 @@ mixin HasTappableComponents on FlameGame implements MultiTapListener {
           component.onLongTapDown(event);
         }
       },
+      deliverToAll: true,
     );
     if (this is HasTappablesBridge) {
       final info = event.asInfo(this)..handled = event.handled;
@@ -104,6 +105,7 @@ mixin HasTappableComponents on FlameGame implements MultiTapListener {
           component.onTapUp(event);
         }
       },
+      deliverToAll: true,
     );
     _tapCancelImpl(TapCancelEvent(event.pointerId));
     if (this is HasTappablesBridge) {
