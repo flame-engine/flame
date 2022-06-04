@@ -1,10 +1,9 @@
 import 'dart:math';
-import 'dart:ui';
 
 import 'package:flame/components.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/rendering.dart';
 
 class TapEventsGame extends FlameGame with HasTappableComponents {
   @override
@@ -18,7 +17,7 @@ class TapTarget extends PositionComponent with TapCallbacks {
 
   late final game = findGame()!;
   late Rect _rect;
-  late Paint _paint = Paint()..color = const Color(0x448BA8FF);
+  late final Paint _paint = Paint()..color = const Color(0x448BA8FF);
   ExpandingCircle? _currentCircle;
 
   @override
@@ -100,7 +99,7 @@ class ExpandingCircle extends Component {
       _innerRadius += dt * 50;
     } else {
       _outerRadius += dt * 10;
-      _innerRadius += dt * (_released? 10 : 5);
+      _innerRadius += dt * (_released ? 10 : 5);
       _accentRadius += dt * 10;
     }
     if (radius >= maxRadius || _innerRadius > _outerRadius) {
