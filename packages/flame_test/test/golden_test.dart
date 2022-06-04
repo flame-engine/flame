@@ -37,5 +37,12 @@ void main() {
       },
       goldenFile: 'golden_test.png',
     );
+
+    testGolden(
+      'skipped test',
+      (game) async {},
+      goldenFile: 'golden_test.png',
+      skip: true,
+    );
   });
 }
