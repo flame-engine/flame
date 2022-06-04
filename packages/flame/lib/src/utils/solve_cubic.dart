@@ -34,8 +34,8 @@ List<double> _solveDepressedCubic(double p, double q) {
     final x2 = -2 * x1;
     return [x1, x1, x2];
   } else if (discriminant > 0) {
-    final c = _cubicRoot(-q / 2 + sqrt(discriminant));
-    return [c - p / (3 * c)];
+    final w = _cubicRoot(q.abs() / 2 + sqrt(discriminant));
+    return [(p / (3 * w) - w) * q.sign];
   } else {
     final f = 2 * sqrt(-p / 3);
     final v = acos(3 * q / (f * p)) / 3;

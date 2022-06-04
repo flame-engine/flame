@@ -88,7 +88,7 @@ void main() {
         final d = rnd.nextDouble() * 6;
         final solutions = solveCubic(a, b, c, d);
         for (final x in solutions) {
-          expect(a * x * x * x + b * x * x + c * x + d, closeTo(0, 1e-3));
+          expect(a * x * x * x + b * x * x + c * x + d, closeTo(0, 1e-6));
         }
       },
       repeatCount: repeatCount,
@@ -105,6 +105,6 @@ void check(List<double> list1, List<double> list2) {
   list1.sort();
   list2.sort();
   for (var i = 0; i < list1.length; i++) {
-    expect(list1[i], closeTo(list2[i], 1e-7));
+    expect(list1[i], closeTo(list2[i], 1e-6));
   }
 }
