@@ -16,8 +16,12 @@ cases will be handled correctly by Flame, and you can even keep track of the eve
 
 It takes only a few simple steps to enable these events for your game:
 
-1.  Add the `HasTappableComponents` mixin to your main game class.
-    - This mixin works "as-is", and doesn't need to be configured further.
+1.  Add the `HasTappableComponents` mixin to your main game class:
+    ```dart
+    class MyGame extends FlameGame with HasTappableComponents {
+      // ...
+    }
+    ```
 
 2.  For those components that you want to respond to taps, add the `TapCallbacks` mixin.
     - This mixin adds four overridable methods to your component: `onTapDown`, `onTapUp`,
@@ -25,6 +29,16 @@ It takes only a few simple steps to enable these events for your game:
       to be overridden in order to perform any function.
     - In addition, the component must implement the `containsLocalPoint()` method -- this method
       allows Flame to know whether the event occurred within the component or not.
+    ```dart
+    class MyComponent extends PositionComponent with TapCallbacks {
+      MyComponent() : super(size: Vector2(80, 60));
+
+      @override
+      void onTapUp(TapUpEvent event) {
+        // Do something in response to a tap
+      }
+    }
+    ```
 
 
 ## Tap anatomy
@@ -99,3 +113,99 @@ you cause the `onTapCancel` event by moving the finger.
 :page: tap_events
 :show: widget code
 ```
+
+
+## Mixins
+
+This section describes in more details several mixins needed for tap event handling.
+
+
+### HasTappableComponents
+
+This mixin is used on a `FlameGame` in order to ensure that tap events coming from Flutter reach
+their target `Component`s. This mixin **must** be added if you have any components with the
+`TapCallbacks` mixin.
+
+The mixin adds methods `onTapDown`, `onLongTapDown`, `onTapUp`, and `onTapCancel` to the game. The
+default implementation will simply propagate these events to the component(s) that are at the point
+of touch; but you can override them if you also want to respond to those events at the global game
+level:
+
+```dart
+class MyGame extends FlameGame with HasTappableComponents {
+  @override
+  void onTapDown(TapDownEvent event) {
+    super.onTapDown(event);
+    if (!event.handled) {
+      print('Event $event was not handled by any component');
+    }
+  }
+}
+```
+
+
+### TapCallbacks
+
+The `TapCallbacks` mixin can be added to any `Component` in order for that component to start
+receiving tap events.
+
+This mixin adds methods `onTapDown`, `onLongTapDown`, `onTapUp`, and `onTapCancel` to the component,
+which by default don't do anything, but can be overridden to implement any real functionality. There
+is no need to override all of them either: for example, you can override only `onTapUp` if you wish
+to respond to "real" taps only.
+
+Another crucial detail is that a component will only receive tap events that occur _within_ that
+component, as judged by the `containsLocalPoint()` function. The commonly-used `PositionComponent`
+class provides such an implementation based on its `size` property. Thus, if your component derives
+from a `PositionComponent`, then make sure that you set its size correctly. If, however, your
+component derives from the bare `Component`, then the `containsLocalPoint()` method must be
+implemented manually.
+
+If your component is a part of a larger hierarchy, then it will only receive tap events if its
+parent has implemented the `containsLocalPoint` correctly.
+
+```dart
+class MyComponent extends Component with TapCallbacks {
+  final _rect = const Rect.fromLTWH(0, 0, 100, 100);
+  final _paint = Paint();
+  bool _isPressed = false;
+
+  @override
+  bool containsLocalPoint(Vector2 point) => _rect.contains(point.toOffset());
+
+  @override
+  void onTapDown(TapDownEvent event) => _isPressed = true;
+
+  @override
+  void onTapUp(TapUpEvent event) => _isPressed = false;
+
+  @override
+  void onTapCancel(TapCancelEvent event) => _isPressed = false;
+
+  @override
+  void render(Canvas canvas) {
+    _paint.color = _isPressed? Colors.red : Colors.white;
+    canvas.drawRect(_rect, _paint);
+  }
+}
+```
+
+
+### HasTappablesBridge
+
+This marker mixin can be used to indicate that the game has both the "new-style" components that
+use the `TapCallbacks` mixin, and the "old-style" components that use the `Tappable` mixin. In
+effect, every tap event will be propagated twice through the system: first trying to reach the
+components with `TapCallbacks` mixin, and then components with `Tappable`.
+
+```dart
+class MyGame extends FlameGame with HasTappableComponents, HasTappablesBridge {
+  // ...
+}
+```
+
+The purpose of this mixin is to ease the transition from the old event delivery system to the
+new one. With this mixin, you can transition your `Tappable` components into using `TapCallbacks`
+one by one, verifying that your game continues to work at every step.
+
+Use of this mixin for any new project is highly discouraged.
