@@ -32,23 +32,14 @@ extension SpriteBatchExtension on Game {
 
 /// A single item in a SpriteBatch.
 ///
-/// Holds all the important information of a batch item,
+/// Holds all the important information of a batch item.
 class BatchItem {
   BatchItem({
     required this.source,
     required this.transform,
     this.flip = false,
     required this.color,
-  })  : matrix = Matrix4(
-          transform.scos, transform.ssin, 0, 0, //
-          -transform.ssin, transform.scos, 0, 0, //
-          0, 0, 0, 0, //
-          transform.tx, transform.ty, 0, 1, //
-        )
-          ..translate(source.width / 2, source.height / 2)
-          ..rotateY(flip ? pi : 0)
-          ..translate(-source.width / 2, -source.height / 2),
-        paint = Paint()..color = color,
+  })  : paint = Paint()..color = color,
         destination = Offset.zero & source.size;
 
   /// The source rectangle on the [SpriteBatch.atlas].
@@ -70,9 +61,17 @@ class BatchItem {
 
   /// Fallback matrix for the web.
   ///
-  /// Because `Canvas.drawAtlas` is not supported on the web we also
+  /// Since [Canvas.drawAtlas] is not supported on the web we also
   /// build a `Matrix4` based on the [transform] and [flip] values.
-  final Matrix4 matrix;
+  late final Matrix4 matrix = Matrix4(
+    transform.scos, transform.ssin, 0, 0, //
+    -transform.ssin, transform.scos, 0, 0, //
+    0, 0, 0, 0, //
+    transform.tx, transform.ty, 0, 1, //
+  )
+    ..translate(source.width / 2, source.height / 2)
+    ..rotateY(flip ? pi : 0)
+    ..translate(-source.width / 2, -source.height / 2);
 
   /// Paint object used for the web.
   final Paint paint;
