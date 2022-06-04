@@ -4,12 +4,14 @@ import 'package:flame/src/utils/solve_quadratic.dart';
 
 /// Solves cubic equation `ax³ + bx² + cx + d == 0`.
 ///
-/// Depending on the coefficients, either 0, 1, 2, or 3 solutions may be
-/// produced.
-/// If coefficient [a] is very close to zero, then we assume it is equal to
-/// zero, and solve the equation as a quadratic one.
+/// Depending on the coefficients, either 1 or 3 real solutions may be returned.
+/// In degenerate cases, when some of the roots of the equation coincide, we
+/// return all such roots without deduplication.
+///
+/// If coefficient [a] is equal to zero, then we solve the equation as a
+/// quadratic one (see [solveQuadratic]).
 List<double> solveCubic(double a, double b, double c, double d) {
-  if (a.abs() < coefficientEpsilon) {
+  if (a == 0) {
     return solveQuadratic(b, c, d);
   }
   if (b == 0) {
@@ -28,15 +30,11 @@ List<double> _solveDepressedCubic(double p, double q) {
   // If the discriminant is very close to zero, then we will treat this as if
   // it was equal to zero.
   if (discriminant.abs() < discriminantEpsilon) {
-    if (p.abs() < coefficientEpsilon) {
-      return [0];
-    } else {
-      final x1 = 3 * q / p;
-      final x2 = -x1 / 2;
-      return [x1, x2];
-    }
+    final x1 = _cubicRoot(q / 2);
+    final x2 = -2 * x1;
+    return [x1, x1, x2];
   } else if (discriminant > 0) {
-    final c = pow(-q / 2 + sqrt(discriminant), 1 / 3);
+    final c = _cubicRoot(-q / 2 + sqrt(discriminant));
     return [c - p / (3 * c)];
   } else {
     final f = 2 * sqrt(-p / 3);
@@ -48,6 +46,14 @@ List<double> _solveDepressedCubic(double p, double q) {
   }
 }
 
-const discriminantEpsilon = 1e-13;
-const coefficientEpsilon = 1e-15;
+double _cubicRoot(double x) {
+  // Note: `pow(x, y)` function cannot handle negative values of `x`
+  if (x >= 0) {
+    return pow(x, 1 / 3).toDouble();
+  } else {
+    return -pow(-x, 1 / 3).toDouble();
+  }
+}
+
+const discriminantEpsilon = 1e-15;
 const tau = 2 * pi;
