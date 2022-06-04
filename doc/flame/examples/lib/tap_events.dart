@@ -96,11 +96,11 @@ class ExpandingCircle extends Component {
   @override
   void update(double dt) {
     if (_cancelled) {
-      _innerRadius += dt * 50;
+      _innerRadius += dt * 100;
     } else {
-      _outerRadius += dt * 10;
-      _innerRadius += dt * (_released ? 10 : 5);
-      _accentRadius += dt * 10;
+      _outerRadius += dt * 20;
+      _innerRadius += dt * (_released ? 20 : 6);
+      _accentRadius += dt * 20;
     }
     if (radius >= maxRadius || _innerRadius > _outerRadius) {
       removeFromParent();
