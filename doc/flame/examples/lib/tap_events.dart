@@ -15,7 +15,6 @@ class TapEventsGame extends FlameGame with HasTappableComponents {
 class TapTarget extends PositionComponent with TapCallbacks {
   TapTarget() : super(anchor: Anchor.center);
 
-  late final game = findGame()!;
   late Rect _rect;
   late final Paint _paint = Paint()..color = const Color(0x448BA8FF);
   ExpandingCircle? _currentCircle;

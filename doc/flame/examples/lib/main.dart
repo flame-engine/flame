@@ -1,9 +1,8 @@
 import 'dart:html'; // ignore: avoid_web_libraries_in_flutter
 
+import 'package:doc_flame_examples/tap_events.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/widgets.dart';
-
-import 'tap_events.dart';
 
 void main() {
   var page = window.location.search ?? '';
