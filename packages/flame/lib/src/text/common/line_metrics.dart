@@ -12,10 +12,10 @@ class LineMetrics {
   LineMetrics({
     required this.left,
     required this.baseline,
-    this.width = 0,
-    this.ascent = 0,
-    this.descent = 0,
-  });
+    double width = 0,
+    double ascent = 0,
+    double descent = 0,
+  }) : _width = width, _ascent = ascent, _descent = descent;
 
   /// X-coordinate of the left edge of the box.
   double left;
@@ -25,13 +25,16 @@ class LineMetrics {
   double baseline;
 
   /// The total width of the box.
-  double width;
+  double get width => _width;
+  double _width;
 
   /// The distance from the baseline to the top of the box.
-  double ascent;
+  double get ascent => _ascent;
+  double _ascent;
 
   /// The distance from the baseline to the bottom of the box.
-  double descent;
+  double get descent => _descent;
+  double _descent;
 
   double get right => left + width;
   double get top => baseline - ascent;
@@ -44,12 +47,12 @@ class LineMetrics {
   void append(LineMetrics other) {
     assert(right == other.left);
     assert(baseline == other.baseline);
-    width += other.width;
-    if (ascent < other.ascent) {
-      ascent = other.ascent;
+    _width += other.width;
+    if (_ascent < other.ascent) {
+      _ascent = other.ascent;
     }
-    if (descent < other.descent) {
-      descent = other.descent;
+    if (_descent < other.descent) {
+      _descent = other.descent;
     }
   }
 
