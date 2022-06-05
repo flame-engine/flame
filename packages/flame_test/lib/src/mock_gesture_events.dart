@@ -15,3 +15,19 @@ TapDownInfo createTapDownEvent(
     ),
   );
 }
+
+TapUpInfo createTapUpEvent(
+  Game game, {
+  Offset? globalPosition,
+  Offset? localPosition,
+  PointerDeviceKind kind = PointerDeviceKind.mouse,
+}) {
+  return TapUpInfo.fromDetails(
+    game,
+    TapUpDetails(
+      localPosition: localPosition ?? Offset.zero,
+      globalPosition: globalPosition ?? Offset.zero,
+      kind: PointerDeviceKind.mouse,
+    ),
+  );
+}
