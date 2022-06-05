@@ -1,19 +1,18 @@
-import 'dart:ui' as ui;
+import 'dart:async';
+import 'dart:ui';
 
-import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-
-import '../../assets.dart';
-import '../../flame.dart';
-import '../nine_tile_box.dart' as non_widget;
-import '../sprite.dart';
-import 'base_future_builder.dart';
+import 'package:flame/cache.dart';
+import 'package:flame/flame.dart';
+import 'package:flame/src/nine_tile_box.dart' as non_widget;
+import 'package:flame/src/sprite.dart';
+import 'package:flame/src/widgets/base_future_builder.dart';
+import 'package:flutter/material.dart' hide Image;
 
 export '../nine_tile_box.dart';
 export '../sprite.dart';
 
 class _Painter extends CustomPainter {
-  final ui.Image image;
+  final Image image;
   final double tileSize;
   final double destTileSize;
   late final non_widget.NineTileBox _nineTileBox;
@@ -42,7 +41,7 @@ typedef NineTileBox = NineTileBoxWidget;
 
 /// A [StatelessWidget] that renders NineTileBox
 class NineTileBoxWidget extends StatelessWidget {
-  final Future<ui.Image> Function() _imageFuture;
+  final FutureOr<Image> _imageFuture;
 
   /// The size of the tile on the image
   final double tileSize;
@@ -54,25 +53,34 @@ class NineTileBoxWidget extends StatelessWidget {
 
   final Widget? child;
 
+  final EdgeInsetsGeometry? padding;
+
   /// A builder function that is called if the loading fails
   final WidgetBuilder? errorBuilder;
 
   /// A builder function that is called while the loading is on the way
   final WidgetBuilder? loadingBuilder;
 
-  NineTileBoxWidget({
-    required ui.Image image,
+  const NineTileBoxWidget({
+    required Image image,
     required this.tileSize,
     required this.destTileSize,
     this.width,
     this.height,
     this.child,
-    this.errorBuilder,
-    this.loadingBuilder,
+    this.padding,
     Key? key,
-  })  : _imageFuture = (() => Future.value(image)),
+  })  : _imageFuture = image,
+        errorBuilder = null,
+        loadingBuilder = null,
         super(key: key);
 
+  /// Loads image from the asset [path] and renders it as a widget.
+  ///
+  /// It will use the [loadingBuilder] while the image from [path] is loading.
+  /// To render without loading, or when you want to have a gapless playback
+  /// when the [path] value changes, consider loading the image beforehand
+  /// and direct pass it to the default constructor.
   NineTileBoxWidget.asset({
     required String path,
     required this.tileSize,
@@ -81,24 +89,26 @@ class NineTileBoxWidget extends StatelessWidget {
     this.width,
     this.height,
     this.child,
+    this.padding,
     this.errorBuilder,
     this.loadingBuilder,
     Key? key,
-  })  : _imageFuture = (() => (images ?? Flame.images).load(path)),
+  })  : _imageFuture = (images ?? Flame.images).load(path),
         super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return BaseFutureBuilder<ui.Image>(
-      futureBuilder: _imageFuture,
+    return BaseFutureBuilder<Image>(
+      future: _imageFuture,
       builder: (_, image) {
-        return _NineTileBox(
+        return InternalNineTileBox(
           image: image,
           tileSize: tileSize,
           destTileSize: destTileSize,
           width: width,
           height: height,
           child: child,
+          padding: padding,
         );
       },
       errorBuilder: errorBuilder,
@@ -107,8 +117,9 @@ class NineTileBoxWidget extends StatelessWidget {
   }
 }
 
-class _NineTileBox extends StatelessWidget {
-  final ui.Image image;
+@visibleForTesting
+class InternalNineTileBox extends StatelessWidget {
+  final Image image;
   final double tileSize;
   final double destTileSize;
   final double? width;
@@ -118,15 +129,15 @@ class _NineTileBox extends StatelessWidget {
 
   final EdgeInsetsGeometry? padding;
 
-  const _NineTileBox({
+  const InternalNineTileBox({
     required this.image,
     required this.tileSize,
     required this.destTileSize,
-    Key? key,
     this.child,
     this.width,
     this.height,
     this.padding,
+    Key? key,
   }) : super(key: key);
 
   @override

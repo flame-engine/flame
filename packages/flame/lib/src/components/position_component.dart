@@ -1,14 +1,15 @@
 import 'dart:math' as math;
 import 'dart:ui' hide Offset;
 
-import '../anchor.dart';
-import '../effects/provider_interfaces.dart';
-import '../extensions/offset.dart';
-import '../extensions/vector2.dart';
-import '../game/notifying_vector2.dart';
-import '../game/transform2d.dart';
-import 'component.dart';
-import 'mixins/coordinate_transform.dart';
+import 'package:collection/collection.dart';
+import 'package:flame/src/anchor.dart';
+import 'package:flame/src/components/component.dart';
+import 'package:flame/src/components/mixins/coordinate_transform.dart';
+import 'package:flame/src/effects/provider_interfaces.dart';
+import 'package:flame/src/extensions/offset.dart';
+import 'package:flame/src/extensions/vector2.dart';
+import 'package:flame/src/game/notifying_vector2.dart';
+import 'package:flame/src/game/transform2d.dart';
 
 /// A [Component] implementation that represents an object that can be
 /// freely moved around the screen, rotated, and scaled.
@@ -195,9 +196,10 @@ class PositionComponent extends Component
   /// has been applied.
   double get absoluteAngle {
     // TODO(spydon): take scale into consideration
-    return ancestors()
+    return ancestors(includeSelf: true)
         .whereType<PositionComponent>()
-        .fold<double>(angle, (totalAngle, c) => totalAngle + c.angle);
+        .map((c) => c.angle)
+        .sum;
   }
 
   /// The resulting scale after all the ancestors and the components own scale

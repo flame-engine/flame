@@ -1,9 +1,8 @@
+import 'package:examples/stories/input/joystick_player.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/palette.dart';
 import 'package:flutter/painting.dart';
-
-import 'joystick_player.dart';
 
 class JoystickExample extends FlameGame with HasDraggables {
   static const String description = '''

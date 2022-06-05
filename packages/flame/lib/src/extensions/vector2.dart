@@ -40,6 +40,11 @@ extension Vector2Extension on Vector2 {
   /// Whether the [Vector2] is the identity vector or not
   bool isIdentity() => x == 1 && y == 1;
 
+  /// Distance to [other] vector, using the taxicab (L1) geometry.
+  double taxicabDistanceTo(Vector2 other) {
+    return (x - other.x).abs() + (y - other.y).abs();
+  }
+
   /// Rotates the [Vector2] with [angle] in radians
   /// rotates around [center] if it is defined
   /// In a screen coordinate system (where the y-axis is flipped) it rotates in

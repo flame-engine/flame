@@ -1,7 +1,7 @@
 import 'package:dashbook/dashbook.dart';
 
-import '1_flame_game/step.dart';
-import '2_input_and_graphics/step.dart';
+import 'package:tutorials_space_shooter/steps/1_getting_started/1_flame_game/step.dart';
+import 'package:tutorials_space_shooter/steps/1_getting_started/2_input_and_graphics/step.dart';
 
 void addGettingStarted(Dashbook dashbook) {
   dashbook

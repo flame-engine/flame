@@ -10,8 +10,10 @@ class MockImage extends Mock implements Image {
   MockImage(this.size);
 
   final Vector2 size;
+
   @override
   int get width => size.x.toInt();
+
   @override
   int get height => size.y.toInt();
 }
@@ -20,6 +22,7 @@ class _MockSpriteSheet extends Mock implements SpriteSheet {
   _MockSpriteSheet(this.tileSize);
 
   final Vector2 tileSize;
+
   @override
   Image get image => MockImage(tileSize);
 }
@@ -40,10 +43,14 @@ void main() {
         tileHeight: 8.0,
       );
 
+      final scales = [Vector2.all(0.1), Vector2.all(1), Vector2.all(2.0)];
       const blocks = [Block(0, 0), Block(1, 1), Block(-1, 0), Block(2, -10)];
-      for (final block in blocks) {
-        expect(c.getBlockRenderedAt(c.getBlockRenderPosition(block)), block);
-        expect(c.getBlock(c.getBlockCenterPosition(block)), block);
+      for (final scale in scales) {
+        c.scale = scale;
+        for (final block in blocks) {
+          expect(c.getBlockRenderedAt(c.getBlockRenderPosition(block)), block);
+          expect(c.getBlock(c.getBlockCenterPosition(block)), block);
+        }
       }
     });
 

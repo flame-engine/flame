@@ -1,6 +1,6 @@
-import '../../components.dart';
-import 'component_effect.dart';
-import 'controllers/effect_controller.dart';
+import 'package:flame/components.dart';
+import 'package:flame/src/effects/component_effect.dart';
+import 'package:flame/src/effects/controllers/effect_controller.dart';
 
 /// Change the opacity of a component over time.
 ///
@@ -18,30 +18,49 @@ class OpacityEffect extends ComponentEffect<HasPaint> {
     double offset,
     EffectController controller, {
     this.paintId,
+    void Function()? onComplete,
   })  : _alphaOffset = (255 * offset).round(),
-        super(controller);
+        super(controller, onComplete: onComplete);
 
   /// This constructor will set the opacity to the specified opacity over time.
   factory OpacityEffect.to(
     double targetOpacity,
     EffectController controller, {
     String? paintId,
+    void Function()? onComplete,
   }) {
-    return _OpacityToEffect(targetOpacity, controller, paintId: paintId);
+    return _OpacityToEffect(
+      targetOpacity,
+      controller,
+      paintId: paintId,
+      onComplete: onComplete,
+    );
   }
 
   factory OpacityEffect.fadeIn(
     EffectController controller, {
     String? paintId,
+    void Function()? onComplete,
   }) {
-    return _OpacityToEffect(1.0, controller, paintId: paintId);
+    return _OpacityToEffect(
+      1.0,
+      controller,
+      paintId: paintId,
+      onComplete: onComplete,
+    );
   }
 
   factory OpacityEffect.fadeOut(
     EffectController controller, {
     String? paintId,
+    void Function()? onComplete,
   }) {
-    return _OpacityToEffect(0.0, controller, paintId: paintId);
+    return _OpacityToEffect(
+      0.0,
+      controller,
+      paintId: paintId,
+      onComplete: onComplete,
+    );
   }
 
   @override
@@ -79,7 +98,13 @@ class _OpacityToEffect extends OpacityEffect {
     this._targetOpacity,
     EffectController controller, {
     String? paintId,
-  }) : super.by(0.0, controller, paintId: paintId);
+    void Function()? onComplete,
+  }) : super.by(
+          0.0,
+          controller,
+          paintId: paintId,
+          onComplete: onComplete,
+        );
 
   @override
   void onStart() {

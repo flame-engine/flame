@@ -24,7 +24,6 @@ class DebugSystem extends BaseSystem {
     statusPainter.render(
       canvas,
       [
-        'FPS: ${(world!.game as FPSCounter).fps()}',
         'Entities: ${world!.entities.length}',
       ].join('\n'),
       Vector2.zero(),

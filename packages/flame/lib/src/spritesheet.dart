@@ -1,7 +1,7 @@
 import 'dart:ui';
 
-import 'extensions/vector2.dart';
-import 'sprite_animation.dart';
+import 'package:flame/src/extensions/vector2.dart';
+import 'package:flame/src/sprite_animation.dart';
 
 /// Utility class to help extract animations and sprites from a sprite sheet
 /// image.

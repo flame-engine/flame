@@ -1,10 +1,9 @@
 import 'package:dashbook/dashbook.dart';
+import 'package:examples/commons/commons.dart';
+import 'package:examples/stories/collision_detection/circles_example.dart';
+import 'package:examples/stories/collision_detection/collidable_animation_example.dart';
+import 'package:examples/stories/collision_detection/multiple_shapes_example.dart';
 import 'package:flame/game.dart';
-
-import '../../commons/commons.dart';
-import 'circles_example.dart';
-import 'collidable_animation_example.dart';
-import 'multiple_shapes_example.dart';
 
 void addCollisionDetectionStories(Dashbook dashbook) {
   dashbook.storiesOf('Collision Detection')

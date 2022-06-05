@@ -1,5 +1,5 @@
-import '../effect.dart';
-import 'effect_controller.dart';
+import 'package:flame/src/effects/controllers/effect_controller.dart';
+import 'package:flame/src/effects/effect.dart';
 
 /// An effect controller that waits for [delay] seconds before running the
 /// child controller. While waiting, the progress will be reported at 0.

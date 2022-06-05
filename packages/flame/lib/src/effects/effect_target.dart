@@ -1,4 +1,4 @@
-import 'effect.dart';
+import 'package:flame/src/effects/effect.dart';
 
 /// Mixin adds field [target] of type [T] to an [Effect]. The target can be
 /// either set explicitly by the effect class, or acquired automatically from

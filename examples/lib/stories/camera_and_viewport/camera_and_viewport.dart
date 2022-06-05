@@ -1,13 +1,12 @@
 import 'package:dashbook/dashbook.dart';
+import 'package:examples/commons/commons.dart';
+import 'package:examples/stories/camera_and_viewport/camera_component_example.dart';
+import 'package:examples/stories/camera_and_viewport/camera_component_properties_example.dart';
+import 'package:examples/stories/camera_and_viewport/coordinate_systems_example.dart';
+import 'package:examples/stories/camera_and_viewport/fixed_resolution_example.dart';
+import 'package:examples/stories/camera_and_viewport/follow_component_example.dart';
+import 'package:examples/stories/camera_and_viewport/zoom_example.dart';
 import 'package:flame/game.dart';
-
-import '../../commons/commons.dart';
-import 'camera_component_example.dart';
-import 'camera_component_properties_example.dart';
-import 'coordinate_systems_example.dart';
-import 'fixed_resolution_example.dart';
-import 'follow_component_example.dart';
-import 'zoom_example.dart';
 
 void addCameraAndViewportStories(Dashbook dashbook) {
   dashbook.storiesOf('Camera & Viewport')

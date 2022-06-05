@@ -1,22 +1,30 @@
-import '../../components.dart';
-import 'component_effect.dart';
-import 'controllers/effect_controller.dart';
+import 'package:flame/components.dart';
+import 'package:flame/src/effects/controllers/effect_controller.dart';
+import 'package:flame/src/effects/effect.dart';
+import 'package:flame/src/effects/effect_target.dart';
+import 'package:flame/src/effects/provider_interfaces.dart';
 
 /// Change the size of a component over time.
 ///
 /// This effect applies incremental changes to the component's size, and
 /// requires that any other effect or update logic applied to the same component
 /// also used incremental updates.
-class SizeEffect extends ComponentEffect<PositionComponent> {
+class SizeEffect extends Effect with EffectTarget<SizeProvider> {
   /// This constructor will create an effect that sets the size in relation to
   /// the [PositionComponent]'s  current size, for example if the [offset] is
   /// set to `Vector2(10, -10)` and the size of the affected component is
   /// `Vector2(100, 100)` at the start of the affected the effect will peak when
   /// the size is `Vector2(110, 90)`, if there is nothing else affecting the
   /// size at the same time.
-  SizeEffect.by(Vector2 offset, EffectController controller)
-      : _offset = offset.clone(),
-        super(controller);
+  SizeEffect.by(
+    Vector2 offset,
+    EffectController controller, {
+    SizeProvider? target,
+    void Function()? onComplete,
+  })  : _offset = offset.clone(),
+        super(controller, onComplete: onComplete) {
+    this.target = target;
+  }
 
   /// This constructor will create an effect that sets the size to the absolute
   /// size that is defined by [targetSize].
@@ -24,8 +32,12 @@ class SizeEffect extends ComponentEffect<PositionComponent> {
   /// of the affected component is `Vector2(100, 100)` at the start of the
   /// affected the effect will peak when the size is `Vector2(200, 100)`, if
   /// there is nothing else affecting the size at the same time.
-  factory SizeEffect.to(Vector2 targetSize, EffectController controller) =>
-      _SizeToEffect(targetSize, controller);
+  factory SizeEffect.to(
+    Vector2 targetSize,
+    EffectController controller, {
+    void Function()? onComplete,
+  }) =>
+      _SizeToEffect(targetSize, controller, onComplete: onComplete);
 
   Vector2 _offset;
 
@@ -41,9 +53,16 @@ class SizeEffect extends ComponentEffect<PositionComponent> {
 class _SizeToEffect extends SizeEffect {
   final Vector2 _targetSize;
 
-  _SizeToEffect(Vector2 targetSize, EffectController controller)
-      : _targetSize = targetSize.clone(),
-        super.by(Vector2.zero(), controller);
+  _SizeToEffect(
+    Vector2 targetSize,
+    EffectController controller, {
+    void Function()? onComplete,
+  })  : _targetSize = targetSize.clone(),
+        super.by(
+          Vector2.zero(),
+          controller,
+          onComplete: onComplete,
+        );
 
   @override
   void onStart() {

@@ -315,7 +315,7 @@ void main() {
     group('errors', () {
       test('empty', () {
         expect(
-          () => EffectController(),
+          EffectController.new,
           failsAssert('Either duration or speed must be specified'),
         );
       });

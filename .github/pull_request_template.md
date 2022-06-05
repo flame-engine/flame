@@ -20,11 +20,18 @@ relevant checkboxes (`[x]`). This will ensure a smooth and quick review process.
 
 <!-- Does your PR require Flame users to manually update their apps to accommodate your change? 
 
-If the PR is a breaking change this should be indicated with suffix "!"  (for example, `feat!:`, `fix!:`). See [Conventional Commit] for details.
+If the PR is a breaking change this should be indicated with suffix "!" 
+(for example, `feat!:`, `fix!:`). See [Conventional Commit] for details.
 -->
 
 - [ ] Yes, this is a breaking change.
 - [ ] No, this is *not* a breaking change.
+
+<!-- ### Migration instructions
+
+If the PR is breaking, uncomment this header and add instructions for how to migrate from the
+currently released version to the new proposed way.
+-->
 
 ## Related Issues
 

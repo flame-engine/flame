@@ -8,7 +8,7 @@ import 'package:test/test.dart';
 class _GameHasDraggables extends FlameGame with HasDraggables {}
 
 void main() {
-  final withDraggables = FlameTester(() => _GameHasDraggables());
+  final withDraggables = FlameTester(_GameHasDraggables.new);
 
   group('JoystickDirection tests', () {
     withDraggables.test('can convert angle to JoystickDirection', (game) async {

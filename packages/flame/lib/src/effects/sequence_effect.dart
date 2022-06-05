@@ -1,7 +1,7 @@
-import 'controllers/effect_controller.dart';
-import 'controllers/infinite_effect_controller.dart';
-import 'controllers/repeated_effect_controller.dart';
-import 'effect.dart';
+import 'package:flame/src/effects/controllers/effect_controller.dart';
+import 'package:flame/src/effects/controllers/infinite_effect_controller.dart';
+import 'package:flame/src/effects/controllers/repeated_effect_controller.dart';
+import 'package:flame/src/effects/effect.dart';
 
 /// Run multiple effects in a sequence, one after another.
 ///
@@ -32,6 +32,7 @@ class SequenceEffect extends Effect {
     bool alternate = false,
     bool infinite = false,
     int repeatCount = 1,
+    void Function()? onComplete,
   }) {
     assert(effects.isNotEmpty, 'The list of effects cannot be empty');
     assert(
@@ -45,10 +46,13 @@ class SequenceEffect extends Effect {
       ec = RepeatedEffectController(ec, repeatCount);
     }
     effects.forEach((e) => e.removeOnFinish = false);
-    return SequenceEffect._(ec)..addAll(effects);
+    return SequenceEffect._(ec, onComplete: onComplete)..addAll(effects);
   }
 
-  SequenceEffect._(EffectController ec) : super(ec);
+  SequenceEffect._(
+    EffectController ec, {
+    void Function()? onComplete,
+  }) : super(ec, onComplete: onComplete);
 
   @override
   void apply(double progress) {}

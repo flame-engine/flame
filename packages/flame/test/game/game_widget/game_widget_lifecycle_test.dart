@@ -199,7 +199,7 @@ void main() {
       expect(events, ['onGameResize']); // no onRemove
       final game =
           tester.allWidgets.whereType<GameWidget<_MyGame>>().first.game;
-      expect(game.children, everyElement((Component c) => c.parent == game));
+      expect(game?.children, everyElement((Component c) => c.parent == game));
     });
 
     testWidgets('all events are executed in the correct order', (tester) async {

@@ -1,6 +1,5 @@
+import 'package:flame/collisions.dart';
 import 'package:meta/meta.dart';
-
-import '../../collisions.dart';
 
 /// The [Broadphase] class is used to make collision detection more efficient
 /// by doing a rough estimation of which hitboxes that can collide before their

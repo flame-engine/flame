@@ -1,6 +1,6 @@
 import 'package:flame/sprite.dart';
 import 'package:flutter/foundation.dart';
-import 'klondike_game.dart';
+import 'package:klondike/step3/klondike_game.dart';
 
 @immutable
 class Suit {

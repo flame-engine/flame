@@ -1,16 +1,15 @@
 import 'dart:math';
 
 import 'package:flame/components.dart';
+import 'package:flame/effects.dart';
 import 'package:flame/game.dart';
-import 'package:flame/src/effects/controllers/effect_controller.dart';
-import 'package:flame/src/effects/size_effect.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('SizeEffect', () {
     flameGame.test('relative', (game) async {
-      final component = PositionComponent();
+      final component = ResizableComponent();
       await game.ensureAdd(component);
 
       component.size = Vector2.all(1.0);
@@ -32,7 +31,7 @@ void main() {
     });
 
     flameGame.test('absolute', (game) async {
-      final component = PositionComponent();
+      final component = ResizableComponent();
       await game.ensureAdd(component);
 
       component.size = Vector2.all(1.0);
@@ -54,7 +53,7 @@ void main() {
     });
 
     flameGame.test('reset relative', (game) async {
-      final component = PositionComponent();
+      final component = ResizableComponent();
       await game.ensureAdd(component);
 
       final effect = SizeEffect.by(
@@ -74,7 +73,7 @@ void main() {
     });
 
     flameGame.test('reset absolute', (game) {
-      final component = PositionComponent();
+      final component = ResizableComponent();
       game.ensureAdd(component);
 
       final effect = SizeEffect.to(
@@ -93,7 +92,7 @@ void main() {
     });
 
     flameGame.test('size composition', (game) async {
-      final component = PositionComponent();
+      final component = ResizableComponent();
       await game.ensureAdd(component);
 
       await component.add(
@@ -123,7 +122,7 @@ void main() {
 
     testRandom('a very long size change', (Random rng) async {
       final game = FlameGame()..onGameResize(Vector2(1, 1));
-      final component = PositionComponent();
+      final component = ResizableComponent();
       await game.ensureAdd(component);
 
       final effect = SizeEffect.by(
@@ -149,3 +148,5 @@ void main() {
     });
   });
 }
+
+class ResizableComponent extends PositionComponent implements SizeProvider {}

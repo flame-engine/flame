@@ -18,7 +18,7 @@ void main() {
         ..onGameResize(Vector2.all(100))
         ..onMount();
       expect(
-        () => FlameGame(),
+        FlameGame.new,
         failsAssert(
           "Instance of 'FlameGame' instantiated, while another game "
           "Instance of 'SingletonGame' declares itself to be a singleton",

@@ -1,7 +1,7 @@
 import 'dart:math' as math;
-import 'duration_effect_controller.dart';
-import 'infinite_effect_controller.dart';
-import 'repeated_effect_controller.dart';
+import 'package:flame/src/effects/controllers/duration_effect_controller.dart';
+import 'package:flame/src/effects/controllers/infinite_effect_controller.dart';
+import 'package:flame/src/effects/controllers/repeated_effect_controller.dart';
 
 /// This effect controller follows a sine wave.
 ///

@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/src/game/game_render_box.dart';
@@ -5,6 +6,7 @@ import 'package:flame_test/flame_test.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
+
 import 'projector_test.dart';
 
 void main() {
@@ -40,9 +42,9 @@ void main() {
         },
       );
 
-      testWithGame<_GameWithTappables>(
+      testWithGame<GameWithTappables>(
         'Add component with onLoad function',
-        () => _GameWithTappables(),
+        GameWithTappables.new,
         (game) async {
           final component = _MyAsyncComponent();
           await game.ensureAdd(component);
@@ -64,9 +66,9 @@ void main() {
         },
       );
 
-      testWithGame<_GameWithTappables>(
+      testWithGame<GameWithTappables>(
         'component can be tapped',
-        () => _GameWithTappables(),
+        GameWithTappables.new,
         (game) async {
           final component = _MyTappableComponent();
           await game.ensureAdd(component);
@@ -147,14 +149,19 @@ void main() {
         expect(game.children.isEmpty, equals(true));
       });
 
-      test("can't add a component to a game without a layout", () {
-        final game = FlameGame();
-        final component = Component();
-        const message =
-            'add() called before the game has a layout. Did you try to add '
-            'components from the constructor? Use the onLoad() method instead.';
-        expect(() => game.add(component), failsAssert(message));
-      });
+      testWidgets(
+        'can add a component to a game without a layout',
+        (WidgetTester tester) async {
+          final game = FlameGame();
+          final component = Component()..addToParent(game);
+          expect(game.hasLayout, false);
+
+          await tester.pumpWidget(GameWidget(game: game));
+          game.update(0);
+          expect(game.children.length, 1);
+          expect(game.children.first, component);
+        },
+      );
     });
 
     group('projector', () {
@@ -604,11 +611,77 @@ void main() {
           expect(game.projector.unscaleVector(Vector2(8, 16)), Vector2(1, 2));
         },
       );
+
+      testWithGame<FlameGame>(
+        'children in the constructor',
+        () {
+          return FlameGame(
+            children: [_IndexedComponent(1), _IndexedComponent(2)],
+          );
+        },
+        (game) async {
+          game.add(_IndexedComponent(3));
+          game.add(_IndexedComponent(4));
+          await game.ready();
+
+          expect(game.children.length, 4);
+          expect(
+            game.children
+                .whereType<_IndexedComponent>()
+                .map((c) => c.index)
+                .isSorted((a, b) => a.compareTo(b)),
+            isTrue,
+          );
+        },
+      );
+
+      testWithGame<FlameGame>(
+        'children in the constructor and onLoad',
+        () {
+          return _ConstructorChildrenGame(
+            constructorChildren: [_IndexedComponent(1), _IndexedComponent(2)],
+            onLoadChildren: [_IndexedComponent(3), _IndexedComponent(4)],
+          );
+        },
+        (game) async {
+          game.add(_IndexedComponent(5));
+          game.add(_IndexedComponent(6));
+          await game.ready();
+
+          expect(game.children.length, 6);
+          expect(
+            game.children
+                .whereType<_IndexedComponent>()
+                .map((c) => c.index)
+                .isSorted((a, b) => a.compareTo(b)),
+            isTrue,
+          );
+        },
+      );
     });
   });
 }
 
-class _GameWithTappables extends FlameGame with HasTappables {}
+class _IndexedComponent extends Component {
+  final int index;
+  _IndexedComponent(this.index);
+}
+
+class _ConstructorChildrenGame extends FlameGame {
+  final Iterable<_IndexedComponent> onLoadChildren;
+
+  _ConstructorChildrenGame({
+    required Iterable<_IndexedComponent> constructorChildren,
+    required this.onLoadChildren,
+  }) : super(children: constructorChildren);
+
+  @override
+  Future<void> onLoad() async {
+    addAll(onLoadChildren);
+  }
+}
+
+class GameWithTappables extends FlameGame with HasTappables {}
 
 class _MyTappableComponent extends _MyComponent with Tappable {
   bool tapped = false;

@@ -1,8 +1,7 @@
+import 'package:flame/components.dart';
+import 'package:flame/game.dart';
 import 'package:flutter/widgets.dart' show EdgeInsets;
 import 'package:meta/meta.dart';
-
-import '../../../components.dart';
-import '../../../game.dart';
 
 /// The [HudMarginComponent] positions itself by a margin to the edge of the
 /// screen instead of by an absolute position on the screen or on the game, so

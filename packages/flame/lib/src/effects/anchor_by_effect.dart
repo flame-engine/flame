@@ -1,9 +1,8 @@
+import 'package:flame/src/anchor.dart';
+import 'package:flame/src/effects/anchor_effect.dart';
+import 'package:flame/src/effects/controllers/effect_controller.dart';
+import 'package:flame/src/effects/provider_interfaces.dart';
 import 'package:vector_math/vector_math_64.dart';
-
-import '../anchor.dart';
-import 'anchor_effect.dart';
-import 'controllers/effect_controller.dart';
-import 'provider_interfaces.dart';
 
 /// An [AnchorEffect] that changes its target's anchor by the specified offset.
 ///
@@ -24,8 +23,9 @@ class AnchorByEffect extends AnchorEffect {
     Vector2 offset,
     EffectController controller, {
     AnchorProvider? target,
+    void Function()? onComplete,
   })  : _offset = offset.clone(),
-        super(controller, target);
+        super(controller, target, onComplete: onComplete);
 
   final Vector2 _offset;
 

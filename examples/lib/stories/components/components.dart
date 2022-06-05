@@ -1,11 +1,10 @@
 import 'package:dashbook/dashbook.dart';
+import 'package:examples/commons/commons.dart';
+import 'package:examples/stories/components/composability_example.dart';
+import 'package:examples/stories/components/debug_example.dart';
+import 'package:examples/stories/components/game_in_game_example.dart';
+import 'package:examples/stories/components/priority_example.dart';
 import 'package:flame/game.dart';
-
-import '../../commons/commons.dart';
-import 'composability_example.dart';
-import 'debug_example.dart';
-import 'game_in_game_example.dart';
-import 'priority_example.dart';
 
 void addComponentsStories(Dashbook dashbook) {
   dashbook.storiesOf('Components')

@@ -2,15 +2,14 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:collection/collection.dart';
+import 'package:flame/src/anchor.dart';
+import 'package:flame/src/cache/value_cache.dart';
+import 'package:flame/src/components/component.dart';
+import 'package:flame/src/extensions/rect.dart';
+import 'package:flame/src/extensions/vector2.dart';
+import 'package:flame/src/geometry/line_segment.dart';
+import 'package:flame/src/geometry/shape_component.dart';
 import 'package:meta/meta.dart';
-
-import '../anchor.dart';
-import '../cache/value_cache.dart';
-import '../components/component.dart';
-import '../extensions/rect.dart';
-import '../extensions/vector2.dart';
-import 'line_segment.dart';
-import 'shape_component.dart';
 
 class PolygonComponent extends ShapeComponent {
   final List<Vector2> _vertices;

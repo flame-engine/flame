@@ -1,9 +1,8 @@
+import 'package:flame/src/effects/controllers/effect_controller.dart';
+import 'package:flame/src/effects/effect.dart';
+import 'package:flame/src/effects/effect_target.dart';
+import 'package:flame/src/effects/provider_interfaces.dart';
 import 'package:vector_math/vector_math_64.dart';
-
-import 'controllers/effect_controller.dart';
-import 'effect.dart';
-import 'effect_target.dart';
-import 'provider_interfaces.dart';
 
 /// Scale a component.
 ///
@@ -17,12 +16,23 @@ import 'provider_interfaces.dart';
 /// requires that any other effect or update logic applied to the same component
 /// also used incremental updates.
 class ScaleEffect extends Effect with EffectTarget<ScaleProvider> {
-  ScaleEffect.by(Vector2 scaleFactor, EffectController controller)
-      : _scaleFactor = scaleFactor.clone(),
-        super(controller);
+  ScaleEffect.by(
+    Vector2 scaleFactor,
+    EffectController controller, {
+    void Function()? onComplete,
+  })  : _scaleFactor = scaleFactor.clone(),
+        super(controller, onComplete: onComplete);
 
-  factory ScaleEffect.to(Vector2 targetScale, EffectController controller) =>
-      _ScaleToEffect(targetScale, controller);
+  factory ScaleEffect.to(
+    Vector2 targetScale,
+    EffectController controller, {
+    void Function()? onComplete,
+  }) =>
+      _ScaleToEffect(
+        targetScale,
+        controller,
+        onComplete: onComplete,
+      );
 
   final Vector2 _scaleFactor;
   late Vector2 _scaleDelta;
@@ -46,9 +56,16 @@ class ScaleEffect extends Effect with EffectTarget<ScaleProvider> {
 class _ScaleToEffect extends ScaleEffect {
   final Vector2 _targetScale;
 
-  _ScaleToEffect(Vector2 targetScale, EffectController controller)
-      : _targetScale = targetScale.clone(),
-        super.by(Vector2.zero(), controller);
+  _ScaleToEffect(
+    Vector2 targetScale,
+    EffectController controller, {
+    void Function()? onComplete,
+  })  : _targetScale = targetScale.clone(),
+        super.by(
+          Vector2.zero(),
+          controller,
+          onComplete: onComplete,
+        );
 
   @override
   void onStart() {

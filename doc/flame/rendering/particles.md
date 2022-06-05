@@ -143,6 +143,7 @@ Timer.periodic(duration * .1, () => print(particle.progress));
 The `lifespan` is passed down to all the descendants of a given `Particle`, if it supports any of
 the nesting behaviors.
 
+
 ## Built-in particles
 
 Flame ships with a few built-in `Particle` behaviors:
@@ -156,7 +157,7 @@ Flame ships with a few built-in `Particle` behaviors:
 * The `FlareParticle` renders Flare animation within a `Particle` effect
 
 More examples of how to use these behaviors together are available
-[here](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/utils/particles.dart).
+[here](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/rendering/particles_example.dart).
 All the implementations are available in the
 [particles](https://github.com/flame-engine/flame/tree/main/packages/flame/lib/src/particles) folder
 on the Flame repository.
@@ -182,6 +183,7 @@ game.add(
 );
 ```
 
+
 ## MovingParticle
 
 Moves the child `Particle` between the `from` and `to` `Vector2`s during its lifespan. Supports
@@ -202,6 +204,7 @@ game.add(
   ),
 );
 ```
+
 
 ## AcceleratedParticle
 
@@ -233,6 +236,7 @@ game.add(
 );
 ```
 
+
 ## CircleParticle
 
 A `Particle` which renders a circle with given `Paint` at the zero offset of passed `Canvas`. Use in
@@ -250,6 +254,7 @@ game.add(
 );
 ```
 
+
 ## SpriteParticle
 
 Allows you to embed a `Sprite` into your particle effects.
@@ -264,6 +269,7 @@ game.add(
   ),
 );
 ```
+
 
 ## ImageParticle
 
@@ -290,6 +296,7 @@ game.add(
 );
 ```
 
+
 ## AnimationParticle
 
 A `Particle` which embeds an `Animation`. By default, aligns the `Animation`'s `stepTime` so that
@@ -310,6 +317,7 @@ game.add(
   ),
 );
 ```
+
 
 ## ComponentParticle
 
@@ -343,10 +351,11 @@ class RectComponent extends Component {
 }
 ```
 
+
 ## FlareParticle
 
-To use Flare within Flame, use the [`flame_flare`](https://github.com/flame-engine/flame_flare)
-package.
+To use Flare within Flame, use the
+[`flame_flare`](https://github.com/flame-engine/flame/tree/main/packages/flame_flare) package.
 
 It will provide a class called `FlareParticle` that is a container for `FlareActorAnimation`, it
 propagates the `update` and `render` methods to its child.
@@ -367,6 +376,7 @@ game.add(
   ),
 );
 ```
+
 
 ## ComputedParticle
 
@@ -397,6 +407,7 @@ game.add(
   ),
 )
 ```
+
 
 ## Nesting behavior
 

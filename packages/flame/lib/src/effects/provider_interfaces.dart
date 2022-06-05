@@ -1,6 +1,5 @@
+import 'package:flame/src/anchor.dart';
 import 'package:vector_math/vector_math_64.dart';
-
-import '../anchor.dart';
 
 /// Interface for a component that can be affected by move effects.
 abstract class PositionProvider {
@@ -44,4 +43,10 @@ abstract class AngleProvider {
 abstract class AnchorProvider {
   Anchor get anchor;
   set anchor(Anchor value);
+}
+
+/// Interface for a component that can be affected by size effects.
+abstract class SizeProvider {
+  Vector2 get size;
+  set size(Vector2 value);
 }

@@ -41,7 +41,7 @@ class _NonPropagatingComponent extends _HoverableComponent {
 }
 
 void main() {
-  final withHoverables = FlameTester(() => _GameWithHoverables());
+  final withHoverables = FlameTester(_GameWithHoverables.new);
 
   group('Hoverable', () {
     withHoverables.test(

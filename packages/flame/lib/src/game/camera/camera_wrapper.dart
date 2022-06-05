@@ -1,9 +1,8 @@
 import 'dart:ui';
 
+import 'package:flame/components.dart';
+import 'package:flame/src/game/camera/camera.dart';
 import 'package:meta/meta.dart';
-
-import '../../../components.dart';
-import 'camera.dart';
 
 /// This class encapsulates FlameGame's rendering functionality. It will be
 /// converted into a proper Component in a future release, but until then

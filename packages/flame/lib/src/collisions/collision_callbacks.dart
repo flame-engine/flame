@@ -1,7 +1,6 @@
+import 'package:flame/collisions.dart';
+import 'package:flame/components.dart';
 import 'package:meta/meta.dart';
-
-import '../../collisions.dart';
-import '../../components.dart';
 
 /// The [CollisionType] is used to determine which other hitboxes that it
 /// should collide with.

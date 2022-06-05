@@ -41,6 +41,7 @@ class CameraComponentPropertiesExample extends FlameGame with HasTappables {
   @override
   void onGameResize(Vector2 size) {
     super.onGameResize(size);
+    _camera?.viewport.anchor = Anchor.center;
     _camera?.viewport.size = size * 0.7;
     _camera?.viewport.position = size * 0.6;
   }
@@ -49,10 +50,11 @@ class CameraComponentPropertiesExample extends FlameGame with HasTappables {
   // ignore: must_call_super
   void onTapDown(int pointerId, TapDownInfo info) {
     final canvasPoint = info.eventPosition.widget;
-    for (final cp in componentsAtPoint(canvasPoint)) {
-      if (cp.component is Background) {
-        cp.component.add(
-          ExpandingCircle(cp.point.toOffset()),
+    final nested = <Vector2>[];
+    for (final component in componentsAtPoint(canvasPoint, nested)) {
+      if (component is Background) {
+        component.add(
+          ExpandingCircle(nested.last.toOffset()),
         );
       }
     }
@@ -70,7 +72,7 @@ class ViewportFrame extends Component {
     final size = (parent! as Viewport).size;
     canvas.drawRRect(
       RRect.fromRectAndRadius(
-        Rect.fromLTWH(-size.x / 2, -size.y / 2, size.x, size.y),
+        Rect.fromLTWH(0, 0, size.x, size.y),
         const Radius.circular(5),
       ),
       paint,

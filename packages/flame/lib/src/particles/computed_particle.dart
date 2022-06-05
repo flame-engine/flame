@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'particle.dart';
+import 'package:flame/src/particles/particle.dart';
 
 /// A function which should render desired contents
 /// onto a given canvas. External state needed for

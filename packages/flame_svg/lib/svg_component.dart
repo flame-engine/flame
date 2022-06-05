@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:flame/components.dart';
 
-import './svg.dart';
+import 'package:flame_svg/svg.dart';
 
 /// Wraps [Svg] in a Flame component.
 class SvgComponent extends PositionComponent {

@@ -1,7 +1,6 @@
 import 'package:flame/components.dart';
+import 'package:flame_flare/flame_flare.dart';
 import 'package:flutter/widgets.dart';
-
-import '../flame_flare.dart';
 
 /// A [PositionComponent] that renders a [FlareActorAnimation]
 class FlareActorComponent extends PositionComponent {

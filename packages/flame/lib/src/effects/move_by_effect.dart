@@ -1,8 +1,7 @@
+import 'package:flame/src/effects/controllers/effect_controller.dart';
+import 'package:flame/src/effects/move_effect.dart';
+import 'package:flame/src/effects/provider_interfaces.dart';
 import 'package:vector_math/vector_math_64.dart';
-
-import 'controllers/effect_controller.dart';
-import 'move_effect.dart';
-import 'provider_interfaces.dart';
 
 /// A [MoveEffect] that moves its target by the specified offset vector.
 ///
@@ -23,8 +22,9 @@ class MoveByEffect extends MoveEffect {
     Vector2 offset,
     EffectController controller, {
     PositionProvider? target,
+    void Function()? onComplete,
   })  : _offset = offset.clone(),
-        super(controller, target);
+        super(controller, target, onComplete: onComplete);
 
   final Vector2 _offset;
 

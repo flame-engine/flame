@@ -49,9 +49,9 @@ class _PanGame extends FlameGame with PanDetector {
 }
 
 void main() {
-  final horizontalGame = FlameTester(() => _HorizontalDragGame());
-  final verticalGame = FlameTester(() => _VerticalDragGame());
-  final panGame = FlameTester(() => _PanGame());
+  final horizontalGame = FlameTester(_HorizontalDragGame.new);
+  final verticalGame = FlameTester(_VerticalDragGame.new);
+  final panGame = FlameTester(_PanGame.new);
 
   group('GameWidget - HorizontalDragDetector', () {
     horizontalGame.testGameWidget(

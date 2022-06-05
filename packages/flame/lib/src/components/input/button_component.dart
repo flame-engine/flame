@@ -1,7 +1,6 @@
+import 'package:flame/components.dart';
+import 'package:flame/input.dart';
 import 'package:meta/meta.dart';
-
-import '../../../components.dart';
-import '../../../input.dart';
 
 /// The [ButtonComponent] bundles two [PositionComponent]s, one that shows while
 /// the button is being pressed, and one that shows otherwise.
@@ -13,14 +12,20 @@ class ButtonComponent extends PositionComponent with Tappable {
   late final PositionComponent? buttonDown;
 
   /// Callback for what should happen when the button is pressed.
-  /// If you want to interact with [onTapUp] or [onTapCancel] it is recommended
+  /// If you want to interact with [onTapCancel] it is recommended
   /// to extend [ButtonComponent].
   void Function()? onPressed;
+
+  /// Callback for what should happen when the button is released.
+  /// If you want to interact with [onTapCancel] it is recommended
+  /// to extend [ButtonComponent].
+  void Function()? onReleased;
 
   ButtonComponent({
     this.button,
     this.buttonDown,
     this.onPressed,
+    this.onReleased,
     Vector2? position,
     Vector2? size,
     Vector2? scale,
@@ -55,12 +60,8 @@ class ButtonComponent extends PositionComponent with Tappable {
   @override
   @mustCallSuper
   bool onTapDown(TapDownInfo info) {
-    if (buttonDown != null) {
-      if (button != null) {
-        remove(button!);
-      }
-      add(buttonDown!);
-    }
+    button?.removeFromParent();
+    buttonDown?.changeParent(this);
     onPressed?.call();
     return false;
   }
@@ -69,18 +70,15 @@ class ButtonComponent extends PositionComponent with Tappable {
   @mustCallSuper
   bool onTapUp(TapUpInfo info) {
     onTapCancel();
+    onReleased?.call();
     return true;
   }
 
   @override
   @mustCallSuper
   bool onTapCancel() {
-    if (buttonDown != null) {
-      remove(buttonDown!);
-      if (button != null) {
-        add(button!);
-      }
-    }
+    buttonDown?.removeFromParent();
+    button?.changeParent(this);
     return false;
   }
 }

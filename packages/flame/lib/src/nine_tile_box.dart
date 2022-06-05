@@ -1,8 +1,8 @@
 import 'dart:ui';
 
-import 'extensions/vector2.dart';
-import 'palette.dart';
-import 'sprite.dart';
+import 'package:flame/src/extensions/vector2.dart';
+import 'package:flame/src/palette.dart';
+import 'package:flame/src/sprite.dart';
 
 /// This allows you to create a rectangle textured with a 9-sliced image.
 ///

@@ -1,8 +1,7 @@
+import 'package:flame/components.dart';
 import 'package:meta/meta.dart';
 import 'package:ordered_set/comparing.dart';
 import 'package:ordered_set/queryable_ordered_set.dart';
-
-import '../../components.dart';
 
 /// This is a simple wrapper over [QueryableOrderedSet] to be used by
 /// [Component].
@@ -23,7 +22,7 @@ class ComponentSet extends QueryableOrderedSet<Component> {
           strictMode: strictMode ?? defaultStrictMode,
         );
 
-  // When we switch to Dart 2.15 this can be replaced with constructor tear-off
+  @Deprecated('Use ComponentSet.new instead; will be removed in 1.3.0')
   static ComponentSet createDefault() => ComponentSet();
 
   /// Components whose priority changed since the last update.
