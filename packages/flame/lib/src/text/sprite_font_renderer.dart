@@ -2,6 +2,7 @@ import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:flame/src/anchor.dart';
+import 'package:flame/src/text/inline/text_element.dart';
 import 'package:flame/src/text/text_renderer.dart';
 import 'package:vector_math/vector_math_64.dart';
 
@@ -110,6 +111,11 @@ class SpriteFontRenderer extends TextRenderer {
       throw ArgumentError('No glyph for character "${String.fromCharCode(i)}"');
     }
     return glyph;
+  }
+
+  @override
+  TextElement forge(String text) {
+    throw UnimplementedError();
   }
 }
 
