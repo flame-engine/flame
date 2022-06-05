@@ -99,8 +99,7 @@ class InternalSpriteAnimationWidget extends StatefulWidget {
 }
 
 class _InternalSpriteAnimationWidgetState
-    extends State<InternalSpriteAnimationWidget>
-    with SingleTickerProviderStateMixin {
+    extends State<InternalSpriteAnimationWidget> with TickerProviderStateMixin {
   AnimationController? _controller;
   double? _lastUpdated;
 
