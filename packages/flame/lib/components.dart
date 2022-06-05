@@ -10,6 +10,7 @@ export 'src/components/fps_text_component.dart';
 export 'src/components/input/joystick_component.dart';
 export 'src/components/input/keyboard_listener_component.dart';
 export 'src/components/isometric_tile_map_component.dart';
+export 'src/components/mixins/component_viewport_margin.dart';
 export 'src/components/mixins/draggable.dart';
 export 'src/components/mixins/gesture_hitboxes.dart';
 export 'src/components/mixins/has_game_ref.dart';
