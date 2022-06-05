@@ -8,7 +8,8 @@ for handling tap events is described in [](gesture-input.md).
 **Tap events** are one of the most basic methods of interaction with a Flame game. These events
 occur when the user touches the screen with a finger, or clicks with a mouse, or taps with a stylus.
 A tap can be "long", but the finger isn't supposed to move during the gesture. Thus, touching the
-screen, then moving the finger, and then releasing -- is not a tap but a drag.
+screen, then moving the finger, and then releasing -- is not a tap but a drag. Similarly, clicking
+a mouse button while the mouse is moving will also be registered as a drag.
 
 Multiple tap events can occur at the same time, especially if the user has multiple fingers. Such
 cases will be handled correctly by Flame, and you can even keep track of the events by using their
@@ -84,14 +85,18 @@ you may find that the local tap-up coordinates are quite different from the loca
 coordinates.
 
 In extreme case, when the component moves away from the point of touch, the `onTapUp` event will not
-be generated at all: it will be replaced with `onTapCancel`.
+be generated at all: it will be replaced with `onTapCancel`. Note, however, that in this case the
+`onTapCancel` will be generated at the moment the user lifts or moves their finger, not at the
+moment the component moves away from the point of touch.
 
 
 ### onTapCancel
 
 This event occurs when the tap fails to materialize. Most often, this will happen if the user moves
 their finger, which converts the gesture from "tap" into "drag". Less often, this may happen when
-the component being tapped moves away from under the user's finger.
+the component being tapped moves away from under the user's finger. Even more rarely, the
+`onTapCancel` occurs when another widget pops over the game widget, or when the device turns off,
+or similar situations.
 
 The `TapCancelEvent` object contains only the `pointerId` of the previous `TapDownEvent` which is
 now being canceled. There is no position associated with a tap-cancel.
