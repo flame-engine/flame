@@ -1,6 +1,6 @@
 import 'dart:ui' hide LineMetrics;
 
-import 'package:flame/src/text/line_metrics.dart';
+import 'package:flame/src/text/common/line_metrics.dart';
 import 'package:flame/src/text/text_line.dart';
 
 /// [TextElement] is the base class describing a span of text that has "inline"

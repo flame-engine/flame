@@ -1,7 +1,7 @@
 import 'dart:ui' hide LineMetrics;
 
 import 'package:flame/src/text/inline/text_element.dart';
-import 'package:flame/src/text/line_metrics.dart';
+import 'package:flame/src/text/common/line_metrics.dart';
 import 'package:flame/src/text/text_line.dart';
 
 /// An [TextElement] containing other [TextElement]s inside.
