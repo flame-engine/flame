@@ -665,7 +665,6 @@ void main() {
         await tester.runAsync(() async {
           var hasAttached = false;
           final game = _OnAttachGame(() => hasAttached = true);
-          await game.toBeLoaded();
 
           await tester.pumpWidget(GameWidget(game: game));
           await game.toBeLoaded();
@@ -761,6 +760,6 @@ class _OnAttachGame extends FlameGame {
 
   @override
   Future<void>? onLoad() {
-    return Future.delayed(Duration(seconds: 1));
+    return Future.delayed(const Duration(seconds: 1));
   }
 }

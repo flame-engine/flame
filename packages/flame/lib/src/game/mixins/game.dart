@@ -48,10 +48,12 @@ mixin Game {
 
   @internal
   Future<void>? startLoad() {
-    assert(() {
-      _debugOnLoadStarted = true;
-      return true;
-    }());
+    assert(
+      () {
+        _debugOnLoadStarted = true;
+        return true;
+      }(),
+    );
     return _onLoadFuture = onLoad();
   }
 
