@@ -17,5 +17,5 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flame_lint: ^0.0.1
-  mocktail: ^0.1.2
+  mocktail: ^0.3.0
   dartdoc: ^4.1.0

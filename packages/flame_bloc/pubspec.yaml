@@ -21,5 +21,5 @@ dev_dependencies:
     sdk: flutter
   flutter_lints: ^1.0.0
   flame_test: ^1.4.0
-  mocktail: ^0.2.0
+  mocktail: ^0.3.0
   flame_lint: ^0.0.1
