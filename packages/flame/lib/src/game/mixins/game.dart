@@ -42,8 +42,30 @@ mixin Game {
   Vector2? _size;
 
   /// This variable ensures that Game's [onLoad] is called no more than once.
+  Future<void>? _onLoadFuture;
+
+  bool _debugOnLoadStarted = false;
+
+  @internal
+  Future<void>? startLoad() {
+    assert(() {
+      _debugOnLoadStarted = true;
+      return true;
+    }());
+    return _onLoadFuture = onLoad();
+  }
+
+  /// To be used for tests that needs to evaluate the game after it has been
+  /// loaded by the game widget.
   @visibleForTesting
-  late Future<void>? onLoadFuture = onLoad();
+  Future<void>? toBeLoaded() {
+    assert(
+      _debugOnLoadStarted,
+      'Make sure the game has passed to a mounted '
+      'GameWidget before calling toBeLoaded',
+    );
+    return _onLoadFuture ?? Future.value();
+  }
 
   /// Current game viewport size, updated every resize via the [onGameResize]
   /// method hook.
@@ -283,6 +305,7 @@ mixin Game {
   /// of the cursor to the closest region available on the tree.
   MouseCursor get mouseCursor => _mouseCursor;
   MouseCursor _mouseCursor = MouseCursor.defer;
+
   set mouseCursor(MouseCursor value) {
     _mouseCursor = value;
     _refreshWidget();

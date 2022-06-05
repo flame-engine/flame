@@ -181,7 +181,7 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
 
   Future<void> get loaderFuture => _loaderFuture ??= (() async {
         assert(currentGame.hasLayout);
-        final onLoad = currentGame.onLoadFuture;
+        final onLoad = currentGame.startLoad();
         if (onLoad != null) {
           await onLoad;
         }

@@ -660,14 +660,15 @@ void main() {
       );
     });
 
-    group('Render box attachement', () {
+    group('Render box attachment', () {
       testWidgets('calls on attach', (tester) async {
         await tester.runAsync(() async {
           var hasAttached = false;
           final game = _OnAttachGame(() => hasAttached = true);
+          await game.toBeLoaded();
 
           await tester.pumpWidget(GameWidget(game: game));
-          await game.onLoadFuture;
+          await game.toBeLoaded();
           await tester.pump();
 
           expect(hasAttached, isTrue);
