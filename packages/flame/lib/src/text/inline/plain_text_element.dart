@@ -43,7 +43,7 @@ class PlainTextElement extends TextElement implements TextLine {
       left: _x0!,
       width: _textPainter.width,
       ascent: _ascent,
-      bottom: _y0! + _textPainter.height,
+      descent: _textPainter.height - _ascent,
     );
   }
 

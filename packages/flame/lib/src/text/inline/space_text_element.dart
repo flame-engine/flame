@@ -20,7 +20,7 @@ class SpaceTextElement extends TextElement implements TextLine {
           baseline: 0,
           width: width,
           ascent: baseline,
-          bottom: height - baseline,
+          descent: height - baseline,
         );
 
   @override
@@ -42,14 +42,12 @@ class SpaceTextElement extends TextElement implements TextLine {
     final y0 = bounds.baseline;
     metrics.left = x0;
     metrics.baseline = y0;
-    metrics.bottom += y0;
     return LayoutResult.done;
   }
 
   @override
   void translate(double dx, double dy) {
     metrics.left += dx;
-    metrics.bottom += dx;
     metrics.baseline += dx;
   }
 
@@ -58,7 +56,6 @@ class SpaceTextElement extends TextElement implements TextLine {
 
   @override
   void resetLayout() {
-    metrics.bottom -= metrics.baseline;
     metrics.left = 0;
     metrics.baseline = 0;
   }

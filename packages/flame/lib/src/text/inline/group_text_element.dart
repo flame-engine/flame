@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'dart:ui' hide LineMetrics;
 
 import 'package:flame/src/text/inline/text_element.dart';
@@ -44,9 +43,7 @@ class GroupTextElement extends TextElement {
           final lastLine = child.lastLine;
           final lastMetric = lastLine.metrics;
           line.addChild(lastLine);
-          metric.width = lastMetric.right - metric.left;
-          metric.ascent = max(metric.ascent, lastMetric.ascent);
-          metric.bottom = max(metric.bottom, lastMetric.bottom);
+          metric.append(lastMetric);
           bounds.left = metric.right;
           _currentIndex++;
           break;
