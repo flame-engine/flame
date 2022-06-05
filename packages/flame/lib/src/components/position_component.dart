@@ -352,7 +352,7 @@ class PositionComponent extends Component
   /// Whether it is currently flipped horizontally.
   bool get isFlippedHorizontally => transform.scale.x.isNegative;
 
-  /// Whether it is currently flipped horizontally.
+  /// Whether it is currently flipped vertically.
   bool get isFlippedVertically => transform.scale.y.isNegative;
 
   //#endregion
