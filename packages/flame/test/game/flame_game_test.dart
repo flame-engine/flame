@@ -659,11 +659,27 @@ void main() {
         },
       );
     });
+
+    group('Render box attachement', () {
+      testWidgets('calls on attach', (tester) async {
+        await tester.runAsync(() async {
+          var hasAttached = false;
+          final game = _OnAttachGame(() => hasAttached = true);
+
+          await tester.pumpWidget(GameWidget(game: game));
+          await game.onLoadFuture;
+          await tester.pump();
+
+          expect(hasAttached, isTrue);
+        });
+      });
+    });
   });
 }
 
 class _IndexedComponent extends Component {
   final int index;
+
   _IndexedComponent(this.index);
 }
 
@@ -729,5 +745,21 @@ class _MyAsyncComponent extends _MyComponent {
   @override
   Future<void> onLoad() {
     return Future.value();
+  }
+}
+
+class _OnAttachGame extends FlameGame {
+  final VoidCallback onAttachCallback;
+
+  _OnAttachGame(this.onAttachCallback);
+
+  @override
+  void onAttach() {
+    onAttachCallback();
+  }
+
+  @override
+  Future<void>? onLoad() {
+    return Future.delayed(Duration(seconds: 1));
   }
 }

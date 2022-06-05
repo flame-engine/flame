@@ -42,7 +42,7 @@ mixin Game {
   Vector2? _size;
 
   /// This variable ensures that Game's [onLoad] is called no more than once.
-  @internal
+  @visibleForTesting
   late Future<void>? onLoadFuture = onLoad();
 
   /// Current game viewport size, updated every resize via the [onGameResize]
