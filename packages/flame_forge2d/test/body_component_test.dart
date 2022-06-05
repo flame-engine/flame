@@ -1,6 +1,5 @@
 import 'dart:ui';
 
-import 'package:flame/game.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter/material.dart';
@@ -37,7 +36,7 @@ void main() {
       group('draws correctly', () {
         String goldenPath(String name) => 'goldens/body_component/$name.png';
 
-        final flameTester = FlameTester(() => Forge2DGame());
+        final flameTester = FlameTester(Forge2DGame.new);
         final testPaint = Paint()..color = const Color(0xffff0000);
 
         flameTester.testGameWidget(
