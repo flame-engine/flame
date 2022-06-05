@@ -17,7 +17,7 @@ class SpaceTextElement extends TextElement implements TextLine {
     required double baseline,
   }) : metrics = LineMetrics(
           left: 0,
-          right: width,
+          width: width,
           top: -baseline,
           bottom: height - baseline,
           baseline: 0,
@@ -41,7 +41,6 @@ class SpaceTextElement extends TextElement implements TextLine {
     final x0 = bounds.left;
     final y0 = bounds.baseline;
     metrics.left = x0;
-    metrics.right += x0;
     metrics.baseline = y0;
     metrics.top += y0;
     metrics.bottom += y0;
@@ -51,7 +50,6 @@ class SpaceTextElement extends TextElement implements TextLine {
   @override
   void translate(double dx, double dy) {
     metrics.left += dx;
-    metrics.right += dx;
     metrics.top += dx;
     metrics.bottom += dx;
     metrics.baseline += dx;
@@ -62,7 +60,6 @@ class SpaceTextElement extends TextElement implements TextLine {
 
   @override
   void resetLayout() {
-    metrics.right -= metrics.left;
     metrics.top -= metrics.baseline;
     metrics.bottom -= metrics.baseline;
     metrics.left = 0;

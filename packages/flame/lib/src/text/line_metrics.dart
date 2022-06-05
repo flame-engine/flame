@@ -3,20 +3,20 @@ class LineMetrics {
   LineMetrics({
     required this.baseline,
     required this.left,
-    double? right,
+    this.width = 0,
     double? top,
     double? bottom,
-  })  : right = right ?? left,
+  })  :
         top = top ?? baseline,
         bottom = bottom ?? baseline;
 
   double left;
-  double right;
+  double width;
   double top;
   double bottom;
   double baseline;
 
-  double get width => right - left;
+  double get right => left + width;
   double get height => bottom - top;
 
   @override

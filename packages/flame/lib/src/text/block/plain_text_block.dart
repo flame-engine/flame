@@ -32,7 +32,7 @@ class PlainTextBlock extends TextBlock {
     final bounds = LineMetrics(
       baseline: 0,
       left: leftEdge,
-      right: width - rightEdge,
+      width: width - rightEdge - leftEdge,
     );
     print(bounds);
     var result = LayoutResult.unfinished;
@@ -41,7 +41,7 @@ class PlainTextBlock extends TextBlock {
         LineMetrics(
           baseline: 0,
           left: leftEdge,
-          right: width - rightEdge,
+          width: width - rightEdge - leftEdge,
         ),
       );
     }

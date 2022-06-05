@@ -44,7 +44,7 @@ class GroupTextElement extends TextElement {
           final lastLine = child.lastLine;
           final lastMetric = lastLine.metrics;
           line.addChild(lastLine);
-          metric.right = lastMetric.right;
+          metric.width = lastMetric.right - metric.left;
           metric.top = min(metric.top, lastMetric.top);
           metric.bottom = max(metric.bottom, lastMetric.bottom);
           bounds.left = metric.right;

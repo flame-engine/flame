@@ -40,8 +40,8 @@ class PlainTextElement extends TextElement implements TextLine {
     assert(isLaidOut);
     return LineMetrics(
       left: _x0!,
-      right: _x0! + _textPainter.width,
       top: _y0,
+      width: _textPainter.width,
       bottom: _y0! + _textPainter.height,
       baseline: _y0! + _ascent,
     );
