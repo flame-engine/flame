@@ -38,6 +38,11 @@ import 'package:flame/game.dart';
 /// the position where components are rendered with relation to the Viewport.
 /// Components marked as `positionType = PositionType.viewport;` are
 /// always rendered in screen coordinates, bypassing the camera altogether.
+///
+/// Note: beware of using very large numbers with the camera (like coordinates
+/// spanning the dozens of millions). Due to the required matrix operations
+/// performed by the Camera, using such large numbers can cause performance
+/// issues. Consider breaking down huge maps into manageable chunks.
 class Camera extends Projector {
   Camera() : _viewport = DefaultViewport() {
     _combinedProjector = Projector.compose([this, _viewport]);
