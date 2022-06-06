@@ -2,8 +2,8 @@ import 'dart:ui';
 
 import 'package:collection/collection.dart';
 import 'package:flame/src/text/block/text_block.dart';
-import 'package:flame/src/text/inline/text_element.dart';
 import 'package:flame/src/text/common/line_metrics.dart';
+import 'package:flame/src/text/inline/text_element.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 
@@ -46,7 +46,6 @@ class PlainTextBlock extends TextBlock {
       );
     }
     final lines = _text.lines;
-    assert(_text.isLaidOut);
 
     // Vertical+horizontal alignment
     final textHeight = lines.map((line) => line.metrics.height).sum +
@@ -77,7 +76,6 @@ class PlainTextBlock extends TextBlock {
 
   @override
   void translate(double dx, double dy) {
-    assert(_text.isLaidOut);
     _text.lines.forEach((line) => line.translate(dx, dy));
   }
 

@@ -11,12 +11,12 @@ import 'package:flame/src/text/common/text_line.dart';
 /// then render on a canvas after the layout.
 ///
 /// The layout mechanism used by this class works as follows:
-/// - initially, [isLaidOut] is false, and [lines] iterator is empty;
+/// - initially, the [lines] iterator is empty;
 /// - the owner of the text will call [layOutNextLine], requesting the text to
 ///   be placed within the specified `bounds`: onto the `baseline` and between
 ///   coordinates `left` and `right`;
 /// - if the text can be fit between the requested coordinates, then
-///   [LayoutResult.done] is returned, and [isLaidOut] becomes true;
+///   [LayoutResult.done] is returned, and the text is considered "laid out";
 /// - if the text can only fit partially between `x0` and `x1`, then the method
 ///   will return [LayoutResult.unfinished], and place the line just produced
 ///   into the [lines] iterable. At this moment the caller should call
@@ -31,9 +31,6 @@ import 'package:flame/src/text/common/text_line.dart';
 /// An inline text can potentially span multiple lines, be adjacent to other
 /// [TextElement]s, or contain other [TextElement]s inside.
 abstract class TextElement {
-  /// True iff the text has been completely laid out.
-  bool get isLaidOut;
-
   /// Performs layout of a single line of text.
   ///
   /// The [bounds] parameter specifies where the text should be placed: on y-
@@ -48,8 +45,6 @@ abstract class TextElement {
   /// - [LayoutResult.didNotAdvance]: the amount of space provided is too small
   ///   to place any amount of text. The caller should supply a larger value of
   ///   `right - left` next time. No new lines were stored in [lines].
-  ///
-  /// This method should only be called if [isLaidOut] is false.
   LayoutResult layOutNextLine(LineMetrics bounds);
 
   /// Returns information about the lines laid out so far.
@@ -63,14 +58,14 @@ abstract class TextElement {
   /// Renders the text on the [canvas], at positions determined during the
   /// layout.
   ///
-  /// This method can only be invoked if [isLaidOut] is true.
+  /// This method should only be invoked after the text was laid out.
   ///
   /// In order to render the text at a different location, consider applying a
   /// translation transform to the canvas.
   void render(Canvas canvas);
 
-  /// Clears all current layout information. After this call [isLaidOut] should
-  /// return false, and the text should be ready to be laid out again.
+  /// Clears all current layout information. After this call the text should be
+  /// ready to be laid out again.
   void resetLayout();
 }
 

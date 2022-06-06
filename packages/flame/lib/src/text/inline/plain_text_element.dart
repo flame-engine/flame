@@ -20,9 +20,6 @@ class PlainTextElement extends TextElement implements TextLine {
   final LineMetrics _box;
 
   @override
-  bool get isLaidOut => true;
-
-  @override
   void resetLayout() {
     _box.translate(-_box.left, -_box.baseline);
   }

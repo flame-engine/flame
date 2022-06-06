@@ -27,9 +27,6 @@ class SpaceTextElement extends TextElement implements TextLine {
   final LineMetrics metrics;
 
   @override
-  bool get isLaidOut => true;
-
-  @override
   TextLine get lastLine => this;
 
   @override

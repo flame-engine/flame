@@ -20,8 +20,9 @@ class LineMetrics {
   })  : _left = left,
         _baseline = baseline,
         _width = width,
-        _ascent = ascent ?? (height == null? 0 : height - (descent ?? 0)),
-        _descent = descent ?? (height == null? 0 : height - (ascent ?? height));
+        _ascent = ascent ?? (height == null ? 0 : height - (descent ?? 0)),
+        _descent =
+            descent ?? (height == null ? 0 : height - (ascent ?? height));
 
   /// X-coordinate of the left edge of the box.
   double get left => _left;

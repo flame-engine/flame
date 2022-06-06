@@ -16,14 +16,10 @@ class GroupTextElement extends TextElement {
   int _currentIndex = 0;
 
   @override
-  bool get isLaidOut => _currentIndex == _children.length;
-
-  @override
   LayoutResult layOutNextLine(LineMetrics bounds) {
-    assert(!isLaidOut);
     final metric = LineMetrics(left: bounds.left, baseline: bounds.baseline);
     final line = _InlineTextGroupLine(metric);
-    while (!isLaidOut) {
+    while (_currentIndex < _children.length) {
       final child = _children[_currentIndex];
       final result = child.layOutNextLine(bounds);
       switch (result) {
@@ -61,7 +57,6 @@ class GroupTextElement extends TextElement {
 
   @override
   void render(Canvas canvas) {
-    assert(isLaidOut);
     _children.forEach((e) => e.render(canvas));
   }
 
