@@ -120,7 +120,7 @@ class FlameGame extends Component with Game {
     var repeat = true;
     while (repeat) {
       // Give chance to other futures to execute first
-      await Future<void>.delayed(const Duration());
+      await Future<void>.delayed(Duration.zero);
       repeat = false;
       descendants(includeSelf: true).forEach(
         (Component child) {

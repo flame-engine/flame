@@ -8,11 +8,11 @@ environment:
   flutter: ">=2.10.0"
 
 dependencies:
-  flame: ^1.1.1
   audioplayers: ^0.20.1
-  synchronized: ^3.0.0
+  flame: ^1.1.1
   flutter:
     sdk: flutter
+  synchronized: ^3.0.0
 
 dev_dependencies:
   dartdoc: ^4.1.0

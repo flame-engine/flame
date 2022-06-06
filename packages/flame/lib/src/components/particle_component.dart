@@ -11,6 +11,7 @@ import 'package:flame/src/particles/particle.dart';
 class ParticleComponent extends Component {
   Particle particle;
 
+  @Deprecated('Will be removed after v1.1, use ParticleSystemComponent instead')
   ParticleComponent(this.particle);
 
   /// Returns progress of the child [Particle].

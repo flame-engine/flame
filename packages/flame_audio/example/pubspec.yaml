@@ -9,16 +9,13 @@ environment:
   sdk: ">=2.16.0 <3.0.0"
 
 dependencies:
-  flame:
-    path: ../../flame
-  flame_audio:
-    path: ../
+  flame: ^1.1.1
+  flame_audio: ^1.0.2
   flutter:
     sdk: flutter
 
 dev_dependencies:
-  flame_lint:
-    path: ../../flame_lint
+  flame_lint: ^0.0.1
 
 flutter:
   assets:

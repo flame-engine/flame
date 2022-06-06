@@ -9,17 +9,15 @@ environment:
   sdk: ">=2.16.0 <3.0.0"
 
 dependencies:
+  flame: ^1.1.1
+  flame_svg: ^1.2.0
   flutter:
     sdk: flutter
-  flame: ^1.1.1
-  flame_svg:
-    path: ../
 
 dev_dependencies:
+  flame_lint: ^0.0.1
   flutter_test:
     sdk: flutter
-  flame_lint:
-    path: ../../flame_lint
 
 flutter:
   uses-material-design: true

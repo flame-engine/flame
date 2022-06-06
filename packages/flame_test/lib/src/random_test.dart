@@ -42,7 +42,7 @@ void testRandom(
   int? retry,
   int repeatCount = 1,
 }) {
-  assert(repeatCount > 0);
+  assert(repeatCount > 0, 'repeatCount needs to be a positive number');
   for (var i = 0; i < repeatCount; i++) {
     final seed0 = seed ?? _seedGenerator.nextInt(_maxSeed);
     test(

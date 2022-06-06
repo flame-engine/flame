@@ -8,18 +8,18 @@ environment:
   flutter: ">=2.10.0"
 
 dependencies:
+  bloc: ^8.0.2
+  flame: ^1.1.1
   flutter:
     sdk: flutter
-  bloc: ^8.0.2
-  meta: ^1.7.0
-  flame: ^1.1.1
   flutter_bloc: ^8.0.1
+  meta: ^1.7.0
 
 dev_dependencies:
   dartdoc: ^4.1.0
+  flame_lint: ^0.0.1
+  flame_test: ^1.4.0
+  flutter_lints: ^1.0.0
   flutter_test:
     sdk: flutter
-  flutter_lints: ^1.0.0
-  flame_test: ^1.4.0
   mocktail: ^0.3.0
-  flame_lint: ^0.0.1
