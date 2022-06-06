@@ -69,7 +69,7 @@ FlameTester<_MyGame> myGame({required bool open}) {
   return FlameTester(
     _MyGame.new,
     pumpWidget: (gameWidget, tester) async {
-      await tester.pumpWidget(_Wrapper(child: gameWidget, open: open));
+      await tester.pumpWidget(_Wrapper(open: open, child: gameWidget));
     },
   );
 }

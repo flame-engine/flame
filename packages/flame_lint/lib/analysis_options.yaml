@@ -73,7 +73,6 @@ linter:
     - no_runtimeType_toString
     - non_constant_identifier_names
     - noop_primitive_operations
-    - null_check_on_nullable_type_parameter
     - null_closures
     - omit_local_variable_types
     - package_api_docs
@@ -82,7 +81,6 @@ linter:
     - parameter_assignments
     - prefer_adjacent_string_concatenation
     - prefer_asserts_in_initializer_lists
-    - prefer_asserts_with_message
     - prefer_collection_literals
     - prefer_conditional_assignment
     - prefer_const_constructors
@@ -155,6 +153,5 @@ linter:
     - use_raw_strings
     - use_rethrow_when_possible
     - use_test_throws_matchers
-    - use_to_and_as_if_applicable
     - valid_regexps
     - void_checks

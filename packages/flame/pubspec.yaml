@@ -8,19 +8,19 @@ environment:
   flutter: ">=2.10.0"
 
 dependencies:
+  collection: ^1.15.0
   flutter:
     sdk: flutter
   meta: ^1.7.0
-  collection: ^1.15.0
   ordered_set: ^5.0.0
   vector_math: ^2.1.1
 
 dev_dependencies:
-  dartdoc: ^4.1.0
-  mocktail: ^0.3.0
   canvas_test: ^0.2.0
-  flame_test: ^1.4.0
+  dartdoc: ^4.1.0
   flame_lint: ^0.0.1
-  test: any
+  flame_test: ^1.4.0
   flutter_test:
     sdk: flutter
+  mocktail: ^0.3.0
+  test: any

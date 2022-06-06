@@ -94,7 +94,7 @@ Future<SpriteFontRenderer> createRenderer({
   const lines = [
     'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
     'abcdefghijklmnopqrstuvwxyz',
-    '0123456789.,:;—_!?@\$%+-=/*',
+    r'0123456789.,:;—_!?@$%+-=/*',
     '#^&()[]{}<>|\\\'"`~←→↑↓ ',
   ];
   return SpriteFontRenderer(

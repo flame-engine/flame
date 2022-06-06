@@ -107,8 +107,8 @@ class NineTileBoxWidget extends StatelessWidget {
           destTileSize: destTileSize,
           width: width,
           height: height,
-          child: child,
           padding: padding,
+          child: child,
         );
       },
       errorBuilder: errorBuilder,
@@ -152,8 +152,8 @@ class InternalNineTileBox extends StatelessWidget {
           destTileSize: destTileSize,
         ),
         child: Container(
-          child: child,
           padding: padding,
+          child: child,
         ),
       ),
     );
