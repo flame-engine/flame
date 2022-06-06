@@ -10,17 +10,17 @@ environment:
   flutter: ">=2.10.0"
 
 dependencies:
-  flame: ^1.1.1
-  flame_svg: ^1.2.0
-  flame_forge2d: ^0.11.0
   dashbook: 0.1.6
-  google_fonts: ^2.3.2
+  flame: ^1.1.1
+  flame_forge2d: ^0.11.0
+  flame_svg: ^1.2.0
   flutter:
     sdk: flutter
-  trex_game:
-    path: games/trex
+  google_fonts: ^2.3.2
   padracing:
     path: games/padracing
+  trex_game:
+    path: games/trex
 
 dev_dependencies:
   flame_lint: ^0.0.1
