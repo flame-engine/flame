@@ -8,13 +8,11 @@ environment:
   flutter: ">=2.10.0"
 
 dependencies:
-  flame:
-    path: ../
+  flame: ^1.1.1
   flutter:
     sdk: flutter
 
 dev_dependencies:
+  flame_lint: ^0.0.1
   flutter_test:
     sdk: flutter
-  flame_lint:
-    path: ../../flame_lint
