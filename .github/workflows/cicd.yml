@@ -48,5 +48,5 @@ jobs:
         with:
           channel: 'stable'
       - uses: bluefireteam/melos-action@main
-      - run: melos run test
+      - uses: bluefireteam/spec-action@main
   # END TESTING STAGE
