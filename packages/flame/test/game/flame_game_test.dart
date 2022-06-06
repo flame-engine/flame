@@ -135,20 +135,6 @@ void main() {
         },
       );
 
-      testWithFlameGame('clear removes all components', (game) async {
-        final components = List.generate(3, (index) => Component());
-        await game.ensureAddAll(components);
-        expect(game.children.length, equals(3));
-
-        game.children
-            .clear(); // ignore: deprecated_member_use_from_same_package
-
-        // Ensure clear does not remove components directly
-        expect(game.children.length, equals(3));
-        game.updateTree(0);
-        expect(game.children.isEmpty, equals(true));
-      });
-
       testWidgets(
         'can add a component to a game without a layout',
         (WidgetTester tester) async {
