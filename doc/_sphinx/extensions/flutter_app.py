@@ -85,6 +85,8 @@ class FlutterAppDirective(SphinxDirective):
         page = self.options.get('page', '')
         iframe_url = _doc_root() + self.html_dir + '/index.html?' + page
         result = []
+        if 'widget' in self.modes:
+            result.append(IFrame(src=iframe_url, classes=['flutter-app-iframe']))
         if 'popup' in self.modes:
             result.append(Button(
                 '',
@@ -101,8 +103,6 @@ class FlutterAppDirective(SphinxDirective):
                 classes=['flutter-app-button', 'code'],
                 onclick=f'open_code_listings("{code_id}")',
             ))
-        if 'widget' in self.modes:
-            result.append(IFrame(src=iframe_url))
         return result
 
     def _process_show_option(self):
@@ -190,9 +190,14 @@ class FlutterAppDirective(SphinxDirective):
 
     def _generate_code_listings(self, code_id):
         code_dir = self.source_dir + '/lib/' + self.options.get('page', '')
-        if not os.path.isdir(code_dir):
-            raise self.error('Cannot find source directory ' + code_dir)
-        files = glob.glob(code_dir + '/**', recursive=True)
+        if os.path.isdir(code_dir):
+            files = glob.glob(code_dir + '/**', recursive=True)
+        elif os.path.isfile(code_dir + '.dart'):
+            files = [code_dir + '.dart']
+            code_dir += '/..'
+        else:
+            raise self.error(f'Cannot find source directory {code_dir} or '
+                             f'source file {code_dir}.dart')
 
         result = nodes.container(classes=['flutter-app-code'], ids=[code_id])
         for filename in sorted(files):

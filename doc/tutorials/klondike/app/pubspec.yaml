@@ -12,6 +12,9 @@ dependencies:
   flame:
     path: ../../../../packages/flame
 
+dev_dependencies:
+  flame_lint: ^0.0.1
+
 flutter:
   assets:
     - assets/images/
