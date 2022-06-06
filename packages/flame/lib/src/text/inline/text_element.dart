@@ -48,12 +48,9 @@ abstract class TextElement {
   LayoutResult layOutNextLine(LineMetrics bounds);
 
   /// Returns information about the lines laid out so far.
-  Iterable<TextLine> get lines;
+  List<TextLine>? get lines => null;
 
-  /// Access to the last laid out line. This property is accessed very often
-  /// during the lay out algorithm, so it should be more efficient than
-  /// `lines().last`.
-  TextLine get lastLine;
+  TextLine get lastLaidOutLine => lines?.last ?? (this as TextLine);
 
   /// Renders the text on the [canvas], at positions determined during the
   /// layout.

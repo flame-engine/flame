@@ -34,12 +34,6 @@ class PlainTextElement extends TextElement implements TextLine {
   }
 
   @override
-  Iterable<TextLine> get lines => [this];
-
-  @override
-  TextLine get lastLine => this;
-
-  @override
   LineMetrics get metrics => _box;
 
   @override

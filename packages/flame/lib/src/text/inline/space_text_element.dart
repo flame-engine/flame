@@ -27,12 +27,6 @@ class SpaceTextElement extends TextElement implements TextLine {
   final LineMetrics metrics;
 
   @override
-  TextLine get lastLine => this;
-
-  @override
-  Iterable<TextLine> get lines => [this];
-
-  @override
   LayoutResult layOutNextLine(LineMetrics bounds) {
     assert(metrics.left == 0 && metrics.baseline == 0);
     metrics.translate(bounds.left, bounds.baseline);

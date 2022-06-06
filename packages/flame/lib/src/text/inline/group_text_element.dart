@@ -9,62 +9,61 @@ import 'package:flame/src/text/inline/text_element.dart';
 /// This class allows forming a tree of [TextElement]s, placing different
 /// kinds of [TextElement]s next to each other.
 class GroupTextElement extends TextElement {
-  GroupTextElement(this._children);
+  GroupTextElement(this.children, {this.spacing = 0});
 
-  final List<TextElement> _children;
-  final List<TextLine> _lines = [];
+  final List<TextElement> children;
+
+  /// Extra distance to insert between the child text elements.
+  final double spacing;
+
+  @override
+  final List<_InlineTextGroupLine> lines = [];
+
+  /// Index of the child currently being laid out.
   int _currentIndex = 0;
 
   @override
   LayoutResult layOutNextLine(LineMetrics bounds) {
-    final metric = LineMetrics(left: bounds.left, baseline: bounds.baseline);
-    final line = _InlineTextGroupLine(metric);
-    while (_currentIndex < _children.length) {
-      final child = _children[_currentIndex];
-      final result = child.layOutNextLine(bounds);
-      switch (result) {
-        case LayoutResult.didNotAdvance:
-          if (metric.left == metric.right) {
-            return LayoutResult.didNotAdvance;
-          } else {
-            _lines.add(line);
-            return LayoutResult.unfinished;
-          }
-
-        case LayoutResult.unfinished:
-          _lines.add(line);
+    final currentLineMetric = LineMetrics(
+      left: bounds.left,
+      baseline: bounds.baseline,
+    );
+    lines.add(_InlineTextGroupLine(currentLineMetric));
+    while (_currentIndex < children.length) {
+      final child = children[_currentIndex];
+      final childLayoutResult = child.layOutNextLine(bounds);
+      if (childLayoutResult == LayoutResult.didNotAdvance) {
+        if (currentLineMetric.width == 0) {
+          lines.removeLast();
+          return LayoutResult.didNotAdvance;
+        } else {
           return LayoutResult.unfinished;
+        }
+      }
+      final lastLine = child.lines?.last ?? (child as TextLine);
+      final lastMetric = lastLine.metrics;
+      lines.last.addChild(lastLine);
+      currentLineMetric.append(lastMetric);
+      bounds.setLeftEdge(currentLineMetric.right);
+      _currentIndex++;
 
-        case LayoutResult.done:
-          final lastLine = child.lastLine;
-          final lastMetric = lastLine.metrics;
-          line.addChild(lastLine);
-          metric.append(lastMetric);
-          bounds.setLeftEdge(metric.right);
-          _currentIndex++;
-          break;
+      if (childLayoutResult == LayoutResult.unfinished) {
+        return LayoutResult.unfinished;
       }
     }
-    _lines.add(line);
     return LayoutResult.done;
   }
 
   @override
-  Iterable<TextLine> get lines => _lines;
-
-  @override
-  TextLine get lastLine => _lines.last;
-
-  @override
   void render(Canvas canvas) {
-    _children.forEach((e) => e.render(canvas));
+    children.forEach((e) => e.render(canvas));
   }
 
   @override
   void resetLayout() {
     _currentIndex = 0;
-    _lines.clear();
-    _children.forEach((e) => e.resetLayout());
+    lines.clear();
+    children.forEach((e) => e.resetLayout());
   }
 }
 
