@@ -4,12 +4,14 @@ import 'package:flame/src/text/common/line_metrics.dart';
 import 'package:flame/src/text/common/text_line.dart';
 import 'package:flame/src/text/inline/text_element.dart';
 
-/// An [TextElement] containing other [TextElement]s inside.
+/// A [TextElement] containing a sequence of other [TextElement]s inside.
 ///
 /// This class allows forming a tree of [TextElement]s, placing different
-/// kinds of [TextElement]s next to each other.
+/// kinds of [TextElement]s next to each other, with optional additional
+/// [spacing].
 class GroupTextElement extends TextElement {
-  GroupTextElement(this.children, {this.spacing = 0});
+  GroupTextElement(this.children, {this.spacing = 0})
+    : assert(children.isNotEmpty, 'Children list cannot be empty');
 
   final List<TextElement> children;
 
