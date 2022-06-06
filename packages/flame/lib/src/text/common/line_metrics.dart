@@ -13,13 +13,14 @@ class LineMetrics {
     required double left,
     required double baseline,
     double width = 0,
-    double ascent = 0,
-    double descent = 0,
+    double? ascent,
+    double? descent,
+    double? height,
   })  : _left = left,
         _baseline = baseline,
         _width = width,
-        _ascent = ascent,
-        _descent = descent;
+        _ascent = ascent ?? (height == null? 0 : height - (descent ?? 0)),
+        _descent = descent ?? (height == null? 0 : height - (ascent ?? height));
 
   /// X-coordinate of the left edge of the box.
   double get left => _left;

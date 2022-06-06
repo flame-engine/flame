@@ -1,61 +1,57 @@
-import 'package:flame/src/text/inline/text_element.dart';
+import 'dart:ui';
+
 import 'package:flame/src/text/common/line_metrics.dart';
+import 'package:flame/src/text/inline/text_element.dart';
 import 'package:flame/src/text/text_line.dart';
-import 'package:flutter/rendering.dart';
+import 'package:flutter/rendering.dart' show TextBaseline, TextPainter;
 
 class PlainTextElement extends TextElement implements TextLine {
   PlainTextElement(this._textPainter)
-      : _ascent = _textPainter
-            .computeDistanceToActualBaseline(TextBaseline.alphabetic);
+      : _box = LineMetrics(
+          left: 0,
+          baseline: 0,
+          ascent: _textPainter
+              .computeDistanceToActualBaseline(TextBaseline.alphabetic),
+          width: _textPainter.width,
+          height: _textPainter.height,
+        );
 
   final TextPainter _textPainter;
-  final double _ascent;
-  double? _x0;
-  double? _y0;
+  final LineMetrics _box;
 
   @override
-  bool get isLaidOut => _x0 != null && _y0 != null;
+  bool get isLaidOut => true;
 
   @override
-  void resetLayout() => _x0 = null;
+  void resetLayout() {
+    _box.translate(-_box.left, -_box.baseline);
+  }
 
   @override
   LayoutResult layOutNextLine(LineMetrics bounds) {
     if (bounds.width < _textPainter.width) {
       return LayoutResult.didNotAdvance;
     }
-    _x0 = bounds.left;
-    _y0 = bounds.baseline - _ascent;
+    _box.translate(bounds.left, bounds.baseline);
     return LayoutResult.done;
   }
 
   @override
-  Iterable<TextLine> get lines => _x0 == null ? [] : [this];
+  Iterable<TextLine> get lines => [this];
 
   @override
   TextLine get lastLine => this;
 
   @override
-  LineMetrics get metrics {
-    assert(isLaidOut);
-    return LineMetrics(
-      baseline: _y0! + _ascent,
-      left: _x0!,
-      width: _textPainter.width,
-      ascent: _ascent,
-      descent: _textPainter.height - _ascent,
-    );
-  }
+  LineMetrics get metrics => _box;
 
   @override
   void translate(double dx, double dy) {
-    _x0 = _x0! + dx;
-    _y0 = _y0! + dy;
+    _box.translate(dx, dy);
   }
 
   @override
   void render(Canvas canvas) {
-    assert(isLaidOut);
-    _textPainter.paint(canvas, Offset(_x0!, _y0!));
+    _textPainter.paint(canvas, Offset(_box.left, _box.top));
   }
 }
