@@ -36,9 +36,6 @@ class _Painter extends CustomPainter {
   bool shouldRepaint(_) => false;
 }
 
-@Deprecated('Renamed to [NineTileBoxWidget], this will be remove in v1.2.0')
-typedef NineTileBox = NineTileBoxWidget;
-
 /// A [StatelessWidget] that renders NineTileBox
 class NineTileBoxWidget extends StatelessWidget {
   final FutureOr<Image> _imageFuture;

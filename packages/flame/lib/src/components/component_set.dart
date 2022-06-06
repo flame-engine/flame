@@ -45,38 +45,6 @@ class ComponentSet extends QueryableOrderedSet<Component> {
   @override
   bool remove(Component component) => super.remove(component);
 
-  /// Prohibit method `addAll()` inherited from the [QueryableOrderedSet]. If
-  /// this was allowed, then the user would be able to bypass standard lifecycle
-  /// methods of the [Component] class.
-  @Deprecated('Do not use, will be fully removed in v1.2.0')
-  @override
-  int addAll(Iterable<Component> c) {
-    throw UnsupportedError(
-      'Adding elements directly to a ComponentSet is prohibited; use '
-      'Component.addAll() instead',
-    );
-  }
-
-  /// Prohibit method `removeAll()` inherited from the [QueryableOrderedSet]. If
-  /// this was allowed, then the user would be able to bypass standard lifecycle
-  /// methods of the [Component] class.
-  @Deprecated('Do not use, will be fully removed in v1.2.0')
-  @override
-  Iterable<Component> removeAll(Iterable<Component> components) {
-    throw UnsupportedError(
-      'Removing elements directly from a ComponentSet is prohibited; use '
-      'Component.removeAll() instead',
-    );
-  }
-
-  /// Marks all existing components to be removed from the components list on
-  /// the next game tick.
-  @Deprecated('This method will be removed in v1.2.0')
-  @override
-  void clear() {
-    forEach((element) => element.removeFromParent());
-  }
-
   /// Whether the component set contains components or that there are components
   /// marked to be added later.
   @override

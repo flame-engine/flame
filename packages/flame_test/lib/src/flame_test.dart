@@ -130,7 +130,7 @@ class GameTester<T extends Game> {
   ///
   /// Use [verify] closure to make verifications/assertions.
   @isTest
-  @Deprecated('Use testGameWidget instead')
+  @Deprecated('Use testGameWidget instead, will be removed in v1.3.0')
   void widgetTest(
     String description,
     WidgetVerifyFunction<T>? verify, {

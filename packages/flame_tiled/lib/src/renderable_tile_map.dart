@@ -31,15 +31,6 @@ class RenderableTiledMap {
     refreshCache();
   }
 
-  /// Cached [SpriteBatch]es of this map.
-  @Deprecated(
-    'If you take a direct dependency on batches, use batchesByLayer instead. '
-    'This will be removed in flame_tiled v1.4.0',
-  )
-  Map<String, SpriteBatch> get batches => batchesByLayer.isNotEmpty
-      ? batchesByLayer.first
-      : <String, SpriteBatch>{};
-
   /// Changes the visibility of the corresponding layer, if different
   void setLayerVisibility(int layerId, bool visibility) {
     if (map.layers[layerId].visible != visibility) {
@@ -206,19 +197,6 @@ class RenderableTiledMap {
     batchesByLayer.forEach((batchMap) {
       batchMap.forEach((_, batch) => batch.render(c));
     });
-  }
-
-  /// This returns an object group fetch by name from a given layer.
-  /// Use this to add custom behaviour to special objects and groups.
-  @Deprecated(
-    'Use the getLayer() method instead. '
-    'This method will be removed in flame_tiled v1.4.0.',
-  )
-  ObjectGroup getObjectGroupFromLayer(String name) {
-    final g = map.layers.firstWhere((layer) {
-      return layer is ObjectGroup && layer.name == name;
-    });
-    return g as ObjectGroup;
   }
 
   /// Returns a layer of type [T] with given [name] from all the layers

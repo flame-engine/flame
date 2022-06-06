@@ -199,11 +199,15 @@ After that it can be specified which widgets represent each overlay in the `Game
 by setting a `overlayBuilderMap`.
 
 ```dart
-// Inside the game methods:
-final pauseOverlayIdentifier = 'PauseMenu';
-
-overlays.add(pauseOverlayIdentifier); // Marks 'PauseMenu' to be rendered.
-overlays.remove(pauseOverlayIdentifier); // Marks 'PauseMenu' to not be rendered.
+void main() {
+  // Inside the game methods:
+  final pauseOverlayIdentifier = 'PauseMenu';
+  
+  // Marks 'PauseMenu' to be rendered.
+  overlays.add(pauseOverlayIdentifier);
+  // Marks 'PauseMenu' to not be rendered.
+  overlays.remove(pauseOverlayIdentifier);
+}
 ```
 
 ```dart
