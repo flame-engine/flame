@@ -1,7 +1,7 @@
 import 'dart:ui';
 
-import 'package:flame/src/text/inline/text_element.dart';
 import 'package:flame/src/text/common/line_metrics.dart';
+import 'package:flame/src/text/inline/text_element.dart';
 import 'package:flame/src/text/text_line.dart';
 
 /// Text element representing a single space between words.
@@ -38,17 +38,13 @@ class SpaceTextElement extends TextElement implements TextLine {
   @override
   LayoutResult layOutNextLine(LineMetrics bounds) {
     assert(metrics.left == 0 && metrics.baseline == 0);
-    final x0 = bounds.left;
-    final y0 = bounds.baseline;
-    metrics.left = x0;
-    metrics.baseline = y0;
+    metrics.translate(bounds.left, bounds.baseline);
     return LayoutResult.done;
   }
 
   @override
   void translate(double dx, double dy) {
-    metrics.left += dx;
-    metrics.baseline += dx;
+    metrics.translate(dx, dy);
   }
 
   @override
@@ -56,7 +52,6 @@ class SpaceTextElement extends TextElement implements TextLine {
 
   @override
   void resetLayout() {
-    metrics.left = 0;
-    metrics.baseline = 0;
+    metrics.translate(-metrics.left, -metrics.baseline);
   }
 }

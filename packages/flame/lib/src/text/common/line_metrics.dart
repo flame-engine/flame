@@ -10,19 +10,25 @@
 /// of multi-line text.
 class LineMetrics {
   LineMetrics({
-    required this.left,
-    required this.baseline,
+    required double left,
+    required double baseline,
     double width = 0,
     double ascent = 0,
     double descent = 0,
-  }) : _width = width, _ascent = ascent, _descent = descent;
+  })  : _left = left,
+        _baseline = baseline,
+        _width = width,
+        _ascent = ascent,
+        _descent = descent;
 
   /// X-coordinate of the left edge of the box.
-  double left;
+  double get left => _left;
+  double _left;
 
   /// Y-coordinate of the baseline of the box. When several line fragments are
   /// placed next to each other, their baselines will match.
-  double baseline;
+  double get baseline => _baseline;
+  double _baseline;
 
   /// The total width of the box.
   double get width => _width;
@@ -40,6 +46,20 @@ class LineMetrics {
   double get top => baseline - ascent;
   double get bottom => baseline + descent;
   double get height => ascent + descent;
+
+  /// Moves the [LineMetrics] box by the specified offset [dx], [dy] leaving its
+  /// width and height unmodified.
+  void translate(double dx, double dy) {
+    _left += dx;
+    _baseline += dy;
+  }
+
+  /// Sets the position of the left edge of this [LineMetrics] box, leaving the
+  /// [right] edge in place.
+  void setLeftEdge(double x) {
+    _width = _left + _width - x;
+    _left = x;
+  }
 
   /// Appends another [LineMetrics] box that is adjacent to the current and on
   /// the same baseline. The current object will be modified to encompass the
