@@ -77,7 +77,6 @@ class LineMetrics {
   }
 
   @override
-  String toString() => 'LineMetrics('
-      'left: $left, baseline: $baseline, '
+  String toString() => 'LineMetrics(left: $left, baseline: $baseline, '
       'width: $width, ascent: $ascent, descent: $descent)';
 }
