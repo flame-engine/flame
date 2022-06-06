@@ -23,7 +23,7 @@ class ComponentSet extends QueryableOrderedSet<Component> {
         );
 
   @Deprecated('Use ComponentSet.new instead; will be removed in 1.3.0')
-  static ComponentSet createDefault() => ComponentSet();
+  ComponentSet.createDefault() : this();
 
   /// Components whose priority changed since the last update.
   ///

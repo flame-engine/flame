@@ -47,7 +47,10 @@ class ShapesExample extends FlameGame {
 
 class ShapesComponent extends Component {
   ShapesComponent(this.shapes, List<Color> colors)
-      : assert(shapes.length == colors.length),
+      : assert(
+          shapes.length == colors.length,
+          'The shapes and colors lists have to be of the same length',
+        ),
         paints = colors
             .map(
               (color) => Paint()
@@ -70,7 +73,10 @@ class ShapesComponent extends Component {
 
 class DotsComponent extends Component {
   DotsComponent(this.shapes, this.shapeColors)
-      : assert(shapes.length == shapeColors.length);
+      : assert(
+          shapes.length == shapeColors.length,
+          'The shapes and shapeColors lists have to be of the same length',
+        );
 
   final List<Shape> shapes;
   final List<Color> shapeColors;

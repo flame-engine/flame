@@ -10,18 +10,15 @@ environment:
   flutter: ">=2.10.0"
 
 dependencies:
+  dashbook: ^0.1.6
+  flame_forge2d: ^0.11.0
   flutter:
     sdk: flutter
-  flame_forge2d:
-    path: ../
-  dashbook: ^0.1.6
 
 dev_dependencies:
+  flame_lint: ^0.0.1
   flutter_test:
     sdk: flutter
-  flame_lint:
-    path: ../../flame_lint
-
 
 flutter:
   uses-material-design: true

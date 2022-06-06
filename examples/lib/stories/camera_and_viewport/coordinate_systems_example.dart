@@ -213,26 +213,26 @@ class _CoordinateSystemsState extends State<CoordinateSystemsWidget> {
     required bool start,
   }) {
     final add = Container(
+      margin: const EdgeInsets.all(32),
       child: Center(
         child: TextButton(
           child: const Text('+'),
           onPressed: () => setState(() => blocks[index]++),
         ),
       ),
-      margin: const EdgeInsets.all(32),
     );
     return [
       if (start) add,
       for (int i = 1; i <= blocks[index]; i++)
         GestureDetector(
           child: Container(
+            margin: const EdgeInsets.all(32),
             child: Center(
               child: RotatedBox(
                 quarterTurns: rotated ? 1 : 0,
                 child: Text('Block $i'),
               ),
             ),
-            margin: const EdgeInsets.all(32),
           ),
           onTap: () => setState(() => blocks[index]--),
         ),

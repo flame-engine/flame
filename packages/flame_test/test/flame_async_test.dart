@@ -6,7 +6,7 @@ void main() {
   var instructions = 0;
 
   tearDown(() {
-    assert(instructions == 9);
+    assert(instructions == 9, 'There should be exactly 9 instructions');
   });
   flameGame.test(
     'runs all the async tests',

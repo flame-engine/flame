@@ -7,17 +7,17 @@ environment:
   sdk: ">=2.16.0 <3.0.0"
 
 dependencies:
-  flutter:
-    sdk: flutter
   flame: ^1.1.1
   flame_forge2d: ^0.11.0
+  flutter:
+    sdk: flutter
   google_fonts: ^2.3.2
   url_launcher: ^6.1.2
 
 dev_dependencies:
+  flame_lint: ^0.0.1
   flutter_test:
     sdk: flutter
-  flame_lint: ^0.0.1
 
 flutter:
   uses-material-design: true

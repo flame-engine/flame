@@ -9,12 +9,12 @@ environment:
 
 dependencies:
   flame: ^1.1.1
-  rive: ^0.8.4
   flutter:
     sdk: flutter
+  rive: ^0.8.4
 
 dev_dependencies:
   dartdoc: ^4.1.0
+  flame_lint: ^0.0.1
   flutter_test:
     sdk: flutter
-  flame_lint: ^0.0.1

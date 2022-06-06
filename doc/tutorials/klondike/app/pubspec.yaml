@@ -7,10 +7,9 @@ environment:
   sdk: ^2.15.0
 
 dependencies:
+  flame: ^1.1.1
   flutter:
     sdk: flutter
-  flame:
-    path: ../../../../packages/flame
 
 dev_dependencies:
   flame_lint: ^0.0.1
