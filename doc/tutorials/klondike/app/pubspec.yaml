@@ -11,6 +11,9 @@ dependencies:
   flutter:
     sdk: flutter
 
+dev_dependencies:
+  flame_lint: ^0.0.1
+
 flutter:
   assets:
     - assets/images/

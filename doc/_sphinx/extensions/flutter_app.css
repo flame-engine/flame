@@ -124,3 +124,9 @@ button.flutter-app-button:after {
   background: #e38f13;
   color: white;
 }
+
+.flutter-app-iframe {
+  border: 1px solid #555;
+  height: 350px;
+  width: 100%;
+}

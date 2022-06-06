@@ -120,14 +120,11 @@ class CameraComponent extends Component {
     );
     if (world.isMounted && currentCameras.length < maxCamerasDepth) {
       if (viewport.containsLocalPoint(viewportPoint)) {
-        try {
-          currentCameras.add(this);
-          final worldPoint = viewfinder.transform.globalToLocal(viewportPoint);
-          yield* world.componentsAtPointFromCamera(worldPoint, nestedPoints);
-          yield* viewfinder.componentsAtPoint(worldPoint, nestedPoints);
-        } finally {
-          currentCameras.removeLast();
-        }
+        currentCameras.add(this);
+        final worldPoint = viewfinder.transform.globalToLocal(viewportPoint);
+        yield* world.componentsAtPointFromCamera(worldPoint, nestedPoints);
+        yield* viewfinder.componentsAtPoint(worldPoint, nestedPoints);
+        currentCameras.removeLast();
       }
     }
     yield* viewport.componentsAtPoint(viewportPoint, nestedPoints);
