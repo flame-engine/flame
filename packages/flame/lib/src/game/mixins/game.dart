@@ -42,19 +42,19 @@ mixin Game {
   Vector2? _size;
 
   /// This variable ensures that Game's [onLoad] is called no more than once.
-  Future<void>? _onLoadFuture;
+  late final Future<void>? _onLoadFuture = onLoad();
 
   bool _debugOnLoadStarted = false;
 
   @internal
-  Future<void>? startLoad() {
+  Future<void>? get onLoadFuture {
     assert(
       () {
         _debugOnLoadStarted = true;
         return true;
       }(),
     );
-    return _onLoadFuture = onLoad();
+    return _onLoadFuture;
   }
 
   /// To be used for tests that needs to evaluate the game after it has been
@@ -66,7 +66,7 @@ mixin Game {
       'Make sure the game has passed to a mounted '
       'GameWidget before calling toBeLoaded',
     );
-    return _onLoadFuture ?? Future.value();
+    return _onLoadFuture;
   }
 
   /// Current game viewport size, updated every resize via the [onGameResize]
