@@ -47,7 +47,10 @@ abstract class TextElement {
   ///   `right - left` next time. No new lines were stored in [lines].
   LayoutResult layOutNextLine(LineMetrics bounds);
 
-  /// Returns information about the lines laid out so far.
+  /// Returns information about the laid out lines in a multiline [TextElement].
+  ///
+  /// For a single-line text element this should return null, and the class
+  /// itself should implement the [TextLine] interface.
   List<TextLine>? get lines => null;
 
   TextLine get lastLaidOutLine => lines?.last ?? (this as TextLine);

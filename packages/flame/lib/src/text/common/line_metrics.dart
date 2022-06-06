@@ -60,7 +60,7 @@ class LineMetrics {
   /// Sets the position of the left edge of this [LineMetrics] box, leaving the
   /// [right] edge in place.
   void setLeftEdge(double x) {
-    _width = _left + _width - x;
+    _width = right - x;
     _left = x;
   }
 
@@ -68,9 +68,8 @@ class LineMetrics {
   /// the same baseline. The current object will be modified to encompass the
   /// [other] box.
   void append(LineMetrics other) {
-    assert(right == other.left);
     assert(baseline == other.baseline);
-    _width += other.width;
+    _width = other.right - left;
     if (_ascent < other.ascent) {
       _ascent = other.ascent;
     }

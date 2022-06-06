@@ -24,31 +24,27 @@ class GroupTextElement extends TextElement {
 
   @override
   LayoutResult layOutNextLine(LineMetrics bounds) {
-    final currentLineMetric = LineMetrics(
-      left: bounds.left,
-      baseline: bounds.baseline,
+    final line = _InlineTextGroupLine(
+      LineMetrics(left: bounds.left, baseline: bounds.baseline),
     );
-    lines.add(_InlineTextGroupLine(currentLineMetric));
+    lines.add(line);
     while (_currentIndex < children.length) {
       final child = children[_currentIndex];
       final childLayoutResult = child.layOutNextLine(bounds);
       if (childLayoutResult == LayoutResult.didNotAdvance) {
-        if (currentLineMetric.width == 0) {
+        if (line.metrics.width == 0) {
           lines.removeLast();
           return LayoutResult.didNotAdvance;
         } else {
           return LayoutResult.unfinished;
         }
       }
-      final lastLine = child.lines?.last ?? (child as TextLine);
-      final lastMetric = lastLine.metrics;
-      lines.last.addChild(lastLine);
-      currentLineMetric.append(lastMetric);
-      bounds.setLeftEdge(currentLineMetric.right);
-      _currentIndex++;
-
+      line.addChild(child.lastLaidOutLine);
       if (childLayoutResult == LayoutResult.unfinished) {
         return LayoutResult.unfinished;
+      } else {
+        bounds.setLeftEdge(line.metrics.right + spacing);
+        _currentIndex++;
       }
     }
     return LayoutResult.done;
@@ -75,7 +71,10 @@ class _InlineTextGroupLine implements TextLine {
 
   final List<TextLine> _children = [];
 
-  void addChild(TextLine line) => _children.add(line);
+  void addChild(TextLine line) {
+    metrics.append(line.metrics);
+    _children.add(line);
+  }
 
   @override
   void translate(double dx, double dy) {
