@@ -45,6 +45,12 @@ class ComponentSet extends QueryableOrderedSet<Component> {
   @override
   bool remove(Component component) => super.remove(component);
 
+  /// Marked as internal, because the users shouldn't be able to remove elements
+  /// from the [ComponentSet] directly, bypassing the normal lifecycle handling.
+  @internal
+  @override
+  void clear() => super.clear();
+
   /// Whether the component set contains components or that there are components
   /// marked to be added later.
   @override
