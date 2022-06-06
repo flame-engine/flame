@@ -89,7 +89,7 @@ class ExpandingCircle extends Component {
 
   /// At this radius the circle will disappear.
   static const maxRadius = 175;
-  static random = Random();
+  static final random = Random();
 
   double get radius => (_innerRadius + _outerRadius) / 2;
 
