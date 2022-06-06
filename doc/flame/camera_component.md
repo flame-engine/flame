@@ -150,6 +150,5 @@ Pros:
   - Effects can be applied either to the viewport, or to the viewfinder;
   - More flexible camera controllers.
 
-Cons (we are planning to eliminate these in the near future):
-  - Camera controls are not yet implemented;
-  - Events propagation may not always work correctly.
+Cons:
+  - Only tap events are currently supported.
