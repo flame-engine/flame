@@ -1,13 +1,14 @@
-/// [LineMetrics] represents dimensions of a single line of text, or a fragment
-/// of a line.
+import 'package:flame/src/text/common/text_line.dart';
+
+/// [LineMetrics] object contains measurements of a [TextLine].
 ///
 /// A line of text can be thought of as surrounded by a box (rect) that outlines
 /// the boundaries of the text, plus there is a [baseline] inside the box which
 /// is the line on top of which the text is placed.
 ///
 /// The [LineMetrics] box surrounding a piece of text is not necessarily tight:
-/// there's usually some amount of space above and below to improve legibility
-/// of multi-line text.
+/// there's usually some amount of space above and below the text glyphs to
+/// improve legibility of multi-line text.
 class LineMetrics {
   LineMetrics({
     required double left,
