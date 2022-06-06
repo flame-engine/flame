@@ -1,8 +1,8 @@
 import 'dart:ui';
 
 import 'package:flame/src/text/common/line_metrics.dart';
+import 'package:flame/src/text/common/text_line.dart';
 import 'package:flame/src/text/inline/text_element.dart';
-import 'package:flame/src/text/text_line.dart';
 
 /// Text element representing a single space between words.
 ///
