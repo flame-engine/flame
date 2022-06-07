@@ -1,5 +1,6 @@
 
 import 'package:flame/src/events/interfaces/multi_drag_listener.dart';
+import 'package:flame/src/events/messages/drag_cancel_event.dart';
 import 'package:flame/src/events/messages/drag_end_event.dart';
 import 'package:flame/src/events/messages/drag_start_event.dart';
 import 'package:flame/src/events/messages/drag_update_event.dart';
@@ -18,6 +19,10 @@ mixin HasDraggableComponents on FlameGame implements MultiDragListener {
 
   @mustCallSuper
   void onDragEnd(DragEndEvent event) {
+  }
+
+  @mustCallSuper
+  void onDragCancel(DragCancelEvent event) {
   }
 
   //#region MultiDragListener API
@@ -42,7 +47,9 @@ mixin HasDraggableComponents on FlameGame implements MultiDragListener {
 
   @internal
   @override
-  void handleDragCancel(int pointerId);
+  void handleDragCancel(int pointerId) {
+    onDragCancel(DragCancelEvent(pointerId));
+  }
 
   //#endregion
 }
