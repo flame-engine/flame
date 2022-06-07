@@ -209,7 +209,7 @@ Example:
 class MyComponent extends Component with HasAncestor<MyAncestorComponent> {
   @override
   Future<void> onLoad() async {
-    // ancestor is of type MyAncestorComponent, but it can be much higher up the tree.
+    // ancestor is of type MyAncestorComponent.
     print(ancestor.myValue);
   }
 }
