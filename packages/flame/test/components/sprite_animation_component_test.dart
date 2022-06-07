@@ -96,11 +96,11 @@ Future<void> main() async {
 
         await game.ensureAdd(component);
 
-        expect(component.shouldRemove, false);
+        expect(component.parent, game);
         expect(game.children.length, 1);
 
         game.update(2);
-        expect(component.shouldRemove, false);
+        expect(component.parent, game);
 
         // runs a cycle to remove the component, but failed
         game.update(0.1);
@@ -127,11 +127,11 @@ Future<void> main() async {
 
         await game.ensureAdd(component);
 
-        expect(component.shouldRemove, false);
+        expect(component.parent, game);
         expect(game.children.length, 1);
 
         game.update(2);
-        expect(component.shouldRemove, false);
+        expect(component.parent, game);
 
         // runs a cycle to remove the component, but failed
         game.update(0.1);
@@ -159,11 +159,11 @@ Future<void> main() async {
 
         await game.ensureAdd(component);
 
-        expect(component.shouldRemove, false);
+        expect(component.parent, game);
         expect(game.children.length, 1);
 
         game.update(2);
-        expect(component.shouldRemove, false);
+        expect(component.parent, game);
 
         // runs a cycle to remove the component, but failed
         game.update(0.1);
@@ -190,11 +190,11 @@ Future<void> main() async {
 
         await game.ensureAdd(component);
 
-        expect(component.shouldRemove, false);
+        expect(component.parent, game);
         expect(game.children.length, 1);
 
         game.update(2);
-        expect(component.shouldRemove, false);
+        expect(component.parent, game);
 
         // runs a cycle to potentially remove the component
         game.update(0.1);
