@@ -7,7 +7,7 @@ class FixedAspectRatioViewport extends Viewport {
   FixedAspectRatioViewport({
     required this.aspectRatio,
     super.children,
-  })  : assert(aspectRatio > 0);
+  }) : assert(aspectRatio > 0);
 
   final double aspectRatio;
   Rect _clipRect = Rect.zero;

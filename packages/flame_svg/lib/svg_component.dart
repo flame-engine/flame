@@ -18,7 +18,7 @@ class SvgComponent extends PositionComponent {
     super.anchor,
     super.children,
     super.priority,
-  })  : _svg = svg;
+  }) : _svg = svg;
 
   set svg(Svg? svg) {
     _svg?.dispose();

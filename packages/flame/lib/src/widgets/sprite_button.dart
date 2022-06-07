@@ -73,7 +73,7 @@ class SpriteButton extends StatelessWidget {
     this.errorBuilder,
     this.loadingBuilder,
     super.key,
-  })  : _buttonsFuture = Future.wait([
+  }) : _buttonsFuture = Future.wait([
           sprite,
           pressedSprite,
         ]);
@@ -100,7 +100,7 @@ class SpriteButton extends StatelessWidget {
     this.errorBuilder,
     this.loadingBuilder,
     super.key,
-  })  : _buttonsFuture = Future.wait([
+  }) : _buttonsFuture = Future.wait([
           Sprite.load(
             path,
             srcSize: srcSize,

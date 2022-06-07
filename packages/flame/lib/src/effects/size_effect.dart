@@ -21,7 +21,7 @@ class SizeEffect extends Effect with EffectTarget<SizeProvider> {
     super.controller, {
     SizeProvider? target,
     super.onComplete,
-  })  : _offset = offset.clone() {
+  }) : _offset = offset.clone() {
     this.target = target;
   }
 

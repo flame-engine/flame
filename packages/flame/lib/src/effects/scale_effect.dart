@@ -20,7 +20,7 @@ class ScaleEffect extends Effect with EffectTarget<ScaleProvider> {
     Vector2 scaleFactor,
     super.controller, {
     super.onComplete,
-  })  : _scaleFactor = scaleFactor.clone();
+  }) : _scaleFactor = scaleFactor.clone();
 
   factory ScaleEffect.to(
     Vector2 targetScale,

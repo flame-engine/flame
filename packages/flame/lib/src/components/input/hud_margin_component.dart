@@ -31,7 +31,7 @@ class HudMarginComponent<T extends FlameGame> extends PositionComponent
     super.anchor,
     super.children,
     super.priority,
-  })  : assert(
+  }) : assert(
           margin != null || position != null,
           'Either margin or position must be defined',
         );

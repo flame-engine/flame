@@ -19,7 +19,7 @@ class OpacityEffect extends ComponentEffect<HasPaint> {
     super.controller, {
     this.paintId,
     super.onComplete,
-  })  : _alphaOffset = (255 * offset).round();
+  }) : _alphaOffset = (255 * offset).round();
 
   /// This constructor will set the opacity to the specified opacity over time.
   factory OpacityEffect.to(

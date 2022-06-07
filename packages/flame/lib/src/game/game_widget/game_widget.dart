@@ -126,7 +126,7 @@ class GameWidget<T extends Game> extends StatefulWidget {
     this.focusNode,
     this.autofocus = true,
     MouseCursor? mouseCursor,
-  })  : gameFactory = null {
+  }) : gameFactory = null {
     if (mouseCursor != null) {
       game!.mouseCursor = mouseCursor;
     }
@@ -165,7 +165,7 @@ class GameWidget<T extends Game> extends StatefulWidget {
     this.overlayBuilderMap,
     this.focusNode,
     this.autofocus = true,
-  })  : game = null;
+  }) : game = null;
 
   /// Renders a [game] in a flutter widget tree alongside widgets overlays.
   ///

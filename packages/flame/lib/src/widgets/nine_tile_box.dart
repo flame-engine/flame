@@ -89,7 +89,7 @@ class NineTileBoxWidget extends StatelessWidget {
     this.errorBuilder,
     this.loadingBuilder,
     super.key,
-  })  : _imageFuture = (images ?? Flame.images).load(path);
+  }) : _imageFuture = (images ?? Flame.images).load(path);
 
   @override
   Widget build(BuildContext context) {

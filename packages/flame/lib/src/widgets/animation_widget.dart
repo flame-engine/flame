@@ -50,7 +50,7 @@ class SpriteAnimationWidget extends StatelessWidget {
     this.errorBuilder,
     this.loadingBuilder,
     super.key,
-  })  : _animationFuture = SpriteAnimation.load(
+  }) : _animationFuture = SpriteAnimation.load(
           path,
           data,
           images: images,

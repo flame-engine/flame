@@ -60,7 +60,7 @@ class SpriteWidget extends StatelessWidget {
     this.errorBuilder,
     this.loadingBuilder,
     super.key,
-  })  : _spriteFuture = Sprite.load(
+  }) : _spriteFuture = Sprite.load(
           path,
           srcSize: srcSize,
           srcPosition: srcPosition,

@@ -63,7 +63,7 @@ class IsometricTileMapComponent extends PositionComponent {
     super.anchor,
     super.children,
     super.priority,
-  })  : _renderSprite = Sprite(tileset.image);
+  }) : _renderSprite = Sprite(tileset.image);
 
   /// This is the size the tiles will be drawn (either original or overwritten).
   Vector2 get effectiveTileSize => destTileSize ?? tileset.srcSize;

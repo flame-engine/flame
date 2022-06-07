@@ -19,7 +19,7 @@ class MovingParticle extends CurvedParticle with SingleChildParticle {
     Vector2? from,
     super.lifespan,
     super.curve,
-  })  : from = from ?? Vector2.zero();
+  }) : from = from ?? Vector2.zero();
 
   /// Used to avoid creating new [Vector2] objects in [update].
   static final _tmpVector = Vector2.zero();

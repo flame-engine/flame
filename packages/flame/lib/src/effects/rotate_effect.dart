@@ -25,7 +25,7 @@ class RotateEffect extends Effect
     double angle,
     super.controller, {
     super.onComplete,
-  })  : _angle = angle;
+  }) : _angle = angle;
 
   factory RotateEffect.to(
     double angle,

@@ -31,7 +31,7 @@ class SpriteAnimationGroupComponent<T> extends PositionComponent
     super.anchor,
     super.children,
     super.priority,
-  })  : removeOnFinish = removeOnFinish ?? const {} {
+  }) : removeOnFinish = removeOnFinish ?? const {} {
     if (paint != null) {
       this.paint = paint;
     }
