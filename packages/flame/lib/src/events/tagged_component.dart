@@ -1,4 +1,3 @@
-
 import 'package:flame/src/components/component.dart';
 import 'package:meta/meta.dart';
 
