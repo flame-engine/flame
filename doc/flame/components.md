@@ -198,6 +198,27 @@ If you try to add `MyComponent` to a parent that is not `MyParentComponent`,
 an assertion error will be thrown.
 
 
+### Ensuring a component has a given ancestor
+
+When a component requires to have a specific ancestor type somewhere in the 
+component tree, `HasAncestor` mixin can be used to enforce that relationship.
+
+Example:
+
+```dart
+class MyComponent extends Component with HasAncestor<MyAncestorComponent> {
+  @override
+  Future<void> onLoad() async {
+    // ancestor is of type MyAncestorComponent, but it can be much higher up the tree.
+    print(ancestor.myValue);
+  }
+}
+```
+
+If you try to add `MyComponent` to a tree that does not contain `MyAncestorComponent`,
+an assertion error will be thrown.
+
+
 ### Querying child components
 
 The children that have been added to a component live in a `QueryableOrderedSet` called
