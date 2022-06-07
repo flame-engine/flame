@@ -7,7 +7,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 import '../game/flame_game_test.dart';
 
-void main() async {
+void main() {
   group('HudButtonComponent', () {
     testWithGame<GameWithTappables>(
         'correctly registers taps', GameWithTappables.new, (game) async {

@@ -2,7 +2,7 @@ import 'package:flame/components.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:test/test.dart';
 
-void main() async {
+Future<void> main() async {
   // Generate an image
   final image = await generateImage();
 
