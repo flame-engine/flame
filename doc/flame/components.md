@@ -203,6 +203,8 @@ an assertion error will be thrown.
 When a component requires to have a specific ancestor type somewhere in the 
 component tree, `HasAncestor` mixin can be used to enforce that relationship.
 
+The mixin exposes the `ancestor` field that will be of the given type.
+
 Example:
 
 ```dart
