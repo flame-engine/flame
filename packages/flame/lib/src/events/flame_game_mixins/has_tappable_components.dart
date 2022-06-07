@@ -4,6 +4,7 @@ import 'package:flame/src/events/interfaces/multi_tap_listener.dart';
 import 'package:flame/src/events/messages/tap_cancel_event.dart';
 import 'package:flame/src/events/messages/tap_down_event.dart';
 import 'package:flame/src/events/messages/tap_up_event.dart';
+import 'package:flame/src/events/tagged_component.dart';
 import 'package:flame/src/game/flame_game.dart';
 import 'package:flutter/gestures.dart';
 import 'package:meta/meta.dart';
@@ -28,7 +29,7 @@ import 'package:meta/meta.dart';
 ///   Instead, consider `MultiTouchTapDetector`.
 mixin HasTappableComponents on FlameGame implements MultiTapListener {
   /// The record of all components currently being touched.
-  final Set<_TaggedComponent> _record = {};
+  final Set<TaggedComponent<TapCallbacks>> _record = {};
 
   /// Called when the user touches the device screen within the game canvas,
   /// either with a finger, a stylus, or a mouse.
@@ -45,7 +46,7 @@ mixin HasTappableComponents on FlameGame implements MultiTapListener {
     event.deliverAtPoint(
       rootComponent: this,
       eventHandler: (TapCallbacks component) {
-        _record.add(_TaggedComponent(event.pointerId, component));
+        _record.add(TaggedComponent(event.pointerId, component));
         component.onTapDown(event);
       },
     );
@@ -69,7 +70,7 @@ mixin HasTappableComponents on FlameGame implements MultiTapListener {
     event.deliverAtPoint(
       rootComponent: this,
       eventHandler: (TapCallbacks component) {
-        final record = _TaggedComponent(event.pointerId, component);
+        final record = TaggedComponent(event.pointerId, component);
         if (_record.contains(record)) {
           component.onLongTapDown(event);
         }
@@ -101,7 +102,7 @@ mixin HasTappableComponents on FlameGame implements MultiTapListener {
     event.deliverAtPoint(
       rootComponent: this,
       eventHandler: (TapCallbacks component) {
-        if (_record.remove(_TaggedComponent(event.pointerId, component))) {
+        if (_record.remove(TaggedComponent(event.pointerId, component))) {
           component.onTapUp(event);
         }
       },
@@ -186,20 +187,3 @@ mixin HasTappableComponents on FlameGame implements MultiTapListener {
 /// This is a temporary mixin to facilitate the transition between the old and
 /// the new event system. In the future it will be deprecated.
 mixin HasTappablesBridge on HasTappableComponents {}
-
-@immutable
-class _TaggedComponent {
-  const _TaggedComponent(this.pointerId, this.component);
-  final int pointerId;
-  final TapCallbacks component;
-
-  @override
-  int get hashCode => Object.hash(pointerId, component);
-
-  @override
-  bool operator ==(Object other) {
-    return other is _TaggedComponent &&
-        other.pointerId == pointerId &&
-        other.component == component;
-  }
-}
