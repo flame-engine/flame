@@ -23,13 +23,9 @@ class RotateEffect extends Effect
     implements MeasurableEffect {
   RotateEffect.by(
     double angle,
-    EffectController controller, {
-    void Function()? onComplete,
-  })  : _angle = angle,
-        super(
-          controller,
-          onComplete: onComplete,
-        );
+    super.controller, {
+    super.onComplete,
+  })  : _angle = angle;
 
   factory RotateEffect.to(
     double angle,

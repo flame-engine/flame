@@ -18,11 +18,10 @@ class SizeEffect extends Effect with EffectTarget<SizeProvider> {
   /// size at the same time.
   SizeEffect.by(
     Vector2 offset,
-    EffectController controller, {
+    super.controller, {
     SizeProvider? target,
-    void Function()? onComplete,
-  })  : _offset = offset.clone(),
-        super(controller, onComplete: onComplete) {
+    super.onComplete,
+  })  : _offset = offset.clone() {
     this.target = target;
   }
 

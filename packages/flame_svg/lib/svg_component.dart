@@ -11,23 +11,14 @@ class SvgComponent extends PositionComponent {
   /// Creates an [SvgComponent]
   SvgComponent({
     Svg? svg,
-    Vector2? position,
-    Vector2? size,
-    Vector2? scale,
-    double? angle,
-    Anchor? anchor,
-    Iterable<Component>? children,
-    int? priority,
-  })  : _svg = svg,
-        super(
-          position: position,
-          size: size,
-          scale: scale,
-          angle: angle,
-          anchor: anchor,
-          children: children,
-          priority: priority,
-        );
+    super.position,
+    super.size,
+    super.scale,
+    super.angle,
+    super.anchor,
+    super.children,
+    super.priority,
+  })  : _svg = svg;
 
   set svg(Svg? svg) {
     _svg?.dispose();

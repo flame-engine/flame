@@ -30,11 +30,10 @@ class SpriteAnimationWidget extends StatelessWidget {
     required SpriteAnimation animation,
     this.playing = true,
     this.anchor = Anchor.topLeft,
-    Key? key,
+    super.key,
   })  : _animationFuture = animation,
         errorBuilder = null,
-        loadingBuilder = null,
-        super(key: key);
+        loadingBuilder = null;
 
   /// Loads image from the asset [path] and renders it as a widget.
   ///
@@ -50,13 +49,12 @@ class SpriteAnimationWidget extends StatelessWidget {
     this.anchor = Anchor.topLeft,
     this.errorBuilder,
     this.loadingBuilder,
-    Key? key,
+    super.key,
   })  : _animationFuture = SpriteAnimation.load(
           path,
           data,
           images: images,
-        ),
-        super(key: key);
+        );
 
   @override
   Widget build(BuildContext context) {
@@ -91,8 +89,8 @@ class InternalSpriteAnimationWidget extends StatefulWidget {
     required this.animation,
     this.playing = true,
     this.anchor = Anchor.topLeft,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State createState() => _InternalSpriteAnimationWidgetState();

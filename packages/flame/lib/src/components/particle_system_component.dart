@@ -14,20 +14,13 @@ class ParticleSystemComponent extends PositionComponent {
   /// {@macro particle_system_component}
   ParticleSystemComponent({
     this.particle,
-    Vector2? position,
-    Vector2? size,
-    Vector2? scale,
-    double? angle,
-    Anchor? anchor,
-    int? priority,
-  }) : super(
-          position: position,
-          size: size,
-          scale: scale,
-          angle: angle,
-          anchor: anchor,
-          priority: priority,
-        );
+    super.position,
+    super.size,
+    super.scale,
+    super.angle,
+    super.anchor,
+    super.priority,
+  });
 
   /// Returns progress of the child [Particle].
   ///

@@ -69,7 +69,7 @@ class TappableBall extends Ball with Tappable {
   int counter = 0;
   late final TextPaint _textPaint;
 
-  TappableBall(Vector2 position) : super(position) {
+  TappableBall(super.position) {
     originalPaint = Paint()..color = Colors.amber;
     paint = originalPaint;
   }

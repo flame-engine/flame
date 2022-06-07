@@ -19,10 +19,10 @@ abstract class AnchorEffect extends Effect
     with EffectTarget<AnchorProvider>
     implements MeasurableEffect {
   AnchorEffect(
-    EffectController controller,
+    super.controller,
     AnchorProvider? target, {
-    void Function()? onComplete,
-  }) : super(controller, onComplete: onComplete) {
+    super.onComplete,
+  }) {
     this.target = target;
   }
 

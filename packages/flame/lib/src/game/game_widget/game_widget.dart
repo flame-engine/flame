@@ -115,7 +115,7 @@ class GameWidget<T extends Game> extends StatefulWidget {
   /// game.overlays.add('PauseMenu');
   /// ```
   GameWidget({
-    Key? key,
+    super.key,
     required T this.game,
     this.textDirection,
     this.loadingBuilder,
@@ -126,8 +126,7 @@ class GameWidget<T extends Game> extends StatefulWidget {
     this.focusNode,
     this.autofocus = true,
     MouseCursor? mouseCursor,
-  })  : gameFactory = null,
-        super(key: key) {
+  })  : gameFactory = null {
     if (mouseCursor != null) {
       game!.mouseCursor = mouseCursor;
     }
@@ -157,7 +156,7 @@ class GameWidget<T extends Game> extends StatefulWidget {
   /// ...
   /// ```
   const GameWidget.controlled({
-    Key? key,
+    super.key,
     required GameFactory<T> this.gameFactory,
     this.textDirection,
     this.loadingBuilder,
@@ -166,8 +165,7 @@ class GameWidget<T extends Game> extends StatefulWidget {
     this.overlayBuilderMap,
     this.focusNode,
     this.autofocus = true,
-  })  : game = null,
-        super(key: key);
+  })  : game = null;
 
   /// Renders a [game] in a flutter widget tree alongside widgets overlays.
   ///

@@ -1,6 +1,5 @@
 import 'dart:ui';
 
-import 'package:flame/src/components/component.dart';
 import 'package:flame/src/experimental/viewport.dart';
 import 'package:vector_math/vector_math_64.dart';
 
@@ -8,7 +7,7 @@ import 'package:vector_math/vector_math_64.dart';
 ///
 /// This viewport does not perform any clipping.
 class MaxViewport extends Viewport {
-  MaxViewport({Iterable<Component>? children}) : super(children: children);
+  MaxViewport({super.children});
 
   @override
   void onGameResize(Vector2 gameSize) {
