@@ -75,7 +75,7 @@ class _GamePage extends StatelessWidget {
   }
 }
 
-void main() async {
+void main() {
   final size = Vector2(1.0, 1.0);
 
   testWidgets('adds focus', (tester) async {
