@@ -46,7 +46,7 @@ void main() {
 
         game.update(1);
 
-        expect(component.parent == null, isTrue);
+        expect(component.isRemoving, true);
       },
     );
   });
