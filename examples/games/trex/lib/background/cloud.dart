@@ -37,7 +37,7 @@ class Cloud extends SpriteComponent
   @override
   void update(double dt) {
     super.update(dt);
-    if (shouldRemove) {
+    if (isRemoving) {
       return;
     }
     x -= parent.cloudSpeed.ceil() * 50 * dt;
