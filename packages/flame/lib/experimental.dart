@@ -9,9 +9,16 @@
 /// After the components lived here for some time, and when we gain more
 /// confidence in their robustness, they will be moved out into the main Flame
 /// library.
+export 'src/events/component_mixins/drag_callbacks.dart' show DragCallbacks;
 export 'src/events/component_mixins/tap_callbacks.dart' show TapCallbacks;
+export 'src/events/flame_game_mixins/has_draggable_components.dart'
+    show HasDraggableComponents;
 export 'src/events/flame_game_mixins/has_tappable_components.dart'
     show HasTappableComponents, HasTappablesBridge;
+export 'src/events/messages/drag_cancel_event.dart' show DragCancelEvent;
+export 'src/events/messages/drag_end_event.dart' show DragEndEvent;
+export 'src/events/messages/drag_start_event.dart' show DragStartEvent;
+export 'src/events/messages/drag_update_event.dart' show DragUpdateEvent;
 export 'src/events/messages/tap_cancel_event.dart' show TapCancelEvent;
 export 'src/events/messages/tap_down_event.dart' show TapDownEvent;
 export 'src/events/messages/tap_up_event.dart' show TapUpEvent;
