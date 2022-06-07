@@ -7,7 +7,7 @@ enum _SpriteState {
   running,
 }
 
-void main() async {
+Future<void> main() async {
   // Generate a image
   final image = await generateImage();
 
