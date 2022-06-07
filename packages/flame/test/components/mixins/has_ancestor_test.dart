@@ -27,7 +27,7 @@ void main() {
             game.update(0);
           },
           failsAssert(
-            'An ancestor must be of type _AncestorComponent in the component tree',
+            '''An ancestor must be of type _AncestorComponent in the component tree''',
           ),
         );
       },
