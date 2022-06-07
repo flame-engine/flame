@@ -17,7 +17,7 @@ import 'package:examples/stories/utils/utils.dart';
 import 'package:examples/stories/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 
-void main() async {
+void main() {
   final dashbook = Dashbook(
     title: 'Flame Examples',
     theme: ThemeData.dark(),
