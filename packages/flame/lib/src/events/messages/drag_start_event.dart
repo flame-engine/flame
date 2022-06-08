@@ -1,4 +1,6 @@
 import 'package:flame/extensions.dart';
+import 'package:flame/src/events/messages/drag_end_event.dart';
+import 'package:flame/src/events/messages/drag_update_event.dart';
 import 'package:flame/src/events/messages/position_event.dart';
 import 'package:flame/src/game/flame_game.dart';
 import 'package:flame/src/gestures/events.dart';
@@ -13,8 +15,14 @@ class DragStartEvent extends PositionEvent {
           devicePosition: details.globalPosition.toVector2(),
         );
 
-  final Duration timestamp;
+  /// The unique identifier of the drag event.
+  ///
+  /// Subsequent [DragUpdateEvent] or [DragEndEvent] will carry the same pointer
+  /// id. This allows distinguishing multiple drags that may occur at the same
+  /// time on the same component.
   final int pointerId;
+
+  final Duration timestamp;
   final PointerDeviceKind deviceKind;
 
   /// Converts this event into the legacy [DragStartInfo] representation.
