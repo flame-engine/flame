@@ -7,7 +7,7 @@ export 'src/game/mixins/has_hoverables.dart' show HasHoverables;
 export 'src/game/mixins/has_tappables.dart' show HasTappables;
 export 'src/game/mixins/keyboard.dart'
     show HasKeyboardHandlerComponents, KeyboardEvents;
-export 'src/game/mixins/multi_touch_tap_detector.dart'
+export 'src/events/game_mixins/multi_touch_tap_detector.dart'
     show MultiTouchTapDetector;
 export 'src/gestures/detectors.dart'
     show
