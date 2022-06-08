@@ -309,8 +309,7 @@ class _TapCallbacksComponent extends PositionComponent with TapCallbacks {
 }
 
 class _SimpleTapCallbacksComponent extends PositionComponent with TapCallbacks {
-  // ignore: unused_element
-  _SimpleTapCallbacksComponent({super.size, List<Component>? super.children});
+  _SimpleTapCallbacksComponent({super.size});
 }
 
 class _TappableComponent extends PositionComponent with Tappable {
