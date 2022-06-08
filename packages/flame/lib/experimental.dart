@@ -13,6 +13,8 @@ export 'src/events/component_mixins/drag_callbacks.dart' show DragCallbacks;
 export 'src/events/component_mixins/tap_callbacks.dart' show TapCallbacks;
 export 'src/events/flame_game_mixins/has_draggable_components.dart'
     show HasDraggableComponents;
+export 'src/events/flame_game_mixins/has_draggables_bridge.dart'
+    show HasDraggablesBridge;
 export 'src/events/flame_game_mixins/has_tappable_components.dart'
     show HasTappableComponents, HasTappablesBridge;
 export 'src/events/messages/drag_cancel_event.dart' show DragCancelEvent;
