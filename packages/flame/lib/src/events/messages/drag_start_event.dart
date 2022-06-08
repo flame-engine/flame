@@ -19,7 +19,8 @@ class DragStartEvent extends PositionEvent {
 
   /// Converts this event into the legacy [DragStartInfo] representation.
   DragStartInfo asInfo(FlameGame game) {
-    return DragStartInfo.fromDetails(game,
+    return DragStartInfo.fromDetails(
+      game,
       DragStartDetails(
         sourceTimeStamp: timestamp,
         globalPosition: devicePosition.toOffset(),
