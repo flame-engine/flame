@@ -32,6 +32,9 @@ abstract class MultiDragListener {
   /// even if the pointer is currently outside of the game widget.
   void handleDragEnd(int pointerId, DragEndDetails details);
 
-  /// (unknown)
+  /// The drag operation is cancelled.
+  ///
+  /// For example, this may happen if the drag was interrupted by a system-
+  /// modal dialog appearing during the drag.
   void handleDragCancel(int pointerId);
 }

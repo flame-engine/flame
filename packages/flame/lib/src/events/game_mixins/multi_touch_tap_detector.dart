@@ -1,6 +1,6 @@
+import 'package:flame/src/events/flame_game_mixins/has_tappable_components.dart';
 import 'package:flame/src/events/interfaces/multi_tap_listener.dart';
 import 'package:flame/src/game/mixins/game.dart';
-import 'package:flame/src/game/mixins/has_tappables.dart';
 import 'package:flame/src/gestures/events.dart';
 import 'package:flutter/gestures.dart';
 
@@ -15,9 +15,9 @@ import 'package:flutter/gestures.dart';
 /// in order to respond to each corresponding event. Those events whose methods
 /// are not overridden are ignored.
 ///
-/// See [MultiTapGestureRecognizer] for the description of each individual
-/// event. If your game is derived from the FlameGame class, consider using the
-/// [HasTappables] mixin instead.
+/// See [MultiTapListener] for the description of each individual event. If your
+/// game is derived from the FlameGame class, consider using the
+/// [HasTappableComponents] mixin instead.
 mixin MultiTouchTapDetector on Game implements MultiTapListener {
   void onTapDown(int pointerId, TapDownInfo info) {}
   void onLongTapDown(int pointerId, TapDownInfo info) {}
