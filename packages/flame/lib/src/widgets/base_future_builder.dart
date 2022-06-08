@@ -13,8 +13,8 @@ class BaseFutureBuilder<T> extends StatelessWidget {
     required this.builder,
     this.loadingBuilder,
     this.errorBuilder,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

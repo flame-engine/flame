@@ -7,7 +7,7 @@ import 'package:padracing/menu.dart';
 import 'package:padracing/padracing_game.dart';
 
 class PadracingWidget extends StatelessWidget {
-  const PadracingWidget({Key? key}) : super(key: key);
+  const PadracingWidget({super.key});
 
   @override
   Widget build(BuildContext context) {

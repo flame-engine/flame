@@ -18,10 +18,9 @@ import 'package:vector_math/vector_math_64.dart';
 class ScaleEffect extends Effect with EffectTarget<ScaleProvider> {
   ScaleEffect.by(
     Vector2 scaleFactor,
-    EffectController controller, {
-    void Function()? onComplete,
-  })  : _scaleFactor = scaleFactor.clone(),
-        super(controller, onComplete: onComplete);
+    super.controller, {
+    super.onComplete,
+  }) : _scaleFactor = scaleFactor.clone();
 
   factory ScaleEffect.to(
     Vector2 targetScale,

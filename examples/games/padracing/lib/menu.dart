@@ -6,7 +6,7 @@ import 'package:padracing/padracing_game.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Menu extends StatelessWidget {
-  const Menu(this.game, {Key? key}) : super(key: key);
+  const Menu(this.game, {super.key});
 
   final PadRacingGame game;
 

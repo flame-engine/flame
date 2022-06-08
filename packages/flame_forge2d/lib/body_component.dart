@@ -14,10 +14,10 @@ abstract class BodyComponent<T extends Forge2DGame> extends Component
     with HasGameRef<T>, HasPaint {
   BodyComponent({
     Paint? paint,
-    Iterable<Component>? children,
-    int? priority,
+    super.children,
+    super.priority,
     this.renderBody = true,
-  }) : super(children: children, priority: priority) {
+  }) {
     this.paint = paint ?? (Paint()..color = defaultColor);
   }
 

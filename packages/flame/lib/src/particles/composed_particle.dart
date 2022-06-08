@@ -9,10 +9,8 @@ class ComposedParticle extends Particle {
 
   ComposedParticle({
     required this.children,
-    double? lifespan,
-  }) : super(
-          lifespan: lifespan,
-        );
+    super.lifespan,
+  });
 
   @override
   void setLifespan(double lifespan) {

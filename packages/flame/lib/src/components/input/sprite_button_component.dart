@@ -22,22 +22,16 @@ class SpriteButtonComponent extends SpriteGroupComponent<_ButtonState>
     this.button,
     this.buttonDown,
     this.onPressed,
-    Vector2? position,
+    super.position,
     Vector2? size,
-    Vector2? scale,
-    double? angle,
-    Anchor? anchor,
-    Iterable<Component>? children,
-    int? priority,
+    super.scale,
+    super.angle,
+    super.anchor,
+    super.children,
+    super.priority,
   }) : super(
           current: _ButtonState.up,
-          position: position,
           size: size ?? button?.originalSize,
-          scale: scale,
-          angle: angle,
-          anchor: anchor,
-          children: children,
-          priority: priority,
         );
 
   @override

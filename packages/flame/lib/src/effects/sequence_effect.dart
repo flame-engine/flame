@@ -50,9 +50,9 @@ class SequenceEffect extends Effect {
   }
 
   SequenceEffect._(
-    EffectController ec, {
-    void Function()? onComplete,
-  }) : super(ec, onComplete: onComplete);
+    super.ec, {
+    super.onComplete,
+  });
 
   @override
   void apply(double progress) {}

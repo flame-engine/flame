@@ -65,33 +65,22 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
   TextBoxConfig get boxConfig => _boxConfig;
 
   TextBoxComponent({
-    String? text,
-    T? textRenderer,
+    super.text,
+    T? super.textRenderer,
     TextBoxConfig? boxConfig,
     Anchor? align,
     double? pixelRatio,
-    Vector2? position,
-    Vector2? size,
-    Vector2? scale,
-    double? angle,
-    Anchor? anchor,
-    Iterable<Component>? children,
-    int? priority,
+    super.position,
+    super.size,
+    super.scale,
+    super.angle,
+    super.anchor,
+    super.children,
+    super.priority,
   })  : _boxConfig = boxConfig ?? TextBoxConfig(),
         _fixedSize = size != null,
         align = align ?? Anchor.topLeft,
-        pixelRatio = pixelRatio ?? window.devicePixelRatio,
-        super(
-          text: text,
-          textRenderer: textRenderer,
-          position: position,
-          scale: scale,
-          size: size,
-          angle: angle,
-          anchor: anchor,
-          children: children,
-          priority: priority,
-        );
+        pixelRatio = pixelRatio ?? window.devicePixelRatio;
 
   /// Alignment of the text within its bounding box.
   ///

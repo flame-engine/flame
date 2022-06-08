@@ -139,5 +139,5 @@ class FlameBlocGame extends FlameGame with FlameBloc {
   /// FlameBlocGame constructor with an optional [Camera] as a parameter to
   /// FlameGame.
   @Deprecated('Use FlameBlocProvider and FlameBlocListener instead')
-  FlameBlocGame({Camera? camera}) : super(camera: camera);
+  FlameBlocGame({super.camera});
 }

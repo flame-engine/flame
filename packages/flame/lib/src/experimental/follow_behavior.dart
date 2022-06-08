@@ -23,7 +23,7 @@ class FollowBehavior extends Component {
     double maxSpeed = double.infinity,
     this.horizontalOnly = false,
     this.verticalOnly = false,
-    int? priority,
+    super.priority,
   })  : _target = target,
         _owner = owner,
         _speed = maxSpeed,
@@ -31,8 +31,7 @@ class FollowBehavior extends Component {
         assert(
           !(horizontalOnly && verticalOnly),
           'The behavior cannot be both horizontalOnly and verticalOnly',
-        ),
-        super(priority: priority);
+        );
 
   PositionProvider get target => _target;
   final PositionProvider _target;
