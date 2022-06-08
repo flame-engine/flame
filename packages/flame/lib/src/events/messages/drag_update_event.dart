@@ -10,4 +10,11 @@ class DragUpdateEvent extends PositionEvent {
         );
 
   final int pointerId;
+
+  @override
+  Vector2 get localPosition {
+    return renderingTrace.isEmpty? _oobPoint : renderingTrace.last;
+  }
+
+  static final _oobPoint = Vector2.all(double.nan);
 }

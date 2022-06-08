@@ -38,13 +38,11 @@ mixin HasDraggableComponents on FlameGame implements MultiDragListener {
         }
       },
     );
-    event.renderingTrace.add(Vector2(double.nan, double.nan));
     for (final record in _records) {
       if (record.pointerId == event.pointerId && !updated.contains(record)) {
         record.component.onDragUpdate(event);
       }
     }
-    event.renderingTrace.removeLast();
   }
 
   @mustCallSuper
