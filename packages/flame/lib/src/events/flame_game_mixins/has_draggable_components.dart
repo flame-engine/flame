@@ -43,6 +43,13 @@ mixin HasDraggableComponents on FlameGame implements MultiDragListener {
         component.onDragStart(event);
       },
     );
+    if (this is HasDraggablesBridge) {
+      final info = event.asInfo(this)..handled = event.handled;
+      propagateToChildren<Draggable>(
+        (c) => c.handleDragStart(event.pointerId, info),
+      );
+      event.handled = info.handled;
+    }
   }
 
   @mustCallSuper
@@ -64,6 +71,13 @@ mixin HasDraggableComponents on FlameGame implements MultiDragListener {
         record.component.onDragUpdate(event);
       }
     }
+    if (this is HasDraggablesBridge) {
+      final info = event.asInfo(this)..handled = event.handled;
+      propagateToChildren<Draggable>(
+        (c) => c.handleDragUpdated(event.pointerId, info),
+      );
+      event.handled = info.handled;
+    }
   }
 
   @mustCallSuper
@@ -75,6 +89,13 @@ mixin HasDraggableComponents on FlameGame implements MultiDragListener {
       }
       return false;
     });
+    if (this is HasDraggablesBridge) {
+      final info = event.asInfo(this)..handled = event.handled;
+      propagateToChildren<Draggable>(
+        (c) => c.handleDragEnded(event.pointerId, info),
+      );
+      event.handled = info.handled;
+    }
   }
 
   @mustCallSuper
@@ -86,6 +107,11 @@ mixin HasDraggableComponents on FlameGame implements MultiDragListener {
       }
       return false;
     });
+    if (this is HasDraggablesBridge) {
+      propagateToChildren<Draggable>(
+        (c) => c.handleDragCanceled(event.pointerId),
+      );
+    }
   }
 
   //#region MultiDragListener API
