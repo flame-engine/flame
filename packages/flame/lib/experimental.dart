@@ -16,7 +16,9 @@ export 'src/events/flame_game_mixins/has_draggable_components.dart'
 export 'src/events/flame_game_mixins/has_draggables_bridge.dart'
     show HasDraggablesBridge;
 export 'src/events/flame_game_mixins/has_tappable_components.dart'
-    show HasTappableComponents, HasTappablesBridge;
+    show HasTappableComponents;
+export 'src/events/flame_game_mixins/has_tappables_bridge.dart'
+    show HasTappablesBridge;
 export 'src/events/messages/drag_cancel_event.dart' show DragCancelEvent;
 export 'src/events/messages/drag_end_event.dart' show DragEndEvent;
 export 'src/events/messages/drag_start_event.dart' show DragStartEvent;
