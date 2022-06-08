@@ -1,6 +1,7 @@
 import 'package:flame/src/components/mixins/draggable.dart';
 import 'package:flame/src/events/component_mixins/drag_callbacks.dart';
 import 'package:flame/src/events/flame_game_mixins/has_draggables_bridge.dart';
+import 'package:flame/src/events/flame_game_mixins/has_tappable_components.dart';
 import 'package:flame/src/events/game_mixins/multi_touch_drag_detector.dart';
 import 'package:flame/src/events/interfaces/multi_drag_listener.dart';
 import 'package:flame/src/events/messages/drag_cancel_event.dart';
@@ -34,6 +35,23 @@ mixin HasDraggableComponents on FlameGame implements MultiDragListener {
   /// The record of all components currently being touched.
   final Set<TaggedComponent<DragCallbacks>> _records = {};
 
+  /// Called when the user initiates a drag gesture, for example by touching the
+  /// screen and then moving the finger.
+  ///
+  /// The handler propagates the [event] to any component located at the point
+  /// of touch and that uses the [DragCallbacks] mixin. The event will be first
+  /// delivered to the topmost such component, and then propagated to the
+  /// components below only if explicitly requested.
+  ///
+  /// Each [event] has an `event.pointerId` to keep track of multiple touches
+  /// that may occur simultaneously.
+  ///
+  /// If [HasDraggableComponents] is the only pointer events mixin in use, then
+  /// [onDragStart] will be called immediately when the user touches the screen.
+  /// If, however, the game uses other pointer events mixins as well, such as
+  /// [HasTappableComponents], then this even will only occur after the gesture
+  /// can be unambiguously interpreted as a drag, i.e. only after the user has
+  /// both touched the screen and moved their finger for some minimum distance.
   @mustCallSuper
   void onDragStart(DragStartEvent event) {
     event.deliverAtPoint(
@@ -52,6 +70,12 @@ mixin HasDraggableComponents on FlameGame implements MultiDragListener {
     }
   }
 
+  /// Called continuously during the drag as the user moves their finger.
+  ///
+  /// The default handler propagates this event to those components who received
+  /// the initial [onDragStart] event. If the position of the pointer is outside
+  /// of the bounds of the component, then this event will nevertheless be
+  /// delivered, however its `event.localPosition` property will contain NaNs.
   @mustCallSuper
   void onDragUpdate(DragUpdateEvent event) {
     final updated = <TaggedComponent<DragCallbacks>>{};
@@ -80,6 +104,11 @@ mixin HasDraggableComponents on FlameGame implements MultiDragListener {
     }
   }
 
+  /// Called when the drag gesture finishes.
+  ///
+  /// The default handler will deliver this event to all components who has
+  /// previously received the corresponding [onDragStart] event and
+  /// [onDragUpdate]s.
   @mustCallSuper
   void onDragEnd(DragEndEvent event) {
     _records.removeWhere((record) {
