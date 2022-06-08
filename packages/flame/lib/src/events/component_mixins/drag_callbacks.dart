@@ -6,10 +6,10 @@ import 'package:flame/src/events/messages/drag_start_event.dart';
 import 'package:flame/src/events/messages/drag_update_event.dart';
 
 mixin DragCallbacks on Component {
-  void onDragStart(DragStartEvent event);
-  void onDragUpdate(DragUpdateEvent event);
-  void onDragEnd(DragEndEvent event);
-  void onDragCancel(DragCancelEvent event);
+  void onDragStart(DragStartEvent event) {}
+  void onDragUpdate(DragUpdateEvent event) {}
+  void onDragEnd(DragEndEvent event) {}
+  void onDragCancel(DragCancelEvent event) {}
 
   @override
   void onMount() {

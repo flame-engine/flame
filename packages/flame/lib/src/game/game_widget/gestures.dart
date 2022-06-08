@@ -17,9 +17,7 @@ bool hasBasicGestureDetectors(Game game) {
 }
 
 bool hasAdvancedGestureDetectors(Game game) {
-  return game is MultiTapListener ||
-      game is MultiTouchDragDetector ||
-      game is HasDraggables;
+  return game is MultiTapListener || game is MultiDragListener;
 }
 
 bool hasMouseDetectors(Game game) {
