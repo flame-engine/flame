@@ -1,4 +1,4 @@
-import 'package:flame/src/game/mixins/has_tappables.dart';
+import 'package:flame/src/events/flame_game_mixins/has_tappable_components.dart';
 import 'package:flame/src/events/game_mixins/multi_touch_tap_detector.dart';
 import 'package:flutter/gestures.dart';
 
@@ -7,7 +7,7 @@ import 'package:flutter/gestures.dart';
 ///
 /// Instead of implementing this class directly consider using one of the
 /// prebuilt mixins:
-///  - [HasTappables] for a `FlameGame`
+///  - [HasTappableComponents] for a `FlameGame`
 ///  - [MultiTouchTapDetector] for a custom `Game`
 abstract class MultiTapListener {
   /// The amount of time before the "long tap down" event is triggered.
