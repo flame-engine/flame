@@ -17,15 +17,15 @@ import 'package:meta/meta.dart';
 /// It is based on the Flame Component System (also known as FCS).
 class FlameGame extends Component with Game {
   FlameGame({
-    Iterable<Component>? children,
+    super.children,
     Camera? camera,
-  }) : super(children: children) {
+  }) {
     assert(
       Component.staticGameInstance == null,
       '$this instantiated, while another game ${Component.staticGameInstance} '
       'declares itself to be a singleton',
     );
-    _cameraWrapper = CameraWrapper(camera ?? Camera(), this.children);
+    _cameraWrapper = CameraWrapper(camera ?? Camera(), children);
   }
 
   late final CameraWrapper _cameraWrapper;

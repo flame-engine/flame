@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:flame/components.dart';
 import 'package:flame/src/components/input/hud_margin_component.dart';
 import 'package:flame/src/gestures/events.dart';
-import 'package:flutter/rendering.dart' show EdgeInsets;
 import 'package:meta/meta.dart';
 
 enum JoystickDirection {
@@ -47,13 +46,13 @@ class JoystickComponent extends HudMarginComponent with Draggable {
   JoystickComponent({
     this.knob,
     this.background,
-    EdgeInsets? margin,
-    Vector2? position,
+    super.margin,
+    super.position,
     double? size,
     double? knobRadius,
-    Anchor anchor = Anchor.center,
-    Iterable<Component>? children,
-    int? priority,
+    Anchor super.anchor = Anchor.center,
+    super.children,
+    super.priority,
   })  : assert(
           size != null || background != null,
           'Either size or background must be defined',
@@ -64,12 +63,7 @@ class JoystickComponent extends HudMarginComponent with Draggable {
           'Positions should not be set for the knob or the background',
         ),
         super(
-          margin: margin,
-          position: position,
           size: background?.size ?? Vector2.all(size ?? 0),
-          anchor: anchor,
-          children: children,
-          priority: priority,
         ) {
     this.knobRadius = knobRadius ?? this.size.x / 2;
   }

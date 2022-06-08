@@ -3,7 +3,7 @@ import 'package:padracing/menu_card.dart';
 import 'package:padracing/padracing_game.dart';
 
 class GameOver extends StatelessWidget {
-  const GameOver(this.game, {Key? key}) : super(key: key);
+  const GameOver(this.game, {super.key});
 
   final PadRacingGame game;
 

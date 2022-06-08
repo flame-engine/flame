@@ -268,21 +268,19 @@ void main() {
 
 class _GameWithHasTappableComponents extends FlameGame
     with HasTappableComponents {
-  _GameWithHasTappableComponents({Iterable<Component>? children})
-      : super(children: children);
+  _GameWithHasTappableComponents({super.children});
 }
 
 class _GameWithDualTappableComponents extends FlameGame
     with HasTappableComponents, HasTappablesBridge {
-  _GameWithDualTappableComponents({Iterable<Component>? children})
-      : super(children: children);
+  _GameWithDualTappableComponents({super.children});
 }
 
 class _TapCallbacksComponent extends PositionComponent with TapCallbacks {
   _TapCallbacksComponent({
-    Iterable<Component>? children,
-    required Vector2 position,
-    required Vector2 size,
+    super.children,
+    required Vector2 super.position,
+    required Vector2 super.size,
     void Function(TapDownEvent)? onTapDown,
     void Function(TapDownEvent)? onLongTapDown,
     void Function(TapUpEvent)? onTapUp,
@@ -290,8 +288,7 @@ class _TapCallbacksComponent extends PositionComponent with TapCallbacks {
   })  : _onTapDown = onTapDown,
         _onLongTapDown = onLongTapDown,
         _onTapUp = onTapUp,
-        _onTapCancel = onTapCancel,
-        super(children: children, position: position, size: size);
+        _onTapCancel = onTapCancel;
 
   final void Function(TapDownEvent)? _onTapDown;
   final void Function(TapDownEvent)? _onLongTapDown;
@@ -312,8 +309,7 @@ class _TapCallbacksComponent extends PositionComponent with TapCallbacks {
 }
 
 class _SimpleTapCallbacksComponent extends PositionComponent with TapCallbacks {
-  _SimpleTapCallbacksComponent({Vector2? size, List<Component>? children})
-      : super(children: children, size: size);
+  _SimpleTapCallbacksComponent({super.size});
 }
 
 class _TappableComponent extends PositionComponent with Tappable {
