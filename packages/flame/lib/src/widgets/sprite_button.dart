@@ -51,14 +51,13 @@ class SpriteButton extends StatelessWidget {
     this.srcSize,
     this.pressedSrcPosition,
     this.pressedSrcSize,
-    Key? key,
+    super.key,
   })  : _buttonsFuture = [
           sprite,
           pressedSprite,
         ],
         errorBuilder = null,
-        loadingBuilder = null,
-        super(key: key);
+        loadingBuilder = null;
 
   SpriteButton.future({
     required Future<Sprite> sprite,
@@ -73,12 +72,11 @@ class SpriteButton extends StatelessWidget {
     this.pressedSrcSize,
     this.errorBuilder,
     this.loadingBuilder,
-    Key? key,
-  })  : _buttonsFuture = Future.wait([
+    super.key,
+  }) : _buttonsFuture = Future.wait([
           sprite,
           pressedSprite,
-        ]),
-        super(key: key);
+        ]);
 
   /// Loads the images from the asset [path] and [pressedPath] and renders
   /// it as a widget.
@@ -101,8 +99,8 @@ class SpriteButton extends StatelessWidget {
     this.pressedSrcSize,
     this.errorBuilder,
     this.loadingBuilder,
-    Key? key,
-  })  : _buttonsFuture = Future.wait([
+    super.key,
+  }) : _buttonsFuture = Future.wait([
           Sprite.load(
             path,
             srcSize: srcSize,
@@ -115,8 +113,7 @@ class SpriteButton extends StatelessWidget {
             srcPosition: pressedSrcPosition,
             images: images,
           ),
-        ]),
-        super(key: key);
+        ]);
 
   @override
   Widget build(BuildContext context) {
@@ -157,8 +154,8 @@ class InternalSpriteButton extends StatefulWidget {
     required this.pressedSprite,
     this.width = 200,
     this.height = 50,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State createState() => _ButtonState();

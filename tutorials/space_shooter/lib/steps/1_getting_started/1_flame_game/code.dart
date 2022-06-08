@@ -25,7 +25,7 @@ class SpaceShooterGame extends FlameGame {
 }
 
 class MyGame extends StatelessWidget {
-  const MyGame({Key? key}) : super(key: key);
+  const MyGame({super.key});
 
   @override
   Widget build(BuildContext context) {

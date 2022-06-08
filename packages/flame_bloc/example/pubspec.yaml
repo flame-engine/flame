@@ -6,11 +6,11 @@ publish_to: 'none'
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.16.0 <3.0.0"
+  sdk: ">=2.17.0 <3.0.0"
 
 dependencies:
   equatable: ^2.0.3
-  flame_bloc: ^1.4.0
+  flame_bloc: ^1.5.0
   flutter:
     sdk: flutter
   flutter_bloc: ^8.0.1

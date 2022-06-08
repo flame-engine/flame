@@ -18,11 +18,9 @@ class SpriteAnimationParticle extends Particle {
     required this.animation,
     this.size,
     this.overridePaint,
-    double? lifespan,
+    super.lifespan,
     this.alignAnimationTime = true,
-  }) : super(
-          lifespan: lifespan,
-        );
+  });
 
   @override
   void setLifespan(double lifespan) {

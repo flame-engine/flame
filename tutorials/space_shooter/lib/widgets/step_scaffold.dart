@@ -9,10 +9,10 @@ class StepScaffold extends StatelessWidget {
   final Widget game;
 
   const StepScaffold({
-    Key? key,
+    super.key,
     required this.tutorial,
     required this.game,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

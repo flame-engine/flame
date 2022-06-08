@@ -124,12 +124,12 @@ void main() {
       );
 
       testWithFlameGame(
-        'removes PositionComponent when shouldRemove is true',
+        'removes PositionComponent when removeFromParent is called',
         (game) async {
           final component = PositionComponent();
           await game.ensureAdd(component);
           expect(game.children.length, equals(1));
-          component.shouldRemove = true;
+          component.removeFromParent();
           game.updateTree(0);
           expect(game.children.isEmpty, equals(true));
         },

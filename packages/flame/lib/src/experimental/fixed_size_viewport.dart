@@ -1,6 +1,5 @@
 import 'dart:ui';
 
-import 'package:flame/src/components/component.dart';
 import 'package:flame/src/experimental/viewport.dart';
 import 'package:vector_math/vector_math_64.dart';
 
@@ -12,8 +11,8 @@ class FixedSizeViewport extends Viewport {
   FixedSizeViewport(
     double width,
     double height, {
-    Iterable<Component>? children,
-  }) : super(children: children) {
+    super.children,
+  }) {
     size = Vector2(width, height);
     onViewportResize();
   }

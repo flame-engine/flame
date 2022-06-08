@@ -24,7 +24,7 @@ class TappableExample extends Forge2DGame with HasTappables {
 }
 
 class TappableBall extends Ball with Tappable {
-  TappableBall(Vector2 position) : super(position) {
+  TappableBall(super.position) {
     originalPaint = BasicPalette.white.paint();
     paint = originalPaint;
   }

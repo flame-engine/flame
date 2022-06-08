@@ -17,10 +17,8 @@ class SpriteParticle extends Particle {
     required this.sprite,
     this.size,
     this.overridePaint,
-    double? lifespan,
-  }) : super(
-          lifespan: lifespan,
-        );
+    super.lifespan,
+  });
 
   @override
   void render(Canvas canvas) {

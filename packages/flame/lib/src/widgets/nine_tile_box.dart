@@ -66,11 +66,10 @@ class NineTileBoxWidget extends StatelessWidget {
     this.height,
     this.child,
     this.padding,
-    Key? key,
+    super.key,
   })  : _imageFuture = image,
         errorBuilder = null,
-        loadingBuilder = null,
-        super(key: key);
+        loadingBuilder = null;
 
   /// Loads image from the asset [path] and renders it as a widget.
   ///
@@ -89,9 +88,8 @@ class NineTileBoxWidget extends StatelessWidget {
     this.padding,
     this.errorBuilder,
     this.loadingBuilder,
-    Key? key,
-  })  : _imageFuture = (images ?? Flame.images).load(path),
-        super(key: key);
+    super.key,
+  }) : _imageFuture = (images ?? Flame.images).load(path);
 
   @override
   Widget build(BuildContext context) {
@@ -134,8 +132,8 @@ class InternalNineTileBox extends StatelessWidget {
     this.width,
     this.height,
     this.padding,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

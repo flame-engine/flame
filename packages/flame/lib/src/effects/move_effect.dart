@@ -18,10 +18,10 @@ abstract class MoveEffect extends Effect
     with EffectTarget<PositionProvider>
     implements MeasurableEffect {
   MoveEffect(
-    EffectController controller,
+    super.controller,
     PositionProvider? target, {
-    void Function()? onComplete,
-  }) : super(controller, onComplete: onComplete) {
+    super.onComplete,
+  }) {
     this.target = target;
   }
 

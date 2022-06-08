@@ -36,7 +36,7 @@ class SpaceShooterGame extends FlameGame with PanDetector {
 }
 
 class MyGame extends StatelessWidget {
-  const MyGame({Key? key}) : super(key: key);
+  const MyGame({super.key});
 
   @override
   Widget build(BuildContext context) {

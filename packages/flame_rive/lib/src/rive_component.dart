@@ -22,28 +22,19 @@ class RiveComponent extends PositionComponent {
     Alignment alignment = Alignment.center,
 
     // position component arguments
-    Vector2? position,
-    Vector2? size,
-    Vector2? scale,
-    double angle = 0.0,
-    Anchor anchor = Anchor.topLeft,
-    Iterable<Component>? children,
-    int? priority,
-  })  : _renderer = RiveArtboardRenderer(
+    super.position,
+    super.size,
+    super.scale,
+    double super.angle = 0.0,
+    Anchor super.anchor = Anchor.topLeft,
+    super.children,
+    super.priority,
+  }) : _renderer = RiveArtboardRenderer(
           antialiasing: antialiasing,
           useArtboardSize: useArtboardSize,
           fit: fit,
           alignment: alignment,
           artboard: artboard,
-        ),
-        super(
-          position: position,
-          size: size,
-          scale: scale,
-          angle: angle,
-          anchor: anchor,
-          children: children,
-          priority: priority,
         );
 
   @override
