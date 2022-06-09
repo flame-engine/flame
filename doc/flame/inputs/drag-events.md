@@ -105,3 +105,88 @@ which simply converts this event into an `onDragEnd`.
 ## Mixins
 
 ### HasDraggableComponents
+
+This mixin is used on a `FlameGame` in order to ensure that drag events coming from Flutter reach
+their target `Component`s. This mixin **must** be added if you have any components with the
+`DragCallbacks` mixin.
+
+The mixin adds methods `onDragStart`, `onDragUpdate`, `onDragEnd`, and `onDragCancel` to the game.
+The default implementation will simply propagate these events to the component(s) that are at the
+point of touch; but you can override them if you also want to respond to those events at the global
+game level:
+
+```dart
+class MyGame extends FlameGame with HasDraggableComponents {
+  @override
+  void onDragDown(DragDownEvent event) {
+    super.onDragDown(event);
+    if (!event.handled) {
+      print('Event $event was not handled by any component');
+    }
+  }
+}
+```
+
+
+### DragCallbacks
+
+The `DragCallbacks` mixin can be added to any `Component` in order for that component to start
+receiving drag events.
+
+This mixin adds methods `onDragStart`, `onDragUpdate`, `onDragEnd`, and `onDragCancel` to the
+component, which by default don't do anything, but can be overridden to implement any real
+functionality.
+
+Another crucial detail is that a component will only receive drag events that originate _within_
+that component, as judged by the `containsLocalPoint()` function. The commonly-used
+`PositionComponent` class provides such an implementation based on its `size` property. Thus, if
+your component derives from a `PositionComponent`, then make sure that you set its size correctly.
+If, however, your component derives from the bare `Component`, then the `containsLocalPoint()`
+method must be implemented manually.
+
+If your component is a part of a larger hierarchy, then it will only receive drag events if its
+ancestors have all implemented the `containsLocalPoint` correctly.
+
+```dart
+class MyComponent extends PositionComponent with DragCallbacks {
+  MyComponent({super.size});
+
+  final _paint = Paint();
+  bool _isDragged = false;
+
+  @override
+  void onDragStart(DragStartEvent event) => _isDragged = true;
+
+  @override
+  void onDragUpdate(DragUpdateEvent event) => position += event.delta;
+
+  @override
+  void onDragEnd(DragEndEvent event) => _isDragged = false;
+
+  @override
+  void render(Canvas canvas) {
+    _paint.color = _isDragged? Colors.red : Colors.white;
+    canvas.drawRect(size.toRect(), _paint);
+  }
+}
+```
+
+
+### HasDraggablesBridge
+
+This marker mixin can be used to indicate that the game has both the "new-style" components that
+use the `DragCallbacks` mixin, and the "old-style" components that use the `Draggable` mixin. In
+effect, every drag event will be propagated twice through the system: first trying to reach the
+components with `DragCallbacks` mixin, and then components with `Draggable`.
+
+```dart
+class MyGame extends FlameGame with HasDraggableComponents, HasDraggablesBridge {
+  // ...
+}
+```
+
+The purpose of this mixin is to ease the transition from the old event delivery system to the
+new one. With this mixin, you can transition your `Draggable` components into using `DragCallbacks`
+one by one, verifying that your game continues to work at every step.
+
+Use of this mixin for any new project is highly discouraged.
