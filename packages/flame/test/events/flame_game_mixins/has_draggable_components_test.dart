@@ -46,6 +46,35 @@ void main() {
         expect(nDragEndCalled, 2);
       },
     );
+
+    testWidgets(
+      'drag event does not affect more than one component',
+      (tester) async {
+        var nEvents = 0;
+        final game = _GameWithHasDraggableComponents(
+          children: [
+            _DragCallbacksComponent(
+              size: Vector2.all(100),
+              onDragStart: (e) => nEvents++,
+              onDragUpdate: (e) => nEvents++,
+              onDragEnd: (e) => nEvents++,
+            ),
+            _SimpleDragCallbacksComponent(size: Vector2.all(200)),
+          ],
+        );
+        await tester.pumpWidget(GameWidget(game: game));
+        await tester.pump();
+        await tester.pump();
+        expect(game.children.length, 2);
+
+        await tester.timedDragFrom(
+          const Offset(20, 20),
+          const Offset(5, 5),
+          const Duration(seconds: 1),
+        );
+        expect(nEvents, 0);
+      },
+    );
   });
 }
 
@@ -77,4 +106,9 @@ class _DragCallbacksComponent extends PositionComponent with DragCallbacks {
 
   @override
   void onDragEnd(DragEndEvent event) => _onDragEnd?.call(event);
+}
+
+class _SimpleDragCallbacksComponent extends PositionComponent
+    with DragCallbacks {
+  _SimpleDragCallbacksComponent({super.size});
 }
