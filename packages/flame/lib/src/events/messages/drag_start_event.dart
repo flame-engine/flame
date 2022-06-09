@@ -8,8 +8,7 @@ import 'package:flutter/gestures.dart';
 
 class DragStartEvent extends PositionEvent {
   DragStartEvent(this.pointerId, DragStartDetails details)
-      : timestamp = details.sourceTimeStamp ?? Duration.zero,
-        deviceKind = details.kind ?? PointerDeviceKind.unknown,
+      : deviceKind = details.kind ?? PointerDeviceKind.unknown,
         super(
           canvasPosition: details.localPosition.toVector2(),
           devicePosition: details.globalPosition.toVector2(),
@@ -22,7 +21,6 @@ class DragStartEvent extends PositionEvent {
   /// time on the same component.
   final int pointerId;
 
-  final Duration timestamp;
   final PointerDeviceKind deviceKind;
 
   /// Converts this event into the legacy [DragStartInfo] representation.
@@ -30,7 +28,6 @@ class DragStartEvent extends PositionEvent {
     return DragStartInfo.fromDetails(
       game,
       DragStartDetails(
-        sourceTimeStamp: timestamp,
         globalPosition: devicePosition.toOffset(),
         localPosition: canvasPosition.toOffset(),
         kind: deviceKind,
