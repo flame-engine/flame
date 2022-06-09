@@ -61,7 +61,6 @@ class _DragCallbacksComponent extends PositionComponent with DragCallbacks {
     void Function(DragEndEvent)? onDragEnd,
     super.position,
     super.size,
-    super.children,
   })  : _onDragStart = onDragStart,
         _onDragUpdate = onDragUpdate,
         _onDragEnd = onDragEnd;
