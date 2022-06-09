@@ -12,12 +12,30 @@ class DragEventsGame extends FlameGame with HasDraggableComponents {
   Future<void> onLoad() async {
     addAll([
       DragTarget(),
-      Star(n: 5, radius1: 40, radius2: 20, sharpness: 0.2)
-        ..position = Vector2(70, 70),
-      Star(n: 3, radius1: 50, radius2: 40, sharpness: 0.3)
-        ..position = Vector2(70, 160),
-      Star(n: 12, radius1: 10, radius2: 75, sharpness: 1.3)
-        ..position = Vector2(70, 270),
+      Star(
+        n: 5,
+        radius1: 40,
+        radius2: 20,
+        sharpness: 0.2,
+        color: const Color(0xffd1adf1),
+        position: Vector2(70, 70),
+      ),
+      Star(
+        n: 3,
+        radius1: 50,
+        radius2: 40,
+        sharpness: 0.3,
+        color: const Color(0xff6ecbe5),
+        position: Vector2(70, 160),
+      ),
+      Star(
+        n: 12,
+        radius1: 10,
+        radius2: 75,
+        sharpness: 1.3,
+        color: const Color(0xfff6df6a),
+        position: Vector2(70, 270),
+      ),
     ]);
   }
 }
@@ -153,10 +171,12 @@ class Trail extends Component {
 
 class Star extends PositionComponent with DragCallbacks {
   Star({
-    required this.n,
-    required this.radius1,
-    required this.radius2,
-    required this.sharpness,
+    required int n,
+    required double radius1,
+    required double radius2,
+    required double sharpness,
+    required this.color,
+    super.position,
   }) {
     _path = Path()..moveTo(radius1, 0);
     for (var i = 0; i < n; i++) {
@@ -166,28 +186,19 @@ class Star extends PositionComponent with DragCallbacks {
       _path.cubicTo(p1.x, p1.y, p2.x, p2.y, p3.x, p3.y);
     }
     _path.close();
-    _paint = Paint()
-      ..color =
-          HSLColor.fromAHSL(1, random.nextDouble() * 360, 0.5, 0.7).toColor();
-    _borderPaint = Paint()
-      ..color = const Color(0xFFffffff)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 3;
   }
 
-  final int n;
-  final double radius1;
-  final double radius2;
-  final double sharpness;
-  late final Path _path;
-  late final Paint _paint;
-  late final Paint _borderPaint;
-  late final _shadowPaint = Paint()
+  final Color color;
+  final Paint _paint = Paint();
+  final Paint _borderPaint = Paint()
+    ..color = const Color(0xFFffffff)
+    ..style = PaintingStyle.stroke
+    ..strokeWidth = 3;
+  final _shadowPaint = Paint()
     ..color = const Color(0xFF000000)
     ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 4.0);
+  late final Path _path;
   bool _isDragged = false;
-
-  static final random = Random();
 
   @override
   bool containsLocalPoint(Vector2 point) {
@@ -197,11 +208,11 @@ class Star extends PositionComponent with DragCallbacks {
   @override
   void render(Canvas canvas) {
     if (_isDragged) {
-      _paint.color = _paint.color.withOpacity(0.5);
+      _paint.color = color.withOpacity(0.5);
       canvas.drawPath(_path, _paint);
       canvas.drawPath(_path, _borderPaint);
     } else {
-      _paint.color = _paint.color.withOpacity(1);
+      _paint.color = color.withOpacity(1);
       canvas.drawPath(_path, _shadowPaint);
       canvas.drawPath(_path, _paint);
     }
@@ -225,4 +236,4 @@ class Star extends PositionComponent with DragCallbacks {
   }
 }
 
-const tau = Transform2D.tau;
+const tau = 2 * pi;
