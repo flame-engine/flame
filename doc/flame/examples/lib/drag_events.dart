@@ -1,39 +1,34 @@
 import 'dart:math';
-import 'dart:ui';
 
 import 'package:flame/components.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/rendering.dart';
 
 /// The main [FlameGame] class uses [HasDraggableComponents] in order to enable
 /// tap events propagation.
 class DragEventsGame extends FlameGame with HasDraggableComponents {
   @override
   Future<void> onLoad() async {
-    add(DragTarget());
-    add(
+    addAll([
+      DragTarget(),
       Star(n: 5, radius1: 40, radius2: 20, sharpness: 0.2)
         ..position = Vector2(70, 70),
-    );
-    add(
       Star(n: 3, radius1: 50, radius2: 40, sharpness: 0.3)
         ..position = Vector2(70, 160),
-    );
-    add(
       Star(n: 12, radius1: 10, radius2: 75, sharpness: 1.3)
         ..position = Vector2(70, 270),
-    );
+    ]);
   }
 }
 
-/// This component is the tappable blue-ish rectangle in the center of the
-/// game. It uses the [TapCallbacks] mixin in order to inform the game that it
-/// wants to receive tap events.
+/// This component is the pink-ish rectangle in the center of the game window.
+/// It uses the [DragCallbacks] mixin in order to inform the game that it wants
+/// to receive drag events.
 class DragTarget extends PositionComponent with DragCallbacks {
   DragTarget() : super(anchor: Anchor.center);
 
-  final _paint = Paint()..color = const Color(0x44EA8BFF);
+  final _rectPaint = Paint()..color = const Color(0x88AC54BF);
 
   /// We will store all current circles into this map, keyed by the `pointerId`
   /// of the event that created the circle.
@@ -51,7 +46,7 @@ class DragTarget extends PositionComponent with DragCallbacks {
 
   @override
   void render(Canvas canvas) {
-    canvas.drawRect(size.toRect(), _paint);
+    canvas.drawRect(size.toRect(), _rectPaint);
   }
 
   @override
@@ -92,10 +87,11 @@ class Trail extends Component {
   late final _circlePaint = Paint()..color = _color;
   bool _released = false;
   double _timer = 0;
-  final _vanishInterval = 0.02;
+  final _vanishInterval = 0.03;
   final Vector2 _lastPoint;
 
   static final random = Random();
+  static const lineWidth = 10.0;
 
   @override
   void render(Canvas canvas) {
@@ -105,11 +101,15 @@ class Trail extends Component {
       final opacity = _opacities[i];
       if (opacity > 0) {
         _linePaint.color = _color.withOpacity(opacity);
-        _linePaint.strokeWidth = 4 * opacity;
+        _linePaint.strokeWidth = lineWidth * opacity;
         canvas.drawPath(path, _linePaint);
       }
     }
-    canvas.drawCircle(_lastPoint.toOffset(), 4, _circlePaint);
+    canvas.drawCircle(
+      _lastPoint.toOffset(),
+      (lineWidth - 2) * _opacities.last + 2,
+      _circlePaint,
+    );
   }
 
   @override
