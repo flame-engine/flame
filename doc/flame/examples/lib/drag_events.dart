@@ -17,7 +17,7 @@ class DragEventsGame extends FlameGame with HasDraggableComponents {
         radius1: 40,
         radius2: 20,
         sharpness: 0.2,
-        color: const Color(0xffd1adf1),
+        color: const Color(0xffbae5ad),
         position: Vector2(70, 70),
       ),
       Star(
@@ -35,6 +35,14 @@ class DragEventsGame extends FlameGame with HasDraggableComponents {
         sharpness: 1.3,
         color: const Color(0xfff6df6a),
         position: Vector2(70, 270),
+      ),
+      Star(
+        n: 10,
+        radius1: 20,
+        radius2: 17,
+        sharpness: 0.85,
+        color: const Color(0xfff82a4b),
+        position: Vector2(110, 110),
       ),
     ]);
   }
