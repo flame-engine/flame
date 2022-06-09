@@ -149,6 +149,3 @@ Pros:
   - Support rotation of the world view;
   - Effects can be applied either to the viewport, or to the viewfinder;
   - More flexible camera controllers.
-
-Cons:
-  - Only tap events are currently supported.
