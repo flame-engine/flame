@@ -1,4 +1,5 @@
 import 'package:flame/components.dart';
+import 'package:flame/events.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -75,12 +76,91 @@ void main() {
         expect(nEvents, 0);
       },
     );
+
+    testWidgets(
+      'drag event can move outside the component bounds',
+      (tester) async {
+        final points = <Vector2>[];
+        final game = _GameWithHasDraggableComponents(
+          children: [
+            _DragCallbacksComponent(
+              size: Vector2.all(95),
+              position: Vector2.all(5),
+              onDragUpdate: (e) => points.add(e.localPosition),
+            ),
+          ],
+        );
+        await tester.pumpWidget(GameWidget(game: game));
+        await tester.pump();
+        await tester.pump();
+        expect(game.children.length, 1);
+
+        await tester.timedDragFrom(
+          const Offset(80, 80),
+          const Offset(0, 40),
+          const Duration(seconds: 1),
+          frequency: 40,
+        );
+        expect(points.length, 42);
+        expect(points.first, Vector2(75, 75));
+        expect(
+          points.skip(1).take(20),
+          List.generate(20, (i) => Vector2(75.0, 75.0 + i)),
+        );
+        expect(
+          points.skip(21),
+          everyElement(predicate((Vector2 v) => v.isNaN)),
+        );
+      },
+    );
+
+    testWidgets(
+      'game with Draggables',
+      (tester) async {
+        var nDragCallbackUpdates = 0;
+        var nDraggableUpdates = 0;
+        final game = _GameWithDualDraggableComponents(
+          children: [
+            _DragCallbacksComponent(
+              size: Vector2.all(100),
+              onDragStart: (e) => e.continuePropagation = true,
+              onDragUpdate: (e) => nDragCallbackUpdates++,
+            ),
+            _DraggableComponent(
+              size: Vector2.all(100),
+              onDragStart: (e) => true,
+              onDragUpdate: (e) {
+                nDraggableUpdates++;
+                return true;
+              },
+            ),
+          ],
+        );
+        await tester.pumpWidget(GameWidget(game: game));
+        await tester.pump();
+        await tester.pump();
+        expect(game.children.length, 2);
+
+        await tester.timedDragFrom(
+          const Offset(50, 50),
+          const Offset(-20, 20),
+          const Duration(seconds: 1),
+        );
+        expect(nDragCallbackUpdates, 62);
+        expect(nDraggableUpdates, 62);
+      },
+    );
   });
 }
 
 class _GameWithHasDraggableComponents extends FlameGame
     with HasDraggableComponents {
   _GameWithHasDraggableComponents({super.children});
+}
+
+class _GameWithDualDraggableComponents extends FlameGame
+    with HasDraggableComponents, HasDraggablesBridge {
+  _GameWithDualDraggableComponents({super.children});
 }
 
 class _DragCallbacksComponent extends PositionComponent with DragCallbacks {
@@ -111,4 +191,28 @@ class _DragCallbacksComponent extends PositionComponent with DragCallbacks {
 class _SimpleDragCallbacksComponent extends PositionComponent
     with DragCallbacks {
   _SimpleDragCallbacksComponent({super.size});
+}
+
+class _DraggableComponent extends PositionComponent with Draggable {
+  _DraggableComponent({
+    super.size,
+    bool Function(DragStartInfo)? onDragStart,
+    bool Function(DragUpdateInfo)? onDragUpdate,
+    bool Function(DragEndInfo)? onDragEnd,
+  })  : _onDragStart = onDragStart,
+        _onDragUpdate = onDragUpdate,
+        _onDragEnd = onDragEnd;
+
+  final bool Function(DragStartInfo)? _onDragStart;
+  final bool Function(DragUpdateInfo)? _onDragUpdate;
+  final bool Function(DragEndInfo)? _onDragEnd;
+
+  @override
+  bool onDragStart(DragStartInfo info) => _onDragStart?.call(info) ?? true;
+
+  @override
+  bool onDragUpdate(DragUpdateInfo info) => _onDragUpdate?.call(info) ?? true;
+
+  @override
+  bool onDragEnd(DragEndInfo info) => _onDragEnd?.call(info) ?? true;
 }
