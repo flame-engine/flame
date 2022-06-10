@@ -22,21 +22,15 @@ class SpriteComponent extends PositionComponent
   SpriteComponent({
     this.sprite,
     Paint? paint,
-    Vector2? position,
+    super.position,
     Vector2? size,
-    Vector2? scale,
-    double? angle,
-    Anchor? anchor,
-    Iterable<Component>? children,
-    int? priority,
+    super.scale,
+    super.angle,
+    super.anchor,
+    super.children,
+    super.priority,
   }) : super(
-          position: position,
           size: size ?? sprite?.srcSize,
-          scale: scale,
-          angle: angle,
-          anchor: anchor,
-          children: children,
-          priority: priority,
         ) {
     if (paint != null) {
       this.paint = paint;

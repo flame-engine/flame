@@ -8,9 +8,9 @@ class FlareActorComponent extends PositionComponent {
 
   FlareActorComponent(
     this.flareAnimation, {
-    required Vector2 size,
-    Vector2? position,
-  }) : super(position: position, size: size);
+    required Vector2 super.size,
+    super.position,
+  });
 
   @override
   void onMount() {

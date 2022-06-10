@@ -7,21 +7,15 @@ class FpsTextComponent<T extends TextRenderer> extends TextComponent {
   FpsTextComponent({
     int windowSize = 60,
     this.decimalPlaces = 0,
-    T? textRenderer,
-    Vector2? position,
-    Vector2? size,
-    Vector2? scale,
-    double? angle,
-    Anchor? anchor,
+    T? super.textRenderer,
+    super.position,
+    super.size,
+    super.scale,
+    super.angle,
+    super.anchor,
     int? priority,
   })  : fpsComponent = FpsComponent(windowSize: windowSize),
         super(
-          textRenderer: textRenderer,
-          position: position,
-          size: size,
-          scale: scale,
-          angle: angle,
-          anchor: anchor,
           priority: priority ?? double.maxFinite.toInt(),
         ) {
     positionType = PositionType.viewport;

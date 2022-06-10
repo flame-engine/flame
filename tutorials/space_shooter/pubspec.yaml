@@ -6,24 +6,21 @@ publish_to: 'none'
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: ">=2.17.0 <3.0.0"
 
 dependencies:
+  dashbook: ^0.1.5
+  flame: ^1.2.0
   flutter:
     sdk: flutter
-  cupertino_icons: ^1.0.2
-  dashbook: ^0.1.5
-  flame:
-    path: ../../packages/flame
-  flutter_markdown: ^0.6.7
   flutter_highlight: ^0.7.0
+  flutter_markdown: ^0.6.7
 
 dev_dependencies:
+  flame_lint: ^0.0.1
+  flutter_lints: ^1.0.0
   flutter_test:
     sdk: flutter
-  flutter_lints: ^1.0.0
-  flame_lint:
-    path: ../../packages/flame_lint
 
 flutter:
   uses-material-design: true

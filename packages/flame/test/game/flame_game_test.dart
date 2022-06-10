@@ -124,30 +124,16 @@ void main() {
       );
 
       testWithFlameGame(
-        'removes PositionComponent when shouldRemove is true',
+        'removes PositionComponent when removeFromParent is called',
         (game) async {
           final component = PositionComponent();
           await game.ensureAdd(component);
           expect(game.children.length, equals(1));
-          component.shouldRemove = true;
+          component.removeFromParent();
           game.updateTree(0);
           expect(game.children.isEmpty, equals(true));
         },
       );
-
-      testWithFlameGame('clear removes all components', (game) async {
-        final components = List.generate(3, (index) => Component());
-        await game.ensureAddAll(components);
-        expect(game.children.length, equals(3));
-
-        game.children
-            .clear(); // ignore: deprecated_member_use_from_same_package
-
-        // Ensure clear does not remove components directly
-        expect(game.children.length, equals(3));
-        game.updateTree(0);
-        expect(game.children.isEmpty, equals(true));
-      });
 
       testWidgets(
         'can add a component to a game without a layout',
@@ -659,11 +645,27 @@ void main() {
         },
       );
     });
+
+    group('Render box attachment', () {
+      testWidgets('calls on attach', (tester) async {
+        await tester.runAsync(() async {
+          var hasAttached = false;
+          final game = _OnAttachGame(() => hasAttached = true);
+
+          await tester.pumpWidget(GameWidget(game: game));
+          await game.toBeLoaded();
+          await tester.pump();
+
+          expect(hasAttached, isTrue);
+        });
+      });
+    });
   });
 }
 
 class _IndexedComponent extends Component {
   final int index;
+
   _IndexedComponent(this.index);
 }
 
@@ -729,5 +731,21 @@ class _MyAsyncComponent extends _MyComponent {
   @override
   Future<void> onLoad() {
     return Future.value();
+  }
+}
+
+class _OnAttachGame extends FlameGame {
+  final VoidCallback onAttachCallback;
+
+  _OnAttachGame(this.onAttachCallback);
+
+  @override
+  void onAttach() {
+    onAttachCallback();
+  }
+
+  @override
+  Future<void>? onLoad() {
+    return Future.delayed(const Duration(seconds: 1));
   }
 }

@@ -6,22 +6,19 @@ publish_to: 'none'
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.16.0 <3.0.0"
-  flutter: ">=2.10.0"
+  sdk: ">=2.17.0 <3.0.0"
+  flutter: ^3.0.0
 
 dependencies:
+  dashbook: ^0.1.6
+  flame_forge2d: ^0.11.0
   flutter:
     sdk: flutter
-  flame_forge2d:
-    path: ../
-  dashbook: ^0.1.6
 
 dev_dependencies:
+  flame_lint: ^0.0.1
   flutter_test:
     sdk: flutter
-  flame_lint:
-    path: ../../flame_lint
-
 
 flutter:
   uses-material-design: true

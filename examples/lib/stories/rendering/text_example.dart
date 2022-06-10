@@ -90,15 +90,13 @@ final _shaded = TextPaint(
 class MyTextBox extends TextBoxComponent {
   MyTextBox(
     String text, {
-    Anchor? align,
-    Vector2? size,
+    super.align,
+    super.size,
     double? timePerChar,
     double? margins,
   }) : super(
           text: text,
           textRenderer: _box,
-          align: align,
-          size: size,
           boxConfig: TextBoxConfig(
             maxWidth: 400,
             timePerChar: timePerChar ?? 0.05,

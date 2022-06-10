@@ -161,7 +161,7 @@ class Camera extends Projector {
   /// When using this method you are responsible for saving/restoring canvas
   /// state to avoid leakage.
   void apply(Canvas canvas) {
-    canvas.transform(_transformMatrix(position, zoom).storage);
+    canvas.transform(_transformMatrix().storage);
   }
 
   Vector2? _canvasSize;
@@ -178,7 +178,7 @@ class Camera extends Projector {
     _viewport.resize(canvasSize);
   }
 
-  Matrix4 _transformMatrix(Vector2 position, double zoom) {
+  Matrix4 _transformMatrix() {
     final translateX = -_position.x * zoom;
     final translateY = -_position.y * zoom;
     if (_transform.m11 == zoom &&

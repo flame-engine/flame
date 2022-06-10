@@ -3,7 +3,7 @@ import 'package:flutter/material.dart' hide Image, Gradient;
 import 'package:trex_game/trex_game.dart';
 
 class TRexWidget extends StatelessWidget {
-  const TRexWidget({Key? key}) : super(key: key);
+  const TRexWidget({super.key});
 
   @override
   Widget build(BuildContext context) {

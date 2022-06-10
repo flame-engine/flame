@@ -7,7 +7,7 @@ import 'package:flame_audio/audio_pool.dart';
 import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/widgets.dart' hide Animation;
 
-void main() async {
+void main() {
   runApp(GameWidget(game: AudioGame()));
 }
 

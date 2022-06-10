@@ -83,7 +83,7 @@ class Ball extends BodyComponent with ContactCallbacks {
 }
 
 class WhiteBall extends Ball with ContactCallbacks {
-  WhiteBall(Vector2 position) : super(position) {
+  WhiteBall(super.position) {
     originalPaint = BasicPalette.white.paint();
     paint = originalPaint;
   }

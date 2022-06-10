@@ -97,7 +97,7 @@ class Anchor {
   ///
   /// If you need to convert anchors to serializable data (like JSON),
   /// use the `toString()` and `valueOf` methods.
-  static Anchor valueOf(String name) {
+  factory Anchor.valueOf(String name) {
     if (_valueNames.containsValue(name)) {
       return _valueNames.entries.singleWhere((e) => e.value == name).key;
     } else {

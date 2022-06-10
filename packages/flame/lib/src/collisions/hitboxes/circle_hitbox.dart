@@ -1,3 +1,5 @@
+// ignore_for_file: comment_references
+
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 
@@ -7,35 +9,23 @@ class CircleHitbox extends CircleComponent with ShapeHitbox {
   final bool shouldFillParent;
 
   CircleHitbox({
-    double? radius,
-    Vector2? position,
-    double? angle,
-    Anchor? anchor,
-  })  : shouldFillParent = radius == null && position == null,
-        super(
-          radius: radius,
-          position: position,
-          angle: angle,
-          anchor: anchor,
-        );
+    super.radius,
+    super.position,
+    super.angle,
+    super.anchor,
+  }) : shouldFillParent = radius == null && position == null;
 
   /// With this constructor you define the [CircleHitbox] in relation to the
   /// [parentSize]. For example having a [relation] of 0.5 would create a circle
   /// that fills half of the [parentSize].
   CircleHitbox.relative(
-    double relation, {
-    Vector2? position,
-    required Vector2 parentSize,
-    double angle = 0,
-    Anchor? anchor,
+    super.relation, {
+    super.position,
+    required super.parentSize,
+    super.angle,
+    super.anchor,
   })  : shouldFillParent = false,
-        super.relative(
-          relation,
-          position: position,
-          parentSize: parentSize,
-          angle: angle,
-          anchor: anchor,
-        );
+        super.relative();
 
   @override
   void fillParent() {

@@ -164,9 +164,8 @@ class Tire extends BodyComponent<PadRacingGame> {
     if (isTurnableTire && isTurning) {
       final turnPerTimeStep = _turnSpeedPerSecond * dt;
       final angleNow = joint.jointAngle();
-      final angleToTurn = (desiredAngle - angleNow)
-          .clamp(-turnPerTimeStep, turnPerTimeStep)
-          .toDouble();
+      final angleToTurn =
+          (desiredAngle - angleNow).clamp(-turnPerTimeStep, turnPerTimeStep);
       final angle = angleNow + angleToTurn;
       joint.setLimits(angle, angle);
     } else {

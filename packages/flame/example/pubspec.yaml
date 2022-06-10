@@ -4,17 +4,15 @@ version: 0.1.0
 publish_to: 'none'
 
 environment:
-  sdk: ">=2.16.0 <3.0.0"
-  flutter: ">=2.10.0"
+  sdk: ">=2.17.0 <3.0.0"
+  flutter: ^3.0.0
 
 dependencies:
-  flame:
-    path: ../
+  flame: ^1.2.0
   flutter:
     sdk: flutter
 
 dev_dependencies:
+  flame_lint: ^0.0.1
   flutter_test:
     sdk: flutter
-  flame_lint:
-    path: ../../flame_lint
