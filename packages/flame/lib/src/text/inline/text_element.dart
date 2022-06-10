@@ -3,12 +3,12 @@ import 'dart:ui' hide LineMetrics;
 import 'package:flame/src/text/common/line_metrics.dart';
 import 'package:flame/src/text/common/text_line.dart';
 
-/// [TextElement] is the base class describing a span of text that has "inline"
+/// [TextElement] is the base class describing a span of text that has *inline*
 /// placement rules.
 ///
-/// Concrete implementations of this class must know how to lay themselves out
+/// Concrete implementations of this class must know how to perform own layout
 /// (i.e. determine the exact placement and size of each internal piece), and
-/// then render on a canvas after the layout.
+/// then render on a canvas afterwards.
 ///
 /// The layout mechanism used by this class works as follows:
 /// - initially, the [lines] iterator is empty;
