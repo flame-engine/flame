@@ -30,11 +30,11 @@ class PlainTextBlock extends TextBlock {
     final rightEdge = (padding?.right ?? 0) + (border?.right ?? 0);
     final bottomEdge = (padding?.bottom ?? 0) + (border?.bottom ?? 0);
 
-    final bounds = LineMetrics(
-      baseline: 0,
-      left: leftEdge,
-      width: width - rightEdge - leftEdge,
-    );
+    // final bounds = LineMetrics(
+    //   baseline: 0,
+    //   left: leftEdge,
+    //   width: width - rightEdge - leftEdge,
+    // );
     var result = LayoutResult.unfinished;
     while (result == LayoutResult.unfinished) {
       result = _text.layOutNextLine(
