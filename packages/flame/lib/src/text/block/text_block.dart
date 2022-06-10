@@ -11,14 +11,14 @@ abstract class TextBlock {
   EdgeInsets? padding;
   EdgeInsets? border;
   double borderRadius = 0;
-  Rect? _rect;
-  RRect? _rrect;
+  late Rect _rect;
+  late RRect _rrect;
 
   @mustCallSuper
   void layout() {
     _rect = Rect.fromLTWH(0, 0, width, height);
     if (borderRadius != 0) {
-      _rrect = RRect.fromRectAndRadius(_rect!, Radius.circular(borderRadius));
+      _rrect = RRect.fromRectAndRadius(_rect, Radius.circular(borderRadius));
     }
   }
 
@@ -28,10 +28,10 @@ abstract class TextBlock {
   void render(Canvas canvas) {
     if (borderRadius == 0) {
       if (backgroundPaint != null) {
-        canvas.drawRect(_rect!, backgroundPaint!);
+        canvas.drawRect(_rect, backgroundPaint!);
       }
       if (borderPaint != null) {
-        canvas.drawRect(_rect!, borderPaint!);
+        canvas.drawRect(_rect, borderPaint!);
       }
       if (borderPaintsLTRB != null) {
         final leftPaint = borderPaintsLTRB![0];
@@ -56,10 +56,10 @@ abstract class TextBlock {
       }
     } else {
       if (backgroundPaint != null) {
-        canvas.drawRRect(_rrect!, backgroundPaint!);
+        canvas.drawRRect(_rrect, backgroundPaint!);
       }
       if (borderPaint != null) {
-        canvas.drawRRect(_rrect!, borderPaint!);
+        canvas.drawRRect(_rrect, borderPaint!);
       }
     }
   }

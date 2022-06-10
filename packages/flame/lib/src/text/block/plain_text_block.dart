@@ -35,7 +35,6 @@ class PlainTextBlock extends TextBlock {
       left: leftEdge,
       width: width - rightEdge - leftEdge,
     );
-    print(bounds);
     var result = LayoutResult.unfinished;
     while (result == LayoutResult.unfinished) {
       result = _text.layOutNextLine(

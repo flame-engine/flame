@@ -11,7 +11,7 @@ import 'package:flame/src/text/inline/text_element.dart';
 /// [spacing].
 class GroupTextElement extends TextElement {
   GroupTextElement(this.children, {this.spacing = 0})
-    : assert(children.isNotEmpty, 'Children list cannot be empty');
+      : assert(children.isNotEmpty, 'Children list cannot be empty');
 
   final List<TextElement> children;
 
