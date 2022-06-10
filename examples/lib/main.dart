@@ -15,9 +15,25 @@ import 'package:examples/stories/svg/svg.dart';
 import 'package:examples/stories/system/system.dart';
 import 'package:examples/stories/utils/utils.dart';
 import 'package:examples/stories/widgets/widgets.dart';
+import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 
 void main() {
+  runApp(MaterialApp(
+    home: Scaffold(
+      body: GameWidget(
+        game: FlameGame(),
+        initialActiveOverlays: const ['text-field'],
+        overlayBuilderMap: {
+          'text-field': (_, g) => TextField(
+            onChanged: (s) => print(s),
+          ),
+        },
+      ),
+    ),
+  ),
+  );return;
+
   final dashbook = Dashbook(
     title: 'Flame Examples',
     theme: ThemeData.dark(),

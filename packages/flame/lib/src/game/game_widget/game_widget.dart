@@ -288,7 +288,7 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
     if (game is KeyboardEvents) {
       return game.onKeyEvent(event, RawKeyboard.instance.keysPressed);
     }
-    return KeyEventResult.handled;
+    return KeyEventResult.ignored;
   }
 
   @override
