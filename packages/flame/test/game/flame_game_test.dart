@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/src/game/game_render_box.dart';
@@ -41,9 +42,9 @@ void main() {
         },
       );
 
-      testWithGame<_GameWithTappables>(
+      testWithGame<GameWithTappables>(
         'Add component with onLoad function',
-        _GameWithTappables.new,
+        GameWithTappables.new,
         (game) async {
           final component = _MyAsyncComponent();
           await game.ensureAdd(component);
@@ -65,9 +66,9 @@ void main() {
         },
       );
 
-      testWithGame<_GameWithTappables>(
+      testWithGame<GameWithTappables>(
         'component can be tapped',
-        _GameWithTappables.new,
+        GameWithTappables.new,
         (game) async {
           final component = _MyTappableComponent();
           await game.ensureAdd(component);
@@ -123,30 +124,16 @@ void main() {
       );
 
       testWithFlameGame(
-        'removes PositionComponent when shouldRemove is true',
+        'removes PositionComponent when removeFromParent is called',
         (game) async {
           final component = PositionComponent();
           await game.ensureAdd(component);
           expect(game.children.length, equals(1));
-          component.shouldRemove = true;
+          component.removeFromParent();
           game.updateTree(0);
           expect(game.children.isEmpty, equals(true));
         },
       );
-
-      testWithFlameGame('clear removes all components', (game) async {
-        final components = List.generate(3, (index) => Component());
-        await game.ensureAddAll(components);
-        expect(game.children.length, equals(3));
-
-        game.children
-            .clear(); // ignore: deprecated_member_use_from_same_package
-
-        // Ensure clear does not remove components directly
-        expect(game.children.length, equals(3));
-        game.updateTree(0);
-        expect(game.children.isEmpty, equals(true));
-      });
 
       testWidgets(
         'can add a component to a game without a layout',
@@ -610,11 +597,93 @@ void main() {
           expect(game.projector.unscaleVector(Vector2(8, 16)), Vector2(1, 2));
         },
       );
+
+      testWithGame<FlameGame>(
+        'children in the constructor',
+        () {
+          return FlameGame(
+            children: [_IndexedComponent(1), _IndexedComponent(2)],
+          );
+        },
+        (game) async {
+          game.add(_IndexedComponent(3));
+          game.add(_IndexedComponent(4));
+          await game.ready();
+
+          expect(game.children.length, 4);
+          expect(
+            game.children
+                .whereType<_IndexedComponent>()
+                .map((c) => c.index)
+                .isSorted((a, b) => a.compareTo(b)),
+            isTrue,
+          );
+        },
+      );
+
+      testWithGame<FlameGame>(
+        'children in the constructor and onLoad',
+        () {
+          return _ConstructorChildrenGame(
+            constructorChildren: [_IndexedComponent(1), _IndexedComponent(2)],
+            onLoadChildren: [_IndexedComponent(3), _IndexedComponent(4)],
+          );
+        },
+        (game) async {
+          game.add(_IndexedComponent(5));
+          game.add(_IndexedComponent(6));
+          await game.ready();
+
+          expect(game.children.length, 6);
+          expect(
+            game.children
+                .whereType<_IndexedComponent>()
+                .map((c) => c.index)
+                .isSorted((a, b) => a.compareTo(b)),
+            isTrue,
+          );
+        },
+      );
+    });
+
+    group('Render box attachment', () {
+      testWidgets('calls on attach', (tester) async {
+        await tester.runAsync(() async {
+          var hasAttached = false;
+          final game = _OnAttachGame(() => hasAttached = true);
+
+          await tester.pumpWidget(GameWidget(game: game));
+          await game.toBeLoaded();
+          await tester.pump();
+
+          expect(hasAttached, isTrue);
+        });
+      });
     });
   });
 }
 
-class _GameWithTappables extends FlameGame with HasTappables {}
+class _IndexedComponent extends Component {
+  final int index;
+
+  _IndexedComponent(this.index);
+}
+
+class _ConstructorChildrenGame extends FlameGame {
+  final Iterable<_IndexedComponent> onLoadChildren;
+
+  _ConstructorChildrenGame({
+    required Iterable<_IndexedComponent> constructorChildren,
+    required this.onLoadChildren,
+  }) : super(children: constructorChildren);
+
+  @override
+  Future<void> onLoad() async {
+    addAll(onLoadChildren);
+  }
+}
+
+class GameWithTappables extends FlameGame with HasTappables {}
 
 class _MyTappableComponent extends _MyComponent with Tappable {
   bool tapped = false;
@@ -662,5 +731,21 @@ class _MyAsyncComponent extends _MyComponent {
   @override
   Future<void> onLoad() {
     return Future.value();
+  }
+}
+
+class _OnAttachGame extends FlameGame {
+  final VoidCallback onAttachCallback;
+
+  _OnAttachGame(this.onAttachCallback);
+
+  @override
+  void onAttach() {
+    onAttachCallback();
+  }
+
+  @override
+  Future<void>? onLoad() {
+    return Future.delayed(const Duration(seconds: 1));
   }
 }

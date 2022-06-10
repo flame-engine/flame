@@ -4,9 +4,9 @@ import 'package:flame/components.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
+import 'package:flame/text.dart';
 import 'package:flutter/material.dart' hide Image;
 import 'package:flutter/services.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:trex_game/background/horizon.dart';
 import 'package:trex_game/game_over.dart';
 import 'package:trex_game/player.dart';
@@ -31,12 +31,18 @@ class TRexGame extends FlameGame
   late final gameOverPanel = GameOverPanel();
   late final TextComponent scoreText;
 
-  late int _score;
+  int _score = 0;
+  int _highscore = 0;
   int get score => _score;
   set score(int newScore) {
     _score = newScore;
-    scoreText.text = 'Score:$score';
+    scoreText.text = '${scoreString(_score)}  HI ${scoreString(_highscore)}';
   }
+
+  String scoreString(int score) => score.toString().padLeft(5, '0');
+
+  /// Used for score calculation
+  double _distanceTravelled = 0;
 
   @override
   Future<void> onLoad() async {
@@ -45,16 +51,21 @@ class TRexGame extends FlameGame
     add(player);
     add(gameOverPanel);
 
-    final textStyle = GoogleFonts.pressStart2p(
-      fontSize: 20,
-      fontWeight: FontWeight.bold,
-      color: Colors.grey.shade700,
+    const chars = '0123456789HI ';
+    final renderer = SpriteFontRenderer(
+      source: spriteImage,
+      charWidth: 20,
+      charHeight: 23,
+      glyphs: {
+        for (var i = 0; i < chars.length; i++)
+          chars[i]: GlyphData(left: 954.0 + 20 * i, top: 0)
+      },
+      letterSpacing: 2,
     );
-    final textPaint = TextPaint(style: textStyle);
     add(
       scoreText = TextComponent(
         position: Vector2(20, 20),
-        textRenderer: textPaint,
+        textRenderer: renderer,
       )..positionType = PositionType.viewport,
     );
     score = 0;
@@ -111,7 +122,11 @@ class TRexGame extends FlameGame
     currentSpeed = startSpeed;
     gameOverPanel.visible = false;
     timePlaying = 0.0;
+    if (score > _highscore) {
+      _highscore = score;
+    }
     score = 0;
+    _distanceTravelled = 0;
   }
 
   @override
@@ -123,6 +138,8 @@ class TRexGame extends FlameGame
 
     if (isPlaying) {
       timePlaying += dt;
+      _distanceTravelled += dt * currentSpeed;
+      score = _distanceTravelled ~/ 50;
 
       if (currentSpeed < maxSpeed) {
         currentSpeed += acceleration * dt;

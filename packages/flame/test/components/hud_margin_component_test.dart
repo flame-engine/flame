@@ -3,7 +3,7 @@ import 'package:flame_test/flame_test.dart';
 import 'package:flutter/widgets.dart';
 import 'package:test/test.dart';
 
-void main() async {
+void main() {
   group('HudMarginComponent test', () {
     flameGame.test(
       'position set from margin should change onGameResize',

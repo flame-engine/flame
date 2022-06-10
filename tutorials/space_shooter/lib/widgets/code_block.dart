@@ -7,7 +7,7 @@ import 'package:flutter_highlight/themes/github.dart';
 class CodeBlock extends StatelessWidget {
   final String value;
 
-  const CodeBlock({Key? key, required this.value}) : super(key: key);
+  const CodeBlock({super.key, required this.value});
 
   @override
   Widget build(BuildContext context) {

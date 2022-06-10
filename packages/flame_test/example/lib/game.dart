@@ -3,7 +3,7 @@ import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 
 class MyGameWidget extends StatelessWidget {
-  const MyGameWidget({Key? key}) : super(key: key);
+  const MyGameWidget({super.key});
 
   @override
   Widget build(BuildContext context) {

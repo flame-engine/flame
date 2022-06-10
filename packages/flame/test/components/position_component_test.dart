@@ -465,6 +465,40 @@ void main() {
       expect(component.center, closeToVector(x, y, epsilon: 1e-14));
     });
 
+    test('isHorizontallyFlipped', () {
+      final component = PositionComponent()
+        ..size = Vector2(10, 10)
+        ..position = Vector2(50, 20)
+        ..anchor = const Anchor(0.6, 0.8);
+
+      expect(component.isFlippedHorizontally, isFalse);
+      component.flipHorizontally();
+      expect(component.isFlippedHorizontally, isTrue);
+      component.flipHorizontally();
+      expect(component.isFlippedHorizontally, isFalse);
+      component.flipHorizontallyAroundCenter();
+      expect(component.isFlippedHorizontally, isTrue);
+      component.flipHorizontallyAroundCenter();
+      expect(component.isFlippedHorizontally, isFalse);
+    });
+
+    test('isVerticallyFlipped', () {
+      final component = PositionComponent()
+        ..size = Vector2(10, 10)
+        ..position = Vector2(50, 20)
+        ..anchor = const Anchor(0.6, 0.8);
+
+      expect(component.isFlippedVertically, isFalse);
+      component.flipVertically();
+      expect(component.isFlippedVertically, isTrue);
+      component.flipVertically();
+      expect(component.isFlippedVertically, isFalse);
+      component.flipVerticallyAroundCenter();
+      expect(component.isFlippedVertically, isTrue);
+      component.flipVerticallyAroundCenter();
+      expect(component.isFlippedVertically, isFalse);
+    });
+
     test('rotations', () {
       final component = PositionComponent()
         ..size = Vector2(8, 6)

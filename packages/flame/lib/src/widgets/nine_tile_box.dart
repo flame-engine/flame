@@ -36,9 +36,6 @@ class _Painter extends CustomPainter {
   bool shouldRepaint(_) => false;
 }
 
-@Deprecated('Renamed to [NineTileBoxWidget], this will be remove in v1.2.0')
-typedef NineTileBox = NineTileBoxWidget;
-
 /// A [StatelessWidget] that renders NineTileBox
 class NineTileBoxWidget extends StatelessWidget {
   final FutureOr<Image> _imageFuture;
@@ -69,11 +66,10 @@ class NineTileBoxWidget extends StatelessWidget {
     this.height,
     this.child,
     this.padding,
-    Key? key,
+    super.key,
   })  : _imageFuture = image,
         errorBuilder = null,
-        loadingBuilder = null,
-        super(key: key);
+        loadingBuilder = null;
 
   /// Loads image from the asset [path] and renders it as a widget.
   ///
@@ -92,9 +88,8 @@ class NineTileBoxWidget extends StatelessWidget {
     this.padding,
     this.errorBuilder,
     this.loadingBuilder,
-    Key? key,
-  })  : _imageFuture = (images ?? Flame.images).load(path),
-        super(key: key);
+    super.key,
+  }) : _imageFuture = (images ?? Flame.images).load(path);
 
   @override
   Widget build(BuildContext context) {
@@ -107,8 +102,8 @@ class NineTileBoxWidget extends StatelessWidget {
           destTileSize: destTileSize,
           width: width,
           height: height,
-          child: child,
           padding: padding,
+          child: child,
         );
       },
       errorBuilder: errorBuilder,
@@ -137,8 +132,8 @@ class InternalNineTileBox extends StatelessWidget {
     this.width,
     this.height,
     this.padding,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -152,8 +147,8 @@ class InternalNineTileBox extends StatelessWidget {
           destTileSize: destTileSize,
         ),
         child: Container(
-          child: child,
           padding: padding,
+          child: child,
         ),
       ),
     );

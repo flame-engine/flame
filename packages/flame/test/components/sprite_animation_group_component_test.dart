@@ -7,7 +7,7 @@ enum _AnimationState {
   running,
 }
 
-void main() async {
+Future<void> main() async {
   // Generate a image
   final image = await generateImage();
 
@@ -64,11 +64,11 @@ void main() async {
       );
 
       await game.ensureAdd(component);
-      expect(component.shouldRemove, false);
+      expect(component.parent, game);
       expect(game.children.length, 1);
 
       game.update(2);
-      expect(component.shouldRemove, false);
+      expect(component.parent, game);
 
       // runs a cycle and the component should still be there
       game.update(0.1);
@@ -121,11 +121,11 @@ void main() async {
       );
 
       await game.ensureAdd(component);
-      expect(component.shouldRemove, false);
+      expect(component.parent, game);
       expect(game.children.length, 1);
 
       game.update(2);
-      expect(component.shouldRemove, false);
+      expect(component.parent, game);
 
       // runs a cycle to remove the component, but failed
       game.update(0.1);
@@ -150,11 +150,11 @@ void main() async {
       );
 
       await game.ensureAdd(component);
-      expect(component.shouldRemove, false);
+      expect(component.parent, game);
       expect(game.children.length, 1);
 
       game.update(2);
-      expect(component.shouldRemove, false);
+      expect(component.parent, game);
 
       // runs a cycle to remove the component, but failed
       game.update(0.1);
@@ -180,11 +180,11 @@ void main() async {
 
       await game.ensureAdd(component);
 
-      expect(component.shouldRemove, false);
+      expect(component.parent, game);
       expect(game.children.length, 1);
 
       game.update(2);
-      expect(component.shouldRemove, false);
+      expect(component.parent, game);
 
       // runs a cycle to remove the component, but failed
       game.update(0.1);

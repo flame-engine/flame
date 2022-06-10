@@ -2,7 +2,7 @@ import 'package:flame/components.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:test/test.dart';
 
-void main() async {
+Future<void> main() async {
   // Generate an image
   final image = await generateImage();
 
@@ -96,11 +96,11 @@ void main() async {
 
         await game.ensureAdd(component);
 
-        expect(component.shouldRemove, false);
+        expect(component.parent, game);
         expect(game.children.length, 1);
 
         game.update(2);
-        expect(component.shouldRemove, false);
+        expect(component.parent, game);
 
         // runs a cycle to remove the component, but failed
         game.update(0.1);
@@ -127,11 +127,11 @@ void main() async {
 
         await game.ensureAdd(component);
 
-        expect(component.shouldRemove, false);
+        expect(component.parent, game);
         expect(game.children.length, 1);
 
         game.update(2);
-        expect(component.shouldRemove, false);
+        expect(component.parent, game);
 
         // runs a cycle to remove the component, but failed
         game.update(0.1);
@@ -159,11 +159,11 @@ void main() async {
 
         await game.ensureAdd(component);
 
-        expect(component.shouldRemove, false);
+        expect(component.parent, game);
         expect(game.children.length, 1);
 
         game.update(2);
-        expect(component.shouldRemove, false);
+        expect(component.parent, game);
 
         // runs a cycle to remove the component, but failed
         game.update(0.1);
@@ -190,11 +190,11 @@ void main() async {
 
         await game.ensureAdd(component);
 
-        expect(component.shouldRemove, false);
+        expect(component.parent, game);
         expect(game.children.length, 1);
 
         game.update(2);
-        expect(component.shouldRemove, false);
+        expect(component.parent, game);
 
         // runs a cycle to potentially remove the component
         game.update(0.1);

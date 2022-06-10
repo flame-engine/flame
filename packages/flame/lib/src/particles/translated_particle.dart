@@ -14,8 +14,8 @@ class TranslatedParticle extends Particle with SingleChildParticle {
   TranslatedParticle({
     required this.child,
     required this.offset,
-    double? lifespan,
-  }) : super(lifespan: lifespan);
+    super.lifespan,
+  });
 
   @override
   void render(Canvas c) {

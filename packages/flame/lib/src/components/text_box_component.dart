@@ -65,28 +65,43 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
   TextBoxConfig get boxConfig => _boxConfig;
 
   TextBoxComponent({
-    String? text,
-    T? textRenderer,
+    super.text,
+    T? super.textRenderer,
     TextBoxConfig? boxConfig,
+    Anchor? align,
     double? pixelRatio,
-    Vector2? position,
-    Vector2? scale,
-    double? angle,
-    Anchor? anchor,
-    Iterable<Component>? children,
-    int? priority,
+    super.position,
+    super.size,
+    super.scale,
+    super.angle,
+    super.anchor,
+    super.children,
+    super.priority,
   })  : _boxConfig = boxConfig ?? TextBoxConfig(),
-        pixelRatio = pixelRatio ?? window.devicePixelRatio,
-        super(
-          text: text,
-          textRenderer: textRenderer,
-          position: position,
-          scale: scale,
-          angle: angle,
-          anchor: anchor,
-          children: children,
-          priority: priority,
-        );
+        _fixedSize = size != null,
+        align = align ?? Anchor.topLeft,
+        pixelRatio = pixelRatio ?? window.devicePixelRatio;
+
+  /// Alignment of the text within its bounding box.
+  ///
+  /// This property combines both the horizontal and vertical alignment. For
+  /// example, setting this property to `Align.center` will make the text
+  /// centered inside its box. Similarly, `Align.bottomRight` will render the
+  /// text that's aligned to the right and to the bottom of the box.
+  ///
+  /// Custom alignment anchors are supported too. For example, if this property
+  /// is set to `Anchor(0.1, 0)`, then the text would be positioned such that
+  /// its every line will have 10% of whitespace on the left, and 90% on the
+  /// right. You can use an `AnchorEffect` to make the text gradually transition
+  /// between different alignment values.
+  Anchor align;
+
+  /// If true, the size of the component will remain fixed. If false, the size
+  /// will expand or shrink to the fit the text.
+  ///
+  /// This property is set to true if the user has explicitly specified [size]
+  /// in the constructor.
+  final bool _fixedSize;
 
   @override
   set text(String value) {
@@ -99,9 +114,8 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
 
   @override
   @mustCallSuper
-  Future<void> onLoad() async {
-    await super.onLoad();
-    await redraw();
+  Future<void> onLoad() {
+    return redraw();
   }
 
   @override
@@ -117,12 +131,13 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
   void updateBounds() {
     _lines.clear();
     double? lineHeight;
+    final maxBoxWidth = _fixedSize ? width : _boxConfig.maxWidth;
     text.split(' ').forEach((word) {
       final possibleLine = _lines.isEmpty ? word : '${_lines.last} $word';
       lineHeight ??= textRenderer.measureTextHeight(possibleLine);
 
       final textWidth = textRenderer.measureTextWidth(possibleLine);
-      if (textWidth <= _boxConfig.maxWidth - _boxConfig.margins.horizontal) {
+      if (textWidth <= maxBoxWidth - _boxConfig.margins.horizontal) {
         if (_lines.isNotEmpty) {
           _lines.last = possibleLine;
         } else {
@@ -176,7 +191,9 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
   }
 
   Vector2 _recomputeSize() {
-    if (_boxConfig.growingBox) {
+    if (_fixedSize) {
+      return size;
+    } else if (_boxConfig.growingBox) {
       var i = 0;
       var totalCharCount = 0;
       final _currentChar = currentChar;
@@ -225,23 +242,32 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
   /// Override this method to provide a custom background to the text box.
   void drawBackground(Canvas c) {}
 
-  void _fullRender(Canvas c) {
-    drawBackground(c);
+  void _fullRender(Canvas canvas) {
+    drawBackground(canvas);
 
-    final _currentLine = currentLine;
+    final nLines = currentLine + 1;
+    final boxWidth = size.x - boxConfig.margins.horizontal;
+    final boxHeight = size.y - boxConfig.margins.vertical;
     var charCount = 0;
-    var dy = _boxConfig.margins.top;
-    for (var line = 0; line < _currentLine; line++) {
-      charCount += _lines[line].length;
-      _drawLine(c, _lines[line], dy);
-      dy += _lineHeight;
+    for (var i = 0; i < nLines; i++) {
+      var line = _lines[i];
+      if (i == nLines - 1) {
+        final nChars = math.min(currentChar - charCount, line.length);
+        line = line.substring(0, nChars);
+      }
+      textRenderer.render(
+        canvas,
+        line,
+        Vector2(
+          boxConfig.margins.left +
+              (boxWidth - textRenderer.measureTextWidth(line)) * align.x,
+          boxConfig.margins.top +
+              (boxHeight - nLines * _lineHeight) * align.y +
+              i * _lineHeight,
+        ),
+      );
+      charCount += _lines[i].length;
     }
-    final max = math.min(currentChar - charCount, _lines[_currentLine].length);
-    _drawLine(c, _lines[_currentLine].substring(0, max), dy);
-  }
-
-  void _drawLine(Canvas c, String line, double dy) {
-    textRenderer.render(c, line, Vector2(_boxConfig.margins.left, dy));
   }
 
   Future<void> redraw() async {

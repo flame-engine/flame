@@ -17,8 +17,11 @@ import 'package:meta/meta.dart';
 /// This is the recommended base class to use for most games made with Flame.
 /// It is based on the Flame Component System (also known as FCS).
 class FlameGame extends Component with Game {
-  FlameGame({Camera? camera, RenderContext? context})
-      : _renderContext = context ?? RenderContext() {
+  FlameGame({
+    RenderContext? context,
+    Camera? camera,
+    super.children,
+  }) : _renderContext = context ?? RenderContext() {
     assert(
       Component.staticGameInstance == null,
       '$this instantiated, while another game ${Component.staticGameInstance} '
@@ -123,7 +126,7 @@ class FlameGame extends Component with Game {
     var repeat = true;
     while (repeat) {
       // Give chance to other futures to execute first
-      await Future<void>.delayed(const Duration());
+      await Future<void>.delayed(Duration.zero);
       repeat = false;
       descendants(includeSelf: true).forEach(
         (Component child) {

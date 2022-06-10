@@ -1,87 +1,30 @@
 import 'package:flame/components.dart';
 import 'package:flame/input.dart';
 import 'package:flutter/rendering.dart' show EdgeInsets;
-import 'package:meta/meta.dart';
 
 /// The [HudButtonComponent] bundles two [PositionComponent]s, one that shows
 /// when the button is being pressed, and one that shows otherwise.
 ///
 /// Note: You have to set the [button] in [onLoad] if you are not passing it in
 /// through the constructor.
-class HudButtonComponent extends HudMarginComponent with Tappable {
-  late final PositionComponent? button;
-  late final PositionComponent? buttonDown;
-
-  /// Callback for what should happen when the button is pressed.
-  /// If you want to directly interact with [onTapUp], [onTapDown] or
-  /// [onTapCancel] it is recommended to extend [HudButtonComponent].
-  void Function()? onPressed;
-
-  /// Callback for what should happen when the button is released.
-  /// If you want to directly interact with [onTapUp], [onTapDown] or
-  /// [onTapCancel] it is recommended to extend [HudButtonComponent].
-  void Function()? onReleased;
-
+class HudButtonComponent extends ButtonComponent
+    with HasGameRef, ComponentViewportMargin {
   HudButtonComponent({
-    this.button,
-    this.buttonDown,
+    super.button,
+    super.buttonDown,
     EdgeInsets? margin,
-    this.onPressed,
-    this.onReleased,
-    Vector2? position,
+    Function()? super.onPressed,
+    Function()? super.onReleased,
+    super.position,
     Vector2? size,
-    Vector2? scale,
-    double? angle,
-    Anchor? anchor,
-    Iterable<Component>? children,
-    int? priority,
+    super.scale,
+    super.angle,
+    super.anchor,
+    super.children,
+    super.priority,
   }) : super(
-          margin: margin,
-          position: position,
           size: size ?? button?.size,
-          scale: scale,
-          angle: angle,
-          anchor: anchor,
-          children: children,
-          priority: priority,
-        );
-
-  @override
-  @mustCallSuper
-  void onMount() {
-    super.onMount();
-    assert(
-      button != null,
-      'The button has to either be passed in as an argument or set in onLoad',
-    );
-    final idleButton = button;
-    if (idleButton != null && !contains(idleButton)) {
-      add(idleButton);
-    }
-  }
-
-  @override
-  @mustCallSuper
-  bool onTapDown(TapDownInfo info) {
-    button?.removeFromParent();
-    buttonDown?.changeParent(this);
-    onPressed?.call();
-    return false;
-  }
-
-  @override
-  @mustCallSuper
-  bool onTapUp(TapUpInfo info) {
-    onTapCancel();
-    onReleased?.call();
-    return true;
-  }
-
-  @override
-  @mustCallSuper
-  bool onTapCancel() {
-    buttonDown?.removeFromParent();
-    button?.changeParent(this);
-    return false;
+        ) {
+    this.margin = margin;
   }
 }

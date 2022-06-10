@@ -14,12 +14,10 @@ void main() {
   );
 }
 
-/// This example simply adds a rotating white square on the screen, if you press
-/// somewhere other than on the existing square another square will be added and
-/// if you press on a square it will be removed.
-class MyGame extends FlameGame with DoubleTapDetector, HasTappables {
-  bool running = true;
-
+/// This example simply adds a rotating white square on the screen.
+/// If you press on a square, it will be removed.
+/// If you press anywhere else, another square will be added.
+class MyGame extends FlameGame with HasTappables {
   @override
   Future<void> onLoad() async {
     add(Square(Vector2(100, 200)));
@@ -32,17 +30,6 @@ class MyGame extends FlameGame with DoubleTapDetector, HasTappables {
       final touchPoint = info.eventPosition.game;
       add(Square(touchPoint));
     }
-  }
-
-  @override
-  void onDoubleTap() {
-    if (running) {
-      pauseEngine();
-    } else {
-      resumeEngine();
-    }
-
-    running = !running;
   }
 }
 
@@ -80,6 +67,7 @@ class Square extends PositionComponent with Tappable {
   @override
   bool onTapUp(TapUpInfo info) {
     removeFromParent();
+    info.handled = true;
     return true;
   }
 }

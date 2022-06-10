@@ -86,16 +86,16 @@ void main() {
         true,
       );
       final rightTilePixels = <int>[];
-      for (var ind = 16 * 4; ind < 16 * 32 * 4; ind += 32 * 4) {
-        rightTilePixels.addAll(canvasPixelData.getRange(ind, ind + (16 * 4)));
+      for (var i = 16 * 4; i < 16 * 32 * 4; i += 32 * 4) {
+        rightTilePixels.addAll(canvasPixelData.getRange(i, i + (16 * 4)));
       }
 
       var allRed = true;
-      for (var indRed = 0; indRed < rightTilePixels.length; indRed += 4) {
-        allRed &= rightTilePixels[indRed] == 255 &&
-            rightTilePixels[indRed + 1] == 0 &&
-            rightTilePixels[indRed + 2] == 0 &&
-            rightTilePixels[indRed + 3] == 255;
+      for (var i = 0; i < rightTilePixels.length; i += 4) {
+        allRed &= rightTilePixels[i] == 255 &&
+            rightTilePixels[i + 1] == 0 &&
+            rightTilePixels[i + 2] == 0 &&
+            rightTilePixels[i + 3] == 255;
       }
       expect(allRed, true);
     });
@@ -110,23 +110,23 @@ void main() {
       );
 
       final leftTilePixels = <int>[];
-      for (var ind = 0; ind < 15 * 32 * 4; ind += 32 * 4) {
-        leftTilePixels.addAll(canvasPixelData.getRange(ind, ind + (16 * 4)));
+      for (var i = 0; i < 15 * 32 * 4; i += 32 * 4) {
+        leftTilePixels.addAll(canvasPixelData.getRange(i, i + (16 * 4)));
       }
 
       var allGreen = true;
-      for (var indGreen = 0; indGreen < leftTilePixels.length; indGreen += 4) {
-        allGreen &= leftTilePixels[indGreen] == 0 &&
-            leftTilePixels[indGreen + 1] == 255 &&
-            leftTilePixels[indGreen + 2] == 0 &&
-            leftTilePixels[indGreen + 3] == 255;
+      for (var i = 0; i < leftTilePixels.length; i += 4) {
+        allGreen &= leftTilePixels[i] == 0 &&
+            leftTilePixels[i + 1] == 255 &&
+            leftTilePixels[i + 2] == 0 &&
+            leftTilePixels[i + 3] == 255;
       }
       expect(allGreen, true);
     });
   });
 
-  group('Flipped and rotated tiles render correctly with sprite batch', () {
-    late Uint8List canvasPixelData;
+  group('Flipped and rotated tiles render correctly with sprite batch:', () {
+    late Uint8List canvasPixelData, canvasPixelDataAtlas;
     late RenderableTiledMap overlapMap;
     setUp(() async {
       Flame.bundle = TestAssetBundle(
@@ -147,37 +147,72 @@ void main() {
       final image = await picture.toImageSafe(64, 48);
       final bytes = await image.toByteData();
       canvasPixelData = bytes!.buffer.asUint8List();
+
+      await Flame.images.ready();
+      final canvasRecorderAtlas = PictureRecorder();
+      final canvasAtlas = Canvas(canvasRecorderAtlas);
+      overlapMap.render(canvasAtlas);
+      final pictureAtlas = canvasRecorderAtlas.endRecording();
+
+      final imageAtlas = await pictureAtlas.toImageSafe(64, 48);
+      final bytesAtlas = await imageAtlas.toByteData();
+      canvasPixelDataAtlas = bytesAtlas!.buffer.asUint8List();
     });
 
-    test('Green tile pixels are in correct spots', () {
+    test('[useAtlas = true] Green tile pixels are in correct spots', () {
       final leftTilePixels = <int>[];
-      for (var ind = 65 * 8 * 4;
-          ind < ((64 * 23) + (8 * 3)) * 4;
-          ind += 64 * 4) {
-        leftTilePixels.addAll(canvasPixelData.getRange(ind, ind + (16 * 4)));
+      for (var i = 65 * 8 * 4; i < ((64 * 23) + (8 * 3)) * 4; i += 64 * 4) {
+        leftTilePixels.addAll(canvasPixelDataAtlas.getRange(i, i + (16 * 4)));
       }
 
       var allGreen = true;
-      for (var indGreen = 0; indGreen < leftTilePixels.length; indGreen += 4) {
-        allGreen &= leftTilePixels[indGreen] == 0 &&
-            leftTilePixels[indGreen + 1] == 255 &&
-            leftTilePixels[indGreen + 2] == 0 &&
-            leftTilePixels[indGreen + 3] == 255;
+      for (var i = 0; i < leftTilePixels.length; i += 4) {
+        allGreen &= leftTilePixels[i] == 0 &&
+            leftTilePixels[i + 1] == 255 &&
+            leftTilePixels[i + 2] == 0 &&
+            leftTilePixels[i + 3] == 255;
       }
       expect(allGreen, true);
 
       final rightTilePixels = <int>[];
-      for (var ind = 69 * 8 * 4;
-          ind < ((64 * 23) + (8 * 7)) * 4;
-          ind += 64 * 4) {
-        rightTilePixels.addAll(canvasPixelData.getRange(ind, ind + (16 * 4)));
+      for (var i = 69 * 8 * 4; i < ((64 * 23) + (8 * 7)) * 4; i += 64 * 4) {
+        rightTilePixels.addAll(canvasPixelDataAtlas.getRange(i, i + (16 * 4)));
       }
 
-      for (var indGreen = 0; indGreen < rightTilePixels.length; indGreen += 4) {
-        allGreen &= rightTilePixels[indGreen] == 0 &&
-            rightTilePixels[indGreen + 1] == 255 &&
-            rightTilePixels[indGreen + 2] == 0 &&
-            rightTilePixels[indGreen + 3] == 255;
+      for (var i = 0; i < rightTilePixels.length; i += 4) {
+        allGreen &= rightTilePixels[i] == 0 &&
+            rightTilePixels[i + 1] == 255 &&
+            rightTilePixels[i + 2] == 0 &&
+            rightTilePixels[i + 3] == 255;
+      }
+      expect(allGreen, true);
+    });
+
+    test('[useAtlas = false] Green tile pixels are in correct spots', () {
+      final leftTilePixels = <int>[];
+      for (var i = 65 * 8 * 4; i < ((64 * 23) + (8 * 3)) * 4; i += 64 * 4) {
+        leftTilePixels.addAll(canvasPixelData.getRange(i, i + (16 * 4)));
+      }
+
+      var allGreen = true;
+      for (var i = 0; i < leftTilePixels.length; i += 4) {
+        allGreen &= leftTilePixels[i] == 0 &&
+            leftTilePixels[i + 1] == 255 &&
+            leftTilePixels[i + 2] == 0 &&
+            leftTilePixels[i + 3] == 255;
+      }
+      expect(allGreen, true);
+
+      final rightTilePixels = <int>[];
+      for (var i = 69 * 8 * 4; i < ((64 * 23) + (8 * 7)) * 4; i += 64 * 4) {
+        rightTilePixels.addAll(canvasPixelData.getRange(i, i + (16 * 4)));
+      }
+
+      for (var i = 0; i < rightTilePixels.length; i += 4) {
+        allGreen &= rightTilePixels[i] == 0 &&
+            rightTilePixels[i + 1] == 255 &&
+            rightTilePixels[i + 2] == 0 &&
+            rightTilePixels[i + 3] == 255;
       }
       expect(allGreen, true);
     });
