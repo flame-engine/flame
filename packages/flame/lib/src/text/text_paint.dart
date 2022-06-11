@@ -1,6 +1,5 @@
-import 'package:flame/src/anchor.dart';
 import 'package:flame/src/cache/memory_cache.dart';
-import 'package:flame/src/extensions/vector2.dart';
+import 'package:flame/src/text/formatter_text_renderer.dart';
 import 'package:flame/src/text/formatters/text_painter_text_formatter.dart';
 import 'package:flame/src/text/text_renderer.dart';
 import 'package:flutter/rendering.dart';
@@ -11,15 +10,15 @@ import 'package:flutter/rendering.dart';
 /// modified dynamically, if you need to change any attribute of the text at
 /// runtime, such as color, then create a new [TextPaint] object using
 /// [copyWith].
-class TextPaint extends TextRenderer {
+class TextPaint extends FormatterTextRenderer<TextPainterTextFormatter> {
   TextPaint({TextStyle? style, TextDirection? textDirection, bool? debugMode})
-      : formatter = TextPainterTextFormatter(
-          style: style ?? defaultTextStyle,
-          textDirection: textDirection ?? TextDirection.ltr,
-          debugMode: debugMode ?? false,
+      : super(
+          TextPainterTextFormatter(
+            style: style ?? defaultTextStyle,
+            textDirection: textDirection ?? TextDirection.ltr,
+            debugMode: debugMode ?? false,
+          ),
         );
-
-  final TextPainterTextFormatter formatter;
 
   TextStyle get style => formatter.style;
 
@@ -32,27 +31,6 @@ class TextPaint extends TextRenderer {
     fontFamily: 'Arial',
     fontSize: 24,
   );
-
-  @override
-  void render(
-    Canvas canvas,
-    String text,
-    Vector2 p, {
-    Anchor anchor = Anchor.topLeft,
-  }) {
-    final te = formatter.format(text);
-    te.translate(
-      p.x - te.metrics.width * anchor.x,
-      p.y - te.metrics.height * anchor.y - te.metrics.top,
-    );
-    te.render(canvas);
-  }
-
-  @override
-  Vector2 measureText(String text) {
-    final te = formatter.format(text);
-    return Vector2(te.metrics.width, te.metrics.height);
-  }
 
   /// Returns a [TextPainter] that allows for text rendering and size
   /// measuring.

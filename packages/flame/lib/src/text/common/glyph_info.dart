@@ -1,4 +1,3 @@
-
 /// Helper class that stores dimensions of a single glyph for a spritesheet-
 /// based font.
 class GlyphInfo {

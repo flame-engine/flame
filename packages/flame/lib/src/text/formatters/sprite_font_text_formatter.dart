@@ -6,7 +6,6 @@ import 'package:flame/src/text/common/glyph_info.dart';
 import 'package:flame/src/text/common/line_metrics.dart';
 import 'package:flame/src/text/formatters/text_formatter.dart';
 import 'package:flame/src/text/inline/sprite_font_text_element.dart';
-import 'package:flame/src/text/sprite_font_renderer.dart';
 
 class SpriteFontTextFormatter extends TextFormatter {
   SpriteFontTextFormatter({
