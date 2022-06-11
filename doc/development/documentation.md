@@ -17,6 +17,22 @@ basics of the Markdown syntax (if not, there are plenty of guides on the Interne
 section will focus on the Markdown extensions that are enabled in our build system.
 
 
+### Table of contents
+
+The table of contents for the site must be created manually. This is done using special `{toctree}`
+blocks, one per each subdirectory:
+`````
+```{toctree}
+:hidden:
+
+First Topic    <topic1.md>
+Second Topic   <topic2.md>
+```
+`````
+When adding new documents into the documentation site, make sure that they are mentioned in one of
+the toctrees -- otherwise you will see a warning during the build that the document is orphaned.
+
+
 ### Admonitions
 
 Admonitions are emphasized blocks of text with a distinct appearance. They are created using the
@@ -32,7 +48,7 @@ Don't look down, or you will encounter an error.
 I told you so.
 ```
 ```{seealso}
-Also check out this cool admonition.
+Also check out this cool thingy.
 ```
 `````
 ```{note}
@@ -45,11 +61,11 @@ Don't look down, or you will encounter an error.
 I told you so.
 ```
 ```{seealso}
-Also check out this cool admonition.
+Also check out this cool thingy.
 ```
 
 
-### Deprecation
+### Deprecations
 
 The special `{deprecated}` block can be used to mark some part of documentation or syntax as being
 deprecated. This block requires specifying the version when the deprecation has occurred
@@ -63,6 +79,46 @@ Which would be rendered like this:
 ```{deprecated} v1.3.0
 
 Please use this **other** thing instead.
+```
+
+
+### Live examples
+
+Our documentation site includes a custom-built **flutter-app** directive which allows creating
+Flutter widgets and embedding them alongside with the overall documentation content.
+
+In Markdown, the code for inserting an embed looks like this:
+``````
+```{flutter-app}
+:sources: ../flame/examples
+:page: tap_events
+:show: widget code popup
+```
+``````
+Here's what the different options mean:
+- **sources**: specifies the name of the root directory where the Flutter code that you wish to run
+  is located. This directory must be a Flutter repository, and there must be a `pubspec.yaml` file
+  there. The path is considered relative to the `doc/_sphinx` directory.
+
+- **page**: a sub-path within the root directory given in `sources`. This option has two effects:
+  first, it is appended to the path of the html page of the widget, like so: `main.dart.html?$page`.
+  Secondly, the button to show the source code of the embed will display the code from the file or
+  directory with the name given by `page`.
+
+  The purpose of this option is to be able to bundle multiple examples into a single executable.
+  When using this option, the `main.dart` file of the app should route the execution to the proper
+  widget according to the `page` being passed.
+
+- **show**: contains a subset of modes: `widget`, `code`, and `popup`. The `widget` mode creates an
+  iframe with the embedded example, directly within the page. The `code` mode will show a button
+  that allows the user to see the code that produced this example. The `popup` mode also shows a
+  button, which displays the example in an overlay window. This is more suitable for demoing larger
+  apps. Using both "widget" and "popup" modes at the same time is not recommended.
+
+```{flutter-app}
+:sources: ../flame/examples
+:page: tap_events
+:show: widget code popup
 ```
 
 

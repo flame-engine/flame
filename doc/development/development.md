@@ -1,7 +1,5 @@
 # Development
 
-```{eval-rst}
-.. toctree::
-
-    Documentation       <documentation.md>
+```{toctree}
+Documentation       <documentation.md>
 ```
