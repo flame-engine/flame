@@ -5,8 +5,8 @@ import 'package:flame/src/text/common/text_line.dart';
 import 'package:flame/src/text/inline/text_element.dart';
 import 'package:flutter/rendering.dart' show TextBaseline, TextPainter;
 
-class PlainTextElement extends TextElement implements TextLine {
-  PlainTextElement(this._textPainter)
+class TextPainterTextElement extends TextElement implements TextLine {
+  TextPainterTextElement(this._textPainter)
       : _box = LineMetrics(
           left: 0,
           baseline: 0,
