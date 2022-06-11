@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:canvas_test/canvas_test.dart';
 import 'package:flame/components.dart';
+import 'package:flame/src/text/common/glyph_data.dart';
 import 'package:flame/text.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:test/test.dart';

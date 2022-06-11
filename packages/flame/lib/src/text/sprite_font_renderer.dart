@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flame/src/anchor.dart';
+import 'package:flame/src/text/common/glyph_data.dart';
 import 'package:flame/src/text/formatters/sprite_font_text_formatter.dart';
 import 'package:flame/src/text/text_renderer.dart';
 import 'package:vector_math/vector_math_64.dart';
@@ -63,37 +64,4 @@ class SpriteFontRenderer extends TextRenderer {
     );
     txt.render(canvas);
   }
-}
-
-class GlyphData {
-  const GlyphData({
-    required this.left,
-    required this.top,
-    this.right,
-    this.bottom,
-  });
-
-  const GlyphData.fromLTWH(this.left, this.top, double width, double height)
-      : right = left + width,
-        bottom = top + height;
-
-  const GlyphData.fromLTRB(this.left, this.top, this.right, this.bottom);
-
-  final double left;
-  final double top;
-  final double? right;
-  final double? bottom;
-}
-
-class GlyphInfo {
-  double srcLeft = 0;
-  double srcTop = 0;
-  double srcRight = 0;
-  double srcBottom = 0;
-  double rstSCos = 1;
-  double rstSSin = 0;
-  double rstTx = 0;
-  double rstTy = 0;
-  double width = 0;
-  double height = 0;
 }
