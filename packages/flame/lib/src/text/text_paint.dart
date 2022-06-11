@@ -1,9 +1,9 @@
 import 'package:flame/src/anchor.dart';
 import 'package:flame/src/cache/memory_cache.dart';
 import 'package:flame/src/extensions/vector2.dart';
-import 'package:flame/src/text/inline/text_painter_text_element.dart';
 import 'package:flame/src/text/inline/space_text_element.dart';
 import 'package:flame/src/text/inline/text_element.dart';
+import 'package:flame/src/text/inline/text_painter_text_element.dart';
 import 'package:flame/src/text/text_renderer.dart';
 import 'package:flutter/rendering.dart';
 
