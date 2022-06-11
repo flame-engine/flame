@@ -223,7 +223,7 @@ void main() {
 
     testWidgets(
       'able to enter text into an overlay widget',
-          (tester) async {
+      (tester) async {
         var enteredText = '';
         await tester.pumpWidget(
           MaterialApp(
@@ -233,8 +233,8 @@ void main() {
                 initialActiveOverlays: const ['text-field'],
                 overlayBuilderMap: {
                   'text-field': (_, g) => TextField(
-                    onChanged: (s) => enteredText = s,
-                  ),
+                        onChanged: (s) => enteredText = s,
+                      ),
                 },
               ),
             ),
