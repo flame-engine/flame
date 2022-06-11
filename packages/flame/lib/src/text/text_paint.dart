@@ -1,6 +1,6 @@
 import 'package:flame/src/anchor.dart';
-import 'package:flame/src/cache/memory_cache.dart';
 import 'package:flame/src/extensions/vector2.dart';
+import 'package:flame/src/text/formatters/text_painter_text_formatter.dart';
 import 'package:flame/src/text/text_renderer.dart';
 import 'package:flutter/rendering.dart';
 
@@ -11,15 +11,18 @@ import 'package:flutter/rendering.dart';
 /// runtime, such as color, then create a new [TextPaint] object using
 /// [copyWith].
 class TextPaint extends TextRenderer {
-  TextPaint({TextStyle? style, TextDirection? textDirection})
-      : style = style ?? defaultTextStyle,
-        textDirection = textDirection ?? TextDirection.ltr;
+  TextPaint({TextStyle? style, TextDirection? textDirection, bool? debugMode})
+      : formatter = TextPainterTextFormatter(
+          style: style ?? defaultTextStyle,
+          textDirection: textDirection ?? TextDirection.ltr,
+          debugMode: debugMode ?? false,
+        );
 
-  final TextStyle style;
+  final TextPainterTextFormatter formatter;
 
-  final TextDirection textDirection;
+  TextStyle get style => formatter.style;
 
-  final MemoryCache<String, TextPainter> _textPainterCache = MemoryCache();
+  TextDirection get textDirection => formatter.textDirection;
 
   static const TextStyle defaultTextStyle = TextStyle(
     color: Color(0xFFFFFFFF),
@@ -34,51 +37,27 @@ class TextPaint extends TextRenderer {
     Vector2 p, {
     Anchor anchor = Anchor.topLeft,
   }) {
-    final tp = toTextPainter(text);
-    final translatedPosition = Offset(
-      p.x - tp.width * anchor.x,
-      p.y - tp.height * anchor.y,
+    final te = formatter.format(text);
+    te.translate(
+      p.x - te.metrics.width * anchor.x,
+      p.y - te.metrics.height * anchor.y - te.metrics.top,
     );
-    tp.paint(canvas, translatedPosition);
+    te.render(canvas);
   }
 
   @override
   Vector2 measureText(String text) {
-    final tp = toTextPainter(text);
-    return Vector2(tp.width, tp.height);
-  }
-
-  /// Returns a [TextPainter] that allows for text rendering and size
-  /// measuring.
-  ///
-  /// A [TextPainter] has three important properties: paint, width and
-  /// height (or size).
-  ///
-  /// Example usage:
-  ///
-  ///   const config = TextPaint(fontSize: 48.0, fontFamily: 'Arial');
-  ///   final tp = config.toTextPainter('Score: $score');
-  ///   tp.paint(canvas, const Offset(10, 10));
-  ///
-  /// However, you probably want to use the [render] method which already
-  /// takes the anchor into consideration.
-  /// That way, you don't need to perform the math for that yourself.
-  TextPainter toTextPainter(String text) {
-    if (!_textPainterCache.containsKey(text)) {
-      final tp = TextPainter(
-        text: TextSpan(text: text, style: style),
-        textDirection: textDirection,
-      );
-      tp.layout();
-      _textPainterCache.setValue(text, tp);
-    }
-    return _textPainterCache.getValue(text)!;
+    final te = formatter.format(text);
+    return Vector2(te.metrics.width, te.metrics.height);
   }
 
   TextPaint copyWith(
     TextStyle Function(TextStyle) transform, {
     TextDirection? textDirection,
   }) {
-    return TextPaint(style: transform(style), textDirection: textDirection);
+    return TextPaint(
+      style: transform(formatter.style),
+      textDirection: textDirection ?? formatter.textDirection,
+    );
   }
 }
