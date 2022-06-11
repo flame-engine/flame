@@ -3,11 +3,11 @@ import 'package:flame/src/text/inline/debug_text_painter_text_element.dart';
 import 'package:flame/src/text/inline/text_painter_text_element.dart';
 import 'package:flutter/rendering.dart';
 
-/// This text formatter applies Flutter [TextStyle] to the a string of text,
-/// creating a [TextPainterTextElement].
+/// [TextPainterTextFormatter] applies a Flutter [TextStyle] to a string of
+/// text, creating a [TextPainterTextElement].
 ///
-/// If the [debugMode] is true, this formatter will wraps the text with
-/// [DebugTextPainterTextElement] instead.
+/// If the [debugMode] is true, this formatter will wrap the text with a
+/// [DebugTextPainterTextElement] instead. This mode is mostly useful for tests.
 class TextPainterTextFormatter extends TextFormatter {
   TextPainterTextFormatter({
     required this.style,
