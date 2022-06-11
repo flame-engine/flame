@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flame/src/text/common/text_line.dart';
 
 /// [LineMetrics] object contains measurements of a [TextLine].
@@ -87,6 +89,8 @@ class LineMetrics {
       _descent = other.descent;
     }
   }
+
+  Rect toRect() => Rect.fromLTWH(left, top, width, height);
 
   @override
   String toString() => 'LineMetrics(left: $left, baseline: $baseline, '
