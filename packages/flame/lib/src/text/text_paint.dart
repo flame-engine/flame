@@ -1,4 +1,5 @@
 import 'package:flame/src/anchor.dart';
+import 'package:flame/src/cache/memory_cache.dart';
 import 'package:flame/src/extensions/vector2.dart';
 import 'package:flame/src/text/formatters/text_painter_text_formatter.dart';
 import 'package:flame/src/text/text_renderer.dart';
@@ -24,6 +25,8 @@ class TextPaint extends TextRenderer {
 
   TextDirection get textDirection => formatter.textDirection;
 
+  final MemoryCache<String, TextPainter> _textPainterCache = MemoryCache();
+
   static const TextStyle defaultTextStyle = TextStyle(
     color: Color(0xFFFFFFFF),
     fontFamily: 'Arial',
@@ -45,6 +48,12 @@ class TextPaint extends TextRenderer {
     te.render(canvas);
   }
 
+  @override
+  Vector2 measureText(String text) {
+    final te = formatter.format(text);
+    return Vector2(te.metrics.width, te.metrics.height);
+  }
+
   /// Returns a [TextPainter] that allows for text rendering and size
   /// measuring.
   ///
@@ -60,6 +69,7 @@ class TextPaint extends TextRenderer {
   /// However, you probably want to use the [render] method which already
   /// takes the anchor into consideration.
   /// That way, you don't need to perform the math for that yourself.
+  @Deprecated('This method will be removed in v1.4.0')
   TextPainter toTextPainter(String text) {
     if (!_textPainterCache.containsKey(text)) {
       final tp = TextPainter(
@@ -70,12 +80,6 @@ class TextPaint extends TextRenderer {
       _textPainterCache.setValue(text, tp);
     }
     return _textPainterCache.getValue(text)!;
-  }
-
-  @override
-  Vector2 measureText(String text) {
-    final te = formatter.format(text);
-    return Vector2(te.metrics.width, te.metrics.height);
   }
 
   TextPaint copyWith(
