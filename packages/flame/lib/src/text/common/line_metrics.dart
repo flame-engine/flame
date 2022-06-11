@@ -11,8 +11,8 @@ import 'package:flame/src/text/common/text_line.dart';
 /// improve legibility of multi-line text.
 class LineMetrics {
   LineMetrics({
-    required double left,
-    required double baseline,
+    double left = 0,
+    double baseline = 0,
     double width = 0,
     double? ascent,
     double? descent,
@@ -75,7 +75,10 @@ class LineMetrics {
   /// the same baseline. The current object will be modified to encompass the
   /// [other] box.
   void append(LineMetrics other) {
-    assert(baseline == other.baseline);
+    assert(
+      baseline == other.baseline,
+      'Baselines do not match: $baseline vs ${other.baseline}',
+    );
     _width = other.right - left;
     if (_ascent < other.ascent) {
       _ascent = other.ascent;
