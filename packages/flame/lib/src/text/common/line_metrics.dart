@@ -57,6 +57,13 @@ class LineMetrics {
     _baseline += dy;
   }
 
+  /// Moves this [LineMetrics] box to the origin, setting [left] and [baseline]
+  /// to 0.
+  void moveToOrigin() {
+    _left = 0;
+    _baseline = 0;
+  }
+
   /// Sets the position of the left edge of this [LineMetrics] box, leaving the
   /// [right] edge in place.
   void setLeftEdge(double x) {

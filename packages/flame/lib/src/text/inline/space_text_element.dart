@@ -42,7 +42,5 @@ class SpaceTextElement extends TextElement implements TextLine {
   void render(Canvas canvas) {}
 
   @override
-  void resetLayout() {
-    metrics.translate(-metrics.left, -metrics.baseline);
-  }
+  void resetLayout() => metrics.moveToOrigin();
 }
