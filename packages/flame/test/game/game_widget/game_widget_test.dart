@@ -220,5 +220,33 @@ void main() {
 
       expect(game2, isNull);
     });
+
+    testWidgets(
+      'able to enter text into an overlay widget',
+          (tester) async {
+        var enteredText = '';
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(
+              body: GameWidget(
+                game: FlameGame(),
+                initialActiveOverlays: const ['text-field'],
+                overlayBuilderMap: {
+                  'text-field': (_, g) => TextField(
+                    onChanged: (s) => enteredText = s,
+                  ),
+                },
+              ),
+            ),
+          ),
+        );
+        await tester.pump();
+        await tester.pump();
+        // await tester.enterText(find.byType(TextField), 'flame');
+        await tester.tap(find.byType(TextField));
+        tester.testTextInput.enterText('flame');
+        expect(enteredText, 'flame');
+      },
+    );
   });
 }
