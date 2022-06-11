@@ -310,69 +310,73 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
           internalGameWidget,
         );
       }
-
       if (hasMouseDetectors(currentGame)) {
         internalGameWidget = applyMouseDetectors(
           currentGame,
           internalGameWidget,
         );
       }
+      if (currentGame is KeyboardEvents) {
+        internalGameWidget = applyKeyboardDetectors(internalGameWidget);
+      }
 
       final stackedWidgets = [internalGameWidget];
       _addBackground(context, stackedWidgets);
       _addOverlays(context, stackedWidgets);
 
-      // We can use Directionality.maybeOf when that method lands on stable
-      final textDir = widget.textDirection ?? TextDirection.ltr;
-
-      return Focus(
-        focusNode: _focusNode,
-        autofocus: widget.autofocus,
-        onKey: _handleKeyEvent,
-        child: MouseRegion(
-          cursor: currentGame.mouseCursor,
-          child: Directionality(
-            textDirection: textDir,
-            child: Container(
-              color: currentGame.backgroundColor(),
-              child: LayoutBuilder(
-                builder: (_, BoxConstraints constraints) {
-                  return _protectedBuild(() {
-                    final size = constraints.biggest.toVector2();
-                    if (size.isZero()) {
+      return MouseRegion(
+        cursor: currentGame.mouseCursor,
+        child: Directionality(
+          textDirection: widget.textDirection ??
+              Directionality.maybeOf(context) ??
+              TextDirection.ltr,
+          child: Container(
+            color: currentGame.backgroundColor(),
+            child: LayoutBuilder(
+              builder: (_, BoxConstraints constraints) {
+                return _protectedBuild(() {
+                  final size = constraints.biggest.toVector2();
+                  if (size.isZero()) {
+                    return widget.loadingBuilder?.call(context) ?? Container();
+                  }
+                  currentGame.onGameResize(size);
+                  return FutureBuilder(
+                    future: loaderFuture,
+                    builder: (_, snapshot) {
+                      if (snapshot.hasError) {
+                        final errorBuilder = widget.errorBuilder;
+                        if (errorBuilder == null) {
+                          throw Error.throwWithStackTrace(
+                            snapshot.error!,
+                            snapshot.stackTrace!,
+                          );
+                        } else {
+                          return errorBuilder(context, snapshot.error!);
+                        }
+                      }
+                      if (snapshot.connectionState == ConnectionState.done) {
+                        return Stack(children: stackedWidgets);
+                      }
                       return widget.loadingBuilder?.call(context) ??
                           Container();
-                    }
-                    currentGame.onGameResize(size);
-                    return FutureBuilder(
-                      future: loaderFuture,
-                      builder: (_, snapshot) {
-                        if (snapshot.hasError) {
-                          final errorBuilder = widget.errorBuilder;
-                          if (errorBuilder == null) {
-                            throw Error.throwWithStackTrace(
-                              snapshot.error!,
-                              snapshot.stackTrace!,
-                            );
-                          } else {
-                            return errorBuilder(context, snapshot.error!);
-                          }
-                        }
-                        if (snapshot.connectionState == ConnectionState.done) {
-                          return Stack(children: stackedWidgets);
-                        }
-                        return widget.loadingBuilder?.call(context) ??
-                            Container();
-                      },
-                    );
-                  });
-                },
-              ),
+                    },
+                  );
+                });
+              },
             ),
           ),
         ),
       );
     });
+  }
+
+  Widget applyKeyboardDetectors(Widget child) {
+    return Focus(
+      focusNode: _focusNode,
+      autofocus: widget.autofocus,
+      onKey: _handleKeyEvent,
+      child: child,
+    );
   }
 
   List<Widget> _addBackground(BuildContext context, List<Widget> stackWidgets) {
