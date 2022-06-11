@@ -3,7 +3,7 @@
 ```{eval-rst}
 .. toctree::
     :hidden:
-    
+
     File structure       <structure.md>
     GameWidget           <game_widget.md>
     Game loop            <game.md>
