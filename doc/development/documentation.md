@@ -1,4 +1,4 @@
-# Developing documentation
+# Documentation Site
 
 Flame's documentation is written in **Markdown**. It is then rendered into HTML with the help of
 the [Sphinx] engine and its [MyST] plugin. The rendered files are then manually published to
@@ -8,6 +8,62 @@ the [Sphinx] engine and its [MyST] plugin. The rendered files are then manually 
 [MyST]: https://myst-parser.readthedocs.io/en/latest/
 [flame-docs-site]: https://github.com/flame-engine/flame-docs-site
 [GitHub Pages]: https://pages.github.com/
+
+
+## Markdown
+
+The main documentation site is written in Markdown. We assume that you're already familiar with the
+basics of the Markdown syntax (if not, there are plenty of guides on the Internet). Instead, this
+section will focus on the Markdown extensions that are enabled in our build system.
+
+
+### Admonitions
+
+Admonitions are emphasized blocks of text with a distinct appearance. They are created using the
+triple-backticks syntax:
+`````
+```{note}
+Please note this very important caveat.
+```
+```{warning}
+Don't look down, or you will encounter an error.
+```
+```{error}
+I told you so.
+```
+```{seealso}
+Also check out this cool admonition.
+```
+`````
+```{note}
+Please note this very important caveat.
+```
+```{warning}
+Don't look down, or you will encounter an error.
+```
+```{error}
+I told you so.
+```
+```{seealso}
+Also check out this cool admonition.
+```
+
+
+### Deprecation
+
+The special `{deprecated}` block can be used to mark some part of documentation or syntax as being
+deprecated. This block requires specifying the version when the deprecation has occurred
+`````
+```{deprecated} v1.3.0
+
+Please use this **other** thing instead.
+```
+`````
+Which would be rendered like this:
+```{deprecated} v1.3.0
+
+Please use this **other** thing instead.
+```
 
 
 ## Building documentation locally
@@ -34,10 +90,14 @@ $ cd doc/_sphinx
 $ make html
 ```
 
-The **make html** command here renders the documentation site into HTML. There are other make
-commands that you may find occasionally useful too: **make clean** removes all cached generated
-files (in case the system gets stuck in a bad state); and **make linkcheck** to check whether there
-are any broken links in the documentation.
+The **make html** command here renders the documentation site into HTML. This command needs to be
+re-run every time you make changes to any of the documents. Luckily, it is smart enough to only
+rebuild those documents that have changed since the previous run, so usually a rebuild takes only
+a second or two.
+
+There are other make commands that you may find occasionally useful too: **make clean** removes all
+cached generated files (in case the system gets stuck in a bad state); and **make linkcheck** to
+check whether there are any broken links in the documentation.
 
 The generated html files will be in the `doc/_build/html` directory, you can view them directly
 by opening the file `doc/_build/html/index.html` in your browser. The only drawback is that the
@@ -47,3 +107,6 @@ is to run your own local http server:
 $ python -m http.server 8000 --directory doc/_build/html
 ```
 Then you can open the site at `http://localhost:8000/`.
+
+If you ever run the `make clean` command, the server will need to be restarted, because the clean
+command deletes the entire `html` directory.
