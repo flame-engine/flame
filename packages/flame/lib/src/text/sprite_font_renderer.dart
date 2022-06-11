@@ -1,7 +1,7 @@
-import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:flame/src/anchor.dart';
+import 'package:flame/src/text/formatters/sprite_font_text_formatter.dart';
 import 'package:flame/src/text/text_renderer.dart';
 import 'package:vector_math/vector_math_64.dart';
 
@@ -24,53 +24,29 @@ import 'package:vector_math/vector_math_64.dart';
 /// the opacity of the paint's color will make the text semi-transparent.
 class SpriteFontRenderer extends TextRenderer {
   SpriteFontRenderer({
-    required this.source,
+    required Image source,
     required double charWidth,
     required double charHeight,
     required Map<String, GlyphData> glyphs,
-    this.scale = 1,
-    this.letterSpacing = 0,
-  })  : scaledCharWidth = charWidth * scale,
-        scaledCharHeight = charHeight * scale,
-        _glyphs = glyphs.map((char, rect) {
-          assert(
-            char.length == 1,
-            'A glyph must have a single character: "$char"',
-          );
-          final info = _GlyphInfo();
-          info.srcLeft = rect.left;
-          info.srcTop = rect.top;
-          info.srcRight = rect.right ?? rect.left + charWidth;
-          info.srcBottom = rect.bottom ?? rect.top + charHeight;
-          info.rstSCos = scale;
-          info.rstTy = (charHeight - (info.srcBottom - info.srcTop)) * scale;
-          info.width = charWidth * scale;
-          info.height = charHeight * scale;
-          return MapEntry(char.codeUnitAt(0), info);
-        });
+    double scale = 1,
+    double letterSpacing = 0,
+  }) : formatter = SpriteFontTextFormatter(
+          source: source,
+          charWidth: charWidth,
+          charHeight: charHeight,
+          glyphs: glyphs,
+          scale: scale,
+          letterSpacing: letterSpacing,
+        );
 
-  final Image source;
-  final Map<int, _GlyphInfo> _glyphs;
-  final double letterSpacing;
-  final double scale;
-  final double scaledCharWidth;
-  final double scaledCharHeight;
+  final SpriteFontTextFormatter formatter;
+
   bool get isMonospace => true;
-
-  Paint paint = Paint()..color = const Color(0xFFFFFFFF);
-
-  @override
-  double measureTextHeight(String text) => scaledCharHeight;
-
-  @override
-  double measureTextWidth(String text) {
-    final n = text.length;
-    return n > 0 ? scaledCharWidth * n + letterSpacing * (n - 1) : 0;
-  }
 
   @override
   Vector2 measureText(String text) {
-    return Vector2(measureTextWidth(text), measureTextHeight(text));
+    final box = formatter.format(text).metrics;
+    return Vector2(box.width, box.height);
   }
 
   @override
@@ -80,36 +56,12 @@ class SpriteFontRenderer extends TextRenderer {
     Vector2 position, {
     Anchor anchor = Anchor.topLeft,
   }) {
-    final rstTransforms = Float32List(4 * text.length);
-    final rects = Float32List(4 * text.length);
-    var j = 0;
-    var x0 = position.x;
-    final y0 = position.y;
-    for (final glyph in _textToGlyphs(text)) {
-      rects[j + 0] = glyph.srcLeft;
-      rects[j + 1] = glyph.srcTop;
-      rects[j + 2] = glyph.srcRight;
-      rects[j + 3] = glyph.srcBottom;
-      rstTransforms[j + 0] = glyph.rstSCos;
-      rstTransforms[j + 1] = glyph.rstSSin;
-      rstTransforms[j + 2] = x0 + glyph.rstTx;
-      rstTransforms[j + 3] = y0 + glyph.rstTy;
-      x0 += glyph.width + letterSpacing;
-      j += 4;
-    }
-    canvas.drawRawAtlas(source, rstTransforms, rects, null, null, null, paint);
-  }
-
-  Iterable<_GlyphInfo> _textToGlyphs(String text) {
-    return text.codeUnits.map(_getGlyphFromCodeUnit);
-  }
-
-  _GlyphInfo _getGlyphFromCodeUnit(int i) {
-    final glyph = _glyphs[i];
-    if (glyph == null) {
-      throw ArgumentError('No glyph for character "${String.fromCharCode(i)}"');
-    }
-    return glyph;
+    final txt = formatter.format(text);
+    txt.translate(
+      position.x - txt.metrics.width * anchor.x,
+      position.y - txt.metrics.height * anchor.y - txt.metrics.top,
+    );
+    txt.render(canvas);
   }
 }
 
@@ -133,7 +85,7 @@ class GlyphData {
   final double? bottom;
 }
 
-class _GlyphInfo {
+class GlyphInfo {
   double srcLeft = 0;
   double srcTop = 0;
   double srcRight = 0;

@@ -12,15 +12,15 @@ void main() {
   group('SpriteFontRenderer', () {
     test('creating SpriteFontRenderer', () async {
       final renderer = await createRenderer();
-      expect(renderer.source, isA<Image>());
-      expect(renderer.scaledCharWidth, 6);
-      expect(renderer.scaledCharHeight, 6);
-      expect(renderer.letterSpacing, 0);
+      expect(renderer.formatter.source, isA<Image>());
+      expect(renderer.formatter.scaledCharWidth, 6);
+      expect(renderer.formatter.scaledCharHeight, 6);
+      expect(renderer.formatter.letterSpacing, 0);
       expect(renderer.isMonospace, true);
 
       expect(
         () => renderer.render(MockCanvas(), 'Ї', Vector2.zero()),
-        throwsArgumentError,
+        failsAssert('No glyph for character "Ї"'),
       );
     });
 
@@ -43,7 +43,7 @@ void main() {
           TextComponent(
             text: 'FLAME',
             textRenderer: (await createRenderer(scale: 25))
-              ..paint.color = const Color(0x44000000),
+              ..formatter.paint.color = const Color(0x44000000),
             position: Vector2(400, 500),
             anchor: Anchor.center,
           ),
