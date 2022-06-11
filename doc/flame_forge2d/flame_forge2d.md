@@ -2,7 +2,6 @@
 
 ```{eval-rst}
 .. toctree::
-    :hidden:
 
     Overview    <forge2d.md>
 ```
