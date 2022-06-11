@@ -17,7 +17,6 @@ void main() {
       expect(renderer.formatter.scaledCharWidth, 6);
       expect(renderer.formatter.scaledCharHeight, 6);
       expect(renderer.formatter.letterSpacing, 0);
-      expect(renderer.isMonospace, true);
 
       expect(
         () => renderer.render(MockCanvas(), 'Ї', Vector2.zero()),

@@ -42,8 +42,6 @@ class SpriteFontRenderer extends TextRenderer {
 
   final SpriteFontTextFormatter formatter;
 
-  bool get isMonospace => true;
-
   @override
   Vector2 measureText(String text) {
     final box = formatter.format(text).metrics;
