@@ -45,6 +45,33 @@ class TextPaint extends TextRenderer {
     te.render(canvas);
   }
 
+  /// Returns a [TextPainter] that allows for text rendering and size
+  /// measuring.
+  ///
+  /// A [TextPainter] has three important properties: paint, width and
+  /// height (or size).
+  ///
+  /// Example usage:
+  ///
+  ///   const config = TextPaint(fontSize: 48.0, fontFamily: 'Arial');
+  ///   final tp = config.toTextPainter('Score: $score');
+  ///   tp.paint(canvas, const Offset(10, 10));
+  ///
+  /// However, you probably want to use the [render] method which already
+  /// takes the anchor into consideration.
+  /// That way, you don't need to perform the math for that yourself.
+  TextPainter toTextPainter(String text) {
+    if (!_textPainterCache.containsKey(text)) {
+      final tp = TextPainter(
+        text: TextSpan(text: text, style: style),
+        textDirection: textDirection,
+      );
+      tp.layout();
+      _textPainterCache.setValue(text, tp);
+    }
+    return _textPainterCache.getValue(text)!;
+  }
+
   @override
   Vector2 measureText(String text) {
     final te = formatter.format(text);
