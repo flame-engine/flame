@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/widgets.dart';
 
@@ -49,7 +47,7 @@ class Bgm extends WidgetsBindingObserver {
     _isRegistered = false;
   }
 
-  /// Plays and loops a background music file specified by [filename].
+  /// Plays and loops a background music file specified by [fileName].
   ///
   /// The volume can be specified in the optional named parameter [volume]
   /// where `0` means off and `1` means max.
