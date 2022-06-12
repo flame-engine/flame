@@ -2,6 +2,7 @@ import 'dart:html'; // ignore: avoid_web_libraries_in_flutter
 import 'package:flutter/widgets.dart';
 import 'package:klondike/step2/main.dart' as step2;
 import 'package:klondike/step3/main.dart' as step3;
+import 'package:klondike/step4/main.dart' as step4;
 
 void main() {
   var page = window.location.search ?? '';
@@ -15,6 +16,10 @@ void main() {
 
     case 'step3':
       step3.main();
+      break;
+
+    case 'step4':
+      step4.main();
       break;
 
     default:
