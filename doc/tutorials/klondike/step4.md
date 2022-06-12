@@ -8,6 +8,7 @@ the previous chapter. Open the `KlondikeGame` class and erase the loop at the bo
 that was adding 28 cards onto the table.
 
 
+
 ```{flutter-app}
 :sources: ../tutorials/klondike/app
 :page: step4
