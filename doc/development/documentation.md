@@ -2,7 +2,7 @@
 
 Flame's documentation is written in **Markdown**. It is then rendered into HTML with the help of
 the [Sphinx] engine and its [MyST] plugin. The rendered files are then manually published to
-[flame-docs-site], where the site is served via the [GitHub Pages] server.
+[flame-docs-site], where the site is served via [GitHub Pages].
 
 [Sphinx]: https://www.sphinx-doc.org/en/master/
 [MyST]: https://myst-parser.readthedocs.io/en/latest/
@@ -148,7 +148,7 @@ $ make html
 
 The **make html** command here renders the documentation site into HTML. This command needs to be
 re-run every time you make changes to any of the documents. Luckily, it is smart enough to only
-rebuild those documents that have changed since the previous run, so usually a rebuild takes only
+rebuild the documents that have changed since the previous run, so usually a rebuild takes only
 a second or two.
 
 There are other make commands that you may find occasionally useful too: **make clean** removes all
