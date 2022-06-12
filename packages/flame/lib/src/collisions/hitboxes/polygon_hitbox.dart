@@ -1,17 +1,15 @@
+// ignore_for_file: comment_references
+
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 
 /// A [Hitbox] in the shape of a polygon.
 class PolygonHitbox extends PolygonComponent with ShapeHitbox {
   PolygonHitbox(
-    List<Vector2> vertices, {
-    double? angle,
-    Anchor? anchor,
-  }) : super(
-          vertices,
-          angle: angle,
-          anchor: anchor,
-        );
+    super.vertices, {
+    super.angle,
+    super.anchor,
+  });
 
   /// With this constructor you define the [PolygonHitbox] in relation to the
   /// [parentSize] of the hitbox.
@@ -21,17 +19,12 @@ class PolygonHitbox extends PolygonComponent with ShapeHitbox {
   /// NOTE: Always define your shape in a counter-clockwise fashion (in the
   /// screen coordinate system)
   PolygonHitbox.relative(
-    List<Vector2> relation, {
-    Vector2? position,
-    required Vector2 parentSize,
-    double angle = 0,
-    Anchor? anchor,
+    super.relation, {
+    super.position,
+    required super.parentSize,
+    double super.angle = 0,
+    super.anchor,
   }) : super.relative(
-          relation,
-          position: position,
-          parentSize: parentSize,
-          angle: angle,
-          anchor: anchor,
           shrinkToBounds: true,
         );
 

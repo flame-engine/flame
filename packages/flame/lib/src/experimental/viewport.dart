@@ -22,7 +22,7 @@ import 'package:vector_math/vector_math_64.dart';
 /// the top left corner of the viewport's bounding box.
 abstract class Viewport extends Component
     implements AnchorProvider, PositionProvider, SizeProvider {
-  Viewport({Iterable<Component>? children}) : super(children: children);
+  Viewport({super.children});
 
   /// Position of the viewport's anchor in the parent's coordinate frame.
   ///

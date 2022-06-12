@@ -681,8 +681,7 @@ class IntComponent extends Component {
 }
 
 class TwoChildrenComponent extends Component {
-  TwoChildrenComponent({Iterable<Component>? children})
-      : super(children: children);
+  TwoChildrenComponent({super.children});
 
   late final Component child1;
   late final Component child2;

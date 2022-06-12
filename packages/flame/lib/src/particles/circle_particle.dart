@@ -12,8 +12,8 @@ class CircleParticle extends Particle {
   CircleParticle({
     required this.paint,
     this.radius = 10.0,
-    double? lifespan,
-  }) : super(lifespan: lifespan);
+    super.lifespan,
+  });
 
   @override
   void render(Canvas c) {

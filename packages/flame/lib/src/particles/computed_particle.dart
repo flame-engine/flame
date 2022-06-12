@@ -16,10 +16,8 @@ class ComputedParticle extends Particle {
 
   ComputedParticle({
     required this.renderer,
-    double? lifespan,
-  }) : super(
-          lifespan: lifespan,
-        );
+    super.lifespan,
+  });
 
   @override
   void render(Canvas canvas) {

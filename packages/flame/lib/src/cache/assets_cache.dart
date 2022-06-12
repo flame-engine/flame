@@ -76,9 +76,9 @@ class _Asset<T> {
 }
 
 class _StringAsset extends _Asset<String> {
-  _StringAsset(String value) : super(value);
+  _StringAsset(super.value);
 }
 
 class _BinaryAsset extends _Asset<List<int>> {
-  _BinaryAsset(List<int> value) : super(value);
+  _BinaryAsset(super.value);
 }

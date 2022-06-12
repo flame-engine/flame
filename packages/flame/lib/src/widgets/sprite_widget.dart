@@ -39,11 +39,10 @@ class SpriteWidget extends StatelessWidget {
     this.angle = 0,
     this.srcPosition,
     this.srcSize,
-    Key? key,
+    super.key,
   })  : _spriteFuture = sprite,
         errorBuilder = null,
-        loadingBuilder = null,
-        super(key: key);
+        loadingBuilder = null;
 
   /// Load the image from the asset [path] and renders it as a widget.
   ///
@@ -60,14 +59,13 @@ class SpriteWidget extends StatelessWidget {
     this.srcSize,
     this.errorBuilder,
     this.loadingBuilder,
-    Key? key,
-  })  : _spriteFuture = Sprite.load(
+    super.key,
+  }) : _spriteFuture = Sprite.load(
           path,
           srcSize: srcSize,
           srcPosition: srcPosition,
           images: images,
-        ),
-        super(key: key);
+        );
 
   @override
   Widget build(BuildContext context) {
@@ -102,8 +100,8 @@ class InternalSpriteWidget extends StatelessWidget {
     required this.sprite,
     this.anchor = Anchor.topLeft,
     this.angle = 0,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(_) {

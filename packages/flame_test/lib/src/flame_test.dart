@@ -219,16 +219,11 @@ class GameTester<T extends Game> {
 /// custom [gameSize].
 class FlameTester<T extends FlameGame> extends GameTester<T> {
   FlameTester(
-    GameCreateFunction<T> createGame, {
-    Vector2? gameSize,
-    GameWidgetCreateFunction<T>? createGameWidget,
-    PumpWidgetFunction<T>? pumpWidget,
-  }) : super(
-          createGame,
-          gameSize: gameSize,
-          createGameWidget: createGameWidget,
-          pumpWidget: pumpWidget,
-        );
+    super.createGame, {
+    super.gameSize,
+    super.createGameWidget,
+    super.pumpWidget,
+  });
 }
 
 /// Default instance of Flame Tester to be used when you don't care about

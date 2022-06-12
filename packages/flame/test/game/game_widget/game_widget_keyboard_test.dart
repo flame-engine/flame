@@ -47,7 +47,7 @@ class _HasKeyboardHandlerComponentsGame extends FlameGame
 class _GamePage extends StatelessWidget {
   final Widget child;
 
-  const _GamePage({Key? key, required this.child}) : super(key: key);
+  const _GamePage({required this.child});
 
   @override
   Widget build(BuildContext context) {

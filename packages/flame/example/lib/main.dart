@@ -26,9 +26,11 @@ class MyGame extends FlameGame with HasTappables {
   @override
   void onTapUp(int id, TapUpInfo info) {
     super.onTapUp(id, info);
-
-    final touchPoint = info.eventPosition.game;
-    add(Square(touchPoint));
+    
+    if (!info.handled) {
+      final touchPoint = info.eventPosition.game;
+      add(Square(touchPoint));
+    }
   }
 }
 
@@ -66,6 +68,7 @@ class Square extends PositionComponent with Tappable {
   @override
   bool onTapUp(TapUpInfo info) {
     removeFromParent();
-    return false;
+    info.handled = true;
+    return true;
   }
 }
