@@ -29,7 +29,11 @@ class AudioGame extends FlameGame with TapDetector {
 
   @override
   Future<void> onLoad() async {
-    pool = await AudioPool.create('fire_2.mp3', minPlayers: 3, maxPlayers: 4);
+    pool = await FlameAudio.createPool(
+      'sfx/fire_2.mp3',
+      minPlayers: 3,
+      maxPlayers: 4,
+    );
     startBgmMusic();
   }
 
@@ -41,7 +45,7 @@ class AudioGame extends FlameGame with TapDetector {
   }
 
   void fireOne() {
-    FlameAudio.audioCache.play('sfx/fire_1.mp3');
+    FlameAudio.play('sfx/fire_1.mp3');
   }
 
   void fireTwo() {
