@@ -81,7 +81,7 @@ In fact you can always use `AudioPlayer`s directly to gain full control over how
 
 ## Caching
 
-You can pre-load your audios. Audios need to be stored in the memory the first time they
+You can pre-load your assets. Audios need to be stored in the memory the first time they
 are requested; therefore, the first time you play each mp3 you might get a delay. In order to
 pre-load your audios, just use:
 
