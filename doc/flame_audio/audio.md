@@ -59,9 +59,9 @@ You can use [the `Bgm` class](bgm.md) (via `FlameAudio.bgm`) to play looping bac
 tracks. The `Bgm` class lets Flame automatically manage the pausing and resuming of background music
 tracks when the game is backgrounded or comes back to the foreground.
 
-You can use [the `AudioPool` class](audio_pool.md) if you want to fire quick sound effects on a very
+You can use [the `AudioPool` class](audio_pool.md) if you want to fire quick sound effects in a very
 efficient manner. `AudioPool` will keep a pool of `AudioPlayer`s preloaded with a given sound, and
-allow you to fire them very fast in quick succession. 
+allow you to play them very fast in quick succession. 
 
 Some file formats that work across devices and that we recommend are: MP3, OGG and WAV.
 

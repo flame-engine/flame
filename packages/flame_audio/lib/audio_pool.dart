@@ -6,7 +6,7 @@ import 'package:synchronized/synchronized.dart';
 /// Represents a function that can stop an audio playing.
 typedef Stoppable = void Function();
 
-/// An AudioPool is a provider of AudioPlayers that leaves them pre-loaded with
+/// An AudioPool is a provider of AudioPlayers that are pre-loaded with
 /// local assets to minimize delays.
 ///
 /// All AudioPlayers loaded are for the same [sound]. If you want multiple
