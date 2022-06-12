@@ -26,7 +26,6 @@ class MyGame extends FlameGame with HasTappables {
   @override
   void onTapUp(int id, TapUpInfo info) {
     super.onTapUp(id, info);
-    
     if (!info.handled) {
       final touchPoint = info.eventPosition.game;
       add(Square(touchPoint));
