@@ -3,6 +3,7 @@ import 'package:flame/experimental.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 
+import 'components/card.dart';
 import 'components/foundation.dart';
 import 'components/pile.dart';
 import 'components/stock.dart';
@@ -53,6 +54,14 @@ class KlondikeGame extends FlameGame {
       ..viewfinder.position = Vector2(cardWidth * 3.5 + cardGap * 4, 0)
       ..viewfinder.anchor = Anchor.topCenter;
     add(camera);
+
+    final cards = [
+      for (var rank = 1; rank <= 13; rank++)
+        for (var suit = 0; suit < 4; suit++)
+          Card(rank, suit)
+    ];
+    world.addAll(cards);
+    stock.acquireCards(cards);
   }
 }
 

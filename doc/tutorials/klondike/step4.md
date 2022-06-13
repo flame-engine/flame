@@ -33,7 +33,34 @@ Having this in mind, let's start implementing the `Stock` component:
 ```dart
 class Stock extends PositionComponent {
   Stock({super.size, super.position});
+
+  /// Which cards are currently placed onto the Stock pile.
+  final List<Card> _cards = [];
+
+  void acquireCards(Iterable<Card> cards) {
+    cards.forEach((card) {
+      assert(card.isFaceDown);
+      card.position = position;
+    });
+    _cards.addAll(cards);
+  }
 }
+```
+Here the `acquireCards()` method stores the provided list of cards into an internal list `_cards`,
+and also moves those cards on top of the `Stock`'s position. However, this method does not mount
+the cards as children of the `Stock` component -- they remain belonging to the top-level game.
+
+Speaking of the game class, let's open the `KlondikeGame` and add the following lines to create a
+full deck of 52 cards and put them onto the stock pile (this should be added at the end of the
+`onLoad` method):
+```dart
+final cards = [
+  for (var rank = 2; rank <= 13; rank++)
+    for (var suit = 0; suit < 4; suit++)
+      Card(rank, suit)
+];
+world.addAll(cards);
+stock.acquireCards(cards);
 ```
 
 
