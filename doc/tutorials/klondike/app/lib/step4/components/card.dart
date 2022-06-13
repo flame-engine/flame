@@ -18,6 +18,7 @@ class Card extends PositionComponent {
   bool _faceUp;
 
   bool get isFaceUp => _faceUp;
+  bool get isFaceDown => !_faceUp;
   void flip() => _faceUp = !_faceUp;
 
   @override

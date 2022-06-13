@@ -9,7 +9,10 @@ class Stock extends PositionComponent {
   final List<Card> _cards = [];
 
   void acquireCards(Iterable<Card> cards) {
-    cards.forEach((card) => card.position = position);
+    cards.forEach((card) {
+      assert(card.isFaceDown);
+      card.position = position;
+    });
     _cards.addAll(cards);
   }
 }
