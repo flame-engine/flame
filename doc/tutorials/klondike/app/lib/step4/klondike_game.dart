@@ -20,10 +20,8 @@ class KlondikeGame extends FlameGame {
   Future<void> onLoad() async {
     await Flame.images.load('klondike-sprites.png');
 
-    final stock = Stock(size: cardSize, position: Vector2(cardGap, cardGap));
-    final waste = Waste()
-      ..size = cardSize
-      ..position = Vector2(cardWidth + 2 * cardGap, cardGap);
+    final stock = Stock(position: Vector2(cardGap, cardGap));
+    final waste = Waste(position: Vector2(cardWidth + 2 * cardGap, cardGap));
     final foundations = List.generate(
       4,
       (i) => Foundation()

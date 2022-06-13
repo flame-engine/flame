@@ -1,9 +1,11 @@
 import 'package:flame/components.dart';
 
+import '../klondike_game.dart';
 import 'card.dart';
 
 class Stock extends PositionComponent {
-  Stock({super.size, super.position});
+  Stock({super.position})
+    : super(size: KlondikeGame.cardSize);
 
   /// Which cards are currently placed onto the Stock pile.
   final List<Card> _cards = [];
