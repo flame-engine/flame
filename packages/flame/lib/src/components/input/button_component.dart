@@ -54,7 +54,7 @@ class ButtonComponent extends PositionComponent with Tappable {
   @mustCallSuper
   bool onTapDown(TapDownInfo info) {
     if (buttonDown != null) {
-      button!.parent = null;
+      button!.removeFromParent();
       buttonDown!.parent = this;
     }
     onPressed?.call();
@@ -73,7 +73,7 @@ class ButtonComponent extends PositionComponent with Tappable {
   @mustCallSuper
   bool onTapCancel() {
     if (buttonDown != null) {
-      buttonDown!.parent = null;
+      buttonDown!.removeFromParent();
       button!.parent = this;
     }
     return false;
