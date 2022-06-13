@@ -14,27 +14,29 @@ jobs:
     outputs:
       packages: ${{ steps.set-packages.outputs.packages }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - id: set-packages
         run: echo "::set-output name=packages::$(find ./packages -maxdepth 2 -type f -name "pubspec.yaml" | jq -R -s -c 'split("\n")[:-1]')"
 
   format:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: subosito/flutter-action@v1
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
+          cache: true
       - uses: bluefireteam/melos-action@main
       - run: melos run format-check
 
   analyze:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: subosito/flutter-action@v1
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
+          cache: true
       - uses: bluefireteam/melos-action@main
       - run: melos run analyze
   # END LINTING STAGE
@@ -44,9 +46,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: subosito/flutter-action@v1
+      - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
+          cache: true
       - uses: bluefireteam/melos-action@main
-      - run: melos run test
+      - uses: bluefireteam/spec-action@main
   # END TESTING STAGE

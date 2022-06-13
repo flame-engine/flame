@@ -1,9 +1,10 @@
 # Bare Flame game
 
-This tutorial assumes that you already have [Flutter], [git], and
-[Android Studio] on your computer (all of these programs are free); and that
-you have basic familiarity with using the command line. Android Studio is not
-a strict requirement, you can use other IDEs too, such as [Visual Studio Code].
+This tutorial assumes that you have basic familiarity with using the command line, and the
+following programs on your computer (all of them are free):
+- [Flutter], version 2.10.0 or above;
+- [Android Studio], or any other IDE, for example [Visual Studio Code];
+- [git] (optional), in order to save your project on GitHub.
 
 
 ## 1. Check flutter installation
@@ -13,17 +14,17 @@ accessible from the command line:
 
 ```console
 $ flutter doctor
-[✓] Flutter (Channel stable, 2.8.0, on macOS 12.2 21D49 darwin-x64, locale en)
+[✓] Flutter (Channel stable, 2.10.0, on macOS 12.3.1 21E258 darwin-x64, locale en)
 [✓] Android toolchain - develop for Android devices (Android SDK version 31.0.0)
 [✓] Xcode - develop for iOS and macOS (Xcode 13.1)
 [✓] Chrome - develop for the web
 [✓] Android Studio (version 2020.3)
 [✓] Connected device (1 available)
+[✓] HTTP Host Availability
 ```
 
 Your output will be slightly different, but the important thing is to verify
-that no errors are reported, and that your Flutter version is **2.5.0** or
-above.
+that no errors are reported, and that your Flutter version is at least **2.10.0**.
 
 
 ## 2. Create project directory
@@ -32,8 +33,8 @@ Now you need to come up with a name for your project. The name can only use
 lowercase latin letters, digits, and underscores. It must also be a valid Dart
 identifier (thus, for example, it cannot be a keyword).
 
-In this tutorial I'm going to call my project **syzygy**, which is a totally
-real not-made-up word.
+In this tutorial we're going to call the project **syzygy**, which is a totally
+real non-made-up word.
 
 Create the directory for your new project:
 
@@ -93,17 +94,18 @@ First, open the file `pubspec.yaml` and replace it with the following code
 
 ```yaml
 name: syzygy
-description: Syzygy flame game
+description: Syzygy Flame game
 version: 0.0.0
 publish_to: none
 
 environment:
-  sdk: ^2.15.0
+  sdk: ^2.16.0
+  flutter: ^2.10.0
 
 dependencies:
   flutter:
     sdk: flutter
-  flame: ^1.0.0
+  flame: ^1.1.0
 ```
 
 After that, press the `[Pub get]` button at the top of the window; or
@@ -125,7 +127,7 @@ void main() {
 }
 ```
 
-Lastly, remove file `test/widget_test.dart` completely.
+Lastly, remove the file `test/widget_test.dart` completely.
 
 
 ## 6. Run the project

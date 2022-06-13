@@ -4,12 +4,11 @@ publish_to: 'none'
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.16.0 <3.0.0"
+  sdk: ">=2.17.0 <3.0.0"
 
 dependencies:
-  flame: ^1.1.1
-  flame_tiled:
-    path: ../
+  flame: ^1.2.0
+  flame_tiled: ^1.5.0
   flutter:
     sdk: flutter
 

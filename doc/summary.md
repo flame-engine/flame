@@ -18,6 +18,9 @@
     - [General Audio](flame_audio/audio.md)
     - [Looping Background Music](flame_audio/bgm.md)
 
+- Physics
+    - [Forge2D](flame_forge2d/forge2d.md)
+
 - Rendering
     - [Images, Sprites and Animations](flame/rendering/images.md)
     - [Text Rendering](flame/rendering/text.md)
@@ -28,7 +31,6 @@
 - Other Modules
     - [Util](flame/other/util.md)
     - [Widgets](flame/other/widgets.md)
-    - [Forge2D](other_modules/forge2d.md)
     - [Oxygen](other_modules/oxygen.md)
     - [Tiled](other_modules/tiled.md)
     - [Debugging](flame/other/debug.md)

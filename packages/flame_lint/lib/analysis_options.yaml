@@ -26,6 +26,7 @@ linter:
     - avoid_init_to_null
     - avoid_js_rounded_ints
     - avoid_null_checks_in_equality_operators
+    - avoid_print
     - avoid_private_typedef_functions
     - avoid_redundant_argument_values
     - avoid_relative_lib_imports
@@ -36,6 +37,7 @@ linter:
     - avoid_type_to_string
     - avoid_types_as_parameter_names
     - avoid_unused_constructor_parameters
+    - avoid_void_async
     - await_only_futures
     - camel_case_extensions
     - camel_case_types
@@ -46,6 +48,7 @@ linter:
     - constant_identifier_names
     - control_flow_in_finally
     - curly_braces_in_flow_control_structures
+    - deprecated_consistency
     - directives_ordering
     - do_not_use_environment
     - empty_catches
@@ -68,6 +71,9 @@ linter:
     - no_adjacent_strings_in_list
     - no_duplicate_case_values
     - no_runtimeType_toString
+    - non_constant_identifier_names
+    - noop_primitive_operations
+    - null_closures
     - omit_local_variable_types
     - package_api_docs
     - package_names
@@ -81,6 +87,7 @@ linter:
     - prefer_const_constructors_in_immutables
     - prefer_const_declarations
     - prefer_const_literals_to_create_immutables
+    - prefer_constructors_over_static_methods
     - prefer_contains
     - prefer_equal_for_default_values
     - prefer_final_fields
@@ -108,6 +115,8 @@ linter:
     - recursive_getters
     - require_trailing_commas
     - slash_for_doc_comments
+    - sort_child_properties_last
+    - sort_pub_dependencies
     - sort_unnamed_constructors_first
     - test_types_in_equals
     - throw_in_finally
@@ -116,6 +125,7 @@ linter:
     - unnecessary_await_in_return
     - unnecessary_brace_in_string_interps
     - unnecessary_const
+    - unnecessary_constructor_name
     - unnecessary_getters_setters
     - unnecessary_lambdas
     - unnecessary_new
@@ -132,12 +142,17 @@ linter:
     - unnecessary_this
     - unrelated_type_equality_checks
     - unsafe_html
+    - use_enums
     - use_full_hex_values_for_flutter_colors
     - use_function_type_syntax_for_parameters
     - use_if_null_to_convert_nulls_to_bools
     - use_is_even_rather_than_modulo
     - use_key_in_widget_constructors
+    - use_late_for_private_fields_and_variables
+    - use_named_constants
+    - use_raw_strings
     - use_rethrow_when_possible
+    - use_super_parameters
     - use_test_throws_matchers
     - valid_regexps
     - void_checks

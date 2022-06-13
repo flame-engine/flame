@@ -26,6 +26,7 @@ mixin Game {
 
   /// Just a reference back to the render box that is kept up to date by the
   /// engine.
+  GameRenderBox get renderBox => _gameRenderBox!;
   GameRenderBox? _gameRenderBox;
 
   /// Currently attached build context. Can be null if not attached.
@@ -41,8 +42,32 @@ mixin Game {
   Vector2? _size;
 
   /// This variable ensures that Game's [onLoad] is called no more than once.
+  late final Future<void>? _onLoadFuture = onLoad();
+
+  bool _debugOnLoadStarted = false;
+
   @internal
-  late Future<void>? onLoadFuture = onLoad();
+  Future<void>? get onLoadFuture {
+    assert(
+      () {
+        _debugOnLoadStarted = true;
+        return true;
+      }(),
+    );
+    return _onLoadFuture;
+  }
+
+  /// To be used for tests that needs to evaluate the game after it has been
+  /// loaded by the game widget.
+  @visibleForTesting
+  Future<void>? toBeLoaded() {
+    assert(
+      _debugOnLoadStarted,
+      'Make sure the game has passed to a mounted '
+      'GameWidget before calling toBeLoaded',
+    );
+    return _onLoadFuture;
+  }
 
   /// Current game viewport size, updated every resize via the [onGameResize]
   /// method hook.
@@ -282,25 +307,28 @@ mixin Game {
   /// of the cursor to the closest region available on the tree.
   MouseCursor get mouseCursor => _mouseCursor;
   MouseCursor _mouseCursor = MouseCursor.defer;
+
   set mouseCursor(MouseCursor value) {
     _mouseCursor = value;
     _refreshWidget();
   }
 
-  final List<VoidCallback> _gameStateListeners = [];
+  @visibleForTesting
+  final List<VoidCallback> gameStateListeners = [];
+
   void addGameStateListener(VoidCallback callback) {
-    _gameStateListeners.add(callback);
+    gameStateListeners.add(callback);
   }
 
   void removeGameStateListener(VoidCallback callback) {
-    _gameStateListeners.remove(callback);
+    gameStateListeners.remove(callback);
   }
 
   /// When a Game is attached to a `GameWidget`, this method will force that
   /// widget to be rebuilt. This can be used when updating any property which is
   /// implemented within the Flutter tree.
   void _refreshWidget() {
-    _gameStateListeners.forEach((callback) => callback());
+    gameStateListeners.forEach((callback) => callback());
   }
 }
 
@@ -325,6 +353,17 @@ class _ActiveOverlays {
     return setChanged;
   }
 
+  /// Marks [overlayNames] to be rendered.
+  void addAll(Iterable<String> overlayNames) {
+    final overlayCountBeforeAdded = _activeOverlays.length;
+    _activeOverlays.addAll(overlayNames);
+
+    final overlayCountAfterAdded = _activeOverlays.length;
+    if (overlayCountBeforeAdded != overlayCountAfterAdded) {
+      _game?._refreshWidget();
+    }
+  }
+
   /// Hides the [overlayName].
   bool remove(String overlayName) {
     final hasRemoved = _activeOverlays.remove(overlayName);
@@ -332,6 +371,17 @@ class _ActiveOverlays {
       _game?._refreshWidget();
     }
     return hasRemoved;
+  }
+
+  /// Hides multiple overlays specified in [overlayNames].
+  void removeAll(Iterable<String> overlayNames) {
+    final overlayCountBeforeRemoved = _activeOverlays.length;
+    _activeOverlays.removeAll(overlayNames);
+
+    final overlayCountAfterRemoved = _activeOverlays.length;
+    if (overlayCountBeforeRemoved != overlayCountAfterRemoved) {
+      _game?._refreshWidget();
+    }
   }
 
   /// The names of all currently active overlays.

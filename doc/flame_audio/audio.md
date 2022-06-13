@@ -65,8 +65,8 @@ tracks when the game is backgrounded or comes back to the foreground.
 
 Some file formats that work across devices and that we recommend are: MP3, OGG and WAV.
 
-This bridge library (flame_audio) uses [audioplayers](https://github.com/luanpotter/audioplayer) in
-order to allow for playing multiple sounds simultaneously (crucial in a game). You can check the
+This bridge library (flame_audio) uses [audioplayers](https://github.com/bluefireteam/audioplayers)
+in order to allow for playing multiple sounds simultaneously (crucial in a game). You can check the
 link for a more in-depth explanation.
 
 Finally, you can pre-load your audios. Audios need to be stored in the memory the first time they
@@ -101,5 +101,5 @@ Both on `play` and `loop` you can pass an additional optional double parameter, 
 (defaults to `1.0`).
 
 Both the `play` and `loop` methods return an instance of an `AudioPlayer` from the
-[audioplayers](https://github.com/luanpotter/audioplayer) lib, that allows you to stop, pause and
+[audioplayers](https://github.com/bluefireteam/audioplayers) lib, that allows you to stop, pause and
 configure other parameters.

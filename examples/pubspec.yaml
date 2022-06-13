@@ -6,17 +6,21 @@ publish_to: 'none'
 version: 0.1.0
 
 environment:
-  sdk: ">=2.16.0 <3.0.0"
-  flutter: ">=2.10.0"
+  sdk: ">=2.17.0 <3.0.0"
+  flutter: ^3.0.0
 
 dependencies:
-  flame: ^1.1.1
-  flame_svg: ^1.2.0
-  flame_forge2d: ^0.11.0
   dashbook: 0.1.6
-  google_fonts: 2.2.0
+  flame: ^1.2.0
+  flame_forge2d: ^0.11.0
+  flame_svg: ^1.3.0
   flutter:
     sdk: flutter
+  google_fonts: ^2.3.2
+  padracing:
+    path: games/padracing
+  trex_game:
+    path: games/trex
 
 dev_dependencies:
   flame_lint: ^0.0.1

@@ -1,38 +1,26 @@
 # FlameGame
 
-`FlameGame` is the most basic and most commonly used `Game` class in Flame.
+`FlameGame` is the most most commonly used `Game` class in Flame.
 
-The `FlameGame` class implements a `Component` based `Game`. Basically it has a list of `Component`s
-and passes the `update` and `render` calls to all `Component`s that have been added to the game.
+The `FlameGame` class implements a `Component` based `Game`. Basically it has a tree of `Component`s
+and calls the `update` and `render` methods of all `Component`s that have been added to the game.
 
 We refer to this component based system as the Flame Component System, FCS for short.
 
-Every time the game needs to be resized, for example when the orientation is changed,
-`FlameGame` will call all of the `Component`s `resize` methods and it will also pass this information
-to the camera and viewport.
+Components can be added to the `FlameGame` directly in the constructor with the named `children`
+argument, or from anywhere else with the `add`/`addAll` methods.
 
-The `FlameGame.camera` controls which point in the coordinate space should be the top-left of the
-screen (it defaults to [0,0] like a regular `Canvas`).
-
-A `FlameGame` implementation example can be seen below:
+A simple `FlameGame` implementation which adds two components, one in `onLoad` and one directly in
+the constructor can look like this:
 
 ```dart
+/// A component that renders the crate sprite, with a 16 x 16 size.
 class MyCrate extends SpriteComponent {
-  // creates a component that renders the crate.png sprite, with size 16 x 16
-  MyCrate() : super(size: Vector2.all(16), anchor: Anchor.center);
+  MyCrate() : super(size: Vector2.all(16));
 
   @override
   Future<void> onLoad() async {
     sprite = await Sprite.load('crate.png');
-  }
-
-  @override
-  void onGameResize(Vector2 gameSize) {
-    super.onGameResize(gameSize);
-    // We don't need to set the position in the constructor, we can set it 
-    // directly here since it will be called once before the first time it 
-    // is rendered.
-    position = gameSize / 2;
   }
 }
 
@@ -44,7 +32,7 @@ class MyGame extends FlameGame {
 }
 
 main() {
-  final myGame = MyGame();
+  final myGame = MyGame(children: [MyCrate]);
   runApp(
     GameWidget(
       game: myGame,
@@ -62,8 +50,15 @@ To remove components from the list on a `FlameGame` the `remove` or `removeAll` 
 The first can be used if you just want to remove one component, and the second can be used when you
 want to remove a list of components.
 
-Any component on which the `remove()` method has been called will also be removed. You can do this
-simply by doing `yourComponent.remove();`.
+
+## Resizing
+
+Every time the game needs to be resized, for example when the orientation is changed,
+`FlameGame` will call all of the `Component`s `onGameResize` methods and it will also pass this
+information to the camera and viewport.
+
+The `FlameGame.camera` controls which point in the coordinate space should be the top-left of the
+screen (it defaults to [0,0] like a regular `Canvas`).
 
 
 ## Lifecycle
@@ -204,11 +199,15 @@ After that it can be specified which widgets represent each overlay in the `Game
 by setting a `overlayBuilderMap`.
 
 ```dart
-// Inside the game methods:
-final pauseOverlayIdentifier = 'PauseMenu';
-
-overlays.add(pauseOverlayIdentifier); // Marks 'PauseMenu' to be rendered.
-overlays.remove(pauseOverlayIdentifier); // Marks 'PauseMenu' to not be rendered.
+void main() {
+  // Inside the game methods:
+  final pauseOverlayIdentifier = 'PauseMenu';
+  
+  // Marks 'PauseMenu' to be rendered.
+  overlays.add(pauseOverlayIdentifier);
+  // Marks 'PauseMenu' to not be rendered.
+  overlays.remove(pauseOverlayIdentifier);
+}
 ```
 
 ```dart

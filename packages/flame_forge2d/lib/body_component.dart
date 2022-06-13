@@ -14,10 +14,10 @@ abstract class BodyComponent<T extends Forge2DGame> extends Component
     with HasGameRef<T>, HasPaint {
   BodyComponent({
     Paint? paint,
-    Iterable<Component>? children,
-    int? priority,
+    super.children,
+    super.priority,
     this.renderBody = true,
-  }) : super(children: children, priority: priority) {
+  }) {
     this.paint = paint ?? (Paint()..color = defaultColor);
   }
 
@@ -27,7 +27,7 @@ abstract class BodyComponent<T extends Forge2DGame> extends Component
   /// Specifies if the body's fixtures should be rendered.
   ///
   /// [renderBody] is true by default for [BodyComponent], if set to false
-  /// the body wont be rendered.
+  /// the body's fixtures wont be rendered.
   ///
   /// If you render something on top of the [BodyComponent], or doesn't want it
   /// to be seen, you probably want to set it to false.
@@ -73,32 +73,45 @@ abstract class BodyComponent<T extends Forge2DGame> extends Component
   @override
   void render(Canvas canvas) {
     if (renderBody) {
-      _renderFixtures(canvas);
+      body.fixtures.forEach(
+        (fixture) => renderFixture(canvas, fixture),
+      );
     }
   }
 
   @override
   void renderDebugMode(Canvas canvas) {
-    _renderFixtures(canvas);
+    body.fixtures.forEach(
+      (fixture) => renderFixture(canvas, fixture),
+    );
   }
 
-  void _renderFixtures(Canvas canvas) {
+  /// Renders a [Fixture] in a [Canvas].
+  ///
+  /// Called for each fixture in [body] when [render]ing. Override this method
+  /// to customize how fixtures are rendered. For example, you can filter out
+  /// fixtures that you don't want to render.
+  ///
+  /// **NOTE**: If [renderBody] is false, no fixtures will be rendered. Hence,
+  /// [renderFixture] is not called when [render]ing.
+  void renderFixture(
+    Canvas canvas,
+    Fixture fixture,
+  ) {
     canvas.save();
-    for (final fixture in body.fixtures) {
-      switch (fixture.type) {
-        case ShapeType.chain:
-          _renderChain(canvas, fixture);
-          break;
-        case ShapeType.circle:
-          _renderCircle(canvas, fixture);
-          break;
-        case ShapeType.edge:
-          _renderEdge(canvas, fixture);
-          break;
-        case ShapeType.polygon:
-          _renderPolygon(canvas, fixture);
-          break;
-      }
+    switch (fixture.type) {
+      case ShapeType.chain:
+        _renderChain(canvas, fixture);
+        break;
+      case ShapeType.circle:
+        _renderCircle(canvas, fixture);
+        break;
+      case ShapeType.edge:
+        _renderEdge(canvas, fixture);
+        break;
+      case ShapeType.polygon:
+        _renderPolygon(canvas, fixture);
+        break;
     }
     canvas.restore();
   }

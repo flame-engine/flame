@@ -421,7 +421,10 @@ class Ant extends PositionComponent {
       travelDirection = -travelDirection;
     }
     final nextIndex = travelPathNodeIndex + travelDirection;
-    assert(nextIndex >= 0 && nextIndex < travelPath.length);
+    assert(
+      nextIndex >= 0 && nextIndex < travelPath.length,
+      'nextIndex is outside of the bounds of travelPath',
+    );
     final nextPosition = travelPath[nextIndex];
     var nextAngle =
         angle = -(nextPosition - position).angleToSigned(Vector2(0, -1));
@@ -480,7 +483,7 @@ class InsectLeg {
         path = Path(),
         foot = Vector2.zero() {
     final ok = placeFoot(Vector2(x1, y1));
-    assert(ok);
+    assert(ok, 'The foot was not properly placed');
   }
 
   /// Place where the leg is attached to the body

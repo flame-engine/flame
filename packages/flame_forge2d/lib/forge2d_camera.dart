@@ -1,8 +1,7 @@
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
-
-import 'package:flame_forge2d/flame_forge2d.dart';
+import 'package:flame_forge2d/body_component.dart';
 
 extension Forge2DCameraExtension on Camera {
   /// Immediately snaps the camera to start following the [BodyComponent].

@@ -1,10 +1,10 @@
 import 'dart:math';
-import 'dart:ui';
 
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/geometry.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
+import 'package:flame/src/utils/solve_quadratic.dart';
 
 class CircleComponent extends ShapeComponent implements SizeProvider {
   /// With this constructor you can create your [CircleComponent] from a radius
@@ -12,20 +12,14 @@ class CircleComponent extends ShapeComponent implements SizeProvider {
   /// the [CircleComponent].
   CircleComponent({
     double? radius,
-    Vector2? position,
-    double? angle,
-    Anchor? anchor,
-    Iterable<Component>? children,
-    int? priority,
-    Paint? paint,
+    super.position,
+    super.angle,
+    super.anchor,
+    super.children,
+    super.priority,
+    super.paint,
   }) : super(
-          position: position,
           size: Vector2.all((radius ?? 0) * 2),
-          angle: angle,
-          anchor: anchor,
-          children: children,
-          priority: priority,
-          paint: paint,
         );
 
   /// With this constructor you define the [CircleComponent] in relation to the
@@ -94,7 +88,7 @@ class CircleComponent extends ShapeComponent implements SizeProvider {
     return dx * dx + dy * dy <= radius * radius;
   }
 
-  /// Returns the locus of points in which the provided line segment intersect
+  /// Returns the locus of points in which the provided line segment intersects
   /// the circle.
   ///
   /// This can be an empty list (if they don't intersect), one point (if the
@@ -103,43 +97,27 @@ class CircleComponent extends ShapeComponent implements SizeProvider {
     LineSegment line, {
     double epsilon = double.minPositive,
   }) {
-    double sq(double x) => x * x;
+    // A point on a line is `from + t*(to - from)`. We're trying to solve the
+    // equation `‖point - center‖² == radius²`. Or, denoting `Δ₂₁ = to - from`
+    // and `Δ₁₀ = from - center`, the equation is `‖t*Δ₂₁ + Δ₁₀‖² == radius²`.
+    // Expanding the norm, this becomes a square equation in `t`:
+    // `t²Δ₂₁² + 2tΔ₂₁Δ₁₀ + Δ₁₀² - radius² == 0`.
+    _delta21
+      ..setFrom(line.to)
+      ..sub(line.from); // to - from
+    _delta10
+      ..setFrom(line.from)
+      ..sub(absoluteCenter); // from - absoluteCenter
+    final a = _delta21.length2;
+    final b = 2 * _delta21.dot(_delta10);
+    final c = _delta10.length2 - radius * radius;
 
-    final cx = absoluteCenter.x;
-    final cy = absoluteCenter.y;
-
-    final point1 = line.from;
-    final point2 = line.to;
-
-    final delta = point2 - point1;
-
-    final A = sq(delta.x) + sq(delta.y);
-    final B = 2 * (delta.x * (point1.x - cx) + delta.y * (point1.y - cy));
-    final C = sq(point1.x - cx) + sq(point1.y - cy) - sq(radius);
-
-    final det = B * B - 4 * A * C;
-    final result = <Vector2>[];
-    if (A <= epsilon || det < 0) {
-      return [];
-    } else if (det == 0) {
-      final t = -B / (2 * A);
-      result.add(Vector2(point1.x + t * delta.x, point1.y + t * delta.y));
-    } else {
-      final t1 = (-B + sqrt(det)) / (2 * A);
-      final i1 = Vector2(
-        point1.x + t1 * delta.x,
-        point1.y + t1 * delta.y,
-      );
-
-      final t2 = (-B - sqrt(det)) / (2 * A);
-      final i2 = Vector2(
-        point1.x + t2 * delta.x,
-        point1.y + t2 * delta.y,
-      );
-
-      result.addAll([i1, i2]);
-    }
-    result.removeWhere((v) => !line.containsPoint(v));
-    return result;
+    return solveQuadratic(a, b, c)
+        .where((t) => t >= 0 && t <= 1)
+        .map((t) => line.from.clone()..addScaled(_delta21, t))
+        .toList();
   }
+
+  static final Vector2 _delta21 = Vector2.zero();
+  static final Vector2 _delta10 = Vector2.zero();
 }

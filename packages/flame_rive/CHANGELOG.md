@@ -1,3 +1,9 @@
+## 1.3.0
+
+ - **FEAT**: Add more lint rules ([#1703](https://github.com/flame-engine/flame/issues/1703)). ([49252f8e](https://github.com/flame-engine/flame/commit/49252f8ef29aa6b77144dcb97c24346f2f39380b))
+ - **FEAT**: Bump to Flutter 2.10.0 ([#1617](https://github.com/flame-engine/flame/issues/1617)). ([beac9013](https://github.com/flame-engine/flame/commit/beac901313456cf0b39b6f4e6459f0feed183614))
+ - **FEAT**: update to Rive 0.8.4 ([#1542](https://github.com/flame-engine/flame/issues/1542)). ([ac3d4bf6](https://github.com/flame-engine/flame/commit/ac3d4bf61b1386df555de4673e2bb6da1f0edd50))
+
 ## 1.2.0
 
  - **FEAT**: Added children parameter to Component constructor (#1525). ([f0b31fcf](https://github.com/flame-engine/flame/commit/f0b31fcfc0fc6b0f8f96895ef6a68fd5a30a3159))

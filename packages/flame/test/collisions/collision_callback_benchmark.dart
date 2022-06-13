@@ -61,6 +61,7 @@ void main() {
       }
       final totalTime = DateTime.now().millisecondsSinceEpoch -
           startTime.millisecondsSinceEpoch;
+      // ignore:avoid_print
       print(
         '$totalTime ms\n'
         '${1000 / (totalTime / ticks)} runs per second\n'

@@ -6,23 +6,19 @@ publish_to: 'none'
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.16.0 <3.0.0"
+  sdk: ">=2.17.0 <3.0.0"
 
 dependencies:
+  equatable: ^2.0.3
+  flame_bloc: ^1.5.0
   flutter:
     sdk: flutter
-  cupertino_icons: ^1.0.2
-  equatable: ^2.0.3
-  flame_bloc:
-    path: ../
   flutter_bloc: ^8.0.1
 
 dev_dependencies:
+  flame_lint: ^0.0.1
   flutter_test:
     sdk: flutter
-  flutter_lints: ^1.0.0
-  flame_lint:
-    path: ../../flame_lint
 
 
 flutter:

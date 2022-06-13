@@ -66,13 +66,10 @@ class MyShapeComponent extends PositionComponent
 
   MyShapeComponent({
     required this.hitbox,
-    Vector2? position,
-    Vector2? size,
-    double? angle,
+    super.position,
+    super.size,
+    super.angle,
   }) : super(
-          position: position,
-          size: size,
-          angle: angle,
           anchor: Anchor.center,
         );
 

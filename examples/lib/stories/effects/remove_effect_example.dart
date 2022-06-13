@@ -24,8 +24,8 @@ class RemoveEffectExample extends FlameGame with HasTappables {
 }
 
 class _RandomCircle extends CircleComponent with Tappable {
-  _RandomCircle(double radius, {Vector2? position, Paint? paint})
-      : super(radius: radius, position: position, paint: paint);
+  _RandomCircle(double radius, {super.position, super.paint})
+      : super(radius: radius);
 
   factory _RandomCircle.random(Random rng) {
     final radius = rng.nextDouble() * 30 + 10;

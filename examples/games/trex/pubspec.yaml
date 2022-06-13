@@ -1,0 +1,24 @@
+name: trex_game
+description: A clone of the classic browser T-Rex game.
+homepage: https://github.com/flame-engine/flame/tree/main/examples/games/trex/
+publish_to: 'none'
+
+version: 0.1.0
+
+environment:
+  sdk: ">=2.17.0 <3.0.0"
+  flutter: ^3.0.0
+
+dependencies:
+  flame: ^1.2.0
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flame_lint: ^0.0.1
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/images/

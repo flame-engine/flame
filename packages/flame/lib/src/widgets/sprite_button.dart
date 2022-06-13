@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flame/cache.dart';
 import 'package:flame/src/extensions/size.dart';
 import 'package:flame/src/extensions/vector2.dart';
@@ -36,7 +38,7 @@ class SpriteButton extends StatelessWidget {
   /// A builder function that is called while the loading is on the way
   final WidgetBuilder? loadingBuilder;
 
-  final Future<List<Sprite>> Function() _buttonsFuture;
+  final FutureOr<List<Sprite>> _buttonsFuture;
 
   SpriteButton({
     required Sprite sprite,
@@ -49,15 +51,40 @@ class SpriteButton extends StatelessWidget {
     this.srcSize,
     this.pressedSrcPosition,
     this.pressedSrcSize,
+    super.key,
+  })  : _buttonsFuture = [
+          sprite,
+          pressedSprite,
+        ],
+        errorBuilder = null,
+        loadingBuilder = null;
+
+  SpriteButton.future({
+    required Future<Sprite> sprite,
+    required Future<Sprite> pressedSprite,
+    required this.onPressed,
+    required this.width,
+    required this.height,
+    required this.label,
+    this.srcPosition,
+    this.srcSize,
+    this.pressedSrcPosition,
+    this.pressedSrcSize,
     this.errorBuilder,
     this.loadingBuilder,
-    Key? key,
-  })  : _buttonsFuture = (() => Future.wait([
-              Future.value(sprite),
-              Future.value(pressedSprite),
-            ])),
-        super(key: key);
+    super.key,
+  }) : _buttonsFuture = Future.wait([
+          sprite,
+          pressedSprite,
+        ]);
 
+  /// Loads the images from the asset [path] and [pressedPath] and renders
+  /// it as a widget.
+  ///
+  /// It will use the [loadingBuilder] while the image from [path] is loading.
+  /// To render without loading, or when you want to have a gapless playback
+  /// when the [path] value changes, consider loading the image beforehand
+  /// and direct pass it to the default constructor.
   SpriteButton.asset({
     required String path,
     required String pressedPath,
@@ -72,32 +99,31 @@ class SpriteButton extends StatelessWidget {
     this.pressedSrcSize,
     this.errorBuilder,
     this.loadingBuilder,
-    Key? key,
-  })  : _buttonsFuture = (() => Future.wait([
-              Sprite.load(
-                path,
-                srcSize: srcSize,
-                srcPosition: srcPosition,
-                images: images,
-              ),
-              Sprite.load(
-                pressedPath,
-                srcSize: pressedSrcSize,
-                srcPosition: pressedSrcPosition,
-                images: images,
-              ),
-            ])),
-        super(key: key);
+    super.key,
+  }) : _buttonsFuture = Future.wait([
+          Sprite.load(
+            path,
+            srcSize: srcSize,
+            srcPosition: srcPosition,
+            images: images,
+          ),
+          Sprite.load(
+            pressedPath,
+            srcSize: pressedSrcSize,
+            srcPosition: pressedSrcPosition,
+            images: images,
+          ),
+        ]);
 
   @override
   Widget build(BuildContext context) {
     return BaseFutureBuilder<List<Sprite>>(
-      futureBuilder: _buttonsFuture,
+      future: _buttonsFuture,
       builder: (_, list) {
         final sprite = list[0];
         final pressedSprite = list[1];
 
-        return _SpriteButton(
+        return InternalSpriteButton(
           onPressed: onPressed,
           label: label,
           width: width,
@@ -112,7 +138,8 @@ class SpriteButton extends StatelessWidget {
   }
 }
 
-class _SpriteButton extends StatefulWidget {
+@visibleForTesting
+class InternalSpriteButton extends StatefulWidget {
   final VoidCallback onPressed;
   final Widget label;
   final Sprite sprite;
@@ -120,20 +147,21 @@ class _SpriteButton extends StatefulWidget {
   final double width;
   final double height;
 
-  const _SpriteButton({
+  const InternalSpriteButton({
     required this.onPressed,
     required this.label,
     required this.sprite,
     required this.pressedSprite,
     this.width = 200,
     this.height = 50,
+    super.key,
   });
 
   @override
   State createState() => _ButtonState();
 }
 
-class _ButtonState extends State<_SpriteButton> {
+class _ButtonState extends State<InternalSpriteButton> {
   bool _pressed = false;
 
   @override

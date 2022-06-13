@@ -1,0 +1,23 @@
+name: padracing
+description: A sample game featuring Flame and Forge2D for DartPad
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.17.0 <3.0.0"
+
+dependencies:
+  flame: ^1.2.0
+  flame_forge2d: ^0.11.0
+  flutter:
+    sdk: flutter
+  google_fonts: ^2.3.2
+  url_launcher: ^6.1.2
+
+dev_dependencies:
+  flame_lint: ^0.0.1
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
