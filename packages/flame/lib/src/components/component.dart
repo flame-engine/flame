@@ -232,7 +232,9 @@ class Component {
   Component? get parent => _parent;
   Component? _parent;
   set parent(Component? newParent) {
-    if (newParent == null) {
+    if (newParent == _parent) {
+      return;
+    } else if (newParent == null) {
       removeFromParent();
     } else if (_parent == null) {
       addToParent(newParent);

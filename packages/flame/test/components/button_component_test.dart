@@ -1,6 +1,9 @@
 import 'package:flame/components.dart';
 import 'package:flame/input.dart';
+import 'package:flame/src/game/game_widget/game_widget.dart';
 import 'package:flame_test/flame_test.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../game/flame_game_test.dart';
@@ -108,6 +111,64 @@ void main() {
       expect(releasedTimes, 1);
     });
 
+    testWidgets(
+      '[#1723] can be pressed while the engine is paused',
+      (tester) async {
+        final game = GameWithTappables();
+        game.add(
+          ButtonComponent(
+            button: CircleComponent(radius: 40),
+            position: Vector2(400, 300),
+            anchor: Anchor.center,
+            onPressed: () {
+              game.pauseEngine();
+              game.overlays.add('pause-menu');
+            },
+          ),
+        );
+        await tester.pumpWidget(
+          GameWidget(
+            game: game,
+            overlayBuilderMap: {
+              'pause-menu': (context, _) {
+                return SimpleStatelessWidget(build: (context) {
+                  return Center(
+                    child: OutlinedButton(
+                      onPressed: () {
+                        game.overlays.remove('pause-menu');
+                        game.resumeEngine();
+                      },
+                      child: const Text('Resume'),
+                    ),
+                  );
+                });
+              },
+            },
+          ),
+        );
+        await tester.pump();
+        await tester.pump();
 
+        await tester.tapAt(const Offset(400, 300));
+        await tester.pump(const Duration(seconds: 1));
+        expect(game.paused, true);
+
+        await tester.tapAt(const Offset(400, 300));
+        await tester.pump(const Duration(seconds: 1));
+        expect(game.paused, false);
+      },
+    );
   });
+}
+
+class SimpleStatelessWidget extends StatelessWidget {
+  const SimpleStatelessWidget({
+    required Widget Function(BuildContext) build,
+    super.key,
+  }) : _build = build;
+
+  final Widget Function(BuildContext) _build;
+
+  @override
+  Widget build(BuildContext context) => _build(context);
 }
