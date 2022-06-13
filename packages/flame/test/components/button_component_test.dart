@@ -3,7 +3,6 @@ import 'package:flame/input.dart';
 import 'package:flame/src/game/game_widget/game_widget.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../game/flame_game_test.dart';
@@ -131,17 +130,19 @@ void main() {
             game: game,
             overlayBuilderMap: {
               'pause-menu': (context, _) {
-                return SimpleStatelessWidget(build: (context) {
-                  return Center(
-                    child: OutlinedButton(
-                      onPressed: () {
-                        game.overlays.remove('pause-menu');
-                        game.resumeEngine();
-                      },
-                      child: const Text('Resume'),
-                    ),
-                  );
-                });
+                return SimpleStatelessWidget(
+                  build: (context) {
+                    return Center(
+                      child: OutlinedButton(
+                        onPressed: () {
+                          game.overlays.remove('pause-menu');
+                          game.resumeEngine();
+                        },
+                        child: const Text('Resume'),
+                      ),
+                    );
+                  },
+                );
               },
             },
           ),
