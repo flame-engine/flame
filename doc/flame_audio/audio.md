@@ -15,7 +15,7 @@ The latest version can be found on [pub.dev](https://pub.dev/packages/flame_audi
 After installing the `flame_audio` package, you can add audio files in the assets section of your
 `pubspec.yaml` file. Make sure that the audio files exists in the paths that you provide.
 
-The default directory for `FlameAudio` is `assets/audio` (which can be changed).
+The default directory for `FlameAudio` is `assets/audio` (which can be changed by providing your own instance of `AudioCache`).
 
 For the examples below, your `pubspec.yaml` file needs to contain something like this:
 
