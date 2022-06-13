@@ -88,28 +88,30 @@ class Waste extends PositionComponent {
     cards.forEach((card) {
       assert(card.isFaceUp);
       card.position = position;
+      card.priority = _cards.length;
+      _cards.add(card);
     });
-    _cards.addAll(cards);
   }
 }
 ```
-This works, but it puts all cards into a single neat pile, whereas we wanted a fan-out of top three.
-So, let's add a dedicated method `_fanOutTopCards()` for this, which we will call after each
-acquire:
+Note that we are setting each card's `priority` here: this ensures that the cards will be rendered
+in exactly the same order as they appear in the `_cards` list. We didn't do the same for the `Stock`
+pile, because all cards there are face down, so it doesn't really matter in which order they are
+rendered.
+
+So far. this puts all cards into a single neat pile, whereas we wanted a fan-out of top three. So,
+let's add a dedicated method `_fanOutTopCards()` for this, which we will call after each acquire:
 ```dart
   void _fanOutTopCards() {
     final n = _cards.length;
-    if (n == 1) {
-      _cards[0].position = position;
-    } else if (n == 2) {
-      _cards[0].position = position;
-      _cards[1].position = position + _fanOffset;
+    for (var i = 0; i < n; i++) {
+      _cards[i].position = position;
+    }
+    if (n == 2) {
+      _cards[1].position.add(_fanOffset);
     } else if (n >= 3) {
-      _cards[n - 1].position = position + _fanOffset * 2;
-      _cards[n - 2].position = position + _fanOffset;
-      for (var i = 0; i < n - 2; i++) {
-        _cards[i].position = position;
-      }
+      _cards[n - 2].position.add(_fanOffset);
+      _cards[n - 1].position.addScaled(_fanOffset, 2);
     }
   }
 ```
@@ -124,11 +126,59 @@ Now that the waste pile is ready, let's get back to the `Stock`.
 
 ## Stock, continued
 
-...
+### Tap to deal cards
 
+The second item on our todo list is the first interactive functionality in the game: tap the stock
+pile to deal 3 cards onto the waste.
 
-```{flutter-app}
-:sources: ../tutorials/klondike/app
-:page: step4
-:show: popup code
+Adding tap functionality to the components in Flame is quite simple: first, we add the mixin
+`HasTappableComponents` to our top-level game class:
+```dart
+class KlondikeGame extends FlameGame with HasTappableComponents { ... }
 ```
+And second, we add the mixin `TapCallbacks` to the component that we want to be tappable:
+```dart
+class Stock extends PositionComponent with TapCallbacks { ... }
+```
+Oh, and we also need to say what we want to happen when the tap occurs. Here we want the top 3 cards
+to be turned faced up and moved to the waste pile. So, add the following method to the `Stock`
+class:
+```dart
+  /// Reference to the waste pile component
+  late final Waste _waste = parent!.firstChild<Waste>()!;
+
+  @override
+  void onTapUp(TapUpEvent event) {
+    final removedCards = <Card>[];
+    for (var i = 0; i < 3; i++) {
+      if (_cards.isNotEmpty) {
+        final card = _cards.removeLast();
+        card.flip();
+        removedCards.add(card);
+      }
+    }
+    _waste.acquireCards(removedCards);
+  }
+```
+We are careful to remove the cards from the top of the pile one-by-one, so that their proper order
+is ensured when adding them to the waste pile.
+
+You will also notice that the cards move from one pile to another immediately, which looks very
+unnatural. However, this is how it is going to be for now -- we will defer making the game more
+smooth till the next chapter of the tutorial.
+
+```{seealso}
+For more information about tap functionality, see [](../../flame/inputs/tap-events.md).
+```
+
+
+### Empty stock pile
+
+
+
+
+<!-- ```{flutter-app} -->
+<!-- :sources: ../tutorials/klondike/app -->
+<!-- :page: step4 -->
+<!-- :show: popup code -->
+<!-- ``` -->

@@ -13,24 +13,22 @@ class Waste extends PositionComponent {
     cards.forEach((card) {
       assert(card.isFaceUp);
       card.position = position;
+      card.priority = _cards.length;
+      _cards.add(card);
     });
-    _cards.addAll(cards);
     _fanOutTopCards();
   }
 
   void _fanOutTopCards() {
     final n = _cards.length;
-    if (n == 1) {
-      _cards[0].position = position;
-    } else if (n == 2) {
-      _cards[0].position = position;
-      _cards[1].position = position + _fanOffset;
+    for (var i = 0; i < n; i++) {
+      _cards[i].position = position;
+    }
+    if (n == 2) {
+      _cards[1].position.add(_fanOffset);
     } else if (n >= 3) {
-      _cards[n - 1].position = position + _fanOffset * 2;
-      _cards[n - 2].position = position + _fanOffset;
-      for (var i = 0; i < n - 2; i++) {
-        _cards[i].position = position;
-      }
+      _cards[n - 2].position.add(_fanOffset);
+      _cards[n - 1].position.addScaled(_fanOffset, 2);
     }
   }
 }

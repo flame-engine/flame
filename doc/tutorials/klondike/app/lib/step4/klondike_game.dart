@@ -9,7 +9,7 @@ import 'components/pile.dart';
 import 'components/stock.dart';
 import 'components/waste.dart';
 
-class KlondikeGame extends FlameGame {
+class KlondikeGame extends FlameGame with HasTappableComponents {
   static const double cardGap = 175.0;
   static const double cardWidth = 1000.0;
   static const double cardHeight = 1400.0;
