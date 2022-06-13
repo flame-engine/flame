@@ -34,10 +34,10 @@ class KlondikeGame extends FlameGame with HasTappableComponents {
     final waste = Waste(position: Vector2(cardWidth + 2 * cardGap, cardGap));
     final foundations = List.generate(
       4,
-      (i) => Foundation()
-        ..size = cardSize
-        ..position =
-            Vector2((i + 3) * (cardWidth + cardGap) + cardGap, cardGap),
+      (i) => Foundation(
+        i,
+        position: Vector2((i + 3) * (cardWidth + cardGap) + cardGap, cardGap),
+      ),
     );
     final piles = List.generate(
       7,

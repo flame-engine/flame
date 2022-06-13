@@ -286,7 +286,49 @@ class Foundation extends PositionComponent {
 The `acquireCard()` method here only takes a single card instead of an iterable, because there's
 really never a situation where we would need to add multiple cards at once to the foundation.
 
+For visual representation of a foundation, I've decided to make a large icon of that foundation's
+suit, in grey color. Which means we'd need to update the definition of the `Foundation` class:
+```dart
+class Foundation extends PositionComponent {
+  Foundation(int intSuit, {super.position})
+      : suit = Suit.fromInt(intSuit),
+        super(size: KlondikeGame.cardSize);
 
+  final Suit suit;
+  ...
+}
+```
+The code in the `KlondikeGame` class that generates the foundations will have to be adjusted
+accordingly in order to pass the suit index to each foundation.
+
+Now, the rendering code will look like this:
+```dart
+  @override
+  void render(Canvas canvas) {
+    canvas.drawRRect(KlondikeGame.cardRRect, _borderPaint);
+    suit.sprite.render(
+      canvas,
+      position: size / 2,
+      anchor: Anchor.center,
+      size: Vector2.all(KlondikeGame.cardWidth * 0.6),
+      overridePaint: _suitPaint,
+    );
+  }
+```
+Here we need two paint objects, one for the border and one for the suits:
+```dart
+  final _borderPaint = Paint()
+    ..style = PaintingStyle.stroke
+    ..strokeWidth = 10
+    ..color = const Color(0x50ffffff);
+  late final _suitPaint = Paint()
+    ..color = suit.isRed? const Color(0x36000000) : const Color(0x64000000)
+    ..blendMode = BlendMode.luminosity;
+```
+The suit paint uses `BlendMode.luminosity` in order to convert the regular yellow/blue colors of
+the suit sprites into greyscale. The "color" of the paint is different depending whether the suit
+is red or black because the original luminosity of those sprites is different. Therefore, I had to
+pick two different colors in order to make them look the same in greyscale.
 
 
 <!-- ```{flutter-app} -->
