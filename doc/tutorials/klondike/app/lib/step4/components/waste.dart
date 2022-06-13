@@ -7,7 +7,7 @@ class Waste extends PositionComponent {
   Waste({super.position}) : super(size: KlondikeGame.cardSize);
 
   final List<Card> _cards = [];
-  final Vector2 _fanOffset = Vector2(KlondikeGame.cardWidth * 0.3, 0);
+  final Vector2 _fanOffset = Vector2(KlondikeGame.cardWidth * 0.2, 0);
 
   void acquireCards(Iterable<Card> cards) {
     cards.forEach((card) {

@@ -118,7 +118,7 @@ let's add a dedicated method `_fanOutTopCards()` for this, which we will call af
 The `_fanOffset` variable here helps determine the shift between cards in the fan, which I decided
 to be about 30% of the card width:
 ```dart
-  final Vector2 _fanOffset = Vector2(KlondikeGame.cardWidth * 0.3, 0);
+  final Vector2 _fanOffset = Vector2(KlondikeGame.cardWidth * 0.2, 0);
 ```
 
 Now that the waste pile is ready, let's get back to the `Stock`.
