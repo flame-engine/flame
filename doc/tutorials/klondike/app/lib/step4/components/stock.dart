@@ -35,15 +35,19 @@ class Stock extends PositionComponent with TapCallbacks {
 
   @override
   void onTapUp(TapUpEvent event) {
-    final removedCards = <Card>[];
-    for (var i = 0; i < 3; i++) {
-      if (_cards.isNotEmpty) {
-        final card = _cards.removeLast();
-        card.flip();
-        removedCards.add(card);
+    if (_cards.isEmpty) {
+      acquireCards(_waste.removeAllAndFlip());
+    } else {
+      final removedCards = <Card>[];
+      for (var i = 0; i < 3; i++) {
+        if (_cards.isNotEmpty) {
+          final card = _cards.removeLast();
+          card.flip();
+          removedCards.add(card);
+        }
       }
+      _waste.acquireCards(removedCards);
     }
-    _waste.acquireCards(removedCards);
   }
 
   @override

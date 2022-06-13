@@ -19,6 +19,13 @@ class Waste extends PositionComponent {
     _fanOutTopCards();
   }
 
+  List<Card> removeAllAndFlip() {
+    final cards = _cards.reversed.toList();
+    _cards.clear();
+    cards.forEach((card) => card.flip());
+    return cards;
+  }
+
   void _fanOutTopCards() {
     final n = _cards.length;
     for (var i = 0; i < n; i++) {

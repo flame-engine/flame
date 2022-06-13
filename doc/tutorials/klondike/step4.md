@@ -218,7 +218,39 @@ Now when you click through the stock pile till the end, you should be able to se
 for the stock cards.
 
 
+### Return cards from the waste pile
 
+The last piece of functionality to add, is to move the cards back from the waste pile into the stock
+pile when the user taps on an empty stock. To implement this, we will modify the `onTapUp()` method
+like so:
+```dart
+  void onTapUp(TapUpEvent event) {
+    if (_cards.isEmpty) {
+      acquireCards(_waste.removeAllAndFlip());
+    } else {
+      final removedCards = <Card>[];
+      for (var i = 0; i < 3; i++) {
+        if (_cards.isNotEmpty) {
+          final card = _cards.removeLast();
+          card.flip();
+          removedCards.add(card);
+        }
+      }
+      _waste.acquireCards(removedCards);
+    }
+  }
+```
+Where the function `Waste.removeAllAndFlip()` still needs to be implemented. This method's job will
+be to remove all cards that are currently in the waste pile, flip them upside-down, and hand them
+over to the stock pile.
+```dart
+  List<Card> removeAllAndFlip() {
+    final cards = _cards.reversed.toList();
+    _cards.clear();
+    cards.forEach((card) => card.flip());
+    return cards;
+  }
+```
 
 <!-- ```{flutter-app} -->
 <!-- :sources: ../tutorials/klondike/app -->
