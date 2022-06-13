@@ -251,6 +251,43 @@ over to the stock pile.
     return cards;
   }
 ```
+If you're curious why we had to have `_cards.reversed` here, then it is because we want to simulate
+the entire waste pile being turned over at once, and not each card being flipped one by one in their
+places. You can check that this is working as intended by verifying that on each subsequent run
+through the stock pile, the cards are dealt in the same order as they were dealt in the first run.
+
+This pretty much concludes the `Stock` functionality, and we already implemented the `Waste` -- so
+the only two components remaining are the `Foundation` and the `Pile`. We'll start with the
+`Foundation` because it looks simpler.
+
+
+## Foundation
+
+The **foundation** piles are the four piles in the top right corner of the game. This is where we
+will be building the ordered runs of cards from Ace to King. The functionality of this class is
+similar to the `Stock` and the `Waste`: it has to be able to hold cards face up, and there has to
+be some visual to show where the foundation is when there are no cards there.
+
+First, let's implement the card-holding logic:
+```dart
+class Foundation extends PositionComponent {
+  Foundation({super.position}) : super(size: KlondikeGame.cardSize);
+
+  final List<Card> _cards = [];
+
+  void acquireCard(Card card) {
+    assert(card.isFaceUp);
+    card.position = position;
+    card.priority = _cards.length;
+    _cards.add(card);
+  }
+}
+```
+The `acquireCard()` method here only takes a single card instead of an iterable, because there's
+really never a situation where we would need to add multiple cards at once to the foundation.
+
+
+
 
 <!-- ```{flutter-app} -->
 <!-- :sources: ../tutorials/klondike/app -->
