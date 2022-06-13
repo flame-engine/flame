@@ -77,6 +77,7 @@ class RectangleComponent extends PolygonComponent {
     double? angle,
     Anchor anchor = Anchor.topLeft,
     int? priority,
+    Paint? paint,
   }) {
     return RectangleComponent(
       position: anchor == Anchor.topLeft
@@ -90,6 +91,7 @@ class RectangleComponent extends PolygonComponent {
       angle: angle,
       anchor: anchor,
       priority: priority,
+      paint: paint,
     );
   }
 

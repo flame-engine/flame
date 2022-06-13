@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'dart:ui';
 
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
@@ -31,11 +32,13 @@ class CircleComponent extends ShapeComponent implements SizeProvider {
     required Vector2 parentSize,
     double angle = 0,
     Anchor? anchor,
+    Paint? paint,
   }) : this(
           radius: relation * (min(parentSize.x, parentSize.y) / 2),
           position: position,
           angle: angle,
           anchor: anchor,
+          paint: paint,
         );
 
   /// Get the radius of the circle before scaling.
