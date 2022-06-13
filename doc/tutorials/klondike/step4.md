@@ -261,7 +261,7 @@ the only two components remaining are the `Foundation` and the `Pile`. We'll sta
 `Foundation` because it looks simpler.
 
 
-## Foundation
+## Foundation piles
 
 The **foundation** piles are the four piles in the top right corner of the game. This is where we
 will be building the ordered runs of cards from Ace to King. The functionality of this class is
@@ -329,6 +329,85 @@ The suit paint uses `BlendMode.luminosity` in order to convert the regular yello
 the suit sprites into greyscale. The "color" of the paint is different depending whether the suit
 is red or black because the original luminosity of those sprites is different. Therefore, I had to
 pick two different colors in order to make them look the same in greyscale.
+
+
+## Tableau Piles
+
+The last piece of the game to be implemented is the `Pile` component. There are seven piles in
+total, and they are where the majority of the game play is happening.
+
+The `Pile` also needs a visual representation, in order to indicate that it's a place where a King
+can be placed when it is empty. I believe it could be just an empty frame, and that should be
+sufficient:
+```dart
+class Pile extends PositionComponent {
+  final _borderPaint = Paint()
+    ..style = PaintingStyle.stroke
+    ..strokeWidth = 10
+    ..color = const Color(0x50ffffff);
+
+  @override
+  void render(Canvas canvas) {
+    canvas.drawRRect(KlondikeGame.cardRRect, _borderPaint);
+  }
+}
+```
+
+Oh, and the class will need to be able hold the cards too, obviously. Here, some of the cards will
+be face down, while others will be face up. We will need a small amount of vertical fanning too,
+similar to how we did it for the `Waste` component:
+```dart
+  /// Which cards are currently placed onto this Pile.
+  final List<Card> _cards = [];
+  final Vector2 _fanOffset = Vector2(0, KlondikeGame.cardHeight * 0.05);
+
+  void acquireCard(Card card) {
+    if (_cards.isEmpty) {
+      card.position = position;
+    } else {
+      card.position = _cards.last.position + _fanOffset;
+    }
+    card.priority = _cards.length;
+    _cards.add(card);
+  }
+```
+
+All that remains now is to head over to the `KlondikeGame` and make sure that the cards are dealt
+into the `Pile`s at the beginning of the game. Add the following code at the end of the `onLoad()`
+method:
+```dart
+  Future<void> onLoad() async {
+    ...
+
+    for (var i = 0; i < 7; i++) {
+      for (var j = i; j < 7; j++) {
+        piles[j].acquireCard(cards.removeLast());
+      }
+    }
+    piles.forEach((pile) => pile.flipTopCard());
+    stock.acquireCards(cards);
+  }
+```
+Note how we remove the cards from the deck and place them into `Pile`s one by one, and only after
+that put the remaining cards into the `stock`. Also, the `flipTopCard` method in the `Pile` class
+is as trivial as it sounds:
+```dart
+  void flipTopCard() {
+    assert(_cards.last.isFaceDown);
+    _cards.last.flip();
+  }
+```
+
+This is it! Let's run the game, and... ok we forgot to shuffle. Add the line `cards.shuffle()` in
+the `KlondikeGame` constructor when we're creating the list of cards.
+
+Ok, this is it, everything's ready! Let's run the game... The cards don't move. That seems like a
+big oversight on my part, so without further ado, presenting you the next section:
+
+
+## Moving the cards
+
+<!-- So, we want to be able to drag the cards on the screen. This isn't as difficult as it sounds -->
 
 
 <!-- ```{flutter-app} -->
