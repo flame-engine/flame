@@ -174,6 +174,49 @@ For more information about tap functionality, see [](../../flame/inputs/tap-even
 
 ### Empty stock pile
 
+Currently, when the stock pile has no cards, it simply shows an empty space -- there is no visual
+cue that this is where the stock is. Such cue is needed, though, because we want the user to be
+able to click the stock pile when it is empty in order to move all the cards from the waste back to
+the stock so that they can be dealt again.
+
+In our case, the empty stock pile will have a card-like border, and a circle in the middle:
+```dart
+  @override
+  void render(Canvas canvas) {
+    canvas.drawRRect(KlondikeGame.cardRRect, _borderPaint);
+    canvas.drawCircle(
+      Offset(width / 2, height / 2),
+      KlondikeGame.cardWidth * 0.3,
+      _circlePaint,
+    );
+  }
+```
+where the paints are defined as
+```dart
+  final _borderPaint = Paint()
+    ..style = PaintingStyle.stroke
+    ..strokeWidth = 10
+    ..color = const Color(0xFF3F5B5D);
+  final _circlePaint = Paint()
+    ..style = PaintingStyle.stroke
+    ..strokeWidth = 100
+    ..color = const Color(0x883F5B5D);
+```
+and the `cardRRect` in the `KlondikeGame` class as
+```dart
+  static const cardRRect = RRect.fromLTRBXY(
+    0,
+    0,
+    cardWidth,
+    cardHeight,
+    cardRadius,
+    cardRadius,
+  );
+```
+
+Now when you click through the stock pile till the end, you should be able to see the placeholder
+for the stock cards.
+
 
 
 
