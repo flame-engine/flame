@@ -18,6 +18,7 @@ class FlameDragAdapter implements Drag {
 
   void start(Offset point) {
     final event = DragStartDetails(
+      sourceTimeStamp: Duration.zero,
       globalPosition: point,
       localPosition: (_game as Game).renderBox.globalToLocal(point),
     );

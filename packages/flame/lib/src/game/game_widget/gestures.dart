@@ -15,8 +15,7 @@ bool hasGestureDetectors(Game game) {
       game is PanDetector ||
       game is ScaleDetector ||
       game is MultiTapListener ||
-      game is MultiTouchDragDetector ||
-      game is HasDraggables;
+      game is MultiDragListener;
 }
 
 bool hasMouseDetectors(Game game) {

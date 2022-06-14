@@ -1,7 +1,7 @@
 import 'package:flame/src/components/mixins/tappable.dart';
+import 'package:flame/src/events/game_mixins/multi_touch_tap_detector.dart';
 import 'package:flame/src/events/interfaces/multi_tap_listener.dart';
 import 'package:flame/src/game/flame_game.dart';
-import 'package:flame/src/game/mixins/multi_touch_tap_detector.dart';
 import 'package:flame/src/gestures/events.dart';
 import 'package:flutter/gestures.dart';
 import 'package:meta/meta.dart';
