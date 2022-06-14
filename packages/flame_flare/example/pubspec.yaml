@@ -8,16 +8,13 @@ environment:
   flutter: ^3.0.0
 
 dependencies:
-  flame:
-    path: ../../flame
-  flame_flare:
-    path: ../
+  flame: ^1.2.0
+  flame_flare: ^1.2.0
   flutter:
     sdk: flutter
 
 dev_dependencies:
-  flame_lint:
-    path: ../../flame_lint
+  flame_lint: ^0.1.0
 
 flutter:
   assets:
