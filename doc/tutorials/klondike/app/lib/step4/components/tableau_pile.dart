@@ -5,8 +5,8 @@ import 'package:flame/components.dart';
 import '../klondike_game.dart';
 import 'card.dart';
 
-class Pile extends PositionComponent {
-  Pile({super.position}) : super(size: KlondikeGame.cardSize);
+class TableauPile extends PositionComponent {
+  TableauPile({super.position}) : super(size: KlondikeGame.cardSize);
 
   /// Which cards are currently placed onto this Pile.
   final List<Card> _cards = [];
