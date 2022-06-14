@@ -13,6 +13,7 @@ export 'src/components/isometric_tile_map_component.dart';
 export 'src/components/mixins/component_viewport_margin.dart';
 export 'src/components/mixins/draggable.dart';
 export 'src/components/mixins/gesture_hitboxes.dart';
+export 'src/components/mixins/has_ancestor.dart';
 export 'src/components/mixins/has_game_ref.dart';
 export 'src/components/mixins/has_paint.dart';
 export 'src/components/mixins/hoverable.dart';
