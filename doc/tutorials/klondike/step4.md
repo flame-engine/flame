@@ -457,6 +457,33 @@ however, is to be able to restrict where the card is allowed or not allowed to g
 the core of the logic of the game begins.
 
 
+### Restricting the motion
+
+So, the first challenge that we need to solve is how do we ensure that the cards can only be placed
+where they are allowed to go? To solve this, we need to be able to understand on top of which pile
+the card is when the drag gesture ends. One of the tools that we can use for this purpose is the
+`componentsAtPoint()` API. This API allows us to query which components are located at a particular
+point of the screen -- in our case we'd want to see if the point where the user is dropping a card
+is either a foundation or a pile. The implementation would look somewhat like this:
+```dart
+  @override
+  void onDragEnd(DragEndEvent event) {
+    final game = parent! as KlondikeGame;
+    var moveSucceeded = false;
+    game.componentsAtPoint(event.screenPosition).forEach((component) {
+      if (component is Foundation) {
+        if (component.acceptsCard(this)) {
+          component.acquireCard(this);
+          moveSucceeded = true;
+        }
+      }
+    });
+  }
+```
+
+
+
+
 <!-- ```{flutter-app} -->
 <!-- :sources: ../tutorials/klondike/app -->
 <!-- :page: step4 -->
