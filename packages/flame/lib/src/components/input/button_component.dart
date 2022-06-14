@@ -45,17 +45,18 @@ class ButtonComponent extends PositionComponent with Tappable {
       button != null,
       'The button has to either be passed in as an argument or set in onLoad',
     );
-    final idleButton = button;
-    if (idleButton != null && !contains(idleButton)) {
-      add(idleButton);
+    if (!contains(button!)) {
+      add(button!);
     }
   }
 
   @override
   @mustCallSuper
   bool onTapDown(TapDownInfo info) {
-    button?.removeFromParent();
-    buttonDown?.changeParent(this);
+    if (buttonDown != null) {
+      button!.removeFromParent();
+      buttonDown!.parent = this;
+    }
     onPressed?.call();
     return false;
   }
@@ -71,8 +72,10 @@ class ButtonComponent extends PositionComponent with Tappable {
   @override
   @mustCallSuper
   bool onTapCancel() {
-    buttonDown?.removeFromParent();
-    button?.changeParent(this);
+    if (buttonDown != null) {
+      buttonDown!.removeFromParent();
+      button!.parent = this;
+    }
     return false;
   }
 }
