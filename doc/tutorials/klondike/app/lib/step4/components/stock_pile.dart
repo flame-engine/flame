@@ -7,8 +7,8 @@ import '../klondike_game.dart';
 import 'card.dart';
 import 'waste.dart';
 
-class Stock extends PositionComponent with TapCallbacks {
-  Stock({super.position}) : super(size: KlondikeGame.cardSize);
+class StockPile extends PositionComponent with TapCallbacks {
+  StockPile({super.position}) : super(size: KlondikeGame.cardSize);
 
   /// Which cards are currently placed onto the Stock pile.
   final List<Card> _cards = [];
