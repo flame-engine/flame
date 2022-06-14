@@ -7,6 +7,12 @@ Before we begin though, let's clean up all those cards that we left scattered ac
 the previous chapter. Open the `KlondikeGame` class and erase the loop at the bottom of `onLoad()`
 that was adding 28 cards onto the table.
 
+Another small refactoring that we need to do is to rename our components: `Stock` -> `StockPile`,
+`Waste` -> `WastePile`, `Foundation` -> `FoundationPile`, and `Pile` -> `TableauPile`. This is
+because these components have some common features in how they handle interactions with the cards,
+and it would be convenient to have all of them implement a common API. We will call the interface
+that they will all be implementing the `Pile` class.
+
 
 ## Stock pile
 

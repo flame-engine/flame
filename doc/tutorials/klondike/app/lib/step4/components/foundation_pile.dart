@@ -6,8 +6,8 @@ import '../klondike_game.dart';
 import '../suit.dart';
 import 'card.dart';
 
-class Foundation extends PositionComponent {
-  Foundation(int intSuit, {super.position})
+class FoundationPile extends PositionComponent {
+  FoundationPile(int intSuit, {super.position})
       : suit = Suit.fromInt(intSuit),
         super(size: KlondikeGame.cardSize);
 

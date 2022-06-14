@@ -6,7 +6,7 @@ import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 
 import 'components/card.dart';
-import 'components/foundation.dart';
+import 'components/foundation_pile.dart';
 import 'components/pile.dart';
 import 'components/stock.dart';
 import 'components/waste.dart';
@@ -34,7 +34,7 @@ class KlondikeGame extends FlameGame with HasTappableComponents {
     final waste = Waste(position: Vector2(cardWidth + 2 * cardGap, cardGap));
     final foundations = List.generate(
       4,
-      (i) => Foundation(
+      (i) => FoundationPile(
         i,
         position: Vector2((i + 3) * (cardWidth + cardGap) + cardGap, cardGap),
       ),
