@@ -407,7 +407,54 @@ big oversight on my part, so without further ado, presenting you the next sectio
 
 ## Moving the cards
 
-<!-- So, we want to be able to drag the cards on the screen. This isn't as difficult as it sounds -->
+So, we want to be able to drag the cards on the screen. This is almost as simple as making the
+`Stock` tappable: first, we add the `HasDraggableComponents` mixin to our game class:
+```dart
+class KlondikeGame extends FlameGame with HasTappableComponents, HasDraggableComponents {
+  ...
+}
+```
+
+Now, head over into the `Card` class and add the `DragCallbacks` mixin:
+```dart
+class Card extends PositionComponent with DragCallbacks {
+}
+```
+
+The next step is to implement the actual drag event callbacks: `onDragStart`, `onDragUpdate`, and
+`onDragEnd`.
+
+When the drag gesture is initiated, we need to perform several actions: (1) raise the priority of
+the card, so that it is rendered above all others; (2) store the initial position of the card so
+that it can be returned to where it came from if the drag didn't land properly; and (3) store the
+initial position of the tap point in parent's coordinate space, so that the card can be moved
+properly during the drag:
+```dart
+  final Vector2 _positionBeforeDrag = Vector2.zero();
+  final Vector2 _parentTapPoint = Vector2.zero();
+
+  @override
+  void onDragStart(DragStartEvent event) {
+    priority = 100;
+    _positionBeforeDrag.setFrom(position);
+    _parentTapPoint.setFrom(event.parentPosition);
+  }
+```
+
+During the drag, the `onDragUpdate` event will be called continuously. Using this callback we will
+be updating the position of the card so that it follows the movement of the finger (or the mouse):
+```dart
+  @override
+  void onDragUpdate(DragUpdateEvent event) {
+    if (event.parentPosition != null) {
+      position = _positionBeforeDrag + (event.parentPosition - _parentTapPoint);
+    }
+  }
+```
+
+So far this allows you to grab any card and drag it anywhere around the table. What we want,
+however, is to be able to restrict where the card is allowed or not allowed to go. This is where
+the core of the logic of the game begins.
 
 
 <!-- ```{flutter-app} -->
