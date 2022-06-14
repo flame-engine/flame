@@ -24,6 +24,7 @@ class TiledGame extends FlameGame {
     for (final obj in objGroup!.objects) {
       add(
         SpriteAnimationComponent(
+          size: Vector2(20.0, 20.0),
           position: Vector2(obj.x, obj.y),
           animation: SpriteAnimation.fromFrameData(
             coins,
