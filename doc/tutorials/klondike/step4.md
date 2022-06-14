@@ -430,14 +430,16 @@ that it can be returned to where it came from if the drag didn't land properly; 
 initial position of the tap point in parent's coordinate space, so that the card can be moved
 properly during the drag:
 ```dart
+  int _priorityBeforeDrag = 0;
   final Vector2 _positionBeforeDrag = Vector2.zero();
   final Vector2 _parentTapPoint = Vector2.zero();
 
   @override
   void onDragStart(DragStartEvent event) {
-    priority = 100;
+    _priorityBeforeDrag = priority;
     _positionBeforeDrag.setFrom(position);
     _parentTapPoint.setFrom(event.parentPosition);
+    priority = 100;
   }
 ```
 
@@ -471,16 +473,40 @@ is either a foundation or a pile. The implementation would look somewhat like th
     final game = parent! as KlondikeGame;
     var moveSucceeded = false;
     game.componentsAtPoint(event.screenPosition).forEach((component) {
-      if (component is Foundation) {
+      if (component is CardDropLocation) {
         if (component.acceptsCard(this)) {
+          // TODO: also remove from the current owner
           component.acquireCard(this);
           moveSucceeded = true;
         }
       }
     });
+    if (!moveSucceeded) {
+      position.setFrom(_positionBeforeDrag);
+      priority = _priorityBeforeDrag;
+    }
   }
 ```
+where `CardDropLocation` is a small interface class which will be implemented by `Foundation` and
+`Pile`:
+```dart
+abstract class CardDropLocation {
+  bool acceptsCard(Card card);
+  void acquireCard(Card card);
+}
+```
 
+For the `Foundation` class, the logic that allows accepting a new card would look like this:
+```dart
+class Foundation extends PositionComponent implements CardDropLocation {
+  // ...
+
+  @override
+  bool acceptsCard(Card card) {
+    return card.suit == suit && card.rank.value == _cards.length + 1;
+  }
+}
+```
 
 
 
