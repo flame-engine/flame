@@ -1,8 +1,8 @@
 # Documentation Site
 
 Flame's documentation is written in **Markdown**. It is then rendered into HTML with the help of
-the [Sphinx] engine and its [MyST] plugin. The rendered files are then manually published to
-[flame-docs-site], where the site is served via [GitHub Pages].
+the [Sphinx] engine and its [MyST] plugin. The rendered files are then manually (but with the help
+of a script) published to [flame-docs-site], where the site is served via [GitHub Pages].
 
 [Sphinx]: https://www.sphinx-doc.org/en/master/
 [MyST]: https://myst-parser.readthedocs.io/en/latest/
