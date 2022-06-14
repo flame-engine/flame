@@ -6,23 +6,22 @@ import 'package:synchronized/synchronized.dart';
 /// Represents a function that can stop an audio playing.
 typedef Stoppable = void Function();
 
-/// An AudioPool is a provider of AudioPlayers that leaves them pre-loaded to
-/// minimize delays.
+/// An AudioPool is a provider of AudioPlayers that are pre-loaded with
+/// local assets to minimize delays.
 ///
 /// All AudioPlayers loaded are for the same [sound]. If you want multiple
 /// sounds use multiple [AudioPool].
 /// Use this class if you'd like have extremely quick firing, repetitive and
 /// simultaneous sounds, like shooting a laser in a fast-paced spaceship game.
 class AudioPool {
-  final AudioCache _cache;
   final Map<String, AudioPlayer> _currentPlayers = {};
   final List<AudioPlayer> _availablePlayers = [];
 
+  /// Instance of [AudioCache] to be used by all players.
+  final AudioCache audioCache;
+
   /// The path of the sound of this pool.
   final String sound;
-
-  /// If the pool is repeating.
-  final bool repeating;
 
   /// Max and min numbers of players.
   final int minPlayers, maxPlayers;
@@ -31,29 +30,23 @@ class AudioPool {
 
   AudioPool._(
     this.sound, {
-    bool? repeating,
-    int? maxPlayers,
-    int? minPlayers = 1,
-    String? prefix,
-  })  : _cache = AudioCache(prefix: prefix ?? 'assets/audio/sfx/'),
-        repeating = repeating ?? false,
-        maxPlayers = maxPlayers ?? 1,
-        minPlayers = minPlayers ?? 1;
+    required this.minPlayers,
+    required this.maxPlayers,
+    AudioCache? audioCache,
+  }) : audioCache = audioCache ?? AudioCache.instance;
 
   /// Creates an [AudioPool] instance with the given parameters.
   static Future<AudioPool> create(
     String sound, {
-    bool? repeating,
-    int? maxPlayers,
-    int? minPlayers = 1,
-    String? prefix,
+    AudioCache? audioCache,
+    int minPlayers = 1,
+    required int maxPlayers,
   }) async {
     final instance = AudioPool._(
       sound,
-      repeating: repeating,
+      audioCache: audioCache,
       maxPlayers: maxPlayers,
       minPlayers: minPlayers,
-      prefix: prefix,
     );
     for (var i = 0; i < instance.minPlayers; i++) {
       instance._availablePlayers.add(await instance._createNewAudioPlayer());
@@ -90,23 +83,16 @@ class AudioPool {
         });
       }
 
-      subscription = player.onPlayerCompletion.listen((_) {
-        if (repeating) {
-          player.resume();
-        } else {
-          stop();
-        }
-      });
+      subscription = player.onPlayerComplete.listen((_) => stop());
 
       return stop;
     });
   }
 
   Future<AudioPlayer> _createNewAudioPlayer() async {
-    final player = AudioPlayer();
-    final url = (await _cache.load(sound)).path;
-    await player.setUrl(url);
-    await player.setReleaseMode(ReleaseMode.STOP);
+    final player = AudioPlayer()..audioCache = audioCache;
+    await player.setSource(AssetSource(sound));
+    await player.setReleaseMode(ReleaseMode.stop);
     return player;
   }
 }
