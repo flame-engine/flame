@@ -5,20 +5,19 @@ import 'package:flame/input.dart';
 import 'package:flame/palette.dart';
 import 'package:flame_audio/audio_pool.dart';
 import 'package:flame_audio/flame_audio.dart';
-import 'package:flutter/widgets.dart' hide Animation;
+import 'package:flutter/painting.dart';
 
-void main() {
-  runApp(GameWidget(game: AudioGame()));
-}
+class BasicAudioExample extends FlameGame with TapDetector {
+  static const String description = '''
+    This example showcases the most basic Flame Audio functionalities.
 
-/// This example game showcases three possible use cases:
-///
-/// 1. Use the static FlameAudio class to easily fire a sfx using the default
-/// configs for the button tap.
-/// 2. Uses a custom AudioPool for extremely efficient audio loading and pooling
-/// for tapping elsewhere.
-/// 3. Uses the Bgm utility for background music.
-class AudioGame extends FlameGame with TapDetector {
+    1. Use the static FlameAudio class to easily fire a sfx using the default
+    configs for the button tap.
+    2. Uses a custom AudioPool for extremely efficient audio loading and pooling
+    for tapping elsewhere.
+    3. Uses the Bgm utility for background music.
+  ''';
+
   static Paint black = BasicPalette.black.paint();
   static Paint gray = const PaletteEntry(Color(0xFFCCCCCC)).paint();
   static TextPaint text = TextPaint(
