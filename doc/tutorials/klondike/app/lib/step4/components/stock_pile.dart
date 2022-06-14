@@ -5,7 +5,7 @@ import 'package:flame/experimental.dart';
 
 import '../klondike_game.dart';
 import 'card.dart';
-import 'waste.dart';
+import 'waste_pile.dart';
 
 class StockPile extends PositionComponent with TapCallbacks {
   StockPile({super.position}) : super(size: KlondikeGame.cardSize);
@@ -14,7 +14,7 @@ class StockPile extends PositionComponent with TapCallbacks {
   final List<Card> _cards = [];
 
   /// Reference to the waste pile component
-  late final Waste _waste = parent!.firstChild<Waste>()!;
+  late final WastePile _waste = parent!.firstChild<WastePile>()!;
 
   final _borderPaint = Paint()
     ..style = PaintingStyle.stroke
