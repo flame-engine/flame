@@ -36,3 +36,5 @@ flutter:
     - assets/images/layers/
     - assets/images/parallax/
     - assets/svgs/
+    - assets/audio/music/
+    - assets/audio/sfx/
