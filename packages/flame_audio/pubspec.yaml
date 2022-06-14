@@ -8,7 +8,7 @@ environment:
   flutter: ^3.0.0
 
 dependencies:
-  audioplayers: ^0.20.1
+  audioplayers: ^1.0.0
   flame: ^1.2.0
   flutter:
     sdk: flutter
