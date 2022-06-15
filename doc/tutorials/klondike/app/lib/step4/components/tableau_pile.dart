@@ -8,7 +8,7 @@ import 'card.dart';
 class TableauPile extends PositionComponent {
   TableauPile({super.position}) : super(size: KlondikeGame.cardSize);
 
-  /// Which cards are currently placed onto this Pile.
+  /// Which cards are currently placed onto this pile.
   final List<Card> _cards = [];
   final Vector2 _fanOffset = Vector2(0, KlondikeGame.cardHeight * 0.05);
 
