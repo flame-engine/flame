@@ -265,13 +265,13 @@ with the first one because it looks simpler.
 
 The **foundation** piles are the four piles in the top right corner of the game. This is where we
 will be building the ordered runs of cards from Ace to King. The functionality of this class is
-similar to the `Stock` and the `Waste`: it has to be able to hold cards face up, and there has to
-be some visual to show where the foundation is when there are no cards there.
+similar to the `StockPile` and the `WastePile`: it has to be able to hold cards face up, and there
+has to be some visual to show where the foundation is when there are no cards there.
 
 First, let's implement the card-holding logic:
 ```dart
-class Foundation extends PositionComponent {
-  Foundation({super.position}) : super(size: KlondikeGame.cardSize);
+class FoundationPile extends PositionComponent {
+  FoundationPile({super.position}) : super(size: KlondikeGame.cardSize);
 
   final List<Card> _cards = [];
 
@@ -283,14 +283,13 @@ class Foundation extends PositionComponent {
   }
 }
 ```
-The `acquireCard()` method here only takes a single card instead of an iterable, because there's
-really never a situation where we would need to add multiple cards at once to the foundation.
 
 For visual representation of a foundation, I've decided to make a large icon of that foundation's
-suit, in grey color. Which means we'd need to update the definition of the `Foundation` class:
+suit, in grey color. Which means we'd need to update the definition of the class to include the
+suit information:
 ```dart
-class Foundation extends PositionComponent {
-  Foundation(int intSuit, {super.position})
+class FoundationPile extends PositionComponent {
+  FoundationPile(int intSuit, {super.position})
       : suit = Suit.fromInt(intSuit),
         super(size: KlondikeGame.cardSize);
 
@@ -315,14 +314,14 @@ Now, the rendering code will look like this:
     );
   }
 ```
-Here we need two paint objects, one for the border and one for the suits:
+Here we need to have two paint objects, one for the border and one for the suits:
 ```dart
   final _borderPaint = Paint()
     ..style = PaintingStyle.stroke
     ..strokeWidth = 10
     ..color = const Color(0x50ffffff);
   late final _suitPaint = Paint()
-    ..color = suit.isRed? const Color(0x36000000) : const Color(0x64000000)
+    ..color = suit.isRed? const Color(0x3a000000) : const Color(0x64000000)
     ..blendMode = BlendMode.luminosity;
 ```
 The suit paint uses `BlendMode.luminosity` in order to convert the regular yellow/blue colors of
@@ -331,7 +330,7 @@ is red or black because the original luminosity of those sprites is different. T
 pick two different colors in order to make them look the same in greyscale.
 
 
-## Tableau Piles
+### Tableau Piles
 
 The last piece of the game to be implemented is the `Pile` component. There are seven piles in
 total, and they are where the majority of the game play is happening.

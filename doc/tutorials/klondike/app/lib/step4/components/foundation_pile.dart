@@ -14,12 +14,14 @@ class FoundationPile extends PositionComponent {
   final Suit suit;
   final List<Card> _cards = [];
 
+  //#region Rendering
+
   final _borderPaint = Paint()
     ..style = PaintingStyle.stroke
     ..strokeWidth = 10
     ..color = const Color(0x50ffffff);
   late final _suitPaint = Paint()
-    ..color = suit.isRed? const Color(0x36000000) : const Color(0x64000000)
+    ..color = suit.isRed? const Color(0x3a000000) : const Color(0x64000000)
     ..blendMode = BlendMode.luminosity;
 
   void acquireCard(Card card) {
@@ -41,44 +43,5 @@ class FoundationPile extends PositionComponent {
     );
   }
 
-  /*
-  Path _preparePath() {
-    const w = KlondikeGame.cardWidth * 0.3;
-    final path = Path();
-    if (suit.value == 0) {
-      path.moveTo(0, -w * 0.75);
-      path.cubicTo(w * 1.0, -w * 1.55, 1.7 * w, 0.0 * w, 0, w * 0.95);
-      path.cubicTo(-1.7 * w, 0, -w, -w * 1.55, 0, -w * 0.75);
-      path.close();
-    }
-    if (suit.value == 1) {
-      path.moveTo(-w, 0);
-      path.lineTo(0, -w);
-      path.lineTo(w, 0);
-      path.lineTo(0, w);
-      path.lineTo(-w, 0);
-    }
-    if (suit.value == 2) {
-      const r = w * 1.05 / 2;
-      path.addOval(
-          Rect.fromCircle(center: const Offset(0, -w * 0.45), radius: r));
-      path.addOval(
-          Rect.fromCircle(center: const Offset(-w * 0.5, w * 0.45), radius: r));
-      path.addOval(
-          Rect.fromCircle(center: const Offset(w * 0.5, w * 0.45), radius: r));
-      path.addOval(Rect.fromCircle(center: Offset.zero, radius: w * 0.3));
-    }
-    if (suit.value == 3) {
-      path.moveTo(0, -w);
-      path.cubicTo(1.7 * w, 0.3 * w, 0.8 * w, w, 0.5 * w, w);
-      path.cubicTo(0.2 * w, 0.65 * w, -0.2 * w, 0.65 * w, -0.5 * w, w);
-      path.cubicTo(-0.8 * w, w, -1.7 * w, 0.3 * w, 0, -w);
-      path.close();
-    }
-    return path.shift(
-      const Offset(KlondikeGame.cardWidth * 0.5, KlondikeGame.cardHeight * 0.5),
-    );
-  }
-
-   */
+  //#endregion
 }
