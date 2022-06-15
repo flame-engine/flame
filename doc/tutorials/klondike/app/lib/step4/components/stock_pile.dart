@@ -39,6 +39,8 @@ class StockPile extends PositionComponent with TapCallbacks {
     }
   }
 
+  //#region Rendering
+
   final _borderPaint = Paint()
     ..style = PaintingStyle.stroke
     ..strokeWidth = 10
@@ -57,4 +59,6 @@ class StockPile extends PositionComponent with TapCallbacks {
       _circlePaint,
     );
   }
+
+  //#endregion
 }

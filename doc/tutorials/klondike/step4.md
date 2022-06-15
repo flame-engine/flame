@@ -208,13 +208,9 @@ where the paints are defined as
 ```
 and the `cardRRect` in the `KlondikeGame` class as
 ```dart
-  static const cardRRect = RRect.fromLTRBXY(
-    0,
-    0,
-    cardWidth,
-    cardHeight,
-    cardRadius,
-    cardRadius,
+  static final cardRRect = RRect.fromRectAndRadius(
+    const Rect.fromLTWH(0, 0, cardWidth, cardHeight),
+    const Radius.circular(cardRadius),
   );
 ```
 
