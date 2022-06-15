@@ -176,7 +176,7 @@ For more information about tap functionality, see [](../../flame/inputs/tap-even
 ```
 
 
-### Empty stock pile
+### Stock pile -- visual representation
 
 Currently, when the stock pile has no cards, it simply shows an empty space -- there is no visual
 cue that this is where the stock is. Such cue is needed, though, because we want the user to be
@@ -218,7 +218,7 @@ Now when you click through the stock pile till the end, you should be able to se
 for the stock cards.
 
 
-### Return cards from the waste pile
+### Stock pile -- refill from the waste
 
 The last piece of functionality to add, is to move the cards back from the waste pile into the stock
 pile when the user taps on an empty stock. To implement this, we will modify the `onTapUp()` method
@@ -226,42 +226,42 @@ like so:
 ```dart
   void onTapUp(TapUpEvent event) {
     if (_cards.isEmpty) {
-      acquireCards(_waste.removeAllAndFlip());
+      _waste.removeAllCards().reversed.forEach((card) {
+        card.flip();
+        acquireCard(card);
+      });
     } else {
-      final removedCards = <Card>[];
-      for (var i = 0; i < 3; i++) {
+     for (var i = 0; i < 3; i++) {
         if (_cards.isNotEmpty) {
           final card = _cards.removeLast();
           card.flip();
-          removedCards.add(card);
+          _waste.acquireCard(card);
         }
       }
-      _waste.acquireCards(removedCards);
     }
   }
 ```
-Where the function `Waste.removeAllAndFlip()` still needs to be implemented. This method's job will
-be to remove all cards that are currently in the waste pile, flip them upside-down, and hand them
-over to the stock pile.
+If you're curious why we needed to reverse the list of cards removed from the waste pile, then it is
+because we want to simulate the entire waste pile being turned over at once, and not each card being
+flipped one by one in their places. You can check that this is working as intended by verifying that
+on each subsequent run through the stock pile, the cards are dealt in the same order as they were
+dealt in the first run.
+
+The method `WastePile.removeAllCards()` still needs to be implemented though:
 ```dart
-  List<Card> removeAllAndFlip() {
-    final cards = _cards.reversed.toList();
+  List<Card> removeAllCards() {
+    final cards = _cards.toList();
     _cards.clear();
-    cards.forEach((card) => card.flip());
     return cards;
   }
 ```
-If you're curious why we had to have `_cards.reversed` here, then it is because we want to simulate
-the entire waste pile being turned over at once, and not each card being flipped one by one in their
-places. You can check that this is working as intended by verifying that on each subsequent run
-through the stock pile, the cards are dealt in the same order as they were dealt in the first run.
 
-This pretty much concludes the `Stock` functionality, and we already implemented the `Waste` -- so
-the only two components remaining are the `Foundation` and the `Pile`. We'll start with the
-`Foundation` because it looks simpler.
+This pretty much concludes the `StockPile` functionality, and we already implemented the `WastePile`
+-- so the only two components remaining are the `FoundationPile` and the `TableauPile`. We'll start
+with the first one because it looks simpler.
 
 
-## Foundation piles
+### Foundation piles
 
 The **foundation** piles are the four piles in the top right corner of the game. This is where we
 will be building the ordered runs of cards from Ace to King. The functionality of this class is

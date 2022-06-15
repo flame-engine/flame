@@ -17,10 +17,9 @@ class WastePile extends PositionComponent {
     _fanOutTopCards();
   }
 
-  List<Card> removeAllAndFlip() {
-    final cards = _cards.reversed.toList();
+  List<Card> removeAllCards() {
+    final cards = _cards.toList();
     _cards.clear();
-    cards.forEach((card) => card.flip());
     return cards;
   }
 
