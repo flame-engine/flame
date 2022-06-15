@@ -9,13 +9,11 @@ class WastePile extends PositionComponent {
   final List<Card> _cards = [];
   final Vector2 _fanOffset = Vector2(KlondikeGame.cardWidth * 0.2, 0);
 
-  void acquireCards(Iterable<Card> cards) {
-    cards.forEach((card) {
-      assert(card.isFaceUp);
-      card.position = position;
-      card.priority = _cards.length;
-      _cards.add(card);
-    });
+  void acquireCard(Card card) {
+    assert(card.isFaceUp);
+    card.position = position;
+    card.priority = _cards.length;
+    _cards.add(card);
     _fanOutTopCards();
   }
 

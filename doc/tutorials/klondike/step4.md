@@ -92,31 +92,24 @@ The **waste** is a pile next to the stock. During the course of the game we will
 from the top of the stock pile and putting them into the waste. The functionality of this class is
 quite simple: it holds a certain number of cards face up, fanning out the top 3.
 
-Let's start implementing the `Waste` class same way as we did with the `Stock` class, only now the
-cards are expected to be face up.
+Let's start implementing the `WastePile` class same way as we did with the `StockPile` class, only
+now the cards are expected to be face up:
 ```dart
-class Waste extends PositionComponent {
-  Waste({super.position})
-    : super(size: KlondikeGame.cardSize);
+class WastePile extends PositionComponent {
+  WastePile({super.position}) : super(size: KlondikeGame.cardSize);
 
   final List<Card> _cards = [];
 
-  void acquireCards(Iterable<Card> cards) {
-    cards.forEach((card) {
-      assert(card.isFaceUp);
-      card.position = position;
-      card.priority = _cards.length;
-      _cards.add(card);
-    });
+  void acquireCard(Card card) {
+    assert(card.isFaceUp);
+    card.position = position;
+    card.priority = _cards.length;
+    _cards.add(card);
   }
 }
 ```
-Note that we are setting each card's `priority` here: this ensures that the cards will be rendered
-in exactly the same order as they appear in the `_cards` list. We didn't do the same for the `Stock`
-pile, because all cards there are face down, so it doesn't really matter in which order they are
-rendered.
 
-So far. this puts all cards into a single neat pile, whereas we wanted a fan-out of top three. So,
+So far, this puts all cards into a single neat pile, whereas we wanted a fan-out of top three. So,
 let's add a dedicated method `_fanOutTopCards()` for this, which we will call after each acquire:
 ```dart
   void _fanOutTopCards() {
@@ -133,12 +126,12 @@ let's add a dedicated method `_fanOutTopCards()` for this, which we will call af
   }
 ```
 The `_fanOffset` variable here helps determine the shift between cards in the fan, which I decided
-to be about 30% of the card width:
+to be about 20% of the card's width:
 ```dart
   final Vector2 _fanOffset = Vector2(KlondikeGame.cardWidth * 0.2, 0);
 ```
 
-Now that the waste pile is ready, let's get back to the `Stock`.
+Now that the waste pile is ready, let's get back to the `StockPile`.
 
 
 ## Stock, continued
