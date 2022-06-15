@@ -7,8 +7,8 @@ import 'package:flame/game.dart';
 
 import 'components/card.dart';
 import 'components/foundation_pile.dart';
-import 'components/tableau_pile.dart';
 import 'components/stock_pile.dart';
+import 'components/tableau_pile.dart';
 import 'components/waste_pile.dart';
 
 class KlondikeGame extends FlameGame

@@ -409,9 +409,10 @@ big oversight on my part, so without further ado, presenting you the next sectio
 ## Moving the cards
 
 So, we want to be able to drag the cards on the screen. This is almost as simple as making the
-`Stock` tappable: first, we add the `HasDraggableComponents` mixin to our game class:
+`StockPile` tappable: first, we add the `HasDraggableComponents` mixin to our game class:
 ```dart
-class KlondikeGame extends FlameGame with HasTappableComponents, HasDraggableComponents {
+class KlondikeGame extends FlameGame
+    with HasTappableComponents, HasDraggableComponents {
   ...
 }
 ```
@@ -459,27 +460,73 @@ So far this allows you to grab any card and drag it anywhere around the table. W
 however, is to be able to restrict where the card is allowed or not allowed to go. This is where
 the core of the logic of the game begins.
 
+There are several considerations when it comes to moving the cards within the game:
+1.  How do we ensure that the user can only move the cards that they are allowed to?
+2.  How can we drag a run of cards?
+3.  How do we check that the cards are dropped at proper destinations?
 
-### Restricting the motion
+
+### 1. Move only allowed cards
+
+The cards can be moved in following scenarios: (1) when it is the top card of a waste pile, (2)
+when it is the top card of a foundation pile, (3) when it is any face-up card in a tableau pile.
+Thus, in order to determine whether a card can be moved or not, we need to know which pile it
+currently belongs to. There could be several ways that we go about it, but seemingly the most
+straightforward is to let every card keep a reference to the pile that it belongs to.
+
+So, let's start by defining the abstract interface `Pile` that all our existing piles will be
+implementing:
+```dart
+abstract class Pile {
+  bool canMoveCard(Card card);
+}
+```
+We will expand this class further later, but for now let's make sure that each of the classes
+`StockPile`, `WastePile`, `FoundationPile`, and `TableauPile` are marked as implementing this
+interface:
+```dart
+class StockPile extends PositionComponent with TapCallbacks implements Pile {
+  ...
+  @override
+  bool canMoveCard(Card card) => false;
+}
+
+class WastePile extends PositionComponent implements Pile {
+  ...
+  @override
+  bool canMoveCard(Card card) => _cards.isNotEmpty && card == _cards.last;
+}
+
+class FoundationPile extends PositionComponent implements Pile {
+  ...
+  @override
+  bool canMoveCard(Card card) => _cards.isNotEmpty && card == _cards.last;
+}
+
+class TableauPile extends PositionComponent implements Pile {
+  ...
+  @override
+  bool canMoveCard(Card card) => card.isFaceUp;
+}
+```
+
 
 So, the first challenge that we need to solve is how do we ensure that the cards can only be placed
 where they are allowed to go? To solve this, we need to be able to understand on top of which pile
 the card is when the drag gesture ends. One of the tools that we can use for this purpose is the
 `componentsAtPoint()` API. This API allows us to query which components are located at a particular
 point of the screen -- in our case we'd want to see if the point where the user is dropping a card
-is either a foundation or a pile. The implementation would look somewhat like this:
+is either a foundation or a tableau pile. The implementation would look like this:
 ```dart
   @override
   void onDragEnd(DragEndEvent event) {
     final game = parent! as KlondikeGame;
     var moveSucceeded = false;
-    game.componentsAtPoint(event.screenPosition).forEach((component) {
-      if (component is CardDropLocation) {
-        if (component.acceptsCard(this)) {
-          // TODO: also remove from the current owner
-          component.acquireCard(this);
-          moveSucceeded = true;
-        }
+    game.componentsAtPoint(event.screenPosition).whereType<Pile>.forEach((pile) {
+      if (pile.acceptsCard(this)) {
+        // TODO: also remove from the current owner
+        pile.acquireCard(this);
+        moveSucceeded = true;
       }
     });
     if (!moveSucceeded) {
@@ -488,10 +535,10 @@ is either a foundation or a pile. The implementation would look somewhat like th
     }
   }
 ```
-where `CardDropLocation` is a small interface class which will be implemented by `Foundation` and
+where `Pile` is a small interface class which will be implemented by `Foundation` and
 `Pile`:
 ```dart
-abstract class CardDropLocation {
+abstract class Pile {
   bool acceptsCard(Card card);
   void acquireCard(Card card);
 }

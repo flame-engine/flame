@@ -4,10 +4,11 @@ import 'package:flame/components.dart';
 import 'package:flame/experimental.dart';
 
 import '../klondike_game.dart';
+import '../pile.dart';
 import 'card.dart';
 import 'waste_pile.dart';
 
-class StockPile extends PositionComponent with TapCallbacks {
+class StockPile extends PositionComponent with TapCallbacks implements Pile {
   StockPile({super.position}) : super(size: KlondikeGame.cardSize);
 
   /// Which cards are currently placed onto this pile. The first card in the
@@ -16,6 +17,9 @@ class StockPile extends PositionComponent with TapCallbacks {
 
   /// Reference to the waste pile component
   late final WastePile _waste = parent!.firstChild<WastePile>()!;
+
+  @override
+  bool canMoveCard(Card card) => false;
 
   void acquireCard(Card card) {
     assert(card.isFaceDown);

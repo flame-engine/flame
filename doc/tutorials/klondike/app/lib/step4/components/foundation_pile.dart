@@ -3,16 +3,20 @@ import 'dart:ui';
 import 'package:flame/components.dart';
 
 import '../klondike_game.dart';
+import '../pile.dart';
 import '../suit.dart';
 import 'card.dart';
 
-class FoundationPile extends PositionComponent {
+class FoundationPile extends PositionComponent implements Pile {
   FoundationPile(int intSuit, {super.position})
       : suit = Suit.fromInt(intSuit),
         super(size: KlondikeGame.cardSize);
 
   final Suit suit;
   final List<Card> _cards = [];
+
+  @override
+  bool canMoveCard(Card card) => _cards.isNotEmpty && card == _cards.last;
 
   //#region Rendering
 
