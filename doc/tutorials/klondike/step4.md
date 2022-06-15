@@ -134,9 +134,7 @@ to be about 20% of the card's width:
 Now that the waste pile is ready, let's get back to the `StockPile`.
 
 
-## Stock, continued
-
-### Tap to deal cards
+### Stock pile -- tap to deal cards
 
 The second item on our todo list is the first interactive functionality in the game: tap the stock
 pile to deal 3 cards onto the waste.
@@ -148,32 +146,28 @@ class KlondikeGame extends FlameGame with HasTappableComponents { ... }
 ```
 And second, we add the mixin `TapCallbacks` to the component that we want to be tappable:
 ```dart
-class Stock extends PositionComponent with TapCallbacks { ... }
+class StockPile extends PositionComponent with TapCallbacks { ... }
 ```
 Oh, and we also need to say what we want to happen when the tap occurs. Here we want the top 3 cards
-to be turned faced up and moved to the waste pile. So, add the following method to the `Stock`
+to be turned face up and moved to the waste pile. So, add the following method to the `StockPile`
 class:
 ```dart
   /// Reference to the waste pile component
-  late final Waste _waste = parent!.firstChild<Waste>()!;
+  late final WastePile _waste = parent!.firstChild<WastePile>()!;
 
   @override
   void onTapUp(TapUpEvent event) {
-    final removedCards = <Card>[];
     for (var i = 0; i < 3; i++) {
       if (_cards.isNotEmpty) {
         final card = _cards.removeLast();
         card.flip();
-        removedCards.add(card);
+        _waste.acquireCard(card);
       }
     }
-    _waste.acquireCards(removedCards);
   }
 ```
-We are careful to remove the cards from the top of the pile one-by-one, so that their proper order
-is ensured when adding them to the waste pile.
 
-You will also notice that the cards move from one pile to another immediately, which looks very
+You have probably noticed that the cards move from one pile to another immediately, which looks very
 unnatural. However, this is how it is going to be for now -- we will defer making the game more
 smooth till the next chapter of the tutorial.
 
