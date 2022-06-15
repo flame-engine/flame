@@ -78,7 +78,7 @@ class KlondikeGame extends FlameGame
       }
     }
     piles.forEach((pile) => pile.flipTopCard());
-    stock.acquireCards(cards);
+    cards.forEach(stock.acquireCard);
   }
 }
 

@@ -25,12 +25,12 @@ written in the past: it is a good habit to have.
 After such a rename, we can begin implementing each of these components.
 
 
-### StockPile
+### Stock pile
 
 The **stock** is a place in the top-left corner of the playing field which holds the cards that are
 not currently in play. We will need to build the following functionality for this component:
 
-1.  Ability to hold cards that are not currently in play (up to 24), face down;
+1.  Ability to hold cards that are not currently in play, face down;
 2.  Tapping the stock should reveal top 3 cards and move them to the **waste** pile;
 3.  When the cards run out, there should be a visual indicating that this is the stock pile;
 4.  When the cards run out, tapping the empty stock should move all the cards from the waste pile
@@ -43,30 +43,30 @@ this approach is tempting, I believe it would make our life more complicated as 
 card from one place to another.
 
 So, I decided to stick with my first approach: the `Card` components are owned directly by the
-`KlondikeGame` itself, whereas the `Stock` and other piles are merely aware of which cards are
+`KlondikeGame` itself, whereas the `StockPile` and other piles are merely aware of which cards are
 currently placed there.
 
-Having this in mind, let's start implementing the `Stock` component:
+Having this in mind, let's start implementing the `StockPile` component:
 ```dart
-class Stock extends PositionComponent {
-  Stock({super.position})
-    : super(size: KlondikeGame.cardSize);
+class StockPile extends PositionComponent {
+  StockPile({super.position}) : super(size: KlondikeGame.cardSize);
 
-  /// Which cards are currently placed onto the Stock pile.
+  /// Which cards are currently placed onto this pile. The first card in the
+  /// list is at the bottom, the last card is on top.
   final List<Card> _cards = [];
 
-  void acquireCards(Iterable<Card> cards) {
-    cards.forEach((card) {
-      assert(card.isFaceDown);
-      card.position = position;
-    });
-    _cards.addAll(cards);
+  void acquireCard(Card card) {
+    assert(card.isFaceDown);
+    card.position = position;
+    card.priority = _cards.length;
+    _cards.add(card);
   }
 }
 ```
-Here the `acquireCards()` method stores the provided list of cards into an internal list `_cards`,
-and also moves those cards on top of the `Stock`'s position. However, this method does not mount
-the cards as children of the `Stock` component -- they remain belonging to the top-level game.
+Here the `acquireCard()` method stores the provided card into the internal list `_cards`; it also
+moves that card to the `StockPile`'s position and adjusts the cards priority so that they are
+displayed in the right order. However, this method does not mount the card as a child of the
+`StockPile` component -- it remains belonging to the top-level game.
 
 Speaking of the game class, let's open the `KlondikeGame` and add the following lines to create a
 full deck of 52 cards and put them onto the stock pile (this should be added at the end of the
@@ -78,15 +78,15 @@ final cards = [
       Card(rank, suit)
 ];
 world.addAll(cards);
-stock.acquireCards(cards);
+cards.forEach(stock.acquireCard);
 ```
 
 This concludes the first step of our short plan at the beginning of this section. For the second
-step, though, we need to have a waste pile -- so let's make a quick detour and implement the `Waste`
-class.
+step, though, we need to have a waste pile -- so let's make a quick detour and implement the
+`WastePile` class.
 
 
-## Waste pile
+### Waste pile
 
 The **waste** is a pile next to the stock. During the course of the game we will be taking the cards
 from the top of the stock pile and putting them into the waste. The functionality of this class is
