@@ -11,7 +11,8 @@ import 'components/tableau_pile.dart';
 import 'components/stock_pile.dart';
 import 'components/waste_pile.dart';
 
-class KlondikeGame extends FlameGame with HasTappableComponents {
+class KlondikeGame extends FlameGame
+    with HasTappableComponents, HasDraggableComponents {
   static const double cardGap = 175.0;
   static const double cardWidth = 1000.0;
   static const double cardHeight = 1400.0;
@@ -31,7 +32,8 @@ class KlondikeGame extends FlameGame with HasTappableComponents {
     await Flame.images.load('klondike-sprites.png');
 
     final stock = StockPile(position: Vector2(cardGap, cardGap));
-    final waste = WastePile(position: Vector2(cardWidth + 2 * cardGap, cardGap));
+    final waste =
+        WastePile(position: Vector2(cardWidth + 2 * cardGap, cardGap));
     final foundations = List.generate(
       4,
       (i) => FoundationPile(
