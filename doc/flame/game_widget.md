@@ -44,7 +44,7 @@ class _MyGamePageState extends State<MyGamePage> {
   }
 
   @override
-  void build(BuildContext context) {
+  Widget build(BuildContext context) {
     return GameWidget(game: _game);
   }
 }
@@ -55,7 +55,7 @@ In a `StatelessWidget` with the `gameFactory` argument:
 ```dart
 class MyGamePage extends StatelessWidget {
   @override
-  void build(BuildContext context) {
+  Widget build(BuildContext context) {
     return GameWidget.controlled(gameFactory: MyGame.new);
   }
 }
