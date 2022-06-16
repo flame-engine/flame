@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:flame/components.dart';
 import 'package:flame/experimental.dart';
 import '../klondike_game.dart';
+import '../pile.dart';
 import '../rank.dart';
 import '../suit.dart';
 
@@ -11,12 +12,13 @@ class Card extends PositionComponent with DragCallbacks {
   Card(int intRank, int intSuit)
       : rank = Rank.fromInt(intRank),
         suit = Suit.fromInt(intSuit),
-        _faceUp = false,
         super(size: KlondikeGame.cardSize);
 
   final Rank rank;
   final Suit suit;
-  bool _faceUp;
+  Pile? pile;
+  bool _faceUp = false;
+  bool _isDragging = false;
 
   bool get isFaceUp => _faceUp;
   bool get isFaceDown => !_faceUp;
@@ -24,6 +26,8 @@ class Card extends PositionComponent with DragCallbacks {
 
   @override
   String toString() => rank.label + suit.label; // e.g. "Q♠" or "10♦"
+
+  //#region Rendering
 
   @override
   void render(Canvas canvas) {
@@ -209,28 +213,36 @@ class Card extends PositionComponent with DragCallbacks {
     }
   }
 
+  //#endregion
+
   int _priorityBeforeDrag = 0;
   final Vector2 _positionBeforeDrag = Vector2.zero();
   final Vector2 _parentTapPoint = Vector2.zero();
 
   @override
   void onDragStart(DragStartEvent event) {
-    _priorityBeforeDrag = priority;
-    _positionBeforeDrag.setFrom(position);
-    _parentTapPoint.setFrom(event.parentPosition!);
-    priority = 100;
+    if (pile?.canMoveCard(this) ?? false) {
+      _isDragging = true;
+      _priorityBeforeDrag = priority;
+      _positionBeforeDrag.setFrom(position);
+      _parentTapPoint.setFrom(event.parentPosition!);
+      priority = 100;
+    }
   }
 
   @override
   void onDragUpdate(DragUpdateEvent event) {
-    if (event.parentPosition != null) {
+    if (_isDragging && event.parentPosition != null) {
       position = _positionBeforeDrag + event.parentPosition! - _parentTapPoint;
     }
   }
 
   @override
   void onDragEnd(DragEndEvent event) {
-    position.setFrom(_positionBeforeDrag);
-    priority = _priorityBeforeDrag;
+    if (_isDragging) {
+      _isDragging = false;
+      position.setFrom(_positionBeforeDrag);
+      priority = _priorityBeforeDrag;
+    }
   }
 }

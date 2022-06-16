@@ -30,6 +30,7 @@ class FoundationPile extends PositionComponent implements Pile {
 
   void acquireCard(Card card) {
     assert(card.isFaceUp);
+    card.pile = this;
     card.position = position;
     card.priority = _cards.length;
     _cards.add(card);

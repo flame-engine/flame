@@ -510,6 +510,49 @@ class TableauPile extends PositionComponent implements Pile {
 }
 ```
 
+We also wanted to let every `Card` know which pile it is currently in. For this, add the field
+`Pile? pile` into the `Card` class, and make sure to set it in each pile's `acquireCard()` method,
+like so:
+```dart
+  void acquireCard(Card card) {
+    ...
+    card.pile = this;
+  }
+```
+
+Now we can put this new functionality to use: go into the `Card.onDragStart()` method and modify
+it so that it would check whether the card is allowed to be moved before starting the drag:
+```dart
+  void onDragStart(DragStartEvent event) {
+    if (pile?.canMoveCard(this) ?? false) {
+      _isDragging = true;
+      _priorityBeforeDrag = priority;
+      _positionBeforeDrag.setFrom(position);
+      _parentTapPoint.setFrom(event.parentPosition!);
+      priority = 100;
+    }
+  }
+```
+We have also added the boolean `_isDragging` variable here: make sure to define it, and then to
+check this flag in the `onDragUpdate()` method, and to set it back to false in the `onDragEnd()`:
+```dart
+  @override
+  void onDragUpdate(DragUpdateEvent event) {
+    if (_isDragging && event.parentPosition != null) {
+      position = _positionBeforeDrag + event.parentPosition! - _parentTapPoint;
+    }
+  }
+
+  @override
+  void onDragEnd(DragEndEvent event) {
+    if (_isDragging) {
+      _isDragging = false;
+      position.setFrom(_positionBeforeDrag);
+      priority = _priorityBeforeDrag;
+    }
+  }
+```
+
 
 So, the first challenge that we need to solve is how do we ensure that the cards can only be placed
 where they are allowed to go? To solve this, we need to be able to understand on top of which pile

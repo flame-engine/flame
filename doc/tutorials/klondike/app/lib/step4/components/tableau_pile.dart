@@ -22,6 +22,7 @@ class TableauPile extends PositionComponent implements Pile {
     } else {
       card.position = _cards.last.position + _fanOffset;
     }
+    card.pile = this;
     card.priority = _cards.length;
     _cards.add(card);
   }
