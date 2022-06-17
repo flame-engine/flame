@@ -590,8 +590,10 @@ Thus, my first attempt at revising the `onDragEnd` callback looks like this:
       return;
     }
     _isDragging = false;
-    final dropPiles =
-        parent!.componentsAtPoint(position).whereType<Pile>().toList();
+    final dropPiles = parent!
+        .componentsAtPoint(position + size / 2)
+        .whereType<Pile>()
+        .toList();
     if (dropPiles.isNotEmpty) {
       // if (card is allowed to be dropped into this pile) {
       //   remove the card from the current pile
@@ -747,8 +749,10 @@ Now, putting this all together, the `Card`'s `onDragEnd` method will look like t
       return;
     }
     _isDragging = false;
-    final dropPiles =
-        parent!.componentsAtPoint(position).whereType<Pile>().toList();
+    final dropPiles = parent!
+        .componentsAtPoint(position + size / 2)
+        .whereType<Pile>()
+        .toList();
     if (dropPiles.isNotEmpty) {
       if (dropPiles.first.canAcceptCard(this)) {
         pile!.removeCard(this);
@@ -775,6 +779,40 @@ You have probably noticed when running the game in the previous section that the
 tableau piles clamp too closely together. That is, they are at the correct distance when they face
 down, but they should be at a larger distance when they face up, which is not currently the case.
 This makes it really difficult to see which cards are available for dragging.
+
+So, let's head over into the `TableauPile` class and create a new method `layOutCards()`, whose job
+would be to ensure that all cards currently in the pile have the right positions:
+```dart
+  final Vector2 _fanOffset1 = Vector2(0, KlondikeGame.cardHeight * 0.05);
+  final Vector2 _fanOffset2 = Vector2(0, KlondikeGame.cardHeight * 0.20);
+
+  void layOutCards() {
+    if (_cards.isEmpty) {
+      return;
+    }
+    _cards[0].position.setFrom(position);
+    for (var i = 1; i < _cards.length; i++) {
+      _cards[i].position
+        ..setFrom(_cards[i - 1].position)
+        ..add(_cards[i - 1].isFaceDown ? _fanOffset1 : _fanOffset2);
+    }
+  }
+```
+Make sure to call this method at the end of `removeCard()`, `returnCard()`, and `acquireCard()` --
+replacing any current logic that handles card positioning.
+
+Another problem that you may have noticed is that for taller card stacks it becomes hard to place a
+card there. This is because our logic for determining in which pile the card is being dropped checks
+whether the center of the card is inside any of the `TableauPile` components -- but those components
+have only the size of a single card! To fix this inconsistency, all we need is to declare that the
+height of the tableau pile is at least as tall as all the cards in it, or even higher. Add this line
+at the end of the `layOutCards()` method:
+```dart
+    height = KlondikeGame.cardHeight * 1.5 + _cards.last.y - _cards.first.y;
+```
+The factor `1.5` here adds a little bit extra space at the bottom of each pile. You can temporarily
+turn the debug mode on to see the hitboxes.
+
 
 
 

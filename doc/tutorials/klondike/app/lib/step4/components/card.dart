@@ -244,8 +244,10 @@ class Card extends PositionComponent with DragCallbacks {
       return;
     }
     _isDragging = false;
-    final dropPiles =
-        parent!.componentsAtPoint(position).whereType<Pile>().toList();
+    final dropPiles = parent!
+        .componentsAtPoint(position + size / 2)
+        .whereType<Pile>()
+        .toList();
     if (dropPiles.isNotEmpty) {
       if (dropPiles.first.canAcceptCard(this)) {
         pile!.removeCard(this);

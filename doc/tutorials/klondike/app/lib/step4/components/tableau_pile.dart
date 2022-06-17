@@ -11,7 +11,8 @@ class TableauPile extends PositionComponent implements Pile {
 
   /// Which cards are currently placed onto this pile.
   final List<Card> _cards = [];
-  final Vector2 _fanOffset = Vector2(0, KlondikeGame.cardHeight * 0.05);
+  final Vector2 _fanOffset1 = Vector2(0, KlondikeGame.cardHeight * 0.05);
+  final Vector2 _fanOffset2 = Vector2(0, KlondikeGame.cardHeight * 0.20);
 
   //#region Pile API
 
@@ -37,26 +38,21 @@ class TableauPile extends PositionComponent implements Pile {
     if (_cards.isNotEmpty && _cards.last.isFaceDown) {
       flipTopCard();
     }
+    layOutCards();
   }
 
   @override
   void returnCard(Card card) {
-    final index = _cards.indexOf(card);
-    card.position =
-        index == 0 ? position : _cards[index - 1].position + _fanOffset;
-    card.priority = index;
+    card.priority = _cards.indexOf(card);
+    layOutCards();
   }
 
   @override
   void acquireCard(Card card) {
-    if (_cards.isEmpty) {
-      card.position = position;
-    } else {
-      card.position = _cards.last.position + _fanOffset;
-    }
     card.pile = this;
     card.priority = _cards.length;
     _cards.add(card);
+    layOutCards();
   }
 
   //#endregion
@@ -64,6 +60,19 @@ class TableauPile extends PositionComponent implements Pile {
   void flipTopCard() {
     assert(_cards.last.isFaceDown);
     _cards.last.flip();
+  }
+
+  void layOutCards() {
+    if (_cards.isEmpty) {
+      return;
+    }
+    _cards[0].position.setFrom(position);
+    for (var i = 1; i < _cards.length; i++) {
+      _cards[i].position
+        ..setFrom(_cards[i - 1].position)
+        ..add(_cards[i - 1].isFaceDown ? _fanOffset1 : _fanOffset2);
+    }
+    height = KlondikeGame.cardHeight * 1.5 + _cards.last.y - _cards.first.y;
   }
 
   //#region Rendering
