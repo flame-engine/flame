@@ -119,7 +119,7 @@ class Compass extends PositionComponent {
 
 class CompassArrow extends PositionComponent {
   CompassArrow({required double width, required double radius})
-      : assert(width <= radius),
+      : assert(width <= radius, 'The width is larger than the radius'),
         _radius = radius,
         _width = width,
         super(size: Vector2(width, 2 * radius), anchor: Anchor.center);
@@ -154,7 +154,7 @@ class CompassArrow extends PositionComponent {
 
 class CompassRim extends PositionComponent {
   CompassRim({required double radius, required double width})
-      : assert(radius > width),
+      : assert(radius > width, 'The width is larger than the radius'),
         _radius = radius,
         _width = width,
         super(

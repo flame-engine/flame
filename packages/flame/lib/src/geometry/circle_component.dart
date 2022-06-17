@@ -13,20 +13,14 @@ class CircleComponent extends ShapeComponent implements SizeProvider {
   /// the [CircleComponent].
   CircleComponent({
     double? radius,
-    Vector2? position,
-    double? angle,
-    Anchor? anchor,
-    Iterable<Component>? children,
-    int? priority,
-    Paint? paint,
+    super.position,
+    super.angle,
+    super.anchor,
+    super.children,
+    super.priority,
+    super.paint,
   }) : super(
-          position: position,
           size: Vector2.all((radius ?? 0) * 2),
-          angle: angle,
-          anchor: anchor,
-          children: children,
-          priority: priority,
-          paint: paint,
         );
 
   /// With this constructor you define the [CircleComponent] in relation to the
@@ -38,11 +32,13 @@ class CircleComponent extends ShapeComponent implements SizeProvider {
     required Vector2 parentSize,
     double angle = 0,
     Anchor? anchor,
+    Paint? paint,
   }) : this(
           radius: relation * (min(parentSize.x, parentSize.y) / 2),
           position: position,
           angle: angle,
           anchor: anchor,
+          paint: paint,
         );
 
   /// Get the radius of the circle before scaling.

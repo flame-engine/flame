@@ -1,5 +1,6 @@
 import 'package:dashbook/dashbook.dart';
 import 'package:examples/stories/animations/animations.dart';
+import 'package:examples/stories/bridge_libraries/audio/audio.dart';
 import 'package:examples/stories/bridge_libraries/forge2d/flame_forge2d.dart';
 import 'package:examples/stories/camera_and_viewport/camera_and_viewport.dart';
 import 'package:examples/stories/collision_detection/collision_detection.dart';
@@ -17,7 +18,7 @@ import 'package:examples/stories/utils/utils.dart';
 import 'package:examples/stories/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 
-void main() async {
+void main() {
   final dashbook = Dashbook(
     title: 'Flame Examples',
     theme: ThemeData.dark(),
@@ -27,6 +28,7 @@ void main() async {
   addGameStories(dashbook);
 
   // Feature examples
+  addAudioStories(dashbook);
   addAnimationStories(dashbook);
   addCameraAndViewportStories(dashbook);
   addCollisionDetectionStories(dashbook);

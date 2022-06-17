@@ -13,10 +13,8 @@ class ComponentParticle extends Particle {
     required this.component,
     this.size,
     this.overridePaint,
-    double? lifespan,
-  }) : super(
-          lifespan: lifespan,
-        );
+    super.lifespan,
+  });
 
   @override
   void render(Canvas canvas) {

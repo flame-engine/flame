@@ -4,7 +4,9 @@ import 'package:flame_test/flame_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-void main() async {
+import 'loading_widget.dart';
+
+Future<void> main() async {
   final image = await generateImage();
 
   group('SpriteButton', () {
@@ -47,13 +49,13 @@ void main() async {
             width: 100,
             height: 100,
             label: const SizedBox(),
-            loadingBuilder: (_) => const _LoadingWidget(),
+            loadingBuilder: (_) => const LoadingWidget(),
           ),
         );
 
         final futureBuilderFinder = find.byType(FutureBuilder<List<Sprite>>);
         final nineTileBoxWidgetFinder = find.byType(InternalSpriteButton);
-        final loadingWidgetFinder = find.byType(_LoadingWidget);
+        final loadingWidgetFinder = find.byType(LoadingWidget);
 
         expect(futureBuilderFinder, findsOneWidget);
         expect(loadingWidgetFinder, findsOneWidget);
@@ -68,13 +70,4 @@ void main() async {
       },
     );
   });
-}
-
-class _LoadingWidget extends StatelessWidget {
-  const _LoadingWidget({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return const SizedBox();
-  }
 }

@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart' hide Image, Gradient;
-
 import 'package:padracing/menu_card.dart';
 import 'package:padracing/padracing_game.dart';
 
 class GameOver extends StatelessWidget {
-  const GameOver(this.game, {Key? key}) : super(key: key);
+  const GameOver(this.game, {super.key});
 
   final PadRacingGame game;
 
@@ -29,8 +28,8 @@ class GameOver extends StatelessWidget {
                 ),
                 const SizedBox(height: 10),
                 ElevatedButton(
-                  child: const Text('Restart'),
                   onPressed: game.reset,
+                  child: const Text('Restart'),
                 ),
               ],
             ),

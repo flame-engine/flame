@@ -14,7 +14,7 @@ Widget spriteButtonBuilder(DashbookContext ctx) {
       pressedSrcPosition: Vector2(0, 20),
       pressedSrcSize: Vector2(60, 20),
       onPressed: () {
-        print('Pressed');
+        // Do something
       },
       label: const Text(
         'Sprite Button',

@@ -10,23 +10,15 @@ abstract class ShapeComponent extends PositionComponent with HasPaint {
   bool renderShape = true;
 
   ShapeComponent({
-    Vector2? position,
-    Vector2? size,
-    Vector2? scale,
-    double? angle,
-    Anchor? anchor,
-    Iterable<Component>? children,
-    int? priority,
+    super.position,
+    super.size,
+    super.scale,
+    super.angle,
+    super.anchor,
+    super.children,
+    super.priority,
     Paint? paint,
-  }) : super(
-          position: position,
-          size: size,
-          scale: scale,
-          angle: angle,
-          anchor: anchor,
-          children: children,
-          priority: priority,
-        ) {
+  }) {
     this.paint = paint ?? this.paint;
   }
 }

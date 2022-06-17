@@ -232,7 +232,9 @@ class Component {
   Component? get parent => _parent;
   Component? _parent;
   set parent(Component? newParent) {
-    if (newParent == null) {
+    if (newParent == _parent) {
+      return;
+    } else if (newParent == null) {
       removeFromParent();
     } else if (_parent == null) {
       addToParent(newParent);
@@ -583,23 +585,6 @@ class Component {
     _parent?.remove(this);
   }
 
-  /// Whether this component should be removed or not.
-  ///
-  /// It will be checked once per component per tick, and if it is true,
-  /// FlameGame will remove it.
-  @nonVirtual
-  bool get shouldRemove => isRemoving;
-
-  /// Setting [shouldRemove] to true will schedule the component to be removed
-  /// from the game tree before the next game cycle.
-  ///
-  /// This property is equivalent to using the method [removeFromParent].
-  @nonVirtual
-  set shouldRemove(bool value) {
-    assert(value, '"Resurrecting" a component is not allowed');
-    removeFromParent();
-  }
-
   /// Changes the current parent for another parent and prepares the tree under
   /// the new root.
   void changeParent(Component newParent) {
@@ -809,6 +794,7 @@ class Component {
   }
 
   void _remove() {
+    assert(_parent != null, 'Trying to remove a component with no parent');
     _parent!.children.remove(this);
     propagateToChildren(
       (Component component) {

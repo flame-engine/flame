@@ -86,15 +86,6 @@ extension RectExtension on Rect {
     return Rect.fromPoints(Offset(minX, minY), Offset(maxX, maxY));
   }
 
-  /// Creates a [Rect] that represents the bounds of the list [pts].
-  @Deprecated(
-    'Use RectExtension.getBounds() instead. This function will be removed '
-    'in v1.2.0',
-  )
-  static Rect fromBounds(List<Vector2> pts) {
-    return getBounds(pts);
-  }
-
   /// Constructs a [Rect] with a [width] and [height] around the [center] point.
   static Rect fromCenter({
     required Vector2 center,
@@ -107,18 +98,5 @@ extension RectExtension on Rect {
       center.x + width / 2,
       center.y + height / 2,
     );
-  }
-
-  /// Constructs a [Rect] with a [width] and [height] around the [center] point.
-  @Deprecated(
-    'Use RectExtension.fromCenter() instead. This function will be removed '
-    'in v1.2.0',
-  )
-  static Rect fromVector2Center({
-    required Vector2 center,
-    required double width,
-    required double height,
-  }) {
-    return fromCenter(center: center, width: width, height: height);
   }
 }

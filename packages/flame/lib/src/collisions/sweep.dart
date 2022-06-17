@@ -3,7 +3,7 @@ import 'package:flame/src/collisions/collision_callbacks.dart';
 import 'package:flame/src/collisions/hitboxes/hitbox.dart';
 
 class Sweep<T extends Hitbox<T>> extends Broadphase<T> {
-  Sweep({List<T>? items}) : super(items: items);
+  Sweep({super.items});
 
   final List<T> _active = [];
   final Set<CollisionProspect<T>> _potentials = {};

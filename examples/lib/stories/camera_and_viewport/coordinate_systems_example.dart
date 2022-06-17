@@ -164,7 +164,7 @@ class CoordinateSystemsExample extends FlameGame
 /// on each direction (top, bottom, left and right) and allow adding
 /// or removing containers.
 class CoordinateSystemsWidget extends StatefulWidget {
-  const CoordinateSystemsWidget({Key? key}) : super(key: key);
+  const CoordinateSystemsWidget({super.key});
 
   @override
   State<StatefulWidget> createState() {
@@ -213,26 +213,26 @@ class _CoordinateSystemsState extends State<CoordinateSystemsWidget> {
     required bool start,
   }) {
     final add = Container(
+      margin: const EdgeInsets.all(32),
       child: Center(
         child: TextButton(
           child: const Text('+'),
           onPressed: () => setState(() => blocks[index]++),
         ),
       ),
-      margin: const EdgeInsets.all(32),
     );
     return [
       if (start) add,
       for (int i = 1; i <= blocks[index]; i++)
         GestureDetector(
           child: Container(
+            margin: const EdgeInsets.all(32),
             child: Center(
               child: RotatedBox(
                 quarterTurns: rotated ? 1 : 0,
                 child: Text('Block $i'),
               ),
             ),
-            margin: const EdgeInsets.all(32),
           ),
           onTap: () => setState(() => blocks[index]--),
         ),

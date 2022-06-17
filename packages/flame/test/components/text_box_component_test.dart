@@ -126,11 +126,11 @@ void main() {
 
 class _FramedTextBox extends TextBoxComponent {
   _FramedTextBox({
-    required String text,
-    Anchor? align,
-    Vector2? position,
-    Vector2? size,
-  }) : super(text: text, align: align, position: position, size: size);
+    required String super.text,
+    super.align,
+    super.position,
+    super.size,
+  });
 
   final Paint _borderPaint = Paint()
     ..style = PaintingStyle.stroke

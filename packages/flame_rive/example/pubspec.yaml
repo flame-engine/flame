@@ -4,22 +4,19 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.16.0 <3.0.0"
+  sdk: ">=2.17.0 <3.0.0"
 
 dependencies:
-  rive: 0.8.4
-  flame_rive:
-    path: ../
-  flame:
-    path: ../../flame
+  flame: ^1.2.0
+  flame_rive: ^1.3.0
   flutter:
     sdk: flutter
+  rive: 0.8.4
 
 dev_dependencies:
+  flame_lint: ^0.0.1
   flutter_test:
     sdk: flutter
-  flame_lint:
-    path: ../../flame_lint
 
 flutter:
   uses-material-design: true

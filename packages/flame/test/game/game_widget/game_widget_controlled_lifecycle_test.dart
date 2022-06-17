@@ -96,7 +96,7 @@ class _MyApp extends StatelessWidget {
 class _MyContainer extends StatefulWidget {
   final List<String> events;
 
-  const _MyContainer(this.events, {Key? key}) : super(key: key);
+  const _MyContainer(this.events);
 
   @override
   State<_MyContainer> createState() => _MyContainerState();

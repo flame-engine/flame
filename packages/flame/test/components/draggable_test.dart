@@ -43,7 +43,7 @@ void main() {
           () => game.ensureAdd(_DraggableComponent()),
           failsAssert(
             'Draggable Components can only be added to a FlameGame with '
-            'HasDraggables',
+            'HasDraggables or HasDraggablesBridge',
           ),
         );
       },
