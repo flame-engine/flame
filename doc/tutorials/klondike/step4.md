@@ -56,7 +56,7 @@ class StockPile extends PositionComponent {
   final List<Card> _cards = [];
 
   void acquireCard(Card card) {
-    assert(card.isFaceDown);
+    assert(!card.isFaceUp);
     card.position = position;
     card.priority = _cards.length;
     _cards.add(card);
@@ -73,7 +73,7 @@ full deck of 52 cards and put them onto the stock pile (this should be added at 
 `onLoad` method):
 ```dart
 final cards = [
-  for (var rank = 2; rank <= 13; rank++)
+  for (var rank = 1; rank <= 13; rank++)
     for (var suit = 0; suit < 4; suit++)
       Card(rank, suit)
 ];
@@ -110,7 +110,8 @@ class WastePile extends PositionComponent {
 ```
 
 So far, this puts all cards into a single neat pile, whereas we wanted a fan-out of top three. So,
-let's add a dedicated method `_fanOutTopCards()` for this, which we will call after each acquire:
+let's add a dedicated method `_fanOutTopCards()` for this, which we will call at the end of each
+`acquireCard()`:
 ```dart
   void _fanOutTopCards() {
     final n = _cards.length;
@@ -152,16 +153,14 @@ Oh, and we also need to say what we want to happen when the tap occurs. Here we 
 to be turned face up and moved to the waste pile. So, add the following method to the `StockPile`
 class:
 ```dart
-  /// Reference to the waste pile component
-  late final WastePile _waste = parent!.firstChild<WastePile>()!;
-
   @override
   void onTapUp(TapUpEvent event) {
+  final wastePile = parent!.firstChild<WastePile>()!;
     for (var i = 0; i < 3; i++) {
       if (_cards.isNotEmpty) {
         final card = _cards.removeLast();
         card.flip();
-        _waste.acquireCard(card);
+        wastePile.acquireCard(card);
       }
     }
   }
@@ -170,6 +169,14 @@ class:
 You have probably noticed that the cards move from one pile to another immediately, which looks very
 unnatural. However, this is how it is going to be for now -- we will defer making the game more
 smooth till the next chapter of the tutorial.
+
+Also, the cards are organized in a well-defined order right now, starting from Kings and ending with
+Aces. This doesn't make a very exciting gameplay though, so add line
+```dart
+    cards.shuffle();
+```
+in the `KlondikeGame` class right after the list of cards is created.
+
 
 ```{seealso}
 For more information about tap functionality, see [](../../flame/inputs/tap-events.md).
@@ -224,18 +231,20 @@ The last piece of functionality to add, is to move the cards back from the waste
 pile when the user taps on an empty stock. To implement this, we will modify the `onTapUp()` method
 like so:
 ```dart
+  @override
   void onTapUp(TapUpEvent event) {
+    final wastePile = parent!.firstChild<WastePile>()!;
     if (_cards.isEmpty) {
-      _waste.removeAllCards().reversed.forEach((card) {
+      wastePile.removeAllCards().reversed.forEach((card) {
         card.flip();
         acquireCard(card);
       });
     } else {
-     for (var i = 0; i < 3; i++) {
+      for (var i = 0; i < 3; i++) {
         if (_cards.isNotEmpty) {
           final card = _cards.removeLast();
           card.flip();
-          _waste.acquireCard(card);
+          wastePile.acquireCard(card);
         }
       }
     }
@@ -300,7 +309,7 @@ class FoundationPile extends PositionComponent {
 The code in the `KlondikeGame` class that generates the foundations will have to be adjusted
 accordingly in order to pass the suit index to each foundation.
 
-Now, the rendering code will look like this:
+Now, the rendering code for the foundation pile will look like this:
 ```dart
   @override
   void render(Canvas canvas) {
@@ -374,18 +383,26 @@ similar to how we did it for the `WastePile` component:
 ```
 
 All that remains now is to head over to the `KlondikeGame` and make sure that the cards are dealt
-into the `TableauPile`s at the beginning of the game. Add the following code at the end of the
-`onLoad()` method:
+into the `TableauPile`s at the beginning of the game. Modify the code at the end of the `onLoad()`
+method so that it looks like this:
 ```dart
   Future<void> onLoad() async {
     ...
+
+    final cards = [
+      for (var rank = 1; rank <= 13; rank++)
+        for (var suit = 0; suit < 4; suit++)
+          Card(rank, suit)
+    ];
+    cards.shuffle();
+    world.addAll(cards);
 
     for (var i = 0; i < 7; i++) {
       for (var j = i; j < 7; j++) {
         piles[j].acquireCard(cards.removeLast());
       }
+      piles[i].flipTopCard();
     }
-    piles.forEach((pile) => pile.flipTopCard());
     cards.forEach(stock.acquireCard);
   }
 ```
@@ -399,14 +416,22 @@ after that we put the remaining cards into the stock. Also, the `flipTopCard` me
   }
 ```
 
-This is it! Let's run the game, and... ok we forgot to shuffle the deck. Add the line
-`cards.shuffle()` in the `KlondikeGame` constructor when we're creating the list of cards.
-
-Ok, this is it, everything's ready! Let's run the game... The cards don't move. That seems like a
-big oversight on my part, so without further ado, presenting you the next section:
+If you run the game at this point, it would be nicely set up and look as if it was ready to play.
+Except that we can't move the cards yet, which is kinda a deal-breaker here. So without further ado,
+presenting you the next section:
 
 
 ## Moving the cards
+
+Moving the cards is a somewhat more complicated topic than what we have had so far. We will split
+it into several smaller steps:
+1.  Simple movement: grab a card and move it around.
+2.  Ensure that the user can only move the cards that they are allowed to.
+3.  Check that the cards are dropped at proper destinations.
+4.  Drag a run of cards.
+
+
+### 1. Simple movement
 
 So, we want to be able to drag the cards on the screen. This is almost as simple as making the
 `StockPile` tappable: first, we add the `HasDraggableComponents` mixin to our game class:
@@ -426,33 +451,31 @@ class Card extends PositionComponent with DragCallbacks {
 The next step is to implement the actual drag event callbacks: `onDragStart`, `onDragUpdate`, and
 `onDragEnd`.
 
-When the drag gesture is initiated, we need to perform several actions: (1) raise the priority of
-the card, so that it is rendered above all others; (2) store the initial position of the card so
-that it can be returned to where it came from if the drag didn't land properly; and (3) store the
-initial position of the tap point in parent's coordinate space, so that the card can be moved
-properly during the drag:
+When the drag gesture is initiated, the first thing that we need to do is to raise the priority of
+the card, so that it is rendered above all others. Without this, the card would be occasionally
+"sliding beneath" other cards, which would look most unnatural:
 ```dart
-  int _priorityBeforeDrag = 0;
-  final Vector2 _positionBeforeDrag = Vector2.zero();
-  final Vector2 _parentTapPoint = Vector2.zero();
-
   @override
   void onDragStart(DragStartEvent event) {
-    _priorityBeforeDrag = priority;
-    _positionBeforeDrag.setFrom(position);
-    _parentTapPoint.setFrom(event.parentPosition);
     priority = 100;
   }
 ```
 
 During the drag, the `onDragUpdate` event will be called continuously. Using this callback we will
-be updating the position of the card so that it follows the movement of the finger (or the mouse):
+be updating the position of the card so that it follows the movement of the finger (or the mouse).
+The `event` object passed to this callback contains the most recent coordinate of the point of
+touch, and also the `delta` property -- which is the displacement vector since the previous call of
+`onDragUpdate`. The only problem is that this delta is measured in screen pixels, whereas we want
+it to be in game world units. The conversion between the two is given by the camera zoom level, so
+we will add an extra method to determine the zoom level:
 ```dart
   @override
   void onDragUpdate(DragUpdateEvent event) {
-    if (event.parentPosition != null) {
-      position = _positionBeforeDrag + (event.parentPosition - _parentTapPoint);
-    }
+    final cameraZoom = (findGame()! as FlameGame)
+        .firstChild<CameraComponent>()!
+        .viewfinder
+        .zoom;
+    position += event.delta / cameraZoom;
   }
 ```
 
@@ -460,19 +483,16 @@ So far this allows you to grab any card and drag it anywhere around the table. W
 however, is to be able to restrict where the card is allowed or not allowed to go. This is where
 the core of the logic of the game begins.
 
-There are several considerations when it comes to moving the cards within the game:
-1.  How do we ensure that the user can only move the cards that they are allowed to?
-2.  How can we drag a run of cards?
-3.  How do we check that the cards are dropped at proper destinations?
 
+### 2. Move only allowed cards
 
-### 1. Move only allowed cards
+The first restriction that we impose is that the user should only be able to drag the cards that we
+allow, which include: (1) the top card of a waste pile, (2) the top card of a foundation pile, and
+(3) any face-up card in a tableau pile.
 
-The cards can be moved in following scenarios: (1) when it is the top card of a waste pile, (2)
-when it is the top card of a foundation pile, (3) when it is any face-up card in a tableau pile.
 Thus, in order to determine whether a card can be moved or not, we need to know which pile it
 currently belongs to. There could be several ways that we go about it, but seemingly the most
-straightforward is to let every card keep a reference to the pile that it belongs to.
+straightforward is to let every card keep a reference to the pile in which it currently resides.
 
 So, let's start by defining the abstract interface `Pile` that all our existing piles will be
 implementing:
@@ -506,7 +526,7 @@ class FoundationPile extends PositionComponent implements Pile {
 class TableauPile extends PositionComponent implements Pile {
   ...
   @override
-  bool canMoveCard(Card card) => card.isFaceUp;
+  bool canMoveCard(Card card) => _cards.isNotEmpty && card == _cards.last;
 }
 ```
 
@@ -526,9 +546,6 @@ it so that it would check whether the card is allowed to be moved before startin
   void onDragStart(DragStartEvent event) {
     if (pile?.canMoveCard(this) ?? false) {
       _isDragging = true;
-      _priorityBeforeDrag = priority;
-      _positionBeforeDrag.setFrom(position);
-      _parentTapPoint.setFrom(event.parentPosition!);
       priority = 100;
     }
   }
@@ -538,66 +555,230 @@ check this flag in the `onDragUpdate()` method, and to set it back to false in t
 ```dart
   @override
   void onDragUpdate(DragUpdateEvent event) {
-    if (_isDragging && event.parentPosition != null) {
-      position = _positionBeforeDrag + event.parentPosition! - _parentTapPoint;
+    if (!_isDragging) {
+      return;
     }
+    final cameraZoom = (findGame()! as FlameGame)
+        .firstChild<CameraComponent>()!
+        .viewfinder
+        .zoom;
+    position += event.delta / cameraZoom;
   }
 
   @override
   void onDragEnd(DragEndEvent event) {
-    if (_isDragging) {
-      _isDragging = false;
-      position.setFrom(_positionBeforeDrag);
-      priority = _priorityBeforeDrag;
-    }
+    _isDragging = false;
   }
 ```
 
+Now the only the proper cards can be dragged, but they still drop at random positions on the table,
+so let's work on that.
 
-So, the first challenge that we need to solve is how do we ensure that the cards can only be placed
-where they are allowed to go? To solve this, we need to be able to understand on top of which pile
-the card is when the drag gesture ends. One of the tools that we can use for this purpose is the
-`componentsAtPoint()` API. This API allows us to query which components are located at a particular
-point of the screen -- in our case we'd want to see if the point where the user is dropping a card
-is either a foundation or a tableau pile. The implementation would look like this:
+
+### 3. Dropping the cards at proper locations
+
+At this point what we want to do is to figure out where the dragged card is being dropped. More
+specifically, we want to know into which _pile_ it is being dropped. This can be achieved by using
+the `componentsAtPoint()` API, which allows you to query which components are located at a given
+position on the screen.
+
+Thus, my first attempt at revising the `onDragEnd` callback looks like this:
 ```dart
   @override
   void onDragEnd(DragEndEvent event) {
-    final game = parent! as KlondikeGame;
-    var moveSucceeded = false;
-    game.componentsAtPoint(event.screenPosition).whereType<Pile>.forEach((pile) {
-      if (pile.acceptsCard(this)) {
-        // TODO: also remove from the current owner
-        pile.acquireCard(this);
-        moveSucceeded = true;
-      }
-    });
-    if (!moveSucceeded) {
-      position.setFrom(_positionBeforeDrag);
-      priority = _priorityBeforeDrag;
+    if (!_isDragging) {
+      return;
     }
+    _isDragging = false;
+    final dropPiles = (findGame()! as FlameGame)
+        .componentsAtPoint(event.canvasPosition)
+        .whereType<Pile>()
+        .toList();
+    if (dropPiles.isNotEmpty) {
+      // if (card is allowed to be dropped into this pile) {
+      //   remove the card from the current pile
+      //   add the card into the new pile
+      // }
+    }
+    // return the card to where it was originally
   }
 ```
-where `Pile` is a small interface class which will be implemented by `Foundation` and
-`Pile`:
+This still contains several placeholders for the functionality that still needs to be implemented,
+so let's get to it.
+
+First piece of the puzzle is the "is card allowed to be dropped here?" check. To implement this,
+first head over into the `Pile` class and add the `canAcceptCard()` abstract method:
 ```dart
 abstract class Pile {
-  bool acceptsCard(Card card);
+  ...
+  bool canAcceptCard(Card card);
+}
+```
+Obviously this now needs to be implemented for every `Pile` subclass, so let's get to it:
+```dart
+class FoundationPile ... implements Pile {
+  ...
+  @override
+  bool canAcceptCard(Card card) {
+    final topCardRank = _cards.isEmpty? 0 : _cards.last.rank.value;
+    return card.suit == suit && card.rank.value == topCardRank + 1;
+  }
+}
+
+class TableauPile ... implements Pile {
+  ...
+  @override
+  bool canAcceptCard(Card card) {
+    if (_cards.isEmpty) {
+      return card.rank.value == 13;
+    } else {
+      final topCard = _cards.last;
+      return card.suit.isRed == !topCard.suit.isRed &&
+          card.rank.value == topCard.rank.value - 1;
+    }
+  }
+}
+```
+(for the `StockPile` and the `WastePile` the method should just return false, since no cards should
+be dropped there).
+
+Alright, next part is the "remove the card from its current pile". Once again, let's head over to
+the `Pile` class and add the `removeCard()` abstract method:
+```dart
+abstract class Pile {
+  ...
+  void removeCard(Card card);
+}
+```
+Then we need to re-visit all four pile subclasses and implement this method:
+```dart
+class StockPile ... implements Pile {
+  ...
+  @override
+  void removeCard(Card card) => throw StateError('cannot remove cards from here');
+}
+
+class WastePile ... implements Pile {
+  ...
+  @override
+  void removeCard(Card card) {
+    assert(canMoveCard(card));
+    _cards.removeLast();
+    _fanOutTopCards();
+  }
+}
+
+class FoundationPile ... implements Pile {
+  ...
+  @override
+  void removeCard(Card card) {
+    assert(canMoveCard(card));
+    _cards.removeLast();
+  }
+}
+
+class TableauPile ... implements Pile {
+  ...
+  @override
+  void removeCard(Card card) {
+    assert(_cards.contains(card) && card.isFaceUp);
+    final index = _cards.indexOf(card);
+    _cards.removeRange(index, _cards.length);
+    if (_cards.isNotEmpty && _cards.last.isFaceDown) {
+      flipTopCard();
+    }
+  }
+}
+```
+
+The next action in our pseudo-code is to "add the card to the new pile". But this one we have
+already implemented: it's the `acquireCard()` method. So all we need is to declare it in the `Pile`
+interface:
+```dart
+abstract class Pile {
+  ...
   void acquireCard(Card card);
 }
 ```
 
-For the `Foundation` class, the logic that allows accepting a new card would look like this:
+The last piece that's missing is "return the card to where it was". You can probably guess how we
+are going to go about this one: add the `returnCard()` method into the `Pile` interface, and then
+implement this method in all four pile subclasses:
 ```dart
-class Foundation extends PositionComponent implements CardDropLocation {
-  // ...
-
+class StockPile ... implements Pile {
+  ...
   @override
-  bool acceptsCard(Card card) {
-    return card.suit == suit && card.rank.value == _cards.length + 1;
+  void returnCard(Card card) => throw StateError('cannot remove cards from here');
+}
+
+class WastePile ... implements Pile {
+  ...
+  @override
+  void returnCard(Card card) {
+    card.priority = _cards.indexOf(card);
+    _fanOutTopCards();
+  }
+}
+
+class FoundationPile ... implements Pile {
+  ...
+  @override
+  void returnCard(Card card) {
+    card.position = position;
+    card.priority = _cards.indexOf(card);
+  }
+}
+
+class TableauPile ... implements Pile {
+  ...
+  @override
+  void returnCard(Card card) {
+    final index = _cards.indexOf(card);
+    card.position =
+        index == 0 ? position : _cards[index - 1].position + _fanOffset;
+    card.priority = index;
   }
 }
 ```
+
+Now, putting this all together, the `Card`'s `onDragEnd` method will look like this:
+```dart
+  @override
+  void onDragEnd(DragEndEvent event) {
+    if (!_isDragging) {
+      return;
+    }
+    _isDragging = false;
+    final dropPiles = (findGame()! as FlameGame)
+        .componentsAtPoint(event.canvasPosition)
+        .whereType<Pile>()
+        .toList();
+    if (dropPiles.isNotEmpty) {
+      if (dropPiles.first.canAcceptCard(this)) {
+        pile!.removeCard(this);
+        dropPiles.first.acquireCard(this);
+        return;
+      }
+    }
+    pile!.returnCard(this);
+  }
+```
+
+Ok, that was quite a lot of work -- but if you run the game now, you'd be able to move the cards
+properly from one pile to another, and they will never go where they are not supposed to go. The
+only thing that remains is to be able to move multiple cards at once between tableau piles. So take
+a short break, and then on to the next section!
+
+
+### 4. Moving a run of cards
+
+In this section we will be implementing the necessary changes to allow us to move small stacks of
+cards between the tableau piles. Before we begin, though, we need to make a small fix first.
+
+You have probably noticed when running the game in the previous section that the cards in the
+tableau piles clamp too closely together. That is, they are at the correct distance when they face
+down, but they should be at a larger distance when they face up, which is not currently the case.
+This makes it really difficult to see which cards are available for dragging.
 
 
 

@@ -1,12 +1,16 @@
 import 'package:flame/events.dart';
 import 'package:flame/extensions.dart';
-import 'package:flame/src/events/messages/event.dart';
+import 'package:flame/src/events/messages/position_event.dart';
 import 'package:flame/src/game/flame_game.dart';
 import 'package:flutter/gestures.dart';
 
-class DragEndEvent extends Event {
-  DragEndEvent(this.pointerId, DragEndDetails details)
-      : velocity = details.velocity.pixelsPerSecond.toVector2();
+class DragEndEvent extends PositionEvent {
+  DragEndEvent(
+    this.pointerId,
+    DragEndDetails details, {
+    required super.devicePosition,
+    required super.canvasPosition,
+  }) : velocity = details.velocity.pixelsPerSecond.toVector2();
 
   final int pointerId;
 

@@ -10,8 +10,10 @@ import 'package:flame/src/events/messages/drag_start_event.dart';
 import 'package:flame/src/events/messages/drag_update_event.dart';
 import 'package:flame/src/events/tagged_component.dart';
 import 'package:flame/src/game/flame_game.dart';
+import 'package:flame/src/image_composition.dart';
 import 'package:flutter/gestures.dart';
 import 'package:meta/meta.dart';
+import 'package:vector_math/vector_math_64.dart';
 
 /// This mixin allows a [FlameGame] to respond to drag events, and also delivers
 /// those events to components that have the [DragCallbacks] mixin.
@@ -144,23 +146,35 @@ mixin HasDraggableComponents on FlameGame implements MultiDragListener {
   }
 
   //#region MultiDragListener API
+  final Map<int, _PositionsPair> _lastUpdatePositions = {};
 
   @internal
   @override
   void handleDragStart(int pointerId, DragStartDetails details) {
+    _lastUpdatePositions[pointerId] = _PositionsPair();
     onDragStart(DragStartEvent(pointerId, details));
   }
 
   @internal
   @override
   void handleDragUpdate(int pointerId, DragUpdateDetails details) {
+    _lastUpdatePositions[pointerId]!
+      ..devicePosition.setFrom(details.globalPosition.toVector2())
+      ..canvasPosition.setFrom(details.localPosition.toVector2());
     onDragUpdate(DragUpdateEvent(pointerId, details));
   }
 
   @internal
   @override
   void handleDragEnd(int pointerId, DragEndDetails details) {
-    onDragEnd(DragEndEvent(pointerId, details));
+    onDragEnd(
+      DragEndEvent(
+        pointerId,
+        details,
+        devicePosition: _lastUpdatePositions[pointerId]!.devicePosition,
+        canvasPosition: _lastUpdatePositions[pointerId]!.canvasPosition,
+      ),
+    );
   }
 
   @internal
@@ -170,4 +184,9 @@ mixin HasDraggableComponents on FlameGame implements MultiDragListener {
   }
 
   //#endregion
+}
+
+class _PositionsPair {
+  Vector2 devicePosition = Vector2.zero();
+  Vector2 canvasPosition = Vector2.zero();
 }

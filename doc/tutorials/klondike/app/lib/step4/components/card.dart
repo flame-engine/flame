@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:flame/components.dart';
 import 'package:flame/experimental.dart';
+import 'package:flame/game.dart';
 import '../klondike_game.dart';
 import '../pile.dart';
 import '../rank.dart';
@@ -215,34 +216,47 @@ class Card extends PositionComponent with DragCallbacks {
 
   //#endregion
 
-  int _priorityBeforeDrag = 0;
-  final Vector2 _positionBeforeDrag = Vector2.zero();
-  final Vector2 _parentTapPoint = Vector2.zero();
+  //#region Dragging
 
   @override
   void onDragStart(DragStartEvent event) {
     if (pile?.canMoveCard(this) ?? false) {
       _isDragging = true;
-      _priorityBeforeDrag = priority;
-      _positionBeforeDrag.setFrom(position);
-      _parentTapPoint.setFrom(event.parentPosition!);
       priority = 100;
     }
   }
 
   @override
   void onDragUpdate(DragUpdateEvent event) {
-    if (_isDragging && event.parentPosition != null) {
-      position = _positionBeforeDrag + event.parentPosition! - _parentTapPoint;
+    if (!_isDragging) {
+      return;
     }
+    final cameraZoom = (findGame()! as FlameGame)
+        .firstChild<CameraComponent>()!
+        .viewfinder
+        .zoom;
+    position += event.delta / cameraZoom;
   }
 
   @override
   void onDragEnd(DragEndEvent event) {
-    if (_isDragging) {
-      _isDragging = false;
-      position.setFrom(_positionBeforeDrag);
-      priority = _priorityBeforeDrag;
+    if (!_isDragging) {
+      return;
     }
+    _isDragging = false;
+    final dropPiles = (findGame()! as FlameGame)
+        .componentsAtPoint(event.canvasPosition)
+        .whereType<Pile>()
+        .toList();
+    if (dropPiles.isNotEmpty) {
+      if (dropPiles.first.canAcceptCard(this)) {
+        pile!.removeCard(this);
+        dropPiles.first.acquireCard(this);
+        return;
+      }
+    }
+    pile!.returnCard(this);
   }
+
+  //#endregion
 }

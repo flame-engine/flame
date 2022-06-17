@@ -15,12 +15,21 @@ class StockPile extends PositionComponent with TapCallbacks implements Pile {
   /// list is at the bottom, the last card is on top.
   final List<Card> _cards = [];
 
-  /// Reference to the waste pile component
-  late final WastePile _waste = parent!.firstChild<WastePile>()!;
+  //#region Pile API
 
   @override
   bool canMoveCard(Card card) => false;
 
+  @override
+  bool canAcceptCard(Card card) => false;
+
+  @override
+  void removeCard(Card card) => throw StateError('cannot remove cards');
+
+  @override
+  void returnCard(Card card) => throw StateError('cannot remove cards');
+
+  @override
   void acquireCard(Card card) {
     assert(card.isFaceDown);
     card.pile = this;
@@ -29,10 +38,13 @@ class StockPile extends PositionComponent with TapCallbacks implements Pile {
     _cards.add(card);
   }
 
+  //#endregion
+
   @override
   void onTapUp(TapUpEvent event) {
+    final wastePile = parent!.firstChild<WastePile>()!;
     if (_cards.isEmpty) {
-      _waste.removeAllCards().reversed.forEach((card) {
+      wastePile.removeAllCards().reversed.forEach((card) {
         card.flip();
         acquireCard(card);
       });
@@ -41,7 +53,7 @@ class StockPile extends PositionComponent with TapCallbacks implements Pile {
         if (_cards.isNotEmpty) {
           final card = _cards.removeLast();
           card.flip();
-          _waste.acquireCard(card);
+          wastePile.acquireCard(card);
         }
       }
     }
