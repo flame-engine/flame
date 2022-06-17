@@ -1,5 +1,6 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flame/src/geometry/ray2.dart';
 
 /// [CollisionDetection] is the foundation of the collision detection system in
 /// Flame.
@@ -64,6 +65,28 @@ abstract class CollisionDetection<T extends Hitbox<T>> {
   void handleCollisionStart(Set<Vector2> intersectionPoints, T itemA, T itemB);
   void handleCollision(Set<Vector2> intersectionPoints, T itemA, T itemB);
   void handleCollisionEnd(T itemA, T itemB);
+
+  /// [raycast] gives back the first hitbox and intersection point which the
+  /// ray hits. If there is no intersection null is returned.
+  ///
+  /// If [out] is provided that object will be modified and returned with the
+  /// result.
+  RaycastResult<T>? raycast(Ray2 ray, {RaycastResult<T>? out});
+
+  /// [raycastAll] gives back the all hitboxes and the intersection points which
+  /// the ray hits.
+  ///
+  /// If [out] is provided the [RaycastResult]s in that list be modified and
+  /// returned with the result. If there are less objects in [out] than the
+  /// result requires, the missing [RaycastResult] objects will be created.
+  Set<RaycastResult<T>> raycastAll(Ray2 ray, {Iterable<RaycastResult<T>>? out});
+}
+
+class RaycastResult<T extends Hitbox<T>> {
+  RaycastResult({required this.hitbox, this.point});
+
+  Vector2? point;
+  T hitbox;
 }
 
 /// The default implementation of [CollisionDetection].
@@ -123,5 +146,23 @@ class StandardCollisionDetection extends CollisionDetection<ShapeHitbox> {
   void handleCollisionEnd(ShapeHitbox hitboxA, ShapeHitbox hitboxB) {
     hitboxA.onCollisionEnd(hitboxB);
     hitboxB.onCollisionEnd(hitboxA);
+  }
+
+  @override
+  RaycastResult<ShapeHitbox>? raycast(
+    Ray2 ray, {
+    RaycastResult<Hitbox<ShapeHitbox>>? out,
+  }) {
+    // TODO: implement raycast
+    throw UnimplementedError();
+  }
+
+  @override
+  Set<RaycastResult<ShapeHitbox>> raycastAll(
+    Ray2 ray, {
+    Iterable<RaycastResult<Hitbox<ShapeHitbox>>>? out,
+  }) {
+    // TODO: implement raycastAll
+    throw UnimplementedError();
   }
 }

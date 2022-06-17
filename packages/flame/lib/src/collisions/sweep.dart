@@ -1,12 +1,12 @@
-import 'package:flame/src/collisions/broadphase.dart';
-import 'package:flame/src/collisions/collision_callbacks.dart';
-import 'package:flame/src/collisions/hitboxes/hitbox.dart';
+import 'package:flame/collisions.dart';
+import 'package:flame/geometry.dart';
 
 class Sweep<T extends Hitbox<T>> extends Broadphase<T> {
   Sweep({super.items});
 
-  final List<T> _active = [];
-  final Set<CollisionProspect<T>> _potentials = {};
+  late final List<T> _active = [];
+  late final Set<CollisionProspect<T>> _potentials = {};
+  late final Set<RaycastResult<T>> _raycastPotentials = {};
 
   @override
   Set<CollisionProspect<T>> query() {
@@ -38,5 +38,38 @@ class Sweep<T extends Hitbox<T>> extends Broadphase<T> {
       _active.add(item);
     }
     return _potentials;
+  }
+
+  @override
+  Set<RaycastResult<T>>? raycast(Ray2 ray, {Iterable<RaycastResult<T>>? out}) {
+    _raycastPotentials.clear();
+    final outIterator = out?.iterator;
+    items.sort((a, b) => (a.aabb.min.x - b.aabb.min.x).ceil());
+    for (final item in items) {
+      if (item.collisionType == CollisionType.inactive) {
+        continue;
+      }
+      final currentBox = item.aabb;
+      if (ray.direction.x <= 0) {
+        if (currentBox.min.x > ray.origin.x) {
+          break;
+        }
+        if ((currentBox.max.x - ray.origin.x) > 0) {
+          continue;
+        }
+      } else {
+        if ((currentBox.max.x - ray.origin.x) <= 0) {
+          continue;
+        }
+      }
+
+      if (ray.intersectsWithAabb2(currentBox)) {
+        final potential = (outIterator?.moveNext() ?? false)
+            ? outIterator!.current
+            : RaycastResult(hitbox: item);
+        _raycastPotentials.add(potential);
+      }
+    }
+    return _raycastPotentials;
   }
 }

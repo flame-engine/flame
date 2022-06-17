@@ -1,4 +1,5 @@
 import 'package:flame/collisions.dart';
+import 'package:flame/geometry.dart';
 import 'package:meta/meta.dart';
 
 /// The [Broadphase] class is used to make collision detection more efficient
@@ -13,6 +14,8 @@ abstract class Broadphase<T extends Hitbox<T>> {
   Broadphase({List<T>? items}) : items = items ?? [];
 
   Set<CollisionProspect<T>> query();
+
+  Set<RaycastResult<T>>? raycast(Ray2 ray);
 }
 
 /// A [CollisionProspect] is a tuple that is used to contain two potentially
