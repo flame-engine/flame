@@ -41,7 +41,7 @@ class Sweep<T extends Hitbox<T>> extends Broadphase<T> {
   }
 
   @override
-  Set<RaycastResult<T>>? raycast(Ray2 ray, {Iterable<RaycastResult<T>>? out}) {
+  Set<RaycastResult<T>> raycast(Ray2 ray, {Iterable<RaycastResult<T>>? out}) {
     _raycastPotentials.clear();
     final outIterator = out?.iterator;
     items.sort((a, b) => (a.aabb.min.x - b.aabb.min.x).ceil());
