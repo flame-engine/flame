@@ -590,10 +590,8 @@ Thus, my first attempt at revising the `onDragEnd` callback looks like this:
       return;
     }
     _isDragging = false;
-    final dropPiles = (findGame()! as FlameGame)
-        .componentsAtPoint(event.canvasPosition)
-        .whereType<Pile>()
-        .toList();
+    final dropPiles =
+        parent!.componentsAtPoint(position).whereType<Pile>().toList();
     if (dropPiles.isNotEmpty) {
       // if (card is allowed to be dropped into this pile) {
       //   remove the card from the current pile
@@ -749,10 +747,8 @@ Now, putting this all together, the `Card`'s `onDragEnd` method will look like t
       return;
     }
     _isDragging = false;
-    final dropPiles = (findGame()! as FlameGame)
-        .componentsAtPoint(event.canvasPosition)
-        .whereType<Pile>()
-        .toList();
+    final dropPiles =
+        parent!.componentsAtPoint(position).whereType<Pile>().toList();
     if (dropPiles.isNotEmpty) {
       if (dropPiles.first.canAcceptCard(this)) {
         pile!.removeCard(this);

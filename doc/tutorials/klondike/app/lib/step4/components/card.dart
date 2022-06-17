@@ -244,10 +244,8 @@ class Card extends PositionComponent with DragCallbacks {
       return;
     }
     _isDragging = false;
-    final dropPiles = (findGame()! as FlameGame)
-        .componentsAtPoint(event.canvasPosition)
-        .whereType<Pile>()
-        .toList();
+    final dropPiles =
+        parent!.componentsAtPoint(position).whereType<Pile>().toList();
     if (dropPiles.isNotEmpty) {
       if (dropPiles.first.canAcceptCard(this)) {
         pile!.removeCard(this);
