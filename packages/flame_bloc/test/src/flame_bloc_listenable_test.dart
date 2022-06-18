@@ -98,5 +98,21 @@ void main() {
         expect(component.last, isNull);
       },
     );
+
+    testWithFlameGame(
+      'successfully retreive the bloc via getter',
+      (game) async {
+        final bloc = PlayerCubit();
+        final provider = FlameBlocProvider<PlayerCubit, PlayerState>.value(
+          value: bloc,
+        );
+        await game.ensureAdd(provider);
+
+        final component = PlayerListener();
+        await provider.ensureAdd(component);
+
+        expect(component.bloc, bloc);
+      },
+    );
   });
 }
