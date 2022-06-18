@@ -7,7 +7,7 @@ import 'package:meta/meta.dart';
 class HasCollidablesGame extends FlameGame with HasCollisionDetection {}
 
 @isTest
-Future<void> testCollidableGame(
+Future<void> testCollisionDetectionGame(
   String testName,
   Future Function(HasCollidablesGame) testBody,
 ) {

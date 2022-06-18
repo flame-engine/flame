@@ -1,7 +1,11 @@
+import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/geometry.dart';
 import 'package:flame/geometry.dart' as geometry;
+import 'package:flame_test/flame_test.dart';
 import 'package:test/test.dart';
+
+import 'collision_test_helpers.dart';
 
 void main() {
   group('LineSegment.isPointOnSegment', () {
@@ -673,6 +677,22 @@ void main() {
         true,
         reason: 'Should not be any intersections',
       );
+    });
+  });
+
+  group('Raycasting', () {
+    testCollisionDetectionGame('basic raycasting', (game) async {
+      game.ensureAddAll([
+        for (var i = 0.0; i < 10; i++)
+          PositionComponent(
+            position: Vector2.all(100 + i * 10),
+            size: Vector2.all(20 - i),
+          )..add(RectangleHitbox()),
+      ]);
+      await game.ready();
+      final ray = Ray2(Vector2.zero(), Vector2.all(1)..normalized());
+      final result = game.collisionDetection.raycast(ray);
+      expect(result?.hitbox?.parent, game.children.first);
     });
   });
 }

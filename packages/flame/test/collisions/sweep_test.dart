@@ -8,7 +8,7 @@ import 'collision_test_helpers.dart';
 void main() {
   group('Sweep', () {
     group('raycast', () {
-      testCollidableGame('detects CircleHitbox', (game) async {
+      testCollisionDetectionGame('detects CircleHitbox', (game) async {
         final circleHitbox = CircleHitbox();
         game.add(
           PositionComponent(
@@ -22,7 +22,7 @@ void main() {
         expect(sweep.raycast(ray).first, circleHitbox);
       });
 
-      testCollidableGame('detects RectangleHitbox', (game) async {
+      testCollisionDetectionGame('detects RectangleHitbox', (game) async {
         final rectangleHitbox = RectangleHitbox();
         game.add(
           PositionComponent(
@@ -36,7 +36,7 @@ void main() {
         expect(sweep.raycast(ray).first, rectangleHitbox);
       });
 
-      testCollidableGame('detects PolygonHitbox', (game) async {
+      testCollisionDetectionGame('detects PolygonHitbox', (game) async {
         final polygonHitbox = PolygonHitbox([
           Vector2(1, 0),
           Vector2(0, 1),
@@ -55,7 +55,7 @@ void main() {
         expect(sweep.raycast(ray).first, polygonHitbox);
       });
 
-      testCollidableGame('empty list on no results', (game) async {
+      testCollisionDetectionGame('empty list on no results', (game) async {
         final circleHitbox = CircleHitbox();
         game.add(
           PositionComponent(
@@ -69,7 +69,7 @@ void main() {
         expect(sweep.raycast(ray).isEmpty, isTrue);
       });
 
-      testCollidableGame('detects multiple hitboxes', (game) async {
+      testCollisionDetectionGame('detects multiple hitboxes', (game) async {
         game.addAll([
           for (var i = 0.0; i < 10; i++)
             PositionComponent(
