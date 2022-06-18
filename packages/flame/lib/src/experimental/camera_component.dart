@@ -122,7 +122,7 @@ class CameraComponent extends Component {
       if (viewport.containsLocalPoint(viewportPoint)) {
         currentCameras.add(this);
         final worldPoint = viewfinder.transform.globalToLocal(viewportPoint);
-        yield* world.componentsAtPointFromCamera(worldPoint, nestedPoints);
+        yield* world.componentsAtPoint(worldPoint, nestedPoints);
         yield* viewfinder.componentsAtPoint(worldPoint, nestedPoints);
         currentCameras.removeLast();
       }
