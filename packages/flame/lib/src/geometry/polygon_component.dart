@@ -259,7 +259,7 @@ class PolygonComponent extends ShapeComponent {
     var closestDistance = double.infinity;
     LineSegment? closestSegment;
     var crossings = 0;
-    for (var i = 0; i < vertices.length - i; i++) {
+    for (var i = 0; i < vertices.length; i++) {
       final lineSegment = getEdge(i, vertices: vertices);
       final distance = ray.lineSegmentIntersection(lineSegment);
       if (distance != null) {
@@ -275,7 +275,7 @@ class PolygonComponent extends ShapeComponent {
         closestDistance,
         out: out?.point ?? Vector2.zero(),
       );
-      final perpendicularDirection = (out?.ray?.direction ?? Vector2.zero())
+      final perpendicularDirection = (out?.ray.direction ?? Vector2.zero())
         ..setFrom(closestSegment!.to)
         ..sub(closestSegment.from);
       perpendicularDirection.setValues(
@@ -289,6 +289,8 @@ class PolygonComponent extends ShapeComponent {
           distance: closestDistance,
         );
     }
+    // TODO(spydon): Handle if there is one crossing
+    // (if the origin of the ray is inside of the hitbox)
     return null;
   }
 

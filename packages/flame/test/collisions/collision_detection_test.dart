@@ -681,12 +681,28 @@ void main() {
   });
 
   group('Raycasting', () {
+    testCollisionDetectionGame('one hitbox', (game) async {
+      game.ensureAdd(
+        PositionComponent(
+          children: [RectangleHitbox()],
+          position: Vector2(100, 0),
+          size: Vector2.all(100),
+          anchor: Anchor.center,
+        ),
+      );
+      await game.ready();
+      final ray = Ray2(Vector2.zero(), Vector2(1, 0));
+      final result = game.collisionDetection.raycast(ray);
+      expect(result?.hitbox?.parent, game.children.first);
+    });
+
     testCollisionDetectionGame('basic raycasting', (game) async {
       game.ensureAddAll([
         for (var i = 0.0; i < 10; i++)
           PositionComponent(
-            position: Vector2.all(100 + i * 10),
+            position: Vector2.all(100 + i * 10)..x += 0.1,
             size: Vector2.all(20 - i),
+            anchor: Anchor.center,
           )..add(RectangleHitbox()),
       ]);
       await game.ready();
