@@ -24,8 +24,10 @@ class FoundationPile extends PositionComponent implements Pile {
 
   @override
   bool canAcceptCard(Card card) {
-    final topCardRank = _cards.isEmpty? 0 : _cards.last.rank.value;
-    return card.suit == suit && card.rank.value == topCardRank + 1;
+    final topCardRank = _cards.isEmpty ? 0 : _cards.last.rank.value;
+    return card.suit == suit &&
+        card.rank.value == topCardRank + 1 &&
+        card.attachedCards.isEmpty;
   }
 
   @override
@@ -58,7 +60,7 @@ class FoundationPile extends PositionComponent implements Pile {
     ..strokeWidth = 10
     ..color = const Color(0x50ffffff);
   late final _suitPaint = Paint()
-    ..color = suit.isRed? const Color(0x3a000000) : const Color(0x64000000)
+    ..color = suit.isRed ? const Color(0x3a000000) : const Color(0x64000000)
     ..blendMode = BlendMode.luminosity;
 
   @override

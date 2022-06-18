@@ -813,7 +813,114 @@ at the end of the `layOutCards()` method:
 The factor `1.5` here adds a little bit extra space at the bottom of each pile. You can temporarily
 turn the debug mode on to see the hitboxes.
 
+Ok, let's get to our main topic: how to move a stack of cards at once.
 
+First thing that we're going to add is the list of `attachedCards` for every card. This list will
+be non-empty only when the card is being dragged while having other cards on top. Add the following
+declaration to the `Card` class:
+```dart
+  final List<Card> attachedCards = [];
+```
+
+Now, in order to create this list in `onDragStart`, we need to query the `TableauPile` for the list
+of cards that are on top of the given card. Let's add such a method into the `TableauPile` class:
+```dart
+  List<Card> cardsOnTop(Card card) {
+    assert(card.isFaceUp && _cards.contains(card));
+    final index = _cards.indexOf(card);
+    return _cards.getRange(index + 1, _cards.length).toList();
+  }
+```
+While we are in the `TableauPile` class, let's also update the `canMoveCard()` method to allow
+dragging cards that are not necessarily on top:
+```dart
+  @override
+  bool canMoveCard(Card card) => card.isFaceUp;
+```
+
+Heading back into the `Card` class, we can use this method in order to populate the list of
+`attachedCards` when the card starts to move:
+```dart
+  @override
+  void onDragStart(DragStartEvent event) {
+    if (pile?.canMoveCard(this) ?? false) {
+      _isDragging = true;
+      priority = 100;
+      if (pile is TableauPile) {
+        attachedCards.clear();
+        final extraCards = (pile! as TableauPile).cardsOnTop(this);
+        for (final card in extraCards) {
+          card.priority = attachedCards.length + 101;
+          attachedCards.add(card);
+        }
+      }
+    }
+  }
+```
+
+Now all we need to do is to make sure that the attached cards are also moved with the main card in
+the `onDragUpdate` method:
+```dart
+  @override
+  void onDragUpdate(DragUpdateEvent event) {
+    if (!_isDragging) {
+      return;
+    }
+    final cameraZoom = (findGame()! as FlameGame)
+        .firstChild<CameraComponent>()!
+        .viewfinder
+        .zoom;
+    final delta = event.delta / cameraZoom;
+    position.add(delta);
+    attachedCards.forEach((card) => card.position.add(delta));
+  }
+```
+
+This does the trick, almost. All that remains is to fix any loose ends. For example, we don't want
+to let the user drop a stack of cards onto a foundation pile, so let's head over into the
+`FoundationPile` class and modify the `canAcceptCard()` method accordingly:
+```dart
+  @override
+  bool canAcceptCard(Card card) {
+    final topCardRank = _cards.isEmpty ? 0 : _cards.last.rank.value;
+    return card.suit == suit &&
+        card.rank.value == topCardRank + 1 &&
+        card.attachedCards.isEmpty;
+  }
+```
+
+Secondly, we need to properly take care of the stack of card as it is being dropped into a tableau
+pile. So, go back into the `Card` class and update its `onDragEnd()` method to also move the
+attached cards into the pile, and the same when it comes to returning the cards into the old pile:
+```dart
+  @override
+  void onDragEnd(DragEndEvent event) {
+    if (!_isDragging) {
+      return;
+    }
+    _isDragging = false;
+    final dropPiles = parent!
+        .componentsAtPoint(position + size / 2)
+        .whereType<Pile>()
+        .toList();
+    if (dropPiles.isNotEmpty) {
+      if (dropPiles.first.canAcceptCard(this)) {
+        pile!.removeCard(this);
+        dropPiles.first.acquireCard(this);
+        if (attachedCards.isNotEmpty) {
+          attachedCards.forEach((card) => dropPiles.first.acquireCard(card));
+          attachedCards.clear();
+        }
+        return;
+      }
+    }
+    pile!.returnCard(this);
+    if (attachedCards.isNotEmpty) {
+      attachedCards.forEach((card) => pile!.returnCard(card));
+      attachedCards.clear();
+    }
+  }
+```
 
 
 <!-- ```{flutter-app} -->
