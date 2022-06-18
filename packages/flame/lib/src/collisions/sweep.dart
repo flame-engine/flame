@@ -6,7 +6,7 @@ class Sweep<T extends Hitbox<T>> extends Broadphase<T> {
 
   late final List<T> _active = [];
   late final Set<CollisionProspect<T>> _potentials = {};
-  late final Set<RaycastResult<T>> _raycastPotentials = {};
+  late final Set<T> _raycastPotentials = {};
 
   @override
   Set<CollisionProspect<T>> query() {
@@ -41,9 +41,8 @@ class Sweep<T extends Hitbox<T>> extends Broadphase<T> {
   }
 
   @override
-  Set<RaycastResult<T>> raycast(Ray2 ray, {Iterable<RaycastResult<T>>? out}) {
+  Set<T> raycast(Ray2 ray) {
     _raycastPotentials.clear();
-    final outIterator = out?.iterator;
     items.sort((a, b) => (a.aabb.min.x - b.aabb.min.x).ceil());
     for (final item in items) {
       if (item.collisionType == CollisionType.inactive) {
@@ -64,10 +63,7 @@ class Sweep<T extends Hitbox<T>> extends Broadphase<T> {
       }
 
       if (ray.intersectsWithAabb2(currentBox)) {
-        final potential = (outIterator?.moveNext() ?? false)
-            ? outIterator!.current
-            : RaycastResult(hitbox: item);
-        _raycastPotentials.add(potential);
+        _raycastPotentials.add(item);
       }
     }
     return _raycastPotentials;

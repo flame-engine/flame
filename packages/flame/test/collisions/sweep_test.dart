@@ -19,7 +19,7 @@ void main() {
         await game.ready();
         final ray = Ray2(Vector2.zero(), Vector2.all(1)..normalized());
         final sweep = game.collisionDetection.broadphase;
-        expect(sweep.raycast(ray).first.hitbox, circleHitbox);
+        expect(sweep.raycast(ray).first, circleHitbox);
       });
 
       testCollidableGame('detects RectangleHitbox', (game) async {
@@ -33,7 +33,7 @@ void main() {
         await game.ready();
         final ray = Ray2(Vector2.zero(), Vector2.all(1)..normalized());
         final sweep = game.collisionDetection.broadphase;
-        expect(sweep.raycast(ray).first.hitbox, rectangleHitbox);
+        expect(sweep.raycast(ray).first, rectangleHitbox);
       });
 
       testCollidableGame('detects PolygonHitbox', (game) async {
@@ -52,7 +52,7 @@ void main() {
         await game.ready();
         final ray = Ray2(Vector2.zero(), Vector2.all(1)..normalized());
         final sweep = game.collisionDetection.broadphase;
-        expect(sweep.raycast(ray).first.hitbox, polygonHitbox);
+        expect(sweep.raycast(ray).first, polygonHitbox);
       });
 
       testCollidableGame('empty list on no results', (game) async {

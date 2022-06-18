@@ -2,6 +2,8 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:collection/collection.dart';
+import 'package:flame/collisions.dart';
+import 'package:flame/geometry.dart';
 import 'package:flame/src/anchor.dart';
 import 'package:flame/src/cache/value_cache.dart';
 import 'package:flame/src/extensions/rect.dart';
@@ -247,6 +249,47 @@ class PolygonComponent extends ShapeComponent {
       }
     }
     return rectIntersections;
+  }
+
+  RaycastResult<ShapeHitbox>? rayIntersection(
+    Ray2 ray, {
+    RaycastResult<ShapeHitbox>? out,
+  }) {
+    final vertices = globalVertices();
+    var closestDistance = double.infinity;
+    LineSegment? closestSegment;
+    var crossings = 0;
+    for (var i = 0; i < vertices.length - i; i++) {
+      final lineSegment = getEdge(i, vertices: vertices);
+      final distance = ray.lineSegmentIntersection(lineSegment);
+      if (distance != null) {
+        crossings++;
+        if (distance < closestDistance) {
+          closestDistance = distance;
+          closestSegment = lineSegment;
+        }
+      }
+    }
+    if (crossings > 0 && crossings.isEven) {
+      final intersectionPoint = ray.point(
+        closestDistance,
+        out: out?.point ?? Vector2.zero(),
+      );
+      final perpendicularDirection = (out?.ray?.direction ?? Vector2.zero())
+        ..setFrom(closestSegment!.to)
+        ..sub(closestSegment.from);
+      perpendicularDirection.setValues(
+        -perpendicularDirection.y,
+        perpendicularDirection.x,
+      );
+
+      return (out ?? RaycastResult<ShapeHitbox>())
+        ..setWith(
+          ray: Ray2(intersectionPoint, perpendicularDirection),
+          distance: closestDistance,
+        );
+    }
+    return null;
   }
 
   LineSegment getEdge(int i, {required List<Vector2> vertices}) {

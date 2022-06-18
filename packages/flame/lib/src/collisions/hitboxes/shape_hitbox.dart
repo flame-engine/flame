@@ -1,6 +1,7 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
+import 'package:flame/geometry.dart';
 import 'package:flame/src/geometry/shape_intersections.dart'
     as intersection_system;
 import 'package:meta/meta.dart';
@@ -128,6 +129,15 @@ mixin ShapeHitbox on ShapeComponent implements Hitbox<ShapeHitbox> {
         allowSiblingCollision || hitboxParent != other.hitboxParent;
     return collisionAllowed && aabb.intersectsWithAabb2(other.aabb);
   }
+
+  /// Returns the reflection of the ray against the closest.
+  ///
+  /// If you are only interested in the intersection point use
+  /// [RaycastResult.point] of the result.
+  RaycastResult<ShapeHitbox>? rayIntersection(
+    Ray2 ray, {
+    RaycastResult<ShapeHitbox>? out,
+  });
 
   /// This determines how the shape should scale if it should try to fill its
   /// parents boundaries.

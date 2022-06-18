@@ -82,13 +82,6 @@ abstract class CollisionDetection<T extends Hitbox<T>> {
   Set<RaycastResult<T>> raycastAll(Ray2 ray, {Iterable<RaycastResult<T>>? out});
 }
 
-class RaycastResult<T extends Hitbox<T>> {
-  RaycastResult({required this.hitbox, this.point});
-
-  Vector2? point;
-  T hitbox;
-}
-
 /// The default implementation of [CollisionDetection].
 /// Checks whether any [ShapeHitbox]s in [items] collide with each other and
 /// calls their callback methods accordingly.
@@ -148,13 +141,28 @@ class StandardCollisionDetection extends CollisionDetection<ShapeHitbox> {
     hitboxB.onCollisionEnd(hitboxA);
   }
 
+  late final _temporaryRaycastResult = RaycastResult<ShapeHitbox>();
+
   @override
   RaycastResult<ShapeHitbox>? raycast(
     Ray2 ray, {
-    RaycastResult<Hitbox<ShapeHitbox>>? out,
+    RaycastResult<ShapeHitbox>? out,
   }) {
-    // TODO: implement raycast
-    throw UnimplementedError();
+    final broadphaseResult = broadphase.raycast(ray);
+    if (broadphaseResult.isEmpty) {
+      return null;
+    }
+    final raycastResult = (out?..reset()) ?? RaycastResult();
+    var hasResult = false;
+    for (final potential in broadphaseResult) {
+      final result =
+          potential.rayIntersection(ray, out: _temporaryRaycastResult);
+      if (result != null && result.distance < raycastResult.distance) {
+        hasResult = true;
+        raycastResult.setFrom(result);
+      }
+    }
+    return hasResult ? raycastResult : null;
   }
 
   @override

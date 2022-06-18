@@ -15,7 +15,8 @@ abstract class Broadphase<T extends Hitbox<T>> {
 
   Set<CollisionProspect<T>> query();
 
-  Set<RaycastResult<T>> raycast(Ray2 ray);
+  /// Returns potential [T] hitboxes that the ray can intersect.
+  Set<T> raycast(Ray2 ray);
 }
 
 /// A [CollisionProspect] is a tuple that is used to contain two potentially
