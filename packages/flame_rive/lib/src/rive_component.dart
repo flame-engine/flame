@@ -162,6 +162,6 @@ Future<Artboard> loadArtboard(
 }) async {
   final loaded = await file;
   return artboardName == null
-      ? loaded.mainArtboard
-      : loaded.artboardByName(artboardName) ?? loaded.mainArtboard;
+      ? loaded.mainArtboard.instance()
+      : loaded.artboardByName(artboardName)!.instance();
 }
