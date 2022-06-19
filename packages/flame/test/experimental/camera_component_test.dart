@@ -139,6 +139,17 @@ void main() {
       expect(it.current, game);
       expect(nested, [Vector2(400, 300)]);
       expect(it.moveNext(), false);
+
+      // Check that `componentsAtPoint` is usable with non-top-level components
+      // also.
+      expect(
+        world.componentsAtPoint(Vector2(100, 100)).toList(),
+        [component, world],
+      );
+      expect(
+        component.componentsAtPoint(Vector2(100, 50)).toList(),
+        [component],
+      );
     });
   });
 }
