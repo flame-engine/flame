@@ -691,7 +691,7 @@ void main() {
         ),
       );
       await game.ready();
-      final ray = Ray2(Vector2.zero(), Vector2(1, 0));
+      final ray = Ray2(Vector2.zero(), Vector2(1, 0.001)..normalized());
       final result = game.collisionDetection.raycast(ray);
       expect(result?.hitbox?.parent, game.children.first);
     });

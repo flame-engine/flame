@@ -13,8 +13,8 @@ class RaycastResult<T extends Hitbox<T>> {
   }
 
   T? hitbox;
-  late Ray2 ray;
-  Vector2 get point => ray.origin;
+  Ray2? ray;
+  Vector2? get point => ray?.origin;
   double distance = double.maxFinite;
 
   void setWith({T? hitbox, required Ray2 ray, double? distance}) {

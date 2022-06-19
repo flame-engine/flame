@@ -275,7 +275,7 @@ class PolygonComponent extends ShapeComponent {
         closestDistance,
         out: out?.point ?? Vector2.zero(),
       );
-      final perpendicularDirection = (out?.ray.direction ?? Vector2.zero())
+      final perpendicularDirection = (out?.ray?.direction ?? Vector2.zero())
         ..setFrom(closestSegment!.to)
         ..sub(closestSegment.from);
       perpendicularDirection.setValues(
@@ -285,6 +285,8 @@ class PolygonComponent extends ShapeComponent {
 
       return (out ?? RaycastResult<ShapeHitbox>())
         ..setWith(
+          hitbox: this
+              as ShapeHitbox, // TODO(spydon): This class should probably not be aware of ShapeHitbox
           ray: Ray2(intersectionPoint, perpendicularDirection),
           distance: closestDistance,
         );

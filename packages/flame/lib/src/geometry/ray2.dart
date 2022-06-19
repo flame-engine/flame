@@ -122,8 +122,8 @@ class Ray2 {
       ..setFrom(origin)
       ..sub(segment.from);
     _v2
-      ..setFrom(segment.from)
-      ..sub(segment.to);
+      ..setFrom(segment.to)
+      ..sub(segment.from);
     _v3.setValues(-direction.y, direction.x);
 
     final dot = _v2.dot(_v3);
