@@ -251,6 +251,8 @@ class PolygonComponent extends ShapeComponent {
     return rectIntersections;
   }
 
+  late final _temporaryNormal = Vector2.zero();
+
   RaycastResult<ShapeHitbox>? rayIntersection(
     Ray2 ray, {
     RaycastResult<ShapeHitbox>? out,
@@ -275,24 +277,26 @@ class PolygonComponent extends ShapeComponent {
         closestDistance,
         out: out?.point ?? Vector2.zero(),
       );
-      final perpendicularDirection = (out?.ray?.direction ?? Vector2.zero())
+      _temporaryNormal
         ..setFrom(closestSegment!.to)
         ..sub(closestSegment.from);
-      perpendicularDirection.setValues(
-        -perpendicularDirection.y,
-        perpendicularDirection.x,
-      );
+      _temporaryNormal.setValues(_temporaryNormal.y, -_temporaryNormal.x);
+      final reflection = (out?.ray?.direction ?? Vector2.zero())
+        ..setFrom(ray.direction);
+      reflection
+        ..reflect(_temporaryNormal)
+        ..normalize();
 
       return (out ?? RaycastResult<ShapeHitbox>())
         ..setWith(
-          hitbox: this
-              as ShapeHitbox, // TODO(spydon): This class should probably not be aware of ShapeHitbox
-          ray: Ray2(intersectionPoint, perpendicularDirection),
+          // TODO(spydon): This class should probably not be aware of ShapeHitbox
+          hitbox: this as ShapeHitbox,
+          ray: Ray2(intersectionPoint, reflection),
           distance: closestDistance,
         );
     }
     // TODO(spydon): Handle if there is one crossing
-    // (if the origin of the ray is inside of the hitbox)
+    // (if the origin of the ray is inside of the hitbox, then it should be reflected the other way around)
     return null;
   }
 
