@@ -96,7 +96,7 @@ void main() {
       expect(focusNode.hasFocus, true);
     });
 
-    testWidgets('game with KeyboardEvents receives keys', (tester) async {
+    testWidgets('game with KeyboardEvents receives key events', (tester) async {
       final game = _KeyboardEventsGame();
 
       await tester.pumpWidget(
@@ -115,7 +115,7 @@ void main() {
     });
 
     testWidgets(
-      'game with HasKeyboardHandlerComponents receives keys',
+      'game with HasKeyboardHandlerComponents receives key events',
       (tester) async {
         final game = _HasKeyboardHandlerComponentsGame();
 
@@ -159,7 +159,7 @@ void main() {
       expect(focusNode.hasFocus, true);
     });
 
-    testWidgets('game with KeyboardEvents receives keys', (tester) async {
+    testWidgets('game with KeyboardEvents receives key events', (tester) async {
       final game = _KeyboardEventsGame();
 
       await tester.pumpWidget(
@@ -178,7 +178,7 @@ void main() {
     });
 
     testWidgets(
-      'game with HasKeyboardHandlerComponents receives keys',
+      'game with HasKeyboardHandlerComponents receives key events',
       (tester) async {
         final game = _HasKeyboardHandlerComponentsGame();
 
