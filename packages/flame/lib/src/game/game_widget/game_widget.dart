@@ -284,7 +284,7 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
   }
 
   KeyEventResult _handleKeyEvent(FocusNode focusNode, RawKeyEvent event) {
-    final game = widget.game;
+    final game = currentGame;
     if (game is KeyboardEvents) {
       return game.onKeyEvent(event, RawKeyboard.instance.keysPressed);
     }
