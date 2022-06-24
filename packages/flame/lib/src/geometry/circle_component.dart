@@ -1,5 +1,4 @@
 import 'dart:math';
-import 'dart:ui';
 
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
@@ -12,34 +11,26 @@ class CircleComponent extends ShapeComponent implements SizeProvider {
   /// and a position. It will also calculate the bounding rectangle [size] for
   /// the [CircleComponent].
   CircleComponent({
-    double? radius,
+    double radius = 0,
     super.position,
     super.angle,
     super.anchor,
     super.children,
     super.priority,
     super.paint,
-  }) : super(
-          size: Vector2.all((radius ?? 0) * 2),
-        );
+  }) : super(size: Vector2.all(radius * 2));
 
   /// With this constructor you define the [CircleComponent] in relation to the
   /// [parentSize]. For example having a [relation] of 0.5 would create a circle
   /// that fills half of the [parentSize].
   CircleComponent.relative(
     double relation, {
-    Vector2? position,
     required Vector2 parentSize,
-    double angle = 0,
-    Anchor? anchor,
-    Paint? paint,
-  }) : this(
-          radius: relation * (min(parentSize.x, parentSize.y) / 2),
-          position: position,
-          angle: angle,
-          anchor: anchor,
-          paint: paint,
-        );
+    super.position,
+    super.angle,
+    super.anchor,
+    super.paint,
+  }) : super(size: Vector2.all(relation * min(parentSize.x, parentSize.y)));
 
   /// Get the radius of the circle before scaling.
   double get radius {
