@@ -16,20 +16,14 @@ class RectangleComponent extends PolygonComponent {
   }) : super(sizeToVertices(size ?? Vector2.zero(), anchor));
 
   RectangleComponent.square({
-    Vector2? position,
-    double? size,
-    double? angle,
-    Anchor? anchor,
-    int? priority,
-    Paint? paint,
-  }) : this(
-          position: position,
-          size: Vector2.all(size ?? 0),
-          angle: angle,
-          anchor: anchor,
-          priority: priority,
-          paint: paint,
-        );
+    double size = 0,
+    super.position,
+    super.angle,
+    super.anchor,
+    super.priority,
+    super.paint,
+    super.children,
+  }) : super(sizeToVertices(Vector2.all(size), anchor));
 
   /// With this constructor you define the [RectangleComponent] in relation to
   /// the `parentSize`. For example having [relation] as of (0.8, 0.5) would
