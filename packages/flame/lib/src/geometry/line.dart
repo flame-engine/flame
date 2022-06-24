@@ -5,11 +5,11 @@ import 'package:flame/extensions.dart';
 /// This represents a line on the ax + by = c form
 /// If you just want to represent a part of a line, look into LineSegment.
 class Line {
+  const Line(this.a, this.b, this.c);
+
   final double a;
   final double b;
   final double c;
-
-  const Line(this.a, this.b, this.c);
 
   Line.fromPoints(Vector2 p1, Vector2 p2)
       : this(
