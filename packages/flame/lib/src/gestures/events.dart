@@ -1,5 +1,5 @@
 import 'package:flame/extensions.dart';
-import 'package:flame/src/game/mixins/game.dart';
+import 'package:flame/src/game/game.dart';
 import 'package:flutter/gestures.dart';
 
 /// [EventPosition] converts position based events to three different coordinate

@@ -14,7 +14,7 @@ import 'package:meta/meta.dart';
 /// methods to use it in a `GameWidget`.
 /// Flame will deal with calling these methods properly when the game's widget
 /// is rendered.
-mixin Game {
+abstract class Game {
   final images = Images();
   final assets = AssetsCache();
 

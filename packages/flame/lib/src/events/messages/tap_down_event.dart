@@ -4,7 +4,7 @@ import 'package:flame/src/events/flame_game_mixins/has_tappable_components.dart'
 import 'package:flame/src/events/messages/position_event.dart';
 import 'package:flame/src/events/messages/tap_cancel_event.dart';
 import 'package:flame/src/events/messages/tap_up_event.dart';
-import 'package:flame/src/game/mixins/game.dart';
+import 'package:flame/src/game/game.dart';
 import 'package:flame/src/gestures/events.dart';
 import 'package:flutter/gestures.dart';
 
