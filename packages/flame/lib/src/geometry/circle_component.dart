@@ -11,14 +11,14 @@ class CircleComponent extends ShapeComponent implements SizeProvider {
   /// and a position. It will also calculate the bounding rectangle [size] for
   /// the [CircleComponent].
   CircleComponent({
-    double radius = 0,
+    double? radius,
     super.position,
     super.angle,
     super.anchor,
     super.children,
     super.priority,
     super.paint,
-  }) : super(size: Vector2.all(radius * 2));
+  }) : super(size: Vector2.all((radius ?? 0) * 2));
 
   /// With this constructor you define the [CircleComponent] in relation to the
   /// [parentSize]. For example having a [relation] of 0.5 would create a circle
