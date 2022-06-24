@@ -10,10 +10,10 @@ import 'package:meta/meta.dart';
 /// This gives access to a low-level game API, to not build everything from a
 /// low level `FlameGame` should be used.
 ///
-/// Add this mixin to your game class and implement the [update] and [render]
-/// methods to use it in a `GameWidget`.
-/// Flame will deal with calling these methods properly when the game's widget
-/// is rendered.
+/// You can either extend this class, or add it as a mixin.
+///
+/// Methods [update] and [render] need to be implemented in order to connect
+/// your class with the internal game loop.
 abstract class Game {
   final images = Images();
   final assets = AssetsCache();
