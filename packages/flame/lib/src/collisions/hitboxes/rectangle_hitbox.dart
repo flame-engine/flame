@@ -24,7 +24,7 @@ class RectangleHitbox extends RectangleComponent with ShapeHitbox {
     super.relation, {
     super.position,
     required super.parentSize,
-    double super.angle,
+    super.angle,
     super.anchor,
   })  : shouldFillParent = false,
         super.relative(
