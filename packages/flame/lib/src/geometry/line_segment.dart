@@ -4,12 +4,12 @@ import 'package:flame/src/geometry/line.dart';
 /// A [LineSegment] represent a segment of an infinitely long line, it is the
 /// segment between the [from] and [to] vectors (inclusive).
 class LineSegment {
+  final Vector2 from;
+  final Vector2 to;
+
   LineSegment(this.from, this.to);
 
   factory LineSegment.zero() => LineSegment(Vector2.zero(), Vector2.zero());
-
-  final Vector2 from;
-  final Vector2 to;
 
   /// Returns an empty list if there are no intersections between the segments
   /// If the segments are concurrent, the intersecting point is returned as a
