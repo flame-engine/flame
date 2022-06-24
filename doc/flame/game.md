@@ -41,10 +41,12 @@ main() {
 }
 ```
 
-**Note:** If you instantiate your game in a build method your game will be rebuilt every time the
- Flutter tree gets rebuilt, which usually is more often than you'd like. To avoid this, you can
- instead create an instance of your game first and reference it within your widget structure, like
- it is done in the example above.
+```{note}
+If you instantiate your game in a build method your game will be rebuilt every time the
+Flutter tree gets rebuilt, which usually is more often than you'd like. To avoid this, you can
+instead create an instance of your game first and reference it within your widget structure, like
+it is done in the example above.
+```
 
 To remove components from the list on a `FlameGame` the `remove` or `removeAll` methods can be used.
 The first can be used if you just want to remove one component, and the second can be used when you
@@ -103,7 +105,7 @@ just draw a background that covers the whole canvas if you would want it to chan
 ## SingleGameInstance mixin
 
 An optional mixin `SingleGameInstance` can be applied to your game if you are making a single-game
-application. This is a common scenario when building games: there is a single full-screen 
+application. This is a common scenario when building games: there is a single full-screen
 `GameWidget` which hosts a single `Game` instance.
 
 Adding this mixin provides performance advantages in certain scenarios. In particular, a component's
@@ -123,7 +125,7 @@ class MyGame extends FlameGame with SingleGameInstance {
 
 ![Game low-level API](../images/game_mixin.png)
 
-The `Game` mixin is a low-level API that can be used when you want to implement the functionality of
+The `Game` class is a low-level API that can be used when you want to implement the functionality of
 how the game engine should be structured. `Game` does not implement any `update` or
 `render` function for example.
 
@@ -133,13 +135,15 @@ called from the `GameWidget` (or another parent) when the game is loaded + mount
 called after `onLoad`) is called every time it is added to a new parent. `onRemove` is called when
 the class is removed from a parent.
 
-**Note**: The `Game` mixin allows for more freedom of how to implement things, but you are also
+```{note}
+The `Game` class allows for more freedom of how to implement things, but you are also
 missing out on all of the built-in features in Flame if you use it.
+```
 
 An example of how a `Game` implementation could look like:
 
 ```dart
-class MyGameSubClass with Game {
+class MyGameSubClass extends Game {
   @override
   void render(Canvas canvas) {
     // ...
@@ -151,7 +155,7 @@ class MyGameSubClass with Game {
   }
 }
 
-main() {
+void main() {
   final myGame = MyGameSubClass();
   runApp(
     GameWidget(
@@ -202,7 +206,7 @@ by setting a `overlayBuilderMap`.
 void main() {
   // Inside the game methods:
   final pauseOverlayIdentifier = 'PauseMenu';
-  
+
   // Marks 'PauseMenu' to be rendered.
   overlays.add(pauseOverlayIdentifier);
   // Marks 'PauseMenu' to not be rendered.
@@ -226,8 +230,8 @@ Widget build(BuildContext context) {
 }
 ```
 
-The order of rendering for an overlay is determined by the order of the keys in the 
-`overlayBuilderMap`. 
+The order of rendering for an overlay is determined by the order of the keys in the
+`overlayBuilderMap`.
 
-An example of feature can be found 
+An example of feature can be found
 [here](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/system/overlays_example.dart).
