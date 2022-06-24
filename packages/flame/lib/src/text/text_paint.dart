@@ -47,7 +47,6 @@ class TextPaint extends FormatterTextRenderer<TextPainterTextFormatter> {
   /// However, you probably want to use the [render] method which already
   /// takes the anchor into consideration.
   /// That way, you don't need to perform the math for that yourself.
-  @Deprecated('This method will be removed in v1.4.0')
   TextPainter toTextPainter(String text) {
     if (!_textPainterCache.containsKey(text)) {
       final tp = TextPainter(
