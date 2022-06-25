@@ -1,6 +1,6 @@
 import 'package:flame/events.dart';
 import 'package:flame/src/events/flame_drag_adapter.dart';
-import 'package:flame/src/game/mixins/game.dart';
+import 'package:flame/src/game/game.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
 

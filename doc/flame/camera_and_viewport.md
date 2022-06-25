@@ -138,7 +138,7 @@ class MyGame extends FlameGame {
        anchor: Anchor.center,
      );
      add(player);
-     
+
      camera.followComponent(player);
   }
 }
@@ -148,17 +148,20 @@ class MyGame extends FlameGame {
 ### Using the camera with the Game class
 
 If you are not using `FlameGame`, but instead are using the `Game` mixin, then you need to manage
-calling certain camera methods yourself. Let's say we have the following game structure, and we 
+calling certain camera methods yourself. Let's say we have the following game structure, and we
 want to add the camera functionality:
 
 ```dart
-class YourGame with Game {
+class YourGame extends Game {
   Camera? camera;
 
+  @override
   Future<void> onLoad() async {}
 
+  @override
   void render(Canvas canvas) {}
 
+  @override
   void update(double dt) {}
 }
 ```
@@ -166,8 +169,7 @@ class YourGame with Game {
 We first create a new camera instance on load and assign our game as the reference:
 
 ```dart
-  // ...
-  
+  @override
   Future<void> onLoad() async {
     camera = Camera();
 
@@ -179,51 +181,42 @@ We first create a new camera instance on load and assign our game as the referen
 
     // Rest of your on load code.
   }
-
-  // ...
 ```
 
-The camera can also be made aware of which position to follow, this is an optional feature as you 
-can also use the camare for just moving,snapping or shaking.
+The camera can also be made aware of which position to follow, this is an optional feature as you
+can also use the camera for just moving,snapping or shaking.
 
-To do this the `Camera` class provides multiple methods for it but let's showcase the simplest one 
+To do this the `Camera` class provides multiple methods for it but let's showcase the simplest one
 and that is the `followVector2`:
 
 ```dart
-  // Somewhere in your code.
-
+  // Somewhere in your code:
   camera?.followVector2(
     yourPositionToFollow,
     worldBounds: yourWorldBounds, // Optional to pass, it will overwrite the previous bounds.
   );
 ```
 
-Now that the camera is created and it is aware of both the world bounds and the position it should 
+Now that the camera is created and it is aware of both the world bounds and the position it should
 follow, it can be used to translate the canvas in the render method:
 
 ```dart
-  // ...
-
+  @override
   void render(Canvas canvas) {
     camera?.apply(canvas); // This will apply the camera transformation.
 
     // Rest of your rendering code.
   }
-
-  // ...
 ```
 
-The only thing left to do is to call the `update` method on the `Camera` so it can smoothly follow 
+The only thing left to do is to call the `update` method on the `Camera` so it can smoothly follow
 your given position:
 
 ```dart
-  // ...
-
+  @override
   void update(double dt) {
     camera?.update(dt);
 
     // Rest of your update code.
   }
-
-  // ...
 ```
