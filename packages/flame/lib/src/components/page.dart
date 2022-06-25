@@ -1,9 +1,11 @@
+import 'dart:ui' show Canvas;
 
 import 'package:flame/src/components/component.dart';
 import 'package:flame/src/components/mixins/parent_is_a.dart';
 import 'package:flame/src/components/navigator.dart';
 import 'package:flame/src/components/position_component.dart';
 import 'package:meta/meta.dart';
+import 'package:vector_math/vector_math_64.dart';
 
 class Page extends PositionComponent with ParentIsA<Navigator> {
   Page({
@@ -21,9 +23,8 @@ class Page extends PositionComponent with ParentIsA<Navigator> {
 
   void onActivate() {}
 
-  void deactivate() {}
+  void onDeactivate() {}
 
-  @internal
   Component build() {
     assert(
       builder != null,
@@ -32,6 +33,8 @@ class Page extends PositionComponent with ParentIsA<Navigator> {
     );
     return builder!();
   }
+
+  //#region Implementation methods
 
   @internal
   bool get isBuilt => _child != null;
@@ -46,4 +49,30 @@ class Page extends PositionComponent with ParentIsA<Navigator> {
     _child ??= build()..addToParent(this);
     onActivate();
   }
+
+  @internal
+  void deactivate() {
+    onDeactivate();
+  }
+
+  @override
+  void renderTree(Canvas canvas) {
+    if (isRendered) {
+      super.renderTree(canvas);
+    }
+  }
+
+  @override
+  Iterable<Component> componentsAtPoint(
+    Vector2 point, [
+    List<Vector2>? nestedPoints,
+  ]) {
+    if (isRendered) {
+      return super.componentsAtPoint(point, nestedPoints);
+    } else {
+      return const Iterable<Component>.empty();
+    }
+  }
+
+  //#endregion
 }

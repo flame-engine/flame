@@ -155,7 +155,7 @@ class Level1PageImpl extends Component {
 
   @override
   void render(Canvas canvas) {
-    canvas.drawColor(const Color(0xaa845fb0), BlendMode.srcATop);
+    canvas.drawColor(const Color(0xbb5f358d), BlendMode.srcATop);
   }
 }
 
