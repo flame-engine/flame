@@ -7,12 +7,9 @@ import 'package:meta/meta.dart';
 
 class Page extends PositionComponent with ParentIsA<Navigator> {
   Page({
-    required this.name,
     this.builder,
     this.transparent = false,
   });
-
-  final String name;
 
   final Component Function()? builder;
 
@@ -22,6 +19,10 @@ class Page extends PositionComponent with ParentIsA<Navigator> {
   /// page underneath doesn't need to be rendered.
   final bool transparent;
 
+  void onActivate() {}
+
+  void deactivate() {}
+
   @internal
   Component build() {
     assert(
@@ -30,5 +31,16 @@ class Page extends PositionComponent with ParentIsA<Navigator> {
       'method',
     );
     return builder!();
+  }
+
+  @internal
+  bool get isBuilt => _child != null;
+
+  Component? _child;
+
+  @internal
+  void activate() {
+    _child ??= build()..addToParent(this);
+    onActivate();
   }
 }
