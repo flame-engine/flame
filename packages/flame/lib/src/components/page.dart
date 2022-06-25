@@ -36,6 +36,9 @@ class Page extends PositionComponent with ParentIsA<Navigator> {
   @internal
   bool get isBuilt => _child != null;
 
+  @internal
+  bool isRendered = true;
+
   Component? _child;
 
   @internal

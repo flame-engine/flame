@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:collection/collection.dart';
 import 'package:flame/src/components/component.dart';
 import 'package:flame/src/components/page.dart';
@@ -30,8 +32,11 @@ class Navigator extends Component {
   }
 
   void _fixPageOrder() {
-    for (var i = 0; i < _currentPages.length; i++) {
+    var render = true;
+    for (var i = _currentPages.length - 1; i >= 0; i--) {
       _currentPages[i].changePriorityWithoutResorting(i);
+      _currentPages[i].isRendered = render;
+      render &= _currentPages[i].transparent;
     }
     reorderChildren();
   }
@@ -40,5 +45,14 @@ class Navigator extends Component {
   void onMount() {
     super.onMount();
     showPage(initialPage);
+  }
+
+  @override
+  void renderTree(Canvas canvas) {
+    children.forEach((child) {
+      if (child is Page && child.isRendered) {
+        child.renderTree(canvas);
+      }
+    });
   }
 }
