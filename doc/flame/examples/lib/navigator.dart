@@ -11,6 +11,8 @@ class NavigatorGame extends FlameGame with HasTappableComponents {
     navigator = Navigator(
       pages: {
         'home': Page(builder: StartPageImpl.new),
+        'level1': Page(builder: Level1PageImpl.new),
+        'level2': Page(builder: Level2PageImpl.new),
       },
       initialPage: 'home',
     )..addToParent(this);
@@ -18,34 +20,34 @@ class NavigatorGame extends FlameGame with HasTappableComponents {
 }
 
 class StartPageImpl extends Component with HasGameRef<NavigatorGame> {
-  StartPageImpl()
-      : _logo = TextPaint(
-          style: const TextStyle(
-            fontSize: 64,
-            color: Color(0xFFFFFFFF),
-            fontWeight: FontWeight.w800,
-          ),
-        ).toTextPainter('Syzygy'),
-        _button1 = RoundedButton(
-          text: 'Level 1',
-          action: () {},
-          color: const Color(0xffadde6c),
-          borderColor: const Color(0xffedffab),
-        ),
-        _button2 = RoundedButton(
-          text: 'Level 2',
-          action: () {},
-          color: const Color(0xffdebe6c),
-          borderColor: const Color(0xfffff4c7),
-        ) {
+  StartPageImpl() {
+    _logo = TextPaint(
+      style: const TextStyle(
+        fontSize: 64,
+        color: Color(0xFFFFFFFF),
+        fontWeight: FontWeight.w800,
+      ),
+    ).toTextPainter('Syzygy');
+    _button1 = RoundedButton(
+      text: 'Level 1',
+      action: () => gameRef.navigator.showPage('level1'),
+      color: const Color(0xffadde6c),
+      borderColor: const Color(0xffedffab),
+    );
+    _button2 = RoundedButton(
+      text: 'Level 2',
+      action: () => gameRef.navigator.showPage('level2'),
+      color: const Color(0xffdebe6c),
+      borderColor: const Color(0xfffff4c7),
+    );
     add(_button1);
     add(_button2);
   }
 
-  final TextPainter _logo;
+  late final TextPainter _logo;
   late Offset _logoOffset;
-  final RoundedButton _button1;
-  final RoundedButton _button2;
+  late final RoundedButton _button1;
+  late final RoundedButton _button2;
 
   @override
   void onGameResize(Vector2 size) {
@@ -120,3 +122,38 @@ class RoundedButton extends PositionComponent with TapCallbacks {
     scale = Vector2.all(1.0);
   }
 }
+
+class Level1PageImpl extends Component {
+  @override
+  Future<void> onLoad() async {
+    final game = findGame()!;
+    add(
+      Planet(radius: 40, color: const Color(0xFFFFFFEE))
+        ..position = game.size / 2,
+    );
+  }
+
+  @override
+  void render(Canvas canvas) {
+    canvas.drawColor(const Color(0xaa845fb0), BlendMode.srcATop);
+  }
+}
+
+class Level2PageImpl extends Component {}
+
+class Planet extends PositionComponent {
+  Planet({required this.radius, required this.color})
+      : _paint = Paint()..color = color,
+        super(anchor: Anchor.center, size: Vector2.all(2 * radius));
+
+  final double radius;
+  final Color color;
+  final Paint _paint;
+
+  @override
+  void render(Canvas canvas) {
+    canvas.drawCircle(Offset(radius, radius), radius, _paint);
+  }
+}
+
+class Orbit extends PositionComponent {}
