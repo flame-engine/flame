@@ -128,8 +128,28 @@ class Level1PageImpl extends Component {
   Future<void> onLoad() async {
     final game = findGame()!;
     add(
-      Planet(radius: 40, color: const Color(0xFFFFFFEE))
-        ..position = game.size / 2,
+      Planet(
+        radius: 40,
+        color: const Color(0xFFFFFFEE),
+        position: game.size / 2,
+        children: [
+          Orbit(
+            radius: 150,
+            revolutionPeriod: 6,
+            planet: Planet(
+              radius: 15,
+              color: const Color(0xff54d7b1),
+              children: [
+                Orbit(
+                    radius: 40,
+                    revolutionPeriod: 5,
+                    planet: Planet(radius: 5, color: const Color(0xFFcccccc)),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -142,9 +162,12 @@ class Level1PageImpl extends Component {
 class Level2PageImpl extends Component {}
 
 class Planet extends PositionComponent {
-  Planet({required this.radius, required this.color})
-      : _paint = Paint()..color = color,
-        super(anchor: Anchor.center, size: Vector2.all(2 * radius));
+  Planet({
+    required this.radius,
+    required this.color,
+    super.position,
+    super.children,
+  }) : _paint = Paint()..color = color;
 
   final double radius;
   final Color color;
@@ -152,8 +175,37 @@ class Planet extends PositionComponent {
 
   @override
   void render(Canvas canvas) {
-    canvas.drawCircle(Offset(radius, radius), radius, _paint);
+    canvas.drawCircle(Offset.zero, radius, _paint);
   }
 }
 
-class Orbit extends PositionComponent {}
+class Orbit extends PositionComponent {
+  Orbit({
+    required this.radius,
+    required this.planet,
+    required this.revolutionPeriod,
+    double initialAngle = 0,
+  })  : _paint = Paint()
+          ..style = PaintingStyle.stroke
+          ..color = const Color(0x888888aa),
+        _angle = initialAngle {
+    add(planet);
+  }
+
+  final double radius;
+  final double revolutionPeriod;
+  final Planet planet;
+  final Paint _paint;
+  double _angle;
+
+  @override
+  void render(Canvas canvas) {
+    canvas.drawCircle(Offset.zero, radius, _paint);
+  }
+
+  @override
+  void update(double dt) {
+    _angle += dt / revolutionPeriod * Transform2D.tau;
+    planet.position = Vector2(radius, 0)..rotate(_angle);
+  }
+}
