@@ -1,6 +1,6 @@
 import 'package:flame/src/events/flame_game_mixins/has_tappable_components.dart';
 import 'package:flame/src/events/interfaces/multi_tap_listener.dart';
-import 'package:flame/src/game/mixins/game.dart';
+import 'package:flame/src/game/game.dart';
 import 'package:flame/src/gestures/events.dart';
 import 'package:flutter/gestures.dart';
 
