@@ -44,13 +44,16 @@ class FlutterAppDirective(SphinxDirective):
         with the matching name.
 
       :show: - a list of one or more run modes, which could include "widget",
-        "popup", and "code". Each of these modes produces a different output:
+        "popup", "code", and "infobox". Each of these modes produces a different
+        output:
           "widget" - an iframe shown directly inside the docs page;
           "popup" - a [Run] button which opens the app to (almost) fullscreen;
           "code" - a [Code] button which opens a popup with the code that was
               compiled.
+          "infobox" - the content will be displayed as an infobox floating on
+              the right-hand side of the page
     """
-    has_content = False
+    has_content = True
     required_arguments = 0
     optional_arguments = 0
     option_spec = {
@@ -103,6 +106,11 @@ class FlutterAppDirective(SphinxDirective):
                 classes=['flutter-app-button', 'code'],
                 onclick=f'open_code_listings("{code_id}")',
             ))
+        if 'infobox' in self.modes:
+            self.state.nested_parse(self.content, 0, result)
+            result = [
+                nodes.container('', *result, classes=['flutter-app-infobox'])
+            ]
         return result
 
     def _process_show_option(self):
@@ -110,7 +118,7 @@ class FlutterAppDirective(SphinxDirective):
         if argument:
             values = argument.split()
             for value in values:
-                if value not in ['widget', 'popup', 'code']:
+                if value not in ['widget', 'popup', 'code', 'infobox']:
                     raise self.error('Invalid :show: value ' + value)
             self.modes = values
         else:
@@ -228,30 +236,31 @@ def _doc_root():
 # ------------------------------------------------------------------------------
 
 class IFrame(nodes.Element, nodes.General):
-    pass
+    def visit(self, node):
+        self.body.append(
+            self.starttag(node, 'iframe', src=node.attributes['src']))
 
-
-def visit_iframe(self, node):
-    self.body.append(self.starttag(node, 'iframe', src=node.attributes['src']))
-
-
-def depart_iframe(self, _):
-    self.body.append('</iframe>')
+    def depart(self, _):
+        self.body.append('</iframe>')
 
 
 class Button(nodes.Element, nodes.General):
-    pass
+    def visit(self, node):
+        attrs = {}
+        if 'onclick' in node.attributes:
+            attrs['onclick'] = node.attributes['onclick']
+        self.body.append(self.starttag(node, 'button', **attrs).strip())
+
+    def depart(self, _):
+        self.body.append('</button>')
 
 
-def visit_button(self, node):
-    attrs = {}
-    if 'onclick' in node.attributes:
-        attrs['onclick'] = node.attributes['onclick']
-    self.body.append(self.starttag(node, 'button', **attrs).strip())
+class Div(nodes.Element, nodes.General):
+    def visit(self, node):
+        self.body.append(self.starttag(node, 'div').strip())
 
-
-def depart_button(self, _):
-    self.body.append('</button>')
+    def depart(self, _):
+        self.body.append('</div>')
 
 
 # ------------------------------------------------------------------------------
@@ -265,8 +274,9 @@ def setup(app):
     shutil.copy(os.path.join(base_dir, 'flutter_app.js'), target_dir)
     shutil.copy(os.path.join(base_dir, 'flutter_app.css'), target_dir)
 
-    app.add_node(IFrame, html=(visit_iframe, depart_iframe))
-    app.add_node(Button, html=(visit_button, depart_button))
+    app.add_node(IFrame, html=(IFrame.visit, IFrame.depart))
+    app.add_node(Button, html=(Button.visit, Button.depart))
+    app.add_node(Div, html=(Div.visit, Div.depart))
     app.add_directive('flutter-app', FlutterAppDirective)
     app.add_js_file('flutter_app.js')
     app.add_css_file('flutter_app.css')

@@ -26,7 +26,7 @@ class StartPageImpl extends Component with HasGameRef<NavigatorGame> {
     _logo = TextPaint(
       style: const TextStyle(
         fontSize: 64,
-        color: Color(0xFFFFFFFF),
+        color: Color(0xFFC8FFF5),
         fontWeight: FontWeight.w800,
       ),
     ).toTextPainter('Syzygy');
@@ -61,7 +61,7 @@ class StartPageImpl extends Component with HasGameRef<NavigatorGame> {
 
   @override
   void render(Canvas canvas) {
-    canvas.drawColor(const Color(0xff063e67), BlendMode.src);
+    // canvas.drawColor(const Color(0xff063e67), BlendMode.src);
     _logo.paint(canvas, _logoOffset);
   }
 }
@@ -230,25 +230,25 @@ class Level1PageImpl extends Component {
   Future<void> onLoad() async {
     final game = findGame()!;
     addAll([
-      Background(const Color(0xbb5f358d)),
+      Background(const Color(0xbb2a074f)),
       BackButton(),
       PauseButton(),
       Planet(
-        radius: 40,
+        radius: 25,
         color: const Color(0xfffff188),
         position: game.size / 2,
         children: [
           Orbit(
-            radius: 150,
+            radius: 110,
             revolutionPeriod: 6,
             planet: Planet(
-              radius: 15,
+              radius: 10,
               color: const Color(0xff54d7b1),
               children: [
                 Orbit(
-                  radius: 40,
+                  radius: 25,
                   revolutionPeriod: 5,
-                  planet: Planet(radius: 5, color: const Color(0xFFcccccc)),
+                  planet: Planet(radius: 3, color: const Color(0xFFcccccc)),
                 ),
               ],
             ),
@@ -264,7 +264,7 @@ class Level2PageImpl extends Component {
   Future<void> onLoad() async {
     final game = findGame()!;
     addAll([
-      Background(const Color(0xbb074825)),
+      Background(const Color(0xff052b44)),
       BackButton(),
       PauseButton(),
       Planet(
@@ -273,35 +273,26 @@ class Level2PageImpl extends Component {
         position: game.size / 2,
         children: [
           Orbit(
-            radius: 100,
+            radius: 60,
             revolutionPeriod: 5,
-            planet: Planet(
-              radius: 15,
-              color: const Color(0xffc9ce0d),
-            ),
+            planet: Planet(radius: 10, color: const Color(0xffc9ce0d)),
           ),
           Orbit(
-            radius: 180,
+            radius: 110,
             revolutionPeriod: 10,
             planet: Planet(
-              radius: 20,
+              radius: 14,
               color: const Color(0xfff32727),
               children: [
                 Orbit(
-                  radius: 32,
+                  radius: 26,
                   revolutionPeriod: 3,
-                  planet: Planet(
-                    radius: 6,
-                    color: const Color(0xffffdb00),
-                  ),
+                  planet: Planet(radius: 5, color: const Color(0xffffdb00)),
                 ),
                 Orbit(
-                  radius: 45,
+                  radius: 35,
                   revolutionPeriod: 4,
-                  planet: Planet(
-                    radius: 4,
-                    color: const Color(0xffdc00ff),
-                  ),
+                  planet: Planet(radius: 3, color: const Color(0xffdc00ff)),
                 ),
               ],
             ),
