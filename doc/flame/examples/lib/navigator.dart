@@ -133,15 +133,60 @@ class RoundedButton extends PositionComponent with TapCallbacks {
   }
 }
 
+class BackButton extends PositionComponent
+    with TapCallbacks, HasGameRef<NavigatorGame> {
+  BackButton() : super(size: Vector2.all(40), position: Vector2.all(10));
+
+  final Paint _borderPaint = Paint()
+    ..style = PaintingStyle.stroke
+    ..color = const Color(0x66ffffff);
+  final Paint _arrowPaint = Paint()
+    ..style = PaintingStyle.stroke
+    ..color = const Color(0xffaaaaaa)
+    ..strokeWidth = 7;
+  final Path _arrowPath = Path()
+    ..moveTo(22, 8)
+    ..lineTo(10, 20)
+    ..lineTo(22, 32)
+    ..moveTo(12, 20)
+    ..lineTo(34, 20);
+
+  @override
+  void render(Canvas canvas) {
+    canvas.drawRRect(
+      RRect.fromRectAndRadius(size.toRect(), Radius.circular(5)),
+      _borderPaint,
+    );
+    canvas.drawPath(_arrowPath, _arrowPaint);
+  }
+
+  @override
+  void onTapDown(TapDownEvent event) {
+    _arrowPaint.color = const Color(0xffffffff);
+  }
+
+  @override
+  void onTapUp(TapUpEvent event) {
+    _arrowPaint.color = const Color(0xffaaaaaa);
+    gameRef.navigator.popPage();
+  }
+
+  @override
+  void onTapCancel(TapCancelEvent event) {
+    _arrowPaint.color = const Color(0xffaaaaaa);
+  }
+}
+
 class Level1PageImpl extends Component {
   @override
   Future<void> onLoad() async {
     final game = findGame()!;
     addAll([
       Background(const Color(0xbb5f358d)),
+      BackButton(),
       Planet(
         radius: 40,
-        color: const Color(0xFFFFFFEE),
+        color: const Color(0xfffff188),
         position: game.size / 2,
         children: [
           Orbit(
@@ -171,6 +216,7 @@ class Level2PageImpl extends Component {
     final game = findGame()!;
     addAll([
       Background(const Color(0xbb074825)),
+      BackButton(),
       Planet(
         radius: 30,
         color: const Color(0xFFFFFFff),
@@ -181,31 +227,31 @@ class Level2PageImpl extends Component {
             revolutionPeriod: 5,
             planet: Planet(
               radius: 15,
-              color: const Color(0xffcbce7b),
+              color: const Color(0xffc9ce0d),
             ),
           ),
           Orbit(
             radius: 180,
-            revolutionPeriod: 11,
+            revolutionPeriod: 10,
             planet: Planet(
               radius: 20,
               color: const Color(0xfff32727),
               children: [
                 Orbit(
-                    radius: 32,
-                    revolutionPeriod: 3,
-                    planet: Planet(
-                      radius: 6,
-                      color: const Color(0xffffdb00),
-                    ),
+                  radius: 32,
+                  revolutionPeriod: 3,
+                  planet: Planet(
+                    radius: 6,
+                    color: const Color(0xffffdb00),
+                  ),
                 ),
                 Orbit(
-                    radius: 45,
-                    revolutionPeriod: 4,
-                    planet: Planet(
-                      radius: 4,
-                      color: const Color(0xffdc00ff),
-                    ),
+                  radius: 45,
+                  revolutionPeriod: 4,
+                  planet: Planet(
+                    radius: 4,
+                    color: const Color(0xffdc00ff),
+                  ),
                 ),
               ],
             ),

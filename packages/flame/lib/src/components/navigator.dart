@@ -33,6 +33,16 @@ class Navigator extends Component {
     page.activate();
   }
 
+  void popPage() {
+    if (_currentPages.isEmpty) {
+      return;
+    }
+    final poppedPage = _currentPages.removeLast()..removeFromParent();
+    _fixPageOrder();
+    poppedPage.deactivate();
+    _currentPages.lastOrNull?.activate();
+  }
+
   void _fixPageOrder() {
     var render = true;
     for (var i = _currentPages.length - 1; i >= 0; i--) {
