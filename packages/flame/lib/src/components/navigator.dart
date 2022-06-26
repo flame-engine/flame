@@ -2,6 +2,9 @@ import 'package:collection/collection.dart';
 import 'package:flame/src/components/component.dart';
 import 'package:flame/src/components/page.dart';
 
+/// [Navigator] is a component that handles transitions between multiple [Page]s
+/// of your game.
+///
 class Navigator extends Component {
   Navigator({
     required Map<String, Page> pages,

@@ -89,7 +89,6 @@ class StartPageImpl extends Component with HasGameRef<NavigatorGame> {
 
   @override
   void render(Canvas canvas) {
-    // canvas.drawColor(const Color(0xff063e67), BlendMode.src);
     _logo.paint(canvas, _logoOffset);
   }
 }
