@@ -48,7 +48,7 @@ class SplashScreen extends Component
   bool containsLocalPoint(Vector2 point) => true;
 
   @override
-  void onTapUp(TapUpEvent event) => gameRef.navigator.showPage('home');
+  void onTapUp(TapUpEvent event) => gameRef.navigator.pushPage('home');
 }
 
 class StartPageImpl extends Component with HasGameRef<NavigatorGame> {
@@ -67,13 +67,13 @@ class StartPageImpl extends Component with HasGameRef<NavigatorGame> {
       ),
       _button1 = RoundedButton(
         text: 'Level 1',
-        action: () => gameRef.navigator.showPage('level1'),
+        action: () => gameRef.navigator.pushPage('level1'),
         color: const Color(0xffadde6c),
         borderColor: const Color(0xffedffab),
       ),
       _button2 = RoundedButton(
         text: 'Level 2',
-        action: () => gameRef.navigator.showPage('level2'),
+        action: () => gameRef.navigator.pushPage('level2'),
         color: const Color(0xffdebe6c),
         borderColor: const Color(0xfffff4c7),
       ),
@@ -229,7 +229,7 @@ class PauseButton extends SimpleButton with HasGameRef<NavigatorGame> {
           position: Vector2(60, 10),
         );
   @override
-  void action() => gameRef.navigator.showPage('pause');
+  void action() => gameRef.navigator.pushPage('pause');
 }
 
 class LevelPage extends Page {

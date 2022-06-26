@@ -20,7 +20,7 @@ class Navigator extends Component {
   final List<Page> _currentPages = [];
   final _PageFactory? onUnknownPage;
 
-  void showPage(String name) {
+  void pushPage(String name) {
     final page = _resolvePage(name);
     final activePage = _currentPages.lastOrNull;
     if (page == activePage) {
@@ -81,7 +81,7 @@ class Navigator extends Component {
   @override
   void onMount() {
     super.onMount();
-    showPage(initialPage);
+    pushPage(initialPage);
   }
 }
 
