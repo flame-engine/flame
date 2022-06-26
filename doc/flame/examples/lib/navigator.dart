@@ -1,4 +1,5 @@
 import 'package:flame/components.dart';
+import 'package:flame/effects.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/rendering.dart';
@@ -11,8 +12,8 @@ class NavigatorGame extends FlameGame with HasTappableComponents {
     navigator = Navigator(
       pages: {
         'home': Page(builder: StartPageImpl.new),
-        'level1': Page(builder: Level1PageImpl.new),
-        'level2': Page(builder: Level2PageImpl.new),
+        'level1': Level1Page(),
+        'level2': Level2Page(),
         'pause': Page(builder: PausePageImpl.new, transparent: true),
       },
       initialPage: 'home',
@@ -204,6 +205,22 @@ class PauseButton extends SimpleButton with HasGameRef<NavigatorGame> {
   void action() => gameRef.navigator.showPage('pause');
 }
 
+class Level1Page extends Page {
+  @override
+  Component build() => Level1PageImpl();
+
+  @override
+  void onDeactivate() => stopTime();
+}
+
+class Level2Page extends Page {
+  @override
+  Component build() => Level2PageImpl();
+
+  @override
+  void onDeactivate() => stopTime();
+}
+
 class Level1PageImpl extends Component {
   @override
   Future<void> onLoad() async {
@@ -340,7 +357,8 @@ class Orbit extends PositionComponent {
   }
 }
 
-class PausePageImpl extends Component {
+class PausePageImpl extends Component
+    with TapCallbacks, HasGameRef<NavigatorGame> {
   @override
   Future<void> onLoad() async {
     final game = findGame()!;
@@ -350,7 +368,23 @@ class PausePageImpl extends Component {
         text: 'PAUSED',
         position: game.canvasSize / 2,
         anchor: Anchor.center,
+        children: [
+          ScaleEffect.to(
+            Vector2.all(1.1),
+            EffectController(
+              duration: 0.3,
+              alternate: true,
+              infinite: true,
+            ),
+          )
+        ],
       ),
     ]);
   }
+
+  @override
+  bool containsLocalPoint(Vector2 point) => true;
+
+  @override
+  void onTapUp(TapUpEvent event) => gameRef.navigator.popPage();
 }

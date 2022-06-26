@@ -34,7 +34,13 @@ class Page extends PositionComponent with ParentIsA<Navigator> {
     return builder!();
   }
 
+  void stopTime() {
+    _timeMultiplier = 0;
+  }
+
   //#region Implementation methods
+
+  double _timeMultiplier = 1.0;
 
   @internal
   bool get isBuilt => _child != null;
@@ -47,6 +53,7 @@ class Page extends PositionComponent with ParentIsA<Navigator> {
   @internal
   void activate() {
     _child ??= build()..addToParent(this);
+    _timeMultiplier = 1.0;
     onActivate();
   }
 
@@ -59,6 +66,13 @@ class Page extends PositionComponent with ParentIsA<Navigator> {
   void renderTree(Canvas canvas) {
     if (isRendered) {
       super.renderTree(canvas);
+    }
+  }
+
+  @override
+  void updateTree(double dt) {
+    if (_timeMultiplier > 0) {
+      super.updateTree(dt * _timeMultiplier);
     }
   }
 
