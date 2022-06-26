@@ -9,17 +9,21 @@ class Navigator extends Component {
   Navigator({
     required Map<String, Page> pages,
     required this.initialPage,
-  }) : _pages = pages;
+    Map<String, _PageFactory>? pageFactories,
+    this.onUnknownPage,
+  }) : _pages = pages,
+       _pageFactories = pageFactories ?? {};
 
   final String initialPage;
   final Map<String, Page> _pages;
+  final Map<String, _PageFactory> _pageFactories;
   final List<Page> _currentPages = [];
+  final _PageFactory? onUnknownPage;
 
   void showPage(String name) {
-    final page = _pages[name];
-    assert(page != null, 'Page "$name" is not known to the Navigator');
+    final page = _resolvePage(name);
     final activePage = _currentPages.lastOrNull;
-    if (page! == activePage) {
+    if (page == activePage) {
       return;
     }
     if (!page.isMounted) {
@@ -42,6 +46,28 @@ class Navigator extends Component {
     _currentPages.lastOrNull?.activate();
   }
 
+  Page _resolvePage(String name) {
+    final existingPage = _pages[name];
+    if (existingPage != null) {
+      return existingPage;
+    }
+    if (name.contains('/')) {
+      final i = name.indexOf('/');
+      final factoryName = name.substring(0, i);
+      final factory = _pageFactories[factoryName];
+      if (factory != null) {
+        final argument = name.substring(i + 1);
+        final generatedPage = factory(argument);
+        _pages[name] = generatedPage;
+        return generatedPage;
+      }
+    }
+    if (onUnknownPage != null) {
+      return onUnknownPage!(name);
+    }
+    throw ArgumentError('Page "$name" could not be resolved by the Navigator');
+  }
+
   void _fixPageOrder() {
     var render = true;
     for (var i = _currentPages.length - 1; i >= 0; i--) {
@@ -58,3 +84,5 @@ class Navigator extends Component {
     showPage(initialPage);
   }
 }
+
+typedef _PageFactory = Page Function(String parameter);
