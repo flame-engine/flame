@@ -1,10 +1,6 @@
-import 'dart:ui';
-
 import 'package:collection/collection.dart';
 import 'package:flame/src/components/component.dart';
-import 'package:flame/src/components/mixins/coordinate_transform.dart';
 import 'package:flame/src/components/page.dart';
-import 'package:vector_math/vector_math_64.dart';
 
 class Navigator extends Component {
   Navigator({

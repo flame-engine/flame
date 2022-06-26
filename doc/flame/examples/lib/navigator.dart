@@ -13,6 +13,7 @@ class NavigatorGame extends FlameGame with HasTappableComponents {
         'home': Page(builder: StartPageImpl.new),
         'level1': Page(builder: Level1PageImpl.new),
         'level2': Page(builder: Level2PageImpl.new),
+        'pause': Page(builder: PausePageImpl.new, transparent: true),
       },
       initialPage: 'home',
     )..addToParent(this);
@@ -133,48 +134,74 @@ class RoundedButton extends PositionComponent with TapCallbacks {
   }
 }
 
-class BackButton extends PositionComponent
-    with TapCallbacks, HasGameRef<NavigatorGame> {
-  BackButton() : super(size: Vector2.all(40), position: Vector2.all(10));
+abstract class SimpleButton extends PositionComponent with TapCallbacks {
+  SimpleButton(this._iconPath, {super.position}) : super(size: Vector2.all(40));
 
   final Paint _borderPaint = Paint()
     ..style = PaintingStyle.stroke
     ..color = const Color(0x66ffffff);
-  final Paint _arrowPaint = Paint()
+  final Paint _iconPaint = Paint()
     ..style = PaintingStyle.stroke
     ..color = const Color(0xffaaaaaa)
     ..strokeWidth = 7;
-  final Path _arrowPath = Path()
-    ..moveTo(22, 8)
-    ..lineTo(10, 20)
-    ..lineTo(22, 32)
-    ..moveTo(12, 20)
-    ..lineTo(34, 20);
+  final Path _iconPath;
+
+  void action();
 
   @override
   void render(Canvas canvas) {
     canvas.drawRRect(
-      RRect.fromRectAndRadius(size.toRect(), Radius.circular(5)),
+      RRect.fromRectAndRadius(size.toRect(), const Radius.circular(8)),
       _borderPaint,
     );
-    canvas.drawPath(_arrowPath, _arrowPaint);
+    canvas.drawPath(_iconPath, _iconPaint);
   }
 
   @override
   void onTapDown(TapDownEvent event) {
-    _arrowPaint.color = const Color(0xffffffff);
+    _iconPaint.color = const Color(0xffffffff);
   }
 
   @override
   void onTapUp(TapUpEvent event) {
-    _arrowPaint.color = const Color(0xffaaaaaa);
-    gameRef.navigator.popPage();
+    _iconPaint.color = const Color(0xffaaaaaa);
+    action();
   }
 
   @override
   void onTapCancel(TapCancelEvent event) {
-    _arrowPaint.color = const Color(0xffaaaaaa);
+    _iconPaint.color = const Color(0xffaaaaaa);
   }
+}
+
+class BackButton extends SimpleButton with HasGameRef<NavigatorGame> {
+  BackButton()
+      : super(
+          Path()
+            ..moveTo(22, 8)
+            ..lineTo(10, 20)
+            ..lineTo(22, 32)
+            ..moveTo(12, 20)
+            ..lineTo(34, 20),
+          position: Vector2.all(10),
+        );
+
+  @override
+  void action() => gameRef.navigator.popPage();
+}
+
+class PauseButton extends SimpleButton with HasGameRef<NavigatorGame> {
+  PauseButton()
+      : super(
+          Path()
+            ..moveTo(14, 10)
+            ..lineTo(14, 30)
+            ..moveTo(26, 10)
+            ..lineTo(26, 30),
+          position: Vector2(60, 10),
+        );
+  @override
+  void action() => gameRef.navigator.showPage('pause');
 }
 
 class Level1PageImpl extends Component {
@@ -184,6 +211,7 @@ class Level1PageImpl extends Component {
     addAll([
       Background(const Color(0xbb5f358d)),
       BackButton(),
+      PauseButton(),
       Planet(
         radius: 40,
         color: const Color(0xfffff188),
@@ -217,6 +245,7 @@ class Level2PageImpl extends Component {
     addAll([
       Background(const Color(0xbb074825)),
       BackButton(),
+      PauseButton(),
       Planet(
         radius: 30,
         color: const Color(0xFFFFFFff),
@@ -308,5 +337,20 @@ class Orbit extends PositionComponent {
   void update(double dt) {
     _angle += dt / revolutionPeriod * Transform2D.tau;
     planet.position = Vector2(radius, 0)..rotate(_angle);
+  }
+}
+
+class PausePageImpl extends Component {
+  @override
+  Future<void> onLoad() async {
+    final game = findGame()!;
+    addAll([
+      Background(const Color(0x55000000)),
+      TextComponent(
+        text: 'PAUSED',
+        position: game.canvasSize / 2,
+        anchor: Anchor.center,
+      ),
+    ]);
   }
 }
