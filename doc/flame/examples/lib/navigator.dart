@@ -11,14 +11,42 @@ class NavigatorGame extends FlameGame with HasTappableComponents {
   Future<void> onLoad() async {
     navigator = Navigator(
       pages: {
+        'splash': Page(builder: SplashScreen.new),
         'home': Page(builder: StartPageImpl.new),
         'level1': LevelPage(builder: Level1PageImpl.new),
         'level2': LevelPage(builder: Level2PageImpl.new),
         'pause': Page(builder: PausePageImpl.new, transparent: true),
       },
-      initialPage: 'home',
+      initialPage: 'splash',
     )..addToParent(this);
   }
+}
+
+class SplashScreen extends Component
+    with TapCallbacks, HasGameRef<NavigatorGame> {
+  @override
+  Future<void> onLoad() async {
+    addAll([
+      Background(const Color(0xff282828)),
+      TextBoxComponent(
+        text: '[Navigator demo]',
+        textRenderer: TextPaint(
+          style: const TextStyle(
+            color: Color(0x66ffffff),
+            fontSize: 16,
+          ),
+        ),
+        align: Anchor.center,
+        size: gameRef.canvasSize,
+      ),
+    ]);
+  }
+
+  @override
+  bool containsLocalPoint(Vector2 point) => true;
+
+  @override
+  void onTapUp(TapUpEvent event) => gameRef.navigator.showPage('home');
 }
 
 class StartPageImpl extends Component with HasGameRef<NavigatorGame> {
