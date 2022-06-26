@@ -255,14 +255,6 @@ class Button(nodes.Element, nodes.General):
         self.body.append('</button>')
 
 
-class Div(nodes.Element, nodes.General):
-    def visit(self, node):
-        self.body.append(self.starttag(node, 'div').strip())
-
-    def depart(self, _):
-        self.body.append('</div>')
-
-
 # ------------------------------------------------------------------------------
 # Extension setup
 # ------------------------------------------------------------------------------
@@ -276,7 +268,6 @@ def setup(app):
 
     app.add_node(IFrame, html=(IFrame.visit, IFrame.depart))
     app.add_node(Button, html=(Button.visit, Button.depart))
-    app.add_node(Div, html=(Div.visit, Div.depart))
     app.add_directive('flutter-app', FlutterAppDirective)
     app.add_js_file('flutter_app.js')
     app.add_css_file('flutter_app.css')
