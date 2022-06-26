@@ -11,8 +11,8 @@ class Navigator extends Component {
     required this.initialPage,
     Map<String, _PageFactory>? pageFactories,
     this.onUnknownPage,
-  }) : _pages = pages,
-       _pageFactories = pageFactories ?? {};
+  })  : _pages = pages,
+        _pageFactories = pageFactories ?? {};
 
   final String initialPage;
   final Map<String, Page> _pages;
