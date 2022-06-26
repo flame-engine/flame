@@ -9,16 +9,18 @@ class NavigatorGame extends FlameGame with HasTappableComponents {
 
   @override
   Future<void> onLoad() async {
-    navigator = Navigator(
-      pages: {
-        'splash': Page(builder: SplashScreen.new),
-        'home': Page(builder: StartPageImpl.new),
-        'level1': LevelPage(builder: Level1PageImpl.new),
-        'level2': LevelPage(builder: Level2PageImpl.new),
-        'pause': Page(builder: PausePageImpl.new, transparent: true),
-      },
-      initialPage: 'splash',
-    )..addToParent(this);
+    add(
+      navigator = Navigator(
+        pages: {
+          'splash': Page(builder: SplashScreen.new),
+          'home': Page(builder: StartPageImpl.new),
+          'level1': LevelPage(builder: Level1PageImpl.new),
+          'level2': LevelPage(builder: Level2PageImpl.new),
+          'pause': Page(builder: PausePageImpl.new, transparent: true),
+        },
+        initialPage: 'splash',
+      ),
+    );
   }
 }
 
