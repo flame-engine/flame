@@ -21,10 +21,17 @@ class RaycastResult<T extends Hitbox<T>> {
   Ray2? ray;
   Vector2? get point => ray?.origin;
   double distance = double.maxFinite;
+  Vector2? normal;
 
-  void setWith({T? hitbox, required Ray2 ray, double? distance}) {
+  void setWith({
+    T? hitbox,
+    required Ray2 ray,
+    required Vector2 normal,
+    double? distance,
+  }) {
     this.hitbox = hitbox;
     this.ray = ray;
+    this.normal = normal;
     this.distance = distance ?? double.maxFinite;
   }
 

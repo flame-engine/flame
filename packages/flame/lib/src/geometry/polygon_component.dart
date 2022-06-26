@@ -277,21 +277,25 @@ class PolygonComponent extends ShapeComponent {
         closestDistance,
         out: out?.point ?? Vector2.zero(),
       );
+      // This is from - to since it is defined ccw in the canvas
+      // coordinate system
       _temporaryNormal
-        ..setFrom(closestSegment!.to)
-        ..sub(closestSegment.from);
-      _temporaryNormal.setValues(_temporaryNormal.y, -_temporaryNormal.x);
-      final reflection = (out?.ray?.direction ?? Vector2.zero())
-        ..setFrom(ray.direction);
-      reflection
-        ..reflect(_temporaryNormal)
+        ..setFrom(closestSegment!.from)
+        ..sub(closestSegment.to);
+      _temporaryNormal
+        ..setValues(_temporaryNormal.y, -_temporaryNormal.x)
         ..normalize();
+      final reflectionDirection = (out?.ray?.direction ?? Vector2.zero())
+        ..setFrom(ray.direction)
+        ..reflect(_temporaryNormal);
 
       return (out ?? RaycastResult<ShapeHitbox>())
         ..setWith(
           // TODO(spydon): This class should probably not be aware of ShapeHitbox
           hitbox: this as ShapeHitbox,
-          ray: Ray2(intersectionPoint, reflection),
+          ray: Ray2(intersectionPoint, reflectionDirection),
+          normal: (out?.normal?..setFrom(_temporaryNormal)) ??
+              _temporaryNormal.clone(),
           distance: closestDistance,
         );
     }

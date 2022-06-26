@@ -1,17 +1,34 @@
+import 'dart:math';
 import 'dart:ui';
 
+import 'package:collection/collection.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/geometry.dart';
 import 'package:flame/input.dart';
 
-class RaycastExample extends FlameGame with HasCollisionDetection, TapDetector {
+class RaycastExample extends FlameGame
+    with HasCollisionDetection, TapDetector, MouseMovementDetector {
   static const description = '''
   ''';
+  static const tau = pi * 2;
 
   Ray2? ray;
   Ray2? reflection;
+  Vector2? origin;
+
+  static const numberOfRays = 20;
+  final List<Ray2> rays = List.generate(
+    numberOfRays,
+    (i) => Ray2(Vector2.zero(), Vector2.zero()),
+    growable: false,
+  );
+  final List<RaycastResult<ShapeHitbox>> results = List.generate(
+    numberOfRays,
+    (i) => RaycastResult<ShapeHitbox>(),
+    growable: false,
+  );
 
   @override
   Future<void> onLoad() async {
@@ -24,15 +41,34 @@ class RaycastExample extends FlameGame with HasCollisionDetection, TapDetector {
 
   @override
   void onTapDown(TapDownInfo info) {
-    final direction = info.eventPosition.game.normalized();
-    print(direction);
-    ray = Ray2(Vector2.zero(), direction);
-    reflection = collisionDetection.raycast(ray!)?.ray;
+    origin = info.eventPosition.game;
+    castRays();
+    print('dont');
+  }
+
+  void castRays() {
+    rays.forEachIndexed((i, ray) {
+      ray.origin.setFrom(origin!);
+      ray.direction
+        ..setValues(1, 0)
+        ..rotate((tau / numberOfRays) * i);
+      collisionDetection.raycast(rays[i], out: results[i]);
+    });
+  }
+
+  @override
+  void onMouseMove(PointerHoverInfo info) {
+    return;
+    origin = info.eventPosition.game;
+    castRays();
   }
 
   @override
   void render(Canvas c) {
     super.render(c);
+    if (origin != null) {
+      c.drawCircle(origin!.toOffset(), 10, debugPaint);
+    }
     if (ray != null && reflection != null) {
       c.drawLine(
         ray!.origin.toOffset(),
@@ -41,7 +77,24 @@ class RaycastExample extends FlameGame with HasCollisionDetection, TapDetector {
       );
       c.drawLine(
         reflection!.origin.toOffset(),
-        reflection!.direction.scaled(10).toOffset(),
+        reflection!.origin.toOffset() +
+            reflection!.direction.scaled(100).toOffset(),
+        debugPaint,
+      );
+    }
+
+    if (origin == null) {
+      return;
+    }
+    final originOffset = origin!.toOffset();
+    for (final result in results) {
+      if (result.ray == null) {
+        continue;
+      }
+      final intersectionPoint = result.ray!.origin.toOffset();
+      c.drawLine(
+        originOffset,
+        intersectionPoint,
         debugPaint,
       );
     }
