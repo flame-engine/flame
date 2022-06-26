@@ -17,4 +17,5 @@ export 'src/game/mixins/single_game_instance.dart';
 export 'src/game/notifying_vector2.dart';
 export 'src/game/projector.dart';
 export 'src/game/transform2d.dart';
+export 'src/page_render_effect.dart';
 export 'src/text/text_paint.dart';

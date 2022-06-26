@@ -12,8 +12,8 @@ class NavigatorGame extends FlameGame with HasTappableComponents {
     navigator = Navigator(
       pages: {
         'home': Page(builder: StartPageImpl.new),
-        'level1': Level1Page(),
-        'level2': Level2Page(),
+        'level1': LevelPage(builder: Level1PageImpl.new),
+        'level2': LevelPage(builder: Level2PageImpl.new),
         'pause': Page(builder: PausePageImpl.new, transparent: true),
       },
       initialPage: 'home',
@@ -205,20 +205,24 @@ class PauseButton extends SimpleButton with HasGameRef<NavigatorGame> {
   void action() => gameRef.navigator.showPage('pause');
 }
 
-class Level1Page extends Page {
-  @override
-  Component build() => Level1PageImpl();
+class LevelPage extends Page {
+  LevelPage({super.builder});
 
   @override
-  void onDeactivate() => stopTime();
-}
-
-class Level2Page extends Page {
-  @override
-  Component build() => Level2PageImpl();
+  void onActivate() {
+    resumeTime();
+    removeRenderEffect();
+  }
 
   @override
-  void onDeactivate() => stopTime();
+  void onDeactivate() {
+    stopTime();
+    addRenderEffect(
+      PaintRenderEffect()
+        ..addDesaturation(opacity: 0.5)
+        ..addBlur(3.0),
+    );
+  }
 }
 
 class Level1PageImpl extends Component {
@@ -363,7 +367,6 @@ class PausePageImpl extends Component
   Future<void> onLoad() async {
     final game = findGame()!;
     addAll([
-      Background(const Color(0x55000000)),
       TextComponent(
         text: 'PAUSED',
         position: game.canvasSize / 2,

@@ -1,9 +1,10 @@
-import 'dart:ui' show Canvas;
+import 'dart:ui';
 
 import 'package:flame/src/components/component.dart';
 import 'package:flame/src/components/mixins/parent_is_a.dart';
 import 'package:flame/src/components/navigator.dart';
 import 'package:flame/src/components/position_component.dart';
+import 'package:flame/src/page_render_effect.dart';
 import 'package:meta/meta.dart';
 import 'package:vector_math/vector_math_64.dart';
 
@@ -34,13 +35,17 @@ class Page extends PositionComponent with ParentIsA<Navigator> {
     return builder!();
   }
 
-  void stopTime() {
-    _timeMultiplier = 0;
-  }
+  double timeSpeed = 1.0;
+
+  void stopTime() => timeSpeed = 0;
+
+  void resumeTime() => timeSpeed = 1.0;
+
+  void addRenderEffect(PageRenderEffect effect) => _renderEffect = effect;
+
+  void removeRenderEffect() => _renderEffect = null;
 
   //#region Implementation methods
-
-  double _timeMultiplier = 1.0;
 
   @internal
   bool get isBuilt => _child != null;
@@ -50,10 +55,11 @@ class Page extends PositionComponent with ParentIsA<Navigator> {
 
   Component? _child;
 
+  PageRenderEffect? _renderEffect;
+
   @internal
   void activate() {
     _child ??= build()..addToParent(this);
-    _timeMultiplier = 1.0;
     onActivate();
   }
 
@@ -65,14 +71,20 @@ class Page extends PositionComponent with ParentIsA<Navigator> {
   @override
   void renderTree(Canvas canvas) {
     if (isRendered) {
-      super.renderTree(canvas);
+      if (_renderEffect != null) {
+        final useCanvas = _renderEffect!.preprocessCanvas(canvas);
+        super.renderTree(useCanvas);
+        _renderEffect!.postprocessCanvas(canvas);
+      } else {
+        super.renderTree(canvas);
+      }
     }
   }
 
   @override
   void updateTree(double dt) {
-    if (_timeMultiplier > 0) {
-      super.updateTree(dt * _timeMultiplier);
+    if (timeSpeed > 0) {
+      super.updateTree(dt * timeSpeed);
     }
   }
 
