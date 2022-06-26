@@ -20,6 +20,7 @@ void main() {
       game = DragEventsGame();
       break;
     case 'navigator':
+    default:
       game = NavigatorGame();
       break;
   }

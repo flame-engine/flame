@@ -53,45 +53,43 @@ class SplashScreen extends Component
 
 class StartPageImpl extends Component with HasGameRef<NavigatorGame> {
   StartPageImpl() {
-    _logo = TextPaint(
-      style: const TextStyle(
-        fontSize: 64,
-        color: Color(0xFFC8FFF5),
-        fontWeight: FontWeight.w800,
+    addAll([
+      _logo = TextComponent(
+        text: 'Syzygy',
+        textRenderer: TextPaint(
+          style: const TextStyle(
+            fontSize: 64,
+            color: Color(0xFFC8FFF5),
+            fontWeight: FontWeight.w800,
+          ),
+        ),
+        anchor: Anchor.center,
       ),
-    ).toTextPainter('Syzygy');
-    _button1 = RoundedButton(
-      text: 'Level 1',
-      action: () => gameRef.navigator.showPage('level1'),
-      color: const Color(0xffadde6c),
-      borderColor: const Color(0xffedffab),
-    );
-    _button2 = RoundedButton(
-      text: 'Level 2',
-      action: () => gameRef.navigator.showPage('level2'),
-      color: const Color(0xffdebe6c),
-      borderColor: const Color(0xfffff4c7),
-    );
-    add(_button1);
-    add(_button2);
+      _button1 = RoundedButton(
+        text: 'Level 1',
+        action: () => gameRef.navigator.showPage('level1'),
+        color: const Color(0xffadde6c),
+        borderColor: const Color(0xffedffab),
+      ),
+      _button2 = RoundedButton(
+        text: 'Level 2',
+        action: () => gameRef.navigator.showPage('level2'),
+        color: const Color(0xffdebe6c),
+        borderColor: const Color(0xfffff4c7),
+      ),
+    ]);
   }
 
-  late final TextPainter _logo;
-  late Offset _logoOffset;
+  late final TextComponent _logo;
   late final RoundedButton _button1;
   late final RoundedButton _button2;
 
   @override
   void onGameResize(Vector2 size) {
     super.onGameResize(size);
-    _logoOffset = Offset((size.x - _logo.width) / 2, size.y / 3 - _logo.height);
-    _button1.position = Vector2(size.x / 2, _logoOffset.dy + 140);
-    _button2.position = Vector2(size.x / 2, _logoOffset.dy + 200);
-  }
-
-  @override
-  void render(Canvas canvas) {
-    _logo.paint(canvas, _logoOffset);
+    _logo.position = Vector2(size.x / 2, size.y / 3);
+    _button1.position = Vector2(size.x / 2, _logo.y + 80);
+    _button2.position = Vector2(size.x / 2, _logo.y + 140);
   }
 }
 
