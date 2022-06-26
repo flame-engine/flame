@@ -18,7 +18,7 @@ class RaycastExample extends FlameGame
   Ray2? reflection;
   Vector2? origin;
 
-  static const numberOfRays = 20;
+  static const numberOfRays = 100;
   final List<Ray2> rays = List.generate(
     numberOfRays,
     (i) => Ray2(Vector2.zero(), Vector2.zero()),
@@ -43,7 +43,6 @@ class RaycastExample extends FlameGame
   void onTapDown(TapDownInfo info) {
     origin = info.eventPosition.game;
     castRays();
-    print('dont');
   }
 
   void castRays() {
@@ -58,7 +57,6 @@ class RaycastExample extends FlameGame
 
   @override
   void onMouseMove(PointerHoverInfo info) {
-    return;
     origin = info.eventPosition.game;
     castRays();
   }
@@ -88,15 +86,17 @@ class RaycastExample extends FlameGame
     }
     final originOffset = origin!.toOffset();
     for (final result in results) {
-      if (result.ray == null) {
+      if (!result.isActive) {
         continue;
       }
-      final intersectionPoint = result.ray!.origin.toOffset();
+      final intersectionPoint = result.reflectionRay!.origin.toOffset();
+      //print(intersectionPoint);
       c.drawLine(
         originOffset,
         intersectionPoint,
         debugPaint,
       );
     }
+    //print('stop');
   }
 }

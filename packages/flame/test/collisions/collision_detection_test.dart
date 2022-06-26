@@ -694,8 +694,11 @@ void main() {
       final ray = Ray2(Vector2.zero(), Vector2(1, 0));
       final result = game.collisionDetection.raycast(ray);
       expect(result?.hitbox?.parent, game.children.first);
-      expect(result?.ray?.origin, closeToVector(50, 0));
-      expect(result?.ray?.direction, closeToVector(-1, 0, epsilon: 0.005));
+      expect(result?.reflectionRay?.origin, closeToVector(50, 0));
+      expect(
+        result?.reflectionRay?.direction,
+        closeToVector(-1, 0, epsilon: 0.005),
+      );
     });
 
     testCollisionDetectionGame(
@@ -713,8 +716,11 @@ void main() {
         final ray = Ray2(Vector2.zero(), Vector2.all(1)..normalized());
         final result = game.collisionDetection.raycast(ray);
         expect(result?.hitbox?.parent, game.children.first);
-        expect(result?.ray?.origin, closeToVector(184.5, 184.5));
-        expect(result?.ray?.direction, closeToVector(-1, 0, epsilon: 0.005));
+        expect(result?.reflectionRay?.origin, closeToVector(184.5, 184.5));
+        expect(
+          result?.reflectionRay?.direction,
+          closeToVector(-1, 0, epsilon: 0.005),
+        );
       },
     );
 
@@ -731,8 +737,11 @@ void main() {
         final ray = Ray2(Vector2.all(10), Vector2.all(1)..normalized());
         final result = game.collisionDetection.raycast(ray);
         expect(result?.hitbox?.parent, game.children.first);
-        expect(result?.ray?.origin, closeToVector(10, 10));
-        expect(result?.ray?.direction, closeToVector(-1, 0, epsilon: 0.006));
+        expect(result?.reflectionRay?.origin, closeToVector(10, 10));
+        expect(
+          result?.reflectionRay?.direction,
+          closeToVector(-1, 0, epsilon: 0.006),
+        );
       },
     );
 
@@ -749,8 +758,11 @@ void main() {
         final ray = Ray2(Vector2(1, 0), Vector2.all(1)..normalized());
         final result = game.collisionDetection.raycast(ray);
         expect(result?.hitbox?.parent, game.children.first);
-        expect(result?.ray?.origin, closeToVector(10, 10));
-        expect(result?.ray?.direction, closeToVector(-1, 0, epsilon: 0.006));
+        expect(result?.reflectionRay?.origin, closeToVector(10, 10));
+        expect(
+          result?.reflectionRay?.direction,
+          closeToVector(-1, 0, epsilon: 0.006),
+        );
       },
     );
   });

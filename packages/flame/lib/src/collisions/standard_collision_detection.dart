@@ -61,7 +61,9 @@ class StandardCollisionDetection extends CollisionDetection<ShapeHitbox> {
     hitboxB.onCollisionEnd(hitboxA);
   }
 
-  late final _temporaryRaycastResult = RaycastResult<ShapeHitbox>();
+  late final _temporaryRaycastResult = RaycastResult<ShapeHitbox>(
+    isActive: false,
+  );
 
   @override
   RaycastResult<ShapeHitbox>? raycast(
@@ -72,17 +74,22 @@ class StandardCollisionDetection extends CollisionDetection<ShapeHitbox> {
     if (broadphaseResult.isEmpty) {
       return null;
     }
-    final raycastResult = (out?..reset()) ?? RaycastResult();
-    var hasResult = false;
+    var finalResult = out?..reset();
     for (final potential in broadphaseResult) {
-      final result =
+      final currentResult =
           potential.rayIntersection(ray, out: _temporaryRaycastResult);
-      if (result != null && result.distance < raycastResult.distance) {
-        hasResult = true;
-        raycastResult.setFrom(result);
+      final possiblyFirstResult = !(finalResult?.isActive ?? false);
+      if (currentResult != null &&
+          (possiblyFirstResult ||
+              currentResult.distance! < finalResult!.distance!)) {
+        if (finalResult == null) {
+          finalResult = currentResult.clone();
+        } else {
+          finalResult.setFrom(currentResult);
+        }
       }
     }
-    return hasResult ? raycastResult : null;
+    return finalResult;
   }
 
   @override
@@ -90,7 +97,7 @@ class StandardCollisionDetection extends CollisionDetection<ShapeHitbox> {
     Ray2 ray, {
     Iterable<RaycastResult<Hitbox<ShapeHitbox>>>? out,
   }) {
-    // TODO: implement raycastAll
+    // TODO(Spydon): implement raycastAll, rayTrace?
     throw UnimplementedError();
   }
 }

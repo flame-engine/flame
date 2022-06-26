@@ -8,45 +8,79 @@ import 'package:flame/src/geometry/ray2.dart';
 /// keep the result in an object, clone the parts you want, or the whole
 /// [RaycastResult] with [clone].
 class RaycastResult<T extends Hitbox<T>> {
-  RaycastResult({this.hitbox, Ray2? ray, double? distance}) {
-    if (ray != null) {
-      this.ray = ray;
-    }
-    if (distance != null) {
-      this.distance = distance;
-    }
+  RaycastResult({
+    T? hitbox,
+    Ray2? reflectionRay,
+    Vector2? normal,
+    double? distance,
+    this.isActive = true,
+  }) {
+    _hitbox = hitbox;
+    _reflectionRay = reflectionRay ?? Ray2.zero();
+    _normal = normal ?? Vector2.zero();
+    _distance = distance ?? double.maxFinite;
   }
 
-  T? hitbox;
-  Ray2? ray;
-  Vector2? get point => ray?.origin;
-  double distance = double.maxFinite;
-  Vector2? normal;
+  /// Whether this result has active results in it.
+  ///
+  /// This is used so that the objects in there can continue to live even when
+  /// there is no result from a ray cast.
+  bool isActive;
+
+  T? _hitbox;
+  T? get hitbox => isActive ? _hitbox : null;
+
+  late Ray2 _reflectionRay;
+  Ray2? get reflectionRay => isActive ? _reflectionRay : null;
+
+  Vector2? get point => reflectionRay?.origin;
+
+  late double _distance;
+  double? get distance => isActive ? _distance : null;
+
+  late Vector2 _normal;
+  Vector2? get normal => isActive ? _normal : null;
+
+  void reset() => isActive = false;
+
+  /// Sets this [RaycastResult]'s objects to the values stored in [other].
+  ///
+  /// Always sets [isActive] to true, unless explicitly passed false.
+  void setFrom(RaycastResult<T> other, {bool isActive = true}) {
+    setWith(
+      hitbox: other.hitbox,
+      reflectionRay: other.reflectionRay,
+      normal: other.normal,
+      distance: other.distance,
+      isActive: isActive,
+    );
+  }
 
   void setWith({
     T? hitbox,
-    required Ray2 ray,
-    required Vector2 normal,
+    Ray2? reflectionRay,
+    Vector2? normal,
     double? distance,
+    bool isActive = true,
   }) {
-    this.hitbox = hitbox;
-    this.ray = ray;
-    this.normal = normal;
-    this.distance = distance ?? double.maxFinite;
-  }
-
-  void reset() {
-    hitbox = null;
-    distance = double.maxFinite;
-  }
-
-  void setFrom(RaycastResult<T> result) {
-    hitbox = result.hitbox;
-    ray = result.ray;
-    distance = result.distance;
+    _hitbox = hitbox;
+    if (reflectionRay != null) {
+      _reflectionRay.setFrom(reflectionRay);
+    }
+    if (normal != null) {
+      _normal.setFrom(normal);
+    }
+    _distance = distance ?? double.maxFinite;
+    this.isActive = isActive;
   }
 
   RaycastResult<T> clone() {
-    return RaycastResult(hitbox: hitbox, ray: ray?.clone(), distance: distance);
+    return RaycastResult(
+      hitbox: hitbox,
+      reflectionRay: _reflectionRay.clone(),
+      normal: _normal.clone(),
+      distance: distance,
+      isActive: isActive,
+    );
   }
 }

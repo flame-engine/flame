@@ -8,8 +8,6 @@ import 'package:flame/src/anchor.dart';
 import 'package:flame/src/cache/value_cache.dart';
 import 'package:flame/src/extensions/rect.dart';
 import 'package:flame/src/extensions/vector2.dart';
-import 'package:flame/src/geometry/line_segment.dart';
-import 'package:flame/src/geometry/shape_component.dart';
 import 'package:meta/meta.dart';
 
 class PolygonComponent extends ShapeComponent {
@@ -273,10 +271,8 @@ class PolygonComponent extends ShapeComponent {
       }
     }
     if (crossings > 0 && crossings.isEven) {
-      final intersectionPoint = ray.point(
-        closestDistance,
-        out: out?.point ?? Vector2.zero(),
-      );
+      out?.isActive = true;
+      final intersectionPoint = ray.point(closestDistance, out: out?.point);
       // This is from - to since it is defined ccw in the canvas
       // coordinate system
       _temporaryNormal
@@ -285,22 +281,30 @@ class PolygonComponent extends ShapeComponent {
       _temporaryNormal
         ..setValues(_temporaryNormal.y, -_temporaryNormal.x)
         ..normalize();
-      final reflectionDirection = (out?.ray?.direction ?? Vector2.zero())
-        ..setFrom(ray.direction)
-        ..reflect(_temporaryNormal);
+      final reflectionDirection =
+          (out?.reflectionRay?.direction ?? Vector2.zero())
+            ..setFrom(ray.direction)
+            ..reflect(_temporaryNormal);
 
+      final reflectionRay = (out?.reflectionRay
+            ?..setWith(
+              origin: intersectionPoint,
+              direction: reflectionDirection,
+            )) ??
+          Ray2(intersectionPoint, reflectionDirection);
       return (out ?? RaycastResult<ShapeHitbox>())
         ..setWith(
-          // TODO(spydon): This class should probably not be aware of ShapeHitbox
+          // TODO(spydon): This class should not be aware of ShapeHitbox
           hitbox: this as ShapeHitbox,
-          ray: Ray2(intersectionPoint, reflectionDirection),
+          reflectionRay: reflectionRay,
           normal: (out?.normal?..setFrom(_temporaryNormal)) ??
               _temporaryNormal.clone(),
           distance: closestDistance,
         );
     }
     // TODO(spydon): Handle if there is one crossing
-    // (if the origin of the ray is inside of the hitbox, then it should be reflected the other way around)
+    // (if the origin of the ray is inside of the hitbox, then it should be
+    // reflected the other way around)
     return null;
   }
 
