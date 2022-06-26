@@ -297,14 +297,14 @@ class PolygonComponent extends ShapeComponent {
           // TODO(spydon): This class should not be aware of ShapeHitbox
           hitbox: this as ShapeHitbox,
           reflectionRay: reflectionRay,
-          normal: (out?.normal?..setFrom(_temporaryNormal)) ??
-              _temporaryNormal.clone(),
+          normal: _temporaryNormal,
           distance: closestDistance,
         );
     }
     // TODO(spydon): Handle if there is one crossing
     // (if the origin of the ray is inside of the hitbox, then it should be
     // reflected the other way around)
+    out?.isActive = false;
     return null;
   }
 

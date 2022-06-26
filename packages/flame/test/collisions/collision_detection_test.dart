@@ -695,10 +695,7 @@ void main() {
       final result = game.collisionDetection.raycast(ray);
       expect(result?.hitbox?.parent, game.children.first);
       expect(result?.reflectionRay?.origin, closeToVector(50, 0));
-      expect(
-        result?.reflectionRay?.direction,
-        closeToVector(-1, 0, epsilon: 0.005),
-      );
+      expect(result?.reflectionRay?.direction, closeToVector(-1, 0));
     });
 
     testCollisionDetectionGame(
@@ -716,11 +713,8 @@ void main() {
         final ray = Ray2(Vector2.zero(), Vector2.all(1)..normalized());
         final result = game.collisionDetection.raycast(ray);
         expect(result?.hitbox?.parent, game.children.first);
-        expect(result?.reflectionRay?.origin, closeToVector(184.5, 184.5));
-        expect(
-          result?.reflectionRay?.direction,
-          closeToVector(-1, 0, epsilon: 0.005),
-        );
+        expect(result?.reflectionRay?.origin, closeToVector(90, 90));
+        expect(result?.reflectionRay?.direction, closeToVector(-1, 1));
       },
     );
 
@@ -738,10 +732,7 @@ void main() {
         final result = game.collisionDetection.raycast(ray);
         expect(result?.hitbox?.parent, game.children.first);
         expect(result?.reflectionRay?.origin, closeToVector(10, 10));
-        expect(
-          result?.reflectionRay?.direction,
-          closeToVector(-1, 0, epsilon: 0.006),
-        );
+        expect(result?.reflectionRay?.direction, closeToVector(-1, 1));
       },
     );
 
@@ -759,10 +750,79 @@ void main() {
         final result = game.collisionDetection.raycast(ray);
         expect(result?.hitbox?.parent, game.children.first);
         expect(result?.reflectionRay?.origin, closeToVector(10, 10));
-        expect(
-          result?.reflectionRay?.direction,
-          closeToVector(-1, 0, epsilon: 0.006),
-        );
+        expect(result?.reflectionRay?.direction, closeToVector(-1, 0));
+      },
+    );
+
+    testCollisionDetectionGame(
+      'ray from the left of hitbox',
+      (game) async {
+        game.ensureAddAll([
+          PositionComponent(
+            position: Vector2.zero(),
+            size: Vector2.all(10),
+          )..add(RectangleHitbox()),
+        ]);
+        await game.ready();
+        final ray = Ray2(Vector2(-5, 5), Vector2(1, 0));
+        final result = game.collisionDetection.raycast(ray);
+        expect(result?.hitbox?.parent, game.children.first);
+        expect(result?.reflectionRay?.origin, closeToVector(0, 5));
+        expect(result?.reflectionRay?.direction, closeToVector(-1, 0));
+      },
+    );
+
+    testCollisionDetectionGame(
+      'ray from the top of hitbox',
+      (game) async {
+        game.ensureAddAll([
+          PositionComponent(
+            position: Vector2.zero(),
+            size: Vector2.all(10),
+          )..add(RectangleHitbox()),
+        ]);
+        await game.ready();
+        final ray = Ray2(Vector2(5, -5), Vector2(0, 1));
+        final result = game.collisionDetection.raycast(ray);
+        expect(result?.hitbox?.parent, game.children.first);
+        expect(result?.reflectionRay?.origin, closeToVector(5, 0));
+        expect(result?.reflectionRay?.direction, closeToVector(0, -1));
+      },
+    );
+
+    testCollisionDetectionGame(
+      'ray from the right of hitbox',
+      (game) async {
+        game.ensureAddAll([
+          PositionComponent(
+            position: Vector2.zero(),
+            size: Vector2.all(10),
+          )..add(RectangleHitbox()),
+        ]);
+        await game.ready();
+        final ray = Ray2(Vector2(15, 5), Vector2(-1, 0));
+        final result = game.collisionDetection.raycast(ray);
+        expect(result?.hitbox?.parent, game.children.first);
+        expect(result?.reflectionRay?.origin, closeToVector(10, 5));
+        expect(result?.reflectionRay?.direction, closeToVector(1, 0));
+      },
+    );
+
+    testCollisionDetectionGame(
+      'ray from the bottom of hitbox',
+      (game) async {
+        game.ensureAddAll([
+          PositionComponent(
+            position: Vector2.zero(),
+            size: Vector2.all(10),
+          )..add(RectangleHitbox()),
+        ]);
+        await game.ready();
+        final ray = Ray2(Vector2(5, 15), Vector2(0, -1));
+        final result = game.collisionDetection.raycast(ray);
+        expect(result?.hitbox?.parent, game.children.first);
+        expect(result?.reflectionRay?.origin, closeToVector(0, 5));
+        expect(result?.reflectionRay?.direction, closeToVector(1, 0));
       },
     );
   });

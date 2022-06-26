@@ -7,6 +7,8 @@ import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/geometry.dart';
 import 'package:flame/input.dart';
+import 'package:flame/palette.dart';
+import 'package:flutter/material.dart';
 
 class RaycastExample extends FlameGame
     with HasCollisionDetection, TapDetector, MouseMovementDetector {
@@ -18,7 +20,7 @@ class RaycastExample extends FlameGame
   Ray2? reflection;
   Vector2? origin;
 
-  static const numberOfRays = 100;
+  static const numberOfRays = 4;
   final List<Ray2> rays = List.generate(
     numberOfRays,
     (i) => Ray2(Vector2.zero(), Vector2.zero()),
@@ -35,7 +37,8 @@ class RaycastExample extends FlameGame
     debugMode = true;
     add(
       RectangleComponent(position: Vector2.all(300), size: Vector2.all(100))
-        ..add(RectangleHitbox()),
+        ..add(RectangleHitbox())
+        ..paint = BasicPalette.transparent.paint(),
     );
   }
 
