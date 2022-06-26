@@ -64,6 +64,16 @@ class StartPageImpl extends Component with HasGameRef<NavigatorGame> {
   }
 }
 
+class Background extends Component {
+  Background(this.color);
+  final Color color;
+
+  @override
+  void render(Canvas canvas) {
+    canvas.drawColor(color, BlendMode.srcATop);
+  }
+}
+
 class RoundedButton extends PositionComponent with TapCallbacks {
   RoundedButton({
     required this.text,
@@ -127,7 +137,8 @@ class Level1PageImpl extends Component {
   @override
   Future<void> onLoad() async {
     final game = findGame()!;
-    add(
+    addAll([
+      Background(const Color(0xbb5f358d)),
       Planet(
         radius: 40,
         color: const Color(0xFFFFFFEE),
@@ -141,25 +152,69 @@ class Level1PageImpl extends Component {
               color: const Color(0xff54d7b1),
               children: [
                 Orbit(
-                    radius: 40,
-                    revolutionPeriod: 5,
-                    planet: Planet(radius: 5, color: const Color(0xFFcccccc)),
+                  radius: 40,
+                  revolutionPeriod: 5,
+                  planet: Planet(radius: 5, color: const Color(0xFFcccccc)),
                 ),
               ],
             ),
           ),
         ],
       ),
-    );
-  }
-
-  @override
-  void render(Canvas canvas) {
-    canvas.drawColor(const Color(0xbb5f358d), BlendMode.srcATop);
+    ]);
   }
 }
 
-class Level2PageImpl extends Component {}
+class Level2PageImpl extends Component {
+  @override
+  Future<void> onLoad() async {
+    final game = findGame()!;
+    addAll([
+      Background(const Color(0xbb074825)),
+      Planet(
+        radius: 30,
+        color: const Color(0xFFFFFFff),
+        position: game.size / 2,
+        children: [
+          Orbit(
+            radius: 100,
+            revolutionPeriod: 5,
+            planet: Planet(
+              radius: 15,
+              color: const Color(0xffcbce7b),
+            ),
+          ),
+          Orbit(
+            radius: 180,
+            revolutionPeriod: 11,
+            planet: Planet(
+              radius: 20,
+              color: const Color(0xfff32727),
+              children: [
+                Orbit(
+                    radius: 32,
+                    revolutionPeriod: 3,
+                    planet: Planet(
+                      radius: 6,
+                      color: const Color(0xffffdb00),
+                    ),
+                ),
+                Orbit(
+                    radius: 45,
+                    revolutionPeriod: 4,
+                    planet: Planet(
+                      radius: 4,
+                      color: const Color(0xffdc00ff),
+                    ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    ]);
+  }
+}
 
 class Planet extends PositionComponent {
   Planet({
