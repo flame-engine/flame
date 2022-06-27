@@ -10,11 +10,9 @@ import 'package:vector_math/vector_math_64.dart';
 
 class Page extends PositionComponent with ParentIsA<Navigator> {
   Page({
-    this.builder,
+    Component Function()? builder,
     this.transparent = false,
-  });
-
-  final Component Function()? builder;
+  }) : _builder = builder;
 
   /// If true, then the page below this one will continue to be rendered when
   /// this page becomes active. If false, then this page is assumed to
@@ -22,17 +20,25 @@ class Page extends PositionComponent with ParentIsA<Navigator> {
   /// page underneath doesn't need to be rendered.
   final bool transparent;
 
-  void onActivate() {}
+  double pushTransitionDuration = 0;
 
-  void onDeactivate() {}
+  double popTransitionDuration = 0;
+
+  final Component Function()? _builder;
+
+  /// This method is invoked when the page is pushed on top of the [Navigator]'s
+  /// stack.
+  void onPush(Page? previousPage) {}
+
+  void onPop(Page previousPage) {}
 
   Component build() {
     assert(
-      builder != null,
+      _builder != null,
       'Either provide `builder` in the constructor, or override the build() '
       'method',
     );
-    return builder!();
+    return _builder!();
   }
 
   double timeSpeed = 1.0;
@@ -58,15 +64,13 @@ class Page extends PositionComponent with ParentIsA<Navigator> {
   PageRenderEffect? _renderEffect;
 
   @internal
-  void activate() {
+  void didPush(Page? previousPage) {
     _child ??= build()..addToParent(this);
-    onActivate();
+    onPush(previousPage);
   }
 
   @internal
-  void deactivate() {
-    onDeactivate();
-  }
+  void didPop(Page previousPage) => onPop(previousPage);
 
   @override
   void renderTree(Canvas canvas) {

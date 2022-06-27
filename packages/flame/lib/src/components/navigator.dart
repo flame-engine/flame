@@ -1,4 +1,3 @@
-import 'package:collection/collection.dart';
 import 'package:flame/src/components/component.dart';
 import 'package:flame/src/components/page.dart';
 
@@ -20,30 +19,41 @@ class Navigator extends Component {
   final List<Page> _currentPages = [];
   final _PageFactory? onUnknownPage;
 
+  /// Puts the page [name] on top of the navigation stack.
+  ///
+  /// If the page is already in the stack, it will be simply moved on top;
+  /// otherwise the page will be built, mounted, and added at the top. If the
+  /// page is already on the top, this method will be a noop.
+  ///
+  ///
   void pushPage(String name) {
     final page = _resolvePage(name);
-    final activePage = _currentPages.lastOrNull;
-    if (page == activePage) {
+    final currentActivePage = _currentPages.last;
+    if (page == currentActivePage) {
       return;
     }
-    if (!page.isMounted) {
+    if (_currentPages.contains(page)) {
+      _currentPages.remove(page);
+      _currentPages.add(page);
+    } else {
+      _currentPages.add(page);
       add(page);
     }
-    _currentPages.remove(page);
-    _currentPages.add(page);
-    _fixPageOrder();
-    activePage?.deactivate();
-    page.activate();
+    _adjustPageOrder();
+    page.didPush(currentActivePage);
+    _execute(action: _adjustPageVisibility, delay: page.pushTransitionDuration);
   }
 
   void popPage() {
-    if (_currentPages.isEmpty) {
-      return;
-    }
-    final poppedPage = _currentPages.removeLast()..removeFromParent();
-    _fixPageOrder();
-    poppedPage.deactivate();
-    _currentPages.lastOrNull?.activate();
+    assert(
+      _currentPages.length > 1,
+      'Cannot pop the last page from the Navigator',
+    );
+    final page = _currentPages.removeLast();
+    _adjustPageOrder();
+    _adjustPageVisibility();
+    page.didPop(_currentPages.last);
+    _execute(action: page.removeFromParent, delay: page.popTransitionDuration);
   }
 
   Page _resolvePage(String name) {
@@ -68,20 +78,37 @@ class Navigator extends Component {
     throw ArgumentError('Page "$name" could not be resolved by the Navigator');
   }
 
-  void _fixPageOrder() {
+  void _adjustPageOrder() {
+    for (var i = 0; i < _currentPages.length; i++) {
+      _currentPages[i].changePriorityWithoutResorting(i);
+    }
+    reorderChildren();
+  }
+
+  void _adjustPageVisibility() {
     var render = true;
     for (var i = _currentPages.length - 1; i >= 0; i--) {
-      _currentPages[i].changePriorityWithoutResorting(i);
       _currentPages[i].isRendered = render;
       render &= _currentPages[i].transparent;
     }
-    reorderChildren();
+  }
+
+  void _execute({required void Function() action, required double delay}) {
+    if (delay > 0) {
+      Future<void>.delayed(Duration(microseconds: (delay * 1e6).toInt()))
+          .then((_) => action());
+    } else {
+      action();
+    }
   }
 
   @override
   void onMount() {
     super.onMount();
-    pushPage(initialPage);
+    final page = _resolvePage(initialPage);
+    _currentPages.add(page);
+    add(page);
+    page.didPush(null);
   }
 }
 

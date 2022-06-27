@@ -14,9 +14,9 @@ class NavigatorGame extends FlameGame with HasTappableComponents {
         pages: {
           'splash': Page(builder: SplashScreen.new),
           'home': Page(builder: StartPageImpl.new),
-          'level1': LevelPage(builder: Level1PageImpl.new),
-          'level2': LevelPage(builder: Level2PageImpl.new),
-          'pause': Page(builder: PausePageImpl.new, transparent: true),
+          'level1': Page(builder: Level1PageImpl.new),
+          'level2': Page(builder: Level2PageImpl.new),
+          'pause': PausePage(),
         },
         initialPage: 'splash',
       ),
@@ -232,26 +232,6 @@ class PauseButton extends SimpleButton with HasGameRef<NavigatorGame> {
   void action() => gameRef.navigator.pushPage('pause');
 }
 
-class LevelPage extends Page {
-  LevelPage({super.builder});
-
-  @override
-  void onActivate() {
-    resumeTime();
-    removeRenderEffect();
-  }
-
-  @override
-  void onDeactivate() {
-    stopTime();
-    addRenderEffect(
-      PaintRenderEffect()
-        ..addDesaturation(opacity: 0.5)
-        ..addBlur(3.0),
-    );
-  }
-}
-
 class Level1PageImpl extends Component {
   @override
   Future<void> onLoad() async {
@@ -376,6 +356,28 @@ class Orbit extends PositionComponent {
   void update(double dt) {
     _angle += dt / revolutionPeriod * Transform2D.tau;
     planet.position = Vector2(radius, 0)..rotate(_angle);
+  }
+}
+
+class PausePage extends Page {
+  PausePage() : super(builder: PausePageImpl.new, transparent: true);
+
+  @override
+  void onPush(Page? previousPage) {
+    previousPage!
+      ..stopTime()
+      ..addRenderEffect(
+        PaintRenderEffect()
+          ..addDesaturation(opacity: 0.5)
+          ..addBlur(3.0),
+      );
+  }
+
+  @override
+  void onPop(Page previousPage) {
+    previousPage
+      ..resumeTime()
+      ..removeRenderEffect();
   }
 }
 
