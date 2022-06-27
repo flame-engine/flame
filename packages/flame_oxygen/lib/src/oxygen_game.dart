@@ -10,7 +10,7 @@ import 'package:oxygen/oxygen.dart';
 /// [OxygenGame] should be extended to add your own game logic.
 ///
 /// It is based on the Oxygen package.
-abstract class OxygenGame with Game {
+abstract class OxygenGame extends Game {
   late final FlameWorld world;
 
   OxygenGame() {
