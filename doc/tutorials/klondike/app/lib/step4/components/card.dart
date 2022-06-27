@@ -2,26 +2,35 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:flame/components.dart';
+import 'package:flame/experimental.dart';
+import 'package:flame/game.dart';
 import '../klondike_game.dart';
+import '../pile.dart';
 import '../rank.dart';
 import '../suit.dart';
+import 'tableau_pile.dart';
 
-class Card extends PositionComponent {
+class Card extends PositionComponent with DragCallbacks {
   Card(int intRank, int intSuit)
       : rank = Rank.fromInt(intRank),
         suit = Suit.fromInt(intSuit),
-        _faceUp = false,
         super(size: KlondikeGame.cardSize);
 
   final Rank rank;
   final Suit suit;
-  bool _faceUp;
+  Pile? pile;
+  bool _faceUp = false;
+  bool _isDragging = false;
+  final List<Card> attachedCards = [];
 
   bool get isFaceUp => _faceUp;
+  bool get isFaceDown => !_faceUp;
   void flip() => _faceUp = !_faceUp;
 
   @override
   String toString() => rank.label + suit.label; // e.g. "Q♠" or "10♦"
+
+  //#region Rendering
 
   @override
   void render(Canvas canvas) {
@@ -206,4 +215,68 @@ class Card extends PositionComponent {
       canvas.restore();
     }
   }
+
+  //#endregion
+
+  //#region Dragging
+
+  @override
+  void onDragStart(DragStartEvent event) {
+    if (pile?.canMoveCard(this) ?? false) {
+      _isDragging = true;
+      priority = 100;
+      if (pile is TableauPile) {
+        attachedCards.clear();
+        final extraCards = (pile! as TableauPile).cardsOnTop(this);
+        for (final card in extraCards) {
+          card.priority = attachedCards.length + 101;
+          attachedCards.add(card);
+        }
+      }
+    }
+  }
+
+  @override
+  void onDragUpdate(DragUpdateEvent event) {
+    if (!_isDragging) {
+      return;
+    }
+    final cameraZoom = (findGame()! as FlameGame)
+        .firstChild<CameraComponent>()!
+        .viewfinder
+        .zoom;
+    final delta = event.delta / cameraZoom;
+    position.add(delta);
+    attachedCards.forEach((card) => card.position.add(delta));
+  }
+
+  @override
+  void onDragEnd(DragEndEvent event) {
+    if (!_isDragging) {
+      return;
+    }
+    _isDragging = false;
+    final dropPiles = parent!
+        .componentsAtPoint(position + size / 2)
+        .whereType<Pile>()
+        .toList();
+    if (dropPiles.isNotEmpty) {
+      if (dropPiles.first.canAcceptCard(this)) {
+        pile!.removeCard(this);
+        dropPiles.first.acquireCard(this);
+        if (attachedCards.isNotEmpty) {
+          attachedCards.forEach((card) => dropPiles.first.acquireCard(card));
+          attachedCards.clear();
+        }
+        return;
+      }
+    }
+    pile!.returnCard(this);
+    if (attachedCards.isNotEmpty) {
+      attachedCards.forEach((card) => pile!.returnCard(card));
+      attachedCards.clear();
+    }
+  }
+
+  //#endregion
 }
