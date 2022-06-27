@@ -70,11 +70,11 @@ class StandardCollisionDetection extends CollisionDetection<ShapeHitbox> {
     Ray2 ray, {
     RaycastResult<ShapeHitbox>? out,
   }) {
+    var finalResult = out?..reset();
     final broadphaseResult = broadphase.raycast(ray);
     if (broadphaseResult.isEmpty) {
       return null;
     }
-    var finalResult = out?..reset();
     for (final potential in broadphaseResult) {
       final currentResult =
           potential.rayIntersection(ray, out: _temporaryRaycastResult);

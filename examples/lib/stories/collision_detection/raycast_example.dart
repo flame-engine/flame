@@ -23,17 +23,22 @@ class RaycastExample extends FlameGame
   static const numberOfRays = 4;
   final List<Ray2> rays = List.generate(
     numberOfRays,
-    (i) => Ray2(Vector2.zero(), Vector2.zero()),
+    (i) => Ray2(
+      Vector2.zero(),
+      Vector2(0, 1)..rotate((tau / numberOfRays) * i),
+    ),
     growable: false,
   );
+
   final List<RaycastResult<ShapeHitbox>> results = List.generate(
     numberOfRays,
-    (i) => RaycastResult<ShapeHitbox>(),
+    (i) => RaycastResult<ShapeHitbox>(isActive: false),
     growable: false,
   );
 
   @override
   Future<void> onLoad() async {
+    rays.forEach((r) => print(r.direction));
     debugMode = true;
     add(
       RectangleComponent(position: Vector2.all(300), size: Vector2.all(100))
@@ -51,9 +56,6 @@ class RaycastExample extends FlameGame
   void castRays() {
     rays.forEachIndexed((i, ray) {
       ray.origin.setFrom(origin!);
-      ray.direction
-        ..setValues(1, 0)
-        ..rotate((tau / numberOfRays) * i);
       collisionDetection.raycast(rays[i], out: results[i]);
     });
   }
