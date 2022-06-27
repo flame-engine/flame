@@ -12,31 +12,29 @@ class DraggablesExample extends FlameGame with HasDraggables {
   ''';
 
   final double zoom;
-  late final DraggableSquare square;
+  late final DraggableEmber square;
 
   DraggablesExample({required this.zoom});
 
   @override
   Future<void> onLoad() async {
     camera.zoom = zoom;
-    add(square = DraggableSquare());
-    add(DraggableSquare()..y = 350);
+    add(square = DraggableEmber());
+    add(DraggableEmber()..y = 350);
   }
 }
 
 // Note: this component does not consider the possibility of multiple
 // simultaneous drags with different pointerIds.
-class DraggableSquare extends Ember with Draggable {
+class DraggableEmber extends Ember with Draggable {
   @override
   bool debugMode = true;
 
-  DraggableSquare({Vector2? position})
+  DraggableEmber({Vector2? position})
       : super(
           position: position ?? Vector2.all(100),
           size: Vector2.all(100),
         );
-
-  Vector2? dragDeltaPosition;
 
   @override
   void update(double dt) {
@@ -47,34 +45,12 @@ class DraggableSquare extends Ember with Draggable {
   }
 
   @override
-  bool onDragStart(DragStartInfo info) {
-    dragDeltaPosition = info.eventPosition.game - position;
-    return false;
-  }
-
-  @override
   bool onDragUpdate(DragUpdateInfo info) {
     if (parent is! DraggablesExample) {
       return true;
     }
-    final dragDeltaPosition = this.dragDeltaPosition;
-    if (dragDeltaPosition == null) {
-      return false;
-    }
 
-    position.setFrom(info.eventPosition.game - dragDeltaPosition);
-    return false;
-  }
-
-  @override
-  bool onDragEnd(_) {
-    dragDeltaPosition = null;
-    return false;
-  }
-
-  @override
-  bool onDragCancel() {
-    dragDeltaPosition = null;
+    position.add(info.delta.game);
     return false;
   }
 }
