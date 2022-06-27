@@ -1,4 +1,4 @@
-import 'package:flame/src/game/mixins/game.dart';
+import 'package:flame/src/game/game.dart';
 import 'package:flame/src/gestures/events.dart';
 import 'package:flutter/gestures.dart';
 

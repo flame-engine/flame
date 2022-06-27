@@ -1,5 +1,5 @@
+import 'package:flame/src/game/game.dart';
 import 'package:flame/src/game/game_loop.dart';
-import 'package:flame/src/game/mixins/game.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart' hide WidgetBuilder;
 //ignore_for_file: unnecessary_non_null_assertion

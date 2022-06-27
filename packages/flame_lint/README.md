@@ -10,5 +10,5 @@ Package with the lint rules used in all Flame Engine projects.
 - Then include it on your `analysis_options.yaml` file:
 
 ```yaml
-include: package:flame_lint/analysis_options_package.yaml
+include: package:flame_lint/analysis_options.yaml
 ```

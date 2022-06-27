@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:flame/extensions.dart';
 import 'package:flame/input.dart';
+import 'package:flame/src/game/game.dart';
 import 'package:flame/src/game/game_render_box.dart';
 import 'package:flame/src/game/game_widget/gestures.dart';
-import 'package:flame/src/game/mixins/game.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
@@ -284,7 +284,7 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
   }
 
   KeyEventResult _handleKeyEvent(FocusNode focusNode, RawKeyEvent event) {
-    final game = widget.game;
+    final game = currentGame;
     if (game is KeyboardEvents) {
       return game.onKeyEvent(event, RawKeyboard.instance.keysPressed);
     }
