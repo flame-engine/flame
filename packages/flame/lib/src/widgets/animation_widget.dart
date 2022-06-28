@@ -141,7 +141,6 @@ class _InternalSpriteAnimationWidgetState
   void _setupController() {
     widget.animation.onComplete = _pauseAnimation;
     _controller ??= AnimationController(vsync: this)
-      ..removeListener(_onAnimationValueChanged)
       ..addListener(_onAnimationValueChanged);
   }
 
