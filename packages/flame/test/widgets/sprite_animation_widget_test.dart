@@ -66,5 +66,19 @@ Future<void> main() async {
         expect(spriteAnimationWidgetFinder, findsOneWidget);
       },
     );
+
+    testWidgets('throws exception before', (tester) async {
+      final frames = List.generate(5, (_) => Sprite(image));
+      final spriteAnimation = SpriteAnimation.spriteList(frames, stepTime: 0.1);
+      final spriteAnimation2 =
+          SpriteAnimation.spriteList(frames, stepTime: 0.1);
+
+      await tester.pumpWidget(
+        SpriteAnimationWidget(animation: spriteAnimation),
+      );
+      await tester.pumpWidget(
+        SpriteAnimationWidget(animation: spriteAnimation2),
+      );
+    });
   });
 }
