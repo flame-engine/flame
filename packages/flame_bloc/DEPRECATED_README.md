@@ -1,5 +1,8 @@
 # Flame Bloc 🔥🧱
 
+This is documentation for the deprecated version of the Flame Bloc. This API will live until the
+next major version is released.
+
 `flame_bloc` provides easy access to blocs/cubits that are available on the widget tree to your Flame
 game and makes it possible for Flame components to listen to state changes to those blocs/cubits.
 

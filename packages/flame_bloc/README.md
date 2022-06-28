@@ -3,10 +3,6 @@
 `flame_bloc` offers a simple and natural (as in similar to `flutter_bloc`) way to use blocs and
 cubits inside a `FlameGame`.
 
-## ⚠️  IMPORTANT ⚠️  ##
-This README only covers the new (>= 1.4.0) API of flame bloc, for the previous deprecated API check
-[this](./DEPRECATED_README.md).
-
 For a migration guide from the previous API to the current one,
 [check this article](https://verygood.ventures/blog/flame-bloc-new-api).
 
@@ -107,5 +103,7 @@ class Player extends PositionComponent
   }
 }
 ```
+
+Note that one limitation of the mixin is that it can access only a single bloc.
 
 For a full example, check the [example folder](./example)
