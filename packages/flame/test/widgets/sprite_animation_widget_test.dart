@@ -67,18 +67,30 @@ Future<void> main() async {
       },
     );
 
-    testWidgets('throws exception before', (tester) async {
+    testWidgets('can safely change animation parameter', (tester) async {
       final frames = List.generate(5, (_) => Sprite(image));
-      final spriteAnimation = SpriteAnimation.spriteList(frames, stepTime: 0.1);
-      final spriteAnimation2 =
-          SpriteAnimation.spriteList(frames, stepTime: 0.1);
+      final animation1 = SpriteAnimation.spriteList(frames, stepTime: 0.1);
+      final animation2 = SpriteAnimation.spriteList(frames, stepTime: 0.1);
 
-      await tester.pumpWidget(
-        SpriteAnimationWidget(animation: spriteAnimation),
-      );
-      await tester.pumpWidget(
-        SpriteAnimationWidget(animation: spriteAnimation2),
-      );
+      await tester.pumpWidget(SpriteAnimationWidget(animation: animation1));
+      expect(animation1.onComplete, isNotNull);
+      expect(animation2.onComplete, isNull);
+
+      await tester.pump();
+      expect(animation1.elapsed, isNonZero);
+      expect(animation2.elapsed, isZero);
+
+      // This will call didUpdateWidget life cycle
+      await tester.pumpWidget(SpriteAnimationWidget(animation: animation2));
+      expect(animation1.onComplete, isNull);
+      expect(animation2.onComplete, isNotNull);
+
+      // Reset the replaced animation for clarifying the expectation
+      animation1.reset();
+
+      await tester.pump();
+      expect(animation1.elapsed, isZero);
+      expect(animation2.elapsed, isNonZero);
     });
   });
 }
