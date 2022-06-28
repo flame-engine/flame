@@ -337,7 +337,7 @@ class Camera extends Projector {
 
     final bounds = worldBounds;
     if (bounds != null) {
-      if (bounds.width > gameSize.x * zoom) {
+      if (bounds.width > gameSize.x) {
         final cameraLeftEdge = attemptedTarget.x;
         final cameraRightEdge = attemptedTarget.x + gameSize.x;
         if (cameraLeftEdge < bounds.left) {
@@ -349,7 +349,7 @@ class Camera extends Projector {
         attemptedTarget.x = (gameSize.x - bounds.width) / 2;
       }
 
-      if (bounds.height > gameSize.y * zoom) {
+      if (bounds.height > gameSize.y) {
         final cameraTopEdge = attemptedTarget.y;
         final cameraBottomEdge = attemptedTarget.y + gameSize.y;
         if (cameraTopEdge < bounds.top) {
