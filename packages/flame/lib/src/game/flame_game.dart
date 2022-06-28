@@ -4,7 +4,7 @@ import 'package:flame/src/components/component.dart';
 import 'package:flame/src/extensions/vector2.dart';
 import 'package:flame/src/game/camera/camera.dart';
 import 'package:flame/src/game/camera/camera_wrapper.dart';
-import 'package:flame/src/game/mixins/game.dart';
+import 'package:flame/src/game/game.dart';
 import 'package:flame/src/game/projector.dart';
 import 'package:meta/meta.dart';
 

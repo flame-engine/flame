@@ -37,6 +37,14 @@ abstract class PositionEvent extends Event {
   /// rendering order.
   final List<Vector2> renderingTrace = [];
 
+  Vector2? get parentPosition {
+    if (renderingTrace.length >= 2) {
+      return renderingTrace[renderingTrace.length - 2];
+    } else {
+      return null;
+    }
+  }
+
   /// Sends the event to components of type <T> that are currently rendered at
   /// the [canvasPosition].
   @internal
