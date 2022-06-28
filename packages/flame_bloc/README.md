@@ -34,7 +34,7 @@ class MyGame extends FlameGame {
 }
 ```
 
-With that, the `Player` component will now have access to our bloc.
+With the above changes, the `Player` component will now have access to our bloc.
 
 If more than one bloc needs to be provided, `FlameMultiBlocProvider` can be used in a similar fashion:
 
@@ -62,7 +62,7 @@ class MyGame extends FlameGame {
 }
 ```
 
-Listening to states changes on a component level can be done with two approaches:
+Listening to states changes at the component level can be done with two approaches:
 
 By using `FlameBlocListener` component:
 

@@ -1,6 +1,6 @@
 # Flame Bloc 🔥🧱
 
-`flame_bloc` adds easy access to blocs/cubits that are available on the widget tree to your Flame
+`flame_bloc` provides easy access to blocs/cubits that are available on the widget tree to your Flame
 game and makes it possible for Flame components to listen to state changes to those blocs/cubits.
 
 ## How to use
