@@ -9,14 +9,8 @@ void main() {
       final changer = MyVectorChanger();
       final vector = Vector2.all(1.0);
       final changedVector = changer.addOne(vector);
-      expect(
-        vector + Vector2.all(1.0),
-        closeToVector(changedVector.x, changedVector.y),
-      );
-      expect(
-        vector + Vector2.all(1.1),
-        closeToVector(changedVector.x, changedVector.y, epsilon: 0.2),
-      );
+      expect(vector + Vector2.all(1.0), closeToVector(changedVector));
+      expect(vector + Vector2.all(1.1), closeToVector(changedVector, 0.2));
     });
 
     test('can test double', () {
