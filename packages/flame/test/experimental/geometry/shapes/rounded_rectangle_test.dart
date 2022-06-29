@@ -20,7 +20,7 @@ void main() {
       expect(rrect.isConvex, true);
       expect(rrect.isClosed, true);
       expect(rrect.perimeter, closeTo(30.566, 0.001));
-      expect(rrect.center, closeToVector(6.5, 6));
+      expect(rrect.center, closeToVector(Vector2(6.5, 6)));
       expect(
         rrect.aabb,
         closeToAabb(Aabb2.minMax(Vector2(4, 0), Vector2(9, 12))),
@@ -116,8 +116,8 @@ void main() {
 
     test('move', () {
       final rrect = RoundedRectangle.fromLTRBR(4, 2, 9, 12, 1);
-      expect(rrect.aabb.min, closeToVector(4, 2));
-      expect(rrect.aabb.max, closeToVector(9, 12));
+      expect(rrect.aabb.min, closeToVector(Vector2(4, 2)));
+      expect(rrect.aabb.max, closeToVector(Vector2(9, 12)));
 
       rrect.move(Vector2(-3, 1));
       expect(rrect.left, 4 - 3);
@@ -125,7 +125,7 @@ void main() {
       expect(rrect.top, 2 + 1);
       expect(rrect.bottom, 12 + 1);
       expect(rrect.radius, 1);
-      expect(rrect.center, closeToVector(6.5 - 3, 7 + 1));
+      expect(rrect.center, closeToVector(Vector2(6.5 - 3, 7 + 1)));
       expect(
         rrect.aabb,
         closeToAabb(Aabb2.minMax(Vector2(1, 3), Vector2(6, 13))),
@@ -178,7 +178,7 @@ void main() {
         final expected = rect.support(direction) + circle.support(direction);
         expect(
           rrect.support(direction),
-          closeToVector(expected.x, expected.y, epsilon: 1e-14),
+          closeToVector(expected, 1e-14),
         );
       }
     });
