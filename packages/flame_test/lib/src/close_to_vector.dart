@@ -11,6 +11,7 @@ import 'package:vector_math/vector_math_64.dart';
 Matcher closeToVector(Vector2 vector, [double epsilon = 1e-15]) {
   return _IsCloseTo(vector, epsilon);
 }
+
 Matcher closeToVectorOld(num x, num y, {double epsilon = 1e-15}) {
   return _IsCloseTo(Vector2(x.toDouble(), y.toDouble()), epsilon);
 }

@@ -112,7 +112,8 @@ void main() {
       game.update(1);
       expect(component.size, closeToVector(Vector2(1, 1))); // 5*1/10 + 0.5*1
       game.update(1);
-      expect(component.size, closeToVector(Vector2(1, 1))); // 5*2/10 + 0.5*1 - 0.5*1
+      // 5*2/10 + 0.5*1 - 0.5*1
+      expect(component.size, closeToVector(Vector2(1, 1)));
       for (var i = 0; i < 10; i++) {
         game.update(1);
       }
@@ -144,7 +145,7 @@ void main() {
       game.update(1000 - totalTime);
       // Typically, `component.size` could accumulate numeric discrepancy on the
       // order of 1e-11 .. 1e-12 by now.
-      expect(component.size, closeToVector(Vector2(0, 0),  1e-10));
+      expect(component.size, closeToVector(Vector2(0, 0), 1e-10));
     });
   });
 }
