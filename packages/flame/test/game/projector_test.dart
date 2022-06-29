@@ -10,8 +10,8 @@ void main() {
       final projector = IdentityProjector();
       checkProjectorReversibility(projector);
       final v = Vector2(3.14, -3.15);
-      expect(projector.projectVector(v), closeToVector(v.x, v.y));
-      expect(projector.scaleVector(v), closeToVector(v.x, v.y));
+      expect(projector.projectVector(v), closeToVector(v));
+      expect(projector.scaleVector(v), closeToVector(v));
     });
   });
 
@@ -22,8 +22,14 @@ void main() {
         _ScaleProjector(-1),
       ]);
       checkProjectorReversibility(projector);
-      expect(projector.projectVector(Vector2(4, 5)), closeToVector(-12, -15));
-      expect(projector.projectVector(Vector2(1, -2)), closeToVector(-3, 6));
+      expect(
+        projector.projectVector(Vector2(4, 5)),
+        closeToVector(Vector2(-12, -15)),
+      );
+      expect(
+        projector.projectVector(Vector2(1, -2)),
+        closeToVector(Vector2(-3, 6)),
+      );
     });
   });
 }
@@ -39,19 +45,19 @@ void checkProjectorReversibility(Projector projector) {
     );
     expect(
       projector.projectVector(projector.unprojectVector(point)),
-      closeToVector(point.x, point.y, epsilon: 1e-13),
+      closeToVector(point, 1e-13),
     );
     expect(
       projector.unprojectVector(projector.projectVector(point)),
-      closeToVector(point.x, point.y, epsilon: 1e-13),
+      closeToVector(point, 1e-13),
     );
     expect(
       projector.scaleVector(projector.unscaleVector(point)),
-      closeToVector(point.x, point.y, epsilon: 1e-13),
+      closeToVector(point, 1e-13),
     );
     expect(
       projector.unscaleVector(projector.scaleVector(point)),
-      closeToVector(point.x, point.y, epsilon: 1e-13),
+      closeToVector(point, 1e-13),
     );
   }
 }

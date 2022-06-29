@@ -17,7 +17,7 @@ void main() {
       expect('$circle', 'Circle([5.0, 10.0], 2.5)');
       // Modifying original `center` vector does not affect the shape
       center.x += 111;
-      expect(circle.center, closeToVector(5, 10));
+      expect(circle.center, closeToVector(Vector2(5, 10)));
     });
 
     test('negative radius', () {
@@ -65,7 +65,7 @@ void main() {
 
     test('move', () {
       final circle = Circle(Vector2.zero(), 1);
-      expect(circle.center, closeToVector(0, 0));
+      expect(circle.center, closeToVector(Vector2.zero()));
       expect(circle.radius, 1);
       expect(
         circle.aabb,
@@ -73,7 +73,7 @@ void main() {
       );
 
       circle.move(Vector2(4, 7));
-      expect(circle.center, closeToVector(4, 7));
+      expect(circle.center, closeToVector(Vector2(4, 7)));
       expect(circle.radius, 1);
       expect(
         circle.aabb,
@@ -102,7 +102,7 @@ void main() {
       final transform = Transform2D()..position = Vector2(10, 40);
       final result = circle.project(transform);
       expect(result, isA<Circle>());
-      expect(result.center, closeToVector(10, 40));
+      expect(result.center, closeToVector(Vector2(10, 40)));
       expect((result as Circle).radius, 100);
 
       transform.scale.setValues(1, 2);
@@ -125,23 +125,26 @@ void main() {
       expect(result, isA<Circle>());
       expect(result, target);
       expect(target.radius, 200);
-      expect(target.center, closeToVector(10, 20));
+      expect(target.center, closeToVector(Vector2(10, 20)));
     });
 
     test('support', () {
       final circle = Circle(Vector2(2, 1), 10);
-      expect(circle.support(Vector2(1, 0)), closeToVector(12, 1));
-      expect(circle.support(Vector2(-1, 0)), closeToVector(-8, 1));
-      expect(circle.support(Vector2(0, 3.14)), closeToVector(2, 11));
-      expect(circle.support(Vector2(0, -3)), closeToVector(2, -9));
+      expect(circle.support(Vector2(1, 0)), closeToVector(Vector2(12, 1)));
+      expect(circle.support(Vector2(-1, 0)), closeToVector(Vector2(-8, 1)));
+      expect(circle.support(Vector2(0, 3.14)), closeToVector(Vector2(2, 11)));
+      expect(circle.support(Vector2(0, -3)), closeToVector(Vector2(2, -9)));
       expect(
         circle.support(Vector2(1, 1)),
-        closeToVector(2 + 10 / sqrt(2), 1 + 10 / sqrt(2)),
+        closeToVector(Vector2(2 + 10 / sqrt(2), 1 + 10 / sqrt(2))),
       );
-      expect(circle.support(Vector2(3, 4)), closeToVector(2 + 6, 1 + 8));
+      expect(
+        circle.support(Vector2(3, 4)),
+        closeToVector(Vector2(2 + 6, 1 + 8)),
+      );
       expect(
         circle.support(Vector2(-2, -1)),
-        closeToVector(2 - 20 / sqrt(5), 1 - 10 / sqrt(5)),
+        closeToVector(Vector2(2 - 20 / sqrt(5), 1 - 10 / sqrt(5))),
       );
     });
   });

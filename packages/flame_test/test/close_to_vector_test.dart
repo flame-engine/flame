@@ -5,17 +5,17 @@ import 'package:vector_math/vector_math_64.dart';
 void main() {
   group('closeToVector', () {
     test('matches normally', () {
-      expect(Vector2.zero(), closeToVector(0, 0));
-      expect(Vector2(-14, 99), closeToVector(-14, 99));
-      expect(Vector2(1e-20, -1e-16), closeToVector(0, 0));
+      expect(Vector2.zero(), closeToVector(Vector2(0, 0)));
+      expect(Vector2(-14, 99), closeToVector(Vector2(-14, 99)));
+      expect(Vector2(1e-20, -1e-16), closeToVector(Vector2(0, 0)));
 
-      expect(Vector2(1.0001, 2.0), closeToVector(1, 2, epsilon: 0.01));
-      expect(Vector2(13, 14), closeToVector(10, 10, epsilon: 5));
+      expect(Vector2(1.0001, 2.0), closeToVector(Vector2(1, 2), 0.01));
+      expect(Vector2(13, 14), closeToVector(Vector2(10, 10), 5));
     });
 
     test('fails on type mismatch', () {
       try {
-        expect(3.14, closeToVector(0, 0));
+        expect(3.14, closeToVector(Vector2.zero()));
       } on TestFailure catch (e) {
         expect(
           e.message,
@@ -28,7 +28,7 @@ void main() {
 
     test('fails on value mismatch', () {
       try {
-        expect(Vector2(101, 217), closeToVector(100, 220));
+        expect(Vector2(101, 217), closeToVector(Vector2(100, 220)));
       } on TestFailure catch (e) {
         expect(
           e.message,

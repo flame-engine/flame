@@ -17,7 +17,7 @@ void main() {
       for (var i = 0; i < 20; i++) {
         player.position.add(Vector2(i * 5.0, 20.0 - i));
         game.update(0.01);
-        expect(camera.viewfinder.position, closeToVector(player.x, player.y));
+        expect(camera.viewfinder.position, closeToVector(player.position));
       }
     });
 
@@ -56,12 +56,12 @@ void main() {
 
       camera.moveTo(Vector2(100, 0), speed: 5);
       for (var i = 0; i < 10; i++) {
-        expect(camera.viewfinder.position, closeToVector(0.5 * i, 0));
+        expect(camera.viewfinder.position, closeToVector(Vector2(0.5 * i, 0)));
         game.update(0.1);
       }
       camera.moveTo(Vector2(5, 200), speed: 10);
       for (var i = 0; i < 10; i++) {
-        expect(camera.viewfinder.position, closeToVector(5, 1.0 * i));
+        expect(camera.viewfinder.position, closeToVector(Vector2(5, 1.0 * i)));
         game.update(0.1);
       }
       expect(camera.viewfinder.children.length, 1);
@@ -78,11 +78,11 @@ void main() {
       expect(camera.viewfinder.position, Vector2(10, 10));
       camera.viewfinder.position = Vector2(-10, 10);
       game.update(0);
-      expect(camera.viewfinder.position, closeToVector(0, 10, epsilon: 0.5));
+      expect(camera.viewfinder.position, closeToVector(Vector2(0, 10), 0.5));
 
       camera.moveTo(Vector2(-20, 0), speed: 10);
       for (var i = 0; i < 20; i++) {
-        expect(camera.viewfinder.position, closeToVector(0, 10, epsilon: 0.5));
+        expect(camera.viewfinder.position, closeToVector(Vector2(0, 10), 0.5));
         game.update(0.5);
       }
 

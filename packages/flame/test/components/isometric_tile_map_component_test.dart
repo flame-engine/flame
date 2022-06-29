@@ -63,7 +63,10 @@ void main() {
         tileHeight: 8.0,
       );
 
-      expect(c.getBlockCenterPosition(const Block(0, 0)), closeToVector(0, 0));
+      expect(
+        c.getBlockCenterPosition(const Block(0, 0)),
+        closeToVector(Vector2.zero()),
+      );
     });
 
     test('height scaling', () {
@@ -76,7 +79,7 @@ void main() {
       //expect the block to be directly below
       expect(
         c.getBlockRenderPositionInts(1, 1),
-        closeToVector(-156 / 2, 12.5, epsilon: 1e-13),
+        closeToVector(Vector2(-156 / 2, 12.5), 1e-13),
       );
     });
   });

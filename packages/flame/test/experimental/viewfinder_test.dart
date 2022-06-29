@@ -16,8 +16,8 @@ void main() {
         final camera = CameraComponent(world: world)..addToParent(game);
         world.add(_Rect());
         await game.ready();
-        expect(game.canvasSize, closeToVector(800, 600));
-        expect(camera.viewfinder.position, closeToVector(0, 0));
+        expect(game.canvasSize, closeToVector(Vector2(800, 600)));
+        expect(camera.viewfinder.position, closeToVector(Vector2(0, 0)));
         expect(camera.viewfinder.zoom, 1);
 
         // By default, the camera uses anchor=center, and places the world's
@@ -44,7 +44,7 @@ void main() {
           ..addToParent(game);
         world.add(_Rect());
         await game.ready();
-        expect(camera.viewfinder.position, closeToVector(100, -50));
+        expect(camera.viewfinder.position, closeToVector(Vector2(100, -50)));
 
         final canvas = MockCanvas();
         game.render(canvas);
@@ -126,11 +126,11 @@ void main() {
         for (var t = 0.0; t < 1.0; t += 0.1) {
           expect(
             camera.viewfinder.position,
-            closeToVector(5 * t, 13 * t, epsilon: 1e-14),
+            closeToVector(Vector2(5 * t, 13 * t), 1e-14),
           );
           expect(
             camera.viewport.position,
-            closeToVector(40 * t, -77 * t, epsilon: 1e-12),
+            closeToVector(Vector2(40 * t, -77 * t), 1e-12),
           );
           game.update(0.1);
         }
