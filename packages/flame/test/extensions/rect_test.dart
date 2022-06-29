@@ -43,8 +43,8 @@ void main() {
       const input = Rect.fromLTWH(0, 0, 10, 10);
       final result = input.transform(matrix4);
 
-      expect(result.topLeft.toVector2(), closeToVector(10, 10));
-      expect(result.bottomRight.toVector2(), closeToVector(20, 20));
+      expect(result.topLeft.toVector2(), closeToVector(Vector2(10, 10)));
+      expect(result.bottomRight.toVector2(), closeToVector(Vector2(20, 20)));
     });
   });
 }

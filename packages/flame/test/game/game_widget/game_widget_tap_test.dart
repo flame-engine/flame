@@ -52,7 +52,7 @@ void main() {
       verify: (game, tester) async {
         expect(game.doubleTapRegistered, isTrue);
         final tapVector = tapPosition.toVector2();
-        expect(game.doubleTapPosition, closeToVector(tapVector.x, tapVector.y));
+        expect(game.doubleTapPosition, closeToVector(tapVector));
       },
     );
   });
