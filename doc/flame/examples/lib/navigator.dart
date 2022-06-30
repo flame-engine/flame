@@ -12,11 +12,11 @@ class NavigatorGame extends FlameGame with HasTappableComponents {
     add(
       navigator = Navigator(
         routes: {
-          'splash': Route(builder: SplashScreen.new),
+          'splash': Route(builder: SplashScreenPage.new),
           'home': Route(builder: StartPage.new),
           'level1': Route(builder: Level1Page.new),
           'level2': Route(builder: Level2Page.new),
-          'pause': PausePage(),
+          'pause': PauseRoute(),
         },
         initialRoute: 'splash',
       ),
@@ -24,7 +24,7 @@ class NavigatorGame extends FlameGame with HasTappableComponents {
   }
 }
 
-class SplashScreen extends Component
+class SplashScreenPage extends Component
     with TapCallbacks, HasGameRef<NavigatorGame> {
   @override
   Future<void> onLoad() async {
@@ -359,8 +359,8 @@ class Orbit extends PositionComponent {
   }
 }
 
-class PausePage extends Route {
-  PausePage() : super(builder: PausePageImpl.new, transparent: true);
+class PauseRoute extends Route {
+  PauseRoute() : super(builder: PausePage.new, transparent: true);
 
   @override
   void onPush(Route? previousRoute) {
@@ -381,7 +381,7 @@ class PausePage extends Route {
   }
 }
 
-class PausePageImpl extends Component
+class PausePage extends Component
     with TapCallbacks, HasGameRef<NavigatorGame> {
   @override
   Future<void> onLoad() async {

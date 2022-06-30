@@ -14,10 +14,10 @@ class Route extends PositionComponent with ParentIsA<Navigator> {
     this.transparent = false,
   }) : _builder = builder;
 
-  /// If true, then the page below this one will continue to be rendered when
-  /// this page becomes active. If false, then this page is assumed to
-  /// completely obscure any page that would be underneath, and therefore the
-  /// page underneath doesn't need to be rendered.
+  /// If true, then the route below this one will continue to be rendered when
+  /// this route becomes active. If false, then this route is assumed to
+  /// completely obscure any route that would be underneath, and therefore the
+  /// route underneath doesn't need to be rendered.
   final bool transparent;
 
   double pushTransitionDuration = 0;
@@ -26,8 +26,8 @@ class Route extends PositionComponent with ParentIsA<Navigator> {
 
   final Component Function()? _builder;
 
-  /// This method is invoked when the page is pushed on top of the [Navigator]'s
-  /// stack.
+  /// This method is invoked when the route is pushed on top of the
+  /// [Navigator]'s stack.
   void onPush(Route? previousRoute) {}
 
   void onPop(Route previousRoute) {}
@@ -54,18 +54,18 @@ class Route extends PositionComponent with ParentIsA<Navigator> {
   //#region Implementation methods
 
   @internal
-  bool get isBuilt => _child != null;
+  bool get isBuilt => _page != null;
 
   @internal
   bool isRendered = true;
 
-  Component? _child;
+  Component? _page;
 
   PageRenderEffect? _renderEffect;
 
   @internal
   void didPush(Route? previousRoute) {
-    _child ??= build()..addToParent(this);
+    _page ??= build()..addToParent(this);
     onPush(previousRoute);
   }
 
