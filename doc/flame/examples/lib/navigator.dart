@@ -381,8 +381,7 @@ class PauseRoute extends Route {
   }
 }
 
-class PausePage extends Component
-    with TapCallbacks, HasGameRef<NavigatorGame> {
+class PausePage extends Component with TapCallbacks, HasGameRef<NavigatorGame> {
   @override
   Future<void> onLoad() async {
     final game = findGame()!;
