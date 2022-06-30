@@ -106,7 +106,10 @@ class InternalSpriteWidget extends StatelessWidget {
   @override
   Widget build(_) {
     return Container(
-      child: CustomPaint(painter: SpritePainter(sprite, anchor, angle: angle)),
+      child: CustomPaint(
+        painter: SpritePainter(sprite, anchor, angle: angle),
+        size: sprite.srcSize.toSize(),
+      ),
     );
   }
 }
