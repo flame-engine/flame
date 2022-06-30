@@ -1,23 +1,23 @@
 import 'package:flame/src/components/component.dart';
-import 'package:flame/src/components/page.dart';
+import 'package:flame/src/components/route.dart';
 
-/// [Navigator] is a component that handles transitions between multiple [Page]s
-/// of your game.
+/// [Navigator] is a component that handles transitions between multiple
+/// [Route]s of your game.
 ///
 class Navigator extends Component {
   Navigator({
-    required Map<String, Page> pages,
-    required this.initialPage,
-    Map<String, _PageFactory>? pageFactories,
-    this.onUnknownPage,
-  })  : _pages = pages,
-        _pageFactories = pageFactories ?? {};
+    required Map<String, Route> routes,
+    required this.initialRoute,
+    Map<String, _RouteFactory>? routeFactories,
+    this.onUnknownRoute,
+  })  : _routes = routes,
+        _routeFactories = routeFactories ?? {};
 
-  final String initialPage;
-  final Map<String, Page> _pages;
-  final Map<String, _PageFactory> _pageFactories;
-  final List<Page> _currentPages = [];
-  final _PageFactory? onUnknownPage;
+  final String initialRoute;
+  final Map<String, Route> _routes;
+  final Map<String, _RouteFactory> _routeFactories;
+  final List<Route> _currentRoutes = [];
+  final _RouteFactory? onUnknownRoute;
 
   /// Puts the page [name] on top of the navigation stack.
   ///
@@ -26,17 +26,17 @@ class Navigator extends Component {
   /// page is already on the top, this method will be a noop.
   ///
   ///
-  void pushPage(String name) {
-    final page = _resolvePage(name);
-    final currentActivePage = _currentPages.last;
+  void pushRoute(String name) {
+    final page = _resolveRoute(name);
+    final currentActivePage = _currentRoutes.last;
     if (page == currentActivePage) {
       return;
     }
-    if (_currentPages.contains(page)) {
-      _currentPages.remove(page);
-      _currentPages.add(page);
+    if (_currentRoutes.contains(page)) {
+      _currentRoutes.remove(page);
+      _currentRoutes.add(page);
     } else {
-      _currentPages.add(page);
+      _currentRoutes.add(page);
       add(page);
     }
     _adjustPageOrder();
@@ -44,52 +44,52 @@ class Navigator extends Component {
     _execute(action: _adjustPageVisibility, delay: page.pushTransitionDuration);
   }
 
-  void popPage() {
+  void popRoute() {
     assert(
-      _currentPages.length > 1,
+      _currentRoutes.length > 1,
       'Cannot pop the last page from the Navigator',
     );
-    final page = _currentPages.removeLast();
+    final page = _currentRoutes.removeLast();
     _adjustPageOrder();
     _adjustPageVisibility();
-    page.didPop(_currentPages.last);
+    page.didPop(_currentRoutes.last);
     _execute(action: page.removeFromParent, delay: page.popTransitionDuration);
   }
 
-  Page _resolvePage(String name) {
-    final existingPage = _pages[name];
+  Route _resolveRoute(String name) {
+    final existingPage = _routes[name];
     if (existingPage != null) {
       return existingPage;
     }
     if (name.contains('/')) {
       final i = name.indexOf('/');
       final factoryName = name.substring(0, i);
-      final factory = _pageFactories[factoryName];
+      final factory = _routeFactories[factoryName];
       if (factory != null) {
         final argument = name.substring(i + 1);
         final generatedPage = factory(argument);
-        _pages[name] = generatedPage;
+        _routes[name] = generatedPage;
         return generatedPage;
       }
     }
-    if (onUnknownPage != null) {
-      return onUnknownPage!(name);
+    if (onUnknownRoute != null) {
+      return onUnknownRoute!(name);
     }
     throw ArgumentError('Page "$name" could not be resolved by the Navigator');
   }
 
   void _adjustPageOrder() {
-    for (var i = 0; i < _currentPages.length; i++) {
-      _currentPages[i].changePriorityWithoutResorting(i);
+    for (var i = 0; i < _currentRoutes.length; i++) {
+      _currentRoutes[i].changePriorityWithoutResorting(i);
     }
     reorderChildren();
   }
 
   void _adjustPageVisibility() {
     var render = true;
-    for (var i = _currentPages.length - 1; i >= 0; i--) {
-      _currentPages[i].isRendered = render;
-      render &= _currentPages[i].transparent;
+    for (var i = _currentRoutes.length - 1; i >= 0; i--) {
+      _currentRoutes[i].isRendered = render;
+      render &= _currentRoutes[i].transparent;
     }
   }
 
@@ -105,11 +105,11 @@ class Navigator extends Component {
   @override
   void onMount() {
     super.onMount();
-    final page = _resolvePage(initialPage);
-    _currentPages.add(page);
-    add(page);
-    page.didPush(null);
+    final route = _resolveRoute(initialRoute);
+    _currentRoutes.add(route);
+    add(route);
+    route.didPush(null);
   }
 }
 
-typedef _PageFactory = Page Function(String parameter);
+typedef _RouteFactory = Route Function(String parameter);

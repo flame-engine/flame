@@ -8,8 +8,8 @@ import 'package:flame/src/page_render_effect.dart';
 import 'package:meta/meta.dart';
 import 'package:vector_math/vector_math_64.dart';
 
-class Page extends PositionComponent with ParentIsA<Navigator> {
-  Page({
+class Route extends PositionComponent with ParentIsA<Navigator> {
+  Route({
     Component Function()? builder,
     this.transparent = false,
   }) : _builder = builder;
@@ -28,9 +28,9 @@ class Page extends PositionComponent with ParentIsA<Navigator> {
 
   /// This method is invoked when the page is pushed on top of the [Navigator]'s
   /// stack.
-  void onPush(Page? previousPage) {}
+  void onPush(Route? previousRoute) {}
 
-  void onPop(Page previousPage) {}
+  void onPop(Route previousRoute) {}
 
   Component build() {
     assert(
@@ -64,13 +64,13 @@ class Page extends PositionComponent with ParentIsA<Navigator> {
   PageRenderEffect? _renderEffect;
 
   @internal
-  void didPush(Page? previousPage) {
+  void didPush(Route? previousRoute) {
     _child ??= build()..addToParent(this);
-    onPush(previousPage);
+    onPush(previousRoute);
   }
 
   @internal
-  void didPop(Page previousPage) => onPop(previousPage);
+  void didPop(Route previousRoute) => onPop(previousRoute);
 
   @override
   void renderTree(Canvas canvas) {

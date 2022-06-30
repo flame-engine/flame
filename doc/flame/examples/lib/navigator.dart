@@ -11,14 +11,14 @@ class NavigatorGame extends FlameGame with HasTappableComponents {
   Future<void> onLoad() async {
     add(
       navigator = Navigator(
-        pages: {
-          'splash': Page(builder: SplashScreen.new),
-          'home': Page(builder: StartPageImpl.new),
-          'level1': Page(builder: Level1PageImpl.new),
-          'level2': Page(builder: Level2PageImpl.new),
+        routes: {
+          'splash': Route(builder: SplashScreen.new),
+          'home': Route(builder: StartPage.new),
+          'level1': Route(builder: Level1Page.new),
+          'level2': Route(builder: Level2Page.new),
           'pause': PausePage(),
         },
-        initialPage: 'splash',
+        initialRoute: 'splash',
       ),
     );
   }
@@ -48,11 +48,11 @@ class SplashScreen extends Component
   bool containsLocalPoint(Vector2 point) => true;
 
   @override
-  void onTapUp(TapUpEvent event) => gameRef.navigator.pushPage('home');
+  void onTapUp(TapUpEvent event) => gameRef.navigator.pushRoute('home');
 }
 
-class StartPageImpl extends Component with HasGameRef<NavigatorGame> {
-  StartPageImpl() {
+class StartPage extends Component with HasGameRef<NavigatorGame> {
+  StartPage() {
     addAll([
       _logo = TextComponent(
         text: 'Syzygy',
@@ -67,13 +67,13 @@ class StartPageImpl extends Component with HasGameRef<NavigatorGame> {
       ),
       _button1 = RoundedButton(
         text: 'Level 1',
-        action: () => gameRef.navigator.pushPage('level1'),
+        action: () => gameRef.navigator.pushRoute('level1'),
         color: const Color(0xffadde6c),
         borderColor: const Color(0xffedffab),
       ),
       _button2 = RoundedButton(
         text: 'Level 2',
-        action: () => gameRef.navigator.pushPage('level2'),
+        action: () => gameRef.navigator.pushRoute('level2'),
         color: const Color(0xffdebe6c),
         borderColor: const Color(0xfffff4c7),
       ),
@@ -215,7 +215,7 @@ class BackButton extends SimpleButton with HasGameRef<NavigatorGame> {
         );
 
   @override
-  void action() => gameRef.navigator.popPage();
+  void action() => gameRef.navigator.popRoute();
 }
 
 class PauseButton extends SimpleButton with HasGameRef<NavigatorGame> {
@@ -229,10 +229,10 @@ class PauseButton extends SimpleButton with HasGameRef<NavigatorGame> {
           position: Vector2(60, 10),
         );
   @override
-  void action() => gameRef.navigator.pushPage('pause');
+  void action() => gameRef.navigator.pushRoute('pause');
 }
 
-class Level1PageImpl extends Component {
+class Level1Page extends Component {
   @override
   Future<void> onLoad() async {
     final game = findGame()!;
@@ -266,7 +266,7 @@ class Level1PageImpl extends Component {
   }
 }
 
-class Level2PageImpl extends Component {
+class Level2Page extends Component {
   @override
   Future<void> onLoad() async {
     final game = findGame()!;
@@ -359,12 +359,12 @@ class Orbit extends PositionComponent {
   }
 }
 
-class PausePage extends Page {
+class PausePage extends Route {
   PausePage() : super(builder: PausePageImpl.new, transparent: true);
 
   @override
-  void onPush(Page? previousPage) {
-    previousPage!
+  void onPush(Route? previousRoute) {
+    previousRoute!
       ..stopTime()
       ..addRenderEffect(
         PaintRenderEffect()
@@ -374,8 +374,8 @@ class PausePage extends Page {
   }
 
   @override
-  void onPop(Page previousPage) {
-    previousPage
+  void onPop(Route previousRoute) {
+    previousRoute
       ..resumeTime()
       ..removeRenderEffect();
   }
@@ -409,5 +409,5 @@ class PausePageImpl extends Component
   bool containsLocalPoint(Vector2 point) => true;
 
   @override
-  void onTapUp(TapUpEvent event) => gameRef.navigator.popPage();
+  void onTapUp(TapUpEvent event) => gameRef.navigator.popRoute();
 }
