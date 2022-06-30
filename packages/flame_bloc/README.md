@@ -1,55 +1,109 @@
 # Flame Bloc 🔥🧱
 
-`flame_bloc` adds easy access to blocs/cubits that are available on the widget tree to your Flame
-game and makes it possible for Flame components to listen to state changes to those blocs/cubits.
+`flame_bloc` offers a simple and natural (as in similar to `flutter_bloc`) way to use blocs and
+cubits inside a `FlameGame`.
+
+For a migration guide from the previous API to the current one,
+[check this article](https://verygood.ventures/blog/flame-bloc-new-api).
 
 ## How to use
 
-Lets assume we have a bloc that handles player inventory and it is available on the widget tree via
-a `BlocProvider` like this:
+Lets assume we have a bloc that handles player inventory, first we need to make it available to our
+components.
+
+We can do that by using `FlameBlocProvider` component:
 
 ```dart
-BlocProvider<ExampleGame>(
-  create: (_) => InventoryBloc(),
-  child: GameWidget(game: ExampleGame()),
-)
-```
-
-To enable the features of `flame_bloc` in your game, you can make your game class inherit from
-`FlameBlocGame`, or if you are already using an enhanced `FlameGame` class (like for example a
-`Forge2DGame`), the `FlameBloc` mixin can be used instead.
-
-
-To access the bloc from inside your game, the `read` method can be used.
-
-```dart
-class ExampleGame extends FlameBlocGame {
-  void selectWeapon() {
-    read<InventoryBloc>.add(WeaponSelected('axe'));
+class MyGame extends FlameGame {
+  @override
+  Future<void> onLoad() async {
+    await add(
+      FlameBlocProvider<PlayerInventoryBloc, PlayerInventoryState>(
+        create: () => PlayerInventoryBloc(),
+        children: [
+          Player(),
+          // ...
+        ],
+      ),
+    );
   }
 }
 ```
 
-To have your components listen to state change, the `BlocComponent` mixin can be used.
+With the above changes, the `Player` component will now have access to our bloc.
 
+If more than one bloc needs to be provided, `FlameMultiBlocProvider` can be used in a similar fashion:
 
 ```dart
-class PlayerComponent with BlocComponent<InventoryBloc, InventoryState> {
-
-  // onNewState can be overriden to so the component
-  // can be notified on state changes
+class MyGame extends FlameGame {
   @override
-  void onNewState(InventoryState state) {
-    print(state.weapon);
-  }
-
-  @override
-  void update(double dt) {
-    // the `state` getter can also be used to have
-    // direct access to the current state
-    print(state.weapon);
+  Future<void> onLoad() async {
+    await add(
+      FlameMultiBlocProvider(
+        providers: [
+          FlameBlocProvider<PlayerInventoryBloc, PlayerInventoryState>(
+            create: () => PlayerInventoryBloc(),
+          ),
+          FlameBlocProvider<PlayerStatsBloc, PlayerStatsState>(
+            create: () => PlayerStatsBloc(),
+          ),
+        ],
+        children: [
+          Player(),
+          // ...
+        ],
+      ),
+    );
   }
 }
 ```
+
+Listening to states changes at the component level can be done with two approaches:
+
+By using `FlameBlocListener` component:
+
+```dart
+class Player extends PositionComponent {
+  @override
+  Future<void> onLoad() async {
+    await add(
+      FlameBlocListener<PlayerInventoryBloc, PlayerInventoryState>(
+        listener: (state) {
+          updateGear(state);
+        },
+      ),
+    );
+  }
+}
+```
+
+Or by using `FlameBlocListenable` mixin:
+
+```dart
+class Player extends PositionComponent
+  with FlameBlocListenable<PlayerInventoryBloc, PlayerInventoryState> {
+
+  @override
+  void onNewState(state) {
+    updateGear(state);
+  }
+}
+```
+
+If all your component need is to simply access a bloc, the `FlameBlocReader` mixin can be applied
+to a component:
+
+
+```dart
+class Player extends PositionComponent
+  with FlameBlocReader<PlayerStatsBloc, PlayerStatsState> {
+
+  void takeHit() {
+    bloc.add(const PlayerDamaged());
+  }
+}
+```
+
+Note that one limitation of the mixin is that it can access only a single bloc.
 
 For a full example, check the [example folder](./example)

@@ -105,7 +105,6 @@ class _InternalSpriteAnimationWidgetState
   @override
   void initState() {
     super.initState();
-    widget.animation.onComplete = _pauseAnimation;
     _setupController();
     if (widget.playing) {
       _initAnimation();
@@ -140,17 +139,18 @@ class _InternalSpriteAnimationWidgetState
   }
 
   void _setupController() {
-    _controller?.dispose();
+    widget.animation.onComplete = _pauseAnimation;
+    _controller ??= AnimationController(vsync: this)
+      ..addListener(_onAnimationValueChanged);
+  }
 
-    _controller = AnimationController(vsync: this)
-      ..addListener(() {
-        final now = DateTime.now().millisecond.toDouble();
+  void _onAnimationValueChanged() {
+    final now = DateTime.now().millisecond.toDouble();
 
-        final dt = max(0, (now - (_lastUpdated ?? 0)) / 1000).toDouble();
-        widget.animation.update(dt);
+    final dt = max(0, (now - (_lastUpdated ?? 0)) / 1000).toDouble();
+    widget.animation.update(dt);
 
-        setState(() => _lastUpdated = now);
-      });
+    setState(() => _lastUpdated = now);
   }
 
   void _pauseAnimation() {

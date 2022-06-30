@@ -1,8 +1,90 @@
 import 'package:flame/game.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
+
+import '../_resources/custom_flame_game.dart';
 
 void main() {
   group('_ActiveOverlays', () {
+    testWidgets(
+      'Overlay can be added via initialActiveOverlays',
+      (tester) async {
+        const key1 = ValueKey('one');
+        const key2 = ValueKey('two');
+        await tester.pumpWidget(
+          GameWidget(
+            game: FlameGame(),
+            overlayBuilderMap: {
+              'first!': (_, __) => Container(key: key1),
+              'second': (_, __) => Container(key: key2),
+            },
+            initialActiveOverlays: const ['first!'],
+          ),
+        );
+        await tester.pump();
+
+        expect(find.byKey(key1), findsOneWidget);
+        expect(find.byKey(key2), findsNothing);
+      },
+    );
+
+    testWidgets(
+      'Overlay can be added in onLoad',
+      (tester) async {
+        const key1 = ValueKey('one');
+        const key2 = ValueKey('two');
+        await tester.pumpWidget(
+          GameWidget(
+            game: CustomFlameGame(
+              onLoad: (game) async {
+                game.overlays.add('first!');
+              },
+            ),
+            overlayBuilderMap: {
+              'first!': (_, __) => Container(key: key1),
+              'second': (_, __) => Container(key: key2),
+            },
+          ),
+        );
+        await tester.pump();
+
+        expect(find.byKey(key1), findsOneWidget);
+        expect(find.byKey(key2), findsNothing);
+      },
+    );
+
+    testWidgets(
+      'Overlay can be added and removed at runtime',
+      (tester) async {
+        const key1 = ValueKey('one');
+        const key2 = ValueKey('two');
+        final game = FlameGame();
+        await tester.pumpWidget(
+          GameWidget(
+            game: game,
+            overlayBuilderMap: {
+              'first!': (_, __) => Container(key: key1),
+              'second': (_, __) => Container(key: key2),
+            },
+          ),
+        );
+        await tester.pump();
+
+        expect(find.byKey(key1), findsNothing);
+        expect(find.byKey(key2), findsNothing);
+
+        game.overlays.add('second');
+        await tester.pump();
+        expect(find.byKey(key1), findsNothing);
+        expect(find.byKey(key2), findsOneWidget);
+
+        game.overlays.remove('second');
+        await tester.pump();
+        expect(find.byKey(key1), findsNothing);
+        expect(find.byKey(key2), findsNothing);
+      },
+    );
+
     group('add', () {
       test('can add an overlay', () {
         final overlays = FlameGame().overlays;
