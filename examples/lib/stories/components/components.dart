@@ -1,5 +1,6 @@
 import 'package:dashbook/dashbook.dart';
 import 'package:examples/commons/commons.dart';
+import 'package:examples/stories/components/clip_component_example.dart';
 import 'package:examples/stories/components/composability_example.dart';
 import 'package:examples/stories/components/debug_example.dart';
 import 'package:examples/stories/components/game_in_game_example.dart';
@@ -31,5 +32,17 @@ void addComponentsStories(Dashbook dashbook) {
       (_) => GameWidget(game: GameInGameExample()),
       codeLink: baseLink('components/game_in_game_example.dart'),
       info: GameInGameExample.description,
+    )
+    ..add(
+      'ClipComponent',
+      (context) {
+        final game = ClipComponentExample();
+
+        // TODO action
+
+        return GameWidget(game: game);
+      },
+      codeLink: baseLink('components/clip_component_example.dart'),
+      info: ClipComponentExample.description,
     );
 }
