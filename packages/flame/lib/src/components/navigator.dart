@@ -33,7 +33,9 @@ class Navigator extends Component {
     Map<String, _RouteFactory>? routeFactories,
     this.onUnknownRoute,
   })  : _routes = routes,
-        _routeFactories = routeFactories ?? {};
+        _routeFactories = routeFactories ?? {} {
+    routes.forEach((name, route) => route.name = name);
+  }
 
   /// Route that will be placed on the stack in the beginning.
   final String initialRoute;
@@ -125,13 +127,13 @@ class Navigator extends Component {
       final factory = _routeFactories[factoryName];
       if (factory != null) {
         final argument = name.substring(i + 1);
-        final generatedRoute = factory(argument);
+        final generatedRoute = factory(argument)..name = name;
         _routes[name] = generatedRoute;
         return generatedRoute;
       }
     }
     if (onUnknownRoute != null) {
-      return onUnknownRoute!(name);
+      return onUnknownRoute!(name)..name = name;
     }
     throw ArgumentError('Route "$name" could not be resolved by the Navigator');
   }

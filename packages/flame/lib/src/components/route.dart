@@ -35,6 +35,9 @@ class Route extends PositionComponent with ParentIsA<Navigator> {
   /// route underneath doesn't need to be rendered.
   final bool transparent;
 
+  /// The name of the route (set by the [Navigator]).
+  late final String name;
+
   /// The function that will be invoked in order to build the page component
   /// when this route first becomes active. This function may also be `null`,
   /// in which case the user must override the [build] method.
