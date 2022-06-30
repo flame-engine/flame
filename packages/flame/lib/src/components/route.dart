@@ -8,6 +8,9 @@ import 'package:flame/src/page_render_effect.dart';
 import 'package:meta/meta.dart';
 import 'package:vector_math/vector_math_64.dart';
 
+/// A [Route] is a light-weight component whose primary job is to build its page
+/// when necessary (most routes are created when the game is initialized, and
+/// therefore they should avoid doing any potentially costly operations).
 class Route extends PositionComponent with ParentIsA<Navigator> {
   Route({
     Component Function()? builder,
