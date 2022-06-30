@@ -20,10 +20,6 @@ class Route extends PositionComponent with ParentIsA<Navigator> {
   /// route underneath doesn't need to be rendered.
   final bool transparent;
 
-  double pushTransitionDuration = 0;
-
-  double popTransitionDuration = 0;
-
   final Component Function()? _builder;
 
   /// This method is invoked when the route is pushed on top of the

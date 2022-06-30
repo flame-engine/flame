@@ -41,7 +41,7 @@ class Navigator extends Component {
     }
     _adjustPageOrder();
     page.didPush(currentActivePage);
-    _execute(action: _adjustPageVisibility, delay: page.pushTransitionDuration);
+    _adjustPageVisibility();
   }
 
   void popRoute() {
@@ -53,7 +53,7 @@ class Navigator extends Component {
     _adjustPageOrder();
     _adjustPageVisibility();
     page.didPop(_currentRoutes.last);
-    _execute(action: page.removeFromParent, delay: page.popTransitionDuration);
+    page.removeFromParent();
   }
 
   Route _resolveRoute(String name) {
@@ -90,15 +90,6 @@ class Navigator extends Component {
     for (var i = _currentRoutes.length - 1; i >= 0; i--) {
       _currentRoutes[i].isRendered = render;
       render &= _currentRoutes[i].transparent;
-    }
-  }
-
-  void _execute({required void Function() action, required double delay}) {
-    if (delay > 0) {
-      Future<void>.delayed(Duration(microseconds: (delay * 1e6).toInt()))
-          .then((_) => action());
-    } else {
-      action();
     }
   }
 
