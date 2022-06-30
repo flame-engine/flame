@@ -35,30 +35,56 @@ class Navigator extends Component {
   })  : _routes = routes,
         _routeFactories = routeFactories ?? {};
 
+  /// Route that will be placed on the stack in the beginning.
   final String initialRoute;
+
+  /// The stack of all currently active routes. This stack must not be empty
+  /// (it will be populated with the [initialRoute] in the beginning).
+  ///
+  /// The routes in this list are also added to the Navigator as child
+  /// components. However, due to the fact that children are usually added or
+  /// removed with a delay, there could be temporary discrepancies between this
+  /// list and the list of children.
+  final List<Route> _routeStack = [];
+
+  /// The map of all routes known to the Navigator, each route will have a
+  /// unique name. This map is initialized in the constructor; in addition, any
+  /// routes produced by the [_routeFactories] will also be cached here.
   final Map<String, Route> _routes;
+
+  /// Set of functions that are able to resolve routes dynamically.
+  ///
+  /// Route factories will be used to resolve pages with names like
+  /// "prefix/arg". For such a name, we will call the factory "prefix" with the
+  /// argument "arg". The produced route will be cached in the main [_routes]
+  /// map, and then built and mounted normally.
   final Map<String, _RouteFactory> _routeFactories;
-  final List<Route> _currentRoutes = [];
+
+  /// Function that will be called to resolve any route names that couldn't be
+  /// resolved via [_routes] or [_routeFactories]. Unlike with routeFactories,
+  /// the route returned by this function will not be cached.
   final _RouteFactory? onUnknownRoute;
 
-  /// Puts the page [name] on top of the navigation stack.
+  /// Puts the route [name] on top of the navigation stack.
   ///
-  /// If the page is already in the stack, it will be simply moved on top;
-  /// otherwise the page will be built, mounted, and added at the top. If the
-  /// page is already on the top, this method will be a noop.
+  /// If the route is already in the stack, it will be simply moved to the top.
+  /// Otherwise the route will be mounted and added at the top. We will also
+  /// initiate building the route's page if it hasn't been built before. If the
+  /// route is already on top of the stack, this method will do nothing.
   ///
-  ///
+  /// The method calls the [Route.didPush] callback for the newly activated
+  /// route.
   void pushRoute(String name) {
     final route = _resolveRoute(name);
-    final currentActiveRoute = _currentRoutes.last;
+    final currentActiveRoute = _routeStack.last;
     if (route == currentActiveRoute) {
       return;
     }
-    if (_currentRoutes.contains(route)) {
-      _currentRoutes.remove(route);
-      _currentRoutes.add(route);
+    if (_routeStack.contains(route)) {
+      _routeStack.remove(route);
+      _routeStack.add(route);
     } else {
-      _currentRoutes.add(route);
+      _routeStack.add(route);
       add(route);
     }
     _adjustRoutesOrder();
@@ -66,18 +92,28 @@ class Navigator extends Component {
     _adjustRoutesVisibility();
   }
 
+  /// Removes the topmost route from the stack, and also removes it as a child
+  /// of the Navigator.
+  ///
+  /// The method calls [Route.didPop] for the route that was removed.
+  ///
+  /// It is an error to attempt to pop the last remaining route on the stack.
   void popRoute() {
     assert(
-      _currentRoutes.length > 1,
+      _routeStack.length > 1,
       'Cannot pop the last route from the Navigator',
     );
-    final route = _currentRoutes.removeLast();
+    final route = _routeStack.removeLast();
     _adjustRoutesOrder();
     _adjustRoutesVisibility();
-    route.didPop(_currentRoutes.last);
+    route.didPop(_routeStack.last);
     route.removeFromParent();
   }
 
+  /// Attempts to resolve the route with the given [name] by searching in the
+  /// [_routes] map, or invoking one of the [_routeFactories], or, lastly,
+  /// falling back to the [onUnknownRoute] function. If none of these methods
+  /// is able to produce a valid [Route], an exception will be raised.
   Route _resolveRoute(String name) {
     final existingRoute = _routes[name];
     if (existingRoute != null) {
@@ -101,17 +137,17 @@ class Navigator extends Component {
   }
 
   void _adjustRoutesOrder() {
-    for (var i = 0; i < _currentRoutes.length; i++) {
-      _currentRoutes[i].changePriorityWithoutResorting(i);
+    for (var i = 0; i < _routeStack.length; i++) {
+      _routeStack[i].changePriorityWithoutResorting(i);
     }
     reorderChildren();
   }
 
   void _adjustRoutesVisibility() {
     var render = true;
-    for (var i = _currentRoutes.length - 1; i >= 0; i--) {
-      _currentRoutes[i].isRendered = render;
-      render &= _currentRoutes[i].transparent;
+    for (var i = _routeStack.length - 1; i >= 0; i--) {
+      _routeStack[i].isRendered = render;
+      render &= _routeStack[i].transparent;
     }
   }
 
@@ -119,7 +155,7 @@ class Navigator extends Component {
   void onMount() {
     super.onMount();
     final route = _resolveRoute(initialRoute);
-    _currentRoutes.add(route);
+    _routeStack.add(route);
     add(route);
     route.didPush(null);
   }
