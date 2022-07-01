@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:math';
 
 import 'package:flame/src/anchor.dart';
 import 'package:flame/src/cache/images.dart';
@@ -105,7 +104,6 @@ class _InternalSpriteAnimationWidgetState
   @override
   void initState() {
     super.initState();
-    widget.animation.onComplete = _pauseAnimation;
     _setupController();
     if (widget.playing) {
       _initAnimation();
@@ -131,7 +129,7 @@ class _InternalSpriteAnimationWidgetState
   void _initAnimation() {
     setState(() {
       widget.animation.reset();
-      _lastUpdated = DateTime.now().millisecond.toDouble();
+      _lastUpdated = DateTime.now().microsecondsSinceEpoch.toDouble();
       _controller?.repeat(
         // Approximately 60 fps
         period: const Duration(milliseconds: 16),
@@ -140,17 +138,21 @@ class _InternalSpriteAnimationWidgetState
   }
 
   void _setupController() {
-    _controller?.dispose();
+    widget.animation.onComplete = _pauseAnimation;
+    _controller ??= AnimationController(vsync: this)
+      ..addListener(_onAnimationValueChanged);
+  }
 
-    _controller = AnimationController(vsync: this)
-      ..addListener(() {
-        final now = DateTime.now().millisecond.toDouble();
+  void _onAnimationValueChanged() {
+    const microSecond = 1 / 1000000;
 
-        final dt = max(0, (now - (_lastUpdated ?? 0)) / 1000).toDouble();
-        widget.animation.update(dt);
+    final now = DateTime.now().microsecondsSinceEpoch.toDouble();
+    final lastUpdated = _lastUpdated ??= now;
+    final dt = (now - lastUpdated) * microSecond;
 
-        setState(() => _lastUpdated = now);
-      });
+    widget.animation.update(dt);
+
+    setState(() => _lastUpdated = now);
   }
 
   void _pauseAnimation() {

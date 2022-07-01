@@ -167,8 +167,6 @@ abstract class Game {
       );
     }
     _gameRenderBox = gameRenderBox;
-    overlays._game = this;
-
     onAttach();
   }
 
@@ -300,7 +298,7 @@ abstract class Game {
   /// overlays.add(pauseOverlayIdentifier); // marks 'PauseMenu' to be rendered.
   /// overlays.remove(pauseOverlayIdentifier); // hides 'PauseMenu'.
   /// ```
-  final overlays = _ActiveOverlays();
+  late final overlays = _ActiveOverlays(this);
 
   /// Used to change the mouse cursor of the GameWidget running this game.
   /// Setting the value to null will make the GameWidget defer the choice
@@ -335,20 +333,22 @@ abstract class Game {
 /// A helper class used to control the visibility of overlays on a [Game]
 /// instance. See [Game.overlays].
 class _ActiveOverlays {
-  Game? _game;
+  _ActiveOverlays(this._game);
+
+  final Game _game;
   final Set<String> _activeOverlays = {};
 
   /// Clear all active overlays.
   void clear() {
     _activeOverlays.clear();
-    _game?._refreshWidget();
+    _game._refreshWidget();
   }
 
   /// Marks the [overlayName] to be rendered.
   bool add(String overlayName) {
     final setChanged = _activeOverlays.add(overlayName);
     if (setChanged) {
-      _game?._refreshWidget();
+      _game._refreshWidget();
     }
     return setChanged;
   }
@@ -360,7 +360,7 @@ class _ActiveOverlays {
 
     final overlayCountAfterAdded = _activeOverlays.length;
     if (overlayCountBeforeAdded != overlayCountAfterAdded) {
-      _game?._refreshWidget();
+      _game._refreshWidget();
     }
   }
 
@@ -368,7 +368,7 @@ class _ActiveOverlays {
   bool remove(String overlayName) {
     final hasRemoved = _activeOverlays.remove(overlayName);
     if (hasRemoved) {
-      _game?._refreshWidget();
+      _game._refreshWidget();
     }
     return hasRemoved;
   }
@@ -380,7 +380,7 @@ class _ActiveOverlays {
 
     final overlayCountAfterRemoved = _activeOverlays.length;
     if (overlayCountBeforeRemoved != overlayCountAfterRemoved) {
-      _game?._refreshWidget();
+      _game._refreshWidget();
     }
   }
 

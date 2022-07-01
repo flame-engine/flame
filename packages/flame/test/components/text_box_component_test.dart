@@ -119,7 +119,6 @@ void main() {
         ]);
       },
       goldenFile: '../_goldens/text_box_component_test_1.png',
-      skip: true,
     );
   });
 }
@@ -130,7 +129,7 @@ class _FramedTextBox extends TextBoxComponent {
     super.align,
     super.position,
     super.size,
-  });
+  }) : super(textRenderer: TextPaint(debugMode: true));
 
   final Paint _borderPaint = Paint()
     ..style = PaintingStyle.stroke

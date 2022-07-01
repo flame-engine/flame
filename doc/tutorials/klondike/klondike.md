@@ -16,5 +16,6 @@ with the [Dart] programming language.
 1. Preparation  <step1.md>
 2. Scaffolding  <step2.md>
 3. Cards        <step3.md>
+4. Gameplay     <step4.md>
 [To be continued]... <tbc.md>
 ```

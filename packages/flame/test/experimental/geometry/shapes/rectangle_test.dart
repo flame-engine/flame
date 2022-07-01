@@ -18,7 +18,7 @@ void main() {
       expect(rectangle.isConvex, true);
       expect(rectangle.isClosed, true);
       expect(rectangle.perimeter, 34);
-      expect(rectangle.center, closeToVector(6.5, 6));
+      expect(rectangle.center, closeToVector(Vector2(6.5, 6)));
       expect('$rectangle', 'Rectangle([4.0, 0.0], [9.0, 12.0])');
     });
 
@@ -135,14 +135,14 @@ void main() {
 
     test('move', () {
       final rectangle = Rectangle.fromLTRB(4, 2, 9, 12);
-      expect(rectangle.aabb.min, closeToVector(4, 2));
+      expect(rectangle.aabb.min, closeToVector(Vector2(4, 2)));
 
       rectangle.move(Vector2(-3, 1));
       expect(rectangle.left, 4 - 3);
       expect(rectangle.right, 9 - 3);
       expect(rectangle.top, 2 + 1);
       expect(rectangle.bottom, 12 + 1);
-      expect(rectangle.center, closeToVector(6.5 - 3, 7 + 1));
+      expect(rectangle.center, closeToVector(Vector2(6.5 - 3, 7 + 1)));
       expect(
         rectangle.aabb,
         closeToAabb(Aabb2.minMax(Vector2(1, 3), Vector2(6, 13))),
@@ -200,10 +200,13 @@ void main() {
       expect(rectangle.support(Vector2(0, 11)).y, 3);
       expect(rectangle.support(Vector2(0, -1)).y, 2);
 
-      expect(rectangle.support(Vector2(1, 1)), closeToVector(9, 3));
-      expect(rectangle.support(Vector2(-3, 2)), closeToVector(4, 3));
-      expect(rectangle.support(Vector2(-0.13, -2.01)), closeToVector(4, 2));
-      expect(rectangle.support(Vector2(9, -200)), closeToVector(9, 2));
+      expect(rectangle.support(Vector2(1, 1)), closeToVector(Vector2(9, 3)));
+      expect(rectangle.support(Vector2(-3, 2)), closeToVector(Vector2(4, 3)));
+      expect(
+        rectangle.support(Vector2(-0.13, -2.01)),
+        closeToVector(Vector2(4, 2)),
+      );
+      expect(rectangle.support(Vector2(9, -200)), closeToVector(Vector2(9, 2)));
     });
   });
 }

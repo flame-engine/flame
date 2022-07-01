@@ -2,14 +2,14 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:vector_math/vector_math_64.dart';
 
 /// Returns a matcher which checks if the argument is a vector within distance
-/// [epsilon] of point ([x], [y]). For example:
+/// [epsilon] of [vector]. For example:
 ///
 /// ```dart
-/// expect(scale, closeToVector(2, -2));
-/// expect(position, closeToVector(120, 150, epsilon: 1e-10));
+/// expect(scale, closeToVector(Vector2(2, -2)));
+/// expect(position, closeToVector(expectedPosition, 1e-10));
 /// ```
-Matcher closeToVector(num x, num y, {double epsilon = 1e-15}) {
-  return _IsCloseTo(Vector2(x.toDouble(), y.toDouble()), epsilon);
+Matcher closeToVector(Vector2 vector, [double epsilon = 1e-15]) {
+  return _IsCloseTo(vector, epsilon);
 }
 
 class _IsCloseTo extends Matcher {
