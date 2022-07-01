@@ -109,11 +109,13 @@ Here's what the different options mean:
   When using this option, the `main.dart` file of the app should route the execution to the proper
   widget according to the `page` being passed.
 
-- **show**: contains a subset of modes: `widget`, `code`, and `popup`. The `widget` mode creates an
-  iframe with the embedded example, directly within the page. The `code` mode will show a button
-  that allows the user to see the code that produced this example. The `popup` mode also shows a
-  button, which displays the example in an overlay window. This is more suitable for demoing larger
-  apps. Using both "widget" and "popup" modes at the same time is not recommended.
+- **show**: contains a subset of modes: `widget`, `code`, `infobox`, and `popup`. The `widget` mode
+  creates an iframe with the embedded example, directly within the page. The `code` mode will show
+  a button that allows the user to see the code that produced this example. The `popup` mode also
+  shows a button, which displays the example in an overlay window. This is more suitable for
+  demoing larger apps. Using both "widget" and "popup" modes at the same time is not recommended.
+  Finally, the `infobox` mode will display the result in a floating window -- this mode is best
+  combined with `widget` and `code`.
 
 ```{flutter-app}
 :sources: ../flame/examples
