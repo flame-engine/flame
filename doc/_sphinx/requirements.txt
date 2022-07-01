@@ -1,5 +1,0 @@
-linkify-it-py>=1.0
-myst-parser>=0.15.2
-pygments>=2.10
-sphinx>=5.0
-sphinxcontrib-mermaid>=0.7.1
