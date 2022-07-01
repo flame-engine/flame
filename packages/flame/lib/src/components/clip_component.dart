@@ -27,7 +27,7 @@ class ClipComponent extends PositionComponent {
 
   /// {@macro clip_component}
   ///
-  /// Creates a rectangle clip based on the components size.
+  /// Creates a rectangle clip based on the [size].
   ClipComponent.rect({
     super.position,
     super.size,
