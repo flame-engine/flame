@@ -51,7 +51,7 @@ class FlutterAppDirective(SphinxDirective):
           "code" - a [Code] button which opens a popup with the code that was
               compiled.
           "infobox" - the content will be displayed as an infobox floating on
-              the right-hand side of the page
+              the right-hand side of the page.
     """
     has_content = True
     required_arguments = 0
