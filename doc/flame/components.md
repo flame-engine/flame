@@ -27,7 +27,7 @@ void main() {
 The `Component()` here could of course be any subclass of `Component`.
 
 Every `Component` has a few methods that you can optionally implement, which are used by the
-`FlameGame` class. 
+`FlameGame` class.
 
 
 ### Component lifecycle
@@ -200,7 +200,7 @@ an assertion error will be thrown.
 
 ### Ensuring a component has a given ancestor
 
-When a component requires to have a specific ancestor type somewhere in the 
+When a component requires to have a specific ancestor type somewhere in the
 component tree, `HasAncestor` mixin can be used to enforce that relationship.
 
 The mixin exposes the `ancestor` field that will be of the given type.
@@ -988,6 +988,22 @@ Check the example app
 [custom_painter_component](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/widgets/custom_painter_example.dart)
 for details on how to use it.
 
+## ClipComponent
+
+A `ClipComponent` is a component that will clip the canvas to its size and shape. This means that
+if the any child of a `ClipComponent` is beign rendered outside of its bondaries, the part that is
+not inside the area will not be shown.
+
+There are three types of shapes that a `ClipComponent` can take form:
+
+ - `ClipComponent.rect`: Clips the area in the form a rectangle based on its size.
+ - `ClipComponent.circle`: Clips the area in the form of a circle based on its size.
+ - `ClipComponent.poylon`:  Clips the area in the form of a polygon based on the points received
+on the constructor.
+
+Check the example app
+[clip_component](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/components/clip_component_example.dart)
+for details on how to use it.
 
 ## Effects
 
