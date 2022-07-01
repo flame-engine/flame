@@ -482,6 +482,12 @@ div.document {
   padding: var(--document-padding);
 }
 
+div.document::after { /* clearfix */
+  content: '';
+  display: block;
+  clear: both;
+}
+
 div.copyright {
   font-size: 12px;
   margin-top: 3px;
