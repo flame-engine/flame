@@ -14,7 +14,7 @@ enum _ClipType {
 class ClipComponent extends PositionComponent {
   /// {@macro clip_component}
   ///
-  /// Creates a circle clip based on the components size.
+  /// Creates a circle clip based on the [size].
   ClipComponent.circle({
     super.position,
     super.size,
