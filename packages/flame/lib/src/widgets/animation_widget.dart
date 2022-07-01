@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:math';
 
 import 'package:flame/src/anchor.dart';
 import 'package:flame/src/cache/images.dart';
@@ -130,7 +129,7 @@ class _InternalSpriteAnimationWidgetState
   void _initAnimation() {
     setState(() {
       widget.animation.reset();
-      _lastUpdated = DateTime.now().millisecond.toDouble();
+      _lastUpdated = DateTime.now().microsecondsSinceEpoch.toDouble();
       _controller?.repeat(
         // Approximately 60 fps
         period: const Duration(milliseconds: 16),
@@ -145,9 +144,12 @@ class _InternalSpriteAnimationWidgetState
   }
 
   void _onAnimationValueChanged() {
-    final now = DateTime.now().millisecond.toDouble();
+    const microSecond = 1 / 1000000;
 
-    final dt = max(0, (now - (_lastUpdated ?? 0)) / 1000).toDouble();
+    final now = DateTime.now().microsecondsSinceEpoch.toDouble();
+    final lastUpdated = _lastUpdated ??= now;
+    final dt = (now - lastUpdated) * microSecond;
+
     widget.animation.update(dt);
 
     setState(() => _lastUpdated = now);
