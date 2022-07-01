@@ -35,13 +35,7 @@ void addComponentsStories(Dashbook dashbook) {
     )
     ..add(
       'ClipComponent',
-      (context) {
-        final game = ClipComponentExample();
-
-        // TODO action
-
-        return GameWidget(game: game);
-      },
+      (context) => GameWidget(game: ClipComponentExample()),
       codeLink: baseLink('components/clip_component_example.dart'),
       info: ClipComponentExample.description,
     );
