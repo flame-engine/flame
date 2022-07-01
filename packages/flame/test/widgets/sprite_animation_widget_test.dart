@@ -67,30 +67,48 @@ Future<void> main() async {
       },
     );
 
-    testWidgets('can safely change animation parameter', (tester) async {
-      final frames = List.generate(5, (_) => Sprite(image));
-      final animation1 = SpriteAnimation.spriteList(frames, stepTime: 0.1);
-      final animation2 = SpriteAnimation.spriteList(frames, stepTime: 0.1);
+    testWidgets(
+      'can safely change animation parameter',
+      (tester) async {
+        const executionCount = 1000;
+        var failedCount = 0;
 
-      await tester.pumpWidget(SpriteAnimationWidget(animation: animation1));
-      expect(animation1.onComplete, isNotNull);
-      expect(animation2.onComplete, isNull);
+        for (var idx = 0; idx < executionCount; idx++) {
+          try {
+            final frames = List.generate(5, (_) => Sprite(image));
+            final animation1 =
+                SpriteAnimation.spriteList(frames, stepTime: 0.1);
+            final animation2 =
+                SpriteAnimation.spriteList(frames, stepTime: 0.1);
 
-      await tester.pump();
-      expect(animation1.elapsed, isNonZero);
-      expect(animation2.elapsed, isZero);
+            await tester
+                .pumpWidget(SpriteAnimationWidget(animation: animation1));
+            expect(animation1.onComplete, isNotNull);
+            expect(animation2.onComplete, isNull);
 
-      // This will call didUpdateWidget life cycle
-      await tester.pumpWidget(SpriteAnimationWidget(animation: animation2));
-      expect(animation1.onComplete, isNull);
-      expect(animation2.onComplete, isNotNull);
+            await tester.pump();
+            expect(animation1.elapsed, isNonZero);
+            expect(animation2.elapsed, isZero);
 
-      // Reset the replaced animation for clarifying the expectation
-      animation1.reset();
+            // This will call didUpdateWidget lifecycle
+            await tester
+                .pumpWidget(SpriteAnimationWidget(animation: animation2));
+            expect(animation1.onComplete, isNull);
+            expect(animation2.onComplete, isNotNull);
 
-      await tester.pump();
-      expect(animation1.elapsed, isZero);
-      expect(animation2.elapsed, isNonZero);
-    });
+            // Reset the replaced animation for clarifying the expectation
+            animation1.reset();
+
+            await tester.pump();
+            expect(animation1.elapsed, isZero);
+            expect(animation2.elapsed, isNonZero);
+          } on TestFailure {
+            failedCount++;
+          }
+        }
+
+        expect(failedCount, isZero);
+      },
+    );
   });
 }
