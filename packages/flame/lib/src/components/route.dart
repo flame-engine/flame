@@ -4,8 +4,8 @@ import 'package:flame/src/components/component.dart';
 import 'package:flame/src/components/mixins/parent_is_a.dart';
 import 'package:flame/src/components/navigator_component.dart';
 import 'package:flame/src/components/position_component.dart';
-import 'package:flame/src/effects/effect.dart';
 import 'package:flame/src/decorator.dart';
+import 'package:flame/src/effects/effect.dart';
 import 'package:meta/meta.dart';
 import 'package:vector_math/vector_math_64.dart';
 
@@ -118,16 +118,16 @@ class Route extends PositionComponent with ParentIsA<NavigatorComponent> {
   /// Additional visual effect that may be applied to the page during rendering.
   Decorator? _renderEffect;
 
-  /// Invoked by the [NavigatorComponent] when this route is pushed to the top of the
-  /// navigation stack.
+  /// Invoked by the [NavigatorComponent] when this route is pushed to the top
+  /// of the navigation stack.
   @internal
   void didPush(Route? previousRoute) {
     _page ??= build()..addToParent(this);
     onPush(previousRoute);
   }
 
-  /// Invoked by the [NavigatorComponent] when this route is popped off the top of the
-  /// navigation stack.
+  /// Invoked by the [NavigatorComponent] when this route is popped off the top
+  /// of the navigation stack.
   @internal
   void didPop(Route previousRoute) => onPop(previousRoute);
 

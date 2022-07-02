@@ -71,7 +71,7 @@ class NavigatorComponent extends Component {
 
   /// Returns the route that is below the current topmost route, if it exists.
   Route? get previousRoute {
-    return _routeStack.length >=2 ? _routeStack[_routeStack.length - 2] : null;
+    return _routeStack.length >= 2 ? _routeStack[_routeStack.length - 2] : null;
   }
 
   /// Puts the route [name] on top of the navigation stack.
