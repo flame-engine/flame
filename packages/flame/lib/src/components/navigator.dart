@@ -67,6 +67,14 @@ class Navigator extends Component {
   /// the route returned by this function will not be cached.
   final _RouteFactory? onUnknownRoute;
 
+  /// Returns the route that is currently at the top of the stack.
+  Route get currentRoute => _routeStack.last;
+
+  /// Returns the route that is below the current topmost route, if it exists.
+  Route? get previousRoute {
+    return _routeStack.length >=2 ? _routeStack[_routeStack.length - 2] : null;
+  }
+
   /// Puts the route [name] on top of the navigation stack.
   ///
   /// If the route is already in the stack, it will be simply moved to the top.
@@ -78,19 +86,17 @@ class Navigator extends Component {
   /// route.
   void pushRoute(String name) {
     final route = _resolveRoute(name);
-    final currentActiveRoute = _routeStack.last;
-    if (route == currentActiveRoute) {
+    if (route == currentRoute) {
       return;
     }
     if (_routeStack.contains(route)) {
       _routeStack.remove(route);
-      _routeStack.add(route);
     } else {
-      _routeStack.add(route);
       add(route);
     }
+    _routeStack.add(route);
     _adjustRoutesOrder();
-    route.didPush(currentActiveRoute);
+    route.didPush(previousRoute);
     _adjustRoutesVisibility();
   }
 
