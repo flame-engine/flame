@@ -215,7 +215,7 @@ class BackButton extends SimpleButton with HasGameRef<NavigatorGame> {
         );
 
   @override
-  void action() => gameRef.navigator.popRoute();
+  void action() => gameRef.navigator.pop();
 }
 
 class PauseButton extends SimpleButton with HasGameRef<NavigatorGame> {
@@ -408,5 +408,5 @@ class PausePage extends Component with TapCallbacks, HasGameRef<NavigatorGame> {
   bool containsLocalPoint(Vector2 point) => true;
 
   @override
-  void onTapUp(TapUpEvent event) => gameRef.navigator.popRoute();
+  void onTapUp(TapUpEvent event) => gameRef.navigator.pop();
 }
