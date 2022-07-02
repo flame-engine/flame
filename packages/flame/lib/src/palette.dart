@@ -31,7 +31,7 @@ class BasicPalette {
   static const PaletteEntry green = PaletteEntry(Color(0xFF00FF00));
   static const PaletteEntry blue = PaletteEntry(Color(0xFF0000FF));
   static const PaletteEntry magenta = PaletteEntry(Color(0xFFFF00FF));
-   static const PaletteEntry cyan = PaletteEntry(Color(0xFF00FFFF));
+  static const PaletteEntry cyan = PaletteEntry(Color(0xFF00FFFF));
   static const PaletteEntry yellow = PaletteEntry(Color(0xFFFFFF00));
   static const PaletteEntry gray = PaletteEntry(Color(0xFF808080));
   static const PaletteEntry teal = PaletteEntry(Color(0xFF008080));
