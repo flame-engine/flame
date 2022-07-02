@@ -367,7 +367,7 @@ class PauseRoute extends Route {
     previousRoute!
       ..stopTime()
       ..addRenderEffect(
-        PaintRenderEffect()
+        PaintDecorator()
           ..addDesaturation(opacity: 0.5)
           ..addBlur(3.0),
       );

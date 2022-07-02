@@ -5,7 +5,7 @@ import 'package:flame/src/components/mixins/parent_is_a.dart';
 import 'package:flame/src/components/navigator.dart';
 import 'package:flame/src/components/position_component.dart';
 import 'package:flame/src/effects/effect.dart';
-import 'package:flame/src/page_render_effect.dart';
+import 'package:flame/src/decorator.dart';
 import 'package:meta/meta.dart';
 import 'package:vector_math/vector_math_64.dart';
 
@@ -93,14 +93,14 @@ class Route extends PositionComponent with ParentIsA<Navigator> {
   /// down or stopped.
   void resumeTime() => timeSpeed = 1.0;
 
-  /// Applies the provided [PageRenderEffect] to the page.
+  /// Applies the provided [Decorator] to the page.
   ///
   /// Render effects should not be confused with regular [Effect]s. Examples of
   /// the render effects include: whole-page blur, convert into grayscale,
   /// apply color tint, etc.
-  void addRenderEffect(PageRenderEffect effect) => _renderEffect = effect;
+  void addRenderEffect(Decorator effect) => _renderEffect = effect;
 
-  /// Removes current [PageRenderEffect], is any.
+  /// Removes current [Decorator], is any.
   void removeRenderEffect() => _renderEffect = null;
 
   //#region Implementation methods
@@ -116,7 +116,7 @@ class Route extends PositionComponent with ParentIsA<Navigator> {
   Component? _page;
 
   /// Additional visual effect that may be applied to the page during rendering.
-  PageRenderEffect? _renderEffect;
+  Decorator? _renderEffect;
 
   /// Invoked by the [Navigator] when this route is pushed to the top of the
   /// navigation stack.

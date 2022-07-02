@@ -1,11 +1,8 @@
 import 'dart:ui';
 
-abstract class PageRenderEffect {
-  Canvas preprocessCanvas(Canvas canvas);
-  void postprocessCanvas(Canvas canvas);
-}
+import 'package:flame/src/decorator.dart';
 
-class PaintRenderEffect extends PageRenderEffect {
+class PaintDecorator extends Decorator {
   final _paint = Paint();
 
   void addBlur(double amount, [double? amountY]) {
