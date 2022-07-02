@@ -135,9 +135,7 @@ class Route extends PositionComponent with ParentIsA<NavigatorComponent> {
   void renderTree(Canvas canvas) {
     if (isRendered) {
       if (_renderEffect != null) {
-        final useCanvas = _renderEffect!.preprocessCanvas(canvas);
-        super.renderTree(useCanvas);
-        _renderEffect!.postprocessCanvas(canvas);
+        _renderEffect!.apply(super.renderTree, canvas);
       } else {
         super.renderTree(canvas);
       }
