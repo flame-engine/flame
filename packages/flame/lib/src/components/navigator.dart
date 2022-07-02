@@ -100,6 +100,17 @@ class Navigator extends Component {
     _adjustRoutesVisibility();
   }
 
+  /// Puts an unnamed [route] on top of the navigation stack.
+  ///
+  /// The method calls [Route.didPush] for this new route after it is added.
+  void pushRoute(Route route) {
+    add(route);
+    _routeStack.add(route);
+    _adjustRoutesOrder();
+    route.didPush(previousRoute);
+    _adjustRoutesVisibility();
+  }
+
   /// Removes the topmost route from the stack, and also removes it as a child
   /// of the Navigator.
   ///
