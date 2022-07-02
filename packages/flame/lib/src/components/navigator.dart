@@ -16,7 +16,7 @@ import 'package:flame/src/components/route.dart';
 ///
 /// Internally, the Navigator maintains a stack of Routes. In the beginning,
 /// the stack will contain the [initialRoute]. New routes can be added via the
-/// [pushRoute] method, and removed with [popRoute]. However, the stack must be
+/// [pushNamed] method, and removed with [popRoute]. However, the stack must be
 /// kept non-empty: it is an error to attempt to remove the only remaining route
 /// from the stack.
 ///
@@ -84,7 +84,7 @@ class Navigator extends Component {
   ///
   /// The method calls the [Route.didPush] callback for the newly activated
   /// route.
-  void pushRoute(String name) {
+  void pushNamed(String name) {
     final route = _resolveRoute(name);
     if (route == currentRoute) {
       return;
