@@ -1,15 +1,14 @@
 import 'package:flame/src/components/component.dart';
 import 'package:flame/src/components/route.dart';
 
-/// [Navigator] is a component that handles transitions between multiple pages
-/// of your game.
+/// [NavigatorComponent] handles transitions between multiple pages of a game.
 ///
 /// The term **page** is used descriptively here: it is any full-screen (or
 /// partial-screen) component. For example: a starting page, a settings page,
 /// the main game world page, and so on. A page can also be any individual piece
 /// of UI, such as a confirmation dialog box, or a user inventory pop-up.
 ///
-/// The [Navigator] doesn't handle the pages directly -- instead, it operates
+/// The navigator doesn't handle the pages directly -- instead, it operates
 /// a stack of [Route]s. Each route, in turn, manages a single page component.
 /// However, routes are "lazy": they will only build their pages when they
 /// become active.
@@ -26,8 +25,8 @@ import 'package:flame/src/components/route.dart';
 /// rendering, and also stops pointer events. In addition, routes are able to
 /// stop or slow down time for the pages that they control, or to apply visual
 /// effects to those pages.
-class Navigator extends Component {
-  Navigator({
+class NavigatorComponent extends Component {
+  NavigatorComponent({
     required this.initialRoute,
     required Map<String, Route> routes,
     Map<String, _RouteFactory>? routeFactories,

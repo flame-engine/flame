@@ -1,5 +1,5 @@
 import 'package:flame/components.dart';
-import 'package:flame/game.dart' hide Navigator;
+import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

@@ -5,12 +5,12 @@ import 'package:flame/game.dart';
 import 'package:flutter/rendering.dart';
 
 class NavigatorGame extends FlameGame with HasTappableComponents {
-  late final Navigator navigator;
+  late final NavigatorComponent navigator;
 
   @override
   Future<void> onLoad() async {
     add(
-      navigator = Navigator(
+      navigator = NavigatorComponent(
         routes: {
           'splash': Route(builder: SplashScreenPage.new),
           'home': Route(builder: StartPage.new),

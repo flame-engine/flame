@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:flame/src/components/component.dart';
 import 'package:flame/src/components/mixins/parent_is_a.dart';
-import 'package:flame/src/components/navigator.dart';
+import 'package:flame/src/components/navigator_component.dart';
 import 'package:flame/src/components/position_component.dart';
 import 'package:flame/src/effects/effect.dart';
 import 'package:flame/src/decorator.dart';
@@ -22,8 +22,8 @@ import 'package:vector_math/vector_math_64.dart';
 /// try to be as lightweight as possible. In particular, a [Route] should avoid
 /// any potentially costly initialization operations.
 ///
-/// Routes are managed by the [Navigator] component.
-class Route extends PositionComponent with ParentIsA<Navigator> {
+/// Routes are managed by the [NavigatorComponent] component.
+class Route extends PositionComponent with ParentIsA<NavigatorComponent> {
   Route({
     Component Function()? builder,
     this.transparent = false,
@@ -35,7 +35,7 @@ class Route extends PositionComponent with ParentIsA<Navigator> {
   /// route underneath doesn't need to be rendered.
   final bool transparent;
 
-  /// The name of the route (set by the [Navigator]).
+  /// The name of the route (set by the [NavigatorComponent]).
   late final String name;
 
   /// The function that will be invoked in order to build the page component
@@ -44,7 +44,7 @@ class Route extends PositionComponent with ParentIsA<Navigator> {
   final Component Function()? _builder;
 
   /// This method is invoked when the route is pushed on top of the
-  /// [Navigator]'s stack.
+  /// [NavigatorComponent]'s stack.
   ///
   /// The argument for this method is the route that was on top of the stack
   /// before the push. It can be null if the current route becomes the first
@@ -52,7 +52,7 @@ class Route extends PositionComponent with ParentIsA<Navigator> {
   void onPush(Route? previousRoute) {}
 
   /// This method is called when the route is popped off the top of the
-  /// [Navigator]'s stack.
+  /// [NavigatorComponent]'s stack.
   ///
   /// The argument for this method is the route that will become the next
   /// top-most route on the stack. Thus, the argument in [onPop] will always be
@@ -107,7 +107,7 @@ class Route extends PositionComponent with ParentIsA<Navigator> {
 
   /// If true, the page must be rendered normally. If false, the page should
   /// not be rendered, because it is completely obscured by another route which
-  /// is on top of it. This variable is set by the [Navigator].
+  /// is on top of it. This variable is set by the [NavigatorComponent].
   @internal
   bool isRendered = true;
 
@@ -118,7 +118,7 @@ class Route extends PositionComponent with ParentIsA<Navigator> {
   /// Additional visual effect that may be applied to the page during rendering.
   Decorator? _renderEffect;
 
-  /// Invoked by the [Navigator] when this route is pushed to the top of the
+  /// Invoked by the [NavigatorComponent] when this route is pushed to the top of the
   /// navigation stack.
   @internal
   void didPush(Route? previousRoute) {
@@ -126,7 +126,7 @@ class Route extends PositionComponent with ParentIsA<Navigator> {
     onPush(previousRoute);
   }
 
-  /// Invoked by the [Navigator] when this route is popped off the top of the
+  /// Invoked by the [NavigatorComponent] when this route is popped off the top of the
   /// navigation stack.
   @internal
   void didPop(Route previousRoute) => onPop(previousRoute);
