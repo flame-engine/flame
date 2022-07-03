@@ -80,11 +80,11 @@ void main() {
       goldenFile: '../_goldens/paint_decorator_tinted.png',
     );
 
-
     testGolden(
-      'grayscale with blur',
+      'grayscale/tinted with blur',
       (game) async {
         final image = await loadImage('zz_guitarre.png');
+        const color = Color(0x88EBFF7F);
         game.addAll([
           SpriteComponent(sprite: Sprite(image)),
           _DecoratedSprite(
@@ -92,10 +92,15 @@ void main() {
             decorator: PaintDecorator.grayscale()..addBlur(3),
             position: Vector2(100, 0),
           ),
+          _DecoratedSprite(
+            sprite: Sprite(image),
+            decorator: PaintDecorator.tinted(color)..addBlur(3),
+            position: Vector2(200, 0),
+          ),
         ]);
       },
-      size: Vector2(200, 300),
-      goldenFile: '../_goldens/paint_decorator_grayscale_blur.png',
+      size: Vector2(300, 300),
+      goldenFile: '../_goldens/paint_decorator_with_blur.png',
     );
   });
 }
