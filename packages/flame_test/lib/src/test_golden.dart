@@ -63,7 +63,10 @@ void testGolden(
         await tester.pump();
       });
 
-      await expectLater(find.byKey(myKey), matchesGoldenFile(goldenFile));
+      await expectLater(
+        find.byKey(myKey),
+        matchesGoldenFile(goldenFile),
+      );
     },
     skip: skip,
   );
