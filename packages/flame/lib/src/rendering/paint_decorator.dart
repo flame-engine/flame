@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:flame/src/decorator.dart';
+import 'package:flame/src/rendering/decorator.dart';
 
 /// [PaintDecorator] applies a paint filter to a group of drawing operations.
 ///
