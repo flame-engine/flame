@@ -79,6 +79,24 @@ void main() {
       size: Vector2(400, 300),
       goldenFile: '../_goldens/paint_decorator_tinted.png',
     );
+
+
+    testGolden(
+      'grayscale with blur',
+      (game) async {
+        final image = await loadImage('zz_guitarre.png');
+        game.addAll([
+          SpriteComponent(sprite: Sprite(image)),
+          _DecoratedSprite(
+            sprite: Sprite(image),
+            decorator: PaintDecorator.grayscale()..addBlur(3),
+            position: Vector2(100, 0),
+          ),
+        ]);
+      },
+      size: Vector2(200, 300),
+      goldenFile: '../_goldens/paint_decorator_grayscale_blur.png',
+    );
   });
 }
 
