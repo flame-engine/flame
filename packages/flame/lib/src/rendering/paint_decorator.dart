@@ -21,10 +21,8 @@ class PaintDecorator extends Decorator {
   }
 
   PaintDecorator.grayscale({double opacity = 1.0}) {
-    _paint.colorFilter = ColorFilter.mode(
-      Color.fromARGB((255 * opacity).toInt(), 0, 0, 0),
-      BlendMode.luminosity,
-    );
+    _paint.color = Color.fromARGB((255 * opacity).toInt(), 0, 0, 0);
+    _paint.blendMode = BlendMode.luminosity;
   }
 
   final _paint = Paint();
