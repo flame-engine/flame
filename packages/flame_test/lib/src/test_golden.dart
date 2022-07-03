@@ -50,7 +50,9 @@ void testGolden(
             child: SizedBox(
               width: size.x,
               height: size.y,
-              child: RepaintBoundary(child: widget),
+              child: RepaintBoundary(
+                child: widget,
+              ),
             ),
           );
         }
