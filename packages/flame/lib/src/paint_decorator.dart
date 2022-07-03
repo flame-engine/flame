@@ -4,23 +4,34 @@ import 'package:flame/src/decorator.dart';
 
 /// [PaintDecorator] applies a paint filter to a group of drawing operations.
 ///
-/// Specifically, the following flavors are available:
-/// -
+/// Specifically, the following filters are available:
+/// - [PaintDecorator.blur] adds Gaussian blur to the image, as if your vision
+///   became blurry and out of focus;
+/// - [PaintDecorator.tinted] tints the picture with the specified color, as if
+///   looking through a colored glass;
+/// - [PaintDecorator.grayscale] removes all color from the picture, as if it
+///   was a black-and-white photo.
 class PaintDecorator extends Decorator {
+  PaintDecorator.blur(double amount, [double? amountY]) {
+    addBlur(amount, amountY ?? amount);
+  }
+
+  PaintDecorator.tinted(Color color) {
+    _paint.colorFilter = ColorFilter.mode(color, BlendMode.srcATop);
+  }
+
+  PaintDecorator.grayscale({double opacity = 1.0}) {
+    _paint.colorFilter = ColorFilter.mode(
+      Color.fromARGB((255 * opacity).toInt(), 0, 0, 0),
+      BlendMode.luminosity,
+    );
+  }
+
   final _paint = Paint();
 
   void addBlur(double amount, [double? amountY]) {
     _paint.imageFilter =
         ImageFilter.blur(sigmaX: amount, sigmaY: amountY ?? amount);
-  }
-
-  void addTint(Color color) {
-    _paint.colorFilter = ColorFilter.mode(color, BlendMode.srcATop);
-  }
-
-  void addDesaturation({double opacity = 1.0}) {
-    _paint.blendMode = BlendMode.luminosity;
-    _paint.color = Color.fromARGB((255 * opacity).toInt(), 0, 0, 0);
   }
 
   @override
