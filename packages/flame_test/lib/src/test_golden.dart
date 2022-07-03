@@ -41,7 +41,7 @@ void testGolden(
     testName,
     (tester) async {
       final gameInstance = game ?? FlameGame();
-      const myKey = ValueKey('golden-widget');
+      const myKey = ValueKey('game-instance');
 
       await tester.runAsync(() async {
         Widget widget = GameWidget(key: myKey, game: gameInstance);
