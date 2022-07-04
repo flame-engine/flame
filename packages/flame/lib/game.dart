@@ -3,7 +3,7 @@
 export 'src/collisions/has_collision_detection.dart';
 export 'src/components/navigator_component.dart' show NavigatorComponent;
 export 'src/components/route.dart' show Route;
-export 'src/decorator.dart' show Decorator;
+export 'src/rendering/decorator.dart' show Decorator;
 export 'src/extensions/vector2.dart';
 export 'src/game/camera/camera.dart';
 export 'src/game/camera/viewport.dart';
@@ -18,5 +18,5 @@ export 'src/game/mixins/single_game_instance.dart';
 export 'src/game/notifying_vector2.dart';
 export 'src/game/projector.dart';
 export 'src/game/transform2d.dart';
-export 'src/paint_decorator.dart' show PaintDecorator;
+export 'src/rendering/paint_decorator.dart' show PaintDecorator;
 export 'src/text/text_paint.dart';

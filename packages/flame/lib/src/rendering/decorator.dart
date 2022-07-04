@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:flame/src/paint_decorator.dart';
+import 'package:flame/src/rendering/paint_decorator.dart';
 
 /// [Decorator] is an abstract class that encapsulates a particular visual
 /// effect that should apply to drawing commands wrapped by this class.

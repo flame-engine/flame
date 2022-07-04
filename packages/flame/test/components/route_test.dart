@@ -188,7 +188,7 @@ void main() {
               ),
               transparent: true,
               onPush: (self, route) =>
-                  route!.addRenderEffect(PaintDecorator()..addDesaturation()),
+                  route!.addRenderEffect(PaintDecorator.grayscale()),
               onPop: (self, route) => route.removeRenderEffect(),
             ),
           },
@@ -220,7 +220,7 @@ void main() {
               ),
               transparent: true,
               onPush: (self, route) =>
-                  route!.addRenderEffect(PaintDecorator()..addDesaturation()),
+                  route!.addRenderEffect(PaintDecorator.grayscale()),
               onPop: (self, route) => route.removeRenderEffect(),
             ),
           },

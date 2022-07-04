@@ -4,7 +4,7 @@ import 'package:flame/src/components/component.dart';
 import 'package:flame/src/components/mixins/parent_is_a.dart';
 import 'package:flame/src/components/navigator_component.dart';
 import 'package:flame/src/components/position_component.dart';
-import 'package:flame/src/decorator.dart';
+import 'package:flame/src/rendering/decorator.dart';
 import 'package:flame/src/effects/effect.dart';
 import 'package:meta/meta.dart';
 import 'package:vector_math/vector_math_64.dart';
