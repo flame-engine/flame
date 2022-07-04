@@ -1,5 +1,6 @@
 import 'package:flame/src/components/component.dart';
 import 'package:flame/src/components/route.dart';
+import 'package:meta/meta.dart';
 
 /// [NavigatorComponent] handles transitions between multiple pages of a game.
 ///
@@ -47,10 +48,13 @@ class NavigatorComponent extends Component {
   /// removed with a delay, there could be temporary discrepancies between this
   /// list and the list of children.
   final List<Route> _routeStack = [];
+  @visibleForTesting
+  List<Route> get stack => _routeStack;
 
   /// The map of all routes known to the Navigator, each route will have a
   /// unique name. This map is initialized in the constructor; in addition, any
   /// routes produced by the [_routeFactories] will also be cached here.
+  Map<String, Route> get routes => _routes;
   final Map<String, Route> _routes;
 
   /// Set of functions that are able to resolve routes dynamically.
@@ -99,10 +103,18 @@ class NavigatorComponent extends Component {
     _adjustRoutesVisibility();
   }
 
-  /// Puts an unnamed [route] on top of the navigation stack.
+  /// Puts a new [route] on top of the navigation stack.
+  ///
+  /// The route may also be given a [name], in which case it will be cached in
+  /// the [routes] map under this name (if there was already a route with the
+  /// same name, it will be overwritten).
   ///
   /// The method calls [Route.didPush] for this new route after it is added.
-  void pushRoute(Route route) {
+  void pushRoute(Route route, {String name = ''}) {
+    route.name = name;
+    if (name.isNotEmpty) {
+      _routes[name] = route;
+    }
     add(route);
     _routeStack.add(route);
     _adjustRoutesOrder();
@@ -126,6 +138,18 @@ class NavigatorComponent extends Component {
     _adjustRoutesVisibility();
     route.didPop(_routeStack.last);
     route.removeFromParent();
+  }
+
+  /// Removes routes from the top of the stack until reaches the route with the
+  /// given [name].
+  ///
+  /// After this method, the route [name] will be at the top of the stack. An
+  /// error will occur if this method is run when there is no route with the
+  /// specified name on the stack.
+  void popUntilNamed(String name) {
+    while (currentRoute.name != name) {
+      pop();
+    }
   }
 
   /// Attempts to resolve the route with the given [name] by searching in the
