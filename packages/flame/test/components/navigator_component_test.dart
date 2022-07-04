@@ -145,6 +145,31 @@ void main() {
         failsAssert('Cannot pop the last route from the Navigator'),
       );
     });
+
+    testWithFlameGame('popUntilNamed', (game) async {
+      final navigator = NavigatorComponent(
+        routes: {
+          'A': Route(builder: _ComponentA.new),
+          'B': Route(builder: _ComponentB.new),
+          'C': Route(builder: _ComponentC.new),
+        },
+        initialRoute: 'A',
+      );
+      game.add(navigator);
+      await game.ready();
+
+      navigator.pushNamed('B');
+      navigator.pushNamed('C');
+      await game.ready();
+      expect(navigator.stack.length, 3);
+      expect(navigator.children.length, 3);
+
+      navigator.popUntilNamed('A');
+      await game.ready();
+      expect(navigator.stack.length, 1);
+      expect(navigator.children.length, 1);
+      expect(navigator.currentRoute.name, 'A');
+    });
   });
 }
 
