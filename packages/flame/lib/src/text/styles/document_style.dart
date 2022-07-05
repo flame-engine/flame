@@ -1,4 +1,3 @@
-
 import 'package:flame/src/text/document_element.dart';
 import 'package:flame/src/text/nodes.dart';
 import 'package:flame/src/text/styles/block_style.dart';
@@ -11,7 +10,9 @@ class DocumentStyle {
     this.padding = EdgeInsets.zero,
     Color? backgroundColor,
     Paint? backgroundPaint,
-  }) : backgroundPaint = backgroundPaint ?? Paint() {
+    BlockStyle? paragraphStyle,
+  })  : backgroundPaint = backgroundPaint ?? Paint(),
+        paragraphStyle = paragraphStyle ?? BlockStyle() {
     if (backgroundColor != null) {
       this.backgroundPaint.color = backgroundColor;
     }
@@ -25,9 +26,16 @@ class DocumentStyle {
 
   Paint backgroundPaint;
 
+  BlockStyle paragraphStyle;
+
   DocumentElement format(DocumentNode document) {
     return DocumentElement(document, this);
   }
 
-  BlockStyle styleFor(BlockNode node) => throw UnimplementedError();
+  BlockStyle styleFor(BlockNode node) {
+    if (node is ParagraphNode) {
+      return paragraphStyle;
+    }
+    return BlockStyle();
+  }
 }

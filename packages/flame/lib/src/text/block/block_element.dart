@@ -9,8 +9,11 @@ class BlockElement {
 
   final BlockNode _block;
   final BlockStyle _style;
+  double width = 0;
 
   void layout() {}
 
   void render(Canvas canvas) {}
+
+  void translate(double dx, double dy) {}
 }
