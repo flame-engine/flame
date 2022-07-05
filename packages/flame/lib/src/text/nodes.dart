@@ -19,6 +19,12 @@ class HeaderNode extends BlockNode {
   final int level;
 }
 
+class BlockquoteNode extends BlockNode {
+  BlockquoteNode(this.children);
+
+  final List<BlockNode> children;
+}
+
 abstract class TextNode {}
 
 class PlainTextNode extends TextNode {
@@ -39,4 +45,12 @@ class BoldTextNode extends GroupTextNode {
 
 class ItalicTextNode extends GroupTextNode {
   ItalicTextNode(super.children);
+}
+
+class StrikethroughTextNode extends GroupTextNode {
+  StrikethroughTextNode(super.children);
+}
+
+class HighlightedTextNode extends GroupTextNode {
+  HighlightedTextNode(super.children);
 }
