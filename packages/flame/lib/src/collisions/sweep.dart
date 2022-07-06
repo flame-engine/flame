@@ -51,13 +51,16 @@ class Sweep<T extends Hitbox<T>> extends Broadphase<T> {
       final currentBox = item.aabb;
       if (ray.direction.x <= 0) {
         if (currentBox.min.x > ray.origin.x) {
+          // The ray starts further to the left than the current min and has a
+          // direction to the left and since the items are sorted along the
+          // x-axis we know that it can't hit any of the following items in the
+          // list.
           break;
         }
-        if ((currentBox.max.x - ray.origin.x) > 0) {
-          continue;
-        }
       } else {
-        if ((currentBox.max.x - ray.origin.x) <= 0) {
+        if (currentBox.max.x < ray.origin.x) {
+          // If the box is to the left of the ray's origin and the direction is
+          // to the right we can skip this item.
           continue;
         }
       }

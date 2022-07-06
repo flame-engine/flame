@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/geometry.dart';
@@ -35,6 +36,74 @@ void main() {
         final sweep = game.collisionDetection.broadphase;
         expect(sweep.raycast(ray).first, rectangleHitbox);
       });
+
+      testCollisionDetectionGame(
+        'detects RectangleHitbox with ray from above',
+        (game) async {
+          final rectangleHitbox = RectangleHitbox();
+          game.add(
+            PositionComponent(
+              position: Vector2.all(0),
+              size: Vector2.all(10),
+            )..add(rectangleHitbox),
+          );
+          await game.ready();
+          final ray = Ray2(Vector2(5, -5), Vector2(0, 1));
+          final sweep = game.collisionDetection.broadphase;
+          expect(sweep.raycast(ray).firstOrNull, rectangleHitbox);
+        },
+      );
+
+      testCollisionDetectionGame(
+        'detects RectangleHitbox with ray from below',
+        (game) async {
+          final rectangleHitbox = RectangleHitbox();
+          game.add(
+            PositionComponent(
+              position: Vector2.all(0),
+              size: Vector2.all(10),
+            )..add(rectangleHitbox),
+          );
+          await game.ready();
+          final ray = Ray2(Vector2(5, 15), Vector2(0, -1));
+          final sweep = game.collisionDetection.broadphase;
+          expect(sweep.raycast(ray).firstOrNull, rectangleHitbox);
+        },
+      );
+
+      testCollisionDetectionGame(
+        'detects RectangleHitbox with ray from the left',
+        (game) async {
+          final rectangleHitbox = RectangleHitbox();
+          game.add(
+            PositionComponent(
+              position: Vector2.all(0),
+              size: Vector2.all(10),
+            )..add(rectangleHitbox),
+          );
+          await game.ready();
+          final ray = Ray2(Vector2(-5, 5), Vector2(1, 0));
+          final sweep = game.collisionDetection.broadphase;
+          expect(sweep.raycast(ray).firstOrNull, rectangleHitbox);
+        },
+      );
+
+      testCollisionDetectionGame(
+        'detects RectangleHitbox with ray from the right',
+        (game) async {
+          final rectangleHitbox = RectangleHitbox();
+          game.add(
+            PositionComponent(
+              position: Vector2.all(0),
+              size: Vector2.all(10),
+            )..add(rectangleHitbox),
+          );
+          await game.ready();
+          final ray = Ray2(Vector2(15, 5), Vector2(-1, 0));
+          final sweep = game.collisionDetection.broadphase;
+          expect(sweep.raycast(ray).firstOrNull, rectangleHitbox);
+        },
+      );
 
       testCollisionDetectionGame('detects PolygonHitbox', (game) async {
         final polygonHitbox = PolygonHitbox([
