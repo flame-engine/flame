@@ -1,8 +1,8 @@
 import 'dart:math';
 import 'dart:ui';
 
-import 'package:flame/src/text/block/background_element.dart';
-import 'package:flame/src/text/block/block_element.dart';
+import 'package:flame/src/text/elements/block_element.dart';
+import 'package:flame/src/text/elements/element.dart';
 import 'package:flame/src/text/nodes.dart';
 import 'package:flame/src/text/styles/document_style.dart';
 
@@ -13,7 +13,7 @@ class DocumentElement {
   final DocumentNode _document;
   final DocumentStyle _style;
   final List<BlockElement> _elements = [];
-  BackgroundElement? _background;
+  Element? _background;
 
   double get width => _width;
   double _width;

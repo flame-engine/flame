@@ -1,5 +1,5 @@
 
-import 'package:flame/src/text/block/block_element.dart';
+import 'package:flame/src/text/elements/block_element.dart';
 import 'package:flame/src/text/nodes.dart';
 import 'package:flutter/painting.dart';
 

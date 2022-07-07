@@ -32,21 +32,21 @@ class Block {
 }
 
 /// This component renders a tilemap, represented by an int matrix, given a
-/// tileset, in which the integers are the block ids.
+/// tileset, in which the integers are the elements ids.
 ///
-/// It can change the scale of each block by using the optional destTileSize
+/// It can change the scale of each elements by using the optional destTileSize
 /// property.
 class IsometricTileMapComponent extends PositionComponent {
   /// This is the tileset that will be used to render this map.
   SpriteSheet tileset;
 
-  /// The positions of each block will be placed respecting this matrix.
+  /// The positions of each elements will be placed respecting this matrix.
   List<List<int>> matrix;
 
   /// Optionally provide a new tile size to render it scaled.
   Vector2? destTileSize;
 
-  /// This is the vertical height of each block in the tile set.
+  /// This is the vertical height of each elements in the tile set.
   ///
   /// Note: this must be measured in the destination space.
   double? tileHeight;
@@ -71,7 +71,7 @@ class IsometricTileMapComponent extends PositionComponent {
   /// The current scaling factor for the isometric view.
   double get scalingFactor => effectiveTileSize.y / effectiveTileSize.x;
 
-  /// This is the vertical height of each block; by default it's half the
+  /// This is the vertical height of each elements; by default it's half the
   /// tile size.
   double get effectiveTileHeight => tileHeight ?? (effectiveTileSize.y / 2);
 
@@ -96,7 +96,7 @@ class IsometricTileMapComponent extends PositionComponent {
     }
   }
 
-  /// Get the position in which a block is rendered in, in the isometric space.
+  /// Get the position in which a elements is rendered in, in the isometric space.
   ///
   /// This does not include the (x,y) PositionComponent offset!
   /// This assumes the tile sprite as a rectangular tile.
@@ -141,7 +141,7 @@ class IsometricTileMapComponent extends PositionComponent {
     return Vector2(x, y);
   }
 
-  /// Get which block's surface is at isometric position [p].
+  /// Get which elements's surface is at isometric position [p].
   ///
   /// This can be used to handle clicks or hovers.
   /// This is the opposite of [getBlockCenterPosition].
@@ -155,7 +155,7 @@ class IsometricTileMapComponent extends PositionComponent {
     return Block(px, py);
   }
 
-  /// Get which block should be rendered on position [p].
+  /// Get which elements should be rendered on position [p].
   ///
   /// This is the opposite of [getBlockRenderPosition].
   Block getBlockRenderedAt(Vector2 p) {
@@ -167,17 +167,17 @@ class IsometricTileMapComponent extends PositionComponent {
     );
   }
 
-  /// Sets the block value into the matrix.
+  /// Sets the elements value into the matrix.
   void setBlockValue(Block pos, int block) {
     matrix[pos.y][pos.x] = block;
   }
 
-  /// Gets the block value from the matrix.
+  /// Gets the elements value from the matrix.
   int blockValue(Block pos) {
     return matrix[pos.y][pos.x];
   }
 
-  /// Return whether the matrix contains a block in its bounds.
+  /// Return whether the matrix contains a elements in its bounds.
   bool containsBlock(Block block) {
     return block.y >= 0 &&
         block.y < matrix.length &&

@@ -1,8 +1,8 @@
 import 'dart:ui';
 
-import 'package:flame/src/text/block/background_element.dart';
+import 'package:flame/src/text/elements/element.dart';
 
-class RRectBackgroundElement extends BackgroundElement {
+class RRectBackgroundElement extends Element {
   RRectBackgroundElement(
     double width,
     double height,

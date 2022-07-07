@@ -1,4 +1,4 @@
-import 'package:flame/src/text/block/document_element.dart';
+import 'package:flame/src/text/elements/document_element.dart';
 import 'package:flame/src/text/nodes.dart';
 import 'package:flame/src/text/styles/background_style.dart';
 import 'package:flame/src/text/styles/block_style.dart';
@@ -14,6 +14,11 @@ class DocumentStyle {
   })  : paragraphStyle = paragraphStyle ?? BlockStyle(),
         backgroundStyle = background;
 
+  /// Outer width of the document page.
+  ///
+  /// This width is computed between the left edge of the left border, and the
+  /// right edge of the right border. Thus, it corresponds to the "border-box"
+  /// box sizing model in HTML.
   double width;
 
   double height;

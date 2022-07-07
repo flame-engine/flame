@@ -1,9 +1,9 @@
 
 import 'dart:ui';
 
-import 'package:flame/src/text/block/background_element.dart';
+import 'package:flame/src/text/elements/element.dart';
 
-class RectBackgroundElement extends BackgroundElement {
+class RectBackgroundElement extends Element {
   RectBackgroundElement(double width, double height, this._paints)
     : _rect = Rect.fromLTWH(0, 0, width, height);
 

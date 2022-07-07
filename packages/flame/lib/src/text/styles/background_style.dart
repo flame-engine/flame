@@ -1,8 +1,8 @@
 import 'dart:ui';
 
-import 'package:flame/src/text/block/background_element.dart';
-import 'package:flame/src/text/block/rect_background_element.dart';
-import 'package:flame/src/text/block/rrect_background_element.dart';
+import 'package:flame/src/text/elements/element.dart';
+import 'package:flame/src/text/elements/rect_background_element.dart';
+import 'package:flame/src/text/elements/rrect_background_element.dart';
 
 class BackgroundStyle {
   BackgroundStyle({
@@ -37,7 +37,7 @@ class BackgroundStyle {
   late final Paint? _borderPaint;
   final double _borderRadius;
 
-  BackgroundElement? format(double width, double height) {
+  Element? format(double width, double height) {
     final paints = <Paint>[
       if (_backgroundPaint != null) _backgroundPaint!,
       if (_borderPaint != null) _borderPaint!,
