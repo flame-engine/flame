@@ -46,7 +46,7 @@ class CircleHitbox extends CircleComponent with ShapeHitbox {
   }) {
     var isWithin = false;
     _temporaryLineSegment.from.setFrom(ray.origin);
-    // TODO(spydon): Here we are creating new vectors
+    // TODO(spydon): absoluteCenter is creating two new vectors
     _temporaryAbsoluteCenter.setFrom(absoluteCenter);
     _temporaryCenter
       ..setFrom(_temporaryAbsoluteCenter)

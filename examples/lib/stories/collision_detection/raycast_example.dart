@@ -54,27 +54,49 @@ class RaycastExample extends FlameGame
   late Path path;
   @override
   Future<void> onLoad() async {
-    debugMode = true;
+    final paint = BasicPalette.gray.paint()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 2.0;
     add(ScreenHitbox());
     add(
-      CircleComponent(position: Vector2(100, 100), radius: 50)
-        ..add(CircleHitbox())
-        ..paint = BasicPalette.transparent.paint(),
+      CircleComponent(
+        position: Vector2(100, 100),
+        radius: 50,
+        paint: paint,
+        children: [CircleHitbox()],
+      ),
     );
     add(
-      RectangleComponent(position: Vector2.all(300), size: Vector2.all(100))
-        ..add(RectangleHitbox())
-        ..paint = BasicPalette.transparent.paint(),
+      CircleComponent(
+        position: Vector2(150, 500),
+        radius: 50,
+        paint: paint,
+        children: [CircleHitbox()],
+      ),
     );
     add(
-      RectangleComponent(position: Vector2.all(500), size: Vector2(100, 200))
-        ..add(RectangleHitbox())
-        ..paint = BasicPalette.transparent.paint(),
+      RectangleComponent(
+        position: Vector2.all(300),
+        size: Vector2.all(100),
+        paint: paint,
+        children: [RectangleHitbox()],
+      ),
     );
     add(
-      RectangleComponent(position: Vector2(550, 200), size: Vector2(200, 150))
-        ..add(RectangleHitbox())
-        ..paint = BasicPalette.transparent.paint(),
+      RectangleComponent(
+        position: Vector2.all(500),
+        size: Vector2(100, 200),
+        paint: paint,
+        children: [RectangleHitbox()],
+      ),
+    );
+    add(
+      RectangleComponent(
+        position: Vector2(550, 200),
+        size: Vector2(200, 150),
+        paint: paint,
+        children: [RectangleHitbox()],
+      ),
     );
   }
 
