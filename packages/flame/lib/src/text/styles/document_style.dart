@@ -1,5 +1,6 @@
 import 'package:flame/src/text/block/document_element.dart';
 import 'package:flame/src/text/nodes.dart';
+import 'package:flame/src/text/styles/background_style.dart';
 import 'package:flame/src/text/styles/block_style.dart';
 import 'package:flutter/painting.dart';
 
@@ -8,15 +9,10 @@ class DocumentStyle {
     required this.width,
     required this.height,
     this.padding = EdgeInsets.zero,
-    Color? backgroundColor,
-    Paint? backgroundPaint,
+    BackgroundStyle? background,
     BlockStyle? paragraphStyle,
-  })  : backgroundPaint = backgroundPaint ?? Paint(),
-        paragraphStyle = paragraphStyle ?? BlockStyle() {
-    if (backgroundColor != null) {
-      this.backgroundPaint.color = backgroundColor;
-    }
-  }
+  })  : paragraphStyle = paragraphStyle ?? BlockStyle(),
+        backgroundStyle = background;
 
   double width;
 
@@ -24,7 +20,7 @@ class DocumentStyle {
 
   EdgeInsets padding;
 
-  Paint backgroundPaint;
+  BackgroundStyle? backgroundStyle;
 
   BlockStyle paragraphStyle;
 
