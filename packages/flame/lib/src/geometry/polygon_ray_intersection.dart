@@ -28,7 +28,7 @@ mixin PolygonRayIntersection<T extends ShapeHitbox> on PolygonComponent {
     if (crossings > 0) {
       out?.isActive = true;
       final intersectionPoint = ray.point(closestDistance, out: out?.point);
-      // This is from - to since it is defined ccw in the canvas
+      // This is "from" to "to" since it is defined ccw in the canvas
       // coordinate system
       _temporaryNormal
         ..setFrom(closestSegment!.from)

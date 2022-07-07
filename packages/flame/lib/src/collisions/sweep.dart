@@ -43,13 +43,18 @@ class Sweep<T extends Hitbox<T>> extends Broadphase<T> {
   @override
   Set<T> raycast(Ray2 ray) {
     _raycastPotentials.clear();
-    items.sort((a, b) => (a.aabb.min.x - b.aabb.min.x).ceil());
+    if (ray.direction.x.isNegative) {
+      items.sort((a, b) => (a.aabb.min.x - b.aabb.min.x).ceil());
+    } else {
+      items.sort((a, b) => (b.aabb.max.x - a.aabb.max.x).ceil());
+    }
+
     for (final item in items) {
       if (item.collisionType == CollisionType.inactive) {
         continue;
       }
       final currentBox = item.aabb;
-      if (ray.direction.x <= 0) {
+      if (ray.direction.x.isNegative) {
         if (currentBox.min.x > ray.origin.x) {
           // The ray starts further to the left than the current min and has a
           // direction to the left and since the items are sorted along the
@@ -59,9 +64,11 @@ class Sweep<T extends Hitbox<T>> extends Broadphase<T> {
         }
       } else {
         if (currentBox.max.x < ray.origin.x) {
-          // If the box is to the left of the ray's origin and the direction is
-          // to the right we can skip this item.
-          continue;
+          // The ray starts further to the right than the current max and has a
+          // direction to the left and since the items are sorted in reverse
+          // order along the x-axis we know that it can't hit any of the
+          // following items in the list.
+          break;
         }
       }
 
