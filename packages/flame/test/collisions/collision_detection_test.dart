@@ -846,23 +846,74 @@ void main() {
 
     group('Circle hitboxes', () {
       testCollisionDetectionGame(
-        'ray from within CircleHitbox',
+        'ray from top to bottom within CircleHitbox',
         (game) async {
           game.ensureAddAll([
             PositionComponent(
-              position: Vector2(0, 10),
+              position: Vector2.zero(),
               size: Vector2.all(10),
             )..add(CircleHitbox()),
           ]);
           await game.ready();
-          final ray = Ray2(Vector2.all(5), Vector2.all(1)..normalized());
+          final ray = Ray2(Vector2(5, 4), Vector2(0, 1));
           final result = game.collisionDetection.raycast(ray);
           expect(result?.hitbox?.parent, game.children.first);
-          expect(result?.normal, closeToVector(Vector2(-1, 0)));
-          expect(result?.reflectionRay?.origin, closeToVector(Vector2(10, 10)));
+          expect(result?.normal, closeToVector(Vector2(0, -1)));
+          expect(result?.reflectionRay?.origin, closeToVector(Vector2(5, 10)));
           expect(
             result?.reflectionRay?.direction,
-            closeToVector(Vector2(-1, 1)),
+            closeToVector(Vector2(0, -1)),
+          );
+        },
+      );
+
+      testCollisionDetectionGame(
+        'ray from bottom-right to top-left within CircleHitbox',
+        (game) async {
+          game.ensureAddAll([
+            PositionComponent(
+              position: Vector2.zero(),
+              size: Vector2.all(10),
+            )..add(CircleHitbox()),
+          ]);
+          await game.ready();
+          final ray = Ray2(Vector2.all(6), Vector2.all(-1));
+          final result = game.collisionDetection.raycast(ray);
+          expect(result?.hitbox?.parent, game.children.first);
+          expect(result?.normal, closeToVector(Vector2.all(0.707106781186547)));
+          expect(
+            result?.intersectionPoint,
+            closeToVector(Vector2.all(1.4644660940672631)),
+          );
+          expect(
+            result?.reflectionRay?.direction,
+            closeToVector(Vector2.all(1)),
+          );
+        },
+      );
+
+      testCollisionDetectionGame(
+        'ray from bottom within CircleHitbox going down',
+        (game) async {
+          game.ensureAddAll([
+            PositionComponent(
+              position: Vector2.zero(),
+              size: Vector2.all(10),
+            )..add(CircleHitbox()),
+          ]);
+          await game.ready();
+          final direction = Vector2(0, 1);
+          final ray = Ray2(Vector2(5, 6), direction);
+          final result = game.collisionDetection.raycast(ray);
+          expect(result?.hitbox?.parent, game.children.first);
+          expect(result?.normal, closeToVector(Vector2(0, -1)));
+          expect(
+            result?.intersectionPoint,
+            closeToVector(Vector2(5, 10)),
+          );
+          expect(
+            result?.reflectionRay?.direction,
+            closeToVector(direction.inverted()),
           );
         },
       );

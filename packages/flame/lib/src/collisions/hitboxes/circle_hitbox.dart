@@ -36,16 +36,30 @@ class CircleHitbox extends CircleComponent with ShapeHitbox {
 
   late final _temporaryLineSegment = LineSegment.zero();
   late final _temporaryNormal = Vector2.zero();
+  late final _temporaryCenter = Vector2.zero();
+  late final _temporaryAbsoluteCenter = Vector2.zero();
 
   @override
   RaycastResult<ShapeHitbox>? rayIntersection(
     Ray2 ray, {
     RaycastResult<ShapeHitbox>? out,
   }) {
+    var isWithin = false;
     _temporaryLineSegment.from.setFrom(ray.origin);
-    absoluteCenter
-        .projection(ray.direction, out: _temporaryLineSegment.to)
-        .add(ray.origin);
+    // TODO(spydon): Here we are creating new vectors
+    _temporaryAbsoluteCenter.setFrom(absoluteCenter);
+    _temporaryCenter
+      ..setFrom(_temporaryAbsoluteCenter)
+      ..sub(ray.origin);
+    _temporaryCenter.projection(ray.direction, out: _temporaryLineSegment.to);
+    _temporaryLineSegment.to
+      ..x *= (ray.direction.x.sign * _temporaryLineSegment.to.x.sign)
+      ..y *= (ray.direction.y.sign * _temporaryLineSegment.to.y.sign);
+    if (_temporaryLineSegment.to.length2 < radius * radius) {
+      _temporaryLineSegment.to.scaleTo(2 * radius);
+      isWithin = true;
+    }
+    _temporaryLineSegment.to.add(ray.origin);
     final intersections = lineSegmentIntersections(_temporaryLineSegment);
     if (intersections.isEmpty) {
       out?.isActive = false;
@@ -53,12 +67,18 @@ class CircleHitbox extends CircleComponent with ShapeHitbox {
     } else {
       final result = out ?? RaycastResult();
       final intersectionPoint = intersections.first;
+      _temporaryNormal
+        ..setFrom(intersectionPoint)
+        ..sub(_temporaryAbsoluteCenter)
+        ..normalize();
+      if (isWithin) {
+        _temporaryNormal.invert();
+      }
       final reflectionDirection =
           (out?.reflectionRay?.direction ?? Vector2.zero())
             ..setFrom(ray.direction)
             ..reflect(_temporaryNormal);
 
-      // TODO(Spydon): Not done.
       final reflectionRay = (out?.reflectionRay
             ?..setWith(
               origin: intersectionPoint,
@@ -71,6 +91,7 @@ class CircleHitbox extends CircleComponent with ShapeHitbox {
         reflectionRay: reflectionRay,
         normal: _temporaryNormal,
         distance: ray.origin.distanceTo(intersectionPoint),
+        isWithin: isWithin,
       );
       return result;
     }

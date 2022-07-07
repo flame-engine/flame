@@ -125,7 +125,7 @@ class RaycastExample extends FlameGame
       if (!result.isActive) {
         continue;
       }
-      final intersectionPoint = result.point!.toOffset();
+      final intersectionPoint = result.intersectionPoint!.toOffset();
       canvas.drawLine(
         originOffset,
         intersectionPoint,

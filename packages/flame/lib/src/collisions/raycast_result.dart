@@ -13,6 +13,7 @@ class RaycastResult<T extends Hitbox<T>> {
     Ray2? reflectionRay,
     Vector2? normal,
     double? distance,
+    this.isWithin = false,
     this.isActive = true,
   }) {
     _hitbox = hitbox;
@@ -27,13 +28,16 @@ class RaycastResult<T extends Hitbox<T>> {
   /// there is no result from a ray cast.
   bool isActive;
 
+  /// Whether the origin of the ray was within the hitbox.
+  bool isWithin;
+
   T? _hitbox;
   T? get hitbox => isActive ? _hitbox : null;
 
   late Ray2 _reflectionRay;
   Ray2? get reflectionRay => isActive ? _reflectionRay : null;
 
-  Vector2? get point => reflectionRay?.origin;
+  Vector2? get intersectionPoint => reflectionRay?.origin;
 
   late double _distance;
   double? get distance => isActive ? _distance : null;
@@ -53,6 +57,7 @@ class RaycastResult<T extends Hitbox<T>> {
       normal: other.normal,
       distance: other.distance,
       isActive: isActive,
+      isWithin: other.isWithin,
     );
   }
 
@@ -62,6 +67,7 @@ class RaycastResult<T extends Hitbox<T>> {
     Vector2? normal,
     double? distance,
     bool isActive = true,
+    bool isWithin = false,
   }) {
     _hitbox = hitbox;
     if (reflectionRay != null) {
@@ -72,6 +78,7 @@ class RaycastResult<T extends Hitbox<T>> {
     }
     _distance = distance ?? double.maxFinite;
     this.isActive = isActive;
+    this.isWithin = isWithin;
   }
 
   RaycastResult<T> clone() {
@@ -81,6 +88,7 @@ class RaycastResult<T extends Hitbox<T>> {
       normal: _normal.clone(),
       distance: distance,
       isActive: isActive,
+      isWithin: isWithin,
     );
   }
 }

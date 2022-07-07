@@ -31,7 +31,8 @@ mixin PolygonRayIntersection<T extends ShapeHitbox> on PolygonComponent {
     }
     if (crossings > 0) {
       out?.isActive = true;
-      final intersectionPoint = ray.point(closestDistance, out: out?.point);
+      final intersectionPoint =
+          ray.point(closestDistance, out: out?.intersectionPoint);
       // This is "from" to "to" since it is defined ccw in the canvas
       // coordinate system
       _temporaryNormal
@@ -40,8 +41,10 @@ mixin PolygonRayIntersection<T extends ShapeHitbox> on PolygonComponent {
       _temporaryNormal
         ..setValues(_temporaryNormal.y, -_temporaryNormal.x)
         ..normalize();
+      var isWithin = false;
       if (crossings == 1 || isOverlappingPoint) {
         _temporaryNormal.invert();
+        isWithin = true;
       }
       final reflectionDirection =
           (out?.reflectionRay?.direction ?? Vector2.zero())
@@ -60,6 +63,7 @@ mixin PolygonRayIntersection<T extends ShapeHitbox> on PolygonComponent {
           reflectionRay: reflectionRay,
           normal: _temporaryNormal,
           distance: closestDistance,
+          isWithin: isWithin,
         );
     }
     out?.isActive = false;

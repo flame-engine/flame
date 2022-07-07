@@ -133,7 +133,7 @@ mixin ShapeHitbox on ShapeComponent implements Hitbox<ShapeHitbox> {
   /// Returns the reflection of the ray against the closest.
   ///
   /// If you are only interested in the intersection point use
-  /// [RaycastResult.point] of the result.
+  /// [RaycastResult.intersectionPoint] of the result.
   RaycastResult<ShapeHitbox>? rayIntersection(
     Ray2 ray, {
     RaycastResult<ShapeHitbox>? out,
