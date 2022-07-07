@@ -20,7 +20,7 @@ class RaycastExample extends FlameGame
   Ray2? reflection;
   Vector2? origin;
 
-  static const numberOfRays = 4;
+  static const numberOfRays = 5000;
   final List<Ray2> rays = List.generate(
     numberOfRays,
     (i) => Ray2(
@@ -38,10 +38,25 @@ class RaycastExample extends FlameGame
 
   @override
   Future<void> onLoad() async {
-    rays.forEach((r) => print(r.direction));
     debugMode = true;
+    debugColor = Colors.amber.withOpacity(0.1);
+    add(
+      CircleComponent(position: Vector2(100, 100), radius: 50)
+        ..add(CircleHitbox())
+        ..paint = BasicPalette.transparent.paint(),
+    );
     add(
       RectangleComponent(position: Vector2.all(300), size: Vector2.all(100))
+        ..add(RectangleHitbox())
+        ..paint = BasicPalette.transparent.paint(),
+    );
+    add(
+      RectangleComponent(position: Vector2.all(500), size: Vector2(100, 200))
+        ..add(RectangleHitbox())
+        ..paint = BasicPalette.transparent.paint(),
+    );
+    add(
+      RectangleComponent(position: Vector2(550, 200), size: Vector2(200, 150))
         ..add(RectangleHitbox())
         ..paint = BasicPalette.transparent.paint(),
     );
@@ -94,8 +109,7 @@ class RaycastExample extends FlameGame
       if (!result.isActive) {
         continue;
       }
-      final intersectionPoint = result.reflectionRay!.origin.toOffset();
-      //print(intersectionPoint);
+      final intersectionPoint = result.point!.toOffset();
       c.drawLine(
         originOffset,
         intersectionPoint,

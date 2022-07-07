@@ -73,11 +73,11 @@ abstract class CollisionDetection<T extends Hitbox<T>> {
   /// result.
   RaycastResult<T>? raycast(Ray2 ray, {RaycastResult<T>? out});
 
-  /// [raycastAll] gives back the all hitboxes and the intersection points which
+  /// [raytrace] gives back the all hitboxes and the intersection points which
   /// the ray hits.
   ///
   /// If [out] is provided the [RaycastResult]s in that list be modified and
   /// returned with the result. If there are less objects in [out] than the
   /// result requires, the missing [RaycastResult] objects will be created.
-  Set<RaycastResult<T>> raycastAll(Ray2 ray, {Iterable<RaycastResult<T>>? out});
+  Set<RaycastResult<T>> raytrace(Ray2 ray, {Iterable<RaycastResult<T>>? out});
 }

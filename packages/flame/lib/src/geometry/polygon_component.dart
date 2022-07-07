@@ -2,7 +2,6 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:collection/collection.dart';
-import 'package:flame/collisions.dart';
 import 'package:flame/geometry.dart';
 import 'package:flame/src/anchor.dart';
 import 'package:flame/src/cache/value_cache.dart';
@@ -247,65 +246,6 @@ class PolygonComponent extends ShapeComponent {
       }
     }
     return rectIntersections;
-  }
-
-  late final _temporaryNormal = Vector2.zero();
-
-  RaycastResult<ShapeHitbox>? rayIntersection(
-    Ray2 ray, {
-    RaycastResult<ShapeHitbox>? out,
-  }) {
-    final vertices = globalVertices();
-    var closestDistance = double.infinity;
-    LineSegment? closestSegment;
-    var crossings = 0;
-    for (var i = 0; i < vertices.length; i++) {
-      final lineSegment = getEdge(i, vertices: vertices);
-      final distance = ray.lineSegmentIntersection(lineSegment);
-      if (distance != null) {
-        crossings++;
-        if (distance < closestDistance) {
-          closestDistance = distance;
-          closestSegment = lineSegment;
-        }
-      }
-    }
-    if (crossings > 0 && crossings.isEven) {
-      out?.isActive = true;
-      final intersectionPoint = ray.point(closestDistance, out: out?.point);
-      // This is from - to since it is defined ccw in the canvas
-      // coordinate system
-      _temporaryNormal
-        ..setFrom(closestSegment!.from)
-        ..sub(closestSegment.to);
-      _temporaryNormal
-        ..setValues(_temporaryNormal.y, -_temporaryNormal.x)
-        ..normalize();
-      final reflectionDirection =
-          (out?.reflectionRay?.direction ?? Vector2.zero())
-            ..setFrom(ray.direction)
-            ..reflect(_temporaryNormal);
-
-      final reflectionRay = (out?.reflectionRay
-            ?..setWith(
-              origin: intersectionPoint,
-              direction: reflectionDirection,
-            )) ??
-          Ray2(intersectionPoint, reflectionDirection);
-      return (out ?? RaycastResult<ShapeHitbox>())
-        ..setWith(
-          // TODO(spydon): This class should not be aware of ShapeHitbox
-          hitbox: this as ShapeHitbox,
-          reflectionRay: reflectionRay,
-          normal: _temporaryNormal,
-          distance: closestDistance,
-        );
-    }
-    // TODO(spydon): Handle if there is one crossing
-    // (if the origin of the ray is inside of the hitbox, then it should be
-    // reflected the other way around)
-    out?.isActive = false;
-    return null;
   }
 
   LineSegment getEdge(int i, {required List<Vector2> vertices}) {

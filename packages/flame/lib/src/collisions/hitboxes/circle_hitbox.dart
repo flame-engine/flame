@@ -2,6 +2,7 @@
 
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flame/geometry.dart';
 
 /// A [Hitbox] in the shape of a circle.
 class CircleHitbox extends CircleComponent with ShapeHitbox {
@@ -31,5 +32,47 @@ class CircleHitbox extends CircleComponent with ShapeHitbox {
   void fillParent() {
     // There is no need to do anything here since the size already is bound to
     // the parent size and the radius is defined from the shortest side.
+  }
+
+  late final _temporaryLineSegment = LineSegment.zero();
+  late final _temporaryNormal = Vector2.zero();
+
+  @override
+  RaycastResult<ShapeHitbox>? rayIntersection(
+    Ray2 ray, {
+    RaycastResult<ShapeHitbox>? out,
+  }) {
+    _temporaryLineSegment.from.setFrom(ray.origin);
+    absoluteCenter
+        .projection(ray.direction, out: _temporaryLineSegment.to)
+        .add(ray.origin);
+    final intersections = lineSegmentIntersections(_temporaryLineSegment);
+    if (intersections.isEmpty) {
+      out?.isActive = false;
+      return null;
+    } else {
+      final result = out ?? RaycastResult();
+      final intersectionPoint = intersections.first;
+      final reflectionDirection =
+          (out?.reflectionRay?.direction ?? Vector2.zero())
+            ..setFrom(ray.direction)
+            ..reflect(_temporaryNormal);
+
+      // TODO(Spydon): Not done.
+      final reflectionRay = (out?.reflectionRay
+            ?..setWith(
+              origin: intersectionPoint,
+              direction: reflectionDirection,
+            )) ??
+          Ray2(intersectionPoint, reflectionDirection);
+
+      result.setWith(
+        hitbox: this,
+        reflectionRay: reflectionRay,
+        normal: _temporaryNormal,
+        distance: ray.origin.distanceTo(intersectionPoint),
+      );
+      return result;
+    }
   }
 }
