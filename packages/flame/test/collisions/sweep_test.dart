@@ -105,6 +105,74 @@ void main() {
         },
       );
 
+      testCollisionDetectionGame(
+        'detects CircleHitbox with ray from above',
+        (game) async {
+          final circleHitbox = CircleHitbox();
+          game.add(
+            PositionComponent(
+              position: Vector2.all(0),
+              size: Vector2.all(10),
+            )..add(circleHitbox),
+          );
+          await game.ready();
+          final ray = Ray2(Vector2(5, -5), Vector2(0, 1));
+          final sweep = game.collisionDetection.broadphase;
+          expect(sweep.raycast(ray).firstOrNull, circleHitbox);
+        },
+      );
+
+      testCollisionDetectionGame(
+        'detects CircleHitbox with ray from below',
+        (game) async {
+          final circleHitbox = CircleHitbox();
+          game.add(
+            PositionComponent(
+              position: Vector2.all(0),
+              size: Vector2.all(10),
+            )..add(circleHitbox),
+          );
+          await game.ready();
+          final ray = Ray2(Vector2(5, 15), Vector2(0, -1));
+          final sweep = game.collisionDetection.broadphase;
+          expect(sweep.raycast(ray).firstOrNull, circleHitbox);
+        },
+      );
+
+      testCollisionDetectionGame(
+        'detects CircleHitbox with ray from the left',
+        (game) async {
+          final circleHitbox = CircleHitbox();
+          game.add(
+            PositionComponent(
+              position: Vector2.all(0),
+              size: Vector2.all(10),
+            )..add(circleHitbox),
+          );
+          await game.ready();
+          final ray = Ray2(Vector2(-5, 5), Vector2(1, 0));
+          final sweep = game.collisionDetection.broadphase;
+          expect(sweep.raycast(ray).firstOrNull, circleHitbox);
+        },
+      );
+
+      testCollisionDetectionGame(
+        'detects CircleHitbox with ray from the right',
+        (game) async {
+          final circleHitbox = CircleHitbox();
+          game.add(
+            PositionComponent(
+              position: Vector2.all(0),
+              size: Vector2.all(10),
+            )..add(circleHitbox),
+          );
+          await game.ready();
+          final ray = Ray2(Vector2(15, 5), Vector2(-1, 0));
+          final sweep = game.collisionDetection.broadphase;
+          expect(sweep.raycast(ray).firstOrNull, circleHitbox);
+        },
+      );
+
       testCollisionDetectionGame('detects PolygonHitbox', (game) async {
         final polygonHitbox = PolygonHitbox([
           Vector2(1, 0),

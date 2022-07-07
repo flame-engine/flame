@@ -14,14 +14,18 @@ mixin PolygonRayIntersection<T extends ShapeHitbox> on PolygonComponent {
     var closestDistance = double.infinity;
     LineSegment? closestSegment;
     var crossings = 0;
+    var isOverlappingPoint = false;
     for (var i = 0; i < vertices.length; i++) {
       final lineSegment = getEdge(i, vertices: vertices);
       final distance = ray.lineSegmentIntersection(lineSegment);
       if (distance != null) {
         crossings++;
         if (distance < closestDistance) {
+          isOverlappingPoint = false;
           closestDistance = distance;
           closestSegment = lineSegment;
+        } else if (distance == closestDistance) {
+          isOverlappingPoint = true;
         }
       }
     }
@@ -33,10 +37,12 @@ mixin PolygonRayIntersection<T extends ShapeHitbox> on PolygonComponent {
       _temporaryNormal
         ..setFrom(closestSegment!.from)
         ..sub(closestSegment.to);
-      // TODO(spydon): The normal needs to be inverted if it is only one crossing
       _temporaryNormal
         ..setValues(_temporaryNormal.y, -_temporaryNormal.x)
         ..normalize();
+      if (crossings == 1 || isOverlappingPoint) {
+        _temporaryNormal.invert();
+      }
       final reflectionDirection =
           (out?.reflectionRay?.direction ?? Vector2.zero())
             ..setFrom(ray.direction)
