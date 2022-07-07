@@ -1,6 +1,7 @@
 import 'package:flame/cache.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
+import 'package:flame/src/flame.dart';
 import 'package:flame/src/game/game_render_box.dart';
 import 'package:flame/src/game/projector.dart';
 import 'package:flutter/rendering.dart';
@@ -15,8 +16,15 @@ import 'package:meta/meta.dart';
 /// Methods [update] and [render] need to be implemented in order to connect
 /// your class with the internal game loop.
 abstract class Game {
-  final images = Images();
-  final assets = AssetsCache();
+  /// The cache of all images loaded into the game. This defaults to the global
+  /// [Flame.images] cache, but you can replace it with a new cache instance if
+  /// needed.
+  Images images = Flame.images;
+
+  /// The cache of all (non-image) assets loaded into the game. This defaults to
+  /// the global [Flame.assets] cache, but you can replace this with another
+  /// instance if needed.
+  AssetsCache assets = Flame.assets;
 
   /// This should update the state of the game.
   void update(double dt);
