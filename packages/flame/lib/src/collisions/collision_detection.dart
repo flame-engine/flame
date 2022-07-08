@@ -73,6 +73,25 @@ abstract class CollisionDetection<T extends Hitbox<T>> {
   /// result.
   RaycastResult<T>? raycast(Ray2 ray, {RaycastResult<T>? out});
 
+  /// [raycastAll] casts rays uniformly around the given [origin] and gives back
+  /// the all hitboxes and intersection points the ray hits.
+  /// [amount] is the number of rays that should be casted.
+  ///
+  /// If [rays] is provided its [Ray2]s are populated with the rays needed to
+  /// perform the operation.
+  /// If there are less objects in [rays] than the operation requires, the
+  /// missing [Ray2] objects will be created and added to [rays].
+  ///
+  /// If [out] is provided the [RaycastResult]s in that list be modified and
+  /// returned with the result. If there are less objects in [out] than the
+  /// result requires, the missing [RaycastResult] objects will be created.
+  List<RaycastResult<T>> raycastAll(
+    Vector2 origin,
+    int amount, {
+    List<Ray2>? rays,
+    List<RaycastResult<T>>? out,
+  });
+
   /// [raytrace] gives back all hitboxes and intersection points the ray hits.
   ///
   /// If [out] is provided the [RaycastResult]s in that list be modified and

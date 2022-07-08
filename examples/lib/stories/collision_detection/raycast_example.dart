@@ -1,6 +1,3 @@
-import 'dart:math';
-
-import 'package:collection/collection.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
@@ -16,7 +13,6 @@ In this example the raycast functionality is showcased, if you move the mouse
 around the canvas the rays will be cast from its location. You can also tap to
 create a permanent source of rays that wont move with with mouse.
   ''';
-  static const tau = pi * 2;
 
   Ray2? ray;
   Ray2? reflection;
@@ -26,33 +22,10 @@ create a permanent source of rays that wont move with with mouse.
   Paint tapPaint = Paint()..color = Colors.blue.withOpacity(0.2);
 
   static const numberOfRays = 2000;
-  final List<Ray2> rays = List.generate(
-    numberOfRays,
-    (i) => Ray2(
-      Vector2.zero(),
-      Vector2(0, 1)..rotate((tau / numberOfRays) * i),
-    ),
-    growable: false,
-  );
-  final List<Ray2> tapRays = List.generate(
-    numberOfRays,
-    (i) => Ray2(
-      Vector2.all(800),
-      Vector2(0, 1)..rotate((tau / numberOfRays) * i),
-    ),
-    growable: false,
-  );
-
-  final List<RaycastResult<ShapeHitbox>> results = List.generate(
-    numberOfRays,
-    (i) => RaycastResult<ShapeHitbox>(isActive: false),
-    growable: false,
-  );
-  final List<RaycastResult<ShapeHitbox>> tapResults = List.generate(
-    numberOfRays,
-    (i) => RaycastResult<ShapeHitbox>(isActive: false),
-    growable: false,
-  );
+  final List<Ray2> rays = [];
+  final List<Ray2> tapRays = [];
+  final List<RaycastResult<ShapeHitbox>> results = [];
+  final List<RaycastResult<ShapeHitbox>> tapResults = [];
 
   late Path path;
   @override
@@ -103,29 +76,28 @@ create a permanent source of rays that wont move with with mouse.
     );
   }
 
-  void castRays(
-    Vector2 origin,
-    List<Ray2> rays,
-    List<RaycastResult<ShapeHitbox>> results,
-  ) {
-    rays.forEachIndexed((i, ray) {
-      ray.origin.setFrom(origin);
-      collisionDetection.raycast(rays[i], out: results[i]);
-    });
-  }
-
   @override
   bool onTapDown(TapDownInfo info) {
     super.onTapDown(info);
     tapOrigin = info.eventPosition.game;
-    castRays(tapOrigin!, tapRays, tapResults);
+    collisionDetection.raycastAll(
+      tapOrigin!,
+      numberOfRays,
+      rays: tapRays,
+      out: tapResults,
+    );
     return false;
   }
 
   @override
   void onMouseMove(PointerHoverInfo info) {
     origin = info.eventPosition.game;
-    castRays(origin!, rays, results);
+    collisionDetection.raycastAll(
+      origin!,
+      numberOfRays,
+      rays: rays,
+      out: results,
+    );
   }
 
   @override

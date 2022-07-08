@@ -1,5 +1,6 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flame/geometry.dart';
 import 'package:flame/src/geometry/ray2.dart';
 
 /// The default implementation of [CollisionDetection].
@@ -90,6 +91,42 @@ class StandardCollisionDetection extends CollisionDetection<ShapeHitbox> {
       }
     }
     return finalResult;
+  }
+
+  @override
+  List<RaycastResult<ShapeHitbox>> raycastAll(
+    Vector2 origin,
+    int amount, {
+    List<Ray2>? rays,
+    List<RaycastResult<ShapeHitbox>>? out,
+  }) {
+    final angle = tau / amount;
+    final results = <RaycastResult<ShapeHitbox>>[];
+    for (var i = 0; i < amount; i++) {
+      Ray2 ray;
+      if (rays != null && i < rays.length) {
+        ray = rays[i];
+      } else {
+        ray = Ray2.empty();
+        rays?.add(ray);
+      }
+      RaycastResult<ShapeHitbox> result;
+      if (out != null && i < out.length) {
+        result = out[i];
+      } else {
+        result = RaycastResult();
+        out?.add(result);
+      }
+      ray.origin.setFrom(origin);
+      ray.direction
+        ..setValues(1, 0)
+        ..rotate(angle * i);
+      result = raycast(ray, out: result);
+      if (result != null) {
+        results.add(result);
+      }
+    }
+    return results;
   }
 
   @override
