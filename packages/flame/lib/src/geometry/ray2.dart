@@ -4,7 +4,7 @@ import 'package:flame/geometry.dart';
 import 'package:meta/meta.dart';
 import 'package:vector_math/vector_math_64.dart';
 
-/// A Ray is a ray in the 2d plane.
+/// A ray in the 2d plane.
 ///
 /// The [direction] should be normalized.
 class Ray2 {
