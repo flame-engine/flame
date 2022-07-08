@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flame/src/text/common/utils.dart';
 import 'package:flame/src/text/elements/element.dart';
 import 'package:flame/src/text/elements/group_element.dart';
@@ -45,10 +47,10 @@ class DocumentNode extends GroupBlockNode {
       elements.add(nodeElement);
       currentMargin = blockStyle.margin.bottom;
     }
-    final height = verticalOffset +
+    final documentHeight = max(height ?? 0, verticalOffset +
         collapseMargin(currentMargin, style.padding.bottom) +
-        (borders?.bottom ?? 0);
-    final background = style.backgroundStyle?.format(documentWidth, height);
+        (borders?.bottom ?? 0),);
+    final background = style.backgroundStyle?.format(documentWidth, documentHeight);
     if (background != null) {
       background.layout();
       elements.insert(0, background);
@@ -58,7 +60,9 @@ class DocumentNode extends GroupBlockNode {
 }
 
 class ParagraphNode extends BlockNode {
-  ParagraphNode(this.child);
+  ParagraphNode._(this.child);
+  ParagraphNode.simple(String text)
+    : child = GroupTextNode([PlainTextNode(text)]);
 
   final GroupTextNode child;
 
@@ -71,19 +75,21 @@ class ParagraphNode extends BlockNode {
     final lines = <TextPainterTextElement>[];
     TextPainterTextElement? currentLine;
     var i0 = 0;
+    var verticalOffset = 0.0;
     for (var i = 0; i < words.length; i++) {
       final lineText = words.sublist(i0, i + 1).join(' ');
       final formattedLine = formatter.format(lineText);
       if (formattedLine.metrics.width > parentWidth) {
         if (currentLine != null) {
-          lines.add(currentLine);
+          lines.add(currentLine..translate(0, verticalOffset));
+          verticalOffset += currentLine.metrics.height;
         }
         i0 = i;
       }
       currentLine = formattedLine;
     }
     if (currentLine != null) {
-      lines.add(currentLine);
+      lines.add(currentLine..translate(0, verticalOffset));
     }
     return GroupElement(lines);
   }

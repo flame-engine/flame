@@ -15,7 +15,7 @@ class GroupElement extends Element {
 
   @override
   void translate(double dx, double dy) {
-    children.forEach((child) => translate(dx, dy));
+    children.forEach((child) => child.translate(dx, dy));
   }
 
   @override
