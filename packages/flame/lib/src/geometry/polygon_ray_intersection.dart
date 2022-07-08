@@ -2,10 +2,15 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/geometry.dart';
 
-/// A [Hitbox] in the shape of a polygon.
+/// Used to add the [rayIntersection] method to [RectangleHitbox] and
+/// [PolygonHitbox], used by the raytracing and raycasting methods.
 mixin PolygonRayIntersection<T extends ShapeHitbox> on PolygonComponent {
   late final _temporaryNormal = Vector2.zero();
 
+  /// Returns whether the [RaycastResult] if the [ray] intersects the polygon.
+  ///
+  /// If [out] is defined that is used to populate with the result and then
+  /// returned, to minimize the creation of new objects.
   RaycastResult<ShapeHitbox>? rayIntersection(
     Ray2 ray, {
     RaycastResult<ShapeHitbox>? out,

@@ -12,6 +12,9 @@ import 'package:flutter/material.dart';
 class RaycastExample extends FlameGame
     with HasCollisionDetection, TapDetector, MouseMovementDetector {
   static const description = '''
+In this example the raycast functionality is showcased, if you move the mouse
+around the canvas the rays will be cast from its location. You can also tap to
+create a permanent source of rays that wont move with with mouse.
   ''';
   static const tau = pi * 2;
 

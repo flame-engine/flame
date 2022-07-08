@@ -93,7 +93,7 @@ class StandardCollisionDetection extends CollisionDetection<ShapeHitbox> {
   }
 
   @override
-  Set<RaycastResult<ShapeHitbox>> raytrace(
+  List<RaycastResult<ShapeHitbox>> raytrace(
     Ray2 ray, {
     Iterable<RaycastResult<Hitbox<ShapeHitbox>>>? out,
   }) {

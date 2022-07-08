@@ -66,18 +66,17 @@ abstract class CollisionDetection<T extends Hitbox<T>> {
   void handleCollision(Set<Vector2> intersectionPoints, T itemA, T itemB);
   void handleCollisionEnd(T itemA, T itemB);
 
-  /// [raycast] gives back the first hitbox and intersection point which the
-  /// ray hits. If there is no intersection null is returned.
+  /// [raycast] gives back the first hitbox and intersection point the ray hits.
+  /// If there is no intersection, null is returned.
   ///
   /// If [out] is provided that object will be modified and returned with the
   /// result.
   RaycastResult<T>? raycast(Ray2 ray, {RaycastResult<T>? out});
 
-  /// [raytrace] gives back the all hitboxes and the intersection points which
-  /// the ray hits.
+  /// [raytrace] gives back all hitboxes and intersection points the ray hits.
   ///
   /// If [out] is provided the [RaycastResult]s in that list be modified and
   /// returned with the result. If there are less objects in [out] than the
   /// result requires, the missing [RaycastResult] objects will be created.
-  Set<RaycastResult<T>> raytrace(Ray2 ray, {Iterable<RaycastResult<T>>? out});
+  List<RaycastResult<T>> raytrace(Ray2 ray, {Iterable<RaycastResult<T>>? out});
 }

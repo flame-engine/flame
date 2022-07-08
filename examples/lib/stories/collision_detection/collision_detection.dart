@@ -30,5 +30,7 @@ void addCollisionDetectionStories(Dashbook dashbook) {
     ..add(
       'Raycasting',
       (_) => GameWidget(game: RaycastExample()),
+      codeLink: baseLink('collision_detection/raycast_example.dart'),
+      info: RaycastExample.description,
     );
 }
