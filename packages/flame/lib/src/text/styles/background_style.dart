@@ -38,8 +38,9 @@ class BackgroundStyle {
 
   late final Paint? _backgroundPaint;
   late final Paint? _borderPaint;
-  late final double _borderWidth;
+  final double _borderWidth;
   final double _borderRadius;
+  late final EdgeInsets borderWidths = EdgeInsets.all(_borderWidth);
 
   Element? format(double width, double height) {
     final elements = <Element>[];

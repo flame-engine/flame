@@ -6,45 +6,54 @@ import 'package:flame/src/text/nodes.dart';
 import 'package:flame/src/text/styles/document_style.dart';
 
 class DocumentElement extends Element {
-  DocumentElement(this._document, this._style)
-    : _width = _style.width;
+  DocumentElement({
+    required DocumentNode document,
+    required DocumentStyle style,
+    required double width,
+    required double height,
+  })  : _document = document,
+        _style = style,
+        _width = width,
+        _height = height;
 
   final DocumentNode _document;
   final DocumentStyle _style;
   final List<Element> _elements = [];
   Element? _background;
 
-  double get width => _width;
-  double _width;
-  set width(double value) {
-    assert(!_laidOut, 'Cannot change width after the document was laid out');
-    _width = value;
-  }
-
-  double _height = 0;
+  final double _width;
+  double _height;
 
   /// Will be set to true once the document is laid out
   bool _laidOut = false;
 
   @override
   void layout() {
-    final contentWidth = width - _style.padding.horizontal;
-    var verticalOffset = 0.0;
-    var currentMargin = 0.0;
+    final contentWidth = _width -
+        _style.padding.horizontal -
+        (_style.backgroundStyle?.borderWidths.horizontal ?? 0);
+    var verticalOffset =
+        _style.padding.top + (_style.backgroundStyle?.borderWidths.top ?? 0);
+    var currentMargin = _style.padding.top;
     for (final node in _document.children) {
-      final nodeStyle = _style.styleFor(node);
-      verticalOffset += _collapseMargin(currentMargin, nodeStyle.margin.top);
-      final nodeElement = nodeStyle.format(node)
-        ..width = contentWidth
-        ..translate(0, verticalOffset);
-      _elements.add(nodeElement);
-      currentMargin = nodeStyle.margin.bottom;
+      final blockStyle = _style.styleForBlockNode(node);
+      verticalOffset += _collapseMargin(currentMargin, blockStyle.margin.top);
+      final nodeElement = blockStyle.format(node, parentWidth: contentWidth);
+      _elements.add(nodeElement..translate(0, verticalOffset));
+      currentMargin = blockStyle.margin.bottom;
     }
-    verticalOffset += _collapseMargin(currentMargin, _style.padding.bottom);
-    _height = verticalOffset;
+    _height = verticalOffset +
+        _collapseMargin(currentMargin, _style.padding.bottom) +
+        (_style.backgroundStyle?.borderWidths.bottom ?? 0);
     _background = _style.backgroundStyle?.format(_width, _height);
     _background?.layout();
     _laidOut = true;
+  }
+
+  @override
+  void translate(double dx, double dy) {
+    _background?.translate(dx, dy);
+    _elements.forEach((element) => element.translate(dx, dy));
   }
 
   @override
@@ -54,11 +63,6 @@ class DocumentElement extends Element {
     for (final element in _elements) {
       element.render(canvas);
     }
-  }
-
-  @override
-  void translate(double dx, double dy) {
-    throw UnsupportedError('');
   }
 
   double _collapseMargin(double margin1, double margin2) {
