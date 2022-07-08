@@ -2,16 +2,19 @@ import 'dart:ui';
 
 import 'package:flame/src/text/elements/element.dart';
 
-class RRectBackgroundElement extends Element {
-  RRectBackgroundElement(
+class RRectElement extends Element {
+  RRectElement(
     double width,
     double height,
     double radius,
-    this._paints,
+    this._paint,
   ) : _rrect = RRect.fromLTRBR(0, 0, width, height, Radius.circular(radius));
 
   RRect _rrect;
-  final List<Paint> _paints;
+  final Paint _paint;
+
+  @override
+  void layout() {}
 
   @override
   void translate(double dx, double dy) {
@@ -20,8 +23,6 @@ class RRectBackgroundElement extends Element {
 
   @override
   void render(Canvas canvas) {
-    for (final paint in _paints) {
-      canvas.drawRRect(_rrect, paint);
-    }
+    canvas.drawRRect(_rrect, _paint);
   }
 }

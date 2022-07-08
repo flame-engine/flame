@@ -1,18 +1,17 @@
 import 'dart:math';
 import 'dart:ui';
 
-import 'package:flame/src/text/elements/block_element.dart';
 import 'package:flame/src/text/elements/element.dart';
 import 'package:flame/src/text/nodes.dart';
 import 'package:flame/src/text/styles/document_style.dart';
 
-class DocumentElement {
+class DocumentElement extends Element {
   DocumentElement(this._document, this._style)
     : _width = _style.width;
 
   final DocumentNode _document;
   final DocumentStyle _style;
-  final List<BlockElement> _elements = [];
+  final List<Element> _elements = [];
   Element? _background;
 
   double get width => _width;
@@ -27,6 +26,7 @@ class DocumentElement {
   /// Will be set to true once the document is laid out
   bool _laidOut = false;
 
+  @override
   void layout() {
     final contentWidth = width - _style.padding.horizontal;
     var verticalOffset = 0.0;
@@ -47,12 +47,18 @@ class DocumentElement {
     _laidOut = true;
   }
 
+  @override
   void render(Canvas canvas) {
     assert(_laidOut, 'The document needs to be laid out before rendering');
     _background?.render(canvas);
     for (final element in _elements) {
       element.render(canvas);
     }
+  }
+
+  @override
+  void translate(double dx, double dy) {
+    throw UnsupportedError('');
   }
 
   double _collapseMargin(double margin1, double margin2) {
