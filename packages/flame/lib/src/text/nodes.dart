@@ -1,7 +1,11 @@
 import 'package:flame/src/text/common/utils.dart';
 import 'package:flame/src/text/elements/element.dart';
 import 'package:flame/src/text/elements/group_element.dart';
+import 'package:flame/src/text/formatters/text_painter_text_formatter.dart';
+import 'package:flame/src/text/inline/text_painter_text_element.dart';
+import 'package:flame/src/text/styles/block_style.dart';
 import 'package:flame/src/text/styles/document_style.dart';
+import 'package:flutter/painting.dart' as painting;
 
 /// An abstract base class for all entities with "block" placement rules.
 abstract class BlockNode {}
@@ -32,7 +36,11 @@ class DocumentNode extends GroupBlockNode {
     for (final node in children) {
       final blockStyle = style.styleForBlockNode(node);
       verticalOffset += collapseMargin(currentMargin, blockStyle.margin.top);
-      final nodeElement = blockStyle.format(node, parentWidth: contentWidth);
+      // final nodeElement = blockStyle.format(node, parentWidth: contentWidth);
+      final nodeElement = (node as ParagraphNode).format(
+        blockStyle,
+        parentWidth: contentWidth,
+      );
       nodeElement.translate(horizontalOffset, verticalOffset);
       elements.add(nodeElement);
       currentMargin = blockStyle.margin.bottom;
@@ -53,6 +61,32 @@ class ParagraphNode extends BlockNode {
   ParagraphNode(this.child);
 
   final GroupTextNode child;
+
+  Element format(BlockStyle style, {required double parentWidth}) {
+    final text = (child.children.first as PlainTextNode).text;
+    final formatter = TextPainterTextFormatter(
+      style: const painting.TextStyle(fontSize: 16),
+    );
+    final words = text.split(' ');
+    final lines = <TextPainterTextElement>[];
+    TextPainterTextElement? currentLine;
+    var i0 = 0;
+    for (var i = 0; i < words.length; i++) {
+      final lineText = words.sublist(i0, i + 1).join(' ');
+      final formattedLine = formatter.format(lineText);
+      if (formattedLine.metrics.width > parentWidth) {
+        if (currentLine != null) {
+          lines.add(currentLine);
+        }
+        i0 = i;
+      }
+      currentLine = formattedLine;
+    }
+    if (currentLine != null) {
+      lines.add(currentLine);
+    }
+    return GroupElement(lines);
+  }
 }
 
 class HeaderNode extends BlockNode {
