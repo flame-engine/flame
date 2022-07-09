@@ -1,6 +1,3 @@
-import 'package:flame/src/text/common/utils.dart';
-import 'package:flame/src/text/elements/element.dart';
-import 'package:flame/src/text/elements/group_element.dart';
 import 'package:flame/src/text/nodes.dart';
 import 'package:flame/src/text/styles/background_style.dart';
 import 'package:flame/src/text/styles/block_style.dart';
