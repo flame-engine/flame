@@ -12,7 +12,7 @@ class Ray2 {
     this.direction = direction;
   }
 
-  Ray2.empty() : this(Vector2.zero(), Vector2(1, 0));
+  Ray2.uninitialized() : this(Vector2.zero(), Vector2(1, 0));
 
   Vector2 origin;
   final Vector2 _direction = Vector2.zero();
