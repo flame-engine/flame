@@ -33,6 +33,7 @@ class MyTextComponent extends PositionComponent {
       ),
       paragraphStyle: BlockStyle(
         margin: const EdgeInsets.symmetric(vertical: 6),
+        padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 6),
         background: BackgroundStyle(
           color: const Color(0xFFFFF0CB),
           borderColor: const Color(0xFFAAAAAA),
