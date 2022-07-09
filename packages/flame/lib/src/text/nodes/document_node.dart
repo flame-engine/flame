@@ -44,7 +44,7 @@ class DocumentNode extends GroupBlockNode {
     final background =
         style.backgroundStyle?.format(documentWidth, documentHeight);
     if (background != null) {
-      background.layout();
+      // background.layout();
       elements.insert(0, background);
     }
     return GroupElement(elements);

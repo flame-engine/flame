@@ -9,11 +9,6 @@ class GroupElement extends Element {
   final List<Element> children;
 
   @override
-  void layout() {
-    children.forEach((child) => child.layout());
-  }
-
-  @override
   void translate(double dx, double dy) {
     children.forEach((child) => child.translate(dx, dy));
   }
