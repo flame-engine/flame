@@ -47,6 +47,7 @@ class SpriteComponent extends PositionComponent
     Vector2? scale,
     double? angle,
     Anchor? anchor,
+    Iterable<Component>? children,
     int? priority,
   }) : this(
           sprite: Sprite(
@@ -60,6 +61,7 @@ class SpriteComponent extends PositionComponent
           scale: scale,
           angle: angle,
           anchor: anchor,
+          children: children,
           priority: priority,
         );
 
