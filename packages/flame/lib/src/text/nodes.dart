@@ -52,7 +52,7 @@ class ParagraphNode extends BlockNode {
     if (currentLine != null) {
       lines.add(currentLine..translate(0, verticalOffset));
     }
-    return GroupElement(lines);
+    return GroupElement(parentWidth, verticalOffset, lines);
   }
 }
 

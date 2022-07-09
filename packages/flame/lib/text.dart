@@ -1,6 +1,7 @@
 export 'src/text/common/glyph_data.dart' show GlyphData;
 export 'src/text/elements/element.dart' show Element;
-export 'src/text/nodes.dart' show DocumentNode, ParagraphNode;
+export 'src/text/nodes.dart' show ParagraphNode;
+export 'src/text/nodes/document_node.dart' show DocumentNode;
 export 'src/text/sprite_font_renderer.dart' show SpriteFontRenderer;
 export 'src/text/styles/background_style.dart' show BackgroundStyle;
 export 'src/text/styles/block_style.dart' show BlockStyle;

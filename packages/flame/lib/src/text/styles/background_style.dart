@@ -1,6 +1,4 @@
-import 'dart:ui';
-
-import 'package:flame/src/text/elements/element.dart';
+import 'package:flame/src/text/elements/block_element.dart';
 import 'package:flame/src/text/elements/group_element.dart';
 import 'package:flame/src/text/elements/rect_element.dart';
 import 'package:flame/src/text/elements/rrect_element.dart';
@@ -42,8 +40,8 @@ class BackgroundStyle {
   final double _borderRadius;
   late final EdgeInsets borderWidths = EdgeInsets.all(_borderWidth);
 
-  Element? format(double width, double height) {
-    final elements = <Element>[];
+  BlockElement? format(double width, double height) {
+    final elements = <BlockElement>[];
     if (_backgroundPaint != null) {
       if (_borderRadius == 0) {
         elements.add(RectElement(width, height, _backgroundPaint!));
@@ -77,7 +75,7 @@ class BackgroundStyle {
     if (elements.length == 1) {
       return elements.first;
     } else {
-      return GroupElement(elements);
+      return GroupElement(width, height, elements);
     }
   }
 }

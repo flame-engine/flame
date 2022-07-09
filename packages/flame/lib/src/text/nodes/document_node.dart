@@ -5,6 +5,7 @@ import 'package:flame/src/text/elements/element.dart';
 import 'package:flame/src/text/elements/group_element.dart';
 import 'package:flame/src/text/nodes.dart';
 import 'package:flame/src/text/styles/document_style.dart';
+import 'package:flutter/painting.dart';
 
 class DocumentNode extends GroupBlockNode {
   DocumentNode(super.children);
@@ -14,15 +15,19 @@ class DocumentNode extends GroupBlockNode {
   /// if they were not specified in the style itself. However, they are ignored
   /// if `style.width` and `style.height` are provided.
   Element format(DocumentStyle style, {double? width, double? height}) {
-    final elements = <Element>[];
-    final borders = style.backgroundStyle?.borderWidths;
+    assert(
+      style.width != null || width != null,
+      'Width must be either provided explicitly or set in the stylesheet',
+    );
+    final out = <Element>[];
+    final border = style.backgroundStyle?.borderWidths ?? EdgeInsets.zero;
+    final padding = style.padding;
 
-    final documentWidth = width ?? style.width!;
-    final contentWidth =
-        documentWidth - style.padding.horizontal - (borders?.horizontal ?? 0);
-    final horizontalOffset = style.padding.left + (borders?.left ?? 0);
-    var verticalOffset = style.padding.top + (borders?.top ?? 0);
-    var currentMargin = style.padding.top;
+    final pageWidth = style.width ?? width!;
+    final contentWidth = pageWidth - padding.horizontal - border.horizontal;
+    final horizontalOffset = padding.left + border.left;
+    var verticalOffset = padding.top + border.top;
+    var currentMargin = padding.top;
     for (final node in children) {
       final blockStyle = style.styleForBlockNode(node);
       verticalOffset += collapseMargin(currentMargin, blockStyle.margin.top);
@@ -32,21 +37,21 @@ class DocumentNode extends GroupBlockNode {
         parentWidth: contentWidth,
       );
       nodeElement.translate(horizontalOffset, verticalOffset);
-      elements.add(nodeElement);
+      out.add(nodeElement);
       currentMargin = blockStyle.margin.bottom;
     }
-    final documentHeight = max(
+    final pageHeight = max(
       height ?? 0,
       verticalOffset +
-          collapseMargin(currentMargin, style.padding.bottom) +
-          (borders?.bottom ?? 0),
+          collapseMargin(currentMargin, padding.bottom) +
+          border.bottom,
     );
     final background =
-        style.backgroundStyle?.format(documentWidth, documentHeight);
+        style.backgroundStyle?.format(pageWidth, pageHeight);
     if (background != null) {
       // background.layout();
-      elements.insert(0, background);
+      out.insert(0, background);
     }
-    return GroupElement(elements);
+    return GroupElement(pageWidth, pageHeight, out);
   }
 }

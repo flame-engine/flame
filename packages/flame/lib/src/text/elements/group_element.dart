@@ -1,10 +1,11 @@
 
 import 'dart:ui';
 
+import 'package:flame/src/text/elements/block_element.dart';
 import 'package:flame/src/text/elements/element.dart';
 
-class GroupElement extends Element {
-  GroupElement(this.children);
+class GroupElement extends BlockElement {
+  GroupElement(super.width, super.height, this.children);
 
   final List<Element> children;
 

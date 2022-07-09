@@ -7,7 +7,4 @@ class BlockStyle {
   EdgeInsets margin = EdgeInsets.zero;
   EdgeInsets padding = EdgeInsets.zero;
 
-  BlockElement format(BlockNode node, {required double parentWidth}) {
-    return BlockElement(node, this);
-  }
 }

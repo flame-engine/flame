@@ -1,17 +1,13 @@
-
 import 'dart:ui';
 
-import 'package:flame/src/text/elements/element.dart';
+import 'package:flame/src/text/elements/block_element.dart';
 
-class RectElement extends Element {
-  RectElement(double width, double height, this._paint)
-    : _rect = Rect.fromLTWH(0, 0, width, height);
+class RectElement extends BlockElement {
+  RectElement(super.width, super.height, this._paint)
+      : _rect = Rect.fromLTWH(0, 0, width, height);
 
   Rect _rect;
   final Paint _paint;
-
-  @override
-  void layout() {}
 
   @override
   void translate(double dx, double dy) => _rect = _rect.translate(dx, dy);
