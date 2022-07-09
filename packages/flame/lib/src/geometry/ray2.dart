@@ -15,14 +15,14 @@ class Ray2 {
   Ray2.empty() : this(Vector2.zero(), Vector2(1, 0));
 
   Vector2 origin;
-  late Vector2 _direction;
+  final Vector2 _direction = Vector2.zero();
   Vector2 get direction => _direction;
   set direction(Vector2 direction) {
     assert(
-      direction.x.abs() <= 1 && direction.y.abs() <= 1,
+      (direction.length2 - 1).abs() < 0.000001,
       'direction must be normalized',
     );
-    _direction = direction;
+    _direction.setFrom(direction);
     directionInvX = 1 / direction.x;
     directionInvY = 1 / direction.y;
   }
@@ -42,14 +42,11 @@ class Ray2 {
     final tx1 = (box.min.x - origin.x) * directionInvX;
     final tx2 = (box.max.x - origin.x) * directionInvX;
 
-    var tMin = min(tx1, tx2);
-    var tMax = max(tx1, tx2);
-
     final ty1 = (box.min.y - origin.y) * directionInvY;
     final ty2 = (box.max.y - origin.y) * directionInvY;
 
-    tMin = max(tMin, min(ty1, ty2));
-    tMax = min(tMax, max(ty1, ty2));
+    final tMin = max(min(tx1, tx2), min(ty1, ty2));
+    final tMax = min(max(tx1, tx2), max(ty1, ty2));
 
     return tMax >= tMin;
   }
@@ -61,9 +58,12 @@ class Ray2 {
       ..add(origin);
   }
 
-  late final Vector2 _v1 = Vector2.zero();
-  late final Vector2 _v2 = Vector2.zero();
-  late final Vector2 _v3 = Vector2.zero();
+  static final Vector2 _v1 = Vector2.zero();
+  static final Vector2 _v2 = Vector2.zero();
+  static final Vector2 _v3 = Vector2.zero();
+
+  /// Returns where (length wise) on the ray that the ray intersects the
+  /// [LineSegment] or null if there is no intersection.
   double? lineSegmentIntersection(LineSegment segment) {
     _v1
       ..setFrom(origin)
@@ -74,10 +74,6 @@ class Ray2 {
     _v3.setValues(-direction.y, direction.x);
 
     final dot = _v2.dot(_v3);
-    if (dot.abs() < 0.000001) {
-      return null;
-    }
-
     final t1 = _v2.cross(_v1) / dot;
     final t2 = _v1.dot(_v3) / dot;
     if (t1 >= 0 && (t2 >= 0 && t2 <= 1)) {
