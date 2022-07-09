@@ -25,11 +25,18 @@ class MyTextComponent extends PositionComponent {
     final style = DocumentStyle(
       width: 400,
       height: 200,
-      padding: const EdgeInsets.all(10),
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 14),
       background: BackgroundStyle(
         color: const Color(0xFFFFFFEE),
         borderColor: const Color(0xFF000000),
         borderWidth: 2.0,
+      ),
+      paragraphStyle: BlockStyle(
+        margin: const EdgeInsets.symmetric(vertical: 6),
+        background: BackgroundStyle(
+          color: const Color(0xFFFFF0CB),
+          borderColor: const Color(0xFFAAAAAA),
+        ),
       ),
     );
     final document = DocumentNode([

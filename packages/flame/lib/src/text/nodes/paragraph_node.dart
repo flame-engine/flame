@@ -51,11 +51,8 @@ class ParagraphNode extends BlockNode {
     if (!startNewLine) {
       verticalOffset += lines.last.metrics.height;
     }
-    final bg = RectElement(
-      parentWidth,
-      verticalOffset,
-      Paint()..color = const Color(0xffffff33),
-    );
-    return GroupElement(parentWidth, verticalOffset, [bg, ...lines]);
+    final bg = style.background?.format(parentWidth, verticalOffset);
+    final elements = bg == null? lines : [bg, ...lines];
+    return GroupElement(parentWidth, verticalOffset, elements);
   }
 }

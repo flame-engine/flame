@@ -1,10 +1,14 @@
-
-import 'package:flame/src/text/elements/block_element.dart';
-import 'package:flame/src/text/nodes.dart';
+import 'package:flame/src/text/styles/background_style.dart';
 import 'package:flutter/painting.dart';
 
 class BlockStyle {
-  EdgeInsets margin = EdgeInsets.zero;
-  EdgeInsets padding = EdgeInsets.zero;
+  BlockStyle({
+    this.margin = EdgeInsets.zero,
+    this.padding = EdgeInsets.zero,
+    this.background,
+  });
 
+  EdgeInsets margin;
+  EdgeInsets padding;
+  BackgroundStyle? background;
 }
