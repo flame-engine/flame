@@ -18,6 +18,8 @@ create a permanent source of rays that wont move with with mouse.
   Ray2? reflection;
   Vector2? origin;
   Vector2? tapOrigin;
+  bool isOriginCasted = false;
+  bool isTapOriginCasted = false;
   Paint paint = Paint()..color = Colors.amber.withOpacity(0.2);
   Paint tapPaint = Paint()..color = Colors.blue.withOpacity(0.2);
 
@@ -79,25 +81,40 @@ create a permanent source of rays that wont move with with mouse.
   @override
   bool onTapDown(TapDownInfo info) {
     super.onTapDown(info);
-    tapOrigin = info.eventPosition.game;
-    collisionDetection.raycastAll(
-      tapOrigin!,
-      numberOfRays,
-      rays: tapRays,
-      out: tapResults,
-    );
+    final origin = info.eventPosition.game;
+    isTapOriginCasted = origin == tapOrigin;
+    tapOrigin = origin;
     return false;
   }
 
   @override
   void onMouseMove(PointerHoverInfo info) {
-    origin = info.eventPosition.game;
-    collisionDetection.raycastAll(
-      origin!,
-      numberOfRays,
-      rays: rays,
-      out: results,
-    );
+    final origin = info.eventPosition.game;
+    isOriginCasted = origin == this.origin;
+    this.origin = origin;
+  }
+
+  @override
+  void update(double dt) {
+    super.update(dt);
+    if (origin != null && !isOriginCasted) {
+      collisionDetection.raycastAll(
+        origin!,
+        numberOfRays,
+        rays: rays,
+        out: results,
+      );
+      isOriginCasted = true;
+    }
+    if (tapOrigin != null && !isTapOriginCasted) {
+      collisionDetection.raycastAll(
+        tapOrigin!,
+        numberOfRays,
+        rays: tapRays,
+        out: tapResults,
+      );
+      isTapOriginCasted = true;
+    }
   }
 
   @override

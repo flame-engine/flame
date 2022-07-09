@@ -1002,5 +1002,36 @@ void main() {
         },
       );
     });
+
+    group('raycastAll', () {
+      testCollisionDetectionGame(
+        'All directions and all hits',
+        (game) async {
+          game.ensureAddAll([
+            PositionComponent(
+              position: Vector2(10, 0),
+              size: Vector2.all(10),
+            )..add(RectangleHitbox()),
+            PositionComponent(
+              position: Vector2(20, 10),
+              size: Vector2.all(10),
+            )..add(RectangleHitbox()),
+            PositionComponent(
+              position: Vector2(10, 20),
+              size: Vector2.all(10),
+            )..add(RectangleHitbox()),
+            PositionComponent(
+              position: Vector2(0, 10),
+              size: Vector2.all(10),
+            )..add(RectangleHitbox()),
+          ]);
+          await game.ready();
+          final origin = Vector2.all(15);
+          final results = game.collisionDetection.raycastAll(origin, 4);
+          expect(results.every((r) => r.isActive), isTrue);
+          expect(results.length, 4);
+        },
+      );
+    });
   });
 }

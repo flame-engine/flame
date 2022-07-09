@@ -43,6 +43,8 @@ class Sweep<T extends Hitbox<T>> extends Broadphase<T> {
   @override
   Set<T> raycast(Ray2 ray) {
     _raycastPotentials.clear();
+    // TODO(Spydon): If we resort these they will be in the wrong order for the
+    // collision detection
     if (ray.direction.x.isNegative) {
       items.sort((a, b) => (a.aabb.min.x - b.aabb.min.x).ceil());
     } else {

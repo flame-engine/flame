@@ -153,15 +153,13 @@ class PolygonComponent extends ShapeComponent {
       scale,
       angle,
     ])) {
-      var i = 0;
-      for (final vertex in vertices) {
+      vertices.forEachIndexed((i, vertex) {
         _globalVertices[i]
           ..setFrom(vertex)
           ..multiply(scale)
           ..add(position)
           ..rotate(angle, center: position);
-        i++;
-      }
+      });
       if (scale.y.isNegative || scale.x.isNegative) {
         // Since the list will be clockwise we have to reverse it for it to
         // become counterclockwise.

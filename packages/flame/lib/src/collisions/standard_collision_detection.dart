@@ -1,7 +1,6 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/geometry.dart';
-import 'package:flame/src/geometry/ray2.dart';
 
 /// The default implementation of [CollisionDetection].
 /// Checks whether any [ShapeHitbox]s in [items] collide with each other and
@@ -62,7 +61,7 @@ class StandardCollisionDetection extends CollisionDetection<ShapeHitbox> {
     hitboxB.onCollisionEnd(hitboxA);
   }
 
-  late final _temporaryRaycastResult = RaycastResult<ShapeHitbox>(
+  static final _temporaryRaycastResult = RaycastResult<ShapeHitbox>(
     isActive: false,
   );
 
@@ -90,7 +89,7 @@ class StandardCollisionDetection extends CollisionDetection<ShapeHitbox> {
         }
       }
     }
-    return finalResult;
+    return (finalResult?.isActive ?? false) ? finalResult : null;
   }
 
   @override
@@ -104,24 +103,26 @@ class StandardCollisionDetection extends CollisionDetection<ShapeHitbox> {
     final results = <RaycastResult<ShapeHitbox>>[];
     for (var i = 0; i < amount; i++) {
       Ray2 ray;
-      if (rays != null && i < rays.length) {
-        ray = rays[i];
+      if (i < (rays?.length ?? 0)) {
+        ray = rays![i];
       } else {
         ray = Ray2.empty();
         rays?.add(ray);
-      }
-      RaycastResult<ShapeHitbox> result;
-      if (out != null && i < out.length) {
-        result = out[i];
-      } else {
-        result = RaycastResult();
-        out?.add(result);
       }
       ray.origin.setFrom(origin);
       ray.direction
         ..setValues(1, 0)
         ..rotate(angle * i);
+
+      RaycastResult<ShapeHitbox>? result;
+      if (i < (out?.length ?? 0)) {
+        result = out![i];
+      } else {
+        result = RaycastResult(isActive: false);
+        out?.add(result);
+      }
       result = raycast(ray, out: result);
+
       if (result != null) {
         results.add(result);
       }
@@ -134,7 +135,6 @@ class StandardCollisionDetection extends CollisionDetection<ShapeHitbox> {
     Ray2 ray, {
     Iterable<RaycastResult<Hitbox<ShapeHitbox>>>? out,
   }) {
-    // TODO(Spydon): implement raycastAll, rayTrace?
     throw UnimplementedError();
   }
 }
