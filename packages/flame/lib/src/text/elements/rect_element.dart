@@ -10,8 +10,12 @@ class RectElement extends BlockElement {
   final Paint _paint;
 
   @override
-  void translate(double dx, double dy) => _rect = _rect.translate(dx, dy);
+  void translate(double dx, double dy) {
+    _rect = _rect.translate(dx, dy);
+  }
 
   @override
-  void render(Canvas canvas) => canvas.drawRect(_rect, _paint);
+  void render(Canvas canvas) {
+    canvas.drawRect(_rect, _paint);
+  }
 }
