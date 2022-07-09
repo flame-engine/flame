@@ -26,7 +26,11 @@ class MyTextComponent extends PositionComponent {
       width: 400,
       height: 200,
       padding: const EdgeInsets.all(10),
-      background: BackgroundStyle(color: const Color(0xFFFFFFEE)),
+      background: BackgroundStyle(
+        color: const Color(0xFFFFFFEE),
+        borderColor: const Color(0xFF000000),
+        borderWidth: 2.0,
+      ),
     );
     final document = DocumentNode([
       ParagraphNode.simple(

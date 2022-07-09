@@ -27,7 +27,7 @@ class DocumentNode extends GroupBlockNode {
     final pageWidth = style.width ?? width!;
     final contentWidth = pageWidth - padding.horizontal - border.horizontal;
     final horizontalOffset = padding.left + border.left;
-    var verticalOffset = padding.top + border.top;
+    var verticalOffset = border.top;
     var currentMargin = padding.top;
     for (final node in children) {
       final blockStyle = style.styleForBlockNode(node);
@@ -50,7 +50,6 @@ class DocumentNode extends GroupBlockNode {
     final background =
         style.backgroundStyle?.format(pageWidth, pageHeight);
     if (background != null) {
-      // background.layout();
       out.insert(0, background);
     }
     return GroupElement(pageWidth, pageHeight, out);
