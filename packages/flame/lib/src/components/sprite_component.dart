@@ -42,12 +42,13 @@ class SpriteComponent extends PositionComponent
     Vector2? srcPosition,
     Vector2? srcSize,
     Paint? paint,
-    Vector2? position,
+    super.position,
     Vector2? size,
-    Vector2? scale,
-    double? angle,
-    Anchor? anchor,
-    int? priority,
+    super.scale,
+    super.angle,
+    super.anchor,
+    super.children,
+    super.priority,
   }) : this(
           sprite: Sprite(
             image,
@@ -55,12 +56,7 @@ class SpriteComponent extends PositionComponent
             srcSize: srcSize,
           ),
           paint: paint,
-          position: position,
           size: size ?? srcSize ?? image.size,
-          scale: scale,
-          angle: angle,
-          anchor: anchor,
-          priority: priority,
         );
 
   @override
