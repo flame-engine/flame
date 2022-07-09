@@ -32,7 +32,6 @@ class DocumentNode extends GroupBlockNode {
     for (final node in children) {
       final blockStyle = style.styleForBlockNode(node);
       verticalOffset += collapseMargin(currentMargin, blockStyle.margin.top);
-      // final nodeElement = blockStyle.format(node, parentWidth: contentWidth);
       final nodeElement = (node as ParagraphNode).format(
         blockStyle,
         parentWidth: contentWidth,
@@ -40,6 +39,7 @@ class DocumentNode extends GroupBlockNode {
       nodeElement.translate(horizontalOffset, verticalOffset);
       out.add(nodeElement);
       currentMargin = blockStyle.margin.bottom;
+      verticalOffset += nodeElement.height;
     }
     final pageHeight = max(
       height ?? 0,

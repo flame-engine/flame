@@ -20,23 +20,31 @@ class ParagraphNode extends BlockNode {
     );
     final words = text.split(' ');
     final lines = <TextPainterTextElement>[];
-    TextPainterTextElement? currentLine;
-    var i0 = 0;
+    // TextPainterTextElement? currentLine;
     var verticalOffset = 0.0;
-    for (var i = 0; i < words.length; i++) {
-      final lineText = words.sublist(i0, i + 1).join(' ');
+    var i0 = 0;
+    var i1 = 1;
+    var startNewLine = true;
+    while (i1 <= words.length) {
+      final lineText = words.sublist(i0, i1).join(' ');
       final formattedLine = formatter.format(lineText);
-      if (formattedLine.metrics.width > parentWidth) {
-        if (currentLine != null) {
-          lines.add(currentLine..translate(0, verticalOffset));
-          verticalOffset += currentLine.metrics.height;
+      if (formattedLine.metrics.width <= parentWidth || i1 - i0 == 1) {
+        formattedLine.translate(0, verticalOffset);
+        if (startNewLine) {
+          lines.add(formattedLine);
+          startNewLine = false;
+        } else {
+          lines[lines.length - 1] = formattedLine;
         }
-        i0 = i;
+        i1++;
+      } else {
+        i0 = i1 - 1;
+        startNewLine = true;
+        verticalOffset += lines.last.metrics.height;
       }
-      currentLine = formattedLine;
     }
-    if (currentLine != null) {
-      lines.add(currentLine..translate(0, verticalOffset));
+    if (!startNewLine) {
+      verticalOffset += lines.last.metrics.height;
     }
     return GroupElement(parentWidth, verticalOffset, lines);
   }

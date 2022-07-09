@@ -13,7 +13,7 @@ class RichTextExample extends FlameGame {
 
   @override
   Future<void> onLoad() async {
-    add(MyTextComponent()..position=Vector2.all(100));
+    add(MyTextComponent()..position = Vector2.all(100));
   }
 }
 
@@ -23,16 +23,33 @@ class MyTextComponent extends PositionComponent {
   @override
   Future<void> onLoad() async {
     final style = DocumentStyle(
-      width: 300,
+      width: 400,
       height: 200,
       padding: const EdgeInsets.all(10),
       background: BackgroundStyle(color: const Color(0xFFFFFFEE)),
     );
     final document = DocumentNode([
-      ParagraphNode.simple('Once upon a time there lived a small girl.'),
       ParagraphNode.simple(
-        'She was quite a happy girl, content with her way '
-        'of living, and not suicidal even a little bit',
+        'Anything could be true. The so-called laws of nature were nonsense.',
+      ),
+      ParagraphNode.simple(
+        'The law of gravity was nonsense. "If I wished," O\'Brien had said, '
+        '"I could float off this floor like a soap bubble." Winston worked it '
+        'out. "If he thinks he floats off the floor, and I simultaneously '
+        'think I can see him do it, then the thing happens."',
+      ),
+      ParagraphNode.simple(
+        'Suddenly, like a lump of submerged wreckage breaking the surface of '
+        'water, the thought burst into his mind: "It doesn\'t really happen. '
+        'We imagine it. It is hallucination."',
+      ),
+      ParagraphNode.simple(
+        'He pushed the thought under instantly. The fallacy was obvious. It '
+        'presupposed that somewhere or other, outside oneself, there was a '
+        '"real" world where "real" things happened. But how could there be '
+        'such a world? What knowledge have we of anything, save through our '
+        'own minds? All happenings are in the mind. Whatever happens in all '
+        'minds, truly happens.',
       ),
     ]);
     element = document.format(style);
