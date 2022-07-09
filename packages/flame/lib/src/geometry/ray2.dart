@@ -54,7 +54,7 @@ class Ray2 {
     return tMax >= tMin;
   }
 
-  /// Gives the point at a certain length of the ray.
+  /// Gives the point at a certain length along the ray.
   Vector2 point(double length, {Vector2? out}) {
     return ((out?..setFrom(direction)) ?? direction.clone())
       ..scale(length)
