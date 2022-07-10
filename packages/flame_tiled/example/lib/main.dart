@@ -10,14 +10,22 @@ void main() {
 }
 
 class TiledGame extends FlameGame {
+  late TiledComponent mapComponent;
+
+  double time = 0;
+
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    final tiledMap = await TiledComponent.load('map.tmx', Vector2.all(16));
-    add(tiledMap);
+    mapComponent =
+        await TiledComponent.load('map.tmx', Vector2.all(16), camera: camera);
+    add(mapComponent);
 
-    final objGroup = tiledMap.tileMap.getLayer<ObjectGroup>('AnimatedCoins');
+    final objGroup =
+        mapComponent.tileMap.getLayer<ObjectGroup>('AnimatedCoins');
     final coins = await Flame.images.load('coins.png');
+
+    camera.viewport = FixedResolutionViewport(Vector2(16 * 28, 16 * 14));
 
     // We are 100% sure that an object layer named `AnimatedCoins`
     // exists in the example `map.tmx`.
@@ -36,6 +44,21 @@ class TiledGame extends FlameGame {
           ),
         ),
       );
+    }
+  }
+
+  @override
+  void update(double dt) {
+    super.update(dt);
+    time += dt;
+    final tiledMap = mapComponent.tileMap.map;
+    if (time % 10 < 5) {
+      camera.moveTo(Vector2(
+          tiledMap.width * tiledMap.tileWidth.toDouble() -
+              camera.viewport.effectiveSize.x,
+          camera.viewport.effectiveSize.y));
+    } else {
+      camera.moveTo(Vector2(0, 0));
     }
   }
 }

@@ -8,7 +8,8 @@ environment:
 
 dependencies:
   flame: ^1.2.1
-  flame_tiled: ^1.6.0
+  flame_tiled:
+    path: "../../flame_tiled"
   flutter:
     sdk: flutter
 
