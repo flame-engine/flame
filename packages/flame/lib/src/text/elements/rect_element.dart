@@ -1,9 +1,9 @@
 import 'dart:ui';
 
-import 'package:flame/src/text/elements/block_element.dart';
+import 'package:flame/src/text/elements/element.dart';
 
-class RectElement extends BlockElement {
-  RectElement(super.width, super.height, this._paint)
+class RectElement extends Element {
+  RectElement(double width, double height, this._paint)
       : _rect = Rect.fromLTWH(0, 0, width, height);
 
   Rect _rect;
