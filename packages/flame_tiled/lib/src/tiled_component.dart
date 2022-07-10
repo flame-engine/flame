@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flame/components.dart';
+import 'package:flame/game.dart';
 
 import 'package:flame_tiled/src/renderable_tile_map.dart';
 
@@ -27,13 +28,10 @@ class TiledComponent extends Component {
   }
 
   /// Loads a [TiledComponent] from a file.
-  static Future<TiledComponent> load(
-    String fileName,
-    Vector2 destTileSize, {
-    int? priority,
-  }) async {
+  static Future<TiledComponent> load(String fileName, Vector2 destTileSize,
+      {int? priority, Camera? camera}) async {
     return TiledComponent(
-      await RenderableTiledMap.fromFile(fileName, destTileSize),
+      await RenderableTiledMap.fromFile(fileName, destTileSize, camera: camera),
       priority: priority,
     );
   }

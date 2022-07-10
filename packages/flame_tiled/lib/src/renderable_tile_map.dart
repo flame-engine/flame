@@ -3,6 +3,7 @@ import 'dart:ui' as ui;
 import 'package:collection/collection.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
+import 'package:flame/game.dart';
 import 'package:flame/sprite.dart';
 import 'package:flame_tiled/src/flame_tsx_provider.dart';
 import 'package:flame_tiled/src/simple_flips.dart';
@@ -19,15 +20,26 @@ class RenderableTiledMap {
   /// The size of tile to be rendered on the game.
   final Vector2 destTileSize;
 
+  /// Camera to account for parallax
+  final Camera? camera;
+
   /// Cached list of [SpriteBatch]es, ordered by layer.
   final List<Map<String, SpriteBatch>> batchesByLayer;
+
+  /// Paint to apply to canvas during render
+  final paint = ui.Paint();
+
+  /// Cached color per layer, index will match layer index of [batchesByLayer]
+  final List<Color> paintColorByLayer;
 
   /// {@macro _renderable_tiled_map}
   RenderableTiledMap(
     this.map,
     this.batchesByLayer,
-    this.destTileSize,
-  ) {
+    this.paintColorByLayer,
+    this.destTileSize, {
+    this.camera,
+  }) {
     refreshCache();
   }
 
@@ -81,38 +93,42 @@ class RenderableTiledMap {
   /// NOTE: this method looks for files under the path "assets/tiles/".
   static Future<RenderableTiledMap> fromFile(
     String fileName,
-    Vector2 destTileSize,
-  ) async {
+    Vector2 destTileSize, {
+    Camera? camera,
+  }) async {
     final contents = await Flame.bundle.loadString('assets/tiles/$fileName');
-    return fromString(contents, destTileSize);
+    return fromString(contents, destTileSize, camera: camera);
   }
 
   /// Parses a string returning a [RenderableTiledMap].
   static Future<RenderableTiledMap> fromString(
     String contents,
-    Vector2 destTileSize,
-  ) async {
+    Vector2 destTileSize, {
+    Camera? camera,
+  }) async {
     final map = await TiledMap.fromString(
       contents,
       FlameTsxProvider.parse,
     );
-    return fromTiledMap(map, destTileSize);
+    return fromTiledMap(map, destTileSize, camera: camera);
   }
 
   /// Parses a [TiledMap] returning a [RenderableTiledMap].
   static Future<RenderableTiledMap> fromTiledMap(
-    TiledMap map,
-    Vector2 destTileSize,
-  ) async {
+      TiledMap map, Vector2 destTileSize,
+      {Camera? camera}) async {
     final batchesByLayer = await Future.wait(
-      _renderableTileLayers(map).map((e) => _loadImages(map)),
+      _renderableTileLayers(map).map((layer) => _loadImages(map)),
     );
 
+    final paintColorByLayer = batchesByLayer.mapIndexed((index, batch) {
+      final layer = map.layers[index];
+      return Color.fromRGBO(255, 255, 255, layer.opacity);
+    }).toList();
+
     return RenderableTiledMap(
-      map,
-      batchesByLayer,
-      destTileSize,
-    );
+        map, batchesByLayer, paintColorByLayer, destTileSize,
+        camera: camera);
   }
 
   static Iterable<TileLayer> _renderableTileLayers(TiledMap map) {
@@ -139,7 +155,7 @@ class RenderableTiledMap {
     );
 
     _renderableTileLayers(map)
-        .where((e) => e.tileData != null)
+        .where((layer) => layer.tileData != null)
         .forEachIndexed((mapIndex, layer) {
       return _renderLayer(
         mapIndex,
@@ -156,17 +172,17 @@ class RenderableTiledMap {
   ) {
     final batchMap = batchesByLayer.elementAt(mapIndex);
     tileData.asMap().forEach((ty, tileRow) {
-      tileRow.asMap().forEach((tx, tile) {
-        if (tile.tile == 0) {
+      tileRow.asMap().forEach((tx, tileGid) {
+        if (tileGid.tile == 0) {
           return;
         }
-        final t = map.tileByGid(tile.tile);
-        final ts = map.tilesetByTileGId(tile.tile);
-        final img = t.image ?? ts.image;
+        final tile = map.tileByGid(tileGid.tile);
+        final tileset = map.tilesetByTileGId(tileGid.tile);
+        final img = tile.image ?? tileset.image;
         if (img != null) {
           final batch = batchMap[img.source];
-          final src = ts.computeDrawRect(t).toRect();
-          final flips = SimpleFlips.fromFlips(tile.flips);
+          final src = tileset.computeDrawRect(tile).toRect();
+          final flips = SimpleFlips.fromFlips(tileGid.flips);
           final size = destTileSize;
           final scale = size.x / src.width;
           final anchorX = src.width / 2;
@@ -194,8 +210,35 @@ class RenderableTiledMap {
 
   /// Render [batchesByLayer] that compose this tile map.
   void render(Canvas c) {
-    batchesByLayer.forEach((batchMap) {
-      batchMap.forEach((_, batch) => batch.render(c));
+    batchesByLayer.forEachIndexed((layerIndex, batchMap) {
+      batchMap.forEach((_tilesetImageFile, batch) {
+        final layer = map.layers[layerIndex];
+        c.save();
+
+        if (camera != null) {
+          // https://doc.mapeditor.org/en/latest/manual/layers/#parallax-scrolling-factor
+
+          final cameraX = camera!.position.x;
+          final cameraY = camera!.position.y;
+          final vpCenterX = camera!.viewport.effectiveSize.x / 2;
+          final vpCenterY = camera!.viewport.effectiveSize.y / 2;
+          final parallaxOffset = Vector2(
+            (1 - layer.parallaxX) * vpCenterX,
+            (1 - layer.parallaxY) * vpCenterY,
+          );
+          final parallaxScroll = Vector2(
+            cameraX - (cameraX * layer.parallaxX),
+            cameraY - (cameraY * layer.parallaxY),
+          );
+          final totalOffset = parallaxScroll + parallaxOffset;
+          c.translate(totalOffset.x, totalOffset.y);
+        }
+
+        // Paint with the layer's opacity
+        paint.color = paintColorByLayer[layerIndex];
+        batch.render(c, paint: paint);
+        c.restore();
+      });
     });
   }
 
