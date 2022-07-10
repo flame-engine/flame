@@ -32,6 +32,7 @@ class RenderableTiledMap {
   /// Paint to apply to canvas during render
   final paint = ui.Paint();
 
+  /// Offset to apply during render due to layer parallax factor
   final parallaxOffset = Vector2.zero();
 
   /// {@macro _renderable_tiled_map}
@@ -237,7 +238,8 @@ class RenderableTiledMap {
   }
 
   /// Calculates the offset we need to apply to the canvas to compensate for
-  /// parallax positioning and scroll for the layer and the current camera position
+  /// parallax positioning and scroll for the layer and the current camera
+  /// position
   /// https://doc.mapeditor.org/en/latest/manual/layers/#parallax-scrolling-factor
   void calculateParallaxOffset(Camera camera, Layer layer) {
     final cameraX = camera.position.x;
