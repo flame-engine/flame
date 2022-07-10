@@ -115,8 +115,10 @@ class RenderableTiledMap {
 
   /// Parses a [TiledMap] returning a [RenderableTiledMap].
   static Future<RenderableTiledMap> fromTiledMap(
-      TiledMap map, Vector2 destTileSize,
-      {Camera? camera}) async {
+    TiledMap map,
+    Vector2 destTileSize, {
+    Camera? camera,
+  }) async {
     final batchesByLayer = await Future.wait(
       _renderableTileLayers(map).map((layer) => _loadImages(map)),
     );
@@ -127,8 +129,12 @@ class RenderableTiledMap {
     }).toList();
 
     return RenderableTiledMap(
-        map, batchesByLayer, paintColorByLayer, destTileSize,
-        camera: camera);
+      map,
+      batchesByLayer,
+      paintColorByLayer,
+      destTileSize,
+      camera: camera,
+    );
   }
 
   static Iterable<TileLayer> _renderableTileLayers(TiledMap map) {
@@ -232,10 +238,10 @@ class RenderableTiledMap {
   /// parallax positioning and scroll for the layer and the current camera position
   /// https://doc.mapeditor.org/en/latest/manual/layers/#parallax-scrolling-factor
   Vector2 calculateParallaxOffset(Camera camera, Layer layer) {
-    final cameraX = camera!.position.x;
-    final cameraY = camera!.position.y;
-    final vpCenterX = camera!.viewport.effectiveSize.x / 2;
-    final vpCenterY = camera!.viewport.effectiveSize.y / 2;
+    final cameraX = camera.position.x;
+    final cameraY = camera.position.y;
+    final vpCenterX = camera.viewport.effectiveSize.x / 2;
+    final vpCenterY = camera.viewport.effectiveSize.y / 2;
     // Due to how Tiled treats the center of the view as the reference
     // point for parallax positioning (see Tiled docs), we need to offset
     final parallaxOffset = Vector2(
