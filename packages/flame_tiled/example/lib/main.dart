@@ -25,6 +25,8 @@ class TiledGame extends FlameGame {
         mapComponent.tileMap.getLayer<ObjectGroup>('AnimatedCoins');
     final coins = await Flame.images.load('coins.png');
 
+    final ground = mapComponent.tileMap.getLayer<TileLayer>('Ground');
+
     camera.viewport = FixedResolutionViewport(Vector2(16 * 28, 16 * 14));
 
     // We are 100% sure that an object layer named `AnimatedCoins`
