@@ -13,6 +13,7 @@ class TiledGame extends FlameGame {
   late TiledComponent mapComponent;
 
   double time = 0;
+  Vector2 cameraTarget = Vector2.zero();
 
   @override
   Future<void> onLoad() async {
@@ -24,8 +25,6 @@ class TiledGame extends FlameGame {
     final objGroup =
         mapComponent.tileMap.getLayer<ObjectGroup>('AnimatedCoins');
     final coins = await Flame.images.load('coins.png');
-
-    final ground = mapComponent.tileMap.getLayer<TileLayer>('Ground');
 
     camera.viewport = FixedResolutionViewport(Vector2(16 * 28, 16 * 14));
 
@@ -55,12 +54,12 @@ class TiledGame extends FlameGame {
     time += dt;
     final tiledMap = mapComponent.tileMap.map;
     if (time % 10 < 5) {
-      camera.moveTo(Vector2(
-          tiledMap.width * tiledMap.tileWidth.toDouble() -
-              camera.viewport.effectiveSize.x,
-          camera.viewport.effectiveSize.y));
+      cameraTarget.x = tiledMap.width * tiledMap.tileWidth.toDouble() -
+          camera.viewport.effectiveSize.x;
+      cameraTarget.y = camera.viewport.effectiveSize.y;
     } else {
-      camera.moveTo(Vector2(0, 0));
+      cameraTarget.setZero();
     }
+    camera.moveTo(cameraTarget);
   }
 }

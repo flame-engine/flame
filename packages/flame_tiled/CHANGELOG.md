@@ -1,8 +1,3 @@
-## 1.7.0
-
-- **FEAT**: Added support for Tiled layer having "Parallax Factor"
-- **FEAT**: Added support for Tiled layer having opacity less than 1 (semi-transparent)
-
 ## 1.6.0
 
  - **FIX**: Correct flutter constraint ([#1731](https://github.com/flame-engine/flame/issues/1731)). ([c7383843](https://github.com/flame-engine/flame/commit/c738384314a1a5c3695d1c3adaebcb59604df83a))

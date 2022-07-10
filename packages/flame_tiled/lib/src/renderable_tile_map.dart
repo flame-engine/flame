@@ -26,11 +26,13 @@ class RenderableTiledMap {
   /// Cached list of [SpriteBatch]es, ordered by layer.
   final List<Map<String, SpriteBatch>> batchesByLayer;
 
+  /// Cached color per layer, index will match layer index of [batchesByLayer]
+  final List<Color> paintColorByLayer;
+
   /// Paint to apply to canvas during render
   final paint = ui.Paint();
 
-  /// Cached color per layer, index will match layer index of [batchesByLayer]
-  final List<Color> paintColorByLayer;
+  final parallaxOffset = Vector2.zero();
 
   /// {@macro _renderable_tiled_map}
   RenderableTiledMap(
@@ -222,8 +224,8 @@ class RenderableTiledMap {
         c.save();
 
         if (camera != null) {
-          final totalOffset = calculateParallaxOffset(camera!, layer);
-          c.translate(totalOffset.x, totalOffset.y);
+          calculateParallaxOffset(camera!, layer);
+          c.translate(parallaxOffset.x, parallaxOffset.y);
         }
 
         // Paint with the layer's opacity
@@ -237,23 +239,20 @@ class RenderableTiledMap {
   /// Calculates the offset we need to apply to the canvas to compensate for
   /// parallax positioning and scroll for the layer and the current camera position
   /// https://doc.mapeditor.org/en/latest/manual/layers/#parallax-scrolling-factor
-  Vector2 calculateParallaxOffset(Camera camera, Layer layer) {
+  void calculateParallaxOffset(Camera camera, Layer layer) {
     final cameraX = camera.position.x;
     final cameraY = camera.position.y;
     final vpCenterX = camera.viewport.effectiveSize.x / 2;
     final vpCenterY = camera.viewport.effectiveSize.y / 2;
+
     // Due to how Tiled treats the center of the view as the reference
     // point for parallax positioning (see Tiled docs), we need to offset
-    final parallaxOffset = Vector2(
-      (1 - layer.parallaxX) * vpCenterX,
-      (1 - layer.parallaxY) * vpCenterY,
-    );
-    final parallaxScroll = Vector2(
-      cameraX - (cameraX * layer.parallaxX),
-      cameraY - (cameraY * layer.parallaxY),
-    );
-    final totalOffset = parallaxScroll + parallaxOffset;
-    return totalOffset;
+    parallaxOffset.x = (1 - layer.parallaxX) * vpCenterX;
+    parallaxOffset.y = (1 - layer.parallaxY) * vpCenterY;
+
+    // Now add the scroll for the current camera position
+    parallaxOffset.x += cameraX - (cameraX * layer.parallaxX);
+    parallaxOffset.y += cameraY - (cameraY * layer.parallaxY);
   }
 
   /// Returns a layer of type [T] with given [name] from all the layers
