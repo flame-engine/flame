@@ -1,6 +1,5 @@
 
-/// An abstract base class for all entities with "block" placement rules.
-abstract class BlockNode {}
+import 'package:flame/src/text/nodes/block_node.dart';
 
 class GroupBlockNode extends BlockNode {
   GroupBlockNode(this.children);

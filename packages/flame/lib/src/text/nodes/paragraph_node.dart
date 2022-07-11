@@ -3,6 +3,7 @@ import 'package:flame/src/text/elements/group_element.dart';
 import 'package:flame/src/text/formatters/text_painter_text_formatter.dart';
 import 'package:flame/src/text/inline/text_painter_text_element.dart';
 import 'package:flame/src/text/nodes.dart';
+import 'package:flame/src/text/nodes/block_node.dart';
 import 'package:flame/src/text/styles/block_style.dart';
 import 'package:flutter/painting.dart' as painting;
 

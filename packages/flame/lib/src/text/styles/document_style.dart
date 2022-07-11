@@ -1,4 +1,4 @@
-import 'package:flame/src/text/nodes.dart';
+import 'package:flame/src/text/nodes/block_node.dart';
 import 'package:flame/src/text/nodes/paragraph_node.dart';
 import 'package:flame/src/text/styles/background_style.dart';
 import 'package:flame/src/text/styles/block_style.dart';

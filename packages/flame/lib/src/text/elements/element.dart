@@ -8,7 +8,7 @@ import 'dart:ui';
 /// arbitrary pieces of text ought to be rendered).
 ///
 /// Elements are at the final stage of the text rendering pipeline, they are
-/// the product of the layout step.
+/// created during the layout step.
 abstract class Element {
   void translate(double dx, double dy);
   void render(Canvas canvas);
