@@ -91,7 +91,7 @@ Flame 引擎的目的是为使用 Flutter 开发的游戏会遇到的常见问�
 
 Flame 引擎最大的赞助者：
 
-[![Cypher Stack](/media/logo_cypherstack.png)](https://cypherstack.com/)
+[![Cypher Stack](https://raw.githubusercontent.com/flame-engine/flame/main/media/logo_cypherstack.png)](https://cypherstack.com/)
 
 如果你想要赞助 Flame，请查看下方的 Pateron 信息，或在 Discord 频道中联系我们。
 

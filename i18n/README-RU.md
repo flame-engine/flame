@@ -89,9 +89,9 @@ Flame официально предоставляет связанные биб�
 
 Лучшие спонсоры движка Flame:
 
-[![Very Good Ventures](/media/unicorn_two_toned.png)](https://verygood.ventures/)
+[![Very Good Ventures](https://raw.githubusercontent.com/flame-engine/flame/main/media/unicorn_two_toned.png)](https://verygood.ventures/)
 
-[![Cypher Stack](/media/logo_cypherstack.png)](https://cypherstack.com/)
+[![Cypher Stack](https://raw.githubusercontent.com/flame-engine/flame/main/media/logo_cypherstack.png)](https://cypherstack.com/)
 
 Хотите спонсировать Flame? Обратите внимание на наш Patreon в следующем разделе, или свяжитесь с нами через Discord.
 

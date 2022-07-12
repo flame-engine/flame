@@ -83,7 +83,7 @@ Flame は公式に以下のパッケージのブリッジライブラリを提�
 
 Flame エンジンのトップスポンサーは以下の通りです:
 
-[![Cypher Stack](/media/logo_cypherstack.png)](https://cypherstack.com/)
+[![Cypher Stack](https://raw.githubusercontent.com/flame-engine/flame/main/media/logo_cypherstack.png)](https://cypherstack.com/)
 
 Flame のスポンサーになることを希望する方は、以下のセクションにある私たちの Patreon か、または Discord で連絡してください。
 
