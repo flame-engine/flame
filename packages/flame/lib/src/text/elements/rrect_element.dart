@@ -15,7 +15,7 @@ class RRectElement extends Element {
 
   @override
   void translate(double dx, double dy) {
-    _rrect = _rrect.shift(Offset(dx, dy));
+    _rrect = _rrect.shift(Offset(dx, dy)); // sneaky 2: electric boogaloo
   }
 
   @override

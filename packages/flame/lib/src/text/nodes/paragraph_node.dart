@@ -53,7 +53,7 @@ class ParagraphNode extends BlockNode {
       verticalOffset += lines.last.metrics.height;
     }
     verticalOffset += style.padding.bottom;
-    final bg = style.background?.format(parentWidth, verticalOffset);
+    final bg = makeBackground(style.background, parentWidth, verticalOffset);
     final elements = bg == null? lines : [bg, ...lines];
     return GroupElement(parentWidth, verticalOffset, elements);
   }

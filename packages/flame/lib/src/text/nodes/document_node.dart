@@ -47,8 +47,11 @@ class DocumentNode extends GroupBlockNode {
           collapseMargin(currentMargin, padding.bottom) +
           border.bottom,
     );
-    final background =
-        style.backgroundStyle?.format(pageWidth, pageHeight);
+    final background = makeBackground(
+      style.backgroundStyle,
+      pageWidth,
+      pageHeight,
+    );
     if (background != null) {
       out.insert(0, background);
     }
