@@ -11,4 +11,18 @@ class BlockStyle {
   EdgeInsets margin;
   EdgeInsets padding;
   BackgroundStyle? background;
+
+  BlockStyle clone() => copyWith();
+
+  BlockStyle copyWith({
+    EdgeInsets? margin,
+    EdgeInsets? padding,
+    BackgroundStyle? background,
+  }) {
+    return BlockStyle(
+      margin: margin ?? this.margin,
+      padding: padding ?? this.padding,
+      background: background ?? this.background,
+    );
+  }
 }

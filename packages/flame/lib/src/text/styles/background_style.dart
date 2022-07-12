@@ -34,4 +34,20 @@ class BackgroundStyle {
   late final Paint? borderPaint;
   final double borderRadius;
   final EdgeInsets borderWidths;
+
+  BackgroundStyle copyWith({
+    Color? color,
+    Paint? paint,
+    Color? borderColor,
+    double? borderRadius,
+    double? borderWidth,
+  }) {
+    return BackgroundStyle(
+      color: color ?? (paint == null? backgroundPaint?.color : null),
+      paint: paint ?? backgroundPaint,
+      borderColor: borderColor ?? borderPaint?.color,
+      borderRadius: borderRadius ?? this.borderRadius,
+      borderWidth: borderWidth ?? borderWidths.left,
+    );
+  }
 }
