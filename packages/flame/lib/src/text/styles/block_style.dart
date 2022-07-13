@@ -1,7 +1,8 @@
 import 'package:flame/src/text/styles/background_style.dart';
+import 'package:flame/src/text/styles/style.dart';
 import 'package:flutter/painting.dart';
 
-class BlockStyle {
+class BlockStyle extends Style<BlockStyle> {
   BlockStyle({
     this.margin = EdgeInsets.zero,
     this.padding = EdgeInsets.zero,
@@ -12,6 +13,7 @@ class BlockStyle {
   EdgeInsets padding;
   BackgroundStyle? background;
 
+  @override
   BlockStyle clone() => copyWith();
 
   BlockStyle copyWith({

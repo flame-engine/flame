@@ -3,6 +3,7 @@ import 'package:flame/src/text/nodes/paragraph_node.dart';
 import 'package:flame/src/text/styles/background_style.dart';
 import 'package:flame/src/text/styles/block_style.dart';
 import 'package:flame/src/text/styles/overflow.dart';
+import 'package:flame/src/text/styles/style.dart';
 import 'package:flutter/painting.dart';
 import 'package:meta/meta.dart';
 
@@ -15,7 +16,7 @@ import 'package:meta/meta.dart';
 ///
 /// All styles that collectively describe how to render text are organized into
 /// a tree, with [DocumentStyle] at the root.
-class DocumentStyle {
+class DocumentStyle extends Style<DocumentStyle> {
   DocumentStyle({
     this.width,
     this.height,
@@ -23,8 +24,9 @@ class DocumentStyle {
     BackgroundStyle? background,
     BlockStyle? paragraphStyle,
   })  : padding = padding ?? EdgeInsets.zero,
-        backgroundStyle = background,
-        paragraphStyle = paragraphStyle ?? defaultParagraphStyle;
+        backgroundStyle = background {
+    paragraphStyle = (paragraphStyle ?? defaultParagraphStyle).acquire(this);
+  }
 
   /// Outer width of the document page.
   ///
@@ -67,9 +69,12 @@ class DocumentStyle {
   final BackgroundStyle? backgroundStyle;
 
   /// Style for paragraph nodes in the document.
-  final BlockStyle paragraphStyle;
+  late final BlockStyle paragraphStyle;
 
   static BlockStyle defaultParagraphStyle = BlockStyle();
+
+  @override
+  DocumentStyle clone() => copyWith();
 
   DocumentStyle copyWith({
     double? width,

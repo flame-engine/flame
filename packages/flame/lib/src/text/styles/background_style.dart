@@ -1,6 +1,7 @@
+import 'package:flame/src/text/styles/style.dart';
 import 'package:flutter/rendering.dart';
 
-class BackgroundStyle {
+class BackgroundStyle extends Style<BackgroundStyle> {
   BackgroundStyle({
     Color? color,
     Paint? paint,
@@ -34,6 +35,9 @@ class BackgroundStyle {
   late final Paint? borderPaint;
   final double borderRadius;
   final EdgeInsets borderWidths;
+
+  @override
+  BackgroundStyle clone() => copyWith();
 
   BackgroundStyle copyWith({
     Color? color,
