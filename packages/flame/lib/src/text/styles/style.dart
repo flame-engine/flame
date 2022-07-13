@@ -29,7 +29,10 @@ abstract class Style {
   /// However, if the [style] is already owned by some other object, then clones
   /// the [style], marks the copy as being owned, and returns it.
   @protected
-  S acquire<S extends Style>(S style) {
+  S? acquire<S extends Style>(S? style) {
+    if (style == null) {
+      return null;
+    }
     final useStyle = style._parent == null ? style : style.clone() as S;
     useStyle._parent = this;
     return useStyle;

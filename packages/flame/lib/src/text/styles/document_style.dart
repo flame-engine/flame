@@ -5,7 +5,7 @@ import 'package:flame/src/text/styles/background_style.dart';
 import 'package:flame/src/text/styles/block_style.dart';
 import 'package:flame/src/text/styles/overflow.dart';
 import 'package:flame/src/text/styles/style.dart';
-import 'package:flutter/painting.dart';
+import 'package:flutter/painting.dart' show EdgeInsets;
 import 'package:meta/meta.dart';
 
 /// [DocumentStyle] is a user-facing description of how to render an entire
@@ -27,12 +27,12 @@ class DocumentStyle extends Style {
     BlockStyle? header1Style,
     BlockStyle? header2Style,
     BlockStyle? header3Style,
-  })  : padding = padding ?? EdgeInsets.zero,
-        backgroundStyle = background {
-    this.paragraphStyle = acquire(paragraphStyle ?? defaultParagraphStyle);
-    this.header1Style = acquire(header1Style ?? defaultHeader1Style);
-    this.header2Style = acquire(header2Style ?? defaultHeader2Style);
-    this.header3Style = acquire(header3Style ?? defaultHeader3Style);
+  })  : padding = padding ?? EdgeInsets.zero {
+    backgroundStyle = acquire(background);
+    this.paragraphStyle = acquire(paragraphStyle ?? defaultParagraphStyle)!;
+    this.header1Style = acquire(header1Style ?? defaultHeader1Style)!;
+    this.header2Style = acquire(header2Style ?? defaultHeader2Style)!;
+    this.header3Style = acquire(header3Style ?? defaultHeader3Style)!;
   }
 
   /// Outer width of the document page.
@@ -73,7 +73,7 @@ class DocumentStyle extends Style {
 
   /// If present, describes what kind of background and borders to draw for the
   /// document page(s).
-  final BackgroundStyle? backgroundStyle;
+  late final BackgroundStyle? backgroundStyle;
 
   /// Style for paragraph nodes in the document.
   late final BlockStyle paragraphStyle;
@@ -118,7 +118,7 @@ class DocumentStyle extends Style {
   }
 
   @internal
-  BlockStyle styleForBlockNode(BlockNode node) {
+  BlockStyle styleFor(BlockNode node) {
     if (node is ParagraphNode) {
       return paragraphStyle;
     }

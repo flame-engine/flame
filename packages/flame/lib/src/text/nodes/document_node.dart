@@ -30,7 +30,7 @@ class DocumentNode extends GroupBlockNode {
     var verticalOffset = border.top;
     var currentMargin = padding.top;
     for (final node in children) {
-      final blockStyle = style.styleForBlockNode(node);
+      final blockStyle = style.styleFor(node);
       verticalOffset += collapseMargin(currentMargin, blockStyle.margin.top);
       final nodeElement = (node as ParagraphNode).format(
         blockStyle,
