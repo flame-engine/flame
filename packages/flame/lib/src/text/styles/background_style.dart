@@ -1,7 +1,7 @@
 import 'package:flame/src/text/styles/style.dart';
 import 'package:flutter/rendering.dart';
 
-class BackgroundStyle extends Style<BackgroundStyle> {
+class BackgroundStyle extends Style {
   BackgroundStyle({
     Color? color,
     Paint? paint,

@@ -7,13 +7,6 @@ class GroupBlockNode extends BlockNode {
   final List<BlockNode> children;
 }
 
-class HeaderNode extends BlockNode {
-  HeaderNode(this.child, {required this.level});
-
-  final GroupTextNode child;
-  final int level;
-}
-
 class BlockquoteNode extends GroupBlockNode {
   BlockquoteNode(super.children);
 }

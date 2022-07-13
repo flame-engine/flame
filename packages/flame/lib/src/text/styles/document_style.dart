@@ -4,6 +4,7 @@ import 'package:flame/src/text/styles/background_style.dart';
 import 'package:flame/src/text/styles/block_style.dart';
 import 'package:flame/src/text/styles/overflow.dart';
 import 'package:flame/src/text/styles/style.dart';
+import 'package:flame/text.dart';
 import 'package:flutter/painting.dart';
 import 'package:meta/meta.dart';
 
@@ -16,16 +17,22 @@ import 'package:meta/meta.dart';
 ///
 /// All styles that collectively describe how to render text are organized into
 /// a tree, with [DocumentStyle] at the root.
-class DocumentStyle extends Style<DocumentStyle> {
+class DocumentStyle extends Style {
   DocumentStyle({
     this.width,
     this.height,
     EdgeInsets? padding,
     BackgroundStyle? background,
     BlockStyle? paragraphStyle,
+    BlockStyle? header1Style,
+    BlockStyle? header2Style,
+    BlockStyle? header3Style,
   })  : padding = padding ?? EdgeInsets.zero,
         backgroundStyle = background {
-    paragraphStyle = (paragraphStyle ?? defaultParagraphStyle).acquire(this);
+    this.paragraphStyle = acquire(paragraphStyle ?? defaultParagraphStyle);
+    this.header1Style = acquire(header1Style ?? defaultHeader1Style);
+    this.header2Style = acquire(header2Style ?? defaultHeader2Style);
+    this.header3Style = acquire(header3Style ?? defaultHeader3Style);
   }
 
   /// Outer width of the document page.
@@ -71,7 +78,19 @@ class DocumentStyle extends Style<DocumentStyle> {
   /// Style for paragraph nodes in the document.
   late final BlockStyle paragraphStyle;
 
+  /// Style for level-1 headers.
+  late final BlockStyle header1Style;
+
+  /// Style for level-2 headers.
+  late final BlockStyle header2Style;
+
+  /// Style for level-3 headers.
+  late final BlockStyle header3Style;
+
   static BlockStyle defaultParagraphStyle = BlockStyle();
+  static BlockStyle defaultHeader1Style = BlockStyle();
+  static BlockStyle defaultHeader2Style = BlockStyle();
+  static BlockStyle defaultHeader3Style = BlockStyle();
 
   @override
   DocumentStyle clone() => copyWith();
@@ -82,13 +101,19 @@ class DocumentStyle extends Style<DocumentStyle> {
     EdgeInsets? padding,
     BackgroundStyle? background,
     BlockStyle? paragraphStyle,
+    BlockStyle? header1Style,
+    BlockStyle? header2Style,
+    BlockStyle? header3Style,
   }) {
     return DocumentStyle(
       width: width ?? this.width,
       height: height ?? this.height,
       padding: padding ?? this.padding,
       background: background ?? backgroundStyle,
-      paragraphStyle: paragraphStyle ?? this.paragraphStyle.clone(),
+      paragraphStyle: paragraphStyle ?? this.paragraphStyle,
+      header1Style: header1Style ?? this.header1Style,
+      header2Style: header2Style ?? this.header2Style,
+      header3Style: header3Style ?? this.header3Style,
     );
   }
 
@@ -96,6 +121,16 @@ class DocumentStyle extends Style<DocumentStyle> {
   BlockStyle styleForBlockNode(BlockNode node) {
     if (node is ParagraphNode) {
       return paragraphStyle;
+    }
+    if (node is HeaderNode) {
+      switch (node.level) {
+        case 1:
+          return header1Style;
+        case 2:
+          return header2Style;
+        default:
+          return header3Style;
+      }
     }
     return BlockStyle();
   }

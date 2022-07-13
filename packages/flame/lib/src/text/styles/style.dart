@@ -1,19 +1,14 @@
 import 'package:meta/meta.dart';
 
-abstract class Style<T extends Style<T>> {
+abstract class Style {
   Style? _parent;
 
-  T clone();
+  Style clone();
 
   @protected
-  T acquire(Style parent) {
-    if (_parent == null) {
-      _parent = parent;
-      return this as T;
-    } else {
-      final copy = clone();
-      copy._parent = parent;
-      return copy;
-    }
+  S acquire<S extends Style>(S style) {
+    final useStyle = style._parent == null ? style : style.clone() as S;
+    useStyle._parent = this;
+    return useStyle;
   }
 }
