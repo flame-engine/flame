@@ -49,5 +49,5 @@ class Flower extends PositionComponent with TapCallbacks, HasDecorator {
   }
 
   @override
-  void onTapUp(TapUpEvent event) => _onTap?.call(this);
+  void onTapUp([TapUpEvent? event]) => _onTap?.call(this);
 }
