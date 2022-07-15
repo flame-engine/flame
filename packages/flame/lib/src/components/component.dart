@@ -4,6 +4,7 @@ import 'dart:collection';
 import 'package:collection/collection.dart';
 import 'package:flame/src/cache/value_cache.dart';
 import 'package:flame/src/components/component_set.dart';
+import 'package:flame/src/components/inherited_component.dart';
 import 'package:flame/src/components/mixins/coordinate_transform.dart';
 import 'package:flame/src/components/position_type.dart';
 import 'package:flame/src/game/flame_game.dart';
@@ -240,6 +241,28 @@ class Component {
       addToParent(newParent);
     } else {
       newParent.lifecycle._adoption.add(this);
+    }
+  }
+
+  Map<Type, InheritedComponent>? _inheritedComponents;
+
+  T? dependOnInheritedComponentOfExactType<T extends InheritedComponent>() {
+    return _inheritedComponents?[T] as T?;
+  }
+
+  void _updateInheritance() {
+    final incomingComponents = _parent?._inheritedComponents;
+    if (incomingComponents == null) {
+      _inheritedComponents = null;
+    } else {
+      _inheritedComponents =
+          HashMap<Type, InheritedComponent>.from(incomingComponents);
+    }
+
+    final parent = this.parent;
+    if (parent is InheritedComponent) {
+      _inheritedComponents ??= HashMap<Type, InheritedComponent>();
+      _inheritedComponents![parent.runtimeType] = parent;
     }
   }
 
@@ -736,6 +759,7 @@ class Component {
     assert(_parent!.findGame()!.hasLayout);
     _setLoadingBit();
     onGameResize(_parent!.findGame()!.canvasSize);
+    _updateInheritance();
     final onLoadFuture = onLoad();
     if (onLoadFuture == null) {
       _finishLoading();
