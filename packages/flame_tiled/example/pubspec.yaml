@@ -18,6 +18,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/tiles/map.tmx
-    - assets/images/map-level1.png
-    - assets/images/map-level2.png
+    - assets/images/level_ice_tileset.png
+    - assets/images/level_standard_tileset.png
+    - assets/images/repeatable_background.png
     - assets/images/coins.png

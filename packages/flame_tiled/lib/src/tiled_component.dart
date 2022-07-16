@@ -27,6 +27,12 @@ class TiledComponent extends Component {
     tileMap.render(canvas);
   }
 
+  @override
+  void onGameResize(Vector2 canvasSize) {
+    super.onGameResize(canvasSize);
+    tileMap.handleResize(canvasSize);
+  }
+
   /// Loads a [TiledComponent] from a file.
   static Future<TiledComponent> load(
     String fileName,

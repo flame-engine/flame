@@ -26,6 +26,7 @@ class TiledGame extends FlameGame {
         mapComponent.tileMap.getLayer<ObjectGroup>('AnimatedCoins');
     final coins = await Flame.images.load('coins.png');
 
+    camera.zoom = 0.5;
     camera.viewport = FixedResolutionViewport(Vector2(16 * 28, 16 * 14));
 
     // We are 100% sure that an object layer named `AnimatedCoins`
@@ -53,7 +54,8 @@ class TiledGame extends FlameGame {
     super.update(dt);
     time += dt;
     final tiledMap = mapComponent.tileMap.map;
-    if (time % 10 < 5) {
+    // Pan the camera down and right for 10 seconds, then reverse
+    if (time % 20 < 10) {
       cameraTarget.x = tiledMap.width * tiledMap.tileWidth.toDouble() -
           camera.viewport.effectiveSize.x;
       cameraTarget.y = camera.viewport.effectiveSize.y;

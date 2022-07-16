@@ -7,50 +7,57 @@ import 'package:flame/game.dart';
 import 'package:flame/sprite.dart';
 import 'package:flame_tiled/src/flame_tsx_provider.dart';
 import 'package:flame_tiled/src/simple_flips.dart';
+import 'package:flutter/painting.dart';
 import 'package:tiled/tiled.dart';
 
 /// {@template _renderable_tiled_map}
-/// This is a wrapper over Tiled's [TiledMap] with pre-computed SpriteBatches
-/// for rendering each layer of the map.
+/// This is a wrapper over Tiled's [TiledMap] which can be rendered to a canvas.
+///
+/// Internally each layer is wrapped with a [_RenderableLayer] which handles
+/// rendering and caching for supported layer types:
+///  - [TileLayer] is supported with pre-computed SpriteBatches
+///  - [ImageLayer] is supported with [paintImage]
+///
+/// This also supports the following properties:
+///  - [TiledMap.backgroundColor]
+///  - [Layer.opacity]
+///  - [Layer.offsetX]
+///  - [Layer.offsetY]
+///  - [Layer.parallaxX] (only supported if [Camera] is supplied)
+///  - [Layer.parallaxY] (only supported if [Camera] is supplied)
+///
 /// {@endtemplate}
 class RenderableTiledMap {
   /// [TiledMap] instance for this map.
   final TiledMap map;
 
-  /// The size of tile to be rendered on the game.
-  final Vector2 destTileSize;
+  /// Layers to be rendered, in the same order as [TiledMap.layers]
+  final List<_RenderableLayer> renderableLayers;
 
-  /// Camera to account for parallax
-  final Camera? camera;
-
-  /// Cached list of [SpriteBatch]es, ordered by layer.
-  final List<Map<String, SpriteBatch>> batchesByLayer;
-
-  /// Cached color per layer, index will match layer index of [batchesByLayer]
-  final List<Color> paintColorByLayer;
-
-  /// Paint to apply to canvas during render
-  final paint = ui.Paint();
-
-  /// Offset to apply during render due to layer parallax factor
-  final parallaxOffset = Vector2.zero();
+  /// Paint for the map's background color, if there is one
+  late final ui.Paint? _backgroundPaint;
 
   /// {@macro _renderable_tiled_map}
   RenderableTiledMap(
     this.map,
-    this.batchesByLayer,
-    this.paintColorByLayer,
-    this.destTileSize, {
-    this.camera,
-  }) {
-    refreshCache();
+    this.renderableLayers,
+  ) {
+    _refreshCache();
+
+    final backgroundColor = _parseTiledColor(map.backgroundColor);
+    if (backgroundColor != null) {
+      _backgroundPaint = ui.Paint();
+      _backgroundPaint!.color = backgroundColor;
+    } else {
+      _backgroundPaint = null;
+    }
   }
 
   /// Changes the visibility of the corresponding layer, if different
   void setLayerVisibility(int layerId, bool visibility) {
     if (map.layers[layerId].visible != visibility) {
       map.layers[layerId].visible = visibility;
-      refreshCache();
+      _refreshCache();
     }
   }
 
@@ -76,7 +83,7 @@ class RenderableTiledMap {
             td[y][x].flips.vertically != gid.flips.vertically ||
             td[y][x].flips.diagonally != gid.flips.diagonally) {
           td[y][x] = gid;
-          refreshCache();
+          _refreshCache();
         }
       }
     }
@@ -122,82 +129,124 @@ class RenderableTiledMap {
     Vector2 destTileSize, {
     Camera? camera,
   }) async {
-    final batchesByLayer = await Future.wait(
-      _renderableTileLayers(map).map((layer) => _loadImages(map)),
-    );
+    final renderableLayers = await Future.wait(
+      map.layers.where((layer) => layer.visible).toList().map((layer) {
+        switch (layer.runtimeType) {
+          case TileLayer:
+            return _RenderableTileLayer.load(
+              layer as TileLayer,
+              map,
+              camera,
+              destTileSize,
+            );
+          case ImageLayer:
+            return _RenderableImageLayer.load(layer as ImageLayer, camera);
 
-    final paintColorByLayer = batchesByLayer.mapIndexed((index, batch) {
-      final layer = map.layers[index];
-      return Color.fromRGBO(255, 255, 255, layer.opacity);
-    }).toList();
+          default:
+            return _UnrenderableLayer.load(layer);
+        }
+      }),
+    );
 
     return RenderableTiledMap(
       map,
-      batchesByLayer,
-      paintColorByLayer,
-      destTileSize,
-      camera: camera,
+      renderableLayers,
     );
   }
 
-  static Iterable<TileLayer> _renderableTileLayers(TiledMap map) {
-    return map.layers.where((layer) => layer.visible).whereType<TileLayer>();
-  }
-
-  static Future<Map<String, SpriteBatch>> _loadImages(TiledMap map) async {
-    final result = <String, SpriteBatch>{};
-
-    await Future.forEach(map.tiledImages(), (TiledImage img) async {
-      final src = img.source;
-      if (src != null) {
-        result[src] = await SpriteBatch.load(src);
-      }
+  /// Handle game resize and propagate it to renderable layers
+  void handleResize(Vector2 canvasSize) {
+    renderableLayers.forEach((rl) {
+      rl.handleResize(canvasSize);
     });
-
-    return result;
   }
 
   /// Rebuilds the cache for rendering
-  void refreshCache() {
-    batchesByLayer.forEach(
-      (batchMap) => batchMap.values.forEach((batch) => batch.clear()),
-    );
-
-    _renderableTileLayers(map)
-        .where((layer) => layer.tileData != null)
-        .forEachIndexed((mapIndex, layer) {
-      return _renderLayer(
-        mapIndex,
-        layer.tileData!,
-        Vector2(layer.offsetX, layer.offsetY),
-      );
+  void _refreshCache() {
+    renderableLayers.forEach((rl) {
+      rl.refreshCache();
     });
   }
 
-  void _renderLayer(
-    int mapIndex,
-    List<List<Gid>> tileData,
-    Vector2 layerOffset,
+  /// Renders each renderable layer in the same order specified by the Tiled map
+  void render(Canvas c) {
+    if (_backgroundPaint != null) {
+      c.drawPaint(_backgroundPaint!);
+    }
+
+    // paint each layer in reverse order, because the last layers should be
+    // rendered beneath the first layers
+    renderableLayers.where((l) => l.visible).forEach((renderableLayer) {
+      renderableLayer.render(c);
+    });
+  }
+
+  /// Returns a layer of type [T] with given [name] from all the layers
+  /// of this map. If no such layer is found, null is returned.
+  T? getLayer<T extends Layer>(String name) {
+    return map.layers
+        .firstWhereOrNull((layer) => layer is T && layer.name == name) as T?;
+  }
+}
+
+abstract class _RenderableLayer<T extends Layer> {
+  final T layer;
+
+  _RenderableLayer(this.layer);
+
+  bool get visible => layer.visible;
+
+  void render(Canvas canvas);
+
+  void handleResize(Vector2 canvasSize) {}
+
+  void refreshCache() {}
+}
+
+class _RenderableTileLayer extends _RenderableLayer<TileLayer> {
+  final Camera? _camera;
+  final TiledMap _map;
+  final Vector2 _destTileSize;
+  late final _layerPaint = ui.Paint();
+  late final Map<String, SpriteBatch> _cachedSpriteBatches;
+
+  _RenderableTileLayer(
+    super.layer,
+    this._map,
+    this._camera,
+    this._destTileSize,
+    this._cachedSpriteBatches,
   ) {
-    final batchMap = batchesByLayer.elementAt(mapIndex);
+    _layerPaint.color = Color.fromRGBO(255, 255, 255, layer.opacity);
+    _cacheLayerTiles();
+  }
+
+  @override
+  void refreshCache() {
+    _cacheLayerTiles();
+  }
+
+  void _cacheLayerTiles() {
+    final tileData = layer.tileData!;
+    final batchMap = _cachedSpriteBatches;
     tileData.asMap().forEach((ty, tileRow) {
       tileRow.asMap().forEach((tx, tileGid) {
         if (tileGid.tile == 0) {
           return;
         }
-        final tile = map.tileByGid(tileGid.tile);
-        final tileset = map.tilesetByTileGId(tileGid.tile);
+        final tile = _map.tileByGid(tileGid.tile);
+        final tileset = _map.tilesetByTileGId(tileGid.tile);
         final img = tile.image ?? tileset.image;
         if (img != null) {
           final batch = batchMap[img.source];
           final src = tileset.computeDrawRect(tile).toRect();
           final flips = SimpleFlips.fromFlips(tileGid.flips);
-          final size = destTileSize;
+          final size = _destTileSize;
           final scale = size.x / src.width;
           final anchorX = src.width / 2;
           final anchorY = src.height / 2;
-          final offsetX = ((tx + .5) * size.x) + (layerOffset.x * scale);
-          final offsetY = ((ty + .5) * size.y) + (layerOffset.y * scale);
+          final offsetX = ((tx + .5) * size.x) + (layer.offsetX * scale);
+          final offsetY = ((ty + .5) * size.y) + (layer.offsetY * scale);
           final scos = flips.cos * scale;
           final ssin = flips.sin * scale;
           if (batch != null) {
@@ -217,50 +266,156 @@ class RenderableTiledMap {
     });
   }
 
-  /// Render [batchesByLayer] that compose this tile map.
-  void render(Canvas c) {
-    batchesByLayer.forEachIndexed((layerIndex, batchMap) {
-      batchMap.forEach((_tilesetImageFile, batch) {
-        final layer = map.layers[layerIndex];
-        c.save();
+  @override
+  void render(Canvas canvas) {
+    canvas.save();
 
-        if (camera != null) {
-          calculateParallaxOffset(camera!, layer);
-          c.translate(parallaxOffset.x, parallaxOffset.y);
-        }
+    if (_camera != null) {
+      _applyParallaxOffset(canvas, _camera!, layer);
+    }
 
-        // Paint with the layer's opacity
-        paint.color = paintColorByLayer[layerIndex];
-        batch.render(c, paint: paint);
-        c.restore();
-      });
+    _cachedSpriteBatches.values.forEach((batch) {
+      batch.render(canvas, paint: _layerPaint);
     });
+
+    canvas.restore();
   }
 
-  /// Calculates the offset we need to apply to the canvas to compensate for
-  /// parallax positioning and scroll for the layer and the current camera
-  /// position
-  /// https://doc.mapeditor.org/en/latest/manual/layers/#parallax-scrolling-factor
-  void calculateParallaxOffset(Camera camera, Layer layer) {
-    final cameraX = camera.position.x;
-    final cameraY = camera.position.y;
-    final vpCenterX = camera.viewport.effectiveSize.x / 2;
-    final vpCenterY = camera.viewport.effectiveSize.y / 2;
-
-    // Due to how Tiled treats the center of the view as the reference
-    // point for parallax positioning (see Tiled docs), we need to offset
-    parallaxOffset.x = (1 - layer.parallaxX) * vpCenterX;
-    parallaxOffset.y = (1 - layer.parallaxY) * vpCenterY;
-
-    // Now add the scroll for the current camera position
-    parallaxOffset.x += cameraX - (cameraX * layer.parallaxX);
-    parallaxOffset.y += cameraY - (cameraY * layer.parallaxY);
+  static Future<_RenderableLayer> load(
+    TileLayer layer,
+    TiledMap map,
+    Camera? camera,
+    Vector2 destTileSize,
+  ) async {
+    return _RenderableTileLayer(
+      layer,
+      map,
+      camera,
+      destTileSize,
+      await _loadImages(map),
+    );
   }
 
-  /// Returns a layer of type [T] with given [name] from all the layers
-  /// of this map. If no such layer is found, null is returned.
-  T? getLayer<T extends Layer>(String name) {
-    return map.layers
-        .firstWhereOrNull((layer) => layer is T && layer.name == name) as T?;
+  static Future<Map<String, SpriteBatch>> _loadImages(TiledMap map) async {
+    final result = <String, SpriteBatch>{};
+
+    await Future.forEach(map.tiledImages(), (TiledImage img) async {
+      final src = img.source;
+      if (src != null) {
+        result[src] = await SpriteBatch.load(src);
+      }
+    });
+
+    return result;
+  }
+}
+
+class _RenderableImageLayer extends _RenderableLayer {
+  final Image _image;
+  late final ImageRepeat _repeat;
+  late final Camera? _camera;
+  Rect _paintArea = Rect.zero;
+
+  _RenderableImageLayer(super.layer, this._camera, this._image) {
+    // use the actual repeat from the layer when `tiled.dart` v0.8.4 is released
+    // with https://github.com/flame-engine/tiled.dart/pull/50
+    // then, `layer.repeatX` and `layer.repeatY` will be available
+    _repeat = ImageRepeat.repeatX;
+  }
+
+  @override
+  void handleResize(Vector2 canvasSize) {
+    _paintArea =
+        Rect.fromLTWH(0, 0, _camera!.canvasSize.x, _camera!.canvasSize.y);
+  }
+
+  @override
+  void render(Canvas canvas) {
+    canvas.save();
+
+    // this seems to match how the Tiled editor initially offsets image layers
+    canvas.translate(-_image.width + layer.offsetX, layer.offsetY);
+
+    _applyParallaxOffset(canvas, _camera!, layer);
+
+    paintImage(
+      canvas: canvas,
+      rect: _paintArea,
+      image: _image,
+      opacity: layer.opacity,
+      alignment: Alignment.topLeft,
+      repeat: _repeat,
+      filterQuality: FilterQuality.medium,
+    );
+
+    canvas.restore();
+  }
+
+  static Future<_RenderableLayer> load(
+    ImageLayer layer,
+    Camera? camera,
+  ) async {
+    return _RenderableImageLayer(
+      layer,
+      camera,
+      await Flame.images.load(layer.image.source!),
+    );
+  }
+}
+
+class _UnrenderableLayer extends _RenderableLayer {
+  _UnrenderableLayer(super.layer);
+
+  @override
+  void render(Canvas canvas) {
+    // nothing to do
+  }
+
+  // ignore unrenderable layers when looping over the layers to render
+  @override
+  bool get visible => false;
+
+  static Future<_RenderableLayer> load(Layer layer) async {
+    return _UnrenderableLayer(layer);
+  }
+}
+
+/// Calculates the offset we need to apply to the canvas to compensate for
+/// parallax positioning and scroll for the layer and the current camera
+/// position
+/// https://doc.mapeditor.org/en/latest/manual/layers/#parallax-scrolling-factor
+void _applyParallaxOffset(Canvas canvas, Camera camera, Layer layer) {
+  final cameraX = camera.position.x;
+  final cameraY = camera.position.y;
+  final vpCenterX = camera.viewport.effectiveSize.x / 2;
+  final vpCenterY = camera.viewport.effectiveSize.y / 2;
+
+  // Due to how Tiled treats the center of the view as the reference
+  // point for parallax positioning (see Tiled docs), we need to offset the
+  // entire layer
+  var x = (1 - layer.parallaxX) * vpCenterX;
+  var y = (1 - layer.parallaxY) * vpCenterY;
+  // compensate the offset for zoom
+  x /= camera.zoom;
+  y /= camera.zoom;
+
+  // Now add the scroll for the current camera position
+  x += cameraX - (cameraX * layer.parallaxX);
+  y += cameraY - (cameraY * layer.parallaxY);
+
+  canvas.translate(x, y);
+}
+
+Color? _parseTiledColor(String? tiledColor) {
+  int? colorValue;
+  if (tiledColor?.length == 7) {
+    colorValue = int.tryParse(tiledColor!.replaceFirst('#', '0xff'));
+  } else if (tiledColor?.length == 9) {
+    colorValue = int.tryParse(tiledColor!.replaceFirst('#', '0x'));
+  }
+  if (colorValue != null) {
+    return Color(colorValue);
+  } else {
+    return null;
   }
 }
