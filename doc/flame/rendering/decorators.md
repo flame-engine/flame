@@ -61,22 +61,22 @@ Possible uses:
 - black-and-white photos.
 
 
-### PaintDecorator.tinted
+### PaintDecorator.tint
 
 ```{flutter-app}
 :sources: ../flame/examples
-:page: decorator_tinted
+:page: decorator_tint
 :show: widget infobox
 :width: 180
 :height: 160
 ```
 
-This decorator "tints" the underlying image with the specified color, as if watching it through a
+This decorator *tints* the underlying image with the specified color, as if watching it through a
 colored glass. It is recommended that the `color` used by this decorator was semi-transparent, so
 that you can see the details of the image below.
 
 ```dart
-final decorator = PaintDecorator.tinted(const Color(0xAAFF0000);
+final decorator = PaintDecorator.tint(const Color(0xAAFF0000);
 ```
 
 Possible uses:

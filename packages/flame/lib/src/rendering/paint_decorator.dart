@@ -7,7 +7,7 @@ import 'package:flame/src/rendering/decorator.dart';
 /// Specifically, the following filters are available:
 /// - [PaintDecorator.blur] adds Gaussian blur to the image, as if your vision
 ///   became blurry and out of focus;
-/// - [PaintDecorator.tinted] tints the picture with the specified color, as if
+/// - [PaintDecorator.tint] tints the picture with the specified color, as if
 ///   looking through a colored glass;
 /// - [PaintDecorator.grayscale] removes all color from the picture, as if it
 ///   was a black-and-white photo.
@@ -16,7 +16,7 @@ class PaintDecorator extends Decorator {
     addBlur(amount, amountY ?? amount);
   }
 
-  PaintDecorator.tinted(Color color) {
+  PaintDecorator.tint(Color color) {
     _paint.colorFilter = ColorFilter.mode(color, BlendMode.srcATop);
   }
 

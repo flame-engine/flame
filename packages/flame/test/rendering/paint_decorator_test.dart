@@ -61,17 +61,17 @@ void main() {
           SpriteComponent(sprite: Sprite(image)),
           _DecoratedSprite(
             sprite: Sprite(image),
-            decorator: PaintDecorator.tinted(const Color(0x8800FF00)),
+            decorator: PaintDecorator.tint(const Color(0x8800FF00)),
             position: Vector2(100, 0),
           ),
           _DecoratedSprite(
             sprite: Sprite(image),
-            decorator: PaintDecorator.tinted(const Color(0x880000FF)),
+            decorator: PaintDecorator.tint(const Color(0x880000FF)),
             position: Vector2(200, 0),
           ),
           _DecoratedSprite(
             sprite: Sprite(image),
-            decorator: PaintDecorator.tinted(const Color(0xAAFFFFFF)),
+            decorator: PaintDecorator.tint(const Color(0xAAFFFFFF)),
             position: Vector2(300, 0),
           ),
         ]);
@@ -94,7 +94,7 @@ void main() {
           ),
           _DecoratedSprite(
             sprite: Sprite(image),
-            decorator: PaintDecorator.tinted(color)..addBlur(3),
+            decorator: PaintDecorator.tint(color)..addBlur(3),
             position: Vector2(200, 0),
           ),
         ]);
