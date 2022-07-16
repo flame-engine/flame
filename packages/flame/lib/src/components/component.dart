@@ -246,6 +246,8 @@ class Component {
 
   Map<Type, InheritedComponent>? _inheritedComponents;
 
+  /// Obtains the nearest [InheritedComponent] of the given type [T], which must
+  /// be the type of a concrete [InheritedComponent] subclass.
   T? dependOnInheritedComponentOfExactType<T extends InheritedComponent>() {
     return _inheritedComponents?[T] as T?;
   }
