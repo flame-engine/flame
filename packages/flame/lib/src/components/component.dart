@@ -248,7 +248,9 @@ class Component {
 
   /// Obtains the nearest [InheritedComponent] of the given type [T], which must
   /// be the type of a concrete [InheritedComponent] subclass.
-  T? dependOnInheritedComponentOfExactType<T extends InheritedComponent>() {
+  ///
+  /// Calling this method results in O(1); unlike [ancestors].
+  T? read<T extends InheritedComponent>() {
     return _inheritedComponents?[T] as T?;
   }
 

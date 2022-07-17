@@ -8,7 +8,7 @@ class _TestInheritedComponentB extends InheritedComponent {}
 
 void main() {
   group('Component Inheritance', () {
-    group('dependOnInheritedComponentOfExactType', () {
+    group('read', () {
       testWithFlameGame(
         'retrieves an InheritedComponent',
         (game) async {
@@ -19,8 +19,7 @@ void main() {
           await game.ensureAdd(parent);
 
           expect(
-            child.dependOnInheritedComponentOfExactType<
-                _TestInheritedComponentA>(),
+            child.read<_TestInheritedComponentA>(),
             parent,
           );
         },
@@ -38,18 +37,15 @@ void main() {
           await game.ensureAdd(grandParent);
 
           expect(
-            child.dependOnInheritedComponentOfExactType<
-                _TestInheritedComponentA>(),
+            child.read<_TestInheritedComponentA>(),
             parent,
           );
           expect(
-            parent.dependOnInheritedComponentOfExactType<
-                _TestInheritedComponentA>(),
+            parent.read<_TestInheritedComponentA>(),
             grandParent,
           );
           expect(
-            grandParent.dependOnInheritedComponentOfExactType<
-                _TestInheritedComponentA>(),
+            grandParent.read<_TestInheritedComponentA>(),
             null,
           );
         },
@@ -67,13 +63,11 @@ void main() {
           await game.ensureAdd(grandParent);
 
           expect(
-            child.dependOnInheritedComponentOfExactType<
-                _TestInheritedComponentB>(),
+            child.read<_TestInheritedComponentB>(),
             parent,
           );
           expect(
-            child.dependOnInheritedComponentOfExactType<
-                _TestInheritedComponentA>(),
+            child.read<_TestInheritedComponentA>(),
             grandParent,
           );
         },
