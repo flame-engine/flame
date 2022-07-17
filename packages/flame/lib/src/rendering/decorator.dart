@@ -1,5 +1,7 @@
 import 'dart:ui';
 
+import 'package:flame/src/rendering/rotate3d_decorator.dart';
+
 /// [Decorator] is an abstract class that encapsulates a particular visual
 /// effect that should apply to drawing commands wrapped by this class.
 ///
@@ -13,6 +15,7 @@ import 'dart:ui';
 /// ```
 ///
 /// The following implementations are available:
+/// - [Rotate3DDecorator]
 abstract class Decorator {
   /// Applies visual effect while [draw]ing on the [canvas].
   ///
