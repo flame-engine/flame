@@ -87,6 +87,38 @@ Possible uses:
 - tint the scene deep blue during the night time;
 
 
+### Rotate3DDecorator
+
+```{flutter-app}
+:sources: ../flame/examples
+:page: decorator_rotate3d
+:show: widget infobox
+:width: 180
+:height: 160
+```
+
+This decorator applies a 3D rotation to the underlying component. You can specify the angles of the
+rotation, as well as the pivot point and the amount of perspective distortion to apply.
+
+The decorator also supplies the `isFlipped` property, which allows you to determine whether the
+component is currently being viewed from the front side or from the back. This is useful if you want
+to draw a component whose appearance is different in the front and in the back.
+
+```dart
+final decorator = Rotate3DDecorator(
+  center: component.center,
+  angleX: rotationAngle,
+  perspective: 0.002,
+);
+```
+
+Possible uses:
+- a card that can be flipped over;
+- pages in a book;
+- transitions between app routes;
+- 3d falling particles such as snowflakes or leaves.
+
+
 ## Using decorators
 
 ### HasDecorator mixin
