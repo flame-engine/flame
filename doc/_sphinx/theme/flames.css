@@ -797,3 +797,12 @@ div.admonition.admonition-deprecated {
   --admonition-icon-color: #555;
   --admonition-title-background-color: #1c1c1c;
 }
+
+
+pre, div[class*="highlight-"] {
+  clear: none;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  clear: both;
+}
