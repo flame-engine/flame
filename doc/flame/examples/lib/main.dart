@@ -1,5 +1,8 @@
 import 'dart:html'; // ignore: avoid_web_libraries_in_flutter
 
+import 'package:doc_flame_examples/decorator_blur.dart';
+import 'package:doc_flame_examples/decorator_grayscale.dart';
+import 'package:doc_flame_examples/decorator_tint.dart';
 import 'package:doc_flame_examples/drag_events.dart';
 import 'package:doc_flame_examples/navigator.dart';
 import 'package:doc_flame_examples/tap_events.dart';
@@ -21,6 +24,15 @@ void main() {
       break;
     case 'navigator':
       game = NavigatorGame();
+      break;
+    case 'decorator_blur':
+      game = DecoratorBlurGame();
+      break;
+    case 'decorator_grayscale':
+      game = DecoratorGrayscaleGame();
+      break;
+    case 'decorator_tint':
+      game = DecoratorTintGame();
       break;
   }
   if (game != null) {

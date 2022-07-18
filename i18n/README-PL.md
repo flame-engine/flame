@@ -88,9 +88,9 @@ Flame oficjalnie udostępnia biblioteki bridge do następujących pakietów:
 
 Top sponsorzy Flame Engine:
 
-[![Very Good Ventures](/media/unicorn_two_toned.png)](https://verygood.ventures/)
+[![Very Good Ventures](https://raw.githubusercontent.com/flame-engine/flame/main/media/unicorn_two_toned.png)](https://verygood.ventures/)
 
-[![Cypher Stack](/media/logo_cypherstack.png)](https://cypherstack.com/)
+[![Cypher Stack](https://raw.githubusercontent.com/flame-engine/flame/main/media/logo_cypherstack.png)](https://cypherstack.com/)
 
 Chcesz sponsorować Flame? Sprawdź nasz Patreon w sekcji poniżej lub skontaktuj się z nami na Discordzie.
 

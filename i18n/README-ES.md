@@ -85,7 +85,7 @@ Por medio de estas librerías, serás capaz de acceder a componentes de Flame, h
 
 Top de patrocinadores del Flame Engine:
 
-[![Cypher Stack](/media/logo_cypherstack.png)](https://cypherstack.com/)
+[![Cypher Stack](https://raw.githubusercontent.com/flame-engine/flame/main/media/logo_cypherstack.png)](https://cypherstack.com/)
 
 ¿Quieres patrocinar Flame? Mira nuestro Patreon en la siguiente sección, o contactanos en Discord. 
 
