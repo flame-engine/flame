@@ -6,7 +6,6 @@ import 'package:flame/rendering.dart';
 class DecoratorRotate3DGame extends FlameGame with HasTappableComponents {
   @override
   Future<void> onLoad() async {
-    print('DecoratorRotate3DGame onLoad');
     var step = 0;
     add(
       Flower(
@@ -16,8 +15,8 @@ class DecoratorRotate3DGame extends FlameGame with HasTappableComponents {
           step++;
           final decorator =
               (flower.decorator ??= Rotate3DDecorator()) as Rotate3DDecorator
-            ..center = flower.center
-            ..perspective = 0.01;
+                ..center = flower.center
+                ..perspective = 0.01;
           if (step == 1) {
             decorator.angleY = -0.8;
           } else if (step == 2) {
