@@ -117,7 +117,7 @@ void main() {
         );
 
         flameTester.testGameWidget(
-          'a ChainShape',
+          'an open ChainShape',
           setUp: (game, tester) async {
             final body = game.world.createBody(BodyDef());
             final shape = ChainShape()
@@ -140,7 +140,36 @@ void main() {
           verify: (game, tester) async {
             await expectLater(
               find.byGame<Forge2DGame>(),
-              matchesGoldenFile(goldenPath('chain_shape')),
+              matchesGoldenFile(goldenPath('chain_shape_open')),
+            );
+          },
+        );
+
+        flameTester.testGameWidget(
+          'a closed ChainShape',
+          setUp: (game, tester) async {
+            final body = game.world.createBody(BodyDef());
+            final shape = ChainShape()
+              ..createLoop(
+                [
+                  Vector2.zero(),
+                  Vector2.all(10),
+                  Vector2(10, 0),
+                ],
+              );
+            body.createFixture(FixtureDef(shape));
+
+            final component = _TestBodyComponent()
+              ..body = body
+              ..paint = testPaint;
+            await game.add(component);
+
+            game.camera.followVector2(Vector2.zero());
+          },
+          verify: (game, tester) async {
+            await expectLater(
+              find.byGame<Forge2DGame>(),
+              matchesGoldenFile(goldenPath('chain_shape_closed')),
             );
           },
         );

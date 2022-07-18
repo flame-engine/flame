@@ -52,6 +52,11 @@ class FlutterAppDirective(SphinxDirective):
               compiled.
           "infobox" - the content will be displayed as an infobox floating on
               the right-hand side of the page.
+
+      :width: - override the default width of an iframe in widget/infobox modes.
+
+      :height: - override the default height of an iframe in widget/infobox
+        modes.
     """
     has_content = True
     required_arguments = 0
@@ -60,6 +65,8 @@ class FlutterAppDirective(SphinxDirective):
         'sources': directives.unchanged,
         'page': directives.unchanged,
         'show': directives.unchanged,
+        'width': directives.unchanged,
+        'height': directives.unchanged,
     }
     # Static list of targets that were already compiled during the build
     COMPILED = []
@@ -89,7 +96,21 @@ class FlutterAppDirective(SphinxDirective):
         iframe_url = _doc_root() + self.html_dir + '/index.html?' + page
         result = []
         if 'widget' in self.modes:
-            result.append(IFrame(src=iframe_url, classes=['flutter-app-iframe']))
+            iframe = IFrame(src=iframe_url, classes=['flutter-app-iframe'])
+            result.append(iframe)
+            styles = []
+            if self.options.get('width'):
+                width = self.options.get('width')
+                if width.isdigit():
+                    width += 'px'
+                styles.append("width: " + width)
+            if self.options.get('height'):
+                height = self.options.get('height')
+                if height.isdigit():
+                    height += 'px'
+                styles.append("height: " + height)
+            if styles:
+                iframe.attributes['style'] = '; '.join(styles)
         if 'popup' in self.modes:
             result.append(Button(
                 '',
@@ -237,8 +258,10 @@ def _doc_root():
 
 class IFrame(nodes.Element, nodes.General):
     def visit(self, node):
-        self.body.append(
-            self.starttag(node, 'iframe', src=node.attributes['src']))
+        attrs = {'src': node.attributes['src']}
+        if 'style' in node.attributes:
+            attrs['style'] = node.attributes['style']
+        self.body.append(self.starttag(node, 'iframe', **attrs).strip())
 
     def depart(self, _):
         self.body.append('</iframe>')
