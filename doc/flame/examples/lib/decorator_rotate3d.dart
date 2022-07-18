@@ -11,12 +11,12 @@ class DecoratorRotate3DGame extends FlameGame with HasTappableComponents {
       Flower(
         size: 100,
         position: canvasSize / 2,
+        decorator: Rotate3DDecorator()
+          ..center = canvasSize / 2
+          ..perspective = 0.01,
         onTap: (flower) {
           step++;
-          final decorator =
-              (flower.decorator ??= Rotate3DDecorator()) as Rotate3DDecorator
-                ..center = flower.center
-                ..perspective = 0.01;
+          final decorator = flower.decorator! as Rotate3DDecorator;
           if (step == 1) {
             decorator.angleY = -0.8;
           } else if (step == 2) {
@@ -28,7 +28,10 @@ class DecoratorRotate3DGame extends FlameGame with HasTappableComponents {
           } else if (step == 5) {
             decorator.angleY = 2;
           } else {
-            flower.decorator = null;
+            decorator
+              ..angleX = 0
+              ..angleY = 0
+              ..angleZ = 0;
             step = 0;
           }
         },
