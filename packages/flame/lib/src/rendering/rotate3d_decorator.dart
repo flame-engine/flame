@@ -18,9 +18,7 @@ class Rotate3DDecorator extends Decorator {
     this.perspective = 0.001,
   }) : center = center ?? Vector2.zero();
 
-  /// The center of rotation, in the local coordinate space. For example, in
-  /// order to rotate the component around its anchor point, pass `center =
-  /// anchor * size`.
+  /// The center of rotation, in the **parent** coordinate space.
   Vector2 center;
 
   /// Angle of rotation around the X axis. This rotation is usually described as
