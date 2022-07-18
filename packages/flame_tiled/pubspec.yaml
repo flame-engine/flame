@@ -13,7 +13,7 @@ dependencies:
   flutter:
     sdk: flutter
   meta: ^1.7.0
-  tiled: ^0.8.1
+  tiled: ^0.8.4
   xml: ^5.3.0
 
 dev_dependencies:

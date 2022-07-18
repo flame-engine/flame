@@ -310,17 +310,14 @@ class _RenderableTileLayer extends _RenderableLayer<TileLayer> {
   }
 }
 
-class _RenderableImageLayer extends _RenderableLayer {
+class _RenderableImageLayer extends _RenderableLayer<ImageLayer> {
   final Image _image;
   late final ImageRepeat _repeat;
   late final Camera? _camera;
   Rect _paintArea = Rect.zero;
 
   _RenderableImageLayer(super.layer, this._camera, this._image) {
-    // use the actual repeat from the layer when `tiled.dart` v0.8.4 is released
-    // with https://github.com/flame-engine/tiled.dart/pull/50
-    // then, `layer.repeatX` and `layer.repeatY` will be available
-    _repeat = ImageRepeat.repeatX;
+    _initImageRepeat();
   }
 
   @override
@@ -349,6 +346,18 @@ class _RenderableImageLayer extends _RenderableLayer {
     );
 
     canvas.restore();
+  }
+
+  void _initImageRepeat() {
+    if (layer.repeatX && layer.repeatY) {
+      _repeat = ImageRepeat.repeat;
+    } else if (layer.repeatX) {
+      _repeat = ImageRepeat.repeatX;
+    } else if (layer.repeatY) {
+      _repeat = ImageRepeat.repeatY;
+    } else {
+      _repeat = ImageRepeat.noRepeat;
+    }
   }
 
   static Future<_RenderableLayer> load(
