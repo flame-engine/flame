@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import 'package:flame/components.dart';
 import 'package:flame/rendering.dart';
-import 'package:flame/src/components/mixins/has_decorator.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -55,20 +54,20 @@ void main() {
     testGolden(
       'Rotation around all axes',
       (game) async {
-          game.add(
-            DecoratedRectangle(
-              position: Vector2(20, 30),
-              size: Vector2(60, 100),
-              paint: Paint()..color = const Color(0xff199f2b),
-              decorator: Rotate3DDecorator(
-                center: Vector2(50, 80),
-                angleX: 0.7,
-                angleY: 1.0,
-                angleZ: 0.5,
-                perspective: 0.005,
-              ),
+        game.add(
+          DecoratedRectangle(
+            position: Vector2(20, 30),
+            size: Vector2(60, 100),
+            paint: Paint()..color = const Color(0xff199f2b),
+            decorator: Rotate3DDecorator(
+              center: Vector2(50, 80),
+              angleX: 0.7,
+              angleY: 1.0,
+              angleZ: 0.5,
+              perspective: 0.005,
             ),
-          );
+          ),
+        );
       },
       size: Vector2(100, 160),
       goldenFile: '../_goldens/rotate3d_decorator_3.png',
