@@ -38,18 +38,6 @@ class _Rectangle extends RectangleComponent {
 class ClipComponentExample extends FlameGame {
   static String description = '';
 
-  void increaseSize() {
-    descendants().whereType<PositionComponent>().forEach((component) {
-      component.size = component.size * 1.1;
-    });
-  }
-
-  void decreaseSize() {
-    descendants().whereType<PositionComponent>().forEach((component) {
-      component.size = component.size * .9;
-    });
-  }
-
   @override
   Future<void> onLoad() async {
     addAll(

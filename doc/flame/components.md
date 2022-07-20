@@ -991,8 +991,8 @@ for details on how to use it.
 ## ClipComponent
 
 A `ClipComponent` is a component that will clip the canvas to its size and shape. This means that
-if the component itself or any child of the `ClipComponent` renders outside of the `ClipComponent`'s boundaries, the part that is
-not inside the area will not be shown.
+if the component itself or any child of the `ClipComponent` renders outside of the
+`ClipComponent`'s boundaries, the part that is not inside the area will not be shown.
 
 There are three types of shapes that a `ClipComponent` can use to define the area that shoud be clipped:
 
