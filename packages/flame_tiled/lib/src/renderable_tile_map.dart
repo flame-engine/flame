@@ -35,7 +35,7 @@ class RenderableTiledMap {
   final List<_RenderableLayer> renderableLayers;
 
   /// Camera used for determining the current viewport for layer rendering.
-  /// Optional, but required for parallax support and [ImageLayer] rendering
+  /// Optional, but required for parallax support
   Camera? camera;
 
   /// Paint for the map's background color, if there is one
@@ -162,7 +162,7 @@ class RenderableTiledMap {
   /// Handle game resize and propagate it to renderable layers
   void handleResize(Vector2 canvasSize) {
     renderableLayers.forEach((rl) {
-      rl.handleResize(canvasSize, camera);
+      rl.handleResize(canvasSize);
     });
   }
 
@@ -203,7 +203,7 @@ abstract class _RenderableLayer<T extends Layer> {
 
   void render(Canvas canvas, Camera? camera);
 
-  void handleResize(Vector2 canvasSize, Camera? camera) {}
+  void handleResize(Vector2 canvasSize) {}
 
   void refreshCache() {}
 }
@@ -321,11 +321,8 @@ class _RenderableImageLayer extends _RenderableLayer<ImageLayer> {
   }
 
   @override
-  void handleResize(Vector2 canvasSize, Camera? camera) {
-    if (camera != null) {
-      _paintArea =
-          Rect.fromLTWH(0, 0, camera.canvasSize.x, camera.canvasSize.y);
-    }
+  void handleResize(Vector2 canvasSize) {
+    _paintArea = Rect.fromLTWH(0, 0, canvasSize.x, canvasSize.y);
   }
 
   @override
@@ -346,7 +343,6 @@ class _RenderableImageLayer extends _RenderableLayer<ImageLayer> {
       opacity: layer.opacity,
       alignment: Alignment.topLeft,
       repeat: _repeat,
-      filterQuality: FilterQuality.medium,
     );
 
     canvas.restore();

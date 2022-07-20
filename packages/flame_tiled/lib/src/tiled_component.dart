@@ -11,7 +11,7 @@ import 'package:flame_tiled/src/renderable_tile_map.dart';
 /// It uses a preloaded [RenderableTiledMap] to batch rendering calls into
 /// Sprite Batches.
 /// {@endtemplate}
-class TiledComponent extends Component with HasGameRef {
+class TiledComponent<T extends FlameGame> extends Component with HasGameRef<T> {
   /// Map instance of this component.
   RenderableTiledMap tileMap;
 
