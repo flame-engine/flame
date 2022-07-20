@@ -11,7 +11,7 @@ import 'package:flame_tiled/src/renderable_tile_map.dart';
 /// It uses a preloaded [RenderableTiledMap] to batch rendering calls into
 /// Sprite Batches.
 /// {@endtemplate}
-class TiledComponent extends Component {
+class TiledComponent extends Component with HasGameRef {
   /// Map instance of this component.
   RenderableTiledMap tileMap;
 
@@ -30,6 +30,12 @@ class TiledComponent extends Component {
   @override
   void onGameResize(Vector2 canvasSize) {
     super.onGameResize(canvasSize);
+
+    // Automatically use the FlameGame camera if it's not already set.
+    // This is set here instead of onLoad because internally some layers need
+    // the camera during handleResize
+    tileMap.camera ??= gameRef.camera;
+
     tileMap.handleResize(canvasSize);
   }
 

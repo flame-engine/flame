@@ -34,14 +34,19 @@ class RenderableTiledMap {
   /// Layers to be rendered, in the same order as [TiledMap.layers]
   final List<_RenderableLayer> renderableLayers;
 
+  /// Camera used for determining the current viewport for layer rendering.
+  /// Optional, but required for parallax support and [ImageLayer] rendering
+  Camera? camera;
+
   /// Paint for the map's background color, if there is one
   late final ui.Paint? _backgroundPaint;
 
   /// {@macro _renderable_tiled_map}
   RenderableTiledMap(
     this.map,
-    this.renderableLayers,
-  ) {
+    this.renderableLayers, {
+    this.camera,
+  }) {
     _refreshCache();
 
     final backgroundColor = _parseTiledColor(map.backgroundColor);
@@ -136,7 +141,6 @@ class RenderableTiledMap {
             return _RenderableTileLayer.load(
               layer as TileLayer,
               map,
-              camera,
               destTileSize,
             );
           case ImageLayer:
@@ -151,13 +155,14 @@ class RenderableTiledMap {
     return RenderableTiledMap(
       map,
       renderableLayers,
+      camera: camera,
     );
   }
 
   /// Handle game resize and propagate it to renderable layers
   void handleResize(Vector2 canvasSize) {
     renderableLayers.forEach((rl) {
-      rl.handleResize(canvasSize);
+      rl.handleResize(canvasSize, camera);
     });
   }
 
@@ -177,7 +182,7 @@ class RenderableTiledMap {
     // paint each layer in reverse order, because the last layers should be
     // rendered beneath the first layers
     renderableLayers.where((l) => l.visible).forEach((renderableLayer) {
-      renderableLayer.render(c);
+      renderableLayer.render(c, camera);
     });
   }
 
@@ -196,15 +201,14 @@ abstract class _RenderableLayer<T extends Layer> {
 
   bool get visible => layer.visible;
 
-  void render(Canvas canvas);
+  void render(Canvas canvas, Camera? camera);
 
-  void handleResize(Vector2 canvasSize) {}
+  void handleResize(Vector2 canvasSize, Camera? camera) {}
 
   void refreshCache() {}
 }
 
 class _RenderableTileLayer extends _RenderableLayer<TileLayer> {
-  final Camera? _camera;
   final TiledMap _map;
   final Vector2 _destTileSize;
   late final _layerPaint = ui.Paint();
@@ -213,7 +217,6 @@ class _RenderableTileLayer extends _RenderableLayer<TileLayer> {
   _RenderableTileLayer(
     super.layer,
     this._map,
-    this._camera,
     this._destTileSize,
     this._cachedSpriteBatches,
   ) {
@@ -267,11 +270,11 @@ class _RenderableTileLayer extends _RenderableLayer<TileLayer> {
   }
 
   @override
-  void render(Canvas canvas) {
+  void render(Canvas canvas, Camera? camera) {
     canvas.save();
 
-    if (_camera != null) {
-      _applyParallaxOffset(canvas, _camera!, layer);
+    if (camera != null) {
+      _applyParallaxOffset(canvas, camera, layer);
     }
 
     _cachedSpriteBatches.values.forEach((batch) {
@@ -284,13 +287,11 @@ class _RenderableTileLayer extends _RenderableLayer<TileLayer> {
   static Future<_RenderableLayer> load(
     TileLayer layer,
     TiledMap map,
-    Camera? camera,
     Vector2 destTileSize,
   ) async {
     return _RenderableTileLayer(
       layer,
       map,
-      camera,
       destTileSize,
       await _loadImages(map),
     );
@@ -313,27 +314,30 @@ class _RenderableTileLayer extends _RenderableLayer<TileLayer> {
 class _RenderableImageLayer extends _RenderableLayer<ImageLayer> {
   final Image _image;
   late final ImageRepeat _repeat;
-  late final Camera? _camera;
   Rect _paintArea = Rect.zero;
 
-  _RenderableImageLayer(super.layer, this._camera, this._image) {
+  _RenderableImageLayer(super.layer, this._image) {
     _initImageRepeat();
   }
 
   @override
-  void handleResize(Vector2 canvasSize) {
-    _paintArea =
-        Rect.fromLTWH(0, 0, _camera!.canvasSize.x, _camera!.canvasSize.y);
+  void handleResize(Vector2 canvasSize, Camera? camera) {
+    if (camera != null) {
+      _paintArea =
+          Rect.fromLTWH(0, 0, camera.canvasSize.x, camera.canvasSize.y);
+    }
   }
 
   @override
-  void render(Canvas canvas) {
+  void render(Canvas canvas, Camera? camera) {
     canvas.save();
 
     // this seems to match how the Tiled editor initially offsets image layers
     canvas.translate(-_image.width + layer.offsetX, layer.offsetY);
 
-    _applyParallaxOffset(canvas, _camera!, layer);
+    if (camera != null) {
+      _applyParallaxOffset(canvas, camera, layer);
+    }
 
     paintImage(
       canvas: canvas,
@@ -366,7 +370,6 @@ class _RenderableImageLayer extends _RenderableLayer<ImageLayer> {
   ) async {
     return _RenderableImageLayer(
       layer,
-      camera,
       await Flame.images.load(layer.image.source!),
     );
   }
@@ -376,7 +379,7 @@ class _UnrenderableLayer extends _RenderableLayer {
   _UnrenderableLayer(super.layer);
 
   @override
-  void render(Canvas canvas) {
+  void render(Canvas canvas, Camera? camera) {
     // nothing to do
   }
 

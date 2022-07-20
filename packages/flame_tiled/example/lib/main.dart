@@ -18,8 +18,7 @@ class TiledGame extends FlameGame {
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    mapComponent =
-        await TiledComponent.load('map.tmx', Vector2.all(16), camera: camera);
+    mapComponent = await TiledComponent.load('map.tmx', Vector2.all(16));
     add(mapComponent);
 
     final objGroup =
