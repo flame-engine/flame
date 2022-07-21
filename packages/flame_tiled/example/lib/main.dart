@@ -10,14 +10,23 @@ void main() {
 }
 
 class TiledGame extends FlameGame {
+  late TiledComponent mapComponent;
+
+  double time = 0;
+  Vector2 cameraTarget = Vector2.zero();
+
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    final tiledMap = await TiledComponent.load('map.tmx', Vector2.all(16));
-    add(tiledMap);
+    mapComponent = await TiledComponent.load('map.tmx', Vector2.all(16));
+    add(mapComponent);
 
-    final objGroup = tiledMap.tileMap.getLayer<ObjectGroup>('AnimatedCoins');
+    final objGroup =
+        mapComponent.tileMap.getLayer<ObjectGroup>('AnimatedCoins');
     final coins = await Flame.images.load('coins.png');
+
+    camera.zoom = 0.5;
+    camera.viewport = FixedResolutionViewport(Vector2(16 * 28, 16 * 14));
 
     // We are 100% sure that an object layer named `AnimatedCoins`
     // exists in the example `map.tmx`.
@@ -37,5 +46,21 @@ class TiledGame extends FlameGame {
         ),
       );
     }
+  }
+
+  @override
+  void update(double dt) {
+    super.update(dt);
+    time += dt;
+    final tiledMap = mapComponent.tileMap.map;
+    // Pan the camera down and right for 10 seconds, then reverse
+    if (time % 20 < 10) {
+      cameraTarget.x = tiledMap.width * tiledMap.tileWidth.toDouble() -
+          camera.viewport.effectiveSize.x;
+      cameraTarget.y = camera.viewport.effectiveSize.y;
+    } else {
+      cameraTarget.setZero();
+    }
+    camera.moveTo(cameraTarget);
   }
 }
