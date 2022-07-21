@@ -206,6 +206,32 @@ abstract class _RenderableLayer<T extends Layer> {
   void handleResize(Vector2 canvasSize) {}
 
   void refreshCache() {}
+
+  /// Calculates the offset we need to apply to the canvas to compensate for
+  /// parallax positioning and scroll for the layer and the current camera
+  /// position
+  /// https://doc.mapeditor.org/en/latest/manual/layers/#parallax-scrolling-factor
+  void _applyParallaxOffset(Canvas canvas, Camera camera, Layer layer) {
+    final cameraX = camera.position.x;
+    final cameraY = camera.position.y;
+    final vpCenterX = camera.viewport.effectiveSize.x / 2;
+    final vpCenterY = camera.viewport.effectiveSize.y / 2;
+
+    // Due to how Tiled treats the center of the view as the reference
+    // point for parallax positioning (see Tiled docs), we need to offset the
+    // entire layer
+    var x = (1 - layer.parallaxX) * vpCenterX;
+    var y = (1 - layer.parallaxY) * vpCenterY;
+    // compensate the offset for zoom
+    x /= camera.zoom;
+    y /= camera.zoom;
+
+    // Now add the scroll for the current camera position
+    x += cameraX - (cameraX * layer.parallaxX);
+    y += cameraY - (cameraY * layer.parallaxY);
+
+    canvas.translate(x, y);
+  }
 }
 
 class _RenderableTileLayer extends _RenderableLayer<TileLayer> {
@@ -388,37 +414,13 @@ class _UnrenderableLayer extends _RenderableLayer {
   }
 }
 
-/// Calculates the offset we need to apply to the canvas to compensate for
-/// parallax positioning and scroll for the layer and the current camera
-/// position
-/// https://doc.mapeditor.org/en/latest/manual/layers/#parallax-scrolling-factor
-void _applyParallaxOffset(Canvas canvas, Camera camera, Layer layer) {
-  final cameraX = camera.position.x;
-  final cameraY = camera.position.y;
-  final vpCenterX = camera.viewport.effectiveSize.x / 2;
-  final vpCenterY = camera.viewport.effectiveSize.y / 2;
-
-  // Due to how Tiled treats the center of the view as the reference
-  // point for parallax positioning (see Tiled docs), we need to offset the
-  // entire layer
-  var x = (1 - layer.parallaxX) * vpCenterX;
-  var y = (1 - layer.parallaxY) * vpCenterY;
-  // compensate the offset for zoom
-  x /= camera.zoom;
-  y /= camera.zoom;
-
-  // Now add the scroll for the current camera position
-  x += cameraX - (cameraX * layer.parallaxX);
-  y += cameraY - (cameraY * layer.parallaxY);
-
-  canvas.translate(x, y);
-}
-
 Color? _parseTiledColor(String? tiledColor) {
   int? colorValue;
   if (tiledColor?.length == 7) {
+    // parse '#rrbbgg'  as hex '0xaarrggbb' with the alpha channel on full
     colorValue = int.tryParse(tiledColor!.replaceFirst('#', '0xff'));
   } else if (tiledColor?.length == 9) {
+    // parse '#aarrbbgg'  as hex '0xaarrggbb'
     colorValue = int.tryParse(tiledColor!.replaceFirst('#', '0x'));
   }
   if (colorValue != null) {

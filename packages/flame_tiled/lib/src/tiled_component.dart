@@ -23,6 +23,13 @@ class TiledComponent<T extends FlameGame> extends Component with HasGameRef<T> {
   });
 
   @override
+  Future<void>? onLoad() async {
+    super.onLoad();
+    // Automatically use the FlameGame camera if it's not already set.
+    tileMap.camera ??= gameRef.camera;
+  }
+
+  @override
   void render(Canvas canvas) {
     tileMap.render(canvas);
   }
@@ -30,12 +37,6 @@ class TiledComponent<T extends FlameGame> extends Component with HasGameRef<T> {
   @override
   void onGameResize(Vector2 canvasSize) {
     super.onGameResize(canvasSize);
-
-    // Automatically use the FlameGame camera if it's not already set.
-    // This is set here instead of onLoad because internally some layers need
-    // the camera during handleResize
-    tileMap.camera ??= gameRef.camera;
-
     tileMap.handleResize(canvasSize);
   }
 
@@ -44,10 +45,9 @@ class TiledComponent<T extends FlameGame> extends Component with HasGameRef<T> {
     String fileName,
     Vector2 destTileSize, {
     int? priority,
-    Camera? camera,
   }) async {
     return TiledComponent(
-      await RenderableTiledMap.fromFile(fileName, destTileSize, camera: camera),
+      await RenderableTiledMap.fromFile(fileName, destTileSize),
       priority: priority,
     );
   }
