@@ -17,7 +17,7 @@ void main() {
       mapPath: 'test/assets/map.tmx',
     );
     final tiled = await TiledComponent.load('x', Vector2.all(16));
-    expect(tiled.tileMap.batchesByLayer.length == 1, true);
+    expect(tiled.tileMap.renderableLayers.length == 1, true);
   });
 
   test('correctly loads external tileset', () async {
@@ -66,7 +66,7 @@ void main() {
 
     test(
       'Correctly loads batches list',
-      () => expect(overlapMap.batchesByLayer.length == 2, true),
+      () => expect(overlapMap.renderableLayers.length == 2, true),
     );
 
     test(
