@@ -2,6 +2,7 @@ import 'dart:html'; // ignore: avoid_web_libraries_in_flutter
 
 import 'package:doc_flame_examples/decorator_blur.dart';
 import 'package:doc_flame_examples/decorator_grayscale.dart';
+import 'package:doc_flame_examples/decorator_rotate3d.dart';
 import 'package:doc_flame_examples/decorator_shadow.dart';
 import 'package:doc_flame_examples/decorator_tint.dart';
 import 'package:doc_flame_examples/drag_events.dart';
@@ -19,10 +20,11 @@ void main() {
     'drag_events': DragEventsGame.new,
     'decorator_blur': DecoratorBlurGame.new,
     'decorator_grayscale': DecoratorGrayscaleGame.new,
+    'decorator_rotate3d': DecoratorRotate3DGame.new,
     'decorator_tint': DecoratorTintGame.new,
     'decorator_shadow3d': DecoratorShadowGame.new,
   };
-  final game = (routes[page] ?? routes['decorator_shadow3d'])?.call();
+  final game = routes[page]?.call();
   if (game != null) {
     runApp(GameWidget(game: game));
   } else {
