@@ -127,6 +127,7 @@ button.flutter-app-button:after {
 
 .flutter-app-iframe {
   border: 1px solid #555;
+  display: block;
   height: 350px;
   width: 100%;
 }
@@ -138,7 +139,6 @@ button.flutter-app-button:after {
   float: right;
   margin-left: 6pt;
   padding: 8px;
-  width: 280px;
 }
 
 .flutter-app-infobox button.flutter-app-iframe {
@@ -148,8 +148,7 @@ button.flutter-app-button:after {
 .flutter-app-infobox button.flutter-app-button {
   float: right;
   font-size: 0.85em;
-  margin-bottom: 0;
-  margin-right: 0;
+  margin: 6px 0 0 0;
   min-height: 14pt;
   min-width: 50pt;
 }
