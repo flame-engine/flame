@@ -8,26 +8,45 @@ import 'package:flame/rendering.dart';
 
 class DecoratorShadowGame extends FlameGame with HasTappableComponents {
   @override
-  Color backgroundColor() => const Color(0xFFAAAAAA);
+  Color backgroundColor() => const Color(0xFFC7C7C7);
 
   @override
   Future<void> onLoad() async {
     var step = 0;
     add(Grid());
     add(
-      MyRect(
-        size: Vector2(100, 150),
-        position: Vector2(300, 150),
+      Flower(
+        size: 100 ,//Vector2(100, 150),
+        position: canvasSize / 2,
+        decorator: Shadow3DDecorator(
+          base: canvasSize / 2 + Vector2(0, 50),
+        ),
         onTap: (flower) {
           step++;
+          final decorator = flower.decorator! as Shadow3DDecorator;
           if (step == 1) {
-            flower.decorator = Shadow3DDecorator(
-              base: Vector2(350, 300),
-            );
+            decorator.xShift = 200;
+            decorator.opacity = 0.5;
           } else if (step == 2) {
+            decorator.xShift = 400;
+            decorator.yScale = 3;
+            decorator.blur = 1;
           } else if (step == 3) {
+            decorator.angle = 1.7;
+            decorator.blur = 2;
+          } else if (step == 4) {
+            decorator.ascent = 50;
+            decorator.angle = 1.7;
+            decorator.blur = 2;
+            flower.y -= 50;
           } else {
-            flower.decorator = null;
+            decorator.ascent = 0;
+            decorator.xShift = 0;
+            decorator.yScale = 1;
+            decorator.angle = -1.4;
+            decorator.opacity = 0.8;
+            decorator.blur = 0;
+            flower.y += 50;
             step = 0;
           }
         },
@@ -36,32 +55,9 @@ class DecoratorShadowGame extends FlameGame with HasTappableComponents {
   }
 }
 
-class MyRect extends RectangleComponent with HasDecorator, TapCallbacks {
-  MyRect({super.size, super.position, this.onTap})
-      : pos0 = position!,
-        super(paint: Paint()..color = const Color(0xcc6eb5ff));
-
-  Vector2 pos0;
-  void Function(MyRect)? onTap;
-
-  @override
-  void onTapUp([TapUpEvent? event]) {
-    onTap?.call(this);
-  }
-
-  double timer = 0.0;
-
-  @override
-  void update(double dt) {
-    timer += dt * 0;
-    position.y = pos0.y - timer;
-    (decorator! as Shadow3DDecorator).ascent = timer;
-  }
-}
-
 class Grid extends Component {
   final paint = Paint()
-    ..color = const Color(0xffa3d5ff)
+    ..color = const Color(0xffa9a9a9)
     ..style = PaintingStyle.stroke
     ..strokeWidth = 1;
   @override
