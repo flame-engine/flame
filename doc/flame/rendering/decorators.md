@@ -42,7 +42,7 @@ Possible uses:
 ```{flutter-app}
 :sources: ../flame/examples
 :page: decorator_grayscale
-:show: widget infobox
+:show: widget code infobox
 :width: 180
 :height: 160
 ```
@@ -66,7 +66,7 @@ Possible uses:
 ```{flutter-app}
 :sources: ../flame/examples
 :page: decorator_tint
-:show: widget infobox
+:show: widget code infobox
 :width: 180
 :height: 160
 ```
@@ -92,7 +92,7 @@ Possible uses:
 ```{flutter-app}
 :sources: ../flame/examples
 :page: decorator_rotate3d
-:show: widget infobox
+:show: widget code infobox
 :width: 180
 :height: 160
 ```
