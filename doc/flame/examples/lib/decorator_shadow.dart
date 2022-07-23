@@ -35,10 +35,10 @@ class DecoratorShadowGame extends FlameGame with HasTappableComponents {
             decorator.angle = 1.7;
             decorator.blur = 2;
           } else if (step == 4) {
-            decorator.ascent = 50;
+            decorator.ascent = 20;
             decorator.angle = 1.7;
             decorator.blur = 2;
-            flower.y -= 50;
+            flower.y -= 20;
           } else {
             decorator.ascent = 0;
             decorator.xShift = 0;
@@ -46,7 +46,7 @@ class DecoratorShadowGame extends FlameGame with HasTappableComponents {
             decorator.angle = -1.4;
             decorator.opacity = 0.8;
             decorator.blur = 0;
-            flower.y += 50;
+            flower.y += 20;
             step = 0;
           }
         },
