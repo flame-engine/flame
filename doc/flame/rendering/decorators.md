@@ -119,6 +119,21 @@ Possible uses:
 - 3d falling particles such as snowflakes or leaves.
 
 
+### Shadow3DDecorator
+
+```{flutter-app}
+:sources: ../flame/examples
+:page: decorator_shadow3d
+:show: widget infobox
+:width: 180
+:height: 160
+```
+
+This decorator renders a shadow underneath the component, as if the component was a 3D object
+standing on a plane. This effect works best for games that use isometric camera projection.
+
+
+
 ## Using decorators
 
 ### HasDecorator mixin
