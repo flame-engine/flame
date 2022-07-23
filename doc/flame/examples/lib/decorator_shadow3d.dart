@@ -16,7 +16,7 @@ class DecoratorShadowGame extends FlameGame with HasTappableComponents {
     add(Grid());
     add(
       Flower(
-        size: 100 ,//Vector2(100, 150),
+        size: 100,
         position: canvasSize / 2,
         decorator: Shadow3DDecorator(
           base: canvasSize / 2 + Vector2(0, 50),
