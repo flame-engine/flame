@@ -64,15 +64,15 @@
       // This function ensures that when navigating to internal targets within the page (such as
       // a section header), those targets will be visible to the user and not obscured by the menu
       // bar at the top of the page.
-      function scroll_to_hash_target() {
-        if (location.hash !== location.old_hash) {
+      function scrollToHashTarget() {
+        if (location.hash !== location.oldHash) {
           window.scrollBy(0, -60);
-          location.old_hash = location.hash;
+          location.oldHash = location.hash;
         }
       }
-      window.location.old_hash = '';
-      window.addEventListener('hashchange', scroll_to_hash_target);
-      scroll_to_hash_target();
+      window.location.oldHash = '';
+      window.addEventListener('hashchange', scrollToHashTarget);
+      scrollToHashTarget();
     });
 
   </script>
