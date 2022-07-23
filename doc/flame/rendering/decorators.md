@@ -124,7 +124,7 @@ Possible uses:
 ```{flutter-app}
 :sources: ../flame/examples
 :page: decorator_shadow3d
-:show: widget infobox
+:show: widget code infobox
 :width: 180
 :height: 160
 ```
