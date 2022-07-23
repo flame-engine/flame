@@ -1,5 +1,6 @@
 import 'package:flame/components.dart';
 import 'package:flame/geometry.dart';
+import 'package:flame/src/experimental/geometry/shapes/circle.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:test/test.dart';
 
@@ -124,5 +125,41 @@ void main() {
         isTrue,
       );
     });
+
+    test(
+      'intersectsWithAabb2 with ray that originates from within the box',
+      () {
+        final direction = Vector2(0, 1);
+        const numberOfDirections = 16;
+        for (var i = 0; i < numberOfDirections; i++) {
+          direction.rotate(tau * (i / numberOfDirections));
+          final ray = Ray2(Vector2.all(5), direction.normalized());
+          final aabb2 = Aabb2.minMax(Vector2.zero(), Vector2.all(10));
+          expect(
+            ray.intersectsWithAabb2(aabb2),
+            isTrue,
+          );
+        }
+      },
+    );
+
+    test(
+      'intersectsWithAabb2 with ray that originates from a box edge',
+      () {
+        final direction = Vector2(0, 1);
+        const numberOfDirections = 16;
+        for (var i = 0; i < numberOfDirections; i++) {
+          final angle = tau * (i / numberOfDirections);
+          direction.rotate(angle);
+          final ray = Ray2(Vector2(10, 5), direction.normalized());
+          final aabb2 = Aabb2.minMax(Vector2.zero(), Vector2.all(10));
+          print(angle);
+          expect(
+            ray.intersectsWithAabb2(aabb2),
+            isTrue,
+          );
+        }
+      },
+    );
   });
 }
