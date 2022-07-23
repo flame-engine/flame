@@ -131,10 +131,10 @@ class Shadow3DDecorator extends Decorator {
   Matrix4? _transformMatrix;
   Matrix4 _makeTransform() {
     return Matrix4.identity()
-      ..translate(0, 0, _scale * _ascent)
+      ..translate(0.0, 0.0, _scale * _ascent)
       ..setEntry(3, 2, 0.001)
       ..rotateX(_angle)
-      ..scale(1, _scale)
+      ..scale(1.0, _scale)
       ..translate(-base.x - _shift, -base.y);
   }
 
