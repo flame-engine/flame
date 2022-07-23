@@ -16,13 +16,13 @@ void main() {
     page = page.substring(1);
   }
   final routes = <String, Game Function()>{
-    'tap_events': TapEventsGame.new,
-    'drag_events': DragEventsGame.new,
     'decorator_blur': DecoratorBlurGame.new,
     'decorator_grayscale': DecoratorGrayscaleGame.new,
     'decorator_rotate3d': DecoratorRotate3DGame.new,
-    'decorator_tint': DecoratorTintGame.new,
     'decorator_shadow3d': DecoratorShadowGame.new,
+    'decorator_tint': DecoratorTintGame.new,
+    'drag_events': DragEventsGame.new,
+    'tap_events': TapEventsGame.new,
   };
   final game = routes[page]?.call();
   if (game != null) {
