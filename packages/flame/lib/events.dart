@@ -19,6 +19,7 @@ export 'src/gestures/detectors.dart'
         PanDetector,
         ScaleDetector,
         ScrollDetector,
+        TertiaryTapDetector,
         SecondaryTapDetector,
         TapDetector,
         VerticalDragDetector;
