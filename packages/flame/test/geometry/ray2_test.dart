@@ -340,19 +340,49 @@ void main() {
     test(
       'intersectsWithAabb2 with ray that originates from a box edge',
       () {
-        final direction = Vector2(0, 1);
+        final direction = Vector2(-1, 0);
         const numberOfDirections = 16;
         for (var i = 0; i < numberOfDirections; i++) {
           final angle = tau * (i / numberOfDirections);
           direction.rotate(angle);
           final ray = Ray2(Vector2(10, 5), direction.normalized());
           final aabb2 = Aabb2.minMax(Vector2.zero(), Vector2.all(10));
-          print(angle);
           expect(
             ray.intersectsWithAabb2(aabb2),
             isTrue,
           );
         }
+      },
+    );
+
+    // https://tavianator.com/2015/ray_box_nan.html
+    test(
+      'ray that originates and follows a box edge does not intersectsWithAabb2',
+      () {
+        final rayVertical = Ray2(Vector2(10, 5), Vector2(0, 1));
+        final aabb2 = Aabb2.minMax(Vector2.zero(), Vector2.all(10));
+        expect(
+          rayVertical.intersectsWithAabb2(aabb2),
+          isFalse,
+        );
+        final rayHorizontal = Ray2(Vector2(5, 0), Vector2(1, 0));
+        expect(
+          rayHorizontal.intersectsWithAabb2(aabb2),
+          isFalse,
+        );
+      },
+    );
+
+    test(
+      'does not intersectsWithAabb2 with ray in the opposite direction',
+      () {
+        final direction = Vector2(1, 0);
+        final ray = Ray2(Vector2(15, 5), direction.normalized());
+        final aabb2 = Aabb2.minMax(Vector2.zero(), Vector2.all(10));
+        expect(
+          ray.intersectsWithAabb2(aabb2),
+          isFalse,
+        );
       },
     );
   });
