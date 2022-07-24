@@ -32,6 +32,20 @@ mixin SecondaryTapDetector on Game {
   }
 }
 
+mixin TertiaryTapDetector on Game {
+  void onTertiaryTapDown(TapDownInfo info) {}
+  void onTertiaryTapUp(TapUpInfo info) {}
+  void onTertiaryTapCancel() {}
+
+  void handleTertiaryTapUp(TapUpDetails details) {
+    onTertiaryTapUp(TapUpInfo.fromDetails(this, details));
+  }
+
+  void handleTertiaryTapDown(TapDownDetails details) {
+    onTertiaryTapDown(TapDownInfo.fromDetails(this, details));
+  }
+}
+
 mixin DoubleTapDetector on Game {
   void onDoubleTap() {}
   void onDoubleTapCancel() {}
