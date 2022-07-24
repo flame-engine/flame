@@ -42,7 +42,7 @@ Possible uses:
 ```{flutter-app}
 :sources: ../flame/examples
 :page: decorator_grayscale
-:show: widget infobox
+:show: widget code infobox
 :width: 180
 :height: 160
 ```
@@ -66,7 +66,7 @@ Possible uses:
 ```{flutter-app}
 :sources: ../flame/examples
 :page: decorator_tint
-:show: widget infobox
+:show: widget code infobox
 :width: 180
 :height: 160
 ```
@@ -92,7 +92,7 @@ Possible uses:
 ```{flutter-app}
 :sources: ../flame/examples
 :page: decorator_rotate3d
-:show: widget infobox
+:show: widget code infobox
 :width: 180
 :height: 160
 ```
@@ -117,6 +117,39 @@ Possible uses:
 - pages in a book;
 - transitions between app routes;
 - 3d falling particles such as snowflakes or leaves.
+
+
+### Shadow3DDecorator
+
+```{flutter-app}
+:sources: ../flame/examples
+:page: decorator_shadow3d
+:show: widget code infobox
+:width: 180
+:height: 160
+```
+
+This decorator renders a shadow underneath the component, as if the component was a 3D object
+standing on a plane. This effect works best for games that use isometric camera projection.
+
+The shadow produced by this generator is quite flexible: you can control its angle, length, opacity,
+blur, etc. For a full description of what properties this decorator has and their meaning, see the
+class documentation.
+
+```dart
+final decorator = Shadow3DDecorator(
+  base: Vector2(100, 150),
+  angle: -1.4,
+  xShift: 200,
+  yScale: 1.5,
+  opacity: 0.5,
+  blur: 1.5,
+);
+```
+
+The primary purpose of this decorator is to add shadows on the ground to your components. The main
+limitation is that the shadows are flat and cannot interact with the environment. For example, this
+decorator cannot handle shadows that fall onto walls or other vertical structures.
 
 
 ## Using decorators
