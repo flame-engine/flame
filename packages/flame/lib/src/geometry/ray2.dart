@@ -69,6 +69,9 @@ class Ray2 {
 
   /// Returns where (length wise) on the ray that the ray intersects the
   /// [LineSegment] or null if there is no intersection.
+  ///
+  /// A ray that is parallel and overlapping with the [segment] is considered to
+  /// not intersect.
   double? lineSegmentIntersection(LineSegment segment) {
     _v1
       ..setFrom(origin)
