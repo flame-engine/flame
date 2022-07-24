@@ -60,7 +60,21 @@
         $(this).toggleClass("active");
         $(".sidebar-left-area").toggleClass("active");
       });
+
+      // This function ensures that when navigating to internal targets within the page (such as
+      // a section header), those targets will be visible to the user and not obscured by the menu
+      // bar at the top of the page.
+      function scrollToHashTarget() {
+        if (location.hash !== location.oldHash) {
+          window.scrollBy(0, -60);
+          location.oldHash = location.hash;
+        }
+      }
+      window.location.oldHash = '';
+      window.addEventListener('hashchange', scrollToHashTarget);
+      scrollToHashTarget();
     });
+
   </script>
 
   <a href="{{pathto('index')}}" class="logo_image">
