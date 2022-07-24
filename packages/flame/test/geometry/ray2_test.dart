@@ -78,7 +78,8 @@ void main() {
         final ray = Ray2(Vector2.zero(), direction.normalized());
         expect(
           ray.intersectsWithAabb2(
-              Aabb2.minMax(Vector2(-2, -1), Vector2(-1, 1))),
+            Aabb2.minMax(Vector2(-2, -1), Vector2(-1, 1)),
+          ),
           isTrue,
         );
       });
@@ -88,7 +89,8 @@ void main() {
         final ray = Ray2(Vector2.zero(), direction.normalized());
         expect(
           ray.intersectsWithAabb2(
-              Aabb2.minMax(Vector2(-1, -2), Vector2(1, -1))),
+            Aabb2.minMax(Vector2(-1, -2), Vector2(1, -1)),
+          ),
           isTrue,
         );
       });
