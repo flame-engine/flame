@@ -36,8 +36,13 @@ class Ray2 {
   @visibleForTesting
   late double directionInvY;
 
-  // Uses the branchless Ray/Bounding box intersection method by Tavian.
-  // https://tavianator.com/2011/ray_box.html
+  /// Whether the ray intersects the [box] or not.
+  ///
+  /// Caveat: Since this uses the Branchless Ray/Bounding box intersection
+  /// method by Tavian, rays that originate and follow an edge of the AABB will
+  /// be considered as non-intersecting.
+  /// https://tavianator.com/2011/ray_box.html
+  /// https://tavianator.com/2015/ray_box_nan.html
   bool intersectsWithAabb2(Aabb2 box) {
     final tx1 = (box.min.x - origin.x) * directionInvX;
     final tx2 = (box.max.x - origin.x) * directionInvX;
@@ -48,7 +53,7 @@ class Ray2 {
     final tMin = max(min(tx1, tx2), min(ty1, ty2));
     final tMax = min(max(tx1, tx2), max(ty1, ty2));
 
-    return tMax >= tMin;
+    return tMax >= tMin && tMax >= 0;
   }
 
   /// Gives the point at a certain length along the ray.
@@ -86,6 +91,7 @@ class Ray2 {
   /// a new [Ray2] object.
   Ray2 clone() => Ray2(origin.clone(), direction.clone());
 
+  /// Sets the values by copying them from [other].
   void setFrom(Ray2 other) {
     setWith(origin: other.origin, direction: other.direction);
   }
