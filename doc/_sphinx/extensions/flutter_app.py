@@ -119,7 +119,7 @@ class FlutterAppDirective(SphinxDirective):
                 onclick=f'run_flutter_app("{iframe_url}")',
             ))
         if 'code' in self.modes:
-            code_id = self.app_name + "-source"
+            code_id = self.app_name + "-source-" + page
             result.append(self._generate_code_listings(code_id))
             result.append(Button(
                 '',
