@@ -60,6 +60,12 @@
         $(this).toggleClass("active");
         $(".sidebar-left-area").toggleClass("active");
       });
+
+      $('div.nav-left li > a:not(:only-child)').wrap('<div class=submenu></div>');
+      $('div.nav-left .submenu').prepend('<a class=arrow></a>')
+      .click(function() {
+        console.log(this);
+      });
     });
   </script>
 

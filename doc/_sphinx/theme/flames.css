@@ -309,8 +309,7 @@ div.nav-left ul {
   padding: 0 0 0 16px;
 }
 
-div.nav-left ul.current,
-div.nav-left > ul {
+div.nav-left ul.current {
   display: block;
 }
 
@@ -334,20 +333,34 @@ div.nav-left li > a:hover {
   background-color: #303030;
 }
 
-div.nav-left li > a:not(:only-child)::before {
+div.nav-left li > div.submenu > a.reference {
+  border-radius: 5px 0 0 5px;
+  display: block;
+  font-size: 13px;
+  margin-left: -15px;
+  padding: 2px 0 2px 15px;
+  text-decoration: none;
+}
+
+div.nav-left li > div.submenu > a.arrow {
+  width: 20px;
+}
+
+div.nav-left li > div.submenu > a.arrow::before {
   color: #ffbb3e;
   content: "\f0da";
   font-family: var(--font-awesome);
-  font-size: 70%;
-  font-weight: 900;
-  left: -9px;
+  font-size: 80%;
+  left: -10px;
   position: absolute;
-  top: 5px;
+  top: 2px;
 }
 
+/*
 div.nav-left li > a:not(:only-child):not(.current):hover::before {
   color: #fff;
 }
+*/
 
 div.nav-left li.current > ul {
   display: block;
@@ -362,14 +375,16 @@ div.nav-left li.current > a.current {
   z-index: 40;
 }
 
-div.nav-left li.current > a:not(:only-child)::before {
+div.nav-left li.current a.arrow::before {
   content: "\f0d7";
-  left: -10px;
+  left: -13px;
 }
 
+/*
 div.nav-left li.current > a.current:not(:only-child)::before {
   left: 4px;
 }
+*/
 
 div.nav-left li.current > ul {
   display: block;
