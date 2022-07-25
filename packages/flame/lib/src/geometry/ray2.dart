@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flame/geometry.dart';
+import 'package:flame/src/extensions/double.dart';
 import 'package:meta/meta.dart';
 import 'package:vector_math/vector_math_64.dart';
 
@@ -23,8 +24,8 @@ class Ray2 {
       'direction must be normalized',
     );
     _direction.setFrom(direction);
-    directionInvX = 1 / direction.x;
-    directionInvY = 1 / direction.y;
+    directionInvX = (1 / direction.x).toFinite();
+    directionInvY = (1 / direction.y).toFinite();
   }
 
   // These are the inverse of the direction (the normal), they are used to avoid
@@ -38,11 +39,14 @@ class Ray2 {
 
   /// Whether the ray intersects the [box] or not.
   ///
-  /// Caveat: Since this uses the Branchless Ray/Bounding box intersection
-  /// method by Tavian, rays that originate and follow an edge of the AABB will
-  /// be considered as non-intersecting.
-  /// https://tavianator.com/2011/ray_box.html
-  /// https://tavianator.com/2015/ray_box_nan.html
+  /// Rays that originate on the edge of the [box] are considered to be
+  /// intersecting with the box no matter what direction they have.
+  // This uses the Branchless Ray/Bounding box intersection method by Tavian,
+  // but since +-infinity is replaced by +-maxFinite for directionInvX and
+  // directionInvY, rays that originate on an edge will always be considered to
+  // intersect with the aabb, no matter what direction they have.
+  // https://tavianator.com/2011/ray_box.html
+  // https://tavianator.com/2015/ray_box_nan.html
   bool intersectsWithAabb2(Aabb2 box) {
     final tx1 = (box.min.x - origin.x) * directionInvX;
     final tx2 = (box.max.x - origin.x) * directionInvX;
@@ -53,14 +57,13 @@ class Ray2 {
     final tMin = max(min(tx1, tx2), min(ty1, ty2));
     final tMax = min(max(tx1, tx2), max(ty1, ty2));
 
-    return tMax > max(tMin, 0);
+    return tMax >= max(tMin, 0);
   }
 
   /// Gives the point at a certain length along the ray.
   Vector2 point(double length, {Vector2? out}) {
-    return ((out?..setFrom(direction)) ?? direction.clone())
-      ..scale(length)
-      ..add(origin);
+    return ((out?..setFrom(origin)) ?? origin.clone())
+      ..addScaled(direction, length);
   }
 
   static final Vector2 _v1 = Vector2.zero();

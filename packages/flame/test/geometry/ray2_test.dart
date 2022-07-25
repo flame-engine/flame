@@ -171,7 +171,7 @@ void main() {
       );
 
       test(
-        'Rays that originates from a box edge pointing outwards',
+        'Rays that originates from a box edge pointing outwards intersects',
         () {
           const epsilon = 0.000001;
           const numberOfDirections = 100;
@@ -184,43 +184,42 @@ void main() {
             final aabb2 = Aabb2.minMax(Vector2.zero(), Vector2.all(10));
             expect(
               ray.intersectsWithAabb2(aabb2),
-              isFalse,
+              isTrue,
             );
           }
         },
       );
 
-      // https://tavianator.com/2015/ray_box_nan.html
       test(
-        'Rays that originates and follows a box edge does not intersect',
+        'Rays that originates and follows a box edge intersects',
         () {
           final rayVertical = Ray2(Vector2(10, 5), Vector2(0, 1));
           final aabb2 = Aabb2.minMax(Vector2.zero(), Vector2.all(10));
           expect(
             rayVertical.intersectsWithAabb2(aabb2),
-            isFalse,
+            isTrue,
           );
           final rayHorizontal = Ray2(Vector2(5, 0), Vector2(1, 0));
           expect(
             rayHorizontal.intersectsWithAabb2(aabb2),
-            isFalse,
+            isTrue,
           );
         },
       );
 
       test(
-        'Rays that originates in a corner does not intersect',
+        'Rays that originates in a corner intersects',
         () {
           final rayZero = Ray2(Vector2.zero(), Vector2(0, 1));
           final aabb2 = Aabb2.minMax(Vector2.zero(), Vector2.all(10));
           expect(
             rayZero.intersectsWithAabb2(aabb2),
-            isFalse,
+            isTrue,
           );
           final rayTen = Ray2(Vector2.all(10), Vector2(0, -1));
           expect(
             rayTen.intersectsWithAabb2(aabb2),
-            isFalse,
+            isTrue,
           );
         },
       );
