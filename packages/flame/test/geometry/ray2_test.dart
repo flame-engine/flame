@@ -151,18 +151,40 @@ void main() {
       );
 
       test(
-        'Ray that originates from a box edge',
+        'Rays that originates from a box edge pointing inwards',
         () {
-          final direction = Vector2(-1, 0);
-          const numberOfDirections = 16;
+          const epsilon = 0.000001;
+          const numberOfDirections = 100;
           for (var i = 0; i < numberOfDirections; i++) {
-            final angle = tau * (i / numberOfDirections);
+            final direction = Vector2(0, 1);
+            final angle =
+                (tau / 2 - 2 * epsilon) * (i / numberOfDirections) + epsilon;
             direction.rotate(angle);
             final ray = Ray2(Vector2(10, 5), direction.normalized());
             final aabb2 = Aabb2.minMax(Vector2.zero(), Vector2.all(10));
             expect(
               ray.intersectsWithAabb2(aabb2),
               isTrue,
+            );
+          }
+        },
+      );
+
+      test(
+        'Rays that originates from a box edge pointing outwards',
+        () {
+          const epsilon = 0.000001;
+          const numberOfDirections = 100;
+          for (var i = 0; i < numberOfDirections; i++) {
+            final direction = Vector2(0, 1);
+            final angle =
+                (tau / 2 - 2 * epsilon) * (i / numberOfDirections) + epsilon;
+            direction.rotate(-angle);
+            final ray = Ray2(Vector2(10, 5), direction.normalized());
+            final aabb2 = Aabb2.minMax(Vector2.zero(), Vector2.all(10));
+            expect(
+              ray.intersectsWithAabb2(aabb2),
+              isFalse,
             );
           }
         },
@@ -181,6 +203,23 @@ void main() {
           final rayHorizontal = Ray2(Vector2(5, 0), Vector2(1, 0));
           expect(
             rayHorizontal.intersectsWithAabb2(aabb2),
+            isFalse,
+          );
+        },
+      );
+
+      test(
+        'Rays that originates in a corner does not intersect',
+        () {
+          final rayZero = Ray2(Vector2.zero(), Vector2(0, 1));
+          final aabb2 = Aabb2.minMax(Vector2.zero(), Vector2.all(10));
+          expect(
+            rayZero.intersectsWithAabb2(aabb2),
+            isFalse,
+          );
+          final rayTen = Ray2(Vector2.all(10), Vector2(0, -1));
+          expect(
+            rayTen.intersectsWithAabb2(aabb2),
             isFalse,
           );
         },

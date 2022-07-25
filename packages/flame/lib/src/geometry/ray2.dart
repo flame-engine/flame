@@ -53,7 +53,7 @@ class Ray2 {
     final tMin = max(min(tx1, tx2), min(ty1, ty2));
     final tMax = min(max(tx1, tx2), max(ty1, ty2));
 
-    return tMax >= tMin && tMax >= 0;
+    return tMax > max(tMin, 0);
   }
 
   /// Gives the point at a certain length along the ray.
