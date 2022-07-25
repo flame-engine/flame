@@ -4,6 +4,7 @@ import 'package:examples/stories/collision_detection/circles_example.dart';
 import 'package:examples/stories/collision_detection/collidable_animation_example.dart';
 import 'package:examples/stories/collision_detection/multiple_shapes_example.dart';
 import 'package:examples/stories/collision_detection/raycast_example.dart';
+import 'package:examples/stories/collision_detection/raytrace_example.dart';
 import 'package:flame/game.dart';
 
 void addCollisionDetectionStories(Dashbook dashbook) {
@@ -32,5 +33,11 @@ void addCollisionDetectionStories(Dashbook dashbook) {
       (_) => GameWidget(game: RaycastExample()),
       codeLink: baseLink('collision_detection/raycast_example.dart'),
       info: RaycastExample.description,
+    )
+    ..add(
+      'Raytracing',
+      (_) => GameWidget(game: RaytraceExample()),
+      codeLink: baseLink('collision_detection/raytrace.dart'),
+      info: RaytraceExample.description,
     );
 }

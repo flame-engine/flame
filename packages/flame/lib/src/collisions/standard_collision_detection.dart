@@ -119,7 +119,7 @@ class StandardCollisionDetection extends CollisionDetection<ShapeHitbox> {
       if (i < (out?.length ?? 0)) {
         result = out![i];
       } else {
-        result = RaycastResult(isActive: false);
+        result = RaycastResult();
         out?.add(result);
       }
       result = raycast(ray, out: result);
@@ -134,8 +134,24 @@ class StandardCollisionDetection extends CollisionDetection<ShapeHitbox> {
   @override
   List<RaycastResult<ShapeHitbox>> raytrace(
     Ray2 ray, {
-    Iterable<RaycastResult<Hitbox<ShapeHitbox>>>? out,
+    double maxDepth = 100,
+    List<RaycastResult<ShapeHitbox>>? out,
   }) {
-    throw UnimplementedError();
+    final result = out ?? <RaycastResult<ShapeHitbox>>[];
+    var currentRay = ray;
+    for (var i = 0; i < maxDepth; i++) {
+      final hasResultObject = result.length > i;
+      final currentResult =
+          hasResultObject ? result[i] : RaycastResult<ShapeHitbox>();
+      if (raycast(currentRay, out: currentResult) != null) {
+        currentRay = currentResult.reflectionRay!;
+        if (!hasResultObject) {
+          result.add(currentResult);
+        }
+      } else {
+        break;
+      }
+    }
+    return result;
   }
 }

@@ -92,10 +92,17 @@ abstract class CollisionDetection<T extends Hitbox<T>> {
     List<RaycastResult<T>>? out,
   });
 
-  /// [raytrace] gives back all hitboxes and intersection points the ray hits.
+  /// Gives back all hitboxes and intersection points the ray hits.
+  ///
+  /// [maxDepth] is how many times the ray should collide before returning a
+  /// result, defaults to 100.
   ///
   /// If [out] is provided the [RaycastResult]s in that list be modified and
   /// returned with the result. If there are less objects in [out] than the
   /// result requires, the missing [RaycastResult] objects will be created.
-  List<RaycastResult<T>> raytrace(Ray2 ray, {Iterable<RaycastResult<T>>? out});
+  List<RaycastResult<T>> raytrace(
+    Ray2 ray, {
+    double maxDepth = 100,
+    List<RaycastResult<T>>? out,
+  });
 }
