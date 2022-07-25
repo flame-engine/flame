@@ -95,13 +95,13 @@ class StandardCollisionDetection extends CollisionDetection<ShapeHitbox> {
   @override
   List<RaycastResult<ShapeHitbox>> raycastAll(
     Vector2 origin,
-    int amount, {
+    int amountOfRays, {
     List<Ray2>? rays,
     List<RaycastResult<ShapeHitbox>>? out,
   }) {
-    final angle = tau / amount;
+    final angle = tau / amountOfRays;
     final results = <RaycastResult<ShapeHitbox>>[];
-    for (var i = 0; i < amount; i++) {
+    for (var i = 0; i < amountOfRays; i++) {
       Ray2 ray;
       if (i < (rays?.length ?? 0)) {
         ray = rays![i];

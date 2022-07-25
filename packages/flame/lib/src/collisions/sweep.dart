@@ -1,3 +1,6 @@
+import 'dart:math';
+
+import 'package:collection/collection.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/geometry.dart';
 
@@ -6,7 +9,7 @@ class Sweep<T extends Hitbox<T>> extends Broadphase<T> {
 
   late final List<T> _active = [];
   late final Set<CollisionProspect<T>> _potentials = {};
-  late final Set<T> _raycastPotentials = {};
+  late final List<T> _raycastPotentials = [];
 
   @override
   Set<CollisionProspect<T>> query() {
@@ -41,35 +44,34 @@ class Sweep<T extends Hitbox<T>> extends Broadphase<T> {
   }
 
   @override
-  Set<T> raycast(Ray2 ray) {
+  List<T> raycast(Ray2 ray) {
     _raycastPotentials.clear();
-    // TODO(Spydon): If we resort these they will be in the wrong order for the
-    // collision detection
-    if (ray.direction.x.isNegative) {
-      items.sort((a, b) => (a.aabb.min.x - b.aabb.min.x).ceil());
-    } else {
-      items.sort((a, b) => (b.aabb.max.x - a.aabb.max.x).ceil());
-    }
+    final normalDirection = !ray.direction.x.isNegative;
+    var currentMax = items.firstOrNull?.aabb.max.x ?? 0;
+    var currentMin = items.firstOrNull?.aabb.min.x ?? 0;
 
-    for (final item in items) {
+    for (var i = 0; i < items.length; i++) {
+      final item = normalDirection ? items[i] : items[items.length - i - 1];
       if (item.collisionType == CollisionType.inactive) {
         continue;
       }
       final currentBox = item.aabb;
-      if (ray.direction.x.isNegative) {
-        if (currentBox.min.x > ray.origin.x) {
-          // The ray starts further to the left than the current min and has a
-          // direction to the left and since the items are sorted along the
-          // x-axis we know that it can't hit any of the following items in the
-          // list.
-          break;
-        }
-      } else {
-        if (currentBox.max.x < ray.origin.x) {
+      currentMax = max(currentMax, currentBox.max.x);
+      currentMin = min(currentMin, currentBox.min.x);
+      if (normalDirection) {
+        if (currentMax < ray.origin.x) {
           // The ray starts further to the right than the current max and has a
           // direction to the left and since the items are sorted in reverse
           // order along the x-axis we know that it can't hit any of the
           // following items in the list.
+          break;
+        }
+      } else {
+        if (currentMin > ray.origin.x) {
+          // The ray starts further to the left than the current min and has a
+          // direction to the left and since the items are sorted along the
+          // x-axis we know that it can't hit any of the following items in the
+          // list.
           break;
         }
       }
