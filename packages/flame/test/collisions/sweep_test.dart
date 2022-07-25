@@ -18,7 +18,7 @@ void main() {
           )..add(circleHitbox),
         );
         await game.ready();
-        final ray = Ray2(Vector2.zero(), Vector2.all(1)..normalized());
+        final ray = Ray2(Vector2.zero(), Vector2.all(1)..normalize());
         final sweep = game.collisionDetection.broadphase;
         expect(sweep.raycast(ray).first, circleHitbox);
       });
@@ -32,7 +32,7 @@ void main() {
           )..add(rectangleHitbox),
         );
         await game.ready();
-        final ray = Ray2(Vector2.zero(), Vector2.all(1)..normalized());
+        final ray = Ray2(Vector2.zero(), Vector2.all(1)..normalize());
         final sweep = game.collisionDetection.broadphase;
         expect(sweep.raycast(ray).first, rectangleHitbox);
       });
@@ -187,7 +187,7 @@ void main() {
           )..add(polygonHitbox),
         );
         await game.ready();
-        final ray = Ray2(Vector2.zero(), Vector2.all(1)..normalized());
+        final ray = Ray2(Vector2.zero(), Vector2.all(1)..normalize());
         final sweep = game.collisionDetection.broadphase;
         expect(sweep.raycast(ray).first, polygonHitbox);
       });
@@ -201,7 +201,7 @@ void main() {
           )..add(circleHitbox),
         );
         await game.ready();
-        final ray = Ray2(Vector2.zero(), Vector2.all(-1)..normalized());
+        final ray = Ray2(Vector2.zero(), Vector2.all(-1)..normalize());
         final sweep = game.collisionDetection.broadphase;
         expect(sweep.raycast(ray).isEmpty, isTrue);
       });
@@ -215,7 +215,7 @@ void main() {
             )..add(CircleHitbox()),
         ]);
         await game.ready();
-        final ray = Ray2(Vector2.zero(), Vector2.all(1)..normalized());
+        final ray = Ray2(Vector2.zero(), Vector2.all(1)..normalize());
         final sweep = game.collisionDetection.broadphase;
         expect(sweep.raycast(ray).length, game.children.length);
       });

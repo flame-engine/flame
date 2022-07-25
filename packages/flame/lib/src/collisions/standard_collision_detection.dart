@@ -113,6 +113,7 @@ class StandardCollisionDetection extends CollisionDetection<ShapeHitbox> {
       ray.direction
         ..setValues(1, 0)
         ..rotate(angle * i);
+      ray.updateInverses();
 
       RaycastResult<ShapeHitbox>? result;
       if (i < (out?.length ?? 0)) {
