@@ -106,7 +106,7 @@ class StandardCollisionDetection extends CollisionDetection<ShapeHitbox> {
       if (i < (rays?.length ?? 0)) {
         ray = rays![i];
       } else {
-        ray = Ray2.empty();
+        ray = Ray2.zero();
         rays?.add(ray);
       }
       ray.origin.setFrom(origin);

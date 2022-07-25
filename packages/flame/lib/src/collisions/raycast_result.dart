@@ -17,7 +17,7 @@ class RaycastResult<T extends Hitbox<T>> {
     this.isActive = true,
   }) {
     _hitbox = hitbox;
-    _reflectionRay = reflectionRay ?? Ray2.empty();
+    _reflectionRay = reflectionRay ?? Ray2.zero();
     _normal = normal ?? Vector2.zero();
     _distance = distance ?? double.maxFinite;
   }

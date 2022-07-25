@@ -1,9 +1,9 @@
 import 'dart:ui';
 
+import 'package:flame/geometry.dart';
 import 'package:flame/src/experimental/geometry/shapes/shape.dart';
 import 'package:flame/src/extensions/vector2.dart';
 import 'package:flame/src/game/transform2d.dart';
-import 'package:meta/meta.dart';
 
 /// The circle with a given [center] and a [radius].
 ///
@@ -85,6 +85,3 @@ class Circle extends Shape {
   @override
   String toString() => 'Circle([${_center.x}, ${_center.y}], $_radius)';
 }
-
-@internal
-const tau = Transform2D.tau; // 2π

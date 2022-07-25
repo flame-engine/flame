@@ -1,6 +1,5 @@
 import 'package:flame/components.dart';
 import 'package:flame/geometry.dart';
-import 'package:flame/src/experimental/geometry/shapes/circle.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:test/test.dart';
 
