@@ -4,6 +4,7 @@ export 'src/events/game_mixins/multi_touch_tap_detector.dart'
     show MultiTouchTapDetector;
 export 'src/events/interfaces/multi_drag_listener.dart' show MultiDragListener;
 export 'src/events/interfaces/multi_tap_listener.dart' show MultiTapListener;
+export 'src/game/mixins/cursor.dart' show HasCursorHandlerComponents;
 export 'src/game/mixins/has_draggables.dart' show HasDraggables;
 export 'src/game/mixins/has_hoverables.dart' show HasHoverables;
 export 'src/game/mixins/has_tappables.dart' show HasTappables;

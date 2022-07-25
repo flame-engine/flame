@@ -1,4 +1,5 @@
 import 'package:flame/src/game/game.dart';
+import 'package:flame/src/game/mixins/cursor.dart';
 import 'package:flame/src/gestures/events.dart';
 import 'package:flutter/gestures.dart';
 
@@ -177,7 +178,14 @@ mixin ScaleDetector on Game {
 }
 
 mixin MouseMovementDetector on Game {
-  void onMouseMove(PointerHoverInfo info) {}
+  void onMouseMove(PointerHoverInfo info) {
+    assert(
+      this is! HasCursorHandlerComponents,
+      'A mouse movement event was registered by MouseMovementDetector for a game also '
+      'mixed with HasCursorHandlerComponents. Do not mix with both, '
+      'HasCursorHandlerComponents removes the necessity of MouseMovementDetector',
+    );
+  }
 }
 
 mixin ScrollDetector on Game {
