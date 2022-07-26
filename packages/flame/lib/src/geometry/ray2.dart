@@ -69,6 +69,7 @@ class Ray2 {
   static final Vector2 _v1 = Vector2.zero();
   static final Vector2 _v2 = Vector2.zero();
   static final Vector2 _v3 = Vector2.zero();
+  static final Vector2 _v4 = Vector2.zero();
 
   /// Returns where (length wise) on the ray that the ray intersects the
   /// [LineSegment] or null if there is no intersection.
@@ -85,9 +86,28 @@ class Ray2 {
     _v3.setValues(-direction.y, direction.x);
 
     final dot = _v2.dot(_v3);
+
+    if (dot == 0) {
+      // ray is parallel to line
+      if (segment.containsPoint(origin)) {
+        return 0;
+      } else {
+        final closestPoint = origin.distanceToSquared(segment.to) <
+                origin.distanceToSquared(segment.from)
+            ? segment.to
+            : segment.from;
+        _v4
+          ..setFrom(closestPoint)
+          ..sub(origin);
+        if (_v4.x.sign == direction.x.sign && _v4.y.sign == direction.y.sign) {
+          return _v4.length;
+        }
+      }
+    }
+
     final t1 = _v2.cross(_v1) / dot;
     final t2 = _v1.dot(_v3) / dot;
-    if (t1 >= 0 && (t2 >= 0 && t2 <= 1)) {
+    if (t1 >= 0 && t2 >= 0 && t2 <= 1) {
       return t1;
     }
     return null;

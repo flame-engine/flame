@@ -290,10 +290,30 @@ void main() {
       );
 
       test(
-        'No intersection point when ray follows the segment',
+        'Correct intersection point when ray is parallel and originates on the segment',
         () {
           final direction = Vector2(1, 0);
           final ray = Ray2(Vector2(5, 0), direction.normalized());
+          final segment = LineSegment(Vector2(0, 0), Vector2(10, 0));
+          expect(ray.lineSegmentIntersection(segment), 0);
+        },
+      );
+
+      test(
+        'Correct intersection point when ray is parallel to the segment',
+        () {
+          final direction = Vector2(1, 0);
+          final ray = Ray2(Vector2(-5, 0), direction.normalized());
+          final segment = LineSegment(Vector2(0, 0), Vector2(10, 0));
+          expect(ray.lineSegmentIntersection(segment), 5);
+        },
+      );
+
+      test(
+        'No intersection point when ray is parallel without intersection on the segment',
+        () {
+          final direction = Vector2(1, 0);
+          final ray = Ray2(Vector2(5, 5), direction.normalized());
           final segment = LineSegment(Vector2(0, 0), Vector2(10, 0));
           expect(ray.lineSegmentIntersection(segment), null);
         },
