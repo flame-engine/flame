@@ -290,7 +290,7 @@ void main() {
       );
 
       test(
-        'Correct intersection point when ray is parallel and originates on the segment',
+        'Correct intersection when ray is parallel and originates on segment',
         () {
           final direction = Vector2(1, 0);
           final ray = Ray2(Vector2(5, 0), direction.normalized());
@@ -310,7 +310,7 @@ void main() {
       );
 
       test(
-        'No intersection point when ray is parallel without intersection on the segment',
+        'No intersection point when ray is parallel without intersection',
         () {
           final direction = Vector2(1, 0);
           final ray = Ray2(Vector2(5, 5), direction.normalized());
