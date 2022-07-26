@@ -129,7 +129,7 @@ class MyGame extends Game {
 
 ```dart
 import 'package:flame/timer.dart';
-import 'package:flame/components/timer_component.dart';
+import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 
 class MyFlameGame extends FlameGame {
