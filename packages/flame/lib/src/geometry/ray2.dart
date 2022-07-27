@@ -69,7 +69,6 @@ class Ray2 {
   static final Vector2 _v1 = Vector2.zero();
   static final Vector2 _v2 = Vector2.zero();
   static final Vector2 _v3 = Vector2.zero();
-  static final Vector2 _v4 = Vector2.zero();
 
   /// Returns where (length wise) on the ray that the ray intersects the
   /// [LineSegment] or null if there is no intersection.
