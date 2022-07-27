@@ -86,7 +86,9 @@ class Ray2 {
   /// [LineSegment] or null if there is no intersection.
   ///
   /// A ray that is parallel and overlapping with the [segment] is considered to
-  /// not intersect.
+  /// not intersect. This is due to that a single intersection point can't be
+  /// determined and that a [LineSegment] is almost always connected to another
+  /// line segment which will get the intersection on one of its ends instead.
   double? lineSegmentIntersection(LineSegment segment) {
     _v1
       ..setFrom(origin)
