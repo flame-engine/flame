@@ -1,5 +1,3 @@
-export 'dart:ui' show Color;
-
 extension DoubleExtension on double {
   /// Converts +-[infinity] to +-[maxFinite].
   /// If it is already a finite value, that is returned.
