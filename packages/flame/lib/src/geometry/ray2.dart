@@ -86,25 +86,6 @@ class Ray2 {
     _v3.setValues(-direction.y, direction.x);
 
     final dot = _v2.dot(_v3);
-
-    if (dot == 0) {
-      // ray is parallel to line
-      if (segment.containsPoint(origin)) {
-        return 0;
-      } else {
-        final closestPoint = origin.distanceToSquared(segment.to) <
-                origin.distanceToSquared(segment.from)
-            ? segment.to
-            : segment.from;
-        _v4
-          ..setFrom(closestPoint)
-          ..sub(origin);
-        if (_v4.x.sign == direction.x.sign && _v4.y.sign == direction.y.sign) {
-          return _v4.length;
-        }
-      }
-    }
-
     final t1 = _v2.cross(_v1) / dot;
     final t2 = _v1.dot(_v3) / dot;
     if (t1 >= 0 && t2 >= 0 && t2 <= 1) {
