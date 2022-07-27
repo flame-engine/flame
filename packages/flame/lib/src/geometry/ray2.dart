@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:flame/geometry.dart';
-import 'package:flame/src/extensions/double.dart';
 import 'package:meta/meta.dart';
 import 'package:vector_math/vector_math_64.dart';
 
@@ -15,17 +14,30 @@ class Ray2 {
 
   Ray2.zero() : this(Vector2.zero(), Vector2(1, 0));
 
+  /// The point where the ray originates from.
   Vector2 origin;
-  final Vector2 _direction = Vector2.zero();
+
+  /// The normalized direction of the ray.
+  ///
+  /// If the direction values are updated within the object instead of by the
+  /// setter [updateInverses] needs to be called.
   Vector2 get direction => _direction;
   set direction(Vector2 direction) {
+    _direction.setFrom(direction);
+    updateInverses();
+  }
+
+  final Vector2 _direction = Vector2.zero();
+
+  /// Should be called if the [direction] values are updated within the object
+  /// instead of by the setter.
+  void updateInverses() {
     assert(
       (direction.length2 - 1).abs() < 0.000001,
       'direction must be normalized',
     );
-    _direction.setFrom(direction);
-    directionInvX = (1 / direction.x).toFinite();
-    directionInvY = (1 / direction.y).toFinite();
+    directionInvX = 1 / direction.x;
+    directionInvY = 1 / direction.y;
   }
 
   // These are the inverse of the direction (the normal), they are used to avoid

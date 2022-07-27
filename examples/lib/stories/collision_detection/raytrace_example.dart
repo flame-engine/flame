@@ -122,7 +122,6 @@ around the canvas, rays and their reflections will be rendered.
         continue;
       }
       final intersectionPoint = result.intersectionPoint!.toOffset();
-      print(intersectionPoint);
       canvas.drawLine(
         originOffset,
         intersectionPoint,
