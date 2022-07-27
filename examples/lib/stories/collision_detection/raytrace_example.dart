@@ -19,7 +19,7 @@ around the canvas, rays and their reflections will be rendered.
   bool isOriginCasted = false;
   Paint paint = Paint()..color = Colors.amber.withOpacity(1.0);
 
-  static const numberOfRays = 4;
+  static const numberOfRays = 1;
   final List<Ray2> rays = [];
   final List<RaycastResult<ShapeHitbox>> results = [];
 
@@ -85,6 +85,7 @@ around the canvas, rays and their reflections will be rendered.
   void update(double dt) {
     super.update(dt);
     if (origin != null && !isOriginCasted) {
+      _ray.origin.setFrom(origin!);
       _ray.direction
         ..setValues(1, 1)
         ..normalize();
@@ -94,7 +95,7 @@ around the canvas, rays and their reflections will be rendered.
         _ray.updateInverses();
         collisionDetection.raytrace(
           _ray,
-          maxDepth: 4,
+          maxDepth: 100,
           out: results,
         );
       }
@@ -116,7 +117,7 @@ around the canvas, rays and their reflections will be rendered.
     List<RaycastResult<ShapeHitbox>> results,
     Paint paint,
   ) {
-    final originOffset = origin.toOffset();
+    var originOffset = origin.toOffset();
     for (final result in results) {
       if (!result.isActive) {
         continue;
@@ -127,6 +128,7 @@ around the canvas, rays and their reflections will be rendered.
         intersectionPoint,
         paint,
       );
+      originOffset = intersectionPoint;
     }
   }
 }
