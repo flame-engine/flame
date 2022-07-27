@@ -190,7 +190,7 @@ void main() {
       );
 
       test(
-        'Rays that originates and follows a box edge intersects',
+        'Rays that originates and follows a box edge does intersects',
         () {
           final rayVertical = Ray2(Vector2(10, 5), Vector2(0, 1));
           final aabb2 = Aabb2.minMax(Vector2.zero(), Vector2.all(10));

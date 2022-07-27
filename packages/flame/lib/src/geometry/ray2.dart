@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:flame/extensions.dart';
 import 'package:flame/geometry.dart';
 import 'package:meta/meta.dart';
 import 'package:vector_math/vector_math_64.dart';
@@ -36,8 +37,8 @@ class Ray2 {
       (direction.length2 - 1).abs() < 0.000001,
       'direction must be normalized',
     );
-    directionInvX = 1 / direction.x;
-    directionInvY = 1 / direction.y;
+    directionInvX = (1 / direction.x).toFinite();
+    directionInvY = (1 / direction.y).toFinite();
   }
 
   // These are the inverse of the direction (the normal), they are used to avoid
