@@ -121,4 +121,7 @@ class Ray2 {
     this.origin.setFrom(origin);
     this.direction = direction;
   }
+
+  @override
+  String toString() => 'origin: $origin, direction: $direction';
 }

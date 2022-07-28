@@ -87,7 +87,7 @@ around the canvas, rays and their reflections will be rendered.
     if (origin != null && !isOriginCasted) {
       _ray.origin.setFrom(origin!);
       _ray.direction
-        ..setValues(1, 1)
+        ..setValues(-1, 1)
         ..normalize();
       const angle = tau / numberOfRays;
       for (var i = 0; i < numberOfRays; i++) {

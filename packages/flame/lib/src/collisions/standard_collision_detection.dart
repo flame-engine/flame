@@ -143,12 +143,16 @@ class StandardCollisionDetection extends CollisionDetection<ShapeHitbox> {
       final hasResultObject = result.length > i;
       final currentResult =
           hasResultObject ? result[i] : RaycastResult<ShapeHitbox>();
-      if (raycast(currentRay, out: currentResult) != null) {
+      if (raycast(currentRay, out: currentResult) != null &&
+          currentResult.reflectionRay!.origin != currentRay.origin) {
         currentRay = currentResult.reflectionRay!;
         if (!hasResultObject) {
           result.add(currentResult);
         }
       } else {
+        for (var j = i; j < result.length; j++) {
+          result[j].reset();
+        }
         break;
       }
     }
