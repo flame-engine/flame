@@ -102,7 +102,7 @@ class Ray2 {
     final dot = _v2.dot(_v3);
     final t1 = _v2.cross(_v1) / dot;
     final t2 = _v1.dot(_v3) / dot;
-    if (t1 >= 0 && t2 >= 0 && t2 <= 1) {
+    if (t1 > 0 && t2 >= 0 && t2 <= 1) {
       return t1;
     }
     return null;
