@@ -102,7 +102,7 @@ class Ball extends BodyComponent with ContactCallbacks {
   Body createBody() {
     ...
     final bodyDef = BodyDef(
-      userData = this,
+      userData: this,
     );
     ...
   }
