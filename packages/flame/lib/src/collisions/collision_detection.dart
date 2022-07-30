@@ -27,6 +27,7 @@ abstract class CollisionDetection<T extends Hitbox<T>> {
 
   /// Run collision detection for the current state of [items].
   void run() {
+    broadphase.update();
     final potentials = broadphase.query();
     potentials.forEach((tuple) {
       final itemA = tuple.a;

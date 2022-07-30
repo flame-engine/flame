@@ -10,11 +10,24 @@ class Sweep<T extends Hitbox<T>> extends Broadphase<T> {
   late final Set<CollisionProspect<T>> _potentials = {};
   late final List<T> _raycastPotentials = [];
 
+  /// The items sorted by the `aabb.max.x` instead of min.
+  final List<T> reversedItems = [];
+  bool _doingRaycasting = false;
+
+  @override
+  void update() {
+    items.sort((a, b) => (a.aabb.min.x - b.aabb.min.x).ceil());
+    if (_doingRaycasting) {
+      reversedItems
+        ..addAll(items)
+        ..sort((a, b) => (a.aabb.max.x - b.aabb.max.x).floor());
+    }
+  }
+
   @override
   Set<CollisionProspect<T>> query() {
     _active.clear();
     _potentials.clear();
-    items.sort((a, b) => (a.aabb.min.x - b.aabb.min.x).ceil());
     for (final item in items) {
       if (item.collisionType == CollisionType.inactive) {
         continue;
@@ -44,25 +57,24 @@ class Sweep<T extends Hitbox<T>> extends Broadphase<T> {
 
   @override
   List<T> raycast(Ray2 ray) {
-    return items;
+    if (!_doingRaycasting) {
+      _doingRaycasting = true;
+      update();
+    }
     _raycastPotentials.clear();
     // The direction that the sweep will go from, the normal is left to right.
     final normalDirection = ray.direction.x.isNegative;
     var currentMax = 0.0;
     var currentMin = double.maxFinite;
+    final items = normalDirection ? this.items : reversedItems;
 
-    for (var i = 0; i < items.length; i++) {
-      // If the ray points to the right (normalDirection), we need to check all
-      // the items with a larger min x value than the rays origin, and therefore
-      // the list is gone through in the reverse order
-      final item = normalDirection ? items[items.length - i - 1] : items[i];
+    for (final item in items) {
       if (item.collisionType == CollisionType.inactive) {
         continue;
       }
       final currentBox = item.aabb;
-      currentMax = max(currentMax, currentBox.max.x);
-      currentMin = min(currentMin, currentBox.min.x);
       if (normalDirection) {
+        currentMax = max(currentMax, currentBox.max.x);
         if (currentMax < ray.origin.x) {
           // The ray starts further to the right than the current max and has a
           // direction to the left and since the items are sorted in reverse
@@ -71,6 +83,7 @@ class Sweep<T extends Hitbox<T>> extends Broadphase<T> {
           break;
         }
       } else {
+        currentMin = min(currentMin, currentBox.min.x);
         if (currentMin > ray.origin.x) {
           // The ray starts further to the left than the current min and has a
           // direction to the left and since the items are sorted along the

@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:flame/extensions.dart';
 import 'package:flame/geometry.dart';
 import 'package:meta/meta.dart';
-import 'package:vector_math/vector_math_64.dart';
 
 /// A ray in the 2d plane.
 ///

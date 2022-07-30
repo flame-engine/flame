@@ -21,7 +21,10 @@ around the canvas, rays and their reflections will be rendered.
   Ray2? reflection;
   Vector2? origin;
   bool isOriginCasted = false;
-  Paint paint = Paint()..color = Colors.amber.withOpacity(0.2);
+  Paint rayPaint = Paint()..color = Colors.amber.withOpacity(0.2);
+  final boxPaint = BasicPalette.gray.paint()
+    ..style = PaintingStyle.stroke
+    ..strokeWidth = 2.0;
 
   static const numberOfRays = 1;
   final List<Ray2> rays = [];
@@ -30,71 +33,74 @@ around the canvas, rays and their reflections will be rendered.
   late Path path;
   @override
   Future<void> onLoad() async {
-    final paint = BasicPalette.gray.paint()
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 2.0;
     addAll([
       ScreenHitbox(),
       CircleComponent(
-        position: Vector2(100, 100),
-        radius: 50,
-        paint: paint,
+        radius: 500,
+        paint: boxPaint,
         children: [CircleHitbox()],
-      ),
-      CircleComponent(
-        position: Vector2(150, 500),
-        radius: 50,
-        paint: paint,
-        anchor: Anchor.center,
-        children: [CircleHitbox()],
-      ),
-      CircleComponent(
-        position: Vector2(150, 500),
-        radius: 150,
-        paint: paint,
-        anchor: Anchor.center,
-        children: [CircleHitbox()],
-      ),
-      RectangleComponent(
-        position: Vector2.all(300),
-        size: Vector2.all(100),
-        paint: paint,
-        children: [RectangleHitbox()],
-      ),
-      RectangleComponent(
-        position: Vector2.all(500),
-        size: Vector2(100, 200),
-        paint: paint,
-        children: [RectangleHitbox()],
-      ),
-      CircleComponent(
-        position: Vector2(650, 275),
-        radius: 50,
-        paint: paint,
-        anchor: Anchor.center,
-        children: [CircleHitbox()],
-      ),
-      RectangleComponent(
-        position: Vector2(550, 200),
-        size: Vector2(200, 150),
-        paint: paint,
-        children: [RectangleHitbox()],
-      ),
-      RectangleComponent(
-        position: Vector2(900, 200),
-        size: Vector2(200, 150),
-        paint: paint,
-        angle: tau / 6,
-        children: [RectangleHitbox()],
       ),
     ]);
   }
 
   @override
-  void onTapDown(TapDownInfo info) {
-    final origin = info.eventPosition.game;
-    isOriginCasted = origin == this.origin;
-    this.origin = origin;
+  void onTap() {
+    if (children.length < 3) {
+      addAll([
+        CircleComponent(
+          position: Vector2(100, 100),
+          radius: 50,
+          paint: boxPaint,
+          children: [CircleHitbox()],
+        ),
+        CircleComponent(
+          position: Vector2(150, 500),
+          radius: 50,
+          paint: boxPaint,
+          anchor: Anchor.center,
+          children: [CircleHitbox()],
+        ),
+        CircleComponent(
+          position: Vector2(150, 500),
+          radius: 150,
+          paint: boxPaint,
+          anchor: Anchor.center,
+          children: [CircleHitbox()],
+        ),
+        RectangleComponent(
+          position: Vector2.all(300),
+          size: Vector2.all(100),
+          paint: boxPaint,
+          children: [RectangleHitbox()],
+        ),
+        RectangleComponent(
+          position: Vector2.all(500),
+          size: Vector2(100, 200),
+          paint: boxPaint,
+          children: [RectangleHitbox()],
+        ),
+        CircleComponent(
+          position: Vector2(650, 275),
+          radius: 50,
+          paint: boxPaint,
+          anchor: Anchor.center,
+          children: [CircleHitbox()],
+        ),
+        RectangleComponent(
+          position: Vector2(550, 200),
+          size: Vector2(200, 150),
+          paint: boxPaint,
+          children: [RectangleHitbox()],
+        ),
+        RectangleComponent(
+          position: Vector2(350, 30),
+          size: Vector2(200, 150),
+          paint: boxPaint,
+          angle: tau / 10,
+          children: [RectangleHitbox()],
+        ),
+      ]);
+    }
   }
 
   @override
@@ -132,7 +138,7 @@ around the canvas, rays and their reflections will be rendered.
   void render(Canvas canvas) {
     super.render(canvas);
     if (origin != null) {
-      renderResult(canvas, origin!, results, paint);
+      renderResult(canvas, origin!, results, rayPaint);
     }
   }
 

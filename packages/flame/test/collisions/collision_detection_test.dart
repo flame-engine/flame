@@ -1114,7 +1114,6 @@ void main() {
       await game.ensureAddAll([circle1, circle2]);
       final ray = Ray2(Vector2(0, 10), Vector2.all(1.0)..normalize());
       final results = game.collisionDetection.raytrace(ray);
-      print(results[0].distance);
       expect(results.length, 2);
       expect(results.every((e) => e.isActive), isTrue);
       expect(results.every((e) => e.isWithin), isFalse);
@@ -1125,10 +1124,6 @@ void main() {
       expect(reflectionRay1?.origin, Vector2(10, 20));
       expect(reflectionRay1?.direction, Vector2(-1, 1)..normalize());
       final results2 = game.collisionDetection.raytrace(reflectionRay1!);
-      print(reflectionRay1);
-      print((circle2.children.first as ShapeHitbox)
-          .rayIntersection(reflectionRay1)
-          ?.isActive);
       expect(results2.length, 1);
       // Second box
       expect(results[1].intersectionPoint, Vector2(-10, 40));
@@ -1183,7 +1178,6 @@ void main() {
       //final ray = Ray2(Vector2(40, 10), Vector2(-1, 1)..normalize());
       final ray = Ray2(Vector2(150, 200), Vector2(1, -1)..normalize());
       final results = game.collisionDetection.raytrace(ray);
-      results.forEach((r) => print('${r.reflectionRay} ${r.normal}'));
       expect(results.length, 2);
       expect(results.every((e) => e.isActive), isTrue);
       expect(results[0].isWithin, isFalse);
