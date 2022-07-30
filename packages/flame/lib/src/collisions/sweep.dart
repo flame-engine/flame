@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:collection/collection.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/geometry.dart';
 
@@ -45,13 +44,18 @@ class Sweep<T extends Hitbox<T>> extends Broadphase<T> {
 
   @override
   List<T> raycast(Ray2 ray) {
+    return items;
     _raycastPotentials.clear();
-    final normalDirection = !ray.direction.x.isNegative;
-    var currentMax = items.firstOrNull?.aabb.max.x ?? 0;
-    var currentMin = items.firstOrNull?.aabb.min.x ?? 0;
+    // The direction that the sweep will go from, the normal is left to right.
+    final normalDirection = ray.direction.x.isNegative;
+    var currentMax = 0.0;
+    var currentMin = double.maxFinite;
 
     for (var i = 0; i < items.length; i++) {
-      final item = normalDirection ? items[i] : items[items.length - i - 1];
+      // If the ray points to the right (normalDirection), we need to check all
+      // the items with a larger min x value than the rays origin, and therefore
+      // the list is gone through in the reverse order
+      final item = normalDirection ? items[items.length - i - 1] : items[i];
       if (item.collisionType == CollisionType.inactive) {
         continue;
       }

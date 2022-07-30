@@ -59,7 +59,9 @@ class CircleHitbox extends CircleComponent with ShapeHitbox {
       isWithin = true;
     }
     _temporaryLineSegment.to.add(ray.origin);
-    final intersections = lineSegmentIntersections(_temporaryLineSegment);
+    final intersections = lineSegmentIntersections(_temporaryLineSegment).where(
+      (i) => i.distanceToSquared(ray.origin) > 0.0000001,
+    );
     if (intersections.isEmpty) {
       out?.isActive = false;
       return null;

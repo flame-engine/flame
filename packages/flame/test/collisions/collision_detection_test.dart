@@ -1170,5 +1170,38 @@ void main() {
       expect(reflectionRay2?.origin, Vector2(-10, 40));
       expect(reflectionRay2?.direction, Vector2(1, 1)..normalize());
     });
+
+    testCollisionDetectionGame('on a rectangle within another', (game) async {
+      final rectangle1 = RectangleComponent(
+        position: Vector2.all(20),
+        size: Vector2.all(20),
+      )..add(RectangleHitbox());
+      final rectangle2 = RectangleComponent(
+        size: Vector2.all(200),
+      )..add(RectangleHitbox());
+      await game.ensureAddAll([rectangle1, rectangle2]);
+      //final ray = Ray2(Vector2(40, 10), Vector2(-1, 1)..normalize());
+      final ray = Ray2(Vector2(150, 200), Vector2(1, -1)..normalize());
+      final results = game.collisionDetection.raytrace(ray);
+      results.forEach((r) => print('${r.reflectionRay} ${r.normal}'));
+      expect(results.length, 2);
+      expect(results.every((e) => e.isActive), isTrue);
+      expect(results[0].isWithin, isFalse);
+      expect(results[1].isWithin, isTrue);
+      // First box
+      expect(results[0].intersectionPoint, Vector2(10, 20));
+      expect(results[0].normal, Vector2(-1, 0));
+      final reflectionRay1 = results[0].reflectionRay;
+      expect(reflectionRay1?.origin, Vector2(10, 20));
+      expect(reflectionRay1?.direction, Vector2(-1, 1)..normalize());
+      final results2 = game.collisionDetection.raytrace(reflectionRay1!);
+      expect(results2.length, 1);
+      // Second box
+      expect(results[1].intersectionPoint, Vector2(-10, 40));
+      expect(results[1].normal, Vector2(1, 0));
+      final reflectionRay2 = results[1].reflectionRay;
+      expect(reflectionRay2?.origin, Vector2(-10, 40));
+      expect(reflectionRay2?.direction, Vector2(1, 1)..normalize());
+    });
   });
 }

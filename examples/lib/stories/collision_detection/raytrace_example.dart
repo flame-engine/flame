@@ -7,7 +7,11 @@ import 'package:flame/palette.dart';
 import 'package:flutter/material.dart';
 
 class RaytraceExample extends FlameGame
-    with HasCollisionDetection, TapDetector, MouseMovementDetector {
+    with
+        HasCollisionDetection,
+        TapDetector,
+        MouseMovementDetector,
+        TapDetector {
   static const description = '''
 In this example the raytrace functionality is showcased, if you move the mouse
 around the canvas, rays and their reflections will be rendered.
@@ -17,7 +21,7 @@ around the canvas, rays and their reflections will be rendered.
   Ray2? reflection;
   Vector2? origin;
   bool isOriginCasted = false;
-  Paint paint = Paint()..color = Colors.amber.withOpacity(1.0);
+  Paint paint = Paint()..color = Colors.amber.withOpacity(0.2);
 
   static const numberOfRays = 1;
   final List<Ray2> rays = [];
@@ -29,47 +33,68 @@ around the canvas, rays and their reflections will be rendered.
     final paint = BasicPalette.gray.paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2.0;
-    add(ScreenHitbox());
-    add(
+    addAll([
+      ScreenHitbox(),
       CircleComponent(
         position: Vector2(100, 100),
         radius: 50,
         paint: paint,
         children: [CircleHitbox()],
       ),
-    );
-    add(
       CircleComponent(
         position: Vector2(150, 500),
         radius: 50,
         paint: paint,
+        anchor: Anchor.center,
         children: [CircleHitbox()],
       ),
-    );
-    add(
+      CircleComponent(
+        position: Vector2(150, 500),
+        radius: 150,
+        paint: paint,
+        anchor: Anchor.center,
+        children: [CircleHitbox()],
+      ),
       RectangleComponent(
         position: Vector2.all(300),
         size: Vector2.all(100),
         paint: paint,
         children: [RectangleHitbox()],
       ),
-    );
-    add(
       RectangleComponent(
         position: Vector2.all(500),
         size: Vector2(100, 200),
         paint: paint,
         children: [RectangleHitbox()],
       ),
-    );
-    add(
+      CircleComponent(
+        position: Vector2(650, 275),
+        radius: 50,
+        paint: paint,
+        anchor: Anchor.center,
+        children: [CircleHitbox()],
+      ),
       RectangleComponent(
         position: Vector2(550, 200),
         size: Vector2(200, 150),
         paint: paint,
         children: [RectangleHitbox()],
       ),
-    );
+      RectangleComponent(
+        position: Vector2(900, 200),
+        size: Vector2(200, 150),
+        paint: paint,
+        angle: tau / 6,
+        children: [RectangleHitbox()],
+      ),
+    ]);
+  }
+
+  @override
+  void onTapDown(TapDownInfo info) {
+    final origin = info.eventPosition.game;
+    isOriginCasted = origin == this.origin;
+    this.origin = origin;
   }
 
   @override
@@ -95,7 +120,7 @@ around the canvas, rays and their reflections will be rendered.
         _ray.updateInverses();
         collisionDetection.raytrace(
           _ray,
-          maxDepth: 100,
+          maxDepth: 1000,
           out: results,
         );
       }

@@ -13,6 +13,7 @@ abstract class Broadphase<T extends Hitbox<T>> {
 
   Broadphase({List<T>? items}) : items = items ?? [];
 
+  /// Returns the potential hitbox collisions
   Set<CollisionProspect<T>> query();
 
   /// Returns potential [T] hitboxes that the ray can intersect.

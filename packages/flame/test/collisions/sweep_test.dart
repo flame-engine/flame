@@ -239,6 +239,36 @@ void main() {
         expect(sweep.raycast(ray).length, 1);
         expect(sweep.raycast(ray).first, rectangle2.children.first);
       });
+
+      testCollisionDetectionGame(
+          'detects collision from within hitbox with other hitbox to the left',
+          (game) async {
+        final rectangle1 = RectangleComponent(
+          size: Vector2.all(100),
+        )..add(RectangleHitbox());
+        final rectangle2 = RectangleComponent(
+          position: Vector2.all(30),
+          size: Vector2.all(10),
+        )..add(RectangleHitbox());
+        await game.ensureAddAll([rectangle1, rectangle2]);
+        final ray = Ray2(Vector2(50, 10), Vector2(-1, -1)..normalize());
+        final sweep = game.collisionDetection.broadphase;
+        expect(sweep.raycast(ray).length, 1);
+        expect(sweep.raycast(ray).first, rectangle1.children.first);
+      });
+
+      testCollisionDetectionGame(
+          'detects collision from within hitbox on opposite edge',
+          (game) async {
+        final rectangle1 = RectangleComponent(
+          size: Vector2.all(100),
+        )..add(RectangleHitbox());
+        await game.ensureAddAll([rectangle1]);
+        final ray = Ray2(Vector2(50, 100), Vector2(0, -1)..normalize());
+        final sweep = game.collisionDetection.broadphase;
+        expect(sweep.raycast(ray).length, 1);
+        expect(sweep.raycast(ray).first, rectangle1.children.first);
+      });
     });
   });
 }
