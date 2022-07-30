@@ -27,7 +27,7 @@ void main() {
 The `Component()` here could of course be any subclass of `Component`.
 
 Every `Component` has a few methods that you can optionally implement, which are used by the
-`FlameGame` class. 
+`FlameGame` class.
 
 
 ### Component lifecycle
@@ -118,7 +118,7 @@ children are rendered and updated with the same conditions.
 Example of usage, where visibility of two components are handled by a wrapper:
 
 ```dart
-class GameOverPanel extends PositionComponent with HasGameRef<MyGame> {
+class GameOverPanel extends PositionComponent {
   bool visible = false;
   final Image spriteImage;
 
@@ -200,7 +200,7 @@ an assertion error will be thrown.
 
 ### Ensuring a component has a given ancestor
 
-When a component requires to have a specific ancestor type somewhere in the 
+When a component requires to have a specific ancestor type somewhere in the
 component tree, `HasAncestor` mixin can be used to enforce that relationship.
 
 The mixin exposes the `ancestor` field that will be of the given type.
@@ -536,11 +536,11 @@ Example:
 
 ```dart
 class ButtonComponent extends SpriteGroupComponent<ButtonState>
-    with HasGameRef<SpriteGroupExample>, Tappable {
+    with HasGameReference<SpriteGroupExample>, Tappable {
   @override
   Future<void>? onLoad() async {
-    final pressedSprite = await gameRef.loadSprite(/* omitted */);
-    final unpressedSprite = await gameRef.loadSprite(/* omitted /*);
+    final pressedSprite = await game.loadSprite(/* omitted */);
+    final unpressedSprite = await game.loadSprite(/* omitted /*);
 
     sprites = {
       ButtonState.pressed: pressedSprite,

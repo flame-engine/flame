@@ -52,29 +52,26 @@ class MyGame extends FlameGame with HasDraggables {
   }
 }
 
-class JoystickPlayer extends SpriteComponent with HasGameRef {
+class JoystickPlayer extends SpriteComponent with HasGameReference {
+  JoystickPlayer(this.joystick)
+    : super(
+        anchor: Anchor.center,
+        size: Vector2.all(100.0),
+      );
+
   /// Pixels/s
   double maxSpeed = 300.0;
 
   final JoystickComponent joystick;
 
-  JoystickPlayer(this.joystick)
-      : super(
-          size: Vector2.all(100.0),
-        ) {
-    anchor = Anchor.center;
-  }
-
   @override
   Future<void> onLoad() async {
-    super.onLoad();
-    sprite = await gameRef.loadSprite('layers/player.png');
-    position = gameRef.size / 2;
+    sprite = await game.loadSprite('layers/player.png');
+    position = game.size / 2;
   }
 
   @override
   void update(double dt) {
-    super.update(dt);
     if (joystick.direction != JoystickDirection.idle) {
       position.add(joystick.velocity * maxSpeed * dt);
       angle = joystick.delta.screenAngle();
