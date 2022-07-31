@@ -1,8 +1,10 @@
+import 'dart:math';
+
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flame/geometry.dart';
-import 'package:flame/input.dart';
 import 'package:flame/palette.dart';
 import 'package:flutter/material.dart';
 
@@ -17,6 +19,11 @@ In this example the raytrace functionality is showcased, if you move the mouse
 around the canvas, rays and their reflections will be rendered.
   ''';
 
+  final _colorTween = ColorTween(
+    begin: Colors.amber.withOpacity(0.2),
+    end: Colors.lightBlueAccent.withOpacity(0.2),
+  );
+  final random = Random();
   Ray2? ray;
   Ray2? reflection;
   Vector2? origin;
@@ -43,63 +50,72 @@ around the canvas, rays and their reflections will be rendered.
     ]);
   }
 
+  final extraChildren = <Component>[];
   @override
   void onTap() {
-    if (children.length < 3) {
-      addAll([
-        CircleComponent(
-          position: Vector2(100, 100),
-          radius: 50,
-          paint: boxPaint,
-          children: [CircleHitbox()],
-        ),
-        CircleComponent(
-          position: Vector2(150, 500),
-          radius: 50,
-          paint: boxPaint,
-          anchor: Anchor.center,
-          children: [CircleHitbox()],
-        ),
-        CircleComponent(
-          position: Vector2(150, 500),
-          radius: 150,
-          paint: boxPaint,
-          anchor: Anchor.center,
-          children: [CircleHitbox()],
-        ),
-        RectangleComponent(
-          position: Vector2.all(300),
-          size: Vector2.all(100),
-          paint: boxPaint,
-          children: [RectangleHitbox()],
-        ),
-        RectangleComponent(
-          position: Vector2.all(500),
-          size: Vector2(100, 200),
-          paint: boxPaint,
-          children: [RectangleHitbox()],
-        ),
-        CircleComponent(
-          position: Vector2(650, 275),
-          radius: 50,
-          paint: boxPaint,
-          anchor: Anchor.center,
-          children: [CircleHitbox()],
-        ),
-        RectangleComponent(
-          position: Vector2(550, 200),
-          size: Vector2(200, 150),
-          paint: boxPaint,
-          children: [RectangleHitbox()],
-        ),
-        RectangleComponent(
-          position: Vector2(350, 30),
-          size: Vector2(200, 150),
-          paint: boxPaint,
-          angle: tau / 10,
-          children: [RectangleHitbox()],
-        ),
-      ]);
+    if (extraChildren.isEmpty) {
+      addAll(
+        extraChildren
+          ..addAll(
+            [
+              CircleComponent(
+                position: Vector2(100, 100),
+                radius: 50,
+                paint: boxPaint,
+                children: [CircleHitbox()],
+              ),
+              CircleComponent(
+                position: Vector2(150, 500),
+                radius: 50,
+                paint: boxPaint,
+                anchor: Anchor.center,
+                children: [CircleHitbox()],
+              ),
+              CircleComponent(
+                position: Vector2(150, 500),
+                radius: 150,
+                paint: boxPaint,
+                anchor: Anchor.center,
+                children: [CircleHitbox()],
+              ),
+              RectangleComponent(
+                position: Vector2.all(300),
+                size: Vector2.all(100),
+                paint: boxPaint,
+                children: [RectangleHitbox()],
+              ),
+              RectangleComponent(
+                position: Vector2.all(500),
+                size: Vector2(100, 200),
+                paint: boxPaint,
+                children: [RectangleHitbox()],
+              ),
+              CircleComponent(
+                position: Vector2(650, 275),
+                radius: 50,
+                paint: boxPaint,
+                anchor: Anchor.center,
+                children: [CircleHitbox()],
+              ),
+              RectangleComponent(
+                position: Vector2(550, 200),
+                size: Vector2(200, 150),
+                paint: boxPaint,
+                children: [RectangleHitbox()],
+              ),
+              RectangleComponent(
+                position: Vector2(350, 30),
+                size: Vector2(200, 150),
+                paint: boxPaint,
+                angle: tau / 10,
+                children: [RectangleHitbox()],
+              ),
+            ],
+          ),
+      );
+    } else {
+      removeAll(extraChildren);
+      extraChildren.clear();
     }
   }
 
@@ -111,10 +127,13 @@ around the canvas, rays and their reflections will be rendered.
   }
 
   final Ray2 _ray = Ray2.zero();
+  var _timePassed = 0.0;
 
   @override
   void update(double dt) {
     super.update(dt);
+    _timePassed += dt;
+    rayPaint.color = _colorTween.transform(0.5 + (sin(_timePassed) / 2))!;
     if (origin != null && !isOriginCasted) {
       _ray.origin.setFrom(origin!);
       _ray.direction
@@ -126,7 +145,7 @@ around the canvas, rays and their reflections will be rendered.
         _ray.updateInverses();
         collisionDetection.raytrace(
           _ray,
-          maxDepth: 1000,
+          maxDepth: 500,
           out: results,
         );
       }
