@@ -76,7 +76,7 @@ void main() {
         map,
         destTileSize: tileSize,
       );
-      //expect the elements to be directly below
+      //expect the block to be directly below
       expect(
         c.getBlockRenderPositionInts(1, 1),
         closeToVector(Vector2(-156 / 2, 12.5), 1e-13),

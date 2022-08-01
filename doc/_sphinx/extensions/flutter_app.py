@@ -237,7 +237,7 @@ class FlutterAppDirective(SphinxDirective):
                 )
                 with open(filename, 'rt') as f:
                     self.state.nested_parse(
-                        ['``````{code-elements} dart\n:lineno-start: 1\n'] +
+                        ['``````{code-block} dart\n:lineno-start: 1\n'] +
                         [line.rstrip() for line in f] +
                         ['``````\n'], 0, result)
         return result
