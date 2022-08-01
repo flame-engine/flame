@@ -11,5 +11,12 @@ import 'dart:ui';
 /// created during the layout step.
 abstract class Element {
   void translate(double dx, double dy);
+
+  /// Renders the element on the [canvas], at coordinates determined during the
+  /// layout.
+  ///
+  /// In order to render the element at a different location, consider either
+  /// calling the [translate] method, or applying a translation transform to the
+  /// canvas beforehand.
   void render(Canvas canvas);
 }
