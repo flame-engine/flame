@@ -1,3 +1,9 @@
+## 1.5.0
+
+ - **FIX**: Flame_rive now can load Nested Artboards and update to 0.9.0 rive package  ([#1741](https://github.com/flame-engine/flame/issues/1741)). ([82e4be96](https://github.com/flame-engine/flame/commit/82e4be96f3090908e95659a96006bf50fbb5b08c))
+ - **FIX**: Correct flutter constraint ([#1731](https://github.com/flame-engine/flame/issues/1731)). ([c7383843](https://github.com/flame-engine/flame/commit/c738384314a1a5c3695d1c3adaebcb59604df83a))
+ - **FEAT**: Move to Flutter 3.0.0 and Dart 2.17.0 ([#1713](https://github.com/flame-engine/flame/issues/1713)). ([2a41d0d6](https://github.com/flame-engine/flame/commit/2a41d0d683391194b7209c47bde91199ab7a663e))
+
 ## 1.4.0
 
  - **FIX**: Flame_rive now can load Nested Artboards and update to 0.9.0 rive package  ([#1741](https://github.com/flame-engine/flame/issues/1741)). ([82e4be96](https://github.com/flame-engine/flame/commit/82e4be96f3090908e95659a96006bf50fbb5b08c))

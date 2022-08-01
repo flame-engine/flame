@@ -60,6 +60,26 @@
         $(this).toggleClass("active");
         $(".sidebar-left-area").toggleClass("active");
       });
+
+      $('div.nav-left li > a:not(:only-child)').wrap('<div class=submenu></div>');
+      $('div.nav-left div.submenu').prepend('<a class=arrow>&nbsp;</a>');
+      $('div.nav-left div.submenu > a.arrow')
+        .click(function() {
+          $(this.parentElement.parentElement).toggleClass('current');
+        });
+
+      // This function ensures that when navigating to internal targets within the page (such as
+      // a section header), those targets will be visible to the user and not obscured by the menu
+      // bar at the top of the page.
+      function scrollToHashTarget() {
+        if (location.hash !== location.oldHash) {
+          window.scrollBy(0, -60);
+          location.oldHash = location.hash;
+        }
+      }
+      window.location.oldHash = '';
+      window.addEventListener('hashchange', scrollToHashTarget);
+      scrollToHashTarget();
     });
   </script>
 

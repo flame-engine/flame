@@ -64,7 +64,7 @@ pygments_style = 'monokai'
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['images', 'scripts', 'theme']
-html_js_files = ['versions.js']
+html_js_files = ['versions.js', 'menu-expand.js']
 
 # -- Custom setup ------------------------------------------------------------
 class TitleCollector(docutils.nodes.SparseNodeVisitor):

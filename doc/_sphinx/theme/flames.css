@@ -320,55 +320,46 @@ div.nav-left li {
   margin: 0;
 }
 
-div.nav-left li > a {
+div.nav-left li > a,
+div.nav-left li > div.submenu > a.reference {
   border-radius: 5px 0 0 5px;
   color: #9d9175;
   display: block;
   font-size: 13px;
-  margin-left: -15px;
-  padding: 2px 0 2px 15px;
+  margin-left: -5px;
+  padding: 2px 0 2px 5px;
   text-decoration: none;
 }
 
-div.nav-left li > a:hover {
-  background-color: #303030;
+div.nav-left li a:hover {
+  background-color: #00000030;
+  color: #fff !important;
 }
 
-div.nav-left li > a:not(:only-child)::before {
-  color: #ffbb3e;
+div.nav-left li > div.submenu > a.arrow {
+  border-radius: 5px;
+  cursor: pointer;
+  left: -20px;
+  position: absolute;
+  width: 20px;
+}
+
+div.nav-left li > div.submenu > a.arrow::before {
   content: "\f0da";
   font-family: var(--font-awesome);
-  font-size: 70%;
-  font-weight: 900;
-  left: -9px;
-  position: absolute;
-  top: 5px;
+  font-size: 80%;
+  padding-left: 9px;
 }
 
-div.nav-left li > a:not(:only-child):not(.current):hover::before {
-  color: #fff;
-}
-
-div.nav-left li.current > ul {
-  display: block;
-}
-
-div.nav-left li.current > a.current {
+div.nav-left li > a.current,
+div.nav-left li > div.submenu > a.reference.current {
   background: #222;
   color: #aaa;
-  margin-left: -14px;
-  padding-left: 15px;
-  position: relative;
-  z-index: 40;
 }
 
-div.nav-left li.current > a:not(:only-child)::before {
+div.nav-left li.current > div.submenu > a.arrow::before {
   content: "\f0d7";
-  left: -10px;
-}
-
-div.nav-left li.current > a.current:not(:only-child)::before {
-  left: 4px;
+  padding-left: 6px;
 }
 
 div.nav-left li.current > ul {
@@ -796,4 +787,13 @@ div.admonition.admonition-deprecated {
   --admonition-icon: '\f1f8';
   --admonition-icon-color: #555;
   --admonition-title-background-color: #1c1c1c;
+}
+
+
+pre, div[class*="highlight-"] {
+  clear: none;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  clear: both;
 }

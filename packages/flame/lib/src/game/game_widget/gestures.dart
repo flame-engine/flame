@@ -7,6 +7,7 @@ import 'package:flutter/widgets.dart';
 bool hasGestureDetectors(Game game) {
   return game is TapDetector ||
       game is SecondaryTapDetector ||
+      game is TertiaryTapDetector ||
       game is DoubleTapDetector ||
       game is LongPressDetector ||
       game is VerticalDragDetector ||
@@ -34,7 +35,9 @@ Widget applyGesturesDetectors(Game game, Widget child) {
     gestures[T] = GestureRecognizerFactoryWithHandlers<T>(factory, handlers);
   }
 
-  if (game is TapDetector || game is SecondaryTapDetector) {
+  if (game is TapDetector ||
+      game is SecondaryTapDetector ||
+      game is TertiaryTapDetector) {
     addRecognizer(
       TapGestureRecognizer.new,
       (TapGestureRecognizer instance) {
@@ -48,6 +51,11 @@ Widget applyGesturesDetectors(Game game, Widget child) {
           instance.onSecondaryTapCancel = game.onSecondaryTapCancel;
           instance.onSecondaryTapUp = game.handleSecondaryTapUp;
           instance.onSecondaryTapDown = game.handleSecondaryTapDown;
+        }
+        if (game is TertiaryTapDetector) {
+          instance.onTertiaryTapCancel = game.onTertiaryTapCancel;
+          instance.onTertiaryTapUp = game.handleTertiaryTapUp;
+          instance.onTertiaryTapDown = game.handleTertiaryTapDown;
         }
       },
     );

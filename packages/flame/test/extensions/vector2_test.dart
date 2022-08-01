@@ -208,4 +208,59 @@ void main() {
       expectDouble(position.screenAngle(), math.pi / 2);
     });
   });
+
+  group('projection', () {
+    test('Project onto longer vector', () {
+      final u = Vector2(5, 2);
+      final v = Vector2(10, 0);
+      final result = u.projection(v);
+      expect(result, Vector2(5, 0));
+    });
+
+    test('Project onto shorter vector', () {
+      final u = Vector2(5, 2);
+      final v = Vector2(2, 0);
+      final result = u.projection(v);
+      expect(result, Vector2(5, 0));
+    });
+
+    test('Project onto vector in other direction', () {
+      final u = Vector2(5, 2);
+      final v = Vector2(-10, 0);
+      final result = u.projection(v);
+      expect(result, Vector2(5, 0));
+    });
+
+    test('Project onto vector with out', () {
+      final out = Vector2.zero();
+      final u = Vector2(5, 2);
+      final v = Vector2(-10, 0);
+      final result = u.projection(v, out: out);
+      expect(result, Vector2(5, 0));
+      expect(out, Vector2(5, 0));
+    });
+
+    test('Project onto vector with out as sane return and argument', () {
+      var out = Vector2.zero();
+      final u = Vector2(5, 2);
+      final v = Vector2(-10, 0);
+      out = u.projection(v, out: out);
+      expect(out, Vector2(5, 0));
+    });
+  });
+
+  group('inversion', () {
+    test('invert', () {
+      final v = Vector2.all(1);
+      v.invert();
+      expect(v, Vector2.all(-1));
+    });
+
+    test('inverted', () {
+      final v = Vector2.all(1);
+      final w = v.inverted();
+      expect(v, Vector2.all(1));
+      expect(w, Vector2.all(-1));
+    });
+  });
 }
