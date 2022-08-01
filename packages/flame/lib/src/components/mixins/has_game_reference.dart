@@ -1,5 +1,5 @@
 import 'package:flame/src/components/component.dart';
-import 'package:flame/src/components/mixins/has_game_ref.dart';
+import 'package:flame/src/game/flame_game.dart';
 import 'package:flame/src/game/game.dart';
 import 'package:flame/src/game/mixins/single_game_instance.dart';
 
@@ -9,9 +9,6 @@ import 'package:flame/src/game/mixins/single_game_instance.dart';
 /// The type [T] on the mixin is the type of your game class. This type will be
 /// the type of the [game] reference, and the mixin will check at runtime that
 /// the actual type matches the expectation.
-///
-/// See also:
-///  - [HasGameRef] mixin which performs a similar function.
 mixin HasGameReference<T extends Game> on Component {
   T? _game;
 
@@ -43,4 +40,13 @@ mixin HasGameReference<T extends Game> on Component {
     );
     return game! as T;
   }
+
+  // Deprecated: use [game] instead
+  T get gameRef => game;
+
+  // Deprecated: use [game] setter instead
+  void mockGameRef(T value) => game = value;
 }
+
+// Deprecated: use [HasGameReference] instead.
+typedef HasGameRef<T extends FlameGame> = HasGameReference<T>;
