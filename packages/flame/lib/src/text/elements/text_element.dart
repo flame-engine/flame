@@ -1,5 +1,3 @@
-import 'dart:ui' hide LineMetrics;
-
 import 'package:flame/src/text/common/text_line.dart';
 import 'package:flame/src/text/elements/element.dart';
 
