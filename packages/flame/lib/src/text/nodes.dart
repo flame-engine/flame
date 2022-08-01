@@ -1,4 +1,3 @@
-
 import 'package:flame/src/text/nodes/block_node.dart';
 
 class GroupBlockNode extends BlockNode {

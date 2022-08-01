@@ -27,7 +27,7 @@ class DocumentStyle extends Style {
     BlockStyle? header1Style,
     BlockStyle? header2Style,
     BlockStyle? header3Style,
-  })  : padding = padding ?? EdgeInsets.zero {
+  }) : padding = padding ?? EdgeInsets.zero {
     backgroundStyle = acquire(background);
     this.paragraphStyle = acquire(paragraphStyle ?? defaultParagraphStyle)!;
     this.header1Style = acquire(header1Style ?? defaultHeader1Style)!;

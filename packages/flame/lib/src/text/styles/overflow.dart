@@ -1,4 +1,3 @@
-
 enum Overflow {
   /// Any content that doesn't fit into the document box will be clipped.
   hidden,

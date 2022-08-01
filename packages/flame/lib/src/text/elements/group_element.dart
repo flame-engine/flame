@@ -1,4 +1,3 @@
-
 import 'dart:ui';
 
 import 'package:flame/src/text/elements/block_element.dart';

@@ -47,7 +47,7 @@ class BackgroundStyle extends Style {
     double? borderWidth,
   }) {
     return BackgroundStyle(
-      color: color ?? (paint == null? backgroundPaint?.color : null),
+      color: color ?? (paint == null ? backgroundPaint?.color : null),
       paint: paint ?? backgroundPaint,
       borderColor: borderColor ?? borderPaint?.color,
       borderRadius: borderRadius ?? this.borderRadius,

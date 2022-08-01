@@ -1,4 +1,3 @@
-
 import 'package:flame/src/text/elements/element.dart';
 
 /// [BlockElement] is the base class for [Element]s with rectangular shape and

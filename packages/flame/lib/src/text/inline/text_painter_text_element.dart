@@ -31,7 +31,4 @@ class TextPainterTextElement extends TextElement implements TextLine, Element {
   void render(Canvas canvas) {
     _textPainter.paint(canvas, Offset(_box.left, _box.top));
   }
-
-  @override
-  void layout() {}
 }
