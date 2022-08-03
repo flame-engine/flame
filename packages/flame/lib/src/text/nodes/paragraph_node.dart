@@ -8,7 +8,6 @@ import 'package:flame/src/text/styles/block_style.dart';
 import 'package:flutter/painting.dart' as painting;
 
 class ParagraphNode extends BlockNode {
-  // ParagraphNode._(this.child);
   ParagraphNode.simple(String text)
       : child = GroupTextNode([PlainTextNode(text)]);
 
