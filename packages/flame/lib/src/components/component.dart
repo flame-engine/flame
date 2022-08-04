@@ -637,21 +637,16 @@ class Component {
     Vector2 point, [
     List<Vector2>? nestedPoints,
   ]) sync* {
-    nestedPoints?.add(point);
-    if (_children != null) {
-      for (final child in _children!.reversed()) {
-        Vector2? childPoint = point;
-        if (child is CoordinateTransform) {
-          childPoint = (child as CoordinateTransform).parentToLocal(point);
-        }
-        if (childPoint != null) {
-          yield* child.componentsAtPoint(childPoint, nestedPoints);
-        }
-      }
-    }
     var localPoint = point;
     if (this is CoordinateTransform && parent != null) {
-      localPoint = (this as CoordinateTransform).parentToLocal(point) ?? point;
+      final transform = this as CoordinateTransform;
+      localPoint = transform.parentToLocal(point) ?? point;
+    }
+    nestedPoints?.add(localPoint);
+    if (_children != null) {
+      for (final child in _children!.reversed()) {
+        yield* child.componentsAtPoint(localPoint, nestedPoints);
+      }
     }
     if (containsLocalPoint(localPoint)) {
       yield this;
