@@ -54,7 +54,7 @@ abstract class PositionEvent extends Event {
     bool deliverToAll = false,
   }) {
     for (final child in rootComponent
-        .componentsAtPoint(canvasPosition, renderingTrace)
+        .componentsAtPoint(localPosition, renderingTrace)
         .whereType<T>()) {
       continuePropagation = deliverToAll;
       eventHandler(child);
