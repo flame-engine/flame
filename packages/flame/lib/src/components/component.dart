@@ -649,7 +649,11 @@ class Component {
         }
       }
     }
-    if (containsLocalPoint(point)) {
+    var localPoint = point;
+    if (this is CoordinateTransform && parent != null) {
+      localPoint = (this as CoordinateTransform).parentToLocal(point) ?? point;
+    }
+    if (containsLocalPoint(localPoint)) {
       yield this;
     }
     nestedPoints?.removeLast();
