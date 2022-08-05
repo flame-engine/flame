@@ -66,10 +66,10 @@ class FlameGame extends Component with Game {
   @override
   @mustCallSuper
   void update(double dt) {
-    _cameraWrapper.update(dt);
     if (parent == null) {
       updateTree(dt);
     }
+    _cameraWrapper.update(dt);
   }
 
   @override

@@ -125,8 +125,7 @@ abstract class BodyComponent<T extends Forge2DGame> extends Component
   }
 
   void renderChain(Canvas canvas, List<Offset> points) {
-    final path = Path()..addPolygon(points, true);
-    canvas.drawPath(path, paint);
+    canvas.drawPoints(PointMode.polygon, points, paint);
   }
 
   void _renderCircle(Canvas canvas, Fixture fixture) {
