@@ -1,5 +1,4 @@
 import 'package:flame/src/components/component.dart';
-import 'package:flame/src/game/flame_game.dart';
 import 'package:flame/src/game/game.dart';
 import 'package:flame/src/game/mixins/single_game_instance.dart';
 
@@ -40,13 +39,4 @@ mixin HasGameReference<T extends Game> on Component {
     );
     return game! as T;
   }
-
-  // Deprecated: use [game] instead
-  T get gameRef => game;
-
-  // Deprecated: use [game] setter instead
-  void mockGameRef(T value) => game = value;
 }
-
-// Deprecated: use [HasGameReference] instead.
-typedef HasGameRef<T extends FlameGame> = HasGameReference<T>;
