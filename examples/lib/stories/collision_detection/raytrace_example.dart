@@ -20,15 +20,15 @@ around the canvas, rays and their reflections will be rendered.
   ''';
 
   final _colorTween = ColorTween(
-    begin: Colors.amber.withOpacity(0.2),
-    end: Colors.lightBlueAccent.withOpacity(0.2),
+    begin: Colors.amber.withOpacity(1.0),
+    end: Colors.lightBlueAccent.withOpacity(1.0),
   );
   final random = Random();
   Ray2? ray;
   Ray2? reflection;
   Vector2? origin;
   bool isOriginCasted = false;
-  Paint rayPaint = Paint()..color = Colors.amber.withOpacity(0.2);
+  Paint rayPaint = Paint()..color = Colors.amber.withOpacity(1.0);
   final boxPaint = BasicPalette.gray.paint()
     ..style = PaintingStyle.stroke
     ..strokeWidth = 2.0;
@@ -43,7 +43,7 @@ around the canvas, rays and their reflections will be rendered.
     addAll([
       ScreenHitbox(),
       CircleComponent(
-        radius: 500,
+        radius: min(camera.canvasSize.x, camera.canvasSize.y) / 2,
         paint: boxPaint,
         children: [CircleHitbox()],
       ),
@@ -145,7 +145,7 @@ around the canvas, rays and their reflections will be rendered.
         _ray.updateInverses();
         collisionDetection.raytrace(
           _ray,
-          maxDepth: 500,
+          maxDepth: 10,
           out: results,
         );
       }
