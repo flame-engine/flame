@@ -1,34 +1,34 @@
-import 'dart:math';
-
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/geometry.dart';
+import 'package:flame/input.dart';
 import 'package:flame/palette.dart';
 import 'package:flutter/material.dart';
 
-class RaycastExample extends FlameGame with HasCollisionDetection {
-  // TODO(spydon): Update this.
+class RaycastLightExample extends FlameGame
+    with HasCollisionDetection, TapDetector, MouseMovementDetector {
   static const description = '''
-In this example the raycast functionality is showcased. The circle moves around
-and casts 10 rays and checks how far the nearest hitboxes are and naively moves
-around trying not to hit them.
+In this example the raycast functionality is showcased by using it as a light
+source, if you move the mouse around the canvas the rays will be cast from its
+location. You can also tap to create a permanent source of rays that wont move
+with with mouse.
   ''';
 
   Ray2? ray;
   Ray2? reflection;
-  Vector2 origin = Vector2(250, 100);
-  Paint paint = Paint()..color = Colors.amber.withOpacity(0.6);
-  final speed = 100;
-  final inertia = 3.0;
-  final safetyDistance = 50;
-  final direction = Vector2(0, 1);
-  final velocity = Vector2.zero();
-  final random = Random();
+  Vector2? origin;
+  Vector2? tapOrigin;
+  bool isOriginCasted = false;
+  bool isTapOriginCasted = false;
+  Paint paint = Paint()..color = Colors.amber.withOpacity(0.2);
+  Paint tapPaint = Paint()..color = Colors.blue.withOpacity(0.2);
 
-  static const numberOfRays = 10;
+  static const numberOfRays = 2000;
   final List<Ray2> rays = [];
+  final List<Ray2> tapRays = [];
   final List<RaycastResult<ShapeHitbox>> results = [];
+  final List<RaycastResult<ShapeHitbox>> tapResults = [];
 
   late Path path;
   @override
@@ -79,40 +79,54 @@ around trying not to hit them.
     );
   }
 
-  final _velocityModifier = Vector2.zero();
+  @override
+  bool onTapDown(TapDownInfo info) {
+    super.onTapDown(info);
+    final origin = info.eventPosition.game;
+    isTapOriginCasted = origin == tapOrigin;
+    tapOrigin = origin;
+    return false;
+  }
+
+  @override
+  void onMouseMove(PointerHoverInfo info) {
+    final origin = info.eventPosition.game;
+    isOriginCasted = origin == this.origin;
+    this.origin = origin;
+  }
 
   @override
   void update(double dt) {
     super.update(dt);
-    collisionDetection.raycastAll(
-      origin,
-      numberOfRays,
-      rays: rays,
-      out: results,
-    );
-    velocity.scale(inertia);
-    for (final result in results) {
-      _velocityModifier
-        ..setFrom(result.intersectionPoint!)
-        ..sub(origin)
-        ..normalize();
-      if (result.distance! < safetyDistance) {
-        _velocityModifier.negate();
-      } else if (random.nextDouble() < 0.2) {
-        velocity.add(_velocityModifier);
-      }
-      velocity.add(_velocityModifier);
+    if (origin != null && !isOriginCasted) {
+      collisionDetection.raycastAll(
+        origin!,
+        numberOfRays,
+        rays: rays,
+        out: results,
+      );
+      isOriginCasted = true;
     }
-    velocity
-      ..normalize()
-      ..scale(speed * dt);
-    origin.add(velocity);
+    if (tapOrigin != null && !isTapOriginCasted) {
+      collisionDetection.raycastAll(
+        tapOrigin!,
+        numberOfRays,
+        rays: tapRays,
+        out: tapResults,
+      );
+      isTapOriginCasted = true;
+    }
   }
 
   @override
   void render(Canvas canvas) {
     super.render(canvas);
-    renderResult(canvas, origin, results, paint);
+    if (origin != null) {
+      renderResult(canvas, origin!, results, paint);
+    }
+    if (tapOrigin != null) {
+      renderResult(canvas, tapOrigin!, tapResults, tapPaint);
+    }
   }
 
   void renderResult(
@@ -133,6 +147,5 @@ around trying not to hit them.
         paint,
       );
     }
-    canvas.drawCircle(originOffset, 5, paint);
   }
 }

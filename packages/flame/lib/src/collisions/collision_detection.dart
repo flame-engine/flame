@@ -89,6 +89,7 @@ abstract class CollisionDetection<T extends Hitbox<T>> {
   List<RaycastResult<T>> raycastAll(
     Vector2 origin,
     int amount, {
+    double startAngle = 0,
     List<Ray2>? rays,
     List<RaycastResult<T>>? out,
   });

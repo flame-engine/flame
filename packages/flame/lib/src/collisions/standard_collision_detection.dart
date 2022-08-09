@@ -92,6 +92,7 @@ class StandardCollisionDetection extends CollisionDetection<ShapeHitbox> {
   List<RaycastResult<ShapeHitbox>> raycastAll(
     Vector2 origin,
     int amountOfRays, {
+    double startAngle = 0,
     List<Ray2>? rays,
     List<RaycastResult<ShapeHitbox>>? out,
   }) {
@@ -108,7 +109,7 @@ class StandardCollisionDetection extends CollisionDetection<ShapeHitbox> {
       ray.origin.setFrom(origin);
       ray.direction
         ..setValues(1, 0)
-        ..rotate(angle * i);
+        ..rotate(startAngle + angle * i);
       ray.updateInverses();
 
       RaycastResult<ShapeHitbox>? result;
