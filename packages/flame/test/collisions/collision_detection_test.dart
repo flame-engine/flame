@@ -1053,7 +1053,7 @@ void main() {
       final results = game.collisionDetection.raytrace(ray);
       expect(results.length, 1);
       expect(results.first.isActive, isTrue);
-      expect(results.first.isWithin, isFalse);
+      expect(results.first.isInsideHitbox, isFalse);
       expect(results.first.intersectionPoint, Vector2(10, 20));
       final reflectionRay = results.first.reflectionRay;
       expect(reflectionRay?.origin, Vector2(10, 20));
@@ -1072,7 +1072,7 @@ void main() {
       final results = game.collisionDetection.raytrace(ray);
       expect(results.length, 1);
       expect(results.first.isActive, isTrue);
-      expect(results.first.isWithin, isFalse);
+      expect(results.first.isInsideHitbox, isFalse);
       expect(results.first.intersectionPoint, Vector2(10, 20));
       final reflectionRay = results.first.reflectionRay;
       expect(reflectionRay?.origin, Vector2(10, 20));
@@ -1092,7 +1092,7 @@ void main() {
       final results = game.collisionDetection.raytrace(ray);
       expect(results.length, 1);
       expect(results.first.isActive, isTrue);
-      expect(results.first.isWithin, isFalse);
+      expect(results.first.isInsideHitbox, isFalse);
       expect(results.first.intersectionPoint, Vector2(-10, 40));
       final reflectionRay = results.first.reflectionRay;
       expect(reflectionRay?.origin, Vector2(-10, 40));
@@ -1116,7 +1116,7 @@ void main() {
       final results = game.collisionDetection.raytrace(ray);
       expect(results.length, 2);
       expect(results.every((e) => e.isActive), isTrue);
-      expect(results.every((e) => e.isWithin), isFalse);
+      expect(results.every((e) => e.isInsideHitbox), isFalse);
       // First box
       expect(results[0].intersectionPoint, Vector2(10, 20));
       expect(results[0].normal, Vector2(-1, 0));
@@ -1149,7 +1149,7 @@ void main() {
       final results = game.collisionDetection.raytrace(ray);
       expect(results.length, 2);
       expect(results.every((e) => e.isActive), isTrue);
-      expect(results.every((e) => e.isWithin), isFalse);
+      expect(results.every((e) => e.isInsideHitbox), isFalse);
       // First box
       expect(results[0].intersectionPoint, Vector2(10, 20));
       expect(results[0].normal, Vector2(-1, 0));
@@ -1179,8 +1179,8 @@ void main() {
       final results = game.collisionDetection.raytrace(ray);
       expect(results.length, 100);
       expect(results.every((e) => e.isActive), isTrue);
-      expect(results[0].isWithin, isFalse);
-      expect(results[1].isWithin, isTrue);
+      expect(results[0].isInsideHitbox, isFalse);
+      expect(results[1].isInsideHitbox, isTrue);
       // First box
       expect(results[0].intersectionPoint, Vector2(30, 20));
       expect(results[0].normal, Vector2(0, -1));

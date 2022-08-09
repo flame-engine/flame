@@ -46,10 +46,10 @@ mixin PolygonRayIntersection<T extends ShapeHitbox> on PolygonComponent {
       _temporaryNormal
         ..setValues(_temporaryNormal.y, -_temporaryNormal.x)
         ..normalize();
-      var isWithin = false;
+      var isInsideHitbox = false;
       if (crossings == 1 || isOverlappingPoint) {
         _temporaryNormal.invert();
-        isWithin = true;
+        isInsideHitbox = true;
       }
       final reflectionDirection =
           (out?.reflectionRay?.direction ?? Vector2.zero())
@@ -68,7 +68,7 @@ mixin PolygonRayIntersection<T extends ShapeHitbox> on PolygonComponent {
           reflectionRay: reflectionRay,
           normal: _temporaryNormal,
           distance: closestDistance,
-          isWithin: isWithin,
+          isInsideHitbox: isInsideHitbox,
         );
     }
     out?.isActive = false;

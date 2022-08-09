@@ -44,7 +44,7 @@ class CircleHitbox extends CircleComponent with ShapeHitbox {
     Ray2 ray, {
     RaycastResult<ShapeHitbox>? out,
   }) {
-    var isWithin = false;
+    var isInsideHitbox = false;
     _temporaryLineSegment.from.setFrom(ray.origin);
     _temporaryAbsoluteCenter.setFrom(absoluteCenter);
     _temporaryCenter
@@ -56,7 +56,7 @@ class CircleHitbox extends CircleComponent with ShapeHitbox {
       ..y *= (ray.direction.y.sign * _temporaryLineSegment.to.y.sign);
     if (_temporaryLineSegment.to.length2 < radius * radius) {
       _temporaryLineSegment.to.scaleTo(2 * radius);
-      isWithin = true;
+      isInsideHitbox = true;
     }
     _temporaryLineSegment.to.add(ray.origin);
     final intersections = lineSegmentIntersections(_temporaryLineSegment).where(
@@ -72,7 +72,7 @@ class CircleHitbox extends CircleComponent with ShapeHitbox {
         ..setFrom(intersectionPoint)
         ..sub(_temporaryAbsoluteCenter)
         ..normalize();
-      if (isWithin) {
+      if (isInsideHitbox) {
         _temporaryNormal.invert();
       }
       final reflectionDirection =
@@ -92,7 +92,7 @@ class CircleHitbox extends CircleComponent with ShapeHitbox {
         reflectionRay: reflectionRay,
         normal: _temporaryNormal,
         distance: ray.origin.distanceTo(intersectionPoint),
-        isWithin: isWithin,
+        isInsideHitbox: isInsideHitbox,
       );
       return result;
     }
