@@ -63,7 +63,7 @@ class CircleHitbox extends CircleComponent with ShapeHitbox {
       (i) => i.distanceToSquared(ray.origin) > 0.0000001,
     );
     if (intersections.isEmpty) {
-      out?.isActive = false;
+      out?.reset();
       return null;
     } else {
       final result = out ?? RaycastResult();

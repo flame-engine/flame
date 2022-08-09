@@ -35,7 +35,6 @@ mixin PolygonRayIntersection<T extends ShapeHitbox> on PolygonComponent {
       }
     }
     if (crossings > 0) {
-      out?.isActive = true;
       final intersectionPoint =
           ray.point(closestDistance, out: out?.intersectionPoint);
       // This is "from" to "to" since it is defined ccw in the canvas
@@ -71,7 +70,7 @@ mixin PolygonRayIntersection<T extends ShapeHitbox> on PolygonComponent {
           isInsideHitbox: isInsideHitbox,
         );
     }
-    out?.isActive = false;
+    out?.reset();
     return null;
   }
 }

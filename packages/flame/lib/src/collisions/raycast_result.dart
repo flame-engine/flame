@@ -13,39 +13,41 @@ class RaycastResult<T extends Hitbox<T>> {
     Ray2? reflectionRay,
     Vector2? normal,
     double? distance,
-    this.isInsideHitbox = false,
-    this.isActive = true,
-  }) {
-    _hitbox = hitbox;
-    _reflectionRay = reflectionRay ?? Ray2.zero();
-    _normal = normal ?? Vector2.zero();
-    _distance = distance ?? double.maxFinite;
-  }
+    bool isInsideHitbox = false,
+    bool isActive = true,
+  })  : _isInsideHitbox = isInsideHitbox,
+        _isActive = isActive,
+        _hitbox = hitbox,
+        _reflectionRay = reflectionRay ?? Ray2.zero(),
+        _normal = normal ?? Vector2.zero(),
+        _distance = distance ?? double.maxFinite;
 
   /// Whether this result has active results in it.
   ///
   /// This is used so that the objects in there can continue to live even when
   /// there is no result from a ray cast.
-  bool isActive;
+  bool get isActive => _isActive;
+  bool _isActive;
 
   /// Whether the origin of the ray was inside the hitbox.
-  bool isInsideHitbox;
+  bool get isInsideHitbox => _isInsideHitbox;
+  bool _isInsideHitbox;
 
   T? _hitbox;
   T? get hitbox => isActive ? _hitbox : null;
 
-  late Ray2 _reflectionRay;
+  final Ray2 _reflectionRay;
   Ray2? get reflectionRay => isActive ? _reflectionRay : null;
 
   Vector2? get intersectionPoint => reflectionRay?.origin;
 
-  late double _distance;
+  double _distance;
   double? get distance => isActive ? _distance : null;
 
-  late Vector2 _normal;
+  final Vector2 _normal;
   Vector2? get normal => isActive ? _normal : null;
 
-  void reset() => isActive = false;
+  void reset() => _isActive = false;
 
   /// Sets this [RaycastResult]'s objects to the values stored in [other].
   ///
@@ -77,8 +79,8 @@ class RaycastResult<T extends Hitbox<T>> {
       _normal.setFrom(normal);
     }
     _distance = distance ?? double.maxFinite;
-    this.isActive = isActive;
-    this.isInsideHitbox = isInsideHitbox;
+    _isActive = isActive;
+    _isInsideHitbox = isInsideHitbox;
   }
 
   RaycastResult<T> clone() {
