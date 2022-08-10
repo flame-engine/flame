@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2022-08-10
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`flame_tiled` - `v1.7.1`](#flame_tiled---v171)
+
+---
+
+#### `flame_tiled` - `v1.7.1`
+
+ - **FIX**: Remove unnecessary x offset ([#1838](https://github.com/flame-engine/flame/issues/1838)). ([4ea12b72](https://github.com/flame-engine/flame/commit/4ea12b724e04843b3b7dcd02dc2fb5060c9cf283))
+ - **FEAT**: Adding support for additional layer rendering options ([#1794](https://github.com/flame-engine/flame/issues/1794)). ([112acf2a](https://github.com/flame-engine/flame/commit/112acf2aa70ded86e6c2b661f5d6a4855d043f99))
+
+
 ## 2022-08-09
 
 ### Changes
