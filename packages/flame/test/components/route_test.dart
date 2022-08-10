@@ -12,8 +12,8 @@ void main() {
       final router = RouterComponent(
         initialRoute: 'start',
         routes: {
-          'start': Route(builder: Component.new),
-          'new': Route(),
+          'start': Route(Component.new),
+          'new': Route(null),
         },
       )..addToParent(game);
       await game.ready();
@@ -34,7 +34,7 @@ void main() {
       final router = RouterComponent(
         initialRoute: 'start',
         routes: {
-          'start': Route(builder: Component.new),
+          'start': Route(Component.new),
           'new': CustomRoute(
             onPush: (self, prevRoute) {
               onPushCalled++;
@@ -75,7 +75,7 @@ void main() {
       final router = RouterComponent(
         initialRoute: 'start',
         routes: {
-          'start': Route(builder: _TimerComponent.new),
+          'start': Route(_TimerComponent.new),
           'pause': CustomRoute(
             builder: Component.new,
             onPush: (self, route) => route?.stopTime(),
@@ -119,13 +119,13 @@ void main() {
           initialRoute: 'initial',
           routes: {
             'initial': Route(
-              builder: () => _ColoredComponent(
+              () => _ColoredComponent(
                 color: const Color(0xFFFF0000),
                 size: Vector2.all(100),
               ),
             ),
             'green': Route(
-              builder: () => _ColoredComponent(
+              () => _ColoredComponent(
                 color: const Color(0x8800FF00),
                 position: Vector2.all(10),
                 size: Vector2.all(80),
@@ -147,13 +147,13 @@ void main() {
           initialRoute: 'initial',
           routes: {
             'initial': Route(
-              builder: () => _ColoredComponent(
+              () => _ColoredComponent(
                 color: const Color(0xFFFF0000),
                 size: Vector2.all(100),
               ),
             ),
             'green': Route(
-              builder: () => _ColoredComponent(
+              () => _ColoredComponent(
                 color: const Color(0x8800FF00),
                 position: Vector2.all(10),
                 size: Vector2.all(80),
@@ -176,7 +176,7 @@ void main() {
           initialRoute: 'initial',
           routes: {
             'initial': Route(
-              builder: () => _ColoredComponent(
+              () => _ColoredComponent(
                 color: const Color(0xFFFF0000),
                 size: Vector2.all(100),
               ),
@@ -208,7 +208,7 @@ void main() {
           initialRoute: 'initial',
           routes: {
             'initial': Route(
-              builder: () => _ColoredComponent(
+              () => _ColoredComponent(
                 color: const Color(0xFFFF0000),
                 size: Vector2.all(100),
               ),
@@ -240,10 +240,10 @@ void main() {
         initialRoute: 'initial',
         routes: {
           'initial': Route(
-            builder: () => PositionComponent(size: Vector2.all(100)),
+            () => PositionComponent(size: Vector2.all(100)),
           ),
           'new': Route(
-            builder: () => PositionComponent(size: Vector2.all(100)),
+            () => PositionComponent(size: Vector2.all(100)),
           ),
         },
       )..addToParent(game);
@@ -262,10 +262,10 @@ void main() {
         initialRoute: 'initial',
         routes: {
           'initial': Route(
-            builder: () => PositionComponent(size: Vector2.all(100)),
+            () => PositionComponent(size: Vector2.all(100)),
           ),
           'new': Route(
-            builder: () => PositionComponent(size: Vector2.all(100)),
+            () => PositionComponent(size: Vector2.all(100)),
             transparent: true,
           ),
         },
@@ -288,14 +288,15 @@ void main() {
 
 class CustomRoute extends Route {
   CustomRoute({
-    super.builder,
+    Component Function()? builder,
     super.transparent,
     void Function(Route, Route?)? onPush,
     void Function(Route, Route)? onPop,
     Component Function(Route)? build,
   })  : _onPush = onPush,
         _onPop = onPop,
-        _build = build;
+        _build = build,
+        super(builder);
 
   final void Function(Route, Route?)? _onPush;
   final void Function(Route, Route)? _onPop;

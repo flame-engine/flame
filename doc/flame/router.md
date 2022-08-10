@@ -40,9 +40,9 @@ class MyGame extends FlameGame {
     add(
       router = RouterComponent(
         routes: {
-          'home': Route(builder: HomePage()),
-          'level-selector': Route(builder: LevelSelectorPage()),
-          'settings': Route(builder: SettingsPage(), transparent: true),
+          'home': Route(HomePage.new),
+          'level-selector': Route(LevelSelectorPage.new),
+          'settings': Route(SettingsPage.new, transparent: true),
           'pause': PauseRoute(),
         },
         initialRoute: 'home',

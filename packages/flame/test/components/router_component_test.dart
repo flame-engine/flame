@@ -8,9 +8,9 @@ void main() {
     testWithFlameGame('normal route pushing/popping', (game) async {
       final router = RouterComponent(
         routes: {
-          'A': Route(builder: _ComponentA.new),
-          'B': Route(builder: _ComponentB.new),
-          'C': Route(builder: _ComponentC.new),
+          'A': Route(_ComponentA.new),
+          'B': Route(_ComponentB.new),
+          'C': Route(_ComponentC.new),
         },
         initialRoute: 'A',
       );
@@ -34,7 +34,7 @@ void main() {
       expect(router.currentRoute.name, 'A');
       expect(router.stack.length, 1);
 
-      router.pushRoute(Route(builder: _ComponentD.new), name: 'Dee');
+      router.pushRoute(Route(_ComponentD.new), name: 'Dee');
       await game.ready();
       expect(router.routes.length, 4);
       expect(router.currentRoute.name, 'Dee');
@@ -46,10 +46,10 @@ void main() {
     testWithFlameGame('Route factories', (game) async {
       final router = RouterComponent(
         initialRoute: 'initial',
-        routes: {'initial': Route(builder: _ComponentD.new)},
+        routes: {'initial': Route(_ComponentD.new)},
         routeFactories: {
-          'a': (arg) => Route(builder: _ComponentA.new),
-          'b': (arg) => Route(builder: _ComponentB.new),
+          'a': (arg) => Route(_ComponentA.new),
+          'b': (arg) => Route(_ComponentB.new),
         },
       );
       game.add(router);
@@ -71,9 +71,9 @@ void main() {
     testWithFlameGame('push an existing route', (game) async {
       final router = RouterComponent(
         routes: {
-          'A': Route(builder: _ComponentA.new),
-          'B': Route(builder: _ComponentB.new),
-          'C': Route(builder: _ComponentC.new),
+          'A': Route(_ComponentA.new),
+          'B': Route(_ComponentB.new),
+          'C': Route(_ComponentC.new),
         },
         initialRoute: 'A',
       )..addToParent(game);
@@ -102,8 +102,8 @@ void main() {
     testWithFlameGame('onUnknownRoute', (game) async {
       final router = RouterComponent(
         initialRoute: 'home',
-        routes: {'home': Route(builder: _ComponentA.new)},
-        onUnknownRoute: (name) => Route(builder: _ComponentD.new),
+        routes: {'home': Route(_ComponentA.new)},
+        onUnknownRoute: (name) => Route(_ComponentD.new),
       )..addToParent(game);
       await game.ready();
 
@@ -116,7 +116,7 @@ void main() {
     testWithFlameGame('default unknown route handling', (game) async {
       final router = RouterComponent(
         initialRoute: 'home',
-        routes: {'home': Route(builder: _ComponentA.new)},
+        routes: {'home': Route(_ComponentA.new)},
       )..addToParent(game);
       await game.ready();
 
@@ -136,7 +136,7 @@ void main() {
     testWithFlameGame('cannot pop last remaining route', (game) async {
       final router = RouterComponent(
         initialRoute: 'home',
-        routes: {'home': Route(builder: _ComponentA.new)},
+        routes: {'home': Route(_ComponentA.new)},
       )..addToParent(game);
       await game.ready();
 
@@ -149,9 +149,9 @@ void main() {
     testWithFlameGame('popUntilNamed', (game) async {
       final router = RouterComponent(
         routes: {
-          'A': Route(builder: _ComponentA.new),
-          'B': Route(builder: _ComponentB.new),
-          'C': Route(builder: _ComponentC.new),
+          'A': Route(_ComponentA.new),
+          'B': Route(_ComponentB.new),
+          'C': Route(_ComponentC.new),
         },
         initialRoute: 'A',
       );

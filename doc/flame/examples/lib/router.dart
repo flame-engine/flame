@@ -13,10 +13,10 @@ class RouterGame extends FlameGame with HasTappableComponents {
     add(
       router = RouterComponent(
         routes: {
-          'splash': Route(builder: SplashScreenPage.new),
-          'home': Route(builder: StartPage.new),
-          'level1': Route(builder: Level1Page.new),
-          'level2': Route(builder: Level2Page.new),
+          'splash': Route(SplashScreenPage.new),
+          'home': Route(StartPage.new),
+          'level1': Route(Level1Page.new),
+          'level2': Route(Level2Page.new),
           'pause': PauseRoute(),
         },
         initialRoute: 'splash',
@@ -361,7 +361,7 @@ class Orbit extends PositionComponent {
 }
 
 class PauseRoute extends Route {
-  PauseRoute() : super(builder: PausePage.new, transparent: true);
+  PauseRoute() : super(PausePage.new, transparent: true);
 
   @override
   void onPush(Route? previousRoute) {

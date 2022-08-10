@@ -24,8 +24,8 @@ import 'package:vector_math/vector_math_64.dart';
 ///
 /// Routes are managed by the [RouterComponent] component.
 class Route extends PositionComponent with ParentIsA<RouterComponent> {
-  Route({
-    Component Function()? builder,
+  Route(
+    Component Function()? builder, {
     this.transparent = false,
   }) : _builder = builder;
 
