@@ -2,8 +2,8 @@ import 'dart:ui';
 
 import 'package:flame/src/components/component.dart';
 import 'package:flame/src/components/mixins/parent_is_a.dart';
-import 'package:flame/src/components/router_component.dart';
 import 'package:flame/src/components/position_component.dart';
+import 'package:flame/src/components/router_component.dart';
 import 'package:flame/src/effects/effect.dart';
 import 'package:flame/src/rendering/decorator.dart';
 import 'package:meta/meta.dart';
