@@ -4,9 +4,9 @@ import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  group('NavigatorComponent', () {
+  group('RouterComponent', () {
     testWithFlameGame('normal route pushing/popping', (game) async {
-      final navigator = RouterComponent(
+      final router = RouterComponent(
         routes: {
           'A': Route(builder: _ComponentA.new),
           'B': Route(builder: _ComponentB.new),
@@ -14,37 +14,37 @@ void main() {
         },
         initialRoute: 'A',
       );
-      game.add(navigator);
+      game.add(router);
       await game.ready();
 
-      expect(navigator.routes.length, 3);
-      expect(navigator.currentRoute.name, 'A');
-      expect(navigator.currentRoute.children.length, 1);
-      expect(navigator.currentRoute.children.first, isA<_ComponentA>());
+      expect(router.routes.length, 3);
+      expect(router.currentRoute.name, 'A');
+      expect(router.currentRoute.children.length, 1);
+      expect(router.currentRoute.children.first, isA<_ComponentA>());
 
-      navigator.pushNamed('B');
+      router.pushNamed('B');
       await game.ready();
-      expect(navigator.currentRoute.name, 'B');
-      expect(navigator.currentRoute.children.length, 1);
-      expect(navigator.currentRoute.children.first, isA<_ComponentB>());
-      expect(navigator.stack.length, 2);
+      expect(router.currentRoute.name, 'B');
+      expect(router.currentRoute.children.length, 1);
+      expect(router.currentRoute.children.first, isA<_ComponentB>());
+      expect(router.stack.length, 2);
 
-      navigator.pop();
+      router.pop();
       await game.ready();
-      expect(navigator.currentRoute.name, 'A');
-      expect(navigator.stack.length, 1);
+      expect(router.currentRoute.name, 'A');
+      expect(router.stack.length, 1);
 
-      navigator.pushRoute(Route(builder: _ComponentD.new), name: 'Dee');
+      router.pushRoute(Route(builder: _ComponentD.new), name: 'Dee');
       await game.ready();
-      expect(navigator.routes.length, 4);
-      expect(navigator.currentRoute.name, 'Dee');
-      expect(navigator.currentRoute.children.length, 1);
-      expect(navigator.currentRoute.children.first, isA<_ComponentD>());
-      expect(navigator.stack.length, 2);
+      expect(router.routes.length, 4);
+      expect(router.currentRoute.name, 'Dee');
+      expect(router.currentRoute.children.length, 1);
+      expect(router.currentRoute.children.first, isA<_ComponentD>());
+      expect(router.stack.length, 2);
     });
 
     testWithFlameGame('Route factories', (game) async {
-      final navigator = RouterComponent(
+      final router = RouterComponent(
         initialRoute: 'initial',
         routes: {'initial': Route(builder: _ComponentD.new)},
         routeFactories: {
@@ -52,24 +52,24 @@ void main() {
           'b': (arg) => Route(builder: _ComponentB.new),
         },
       );
-      game.add(navigator);
+      game.add(router);
       await game.ready();
 
-      expect(navigator.currentRoute.name, 'initial');
+      expect(router.currentRoute.name, 'initial');
 
-      navigator.pushNamed('a/101');
+      router.pushNamed('a/101');
       await game.ready();
-      expect(navigator.currentRoute.name, 'a/101');
-      expect(navigator.currentRoute.children.first, isA<_ComponentA>());
+      expect(router.currentRoute.name, 'a/101');
+      expect(router.currentRoute.children.first, isA<_ComponentA>());
 
-      navigator.pushNamed('b/something');
+      router.pushNamed('b/something');
       await game.ready();
-      expect(navigator.currentRoute.name, 'b/something');
-      expect(navigator.currentRoute.children.first, isA<_ComponentB>());
+      expect(router.currentRoute.name, 'b/something');
+      expect(router.currentRoute.children.first, isA<_ComponentB>());
     });
 
     testWithFlameGame('push an existing route', (game) async {
-      final navigator = RouterComponent(
+      final router = RouterComponent(
         routes: {
           'A': Route(builder: _ComponentA.new),
           'B': Route(builder: _ComponentB.new),
@@ -79,49 +79,49 @@ void main() {
       )..addToParent(game);
       await game.ready();
 
-      navigator.pushNamed('A');
+      router.pushNamed('A');
       await game.ready();
-      expect(navigator.stack.length, 1);
+      expect(router.stack.length, 1);
 
-      navigator.pushNamed('B');
-      navigator.pushNamed('C');
-      expect(navigator.stack.length, 3);
+      router.pushNamed('B');
+      router.pushNamed('C');
+      expect(router.stack.length, 3);
 
-      navigator.pushNamed('B');
-      expect(navigator.stack.length, 3);
-      navigator.pushNamed('A');
-      expect(navigator.stack.length, 3);
+      router.pushNamed('B');
+      expect(router.stack.length, 3);
+      router.pushNamed('A');
+      expect(router.stack.length, 3);
 
       await game.ready();
-      expect(navigator.children.length, 3);
-      expect((navigator.children.elementAt(0) as Route).name, 'C');
-      expect((navigator.children.elementAt(1) as Route).name, 'B');
-      expect((navigator.children.elementAt(2) as Route).name, 'A');
+      expect(router.children.length, 3);
+      expect((router.children.elementAt(0) as Route).name, 'C');
+      expect((router.children.elementAt(1) as Route).name, 'B');
+      expect((router.children.elementAt(2) as Route).name, 'A');
     });
 
     testWithFlameGame('onUnknownRoute', (game) async {
-      final navigator = RouterComponent(
+      final router = RouterComponent(
         initialRoute: 'home',
         routes: {'home': Route(builder: _ComponentA.new)},
         onUnknownRoute: (name) => Route(builder: _ComponentD.new),
       )..addToParent(game);
       await game.ready();
 
-      navigator.pushNamed('hello');
+      router.pushNamed('hello');
       await game.ready();
-      expect(navigator.currentRoute.name, 'hello');
-      expect(navigator.currentRoute.children.first, isA<_ComponentD>());
+      expect(router.currentRoute.name, 'hello');
+      expect(router.currentRoute.children.first, isA<_ComponentD>());
     });
 
     testWithFlameGame('default unknown route handling', (game) async {
-      final navigator = RouterComponent(
+      final router = RouterComponent(
         initialRoute: 'home',
         routes: {'home': Route(builder: _ComponentA.new)},
       )..addToParent(game);
       await game.ready();
 
       expect(
-        () => navigator.pushNamed('hello'),
+        () => router.pushNamed('hello'),
         throwsA(
           predicate(
             (e) =>
@@ -134,20 +134,20 @@ void main() {
     });
 
     testWithFlameGame('cannot pop last remaining route', (game) async {
-      final navigator = RouterComponent(
+      final router = RouterComponent(
         initialRoute: 'home',
         routes: {'home': Route(builder: _ComponentA.new)},
       )..addToParent(game);
       await game.ready();
 
       expect(
-        navigator.pop,
+        router.pop,
         failsAssert('Cannot pop the last route from the Navigator'),
       );
     });
 
     testWithFlameGame('popUntilNamed', (game) async {
-      final navigator = RouterComponent(
+      final router = RouterComponent(
         routes: {
           'A': Route(builder: _ComponentA.new),
           'B': Route(builder: _ComponentB.new),
@@ -155,20 +155,20 @@ void main() {
         },
         initialRoute: 'A',
       );
-      game.add(navigator);
+      game.add(router);
       await game.ready();
 
-      navigator.pushNamed('B');
-      navigator.pushNamed('C');
+      router.pushNamed('B');
+      router.pushNamed('C');
       await game.ready();
-      expect(navigator.stack.length, 3);
-      expect(navigator.children.length, 3);
+      expect(router.stack.length, 3);
+      expect(router.children.length, 3);
 
-      navigator.popUntilNamed('A');
+      router.popUntilNamed('A');
       await game.ready();
-      expect(navigator.stack.length, 1);
-      expect(navigator.children.length, 1);
-      expect(navigator.currentRoute.name, 'A');
+      expect(router.stack.length, 1);
+      expect(router.children.length, 1);
+      expect(router.currentRoute.name, 'A');
     });
   });
 }

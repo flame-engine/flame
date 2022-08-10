@@ -6,7 +6,7 @@ import 'package:doc_flame_examples/decorator_rotate3d.dart';
 import 'package:doc_flame_examples/decorator_shadow3d.dart';
 import 'package:doc_flame_examples/decorator_tint.dart';
 import 'package:doc_flame_examples/drag_events.dart';
-import 'package:doc_flame_examples/navigator.dart';
+import 'package:doc_flame_examples/router.dart';
 import 'package:doc_flame_examples/tap_events.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/widgets.dart';
