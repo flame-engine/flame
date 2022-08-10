@@ -1,8 +1,8 @@
 import 'dart:ui';
 
 import 'package:flame/components.dart';
+import 'package:flame/src/text/elements/text_element.dart';
 import 'package:flame/src/text/formatter_text_renderer.dart';
-import 'package:flame/src/text/inline/text_element.dart';
 import 'package:flame/src/text/text_renderer.dart';
 import 'package:flutter/painting.dart';
 import 'package:meta/meta.dart';
