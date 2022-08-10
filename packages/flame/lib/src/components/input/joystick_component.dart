@@ -111,7 +111,7 @@ class JoystickComponent extends HudMarginComponent with Draggable {
 
   @override
   bool onDragUpdate(DragUpdateInfo info) {
-    _unscaledDelta.add(info.delta.global);
+    _unscaledDelta.add(info.delta.viewport);
     return false;
   }
 
