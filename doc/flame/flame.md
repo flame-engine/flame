@@ -3,7 +3,7 @@
 ```{toctree}
 File structure       <structure.md>
 GameWidget           <game_widget.md>
-Navigator            <navigator.md>
+Router               <router.md>
 Game loop            <game.md>
 Components           <components.md>
 Platforms            <platforms.md>

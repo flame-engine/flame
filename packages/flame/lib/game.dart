@@ -1,7 +1,7 @@
 /// {@canonicalFor text.TextPaint}
 /// {@canonicalFor text.TextRenderer}
 export 'src/collisions/has_collision_detection.dart';
-export 'src/components/navigator_component.dart' show NavigatorComponent;
+export 'src/components/router_component.dart' show RouterComponent;
 export 'src/components/route.dart' show Route;
 export 'src/extensions/vector2.dart';
 export 'src/game/camera/camera.dart';

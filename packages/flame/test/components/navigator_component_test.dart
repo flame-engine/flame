@@ -6,7 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('NavigatorComponent', () {
     testWithFlameGame('normal route pushing/popping', (game) async {
-      final navigator = NavigatorComponent(
+      final navigator = RouterComponent(
         routes: {
           'A': Route(builder: _ComponentA.new),
           'B': Route(builder: _ComponentB.new),
@@ -44,7 +44,7 @@ void main() {
     });
 
     testWithFlameGame('Route factories', (game) async {
-      final navigator = NavigatorComponent(
+      final navigator = RouterComponent(
         initialRoute: 'initial',
         routes: {'initial': Route(builder: _ComponentD.new)},
         routeFactories: {
@@ -69,7 +69,7 @@ void main() {
     });
 
     testWithFlameGame('push an existing route', (game) async {
-      final navigator = NavigatorComponent(
+      final navigator = RouterComponent(
         routes: {
           'A': Route(builder: _ComponentA.new),
           'B': Route(builder: _ComponentB.new),
@@ -100,7 +100,7 @@ void main() {
     });
 
     testWithFlameGame('onUnknownRoute', (game) async {
-      final navigator = NavigatorComponent(
+      final navigator = RouterComponent(
         initialRoute: 'home',
         routes: {'home': Route(builder: _ComponentA.new)},
         onUnknownRoute: (name) => Route(builder: _ComponentD.new),
@@ -114,7 +114,7 @@ void main() {
     });
 
     testWithFlameGame('default unknown route handling', (game) async {
-      final navigator = NavigatorComponent(
+      final navigator = RouterComponent(
         initialRoute: 'home',
         routes: {'home': Route(builder: _ComponentA.new)},
       )..addToParent(game);
@@ -134,7 +134,7 @@ void main() {
     });
 
     testWithFlameGame('cannot pop last remaining route', (game) async {
-      final navigator = NavigatorComponent(
+      final navigator = RouterComponent(
         initialRoute: 'home',
         routes: {'home': Route(builder: _ComponentA.new)},
       )..addToParent(game);
@@ -147,7 +147,7 @@ void main() {
     });
 
     testWithFlameGame('popUntilNamed', (game) async {
-      final navigator = NavigatorComponent(
+      final navigator = RouterComponent(
         routes: {
           'A': Route(builder: _ComponentA.new),
           'B': Route(builder: _ComponentB.new),

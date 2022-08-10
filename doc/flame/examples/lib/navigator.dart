@@ -5,13 +5,13 @@ import 'package:flame/game.dart';
 import 'package:flame/rendering.dart';
 import 'package:flutter/rendering.dart';
 
-class NavigatorGame extends FlameGame with HasTappableComponents {
-  late final NavigatorComponent navigator;
+class RouterGame extends FlameGame with HasTappableComponents {
+  late final RouterComponent router;
 
   @override
   Future<void> onLoad() async {
     add(
-      navigator = NavigatorComponent(
+      router = RouterComponent(
         routes: {
           'splash': Route(builder: SplashScreenPage.new),
           'home': Route(builder: StartPage.new),
@@ -26,7 +26,7 @@ class NavigatorGame extends FlameGame with HasTappableComponents {
 }
 
 class SplashScreenPage extends Component
-    with TapCallbacks, HasGameRef<NavigatorGame> {
+    with TapCallbacks, HasGameRef<RouterGame> {
   @override
   Future<void> onLoad() async {
     addAll([
@@ -49,10 +49,10 @@ class SplashScreenPage extends Component
   bool containsLocalPoint(Vector2 point) => true;
 
   @override
-  void onTapUp(TapUpEvent event) => gameRef.navigator.pushNamed('home');
+  void onTapUp(TapUpEvent event) => gameRef.router.pushNamed('home');
 }
 
-class StartPage extends Component with HasGameRef<NavigatorGame> {
+class StartPage extends Component with HasGameRef<RouterGame> {
   StartPage() {
     addAll([
       _logo = TextComponent(
@@ -68,13 +68,13 @@ class StartPage extends Component with HasGameRef<NavigatorGame> {
       ),
       _button1 = RoundedButton(
         text: 'Level 1',
-        action: () => gameRef.navigator.pushNamed('level1'),
+        action: () => gameRef.router.pushNamed('level1'),
         color: const Color(0xffadde6c),
         borderColor: const Color(0xffedffab),
       ),
       _button2 = RoundedButton(
         text: 'Level 2',
-        action: () => gameRef.navigator.pushNamed('level2'),
+        action: () => gameRef.router.pushNamed('level2'),
         color: const Color(0xffdebe6c),
         borderColor: const Color(0xfffff4c7),
       ),
@@ -203,7 +203,7 @@ abstract class SimpleButton extends PositionComponent with TapCallbacks {
   }
 }
 
-class BackButton extends SimpleButton with HasGameRef<NavigatorGame> {
+class BackButton extends SimpleButton with HasGameRef<RouterGame> {
   BackButton()
       : super(
           Path()
@@ -216,10 +216,10 @@ class BackButton extends SimpleButton with HasGameRef<NavigatorGame> {
         );
 
   @override
-  void action() => gameRef.navigator.pop();
+  void action() => gameRef.router.pop();
 }
 
-class PauseButton extends SimpleButton with HasGameRef<NavigatorGame> {
+class PauseButton extends SimpleButton with HasGameRef<RouterGame> {
   PauseButton()
       : super(
           Path()
@@ -230,7 +230,7 @@ class PauseButton extends SimpleButton with HasGameRef<NavigatorGame> {
           position: Vector2(60, 10),
         );
   @override
-  void action() => gameRef.navigator.pushNamed('pause');
+  void action() => gameRef.router.pushNamed('pause');
 }
 
 class Level1Page extends Component {
@@ -380,7 +380,7 @@ class PauseRoute extends Route {
   }
 }
 
-class PausePage extends Component with TapCallbacks, HasGameRef<NavigatorGame> {
+class PausePage extends Component with TapCallbacks, HasGameRef<RouterGame> {
   @override
   Future<void> onLoad() async {
     final game = findGame()!;
@@ -407,5 +407,5 @@ class PausePage extends Component with TapCallbacks, HasGameRef<NavigatorGame> {
   bool containsLocalPoint(Vector2 point) => true;
 
   @override
-  void onTapUp(TapUpEvent event) => gameRef.navigator.pop();
+  void onTapUp(TapUpEvent event) => gameRef.router.pop();
 }

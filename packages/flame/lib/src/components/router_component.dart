@@ -2,19 +2,18 @@ import 'package:flame/src/components/component.dart';
 import 'package:flame/src/components/route.dart';
 import 'package:meta/meta.dart';
 
-/// [NavigatorComponent] handles transitions between multiple pages of a game.
+/// [RouterComponent] handles transitions between multiple pages of a game.
 ///
 /// The term **page** is used descriptively here: it is any full-screen (or
 /// partial-screen) component. For example: a starting page, a settings page,
 /// the main game world page, and so on. A page can also be any individual piece
 /// of UI, such as a confirmation dialog box, or a user inventory pop-up.
 ///
-/// The navigator doesn't handle the pages directly -- instead, it operates
-/// a stack of [Route]s. Each route, in turn, manages a single page component.
-/// However, routes are "lazy": they will only build their pages when they
-/// become active.
+/// The router doesn't handle the pages directly -- instead, it operates a stack
+/// of [Route]s. Each route, in turn, manages a single page component. However,
+/// routes are lazy: they will only build their pages when they become active.
 ///
-/// Internally, the Navigator maintains a stack of Routes. In the beginning,
+/// Internally, the router maintains a stack of Routes. In the beginning,
 /// the stack will contain the [initialRoute]. New routes can be added via the
 /// [pushNamed] method, and removed with [pop]. However, the stack must be
 /// kept non-empty: it is an error to attempt to remove the only remaining route
@@ -25,9 +24,9 @@ import 'package:meta/meta.dart';
 /// transparent or opaque. An opaque route prevents all routes below it from
 /// rendering, and also stops pointer events. In addition, routes are able to
 /// stop or slow down time for the pages that they control, or to apply visual
-/// effects to those pages.
-class NavigatorComponent extends Component {
-  NavigatorComponent({
+/// effects (via decorators) to those pages.
+class RouterComponent extends Component {
+  RouterComponent({
     required this.initialRoute,
     required Map<String, Route> routes,
     Map<String, _RouteFactory>? routeFactories,

@@ -23,7 +23,7 @@ void main() {
     'decorator_shadow3d': DecoratorShadowGame.new,
     'decorator_tint': DecoratorTintGame.new,
     'drag_events': DragEventsGame.new,
-    'navigator': NavigatorGame.new,
+    'router': RouterGame.new,
     'tap_events': TapEventsGame.new,
   };
   final game = routes[page]?.call();

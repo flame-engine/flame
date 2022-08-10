@@ -9,7 +9,7 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('Route', () {
     testWithFlameGame('Route without a builder', (game) async {
-      final navigator = NavigatorComponent(
+      final navigator = RouterComponent(
         initialRoute: 'start',
         routes: {
           'start': Route(builder: Component.new),
@@ -31,7 +31,7 @@ void main() {
       var onPopCalled = 0;
       var buildCalled = 0;
       Route? previousRoute;
-      final navigator = NavigatorComponent(
+      final navigator = RouterComponent(
         initialRoute: 'start',
         routes: {
           'start': Route(builder: Component.new),
@@ -72,7 +72,7 @@ void main() {
     });
 
     testWithFlameGame('Stop and resume time', (game) async {
-      final navigator = NavigatorComponent(
+      final navigator = RouterComponent(
         initialRoute: 'start',
         routes: {
           'start': Route(builder: _TimerComponent.new),
@@ -115,7 +115,7 @@ void main() {
     testGolden(
       'Rendering of opaque routes',
       (game) async {
-        final navigator = NavigatorComponent(
+        final navigator = RouterComponent(
           initialRoute: 'initial',
           routes: {
             'initial': Route(
@@ -143,7 +143,7 @@ void main() {
     testGolden(
       'Rendering of transparent routes',
       (game) async {
-        final navigator = NavigatorComponent(
+        final navigator = RouterComponent(
           initialRoute: 'initial',
           routes: {
             'initial': Route(
@@ -172,7 +172,7 @@ void main() {
     testGolden(
       'Rendering of transparent routes with decorators',
       (game) async {
-        final navigator = NavigatorComponent(
+        final navigator = RouterComponent(
           initialRoute: 'initial',
           routes: {
             'initial': Route(
@@ -204,7 +204,7 @@ void main() {
     testGolden(
       'Rendering effect can be removed',
       (game) async {
-        final navigator = NavigatorComponent(
+        final navigator = RouterComponent(
           initialRoute: 'initial',
           routes: {
             'initial': Route(
@@ -236,7 +236,7 @@ void main() {
     );
 
     testWithFlameGame('componentsAtPoint for opaque route', (game) async {
-      final navigator = NavigatorComponent(
+      final navigator = RouterComponent(
         initialRoute: 'initial',
         routes: {
           'initial': Route(
@@ -258,7 +258,7 @@ void main() {
     });
 
     testWithFlameGame('componentsAtPoint for transparent route', (game) async {
-      final navigator = NavigatorComponent(
+      final navigator = RouterComponent(
         initialRoute: 'initial',
         routes: {
           'initial': Route(
