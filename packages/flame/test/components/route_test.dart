@@ -9,7 +9,7 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('Route', () {
     testWithFlameGame('Route without a builder', (game) async {
-      final navigator = RouterComponent(
+      final router = RouterComponent(
         initialRoute: 'start',
         routes: {
           'start': Route(builder: Component.new),
@@ -18,7 +18,7 @@ void main() {
       )..addToParent(game);
       await game.ready();
       expect(
-        () => navigator.pushNamed('new'),
+        () => router.pushNamed('new'),
         failsAssert(
           'Either provide `builder` in the constructor, or override the '
           'build() method',
@@ -31,7 +31,7 @@ void main() {
       var onPopCalled = 0;
       var buildCalled = 0;
       Route? previousRoute;
-      final navigator = RouterComponent(
+      final router = RouterComponent(
         initialRoute: 'start',
         routes: {
           'start': Route(builder: Component.new),
@@ -53,26 +53,26 @@ void main() {
       )..addToParent(game);
       await game.ready();
 
-      navigator.pushNamed('new');
+      router.pushNamed('new');
       expect(buildCalled, 1);
       await game.ready();
-      expect(navigator.currentRoute.name, 'new');
-      expect(navigator.currentRoute.children.first, isA<PositionComponent>());
+      expect(router.currentRoute.name, 'new');
+      expect(router.currentRoute.children.first, isA<PositionComponent>());
       expect(onPushCalled, 1);
       expect(onPopCalled, 0);
       expect(previousRoute!.name, 'start');
 
       previousRoute = null;
-      navigator.pop();
+      router.pop();
       await game.ready();
       expect(onPushCalled, 1);
       expect(onPopCalled, 1);
       expect(previousRoute!.name, 'start');
-      expect(navigator.currentRoute.name, 'start');
+      expect(router.currentRoute.name, 'start');
     });
 
     testWithFlameGame('Stop and resume time', (game) async {
-      final navigator = RouterComponent(
+      final router = RouterComponent(
         initialRoute: 'start',
         routes: {
           'start': Route(builder: _TimerComponent.new),
@@ -85,28 +85,28 @@ void main() {
       )..addToParent(game);
       await game.ready();
 
-      final timer = navigator.currentRoute.children.first as _TimerComponent;
+      final timer = router.currentRoute.children.first as _TimerComponent;
       expect(timer.elapsedTime, 0);
 
       game.update(1);
       expect(timer.elapsedTime, 1);
 
-      navigator.pushNamed('pause');
+      router.pushNamed('pause');
       await game.ready();
-      expect(navigator.currentRoute.name, 'pause');
-      expect(navigator.previousRoute!.timeSpeed, 0);
+      expect(router.currentRoute.name, 'pause');
+      expect(router.previousRoute!.timeSpeed, 0);
 
       game.update(10);
       expect(timer.elapsedTime, 1);
 
-      navigator.previousRoute!.timeSpeed = 0.1;
+      router.previousRoute!.timeSpeed = 0.1;
       game.update(10);
       expect(timer.elapsedTime, 2);
 
-      navigator.pop();
+      router.pop();
       await game.ready();
-      expect(navigator.currentRoute.name, 'start');
-      expect(navigator.currentRoute.timeSpeed, 1);
+      expect(router.currentRoute.name, 'start');
+      expect(router.currentRoute.timeSpeed, 1);
 
       game.update(10);
       expect(timer.elapsedTime, 12);
@@ -115,7 +115,7 @@ void main() {
     testGolden(
       'Rendering of opaque routes',
       (game) async {
-        final navigator = RouterComponent(
+        final router = RouterComponent(
           initialRoute: 'initial',
           routes: {
             'initial': Route(
@@ -134,7 +134,7 @@ void main() {
           },
         )..addToParent(game);
         await game.ready();
-        navigator.pushNamed('green');
+        router.pushNamed('green');
       },
       size: Vector2(100, 100),
       goldenFile: '../_goldens/route_opaque.png',
@@ -143,7 +143,7 @@ void main() {
     testGolden(
       'Rendering of transparent routes',
       (game) async {
-        final navigator = RouterComponent(
+        final router = RouterComponent(
           initialRoute: 'initial',
           routes: {
             'initial': Route(
@@ -163,7 +163,7 @@ void main() {
           },
         )..addToParent(game);
         await game.ready();
-        navigator.pushNamed('green');
+        router.pushNamed('green');
       },
       size: Vector2(100, 100),
       goldenFile: '../_goldens/route_transparent.png',
@@ -172,7 +172,7 @@ void main() {
     testGolden(
       'Rendering of transparent routes with decorators',
       (game) async {
-        final navigator = RouterComponent(
+        final router = RouterComponent(
           initialRoute: 'initial',
           routes: {
             'initial': Route(
@@ -195,7 +195,7 @@ void main() {
           },
         )..addToParent(game);
         await game.ready();
-        navigator.pushNamed('green');
+        router.pushNamed('green');
       },
       size: Vector2(100, 100),
       goldenFile: '../_goldens/route_with_decorators.png',
@@ -204,7 +204,7 @@ void main() {
     testGolden(
       'Rendering effect can be removed',
       (game) async {
-        final navigator = RouterComponent(
+        final router = RouterComponent(
           initialRoute: 'initial',
           routes: {
             'initial': Route(
@@ -227,16 +227,16 @@ void main() {
           },
         )..addToParent(game);
         await game.ready();
-        navigator.pushNamed('green');
+        router.pushNamed('green');
         await game.ready();
-        navigator.pop();
+        router.pop();
       },
       size: Vector2(100, 100),
       goldenFile: '../_goldens/route_decorator_removed.png',
     );
 
     testWithFlameGame('componentsAtPoint for opaque route', (game) async {
-      final navigator = RouterComponent(
+      final router = RouterComponent(
         initialRoute: 'initial',
         routes: {
           'initial': Route(
@@ -249,16 +249,16 @@ void main() {
       )..addToParent(game);
       await game.ready();
 
-      navigator.pushNamed('new');
+      router.pushNamed('new');
       await game.ready();
       expect(
         game.componentsAtPoint(Vector2(50, 50)).toList(),
-        [navigator.currentRoute.children.first, game],
+        [router.currentRoute.children.first, game],
       );
     });
 
     testWithFlameGame('componentsAtPoint for transparent route', (game) async {
-      final navigator = RouterComponent(
+      final router = RouterComponent(
         initialRoute: 'initial',
         routes: {
           'initial': Route(
@@ -272,13 +272,13 @@ void main() {
       )..addToParent(game);
       await game.ready();
 
-      navigator.pushNamed('new');
+      router.pushNamed('new');
       await game.ready();
       expect(
         game.componentsAtPoint(Vector2(50, 50)).toList(),
         [
-          navigator.currentRoute.children.first,
-          navigator.previousRoute!.children.first,
+          router.currentRoute.children.first,
+          router.previousRoute!.children.first,
           game,
         ],
       );

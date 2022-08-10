@@ -13,7 +13,7 @@ the page below it.
 # RouterComponent
 
 The **RouterComponent**'s job is to manage navigation across multiple screens within the game. It is
-similar in spirit to Flutter's [Navigator][Flutter Navigator] class, except that it works with Flame 
+similar in spirit to Flutter's [Navigator][Flutter Navigator] class, except that it works with Flame
 components instead of Flutter widgets.
 
 A typical game will usually consists of multiple pages: the splash screen, the starting menu page,
@@ -33,7 +33,7 @@ dialogue UIs, etc.
 Usage example:
 ```dart
 class MyGame extends FlameGame {
-  late final RouterComponent navigator;
+  late final RouterComponent router;
 
   @override
   Future<void> onLoad() async {

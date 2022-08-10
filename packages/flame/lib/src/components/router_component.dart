@@ -42,7 +42,7 @@ class RouterComponent extends Component {
   /// The stack of all currently active routes. This stack must not be empty
   /// (it will be populated with the [initialRoute] in the beginning).
   ///
-  /// The routes in this list are also added to the Navigator as child
+  /// The routes in this list are also added to the Router as child
   /// components. However, due to the fact that children are usually added or
   /// removed with a delay, there could be temporary discrepancies between this
   /// list and the list of children.
@@ -50,7 +50,7 @@ class RouterComponent extends Component {
   @visibleForTesting
   List<Route> get stack => _routeStack;
 
-  /// The map of all routes known to the Navigator, each route will have a
+  /// The map of all routes known to the Router, each route will have a
   /// unique name. This map is initialized in the constructor; in addition, any
   /// routes produced by the [_routeFactories] will also be cached here.
   Map<String, Route> get routes => _routes;
@@ -122,7 +122,7 @@ class RouterComponent extends Component {
   }
 
   /// Removes the topmost route from the stack, and also removes it as a child
-  /// of the Navigator.
+  /// of the Router.
   ///
   /// The method calls [Route.didPop] for the route that was removed.
   ///
@@ -130,7 +130,7 @@ class RouterComponent extends Component {
   void pop() {
     assert(
       _routeStack.length > 1,
-      'Cannot pop the last route from the Navigator',
+      'Cannot pop the last route from the Router',
     );
     final route = _routeStack.removeLast();
     _adjustRoutesOrder();
@@ -174,7 +174,7 @@ class RouterComponent extends Component {
     if (onUnknownRoute != null) {
       return onUnknownRoute!(name)..name = name;
     }
-    throw ArgumentError('Route "$name" could not be resolved by the Navigator');
+    throw ArgumentError('Route "$name" could not be resolved by the Router');
   }
 
   void _adjustRoutesOrder() {

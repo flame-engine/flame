@@ -32,7 +32,7 @@ class SplashScreenPage extends Component
     addAll([
       Background(const Color(0xff282828)),
       TextBoxComponent(
-        text: '[Navigator demo]',
+        text: '[Router demo]',
         textRenderer: TextPaint(
           style: const TextStyle(
             color: Color(0x66ffffff),

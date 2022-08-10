@@ -127,7 +127,7 @@ void main() {
             (e) =>
                 e is ArgumentError &&
                 e.message ==
-                    'Route "hello" could not be resolved by the Navigator',
+                    'Route "hello" could not be resolved by the Router',
           ),
         ),
       );
@@ -142,7 +142,7 @@ void main() {
 
       expect(
         router.pop,
-        failsAssert('Cannot pop the last route from the Navigator'),
+        failsAssert('Cannot pop the last route from the Router'),
       );
     });
 
