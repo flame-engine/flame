@@ -27,12 +27,18 @@ class DocumentStyle extends Style {
     BlockStyle? header1Style,
     BlockStyle? header2Style,
     BlockStyle? header3Style,
+    BlockStyle? header4Style,
+    BlockStyle? header5Style,
+    BlockStyle? header6Style,
   }) : padding = padding ?? EdgeInsets.zero {
     backgroundStyle = acquire(background);
     this.paragraphStyle = acquire(paragraphStyle ?? defaultParagraphStyle)!;
     this.header1Style = acquire(header1Style ?? defaultHeader1Style)!;
     this.header2Style = acquire(header2Style ?? defaultHeader2Style)!;
     this.header3Style = acquire(header3Style ?? defaultHeader3Style)!;
+    this.header4Style = acquire(header4Style ?? defaultHeader4Style)!;
+    this.header5Style = acquire(header5Style ?? defaultHeader5Style)!;
+    this.header6Style = acquire(header6Style ?? defaultHeader6Style)!;
   }
 
   /// Outer width of the document page.
@@ -87,10 +93,22 @@ class DocumentStyle extends Style {
   /// Style for level-3 headers.
   late final BlockStyle header3Style;
 
+  /// Style for level-4 headers.
+  late final BlockStyle header4Style;
+
+  /// Style for level-5 headers.
+  late final BlockStyle header5Style;
+
+  /// Style for level-6 headers.
+  late final BlockStyle header6Style;
+
   static BlockStyle defaultParagraphStyle = BlockStyle();
   static BlockStyle defaultHeader1Style = BlockStyle();
   static BlockStyle defaultHeader2Style = BlockStyle();
   static BlockStyle defaultHeader3Style = BlockStyle();
+  static BlockStyle defaultHeader4Style = BlockStyle();
+  static BlockStyle defaultHeader5Style = BlockStyle();
+  static BlockStyle defaultHeader6Style = BlockStyle();
 
   @override
   DocumentStyle clone() => copyWith();
@@ -104,6 +122,9 @@ class DocumentStyle extends Style {
     BlockStyle? header1Style,
     BlockStyle? header2Style,
     BlockStyle? header3Style,
+    BlockStyle? header4Style,
+    BlockStyle? header5Style,
+    BlockStyle? header6Style,
   }) {
     return DocumentStyle(
       width: width ?? this.width,
@@ -114,6 +135,9 @@ class DocumentStyle extends Style {
       header1Style: header1Style ?? this.header1Style,
       header2Style: header2Style ?? this.header2Style,
       header3Style: header3Style ?? this.header3Style,
+      header4Style: header4Style ?? this.header4Style,
+      header5Style: header5Style ?? this.header5Style,
+      header6Style: header6Style ?? this.header6Style,
     );
   }
 
@@ -128,8 +152,14 @@ class DocumentStyle extends Style {
           return header1Style;
         case 2:
           return header2Style;
-        default:
+        case 3:
           return header3Style;
+        case 4:
+          return header4Style;
+        case 5:
+          return header5Style;
+        default:
+          return header6Style;
       }
     }
     return BlockStyle();
