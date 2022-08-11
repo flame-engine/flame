@@ -8,7 +8,7 @@ class Sweep<T extends Hitbox<T>> extends Broadphase<T> {
 
   @override
   void update() {
-    items.sort((a, b) => (a.aabb.min.x - b.aabb.min.x).ceil());
+items.sort((a, b) => a.aabb.min.x.compareTo(b.aabb.min.x));
   }
 
   @override
