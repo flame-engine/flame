@@ -33,7 +33,6 @@ around the canvas, rays and their reflections will be rendered.
     ..style = PaintingStyle.stroke
     ..strokeWidth = 2.0;
 
-  static const numberOfRays = 1;
   final List<Ray2> rays = [];
   final List<RaycastResult<ShapeHitbox>> results = [];
 
@@ -139,16 +138,11 @@ around the canvas, rays and their reflections will be rendered.
       _ray.direction
         ..setValues(-1, 1)
         ..normalize();
-      const angle = tau / numberOfRays;
-      for (var i = 0; i < numberOfRays; i++) {
-        _ray.direction.rotate(i * angle);
-        _ray.updateInverses();
-        collisionDetection.raytrace(
-          _ray,
-          maxDepth: 10,
-          out: results,
-        );
-      }
+      collisionDetection.raytrace(
+        _ray,
+        maxDepth: 10,
+        out: results,
+      );
       isOriginCasted = true;
     }
   }

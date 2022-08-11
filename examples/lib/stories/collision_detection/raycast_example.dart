@@ -8,7 +8,6 @@ import 'package:flame/palette.dart';
 import 'package:flutter/material.dart';
 
 class RaycastExample extends FlameGame with HasCollisionDetection {
-  // TODO(spydon): Update this.
   static const description = '''
 In this example the raycast functionality is showcased. The circle moves around
 and casts 10 rays and checks how far the nearest hitboxes are and naively moves

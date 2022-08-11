@@ -98,6 +98,7 @@ class StandardCollisionDetection extends CollisionDetection<ShapeHitbox> {
   }) {
     final angle = tau / amountOfRays;
     final results = <RaycastResult<ShapeHitbox>>[];
+    final direction = Vector2(1, 0);
     for (var i = 0; i < amountOfRays; i++) {
       Ray2 ray;
       if (i < (rays?.length ?? 0)) {
@@ -107,10 +108,10 @@ class StandardCollisionDetection extends CollisionDetection<ShapeHitbox> {
         rays?.add(ray);
       }
       ray.origin.setFrom(origin);
-      ray.direction
+      direction
         ..setValues(1, 0)
         ..rotate(startAngle + angle * i);
-      ray.updateInverses();
+      ray.direction = direction;
 
       RaycastResult<ShapeHitbox>? result;
       if (i < (out?.length ?? 0)) {

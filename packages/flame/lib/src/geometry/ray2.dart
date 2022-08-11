@@ -19,19 +19,19 @@ class Ray2 {
 
   /// The normalized direction of the ray.
   ///
-  /// If the direction values are updated within the object instead of by the
-  /// setter [updateInverses] needs to be called.
+  /// The values within the direction object should not be updated manually, use
+  /// the setter instead.
   Vector2 get direction => _direction;
   set direction(Vector2 direction) {
     _direction.setFrom(direction);
-    updateInverses();
+    _updateInverses();
   }
 
   final Vector2 _direction = Vector2.zero();
 
   /// Should be called if the [direction] values are updated within the object
   /// instead of by the setter.
-  void updateInverses() {
+  void _updateInverses() {
     assert(
       (direction.length2 - 1).abs() < 0.000001,
       'direction must be normalized',

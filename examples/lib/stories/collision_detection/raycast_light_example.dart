@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
@@ -21,8 +23,13 @@ with with mouse.
   Vector2? tapOrigin;
   bool isOriginCasted = false;
   bool isTapOriginCasted = false;
-  Paint paint = Paint()..color = Colors.amber.withOpacity(0.2);
-  Paint tapPaint = Paint()..color = Colors.blue.withOpacity(0.2);
+  Paint paint = Paint();
+  Paint tapPaint = Paint();
+
+  final _colorTween = ColorTween(
+    begin: Colors.blue.withOpacity(0.2),
+    end: Colors.red.withOpacity(0.2),
+  );
 
   static const numberOfRays = 2000;
   final List<Ray2> rays = [];
@@ -95,9 +102,14 @@ with with mouse.
     this.origin = origin;
   }
 
+  var _timePassed = 0.0;
+
   @override
   void update(double dt) {
     super.update(dt);
+    _timePassed += dt;
+    paint.color = _colorTween.transform(0.5 + (sin(_timePassed) / 2))!;
+    tapPaint.color = _colorTween.transform(0.5 + (cos(_timePassed) / 2))!;
     if (origin != null && !isOriginCasted) {
       collisionDetection.raycastAll(
         origin!,
