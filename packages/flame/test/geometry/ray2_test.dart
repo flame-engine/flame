@@ -279,12 +279,12 @@ void main() {
       );
 
       test(
-        'No intersection point when ray originates on segment',
+        'Origin as intersection point when ray originates on segment',
         () {
           final direction = Vector2(0, -1);
           final ray = Ray2(Vector2(5, 0), direction.normalized());
           final segment = LineSegment(Vector2(0, 0), Vector2(10, 0));
-          expect(ray.lineSegmentIntersection(segment), null);
+          expect(ray.lineSegmentIntersection(segment), 0);
         },
       );
 

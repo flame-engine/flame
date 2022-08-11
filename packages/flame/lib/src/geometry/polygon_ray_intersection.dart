@@ -23,7 +23,9 @@ mixin PolygonRayIntersection<T extends ShapeHitbox> on PolygonComponent {
     for (var i = 0; i < vertices.length; i++) {
       final lineSegment = getEdge(i, vertices: vertices);
       final distance = ray.lineSegmentIntersection(lineSegment);
-      if (distance != null) {
+      // Using a small value above 0 just because of rounding errors later that
+      // might cause a ray to go in the wrong direction.
+      if (distance != null && distance > 0.0000000001) {
         crossings++;
         if (distance < closestDistance) {
           isOverlappingPoint = false;
