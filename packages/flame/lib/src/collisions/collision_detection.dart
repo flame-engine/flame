@@ -1,6 +1,6 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-import 'package:flame/src/geometry/ray2.dart';
+import 'package:flame/geometry.dart';
 
 /// [CollisionDetection] is the foundation of the collision detection system in
 /// Flame.
@@ -67,19 +67,20 @@ abstract class CollisionDetection<T extends Hitbox<T>> {
   void handleCollision(Set<Vector2> intersectionPoints, T itemA, T itemB);
   void handleCollisionEnd(T itemA, T itemB);
 
-  /// [raycast] gives back the first hitbox and intersection point the ray hits.
-  /// If there is no intersection, null is returned.
+  /// Returns the first hitbox that the given [ray] hits and the associated
+  /// intersection information; or null if the ray doesn't hit any hitbox.
   ///
   /// If [out] is provided that object will be modified and returned with the
   /// result.
   RaycastResult<T>? raycast(Ray2 ray, {RaycastResult<T>? out});
 
-  /// [raycastAll] casts rays uniformly around the given [origin] and gives back
-  /// the all hitboxes and intersection points the ray hits.
+  /// Casts rays uniformly between [startAngle] to [startAngle]+[sweepAngle]
+  /// from the given [origin] and returns all hitboxes and intersection points
+  /// the rays hit.
   /// [amount] is the number of rays that should be casted.
   ///
-  /// If [rays] is provided its [Ray2]s are populated with the rays needed to
-  /// perform the operation.
+  /// If the [rays] argument is provided its [Ray2]s are populated with the rays
+  /// needed to perform the operation.
   /// If there are less objects in [rays] than the operation requires, the
   /// missing [Ray2] objects will be created and added to [rays].
   ///
@@ -90,6 +91,7 @@ abstract class CollisionDetection<T extends Hitbox<T>> {
     Vector2 origin,
     int amount, {
     double startAngle = 0,
+    double sweepAngle = tau,
     List<Ray2>? rays,
     List<RaycastResult<T>>? out,
   });

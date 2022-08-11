@@ -14,9 +14,7 @@ class RaycastResult<T extends Hitbox<T>> {
     Vector2? normal,
     double? distance,
     bool isInsideHitbox = false,
-    bool isActive = true,
   })  : _isInsideHitbox = isInsideHitbox,
-        _isActive = isActive,
         _hitbox = hitbox,
         _reflectionRay = reflectionRay ?? Ray2.zero(),
         _normal = normal ?? Vector2.zero(),
@@ -26,8 +24,7 @@ class RaycastResult<T extends Hitbox<T>> {
   ///
   /// This is used so that the objects in there can continue to live even when
   /// there is no result from a ray cast.
-  bool get isActive => _isActive;
-  bool _isActive;
+  bool get isActive => _hitbox != null;
 
   /// Whether the origin of the ray was inside the hitbox.
   bool get isInsideHitbox => _isInsideHitbox;
@@ -47,28 +44,25 @@ class RaycastResult<T extends Hitbox<T>> {
   final Vector2 _normal;
   Vector2? get normal => isActive ? _normal : null;
 
-  void reset() => _isActive = false;
+  void reset() => _hitbox = null;
 
   /// Sets this [RaycastResult]'s objects to the values stored in [other].
-  ///
-  /// Always sets [isActive] to true, unless explicitly passed false.
-  void setFrom(RaycastResult<T> other, {bool isActive = true}) {
+  void setFrom(RaycastResult<T> other) {
     setWith(
       hitbox: other.hitbox,
       reflectionRay: other.reflectionRay,
       normal: other.normal,
       distance: other.distance,
-      isActive: isActive,
       isInsideHitbox: other.isInsideHitbox,
     );
   }
 
+  /// Sets the values of the result from the specified arguments.
   void setWith({
     T? hitbox,
     Ray2? reflectionRay,
     Vector2? normal,
     double? distance,
-    bool isActive = true,
     bool isInsideHitbox = false,
   }) {
     _hitbox = hitbox;
@@ -79,7 +73,6 @@ class RaycastResult<T extends Hitbox<T>> {
       _normal.setFrom(normal);
     }
     _distance = distance ?? double.maxFinite;
-    _isActive = isActive;
     _isInsideHitbox = isInsideHitbox;
   }
 
@@ -89,7 +82,6 @@ class RaycastResult<T extends Hitbox<T>> {
       reflectionRay: _reflectionRay.clone(),
       normal: _normal.clone(),
       distance: distance,
-      isActive: isActive,
       isInsideHitbox: isInsideHitbox,
     );
   }

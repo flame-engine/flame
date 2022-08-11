@@ -61,9 +61,7 @@ class StandardCollisionDetection extends CollisionDetection<ShapeHitbox> {
     hitboxB.onCollisionEnd(hitboxA);
   }
 
-  static final _temporaryRaycastResult = RaycastResult<ShapeHitbox>(
-    isActive: false,
-  );
+  static final _temporaryRaycastResult = RaycastResult<ShapeHitbox>();
 
   @override
   RaycastResult<ShapeHitbox>? raycast(
@@ -93,10 +91,12 @@ class StandardCollisionDetection extends CollisionDetection<ShapeHitbox> {
     Vector2 origin,
     int amountOfRays, {
     double startAngle = 0,
+    double sweepAngle = tau,
     List<Ray2>? rays,
     List<RaycastResult<ShapeHitbox>>? out,
   }) {
-    final angle = tau / amountOfRays;
+    final isFullCircle = (sweepAngle % tau).abs() < 0.0001;
+    final angle = sweepAngle / (amountOfRays + (isFullCircle ? 0 : -1));
     final results = <RaycastResult<ShapeHitbox>>[];
     final direction = Vector2(1, 0);
     for (var i = 0; i < amountOfRays; i++) {
@@ -109,8 +109,8 @@ class StandardCollisionDetection extends CollisionDetection<ShapeHitbox> {
       }
       ray.origin.setFrom(origin);
       direction
-        ..setValues(1, 0)
-        ..rotate(startAngle + angle * i);
+        ..setValues(0, -1)
+        ..rotate(startAngle - angle * i);
       ray.direction = direction;
 
       RaycastResult<ShapeHitbox>? result;
