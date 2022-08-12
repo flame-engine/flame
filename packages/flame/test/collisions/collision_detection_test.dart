@@ -1113,7 +1113,7 @@ void main() {
       )..add(CircleHitbox());
       await game.ensureAddAll([circle1, circle2]);
       final ray = Ray2(Vector2(0, 10), Vector2.all(1.0)..normalize());
-      final results = game.collisionDetection.raytrace(ray);
+      final results = game.collisionDetection.raytrace(ray).toList();
       expect(results.length, 2);
       expect(results.every((e) => e.isActive), isTrue);
       expect(results.every((e) => e.isInsideHitbox), isFalse);
@@ -1146,7 +1146,7 @@ void main() {
       )..add(RectangleHitbox());
       await game.ensureAddAll([rectangle1, rectangle2]);
       final ray = Ray2(Vector2(0, 10), Vector2.all(1.0)..normalize());
-      final results = game.collisionDetection.raytrace(ray);
+      final results = game.collisionDetection.raytrace(ray).toList();
       expect(results.length, 2);
       expect(results.every((e) => e.isActive), isTrue);
       expect(results.every((e) => e.isInsideHitbox), isFalse);
@@ -1156,7 +1156,8 @@ void main() {
       final reflectionRay1 = results[0].reflectionRay;
       expect(reflectionRay1?.origin, Vector2(10, 20));
       expect(reflectionRay1?.direction, Vector2(-1, 1)..normalize());
-      final results2 = game.collisionDetection.raytrace(reflectionRay1!);
+      final results2 =
+          game.collisionDetection.raytrace(reflectionRay1!).toList();
       expect(results2.length, 1);
       // Second box
       expect(results[1].intersectionPoint, Vector2(-10, 40));
@@ -1176,8 +1177,8 @@ void main() {
       )..add(RectangleHitbox());
       await game.ensureAddAll([rectangle1, rectangle2]);
       final ray = Ray2(Vector2(20, 10), Vector2(1, 1)..normalize());
-      final results = game.collisionDetection.raytrace(ray);
-      expect(results.length, 100);
+      final results = game.collisionDetection.raytrace(ray).toList();
+      expect(results.length, 10);
       expect(results.every((e) => e.isActive), isTrue);
       expect(results[0].isInsideHitbox, isFalse);
       expect(results[1].isInsideHitbox, isTrue);
@@ -1187,8 +1188,9 @@ void main() {
       final reflectionRay1 = results[0].reflectionRay;
       expect(reflectionRay1?.origin, Vector2(30, 20));
       expect(reflectionRay1?.direction, Vector2(1, -1)..normalize());
-      final results2 = game.collisionDetection.raytrace(reflectionRay1!);
-      expect(results2.length, 100);
+      final results2 =
+          game.collisionDetection.raytrace(reflectionRay1!).toList();
+      expect(results2.length, 10);
       // Second box
       expect(results[1].intersectionPoint, Vector2(50, 0));
       expect(results[1].normal, Vector2(0, 1));
