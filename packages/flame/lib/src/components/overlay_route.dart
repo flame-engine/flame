@@ -15,10 +15,15 @@ import 'package:meta/meta.dart';
 /// - the `builder` of an overlay route produces a widget instead of a
 ///   component.
 class OverlayRoute extends Route {
+  /// An overlay route that uses the specified [builder]. This builder will be
+  /// registered with the Game's map of overlay builders when this route is
+  /// first activated.
   OverlayRoute(OverlayBuilder builder, {super.transparent = true})
       : _builder = builder,
         super(null);
 
+  /// An overlay route that corresponds to an overlay that was already declared
+  /// within GameWidget's `overlayBuilderMap`.
   OverlayRoute.existing({super.transparent = true})
     : _builder = null,
       super(null);
