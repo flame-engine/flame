@@ -133,7 +133,10 @@ class GameWidget<T extends Game> extends StatefulWidget {
     }
     if (overlayBuilderMap != null) {
       for (final kv in overlayBuilderMap.entries) {
-        game!.overlays.addEntry(kv.key, kv.value as OverlayWidgetBuilder<Game>);
+        game!.overlays.addEntry(
+          kv.key,
+          (ctx, game) => kv.value(ctx, game as T),
+        );
       }
     }
     if (initialActiveOverlays != null) {
