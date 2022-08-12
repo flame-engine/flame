@@ -7,7 +7,7 @@ import '../_resources/custom_flame_game.dart';
 void main() {
   group('OverlaysManager', () {
     testWidgets(
-      'Overlay can be added via initialActiveOverlays',
+      'overlay can be added via initialActiveOverlays',
       (tester) async {
         const key1 = ValueKey('one');
         const key2 = ValueKey('two');
@@ -29,7 +29,7 @@ void main() {
     );
 
     testWidgets(
-      'Overlay can be added in onLoad',
+      'overlay can be added in onLoad',
       (tester) async {
         const key1 = ValueKey('one');
         const key2 = ValueKey('two');
@@ -54,7 +54,7 @@ void main() {
     );
 
     testWidgets(
-      'Overlay can be added and removed at runtime',
+      'overlay can be added and removed at runtime',
       (tester) async {
         const key1 = ValueKey('one');
         const key2 = ValueKey('two');
@@ -85,96 +85,73 @@ void main() {
       },
     );
 
-    group('add', () {
-      test('can add an overlay', () {
-        final overlays = FlameGame().overlays
-          ..addEntry('test', (ctx, game) => Container());
-        final added = overlays.add('test');
-        expect(added, true);
-        expect(overlays.isActive('test'), true);
-      });
+    test('can add an overlay', () {
+      final overlays = FlameGame().overlays
+        ..addEntry('test', (ctx, game) => Container());
+      final added = overlays.add('test');
+      expect(added, true);
+      expect(overlays.isActive('test'), true);
 
-      test('would not add same overlay twice', () {
-        final overlays = FlameGame().overlays
-          ..addEntry('test', (ctx, game) => Container());
-        overlays.add('test');
-        final added = overlays.add('test');
-        expect(added, false);
-      });
+      final added2 = overlays.add('test');
+      expect(added2, false);
+      expect(overlays.isActive('test'), true);
+      expect(overlays.activeOverlays.length, 1);
     });
 
-    group('addAll', () {
-      test('can add multiple overlays at once', () {
-        final overlays = FlameGame().overlays
-          ..addEntry('test', (ctx, game) => Container())
-          ..addEntry('test2', (ctx, game) => Container());
-        overlays.addAll(['test', 'test2']);
-        expect(overlays.isActive('test'), true);
-        expect(overlays.isActive('test2'), true);
-      });
+    test('can add multiple overlays at once', () {
+      final overlays = FlameGame().overlays
+        ..addEntry('test1', (ctx, game) => Container())
+        ..addEntry('test2', (ctx, game) => Container());
+      overlays.addAll(['test1', 'test2']);
+      expect(overlays.isActive('test1'), true);
+      expect(overlays.isActive('test2'), true);
+      expect(overlays.activeOverlays.length, 2);
     });
 
-    group('removeAll', () {
-      test('can remove multiple overlays at once', () {
-        final overlays = FlameGame().overlays
-          ..addEntry('test', (ctx, game) => Container())
-          ..addEntry('test2', (ctx, game) => Container());
-        overlays.addAll(['test', 'test2']);
+    test('can remove an overlay', () {
+      final overlays = FlameGame().overlays
+        ..addEntry('test', (ctx, game) => Container());
+      overlays.add('test');
 
-        overlays.removeAll(['test', 'test2']);
-
-        expect(overlays.isActive('test'), false);
-        expect(overlays.isActive('test2'), false);
-      });
+      final didRemove = overlays.remove('test');
+      expect(didRemove, true);
+      expect(overlays.isActive('test'), false);
     });
 
-    group('remove', () {
-      test('can remove an overlay', () {
-        final overlays = FlameGame().overlays
-          ..addEntry('test', (ctx, game) => Container());
-        overlays.add('test');
+    test('will not result in removal if there is nothing to remove', () {
+      final overlays = FlameGame().overlays
+        ..addEntry('test', (ctx, game) => Container());
 
-        final removed = overlays.remove('test');
-        expect(removed, true);
-        expect(overlays.isActive('test'), false);
-      });
-
-      test('will not result in removal if there is nothing to remove', () {
-        final overlays = FlameGame().overlays
-          ..addEntry('test', (ctx, game) => Container());
-        final removed = overlays.remove('test');
-        expect(removed, false);
-      });
+      final didRemove = overlays.remove('test');
+      expect(didRemove, false);
     });
 
-    group('isActive', () {
-      test('is true when overlay is active', () {
-        final overlays = FlameGame().overlays
-          ..addEntry('test', (ctx, game) => Container());
-        overlays.add('test');
-        expect(overlays.isActive('test'), true);
-      });
+    test('can remove multiple overlays at once', () {
+      final overlays = FlameGame().overlays
+        ..addEntry('test1', (ctx, game) => Container())
+        ..addEntry('test2', (ctx, game) => Container())
+        ..addEntry('test3', (ctx, game) => Container());
+      overlays.addAll(['test1', 'test2', 'test3']);
+      expect(overlays.activeOverlays.length, 3);
 
-      test('is false when overlay is active', () {
-        final overlays = FlameGame().overlays
-          ..addEntry('test', (ctx, game) => Container());
-        expect(overlays.isActive('test'), false);
-      });
+      overlays.removeAll(['test1', 'test2']);
+      expect(overlays.isActive('test1'), false);
+      expect(overlays.isActive('test2'), false);
+      expect(overlays.isActive('test3'), true);
+      expect(overlays.activeOverlays.length, 1);
     });
 
-    group('clear', () {
-      test('clears all overlays', () {
-        final overlays = FlameGame().overlays
-          ..addEntry('test1', (ctx, game) => Container())
-          ..addEntry('test2', (ctx, game) => Container());
-        overlays.add('test1');
-        overlays.add('test2');
+    test('clears all overlays', () {
+      final overlays = FlameGame().overlays
+        ..addEntry('test1', (ctx, game) => Container())
+        ..addEntry('test2', (ctx, game) => Container());
+      overlays.add('test1');
+      overlays.add('test2');
 
-        overlays.clear();
-
-        expect(overlays.isActive('test1'), false);
-        expect(overlays.isActive('test2'), false);
-      });
+      overlays.clear();
+      expect(overlays.isActive('test1'), false);
+      expect(overlays.isActive('test2'), false);
+      expect(overlays.activeOverlays.length, 0);
     });
   });
 }
