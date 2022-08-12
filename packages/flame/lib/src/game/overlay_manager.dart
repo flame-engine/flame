@@ -52,7 +52,7 @@ class OverlayManager {
   bool _addImpl(String name) {
     assert(
       _builders.containsKey(name),
-      'Trying to add an unknown overlay $name',
+      'Trying to add an unknown overlay "$name"',
     );
     if (_activeOverlays.contains(name)) {
       return false;

@@ -1,4 +1,5 @@
 import 'package:flame/game.dart';
+import 'package:flame_test/flame_test.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -106,6 +107,14 @@ void main() {
       expect(overlays.isActive('test1'), true);
       expect(overlays.isActive('test2'), true);
       expect(overlays.activeOverlays.length, 2);
+    });
+
+    test('cannot add an unknown overlay', () {
+      final overlays = FlameGame().overlays;
+      expect(
+        () => overlays.add('wheelbarrow'),
+        failsAssert('Trying to add an unknown overlay "wheelbarrow"'),
+      );
     });
 
     test('can remove an overlay', () {
