@@ -386,22 +386,20 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
     });
   }
 
-  List<Widget> _addBackground(BuildContext context, List<Widget> stackWidgets) {
-    if (widget.backgroundBuilder == null) {
-      return stackWidgets;
+  void _addBackground(BuildContext context, List<Widget> stackWidgets) {
+    if (widget.backgroundBuilder != null) {
+      final backgroundContent = KeyedSubtree(
+        key: ValueKey(widget.game),
+        child: widget.backgroundBuilder!(context),
+      );
+      stackWidgets.insert(0, backgroundContent);
     }
-    final backgroundContent = KeyedSubtree(
-      key: ValueKey(widget.game),
-      child: widget.backgroundBuilder!(context),
-    );
-    stackWidgets.insert(0, backgroundContent);
-    return stackWidgets;
   }
 
-  List<Widget> _addOverlays(BuildContext context, List<Widget> stackWidgets) {
-    final widgets = currentGame.overlays.buildCurrentOverlayWidgets(context);
-    stackWidgets.addAll(widgets);
-    return stackWidgets;
+  void _addOverlays(BuildContext context, List<Widget> stackWidgets) {
+    stackWidgets.addAll(
+      currentGame.overlays.buildCurrentOverlayWidgets(context),
+    );
   }
 }
 

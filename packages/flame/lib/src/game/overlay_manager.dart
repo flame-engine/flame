@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:flame/src/game/game.dart';
 import 'package:flutter/widgets.dart';
 import 'package:meta/meta.dart';
@@ -9,17 +11,21 @@ class OverlayManager {
   OverlayManager(this._game);
 
   final Game _game;
-  final Set<String> _activeOverlays = {};
-
+  final List<String> _activeOverlays = [];
   final Map<String, _OverlayBuilderFunction> _builders = {};
 
   /// The names of all currently active overlays.
-  Set<String> get value => _activeOverlays;
+  UnmodifiableListView<String> get activeOverlays {
+    return UnmodifiableListView(_activeOverlays);
+  }
+
+  @Deprecated('Use .activeOverlays instead. Will be removed in 1.4.0')
+  Set<String> get value => _activeOverlays.toSet();
 
   /// Returns if the given [overlayName] is active
   bool isActive(String overlayName) => _activeOverlays.contains(overlayName);
 
-  /// Clear all active overlays.
+  /// Clears all active overlays.
   void clear() {
     _activeOverlays.clear();
     _game.refreshWidget();
@@ -55,6 +61,7 @@ class OverlayManager {
     return true;
   }
 
+  /// Adds a named overlay builder
   void addEntry(String name, _OverlayBuilderFunction builder) {
     _builders[name] = builder;
   }
@@ -70,11 +77,9 @@ class OverlayManager {
 
   /// Hides multiple overlays specified in [overlayNames].
   void removeAll(Iterable<String> overlayNames) {
-    final overlayCountBeforeRemoved = _activeOverlays.length;
-    _activeOverlays.removeAll(overlayNames);
-
-    final overlayCountAfterRemoved = _activeOverlays.length;
-    if (overlayCountBeforeRemoved != overlayCountAfterRemoved) {
+    final initialCount = _activeOverlays.length;
+    overlayNames.forEach(_activeOverlays.remove);
+    if (_activeOverlays.length != initialCount) {
       _game.refreshWidget();
     }
   }
