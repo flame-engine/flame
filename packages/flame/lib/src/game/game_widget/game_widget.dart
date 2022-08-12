@@ -68,6 +68,9 @@ class GameWidget<T extends Game> extends StatefulWidget {
   /// Defaults to true.
   final bool autofocus;
 
+  final MouseCursor? mouseCursor;
+  final List<String>? initialActiveOverlays;
+
   /// Renders a [game] in a flutter widget tree.
   ///
   /// Ex:
@@ -121,27 +124,13 @@ class GameWidget<T extends Game> extends StatefulWidget {
     this.loadingBuilder,
     this.errorBuilder,
     this.backgroundBuilder,
-    Map<String, OverlayWidgetBuilder<T>>? overlayBuilderMap,
-    List<String>? initialActiveOverlays,
+    this.overlayBuilderMap,
+    this.initialActiveOverlays,
     this.focusNode,
     this.autofocus = true,
-    MouseCursor? mouseCursor,
-  })  : gameFactory = null,
-        overlayBuilderMap = null {
-    if (mouseCursor != null) {
-      game!.mouseCursor = mouseCursor;
-    }
-    if (overlayBuilderMap != null) {
-      for (final kv in overlayBuilderMap.entries) {
-        game!.overlays.addEntry(
-          kv.key,
-          (ctx, game) => kv.value(ctx, game as T),
-        );
-      }
-    }
-    if (initialActiveOverlays != null) {
-      game!.overlays.addAll(initialActiveOverlays);
-    }
+    this.mouseCursor,
+  }) : gameFactory = null {
+    _initializeGame(game!);
   }
 
   /// Creates a new game instance with the [gameFactory] and then
@@ -172,8 +161,10 @@ class GameWidget<T extends Game> extends StatefulWidget {
     this.errorBuilder,
     this.backgroundBuilder,
     this.overlayBuilderMap,
+    this.initialActiveOverlays,
     this.focusNode,
     this.autofocus = true,
+    this.mouseCursor,
   }) : game = null;
 
   /// Renders a [game] in a flutter widget tree alongside widgets overlays.
@@ -181,6 +172,23 @@ class GameWidget<T extends Game> extends StatefulWidget {
   /// To use overlays, the game subclass has to be mixed with HasWidgetsOverlay.
   @override
   _GameWidgetState<T> createState() => _GameWidgetState<T>();
+
+  void _initializeGame(T game) {
+    if (mouseCursor != null) {
+      game.mouseCursor = mouseCursor!;
+    }
+    if (overlayBuilderMap != null) {
+      for (final kv in overlayBuilderMap!.entries) {
+        game.overlays.addEntry(
+          kv.key,
+          (ctx, game) => kv.value(ctx, game as T),
+        );
+      }
+    }
+    if (initialActiveOverlays != null) {
+      game.overlays.addAll(initialActiveOverlays!);
+    }
+  }
 }
 
 class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
@@ -241,8 +249,12 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
   }
 
   void initCurrentGame() {
-    final widgetGame = widget.game;
-    currentGame = widgetGame ?? widget.gameFactory!.call();
+    if (widget.game == null) {
+      currentGame = widget.gameFactory!.call();
+      widget._initializeGame(currentGame);
+    } else {
+      currentGame = widget.game!;
+    }
     currentGame.addGameStateListener(_onGameStateChange);
     _loaderFuture = null;
   }
