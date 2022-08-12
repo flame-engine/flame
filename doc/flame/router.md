@@ -74,7 +74,7 @@ only a part of the screen.
 
 ## OverlayRoute
 
-The **OverlayRoute** is a special route that allows adding game overlays via the Router. These
+The **OverlayRoute** is a special route that allows adding game overlays via the router. These
 routes are transparent by default.
 
 There are two constructors for the `OverlayRoute`. The first constructor requires a builder function
