@@ -355,8 +355,7 @@ class _RenderableImageLayer extends _RenderableLayer<ImageLayer> {
   void render(Canvas canvas, Camera? camera) {
     canvas.save();
 
-    // this seems to match how the Tiled editor initially offsets image layers
-    canvas.translate(-_image.width + layer.offsetX, layer.offsetY);
+    canvas.translate(layer.offsetX, layer.offsetY);
 
     if (camera != null) {
       _applyParallaxOffset(canvas, camera, layer);
