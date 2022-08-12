@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:flame/extensions.dart';
+import 'package:flame/game.dart';
 import 'package:flame/input.dart';
-import 'package:flame/src/game/game.dart';
 import 'package:flame/src/game/game_render_box.dart';
 import 'package:flame/src/game/game_widget/gestures.dart';
 import 'package:flutter/services.dart';
@@ -121,14 +121,20 @@ class GameWidget<T extends Game> extends StatefulWidget {
     this.loadingBuilder,
     this.errorBuilder,
     this.backgroundBuilder,
-    this.overlayBuilderMap,
+    Map<String, OverlayWidgetBuilder<T>>? overlayBuilderMap,
     List<String>? initialActiveOverlays,
     this.focusNode,
     this.autofocus = true,
     MouseCursor? mouseCursor,
-  }) : gameFactory = null {
+  })  : gameFactory = null,
+        overlayBuilderMap = null {
     if (mouseCursor != null) {
       game!.mouseCursor = mouseCursor;
+    }
+    if (overlayBuilderMap != null) {
+      for (final kv in overlayBuilderMap.entries) {
+        game!.overlays.addEntry(kv.key, kv.value as OverlayWidgetBuilder<Game>);
+      }
     }
     if (initialActiveOverlays != null) {
       game!.overlays.addAll(initialActiveOverlays);
@@ -274,15 +280,6 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
     }
   }
 
-  void _checkOverlays(Set<String> overlays) {
-    overlays.forEach((overlayKey) {
-      assert(
-        widget.overlayBuilderMap?.containsKey(overlayKey) ?? false,
-        'A non mapped overlay has been added: $overlayKey',
-      );
-    });
-  }
-
   KeyEventResult _handleKeyEvent(FocusNode focusNode, RawKeyEvent event) {
     final game = currentGame;
     if (game is KeyboardEvents) {
@@ -296,7 +293,6 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
     return _protectedBuild(() {
       Widget internalGameWidget = _GameRenderObjectWidget(currentGame);
 
-      _checkOverlays(currentGame.overlays.value);
       assert(
         !(currentGame is MultiTouchDragDetector && currentGame is PanDetector),
         'WARNING: Both MultiTouchDragDetector and a PanDetector detected. '
@@ -388,16 +384,7 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
   }
 
   List<Widget> _addOverlays(BuildContext context, List<Widget> stackWidgets) {
-    if (widget.overlayBuilderMap == null) {
-      return stackWidgets;
-    }
-    final widgets = currentGame.overlays.value.map((String overlayKey) {
-      final builder = widget.overlayBuilderMap![overlayKey]!;
-      return KeyedSubtree(
-        key: ValueKey(overlayKey),
-        child: builder(context, currentGame),
-      );
-    });
+    final widgets = currentGame.overlays.buildCurrentOverlayWidgets(context);
     stackWidgets.addAll(widgets);
     return stackWidgets;
   }

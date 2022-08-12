@@ -5,7 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import '../_resources/custom_flame_game.dart';
 
 void main() {
-  group('_ActiveOverlays', () {
+  group('OverlaysManager', () {
     testWidgets(
       'Overlay can be added via initialActiveOverlays',
       (tester) async {
@@ -87,14 +87,16 @@ void main() {
 
     group('add', () {
       test('can add an overlay', () {
-        final overlays = FlameGame().overlays;
+        final overlays = FlameGame().overlays
+          ..addEntry('test', (ctx, game) => Container());
         final added = overlays.add('test');
         expect(added, true);
         expect(overlays.isActive('test'), true);
       });
 
-      test('wont add same overlay', () {
-        final overlays = FlameGame().overlays;
+      test('would not add same overlay twice', () {
+        final overlays = FlameGame().overlays
+          ..addEntry('test', (ctx, game) => Container());
         overlays.add('test');
         final added = overlays.add('test');
         expect(added, false);
@@ -103,7 +105,9 @@ void main() {
 
     group('addAll', () {
       test('can add multiple overlays at once', () {
-        final overlays = FlameGame().overlays;
+        final overlays = FlameGame().overlays
+          ..addEntry('test', (ctx, game) => Container())
+          ..addEntry('test2', (ctx, game) => Container());
         overlays.addAll(['test', 'test2']);
         expect(overlays.isActive('test'), true);
         expect(overlays.isActive('test2'), true);
@@ -112,7 +116,9 @@ void main() {
 
     group('removeAll', () {
       test('can remove multiple overlays at once', () {
-        final overlays = FlameGame().overlays;
+        final overlays = FlameGame().overlays
+          ..addEntry('test', (ctx, game) => Container())
+          ..addEntry('test2', (ctx, game) => Container());
         overlays.addAll(['test', 'test2']);
 
         overlays.removeAll(['test', 'test2']);
@@ -124,7 +130,8 @@ void main() {
 
     group('remove', () {
       test('can remove an overlay', () {
-        final overlays = FlameGame().overlays;
+        final overlays = FlameGame().overlays
+          ..addEntry('test', (ctx, game) => Container());
         overlays.add('test');
 
         final removed = overlays.remove('test');
@@ -133,7 +140,8 @@ void main() {
       });
 
       test('will not result in removal if there is nothing to remove', () {
-        final overlays = FlameGame().overlays;
+        final overlays = FlameGame().overlays
+          ..addEntry('test', (ctx, game) => Container());
         final removed = overlays.remove('test');
         expect(removed, false);
       });
@@ -141,20 +149,24 @@ void main() {
 
     group('isActive', () {
       test('is true when overlay is active', () {
-        final overlays = FlameGame().overlays;
+        final overlays = FlameGame().overlays
+          ..addEntry('test', (ctx, game) => Container());
         overlays.add('test');
         expect(overlays.isActive('test'), true);
       });
 
       test('is false when overlay is active', () {
-        final overlays = FlameGame().overlays;
+        final overlays = FlameGame().overlays
+          ..addEntry('test', (ctx, game) => Container());
         expect(overlays.isActive('test'), false);
       });
     });
 
     group('clear', () {
       test('clears all overlays', () {
-        final overlays = FlameGame().overlays;
+        final overlays = FlameGame().overlays
+          ..addEntry('test1', (ctx, game) => Container())
+          ..addEntry('test2', (ctx, game) => Container());
         overlays.add('test1');
         overlays.add('test2');
 
