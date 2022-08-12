@@ -195,9 +195,10 @@ mixin MouseMovementDetector on Game {
   void onMouseMove(PointerHoverInfo info) {
     assert(
       this is! HasCursorHandlerComponents,
-      'A mouse movement event was registered by MouseMovementDetector for a game also '
-      'mixed with HasCursorHandlerComponents. Do not mix with both, '
-      'HasCursorHandlerComponents removes the necessity of MouseMovementDetector',
+      'A mouse movement event was registered by MouseMovementDetector for a '
+      'game also mixed with HasCursorHandlerComponents. Do not mix with both, '
+      'HasCursorHandlerComponents removes the necessity of '
+      'MouseMovementDetector.',
     );
   }
 }
