@@ -25,8 +25,8 @@ class OverlayRoute extends Route {
   /// An overlay route that corresponds to an overlay that was already declared
   /// within GameWidget's `overlayBuilderMap`.
   OverlayRoute.existing({super.transparent = true})
-    : _builder = null,
-      super(null);
+      : _builder = null,
+        super(null);
 
   final OverlayBuilder? _builder;
 
