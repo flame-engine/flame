@@ -5,8 +5,6 @@ import 'package:flame/geometry.dart';
 /// Used to add the [rayIntersection] method to [RectangleHitbox] and
 /// [PolygonHitbox], used by the raytracing and raycasting methods.
 mixin PolygonRayIntersection<T extends ShapeHitbox> on PolygonComponent {
-  late final _temporaryNormal = Vector2.zero();
-
   /// Returns whether the [RaycastResult] if the [ray] intersects the polygon.
   ///
   /// If [out] is defined that is used to populate with the result and then
@@ -36,43 +34,64 @@ mixin PolygonRayIntersection<T extends ShapeHitbox> on PolygonComponent {
         }
       }
     }
-    if (crossings > 0) {
-      final intersectionPoint =
-          ray.point(closestDistance, out: out?.intersectionPoint);
-      // This is "from" to "to" since it is defined ccw in the canvas
-      // coordinate system
-      _temporaryNormal
-        ..setFrom(closestSegment!.from)
-        ..sub(closestSegment.to);
-      _temporaryNormal
-        ..setValues(_temporaryNormal.y, -_temporaryNormal.x)
-        ..normalize();
-      var isInsideHitbox = false;
-      if (crossings == 1 || isOverlappingPoint) {
-        _temporaryNormal.invert();
-        isInsideHitbox = true;
-      }
-      final reflectionDirection =
-          (out?.reflectionRay?.direction ?? Vector2.zero())
-            ..setFrom(ray.direction)
-            ..reflect(_temporaryNormal);
 
-      final reflectionRay = (out?.reflectionRay
-            ?..setWith(
-              origin: intersectionPoint,
-              direction: reflectionDirection,
-            )) ??
-          Ray2(intersectionPoint, reflectionDirection);
-      return (out ?? RaycastResult<ShapeHitbox>())
+    if (crossings > 0) {
+      Vector2 intersectionPointFunction() =>
+          ray.point(closestDistance, out: out?.rawIntersectionPoint);
+
+      final result = (out ?? RaycastResult<ShapeHitbox>())
         ..setWith(
           hitbox: this as T,
-          reflectionRay: reflectionRay,
-          normal: _temporaryNormal,
-          distance: closestDistance,
-          isInsideHitbox: isInsideHitbox,
+          isInsideHitbox: crossings == 1 || isOverlappingPoint,
+          originatingRay: ray,
+          distanceFunction: () => closestDistance,
+          intersectionPointFunction: intersectionPointFunction,
         );
+      result.setWith(
+        normalFunction: () => _rayNormal(
+          closestSegment: closestSegment!,
+          result: result,
+        ),
+      );
+      result.setWith(
+        reflectionRayFunction: () => _rayReflection(result: result),
+      );
+      return result;
     }
     out?.reset();
     return null;
+  }
+
+  /// This method is used to pass to the [RaycastResult] to lazily compute the
+  /// normal.
+  Vector2 _rayNormal({
+    required LineSegment closestSegment,
+    required RaycastResult result,
+  }) {
+    final normal = result.rawNormal ?? Vector2.zero();
+    // This is "from" to "to" since it is defined ccw in the canvas
+    // coordinate system
+    normal
+      ..setFrom(closestSegment.from)
+      ..sub(closestSegment.to);
+    normal
+      ..setValues(normal.y, -normal.x)
+      ..normalize();
+    return result.isInsideHitbox ? (normal..invert()) : normal;
+  }
+
+  /// This method is used to pass to the [RaycastResult] to lazily compute the
+  /// reflection.
+  Ray2 _rayReflection({required RaycastResult result}) {
+    final reflection = result.rawReflectionRay ?? Ray2.zero();
+    final reflectionDirection = reflection.direction
+      ..setFrom(result.originatingRay!.direction)
+      ..reflect(result.normal!);
+
+    return reflection
+      ..setWith(
+        origin: result.intersectionPoint!,
+        direction: reflectionDirection,
+      );
   }
 }
