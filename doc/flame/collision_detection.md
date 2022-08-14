@@ -223,6 +223,27 @@ class MyGame extends FlameGame with HasCollisionDetection {
 ```
 
 
+## Ray casting 
+
+Ray casting is the operation of casting out one or more rays from a point and see if they hit
+anything, in Flame's case, hitboxes.
+
+We provide two methods for doing so, `raycast` and `raycastAll`. The first one just casts out
+a single ray and gets back a result with information about what and where the ray hit, and some
+extra information like the distance, normal and the reflection ray. The second one, `raycastAll`,
+works similarly but sends out multiple rays uniformly all around the origin, or within two angles
+from the origin.
+
+
+## Ray tracing
+
+Ray tracing is similar to ray casting, but instead of just checking what the ray hits you can
+continue to trace the ray and see what its reflection ray (the ray bouncing off the hitbox) will
+hit and then what that casted reflection ray's reflection ray will hit and so on, until you decide
+that you have traced the ray for long enough. If you imagine how a pool ball would bounce on a pool
+table for example, that information could be retrieved with the help of ray tracing.
+
+
 ## Comparison to Forge2D
 
 If you want to have a full-blown physics engine in your game we recommend that you use
