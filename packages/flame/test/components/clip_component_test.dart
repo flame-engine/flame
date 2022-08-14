@@ -14,12 +14,12 @@ class _Rectangle extends RectangleComponent {
 
 void main() {
   group('ClipComponent', () {
-    group('ClipComponent.rect', () {
+    group('RectangleClipComponent', () {
       testGolden(
         'renders correctly',
         (game) async {
           await game.add(
-            ClipComponent.rect(
+            RectangleClipComponent(
               size: Vector2(100, 100),
               children: [_Rectangle()],
             ),
@@ -29,12 +29,12 @@ void main() {
       );
     });
 
-    group('ClipComponent.circle', () {
+    group('CircleClipComponent', () {
       testGolden(
         'renders correctly',
         (game) async {
           await game.add(
-            ClipComponent.circle(
+            CircleClipComponent(
               size: Vector2(100, 100),
               children: [_Rectangle()],
             ),
@@ -44,17 +44,17 @@ void main() {
       );
     });
 
-    group('ClipComponent.circle', () {
+    group('PolygonClipComponent', () {
       testGolden(
         'renders correctly',
         (game) async {
           await game.add(
-            ClipComponent.polygon(
+            PolygonClipComponent(
               points: [
-                Vector2(50, 0),
-                Vector2(50, 50),
-                Vector2(0, 50),
-                Vector2(50, 0),
+                Vector2(1, 0),
+                Vector2(1, 1),
+                Vector2(0, 1),
+                Vector2(1, 0),
               ],
               size: Vector2(100, 100),
               children: [_Rectangle()],

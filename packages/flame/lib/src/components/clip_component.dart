@@ -1,21 +1,16 @@
 import 'dart:ui';
 
 import 'package:flame/components.dart';
-
-enum _ClipType {
-  rect,
-  circle,
-  polygon,
-}
+import 'package:flame/experimental.dart';
 
 /// {@template clip_component}
 /// A component that will clip its content.
 /// {@endtemplate}
-class ClipComponent extends PositionComponent {
+abstract class ClipComponent extends PositionComponent {
   /// {@macro clip_component}
   ///
-  /// Creates a circle clip based on the [size].
-  ClipComponent.circle({
+  /// Clips the canvas based its shape and its size.
+  ClipComponent({
     super.position,
     super.size,
     super.scale,
@@ -23,12 +18,42 @@ class ClipComponent extends PositionComponent {
     super.anchor,
     super.children,
     super.priority,
-  }) : _clipType = _ClipType.circle;
+  });
 
-  /// {@macro clip_component}
+  late Path _path;
+  late Shape _shape;
+
+  @override
+  Future<void> onLoad() async {
+    _prepare();
+    size.addListener(_prepare);
+  }
+
+  Shape _buildShape();
+
+  void _prepare() {
+    _shape = _buildShape();
+    _path = _shape.asPath();
+  }
+
+  @override
+  void render(Canvas canvas) => canvas.clipPath(_path);
+
+  @override
+  bool containsPoint(Vector2 point) {
+    // TODO, test this
+    return _shape.containsPoint(point);
+  }
+}
+
+/// {@template circle_clip_component}
+///
+/// A component that will clip its content to a circle.
+class CircleClipComponent extends ClipComponent {
+  /// {@macro circle_clip_component}
   ///
-  /// Creates a rectangle clip based on the [size].
-  ClipComponent.rect({
+  /// Clips the canvas in the form of a circle based on its size.
+  CircleClipComponent({
     super.position,
     super.size,
     super.scale,
@@ -36,12 +61,45 @@ class ClipComponent extends PositionComponent {
     super.anchor,
     super.children,
     super.priority,
-  }) : _clipType = _ClipType.rect;
+  });
 
-  /// {@macro clip_component}
+  @override
+  Shape _buildShape() {
+    return Circle(size / 2, size.x / 2);
+  }
+}
+
+/// {@template rectangle_clip_component}
+///
+/// A component that will clip its content to a rectangle.
+class RectangleClipComponent extends ClipComponent {
+  /// {@macro rectangle_clip_component}
   ///
-  /// Creates a polygon clip based on the given [points].
-  ClipComponent.polygon({
+  /// Clips the canvas in the form of a rectangle based on its size.
+  RectangleClipComponent({
+    super.position,
+    super.size,
+    super.scale,
+    super.angle,
+    super.anchor,
+    super.children,
+    super.priority,
+  });
+
+  @override
+  Shape _buildShape() {
+    return Rectangle.fromRect(size.toRect());
+  }
+}
+
+/// {@template polygon_clip_component}
+///
+/// A component that will clip its content to a polygon.
+class PolygonClipComponent extends ClipComponent {
+  /// {@macro polygon_clip_component}
+  ///
+  /// Clips the canvas in the form of a polygon based on its size.
+  PolygonClipComponent({
     required List<Vector2> points,
     super.position,
     super.size,
@@ -52,41 +110,15 @@ class ClipComponent extends PositionComponent {
     super.priority,
   })  : assert(
           points.length > 2,
-          'ClipComponent.polygon requires at least 3 points.',
+          'PolygonClipComponent requires at least 3 points.',
         ),
-        _clipType = _ClipType.polygon {
-    final _points = [...points];
-    final firstPoint = _points.removeAt(0);
+        _points = points;
 
-    _path = _points.fold(Path()..moveTo(firstPoint.x, firstPoint.y),
-        (previousValue, value) {
-      return previousValue..lineTo(value.x, value.y);
-    });
-  }
-
-  late Path _path;
-  final _ClipType _clipType;
+  final List<Vector2> _points;
 
   @override
-  Future<void> onLoad() async {
-    _buildPath();
-    size.addListener(_buildPath);
+  Shape _buildShape() {
+    final translatedPoints = _points.map((p) => p..multiply(size)).toList();
+    return Polygon(translatedPoints);
   }
-
-  void _buildPath() {
-    switch (_clipType) {
-      case _ClipType.rect:
-        _path = Path()..addRect(size.toRect());
-        break;
-      case _ClipType.circle:
-        _path = Path()..addOval(Rect.fromLTWH(0, 0, size.x, size.y));
-        break;
-      case _ClipType.polygon:
-        // nothing to do here, path is set in the constructor.
-        break;
-    }
-  }
-
-  @override
-  void render(Canvas canvas) => canvas.clipPath(_path);
 }

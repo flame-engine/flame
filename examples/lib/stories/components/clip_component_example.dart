@@ -42,24 +42,24 @@ class ClipComponentExample extends FlameGame {
   Future<void> onLoad() async {
     addAll(
       [
-        ClipComponent.rect(
+        CircleClipComponent(
           position: Vector2(100, 100),
           size: Vector2.all(50),
           children: [_Rectangle()],
         ),
-        ClipComponent.circle(
+        RectangleClipComponent(
           position: Vector2(200, 100),
           size: Vector2.all(50),
           children: [_Rectangle()],
         ),
-        ClipComponent.polygon(
+        PolygonClipComponent(
           points: [
-            Vector2(50, 0),
-            Vector2(50, 50),
-            Vector2(0, 50),
-            Vector2(50, 0),
+            Vector2(1, 0),
+            Vector2(1, 1),
+            Vector2(0, 1),
+            Vector2(1, 0),
           ],
-          position: Vector2(150, 200),
+          position: Vector2(200, 200),
           size: Vector2.all(50),
           children: [_Rectangle()],
         ),
