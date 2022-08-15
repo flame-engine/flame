@@ -27,8 +27,8 @@ class Route extends PositionComponent with ParentIsA<RouterComponent> {
   Route(
     Component Function()? builder, {
     this.transparent = false,
-  }) : _builder = builder,
-       _renderEffect = Decorator();
+  })  : _builder = builder,
+        _renderEffect = Decorator();
 
   /// If true, then the route below this one will continue to be rendered when
   /// this route becomes active. If false, then this route is assumed to
