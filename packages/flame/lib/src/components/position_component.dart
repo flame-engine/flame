@@ -95,9 +95,19 @@ class PositionComponent extends Component
   }
 
   final Transform2D transform;
-  late final Decorator decorator;
   final NotifyingVector2 _size;
   Anchor _anchor;
+
+  /// The decorator is used to apply visual effects to a component.
+  ///
+  /// By default, the [PositionComponent] is equipped with a
+  /// [Transform2DDecorator] which makes sure the component is rendered at a
+  /// proper location on the canvas. It is possible to replace this decorator
+  /// with another one if a different functionality is desired.
+  ///
+  /// A more common use for this field, however, is to apply additional visual
+  /// effects such as tints/shadows/etc using [Decorator.addLast].
+  late Decorator decorator;
 
   /// The total transformation matrix for the component. This matrix combines
   /// translation, rotation and scale transforms into a single entity. The

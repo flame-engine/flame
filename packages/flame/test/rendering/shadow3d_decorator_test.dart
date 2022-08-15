@@ -74,7 +74,7 @@ void main() {
             paint: Paint()..color = const Color(0xcc199f2b),
             decorator: Shadow3DDecorator()
               ..base = Vector2(30, 100)
-              ..ascent = 20
+              ..ascent = 0
               ..angle = 1.8
               ..xShift = 250.0
               ..yScale = 1.5
