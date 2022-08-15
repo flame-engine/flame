@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flame/src/rendering/paint_decorator.dart';
 import 'package:flame/src/rendering/rotate3d_decorator.dart';
 import 'package:flame/src/rendering/shadow3d_decorator.dart';
+import 'package:flame/src/rendering/transform2d_decorator.dart';
 import 'package:meta/meta.dart';
 
 /// [Decorator] is an abstract class that encapsulates a particular visual
@@ -25,7 +26,8 @@ import 'package:meta/meta.dart';
 /// - [PaintDecorator]
 /// - [Rotate3DDecorator]
 /// - [Shadow3DDecorator]
-abstract class Decorator {
+/// - [Transform2DDecorator]
+class Decorator {
   /// The next decorator in the chain, or null if there is none.
   Decorator? _next;
 
@@ -43,14 +45,15 @@ abstract class Decorator {
 
   /// Applies visual effect while [draw]ing on the [canvas].
   ///
-  /// A no-op decorator would simply call `draw(canvas)`. Any other non-trivial
-  /// decorator can transform the canvas before drawing, or perform any other
-  /// adjustment.
+  /// The default implementation is a no-op; all other non-trivial decorators
+  /// transform the canvas before drawing, or perform some other adjustments.
   ///
   /// This method must be implemented by the subclasses, but it is not available
   /// to external users: use [applyChain] instead.
   @protected
-  void apply(void Function(Canvas) draw, Canvas canvas);
+  void apply(void Function(Canvas) draw, Canvas canvas) {
+    draw(canvas);
+  }
 
   //#region Decorator chain functionality
 
@@ -72,11 +75,11 @@ abstract class Decorator {
     if (isLastDecorator) {
       return;
     }
-      if (_next!.isLastDecorator) {
-        _next = null;
-      } else {
-        _next!.removeLast();
-      }
+    if (_next!.isLastDecorator) {
+      _next = null;
+    } else {
+      _next!.removeLast();
+    }
   }
 
   void replaceLast(Decorator? decorator) {

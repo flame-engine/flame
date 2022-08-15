@@ -1,4 +1,3 @@
-
 import 'dart:ui';
 
 import 'package:flame/src/game/transform2d.dart';
@@ -6,7 +5,7 @@ import 'package:flame/src/rendering/decorator.dart';
 
 class Transform2DDecorator extends Decorator {
   Transform2DDecorator([Transform2D? transform])
-    : transform2d = transform ?? Transform2D();
+      : transform2d = transform ?? Transform2D();
 
   final Transform2D transform2d;
 
