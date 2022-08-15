@@ -12,17 +12,18 @@ class DecoratorGrayscaleGame extends FlameGame with HasTappableComponents {
         size: 100,
         position: canvasSize / 2,
         onTap: (flower) {
+          final decorator = flower.decorator;
           step++;
           if (step == 1) {
-            flower.decorator = PaintDecorator.grayscale();
+            decorator.addLast(PaintDecorator.grayscale());
           } else if (step == 2) {
-            flower.decorator = PaintDecorator.grayscale(opacity: 0.5);
+            decorator.replaceLast(PaintDecorator.grayscale(opacity: 0.5));
           } else if (step == 3) {
-            flower.decorator = PaintDecorator.grayscale(opacity: 0.2);
+            decorator.replaceLast(PaintDecorator.grayscale(opacity: 0.2));
           } else if (step == 4) {
-            flower.decorator = PaintDecorator.grayscale(opacity: 0.1);
+            decorator.replaceLast(PaintDecorator.grayscale(opacity: 0.1));
           } else {
-            flower.decorator = null;
+            decorator.removeLast();
             step = 0;
           }
         },

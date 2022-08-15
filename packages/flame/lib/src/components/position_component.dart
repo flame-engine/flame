@@ -10,6 +10,8 @@ import 'package:flame/src/extensions/offset.dart';
 import 'package:flame/src/extensions/vector2.dart';
 import 'package:flame/src/game/notifying_vector2.dart';
 import 'package:flame/src/game/transform2d.dart';
+import 'package:flame/src/rendering/decorator.dart';
+import 'package:flame/src/rendering/transform2d_decorator.dart';
 
 /// A [Component] implementation that represents an object that can be
 /// freely moved around the screen, rotated, and scaled.
@@ -78,6 +80,7 @@ class PositionComponent extends Component
   })  : transform = Transform2D(),
         _anchor = anchor ?? Anchor.topLeft,
         _size = NotifyingVector2.copy(size ?? Vector2.zero()) {
+    decorator = Transform2DDecorator(transform);
     if (position != null) {
       transform.position = position;
     }
@@ -92,6 +95,7 @@ class PositionComponent extends Component
   }
 
   final Transform2D transform;
+  late final Decorator decorator;
   final NotifyingVector2 _size;
   Anchor _anchor;
 
@@ -395,10 +399,7 @@ class PositionComponent extends Component
 
   @override
   void renderTree(Canvas canvas) {
-    canvas.save();
-    canvas.transform(transformMatrix.storage);
-    super.renderTree(canvas);
-    canvas.restore();
+    decorator.applyChain(super.renderTree, canvas);
   }
 
   /// Returns the bounding rectangle for this component.

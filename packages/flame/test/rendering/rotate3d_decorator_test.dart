@@ -17,7 +17,7 @@ void main() {
               size: Vector2(60, 100),
               paint: Paint()..color = const Color(0x9dde0445),
               decorator: Rotate3DDecorator(
-                center: Vector2(50, 80),
+                center: Vector2(30, 50),
                 angleX: angle,
                 perspective: 0.005,
               ),
@@ -39,7 +39,7 @@ void main() {
               size: Vector2(60, 100),
               paint: Paint()..color = const Color(0x9dde0445),
               decorator: Rotate3DDecorator(
-                center: Vector2(50, 80),
+                center: Vector2(30, 50),
                 angleY: angle,
                 perspective: 0.005,
               ),
@@ -60,7 +60,7 @@ void main() {
             size: Vector2(60, 100),
             paint: Paint()..color = const Color(0xff199f2b),
             decorator: Rotate3DDecorator(
-              center: Vector2(50, 80),
+              center: Vector2(30, 50),
               angleX: 0.7,
               angleY: 1.0,
               angleZ: 0.5,
@@ -92,13 +92,13 @@ void main() {
   });
 }
 
-class DecoratedRectangle extends RectangleComponent with HasDecorator {
+class DecoratedRectangle extends RectangleComponent {
   DecoratedRectangle({
     super.position,
     super.size,
     super.paint,
     Decorator? decorator,
   }) {
-    this.decorator = decorator;
+    this.decorator.addLast(decorator);
   }
 }

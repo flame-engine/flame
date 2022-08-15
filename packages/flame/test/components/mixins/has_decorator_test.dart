@@ -20,7 +20,7 @@ void main() {
           _DecoratedComponent(
             position: Vector2(75, 25),
             size: Vector2.all(40),
-          )..decorator = (PaintDecorator.grayscale()..addBlur(2)),
+          )..decorator.addLast(PaintDecorator.grayscale()..addBlur(2)),
         );
       },
       size: Vector2(100, 50),
@@ -29,7 +29,7 @@ void main() {
   });
 }
 
-class _DecoratedComponent extends PositionComponent with HasDecorator {
+class _DecoratedComponent extends PositionComponent {
   _DecoratedComponent({super.position, super.size})
       : super(anchor: Anchor.center);
 

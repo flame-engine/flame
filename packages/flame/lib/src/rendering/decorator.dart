@@ -54,20 +54,38 @@ abstract class Decorator {
 
   //#region Decorator chain functionality
 
+  bool get isLastDecorator => _next == null;
+
   /// Adds a new decorator onto the chain of decorators
-  void addLast(Decorator decorator) {
-    if (_next == null) {
-      _next = decorator;
-    } else {
-      _next!.addLast(decorator);
+  void addLast(Decorator? decorator) {
+    if (decorator != null) {
+      if (_next == null) {
+        _next = decorator;
+      } else {
+        _next!.addLast(decorator);
+      }
     }
   }
 
+  /// Removes the last decorator from the chain of decorators
   void removeLast() {
-    if (_next == null || _next!._next == null) {
-      _next = null;
+    if (isLastDecorator) {
+      return;
+    }
+      if (_next!.isLastDecorator) {
+        _next = null;
+      } else {
+        _next!.removeLast();
+      }
+  }
+
+  void replaceLast(Decorator? decorator) {
+    if (decorator == null) {
+      removeLast();
+    } else if (isLastDecorator || _next!.isLastDecorator) {
+      _next = decorator;
     } else {
-      _next!.removeLast();
+      _next!.replaceLast(decorator);
     }
   }
 
