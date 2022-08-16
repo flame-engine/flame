@@ -1,5 +1,6 @@
 import 'package:flame/src/components/component.dart';
 import 'package:flame/src/components/route.dart';
+import 'package:flame/src/components/value_route.dart';
 import 'package:meta/meta.dart';
 
 /// [RouterComponent] handles transitions between multiple pages of a game.
@@ -121,6 +122,11 @@ class RouterComponent extends Component {
     _adjustRoutesVisibility();
   }
 
+  Future<T> pushAndWait<T>(ValueRoute<T> route) {
+    pushRoute(route);
+    return route.future;
+  }
+
   /// Removes the topmost route from the stack, and also removes it as a child
   /// of the Router.
   ///
@@ -149,6 +155,15 @@ class RouterComponent extends Component {
     while (currentRoute.name != name) {
       pop();
     }
+  }
+
+  /// Removes routes from the stack until [route] is removed. This is equivalent
+  /// to [pop] if [route] is currently on top of the stack.
+  void popRoute(Route route) {
+    while (currentRoute != route) {
+      pop();
+    }
+    pop();
   }
 
   /// Attempts to resolve the route with the given [name] by searching in the
