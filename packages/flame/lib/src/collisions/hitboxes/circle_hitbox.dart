@@ -67,53 +67,34 @@ class CircleHitbox extends CircleComponent with ShapeHitbox {
       return null;
     } else {
       final result = out ?? RaycastResult();
-      result.hitboxCenter = (result.hitboxCenter
-            ?..setFrom(_temporaryAbsoluteCenter)) ??
-          _temporaryAbsoluteCenter.clone();
+      final intersectionPoint = intersections.first;
+      _temporaryNormal
+        ..setFrom(intersectionPoint)
+        ..sub(_temporaryAbsoluteCenter)
+        ..normalize();
+      if (isInsideHitbox) {
+        _temporaryNormal.invert();
+      }
+      final reflectionDirection =
+          (out?.reflectionRay?.direction ?? Vector2.zero())
+            ..setFrom(ray.direction)
+            ..reflect(_temporaryNormal);
+
+      final reflectionRay = (out?.reflectionRay
+            ?..setWith(
+              origin: intersectionPoint,
+              direction: reflectionDirection,
+            )) ??
+          Ray2(intersectionPoint, reflectionDirection);
 
       result.setWith(
         hitbox: this,
+        reflectionRay: reflectionRay,
+        normal: _temporaryNormal,
+        distance: ray.origin.distanceTo(intersectionPoint),
         isInsideHitbox: isInsideHitbox,
-        intersectionPointFunction: () => intersections.first,
-      );
-      result.setWith(
-        distanceFunction: () =>
-            result.originatingRay?.origin.distanceTo(result.intersectionPoint!),
-        normalFunction: () =>
-            _rayNormal(result, isInsideHitbox: isInsideHitbox),
-      );
-      result.setWith(
-        reflectionRayFunction: () => _rayReflection(result),
       );
       return result;
     }
-  }
-
-  Vector2 _rayNormal(RaycastResult result, {required bool isInsideHitbox}) {
-    _temporaryNormal
-      ..setFrom(result.intersectionPoint!)
-      ..sub(result.hitboxCenter!)
-      ..normalize();
-    if (isInsideHitbox) {
-      _temporaryNormal.invert();
-    }
-    return _temporaryNormal;
-  }
-
-  Ray2 _rayReflection(RaycastResult result) {
-    final intersectionPoint = result.intersectionPoint!;
-
-    final reflectionDirection =
-        (result.rawReflectionRay?.direction ?? Vector2.zero())
-          ..setFrom(result.originatingRay!.direction)
-          ..reflect(result.normal!);
-
-    final reflectionRay = (result.rawReflectionRay
-          ?..setWith(
-            origin: intersectionPoint,
-            direction: reflectionDirection,
-          )) ??
-        Ray2(intersectionPoint, reflectionDirection);
-    return reflectionRay;
   }
 }

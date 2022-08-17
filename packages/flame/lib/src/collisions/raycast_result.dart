@@ -1,7 +1,6 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/src/geometry/ray2.dart';
-import 'package:meta/meta.dart';
 
 /// The result of a raycasting operation.
 ///
@@ -11,22 +10,15 @@ import 'package:meta/meta.dart';
 class RaycastResult<T extends Hitbox<T>> {
   RaycastResult({
     T? hitbox,
+    Ray2? reflectionRay,
+    Vector2? normal,
+    double? distance,
     bool isInsideHitbox = false,
-    Ray2? originatingRay,
-    double? Function()? distanceFunction,
-    Vector2? Function()? intersectionPointFunction,
-    Vector2? Function()? normalFunction,
-    Ray2? Function()? reflectionRayFunction,
-  })  : _hitbox = hitbox,
-        _isInsideHitbox = isInsideHitbox,
-        rawOriginatingRay = originatingRay,
-        _distanceFunction = distanceFunction,
-        _intersectionPointFunction = intersectionPointFunction,
-        _normalFunction = normalFunction,
-        _reflectionRayFunction = reflectionRayFunction;
-
-  T? get hitbox => isActive ? _hitbox : null;
-  T? _hitbox;
+  })  : _isInsideHitbox = isInsideHitbox,
+        _hitbox = hitbox,
+        _reflectionRay = reflectionRay ?? Ray2.zero(),
+        _normal = normal ?? Vector2.zero(),
+        _distance = distance ?? double.maxFinite;
 
   /// Whether this result has active results in it.
   ///
@@ -38,162 +30,59 @@ class RaycastResult<T extends Hitbox<T>> {
   bool get isInsideHitbox => _isInsideHitbox;
   bool _isInsideHitbox;
 
-  /// The casted ray that the result came from.
-  Ray2? get originatingRay => isActive ? rawOriginatingRay : null;
-  @internal
-  Ray2? rawOriginatingRay;
+  T? _hitbox;
+  T? get hitbox => isActive ? _hitbox : null;
 
-  double? Function()? _distanceFunction;
-  Vector2? Function()? _intersectionPointFunction;
-  Vector2? Function()? _normalFunction;
-  Ray2? Function()? _reflectionRayFunction;
+  final Ray2 _reflectionRay;
+  Ray2? get reflectionRay => isActive ? _reflectionRay : null;
 
-  double? _rawDistance;
-  bool _validDistance = false;
-  double? get distance {
-    if (!_validDistance) {
-      _rawDistance = _distanceFunction?.call();
-      _validDistance = true;
-    }
-    return _rawDistance;
-  }
+  Vector2? get intersectionPoint => reflectionRay?.origin;
 
-  @internal
-  Vector2? rawIntersectionPoint;
-  bool _validIntersectionPoint = false;
-  Vector2? get intersectionPoint {
-    if (!isActive) {
-      return null;
-    }
-    if (!_validIntersectionPoint) {
-      rawIntersectionPoint = _intersectionPointFunction?.call();
-      _validIntersectionPoint = true;
-    }
-    return rawIntersectionPoint;
-  }
+  double _distance;
+  double? get distance => isActive ? _distance : null;
 
-  @internal
-  Vector2? rawNormal;
-  bool _validNormal = false;
-  Vector2? get normal {
-    if (!isActive) {
-      return null;
-    }
-    if (!_validNormal) {
-      rawNormal = _normalFunction?.call();
-      _validNormal = true;
-    }
-    return rawNormal;
-  }
+  final Vector2 _normal;
+  Vector2? get normal => isActive ? _normal : null;
 
-  @internal
-  Ray2? rawReflectionRay;
-  bool _validReflectionRay = false;
-  Ray2? get reflectionRay {
-    if (!isActive) {
-      return null;
-    }
-    if (!_validReflectionRay) {
-      rawReflectionRay = _reflectionRayFunction?.call();
-      _validReflectionRay = true;
-    }
-    return rawReflectionRay;
-  }
-
-  /// Used for storing the center of the [CircleHitbox] to be able to lazily
-  /// compute other values.
-  @internal
-  Vector2? hitboxCenter;
-
-  void reset() {
-    _hitbox = null;
-    _validDistance = false;
-    _validIntersectionPoint = false;
-    _validNormal = false;
-    _validReflectionRay = false;
-  }
+  void reset() => _hitbox = null;
 
   /// Sets this [RaycastResult]'s objects to the values stored in [other].
   void setFrom(RaycastResult<T> other) {
     setWith(
       hitbox: other.hitbox,
+      reflectionRay: other.reflectionRay,
+      normal: other.normal,
+      distance: other.distance,
       isInsideHitbox: other.isInsideHitbox,
-      originatingRay: other.rawOriginatingRay,
-      distanceFunction: other._distanceFunction,
-      intersectionPointFunction: other._intersectionPointFunction,
-      normalFunction: other._normalFunction,
-      reflectionRayFunction: other._reflectionRayFunction,
     );
-    _validDistance = other._validDistance;
-    _rawDistance = other._rawDistance;
-
-    _validIntersectionPoint = other._validIntersectionPoint;
-    if (_validIntersectionPoint) {
-      rawIntersectionPoint = (rawIntersectionPoint
-            ?..setFrom(other.rawIntersectionPoint!)) ??
-          other.rawIntersectionPoint!.clone();
-    }
-
-    _validNormal = other._validNormal;
-    if (_validNormal) {
-      rawNormal =
-          (rawNormal?..setFrom(other.rawNormal!)) ?? other.rawNormal!.clone();
-    }
-
-    _validReflectionRay = other._validReflectionRay;
-    if (_validReflectionRay) {
-      rawReflectionRay = (rawReflectionRay
-            ?..setFrom(other.rawReflectionRay!)) ??
-          other.rawReflectionRay!.clone();
-    }
   }
 
   /// Sets the values of the result from the specified arguments.
-  ///
-  /// Values that are not specified are kept as their previous values.
   void setWith({
     T? hitbox,
-    bool? isInsideHitbox,
-    Ray2? originatingRay,
-    double? Function()? distanceFunction,
-    Vector2? Function()? intersectionPointFunction,
-    Vector2? Function()? normalFunction,
-    Ray2? Function()? reflectionRayFunction,
+    Ray2? reflectionRay,
+    Vector2? normal,
+    double? distance,
+    bool isInsideHitbox = false,
   }) {
-    _hitbox = hitbox ?? _hitbox;
-    _isInsideHitbox = isInsideHitbox ?? _isInsideHitbox;
-    if (distanceFunction != null) {
-      _distanceFunction = distanceFunction;
-      _validDistance = false;
+    _hitbox = hitbox;
+    if (reflectionRay != null) {
+      _reflectionRay.setFrom(reflectionRay);
     }
-    if (intersectionPointFunction != null) {
-      _intersectionPointFunction = intersectionPointFunction;
-      _validIntersectionPoint = false;
+    if (normal != null) {
+      _normal.setFrom(normal);
     }
-    if (normalFunction != null) {
-      _normalFunction = normalFunction;
-      _validNormal = false;
-    }
-    if (reflectionRayFunction != null) {
-      _reflectionRayFunction = reflectionRayFunction;
-      _validReflectionRay = false;
-    }
-    if (rawOriginatingRay != null && originatingRay != null) {
-      rawOriginatingRay?.setFrom(originatingRay);
-    } else {
-      rawOriginatingRay = originatingRay?.clone() ?? rawOriginatingRay;
-    }
+    _distance = distance ?? double.maxFinite;
+    _isInsideHitbox = isInsideHitbox;
   }
 
   RaycastResult<T> clone() {
     return RaycastResult(
       hitbox: hitbox,
+      reflectionRay: _reflectionRay.clone(),
+      normal: _normal.clone(),
+      distance: distance,
       isInsideHitbox: isInsideHitbox,
-      originatingRay: originatingRay?.clone(),
-      distanceFunction: _distanceFunction,
-      intersectionPointFunction: _intersectionPointFunction,
-      normalFunction: _normalFunction,
-      reflectionRayFunction: _reflectionRayFunction,
     );
   }
 }
