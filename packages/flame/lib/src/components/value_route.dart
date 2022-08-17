@@ -28,13 +28,11 @@ abstract class ValueRoute<T> extends Route {
   /// Future that will complete when this route is popped from the stack.
   Future<T> get future => _completer.future;
 
-  @protected
   void completeWith(T value) {
     _completer.complete(value);
     parent.popRoute(this);
   }
 
-  @protected
   void complete() => completeWith(_defaultValue);
 
   @mustCallSuper
