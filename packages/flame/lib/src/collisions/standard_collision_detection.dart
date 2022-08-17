@@ -77,7 +77,7 @@ class StandardCollisionDetection extends CollisionDetection<ShapeHitbox> {
           (possiblyFirstResult ||
               currentResult.distance! < finalResult!.distance!)) {
         if (finalResult == null) {
-          finalResult = currentResult.clone();
+          finalResult = RaycastResult()..setFrom(currentResult);
         } else {
           finalResult.setFrom(currentResult);
         }

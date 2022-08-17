@@ -36,30 +36,36 @@ mixin PolygonRayIntersection<T extends ShapeHitbox> on PolygonComponent {
     }
 
     if (crossings > 0) {
-      Vector2 intersectionPointFunction() =>
-          ray.point(closestDistance, out: out?.rawIntersectionPoint);
-
+      // TODO(spydon): If removing out ?? here it works. Since it will read
+      // a modified temporary RaycastResult when it actually calls the functions
+      // making the results lazy. And we don't want to create a new
+      // RaycastResult object for every raycast call that is done.
       final result = (out ?? RaycastResult<ShapeHitbox>())
         ..setWith(
           hitbox: this as T,
           isInsideHitbox: crossings == 1 || isOverlappingPoint,
           originatingRay: ray,
-          distanceFunction: () => closestDistance,
-          intersectionPointFunction: intersectionPointFunction,
+          distance: closestDistance,
         );
       result.setWith(
+        intersectionPointFunction: () => _intersectionPoint(result: result),
         normalFunction: () => _rayNormal(
           closestSegment: closestSegment!,
           result: result,
         ),
-      );
-      result.setWith(
         reflectionRayFunction: () => _rayReflection(result: result),
       );
       return result;
     }
     out?.reset();
     return null;
+  }
+
+  Vector2 _intersectionPoint({required RaycastResult result}) {
+    return result.rawOriginatingRay!.point(
+      result.distance!,
+      out: result.rawIntersectionPoint,
+    );
   }
 
   /// This method is used to pass to the [RaycastResult] to lazily compute the
