@@ -75,10 +75,10 @@ class CircleHitbox extends CircleComponent with ShapeHitbox {
         hitbox: this,
         isInsideHitbox: isInsideHitbox,
         intersectionPointFunction: () => intersections.first,
-        distance:
-            result.originatingRay?.origin.distanceTo(result.intersectionPoint!),
       );
       result.setWith(
+        distanceFunction: () =>
+            result.originatingRay?.origin.distanceTo(result.intersectionPoint!),
         normalFunction: () =>
             _rayNormal(result, isInsideHitbox: isInsideHitbox),
       );

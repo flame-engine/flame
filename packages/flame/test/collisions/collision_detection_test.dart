@@ -713,8 +713,6 @@ void main() {
         final ray = Ray2(Vector2.zero(), Vector2.all(1)..normalize());
         final result = game.collisionDetection.raycast(ray);
         expect(result?.hitbox?.parent, game.children.first);
-        expect(result?.distance, 127.27922061357856);
-        expect(result?.intersectionPoint, closeToVector(Vector2.all(90)));
         expect(result?.reflectionRay?.origin, closeToVector(Vector2.all(90)));
         expect(
           result?.reflectionRay?.direction,

@@ -13,14 +13,14 @@ class RaycastResult<T extends Hitbox<T>> {
     T? hitbox,
     bool isInsideHitbox = false,
     Ray2? originatingRay,
-    double? distance,
+    double? Function()? distanceFunction,
     Vector2? Function()? intersectionPointFunction,
     Vector2? Function()? normalFunction,
     Ray2? Function()? reflectionRayFunction,
   })  : _hitbox = hitbox,
         _isInsideHitbox = isInsideHitbox,
         rawOriginatingRay = originatingRay,
-        _distance = distance,
+        _distanceFunction = distanceFunction,
         _intersectionPointFunction = intersectionPointFunction,
         _normalFunction = normalFunction,
         _reflectionRayFunction = reflectionRayFunction;
@@ -43,13 +43,19 @@ class RaycastResult<T extends Hitbox<T>> {
   @internal
   Ray2? rawOriginatingRay;
 
+  double? Function()? _distanceFunction;
   Vector2? Function()? _intersectionPointFunction;
   Vector2? Function()? _normalFunction;
   Ray2? Function()? _reflectionRayFunction;
 
-  double? _distance;
+  double? _rawDistance;
+  bool _validDistance = false;
   double? get distance {
-    return isActive ? _distance : null;
+    if (!_validDistance) {
+      _rawDistance = _distanceFunction?.call();
+      _validDistance = true;
+    }
+    return _rawDistance;
   }
 
   @internal
@@ -101,6 +107,7 @@ class RaycastResult<T extends Hitbox<T>> {
 
   void reset() {
     _hitbox = null;
+    _validDistance = false;
     _validIntersectionPoint = false;
     _validNormal = false;
     _validReflectionRay = false;
@@ -112,11 +119,14 @@ class RaycastResult<T extends Hitbox<T>> {
       hitbox: other.hitbox,
       isInsideHitbox: other.isInsideHitbox,
       originatingRay: other.rawOriginatingRay,
-      distance: other._distance,
+      distanceFunction: other._distanceFunction,
       intersectionPointFunction: other._intersectionPointFunction,
       normalFunction: other._normalFunction,
       reflectionRayFunction: other._reflectionRayFunction,
     );
+    _validDistance = other._validDistance;
+    _rawDistance = other._rawDistance;
+
     _validIntersectionPoint = other._validIntersectionPoint;
     if (_validIntersectionPoint) {
       rawIntersectionPoint = (rawIntersectionPoint
@@ -145,14 +155,17 @@ class RaycastResult<T extends Hitbox<T>> {
     T? hitbox,
     bool? isInsideHitbox,
     Ray2? originatingRay,
-    double? distance,
+    double? Function()? distanceFunction,
     Vector2? Function()? intersectionPointFunction,
     Vector2? Function()? normalFunction,
     Ray2? Function()? reflectionRayFunction,
   }) {
     _hitbox = hitbox ?? _hitbox;
-    _distance = distance ?? _distance;
     _isInsideHitbox = isInsideHitbox ?? _isInsideHitbox;
+    if (distanceFunction != null) {
+      _distanceFunction = distanceFunction;
+      _validDistance = false;
+    }
     if (intersectionPointFunction != null) {
       _intersectionPointFunction = intersectionPointFunction;
       _validIntersectionPoint = false;
@@ -172,5 +185,15 @@ class RaycastResult<T extends Hitbox<T>> {
     }
   }
 
-  RaycastResult<T> clone() => RaycastResult<T>()..setFrom(this);
+  RaycastResult<T> clone() {
+    return RaycastResult(
+      hitbox: hitbox,
+      isInsideHitbox: isInsideHitbox,
+      originatingRay: originatingRay?.clone(),
+      distanceFunction: _distanceFunction,
+      intersectionPointFunction: _intersectionPointFunction,
+      normalFunction: _normalFunction,
+      reflectionRayFunction: _reflectionRayFunction,
+    );
+  }
 }
