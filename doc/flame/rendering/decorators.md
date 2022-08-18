@@ -183,6 +183,11 @@ add another one, then you can call `component.decorator.addLast(newDecorator)` -
 the new decorator at the end of the existing chain. The method `removeLast()` can remove that
 decorator later.
 
+Several decorators can be chain that way. For example, if `A` is an initial decorator, then
+`A.addLast(B)` can be followed by either `A.addLast(C)` or `B.addLast(C)` -- and in both cases the
+chain `A -> B -> C` will be created. In practice, it means that the entire chain can be manipulated
+from its root, which usually is `component.decorator`.
+
 
 
 [Component]: ../../flame/components.md#component
