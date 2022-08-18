@@ -162,6 +162,28 @@ the rendering of the component. In order to remove this visual effect, simply se
 property back to `null`.
 
 
+### PositionComponent
+
+`PositionComponent` (and all the derived classes) already has a `decorator` property, so for these
+components the `HasDecorator` mixin is not needed.
+
+In fact, the `PositionComponent` uses its decorator in order to properly position the component on
+the screen. Thus, any new decorators that you'd want to apply to the `PositionComponent` will need
+to be chained (see the [](#multiple-decorators) section below).
+
+It is also possible to replace the root decorator of the `PositionComponent`, if you want to create
+an alternative logic for how the component shall be positioned on the screen.
+
+
+### Multiple decorators
+
+It is possible to apply several decorators simultaneously to the same component: the `Decorator`
+class supports chaining. That is, if you have an existing decorator on a component and you want to
+add another one, then you can call `component.decorator.addLast(newDecorator)` -- this will add
+the new decorator at the end of the existing chain. The method `removeLast()` can remove that
+decorator later.
+
+
 
 [Component]: ../../flame/components.md#component
 [Effect]: ../../flame/effects.md
