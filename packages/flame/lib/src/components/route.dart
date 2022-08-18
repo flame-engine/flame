@@ -37,7 +37,10 @@ class Route extends PositionComponent with ParentIsA<RouterComponent> {
   final bool transparent;
 
   /// The name of the route (set by the [RouterComponent]).
-  late final String name;
+  String get name => _name;
+  late String _name;
+  @internal
+  set name(String value) => _name = value;
 
   /// The function that will be invoked in order to build the page component
   /// when this route first becomes active. This function may also be `null`,
