@@ -113,7 +113,7 @@ with with mouse.
     if (origin != null && !isOriginCasted) {
       collisionDetection.raycastAll(
         origin!,
-        numberOfRays,
+        numberOfRays: numberOfRays,
         rays: rays,
         out: results,
       );
@@ -122,7 +122,7 @@ with with mouse.
     if (tapOrigin != null && !isTapOriginCasted) {
       collisionDetection.raycastAll(
         tapOrigin!,
-        numberOfRays,
+        numberOfRays: numberOfRays,
         rays: tapRays,
         out: tapResults,
       );

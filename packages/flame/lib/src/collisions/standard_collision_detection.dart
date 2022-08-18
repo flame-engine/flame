@@ -88,18 +88,18 @@ class StandardCollisionDetection extends CollisionDetection<ShapeHitbox> {
 
   @override
   List<RaycastResult<ShapeHitbox>> raycastAll(
-    Vector2 origin,
-    int amountOfRays, {
+    Vector2 origin, {
+    required int numberOfRays,
     double startAngle = 0,
     double sweepAngle = tau,
     List<Ray2>? rays,
     List<RaycastResult<ShapeHitbox>>? out,
   }) {
     final isFullCircle = (sweepAngle % tau).abs() < 0.0001;
-    final angle = sweepAngle / (amountOfRays + (isFullCircle ? 0 : -1));
+    final angle = sweepAngle / (numberOfRays + (isFullCircle ? 0 : -1));
     final results = <RaycastResult<ShapeHitbox>>[];
     final direction = Vector2(1, 0);
-    for (var i = 0; i < amountOfRays; i++) {
+    for (var i = 0; i < numberOfRays; i++) {
       Ray2 ray;
       if (i < (rays?.length ?? 0)) {
         ray = rays![i];
@@ -132,22 +132,21 @@ class StandardCollisionDetection extends CollisionDetection<ShapeHitbox> {
   @override
   Iterable<RaycastResult<ShapeHitbox>> raytrace(
     Ray2 ray, {
-    double maxDepth = 10,
+    int maxDepth = 10,
     List<RaycastResult<ShapeHitbox>>? out,
   }) sync* {
     out?.forEach((e) => e.reset());
-    final result = out ?? <RaycastResult<ShapeHitbox>>[];
     var currentRay = ray;
     for (var i = 0; i < maxDepth; i++) {
-      final hasResultObject = result.length > i;
+      final hasResultObject = (out?.length ?? 0) > i;
       final currentResult =
-          hasResultObject ? result[i] : RaycastResult<ShapeHitbox>();
+          hasResultObject ? out![i] : RaycastResult<ShapeHitbox>();
       if (raycast(currentRay, out: currentResult) != null) {
         currentRay = currentResult.reflectionRay!;
-        if (!hasResultObject) {
-          result.add(currentResult);
-          yield currentResult;
+        if (!hasResultObject && out != null) {
+          out.add(currentResult);
         }
+        yield currentResult;
       } else {
         break;
       }

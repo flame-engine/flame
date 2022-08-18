@@ -77,7 +77,7 @@ abstract class CollisionDetection<T extends Hitbox<T>> {
   /// Casts rays uniformly between [startAngle] to [startAngle]+[sweepAngle]
   /// from the given [origin] and returns all hitboxes and intersection points
   /// the rays hit.
-  /// [amount] is the number of rays that should be casted.
+  /// [numberOfRays] is the number of rays that should be casted.
   ///
   /// If the [rays] argument is provided its [Ray2]s are populated with the rays
   /// needed to perform the operation.
@@ -88,8 +88,8 @@ abstract class CollisionDetection<T extends Hitbox<T>> {
   /// returned with the result. If there are less objects in [out] than the
   /// result requires, the missing [RaycastResult] objects will be created.
   List<RaycastResult<T>> raycastAll(
-    Vector2 origin,
-    int amount, {
+    Vector2 origin, {
+    required int numberOfRays,
     double startAngle = 0,
     double sweepAngle = tau,
     List<Ray2>? rays,
@@ -108,7 +108,7 @@ abstract class CollisionDetection<T extends Hitbox<T>> {
   /// result requires, the missing [RaycastResult] objects will be created.
   Iterable<RaycastResult<T>> raytrace(
     Ray2 ray, {
-    double maxDepth = 10,
+    int maxDepth = 10,
     List<RaycastResult<T>>? out,
   });
 }

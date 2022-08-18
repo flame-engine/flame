@@ -15,8 +15,11 @@ class RaytraceExample extends FlameGame
         MouseMovementDetector,
         TapDetector {
   static const description = '''
-In this example the raytrace functionality is showcased, if you move the mouse
-around the canvas, rays and their reflections will be rendered.
+In this example the raytrace functionality is showcased.
+Click to start sending out a ray which will bounce around to visualize how it
+works. If you move the mouse around the canvas, rays and their reflections will
+be moved rendered and if you click again some more objects that the rays can
+bounce on will appear.
   ''';
 
   final _colorTween = ColorTween(
@@ -28,7 +31,7 @@ around the canvas, rays and their reflections will be rendered.
   Ray2? reflection;
   Vector2? origin;
   bool isOriginCasted = false;
-  Paint rayPaint = Paint()..color = Colors.amber.withOpacity(1.0);
+  Paint rayPaint = Paint();
   final boxPaint = BasicPalette.gray.paint()
     ..style = PaintingStyle.stroke
     ..strokeWidth = 2.0;
@@ -49,9 +52,15 @@ around the canvas, rays and their reflections will be rendered.
     ]);
   }
 
+  bool isClicked = false;
   final extraChildren = <Component>[];
   @override
   void onTap() {
+    if (!isClicked) {
+      isClicked = true;
+      return;
+    }
+    _timePassed = 0;
     if (extraChildren.isEmpty) {
       addAll(
         extraChildren
@@ -131,18 +140,22 @@ around the canvas, rays and their reflections will be rendered.
   @override
   void update(double dt) {
     super.update(dt);
-    _timePassed += dt;
+    if (isClicked) {
+      _timePassed += dt;
+    }
     rayPaint.color = _colorTween.transform(0.5 + (sin(_timePassed) / 2))!;
-    if (origin != null && !isOriginCasted) {
+    if (origin != null) {
       _ray.origin.setFrom(origin!);
       _ray.direction
-        ..setValues(-1, 1)
+        ..setValues(1, 1)
         ..normalize();
-      collisionDetection.raytrace(
-        _ray,
-        maxDepth: 10,
-        out: results,
-      );
+      collisionDetection
+          .raytrace(
+            _ray,
+            maxDepth: min((_timePassed * 8).ceil(), 1000),
+            out: results,
+          )
+          .toList();
       isOriginCasted = true;
     }
   }

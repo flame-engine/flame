@@ -7,6 +7,9 @@ import 'package:flame/src/geometry/ray2.dart';
 /// Note that the members of this class is heavily re-used. If you want to
 /// keep the result in an object, clone the parts you want, or the whole
 /// [RaycastResult] with [clone].
+///
+/// NOTE: This class might be subject to breaking changes in an upcoming
+/// version, to make it possible to calculate the values lazily.
 class RaycastResult<T extends Hitbox<T>> {
   RaycastResult({
     T? hitbox,

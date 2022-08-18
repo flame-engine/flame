@@ -85,7 +85,7 @@ around trying not to hit them.
     super.update(dt);
     collisionDetection.raycastAll(
       origin,
-      numberOfRays,
+      numberOfRays: numberOfRays,
       rays: rays,
       out: results,
     );

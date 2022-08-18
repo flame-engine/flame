@@ -1033,7 +1033,10 @@ void main() {
           ]);
           await game.ready();
           final origin = Vector2.all(15);
-          final results = game.collisionDetection.raycastAll(origin, 4);
+          final results = game.collisionDetection.raycastAll(
+            origin,
+            numberOfRays: 4,
+          );
           expect(results.every((r) => r.isActive), isTrue);
           expect(results.length, 4);
         },
