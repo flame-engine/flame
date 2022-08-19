@@ -12,18 +12,16 @@ class DecoratorShadowGame extends FlameGame with HasTappableComponents {
 
   @override
   Future<void> onLoad() async {
+    final decorator = Shadow3DDecorator(base: Vector2(0, 100));
     var step = 0;
     add(Grid());
     add(
       Flower(
         size: 100,
         position: canvasSize / 2,
-        decorator: Shadow3DDecorator(
-          base: canvasSize / 2 + Vector2(0, 50),
-        ),
+        decorator: decorator,
         onTap: (flower) {
           step++;
-          final decorator = flower.decorator! as Shadow3DDecorator;
           if (step == 1) {
             decorator.xShift = 200;
             decorator.opacity = 0.5;

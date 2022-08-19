@@ -62,3 +62,62 @@ mounted as children to the `RouterComponent`.
 
 The main property of a `Route` is its `builder` -- the function that creates the component with
 the content of its page.
+
+
+## ValueRoute
+
+```{flutter-app}
+:sources: ../flame/examples
+:page: value_route
+:show: widget code infobox
+:width: 280
+```
+
+A **ValueRoute** is a route that will return a value when it is eventually popped from the stack.
+Such routes can be used, for example, for dialog boxes that ask for some feedback from the user.
+
+In order to use `ValueRoute`s, two steps are required:
+
+1. Create a route derived from the `ValueRoute<T>` class, where `T` is the type of the value that
+   your route will return. Inside that class override the `build()` method to construct the
+   component that will be displayed. The component should use the `completeWith(value)` method to
+   pop the route and return the specified value.
+
+   ```dart
+   class YesNoDialog extends ValueRoute<bool> {
+     YesNoDialog(this.text) : super(value: false);
+     final String text;
+
+     @override
+     Component build() {
+       return PositionComponent(
+         children: [
+           RectangleComponent(),
+           TextComponent(text: text),
+           Button(
+             text: 'Yes',
+             action: () => completeWith(true),
+           ),
+           Button(
+             text: 'No',
+             action: () => completeWith(false),
+           ),
+         ],
+       );
+     }
+   }
+   ```
+
+2. Display the route using `Router.pushAndWait()`, which returns a future that resolves with the
+   value returned from the route.
+
+   ```dart
+   Future<void> foo() async {
+     final result = await game.router.pushAndWait(YesNoDialog('Are you sure?'));
+     if (result) {
+       // ... the user is sure
+     } else {
+       // ... the user was not so sure
+     }
+   }
+   ```

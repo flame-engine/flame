@@ -135,7 +135,7 @@ class Shadow3DDecorator extends Decorator {
       ..setEntry(3, 2, 0.001)
       ..rotateX(_angle)
       ..scale(1.0, _scale)
-      ..translate(-base.x - _shift, -base.y);
+      ..translate(-base.x - _shift, -base.y - _scale * _ascent);
   }
 
   @override

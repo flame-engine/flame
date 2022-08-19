@@ -14,19 +14,20 @@ class DecoratorTintGame extends FlameGame with HasTappableComponents {
         size: 100,
         position: canvasSize / 2,
         onTap: (flower) {
+          final decorator = flower.decorator;
           step++;
           if (step == 1) {
-            flower.decorator = PaintDecorator.tint(const Color(0x88FF0000));
+            decorator.addLast(PaintDecorator.tint(const Color(0x88FF0000)));
           } else if (step == 2) {
-            flower.decorator = PaintDecorator.tint(const Color(0x8800FF00));
+            decorator.replaceLast(PaintDecorator.tint(const Color(0x8800FF00)));
           } else if (step == 3) {
-            flower.decorator = PaintDecorator.tint(const Color(0x88000088));
+            decorator.replaceLast(PaintDecorator.tint(const Color(0x88000088)));
           } else if (step == 4) {
-            flower.decorator = PaintDecorator.tint(const Color(0x66FFFFFF));
+            decorator.replaceLast(PaintDecorator.tint(const Color(0x66FFFFFF)));
           } else if (step == 5) {
-            flower.decorator = PaintDecorator.tint(const Color(0xAA000000));
+            decorator.replaceLast(PaintDecorator.tint(const Color(0xAA000000)));
           } else {
-            flower.decorator = null;
+            decorator.removeLast();
             step = 0;
           }
         },
