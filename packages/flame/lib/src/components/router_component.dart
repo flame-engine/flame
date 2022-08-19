@@ -1,4 +1,5 @@
 import 'package:flame/src/components/component.dart';
+import 'package:flame/src/components/overlay_route.dart';
 import 'package:flame/src/components/route.dart';
 import 'package:flame/src/components/value_route.dart';
 import 'package:meta/meta.dart';
@@ -120,6 +121,21 @@ class RouterComponent extends Component {
     _adjustRoutesOrder();
     route.didPush(previousRoute);
     _adjustRoutesVisibility();
+  }
+
+  /// Puts the overlay route [name] on top of the navigation stack.
+  ///
+  /// If [name] was already registered as a name of an overlay route, then this
+  /// method is equivalent to [pushNamed]. If not, then a new [OverlayRoute]
+  /// will be created based on the overlay with the same name within the root
+  /// game.
+  void pushOverlay(String name) {
+    if (_routes.containsKey(name)) {
+      assert(_routes[name] is OverlayRoute, '"$name" is not an overlay route');
+      pushNamed(name);
+    } else {
+      pushRoute(OverlayRoute.existing(), name: name);
+    }
   }
 
   /// Puts [route] on top of the stack and waits until that route is popped.
