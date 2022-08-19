@@ -7,7 +7,7 @@ import 'package:flame/rendering.dart';
 
 const tau = 2 * pi;
 
-class Flower extends PositionComponent with TapCallbacks, HasDecorator {
+class Flower extends PositionComponent with TapCallbacks {
   Flower({
     required double size,
     void Function(Flower)? onTap,
@@ -15,7 +15,7 @@ class Flower extends PositionComponent with TapCallbacks, HasDecorator {
     super.position,
   })  : _onTap = onTap,
         super(size: Vector2.all(size), anchor: Anchor.center) {
-    this.decorator = decorator;
+    this.decorator.addLast(decorator);
     final radius = size * 0.38;
     _paths.add(_makePath(radius * 1.4, 6, -0.05, 0.8));
     _paths.add(_makePath(radius, 6, 0.25, 1.5));

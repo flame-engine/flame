@@ -28,7 +28,7 @@ void main() {
             size: Vector2(60, 100),
             paint: Paint()..color = const Color(0xcc199f2b),
             decorator: Shadow3DDecorator(
-              base: Vector2(50, 130),
+              base: Vector2(30, 100),
               xShift: 200,
               yScale: 2,
             ),
@@ -49,7 +49,7 @@ void main() {
             size: Vector2(60, 100),
             paint: Paint()..color = const Color(0xcc199f2b),
             decorator: Shadow3DDecorator(
-              base: Vector2(90, 120),
+              base: Vector2(30, 100),
               angle: 1.7,
               xShift: 200,
               yScale: 2,
@@ -73,8 +73,8 @@ void main() {
             size: Vector2(60, 100),
             paint: Paint()..color = const Color(0xcc199f2b),
             decorator: Shadow3DDecorator()
-              ..base = Vector2(90, 120)
-              ..ascent = 20
+              ..base = Vector2(30, 100)
+              ..ascent = 0
               ..angle = 1.8
               ..xShift = 250.0
               ..yScale = 1.5
@@ -89,20 +89,21 @@ void main() {
   });
 }
 
-class DecoratedRectangle extends RectangleComponent with HasDecorator {
+class DecoratedRectangle extends RectangleComponent {
   DecoratedRectangle({
     super.position,
     super.size,
     super.paint,
     Decorator? decorator,
   }) {
-    this.decorator = decorator;
+    this.decorator.addLast(decorator);
   }
 }
 
 class Background extends Component {
   Background(this.color);
   final Color color;
+
   @override
   void render(Canvas canvas) {
     canvas.drawColor(color, BlendMode.src);

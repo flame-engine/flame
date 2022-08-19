@@ -106,11 +106,11 @@ void main() {
 }
 
 class _DecoratedSprite extends SpriteComponent {
-  _DecoratedSprite({super.sprite, super.position, required this.decorator});
-  final Decorator decorator;
-
-  @override
-  void renderTree(Canvas canvas) {
-    decorator.apply(super.renderTree, canvas);
+  _DecoratedSprite({
+    super.sprite,
+    super.position,
+    required Decorator decorator,
+  }) {
+    this.decorator.addLast(decorator);
   }
 }
