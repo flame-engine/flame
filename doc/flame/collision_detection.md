@@ -225,8 +225,8 @@ class MyGame extends FlameGame with HasCollisionDetection {
 
 ## Ray casting and Ray tracing
 
-Ray casting and ray tracing are methods of sending out rays from a point in space in your game and
-be able to see what the rays collide with and how their reflections would be after hitting
+Ray casting and ray tracing are methods for sending out rays from a point in your game and
+being able to see what these rays collide with and how they reflect after hitting
 something.
 
 
@@ -237,9 +237,9 @@ anything, in Flame's case, hitboxes.
 
 We provide two methods for doing so, `raycast` and `raycastAll`. The first one just casts out
 a single ray and gets back a result with information about what and where the ray hit, and some
-extra information like the distance, normal and the reflection ray. The second one, `raycastAll`,
-works similarly but sends out multiple rays uniformly all around the origin, or within two angles
-from the origin.
+extra information like the distance, the normal and the reflection ray. The second one, `raycastAll`,
+works similarly but sends out multiple rays uniformly around the origin, or within an angle
+centered at the origin.
 
 To use the ray casting functionality you have to have the `HasCollisionDetection` mixin on your
 game. After you have added that you can call `collisionDetection.raycast(...)` on your game class.
@@ -261,9 +261,9 @@ In this example one can see that the `Ray2` class is being used, this class defi
 origin position and a direction (which are both defined by `Vector2`s). This particular ray starts
 from `0, 100` and shoots a ray straight to the right.
 
-The result from this operation will either be `null`, if the ray doesn't hit anything, or a
+The result from this operation will either be `null` if the ray didn't hit anything, or a
 `RaycastResult` which contains:
-  - Which hitbox that the ray hit
+  - Which hitbox the ray hit
   - The intersection point of the collision
   - The reflection ray, i.e. how the ray would reflect on the hitbox that it hix
   - The normal of the collision, i.e. a vector perpendicular to the face of the hitbox that it hits
@@ -326,8 +326,8 @@ class MyGame extends FlameGame with HasCollisionDetection {
       ray, 
       maxDepth: 100,
     );
-    for(final result in results) {
-      if(result.intersectionPoint.distanceTo(ray.origin) > 300) {
+    for (final result in results) {
+      if (result.intersectionPoint.distanceTo(ray.origin) > 300) {
         break;
       }
     }

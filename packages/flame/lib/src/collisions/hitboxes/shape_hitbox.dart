@@ -130,7 +130,7 @@ mixin ShapeHitbox on ShapeComponent implements Hitbox<ShapeHitbox> {
     return collisionAllowed && aabb.intersectsWithAabb2(other.aabb);
   }
 
-  /// Returns the reflection of the ray against the closest.
+  /// Returns information about how the ray intersects the shape.
   ///
   /// If you are only interested in the intersection point use
   /// [RaycastResult.intersectionPoint] of the result.
