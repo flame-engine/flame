@@ -27,7 +27,8 @@ class Route extends PositionComponent with ParentIsA<RouterComponent> {
   Route(
     Component Function()? builder, {
     this.transparent = false,
-  }) : _builder = builder;
+  })  : _builder = builder,
+        _renderEffect = Decorator();
 
   /// If true, then the route below this one will continue to be rendered when
   /// this route becomes active. If false, then this route is assumed to
@@ -36,7 +37,10 @@ class Route extends PositionComponent with ParentIsA<RouterComponent> {
   final bool transparent;
 
   /// The name of the route (set by the [RouterComponent]).
-  late final String name;
+  String get name => _name;
+  late String _name;
+  @internal
+  set name(String value) => _name = value;
 
   /// The function that will be invoked in order to build the page component
   /// when this route first becomes active. This function may also be `null`,
@@ -98,10 +102,10 @@ class Route extends PositionComponent with ParentIsA<RouterComponent> {
   /// Render effects should not be confused with regular [Effect]s. Examples of
   /// the render effects include: whole-page blur, convert into grayscale,
   /// apply color tint, etc.
-  void addRenderEffect(Decorator effect) => _renderEffect = effect;
+  void addRenderEffect(Decorator effect) => _renderEffect.addLast(effect);
 
   /// Removes current [Decorator], is any.
-  void removeRenderEffect() => _renderEffect = null;
+  void removeRenderEffect() => _renderEffect.removeLast();
 
   //#region Implementation methods
 
@@ -116,7 +120,7 @@ class Route extends PositionComponent with ParentIsA<RouterComponent> {
   Component? _page;
 
   /// Additional visual effect that may be applied to the page during rendering.
-  Decorator? _renderEffect;
+  final Decorator _renderEffect;
 
   /// Invoked by the [RouterComponent] when this route is pushed to the top
   /// of the navigation stack.
@@ -134,11 +138,7 @@ class Route extends PositionComponent with ParentIsA<RouterComponent> {
   @override
   void renderTree(Canvas canvas) {
     if (isRendered) {
-      if (_renderEffect != null) {
-        _renderEffect!.apply(super.renderTree, canvas);
-      } else {
-        super.renderTree(canvas);
-      }
+      _renderEffect.applyChain(super.renderTree, canvas);
     }
   }
 

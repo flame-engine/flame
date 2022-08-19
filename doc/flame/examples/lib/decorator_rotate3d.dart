@@ -7,16 +7,16 @@ class DecoratorRotate3DGame extends FlameGame with HasTappableComponents {
   @override
   Future<void> onLoad() async {
     var step = 0;
+    final decorator = Rotate3DDecorator()
+      ..center = Vector2.all(50)
+      ..perspective = 0.01;
     add(
       Flower(
         size: 100,
         position: canvasSize / 2,
-        decorator: Rotate3DDecorator()
-          ..center = canvasSize / 2
-          ..perspective = 0.01,
+        decorator: decorator,
         onTap: (flower) {
           step++;
-          final decorator = flower.decorator! as Rotate3DDecorator;
           if (step == 1) {
             decorator.angleY = -0.8;
           } else if (step == 2) {
