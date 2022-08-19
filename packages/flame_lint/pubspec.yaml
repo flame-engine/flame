@@ -1,6 +1,6 @@
 name: flame_lint
 description: Flame lint package
-version: 0.1.1
+version: 0.1.2
 homepage: https://github.com/flame-engine/flame/tree/main/packages/flame_lint
 
 environment:

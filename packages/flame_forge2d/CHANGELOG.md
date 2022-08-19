@@ -1,3 +1,9 @@
+## 0.12.2
+
+ - **FIX**: `renderChain` should allow open-ended chain drawing ([#1804](https://github.com/flame-engine/flame/issues/1804)). ([60daa196](https://github.com/flame-engine/flame/commit/60daa196a8b2f9d3b022bf4d25b0dc8af29f40b8))
+ - **FIX**: Correct flutter constraint ([#1731](https://github.com/flame-engine/flame/issues/1731)). ([c7383843](https://github.com/flame-engine/flame/commit/c738384314a1a5c3695d1c3adaebcb59604df83a))
+ - **FEAT**: Move to Flutter 3.0.0 and Dart 2.17.0 ([#1713](https://github.com/flame-engine/flame/issues/1713)). ([2a41d0d6](https://github.com/flame-engine/flame/commit/2a41d0d683391194b7209c47bde91199ab7a663e))
+
 ## 0.12.1
 
  - **FIX**: Correct flutter constraint ([#1731](https://github.com/flame-engine/flame/issues/1731)). ([c7383843](https://github.com/flame-engine/flame/commit/c738384314a1a5c3695d1c3adaebcb59604df83a))
