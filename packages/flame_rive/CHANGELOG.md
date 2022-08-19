@@ -1,3 +1,7 @@
+## 1.5.1
+
+ - Update a dependency to the latest release.
+
 ## 1.5.0
 
  - **FIX**: Flame_rive now can load Nested Artboards and update to 0.9.0 rive package  ([#1741](https://github.com/flame-engine/flame/issues/1741)). ([82e4be96](https://github.com/flame-engine/flame/commit/82e4be96f3090908e95659a96006bf50fbb5b08c))

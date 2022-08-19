@@ -8,13 +8,13 @@ environment:
   sdk: ">=2.17.0 <3.0.0"
 
 dependencies:
-  flame: ^1.2.1
+  flame: ^1.3.0
   flutter:
     sdk: flutter
 
 dev_dependencies:
-  flame_lint: ^0.1.1
-  flame_test: ^1.6.0
+  flame_lint: ^0.1.2
+  flame_test: ^1.7.0
 flutter:
   assets:
     - assets/images/
