@@ -136,6 +136,7 @@ class RouterComponent extends Component {
     } else {
       pushRoute(OverlayRoute.existing(), name: name);
     }
+  }
 
   /// Puts [route] on top of the stack and waits until that route is popped.
   ///
