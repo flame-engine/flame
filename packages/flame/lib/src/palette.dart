@@ -25,6 +25,7 @@ class PaletteEntry {
 }
 
 class BasicPalette {
+  static const PaletteEntry transparent = PaletteEntry(Color(0x00FFFFFF));
   static const PaletteEntry white = PaletteEntry(Color(0xFFFFFFFF));
   static const PaletteEntry black = PaletteEntry(Color(0xFF000000));
   static const PaletteEntry red = PaletteEntry(Color(0xFFFF0000));

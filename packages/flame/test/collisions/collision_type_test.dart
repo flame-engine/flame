@@ -10,7 +10,7 @@ import 'collision_test_helpers.dart';
 
 void main() {
   group('CollisionType', () {
-    testCollidableGame('actives do collide', (game) async {
+    testCollisionDetectionGame('actives do collide', (game) async {
       final blockA = TestBlock(
         Vector2.zero(),
         Vector2.all(10),
@@ -27,7 +27,7 @@ void main() {
       expect(blockB.activeCollisions.length, 1);
     });
 
-    testCollidableGame('passives do not collide', (game) async {
+    testCollisionDetectionGame('passives do not collide', (game) async {
       final blockA = TestBlock(
         Vector2.zero(),
         Vector2.all(10),
@@ -44,7 +44,7 @@ void main() {
       expect(blockB.activeCollisions.isEmpty, true);
     });
 
-    testCollidableGame('inactives do not collide', (game) async {
+    testCollisionDetectionGame('inactives do not collide', (game) async {
       final blockA = TestBlock(
         Vector2.zero(),
         Vector2.all(10),
@@ -61,7 +61,7 @@ void main() {
       expect(blockB.activeCollisions.isEmpty, true);
     });
 
-    testCollidableGame('active collides with static', (game) async {
+    testCollisionDetectionGame('active collides with static', (game) async {
       final blockA = TestBlock(
         Vector2.zero(),
         Vector2.all(10),
@@ -79,7 +79,7 @@ void main() {
       expect(blockB.activeCollisions.length, 1);
     });
 
-    testCollidableGame('passive collides with active', (game) async {
+    testCollisionDetectionGame('passive collides with active', (game) async {
       final blockA = TestBlock(
         Vector2.zero(),
         Vector2.all(10),
@@ -97,7 +97,8 @@ void main() {
       expect(blockB.activeCollisions.length, 1);
     });
 
-    testCollidableGame('passive does not collide with inactive', (game) async {
+    testCollisionDetectionGame('passive does not collide with inactive',
+        (game) async {
       final blockA = TestBlock(
         Vector2.zero(),
         Vector2.all(10),
@@ -114,7 +115,8 @@ void main() {
       expect(blockB.activeCollisions.length, 0);
     });
 
-    testCollidableGame('inactive does not collide with static', (game) async {
+    testCollisionDetectionGame('inactive does not collide with static',
+        (game) async {
       final blockA = TestBlock(
         Vector2.zero(),
         Vector2.all(10),
@@ -131,7 +133,8 @@ void main() {
       expect(blockB.activeCollisions.length, 0);
     });
 
-    testCollidableGame('active does not collide with inactive', (game) async {
+    testCollisionDetectionGame('active does not collide with inactive',
+        (game) async {
       final blockA = TestBlock(
         Vector2.zero(),
         Vector2.all(10),
@@ -147,7 +150,8 @@ void main() {
       expect(blockB.activeCollisions.length, 0);
     });
 
-    testCollidableGame('inactive does not collide with active', (game) async {
+    testCollisionDetectionGame('inactive does not collide with active',
+        (game) async {
       final blockA = TestBlock(
         Vector2.zero(),
         Vector2.all(10),
@@ -163,7 +167,7 @@ void main() {
       expect(blockB.activeCollisions.length, 0);
     });
 
-    testCollidableGame(
+    testCollisionDetectionGame(
       'correct collisions with many involved collidables',
       (game) async {
         final rng = Random(0);
@@ -192,7 +196,7 @@ void main() {
       },
     );
 
-    testCollidableGame('detects collision after scale', (game) async {
+    testCollisionDetectionGame('detects collision after scale', (game) async {
       final blockA = TestBlock(
         Vector2.zero(),
         Vector2.all(10),
@@ -217,7 +221,7 @@ void main() {
       expect(blockB.activeCollisions.length, 1);
     });
 
-    testCollidableGame('detects collision after flip', (game) async {
+    testCollisionDetectionGame('detects collision after flip', (game) async {
       final blockA = TestBlock(
         Vector2.zero(),
         Vector2.all(10),
@@ -242,7 +246,7 @@ void main() {
       expect(blockB.activeCollisions.length, 1);
     });
 
-    testCollidableGame('detects collision after scale', (game) async {
+    testCollisionDetectionGame('detects collision after scale', (game) async {
       final blockA = TestBlock(
         Vector2.zero(),
         Vector2.all(10),
@@ -267,7 +271,8 @@ void main() {
       expect(blockB.activeCollisions.length, 1);
     });
 
-    testCollidableGame('testPoint detects point after flip', (game) async {
+    testCollisionDetectionGame('testPoint detects point after flip',
+        (game) async {
       final blockA = TestBlock(
         Vector2.zero(),
         Vector2.all(10),
@@ -280,7 +285,8 @@ void main() {
       expect(blockA.containsPoint(Vector2(-1, 1)), true);
     });
 
-    testCollidableGame('testPoint detects point after scale', (game) async {
+    testCollisionDetectionGame('testPoint detects point after scale',
+        (game) async {
       final blockA = TestBlock(
         Vector2.zero(),
         Vector2.all(10),
@@ -293,7 +299,8 @@ void main() {
       expect(blockA.containsPoint(Vector2.all(11)), true);
     });
 
-    testCollidableGame('detects collision on child components', (game) async {
+    testCollisionDetectionGame('detects collision on child components',
+        (game) async {
       final blockA = TestBlock(
         Vector2.zero(),
         Vector2.all(10),

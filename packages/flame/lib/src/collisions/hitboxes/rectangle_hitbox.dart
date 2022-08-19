@@ -2,9 +2,11 @@
 
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flame/src/geometry/polygon_ray_intersection.dart';
 
 /// A [Hitbox] in the shape of a rectangle (a simplified polygon).
-class RectangleHitbox extends RectangleComponent with ShapeHitbox {
+class RectangleHitbox extends RectangleComponent
+    with ShapeHitbox, PolygonRayIntersection<RectangleHitbox> {
   @override
   final bool shouldFillParent;
 
