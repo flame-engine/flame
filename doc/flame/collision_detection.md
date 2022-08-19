@@ -251,7 +251,10 @@ class MyGame extends FlameGame with HasCollisionDetection {
   @override
   void update(double dt) {
     super.update(dt);
-    final ray = Ray2(Vector2(0, 100), Vector2(1, 0));
+    final ray = Ray2(
+        origin: Vector2(0, 100),
+        direction: Vector2(1, 0),
+    );
     final result = collisionDetection.raycast(ray);
   }
 }
@@ -321,7 +324,10 @@ class MyGame extends FlameGame with HasCollisionDetection {
   @override
   void update(double dt) {
     super.update(dt);
-    final ray = Ray2(Vector2(0, 100), Vector2(1, 1)..normalize());
+    final ray = Ray2(
+        origin: Vector2(0, 100),
+        direction: Vector2(1, 1)..normalize()
+    );
     final results = collisionDetection.raytrace(
       ray, 
       maxDepth: 100,

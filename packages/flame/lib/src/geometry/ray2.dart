@@ -8,11 +8,11 @@ import 'package:meta/meta.dart';
 ///
 /// The [direction] should be normalized.
 class Ray2 {
-  Ray2(this.origin, Vector2 direction) {
+  Ray2({required this.origin, required Vector2 direction}) {
     this.direction = direction;
   }
 
-  Ray2.zero() : this(Vector2.zero(), Vector2(1, 0));
+  Ray2.zero() : this(origin: Vector2.zero(), direction: Vector2(1, 0));
 
   /// The point where the ray originates from.
   Vector2 origin;
@@ -109,7 +109,7 @@ class Ray2 {
 
   /// Deep clones the object, i.e. both [origin] and [direction] are cloned into
   /// a new [Ray2] object.
-  Ray2 clone() => Ray2(origin.clone(), direction.clone());
+  Ray2 clone() => Ray2(origin: origin.clone(), direction: direction.clone());
 
   /// Sets the values by copying them from [other].
   void setFrom(Ray2 other) {

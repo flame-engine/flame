@@ -62,7 +62,7 @@ mixin PolygonRayIntersection<T extends ShapeHitbox> on PolygonComponent {
               origin: intersectionPoint,
               direction: reflectionDirection,
             )) ??
-          Ray2(intersectionPoint, reflectionDirection);
+          Ray2(origin: intersectionPoint, direction: reflectionDirection);
       return (out ?? RaycastResult<ShapeHitbox>())
         ..setWith(
           hitbox: this as T,

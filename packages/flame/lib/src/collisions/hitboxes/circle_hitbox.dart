@@ -85,7 +85,7 @@ class CircleHitbox extends CircleComponent with ShapeHitbox {
               origin: intersectionPoint,
               direction: reflectionDirection,
             )) ??
-          Ray2(intersectionPoint, reflectionDirection);
+          Ray2(origin: intersectionPoint, direction: reflectionDirection);
 
       result.setWith(
         hitbox: this,
