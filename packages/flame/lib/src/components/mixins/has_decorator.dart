@@ -21,7 +21,7 @@ mixin HasDecorator on Component {
     if (decorator == null) {
       super.renderTree(canvas);
     } else {
-      decorator!.apply(super.renderTree, canvas);
+      decorator!.applyChain(super.renderTree, canvas);
     }
   }
 }

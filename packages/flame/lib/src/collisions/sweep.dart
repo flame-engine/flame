@@ -1,18 +1,20 @@
-import 'package:flame/src/collisions/broadphase.dart';
-import 'package:flame/src/collisions/collision_callbacks.dart';
-import 'package:flame/src/collisions/hitboxes/hitbox.dart';
+import 'package:flame/collisions.dart';
 
 class Sweep<T extends Hitbox<T>> extends Broadphase<T> {
   Sweep({super.items});
 
-  final List<T> _active = [];
-  final Set<CollisionProspect<T>> _potentials = {};
+  late final List<T> _active = [];
+  late final Set<CollisionProspect<T>> _potentials = {};
+
+  @override
+  void update() {
+    items.sort((a, b) => a.aabb.min.x.compareTo(b.aabb.min.x));
+  }
 
   @override
   Set<CollisionProspect<T>> query() {
     _active.clear();
     _potentials.clear();
-    items.sort((a, b) => (a.aabb.min.x - b.aabb.min.x).ceil());
     for (final item in items) {
       if (item.collisionType == CollisionType.inactive) {
         continue;

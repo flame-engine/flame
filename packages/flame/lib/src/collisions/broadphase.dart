@@ -12,6 +12,11 @@ abstract class Broadphase<T extends Hitbox<T>> {
 
   Broadphase({List<T>? items}) : items = items ?? [];
 
+  /// This method can be used if there are things that needs to be prepared in
+  /// each tick.
+  void update() {}
+
+  /// Returns the potential hitbox collisions
   Set<CollisionProspect<T>> query();
 }
 

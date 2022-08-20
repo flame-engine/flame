@@ -1,29 +1,41 @@
 import 'dart:math';
 
+import 'package:flame/extensions.dart';
 import 'package:flame/geometry.dart';
-import 'package:flame/src/extensions/double.dart';
 import 'package:meta/meta.dart';
-import 'package:vector_math/vector_math_64.dart';
 
 /// A ray in the 2d plane.
 ///
 /// The [direction] should be normalized.
 class Ray2 {
-  Ray2(this.origin, Vector2 direction) {
+  Ray2({required this.origin, required Vector2 direction}) {
     this.direction = direction;
   }
 
-  Ray2.zero() : this(Vector2.zero(), Vector2(1, 0));
+  Ray2.zero() : this(origin: Vector2.zero(), direction: Vector2(1, 0));
 
+  /// The point where the ray originates from.
   Vector2 origin;
-  final Vector2 _direction = Vector2.zero();
+
+  /// The normalized direction of the ray.
+  ///
+  /// The values within the direction object should not be updated manually, use
+  /// the setter instead.
   Vector2 get direction => _direction;
   set direction(Vector2 direction) {
+    _direction.setFrom(direction);
+    _updateInverses();
+  }
+
+  final Vector2 _direction = Vector2.zero();
+
+  /// Should be called if the [direction] values are updated within the object
+  /// instead of by the setter.
+  void _updateInverses() {
     assert(
       (direction.length2 - 1).abs() < 0.000001,
       'direction must be normalized',
     );
-    _direction.setFrom(direction);
     directionInvX = (1 / direction.x).toFinite();
     directionInvY = (1 / direction.y).toFinite();
   }
@@ -74,7 +86,9 @@ class Ray2 {
   /// [LineSegment] or null if there is no intersection.
   ///
   /// A ray that is parallel and overlapping with the [segment] is considered to
-  /// not intersect.
+  /// not intersect. This is due to that a single intersection point can't be
+  /// determined and that a [LineSegment] is almost always connected to another
+  /// line segment which will get the intersection on one of its ends instead.
   double? lineSegmentIntersection(LineSegment segment) {
     _v1
       ..setFrom(origin)
@@ -95,7 +109,7 @@ class Ray2 {
 
   /// Deep clones the object, i.e. both [origin] and [direction] are cloned into
   /// a new [Ray2] object.
-  Ray2 clone() => Ray2(origin.clone(), direction.clone());
+  Ray2 clone() => Ray2(origin: origin.clone(), direction: direction.clone());
 
   /// Sets the values by copying them from [other].
   void setFrom(Ray2 other) {
@@ -106,4 +120,7 @@ class Ray2 {
     this.origin.setFrom(origin);
     this.direction = direction;
   }
+
+  @override
+  String toString() => 'Ray2(origin: $origin, direction: $direction)';
 }

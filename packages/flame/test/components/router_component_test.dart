@@ -1,6 +1,7 @@
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame_test/flame_test.dart';
+import 'package:flutter/widgets.dart' hide Route, OverlayRoute;
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -170,6 +171,64 @@ void main() {
       expect(router.children.length, 1);
       expect(router.currentRoute.name, 'A');
     });
+
+    testWidgets(
+      'can handle overlays via the Router',
+      (tester) async {
+        const key1 = ValueKey('one');
+        const key2 = ValueKey('two');
+        const key3 = ValueKey('three');
+        final game = FlameGame();
+        final router = RouterComponent(
+          initialRoute: 'home',
+          routes: {'home': Route(Component.new)},
+        )..addToParent(game);
+
+        await tester.pumpWidget(
+          GameWidget(
+            game: game,
+            overlayBuilderMap: {
+              'first!': (_, __) => Container(key: key1),
+              'second': (_, __) => Container(key: key2),
+            },
+          ),
+        );
+        await tester.pump();
+        await tester.pump();
+        expect(router.stack.length, 1);
+        expect(router.currentRoute.name, 'home');
+        expect(game.overlays.activeOverlays.isEmpty, true);
+
+        router.pushOverlay('second');
+        await tester.pump();
+        expect(game.overlays.activeOverlays, ['second']);
+        expect(find.byKey(key1), findsNothing);
+        expect(find.byKey(key2), findsOneWidget);
+
+        router.pop();
+        await tester.pump();
+        expect(game.overlays.activeOverlays.isEmpty, true);
+        expect(find.byKey(key1), findsNothing);
+        expect(find.byKey(key2), findsNothing);
+
+        router.pushOverlay('first!');
+        router.pushOverlay('second');
+        await tester.pump();
+        expect(game.overlays.activeOverlays, ['first!', 'second']);
+        expect(find.byKey(key1), findsOneWidget);
+        expect(find.byKey(key2), findsOneWidget);
+
+        router.pushRoute(
+          OverlayRoute((ctx, game) => Container(key: key3)),
+          name: 'new-route',
+        );
+        await tester.pump();
+        expect(game.overlays.activeOverlays, ['first!', 'second', 'new-route']);
+        expect(find.byKey(key1), findsOneWidget);
+        expect(find.byKey(key2), findsOneWidget);
+        expect(find.byKey(key3), findsOneWidget);
+      },
+    );
   });
 }
 

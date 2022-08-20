@@ -48,4 +48,4 @@ animated objects).
 ## Full Example
 
 You can check a working example
-[here](https://github.com/flame-engine/flame_tiled/tree/main/example).
+[here](https://github.com/flame-engine/flame/tree/main/packages/flame_tiled/example).

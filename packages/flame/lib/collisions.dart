@@ -9,4 +9,6 @@ export 'src/collisions/hitboxes/polygon_hitbox.dart';
 export 'src/collisions/hitboxes/rectangle_hitbox.dart';
 export 'src/collisions/hitboxes/screen_hitbox.dart';
 export 'src/collisions/hitboxes/shape_hitbox.dart';
+export 'src/collisions/standard_collision_detection.dart';
 export 'src/collisions/sweep.dart';
+export 'src/experimental/raycast_result.dart';

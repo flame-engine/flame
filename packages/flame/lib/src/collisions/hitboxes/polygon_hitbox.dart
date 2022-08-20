@@ -1,10 +1,11 @@
 // ignore_for_file: comment_references
 
 import 'package:flame/collisions.dart';
-import 'package:flame/components.dart';
+import 'package:flame/geometry.dart';
 
 /// A [Hitbox] in the shape of a polygon.
-class PolygonHitbox extends PolygonComponent with ShapeHitbox {
+class PolygonHitbox extends PolygonComponent
+    with ShapeHitbox, PolygonRayIntersection {
   PolygonHitbox(
     super.vertices, {
     super.angle,

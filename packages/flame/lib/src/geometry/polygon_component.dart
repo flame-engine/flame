@@ -2,12 +2,11 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:collection/collection.dart';
+import 'package:flame/geometry.dart';
 import 'package:flame/src/anchor.dart';
 import 'package:flame/src/cache/value_cache.dart';
 import 'package:flame/src/extensions/rect.dart';
 import 'package:flame/src/extensions/vector2.dart';
-import 'package:flame/src/geometry/line_segment.dart';
-import 'package:flame/src/geometry/shape_component.dart';
 import 'package:meta/meta.dart';
 
 class PolygonComponent extends ShapeComponent {
@@ -154,15 +153,13 @@ class PolygonComponent extends ShapeComponent {
       scale,
       angle,
     ])) {
-      var i = 0;
-      for (final vertex in vertices) {
+      vertices.forEachIndexed((i, vertex) {
         _globalVertices[i]
           ..setFrom(vertex)
           ..multiply(scale)
           ..add(position)
           ..rotate(angle, center: position);
-        i++;
-      }
+      });
       if (scale.y.isNegative || scale.x.isNegative) {
         // Since the list will be clockwise we have to reverse it for it to
         // become counterclockwise.
