@@ -69,7 +69,7 @@ void main() {
 
         expect(effect.controller.duration, 5);
         game.update(5);
-        expect(component.position, closeToVector(8, 12));
+        expect(component.position, closeToVector(Vector2(8, 12)));
       });
 
       test('speed on MoveAlongPathEffect', () async {
@@ -90,7 +90,7 @@ void main() {
 
         expect(effect.controller.duration, 25);
         game.update(25);
-        expect(component.position, closeToVector(10, 30));
+        expect(component.position, closeToVector(Vector2(10, 30)));
       });
 
       test('speed on RotateEffect', () async {
@@ -123,7 +123,7 @@ void main() {
         game.update(10);
         expect(effect.controller.completed, true);
 
-        expect(component.position, closeToVector(10, 0));
+        expect(component.position, closeToVector(Vector2(10, 0)));
         component.position = Vector2.all(40);
         effect.reset();
         game.update(0);
@@ -134,7 +134,7 @@ void main() {
 }
 
 class BadEffect extends Effect implements MeasurableEffect {
-  BadEffect(EffectController controller) : super(controller);
+  BadEffect(super.controller);
 
   @override
   void apply(double progress) {}

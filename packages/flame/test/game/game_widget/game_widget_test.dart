@@ -69,7 +69,7 @@ FlameTester<_MyGame> myGame({required bool open}) {
   return FlameTester(
     _MyGame.new,
     pumpWidget: (gameWidget, tester) async {
-      await tester.pumpWidget(_Wrapper(child: gameWidget, open: open));
+      await tester.pumpWidget(_Wrapper(open: open, child: gameWidget));
     },
   );
 }
@@ -109,4 +109,116 @@ void main() {
       expect(game.hasLayout, isTrue);
     },
   );
+
+  group('Subscription is valid after game change', () {
+    testWidgets('Uncontolled to uncontrolled', (tester) async {
+      const key = Key('flame-game');
+      final game1 = FlameGame();
+      await tester.pumpWidget(GameWidget(key: key, game: game1));
+      expect(game1.isMounted, true);
+      expect(game1.gameStateListeners.length, 1);
+
+      final game2 = FlameGame();
+      await tester.pumpWidget(GameWidget(key: key, game: game2));
+      final widget = tester.firstWidget<GameWidget>(
+        find.byWidgetPredicate((widget) => widget is GameWidget),
+      );
+      expect(widget.game, game2);
+      expect(game2.isMounted, true);
+      expect(game2.gameStateListeners.length, 1);
+      expect(game1.gameStateListeners.length, 0);
+    });
+
+    testWidgets('Uncontrolled to controlled', (tester) async {
+      const key = Key('flame-game');
+      final game1 = FlameGame();
+      await tester.pumpWidget(GameWidget(key: key, game: game1));
+      expect(game1.isMounted, true);
+      expect(game1.gameStateListeners.length, 1);
+
+      late final FlameGame game2;
+      await tester.pumpWidget(
+        GameWidget.controlled(
+          key: key,
+          gameFactory: () => game2 = FlameGame(),
+        ),
+      );
+      await tester.pump();
+      final widget = tester.firstWidget<GameWidget>(
+        find.byWidgetPredicate((widget) => widget is GameWidget),
+      );
+
+      expect(widget.game, null);
+
+      expect(game1.gameStateListeners.length, 0);
+      expect(game1.isAttached, false);
+
+      expect(game2.gameStateListeners.length, 1);
+      expect(game2.isAttached, true);
+      expect(game2.isMounted, true);
+    });
+    testWidgets('Controlled to uncontrolled', (tester) async {
+      const key = Key('flame-game');
+
+      late final FlameGame game1;
+      await tester.pumpWidget(
+        GameWidget.controlled(
+          key: key,
+          gameFactory: () => game1 = FlameGame(),
+        ),
+      );
+
+      expect(game1.isMounted, true);
+      expect(game1.gameStateListeners.length, 1);
+
+      final game2 = FlameGame();
+      await tester.pumpWidget(GameWidget(key: key, game: game2));
+      await tester.pump();
+      final widget = tester.firstWidget<GameWidget>(
+        find.byWidgetPredicate((widget) => widget is GameWidget),
+      );
+
+      expect(widget.game, game2);
+
+      expect(game1.gameStateListeners.length, 0);
+      expect(game1.isAttached, false);
+
+      expect(game2.gameStateListeners.length, 1);
+      expect(game2.isAttached, true);
+      expect(game2.isMounted, true);
+    });
+    testWidgets('Controlled to controlled', (tester) async {
+      const key = Key('flame-game');
+
+      late FlameGame game1;
+      await tester.pumpWidget(
+        GameWidget.controlled(
+          key: key,
+          gameFactory: () => game1 = FlameGame(),
+        ),
+      );
+
+      expect(game1.isMounted, true);
+      expect(game1.gameStateListeners.length, 1);
+
+      FlameGame? game2;
+      await tester.pumpWidget(
+        GameWidget.controlled(
+          key: key,
+          gameFactory: () => game2 = FlameGame(),
+        ),
+      );
+      await tester.pump();
+      final widget = tester.firstWidget<GameWidget>(
+        find.byWidgetPredicate((widget) => widget is GameWidget),
+      );
+
+      expect(widget.game, null);
+
+      expect(game1.gameStateListeners.length, 1);
+      expect(game1.isAttached, true);
+
+      expect(game2, isNull);
+    });
+  });
 }

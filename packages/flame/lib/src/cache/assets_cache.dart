@@ -27,27 +27,23 @@ class AssetsCache {
     if (!_files.containsKey(fileName)) {
       _files[fileName] = await _readFile(fileName);
     }
-
     assert(
       _files[fileName] is _StringAsset,
-      '"$fileName" is not a String Asset',
+      '"$fileName" was previously loaded as a binary file',
     );
-
-    return _files[fileName]!.value as String;
+    return (_files[fileName]! as _StringAsset).value;
   }
 
   /// Reads a binary file from assets folder.
-  Future<List<int>> readBinaryFile(String fileName) async {
+  Future<Uint8List> readBinaryFile(String fileName) async {
     if (!_files.containsKey(fileName)) {
       _files[fileName] = await _readBinary(fileName);
     }
-
     assert(
       _files[fileName] is _BinaryAsset,
-      '"$fileName" is not a Binary Asset',
+      '"$fileName" was previously loaded as a text file',
     );
-
-    return _files[fileName]!.value as List<int>;
+    return (_files[fileName]! as _BinaryAsset).value;
   }
 
   /// Reads a json file from the assets folder.
@@ -63,9 +59,7 @@ class AssetsCache {
 
   Future<_BinaryAsset> _readBinary(String fileName) async {
     final data = await rootBundle.load('$prefix$fileName');
-    final list = Uint8List.view(data.buffer);
-
-    final bytes = List<int>.from(list);
+    final bytes = Uint8List.view(data.buffer);
     return _BinaryAsset(bytes);
   }
 }
@@ -76,9 +70,9 @@ class _Asset<T> {
 }
 
 class _StringAsset extends _Asset<String> {
-  _StringAsset(String value) : super(value);
+  _StringAsset(super.value);
 }
 
-class _BinaryAsset extends _Asset<List<int>> {
-  _BinaryAsset(List<int> value) : super(value);
+class _BinaryAsset extends _Asset<Uint8List> {
+  _BinaryAsset(super.value);
 }

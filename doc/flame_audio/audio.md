@@ -1,6 +1,6 @@
 # Audio
 
-Playing audio is essential for any game, so we made it simple!
+Playing audio is essential for most games, so we made it simple!
 
 First you have to add [flame_audio](https://github.com/flame-engine/flame_audio) to your dependency
 list in your `pubspec.yaml` file:
@@ -12,11 +12,10 @@ dependencies:
 
 The latest version can be found on [pub.dev](https://pub.dev/packages/flame_audio/install).
 
-After installing the `flame_audio` package you can add audio files in the assets section of your
+After installing the `flame_audio` package, you can add audio files in the assets section of your
 `pubspec.yaml` file. Make sure that the audio files exists in the paths that you provide.
 
-The default directory for `FlameAudio` is `assets/audio` (which can be changed) and for `AudioPool`
-the default directory is `assets/audio/sfx`.
+The default directory for `FlameAudio` is `assets/audio` (which can be changed by providing your own instance of `AudioCache`).
 
 For the examples below, your `pubspec.yaml` file needs to contain something like this:
 
@@ -26,9 +25,6 @@ flutter:
     - assets/audio/explosion.mp3
     - assets/audio/music.mp3
 ```
-
-(The default directory for `FlameAudio` is `assets/audio` (which can be changed) and for `AudioPool`
-the default directory is `assets/audio/sfx`.)
 
 Then you have the following methods at your disposal:
 
@@ -63,13 +59,29 @@ You can use [the `Bgm` class](bgm.md) (via `FlameAudio.bgm`) to play looping bac
 tracks. The `Bgm` class lets Flame automatically manage the pausing and resuming of background music
 tracks when the game is backgrounded or comes back to the foreground.
 
+You can use [the `AudioPool` class](audio_pool.md) if you want to fire quick sound effects in a very
+efficient manner. `AudioPool` will keep a pool of `AudioPlayer`s preloaded with a given sound, and
+allow you to play them very fast in quick succession. 
+
 Some file formats that work across devices and that we recommend are: MP3, OGG and WAV.
 
-This bridge library (flame_audio) uses [audioplayers](https://github.com/luanpotter/audioplayer) in
-order to allow for playing multiple sounds simultaneously (crucial in a game). You can check the
+This bridge library (flame_audio) uses [audioplayers](https://github.com/bluefireteam/audioplayers)
+in order to allow for playing multiple sounds simultaneously (crucial in a game). You can check the
 link for a more in-depth explanation.
 
-Finally, you can pre-load your audios. Audios need to be stored in the memory the first time they
+Both on `play` and `loop` you can pass an additional optional double parameter, the `volume`
+(defaults to `1.0`).
+
+Both the `play` and `loop` methods return an instance of an `AudioPlayer` from the
+[audioplayers](https://github.com/bluefireteam/audioplayers) lib, that allows you to stop, pause and
+configure other parameters.
+
+In fact you can always use `AudioPlayer`s directly to gain full control over how your audio is played
+-- the `FlameAudio` class is just a wrapper for common functionality.
+
+## Caching
+
+You can pre-load your assets. Audios need to be stored in the memory the first time they
 are requested; therefore, the first time you play each mp3 you might get a delay. In order to
 pre-load your audios, just use:
 
@@ -81,7 +93,7 @@ You can load all your audios in the beginning in your game's `onLoad` method so 
 play smoothly. To load multiple audio files, use the `loadAll` method:
 
 ```dart
-await FlameAudio.audioCache.loadAll(['explosion.mp3', 'music.mp3'])
+await FlameAudio.audioCache.loadAll(['explosion.mp3', 'music.mp3']);
 ```
 
 Finally, you can use the `clear` method to remove a file that has been loaded into the cache:
@@ -94,12 +106,3 @@ There is also a `clearCache` method, that clears the whole cache.
 
 This might be useful if, for instance, your game has multiple levels and each has a different
 set of sounds and music.
-
-Both load methods return a `Future` for the `File`s loaded.
-
-Both on `play` and `loop` you can pass an additional optional double parameter, the `volume`
-(defaults to `1.0`).
-
-Both the `play` and `loop` methods return an instance of an `AudioPlayer` from the
-[audioplayers](https://github.com/luanpotter/audioplayer) lib, that allows you to stop, pause and
-configure other parameters.

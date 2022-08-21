@@ -11,6 +11,7 @@ packages/flame/doc/api/
 .vscode/
 **/.flutter-plugins
 **/.flutter-plugins-dependencies
+**/pubspec_overrides.yaml
 
 android/
 ios/
@@ -19,6 +20,7 @@ build/
 _build/
 
 coverage
+**/failures
 
 .fvm
 Makefile

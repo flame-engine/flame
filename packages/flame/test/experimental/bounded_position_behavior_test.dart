@@ -54,7 +54,7 @@ void main() {
       game.add(target);
       target.add(BoundedPositionBehavior(bounds: shape));
       await game.ready();
-      expect(target.position, closeToVector(10, 0, epsilon: 0.5));
+      expect(target.position, closeToVector(Vector2(10, 0), 0.5));
     });
 
     testWithFlameGame('adjust target position on shape change', (game) async {
@@ -68,7 +68,7 @@ void main() {
 
       behavior.bounds = Circle(Vector2.zero(), 5);
       expect((behavior.bounds as Circle).radius, 5);
-      expect(target.position, closeToVector(5, 0, epsilon: 0.1));
+      expect(target.position, closeToVector(Vector2(5, 0), 0.1));
     });
   });
 }

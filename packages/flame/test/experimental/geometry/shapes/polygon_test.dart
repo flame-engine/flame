@@ -37,7 +37,7 @@ void main() {
         polygon.aabb,
         closeToAabb(Aabb2.minMax(Vector2.zero(), Vector2(80, 60))),
       );
-      expect(polygon.center, closeToVector(80 / 3, 60 * 2 / 3, epsilon: 1e-14));
+      expect(polygon.center, closeToVector(Vector2(80 / 3, 60 * 2 / 3), 1e-14));
       expect('$polygon', 'Polygon([[0.0,0.0], [0.0,60.0], [80.0,60.0]])');
     });
 
@@ -107,7 +107,7 @@ void main() {
       );
       // Force computing (and caching) the aabb and the center
       expect(polygon.aabb.min, Vector2.zero());
-      expect(polygon.center, closeToVector(80 / 3, 40, epsilon: 1e-14));
+      expect(polygon.center, closeToVector(Vector2(80 / 3, 40), 1e-14));
 
       polygon.move(Vector2(5, -10));
       expect(
@@ -122,7 +122,7 @@ void main() {
         polygon.aabb,
         closeToAabb(Aabb2.minMax(Vector2(5, -10), Vector2(85, 50))),
       );
-      expect(polygon.center, closeToVector(95 / 3, 30, epsilon: 1e-14));
+      expect(polygon.center, closeToVector(Vector2(95 / 3, 30), 1e-14));
     });
 
     test('support', () {
@@ -208,10 +208,10 @@ void main() {
       final a = 10 * sqrt(2);
       expect(result, isA<Polygon>());
       expect((result as Polygon).edges.length, 4);
-      expect(result.vertices[0], closeToVector(-a, -a, epsilon: 1e-14));
-      expect(result.vertices[1], closeToVector(-a, a, epsilon: 1e-14));
-      expect(result.vertices[2], closeToVector(a, a, epsilon: 1e-14));
-      expect(result.vertices[3], closeToVector(a, -a, epsilon: 1e-14));
+      expect(result.vertices[0], closeToVector(Vector2(-a, -a), 1e-14));
+      expect(result.vertices[1], closeToVector(Vector2(-a, a), 1e-14));
+      expect(result.vertices[2], closeToVector(Vector2(a, a), 1e-14));
+      expect(result.vertices[3], closeToVector(Vector2(a, -a), 1e-14));
     });
 
     test('project with target', () {

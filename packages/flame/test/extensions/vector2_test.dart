@@ -149,48 +149,48 @@ void main() {
     test('rotate - no center defined', () {
       final position = Vector2(0.0, 1.0);
       position.rotate(-math.pi / 2);
-      expect(position, closeToVector(1.0, 0.0));
+      expect(position, closeToVector(Vector2(1.0, 0.0)));
     });
 
     test('rotate - no center defined, negative position', () {
       final position = Vector2(0.0, -1.0);
       position.rotate(-math.pi / 2);
-      expect(position, closeToVector(-1.0, 0.0));
+      expect(position, closeToVector(Vector2(-1.0, 0.0)));
     });
 
     test('rotate - with center defined', () {
       final position = Vector2(0.0, 1.0);
       final center = Vector2(1.0, 1.0);
       position.rotate(-math.pi / 2, center: center);
-      expect(position, closeToVector(1.0, 2.0));
+      expect(position, closeToVector(Vector2(1.0, 2.0)));
     });
 
     test('rotate - with positive direction', () {
       final position = Vector2(0.0, 1.0);
       final center = Vector2(1.0, 1.0);
       position.rotate(math.pi / 2, center: center);
-      expect(position, closeToVector(1.0, 0.0));
+      expect(position, closeToVector(Vector2(1.0, 0.0)));
     });
 
     test('rotate - with a negative y position', () {
       final position = Vector2(2.0, -3.0);
       final center = Vector2(1.0, 1.0);
       position.rotate(math.pi / 2, center: center);
-      expect(position, closeToVector(5.0, 2.0));
+      expect(position, closeToVector(Vector2(5.0, 2.0)));
     });
 
     test('rotate - with a negative x position', () {
       final position = Vector2(-2.0, 3.0);
       final center = Vector2(1.0, 1.0);
       position.rotate(math.pi / 2, center: center);
-      expect(position, closeToVector(-1.0, -2.0));
+      expect(position, closeToVector(Vector2(-1.0, -2.0)));
     });
 
     test('rotate - with a negative position', () {
       final position = Vector2(-2.0, -3.0);
       final center = Vector2(1.0, 0.0);
       position.rotate(math.pi / 2, center: center);
-      expect(position, closeToVector(4.0, -3.0));
+      expect(position, closeToVector(Vector2(4.0, -3.0)));
     });
 
     test('screenAngle', () {
@@ -206,6 +206,76 @@ void main() {
       // Right
       position.setValues(1.0, 0.0);
       expectDouble(position.screenAngle(), math.pi / 2);
+    });
+  });
+
+  group('projection', () {
+    test('Project onto longer vector', () {
+      final u = Vector2(5, 2);
+      final v = Vector2(10, 0);
+      final result = u.projection(v);
+      expect(result, Vector2(5, 0));
+    });
+
+    test('Project onto shorter vector', () {
+      final u = Vector2(5, 2);
+      final v = Vector2(2, 0);
+      final result = u.projection(v);
+      expect(result, Vector2(5, 0));
+    });
+
+    test('Project onto vector in other direction', () {
+      final u = Vector2(5, 2);
+      final v = Vector2(-10, 0);
+      final result = u.projection(v);
+      expect(result, Vector2(5, 0));
+    });
+
+    test('Project onto vector with out', () {
+      final out = Vector2.zero();
+      final u = Vector2(5, 2);
+      final v = Vector2(-10, 0);
+      final result = u.projection(v, out: out);
+      expect(result, Vector2(5, 0));
+      expect(out, Vector2(5, 0));
+    });
+
+    test('Project onto vector with out as sane return and argument', () {
+      var out = Vector2.zero();
+      final u = Vector2(5, 2);
+      final v = Vector2(-10, 0);
+      out = u.projection(v, out: out);
+      expect(out, Vector2(5, 0));
+    });
+  });
+
+  group('inversion', () {
+    test('invert', () {
+      final v = Vector2.all(1);
+      v.invert();
+      expect(v, Vector2.all(-1));
+    });
+
+    test('inverted', () {
+      final v = Vector2.all(1);
+      final w = v.inverted();
+      expect(v, Vector2.all(1));
+      expect(w, Vector2.all(-1));
+    });
+  });
+
+  group('inversion', () {
+    test('invert', () {
+      final v = Vector2.all(1);
+      v.invert();
+      expect(v, Vector2.all(-1));
+    });
+
+    test('inverted', () {
+      final v = Vector2.all(1);
+      final w = v.inverted();
+      expect(v, Vector2.all(1));
+      expect(w, Vector2.all(-1));
     });
   });
 }

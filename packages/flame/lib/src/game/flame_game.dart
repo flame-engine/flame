@@ -4,7 +4,7 @@ import 'package:flame/src/components/component.dart';
 import 'package:flame/src/extensions/vector2.dart';
 import 'package:flame/src/game/camera/camera.dart';
 import 'package:flame/src/game/camera/camera_wrapper.dart';
-import 'package:flame/src/game/mixins/game.dart';
+import 'package:flame/src/game/game.dart';
 import 'package:flame/src/game/projector.dart';
 import 'package:meta/meta.dart';
 
@@ -16,7 +16,10 @@ import 'package:meta/meta.dart';
 /// This is the recommended base class to use for most games made with Flame.
 /// It is based on the Flame Component System (also known as FCS).
 class FlameGame extends Component with Game {
-  FlameGame({Camera? camera}) {
+  FlameGame({
+    super.children,
+    Camera? camera,
+  }) {
     assert(
       Component.staticGameInstance == null,
       '$this instantiated, while another game ${Component.staticGameInstance} '
@@ -63,10 +66,10 @@ class FlameGame extends Component with Game {
   @override
   @mustCallSuper
   void update(double dt) {
-    _cameraWrapper.update(dt);
     if (parent == null) {
       updateTree(dt);
     }
+    _cameraWrapper.update(dt);
   }
 
   @override
@@ -117,7 +120,7 @@ class FlameGame extends Component with Game {
     var repeat = true;
     while (repeat) {
       // Give chance to other futures to execute first
-      await Future<void>.delayed(const Duration());
+      await Future<void>.delayed(Duration.zero);
       repeat = false;
       descendants(includeSelf: true).forEach(
         (Component child) {

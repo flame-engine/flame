@@ -2,13 +2,11 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:collection/collection.dart';
+import 'package:flame/geometry.dart';
 import 'package:flame/src/anchor.dart';
 import 'package:flame/src/cache/value_cache.dart';
-import 'package:flame/src/components/component.dart';
 import 'package:flame/src/extensions/rect.dart';
 import 'package:flame/src/extensions/vector2.dart';
-import 'package:flame/src/geometry/line_segment.dart';
-import 'package:flame/src/geometry/shape_component.dart';
 import 'package:meta/meta.dart';
 
 class PolygonComponent extends ShapeComponent {
@@ -32,31 +30,21 @@ class PolygonComponent extends ShapeComponent {
   /// screen coordinate system).
   PolygonComponent(
     this._vertices, {
-    Vector2? position,
-    Vector2? size,
-    Vector2? scale,
-    double? angle,
-    Anchor? anchor,
-    Iterable<Component>? children,
-    int? priority,
-    Paint? paint,
+    super.position,
+    super.size,
+    super.scale,
+    super.angle,
+    super.anchor,
+    super.children,
+    super.priority,
+    super.paint,
     bool? shrinkToBounds,
   })  : assert(
           _vertices.length > 2,
           'Number of vertices are too few to create a polygon',
         ),
         shrinkToBounds = shrinkToBounds ?? size == null,
-        manuallyPositioned = position != null,
-        super(
-          position: position,
-          size: size,
-          scale: scale,
-          angle: angle,
-          anchor: anchor,
-          children: children,
-          priority: priority,
-          paint: paint,
-        ) {
+        manuallyPositioned = position != null {
     refreshVertices(newVertices: _vertices);
 
     final verticesLength = _vertices.length;
@@ -165,15 +153,13 @@ class PolygonComponent extends ShapeComponent {
       scale,
       angle,
     ])) {
-      var i = 0;
-      for (final vertex in vertices) {
+      vertices.forEachIndexed((i, vertex) {
         _globalVertices[i]
           ..setFrom(vertex)
           ..multiply(scale)
           ..add(position)
           ..rotate(angle, center: position);
-        i++;
-      }
+      });
       if (scale.y.isNegative || scale.x.isNegative) {
         // Since the list will be clockwise we have to reverse it for it to
         // become counterclockwise.

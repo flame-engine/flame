@@ -8,6 +8,10 @@ packages:
   - doc/**
 
 command:
+  bootstrap:
+    # Uses the pubspec_overrides.yaml instead of having Melos modifying the lock file.
+    usePubspecOverrides: true
+
   version:
     # Generate commit links in package changelogs.
     linkToCommits: true

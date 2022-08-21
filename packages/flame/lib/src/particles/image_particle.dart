@@ -15,8 +15,8 @@ class ImageParticle extends Particle {
   ImageParticle({
     required this.image,
     Vector2? size,
-    double? lifespan,
-  }) : super(lifespan: lifespan) {
+    super.lifespan,
+  }) {
     final srcWidth = image.width.toDouble();
     final srcHeight = image.height.toDouble();
     final destWidth = size?.x ?? srcWidth;

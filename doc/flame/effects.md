@@ -87,7 +87,7 @@ functionality inherited by all other effects. This includes:
     removed from the game tree and garbage-collected once the effect completes. Set this to false
     if you plan to reuse the effect after it is finished.
 
-  - Optional user-provided `onFinishCallback`, which will be invoked when the effect has just
+  - Optional user-provided `onComplete`, which will be invoked when the effect has just
     completed its execution but before it is removed from the game.
 
   - The `reset()` method reverts the effect to its original state, allowing it to run once again.
@@ -586,7 +586,7 @@ final ec = ZigzagEffectController(period: 2);
 
 ## See also
 
-* [Examples of various effects](https://examples.flame-engine.org/#/).
+* [Examples of various effects](https://examples.flame-engine.org/).
 
 
 [tau]: https://en.wikipedia.org/wiki/Tau_(mathematical_constant)

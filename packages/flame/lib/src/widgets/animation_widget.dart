@@ -1,4 +1,4 @@
-import 'dart:math';
+import 'dart:async';
 
 import 'package:flame/src/anchor.dart';
 import 'package:flame/src/cache/images.dart';
@@ -17,7 +17,7 @@ class SpriteAnimationWidget extends StatelessWidget {
   /// Should the animation be playing or not
   final bool playing;
 
-  final Future<SpriteAnimation> Function() _animationFuture;
+  final FutureOr<SpriteAnimation> _animationFuture;
 
   /// A builder function that is called if the loading fails
   final WidgetBuilder? errorBuilder;
@@ -25,16 +25,21 @@ class SpriteAnimationWidget extends StatelessWidget {
   /// A builder function that is called while the loading is on the way
   final WidgetBuilder? loadingBuilder;
 
-  SpriteAnimationWidget({
+  const SpriteAnimationWidget({
     required SpriteAnimation animation,
     this.playing = true,
     this.anchor = Anchor.topLeft,
-    this.errorBuilder,
-    this.loadingBuilder,
-    Key? key,
-  })  : _animationFuture = (() => Future.value(animation)),
-        super(key: key);
+    super.key,
+  })  : _animationFuture = animation,
+        errorBuilder = null,
+        loadingBuilder = null;
 
+  /// Loads image from the asset [path] and renders it as a widget.
+  ///
+  /// It will use the [loadingBuilder] while the image from [path] is loading.
+  /// To render without loading, or when you want to have a gapless playback
+  /// when the [path] value changes, consider loading the [SpriteAnimation]
+  /// beforehand and direct pass it to the default constructor.
   SpriteAnimationWidget.asset({
     required String path,
     required SpriteAnimationData data,
@@ -43,20 +48,19 @@ class SpriteAnimationWidget extends StatelessWidget {
     this.anchor = Anchor.topLeft,
     this.errorBuilder,
     this.loadingBuilder,
-    Key? key,
-  })  : _animationFuture = (() => SpriteAnimation.load(
-              path,
-              data,
-              images: images,
-            )),
-        super(key: key);
+    super.key,
+  }) : _animationFuture = SpriteAnimation.load(
+          path,
+          data,
+          images: images,
+        );
 
   @override
   Widget build(BuildContext context) {
     return BaseFutureBuilder<SpriteAnimation>(
-      futureBuilder: _animationFuture,
+      future: _animationFuture,
       builder: (_, spriteAnimation) {
-        return _SpriteAnimationWidget(
+        return InternalSpriteAnimationWidget(
           animation: spriteAnimation,
           anchor: anchor,
           playing: playing,
@@ -69,7 +73,8 @@ class SpriteAnimationWidget extends StatelessWidget {
 }
 
 /// A [StatefulWidget] that render a [SpriteAnimation].
-class _SpriteAnimationWidget extends StatefulWidget {
+@visibleForTesting
+class InternalSpriteAnimationWidget extends StatefulWidget {
   /// The [SpriteAnimation] to be rendered
   final SpriteAnimation animation;
 
@@ -79,17 +84,19 @@ class _SpriteAnimationWidget extends StatefulWidget {
   /// Should the [animation] be playing or not
   final bool playing;
 
-  const _SpriteAnimationWidget({
+  const InternalSpriteAnimationWidget({
     required this.animation,
     this.playing = true,
     this.anchor = Anchor.topLeft,
+    super.key,
   });
 
   @override
-  State createState() => _SpriteAnimationWidgetState();
+  State createState() => _InternalSpriteAnimationWidgetState();
 }
 
-class _SpriteAnimationWidgetState extends State<_SpriteAnimationWidget>
+class _InternalSpriteAnimationWidgetState
+    extends State<InternalSpriteAnimationWidget>
     with SingleTickerProviderStateMixin {
   AnimationController? _controller;
   double? _lastUpdated;
@@ -97,7 +104,6 @@ class _SpriteAnimationWidgetState extends State<_SpriteAnimationWidget>
   @override
   void initState() {
     super.initState();
-    widget.animation.onComplete = _pauseAnimation;
     _setupController();
     if (widget.playing) {
       _initAnimation();
@@ -105,7 +111,7 @@ class _SpriteAnimationWidgetState extends State<_SpriteAnimationWidget>
   }
 
   @override
-  void didUpdateWidget(_SpriteAnimationWidget oldWidget) {
+  void didUpdateWidget(InternalSpriteAnimationWidget oldWidget) {
     super.didUpdateWidget(oldWidget);
 
     if (oldWidget.animation != widget.animation) {
@@ -123,7 +129,7 @@ class _SpriteAnimationWidgetState extends State<_SpriteAnimationWidget>
   void _initAnimation() {
     setState(() {
       widget.animation.reset();
-      _lastUpdated = DateTime.now().millisecond.toDouble();
+      _lastUpdated = DateTime.now().microsecondsSinceEpoch.toDouble();
       _controller?.repeat(
         // Approximately 60 fps
         period: const Duration(milliseconds: 16),
@@ -132,17 +138,21 @@ class _SpriteAnimationWidgetState extends State<_SpriteAnimationWidget>
   }
 
   void _setupController() {
-    _controller?.dispose();
+    widget.animation.onComplete = _pauseAnimation;
+    _controller ??= AnimationController(vsync: this)
+      ..addListener(_onAnimationValueChanged);
+  }
 
-    _controller = AnimationController(vsync: this)
-      ..addListener(() {
-        final now = DateTime.now().millisecond.toDouble();
+  void _onAnimationValueChanged() {
+    const microSecond = 1 / 1000000;
 
-        final dt = max(0, (now - (_lastUpdated ?? 0)) / 1000).toDouble();
-        widget.animation.update(dt);
+    final now = DateTime.now().microsecondsSinceEpoch.toDouble();
+    final lastUpdated = _lastUpdated ??= now;
+    final dt = (now - lastUpdated) * microSecond;
 
-        setState(() => _lastUpdated = now);
-      });
+    widget.animation.update(dt);
+
+    setState(() => _lastUpdated = now);
   }
 
   void _pauseAnimation() {

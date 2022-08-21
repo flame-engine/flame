@@ -52,7 +52,7 @@ Simple examples for all features can be found in the
 [examples folder](https://github.com/flame-engine/flame/tree/main/examples).
 
 You can also check out the
-[awesome flame repository](https://github.com/flame-engine/awesome-flame#articles--tutorials),
+[awesome flame repository](https://github.com/flame-engine/awesome-flame#user-content-articles--tutorials),
 It contains quite a lot of good tutorials and articles written by the community to get you started
 with Flame.
 
@@ -82,7 +82,7 @@ Flame doesn't bundle any helpers to load assets from an external source (externa
 sources).
 
 But most of Flame's API can be loaded from concrete asset instances, for examples, `Sprite`s can be
-created from `dart:ui`s `Image` instaces, so the user can write custom code to load images from
+created from `dart:ui`s `Image` instances, so the user can write custom code to load images from
 anywhere they need, and then load it into Flame's classes.
 
 Here are some suggestions for http client packages:

@@ -104,6 +104,11 @@ class GameTester<T extends Game> {
     String description,
     VerifyFunction<T> verify, {
     String? skip,
+    String? testOn,
+    Timeout? timeout,
+    dynamic tags,
+    Map<String, dynamic>? onPlatform,
+    int? retry,
   }) {
     flutter_test.test(
       description,
@@ -112,6 +117,11 @@ class GameTester<T extends Game> {
         await verify(game);
       },
       skip: skip,
+      testOn: testOn,
+      timeout: timeout,
+      tags: tags,
+      onPlatform: onPlatform,
+      retry: retry,
     );
   }
 
@@ -120,12 +130,23 @@ class GameTester<T extends Game> {
   ///
   /// Use [verify] closure to make verifications/assertions.
   @isTest
-  @Deprecated('Use testGameWidget instead')
+  @Deprecated('Use testGameWidget instead, will be removed in v1.3.0')
   void widgetTest(
     String description,
-    WidgetVerifyFunction<T>? verify,
-  ) {
-    testGameWidget(description, verify: verify);
+    WidgetVerifyFunction<T>? verify, {
+    bool? skip,
+    Timeout? timeout,
+    bool? semanticsEnabled,
+    dynamic tags,
+  }) {
+    testGameWidget(
+      description,
+      verify: verify,
+      skip: skip,
+      timeout: timeout,
+      semanticsEnabled: semanticsEnabled,
+      tags: tags,
+    );
   }
 
   /// Creates a [Game] specific test case with given [description]
@@ -139,31 +160,42 @@ class GameTester<T extends Game> {
     String description, {
     WidgetSetupFunction<T>? setUp,
     WidgetVerifyFunction<T>? verify,
+    bool? skip,
+    Timeout? timeout,
+    bool? semanticsEnabled,
+    dynamic tags,
   }) {
-    testWidgets(description, (tester) async {
-      final game = createGame();
+    testWidgets(
+      description,
+      (tester) async {
+        final game = createGame();
 
-      await tester.runAsync(() async {
-        final gameWidget =
-            createGameWidget?.call(game) ?? GameWidget(game: game);
+        await tester.runAsync(() async {
+          final gameWidget =
+              createGameWidget?.call(game) ?? GameWidget(game: game);
 
-        final _pump = pumpWidget ??
-            (GameWidget<T> _gameWidget, WidgetTester _tester) =>
-                _tester.pumpWidget(_gameWidget);
+          final _pump = pumpWidget ??
+              (GameWidget<T> _gameWidget, WidgetTester _tester) =>
+                  _tester.pumpWidget(_gameWidget);
 
-        await _pump(gameWidget, tester);
-        await tester.pump();
-
-        if (setUp != null) {
-          await setUp.call(game, tester);
+          await _pump(gameWidget, tester);
           await tester.pump();
-        }
-      });
 
-      if (verify != null) {
-        await verify(game, tester);
-      }
-    });
+          if (setUp != null) {
+            await setUp.call(game, tester);
+            await tester.pump();
+          }
+        });
+
+        if (verify != null) {
+          await verify(game, tester);
+        }
+      },
+      skip: skip,
+      timeout: timeout,
+      semanticsEnabled: semanticsEnabled ?? true,
+      tags: tags,
+    );
   }
 
   GameTester<T> configure({
@@ -187,16 +219,11 @@ class GameTester<T extends Game> {
 /// custom [gameSize].
 class FlameTester<T extends FlameGame> extends GameTester<T> {
   FlameTester(
-    GameCreateFunction<T> createGame, {
-    Vector2? gameSize,
-    GameWidgetCreateFunction<T>? createGameWidget,
-    PumpWidgetFunction<T>? pumpWidget,
-  }) : super(
-          createGame,
-          gameSize: gameSize,
-          createGameWidget: createGameWidget,
-          pumpWidget: pumpWidget,
-        );
+    super.createGame, {
+    super.gameSize,
+    super.createGameWidget,
+    super.pumpWidget,
+  });
 }
 
 /// Default instance of Flame Tester to be used when you don't care about

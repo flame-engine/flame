@@ -1,15 +1,13 @@
 import 'dart:ui';
 
-import 'package:flame/src/components/component.dart';
 import 'package:flame/src/experimental/viewport.dart';
 import 'package:vector_math/vector_math_64.dart';
 
 class FixedAspectRatioViewport extends Viewport {
   FixedAspectRatioViewport({
     required this.aspectRatio,
-    Iterable<Component>? children,
-  })  : assert(aspectRatio > 0),
-        super(children: children);
+    super.children,
+  }) : assert(aspectRatio > 0);
 
   final double aspectRatio;
   Rect _clipRect = Rect.zero;

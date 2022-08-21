@@ -110,7 +110,7 @@ void main() {
           Vector2(30, 40),
         ];
         for (final p in expectedPositions) {
-          expect(component.position, closeToVector(p.x, p.y, epsilon: 1e-12));
+          expect(component.position, closeToVector(p, 1e-12));
           game.update(0.1);
         }
       });
@@ -128,7 +128,7 @@ void main() {
         await game.ready();
 
         game.update(10);
-        expect(component.position, closeToVector(30, 40));
+        expect(component.position, closeToVector(Vector2(30, 40)));
       });
 
       test('k-step sequence', () async {
@@ -145,16 +145,16 @@ void main() {
         await game.ready();
 
         for (var i = 0; i < 10; i++) {
-          final x = ((i + 1) ~/ 2) * 10;
-          final y = (i ~/ 2) * 10;
-          expect(component.position, closeToVector(x, y));
+          final x = ((i + 1) ~/ 2) * 10.0;
+          final y = (i ~/ 2) * 10.0;
+          expect(component.position, closeToVector(Vector2(x, y)));
           expect(effect.isMounted, true);
           game.update(1);
         }
         game.update(5); // Will schedule the `effect` component for deletion
         game.update(0); // Second update ensures the game deletes the component
         expect(effect.isMounted, false);
-        expect(component.position, closeToVector(50, 50));
+        expect(component.position, closeToVector(Vector2(50, 50)));
       });
 
       test('alternating sequence', () async {
@@ -179,7 +179,7 @@ void main() {
           for (var i = 10.0; i > 0; i--) Vector2(i, 0),
         ];
         for (final p in expectedPath) {
-          expect(component.position, closeToVector(p.x, p.y, epsilon: 1e-14));
+          expect(component.position, closeToVector(p, 1e-14));
           game.update(0.1);
         }
         game.update(0.001);
@@ -214,11 +214,11 @@ void main() {
           ...forwardPath.reversed,
         ];
         for (final p in expectedPath) {
-          expect(component.position, closeToVector(p.x, p.y, epsilon: 1e-14));
+          expect(component.position, closeToVector(p, 1e-14));
           game.update(0.1);
         }
         game.update(0.001);
-        expect(component.position, closeToVector(0, 0));
+        expect(component.position, closeToVector(Vector2.zero()));
         expect(effect.controller.completed, true);
       });
 
@@ -301,7 +301,7 @@ void main() {
           ...forwardPath.reversed,
         ];
         for (final p in expectedPath) {
-          expect(component.position, closeToVector(p.x, p.y, epsilon: 1e-12));
+          expect(component.position, closeToVector(p, 1e-12));
           game.update(dt);
         }
         game.update(1e-5);

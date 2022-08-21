@@ -40,7 +40,7 @@ class _TestBlock extends PositionComponent with CollisionCallbacks {
 
 void main() {
   group('Benchmark collision detection', () {
-    testCollidableGame('collidable callbacks are called', (game) async {
+    testCollisionDetectionGame('collidable callbacks are called', (game) async {
       final rng = Random(0);
       final blocks = List.generate(
         100,
@@ -61,6 +61,7 @@ void main() {
       }
       final totalTime = DateTime.now().millisecondsSinceEpoch -
           startTime.millisecondsSinceEpoch;
+      // ignore:avoid_print
       print(
         '$totalTime ms\n'
         '${1000 / (totalTime / ticks)} runs per second\n'

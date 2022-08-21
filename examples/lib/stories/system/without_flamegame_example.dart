@@ -4,7 +4,7 @@ import 'package:flame/palette.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
-class NoFlameGameExample with Game, KeyboardEvents {
+class NoFlameGameExample extends Game with KeyboardEvents {
   static const String description = '''
     This example showcases how to create a game without the FlameGame.
     It also briefly showcases how to act on keyboard events.
