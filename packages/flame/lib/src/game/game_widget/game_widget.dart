@@ -375,7 +375,7 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
                         }
 
                         return widget.loadingBuilder?.call(context) ??
-                            const SizedBox.shrink();
+                            const SizedBox.expand();
                       },
                     );
                   });
