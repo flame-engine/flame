@@ -66,10 +66,14 @@ class StandardCollisionDetection extends CollisionDetection<ShapeHitbox> {
   @override
   RaycastResult<ShapeHitbox>? raycast(
     Ray2 ray, {
+    List<ShapeHitbox>? ignoreHitboxes,
     RaycastResult<ShapeHitbox>? out,
   }) {
     var finalResult = out?..reset();
     for (final item in items) {
+      if (ignoreHitboxes?.contains(item) ?? false) {
+        continue;
+      }
       final currentResult =
           item.rayIntersection(ray, out: _temporaryRaycastResult);
       final possiblyFirstResult = !(finalResult?.isActive ?? false);
@@ -93,6 +97,7 @@ class StandardCollisionDetection extends CollisionDetection<ShapeHitbox> {
     double startAngle = 0,
     double sweepAngle = tau,
     List<Ray2>? rays,
+    List<ShapeHitbox>? ignoreHitboxes,
     List<RaycastResult<ShapeHitbox>>? out,
   }) {
     final isFullCircle = (sweepAngle % tau).abs() < 0.0001;
@@ -120,7 +125,7 @@ class StandardCollisionDetection extends CollisionDetection<ShapeHitbox> {
         result = RaycastResult();
         out?.add(result);
       }
-      result = raycast(ray, out: result);
+      result = raycast(ray, ignoreHitboxes: ignoreHitboxes, out: result);
 
       if (result != null) {
         results.add(result);
@@ -133,20 +138,26 @@ class StandardCollisionDetection extends CollisionDetection<ShapeHitbox> {
   Iterable<RaycastResult<ShapeHitbox>> raytrace(
     Ray2 ray, {
     int maxDepth = 10,
+    List<ShapeHitbox>? ignoreHitboxes,
     List<RaycastResult<ShapeHitbox>>? out,
   }) sync* {
     out?.forEach((e) => e.reset());
     var currentRay = ray;
     for (var i = 0; i < maxDepth; i++) {
       final hasResultObject = (out?.length ?? 0) > i;
-      final currentResult =
+      final storeResult =
           hasResultObject ? out![i] : RaycastResult<ShapeHitbox>();
-      if (raycast(currentRay, out: currentResult) != null) {
-        currentRay = currentResult.reflectionRay!;
+      final currentResult = raycast(
+        currentRay,
+        ignoreHitboxes: ignoreHitboxes,
+        out: storeResult,
+      );
+      if (currentResult != null) {
+        currentRay = storeResult.reflectionRay!;
         if (!hasResultObject && out != null) {
-          out.add(currentResult);
+          out.add(storeResult);
         }
-        yield currentResult;
+        yield storeResult;
       } else {
         break;
       }

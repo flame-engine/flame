@@ -229,6 +229,11 @@ Ray casting and ray tracing are methods for sending out rays from a point in you
 being able to see what these rays collide with and how they reflect after hitting
 something.
 
+For all of the following methods, if there are any hitboxes that you which to ignore you can add the
+`ignoreHitboxes` argument which is a list of the hitboxes that you which to disregard for the call.
+This can be quite useful if you are casting rays from within a hitbox, which could be on your player
+or npc for example.
+
 
 ### Ray casting
 
