@@ -344,7 +344,7 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
           cursor: currentGame.mouseCursor,
           child: Directionality(
             textDirection: textDir,
-            child: Container(
+            child: ColoredBox(
               color: currentGame.backgroundColor(),
               child: LayoutBuilder(
                 builder: (_, BoxConstraints constraints) {
@@ -369,11 +369,13 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
                             return errorBuilder(context, snapshot.error!);
                           }
                         }
+
                         if (snapshot.connectionState == ConnectionState.done) {
                           return Stack(children: stackedWidgets);
                         }
+
                         return widget.loadingBuilder?.call(context) ??
-                            Container();
+                            const SizedBox.shrink();
                       },
                     );
                   });
