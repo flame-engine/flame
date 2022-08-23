@@ -87,7 +87,7 @@ class RecycledQueue<T extends Disposable> {
       if (_endIndex == _startIndex) {
         final newLength = min(_elements.length, 32);
         final newEntries = List<T>.generate(newLength, (i) => factory());
-        _elements.insertAll(_endIndex - 1, newEntries);
+        _elements.insertAll(_endIndex, newEntries);
         _startIndex += newLength;
       }
     }
