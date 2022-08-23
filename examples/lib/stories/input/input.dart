@@ -9,6 +9,7 @@ import 'package:examples/stories/input/keyboard_example.dart';
 import 'package:examples/stories/input/keyboard_listener_component_example.dart';
 import 'package:examples/stories/input/mouse_cursor_example.dart';
 import 'package:examples/stories/input/mouse_movement_example.dart';
+import 'package:examples/stories/input/mouse_movement_listener_example.dart';
 import 'package:examples/stories/input/multitap_advanced_example.dart';
 import 'package:examples/stories/input/multitap_example.dart';
 import 'package:examples/stories/input/overlapping_tappables_example.dart';
@@ -60,6 +61,12 @@ void addInputStories(Dashbook dashbook) {
       (_) => GameWidget(game: MouseMovementExample()),
       codeLink: baseLink('input/mouse_movement_example.dart'),
       info: MouseMovementExample.description,
+    )
+    ..add(
+      'Mouse Movement (Component)',
+      (_) => GameWidget(game: MouseMovementListenerExample()),
+      codeLink: baseLink('input/mouse_movement_listener_example.dart'),
+      info: MouseMovementListenerExample.description,
     )
     ..add(
       'Mouse Cursor',
