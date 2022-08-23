@@ -90,7 +90,8 @@ void main() {
         if (rnd < 0.001) {
           break;
         }
-        if (rnd < 0.05) {  // change action with 5% probability
+        if (rnd < 0.05) {
+          // change action with 5% probability
           addAction = !addAction;
         }
         if (queue0.isEmpty || addAction) {
