@@ -729,6 +729,40 @@ void main() {
     );
 
     testCollisionDetectionGame(
+      'multiple hitboxes after each other with one ignored',
+      (game) async {
+        game.ensureAddAll([
+          for (var i = 0.0; i < 10; i++)
+            PositionComponent(
+              position: Vector2.all(100 + i * 10),
+              size: Vector2.all(20 - i),
+              anchor: Anchor.center,
+            )..add(RectangleHitbox()),
+        ]);
+        await game.ready();
+        final ray = Ray2(
+          origin: Vector2.zero(),
+          direction: Vector2.all(1)..normalize(),
+        );
+        final result = game.collisionDetection.raycast(
+          ray,
+          ignoreHitboxes: [
+            game.children.first.children.first as ShapeHitbox,
+          ],
+        );
+        expect(result?.hitbox?.parent, game.children.toList()[1]);
+        expect(
+          result?.reflectionRay?.origin,
+          closeToVector(Vector2.all(100.5)),
+        );
+        expect(
+          result?.reflectionRay?.direction,
+          closeToVector(Vector2(-1, 1)..normalize()),
+        );
+      },
+    );
+
+    testCollisionDetectionGame(
       'ray with origin on hitbox corner',
       (game) async {
         game.ensureAddAll([
@@ -1058,6 +1092,41 @@ void main() {
         },
       );
     });
+
+    testCollisionDetectionGame(
+      'All directions and all hits',
+      (game) async {
+        game.ensureAddAll([
+          PositionComponent(
+            position: Vector2(10, 0),
+            size: Vector2.all(10),
+          )..add(RectangleHitbox()),
+          PositionComponent(
+            position: Vector2(20, 10),
+            size: Vector2.all(10),
+          )..add(RectangleHitbox()),
+          PositionComponent(
+            position: Vector2(10, 20),
+            size: Vector2.all(10),
+          )..add(RectangleHitbox()),
+          PositionComponent(
+            position: Vector2(0, 10),
+            size: Vector2.all(10),
+          )..add(RectangleHitbox()),
+        ]);
+        await game.ready();
+        final origin = Vector2.all(15);
+        final ignoreHitbox = game.children.first.children.first as ShapeHitbox;
+        final results = game.collisionDetection.raycastAll(
+          origin,
+          numberOfRays: 4,
+          ignoreHitboxes: [ignoreHitbox],
+        );
+        expect(results.any((r) => r.hitbox == ignoreHitbox), isFalse);
+        expect(results.every((r) => r.isActive), isTrue);
+        expect(results.length, 3);
+      },
+    );
   });
 
   group('Raytracing', () {
@@ -1199,6 +1268,41 @@ void main() {
       final reflectionRay2 = results[1].reflectionRay;
       expect(reflectionRay2?.origin, Vector2(-10, 40));
       expect(reflectionRay2?.direction, Vector2(1, 1)..normalize());
+    });
+
+    testCollisionDetectionGame('on two rectangles with one ignored',
+        (game) async {
+      final rectangle1 = RectangleComponent(
+        position: Vector2.all(20),
+        size: Vector2.all(20),
+        anchor: Anchor.center,
+      )..add(RectangleHitbox());
+      final rectangle2 = RectangleComponent(
+        position: Vector2(-20, 40),
+        size: Vector2.all(20),
+        anchor: Anchor.center,
+      )..add(RectangleHitbox());
+      await game.ensureAddAll([rectangle1, rectangle2]);
+      final ray = Ray2(
+        origin: Vector2(0, 10),
+        direction: Vector2.all(1.0)..normalize(),
+      );
+      final ignoreHitbox =
+          game.children.toList()[1].children.first as ShapeHitbox;
+      final results = game.collisionDetection
+          .raytrace(ray, ignoreHitboxes: [ignoreHitbox]).toList();
+      expect(results.length, 1);
+      expect(results.every((e) => e.isActive), isTrue);
+      expect(results.every((e) => e.isInsideHitbox), isFalse);
+      // First box
+      expect(results[0].intersectionPoint, Vector2(10, 20));
+      expect(results[0].normal, Vector2(-1, 0));
+      final reflectionRay1 = results[0].reflectionRay;
+      expect(reflectionRay1?.origin, Vector2(10, 20));
+      expect(reflectionRay1?.direction, Vector2(-1, 1)..normalize());
+      final results2 =
+          game.collisionDetection.raytrace(reflectionRay1!).toList();
+      expect(results2.length, 1);
     });
 
     testCollisionDetectionGame('on a rectangle within another', (game) async {
