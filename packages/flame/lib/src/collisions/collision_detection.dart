@@ -78,7 +78,7 @@ abstract class CollisionDetection<T extends Hitbox<T>> {
   /// result.
   RaycastResult<T>? raycast(
     Ray2 ray, {
-    List<ShapeHitbox>? ignoreHitboxes,
+    List<T>? ignoreHitboxes,
     RaycastResult<T>? out,
   });
 
@@ -105,7 +105,7 @@ abstract class CollisionDetection<T extends Hitbox<T>> {
     double startAngle = 0,
     double sweepAngle = tau,
     List<Ray2>? rays,
-    List<ShapeHitbox>? ignoreHitboxes,
+    List<T>? ignoreHitboxes,
     List<RaycastResult<T>>? out,
   });
 
@@ -126,7 +126,7 @@ abstract class CollisionDetection<T extends Hitbox<T>> {
   Iterable<RaycastResult<T>> raytrace(
     Ray2 ray, {
     int maxDepth = 10,
-    List<ShapeHitbox>? ignoreHitboxes,
+    List<T>? ignoreHitboxes,
     List<RaycastResult<T>>? out,
   });
 }
