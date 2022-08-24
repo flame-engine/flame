@@ -231,8 +231,8 @@ something.
 
 For all of the following methods, if there are any hitboxes that you wish to ignore, you can add the
 `ignoreHitboxes` argument which is a list of the hitboxes that you wish to disregard for the call.
-This can be quite useful for example if you are casting rays from within a hitbox, which could be on your player
-or NPC; or if you don't want a ray to bounce off a `ScreenHitbox`.
+This can be quite useful for example if you are casting rays from within a hitbox, which could be on
+your player or NPC; or if you don't want a ray to bounce off a `ScreenHitbox`.
 
 
 ### Ray casting
