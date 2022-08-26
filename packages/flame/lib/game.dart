@@ -11,7 +11,6 @@ export 'src/game/camera/viewport.dart';
 export 'src/game/flame_game.dart';
 export 'src/game/game.dart';
 export 'src/game/game_widget/game_widget.dart';
-export 'src/game/mixins/fps_counter.dart';
 export 'src/game/mixins/has_draggables.dart';
 export 'src/game/mixins/has_hoverables.dart';
 export 'src/game/mixins/has_tappables.dart';
