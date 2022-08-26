@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:flame/src/components/component.dart';
+import 'package:flame/src/components/core/component.dart';
 import 'package:flame/src/components/mixins/parent_is_a.dart';
 import 'package:flame/src/components/position_component.dart';
 import 'package:flame/src/components/router_component.dart';
