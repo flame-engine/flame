@@ -47,14 +47,6 @@ abstract class Effect extends Component {
   /// Optional callback function to be invoked once the effect completes.
   void Function()? onComplete;
 
-  @Deprecated('It will be removed in v1.3.0. Use Effect.onComplete instead')
-  void Function()? get onFinishCallback => onComplete;
-
-  @Deprecated('It will be removed in v1.3.0. Use Effect.onComplete instead')
-  set onFinishCallback(void Function()? callback) {
-    onComplete = callback;
-  }
-
   /// Boolean indicators of the effect's state, their purpose is to ensure that
   /// the `onStart()` and `onFinish()` callbacks are called exactly once.
   bool _started;
