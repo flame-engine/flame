@@ -128,30 +128,6 @@ class GameTester<T extends Game> {
   /// Creates a [Game] specific test case with given [description]
   /// which runs inside the Flutter test environment.
   ///
-  /// Use [verify] closure to make verifications/assertions.
-  @isTest
-  @Deprecated('Use testGameWidget instead, will be removed in v1.3.0')
-  void widgetTest(
-    String description,
-    WidgetVerifyFunction<T>? verify, {
-    bool? skip,
-    Timeout? timeout,
-    bool? semanticsEnabled,
-    dynamic tags,
-  }) {
-    testGameWidget(
-      description,
-      verify: verify,
-      skip: skip,
-      timeout: timeout,
-      semanticsEnabled: semanticsEnabled,
-      tags: tags,
-    );
-  }
-
-  /// Creates a [Game] specific test case with given [description]
-  /// which runs inside the Flutter test environment.
-  ///
   /// Use [setUp] closure to prepare your game instance (e.g. add components to
   /// it)
   /// Use [verify] closure to make verifications/assertions.
