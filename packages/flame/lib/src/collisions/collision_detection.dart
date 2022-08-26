@@ -70,9 +70,17 @@ abstract class CollisionDetection<T extends Hitbox<T>> {
   /// Returns the first hitbox that the given [ray] hits and the associated
   /// intersection information; or null if the ray doesn't hit any hitbox.
   ///
+  /// [ignoreHitboxes] can be used if you want to ignore certain hitboxes, i.e.
+  /// the rays will go straight through them. For example the hitbox of the
+  /// component that you might be casting the rays from.
+  ///
   /// If [out] is provided that object will be modified and returned with the
   /// result.
-  RaycastResult<T>? raycast(Ray2 ray, {RaycastResult<T>? out});
+  RaycastResult<T>? raycast(
+    Ray2 ray, {
+    List<T>? ignoreHitboxes,
+    RaycastResult<T>? out,
+  });
 
   /// Casts rays uniformly between [startAngle] to [startAngle]+[sweepAngle]
   /// from the given [origin] and returns all hitboxes and intersection points
@@ -84,6 +92,10 @@ abstract class CollisionDetection<T extends Hitbox<T>> {
   /// If there are less objects in [rays] than the operation requires, the
   /// missing [Ray2] objects will be created and added to [rays].
   ///
+  /// [ignoreHitboxes] can be used if you want to ignore certain hitboxes, i.e.
+  /// the rays will go straight through them. For example the hitbox of the
+  /// component that you might be casting the rays from.
+  ///
   /// If [out] is provided the [RaycastResult]s in that list be modified and
   /// returned with the result. If there are less objects in [out] than the
   /// result requires, the missing [RaycastResult] objects will be created.
@@ -93,6 +105,7 @@ abstract class CollisionDetection<T extends Hitbox<T>> {
     double startAngle = 0,
     double sweepAngle = tau,
     List<Ray2>? rays,
+    List<T>? ignoreHitboxes,
     List<RaycastResult<T>>? out,
   });
 
@@ -103,12 +116,17 @@ abstract class CollisionDetection<T extends Hitbox<T>> {
   /// [maxDepth] is how many times the ray should collide before returning a
   /// result, defaults to 10.
   ///
+  /// [ignoreHitboxes] can be used if you want to ignore certain hitboxes, i.e.
+  /// the rays will go straight through them. For example the hitbox of the
+  /// component that you might be casting the rays from.
+  ///
   /// If [out] is provided the [RaycastResult]s in that list be modified and
   /// returned with the result. If there are less objects in [out] than the
   /// result requires, the missing [RaycastResult] objects will be created.
   Iterable<RaycastResult<T>> raytrace(
     Ray2 ray, {
     int maxDepth = 10,
+    List<T>? ignoreHitboxes,
     List<RaycastResult<T>>? out,
   });
 }
