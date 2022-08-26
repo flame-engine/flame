@@ -22,9 +22,6 @@ class ComponentSet extends QueryableOrderedSet<Component> {
           strictMode: strictMode ?? defaultStrictMode,
         );
 
-  @Deprecated('Use ComponentSet.new instead; will be removed in 1.3.0')
-  ComponentSet.createDefault() : this();
-
   /// Components whose priority changed since the last update.
   ///
   /// When priorities change we need to re-balance the component set, but
