@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:flame/src/components/component.dart';
+import 'package:flame/src/components/core/component.dart';
 import 'package:flame/src/extensions/vector2.dart';
 import 'package:flame/src/particles/particle.dart';
 
