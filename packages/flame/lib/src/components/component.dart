@@ -3,7 +3,7 @@ import 'dart:collection';
 
 import 'package:collection/collection.dart';
 import 'package:flame/src/cache/value_cache.dart';
-import 'package:flame/src/components/component_set.dart';
+import 'package:flame/src/components/core/component_set.dart';
 import 'package:flame/src/components/core/position_type.dart';
 import 'package:flame/src/components/mixins/coordinate_transform.dart';
 import 'package:flame/src/game/flame_game.dart';

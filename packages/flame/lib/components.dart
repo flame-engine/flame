@@ -3,7 +3,7 @@ export 'src/anchor.dart';
 export 'src/collisions/has_collision_detection.dart';
 export 'src/collisions/hitboxes/screen_hitbox.dart';
 export 'src/components/component.dart';
-export 'src/components/component_set.dart';
+export 'src/components/core/component_set.dart';
 export 'src/components/core/position_type.dart';
 export 'src/components/custom_painter_component.dart';
 export 'src/components/fps_component.dart';
