@@ -13,7 +13,6 @@ class BouncingBallExample extends FlameGame with HasCollisionDetection {
   ''';
   @override
   Future<void>? onLoad() {
-    // TODO: implement onLoad
     final boundaries = createBoundaries();
 
     boundaries.forEach(add);
@@ -120,16 +119,12 @@ enum BoundarySide {
     switch (this) {
       case BoundarySide.top:
         return Vector2(0, 0);
-        break;
       case BoundarySide.bottom:
         return Vector2(0, game.size.y - 5);
-        break;
       case BoundarySide.left:
         return Vector2(0, 0);
-        break;
       case BoundarySide.right:
         return Vector2(game.size.x - 5, 0);
-        break;
       default:
         return Vector2(0, 0);
     }
@@ -139,16 +134,12 @@ enum BoundarySide {
     switch (this) {
       case BoundarySide.top:
         return Vector2(game.size.x, 5);
-        break;
       case BoundarySide.bottom:
         return Vector2(game.size.x, 5);
-        break;
       case BoundarySide.left:
         return Vector2(5, game.size.y);
-        break;
       case BoundarySide.right:
         return Vector2(5, game.size.y);
-        break;
       default:
         return Vector2(0, 0);
     }
