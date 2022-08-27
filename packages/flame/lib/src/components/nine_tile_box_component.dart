@@ -17,22 +17,14 @@ class NineTileBoxComponent extends PositionComponent implements SizeProvider {
   /// [PositionComponent] to render.
   NineTileBoxComponent({
     this.nineTileBox,
-    Vector2? position,
-    Vector2? size,
-    Vector2? scale,
-    double? angle,
-    Anchor? anchor,
-    Iterable<Component>? children,
-    int? priority,
-  }) : super(
-          position: position,
-          size: size,
-          scale: scale,
-          angle: angle,
-          anchor: anchor,
-          children: children,
-          priority: priority,
-        );
+    super.position,
+    super.size,
+    super.scale,
+    super.angle,
+    super.anchor,
+    super.children,
+    super.priority,
+  });
 
   @override
   @mustCallSuper

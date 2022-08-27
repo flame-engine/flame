@@ -10,7 +10,7 @@ class Passthrough extends TestBlock with CollisionPassthrough {
 
 void main() {
   group('CollisionPassthrough', () {
-    testCollidableGame('Passing collisions to parent', (game) async {
+    testCollisionDetectionGame('Passing collisions to parent', (game) async {
       final passthrough = Passthrough();
       final hitboxParent =
           TestBlock(Vector2.zero(), Vector2.all(10), addTestHitbox: false)

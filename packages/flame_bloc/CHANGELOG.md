@@ -1,3 +1,26 @@
+## 1.7.0
+
+ - **FIX**: Correct flutter constraint ([#1731](https://github.com/flame-engine/flame/issues/1731)). ([c7383843](https://github.com/flame-engine/flame/commit/c738384314a1a5c3695d1c3adaebcb59604df83a))
+ - **FEAT**: Adding bloc getter to FlameBlocListenable mixin ([#1732](https://github.com/flame-engine/flame/issues/1732)). ([3d19caa3](https://github.com/flame-engine/flame/commit/3d19caa36dcb470b306b841ef9c03647a2f307d7))
+ - **FEAT**: Move to Flutter 3.0.0 and Dart 2.17.0 ([#1713](https://github.com/flame-engine/flame/issues/1713)). ([2a41d0d6](https://github.com/flame-engine/flame/commit/2a41d0d683391194b7209c47bde91199ab7a663e))
+ - **DOCS**: Fixing typo in `FlameMultiBlocProvider` dartdoc. ([67be6ab8](https://github.com/flame-engine/flame/commit/67be6ab86264f6def4b1b3b0e4ba00763c7dab4e))
+ - **DOCS**: updating README to the new flame bloc version ([#1737](https://github.com/flame-engine/flame/issues/1737)). ([6a2356aa](https://github.com/flame-engine/flame/commit/6a2356aa5eba1696caa6f88ecfe8143c4ffdb507))
+
+## 1.6.0
+
+ - **FIX**: Correct flutter constraint ([#1731](https://github.com/flame-engine/flame/issues/1731)). ([c7383843](https://github.com/flame-engine/flame/commit/c738384314a1a5c3695d1c3adaebcb59604df83a))
+ - **FEAT**: Adding bloc getter to FlameBlocListenable mixin ([#1732](https://github.com/flame-engine/flame/issues/1732)). ([3d19caa3](https://github.com/flame-engine/flame/commit/3d19caa36dcb470b306b841ef9c03647a2f307d7))
+ - **FEAT**: Move to Flutter 3.0.0 and Dart 2.17.0 ([#1713](https://github.com/flame-engine/flame/issues/1713)). ([2a41d0d6](https://github.com/flame-engine/flame/commit/2a41d0d683391194b7209c47bde91199ab7a663e))
+ - **DOCS**: updating README to the new flame bloc version ([#1737](https://github.com/flame-engine/flame/issues/1737)). ([6a2356aa](https://github.com/flame-engine/flame/commit/6a2356aa5eba1696caa6f88ecfe8143c4ffdb507))
+
+## 1.5.0
+
+ - **REFACTOR**: Update and guarantee consistency on mocktail dev dependency version across repo ([#1701](https://github.com/flame-engine/flame/issues/1701)). ([f4a98878](https://github.com/flame-engine/flame/commit/f4a98878062dbd4fe8238a8b014e6be3e528c5d8))
+ - **REFACTOR**: Move to package imports ([#1625](https://github.com/flame-engine/flame/issues/1625)). ([843ddc36](https://github.com/flame-engine/flame/commit/843ddc36249272fcb518b44672e1012307dfa1b5))
+ - **FEAT**: Add more lint rules ([#1703](https://github.com/flame-engine/flame/issues/1703)). ([49252f8e](https://github.com/flame-engine/flame/commit/49252f8ef29aa6b77144dcb97c24346f2f39380b))
+ - **FEAT**: Bump to Flutter 2.10.0 ([#1617](https://github.com/flame-engine/flame/issues/1617)). ([beac9013](https://github.com/flame-engine/flame/commit/beac901313456cf0b39b6f4e6459f0feed183614))
+ - **FEAT**: new flame bloc API ([#1538](https://github.com/flame-engine/flame/issues/1538)). ([f98970a9](https://github.com/flame-engine/flame/commit/f98970a91f91fe70e4a38834d7b69bfcb438d197))
+
 ## 1.4.0
 
  - **FEAT**: new flame bloc API (#1538). ([f98970a9](https://github.com/flame-engine/flame/commit/f98970a91f91fe70e4a38834d7b69bfcb438d197))

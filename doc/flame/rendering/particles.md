@@ -162,9 +162,8 @@ All the implementations are available in the
 [particles](https://github.com/flame-engine/flame/tree/main/packages/flame/lib/src/particles) folder
 on the Flame repository.
 
-Simply translates the underlying `Particle` to a specified `Vector2` within the rendering `Canvas`.
-Does not change or alter its position, consider using `MovingParticle` or `AcceleratedParticle`
-where change of position is required.
+
+## TranslatedParticle
 
 Simply translates the underlying `Particle` to a specified `Vector2` within the rendering `Canvas`.
 Does not change or alter its position, consider using `MovingParticle` or `AcceleratedParticle`

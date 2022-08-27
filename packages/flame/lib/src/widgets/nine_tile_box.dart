@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:ui';
 
 import 'package:flame/cache.dart';
@@ -35,12 +36,9 @@ class _Painter extends CustomPainter {
   bool shouldRepaint(_) => false;
 }
 
-@Deprecated('Renamed to [NineTileBoxWidget], this will be remove in v1.2.0')
-typedef NineTileBox = NineTileBoxWidget;
-
 /// A [StatelessWidget] that renders NineTileBox
 class NineTileBoxWidget extends StatelessWidget {
-  final Future<Image> Function() _imageFuture;
+  final FutureOr<Image> _imageFuture;
 
   /// The size of the tile on the image
   final double tileSize;
@@ -60,7 +58,7 @@ class NineTileBoxWidget extends StatelessWidget {
   /// A builder function that is called while the loading is on the way
   final WidgetBuilder? loadingBuilder;
 
-  NineTileBoxWidget({
+  const NineTileBoxWidget({
     required Image image,
     required this.tileSize,
     required this.destTileSize,
@@ -68,12 +66,17 @@ class NineTileBoxWidget extends StatelessWidget {
     this.height,
     this.child,
     this.padding,
-    this.errorBuilder,
-    this.loadingBuilder,
-    Key? key,
-  })  : _imageFuture = (() => Future.value(image)),
-        super(key: key);
+    super.key,
+  })  : _imageFuture = image,
+        errorBuilder = null,
+        loadingBuilder = null;
 
+  /// Loads image from the asset [path] and renders it as a widget.
+  ///
+  /// It will use the [loadingBuilder] while the image from [path] is loading.
+  /// To render without loading, or when you want to have a gapless playback
+  /// when the [path] value changes, consider loading the image beforehand
+  /// and direct pass it to the default constructor.
   NineTileBoxWidget.asset({
     required String path,
     required this.tileSize,
@@ -85,23 +88,22 @@ class NineTileBoxWidget extends StatelessWidget {
     this.padding,
     this.errorBuilder,
     this.loadingBuilder,
-    Key? key,
-  })  : _imageFuture = (() => (images ?? Flame.images).load(path)),
-        super(key: key);
+    super.key,
+  }) : _imageFuture = (images ?? Flame.images).load(path);
 
   @override
   Widget build(BuildContext context) {
     return BaseFutureBuilder<Image>(
-      futureBuilder: _imageFuture,
+      future: _imageFuture,
       builder: (_, image) {
-        return _NineTileBox(
+        return InternalNineTileBox(
           image: image,
           tileSize: tileSize,
           destTileSize: destTileSize,
           width: width,
           height: height,
-          child: child,
           padding: padding,
+          child: child,
         );
       },
       errorBuilder: errorBuilder,
@@ -110,7 +112,8 @@ class NineTileBoxWidget extends StatelessWidget {
   }
 }
 
-class _NineTileBox extends StatelessWidget {
+@visibleForTesting
+class InternalNineTileBox extends StatelessWidget {
   final Image image;
   final double tileSize;
   final double destTileSize;
@@ -121,16 +124,16 @@ class _NineTileBox extends StatelessWidget {
 
   final EdgeInsetsGeometry? padding;
 
-  const _NineTileBox({
+  const InternalNineTileBox({
     required this.image,
     required this.tileSize,
     required this.destTileSize,
-    Key? key,
     this.child,
     this.width,
     this.height,
     this.padding,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -144,8 +147,8 @@ class _NineTileBox extends StatelessWidget {
           destTileSize: destTileSize,
         ),
         child: Container(
-          child: child,
           padding: padding,
+          child: child,
         ),
       ),
     );

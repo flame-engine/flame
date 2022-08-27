@@ -1,11 +1,11 @@
-import 'package:flame/src/components/component.dart';
+import 'package:flame/src/components/core/component.dart';
 import 'package:flame/src/effects/controllers/effect_controller.dart';
 import 'package:flame/src/effects/effect.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 class _MyEffect extends Effect {
-  _MyEffect(EffectController controller) : super(controller);
+  _MyEffect(super.controller);
 
   double x = -1;
   Function()? onStartCallback;
@@ -143,7 +143,7 @@ void main() {
         ..onStartCallback = () {
           nStarted++;
         }
-        ..onFinishCallback = () {
+        ..onComplete = () {
           nFinished++;
         };
 

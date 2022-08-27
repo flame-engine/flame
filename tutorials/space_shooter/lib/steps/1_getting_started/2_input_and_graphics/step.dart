@@ -4,7 +4,7 @@ import 'package:tutorials_space_shooter/steps/1_getting_started/2_input_and_grap
 import 'package:tutorials_space_shooter/widgets/step_scaffold.dart';
 
 class InputAndGraphicsStep extends StatelessWidget {
-  const InputAndGraphicsStep({Key? key}) : super(key: key);
+  const InputAndGraphicsStep({super.key});
 
   @override
   Widget build(BuildContext context) {

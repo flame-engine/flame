@@ -223,6 +223,146 @@ class MyGame extends FlameGame with HasCollisionDetection {
 ```
 
 
+## Ray casting and Ray tracing
+
+Ray casting and ray tracing are methods for sending out rays from a point in your game and
+being able to see what these rays collide with and how they reflect after hitting
+something.
+
+For all of the following methods, if there are any hitboxes that you wish to ignore, you can add the
+`ignoreHitboxes` argument which is a list of the hitboxes that you wish to disregard for the call.
+This can be quite useful for example if you are casting rays from within a hitbox, which could be on
+your player or NPC; or if you don't want a ray to bounce off a `ScreenHitbox`.
+
+
+### Ray casting
+
+Ray casting is the operation of casting out one or more rays from a point and see if they hit
+anything, in Flame's case, hitboxes.
+
+We provide two methods for doing so, `raycast` and `raycastAll`. The first one just casts out
+a single ray and gets back a result with information about what and where the ray hit, and some
+extra information like the distance, the normal and the reflection ray. The second one, `raycastAll`,
+works similarly but sends out multiple rays uniformly around the origin, or within an angle
+centered at the origin.
+
+To use the ray casting functionality you have to have the `HasCollisionDetection` mixin on your
+game. After you have added that you can call `collisionDetection.raycast(...)` on your game class.
+
+Example:
+
+```dart
+class MyGame extends FlameGame with HasCollisionDetection {
+  @override
+  void update(double dt) {
+    super.update(dt);
+    final ray = Ray2(
+        origin: Vector2(0, 100),
+        direction: Vector2(1, 0),
+    );
+    final result = collisionDetection.raycast(ray);
+  }
+}
+```
+
+In this example one can see that the `Ray2` class is being used, this class defines a ray from an
+origin position and a direction (which are both defined by `Vector2`s). This particular ray starts
+from `0, 100` and shoots a ray straight to the right.
+
+The result from this operation will either be `null` if the ray didn't hit anything, or a
+`RaycastResult` which contains:
+  - Which hitbox the ray hit
+  - The intersection point of the collision
+  - The reflection ray, i.e. how the ray would reflect on the hitbox that it hix
+  - The normal of the collision, i.e. a vector perpendicular to the face of the hitbox that it hits
+
+If you are concerned about performance you can pre create a `RaycastResult` object that you send in
+to the method with the `out` argument, this will make it possible for the method to reuse this
+object instead of creating a new one for each iteration. This can be good if you do a lot of
+ray casting in your `update` methods.
+
+
+#### raycastAll
+
+Sometimes you want to send out rays in all, or a limited range, of directions from an origin. This
+can have a lot of applications, for example you could calculate the field of view of a player or
+enemy, or it can also be used to create light sources.
+
+Example:
+
+```dart
+class MyGame extends FlameGame with HasCollisionDetection {
+  @override
+  void update(double dt) {
+    super.update(dt);
+    final origin = Vector2(200, 200);
+    final result = collisionDetection.raycastAll(
+      origin, 
+      numberOfRays: 100,
+    );
+  }
+}
+```
+
+In this example we would send out 100 rays from (200, 200) uniformingly spread in all directions.
+
+If you want to limit the directions you can use the `startAngle` and the `sweepAngle` arguments.
+Where the `startAngle` (counting from straight up) is where the rays will start and then the rays
+will end at `startAngle + sweepAngle`.
+
+If you are concerned about performance you can re-use the `RaycastResult` objects that are created
+by the function by sending them in as a list with the `out` argument.
+
+
+### Ray tracing
+
+Ray tracing is similar to ray casting, but instead of just checking what the ray hits you can
+continue to trace the ray and see what its reflection ray (the ray bouncing off the hitbox) will
+hit and then what that casted reflection ray's reflection ray will hit and so on, until you decide
+that you have traced the ray for long enough. If you imagine how a pool ball would bounce on a pool
+table for example, that information could be retrieved with the help of ray tracing.
+
+Example:
+
+```dart
+class MyGame extends FlameGame with HasCollisionDetection {
+  @override
+  void update(double dt) {
+    super.update(dt);
+    final ray = Ray2(
+        origin: Vector2(0, 100),
+        direction: Vector2(1, 1)..normalize()
+    );
+    final results = collisionDetection.raytrace(
+      ray, 
+      maxDepth: 100,
+    );
+    for (final result in results) {
+      if (result.intersectionPoint.distanceTo(ray.origin) > 300) {
+        break;
+      }
+    }
+  }
+}
+```
+
+In the example above we send out a ray from (0, 100) diagonally down to the right and we say that we
+want it the bounce on at most 100 hitboxes, it doesn't necessarily have to get 100 results since at
+some point one of the reflection rays might not hit a hitbox and then the method is done.
+
+The method is lazy, which means that it will only do the calculations that you ask for, so you have
+to loop through the iterable that it returns to get the results, or do `toList()` to directly
+calculate all the results.
+
+In the for-loop it can be seen how this can be used, in that loop we check whether the current
+reflection rays intersection point (where the previous ray hit the hitbox) is further away than 300
+pixels from the origin of the starting ray, and if it is we don't care about the rest of the results
+(and then they don't have to be calculated either).
+
+If you are concerned about performance you can re-use the `RaycastResult` objects that are created
+by the function by sending them in as a list with the `out` argument.
+
+
 ## Comparison to Forge2D
 
 If you want to have a full-blown physics engine in your game we recommend that you use

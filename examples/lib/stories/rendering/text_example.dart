@@ -10,32 +10,20 @@ class TextExample extends FlameGame {
 
   @override
   Future<void> onLoad() async {
-    add(
+    addAll([
       TextComponent(text: 'Hello, Flame', textRenderer: _regular)
         ..anchor = Anchor.topCenter
         ..x = size.x / 2
         ..y = 32.0,
-    );
-
-    add(
       TextComponent(text: 'Text with shade', textRenderer: _shaded)
         ..anchor = Anchor.topRight
         ..position = size - Vector2.all(100),
-    );
-
-    add(
       TextComponent(text: 'center', textRenderer: _tiny)
         ..anchor = Anchor.center
         ..position.setFrom(size / 2),
-    );
-
-    add(
       TextComponent(text: 'bottomRight', textRenderer: _tiny)
         ..anchor = Anchor.bottomRight
         ..position.setFrom(size),
-    );
-
-    add(
       MyTextBox(
         '"This is our world now. The world of the electron and the switch; '
         'the beauty of the baud. We exist without nationality, skin color, '
@@ -45,7 +33,23 @@ class TextExample extends FlameGame {
       )
         ..anchor = Anchor.bottomLeft
         ..y = size.y,
-    );
+      MyTextBox(
+        'Let A be a finitely generated torsion-free abelian group. Then '
+        'A is free.',
+        align: Anchor.center,
+        size: Vector2(300, 200),
+        timePerChar: 0,
+        margins: 10,
+      )..position = Vector2(10, 50),
+      MyTextBox(
+        'Let A be a torsion abelian group. Then A is the direct sum of its '
+        'subgroups A(p) for all primes p such that A(p) ≠ 0.',
+        align: Anchor.bottomRight,
+        size: Vector2(300, 200),
+        timePerChar: 0,
+        margins: 10,
+      )..position = Vector2(10, 260),
+    ]);
   }
 }
 
@@ -72,21 +76,27 @@ final _shaded = TextPaint(
 );
 
 class MyTextBox extends TextBoxComponent {
-  MyTextBox(String text)
-      : super(
+  MyTextBox(
+    String text, {
+    super.align,
+    super.size,
+    double? timePerChar,
+    double? margins,
+  }) : super(
           text: text,
           textRenderer: _box,
           boxConfig: TextBoxConfig(
             maxWidth: 400,
-            timePerChar: 0.05,
+            timePerChar: timePerChar ?? 0.05,
             growingBox: true,
-            margins: const EdgeInsets.all(25),
+            margins: EdgeInsets.all(margins ?? 25),
           ),
         );
 
   @override
-  void drawBackground(Canvas c) {
+  void render(Canvas canvas) {
     final rect = Rect.fromLTWH(0, 0, width, height);
-    c.drawRect(rect, Paint()..color = Colors.white10);
+    canvas.drawRect(rect, Paint()..color = Colors.white10);
+    super.render(canvas);
   }
 }

@@ -1,3 +1,20 @@
+## 1.4.0
+
+ - **FIX**: Correct flutter constraint ([#1731](https://github.com/flame-engine/flame/issues/1731)). ([c7383843](https://github.com/flame-engine/flame/commit/c738384314a1a5c3695d1c3adaebcb59604df83a))
+ - **FEAT**: Move to Flutter 3.0.0 and Dart 2.17.0 ([#1713](https://github.com/flame-engine/flame/issues/1713)). ([2a41d0d6](https://github.com/flame-engine/flame/commit/2a41d0d683391194b7209c47bde91199ab7a663e))
+ - **DOCS**: Documenting how to write documentation ([#1721](https://github.com/flame-engine/flame/issues/1721)). ([ea354e3a](https://github.com/flame-engine/flame/commit/ea354e3a81e3810a8d2b9e3783d9833ae92349e0))
+
+## 1.3.0
+
+ - **FIX**: Correct flutter constraint ([#1731](https://github.com/flame-engine/flame/issues/1731)). ([c7383843](https://github.com/flame-engine/flame/commit/c738384314a1a5c3695d1c3adaebcb59604df83a))
+ - **FEAT**: Move to Flutter 3.0.0 and Dart 2.17.0 ([#1713](https://github.com/flame-engine/flame/issues/1713)). ([2a41d0d6](https://github.com/flame-engine/flame/commit/2a41d0d683391194b7209c47bde91199ab7a663e))
+ - **DOCS**: Documenting how to write documentation ([#1721](https://github.com/flame-engine/flame/issues/1721)). ([ea354e3a](https://github.com/flame-engine/flame/commit/ea354e3a81e3810a8d2b9e3783d9833ae92349e0))
+
+## 1.2.0
+
+ - **REFACTOR**: Move to package imports ([#1625](https://github.com/flame-engine/flame/issues/1625)). ([843ddc36](https://github.com/flame-engine/flame/commit/843ddc36249272fcb518b44672e1012307dfa1b5))
+ - **FEAT**: Bump to Flutter 2.10.0 ([#1617](https://github.com/flame-engine/flame/issues/1617)). ([beac9013](https://github.com/flame-engine/flame/commit/beac901313456cf0b39b6f4e6459f0feed183614))
+
 ## 1.1.1
 
  - Update a dependency to the latest release.

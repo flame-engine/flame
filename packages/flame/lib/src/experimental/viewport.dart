@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:flame/src/anchor.dart';
-import 'package:flame/src/components/component.dart';
+import 'package:flame/src/components/core/component.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
 import 'package:flame/src/experimental/camera_component.dart';
 import 'package:meta/meta.dart';
@@ -22,7 +22,7 @@ import 'package:vector_math/vector_math_64.dart';
 /// the top left corner of the viewport's bounding box.
 abstract class Viewport extends Component
     implements AnchorProvider, PositionProvider, SizeProvider {
-  Viewport({Iterable<Component>? children}) : super(children: children);
+  Viewport({super.children});
 
   /// Position of the viewport's anchor in the parent's coordinate frame.
   ///

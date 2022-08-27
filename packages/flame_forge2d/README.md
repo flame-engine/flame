@@ -32,7 +32,7 @@ remember to add the latest version of [Flame](https://pub.dev/packages/flame/ins
 ## Examples
 
 In the example folder of this directory you can find some
-[examples](https://github.com/flame-engine/flame/tree/main/packages/flame_forge2d/example), and you
+[examples](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/bridge_libraries/forge2d), and you
 can also find some examples in the
 [Forge2D repository](https://github.com/flame-engine/forge2d/tree/main/example).
 

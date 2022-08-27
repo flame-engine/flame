@@ -1,52 +1,45 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
-class BaseFutureBuilder<T> extends StatefulWidget {
-  final Future<T> Function() futureBuilder;
+class BaseFutureBuilder<T> extends StatelessWidget {
+  final FutureOr<T> future;
   final Widget Function(BuildContext, T) builder;
   final WidgetBuilder? errorBuilder;
   final WidgetBuilder? loadingBuilder;
 
   const BaseFutureBuilder({
-    required this.futureBuilder,
+    required this.future,
     required this.builder,
     this.loadingBuilder,
     this.errorBuilder,
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  State<StatefulWidget> createState() {
-    return _BaseFutureBuilder<T>();
-  }
-}
-
-class _BaseFutureBuilder<T> extends State<BaseFutureBuilder<T>> {
-  late Future<T> future;
-
-  @override
-  void initState() {
-    super.initState();
-
-    future = widget.futureBuilder();
-  }
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<T>(
-      future: future,
-      builder: (_, snapshot) {
-        switch (snapshot.connectionState) {
-          case ConnectionState.waiting:
-          case ConnectionState.none:
-          case ConnectionState.active:
-            return widget.loadingBuilder?.call(context) ?? Container();
-          case ConnectionState.done:
-            if (snapshot.hasData) {
-              return widget.builder(context, snapshot.data!);
-            }
-            return widget.loadingBuilder?.call(context) ?? Container();
-        }
-      },
-    );
+    if (future is Future<T>) {
+      return FutureBuilder<T>(
+        future: future as Future<T>,
+        builder: (_, snapshot) {
+          switch (snapshot.connectionState) {
+            case ConnectionState.waiting:
+            case ConnectionState.none:
+            case ConnectionState.active:
+              return loadingBuilder?.call(context) ?? const SizedBox();
+            case ConnectionState.done:
+              if (snapshot.hasData) {
+                return builder(context, snapshot.data!);
+              }
+              if (snapshot.hasError) {
+                return errorBuilder?.call(context) ?? const SizedBox();
+              }
+              return loadingBuilder?.call(context) ?? const SizedBox();
+          }
+        },
+      );
+    }
+
+    return builder(context, future as T);
   }
 }

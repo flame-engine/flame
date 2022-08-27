@@ -7,7 +7,7 @@ import 'collision_test_helpers.dart';
 
 void main() {
   group('Collision callbacks', () {
-    testCollidableGame('collidable callbacks are called', (game) async {
+    testCollisionDetectionGame('collidable callbacks are called', (game) async {
       final blockA = TestBlock(
         Vector2.zero(),
         Vector2.all(10),
@@ -48,7 +48,7 @@ void main() {
       expect(blockB.endCounter, 1);
     });
 
-    testCollidableGame(
+    testCollisionDetectionGame(
       'collidable callbacks are called when removing a Collidable',
       (game) async {
         final blockA = TestBlock(
@@ -76,7 +76,7 @@ void main() {
       },
     );
 
-    testCollidableGame('hitbox callbacks are called', (game) async {
+    testCollisionDetectionGame('hitbox callbacks are called', (game) async {
       final blockA = TestBlock(
         Vector2.zero(),
         Vector2.all(10),
@@ -115,7 +115,7 @@ void main() {
     });
   });
 
-  testCollidableGame(
+  testCollisionDetectionGame(
     'hitbox callbacks are called when Collidable is removed',
     (game) async {
       final blockA = TestBlock(
@@ -145,7 +145,7 @@ void main() {
     },
   );
 
-  testCollidableGame(
+  testCollisionDetectionGame(
     'hitbox end callbacks are called when hitbox is moved away fast',
     (game) async {
       final blockA = TestBlock(
@@ -175,7 +175,7 @@ void main() {
     },
   );
 
-  testCollidableGame(
+  testCollisionDetectionGame(
     'onCollisionEnd is only called when there previously was a collision',
     (game) async {
       final blockA = TestBlock(
@@ -199,7 +199,7 @@ void main() {
     },
   );
 
-  testCollidableGame(
+  testCollisionDetectionGame(
     'callbacks are only called once for hitboxes on each other',
     (game) async {
       final blockA = TestBlock(
@@ -257,7 +257,7 @@ void main() {
     },
   );
 
-  testCollidableGame(
+  testCollisionDetectionGame(
     'end and start callbacks are only called once for hitboxes sharing a side',
     (game) async {
       final blockA = TestBlock(
@@ -316,7 +316,7 @@ void main() {
   );
 
   // Reproduced #1478
-  testCollidableGame(
+  testCollisionDetectionGame(
     'collision callbacks with many hitboxes added',
     (game) async {
       const side = 10.0;
@@ -379,7 +379,7 @@ void main() {
   );
 
   // Reproduced #1478
-  testCollidableGame(
+  testCollisionDetectionGame(
     'collision callbacks with changed game size',
     (game) async {
       final block = TestBlock(Vector2.all(20), Vector2.all(10))

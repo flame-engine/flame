@@ -9,16 +9,15 @@ class PriorityExample extends FlameGame with HasTappables {
     the priority.
   ''';
 
-  @override
-  Future<void> onLoad() async {
-    final squares = [
-      Square(Vector2(100, 100)),
-      Square(Vector2(160, 100)),
-      Square(Vector2(170, 150)),
-      Square(Vector2(110, 150)),
-    ];
-    addAll(squares);
-  }
+  PriorityExample()
+      : super(
+          children: [
+            Square(Vector2(100, 100)),
+            Square(Vector2(160, 100)),
+            Square(Vector2(170, 150)),
+            Square(Vector2(110, 150)),
+          ],
+        );
 }
 
 class Square extends RectangleComponent

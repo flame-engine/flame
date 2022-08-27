@@ -82,7 +82,7 @@ Flame doesn't bundle any helpers to load assets from an external source (externa
 sources).
 
 But most of Flame's API can be loaded from concrete asset instances, for examples, `Sprite`s can be
-created from `dart:ui`s `Image` instaces, so the user can write custom code to load images from
+created from `dart:ui`s `Image` instances, so the user can write custom code to load images from
 anywhere they need, and then load it into Flame's classes.
 
 Here are some suggestions for http client packages:

@@ -16,32 +16,50 @@ class OpacityEffect extends ComponentEffect<HasPaint> {
   /// over time.
   OpacityEffect.by(
     double offset,
-    EffectController controller, {
+    super.controller, {
     this.paintId,
-  })  : _alphaOffset = (255 * offset).round(),
-        super(controller);
+    super.onComplete,
+  }) : _alphaOffset = (255 * offset).round();
 
   /// This constructor will set the opacity to the specified opacity over time.
   factory OpacityEffect.to(
     double targetOpacity,
     EffectController controller, {
     String? paintId,
+    void Function()? onComplete,
   }) {
-    return _OpacityToEffect(targetOpacity, controller, paintId: paintId);
+    return _OpacityToEffect(
+      targetOpacity,
+      controller,
+      paintId: paintId,
+      onComplete: onComplete,
+    );
   }
 
   factory OpacityEffect.fadeIn(
     EffectController controller, {
     String? paintId,
+    void Function()? onComplete,
   }) {
-    return _OpacityToEffect(1.0, controller, paintId: paintId);
+    return _OpacityToEffect(
+      1.0,
+      controller,
+      paintId: paintId,
+      onComplete: onComplete,
+    );
   }
 
   factory OpacityEffect.fadeOut(
     EffectController controller, {
     String? paintId,
+    void Function()? onComplete,
   }) {
-    return _OpacityToEffect(0.0, controller, paintId: paintId);
+    return _OpacityToEffect(
+      0.0,
+      controller,
+      paintId: paintId,
+      onComplete: onComplete,
+    );
   }
 
   @override
@@ -79,7 +97,13 @@ class _OpacityToEffect extends OpacityEffect {
     this._targetOpacity,
     EffectController controller, {
     String? paintId,
-  }) : super.by(0.0, controller, paintId: paintId);
+    void Function()? onComplete,
+  }) : super.by(
+          0.0,
+          controller,
+          paintId: paintId,
+          onComplete: onComplete,
+        );
 
   @override
   void onStart() {

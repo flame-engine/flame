@@ -3,13 +3,15 @@ import 'dart:ui' hide Offset;
 
 import 'package:collection/collection.dart';
 import 'package:flame/src/anchor.dart';
-import 'package:flame/src/components/component.dart';
+import 'package:flame/src/components/core/component.dart';
 import 'package:flame/src/components/mixins/coordinate_transform.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
 import 'package:flame/src/extensions/offset.dart';
 import 'package:flame/src/extensions/vector2.dart';
 import 'package:flame/src/game/notifying_vector2.dart';
 import 'package:flame/src/game/transform2d.dart';
+import 'package:flame/src/rendering/decorator.dart';
+import 'package:flame/src/rendering/transform2d_decorator.dart';
 
 /// A [Component] implementation that represents an object that can be
 /// freely moved around the screen, rotated, and scaled.
@@ -73,12 +75,12 @@ class PositionComponent extends Component
     Vector2? scale,
     double? angle,
     Anchor? anchor,
-    Iterable<Component>? children,
-    int? priority,
+    super.children,
+    super.priority,
   })  : transform = Transform2D(),
         _anchor = anchor ?? Anchor.topLeft,
-        _size = NotifyingVector2.copy(size ?? Vector2.zero()),
-        super(children: children, priority: priority) {
+        _size = NotifyingVector2.copy(size ?? Vector2.zero()) {
+    decorator = Transform2DDecorator(transform);
     if (position != null) {
       transform.position = position;
     }
@@ -95,6 +97,17 @@ class PositionComponent extends Component
   final Transform2D transform;
   final NotifyingVector2 _size;
   Anchor _anchor;
+
+  /// The decorator is used to apply visual effects to a component.
+  ///
+  /// By default, the [PositionComponent] is equipped with a
+  /// [Transform2DDecorator] which makes sure the component is rendered at a
+  /// proper location on the canvas. It is possible to replace this decorator
+  /// with another one if a different functionality is desired.
+  ///
+  /// A more common use for this field, however, is to apply additional visual
+  /// effects such as tints/shadows/etc using [Decorator.addLast].
+  late Decorator decorator;
 
   /// The total transformation matrix for the component. This matrix combines
   /// translation, rotation and scale transforms into a single entity. The
@@ -349,6 +362,12 @@ class PositionComponent extends Component
     transform.flipVertically();
   }
 
+  /// Whether it is currently flipped horizontally.
+  bool get isFlippedHorizontally => transform.scale.x.isNegative;
+
+  /// Whether it is currently flipped vertically.
+  bool get isFlippedVertically => transform.scale.y.isNegative;
+
   //#endregion
 
   /// Internal handler that must be invoked whenever either the [size]
@@ -390,10 +409,7 @@ class PositionComponent extends Component
 
   @override
   void renderTree(Canvas canvas) {
-    canvas.save();
-    canvas.transform(transformMatrix.storage);
-    super.renderTree(canvas);
-    canvas.restore();
+    decorator.applyChain(super.renderTree, canvas);
   }
 
   /// Returns the bounding rectangle for this component.

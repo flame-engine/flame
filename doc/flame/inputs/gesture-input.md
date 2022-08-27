@@ -29,6 +29,11 @@ of these `mixin`s and its methods:
   - onSecondaryTapUp
   - onSecondaryTapCancel
 
+- TertiaryTapDetector
+  - onTertiaryTapDown
+  - onTertiaryTapUp
+  - onTertiaryTapCancel
+
 - DoubleTapDetector
   - onDoubleTap
 
