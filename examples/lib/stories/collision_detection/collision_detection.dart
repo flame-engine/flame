@@ -27,7 +27,7 @@ void addCollisionDetectionStories(Dashbook dashbook) {
     ..add(
       'Bouncing Ball',
       (_) => GameWidget(game: BouncingBallExample()),
-      codeLink: baseLink('collision_detection/bouncing_ball.dart'),
+      codeLink: baseLink('collision_detection/bouncing_ball_example.dart'),
       info: BouncingBallExample.description,
     )
     ..add(
