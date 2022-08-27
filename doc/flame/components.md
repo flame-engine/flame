@@ -62,8 +62,9 @@ A component lifecycle state can be checked by a series of getters:
 
 ### Priority
 
-In Flame the order components are rendered (and updated) in is called `priority`, this is sometimes
-referred to as `z-index` in other languages and frameworks. The higher the `priority` is set to, the
+In Flame every `Component` has the `int priority` property, which determines
+that component's sorting order within its parent's children, this is sometimes referred to
+as `z-index` in other languages and frameworks. The higher the `priority` is set to, the
 closer the component will appear on the screen, since it will be rendered on top of any components
 with lower priority that were rendered before it.
 
