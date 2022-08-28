@@ -13,11 +13,8 @@ class BouncingBallExample extends FlameGame with HasCollisionDetection {
   ''';
   @override
   Future<void>? onLoad() {
-    final boundaries = createBoundaries();
-
-    boundaries.forEach(add);
-
     addAll([
+      ScreenHitbox(),
       Ball(),
     ]);
     return super.onLoad();
@@ -82,112 +79,29 @@ class Ball extends CircleComponent
   ) {
     super.onCollisionStart(intersectionPoints, other);
 
-    if (other is Boundary) {
-      final side = other.side;
+    if (other is ScreenHitbox) {
+      final collisionPoint = intersectionPoints.first;
 
-      switch (side) {
-        case BoundarySide.right:
-          velocity.x = -velocity.x;
-          velocity.y = velocity.y;
-
-          break;
-        case BoundarySide.left:
-          velocity.x = -velocity.x;
-          velocity.y = velocity.y;
-          break;
-        case BoundarySide.top:
-          velocity.x = velocity.x;
-          velocity.y = -velocity.y;
-          break;
-        case BoundarySide.bottom:
-          velocity.x = velocity.x;
-          velocity.y = -velocity.y;
-          break;
-        default:
+      // Left Side Collision
+      if (collisionPoint.x == 0) {
+        velocity.x = -velocity.x;
+        velocity.y = velocity.y;
+      }
+      // Right Side Collision
+      if (collisionPoint.x == gameRef.size.x) {
+        velocity.x = -velocity.x;
+        velocity.y = velocity.y;
+      }
+      // Top Side Collision
+      if (collisionPoint.y == 0) {
+        velocity.x = velocity.x;
+        velocity.y = -velocity.y;
+      }
+      // Bottom Side Collision
+      if (collisionPoint.y == gameRef.size.y) {
+        velocity.x = velocity.x;
+        velocity.y = -velocity.y;
       }
     }
-  }
-}
-
-enum BoundarySide {
-  top,
-  bottom,
-  left,
-  right;
-
-  Vector2 getSidePosition(FlameGame game) {
-    switch (this) {
-      case BoundarySide.top:
-        return Vector2(0, 0);
-      case BoundarySide.bottom:
-        return Vector2(0, game.size.y - 5);
-      case BoundarySide.left:
-        return Vector2(0, 0);
-      case BoundarySide.right:
-        return Vector2(game.size.x - 5, 0);
-      default:
-        return Vector2(0, 0);
-    }
-  }
-
-  Vector2 getSideSize(FlameGame game) {
-    switch (this) {
-      case BoundarySide.top:
-        return Vector2(game.size.x, 5);
-      case BoundarySide.bottom:
-        return Vector2(game.size.x, 5);
-      case BoundarySide.left:
-        return Vector2(5, game.size.y);
-      case BoundarySide.right:
-        return Vector2(5, game.size.y);
-      default:
-        return Vector2(0, 0);
-    }
-  }
-}
-
-List<Boundary> createBoundaries() {
-  return [
-    Boundary(
-      side: BoundarySide.top,
-    ),
-    Boundary(
-      side: BoundarySide.right,
-    ),
-    Boundary(
-      side: BoundarySide.bottom,
-    ),
-    Boundary(
-      side: BoundarySide.left,
-    ),
-  ];
-}
-
-class Boundary extends PositionComponent
-    with HasGameRef<FlameGame>, CollisionCallbacks {
-  final BoundarySide side;
-
-  Boundary({
-    required this.side,
-  });
-
-  @override
-  Future<void>? onLoad() {
-    final hitBox = RectangleHitbox(
-      position: side.getSidePosition(gameRef),
-      size: side.getSideSize(gameRef),
-    );
-
-    final rectangleComponent = RectangleComponent(
-      position: side.getSidePosition(gameRef),
-      size: side.getSideSize(gameRef),
-      paint: Paint()..color = Colors.white,
-    );
-
-    addAll([
-      hitBox,
-      rectangleComponent,
-    ]);
-    return super.onLoad();
   }
 }
