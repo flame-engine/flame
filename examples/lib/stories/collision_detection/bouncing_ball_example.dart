@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 class BouncingBallExample extends FlameGame with HasCollisionDetection {
   static const description = '''
     This example shows how you can use the Collisions detection api to know when a ball
-    collides with the walls we set up and then update it to bounce off these walls.
+    collides with the screen boundaries and then update it to bounce off these boundaries.
   ''';
   @override
   Future<void>? onLoad() {
