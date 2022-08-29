@@ -580,8 +580,7 @@ class Component {
     components.forEach(remove);
   }
 
-  /// Removes all the children the [test] function returns true for and calls
-  /// [onRemove] for all of them and their children.
+  /// Removes all the children for which the [test] function returns true.
   void removeWhere(bool Function(Component component) test) {
     children.forEach((component) {
       if (test(component)) {
