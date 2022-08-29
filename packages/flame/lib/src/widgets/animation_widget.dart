@@ -127,14 +127,12 @@ class _InternalSpriteAnimationWidgetState
   }
 
   void _initAnimation() {
-    setState(() {
-      widget.animation.reset();
-      _lastUpdated = DateTime.now().microsecondsSinceEpoch.toDouble();
-      _controller?.repeat(
-        // Approximately 60 fps
-        period: const Duration(milliseconds: 16),
-      );
-    });
+    widget.animation.reset();
+    _lastUpdated = DateTime.now().microsecondsSinceEpoch.toDouble();
+    _controller?.repeat(
+      // Approximately 60 fps
+      period: const Duration(milliseconds: 16),
+    );
   }
 
   void _setupController() {
