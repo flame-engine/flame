@@ -150,13 +150,18 @@ class _InternalSpriteAnimationWidgetState
     final lastUpdated = _lastUpdated ??= now;
     final dt = (now - lastUpdated) * microSecond;
 
+    final frameIndexBeforeTick = widget.animation.currentIndex;
     widget.animation.update(dt);
+    final frameIndexAfterTick = widget.animation.currentIndex;
 
-    setState(() => _lastUpdated = now);
+    if (frameIndexBeforeTick != frameIndexAfterTick) {
+      setState(() {});
+    }
+    _lastUpdated = now;
   }
 
   void _pauseAnimation() {
-    setState(() => _controller?.stop());
+    _controller?.stop();
   }
 
   @override
@@ -167,12 +172,10 @@ class _InternalSpriteAnimationWidgetState
 
   @override
   Widget build(BuildContext ctx) {
-    return Container(
-      child: CustomPaint(
-        painter: SpritePainter(
-          widget.animation.getSprite(),
-          widget.anchor,
-        ),
+    return CustomPaint(
+      painter: SpritePainter(
+        widget.animation.getSprite(),
+        widget.anchor,
       ),
     );
   }
