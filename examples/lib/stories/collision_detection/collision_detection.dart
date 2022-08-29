@@ -1,5 +1,6 @@
 import 'package:dashbook/dashbook.dart';
 import 'package:examples/commons/commons.dart';
+import 'package:examples/stories/collision_detection/bouncing_ball_example.dart';
 import 'package:examples/stories/collision_detection/circles_example.dart';
 import 'package:examples/stories/collision_detection/collidable_animation_example.dart';
 import 'package:examples/stories/collision_detection/multiple_shapes_example.dart';
@@ -22,6 +23,12 @@ void addCollisionDetectionStories(Dashbook dashbook) {
       (_) => GameWidget(game: CirclesExample()),
       codeLink: baseLink('collision_detection/circles_example.dart'),
       info: CirclesExample.description,
+    )
+    ..add(
+      'Bouncing Ball',
+      (_) => GameWidget(game: BouncingBallExample()),
+      codeLink: baseLink('collision_detection/bouncing_ball_example.dart'),
+      info: BouncingBallExample.description,
     )
     ..add(
       'Multiple shapes',
