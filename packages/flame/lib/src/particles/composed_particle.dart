@@ -6,18 +6,22 @@ import 'package:flame/src/particles/particle.dart';
 /// by proxying all lifecycle hooks.
 class ComposedParticle extends Particle {
   final List<Particle> children;
+  final bool applyLifespanToChildren;
 
   ComposedParticle({
     required this.children,
     super.lifespan,
+    this.applyLifespanToChildren = true,
   });
 
   @override
   void setLifespan(double lifespan) {
     super.setLifespan(lifespan);
 
-    for (final child in children) {
-      child.setLifespan(lifespan);
+    if (applyLifespanToChildren) {
+      for (final child in children) {
+        child.setLifespan(lifespan);
+      }
     }
   }
 
@@ -31,6 +35,8 @@ class ComposedParticle extends Particle {
   @override
   void update(double dt) {
     super.update(dt);
+
+    children.removeWhere((particle) => particle.shouldRemove);
 
     for (final child in children) {
       child.update(dt);
