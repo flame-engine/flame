@@ -488,3 +488,37 @@ More information about how to define hitboxes can be found in the hitbox section
 
 An example of how to use it can be seen
 [here](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/input/gesture_hitboxes_example.dart).
+
+### MouseMovement on the game level
+
+To give a `Game` class the ability to handle mouse movement/hover events, use the `MouseMovementDetector` mixin.  
+
+You can then override an `onMouseMove` method. This method receives [`PointerHoverInfo`](https://pub.dev/documentation/flame/latest/events/PointerHoverInfo-class.html) which provides the position of the hover event, as well as the raw [`PointerHoverEvent`](https://api.flutter.dev/flutter/gestures/PointerHoverEvent-class.html)
+
+
+
+> ⚠️ Note: This should not be used on platforms that do not 
+> support mouse cursors.
+
+Example:
+
+```dart
+class MouseCursorExample extends FlameGame with MouseMovementDetector {
+  // ...
+  @override
+  void onMouseMove(PointerHoverInfo info) {
+    print('X: ${info.eventPosition.game.x}');
+    print('Y: ${info.eventPosition.game.y}');
+  }
+}
+
+```
+
+
+### MouseMovement on the component level
+
+To recieve mouse movement/hover events in components, use the `HasCursorHandlerComponents` mixin on any `Game` sub class first, and remove the `MouseMovementDetector` mixin (if present). 
+
+Then, use the `CursorHandler` mixin on any `Component` sub class.
+
+See [here](https://github.com/flame-engine/flame/blob/main/examples/lib/stores/input/mouse_movement_components_example.dart) for an example.
