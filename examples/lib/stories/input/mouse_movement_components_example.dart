@@ -5,7 +5,7 @@ import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 
-class MouseMovementListenerExample extends FlameGame
+class MouseMovementComponentsExample extends FlameGame
     with HasCursorHandlerComponents {
   static const String description = '''
     This example shows how to handle mouse movement using `CursorHandler` Components.\n\n
