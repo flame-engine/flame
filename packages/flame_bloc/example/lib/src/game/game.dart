@@ -2,7 +2,6 @@ import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flame_bloc/flame_bloc.dart';
-
 import 'package:flame_bloc_example/src/game/components/enemy.dart';
 import 'package:flame_bloc_example/src/game/components/enemy_creator.dart';
 import 'package:flame_bloc_example/src/game/components/player.dart';
@@ -19,7 +18,7 @@ class GameStatsController extends Component with HasGameRef<SpaceShooterGame> {
               newState.status == GameStatus.initial;
         },
         onNewState: (state) {
-          gameRef.children.removeWhere((element) => element is EnemyComponent);
+          gameRef.removeWhere((element) => element is EnemyComponent);
         },
       ),
     );

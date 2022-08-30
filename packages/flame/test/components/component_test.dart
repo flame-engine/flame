@@ -33,6 +33,12 @@ class _ParentOnPrepareComponent extends _OnPrepareComponent {
   }
 }
 
+class _IdentifiableComponent extends Component {
+  final int id;
+
+  _IdentifiableComponent(this.id);
+}
+
 void main() {
   final prepareGame = FlameTester(_PrepareGame.new);
 
@@ -342,6 +348,26 @@ void main() {
 
           game.resumeEngine();
           game.update(0);
+        },
+      );
+
+      testWithFlameGame(
+        'removeWhere removes the correct components',
+        (game) async {
+          final components = List.generate(
+            10,
+            _IdentifiableComponent.new,
+          );
+          game.addAll(components);
+          await game.ready();
+          expect(game.children.length, 10);
+          game.removeWhere((c) => (c as _IdentifiableComponent).id.isEven);
+          game.update(0);
+          expect(game.children.length, 5);
+          expect(
+            game.children.every((c) => (c as _IdentifiableComponent).id.isOdd),
+            true,
+          );
         },
       );
     });
