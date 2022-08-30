@@ -28,7 +28,9 @@ class ComposedParticle extends Particle {
   @override
   void render(Canvas c) {
     for (final child in children) {
-      child.render(c);
+      if (!child.shouldRemove) {
+        child.render(c);
+      }
     }
   }
 
@@ -36,10 +38,10 @@ class ComposedParticle extends Particle {
   void update(double dt) {
     super.update(dt);
 
-    children.removeWhere((particle) => particle.shouldRemove);
-
     for (final child in children) {
-      child.update(dt);
+      if (!child.shouldRemove) {
+        child.update(dt);
+      }
     }
   }
 }
