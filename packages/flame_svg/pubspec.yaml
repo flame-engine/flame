@@ -2,6 +2,9 @@ name: flame_svg
 description: Package to add SVG rendering support for the Flame game engine
 version: 1.5.0
 homepage: https://github.com/flame-engine/flame/tree/main/packages/flame_svg
+funding:
+  - https://patreon.com/bluefireoss
+  - https://www.buymeacoffee.com/bluefire
 
 environment:
   sdk: ">=2.17.0 <3.0.0"
