@@ -2,6 +2,9 @@ name: flame_oxygen
 description: Integrate the Oxygen ECS with the Flame Engine.
 version: 0.1.5
 homepage: https://github.com/flame-engine/flame/tree/main/packages/flame_oxygen
+funding:
+  - https://patreon.com/bluefireoss
+  - https://www.buymeacoffee.com/bluefire
 
 environment:
   sdk: ">=2.17.0 <3.0.0"
