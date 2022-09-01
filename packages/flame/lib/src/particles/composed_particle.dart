@@ -4,6 +4,9 @@ import 'package:flame/src/particles/particle.dart';
 
 /// A single [Particle] which manages multiple children
 /// by proxying all lifecycle hooks.
+///
+/// [applyLifespanToChildren] if true, then [children] will have the same
+/// lifespan as parent [ComposedParticle]
 class ComposedParticle extends Particle {
   final List<Particle> children;
   final bool applyLifespanToChildren;
