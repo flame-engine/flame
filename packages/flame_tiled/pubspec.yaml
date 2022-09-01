@@ -5,7 +5,7 @@ homepage: https://github.com/flame-engine/flame/tree/main/packages/flame_tiled
 
 environment:
   sdk: ">=2.17.0 <3.0.0"
-  flutter: ">=3.0.0"
+  flutter: ">=3.3.0"
 
 dependencies:
   collection: ^1.15.0
@@ -17,6 +17,6 @@ dependencies:
   xml: ^5.3.0
 
 dev_dependencies:
-  dartdoc: ^4.1.0
+  dartdoc: ^6.0.1
   flame_lint: ^0.1.2
   test: any
