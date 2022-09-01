@@ -16,7 +16,7 @@ dependencies:
   meta: ^1.7.0
 
 dev_dependencies:
-  dartdoc: ^4.1.0
+  dartdoc: ^6.0.1
   flame_lint: ^0.1.2
   flame_test: ^1.7.0
   flutter_lints: ^1.0.0
