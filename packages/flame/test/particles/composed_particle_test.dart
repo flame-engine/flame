@@ -78,6 +78,7 @@ void main() {
       expect(childParticle1.progress, 1);
       expect(childParticle2.progress, 0.25);
       expect(particle.children.length, 2);
+
       game.update(1);
 
       expect(particle.progress, 1);
