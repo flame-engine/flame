@@ -180,8 +180,7 @@ class RecycledQueue<T extends Disposable> extends IterableMixin<T>
       _startIndex = -1;
       _endIndex = -1;
       _currentIndex = -1;
-    }
-    else if (_currentIndex == _startIndex) {
+    } else if (_currentIndex == _startIndex) {
       _startIndex += 1;
       if (_startIndex == _elements.length) {
         _startIndex = 0;
