@@ -258,41 +258,59 @@ class _RenderableTileLayer extends _RenderableLayer<TileLayer> {
   void _cacheLayerTiles() {
     final tileData = layer.tileData!;
     final batchMap = _cachedSpriteBatches;
-    tileData.asMap().forEach((ty, tileRow) {
-      tileRow.asMap().forEach((tx, tileGid) {
+    final halfTile = _destTileSize / 2;
+    for (var ty = 0; ty < tileData.length; ty++) {
+      final tileRow = tileData[ty];
+      for (var tx = 0; tx < tileRow.length; tx++) {
+        final tileGid = tileRow[tx];
         if (tileGid.tile == 0) {
-          return;
+          continue;
         }
+
         final tile = _map.tileByGid(tileGid.tile);
         final tileset = _map.tilesetByTileGId(tileGid.tile);
         final img = tile.image ?? tileset.image;
-        if (img != null) {
-          final batch = batchMap[img.source];
-          final src = tileset.computeDrawRect(tile).toRect();
-          final flips = SimpleFlips.fromFlips(tileGid.flips);
-          final size = _destTileSize;
-          final scale = size.x / src.width;
-          final anchorX = src.width / 2;
-          final anchorY = src.height / 2;
-          final offsetX = ((tx + .5) * size.x) + (layer.offsetX * scale);
-          final offsetY = ((ty + .5) * size.y) + (layer.offsetY * scale);
-          final scos = flips.cos * scale;
-          final ssin = flips.sin * scale;
-          if (batch != null) {
-            batch.addTransform(
-              source: src,
-              transform: ui.RSTransform(
-                scos,
-                ssin,
-                offsetX + -scos * anchorX + ssin * anchorY,
-                offsetY + -ssin * anchorX - scos * anchorY,
-              ),
-              flip: flips.flip,
-            );
-          }
+        if (img == null) {
+          continue;
         }
-      });
-    });
+
+        final batch = batchMap[img.source];
+        if (batch == null) {
+          continue;
+        }
+
+        final src = tileset.computeDrawRect(tile).toRect();
+        final flips = SimpleFlips.fromFlips(tileGid.flips);
+        final size = _destTileSize;
+        final scale = size.x / src.width;
+        final anchorX = src.width / 2;
+        final anchorY = src.height / 2;
+
+        late double offsetX;
+        late double offsetY;
+        if (_map.orientation == MapOrientation.isometric) {
+          offsetX = halfTile.x * (tx - ty);
+          offsetY = halfTile.y * (tx + ty);
+        } else {
+          offsetX = (tx + .5) * size.x;
+          offsetY = (ty + .5) * size.y;
+        }
+
+        final scos = flips.cos * scale;
+        final ssin = flips.sin * scale;
+
+        batch.addTransform(
+          source: src,
+          transform: ui.RSTransform(
+            scos,
+            ssin,
+            offsetX + -scos * anchorX + ssin * anchorY,
+            offsetY + -ssin * anchorX - scos * anchorY,
+          ),
+          flip: flips.flip,
+        );
+      }
+    }
   }
 
   @override
