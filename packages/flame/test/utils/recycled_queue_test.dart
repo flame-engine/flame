@@ -335,6 +335,47 @@ void main() {
         expect(queue.toList(), [2, 4, 6, 8, 10].map(_Int.new));
         expect(queue.toString(), 'RecycledQueue(<2>, <4>, <6>, <8>, <10>)');
       });
+
+      testRandom('random attack: add/remove while iterating', (Random random) {
+        final queue0 = Queue<int>();
+        final queue1 = RecycledQueue(_Int.new);
+        var nextNumberToAdd = 1;
+        while (true) {
+          if (random.nextDouble() < 0.01) {
+            break;
+          }
+          if (queue0.isEmpty && queue1.isEmpty) {
+            for (var i = 0; i < 10; i++) {
+              queue0.addLast(nextNumberToAdd);
+              queue1.addLast().value = nextNumberToAdd;
+              nextNumberToAdd += 1;
+            }
+          }
+          var it0 = queue0.iterator;
+          for (final item1 in queue1) {
+            expect(it0.moveNext(), true);
+            final item0 = it0.current;
+            expect(item0, item1.value);
+            final rnd = random.nextDouble();
+            if (rnd < 0.2) {
+              queue0.addLast(nextNumberToAdd);
+              queue1.addLast().value = nextNumberToAdd;
+              nextNumberToAdd += 1;
+              it0 = queue0.iterator;
+              expect(it0.moveNext(), true);
+              while (it0.current != item0) {
+                it0.moveNext();
+              }
+            } else if (rnd < 0.4) {
+              final index = queue0.toList().indexOf(item0);
+              queue0.remove(item0);
+              queue1.removeCurrent();
+              it0 = queue0.skip(index).iterator;
+            }
+          }
+          expect(it0.moveNext(), false);
+        }
+      });
     });
   });
 }
