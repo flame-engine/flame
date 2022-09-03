@@ -19,6 +19,8 @@ void main() {
       expect(queue.isEmpty, false);
       expect(queue.isNotEmpty, true);
       expect(queue.length, 3);
+      expect(queue.first.value, 1);
+      expect(queue.last.value, 3);
 
       expect(queue.first.value, 1);
       queue.removeFirst();
@@ -34,12 +36,25 @@ void main() {
       expect(queue.isEmpty, true);
       expect(
         () => queue.first,
-        failsAssert('Cannot retrieve first element from an empty queue'),
+        failsAssert('Cannot retrieve elements from an empty queue'),
+      );
+      expect(
+        () => queue.last,
+        failsAssert('Cannot retrieve elements from an empty queue'),
       );
       expect(
         queue.removeFirst,
         failsAssert('Cannot remove elements from an empty queue'),
       );
+    });
+
+    test('queue with no initial capacity', () {
+      final queue = RecycledQueue(_Int.new, initialCapacity: 0);
+      expect(queue.isEmpty, true);
+      queue.addLast().value = 42;
+      expect(queue.isEmpty, false);
+      expect(queue.first.value, 42);
+      expect(queue.last.value, 42);
     });
 
     test('queue with overflow', () {
@@ -115,5 +130,5 @@ class _Int implements Disposable {
   void dispose() => value = null;
 
   @override
-  String toString() => 'Int($value)';
+  String toString() => '<$value>';
 }
