@@ -148,6 +148,8 @@ class RecycledQueue<T extends Disposable> extends IterableMixin<T>
   ///
   /// The removed element is not returned (because it is disposed). Use [first]
   /// in order to peek at the first element before removing it.
+  ///
+  /// Calling this method while iterating will stop iteration.
   void removeFirst() {
     assert(isNotEmpty, 'Cannot remove elements from an empty queue');
     _elements[_startIndex].dispose();
@@ -160,6 +162,7 @@ class RecycledQueue<T extends Disposable> extends IterableMixin<T>
         _startIndex = 0;
       }
     }
+    _currentIndex = -1;
   }
 
   /// Removes and disposes the [current] element, while iterating over the
@@ -167,13 +170,22 @@ class RecycledQueue<T extends Disposable> extends IterableMixin<T>
   /// access the [current] element after it was removed.
   void removeCurrent() {
     assert(
-      _currentIndex != -1,
+      _currentIndex >= 0,
       'Cannot remove current element if not iterating',
     );
-    if (_currentIndex == _startIndex) {
-      removeFirst();
+    _elements[_currentIndex].dispose();
+    if (_startIndex == _endIndex) {
+      assert(_currentIndex == _startIndex);
+      _startIndex = -1;
+      _endIndex = -1;
+      _currentIndex = -1;
+    }
+    else if (_currentIndex == _startIndex) {
+      _startIndex += 1;
+      if (_startIndex == _elements.length) {
+        _startIndex = 0;
+      }
     } else {
-      current.dispose();
       _indicesToRemove.add(_currentIndex);
     }
   }
@@ -181,19 +193,26 @@ class RecycledQueue<T extends Disposable> extends IterableMixin<T>
   @override
   Iterator<T> get iterator {
     _garbageCollect();
+    _currentIndex = -2;
     return this;
   }
 
   @override
-  T get current => _elements[_currentIndex];
+  T get current {
+    assert(
+      _currentIndex >= 0,
+      'The [current] getter is only accessible while iterating',
+    );
+    return _elements[_currentIndex];
+  }
 
   @override
   bool moveNext() {
-    if (isEmpty) {
+    if (isEmpty || _currentIndex == -1) {
       _currentIndex = -1;
       return false;
     }
-    if (_currentIndex == -1) {
+    if (_currentIndex < 0) {
       _currentIndex = _startIndex;
     } else if (_currentIndex == _endIndex) {
       _currentIndex = -1;
