@@ -265,7 +265,6 @@ void main() {
   });
 
   group('isometric', () {
-    late Uint8List canvasPixelData;
     late Uint8List pngData;
     late RenderableTiledMap overlapMap;
 
@@ -293,9 +292,6 @@ void main() {
       // its actually double-height tiles.
       final image =
           await picture.toImageSafe(256 * 5 ~/ 4, (128 * 5 + 128) ~/ 4);
-      final bytes = await image.toByteData();
-      canvasPixelData = bytes!.buffer.asUint8List();
-
       pngData = (await image.toByteData(format: ImageByteFormat.png))!
           .buffer
           .asUint8List();
