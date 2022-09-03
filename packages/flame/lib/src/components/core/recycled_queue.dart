@@ -18,7 +18,8 @@ import 'package:collection/collection.dart';
 ///   it (use [first] to retrieve the first element beforehand).
 ///
 /// In addition, the queue can be iterated over, and modified during that
-/// iteration via the methods [removeCurrent] and [addLast].
+/// iteration via the methods [removeCurrent] and [addLast]. However, only one
+/// iterator is allowed at a time.
 ///
 /// Internally, the queue is backed by a circular list.
 class RecycledQueue<T extends Disposable> extends IterableMixin<T>
@@ -65,7 +66,7 @@ class RecycledQueue<T extends Disposable> extends IterableMixin<T>
   /// The list of indices of elements that ought to be removed: this list is
   /// populated when elements are removed during the iteration, and then the
   /// elements are physically removed at the end of the iteration.
-  final List<int> _indicesToRemove = [];
+  List<int> _indicesToRemove = [];
 
   @override
   bool get isEmpty => _startIndex < 0;
@@ -233,6 +234,7 @@ class RecycledQueue<T extends Disposable> extends IterableMixin<T>
     }
     final it = _indicesToRemove.iterator;
     var nextIndexToRemove = (it..moveNext()).current;
+    var lastValidIndex = -1;
     var i = _startIndex;
     var j = _startIndex;
     int advanceIndex(int i) {
@@ -257,12 +259,29 @@ class RecycledQueue<T extends Disposable> extends IterableMixin<T>
           _elements[i] = _elements[j];
           _elements[j] = t;
         }
+        lastValidIndex = j;
         i = advanceIndex(i);
         j = advanceIndex(j);
       }
     }
     assert(nextIndexToRemove == -1);
+    assert(lastValidIndex != -1);
+    _endIndex = lastValidIndex;
     _indicesToRemove.clear();
+  }
+
+  /// [toString] can be called while iterating, though it may show up disposed
+  /// elements if the main iteration is also removing elements from the queue.
+  @override
+  String toString() {
+    final savedIndicesToRemove = _indicesToRemove;
+    final savedCurrentIndex = _currentIndex;
+    _currentIndex = -1;
+    _indicesToRemove = const <int>[];
+    final out = 'RecycledQueue${super.toString()}';
+    _currentIndex = savedCurrentIndex;
+    _indicesToRemove = savedIndicesToRemove;
+    return out;
   }
 }
 
