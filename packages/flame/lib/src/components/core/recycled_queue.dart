@@ -1,8 +1,6 @@
 import 'dart:collection';
 import 'dart:math';
 
-import 'package:collection/collection.dart';
-
 /// [RecycledQueue] is a simple FIFO queue where the elements are recycled.
 ///
 /// The elements [T] in this queue are created and owned by the queue and will
@@ -128,11 +126,11 @@ class RecycledQueue<T extends Disposable> extends IterableMixin<T>
       if (_currentIndex > _endIndex) {
         _currentIndex += numItemsToAdd;
       }
-      _indicesToRemove.forEachIndexed((i, elementIndex) {
-        if (elementIndex > _endIndex) {
+      for (var i = 0; i < _indicesToRemove.length; i++) {
+        if (_indicesToRemove[i] > _endIndex) {
           _indicesToRemove[i] += numItemsToAdd;
         }
-      });
+      }
       _endIndex += 1;
       assert(_endIndex < _startIndex);
     }
