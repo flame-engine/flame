@@ -225,8 +225,12 @@ class RenderableTiledMap {
   /// Returns a layer of type [T] with given [name] from all the layers
   /// of this map. If no such layer is found, null is returned.
   T? getLayer<T extends Layer>(String name) {
-    return map.layers
-        .firstWhereOrNull((layer) => layer is T && layer.name == name) as T?;
+    try {
+      // layerByName will searches recursively starting with tiled.dart v0.8.5
+      return map.layerByName(name) as T;
+    } on ArgumentError {
+      return null;
+    }
   }
 }
 
