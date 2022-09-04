@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:ui' as ui;
 
 import 'package:collection/collection.dart';
@@ -134,28 +135,63 @@ class RenderableTiledMap {
     Vector2 destTileSize, {
     Camera? camera,
   }) async {
-    final renderableLayers = await Future.wait(
-      map.layers.where((layer) => layer.visible).toList().map((layer) {
-        switch (layer.runtimeType) {
-          case TileLayer:
-            return _RenderableTileLayer.load(
-              layer as TileLayer,
-              map,
-              destTileSize,
-            );
-          case ImageLayer:
-            return _RenderableImageLayer.load(layer as ImageLayer, camera);
-
-          default:
-            return _UnrenderableLayer.load(layer);
-        }
-      }),
-    );
+    final renderableLayers =
+        await _renderableLayers(map.layers, null, map, destTileSize, camera);
 
     return RenderableTiledMap(
       map,
       renderableLayers,
       camera: camera,
+    );
+  }
+
+  static Future<List<_RenderableLayer<Layer>>> _renderableLayers(
+    List<Layer> layers,
+    _RenderableGroupLayer? parent,
+    TiledMap map,
+    Vector2 destTileSize,
+    Camera? camera,
+  ) async {
+    return Future.wait(
+      layers.where((layer) => layer.visible).toList().map((layer) async {
+        switch (layer.runtimeType) {
+          case TileLayer:
+            return _RenderableTileLayer.load(
+              layer as TileLayer,
+              parent,
+              map,
+              destTileSize,
+            );
+          case ImageLayer:
+            return _RenderableImageLayer.load(
+              layer as ImageLayer,
+              parent,
+              camera,
+            );
+
+          case Group:
+            final groupLayer = layer as Group;
+            final childrenCompleter = Completer<List<_RenderableLayer>>();
+            final renderableGroup = _RenderableGroupLayer.load(
+              groupLayer,
+              parent,
+              camera,
+              childrenCompleter.future,
+            );
+            final children = _renderableLayers(
+              groupLayer.layers,
+              await renderableGroup,
+              map,
+              destTileSize,
+              camera,
+            );
+            childrenCompleter.complete(await children);
+            return renderableGroup;
+
+          default:
+            return _UnrenderableLayer.load(layer);
+        }
+      }),
     );
   }
 
@@ -197,7 +233,10 @@ class RenderableTiledMap {
 abstract class _RenderableLayer<T extends Layer> {
   final T layer;
 
-  _RenderableLayer(this.layer);
+  /// The parent [Group] layer (if it exists)
+  final _RenderableGroupLayer? parent;
+
+  _RenderableLayer(this.layer, this.parent);
 
   bool get visible => layer.visible;
 
@@ -207,11 +246,51 @@ abstract class _RenderableLayer<T extends Layer> {
 
   void refreshCache() {}
 
+  double get offsetX {
+    if (parent != null) {
+      return parent!.offsetX + layer.offsetX;
+    } else {
+      return layer.offsetX;
+    }
+  }
+
+  double get offsetY {
+    if (parent != null) {
+      return parent!.offsetY + layer.offsetY;
+    } else {
+      return layer.offsetY;
+    }
+  }
+
+  double get opacity {
+    if (parent != null) {
+      return parent!.opacity * layer.opacity;
+    } else {
+      return layer.opacity;
+    }
+  }
+
+  double get parallaxX {
+    if (parent != null) {
+      return parent!.parallaxX * layer.parallaxX;
+    } else {
+      return layer.parallaxX;
+    }
+  }
+
+  double get parallaxY {
+    if (parent != null) {
+      return parent!.parallaxY * layer.parallaxY;
+    } else {
+      return layer.parallaxY;
+    }
+  }
+
   /// Calculates the offset we need to apply to the canvas to compensate for
   /// parallax positioning and scroll for the layer and the current camera
   /// position
   /// https://doc.mapeditor.org/en/latest/manual/layers/#parallax-scrolling-factor
-  void _applyParallaxOffset(Canvas canvas, Camera camera, Layer layer) {
+  void _applyParallaxOffset(Canvas canvas, Camera camera) {
     final cameraX = camera.position.x;
     final cameraY = camera.position.y;
     final vpCenterX = camera.viewport.effectiveSize.x / 2;
@@ -220,15 +299,15 @@ abstract class _RenderableLayer<T extends Layer> {
     // Due to how Tiled treats the center of the view as the reference
     // point for parallax positioning (see Tiled docs), we need to offset the
     // entire layer
-    var x = (1 - layer.parallaxX) * vpCenterX;
-    var y = (1 - layer.parallaxY) * vpCenterY;
+    var x = (1 - parallaxX) * vpCenterX;
+    var y = (1 - parallaxY) * vpCenterY;
     // compensate the offset for zoom
     x /= camera.zoom;
     y /= camera.zoom;
 
     // Now add the scroll for the current camera position
-    x += cameraX - (cameraX * layer.parallaxX);
-    y += cameraY - (cameraY * layer.parallaxY);
+    x += cameraX - (cameraX * parallaxX);
+    y += cameraY - (cameraY * parallaxY);
 
     canvas.translate(x, y);
   }
@@ -242,11 +321,12 @@ class _RenderableTileLayer extends _RenderableLayer<TileLayer> {
 
   _RenderableTileLayer(
     super.layer,
+    super.parent,
     this._map,
     this._destTileSize,
     this._cachedSpriteBatches,
   ) {
-    _layerPaint.color = Color.fromRGBO(255, 255, 255, layer.opacity);
+    _layerPaint.color = Color.fromRGBO(255, 255, 255, opacity);
     _cacheLayerTiles();
   }
 
@@ -274,8 +354,8 @@ class _RenderableTileLayer extends _RenderableLayer<TileLayer> {
           final scale = size.x / src.width;
           final anchorX = src.width / 2;
           final anchorY = src.height / 2;
-          final offsetX = ((tx + .5) * size.x) + (layer.offsetX * scale);
-          final offsetY = ((ty + .5) * size.y) + (layer.offsetY * scale);
+          final offsetX = ((tx + .5) * size.x) + (this.offsetX * scale);
+          final offsetY = ((ty + .5) * size.y) + (this.offsetY * scale);
           final scos = flips.cos * scale;
           final ssin = flips.sin * scale;
           if (batch != null) {
@@ -300,7 +380,7 @@ class _RenderableTileLayer extends _RenderableLayer<TileLayer> {
     canvas.save();
 
     if (camera != null) {
-      _applyParallaxOffset(canvas, camera, layer);
+      _applyParallaxOffset(canvas, camera);
     }
 
     _cachedSpriteBatches.values.forEach((batch) {
@@ -312,11 +392,13 @@ class _RenderableTileLayer extends _RenderableLayer<TileLayer> {
 
   static Future<_RenderableLayer> load(
     TileLayer layer,
+    _RenderableGroupLayer? parent,
     TiledMap map,
     Vector2 destTileSize,
   ) async {
     return _RenderableTileLayer(
       layer,
+      parent,
       map,
       destTileSize,
       await _loadImages(map),
@@ -342,7 +424,7 @@ class _RenderableImageLayer extends _RenderableLayer<ImageLayer> {
   late final ImageRepeat _repeat;
   Rect _paintArea = Rect.zero;
 
-  _RenderableImageLayer(super.layer, this._image) {
+  _RenderableImageLayer(super.layer, super.parent, this._image) {
     _initImageRepeat();
   }
 
@@ -355,17 +437,17 @@ class _RenderableImageLayer extends _RenderableLayer<ImageLayer> {
   void render(Canvas canvas, Camera? camera) {
     canvas.save();
 
-    canvas.translate(layer.offsetX, layer.offsetY);
+    canvas.translate(offsetX, offsetY);
 
     if (camera != null) {
-      _applyParallaxOffset(canvas, camera, layer);
+      _applyParallaxOffset(canvas, camera);
     }
 
     paintImage(
       canvas: canvas,
       rect: _paintArea,
       image: _image,
-      opacity: layer.opacity,
+      opacity: opacity,
       alignment: Alignment.topLeft,
       repeat: _repeat,
     );
@@ -387,17 +469,47 @@ class _RenderableImageLayer extends _RenderableLayer<ImageLayer> {
 
   static Future<_RenderableLayer> load(
     ImageLayer layer,
+    _RenderableGroupLayer? parent,
     Camera? camera,
   ) async {
     return _RenderableImageLayer(
       layer,
+      parent,
       await Flame.images.load(layer.image.source!),
     );
   }
 }
 
+class _RenderableGroupLayer extends _RenderableLayer<Group> {
+  late final List<_RenderableLayer> children;
+
+  _RenderableGroupLayer(
+    super.layer,
+    super.parent,
+    Future<List<_RenderableLayer>> futureChildren,
+  ) {
+    futureChildren.then((children) => this.children = children);
+  }
+
+  @override
+  void render(ui.Canvas canvas, Camera? camera) {
+    children.forEach((child) {
+      child.render(canvas, camera);
+    });
+  }
+
+  static Future<_RenderableGroupLayer> load(
+    Group layer,
+    _RenderableGroupLayer? parent,
+    Camera? camera,
+    Future<List<_RenderableLayer>> children,
+  ) async {
+    return _RenderableGroupLayer(layer, parent, children);
+  }
+}
+
 class _UnrenderableLayer extends _RenderableLayer {
-  _UnrenderableLayer(super.layer);
+  _UnrenderableLayer(super.layer, super.parent);
 
   @override
   void render(Canvas canvas, Camera? camera) {
@@ -409,7 +521,7 @@ class _UnrenderableLayer extends _RenderableLayer {
   bool get visible => false;
 
   static Future<_RenderableLayer> load(Layer layer) async {
-    return _UnrenderableLayer(layer);
+    return _UnrenderableLayer(layer, null);
   }
 }
 
