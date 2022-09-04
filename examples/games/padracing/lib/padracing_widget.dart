@@ -32,7 +32,7 @@ class PadracingWidget extends StatelessWidget {
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          primary: Colors.black,
+          backgroundColor: Colors.black,
           minimumSize: const Size(150, 50),
         ),
       ),
