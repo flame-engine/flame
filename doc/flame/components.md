@@ -995,11 +995,12 @@ A `ClipComponent` is a component that will clip the canvas to its size and shape
 if the component itself or any child of the `ClipComponent` renders outside of the
 `ClipComponent`'s boundaries, the part that is not inside the area will not be shown.
 
-There are three types of shapes that a `ClipComponent` can use to define the area that shoud be clipped:
+There are three types of shapes that a `ClipComponent` can use to define the area that shoud be
+clipped:
 
  - `ClipComponent.rect`: Clips the area in the form a rectangle based on its size.
  - `ClipComponent.circle`: Clips the area in the form of a circle based on its size.
- - `ClipComponent.poylon`:  Clips the area in the form of a polygon based on the points received
+ - `ClipComponent.polygon`:  Clips the area in the form of a polygon based on the points received
 in the constructor.
 
 Check the example app
