@@ -1,6 +1,7 @@
 import 'package:dashbook/dashbook.dart';
 import 'package:examples/commons/commons.dart';
 import 'package:examples/stories/components/clip_component_example.dart';
+import 'package:examples/stories/components/component_notifier_example.dart';
 import 'package:examples/stories/components/composability_example.dart';
 import 'package:examples/stories/components/debug_example.dart';
 import 'package:examples/stories/components/game_in_game_example.dart';
@@ -52,5 +53,11 @@ void addComponentsStories(Dashbook dashbook) {
       (_) => GameWidget(game: LookAtSmoothExample()),
       codeLink: baseLink('components/look_at_smooth_example.dart'),
       info: LookAtExample.description,
+    )
+    ..add(
+      'Component Notifier',
+      (_) => ComponentNotifierExampleWidget(),
+      codeLink: baseLink('components/component_notifier_example.dart'),
+      info: ComponentNotifierExampleWidget.description,
     );
 }

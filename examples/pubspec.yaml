@@ -25,6 +25,7 @@ dependencies:
   padracing: ^1.0.0
   rogue_shooter: ^0.1.0
   trex_game: ^0.1.0
+  provider: ^6.0.3
 
 dev_dependencies:
   flame_lint: ^0.1.3
