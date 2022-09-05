@@ -4,7 +4,7 @@ import 'package:flame_bloc/flame_bloc.dart';
 
 /// {@template flame_multi_bloc_provider}
 /// Similar to [FlameBlocProvider], but provides multiples blocs down
-/// tot he component tree
+/// to the component tree
 /// {@endtemplate}
 class FlameMultiBlocProvider extends Component {
   /// {@macro flame_multi_bloc_provider}

@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:flame/src/anchor.dart';
-import 'package:flame/src/components/component.dart';
+import 'package:flame/src/components/core/component.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
 import 'package:flame/src/experimental/camera_component.dart';
 import 'package:meta/meta.dart';

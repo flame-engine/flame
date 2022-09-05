@@ -52,7 +52,7 @@ void addInputStories(Dashbook dashbook) {
     ..add(
       'Keyboard (Component)',
       (_) => GameWidget(game: KeyboardListenerComponentExample()),
-      codeLink: baseLink('input/keyboard_component_example.dart'),
+      codeLink: baseLink('input/keyboard_listener_component_example.dart'),
       info: KeyboardListenerComponentExample.description,
     )
     ..add(

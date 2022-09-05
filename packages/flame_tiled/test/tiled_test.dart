@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui';
@@ -7,7 +6,7 @@ import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 import 'package:flutter/services.dart' show CachingAssetBundle;
-import 'package:test/test.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:tiled/tiled.dart';
 
 void main() {
@@ -17,7 +16,7 @@ void main() {
       mapPath: 'test/assets/map.tmx',
     );
     final tiled = await TiledComponent.load('x', Vector2.all(16));
-    expect(tiled.tileMap.batchesByLayer.length == 1, true);
+    expect(tiled.tileMap.renderableLayers.length == 1, true);
   });
 
   test('correctly loads external tileset', () async {
@@ -66,7 +65,7 @@ void main() {
 
     test(
       'Correctly loads batches list',
-      () => expect(overlapMap.batchesByLayer.length == 2, true),
+      () => expect(overlapMap.renderableLayers.length == 2, true),
     );
 
     test(
@@ -262,6 +261,42 @@ void main() {
         _renderableTiledMap.getLayer<TileLayer>('Nonexistent layer'),
         isNull,
       );
+    });
+  });
+
+  group('isometric', () {
+    late Uint8List pngData;
+    late RenderableTiledMap overlapMap;
+
+    test('renders', () async {
+      Flame.bundle = TestAssetBundle(
+        imageNames: [
+          'isometric_spritesheet.png',
+        ],
+        mapPath: 'test/assets/test_isometric.tmx',
+      );
+      overlapMap = await RenderableTiledMap.fromFile(
+        'test_isometric.tmx',
+        Vector2(256 / 4, 128 / 4),
+      );
+
+      final canvasRecorder = PictureRecorder();
+      final canvas = Canvas(canvasRecorder);
+      // Isometric maps are centered with tile(0,0) being at the top.
+      // So translate the canvas halfway.
+      canvas.translate((256 * 5) / 4 / 2, 0);
+      overlapMap.render(canvas);
+      final picture = canvasRecorder.endRecording();
+
+      // Map size is now 320 wide, but it has 1 extra tile of height becusae
+      // its actually double-height tiles.
+      final image =
+          await picture.toImageSafe(256 * 5 ~/ 4, (128 * 5 + 128) ~/ 4);
+      pngData = (await image.toByteData(format: ImageByteFormat.png))!
+          .buffer
+          .asUint8List();
+
+      expect(pngData, matchesGoldenFile('goldens/isometric.png'));
     });
   });
 }

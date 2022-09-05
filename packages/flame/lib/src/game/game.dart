@@ -3,6 +3,7 @@ import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/src/flame.dart';
 import 'package:flame/src/game/game_render_box.dart';
+import 'package:flame/src/game/overlay_manager.dart';
 import 'package:flame/src/game/projector.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
@@ -294,7 +295,7 @@ abstract class Game {
   VoidCallback? pauseEngineFn;
   VoidCallback? resumeEngineFn;
 
-  /// A property that stores an [_ActiveOverlays]
+  /// A property that stores an [OverlayManager]
   ///
   /// This is useful to render widgets on top of a game, such as a pause menu.
   /// Overlays can be made visible via [overlays].add or hidden via
@@ -306,7 +307,7 @@ abstract class Game {
   /// overlays.add(pauseOverlayIdentifier); // marks 'PauseMenu' to be rendered.
   /// overlays.remove(pauseOverlayIdentifier); // hides 'PauseMenu'.
   /// ```
-  late final overlays = _ActiveOverlays(this);
+  late final overlays = OverlayManager(this);
 
   /// Used to change the mouse cursor of the GameWidget running this game.
   /// Setting the value to null will make the GameWidget defer the choice
@@ -316,7 +317,7 @@ abstract class Game {
 
   set mouseCursor(MouseCursor value) {
     _mouseCursor = value;
-    _refreshWidget();
+    refreshWidget();
   }
 
   @visibleForTesting
@@ -333,68 +334,8 @@ abstract class Game {
   /// When a Game is attached to a `GameWidget`, this method will force that
   /// widget to be rebuilt. This can be used when updating any property which is
   /// implemented within the Flutter tree.
-  void _refreshWidget() {
+  @internal
+  void refreshWidget() {
     gameStateListeners.forEach((callback) => callback());
   }
-}
-
-/// A helper class used to control the visibility of overlays on a [Game]
-/// instance. See [Game.overlays].
-class _ActiveOverlays {
-  _ActiveOverlays(this._game);
-
-  final Game _game;
-  final Set<String> _activeOverlays = {};
-
-  /// Clear all active overlays.
-  void clear() {
-    _activeOverlays.clear();
-    _game._refreshWidget();
-  }
-
-  /// Marks the [overlayName] to be rendered.
-  bool add(String overlayName) {
-    final setChanged = _activeOverlays.add(overlayName);
-    if (setChanged) {
-      _game._refreshWidget();
-    }
-    return setChanged;
-  }
-
-  /// Marks [overlayNames] to be rendered.
-  void addAll(Iterable<String> overlayNames) {
-    final overlayCountBeforeAdded = _activeOverlays.length;
-    _activeOverlays.addAll(overlayNames);
-
-    final overlayCountAfterAdded = _activeOverlays.length;
-    if (overlayCountBeforeAdded != overlayCountAfterAdded) {
-      _game._refreshWidget();
-    }
-  }
-
-  /// Hides the [overlayName].
-  bool remove(String overlayName) {
-    final hasRemoved = _activeOverlays.remove(overlayName);
-    if (hasRemoved) {
-      _game._refreshWidget();
-    }
-    return hasRemoved;
-  }
-
-  /// Hides multiple overlays specified in [overlayNames].
-  void removeAll(Iterable<String> overlayNames) {
-    final overlayCountBeforeRemoved = _activeOverlays.length;
-    _activeOverlays.removeAll(overlayNames);
-
-    final overlayCountAfterRemoved = _activeOverlays.length;
-    if (overlayCountBeforeRemoved != overlayCountAfterRemoved) {
-      _game._refreshWidget();
-    }
-  }
-
-  /// The names of all currently active overlays.
-  Set<String> get value => _activeOverlays;
-
-  /// Returns if the given [overlayName] is active
-  bool isActive(String overlayName) => _activeOverlays.contains(overlayName);
 }

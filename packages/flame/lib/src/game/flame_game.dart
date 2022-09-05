@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:flame/src/components/component.dart';
+import 'package:flame/src/components/core/component.dart';
 import 'package:flame/src/extensions/vector2.dart';
 import 'package:flame/src/game/camera/camera.dart';
 import 'package:flame/src/game/camera/camera_wrapper.dart';
@@ -66,10 +66,10 @@ class FlameGame extends Component with Game {
   @override
   @mustCallSuper
   void update(double dt) {
-    _cameraWrapper.update(dt);
     if (parent == null) {
       updateTree(dt);
     }
+    _cameraWrapper.update(dt);
   }
 
   @override

@@ -3,9 +3,9 @@ import 'dart:collection';
 
 import 'package:collection/collection.dart';
 import 'package:flame/src/cache/value_cache.dart';
-import 'package:flame/src/components/component_set.dart';
+import 'package:flame/src/components/core/component_set.dart';
+import 'package:flame/src/components/core/position_type.dart';
 import 'package:flame/src/components/mixins/coordinate_transform.dart';
-import 'package:flame/src/components/position_type.dart';
 import 'package:flame/src/game/flame_game.dart';
 import 'package:flame/src/game/game.dart';
 import 'package:flame/src/gestures/events.dart';
@@ -578,6 +578,15 @@ class Component {
   /// and their children.
   void removeAll(Iterable<Component> components) {
     components.forEach(remove);
+  }
+
+  /// Removes all the children for which the [test] function returns true.
+  void removeWhere(bool Function(Component component) test) {
+    children.forEach((component) {
+      if (test(component)) {
+        remove(component);
+      }
+    });
   }
 
   /// Remove the component from its parent in the next tick.
