@@ -9,7 +9,7 @@ import 'package:flame/experimental.dart';
 abstract class ClipComponent extends PositionComponent {
   /// {@macro clip_component}
   ///
-  /// Clips the canvas based its shape and its size.
+  /// Clips the canvas based its shape and size.
   ClipComponent({
     super.position,
     super.size,
