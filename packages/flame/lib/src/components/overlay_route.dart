@@ -1,4 +1,4 @@
-import 'package:flame/src/components/component.dart';
+import 'package:flame/src/components/core/component.dart';
 import 'package:flame/src/components/route.dart';
 import 'package:flame/src/game/game.dart';
 import 'package:flutter/widgets.dart' hide Route;

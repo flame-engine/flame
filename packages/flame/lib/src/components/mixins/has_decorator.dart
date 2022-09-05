@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:flame/src/components/component.dart';
+import 'package:flame/src/components/core/component.dart';
 import 'package:flame/src/rendering/decorator.dart';
 
 /// [HasDecorator] mixin adds a nullable [decorator] field to a Component. If

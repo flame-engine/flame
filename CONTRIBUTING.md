@@ -108,10 +108,10 @@ two versions after the current one, such that there will be at least one stable 
 users get to see the deprecation warning and in the version after that (or a later version) the
 deprecated entity should be removed.
 
-Example (if the current version is v1.1.0):
+Example (if the current version is v1.3.0):
 
 ```dart
-@Deprecated('Will be removed in v1.3.0, use nonDeprecatedFeature() instead')
+@Deprecated('Will be removed in v1.5.0, use nonDeprecatedFeature() instead')
 void deprecatedFeature() {}
 ```
 
@@ -161,7 +161,7 @@ commit message.
 ## Creating a release
 
 There are a few things to think about when doing a release:
- 
+
  - Search through the codebase for `@Deprecated` methods/fields and remove the ones that are marked
    for removal in the version that you are intending to release.
  - Create a PR containing the changes for removing the deprecated entities.
@@ -173,7 +173,7 @@ There are a few things to think about when doing a release:
    sure that all the versions are correct.
  - Once you are satisfied with the result of the dry run, run `melos publish --no-dry-run`
  - Create a PR containing the updated changelog and `pubspec.yaml` files.
-   
+
 
 [GitHub issue]: https://github.com/flame-engine/flame/issues/new
 [GitHub issues]: https://github.com/flame-engine/flame/issues/new

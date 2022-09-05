@@ -3,7 +3,7 @@ import 'dart:ui' hide Offset;
 
 import 'package:collection/collection.dart';
 import 'package:flame/src/anchor.dart';
-import 'package:flame/src/components/component.dart';
+import 'package:flame/src/components/core/component.dart';
 import 'package:flame/src/components/mixins/coordinate_transform.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
 import 'package:flame/src/extensions/offset.dart';
