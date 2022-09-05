@@ -41,7 +41,11 @@ abstract class ClipComponent extends PositionComponent {
 
   @override
   bool containsPoint(Vector2 point) {
-    // TODO, test this
+    return _shape.containsPoint(point - position);
+  }
+
+  @override
+  bool containsLocalPoint(Vector2 point) {
     return _shape.containsPoint(point);
   }
 }
@@ -118,7 +122,11 @@ class PolygonClipComponent extends ClipComponent {
 
   @override
   Shape _buildShape() {
-    final translatedPoints = _points.map((p) => p..multiply(size)).toList();
+    final translatedPoints = _points
+        .map(
+          (p) => p.clone()..multiply(size),
+        )
+        .toList();
     return Polygon(translatedPoints);
   }
 }

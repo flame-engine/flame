@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/game.dart';
+import 'package:flame/input.dart';
 import 'package:flutter/material.dart' hide Gradient;
 
 class _Rectangle extends RectangleComponent {
@@ -35,7 +36,7 @@ class _Rectangle extends RectangleComponent {
         );
 }
 
-class ClipComponentExample extends FlameGame {
+class ClipComponentExample extends FlameGame with TapDetector {
   static String description = '';
 
   @override
@@ -65,5 +66,22 @@ class ClipComponentExample extends FlameGame {
         ),
       ],
     );
+  }
+
+  @override
+  void onTapUp(TapUpInfo info) {
+    final position = info.eventPosition.game;
+    final hit = children
+        .whereType<PositionComponent>()
+        .where(
+          (component) => component.containsLocalPoint(
+            position - component.position,
+          ),
+        )
+        .toList();
+
+    hit.forEach((component) {
+      component.size += Vector2.all(10);
+    });
   }
 }
