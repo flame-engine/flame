@@ -66,7 +66,9 @@ class TiledComponent<T extends FlameGame> extends Component with HasGameRef<T> {
     late Vector2 size;
 
     final tileScaled = Vector2(
-        tileMap.map.tileWidth * xScale, tileMap.map.tileHeight * yScale);
+      tileMap.map.tileWidth * xScale,
+      tileMap.map.tileHeight * yScale,
+    );
 
     if (tMap.orientation == MapOrientation.hexagonal) {
       if (tMap.staggerAxis == StaggerAxis.y) {
