@@ -266,23 +266,30 @@ void main() {
 
   group('isometric', () {
     late Uint8List pngData;
-    late RenderableTiledMap overlapMap;
+    late TiledComponent component;
 
-    test('renders', () async {
+    setUp(() async {
       Flame.bundle = TestAssetBundle(
         imageNames: [
           'isometric_spritesheet.png',
         ],
         mapPath: 'test/assets/test_isometric.tmx',
       );
-      overlapMap = await RenderableTiledMap.fromFile(
+      component = await TiledComponent.load(
         'test_isometric.tmx',
         Vector2(256 / 4, 128 / 4),
       );
+    });
 
+    test('component size', () {
+      expect(component.tileMap.destTileSize, Vector2(64, 32));
+      expect(component.size, Vector2(64 * 5, 32 * 5));
+    });
+
+    test('renders', () async {
       final canvasRecorder = PictureRecorder();
       final canvas = Canvas(canvasRecorder);
-      overlapMap.render(canvas);
+      component.tileMap.render(canvas);
       final picture = canvasRecorder.endRecording();
 
       // Map size is now 320 wide, but it has 1 extra tile of height becusae
@@ -299,9 +306,9 @@ void main() {
 
   group('hexagonal', () {
     late Uint8List pngData;
-    late RenderableTiledMap overlapMap;
+    late TiledComponent component;
 
-    Future<RenderableTiledMap> setupMap(
+    Future<TiledComponent> setupMap(
       String tmxFile,
       String imageFile,
       Vector2 destTileSize,
@@ -312,7 +319,7 @@ void main() {
         ],
         mapPath: 'test/assets/$tmxFile',
       );
-      return overlapMap = await RenderableTiledMap.fromFile(
+      return component = await TiledComponent.load(
         tmxFile,
         destTileSize,
       );
@@ -325,9 +332,11 @@ void main() {
         Vector2(60, 39),
       );
 
+      expect(component.size, Vector2(240, 214.5));
+
       final canvasRecorder = PictureRecorder();
       final canvas = Canvas(canvasRecorder);
-      overlapMap.render(canvas);
+      component.tileMap.render(canvas);
       final picture = canvasRecorder.endRecording();
 
       final image = await picture.toImageSafe(240, 215);
@@ -345,9 +354,11 @@ void main() {
         Vector2(60, 39),
       );
 
+      expect(component.size, Vector2(240, 214.5));
+
       final canvasRecorder = PictureRecorder();
       final canvas = Canvas(canvasRecorder);
-      overlapMap.render(canvas);
+      component.tileMap.render(canvas);
       final picture = canvasRecorder.endRecording();
 
       final image = await picture.toImageSafe(240, 215);
@@ -365,9 +376,11 @@ void main() {
         Vector2(60, 52),
       );
 
+      expect(component.size, Vector2(330, 208));
+
       final canvasRecorder = PictureRecorder();
       final canvas = Canvas(canvasRecorder);
-      overlapMap.render(canvas);
+      component.tileMap.render(canvas);
       final picture = canvasRecorder.endRecording();
 
       final image = await picture.toImageSafe(330, 208);
@@ -385,9 +398,11 @@ void main() {
         Vector2(60, 52),
       );
 
+      expect(component.size, Vector2(330, 208));
+
       final canvasRecorder = PictureRecorder();
       final canvas = Canvas(canvasRecorder);
-      overlapMap.render(canvas);
+      component.tileMap.render(canvas);
       final picture = canvasRecorder.endRecording();
 
       final image = await picture.toImageSafe(330, 208);
