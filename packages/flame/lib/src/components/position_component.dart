@@ -74,6 +74,7 @@ class PositionComponent extends Component
     Vector2? size,
     Vector2? scale,
     double? angle,
+    this.angularOffset = 0,
     Anchor? anchor,
     super.children,
     super.priority,
@@ -87,6 +88,9 @@ class PositionComponent extends Component
     if (angle != 0) {
       transform.angle = angle ?? 0;
     }
+
+    transform.angle += angularOffset;
+
     if (scale != null) {
       transform.scale = scale;
     }
@@ -97,6 +101,12 @@ class PositionComponent extends Component
   final Transform2D transform;
   final NotifyingVector2 _size;
   Anchor _anchor;
+
+  /// Should be used to account for any angular offset needed to
+  /// orient the component in desired direction. It can be thought
+  /// of as rotating the local co-ordinate system of the component
+  /// by [angularOffset].
+  double angularOffset;
 
   /// The decorator is used to apply visual effects to a component.
   ///
@@ -132,9 +142,9 @@ class PositionComponent extends Component
   /// rotated around its anchor point in the clockwise direction if the
   /// angle is positive, or counterclockwise if the angle is negative.
   @override
-  double get angle => transform.angle;
+  double get angle => transform.angle - angularOffset;
   @override
-  set angle(double a) => transform.angle = a;
+  set angle(double a) => transform.angle = a + angularOffset;
 
   /// The scale factor of this component. The scale can be different along
   /// the X and Y dimensions. A scale greater than 1 makes the component
@@ -333,8 +343,10 @@ class PositionComponent extends Component
   Vector2 get absoluteCenter => absolutePositionOfAnchor(Anchor.center);
 
   /// Rotates the component to look at given target.
-  void lookAt(Vector2 target) =>
-      angle = Vector2(0, -1).angleToSigned(target - absolutePosition);
+  void lookAt(Vector2 target) {
+    final defaultOrientation = Vector2(0, -1)..rotate(angularOffset);
+    angle = defaultOrientation.angleToSigned(target - absolutePosition);
+  }
 
   //#endregion
 
