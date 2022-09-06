@@ -12,7 +12,7 @@ class ComponentNotifier<T extends Component> extends ChangeNotifier {
   /// The list of components.
   List<T> get components => _components;
 
-  /// Returns a sinle element of the components on the game.
+  /// Returns a single element of the components on the game.
   ///
   /// Returns null if there is no component.
   T? get single {
