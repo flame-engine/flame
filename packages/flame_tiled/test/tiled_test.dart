@@ -282,9 +282,6 @@ void main() {
 
       final canvasRecorder = PictureRecorder();
       final canvas = Canvas(canvasRecorder);
-      // Isometric maps are centered with tile(0,0) being at the top.
-      // So translate the canvas halfway.
-      canvas.translate((256 * 5) / 4 / 2, 0);
       overlapMap.render(canvas);
       final picture = canvasRecorder.endRecording();
 
@@ -297,6 +294,108 @@ void main() {
           .asUint8List();
 
       expect(pngData, matchesGoldenFile('goldens/isometric.png'));
+    });
+  });
+
+  group('hexagonal', () {
+    late Uint8List pngData;
+    late RenderableTiledMap overlapMap;
+
+    Future<RenderableTiledMap> setupMap(
+      String tmxFile,
+      String imageFile,
+      Vector2 destTileSize,
+    ) async {
+      Flame.bundle = TestAssetBundle(
+        imageNames: [
+          imageFile,
+        ],
+        mapPath: 'test/assets/$tmxFile',
+      );
+      return overlapMap = await RenderableTiledMap.fromFile(
+        tmxFile,
+        destTileSize,
+      );
+    }
+
+    test('flat + even staggerd', () async {
+      await setupMap(
+        'flat_hex_even.tmx',
+        'Tileset_Hexagonal_FlatTop_60x39_60x60.png',
+        Vector2(60, 39),
+      );
+
+      final canvasRecorder = PictureRecorder();
+      final canvas = Canvas(canvasRecorder);
+      overlapMap.render(canvas);
+      final picture = canvasRecorder.endRecording();
+
+      final image = await picture.toImageSafe(240, 215);
+      pngData = (await image.toByteData(format: ImageByteFormat.png))!
+          .buffer
+          .asUint8List();
+
+      expect(pngData, matchesGoldenFile('goldens/flat_hex_even.png'));
+    });
+
+    test('flat + odd staggerd', () async {
+      await setupMap(
+        'flat_hex_odd.tmx',
+        'Tileset_Hexagonal_FlatTop_60x39_60x60.png',
+        Vector2(60, 39),
+      );
+
+      final canvasRecorder = PictureRecorder();
+      final canvas = Canvas(canvasRecorder);
+      overlapMap.render(canvas);
+      final picture = canvasRecorder.endRecording();
+
+      final image = await picture.toImageSafe(240, 215);
+      pngData = (await image.toByteData(format: ImageByteFormat.png))!
+          .buffer
+          .asUint8List();
+
+      expect(pngData, matchesGoldenFile('goldens/flat_hex_odd.png'));
+    });
+
+    test('pointy + even staggerd', () async {
+      await setupMap(
+        'pointy_hex_even.tmx',
+        'Tileset_Hexagonal_PointyTop_60x52_60x80.png',
+        Vector2(60, 52),
+      );
+
+      final canvasRecorder = PictureRecorder();
+      final canvas = Canvas(canvasRecorder);
+      overlapMap.render(canvas);
+      final picture = canvasRecorder.endRecording();
+
+      final image = await picture.toImageSafe(330, 208);
+      pngData = (await image.toByteData(format: ImageByteFormat.png))!
+          .buffer
+          .asUint8List();
+
+      expect(pngData, matchesGoldenFile('goldens/pointy_hex_even.png'));
+    });
+
+    test('pointy + odd staggerd', () async {
+      await setupMap(
+        'pointy_hex_odd.tmx',
+        'Tileset_Hexagonal_PointyTop_60x52_60x80.png',
+        Vector2(60, 52),
+      );
+
+      final canvasRecorder = PictureRecorder();
+      final canvas = Canvas(canvasRecorder);
+      overlapMap.render(canvas);
+      final picture = canvasRecorder.endRecording();
+
+      final image = await picture.toImageSafe(330, 208);
+      pngData = (await image.toByteData(format: ImageByteFormat.png))!
+          .buffer
+          .asUint8List();
+
+      expect(pngData, matchesGoldenFile('goldens/pointy_hex_odd.png'));
     });
   });
 }
