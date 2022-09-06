@@ -7,6 +7,7 @@ import 'package:flame/game.dart';
 import 'package:flame/sprite.dart';
 import 'package:flame_tiled/src/flame_tsx_provider.dart';
 import 'package:flame_tiled/src/simple_flips.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/painting.dart';
 import 'package:tiled/tiled.dart';
 
@@ -259,8 +260,36 @@ class _RenderableTileLayer extends _RenderableLayer<TileLayer> {
     final tileData = layer.tileData!;
     final batchMap = _cachedSpriteBatches;
     final halfTile = _destTileSize / 2;
+    final size = _destTileSize;
+
+    final isometricXShift = _map.width * size.x * 0.5;
+
+    var staggerY = 0.0;
+    var staggerX = 0.0;
+    if (_map.orientation == MapOrientation.hexagonal) {
+      // Hexagonal Ponity Tiles move down by a fractional amount.
+      if (_map.staggerAxis == StaggerAxis.y) {
+        staggerY = _map.tileHeight * 0.75;
+      }
+      // Hexagonal Flat Tiles move right by a fractional amount.
+      if (_map.staggerAxis == StaggerAxis.x) {
+        staggerX = _map.tileWidth * 0.75;
+      }
+    }
+
     for (var ty = 0; ty < tileData.length; ty++) {
       final tileRow = tileData[ty];
+
+      // Hexagonal Pointy Tiles shift left and right depending on the row
+      if (_map.staggerAxis == StaggerAxis.y) {
+        if ((ty.isOdd && _map.staggerIndex == StaggerIndex.odd) ||
+            (ty.isEven && _map.staggerIndex == StaggerIndex.even)) {
+          staggerX = halfTile.x;
+        } else {
+          staggerX = 0.0;
+        }
+      }
+
       for (var tx = 0; tx < tileRow.length; tx++) {
         final tileGid = tileRow[tx];
         if (tileGid.tile == 0) {
@@ -279,18 +308,46 @@ class _RenderableTileLayer extends _RenderableLayer<TileLayer> {
           continue;
         }
 
+        // Hexagonal Flat tiles shift up and down as we move across the row.
+        if (_map.staggerAxis == StaggerAxis.x) {
+          if ((tx.isOdd && _map.staggerIndex == StaggerIndex.odd) ||
+              (tx.isEven && _map.staggerIndex == StaggerIndex.even)) {
+            staggerY = halfTile.y;
+          } else {
+            staggerY = 0.0;
+          }
+        }
+
         final src = tileset.computeDrawRect(tile).toRect();
         final flips = SimpleFlips.fromFlips(tileGid.flips);
-        final size = _destTileSize;
         final scale = size.x / src.width;
-        final anchorX = src.width / 2;
-        final anchorY = src.height / 2;
+        final anchorX = _map.orientation == MapOrientation.hexagonal
+            ? (src.width - (_map.tileWidth / 2))
+            : src.width / 2;
+        final anchorY = _map.orientation == MapOrientation.hexagonal
+            ? (src.height - (_map.tileHeight / 2))
+            : src.height / 2;
 
         late double offsetX;
         late double offsetY;
         if (_map.orientation == MapOrientation.isometric) {
-          offsetX = halfTile.x * (tx - ty);
-          offsetY = halfTile.y * (tx + ty);
+          offsetX = halfTile.x * (tx - ty) + isometricXShift;
+          offsetY = halfTile.y * (tx + ty) - size.y;
+        } else if (_map.orientation == MapOrientation.hexagonal) {
+          // halfTile.x: shfits the map half a tile forward rather than
+          //             lining up on at the center.
+          // halfTile.y: shfits the map half a tile down rather than
+          //             lining up on at the center.
+          // StaggerX/Y: Moves the tile forward/down depending on orientation.
+          //  * stagger: Hexagonal tiles move down or right by only a fraction,
+          //             specifically 3/4 the width or height, for packing.
+          if (_map.staggerAxis == StaggerAxis.y) {
+            offsetX = tx * _map.tileWidth + staggerX + halfTile.x;
+            offsetY = ty * staggerY + halfTile.y;
+          } else {
+            offsetX = tx * staggerX + halfTile.x;
+            offsetY = ty * _map.tileHeight + staggerY + halfTile.y;
+          }
         } else {
           offsetX = (tx + .5) * size.x;
           offsetY = (ty + .5) * size.y;
@@ -344,12 +401,13 @@ class _RenderableTileLayer extends _RenderableLayer<TileLayer> {
   static Future<Map<String, SpriteBatch>> _loadImages(TiledMap map) async {
     final result = <String, SpriteBatch>{};
 
-    await Future.forEach(map.tiledImages(), (TiledImage img) async {
+    for (final img in map.tiledImages()) {
       final src = img.source;
       if (src != null) {
-        result[src] = await SpriteBatch.load(src);
+        const useAtlas = !kIsWeb;
+        result[src] = await SpriteBatch.load(src, useAtlas: useAtlas);
       }
-    });
+    }
 
     return result;
   }
