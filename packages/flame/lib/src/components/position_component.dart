@@ -332,6 +332,10 @@ class PositionComponent extends Component
   /// The absolute center of the component.
   Vector2 get absoluteCenter => absolutePositionOfAnchor(Anchor.center);
 
+  /// Rotates the component to look at given target.
+  void lookAt(Vector2 target) =>
+      angle = Vector2(0, -1).angleToSigned(target - absolutePosition);
+
   //#endregion
 
   //#region Mutators
