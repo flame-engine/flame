@@ -571,6 +571,8 @@ class _RenderableTileLayer extends _RenderableLayer<TileLayer> {
   void render(Canvas canvas, Camera? camera) {
     canvas.save();
 
+    canvas.translate(offsetX, offsetY);
+
     if (camera != null) {
       _applyParallaxOffset(canvas, camera);
     }
