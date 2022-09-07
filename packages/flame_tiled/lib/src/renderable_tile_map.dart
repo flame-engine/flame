@@ -175,21 +175,18 @@ class RenderableTiledMap {
 
           case Group:
             final groupLayer = layer as Group;
-            final childrenCompleter = Completer<List<_RenderableLayer>>();
-            final renderableGroup = _RenderableGroupLayer.load(
+            final renderableGroup = _RenderableGroupLayer(
               groupLayer,
               parent,
-              camera,
-              childrenCompleter.future,
             );
             final children = _renderableLayers(
               groupLayer.layers,
-              await renderableGroup,
+              renderableGroup,
               map,
               destTileSize,
               camera,
             );
-            childrenCompleter.complete(await children);
+            renderableGroup.children = await children;
             return renderableGroup;
 
           default:
@@ -675,30 +672,22 @@ class _RenderableImageLayer extends _RenderableLayer<ImageLayer> {
 }
 
 class _RenderableGroupLayer extends _RenderableLayer<Group> {
+  /// The child layers of this [Group] to be rendered recursively.
+  ///
+  /// NOTE: This is set externally instead of via constructor params because
+  ///       there are cyclic dependencies when loading the renderable layers.
   late final List<_RenderableLayer> children;
 
   _RenderableGroupLayer(
     super.layer,
     super.parent,
-    Future<List<_RenderableLayer>> futureChildren,
-  ) {
-    futureChildren.then((children) => this.children = children);
-  }
+  );
 
   @override
   void render(ui.Canvas canvas, Camera? camera) {
     children.forEach((child) {
       child.render(canvas, camera);
     });
-  }
-
-  static Future<_RenderableGroupLayer> load(
-    Group layer,
-    _RenderableGroupLayer? parent,
-    Camera? camera,
-    Future<List<_RenderableLayer>> children,
-  ) async {
-    return _RenderableGroupLayer(layer, parent, children);
   }
 }
 
