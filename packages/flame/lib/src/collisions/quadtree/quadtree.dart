@@ -8,11 +8,46 @@ extension _QuadMethods on Rect {
       bottom <= box.top);
 }
 
+class QuadTreeNodeDebugInfo {
+  QuadTreeNodeDebugInfo(this.rect, this._node, this.cd);
+
+  factory QuadTreeNodeDebugInfo.init(QuadTreeCollisionDetection cd) {
+    final node = cd.quadBroadphase.tree._rootNode;
+    final rect = cd.quadBroadphase.tree.mainBoxSize;
+    return QuadTreeNodeDebugInfo(rect, node, cd);
+  }
+
+  final Rect rect;
+  final _Node _node;
+  final QuadTreeCollisionDetection cd;
+
+  List<ShapeHitbox> get ownElements => _node.hitboxes as List<ShapeHitbox>;
+
+  List<ShapeHitbox> get allElements =>
+      _node.valuesRecursive as List<ShapeHitbox>;
+
+  List<QuadTreeNodeDebugInfo> get nodes {
+    final list = <QuadTreeNodeDebugInfo>[];
+    for (var i = 0; i < _node.children.length; i++) {
+      final node = _node.children[i];
+      if (node == null) {
+        continue;
+      }
+
+      final nodeRect = QuadTree._computeBox(rect, i);
+      final dbg = QuadTreeNodeDebugInfo(nodeRect, node, cd);
+      list.add(dbg);
+      list.addAll(dbg.nodes);
+    }
+    return list;
+  }
+}
+
 class _Node<T extends Hitbox<T>> {
   final List<_Node?> children =
       List.generate(4, (index) => null, growable: false);
 
-  var _hitboxes = <T>[];
+  List<T> hitboxes = <T>[];
 
   _Node? parent;
   int id = 0;
@@ -20,7 +55,7 @@ class _Node<T extends Hitbox<T>> {
   List<T> get valuesRecursive {
     final data = <T>[];
 
-    data.addAll(_hitboxes);
+    data.addAll(hitboxes);
     for (final ch in children) {
       if (ch == null) {
         continue;
@@ -28,6 +63,11 @@ class _Node<T extends Hitbox<T>> {
       data.addAll(ch.valuesRecursive as List<T>);
     }
     return data;
+  }
+
+  @override
+  String toString() {
+    return 'node $id';
   }
 }
 
@@ -59,7 +99,7 @@ class QuadTree<T extends Hitbox<T>> {
   Rect mainBoxSize;
 
   var _rootNode = _Node<T>();
-  int _nodeLastId = 0;
+  int _nodeLastId = -1;
   final _oldPositionByItem = <ShapeHitbox, Aabb2>{};
   final _itemAtNode = <ShapeHitbox, _Node>{};
 
@@ -77,12 +117,12 @@ class QuadTree<T extends Hitbox<T>> {
 
   void clear() {
     _rootNode = _Node<T>();
-    _nodeLastId = 0;
+    _nodeLastId = -1;
     _itemAtNode.clear();
     _oldPositionByItem.clear();
   }
 
-  Rect _computeBox(Rect box, int i) {
+  static Rect _computeBox(Rect box, int i) {
     final origin = box.topLeft;
     final childSize = (box.size / 2).toOffset();
     switch (i) {
@@ -161,8 +201,8 @@ class QuadTree<T extends Hitbox<T>> {
     _Node<T> finalNode;
     if (_isLeaf(node)) {
       // Insert the value in this node if possible
-      if (depth >= maxLevels || node._hitboxes.length < maxObjects) {
-        node._hitboxes.add(value);
+      if (depth >= maxLevels || node.hitboxes.length < maxObjects) {
+        node.hitboxes.add(value);
         finalNode = node;
       }
       // Otherwise, we split and we try again
@@ -188,7 +228,7 @@ class QuadTree<T extends Hitbox<T>> {
       }
       // Otherwise, we add the value in the current node
       else {
-        node._hitboxes.add(value);
+        node.hitboxes.add(value);
         finalNode = node;
       }
     }
@@ -210,19 +250,19 @@ class QuadTree<T extends Hitbox<T>> {
 
     // Assign values to children
     final moveValues = <T>[]; // New values for this node
-    for (final value in node._hitboxes) {
+    for (final value in node.hitboxes) {
       final quadrant = _getQuadrant(box, _getBoxOfValue(value as T));
       if (quadrant != -1) {
         final children = node.children[quadrant];
         if (children == null) {
           throw 'Invalid index $quadrant';
         }
-        children._hitboxes.add(value);
+        children.hitboxes.add(value);
       } else {
         moveValues.add(value);
       }
     }
-    node._hitboxes = moveValues;
+    node.hitboxes = moveValues;
   }
 
   void remove(T hitbox, {bool oldPosition = false}) =>
@@ -233,7 +273,7 @@ class QuadTree<T extends Hitbox<T>> {
     if (node == null) {
       return _remove(_rootNode, mainBoxSize, hitbox, oldPosition);
     } else {
-      return node._hitboxes.remove(hitbox);
+      return node.hitboxes.remove(hitbox);
     }
   }
 
@@ -277,14 +317,14 @@ class QuadTree<T extends Hitbox<T>> {
   }
 
   void _removeValue(_Node node, T value) {
-    node._hitboxes.removeWhere((element) => element == value);
+    node.hitboxes.removeWhere((element) => element == value);
   }
 
   /// FIXME: never called.
   /// An mechanics should be implemented to optimize all tree recursively
   bool _tryMerge(_Node node) {
     assert(!_isLeaf(node), 'Only interior nodes can be merged');
-    var nbValues = node._hitboxes.length;
+    var nbValues = node.hitboxes.length;
     for (final child in node.children) {
       if (child == null) {
         throw 'Child must be not null';
@@ -292,7 +332,7 @@ class QuadTree<T extends Hitbox<T>> {
       if (!_isLeaf(child)) {
         return false;
       }
-      nbValues += child._hitboxes.length;
+      nbValues += child.hitboxes.length;
     }
     if (nbValues <= maxLevels) {
       // Merge the values of all the children
@@ -300,8 +340,8 @@ class QuadTree<T extends Hitbox<T>> {
         if (child == null) {
           throw 'Child must be not null';
         }
-        node._hitboxes.addAll(child._hitboxes);
-        child._hitboxes.clear();
+        node.hitboxes.addAll(child.hitboxes);
+        child.hitboxes.clear();
       }
       return true;
     } else {
@@ -319,7 +359,7 @@ class QuadTree<T extends Hitbox<T>> {
       _querySlow(_rootNode, mainBoxSize, _getBoxOfValue(value), values);
     } else {
       id = node.id;
-      values.addAll(node._hitboxes as List<T>);
+      values.addAll(node.hitboxes as List<T>);
       values.addAll(_getChildrenItems(node));
       values.addAll(_getParentItems(node));
     }
@@ -330,7 +370,7 @@ class QuadTree<T extends Hitbox<T>> {
     final list = <T>[];
     for (final child in parent.children) {
       if (child != null) {
-        list.addAll(child._hitboxes as List<T>);
+        list.addAll(child.hitboxes as List<T>);
         if (child.children[0] != null) {
           list.addAll(_getChildrenItems(child));
         }
@@ -343,7 +383,7 @@ class QuadTree<T extends Hitbox<T>> {
     final list = <T>[];
     final parent = node.parent;
     if (parent != null) {
-      list.addAll(parent._hitboxes as List<T>);
+      list.addAll(parent.hitboxes as List<T>);
       list.addAll(_getParentItems(parent));
     }
     return list;
@@ -351,7 +391,7 @@ class QuadTree<T extends Hitbox<T>> {
 
   void _querySlow(_Node node, Rect box, Rect queryBox, List<T> values) {
     // assert(queryBox.intersects(box));
-    for (final value in node._hitboxes) {
+    for (final value in node.hitboxes) {
       if (queryBox.intersects(_getBoxOfValue(value as T))) {
         values.add(value);
       }

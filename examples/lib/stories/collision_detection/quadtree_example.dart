@@ -66,7 +66,11 @@ Use WASD to move player. Use mouse scroll to change zoom.
     add(player);
     this.player = player;
     camera.followComponent(player);
-
+    add(
+      QuadTreeDebugComponent(
+        collisionDetection as QuadTreeCollisionDetection,
+      ),
+    );
     add(LayerComponent(staticLayer));
     add(FpsTextComponent());
     camera.zoom = 1;
@@ -257,4 +261,21 @@ extension Vector2Ext on Vector2 {
   }
 }
 
+class QuadTreeDebugComponent extends PositionComponent with HasPaint {
+  QuadTreeDebugComponent(QuadTreeCollisionDetection cd) {
+    dbg = QuadTreeNodeDebugInfo.init(cd);
+    paint.color = Colors.blue;
+    paint.style = PaintingStyle.stroke;
+  }
+
+  late final QuadTreeNodeDebugInfo dbg;
+
+  @override
+  void render(Canvas canvas) {
+    final nodes = dbg.nodes;
+    for (final node in nodes) {
+      canvas.drawRect(node.rect, paint);
+    }
+  }
+}
 //#endregion
