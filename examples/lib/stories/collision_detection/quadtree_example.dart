@@ -266,6 +266,7 @@ class QuadTreeDebugComponent extends PositionComponent with HasPaint {
     dbg = QuadTreeNodeDebugInfo.init(cd);
     paint.color = Colors.blue;
     paint.style = PaintingStyle.stroke;
+    priority = 10;
   }
 
   late final QuadTreeNodeDebugInfo dbg;
@@ -275,6 +276,19 @@ class QuadTreeDebugComponent extends PositionComponent with HasPaint {
     final nodes = dbg.nodes;
     for (final node in nodes) {
       canvas.drawRect(node.rect, paint);
+      final nodeElements = node.ownElements;
+      if (!node.isLeaf && nodeElements.isNotEmpty) {
+        final boxPaint = Paint();
+
+        boxPaint.style = PaintingStyle.stroke;
+        boxPaint.color = Colors.lightGreenAccent;
+        boxPaint.strokeWidth = 2;
+        for (final box in nodeElements) {
+          final rect = Rect.fromLTRB(
+              box.aabb.min.x, box.aabb.min.y, box.aabb.max.x, box.aabb.max.y);
+          canvas.drawRect(rect, boxPaint);
+        }
+      }
     }
   }
 }

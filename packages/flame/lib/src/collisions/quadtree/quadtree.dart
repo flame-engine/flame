@@ -26,6 +26,8 @@ class QuadTreeNodeDebugInfo {
   List<ShapeHitbox> get allElements =>
       _node.valuesRecursive as List<ShapeHitbox>;
 
+  bool get isLeaf => _node.children[0] == null;
+
   List<QuadTreeNodeDebugInfo> get nodes {
     final list = <QuadTreeNodeDebugInfo>[];
     for (var i = 0; i < _node.children.length; i++) {
