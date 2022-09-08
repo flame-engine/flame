@@ -198,16 +198,16 @@ class RenderableTiledMap {
 
   /// Handle game resize and propagate it to renderable layers
   void handleResize(Vector2 canvasSize) {
-    renderableLayers.forEach((rl) {
+    for (final rl in renderableLayers) {
       rl.handleResize(canvasSize);
-    });
+    }
   }
 
   /// Rebuilds the cache for rendering
   void _refreshCache() {
-    renderableLayers.forEach((rl) {
+    for (final rl in renderableLayers) {
       rl.refreshCache();
-    });
+    }
   }
 
   /// Renders each renderable layer in the same order specified by the Tiled map
@@ -218,9 +218,9 @@ class RenderableTiledMap {
 
     // paint each layer in reverse order, because the last layers should be
     // rendered beneath the first layers
-    renderableLayers.where((l) => l.visible).forEach((renderableLayer) {
-      renderableLayer.render(c, camera);
-    });
+    for (final rl in renderableLayers.where((l) => l.visible)) {
+      rl.render(c, camera);
+    }
   }
 
   /// Returns a layer of type [T] with given [name] from all the layers
@@ -574,9 +574,9 @@ class _RenderableTileLayer extends _RenderableLayer<TileLayer> {
       _applyParallaxOffset(canvas, camera);
     }
 
-    _cachedSpriteBatches.values.forEach((batch) {
+    for (final batch in _cachedSpriteBatches.values) {
       batch.render(canvas, paint: _layerPaint);
-    });
+    }
 
     canvas.restore();
   }
@@ -685,9 +685,9 @@ class _RenderableGroupLayer extends _RenderableLayer<Group> {
 
   @override
   void render(ui.Canvas canvas, Camera? camera) {
-    children.forEach((child) {
+    for (final child in children) {
       child.render(canvas, camera);
-    });
+    }
   }
 }
 
