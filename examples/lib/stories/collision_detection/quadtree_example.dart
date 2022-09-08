@@ -18,6 +18,8 @@ In this example the standard "Sweep and Prune" algorithm is replaced by
 "Quad Tree". Quad Tree is more effective approach to handle collisions, it's 
 effectivity reveals especially on huge maps with big amount of collideable 
 components.
+
+Use WASD to move player. Use mouse scroll to change zoom.
   ''';
 
   static const tileSize = 8;
