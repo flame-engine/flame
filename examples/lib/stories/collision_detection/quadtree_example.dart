@@ -8,6 +8,8 @@ import 'package:flame/layers.dart';
 import 'package:flutter/material.dart' hide Image, Draggable;
 import 'package:flutter/services.dart';
 
+const tileSize = 8.0;
+
 //#region Game
 class QuadTreeExample extends FlameGame
     with HasQuadTreeCollisionDetection, KeyboardEvents, ScrollDetector {
@@ -22,7 +24,6 @@ components.
 Use WASD to move player. Use mouse scroll to change zoom.
   ''';
 
-  static const tileSize = 8;
   static const mapSize = 300;
   static const bricksCount = 8000;
 
@@ -30,10 +31,10 @@ Use WASD to move player. Use mouse scroll to change zoom.
   Future<void> onLoad() async {
     super.onLoad();
 
-    final mapWidth = (mapSize * tileSize).toDouble();
-    final mapHeight = (mapSize * tileSize).toDouble();
+    const mapWidth = mapSize * tileSize;
+    const mapHeight = mapSize * tileSize;
     initCollisionDetection(
-      mapDimensions: Rect.fromLTWH(0, 0, mapWidth, mapHeight),
+      mapDimensions: const Rect.fromLTWH(0, 0, mapWidth, mapHeight),
       minimumDistance: 10,
     );
 
@@ -41,14 +42,14 @@ Use WASD to move player. Use mouse scroll to change zoom.
     final sprite = await Sprite.load(
       'retro_tiles.png',
       srcPosition: Vector2.all(0),
-      srcSize: Vector2.all(8),
+      srcSize: Vector2.all(tileSize),
     );
     for (var i = 0; i < bricksCount; i++) {
       final x = random.nextInt(mapSize);
       final y = random.nextInt(mapSize);
       final brick = Brick(
         position: Vector2(x.toDouble() * tileSize, y.toDouble() * tileSize),
-        size: Vector2.all(8),
+        size: Vector2.all(tileSize),
         priority: 0,
         sprite: sprite,
       );
@@ -61,7 +62,7 @@ Use WASD to move player. Use mouse scroll to change zoom.
     final playerPoint = Vector2.all(mapSize * tileSize / 2);
 
     final player =
-        Player(position: playerPoint, size: Vector2.all(8), priority: 2);
+        Player(position: playerPoint, size: Vector2.all(tileSize), priority: 2);
     add(player);
     this.player = player;
     camera.followComponent(player);
@@ -124,8 +125,8 @@ class Player extends SpriteComponent
   }) {
     Sprite.load(
       'retro_tiles.png',
-      srcSize: Vector2.all(8),
-      srcPosition: Vector2(24, 8),
+      srcSize: Vector2.all(tileSize),
+      srcPosition: Vector2(tileSize * 3, tileSize),
     ).then((value) {
       sprite = value;
     });
@@ -143,7 +144,8 @@ class Player extends SpriteComponent
     Set<Vector2> intersectionPoints,
     PositionComponent other,
   ) {
-    final myCenter = Vector2(position.x + 4, position.y + 4);
+    final myCenter =
+        Vector2(position.x + tileSize / 2, position.y + tileSize / 2);
     if (other is Brick) {
       final diffX = myCenter.x - other.cachedCenter.x;
       if (diffX < 0) {
@@ -190,7 +192,8 @@ class Brick extends SpriteComponent
     required super.sprite,
   }) {
     add(RectangleHitbox()..collisionType = CollisionType.passive);
-    cachedCenter = Vector2(position.x + 4, position.y + 4);
+    cachedCenter =
+        Vector2(position.x + tileSize / 2, position.y + tileSize / 2);
   }
 
   late final Vector2 cachedCenter;
