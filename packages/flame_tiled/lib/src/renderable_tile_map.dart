@@ -34,6 +34,9 @@ class RenderableTiledMap {
   /// Layers to be rendered, in the same order as [TiledMap.layers]
   final List<_RenderableLayer> renderableLayers;
 
+  /// The target size for each tile in the tiled map.
+  final Vector2 destTileSize;
+
   /// Camera used for determining the current viewport for layer rendering.
   /// Optional, but required for parallax support
   Camera? camera;
@@ -44,7 +47,8 @@ class RenderableTiledMap {
   /// {@macro _renderable_tiled_map}
   RenderableTiledMap(
     this.map,
-    this.renderableLayers, {
+    this.renderableLayers,
+    this.destTileSize, {
     this.camera,
   }) {
     _refreshCache();
@@ -155,6 +159,7 @@ class RenderableTiledMap {
     return RenderableTiledMap(
       map,
       renderableLayers,
+      destTileSize,
       camera: camera,
     );
   }
@@ -256,43 +261,226 @@ class _RenderableTileLayer extends _RenderableLayer<TileLayer> {
   }
 
   void _cacheLayerTiles() {
+    if (_map.orientation == MapOrientation.isometric) {
+      _cacheIsometricTiles();
+    } else if (_map.orientation == MapOrientation.hexagonal) {
+      _cacheHexagonalTiles();
+    } else {
+      _cacheOrthogonalLayerTiles();
+    }
+  }
+
+  void _cacheOrthogonalLayerTiles() {
     final tileData = layer.tileData!;
     final batchMap = _cachedSpriteBatches;
-    tileData.asMap().forEach((ty, tileRow) {
-      tileRow.asMap().forEach((tx, tileGid) {
+    final size = _destTileSize;
+
+    for (var ty = 0; ty < tileData.length; ty++) {
+      final tileRow = tileData[ty];
+
+      for (var tx = 0; tx < tileRow.length; tx++) {
+        final tileGid = tileRow[tx];
         if (tileGid.tile == 0) {
-          return;
+          continue;
         }
+
         final tile = _map.tileByGid(tileGid.tile);
         final tileset = _map.tilesetByTileGId(tileGid.tile);
         final img = tile.image ?? tileset.image;
-        if (img != null) {
-          final batch = batchMap[img.source];
-          final src = tileset.computeDrawRect(tile).toRect();
-          final flips = SimpleFlips.fromFlips(tileGid.flips);
-          final size = _destTileSize;
-          final scale = size.x / src.width;
-          final anchorX = src.width / 2;
-          final anchorY = src.height / 2;
-          final offsetX = ((tx + .5) * size.x) + (layer.offsetX * scale);
-          final offsetY = ((ty + .5) * size.y) + (layer.offsetY * scale);
-          final scos = flips.cos * scale;
-          final ssin = flips.sin * scale;
-          if (batch != null) {
-            batch.addTransform(
-              source: src,
-              transform: ui.RSTransform(
-                scos,
-                ssin,
-                offsetX + -scos * anchorX + ssin * anchorY,
-                offsetY + -ssin * anchorX - scos * anchorY,
-              ),
-              flip: flips.flip,
-            );
+        if (img == null) {
+          continue;
+        }
+
+        final batch = batchMap[img.source];
+        if (batch == null) {
+          continue;
+        }
+
+        final src = tileset.computeDrawRect(tile).toRect();
+        final flips = SimpleFlips.fromFlips(tileGid.flips);
+        final scale = size.x / src.width;
+        final anchorX = src.width / 2;
+        final anchorY = src.height / 2;
+
+        late double offsetX;
+        late double offsetY;
+        offsetX = (tx + .5) * size.x;
+        offsetY = (ty + .5) * size.y;
+
+        final scos = flips.cos * scale;
+        final ssin = flips.sin * scale;
+
+        batch.addTransform(
+          source: src,
+          transform: ui.RSTransform(
+            scos,
+            ssin,
+            offsetX + -scos * anchorX + ssin * anchorY,
+            offsetY + -ssin * anchorX - scos * anchorY,
+          ),
+          flip: flips.flip,
+        );
+      }
+    }
+  }
+
+  void _cacheIsometricTiles() {
+    final tileData = layer.tileData!;
+    final batchMap = _cachedSpriteBatches;
+    final halfDestinationTile = _destTileSize / 2;
+    final size = _destTileSize;
+    final isometricXShift = _map.width * size.x * 0.5;
+
+    for (var ty = 0; ty < tileData.length; ty++) {
+      final tileRow = tileData[ty];
+
+      for (var tx = 0; tx < tileRow.length; tx++) {
+        final tileGid = tileRow[tx];
+        if (tileGid.tile == 0) {
+          continue;
+        }
+
+        final tile = _map.tileByGid(tileGid.tile);
+        final tileset = _map.tilesetByTileGId(tileGid.tile);
+        final img = tile.image ?? tileset.image;
+        if (img == null) {
+          continue;
+        }
+
+        final batch = batchMap[img.source];
+        if (batch == null) {
+          continue;
+        }
+
+        final src = tileset.computeDrawRect(tile).toRect();
+        final flips = SimpleFlips.fromFlips(tileGid.flips);
+        final scale = size.x / src.width;
+        final anchorX = src.width / 2;
+        final anchorY = src.height / 2;
+
+        late double offsetX;
+        late double offsetY;
+
+        offsetX = halfDestinationTile.x * (tx - ty) + isometricXShift;
+        offsetY = halfDestinationTile.y * (tx + ty) - size.y;
+
+        final scos = flips.cos * scale;
+        final ssin = flips.sin * scale;
+
+        batch.addTransform(
+          source: src,
+          transform: ui.RSTransform(
+            scos,
+            ssin,
+            offsetX + -scos * anchorX + ssin * anchorY,
+            offsetY + -ssin * anchorX - scos * anchorY,
+          ),
+          flip: flips.flip,
+        );
+      }
+    }
+  }
+
+  void _cacheHexagonalTiles() {
+    final tileData = layer.tileData!;
+    final batchMap = _cachedSpriteBatches;
+    final halfDestinationTile = _destTileSize / 2;
+    final size = _destTileSize;
+    final halfMapTile = Vector2(_map.tileWidth / 2, _map.tileHeight / 2);
+
+    var staggerY = 0.0;
+    var staggerX = 0.0;
+    if (_map.orientation == MapOrientation.hexagonal) {
+      // Hexagonal Ponity Tiles move down by a fractional amount.
+      if (_map.staggerAxis == StaggerAxis.y) {
+        staggerY = _map.tileHeight * 0.75;
+      }
+      // Hexagonal Flat Tiles move right by a fractional amount.
+      if (_map.staggerAxis == StaggerAxis.x) {
+        staggerX = _map.tileWidth * 0.75;
+      }
+    }
+
+    for (var ty = 0; ty < tileData.length; ty++) {
+      final tileRow = tileData[ty];
+
+      // Hexagonal Pointy Tiles shift left and right depending on the row
+      if (_map.staggerAxis == StaggerAxis.y) {
+        if ((ty.isOdd && _map.staggerIndex == StaggerIndex.odd) ||
+            (ty.isEven && _map.staggerIndex == StaggerIndex.even)) {
+          staggerX = halfDestinationTile.x;
+        } else {
+          staggerX = 0.0;
+        }
+      }
+
+      for (var tx = 0; tx < tileRow.length; tx++) {
+        final tileGid = tileRow[tx];
+        if (tileGid.tile == 0) {
+          continue;
+        }
+
+        final tile = _map.tileByGid(tileGid.tile);
+        final tileset = _map.tilesetByTileGId(tileGid.tile);
+        final img = tile.image ?? tileset.image;
+        if (img == null) {
+          continue;
+        }
+
+        final batch = batchMap[img.source];
+        if (batch == null) {
+          continue;
+        }
+
+        // Hexagonal Flat tiles shift up and down as we move across the row.
+        if (_map.staggerAxis == StaggerAxis.x) {
+          if ((tx.isOdd && _map.staggerIndex == StaggerIndex.odd) ||
+              (tx.isEven && _map.staggerIndex == StaggerIndex.even)) {
+            staggerY = halfDestinationTile.y;
+          } else {
+            staggerY = 0.0;
           }
         }
-      });
-    });
+
+        final src = tileset.computeDrawRect(tile).toRect();
+        final flips = SimpleFlips.fromFlips(tileGid.flips);
+        final scale = size.x / src.width;
+        final anchorX = src.width - halfMapTile.x;
+        final anchorY = src.height - halfMapTile.y;
+
+        late double offsetX;
+        late double offsetY;
+
+        // halfTile.x: shfits the map half a tile forward rather than
+        //             lining up on at the center.
+        // halfTile.y: shfits the map half a tile down rather than
+        //             lining up on at the center.
+        // StaggerX/Y: Moves the tile forward/down depending on orientation.
+        //  * stagger: Hexagonal tiles move down or right by only a fraction,
+        //             specifically 3/4 the width or height, for packing.
+        if (_map.staggerAxis == StaggerAxis.y) {
+          offsetX = tx * _map.tileWidth + staggerX + halfDestinationTile.x;
+          offsetY = ty * staggerY + halfDestinationTile.y;
+        } else {
+          offsetX = tx * staggerX + halfDestinationTile.x;
+          offsetY = ty * _map.tileHeight + staggerY + halfDestinationTile.y;
+        }
+
+        final scos = flips.cos * scale;
+        final ssin = flips.sin * scale;
+
+        batch.addTransform(
+          source: src,
+          transform: ui.RSTransform(
+            scos,
+            ssin,
+            offsetX + -scos * anchorX + ssin * anchorY,
+            offsetY + -ssin * anchorX - scos * anchorY,
+          ),
+          flip: flips.flip,
+        );
+      }
+    }
   }
 
   @override
@@ -326,12 +514,12 @@ class _RenderableTileLayer extends _RenderableLayer<TileLayer> {
   static Future<Map<String, SpriteBatch>> _loadImages(TiledMap map) async {
     final result = <String, SpriteBatch>{};
 
-    await Future.forEach(map.tiledImages(), (TiledImage img) async {
+    for (final img in map.tiledImages()) {
       final src = img.source;
       if (src != null) {
         result[src] = await SpriteBatch.load(src);
       }
-    });
+    }
 
     return result;
   }
