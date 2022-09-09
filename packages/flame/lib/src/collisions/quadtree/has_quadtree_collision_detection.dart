@@ -57,15 +57,9 @@ mixin HasQuadTreeCollisionDetection on FlameGame
   double? minimumDistance;
 
   bool minimumDistanceCheck(Vector2 activeItemCenter, Vector2 potentialCenter) {
-    if (minimumDistance != null) {
-      if ((activeItemCenter.x - potentialCenter.x).abs() > minimumDistance! ||
-          (activeItemCenter.y - potentialCenter.y).abs() > minimumDistance!) {
-        return false;
-      } else {
-        return true;
-      }
-    }
-    return true;
+    return minimumDistance == null || 
+       !((activeItemCenter.x - potentialCenter.x).abs() > minimumDistance! ||
+         (activeItemCenter.y - potentialCenter.y).abs() > minimumDistance!);
   }
 
   bool broadPhaseCheck(PositionComponent one, PositionComponent another) {
