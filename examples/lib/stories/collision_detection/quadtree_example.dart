@@ -17,20 +17,22 @@ class QuadTreeExample extends FlameGame
 
   static const description = '''
 In this example the standard "Sweep and Prune" algorithm is replaced by  
-"Quad Tree". Quad Tree is more effective approach to handle collisions, it's 
-effectivity reveals especially on huge maps with big amount of collideable 
+"Quad Tree". Quad Tree is often a more efficient approach of handling collisions,
+it's efficiency is shown especially on huge maps with big amounts of collidable 
 components.
-Some bricks are highlighted when placed on an edge of quadrant. It is important 
-to understand that handling hitboxes on edges requires more resources
-Blue lines visualises quad tree quadrants positions 
+Some bricks are highlighted when placed on an edge of a quadrant. It is
+important to understand that handling hitboxes on edges requires more
+resources.
+Blue lines visualise the quad tree's quadrant positions.
 
-Use WASD to move player. Use mouse scroll to change zoom.
-Hold direction button and press Space to fire bullet. 
-Notice that bullet fly above water but collides 
-with bricks.  
-Notice than creating a lot of bullets at once leads to generating new quadrants
-on the map because there become more than 25 objects
-Press O button to rescan all tree and optimize it, removing unused quadrants.
+Use WASD to move the player and use the mouse scroll to change zoom.
+Hold direction button and press space to fire a bullet. 
+Notice that bullet will fly above water but collides with bricks.
+
+Also notice that creating a lot of bullets at once leads to generating new
+quadrants on the map since it becomes more than 25 objects in one quadrant.
+
+Press O button to rescan the tree and optimize it, removing unused quadrants.
   ''';
 
   static const mapSize = 300;
