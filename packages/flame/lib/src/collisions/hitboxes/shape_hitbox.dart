@@ -69,12 +69,6 @@ mixin ShapeHitbox on ShapeComponent implements Hitbox<ShapeHitbox> {
       c.transform.addListener(_transformListener);
     });
 
-    final parentGame = findParent<FlameGame>();
-    if (parentGame is HasCollisionDetection) {
-      _collisionDetection = parentGame.collisionDetection;
-      _collisionDetection?.add(this);
-    }
-
     if (shouldFillParent) {
       _parentSizeListener = () {
         size = hitboxParent.size;
@@ -82,6 +76,14 @@ mixin ShapeHitbox on ShapeComponent implements Hitbox<ShapeHitbox> {
       };
       _parentSizeListener?.call();
       hitboxParent.size.addListener(_parentSizeListener!);
+    }
+
+    // should be placed after hitbox parent listener
+    // because correct hitbox size is required for QuadTree
+    final parentGame = findParent<FlameGame>();
+    if (parentGame is HasCollisionDetection) {
+      _collisionDetection = parentGame.collisionDetection;
+      _collisionDetection?.add(this);
     }
   }
 

@@ -66,6 +66,43 @@ Use WASD to move player. Use mouse scroll to change zoom.
     add(player);
     this.player = player;
     camera.followComponent(player);
+
+    final brick = Brick(
+      position: playerPoint.translate(0, -tileSize * 2),
+      size: Vector2.all(tileSize),
+      priority: 0,
+      sprite: sprite,
+    );
+    add(brick);
+    staticLayer.components.add(brick);
+
+    final brick1 = Brick(
+      position: playerPoint.translate(0, tileSize * 2),
+      size: Vector2.all(tileSize),
+      priority: 0,
+      sprite: sprite,
+    );
+    add(brick1);
+    staticLayer.components.add(brick1);
+
+    final brick2 = Brick(
+      position: playerPoint.translate(tileSize * 2, 0),
+      size: Vector2.all(tileSize),
+      priority: 0,
+      sprite: sprite,
+    );
+    add(brick2);
+    staticLayer.components.add(brick2);
+
+    final brick3 = Brick(
+      position: playerPoint.translate(-tileSize * 2, 0),
+      size: Vector2.all(tileSize),
+      priority: 0,
+      sprite: sprite,
+    );
+    add(brick3);
+    staticLayer.components.add(brick3);
+
     add(
       QuadTreeDebugComponent(
         collisionDetection as QuadTreeCollisionDetection,
@@ -274,18 +311,28 @@ class QuadTreeDebugComponent extends PositionComponent with HasPaint {
   @override
   void render(Canvas canvas) {
     final nodes = dbg.nodes;
+    // final textPaint = TextPaint(
+    //   style: const TextStyle(fontSize: 5.0, color: Colors.lightGreenAccent),
+    // );
     for (final node in nodes) {
       canvas.drawRect(node.rect, paint);
       final nodeElements = node.ownElements;
+      Paint? boxPaint;
       if (!node.isLeaf && nodeElements.isNotEmpty) {
-        final boxPaint = Paint();
-
+        boxPaint = Paint();
         boxPaint.style = PaintingStyle.stroke;
         boxPaint.color = Colors.lightGreenAccent;
-        boxPaint.strokeWidth = 2;
-        for (final box in nodeElements) {
+        boxPaint.strokeWidth = 1;
+      }
+      for (final box in nodeElements) {
+        // textPaint.render(canvas, node.id.toString(), box.aabb.min);
+        if (boxPaint != null) {
           final rect = Rect.fromLTRB(
-              box.aabb.min.x, box.aabb.min.y, box.aabb.max.x, box.aabb.max.y);
+            box.aabb.min.x,
+            box.aabb.min.y,
+            box.aabb.max.x,
+            box.aabb.max.y,
+          );
           canvas.drawRect(rect, boxPaint);
         }
       }

@@ -8,6 +8,14 @@ extension _QuadMethods on Rect {
       bottom <= box.top);
 }
 
+/// Public interface to QuadTree internal data structures
+/// Allow to read node's data without risc to affect on how collisions
+/// works.
+/// Use [QuadTreeNodeDebugInfo.init] to init class for current collision
+/// detection. You need only this instance no get all another nodes and
+/// hitboxes using [nodes] and [allElements] / [ownElements] methods.
+/// Use [rect] to get node's computed box;
+/// The class might be useful to render debugging info. See examples for details
 class QuadTreeNodeDebugInfo {
   QuadTreeNodeDebugInfo(this.rect, this._node, this.cd);
 
@@ -28,8 +36,10 @@ class QuadTreeNodeDebugInfo {
 
   bool get isLeaf => _node.children[0] == null;
 
+  int get id => _node.id;
+
   List<QuadTreeNodeDebugInfo> get nodes {
-    final list = <QuadTreeNodeDebugInfo>[];
+    final list = <QuadTreeNodeDebugInfo>[this];
     for (var i = 0; i < _node.children.length; i++) {
       final node = _node.children[i];
       if (node == null) {
@@ -73,8 +83,8 @@ class _Node<T extends Hitbox<T>> {
   }
 }
 
-/// QuadTree calculation class not bound to Flame. Could be used anywhere outside
-/// of Flame, for example in isolate to calculate background logic.
+/// QuadTree calculation class not bound to Flame. Could be used anywhere
+/// outside of Flame, for example in isolate to calculate background logic.
 ///
 /// Usage:
 /// 1. Create new instance
@@ -101,7 +111,7 @@ class QuadTree<T extends Hitbox<T>> {
   Rect mainBoxSize;
 
   var _rootNode = _Node<T>();
-  int _nodeLastId = -1;
+  int _nodeLastId = 0;
   final _oldPositionByItem = <ShapeHitbox, Aabb2>{};
   final _itemAtNode = <ShapeHitbox, _Node>{};
 
@@ -119,7 +129,7 @@ class QuadTree<T extends Hitbox<T>> {
 
   void clear() {
     _rootNode = _Node<T>();
-    _nodeLastId = -1;
+    _nodeLastId = 0;
     _itemAtNode.clear();
     _oldPositionByItem.clear();
   }
@@ -169,18 +179,18 @@ class QuadTree<T extends Hitbox<T>> {
       // North West
       if (valueBox.bottom <= center.dy) {
         return 0;
-      } else if (valueBox.top >= center.dy) {
+      } else if (valueBox.top > center.dy) {
         return 2;
       } else {
         return -1;
       }
     }
     // East
-    else if (valueBox.left >= center.dx) {
+    else if (valueBox.left > center.dx) {
       // North East
       if (valueBox.bottom <= center.dy) {
         return 1;
-      } else if (valueBox.top >= center.dy) {
+      } else if (valueBox.top > center.dy) {
         return 3;
       } else {
         return -1;
