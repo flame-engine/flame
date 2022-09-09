@@ -13,8 +13,6 @@ mixin HasQuadTreeCollisionDetection on FlameGame
   @override
   CollisionDetection<ShapeHitbox> get collisionDetection => _collisionDetection;
 
-  final _scheduledUpdate = <ShapeHitbox>{};
-
   @override
   set collisionDetection(CollisionDetection<Hitbox> cd) {
     if (cd is! QuadTreeCollisionDetection) {
@@ -97,19 +95,9 @@ mixin HasQuadTreeCollisionDetection on FlameGame
     return true;
   }
 
-  void scheduleHitboxUpdate(ShapeHitbox hitbox) {
-    _scheduledUpdate.add(hitbox);
-  }
-
   @override
   void update(double dt) {
     super.update(dt);
-    _scheduledUpdate.forEach(
-      (collisionDetection as QuadTreeCollisionDetection)
-          .quadBroadphase
-          .updateItemSizeOrPosition,
-    );
-    _scheduledUpdate.clear();
     collisionDetection.run();
   }
 }

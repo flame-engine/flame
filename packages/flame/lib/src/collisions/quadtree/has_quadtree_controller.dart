@@ -20,8 +20,6 @@ import 'package:flutter/widgets.dart';
 /// controlled automatically
 mixin HasQuadTreeController<T extends HasQuadTreeCollisionDetection>
     on PositionComponent {
-  final _listenerByComponent = <ShapeHitbox, VoidCallback>{};
-
   QuadTreeBroadphase get _quadBroadphase {
     final bf = (this as HasGameRef<T>).gameRef.collisionDetection
         as QuadTreeCollisionDetection;
@@ -42,33 +40,6 @@ mixin HasQuadTreeController<T extends HasQuadTreeCollisionDetection>
       _quadBroadphase.activeCollisions.add(hitbox);
     } else {
       _quadBroadphase.activeCollisions.remove(hitbox);
-    }
-  }
-
-  @override
-  Future<void>? add(Component component) {
-    final result = super.add(component);
-    if (component is ShapeHitbox) {
-      // ignore: prefer_function_declarations_over_variables
-      final listener = () {
-        (this as HasGameRef<T>).gameRef.scheduleHitboxUpdate(component);
-      };
-      position.addListener(listener);
-      size.addListener(listener);
-
-      _listenerByComponent[component] = listener;
-    }
-    return result;
-  }
-
-  @override
-  void remove(Component component) {
-    super.remove(component);
-
-    final listener = _listenerByComponent[component];
-    if (listener != null) {
-      position.removeListener(listener);
-      size.removeListener(listener);
     }
   }
 
