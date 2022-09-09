@@ -114,6 +114,22 @@ mixin CollisionCallbacks on Component
     onCollisionEndCallback?.call(other);
   }
 
+  /// Works only for QuadTree collision detection
+  /// If you need to prevent collision of items of different types -
+  /// reimplement [broadPhaseCheck]. The result of calculation is cached so you
+  /// should not check here any dynamical parameters, the function intended to
+  /// be used as pure type checker.
+  @mustCallSuper
+  bool broadPhaseCheck(PositionComponent other) {
+    final myParent = parent;
+    final otherParent = other.parent;
+    if (myParent is CollisionCallbacks && otherParent is PositionComponent) {
+      return myParent.broadPhaseCheck(otherParent);
+    }
+
+    return true;
+  }
+
   /// Assign your own [CollisionCallback] if you want a callback when this
   /// shape collides with another [PositionComponent].
   @override

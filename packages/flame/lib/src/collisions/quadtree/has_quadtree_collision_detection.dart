@@ -69,16 +69,16 @@ mixin HasQuadTreeCollisionDetection on FlameGame
 
   bool broadPhaseCheck(PositionComponent one, PositionComponent another) {
     var checkParent = false;
-    if (one is HasQuadTreeController) {
-      if (!one.broadPhaseCheck(another)) {
+    if (one is CollisionCallbacks) {
+      if (!(one as CollisionCallbacks).broadPhaseCheck(another)) {
         return false;
       }
     } else {
       checkParent = true;
     }
 
-    if (another is HasQuadTreeController) {
-      if (!another.broadPhaseCheck(one)) {
+    if (another is CollisionCallbacks) {
+      if (!(another as CollisionCallbacks).broadPhaseCheck(one)) {
         return false;
       }
     } else {
@@ -88,8 +88,8 @@ mixin HasQuadTreeCollisionDetection on FlameGame
     final anotherParent = another.parent;
 
     if (checkParent &&
-        oneParent is HasQuadTreeController &&
-        anotherParent is HasQuadTreeController) {
+        oneParent is PositionComponent &&
+        anotherParent is PositionComponent) {
       return broadPhaseCheck(oneParent, anotherParent);
     }
     return true;

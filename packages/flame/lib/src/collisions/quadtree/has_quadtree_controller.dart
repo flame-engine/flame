@@ -1,6 +1,5 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-import 'package:flutter/widgets.dart';
 
 /// Mixin should be added to Component to bring QuadTree collision support.
 /// Do not forget also to add [CollisionCallbacks] mixin.
@@ -41,16 +40,5 @@ mixin HasQuadTreeController<T extends HasQuadTreeCollisionDetection>
     } else {
       _quadBroadphase.activeCollisions.remove(hitbox);
     }
-  }
-
-  @mustCallSuper
-  bool broadPhaseCheck(PositionComponent other) {
-    final myParent = parent;
-    final otherParent = other.parent;
-    if (myParent is HasQuadTreeController && otherParent is PositionComponent) {
-      return myParent.broadPhaseCheck(otherParent);
-    }
-
-    return true;
   }
 }
