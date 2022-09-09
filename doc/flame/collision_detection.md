@@ -196,13 +196,14 @@ collisions to the whole hat, instead of for just each hitbox separately.
 
 ## Broad phase
 
-Usually you don't have to worry about the broad phase system that is used, so if the standard
-implementation is performant enough for you, you probably don't have to read this section.
+If your game field is small and do not have a lot of collideable components - you don't have to
+worry about the broad phase system that is used, so if the standard implementation is performant
+enough for you, you probably don't have to read this section.
 
-A broad phase is the first step of collision detection where potential collisions are calculated.
-To calculate these potential collisions are a lot cheaper to calculate than to check the exact
-intersections from the directly and it removes the need to check all hitboxes against each other
-and therefore avoiding O(n²). The broad phase produces a set of potential collisions (a set of
+A broad phase is the first step of collision detection where potential collisions are calculated. To
+calculate these potential collisions are a lot cheaper to calculate than to check the exact
+intersections from the directly and it removes the need to check all hitboxes against each other and
+therefore avoiding O(n²). The broad phase produces a set of potential collisions (a set of
 `CollisionProspect`s), this set is then used to check the exact intersections between hitboxes, this
 is sometimes called narrow phase.
 
@@ -210,24 +211,82 @@ By default Flame's collision detection is using a sweep and prune broadphase ste
 requires another type of broadphase you can write your own broadphase by extending `Broadphase` and
 manually setting the collision detection system that should be used.
 
-For example if you have implemented a broadphase built on a quad tree instead of the standard
+For example if you have implemented a broadphase built on a magic algorithm instead of the standard
 sweep and prune, then you would do the following:
 
 ```dart
 class MyGame extends FlameGame with HasCollisionDetection {
   MyGame() : super() {
-    collisionDetection = 
-        StandardCollisionDetection(broadphase: QuadTreeBroadphase());
+    collisionDetection =
+        StandardCollisionDetection(broadphase: MagicAlgorithmBroadphase());
   }
 }
 ```
 
+## Quad Tree broad phase
+
+If game field is large and game contains a lot (more than one hundred) of collideable components,
+standard sweep and prune become ineffective. Try to use quad tree broad phase then. Just use
+`HasQuadTreeCollisionDetection` instead of `HasCollisionDetection` and call `initCollisionDetection`
+function on game load:
+
+```dart
+class MyGame extends FlameGame with HasQuadTreeCollisionDetection {
+  Future<void> onLoad() async {
+    initCollisionDetection(
+      mapDimensions: const Rect.fromLTWH(0, 0, mapWidth, mapHeight),
+      minimumDistance: 10,
+    );
+  }
+}
+```
+
+You should pass to `initCollisionDetection` correct map dimensions to make quad tree algorithm to
+work properly. There are additional parameters to make things more effective:
+
+- `minimumDistance`: minimum distance between objects to consider them as possibly collideable.
+  If `null` - the check is disabled, it is default behavior
+- `maxObjects`: maximum objects count in one quadrant. Default to 25.
+- `maxLevels`: - maximum nesting levels inside quadrant/ Default to 10
+
+If you use quad tree, you can make algorithm even more effective reimplementing
+`broadPhaseCheck` function of `CollisionCallbacks` mixin. It is useful if you need to prevent
+collision of items of different types. The result of calculation is cached so you should not check
+here any dynamical parameters, the function intended to be used as pure type checker:
+
+```dart
+class Bullet extends PositionComponent with CollisionCallbacks {
+
+  @override
+  bool broadPhaseCheck(PositionComponent other) {
+    if (other is Player || other is Water) {
+      // do NOT collide with Player or Water
+      return false;
+    }
+    return super.broadPhaseCheck(other);
+  }
+
+  @override
+  void onCollisionStart(
+          Set<Vector2> intersectionPoints,
+          PositionComponent other,
+          ) {
+    // Remove component on contact with Brick
+    // Neither Player or Water would be passed to this function
+    // because these classes are filtered out by [broadPhaseCheck]
+    // on early stage
+    if (other is Brick) {
+      removeFromParent();
+    }
+    super.onCollisionStart(intersectionPoints, other);
+  }
+}
+```
 
 ## Ray casting and Ray tracing
 
-Ray casting and ray tracing are methods for sending out rays from a point in your game and
-being able to see what these rays collide with and how they reflect after hitting
-something.
+Ray casting and ray tracing are methods for sending out rays from a point in your game and being
+able to see what these rays collide with and how they reflect after hitting something.
 
 For all of the following methods, if there are any hitboxes that you wish to ignore, you can add the
 `ignoreHitboxes` argument which is a list of the hitboxes that you wish to disregard for the call.

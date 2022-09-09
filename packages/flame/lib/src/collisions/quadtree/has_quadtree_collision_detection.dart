@@ -35,7 +35,7 @@ mixin HasQuadTreeCollisionDetection on FlameGame
   /// dynamical parameters, the function intended to be used as pure type
   /// checker.
   /// It usually should not be reimplemented, see
-  /// [HasQuadTreeController.broadPhaseCheck] instead
+  /// [CollisionCallbacks.broadPhaseCheck] instead
   ///
   void initCollisionDetection({
     required Rect mapDimensions,

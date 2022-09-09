@@ -20,8 +20,16 @@ In this example the standard "Sweep and Prune" algorithm is replaced by
 "Quad Tree". Quad Tree is more effective approach to handle collisions, it's 
 effectivity reveals especially on huge maps with big amount of collideable 
 components.
+Some bricks are highlighted when placed on an edge of quadrant. It is important 
+to understand that handling hitboxes on edges requires more resources
+Blue lines visualises quad tree quadrants positions 
 
 Use WASD to move player. Use mouse scroll to change zoom.
+Hold direction button and press Space to fire bullet. 
+Notice that bullet fly above water but collides 
+with bricks.  
+Notice than creating a lot of bullets at once leads to generating new quadrants
+on the map because there become more than 25 objects
   ''';
 
   static const mapSize = 300;
@@ -39,9 +47,15 @@ Use WASD to move player. Use mouse scroll to change zoom.
     );
 
     final random = Random();
-    final sprite = await Sprite.load(
+    final spriteBrick = await Sprite.load(
       'retro_tiles.png',
       srcPosition: Vector2.all(0),
+      srcSize: Vector2.all(tileSize),
+    );
+
+    final spriteWater = await Sprite.load(
+      'retro_tiles.png',
+      srcPosition: Vector2(0, tileSize),
       srcSize: Vector2.all(tileSize),
     );
     for (var i = 0; i < bricksCount; i++) {
@@ -51,7 +65,7 @@ Use WASD to move player. Use mouse scroll to change zoom.
         position: Vector2(x.toDouble() * tileSize, y.toDouble() * tileSize),
         size: Vector2.all(tileSize),
         priority: 0,
-        sprite: sprite,
+        sprite: spriteBrick,
       );
       add(brick);
       staticLayer.components.add(brick);
@@ -71,37 +85,34 @@ Use WASD to move player. Use mouse scroll to change zoom.
       position: playerPoint.translate(0, -tileSize * 2),
       size: Vector2.all(tileSize),
       priority: 0,
-      sprite: sprite,
+      sprite: spriteBrick,
     );
     add(brick);
     staticLayer.components.add(brick);
 
-    final brick1 = Brick(
+    final water1 = Water(
       position: playerPoint.translate(0, tileSize * 2),
       size: Vector2.all(tileSize),
       priority: 0,
-      sprite: sprite,
+      sprite: spriteWater,
     );
-    add(brick1);
-    staticLayer.components.add(brick1);
+    add(water1);
 
-    final brick2 = Brick(
+    final water2 = Water(
       position: playerPoint.translate(tileSize * 2, 0),
       size: Vector2.all(tileSize),
       priority: 0,
-      sprite: sprite,
+      sprite: spriteWater,
     );
-    add(brick2);
-    staticLayer.components.add(brick2);
+    add(water2);
 
-    final brick3 = Brick(
+    final water3 = Water(
       position: playerPoint.translate(-tileSize * 2, 0),
       size: Vector2.all(tileSize),
       priority: 0,
-      sprite: sprite,
+      sprite: spriteWater,
     );
-    add(brick3);
-    staticLayer.components.add(brick3);
+    add(water3);
 
     add(
       QuadTreeDebugComponent(
@@ -125,19 +136,33 @@ Use WASD to move player. Use mouse scroll to change zoom.
     RawKeyEvent event,
     Set<LogicalKeyboardKey> keysPressed,
   ) {
+    Vector2? displacement;
+    var fireBullet = false;
     for (final key in keysPressed) {
       if (key == LogicalKeyboardKey.keyW && player.canMoveTop) {
+        displacement = Vector2(0, -stepSize);
         player.position = player.position.translate(0, -stepSize);
       }
       if (key == LogicalKeyboardKey.keyA && player.canMoveLeft) {
+        displacement = Vector2(-stepSize, 0);
         player.position = player.position.translate(-stepSize, 0);
       }
       if (key == LogicalKeyboardKey.keyS && player.canMoveBottom) {
+        displacement = Vector2(0, stepSize);
         player.position = player.position.translate(0, stepSize);
       }
       if (key == LogicalKeyboardKey.keyD && player.canMoveRight) {
+        displacement = Vector2(stepSize, 0);
         player.position = player.position.translate(stepSize, 0);
       }
+      if (key == LogicalKeyboardKey.space) {
+        fireBullet = true;
+      }
+    }
+    if (fireBullet && displacement != null) {
+      final bullet =
+          Bullet(position: player.position, displacement: displacement * 50);
+      add(bullet);
     }
 
     return KeyEventResult.handled;
@@ -184,7 +209,7 @@ class Player extends SpriteComponent
   ) {
     final myCenter =
         Vector2(position.x + tileSize / 2, position.y + tileSize / 2);
-    if (other is Brick) {
+    if (other is GameCollideable) {
       final diffX = myCenter.x - other.cachedCenter.x;
       if (diffX < 0) {
         canMoveRight = false;
@@ -214,23 +239,64 @@ class Player extends SpriteComponent
   }
 }
 
+class Bullet extends PositionComponent with CollisionCallbacks, HasPaint {
+  Bullet({required super.position, required this.displacement}) {
+    paint.color = Colors.deepOrange;
+    priority = 10;
+    size = Vector2.all(1);
+    add(RectangleHitbox());
+  }
+
+  final Vector2 displacement;
+
+  @override
+  void render(Canvas canvas) {
+    canvas.drawCircle(Offset.zero, 1, paint);
+  }
+
+  @override
+  void update(double dt) {
+    final d = displacement * dt;
+    position = Vector2(position.x + d.x, position.y + d.y);
+    super.update(dt);
+  }
+
+  @override
+  bool broadPhaseCheck(PositionComponent other) {
+    if (other is Player || other is Water) {
+      return false;
+    }
+    return super.broadPhaseCheck(other);
+  }
+
+  @override
+  void onCollisionStart(
+    Set<Vector2> intersectionPoints,
+    PositionComponent other,
+  ) {
+    if (other is Brick) {
+      removeFromParent();
+    }
+    super.onCollisionStart(intersectionPoints, other);
+  }
+}
+
 //#endregion
 
-//#region Brick
+//#region Environment
 
-class Brick extends SpriteComponent with CollisionCallbacks, UpdateOnce {
+class Brick extends SpriteComponent
+    with CollisionCallbacks, GameCollideable, UpdateOnce {
   Brick({
     required super.position,
     required super.size,
     required super.priority,
     required super.sprite,
   }) {
-    add(RectangleHitbox()..collisionType = CollisionType.passive);
-    cachedCenter =
-        Vector2(position.x + tileSize / 2, position.y + tileSize / 2);
+    initCenter();
+    initCollision();
   }
 
-  late final Vector2 cachedCenter;
   bool rendered = false;
 
   @override
@@ -239,6 +305,32 @@ class Brick extends SpriteComponent with CollisionCallbacks, UpdateOnce {
       super.renderTree(canvas);
     }
   }
+}
+
+class Water extends SpriteComponent
+    with CollisionCallbacks, GameCollideable, UpdateOnce {
+  Water({
+    required super.position,
+    required super.size,
+    required super.priority,
+    required super.sprite,
+  }) {
+    initCenter();
+    initCollision();
+  }
+}
+
+mixin GameCollideable on PositionComponent {
+  void initCollision() {
+    add(RectangleHitbox()..collisionType = CollisionType.passive);
+  }
+
+  void initCenter() {
+    cachedCenter =
+        Vector2(position.x + tileSize / 2, position.y + tileSize / 2);
+  }
+
+  late final Vector2 cachedCenter;
 }
 
 //#endregion
