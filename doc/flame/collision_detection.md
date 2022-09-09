@@ -283,6 +283,27 @@ class Bullet extends PositionComponent with CollisionCallbacks {
 }
 ```
 
+After intensive gameplay a map could become over-clusterized to lot of empty quadrants. Also some
+objects with null `parent` could still present in `QuadTree` but being removed from game lifecycle.
+Run `QuadTree.optimize()` to perform a cleanup from "dead" objects and empty quadrants:
+
+```dart
+class QuadTreeExample extends FlameGame
+        with HasQuadTreeCollisionDetection {
+
+  /// A function called when intensive gameplay session is over
+  /// It also might be scheduled, but no need to run it on every update.
+  /// Use right interval depending on your game circumstances
+  onGameIdle() {
+    (collisionDetection as QuadTreeCollisionDetection)
+            .quadBroadphase
+            .tree
+            .optimize();
+  }
+}
+
+```
+
 ## Ray casting and Ray tracing
 
 Ray casting and ray tracing are methods for sending out rays from a point in your game and being

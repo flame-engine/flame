@@ -30,6 +30,7 @@ Notice that bullet fly above water but collides
 with bricks.  
 Notice than creating a lot of bullets at once leads to generating new quadrants
 on the map because there become more than 25 objects
+Press O button to rescan all tree and optimize it, removing unused quadrants.
   ''';
 
   static const mapSize = 300;
