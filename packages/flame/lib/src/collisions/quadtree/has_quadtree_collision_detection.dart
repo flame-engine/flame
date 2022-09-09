@@ -34,8 +34,8 @@ mixin HasQuadTreeCollisionDetection on FlameGame
   /// The [broadPhaseCheck] checks if objects of different types should
   /// collide.
   /// The result of the calculation is cached so you should not check any
-  /// dynamical parameters here, the function is intended to be used as pure type
-  /// checker.
+  /// dynamical parameters here, the function is intended to be used as pure
+  /// type checker.
   /// It usually should not be overridden, see
   /// [CollisionCallbacks.broadPhaseCheck] instead
   void initCollisionDetection({
@@ -57,9 +57,9 @@ mixin HasQuadTreeCollisionDetection on FlameGame
   double? minimumDistance;
 
   bool minimumDistanceCheck(Vector2 activeItemCenter, Vector2 potentialCenter) {
-    return minimumDistance == null || 
-       !((activeItemCenter.x - potentialCenter.x).abs() > minimumDistance! ||
-         (activeItemCenter.y - potentialCenter.y).abs() > minimumDistance!);
+    return minimumDistance == null ||
+        !((activeItemCenter.x - potentialCenter.x).abs() > minimumDistance! ||
+            (activeItemCenter.y - potentialCenter.y).abs() > minimumDistance!);
   }
 
   bool broadPhaseCheck(PositionComponent one, PositionComponent another) {
