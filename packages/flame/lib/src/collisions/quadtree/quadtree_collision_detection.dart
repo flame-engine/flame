@@ -15,11 +15,12 @@ class QuadTreeCollisionDetection extends StandardCollisionDetection {
     int maxLevels = 10,
   }) : super(
           broadphase: QuadTreeBroadphase<ShapeHitbox>(
-              mainBoxSize: mapDimensions,
-              maxObjects: maxObjects,
-              maxLevels: maxLevels,
-              broadphaseCheck: broadphaseCheck,
-              minimumDistanceCheck: minimumDistanceCheck),
+            mainBoxSize: mapDimensions,
+            maxObjects: maxObjects,
+            maxLevels: maxLevels,
+            broadphaseCheck: broadphaseCheck,
+            minimumDistanceCheck: minimumDistanceCheck,
+          ),
         );
 
   QuadTreeBroadphase get quadBroadphase => broadphase as QuadTreeBroadphase;
