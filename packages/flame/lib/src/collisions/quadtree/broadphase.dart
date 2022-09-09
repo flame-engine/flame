@@ -14,9 +14,10 @@ typedef ExternalMinDistanceCheck = bool Function(
   Vector2 potentialCenter,
 );
 
-/// Performs Quad Tree broadphase check
-/// See [HasQuadTreeCollisionDetection.initCollisionDetection] for detail
-/// description of its parameters
+/// Performs Quad Tree broadphase check.
+///
+/// See [HasQuadTreeCollisionDetection.initCollisionDetection] for a detailed
+/// description of its initialization parameters.
 class QuadTreeBroadphase<T extends Hitbox<T>> extends Broadphase<T> {
   QuadTreeBroadphase({
     super.items,

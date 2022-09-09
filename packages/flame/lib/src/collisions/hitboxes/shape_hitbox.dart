@@ -95,8 +95,8 @@ mixin ShapeHitbox on ShapeComponent implements Hitbox<ShapeHitbox> {
       hitboxParent.size.addListener(_parentSizeListener!);
     }
 
-    // should be placed after hitbox parent listener
-    // because correct hitbox size is required for QuadTree
+    // This should be placed after the hitbox parent listener
+    // since the correct hitbox size is required by the QuadTree.
     final parentGame = findParent<FlameGame>();
     if (parentGame is HasCollisionDetection) {
       _collisionDetection = parentGame.collisionDetection;

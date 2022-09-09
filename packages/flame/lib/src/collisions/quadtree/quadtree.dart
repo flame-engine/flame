@@ -1,14 +1,17 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/extensions.dart';
 
-/// Public interface to QuadTree internal data structures
-/// Allow to read node's data without risc to affect on how collisions
-/// works.
-/// Use [QuadTreeNodeDebugInfo.init] to init class for current collision
-/// detection. You need only this instance no get all another nodes and
-/// hitboxes using [nodes] and [allElements] / [ownElements] methods.
+/// Public interface to QuadTree internal data structures.
+///
+/// Allows to read a node's data without risk of affecting the outcome of
+/// collisions.
+/// Use [QuadTreeNodeDebugInfo.init] to initialize the class for the
+/// current collision detection. You need only this instance to get all
+/// another nodes and hitboxes using [nodes] and the
+/// [allElements] / [ownElements] methods.
 /// Use [rect] to get node's computed box;
-/// The class might be useful to render debugging info. See examples for details
+/// The class might be useful to render debugging info.
+/// See examples for details.
 class QuadTreeNodeDebugInfo {
   QuadTreeNodeDebugInfo(this.rect, this._node, this.cd);
 
@@ -77,19 +80,18 @@ class _Node<T extends Hitbox<T>> {
 }
 
 /// QuadTree calculation class not bound to Flame. Could be used anywhere
-/// outside of Flame, for example in isolate to calculate background logic.
+/// outside of Flame, for example in isolates to calculate background logic.
 ///
 /// Usage:
-/// 1. Create new instance
+/// 1. Create new instance.
 /// 2. Use [add] to add hitboxes to simulation.
-/// 3. Use [query] to get list of hitboxes potentially collide with specified
-/// 4. Use [remove] to remove hitbox from tree
-/// 5. Use sequence of [remove] and [add] to simulate hitbox movement
-/// 6. Use [isMoved] to determine, does hitbox ever changed it's position
+/// 3. Use [query] to get list of hitboxes that potentially collide.
+/// 4. Use [remove] to remove a hitbox from the tree.
+/// 5. Use sequence of [remove] and [add] to simulate hitbox movement.
+/// 6. Use [isMoved] to determine if a hitbox ever changed its position.
 /// 7. Call [clear] to remove all data.
 ///
-/// Use [optimize] to scan all tree and remove unused quadrants.
-///
+/// Use [optimize] to scan the tree and remove unused quadrants.
 class QuadTree<T extends Hitbox<T>> {
   QuadTree({
     this.maxObjects = 25,
@@ -204,19 +206,19 @@ class QuadTree<T extends Hitbox<T>> {
     // assert(box.containsRect(getBoxOfValue(value)));
     _Node<T> finalNode;
     if (_noChildren(node)) {
-      // Insert the value in this node if possible
+      // Insert the value in this node if possible.
       if (depth >= maxLevels || node.hitboxes.length < maxObjects) {
         node.hitboxes.add(value);
         finalNode = node;
       }
-      // Otherwise, we split and we try again
+      // Otherwise, we split and we try again.
       else {
         _split(node, box);
         finalNode = _add(node, depth, box, value, parent);
       }
     } else {
       final quadrant = _getQuadrant(box, _getBoxOfValue(value));
-      // Add the value in a child if the value is entirely contained in it
+      // Add the value in a child if the value is entirely contained in it.
       if (quadrant != -1) {
         final children = node.children[quadrant];
         if (children == null) {
@@ -230,7 +232,7 @@ class QuadTree<T extends Hitbox<T>> {
           node,
         );
       }
-      // Otherwise, we add the value in the current node
+      // Otherwise, we add the value in the current node.
       else {
         node.hitboxes.add(value);
         finalNode = node;

@@ -2,10 +2,10 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/widgets.dart';
 
-/// Collision detection modification to support Quad Tree.
-/// Do not use standard [items] list fo components. Instead adds all components
-/// into [QuadTreeBroadphase] class.
+/// Collision detection modification to support a Quad Tree broadphase.
 ///
+/// Do not use standard [items] list for components. Instead adds all components
+/// into [QuadTreeBroadphase] class.
 class QuadTreeCollisionDetection extends StandardCollisionDetection {
   QuadTreeCollisionDetection({
     required Rect mapDimensions,

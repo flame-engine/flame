@@ -223,12 +223,14 @@ class MyGame extends FlameGame with HasCollisionDetection {
 }
 ```
 
+
 ## Quad Tree broad phase
 
-If game field is large and game contains a lot (more than one hundred) of collideable components,
-standard sweep and prune become ineffective. Try to use quad tree broad phase then. Just use
-`HasQuadTreeCollisionDetection` instead of `HasCollisionDetection` and call `initCollisionDetection`
-function on game load:
+If your game field is large and the game contains a lot (more than one hundred) of collidable
+components, standard sweep and prune can become inefficient. If it does you can try to use the
+quad tree broad phase.
+To do this, add the `HasQuadTreeCollisionDetection` mixin to your game instead of
+`HasCollisionDetection` and call the `initCollisionDetection` function on game load:
 
 ```dart
 class MyGame extends FlameGame with HasQuadTreeCollisionDetection {
@@ -241,18 +243,20 @@ class MyGame extends FlameGame with HasQuadTreeCollisionDetection {
 }
 ```
 
-You should pass to `initCollisionDetection` correct map dimensions to make quad tree algorithm to
-work properly. There are additional parameters to make things more effective:
+When calling `initCollisionDetection` you should pass it the correct map dimensions, to make the
+quad tree algorithm to work properly. There are also additional parameters to make the system more
+efficient:
 
 - `minimumDistance`: minimum distance between objects to consider them as possibly collideable.
   If `null` - the check is disabled, it is default behavior
 - `maxObjects`: maximum objects count in one quadrant. Default to 25.
 - `maxLevels`: - maximum nesting levels inside quadrant/ Default to 10
 
-If you use quad tree, you can make algorithm even more effective reimplementing
-`broadPhaseCheck` function of `CollisionCallbacks` mixin. It is useful if you need to prevent
-collision of items of different types. The result of calculation is cached so you should not check
-here any dynamical parameters, the function intended to be used as pure type checker:
+If you use the quad tree system, you can make algorithm even more efficient by implementing the
+`broadPhaseCheck` function of the `CollisionCallbacks` mixin in your components. It is useful if
+you need to prevent collision of items of different types. The result of the calculation is cached so
+you should not check any dynamical parameters here, the function is intended to be used as a pure
+type checker:
 
 ```dart
 class Bullet extends PositionComponent with CollisionCallbacks {
@@ -268,13 +272,13 @@ class Bullet extends PositionComponent with CollisionCallbacks {
 
   @override
   void onCollisionStart(
-          Set<Vector2> intersectionPoints,
-          PositionComponent other,
-          ) {
-    // Remove component on contact with Brick
-    // Neither Player or Water would be passed to this function
+    Set<Vector2> intersectionPoints,
+    PositionComponent other,
+  ) {
+    // Removes the component when it comes it contact with a Brick.
+    // Neither Player nor Water would be passed to this function
     // because these classes are filtered out by [broadPhaseCheck]
-    // on early stage
+    // in an earlier stage.
     if (other is Brick) {
       removeFromParent();
     }
@@ -283,9 +287,10 @@ class Bullet extends PositionComponent with CollisionCallbacks {
 }
 ```
 
-After intensive gameplay a map could become over-clusterized to lot of empty quadrants. Also some
-objects with null `parent` could still present in `QuadTree` but being removed from game lifecycle.
-Run `QuadTree.optimize()` to perform a cleanup from "dead" objects and empty quadrants:
+After intensive gameplay a map could become over-clusterized with a lot of empty quadrants. Also some
+objects with null `parent` could still be present in the `QuadTree` but being removed from the game's
+lifecycle.
+Run `QuadTree.optimize()` to perform a cleanup of "dead" objects and empty quadrants:
 
 ```dart
 class QuadTreeExample extends FlameGame

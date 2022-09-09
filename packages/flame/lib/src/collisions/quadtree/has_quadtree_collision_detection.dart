@@ -21,22 +21,23 @@ mixin HasQuadTreeCollisionDetection on FlameGame
     _collisionDetection = cd;
   }
 
-  /// Initialise QuadTree with params:
-  /// - [mapDimensions] describes collision area coordinates and size. Should
-  ///   match to game map position and size
-  /// - [maxObjects] (optional) - maximum objects count in one quadrant
-  /// - [maxLevels] (optional) - maximum nested quadrants
+  /// Initialise the QuadTree.
+  ///
+  /// - [mapDimensions] describes the collision area coordinates and size.
+  ///   Should match to game map position and size.
+  /// - [maxObjects] (optional) - maximum objects count in one quadrant.
+  /// - [maxLevels] (optional) - maximum nested quadrants.
   /// - [minimumDistance] (optional) - specify minimum distance between objects
-  ///   to consider them as possibly collideable. You also can reimplement
-  ///   [minimumDistanceCheck] if you need some custom behavior
+  ///   to consider them as possibly colliding. You can also implement the
+  ///   [minimumDistanceCheck] if you need some custom behavior.
   ///
-  /// [broadPhaseCheck] checks if objects of different types should to collide.
-  /// The result of calculation is cached so you should not check here any
-  /// dynamical parameters, the function intended to be used as pure type
+  /// The [broadPhaseCheck] checks if objects of different types should
+  /// collide.
+  /// The result of the calculation is cached so you should not check any
+  /// dynamical parameters here, the function is intended to be used as pure type
   /// checker.
-  /// It usually should not be reimplemented, see
+  /// It usually should not be overridden, see
   /// [CollisionCallbacks.broadPhaseCheck] instead
-  ///
   void initCollisionDetection({
     required Rect mapDimensions,
     double? minimumDistance,
