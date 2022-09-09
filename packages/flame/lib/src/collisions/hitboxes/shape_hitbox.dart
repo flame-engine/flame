@@ -10,8 +10,25 @@ import 'package:meta/meta.dart';
 /// It is currently used by [CircleHitbox], [RectangleHitbox] and
 /// [PolygonHitbox].
 mixin ShapeHitbox on ShapeComponent implements Hitbox<ShapeHitbox> {
+  CollisionType _collisionType = CollisionType.active;
+
+  set collisionType(CollisionType type) {
+    if (_collisionType == type) {
+      return;
+    }
+    _collisionType = type;
+    final broadPhase = _collisionDetection?.broadphase;
+    if (broadPhase is QuadTreeBroadphase && isMounted) {
+      if (type == CollisionType.active) {
+        broadPhase.activeCollisions.add(this);
+      } else {
+        broadPhase.activeCollisions.remove(this);
+      }
+    }
+  }
+
   @override
-  CollisionType collisionType = CollisionType.active;
+  CollisionType get collisionType => _collisionType;
 
   /// Whether the hitbox is allowed to collide with another hitbox that is
   /// added to the same parent.

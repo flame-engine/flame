@@ -11,7 +11,6 @@ export 'src/collisions/hitboxes/screen_hitbox.dart';
 export 'src/collisions/hitboxes/shape_hitbox.dart';
 export 'src/collisions/quadtree/broadphase.dart';
 export 'src/collisions/quadtree/has_quadtree_collision_detection.dart';
-export 'src/collisions/quadtree/has_quadtree_controller.dart';
 export 'src/collisions/quadtree/quadtree.dart';
 export 'src/collisions/quadtree/quadtree_collision_detection.dart';
 export 'src/collisions/standard_collision_detection.dart';

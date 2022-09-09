@@ -155,10 +155,7 @@ Use WASD to move player. Use mouse scroll to change zoom.
 //#region Player
 
 class Player extends SpriteComponent
-    with
-        CollisionCallbacks,
-        HasGameRef<QuadTreeExample>,
-        HasQuadTreeController<QuadTreeExample> {
+    with CollisionCallbacks, HasGameRef<QuadTreeExample> {
   Player({
     required super.position,
     required super.size,
@@ -221,11 +218,7 @@ class Player extends SpriteComponent
 
 //#region Brick
 
-class Brick extends SpriteComponent
-    with
-        CollisionCallbacks,
-        HasQuadTreeController<QuadTreeExample>,
-        UpdateOnce {
+class Brick extends SpriteComponent with CollisionCallbacks, UpdateOnce {
   Brick({
     required super.position,
     required super.size,
