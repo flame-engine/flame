@@ -4,7 +4,7 @@ import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 
 /// Mixin should be applied to FlameGame to bring QuadTree collision support.
-/// [initCollisionDetection] should be called at [onLoad] function.
+/// [initializeCollisionDetection] should be called at [onLoad] function.
 ///
 mixin HasQuadTreeCollisionDetection on FlameGame
     implements HasCollisionDetection {
@@ -38,7 +38,7 @@ mixin HasQuadTreeCollisionDetection on FlameGame
   /// type checker.
   /// It usually should not be overridden, see
   /// [CollisionCallbacks.broadPhaseCheck] instead
-  void initCollisionDetection({
+  void initializeCollisionDetection({
     required Rect mapDimensions,
     double? minimumDistance,
     int maxObjects = 25,

@@ -44,7 +44,7 @@ Press O button to rescan the tree and optimize it, removing unused quadrants.
 
     const mapWidth = mapSize * tileSize;
     const mapHeight = mapSize * tileSize;
-    initCollisionDetection(
+    initializeCollisionDetection(
       mapDimensions: const Rect.fromLTWH(0, 0, mapWidth, mapHeight),
       minimumDistance: 10,
     );

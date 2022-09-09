@@ -230,12 +230,12 @@ If your game field is large and the game contains a lot (more than one hundred) 
 components, standard sweep and prune can become inefficient. If it does you can try to use the
 quad tree broad phase.
 To do this, add the `HasQuadTreeCollisionDetection` mixin to your game instead of
-`HasCollisionDetection` and call the `initCollisionDetection` function on game load:
+`HasCollisionDetection` and call the `initializeCollisionDetection` function on game load:
 
 ```dart
 class MyGame extends FlameGame with HasQuadTreeCollisionDetection {
   Future<void> onLoad() async {
-    initCollisionDetection(
+    initializeCollisionDetection(
       mapDimensions: const Rect.fromLTWH(0, 0, mapWidth, mapHeight),
       minimumDistance: 10,
     );
@@ -243,9 +243,9 @@ class MyGame extends FlameGame with HasQuadTreeCollisionDetection {
 }
 ```
 
-When calling `initCollisionDetection` you should pass it the correct map dimensions, to make the
-quad tree algorithm to work properly. There are also additional parameters to make the system more
-efficient:
+When calling `initializeCollisionDetection` you should pass it the correct map dimensions, to make
+the quad tree algorithm to work properly. There are also additional parameters to make the system 
+more efficient:
 
 - `minimumDistance`: minimum distance between objects to consider them as possibly collideable.
   If `null` - the check is disabled, it is default behavior

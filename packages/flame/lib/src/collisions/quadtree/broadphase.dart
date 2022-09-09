@@ -16,8 +16,8 @@ typedef ExternalMinDistanceCheck = bool Function(
 
 /// Performs Quad Tree broadphase check.
 ///
-/// See [HasQuadTreeCollisionDetection.initCollisionDetection] for a detailed
-/// description of its initialization parameters.
+/// See [HasQuadTreeCollisionDetection.initializeCollisionDetection] for a
+/// detailed description of its initialization parameters.
 class QuadTreeBroadphase<T extends Hitbox<T>> extends Broadphase<T> {
   QuadTreeBroadphase({
     super.items,
@@ -42,13 +42,13 @@ class QuadTreeBroadphase<T extends Hitbox<T>> extends Broadphase<T> {
 
   final _cachedCenters = <ShapeHitbox, Vector2>{};
 
-  final potentials = HashSet<CollisionProspect<T>>();
-  final potentialsTmp = <List<ShapeHitbox>>[];
+  final _potentials = HashSet<CollisionProspect<T>>();
+  final _potentialsTmp = <List<ShapeHitbox>>[];
 
   @override
   HashSet<CollisionProspect<T>> query() {
-    potentials.clear();
-    potentialsTmp.clear();
+    _potentials.clear();
+    _potentialsTmp.clear();
 
     for (final activeItem in activeCollisions) {
       final asShapeItem = activeItem as ShapeHitbox;
@@ -94,21 +94,21 @@ class QuadTreeBroadphase<T extends Hitbox<T>> extends Broadphase<T> {
           continue;
         }
 
-        potentialsTmp.add([asShapeItem, potential]);
+        _potentialsTmp.add([asShapeItem, potential]);
       }
       markRemove.forEach(tree.remove);
     }
 
-    if (potentialsTmp.isNotEmpty) {
-      for (var i = 0; i < potentialsTmp.length; i++) {
-        final item0 = potentialsTmp[i].first;
-        final item1 = potentialsTmp[i].last;
+    if (_potentialsTmp.isNotEmpty) {
+      for (var i = 0; i < _potentialsTmp.length; i++) {
+        final item0 = _potentialsTmp[i].first;
+        final item1 = _potentialsTmp[i].last;
         var keep = broadphaseCheck(item0, item1);
         if (keep) {
           keep = broadphaseCheck(item1, item0);
         }
         if (keep) {
-          potentials.add(CollisionProspect(item0 as T, item1 as T));
+          _potentials.add(CollisionProspect(item0 as T, item1 as T));
         } else {
           if (_broadphaseCheckCache[item0 as T] == null) {
             _broadphaseCheckCache[item0 as T] = {};
@@ -117,7 +117,7 @@ class QuadTreeBroadphase<T extends Hitbox<T>> extends Broadphase<T> {
         }
       }
     }
-    return potentials;
+    return _potentials;
   }
 
   void updateItemSizeOrPosition(T item) {
