@@ -1,13 +1,6 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/extensions.dart';
 
-extension _QuadMethods on Rect {
-  bool intersects(Rect box) => !(left >= box.right ||
-      right <= box.left ||
-      top >= box.bottom ||
-      bottom <= box.top);
-}
-
 /// Public interface to QuadTree internal data structures
 /// Allow to read node's data without risc to affect on how collisions
 /// works.
@@ -34,7 +27,7 @@ class QuadTreeNodeDebugInfo {
   List<ShapeHitbox> get allElements =>
       _node.valuesRecursive as List<ShapeHitbox>;
 
-  bool get isLeaf => _node.children[0] == null;
+  bool get noChildren => _node.children[0] == null;
 
   int get id => _node.id;
 
@@ -95,8 +88,7 @@ class _Node<T extends Hitbox<T>> {
 /// 6. Use [isMoved] to determine, does hitbox ever changed it's position
 /// 7. Call [clear] to remove all data.
 ///
-/// FIXME: there is no way to remove unused quadrants. See [_tryMerge].
-/// It should be implemented later
+/// Use [optimize] to scan all tree and remove unused quadrants.
 ///
 class QuadTree<T extends Hitbox<T>> {
   QuadTree({
@@ -125,7 +117,7 @@ class QuadTree<T extends Hitbox<T>> {
     return Rect.fromPoints(minOffset, value.aabb.max.toOffset());
   }
 
-  bool _isLeaf(_Node node) => node.children[0] == null;
+  bool _noChildren(_Node node) => node.children[0] == null;
 
   void clear() {
     _rootNode = _Node<T>();
@@ -211,7 +203,7 @@ class QuadTree<T extends Hitbox<T>> {
   _Node<T> _add(_Node<T> node, int depth, Rect box, T value, _Node? parent) {
     // assert(box.containsRect(getBoxOfValue(value)));
     _Node<T> finalNode;
-    if (_isLeaf(node)) {
+    if (_noChildren(node)) {
       // Insert the value in this node if possible
       if (depth >= maxLevels || node.hitboxes.length < maxObjects) {
         node.hitboxes.add(value);
@@ -251,7 +243,7 @@ class QuadTree<T extends Hitbox<T>> {
   }
 
   void _split(_Node node, Rect box) {
-    assert(_isLeaf(node), 'Only leaves can be split');
+    assert(_noChildren(node), 'Only leaves can be split');
     // Create children
     for (var i = 0; i < node.children.length; i++) {
       final newId = ++_nodeLastId;
@@ -283,81 +275,52 @@ class QuadTree<T extends Hitbox<T>> {
   bool _removeFast(T hitbox, {bool oldPosition = false}) {
     final node = _itemAtNode[hitbox];
     if (node == null) {
-      return _remove(_rootNode, mainBoxSize, hitbox, oldPosition);
+      throw '${node.toString()} not found';
     } else {
       return node.hitboxes.remove(hitbox);
     }
   }
 
-  /// Fallback function, might be never called
-  bool _remove(_Node node, Rect box, T value, bool oldPosition) {
-    if (_isLeaf(node)) {
-      // Remove the value from node
-      _removeValue(node, value);
-      return true;
-    } else {
-      // Remove the value in a child if the value is entirely contained in it
-      var hitboxToCheck = value;
-      if (oldPosition) {
-        final lastPos = _oldPositionByItem[value];
-        if (lastPos != null) {
-          hitboxToCheck = RectangleHitbox(
-            position: Vector2(lastPos.min.x, lastPos.min.y),
-            size: Vector2(
-              lastPos.max.x - lastPos.min.x,
-              lastPos.max.y - lastPos.min.y,
-            ),
-          ) as T;
-        }
-      }
-      final quadrant = _getQuadrant(box, _getBoxOfValue(hitboxToCheck));
-      if (quadrant != -1) {
-        final children = node.children[quadrant];
-        if (children == null) {
-          throw 'invalid index $quadrant';
-        }
-        if (_remove(children, _computeBox(box, quadrant), value, oldPosition)) {
-          return _tryMerge(node);
-        }
-      }
-      // Otherwise, we remove the value from the current node
-      else {
-        _removeValue(node, value);
-      }
-      return false;
+  void optimize() {
+    _tryMergeRecursive(_rootNode);
+  }
+
+  void _tryMergeRecursive(_Node node) {
+    if (_noChildren(node)) {
+      return;
     }
-  }
 
-  void _removeValue(_Node node, T value) {
-    node.hitboxes.removeWhere((element) => element == value);
-  }
-
-  /// FIXME: never called.
-  /// An mechanics should be implemented to optimize all tree recursively
-  bool _tryMerge(_Node node) {
-    assert(!_isLeaf(node), 'Only interior nodes can be merged');
-    var nbValues = node.hitboxes.length;
+    var tryMerge = true;
+    var hitboxesInside = node.hitboxes.length;
     for (final child in node.children) {
       if (child == null) {
         throw 'Child must be not null';
       }
-      if (!_isLeaf(child)) {
-        return false;
+      _tryMergeRecursive(child);
+      if (_noChildren(child)) {
+        hitboxesInside += child.hitboxes.length;
+      } else {
+        tryMerge = false;
       }
-      nbValues += child.hitboxes.length;
     }
-    if (nbValues <= maxLevels) {
-      // Merge the values of all the children
-      for (final child in node.children) {
+
+    if (hitboxesInside <= maxObjects && tryMerge) {
+      for (var i = 0; i < node.children.length; i++) {
+        final child = node.children[i];
         if (child == null) {
           throw 'Child must be not null';
         }
         node.hitboxes.addAll(child.hitboxes);
         child.hitboxes.clear();
+        node.children[i] = null;
       }
-      return true;
-    } else {
-      return false;
+      final clear = <ShapeHitbox>[];
+      for (final hitbox in node.hitboxes) {
+        if (hitbox is ShapeHitbox && hitbox.parent == null) {
+          clear.add(hitbox);
+        }
+      }
+      clear.forEach(node.hitboxes.remove);
     }
   }
 
@@ -368,7 +331,7 @@ class QuadTree<T extends Hitbox<T>> {
     var id = -1;
     final values = <T>[];
     if (node == null) {
-      _querySlow(_rootNode, mainBoxSize, _getBoxOfValue(value), values);
+      throw '${node.toString()} not found';
     } else {
       id = node.id;
       values.addAll(node.hitboxes as List<T>);
@@ -399,28 +362,6 @@ class QuadTree<T extends Hitbox<T>> {
       list.addAll(_getParentItems(parent));
     }
     return list;
-  }
-
-  void _querySlow(_Node node, Rect box, Rect queryBox, List<T> values) {
-    // assert(queryBox.intersects(box));
-    for (final value in node.hitboxes) {
-      if (queryBox.intersects(_getBoxOfValue(value as T))) {
-        values.add(value);
-      }
-    }
-    if (!_isLeaf(node)) {
-      for (var i = 0; i < node.children.length; ++i) {
-        final childBox = _computeBox(box, i);
-        if (queryBox.intersects(childBox)) {
-          final child = node.children[i];
-          if (child == null) {
-            throw 'Child must be not null';
-          }
-
-          _querySlow(child, childBox, queryBox, values);
-        }
-      }
-    }
   }
 
   bool isMoved(T hitbox) {

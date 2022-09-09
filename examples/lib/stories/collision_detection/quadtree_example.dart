@@ -158,6 +158,12 @@ on the map because there become more than 25 objects
       if (key == LogicalKeyboardKey.space) {
         fireBullet = true;
       }
+      if (key == LogicalKeyboardKey.keyO) {
+        (collisionDetection as QuadTreeCollisionDetection)
+            .quadBroadphase
+            .tree
+            .optimize();
+      }
     }
     if (fireBullet && displacement != null) {
       final bullet =
@@ -403,7 +409,7 @@ class QuadTreeDebugComponent extends PositionComponent with HasPaint {
       canvas.drawRect(node.rect, paint);
       final nodeElements = node.ownElements;
       Paint? boxPaint;
-      if (!node.isLeaf && nodeElements.isNotEmpty) {
+      if (!node.noChildren && nodeElements.isNotEmpty) {
         boxPaint = Paint();
         boxPaint.style = PaintingStyle.stroke;
         boxPaint.color = Colors.lightGreenAccent;
