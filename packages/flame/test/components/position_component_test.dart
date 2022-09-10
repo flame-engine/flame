@@ -22,6 +22,73 @@ class _MyDebugComponent extends PositionComponent {
 
 void main() {
   group('PositionComponent', () {
+    group('Properties getters and setters', () {
+      test('get/set x/y or position', () {
+        final component = PositionComponent();
+        component.position.setValues(2.2, 3.4);
+        expect(component.x, 2.2);
+        expect(component.y, 3.4);
+
+        component.position = Vector2(1.0, 0.0);
+        expect(component.x, 1.0);
+        expect(component.y, 0.0);
+
+        component.x = 3.1;
+        component.y = -2.2;
+        expect(component.position, Vector2(3.1, -2.2));
+      });
+
+      test('get/set width/height or size', () {
+        final component = PositionComponent();
+        component.size.setValues(2.2, 3.4);
+        expect(component.size.x, 2.2);
+        expect(component.size.y, 3.4);
+
+        component.size = Vector2(1.0, 0.0);
+        expect(component.width, 1.0);
+        expect(component.height, 0.0);
+
+        component.width = 2.1;
+        component.height = 3.3;
+        expect(component.size, Vector2(2.1, 3.3));
+      });
+
+      test('get/set rect', () {
+        final component = PositionComponent(
+          position: Vector2(0, 1),
+          size: Vector2.all(2),
+        );
+        final rect = component.toRect();
+        expect(rect, const Rect.fromLTWH(0, 1, 2, 2));
+
+        component.setByRect(const Rect.fromLTWH(10.0, 10.0, 1.0, 1.0));
+        expect(component.x, 10.0);
+        expect(component.y, 10.0);
+        expect(component.width, 1.0);
+        expect(component.height, 1.0);
+      });
+
+      test('get/set rect with anchor', () {
+        final component = PositionComponent(
+          position: Vector2(0, 1),
+          size: Vector2.all(2),
+          anchor: Anchor.center,
+        );
+        final rect = component.toRect();
+        expect(rect.left, -1.0);
+        expect(rect.top, 0.0);
+        expect(rect.width, 2.0);
+        expect(rect.height, 2.0);
+        expect(component.topLeftPosition, Vector2(-1.0, 0));
+
+        component.setByRect(const Rect.fromLTWH(10.0, 10.0, 1.0, 1.0));
+        expect(component.x, 10.5);
+        expect(component.y, 10.5);
+        expect(component.width, 1.0);
+        expect(component.height, 1.0);
+      });
+    });
+
     test('overlap', () {
       final component = PositionComponent();
       component.position.setValues(2.0, 2.0);
