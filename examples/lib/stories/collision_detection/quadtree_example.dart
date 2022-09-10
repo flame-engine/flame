@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flame/layers.dart';
@@ -10,7 +11,6 @@ import 'package:flutter/services.dart';
 
 const tileSize = 8.0;
 
-//#region Game
 class QuadTreeExample extends FlameGame
     with HasQuadTreeCollisionDetection, KeyboardEvents, ScrollDetector {
   QuadTreeExample();
@@ -183,8 +183,6 @@ Press O button to rescan the tree and optimize it, removing unused quadrants.
     camera.zoom = camera.zoom.clamp(0.05, 5.0);
   }
 }
-
-//#endregion
 
 //#region Player
 
@@ -421,13 +419,7 @@ class QuadTreeDebugComponent extends PositionComponent with HasPaint {
       for (final box in nodeElements) {
         // textPaint.render(canvas, node.id.toString(), box.aabb.min);
         if (boxPaint != null) {
-          final rect = Rect.fromLTRB(
-            box.aabb.min.x,
-            box.aabb.min.y,
-            box.aabb.max.x,
-            box.aabb.max.y,
-          );
-          canvas.drawRect(rect, boxPaint);
+          canvas.drawRect(box.aabb.toRect(), boxPaint);
         }
       }
     }

@@ -203,7 +203,6 @@ class QuadTree<T extends Hitbox<T>> {
   }
 
   _Node<T> _add(_Node<T> node, int depth, Rect box, T value, _Node? parent) {
-    // assert(box.containsRect(getBoxOfValue(value)));
     _Node<T> finalNode;
     if (_noChildren(node)) {
       // Insert the value in this node if possible.
