@@ -19,7 +19,7 @@ void main() {
         'renders correctly',
         (game) async {
           await game.add(
-            RectangleClipComponent(
+            ClipComponent.rectangle(
               size: Vector2(100, 100),
               children: [_Rectangle()],
             ),
@@ -34,7 +34,7 @@ void main() {
         'renders correctly',
         (game) async {
           await game.add(
-            CircleClipComponent(
+            ClipComponent.circle(
               size: Vector2(100, 100),
               children: [_Rectangle()],
             ),
@@ -49,7 +49,7 @@ void main() {
         'renders correctly',
         (game) async {
           await game.add(
-            PolygonClipComponent(
+            ClipComponent.polygon(
               points: [
                 Vector2(1, 0),
                 Vector2(1, 1),
