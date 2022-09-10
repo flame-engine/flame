@@ -124,12 +124,17 @@ of the page it will ask you if you want to open a pull request from your newly c
 
 The title of the pull request should start with a [conventional commit] type.
 
-Examples of such types:
- - `fix:` - patches a bug and is not a new feature.
- - `feat:` - introduces a new feature.
- - `docs:` - updates or adds documentation or examples.
- - `test:` - updates or adds tests.
- - `refactor:` - refactors code but doesn't introduce any changes or additions to the public API.
+Allowed types are:
+ - `fix:` -- patches a bug and is not a new feature;
+ - `feat:` -- introduces a new feature;
+ - `docs:` -- updates or adds documentation or examples;
+ - `test:` -- updates or adds tests;
+ - `refactor:` -- refactors code but doesn't introduce any changes or additions to the public API;
+ - `perf:` -- code change that improves performance;
+ - `build:` -- code change that affects the build system or external dependencies;
+ - `ci:` -- changes to the CI configuration files and scripts;
+ - `chore:` -- other changes that don't modify source or test files;
+ - `revert:` -- reverts a previous commit.
 
 If you introduce a **breaking change** the conventional commit type MUST end with an exclamation
 mark (e.g. `feat!: Remove the position argument from PositionComponent`).
