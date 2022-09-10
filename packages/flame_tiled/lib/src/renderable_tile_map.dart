@@ -493,6 +493,11 @@ class _RenderableTileLayer extends _RenderableLayer<TileLayer> {
         }
       }
 
+      // When staggering in the X axis, we need to hold painting of "lower"
+      // tiles (those with staggerY adjustments) otherwise they'll just get
+      // painted over. See the second pass loop after tx.
+      final xSecondPass = <_Transform>[];
+
       for (var tx = 0; tx < tileRow.length; tx++) {
         final tileGid = tileRow[tx];
         if (tileGid.tile == 0) {
@@ -511,7 +516,7 @@ class _RenderableTileLayer extends _RenderableLayer<TileLayer> {
           continue;
         }
 
-        // Hexagonal Flat tiles shift up and down as we move across the row.
+        // Tiles shift up and down as we move across the row.
         if (_map.staggerAxis == StaggerAxis.x) {
           if ((tx.isOdd && _map.staggerIndex == StaggerIndex.odd) ||
               (tx.isEven && _map.staggerIndex == StaggerIndex.even)) {
@@ -548,15 +553,29 @@ class _RenderableTileLayer extends _RenderableLayer<TileLayer> {
         final scos = flips.cos * scale;
         final ssin = flips.sin * scale;
 
-        batch.addTransform(
-          source: src,
-          transform: ui.RSTransform(
-            scos,
-            ssin,
-            offsetX + -scos * anchorX + ssin * anchorY,
-            offsetY + -ssin * anchorX - scos * anchorY,
-          ),
-          flip: flips.flip,
+        final transform = ui.RSTransform(
+          scos,
+          ssin,
+          offsetX + -scos * anchorX + ssin * anchorY,
+          offsetY + -ssin * anchorX - scos * anchorY,
+        );
+
+        if (staggerY > 0) {
+          xSecondPass.add(_Transform(src, transform, flips.flip, batch));
+        } else {
+          batch.addTransform(
+            source: src,
+            transform: transform,
+            flip: flips.flip,
+          );
+        }
+      }
+
+      for (final tile in xSecondPass) {
+        tile.batch.addTransform(
+          source: tile.source,
+          transform: tile.transform,
+          flip: tile.flip,
         );
       }
     }
@@ -820,4 +839,14 @@ Color? _parseTiledColor(String? tiledColor) {
   } else {
     return null;
   }
+}
+
+/// Caches transforms for staggered maps as the row/col are switched.
+class _Transform {
+  final Rect source;
+  final ui.RSTransform transform;
+  final bool flip;
+  final SpriteBatch batch;
+
+  _Transform(this.source, this.transform, this.flip, this.batch);
 }
