@@ -74,15 +74,13 @@ class PositionComponent extends Component
     Vector2? size,
     Vector2? scale,
     double? angle,
-    double? nativeAngle,
+    this.nativeAngle = 0,
     Anchor? anchor,
     super.children,
     super.priority,
   })  : transform = Transform2D(),
         _anchor = anchor ?? Anchor.topLeft,
-        _size = NotifyingVector2.copy(size ?? Vector2.zero()),
-        _nativeAngle = nativeAngle ?? 0,
-        _nativeDirection = Vector2(0, -1)..rotate(nativeAngle ?? 0) {
+        _size = NotifyingVector2.copy(size ?? Vector2.zero()) {
     decorator = Transform2DDecorator(transform);
     if (position != null) {
       transform.position = position;
@@ -103,16 +101,7 @@ class PositionComponent extends Component
 
   /// The angle where this component is looking at in its
   /// default state, i.e. when [angle] is equal to zero.
-  double _nativeAngle;
-  double get nativeAngle => _nativeAngle;
-  set nativeAngle(double value) {
-    _nativeAngle = value;
-    _nativeDirection.setFrom(Vector2(0, -1)..rotate(_nativeAngle));
-  }
-
-  /// The forward direction for this component when it is in its
-  /// default state, i.e. when [angle] is equal to zero.
-  final Vector2 _nativeDirection;
+  double nativeAngle;
 
   /// The decorator is used to apply visual effects to a component.
   ///
@@ -350,7 +339,11 @@ class PositionComponent extends Component
 
   /// Rotates the component to look at given target.
   void lookAt(Vector2 target) {
-    angle = _nativeDirection.angleToSigned(target - absolutePosition);
+    angle = math.atan2(
+          target.x - absolutePosition.x,
+          absolutePosition.y - target.y,
+        ) -
+        nativeAngle;
   }
 
   //#endregion
