@@ -19,14 +19,7 @@ A simple tutorial to get started can be found on
 Flame can be found on [examples.flame-engine.org](https://examples.flame-engine.org). To access the
 code for each example, press the `< >` button in the top right corner.
 
- *Vocabulary* 
-<ul>
-  <li>FlameGame: The base class for games using the Flame Component System.</li>
-  <li>GameWidget: The Widget that will insert your game into the Flutter widget tree.</li>
-  <li>PositionComponent: One of the most basic Flame components which holds a position and dimensiosn in the game space.</li>
-</ul>
-
-
+ 
 ## Highlighted community tutorials
 
 - @Devowl's Flutter & Flame series:
