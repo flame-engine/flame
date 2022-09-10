@@ -559,8 +559,8 @@ class _RenderableTileLayer extends _RenderableLayer<TileLayer> {
           offsetY + -ssin * anchorX - scos * anchorY,
         );
 
-        if ((_map.staggerAxis == StaggerAxis.x && staggerY > 0) ||
-            (_map.staggerAxis == StaggerAxis.y && staggerX > 0)) {
+        // A second pass is only needed in the case of staggery.
+        if (_map.staggerAxis == StaggerAxis.x && staggerY > 0) {
           xSecondPass.add(_Transform(src, transform, flips.flip, batch));
         } else {
           batch.addTransform(
@@ -679,8 +679,8 @@ class _RenderableTileLayer extends _RenderableLayer<TileLayer> {
           offsetY + -ssin * anchorX - scos * anchorY,
         );
 
-        if ((_map.staggerAxis == StaggerAxis.x && staggerY > 0) ||
-            (_map.staggerAxis == StaggerAxis.y && staggerX > 0)) {
+        // A second pass is only needed in the case of staggery.
+        if (_map.staggerAxis == StaggerAxis.x && staggerY > 0) {
           xSecondPass.add(_Transform(src, transform, flips.flip, batch));
         } else {
           batch.addTransform(
