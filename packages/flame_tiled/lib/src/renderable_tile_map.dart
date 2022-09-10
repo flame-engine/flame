@@ -612,6 +612,11 @@ class _RenderableTileLayer extends _RenderableLayer<TileLayer> {
         }
       }
 
+      // When staggering in the X axis, we need to hold painting of "lower"
+      // tiles (those with staggerY adjustments) otherwise they'll just get
+      // painted over. See the second pass loop after tx.
+      final xSecondPass = <_Transform>[];
+
       for (var tx = 0; tx < tileRow.length; tx++) {
         final tileGid = tileRow[tx];
         if (tileGid.tile == 0) {
@@ -667,15 +672,30 @@ class _RenderableTileLayer extends _RenderableLayer<TileLayer> {
         final scos = flips.cos * scale;
         final ssin = flips.sin * scale;
 
-        batch.addTransform(
-          source: src,
-          transform: ui.RSTransform(
-            scos,
-            ssin,
-            offsetX + -scos * anchorX + ssin * anchorY,
-            offsetY + -ssin * anchorX - scos * anchorY,
-          ),
-          flip: flips.flip,
+        final transform = ui.RSTransform(
+          scos,
+          ssin,
+          offsetX + -scos * anchorX + ssin * anchorY,
+          offsetY + -ssin * anchorX - scos * anchorY,
+        );
+
+        if ((_map.staggerAxis == StaggerAxis.x && staggerY > 0) ||
+            (_map.staggerAxis == StaggerAxis.y && staggerX > 0)) {
+          xSecondPass.add(_Transform(src, transform, flips.flip, batch));
+        } else {
+          batch.addTransform(
+            source: src,
+            transform: transform,
+            flip: flips.flip,
+          );
+        }
+      }
+
+      for (final tile in xSecondPass) {
+        tile.batch.addTransform(
+          source: tile.source,
+          transform: tile.transform,
+          flip: tile.flip,
         );
       }
     }
