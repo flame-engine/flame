@@ -18,6 +18,7 @@ class ParticleSystemComponent extends PositionComponent {
     super.size,
     super.scale,
     super.angle,
+    super.nativeAngle,
     super.anchor,
     super.priority,
   });

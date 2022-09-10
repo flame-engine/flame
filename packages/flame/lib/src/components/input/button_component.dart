@@ -30,6 +30,7 @@ class ButtonComponent extends PositionComponent with Tappable {
     Vector2? size,
     super.scale,
     super.angle,
+    super.nativeAngle,
     super.anchor,
     super.children,
     super.priority,
