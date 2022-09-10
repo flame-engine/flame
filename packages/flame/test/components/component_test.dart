@@ -7,7 +7,27 @@ import 'component_lifecycle_test.dart';
 
 void main() {
   group('Component', () {
+    group('Lifecycle', () {});
+
     group('Adding components', () {
+      testWithFlameGame(
+        'child is not added until the component is loaded',
+        (game) async {
+          final child = Component();
+          final parent = Component();
+          await parent.add(child);
+
+          expect(child.isLoaded, false);
+          expect(child.isMounted, false);
+
+          await game.ensureAdd(parent);
+
+          expect(child.isLoaded, true);
+          expect(child.isMounted, true);
+          expect(parent.contains(child), true);
+        },
+      );
+
       testWithFlameGame('children in the constructor', (game) async {
         game.add(
           Component(
@@ -20,6 +40,13 @@ void main() {
         expect(game.children.first.children.length, 2);
         expect(game.children.first.children.elementAt(0), isA<ComponentA>());
         expect(game.children.first.children.elementAt(1), isA<ComponentB>());
+      });
+
+      testWithFlameGame('add multiple children with addAll', (game) async {
+        final children = List.generate(10, (_) => _AsyncLoadingChild());
+        final parent = Component(children: children);
+        await game.ensureAdd(parent);
+        expect(parent.children.length, children.length);
       });
 
       testWithFlameGame('children in constructor and onLoad', (game) async {
@@ -68,9 +95,41 @@ void main() {
           expect(component.history.last, equals(Vector2(300, 500)));
         },
       );
+
+      testWithFlameGame(
+        'when child is async loading, the child is added to the component '
+        'only after loading',
+        (game) async {
+          final child = _AsyncLoadingChild();
+          final wrapper = Component();
+          await game.ensureAdd(wrapper);
+
+          final future = wrapper.add(child);
+          expect(wrapper.contains(child), false);
+          await future;
+          expect(wrapper.contains(child), false);
+          await game.ready();
+          expect(wrapper.contains(child), true);
+        },
+      );
     });
 
     group('Removing components', () {
+      testWithFlameGame('removing child from a component', (game) async {
+        final child = Component();
+        final parent = Component();
+        await game.ensureAdd(parent);
+        expect(parent.isMounted, true);
+
+        await parent.add(child);
+        game.update(0); // children are only added on the next tick
+        expect(parent.contains(child), true);
+
+        parent.remove(child);
+        game.update(0); // children are only removed on the next tick
+        expect(parent.contains(child), false);
+      });
+
       testWithFlameGame(
         'removeFromParent()',
         (game) async {
@@ -313,6 +372,36 @@ void main() {
       component2.add(Component());
       expect(component1.children.strictMode, true);
       expect(component2.children.strictMode, true);
+    });
+
+    testWithFlameGame('initially same debugMode as parent', (game) async {
+      final child = Component();
+      final parent = Component();
+      parent.debugMode = true;
+
+      parent.add(child);
+      game.add(parent);
+      await game.ready();
+
+      expect(child.debugMode, true);
+      parent.debugMode = false;
+      expect(child.debugMode, true);
+    });
+
+    testWithFlameGame('debugMode propagates to descendants', (game) async {
+      final child = Component();
+      final parent = Component();
+      final grandParent = Component();
+      parent.add(child);
+      grandParent.add(parent);
+      grandParent.debugMode = true;
+
+      game.add(grandParent);
+      await game.ready();
+
+      expect(child.debugMode, true);
+      expect(parent.debugMode, true);
+      expect(grandParent.debugMode, true);
     });
 
     testWithFlameGame(
@@ -639,4 +728,12 @@ class _IdentifiableComponent extends Component {
   final int id;
 
   _IdentifiableComponent(this.id);
+}
+
+class _AsyncLoadingChild extends Component {
+  @override
+  Future<void> onLoad() async {
+    await super.onLoad();
+    return Future.value();
+  }
 }
