@@ -22,12 +22,18 @@ abstract class Style {
   Style? get parent => _parent;
   Style? _parent;
 
-  /// Creates and returns a copy of the current object.
+  /// Creates and returns a copy of the current object, but with parent unset.
+  ///
+  /// This method must be implemented in all derived classes, and return an
+  /// object of the same runtime type as the current.
   Style clone();
 
-  /// Marks [style] as being owned by the current object and returns it.
-  /// However, if the [style] is already owned by some other object, then clones
-  /// the [style], marks the copy as being owned, and returns it.
+  /// Assumes ownership or clones [style].
+  ///
+  /// This marks [style] as being owned by the current object and returns the
+  /// [style]. However, if the [style] is already owned by some other object,
+  /// then clones the [style], marks the copy as being owned, and returns the
+  /// copy.
   @protected
   S? acquire<S extends Style>(S? style) {
     if (style == null) {
