@@ -120,7 +120,7 @@ class QuadTreeBroadphase<T extends Hitbox<T>> extends Broadphase<T> {
     return _potentials;
   }
 
-  void updateItemSizeOrPosition(T item) {
+  void updateTransform(T item) {
     tree.remove(item, oldPosition: true);
     if (item.collisionType == CollisionType.passive) {
       _getCenterOfHitbox(item as ShapeHitbox);

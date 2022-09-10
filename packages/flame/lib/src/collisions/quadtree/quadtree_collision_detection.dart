@@ -42,7 +42,7 @@ class QuadTreeCollisionDetection extends StandardCollisionDetection {
     if (parent != null && parent is PositionComponent) {
       parent.position.addListener(listenerTransform);
     }
-    item.size.addListener(listenerTransform);
+    item.transform.removeListener(listenerTransform);
     _listenerTransform[item] = listenerTransform;
 
     // ignore: prefer_function_declarations_over_variables
@@ -74,7 +74,7 @@ class QuadTreeCollisionDetection extends StandardCollisionDetection {
       if (parent != null && parent is PositionComponent) {
         parent.position.removeListener(listenerTransform);
       }
-      item.size.removeListener(listenerTransform);
+      item.transform.removeListener(listenerTransform);
       _listenerTransform.remove(item);
     }
 
@@ -97,7 +97,7 @@ class QuadTreeCollisionDetection extends StandardCollisionDetection {
   @override
   void run() {
     _scheduledUpdate.forEach(
-      quadBroadphase.updateItemSizeOrPosition,
+      quadBroadphase.updateTransform,
     );
     _scheduledUpdate.clear();
     super.run();
