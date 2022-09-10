@@ -23,11 +23,10 @@ please read these instructions carefully.
 ### New Features
  - If you'd like to add a feature to the library that doesn't already exist, feel free to describe
    the feature in a new [GitHub issue].
-   - You can also join us on [Discord] to discuss some initials
-   thoughts.
+   - You can also join us on [Discord] to discuss some initials thoughts.
  - If you'd like to implement the new feature, please wait for feedback from the project maintainers
    before spending too much time writing the code. In some cases, enhancements may not align well
-   with the project objectives at the time.
+   with the project future development direction.
  - Implement the code for the new feature and please read the [How To](#how-to-contribute).
 
 
@@ -41,18 +40,17 @@ please read these instructions carefully.
 ## How To Contribute
 
 ### Requirements
+
 For a contribution to be accepted:
 
-- Documentation should always be updated or added.*
-- Examples should always be updated or added.*
-- Tests should always be updated or added.*
-- Format the Dart code accordingly with `flutter format`.
-- Your code should pass the analyzer checks `melos run analyze`.
-- Your code should pass all tests `melos run test`.
-- Start your PR title with a [conventional commit] type
-  (`feat:`, `fix:` etc).
-
-*When applicable.
+- Follow the [Style Guide] when writing the code;
+- Format the code using `flutter format .`;
+- Lint the code with `melos run analyze`;
+- Check that all tests pass: `melos run test`;
+- Documentation should always be updated or added (if applicable);
+- Examples should always be updated or added (if applicable);
+- Tests should always be updated or added (if applicable);
+- The PR title should start with a [conventional commit] prefix (`feat:`, `fix:` etc).
 
 If the contribution doesn't meet these criteria, a maintainer will discuss it with you on the issue
 or PR. You can still continue to add more commits to the branch you have sent the Pull Request from
@@ -60,6 +58,7 @@ and it will be automatically reflected in the PR.
 
 
 ## Open an issue and fork the repository
+
  - If it is a bigger change or a new feature, first of all
    [file a bug or feature report][GitHub issues], so that we can discuss what direction to follow.
  - [Fork the project][fork guide] on GitHub.
@@ -68,18 +67,18 @@ and it will be automatically reflected in the PR.
 
 
 ### Environment Setup
-Flame uses [Melos] to manage the project and dependencies.
 
-To install Melos, run the following command from your terminal:
+Flame uses [Melos] to manage the project and dependencies. To install Melos, run the following
+command from your terminal:
 
 ```bash
-flutter pub global activate melos
+$ flutter pub global activate melos
 ```
 
 Next, at the root of your locally cloned repository bootstrap the projects dependencies:
 
 ```bash
-melos bootstrap
+$ melos bootstrap
 ```
 
 The bootstrap command locally links all dependencies within the project without having to
@@ -91,6 +90,7 @@ command once.
 
 
 ### Performing changes
+
  - Create a new local branch from `main` (e.g. `git checkout -b my-new-feature`)
  - Make your changes (try to split them up with one PR per feature/fix).
  - When committing your changes, make sure that each commit message is clear
@@ -117,6 +117,7 @@ void deprecatedFeature() {}
 
 
 ### Open a pull request
+
 Go to the [pull request page of Flame][PRs] and in the top
 of the page it will ask you if you want to open a pull request from your newly created branch.
 
@@ -183,3 +184,4 @@ There are a few things to think about when doing a release:
 [Melos]: https://github.com/invertase/melos
 [pubspec doc]: https://dart.dev/tools/pub/pubspec
 [conventional commit]: https://www.conventionalcommits.org
+[style guide]: https://docs.flame-engine.org/main/development/style_guide.md
