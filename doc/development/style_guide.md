@@ -87,8 +87,8 @@ however, using exceptions would be more appropriate. The following rules of thum
   in the Flame framework.
 
   Such asserts serve as "mini-tests" directly in the code, and protect against future refactorings
-  that could create erroneous internal state. It should not be possible to write a test that would
-  deliberately trigger such an assert.
+  that could create an erroneous internal state. It should not be possible to write a test that
+  would deliberately trigger such an assert.
 
 - Use an explicit if-check with an exception to test for a condition that may be outside of the
   developer's control (i.e. it may depend on the environment or on user's input). When deciding
@@ -155,7 +155,7 @@ however, using exceptions would be more appropriate. The following rules of thum
 
 - Check the [Flutter Documentation Guide] -- it contains lots of great advice on writing good
   documentation.
-    - However, disregard the advice about writing in passive voice.
+    - However, disregard the advice about writing in a passive voice.
 
 - Class documentation should ideally start with the class name itself, and follow a pattern such as:
   ```dart
@@ -174,7 +174,7 @@ however, using exceptions would be more appropriate. The following rules of thum
   ```dart
   /// Adds a new [child] into the container, and becomes the owner of that child.
   ///
-  /// The child will be disposed when this container is destroyed. It is an error to try to add a
+  /// The child will be disposed of when this container is destroyed. It is an error to try to add a
   /// child that already belongs to another container.
   void addChild(T child) { ... }
   ```

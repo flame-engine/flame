@@ -42,7 +42,7 @@ test('the name of the test', () {
   expect(...);
 });
 ```
-This is the simplest kind of tests available, and also the fastest. Use these tests for checking
+This is the simplest kind of test available, and also the fastest. Use these tests for checking
 some classes/methods that can function in isolation from the rest of the Flame framework.
 
 
@@ -59,7 +59,7 @@ testWithFlameGame('the name of the test', (game) async {
 });
 ```
 Here the `game` instance that is passed to the test body is a fully initialized game that behaves
-as if it was mounted to a `GameWidget`. The `game.ready()` method waits until all the schedule
+as if it was mounted to a `GameWidget`. The `game.ready()` method waits until all the scheduled
 components are loaded and mounted to the component tree.
 
 The time within the `game` can be advanced with `game.update(dt)`.
@@ -156,5 +156,5 @@ higher than 10.
 
 If the test breaks at some particular seed, then that seed will be shown in the test output. Add it
 as the `seed: NNN` parameter to your test, and you'll be able to run it for the same seed as long
-as you need until the test fixed. Do not leave the `seed:` parameter when submitting your code, as
-it defeats the purpose of having the test randomized.
+as you need until the test is fixed. Do not leave the `seed:` parameter when submitting your code,
+as it defeats the purpose of having the test randomized.
