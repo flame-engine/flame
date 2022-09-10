@@ -1,13 +1,220 @@
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame_test/flame_test.dart';
-import 'package:test/test.dart';
-
-import 'component_lifecycle_test.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('Component', () {
-    group('Lifecycle', () {});
+    group('Lifecycle', () {
+      testWithFlameGame('correct order', (game) async {
+        final component = LifecycleComponent();
+        await game.add(component);
+        await game.ready();
+
+        expect(
+          component.events,
+          ['onGameResize [800.0,600.0]', 'onLoad', 'onMount'],
+        );
+      });
+
+      testWithFlameGame('component mounted completes', (game) async {
+        final component = LifecycleComponent();
+        final mounted = component.mounted;
+        await game.add(component);
+        await game.ready();
+
+        await expectLater(mounted, completes);
+        await expectLater(component.mounted, completes);
+      });
+
+      testWithFlameGame(
+        'component mounted completes when changing parent',
+        (game) async {
+          final parent = LifecycleComponent('parent');
+          final child = LifecycleComponent('child');
+          parent.add(child);
+          game.add(parent);
+
+          var mounted = child.mounted;
+          await game.ready();
+
+          await expectLater(mounted, completes);
+
+          child.changeParent(game);
+          mounted = child.mounted;
+          game.update(0);
+          await game.ready();
+
+          await expectLater(mounted, completes);
+        },
+      );
+
+      testWithFlameGame(
+        'component mounted completes when changing parent from a null parent',
+        (game) async {
+          final parent = LifecycleComponent('parent');
+          final child = LifecycleComponent('child');
+          game.add(parent);
+
+          final mounted = child.mounted;
+          await game.ready();
+
+          child.changeParent(parent);
+          game.update(0);
+          await game.ready();
+
+          expect(child.parent, parent);
+          expect(child.isMounted, true);
+          await expectLater(mounted, completes);
+        },
+      );
+
+      testWithFlameGame(
+        'Component.mounted completes after the component is mounted',
+        (game) async {
+          final child = LifecycleComponent();
+          var mountedFutureCompleted = false;
+          final future = child.mounted.then((_) {
+            expect(child.isMounted, true);
+            expect(child.events, contains('onMount'));
+            mountedFutureCompleted = true;
+          });
+          game.add(child);
+          await game.ready();
+          expect(child.isMounted, true);
+          await future;
+          expect(mountedFutureCompleted, true);
+        },
+      );
+
+      testWithFlameGame('component loaded completes', (game) async {
+        final component = LifecycleComponent();
+        await game.add(component);
+        final loaded = component.loaded;
+
+        await game.ready();
+
+        await expectLater(loaded, completes);
+        await expectLater(component.loaded, completes);
+      });
+
+      testWithFlameGame(
+        'loaded completes even if accessed before the component added to game',
+        (game) async {
+          final component = Component();
+          final loadedFuture = component.loaded;
+          game.add(component);
+          await game.ready();
+          expectLater(loadedFuture, completes);
+        },
+      );
+
+      testWithFlameGame('correct lifecycle on parent change', (game) async {
+        final parent = LifecycleComponent('parent');
+        final child = LifecycleComponent('child');
+        parent.add(child);
+        game.add(parent);
+        await game.ready();
+        child.changeParent(game);
+        game.update(0);
+        await game.ready();
+
+        expect(
+          parent.events,
+          ['onGameResize [800.0,600.0]', 'onLoad', 'onMount'],
+        );
+        // onLoad should only be called the first time that the component is
+        // loaded.
+        expect(
+          child.events,
+          [
+            'onGameResize [800.0,600.0]',
+            'onLoad',
+            'onMount',
+            'onRemove',
+            'onGameResize [800.0,600.0]',
+            'onMount',
+          ],
+        );
+      });
+
+      testWithFlameGame(
+        'components added in correct order even with different load times',
+        (game) async {
+          final a = SlowComponent(0.1);
+          final b = SlowComponent(0.02);
+          final c = SlowComponent(0.05);
+          final d = SlowComponent(0);
+          game.add(a);
+          game.add(b);
+          game.add(c);
+          game.add(d);
+          await game.ready();
+          expect(game.children.toList(), equals([a, b, c, d]));
+        },
+      );
+
+      testWidgets('Multi-widget game', (WidgetTester tester) {
+        return tester.runAsync(() async {
+          final game1 = FlameGame();
+          final game2 = FlameGame();
+          // Device size is set to 800x600
+          await tester.pumpWidget(
+            Row(
+              textDirection: TextDirection.ltr,
+              children: [
+                SizedBox(width: 295, child: GameWidget(game: game1)),
+                SizedBox(width: 505, child: GameWidget(game: game2)),
+              ],
+            ),
+          );
+          final component1 = LifecycleComponent('A')..addToParent(game1);
+          final component2 = LifecycleComponent('B')..addToParent(game2);
+          await game1.ready();
+          await game2.ready();
+          expect(
+            component1.events,
+            ['onGameResize [295.0,600.0]', 'onLoad', 'onMount'],
+          );
+          expect(
+            component2.events,
+            ['onGameResize [505.0,600.0]', 'onLoad', 'onMount'],
+          );
+        });
+      });
+
+      testWithFlameGame(
+        'Remove and re-add component with children',
+        (game) async {
+          final parent = LifecycleComponent('parent');
+          final child = LifecycleComponent('child')..addToParent(parent);
+          await game.add(parent);
+          await game.ready();
+
+          expect(parent.isMounted, true);
+          expect(child.isMounted, true);
+          expect(parent.parent, game);
+          expect(child.parent, parent);
+
+          parent.removeFromParent();
+          await game.ready();
+
+          expect(parent.isMounted, false);
+          expect(child.isMounted, false);
+          expect(parent.parent, isNull);
+          expect(child.parent, isNull);
+
+          await game.add(parent);
+          await game.ready();
+
+          expect(parent.isMounted, true);
+          expect(child.isMounted, true);
+          expect(parent.parent, game);
+          expect(child.parent, parent);
+        },
+      );
+    });
 
     group('Adding components', () {
       testWithFlameGame(
@@ -361,81 +568,6 @@ void main() {
       );
     });
 
-    testWithFlameGame('childrenFactory', (game) async {
-      final component0 = Component();
-      expect(component0.children.strictMode, false);
-
-      Component.childrenFactory = () => ComponentSet(strictMode: true);
-      final component1 = Component();
-      final component2 = Component();
-      component1.add(component2);
-      component2.add(Component());
-      expect(component1.children.strictMode, true);
-      expect(component2.children.strictMode, true);
-    });
-
-    testWithFlameGame('initially same debugMode as parent', (game) async {
-      final child = Component();
-      final parent = Component();
-      parent.debugMode = true;
-
-      parent.add(child);
-      game.add(parent);
-      await game.ready();
-
-      expect(child.debugMode, true);
-      parent.debugMode = false;
-      expect(child.debugMode, true);
-    });
-
-    testWithFlameGame('debugMode propagates to descendants', (game) async {
-      final child = Component();
-      final parent = Component();
-      final grandParent = Component();
-      parent.add(child);
-      grandParent.add(parent);
-      grandParent.debugMode = true;
-
-      game.add(grandParent);
-      await game.ready();
-
-      expect(child.debugMode, true);
-      expect(parent.debugMode, true);
-      expect(grandParent.debugMode, true);
-    });
-
-    testWithFlameGame(
-      'propagateToChildren visits children in the correct order',
-      (game) async {
-        final component1 = IntComponent()..addToParent(game);
-        final component2 = IntComponent()..addToParent(game);
-        final component3 = IntComponent()..addToParent(component2);
-        final component4 = IntComponent()..addToParent(component2);
-        await game.ready();
-
-        var order = 0;
-        game.propagateToChildren(
-          (component) {
-            order += 1;
-            if (component is IntComponent) {
-              expect(component.value, 0);
-              component.value = order;
-            } else {
-              expect(component, equals(game));
-              expect(order, 5);
-            }
-            return true;
-          },
-          includeSelf: true,
-        );
-        expect(component4.value, 1);
-        expect(component3.value, 2);
-        expect(component2.value, 3);
-        expect(component1.value, 4);
-        expect(order, 5);
-      },
-    );
-
     group('descendants()', () {
       testWithFlameGame(
         'descendants in a deep component tree',
@@ -627,6 +759,83 @@ void main() {
         ]);
       });
     });
+
+    group('miscellaneous', () {
+      testWithFlameGame('childrenFactory', (game) async {
+        final component0 = Component();
+        expect(component0.children.strictMode, false);
+
+        Component.childrenFactory = () => ComponentSet(strictMode: true);
+        final component1 = Component();
+        final component2 = Component();
+        component1.add(component2);
+        component2.add(Component());
+        expect(component1.children.strictMode, true);
+        expect(component2.children.strictMode, true);
+      });
+
+      testWithFlameGame('initially same debugMode as parent', (game) async {
+        final child = Component();
+        final parent = Component();
+        parent.debugMode = true;
+
+        parent.add(child);
+        game.add(parent);
+        await game.ready();
+
+        expect(child.debugMode, true);
+        parent.debugMode = false;
+        expect(child.debugMode, true);
+      });
+
+      testWithFlameGame('debugMode propagates to descendants', (game) async {
+        final child = Component();
+        final parent = Component();
+        final grandParent = Component();
+        parent.add(child);
+        grandParent.add(parent);
+        grandParent.debugMode = true;
+
+        game.add(grandParent);
+        await game.ready();
+
+        expect(child.debugMode, true);
+        expect(parent.debugMode, true);
+        expect(grandParent.debugMode, true);
+      });
+
+      testWithFlameGame(
+        'propagateToChildren visits children in the correct order',
+        (game) async {
+          final component1 = IntComponent()..addToParent(game);
+          final component2 = IntComponent()..addToParent(game);
+          final component3 = IntComponent()..addToParent(component2);
+          final component4 = IntComponent()..addToParent(component2);
+          await game.ready();
+
+          var order = 0;
+          game.propagateToChildren(
+            (component) {
+              order += 1;
+              if (component is IntComponent) {
+                expect(component.value, 0);
+                component.value = order;
+              } else {
+                expect(component, equals(game));
+                expect(order, 5);
+              }
+              return true;
+            },
+            includeSelf: true,
+          );
+          expect(component4.value, 1);
+          expect(component3.value, 2);
+          expect(component2.value, 3);
+          expect(component1.value, 4);
+          expect(order, 5);
+        },
+      );
+    });
   });
 }
 
@@ -667,6 +876,49 @@ class TwoChildrenComponent extends Component {
   }
 }
 
+class LifecycleComponent extends Component {
+  final List<String> events = [];
+  final String? name;
+
+  LifecycleComponent([this.name]);
+
+  int countEvents(String event) {
+    return events.where((e) => e == event).length;
+  }
+
+  @override
+  Future<void> onLoad() async {
+    expect(isLoading, true);
+    expect(isLoaded, false);
+    expect(isMounted, false);
+    expect(isRemoving, false);
+    events.add('onLoad');
+  }
+
+  @override
+  void onMount() {
+    expect(isLoading, false);
+    expect(isLoaded, true);
+    expect(isMounted, false);
+    expect(isRemoving, false);
+    events.add('onMount');
+  }
+
+  @override
+  void onRemove() {
+    expect(isLoaded, true);
+    expect(isMounted, true);
+    events.add('onRemove');
+    super.onRemove();
+  }
+
+  @override
+  void onGameResize(Vector2 size) {
+    super.onGameResize(size);
+    events.add('onGameResize $size');
+  }
+}
+
 class _SlowLoadingComponent extends Component {
   int onLoadCalledCount = 0;
 
@@ -674,6 +926,17 @@ class _SlowLoadingComponent extends Component {
   Future<void> onLoad() async {
     onLoadCalledCount++;
     await Future<void>.delayed(const Duration(milliseconds: 10));
+  }
+}
+
+class SlowComponent extends Component {
+  SlowComponent(this.loadTime);
+  final double loadTime;
+
+  @override
+  Future<void> onLoad() async {
+    final ms = (loadTime * 1000).toInt();
+    await Future<int?>.delayed(Duration(milliseconds: ms));
   }
 }
 
