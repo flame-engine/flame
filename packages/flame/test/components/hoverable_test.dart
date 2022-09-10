@@ -7,54 +7,20 @@ import 'package:flame_test/flame_test.dart';
 import 'package:flutter/gestures.dart' show PointerHoverEvent;
 import 'package:test/test.dart';
 
-class _GameWithHoverables extends FlameGame with HasHoverables {}
-
-class _HoverableComponent extends PositionComponent with Hoverable {
-  int enterCount = 0;
-  int leaveCount = 0;
-
-  @override
-  bool onHoverEnter(PointerHoverInfo info) {
-    enterCount++;
-    return true;
-  }
-
-  @override
-  bool onHoverLeave(PointerHoverInfo info) {
-    leaveCount++;
-    return true;
-  }
-}
-
-class _NonPropagatingComponent extends _HoverableComponent {
-  @override
-  bool onHoverEnter(PointerHoverInfo info) {
-    super.onHoverEnter(info);
-    return false;
-  }
-
-  @override
-  bool onHoverLeave(PointerHoverInfo info) {
-    super.onHoverLeave(info);
-    return false;
-  }
-}
-
 void main() {
-  final withHoverables = FlameTester(_GameWithHoverables.new);
-
   group('Hoverable', () {
-    withHoverables.test(
+    testWithGame<_GameWithHoverables>(
       'make sure they can be added to game with HasHoverables',
+      _GameWithHoverables.new,
       (game) async {
         await game.add(_HoverableComponent());
         await game.ready();
       },
     );
 
-    flameGame.test(
+    testWithFlameGame(
       'make sure they cannot be added to invalid games',
-      (game) {
+      (game) async {
         expect(
           () async {
             await game.add(_HoverableComponent());
@@ -68,8 +34,9 @@ void main() {
       },
     );
 
-    withHoverables.test(
+    testWithGame<_GameWithHoverables>(
       'single component',
+      _GameWithHoverables.new,
       (game) async {
         final c = _HoverableComponent()
           ..position = Vector2(10, 20)
@@ -112,8 +79,9 @@ void main() {
       },
     );
 
-    withHoverables.test(
+    testWithGame<_GameWithHoverables>(
       'camera is respected',
+      _GameWithHoverables.new,
       (game) async {
         final c = _HoverableComponent()
           ..position = Vector2(10, 20)
@@ -134,8 +102,9 @@ void main() {
       },
     );
 
-    withHoverables.test(
+    testWithGame<_GameWithHoverables>(
       'multiple components',
+      _GameWithHoverables.new,
       (game) async {
         final a = _HoverableComponent()
           ..position = Vector2(10, 0)
@@ -172,8 +141,9 @@ void main() {
       },
     );
 
-    withHoverables.test(
+    testWithGame<_GameWithHoverables>(
       'composed components',
+      _GameWithHoverables.new,
       (game) async {
         final parent = _HoverableComponent()
           ..position = Vector2.all(10)
@@ -196,6 +166,39 @@ void main() {
       },
     );
   });
+}
+
+class _GameWithHoverables extends FlameGame with HasHoverables {}
+
+class _HoverableComponent extends PositionComponent with Hoverable {
+  int enterCount = 0;
+  int leaveCount = 0;
+
+  @override
+  bool onHoverEnter(PointerHoverInfo info) {
+    enterCount++;
+    return true;
+  }
+
+  @override
+  bool onHoverLeave(PointerHoverInfo info) {
+    leaveCount++;
+    return true;
+  }
+}
+
+class _NonPropagatingComponent extends _HoverableComponent {
+  @override
+  bool onHoverEnter(PointerHoverInfo info) {
+    super.onHoverEnter(info);
+    return false;
+  }
+
+  @override
+  bool onHoverLeave(PointerHoverInfo info) {
+    super.onHoverLeave(info);
+    return false;
+  }
 }
 
 // TODO(luan): we can probably provide some helpers to facilitate testing events
