@@ -323,8 +323,7 @@ class _RenderableTileLayer extends _RenderableLayer<TileLayer> {
     this._destTileSize,
     this._cachedSpriteBatches,
   ) {
-    _layerPaint.color = Color.fromRGBO(255, 255, 255, opacity);
-    _cacheLayerTiles();
+    _layerPaint.color = Color.fromRGBO(255, 255, 255, layer.opacity);
   }
 
   @override
@@ -560,7 +559,8 @@ class _RenderableTileLayer extends _RenderableLayer<TileLayer> {
           offsetY + -ssin * anchorX - scos * anchorY,
         );
 
-        if (staggerY > 0) {
+        if ((_map.staggerAxis == StaggerAxis.x && staggerY > 0) ||
+            (_map.staggerAxis == StaggerAxis.y && staggerX > 0)) {
           xSecondPass.add(_Transform(src, transform, flips.flip, batch));
         } else {
           batch.addTransform(
@@ -848,5 +848,10 @@ class _Transform {
   final bool flip;
   final SpriteBatch batch;
 
-  _Transform(this.source, this.transform, this.flip, this.batch);
+  _Transform(
+    this.source,
+    this.transform,
+    this.flip,
+    this.batch,
+  );
 }
