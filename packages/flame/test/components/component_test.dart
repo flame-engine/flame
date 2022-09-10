@@ -216,6 +216,31 @@ void main() {
       );
     });
 
+    group('onGameResize', () {
+      testWithFlameGame('game calls onGameResize during add', (game) async {
+        final a = _GameResizeComponent('a');
+        await game.ensureAdd(a);
+        expect(a.gameSize, Vector2(800, 600));
+      });
+
+      testWithFlameGame('game calls resize after added', (game) async {
+        final a = _GameResizeComponent('a');
+        await game.ensureAdd(a);
+        game.onGameResize(Vector2(100, 100));
+        expect(a.gameSize, Vector2(100, 100));
+      });
+
+      testWithFlameGame(
+        "game calls doesn't change component size",
+        (game) async {
+          final a = _GameResizeComponent('a');
+          await game.ensureAdd(a);
+          game.onGameResize(Vector2.all(100));
+          expect(a.size, isNot(Vector2.all(100)));
+        },
+      );
+    });
+
     group('Adding components', () {
       testWithFlameGame(
         'child is not added until the component is loaded',
@@ -998,5 +1023,18 @@ class _AsyncLoadingChild extends Component {
   Future<void> onLoad() async {
     await super.onLoad();
     return Future.value();
+  }
+}
+
+class _GameResizeComponent extends PositionComponent {
+  _GameResizeComponent(this.name) : super(size: Vector2.all(2.0));
+
+  String name;
+  late Vector2 gameSize;
+
+  @override
+  void onGameResize(Vector2 gameSize) {
+    super.onGameResize(gameSize);
+    this.gameSize = gameSize;
   }
 }
