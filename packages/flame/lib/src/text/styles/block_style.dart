@@ -9,9 +9,9 @@ class BlockStyle extends Style {
     this.background,
   });
 
-  EdgeInsets margin;
-  EdgeInsets padding;
-  BackgroundStyle? background;
+  final EdgeInsets margin;
+  final EdgeInsets padding;
+  final BackgroundStyle? background;
 
   @override
   BlockStyle clone() => copyWith();
