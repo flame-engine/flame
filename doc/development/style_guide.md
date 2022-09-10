@@ -1,165 +1,211 @@
-# Style Guide
+# Flame Style Guide
 
-This is a general style guide that shall govern over all Flame repositories. The aim is to keep
-all codebases clean and pristine. This includes high level guidance to help with simple decisions
-in the day-to-day development life.
+This is a general style guide for writing code within Flame and adjacent projects. We strive to
+maintain the code clean and readable -- both for the benefit of the users who will need to study
+this code in order to understand how a particular feature works or debug something that is breaking,
+and for the benefit of the current and future maintainers.
 
-This extends rules on the official [Flutter Style
-Guide](https://github.com/flutter/flutter/wiki/Style-guide-for-Flutter-repo) and [Effective Dart
-Patterns](https://dart.dev/guides/language/effective-dart). Those rules apply unless otherwise
-specified in this document.
+This guide extends upon the official style guides of Dart and Flutter. Those guides should be
+considered an essential part of this style guide. However, whenever some rules contradict others,
+the following order of preferences apply:
+- **Flame Style Guide** (this document)
+- **[Flutter Style Guide]**
+- **[Effective Dart]**
 
-Note that this is not yet an exhaustive guide, and consider it a work in progress. PRs are welcome!
 
 ## Code Formatting
 
-### Max line length
-
-For all files, including markdown, keep each line within a hundred or less characters.
-
-### Trailing Commas and Wrapping
-
-List of elements must always be all in one line or one element per line. This includes parameters,
-arguments, collection literals, etc. Furthermore, if multiline, the last element must have a
-trailing comma.
-
-For the sake of example, let's use a function invocation (the same apply for all cases):
-
+Most of the code formatting rules are enforced automatically via the linter. Run the following
+commands to ensure the code is conformant and to fix any easy formatting problems:
+```console
+$ flutter analyze
+$ flutter format .
 ```
-// good
-foo(p1, p2, p3)
 
-// good
-foo(
-    p1,
-    p2,
-    p3,
-)
 
-// bad: missing trailing comma
-foo(
-    p1,
-    p2,
-    p3
-)
-
-// bad: mixed argument lines
-foo(
-    p1, p2,
-    p3,
-)
-
-// bad: mixed argument lines
-foo(f1,
-    f2)
-```
+## Code Structure
 
 ### Imports
 
-* Never include unused or duplicated imports.
-* You must always use relative imports for imports within the Flame library (internal imports must
-  be relative).
-* Omit `./` for relative imports from the same directory.
-* Avoid importing groups of APIs internally, for example, importing `lib/effects.dart` just to use
-  `ScaleEffect`.
-* Order your imports by:
-  * Three main blocks, each separated by exactly one empty line:
-    * Dart SDK dependencies,
-    * External libraries/Flutter imports,
-    * Internal (same library) imports.
-  * Then, for each block, order alphabetically.
-    * For relative imports, that means further away (more `../`) imports will be first.
+- Avoid importing groups of APIs internally, for example, importing `lib/effects.dart` just to use
+  `ScaleEffect`. Instead, import the file that defines `ScaleEffect`.
 
-For example:
+- If you're using an external symbol that's defined in multiple libraries, prefer importing the
+  smallest of them. For example, use `package:meta/meta.dart` to import annotations like
+  `@protected`, or `dart:ui` to import `Canvas`.
 
-```
-import 'dart:math';
+- Never import `package:flutter/cupertino.dart` or `package:flutter/material.dart` -- prefer
+  a much smaller library `package:flutter/widgets.dart` if you're working with widgets.
 
-import 'package:flutter/foundation.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart' hide WidgetBuilder, Viewport;
-import 'package:ordered_set/comparing.dart';
-import 'package:ordered_set/ordered_set.dart';
 
-import '../../extensions.dart';
-import '../components/component.dart';
-import '../components/mixins/has_game_ref.dart';
-import '../components/mixins/tappable.dart';
-import '../components/position_component.dart';
-import '../fps_counter.dart';
-import 'camera.dart';
-import 'game.dart';
-import 'viewport.dart';
-```
+### Exports
 
-## Code Structure
-### Global Variables
+- Strongly prefer to have only one public class per file, and name the file after that class.
+  Having several private classes within the file is perfectly reasonable.
 
-Do not use public global variables or constants; namespace everything inside appropriate scopes.
+- A possible exception to this rule if the "main" class requires some small "helper" classes that
+  need to be public. Or if the file hosts multiple very small related classes.
 
-### Asserts
+- The "main" class in a file should be located at the start of the file (right after the imports
+  section), so that it can be seen immediately upon opening the file. All other definitions,
+  including typedefs, helper classes and functions, should be moved below the main class.
 
-Use asserts to detect contract violation.
+- If multiple public symbols are defined in a file, then they must be exported explicitly using
+  the `export ... show ...` statement. For example:
+  ```dart
+  export 'src/effects/provider_interfaces.dart'
+    show
+      AnchorProvider,
+      AngleProvider,
+      PositionProvider,
+      ScaleProvider,
+      SizeProvider;
+  ```
 
-Example:
 
-````dart
-void something(int smaller, int bigger) {
-  assert(small < bigger, 'smaller is not smaller than bigger');
-  // ...
-}
-````
+### Assertions
 
-## Comments
+Use `assert`s to detect contract violations, or pre-condition/post-condition failures. Sometimes,
+however, using exceptions would be more appropriate. The following rules of thumb apply:
 
-* For any `//` comments, always add a space after the second slash and before the next character.
-* Use `//` (or block comments) for comments about the code; use `///` for dartdocs about APIs.
+- Use an assert with a clear error message to check for a condition that is in developers' control.
+  For example, when creating a component that takes an `opacity` level as an input, you should check
+  whether the value is in the range from 0 to 1. Consider also including the value itself into the
+  error message, to make it easier for the developer to debug the error:
+  ```dart
+  assert(0 <= opacity && opacity <= 1, 'The opacity value must be from 0 to 1: $opacity');
+  ```
+  Always use asserts as early as possible to detect possible violations. For example, check the
+  validity of `opacity` in the constructor/setter, instead of in the render function.
 
-### TODO
+  When adding such an assert, also include a test that checks that the assert triggers. This test
+  would verify that the component does not accept invalid input, and that the error message is what
+  you expect it to be.
 
-TODO comments should follow this template: `// TODO(username): Comment`
+- Use an assert without an error message to check for a condition that cannot be triggered by the
+  developer through any means known to you. If such an assert does trigger, it would indicate a bug
+  in the Flame framework.
 
-I.e., double slash, one space, `TODO` in caps followed by your name in parenthesis, colon, one space
-and the comment, capitalized as a sentence. No need to include a period if it's a single sentence.
+  Such asserts serve as "mini-tests" directly in the code, and protect against future refactorings
+  that could create erroneous internal state. It should not be possible to write a test that would
+  deliberately trigger such an assert.
 
-```dart
-// bad: missing identifier, mixed-case "TODO" and lowercase comment
+- Use an explicit if-check with an exception to test for a condition that may be outside of the
+  developer's control (i.e. it may depend on the environment or on user's input). When deciding
+  whether to use an assert or exception, consider the following question: is it possible for the
+  error condition to occur in production even after the developer has done extensive testing on
+  their side?
 
-// Todo: this thing should be that thing
-final thisThing = 13;
 
-// good:
+### Class structure
 
-// TODO(wolfenrain): This thing should be that thing
-const thisThing = 13;
-```
+- Consider putting all class constructors at the top of the class. This makes it much easier to see
+  how the class ought to be used.
+
+- Try to make as much of your class' API private as possible, do not expose members "just in case".
+  This makes it much easier to modify/refactor the class later without it being a breaking change.
+
+  Remember to document all your public members! Documenting things is harder than it looks, and one
+  way to avoid the burden of documentation is to make as many variables private as possible.
+
+- If a class exposes a `List<X>` or `Vector2` property -- it is **NOT** an invitation to modify
+  them at will! Consider such properties as read-only, unless the documentation explicitly says that
+  they are allowed to be modified.
+
+- When a class becomes sufficiently big, consider adding *regions* inside it, which help with code
+  navigation and collapsing (note the lack of space after `//`):
+  ```dart
+  //#region Region description
+  ...
+  //#endregion
+  ```
+
+- If a class has a private member that needs to be exposed via a getter/setter, prefer the following
+  code structure:
+  ```dart
+  class MyClass {
+    MyClass();
+
+    ...
+    int _variable;
+    ...
+
+    /// Docs for both the getter and the setter.
+    int get variable => _variable;
+    set variable(int value) {
+      assert(value >= 0, 'variable must be non-negative: $value');
+      _variable = value;
+    }
+  }
+  ```
+
+
+## Documentation
+
+- Use dartdocs `///` to explain the meaning/purpose of a class, method, or a variable.
+
+- Use regular comments `//` to explain implementation details of a particular code fragment. That
+  is, these comments explain HOW something works.
+
+- Use markdown documentation in `doc/` folder to give the high-level overview of the functionality,
+  and especially how it fits into the overall Flame framework.
 
 
 ### Dartdocs
 
-#### Consider adding examples
+- Check the [Flutter Documentation Guide] -- it contains lots of great advice on writing good
+  documentation.
+    - However, disregard the advice about writing in passive voice.
 
-Some elements may benefit from a simple usage example.
+- Class documentation should ideally start with the class name itself, and follow a pattern such as:
+  ```dart
+  /// [MyClass] is ...
+  /// [MyClass] serves as ...
+  /// [MyClass] does the following ...
+  ```
+  The reason for such convention is that often the documentation for a class becomes sufficiently
+  long, and it may not be immediately apparent when looking at the top of the doc what exactly is
+  being documented there.
 
-#### Avoid useless code documentation
+- Method documentation should start with a verb in the present simple tense, with the method name
+  as an implicit subject. Add a paragraph break after the first sentence. Try to think about what
+  could be unclear to the users of the method; and mention any pre- and post-conditions.
+  For example:
+  ```dart
+  /// Adds a new [child] into the container, and becomes the owner of that child.
+  ///
+  /// The child will be disposed when this container is destroyed. It is an error to try to add a
+  /// child that already belongs to another container.
+  void addChild(T child) { ... }
+  ```
+  Avoid stating the obvious (or at least only the obvious).
 
-Avoid documentation that just repeats the obvious. For example, `void doStuff()` be documented as
-"Method that does stuff".
+- Constructor documentation may follow either the style of a method (i.e. "Creates ...",
+  "Constructs ..."), or of the class but omitting the name of the class (i.e. "Rectangular-shaped
+  component"). Constructor documentation may be omitted if (1) it's the main constructor of the
+  class, and (2) all the parameters are obvious and coincide with the public members of the class.
 
-#### Consider adding linkage between docs
+  **Do not** use macros to copy the class documentation into the constructor's dartdoc. Generally,
+  the class documentation answers the question "what the class is", whereas the constructor docs
+  answer "how it will be constructed".
 
-You should use `[]` (brackets) to link dartdoc elements that can be referenced on the same file.
-Also, consider adding a "See also" section to element documentation.
 
-## Examples
+### Main docs
 
-There are a few things to consider when adding an example to the examples directory:
+This refers to the docs on the main Flame Documentation website, the one you're reading right now.
+The main documentation site serves as a place where people go to learn about various functionality
+available in Flame. If you're adding a new class, then it must be documented both at the dartdocs
+level, and on the main docs site. The latter serves the purposes of discoverability of your class.
+Without the docs site, your class might never be used (or at least used less than it could have
+been), because the developers would simply not know about it.
 
- - Put your example in a fitting section.
- - Always add a description named `description` in the game object (if you have one).
- - Always add that `description` to the `info` field of the story.
- - Always add the path to the source of the example in `codeLink` on the story.
- - Always have the game class (if there exists one) in the top of your examples file.
- - Name your game class with a relevant name and suffix it with `Example`, for example
- `AnimationExample`.
- - The filename should be the game's (or example's) name, for example `move_effect_example.dart`
+When adding the documentation to the main docs site, consider also including an example directly
+into the docs. This will make readers more excited about trying this new functionality.
+
+Check the [Documentation] manual about how to work with the docs site.
+
+
+[flutter style guide]: https://github.com/flutter/flutter/wiki/Style-guide-for-Flutter-repo
+[effective dart]: https://dart.dev/guides/language/effective-dart
+[flutter documentation guide]: https://github.com/flutter/flutter/wiki/Style-guide-for-Flutter-repo#documentation-dartdocs-javadocs-etc
+[documentation]: documentation.md

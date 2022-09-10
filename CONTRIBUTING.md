@@ -49,7 +49,8 @@ For a contribution to be accepted:
 - Check that all tests pass: `melos run test`;
 - Documentation should always be updated or added (if applicable);
 - Examples should always be updated or added (if applicable);
-- Tests should always be updated or added (if applicable);
+- Tests should always be updated or added (if applicable) -- check the [Test writing guide] for
+  more details;
 - The PR title should start with a [conventional commit] prefix (`feat:`, `fix:` etc).
 
 If the contribution doesn't meet these criteria, a maintainer will discuss it with you on the issue
@@ -185,3 +186,4 @@ There are a few things to think about when doing a release:
 [pubspec doc]: https://dart.dev/tools/pub/pubspec
 [conventional commit]: https://www.conventionalcommits.org
 [style guide]: https://docs.flame-engine.org/main/development/style_guide.md
+[test writing guide]: https://docs.flame-engine.org/main/development/testing_guide.md
