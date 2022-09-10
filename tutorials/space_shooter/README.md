@@ -1,4 +1,4 @@
-# Flame tutorial
+# Flame Tutorial
 ABOUT:
 In this Flame tutorial we will provide you with the foundational steps needed to build several parts of the engine of the space shooter game.
 
