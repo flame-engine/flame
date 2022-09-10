@@ -103,11 +103,7 @@ class QuadTreeBroadphase<T extends Hitbox<T>> extends Broadphase<T> {
       for (var i = 0; i < _potentialsTmp.length; i++) {
         final item0 = _potentialsTmp[i].first;
         final item1 = _potentialsTmp[i].last;
-        var keep = broadphaseCheck(item0, item1);
-        if (keep) {
-          keep = broadphaseCheck(item1, item0);
-        }
-        if (keep) {
+        if (broadphaseCheck(item0, item1)) {
           _potentials.add(CollisionProspect(item0 as T, item1 as T));
         } else {
           if (_broadphaseCheckCache[item0 as T] == null) {
