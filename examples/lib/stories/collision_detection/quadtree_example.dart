@@ -132,6 +132,9 @@ Press T button to toggle player to collide with other objects.
   final elapsedMicroseconds = <double>[];
 
   late Player player;
+  final playerDisplacement = Vector2.zero();
+  var fireBullet = false;
+
   final staticLayer = StaticLayer();
   bool firstRender = true;
   static const stepSize = 1.0;
@@ -141,23 +144,21 @@ Press T button to toggle player to collide with other objects.
     RawKeyEvent event,
     Set<LogicalKeyboardKey> keysPressed,
   ) {
-    Vector2? displacement;
-    var fireBullet = false;
     for (final key in keysPressed) {
       if (key == LogicalKeyboardKey.keyW && player.canMoveTop) {
-        displacement = Vector2(0, -stepSize);
+        playerDisplacement.setValues(0, -stepSize);
         player.position = player.position.translate(0, -stepSize);
       }
       if (key == LogicalKeyboardKey.keyA && player.canMoveLeft) {
-        displacement = Vector2(-stepSize, 0);
+        playerDisplacement.setValues(-stepSize, 0);
         player.position = player.position.translate(-stepSize, 0);
       }
       if (key == LogicalKeyboardKey.keyS && player.canMoveBottom) {
-        displacement = Vector2(0, stepSize);
+        playerDisplacement.setValues(0, stepSize);
         player.position = player.position.translate(0, stepSize);
       }
       if (key == LogicalKeyboardKey.keyD && player.canMoveRight) {
-        displacement = Vector2(stepSize, 0);
+        playerDisplacement.setValues(stepSize, 0);
         player.position = player.position.translate(stepSize, 0);
       }
       if (key == LogicalKeyboardKey.space) {
@@ -178,10 +179,12 @@ Press T button to toggle player to collide with other objects.
             .optimize();
       }
     }
-    if (fireBullet && displacement != null) {
-      final bullet =
-          Bullet(position: player.position, displacement: displacement * 50);
+    if (fireBullet && !playerDisplacement.isZero()) {
+      final bullet = Bullet(
+          position: player.position, displacement: playerDisplacement * 50);
       add(bullet);
+      playerDisplacement.setZero();
+      fireBullet = false;
     }
 
     return KeyEventResult.handled;
