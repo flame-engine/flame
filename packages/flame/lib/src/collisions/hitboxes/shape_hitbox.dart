@@ -4,31 +4,32 @@ import 'package:flame/game.dart';
 import 'package:flame/geometry.dart';
 import 'package:flame/src/geometry/shape_intersections.dart'
     as intersection_system;
+import 'package:flutter/foundation.dart';
 import 'package:meta/meta.dart';
 
 /// A [ShapeHitbox] turns a [ShapeComponent] into a [Hitbox].
 /// It is currently used by [CircleHitbox], [RectangleHitbox] and
 /// [PolygonHitbox].
 mixin ShapeHitbox on ShapeComponent implements Hitbox<ShapeHitbox> {
-  CollisionType _collisionType = CollisionType.active;
+  final _collisionType = NotifyingCollisionType(CollisionType.active);
 
   set collisionType(CollisionType type) {
-    if (_collisionType == type) {
+    if (_collisionType.value == type) {
       return;
     }
-    _collisionType = type;
-    final broadPhase = _collisionDetection?.broadphase;
-    if (broadPhase is QuadTreeBroadphase && isMounted) {
-      if (type == CollisionType.active) {
-        broadPhase.activeCollisions.add(this);
-      } else {
-        broadPhase.activeCollisions.remove(this);
-      }
-    }
+    _collisionType.value = type;
   }
 
   @override
-  CollisionType get collisionType => _collisionType;
+  CollisionType get collisionType => _collisionType.value;
+
+  void addCollisionTypeListener(VoidCallback listener) {
+    _collisionType.addListener(listener);
+  }
+
+  void removeCollisionTypeListener(VoidCallback listener) {
+    _collisionType.removeListener(listener);
+  }
 
   /// Whether the hitbox is allowed to collide with another hitbox that is
   /// added to the same parent.

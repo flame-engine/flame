@@ -33,6 +33,8 @@ Also notice that creating a lot of bullets at once leads to generating new
 quadrants on the map since it becomes more than 25 objects in one quadrant.
 
 Press O button to rescan the tree and optimize it, removing unused quadrants.
+
+Press T button to toggle player to collide with other objects.
   ''';
 
   static const mapSize = 300;
@@ -161,6 +163,14 @@ Press O button to rescan the tree and optimize it, removing unused quadrants.
       if (key == LogicalKeyboardKey.space) {
         fireBullet = true;
       }
+      if (key == LogicalKeyboardKey.keyT) {
+        final collisionType = player.hitbox.collisionType;
+        if (collisionType == CollisionType.active) {
+          player.hitbox.collisionType = CollisionType.inactive;
+        } else if (collisionType == CollisionType.inactive) {
+          player.hitbox.collisionType = CollisionType.active;
+        }
+      }
       if (key == LogicalKeyboardKey.keyO) {
         (collisionDetection as QuadTreeCollisionDetection)
             .quadBroadphase
@@ -201,9 +211,10 @@ class Player extends SpriteComponent
       sprite = value;
     });
 
-    add(RectangleHitbox());
+    add(hitbox);
   }
 
+  final hitbox = RectangleHitbox();
   bool canMoveLeft = true;
   bool canMoveRight = true;
   bool canMoveTop = true;

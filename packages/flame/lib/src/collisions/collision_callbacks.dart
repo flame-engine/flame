@@ -1,6 +1,6 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-import 'package:meta/meta.dart';
+import 'package:flutter/foundation.dart';
 
 /// The [CollisionType] is used to determine which other hitboxes that it
 /// should collide with.
@@ -13,6 +13,19 @@ enum CollisionType {
 
   /// Will not collide with any other hitboxes.
   inactive,
+}
+
+/// Utility class allows to subscribe on collision type changing event
+class NotifyingCollisionType with ChangeNotifier {
+  NotifyingCollisionType(CollisionType type) : _value = type;
+  CollisionType _value = CollisionType.active;
+
+  set value(CollisionType type) {
+    _value = type;
+    notifyListeners();
+  }
+
+  CollisionType get value => _value;
 }
 
 /// The [GenericCollisionCallbacks] mixin can be used to get callbacks from the
