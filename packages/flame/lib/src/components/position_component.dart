@@ -74,13 +74,15 @@ class PositionComponent extends Component
     Vector2? size,
     Vector2? scale,
     double? angle,
-    this.angularOffset = 0,
+    double? nativeAngle,
     Anchor? anchor,
     super.children,
     super.priority,
   })  : transform = Transform2D(),
         _anchor = anchor ?? Anchor.topLeft,
-        _size = NotifyingVector2.copy(size ?? Vector2.zero()) {
+        _size = NotifyingVector2.copy(size ?? Vector2.zero()),
+        _nativeAngle = nativeAngle ?? 0,
+        _nativeDirection = Vector2(0, -1)..rotate(nativeAngle ?? 0) {
     decorator = Transform2DDecorator(transform);
     if (position != null) {
       transform.position = position;
@@ -88,9 +90,6 @@ class PositionComponent extends Component
     if (angle != 0) {
       transform.angle = angle ?? 0;
     }
-
-    transform.angle += angularOffset;
-
     if (scale != null) {
       transform.scale = scale;
     }
@@ -102,11 +101,18 @@ class PositionComponent extends Component
   final NotifyingVector2 _size;
   Anchor _anchor;
 
-  /// Should be used to account for any angular offset needed to
-  /// orient the component in desired direction. It can be thought
-  /// of as rotating the local co-ordinate system of the component
-  /// by [angularOffset].
-  double angularOffset;
+  /// The angle where this component is looking at in its
+  /// default state, i.e. when [angle] is equal to zero.
+  double _nativeAngle;
+  double get nativeAngle => _nativeAngle;
+  set nativeAngle(double value) {
+    _nativeAngle = value;
+    _nativeDirection.setFrom(Vector2(0, -1)..rotate(_nativeAngle));
+  }
+
+  /// The forward direction for this component when it is in its
+  /// default state, i.e. when [angle] is equal to zero.
+  final Vector2 _nativeDirection;
 
   /// The decorator is used to apply visual effects to a component.
   ///
@@ -142,9 +148,9 @@ class PositionComponent extends Component
   /// rotated around its anchor point in the clockwise direction if the
   /// angle is positive, or counterclockwise if the angle is negative.
   @override
-  double get angle => transform.angle - angularOffset;
+  double get angle => transform.angle;
   @override
-  set angle(double a) => transform.angle = a + angularOffset;
+  set angle(double a) => transform.angle = a;
 
   /// The scale factor of this component. The scale can be different along
   /// the X and Y dimensions. A scale greater than 1 makes the component
@@ -344,8 +350,7 @@ class PositionComponent extends Component
 
   /// Rotates the component to look at given target.
   void lookAt(Vector2 target) {
-    final defaultOrientation = Vector2(0, -1)..rotate(angularOffset);
-    angle = defaultOrientation.angleToSigned(target - absolutePosition);
+    angle = _nativeDirection.angleToSigned(target - absolutePosition);
   }
 
   //#endregion
