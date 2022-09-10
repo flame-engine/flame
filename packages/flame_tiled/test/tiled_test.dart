@@ -463,6 +463,116 @@ void main() {
       expect(pngData, matchesGoldenFile('goldens/pointy_hex_odd.png'));
     });
   });
+
+  group('isometric staggered', () {
+    late Uint8List pngData;
+    late TiledComponent component;
+
+    Future<TiledComponent> setupMap(
+      String tmxFile,
+      String imageFile,
+      Vector2 destTileSize,
+    ) async {
+      Flame.bundle = TestAssetBundle(
+        imageNames: [
+          imageFile,
+        ],
+        mapPath: 'test/assets/$tmxFile',
+      );
+      return component = await TiledComponent.load(
+        tmxFile,
+        destTileSize,
+      );
+    }
+
+    test('x + odd', () async {
+      await setupMap(
+        'iso_stag_x_odd.tmx',
+        'iso_stag.png',
+        Vector2(128, 74),
+      );
+
+      expect(component.size, Vector2(320, 407));
+
+      final canvasRecorder = PictureRecorder();
+      final canvas = Canvas(canvasRecorder);
+      component.tileMap.render(canvas);
+      final picture = canvasRecorder.endRecording();
+
+      final image = await picture.toImageSafe(320, 407);
+      pngData = (await image.toByteData(format: ImageByteFormat.png))!
+          .buffer
+          .asUint8List();
+
+      expect(pngData, matchesGoldenFile('goldens/iso_stag_x_odd.png'));
+    });
+
+    test('x + even + half sized', () async {
+      await setupMap(
+        'iso_stag_x_even.tmx',
+        'iso_stag.png',
+        Vector2(128 / 2, 74 / 2),
+      );
+
+      expect(component.size, Vector2(320 / 2, 407 / 2));
+
+      final canvasRecorder = PictureRecorder();
+      final canvas = Canvas(canvasRecorder);
+      component.tileMap.render(canvas);
+      final picture = canvasRecorder.endRecording();
+
+      final image = await picture.toImageSafe(160, 204);
+      pngData = (await image.toByteData(format: ImageByteFormat.png))!
+          .buffer
+          .asUint8List();
+
+      expect(pngData, matchesGoldenFile('goldens/iso_stag_x_even.png'));
+    });
+
+    test('y + odd + half', () async {
+      await setupMap(
+        'iso_stag_y_odd.tmx',
+        'iso_stag.png',
+        Vector2(128 / 2, 74 / 2),
+      );
+
+      expect(component.size, Vector2(576 / 2, 222 / 2));
+
+      final canvasRecorder = PictureRecorder();
+      final canvas = Canvas(canvasRecorder);
+      component.tileMap.render(canvas);
+      final picture = canvasRecorder.endRecording();
+
+      final image = await picture.toImageSafe(288, 111);
+      pngData = (await image.toByteData(format: ImageByteFormat.png))!
+          .buffer
+          .asUint8List();
+
+      expect(pngData, matchesGoldenFile('goldens/iso_stag_y_odd.png'));
+    });
+
+    test('y + even', () async {
+      await setupMap(
+        'iso_stag_y_even.tmx',
+        'iso_stag.png',
+        Vector2(128, 74),
+      );
+
+      expect(component.size, Vector2(576, 222));
+
+      final canvasRecorder = PictureRecorder();
+      final canvas = Canvas(canvasRecorder);
+      component.tileMap.render(canvas);
+      final picture = canvasRecorder.endRecording();
+
+      final image = await picture.toImageSafe(576, 222);
+      pngData = (await image.toByteData(format: ImageByteFormat.png))!
+          .buffer
+          .asUint8List();
+
+      expect(pngData, matchesGoldenFile('goldens/iso_stag_y_even.png'));
+    });
+  });
 }
 
 class TestAssetBundle extends CachingAssetBundle {

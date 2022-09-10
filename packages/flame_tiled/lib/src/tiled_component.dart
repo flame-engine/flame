@@ -63,35 +63,41 @@ class TiledComponent<T extends FlameGame> extends Component with HasGameRef<T> {
     final xScale = tileMap.destTileSize.x / tMap.tileWidth;
     final yScale = tileMap.destTileSize.y / tMap.tileHeight;
 
-    late Vector2 size;
-
     final tileScaled = Vector2(
       tileMap.map.tileWidth * xScale,
       tileMap.map.tileHeight * yScale,
     );
 
-    if (tMap.orientation == MapOrientation.hexagonal) {
-      if (tMap.staggerAxis == StaggerAxis.y) {
-        size = Vector2(
-          tileMap.map.width * tileScaled.x,
-          tileScaled.y + ((tileMap.map.height - 1) * tileScaled.y * 0.75),
-        );
-      } else {
-        size = Vector2(
-          tileScaled.x + ((tileMap.map.width - 1) * tileScaled.x * 0.75),
-          (tileMap.map.height * tileScaled.y) + tileScaled.y / 2,
-        );
-      }
-    } else {
-      size = Vector2(
-        tileMap.map.width * tileScaled.x,
-        tileMap.map.height * tileScaled.y,
-      );
-    }
+    switch (tMap.orientation) {
+      case MapOrientation.staggered:
+        return tMap.staggerAxis == StaggerAxis.y
+            ? Vector2(
+                tileScaled.x * tileMap.map.width + tileScaled.x / 2,
+                tileScaled.y + ((tileMap.map.height - 1) * tileScaled.y / 2),
+              )
+            : Vector2(
+                tileScaled.x + ((tileMap.map.width - 1) * tileScaled.x / 2),
+                tileScaled.y * tileMap.map.height + tileScaled.y / 2,
+              );
 
-    if (tMap.staggerAxis == StaggerAxis.y) {
-      size.x += tMap.tileWidth / 2;
+      case MapOrientation.hexagonal:
+        return tMap.staggerAxis == StaggerAxis.y
+            ? Vector2(
+                tileMap.map.width * tileScaled.x + tileScaled.x / 2,
+                tileScaled.y + ((tileMap.map.height - 1) * tileScaled.y * 0.75),
+              )
+            : Vector2(
+                tileScaled.x + ((tileMap.map.width - 1) * tileScaled.x * 0.75),
+                (tileMap.map.height * tileScaled.y) + tileScaled.y / 2,
+              );
+
+      case MapOrientation.isometric:
+      case MapOrientation.orthogonal:
+      default:
+        return Vector2(
+          tileMap.map.width * tileScaled.x,
+          tileMap.map.height * tileScaled.y,
+        );
     }
-    return size;
   }
 }

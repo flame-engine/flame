@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.9" tiledversion="1.9.1" orientation="staggered" renderorder="right-down" width="4" height="5" tilewidth="128" tileheight="74" infinite="0" staggeraxis="x" staggerindex="even" nextlayerid="3" nextobjectid="1">
+ <tileset firstgid="1" name="iso_stag" tilewidth="128" tileheight="74" tilecount="12" columns="4">
+  <image source="iso_stag.png" width="512" height="222"/>
+ </tileset>
+ <layer id="1" name="ground" width="4" height="5">
+  <data encoding="base64" compression="zlib">
+   eJxjZWBgYEXC7EDMCaVhYpxIbA4ozQjFrGgYABL4AGw=
+  </data>
+ </layer>
+ <layer id="2" name="stuff" width="4" height="5">
+  <data encoding="base64" compression="zlib">
+   eJxjYkAAbiBmYWBoYIHQDjBxIPsAjM2FRsPYbFAMAFTMAcg=
+  </data>
+ </layer>
+</map>
