@@ -717,6 +717,40 @@ void main() {
         expect(child.position, Vector2(3, 2));
         expect(child.absolutePosition, Vector2(15, 21));
       });
+
+      test('lookAt', () {
+        final comp = PositionComponent();
+
+        final targets = [
+          Vector2(0, 1),
+          Vector2.all(2),
+          Vector2(-1, 0),
+          Vector2.all(-50)
+        ];
+        final expectedAngles = [pi, (3 * pi / 4), (-pi / 2), (-pi / 4)];
+
+        for (var i = 0; i < 4; ++i) {
+          comp.lookAt(targets.elementAt(i));
+          expectDouble(comp.angle, expectedAngles.elementAt(i), epsilon: 1e-10);
+        }
+      });
+
+      test('lookAt with native angle', () {
+        final comp = PositionComponent(nativeAngle: pi / 2);
+
+        final targets = [
+          Vector2(0, 1),
+          Vector2.all(2),
+          Vector2(-1, 0),
+          Vector2.all(-50)
+        ];
+        final expectedAngles = [pi / 2, (pi / 4), -pi, (-3 * pi / 4)];
+
+        for (var i = 0; i < 4; ++i) {
+          comp.lookAt(targets.elementAt(i));
+          expectDouble(comp.angle, expectedAngles.elementAt(i), epsilon: 1e-10);
+        }
+      });
     });
 
     group('Rendering', () {
