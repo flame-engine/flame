@@ -252,19 +252,11 @@ abstract class _RenderableLayer<T extends Layer> {
   void refreshCache() {}
 
   double get offsetX {
-    if (parent != null) {
-      return parent!.offsetX + layer.offsetX;
-    } else {
-      return layer.offsetX;
-    }
+    return layer.offsetX + (parent?.offsetX ?? 0);
   }
 
   double get offsetY {
-    if (parent != null) {
-      return parent!.offsetY + layer.offsetY;
-    } else {
-      return layer.offsetY;
-    }
+    return layer.offsetY + (parent?.offsetY ?? 0);
   }
 
   double get opacity {
