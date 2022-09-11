@@ -42,7 +42,7 @@ class QuadTreeNodeDebugInfo {
         continue;
       }
 
-      final nodeRect = QuadTree._computeBox(rect, i);
+      final nodeRect = QuadTree._computeBox(rect, _QuadTreeZone.fromIndex(i));
       final dbg = QuadTreeNodeDebugInfo(nodeRect, node, cd);
       list.add(dbg);
       list.addAll(dbg.nodes);
@@ -77,6 +77,33 @@ class _Node<T extends Hitbox<T>> {
   String toString() {
     return 'node $id';
   }
+}
+
+enum _QuadTreeZone {
+  root(-1),
+  topLeft(0),
+  topRight(1),
+  bottomLeft(2),
+  bottomRight(3);
+
+  const _QuadTreeZone(this.value);
+
+  factory _QuadTreeZone.fromIndex(int i) {
+    switch (i) {
+      case 0:
+        return _QuadTreeZone.topLeft;
+      case 1:
+        return _QuadTreeZone.topRight;
+      case 2:
+        return _QuadTreeZone.bottomLeft;
+      case 3:
+        return _QuadTreeZone.bottomRight;
+      default:
+        return _QuadTreeZone.root;
+    }
+  }
+
+  final int value;
 }
 
 /// QuadTree calculation class not bound to Flame. Could be used anywhere
@@ -128,31 +155,27 @@ class QuadTree<T extends Hitbox<T>> {
     _oldPositionByItem.clear();
   }
 
-  static Rect _computeBox(Rect box, int i) {
+  static Rect _computeBox(Rect box, _QuadTreeZone zone) {
     final origin = box.topLeft;
     final childSize = (box.size / 2).toOffset();
-    switch (i) {
-      case 0:
-        // North West
+    switch (zone) {
+      case _QuadTreeZone.topLeft:
         return Rect.fromLTWH(origin.dx, origin.dy, childSize.dx, childSize.dy);
-      // North East
-      case 1:
+      case _QuadTreeZone.topRight:
         return Rect.fromLTWH(
           origin.dx + childSize.dx,
           origin.dy,
           childSize.dx,
           childSize.dy,
         );
-      // South West
-      case 2:
+      case _QuadTreeZone.bottomLeft:
         return Rect.fromLTWH(
           origin.dx,
           origin.dy + childSize.dy,
           childSize.dx,
           childSize.dy,
         );
-      // South East
-      case 3:
+      case _QuadTreeZone.bottomRight:
         final position = origin + childSize;
         return Rect.fromLTWH(
           position.dx,
@@ -166,33 +189,26 @@ class QuadTree<T extends Hitbox<T>> {
     }
   }
 
-  int _getQuadrant(Rect nodeBox, Rect valueBox) {
+  _QuadTreeZone _getQuadrant(Rect nodeBox, Rect valueBox) {
     final center = nodeBox.center;
-    // West
     if (valueBox.right <= center.dx) {
-      // North West
       if (valueBox.bottom <= center.dy) {
-        return 0;
+        return _QuadTreeZone.topLeft;
       } else if (valueBox.top > center.dy) {
-        return 2;
+        return _QuadTreeZone.bottomLeft;
       } else {
-        return -1;
+        return _QuadTreeZone.root;
       }
-    }
-    // East
-    else if (valueBox.left > center.dx) {
-      // North East
+    } else if (valueBox.left > center.dx) {
       if (valueBox.bottom <= center.dy) {
-        return 1;
+        return _QuadTreeZone.topRight;
       } else if (valueBox.top > center.dy) {
-        return 3;
+        return _QuadTreeZone.bottomRight;
       } else {
-        return -1;
+        return _QuadTreeZone.root;
       }
-    }
-    // Not contained in any quadrant
-    else {
-      return -1;
+    } else {
+      return _QuadTreeZone.root;
     }
   }
 
@@ -218,8 +234,8 @@ class QuadTree<T extends Hitbox<T>> {
     } else {
       final quadrant = _getQuadrant(box, _getBoxOfValue(value));
       // Add the value in a child if the value is entirely contained in it.
-      if (quadrant != -1) {
-        final children = node.children[quadrant];
+      if (quadrant != _QuadTreeZone.root) {
+        final children = node.children[quadrant.value];
         if (children == null) {
           throw 'Invalid index $quadrant';
         }
@@ -257,8 +273,8 @@ class QuadTree<T extends Hitbox<T>> {
     final moveValues = <T>[]; // New values for this node
     for (final value in node.hitboxes) {
       final quadrant = _getQuadrant(box, _getBoxOfValue(value as T));
-      if (quadrant != -1) {
-        final children = node.children[quadrant];
+      if (quadrant != _QuadTreeZone.root) {
+        final children = node.children[quadrant.value];
         if (children == null) {
           throw 'Invalid index $quadrant';
         }
