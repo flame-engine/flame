@@ -13,6 +13,7 @@ This README contains useful videos and articles from the community for this proj
 
 # Part 1
 Link for Part1 video tutorial: https://youtu.be/VEfZgTGolPY 
+
 We will teach you how to create a game class, insert it into the Flutter widget tree, and render a simple component.
 
 A simple tutorial to get started can be found on
