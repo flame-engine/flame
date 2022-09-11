@@ -12,7 +12,6 @@ This README contains useful videos and articles from the community for this proj
 </ul>
 
 # Part 1
-Link for Part1 video tutorial: https://youtu.be/VEfZgTGolPY 
 
 We will teach you how to create a game class, insert it into the Flutter widget tree, and render a simple component.
 
@@ -34,6 +33,7 @@ code for each example, press the `< >` button in the top right corner.
 - Other tutorials:
   - @Vguzzi's article [Building Games in Flutter with Flame](https://www.raywenderlich.com/27407121-building-games-in-flutter-with-flame-getting-started)
   - @DevKage's YouTube series with the [Dino run tutorial](https://www.youtube.com/playlist?list=PLiZZKL9HLmWOmQgYxWHuOHOWsUUlhCCOY)
+  - @RutviShukla's Youtube tutorial on [SpaceShooter Pt.1](https://youtu.be/VEfZgTGolPY)
 
 We offer a curated list of Games, Libraries and Articles over at
 [awesome-flame](https://github.com/flame-engine/awesome-flame).
