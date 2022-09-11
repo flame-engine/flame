@@ -100,13 +100,12 @@ class PositionComponent extends Component
   Anchor _anchor;
 
   /// The angle where this component is looking at when it is in
-  /// the default state, i.e. when [angle] is equal to zero. Valid range
-  /// is -pi to +pi radians with 0 being vertically up.
-  /// For example, a value of:
-  ///     0 => Up direction
-  ///  pi/2 => Right direction
-  /// -pi/2 => Left direction
-  ///    pi => Down direction
+  /// the default state, i.e. when [angle] is equal to zero.
+  /// For example, a nativeAngle of
+  ///     0 implies up/north direction
+  ///  pi/2 implies right/east direction
+  ///    pi implies down/south direction
+  /// -pi/2 implies left/west direction
   double nativeAngle;
 
   /// The decorator is used to apply visual effects to a component.
@@ -343,21 +342,29 @@ class PositionComponent extends Component
   /// The absolute center of the component.
   Vector2 get absoluteCenter => absolutePositionOfAnchor(Anchor.center);
 
-  /// Returns the angle formed by component's forward vector and a vector
-  /// starting at component's absolute position and ending at target.
-  /// Uses [nativeAngle] to decide the forward direction of the component.
+  /// Returns the angle formed by component's orientation vector and a vector
+  /// starting at component's absolute position and ending at target. This
+  /// angle is measured in clockwise direction.
+  ///
+  /// Uses [nativeAngle] to decide the orientation direction of the component.
   /// See [lookAt] to make the component instantly rotate towards target.
-  /// Note: Returns 0 if target is exactly same as [absolutePosition].
+  ///
+  /// Note: If target coincides with the current component, then it is treated
+  /// as being north.
   double angleTo(Vector2 target) {
     return math.atan2(
           target.x - absolutePosition.x,
           absolutePosition.y - target.y,
         ) -
-        nativeAngle;
+        (nativeAngle + absoluteAngle - angle);
   }
 
-  /// Rotates/snaps the component to look at given target. Use [angleTo] to get the
-  /// calculated used by this method.
+  /// Rotates/snaps the component to look at the [target].
+  ///
+  /// This method sets the [angle] so that the component's orientation
+  /// vector (as determined by the [nativeAngle]) is pointing at the target.
+  ///
+  /// See also: [angleTo]
   void lookAt(Vector2 target) => angle = angleTo(target);
 
   //#endregion
