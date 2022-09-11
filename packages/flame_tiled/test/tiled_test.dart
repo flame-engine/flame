@@ -504,8 +504,10 @@ void main() {
           .buffer
           .asUint8List();
 
-      expect(pngData,
-          matchesGoldenFile('goldens/iso_staggered_overlap_x_odd.png'));
+      expect(
+        pngData,
+        matchesGoldenFile('goldens/iso_staggered_overlap_x_odd.png'),
+      );
     });
 
     test('x + even + half sized', () async {
@@ -527,8 +529,10 @@ void main() {
           .buffer
           .asUint8List();
 
-      expect(pngData,
-          matchesGoldenFile('goldens/iso_staggered_overlap_x_even.png'));
+      expect(
+        pngData,
+        matchesGoldenFile('goldens/iso_staggered_overlap_x_even.png'),
+      );
     });
 
     test('y + odd + half', () async {
@@ -550,8 +554,10 @@ void main() {
           .buffer
           .asUint8List();
 
-      expect(pngData,
-          matchesGoldenFile('goldens/iso_staggered_overlap_y_odd.png'));
+      expect(
+        pngData,
+        matchesGoldenFile('goldens/iso_staggered_overlap_y_odd.png'),
+      );
     });
 
     test('y + even', () async {
@@ -573,8 +579,10 @@ void main() {
           .buffer
           .asUint8List();
 
-      expect(pngData,
-          matchesGoldenFile('goldens/iso_staggered_overlap_y_even.png'));
+      expect(
+        pngData,
+        matchesGoldenFile('goldens/iso_staggered_overlap_y_even.png'),
+      );
     });
   });
 }
