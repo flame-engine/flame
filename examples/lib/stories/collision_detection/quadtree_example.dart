@@ -132,11 +132,10 @@ Press T button to toggle player to collide with other objects.
   final elapsedMicroseconds = <double>[];
 
   late Player player;
-  final playerDisplacement = Vector2.zero();
-  var fireBullet = false;
+  final _playerDisplacement = Vector2.zero();
+  var _fireBullet = false;
 
   final staticLayer = StaticLayer();
-  bool firstRender = true;
   static const stepSize = 1.0;
 
   @override
@@ -146,23 +145,23 @@ Press T button to toggle player to collide with other objects.
   ) {
     for (final key in keysPressed) {
       if (key == LogicalKeyboardKey.keyW && player.canMoveTop) {
-        playerDisplacement.setValues(0, -stepSize);
+        _playerDisplacement.setValues(0, -stepSize);
         player.position = player.position.translate(0, -stepSize);
       }
       if (key == LogicalKeyboardKey.keyA && player.canMoveLeft) {
-        playerDisplacement.setValues(-stepSize, 0);
+        _playerDisplacement.setValues(-stepSize, 0);
         player.position = player.position.translate(-stepSize, 0);
       }
       if (key == LogicalKeyboardKey.keyS && player.canMoveBottom) {
-        playerDisplacement.setValues(0, stepSize);
+        _playerDisplacement.setValues(0, stepSize);
         player.position = player.position.translate(0, stepSize);
       }
       if (key == LogicalKeyboardKey.keyD && player.canMoveRight) {
-        playerDisplacement.setValues(stepSize, 0);
+        _playerDisplacement.setValues(stepSize, 0);
         player.position = player.position.translate(stepSize, 0);
       }
       if (key == LogicalKeyboardKey.space) {
-        fireBullet = true;
+        _fireBullet = true;
       }
       if (key == LogicalKeyboardKey.keyT) {
         final collisionType = player.hitbox.collisionType;
@@ -179,12 +178,14 @@ Press T button to toggle player to collide with other objects.
             .optimize();
       }
     }
-    if (fireBullet && !playerDisplacement.isZero()) {
+    if (_fireBullet && !_playerDisplacement.isZero()) {
       final bullet = Bullet(
-          position: player.position, displacement: playerDisplacement * 50);
+        position: player.position,
+        displacement: _playerDisplacement * 50,
+      );
       add(bullet);
-      playerDisplacement.setZero();
-      fireBullet = false;
+      _playerDisplacement.setZero();
+      _fireBullet = false;
     }
 
     return KeyEventResult.handled;
