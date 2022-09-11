@@ -198,15 +198,15 @@ class RenderableTiledMap {
 
   /// Handle game resize and propagate it to renderable layers
   void handleResize(Vector2 canvasSize) {
-    for (final rl in renderableLayers) {
-      rl.handleResize(canvasSize);
+    for (final layer in renderableLayers) {
+      layer.handleResize(canvasSize);
     }
   }
 
   /// Rebuilds the cache for rendering
   void _refreshCache() {
-    for (final rl in renderableLayers) {
-      rl.refreshCache();
+    for (final layer in renderableLayers) {
+      layer.refreshCache();
     }
   }
 
@@ -216,10 +216,10 @@ class RenderableTiledMap {
       c.drawPaint(_backgroundPaint!);
     }
 
-    // paint each layer in reverse order, because the last layers should be
+    // Paint each layer in reverse order, because the last layers should be
     // rendered beneath the first layers
-    for (final rl in renderableLayers.where((l) => l.visible)) {
-      rl.render(c, camera);
+    for (final layer in renderableLayers.where((l) => l.visible)) {
+      layer.render(c, camera);
     }
   }
 
