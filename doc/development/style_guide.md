@@ -5,12 +5,8 @@ maintain the code clean and readable -- both for the benefit of the users who wi
 this code in order to understand how a particular feature works or debug something that is breaking,
 and for the benefit of the current and future maintainers.
 
-This guide extends upon the official style guides of Dart and Flutter. Those guides should be
-considered an essential part of this style guide. However, whenever some rules contradict others,
-the following order of preferences apply:
-- **Flame Style Guide** (this document)
-- **[Flutter Style Guide]**
-- **[Effective Dart]**
+This guide extends upon the official [Dart's style guide][effective dart]. Please make sure to read
+that document first, as it is sure to improve your skill in Dart programming.
 
 
 ## Code Formatting
@@ -27,9 +23,6 @@ $ flutter format .
 
 ### Imports
 
-- Avoid importing groups of APIs internally, for example, importing `lib/effects.dart` just to use
-  `ScaleEffect`. Instead, import the file that defines `ScaleEffect`.
-
 - If you're using an external symbol that's defined in multiple libraries, prefer importing the
   smallest of them. For example, use `package:meta/meta.dart` to import annotations like
   `@protected`, or `dart:ui` to import `Canvas`.
@@ -43,8 +36,8 @@ $ flutter format .
 - Strongly prefer to have only one public class per file, and name the file after that class.
   Having several private classes within the file is perfectly reasonable.
 
-- A possible exception to this rule if the "main" class requires some small "helper" classes that
-  need to be public. Or if the file hosts multiple very small related classes.
+- A possible exception to this rule is if the "main" class requires some small "helper" classes
+  that need to be public. Or if the file hosts multiple very small related classes.
 
 - The "main" class in a file should be located at the start of the file (right after the imports
   section), so that it can be seen immediately upon opening the file. All other definitions,
@@ -205,7 +198,6 @@ into the docs. This will make readers more excited about trying this new functio
 Check the [Documentation] manual about how to work with the docs site.
 
 
-[flutter style guide]: https://github.com/flutter/flutter/wiki/Style-guide-for-Flutter-repo
 [effective dart]: https://dart.dev/guides/language/effective-dart
 [flutter documentation guide]: https://github.com/flutter/flutter/wiki/Style-guide-for-Flutter-repo#documentation-dartdocs-javadocs-etc
 [documentation]: documentation.md
