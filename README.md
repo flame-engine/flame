@@ -141,6 +141,26 @@ For bigger changes, or if in doubt, make sure to talk about your contribution to
 via an issue, GitHub discussion, or reach out to the team either using the
 [Discord server](https://discord.gg/pxrBmy4).
 
+## Getting started
+
+A simple tutorial to get started can be found on tutorials.flame-engine.org and examples of most features in Flame can be found on examples.flame-engine.org. To access the code for each example, press the < > button in the top right corner.
+
+## Highlighted community tutorials
+@Devowl's Flutter & Flame series:
+
+Step 1: Create your game
+Step 2: Game basics
+Step 3: Sprites and inputs
+Step 4: Collisions & Viewport
+Step 5: Level generation & camera
+Other tutorials:
+
+@Vguzzi's article Building Games in Flutter with Flame
+@DevKage's YouTube series with the Dino run tutorial
+We offer a curated list of Games, Libraries and Articles over at awesome-flame.
+
+Note that some of the articles might be slightly outdated, but can still be useful.
+
 ## Credits
  - The [Blue Fire team](https://github.com/orgs/bluefireteam/people), who are continuously
  working on maintaining and improving Flame and its ecosystem.
