@@ -323,7 +323,7 @@ class _RenderableTileLayer extends _RenderableLayer<TileLayer> {
     this._destTileSize,
     this._cachedSpriteBatches,
   ) {
-    _layerPaint.color = Color.fromRGBO(255, 255, 255, layer.opacity);
+    _layerPaint.color = Color.fromRGBO(255, 255, 255, opacity);
   }
 
   @override
@@ -332,6 +332,10 @@ class _RenderableTileLayer extends _RenderableLayer<TileLayer> {
   }
 
   void _cacheLayerTiles() {
+    for (final batch in _cachedSpriteBatches.values) {
+      batch.clear();
+    }
+
     switch (_map.orientation) {
       case MapOrientation.isometric:
         _cacheIsometricTiles();
@@ -819,6 +823,20 @@ class _RenderableGroupLayer extends _RenderableLayer<Group> {
     super.layer,
     super.parent,
   );
+
+  @override
+  void refreshCache() {
+    for (final child in children) {
+      child.refreshCache();
+    }
+  }
+
+  @override
+  void handleResize(Vector2 canvasSize) {
+    for (final child in children) {
+      child.handleResize(canvasSize);
+    }
+  }
 
   @override
   void render(ui.Canvas canvas, Camera? camera) {
