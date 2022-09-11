@@ -762,10 +762,50 @@ void main() {
         }
       });
 
+      test('lookAt with nested components', () {
+        late PositionComponent comp;
+
+        PositionComponent(
+          angle: pi / 2,
+          children: [
+            PositionComponent(
+              angle: pi / 2,
+              children: [
+                comp = PositionComponent(
+                  nativeAngle: -pi,
+                )
+              ],
+            )
+          ],
+        );
+
+        final targets = [
+          Vector2(0, 1),
+          Vector2.all(2),
+          Vector2(-1, 0),
+          Vector2.all(-50)
+        ];
+        final expectedAngles = [pi, (3 * pi / 4), -pi / 2, (-pi / 4)];
+
+        for (var i = 0; i < targets.length; ++i) {
+          final target = targets.elementAt(i);
+          final angle = expectedAngles.elementAt(i);
+
+          expectDouble(comp.angleTo(target), angle, epsilon: 1e-10);
+
+          comp.lookAt(target);
+          expectDouble(comp.angle, angle, epsilon: 1e-10);
+        }
+      });
+
       test('lookAt corner cases', () {
         final comp = PositionComponent(position: Vector2(-20, 50));
         comp.lookAt(comp.absolutePosition);
         expectDouble(comp.angle, 0, epsilon: 1e-10);
+
+        comp.nativeAngle = 3 * pi / 2;
+        comp.lookAt(comp.absolutePosition);
+        expectDouble(comp.angle, -comp.nativeAngle, epsilon: 1e-10);
       });
     });
 
