@@ -15,7 +15,6 @@ class CompositeHitbox extends PositionComponent
     super.size,
     super.scale,
     super.angle,
-    super.nativeAngle,
     super.anchor,
     Iterable<ShapeHitbox>? super.children,
     super.priority,

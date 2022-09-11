@@ -64,7 +64,6 @@ class ParallaxComponent<T extends FlameGame> extends PositionComponent
     Vector2? size,
     super.scale,
     super.angle,
-    super.nativeAngle,
     super.anchor,
     super.children,
     super.priority,

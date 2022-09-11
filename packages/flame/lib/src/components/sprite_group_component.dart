@@ -26,7 +26,6 @@ class SpriteGroupComponent<T> extends PositionComponent
     super.size,
     super.scale,
     super.angle,
-    super.nativeAngle,
     super.anchor,
     super.children,
     super.priority,
