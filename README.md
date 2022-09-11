@@ -36,7 +36,7 @@ on the docs website.
 Other useful links:
  - [The official Flame site](https://flame-engine.org/).
  - [Examples](https://examples.flame-engine.org/) of most features which can be tried out from your browser.
- - [Tutorials](https://github.com/RutviShukla/flame/blob/main/tutorials/space_shooter/README.md) - A simple tutorial to get started.
+ - [Tutorials](https://github.com/flame-engine/flame/blob/main/tutorials/space_shooter/README.md) - A simple tutorial to get started.
  - [API Reference](https://pub.dev/documentation/flame/latest/) - The generated dartdoc API reference.
 
 
