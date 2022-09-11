@@ -2,7 +2,7 @@
 ABOUT:
 In this Flame tutorial we will provide you with the foundational steps needed to build several parts of the engine of the space shooter game.
 
-This README contains useful videos and articles from the community for this project. The links for thses can be found under "Highlighted Community Tutorials."
+This README contains useful videos and articles from the community for this project. The links for these can be found under "Highlighted Community Tutorials."
 
 *Installation information*
 
