@@ -1,9 +1,9 @@
 import 'package:flame/src/text/formatters/text_formatter.dart';
 import 'package:flame/src/text/inline/debug_text_painter_text_element.dart';
 import 'package:flame/src/text/inline/text_painter_text_element.dart';
-import 'package:flutter/rendering.dart';
+import 'package:flutter/rendering.dart' as flutter;
 
-/// [TextPainterTextFormatter] applies a Flutter [TextStyle] to a string of
+/// [TextPainterTextFormatter] applies a [flutter.TextStyle] to a string of
 /// text, creating a [TextPainterTextElement].
 ///
 /// If the [debugMode] is true, this formatter will wrap the text with a
@@ -11,12 +11,12 @@ import 'package:flutter/rendering.dart';
 class TextPainterTextFormatter extends TextFormatter {
   TextPainterTextFormatter({
     required this.style,
-    this.textDirection = TextDirection.ltr,
+    this.textDirection = flutter.TextDirection.ltr,
     this.debugMode = false,
   });
 
-  final TextStyle style;
-  final TextDirection textDirection;
+  final flutter.TextStyle style;
+  final flutter.TextDirection textDirection;
   final bool debugMode;
 
   @override
@@ -29,9 +29,9 @@ class TextPainterTextFormatter extends TextFormatter {
     }
   }
 
-  TextPainter _textToTextPainter(String text) {
-    return TextPainter(
-      text: TextSpan(text: text, style: style),
+  flutter.TextPainter _textToTextPainter(String text) {
+    return flutter.TextPainter(
+      text: flutter.TextSpan(text: text, style: style),
       textDirection: textDirection,
     )..layout();
   }

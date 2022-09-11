@@ -21,7 +21,7 @@ class DocumentNode extends GroupBlockNode {
       'Width must be either provided explicitly or set in the stylesheet',
     );
     final out = <Element>[];
-    final border = style.backgroundStyle?.borderWidths ?? EdgeInsets.zero;
+    final border = style.background?.borderWidths ?? EdgeInsets.zero;
     final padding = style.padding;
 
     final pageWidth = style.width ?? width!;
@@ -48,7 +48,7 @@ class DocumentNode extends GroupBlockNode {
           border.bottom,
     );
     final background = makeBackground(
-      style.backgroundStyle,
+      style.background,
       pageWidth,
       pageHeight,
     );

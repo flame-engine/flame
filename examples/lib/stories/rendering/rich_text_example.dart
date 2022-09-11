@@ -29,7 +29,7 @@ class MyTextComponent extends PositionComponent {
         borderColor: const Color(0xFF000000),
         borderWidth: 2.0,
       ),
-      paragraphStyle: BlockStyle(
+      paragraph: BlockStyle(
         margin: const EdgeInsets.symmetric(vertical: 6),
         padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 6),
         background: BackgroundStyle(

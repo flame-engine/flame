@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flame/src/text/nodes/block_node.dart';
 import 'package:flame/src/text/nodes/header_node.dart';
 import 'package:flame/src/text/nodes/paragraph_node.dart';
@@ -5,6 +7,7 @@ import 'package:flame/src/text/styles/background_style.dart';
 import 'package:flame/src/text/styles/block_style.dart';
 import 'package:flame/src/text/styles/overflow.dart';
 import 'package:flame/src/text/styles/style.dart';
+import 'package:flame/src/text/styles/text_style.dart';
 import 'package:flutter/painting.dart' show EdgeInsets;
 import 'package:meta/meta.dart';
 
@@ -18,28 +21,19 @@ import 'package:meta/meta.dart';
 /// All styles that collectively describe how to render text are organized into
 /// a tree, with [DocumentStyle] at the root.
 class DocumentStyle extends Style {
-  DocumentStyle({
+  const DocumentStyle({
     this.width,
     this.height,
-    EdgeInsets? padding,
-    BackgroundStyle? background,
-    BlockStyle? paragraphStyle,
-    BlockStyle? header1Style,
-    BlockStyle? header2Style,
-    BlockStyle? header3Style,
-    BlockStyle? header4Style,
-    BlockStyle? header5Style,
-    BlockStyle? header6Style,
-  }) : padding = padding ?? EdgeInsets.zero {
-    backgroundStyle = acquire(background);
-    this.paragraphStyle = acquire(paragraphStyle ?? defaultParagraphStyle)!;
-    this.header1Style = acquire(header1Style ?? defaultHeader1Style)!;
-    this.header2Style = acquire(header2Style ?? defaultHeader2Style)!;
-    this.header3Style = acquire(header3Style ?? defaultHeader3Style)!;
-    this.header4Style = acquire(header4Style ?? defaultHeader4Style)!;
-    this.header5Style = acquire(header5Style ?? defaultHeader5Style)!;
-    this.header6Style = acquire(header6Style ?? defaultHeader6Style)!;
-  }
+    this.padding = EdgeInsets.zero,
+    this.background,
+    this.paragraph = _defaultParagraphStyle,
+    this.header1 = _defaultHeader1Style,
+    this.header2 = _defaultHeader2Style,
+    this.header3 = _defaultHeader3Style,
+    this.header4 = _defaultHeader4Style,
+    this.header5 = _defaultHeader5Style,
+    this.header6 = _defaultHeader6Style,
+  });
 
   /// Outer width of the document page.
   ///
@@ -65,7 +59,7 @@ class DocumentStyle extends Style {
   /// Behavior of the document when the amount of content that needs to be laid
   /// out exceeds the provided [height]. See the [Overflow] enum description for
   /// more details.
-  final Overflow overflow = Overflow.expand;
+  Overflow get overflow => Overflow.expand;
 
   /// The distance from the outer edges of the page to the inner content box of
   /// the document.
@@ -79,89 +73,88 @@ class DocumentStyle extends Style {
 
   /// If present, describes what kind of background and borders to draw for the
   /// document page(s).
-  late final BackgroundStyle? backgroundStyle;
+  final BackgroundStyle? background;
 
   /// Style for paragraph nodes in the document.
-  late final BlockStyle paragraphStyle;
+  final BlockStyle paragraph;
 
-  /// Style for level-1 headers.
-  late final BlockStyle header1Style;
+  /// Styles for headers of levels 1 to 6.
+  final BlockStyle header1;
+  final BlockStyle header2;
+  final BlockStyle header3;
+  final BlockStyle header4;
+  final BlockStyle header5;
+  final BlockStyle header6;
 
-  /// Style for level-2 headers.
-  late final BlockStyle header2Style;
-
-  /// Style for level-3 headers.
-  late final BlockStyle header3Style;
-
-  /// Style for level-4 headers.
-  late final BlockStyle header4Style;
-
-  /// Style for level-5 headers.
-  late final BlockStyle header5Style;
-
-  /// Style for level-6 headers.
-  late final BlockStyle header6Style;
-
-  static BlockStyle defaultParagraphStyle = BlockStyle();
-  static BlockStyle defaultHeader1Style = BlockStyle();
-  static BlockStyle defaultHeader2Style = BlockStyle();
-  static BlockStyle defaultHeader3Style = BlockStyle();
-  static BlockStyle defaultHeader4Style = BlockStyle();
-  static BlockStyle defaultHeader5Style = BlockStyle();
-  static BlockStyle defaultHeader6Style = BlockStyle();
-
-  @override
-  DocumentStyle clone() => copyWith();
+  static const _defaultParagraphStyle = BlockStyle();
+  static const _defaultHeader1Style = BlockStyle(
+    text: TextStyle(fontScale: 2.0, fontWeight: FontWeight.bold),
+  );
+  static const BlockStyle _defaultHeader2Style = BlockStyle(
+    text: TextStyle(fontScale: 1.5, fontWeight: FontWeight.bold),
+  );
+  static const BlockStyle _defaultHeader3Style = BlockStyle(
+    text: TextStyle(fontScale: 1.25, fontWeight: FontWeight.bold),
+  );
+  static const BlockStyle _defaultHeader4Style = BlockStyle(
+    text: TextStyle(fontScale: 1.0, fontWeight: FontWeight.bold),
+  );
+  static const BlockStyle _defaultHeader5Style = BlockStyle(
+    text: TextStyle(fontScale: 0.875, fontWeight: FontWeight.bold),
+  );
+  static const BlockStyle _defaultHeader6Style = BlockStyle(
+    text: TextStyle(fontScale: 0.85, fontWeight: FontWeight.bold),
+  );
 
   DocumentStyle copyWith({
     double? width,
     double? height,
     EdgeInsets? padding,
     BackgroundStyle? background,
-    BlockStyle? paragraphStyle,
-    BlockStyle? header1Style,
-    BlockStyle? header2Style,
-    BlockStyle? header3Style,
-    BlockStyle? header4Style,
-    BlockStyle? header5Style,
-    BlockStyle? header6Style,
+    BlockStyle? paragraph,
+    BlockStyle? header1,
+    BlockStyle? header2,
+    BlockStyle? header3,
+    BlockStyle? header4,
+    BlockStyle? header5,
+    BlockStyle? header6,
   }) {
     return DocumentStyle(
       width: width ?? this.width,
       height: height ?? this.height,
       padding: padding ?? this.padding,
-      background: background ?? backgroundStyle,
-      paragraphStyle: paragraphStyle ?? this.paragraphStyle,
-      header1Style: header1Style ?? this.header1Style,
-      header2Style: header2Style ?? this.header2Style,
-      header3Style: header3Style ?? this.header3Style,
-      header4Style: header4Style ?? this.header4Style,
-      header5Style: header5Style ?? this.header5Style,
-      header6Style: header6Style ?? this.header6Style,
+      background: background ?? this.background,
+      paragraph: paragraph ?? this.paragraph,
+      header1: header1 ?? this.header1,
+      header2: header2 ?? this.header2,
+      header3: header3 ?? this.header3,
+      header4: header4 ?? this.header4,
+      header5: header5 ?? this.header5,
+      header6: header6 ?? this.header6,
     );
   }
 
   @internal
   BlockStyle styleFor(BlockNode node) {
     if (node is ParagraphNode) {
-      return paragraphStyle;
+      return paragraph;
     }
     if (node is HeaderNode) {
       switch (node.level) {
         case 1:
-          return header1Style;
+          return header1;
         case 2:
-          return header2Style;
+          return header2;
         case 3:
-          return header3Style;
+          return header3;
         case 4:
-          return header4Style;
+          return header4;
         case 5:
-          return header5Style;
+          return header5;
         default:
-          return header6Style;
+          return header6;
       }
     }
-    return BlockStyle();
+    return const BlockStyle();
   }
 }
