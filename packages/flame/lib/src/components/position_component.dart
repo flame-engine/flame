@@ -99,8 +99,14 @@ class PositionComponent extends Component
   final NotifyingVector2 _size;
   Anchor _anchor;
 
-  /// The angle where this component is looking at in its
-  /// default state, i.e. when [angle] is equal to zero.
+  /// The angle where this component is looking at when it is in
+  /// the default state, i.e. when [angle] is equal to zero. Valid range
+  /// is -pi to +pi radians with 0 being vertically up.
+  /// For example, a value of:
+  ///     0 => Up direction
+  ///  pi/2 => Right direction
+  /// -pi/2 => Left direction
+  ///    pi => Down direction
   double nativeAngle;
 
   /// The decorator is used to apply visual effects to a component.
@@ -337,14 +343,22 @@ class PositionComponent extends Component
   /// The absolute center of the component.
   Vector2 get absoluteCenter => absolutePositionOfAnchor(Anchor.center);
 
-  /// Rotates the component to look at given target.
-  void lookAt(Vector2 target) {
-    angle = math.atan2(
+  /// Returns the angle formed by component's forward vector and a vector
+  /// starting at component's absolute position and ending at target.
+  /// Uses [nativeAngle] to decide the forward direction of the component.
+  /// See [lookAt] to make the component instantly rotate towards target.
+  /// Note: Returns 0 if target is exactly same as [absolutePosition].
+  double angleTo(Vector2 target) {
+    return math.atan2(
           target.x - absolutePosition.x,
           absolutePosition.y - target.y,
         ) -
         nativeAngle;
   }
+
+  /// Rotates/snaps the component to look at given target. Use [angleTo] to get the
+  /// calculated used by this method.
+  void lookAt(Vector2 target) => angle = angleTo(target);
 
   //#endregion
 
