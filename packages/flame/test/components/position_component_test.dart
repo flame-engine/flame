@@ -729,9 +729,14 @@ void main() {
         ];
         final expectedAngles = [pi, (3 * pi / 4), (-pi / 2), (-pi / 4)];
 
-        for (var i = 0; i < 4; ++i) {
-          comp.lookAt(targets.elementAt(i));
-          expectDouble(comp.angle, expectedAngles.elementAt(i), epsilon: 1e-10);
+        for (var i = 0; i < targets.length; ++i) {
+          final target = targets.elementAt(i);
+          final angle = expectedAngles.elementAt(i);
+
+          expectDouble(comp.angleTo(target), angle, epsilon: 1e-10);
+
+          comp.lookAt(target);
+          expectDouble(comp.angle, angle, epsilon: 1e-10);
         }
       });
 
@@ -746,10 +751,21 @@ void main() {
         ];
         final expectedAngles = [pi / 2, (pi / 4), -pi, (-3 * pi / 4)];
 
-        for (var i = 0; i < 4; ++i) {
-          comp.lookAt(targets.elementAt(i));
-          expectDouble(comp.angle, expectedAngles.elementAt(i), epsilon: 1e-10);
+        for (var i = 0; i < targets.length; ++i) {
+          final target = targets.elementAt(i);
+          final angle = expectedAngles.elementAt(i);
+
+          expectDouble(comp.angleTo(target), angle, epsilon: 1e-10);
+
+          comp.lookAt(target);
+          expectDouble(comp.angle, angle, epsilon: 1e-10);
         }
+      });
+
+      test('lookAt corner cases', () {
+        final comp = PositionComponent(position: Vector2(-20, 50));
+        comp.lookAt(comp.absolutePosition);
+        expectDouble(comp.angle, 0, epsilon: 1e-10);
       });
     });
 
