@@ -541,9 +541,9 @@ class _RenderableTileLayer extends _RenderableLayer<TileLayer> {
         late double offsetX;
         late double offsetY;
 
-        // halfTile.x: shfits the map half a tile forward rather than
+        // halfTile.x: shifts the map half a tile forward rather than
         //             lining up on at the center.
-        // halfTile.y: shfits the map half a tile down rather than
+        // halfTile.y: shifts the map half a tile down rather than
         //             lining up on at the center.
         // StaggerX/Y: Moves the tile forward/down depending on orientation.
         //  * stagger: Isometric tiles move down or right by only a fraction,
@@ -661,9 +661,9 @@ class _RenderableTileLayer extends _RenderableLayer<TileLayer> {
         late double offsetX;
         late double offsetY;
 
-        // halfTile.x: shfits the map half a tile forward rather than
+        // halfTile.x: shifts the map half a tile forward rather than
         //             lining up on at the center.
-        // halfTile.y: shfits the map half a tile down rather than
+        // halfTile.y: shifts the map half a tile down rather than
         //             lining up on at the center.
         // StaggerX/Y: Moves the tile forward/down depending on orientation.
         //  * stagger: Hexagonal tiles move down or right by only a fraction,
