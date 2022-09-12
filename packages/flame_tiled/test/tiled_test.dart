@@ -4,19 +4,22 @@ import 'dart:ui';
 
 import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
+import 'package:flame/game.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 import 'package:flutter/services.dart' show CachingAssetBundle;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tiled/tiled.dart';
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
   test('correct loads the file', () async {
     Flame.bundle = TestAssetBundle(
-      imageNames: ['map-level1.png'],
+      imageNames: ['map-level1.png', 'image1.png'],
       mapPath: 'test/assets/map.tmx',
     );
     final tiled = await TiledComponent.load('x', Vector2.all(16));
-    expect(tiled.tileMap.renderableLayers.length == 1, true);
+    expect(tiled.tileMap.renderableLayers.length, equals(3));
   });
 
   test('correctly loads external tileset', () async {
@@ -261,6 +264,53 @@ void main() {
         _renderableTiledMap.getLayer<TileLayer>('Nonexistent layer'),
         isNull,
       );
+    });
+  });
+
+  group('orthogonal with groups, offsets, opacity and parallax', () {
+    late Uint8List pngData;
+    late TiledComponent component;
+    final mapSizePx = Vector2(32 * 16, 128 * 16);
+
+    setUp(() async {
+      Flame.bundle = TestAssetBundle(
+        imageNames: [
+          'image1.png',
+          'map-level1.png',
+        ],
+        mapPath: 'test/assets/map.tmx',
+      );
+      component = await TiledComponent.load(
+        'map.tmx',
+        Vector2(16, 16),
+      );
+
+      // Need to initialize a game and call `onLoad` and `onGameResize` to
+      // get the camera and canvas sizes all initialized
+      final game = FlameGame(children: [component]);
+      component.onLoad();
+      component.onGameResize(mapSizePx);
+      game.onGameResize(mapSizePx);
+      game.camera.snapTo(Vector2(150, 20));
+    });
+
+    test('component size', () {
+      expect(component.tileMap.destTileSize, Vector2(16, 16));
+      expect(component.size, mapSizePx);
+    });
+
+    test('renders', () async {
+      final canvasRecorder = PictureRecorder();
+      final canvas = Canvas(canvasRecorder);
+      component.render(canvas);
+      final picture = canvasRecorder.endRecording();
+
+      final image = await picture.toImageSafe(32 * 16, 128 * 16);
+      pngData = (await image.toByteData(format: ImageByteFormat.png))!
+          .buffer
+          .asUint8List();
+
+      expect(pngData, matchesGoldenFile('goldens/orthogonal.png'));
     });
   });
 
