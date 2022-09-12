@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flame/src/text/nodes/block_node.dart';
 import 'package:flame/src/text/nodes/header_node.dart';
 import 'package:flame/src/text/nodes/paragraph_node.dart';
@@ -7,7 +5,7 @@ import 'package:flame/src/text/styles/background_style.dart';
 import 'package:flame/src/text/styles/block_style.dart';
 import 'package:flame/src/text/styles/overflow.dart';
 import 'package:flame/src/text/styles/style.dart';
-import 'package:flame/src/text/styles/text_style.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/painting.dart' show EdgeInsets;
 import 'package:meta/meta.dart';
 
@@ -26,13 +24,13 @@ class DocumentStyle extends Style {
     this.height,
     this.padding = EdgeInsets.zero,
     this.background,
-    this.paragraph = _defaultParagraphStyle,
-    this.header1 = _defaultHeader1Style,
-    this.header2 = _defaultHeader2Style,
-    this.header3 = _defaultHeader3Style,
-    this.header4 = _defaultHeader4Style,
-    this.header5 = _defaultHeader5Style,
-    this.header6 = _defaultHeader6Style,
+    this.paragraph = ParagraphNode.defaultStyle,
+    this.header1 = HeaderNode.defaultStyleH1,
+    this.header2 = HeaderNode.defaultStyleH2,
+    this.header3 = HeaderNode.defaultStyleH3,
+    this.header4 = HeaderNode.defaultStyleH4,
+    this.header5 = HeaderNode.defaultStyleH5,
+    this.header6 = HeaderNode.defaultStyleH6,
   });
 
   /// Outer width of the document page.
@@ -75,10 +73,10 @@ class DocumentStyle extends Style {
   /// document page(s).
   final BackgroundStyle? background;
 
-  /// Style for paragraph nodes in the document.
+  /// Style for [ParagraphNode]s.
   final BlockStyle paragraph;
 
-  /// Styles for headers of levels 1 to 6.
+  /// Styles for [HeaderNode]s, levels 1 to 6.
   final BlockStyle header1;
   final BlockStyle header2;
   final BlockStyle header3;
@@ -86,51 +84,20 @@ class DocumentStyle extends Style {
   final BlockStyle header5;
   final BlockStyle header6;
 
-  static const _defaultParagraphStyle = BlockStyle();
-  static const _defaultHeader1Style = BlockStyle(
-    text: TextStyle(fontScale: 2.0, fontWeight: FontWeight.bold),
-  );
-  static const BlockStyle _defaultHeader2Style = BlockStyle(
-    text: TextStyle(fontScale: 1.5, fontWeight: FontWeight.bold),
-  );
-  static const BlockStyle _defaultHeader3Style = BlockStyle(
-    text: TextStyle(fontScale: 1.25, fontWeight: FontWeight.bold),
-  );
-  static const BlockStyle _defaultHeader4Style = BlockStyle(
-    text: TextStyle(fontScale: 1.0, fontWeight: FontWeight.bold),
-  );
-  static const BlockStyle _defaultHeader5Style = BlockStyle(
-    text: TextStyle(fontScale: 0.875, fontWeight: FontWeight.bold),
-  );
-  static const BlockStyle _defaultHeader6Style = BlockStyle(
-    text: TextStyle(fontScale: 0.85, fontWeight: FontWeight.bold),
-  );
-
-  DocumentStyle copyWith({
-    double? width,
-    double? height,
-    EdgeInsets? padding,
-    BackgroundStyle? background,
-    BlockStyle? paragraph,
-    BlockStyle? header1,
-    BlockStyle? header2,
-    BlockStyle? header3,
-    BlockStyle? header4,
-    BlockStyle? header5,
-    BlockStyle? header6,
-  }) {
+  @override
+  DocumentStyle mergeWith(DocumentStyle other) {
     return DocumentStyle(
-      width: width ?? this.width,
-      height: height ?? this.height,
-      padding: padding ?? this.padding,
-      background: background ?? this.background,
-      paragraph: paragraph ?? this.paragraph,
-      header1: header1 ?? this.header1,
-      header2: header2 ?? this.header2,
-      header3: header3 ?? this.header3,
-      header4: header4 ?? this.header4,
-      header5: header5 ?? this.header5,
-      header6: header6 ?? this.header6,
+      width: other.width ?? width,
+      height: other.height ?? height,
+      padding: other.padding,
+      background: Style.merge(other.background, background)! as BackgroundStyle,
+      paragraph: Style.merge(other.paragraph, paragraph)! as BlockStyle,
+      header1: Style.merge(other.header1, header1)! as BlockStyle,
+      header2: Style.merge(other.header2, header2)! as BlockStyle,
+      header3: Style.merge(other.header3, header3)! as BlockStyle,
+      header4: Style.merge(other.header4, header4)! as BlockStyle,
+      header5: Style.merge(other.header5, header5)! as BlockStyle,
+      header6: Style.merge(other.header6, header6)! as BlockStyle,
     );
   }
 

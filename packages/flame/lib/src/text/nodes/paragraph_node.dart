@@ -2,16 +2,21 @@ import 'package:flame/src/text/elements/block_element.dart';
 import 'package:flame/src/text/elements/group_element.dart';
 import 'package:flame/src/text/formatters/text_painter_text_formatter.dart';
 import 'package:flame/src/text/inline/text_painter_text_element.dart';
-import 'package:flame/src/text/nodes.dart';
+import 'package:flame/src/text/nodes/text_nodes.dart';
 import 'package:flame/src/text/nodes/block_node.dart';
 import 'package:flame/src/text/styles/block_style.dart';
 import 'package:flutter/painting.dart' as painting;
+import 'package:flutter/rendering.dart';
 
 class ParagraphNode extends BlockNode {
   ParagraphNode.simple(String text)
       : child = GroupTextNode([PlainTextNode(text)]);
 
   final GroupTextNode child;
+
+  static const defaultStyle = BlockStyle(
+    margin: EdgeInsets.all(6),
+  );
 
   BlockElement format(BlockStyle style, {required double parentWidth}) {
     final text = (child.children.first as PlainTextNode).text;

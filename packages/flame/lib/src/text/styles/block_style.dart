@@ -35,4 +35,14 @@ class BlockStyle extends Style {
       text: text ?? this.text,
     );
   }
+
+  @override
+  BlockStyle mergeWith(BlockStyle other) {
+    return BlockStyle(
+      margin: other.margin,
+      padding: other.padding,
+      background: other.background ?? background,
+      text: Style.merge(text, other.text) as TextStyle?,
+    );
+  }
 }

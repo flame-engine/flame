@@ -45,4 +45,14 @@ class BackgroundStyle extends Style {
       borderWidth: borderWidth ?? borderWidths.left,
     );
   }
+
+  @override
+  BackgroundStyle mergeWith(BackgroundStyle other) {
+    return BackgroundStyle(
+      paint: other.backgroundPaint ?? backgroundPaint,
+      borderColor: other.borderPaint?.color ?? borderPaint?.color,
+      borderRadius: other.borderRadius,
+      borderWidth: other.borderWidths.top,
+    );
+  }
 }

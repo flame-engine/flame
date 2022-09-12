@@ -3,9 +3,14 @@ import 'package:flame/src/text/elements/group_element.dart';
 import 'package:flame/src/text/elements/rect_element.dart';
 import 'package:flame/src/text/elements/rrect_element.dart';
 import 'package:flame/src/text/styles/background_style.dart';
+import 'package:flame/src/text/styles/block_style.dart';
 
-/// An abstract base class for all entities with "block" placement rules.
+/// [BlockNode] is a base class for all nodes with "block" placement rules.
+///
+/// A block node is a structural piece of text such that the
 abstract class BlockNode {
+  BlockStyle? style;
+
   Element? makeBackground(BackgroundStyle? style, double width, double height) {
     if (style == null) {
       return null;

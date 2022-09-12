@@ -43,6 +43,7 @@ class TextStyle extends Style {
     );
   }
 
+  @override
   TextStyle mergeWith(TextStyle other) {
     return TextStyle(
       color: color ?? other.color,

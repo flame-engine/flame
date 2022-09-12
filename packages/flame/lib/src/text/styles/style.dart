@@ -15,4 +15,16 @@ import 'package:meta/meta.dart';
 /// The tree of [Style]s is roughly equivalent to a CSS stylesheet.
 abstract class Style {
   const Style();
+
+  Style mergeWith(covariant Style other);
+
+  static Style? merge(Style? style1, Style? style2) {
+    if (style1 == null) {
+      return style2;
+    } else if (style2 == null) {
+      return style1;
+    } else {
+      return style1.mergeWith(style2);
+    }
+  }
 }
