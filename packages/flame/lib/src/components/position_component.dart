@@ -343,8 +343,9 @@ class PositionComponent extends Component
   Vector2 get absoluteCenter => absolutePositionOfAnchor(Anchor.center);
 
   /// Returns the angle formed by component's orientation vector and a vector
-  /// starting at component's absolute position and ending at target. This
-  /// angle is measured in clockwise direction.
+  /// starting at component's absolute position and ending at [target]. This
+  /// angle is measured in clockwise direction. [target] should be in absolute/world
+  /// coordinate system.
   ///
   /// Uses [nativeAngle] to decide the orientation direction of the component.
   /// See [lookAt] to make the component instantly rotate towards target.
@@ -363,6 +364,7 @@ class PositionComponent extends Component
   ///
   /// This method sets the [angle] so that the component's orientation
   /// vector (as determined by the [nativeAngle]) is pointing at the target.
+  /// [target] should to be in absolute/world coordinate system.
   ///
   /// See also: [angleTo]
   void lookAt(Vector2 target) => angle = angleTo(target);
