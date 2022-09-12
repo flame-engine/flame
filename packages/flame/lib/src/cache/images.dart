@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert' show base64, json;
-import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:flame/src/flame.dart';
