@@ -20,22 +20,6 @@ class BlockStyle extends Style {
   final BackgroundStyle? background;
   final TextStyle? text;
 
-  /// Creates a copy of the current style, replacing some of the properties with
-  /// the provided ones.
-  BlockStyle copyWith({
-    EdgeInsets? margin,
-    EdgeInsets? padding,
-    BackgroundStyle? background,
-    TextStyle? text,
-  }) {
-    return BlockStyle(
-      margin: margin ?? this.margin,
-      padding: padding ?? this.padding,
-      background: background ?? this.background,
-      text: text ?? this.text,
-    );
-  }
-
   @override
   BlockStyle mergeWith(BlockStyle other) {
     return BlockStyle(

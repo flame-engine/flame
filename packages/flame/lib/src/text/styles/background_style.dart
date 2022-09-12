@@ -30,22 +30,6 @@ class BackgroundStyle extends Style {
   final double borderRadius;
   final EdgeInsets borderWidths;
 
-  BackgroundStyle copyWith({
-    Color? color,
-    Paint? paint,
-    Color? borderColor,
-    double? borderRadius,
-    double? borderWidth,
-  }) {
-    return BackgroundStyle(
-      color: color ?? (paint == null ? backgroundPaint?.color : null),
-      paint: paint ?? backgroundPaint,
-      borderColor: borderColor ?? borderPaint?.color,
-      borderRadius: borderRadius ?? this.borderRadius,
-      borderWidth: borderWidth ?? borderWidths.left,
-    );
-  }
-
   @override
   BackgroundStyle mergeWith(BackgroundStyle other) {
     return BackgroundStyle(

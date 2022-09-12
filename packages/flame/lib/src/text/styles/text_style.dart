@@ -23,26 +23,6 @@ class TextStyle extends Style {
   final FontStyle? fontStyle;
   final double? letterSpacing;
 
-  TextStyle cloneWith({
-    Color? color,
-    String? fontFamily,
-    double? fontSize,
-    double? fontScale,
-    FontWeight? fontWeight,
-    FontStyle? fontStyle,
-    double? letterSpacing,
-  }) {
-    return TextStyle(
-      color: color ?? this.color,
-      fontFamily: fontFamily ?? this.fontFamily,
-      fontSize: fontSize ?? this.fontSize,
-      fontScale: fontScale ?? this.fontScale,
-      fontWeight: fontWeight ?? this.fontWeight,
-      fontStyle: fontStyle ?? this.fontStyle,
-      letterSpacing: letterSpacing ?? this.letterSpacing,
-    );
-  }
-
   @override
   TextStyle mergeWith(TextStyle other) {
     return TextStyle(
