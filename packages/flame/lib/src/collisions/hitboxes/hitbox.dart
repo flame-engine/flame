@@ -13,6 +13,14 @@ abstract class Hitbox<T extends Hitbox<T>>
   ///   * [CollisionType.inactive] - not collide with any other hitboxes.
   CollisionType get collisionType;
 
+  /// Whether the hitbox is solid or hollow.
+  ///
+  /// If it is solid, collisions will occur even if the other hitbox is fully
+  /// enclosed of the other hitbox.
+  /// A hollow hitbox that is fully enclosed by a solid hitbox will trigger a
+  /// collision, but not the other way around.
+  bool get isSolid;
+
   /// The axis-aligned bounding box of the [Hitbox], this is used to make a
   /// rough estimation of whether two hitboxes can possibly collide or not.
   Aabb2 get aabb;

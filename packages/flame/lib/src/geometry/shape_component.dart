@@ -7,8 +7,6 @@ import 'package:flame/components.dart';
 /// center.
 /// A point can be determined to be within of outside of a shape.
 abstract class ShapeComponent extends PositionComponent with HasPaint {
-  bool renderShape = true;
-
   ShapeComponent({
     super.position,
     super.size,
@@ -21,4 +19,13 @@ abstract class ShapeComponent extends PositionComponent with HasPaint {
   }) {
     this.paint = paint ?? this.paint;
   }
+
+  bool renderShape = true;
+
+  /// Whether the shape should be regarded as solid in regards to
+  /// intersections.
+  ///
+  /// This field is not related to how the shape should be rendered, see
+  /// [Paint.style] for that.
+  bool isSolid = false;
 }
