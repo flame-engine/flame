@@ -336,7 +336,11 @@ class _RenderableTileLayer extends _RenderableLayer<TileLayer> {
       batch.clear();
     }
 
-    switch (_map.orientation) {
+    if (_map.orientation == null) {
+      return;
+    }
+
+    switch (_map.orientation!) {
       case MapOrientation.isometric:
         _cacheIsometricTiles();
         break;
@@ -347,7 +351,6 @@ class _RenderableTileLayer extends _RenderableLayer<TileLayer> {
         _cacheHexagonalTiles();
         break;
       case MapOrientation.orthogonal:
-      default:
         _cacheOrthogonalLayerTiles();
         break;
     }

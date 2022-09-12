@@ -68,7 +68,11 @@ class TiledComponent<T extends FlameGame> extends Component with HasGameRef<T> {
       tileMap.map.tileHeight * yScale,
     );
 
-    switch (tMap.orientation) {
+    if (tMap.orientation == null) {
+      return Vector2.zero();
+    }
+
+    switch (tMap.orientation!) {
       case MapOrientation.staggered:
         return tMap.staggerAxis == StaggerAxis.y
             ? Vector2(
@@ -93,7 +97,6 @@ class TiledComponent<T extends FlameGame> extends Component with HasGameRef<T> {
 
       case MapOrientation.isometric:
       case MapOrientation.orthogonal:
-      default:
         return Vector2(
           tileMap.map.width * tileScaled.x,
           tileMap.map.height * tileScaled.y,
