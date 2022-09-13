@@ -326,6 +326,21 @@ non-uniform way, by change `x` or `y` by different amounts.
 The `angle` is the rotation angle around the anchor, represented as a double in radians. It is
 relative to the parent's angle.
 
+### Native Angle
+
+The `nativeAngle` is an angle in radians, measured clockwise, representing the default orientation of the component. It can be used to define the direction in which the component is facing when [angle](#angle) is zero.
+
+It is specially helpful when making a sprite based component look at a specific target. If the original image of the sprite is not facing in the up/north direction, the calculated angle to make the component look at the target will need some offset to make it look correct. For such cases, `nativeAngle` can be used to let the component know what direction the original image is faces.
+
+An example could be a bullet image pointing in east direction. In this case `nativeAngle` can be set to pi/2 radians. Following are some common directions and their correspondin native angle values.
+
+Direction | Native Angle | In degrees
+----------|--------------|-------------
+Up/North  | 0            | 0
+Down/South| pi or -pi    | 180 or -180
+Left/West | -pi/2        | -90
+Right/East| pi/2         | 90
+
 ### Anchor
 
 The `anchor` is where on the component that the position and rotation should be defined from (the
