@@ -200,8 +200,8 @@ If your game field is small and do not have a lot of collideable components - yo
 worry about the broad phase system that is used, so if the standard implementation is performant
 enough for you, you probably don't have to read this section.
 
-A broad phase is the first step of collision detection where potential collisions are calculated. To
-calculate these potential collisions are a lot cheaper to calculate than to check the exact
+A broad phase is the first step of collision detection where potential collisions are calculated. 
+To calculate these potential collisions are a lot cheaper to calculate than to check the exact
 intersections directly and it removes the need to check all hitboxes against each other and
 therefore avoiding O(n²). The broad phase produces a set of potential collisions (a set of
 `CollisionProspect`s), this set is then used to check the exact intersections between hitboxes, this
