@@ -357,7 +357,7 @@ class PositionComponent extends Component
           target.x - absolutePosition.x,
           absolutePosition.y - target.y,
         ) -
-        (nativeAngle + absoluteAngle - angle);
+        (nativeAngle + absoluteAngle);
   }
 
   /// Rotates/snaps the component to look at the [target].
@@ -367,7 +367,7 @@ class PositionComponent extends Component
   /// [target] should to be in absolute/world coordinate system.
   ///
   /// See also: [angleTo]
-  void lookAt(Vector2 target) => angle = angleTo(target);
+  void lookAt(Vector2 target) => angle += angleTo(target);
 
   //#endregion
 
