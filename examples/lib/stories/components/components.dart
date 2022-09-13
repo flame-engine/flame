@@ -43,7 +43,7 @@ void addComponentsStories(Dashbook dashbook) {
     ..add(
       'Look At Smooth',
       (_) => GameWidget(game: LookAtSmoothExample()),
-      codeLink: baseLink('components/look_at_example.dart'),
+      codeLink: baseLink('components/look_at_smooth_example.dart'),
       info: LookAtExample.description,
     );
 }
