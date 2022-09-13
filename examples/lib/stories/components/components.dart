@@ -3,6 +3,8 @@ import 'package:examples/commons/commons.dart';
 import 'package:examples/stories/components/composability_example.dart';
 import 'package:examples/stories/components/debug_example.dart';
 import 'package:examples/stories/components/game_in_game_example.dart';
+import 'package:examples/stories/components/look_at_example.dart';
+import 'package:examples/stories/components/look_at_smooth_example.dart';
 import 'package:examples/stories/components/priority_example.dart';
 import 'package:flame/game.dart';
 
@@ -31,5 +33,17 @@ void addComponentsStories(Dashbook dashbook) {
       (_) => GameWidget(game: GameInGameExample()),
       codeLink: baseLink('components/game_in_game_example.dart'),
       info: GameInGameExample.description,
+    )
+    ..add(
+      'Look At',
+      (_) => GameWidget(game: LookAtExample()),
+      codeLink: baseLink('components/look_at_example.dart'),
+      info: LookAtExample.description,
+    )
+    ..add(
+      'Look At Smooth',
+      (_) => GameWidget(game: LookAtSmoothExample()),
+      codeLink: baseLink('components/look_at_example.dart'),
+      info: LookAtExample.description,
     );
 }
