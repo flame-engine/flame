@@ -13,9 +13,9 @@ class LookAtSmoothExample extends FlameGame with TapDetector {
   static const description = 'This example demonstrates how a component can be '
       'made to smoothly rotate towards a target using the angleTo method. '
       'Tap anywhere to change the target point for both the choppers. '
-      'It also shows how nativeAngle can be used to make the component orient '
-      'in the desired direction if the image is not facing the correct '
-      'direction.';
+      'It also shows how nativeAngle can be used to make the component '
+      'oriented in the desired direction if the image is not facing the '
+      'correct direction.';
 
   bool _isRotating = false;
   late SpriteAnimationComponent _chopper1;

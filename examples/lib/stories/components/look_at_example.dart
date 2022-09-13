@@ -12,9 +12,9 @@ class LookAtExample extends FlameGame with TapDetector {
   static const description = 'This example demonstrates how a component can be '
       'made to look at a specific target using the lookAt method. Tap anywhere '
       'to change the target point for both the choppers. '
-      'It also shows how nativeAngle can be used to make the component orient '
-      'in the desired direction if the image is not facing the correct '
-      'direction.';
+      'It also shows how nativeAngle can be used to make the component '
+      'oriented in the desired direction if the image is not facing the '
+      'correct direction.';
 
   late SpriteAnimationComponent _chopper1;
   late SpriteAnimationComponent _chopper2;
