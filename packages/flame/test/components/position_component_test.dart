@@ -745,7 +745,11 @@ void main() {
           final target = targets.elementAt(i);
           final angle = expectedAngles.elementAt(i);
 
-          expectDouble(component.angleTo(target), angle, epsilon: 1e-10);
+          expectDouble(
+            component.angleTo(target),
+            angle - component.angle,
+            epsilon: 1e-10,
+          );
 
           component.lookAt(target);
           expectDouble(component.angle, angle, epsilon: 1e-10);
@@ -767,7 +771,11 @@ void main() {
           final target = targets.elementAt(i);
           final angle = expectedAngles.elementAt(i);
 
-          expectDouble(component.angleTo(target), angle, epsilon: 1e-10);
+          expectDouble(
+            component.angleTo(target),
+            angle - component.angle,
+            epsilon: 1e-10,
+          );
 
           component.lookAt(target);
           expectDouble(component.angle, angle, epsilon: 1e-10);
@@ -803,7 +811,11 @@ void main() {
           final target = targets.elementAt(i);
           final angle = expectedAngles.elementAt(i);
 
-          expectDouble(component.angleTo(target), angle, epsilon: 1e-10);
+          expectDouble(
+            component.angleTo(target),
+            angle - component.angle,
+            epsilon: 1e-10,
+          );
 
           component.lookAt(target);
           expectDouble(component.angle, angle, epsilon: 1e-10);
