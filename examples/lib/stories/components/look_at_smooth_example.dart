@@ -56,7 +56,7 @@ class LookAtSmoothExample extends FlameGame with TapDetector {
       _targetComponent.position = info.eventPosition.game;
 
       _chopper1.add(
-        RotateEffect.to(
+        RotateEffect.by(
           _chopper1.angleTo(_targetComponent.absolutePosition),
           LinearEffectController(1),
           onComplete: () => _isRotating = false,
@@ -64,7 +64,7 @@ class LookAtSmoothExample extends FlameGame with TapDetector {
       );
 
       _chopper2.add(
-        RotateEffect.to(
+        RotateEffect.by(
           _chopper2.angleTo(_targetComponent.absolutePosition),
           LinearEffectController(1),
           onComplete: () => _isRotating = false,
