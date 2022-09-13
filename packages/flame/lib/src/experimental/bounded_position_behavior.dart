@@ -71,21 +71,11 @@ class BoundedPositionBehavior extends Component {
   @override
   void update(double dt) {
     final currentPosition = _target!.position;
-    if (isValidPoint(currentPosition)) {
-      _previousPosition.setFrom(currentPosition);
-    } else {
-      var inBoundsPoint = _previousPosition;
-      var outOfBoundsPoint = currentPosition;
-      while (inBoundsPoint.taxicabDistanceTo(outOfBoundsPoint) > _precision) {
-        final newPoint = (inBoundsPoint + outOfBoundsPoint)..scale(0.5);
-        if (isValidPoint(newPoint)) {
-          inBoundsPoint = newPoint;
-        } else {
-          outOfBoundsPoint = newPoint;
-        }
-      }
-      _previousPosition.setFrom(inBoundsPoint);
-      _target!.position = inBoundsPoint;
-    }
+    currentPosition.x =
+        currentPosition.x.clamp(_bounds.aabb.min.x, _bounds.aabb.max.x);
+    currentPosition.y =
+        currentPosition.y.clamp(_bounds.aabb.min.y, _bounds.aabb.max.y);
+    _previousPosition.setFrom(currentPosition);
+    _target!.position = currentPosition;
   }
 }
