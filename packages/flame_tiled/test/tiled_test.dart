@@ -1,23 +1,25 @@
-import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
+import 'package:flame/game.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 import 'package:flutter/services.dart' show CachingAssetBundle;
-import 'package:test/test.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:tiled/tiled.dart';
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
   test('correct loads the file', () async {
     Flame.bundle = TestAssetBundle(
-      imageNames: ['map-level1.png'],
+      imageNames: ['map-level1.png', 'image1.png'],
       mapPath: 'test/assets/map.tmx',
     );
     final tiled = await TiledComponent.load('x', Vector2.all(16));
-    expect(tiled.tileMap.renderableLayers.length == 1, true);
+    expect(tiled.tileMap.renderableLayers.length, equals(3));
   });
 
   test('correctly loads external tileset', () async {
@@ -261,6 +263,259 @@ void main() {
       expect(
         _renderableTiledMap.getLayer<TileLayer>('Nonexistent layer'),
         isNull,
+      );
+    });
+  });
+
+  Future<Uint8List> renderMapToPng(
+    TiledComponent component,
+    int width,
+    int height,
+  ) async {
+    final canvasRecorder = PictureRecorder();
+    final canvas = Canvas(canvasRecorder);
+    component.tileMap.render(canvas);
+    final picture = canvasRecorder.endRecording();
+
+    // Map size is now 320 wide, but it has 1 extra tile of height becusae
+    // its actually double-height tiles.
+    final image = await picture.toImageSafe(width, height);
+    return (await image.toByteData(format: ImageByteFormat.png))!
+        .buffer
+        .asUint8List();
+  }
+
+  group('orthogonal with groups, offsets, opacity and parallax', () {
+    late TiledComponent component;
+    final mapSizePx = Vector2(32 * 16, 128 * 16);
+
+    setUp(() async {
+      Flame.bundle = TestAssetBundle(
+        imageNames: [
+          'image1.png',
+          'map-level1.png',
+        ],
+        mapPath: 'test/assets/map.tmx',
+      );
+      component = await TiledComponent.load(
+        'map.tmx',
+        Vector2(16, 16),
+      );
+
+      // Need to initialize a game and call `onLoad` and `onGameResize` to
+      // get the camera and canvas sizes all initialized
+      final game = FlameGame(children: [component]);
+      component.onLoad();
+      component.onGameResize(mapSizePx);
+      game.onGameResize(mapSizePx);
+      game.camera.snapTo(Vector2(150, 20));
+    });
+
+    test('component size', () {
+      expect(component.tileMap.destTileSize, Vector2(16, 16));
+      expect(component.size, mapSizePx);
+    });
+
+    test('renders', () async {
+      final pngData = await renderMapToPng(component, 32 * 16, 128 * 16);
+
+      expect(pngData, matchesGoldenFile('goldens/orthogonal.png'));
+    });
+  });
+
+  group('isometric', () {
+    late TiledComponent component;
+
+    setUp(() async {
+      Flame.bundle = TestAssetBundle(
+        imageNames: [
+          'isometric_spritesheet.png',
+        ],
+        mapPath: 'test/assets/test_isometric.tmx',
+      );
+      component = await TiledComponent.load(
+        'test_isometric.tmx',
+        Vector2(256 / 4, 128 / 4),
+      );
+    });
+
+    test('component size', () {
+      expect(component.tileMap.destTileSize, Vector2(64, 32));
+      expect(component.size, Vector2(64 * 5, 32 * 5));
+    });
+
+    test('renders', () async {
+      // Map size is now 320 wide, but it has 1 extra tile of height becusae
+      // its actually double-height tiles.
+      final pngData =
+          await renderMapToPng(component, 256 * 5 ~/ 4, (128 * 5 + 128) ~/ 4);
+
+      expect(pngData, matchesGoldenFile('goldens/isometric.png'));
+    });
+  });
+
+  group('hexagonal', () {
+    late TiledComponent component;
+
+    Future<TiledComponent> setupMap(
+      String tmxFile,
+      String imageFile,
+      Vector2 destTileSize,
+    ) async {
+      Flame.bundle = TestAssetBundle(
+        imageNames: [
+          imageFile,
+        ],
+        mapPath: 'test/assets/$tmxFile',
+      );
+      return component = await TiledComponent.load(
+        tmxFile,
+        destTileSize,
+      );
+    }
+
+    test('flat + even staggerd', () async {
+      await setupMap(
+        'flat_hex_even.tmx',
+        'Tileset_Hexagonal_FlatTop_60x39_60x60.png',
+        Vector2(60, 39),
+      );
+
+      expect(component.size, Vector2(240, 214.5));
+
+      final pngData = await renderMapToPng(component, 240, 215);
+
+      expect(pngData, matchesGoldenFile('goldens/flat_hex_even.png'));
+    });
+
+    test('flat + odd staggerd', () async {
+      await setupMap(
+        'flat_hex_odd.tmx',
+        'Tileset_Hexagonal_FlatTop_60x39_60x60.png',
+        Vector2(60, 39),
+      );
+
+      expect(component.size, Vector2(240, 214.5));
+
+      final pngData = await renderMapToPng(component, 240, 215);
+
+      expect(pngData, matchesGoldenFile('goldens/flat_hex_odd.png'));
+    });
+
+    test('pointy + even staggerd', () async {
+      await setupMap(
+        'pointy_hex_even.tmx',
+        'Tileset_Hexagonal_PointyTop_60x52_60x80.png',
+        Vector2(60, 52),
+      );
+
+      expect(component.size, Vector2(330, 208));
+
+      final pngData = await renderMapToPng(component, 330, 208);
+
+      expect(pngData, matchesGoldenFile('goldens/pointy_hex_even.png'));
+    });
+
+    test('pointy + odd staggerd', () async {
+      await setupMap(
+        'pointy_hex_odd.tmx',
+        'Tileset_Hexagonal_PointyTop_60x52_60x80.png',
+        Vector2(60, 52),
+      );
+
+      expect(component.size, Vector2(330, 208));
+
+      final pngData = await renderMapToPng(component, 330, 208);
+
+      expect(pngData, matchesGoldenFile('goldens/pointy_hex_odd.png'));
+    });
+  });
+
+  group('isometric staggered', () {
+    late TiledComponent component;
+
+    Future<TiledComponent> setupMap(
+      String tmxFile,
+      String imageFile,
+      Vector2 destTileSize,
+    ) async {
+      Flame.bundle = TestAssetBundle(
+        imageNames: [
+          imageFile,
+        ],
+        mapPath: 'test/assets/$tmxFile',
+      );
+      return component = await TiledComponent.load(
+        tmxFile,
+        destTileSize,
+      );
+    }
+
+    test('x + odd', () async {
+      await setupMap(
+        'iso_staggered_overlap_x_odd.tmx',
+        'dirt_atlas.png',
+        Vector2(128, 64),
+      );
+
+      expect(component.size, Vector2(320, 288));
+
+      final pngData = await renderMapToPng(component, 320, 288);
+
+      expect(
+        pngData,
+        matchesGoldenFile('goldens/iso_staggered_overlap_x_odd.png'),
+      );
+    });
+
+    test('x + even + half sized', () async {
+      await setupMap(
+        'iso_staggered_overlap_x_even.tmx',
+        'dirt_atlas.png',
+        Vector2(128 / 2, 64 / 2),
+      );
+
+      expect(component.size, Vector2(320 / 2, 288 / 2));
+
+      final pngData = await renderMapToPng(component, 160, 144);
+
+      expect(
+        pngData,
+        matchesGoldenFile('goldens/iso_staggered_overlap_x_even.png'),
+      );
+    });
+
+    test('y + odd + half', () async {
+      await setupMap(
+        'iso_staggered_overlap_y_odd.tmx',
+        'dirt_atlas.png',
+        Vector2(128 / 2, 64 / 2),
+      );
+
+      expect(component.size, Vector2(576 / 2, 160 / 2));
+
+      final pngData = await renderMapToPng(component, 288, 80);
+
+      expect(
+        pngData,
+        matchesGoldenFile('goldens/iso_staggered_overlap_y_odd.png'),
+      );
+    });
+
+    test('y + even', () async {
+      await setupMap(
+        'iso_staggered_overlap_y_even.tmx',
+        'dirt_atlas.png',
+        Vector2(128, 64),
+      );
+
+      expect(component.size, Vector2(576, 160));
+
+      final pngData = await renderMapToPng(component, 576, 160);
+
+      expect(
+        pngData,
+        matchesGoldenFile('goldens/iso_staggered_overlap_y_even.png'),
       );
     });
   });
