@@ -9,24 +9,28 @@ import 'package:meta/meta.dart';
 @immutable
 class BlockStyle extends Style {
   const BlockStyle({
-    this.margin = EdgeInsets.zero,
-    this.padding = EdgeInsets.zero,
+    EdgeInsets? margin,
+    EdgeInsets? padding,
     this.background,
     this.text,
-  });
+  })  : _margin = margin,
+        _padding = padding;
 
-  final EdgeInsets margin;
-  final EdgeInsets padding;
+  final EdgeInsets? _margin;
+  final EdgeInsets? _padding;
   final BackgroundStyle? background;
   final TextStyle? text;
 
+  EdgeInsets get margin => _margin ?? EdgeInsets.zero;
+  EdgeInsets get padding => _padding ?? EdgeInsets.zero;
+
   @override
-  BlockStyle mergeWith(BlockStyle other) {
+  BlockStyle copyWith(BlockStyle other) {
     return BlockStyle(
-      margin: other.margin,
-      padding: other.padding,
+      margin: other._margin ?? _margin,
+      padding: other._padding ?? _padding,
       background: other.background ?? background,
-      text: Style.merge(text, other.text) as TextStyle?,
+      text: Style.merge(text, other.text),
     );
   }
 }

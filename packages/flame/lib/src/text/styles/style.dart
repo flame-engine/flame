@@ -1,5 +1,4 @@
 import 'package:flame/src/text/styles/document_style.dart';
-import 'package:meta/meta.dart';
 
 /// A [Style] is a base class for several classes that collectively describe
 /// the desired visual appearance of a "rich-text" document.
@@ -16,15 +15,16 @@ import 'package:meta/meta.dart';
 abstract class Style {
   const Style();
 
-  Style mergeWith(covariant Style other);
+  Style copyWith(covariant Style other);
 
-  static Style? merge(Style? style1, Style? style2) {
+  static T? merge<T extends Style>(T? style1, T? style2) {
     if (style1 == null) {
       return style2;
     } else if (style2 == null) {
       return style1;
     } else {
-      return style1.mergeWith(style2);
+      assert(style1.runtimeType == style2.runtimeType);
+      return style1.copyWith(style2) as T;
     }
   }
 }

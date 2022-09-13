@@ -31,7 +31,7 @@ class BackgroundStyle extends Style {
   final EdgeInsets borderWidths;
 
   @override
-  BackgroundStyle mergeWith(BackgroundStyle other) {
+  BackgroundStyle copyWith(BackgroundStyle other) {
     return BackgroundStyle(
       paint: other.backgroundPaint ?? backgroundPaint,
       borderColor: other.borderPaint?.color ?? borderPaint?.color,

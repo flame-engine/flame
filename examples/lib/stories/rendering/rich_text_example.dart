@@ -30,7 +30,6 @@ class MyTextComponent extends PositionComponent {
         borderWidth: 2.0,
       ),
       paragraph: BlockStyle(
-        margin: const EdgeInsets.symmetric(vertical: 6),
         padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 6),
         background: BackgroundStyle(
           color: const Color(0xFFFFF0CB),
@@ -39,6 +38,7 @@ class MyTextComponent extends PositionComponent {
       ),
     );
     final document = DocumentNode([
+      HeaderNode.simple('1984', level: 1),
       ParagraphNode.simple(
         'Anything could be true. The so-called laws of nature were nonsense.',
       ),
