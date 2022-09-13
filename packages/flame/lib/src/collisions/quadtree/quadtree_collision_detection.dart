@@ -39,7 +39,7 @@ class QuadTreeCollisionDetection extends StandardCollisionDetection {
       }
     };
     final parent = item.parent;
-    if (parent != null && parent is PositionComponent) {
+    if (parent is PositionComponent) {
       parent.position.addListener(listenerTransform);
     }
     item.transform.removeListener(listenerTransform);
