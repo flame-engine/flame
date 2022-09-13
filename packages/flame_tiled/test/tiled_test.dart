@@ -267,8 +267,25 @@ void main() {
     });
   });
 
+  Future<Uint8List> renderMapToPng(
+    TiledComponent component,
+    int width,
+    int height,
+  ) async {
+    final canvasRecorder = PictureRecorder();
+    final canvas = Canvas(canvasRecorder);
+    component.tileMap.render(canvas);
+    final picture = canvasRecorder.endRecording();
+
+    // Map size is now 320 wide, but it has 1 extra tile of height becusae
+    // its actually double-height tiles.
+    final image = await picture.toImageSafe(width, height);
+    return (await image.toByteData(format: ImageByteFormat.png))!
+        .buffer
+        .asUint8List();
+  }
+
   group('orthogonal with groups, offsets, opacity and parallax', () {
-    late Uint8List pngData;
     late TiledComponent component;
     final mapSizePx = Vector2(32 * 16, 128 * 16);
 
@@ -300,22 +317,13 @@ void main() {
     });
 
     test('renders', () async {
-      final canvasRecorder = PictureRecorder();
-      final canvas = Canvas(canvasRecorder);
-      component.render(canvas);
-      final picture = canvasRecorder.endRecording();
-
-      final image = await picture.toImageSafe(32 * 16, 128 * 16);
-      pngData = (await image.toByteData(format: ImageByteFormat.png))!
-          .buffer
-          .asUint8List();
+      final pngData = await renderMapToPng(component, 32 * 16, 128 * 16);
 
       expect(pngData, matchesGoldenFile('goldens/orthogonal.png'));
     });
   });
 
   group('isometric', () {
-    late Uint8List pngData;
     late TiledComponent component;
 
     setUp(() async {
@@ -337,25 +345,16 @@ void main() {
     });
 
     test('renders', () async {
-      final canvasRecorder = PictureRecorder();
-      final canvas = Canvas(canvasRecorder);
-      component.tileMap.render(canvas);
-      final picture = canvasRecorder.endRecording();
-
       // Map size is now 320 wide, but it has 1 extra tile of height becusae
       // its actually double-height tiles.
-      final image =
-          await picture.toImageSafe(256 * 5 ~/ 4, (128 * 5 + 128) ~/ 4);
-      pngData = (await image.toByteData(format: ImageByteFormat.png))!
-          .buffer
-          .asUint8List();
+      final pngData =
+          await renderMapToPng(component, 256 * 5 ~/ 4, (128 * 5 + 128) ~/ 4);
 
       expect(pngData, matchesGoldenFile('goldens/isometric.png'));
     });
   });
 
   group('hexagonal', () {
-    late Uint8List pngData;
     late TiledComponent component;
 
     Future<TiledComponent> setupMap(
@@ -384,15 +383,7 @@ void main() {
 
       expect(component.size, Vector2(240, 214.5));
 
-      final canvasRecorder = PictureRecorder();
-      final canvas = Canvas(canvasRecorder);
-      component.tileMap.render(canvas);
-      final picture = canvasRecorder.endRecording();
-
-      final image = await picture.toImageSafe(240, 215);
-      pngData = (await image.toByteData(format: ImageByteFormat.png))!
-          .buffer
-          .asUint8List();
+      final pngData = await renderMapToPng(component, 240, 215);
 
       expect(pngData, matchesGoldenFile('goldens/flat_hex_even.png'));
     });
@@ -406,15 +397,7 @@ void main() {
 
       expect(component.size, Vector2(240, 214.5));
 
-      final canvasRecorder = PictureRecorder();
-      final canvas = Canvas(canvasRecorder);
-      component.tileMap.render(canvas);
-      final picture = canvasRecorder.endRecording();
-
-      final image = await picture.toImageSafe(240, 215);
-      pngData = (await image.toByteData(format: ImageByteFormat.png))!
-          .buffer
-          .asUint8List();
+      final pngData = await renderMapToPng(component, 240, 215);
 
       expect(pngData, matchesGoldenFile('goldens/flat_hex_odd.png'));
     });
@@ -428,15 +411,7 @@ void main() {
 
       expect(component.size, Vector2(330, 208));
 
-      final canvasRecorder = PictureRecorder();
-      final canvas = Canvas(canvasRecorder);
-      component.tileMap.render(canvas);
-      final picture = canvasRecorder.endRecording();
-
-      final image = await picture.toImageSafe(330, 208);
-      pngData = (await image.toByteData(format: ImageByteFormat.png))!
-          .buffer
-          .asUint8List();
+      final pngData = await renderMapToPng(component, 330, 208);
 
       expect(pngData, matchesGoldenFile('goldens/pointy_hex_even.png'));
     });
@@ -450,22 +425,13 @@ void main() {
 
       expect(component.size, Vector2(330, 208));
 
-      final canvasRecorder = PictureRecorder();
-      final canvas = Canvas(canvasRecorder);
-      component.tileMap.render(canvas);
-      final picture = canvasRecorder.endRecording();
-
-      final image = await picture.toImageSafe(330, 208);
-      pngData = (await image.toByteData(format: ImageByteFormat.png))!
-          .buffer
-          .asUint8List();
+      final pngData = await renderMapToPng(component, 330, 208);
 
       expect(pngData, matchesGoldenFile('goldens/pointy_hex_odd.png'));
     });
   });
 
   group('isometric staggered', () {
-    late Uint8List pngData;
     late TiledComponent component;
 
     Future<TiledComponent> setupMap(
@@ -494,15 +460,7 @@ void main() {
 
       expect(component.size, Vector2(320, 288));
 
-      final canvasRecorder = PictureRecorder();
-      final canvas = Canvas(canvasRecorder);
-      component.tileMap.render(canvas);
-      final picture = canvasRecorder.endRecording();
-
-      final image = await picture.toImageSafe(320, 288);
-      pngData = (await image.toByteData(format: ImageByteFormat.png))!
-          .buffer
-          .asUint8List();
+      final pngData = await renderMapToPng(component, 320, 288);
 
       expect(
         pngData,
@@ -519,15 +477,7 @@ void main() {
 
       expect(component.size, Vector2(320 / 2, 288 / 2));
 
-      final canvasRecorder = PictureRecorder();
-      final canvas = Canvas(canvasRecorder);
-      component.tileMap.render(canvas);
-      final picture = canvasRecorder.endRecording();
-
-      final image = await picture.toImageSafe(160, 144);
-      pngData = (await image.toByteData(format: ImageByteFormat.png))!
-          .buffer
-          .asUint8List();
+      final pngData = await renderMapToPng(component, 160, 144);
 
       expect(
         pngData,
@@ -544,15 +494,7 @@ void main() {
 
       expect(component.size, Vector2(576 / 2, 160 / 2));
 
-      final canvasRecorder = PictureRecorder();
-      final canvas = Canvas(canvasRecorder);
-      component.tileMap.render(canvas);
-      final picture = canvasRecorder.endRecording();
-
-      final image = await picture.toImageSafe(288, 80);
-      pngData = (await image.toByteData(format: ImageByteFormat.png))!
-          .buffer
-          .asUint8List();
+      final pngData = await renderMapToPng(component, 288, 80);
 
       expect(
         pngData,
@@ -569,15 +511,7 @@ void main() {
 
       expect(component.size, Vector2(576, 160));
 
-      final canvasRecorder = PictureRecorder();
-      final canvas = Canvas(canvasRecorder);
-      component.tileMap.render(canvas);
-      final picture = canvasRecorder.endRecording();
-
-      final image = await picture.toImageSafe(576, 160);
-      pngData = (await image.toByteData(format: ImageByteFormat.png))!
-          .buffer
-          .asUint8List();
+      final pngData = await renderMapToPng(component, 576, 160);
 
       expect(
         pngData,
