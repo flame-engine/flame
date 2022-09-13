@@ -324,7 +324,6 @@ class _RenderableTileLayer extends _RenderableLayer<TileLayer> {
     this._cachedSpriteBatches,
   ) {
     _layerPaint.color = Color.fromRGBO(255, 255, 255, opacity);
-    _cacheLayerTiles();
   }
 
   @override
@@ -333,12 +332,27 @@ class _RenderableTileLayer extends _RenderableLayer<TileLayer> {
   }
 
   void _cacheLayerTiles() {
-    if (_map.orientation == MapOrientation.isometric) {
-      _cacheIsometricTiles();
-    } else if (_map.orientation == MapOrientation.hexagonal) {
-      _cacheHexagonalTiles();
-    } else {
-      _cacheOrthogonalLayerTiles();
+    for (final batch in _cachedSpriteBatches.values) {
+      batch.clear();
+    }
+
+    if (_map.orientation == null) {
+      return;
+    }
+
+    switch (_map.orientation!) {
+      case MapOrientation.isometric:
+        _cacheIsometricTiles();
+        break;
+      case MapOrientation.staggered:
+        _cacheIsometricStaggeredTiles();
+        break;
+      case MapOrientation.hexagonal:
+        _cacheHexagonalTiles();
+        break;
+      case MapOrientation.orthogonal:
+        _cacheOrthogonalLayerTiles();
+        break;
     }
   }
 
@@ -454,7 +468,7 @@ class _RenderableTileLayer extends _RenderableLayer<TileLayer> {
     }
   }
 
-  void _cacheHexagonalTiles() {
+  void _cacheIsometricStaggeredTiles() {
     final tileData = layer.tileData!;
     final batchMap = _cachedSpriteBatches;
     final halfDestinationTile = _destTileSize / 2;
@@ -463,15 +477,13 @@ class _RenderableTileLayer extends _RenderableLayer<TileLayer> {
 
     var staggerY = 0.0;
     var staggerX = 0.0;
-    if (_map.orientation == MapOrientation.hexagonal) {
-      // Hexagonal Ponity Tiles move down by a fractional amount.
-      if (_map.staggerAxis == StaggerAxis.y) {
-        staggerY = _map.tileHeight * 0.75;
-      }
-      // Hexagonal Flat Tiles move right by a fractional amount.
-      if (_map.staggerAxis == StaggerAxis.x) {
-        staggerX = _map.tileWidth * 0.75;
-      }
+    // Hexagonal Ponity Tiles move down by a fractional amount.
+    if (_map.staggerAxis == StaggerAxis.y) {
+      staggerY = size.y * 0.5;
+    } else
+    // Hexagonal Flat Tiles move right by a fractional amount.
+    if (_map.staggerAxis == StaggerAxis.x) {
+      staggerX = size.x * 0.5;
     }
 
     for (var ty = 0; ty < tileData.length; ty++) {
@@ -486,6 +498,131 @@ class _RenderableTileLayer extends _RenderableLayer<TileLayer> {
           staggerX = 0.0;
         }
       }
+
+      // When staggering in the X axis, we need to hold painting of "lower"
+      // tiles (those with staggerY adjustments) otherwise they'll just get
+      // painted over. See the second pass loop after tx.
+      final xSecondPass = <_Transform>[];
+
+      for (var tx = 0; tx < tileRow.length; tx++) {
+        final tileGid = tileRow[tx];
+        if (tileGid.tile == 0) {
+          continue;
+        }
+
+        final tile = _map.tileByGid(tileGid.tile);
+        final tileset = _map.tilesetByTileGId(tileGid.tile);
+        final img = tile.image ?? tileset.image;
+        if (img == null) {
+          continue;
+        }
+
+        final batch = batchMap[img.source];
+        if (batch == null) {
+          continue;
+        }
+
+        // Tiles shift up and down as we move across the row.
+        if (_map.staggerAxis == StaggerAxis.x) {
+          if ((tx.isOdd && _map.staggerIndex == StaggerIndex.odd) ||
+              (tx.isEven && _map.staggerIndex == StaggerIndex.even)) {
+            staggerY = halfDestinationTile.y;
+          } else {
+            staggerY = 0.0;
+          }
+        }
+
+        final src = tileset.computeDrawRect(tile).toRect();
+        final flips = SimpleFlips.fromFlips(tileGid.flips);
+        final scale = size.x / src.width;
+        final anchorX = src.width - halfMapTile.x;
+        final anchorY = src.height - halfMapTile.y;
+
+        late double offsetX;
+        late double offsetY;
+
+        // halfTile.x: shifts the map half a tile forward rather than
+        //             lining up on at the center.
+        // halfTile.y: shifts the map half a tile down rather than
+        //             lining up on at the center.
+        // StaggerX/Y: Moves the tile forward/down depending on orientation.
+        //  * stagger: Isometric tiles move down or right by only a fraction,
+        //             specifically 1/2 the width or height, for packing.
+        if (_map.staggerAxis == StaggerAxis.y) {
+          offsetX = tx * size.x + staggerX + halfDestinationTile.x;
+          offsetY = ty * staggerY + halfDestinationTile.y;
+        } else {
+          offsetX = tx * staggerX + halfDestinationTile.x;
+          offsetY = ty * size.y + staggerY + halfDestinationTile.y;
+        }
+
+        final scos = flips.cos * scale;
+        final ssin = flips.sin * scale;
+
+        final transform = ui.RSTransform(
+          scos,
+          ssin,
+          offsetX + -scos * anchorX + ssin * anchorY,
+          offsetY + -ssin * anchorX - scos * anchorY,
+        );
+
+        // A second pass is only needed in the case of staggery.
+        if (_map.staggerAxis == StaggerAxis.x && staggerY > 0) {
+          xSecondPass.add(_Transform(src, transform, flips.flip, batch));
+        } else {
+          batch.addTransform(
+            source: src,
+            transform: transform,
+            flip: flips.flip,
+          );
+        }
+      }
+
+      for (final tile in xSecondPass) {
+        tile.batch.addTransform(
+          source: tile.source,
+          transform: tile.transform,
+          flip: tile.flip,
+        );
+      }
+    }
+  }
+
+  void _cacheHexagonalTiles() {
+    final tileData = layer.tileData!;
+    final batchMap = _cachedSpriteBatches;
+    final halfDestinationTile = _destTileSize / 2;
+    final size = _destTileSize;
+    final halfMapTile = Vector2(_map.tileWidth / 2, _map.tileHeight / 2);
+
+    var staggerY = 0.0;
+    var staggerX = 0.0;
+    // Hexagonal Ponity Tiles move down by a fractional amount.
+    if (_map.staggerAxis == StaggerAxis.y) {
+      staggerY = size.y * 0.75;
+    } else
+    // Hexagonal Flat Tiles move right by a fractional amount.
+    if (_map.staggerAxis == StaggerAxis.x) {
+      staggerX = size.x * 0.75;
+    }
+
+    for (var ty = 0; ty < tileData.length; ty++) {
+      final tileRow = tileData[ty];
+
+      // Hexagonal Pointy Tiles shift left and right depending on the row
+      if (_map.staggerAxis == StaggerAxis.y) {
+        if ((ty.isOdd && _map.staggerIndex == StaggerIndex.odd) ||
+            (ty.isEven && _map.staggerIndex == StaggerIndex.even)) {
+          staggerX = halfDestinationTile.x;
+        } else {
+          staggerX = 0.0;
+        }
+      }
+
+      // When staggering in the X axis, we need to hold painting of "lower"
+      // tiles (those with staggerY adjustments) otherwise they'll just get
+      // painted over. See the second pass loop after tx.
+      final xSecondPass = <_Transform>[];
 
       for (var tx = 0; tx < tileRow.length; tx++) {
         final tileGid = tileRow[tx];
@@ -524,33 +661,48 @@ class _RenderableTileLayer extends _RenderableLayer<TileLayer> {
         late double offsetX;
         late double offsetY;
 
-        // halfTile.x: shfits the map half a tile forward rather than
+        // halfTile.x: shifts the map half a tile forward rather than
         //             lining up on at the center.
-        // halfTile.y: shfits the map half a tile down rather than
+        // halfTile.y: shifts the map half a tile down rather than
         //             lining up on at the center.
         // StaggerX/Y: Moves the tile forward/down depending on orientation.
         //  * stagger: Hexagonal tiles move down or right by only a fraction,
         //             specifically 3/4 the width or height, for packing.
         if (_map.staggerAxis == StaggerAxis.y) {
-          offsetX = tx * _map.tileWidth + staggerX + halfDestinationTile.x;
+          offsetX = tx * size.x + staggerX + halfDestinationTile.x;
           offsetY = ty * staggerY + halfDestinationTile.y;
         } else {
           offsetX = tx * staggerX + halfDestinationTile.x;
-          offsetY = ty * _map.tileHeight + staggerY + halfDestinationTile.y;
+          offsetY = ty * size.y + staggerY + halfDestinationTile.y;
         }
 
         final scos = flips.cos * scale;
         final ssin = flips.sin * scale;
 
-        batch.addTransform(
-          source: src,
-          transform: ui.RSTransform(
-            scos,
-            ssin,
-            offsetX + -scos * anchorX + ssin * anchorY,
-            offsetY + -ssin * anchorX - scos * anchorY,
-          ),
-          flip: flips.flip,
+        final transform = ui.RSTransform(
+          scos,
+          ssin,
+          offsetX + -scos * anchorX + ssin * anchorY,
+          offsetY + -ssin * anchorX - scos * anchorY,
+        );
+
+        // A second pass is only needed in the case of staggery.
+        if (_map.staggerAxis == StaggerAxis.x && staggerY > 0) {
+          xSecondPass.add(_Transform(src, transform, flips.flip, batch));
+        } else {
+          batch.addTransform(
+            source: src,
+            transform: transform,
+            flip: flips.flip,
+          );
+        }
+      }
+
+      for (final tile in xSecondPass) {
+        tile.batch.addTransform(
+          source: tile.source,
+          transform: tile.transform,
+          flip: tile.flip,
         );
       }
     }
@@ -676,6 +828,20 @@ class _RenderableGroupLayer extends _RenderableLayer<Group> {
   );
 
   @override
+  void refreshCache() {
+    for (final child in children) {
+      child.refreshCache();
+    }
+  }
+
+  @override
+  void handleResize(Vector2 canvasSize) {
+    for (final child in children) {
+      child.handleResize(canvasSize);
+    }
+  }
+
+  @override
   void render(ui.Canvas canvas, Camera? camera) {
     for (final child in children) {
       child.render(canvas, camera);
@@ -714,4 +880,19 @@ Color? _parseTiledColor(String? tiledColor) {
   } else {
     return null;
   }
+}
+
+/// Caches transforms for staggered maps as the row/col are switched.
+class _Transform {
+  final Rect source;
+  final ui.RSTransform transform;
+  final bool flip;
+  final SpriteBatch batch;
+
+  _Transform(
+    this.source,
+    this.transform,
+    this.flip,
+    this.batch,
+  );
 }
