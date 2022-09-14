@@ -1,111 +1,6 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/extensions.dart';
 
-/// Public interface to QuadTree internal data structures.
-///
-/// Allows to read a node's data without risk of affecting the outcome of
-/// collisions.
-/// Use [QuadTreeNodeDebugInfo.init] to initialize the class for the
-/// current collision detection. You need only this instance to get all
-/// another nodes and hitboxes using [nodes] and the
-/// [allElements] / [ownElements] methods.
-/// Use [rect] to get node's computed box;
-/// The class might be useful to render debugging info.
-/// See examples for details.
-class QuadTreeNodeDebugInfo {
-  QuadTreeNodeDebugInfo(this.rect, this._node, this.cd);
-
-  factory QuadTreeNodeDebugInfo.init(QuadTreeCollisionDetection cd) {
-    final node = cd.quadBroadphase.tree._rootNode;
-    final rect = cd.quadBroadphase.tree.mainBoxSize;
-    return QuadTreeNodeDebugInfo(rect, node, cd);
-  }
-
-  final Rect rect;
-  final _Node _node;
-  final QuadTreeCollisionDetection cd;
-
-  List<ShapeHitbox> get ownElements => _node.hitboxes as List<ShapeHitbox>;
-
-  List<ShapeHitbox> get allElements =>
-      _node.valuesRecursive as List<ShapeHitbox>;
-
-  bool get noChildren => _node.children[0] == null;
-
-  int get id => _node.id;
-
-  List<QuadTreeNodeDebugInfo> get nodes {
-    final list = <QuadTreeNodeDebugInfo>[this];
-    for (var i = 0; i < _node.children.length; i++) {
-      final node = _node.children[i];
-      if (node == null) {
-        continue;
-      }
-
-      final nodeRect = QuadTree._computeBox(rect, _QuadTreeZone.fromIndex(i));
-      final dbg = QuadTreeNodeDebugInfo(nodeRect, node, cd);
-      list.add(dbg);
-      list.addAll(dbg.nodes);
-    }
-    return list;
-  }
-}
-
-class _Node<T extends Hitbox<T>> {
-  final List<_Node?> children =
-      List.generate(4, (index) => null, growable: false);
-
-  List<T> hitboxes = <T>[];
-
-  _Node? parent;
-  int id = 0;
-
-  List<T> get valuesRecursive {
-    final data = <T>[];
-
-    data.addAll(hitboxes);
-    for (final ch in children) {
-      if (ch == null) {
-        continue;
-      }
-      data.addAll(ch.valuesRecursive as List<T>);
-    }
-    return data;
-  }
-
-  @override
-  String toString() {
-    return 'node $id';
-  }
-}
-
-enum _QuadTreeZone {
-  root(-1),
-  topLeft(0),
-  topRight(1),
-  bottomLeft(2),
-  bottomRight(3);
-
-  const _QuadTreeZone(this.value);
-
-  factory _QuadTreeZone.fromIndex(int i) {
-    switch (i) {
-      case 0:
-        return _QuadTreeZone.topLeft;
-      case 1:
-        return _QuadTreeZone.topRight;
-      case 2:
-        return _QuadTreeZone.bottomLeft;
-      case 3:
-        return _QuadTreeZone.bottomRight;
-      default:
-        return _QuadTreeZone.root;
-    }
-  }
-
-  final int value;
-}
-
 /// QuadTree calculation class not bound to Flame. Could be used anywhere
 /// outside of Flame, for example in isolates to calculate background logic.
 ///
@@ -122,12 +17,12 @@ enum _QuadTreeZone {
 class QuadTree<T extends Hitbox<T>> {
   QuadTree({
     this.maxObjects = 25,
-    this.maxLevels = 10,
+    this.maxDepth = 10,
     this.mainBoxSize = Rect.zero,
   });
 
   final int maxObjects;
-  final int maxLevels;
+  final int maxDepth;
 
   Rect mainBoxSize;
 
@@ -222,7 +117,7 @@ class QuadTree<T extends Hitbox<T>> {
     _Node<T> finalNode;
     if (_noChildren(node)) {
       // Insert the value in this node if possible.
-      if (depth >= maxLevels || node.hitboxes.length < maxObjects) {
+      if (depth >= maxDepth || node.hitboxes.length < maxObjects) {
         node.hitboxes.add(value);
         finalNode = node;
       }
@@ -392,4 +287,109 @@ class QuadTree<T extends Hitbox<T>> {
       return true;
     }
   }
+}
+
+/// Public interface to QuadTree internal data structures.
+///
+/// Allows to read a node's data without risk of affecting the outcome of
+/// collisions.
+/// Use [QuadTreeNodeDebugInfo.init] to initialize the class for the
+/// current collision detection. You need only this instance to get all
+/// another nodes and hitboxes using [nodes] and the
+/// [allElements] / [ownElements] methods.
+/// Use [rect] to get node's computed box;
+/// The class might be useful to render debugging info.
+/// See examples for details.
+class QuadTreeNodeDebugInfo {
+  QuadTreeNodeDebugInfo(this.rect, this._node, this.cd);
+
+  factory QuadTreeNodeDebugInfo.init(QuadTreeCollisionDetection cd) {
+    final node = cd.quadBroadphase.tree._rootNode;
+    final rect = cd.quadBroadphase.tree.mainBoxSize;
+    return QuadTreeNodeDebugInfo(rect, node, cd);
+  }
+
+  final Rect rect;
+  final _Node _node;
+  final QuadTreeCollisionDetection cd;
+
+  List<ShapeHitbox> get ownElements => _node.hitboxes as List<ShapeHitbox>;
+
+  List<ShapeHitbox> get allElements =>
+      _node.valuesRecursive as List<ShapeHitbox>;
+
+  bool get noChildren => _node.children[0] == null;
+
+  int get id => _node.id;
+
+  List<QuadTreeNodeDebugInfo> get nodes {
+    final list = <QuadTreeNodeDebugInfo>[this];
+    for (var i = 0; i < _node.children.length; i++) {
+      final node = _node.children[i];
+      if (node == null) {
+        continue;
+      }
+
+      final nodeRect = QuadTree._computeBox(rect, _QuadTreeZone.fromIndex(i));
+      final dbg = QuadTreeNodeDebugInfo(nodeRect, node, cd);
+      list.add(dbg);
+      list.addAll(dbg.nodes);
+    }
+    return list;
+  }
+}
+
+class _Node<T extends Hitbox<T>> {
+  final List<_Node?> children =
+      List.generate(4, (index) => null, growable: false);
+
+  List<T> hitboxes = <T>[];
+
+  _Node? parent;
+  int id = 0;
+
+  List<T> get valuesRecursive {
+    final data = <T>[];
+
+    data.addAll(hitboxes);
+    for (final ch in children) {
+      if (ch == null) {
+        continue;
+      }
+      data.addAll(ch.valuesRecursive as List<T>);
+    }
+    return data;
+  }
+
+  @override
+  String toString() {
+    return 'node $id';
+  }
+}
+
+enum _QuadTreeZone {
+  root(-1),
+  topLeft(0),
+  topRight(1),
+  bottomLeft(2),
+  bottomRight(3);
+
+  const _QuadTreeZone(this.value);
+
+  factory _QuadTreeZone.fromIndex(int i) {
+    switch (i) {
+      case 0:
+        return _QuadTreeZone.topLeft;
+      case 1:
+        return _QuadTreeZone.topRight;
+      case 2:
+        return _QuadTreeZone.bottomLeft;
+      case 3:
+        return _QuadTreeZone.bottomRight;
+      default:
+        return _QuadTreeZone.root;
+    }
+  }
+
+  final int value;
 }

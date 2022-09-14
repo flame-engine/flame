@@ -46,7 +46,7 @@ mixin HasQuadTreeCollisionDetection on FlameGame
   }) {
     _collisionDetection = QuadTreeCollisionDetection(
       mapDimensions: mapDimensions,
-      maxLevels: maxLevels,
+      maxDepth: maxLevels,
       maxObjects: maxObjects,
       onComponentTypeCheck: onComponentTypeCheck,
       minimumDistanceCheck: minimumDistanceCheck,

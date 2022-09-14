@@ -12,12 +12,12 @@ class QuadTreeCollisionDetection extends StandardCollisionDetection {
     required ExternalBroadphaseCheck onComponentTypeCheck,
     required ExternalMinDistanceCheck minimumDistanceCheck,
     int maxObjects = 25,
-    int maxLevels = 10,
+    int maxDepth = 10,
   }) : super(
           broadphase: QuadTreeBroadphase<ShapeHitbox>(
             mainBoxSize: mapDimensions,
             maxObjects: maxObjects,
-            maxLevels: maxLevels,
+            maxDepth: maxDepth,
             broadphaseCheck: onComponentTypeCheck,
             minimumDistanceCheck: minimumDistanceCheck,
           ),

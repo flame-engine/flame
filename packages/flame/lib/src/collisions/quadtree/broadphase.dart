@@ -25,11 +25,11 @@ class QuadTreeBroadphase<T extends Hitbox<T>> extends Broadphase<T> {
     required this.broadphaseCheck,
     required this.minimumDistanceCheck,
     int maxObjects = 25,
-    int maxLevels = 10,
+    int maxDepth = 10,
   }) : tree = QuadTree<T>(
           mainBoxSize: mainBoxSize,
           maxObjects: maxObjects,
-          maxLevels: maxLevels,
+          maxDepth: maxDepth,
         );
 
   final QuadTree tree;

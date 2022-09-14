@@ -250,7 +250,7 @@ more efficient:
 - `minimumDistance`: minimum distance between objects to consider them as possibly collideable.
   If `null` - the check is disabled, it is default behavior
 - `maxObjects`: maximum objects count in one quadrant. Default to 25.
-- `maxLevels`: - maximum nesting levels inside quadrant/ Default to 10
+- `maxDepth`: - maximum nesting levels inside quadrant. Default to 10
 
 If you use the quad tree system, you can make algorithm even more efficient by implementing the
 `onComponentTypeCheck` function of the `CollisionCallbacks` mixin in your components. It is useful if
