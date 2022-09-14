@@ -560,6 +560,70 @@ void main() {
       );
     });
   });
+
+  group('shifted and scaled', () {
+    late TiledComponent component;
+    final size = Vector2(256, 128);
+
+    Future<void> setupMap(
+      Vector2 destTileSize,
+    ) async {
+      Flame.bundle = TestAssetBundle(
+        imageNames: [
+          'isometric_spritesheet.png',
+        ],
+        mapPath: 'test/assets/test_shifted.tmx',
+      );
+      component = await TiledComponent.load(
+        'test_isometric.tmx',
+        destTileSize,
+      );
+    }
+
+    test('regular', () async {
+      await setupMap(size);
+      final pngData = await renderMapToPng(
+        component,
+        size.x.toInt() * 5,
+        size.y.toInt() * 5,
+      );
+
+      expect(
+        pngData,
+        matchesGoldenFile('goldens/shifted_scaled_regular.png'),
+      );
+    });
+
+    test('smaller', () async {
+      final smallSize = size / 3;
+      await setupMap(smallSize);
+      final pngData = await renderMapToPng(
+        component,
+        smallSize.x.toInt() * 5,
+        smallSize.y.toInt() * 5,
+      );
+
+      expect(
+        pngData,
+        matchesGoldenFile('goldens/shifted_scaled_smaller.png'),
+      );
+    });
+
+    test('larger', () async {
+      final largeSize = size * 2;
+      await setupMap(largeSize);
+      final pngData = await renderMapToPng(
+        component,
+        largeSize.x.toInt() * 5,
+        largeSize.y.toInt() * 5,
+      );
+
+      expect(
+        pngData,
+        matchesGoldenFile('goldens/shifted_scaled_larger.png'),
+      );
+    });
+  });
 }
 
 class TestAssetBundle extends CachingAssetBundle {
