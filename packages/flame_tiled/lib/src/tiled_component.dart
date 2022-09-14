@@ -21,21 +21,21 @@ class TiledComponent<T extends FlameGame> extends PositionComponent
   /// [PositionComponent] larger or smaller, change its [scale].
   @override
   set size(Vector2 size) {
-    // Intenitonally left empty
+    // Intentionally left empty.
   }
 
   /// This property **cannot** be reassigned at runtime. To make the
   /// [PositionComponent] larger or smaller, change its [scale].
   @override
   set width(double w) {
-    // Intenitonally left empty
+    // Intentionally left empty.
   }
 
   /// This property **cannot** be reassigned at runtime. To make the
   /// [PositionComponent] larger or smaller, change its [scale].
   @override
   set height(double h) {
-    // Intenitonally left empty
+    // Intentionally left empty.
   }
 
   /// {@macro _tiled_component}
