@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.9" tiledversion="1.9.1" orientation="staggered" renderorder="right-down" width="4" height="4" tilewidth="128" tileheight="64" infinite="0" staggeraxis="x" staggerindex="odd" nextlayerid="2" nextobjectid="1">
+ <tileset firstgid="1" name="iso_staggered" tilewidth="128" tileheight="256" tilecount="8" columns="4">
+  <image source="dirt_atlas.png" width="512" height="512"/>
+ </tileset>
+ <layer id="1" name="Tile Layer 1" width="4" height="4">
+  <data encoding="base64" compression="zlib">
+   eJxjZGBgYAViNiBmhtLsQMwExBxQORgfRjNB1YHkAAn4AEs=
+  </data>
+ </layer>
+</map>
