@@ -284,11 +284,11 @@ class Bullet extends PositionComponent with CollisionCallbacks, HasPaint {
   }
 
   @override
-  bool broadPhaseCheck(PositionComponent other) {
+  bool onComponentTypeCheck(PositionComponent other) {
     if (other is Player || other is Water) {
       return false;
     }
-    return super.broadPhaseCheck(other);
+    return super.onComponentTypeCheck(other);
   }
 
   @override

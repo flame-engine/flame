@@ -253,7 +253,7 @@ more efficient:
 - `maxLevels`: - maximum nesting levels inside quadrant/ Default to 10
 
 If you use the quad tree system, you can make algorithm even more efficient by implementing the
-`broadPhaseCheck` function of the `CollisionCallbacks` mixin in your components. It is useful if
+`onComponentTypeCheck` function of the `CollisionCallbacks` mixin in your components. It is useful if
 you need to prevent collision of items of different types. The result of the calculation is cached so
 you should not check any dynamical parameters here, the function is intended to be used as a pure
 type checker:
@@ -262,12 +262,12 @@ type checker:
 class Bullet extends PositionComponent with CollisionCallbacks {
 
   @override
-  bool broadPhaseCheck(PositionComponent other) {
+  bool onComponentTypeCheck(PositionComponent other) {
     if (other is Player || other is Water) {
       // do NOT collide with Player or Water
       return false;
     }
-    return super.broadPhaseCheck(other);
+    return super.onComponentTypeCheck(other);
   }
 
   @override
@@ -277,7 +277,7 @@ class Bullet extends PositionComponent with CollisionCallbacks {
   ) {
     // Removes the component when it comes it contact with a Brick.
     // Neither Player nor Water would be passed to this function
-    // because these classes are filtered out by [broadPhaseCheck]
+    // because these classes are filtered out by [onComponentTypeCheck]
     // in an earlier stage.
     if (other is Brick) {
       removeFromParent();

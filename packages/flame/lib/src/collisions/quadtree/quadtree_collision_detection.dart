@@ -9,7 +9,7 @@ import 'package:flutter/widgets.dart';
 class QuadTreeCollisionDetection extends StandardCollisionDetection {
   QuadTreeCollisionDetection({
     required Rect mapDimensions,
-    required ExternalBroadphaseCheck broadphaseCheck,
+    required ExternalBroadphaseCheck onComponentTypeCheck,
     required ExternalMinDistanceCheck minimumDistanceCheck,
     int maxObjects = 25,
     int maxLevels = 10,
@@ -18,7 +18,7 @@ class QuadTreeCollisionDetection extends StandardCollisionDetection {
             mainBoxSize: mapDimensions,
             maxObjects: maxObjects,
             maxLevels: maxLevels,
-            broadphaseCheck: broadphaseCheck,
+            broadphaseCheck: onComponentTypeCheck,
             minimumDistanceCheck: minimumDistanceCheck,
           ),
         );

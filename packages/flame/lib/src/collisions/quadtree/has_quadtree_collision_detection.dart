@@ -31,13 +31,13 @@ mixin HasQuadTreeCollisionDetection on FlameGame
   ///   to consider them as possibly colliding. You can also implement the
   ///   [minimumDistanceCheck] if you need some custom behavior.
   ///
-  /// The [broadPhaseCheck] checks if objects of different types should
+  /// The [onComponentTypeCheck] checks if objects of different types should
   /// collide.
   /// The result of the calculation is cached so you should not check any
   /// dynamical parameters here, the function is intended to be used as pure
   /// type checker.
   /// It usually should not be overridden, see
-  /// [CollisionCallbacks.broadPhaseCheck] instead
+  /// [CollisionCallbacks.onComponentTypeCheck] instead
   void initializeCollisionDetection({
     required Rect mapDimensions,
     double? minimumDistance,
@@ -48,7 +48,7 @@ mixin HasQuadTreeCollisionDetection on FlameGame
       mapDimensions: mapDimensions,
       maxLevels: maxLevels,
       maxObjects: maxObjects,
-      broadphaseCheck: broadPhaseCheck,
+      onComponentTypeCheck: onComponentTypeCheck,
       minimumDistanceCheck: minimumDistanceCheck,
     );
     this.minimumDistance = minimumDistance;
@@ -62,10 +62,10 @@ mixin HasQuadTreeCollisionDetection on FlameGame
             (activeItemCenter.y - potentialCenter.y).abs() > minimumDistance!);
   }
 
-  bool broadPhaseCheck(PositionComponent one, PositionComponent another) {
+  bool onComponentTypeCheck(PositionComponent one, PositionComponent another) {
     var checkParent = false;
     if (one is CollisionCallbacks) {
-      if (!(one as CollisionCallbacks).broadPhaseCheck(another)) {
+      if (!(one as CollisionCallbacks).onComponentTypeCheck(another)) {
         return false;
       }
     } else {
@@ -73,7 +73,7 @@ mixin HasQuadTreeCollisionDetection on FlameGame
     }
 
     if (another is CollisionCallbacks) {
-      if (!(another as CollisionCallbacks).broadPhaseCheck(one)) {
+      if (!(another as CollisionCallbacks).onComponentTypeCheck(one)) {
         return false;
       }
     } else {
@@ -85,7 +85,7 @@ mixin HasQuadTreeCollisionDetection on FlameGame
     if (checkParent &&
         oneParent is PositionComponent &&
         anotherParent is PositionComponent) {
-      return broadPhaseCheck(oneParent, anotherParent);
+      return onComponentTypeCheck(oneParent, anotherParent);
     }
     return true;
   }
