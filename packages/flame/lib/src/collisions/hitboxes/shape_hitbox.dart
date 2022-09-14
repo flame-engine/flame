@@ -8,7 +8,7 @@ import 'package:meta/meta.dart';
 
 /// A [ShapeHitbox] turns a [ShapeComponent] into a [Hitbox].
 /// It is currently used by [CircleHitbox], [RectangleHitbox] and
-/// [PolygonHitbox].
+/// [PolygonHitbox]
 mixin ShapeHitbox on ShapeComponent implements Hitbox<ShapeHitbox> {
   @internal
   final collisionTypeNotifier = CollisionTypeNotifier(CollisionType.active);
@@ -50,6 +50,9 @@ mixin ShapeHitbox on ShapeComponent implements Hitbox<ShapeHitbox> {
   final List<Transform2D> _transformAncestors = [];
   late Function() _transformListener;
 
+  @internal
+  Function()? onAabbChanged;
+
   final Vector2 _halfExtents = Vector2.zero();
   static const double _extentEpsilon = 0.000000000000001;
   final Matrix3 _rotationMatrix = Matrix3.zero();
@@ -73,7 +76,10 @@ mixin ShapeHitbox on ShapeComponent implements Hitbox<ShapeHitbox> {
       },
     ) as PositionComponent;
 
-    _transformListener = () => _validAabb = false;
+    _transformListener = () {
+      _validAabb = false;
+      onAabbChanged?.call();
+    };
     ancestors(includeSelf: true).whereType<PositionComponent>().forEach((c) {
       _transformAncestors.add(c.transform);
       c.transform.addListener(_transformListener);

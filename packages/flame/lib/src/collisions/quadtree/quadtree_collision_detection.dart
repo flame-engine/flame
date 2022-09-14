@@ -1,5 +1,4 @@
 import 'package:flame/collisions.dart';
-import 'package:flame/components.dart';
 import 'package:flutter/widgets.dart';
 
 /// Collision detection modification to support a Quad Tree broadphase.
@@ -25,26 +24,18 @@ class QuadTreeCollisionDetection extends StandardCollisionDetection {
 
   QuadTreeBroadphase get quadBroadphase => broadphase as QuadTreeBroadphase;
 
-  final _listenerTransform = <ShapeHitbox, VoidCallback>{};
   final _listenerCollisionType = <ShapeHitbox, VoidCallback>{};
   final _scheduledUpdate = <ShapeHitbox>{};
 
   @override
   void add(ShapeHitbox item) {
     super.add(item);
-    // ignore: prefer_function_declarations_over_variables
-    final listenerTransform = () {
+
+    item.onAabbChanged = () {
       if (item.isMounted) {
         _scheduledUpdate.add(item);
       }
     };
-    final parent = item.parent;
-    if (parent is PositionComponent) {
-      parent.position.addListener(listenerTransform);
-    }
-    item.transform.removeListener(listenerTransform);
-    _listenerTransform[item] = listenerTransform;
-
     // ignore: prefer_function_declarations_over_variables
     final listenerCollisionType = () {
       if (item.isMounted) {
@@ -68,16 +59,7 @@ class QuadTreeCollisionDetection extends StandardCollisionDetection {
 
   @override
   void remove(ShapeHitbox item) {
-    final listenerTransform = _listenerTransform[item];
-    if (listenerTransform != null) {
-      final parent = item.parent;
-      if (parent != null && parent is PositionComponent) {
-        parent.position.removeListener(listenerTransform);
-      }
-      item.transform.removeListener(listenerTransform);
-      _listenerTransform.remove(item);
-    }
-
+    item.onAabbChanged = null;
     final listenerCollisionType = _listenerCollisionType[item];
     if (listenerCollisionType != null) {
       item.collisionTypeNotifier.addListener(listenerCollisionType);
