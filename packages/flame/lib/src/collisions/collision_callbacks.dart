@@ -16,8 +16,8 @@ enum CollisionType {
 }
 
 /// Utility class allows to subscribe on collision type changing event
-class NotifyingCollisionType with ChangeNotifier {
-  NotifyingCollisionType(CollisionType type) : _value = type;
+class CollisionTypeNotifier with ChangeNotifier {
+  CollisionTypeNotifier(CollisionType type) : _value = type;
   CollisionType _value = CollisionType.active;
 
   set value(CollisionType type) {

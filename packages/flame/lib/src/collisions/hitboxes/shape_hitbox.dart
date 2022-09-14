@@ -4,31 +4,24 @@ import 'package:flame/game.dart';
 import 'package:flame/geometry.dart';
 import 'package:flame/src/geometry/shape_intersections.dart'
     as intersection_system;
-import 'package:flutter/foundation.dart';
+import 'package:meta/meta.dart';
 
 /// A [ShapeHitbox] turns a [ShapeComponent] into a [Hitbox].
 /// It is currently used by [CircleHitbox], [RectangleHitbox] and
 /// [PolygonHitbox].
 mixin ShapeHitbox on ShapeComponent implements Hitbox<ShapeHitbox> {
-  final _collisionType = NotifyingCollisionType(CollisionType.active);
+  @internal
+  final collisionTypeNotifier = CollisionTypeNotifier(CollisionType.active);
 
   set collisionType(CollisionType type) {
-    if (_collisionType.value == type) {
+    if (collisionTypeNotifier.value == type) {
       return;
     }
-    _collisionType.value = type;
+    collisionTypeNotifier.value = type;
   }
 
   @override
-  CollisionType get collisionType => _collisionType.value;
-
-  void addCollisionTypeListener(VoidCallback listener) {
-    _collisionType.addListener(listener);
-  }
-
-  void removeCollisionTypeListener(VoidCallback listener) {
-    _collisionType.removeListener(listener);
-  }
+  CollisionType get collisionType => collisionTypeNotifier.value;
 
   /// Whether the hitbox is allowed to collide with another hitbox that is
   /// added to the same parent.

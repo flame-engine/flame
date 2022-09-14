@@ -55,7 +55,7 @@ class QuadTreeCollisionDetection extends StandardCollisionDetection {
         }
       }
     };
-    item.addCollisionTypeListener(listenerCollisionType);
+    item.collisionTypeNotifier.addListener(listenerCollisionType);
     _listenerCollisionType[item] = listenerCollisionType;
 
     quadBroadphase.add(item);
@@ -80,7 +80,7 @@ class QuadTreeCollisionDetection extends StandardCollisionDetection {
 
     final listenerCollisionType = _listenerCollisionType[item];
     if (listenerCollisionType != null) {
-      item.removeCollisionTypeListener(listenerCollisionType);
+      item.collisionTypeNotifier.addListener(listenerCollisionType);
       _listenerCollisionType.remove(item);
     }
 
