@@ -18,7 +18,7 @@ class KeyboardListenerComponentExample extends FlameGame
   late final Ember _ember;
   final Vector2 _direction = Vector2.zero();
 
-  final Map<LogicalKeyboardKey, double> _keyStrengths = {
+  final Map<LogicalKeyboardKey, double> _keyWeights = {
     LogicalKeyboardKey.keyW: 0,
     LogicalKeyboardKey.keyA: 0,
     LogicalKeyboardKey.keyS: 0,
@@ -69,15 +69,15 @@ class KeyboardListenerComponentExample extends FlameGame
   }
 
   bool _handleKey(LogicalKeyboardKey key, bool isDown) {
-    _keyStrengths[key] = isDown ? 1 : 0;
+    _keyWeights[key] = isDown ? 1 : 0;
     return true;
   }
 
   double get xInput =>
-      _keyStrengths[LogicalKeyboardKey.keyD]! -
-      _keyStrengths[LogicalKeyboardKey.keyA]!;
+      _keyWeights[LogicalKeyboardKey.keyD]! -
+      _keyWeights[LogicalKeyboardKey.keyA]!;
 
   double get yInput =>
-      _keyStrengths[LogicalKeyboardKey.keyS]! -
-      _keyStrengths[LogicalKeyboardKey.keyW]!;
+      _keyWeights[LogicalKeyboardKey.keyS]! -
+      _keyWeights[LogicalKeyboardKey.keyW]!;
 }
