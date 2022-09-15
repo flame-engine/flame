@@ -79,7 +79,7 @@ class TiledComponent<T extends FlameGame> extends PositionComponent
     );
   }
 
-  static NotifyingVector2 _computeSize(RenderableTiledMap tileMap) {
+  static Vector2 _computeSize(RenderableTiledMap tileMap) {
     final tMap = tileMap.map;
 
     final xScale = tileMap.destTileSize.x / tMap.tileWidth;
@@ -97,29 +97,29 @@ class TiledComponent<T extends FlameGame> extends PositionComponent
     switch (tMap.orientation!) {
       case MapOrientation.staggered:
         return tMap.staggerAxis == StaggerAxis.y
-            ? NotifyingVector2(
+            ? Vector2(
                 tileScaled.x * tileMap.map.width + tileScaled.x / 2,
                 tileScaled.y + ((tileMap.map.height - 1) * tileScaled.y / 2),
               )
-            : NotifyingVector2(
+            : Vector2(
                 tileScaled.x + ((tileMap.map.width - 1) * tileScaled.x / 2),
                 tileScaled.y * tileMap.map.height + tileScaled.y / 2,
               );
 
       case MapOrientation.hexagonal:
         return tMap.staggerAxis == StaggerAxis.y
-            ? NotifyingVector2(
+            ? Vector2(
                 tileMap.map.width * tileScaled.x + tileScaled.x / 2,
                 tileScaled.y + ((tileMap.map.height - 1) * tileScaled.y * 0.75),
               )
-            : NotifyingVector2(
+            : Vector2(
                 tileScaled.x + ((tileMap.map.width - 1) * tileScaled.x * 0.75),
                 (tileMap.map.height * tileScaled.y) + tileScaled.y / 2,
               );
 
       case MapOrientation.isometric:
       case MapOrientation.orthogonal:
-        return NotifyingVector2(
+        return Vector2(
           tileMap.map.width * tileScaled.x,
           tileMap.map.height * tileScaled.y,
         );
