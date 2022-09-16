@@ -18,7 +18,7 @@ class QuadTreeExample extends FlameGame
   static const description = '''
 In this example the standard "Sweep and Prune" algorithm is replaced by  
 "Quad Tree". Quad Tree is often a more efficient approach of handling collisions,
-it's efficiency is shown especially on huge maps with big amounts of collidable 
+its efficiency is shown especially on huge maps with big amounts of collidable 
 components.
 Some bricks are highlighted when placed on an edge of a quadrant. It is
 important to understand that handling hitboxes on edges requires more
