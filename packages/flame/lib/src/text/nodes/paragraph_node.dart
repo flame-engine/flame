@@ -1,5 +1,6 @@
+import 'package:flame/src/text/nodes/group_text_node.dart';
+import 'package:flame/src/text/nodes/plain_text_node.dart';
 import 'package:flame/src/text/nodes/text_block_node.dart';
-import 'package:flame/src/text/nodes/text_nodes.dart';
 import 'package:flame/src/text/styles/block_style.dart';
 import 'package:flame/src/text/styles/document_style.dart';
 import 'package:flame/src/text/styles/style.dart';

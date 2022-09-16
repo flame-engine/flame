@@ -3,7 +3,8 @@ import 'package:flame/src/text/elements/block_element.dart';
 import 'package:flame/src/text/elements/group_element.dart';
 import 'package:flame/src/text/inline/text_painter_text_element.dart';
 import 'package:flame/src/text/nodes/block_node.dart';
-import 'package:flame/src/text/nodes/text_nodes.dart';
+import 'package:flame/src/text/nodes/group_text_node.dart';
+import 'package:flame/src/text/nodes/plain_text_node.dart';
 
 abstract class TextBlockNode extends BlockNode {
   TextBlockNode(this.child);
