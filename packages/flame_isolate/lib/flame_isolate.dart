@@ -2,6 +2,8 @@ import 'package:flame/components.dart';
 import 'package:flutter/foundation.dart';
 import 'package:integral_isolates/integral_isolates.dart';
 
+export 'package:integral_isolates/integral_isolates.dart';
+
 /// Mixin on [Component] that holds an instance of a long running isolate using
 /// the library integral_isolates.
 ///
