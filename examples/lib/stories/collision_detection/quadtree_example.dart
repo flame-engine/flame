@@ -119,11 +119,7 @@ Press T button to toggle player to collide with other objects.
     );
     add(water3);
 
-    add(
-      QuadTreeDebugComponent(
-        collisionDetection as QuadTreeCollisionDetection,
-      ),
-    );
+    add(QuadTreeDebugComponent(collisionDetection));
     add(LayerComponent(staticLayer));
     add(FpsTextComponent());
     camera.zoom = 1;
@@ -172,10 +168,7 @@ Press T button to toggle player to collide with other objects.
         }
       }
       if (key == LogicalKeyboardKey.keyO) {
-        (collisionDetection as QuadTreeCollisionDetection)
-            .quadBroadphase
-            .tree
-            .optimize();
+        collisionDetection.broadphase.tree.optimize();
       }
     }
     if (_fireBullet && !_playerDisplacement.isZero()) {

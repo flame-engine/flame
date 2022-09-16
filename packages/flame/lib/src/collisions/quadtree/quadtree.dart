@@ -304,8 +304,8 @@ class QuadTreeNodeDebugInfo {
   QuadTreeNodeDebugInfo(this.rect, this._node, this.cd);
 
   factory QuadTreeNodeDebugInfo.init(QuadTreeCollisionDetection cd) {
-    final node = cd.quadBroadphase.tree._rootNode;
-    final rect = cd.quadBroadphase.tree.mainBoxSize;
+    final node = cd.broadphase.tree._rootNode;
+    final rect = cd.broadphase.tree.mainBoxSize;
     return QuadTreeNodeDebugInfo(rect, node, cd);
   }
 

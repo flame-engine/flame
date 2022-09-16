@@ -5,7 +5,8 @@ import 'package:flutter/widgets.dart';
 ///
 /// Do not use standard [items] list for components. Instead adds all components
 /// into [QuadTreeBroadphase] class.
-class QuadTreeCollisionDetection extends StandardCollisionDetection {
+class QuadTreeCollisionDetection
+    extends StandardCollisionDetection<QuadTreeBroadphase<ShapeHitbox>> {
   QuadTreeCollisionDetection({
     required Rect mapDimensions,
     required ExternalBroadphaseCheck onComponentTypeCheck,
@@ -22,8 +23,6 @@ class QuadTreeCollisionDetection extends StandardCollisionDetection {
           ),
         );
 
-  QuadTreeBroadphase get quadBroadphase => broadphase as QuadTreeBroadphase;
-
   final _listenerCollisionType = <ShapeHitbox, VoidCallback>{};
   final _scheduledUpdate = <ShapeHitbox>{};
 
@@ -36,16 +35,16 @@ class QuadTreeCollisionDetection extends StandardCollisionDetection {
     final listenerCollisionType = () {
       if (item.isMounted) {
         if (item.collisionType == CollisionType.active) {
-          quadBroadphase.activeCollisions.add(item);
+          broadphase.activeCollisions.add(item);
         } else {
-          quadBroadphase.activeCollisions.remove(item);
+          broadphase.activeCollisions.remove(item);
         }
       }
     };
     item.collisionTypeNotifier.addListener(listenerCollisionType);
     _listenerCollisionType[item] = listenerCollisionType;
 
-    quadBroadphase.add(item);
+    broadphase.add(item);
   }
 
   @override
@@ -62,20 +61,20 @@ class QuadTreeCollisionDetection extends StandardCollisionDetection {
       _listenerCollisionType.remove(item);
     }
 
-    quadBroadphase.remove(item);
+    broadphase.remove(item);
     super.remove(item);
   }
 
   @override
   void removeAll(Iterable<ShapeHitbox> items) {
-    quadBroadphase.clear();
+    broadphase.clear();
     items.forEach(remove);
   }
 
   @override
   void run() {
     _scheduledUpdate.forEach(
-      quadBroadphase.updateTransform,
+      broadphase.updateTransform,
     );
     _scheduledUpdate.clear();
     super.run();
