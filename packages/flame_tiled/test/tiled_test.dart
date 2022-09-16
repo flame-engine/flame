@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui';
 
+import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
@@ -13,13 +14,53 @@ import 'package:tiled/tiled.dart';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  test('correct loads the file', () async {
-    Flame.bundle = TestAssetBundle(
-      imageNames: ['map-level1.png', 'image1.png'],
-      mapPath: 'test/assets/map.tmx',
-    );
-    final tiled = await TiledComponent.load('x', Vector2.all(16));
-    expect(tiled.tileMap.renderableLayers.length, equals(3));
+  group('TiledComponent', () {
+    late TiledComponent tiled;
+    setUp(() async {
+      Flame.bundle = TestAssetBundle(
+        imageNames: ['map-level1.png', 'image1.png'],
+        mapPath: 'test/assets/map.tmx',
+      );
+      tiled = await TiledComponent.load('x', Vector2.all(16));
+    });
+
+    test('correct loads the file', () async {
+      expect(tiled.tileMap.renderableLayers.length, equals(3));
+    });
+
+    group('is positionable', () {
+      test('size, width, and height are readable - not writable', () async {
+        expect(tiled.size, Vector2(512.0, 2048.0));
+        expect(tiled.width, 512);
+        expect(tiled.height, 2048);
+
+        tiled.size = Vector2(256, 1024);
+        expect(tiled.size, Vector2(512.0, 2048.0));
+        tiled.width = 2;
+        expect(tiled.size, Vector2(512.0, 2048.0));
+        tiled.height = 2;
+        expect(tiled.size, Vector2(512.0, 2048.0));
+      });
+
+      test('from constructor', () async {
+        final map = TiledComponent(
+          tiled.tileMap,
+          position: Vector2(10, 20),
+          anchor: Anchor.bottomCenter,
+          children: [tiled],
+          angle: 1.4,
+          priority: 2,
+          scale: Vector2(1.5, 2.0),
+        );
+
+        expect(tiled.parent, map);
+        expect(map.anchor, Anchor.bottomCenter);
+        expect(map.angle, 1.4);
+        expect(map.priority, 2);
+        expect(map.position, Vector2(10, 20));
+        expect(map.scale, Vector2(1.5, 2.0));
+      });
+    });
   });
 
   test('correctly loads external tileset', () async {
