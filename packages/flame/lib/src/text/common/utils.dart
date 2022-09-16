@@ -60,6 +60,6 @@ Element? makeBackground(BackgroundStyle? style, double width, double height) {
   if (out.length == 1) {
     return out.first;
   } else {
-    return GroupElement(width, height, out);
+    return GroupElement(width: width, height: height, children: out);
   }
 }

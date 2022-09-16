@@ -26,17 +26,15 @@ class DocumentNode {
     final padding = style.padding;
 
     final pageWidth = style.width ?? width!;
-    final contentWidth = pageWidth - padding.horizontal - border.horizontal;
-    final horizontalOffset = padding.left + border.left;
+    final contentWidth = pageWidth - padding.horizontal;
+    final horizontalOffset = padding.left;
     var verticalOffset = border.top;
     var currentMargin = padding.top;
     for (final node in children) {
-      node
-        ..fillStyles(style, style.text)
-        ..parentWidth = contentWidth;
+      node.fillStyles(style, style.text);
       final blockStyle = node.style;
       verticalOffset += collapseMargin(currentMargin, blockStyle.margin.top);
-      final nodeElement = node.format();
+      final nodeElement = node.format(contentWidth);
       nodeElement.translate(horizontalOffset, verticalOffset);
       out.add(nodeElement);
       currentMargin = blockStyle.margin.bottom;
@@ -56,6 +54,6 @@ class DocumentNode {
     if (background != null) {
       out.insert(0, background);
     }
-    return GroupElement(pageWidth, pageHeight, out);
+    return GroupElement(width: pageWidth, height: pageHeight, children: out);
   }
 }
