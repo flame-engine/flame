@@ -1,7 +1,7 @@
 import 'package:flame/src/text/common/utils.dart';
 import 'package:flame/src/text/elements/block_element.dart';
 import 'package:flame/src/text/elements/group_element.dart';
-import 'package:flame/src/text/inline/text_painter_text_element.dart';
+import 'package:flame/src/text/elements/text_painter_text_element.dart';
 import 'package:flame/src/text/nodes/block_node.dart';
 import 'package:flame/src/text/nodes/group_text_node.dart';
 import 'package:flame/src/text/nodes/plain_text_node.dart';

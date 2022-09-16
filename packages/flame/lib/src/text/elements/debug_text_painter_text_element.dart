@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:flame/src/text/inline/text_painter_text_element.dart';
+import 'package:flame/src/text/elements/text_painter_text_element.dart';
 
 /// Replacement class for [TextPainterTextElement] which draws solid rectangles
 /// instead of regular text.

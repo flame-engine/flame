@@ -1,6 +1,6 @@
+import 'package:flame/src/text/elements/debug_text_painter_text_element.dart';
+import 'package:flame/src/text/elements/text_painter_text_element.dart';
 import 'package:flame/src/text/formatters/text_formatter.dart';
-import 'package:flame/src/text/inline/debug_text_painter_text_element.dart';
-import 'package:flame/src/text/inline/text_painter_text_element.dart';
 import 'package:flutter/rendering.dart' as flutter;
 
 /// [TextPainterTextFormatter] applies a [flutter.TextStyle] to a string of
