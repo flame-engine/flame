@@ -9,6 +9,7 @@ isolate.
 
 To use it in your game you just need to add `flame_isolate` to your pubspec.yaml.
 
+
 ## Usage
 
 Just add the mixin `FlameIsolate` to your component and start utilizing the power of an isolate as
@@ -29,6 +30,7 @@ class MyGame extends FlameGame with FlameIsolate {
   ...
 }
 ```
+
 
 ### Backpressure Strategies
 You can specify a backpressure strategy by overriding the `backpressureStrategy` field. This will
