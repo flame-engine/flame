@@ -418,9 +418,6 @@ class QuadTreeDebugComponent extends PositionComponent with HasPaint {
   @override
   void render(Canvas canvas) {
     final nodes = dbg.nodes;
-    // final textPaint = TextPaint(
-    //   style: const TextStyle(fontSize: 5.0, color: Colors.lightGreenAccent),
-    // );
     for (final node in nodes) {
       canvas.drawRect(node.rect, paint);
       final nodeElements = node.ownElements;
@@ -432,7 +429,6 @@ class QuadTreeDebugComponent extends PositionComponent with HasPaint {
         boxPaint.strokeWidth = 1;
       }
       for (final box in nodeElements) {
-        // textPaint.render(canvas, node.id.toString(), box.aabb.min);
         if (boxPaint != null) {
           canvas.drawRect(box.aabb.toRect(), boxPaint);
         }
