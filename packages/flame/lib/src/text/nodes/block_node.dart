@@ -7,7 +7,6 @@ import 'package:flame/src/text/styles/text_style.dart';
 ///
 /// A block node is a structural piece of text such that the
 abstract class BlockNode {
-
   late BlockStyle style;
   late TextStyle textStyle;
 

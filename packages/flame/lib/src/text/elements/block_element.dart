@@ -1,5 +1,4 @@
 import 'package:flame/src/text/elements/element.dart';
-import 'package:flutter/rendering.dart';
 
 /// [BlockElement] is the base class for [Element]s with rectangular shape and
 /// "block" placement rules.

@@ -1,4 +1,3 @@
-
 abstract class TextNode {}
 
 class PlainTextNode extends TextNode {

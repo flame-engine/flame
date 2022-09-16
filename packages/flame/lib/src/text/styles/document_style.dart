@@ -1,4 +1,3 @@
-import 'package:flame/src/text/nodes/block_node.dart';
 import 'package:flame/src/text/nodes/header_node.dart';
 import 'package:flame/src/text/nodes/paragraph_node.dart';
 import 'package:flame/src/text/styles/background_style.dart';
@@ -7,7 +6,6 @@ import 'package:flame/src/text/styles/overflow.dart';
 import 'package:flame/src/text/styles/style.dart';
 import 'package:flame/src/text/styles/text_style.dart';
 import 'package:flutter/painting.dart' show EdgeInsets;
-import 'package:meta/meta.dart';
 
 /// [DocumentStyle] is a user-facing description of how to render an entire
 /// body of text; it roughly corresponds to a stylesheet in HTML.
