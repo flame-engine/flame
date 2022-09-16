@@ -310,8 +310,8 @@ void main() {
 
   Future<Uint8List> renderMapToPng(
     TiledComponent component,
-    int width,
-    int height,
+    num width,
+    num height,
   ) async {
     final canvasRecorder = PictureRecorder();
     final canvas = Canvas(canvasRecorder);
@@ -320,7 +320,7 @@ void main() {
 
     // Map size is now 320 wide, but it has 1 extra tile of height becusae
     // its actually double-height tiles.
-    final image = await picture.toImageSafe(width, height);
+    final image = await picture.toImageSafe(width.toInt(), height.toInt());
     return (await image.toByteData(format: ImageByteFormat.png))!
         .buffer
         .asUint8List();
@@ -621,6 +621,65 @@ void main() {
       expect(
         pngData,
         matchesGoldenFile('goldens/shifted_scaled_larger.png'),
+      );
+    });
+  });
+
+  group('TileStack', () {
+    late TiledComponent component;
+    final size = Vector2(256 / 2, 128 / 2);
+
+    setUp(() async {
+      Flame.bundle = TestAssetBundle(
+        imageNames: [
+          'isometric_spritesheet.png',
+        ],
+        mapPath: 'test/assets/test_isometric.tmx',
+      );
+      component = await TiledComponent.load('test_isometric.tmx', size);
+    });
+    test('from all layers', () {
+      var stack = component.tileMap.tileStack(0, 0, all: true);
+      expect(stack.length, 2);
+
+      stack = component.tileMap.tileStack(1, 0, all: true);
+      expect(stack.length, 1);
+    });
+
+    test('from some layers', () {
+      var stack = component.tileMap.tileStack(0, 0, named: {'empty'});
+      expect(stack.length, 0);
+
+      stack = component.tileMap.tileStack(0, 0, named: {'item'});
+      expect(stack.length, 1);
+
+      stack = component.tileMap.tileStack(0, 0, ids: {1});
+      expect(stack.length, 1);
+
+      stack = component.tileMap.tileStack(0, 0, ids: {1, 2});
+      expect(stack.length, 2);
+    });
+
+    test('can be positioned together', () async {
+      final stack = component.tileMap.tileStack(0, 0, all: true);
+      stack.position = stack.position + Vector2.all(20);
+
+      final pngData =
+          await renderMapToPng(component, size.x * 5, size.y * 5 + size.y / 2);
+      expect(
+        pngData,
+        matchesGoldenFile('goldens/tile_stack_all_move.png'),
+      );
+    });
+
+    test('can be positioned singularly', () async {
+      final stack = component.tileMap.tileStack(0, 0, named: {'item'});
+      stack.position = stack.position + Vector2(-20, 20);
+
+      final pngData = await renderMapToPng(component, size.x * 5, size.y * 5);
+      expect(
+        pngData,
+        matchesGoldenFile('goldens/tile_stack_single_move.png'),
       );
     });
   });
