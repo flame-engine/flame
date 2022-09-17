@@ -9,7 +9,7 @@ import 'package:flutter/rendering.dart' show EdgeInsets;
 
 class ParagraphNode extends TextBlockNode {
   ParagraphNode.simple(String text)
-      : super(GroupTextNode([PlainTextNode(text)]));
+      : super(PlainTextNode(text));
 
   static const defaultStyle = BlockStyle(
     margin: EdgeInsets.all(6),
@@ -19,5 +19,6 @@ class ParagraphNode extends TextBlockNode {
   void fillStyles(DocumentStyle stylesheet, TextStyle parentTextStyle) {
     style = stylesheet.paragraph;
     textStyle = Style.merge(parentTextStyle, style.text)!;
+    super.fillStyles(stylesheet, textStyle);
   }
 }

@@ -13,7 +13,7 @@ class HeaderNode extends TextBlockNode {
   HeaderNode(super.child, {required this.level});
 
   HeaderNode.simple(String text, {required this.level})
-      : super(GroupTextNode([PlainTextNode(text)]));
+      : super(PlainTextNode(text));
 
   final int level;
 
@@ -52,5 +52,6 @@ class HeaderNode extends TextBlockNode {
                         ? stylesheet.header5
                         : stylesheet.header6;
     textStyle = Style.merge(parentTextStyle, style.text)!;
+    super.fillStyles(stylesheet, textStyle);
   }
 }
