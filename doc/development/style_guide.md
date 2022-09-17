@@ -131,6 +131,8 @@ however, using exceptions would be more appropriate. The following rules of thum
     }
   }
   ```
+  This would gather all private variables in a single block near the top of the class, allowing one
+  to quickly see what data the class has.
 
 
 ## Documentation
@@ -196,6 +198,14 @@ When adding the documentation to the main docs site, consider also including an 
 into the docs. This will make readers more excited about trying this new functionality.
 
 Check the [Documentation] manual about how to work with the docs site.
+
+The following style rules generally apply when writing documentation (although we currently don't
+have a linter to enforce them strictly):
+- Maximum line length of 100 characters;
+- Prefer to define external links at the bottom of the document, so as to make reading the plain
+  text of the document easier;
+- Separate headers from the preceding content with 2 blank lines -- this makes it easier to see the
+  sections within the plain text.
 
 
 [effective dart]: https://dart.dev/guides/language/effective-dart
