@@ -12,20 +12,42 @@ import 'package:tiled/tiled.dart';
 /// It uses a preloaded [RenderableTiledMap] to batch rendering calls into
 /// Sprite Batches.
 /// {@endtemplate}
-class TiledComponent<T extends FlameGame> extends Component with HasGameRef<T> {
+class TiledComponent<T extends FlameGame> extends PositionComponent
+    with HasGameRef<T> {
   /// Map instance of this component.
   RenderableTiledMap tileMap;
 
-  /// The logical size of the component. The game assumes that this is the
-  /// approximate size of the object that will be drawn on the screen.
-  late final Vector2 size = _computeSize();
+  /// This property **cannot** be reassigned at runtime. To make the
+  /// [PositionComponent] larger or smaller, change its [scale].
+  @override
+  set size(Vector2 size) {
+    // Intentionally left empty.
+  }
+
+  /// This property **cannot** be reassigned at runtime. To make the
+  /// [PositionComponent] larger or smaller, change its [scale].
+  @override
+  set width(double w) {
+    // Intentionally left empty.
+  }
+
+  /// This property **cannot** be reassigned at runtime. To make the
+  /// [PositionComponent] larger or smaller, change its [scale].
+  @override
+  set height(double h) {
+    // Intentionally left empty.
+  }
 
   /// {@macro _tiled_component}
   TiledComponent(
     this.tileMap, {
+    super.position,
+    super.scale,
+    super.angle,
+    super.anchor,
     super.children,
     super.priority,
-  });
+  }) : super(size: _computeSize(tileMap));
 
   @override
   Future<void>? onLoad() async {
@@ -57,7 +79,7 @@ class TiledComponent<T extends FlameGame> extends Component with HasGameRef<T> {
     );
   }
 
-  Vector2 _computeSize() {
+  static Vector2 _computeSize(RenderableTiledMap tileMap) {
     final tMap = tileMap.map;
 
     final xScale = tileMap.destTileSize.x / tMap.tileWidth;
@@ -69,7 +91,7 @@ class TiledComponent<T extends FlameGame> extends Component with HasGameRef<T> {
     );
 
     if (tMap.orientation == null) {
-      return Vector2.zero();
+      return NotifyingVector2.zero();
     }
 
     switch (tMap.orientation!) {
