@@ -1,4 +1,6 @@
+import 'package:flame/src/text/nodes/bold_text_node.dart';
 import 'package:flame/src/text/nodes/header_node.dart';
+import 'package:flame/src/text/nodes/italic_text_node.dart';
 import 'package:flame/src/text/nodes/paragraph_node.dart';
 import 'package:flame/src/text/styles/background_style.dart';
 import 'package:flame/src/text/styles/block_style.dart';
@@ -23,6 +25,8 @@ class DocumentStyle extends Style {
     this.padding = EdgeInsets.zero,
     this.background,
     TextStyle? text,
+    TextStyle? boldText,
+    TextStyle? italicText,
     BlockStyle? paragraph,
     BlockStyle? header1,
     BlockStyle? header2,
@@ -31,6 +35,8 @@ class DocumentStyle extends Style {
     BlockStyle? header5,
     BlockStyle? header6,
   })  : _text = Style.merge(text, DocumentStyle.defaultTextStyle),
+        _boldText = Style.merge(boldText, BoldTextNode.defaultStyle),
+        _italicText = Style.merge(italicText, ItalicTextNode.defaultStyle),
         _paragraph = Style.merge(paragraph, ParagraphNode.defaultStyle),
         _header1 = Style.merge(header1, HeaderNode.defaultStyleH1),
         _header2 = Style.merge(header2, HeaderNode.defaultStyleH2),
@@ -40,6 +46,8 @@ class DocumentStyle extends Style {
         _header6 = Style.merge(header6, HeaderNode.defaultStyleH6);
 
   final TextStyle? _text;
+  final TextStyle? _boldText;
+  final TextStyle? _italicText;
   final BlockStyle? _paragraph;
   final BlockStyle? _header1;
   final BlockStyle? _header2;
@@ -89,6 +97,8 @@ class DocumentStyle extends Style {
   final BackgroundStyle? background;
 
   TextStyle get text => _text!;
+  TextStyle get boldText => _boldText!;
+  TextStyle get italicText => _italicText!;
 
   /// Style for [ParagraphNode]s.
   BlockStyle get paragraph => _paragraph!;
