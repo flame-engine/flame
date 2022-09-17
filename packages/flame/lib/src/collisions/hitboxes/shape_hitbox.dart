@@ -8,7 +8,7 @@ import 'package:meta/meta.dart';
 
 /// A [ShapeHitbox] turns a [ShapeComponent] into a [Hitbox].
 /// It is currently used by [CircleHitbox], [RectangleHitbox] and
-/// [PolygonHitbox]
+/// [PolygonHitbox].
 mixin ShapeHitbox on ShapeComponent implements Hitbox<ShapeHitbox> {
   @internal
   final collisionTypeNotifier = CollisionTypeNotifier(CollisionType.active);
