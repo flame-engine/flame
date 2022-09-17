@@ -7,7 +7,7 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('ComposedParticle', () {
     testWithFlameGame('particles with parent lifespan applied to children',
-            (game) async {
+        (game) async {
       final childParticle1 = CircleParticle(
         paint: Paint()..color = Colors.red,
         lifespan: 1,
@@ -47,7 +47,7 @@ void main() {
     });
 
     testWithFlameGame('particles without parent lifespan applied to children',
-            (game) async {
+        (game) async {
       final childParticle1 = CircleParticle(
         paint: Paint()..color = Colors.red,
         lifespan: 1,
@@ -89,7 +89,7 @@ void main() {
 
     testWithFlameGame(
         'generate particles without parent lifespan applied to children',
-            (game) async {
+        (game) async {
       const particlesCount = 15;
       final component = ParticleSystemComponent(
         particle: Particle.generate(
