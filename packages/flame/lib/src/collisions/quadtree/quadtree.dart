@@ -181,15 +181,13 @@ class QuadTree<T extends Hitbox<T>> {
     node.hitboxes = moveValues;
   }
 
-  void remove(T hitbox, {bool oldPosition = false}) =>
-      _removeFast(hitbox, oldPosition: oldPosition);
-
-  bool _removeFast(T hitbox, {bool oldPosition = false}) {
-    final node = _itemAtNode[hitbox];
-    if (node == null) {
-      throw '${node.toString()} not found';
-    } else {
-      return node.hitboxes.remove(hitbox);
+  void remove(T hitbox, {bool keepOldPosition = false}) {
+    final node = _itemAtNode.remove(hitbox);
+    if (node != null) {
+      node.hitboxes.remove(hitbox);
+      if (keepOldPosition) {
+        _oldPositionByItem.remove(node);
+      }
     }
   }
 
@@ -236,9 +234,7 @@ class QuadTree<T extends Hitbox<T>> {
     }
   }
 
-  Map<int, List<T>> query(T value) => _queryFast(value);
-
-  Map<int, List<T>> _queryFast(T value) {
+  Map<int, List<T>> query(T value) {
     final node = _itemAtNode[value as ShapeHitbox];
     var id = -1;
     final values = <T>[];

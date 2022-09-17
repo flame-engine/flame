@@ -57,7 +57,7 @@ class QuadTreeCollisionDetection
     item.onAabbChanged = null;
     final listenerCollisionType = _listenerCollisionType[item];
     if (listenerCollisionType != null) {
-      item.collisionTypeNotifier.addListener(listenerCollisionType);
+      item.collisionTypeNotifier.removeListener(listenerCollisionType);
       _listenerCollisionType.remove(item);
     }
 
