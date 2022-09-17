@@ -28,7 +28,7 @@ abstract class Particle {
       {int count = 10,
       required ParticleGenerator generator,
       double? lifespan,
-      bool applyLifespanToChildren = true}) {
+      bool applyLifespanToChildren = true,}) {
     return ComposedParticle(
       lifespan: lifespan,
       applyLifespanToChildren: applyLifespanToChildren,
