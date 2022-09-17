@@ -24,11 +24,12 @@ abstract class Particle {
   /// single [ComposedParticle].
   ///
   /// Useful for procedural particle generation.
-  static Particle generate(
-      {int count = 10,
-      required ParticleGenerator generator,
-      double? lifespan,
-      bool applyLifespanToChildren = true,}) {
+  static Particle generate({
+    int count = 10,
+    required ParticleGenerator generator,
+    double? lifespan,
+    bool applyLifespanToChildren = true,
+  }) {
     return ComposedParticle(
       lifespan: lifespan,
       applyLifespanToChildren: applyLifespanToChildren,
