@@ -75,7 +75,8 @@ class MyGame extends Game {
 
   @override
   void render(Canvas canvas) {
-    backgroundLayer.render(canvas); // x and y can be provided as optional position arguments
+    // x and y can be provided as optional position arguments.
+    backgroundLayer.render(canvas);
   }
 }
 ```

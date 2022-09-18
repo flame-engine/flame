@@ -193,7 +193,8 @@ and that is the `followVector2`:
   // Somewhere in your code:
   camera?.followVector2(
     yourPositionToFollow,
-    worldBounds: yourWorldBounds, // Optional to pass, it will overwrite the previous bounds.
+    // Optional to pass, it will overwrite the previous bounds.
+    worldBounds: yourWorldBounds,
   );
 ```
 
@@ -203,7 +204,8 @@ follow, it can be used to translate the canvas in the render method:
 ```dart
   @override
   void render(Canvas canvas) {
-    camera?.apply(canvas); // This will apply the camera transformation.
+    // This will apply the camera transformation.
+    camera?.apply(canvas);
 
     // Rest of your rendering code.
   }

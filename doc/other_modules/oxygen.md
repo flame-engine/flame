@@ -62,8 +62,8 @@ Systems can be registered to the world using the `world.registerSystem` method o
 
 ### mixin GameRef
 
-The `GameRef` mixin allows a system to become aware of the `OxygenGame` instance its attached to. This 
-allows easy access to the methods on the game class.
+The `GameRef` mixin allows a system to become aware of the `OxygenGame` instance its attached to.
+This allows easy access to the methods on the game class.
 
 ```dart
 class YourSystem extends System with GameRef<YourGame> {

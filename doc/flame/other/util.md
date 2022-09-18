@@ -285,5 +285,5 @@ Getters:
   - `m44`: The fourth row and fourth column.
 
 Factories:
- - `Matrix4Extension.scale`: Create a scaled `Matrix4`. Either by passing a `Vector4` or `Vector2` as it's first 
-    argument, or by passing x y z doubles.
+ - `Matrix4Extension.scale`: Create a scaled `Matrix4`. Either by passing a `Vector4` or `Vector2`
+   as it's first argument, or by passing x y z doubles.

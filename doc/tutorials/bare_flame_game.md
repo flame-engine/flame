@@ -39,8 +39,8 @@ real non-made-up word.
 Create the directory for your new project:
 
 ```console
-$ mkdir -p ~/projects/syzygy
-$ cd ~/projects/syzygy
+mkdir -p ~/projects/syzygy
+cd ~/projects/syzygy
 ```
 
 
@@ -50,7 +50,7 @@ In order to turn this barren directory into an actual Flutter project, run the
 following command:
 
 ```console
-$ flutter create .
+flutter create .
 ```
 (I have omitted the output for brevity, but there will be lots of output).
 
@@ -68,7 +68,7 @@ Launch Android Studio, then in the project selection window choose `[Open]`
 and navigate to your project directory. With any luck, the project will now
 look like this:
 
-![](../images/tutorials/android-studio-screenshot-1.webp)
+![Project in Android Studio](../images/tutorials/android-studio-screenshot-1.webp)
 
 If you see only the `main.dart` file but not the side panel, then click the
 vertical `[Project]` button at the left edge of the window.
@@ -78,7 +78,7 @@ in the top left corner that says `[Android]` in the screenshot. In this
 dropdown select the first option "Project". Your project window should now
 look like this:
 
-![](../images/tutorials/android-studio-screenshot-2.webp)
+![Project in Android Studio](../images/tutorials/android-studio-screenshot-2.webp)
 
 The important part is that you should be able to see all files in your
 project directory.

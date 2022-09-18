@@ -2,6 +2,7 @@
 
 Package with the lint rules used in all Flame Engine projects.
 
+
 # Install
 
 - Add `flame_lint` as a dependency in your `pubspec.yaml`

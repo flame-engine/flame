@@ -41,7 +41,9 @@ Vector2 randomVector2() => (Vector2.random(rnd) - Vector2.random(rnd)) * 200;
 
 // Composition.
 //
-// Defining a particle effect as a set of nested behaviors from top to bottom, one within another:
+// Defining a particle effect as a set of nested behaviors from top to bottom,
+// one within another:
+//
 // ParticleSystemComponent
 //   > ComposedParticle
 //     > AcceleratedParticle
@@ -152,7 +154,7 @@ Flame ships with a few built-in `Particle` behaviors:
 * The `AcceleratedParticle` allows basic physics based effects, like gravitation or speed dampening
 * The `CircleParticle` renders circles of all shapes and sizes
 * The `SpriteParticle` renders Flame `Sprite` within a `Particle` effect
-* The `ImageParticle` renders *dart:ui* `Image` within a `Particle` effect
+* The `ImageParticle` renders _dart:ui_ `Image` within a `Particle` effect
 * The `ComponentParticle` renders Flame `Component` within a `Particle` effect
 * The `FlareParticle` renders Flare animation within a `Particle` effect
 
@@ -390,7 +392,8 @@ on each frame to perform necessary computations and render something to the `Can
 ```dart
 game.add(
   ParticleSystemComponent(
-    // Renders a circle which gradually changes its color and size during the particle lifespan.
+    // Renders a circle which gradually changes its color and size during the
+    // particle lifespan.
     particle: ComputedParticle(
       renderer: (canvas, particle) => canvas.drawCircle(
         Offset.zero,

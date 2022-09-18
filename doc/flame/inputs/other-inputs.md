@@ -121,7 +121,8 @@ setting `hudButtonComponent.respectCamera = true;`.
 
 If you want to act upon the button being pressed (which would be the common thing to do) and released,
 you can either pass in callback functions as the `onPressed` and `onReleased` arguments, or you can
-extend the component and override `onTapDown`, `onTapUp` and/or `onTapCancel` and implement your logic there.
+extend the component and override `onTapDown`, `onTapUp` and/or `onTapCancel` and implement your
+logic there.
 
 
 ## SpriteButtonComponent

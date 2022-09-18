@@ -17,9 +17,10 @@ and it would be convenient to have all of them implement a common API. We will c
 that they will all be implementing the `Pile` class.
 
 ```{note}
-Refactors and changes in architecture happen during development all the time: it's almost impossible
-to get the structure right on the first try. Do not be anxious about changing code that you have
-written in the past: it is a good habit to have.
+Refactors and changes in architecture happen during development all the time:
+it's almost impossible to get the structure right on the first try. Do not be
+anxious about changing code that you have written in the past: it is a good
+habit to have.
 ```
 
 After such a rename, we can begin implementing each of these components.

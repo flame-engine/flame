@@ -91,7 +91,7 @@ If you are submitting your game to a game jam, remember to make it public and su
 game jam page too (many get confused by this).
 
 Further instructions can be found on
-(itch.io)[https://itch.io/docs/creators/html5#getting-started/zip-file].
+[itch.io](https://itch.io/docs/creators/html5#getting-started/zip-file).
 
 
 ### Web support

@@ -25,7 +25,7 @@ I always find it useful to create a rough sketch of what I am about to code,
 so that it can serve as a reference point. My sketch for the Klondike game is
 shown below:
 
-![](../../images/tutorials/klondike-sketch.webp)
+![Sketch of the klondike card game](../../images/tutorials/klondike-sketch.webp)
 
 Here you can see both the general layout of the game, as well as names of
 various objects. These names are the [standard terminology] for solitaire games.
@@ -59,7 +59,7 @@ phones, but it would also work nicely for larger devices like an iPad.
 And now, without further ado, here's my graphic asset for the Klondike game
 (I'm not an artist, so don't judge too harshly):
 
-![](app/assets/images/klondike-sprites.png)
+![Klondike sprites](app/assets/images/klondike-sprites.png)
 
 Right-click the image, choose "Save as...", and store it in the `assets/images`
 folder of the project. At this point our project's structure looks like this

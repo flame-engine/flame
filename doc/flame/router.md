@@ -4,9 +4,9 @@
 :page: router
 :show: widget code infobox
 
-This example app shows the use of the `RouterComponent` to move across multiple screens within
-the game. In addition, the "pause" button stops time and applies visual effects to the content of
-the page below it.
+This example app shows the use of the `RouterComponent` to move across multiple
+screens within the game. In addition, the "pause" button stops time and applies
+visual effects to the content of the page below it.
 ```
 
 

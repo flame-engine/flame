@@ -5,7 +5,7 @@
 The joy of our offline hours recreated with [Flutter](https://github.com/flutter/flutter) and [Flame](https://github.com/flame-engine/flame)
 
 
-# Article
+## Article
 
 This was the original article written when the game initially was ported.
 (It is outdated now since it uses a very old version of Flame)

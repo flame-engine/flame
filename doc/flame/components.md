@@ -423,10 +423,14 @@ class MyGame extends FlameGame {
     final size = Vector2.all(128.0);
     final player = SpriteComponent(size: size, sprite: sprite);
 
-    // screen coordinates
-    player.position = ... // Vector2(0.0, 0.0) by default, can also be set in the constructor
-    player.angle = ... // 0 by default, can also be set in the constructor
-    add(player); // Adds the component
+    // Vector2(0.0, 0.0) by default, can also be set in the constructor
+    player.position = ...
+    
+    // 0 by default, can also be set in the constructor
+    player.angle = ...
+    
+    // Adds the component
+    add(player);
   }
 }
 ```
@@ -728,11 +732,33 @@ you then pass in to the `ParallaxComponent`'s constructor.
 Advanced example:
 ```dart
 final images = [
-  loadParallaxImage('stars.jpg', repeat: ImageRepeat.repeat, alignment: Alignment.center, fill: LayerFill.width),
-  loadParallaxImage('planets.jpg', repeat: ImageRepeat.repeatY, alignment: Alignment.bottomLeft, fill: LayerFill.none),
-  loadParallaxImage('dust.jpg', repeat: ImageRepeat.repeatX, alignment: Alignment.topRight, fill: LayerFill.height),
+  loadParallaxImage(
+    'stars.jpg', 
+    repeat: ImageRepeat.repeat,
+    alignment: Alignment.center,
+    fill: LayerFill.width,
+  ),
+  loadParallaxImage(
+    'planets.jpg',
+    repeat: ImageRepeat.repeatY,
+    alignment: Alignment.bottomLeft,
+    fill: LayerFill.none,
+  ),
+  loadParallaxImage(
+    'dust.jpg',
+    repeat: ImageRepeat.repeatX,
+    alignment: Alignment.topRight,
+    fill: LayerFill.height,
+  ),
 ];
-final layers = images.map((image) => ParallaxLayer(await image, velocityMultiplier: images.indexOf(image) * 2.0));
+
+final layers = images.map(
+  (image) => ParallaxLayer(
+    await image,
+    velocityMultiplier: images.indexOf(image) * 2.0,
+  )
+);
+
 final parallaxComponent = ParallaxComponent.fromParallax(
   Parallax(
     await Future.wait(layers),
@@ -943,8 +969,8 @@ isometric tileset.
 A simple example on how to use it:
 
 ```dart
-// Creates a tileset, the block ids are automatically assigned sequentially starting at 0,
-// from left to right and then top to bottom.
+// Creates a tileset, the block ids are automatically assigned sequentially
+// starting at 0, from left to right and then top to bottom.
 final tilesetImage = await images.load('tileset.png');
 final tileset = IsometricTileset(tilesetImage, 32);
 // Each element is a block id, -1 means nothing

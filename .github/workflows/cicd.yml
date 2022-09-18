@@ -39,6 +39,15 @@ jobs:
           cache: true
       - uses: bluefireteam/melos-action@main
       - run: melos run analyze
+
+  markdown-lint:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: articulate/actions-markdownlint@v1
+      with:
+        config: markdownlint-config.json
+        files: '**/*.md'
+        ignore: '**/CHANGELOG.md **/ios/** **/doc/api/static-assets/**'
   # END LINTING STAGE
 
   # BEGIN TESTING STAGE

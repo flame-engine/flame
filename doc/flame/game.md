@@ -42,10 +42,10 @@ main() {
 ```
 
 ```{note}
-If you instantiate your game in a build method your game will be rebuilt every time the
-Flutter tree gets rebuilt, which usually is more often than you'd like. To avoid this, you can
-instead create an instance of your game first and reference it within your widget structure, like
-it is done in the example above.
+If you instantiate your game in a build method your game will be rebuilt every
+time the Flutter tree gets rebuilt, which usually is more often than you'd like.
+To avoid this, you can instead create an instance of your game first and
+reference it within your widget structure, like it is done in the example above.
 ```
 
 To remove components from the list on a `FlameGame` the `remove` or `removeAll` methods can be used.
@@ -136,8 +136,8 @@ called after `onLoad`) is called every time it is added to a new parent. `onRemo
 the class is removed from a parent.
 
 ```{note}
-The `Game` class allows for more freedom of how to implement things, but you are also
-missing out on all of the built-in features in Flame if you use it.
+The `Game` class allows for more freedom of how to implement things, but you
+are also missing out on all of the built-in features in Flame if you use it.
 ```
 
 An example of how a `Game` implementation could look like:

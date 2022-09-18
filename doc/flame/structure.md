@@ -37,4 +37,6 @@ flutter:
     - assets/images/enemy.png
 ```
 
-If you want to change this structure, this is possible by using the `prefix` parameter and creating your own instances of `AssetsCache`, `ImagesCache`, `AudioCache` and `SoundPool`s, instead of using the global ones provided by Flame.
+If you want to change this structure, this is possible by using the `prefix` parameter and creating
+your own instances of `AssetsCache`, `ImagesCache`, `AudioCache` and `SoundPool`s, instead of using
+the global ones provided by Flame.
