@@ -35,13 +35,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: subosito/flutter-action@v2
-        with:
-          channel: 'stable'
-          cache: true
-      - uses: nosborn/github-action-markdown-cli@v3.0.1
-      - uses: bluefireteam/melos-action@main
-      - run: melos markdown-check
+      - uses: bahmutov/npm-install@v1
+      - run: npm install -g markdownlint-cli && markdownlint . --ignore-path .markdownlintignore --config .markdownlint.yaml
   # END LINTING STAGE
 
   # BEGIN TESTING STAGE
