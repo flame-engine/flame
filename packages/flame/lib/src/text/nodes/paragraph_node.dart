@@ -7,8 +7,7 @@ import 'package:flame/src/text/styles/text_style.dart';
 import 'package:flutter/rendering.dart' show EdgeInsets;
 
 class ParagraphNode extends TextBlockNode {
-  ParagraphNode.simple(String text)
-      : super(PlainTextNode(text));
+  ParagraphNode.simple(String text) : super(PlainTextNode(text));
 
   static const defaultStyle = BlockStyle(
     margin: EdgeInsets.all(6),

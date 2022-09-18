@@ -8,11 +8,9 @@ import 'package:flame/src/text/styles/style.dart';
 import 'package:flame/src/text/styles/text_style.dart';
 
 class BoldTextNode extends TextNode {
-  BoldTextNode(List<TextNode> children)
-    : child = GroupTextNode(children);
+  BoldTextNode(List<TextNode> children) : child = GroupTextNode(children);
 
-  BoldTextNode.simple(String text)
-    : child = PlainTextNode(text);
+  BoldTextNode.simple(String text) : child = PlainTextNode(text);
 
   final TextNode child;
 

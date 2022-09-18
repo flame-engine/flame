@@ -6,9 +6,9 @@ import 'package:flame/src/text/elements/text_element.dart';
 
 class GroupTextElement extends TextElement {
   GroupTextElement(List<TextElement> children)
-    : assert(children.isNotEmpty, 'The children list cannot be empty'),
-      _children = children,
-      _metrics = _computeMetrics(children);
+      : assert(children.isNotEmpty, 'The children list cannot be empty'),
+        _children = children,
+        _metrics = _computeMetrics(children);
 
   final List<TextElement> _children;
   final LineMetrics _metrics;
