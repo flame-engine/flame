@@ -124,6 +124,6 @@ void main() {
       for (final child in children2) {
         expect(child.progress, 0.4);
       }
-    });
+    },);
   });
 }
