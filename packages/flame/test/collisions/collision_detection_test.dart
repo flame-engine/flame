@@ -680,6 +680,113 @@ void main() {
     });
   });
 
+  group('Solid intersections', () {
+    test('solid circle enclosed by solid circle', () {
+      final outerCircle = CircleComponent(
+        radius: 4.0,
+        anchor: Anchor.center,
+      )..isSolid = true;
+      final innerCircle = CircleComponent(
+        radius: 2.0,
+        anchor: Anchor.center,
+      )..isSolid = true;
+      final intersections = geometry.intersections(outerCircle, innerCircle);
+      expect(
+        intersections,
+        {innerCircle.position},
+        reason: "Should return the enclosed circle's position",
+      );
+    });
+
+    test('solid circle enclosed by hollow circle', () {
+      final outerCircle = CircleComponent(
+        radius: 4.0,
+        anchor: Anchor.center,
+      );
+      final innerCircle = CircleComponent(
+        radius: 2.0,
+        anchor: Anchor.center,
+      )..isSolid = true;
+      final intersections = geometry.intersections(outerCircle, innerCircle);
+      expect(
+        intersections.isEmpty,
+        isTrue,
+        reason: 'Should not contain any intersection',
+      );
+    });
+
+    test('hollow circle enclosed by solid circle', () {
+      final outerCircle = CircleComponent(
+        radius: 4.0,
+        anchor: Anchor.center,
+      )..isSolid = true;
+      final innerCircle = CircleComponent(
+        radius: 2.0,
+        anchor: Anchor.center,
+      );
+      final intersections = geometry.intersections(outerCircle, innerCircle);
+      expect(
+        intersections,
+        {innerCircle.position},
+        reason: "Should return the enclosed circle's position",
+      );
+    });
+
+    test('solid rectangle enclosed by solid rectangle', () {
+      final outerRectangle = RectangleComponent(
+        size: Vector2.all(4),
+        anchor: Anchor.center,
+      )..isSolid = true;
+      final innerRectangle = RectangleComponent(
+        size: Vector2.all(2),
+        anchor: Anchor.center,
+      )..isSolid = true;
+      final intersections =
+          geometry.intersections(outerRectangle, innerRectangle);
+      expect(
+        intersections,
+        {innerRectangle.position},
+        reason: "Should return the enclosed rectangle's position",
+      );
+    });
+
+    test('solid rectangle enclosed by hollow rectangle', () {
+      final outerRectangle = RectangleComponent(
+        size: Vector2.all(4),
+        anchor: Anchor.center,
+      );
+      final innerRectangle = RectangleComponent(
+        size: Vector2.all(2),
+        anchor: Anchor.center,
+      )..isSolid = true;
+      final intersections =
+          geometry.intersections(outerRectangle, innerRectangle);
+      expect(
+        intersections.isEmpty,
+        isTrue,
+        reason: 'Should not contain any intersection',
+      );
+    });
+
+    test('hollow rectangle enclosed by solid rectangle', () {
+      final outerRectangle = RectangleComponent(
+        size: Vector2.all(4),
+        anchor: Anchor.center,
+      )..isSolid = true;
+      final innerRectangle = RectangleComponent(
+        size: Vector2.all(2),
+        anchor: Anchor.center,
+      );
+      final intersections =
+          geometry.intersections(outerRectangle, innerRectangle);
+      expect(
+        intersections,
+        {innerRectangle.position},
+        reason: "Should return the enclosed rectangle's position",
+      );
+    });
+  });
+
   group('Raycasting', () {
     testCollisionDetectionGame('one hitbox', (game) async {
       game.ensureAdd(
