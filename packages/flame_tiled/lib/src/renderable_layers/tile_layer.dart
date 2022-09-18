@@ -2,19 +2,24 @@ import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame/sprite.dart';
 import 'package:flame_tiled/flame_tiled.dart';
+import 'package:flame_tiled/src/mutable_rect.dart';
 import 'package:flame_tiled/src/mutable_transform.dart';
 import 'package:flame_tiled/src/renderable_layers/group_layer.dart';
 import 'package:flame_tiled/src/renderable_layers/renderable_layer.dart';
+import 'package:flame_tiled/src/tile_animation.dart';
 import 'package:flame_tiled/src/tile_transform.dart';
 import 'package:flutter/painting.dart';
 import 'package:meta/meta.dart';
 import 'package:tiled/tiled.dart' as tiled;
+import 'package:tiled/tiled.dart';
 
 @internal
 class TileLayer extends RenderableLayer<tiled.TileLayer> {
   late final _layerPaint = Paint();
   late final Map<String, SpriteBatch> _cachedSpriteBatches;
   late List<List<MutableRSTransform?>> indexes;
+  final animations = <TileAnimation>[];
+  final animationFrames = <Tile, TileFrames>{};
 
   TileLayer(
     super.layer,
@@ -28,12 +33,20 @@ class TileLayer extends RenderableLayer<tiled.TileLayer> {
 
   @override
   void refreshCache() {
+    animations.clear();
     indexes = List.generate(
       layer.width,
       (index) => List.filled(layer.height, null),
     );
 
     _cacheLayerTiles();
+  }
+
+  @override
+  void update(double dt) {
+    for (final animation in animations) {
+      animation.update(dt);
+    }
   }
 
   void _cacheLayerTiles() {
@@ -88,7 +101,8 @@ class TileLayer extends RenderableLayer<tiled.TileLayer> {
           continue;
         }
 
-        final src = tileset.computeDrawRect(tile).toRect();
+        final src =
+            MutableRect.fromRect(tileset.computeDrawRect(tile).toRect());
         final flips = SimpleFlips.fromFlips(tileGid.flips);
         final scale = size.x / src.width;
         final anchorX = src.width / 2;
@@ -116,6 +130,10 @@ class TileLayer extends RenderableLayer<tiled.TileLayer> {
           transform: indexes[tx][ty],
           flip: flips.flip,
         );
+
+        if (tile.animation.isNotEmpty) {
+          _addAnimation(tile, tileset, src);
+        }
       }
     }
   }
@@ -148,7 +166,8 @@ class TileLayer extends RenderableLayer<tiled.TileLayer> {
           continue;
         }
 
-        final src = tileset.computeDrawRect(tile).toRect();
+        final src =
+            MutableRect.fromRect(tileset.computeDrawRect(tile).toRect());
         final flips = SimpleFlips.fromFlips(tileGid.flips);
         final scale = size.x / src.width;
         final anchorX = src.width / 2;
@@ -177,6 +196,10 @@ class TileLayer extends RenderableLayer<tiled.TileLayer> {
           transform: indexes[tx][ty],
           flip: flips.flip,
         );
+
+        if (tile.animation.isNotEmpty) {
+          _addAnimation(tile, tileset, src);
+        }
       }
     }
   }
@@ -245,7 +268,8 @@ class TileLayer extends RenderableLayer<tiled.TileLayer> {
           }
         }
 
-        final src = tileset.computeDrawRect(tile).toRect();
+        final src =
+            MutableRect.fromRect(tileset.computeDrawRect(tile).toRect());
         final flips = SimpleFlips.fromFlips(tileGid.flips);
         final scale = size.x / src.width;
         final anchorX = src.width - halfMapTile.x;
@@ -290,6 +314,9 @@ class TileLayer extends RenderableLayer<tiled.TileLayer> {
             transform: transform,
             flip: flips.flip,
           );
+        }
+        if (tile.animation.isNotEmpty) {
+          _addAnimation(tile, tileset, src);
         }
       }
 
@@ -367,7 +394,8 @@ class TileLayer extends RenderableLayer<tiled.TileLayer> {
           }
         }
 
-        final src = tileset.computeDrawRect(tile).toRect();
+        final src =
+            MutableRect.fromRect(tileset.computeDrawRect(tile).toRect());
         final flips = SimpleFlips.fromFlips(tileGid.flips);
         final scale = size.x / src.width;
         final anchorX = src.width - halfMapTile.x;
@@ -411,6 +439,9 @@ class TileLayer extends RenderableLayer<tiled.TileLayer> {
             transform: transform,
             flip: flips.flip,
           );
+        }
+        if (tile.animation.isNotEmpty) {
+          _addAnimation(tile, tileset, src);
         }
       }
 
@@ -473,4 +504,20 @@ class TileLayer extends RenderableLayer<tiled.TileLayer> {
 
   @override
   void handleResize(Vector2 canvasSize) {}
+
+  void _addAnimation(Tile tile, Tileset tileset, MutableRect source) {
+    final frames = animationFrames[tile] ??= () {
+      final rects = <Rect>[];
+      final durations = <double>[];
+      for (final frame in tile.animation) {
+        final newTile = tileset.tiles[frame.tileId];
+        final rect = tileset.computeDrawRect(newTile).toRect();
+        rects.add(rect);
+        durations.add(frame.duration / 1000);
+      }
+      return TileFrames(rects, durations);
+    }();
+
+    animations.add(TileAnimation(source, frames));
+  }
 }

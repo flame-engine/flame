@@ -7,6 +7,9 @@ import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flame_tiled/flame_tiled.dart';
+import 'package:flame_tiled/src/renderable_layers/tile_layer.dart'
+    as renderable;
+
 import 'package:flutter/services.dart' show CachingAssetBundle;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tiled/tiled.dart';
@@ -680,6 +683,116 @@ void main() {
       expect(
         pngData,
         matchesGoldenFile('goldens/tile_stack_single_move.png'),
+      );
+    });
+  });
+
+  group('animated tiles', () {
+    late TiledComponent component;
+    late RenderableTiledMap map;
+    final size = Vector2(16, 16);
+
+    setUp(() async {
+      Flame.bundle = TestAssetBundle(
+        imageNames: [
+          '0x72_DungeonTilesetII_v1.4.png',
+        ],
+        mapPath: 'test/assets/dungeon_animation.tmx',
+      );
+      component = await TiledComponent.load('dungeon_animation.tmx', size);
+      map = component.tileMap;
+    });
+
+    test('handle single frame animations', () {
+      expect(map.renderableLayers.first, isInstanceOf<renderable.TileLayer>());
+      final layer = map.renderableLayers.first as renderable.TileLayer;
+      expect(
+        layer.animations,
+        hasLength(1),
+        reason: 'layer has only one animation',
+      );
+      expect(
+        layer.animationFrames,
+        hasLength(1),
+        reason: 'layer only caches frames in use',
+      );
+      expect(layer.animations.first.frames.sources, hasLength(1));
+    });
+
+    test('handle single frame animations', () {
+      expect(map.renderableLayers[1], isInstanceOf<renderable.TileLayer>());
+      final layer = map.renderableLayers[1] as renderable.TileLayer;
+      expect(
+        layer.animations,
+        hasLength(2),
+        reason: 'two animations on this layer',
+      );
+      expect(
+        layer.animationFrames,
+        hasLength(2),
+        reason: 'layer only caches frames in use',
+      );
+
+      final waterAnimation = layer.animations.first;
+      final spikeAnimation = layer.animations.last;
+      expect(waterAnimation.frames.durations, [.18, .17, .15]);
+      expect(spikeAnimation.frames.durations, [.176, .176, .176, .176]);
+
+      layer.update(.177);
+      expect(waterAnimation.frame, 0);
+      expect(waterAnimation.frameTime, .177);
+      expect(
+        waterAnimation.batchedSource.toRect(),
+        waterAnimation.frames.sources[0],
+      );
+
+      expect(spikeAnimation.frame, 1);
+      expect(spikeAnimation.frameTime, moreOrLessEquals(.001));
+      expect(
+        spikeAnimation.batchedSource.toRect(),
+        spikeAnimation.frames.sources[1],
+      );
+
+      layer.update(.003);
+      expect(waterAnimation.frame, 1);
+      expect(waterAnimation.frameTime, moreOrLessEquals(.0));
+      expect(spikeAnimation.frame, 1);
+      expect(spikeAnimation.frameTime, moreOrLessEquals(0.004));
+
+      layer.update(0.17 + 0.15);
+      expect(waterAnimation.frame, 0, reason: 'wraps around');
+      expect(
+        waterAnimation.batchedSource.toRect(),
+        waterAnimation.frames.sources[0],
+      );
+    });
+
+    test('renders', () async {
+      var pngData = await renderMapToPng(component, size.x * 4, size.y * 1);
+      expect(
+        pngData,
+        matchesGoldenFile('goldens/dungeon_animation_0.png'),
+      );
+
+      component.update(0.18);
+      pngData = await renderMapToPng(component, size.x * 4, size.y * 1);
+      expect(
+        pngData,
+        matchesGoldenFile('goldens/dungeon_animation_1.png'),
+      );
+
+      component.update(0.18);
+      pngData = await renderMapToPng(component, size.x * 4, size.y * 1);
+      expect(
+        pngData,
+        matchesGoldenFile('goldens/dungeon_animation_2.png'),
+      );
+
+      component.update(0.18);
+      pngData = await renderMapToPng(component, size.x * 4, size.y * 1);
+      expect(
+        pngData,
+        matchesGoldenFile('goldens/dungeon_animation_3.png'),
       );
     });
   });
