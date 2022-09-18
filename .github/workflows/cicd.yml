@@ -35,9 +35,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: bahmutov/npm-install@v1
-        with:
-          useLockFile: false
+      - uses: actions/setup-node@v3
       - run: npm install -g markdownlint-cli
       - run: markdownlint . -p .markdownlintignore -c .markdownlint.yaml
   # END LINTING STAGE
