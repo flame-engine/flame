@@ -195,8 +195,12 @@ class RenderableTiledMap {
             renderableGroup.children = await children;
             return renderableGroup;
 
+          case ObjectGroup:
+            return _ObjectLayer.load(layer as ObjectGroup);
+
           default:
-            return _ObjectLayer.load(layer);
+            assert(false, '$layer layer is unsupported.');
+            return _UnsupportedLayer(layer, parent);
         }
       }),
     );

@@ -74,3 +74,10 @@ abstract class _RenderableLayer<T extends Layer> {
     canvas.translate(x, y);
   }
 }
+
+class _UnsupportedLayer extends _RenderableLayer {
+  _UnsupportedLayer(super.layer, super.parent);
+
+  @override
+  void render(Canvas canvas, Camera? camera) {}
+}

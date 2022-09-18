@@ -1,6 +1,6 @@
 part of '../renderable_tile_map.dart';
 
-class _ObjectLayer extends _RenderableLayer {
+class _ObjectLayer extends _RenderableLayer<ObjectGroup> {
   _ObjectLayer(super.layer, super.parent);
 
   @override
@@ -12,7 +12,7 @@ class _ObjectLayer extends _RenderableLayer {
   @override
   bool get visible => false;
 
-  static Future<_RenderableLayer> load(Layer layer) async {
+  static Future<_RenderableLayer> load(ObjectGroup layer) async {
     return _ObjectLayer(layer, null);
   }
 }
