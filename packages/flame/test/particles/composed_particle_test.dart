@@ -86,5 +86,45 @@ void main() {
       expect(childParticle2.progress, 0.5);
       expect(particle.children.length, 1);
     });
+
+    testWithFlameGame(
+      'generate particles without parent lifespan applied to children',
+      (game) async {
+        const particlesCount = 15;
+        final component = ParticleSystemComponent(
+          particle: Particle.generate(
+            count: particlesCount,
+            generator: (i) {
+              return CircleParticle(
+                paint: Paint()..color = Colors.red,
+                lifespan: 5,
+              );
+            },
+            applyLifespanToChildren: false,
+            lifespan: 10,
+          ),
+        );
+
+        game.add(component);
+        await game.ready();
+        game.update(1);
+
+        expect(component.particle!.progress, 0.1);
+        final children1 = (component.particle! as ComposedParticle).children;
+        expect(children1.length, particlesCount);
+        for (final child in children1) {
+          expect(child.progress, 0.2);
+        }
+
+        game.update(1);
+
+        expect(component.particle!.progress, 0.2);
+        final children2 = (component.particle! as ComposedParticle).children;
+        expect(children2.length, particlesCount);
+        for (final child in children2) {
+          expect(child.progress, 0.4);
+        }
+      },
+    );
   });
 }

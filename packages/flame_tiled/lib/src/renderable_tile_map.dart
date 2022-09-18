@@ -177,6 +177,8 @@ class RenderableTiledMap {
               layer as ImageLayer,
               parent,
               camera,
+              map,
+              destTileSize,
             );
 
           case Group:
@@ -184,6 +186,8 @@ class RenderableTiledMap {
             final renderableGroup = _GroupLayer(
               groupLayer,
               parent,
+              map,
+              destTileSize,
             );
             final children = _renderableLayers(
               groupLayer.layers,
@@ -196,11 +200,15 @@ class RenderableTiledMap {
             return renderableGroup;
 
           case ObjectGroup:
-            return _ObjectLayer.load(layer as ObjectGroup);
+            return _ObjectLayer.load(
+              layer as ObjectGroup,
+              map,
+              destTileSize,
+            );
 
           default:
             assert(false, '$layer layer is unsupported.');
-            return _UnsupportedLayer(layer, parent);
+            return _UnsupportedLayer(layer, parent, map, destTileSize);
         }
       }),
     );
