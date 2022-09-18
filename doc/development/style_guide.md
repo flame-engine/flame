@@ -178,10 +178,12 @@ however, using exceptions would be more appropriate. The following rules of thum
   For example:
 
   ```dart
-  /// Adds a new [child] into the container, and becomes the owner of that child.
+  /// Adds a new [child] into the container, and becomes the owner of that
+  /// child.
   ///
-  /// The child will be disposed of when this container is destroyed. It is an error to try to add a
-  /// child that already belongs to another container.
+  /// The child will be disposed of when this container is destroyed.
+  /// It is an error to try to add a child that already belongs to another
+  /// container.
   void addChild(T child) { ... }
   ```
 

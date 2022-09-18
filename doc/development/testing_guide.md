@@ -95,7 +95,8 @@ testWidgets('test name', (tester) async {
   await tester.pump();
   await tester.pump();
 
-  // At this point the game is fully initialized, and you can run your checks against it
+  // At this point the game is fully initialized, and you can run your checks
+  // against it.
   expect(...);
 
   // Equivalent to game.update(0)
@@ -147,8 +148,9 @@ simple:
    where your test is located.
 
 ```{note}
-Avoid using text in your golden tests -- it does not render reliably across different platforms,
-due to font discrepancies and differences in anti-aliasing algorithms.
+Avoid using text in your golden tests -- it does not render reliably across
+different platforms, due to font discrepancies and differences in
+anti-aliasing algorithms.
 ```
 
 
