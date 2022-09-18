@@ -2,6 +2,7 @@
 
 This tutorial assumes that you have basic familiarity with using the command line, and the
 following programs on your computer (all of them are free):
+
 - [Flutter], version 2.10.0 or above;
 - [Android Studio], or any other IDE, for example [Visual Studio Code];
 - [git] (optional), in order to save your project on GitHub.
@@ -52,9 +53,11 @@ following command:
 ```console
 flutter create .
 ```
+
 (I have omitted the output for brevity, but there will be lots of output).
 
 You can verify that the project files were created successfully:
+
 ```console
 $ ls
 README.md               android/   lib/           pubspec.yaml   test/
@@ -159,13 +162,14 @@ adding initial files like README, license and gitignore.
 Now go to your project's directory in the terminal and execute the following
 commands (make sure to replace the URL with the link to the repository that
 you just created):
+
 ```console
-$ git init
-$ git add --all
-$ git commit -m 'Initial commit'
-$ git remote add origin https://github.com/your-github-username/syzygy.git
-$ git branch -M main
-$ git push -u origin main
+git init
+git add --all
+git commit -m 'Initial commit'
+git remote add origin https://github.com/your-github-username/syzygy.git
+git branch -M main
+git push -u origin main
 ```
 
 At this point if you go to your repository page on GitHub, you shall see that
@@ -175,9 +179,10 @@ all your project files are there.
 ## 8. Done
 
 That's it! By this point you have
-  - Created an initial blank state Flame project;
-  - Set up the Android Studio IDE for that project;
-  - Created a GitHub repository for the project.
+
+- Created an initial blank state Flame project;
+- Set up the Android Studio IDE for that project;
+- Created a GitHub repository for the project.
 
 Happy coding!
 

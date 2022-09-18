@@ -10,4 +10,4 @@ The joy of our offline hours recreated with [Flutter](https://github.com/flutter
 This was the original article written when the game initially was ported.
 (It is outdated now since it uses a very old version of Flame)
 
-https://medium.com/@renancaraujo/creating-the-t-rex-game-with-flutter-and-flame-6d01add1ad5b
+<https://medium.com/@renancaraujo/creating-the-t-rex-game-with-flutter-and-flame-6d01add1ad5b>

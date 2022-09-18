@@ -6,8 +6,9 @@ background. By doing this, you'll free processing power for more dynamic content
 rendered every game tick.
 
 There are two types of layers on Flame:
- - `DynamicLayer`: For things that are moving or changing.
- - `PreRenderedLayer`: For things that are static.
+
+- `DynamicLayer`: For things that are moving or changing.
+- `PreRenderedLayer`: For things that are static.
 
 
 ## DynamicLayer
@@ -17,6 +18,7 @@ name suggests, it is meant for dynamic content and is most useful for grouping r
 that have the same context.
 
 Usage example:
+
 ```dart
 class GameLayer extends DynamicLayer {
   final MyGame game;

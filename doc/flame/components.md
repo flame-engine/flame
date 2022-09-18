@@ -54,10 +54,10 @@ on the rest of the game engine).
 
 A component lifecycle state can be checked by a series of getters:
 
- - `isLoaded`: Returns a bool with the current loaded state
- - `loaded`: Returns a future that will complete once the component has finished loading
- - `isMounted`: Returns a bool with the current mounted state
- - `mounted`: Returns a future that will complete once the component has finished mounting
+- `isLoaded`: Returns a bool with the current loaded state
+- `loaded`: Returns a future that will complete once the component has finished loading
+- `isMounted`: Returns a bool with the current mounted state
+- `mounted`: Returns a future that will complete once the component has finished mounting
 
 
 ### Priority
@@ -150,6 +150,7 @@ children during the course of the game.
 
 The second method is to use the `children:` parameter in the component's
 constructor. This approach more closely resembles the standard Flutter API:
+
 ```dart
 class MyGame extends FlameGame {
   @override
@@ -269,6 +270,7 @@ implementation. However, if you're defining a custom class that derives from `Co
 to implement the `containsLocalPoint()` method yourself.
 
 Here is an example of how `componentsAtPoint()` can be used:
+
 ```dart
 void onDragUpdate(DragUpdateInfo info) {
   game.componentsAtPoint(info.widget).forEach((component) {
@@ -281,15 +283,16 @@ void onDragUpdate(DragUpdateInfo info) {
 
 
 ### PositionType
+
 If you want to create a HUD (Head-up display) or another component that isn't positioned in relation
 to the game coordinates, you can change the `PositionType` of the component.
 The default `PositionType` is `positionType = PositionType.game` and that can be changed to
 either `PositionType.viewport` or `PositionType.widget` depending on how you want to position
 the component.
 
- - `PositionType.game` (Default) - Respects camera and viewport.
- - `PositionType.viewport` - Respects viewport only (ignores camera).
- - `PositionType.widget` - Position in relation to the coordinate system of the Flutter game
+- `PositionType.game` (Default) - Respects camera and viewport.
+- `PositionType.viewport` - Respects viewport only (ignores camera).
+- `PositionType.widget` - Position in relation to the coordinate system of the Flutter game
    widget (i.e. the raw canvas).
 
 Most of your components will probably be positioned according to `PositionType.game`, since you
@@ -514,6 +517,7 @@ final animation =
       };
 ```
 
+
 ## SpriteAnimationGroup
 
 `SpriteAnimationGroupComponent` is a simple wrapper around `SpriteAnimationComponent` which enables
@@ -730,6 +734,7 @@ behavior, for example if you are not making a side-scrolling game, you can set t
 you then pass in to the `ParallaxComponent`'s constructor.
 
 Advanced example:
+
 ```dart
 final images = [
   loadParallaxImage(
@@ -767,11 +772,11 @@ final parallaxComponent = ParallaxComponent.fromParallax(
 );
 ```
 
- - The stars image in this example will be repeatedly drawn in both axis, align in the center and be
+- The stars image in this example will be repeatedly drawn in both axis, align in the center and be
  scaled to fill the screen width.
- - The planets image will be repeated in Y-axis, aligned to the bottom left of the screen and not be
+- The planets image will be repeated in Y-axis, aligned to the bottom left of the screen and not be
  scaled.
- - The dust image will be repeated in X-axis, aligned to the top right and scaled to fill the screen
+- The dust image will be repeated in X-axis, aligned to the top right and scaled to fill the screen
  height.
 
 Once you are done setting up your `ParallaxComponent`, add it to the game like with any other
@@ -813,6 +818,7 @@ This list will be transformed into a polygon with a size, which can still be sca
 
 For example, this would create a square going from (50, 50) to (100, 100), with it's center in
 (75, 75):
+
 ```dart
 void main() {
   PolygonComponent([
@@ -1031,6 +1037,7 @@ Check the example app
 [custom_painter_component](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/widgets/custom_painter_example.dart)
 for details on how to use it.
 
+
 ## ClipComponent
 
 A `ClipComponent` is a component that will clip the canvas to its size and shape. This means that
@@ -1042,14 +1049,15 @@ clipped area, based on its size.
 
 To make it easier to use that component, there are three factories that offers common shapes:
 
- - `ClipComponent.rectangle`: Clips the area in the form a rectangle based on its size.
- - `ClipComponent.circle`: Clips the area in the form of a circle based on its size.
- - `ClipComponent.polygon`:  Clips the area in the form of a polygon based on the points received
+- `ClipComponent.rectangle`: Clips the area in the form a rectangle based on its size.
+- `ClipComponent.circle`: Clips the area in the form of a circle based on its size.
+- `ClipComponent.polygon`:  Clips the area in the form of a polygon based on the points received
 in the constructor.
 
 Check the example app
 [clip_component](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/components/clip_component_example.dart)
 for details on how to use it.
+
 
 ## Effects
 

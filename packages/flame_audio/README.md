@@ -24,7 +24,8 @@ This package makes it easy to add audio capabilities to your games, integrating 
 
 Add this as a dependency alongside Flame v1 to your game if you want to play background music, ambient sounds, sound effects, etc.
 
+
 # Credits
 
- * The [Flame Engine team](https://github.com/orgs/flame-engine/people), who is continuously working on maintaining and improving Flame.
- * [luanpotter's audioplayers](https://github.com/luanpotter/audioplayer) lib, which was originally a fork from [rxlabz's audioplayer](https://github.com/rxlabz/audioplayer).
+- The [Flame Engine team](https://github.com/orgs/flame-engine/people), who is continuously working on maintaining and improving Flame.
+- [luanpotter's audioplayers](https://github.com/luanpotter/audioplayer) lib, which was originally a fork from [rxlabz's audioplayer](https://github.com/rxlabz/audioplayer).

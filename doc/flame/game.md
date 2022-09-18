@@ -114,6 +114,7 @@ parent is not yet mounted itself. Consequently, `await`-ing on `parent.add(compo
 to always finish loading the component.
 
 Using this mixin is simple:
+
 ```dart
 class MyGame extends FlameGame with SingleGameInstance {
   // ...
@@ -171,8 +172,8 @@ void main() {
 The `GameLoop` module is a simple abstraction over the game loop concept. Basically most games are
 built upon two methods:
 
- - The render method takes the canvas for drawing the current state of the game.
- - The update method receives the delta time in seconds since the last update and allows you to move
+- The render method takes the canvas for drawing the current state of the game.
+- The update method receives the delta time in seconds since the last update and allows you to move
   to the next state.
 
 The `GameLoop` is used by all of Flame's `Game` implementations.
@@ -182,8 +183,8 @@ The `GameLoop` is used by all of Flame's `Game` implementations.
 
 A Flame `Game` can be paused and resumed in two ways:
 
- - With the use of the `pauseEngine` and `resumeEngine` methods.
- - By changing the `paused` attribute.
+- With the use of the `pauseEngine` and `resumeEngine` methods.
+- By changing the `paused` attribute.
 
 When pausing a Flame `Game`, the `GameLoop` is effectively paused, meaning that no updates or new
 renders will happen until it is resumed.

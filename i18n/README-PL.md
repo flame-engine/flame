@@ -34,10 +34,11 @@ Aby zmienić wersję dokumentacji, użyj selektora wersji za pomocą `version:` 
 **Uwaga**: Dokumentacja znajdująca się na gałęzi main jest nowsza, niż dokumentacja udostępniona na stronie docs.
 
 Inne przydatne linki:
- - [Oficjalna strona Flame](https://flame-engine.org/).
- - [Przykłady](https://examples.flame-engine.org/) większości funkcji, które można wypróbować z poziomu twojej przeglądarki.
- - [Poradniki](https://tutorials.flame-engine.org/) - Prosty samouczek na początek.
- - [Dokumentacja API](https://pub.dev/documentation/flame/latest/) - Wygenerowana dokumentacja API dartdoc.
+
+- [Oficjalna strona Flame](https://flame-engine.org/).
+- [Przykłady](https://examples.flame-engine.org/) większości funkcji, które można wypróbować z poziomu twojej przeglądarki.
+- [Poradniki](https://tutorials.flame-engine.org/) - Prosty samouczek na początek.
+- [Dokumentacja API](https://pub.dev/documentation/flame/latest/) - Wygenerowana dokumentacja API dartdoc.
 
 
 ## Pomoc
@@ -54,13 +55,13 @@ Celem Flame Engine jest dostarczenie kompletnego zestawu nietuzinkowych rozwiąz
 
 Oto niektóre z kluczowych dostępnych funkcji:
 
- - Pętla gry.
- - System komponent/obiekt (FCS).
- - Efekty i cząsteczki.
- - Wykrywanie kolizji.
- - Obsługa gestów i wprowadzania danych.
- - Obrazy, duszki (sprites) i arkusze duszka.
- - Ogólne narzędzia ułatwiające programowanie.
+- Pętla gry.
+- System komponent/obiekt (FCS).
+- Efekty i cząsteczki.
+- Wykrywanie kolizji.
+- Obsługa gestów i wprowadzania danych.
+- Obrazy, duszki (sprites) i arkusze duszka.
+- Ogólne narzędzia ułatwiające programowanie.
 
 Oprócz tych funkcji możesz wzmocnić Flame pakietami bridge. Dzięki tym bibliotekom będziesz mógł uzyskać dostęp do powiązań z innymi pakietami, w tym z niestandardowymi komponentami i pomocnikami Flame, aby integracja była bezproblemowa.
 
@@ -160,5 +161,5 @@ Pamiętaj, że niektóre artykuły mogą być nieco nieaktualne, ale nadal mogą
 
 ## Uznanie
 
- - Zespół [Blue Fire](https://github.com/orgs/bluefireteam/people), który nieustannie pracuje nad utrzymaniem i ulepszaniem Flame oraz jego ekosystemu.
- - Wszyscy sympatyczni współtwórcy i ludzie, którzy pomagają w społeczności.
+- Zespół [Blue Fire](https://github.com/orgs/bluefireteam/people), który nieustannie pracuje nad utrzymaniem i ulepszaniem Flame oraz jego ekosystemu.
+- Wszyscy sympatyczni współtwórcy i ludzie, którzy pomagają w społeczności.

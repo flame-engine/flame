@@ -36,10 +36,11 @@ top of the page.
 on the docs website.
 
 Other useful links:
- - [The official Flame site](https://flame-engine.org/).
- - [Examples](https://examples.flame-engine.org/) of most features which can be tried out from your browser.
- - [Tutorials](https://tutorials.flame-engine.org/) - A simple tutorial to get started.
- - [API Reference](https://pub.dev/documentation/flame/latest/) - The generated dartdoc API reference.
+
+- [The official Flame site](https://flame-engine.org/).
+- [Examples](https://examples.flame-engine.org/) of most features which can be tried out from your browser.
+- [Tutorials](https://tutorials.flame-engine.org/) - A simple tutorial to get started.
+- [API Reference](https://pub.dev/documentation/flame/latest/) - The generated dartdoc API reference.
 
 
 ## Help
@@ -59,13 +60,13 @@ problems that games developed with Flutter might share.
 
 Some of the key features provided are:
 
- - A game loop.
- - A component/object system (FCS).
- - Effects and particles.
- - Collision detection.
- - Gesture and input handling.
- - Images, animations, sprites, and sprite sheets.
- - General utilities to make development easier.
+- A game loop.
+- A component/object system (FCS).
+- Effects and particles.
+- Collision detection.
+- Gesture and input handling.
+- Images, animations, sprites, and sprite sheets.
+- General utilities to make development easier.
 
 On top of those features, you can augment Flame with bridge packages. Through these libraries,
 you will be able to access bindings to other packages, including custom Flame components and
@@ -173,6 +174,6 @@ Note that some of the articles might be slightly outdated, but can still be usef
 
 ## Credits
 
- - The [Blue Fire team](https://github.com/orgs/bluefireteam/people), who are continuously
+- The [Blue Fire team](https://github.com/orgs/bluefireteam/people), who are continuously
  working on maintaining and improving Flame and its ecosystem.
- - All the friendly contributors and people who are helping in the community.
+- All the friendly contributors and people who are helping in the community.

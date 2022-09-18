@@ -22,6 +22,7 @@
 
 ---
 
+
 ## 文档
 
 完整的 Flame 文档可在 [docs.flame-engine.org](https://docs.flame-engine.org/) 查看。
@@ -31,12 +32,14 @@
 **注意**：主分支的文档比已发布在网站上的文档版本更新。
 
 其他资源：
- - [官方网站](https://flame-engine.org/) 。
- - [示例](https://examples.flame-engine.org/) 可在浏览器上尝试大部分功能。
- - [教程](https://tutorials.flame-engine.org/) - 快速起步的教程。
- - [API 文档](https://pub.flutter-io.cn/documentation/flame/latest/) - 基于 dartdoc 生成的 API 文档。
- - [Flame 中文网（非官方）](https://www.flame-cn.com/) 。
- - [Flame 中文文档（非官方）](https://docs.flame-cn.com/) 。
+
+- [官方网站](https://flame-engine.org/) 。
+- [示例](https://examples.flame-engine.org/) 可在浏览器上尝试大部分功能。
+- [教程](https://tutorials.flame-engine.org/) - 快速起步的教程。
+- [API 文档](https://pub.flutter-io.cn/documentation/flame/latest/) - 基于 dartdoc 生成的 API 文档。
+- [Flame 中文网（非官方）](https://www.flame-cn.com/) 。
+- [Flame 中文文档（非官方）](https://docs.flame-cn.com/) 。
+
 
 ## 问题互助
 
@@ -50,6 +53,7 @@
 如果你更倾向于使用 StackOverflow，你也可以在上面发表问题。
 添加 [Flame 标签](https://stackoverflow.com/questions/tagged/flame)
 后关注该标签的人可以看到并帮助解决问题。
+
 
 ## 项目功能
 
@@ -89,6 +93,7 @@ Flame 引擎的目的是为使用 Flutter 开发的游戏会遇到的常见问�
 - [flame_tiled](https://github.com/flame-engine/flame/tree/main/packages/flame_tiled) 桥接
   [Tiled](https://www.mapeditor.org/) ：二维平面的地图编辑器。
 
+
 ## 赞助者
 
 Flame 引擎最大的赞助者：
@@ -96,6 +101,7 @@ Flame 引擎最大的赞助者：
 [![Cypher Stack](https://raw.githubusercontent.com/flame-engine/flame/main/media/logo_cypherstack.png)](https://cypherstack.com/)
 
 如果你想要赞助 Flame，请查看下方的 Pateron 信息，或在 Discord 频道中联系我们。
+
 
 ## 支持我们
 
@@ -121,6 +127,7 @@ Flame 引擎最大的赞助者：
 [![Powered by Flame](https://img.shields.io/badge/Powered%20by-%F0%9F%94%A5-orange.svg?style=for-the-badge)](https://flame-engine.org)
 ```
 
+
 ## 贡献
 
 如果你找到了 bug 或对 Flame 有更好的建议，请创建一个 issue，我们将会尽快处理。
@@ -132,12 +139,14 @@ Flame 引擎最大的赞助者：
 你可以通过 issue、GitHub 讨论 (discussion) 或是在
 [Discord 频道](https://discord.gg/pxrBmy4) 联系团队。
 
+
 ## 立即开始
 
 你可以在 [tutorials.flame-engine.org](https://tutorials.flame-engine.org)
 找到一个简单的新手教程，也可以在 [examples.flame-engine.org](https://examples.flame-engine.org)
 找到包含了大部分 Flame 功能的示例。
 若你想查看示例中的代码，点击右上角的 `< >` 按钮。
+
 
 ### 特别突出的社区教程
 
@@ -159,11 +168,14 @@ Flame 引擎最大的赞助者：
 
 请留意，部分文章的内容可能已稍微过时，但它们仍然有很好的指导意义。
 
+
 ## 感谢
 
- * 一直在为 Flame 及其生态作出贡献和维护的 [Blue Fire 团队](https://github.com/orgs/bluefireteam/people) 。
- * 所有友善的贡献者和在社区中提供帮助的人。
+- 一直在为 Flame 及其生态作出贡献和维护的 [Blue Fire 团队](https://github.com/orgs/bluefireteam/people) 。
+- 所有友善的贡献者和在社区中提供帮助的人。
 
-### 本地化文档翻译：
- * [HarrisonQI](https://github.com/HarrisonQi)
- * [Alex Li](https://github.com/AlexV525)
+
+### 本地化文档翻译
+
+- [HarrisonQI](https://github.com/HarrisonQi)
+- [Alex Li](https://github.com/AlexV525)

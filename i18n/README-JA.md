@@ -23,6 +23,7 @@ Flutter ベースのゲームエンジンです。
 
 ---
 
+
 ## ドキュメント
 
 Flame に関する全てのドキュメントは [docs.flame-engine.org](https://docs.flame-engine.org/) で確認できます。
@@ -38,11 +39,13 @@ Flame に関する全てのドキュメントは [docs.flame-engine.org](https:/
 - [Tutorials](https://tutorials.flame-engine.org/) - 簡単なチュートリアルを紹介します。
 - [API Reference](https://pub.dev/documentation/flame/latest/) - dartdoc から生成された API リファレンスです。
 
+
 ## ヘルプ
 
 あなたの Flame 関連のどんな疑問も質問できる Flame コミュニティが [Blue Fire's Discord server](https://discord.gg/5unKpdQD78) にあります。
 
 もしあなたが StackOverflow のほうが好きなのであればそこで質問することもできます。その際にはあなたの質問をフォローできるように [Flame タグ](https://stackoverflow.com/questions/tagged/flame) を付けてください。
+
 
 ## 機能
 
@@ -81,6 +84,7 @@ Flame は公式に以下のパッケージのブリッジライブラリを提�
 - [flame_tiled](https://github.com/flame-engine/flame/tree/main/packages/flame_tiled) for
   [Tiled](https://www.mapeditor.org/): 2D タイルマップのレベルエディターです。
 
+
 ## スポンサー
 
 Flame エンジンのトップスポンサーは以下の通りです:
@@ -88,6 +92,7 @@ Flame エンジンのトップスポンサーは以下の通りです:
 [![Cypher Stack](https://raw.githubusercontent.com/flame-engine/flame/main/media/logo_cypherstack.png)](https://cypherstack.com/)
 
 Flame のスポンサーになることを希望する方は、以下のセクションにある私たちの Patreon か、または Discord で連絡してください。
+
 
 ## サポート
 
@@ -113,6 +118,7 @@ Patreon でパトロンになることでも私たちをサポートできます
 [![Powered by Flame](https://img.shields.io/badge/Powered%20by-%F0%9F%94%A5-orange.svg?style=for-the-badge)](https://flame-engine.org)
 ```
 
+
 ## 貢献
 
 バグを発見したか Flame を改善するための提案をお持ちでしょうか？できる限り迅速に確認しますので、イシューを発行してください。
@@ -121,9 +127,11 @@ Patreon でパトロンになることでも私たちをサポートできます
 
 大きな変更がある場合、または疑問がある場合は、必ずあなたの貢献についてチームに話すようにしてください。イシューや GitHub ディスカッションを通して、もしくは [Discord server](https://discord.gg/pxrBmy4) を使ってチームと連絡をとってください。
 
+
 ## 開発を始めましょう
 
 Flame を使用して開発を始める際の簡単なチュートリアルは [tutorials.flame-engine.org](https://tutorials.flame-engine.org) で確認できます。また、 [examples.flame-engine.org](https://examples.flame-engine.org) で Flame の主な機能の例を確認することができます。各例のコードにアクセスするためには右上の `< >` ボタンを押してください。
+
 
 ### ハイライトされたコミュニティーのチュートリアル
 
@@ -142,6 +150,7 @@ Flame を使用して開発を始める際の簡単なチュートリアルは [
 私たちはゲーム、ライブラリ、記事に関する精選されたリストを [awesome-flame](https://github.com/flame-engine/awesome-flame) で提供しています。
 
 ここまでで紹介した記事の一部は若干古くなっている可能性がありますが、参考にしてください。
+
 
 ## クレジット
 

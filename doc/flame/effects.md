@@ -31,6 +31,7 @@ the final value is provided by the user explicitly, and progression over time is
 
 There are multiple effects provided by Flame, and you can also
 [create your own](#creating-new-effects). The following effects are included:
+
 - [`MoveByEffect`](#movebyeffect)
 - [`MoveToEffect`](#movetoeffect)
 - [`MoveAlongPathEffect`](#movealongpatheffect)
@@ -53,6 +54,7 @@ the job of the effect controller is to map from the "physical" time, measured in
 "logical" time, which changes from 0 to 1.
 
 There are multiple effect controllers provided by the Flame framework as well:
+
 - [`EffectController`](#effectcontroller)
 - [`LinearEffectController`](#lineareffectcontroller)
 - [`ReverseLinearEffectController`](#reverselineareffectcontroller)
@@ -72,25 +74,26 @@ There are multiple effect controllers provided by the Flame framework as well:
 
 ## Built-in effects
 
+
 ### `Effect`
 
 The base `Effect` class is not usable on its own (it is abstract), but it provides some common
 functionality inherited by all other effects. This includes:
 
-  - The ability to pause/resume the effect using `effect.pause()` and `effect.resume()`. You can
+- The ability to pause/resume the effect using `effect.pause()` and `effect.resume()`. You can
     check whether the effect is currently paused using `effect.isPaused`.
 
-  - The ability to reverse the effect's time direction using `effect.reverse()`. Use
+- The ability to reverse the effect's time direction using `effect.reverse()`. Use
     `effect.isReversed` to check if the effect is currently running back in time.
 
-  - Property `removeOnFinish` (which is true by default) will cause the effect component to be
+- Property `removeOnFinish` (which is true by default) will cause the effect component to be
     removed from the game tree and garbage-collected once the effect completes. Set this to false
     if you plan to reuse the effect after it is finished.
 
-  - Optional user-provided `onComplete`, which will be invoked when the effect has just
+- Optional user-provided `onComplete`, which will be invoked when the effect has just
     completed its execution but before it is removed from the game.
 
-  - The `reset()` method reverts the effect to its original state, allowing it to run once again.
+- The `reset()` method reverts the effect to its original state, allowing it to run once again.
 
 
 ### `MoveByEffect`
@@ -296,7 +299,7 @@ final effect = ColorEffect(
 The `Offset` argument will determine "how much" of the color that will be applied to the component,
 in this example the effect will start with 0% and will go up to 80%.
 
-__Note:__ Due to how this effect is implemented, and how Flutter's `ColorFilter` class works, this
+**Note:** Due to how this effect is implemented, and how Flutter's `ColorFilter` class works, this
 effect can't be mixed with other `ColorEffect`s, when more than one is added to the component, only
 the last one will have effect.
 
@@ -328,6 +331,7 @@ without interfering with each other.
 
 
 ## Effect controllers
+
 
 ### `EffectController`
 

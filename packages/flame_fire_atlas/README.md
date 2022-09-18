@@ -2,6 +2,7 @@
 
 Flame fire atlas is a texture atlas lib for Flame. Atlases can be created using the Fire Atlas Editor.
 
+
 ## How to use
 
 Add the dependency on your pubspec

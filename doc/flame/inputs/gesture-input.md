@@ -16,6 +16,7 @@ of these `mixin`s and its methods:
 
 
 ## Touch and mouse detectors
+
 ```
 - TapDetector
   - onTap
@@ -470,6 +471,7 @@ class MyGame extends FlameGame with HasHoverables {
   }
 }
 ```
+
 
 ### GestureHitboxes
 
