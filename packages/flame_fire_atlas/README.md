@@ -7,7 +7,7 @@ Flame fire atlas is a texture atlas lib for Flame. Atlases can be created using 
 
 Add the dependency on your pubspec
 
-```
+```yaml
 flame_fire_atlas: ^1.0.0-rc1
 ```
 

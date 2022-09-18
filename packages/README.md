@@ -13,9 +13,9 @@ migrating all of them to this repository.
 Bridge packages are packages which:
 
 - Provides Flame with an interface to another external package (e.g. `flame_audio` which is
-   Flame + Audioplayers, `flame_tiled`, which is Flame + tiled)
+  Flame + Audioplayers, `flame_tiled`, which is Flame + tiled).
 - Packages with features that are somehow very context specific and doesn't have a place inside the
-   core package (e.g. `flame_splash_screen`)
+  core package (e.g. `flame_splash_screen`).
 
 
 ## Index

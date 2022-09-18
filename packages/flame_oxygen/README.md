@@ -13,4 +13,5 @@
 </p>
 <!-- markdownlint-enable MD013 -->
 
-This library acts as a bridge between [Oxygen](https://github.com/flame-engine/oxygen) (an ECS written by the Flame Team) and the Flame game engine.
+This library acts as a bridge between [Oxygen](https://github.com/flame-engine/oxygen)
+(an ECS written by the Flame Team) and the Flame game engine.

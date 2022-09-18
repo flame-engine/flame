@@ -158,7 +158,7 @@ MD032: true
 # MD033/no-inline-html - Inline HTML
 MD033:
   # Allowed elements
-  allowed_elements: [p, a, img]
+  allowed_elements: [p, a, img, h2]
 
 # MD034/no-bare-urls - Bare URL used
 MD034: true
@@ -184,6 +184,9 @@ MD039: true
 
 # MD040/fenced-code-language - Fenced code blocks should have a language specified
 MD040: true
+
+# MD041/first-line-heading - First line in a file should be a top-level heading
+MD041: false
 
 # MD042/no-empty-links - No empty links
 MD042: true

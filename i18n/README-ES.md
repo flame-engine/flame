@@ -16,7 +16,6 @@ Un motor de video juegos basado en Flutter.
   <img src="https://github.com/flame-engine/flame/workflows/cicd/badge.svg?branch=main&event=push" alt="Test" />
   <a title="Discord" href="https://discord.gg/pxrBmy4" ><img src="https://img.shields.io/discord/509714518008528896.svg" /></a>
 </p>
-<!-- markdownlint-enable MD013 -->
 
 ---
 
@@ -24,7 +23,7 @@ Un motor de video juegos basado en Flutter.
 
 ---
 
-
+<!-- markdownlint-disable-next-line MD002 -->
 ## Documentación
 
 La documentación completa de Flame se encuentra en
@@ -114,7 +113,7 @@ Además puede mostrar en su repositorio que su juego está hecho con Flame al ut
 [![Powered by Flame](https://img.shields.io/badge/Powered%20by-%F0%9F%94%A5-orange.svg?style=flat-square)](https://flame-engine.org)
 [![Powered by Flame](https://img.shields.io/badge/Powered%20by-%F0%9F%94%A5-orange.svg?style=for-the-badge)](https://flame-engine.org)
 
-```
+```txt
 [![Powered by Flame](https://img.shields.io/badge/Powered%20by-%F0%9F%94%A5-orange.svg)](https://flame-engine.org)
 [![Powered by Flame](https://img.shields.io/badge/Powered%20by-%F0%9F%94%A5-orange.svg?style=flat-square)](https://flame-engine.org)
 [![Powered by Flame](https://img.shields.io/badge/Powered%20by-%F0%9F%94%A5-orange.svg?style=for-the-badge)](https://flame-engine.org)

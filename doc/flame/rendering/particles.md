@@ -24,6 +24,7 @@ When using `Particle` with a custom `Game` implementation, please ensure that bo
 `render` methods are called during each game loop tick.
 
 Main approaches to implement desired particle effects:
+
 - Composition of existing behaviors.
 - Use behavior chaining (just a syntactic sugar of the first one).
 - Using `ComputedParticle`.
@@ -149,6 +150,7 @@ the nesting behaviors.
 ## Built-in particles
 
 Flame ships with a few built-in `Particle` behaviors:
+
 - The `TranslatedParticle` translates its `child` by given `Vector2`
 - The `MovingParticle` moves its `child` between two predefined `Vector2`, supports `Curve`
 - The `AcceleratedParticle` allows basic physics based effects, like gravitation or speed dampening
@@ -382,6 +384,7 @@ game.add(
 ## ComputedParticle
 
 A `Particle` which could help you when:
+
 - Default behavior is not enough
 - Complex effects optimization
 - Custom easings

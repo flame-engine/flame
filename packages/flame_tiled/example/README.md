@@ -7,7 +7,7 @@ Simple project to showcase the usage of flame_tiled by rendering a tile map.
 </p>
 
 
-### Credits
+## Credits
 
 - Level tilesets: [erayzesen.itch.io/pixel-platformer](https://erayzesen.itch.io/pixel-platformer)
   created by [@erayzesen](https://twitter.com/erayzesen)

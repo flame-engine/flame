@@ -111,8 +111,11 @@ Example usage:
 
 ```dart
 class MyTextBox extends TextBoxComponent {
-  MyTextBox(String text)
-    : super(text: text, textRenderer: tiny, boxConfig: TextBoxConfig(timePerChar: 0.05));
+  MyTextBox(String text) : super(
+    text: text,
+    textRenderer: tiny,
+    boxConfig: TextBoxConfig(timePerChar: 0.05),
+  );
 
   final bgPaint = Paint()..color = Color(0xFFFF00FF);
   final borderPaint = Paint()..color = Color(0xFF000000)..style = PaintingStyle.stroke;

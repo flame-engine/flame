@@ -156,12 +156,12 @@ Examples of PR titles:
 - refactor: Optimize the structure of the game loop
 
 
-# Maintainers
+## Maintainers
 
 These instructions are for the maintainers of Flame.
 
 
-## Merging a pull request
+### Merging a pull request
 
 When merging a pull request, make sure that the title of the merge commit has the correct
 conventional commit tag and a descriptive title. This is extra important since sometimes the title
@@ -173,7 +173,7 @@ instructions from the "Migration instruction" (if the PR is breaking) should be 
 commit message.
 
 
-## Creating a release
+### Creating a release
 
 There are a few things to think about when doing a release:
 

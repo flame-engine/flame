@@ -353,43 +353,43 @@ EffectController({
 });
 ```
 
-- _`duration`_ -- the length of the main part of the effect, i.e. how long it should take to go
+- *`duration`* -- the length of the main part of the effect, i.e. how long it should take to go
   from 0 to 100%. This parameter cannot be negative, but can be zero. If this is the only parameter
   specified then the effect will grow linearly over the `duration` seconds.
 
-- _`curve`_ -- if given, creates a non-linear effect that grows from 0 to 100% according to the
+- *`curve`* -- if given, creates a non-linear effect that grows from 0 to 100% according to the
   provided [curve](https://api.flutter.dev/flutter/animation/Curves-class.html).
 
-- _`reverseDuration`_ -- if provided, adds an additional step to the controller: after the effect
+- *`reverseDuration`* -- if provided, adds an additional step to the controller: after the effect
   has grown from 0 to 100% over the `duration` seconds, it will then go backwards from 100% to 0
   over the `reverseDuration` seconds. In addition, the effect will complete at progress level of 0
   (normally the effect completes at progress 1).
 
-- _`reverseCurve`_ -- the curve to be used during the "reverse" step of the effect. If not given,
+- *`reverseCurve`* -- the curve to be used during the "reverse" step of the effect. If not given,
   this will default to `curve.flipped`.
 
-- _`alternate`_ -- setting this to true is equivalent to specifying the `reverseDuration` equal
+- *`alternate`* -- setting this to true is equivalent to specifying the `reverseDuration` equal
   to the `duration`. If the `reverseDuration` is already set, this flag has no effect.
 
-- _`atMaxDuration`_ -- if non-zero, this inserts a pause after the effect reaches its max
+- *`atMaxDuration`* -- if non-zero, this inserts a pause after the effect reaches its max
   progress and before the reverse stage. During this time the effect is kept at 100% progress. If
   there is no reverse stage, then this will simply be a pause before the effect is marked as
   completed.
 
-- _`atMinDuration`_ -- if non-zero, this inserts a pause after the reaches its lowest progress
+- *`atMinDuration`* -- if non-zero, this inserts a pause after the reaches its lowest progress
   (0) at the end of the reverse stage. During this time, the effect's progress is at 0%. If there
   is no reverse stage, then this pause will still be inserted after the "at-max" pause if it's
   present, or after the forward stage otherwise. In addition, the effect will now complete at
   progress level of 0.
 
-- _`repeatCount`_ -- if greater than one, it will cause the effect to repeat itself the prescribed
+- *`repeatCount`* -- if greater than one, it will cause the effect to repeat itself the prescribed
   number of times. Each iteration will consists of the forward stage, pause at max, reverse stage,
   then pause at min (skipping those that were not specified).
 
-- _`infinite`_ -- if true, the effect will repeat infinitely and never reach completion. This is
+- *`infinite`* -- if true, the effect will repeat infinitely and never reach completion. This is
   equivalent to as if `repeatCount` was set to infinity.
 
-- _`startDelay`_ -- an additional wait time inserted before the beginning of the effect. This
+- *`startDelay`* -- an additional wait time inserted before the beginning of the effect. This
   wait time is executed only once, even if the effect is repeating. During this time the effect's
   `.started` property returns false. The effect's `onStart()` callback will be executed at the end
   of this waiting period.

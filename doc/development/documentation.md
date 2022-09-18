@@ -22,6 +22,7 @@ section will focus on the Markdown extensions that are enabled in our build syst
 The table of contents for the site must be created manually. This is done using special `{toctree}`
 blocks, one per each subdirectory:
 
+<!-- markdownlint-disable MD040 -->
 `````
 ```{toctree}
 :hidden:
@@ -30,6 +31,7 @@ First Topic    <topic1.md>
 Second Topic   <topic2.md>
 ```
 `````
+<!-- markdownlint-enable MD040 -->
 
 When adding new documents into the documentation site, make sure that they are mentioned in one of
 the toctrees -- otherwise you will see a warning during the build that the document is orphaned.
@@ -40,6 +42,7 @@ the toctrees -- otherwise you will see a warning during the build that the docum
 Admonitions are emphasized blocks of text with a distinct appearance. They are created using the
 triple-backticks syntax:
 
+<!-- markdownlint-disable MD040 -->
 `````
 ```{note}
 Please note this very important caveat.
@@ -54,6 +57,7 @@ I told you so.
 Also check out this cool thingy.
 ```
 `````
+<!-- markdownlint-enable MD040 -->
 
 ```{note}
 Please note this very important caveat.
@@ -77,12 +81,14 @@ Also check out this cool thingy.
 The special `{deprecated}` block can be used to mark some part of documentation or syntax as being
 deprecated. This block requires specifying the version when the deprecation has occurred
 
+<!-- markdownlint-disable MD040 -->
 `````
 ```{deprecated} v1.3.0
 
 Please use this **other** thing instead.
 ```
 `````
+<!-- markdownlint-enable MD040 -->
 
 Which would be rendered like this:
 
@@ -99,6 +105,7 @@ Flutter widgets and embedding them alongside with the overall documentation cont
 
 In Markdown, the code for inserting an embed looks like this:
 
+<!-- markdownlint-disable MD040 -->
 ``````
 ```{flutter-app}
 :sources: ../flame/examples
@@ -106,6 +113,7 @@ In Markdown, the code for inserting an embed looks like this:
 :show: widget code popup
 ```
 ``````
+<!-- markdownlint-enable MD040 -->
 
 Here's what the different options mean:
 

@@ -15,7 +15,6 @@ Flutter ベースのゲームエンジンです。
   <a title="Discord" href="https://discord.gg/pxrBmy4" ><img src="https://img.shields.io/discord/509714518008528896.svg" /></a>
   <a title="Melos" href="https://github.com/invertase/melos"><img src="https://img.shields.io/badge/maintained%20with-melos-f700ff.svg"/></a>
 </p>
-<!-- markdownlint-enable MD013 -->
 
 ---
 
@@ -23,7 +22,7 @@ Flutter ベースのゲームエンジンです。
 
 ---
 
-
+<!-- markdownlint-disable-next-line MD002 -->
 ## ドキュメント
 
 Flame に関する全てのドキュメントは [docs.flame-engine.org](https://docs.flame-engine.org/) で確認できます。
@@ -112,7 +111,7 @@ Patreon でパトロンになることでも私たちをサポートできます
 [![Powered by Flame](https://img.shields.io/badge/Powered%20by-%F0%9F%94%A5-272727.svg?style=flat-square)](https://flame-engine.org)
 [![Powered by Flame](https://img.shields.io/badge/Powered%20by-%F0%9F%94%A5-272727.svg?style=for-the-badge)](https://flame-engine.org)
 
-```
+```txt
 [![Powered by Flame](https://img.shields.io/badge/Powered%20by-%F0%9F%94%A5-orange.svg)](https://flame-engine.org)
 [![Powered by Flame](https://img.shields.io/badge/Powered%20by-%F0%9F%94%A5-orange.svg?style=flat-square)](https://flame-engine.org)
 [![Powered by Flame](https://img.shields.io/badge/Powered%20by-%F0%9F%94%A5-orange.svg?style=for-the-badge)](https://flame-engine.org)
