@@ -11,7 +11,7 @@ class _ImageLayer extends _RenderableLayer<ImageLayer> {
 
   @override
   void handleResize(Vector2 canvasSize) {
-    _paintArea = Rect.fromLTWH(0, 0, canvasSize.x, canvasSize.y);
+    _paintArea = canvasSize.toRect();
   }
 
   @override
