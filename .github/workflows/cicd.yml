@@ -43,11 +43,11 @@ jobs:
   markdown-lint:
     runs-on: ubuntu-latest
     steps:
-    - uses: articulate/actions-markdownlint@v1
-      with:
-        config: .markdownlint.yaml
-        files: '**/*.md'
-        ignore: '**/CHANGELOG.md **/ios/** **/doc/api/static-assets/**'
+      - uses: nosborn/github-action-markdown-cli@v3.0.1
+        with:
+          files: .
+          config_file: .markdownlint.yaml
+          ignore_files: .markdownlintignore
   # END LINTING STAGE
 
   # BEGIN TESTING STAGE
