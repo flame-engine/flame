@@ -47,7 +47,7 @@ jobs:
         with:
           files: .
           config_file: .markdownlint.yaml
-          ignore_files: .markdownlintignore
+          ignore_path: .markdownlintignore
   # END LINTING STAGE
 
   # BEGIN TESTING STAGE
