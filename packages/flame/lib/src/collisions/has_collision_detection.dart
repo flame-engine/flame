@@ -3,12 +3,13 @@ import 'package:flame/game.dart';
 
 /// Keeps track of all the [ShapeHitbox]s in the component tree and initiates
 /// collision detection every tick.
-mixin HasCollisionDetection on FlameGame {
-  CollisionDetection<ShapeHitbox> _collisionDetection =
+mixin HasCollisionDetection<B extends Broadphase<ShapeHitbox>> on FlameGame {
+  CollisionDetection<ShapeHitbox, B> _collisionDetection =
       StandardCollisionDetection();
-  CollisionDetection<ShapeHitbox> get collisionDetection => _collisionDetection;
+  CollisionDetection<ShapeHitbox, B> get collisionDetection =>
+      _collisionDetection;
 
-  set collisionDetection(CollisionDetection<ShapeHitbox> cd) {
+  set collisionDetection(CollisionDetection<ShapeHitbox, B> cd) {
     cd.addAll(_collisionDetection.items);
     _collisionDetection = cd;
   }
@@ -25,11 +26,12 @@ mixin HasCollisionDetection on FlameGame {
 ///
 /// Do note that [collisionDetection] has to be initialized before the game
 /// starts the update loop for the collision detection to work.
-mixin HasGenericCollisionDetection<T extends Hitbox<T>> on FlameGame {
-  CollisionDetection<T>? _collisionDetection;
-  CollisionDetection<T> get collisionDetection => _collisionDetection!;
+mixin HasGenericCollisionDetection<T extends Hitbox<T>, B extends Broadphase<T>>
+    on FlameGame {
+  CollisionDetection<T, B>? _collisionDetection;
+  CollisionDetection<T, B> get collisionDetection => _collisionDetection!;
 
-  set collisionDetection(CollisionDetection<T> cd) {
+  set collisionDetection(CollisionDetection<T, B> cd) {
     if (_collisionDetection != null) {
       cd.addAll(_collisionDetection!.items);
     }

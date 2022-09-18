@@ -12,20 +12,42 @@ import 'package:tiled/tiled.dart';
 /// It uses a preloaded [RenderableTiledMap] to batch rendering calls into
 /// Sprite Batches.
 /// {@endtemplate}
-class TiledComponent<T extends FlameGame> extends Component with HasGameRef<T> {
+class TiledComponent<T extends FlameGame> extends PositionComponent
+    with HasGameRef<T> {
   /// Map instance of this component.
   RenderableTiledMap tileMap;
 
-  /// The logical size of the component. The game assumes that this is the
-  /// approximate size of the object that will be drawn on the screen.
-  late final Vector2 size = _computeSize();
+  /// This property **cannot** be reassigned at runtime. To make the
+  /// [PositionComponent] larger or smaller, change its [scale].
+  @override
+  set size(Vector2 size) {
+    // Intentionally left empty.
+  }
+
+  /// This property **cannot** be reassigned at runtime. To make the
+  /// [PositionComponent] larger or smaller, change its [scale].
+  @override
+  set width(double w) {
+    // Intentionally left empty.
+  }
+
+  /// This property **cannot** be reassigned at runtime. To make the
+  /// [PositionComponent] larger or smaller, change its [scale].
+  @override
+  set height(double h) {
+    // Intentionally left empty.
+  }
 
   /// {@macro _tiled_component}
   TiledComponent(
     this.tileMap, {
+    super.position,
+    super.scale,
+    super.angle,
+    super.anchor,
     super.children,
     super.priority,
-  });
+  }) : super(size: _computeSize(tileMap));
 
   @override
   Future<void>? onLoad() async {
@@ -57,41 +79,50 @@ class TiledComponent<T extends FlameGame> extends Component with HasGameRef<T> {
     );
   }
 
-  Vector2 _computeSize() {
+  static Vector2 _computeSize(RenderableTiledMap tileMap) {
     final tMap = tileMap.map;
 
     final xScale = tileMap.destTileSize.x / tMap.tileWidth;
     final yScale = tileMap.destTileSize.y / tMap.tileHeight;
-
-    late Vector2 size;
 
     final tileScaled = Vector2(
       tileMap.map.tileWidth * xScale,
       tileMap.map.tileHeight * yScale,
     );
 
-    if (tMap.orientation == MapOrientation.hexagonal) {
-      if (tMap.staggerAxis == StaggerAxis.y) {
-        size = Vector2(
-          tileMap.map.width * tileScaled.x,
-          tileScaled.y + ((tileMap.map.height - 1) * tileScaled.y * 0.75),
-        );
-      } else {
-        size = Vector2(
-          tileScaled.x + ((tileMap.map.width - 1) * tileScaled.x * 0.75),
-          (tileMap.map.height * tileScaled.y) + tileScaled.y / 2,
-        );
-      }
-    } else {
-      size = Vector2(
-        tileMap.map.width * tileScaled.x,
-        tileMap.map.height * tileScaled.y,
-      );
+    if (tMap.orientation == null) {
+      return NotifyingVector2.zero();
     }
 
-    if (tMap.staggerAxis == StaggerAxis.y) {
-      size.x += tMap.tileWidth / 2;
+    switch (tMap.orientation!) {
+      case MapOrientation.staggered:
+        return tMap.staggerAxis == StaggerAxis.y
+            ? Vector2(
+                tileScaled.x * tileMap.map.width + tileScaled.x / 2,
+                tileScaled.y + ((tileMap.map.height - 1) * tileScaled.y / 2),
+              )
+            : Vector2(
+                tileScaled.x + ((tileMap.map.width - 1) * tileScaled.x / 2),
+                tileScaled.y * tileMap.map.height + tileScaled.y / 2,
+              );
+
+      case MapOrientation.hexagonal:
+        return tMap.staggerAxis == StaggerAxis.y
+            ? Vector2(
+                tileMap.map.width * tileScaled.x + tileScaled.x / 2,
+                tileScaled.y + ((tileMap.map.height - 1) * tileScaled.y * 0.75),
+              )
+            : Vector2(
+                tileScaled.x + ((tileMap.map.width - 1) * tileScaled.x * 0.75),
+                (tileMap.map.height * tileScaled.y) + tileScaled.y / 2,
+              );
+
+      case MapOrientation.isometric:
+      case MapOrientation.orthogonal:
+        return Vector2(
+          tileMap.map.width * tileScaled.x,
+          tileMap.map.height * tileScaled.y,
+        );
     }
-    return size;
   }
 }

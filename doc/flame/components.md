@@ -27,7 +27,7 @@ void main() {
 The `Component()` here could of course be any subclass of `Component`.
 
 Every `Component` has a few methods that you can optionally implement, which are used by the
-`FlameGame` class. 
+`FlameGame` class.
 
 
 ### Component lifecycle
@@ -201,7 +201,7 @@ an assertion error will be thrown.
 
 ### Ensuring a component has a given ancestor
 
-When a component requires to have a specific ancestor type somewhere in the 
+When a component requires to have a specific ancestor type somewhere in the
 component tree, `HasAncestor` mixin can be used to enforce that relationship.
 
 The mixin exposes the `ancestor` field that will be of the given type.
@@ -336,6 +336,22 @@ non-uniform way, by change `x` or `y` by different amounts.
 
 The `angle` is the rotation angle around the anchor, represented as a double in radians. It is
 relative to the parent's angle.
+
+
+### Native Angle
+
+The `nativeAngle` is an angle in radians, measured clockwise, representing the default orientation of the component. It can be used to define the direction in which the component is facing when [angle](#angle) is zero.
+
+It is specially helpful when making a sprite based component look at a specific target. If the original image of the sprite is not facing in the up/north direction, the calculated angle to make the component look at the target will need some offset to make it look correct. For such cases, `nativeAngle` can be used to let the component know what direction the original image is faces.
+
+An example could be a bullet image pointing in east direction. In this case `nativeAngle` can be set to pi/2 radians. Following are some common directions and their correspondin native angle values.
+
+Direction | Native Angle | In degrees
+----------|--------------|-------------
+Up/North  | 0            | 0
+Down/South| pi or -pi    | 180 or -180
+Left/West | -pi/2        | -90
+Right/East| pi/2         | 90
 
 
 ### Anchor
@@ -989,6 +1005,25 @@ Check the example app
 [custom_painter_component](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/widgets/custom_painter_example.dart)
 for details on how to use it.
 
+## ClipComponent
+
+A `ClipComponent` is a component that will clip the canvas to its size and shape. This means that
+if the component itself or any child of the `ClipComponent` renders outside of the
+`ClipComponent`'s boundaries, the part that is not inside the area will not be shown.
+
+A `ClipComponent` receives a builder function that should return the `Shape` that will define the
+clipped area, based on its size.
+
+To make it easier to use that component, there are three factories that offers common shapes:
+
+ - `ClipComponent.rectangle`: Clips the area in the form a rectangle based on its size.
+ - `ClipComponent.circle`: Clips the area in the form of a circle based on its size.
+ - `ClipComponent.polygon`:  Clips the area in the form of a polygon based on the points received
+in the constructor.
+
+Check the example app
+[clip_component](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/components/clip_component_example.dart)
+for details on how to use it.
 
 ## Effects
 

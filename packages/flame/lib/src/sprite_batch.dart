@@ -209,6 +209,9 @@ class SpriteBatch {
   /// Whether to use [Canvas.drawAtlas] or not.
   final bool useAtlas;
 
+  /// Does this batch contain any operatiosn?
+  bool get isEmpty => _batchItems.isEmpty;
+
   Future<void> _makeFlippedAtlas() async {
     _hasFlips = true;
     _atlasReady = false;
@@ -353,6 +356,10 @@ class SpriteBatch {
     Rect? cullRect,
     Paint? paint,
   }) {
+    if (isEmpty) {
+      return;
+    }
+
     paint ??= _emptyPaint;
 
     if (useAtlas && _atlasReady) {
