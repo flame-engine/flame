@@ -76,15 +76,10 @@ class QuadTreeBroadphase<T extends Hitbox<T>> extends Broadphase<T> {
           continue;
         }
 
-        Vector2 potentialCenter;
-        if (potential.collisionType == CollisionType.passive) {
-          potentialCenter = _getCenterOfHitbox(asShapePotential);
-        } else {
-          potentialCenter = potential.aabb.center;
-        }
-
-        final distanceCloseEnough =
-            minimumDistanceCheck.call(itemCenter, potentialCenter);
+        final distanceCloseEnough = minimumDistanceCheck.call(
+          itemCenter,
+          _cacheCenterOfHitbox(asShapePotential),
+        );
         if (distanceCloseEnough == false) {
           continue;
         }
@@ -112,9 +107,7 @@ class QuadTreeBroadphase<T extends Hitbox<T>> extends Broadphase<T> {
 
   void updateTransform(T item) {
     tree.remove(item, keepOldPosition: true);
-    if (item.collisionType == CollisionType.passive) {
-      _getCenterOfHitbox(item as ShapeHitbox);
-    }
+    _cacheCenterOfHitbox(item as ShapeHitbox);
     tree.add(item);
   }
 
@@ -122,13 +115,13 @@ class QuadTreeBroadphase<T extends Hitbox<T>> extends Broadphase<T> {
     tree.add(hitbox);
     if (hitbox.collisionType == CollisionType.active) {
       activeCollisions.add(hitbox);
-    } else if (hitbox.collisionType == CollisionType.passive) {
-      _getCenterOfHitbox(hitbox as ShapeHitbox);
     }
+    _cacheCenterOfHitbox(hitbox as ShapeHitbox);
   }
 
   void remove(T item) {
     tree.remove(item);
+    _cachedCenters.remove(item);
     if (item.collisionType == CollisionType.active) {
       activeCollisions.remove(item);
     }
@@ -141,10 +134,9 @@ class QuadTreeBroadphase<T extends Hitbox<T>> extends Broadphase<T> {
     _cachedCenters.clear();
   }
 
-  /// Caches hitbox center for passive collision objects, because
-  /// calculating on-the-fly is too expensive whereas passive objects usually
-  /// not change theirs position or size
-  Vector2 _getCenterOfHitbox(ShapeHitbox hitbox) {
+  /// Caches hitbox center because calculating on-the-fly is too expensive
+  /// whereas many of game objects could not change theirs position or size
+  Vector2 _cacheCenterOfHitbox(ShapeHitbox hitbox) {
     var cache = _cachedCenters[hitbox];
     if (cache == null) {
       _cachedCenters[hitbox] = hitbox.aabb.center;
