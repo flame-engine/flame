@@ -59,7 +59,6 @@ class QuadTreeBroadphase<T extends Hitbox<T>> extends Broadphase<T> {
       }
 
       final itemCenter = activeItem.aabb.center;
-      final markRemove = <ShapeHitbox>[];
       final potentiallyCollide = tree.query(activeItem);
       for (final potential in potentiallyCollide.entries.first.value) {
         if (potential.collisionType == CollisionType.inactive) {
@@ -72,10 +71,6 @@ class QuadTreeBroadphase<T extends Hitbox<T>> extends Broadphase<T> {
 
         final asShapePotential = potential as ShapeHitbox;
 
-        if (asShapePotential.isRemoving || asShapePotential.parent == null) {
-          markRemove.add(potential);
-          continue;
-        }
         if (asShapePotential.parent == asShapeItem.parent &&
             asShapeItem.parent != null) {
           continue;
@@ -96,7 +91,6 @@ class QuadTreeBroadphase<T extends Hitbox<T>> extends Broadphase<T> {
 
         _potentialsTmp.add([asShapeItem, potential]);
       }
-      markRemove.forEach(tree.remove);
     }
 
     if (_potentialsTmp.isNotEmpty) {

@@ -29,7 +29,7 @@ class QuadTree<T extends Hitbox<T>> {
   var _rootNode = _Node<T>();
   int _nodeLastId = 0;
   final _oldPositionByItem = <ShapeHitbox, Aabb2>{};
-  final _itemAtNode = <ShapeHitbox, _Node>{};
+  final _hitboxAtNode = <ShapeHitbox, _Node>{};
 
   List<T> get hitboxes => _rootNode.valuesRecursive;
 
@@ -46,7 +46,7 @@ class QuadTree<T extends Hitbox<T>> {
   void clear() {
     _rootNode = _Node<T>();
     _nodeLastId = 0;
-    _itemAtNode.clear();
+    _hitboxAtNode.clear();
     _oldPositionByItem.clear();
   }
 
@@ -110,7 +110,7 @@ class QuadTree<T extends Hitbox<T>> {
   void add(T hitbox) {
     final node = _add(_rootNode, 0, mainBoxSize, hitbox, null);
     _oldPositionByItem[hitbox as ShapeHitbox] = Aabb2.copy(hitbox.aabb);
-    _itemAtNode[hitbox as ShapeHitbox] = node;
+    _hitboxAtNode[hitbox as ShapeHitbox] = node;
   }
 
   _Node<T> _add(_Node<T> node, int depth, Rect box, T value, _Node? parent) {
@@ -174,15 +174,17 @@ class QuadTree<T extends Hitbox<T>> {
           throw 'Invalid index $quadrant';
         }
         children.hitboxes.add(value);
+        _hitboxAtNode[value as ShapeHitbox] = children;
       } else {
         moveValues.add(value);
+        _hitboxAtNode[value as ShapeHitbox] = node;
       }
     }
     node.hitboxes = moveValues;
   }
 
   void remove(T hitbox, {bool keepOldPosition = false}) {
-    final node = _itemAtNode.remove(hitbox);
+    final node = _hitboxAtNode.remove(hitbox);
     if (node != null) {
       node.hitboxes.remove(hitbox);
       if (keepOldPosition) {
@@ -224,18 +226,11 @@ class QuadTree<T extends Hitbox<T>> {
         child.hitboxes.clear();
         node.children[i] = null;
       }
-      final clear = <ShapeHitbox>[];
-      for (final hitbox in node.hitboxes) {
-        if (hitbox is ShapeHitbox && hitbox.parent == null) {
-          clear.add(hitbox);
-        }
-      }
-      clear.forEach(node.hitboxes.remove);
     }
   }
 
   Map<int, List<T>> query(T value) {
-    final node = _itemAtNode[value as ShapeHitbox];
+    final node = _hitboxAtNode[value as ShapeHitbox];
     var id = -1;
     final values = <T>[];
     if (node == null) {
