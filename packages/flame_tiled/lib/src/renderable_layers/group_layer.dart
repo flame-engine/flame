@@ -10,6 +10,8 @@ class _GroupLayer extends _RenderableLayer<Group> {
   _GroupLayer(
     super.layer,
     super.parent,
+    super.map,
+    super.destTileSize,
   );
 
   @override

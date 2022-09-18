@@ -5,13 +5,19 @@ class _ImageLayer extends _RenderableLayer<ImageLayer> {
   late final ImageRepeat _repeat;
   Rect _paintArea = Rect.zero;
 
-  _ImageLayer(super.layer, super.parent, this._image) {
+  _ImageLayer(
+    super.layer,
+    super.parent,
+    this._image,
+    super.map,
+    super.destTileSize,
+  ) {
     _initImageRepeat();
   }
 
   @override
   void handleResize(Vector2 canvasSize) {
-    _paintArea = canvasSize.toRect();
+    _paintArea = Rect.fromLTWH(0, 0, canvasSize.x, canvasSize.y);
   }
 
   @override
@@ -48,15 +54,22 @@ class _ImageLayer extends _RenderableLayer<ImageLayer> {
     }
   }
 
-  static Future<_RenderableLayer> load(
+  static Future<_ImageLayer> load(
     ImageLayer layer,
     _GroupLayer? parent,
     Camera? camera,
+    TiledMap map,
+    Vector2 destTileSize,
   ) async {
     return _ImageLayer(
       layer,
       parent,
       await Flame.images.load(layer.image.source!),
+      map,
+      destTileSize,
     );
   }
+
+  @override
+  void refreshCache() {}
 }

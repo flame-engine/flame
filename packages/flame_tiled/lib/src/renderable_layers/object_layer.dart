@@ -1,7 +1,12 @@
 part of '../renderable_tile_map.dart';
 
 class _ObjectLayer extends _RenderableLayer<ObjectGroup> {
-  _ObjectLayer(super.layer, super.parent);
+  _ObjectLayer(
+    super.layer,
+    super.parent,
+    super.map,
+    super.destTileSize,
+  );
 
   @override
   void render(Canvas canvas, Camera? camera) {
@@ -12,7 +17,17 @@ class _ObjectLayer extends _RenderableLayer<ObjectGroup> {
   @override
   bool get visible => false;
 
-  static Future<_RenderableLayer> load(ObjectGroup layer) async {
-    return _ObjectLayer(layer, null);
+  static Future<_ObjectLayer> load(
+    ObjectGroup layer,
+    TiledMap map,
+    Vector2 destTileSize,
+  ) async {
+    return _ObjectLayer(layer, null, map, destTileSize);
   }
+
+  @override
+  void handleResize(Vector2 canvasSize) {}
+
+  @override
+  void refreshCache() {}
 }

@@ -2,51 +2,39 @@ part of '../renderable_tile_map.dart';
 
 abstract class _RenderableLayer<T extends Layer> {
   final T layer;
+  final Vector2 destTileSize;
+  final TiledMap map;
 
   /// The parent [Group] layer (if it exists)
   final _GroupLayer? parent;
 
-  _RenderableLayer(this.layer, this.parent);
+  _RenderableLayer(
+    this.layer,
+    this.parent,
+    this.map,
+    this.destTileSize,
+  );
 
   bool get visible => layer.visible;
 
   void render(Canvas canvas, Camera? camera);
 
-  void handleResize(Vector2 canvasSize) {}
+  void handleResize(Vector2 canvasSize);
 
-  void refreshCache() {}
+  void refreshCache();
 
-  double get offsetX {
-    return layer.offsetX + (parent?.offsetX ?? 0);
-  }
+  double get scaleX => destTileSize.x / map.tileWidth;
+  double get scaleY => destTileSize.y / map.tileHeight;
 
-  double get offsetY {
-    return layer.offsetY + (parent?.offsetY ?? 0);
-  }
+  late double offsetX = layer.offsetX * scaleX + (parent?.offsetX ?? 0);
 
-  double get opacity {
-    if (parent != null) {
-      return parent!.opacity * layer.opacity;
-    } else {
-      return layer.opacity;
-    }
-  }
+  late double offsetY = layer.offsetY * scaleY + (parent?.offsetY ?? 0);
 
-  double get parallaxX {
-    if (parent != null) {
-      return parent!.parallaxX * layer.parallaxX;
-    } else {
-      return layer.parallaxX;
-    }
-  }
+  late double opacity = layer.opacity * (parent?.opacity ?? 1);
 
-  double get parallaxY {
-    if (parent != null) {
-      return parent!.parallaxY * layer.parallaxY;
-    } else {
-      return layer.parallaxY;
-    }
-  }
+  late double parallaxX = layer.parallaxX * (parent?.parallaxX ?? 1);
+
+  late double parallaxY = layer.parallaxY * (parent?.parallaxY ?? 1);
 
   /// Calculates the offset we need to apply to the canvas to compensate for
   /// parallax positioning and scroll for the layer and the current camera
@@ -76,8 +64,19 @@ abstract class _RenderableLayer<T extends Layer> {
 }
 
 class _UnsupportedLayer extends _RenderableLayer {
-  _UnsupportedLayer(super.layer, super.parent);
+  _UnsupportedLayer(
+    super.layer,
+    super.parent,
+    super.map,
+    super.destTileSize,
+  );
 
   @override
   void render(Canvas canvas, Camera? camera) {}
+
+  @override
+  void handleResize(Vector2 canvasSize) {}
+
+  @override
+  void refreshCache() {}
 }
