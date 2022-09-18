@@ -7,6 +7,7 @@ import 'package:flame/game.dart';
 import 'package:flame/sprite.dart';
 import 'package:flame_tiled/src/flame_tsx_provider.dart';
 import 'package:flame_tiled/src/simple_flips.dart';
+import 'package:flame_tiled/src/utils/tile_transform.dart';
 import 'package:flutter/painting.dart';
 import 'package:tiled/tiled.dart';
 

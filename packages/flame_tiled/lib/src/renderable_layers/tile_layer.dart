@@ -190,7 +190,7 @@ class _TileLayer extends _RenderableLayer<TileLayer> {
       // When staggering in the X axis, we need to hold painting of "lower"
       // tiles (those with staggerY adjustments) otherwise they'll just get
       // painted over. See the second pass loop after tx.
-      final xSecondPass = <_Transform>[];
+      final xSecondPass = <TileTransform>[];
 
       for (var tx = 0; tx < tileRow.length; tx++) {
         final tileGid = tileRow[tx];
@@ -256,7 +256,7 @@ class _TileLayer extends _RenderableLayer<TileLayer> {
 
         // A second pass is only needed in the case of staggery.
         if (map.staggerAxis == StaggerAxis.x && staggerY > 0) {
-          xSecondPass.add(_Transform(src, transform, flips.flip, batch));
+          xSecondPass.add(TileTransform(src, transform, flips.flip, batch));
         } else {
           batch.addTransform(
             source: src,
@@ -310,7 +310,7 @@ class _TileLayer extends _RenderableLayer<TileLayer> {
       // When staggering in the X axis, we need to hold painting of "lower"
       // tiles (those with staggerY adjustments) otherwise they'll just get
       // painted over. See the second pass loop after tx.
-      final xSecondPass = <_Transform>[];
+      final xSecondPass = <TileTransform>[];
 
       for (var tx = 0; tx < tileRow.length; tx++) {
         final tileGid = tileRow[tx];
@@ -376,7 +376,7 @@ class _TileLayer extends _RenderableLayer<TileLayer> {
 
         // A second pass is only needed in the case of staggery.
         if (map.staggerAxis == StaggerAxis.x && staggerY > 0) {
-          xSecondPass.add(_Transform(src, transform, flips.flip, batch));
+          xSecondPass.add(TileTransform(src, transform, flips.flip, batch));
         } else {
           batch.addTransform(
             source: src,
@@ -443,19 +443,4 @@ class _TileLayer extends _RenderableLayer<TileLayer> {
 
   @override
   void handleResize(Vector2 canvasSize) {}
-}
-
-/// Caches transforms for staggered maps as the row/col are switched.
-class _Transform {
-  final Rect source;
-  final ui.RSTransform transform;
-  final bool flip;
-  final SpriteBatch batch;
-
-  _Transform(
-    this.source,
-    this.transform,
-    this.flip,
-    this.batch,
-  );
 }
