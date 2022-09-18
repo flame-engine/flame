@@ -171,6 +171,8 @@ class RenderableTiledMap {
               layer as ImageLayer,
               parent,
               camera,
+              map,
+              destTileSize,
             );
 
           case Group:
@@ -178,6 +180,8 @@ class RenderableTiledMap {
             final renderableGroup = _RenderableGroupLayer(
               groupLayer,
               parent,
+              map,
+              destTileSize,
             );
             final children = _renderableLayers(
               groupLayer.layers,
@@ -190,7 +194,11 @@ class RenderableTiledMap {
             return renderableGroup;
 
           default:
-            return _UnrenderableLayer.load(layer);
+            return _UnrenderableLayer.load(
+              layer,
+              map,
+              destTileSize,
+            );
         }
       }),
     );
@@ -237,51 +245,39 @@ class RenderableTiledMap {
 
 abstract class _RenderableLayer<T extends Layer> {
   final T layer;
+  final Vector2 destTileSize;
+  final TiledMap map;
 
   /// The parent [Group] layer (if it exists)
   final _RenderableGroupLayer? parent;
 
-  _RenderableLayer(this.layer, this.parent);
+  _RenderableLayer(
+    this.layer,
+    this.parent,
+    this.map,
+    this.destTileSize,
+  );
 
   bool get visible => layer.visible;
 
   void render(Canvas canvas, Camera? camera);
 
-  void handleResize(Vector2 canvasSize) {}
+  void handleResize(Vector2 canvasSize);
 
-  void refreshCache() {}
+  void refreshCache();
 
-  double get offsetX {
-    return layer.offsetX + (parent?.offsetX ?? 0);
-  }
+  double get scaleX => destTileSize.x / map.tileWidth;
+  double get scaleY => destTileSize.y / map.tileHeight;
 
-  double get offsetY {
-    return layer.offsetY + (parent?.offsetY ?? 0);
-  }
+  late double offsetX = layer.offsetX * scaleX + (parent?.offsetX ?? 0);
 
-  double get opacity {
-    if (parent != null) {
-      return parent!.opacity * layer.opacity;
-    } else {
-      return layer.opacity;
-    }
-  }
+  late double offsetY = layer.offsetY * scaleY + (parent?.offsetY ?? 0);
 
-  double get parallaxX {
-    if (parent != null) {
-      return parent!.parallaxX * layer.parallaxX;
-    } else {
-      return layer.parallaxX;
-    }
-  }
+  late double opacity = layer.opacity * (parent?.opacity ?? 1);
 
-  double get parallaxY {
-    if (parent != null) {
-      return parent!.parallaxY * layer.parallaxY;
-    } else {
-      return layer.parallaxY;
-    }
-  }
+  late double parallaxX = layer.parallaxX * (parent?.parallaxX ?? 1);
+
+  late double parallaxY = layer.parallaxY * (parent?.parallaxY ?? 1);
 
   /// Calculates the offset we need to apply to the canvas to compensate for
   /// parallax positioning and scroll for the layer and the current camera
@@ -311,16 +307,14 @@ abstract class _RenderableLayer<T extends Layer> {
 }
 
 class _RenderableTileLayer extends _RenderableLayer<TileLayer> {
-  final TiledMap _map;
-  final Vector2 _destTileSize;
   late final _layerPaint = ui.Paint();
   late final Map<String, SpriteBatch> _cachedSpriteBatches;
 
   _RenderableTileLayer(
     super.layer,
     super.parent,
-    this._map,
-    this._destTileSize,
+    super.map,
+    super.destTileSize,
     this._cachedSpriteBatches,
   ) {
     _layerPaint.color = Color.fromRGBO(255, 255, 255, opacity);
@@ -336,11 +330,11 @@ class _RenderableTileLayer extends _RenderableLayer<TileLayer> {
       batch.clear();
     }
 
-    if (_map.orientation == null) {
+    if (map.orientation == null) {
       return;
     }
 
-    switch (_map.orientation!) {
+    switch (map.orientation!) {
       case MapOrientation.isometric:
         _cacheIsometricTiles();
         break;
@@ -359,7 +353,7 @@ class _RenderableTileLayer extends _RenderableLayer<TileLayer> {
   void _cacheOrthogonalLayerTiles() {
     final tileData = layer.tileData!;
     final batchMap = _cachedSpriteBatches;
-    final size = _destTileSize;
+    final size = destTileSize;
 
     for (var ty = 0; ty < tileData.length; ty++) {
       final tileRow = tileData[ty];
@@ -370,8 +364,8 @@ class _RenderableTileLayer extends _RenderableLayer<TileLayer> {
           continue;
         }
 
-        final tile = _map.tileByGid(tileGid.tile);
-        final tileset = _map.tilesetByTileGId(tileGid.tile);
+        final tile = map.tileByGid(tileGid.tile);
+        final tileset = map.tilesetByTileGId(tileGid.tile);
         final img = tile.image ?? tileset.image;
 
         if (img == null) {
@@ -414,9 +408,9 @@ class _RenderableTileLayer extends _RenderableLayer<TileLayer> {
   void _cacheIsometricTiles() {
     final tileData = layer.tileData!;
     final batchMap = _cachedSpriteBatches;
-    final halfDestinationTile = _destTileSize / 2;
-    final size = _destTileSize;
-    final isometricXShift = _map.width * size.x * 0.5;
+    final halfDestinationTile = destTileSize / 2;
+    final size = destTileSize;
+    final isometricXShift = map.width * size.x * 0.5;
 
     for (var ty = 0; ty < tileData.length; ty++) {
       final tileRow = tileData[ty];
@@ -427,8 +421,8 @@ class _RenderableTileLayer extends _RenderableLayer<TileLayer> {
           continue;
         }
 
-        final tile = _map.tileByGid(tileGid.tile);
-        final tileset = _map.tilesetByTileGId(tileGid.tile);
+        final tile = map.tileByGid(tileGid.tile);
+        final tileset = map.tilesetByTileGId(tileGid.tile);
         final img = tile.image ?? tileset.image;
         if (img == null) {
           continue;
@@ -471,18 +465,18 @@ class _RenderableTileLayer extends _RenderableLayer<TileLayer> {
   void _cacheIsometricStaggeredTiles() {
     final tileData = layer.tileData!;
     final batchMap = _cachedSpriteBatches;
-    final halfDestinationTile = _destTileSize / 2;
-    final size = _destTileSize;
-    final halfMapTile = Vector2(_map.tileWidth / 2, _map.tileHeight / 2);
+    final halfDestinationTile = destTileSize / 2;
+    final size = destTileSize;
+    final halfMapTile = Vector2(map.tileWidth / 2, map.tileHeight / 2);
 
     var staggerY = 0.0;
     var staggerX = 0.0;
     // Hexagonal Ponity Tiles move down by a fractional amount.
-    if (_map.staggerAxis == StaggerAxis.y) {
+    if (map.staggerAxis == StaggerAxis.y) {
       staggerY = size.y * 0.5;
     } else
     // Hexagonal Flat Tiles move right by a fractional amount.
-    if (_map.staggerAxis == StaggerAxis.x) {
+    if (map.staggerAxis == StaggerAxis.x) {
       staggerX = size.x * 0.5;
     }
 
@@ -490,9 +484,9 @@ class _RenderableTileLayer extends _RenderableLayer<TileLayer> {
       final tileRow = tileData[ty];
 
       // Hexagonal Pointy Tiles shift left and right depending on the row
-      if (_map.staggerAxis == StaggerAxis.y) {
-        if ((ty.isOdd && _map.staggerIndex == StaggerIndex.odd) ||
-            (ty.isEven && _map.staggerIndex == StaggerIndex.even)) {
+      if (map.staggerAxis == StaggerAxis.y) {
+        if ((ty.isOdd && map.staggerIndex == StaggerIndex.odd) ||
+            (ty.isEven && map.staggerIndex == StaggerIndex.even)) {
           staggerX = halfDestinationTile.x;
         } else {
           staggerX = 0.0;
@@ -510,8 +504,8 @@ class _RenderableTileLayer extends _RenderableLayer<TileLayer> {
           continue;
         }
 
-        final tile = _map.tileByGid(tileGid.tile);
-        final tileset = _map.tilesetByTileGId(tileGid.tile);
+        final tile = map.tileByGid(tileGid.tile);
+        final tileset = map.tilesetByTileGId(tileGid.tile);
         final img = tile.image ?? tileset.image;
         if (img == null) {
           continue;
@@ -523,9 +517,9 @@ class _RenderableTileLayer extends _RenderableLayer<TileLayer> {
         }
 
         // Tiles shift up and down as we move across the row.
-        if (_map.staggerAxis == StaggerAxis.x) {
-          if ((tx.isOdd && _map.staggerIndex == StaggerIndex.odd) ||
-              (tx.isEven && _map.staggerIndex == StaggerIndex.even)) {
+        if (map.staggerAxis == StaggerAxis.x) {
+          if ((tx.isOdd && map.staggerIndex == StaggerIndex.odd) ||
+              (tx.isEven && map.staggerIndex == StaggerIndex.even)) {
             staggerY = halfDestinationTile.y;
           } else {
             staggerY = 0.0;
@@ -548,7 +542,7 @@ class _RenderableTileLayer extends _RenderableLayer<TileLayer> {
         // StaggerX/Y: Moves the tile forward/down depending on orientation.
         //  * stagger: Isometric tiles move down or right by only a fraction,
         //             specifically 1/2 the width or height, for packing.
-        if (_map.staggerAxis == StaggerAxis.y) {
+        if (map.staggerAxis == StaggerAxis.y) {
           offsetX = tx * size.x + staggerX + halfDestinationTile.x;
           offsetY = ty * staggerY + halfDestinationTile.y;
         } else {
@@ -567,7 +561,7 @@ class _RenderableTileLayer extends _RenderableLayer<TileLayer> {
         );
 
         // A second pass is only needed in the case of staggery.
-        if (_map.staggerAxis == StaggerAxis.x && staggerY > 0) {
+        if (map.staggerAxis == StaggerAxis.x && staggerY > 0) {
           xSecondPass.add(_Transform(src, transform, flips.flip, batch));
         } else {
           batch.addTransform(
@@ -591,18 +585,18 @@ class _RenderableTileLayer extends _RenderableLayer<TileLayer> {
   void _cacheHexagonalTiles() {
     final tileData = layer.tileData!;
     final batchMap = _cachedSpriteBatches;
-    final halfDestinationTile = _destTileSize / 2;
-    final size = _destTileSize;
-    final halfMapTile = Vector2(_map.tileWidth / 2, _map.tileHeight / 2);
+    final halfDestinationTile = destTileSize / 2;
+    final size = destTileSize;
+    final halfMapTile = Vector2(map.tileWidth / 2, map.tileHeight / 2);
 
     var staggerY = 0.0;
     var staggerX = 0.0;
     // Hexagonal Ponity Tiles move down by a fractional amount.
-    if (_map.staggerAxis == StaggerAxis.y) {
+    if (map.staggerAxis == StaggerAxis.y) {
       staggerY = size.y * 0.75;
     } else
     // Hexagonal Flat Tiles move right by a fractional amount.
-    if (_map.staggerAxis == StaggerAxis.x) {
+    if (map.staggerAxis == StaggerAxis.x) {
       staggerX = size.x * 0.75;
     }
 
@@ -610,9 +604,9 @@ class _RenderableTileLayer extends _RenderableLayer<TileLayer> {
       final tileRow = tileData[ty];
 
       // Hexagonal Pointy Tiles shift left and right depending on the row
-      if (_map.staggerAxis == StaggerAxis.y) {
-        if ((ty.isOdd && _map.staggerIndex == StaggerIndex.odd) ||
-            (ty.isEven && _map.staggerIndex == StaggerIndex.even)) {
+      if (map.staggerAxis == StaggerAxis.y) {
+        if ((ty.isOdd && map.staggerIndex == StaggerIndex.odd) ||
+            (ty.isEven && map.staggerIndex == StaggerIndex.even)) {
           staggerX = halfDestinationTile.x;
         } else {
           staggerX = 0.0;
@@ -630,8 +624,8 @@ class _RenderableTileLayer extends _RenderableLayer<TileLayer> {
           continue;
         }
 
-        final tile = _map.tileByGid(tileGid.tile);
-        final tileset = _map.tilesetByTileGId(tileGid.tile);
+        final tile = map.tileByGid(tileGid.tile);
+        final tileset = map.tilesetByTileGId(tileGid.tile);
         final img = tile.image ?? tileset.image;
         if (img == null) {
           continue;
@@ -643,9 +637,9 @@ class _RenderableTileLayer extends _RenderableLayer<TileLayer> {
         }
 
         // Hexagonal Flat tiles shift up and down as we move across the row.
-        if (_map.staggerAxis == StaggerAxis.x) {
-          if ((tx.isOdd && _map.staggerIndex == StaggerIndex.odd) ||
-              (tx.isEven && _map.staggerIndex == StaggerIndex.even)) {
+        if (map.staggerAxis == StaggerAxis.x) {
+          if ((tx.isOdd && map.staggerIndex == StaggerIndex.odd) ||
+              (tx.isEven && map.staggerIndex == StaggerIndex.even)) {
             staggerY = halfDestinationTile.y;
           } else {
             staggerY = 0.0;
@@ -668,7 +662,7 @@ class _RenderableTileLayer extends _RenderableLayer<TileLayer> {
         // StaggerX/Y: Moves the tile forward/down depending on orientation.
         //  * stagger: Hexagonal tiles move down or right by only a fraction,
         //             specifically 3/4 the width or height, for packing.
-        if (_map.staggerAxis == StaggerAxis.y) {
+        if (map.staggerAxis == StaggerAxis.y) {
           offsetX = tx * size.x + staggerX + halfDestinationTile.x;
           offsetY = ty * staggerY + halfDestinationTile.y;
         } else {
@@ -687,7 +681,7 @@ class _RenderableTileLayer extends _RenderableLayer<TileLayer> {
         );
 
         // A second pass is only needed in the case of staggery.
-        if (_map.staggerAxis == StaggerAxis.x && staggerY > 0) {
+        if (map.staggerAxis == StaggerAxis.x && staggerY > 0) {
           xSecondPass.add(_Transform(src, transform, flips.flip, batch));
         } else {
           batch.addTransform(
@@ -752,6 +746,9 @@ class _RenderableTileLayer extends _RenderableLayer<TileLayer> {
 
     return result;
   }
+
+  @override
+  void handleResize(Vector2 canvasSize) {}
 }
 
 class _RenderableImageLayer extends _RenderableLayer<ImageLayer> {
@@ -759,7 +756,13 @@ class _RenderableImageLayer extends _RenderableLayer<ImageLayer> {
   late final ImageRepeat _repeat;
   Rect _paintArea = Rect.zero;
 
-  _RenderableImageLayer(super.layer, super.parent, this._image) {
+  _RenderableImageLayer(
+    super.layer,
+    super.parent,
+    this._image,
+    super.map,
+    super.destTileSize,
+  ) {
     _initImageRepeat();
   }
 
@@ -806,13 +809,20 @@ class _RenderableImageLayer extends _RenderableLayer<ImageLayer> {
     ImageLayer layer,
     _RenderableGroupLayer? parent,
     Camera? camera,
+    TiledMap map,
+    Vector2 destTileSize,
   ) async {
     return _RenderableImageLayer(
       layer,
       parent,
       await Flame.images.load(layer.image.source!),
+      map,
+      destTileSize,
     );
   }
+
+  @override
+  void refreshCache() {}
 }
 
 class _RenderableGroupLayer extends _RenderableLayer<Group> {
@@ -825,6 +835,8 @@ class _RenderableGroupLayer extends _RenderableLayer<Group> {
   _RenderableGroupLayer(
     super.layer,
     super.parent,
+    super.map,
+    super.destTileSize,
   );
 
   @override
@@ -850,7 +862,12 @@ class _RenderableGroupLayer extends _RenderableLayer<Group> {
 }
 
 class _UnrenderableLayer extends _RenderableLayer {
-  _UnrenderableLayer(super.layer, super.parent);
+  _UnrenderableLayer(
+    super.layer,
+    super.parent,
+    super.map,
+    super.destTileSize,
+  );
 
   @override
   void render(Canvas canvas, Camera? camera) {
@@ -861,9 +878,19 @@ class _UnrenderableLayer extends _RenderableLayer {
   @override
   bool get visible => false;
 
-  static Future<_RenderableLayer> load(Layer layer) async {
-    return _UnrenderableLayer(layer, null);
+  static Future<_RenderableLayer> load(
+    Layer layer,
+    TiledMap map,
+    Vector2 destTileSize,
+  ) async {
+    return _UnrenderableLayer(layer, null, map, destTileSize);
   }
+
+  @override
+  void handleResize(Vector2 canvasSize) {}
+
+  @override
+  void refreshCache() {}
 }
 
 Color? _parseTiledColor(String? tiledColor) {
