@@ -104,7 +104,7 @@ simulate taps, or drags, or key presses.
 
 ### Golden tests
 
-These tests verify that a component renders correctly. The process of creating a golden test is
+These tests verify that things render as intended. The process of creating a golden test is
 simple:
 
 1. Write the test, using the following template:
