@@ -1,13 +1,13 @@
 part of '../renderable_tile_map.dart';
 
-class _RenderableGroupLayer extends _RenderableLayer<Group> {
+class _GroupLayer extends _RenderableLayer<Group> {
   /// The child layers of this [Group] to be rendered recursively.
   ///
   /// NOTE: This is set externally instead of via constructor params because
   ///       there are cyclic dependencies when loading the renderable layers.
   late final List<_RenderableLayer> children;
 
-  _RenderableGroupLayer(
+  _GroupLayer(
     super.layer,
     super.parent,
   );

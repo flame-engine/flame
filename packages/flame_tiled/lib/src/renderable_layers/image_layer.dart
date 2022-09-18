@@ -1,11 +1,11 @@
 part of '../renderable_tile_map.dart';
 
-class _RenderableImageLayer extends _RenderableLayer<ImageLayer> {
+class _ImageLayer extends _RenderableLayer<ImageLayer> {
   final Image _image;
   late final ImageRepeat _repeat;
   Rect _paintArea = Rect.zero;
 
-  _RenderableImageLayer(super.layer, super.parent, this._image) {
+  _ImageLayer(super.layer, super.parent, this._image) {
     _initImageRepeat();
   }
 
@@ -50,10 +50,10 @@ class _RenderableImageLayer extends _RenderableLayer<ImageLayer> {
 
   static Future<_RenderableLayer> load(
     ImageLayer layer,
-    _RenderableGroupLayer? parent,
+    _GroupLayer? parent,
     Camera? camera,
   ) async {
-    return _RenderableImageLayer(
+    return _ImageLayer(
       layer,
       parent,
       await Flame.images.load(layer.image.source!),

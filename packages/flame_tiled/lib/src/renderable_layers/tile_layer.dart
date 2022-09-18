@@ -1,12 +1,12 @@
 part of '../renderable_tile_map.dart';
 
-class _RenderableTileLayer extends _RenderableLayer<TileLayer> {
+class _TileLayer extends _RenderableLayer<TileLayer> {
   final TiledMap _map;
   final Vector2 _destTileSize;
   late final _layerPaint = ui.Paint();
   late final Map<String, SpriteBatch> _cachedSpriteBatches;
 
-  _RenderableTileLayer(
+  _TileLayer(
     super.layer,
     super.parent,
     this._map,
@@ -417,11 +417,11 @@ class _RenderableTileLayer extends _RenderableLayer<TileLayer> {
 
   static Future<_RenderableLayer> load(
     TileLayer layer,
-    _RenderableGroupLayer? parent,
+    _GroupLayer? parent,
     TiledMap map,
     Vector2 destTileSize,
   ) async {
-    return _RenderableTileLayer(
+    return _TileLayer(
       layer,
       parent,
       map,
@@ -442,4 +442,19 @@ class _RenderableTileLayer extends _RenderableLayer<TileLayer> {
 
     return result;
   }
+}
+
+/// Caches transforms for staggered maps as the row/col are switched.
+class _Transform {
+  final Rect source;
+  final ui.RSTransform transform;
+  final bool flip;
+  final SpriteBatch batch;
+
+  _Transform(
+    this.source,
+    this.transform,
+    this.flip,
+    this.batch,
+  );
 }

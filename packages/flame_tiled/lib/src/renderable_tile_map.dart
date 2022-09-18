@@ -157,7 +157,7 @@ class RenderableTiledMap {
 
   static Future<List<_RenderableLayer<Layer>>> _renderableLayers(
     List<Layer> layers,
-    _RenderableGroupLayer? parent,
+    _GroupLayer? parent,
     TiledMap map,
     Vector2 destTileSize,
     Camera? camera,
@@ -166,14 +166,14 @@ class RenderableTiledMap {
       layers.where((layer) => layer.visible).toList().map((layer) async {
         switch (layer.runtimeType) {
           case TileLayer:
-            return _RenderableTileLayer.load(
+            return _TileLayer.load(
               layer as TileLayer,
               parent,
               map,
               destTileSize,
             );
           case ImageLayer:
-            return _RenderableImageLayer.load(
+            return _ImageLayer.load(
               layer as ImageLayer,
               parent,
               camera,
@@ -181,7 +181,7 @@ class RenderableTiledMap {
 
           case Group:
             final groupLayer = layer as Group;
-            final renderableGroup = _RenderableGroupLayer(
+            final renderableGroup = _GroupLayer(
               groupLayer,
               parent,
             );
@@ -196,7 +196,7 @@ class RenderableTiledMap {
             return renderableGroup;
 
           default:
-            return _UnrenderableLayer.load(layer);
+            return _ObjectLayer.load(layer);
         }
       }),
     );
@@ -255,19 +255,4 @@ Color? _parseTiledColor(String? tiledColor) {
   } else {
     return null;
   }
-}
-
-/// Caches transforms for staggered maps as the row/col are switched.
-class _Transform {
-  final Rect source;
-  final ui.RSTransform transform;
-  final bool flip;
-  final SpriteBatch batch;
-
-  _Transform(
-    this.source,
-    this.transform,
-    this.flip,
-    this.batch,
-  );
 }

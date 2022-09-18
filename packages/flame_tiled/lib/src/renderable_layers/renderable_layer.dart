@@ -4,7 +4,7 @@ abstract class _RenderableLayer<T extends Layer> {
   final T layer;
 
   /// The parent [Group] layer (if it exists)
-  final _RenderableGroupLayer? parent;
+  final _GroupLayer? parent;
 
   _RenderableLayer(this.layer, this.parent);
 

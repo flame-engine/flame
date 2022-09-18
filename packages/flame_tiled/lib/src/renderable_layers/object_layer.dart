@@ -1,7 +1,7 @@
 part of '../renderable_tile_map.dart';
 
-class _UnrenderableLayer extends _RenderableLayer {
-  _UnrenderableLayer(super.layer, super.parent);
+class _ObjectLayer extends _RenderableLayer {
+  _ObjectLayer(super.layer, super.parent);
 
   @override
   void render(Canvas canvas, Camera? camera) {
@@ -13,6 +13,6 @@ class _UnrenderableLayer extends _RenderableLayer {
   bool get visible => false;
 
   static Future<_RenderableLayer> load(Layer layer) async {
-    return _UnrenderableLayer(layer, null);
+    return _ObjectLayer(layer, null);
   }
 }
