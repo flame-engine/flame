@@ -14,6 +14,7 @@
 - The test file should contain a `main()` function with a single `group()` whose name matches the
   name of the class being tested. If the source file contains multiple public classes, then each of
   them should have its own group. For example:
+
   ```dart
   void main() {
     group('SpookyEffect', () {
@@ -35,6 +36,7 @@
 
 ## Types of tests
 
+
 ### Simple tests
 
 ```dart
@@ -42,6 +44,7 @@ test('the name of the test', () {
   expect(...);
 });
 ```
+
 This is the simplest kind of test available, and also the fastest. Use these tests for checking
 some classes/methods that can function in isolation from the rest of the Flame framework.
 
@@ -50,6 +53,7 @@ some classes/methods that can function in isolation from the rest of the Flame f
 
 It is very common to want to have a `FlameGame` instance inside a test, so that you can add some
 components to it and verify various behaviors. The following approach is recommended:
+
 ```dart
 testWithFlameGame('the name of the test', (game) async {
   game.add(...);
@@ -58,6 +62,7 @@ testWithFlameGame('the name of the test', (game) async {
   expect(...);
 });
 ```
+
 Here the `game` instance that is passed to the test body is a fully initialized game that behaves
 as if it was mounted to a `GameWidget`. The `game.ready()` method waits until all the scheduled
 components are loaded and mounted to the component tree.
@@ -65,6 +70,7 @@ components are loaded and mounted to the component tree.
 The time within the `game` can be advanced with `game.update(dt)`.
 
 If you need to have a custom game inside this test (say, a game with some mixin), then use
+
 ```dart
 testWithGame<_MyGame>(
   'the name of the test',
@@ -81,6 +87,7 @@ testWithGame<_MyGame>(
 Sometimes having a "naked" `FlameGame` is insufficient, and you want to have access to the Flutter
 infrastructure as well. That is, to have a game mounted into a real `GameWidget` embedded into an
 actual Flutter framework. In such cases, use
+
 ```dart
 testWidgets('test name', (tester) async {
   final game = _MyGame();
@@ -98,6 +105,7 @@ testWidgets('test name', (tester) async {
   await tester.pump(const Duration(milliseconds: 20));
 });
 ```
+
 There are some additional methods available on the `tester` controller, for example in order to
 simulate taps, or drags, or key presses.
 
@@ -108,6 +116,7 @@ These tests verify that things render as intended. The process of creating a gol
 simple:
 
 1. Write the test, using the following template:
+
    ```dart
    testGolden(
      'the name of the test',
@@ -119,14 +128,17 @@ simple:
      goldenFile: '.../_goldens/my_test_file.png',
    );
    ```
+
    Here the `size` parameter determines the size of the game canvas and of the output image. The
    `goldenFile` parameter is the name of the file where you want to store the "golden" results. This
    should be a relative path to the `test/_goldens` directory, starting from your test file.
 
 2. Run
+
    ```console
-   $ flutter test --update-goldens
+   flutter test --update-goldens
    ```
+
    this would create the golden file for the first time. Open the file to verify that it renders
    exactly as you intended. If not, then delete the file and go back to step 1.
 
@@ -144,11 +156,13 @@ due to font discrepancies and differences in anti-aliasing algorithms.
 
 These are the tests that use a random number generator in order to construct a randomized input and
 then check its correctness. Use as follows:
+
 ```dart
 testRandom('test name', (Random random) {
   // Use [random] to generate random input
 });
 ```
+
 You can add `repeatCount: 1000` parameter to run this test the specified number of times, each one
 with a different seed. It is useful to run a high `repeatCount` when developing the test, to ensure
 that it doesn't break. However, when submitting the test to the main repository, avoid repeatCounts

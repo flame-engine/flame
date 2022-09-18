@@ -13,13 +13,15 @@ that document first, as it is sure to improve your skill in Dart programming.
 
 Most of the code formatting rules are enforced automatically via the linter. Run the following
 commands to ensure the code is conformant and to fix any easy formatting problems:
+
 ```console
-$ flutter analyze
-$ flutter format .
+flutter analyze
+flutter format .
 ```
 
 
 ## Code Structure
+
 
 ### Imports
 
@@ -45,6 +47,7 @@ $ flutter format .
 
 - If multiple public symbols are defined in a file, then they must be exported explicitly using
   the `export ... show ...` statement. For example:
+
   ```dart
   export 'src/effects/provider_interfaces.dart'
     show
@@ -65,9 +68,11 @@ however, using exceptions would be more appropriate. The following rules of thum
   For example, when creating a component that takes an `opacity` level as an input, you should check
   whether the value is in the range from 0 to 1. Consider also including the value itself into the
   error message, to make it easier for the developer to debug the error:
+
   ```dart
   assert(0 <= opacity && opacity <= 1, 'The opacity value must be from 0 to 1: $opacity');
   ```
+
   Always use asserts as early as possible to detect possible violations. For example, check the
   validity of `opacity` in the constructor/setter, instead of in the render function.
 
@@ -107,6 +112,7 @@ however, using exceptions would be more appropriate. The following rules of thum
 
 - When a class becomes sufficiently big, consider adding *regions* inside it, which help with code
   navigation and collapsing (note the lack of space after `//`):
+
   ```dart
   //#region Region description
   ...
@@ -115,6 +121,7 @@ however, using exceptions would be more appropriate. The following rules of thum
 
 - If a class has a private member that needs to be exposed via a getter/setter, prefer the following
   code structure:
+
   ```dart
   class MyClass {
     MyClass();
@@ -131,6 +138,7 @@ however, using exceptions would be more appropriate. The following rules of thum
     }
   }
   ```
+
   This would gather all private variables in a single block near the top of the class, allowing one
   to quickly see what data the class has.
 
@@ -150,14 +158,16 @@ however, using exceptions would be more appropriate. The following rules of thum
 
 - Check the [Flutter Documentation Guide] -- it contains lots of great advice on writing good
   documentation.
-    - However, disregard the advice about writing in a passive voice.
+  - However, disregard the advice about writing in a passive voice.
 
 - Class documentation should ideally start with the class name itself, and follow a pattern such as:
+
   ```dart
   /// [MyClass] is ...
   /// [MyClass] serves as ...
   /// [MyClass] does the following ...
   ```
+
   The reason for such convention is that often the documentation for a class becomes sufficiently
   long, and it may not be immediately apparent when looking at the top of the doc what exactly is
   being documented there.
@@ -166,6 +176,7 @@ however, using exceptions would be more appropriate. The following rules of thum
   as an implicit subject. Add a paragraph break after the first sentence. Try to think about what
   could be unclear to the users of the method; and mention any pre- and post-conditions.
   For example:
+
   ```dart
   /// Adds a new [child] into the container, and becomes the owner of that child.
   ///
@@ -173,6 +184,7 @@ however, using exceptions would be more appropriate. The following rules of thum
   /// child that already belongs to another container.
   void addChild(T child) { ... }
   ```
+
   Avoid stating the obvious (or at least only the obvious).
 
 - Constructor documentation may follow either the style of a method (i.e. "Creates ...",
@@ -201,6 +213,7 @@ Check the [Documentation] manual about how to work with the docs site.
 
 The following style rules generally apply when writing documentation (although we currently don't
 have a linter to enforce them strictly):
+
 - Maximum line length of 100 characters;
 - Prefer to define external links at the bottom of the document, so as to make reading the plain
   text of the document easier;

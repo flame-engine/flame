@@ -27,11 +27,11 @@ please read these instructions carefully.
 
 - If you'd like to add a feature to the library that doesn't already exist, feel free to describe
    the feature in a new [GitHub issue].
-   - You can also join us on [Discord] to discuss some initials thoughts.
- - If you'd like to implement the new feature, please wait for feedback from the project maintainers
+  - You can also join us on [Discord] to discuss some initials thoughts.
+- If you'd like to implement the new feature, please wait for feedback from the project maintainers
    before spending too much time writing the code. In some cases, enhancements may not align well
    with the project future development direction.
- - Implement the code for the new feature and please read the [How To](#how-to-contribute).
+- Implement the code for the new feature and please read the [How To](#how-to-contribute).
 
 
 ### Documentation & Miscellaneous
@@ -66,16 +66,16 @@ and it will be automatically reflected in the PR.
 
 ## Open an issue and fork the repository
 
- - If it is a bigger change or a new feature, first of all
+- If it is a bigger change or a new feature, first of all
    [file a bug or feature report][GitHub issues], so that we can discuss what direction to follow.
- - [Fork the project][fork guide] on GitHub.
- - Clone the forked repository to your local development machine
+- [Fork the project][fork guide] on GitHub.
+- Clone the forked repository to your local development machine
    (e.g. `git clone git@github.com:<YOUR_GITHUB_USER>/flame.git`).
 
 
 ### Environment Setup
 
-Flame uses [Melos] to manage the project and dependencies. 
+Flame uses [Melos] to manage the project and dependencies.
 
 To install Melos, run the following command from your terminal:
 
@@ -99,11 +99,11 @@ command once.
 
 ### Performing changes
 
- - Create a new local branch from `main` (e.g. `git checkout -b my-new-feature`)
- - Make your changes (try to split them up with one PR per feature/fix).
- - When committing your changes, make sure that each commit message is clear
+- Create a new local branch from `main` (e.g. `git checkout -b my-new-feature`)
+- Make your changes (try to split them up with one PR per feature/fix).
+- When committing your changes, make sure that each commit message is clear
  (e.g. `git commit -m 'Take in an optional Camera as a parameter to FlameGame'`).
- - Push your new branch to your own fork into the same remote branch
+- Push your new branch to your own fork into the same remote branch
  (e.g. `git push origin my-username.my-new-feature`, replace `origin` if you use another remote.)
 
 
@@ -132,16 +132,17 @@ of the page it will ask you if you want to open a pull request from your newly c
 The title of the pull request should start with a [conventional commit] type.
 
 Allowed types are:
- - `fix:` -- patches a bug and is not a new feature;
- - `feat:` -- introduces a new feature;
- - `docs:` -- updates or adds documentation or examples;
- - `test:` -- updates or adds tests;
- - `refactor:` -- refactors code but doesn't introduce any changes or additions to the public API;
- - `perf:` -- code change that improves performance;
- - `build:` -- code change that affects the build system or external dependencies;
- - `ci:` -- changes to the CI configuration files and scripts;
- - `chore:` -- other changes that don't modify source or test files;
- - `revert:` -- reverts a previous commit.
+
+- `fix:` -- patches a bug and is not a new feature;
+- `feat:` -- introduces a new feature;
+- `docs:` -- updates or adds documentation or examples;
+- `test:` -- updates or adds tests;
+- `refactor:` -- refactors code but doesn't introduce any changes or additions to the public API;
+- `perf:` -- code change that improves performance;
+- `build:` -- code change that affects the build system or external dependencies;
+- `ci:` -- changes to the CI configuration files and scripts;
+- `chore:` -- other changes that don't modify source or test files;
+- `revert:` -- reverts a previous commit.
 
 If you introduce a **breaking change** the conventional commit type MUST end with an exclamation
 mark (e.g. `feat!: Remove the position argument from PositionComponent`).
