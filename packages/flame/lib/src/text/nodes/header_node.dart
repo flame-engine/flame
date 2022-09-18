@@ -1,6 +1,5 @@
 import 'dart:ui';
 
-import 'package:flame/src/text/nodes/group_text_node.dart';
 import 'package:flame/src/text/nodes/plain_text_node.dart';
 import 'package:flame/src/text/nodes/text_block_node.dart';
 import 'package:flame/src/text/styles/block_style.dart';
@@ -51,7 +50,7 @@ class HeaderNode extends TextBlockNode {
                     : level == 5
                         ? stylesheet.header5
                         : stylesheet.header6;
-    textStyle = Style.merge(parentTextStyle, style.text)!;
+    final textStyle = Style.merge(parentTextStyle, style.text)!;
     super.fillStyles(stylesheet, textStyle);
   }
 }

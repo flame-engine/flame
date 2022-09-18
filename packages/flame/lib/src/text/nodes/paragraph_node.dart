@@ -1,4 +1,3 @@
-import 'package:flame/src/text/nodes/group_text_node.dart';
 import 'package:flame/src/text/nodes/plain_text_node.dart';
 import 'package:flame/src/text/nodes/text_block_node.dart';
 import 'package:flame/src/text/styles/block_style.dart';
@@ -18,7 +17,7 @@ class ParagraphNode extends TextBlockNode {
   @override
   void fillStyles(DocumentStyle stylesheet, TextStyle parentTextStyle) {
     style = stylesheet.paragraph;
-    textStyle = Style.merge(parentTextStyle, style.text)!;
+    final textStyle = Style.merge(parentTextStyle, style.text)!;
     super.fillStyles(stylesheet, textStyle);
   }
 }
