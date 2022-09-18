@@ -785,6 +785,22 @@ void main() {
         reason: "Should return the enclosed rectangle's position",
       );
     });
+
+    test('solid rectangle with intersections by other solid rectangle', () {
+      final rectangleA = RectangleComponent(
+        position: Vector2.all(1),
+        size: Vector2.all(2),
+      )..isSolid = true;
+      final rectangleB = RectangleComponent(
+        size: Vector2.all(2),
+      )..isSolid = true;
+      final intersections = geometry.intersections(rectangleA, rectangleB);
+      expect(
+        intersections,
+        {Vector2(1, 2), Vector2(2, 1)},
+        reason: "Should return the enclosed rectangle's position",
+      );
+    });
   });
 
   group('Raycasting', () {
