@@ -28,9 +28,11 @@ abstract class Particle {
     int count = 10,
     required ParticleGenerator generator,
     double? lifespan,
+    bool applyLifespanToChildren = true,
   }) {
     return ComposedParticle(
       lifespan: lifespan,
+      applyLifespanToChildren: applyLifespanToChildren,
       children: List<Particle>.generate(count, generator),
     );
   }
