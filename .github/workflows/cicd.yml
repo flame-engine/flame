@@ -38,7 +38,7 @@ jobs:
       - uses: bahmutov/npm-install@v1
         with:
           useLockFile: false
-      - run: npm install markdownlint-cli
+      - run: npm install -g markdownlint-cli
       - run: markdownlint . -p .markdownlintignore -c .markdownlint.yaml
   # END LINTING STAGE
 
