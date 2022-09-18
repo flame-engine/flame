@@ -50,10 +50,19 @@ class CircleHitbox extends CircleComponent with ShapeHitbox {
     _temporaryCenter
       ..setFrom(_temporaryAbsoluteCenter)
       ..sub(ray.origin);
-    _temporaryCenter.projection(ray.direction, out: _temporaryLineSegment.to);
-    _temporaryLineSegment.to
-      ..x *= (ray.direction.x.sign * _temporaryLineSegment.to.x.sign)
-      ..y *= (ray.direction.y.sign * _temporaryLineSegment.to.y.sign);
+
+    if (_temporaryCenter.isZero()) {
+      // If _temporaryCenter is zero, it's projection onto ray.direction
+      // will be zero. In that case, directly use ray.direction as temp
+      // end point of line segment.
+      _temporaryLineSegment.to.setFrom(ray.direction);
+    } else {
+      _temporaryCenter.projection(ray.direction, out: _temporaryLineSegment.to);
+      _temporaryLineSegment.to
+        ..x *= (ray.direction.x.sign * _temporaryLineSegment.to.x.sign)
+        ..y *= (ray.direction.y.sign * _temporaryLineSegment.to.y.sign);
+    }
+
     if (_temporaryLineSegment.to.length2 < radius * radius) {
       _temporaryLineSegment.to.scaleTo(2 * radius);
       isInsideHitbox = true;
