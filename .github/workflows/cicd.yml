@@ -36,7 +36,8 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: bahmutov/npm-install@v1
-      - run: npm install -g markdownlint-cli && markdownlint . --ignore-path .markdownlintignore --config .markdownlint.yaml
+      - run: npm install markdownlint-cli
+      - run: markdownlint . -p .markdownlintignore -c .markdownlint.yaml
   # END LINTING STAGE
 
   # BEGIN TESTING STAGE
