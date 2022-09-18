@@ -96,6 +96,11 @@ command once.
 
 > You do not need to run `flutter pub get` once bootstrap has been completed.
 
+If you want to lint the markdown files you have to install
+[markdownlint-cli](https://github.com/igorshubovych/markdownlint-cli) and once that is installed you
+can run `melos markdown-check` to check if the markdown follows the rules. Some markdown linting
+errors can be automatically fixed with `melos markdown-fix`.
+
 
 ### Performing changes
 
