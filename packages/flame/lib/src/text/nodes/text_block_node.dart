@@ -40,6 +40,7 @@ abstract class TextBlockNode extends BlockNode {
         break;
       } else {
         final metrics = element.metrics;
+        assert(metrics.left == 0 && metrics.baseline == 0);
         element.translate(horizontalOffset, verticalOffset + metrics.ascent);
         lines.add(element);
         verticalOffset += metrics.height;

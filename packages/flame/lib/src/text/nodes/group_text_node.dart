@@ -12,6 +12,9 @@ class GroupTextNode extends TextNode {
   @override
   void fillStyles(DocumentStyle stylesheet, TextStyle parentTextStyle) {
     textStyle = parentTextStyle;
+    for (final node in children) {
+      node.fillStyles(stylesheet, textStyle);
+    }
   }
 
   @override
@@ -48,6 +51,7 @@ class _GroupTextLayoutBuilder extends TextNodeLayoutBuilder {
       if (maybeLine == null) {
         break;
       } else {
+        assert(maybeLine.metrics.left == 0 && maybeLine.metrics.baseline == 0);
         maybeLine.translate(usedWidth, 0);
         out.add(maybeLine);
         usedWidth += maybeLine.metrics.width;
@@ -56,9 +60,7 @@ class _GroupTextLayoutBuilder extends TextNodeLayoutBuilder {
     if (out.isEmpty) {
       return null;
     } else {
-      final element = GroupTextElement(out);
-      element.translate(0, element.metrics.ascent);
-      return element;
+      return GroupTextElement(out);
     }
   }
 }

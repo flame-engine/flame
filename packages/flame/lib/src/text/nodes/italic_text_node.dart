@@ -8,9 +8,12 @@ import 'package:flame/src/text/styles/style.dart';
 import 'package:flame/src/text/styles/text_style.dart';
 
 class ItalicTextNode extends TextNode {
-  ItalicTextNode(List<TextNode> children) : child = GroupTextNode(children);
+  ItalicTextNode(this.child);
 
   ItalicTextNode.simple(String text) : child = PlainTextNode(text);
+
+  ItalicTextNode.group(List<TextNode> children)
+      : child = GroupTextNode(children);
 
   final TextNode child;
 
@@ -23,5 +26,5 @@ class ItalicTextNode extends TextNode {
   }
 
   @override
-  TextNodeLayoutBuilder get layoutBuilder => throw UnimplementedError();
+  TextNodeLayoutBuilder get layoutBuilder => child.layoutBuilder;
 }

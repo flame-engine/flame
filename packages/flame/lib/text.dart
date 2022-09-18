@@ -9,9 +9,16 @@ export 'src/text/elements/text_element.dart' show TextElement;
 export 'src/text/elements/text_painter_text_element.dart'
     show TextPainterTextElement;
 export 'src/text/nodes/block_node.dart' show BlockNode;
+export 'src/text/nodes/bold_text_node.dart' show BoldTextNode;
+export 'src/text/nodes/column_node.dart' show ColumnNode;
 export 'src/text/nodes/document_node.dart' show DocumentNode;
+export 'src/text/nodes/group_text_node.dart' show GroupTextNode;
 export 'src/text/nodes/header_node.dart' show HeaderNode;
+export 'src/text/nodes/italic_text_node.dart' show ItalicTextNode;
 export 'src/text/nodes/paragraph_node.dart' show ParagraphNode;
+export 'src/text/nodes/plain_text_node.dart' show PlainTextNode;
+export 'src/text/nodes/text_block_node.dart' show TextBlockNode;
+export 'src/text/nodes/text_node.dart' show TextNode;
 export 'src/text/sprite_font_renderer.dart' show SpriteFontRenderer;
 export 'src/text/styles/background_style.dart' show BackgroundStyle;
 export 'src/text/styles/block_style.dart' show BlockStyle;
