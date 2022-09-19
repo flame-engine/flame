@@ -32,13 +32,13 @@ void main() {
               color: const Color(0xFF0088FF),
             ).format('a b c d e f g h i')
               ..translate(5, 145),
-            DebugTextFormatter().format('www.flame-engine.org')
+            DebugTextFormatter(fontSize: 10).format('www.flame-engine.org')
               ..translate(5, 165),
           ]),
         );
       },
       goldenFile: 'golden_debug_text.png',
-      size: Vector2(200, 200),
+      size: Vector2(300, 200),
     );
   });
 }

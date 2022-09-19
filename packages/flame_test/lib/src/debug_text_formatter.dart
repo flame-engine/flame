@@ -6,12 +6,14 @@ class DebugTextFormatter extends TextFormatter {
   DebugTextFormatter({
     this.color = const Color(0xFFFFFFFF),
     this.fontSize = 16.0,
+    this.lineHeight = 1.2,
     this.fontWeight = FontWeight.normal,
     this.fontStyle = FontStyle.normal,
   });
 
   final Color color;
   final double fontSize;
+  final double lineHeight;
   final FontWeight fontWeight;
   final FontStyle fontStyle;
 
@@ -21,18 +23,20 @@ class DebugTextFormatter extends TextFormatter {
 
 class _DebugTextElement extends TextElement implements TextLine {
   _DebugTextElement(this.style, this.text) {
-    final charWidth = style.fontSize * 0.6;
+    final charWidth = style.fontSize * 1.0;
+    final charHeight = style.fontSize;
     paint
       ..color = style.color
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2.0 * (style.fontWeight.index + 1) / 4;
     metrics = LineMetrics(
       width: text.length * charWidth,
-      height: style.fontSize,
-      baseline: style.fontSize,
+      ascent: charHeight * (style.lineHeight + 1) / 2,
+      descent: charHeight * (style.lineHeight - 1) / 2,
+      baseline: charHeight * (style.lineHeight + 1) / 2,
     );
     assert(metrics.left == 0 && metrics.top == 0);
-    _initRects(charWidth, style.fontSize);
+    _initRects(charWidth, charHeight);
   }
 
   final DebugTextFormatter style;
