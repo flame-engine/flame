@@ -439,7 +439,8 @@ class TileLayer extends RenderableLayer<tiled.TileLayer> {
   }
 
   static Future<Map<String, SpriteBatch>> _loadImages(
-      tiled.TiledMap map) async {
+    tiled.TiledMap map,
+  ) async {
     final result = <String, SpriteBatch>{};
 
     for (final img in map.tiledImages()) {
