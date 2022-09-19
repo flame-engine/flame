@@ -1209,6 +1209,30 @@ void main() {
           );
         },
       );
+
+      testCollisionDetectionGame(
+        'ray from the center of CircleHitbox',
+        (game) async {
+          final positionComponent = PositionComponent(
+            position: Vector2.zero(),
+            size: Vector2.all(10),
+          )..add(CircleHitbox());
+          game.ensureAdd(positionComponent);
+
+          await game.ready();
+          final ray = Ray2(
+            origin: positionComponent.absoluteCenter,
+            direction: Vector2(0, -1),
+          );
+          final result = game.collisionDetection.raycast(ray);
+          expect(result?.hitbox?.parent, positionComponent);
+          expect(result?.reflectionRay?.origin, closeToVector(Vector2(5, 0)));
+          expect(
+            result?.reflectionRay?.direction,
+            closeToVector(Vector2(0, 1)),
+          );
+        },
+      );
     });
 
     group('raycastAll', () {

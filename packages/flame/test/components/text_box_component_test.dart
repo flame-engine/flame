@@ -3,6 +3,7 @@ import 'dart:ui' hide TextStyle;
 import 'package:canvas_test/canvas_test.dart';
 import 'package:flame/components.dart';
 import 'package:flame/palette.dart';
+import 'package:flame/src/text/formatter_text_renderer.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -99,7 +100,7 @@ void main() {
             text: 'To move is to stir, and to be valiant is to stand. '
                 'Therefore, if thou art moved, thou runn‘st away.',
             position: Vector2(10, 370),
-            size: Vector2(390, 225),
+            size: Vector2(390, 220),
             align: Anchor.bottomRight,
           ),
           _FramedTextBox(
@@ -129,7 +130,9 @@ class _FramedTextBox extends TextBoxComponent {
     super.align,
     super.position,
     super.size,
-  }) : super(textRenderer: TextPaint(debugMode: true));
+  }) : super(
+          textRenderer: FormatterTextRenderer(DebugTextFormatter(fontSize: 22)),
+        );
 
   final Paint _borderPaint = Paint()
     ..style = PaintingStyle.stroke
