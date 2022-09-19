@@ -1,4 +1,5 @@
-# Getting Started!
+# Getting Started
+
 
 ## About Flame
 
@@ -12,6 +13,7 @@ animations, collision detection and a component system that we call Flame Compon
 short).
 
 We also provide stand-alone packages that extend the Flame functionality:
+
 - [flame_audio](https://pub.dev/packages/flame_audio) Which provides audio capabilities using the
   `audioplayers` package.
 - [flame_forge2d](https://pub.dev/packages/flame_forge2d) Which provides physics capabilities using
@@ -70,9 +72,9 @@ Flame doesn't bundle any network feature, which may be needed to write online mu
 
 If you are building a multipler game, here are some recommendations of packages/services:
 
- - [Nakama](https://github.com/Allan-Nava/nakama-flutter): Nakama is an open-source server designed
+- [Nakama](https://github.com/Allan-Nava/nakama-flutter): Nakama is an open-source server designed
  to power modern games and apps.
- - [Firebase](https://firebase.google.com/): Provides dozens of services that can be used to write
+- [Firebase](https://firebase.google.com/): Provides dozens of services that can be used to write
 simpler multiplayer experiences.
 
 
@@ -87,5 +89,5 @@ anywhere they need, and then load it into Flame's classes.
 
 Here are some suggestions for http client packages:
 
- - [http](https://pub.dev/packages/http): A simple pacakage for perfoming http requests.
- - [Dio](https://pub.dev/packages/dio): A popular and powerful package for perfoming http requests.
+- [http](https://pub.dev/packages/http): A simple pacakage for perfoming http requests.
+- [Dio](https://pub.dev/packages/dio): A popular and powerful package for perfoming http requests.

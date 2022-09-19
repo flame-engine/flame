@@ -78,8 +78,8 @@ SpriteWidget.asset(
 
 ## SpriteAnimationWidget
 
-`SpriteAnimationWidget` is a widget used to display [SpriteAnimations](../rendering/images.md#animation) inside
-a widget tree.
+`SpriteAnimationWidget` is a widget used to display
+[SpriteAnimations](../rendering/images.md#animation) inside a widget tree.
 
 This is how to use it:
 

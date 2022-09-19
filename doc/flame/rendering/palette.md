@@ -8,7 +8,7 @@ format. So to create a `Color` instance, you just need to pass the color as an i
 format.
 
 You can use Dart's hexadecimal notation to make it really easy; for instance: `0xFF00FF00` is fully
-opaque green (the "mask" would be `0xAARRGGBB`). 
+opaque green (the "mask" would be `0xAARRGGBB`).
 
 **Note**: The first two hexadecimal digits are for
 the alpha channel (transparency), unlike on regular (non-A) RGB. The max(FF = 255) for the two first
@@ -81,7 +81,7 @@ class Palette {
 A `PaletteEntry` is a `const` class that holds information of a color and it has the following
 members:
 
- - `color`: returns the `Color` specified
- - `paint`: creates a new `Paint` with the color specified. `Paint` is a non-`const` class, so this
+- `color`: returns the `Color` specified
+- `paint`: creates a new `Paint` with the color specified. `Paint` is a non-`const` class, so this
   method actually creates a brand new instance every time it's called. It's safe to cascade
   mutations to this.

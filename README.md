@@ -1,3 +1,4 @@
+<!-- markdownlint-disable MD013 -->
 <p align="center">
   <a href="https://flame-engine.org">
     <img alt="flame" width="200px" src="https://user-images.githubusercontent.com/6718144/101553774-3bc7b000-39ad-11eb-8a6a-de2daa31bd64.png">
@@ -20,8 +21,9 @@ A Flutter-based game engine.
 [English](/README.md) | [简体中文](/i18n/README-ZH.md) | [Polski](/i18n/README-PL.md) | [Русский](/i18n/README-RU.md) | [Español](/i18n/README-ES.md) | [日本語](/i18n/README-JA.md)
 
 ---
+<!-- markdownlint-enable MD013 -->
 
-
+<!-- markdownlint-disable-next-line MD002 -->
 ## Documentation
 
 The full documentation for Flame can be found on
@@ -34,10 +36,11 @@ top of the page.
 on the docs website.
 
 Other useful links:
- - [The official Flame site](https://flame-engine.org/).
- - [Examples](https://examples.flame-engine.org/) of most features which can be tried out from your browser.
- - [Tutorials](https://tutorials.flame-engine.org/) - A simple tutorial to get started.
- - [API Reference](https://pub.dev/documentation/flame/latest/) - The generated dartdoc API reference.
+
+- [The official Flame site](https://flame-engine.org/).
+- [Examples](https://examples.flame-engine.org/) of most features which can be tried out from your browser.
+- [Tutorials](https://tutorials.flame-engine.org/) - A simple tutorial to get started.
+- [API Reference](https://pub.dev/documentation/flame/latest/) - The generated dartdoc API reference.
 
 
 ## Help
@@ -57,13 +60,13 @@ problems that games developed with Flutter might share.
 
 Some of the key features provided are:
 
- - A game loop.
- - A component/object system (FCS).
- - Effects and particles.
- - Collision detection.
- - Gesture and input handling.
- - Images, animations, sprites, and sprite sheets.
- - General utilities to make development easier.
+- A game loop.
+- A component/object system (FCS).
+- Effects and particles.
+- Collision detection.
+- Gesture and input handling.
+- Images, animations, sprites, and sprite sheets.
+- General utilities to make development easier.
 
 On top of those features, you can augment Flame with bridge packages. Through these libraries,
 you will be able to access bindings to other packages, including custom Flame components and
@@ -121,7 +124,7 @@ badges:
 [![Powered by Flame](https://img.shields.io/badge/Powered%20by-%F0%9F%94%A5-272727.svg?style=flat-square)](https://flame-engine.org)
 [![Powered by Flame](https://img.shields.io/badge/Powered%20by-%F0%9F%94%A5-272727.svg?style=for-the-badge)](https://flame-engine.org)
 
-```
+```txt
 [![Powered by Flame](https://img.shields.io/badge/Powered%20by-%F0%9F%94%A5-orange.svg)](https://flame-engine.org)
 [![Powered by Flame](https://img.shields.io/badge/Powered%20by-%F0%9F%94%A5-orange.svg?style=flat-square)](https://flame-engine.org)
 [![Powered by Flame](https://img.shields.io/badge/Powered%20by-%F0%9F%94%A5-orange.svg?style=for-the-badge)](https://flame-engine.org)
@@ -171,6 +174,6 @@ Note that some of the articles might be slightly outdated, but can still be usef
 
 ## Credits
 
- - The [Blue Fire team](https://github.com/orgs/bluefireteam/people), who are continuously
+- The [Blue Fire team](https://github.com/orgs/bluefireteam/people), who are continuously
  working on maintaining and improving Flame and its ecosystem.
- - All the friendly contributors and people who are helping in the community.
+- All the friendly contributors and people who are helping in the community.
