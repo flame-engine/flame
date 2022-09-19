@@ -2,6 +2,12 @@ import 'dart:ui';
 
 import 'package:flame/text.dart';
 
+/// Text formatter suitable for use in golden tests. This formatter renders
+/// words as rectangles.
+///
+/// Rendering regular text in golden tests is unreliable due to differences in
+/// font definitions across platforms and different algorithms used for anti-
+/// aliasing.
 class DebugTextFormatter extends TextFormatter {
   DebugTextFormatter({
     this.color = const Color(0xFFFFFFFF),

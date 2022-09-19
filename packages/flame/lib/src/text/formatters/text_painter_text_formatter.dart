@@ -6,23 +6,27 @@ import 'package:flutter/rendering.dart';
 /// [TextPainterTextFormatter] applies a Flutter [TextStyle] to a string of
 /// text, creating a [TextPainterTextElement].
 ///
-/// If the [debugMode] is true, this formatter will wrap the text with a
+/// If the `debugMode` is true, this formatter will wrap the text with a
 /// [DebugTextPainterTextElement] instead. This mode is mostly useful for tests.
 class TextPainterTextFormatter extends TextFormatter {
   TextPainterTextFormatter({
     required this.style,
     this.textDirection = TextDirection.ltr,
+    @Deprecated('Use DebugTextFormatter instead. Will be removed in 1.5.0')
     this.debugMode = false,
   });
 
   final TextStyle style;
   final TextDirection textDirection;
+  @Deprecated('Use DebugTextFormatter instead. Will be removed in 1.5.0')
   final bool debugMode;
 
   @override
   TextPainterTextElement format(String text) {
     final tp = _textToTextPainter(text);
+    // ignore: deprecated_member_use_from_same_package
     if (debugMode) {
+      // ignore: deprecated_member_use_from_same_package
       return DebugTextPainterTextElement(tp);
     } else {
       return TextPainterTextElement(tp);
