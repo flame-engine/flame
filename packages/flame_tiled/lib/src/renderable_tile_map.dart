@@ -4,42 +4,39 @@ import 'dart:ui' as ui;
 import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
-import 'package:flame/sprite.dart';
 import 'package:flame_tiled/src/flame_tsx_provider.dart';
-import 'package:flame_tiled/src/simple_flips.dart';
-import 'package:flame_tiled/src/tile_transform.dart';
+import 'package:flame_tiled/src/renderable_layers/group_layer.dart';
+import 'package:flame_tiled/src/renderable_layers/image_layer.dart';
+import 'package:flame_tiled/src/renderable_layers/object_layer.dart';
+import 'package:flame_tiled/src/renderable_layers/renderable_layer.dart';
+import 'package:flame_tiled/src/renderable_layers/tile_layer.dart';
 import 'package:flutter/painting.dart';
-import 'package:tiled/tiled.dart';
-
-part 'renderable_layers/renderable_layer.dart';
-part 'renderable_layers/tile_layer.dart';
-part 'renderable_layers/image_layer.dart';
-part 'renderable_layers/group_layer.dart';
-part 'renderable_layers/object_layer.dart';
+import 'package:tiled/tiled.dart' as tiled;
 
 /// {@template _renderable_tiled_map}
-/// This is a wrapper over Tiled's [TiledMap] which can be rendered to a canvas.
+/// This is a wrapper over Tiled's [tiled.TiledMap] which can be rendered to a
+/// canvas.
 ///
-/// Internally each layer is wrapped with a [_RenderableLayer] which handles
+/// Internally each layer is wrapped with a [RenderableLayer] which handles
 /// rendering and caching for supported layer types:
-///  - [TileLayer] is supported with pre-computed SpriteBatches
-///  - [ImageLayer] is supported with [paintImage]
+///  - [tiled.TileLayer] is supported with pre-computed SpriteBatches
+///  - [tiled.ImageLayer] is supported with [paintImage]
 ///
 /// This also supports the following properties:
-///  - [TiledMap.backgroundColor]
-///  - [Layer.opacity]
-///  - [Layer.offsetX]
-///  - [Layer.offsetY]
-///  - [Layer.parallaxX] (only supported if [Camera] is supplied)
-///  - [Layer.parallaxY] (only supported if [Camera] is supplied)
+///  - [tiled.TiledMap.backgroundColor]
+///  - [tiled.Layer.opacity]
+///  - [tiled.Layer.offsetX]
+///  - [tiled.Layer.offsetY]
+///  - [tiled.Layer.parallaxX] (only supported if [Camera] is supplied)
+///  - [tiled.Layer.parallaxY] (only supported if [Camera] is supplied)
 ///
 /// {@endtemplate}
 class RenderableTiledMap {
-  /// [TiledMap] instance for this map.
-  final TiledMap map;
+  /// [tiled.TiledMap] instance for this map.
+  final tiled.TiledMap map;
 
-  /// Layers to be rendered, in the same order as [TiledMap.layers]
-  final List<_RenderableLayer> renderableLayers;
+  /// Layers to be rendered, in the same order as [tiled.TiledMap.layers]
+  final List<RenderableLayer> renderableLayers;
 
   /// The target size for each tile in the tiled map.
   final Vector2 destTileSize;
@@ -88,10 +85,10 @@ class RenderableTiledMap {
     required int layerId,
     required int x,
     required int y,
-    required Gid gid,
+    required tiled.Gid gid,
   }) {
     final layer = map.layers[layerId];
-    if (layer is TileLayer) {
+    if (layer is tiled.TileLayer) {
       final td = layer.tileData;
       if (td != null) {
         if (td[y][x].tile != gid.tile ||
@@ -106,9 +103,13 @@ class RenderableTiledMap {
   }
 
   /// Gets the Gid  of the corresponding layer at the given position
-  Gid? getTileData({required int layerId, required int x, required int y}) {
+  tiled.Gid? getTileData({
+    required int layerId,
+    required int x,
+    required int y,
+  }) {
     final layer = map.layers[layerId];
-    if (layer is TileLayer) {
+    if (layer is tiled.TileLayer) {
       return layer.tileData?[y][x];
     }
     return null;
@@ -132,16 +133,16 @@ class RenderableTiledMap {
     Vector2 destTileSize, {
     Camera? camera,
   }) async {
-    final map = await TiledMap.fromString(
+    final map = await tiled.TiledMap.fromString(
       contents,
       FlameTsxProvider.parse,
     );
     return fromTiledMap(map, destTileSize, camera: camera);
   }
 
-  /// Parses a [TiledMap] returning a [RenderableTiledMap].
+  /// Parses a [tiled.TiledMap] returning a [RenderableTiledMap].
   static Future<RenderableTiledMap> fromTiledMap(
-    TiledMap map,
+    tiled.TiledMap map,
     Vector2 destTileSize, {
     Camera? camera,
   }) async {
@@ -156,35 +157,35 @@ class RenderableTiledMap {
     );
   }
 
-  static Future<List<_RenderableLayer<Layer>>> _renderableLayers(
-    List<Layer> layers,
-    _GroupLayer? parent,
-    TiledMap map,
+  static Future<List<RenderableLayer<tiled.Layer>>> _renderableLayers(
+    List<tiled.Layer> layers,
+    GroupLayer? parent,
+    tiled.TiledMap map,
     Vector2 destTileSize,
     Camera? camera,
   ) async {
     return Future.wait(
       layers.where((layer) => layer.visible).toList().map((layer) async {
         switch (layer.runtimeType) {
-          case TileLayer:
-            return _TileLayer.load(
-              layer as TileLayer,
+          case tiled.TileLayer:
+            return TileLayer.load(
+              layer as tiled.TileLayer,
               parent,
               map,
               destTileSize,
             );
-          case ImageLayer:
-            return _ImageLayer.load(
-              layer as ImageLayer,
+          case tiled.ImageLayer:
+            return ImageLayer.load(
+              layer as tiled.ImageLayer,
               parent,
               camera,
               map,
               destTileSize,
             );
 
-          case Group:
-            final groupLayer = layer as Group;
-            final renderableGroup = _GroupLayer(
+          case tiled.Group:
+            final groupLayer = layer as tiled.Group;
+            final renderableGroup = GroupLayer(
               groupLayer,
               parent,
               map,
@@ -200,16 +201,16 @@ class RenderableTiledMap {
             renderableGroup.children = await children;
             return renderableGroup;
 
-          case ObjectGroup:
-            return _ObjectLayer.load(
-              layer as ObjectGroup,
+          case tiled.ObjectGroup:
+            return ObjectLayer.load(
+              layer as tiled.ObjectGroup,
               map,
               destTileSize,
             );
 
           default:
             assert(false, '$layer layer is unsupported.');
-            return _UnsupportedLayer(layer, parent, map, destTileSize);
+            return UnsupportedLayer(layer, parent, map, destTileSize);
         }
       }),
     );
@@ -244,7 +245,7 @@ class RenderableTiledMap {
 
   /// Returns a layer of type [T] with given [name] from all the layers
   /// of this map. If no such layer is found, null is returned.
-  T? getLayer<T extends Layer>(String name) {
+  T? getLayer<T extends tiled.Layer>(String name) {
     try {
       // layerByName will searches recursively starting with tiled.dart v0.8.5
       return map.layerByName(name) as T;

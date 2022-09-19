@@ -1,13 +1,18 @@
-part of '../renderable_tile_map.dart';
+import 'package:flame/extensions.dart';
+import 'package:flame/game.dart';
+import 'package:flame_tiled/src/renderable_layers/renderable_layer.dart';
+import 'package:meta/meta.dart';
+import 'package:tiled/tiled.dart';
 
-class _GroupLayer extends _RenderableLayer<Group> {
+@internal
+class GroupLayer extends RenderableLayer<Group> {
   /// The child layers of this [Group] to be rendered recursively.
   ///
   /// NOTE: This is set externally instead of via constructor params because
   ///       there are cyclic dependencies when loading the renderable layers.
-  late final List<_RenderableLayer> children;
+  late final List<RenderableLayer> children;
 
-  _GroupLayer(
+  GroupLayer(
     super.layer,
     super.parent,
     super.map,
@@ -29,7 +34,7 @@ class _GroupLayer extends _RenderableLayer<Group> {
   }
 
   @override
-  void render(ui.Canvas canvas, Camera? camera) {
+  void render(Canvas canvas, Camera? camera) {
     for (final child in children) {
       child.render(canvas, camera);
     }

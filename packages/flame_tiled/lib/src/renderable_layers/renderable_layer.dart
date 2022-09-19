@@ -1,14 +1,19 @@
-part of '../renderable_tile_map.dart';
+import 'package:flame/extensions.dart';
+import 'package:flame/game.dart';
+import 'package:flame_tiled/src/renderable_layers/group_layer.dart';
+import 'package:meta/meta.dart';
+import 'package:tiled/tiled.dart';
 
-abstract class _RenderableLayer<T extends Layer> {
+@internal
+abstract class RenderableLayer<T extends Layer> {
   final T layer;
   final Vector2 destTileSize;
   final TiledMap map;
 
   /// The parent [Group] layer (if it exists)
-  final _GroupLayer? parent;
+  final GroupLayer? parent;
 
-  _RenderableLayer(
+  RenderableLayer(
     this.layer,
     this.parent,
     this.map,
@@ -40,7 +45,7 @@ abstract class _RenderableLayer<T extends Layer> {
   /// parallax positioning and scroll for the layer and the current camera
   /// position
   /// https://doc.mapeditor.org/en/latest/manual/layers/#parallax-scrolling-factor
-  void _applyParallaxOffset(Canvas canvas, Camera camera) {
+  void applyParallaxOffset(Canvas canvas, Camera camera) {
     final cameraX = camera.position.x;
     final cameraY = camera.position.y;
     final vpCenterX = camera.viewport.effectiveSize.x / 2;
@@ -63,8 +68,9 @@ abstract class _RenderableLayer<T extends Layer> {
   }
 }
 
-class _UnsupportedLayer extends _RenderableLayer {
-  _UnsupportedLayer(
+@internal
+class UnsupportedLayer extends RenderableLayer {
+  UnsupportedLayer(
     super.layer,
     super.parent,
     super.map,

@@ -1,11 +1,19 @@
-part of '../renderable_tile_map.dart';
+import 'package:flame/extensions.dart';
+import 'package:flame/flame.dart';
+import 'package:flame/game.dart';
+import 'package:flame_tiled/src/renderable_layers/group_layer.dart';
+import 'package:flame_tiled/src/renderable_layers/renderable_layer.dart';
+import 'package:flutter/rendering.dart';
+import 'package:meta/meta.dart';
+import 'package:tiled/tiled.dart' as tiled;
 
-class _ImageLayer extends _RenderableLayer<ImageLayer> {
+@internal
+class ImageLayer extends RenderableLayer<tiled.ImageLayer> {
   final Image _image;
   late final ImageRepeat _repeat;
   Rect _paintArea = Rect.zero;
 
-  _ImageLayer(
+  ImageLayer(
     super.layer,
     super.parent,
     this._image,
@@ -27,7 +35,7 @@ class _ImageLayer extends _RenderableLayer<ImageLayer> {
     canvas.translate(offsetX, offsetY);
 
     if (camera != null) {
-      _applyParallaxOffset(canvas, camera);
+      applyParallaxOffset(canvas, camera);
     }
 
     paintImage(
@@ -54,14 +62,14 @@ class _ImageLayer extends _RenderableLayer<ImageLayer> {
     }
   }
 
-  static Future<_ImageLayer> load(
-    ImageLayer layer,
-    _GroupLayer? parent,
+  static Future<ImageLayer> load(
+    tiled.ImageLayer layer,
+    GroupLayer? parent,
     Camera? camera,
-    TiledMap map,
+    tiled.TiledMap map,
     Vector2 destTileSize,
   ) async {
-    return _ImageLayer(
+    return ImageLayer(
       layer,
       parent,
       await Flame.images.load(layer.image.source!),

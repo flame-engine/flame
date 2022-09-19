@@ -1,7 +1,12 @@
-part of '../renderable_tile_map.dart';
+import 'package:flame/extensions.dart';
+import 'package:flame/game.dart';
+import 'package:flame_tiled/src/renderable_layers/renderable_layer.dart';
+import 'package:meta/meta.dart';
+import 'package:tiled/tiled.dart';
 
-class _ObjectLayer extends _RenderableLayer<ObjectGroup> {
-  _ObjectLayer(
+@internal
+class ObjectLayer extends RenderableLayer<ObjectGroup> {
+  ObjectLayer(
     super.layer,
     super.parent,
     super.map,
@@ -17,12 +22,12 @@ class _ObjectLayer extends _RenderableLayer<ObjectGroup> {
   @override
   bool get visible => false;
 
-  static Future<_ObjectLayer> load(
+  static Future<ObjectLayer> load(
     ObjectGroup layer,
     TiledMap map,
     Vector2 destTileSize,
   ) async {
-    return _ObjectLayer(layer, null, map, destTileSize);
+    return ObjectLayer(layer, null, map, destTileSize);
   }
 
   @override
