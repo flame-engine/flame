@@ -50,9 +50,11 @@ class PolygonPolygonIntersections
       }
     }
     if (intersectionPoints.isEmpty && (polygonA.isSolid || polygonB.isSolid)) {
-      final outerShape = polygonA.containsPoint(polygonB.vertices.first)
+      final outerShape = polygonA.containsPoint(polygonB.globalVertices().first)
           ? polygonA
-          : (polygonB.containsPoint(polygonA.vertices.first) ? polygonB : null);
+          : (polygonB.containsPoint(polygonA.globalVertices().first)
+              ? polygonB
+              : null);
       if (outerShape != null && outerShape.isSolid) {
         final innerShape = outerShape == polygonA ? polygonB : polygonA;
         return {innerShape.absoluteCenter};
