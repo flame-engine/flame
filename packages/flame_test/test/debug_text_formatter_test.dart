@@ -3,7 +3,6 @@ import 'dart:ui';
 import 'package:flame/components.dart';
 import 'package:flame/text.dart';
 import 'package:flame_test/flame_test.dart';
-import 'package:flame_test/src/debug_text_formatter.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
