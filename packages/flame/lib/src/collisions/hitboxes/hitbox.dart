@@ -17,6 +17,15 @@ abstract class Hitbox<T extends Hitbox<T>>
   /// rough estimation of whether two hitboxes can possibly collide or not.
   Aabb2 get aabb;
 
+  /// Whether the hitbox is solid or hollow.
+  ///
+  /// If it is solid, intersections will occur even if the other component is
+  /// fully enclosed by the other hitbox. The intersection point in such cases
+  /// will be the center of the enclosed [Hitbox].
+  /// A hollow shape that is fully enclosed by a solid hitbox will cause an
+  /// intersection result, but not the other way around.
+  bool get isSolid;
+
   /// Checks whether the [Hitbox] contains the [point].
   bool containsPoint(Vector2 point);
 

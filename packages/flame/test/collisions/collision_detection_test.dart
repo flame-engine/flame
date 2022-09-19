@@ -801,6 +801,35 @@ void main() {
         reason: "Should return the enclosed rectangle's position",
       );
     });
+
+    testCollisionDetectionGame('circles as children', (game) async {
+      final outerCircle = CircleHitbox(
+        radius: 4.0,
+        anchor: Anchor.center,
+      )..isSolid = true;
+      final outerContainer = PositionComponent(
+        position: Vector2.all(100),
+        children: [outerCircle],
+      );
+      final innerCircle = CircleHitbox(
+        radius: 2.0,
+        anchor: Anchor.center,
+      )..isSolid = true;
+      final innerContainer = PositionComponent(
+        position: Vector2.all(100),
+        children: [innerCircle],
+      );
+      await game.ensureAddAll([outerContainer, innerContainer]);
+      final intersections = game.collisionDetection.intersections(
+        innerCircle,
+        outerCircle,
+      );
+      expect(
+        intersections,
+        {innerCircle.absolutePosition},
+        reason: "Should return the enclosed circle's position",
+      );
+    });
   });
 
   group('Raycasting', () {

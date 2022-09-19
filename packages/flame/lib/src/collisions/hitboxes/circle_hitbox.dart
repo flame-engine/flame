@@ -14,7 +14,10 @@ class CircleHitbox extends CircleComponent with ShapeHitbox {
     super.position,
     super.angle,
     super.anchor,
-  }) : shouldFillParent = radius == null && position == null;
+    bool isSolid = false,
+  }) : shouldFillParent = radius == null && position == null {
+    this.isSolid = isSolid;
+  }
 
   /// With this constructor you define the [CircleHitbox] in relation to the
   /// [parentSize]. For example having a [relation] of 0.5 would create a circle
