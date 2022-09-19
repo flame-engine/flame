@@ -44,8 +44,9 @@ Other useful links:
 - [Tutorials](https://tutorials.flame-engine.org/) - A simple tutorial to get started.
 - [API Reference](https://pub.dev/documentation/flame/latest/) - The generated dartdoc API
   reference.
-- [awesome-flame](https://github.com/flame-engine/awesome-flame) - A curated list of Tutorials, 
+- [awesome-flame](https://github.com/flame-engine/awesome-flame) - A curated list of Tutorials,
   Games, Libraries and Articles.
+
 
 ## Help
 
@@ -79,7 +80,7 @@ helpers, in order to make integrations seamless.
 Flame officially provides bridge libraries to the following packages:
 
 - [flame_audio](https://github.com/flame-engine/flame/tree/main/packages/flame_audio) for
-  [AudioPlayers](https://github.com/bluefireteam/audioplayers): Play multiple audio files 
+  [AudioPlayers](https://github.com/bluefireteam/audioplayers): Play multiple audio files
   simultaneously.
 - [flame_bloc](https://github.com/flame-engine/flame/tree/main/packages/flame_bloc) for
   [Bloc](https://github.com/felangel/bloc): A predictable state management library.
