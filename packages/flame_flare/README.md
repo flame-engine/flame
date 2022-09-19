@@ -8,7 +8,9 @@
 Integrate awesome [Flare animations](https://rive.app/explore/popular/trending/all) to your [Flame](https://flame-engine.org/)
 game.
 
-> :warning: **Flare is deprecated and no longer supported.** Please consider upgrading to Rive.
+```{warning}
+**Flare is deprecated and no longer supported.** Please consider upgrading to Rive.
+```
 
 
 ## Install

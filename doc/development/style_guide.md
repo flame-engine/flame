@@ -213,14 +213,14 @@ into the docs. This will make readers more excited about trying this new functio
 
 Check the [Documentation] manual about how to work with the docs site.
 
-The following style rules generally apply when writing documentation (although we currently don't
-have a linter to enforce them strictly):
+The following style rules generally apply when writing documentation:
 
 - Maximum line length of 100 characters;
 - Prefer to define external links at the bottom of the document, so as to make reading the plain
   text of the document easier;
 - Separate headers from the preceding content with 2 blank lines -- this makes it easier to see the
   sections within the plain text.
+- Lists should start at the beginning of the line and sublists should be indented with 2 spaces.
 
 
 [effective dart]: https://dart.dev/guides/language/effective-dart
