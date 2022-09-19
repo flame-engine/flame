@@ -38,9 +38,14 @@ on the docs website.
 Other useful links:
 
 - [The official Flame site](https://flame-engine.org/).
-- [Examples](https://examples.flame-engine.org/) of most features which can be tried out from your browser.
+- [Examples](https://examples.flame-engine.org/) of most features which can be tried out from your
+  browser.
+  - To access the code for each example, press the `< >` button in the top right corner.
 - [Tutorials](https://tutorials.flame-engine.org/) - A simple tutorial to get started.
-- [API Reference](https://pub.dev/documentation/flame/latest/) - The generated dartdoc API reference.
+- [API Reference](https://pub.dev/documentation/flame/latest/) - The generated dartdoc API
+  reference.
+- [awesome-flame](https://github.com/flame-engine/awesome-flame) - A curated list of Tutorials,
+  Games, Libraries and Articles.
 
 
 ## Help
@@ -49,8 +54,8 @@ There is a Flame community on [Blue Fire's Discord server](https://discord.gg/5u
 can ask any of your Flame related questions.
 
 If you are more comfortable with StackOverflow, you can also create a question there. Add the
-[Flame tag](https://stackoverflow.com/questions/tagged/flame), so that anyone following the tag can
-help out.
+[Flame tag](https://stackoverflow.com/questions/tagged/flame), to make sure that anyone following
+the tag can help out.
 
 
 ## Features
@@ -75,7 +80,8 @@ helpers, in order to make integrations seamless.
 Flame officially provides bridge libraries to the following packages:
 
 - [flame_audio](https://github.com/flame-engine/flame/tree/main/packages/flame_audio) for
-  [AudioPlayers](https://github.com/bluefireteam/audioplayers): Play multiple audio files simultaneously.
+  [AudioPlayers](https://github.com/bluefireteam/audioplayers): Play multiple audio files
+  simultaneously.
 - [flame_bloc](https://github.com/flame-engine/flame/tree/main/packages/flame_bloc) for
   [Bloc](https://github.com/felangel/bloc): A predictable state management library.
 - [flame_fire_atlas](https://github.com/flame-engine/flame/tree/main/packages/flame_fire_atlas) for
@@ -85,7 +91,8 @@ Flame officially provides bridge libraries to the following packages:
 - [flame_lint](https://github.com/flame-engine/flame/tree/main/packages/flame_lint) -
   Our set of linting (`analysis_options.yaml`) rules.
 - [flame_oxygen](https://github.com/flame-engine/flame/tree/main/packages/flame_oxygen) for
-  [Oxygen](https://github.com/flame-engine/oxygen): A lightweight Entity Component System (ECS) framework.
+  [Oxygen](https://github.com/flame-engine/oxygen): A lightweight Entity Component System (ECS)
+  framework.
 - [flame_rive](https://github.com/flame-engine/flame/tree/main/packages/flame_rive) for
   [Rive](https://rive.app/): Create interactive animations.
 - [flame_svg](https://github.com/flame-engine/flame/tree/main/packages/flame_svg) for
@@ -145,35 +152,8 @@ via an issue, GitHub discussion, or reach out to the team either using the
 [Discord server](https://discord.gg/pxrBmy4).
 
 
-## Getting started
-
-A simple tutorial to get started can be found on
-[tutorials.flame-engine.org](https://tutorials.flame-engine.org) and examples of most features in
-Flame can be found on [examples.flame-engine.org](https://examples.flame-engine.org). To access the
-code for each example, press the `< >` button in the top right corner.
-
-
-### Highlighted community tutorials
-
-- @Devowl's Flutter & Flame series:
-  - [Step 1: Create your game](https://medium.com/flutter-community/flutter-flame-step-1-create-your-game-b3b6ee387d77)
-  - [Step 2: Game basics](https://medium.com/flutter-community/flutter-flame-step-2-game-basics-48b4493424f3)
-  - [Step 3: Sprites and inputs](https://blog.devowl.de/flutter-flame-step-3-sprites-and-inputs-7ca9cc7c8b91)
-  - [Step 4: Collisions & Viewport](https://blog.devowl.de/flutter-flame-step-4-collisions-viewport-ff2da048e3a6)
-  - [Step 5: Level generation & camera](https://blog.devowl.de/flutter-flame-step-5-level-generation-camera-62a060a286e3 )
-
-- Other tutorials:
-  - @Vguzzi's article [Building Games in Flutter with Flame](https://www.raywenderlich.com/27407121-building-games-in-flutter-with-flame-getting-started)
-  - @DevKage's YouTube series with the [Dino run tutorial](https://www.youtube.com/playlist?list=PLiZZKL9HLmWOmQgYxWHuOHOWsUUlhCCOY)
-
-We offer a curated list of Games, Libraries and Articles over at
-[awesome-flame](https://github.com/flame-engine/awesome-flame).
-
-Note that some of the articles might be slightly outdated, but can still be useful.
-
-
 ## Credits
 
 - The [Blue Fire team](https://github.com/orgs/bluefireteam/people), who are continuously
- working on maintaining and improving Flame and its ecosystem.
-- All the friendly contributors and people who are helping in the community.
+  working on maintaining and improving Flame and its ecosystem.
+- All the friendly contributors and people who are helping out in the community.
