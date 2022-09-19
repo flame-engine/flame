@@ -13,7 +13,7 @@ class TextPainterTextFormatter extends TextFormatter {
     required this.style,
     this.textDirection = TextDirection.ltr,
     @Deprecated('Use DebugTextFormatter instead. Will be removed in 1.5.0')
-    this.debugMode = false,
+        this.debugMode = false,
   });
 
   final TextStyle style;
