@@ -272,11 +272,7 @@ class QuadTree<T extends Hitbox<T>> {
     if (lastPos == null) {
       return true;
     }
-    if (lastPos.min == hitbox.aabb.min && lastPos.max == hitbox.aabb.max) {
-      return false;
-    } else {
-      return true;
-    }
+    return lastPos.min != hitbox.aabb.min || lastPos.max == hitbox.aabb.max;
   }
 }
 
