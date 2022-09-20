@@ -18,6 +18,7 @@ dependencies:
   flutter:
     sdk: flutter
   google_fonts: ^2.3.2
+  meta: ^1.8.0
   padracing:
     path: games/padracing
   trex_game:
