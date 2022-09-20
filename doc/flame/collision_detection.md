@@ -310,6 +310,7 @@ class QuadTreeExample extends FlameGame
 
 ```
 
+
 ## Ray casting and Ray tracing
 
 Ray casting and ray tracing are methods for sending out rays from a point in your game and being
