@@ -10,7 +10,7 @@ import 'package:flame/extensions.dart';
 /// 3. Use [query] to get list of hitboxes that potentially collide.
 /// 4. Use [remove] to remove a hitbox from the tree.
 /// 5. Use sequence of [remove] and [add] to simulate hitbox movement.
-/// 6. Use [isMoved] to determine if a hitbox ever changed its position.
+/// 6. Use [hasMoved] to determine if a hitbox ever changed its position.
 /// 7. Call [clear] to remove all data.
 ///
 /// Use [optimize] to scan the tree and remove unused quadrants.
@@ -267,7 +267,7 @@ class QuadTree<T extends Hitbox<T>> {
     return list;
   }
 
-  bool isMoved(T hitbox) {
+  bool hasMoved(T hitbox) {
     final lastPos = _oldPositionByItem[hitbox];
     if (lastPos == null) {
       return true;
