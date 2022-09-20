@@ -26,9 +26,9 @@ mixin HasQuadTreeCollisionDetection on FlameGame
   /// Initialise the QuadTree.
   ///
   /// - [mapDimensions] describes the collision area coordinates and size.
-  ///   Should match to game map position and size.
-  /// - [maxObjects] (optional) - maximum objects count in one quadrant.
-  /// - [maxLevels] (optional) - maximum nested quadrants.
+  ///   Should match to game map's position and size.
+  /// - [maxObjects] (optional) - maximum amount of objects in one quadrant.
+  /// - [maxLevels] (optional) - maximum number of nested quadrants.
   /// - [minimumDistance] (optional) - specify minimum distance between objects
   ///   to consider them as possibly colliding. You can also implement the
   ///   [minimumDistanceCheck] if you need some custom behavior.
@@ -38,7 +38,7 @@ mixin HasQuadTreeCollisionDetection on FlameGame
   /// The result of the calculation is cached so you should not check any
   /// dynamical parameters here, the function is intended to be used as pure
   /// type checker.
-  /// It usually should not be overridden, see
+  /// It should usually not be overridden, see
   /// [CollisionCallbacks.onComponentTypeCheck] instead
   void initializeCollisionDetection({
     required Rect mapDimensions,
