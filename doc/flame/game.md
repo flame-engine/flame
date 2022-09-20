@@ -42,10 +42,10 @@ main() {
 ```
 
 ```{note}
-If you instantiate your game in a build method your game will be rebuilt every time the
-Flutter tree gets rebuilt, which usually is more often than you'd like. To avoid this, you can
-instead create an instance of your game first and reference it within your widget structure, like
-it is done in the example above.
+If you instantiate your game in a build method your game will be rebuilt every
+time the Flutter tree gets rebuilt, which usually is more often than you'd like.
+To avoid this, you can instead create an instance of your game first and
+reference it within your widget structure, like it is done in the example above.
 ```
 
 To remove components from the list on a `FlameGame` the `remove` or `removeAll` methods can be used.
@@ -114,6 +114,7 @@ parent is not yet mounted itself. Consequently, `await`-ing on `parent.add(compo
 to always finish loading the component.
 
 Using this mixin is simple:
+
 ```dart
 class MyGame extends FlameGame with SingleGameInstance {
   // ...
@@ -136,8 +137,8 @@ called after `onLoad`) is called every time it is added to a new parent. `onRemo
 the class is removed from a parent.
 
 ```{note}
-The `Game` class allows for more freedom of how to implement things, but you are also
-missing out on all of the built-in features in Flame if you use it.
+The `Game` class allows for more freedom of how to implement things, but you
+are also missing out on all of the built-in features in Flame if you use it.
 ```
 
 An example of how a `Game` implementation could look like:
@@ -171,8 +172,8 @@ void main() {
 The `GameLoop` module is a simple abstraction over the game loop concept. Basically most games are
 built upon two methods:
 
- - The render method takes the canvas for drawing the current state of the game.
- - The update method receives the delta time in seconds since the last update and allows you to move
+- The render method takes the canvas for drawing the current state of the game.
+- The update method receives the delta time in seconds since the last update and allows you to move
   to the next state.
 
 The `GameLoop` is used by all of Flame's `Game` implementations.
@@ -182,8 +183,8 @@ The `GameLoop` is used by all of Flame's `Game` implementations.
 
 A Flame `Game` can be paused and resumed in two ways:
 
- - With the use of the `pauseEngine` and `resumeEngine` methods.
- - By changing the `paused` attribute.
+- With the use of the `pauseEngine` and `resumeEngine` methods.
+- By changing the `paused` attribute.
 
 When pausing a Flame `Game`, the `GameLoop` is effectively paused, meaning that no updates or new
 renders will happen until it is resumed.

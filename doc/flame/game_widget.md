@@ -7,6 +7,7 @@ It can directly receive a `Game` instance in its default constructor or it can r
 `GameFactory` function on the `controlled` constructor that will be used to create the game once the
 `GameWidget` is inserted in the widget tree.
 
+
 ## Examples
 
 Directly in `runApp`, with either:

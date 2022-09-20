@@ -6,6 +6,7 @@ cubits inside a `FlameGame`.
 For a migration guide from the previous API to the current one,
 [check this article](https://verygood.ventures/blog/flame-bloc-new-api).
 
+
 ## How to use
 
 Lets assume we have a bloc that handles player inventory, first we need to make it available to our

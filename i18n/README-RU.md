@@ -1,3 +1,4 @@
+<!-- markdownlint-disable MD013 -->
 <p align="center">
   <a href="https://flame-engine.org">
     <img alt="flame" width="200px" src="https://user-images.githubusercontent.com/6718144/101553774-3bc7b000-39ad-11eb-8a6a-de2daa31bd64.png">
@@ -21,6 +22,8 @@
 
 ---
 
+
+<!-- markdownlint-disable-next-line MD002 -->
 ## Документация
 
 Полная документация по Flame находится тут:
@@ -31,6 +34,7 @@
 **Примечание**: Документация находящаяся в ветке main новее чем документация в релизной ветке.
 
 Другие полезные ссылки:
+
 - [Официальный сайт Flame](https://flame-engine.org/).
 - [Примеры](https://examples.flame-engine.org/) большинство функций которые можно опробовать в браузере.
 - [Уроки](https://tutorials.flame-engine.org/) - Простые уроки позволяющие начать изучение движка.
@@ -44,6 +48,7 @@
 
 Если вам удобнее использовать StackOverflow, вы так же можете задать свой вопрос там, добавив
 [тэг Flame](https://stackoverflow.com/questions/tagged/flame), чтобы любой кто его отслеживает, смог бы помочь.
+
 
 ## Функционал
 
@@ -114,17 +119,18 @@ Flame официально предоставляет связанные биб�
 [![Powered by Flame](https://img.shields.io/badge/Powered%20by-%F0%9F%94%A5-272727.svg?style=flat-square)](https://flame-engine.org)
 [![Powered by Flame](https://img.shields.io/badge/Powered%20by-%F0%9F%94%A5-272727.svg?style=for-the-badge)](https://flame-engine.org)
 
-```
+```txt
 [![Powered by Flame](https://img.shields.io/badge/Powered%20by-%F0%9F%94%A5-orange.svg)](https://flame-engine.org)
 [![Powered by Flame](https://img.shields.io/badge/Powered%20by-%F0%9F%94%A5-orange.svg?style=flat-square)](https://flame-engine.org)
 [![Powered by Flame](https://img.shields.io/badge/Powered%20by-%F0%9F%94%A5-orange.svg?style=for-the-badge)](https://flame-engine.org)
 ```
 
+
 ## Содействие
 
 Вы нашли ошибку или у вас есть предложение как улучшить Flame? Откройте ишью и мы рассмотрим его как можно скорее.
 
-Хотите внести свой вклад создав PR? PRы всегда приветствуются, просто создайте его из правильной ветки (`main`) и 
+Хотите внести свой вклад создав PR? PRы всегда приветствуются, просто создайте его из правильной ветки (`main`) и
 следуйте [чеклисту](.github/pull_request_template.md) который будет доступен при создании PR.
 
 Для больших изменений и/или если у вас есть сомнения, обязательно посоветуйтесь с сообществом. Либо создав ишью
@@ -134,23 +140,23 @@ Flame официально предоставляет связанные биб�
 ## Как начать
 
 Простое руководство по разработке можно найти тут
-[tutorials.flame-engine.org](https://tutorials.flame-engine.org), а примеры большинства функций Flame 
-тут [examples.flame-engine.org](https://examples.flame-engine.org). Для того чтобы увидеть код любого из примеров, 
+[tutorials.flame-engine.org](https://tutorials.flame-engine.org), а примеры большинства функций Flame
+тут [examples.flame-engine.org](https://examples.flame-engine.org). Для того чтобы увидеть код любого из примеров,
 нажмите кнопку `< >` в верхнем правом углу.
 
 
 ### Рекомендуемые сообществом уроки
 
 - Серия @Devowl's Flutter & Flame:
-    - [Step 1: Создание вашей игры](https://medium.com/flutter-community/flutter-flame-step-1-create-your-game-b3b6ee387d77)
-    - [Step 2: Основы игры](https://medium.com/flutter-community/flutter-flame-step-2-game-basics-48b4493424f3)
-    - [Step 3: Спрайты и ввод](https://blog.devowl.de/flutter-flame-step-3-sprites-and-inputs-7ca9cc7c8b91)
-    - [Step 4: Столкновение и область видимости](https://blog.devowl.de/flutter-flame-step-4-collisions-viewport-ff2da048e3a6)
-    - [Step 5: Генерация уровня и камера](https://blog.devowl.de/flutter-flame-step-5-level-generation-camera-62a060a286e3 )
+  - [Step 1: Создание вашей игры](https://medium.com/flutter-community/flutter-flame-step-1-create-your-game-b3b6ee387d77)
+  - [Step 2: Основы игры](https://medium.com/flutter-community/flutter-flame-step-2-game-basics-48b4493424f3)
+  - [Step 3: Спрайты и ввод](https://blog.devowl.de/flutter-flame-step-3-sprites-and-inputs-7ca9cc7c8b91)
+  - [Step 4: Столкновение и область видимости](https://blog.devowl.de/flutter-flame-step-4-collisions-viewport-ff2da048e3a6)
+  - [Step 5: Генерация уровня и камера](https://blog.devowl.de/flutter-flame-step-5-level-generation-camera-62a060a286e3 )
 
 - Другие уроки:
-    - @Vguzzi's статья [Создание игра на Flutter используя Flame](https://www.raywenderlich.com/27407121-building-games-in-flutter-with-flame-getting-started)
-    - @DevKage's Серия видео на YouTube [Dino run tutorial](https://www.youtube.com/playlist?list=PLiZZKL9HLmWOmQgYxWHuOHOWsUUlhCCOY)
+  - @Vguzzi's статья [Создание игра на Flutter используя Flame](https://www.raywenderlich.com/27407121-building-games-in-flutter-with-flame-getting-started)
+  - @DevKage's Серия видео на YouTube [Dino run tutorial](https://www.youtube.com/playlist?list=PLiZZKL9HLmWOmQgYxWHuOHOWsUUlhCCOY)
 
 Мы предлагаем модерируемый список игр и уроков по адресу
 [awesome-flame](https://github.com/flame-engine/awesome-flame).
