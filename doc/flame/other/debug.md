@@ -1,5 +1,6 @@
 # Debug features
 
+
 ## FlameGame features
 
 Flame provides some debugging features for the `FlameGame` class. These features are enabled when

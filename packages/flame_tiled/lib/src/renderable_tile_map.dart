@@ -5,11 +5,13 @@ import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flame_tiled/src/flame_tsx_provider.dart';
+import 'package:flame_tiled/src/mutable_transform.dart';
 import 'package:flame_tiled/src/renderable_layers/group_layer.dart';
 import 'package:flame_tiled/src/renderable_layers/image_layer.dart';
 import 'package:flame_tiled/src/renderable_layers/object_layer.dart';
 import 'package:flame_tiled/src/renderable_layers/renderable_layer.dart';
 import 'package:flame_tiled/src/renderable_layers/tile_layer.dart';
+import 'package:flame_tiled/src/tile_stack.dart';
 import 'package:flutter/painting.dart';
 import 'package:tiled/tiled.dart' as tiled;
 
@@ -113,6 +115,74 @@ class RenderableTiledMap {
       return layer.tileData?[y][x];
     }
     return null;
+  }
+
+  /// Select a group of tiles from the coordinates [x] and [y].
+  ///
+  /// If [all] is set to true, every renderable tile from the map is collected.
+  ///
+  /// If the [named] or [ids] sets are not empty, any layer with matching
+  /// name or id will have their renderable tiles collected. If the matching
+  /// layer is a group layer, all layers in the group will have their tiles
+  /// collected.
+  TileStack tileStack(
+    int x,
+    int y, {
+    Set<String> named = const <String>{},
+    Set<int> ids = const <int>{},
+    bool all = false,
+  }) {
+    return TileStack(
+      _tileStack(
+        renderableLayers,
+        x,
+        y,
+        named: named,
+        ids: ids,
+        all: all,
+      ),
+    );
+  }
+
+  /// Recursive support for [tileStack]
+  List<MutableRSTransform> _tileStack(
+    List<RenderableLayer> layers,
+    int x,
+    int y, {
+    Set<String> named = const <String>{},
+    Set<int> ids = const <int>{},
+    bool all = false,
+  }) {
+    final tiles = <MutableRSTransform>[];
+    for (final layer in layers) {
+      if (layer is GroupLayer) {
+        // if the group matches named or ids; grab every child.
+        // else descend and ask for named children.
+        tiles.addAll(
+          _tileStack(
+            layer.children,
+            x,
+            y,
+            named: named,
+            ids: ids,
+            all: all ||
+                named.contains(layer.layer.name) ||
+                ids.contains(layer.layer.id),
+          ),
+        );
+      } else if (layer is TileLayer) {
+        if (!(all ||
+            named.contains(layer.layer.name) ||
+            ids.contains(layer.layer.id))) {
+          continue;
+        }
+
+        if (layer.indexes[x][y] != null) {
+          tiles.add(layer.indexes[x][y]!);
+        }
+      }
+    }
+    return tiles;
   }
 
   /// Parses a file returning a [RenderableTiledMap].

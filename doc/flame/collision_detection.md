@@ -25,6 +25,7 @@ you have certain types of combinations of flips and scales of the ancestors of t
 
 ## Mixins
 
+
 ### HasCollisionDetection
 
 If you want to use collision detection in your game you have to add the `HasCollisionDetection`
@@ -117,7 +118,7 @@ Remember that you can add as many `ShapeHitbox`s as you want to your `PositionCo
 more complex areas. For example a snowman with a hat could be represented by three `CircleHitbox`s
 and two `RectangleHitbox`s as its hat.
 
-A hitbox can be used either for collision detection or for making gesture detection more accurate 
+A hitbox can be used either for collision detection or for making gesture detection more accurate
 on top of components, see more regarding the latter in the section about the
 [GestureHitboxes](inputs/gesture-input.md#gesturehitboxes) mixin.
 
@@ -277,10 +278,11 @@ from `0, 100` and shoots a ray straight to the right.
 
 The result from this operation will either be `null` if the ray didn't hit anything, or a
 `RaycastResult` which contains:
-  - Which hitbox the ray hit
-  - The intersection point of the collision
-  - The reflection ray, i.e. how the ray would reflect on the hitbox that it hix
-  - The normal of the collision, i.e. a vector perpendicular to the face of the hitbox that it hits
+
+- Which hitbox the ray hit
+- The intersection point of the collision
+- The reflection ray, i.e. how the ray would reflect on the hitbox that it hix
+- The normal of the collision, i.e. a vector perpendicular to the face of the hitbox that it hits
 
 If you are concerned about performance you can pre create a `RaycastResult` object that you send in
 to the method with the `out` argument, this will make it possible for the method to reuse this
@@ -378,12 +380,14 @@ the accuracy of gestures, Flame's built-in collision detection will serve you ve
 
 If you have the following needs you should at least consider to use
 [Forge2D](https://github.com/flame-engine/forge2d):
+
 - Interacting realistic forces
 - Particle systems that can interact with other bodies
 - Joints between bodies
 
 It is a good idea to just use the Flame collision detection system if you on the other hand only
 need some of the following things (since it is simpler to not involve Forge2D):
+
 - The ability to act on some of your components colliding
 - The ability to act on your components colliding with the screen boundaries
 - Complex shapes to act as a hitbox for your component so that gestures will be more accurate
@@ -408,18 +412,18 @@ Since the hitboxes now are `Component`s you add them to your component with `add
 
 ### Name changes
 
- - `ScreenCollidable` -> `ScreenHitbox`
- - `HitboxCircle` -> `CircleHitbox`
- - `HitboxRectangle` -> `RectangleHitbox`
- - `HitboxPolygon` -> `PolygonHitbox`
- - `Collidable` -> `CollisionCallbacks` (Only needed when you want to receive the callbacks)
- - `HasHitboxes` -> `GestureHitboxes` (Only when you need hitboxes for gestures)
- - `CollidableType` -> `CollisionType`
+- `ScreenCollidable` -> `ScreenHitbox`
+- `HitboxCircle` -> `CircleHitbox`
+- `HitboxRectangle` -> `RectangleHitbox`
+- `HitboxPolygon` -> `PolygonHitbox`
+- `Collidable` -> `CollisionCallbacks` (Only needed when you want to receive the callbacks)
+- `HasHitboxes` -> `GestureHitboxes` (Only when you need hitboxes for gestures)
+- `CollidableType` -> `CollisionType`
 
 
 ## Examples
 
- - https://examples.flame-engine.org/#/Collision%20Detection_Collidable%20AnimationComponent
- - https://examples.flame-engine.org/#/Collision%20Detection_Circles 
- - https://examples.flame-engine.org/#/Collision%20Detection_Multiple%20shapes 
- - https://github.com/flame-engine/flame/tree/main/examples/lib/stories/collision_detection
+- [https://examples.flame-engine.org/#/Collision%20Detection_Collidable%20AnimationComponent]
+- [https://examples.flame-engine.org/#/Collision%20Detection_Circles]
+- [https://examples.flame-engine.org/#/Collision%20Detection_Multiple%20shapes]
+- [https://github.com/flame-engine/flame/tree/main/examples/lib/stories/collision_detection]

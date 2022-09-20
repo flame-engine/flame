@@ -40,11 +40,11 @@ import 'dart:ui' hide TextStyle;
 Some common properties of `TextStyle` are the following (here is the
 [full list](https://api.flutter.dev/flutter/painting/TextStyle-class.html)):
 
- - `fontFamily`: a commonly available font, like Arial (default), or a custom font added in your
+- `fontFamily`: a commonly available font, like Arial (default), or a custom font added in your
  pubspec (see [here](https://docs.flutter.dev/cookbook/design/fonts) how to do it).
- - `fontSize`: font size, in pts (default `24.0`).
- - `height`: height of text line, as a multiple of font size (default `null`).
- - `color`: the color, as a `ui.Color` (default white).
+- `fontSize`: font size, in pts (default `24.0`).
+- `height`: height of text line, as a multiple of font size (default `null`).
+- `color`: the color, as a `ui.Color` (default white).
 
 For more information regarding colors and how to create then, see the
 [Colors and the Palette](palette.md) guide.
@@ -111,8 +111,11 @@ Example usage:
 
 ```dart
 class MyTextBox extends TextBoxComponent {
-  MyTextBox(String text)
-    : super(text: text, textRenderer: tiny, boxConfig: TextBoxConfig(timePerChar: 0.05));
+  MyTextBox(String text) : super(
+    text: text,
+    textRenderer: tiny,
+    boxConfig: TextBoxConfig(timePerChar: 0.05),
+  );
 
   final bgPaint = Paint()..color = Color(0xFFFF00FF);
   final borderPaint = Paint()..color = Color(0xFF000000)..style = PaintingStyle.stroke;

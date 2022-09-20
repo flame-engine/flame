@@ -89,10 +89,11 @@ the joystick.
 
 The joystick has a few fields that change depending on what state it is in.
 These are the fields that should be used to know the state of the joystick:
- - `intensity`: The percentage [0.0, 1.0] that the knob is dragged from the epicenter to the edge of
+
+- `intensity`: The percentage [0.0, 1.0] that the knob is dragged from the epicenter to the edge of
   the joystick (or `knobRadius` if that is set).
- - `delta`: The absolute amount (defined as a `Vector2`) that the knob is dragged from its epicenter.
- - `velocity`: The percentage, presented as a `Vector2`, and direction that the knob is currently
+- `delta`: The absolute amount (defined as a `Vector2`) that the knob is dragged from its epicenter.
+- `velocity`: The percentage, presented as a `Vector2`, and direction that the knob is currently
   pulled from its base position to a edge of the joystick.
 
 If you want to create buttons to go with your joystick, check out
@@ -121,7 +122,8 @@ setting `hudButtonComponent.respectCamera = true;`.
 
 If you want to act upon the button being pressed (which would be the common thing to do) and released,
 you can either pass in callback functions as the `onPressed` and `onReleased` arguments, or you can
-extend the component and override `onTapDown`, `onTapUp` and/or `onTapCancel` and implement your logic there.
+extend the component and override `onTapDown`, `onTapUp` and/or `onTapCancel` and implement your
+logic there.
 
 
 ## SpriteButtonComponent
