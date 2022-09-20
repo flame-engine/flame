@@ -24,9 +24,10 @@ When using `Particle` with a custom `Game` implementation, please ensure that bo
 `render` methods are called during each game loop tick.
 
 Main approaches to implement desired particle effects:
-* Composition of existing behaviors.
-* Use behavior chaining (just a syntactic sugar of the first one).
-* Using `ComputedParticle`.
+
+- Composition of existing behaviors.
+- Use behavior chaining (just a syntactic sugar of the first one).
+- Using `ComputedParticle`.
 
 Composition works in a similar fashion to those of Flutter widgets by defining the effect from top
 to bottom. Chaining allows to express the same composition trees more fluently by defining behaviors
@@ -41,7 +42,9 @@ Vector2 randomVector2() => (Vector2.random(rnd) - Vector2.random(rnd)) * 200;
 
 // Composition.
 //
-// Defining a particle effect as a set of nested behaviors from top to bottom, one within another:
+// Defining a particle effect as a set of nested behaviors from top to bottom,
+// one within another:
+//
 // ParticleSystemComponent
 //   > ComposedParticle
 //     > AcceleratedParticle
@@ -147,14 +150,15 @@ the nesting behaviors.
 ## Built-in particles
 
 Flame ships with a few built-in `Particle` behaviors:
-* The `TranslatedParticle` translates its `child` by given `Vector2`
-* The `MovingParticle` moves its `child` between two predefined `Vector2`, supports `Curve`
-* The `AcceleratedParticle` allows basic physics based effects, like gravitation or speed dampening
-* The `CircleParticle` renders circles of all shapes and sizes
-* The `SpriteParticle` renders Flame `Sprite` within a `Particle` effect
-* The `ImageParticle` renders *dart:ui* `Image` within a `Particle` effect
-* The `ComponentParticle` renders Flame `Component` within a `Particle` effect
-* The `FlareParticle` renders Flare animation within a `Particle` effect
+
+- The `TranslatedParticle` translates its `child` by given `Vector2`
+- The `MovingParticle` moves its `child` between two predefined `Vector2`, supports `Curve`
+- The `AcceleratedParticle` allows basic physics based effects, like gravitation or speed dampening
+- The `CircleParticle` renders circles of all shapes and sizes
+- The `SpriteParticle` renders Flame `Sprite` within a `Particle` effect
+- The `ImageParticle` renders *dart:ui* `Image` within a `Particle` effect
+- The `ComponentParticle` renders Flame `Component` within a `Particle` effect
+- The `FlareParticle` renders Flare animation within a `Particle` effect
 
 More examples of how to use these behaviors together are available
 [here](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/rendering/particles_example.dart).
@@ -210,7 +214,7 @@ game.add(
 A basic physics particle which allows you to specify its initial `position`, `speed` and
 `acceleration` and lets the `update` cycle do the rest. All three are specified as `Vector2`s, which
 you can think of as vectors. It works especially well for physics-based "bursts", but it is not
-limited to that. Unit of the `Vector2` value is _logical px/s_. So a speed of `Vector2(0, 100)` will
+limited to that. Unit of the `Vector2` value is *logical px/s*. So a speed of `Vector2(0, 100)` will
 move a child `Particle` by 100 logical pixels of the device every second of game time.
 
 ```dart
@@ -380,9 +384,10 @@ game.add(
 ## ComputedParticle
 
 A `Particle` which could help you when:
-* Default behavior is not enough
-* Complex effects optimization
-* Custom easings
+
+- Default behavior is not enough
+- Complex effects optimization
+- Custom easings
 
 When created, it delegates all the rendering to a supplied `ParticleRenderDelegate` which is called
 on each frame to perform necessary computations and render something to the `Canvas`.
@@ -390,7 +395,8 @@ on each frame to perform necessary computations and render something to the `Can
 ```dart
 game.add(
   ParticleSystemComponent(
-    // Renders a circle which gradually changes its color and size during the particle lifespan.
+    // Renders a circle which gradually changes its color and size during the
+    // particle lifespan.
     particle: ComputedParticle(
       renderer: (canvas, particle) => canvas.drawCircle(
         Offset.zero,

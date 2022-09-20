@@ -31,6 +31,7 @@ Next, we define the factory constructor for the class: `Suit.fromInt(i)`. We
 use a factory constructor here in order to enforce the singleton pattern for
 the class: instead of creating a new object every time, we are returning one
 of the pre-built objects that we store in the `_singletons` list:
+
 ```dart
   factory Suit.fromInt(int index) {
     assert(index >= 0 && index <= 3);
@@ -43,6 +44,7 @@ initializes the main properties of each `Suit` object: the numeric value, the
 string label, and the sprite object which we will later use to draw the suit
 symbol on the canvas. The sprite object is initialized using the
 `klondikeSprite()` function that we created in the previous chapter:
+
 ```dart
   Suit._(this.value, this.label, double x, double y, double w, double h)
       : sprite = klondikeSprite(x, y, w, h);
@@ -57,6 +59,7 @@ define it as `late`, meaning that it will be only initialized the first time
 it is needed. This is important: as we seen above, the constructor tries to
 retrieve an image from the global cache, so it can only be invoked after the
 image is loaded into the cache.
+
 ```dart
   static late final List<Suit> _singletons = [
     Suit._(0, '♥', 1176, 17, 172, 183),
@@ -65,6 +68,7 @@ image is loaded into the cache.
     Suit._(3, '♠', 1178, 220, 176, 182),
   ];
 ```
+
 The last four numbers in the constructor are the coordinates of the sprite
 image within the spritesheet `klondike-sprites.png`. If you're wondering how I
 obtained these numbers, the answer is that I used a free online service
@@ -73,6 +77,7 @@ obtained these numbers, the answer is that I used a free online service
 Lastly, I have simple getters to determine the "color" of a suit. This will be
 needed later when we need to enforce the rule that cards can only be placed
 into columns by alternating colors.
+
 ```dart
   /// Hearts and Diamonds are red, while Clubs and Spades are black.
   bool get isRed => value <= 1;
@@ -139,6 +144,7 @@ class Rank {
 Now that we have the `Rank` and the `Suit` classes, we can finally start
 implementing the **Card** component. Create file `components/card.dart` and
 declare the `Card` class extending from the `PositionComponent`:
+
 ```dart
 class Card extends PositionComponent {}
 ```
@@ -146,6 +152,7 @@ class Card extends PositionComponent {}
 The constructor of the class will take integer rank and suit, and make the
 card initially facing down. Also, we initialize the size of the component to
 be equal to the `cardSize` constant defined in the `KlondikeGame` class:
+
 ```dart
   Card(int intRank, int intSuit)
       : rank = Rank.fromInt(intRank),
@@ -161,6 +168,7 @@ be equal to the `cardSize` constant defined in the `KlondikeGame` class:
 The `_faceUp` property is private (indicated by the underscore) and non-final,
 meaning that it can change during the lifetime of a card. We should create some
 public accessors and mutators for this variable:
+
 ```dart
   bool get isFaceUp => _faceUp;
   void flip() => _faceUp = !_faceUp;
@@ -168,6 +176,7 @@ public accessors and mutators for this variable:
 
 Lastly, let's add a simple `toString()` implementation, which may turn out to
 be useful when we need to debug the game:
+
 ```dart
   @override
   String toString() => rank.label + suit.label; // e.g. "Q♠" or "10♦"
@@ -176,6 +185,7 @@ be useful when we need to debug the game:
 Before we proceed with implementing the rendering, we need to add some cards
 into the game. Head over to the `KlondikeGame` class and add the following at
 the bottom of the `onLoad` method:
+
 ```dart
     final random = Random();
     for (var i = 0; i < 7; i++) {
@@ -189,6 +199,7 @@ the bottom of the `onLoad` method:
       }
     }
 ```
+
 This snippet is a temporary code -- we will remove it in the next chapter --
 but for now it lays down 28 random cards on the table, most of them facing up.
 
@@ -199,6 +210,7 @@ In order to be able to see a card, we need to implement its `render()` method.
 Since the card has two distinct states -- face up or down -- we will
 implement rendering for these two states separately. Add the following methods
 into the `Card` class:
+
 ```dart
   @override
   void render(Canvas canvas) {
@@ -227,6 +239,7 @@ pixels.
 There is a lot of artistic freedom in how to draw the back of a card, but my
 implementation contains a solid background, a border, a flame logo in the
 middle, and another decorative border:
+
 ```dart
   void _renderBack(Canvas canvas) {
     canvas.drawRRect(cardRRect, backBackgroundPaint);
@@ -235,11 +248,13 @@ middle, and another decorative border:
     flameSprite.render(canvas, position: size / 2, anchor: Anchor.center);
   }
 ```
+
 The most interesting part here is the rendering of a sprite: we want to
 render it in the middle (`size/2`), and we use `Anchor.center` to tell the
-engine that we want the _center_ of the sprite to be at that point.
+engine that we want the *center* of the sprite to be at that point.
 
 Various properties used in the `_renderBack()` method are defined as follows:
+
 ```dart
   static final Paint backBackgroundPaint = Paint()
     ..color = const Color(0xff380c02);
@@ -258,6 +273,7 @@ Various properties used in the `_renderBack()` method are defined as follows:
   static final RRect backRRectInner = cardRRect.deflate(40);
   static late final Sprite flameSprite = klondikeSprite(1367, 6, 357, 501);
 ```
+
 I declared these properties as static because they will all be the same across
 all 52 card objects, so we might as well save some resources by having them
 initialized only once.
@@ -273,6 +289,7 @@ center.
 As before, we begin by declaring some constants that will be used for rendering.
 The background of a card will be black, whereas the border will be different
 depending on whether the card is of a "red" suit or "black":
+
 ```dart
   static final Paint frontBackgroundPaint = Paint()
     ..color = const Color(0xff000000);
@@ -287,6 +304,7 @@ depending on whether the card is of a "red" suit or "black":
 ```
 
 Next, we also need the images for the court cards:
+
 ```dart
   static late final Sprite redJack = klondikeSprite(81, 565, 562, 488);
   static late final Sprite redQueen = klondikeSprite(717, 541, 486, 515);
@@ -296,9 +314,10 @@ Next, we also need the images for the court cards:
 Note that I'm calling these sprites `redJack`, `redQueen`, and `redKing`. This
 is because, after some trial, I found that the images that I have don't look
 very well on black-suit cards. So what I decided to do is to take these images
-and _tint_ them with a blueish hue. Tinting of a sprite can be achieved by
+and *tint* them with a blueish hue. Tinting of a sprite can be achieved by
 using a paint with `colorFilter` set to the specified color and the `srcATop`
 blending mode:
+
 ```dart
   static final blueFilter = Paint()
     ..colorFilter = const ColorFilter.mode(
@@ -315,6 +334,7 @@ blending mode:
 
 Now we can start coding the render method itself. First, draw the background
 and the card border:
+
 ```dart
   void _renderFront(Canvas canvas) {
     canvas.drawRRect(cardRRect, frontBackgroundPaint);
@@ -330,6 +350,7 @@ method will draw the provided sprite on the canvas at the specified place (the
 location is relative to the dimensions of the card). The sprite can be
 optionally scaled. In addition, if flag `rotate=true` is passed, the sprite
 will be drawn as if it was rotated 180º around the center of the card:
+
 ```dart
   void _drawSprite(
     Canvas canvas,
@@ -359,6 +380,7 @@ will be drawn as if it was rotated 180º around the center of the card:
 
 Let's draw the rank and the suit symbols in the corners of the card. Add the
 following to the `_renderFront()` method:
+
 ```dart
     final rankSprite = suit.isBlack ? rank.blackSprite : rank.redSprite;
     final suitSprite = suit.sprite;
@@ -372,6 +394,7 @@ The middle of the card is rendered in the same manner: we will create a big
 switch statement on the card's rank, and draw pips accordingly. The code
 below may seem long, but it is actually quite repetitive and consists only
 of drawing various sprites in different places on the card's face:
+
 ```dart
     switch (rank.value) {
       case 1:

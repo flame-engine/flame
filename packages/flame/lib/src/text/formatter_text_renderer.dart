@@ -1,7 +1,6 @@
 import 'dart:ui';
 
 import 'package:flame/src/anchor.dart';
-import 'package:flame/src/text/formatters/text_formatter.dart';
 import 'package:flame/text.dart';
 import 'package:vector_math/vector_math_64.dart';
 

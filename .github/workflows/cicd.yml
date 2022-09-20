@@ -9,15 +9,6 @@ on:
 
 jobs:
   # BEGIN LINTING STAGE
-  get-packages-paths:
-    runs-on: ubuntu-latest
-    outputs:
-      packages: ${{ steps.set-packages.outputs.packages }}
-    steps:
-      - uses: actions/checkout@v3
-      - id: set-packages
-        run: echo "::set-output name=packages::$(find ./packages -maxdepth 2 -type f -name "pubspec.yaml" | jq -R -s -c 'split("\n")[:-1]')"
-
   format:
     runs-on: ubuntu-latest
     steps:
@@ -39,6 +30,16 @@ jobs:
           cache: true
       - uses: bluefireteam/melos-action@main
       - run: melos run analyze
+
+  markdown-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - run: npm install -g markdownlint-cli
+      - run: markdownlint . -p .markdownlintignore -c .markdownlint.yaml
   # END LINTING STAGE
 
   # BEGIN TESTING STAGE
