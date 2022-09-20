@@ -339,11 +339,11 @@ class _Node<T extends Hitbox<T>> {
     final data = <T>[];
 
     data.addAll(hitboxes);
-    for (final ch in children) {
-      if (ch == null) {
+    for (final child in children) {
+      if (child == null) {
         continue;
       }
-      data.addAll(ch.valuesRecursive as List<T>);
+      data.addAll(child.valuesRecursive as List<T>);
     }
     return data;
   }
