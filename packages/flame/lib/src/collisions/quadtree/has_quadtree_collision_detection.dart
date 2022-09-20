@@ -81,13 +81,9 @@ mixin HasQuadTreeCollisionDetection on FlameGame
     } else {
       checkParent = true;
     }
-    final oneParent = one.parent;
-    final anotherParent = another.parent;
 
-    if (checkParent &&
-        oneParent is PositionComponent &&
-        anotherParent is PositionComponent) {
-      return onComponentTypeCheck(oneParent, anotherParent);
+    if (checkParent && one is ShapeHitbox && another is ShapeHitbox) {
+      return onComponentTypeCheck(one.hitboxParent, another.hitboxParent);
     }
     return true;
   }
