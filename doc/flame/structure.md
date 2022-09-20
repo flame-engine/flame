@@ -1,9 +1,10 @@
 # Structure
 
-Flame has a proposed structure for your project that includes the standard Flutter `assets` 
+Flame has a proposed structure for your project that includes the standard Flutter `assets`
 directory in addition to two children: `audio` and `images`.
 
 If using the following example code:
+
 ```dart
 void main() {
   FlameAudio.play('explosion.mp3');
@@ -37,4 +38,6 @@ flutter:
     - assets/images/enemy.png
 ```
 
-If you want to change this structure, this is possible by using the `prefix` parameter and creating your own instances of `AssetsCache`, `ImagesCache`, `AudioCache` and `SoundPool`s, instead of using the global ones provided by Flame.
+If you want to change this structure, this is possible by using the `prefix` parameter and creating
+your own instances of `AssetsCache`, `ImagesCache`, `AudioCache` and `SoundPool`s, instead of using
+the global ones provided by Flame.

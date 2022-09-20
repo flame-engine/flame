@@ -10,6 +10,7 @@ import 'package:flame/src/text/elements/text_painter_text_element.dart';
 /// font rendering, which makes it impossible to create golden tests with
 /// regular text painter.
 class DebugTextPainterTextElement extends TextPainterTextElement {
+  @Deprecated('Use DebugTextFormatter instead. Will be removed in 1.5.0')
   DebugTextPainterTextElement(super.textPainter);
 
   final paint = Paint()..color = const Color(0xFFFFFFFF);

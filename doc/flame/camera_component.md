@@ -10,7 +10,7 @@ that allows more flexibility in placing the camera, or even having more than
 one camera simultaneously.
 
 In order to understand how this approach works, imagine that your game world is
-an entity that exists _somewhere_ independently from your application. Imagine
+an entity that exists *somewhere* independently from your application. Imagine
 that your game is merely a window through which you can look into that world.
 That you can close that window at any moment, and the game world would still be
 there. Or, on the contrary, you can open multiple windows that all look at the
@@ -76,12 +76,13 @@ Adding elements to the viewport is a convenient way to implement "HUD"
 components.
 
 The following viewports are available:
-  - `MaxViewport` (default) -- this viewport expands to the maximum size allowed
+
+- `MaxViewport` (default) -- this viewport expands to the maximum size allowed
     by the game, i.e. it will be equal to the size of the game canvas.
-  - `FixedSizeViewport` -- a simple rectangular viewport with predefined size.
-  - `FixedAspectRatioViewport` -- a rectangular viewport which expands to fit
+- `FixedSizeViewport` -- a simple rectangular viewport with predefined size.
+- `FixedAspectRatioViewport` -- a rectangular viewport which expands to fit
     into the game canvas, but preserving its aspect ratio.
-  - `CircularViewport` -- a viewport in the shape of a circle, fixed size.
+- `CircularViewport` -- a viewport in the shape of a circle, fixed size.
 
 
 ## Viewfinder
@@ -120,19 +121,19 @@ There are several ways to modify camera's settings at runtime:
 
 Camera has several methods for controlling its behavior:
 
- - `Camera.follow()` will force the camera to follow the provided target.
+- `Camera.follow()` will force the camera to follow the provided target.
    Optionally you can limit the maximum speed of movement of the camera, or
    allow it to move horizontally/vertically only.
 
- - `Camera.stop()` will undo the effect of the previous call and stop the camera
+- `Camera.stop()` will undo the effect of the previous call and stop the camera
    at its current position.
 
- - `Camera.moveTo()` can be used to move the camera to the designated point on
+- `Camera.moveTo()` can be used to move the camera to the designated point on
    the world map. If the camera was already following another component or
    moving towards another point, those behaviors would be automatically
    cancelled.
 
- - `Camera.setBounds()` allows you to add limits to where the camera is allowed to go. These limits
+- `Camera.setBounds()` allows you to add limits to where the camera is allowed to go. These limits
    are in the form of a `Shape`, which is commonly a rectangle, but can also be any other shape.
 
 
@@ -142,10 +143,11 @@ Compared to the normal [Camera](camera_and_viewport.md), the `CameraComponent`
 has several advantages and drawbacks.
 
 Pros:
-  - Multiple cameras can be added to the game at the same time;
-  - More flexibility in choosing the placement and the size of the viewport;
-  - Switching camera from one world to another can happen instantaneously,
+
+- Multiple cameras can be added to the game at the same time;
+- More flexibility in choosing the placement and the size of the viewport;
+- Switching camera from one world to another can happen instantaneously,
     without having to unmount one world and then mount another;
-  - Support rotation of the world view;
-  - Effects can be applied either to the viewport, or to the viewfinder;
-  - More flexible camera controllers.
+- Support rotation of the world view;
+- Effects can be applied either to the viewport, or to the viewfinder;
+- More flexible camera controllers.

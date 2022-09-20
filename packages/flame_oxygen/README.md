@@ -1,3 +1,4 @@
+<!-- markdownlint-disable MD013 -->
 <h2 align="center">
   Oxygen
 </h2>
@@ -10,5 +11,7 @@
   <a title="Dependencies" href="https://github.com/flame-engine/oxygen/blob/master/pubspec.yaml"><img src="https://img.shields.io/librariesio/release/pub/flame_oxygen?label=dependencies"></a>
   <a title="Discord" href="https://discord.gg/JUwwvNryDz" ><img src="https://img.shields.io/discord/509714518008528896.svg" /></a>
 </p>
+<!-- markdownlint-enable MD013 -->
 
-This library acts as a bridge between [Oxygen](https://github.com/flame-engine/oxygen) (an ECS written by the Flame Team) and the Flame game engine.
+This library acts as a bridge between [Oxygen](https://github.com/flame-engine/oxygen)
+(an ECS written by the Flame Team) and the Flame game engine.

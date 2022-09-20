@@ -6,6 +6,7 @@ next major version is released.
 `flame_bloc` provides easy access to blocs/cubits that are available on the widget tree to your Flame
 game and makes it possible for Flame components to listen to state changes to those blocs/cubits.
 
+
 ## How to use
 
 Lets assume we have a bloc that handles player inventory and it is available on the widget tree via

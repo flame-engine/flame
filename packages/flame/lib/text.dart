@@ -1,4 +1,5 @@
 export 'src/text/common/glyph_data.dart' show GlyphData;
+export 'src/text/common/line_metrics.dart' show LineMetrics;
 export 'src/text/elements/block_element.dart' show BlockElement;
 export 'src/text/elements/element.dart' show Element;
 export 'src/text/elements/rect_element.dart' show RectElement;
@@ -8,6 +9,11 @@ export 'src/text/elements/sprite_font_text_element.dart'
 export 'src/text/elements/text_element.dart' show TextElement;
 export 'src/text/elements/text_painter_text_element.dart'
     show TextPainterTextElement;
+export 'src/text/formatters/sprite_font_text_formatter.dart'
+    show SpriteFontTextFormatter;
+export 'src/text/formatters/text_formatter.dart' show TextFormatter;
+export 'src/text/formatters/text_painter_text_formatter.dart'
+    show TextPainterTextFormatter;
 export 'src/text/nodes/block_node.dart' show BlockNode;
 export 'src/text/nodes/bold_text_node.dart' show BoldTextNode;
 export 'src/text/nodes/column_node.dart' show ColumnNode;

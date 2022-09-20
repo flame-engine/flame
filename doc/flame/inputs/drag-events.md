@@ -14,14 +14,15 @@ will be handled correctly by Flame, and you can even keep track of the events by
 
 In order to enable drag events for your game, do the following:
 
-1.  Add the `HasDraggableComponents` mixin to your main game class:
+1. Add the `HasDraggableComponents` mixin to your main game class:
+
     ```dart
     class MyGame extends FlameGame with HasDraggableComponents {
      // ...
     }
     ```
 
-2.  For those components that you want to respond to drags, add the `DragCallbacks` mixin.
+2. For those components that you want to respond to drags, add the `DragCallbacks` mixin.
     - This mixin adds four overridable methods to your component: `onDragStart`, `onDragUpdate`,
       `onDragEnd`, and `onDragCancel`. By default, these methods do nothing -- they need to be
       overridden in order to perform any function.
@@ -53,6 +54,7 @@ draw curves inside the pink rectangle.
 
 
 ## Drag anatomy
+
 
 ### onDragStart
 
@@ -104,6 +106,7 @@ which simply converts this event into an `onDragEnd`.
 
 ## Mixins
 
+
 ### HasDraggableComponents
 
 This mixin is used on a `FlameGame` in order to ensure that drag events coming from Flutter reach
@@ -137,7 +140,7 @@ This mixin adds methods `onDragStart`, `onDragUpdate`, `onDragEnd`, and `onDragC
 component, which by default don't do anything, but can be overridden to implement any real
 functionality.
 
-Another crucial detail is that a component will only receive drag events that originate _within_
+Another crucial detail is that a component will only receive drag events that originate *within*
 that component, as judged by the `containsLocalPoint()` function. The commonly-used
 `PositionComponent` class provides such an implementation based on its `size` property. Thus, if
 your component derives from a `PositionComponent`, then make sure that you set its size correctly.

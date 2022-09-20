@@ -25,7 +25,7 @@ I always find it useful to create a rough sketch of what I am about to code,
 so that it can serve as a reference point. My sketch for the Klondike game is
 shown below:
 
-![](../../images/tutorials/klondike-sketch.webp)
+![Sketch of the klondike card game](../../images/tutorials/klondike-sketch.webp)
 
 Here you can see both the general layout of the game, as well as names of
 various objects. These names are the [standard terminology] for solitaire games.
@@ -59,11 +59,12 @@ phones, but it would also work nicely for larger devices like an iPad.
 And now, without further ado, here's my graphic asset for the Klondike game
 (I'm not an artist, so don't judge too harshly):
 
-![](app/assets/images/klondike-sprites.png)
+![Klondike sprites](app/assets/images/klondike-sprites.png)
 
 Right-click the image, choose "Save as...", and store it in the `assets/images`
 folder of the project. At this point our project's structure looks like this
 (there are other files too, of course, but these are the important ones):
+
 ```text
 klondike/
  ├─assets/
@@ -82,16 +83,17 @@ extracted from a single source image can be faster too, since Flutter will
 optimize multiple such drawing commands into a single `drawAtlas` command.
 
 Here are the contents of my spritesheet:
-  - Numerals 2, 3, 4, ..., K, A. In theory, we could have rendered these in the
+
+- Numerals 2, 3, 4, ..., K, A. In theory, we could have rendered these in the
     game as text strings, but then we would need to also include a font as an
     asset -- seems simpler to just have them as images instead.
-  - Suit marks: ♥, ♦, ♣, ♠. Again, we could have used Unicode characters for
+- Suit marks: ♥, ♦, ♣, ♠. Again, we could have used Unicode characters for
     these, but images are much easier to position precisely.
-      * In case you're wondering why these are yellow/blue instead of red/black
+  - In case you're wondering why these are yellow/blue instead of red/black
         -- turns out, black symbols don't look very nice on a dark background,
         so I had to adjust the color scheme.
-  - Flame logo, for use on the backs of the cards.
-  - Pictures of a Jack, a Queen, and a King. Normally there would be four times
+- Flame logo, for use on the backs of the cards.
+- Pictures of a Jack, a Queen, and a King. Normally there would be four times
     more of these, with a different character for each suite, but I got too
     tired drawing these.
 
