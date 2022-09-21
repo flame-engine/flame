@@ -350,6 +350,8 @@ EffectController({
     int? repeatCount,
     bool infinite = false,
     double startDelay = 0.0,
+    VoidCallback? onPeak,
+    VoidCallback? onReversePeak,
 });
 ```
 
@@ -393,6 +395,12 @@ EffectController({
   wait time is executed only once, even if the effect is repeating. During this time the effect's
   `.started` property returns false. The effect's `onStart()` callback will be executed at the end
   of this waiting period.
+
+- *`onPeak`* -- callback function which will be invoked right after reaching its max progress and
+  before the optional pause and reverse stage.
+
+- *`onReversePeak`* -- callback function which will be invoked right after reaching its lowest progress
+  at the end of the reverse stage and before the optional pause and forward stage.
 
   Using this parameter is the simplest way to create a chain of effects that execute one after
   another (or with an overlap).
