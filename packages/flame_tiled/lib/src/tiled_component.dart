@@ -126,6 +126,12 @@ class TiledComponent<T extends FlameGame> extends PositionComponent
               );
 
       case MapOrientation.isometric:
+        // THIS IS
+        return Vector2(
+          tileScaled.x + ((tileMap.map.width - 1) * tileScaled.x / 2),
+          tileScaled.y + ((tileMap.map.height - 1) * tileScaled.y / 2),
+        );
+
       case MapOrientation.orthogonal:
         return Vector2(
           tileMap.map.width * tileScaled.x,
