@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flame/components.dart';
+import 'package:flame/effects.dart';
 import 'package:flame/game.dart';
 import 'package:flame/src/effects/controllers/effect_controller.dart';
 import 'package:flame/src/effects/opacity_effect.dart';
@@ -164,6 +165,48 @@ void main() {
           expect(component.getOpacity(), 0.0);
           component.setOpacity(1.0);
         }
+      },
+    );
+
+    flameGame.test(
+      'repeated fade out and fade in',
+      (game) async {
+        final rng = Random();
+        final component = _PaintComponent();
+        await game.ensureAdd(component);
+
+        final fadeOutValues = <double>[];
+        final fadeInValues = <double>[];
+
+        await component.add(
+          SequenceEffect(
+            [
+              OpacityEffect.fadeOut(
+                LinearEffectController(3),
+                onComplete: () => fadeOutValues.add(component.getOpacity()),
+              ),
+              OpacityEffect.fadeIn(
+                LinearEffectController(3),
+                onComplete: () => fadeInValues.add(component.getOpacity()),
+              ),
+            ],
+            repeatCount: 10,
+          ),
+        );
+
+        var timeElapsed = 0.0;
+        while (timeElapsed < 6 * 10) {
+          final dt = rng.nextDouble() / 60;
+          game.update(dt);
+          timeElapsed += dt;
+        }
+
+        fadeOutValues.forEach(
+          (value) => expectDouble(value, 0.0),
+        );
+        fadeInValues.forEach(
+          (value) => expectDouble(value, 1.0),
+        );
       },
     );
 
