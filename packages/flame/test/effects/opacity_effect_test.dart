@@ -142,6 +142,31 @@ void main() {
       expect(component.children.length, 0);
     });
 
+    flameGame.test(
+      'fade out',
+      (game) async {
+        final rng = Random();
+        final component = _PaintComponent();
+        await game.ensureAdd(component);
+
+        // Repeat the test 3 times
+        for (var i = 0; i < 3; ++i) {
+          await component
+              .add(OpacityEffect.fadeOut(EffectController(duration: 3)));
+
+          var timeElapsed = 0.0;
+          while (timeElapsed < 3) {
+            final dt = rng.nextDouble() / 60;
+            game.update(dt);
+            timeElapsed += dt;
+          }
+
+          expect(component.getOpacity(), 0.0);
+          component.setOpacity(1.0);
+        }
+      },
+    );
+
     testRandom('a very long opacity change', (Random rng) async {
       final game = FlameGame()..onGameResize(Vector2(1, 1));
       final component = _PaintComponent();
