@@ -5,7 +5,7 @@ import 'package:flame/effects.dart';
 /// 1.0 to match `duration` or 0.0 to match when the `reverseDuration`
 /// has been reached.
 class CallbackController extends DurationEffectController {
-  CallbackController({required this.callback, required double progress})
+  CallbackController(this.callback, {required double progress})
       : _progress = progress,
         super(0.0);
 

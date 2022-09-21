@@ -319,36 +319,36 @@ void main() {
       );
     });
 
-    test('onPeak and onReversePeak callbacks', () {
-      final mockOnPeak = CallbackMock();
-      final mockOnReversePeak = CallbackMock();
+    test('onMax and onMin callbacks', () {
+      final mockOnMax = CallbackMock();
+      final mockOnMin = CallbackMock();
       final ec = EffectController(
         duration: 1,
         reverseDuration: 1,
-        onPeak: mockOnPeak,
-        onReversePeak: mockOnReversePeak,
+        onMax: mockOnMax,
+        onMin: mockOnMin,
         infinite: true,
       );
 
       ec.advance(1);
-      verifyNever(mockOnPeak.call);
-      verifyNever(mockOnReversePeak.call);
+      verifyNever(mockOnMax.call);
+      verifyNever(mockOnMin.call);
 
       ec.advance(0.1);
-      verify(mockOnPeak.call).called(1);
-      verifyNever(mockOnReversePeak.call);
+      verify(mockOnMax.call).called(1);
+      verifyNever(mockOnMin.call);
 
       ec.advance(1); // after this call a .setToStart() is performed
-      verifyNever(mockOnPeak.call);
-      verify(mockOnReversePeak.call).called(1);
+      verifyNever(mockOnMax.call);
+      verify(mockOnMin.call).called(1);
 
       ec.advance(0.5);
-      verifyNever(mockOnPeak.call);
-      verifyNever(mockOnReversePeak.call);
+      verifyNever(mockOnMax.call);
+      verifyNever(mockOnMin.call);
 
       ec.advance(0.5);
-      verify(mockOnPeak.call).called(1);
-      verifyNever(mockOnReversePeak.call);
+      verify(mockOnMax.call).called(1);
+      verifyNever(mockOnMin.call);
     });
 
     group('errors', () {

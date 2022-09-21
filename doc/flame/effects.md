@@ -399,10 +399,10 @@ EffectController({
   Using this parameter is the simplest way to create a chain of effects that execute one after
   another (or with an overlap).
 
-- *`onPeak`* -- callback function which will be invoked right after reaching its max progress and
+- *`onMax`* -- callback function which will be invoked right after reaching its max progress and
   before the optional pause and reverse stage.
 
-- *`onReversePeak`* -- callback function which will be invoked right after reaching its lowest progress
+- *`onMin`* -- callback function which will be invoked right after reaching its lowest progress
   at the end of the reverse stage and before the optional pause and forward stage.
 
 The effect controller returned by this factory constructor will be composited of multiple simpler

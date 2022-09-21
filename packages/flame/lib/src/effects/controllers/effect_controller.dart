@@ -91,8 +91,8 @@ abstract class EffectController {
     double startDelay = 0.0,
     double atMaxDuration = 0.0,
     double atMinDuration = 0.0,
-    VoidCallback? onPeak,
-    VoidCallback? onReversePeak,
+    VoidCallback? onMax,
+    VoidCallback? onMin,
   }) {
     assert(
       (duration ?? 1) >= 0,
@@ -164,9 +164,9 @@ abstract class EffectController {
       );
     }
 
-    // ON PEAK CALLBACK
-    if (onPeak != null) {
-      items.add(CallbackController(callback: onPeak, progress: 1.0));
+    // ON MAX CALLBACK
+    if (onMax != null) {
+      items.add(CallbackController(onMax, progress: 1.0));
     }
 
     // AT-MAX
@@ -207,9 +207,9 @@ abstract class EffectController {
       }
     }
 
-    // ON REVERSE PEAK CALLBACK
-    if (onReversePeak != null) {
-      items.add(CallbackController(callback: onReversePeak, progress: 0.0));
+    // ON MIN CALLBACK
+    if (onMin != null) {
+      items.add(CallbackController(onMin, progress: 0.0));
     }
 
     // AT-MIN
