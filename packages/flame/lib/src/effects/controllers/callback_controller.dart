@@ -21,12 +21,12 @@ class CallbackController extends DurationEffectController {
   @override
   double advance(double dt) {
     callback();
-    return 0.00001;
+    return dt;
   }
 
   @override
   double recede(double dt) {
     callback();
-    return 0.00001;
+    return dt;
   }
 }

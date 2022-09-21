@@ -11,6 +11,7 @@ import 'package:mocktail/mocktail.dart';
 abstract class Callback {
   void call();
 }
+
 class CallbackMock extends Mock implements Callback {}
 
 void main() {
@@ -348,7 +349,6 @@ void main() {
       ec.advance(0.5);
       verify(mockOnPeak.call).called(1);
       verifyNever(mockOnReversePeak.call);
-
     });
 
     group('errors', () {
