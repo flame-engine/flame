@@ -7,8 +7,6 @@ They were released as Public domain.
 
 
 The following assets were [downloaded here](https://0x72.itch.io/dungeontileset-ii).
-They were released as CC0 1.0 Universal (CC0 1.0) - Public Domain Dedication.
-
-https://creativecommons.org/publicdomain/zero/1.0/
+They were released as [CC0 1.0 Universal (CC0 1.0) - Public Domain Dedication](https://creativecommons.org/publicdomain/zero/1.0/).
 
 - 0x72_DungeonTilesetII_v1.4.png
