@@ -6,6 +6,12 @@ import 'package:flame/game.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter/animation.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
+
+abstract class Callback {
+  void call();
+}
+class CallbackMock extends Mock implements Callback {}
 
 void main() {
   group('EffectController', () {
@@ -310,6 +316,39 @@ void main() {
         (seq[1] as SpeedEffectController).child,
         isA<ReverseCurvedEffectController>(),
       );
+    });
+
+    test('onPeak and onReversePeak callbacks', () {
+      final mockOnPeak = CallbackMock();
+      final mockOnReversePeak = CallbackMock();
+      final ec = EffectController(
+        duration: 1,
+        reverseDuration: 1,
+        onPeak: mockOnPeak,
+        onReversePeak: mockOnReversePeak,
+        infinite: true,
+      );
+
+      ec.advance(1);
+      verifyNever(mockOnPeak.call);
+      verifyNever(mockOnReversePeak.call);
+
+      ec.advance(0.1);
+      verify(mockOnPeak.call).called(1);
+      verifyNever(mockOnReversePeak.call);
+
+      ec.advance(1); // after this call a .setToStart() is performed
+      verifyNever(mockOnPeak.call);
+      verify(mockOnReversePeak.call).called(1);
+
+      ec.advance(0.5);
+      verifyNever(mockOnPeak.call);
+      verifyNever(mockOnReversePeak.call);
+
+      ec.advance(0.5);
+      verify(mockOnPeak.call).called(1);
+      verifyNever(mockOnReversePeak.call);
+
     });
 
     group('errors', () {

@@ -1,7 +1,8 @@
 import 'dart:ui';
 import 'package:flame/effects.dart';
 
-/// callback will be invoked after the effect's duration or reverseDuration
+/// The [callback] will be invoked once the effect's [progress] is reached.
+/// 1.0 to match `duration` or 0.0 to match when the `reverseDuration`
 /// has been reached.
 class CallbackController extends DurationEffectController {
   CallbackController({required this.callback, required double progress})
@@ -20,12 +21,12 @@ class CallbackController extends DurationEffectController {
   @override
   double advance(double dt) {
     callback();
-    return 1;
+    return 0.00001;
   }
 
   @override
   double recede(double dt) {
     callback();
-    return 1;
+    return 0.00001;
   }
 }
