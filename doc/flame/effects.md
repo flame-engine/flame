@@ -396,14 +396,14 @@ EffectController({
   `.started` property returns false. The effect's `onStart()` callback will be executed at the end
   of this waiting period.
 
+  Using this parameter is the simplest way to create a chain of effects that execute one after
+  another (or with an overlap).
+
 - *`onPeak`* -- callback function which will be invoked right after reaching its max progress and
   before the optional pause and reverse stage.
 
 - *`onReversePeak`* -- callback function which will be invoked right after reaching its lowest progress
   at the end of the reverse stage and before the optional pause and forward stage.
-
-  Using this parameter is the simplest way to create a chain of effects that execute one after
-  another (or with an overlap).
 
 The effect controller returned by this factory constructor will be composited of multiple simpler
 effect controllers described further below. If this constructor proves to be too limited for your
