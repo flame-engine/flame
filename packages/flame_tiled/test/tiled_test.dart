@@ -765,8 +765,8 @@ void main() {
           );
         });
 
-        /// This will not produce a pretty map for non-orthoganal, but that's OK,
-        /// we're looking for parsing and handling of animations.
+        /// This will not produce a pretty map for non-orthogonal, but that's
+        /// OK, we're looking for parsing and handling of animations.
         test('renders ($mapType)', () async {
           var pngData = await renderMapToPng(component);
           await expectLater(

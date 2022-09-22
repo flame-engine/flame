@@ -49,15 +49,16 @@ class TiledComponent<T extends FlameGame> extends PositionComponent
     super.children,
     super.priority,
   }) : super(
-            size: computeSize(
-          tileMap.map.orientation,
-          tileMap.destTileSize,
-          tileMap.map.tileWidth,
-          tileMap.map.tileHeight,
-          tileMap.map.width,
-          tileMap.map.height,
-          tileMap.map.staggerAxis,
-        ));
+          size: computeSize(
+            tileMap.map.orientation,
+            tileMap.destTileSize,
+            tileMap.map.tileWidth,
+            tileMap.map.tileHeight,
+            tileMap.map.width,
+            tileMap.map.height,
+            tileMap.map.staggerAxis,
+          ),
+        );
 
   @override
   Future<void>? onLoad() async {
@@ -118,7 +119,7 @@ class TiledComponent<T extends FlameGame> extends PositionComponent
       tileHeight * yScale,
     );
 
-    switch (orientation!) {
+    switch (orientation) {
       case MapOrientation.staggered:
         return staggerAxis == StaggerAxis.y
             ? Vector2(
