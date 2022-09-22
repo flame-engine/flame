@@ -350,8 +350,8 @@ EffectController({
     int? repeatCount,
     bool infinite = false,
     double startDelay = 0.0,
-    VoidCallback? onPeak,
-    VoidCallback? onReversePeak,
+    VoidCallback? onMax,
+    VoidCallback? onMin,
 });
 ```
 
