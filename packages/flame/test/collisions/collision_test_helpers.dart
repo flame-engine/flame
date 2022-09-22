@@ -36,19 +36,17 @@ Future<void> testQuadTreeCollisionDetectionGame(
   );
 }
 
-typedef CollisionTestsRegistry
-    = Map<String, Future Function(HasCollisionDetection)>;
-
-extension RunTestsRegistry on CollisionTestsRegistry {
-  Future<void> run() async {
-    for (final entry in entries) {
-      final name = entry.key;
-      final testFunction = entry.value;
-      testCollisionDetectionGame('[Sweep] $name', testFunction);
-      testQuadTreeCollisionDetectionGame('[QuadTree] $name', testFunction);
-    }
+Future<void> runTestRegistry(
+  Map<String, Future Function(HasCollisionDetection)> testRegistry,
+) async {
+  for (final entry in testRegistry.entries) {
+    final name = entry.key;
+    final testFunction = entry.value;
+    testCollisionDetectionGame('[Sweep] $name', testFunction);
+    testQuadTreeCollisionDetectionGame('[QuadTree] $name', testFunction);
   }
 }
+
 
 class TestHitbox extends RectangleHitbox {
   int startCounter = 0;

@@ -681,8 +681,7 @@ void main() {
   });
 
   group('Raycasting', () {
-    // ignore: omit_local_variable_types
-    final CollisionTestsRegistry testsRegistry = {
+    runTestRegistry({
       'one hitbox': (game) async {
         game.ensureAdd(
           PositionComponent(
@@ -775,13 +774,10 @@ void main() {
           closeToVector(Vector2(1, -1)..normalize()),
         );
       },
-    };
-
-    testsRegistry.run();
+    });
 
     group('Rectangle hitboxes', () {
-      // ignore: omit_local_variable_types
-      final CollisionTestsRegistry testsRegistry = {
+      runTestRegistry({
         'ray from within RectangleHitbox': (game) async {
           game.ensureAddAll([
             PositionComponent(
@@ -871,14 +867,11 @@ void main() {
             closeToVector(Vector2(0, 1)),
           );
         },
-      };
-
-      testsRegistry.run();
+      });
     });
 
     group('Circle hitboxes', () {
-      // ignore: omit_local_variable_types
-      final CollisionTestsRegistry testsRegistry = {
+      runTestRegistry({
         'ray from top to bottom within CircleHitbox': (game) async {
           game.ensureAddAll([
             PositionComponent(
@@ -1031,13 +1024,11 @@ void main() {
             closeToVector(Vector2(0, 1)),
           );
         },
-      };
-      testsRegistry.run();
+      });
     });
 
     group('raycastAll', () {
-      // ignore: omit_local_variable_types
-      final CollisionTestsRegistry testsRegistry = {
+      runTestRegistry({
         'All directions and all hits': (game) async {
           game.ensureAddAll([
             PositionComponent(
@@ -1066,12 +1057,10 @@ void main() {
           expect(results.every((r) => r.isActive), isTrue);
           expect(results.length, 4);
         },
-      };
-      testsRegistry.run();
+      });
     });
 
-    // ignore: omit_local_variable_types
-    final CollisionTestsRegistry testsRegistryLast = {
+    runTestRegistry({
       'All directions and all hits': (game) async {
         game.ensureAddAll([
           PositionComponent(
@@ -1103,13 +1092,11 @@ void main() {
         expect(results.every((r) => r.isActive), isTrue);
         expect(results.length, 3);
       },
-    };
-    testsRegistryLast.run();
+    });
   });
 
   group('Raytracing', () {
-    // ignore: omit_local_variable_types
-    final CollisionTestsRegistry testsRegistry = {
+    runTestRegistry({
       'on single circle': (game) async {
         final circle = CircleComponent(
           radius: 10.0,
@@ -1311,7 +1298,6 @@ void main() {
         expect(reflectionRay2?.origin, Vector2(50, 0));
         expect(reflectionRay2?.direction, Vector2(1, 1)..normalize());
       }
-    };
-    testsRegistry.run();
+    });
   });
 }
