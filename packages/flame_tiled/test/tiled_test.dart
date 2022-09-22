@@ -769,28 +769,28 @@ void main() {
         /// we're looking for parsing and handling of animations.
         test('renders ($mapType)', () async {
           var pngData = await renderMapToPng(component);
-          expect(
+          await expectLater(
             pngData,
             matchesGoldenFile('goldens/dungeon_animation_${mapType}_0.png'),
           );
 
           component.update(0.18);
           pngData = await renderMapToPng(component);
-          expect(
+          await expectLater(
             pngData,
             matchesGoldenFile('goldens/dungeon_animation_${mapType}_1.png'),
           );
 
           component.update(0.18);
           pngData = await renderMapToPng(component);
-          expect(
+          await expectLater(
             pngData,
             matchesGoldenFile('goldens/dungeon_animation_${mapType}_2.png'),
           );
 
           component.update(0.18);
           pngData = await renderMapToPng(component);
-          expect(
+          await expectLater(
             pngData,
             matchesGoldenFile('goldens/dungeon_animation_${mapType}_3.png'),
           );

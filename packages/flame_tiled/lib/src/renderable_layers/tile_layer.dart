@@ -78,6 +78,7 @@ class TileLayer extends RenderableLayer<tiled.TileLayer> {
     final tileData = layer.tileData!;
     final batchMap = _cachedSpriteBatches;
     final size = destTileSize;
+    final halfMapTile = Vector2(map.tileWidth / 2, map.tileHeight / 2);
 
     for (var ty = 0; ty < tileData.length; ty++) {
       final tileRow = tileData[ty];
@@ -105,8 +106,8 @@ class TileLayer extends RenderableLayer<tiled.TileLayer> {
             MutableRect.fromRect(tileset.computeDrawRect(tile).toRect());
         final flips = SimpleFlips.fromFlips(tileGid.flips);
         final scale = size.x / src.width;
-        final anchorX = src.width / 2;
-        final anchorY = src.height / 2;
+        final anchorX = src.width - halfMapTile.x;
+        final anchorY = src.height - halfMapTile.y;
 
         late double offsetX;
         late double offsetY;
@@ -143,7 +144,9 @@ class TileLayer extends RenderableLayer<tiled.TileLayer> {
     final batchMap = _cachedSpriteBatches;
     final halfDestinationTile = destTileSize / 2;
     final size = destTileSize;
-    final isometricXShift = map.width * size.x * 0.5;
+    final isometricXShift = map.height * halfDestinationTile.x;
+    final isometricYShift = halfDestinationTile.y;
+    final halfMapTile = Vector2(map.tileWidth / 2, map.tileHeight / 2);
 
     for (var ty = 0; ty < tileData.length; ty++) {
       final tileRow = tileData[ty];
@@ -170,14 +173,14 @@ class TileLayer extends RenderableLayer<tiled.TileLayer> {
             MutableRect.fromRect(tileset.computeDrawRect(tile).toRect());
         final flips = SimpleFlips.fromFlips(tileGid.flips);
         final scale = size.x / src.width;
-        final anchorX = src.width / 2;
-        final anchorY = src.height / 2;
+        final anchorX = src.width - halfMapTile.x;
+        final anchorY = src.height - halfMapTile.y;
 
         late double offsetX;
         late double offsetY;
 
         offsetX = halfDestinationTile.x * (tx - ty) + isometricXShift;
-        offsetY = halfDestinationTile.y * (tx + ty) - size.y;
+        offsetY = halfDestinationTile.y * (tx + ty) + isometricYShift;
 
         final scos = flips.cos * scale;
         final ssin = flips.sin * scale;
@@ -213,11 +216,11 @@ class TileLayer extends RenderableLayer<tiled.TileLayer> {
 
     var staggerY = 0.0;
     var staggerX = 0.0;
-    // Hexagonal Ponity Tiles move down by a fractional amount.
+    // Isometric staggered tiles move down by a fractional amount.
     if (map.staggerAxis == tiled.StaggerAxis.y) {
       staggerY = size.y * 0.5;
     } else
-    // Hexagonal Flat Tiles move right by a fractional amount.
+    // Isometric staggered tiles move right by a fractional amount.
     if (map.staggerAxis == tiled.StaggerAxis.x) {
       staggerX = size.x * 0.5;
     }
@@ -225,7 +228,7 @@ class TileLayer extends RenderableLayer<tiled.TileLayer> {
     for (var ty = 0; ty < tileData.length; ty++) {
       final tileRow = tileData[ty];
 
-      // Hexagonal Pointy Tiles shift left and right depending on the row
+      // Isometric staggered tiles shift left and right depending on the row
       if (map.staggerAxis == tiled.StaggerAxis.y) {
         if ((ty.isOdd && map.staggerIndex == tiled.StaggerIndex.odd) ||
             (ty.isEven && map.staggerIndex == tiled.StaggerIndex.even)) {
