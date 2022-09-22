@@ -313,17 +313,16 @@ void main() {
 
   Future<Uint8List> renderMapToPng(
     TiledComponent component,
-    num width,
-    num height,
   ) async {
     final canvasRecorder = PictureRecorder();
     final canvas = Canvas(canvasRecorder);
     component.tileMap.render(canvas);
     final picture = canvasRecorder.endRecording();
 
-    // Map size is now 320 wide, but it has 1 extra tile of height becusae
+    final size = component.size;
+    // Map size is now 320 wide, but it has 1 extra tile of height because
     // its actually double-height tiles.
-    final image = await picture.toImageSafe(width.toInt(), height.toInt());
+    final image = await picture.toImageSafe(size.x.toInt(), size.y.toInt());
     return (await image.toByteData(format: ImageByteFormat.png))!
         .buffer
         .asUint8List();
@@ -361,7 +360,7 @@ void main() {
     });
 
     test('renders', () async {
-      final pngData = await renderMapToPng(component, 32 * 16, 128 * 16);
+      final pngData = await renderMapToPng(component);
 
       expect(pngData, matchesGoldenFile('goldens/orthogonal.png'));
     });
@@ -389,10 +388,9 @@ void main() {
     });
 
     test('renders', () async {
-      // Map size is now 320 wide, but it has 1 extra tile of height becusae
+      // Map size is now 320 wide, but it has 1 extra tile of height because
       // its actually double-height tiles.
-      final pngData =
-          await renderMapToPng(component, 256 * 5 ~/ 4, (128 * 5 + 128) ~/ 4);
+      final pngData = await renderMapToPng(component);
 
       expect(pngData, matchesGoldenFile('goldens/isometric.png'));
     });
@@ -427,7 +425,7 @@ void main() {
 
       expect(component.size, Vector2(240, 214.5));
 
-      final pngData = await renderMapToPng(component, 240, 215);
+      final pngData = await renderMapToPng(component);
 
       expect(pngData, matchesGoldenFile('goldens/flat_hex_even.png'));
     });
@@ -441,7 +439,7 @@ void main() {
 
       expect(component.size, Vector2(240, 214.5));
 
-      final pngData = await renderMapToPng(component, 240, 215);
+      final pngData = await renderMapToPng(component);
 
       expect(pngData, matchesGoldenFile('goldens/flat_hex_odd.png'));
     });
@@ -455,7 +453,7 @@ void main() {
 
       expect(component.size, Vector2(330, 208));
 
-      final pngData = await renderMapToPng(component, 330, 208);
+      final pngData = await renderMapToPng(component);
 
       expect(pngData, matchesGoldenFile('goldens/pointy_hex_even.png'));
     });
@@ -469,7 +467,7 @@ void main() {
 
       expect(component.size, Vector2(330, 208));
 
-      final pngData = await renderMapToPng(component, 330, 208);
+      final pngData = await renderMapToPng(component);
 
       expect(pngData, matchesGoldenFile('goldens/pointy_hex_odd.png'));
     });
@@ -504,7 +502,7 @@ void main() {
 
       expect(component.size, Vector2(320, 288));
 
-      final pngData = await renderMapToPng(component, 320, 288);
+      final pngData = await renderMapToPng(component);
 
       expect(
         pngData,
@@ -521,7 +519,7 @@ void main() {
 
       expect(component.size, Vector2(320 / 2, 288 / 2));
 
-      final pngData = await renderMapToPng(component, 160, 144);
+      final pngData = await renderMapToPng(component);
 
       expect(
         pngData,
@@ -538,7 +536,7 @@ void main() {
 
       expect(component.size, Vector2(576 / 2, 160 / 2));
 
-      final pngData = await renderMapToPng(component, 288, 80);
+      final pngData = await renderMapToPng(component);
 
       expect(
         pngData,
@@ -555,7 +553,7 @@ void main() {
 
       expect(component.size, Vector2(576, 160));
 
-      final pngData = await renderMapToPng(component, 576, 160);
+      final pngData = await renderMapToPng(component);
 
       expect(
         pngData,
@@ -585,11 +583,7 @@ void main() {
 
     test('regular', () async {
       await setupMap(size);
-      final pngData = await renderMapToPng(
-        component,
-        size.x.toInt() * 5,
-        size.y.toInt() * 5,
-      );
+      final pngData = await renderMapToPng(component);
 
       expect(
         pngData,
@@ -600,11 +594,7 @@ void main() {
     test('smaller', () async {
       final smallSize = size / 3;
       await setupMap(smallSize);
-      final pngData = await renderMapToPng(
-        component,
-        smallSize.x.toInt() * 5,
-        smallSize.y.toInt() * 5,
-      );
+      final pngData = await renderMapToPng(component);
 
       expect(
         pngData,
@@ -615,11 +605,7 @@ void main() {
     test('larger', () async {
       final largeSize = size * 2;
       await setupMap(largeSize);
-      final pngData = await renderMapToPng(
-        component,
-        largeSize.x.toInt() * 5,
-        largeSize.y.toInt() * 5,
-      );
+      final pngData = await renderMapToPng(component);
 
       expect(
         pngData,
@@ -667,8 +653,7 @@ void main() {
       final stack = component.tileMap.tileStack(0, 0, all: true);
       stack.position = stack.position + Vector2.all(20);
 
-      final pngData =
-          await renderMapToPng(component, size.x * 5, size.y * 5 + size.y / 2);
+      final pngData = await renderMapToPng(component);
       expect(
         pngData,
         matchesGoldenFile('goldens/tile_stack_all_move.png'),
@@ -679,7 +664,7 @@ void main() {
       final stack = component.tileMap.tileStack(0, 0, named: {'item'});
       stack.position = stack.position + Vector2(-20, 20);
 
-      final pngData = await renderMapToPng(component, size.x * 5, size.y * 5);
+      final pngData = await renderMapToPng(component);
       expect(
         pngData,
         matchesGoldenFile('goldens/tile_stack_single_move.png'),
@@ -783,29 +768,28 @@ void main() {
         /// This will not produce a pretty map for non-orthoganal, but that's OK,
         /// we're looking for parsing and handling of animations.
         test('renders ($mapType)', () async {
-          final mapSize = component.size;
-          var pngData = await renderMapToPng(component, mapSize.x, mapSize.y);
+          var pngData = await renderMapToPng(component);
           expect(
             pngData,
             matchesGoldenFile('goldens/dungeon_animation_${mapType}_0.png'),
           );
 
           component.update(0.18);
-          pngData = await renderMapToPng(component, mapSize.x, mapSize.y);
+          pngData = await renderMapToPng(component);
           expect(
             pngData,
             matchesGoldenFile('goldens/dungeon_animation_${mapType}_1.png'),
           );
 
           component.update(0.18);
-          pngData = await renderMapToPng(component, mapSize.x, mapSize.y);
+          pngData = await renderMapToPng(component);
           expect(
             pngData,
             matchesGoldenFile('goldens/dungeon_animation_${mapType}_2.png'),
           );
 
           component.update(0.18);
-          pngData = await renderMapToPng(component, mapSize.x, mapSize.y);
+          pngData = await renderMapToPng(component);
           expect(
             pngData,
             matchesGoldenFile('goldens/dungeon_animation_${mapType}_3.png'),
