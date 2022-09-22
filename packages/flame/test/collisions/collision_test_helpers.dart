@@ -47,7 +47,6 @@ Future<void> runTestRegistry(
   }
 }
 
-
 class TestHitbox extends RectangleHitbox {
   int startCounter = 0;
   int onCollisionCounter = 0;
