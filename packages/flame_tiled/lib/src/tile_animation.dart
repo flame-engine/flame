@@ -14,9 +14,6 @@ class TileAnimation {
   /// Rectangle that gets updated for each new frame in the animation.
   final MutableRect batchedSource;
 
-  /// Current frame lifetime, in seconds.
-  double frameTime = 0.0;
-
   /// Current frame counter.
   int frame = 0;
 
@@ -26,16 +23,8 @@ class TileAnimation {
   );
 
   void update(double dt) {
-    frameTime += dt;
-    final originalFrame = frame;
-    // Track really long jank by skipping ahead.
-    while (frames.durations[frame] <= frameTime) {
-      final currentFrameTime = frames.durations[frame];
-      frame = (frame + 1) % frames.durations.length;
-      // We still have time to add to this, even if we're late.
-      frameTime = frameTime - currentFrameTime;
-    }
-    if (originalFrame != frame) {
+    if (frame != frames.frame) {
+      frame = frames.frame;
       batchedSource.copy(frames.sources[frame]);
     }
   }
@@ -49,5 +38,23 @@ class TileFrames {
   /// Duration, in seconds, for each frame in the animation.
   final List<double> durations;
 
+  /// Current frame lifetime.
+  double frameTime = 0.0;
+
+  /// Current frame counter for all frames sharing this animation.
+  int frame = 0;
+
   TileFrames(this.sources, this.durations);
+
+  void update(double dt) {
+    frameTime += dt;
+
+    // Track really long jank by skipping ahead.
+    while (durations[frame] <= frameTime) {
+      final currentFrameTime = durations[frame];
+      frame = (frame + 1) % durations.length;
+      // We still have time to add to this, even if we're late.
+      frameTime = frameTime - currentFrameTime;
+    }
+  }
 }

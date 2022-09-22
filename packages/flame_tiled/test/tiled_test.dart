@@ -738,14 +738,14 @@ void main() {
 
           layer.update(.177);
           expect(waterAnimation.frame, 0);
-          expect(waterAnimation.frameTime, .177);
+          expect(waterAnimation.frames.frameTime, .177);
           expect(
             waterAnimation.batchedSource.toRect(),
             waterAnimation.frames.sources[0],
           );
 
           expect(spikeAnimation.frame, 1);
-          expect(spikeAnimation.frameTime, moreOrLessEquals(.001));
+          expect(spikeAnimation.frames.frameTime, moreOrLessEquals(.001));
           expect(
             spikeAnimation.batchedSource.toRect(),
             spikeAnimation.frames.sources[1],
@@ -753,9 +753,9 @@ void main() {
 
           layer.update(.003);
           expect(waterAnimation.frame, 1);
-          expect(waterAnimation.frameTime, moreOrLessEquals(.0));
+          expect(waterAnimation.frames.frameTime, moreOrLessEquals(.0));
           expect(spikeAnimation.frame, 1);
-          expect(spikeAnimation.frameTime, moreOrLessEquals(0.004));
+          expect(spikeAnimation.frames.frameTime, moreOrLessEquals(0.004));
 
           layer.update(0.17 + 0.15);
           expect(waterAnimation.frame, 0, reason: 'wraps around');

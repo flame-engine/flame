@@ -44,6 +44,10 @@ class TileLayer extends RenderableLayer<tiled.TileLayer> {
 
   @override
   void update(double dt) {
+    for (final frame in animationFrames.values) {
+      frame.update(dt);
+    }
+
     for (final animation in animations) {
       animation.update(dt);
     }
