@@ -385,7 +385,7 @@ void main() {
 
     test('component size', () {
       expect(component.tileMap.destTileSize, Vector2(64, 32));
-      expect(component.size, Vector2(192, 96));
+      expect(component.size, Vector2(320, 160));
     });
 
     test('renders', () async {
@@ -784,7 +784,6 @@ void main() {
         /// we're looking for parsing and handling of animations.
         test('renders ($mapType)', () async {
           final mapSize = component.size;
-          print('huh? $mapSize');
           var pngData = await renderMapToPng(component, mapSize.x, mapSize.y);
           expect(
             pngData,
