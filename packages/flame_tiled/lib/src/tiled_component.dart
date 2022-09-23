@@ -140,12 +140,9 @@ class TiledComponent<T extends FlameGame> extends PositionComponent
               );
 
       case MapOrientation.isometric:
-        final dimensions = mapWidth + mapHeight;
         final halfTile = tileScaled / 2;
-        return Vector2(
-          halfTile.x * dimensions,
-          halfTile.y * dimensions,
-        );
+        final dimensions = mapWidth + mapHeight;
+        return halfTile..scale(dimensions.toDouble());
 
       case MapOrientation.orthogonal:
         return Vector2(
