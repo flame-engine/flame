@@ -2,6 +2,7 @@ import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame/sprite.dart';
 import 'package:flame_tiled/flame_tiled.dart';
+import 'package:flame_tiled/src/mutable_transform.dart';
 import 'package:flame_tiled/src/renderable_layers/group_layer.dart';
 import 'package:flame_tiled/src/renderable_layers/renderable_layer.dart';
 import 'package:flame_tiled/src/tile_transform.dart';
@@ -13,6 +14,7 @@ import 'package:tiled/tiled.dart' as tiled;
 class TileLayer extends RenderableLayer<tiled.TileLayer> {
   late final _layerPaint = Paint();
   late final Map<String, SpriteBatch> _cachedSpriteBatches;
+  late List<List<MutableRSTransform?>> indexes;
 
   TileLayer(
     super.layer,
@@ -26,6 +28,11 @@ class TileLayer extends RenderableLayer<tiled.TileLayer> {
 
   @override
   void refreshCache() {
+    indexes = List.generate(
+      layer.width,
+      (index) => List.filled(layer.height, null),
+    );
+
     _cacheLayerTiles();
   }
 
@@ -95,14 +102,18 @@ class TileLayer extends RenderableLayer<tiled.TileLayer> {
         final scos = flips.cos * scale;
         final ssin = flips.sin * scale;
 
+        indexes[tx][ty] = MutableRSTransform(
+          scos,
+          ssin,
+          offsetX,
+          offsetY,
+          -scos * anchorX + ssin * anchorY,
+          -ssin * anchorX - scos * anchorY,
+        );
+
         batch.addTransform(
           source: src,
-          transform: RSTransform(
-            scos,
-            ssin,
-            offsetX + -scos * anchorX + ssin * anchorY,
-            offsetY + -ssin * anchorX - scos * anchorY,
-          ),
+          transform: indexes[tx][ty],
           flip: flips.flip,
         );
       }
@@ -152,14 +163,18 @@ class TileLayer extends RenderableLayer<tiled.TileLayer> {
         final scos = flips.cos * scale;
         final ssin = flips.sin * scale;
 
+        indexes[tx][ty] = MutableRSTransform(
+          scos,
+          ssin,
+          offsetX,
+          offsetY,
+          -scos * anchorX + ssin * anchorY,
+          -ssin * anchorX - scos * anchorY,
+        );
+
         batch.addTransform(
           source: src,
-          transform: RSTransform(
-            scos,
-            ssin,
-            offsetX + -scos * anchorX + ssin * anchorY,
-            offsetY + -ssin * anchorX - scos * anchorY,
-          ),
+          transform: indexes[tx][ty],
           flip: flips.flip,
         );
       }
@@ -257,11 +272,13 @@ class TileLayer extends RenderableLayer<tiled.TileLayer> {
         final scos = flips.cos * scale;
         final ssin = flips.sin * scale;
 
-        final transform = RSTransform(
+        final transform = indexes[tx][ty] = MutableRSTransform(
           scos,
           ssin,
-          offsetX + -scos * anchorX + ssin * anchorY,
-          offsetY + -ssin * anchorX - scos * anchorY,
+          offsetX,
+          offsetY,
+          -scos * anchorX + ssin * anchorY,
+          -ssin * anchorX - scos * anchorY,
         );
 
         // A second pass is only needed in the case of staggery.
@@ -377,13 +394,14 @@ class TileLayer extends RenderableLayer<tiled.TileLayer> {
         final scos = flips.cos * scale;
         final ssin = flips.sin * scale;
 
-        final transform = RSTransform(
+        final transform = indexes[tx][ty] = MutableRSTransform(
           scos,
           ssin,
-          offsetX + -scos * anchorX + ssin * anchorY,
-          offsetY + -ssin * anchorX - scos * anchorY,
+          offsetX,
+          offsetY,
+          -scos * anchorX + ssin * anchorY,
+          -ssin * anchorX - scos * anchorY,
         );
-
         // A second pass is only needed in the case of staggery.
         if (map.staggerAxis == tiled.StaggerAxis.x && staggerY > 0) {
           xSecondPass.add(TileTransform(src, transform, flips.flip, batch));

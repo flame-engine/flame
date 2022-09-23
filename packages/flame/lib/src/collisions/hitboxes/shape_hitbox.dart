@@ -47,8 +47,8 @@ mixin ShapeHitbox on ShapeComponent implements Hitbox<ShapeHitbox> {
   @override
   bool renderShape = false;
 
-  @protected
-  late PositionComponent hitboxParent;
+  late PositionComponent _hitboxParent;
+  PositionComponent get hitboxParent => _hitboxParent;
   void Function()? _parentSizeListener;
   @protected
   bool shouldFillParent = false;
@@ -56,7 +56,7 @@ mixin ShapeHitbox on ShapeComponent implements Hitbox<ShapeHitbox> {
   @override
   void onMount() {
     super.onMount();
-    hitboxParent = ancestors().firstWhere(
+    _hitboxParent = ancestors().firstWhere(
       (c) => c is PositionComponent,
       orElse: () {
         throw StateError('A ShapeHitbox needs a PositionComponent ancestor');
