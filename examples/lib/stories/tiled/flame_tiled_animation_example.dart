@@ -1,8 +1,7 @@
 import 'package:flame/game.dart';
-import 'package:flame/input.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 
-class FlameTiledAnimationExample extends FlameGame with TapDetector {
+class FlameTiledAnimationExample extends FlameGame {
   static const String description = '''
     Loads and displays an animated Tiled map.
   ''';
