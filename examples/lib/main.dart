@@ -14,6 +14,7 @@ import 'package:examples/stories/rendering/rendering.dart';
 import 'package:examples/stories/sprites/sprites.dart';
 import 'package:examples/stories/svg/svg.dart';
 import 'package:examples/stories/system/system.dart';
+import 'package:examples/stories/tiled/tiled.dart';
 import 'package:examples/stories/utils/utils.dart';
 import 'package:examples/stories/widgets/widgets.dart';
 import 'package:flutter/material.dart';
@@ -38,6 +39,7 @@ void main() {
   addInputStories(dashbook);
   addParallaxStories(dashbook);
   addRenderingStories(dashbook);
+  addTiledStories(dashbook);
   addSpritesStories(dashbook);
   addSvgStories(dashbook);
   addSystemStories(dashbook);
