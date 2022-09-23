@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="10" height="10" tilewidth="16" tileheight="16" infinite="0" nextlayerid="6" nextobjectid="1">
+ <tileset firstgid="1" source="0x72_DungeonTilesetII_v1.4.tsx"/>
+ <layer id="3" name="ground" width="10" height="10" locked="1">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAACmNgoAw0Y6FHMfkYAK7z31GQAQAA
+  </data>
+ </layer>
+ <layer id="1" name="walls" width="10" height="10">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAACp3Q7QmDMBSF4ZuELFIVF9FNdBQXae0i4scegnYNXzDgKfSH9MJDksPh/og3My+i0Dw4s4ddiqTVjI6HTp10krkfPZ3xZu/uvn97Zeo+OV/o8XbfvQzBTgP3GQsmyaP8XYOV944PNuRkFTIcCfCt35ABAAA=
+  </data>
+ </layer>
+ <layer id="4" name="stuff" width="10" height="10">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAACmNgoA0oYaKNuamMuOW2IqmBYRgwQ2JfxWHeFKCbw/CYTw8AANEJHwqQAQAA
+  </data>
+ </layer>
+</map>
