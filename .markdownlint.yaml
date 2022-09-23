@@ -57,7 +57,7 @@ MD011: true
 
 # MD012/no-multiple-blanks - Multiple consecutive blank lines
 MD012:
-# Consecutive blank lines
+  # Consecutive blank lines
   maximum: 2
 
 # MD013/line-length - Line length
@@ -235,6 +235,4 @@ MD052: true
 # MD053/link-image-reference-definitions - Link and image reference definitions should be needed
 MD053:
   # Ignored definitions
-  ignored_definitions: [
-  "//"
-  ]
+  ignored_definitions: ["//"]
