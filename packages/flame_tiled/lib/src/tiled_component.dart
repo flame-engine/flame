@@ -69,10 +69,7 @@ class TiledComponent<T extends FlameGame> extends PositionComponent
 
   @override
   void update(double dt) {
-    super.update(dt);
-    for (final layer in tileMap.renderableLayers) {
-      layer.update(dt);
-    }
+    tileMap.update(dt);
   }
 
   @override

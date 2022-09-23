@@ -711,7 +711,7 @@ void main() {
           );
           expect(
             layer.animationFrames,
-            hasLength(1),
+            hasLength(4),
             reason: 'layer only caches frames in use',
           );
           expect(layer.animations.first.frames.sources, hasLength(1));
@@ -727,7 +727,7 @@ void main() {
           );
           expect(
             layer.animationFrames,
-            hasLength(2),
+            hasLength(4),
             reason: 'layer only caches frames in use',
           );
 
@@ -736,7 +736,7 @@ void main() {
           expect(waterAnimation.frames.durations, [.18, .17, .15]);
           expect(spikeAnimation.frames.durations, [.176, .176, .176, .176]);
 
-          layer.update(.177);
+          map.update(.177);
           expect(waterAnimation.frame, 0);
           expect(waterAnimation.frames.frameTime, .177);
           expect(
@@ -751,13 +751,13 @@ void main() {
             spikeAnimation.frames.sources[1],
           );
 
-          layer.update(.003);
+          map.update(.003);
           expect(waterAnimation.frame, 1);
           expect(waterAnimation.frames.frameTime, moreOrLessEquals(.0));
           expect(spikeAnimation.frame, 1);
           expect(spikeAnimation.frames.frameTime, moreOrLessEquals(0.004));
 
-          layer.update(0.17 + 0.15);
+          map.update(0.17 + 0.15);
           expect(waterAnimation.frame, 0, reason: 'wraps around');
           expect(
             waterAnimation.batchedSource.toRect(),

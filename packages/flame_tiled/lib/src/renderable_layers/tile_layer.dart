@@ -19,7 +19,7 @@ class TileLayer extends RenderableLayer<tiled.TileLayer> {
   late final Map<String, SpriteBatch> _cachedSpriteBatches;
   late List<List<MutableRSTransform?>> indexes;
   final animations = <TileAnimation>[];
-  final animationFrames = <Tile, TileFrames>{};
+  final Map<Tile, TileFrames> animationFrames;
 
   TileLayer(
     super.layer,
@@ -27,6 +27,7 @@ class TileLayer extends RenderableLayer<tiled.TileLayer> {
     super.map,
     super.destTileSize,
     this._cachedSpriteBatches,
+    this.animationFrames,
   ) {
     _layerPaint.color = Color.fromRGBO(255, 255, 255, opacity);
   }
@@ -44,10 +45,6 @@ class TileLayer extends RenderableLayer<tiled.TileLayer> {
 
   @override
   void update(double dt) {
-    for (final frame in animationFrames.values) {
-      frame.update(dt);
-    }
-
     for (final animation in animations) {
       animation.update(dt);
     }
@@ -484,6 +481,7 @@ class TileLayer extends RenderableLayer<tiled.TileLayer> {
     GroupLayer? parent,
     tiled.TiledMap map,
     Vector2 destTileSize,
+    Map<tiled.Tile, TileFrames> animationFrames,
   ) async {
     return TileLayer(
       layer,
@@ -491,6 +489,7 @@ class TileLayer extends RenderableLayer<tiled.TileLayer> {
       map,
       destTileSize,
       await _loadImages(map),
+      animationFrames,
     );
   }
 
@@ -524,7 +523,6 @@ class TileLayer extends RenderableLayer<tiled.TileLayer> {
       }
       return TileFrames(rects, durations);
     }();
-
     animations.add(TileAnimation(source, frames));
   }
 }
