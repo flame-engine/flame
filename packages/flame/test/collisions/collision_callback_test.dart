@@ -386,5 +386,26 @@ void main() {
       expect(block.onCollisionCounter, 2);
       expect(block.endCounter, 1);
     },
+    'collision callbacks for solid hitbox': (game) async {
+      final innerBlock = TestBlock(Vector2.zero(), Vector2.all(2))
+        ..anchor = Anchor.center
+        ..hitbox.isSolid = true;
+      final outerBlock = TestBlock(Vector2.zero(), Vector2.all(4))
+        ..anchor = Anchor.center
+        ..hitbox.isSolid = true;
+      await game.ensureAddAll([innerBlock, outerBlock]);
+
+      game.update(0);
+      expect(innerBlock.startCounter, 1);
+      expect(innerBlock.onCollisionCounter, 1);
+      expect(innerBlock.endCounter, 0);
+
+      innerBlock.position = Vector2.all(5);
+      game.update(0);
+
+      expect(outerBlock.startCounter, 1);
+      expect(outerBlock.onCollisionCounter, 1);
+      expect(outerBlock.endCounter, 1);
+    },
   });
 }

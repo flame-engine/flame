@@ -80,4 +80,7 @@ class ImageLayer extends RenderableLayer<tiled.ImageLayer> {
 
   @override
   void refreshCache() {}
+
+  @override
+  void update(double dt) {}
 }

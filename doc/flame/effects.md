@@ -350,6 +350,8 @@ EffectController({
     int? repeatCount,
     bool infinite = false,
     double startDelay = 0.0,
+    VoidCallback? onMax,
+    VoidCallback? onMin,
 });
 ```
 
@@ -396,6 +398,12 @@ EffectController({
 
   Using this parameter is the simplest way to create a chain of effects that execute one after
   another (or with an overlap).
+
+- *`onMax`* -- callback function which will be invoked right after reaching its max progress and
+  before the optional pause and reverse stage.
+
+- *`onMin`* -- callback function which will be invoked right after reaching its lowest progress
+  at the end of the reverse stage and before the optional pause and forward stage.
 
 The effect controller returned by this factory constructor will be composited of multiple simpler
 effect controllers described further below. If this constructor proves to be too limited for your
