@@ -7,7 +7,7 @@ import 'package:mocktail/mocktail.dart';
 void main() {
   group('HasGameRef', () {
     testWithFlameGame(
-      'component with default HasGameReference',
+      'component with default HasGameRef',
       (game) async {
         final component1 = _Component<FlameGame>();
         final component2 = _Component<Game>();
@@ -18,7 +18,7 @@ void main() {
     );
 
     testWithGame<_MyGame>(
-      'component with typed HasGameReference',
+      'component with typed HasGameRef',
       _MyGame.new,
       (game) async {
         final component = _Component<_MyGame>();

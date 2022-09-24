@@ -434,10 +434,10 @@ class MyGame extends FlameGame {
 
     // Vector2(0.0, 0.0) by default, can also be set in the constructor
     player.position = ...
-    
+
     // 0 by default, can also be set in the constructor
     player.angle = ...
-    
+
     // Adds the component
     add(player);
   }
@@ -567,11 +567,11 @@ Example:
 
 ```dart
 class ButtonComponent extends SpriteGroupComponent<ButtonState>
-    with HasGameReference<SpriteGroupExample>, Tappable {
+    with HasGameRef<SpriteGroupExample>, Tappable {
   @override
   Future<void>? onLoad() async {
-    final pressedSprite = await game.loadSprite(/* omitted */);
-    final unpressedSprite = await game.loadSprite(/* omitted /*);
+    final pressedSprite = await gameRef.loadSprite(/* omitted */);
+    final unpressedSprite = await gameRef.loadSprite(/* omitted /*);
 
     sprites = {
       ButtonState.pressed: pressedSprite,
@@ -744,7 +744,7 @@ Advanced example:
 ```dart
 final images = [
   loadParallaxImage(
-    'stars.jpg', 
+    'stars.jpg',
     repeat: ImageRepeat.repeat,
     alignment: Alignment.center,
     fill: LayerFill.width,
