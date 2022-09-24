@@ -294,7 +294,7 @@ class Bullet extends PositionComponent with CollisionCallbacks {
 }
 ```
 
-After intensive gameplay a map could become over-clusterized with a lot of empty quadrants. 
+After intensive gameplay a map could become over-clusterized with a lot of empty quadrants.
 Run `QuadTree.optimize()` to perform a cleanup of empty quadrants:
 
 ```dart
