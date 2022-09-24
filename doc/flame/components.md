@@ -54,16 +54,17 @@ on the rest of the game engine).
 
 A component lifecycle state can be checked by a series of getters:
 
- - `isLoaded`: Returns a bool with the current loaded state
- - `loaded`: Returns a future that will complete once the component has finished loading
- - `isMounted`: Returns a bool with the current mounted state
- - `mounted`: Returns a future that will complete once the component has finished mounting
+- `isLoaded`: Returns a bool with the current loaded state
+- `loaded`: Returns a future that will complete once the component has finished loading
+- `isMounted`: Returns a bool with the current mounted state
+- `mounted`: Returns a future that will complete once the component has finished mounting
 
 
 ### Priority
 
-In Flame the order components are rendered (and updated) in is called `priority`, this is sometimes
-referred to as `z-index` in other languages and frameworks. The higher the `priority` is set to, the
+In Flame every `Component` has the `int priority` property, which determines
+that component's sorting order within its parent's children, this is sometimes referred to
+as `z-index` in other languages and frameworks. The higher the `priority` is set to, the
 closer the component will appear on the screen, since it will be rendered on top of any components
 with lower priority that were rendered before it.
 
@@ -149,6 +150,7 @@ children during the course of the game.
 
 The second method is to use the `children:` parameter in the component's
 constructor. This approach more closely resembles the standard Flutter API:
+
 ```dart
 class MyGame extends FlameGame {
   @override
@@ -268,6 +270,7 @@ implementation. However, if you're defining a custom class that derives from `Co
 to implement the `containsLocalPoint()` method yourself.
 
 Here is an example of how `componentsAtPoint()` can be used:
+
 ```dart
 void onDragUpdate(DragUpdateInfo info) {
   game.componentsAtPoint(info.widget).forEach((component) {
@@ -280,15 +283,16 @@ void onDragUpdate(DragUpdateInfo info) {
 
 
 ### PositionType
+
 If you want to create a HUD (Head-up display) or another component that isn't positioned in relation
 to the game coordinates, you can change the `PositionType` of the component.
 The default `PositionType` is `positionType = PositionType.game` and that can be changed to
 either `PositionType.viewport` or `PositionType.widget` depending on how you want to position
 the component.
 
- - `PositionType.game` (Default) - Respects camera and viewport.
- - `PositionType.viewport` - Respects viewport only (ignores camera).
- - `PositionType.widget` - Position in relation to the coordinate system of the Flutter game
+- `PositionType.game` (Default) - Respects camera and viewport.
+- `PositionType.viewport` - Respects viewport only (ignores camera).
+- `PositionType.widget` - Position in relation to the coordinate system of the Flutter game
    widget (i.e. the raw canvas).
 
 Most of your components will probably be positioned according to `PositionType.game`, since you
@@ -335,6 +339,28 @@ non-uniform way, by change `x` or `y` by different amounts.
 
 The `angle` is the rotation angle around the anchor, represented as a double in radians. It is
 relative to the parent's angle.
+
+
+### Native Angle
+
+The `nativeAngle` is an angle in radians, measured clockwise, representing the default orientation
+of the component. It can be used to define the direction in which the component is facing when
+[angle](#angle) is zero.
+
+It is specially helpful when making a sprite based component look at a specific target. If the
+original image of the sprite is not facing in the up/north direction, the calculated angle to make
+the component look at the target will need some offset to make it look correct. For such cases,
+`nativeAngle` can be used to let the component know what direction the original image is faces.
+
+An example could be a bullet image pointing in east direction. In this case `nativeAngle` can be set
+to pi/2 radians. Following are some common directions and their corresponding native angle values.
+
+Direction | Native Angle | In degrees
+----------|--------------|-------------
+Up/North  | 0            | 0
+Down/South| pi or -pi    | 180 or -180
+Left/West | -pi/2        | -90
+Right/East| pi/2         | 90
 
 
 ### Anchor
@@ -406,10 +432,14 @@ class MyGame extends FlameGame {
     final size = Vector2.all(128.0);
     final player = SpriteComponent(size: size, sprite: sprite);
 
-    // screen coordinates
-    player.position = ... // Vector2(0.0, 0.0) by default, can also be set in the constructor
-    player.angle = ... // 0 by default, can also be set in the constructor
-    add(player); // Adds the component
+    // Vector2(0.0, 0.0) by default, can also be set in the constructor
+    player.position = ...
+    
+    // 0 by default, can also be set in the constructor
+    player.angle = ...
+    
+    // Adds the component
+    add(player);
   }
 }
 ```
@@ -492,6 +522,7 @@ final animation =
         }
       };
 ```
+
 
 ## SpriteAnimationGroup
 
@@ -709,13 +740,36 @@ behavior, for example if you are not making a side-scrolling game, you can set t
 you then pass in to the `ParallaxComponent`'s constructor.
 
 Advanced example:
+
 ```dart
 final images = [
-  loadParallaxImage('stars.jpg', repeat: ImageRepeat.repeat, alignment: Alignment.center, fill: LayerFill.width),
-  loadParallaxImage('planets.jpg', repeat: ImageRepeat.repeatY, alignment: Alignment.bottomLeft, fill: LayerFill.none),
-  loadParallaxImage('dust.jpg', repeat: ImageRepeat.repeatX, alignment: Alignment.topRight, fill: LayerFill.height),
+  loadParallaxImage(
+    'stars.jpg', 
+    repeat: ImageRepeat.repeat,
+    alignment: Alignment.center,
+    fill: LayerFill.width,
+  ),
+  loadParallaxImage(
+    'planets.jpg',
+    repeat: ImageRepeat.repeatY,
+    alignment: Alignment.bottomLeft,
+    fill: LayerFill.none,
+  ),
+  loadParallaxImage(
+    'dust.jpg',
+    repeat: ImageRepeat.repeatX,
+    alignment: Alignment.topRight,
+    fill: LayerFill.height,
+  ),
 ];
-final layers = images.map((image) => ParallaxLayer(await image, velocityMultiplier: images.indexOf(image) * 2.0));
+
+final layers = images.map(
+  (image) => ParallaxLayer(
+    await image,
+    velocityMultiplier: images.indexOf(image) * 2.0,
+  )
+);
+
 final parallaxComponent = ParallaxComponent.fromParallax(
   Parallax(
     await Future.wait(layers),
@@ -724,11 +778,11 @@ final parallaxComponent = ParallaxComponent.fromParallax(
 );
 ```
 
- - The stars image in this example will be repeatedly drawn in both axis, align in the center and be
+- The stars image in this example will be repeatedly drawn in both axis, align in the center and be
  scaled to fill the screen width.
- - The planets image will be repeated in Y-axis, aligned to the bottom left of the screen and not be
+- The planets image will be repeated in Y-axis, aligned to the bottom left of the screen and not be
  scaled.
- - The dust image will be repeated in X-axis, aligned to the top right and scaled to fill the screen
+- The dust image will be repeated in X-axis, aligned to the top right and scaled to fill the screen
  height.
 
 Once you are done setting up your `ParallaxComponent`, add it to the game like with any other
@@ -770,6 +824,7 @@ This list will be transformed into a polygon with a size, which can still be sca
 
 For example, this would create a square going from (50, 50) to (100, 100), with it's center in
 (75, 75):
+
 ```dart
 void main() {
   PolygonComponent([
@@ -910,12 +965,44 @@ void main() {
 
 ## TiledComponent
 
-Currently we have a very basic implementation of a Tiled component. This API uses the lib
-[tiled.dart](https://github.com/flame-engine/tiled.dart) to parse map files and render visible
-layers.
+Tiled is a free and open source, full-featured level and map editor for your platformer or
+RPG game. Currently we have an "in progress" implementation of a Tiled component. This API
+uses the lib [tiled.dart](https://github.com/flame-engine/tiled.dart) to parse map files and
+render visible layers using the performant `SpriteBatch` for each layer.
+
+Supported map types include: Orthogonal, Isometric, Hexagonal, and Staggered.
+
+Orthogonal | Hexagonal             |  Isomorphic
+:--:|:-------------------------:|:-------------------------:
+![An example of an orthogonal map](../images/orthogonal.png)|![An example of hexagonal map](../images/pointy_hex_even.png) |  ![An example of isomorphic map](../images/tile_stack_single_move.png)
 
 An example of how to use the API can be found
 [here](https://github.com/flame-engine/flame_tiled/tree/main/example).
+
+
+### TileStack
+
+Once a `TiledComponent` is loaded, you can select any column of (x,y) tiles in a `tileStack` to
+then add animation. Removing the stack will not remove the tiles from the map.
+
+> **Note**: This currently only supports position based effects.
+
+```dart
+    final stack = map.tileMap.tileStack(4, 0, named: {'floor_under'});
+    stack.add(
+      SequenceEffect(
+        [
+          MoveEffect.by(
+            Vector2(5, 0),
+            NoiseEffectController(duration: 1, frequency: 20),
+          ),
+          MoveEffect.by(Vector2.zero(), LinearEffectController(2)),
+        ],
+        repeatCount: 3,
+      )..onComplete = () => stack.removeFromParent(),
+    );
+    map.add(stack);
+```
 
 
 ## IsometricTileMapComponent
@@ -926,8 +1013,8 @@ isometric tileset.
 A simple example on how to use it:
 
 ```dart
-// Creates a tileset, the block ids are automatically assigned sequentially starting at 0,
-// from left to right and then top to bottom.
+// Creates a tileset, the block ids are automatically assigned sequentially
+// starting at 0, from left to right and then top to bottom.
 final tilesetImage = await images.load('tileset.png');
 final tileset = IsometricTileset(tilesetImage, 32);
 // Each element is a block id, -1 means nothing
@@ -986,6 +1073,27 @@ widgets.
 
 Check the example app
 [custom_painter_component](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/widgets/custom_painter_example.dart)
+for details on how to use it.
+
+
+## ClipComponent
+
+A `ClipComponent` is a component that will clip the canvas to its size and shape. This means that
+if the component itself or any child of the `ClipComponent` renders outside of the
+`ClipComponent`'s boundaries, the part that is not inside the area will not be shown.
+
+A `ClipComponent` receives a builder function that should return the `Shape` that will define the
+clipped area, based on its size.
+
+To make it easier to use that component, there are three factories that offers common shapes:
+
+- `ClipComponent.rectangle`: Clips the area in the form a rectangle based on its size.
+- `ClipComponent.circle`: Clips the area in the form of a circle based on its size.
+- `ClipComponent.polygon`:  Clips the area in the form of a polygon based on the points received
+in the constructor.
+
+Check the example app
+[clip_component](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/components/clip_component_example.dart)
 for details on how to use it.
 
 

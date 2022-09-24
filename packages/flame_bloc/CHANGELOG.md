@@ -1,3 +1,11 @@
+## 1.7.0
+
+ - **FIX**: Correct flutter constraint ([#1731](https://github.com/flame-engine/flame/issues/1731)). ([c7383843](https://github.com/flame-engine/flame/commit/c738384314a1a5c3695d1c3adaebcb59604df83a))
+ - **FEAT**: Adding bloc getter to FlameBlocListenable mixin ([#1732](https://github.com/flame-engine/flame/issues/1732)). ([3d19caa3](https://github.com/flame-engine/flame/commit/3d19caa36dcb470b306b841ef9c03647a2f307d7))
+ - **FEAT**: Move to Flutter 3.0.0 and Dart 2.17.0 ([#1713](https://github.com/flame-engine/flame/issues/1713)). ([2a41d0d6](https://github.com/flame-engine/flame/commit/2a41d0d683391194b7209c47bde91199ab7a663e))
+ - **DOCS**: Fixing typo in `FlameMultiBlocProvider` dartdoc. ([67be6ab8](https://github.com/flame-engine/flame/commit/67be6ab86264f6def4b1b3b0e4ba00763c7dab4e))
+ - **DOCS**: updating README to the new flame bloc version ([#1737](https://github.com/flame-engine/flame/issues/1737)). ([6a2356aa](https://github.com/flame-engine/flame/commit/6a2356aa5eba1696caa6f88ecfe8143c4ffdb507))
+
 ## 1.6.0
 
  - **FIX**: Correct flutter constraint ([#1731](https://github.com/flame-engine/flame/issues/1731)). ([c7383843](https://github.com/flame-engine/flame/commit/c738384314a1a5c3695d1c3adaebcb59604df83a))

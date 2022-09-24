@@ -12,6 +12,7 @@ web.
 
 ## Flame built-in decorators
 
+
 ### PaintDecorator.blur
 
 ```{flutter-app}
@@ -30,6 +31,7 @@ final decorator = PaintDecorator.blur(3.0);
 ```
 
 Possible uses:
+
 - soft shadows;
 - "out-of-focus" objects in the distance or very close to the camera;
 - motion blur effects;
@@ -56,6 +58,7 @@ final decorator = PaintDecorator.grayscale(opacity: 0.5);
 ```
 
 Possible uses:
+
 - apply to an NPC to turn them into stone, or into a ghost!
 - apply to a scene to indicate that it is a memory of the past;
 - black-and-white photos.
@@ -80,6 +83,7 @@ final decorator = PaintDecorator.tint(const Color(0xAAFF0000);
 ```
 
 Possible uses:
+
 - NPCs affected by certain types of magic;
 - items/characters in the shadows can be tinted black;
 - tint the scene red to show bloodlust, or that the character is low on health;
@@ -113,6 +117,7 @@ final decorator = Rotate3DDecorator(
 ```
 
 Possible uses:
+
 - a card that can be flipped over;
 - pages in a book;
 - transitions between app routes;
@@ -154,6 +159,7 @@ decorator cannot handle shadows that fall onto walls or other vertical structure
 
 ## Using decorators
 
+
 ### HasDecorator mixin
 
 This `Component` mixin adds the `decorator` property, which is initially `null`. If you set this
@@ -161,6 +167,32 @@ property to an actual `Decorator` object, then that decorator will apply its vis
 the rendering of the component. In order to remove this visual effect, simply set the `decorator`
 property back to `null`.
 
+
+### PositionComponent
+
+`PositionComponent` (and all the derived classes) already has a `decorator` property, so for these
+components the `HasDecorator` mixin is not needed.
+
+In fact, the `PositionComponent` uses its decorator in order to properly position the component on
+the screen. Thus, any new decorators that you'd want to apply to the `PositionComponent` will need
+to be chained (see the [](#multiple-decorators) section below).
+
+It is also possible to replace the root decorator of the `PositionComponent`, if you want to create
+an alternative logic for how the component shall be positioned on the screen.
+
+
+### Multiple decorators
+
+It is possible to apply several decorators simultaneously to the same component: the `Decorator`
+class supports chaining. That is, if you have an existing decorator on a component and you want to
+add another one, then you can call `component.decorator.addLast(newDecorator)` -- this will add
+the new decorator at the end of the existing chain. The method `removeLast()` can remove that
+decorator later.
+
+Several decorators can be chain that way. For example, if `A` is an initial decorator, then
+`A.addLast(B)` can be followed by either `A.addLast(C)` or `B.addLast(C)` -- and in both cases the
+chain `A -> B -> C` will be created. In practice, it means that the entire chain can be manipulated
+from its root, which usually is `component.decorator`.
 
 
 [Component]: ../../flame/components.md#component

@@ -87,8 +87,10 @@ class CircleComponent extends ShapeComponent implements SizeProvider {
   ///
   /// This can be an empty list (if they don't intersect), one point (if the
   /// line is tangent) or two points (if the line is secant).
+  /// An edge point of the [lineSegment] that originates on the edge of the
+  /// circle doesn't count as an intersection.
   List<Vector2> lineSegmentIntersections(
-    LineSegment line, {
+    LineSegment lineSegment, {
     double epsilon = double.minPositive,
   }) {
     // A point on a line is `from + t*(to - from)`. We're trying to solve the
@@ -97,18 +99,18 @@ class CircleComponent extends ShapeComponent implements SizeProvider {
     // Expanding the norm, this becomes a square equation in `t`:
     // `t²Δ₂₁² + 2tΔ₂₁Δ₁₀ + Δ₁₀² - radius² == 0`.
     _delta21
-      ..setFrom(line.to)
-      ..sub(line.from); // to - from
+      ..setFrom(lineSegment.to)
+      ..sub(lineSegment.from); // to - from
     _delta10
-      ..setFrom(line.from)
+      ..setFrom(lineSegment.from)
       ..sub(absoluteCenter); // from - absoluteCenter
     final a = _delta21.length2;
     final b = 2 * _delta21.dot(_delta10);
     final c = _delta10.length2 - radius * radius;
 
     return solveQuadratic(a, b, c)
-        .where((t) => t >= 0 && t <= 1)
-        .map((t) => line.from.clone()..addScaled(_delta21, t))
+        .where((t) => t > 0 && t <= 1)
+        .map((t) => lineSegment.from.clone()..addScaled(_delta21, t))
         .toList();
   }
 

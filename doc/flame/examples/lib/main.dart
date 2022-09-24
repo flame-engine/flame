@@ -6,7 +6,9 @@ import 'package:doc_flame_examples/decorator_rotate3d.dart';
 import 'package:doc_flame_examples/decorator_shadow3d.dart';
 import 'package:doc_flame_examples/decorator_tint.dart';
 import 'package:doc_flame_examples/drag_events.dart';
+import 'package:doc_flame_examples/router.dart';
 import 'package:doc_flame_examples/tap_events.dart';
+import 'package:doc_flame_examples/value_route.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/widgets.dart';
 
@@ -22,7 +24,9 @@ void main() {
     'decorator_shadow3d': DecoratorShadowGame.new,
     'decorator_tint': DecoratorTintGame.new,
     'drag_events': DragEventsGame.new,
+    'router': RouterGame.new,
     'tap_events': TapEventsGame.new,
+    'value_route': ValueRouteExample.new,
   };
   final game = routes[page]?.call();
   if (game != null) {

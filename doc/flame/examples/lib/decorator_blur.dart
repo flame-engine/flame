@@ -12,15 +12,16 @@ class DecoratorBlurGame extends FlameGame with HasTappableComponents {
         size: 100,
         position: canvasSize / 2,
         onTap: (flower) {
+          final decorator = flower.decorator;
           step++;
           if (step == 1) {
-            flower.decorator = PaintDecorator.blur(3.0);
+            decorator.addLast(PaintDecorator.blur(3.0));
           } else if (step == 2) {
-            flower.decorator = PaintDecorator.blur(5.0);
+            decorator.replaceLast(PaintDecorator.blur(5.0));
           } else if (step == 3) {
-            flower.decorator = PaintDecorator.blur(0.0, 20.0);
+            decorator.replaceLast(PaintDecorator.blur(0.0, 20.0));
           } else {
-            flower.decorator = null;
+            decorator.replaceLast(null);
             step = 0;
           }
         },

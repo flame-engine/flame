@@ -1,4 +1,4 @@
-import 'package:flame/src/components/component.dart';
+import 'package:flame/src/components/core/component.dart';
 import 'package:flame/src/components/mixins/tappable.dart';
 import 'package:flame/src/events/flame_game_mixins/has_tappable_components.dart';
 import 'package:flame/src/events/messages/tap_cancel_event.dart';

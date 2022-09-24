@@ -19,13 +19,15 @@ renderer. This will increase performance on the web, as it will use the `canvas`
 separate DOM elements.
 
 To run your game using skia, use the following command:
+
 ```console
-$ flutter run -d chrome --web-renderer canvaskit
+flutter run -d chrome --web-renderer canvaskit
 ```
 
 To build the game for production, using skia, use the following:
+
 ```console
-$ flutter build web --release --web-renderer canvaskit
+flutter build web --release --web-renderer canvaskit
 ```
 
 
@@ -76,6 +78,22 @@ deployed game.
 
 The game should be available at an URL like this:
 `https://YOUR_GITHUB_USERNAME.github.io/YOUR_REPO_NAME/`
+
+
+## Deploy your game to itch.io
+
+1. Create a web build, either from your IDE or by running `flutter build web`
+(If it complains about `Missing index.html` run `flutter create . --platforms=web`)
+2. Go into `index.html` and remove the line that says `<base href="/">`
+3. zip the `build/web` folder and upload to itch.io
+
+**Remember that it shouldn't be the `web` directory in your project's root, but in `build/web`!**
+
+If you are submitting your game to a game jam, remember to make it public and submit it on the
+game jam page too (many get confused by this).
+
+Further instructions can be found on
+[itch.io](https://itch.io/docs/creators/html5#getting-started/zip-file).
 
 
 ### Web support

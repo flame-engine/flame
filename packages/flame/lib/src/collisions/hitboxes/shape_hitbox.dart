@@ -1,6 +1,7 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
+import 'package:flame/geometry.dart';
 import 'package:flame/src/geometry/shape_intersections.dart'
     as intersection_system;
 import 'package:meta/meta.dart';
@@ -46,8 +47,8 @@ mixin ShapeHitbox on ShapeComponent implements Hitbox<ShapeHitbox> {
   @override
   bool renderShape = false;
 
-  @protected
-  late PositionComponent hitboxParent;
+  late PositionComponent _hitboxParent;
+  PositionComponent get hitboxParent => _hitboxParent;
   void Function()? _parentSizeListener;
   @protected
   bool shouldFillParent = false;
@@ -55,7 +56,7 @@ mixin ShapeHitbox on ShapeComponent implements Hitbox<ShapeHitbox> {
   @override
   void onMount() {
     super.onMount();
-    hitboxParent = ancestors().firstWhere(
+    _hitboxParent = ancestors().firstWhere(
       (c) => c is PositionComponent,
       orElse: () {
         throw StateError('A ShapeHitbox needs a PositionComponent ancestor');
@@ -128,6 +129,15 @@ mixin ShapeHitbox on ShapeComponent implements Hitbox<ShapeHitbox> {
         allowSiblingCollision || hitboxParent != other.hitboxParent;
     return collisionAllowed && aabb.intersectsWithAabb2(other.aabb);
   }
+
+  /// Returns information about how the ray intersects the shape.
+  ///
+  /// If you are only interested in the intersection point use
+  /// [RaycastResult.intersectionPoint] of the result.
+  RaycastResult<ShapeHitbox>? rayIntersection(
+    Ray2 ray, {
+    RaycastResult<ShapeHitbox>? out,
+  });
 
   /// This determines how the shape should scale if it should try to fill its
   /// parents boundaries.

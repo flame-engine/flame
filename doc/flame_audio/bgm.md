@@ -47,7 +47,9 @@ So in order to pre-load music, you can use the same recommendations from the
 You can optionally create your own `Bgm` instances with different backing `AudioCache`s,
 if you so desire.
 
+
 ## Methods
+
 
 ### Play
 

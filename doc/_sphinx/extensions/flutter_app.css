@@ -138,6 +138,7 @@ button.flutter-app-button:after {
   border-radius: 6px;
   float: right;
   margin-left: 6pt;
+  max-width: 40%;
   padding: 8px;
 }
 

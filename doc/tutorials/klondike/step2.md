@@ -42,6 +42,7 @@ anything else in the game. This is for convenience: it means that by the time
 all other components are initialized, they can assume the spritesheet is already
 loaded. We can even add a helper function to extract a sprite from the common
 spritesheet:
+
 ```dart
 Sprite klondikeSprite(double x, double y, double width, double height) {
   return Sprite(
@@ -51,6 +52,7 @@ Sprite klondikeSprite(double x, double y, double width, double height) {
   );
 }
 ```
+
 This helper function won't be needed in this chapter, but will be used
 extensively in the next.
 
@@ -74,7 +76,7 @@ void main() {
 ## Other classes
 
 So far we have the main `KlondikeGame` class, and now we need to create objects
-that we will add to the game. In Flame these objects are called _components_,
+that we will add to the game. In Flame these objects are called *components*,
 and when added to the game they form a "game component tree". All entities that
 exist in the game must be components.
 
@@ -107,6 +109,7 @@ logic inside, we'll be adding more functionality into those classes in
 subsequent chapters.
 
 At this moment the directory structure of your game should look like this:
+
 ```text
 klondike/
  ├─assets/
@@ -152,6 +155,7 @@ it renders at the right size on the screen of the user's device.
 
 Thus, the overall structure of the component tree will look approximately like
 this:
+
 ```text
 KlondikeGame
  ├─ World
@@ -183,6 +187,7 @@ Alright, let's put all this together and implement our `KlondikeGame` class.
 First, we declare several global constants which describe the dimensions of a
 card and the distance between cards. We declare them as constants because we are
 not planning to change these values during the game:
+
 ```dart
   static const double cardWidth = 1000.0;
   static const double cardHeight = 1400.0;
@@ -195,6 +200,7 @@ Next, we will create a `Stock` component, the `Waste`, four `Foundation`s and
 seven `Pile`s, setting their sizes and positions in the world. The positions
 are calculated using simple arithmetics. This should all happen inside the
 `onLoad` method, after loading the spritesheet:
+
 ```dart
     final stock = Stock()
       ..size = cardSize
@@ -222,6 +228,7 @@ are calculated using simple arithmetics. This should all happen inside the
 
 Then we create the main `World` component, add to it all the components that
 we just created, and finally add the `world` to the game.
+
 ```dart
     final world = World()
       ..add(stock)
@@ -278,6 +285,7 @@ because of how we want it to respond if the game size becomes too wide or
 too tall: in case of too wide we want it to be centered on the screen,
 but if the screen is too tall, we want the content to be aligned at the
 top.
+
 ```dart
     final camera = CameraComponent(world: world)
       ..viewfinder.visibleGameSize =

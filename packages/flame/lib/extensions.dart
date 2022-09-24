@@ -1,5 +1,6 @@
 export 'src/extensions/canvas.dart';
 export 'src/extensions/color.dart';
+export 'src/extensions/double.dart';
 export 'src/extensions/image.dart';
 export 'src/extensions/matrix4.dart';
 export 'src/extensions/offset.dart';

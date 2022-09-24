@@ -15,7 +15,8 @@ The latest version can be found on [pub.dev](https://pub.dev/packages/flame_audi
 After installing the `flame_audio` package, you can add audio files in the assets section of your
 `pubspec.yaml` file. Make sure that the audio files exists in the paths that you provide.
 
-The default directory for `FlameAudio` is `assets/audio` (which can be changed by providing your own instance of `AudioCache`).
+The default directory for `FlameAudio` is `assets/audio` (which can be changed by providing your own
+instance of `AudioCache`).
 
 For the examples below, your `pubspec.yaml` file needs to contain something like this:
 
@@ -43,7 +44,8 @@ FlameAudio.playLongAudio('music.mp3');
 // For looping a longer audio file
 FlameAudio.loopLongAudio('music.mp3');
 
-// For background music that should be paused/played when the pausing/resuming the game
+// For background music that should be paused/played when the pausing/resuming
+// the game
 FlameAudio.bgm.play('music.mp3');
 ```
 
@@ -61,7 +63,7 @@ tracks when the game is backgrounded or comes back to the foreground.
 
 You can use [the `AudioPool` class](audio_pool.md) if you want to fire quick sound effects in a very
 efficient manner. `AudioPool` will keep a pool of `AudioPlayer`s preloaded with a given sound, and
-allow you to play them very fast in quick succession. 
+allow you to play them very fast in quick succession.
 
 Some file formats that work across devices and that we recommend are: MP3, OGG and WAV.
 
@@ -78,6 +80,7 @@ configure other parameters.
 
 In fact you can always use `AudioPlayer`s directly to gain full control over how your audio is played
 -- the `FlameAudio` class is just a wrapper for common functionality.
+
 
 ## Caching
 
