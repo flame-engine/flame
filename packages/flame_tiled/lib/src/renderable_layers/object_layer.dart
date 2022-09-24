@@ -35,4 +35,7 @@ class ObjectLayer extends RenderableLayer<ObjectGroup> {
 
   @override
   void refreshCache() {}
+
+  @override
+  void update(double dt) {}
 }

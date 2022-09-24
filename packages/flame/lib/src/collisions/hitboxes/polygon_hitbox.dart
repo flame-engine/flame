@@ -10,7 +10,10 @@ class PolygonHitbox extends PolygonComponent
     super.vertices, {
     super.angle,
     super.anchor,
-  });
+    bool isSolid = false,
+  }) {
+    this.isSolid = isSolid;
+  }
 
   /// With this constructor you define the [PolygonHitbox] in relation to the
   /// [parentSize] of the hitbox.
