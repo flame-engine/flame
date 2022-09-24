@@ -197,7 +197,7 @@ collisions to the whole hat, instead of for just each hitbox separately.
 
 ## Broad phase
 
-If your game field is small and do not have a lot of collideable components - you don't have to
+If your game field is small and do not have a lot of collidable components - you don't have to
 worry about the broad phase system that is used, so if the standard implementation is performant
 enough for you, you probably don't have to read this section.
 
@@ -227,9 +227,9 @@ class MyGame extends FlameGame with HasCollisionDetection {
 
 ## Quad Tree broad phase
 
-If your game field is large and the game contains a lot (more than one hundred) of collidable
-components, standard sweep and prune can become inefficient. If it does you can try to use the
-quad tree broad phase.
+If your game field is large and the game contains a lot of collidable
+components (more than a hundred), standard sweep and prune can
+become inefficient. If it does, you can try to use the quad tree broad phase.
 To do this, add the `HasQuadTreeCollisionDetection` mixin to your game instead of
 `HasCollisionDetection` and call the `initializeCollisionDetection` function on game load:
 
@@ -248,15 +248,15 @@ When calling `initializeCollisionDetection` you should pass it the correct map d
 the quad tree algorithm to work properly. There are also additional parameters to make the system
 more efficient:
 
-- `minimumDistance`: minimum distance between objects to consider them as possibly collideable.
+- `minimumDistance`: minimum distance between objects to consider them as possibly colliding.
   If `null` - the check is disabled, it is default behavior
 - `maxObjects`: maximum objects count in one quadrant. Default to 25.
 - `maxDepth`: - maximum nesting levels inside quadrant. Default to 10
 
-If you use the quad tree system, you can make algorithm even more efficient by implementing the
+If you use the quad tree system, you can make it even more efficient by implementing the
 `onComponentTypeCheck` function of the `CollisionCallbacks` mixin in your components. It is useful if
-you need to prevent collision of items of different types. The result of the calculation is cached so
-you should not check any dynamical parameters here, the function is intended to be used as a pure
+you need to prevent collisions of items of different types. The result of the calculation is cached so
+you should not check any dynamic parameters here, the function is intended to be used as a pure
 type checker:
 
 ```dart
@@ -276,7 +276,7 @@ class Bullet extends PositionComponent with CollisionCallbacks {
     Set<Vector2> intersectionPoints,
     PositionComponent other,
   ) {
-    // Removes the component when it comes it contact with a Brick.
+    // Removes the component when it comes in contact with a Brick.
     // Neither Player nor Water would be passed to this function
     // because these classes are filtered out by [onComponentTypeCheck]
     // in an earlier stage.
