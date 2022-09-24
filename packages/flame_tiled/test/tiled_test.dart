@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui';
 
@@ -10,9 +9,11 @@ import 'package:flame_tiled/flame_tiled.dart';
 import 'package:flame_tiled/src/renderable_layers/tile_layer.dart'
     as renderable;
 
-import 'package:flutter/services.dart' show CachingAssetBundle;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tiled/tiled.dart';
+
+import 'test_asset_bundle.dart';
+import 'test_image_utils.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -67,20 +68,27 @@ void main() {
   });
 
   test('correctly loads external tileset', () async {
-    final tsxProvider = await FlameTsxProvider.parse('external_tileset_1.tsx');
+    // Flame.bundle is a global static. Updating these in tests can lead to
+    // odd errors if you're trying to debug.
+    Flame.bundle = TestAssetBundle(
+      imageNames: ['map-level1.png', 'image1.png'],
+      mapPath: 'test/assets/map.tmx',
+    );
+
+    final tsxProvider =
+        await FlameTsxProvider.parse('tiles/external_tileset_1.tsx');
 
     expect(tsxProvider.getCachedSource() != null, true);
+    final source = tsxProvider.getCachedSource()!;
+    expect(source.getStringOrNull('name'), 'level1');
+    expect(source.getSingleChildOrNull('image'), isNotNull);
     expect(
-      tsxProvider
-              .getCachedSource()!
-              .getSingleChild('tileset')
-              .getString('name') ==
-          'level1',
-      true,
+      source.getSingleChildOrNull('image')!.getStringOrNull('width'),
+      '272',
     );
 
     expect(
-      tsxProvider.filename == 'external_tileset_1.tsx',
+      tsxProvider.filename == 'tiles/external_tileset_1.tsx',
       true,
     );
   });
@@ -310,23 +318,6 @@ void main() {
       );
     });
   });
-
-  Future<Uint8List> renderMapToPng(
-    TiledComponent component,
-  ) async {
-    final canvasRecorder = PictureRecorder();
-    final canvas = Canvas(canvasRecorder);
-    component.tileMap.render(canvas);
-    final picture = canvasRecorder.endRecording();
-
-    final size = component.size;
-    // Map size is now 320 wide, but it has 1 extra tile of height because
-    // its actually double-height tiles.
-    final image = await picture.toImageSafe(size.x.toInt(), size.y.toInt());
-    return (await image.toByteData(format: ImageByteFormat.png))!
-        .buffer
-        .asUint8List();
-  }
 
   group('orthogonal with groups, offsets, opacity and parallax', () {
     late TiledComponent component;
@@ -798,33 +789,4 @@ void main() {
       });
     }
   });
-}
-
-class TestAssetBundle extends CachingAssetBundle {
-  TestAssetBundle({
-    required this.imageNames,
-    required this.mapPath,
-  });
-
-  final List<String> imageNames;
-  final String mapPath;
-
-  @override
-  Future<ByteData> load(String key) async {
-    final split = key.split('/');
-    final imgName = split.isNotEmpty ? split.last : key;
-
-    var toLoadName = key.split('/').last;
-    if (!imageNames.contains(imgName) && imageNames.isNotEmpty) {
-      toLoadName = imageNames.first;
-    }
-    return File('test/assets/$toLoadName')
-        .readAsBytes()
-        .then((bytes) => ByteData.view(Uint8List.fromList(bytes).buffer));
-  }
-
-  @override
-  Future<String> loadString(String key, {bool cache = true}) {
-    return File(mapPath).readAsString();
-  }
 }
