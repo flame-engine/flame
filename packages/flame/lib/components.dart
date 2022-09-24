@@ -18,7 +18,6 @@ export 'src/components/mixins/gesture_hitboxes.dart';
 export 'src/components/mixins/has_ancestor.dart';
 export 'src/components/mixins/has_decorator.dart' show HasDecorator;
 export 'src/components/mixins/has_game_ref.dart' show HasGameRef;
-export 'src/components/mixins/has_game_reference.dart' show HasGameReference;
 export 'src/components/mixins/has_paint.dart';
 export 'src/components/mixins/hoverable.dart';
 export 'src/components/mixins/keyboard_handler.dart';
