@@ -167,44 +167,24 @@ void main() {
     );
 
     flameGame.test(
-      'repeated fade out and fade in',
+      'infinite fade out',
       (game) async {
-        final rng = Random();
         final component = _PaintComponent();
         await game.ensureAdd(component);
 
-        final fadeOutValues = <double>[];
-        final fadeInValues = <double>[];
-
         await component.add(
-          SequenceEffect(
-            [
-              OpacityEffect.fadeOut(
-                LinearEffectController(3),
-                onComplete: () => fadeOutValues.add(component.getOpacity()),
-              ),
-              OpacityEffect.fadeIn(
-                LinearEffectController(3),
-                onComplete: () => fadeInValues.add(component.getOpacity()),
-              ),
-            ],
-            repeatCount: 10,
+          OpacityEffect.fadeOut(
+            EffectController(
+              duration: 3,
+              infinite: true,
+            ),
           ),
         );
 
-        var timeElapsed = 0.0;
-        while (timeElapsed < 6 * 10) {
-          final dt = rng.nextDouble() / 60;
-          game.update(dt);
-          timeElapsed += dt;
+        for (var i = 0; i < 100; ++i) {
+          game.update(3);
+          expectDouble(component.getOpacity(), 0.0);
         }
-
-        fadeOutValues.forEach(
-          (value) => expectDouble(value, 0.0),
-        );
-        fadeInValues.forEach(
-          (value) => expectDouble(value, 1.0),
-        );
       },
     );
 
