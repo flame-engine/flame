@@ -1,5 +1,8 @@
+import 'package:meta/meta.dart';
+
 /// Helper class that stores dimensions of a single glyph for a spritesheet-
 /// based font.
+@internal
 class GlyphInfo {
   double srcLeft = 0;
   double srcTop = 0;
