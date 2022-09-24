@@ -1,7 +1,7 @@
 import 'package:flame/src/text/common/sprite_font.dart';
 import 'package:meta/meta.dart';
 
-/// [GlyphData] describes a single character/icon comprising a [SpriteFont].
+/// [Glyph] describes a single character/icon comprising a [SpriteFont].
 ///
 /// The properties [left], [top], [right] and [bottom] describe the rectangle
 /// within the source image where the character's image is located. This part
@@ -18,8 +18,8 @@ import 'package:meta/meta.dart';
 /// [paddingBottom] describe the distances between the character's "physical"
 /// and "logical" boxes.
 @immutable
-class GlyphData {
-  const GlyphData({
+class Glyph {
+  const Glyph({
     required this.left,
     required this.top,
     this.right,
@@ -31,7 +31,7 @@ class GlyphData {
     this.paddingBottom = 0,
   });
 
-  const GlyphData.fromLTWH(this.left, this.top, double width, double height)
+  const Glyph.fromLTWH(this.left, this.top, double width, double height)
       : right = left + width,
         bottom = top + height,
         ascent = null,
@@ -40,7 +40,7 @@ class GlyphData {
         paddingRight = 0,
         paddingBottom = 0;
 
-  const GlyphData.fromLTRB(this.left, this.top, this.right, this.bottom)
+  const Glyph.fromLTRB(this.left, this.top, this.right, this.bottom)
       : ascent = null,
         paddingLeft = 0,
         paddingTop = 0,
