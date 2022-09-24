@@ -4,6 +4,7 @@ import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 
 import 'package:flame_tiled/src/renderable_tile_map.dart';
+import 'package:meta/meta.dart';
 import 'package:tiled/tiled.dart';
 
 /// {@template _tiled_component}
@@ -47,13 +48,28 @@ class TiledComponent<T extends FlameGame> extends PositionComponent
     super.anchor,
     super.children,
     super.priority,
-  }) : super(size: _computeSize(tileMap));
+  }) : super(
+          size: computeSize(
+            tileMap.map.orientation,
+            tileMap.destTileSize,
+            tileMap.map.tileWidth,
+            tileMap.map.tileHeight,
+            tileMap.map.width,
+            tileMap.map.height,
+            tileMap.map.staggerAxis,
+          ),
+        );
 
   @override
   Future<void>? onLoad() async {
     super.onLoad();
     // Automatically use the FlameGame camera if it's not already set.
     tileMap.camera ??= gameRef.camera;
+  }
+
+  @override
+  void update(double dt) {
+    tileMap.update(dt);
   }
 
   @override
@@ -79,49 +95,59 @@ class TiledComponent<T extends FlameGame> extends PositionComponent
     );
   }
 
-  static Vector2 _computeSize(RenderableTiledMap tileMap) {
-    final tMap = tileMap.map;
-
-    final xScale = tileMap.destTileSize.x / tMap.tileWidth;
-    final yScale = tileMap.destTileSize.y / tMap.tileHeight;
-
-    final tileScaled = Vector2(
-      tileMap.map.tileWidth * xScale,
-      tileMap.map.tileHeight * yScale,
-    );
-
-    if (tMap.orientation == null) {
+  @visibleForTesting
+  static Vector2 computeSize(
+    MapOrientation? orientation,
+    Vector2 destTileSize,
+    int tileWidth,
+    int tileHeight,
+    int mapWidth,
+    int mapHeight,
+    StaggerAxis? staggerAxis,
+  ) {
+    if (orientation == null) {
       return NotifyingVector2.zero();
     }
+    final xScale = destTileSize.x / tileWidth;
+    final yScale = destTileSize.y / tileHeight;
 
-    switch (tMap.orientation!) {
+    final tileScaled = Vector2(
+      tileWidth * xScale,
+      tileHeight * yScale,
+    );
+
+    switch (orientation) {
       case MapOrientation.staggered:
-        return tMap.staggerAxis == StaggerAxis.y
+        return staggerAxis == StaggerAxis.y
             ? Vector2(
-                tileScaled.x * tileMap.map.width + tileScaled.x / 2,
-                tileScaled.y + ((tileMap.map.height - 1) * tileScaled.y / 2),
+                tileScaled.x * mapWidth + tileScaled.x / 2,
+                (mapHeight + 1) * (tileScaled.y / 2),
               )
             : Vector2(
-                tileScaled.x + ((tileMap.map.width - 1) * tileScaled.x / 2),
-                tileScaled.y * tileMap.map.height + tileScaled.y / 2,
+                (mapWidth + 1) * (tileScaled.x / 2),
+                tileScaled.y * mapHeight + tileScaled.y / 2,
               );
 
       case MapOrientation.hexagonal:
-        return tMap.staggerAxis == StaggerAxis.y
+        return staggerAxis == StaggerAxis.y
             ? Vector2(
-                tileMap.map.width * tileScaled.x + tileScaled.x / 2,
-                tileScaled.y + ((tileMap.map.height - 1) * tileScaled.y * 0.75),
+                mapWidth * tileScaled.x + tileScaled.x / 2,
+                tileScaled.y + ((mapHeight - 1) * tileScaled.y * 0.75),
               )
             : Vector2(
-                tileScaled.x + ((tileMap.map.width - 1) * tileScaled.x * 0.75),
-                (tileMap.map.height * tileScaled.y) + tileScaled.y / 2,
+                tileScaled.x + ((mapWidth - 1) * tileScaled.x * 0.75),
+                (mapHeight * tileScaled.y) + tileScaled.y / 2,
               );
 
       case MapOrientation.isometric:
+        final halfTile = tileScaled / 2;
+        final dimensions = mapWidth + mapHeight;
+        return halfTile..scale(dimensions.toDouble());
+
       case MapOrientation.orthogonal:
         return Vector2(
-          tileMap.map.width * tileScaled.x,
-          tileMap.map.height * tileScaled.y,
+          mapWidth * tileScaled.x,
+          mapHeight * tileScaled.y,
         );
     }
   }
