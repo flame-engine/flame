@@ -288,10 +288,8 @@ class Bullet extends PositionComponent with CollisionCallbacks {
 }
 ```
 
-After intensive gameplay a map could become over-clusterized with a lot of empty quadrants. Also some
-objects with null `parent` could still be present in the `QuadTree` but being removed from the game's
-lifecycle.
-Run `QuadTree.optimize()` to perform a cleanup of "dead" objects and empty quadrants:
+After intensive gameplay a map could become over-clusterized with a lot of empty quadrants. 
+Run `QuadTree.optimize()` to perform a cleanup of empty quadrants:
 
 ```dart
 class QuadTreeExample extends FlameGame
