@@ -681,7 +681,7 @@ void main() {
   });
 
   group('Raycasting', () {
-    runTestRegistry({
+    runCollisionTestRegistry({
       'one hitbox': (game) async {
         game.ensureAdd(
           PositionComponent(
@@ -777,7 +777,7 @@ void main() {
     });
 
     group('Rectangle hitboxes', () {
-      runTestRegistry({
+      runCollisionTestRegistry({
         'ray from within RectangleHitbox': (game) async {
           game.ensureAddAll([
             PositionComponent(
@@ -871,7 +871,7 @@ void main() {
     });
 
     group('Circle hitboxes', () {
-      runTestRegistry({
+      runCollisionTestRegistry({
         'ray from top to bottom within CircleHitbox': (game) async {
           game.ensureAddAll([
             PositionComponent(
@@ -1028,7 +1028,7 @@ void main() {
     });
 
     group('raycastAll', () {
-      runTestRegistry({
+      runCollisionTestRegistry({
         'All directions and all hits': (game) async {
           game.ensureAddAll([
             PositionComponent(
@@ -1060,7 +1060,7 @@ void main() {
       });
     });
 
-    runTestRegistry({
+    runCollisionTestRegistry({
       'All directions and all hits': (game) async {
         game.ensureAddAll([
           PositionComponent(
@@ -1096,7 +1096,7 @@ void main() {
   });
 
   group('Raytracing', () {
-    runTestRegistry({
+    runCollisionTestRegistry({
       'on single circle': (game) async {
         final circle = CircleComponent(
           radius: 10.0,

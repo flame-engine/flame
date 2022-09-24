@@ -7,7 +7,7 @@ import 'collision_test_helpers.dart';
 
 void main() {
   group('Collision callbacks', () {
-    runTestRegistry({
+    runCollisionTestRegistry({
       'collidable callbacks are called': (game) async {
         final blockA = TestBlock(
           Vector2.zero(),
@@ -113,7 +113,7 @@ void main() {
     });
   });
 
-  runTestRegistry({
+  runCollisionTestRegistry({
     'hitbox callbacks are called when Collidable is removed': (game) async {
       final blockA = TestBlock(
         Vector2.zero(),

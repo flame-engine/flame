@@ -36,7 +36,7 @@ Future<void> testQuadTreeCollisionDetectionGame(
   );
 }
 
-Future<void> runTestRegistry(
+Future<void> runCollisionTestRegistry(
   Map<String, Future Function(HasCollisionDetection)> testRegistry,
 ) async {
   for (final entry in testRegistry.entries) {

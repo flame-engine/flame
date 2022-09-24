@@ -40,7 +40,7 @@ class _TestBlock extends PositionComponent with CollisionCallbacks {
 
 void main() {
   group('Benchmark collision detection', () {
-    runTestRegistry({
+    runCollisionTestRegistry({
       'collidable callbacks are called': (game) async {
         final rng = Random(0);
         final blocks = List.generate(

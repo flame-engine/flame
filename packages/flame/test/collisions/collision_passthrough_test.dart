@@ -10,7 +10,7 @@ class Passthrough extends TestBlock with CollisionPassthrough {
 
 void main() {
   group('CollisionPassthrough', () {
-    runTestRegistry({
+    runCollisionTestRegistry({
       'Passing collisions to parent': (game) async {
         final passthrough = Passthrough();
         final hitboxParent =

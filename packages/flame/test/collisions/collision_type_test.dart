@@ -10,7 +10,7 @@ import 'collision_test_helpers.dart';
 
 void main() {
   group('CollisionType', () {
-    runTestRegistry({
+    runCollisionTestRegistry({
       'actives do collide': (game) async {
         final blockA = TestBlock(
           Vector2.zero(),
