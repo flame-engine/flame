@@ -47,8 +47,8 @@ mixin ShapeHitbox on ShapeComponent implements Hitbox<ShapeHitbox> {
   @override
   bool renderShape = false;
 
-  @protected
-  late PositionComponent hitboxParent;
+  late PositionComponent _hitboxParent;
+  PositionComponent get hitboxParent => _hitboxParent;
   void Function()? _parentSizeListener;
   @protected
   bool shouldFillParent = false;

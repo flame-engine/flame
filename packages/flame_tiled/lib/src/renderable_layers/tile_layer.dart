@@ -2,19 +2,24 @@ import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame/sprite.dart';
 import 'package:flame_tiled/flame_tiled.dart';
+import 'package:flame_tiled/src/mutable_rect.dart';
 import 'package:flame_tiled/src/mutable_transform.dart';
 import 'package:flame_tiled/src/renderable_layers/group_layer.dart';
 import 'package:flame_tiled/src/renderable_layers/renderable_layer.dart';
+import 'package:flame_tiled/src/tile_animation.dart';
 import 'package:flame_tiled/src/tile_transform.dart';
 import 'package:flutter/painting.dart';
 import 'package:meta/meta.dart';
 import 'package:tiled/tiled.dart' as tiled;
+import 'package:tiled/tiled.dart';
 
 @internal
 class TileLayer extends RenderableLayer<tiled.TileLayer> {
   late final _layerPaint = Paint();
   late final Map<String, SpriteBatch> _cachedSpriteBatches;
   late List<List<MutableRSTransform?>> indexes;
+  final animations = <TileAnimation>[];
+  final Map<Tile, TileFrames> animationFrames;
 
   TileLayer(
     super.layer,
@@ -22,18 +27,27 @@ class TileLayer extends RenderableLayer<tiled.TileLayer> {
     super.map,
     super.destTileSize,
     this._cachedSpriteBatches,
+    this.animationFrames,
   ) {
     _layerPaint.color = Color.fromRGBO(255, 255, 255, opacity);
   }
 
   @override
   void refreshCache() {
+    animations.clear();
     indexes = List.generate(
       layer.width,
       (index) => List.filled(layer.height, null),
     );
 
     _cacheLayerTiles();
+  }
+
+  @override
+  void update(double dt) {
+    for (final animation in animations) {
+      animation.update(dt);
+    }
   }
 
   void _cacheLayerTiles() {
@@ -65,6 +79,7 @@ class TileLayer extends RenderableLayer<tiled.TileLayer> {
     final tileData = layer.tileData!;
     final batchMap = _cachedSpriteBatches;
     final size = destTileSize;
+    final halfMapTile = Vector2(map.tileWidth / 2, map.tileHeight / 2);
 
     for (var ty = 0; ty < tileData.length; ty++) {
       final tileRow = tileData[ty];
@@ -88,11 +103,12 @@ class TileLayer extends RenderableLayer<tiled.TileLayer> {
           continue;
         }
 
-        final src = tileset.computeDrawRect(tile).toRect();
+        final src =
+            MutableRect.fromRect(tileset.computeDrawRect(tile).toRect());
         final flips = SimpleFlips.fromFlips(tileGid.flips);
         final scale = size.x / src.width;
-        final anchorX = src.width / 2;
-        final anchorY = src.height / 2;
+        final anchorX = src.width - halfMapTile.x;
+        final anchorY = src.height - halfMapTile.y;
 
         late double offsetX;
         late double offsetY;
@@ -116,6 +132,10 @@ class TileLayer extends RenderableLayer<tiled.TileLayer> {
           transform: indexes[tx][ty],
           flip: flips.flip,
         );
+
+        if (tile.animation.isNotEmpty) {
+          _addAnimation(tile, tileset, src);
+        }
       }
     }
   }
@@ -125,7 +145,9 @@ class TileLayer extends RenderableLayer<tiled.TileLayer> {
     final batchMap = _cachedSpriteBatches;
     final halfDestinationTile = destTileSize / 2;
     final size = destTileSize;
-    final isometricXShift = map.width * size.x * 0.5;
+    final isometricXShift = map.height * halfDestinationTile.x;
+    final isometricYShift = halfDestinationTile.y;
+    final halfMapTile = Vector2(map.tileWidth / 2, map.tileHeight / 2);
 
     for (var ty = 0; ty < tileData.length; ty++) {
       final tileRow = tileData[ty];
@@ -148,17 +170,18 @@ class TileLayer extends RenderableLayer<tiled.TileLayer> {
           continue;
         }
 
-        final src = tileset.computeDrawRect(tile).toRect();
+        final src =
+            MutableRect.fromRect(tileset.computeDrawRect(tile).toRect());
         final flips = SimpleFlips.fromFlips(tileGid.flips);
         final scale = size.x / src.width;
-        final anchorX = src.width / 2;
-        final anchorY = src.height / 2;
+        final anchorX = src.width - halfMapTile.x;
+        final anchorY = src.height - halfMapTile.y;
 
         late double offsetX;
         late double offsetY;
 
         offsetX = halfDestinationTile.x * (tx - ty) + isometricXShift;
-        offsetY = halfDestinationTile.y * (tx + ty) - size.y;
+        offsetY = halfDestinationTile.y * (tx + ty) + isometricYShift;
 
         final scos = flips.cos * scale;
         final ssin = flips.sin * scale;
@@ -177,6 +200,10 @@ class TileLayer extends RenderableLayer<tiled.TileLayer> {
           transform: indexes[tx][ty],
           flip: flips.flip,
         );
+
+        if (tile.animation.isNotEmpty) {
+          _addAnimation(tile, tileset, src);
+        }
       }
     }
   }
@@ -190,11 +217,11 @@ class TileLayer extends RenderableLayer<tiled.TileLayer> {
 
     var staggerY = 0.0;
     var staggerX = 0.0;
-    // Hexagonal Ponity Tiles move down by a fractional amount.
+    // Isometric staggered tiles move down by a fractional amount.
     if (map.staggerAxis == tiled.StaggerAxis.y) {
       staggerY = size.y * 0.5;
     } else
-    // Hexagonal Flat Tiles move right by a fractional amount.
+    // Isometric staggered tiles move right by a fractional amount.
     if (map.staggerAxis == tiled.StaggerAxis.x) {
       staggerX = size.x * 0.5;
     }
@@ -202,7 +229,7 @@ class TileLayer extends RenderableLayer<tiled.TileLayer> {
     for (var ty = 0; ty < tileData.length; ty++) {
       final tileRow = tileData[ty];
 
-      // Hexagonal Pointy Tiles shift left and right depending on the row
+      // Isometric staggered tiles shift left and right depending on the row
       if (map.staggerAxis == tiled.StaggerAxis.y) {
         if ((ty.isOdd && map.staggerIndex == tiled.StaggerIndex.odd) ||
             (ty.isEven && map.staggerIndex == tiled.StaggerIndex.even)) {
@@ -245,7 +272,8 @@ class TileLayer extends RenderableLayer<tiled.TileLayer> {
           }
         }
 
-        final src = tileset.computeDrawRect(tile).toRect();
+        final src =
+            MutableRect.fromRect(tileset.computeDrawRect(tile).toRect());
         final flips = SimpleFlips.fromFlips(tileGid.flips);
         final scale = size.x / src.width;
         final anchorX = src.width - halfMapTile.x;
@@ -290,6 +318,9 @@ class TileLayer extends RenderableLayer<tiled.TileLayer> {
             transform: transform,
             flip: flips.flip,
           );
+        }
+        if (tile.animation.isNotEmpty) {
+          _addAnimation(tile, tileset, src);
         }
       }
 
@@ -367,7 +398,8 @@ class TileLayer extends RenderableLayer<tiled.TileLayer> {
           }
         }
 
-        final src = tileset.computeDrawRect(tile).toRect();
+        final src =
+            MutableRect.fromRect(tileset.computeDrawRect(tile).toRect());
         final flips = SimpleFlips.fromFlips(tileGid.flips);
         final scale = size.x / src.width;
         final anchorX = src.width - halfMapTile.x;
@@ -412,6 +444,9 @@ class TileLayer extends RenderableLayer<tiled.TileLayer> {
             flip: flips.flip,
           );
         }
+        if (tile.animation.isNotEmpty) {
+          _addAnimation(tile, tileset, src);
+        }
       }
 
       for (final tile in xSecondPass) {
@@ -446,6 +481,7 @@ class TileLayer extends RenderableLayer<tiled.TileLayer> {
     GroupLayer? parent,
     tiled.TiledMap map,
     Vector2 destTileSize,
+    Map<tiled.Tile, TileFrames> animationFrames,
   ) async {
     return TileLayer(
       layer,
@@ -453,6 +489,7 @@ class TileLayer extends RenderableLayer<tiled.TileLayer> {
       map,
       destTileSize,
       await _loadImages(map),
+      animationFrames,
     );
   }
 
@@ -473,4 +510,19 @@ class TileLayer extends RenderableLayer<tiled.TileLayer> {
 
   @override
   void handleResize(Vector2 canvasSize) {}
+
+  void _addAnimation(Tile tile, Tileset tileset, MutableRect source) {
+    final frames = animationFrames[tile] ??= () {
+      final rects = <Rect>[];
+      final durations = <double>[];
+      for (final frame in tile.animation) {
+        final newTile = tileset.tiles[frame.tileId];
+        final rect = tileset.computeDrawRect(newTile).toRect();
+        rects.add(rect);
+        durations.add(frame.duration / 1000);
+      }
+      return TileFrames(rects, durations);
+    }();
+    animations.add(TileAnimation(source, frames));
+  }
 }

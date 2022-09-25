@@ -6,6 +6,13 @@ import 'package:flame/game.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter/animation.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
+
+abstract class Callback {
+  void call();
+}
+
+class CallbackMock extends Mock implements Callback {}
 
 void main() {
   group('EffectController', () {
@@ -310,6 +317,38 @@ void main() {
         (seq[1] as SpeedEffectController).child,
         isA<ReverseCurvedEffectController>(),
       );
+    });
+
+    test('onMax and onMin callbacks', () {
+      final mockOnMax = CallbackMock();
+      final mockOnMin = CallbackMock();
+      final ec = EffectController(
+        duration: 1,
+        reverseDuration: 1,
+        onMax: mockOnMax,
+        onMin: mockOnMin,
+        infinite: true,
+      );
+
+      ec.advance(1);
+      verifyNever(mockOnMax.call);
+      verifyNever(mockOnMin.call);
+
+      ec.advance(0.1);
+      verify(mockOnMax.call).called(1);
+      verifyNever(mockOnMin.call);
+
+      ec.advance(1); // after this call a .setToStart() is performed
+      verifyNever(mockOnMax.call);
+      verify(mockOnMin.call).called(1);
+
+      ec.advance(0.5);
+      verifyNever(mockOnMax.call);
+      verifyNever(mockOnMin.call);
+
+      ec.advance(0.5);
+      verify(mockOnMax.call).called(1);
+      verifyNever(mockOnMin.call);
     });
 
     group('errors', () {

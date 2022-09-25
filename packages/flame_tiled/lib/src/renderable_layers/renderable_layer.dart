@@ -28,6 +28,8 @@ abstract class RenderableLayer<T extends Layer> {
 
   void refreshCache();
 
+  void update(double dt);
+
   double get scaleX => destTileSize.x / map.tileWidth;
   double get scaleY => destTileSize.y / map.tileHeight;
 
@@ -85,4 +87,7 @@ class UnsupportedLayer extends RenderableLayer {
 
   @override
   void refreshCache() {}
+
+  @override
+  void update(double dt) {}
 }

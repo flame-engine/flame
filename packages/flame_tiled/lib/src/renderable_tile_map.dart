@@ -11,6 +11,7 @@ import 'package:flame_tiled/src/renderable_layers/image_layer.dart';
 import 'package:flame_tiled/src/renderable_layers/object_layer.dart';
 import 'package:flame_tiled/src/renderable_layers/renderable_layer.dart';
 import 'package:flame_tiled/src/renderable_layers/tile_layer.dart';
+import 'package:flame_tiled/src/tile_animation.dart';
 import 'package:flame_tiled/src/tile_stack.dart';
 import 'package:flutter/painting.dart';
 import 'package:tiled/tiled.dart' as tiled;
@@ -50,12 +51,15 @@ class RenderableTiledMap {
   /// Paint for the map's background color, if there is one
   late final ui.Paint? _backgroundPaint;
 
+  final Map<tiled.Tile, TileFrames> animationFrames;
+
   /// {@macro _renderable_tiled_map}
   RenderableTiledMap(
     this.map,
     this.renderableLayers,
     this.destTileSize, {
     this.camera,
+    this.animationFrames = const {},
   }) {
     _refreshCache();
 
@@ -216,14 +220,26 @@ class RenderableTiledMap {
     Vector2 destTileSize, {
     Camera? camera,
   }) async {
-    final renderableLayers =
-        await _renderableLayers(map.layers, null, map, destTileSize, camera);
+    // We're not going to load animation frames that are never referenced; but
+    // we do supply the common cache for all layers in this map, and maintain
+    // the update cycle for these in one place.
+    final animationFrames = <tiled.Tile, TileFrames>{};
+
+    final renderableLayers = await _renderableLayers(
+      map.layers,
+      null,
+      map,
+      destTileSize,
+      camera,
+      animationFrames,
+    );
 
     return RenderableTiledMap(
       map,
       renderableLayers,
       destTileSize,
       camera: camera,
+      animationFrames: animationFrames,
     );
   }
 
@@ -233,6 +249,7 @@ class RenderableTiledMap {
     tiled.TiledMap map,
     Vector2 destTileSize,
     Camera? camera,
+    Map<tiled.Tile, TileFrames> animationFrames,
   ) async {
     return Future.wait(
       layers.where((layer) => layer.visible).toList().map((layer) async {
@@ -243,6 +260,7 @@ class RenderableTiledMap {
               parent,
               map,
               destTileSize,
+              animationFrames,
             );
           case tiled.ImageLayer:
             return ImageLayer.load(
@@ -267,6 +285,7 @@ class RenderableTiledMap {
               map,
               destTileSize,
               camera,
+              animationFrames,
             );
             renderableGroup.children = await children;
             return renderableGroup;
@@ -321,6 +340,18 @@ class RenderableTiledMap {
       return map.layerByName(name) as T;
     } on ArgumentError {
       return null;
+    }
+  }
+
+  void update(double dt) {
+    // First, update animation frames.
+    for (final frame in animationFrames.values) {
+      frame.update(dt);
+    }
+
+    // Then every layer.
+    for (final layer in renderableLayers) {
+      layer.update(dt);
     }
   }
 }

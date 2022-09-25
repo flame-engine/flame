@@ -85,6 +85,12 @@ when a collision starts you only need to override `onCollision`, and vice versa.
 If you want to check collisions with the screen edges, as we do in the example above, you can use
 the predefined [ScreenHitbox](#screenhitbox) class.
 
+By default all hitboxes are hollow, this means that one hitbox can be fully enclosed by another
+hitbox without triggering a collision. If you want to set your hitboxes to be solid you can set
+`isSolid = true`. A hollow hitbox inside of a solid hitbox will trigger a collision, but not the
+other way around. If there are no intersections with the edges on a solid hitbox the center
+position is instead returned.
+
 
 ## ShapeHitbox
 
