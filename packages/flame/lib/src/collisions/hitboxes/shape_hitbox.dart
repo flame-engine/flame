@@ -56,7 +56,7 @@ mixin ShapeHitbox on ShapeComponent implements Hitbox<ShapeHitbox> {
   @override
   void onMount() {
     super.onMount();
-    hitboxParent = ancestors().firstWhere(
+    _hitboxParent = ancestors().firstWhere(
       (c) => c is PositionComponent && c is! CompositeHitbox,
       orElse: () {
         throw StateError('A ShapeHitbox needs a PositionComponent ancestor');
