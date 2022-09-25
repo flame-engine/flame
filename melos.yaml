@@ -52,7 +52,7 @@ scripts:
     description: Run dartdoc checks for all packages.
 
   sphinxdoc:
-    run: cd doc/_sphinx && make html
+    run: SOURCEDIR="$MELOS_ROOT_PATH/doc" && cd "$SOURCEDIR/_sphinx" && make html
     description: Create the sphinx html docs.
 
   test:select:

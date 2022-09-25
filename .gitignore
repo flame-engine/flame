@@ -12,6 +12,7 @@ packages/flame/doc/api/
 **/.flutter-plugins
 **/.flutter-plugins-dependencies
 **/pubspec_overrides.yaml
+**/__pycache__/
 
 android/
 ios/
