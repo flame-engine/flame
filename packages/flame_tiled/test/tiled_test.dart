@@ -7,6 +7,9 @@ import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flame_tiled/flame_tiled.dart';
+import 'package:flame_tiled/src/renderable_layers/tile_layer.dart'
+    as renderable;
+
 import 'package:flutter/services.dart' show CachingAssetBundle;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tiled/tiled.dart';
@@ -310,17 +313,16 @@ void main() {
 
   Future<Uint8List> renderMapToPng(
     TiledComponent component,
-    int width,
-    int height,
   ) async {
     final canvasRecorder = PictureRecorder();
     final canvas = Canvas(canvasRecorder);
     component.tileMap.render(canvas);
     final picture = canvasRecorder.endRecording();
 
-    // Map size is now 320 wide, but it has 1 extra tile of height becusae
+    final size = component.size;
+    // Map size is now 320 wide, but it has 1 extra tile of height because
     // its actually double-height tiles.
-    final image = await picture.toImageSafe(width, height);
+    final image = await picture.toImageSafe(size.x.toInt(), size.y.toInt());
     return (await image.toByteData(format: ImageByteFormat.png))!
         .buffer
         .asUint8List();
@@ -358,7 +360,7 @@ void main() {
     });
 
     test('renders', () async {
-      final pngData = await renderMapToPng(component, 32 * 16, 128 * 16);
+      final pngData = await renderMapToPng(component);
 
       expect(pngData, matchesGoldenFile('goldens/orthogonal.png'));
     });
@@ -382,14 +384,13 @@ void main() {
 
     test('component size', () {
       expect(component.tileMap.destTileSize, Vector2(64, 32));
-      expect(component.size, Vector2(64 * 5, 32 * 5));
+      expect(component.size, Vector2(320, 160));
     });
 
     test('renders', () async {
-      // Map size is now 320 wide, but it has 1 extra tile of height becusae
+      // Map size is now 320 wide, but it has 1 extra tile of height because
       // its actually double-height tiles.
-      final pngData =
-          await renderMapToPng(component, 256 * 5 ~/ 4, (128 * 5 + 128) ~/ 4);
+      final pngData = await renderMapToPng(component);
 
       expect(pngData, matchesGoldenFile('goldens/isometric.png'));
     });
@@ -424,7 +425,7 @@ void main() {
 
       expect(component.size, Vector2(240, 214.5));
 
-      final pngData = await renderMapToPng(component, 240, 215);
+      final pngData = await renderMapToPng(component);
 
       expect(pngData, matchesGoldenFile('goldens/flat_hex_even.png'));
     });
@@ -438,7 +439,7 @@ void main() {
 
       expect(component.size, Vector2(240, 214.5));
 
-      final pngData = await renderMapToPng(component, 240, 215);
+      final pngData = await renderMapToPng(component);
 
       expect(pngData, matchesGoldenFile('goldens/flat_hex_odd.png'));
     });
@@ -452,7 +453,7 @@ void main() {
 
       expect(component.size, Vector2(330, 208));
 
-      final pngData = await renderMapToPng(component, 330, 208);
+      final pngData = await renderMapToPng(component);
 
       expect(pngData, matchesGoldenFile('goldens/pointy_hex_even.png'));
     });
@@ -466,7 +467,7 @@ void main() {
 
       expect(component.size, Vector2(330, 208));
 
-      final pngData = await renderMapToPng(component, 330, 208);
+      final pngData = await renderMapToPng(component);
 
       expect(pngData, matchesGoldenFile('goldens/pointy_hex_odd.png'));
     });
@@ -501,7 +502,7 @@ void main() {
 
       expect(component.size, Vector2(320, 288));
 
-      final pngData = await renderMapToPng(component, 320, 288);
+      final pngData = await renderMapToPng(component);
 
       expect(
         pngData,
@@ -518,7 +519,7 @@ void main() {
 
       expect(component.size, Vector2(320 / 2, 288 / 2));
 
-      final pngData = await renderMapToPng(component, 160, 144);
+      final pngData = await renderMapToPng(component);
 
       expect(
         pngData,
@@ -535,7 +536,7 @@ void main() {
 
       expect(component.size, Vector2(576 / 2, 160 / 2));
 
-      final pngData = await renderMapToPng(component, 288, 80);
+      final pngData = await renderMapToPng(component);
 
       expect(
         pngData,
@@ -552,13 +553,250 @@ void main() {
 
       expect(component.size, Vector2(576, 160));
 
-      final pngData = await renderMapToPng(component, 576, 160);
+      final pngData = await renderMapToPng(component);
 
       expect(
         pngData,
         matchesGoldenFile('goldens/iso_staggered_overlap_y_even.png'),
       );
     });
+  });
+
+  group('shifted and scaled', () {
+    late TiledComponent component;
+    final size = Vector2(256, 128);
+
+    Future<void> setupMap(
+      Vector2 destTileSize,
+    ) async {
+      Flame.bundle = TestAssetBundle(
+        imageNames: [
+          'isometric_spritesheet.png',
+        ],
+        mapPath: 'test/assets/test_shifted.tmx',
+      );
+      component = await TiledComponent.load(
+        'test_isometric.tmx',
+        destTileSize,
+      );
+    }
+
+    test('regular', () async {
+      await setupMap(size);
+      final pngData = await renderMapToPng(component);
+
+      expect(
+        pngData,
+        matchesGoldenFile('goldens/shifted_scaled_regular.png'),
+      );
+    });
+
+    test('smaller', () async {
+      final smallSize = size / 3;
+      await setupMap(smallSize);
+      final pngData = await renderMapToPng(component);
+
+      expect(
+        pngData,
+        matchesGoldenFile('goldens/shifted_scaled_smaller.png'),
+      );
+    });
+
+    test('larger', () async {
+      final largeSize = size * 2;
+      await setupMap(largeSize);
+      final pngData = await renderMapToPng(component);
+
+      expect(
+        pngData,
+        matchesGoldenFile('goldens/shifted_scaled_larger.png'),
+      );
+    });
+  });
+
+  group('TileStack', () {
+    late TiledComponent component;
+    final size = Vector2(256 / 2, 128 / 2);
+
+    setUp(() async {
+      Flame.bundle = TestAssetBundle(
+        imageNames: [
+          'isometric_spritesheet.png',
+        ],
+        mapPath: 'test/assets/test_isometric.tmx',
+      );
+      component = await TiledComponent.load('test_isometric.tmx', size);
+    });
+    test('from all layers', () {
+      var stack = component.tileMap.tileStack(0, 0, all: true);
+      expect(stack.length, 2);
+
+      stack = component.tileMap.tileStack(1, 0, all: true);
+      expect(stack.length, 1);
+    });
+
+    test('from some layers', () {
+      var stack = component.tileMap.tileStack(0, 0, named: {'empty'});
+      expect(stack.length, 0);
+
+      stack = component.tileMap.tileStack(0, 0, named: {'item'});
+      expect(stack.length, 1);
+
+      stack = component.tileMap.tileStack(0, 0, ids: {1});
+      expect(stack.length, 1);
+
+      stack = component.tileMap.tileStack(0, 0, ids: {1, 2});
+      expect(stack.length, 2);
+    });
+
+    test('can be positioned together', () async {
+      final stack = component.tileMap.tileStack(0, 0, all: true);
+      stack.position = stack.position + Vector2.all(20);
+
+      final pngData = await renderMapToPng(component);
+      expect(
+        pngData,
+        matchesGoldenFile('goldens/tile_stack_all_move.png'),
+      );
+    });
+
+    test('can be positioned singularly', () async {
+      final stack = component.tileMap.tileStack(0, 0, named: {'item'});
+      stack.position = stack.position + Vector2(-20, 20);
+
+      final pngData = await renderMapToPng(component);
+      expect(
+        pngData,
+        matchesGoldenFile('goldens/tile_stack_single_move.png'),
+      );
+    });
+  });
+
+  group('animated tiles', () {
+    late TiledComponent component;
+    late RenderableTiledMap map;
+    final size = Vector2(16, 16);
+
+    for (final mapType in [
+      'orthogonal',
+      'isometric',
+      'hexagonal',
+      'staggered'
+    ]) {
+      group(mapType, () {
+        setUp(() async {
+          Flame.bundle = TestAssetBundle(
+            imageNames: [
+              '0x72_DungeonTilesetII_v1.4.png',
+            ],
+            mapPath: 'test/assets/dungeon_animation_$mapType.tmx',
+          );
+          component = await TiledComponent.load(
+            'dungeon_animation_$mapType.tmx',
+            size,
+          );
+          map = component.tileMap;
+        });
+
+        test('handle single frame animations ($mapType)', () {
+          expect(
+            map.renderableLayers.first,
+            isInstanceOf<renderable.TileLayer>(),
+          );
+          final layer = map.renderableLayers.first as renderable.TileLayer;
+          expect(
+            layer.animations,
+            hasLength(1),
+            reason: 'layer has only one animation',
+          );
+          expect(
+            layer.animationFrames,
+            hasLength(4),
+            reason: 'layer only caches frames in use',
+          );
+          expect(layer.animations.first.frames.sources, hasLength(1));
+        });
+
+        test('handle single frame animations ($mapType)', () {
+          expect(map.renderableLayers[1], isInstanceOf<renderable.TileLayer>());
+          final layer = map.renderableLayers[1] as renderable.TileLayer;
+          expect(
+            layer.animations,
+            hasLength(2),
+            reason: 'two animations on this layer',
+          );
+          expect(
+            layer.animationFrames,
+            hasLength(4),
+            reason: 'layer only caches frames in use',
+          );
+
+          final waterAnimation = layer.animations.first;
+          final spikeAnimation = layer.animations.last;
+          expect(waterAnimation.frames.durations, [.18, .17, .15]);
+          expect(spikeAnimation.frames.durations, [.176, .176, .176, .176]);
+
+          map.update(.177);
+          expect(waterAnimation.frame, 0);
+          expect(waterAnimation.frames.frameTime, .177);
+          expect(
+            waterAnimation.batchedSource.toRect(),
+            waterAnimation.frames.sources[0],
+          );
+
+          expect(spikeAnimation.frame, 1);
+          expect(spikeAnimation.frames.frameTime, moreOrLessEquals(.001));
+          expect(
+            spikeAnimation.batchedSource.toRect(),
+            spikeAnimation.frames.sources[1],
+          );
+
+          map.update(.003);
+          expect(waterAnimation.frame, 1);
+          expect(waterAnimation.frames.frameTime, moreOrLessEquals(.0));
+          expect(spikeAnimation.frame, 1);
+          expect(spikeAnimation.frames.frameTime, moreOrLessEquals(0.004));
+
+          map.update(0.17 + 0.15);
+          expect(waterAnimation.frame, 0, reason: 'wraps around');
+          expect(
+            waterAnimation.batchedSource.toRect(),
+            waterAnimation.frames.sources[0],
+          );
+        });
+
+        /// This will not produce a pretty map for non-orthogonal, but that's
+        /// OK, we're looking for parsing and handling of animations.
+        test('renders ($mapType)', () async {
+          var pngData = await renderMapToPng(component);
+          await expectLater(
+            pngData,
+            matchesGoldenFile('goldens/dungeon_animation_${mapType}_0.png'),
+          );
+
+          component.update(0.18);
+          pngData = await renderMapToPng(component);
+          await expectLater(
+            pngData,
+            matchesGoldenFile('goldens/dungeon_animation_${mapType}_1.png'),
+          );
+
+          component.update(0.18);
+          pngData = await renderMapToPng(component);
+          await expectLater(
+            pngData,
+            matchesGoldenFile('goldens/dungeon_animation_${mapType}_2.png'),
+          );
+
+          component.update(0.18);
+          pngData = await renderMapToPng(component);
+          await expectLater(
+            pngData,
+            matchesGoldenFile('goldens/dungeon_animation_${mapType}_3.png'),
+          );
+        });
+      });
+    }
   });
 }
 

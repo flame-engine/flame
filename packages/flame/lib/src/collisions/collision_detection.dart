@@ -7,8 +7,9 @@ import 'package:flame/geometry.dart';
 ///
 /// If the [HasCollisionDetection] mixin is added to the game, [run] is
 /// called every tick to check for collisions
-abstract class CollisionDetection<T extends Hitbox<T>> {
-  final Broadphase<T> broadphase;
+abstract class CollisionDetection<T extends Hitbox<T>,
+    B extends Broadphase<T>> {
+  final B broadphase;
   List<T> get items => broadphase.items;
   final Set<CollisionProspect<T>> _lastPotentials = {};
 

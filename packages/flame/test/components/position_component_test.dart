@@ -387,25 +387,37 @@ void main() {
       });
 
       test('positionOf', () {
-        final comp = PositionComponent()
+        final component = PositionComponent()
           ..size = Vector2(50, 100)
           ..position = Vector2(500, 700)
           ..scale = Vector2(2, 1)
           ..anchor = Anchor.center;
-        expect(comp.positionOfAnchor(Anchor.center), Vector2(500, 700));
-        expect(comp.positionOfAnchor(Anchor.topLeft), Vector2(450, 650));
-        expect(comp.positionOfAnchor(Anchor.topCenter), Vector2(500, 650));
-        expect(comp.positionOfAnchor(Anchor.topRight), Vector2(550, 650));
-        expect(comp.positionOfAnchor(Anchor.centerLeft), Vector2(450, 700));
-        expect(comp.positionOfAnchor(Anchor.centerRight), Vector2(550, 700));
-        expect(comp.positionOfAnchor(Anchor.bottomLeft), Vector2(450, 750));
+        expect(component.positionOfAnchor(Anchor.center), Vector2(500, 700));
+        expect(component.positionOfAnchor(Anchor.topLeft), Vector2(450, 650));
+        expect(component.positionOfAnchor(Anchor.topCenter), Vector2(500, 650));
+        expect(component.positionOfAnchor(Anchor.topRight), Vector2(550, 650));
         expect(
-          comp.positionOfAnchor(Anchor.bottomCenter),
+          component.positionOfAnchor(Anchor.centerLeft),
+          Vector2(450, 700),
+        );
+        expect(
+          component.positionOfAnchor(Anchor.centerRight),
+          Vector2(550, 700),
+        );
+        expect(
+          component.positionOfAnchor(Anchor.bottomLeft),
+          Vector2(450, 750),
+        );
+        expect(
+          component.positionOfAnchor(Anchor.bottomCenter),
           Vector2(500, 750),
         );
-        expect(comp.positionOfAnchor(Anchor.bottomRight), Vector2(550, 750));
-        expect(comp.positionOf(Vector2(-3, 2)), Vector2(444, 652));
-        expect(comp.positionOf(Vector2(7, 16)), Vector2(464, 666));
+        expect(
+          component.positionOfAnchor(Anchor.bottomRight),
+          Vector2(550, 750),
+        );
+        expect(component.positionOf(Vector2(-3, 2)), Vector2(444, 652));
+        expect(component.positionOf(Vector2(7, 16)), Vector2(464, 666));
       });
 
       test('local<->parent transforms', () {
@@ -716,6 +728,108 @@ void main() {
         expect(child.center, Vector2(5, 5));
         expect(child.position, Vector2(3, 2));
         expect(child.absolutePosition, Vector2(15, 21));
+      });
+
+      test('lookAt', () {
+        final component = PositionComponent();
+
+        final targets = [
+          Vector2(0, 1),
+          Vector2.all(2),
+          Vector2(-1, 0),
+          Vector2.all(-50)
+        ];
+        final expectedAngles = [pi, (3 * pi / 4), (-pi / 2), (-pi / 4)];
+
+        for (var i = 0; i < targets.length; ++i) {
+          final target = targets.elementAt(i);
+          final angle = expectedAngles.elementAt(i);
+
+          expectDouble(
+            component.angleTo(target),
+            angle - component.angle,
+            epsilon: 1e-10,
+          );
+
+          component.lookAt(target);
+          expectDouble(component.angle, angle, epsilon: 1e-10);
+        }
+      });
+
+      test('lookAt with native angle', () {
+        final component = PositionComponent(nativeAngle: pi / 2);
+
+        final targets = [
+          Vector2(0, 1),
+          Vector2.all(2),
+          Vector2(-1, 0),
+          Vector2.all(-50)
+        ];
+        final expectedAngles = [pi / 2, (pi / 4), -pi, (-3 * pi / 4)];
+
+        for (var i = 0; i < targets.length; ++i) {
+          final target = targets.elementAt(i);
+          final angle = expectedAngles.elementAt(i);
+
+          expectDouble(
+            component.angleTo(target),
+            angle - component.angle,
+            epsilon: 1e-10,
+          );
+
+          component.lookAt(target);
+          expectDouble(component.angle, angle, epsilon: 1e-10);
+        }
+      });
+
+      test('lookAt with nested components', () {
+        late PositionComponent component;
+
+        PositionComponent(
+          angle: pi / 2,
+          children: [
+            PositionComponent(
+              angle: pi / 2,
+              children: [
+                component = PositionComponent(
+                  nativeAngle: -pi,
+                )
+              ],
+            )
+          ],
+        );
+
+        final targets = [
+          Vector2(0, 1),
+          Vector2.all(2),
+          Vector2(-1, 0),
+          Vector2.all(-50)
+        ];
+        final expectedAngles = [pi, (3 * pi / 4), -pi / 2, (-pi / 4)];
+
+        for (var i = 0; i < targets.length; ++i) {
+          final target = targets.elementAt(i);
+          final angle = expectedAngles.elementAt(i);
+
+          expectDouble(
+            component.angleTo(target),
+            angle - component.angle,
+            epsilon: 1e-10,
+          );
+
+          component.lookAt(target);
+          expectDouble(component.angle, angle, epsilon: 1e-10);
+        }
+      });
+
+      test('lookAt corner cases', () {
+        final component = PositionComponent(position: Vector2(-20, 50));
+        component.lookAt(component.absolutePosition);
+        expectDouble(component.angle, 0, epsilon: 1e-10);
+
+        component.nativeAngle = 3 * pi / 2;
+        component.lookAt(component.absolutePosition);
+        expectDouble(component.angle, -component.nativeAngle, epsilon: 1e-10);
       });
     });
 

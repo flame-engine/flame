@@ -258,6 +258,60 @@ void main() {
   );
 
   testCollisionDetectionGame(
+    'callbacks return the parent of the composite hitbox on collisions',
+    (game) async {
+      final size = Vector2.all(10);
+      final hitboxA = TestHitbox();
+      final compositeA = CompositeTestHitbox(size: size, children: [hitboxA]);
+      final blockA = TestBlock(
+        Vector2.zero(),
+        size,
+        children: [compositeA],
+        addTestHitbox: false,
+      );
+      final hitboxB = TestHitbox();
+      final compositeB = CompositeTestHitbox(size: size, children: [hitboxB]);
+      final blockB = TestBlock(
+        Vector2.all(15),
+        size,
+        children: [compositeB],
+        addTestHitbox: false,
+      );
+      await game.ensureAddAll([blockA, blockB]);
+
+      game.update(0);
+      expect(blockA.startCounter, 0);
+      expect(blockB.startCounter, 0);
+      expect(blockA.onCollisionCounter, 0);
+      expect(blockB.onCollisionCounter, 0);
+      expect(blockA.endCounter, 0);
+      expect(blockB.endCounter, 0);
+
+      blockB.position = Vector2.all(5);
+      game.update(0);
+      expect(blockA.startCounter, 1);
+      expect(blockB.startCounter, 1);
+      expect(blockA.onCollisionCounter, 1);
+      expect(blockB.onCollisionCounter, 1);
+      expect(blockA.endCounter, 0);
+      expect(blockB.endCounter, 0);
+      expect(blockA.collidingWith(blockB), isTrue);
+      expect(blockB.collidingWith(blockA), isTrue);
+
+      blockB.position.y += 20;
+      game.update(0);
+      expect(blockA.startCounter, 1);
+      expect(blockB.startCounter, 1);
+      expect(blockA.onCollisionCounter, 1);
+      expect(blockB.onCollisionCounter, 1);
+      expect(blockA.endCounter, 1);
+      expect(blockB.endCounter, 1);
+      expect(blockA.collidingWith(blockB), isFalse);
+      expect(blockB.collidingWith(blockA), isFalse);
+    },
+  );
+
+  testCollisionDetectionGame(
     'end and start callbacks are only called once for hitboxes sharing a side',
     (game) async {
       final blockA = TestBlock(
@@ -408,6 +462,31 @@ void main() {
       expect(block.startCounter, 2);
       expect(block.onCollisionCounter, 2);
       expect(block.endCounter, 1);
+    },
+  );
+
+  testCollisionDetectionGame(
+    'collision callbacks for solid hitbox',
+    (game) async {
+      final innerBlock = TestBlock(Vector2.zero(), Vector2.all(2))
+        ..anchor = Anchor.center
+        ..hitbox.isSolid = true;
+      final outerBlock = TestBlock(Vector2.zero(), Vector2.all(4))
+        ..anchor = Anchor.center
+        ..hitbox.isSolid = true;
+      await game.ensureAddAll([innerBlock, outerBlock]);
+
+      game.update(0);
+      expect(innerBlock.startCounter, 1);
+      expect(innerBlock.onCollisionCounter, 1);
+      expect(innerBlock.endCounter, 0);
+
+      innerBlock.position = Vector2.all(5);
+      game.update(0);
+
+      expect(outerBlock.startCounter, 1);
+      expect(outerBlock.onCollisionCounter, 1);
+      expect(outerBlock.endCounter, 1);
     },
   );
 }

@@ -90,7 +90,8 @@ class MyGame extends Game {
 
   @override
   Future<void> onLoad() async {
-    final playerImage = await images.load('player.png'); // Note that you could also use Sprite.load for this
+    // Note that you could also use Sprite.load for this.
+    final playerImage = await images.load('player.png');
     player = Sprite(playerImage);
   }
 }
@@ -110,8 +111,8 @@ class MyGame extends Game {
   }
 
   void shoot() {
-    // This is just an example, in your game you probably don't want to instantiate new [Sprite]
-    // objects every time you shoot.
+    // This is just an example, in your game you probably don't want to
+    // instantiate new [Sprite] objects every time you shoot.
     final bulletSprite = Sprite(images.fromCache('bullet.png'));
     _bullets.add(bulletSprite);
   }

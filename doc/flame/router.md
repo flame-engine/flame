@@ -4,9 +4,9 @@
 :page: router
 :show: widget code infobox
 
-This example app shows the use of the `RouterComponent` to move across multiple screens within
-the game. In addition, the "pause" button stops time and applies visual effects to the content of
-the page below it.
+This example app shows the use of the `RouterComponent` to move across multiple
+screens within the game. In addition, the "pause" button stops time and applies
+visual effects to the content of the page below it.
 ```
 
 
@@ -31,6 +31,7 @@ events normally. Such transparent pages are useful for implementing modal dialog
 dialogue UIs, etc.
 
 Usage example:
+
 ```dart
 class MyGame extends FlameGame {
   late final RouterComponent router;
@@ -80,6 +81,7 @@ routes are transparent by default.
 There are two constructors for the `OverlayRoute`. The first constructor requires a builder function
 that describes how the overlay's widget is to be built. The second constructor can be used when the
 builder function was already specified within the `GameWidget`:
+
 ```dart
 final router = RouterComponent(
   routes: {
@@ -100,6 +102,7 @@ map beforehand: the `RouterComponent.pushOverlay()` method can do it for you. On
 was registered, it can be activated either via the regular `.pushNamed()` method, or via the
 `.pushOverlay()` -- the two method will do exactly the same, though you can use the second one to
 make it more clear in your code that an overlay is being added instead of a regular route.
+
 
 ## ValueRoute
 
