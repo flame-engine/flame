@@ -6,10 +6,10 @@ enum ButtonState {
 }
 
 /// The [SpriteButtonComponent] bundles two [Sprite]s, one that shows while
-/// the button is being pressed, and one that shows otherwise. 
-/// 
+/// the button is being pressed, and one that shows otherwise.
+///
 /// Each of the two [Sprite]s correspond to one of the two [ButtonState]s.
-/// If needed, state of the button can be manually changed by modifying 
+/// If needed, state of the button can be manually changed by modifying
 /// [current].
 ///
 /// Note: You have to set the [button] in [onLoad] if you are not passing it in
