@@ -65,6 +65,24 @@ class TestHitbox extends RectangleHitbox {
   }
 }
 
+class CompositeTestHitbox extends CompositeHitbox {
+  int startCounter = 0;
+  int onCollisionCounter = 0;
+  int endCounter = 0;
+
+  CompositeTestHitbox({super.size, super.children}) {
+    onCollisionCallback = (_, __) {
+      onCollisionCounter++;
+    };
+    onCollisionStartCallback = (_, __) {
+      startCounter++;
+    };
+    onCollisionEndCallback = (_) {
+      endCounter++;
+    };
+  }
+}
+
 class TestBlock extends PositionComponent with CollisionCallbacks {
   String? name;
   final hitbox = TestHitbox();
@@ -77,6 +95,7 @@ class TestBlock extends PositionComponent with CollisionCallbacks {
     Vector2 size, {
     CollisionType type = CollisionType.active,
     bool addTestHitbox = true,
+    super.children,
     this.name,
   }) : super(
           position: position,
