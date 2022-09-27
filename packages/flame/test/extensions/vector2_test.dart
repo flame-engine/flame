@@ -71,9 +71,9 @@ void main() {
       expect(p.length, 2.0);
 
       p.rotate(-math.pi / 4);
-      expect(p.length, 2.0);
-      expect(p.x, 2.0);
-      expect(p.y, 0.0);
+      expectDouble(p.length, 2.0);
+      expectDouble(p.x, 2.0);
+      expectDouble(p.y, 0.0);
     });
 
     test('scaleTo the zero vector', () {
