@@ -1,7 +1,7 @@
 import 'package:flame/components.dart';
 import 'package:flame/flame.dart';
-import 'package:flutter_colonists/objects/colonists_object.dart';
-import 'package:flutter_colonists/standard/int_vector2.dart';
+import 'package:flutter_isolates_example/objects/colonists_object.dart';
+import 'package:flutter_isolates_example/standard/int_vector2.dart';
 
 class Cheese extends StaticColonistsObject {
   @override

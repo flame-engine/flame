@@ -6,13 +6,13 @@ import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_colonists/brains/path_finder.dart';
-import 'package:flutter_colonists/brains/worker_overmind.dart';
-import 'package:flutter_colonists/constants.dart';
-import 'package:flutter_colonists/game_map/game_map.dart';
-import 'package:flutter_colonists/objects/colonists_object.dart';
-import 'package:flutter_colonists/terrain/terrain.dart';
-import 'package:flutter_colonists/units/worker.dart';
+import 'package:flutter_isolates_example/brains/path_finder.dart';
+import 'package:flutter_isolates_example/brains/worker_overmind.dart';
+import 'package:flutter_isolates_example/constants.dart';
+import 'package:flutter_isolates_example/game_map/game_map.dart';
+import 'package:flutter_isolates_example/objects/colonists_object.dart';
+import 'package:flutter_isolates_example/terrain/terrain.dart';
+import 'package:flutter_isolates_example/units/worker.dart';
 
 class ColonistsGame extends FlameGame with HasTappables, KeyboardEvents {
   final PositionComponent _cameraPos = PositionComponent();
@@ -55,7 +55,7 @@ class ColonistsGame extends FlameGame with HasTappables, KeyboardEvents {
     RawKeyEvent event,
     Set<LogicalKeyboardKey> keysPressed,
   ) {
-    double howMuch = 0;
+    var howMuch = 0.0;
     if (event is RawKeyDownEvent) {
       howMuch = 1;
     } else if (event is RawKeyUpEvent) {

@@ -1,17 +1,17 @@
 import 'dart:math';
 
 import 'package:flame/components.dart';
-import 'package:flutter_colonists/brains/path_finder.dart';
-import 'package:flutter_colonists/colonists_game.dart';
-import 'package:flutter_colonists/constants.dart';
-import 'package:flutter_colonists/extensions/range_extensions.dart';
-import 'package:flutter_colonists/objects/bread.dart';
-import 'package:flutter_colonists/objects/cheese.dart';
-import 'package:flutter_colonists/objects/colonists_object.dart';
-import 'package:flutter_colonists/standard/int_vector2.dart';
-import 'package:flutter_colonists/terrain/grass.dart';
-import 'package:flutter_colonists/terrain/terrain.dart';
-import 'package:flutter_colonists/units/worker.dart';
+import 'package:flutter_isolates_example/brains/path_finder.dart';
+import 'package:flutter_isolates_example/colonists_game.dart';
+import 'package:flutter_isolates_example/constants.dart';
+import 'package:flutter_isolates_example/extensions/range_extensions.dart';
+import 'package:flutter_isolates_example/objects/bread.dart';
+import 'package:flutter_isolates_example/objects/cheese.dart';
+import 'package:flutter_isolates_example/objects/colonists_object.dart';
+import 'package:flutter_isolates_example/standard/int_vector2.dart';
+import 'package:flutter_isolates_example/terrain/grass.dart';
+import 'package:flutter_isolates_example/terrain/terrain.dart';
+import 'package:flutter_isolates_example/units/worker.dart';
 
 class GameMap extends Component with HasGameRef<ColonistsGame> {
   static const mapSizeX = 50;
@@ -27,8 +27,8 @@ class GameMap extends Component with HasGameRef<ColonistsGame> {
 
   @override
   Future onLoad() async {
-    for (int x = 0; x < mapSizeX; x++) {
-      for (int y = 0; y < mapSizeY; y++) {
+    for (var x = 0; x < mapSizeX; x++) {
+      for (var y = 0; y < mapSizeY; y++) {
         addTerrain(IntVector2(x, y), Grass());
       }
     }
@@ -56,16 +56,15 @@ class GameMap extends Component with HasGameRef<ColonistsGame> {
         ),
     };
 
-    for (final object in worldObjects) {
-      addObject(object);
-    }
+    worldObjects.forEach(addObject);
 
     super.onLoad();
   }
 
   Set<Worker> workers = {};
 
-  //TODO: A class should probably take care of difficulty as well as height to properly calculate difficulty between two tiles.
+  // TODO(lohnn): A class should probably take care of difficulty as well as
+  //  height to properly calculate difficulty between two tiles.
   final Map<IntVector2, Terrain> _terrain = {};
   final List<ColonistsObject> _worldObjects = [];
 

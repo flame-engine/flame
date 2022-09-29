@@ -1,10 +1,10 @@
 import 'dart:io';
 
 import 'package:collection/collection.dart';
-import 'package:flutter_colonists/objects/colonists_object.dart';
-import 'package:flutter_colonists/standard/int_vector2.dart';
-import 'package:flutter_colonists/standard/pair.dart';
-import 'package:flutter_colonists/terrain/terrain.dart';
+import 'package:flutter_isolates_example/objects/colonists_object.dart';
+import 'package:flutter_isolates_example/standard/int_vector2.dart';
+import 'package:flutter_isolates_example/standard/pair.dart';
+import 'package:flutter_isolates_example/terrain/terrain.dart';
 
 /// Synchronous implementation of finding a path between start and destination.
 Iterable<IntVector2>? findPath({
@@ -55,27 +55,43 @@ class PathFinderData {
   ) sync* {
     // + shape
     final upOne = current.add(y: -1);
-    if (_complies(upOne, destination)) yield upOne;
+    if (_complies(upOne, destination)) {
+      yield upOne;
+    }
     final leftOne = current.add(x: -1);
-    if (_complies(leftOne, destination)) yield leftOne;
+    if (_complies(leftOne, destination)) {
+      yield leftOne;
+    }
     final downOne = current.add(y: 1);
-    if (_complies(downOne, destination)) yield downOne;
+    if (_complies(downOne, destination)) {
+      yield downOne;
+    }
     final rightOne = current.add(x: 1);
-    if (_complies(rightOne, destination)) yield rightOne;
+    if (_complies(rightOne, destination)) {
+      yield rightOne;
+    }
 
     // Diagonal
     final upLeft = current.add(x: -1, y: -1);
-    if (_complies(upLeft, destination)) yield upLeft;
+    if (_complies(upLeft, destination)) {
+      yield upLeft;
+    }
     final downLeft = current.add(x: -1, y: 1);
-    if (_complies(downLeft, destination)) yield downLeft;
+    if (_complies(downLeft, destination)) {
+      yield downLeft;
+    }
     final upRight = current.add(x: 1, y: -1);
-    if (_complies(upRight, destination)) yield upRight;
+    if (_complies(upRight, destination)) {
+      yield upRight;
+    }
     final downRight = current.add(x: 1, y: 1);
-    if (_complies(downRight, destination)) yield downRight;
+    if (_complies(downRight, destination)) {
+      yield downRight;
+    }
   }
 
   double cost(IntVector2 current, IntVector2 next) {
-    //TODO: Check terrain difficulty between the two tiles
+    // TODO(lohnn): Check terrain difficulty between the two tiles
     return terrain[next]! * current.distanceTo(next);
   }
 }
@@ -103,7 +119,9 @@ Iterable<IntVector2>? _findPathAStar({
   while (frontier.isNotEmpty) {
     final current = frontier.removeFirst().first;
 
-    if (current == destination) break;
+    if (current == destination) {
+      break;
+    }
 
     for (final next in pathFinderData.neighbors(current, destination)) {
       final newCost = costSoFar[current]! + pathFinderData.cost(current, next);
@@ -122,7 +140,9 @@ Iterable<IntVector2>? _findPathAStar({
   while (current != start) {
     path.add(current);
     final innerCurrent = cameFrom[current];
-    if (innerCurrent == null) return null;
+    if (innerCurrent == null) {
+      return null;
+    }
     current = innerCurrent;
   }
   path.add(start);

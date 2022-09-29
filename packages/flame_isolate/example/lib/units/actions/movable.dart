@@ -2,8 +2,8 @@ import 'dart:ui';
 
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
-import 'package:flutter_colonists/colonists_game.dart';
-import 'package:flutter_colonists/standard/int_vector2.dart';
+import 'package:flutter_isolates_example/colonists_game.dart';
+import 'package:flutter_isolates_example/standard/int_vector2.dart';
 
 enum MoveDirection {
   idle(isLeft: false), // 0
@@ -24,8 +24,12 @@ enum MoveDirection {
 
   /// Returns the horizontally mirrored direction
   MoveDirection get mirrored {
-    if (index >= 3 && index <= 5) return MoveDirection.values[index + 3];
-    if (index >= 6 && index <= 8) return MoveDirection.values[index - 3];
+    if (index >= 3 && index <= 5) {
+      return MoveDirection.values[index + 3];
+    }
+    if (index >= 6 && index <= 8) {
+      return MoveDirection.values[index - 3];
+    }
     return this;
   }
 }
@@ -72,7 +76,9 @@ mixin Movable on PositionComponent, HasGameRef<ColonistsGame> {
     final absolutePath = path.map((e) {
       return gameRef.tileAtPosition(e.x, e.y).positionOfAnchor(Anchor.center);
     }).toList(growable: false);
-    if (path.length > 2) gameRef.add(pathLine = PathLine(absolutePath));
+    if (path.length > 2) {
+      gameRef.add(pathLine = PathLine(absolutePath));
+    }
   }
 
   set currentDirection(MoveDirection direction);

@@ -1,12 +1,12 @@
 import 'package:flame/components.dart';
 import 'package:flame/flame.dart';
 import 'package:flutter/material.dart' hide Animation;
-import 'package:flutter_colonists/colonists_game.dart';
-import 'package:flutter_colonists/constants.dart';
-import 'package:flutter_colonists/objects/colonists_object.dart';
-import 'package:flutter_colonists/standard/int_vector2.dart';
-import 'package:flutter_colonists/standard/pair.dart';
-import 'package:flutter_colonists/units/actions/movable.dart';
+import 'package:flutter_isolates_example/colonists_game.dart';
+import 'package:flutter_isolates_example/constants.dart';
+import 'package:flutter_isolates_example/objects/colonists_object.dart';
+import 'package:flutter_isolates_example/standard/int_vector2.dart';
+import 'package:flutter_isolates_example/standard/pair.dart';
+import 'package:flutter_isolates_example/units/actions/movable.dart';
 
 class Worker extends PositionComponent
     with ColonistsObject, HasGameRef<ColonistsGame>, Movable {
@@ -119,11 +119,11 @@ class Worker extends PositionComponent
     //DONE: Move to object
     //DONE: V2 path finding
 
-    //TODO: Check if object is close enough
-    //TODO: V2 path finding
-    //TODO: Pick object up
-    //TODO: Move to destination
-    //TODO: Drop object
+    // TODO(lohnn): Check if object is close enough
+    // TODO(lohnn): V2 path finding
+    // TODO(lohnn): Pick object up
+    // TODO(lohnn): Move to destination
+    // TODO(lohnn): Drop object
 
     super.update(dt);
   }
@@ -137,7 +137,9 @@ class Worker extends PositionComponent
   void render(Canvas canvas) {
     // We want to render from center of component
     canvas.translate(size.x / 2, size.y / 2);
-    if (_walkingLeft) canvas.scale(-1, 1); //When moving left
+    if (_walkingLeft) {
+      canvas.scale(-1, 1);
+    } //When moving left
     _currentAnimation.getSprite().render(
           canvas,
           position: Vector2.zero(),

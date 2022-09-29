@@ -3,14 +3,14 @@ import 'dart:math';
 import 'package:flame/components.dart';
 import 'package:flame_isolate/flame_isolate.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_colonists/brains/path_finder.dart';
-import 'package:flutter_colonists/brains/worker_overmind_hud.dart';
-import 'package:flutter_colonists/colonists_game.dart';
-import 'package:flutter_colonists/objects/bread.dart';
-import 'package:flutter_colonists/objects/colonists_object.dart';
-import 'package:flutter_colonists/standard/int_vector2.dart';
-import 'package:flutter_colonists/standard/pair.dart';
-import 'package:flutter_colonists/units/worker.dart';
+import 'package:flutter_isolates_example/brains/path_finder.dart';
+import 'package:flutter_isolates_example/brains/worker_overmind_hud.dart';
+import 'package:flutter_isolates_example/colonists_game.dart';
+import 'package:flutter_isolates_example/objects/bread.dart';
+import 'package:flutter_isolates_example/objects/colonists_object.dart';
+import 'package:flutter_isolates_example/standard/int_vector2.dart';
+import 'package:flutter_isolates_example/standard/pair.dart';
+import 'package:flutter_isolates_example/units/worker.dart';
 
 class WorkerOvermind extends Component
     with HasGameRef<ColonistsGame>, FlameIsolate {
@@ -32,7 +32,7 @@ class WorkerOvermind extends Component
     return super.onMount();
   }
 
-  // TODO: Would, in reality, also be moved to isolate
+  // TODO(lohnn): Would, in reality, also be moved to isolate
   void calculateTasks() {
     gameRef.worldObjects.whereType<Bread>().forEach((bread) {
       moveObject(bread, Vector2(8, 2));
@@ -58,7 +58,9 @@ class WorkerOvermind extends Component
   ///
   /// Using an isolate for the actual calculation.
   Future _assignTasks() async {
-    if (_queuedTasks.isEmpty) return;
+    if (_queuedTasks.isEmpty) {
+      return;
+    }
 
     final idleWorkers = gameRef.workers
         .where(
@@ -114,7 +116,7 @@ class WorkerOvermind extends Component
             break;
         }
 
-        for (int i = 0; i < paths.length; i++) {
+        for (var i = 0; i < paths.length; i++) {
           idleWorkers[i].issueWork(
             _queuedTasks[i].first,
             paths[i],
@@ -122,11 +124,9 @@ class WorkerOvermind extends Component
         }
       }
     } on DropException catch (_) {
-      print('Dropped');
+      debugPrint('Dropped');
     } finally {
-      for (final worker in idleWorkers) {
-        _workersBeingCalculated.remove(worker);
-      }
+      idleWorkers.forEach(_workersBeingCalculated.remove);
     }
   }
 
@@ -142,7 +142,9 @@ class WorkerOvermind extends Component
         destination: destinations.current,
         pathFinderData: data.pathFinderData,
       );
-      if (path != null) workerPaths.add(path.toList());
+      if (path != null) {
+        workerPaths.add(path.toList());
+      }
     }
 
     return workerPaths;
