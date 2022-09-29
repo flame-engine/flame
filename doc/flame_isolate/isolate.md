@@ -1,6 +1,6 @@
 # FlameIsolate
 
-The power of [integral_isolates](https://pub.dev/packages/integral_isolates) neatly packaged in 
+The power of [integral_isolates](https://pub.dev/packages/integral_isolates) neatly packaged in
 [flame_isolates](https://pub.dev/packages/flame_isolates) for your Flame game.
 
 If you've ever used the [compute](https://api.flutter.dev/flutter/foundation/compute-constant.html)
@@ -17,6 +17,7 @@ simple as running the [compute](https://api.flutter.dev/flutter/foundation/compu
 function.
 
 Example:
+
 ```dart
 class MyGame extends FlameGame with FlameIsolate {
   ...
@@ -33,8 +34,10 @@ class MyGame extends FlameGame with FlameIsolate {
 
 
 ### Backpressure Strategies
+
 You can specify a backpressure strategy by overriding the `backpressureStrategy` field. This will
 create the isolate with the specified strategy when component is mounted.
+
 ```dart
 class MyGame extends FlameGame with FlameIsolate {
   @override
