@@ -17,7 +17,7 @@ of these `mixin`s and its methods:
 
 ## Touch and mouse detectors
 
-```txt
+```text
 - TapDetector
   - onTap
   - onTapCancel
@@ -89,7 +89,7 @@ of these `mixin`s and its methods:
 
 Mouse only events
 
-```txt
+```text
  - MouseMovementDetector
   - onMouseMove
  - ScrollDetector

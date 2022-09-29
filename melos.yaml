@@ -51,6 +51,10 @@ scripts:
     run: melos exec flutter pub run dartdoc
     description: Run dartdoc checks for all packages.
 
+  sphinxdoc:
+    run: SOURCEDIR="$MELOS_ROOT_PATH/doc" && cd "$SOURCEDIR/_sphinx" && make html
+    description: Create the sphinx html docs.
+
   test:select:
     run: melos exec -- flutter test
     select-package:
