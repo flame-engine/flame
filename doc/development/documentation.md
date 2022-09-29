@@ -163,14 +163,21 @@ cd doc/_sphinx
 make html
 ```
 
+Or, you can use melos and run:
+
+```console
+melos sphinx-build
+```
+
 The **make html** command here renders the documentation site into HTML. This command needs to be
 re-run every time you make changes to any of the documents. Luckily, it is smart enough to only
 rebuild the documents that have changed since the previous run, so usually a rebuild takes only
 a second or two.
 
-There are other make commands that you may find occasionally useful too: **make clean** removes all
-cached generated files (in case the system gets stuck in a bad state); and **make linkcheck** to
-check whether there are any broken links in the documentation.
+There are other make commands that you may find occasionally useful too: **make clean**
+(**melos sphinx-clean**) removes all cached generated files (in case the system gets stuck in a bad
+state); and **make linkcheck** (**melos sphinx-linkcheck**) to check whether there are any broken
+links in the documentation.
 
 The generated html files will be in the `doc/_build/html` directory, you can view them directly
 by opening the file `doc/_build/html/index.html` in your browser. The only drawback is that the
