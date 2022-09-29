@@ -26,6 +26,7 @@ class MyGame extends FlameGame with FlameIsolate {
 
 
 ## Backpressure Strategies
+
 You can specify a backpressure strategy by overriding the `backpressureStrategy` field. This will
 create the isolate with the specified strategy when component is mounted.
 

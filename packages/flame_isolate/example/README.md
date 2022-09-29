@@ -6,6 +6,7 @@ an isolate using flame_isolate.
 You can toggle between compute types by tapping the HUD element in the top right corner.
 
 Keyboard bindings for the game are:
+
 - `WASD` for moving the camera.
 - `Num+ Num-` for zooming in and out.
 
