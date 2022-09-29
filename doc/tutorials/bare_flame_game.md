@@ -2,6 +2,7 @@
 
 This tutorial assumes that you have basic familiarity with using the command line, and the
 following programs on your computer (all of them are free):
+
 - [Flutter], version 2.10.0 or above;
 - [Android Studio], or any other IDE, for example [Visual Studio Code];
 - [git] (optional), in order to save your project on GitHub.
@@ -39,8 +40,8 @@ real non-made-up word.
 Create the directory for your new project:
 
 ```console
-$ mkdir -p ~/projects/syzygy
-$ cd ~/projects/syzygy
+mkdir -p ~/projects/syzygy
+cd ~/projects/syzygy
 ```
 
 
@@ -50,11 +51,13 @@ In order to turn this barren directory into an actual Flutter project, run the
 following command:
 
 ```console
-$ flutter create .
+flutter create .
 ```
+
 (I have omitted the output for brevity, but there will be lots of output).
 
 You can verify that the project files were created successfully:
+
 ```console
 $ ls
 README.md               android/   lib/           pubspec.yaml   test/
@@ -68,7 +71,7 @@ Launch Android Studio, then in the project selection window choose `[Open]`
 and navigate to your project directory. With any luck, the project will now
 look like this:
 
-![](../images/tutorials/android-studio-screenshot-1.webp)
+![Project in Android Studio](../images/tutorials/android-studio-screenshot-1.webp)
 
 If you see only the `main.dart` file but not the side panel, then click the
 vertical `[Project]` button at the left edge of the window.
@@ -78,7 +81,7 @@ in the top left corner that says `[Android]` in the screenshot. In this
 dropdown select the first option "Project". Your project window should now
 look like this:
 
-![](../images/tutorials/android-studio-screenshot-2.webp)
+![Project in Android Studio](../images/tutorials/android-studio-screenshot-2.webp)
 
 The important part is that you should be able to see all files in your
 project directory.
@@ -159,13 +162,14 @@ adding initial files like README, license and gitignore.
 Now go to your project's directory in the terminal and execute the following
 commands (make sure to replace the URL with the link to the repository that
 you just created):
+
 ```console
-$ git init
-$ git add --all
-$ git commit -m 'Initial commit'
-$ git remote add origin https://github.com/your-github-username/syzygy.git
-$ git branch -M main
-$ git push -u origin main
+git init
+git add --all
+git commit -m 'Initial commit'
+git remote add origin https://github.com/your-github-username/syzygy.git
+git branch -M main
+git push -u origin main
 ```
 
 At this point if you go to your repository page on GitHub, you shall see that
@@ -175,9 +179,10 @@ all your project files are there.
 ## 8. Done
 
 That's it! By this point you have
-  - Created an initial blank state Flame project;
-  - Set up the Android Studio IDE for that project;
-  - Created a GitHub repository for the project.
+
+- Created an initial blank state Flame project;
+- Set up the Android Studio IDE for that project;
+- Created a GitHub repository for the project.
 
 Happy coding!
 

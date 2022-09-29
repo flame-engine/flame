@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.9" tiledversion="1.9.1" orientation="isometric" renderorder="right-down" width="5" height="5" tilewidth="128" tileheight="64" infinite="0" nextlayerid="7" nextobjectid="1">
+ <tileset firstgid="1" name="isometric_spritesheet" tilewidth="128" tileheight="256" tilecount="4" columns="1">
+  <image source="isometric_spritesheet.png" width="128" height="1024"/>
+ </tileset>
+ <layer id="1" name="ground" width="5" height="5">
+  <data encoding="base64">
+   AgAAAAIAAAACAAAAAgAAAAIAAAACAAAAAgAAAAIAAAACAAAAAwAAAAMAAAACAAAAAwAAAAIAAAADAAAAAgAAAAIAAAACAAAAAgAAAAMAAAACAAAAAwAAAAIAAAACAAAAAgAAAA==
+  </data>
+ </layer>
+ <group id="5" name="shifted" offsetx="32" offsety="16">
+  <layer id="4" name="shifted" width="5" height="5">
+   <data encoding="base64">
+   AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==
+  </data>
+  </layer>
+  <layer id="6" name="shifted2" width="5" height="5" opacity="0.68" offsetx="-128" offsety="0">
+   <data encoding="base64">
+   AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==
+  </data>
+  </layer>
+ </group>
+ <layer id="2" name="item" width="5" height="5">
+  <data encoding="base64">
+   AQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAACAAAAAAAAAAAAAAAAAAAAAAA==
+  </data>
+ </layer>
+</map>

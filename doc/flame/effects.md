@@ -31,6 +31,7 @@ the final value is provided by the user explicitly, and progression over time is
 
 There are multiple effects provided by Flame, and you can also
 [create your own](#creating-new-effects). The following effects are included:
+
 - [`MoveByEffect`](#movebyeffect)
 - [`MoveToEffect`](#movetoeffect)
 - [`MoveAlongPathEffect`](#movealongpatheffect)
@@ -53,6 +54,7 @@ the job of the effect controller is to map from the "physical" time, measured in
 "logical" time, which changes from 0 to 1.
 
 There are multiple effect controllers provided by the Flame framework as well:
+
 - [`EffectController`](#effectcontroller)
 - [`LinearEffectController`](#lineareffectcontroller)
 - [`ReverseLinearEffectController`](#reverselineareffectcontroller)
@@ -72,25 +74,26 @@ There are multiple effect controllers provided by the Flame framework as well:
 
 ## Built-in effects
 
+
 ### `Effect`
 
 The base `Effect` class is not usable on its own (it is abstract), but it provides some common
 functionality inherited by all other effects. This includes:
 
-  - The ability to pause/resume the effect using `effect.pause()` and `effect.resume()`. You can
+- The ability to pause/resume the effect using `effect.pause()` and `effect.resume()`. You can
     check whether the effect is currently paused using `effect.isPaused`.
 
-  - The ability to reverse the effect's time direction using `effect.reverse()`. Use
+- The ability to reverse the effect's time direction using `effect.reverse()`. Use
     `effect.isReversed` to check if the effect is currently running back in time.
 
-  - Property `removeOnFinish` (which is true by default) will cause the effect component to be
+- Property `removeOnFinish` (which is true by default) will cause the effect component to be
     removed from the game tree and garbage-collected once the effect completes. Set this to false
     if you plan to reuse the effect after it is finished.
 
-  - Optional user-provided `onComplete`, which will be invoked when the effect has just
+- Optional user-provided `onComplete`, which will be invoked when the effect has just
     completed its execution but before it is removed from the game.
 
-  - The `reset()` method reverts the effect to its original state, allowing it to run once again.
+- The `reset()` method reverts the effect to its original state, allowing it to run once again.
 
 
 ### `MoveByEffect`
@@ -296,7 +299,7 @@ final effect = ColorEffect(
 The `Offset` argument will determine "how much" of the color that will be applied to the component,
 in this example the effect will start with 0% and will go up to 80%.
 
-__Note:__ Due to how this effect is implemented, and how Flutter's `ColorFilter` class works, this
+**Note:** Due to how this effect is implemented, and how Flutter's `ColorFilter` class works, this
 effect can't be mixed with other `ColorEffect`s, when more than one is added to the component, only
 the last one will have effect.
 
@@ -329,6 +332,7 @@ without interfering with each other.
 
 ## Effect controllers
 
+
 ### `EffectController`
 
 The base `EffectController` class provides a factory constructor capable of creating a variety of
@@ -346,52 +350,60 @@ EffectController({
     int? repeatCount,
     bool infinite = false,
     double startDelay = 0.0,
+    VoidCallback? onMax,
+    VoidCallback? onMin,
 });
 ```
 
-- **`duration`** -- the length of the main part of the effect, i.e. how long it should take to go
+- *`duration`* -- the length of the main part of the effect, i.e. how long it should take to go
   from 0 to 100%. This parameter cannot be negative, but can be zero. If this is the only parameter
   specified then the effect will grow linearly over the `duration` seconds.
 
-- **`curve`** -- if given, creates a non-linear effect that grows from 0 to 100% according to the
+- *`curve`* -- if given, creates a non-linear effect that grows from 0 to 100% according to the
   provided [curve](https://api.flutter.dev/flutter/animation/Curves-class.html).
 
-- **`reverseDuration`** -- if provided, adds an additional step to the controller: after the effect
+- *`reverseDuration`* -- if provided, adds an additional step to the controller: after the effect
   has grown from 0 to 100% over the `duration` seconds, it will then go backwards from 100% to 0
   over the `reverseDuration` seconds. In addition, the effect will complete at progress level of 0
   (normally the effect completes at progress 1).
 
-- **`reverseCurve`** -- the curve to be used during the "reverse" step of the effect. If not given,
+- *`reverseCurve`* -- the curve to be used during the "reverse" step of the effect. If not given,
   this will default to `curve.flipped`.
 
-- **`alternate`** -- setting this to true is equivalent to specifying the `reverseDuration` equal
+- *`alternate`* -- setting this to true is equivalent to specifying the `reverseDuration` equal
   to the `duration`. If the `reverseDuration` is already set, this flag has no effect.
 
-- **`atMaxDuration`** -- if non-zero, this inserts a pause after the effect reaches its max
+- *`atMaxDuration`* -- if non-zero, this inserts a pause after the effect reaches its max
   progress and before the reverse stage. During this time the effect is kept at 100% progress. If
   there is no reverse stage, then this will simply be a pause before the effect is marked as
   completed.
 
-- **`atMinDuration`** -- if non-zero, this inserts a pause after the reaches its lowest progress
+- *`atMinDuration`* -- if non-zero, this inserts a pause after the reaches its lowest progress
   (0) at the end of the reverse stage. During this time, the effect's progress is at 0%. If there
   is no reverse stage, then this pause will still be inserted after the "at-max" pause if it's
   present, or after the forward stage otherwise. In addition, the effect will now complete at
   progress level of 0.
 
-- **`repeatCount`** -- if greater than one, it will cause the effect to repeat itself the prescribed
+- *`repeatCount`* -- if greater than one, it will cause the effect to repeat itself the prescribed
   number of times. Each iteration will consists of the forward stage, pause at max, reverse stage,
   then pause at min (skipping those that were not specified).
 
-- **`infinite`** -- if true, the effect will repeat infinitely and never reach completion. This is
+- *`infinite`* -- if true, the effect will repeat infinitely and never reach completion. This is
   equivalent to as if `repeatCount` was set to infinity.
 
-- **`startDelay`** -- an additional wait time inserted before the beginning of the effect. This
+- *`startDelay`* -- an additional wait time inserted before the beginning of the effect. This
   wait time is executed only once, even if the effect is repeating. During this time the effect's
   `.started` property returns false. The effect's `onStart()` callback will be executed at the end
   of this waiting period.
 
   Using this parameter is the simplest way to create a chain of effects that execute one after
   another (or with an overlap).
+
+- *`onMax`* -- callback function which will be invoked right after reaching its max progress and
+  before the optional pause and reverse stage.
+
+- *`onMin`* -- callback function which will be invoked right after reaching its lowest progress
+  at the end of the reverse stage and before the optional pause and forward stage.
 
 The effect controller returned by this factory constructor will be composited of multiple simpler
 effect controllers described further below. If this constructor proves to be too limited for your
@@ -586,7 +598,7 @@ final ec = ZigzagEffectController(period: 2);
 
 ## See also
 
-* [Examples of various effects](https://examples.flame-engine.org/).
+- [Examples of various effects](https://examples.flame-engine.org/).
 
 
 [tau]: https://en.wikipedia.org/wiki/Tau_(mathematical_constant)
