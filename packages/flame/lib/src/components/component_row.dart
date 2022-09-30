@@ -19,8 +19,8 @@ class ComponentRow extends LayoutComponent {
       return;
     }
     final currentPosition = Vector2.zero();
-    double componentsWidth =
-        list.fold(0, (previousValue, element) => previousValue + element.width);
+    final componentsWidth = list.fold<double>(
+        0, (previousValue, element) => previousValue + element.width);
     final gapWidth = gap * (list.length - 1);
     final widthAvailable = size.x != 0.0
         ? size.x - absoluteTopLeftPosition.x
@@ -33,7 +33,7 @@ class ComponentRow extends LayoutComponent {
       }
     } else if (mainAxisAlignment == MainAxisAlignment.end) {
       for (final child in list.reversed) {
-        currentPosition.x -= (child.width + gap);
+        currentPosition.x -= child.width + gap;
         child.position = Vector2(currentPosition.x, currentPosition.y);
       }
     } else if (mainAxisAlignment == MainAxisAlignment.spaceBetween) {
@@ -41,7 +41,7 @@ class ComponentRow extends LayoutComponent {
           (widthAvailable - componentsWidth - gapWidth) / list.length;
       for (final child in list) {
         child.position = Vector2(currentPosition.x, currentPosition.y);
-        currentPosition.x += (freeSpacePerComponent + child.width + gap);
+        currentPosition.x += freeSpacePerComponent + child.width + gap;
       }
     } else if (mainAxisAlignment == MainAxisAlignment.spaceEvenly) {
       final freeSpacePerComponent =
@@ -49,7 +49,7 @@ class ComponentRow extends LayoutComponent {
       currentPosition.x += freeSpacePerComponent;
       for (final child in list) {
         child.position = Vector2(currentPosition.x, currentPosition.y);
-        currentPosition.x += (freeSpacePerComponent + child.width + gap);
+        currentPosition.x += freeSpacePerComponent + child.width + gap;
       }
     } else if (mainAxisAlignment == MainAxisAlignment.spaceAround) {
       final freeSpacePerComponent =
@@ -57,14 +57,14 @@ class ComponentRow extends LayoutComponent {
       currentPosition.x += freeSpacePerComponent / 2;
       for (final child in list) {
         child.position = Vector2(currentPosition.x, currentPosition.y);
-        currentPosition.x += (freeSpacePerComponent + child.width + gap);
+        currentPosition.x += freeSpacePerComponent + child.width + gap;
       }
     } else if (mainAxisAlignment == MainAxisAlignment.center) {
       final freeSpace = widthAvailable - componentsWidth - gapWidth;
       currentPosition.x += freeSpace / 2;
       for (final child in list) {
         child.position = Vector2(currentPosition.x, currentPosition.y);
-        currentPosition.x += (child.width + gap);
+        currentPosition.x += child.width + gap;
       }
     }
   }
