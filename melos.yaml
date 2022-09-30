@@ -55,6 +55,10 @@ scripts:
     run: SOURCEDIR="$MELOS_ROOT_PATH/doc" && cd "$SOURCEDIR/_sphinx" && make html
     description: Create the sphinx html docs.
 
+  doc-build-live:
+    run: SOURCEDIR="$MELOS_ROOT_PATH/doc" && cd "$SOURCEDIR/_sphinx" && make livehtml
+    description: Recompiles the docs enerytime there is a change in them and opens your browser.
+
   doc-clean:
     run: SOURCEDIR="$MELOS_ROOT_PATH/doc" && cd "$SOURCEDIR/_sphinx" && make clean
     description: Removes all Sphinx's cached generated files.
