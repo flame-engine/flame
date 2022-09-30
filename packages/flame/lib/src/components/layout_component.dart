@@ -22,8 +22,8 @@ abstract class LayoutComponent extends PositionComponent with HasGameRef {
   @override
   Future<void>? add(Component component) {
     assert(
-    component is PositionComponent,
-    'The added component has to be a child of PositionComponent',
+      component is PositionComponent,
+      'The added component has to be a child of PositionComponent',
     );
     (component as PositionComponent).size.addListener(layoutChildren);
 
@@ -34,8 +34,8 @@ abstract class LayoutComponent extends PositionComponent with HasGameRef {
   @override
   void remove(Component component) {
     assert(
-    contains(component),
-    'This component is not a child of this class',
+      contains(component),
+      'This component is not a child of this class',
     );
     (component as PositionComponent).size.removeListener(layoutChildren);
 
