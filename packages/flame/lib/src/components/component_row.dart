@@ -20,7 +20,9 @@ class ComponentRow extends LayoutComponent {
     }
     final currentPosition = Vector2.zero();
     final componentsWidth = list.fold<double>(
-        0, (previousValue, element) => previousValue + element.width);
+      0,
+      (previousValue, element) => previousValue + element.width,
+    );
     final gapWidth = gap * (list.length - 1);
     final widthAvailable = size.x != 0.0
         ? size.x - absoluteTopLeftPosition.x
