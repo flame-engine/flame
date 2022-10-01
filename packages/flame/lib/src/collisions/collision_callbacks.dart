@@ -74,6 +74,11 @@ mixin GenericCollisionCallbacks<T> {
     onCollisionEndCallback?.call(other);
   }
 
+  /// Works only for the QuadTree collision detection.
+  /// If you need to prevent collision of items of different types -
+  /// reimplement [onComponentTypeCheck]. The result of calculation is cached
+  /// so you should not check any dynamical parameters here, the function
+  /// intended to be used as pure type checker.
   @mustCallSuper
   bool onComponentTypeCheck(PositionComponent other);
 
@@ -130,11 +135,6 @@ mixin CollisionCallbacks on Component
     onCollisionEndCallback?.call(other);
   }
 
-  /// Works only for the QuadTree collision detection.
-  /// If you need to prevent collision of items of different types -
-  /// reimplement [onComponentTypeCheck]. The result of calculation is cached
-  /// so you should not check any dynamical parameters here, the function
-  /// intended to be used as pure type checker.
   @override
   @mustCallSuper
   bool onComponentTypeCheck(PositionComponent other) {
