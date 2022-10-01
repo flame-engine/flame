@@ -39,9 +39,33 @@ scripts:
     run: melos exec flutter format . --set-exit-if-changed
     description: Run `flutter format` checks for all packages.
 
+  markdown-check:
+    run: markdownlint . --ignore-path .markdownlintignore --config .markdownlint.yaml
+    description: Runs the markdown linting check.
+
+  markdown-fix:
+    run: markdownlint . --fix --ignore-path .markdownlintignore --config .markdownlint.yaml
+    description: Fixes the markdown linting errors.
+
   dartdoc:
     run: melos exec flutter pub run dartdoc
     description: Run dartdoc checks for all packages.
+
+  doc-build:
+    run: SOURCEDIR="$MELOS_ROOT_PATH/doc" && cd "$SOURCEDIR/_sphinx" && make html
+    description: Create the sphinx html docs.
+
+  doc-build-live:
+    run: SOURCEDIR="$MELOS_ROOT_PATH/doc" && cd "$SOURCEDIR/_sphinx" && make livehtml
+    description: Recompiles the docs enerytime there is a change in them and opens your browser.
+
+  doc-clean:
+    run: SOURCEDIR="$MELOS_ROOT_PATH/doc" && cd "$SOURCEDIR/_sphinx" && make clean
+    description: Removes all Sphinx's cached generated files.
+
+  doc-linkcheck:
+    run: SOURCEDIR="$MELOS_ROOT_PATH/doc" && cd "$SOURCEDIR/_sphinx" && make linkcheck
+    description: Checks whether there are any broken links in the docs.
 
   test:select:
     run: melos exec -- flutter test

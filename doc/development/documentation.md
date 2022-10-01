@@ -21,7 +21,8 @@ section will focus on the Markdown extensions that are enabled in our build syst
 
 The table of contents for the site must be created manually. This is done using special `{toctree}`
 blocks, one per each subdirectory:
-`````
+
+`````{markdown}
 ```{toctree}
 :hidden:
 
@@ -29,6 +30,7 @@ First Topic    <topic1.md>
 Second Topic   <topic2.md>
 ```
 `````
+
 When adding new documents into the documentation site, make sure that they are mentioned in one of
 the toctrees -- otherwise you will see a warning during the build that the document is orphaned.
 
@@ -37,7 +39,8 @@ the toctrees -- otherwise you will see a warning during the build that the docum
 
 Admonitions are emphasized blocks of text with a distinct appearance. They are created using the
 triple-backticks syntax:
-`````
+
+`````{markdown}
 ```{note}
 Please note this very important caveat.
 ```
@@ -51,15 +54,19 @@ I told you so.
 Also check out this cool thingy.
 ```
 `````
+
 ```{note}
 Please note this very important caveat.
 ```
+
 ```{warning}
 Don't look down, or you will encounter an error.
 ```
+
 ```{error}
 I told you so.
 ```
+
 ```{seealso}
 Also check out this cool thingy.
 ```
@@ -69,13 +76,16 @@ Also check out this cool thingy.
 
 The special `{deprecated}` block can be used to mark some part of documentation or syntax as being
 deprecated. This block requires specifying the version when the deprecation has occurred
-`````
+
+`````{markdown}
 ```{deprecated} v1.3.0
 
 Please use this **other** thing instead.
 ```
 `````
+
 Which would be rendered like this:
+
 ```{deprecated} v1.3.0
 
 Please use this **other** thing instead.
@@ -88,14 +98,17 @@ Our documentation site includes a custom-built **flutter-app** directive which a
 Flutter widgets and embedding them alongside with the overall documentation content.
 
 In Markdown, the code for inserting an embed looks like this:
-``````
+
+`````{markdown}
 ```{flutter-app}
 :sources: ../flame/examples
 :page: tap_events
 :show: widget code popup
 ```
 ``````
+
 Here's what the different options mean:
+
 - **sources**: specifies the name of the root directory where the Flutter code that you wish to run
   is located. This directory must be a Flutter repository, and there must be a `pubspec.yaml` file
   there. The path is considered relative to the `doc/_sphinx` directory.
@@ -129,42 +142,51 @@ Here's what the different options mean:
 Building the documentation site on your own computer is fairly simple. All you need is the
 following:
 
-1.  A working **Flutter** installation, accessible from the command line;
+1. A working **Flutter** installation, accessible from the command line;
 
-2.  A **Python** environment, with python version 3.6 or higher;
+2. A **Python** environment, with python version 3.6 or higher;
     - You can verify this by running `python --version` from the command line;
     - Having a dedicated python virtual environment is recommended but not required;
 
-3.  A set of python **modules** listed in the `doc/_sphinx/requirements.txt` file;
+3. A set of python **modules** listed in the `doc/_sphinx/requirements.txt` file;
     - The easiest way to install these is to run
+
       ```console
-      $ pip install -r doc/_sphinx/requirements.txt
+      pip install -r doc/_sphinx/requirements.txt
       ```
 
 Once these prerequisites are met, you can build the documentation by switching to the `doc/_sphinx`
-directory and running `make html`:
+directory and running `make html`, or use the built-in Melos target:
+
 ```console
-$ cd doc/_sphinx
-$ make html
+melos doc-build
 ```
 
-The **make html** command here renders the documentation site into HTML. This command needs to be
-re-run every time you make changes to any of the documents. Luckily, it is smart enough to only
+The **melos doc-build** command here renders the documentation site into HTML. This command needs to
+be re-run every time you make changes to any of the documents. Luckily, it is smart enough to only
 rebuild the documents that have changed since the previous run, so usually a rebuild takes only
 a second or two.
 
-There are other make commands that you may find occasionally useful too: **make clean** removes all
-cached generated files (in case the system gets stuck in a bad state); and **make linkcheck** to
-check whether there are any broken links in the documentation.
+If you want to automatically recompile the docs every time there is a change to one of the files
+you can use the **melos doc-build-live** command, which will also serve and open your default
+browser with the docs.
+
+There are other make commands that you may find occasionally useful too:
+
+- **melos doc-clean** removes all cached generated files (in case the system gets stuck in a bad
+state).
+- **melos doc-linkcheck** to check whether there are any broken links in the documentation.
 
 The generated html files will be in the `doc/_build/html` directory, you can view them directly
 by opening the file `doc/_build/html/index.html` in your browser. The only drawback is that the
 browser won't allow any dynamic content in a file opened from a local drive. The solution to this
-is to run your own local http server:
+is to either run **melos doc-build-live** or run your own local http server:
+
 ```console
-$ python -m http.server 8000 --directory doc/_build/html
+python -m http.server 8000 --directory doc/_build/html
 ```
+
 Then you can open the site at `http://localhost:8000/`.
 
-If you ever run the `make clean` command, the server will need to be restarted, because the clean
-command deletes the entire `html` directory.
+If you ever run the **melos doc-clean** or the **make clean** command, the server will need to be
+restarted, because the clean command deletes the entire `html` directory.

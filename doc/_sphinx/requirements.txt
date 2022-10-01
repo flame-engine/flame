@@ -3,3 +3,4 @@ myst-parser>=0.15.2
 pygments>=2.10
 sphinx>=5.0
 sphinxcontrib-mermaid>=0.7.1
+sphinx-autobuild>=2021.3.14

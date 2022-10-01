@@ -40,33 +40,35 @@ class _TestBlock extends PositionComponent with CollisionCallbacks {
 
 void main() {
   group('Benchmark collision detection', () {
-    testCollisionDetectionGame('collidable callbacks are called', (game) async {
-      final rng = Random(0);
-      final blocks = List.generate(
-        100,
-        (_) => _TestBlock(
-          Vector2.random(rng) * game.size.x,
-          Vector2.random(rng) * 100,
-          Vector2(
-            rng.nextInt(100) * (rng.nextBool() ? 1 : -1),
-            rng.nextInt(100) * (rng.nextBool() ? 1 : -1),
+    runCollisionTestRegistry({
+      'collidable callbacks are called': (game) async {
+        final rng = Random(0);
+        final blocks = List.generate(
+          100,
+          (_) => _TestBlock(
+            Vector2.random(rng) * game.size.x,
+            Vector2.random(rng) * 100,
+            Vector2(
+              rng.nextInt(100) * (rng.nextBool() ? 1 : -1),
+              rng.nextInt(100) * (rng.nextBool() ? 1 : -1),
+            ),
           ),
-        ),
-      );
-      await game.ensureAddAll(blocks);
-      final startTime = DateTime.now();
-      const ticks = 1000;
-      for (var i = 0; i < ticks; i++) {
-        game.update(1 / 60);
+        );
+        await game.ensureAddAll(blocks);
+        final startTime = DateTime.now();
+        const ticks = 1000;
+        for (var i = 0; i < ticks; i++) {
+          game.update(1 / 60);
+        }
+        final totalTime = DateTime.now().millisecondsSinceEpoch -
+            startTime.millisecondsSinceEpoch;
+        // ignore:avoid_print
+        print(
+          '$totalTime ms\n'
+          '${1000 / (totalTime / ticks)} runs per second\n'
+          '${_TestBlock.collisionCounter}',
+        );
       }
-      final totalTime = DateTime.now().millisecondsSinceEpoch -
-          startTime.millisecondsSinceEpoch;
-      // ignore:avoid_print
-      print(
-        '$totalTime ms\n'
-        '${1000 / (totalTime / ticks)} runs per second\n'
-        '${_TestBlock.collisionCounter}',
-      );
     });
   });
 }

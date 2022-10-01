@@ -12,16 +12,18 @@ extension Forge2DCameraExtension on Camera {
   /// [relativeOffset] (default to the center).
   /// [worldBounds] can be optionally set to add boundaries to how far the
   /// camera is allowed to move.
-  /// The component is "grabbed" by its anchor (default top left).
-  /// So for example if you want the center of the object to be at the fixed
-  /// position, set the components anchor to center.
+  /// [useCenterOfMass] set true to follow the body's center of mass rather than
+  /// position (default to false).
   void followBodyComponent(
     BodyComponent bodyComponent, {
     Anchor relativeOffset = Anchor.center,
     Rect? worldBounds,
+    bool useCenterOfMass = false,
   }) {
     followVector2(
-      bodyComponent.body.position,
+      useCenterOfMass
+          ? bodyComponent.body.worldCenter
+          : bodyComponent.body.position,
       relativeOffset: relativeOffset,
       worldBounds: worldBounds,
     );

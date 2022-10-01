@@ -28,7 +28,7 @@ class Block {
   }
 
   @override
-  int get hashCode => hashValues(x, y);
+  int get hashCode => Object.hash(x, y);
 }
 
 /// This component renders a tilemap, represented by an int matrix, given a

@@ -1,5 +1,13 @@
 export 'src/text/common/glyph_data.dart' show GlyphData;
+export 'src/text/common/line_metrics.dart' show LineMetrics;
+export 'src/text/common/text_line.dart' show TextLine;
 export 'src/text/elements/element.dart' show Element;
+export 'src/text/elements/text_element.dart' show TextElement;
+export 'src/text/formatters/sprite_font_text_formatter.dart'
+    show SpriteFontTextFormatter;
+export 'src/text/formatters/text_formatter.dart' show TextFormatter;
+export 'src/text/formatters/text_painter_text_formatter.dart'
+    show TextPainterTextFormatter;
 export 'src/text/nodes/block_node.dart' show BlockNode;
 export 'src/text/nodes/document_node.dart' show DocumentNode;
 export 'src/text/nodes/header_node.dart' show HeaderNode;

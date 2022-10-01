@@ -16,7 +16,8 @@ of these `mixin`s and its methods:
 
 
 ## Touch and mouse detectors
-```
+
+```text
 - TapDetector
   - onTap
   - onTapCancel
@@ -88,7 +89,7 @@ of these `mixin`s and its methods:
 
 Mouse only events
 
-```
+```text
  - MouseMovementDetector
   - onMouseMove
  - ScrollDetector
@@ -114,9 +115,9 @@ also read more about Flutter's gestures
 If you add a `PanDetector` together with a `ScaleDetector` you will be prompted with a quite
 cryptic assertion from Flutter that says:
 
-```
-Having both a pan gesture recognizer and a scale gesture recognizer is redundant; scale is a
-superset of pan.
+```{note}
+Having both a pan gesture recognizer and a scale gesture recognizer is
+redundant; scale is a superset of pan.
 
 Just use the scale gesture recognizer.
 ```
@@ -426,8 +427,8 @@ Just like the others, this mixin allows for easy wiring of your component to lis
 and events.
 
 By adding the `HasHoverables` mixin to your base game, and by using the mixin `Hoverable` on
-your components, they get an `isHovered` field and a couple of methods (`onHoverStart`, `onHoverEnd`) that
-you can override if you want to listen to the events.
+your components, they get an `isHovered` field and a couple of methods (`onHoverStart`,
+`onHoverEnd`) that you can override if you want to listen to the events.
 
 ```dart
   bool isHovered = false;
@@ -470,6 +471,7 @@ class MyGame extends FlameGame with HasHoverables {
   }
 }
 ```
+
 
 ### GestureHitboxes
 

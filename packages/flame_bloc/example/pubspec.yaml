@@ -10,16 +10,16 @@ environment:
 
 dependencies:
   equatable: ^2.0.3
-  flame_bloc: ^1.7.0
+  flame: ^1.4.0
+  flame_bloc: ^1.8.0
   flutter:
     sdk: flutter
   flutter_bloc: ^8.0.1
 
 dev_dependencies:
-  flame_lint: ^0.1.2
+  flame_lint: ^0.1.3
   flutter_test:
     sdk: flutter
-
 
 flutter:
   uses-material-design: true
