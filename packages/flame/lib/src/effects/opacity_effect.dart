@@ -68,14 +68,8 @@ class OpacityEffect extends ComponentEffect<HasPaint> {
     final currentAlpha = target.getAlpha(paintId: paintId);
     final deltaAlpha =
         (_alphaOffset * deltaProgress) + _roundingError * deltaProgress.sign;
-    final remainder = deltaAlpha.remainder(1.0).abs();
-    _roundingError = remainder >= 0.5 ? -1 * (1.0 - remainder) : remainder;
     var nextAlpha = (currentAlpha + deltaAlpha).round();
-    if (nextAlpha < 0) {
-      _roundingError += nextAlpha.abs();
-    } else if (nextAlpha > 255) {
-      _roundingError += nextAlpha - 255;
-    }
+    _roundingError = (currentAlpha + deltaAlpha) - nextAlpha;
     nextAlpha = nextAlpha.clamp(0, 255);
     target.setAlpha(nextAlpha, paintId: paintId);
   }
