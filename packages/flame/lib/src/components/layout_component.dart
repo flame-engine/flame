@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 
 enum Direction { horizontal, vertical }
 
-/// Super class for [ComponentRow] and ComponentColumn
+/// Super class for [RowComponent] and ComponentColumn
 abstract class LayoutComponent extends PositionComponent with HasGameRef {
   LayoutComponent(this.direction, this.mainAxisAlignment, this._gap);
   final Direction direction;

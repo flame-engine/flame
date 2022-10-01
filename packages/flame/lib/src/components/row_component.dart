@@ -6,8 +6,8 @@ import 'package:flutter/widgets.dart';
 ///  - a new child is added
 ///  - an existing child changes its size
 ///  - the [gap] parameter is changed
-class ComponentRow extends LayoutComponent {
-  ComponentRow({
+class RowComponent extends LayoutComponent {
+  RowComponent({
     MainAxisAlignment mainAxisAlignment = MainAxisAlignment.start,
     double gap = 0.0,
   }) : super(Direction.horizontal, mainAxisAlignment, gap);
