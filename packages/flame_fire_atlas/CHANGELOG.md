@@ -1,3 +1,7 @@
+## 1.3.1
+
+ - Update a dependency to the latest release.
+
 ## 1.3.0
 
  - **PERF**: Avoid unnecessary copy in AssetsCache.readBinaryFile ([#1749](https://github.com/flame-engine/flame/issues/1749)). ([7e79638d](https://github.com/flame-engine/flame/commit/7e79638dd577cb07d55402d4e862de08ce832b85))
