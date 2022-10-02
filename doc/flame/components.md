@@ -36,7 +36,6 @@ Every `Component` has a few methods that you can optionally implement, which are
 ```{include} diagrams/component_life_cycle.md
 ```
 
-
 The `onGameResize` method is called whenever the screen is resized, and once in the beginning when
 the component is added to the game via the `add` method.
 

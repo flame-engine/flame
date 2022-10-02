@@ -128,7 +128,6 @@ class MyGame extends FlameGame with SingleGameInstance {
 ```{include} diagrams/low_level_game_api.md
 ```
 
-
 The `Game` class is a low-level API that can be used when you want to implement the functionality of
 how the game engine should be structured. `Game` does not implement any `update` or
 `render` function for example.
