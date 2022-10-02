@@ -354,6 +354,7 @@ void main() {
           expect(parent.onChangedChildrenRuns, 0);
           await parent.ensureAdd(child);
           expect(parent.onChangedChildrenRuns, 1);
+          expect(parent.lastChangeType, ChildrenChangedType.add);
         },
       );
 
@@ -367,6 +368,7 @@ void main() {
           expect(parent.onChangedChildrenRuns, 0);
           await parent.ensureAddAll(list);
           expect(parent.onChangedChildrenRuns, 2);
+          expect(parent.lastChangeType, ChildrenChangedType.add);
         },
       );
 
@@ -382,7 +384,9 @@ void main() {
           child.changeParent(parent2);
           await game.ready();
           expect(parent1.onChangedChildrenRuns, 2);
+          expect(parent1.lastChangeType, ChildrenChangedType.remove);
           expect(parent2.onChangedChildrenRuns, 1);
+          expect(parent2.lastChangeType, ChildrenChangedType.add);
         },
       );
     });
@@ -643,6 +647,7 @@ void main() {
           parent.remove(child);
           await game.ready();
           expect(parent.onChangedChildrenRuns, 2);
+          expect(parent.lastChangeType, ChildrenChangedType.remove);
         },
       );
 
@@ -657,6 +662,7 @@ void main() {
           parent.removeAll(list);
           await game.ready();
           expect(parent.onChangedChildrenRuns, 4);
+          expect(parent.lastChangeType, ChildrenChangedType.remove);
         },
       );
     });
@@ -1109,9 +1115,11 @@ class _GameResizeComponent extends PositionComponent {
 
 class _OnChildrenChangedComponent extends PositionComponent {
   int onChangedChildrenRuns = 0;
+  ChildrenChangedType? lastChangeType;
 
   @override
-  void onChildrenChanged(Component component) {
+  void onChildrenChanged(Component child, ChildrenChangedType type) {
     onChangedChildrenRuns++;
+    lastChangeType = type;
   }
 }
