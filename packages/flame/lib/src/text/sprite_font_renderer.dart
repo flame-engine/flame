@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flame/src/text/common/glyph_data.dart';
+import 'package:flame/src/text/common/sprite_font.dart';
 import 'package:flame/src/text/formatter_text_renderer.dart';
 import 'package:flame/src/text/formatters/sprite_font_text_formatter.dart';
 import 'package:flame/src/text/text_renderer.dart';
@@ -39,6 +40,19 @@ class SpriteFontRenderer
             glyphs: glyphs,
             scale: scale,
             letterSpacing: letterSpacing,
+          ),
+        );
+
+  SpriteFontRenderer.fromFont(SpriteFont font, {
+    Color? color,
+    double scale = 1,
+    double letterSpacing = 0,
+  }) : super(
+          SpriteFontTextFormatter.fromFont(
+            font,
+            scale: scale,
+            letterSpacing: letterSpacing,
+            color: color,
           ),
         );
 }
