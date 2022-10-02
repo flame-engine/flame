@@ -1,4 +1,4 @@
-``` {mermaid}
+``` mermaid
 %%{init: { 'theme': 'dark' } }%%
   graph TD  
 
@@ -37,8 +37,9 @@ graph TD
     HudMarginComponent(HudMarginComponent)
     HudButtonComponent(HudButtonComponent  <br/> JoystickComponent)
     
-    ButtonComponent("ButtonComponent <br/> CustomPainterComponent <br/> ShapeComponent 
-    <br/> SpriteButtonComponent <br/> TextComponent <br/> TextBoxComponent 
+    ButtonComponent("ButtonComponent <br/> CustomPainterComponent 
+    <br/> ShapeComponent <br/> SpriteButtonComponent 
+    <br/> TextComponent <br/> TextBoxComponent 
     <br/> NineTileBoxComponent")
     
     Loadable("Loadable (Mixin)"):::yellow
@@ -57,5 +58,4 @@ graph TD
     
     %% Link Color %%
     linkStyle 4 stroke:black,stroke-width:2px,color: black;
-``` 
 ```

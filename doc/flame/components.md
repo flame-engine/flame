@@ -1,8 +1,10 @@
 # Components
+
 ```{include} diagrams/component.md
 ```
 
 This diagram might look intimidating, but don't worry, it is not as complex as it looks.
+
 
 ## Component
 
