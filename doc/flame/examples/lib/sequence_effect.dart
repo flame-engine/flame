@@ -12,15 +12,13 @@ class SequenceEffectGame extends FlameGame with HasTappableComponents {
         EffectController(duration: 0.2, alternate: true),
       ),
       MoveEffect.by(Vector2(30, -50), EffectController(duration: 0.5)),
-      OpacityEffect.to(0, EffectController(duration: 0.3)),
     ]);
-    final effect2 =
-        MoveEffect.by(Vector2(30, -50), EffectController(duration: 0.5));
+
     final flower = Flower(
       size: 40,
       position: canvasSize / 2,
       onTap: (flower) {
-        flower.add(effect2);
+        flower.add(effect);
       },
     );
     add(flower);
