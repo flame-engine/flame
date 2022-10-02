@@ -7,8 +7,10 @@ import 'package:flame/game.dart';
 class AnchorToEffectGame extends FlameGame with HasTappableComponents {
   @override
   Future<void> onLoad() async {
-    final effect =
-        AnchorToEffect(Anchor.bottomLeft, EffectController(speed: 1));
+    final effect = AnchorToEffect(
+      Anchor.bottomLeft,
+      EffectController(speed: 1),
+    );
     final flower = Flower(
       size: 60,
       position: canvasSize / 2,
