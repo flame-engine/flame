@@ -92,6 +92,7 @@ Future<SpriteFontRenderer> createRenderer({
     '#^&()[]{}<>|\\\'"`~←→↑↓ ',
   ];
   if (legacy) {
+    // ignore: deprecated_member_use_from_same_package
     return SpriteFontRenderer(
       source: await loadImage('alphabet.png'),
       charHeight: 6,
@@ -100,6 +101,7 @@ Future<SpriteFontRenderer> createRenderer({
       glyphs: {
         for (var j = 0; j < lines.length; j++)
           for (var i = 0; i < lines[j].length; i++)
+            // ignore: deprecated_member_use_from_same_package
             lines[j][i]: GlyphData(left: i * 6, top: 1 + j * 6)
       },
       letterSpacing: letterSpacing,

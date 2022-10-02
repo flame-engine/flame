@@ -10,10 +10,13 @@ import 'package:flame/src/text/formatters/text_formatter.dart';
 import 'package:flame/src/text/inline/sprite_font_text_element.dart';
 
 class SpriteFontTextFormatter extends TextFormatter {
+  @Deprecated('Use SpriteFontTextFormatter.fromFont() instead; this '
+      'constructor will be removed in 1.5.0')
   SpriteFontTextFormatter({
     required Image source,
     required double charWidth,
     required double charHeight,
+    // ignore: deprecated_member_use_from_same_package
     required Map<String, GlyphData> glyphs,
     this.scale = 1,
     this.letterSpacing = 0,

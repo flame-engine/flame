@@ -1,4 +1,5 @@
 export 'src/text/common/glyph.dart' show Glyph;
+// ignore: deprecated_member_use_from_same_package
 export 'src/text/common/glyph_data.dart' show GlyphData;
 export 'src/text/common/line_metrics.dart' show LineMetrics;
 export 'src/text/common/sprite_font.dart' show SpriteFont;

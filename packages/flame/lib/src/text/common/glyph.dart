@@ -53,6 +53,7 @@ class Glyph {
         srcRight = srcRight ?? -1,
         srcBottom = srcBottom ?? -1;
 
+  // ignore: deprecated_member_use_from_same_package
   Glyph.fromGlyphData(this.char, GlyphData data)
       : left = data.left,
         top = data.top,
