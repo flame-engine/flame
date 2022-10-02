@@ -354,7 +354,7 @@ void main() {
           expect(parent.onChangedChildrenRuns, 0);
           await parent.ensureAdd(child);
           expect(parent.onChangedChildrenRuns, 1);
-          expect(parent.lastChangeType, ChildrenChangedType.add);
+          expect(parent.lastChangeType, ChildrenChangeType.added);
         },
       );
 
@@ -368,7 +368,7 @@ void main() {
           expect(parent.onChangedChildrenRuns, 0);
           await parent.ensureAddAll(list);
           expect(parent.onChangedChildrenRuns, 2);
-          expect(parent.lastChangeType, ChildrenChangedType.add);
+          expect(parent.lastChangeType, ChildrenChangeType.added);
         },
       );
 
@@ -384,9 +384,9 @@ void main() {
           child.changeParent(parent2);
           await game.ready();
           expect(parent1.onChangedChildrenRuns, 2);
-          expect(parent1.lastChangeType, ChildrenChangedType.remove);
+          expect(parent1.lastChangeType, ChildrenChangeType.removed);
           expect(parent2.onChangedChildrenRuns, 1);
-          expect(parent2.lastChangeType, ChildrenChangedType.add);
+          expect(parent2.lastChangeType, ChildrenChangeType.added);
         },
       );
     });
@@ -647,7 +647,7 @@ void main() {
           parent.remove(child);
           await game.ready();
           expect(parent.onChangedChildrenRuns, 2);
-          expect(parent.lastChangeType, ChildrenChangedType.remove);
+          expect(parent.lastChangeType, ChildrenChangeType.removed);
         },
       );
 
@@ -662,7 +662,7 @@ void main() {
           parent.removeAll(list);
           await game.ready();
           expect(parent.onChangedChildrenRuns, 4);
-          expect(parent.lastChangeType, ChildrenChangedType.remove);
+          expect(parent.lastChangeType, ChildrenChangeType.removed);
         },
       );
     });
@@ -1115,10 +1115,10 @@ class _GameResizeComponent extends PositionComponent {
 
 class _OnChildrenChangedComponent extends PositionComponent {
   int onChangedChildrenRuns = 0;
-  ChildrenChangedType? lastChangeType;
+  ChildrenChangeType? lastChangeType;
 
   @override
-  void onChildrenChanged(Component child, ChildrenChangedType type) {
+  void onChildrenChanged(Component child, ChildrenChangeType type) {
     onChangedChildrenRuns++;
     lastChangeType = type;
   }
