@@ -214,6 +214,18 @@ mixin ShapeHitbox on ShapeComponent implements Hitbox<ShapeHitbox> {
   }
 
   @override
+  @mustCallSuper
+  bool onComponentTypeCheck(PositionComponent other) {
+    final myParent = parent;
+    final otherParent = other.parent;
+    if (myParent is CollisionCallbacks && otherParent is PositionComponent) {
+      return myParent.onComponentTypeCheck(otherParent);
+    }
+
+    return true;
+  }
+
+  @override
   CollisionCallback<ShapeHitbox>? onCollisionCallback;
 
   @override
