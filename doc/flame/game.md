@@ -65,7 +65,8 @@ screen (it defaults to [0,0] like a regular `Canvas`).
 
 ## Lifecycle
 
-![Game Lifecycle Diagram](../images/component_lifecycle.png)
+```{include} diagrams/component_life_cycle.md
+```
 
 When a game first is added to a Flutter widget tree the following lifecycle methods will be called
 in order: `onGameResize`, `onLoad` and `onMount`. After that it goes on to call `update` and
@@ -124,7 +125,8 @@ class MyGame extends FlameGame with SingleGameInstance {
 
 ## Low-level Game API
 
-![Game low-level API](../images/game_mixin.png)
+```{include} diagrams/low_level_game_api.md
+```
 
 The `Game` class is a low-level API that can be used when you want to implement the functionality of
 how the game engine should be structured. `Game` does not implement any `update` or
