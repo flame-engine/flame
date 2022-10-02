@@ -144,7 +144,7 @@ following:
 
 1. A working **Flutter** installation, accessible from the command line;
 
-2. A **Python** environment, with python version 3.6 or higher;
+2. A **Python** environment, with python version 3.8+ or higher;
     - You can verify this by running `python --version` from the command line;
     - Having a dedicated python virtual environment is recommended but not required;
 
