@@ -192,6 +192,7 @@ If you ever run the **melos doc-clean** or the **make clean** command, the serve
 restarted, because the clean command deletes the entire `html` directory.
 
 ```note
-Avoid having spaces in the paths to the docs since that will keep you from building the project due
-to [this bug](https://github.com/ipython/ipython/pull/13765).
+Avoid having spaces in the paths to the docs since that will keep you from
+building the project due to
+[this bug](https://github.com/ipython/ipython/pull/13765).
 ```
