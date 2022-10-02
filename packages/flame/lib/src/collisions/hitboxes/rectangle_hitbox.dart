@@ -16,7 +16,10 @@ class RectangleHitbox extends RectangleComponent
     super.angle,
     super.anchor,
     super.priority,
-  }) : shouldFillParent = size == null && position == null;
+    bool isSolid = false,
+  }) : shouldFillParent = size == null && position == null {
+    this.isSolid = isSolid;
+  }
 
   /// With this constructor you define the [RectangleHitbox] in relation to
   /// the [parentSize]. For example having [relation] as of (0.8, 0.5) would

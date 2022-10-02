@@ -10,8 +10,18 @@ import 'package:meta/meta.dart';
 /// It is currently used by [CircleHitbox], [RectangleHitbox] and
 /// [PolygonHitbox].
 mixin ShapeHitbox on ShapeComponent implements Hitbox<ShapeHitbox> {
+  @internal
+  final collisionTypeNotifier = CollisionTypeNotifier(CollisionType.active);
+
+  set collisionType(CollisionType type) {
+    if (collisionTypeNotifier.value == type) {
+      return;
+    }
+    collisionTypeNotifier.value = type;
+  }
+
   @override
-  CollisionType collisionType = CollisionType.active;
+  CollisionType get collisionType => collisionTypeNotifier.value;
 
   /// Whether the hitbox is allowed to collide with another hitbox that is
   /// added to the same parent.
@@ -40,6 +50,9 @@ mixin ShapeHitbox on ShapeComponent implements Hitbox<ShapeHitbox> {
   final List<Transform2D> _transformAncestors = [];
   late Function() _transformListener;
 
+  @internal
+  Function()? onAabbChanged;
+
   final Vector2 _halfExtents = Vector2.zero();
   static const double _extentEpsilon = 0.000000000000001;
   final Matrix3 _rotationMatrix = Matrix3.zero();
@@ -47,8 +60,8 @@ mixin ShapeHitbox on ShapeComponent implements Hitbox<ShapeHitbox> {
   @override
   bool renderShape = false;
 
-  @protected
-  late PositionComponent hitboxParent;
+  late PositionComponent _hitboxParent;
+  PositionComponent get hitboxParent => _hitboxParent;
   void Function()? _parentSizeListener;
   @protected
   bool shouldFillParent = false;
@@ -56,24 +69,21 @@ mixin ShapeHitbox on ShapeComponent implements Hitbox<ShapeHitbox> {
   @override
   void onMount() {
     super.onMount();
-    hitboxParent = ancestors().firstWhere(
-      (c) => c is PositionComponent,
+    _hitboxParent = ancestors().firstWhere(
+      (c) => c is PositionComponent && c is! CompositeHitbox,
       orElse: () {
         throw StateError('A ShapeHitbox needs a PositionComponent ancestor');
       },
     ) as PositionComponent;
 
-    _transformListener = () => _validAabb = false;
+    _transformListener = () {
+      _validAabb = false;
+      onAabbChanged?.call();
+    };
     ancestors(includeSelf: true).whereType<PositionComponent>().forEach((c) {
       _transformAncestors.add(c.transform);
       c.transform.addListener(_transformListener);
     });
-
-    final parentGame = findParent<FlameGame>();
-    if (parentGame is HasCollisionDetection) {
-      _collisionDetection = parentGame.collisionDetection;
-      _collisionDetection?.add(this);
-    }
 
     if (shouldFillParent) {
       _parentSizeListener = () {
@@ -82,6 +92,14 @@ mixin ShapeHitbox on ShapeComponent implements Hitbox<ShapeHitbox> {
       };
       _parentSizeListener?.call();
       hitboxParent.size.addListener(_parentSizeListener!);
+    }
+
+    // This should be placed after the hitbox parent listener
+    // since the correct hitbox size is required by the QuadTree.
+    final parentGame = findParent<FlameGame>();
+    if (parentGame is HasCollisionDetection) {
+      _collisionDetection = parentGame.collisionDetection;
+      _collisionDetection?.add(this);
     }
   }
 
@@ -193,6 +211,18 @@ mixin ShapeHitbox on ShapeComponent implements Hitbox<ShapeHitbox> {
     if (hitboxParent is CollisionCallbacks) {
       (hitboxParent as CollisionCallbacks).onCollisionEnd(other.hitboxParent);
     }
+  }
+
+  @override
+  @mustCallSuper
+  bool onComponentTypeCheck(PositionComponent other) {
+    final myParent = parent;
+    final otherParent = other.parent;
+    if (myParent is CollisionCallbacks && otherParent is PositionComponent) {
+      return myParent.onComponentTypeCheck(otherParent);
+    }
+
+    return true;
   }
 
   @override

@@ -2,9 +2,7 @@ import 'package:examples/commons/ember.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
-import 'package:flame/palette.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 
 class KeyboardListenerComponentExample extends FlameGame
     with HasKeyboardHandlerComponents {
@@ -12,121 +10,74 @@ class KeyboardListenerComponentExample extends FlameGame
     Similar to the default Keyboard example, but shows a different
     implementation approach, which uses Flame's
     KeyboardListenerComponent to handle input.
-    Usage: Use A S D W to steer Ember.
+    Usage: Use WASD to steer Ember.
   ''';
 
-  static final Paint white = BasicPalette.white.paint();
-  static const int speed = 200;
+  static const int _speed = 200;
 
-  late final Ember ember;
-  final Vector2 velocity = Vector2(0, 0);
+  late final Ember _ember;
+  final Vector2 _direction = Vector2.zero();
+
+  final Map<LogicalKeyboardKey, double> _keyWeights = {
+    LogicalKeyboardKey.keyW: 0,
+    LogicalKeyboardKey.keyA: 0,
+    LogicalKeyboardKey.keyS: 0,
+    LogicalKeyboardKey.keyD: 0,
+  };
 
   @override
   Future<void> onLoad() async {
-    ember = Ember(position: size / 2, size: Vector2.all(100));
-    add(ember);
+    _ember = Ember(position: size / 2, size: Vector2.all(100));
+    add(_ember);
 
     add(
       KeyboardListenerComponent(
         keyUp: {
-          LogicalKeyboardKey.keyA: (keys) => _handleKey(
-                false,
-                LogicalKeyboardKey.keyA,
-                keys,
-              ),
-          LogicalKeyboardKey.keyD: (keys) => _handleKey(
-                false,
-                LogicalKeyboardKey.keyD,
-                keys,
-              ),
-          LogicalKeyboardKey.keyW: (keys) => _handleKey(
-                false,
-                LogicalKeyboardKey.keyW,
-                keys,
-              ),
-          LogicalKeyboardKey.keyS: (keys) => _handleKey(
-                false,
-                LogicalKeyboardKey.keyS,
-                keys,
-              ),
+          LogicalKeyboardKey.keyA: (keys) =>
+              _handleKey(LogicalKeyboardKey.keyA, false),
+          LogicalKeyboardKey.keyD: (keys) =>
+              _handleKey(LogicalKeyboardKey.keyD, false),
+          LogicalKeyboardKey.keyW: (keys) =>
+              _handleKey(LogicalKeyboardKey.keyW, false),
+          LogicalKeyboardKey.keyS: (keys) =>
+              _handleKey(LogicalKeyboardKey.keyS, false),
         },
         keyDown: {
-          LogicalKeyboardKey.keyA: (keys) => _handleKey(
-                true,
-                LogicalKeyboardKey.keyA,
-                keys,
-              ),
-          LogicalKeyboardKey.keyD: (keys) => _handleKey(
-                true,
-                LogicalKeyboardKey.keyD,
-                keys,
-              ),
-          LogicalKeyboardKey.keyW: (keys) => _handleKey(
-                true,
-                LogicalKeyboardKey.keyW,
-                keys,
-              ),
-          LogicalKeyboardKey.keyS: (keys) => _handleKey(
-                true,
-                LogicalKeyboardKey.keyS,
-                keys,
-              ),
+          LogicalKeyboardKey.keyA: (keys) =>
+              _handleKey(LogicalKeyboardKey.keyA, true),
+          LogicalKeyboardKey.keyD: (keys) =>
+              _handleKey(LogicalKeyboardKey.keyD, true),
+          LogicalKeyboardKey.keyW: (keys) =>
+              _handleKey(LogicalKeyboardKey.keyW, true),
+          LogicalKeyboardKey.keyS: (keys) =>
+              _handleKey(LogicalKeyboardKey.keyS, true),
         },
       ),
     );
   }
 
-  bool _handleKey(
-    bool isDown,
-    LogicalKeyboardKey key,
-    Set<LogicalKeyboardKey> keysPressed,
-  ) {
-    const w = LogicalKeyboardKey.keyW;
-    const a = LogicalKeyboardKey.keyA;
-    const s = LogicalKeyboardKey.keyS;
-    const d = LogicalKeyboardKey.keyD;
-
-    if (key == w) {
-      if (isDown) {
-        velocity.y = -1;
-      } else if (keysPressed.contains(s)) {
-        velocity.y = 1;
-      } else {
-        velocity.y = 0;
-      }
-    } else if (key == s) {
-      if (isDown) {
-        velocity.y = 1;
-      } else if (keysPressed.contains(w)) {
-        velocity.y = -1;
-      } else {
-        velocity.y = 0;
-      }
-    } else if (key == a) {
-      if (isDown) {
-        velocity.x = -1;
-      } else if (keysPressed.contains(d)) {
-        velocity.x = 1;
-      } else {
-        velocity.x = 0;
-      }
-    } else if (key == d) {
-      if (isDown) {
-        velocity.x = 1;
-      } else if (keysPressed.contains(a)) {
-        velocity.x = -1;
-      } else {
-        velocity.x = 0;
-      }
-    }
-
-    return true;
-  }
-
   @override
   void update(double dt) {
     super.update(dt);
-    final displacement = velocity * (speed * dt);
-    ember.position.add(displacement);
+
+    _direction
+      ..setValues(xInput, yInput)
+      ..normalize();
+
+    final displacement = _direction * (_speed * dt);
+    _ember.position.add(displacement);
   }
+
+  bool _handleKey(LogicalKeyboardKey key, bool isDown) {
+    _keyWeights[key] = isDown ? 1 : 0;
+    return true;
+  }
+
+  double get xInput =>
+      _keyWeights[LogicalKeyboardKey.keyD]! -
+      _keyWeights[LogicalKeyboardKey.keyA]!;
+
+  double get yInput =>
+      _keyWeights[LogicalKeyboardKey.keyS]! -
+      _keyWeights[LogicalKeyboardKey.keyW]!;
 }
