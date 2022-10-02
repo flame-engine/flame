@@ -1,9 +1,8 @@
 # Components
-
-![Component tree](../images/component_tree.png)
+```{include} diagrams/component.md
+```
 
 This diagram might look intimidating, but don't worry, it is not as complex as it looks.
-
 
 ## Component
 
@@ -32,7 +31,9 @@ Every `Component` has a few methods that you can optionally implement, which are
 
 ### Component lifecycle
 
-![Component Lifecycle Diagram](../images/component_lifecycle.png)
+```{include} diagrams/component_life_cycle.md
+```
+
 
 The `onGameResize` method is called whenever the screen is resized, and once in the beginning when
 the component is added to the game via the `add` method.
