@@ -4,6 +4,7 @@ import os
 import re
 import shutil
 import subprocess
+import sys
 from docutils import nodes
 from docutils.parsers.rst import directives
 from sphinx.util.docutils import SphinxDirective
@@ -177,9 +178,12 @@ class FlutterAppDirective(SphinxDirective):
         FlutterAppDirective.COMPILED.append(self.source_dir)
 
     def _compile_source(self):
+        flutter_cmd = 'flutter'
+        if sys.platform == 'win32':
+            flutter_cmd = 'flutter.bat'
         try:
             subprocess.run(
-                ['flutter', 'build', 'web'],
+                [flutter_cmd, 'build', 'web'],
                 stdout=subprocess.PIPE,
                 stderr=subprocess.STDOUT,
                 cwd=self.source_dir,

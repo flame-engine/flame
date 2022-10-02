@@ -1,10 +1,14 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
+import 'package:flame/image_composition.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:meta/meta.dart';
 
 class HasCollidablesGame extends FlameGame with HasCollisionDetection {}
+
+class HasQuadTreeCollidablesGame extends FlameGame
+    with HasQuadTreeCollisionDetection {}
 
 @isTest
 Future<void> testCollisionDetectionGame(
@@ -14,12 +18,59 @@ Future<void> testCollisionDetectionGame(
   return testWithGame(testName, HasCollidablesGame.new, testBody);
 }
 
+@isTest
+Future<void> testQuadTreeCollisionDetectionGame(
+  String testName,
+  Future Function(HasCollisionDetection) testBody,
+) {
+  return testWithGame(
+    testName,
+    () {
+      final game = HasQuadTreeCollidablesGame();
+      game.initializeCollisionDetection(
+        mapDimensions: const Rect.fromLTWH(0, 0, 1000, 1000),
+      );
+      return game;
+    },
+    testBody,
+  );
+}
+
+Future<void> runCollisionTestRegistry(
+  Map<String, Future Function(HasCollisionDetection)> testRegistry,
+) async {
+  for (final entry in testRegistry.entries) {
+    final name = entry.key;
+    final testFunction = entry.value;
+    testCollisionDetectionGame('[Sweep] $name', testFunction);
+    testQuadTreeCollisionDetectionGame('[QuadTree] $name', testFunction);
+  }
+}
+
 class TestHitbox extends RectangleHitbox {
   int startCounter = 0;
   int onCollisionCounter = 0;
   int endCounter = 0;
 
   TestHitbox() {
+    onCollisionCallback = (_, __) {
+      onCollisionCounter++;
+    };
+    onCollisionStartCallback = (_, __) {
+      startCounter++;
+    };
+    onCollisionEndCallback = (_) {
+      endCounter++;
+    };
+  }
+}
+
+class CompositeTestHitbox extends CompositeHitbox {
+  int startCounter = 0;
+  int onCollisionCounter = 0;
+  int endCounter = 0;
+
+  CompositeTestHitbox({super.size, super.children}) {
     onCollisionCallback = (_, __) {
       onCollisionCounter++;
     };
@@ -44,6 +95,7 @@ class TestBlock extends PositionComponent with CollisionCallbacks {
     Vector2 size, {
     CollisionType type = CollisionType.active,
     bool addTestHitbox = true,
+    super.children,
     this.name,
   }) : super(
           position: position,

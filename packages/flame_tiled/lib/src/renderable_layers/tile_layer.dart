@@ -90,7 +90,7 @@ class TileLayer extends RenderableLayer<tiled.TileLayer> {
           continue;
         }
 
-        final tile = map.tileByGid(tileGid.tile);
+        final tile = map.tileByGid(tileGid.tile)!;
         final tileset = map.tilesetByTileGId(tileGid.tile);
         final img = tile.image ?? tileset.image;
 
@@ -158,7 +158,7 @@ class TileLayer extends RenderableLayer<tiled.TileLayer> {
           continue;
         }
 
-        final tile = map.tileByGid(tileGid.tile);
+        final tile = map.tileByGid(tileGid.tile)!;
         final tileset = map.tilesetByTileGId(tileGid.tile);
         final img = tile.image ?? tileset.image;
         if (img == null) {
@@ -250,7 +250,7 @@ class TileLayer extends RenderableLayer<tiled.TileLayer> {
           continue;
         }
 
-        final tile = map.tileByGid(tileGid.tile);
+        final tile = map.tileByGid(tileGid.tile)!;
         final tileset = map.tilesetByTileGId(tileGid.tile);
         final img = tile.image ?? tileset.image;
         if (img == null) {
@@ -376,7 +376,7 @@ class TileLayer extends RenderableLayer<tiled.TileLayer> {
           continue;
         }
 
-        final tile = map.tileByGid(tileGid.tile);
+        final tile = map.tileByGid(tileGid.tile)!;
         final tileset = map.tilesetByTileGId(tileGid.tile);
         final img = tile.image ?? tileset.image;
         if (img == null) {

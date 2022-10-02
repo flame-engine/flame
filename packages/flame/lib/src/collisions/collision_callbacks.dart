@@ -1,6 +1,6 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-import 'package:meta/meta.dart';
+import 'package:flutter/foundation.dart';
 
 /// The [CollisionType] is used to determine which other hitboxes that it
 /// should collide with.
@@ -13,6 +13,19 @@ enum CollisionType {
 
   /// Will not collide with any other hitboxes.
   inactive,
+}
+
+/// Utility class allows to subscribe on collision type changing event
+class CollisionTypeNotifier with ChangeNotifier {
+  CollisionTypeNotifier(CollisionType type) : _value = type;
+  CollisionType _value = CollisionType.active;
+
+  set value(CollisionType type) {
+    _value = type;
+    notifyListeners();
+  }
+
+  CollisionType get value => _value;
 }
 
 /// The [GenericCollisionCallbacks] mixin can be used to get callbacks from the
@@ -60,6 +73,14 @@ mixin GenericCollisionCallbacks<T> {
     activeCollisions.remove(other);
     onCollisionEndCallback?.call(other);
   }
+
+  /// Works only for the QuadTree collision detection.
+  /// If you need to prevent collision of items of different types -
+  /// reimplement [onComponentTypeCheck]. The result of calculation is cached
+  /// so you should not check any dynamical parameters here, the function
+  /// intended to be used as pure type checker.
+  @mustCallSuper
+  bool onComponentTypeCheck(PositionComponent other);
 
   /// Assign your own [CollisionCallback] if you want a callback when this
   /// shape collides with another [T].
@@ -112,6 +133,18 @@ mixin CollisionCallbacks on Component
   void onCollisionEnd(PositionComponent other) {
     activeCollisions.remove(other);
     onCollisionEndCallback?.call(other);
+  }
+
+  @override
+  @mustCallSuper
+  bool onComponentTypeCheck(PositionComponent other) {
+    final myParent = parent;
+    final otherParent = other.parent;
+    if (myParent is CollisionCallbacks && otherParent is PositionComponent) {
+      return myParent.onComponentTypeCheck(otherParent);
+    }
+
+    return true;
   }
 
   /// Assign your own [CollisionCallback] if you want a callback when this
