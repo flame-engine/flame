@@ -60,6 +60,8 @@ class Sweep<T extends Hitbox<T>> extends Broadphase<T> {
           if (checkSuccess) {
             _potentials.add(CollisionProspect(item0, item1));
           }
+        } else {
+          _potentials.add(CollisionProspect(item0, item1));
         }
 
         if (!checkSuccess) {
