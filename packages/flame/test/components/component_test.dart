@@ -647,8 +647,8 @@ void main() {
       );
 
       testWithFlameGame(
-        'after removing a list of components the method onChildrenChanged should'
-        ' be called list.length times',
+        'after removing a list of components the method onChildrenChanged '
+        'should be called list.length times',
         (game) async {
           final list = [Component(), Component()];
           final parent = _OnChildrenChangedComponent();
