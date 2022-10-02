@@ -10,8 +10,13 @@ import 'package:flame/geometry.dart';
 /// passing in another [Broadphase] to the constructor.
 class StandardCollisionDetection<B extends Broadphase<ShapeHitbox>>
     extends CollisionDetection<ShapeHitbox, B> {
-  StandardCollisionDetection({B? broadphase})
-      : super(broadphase: broadphase ?? Sweep<ShapeHitbox>() as B);
+  StandardCollisionDetection({
+    B? broadphase,
+    ExternalBroadphaseCheck? onComponentTypeCheck,
+  }) : super(
+          broadphase: broadphase ??
+              Sweep<ShapeHitbox>(broadphaseCheck: onComponentTypeCheck) as B,
+        );
 
   /// Check what the intersection points of two collidables are,
   /// returns an empty list if there are no intersections.

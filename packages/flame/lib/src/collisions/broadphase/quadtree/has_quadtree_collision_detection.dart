@@ -66,6 +66,7 @@ mixin HasQuadTreeCollisionDetection on FlameGame
             (activeItemCenter.y - potentialCenter.y).abs() > minimumDistance!);
   }
 
+  @override
   bool onComponentTypeCheck(PositionComponent one, PositionComponent another) {
     var checkParent = false;
     if (one is GenericCollisionCallbacks) {
