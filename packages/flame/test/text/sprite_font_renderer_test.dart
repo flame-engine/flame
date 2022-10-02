@@ -58,6 +58,66 @@ void main() {
         goldenFile: '../_goldens/sprite_font_renderer_1.png',
       );
     }
+
+    testGolden(
+      'Render text with ligatures',
+      (game) async {
+        final font = SpriteFont(
+          source: await loadImage('sprite_font.png'),
+          size: 18,
+          ascent: 14,
+          glyphs: [
+            Glyph('a', left: 5, top: 1, width: 10),
+            Glyph('b', left: 26, top: 1, width: 9),
+            Glyph('c', left: 46, top: 1, width: 9),
+            Glyph('d', left: 66, top: 1, width: 9),
+            Glyph('e', left: 86, top: 1, width: 9),
+            Glyph('f', left: 51, top: 21, width: 6),
+            Glyph('ff', left: 66, top: 21, width: 10),
+            Glyph('g', left: 86, top: 21, width: 9),
+            Glyph('Flame', left: 3, top: 21, width: 41),
+            Glyph(
+              ' ',
+              left: 0,
+              top: 0,
+              width: 9,
+              srcTop: 0,
+              srcBottom: 0,
+              srcLeft: 0,
+              srcRight: 0,
+            ),
+          ],
+        );
+        game.addAll([
+          RectangleComponent(
+            size: Vector2(200, 200),
+            paint: Paint()..color = const Color(0xffd1dae1),
+          ),
+          TextComponent(
+            text: 'facade',
+            textRenderer: SpriteFontRenderer.fromFont(font),
+            position: Vector2(10, 10),
+          ),
+          TextComponent(
+            text: 'caffefe',
+            textRenderer: SpriteFontRenderer.fromFont(font, scale: 2),
+            position: Vector2(10, 30),
+          ),
+          TextComponent(
+            text: 'Flame bag',
+            textRenderer: SpriteFontRenderer.fromFont(font, scale: 2),
+            position: Vector2(10, 70),
+          ),
+          TextComponent(
+            text: 'faded cabbage gaffe',
+            textRenderer: SpriteFontRenderer.fromFont(font, letterSpacing: 1),
+            position: Vector2(10, 110),
+          ),
+        ]);
+      },
+      goldenFile: '../_goldens/sprite_font_renderer_2.png',
+      size: Vector2(200, 140),
+    );
   });
 }
 
