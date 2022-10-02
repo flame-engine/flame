@@ -31,6 +31,9 @@ class Sweep<T extends Hitbox<T>> extends Broadphase<T> {
       final currentMin = currentBox.min.x;
       for (var i = _active.length - 1; i >= 0; i--) {
         final activeItem = _active[i];
+        if (_broadphaseCheckCache[activeItem]?[item] == false) {
+          continue;
+        }
         final activeBox = activeItem.aabb;
         if (activeBox.max.x >= currentMin) {
           if (item.collisionType == CollisionType.active ||
