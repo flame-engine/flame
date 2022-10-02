@@ -132,9 +132,7 @@ div.top-bar .btn:hover {
 }
 
 div.top-bar #github-button,
-div.top-bar #discord-button,
-div.top-bar #api-button,
-div.top-bar #examples-button {
+div.top-bar #discord-button {
   font-size: 1.4em;
 }
 
