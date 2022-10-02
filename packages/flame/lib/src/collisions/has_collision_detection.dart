@@ -6,7 +6,9 @@ import 'package:flame/game.dart';
 /// collision detection every tick.
 mixin HasCollisionDetection<B extends Broadphase<ShapeHitbox>> on FlameGame {
   CollisionDetection<ShapeHitbox, B> _collisionDetection =
-      StandardCollisionDetection(onComponentTypeCheck: _onComponentTypeCheck);
+      StandardCollisionDetection(
+    broadphase: Sweep<ShapeHitbox>(broadphaseCheck: _onComponentTypeCheck) as B,
+  );
 
   CollisionDetection<ShapeHitbox, B> get collisionDetection =>
       _collisionDetection;
