@@ -232,6 +232,7 @@ using `AnchorEffect.by()`.
 final effect = AnchorByEffect(Vector2(0.1, 0.1), EffectController(speed: 1));
 ```
 
+
 ### `AnchorToEffect`
 
 Changes the location of the target's anchor. This effect can also be created using
