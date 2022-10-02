@@ -1,4 +1,4 @@
-``` mermaid
+``` {mermaid}
 %%{init: { 'theme': 'dark' } }%%
   graph TD  
 
@@ -56,6 +56,4 @@ graph TD
     PositionComponent --> ButtonComponent
     HudMarginComponent --> HudButtonComponent
     
-    %% Link Color %%
-    linkStyle 4 stroke:black,stroke-width:2px,color: black;
 ```
