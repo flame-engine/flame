@@ -3,6 +3,7 @@ import 'package:flame/game.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 
 void main() {
   group('Component', () {
@@ -344,6 +345,47 @@ void main() {
           expect(wrapper.contains(child), true);
         },
       );
+
+      testWithFlameGame(
+        'after adding a child the method onChildrenChanged should be called',
+        (game) async {
+          final child = Component();
+          final parent = _OnChildrenChangedComponent();
+          await game.ensureAdd(parent);
+          expect(parent.onChangedChildrenRuns, 0);
+          await parent.ensureAdd(child);
+          expect(parent.onChangedChildrenRuns, 1);
+        },
+      );
+
+      testWithFlameGame(
+        'after adding several childs using addAll the method onChildrenChanged '
+            'should be called list.length times',
+            (game) async {
+          final list = [Component(), Component()];
+          final parent = _OnChildrenChangedComponent();
+          await game.ensureAdd(parent);
+          expect(parent.onChangedChildrenRuns, 0);
+          await parent.ensureAddAll(list);
+          expect(parent.onChangedChildrenRuns, 2);
+        },
+      );
+
+      testWithFlameGame(
+        'changing the parent should call onChildrenChanged on both parents',
+            (game) async {
+          final child = Component();
+          final parent1 = _OnChildrenChangedComponent();
+          final parent2 = _OnChildrenChangedComponent();
+          await game.ensureAdd(parent1);
+          await game.ensureAdd(parent2);
+          await parent1.ensureAdd(child);
+          child.changeParent(parent2);
+          await game.ready();
+          expect(parent1.onChangedChildrenRuns, 2);
+          expect(parent2.onChangedChildrenRuns, 1);
+        },
+      );
     });
 
     group('Removing components', () {
@@ -589,6 +631,33 @@ void main() {
             game.children.every((c) => (c as _IdentifiableComponent).id.isOdd),
             true,
           );
+        },
+      );
+
+      testWithFlameGame(
+        'after removing a child the method onChildrenChanged should be called',
+            (game) async {
+          final child = Component();
+          final parent = _OnChildrenChangedComponent();
+          await game.ensureAdd(parent);
+          await parent.ensureAdd(child);
+          parent.remove(child);
+          await game.ready();
+          expect(parent.onChangedChildrenRuns, 2);
+        },
+      );
+
+      testWithFlameGame(
+        'after removing a list of components the method onChildrenChanged should'
+            ' be called list.length times',
+            (game) async {
+          final list =  [Component(), Component()];
+          final parent = _OnChildrenChangedComponent();
+          await game.ensureAdd(parent);
+          await parent.ensureAddAll(list);
+          parent.removeAll(list);
+          await game.ready();
+          expect(parent.onChangedChildrenRuns, 4);
         },
       );
     });
@@ -1036,5 +1105,14 @@ class _GameResizeComponent extends PositionComponent {
   void onGameResize(Vector2 gameSize) {
     super.onGameResize(gameSize);
     this.gameSize = gameSize;
+  }
+}
+
+class _OnChildrenChangedComponent extends PositionComponent {
+  int onChangedChildrenRuns = 0;
+
+  @override
+  void onChildrenChanged(Component component) {
+    onChangedChildrenRuns++;
   }
 }
