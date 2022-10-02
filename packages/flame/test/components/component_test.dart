@@ -3,7 +3,6 @@ import 'package:flame/game.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mocktail/mocktail.dart';
 
 void main() {
   group('Component', () {
@@ -360,8 +359,8 @@ void main() {
 
       testWithFlameGame(
         'after adding several childs using addAll the method onChildrenChanged '
-            'should be called list.length times',
-            (game) async {
+        'should be called list.length times',
+        (game) async {
           final list = [Component(), Component()];
           final parent = _OnChildrenChangedComponent();
           await game.ensureAdd(parent);
@@ -373,7 +372,7 @@ void main() {
 
       testWithFlameGame(
         'changing the parent should call onChildrenChanged on both parents',
-            (game) async {
+        (game) async {
           final child = Component();
           final parent1 = _OnChildrenChangedComponent();
           final parent2 = _OnChildrenChangedComponent();
@@ -636,7 +635,7 @@ void main() {
 
       testWithFlameGame(
         'after removing a child the method onChildrenChanged should be called',
-            (game) async {
+        (game) async {
           final child = Component();
           final parent = _OnChildrenChangedComponent();
           await game.ensureAdd(parent);
@@ -649,9 +648,9 @@ void main() {
 
       testWithFlameGame(
         'after removing a list of components the method onChildrenChanged should'
-            ' be called list.length times',
-            (game) async {
-          final list =  [Component(), Component()];
+        ' be called list.length times',
+        (game) async {
+          final list = [Component(), Component()];
           final parent = _OnChildrenChangedComponent();
           await game.ensureAdd(parent);
           await parent.ensureAddAll(list);
