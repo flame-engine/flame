@@ -1,10 +1,10 @@
 # Splash screen
 
-![](https://raw.githubusercontent.com/flame-engine/flame_splash_screen/main/demogif.gif)
+![Showcase of the splash screen](https://raw.githubusercontent.com/flame-engine/flame_splash_screen/main/demogif.gif)
 
 Style your flame game with a beautiful splash screen.
 
-FlameSplashScreen is a very customizable splash screen package. 
+FlameSplashScreen is a very customizable splash screen package.
 
 ```dart
 FlameSplashScreen(

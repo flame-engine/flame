@@ -36,11 +36,31 @@ class ComponentSet extends QueryableOrderedSet<Component> {
   @override
   bool add(Component component) => super.add(component);
 
+  /// Marked as internal, because the users shouldn't be able to add elements
+  /// into the [ComponentSet] directly, bypassing the normal lifecycle handling.
+  @internal
+  @override
+  int addAll(Iterable<Component> components) => super.addAll(components);
+
   /// Marked as internal, because the users shouldn't be able to remove elements
   /// from the [ComponentSet] directly, bypassing the normal lifecycle handling.
   @internal
   @override
   bool remove(Component component) => super.remove(component);
+
+  /// Marked as internal, because the users shouldn't be able to remove elements
+  /// from the [ComponentSet] directly, bypassing the normal lifecycle handling.
+  @internal
+  @override
+  Iterable<Component> removeAll(Iterable<Component> components) =>
+      super.removeAll(components);
+
+  /// Marked as internal, because the users shouldn't be able to remove elements
+  /// from the [ComponentSet] directly, bypassing the normal lifecycle handling.
+  @internal
+  @override
+  Iterable<Component> removeWhere(bool Function(Component element) test) =>
+      super.removeWhere(test);
 
   /// Marked as internal, because the users shouldn't be able to remove elements
   /// from the [ComponentSet] directly, bypassing the normal lifecycle handling.

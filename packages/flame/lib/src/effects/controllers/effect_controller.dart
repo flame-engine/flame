@@ -1,3 +1,6 @@
+import 'dart:ui';
+
+import 'package:flame/src/effects/controllers/callback_controller.dart';
 import 'package:flame/src/effects/controllers/curved_effect_controller.dart';
 import 'package:flame/src/effects/controllers/delayed_effect_controller.dart';
 import 'package:flame/src/effects/controllers/infinite_effect_controller.dart';
@@ -71,6 +74,10 @@ abstract class EffectController {
   /// If the animation is finite and there are no "backward" or "atMin" stages
   /// then the animation will complete at `progress == 1`, otherwise it will
   /// complete at `progress == 0`.
+  ///
+  /// Before [atMaxDuration] and [atMinDuration] a callback function can be
+  /// provided which will be called after the corresponding [progress] has
+  /// finished.
   factory EffectController({
     double? duration,
     double? speed,
@@ -84,6 +91,8 @@ abstract class EffectController {
     double startDelay = 0.0,
     double atMaxDuration = 0.0,
     double atMinDuration = 0.0,
+    VoidCallback? onMax,
+    VoidCallback? onMin,
   }) {
     assert(
       (duration ?? 1) >= 0,
@@ -155,6 +164,11 @@ abstract class EffectController {
       );
     }
 
+    // ON MAX CALLBACK
+    if (onMax != null) {
+      items.add(CallbackController(onMax, progress: 1.0));
+    }
+
     // AT-MAX
     if (atMaxDuration != 0) {
       items.add(PauseEffectController(atMaxDuration, progress: 1.0));
@@ -191,6 +205,11 @@ abstract class EffectController {
                 ),
         );
       }
+    }
+
+    // ON MIN CALLBACK
+    if (onMin != null) {
+      items.add(CallbackController(onMin, progress: 0.0));
     }
 
     // AT-MIN

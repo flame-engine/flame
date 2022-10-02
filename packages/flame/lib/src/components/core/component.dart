@@ -580,6 +580,15 @@ class Component {
     components.forEach(remove);
   }
 
+  /// Removes all the children for which the [test] function returns true.
+  void removeWhere(bool Function(Component component) test) {
+    children.forEach((component) {
+      if (test(component)) {
+        remove(component);
+      }
+    });
+  }
+
   /// Remove the component from its parent in the next tick.
   void removeFromParent() {
     _parent?.remove(this);

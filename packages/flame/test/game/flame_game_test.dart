@@ -7,6 +7,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../components/component_test.dart';
 import 'projector_test.dart';
 
 void main() {
@@ -19,6 +20,21 @@ void main() {
         expect(game.size, Vector2(100.0, 200.00));
       },
     );
+
+    test('game resize in zoomed game', () async {
+      final game = FlameGame()
+        ..camera.zoom = 10
+        ..onGameResize(Vector2(300, 200));
+      final component = ComponentWithSizeHistory();
+      game.add(component);
+      await game.ready();
+
+      game.onGameResize(Vector2(400, 500));
+      expect(
+        component.history,
+        equals([Vector2(300, 200), Vector2(400, 500)]),
+      );
+    });
 
     testWithFlameGame('Game in game', (game) async {
       final innerGame = FlameGame();

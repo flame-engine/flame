@@ -1,5 +1,6 @@
 export 'src/close_to_aabb.dart' show closeToAabb;
 export 'src/close_to_vector.dart';
+export 'src/debug_text_formatter.dart' show DebugTextFormatter;
 export 'src/expect_double.dart';
 export 'src/fails_assert.dart';
 export 'src/flame_test.dart';

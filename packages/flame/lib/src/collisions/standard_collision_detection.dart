@@ -8,9 +8,10 @@ import 'package:flame/geometry.dart';
 ///
 /// By default the [Sweep] broadphase is used, this can be configured by
 /// passing in another [Broadphase] to the constructor.
-class StandardCollisionDetection extends CollisionDetection<ShapeHitbox> {
-  StandardCollisionDetection({Broadphase<ShapeHitbox>? broadphase})
-      : super(broadphase: broadphase ?? Sweep<ShapeHitbox>());
+class StandardCollisionDetection<B extends Broadphase<ShapeHitbox>>
+    extends CollisionDetection<ShapeHitbox, B> {
+  StandardCollisionDetection({B? broadphase})
+      : super(broadphase: broadphase ?? Sweep<ShapeHitbox>() as B);
 
   /// Check what the intersection points of two collidables are,
   /// returns an empty list if there are no intersections.
