@@ -25,6 +25,7 @@ you have certain types of combinations of flips and scales of the ancestors of t
 
 ## Mixins
 
+
 ### HasCollisionDetection
 
 If you want to use collision detection in your game you have to add the `HasCollisionDetection`
@@ -84,6 +85,12 @@ when a collision starts you only need to override `onCollision`, and vice versa.
 If you want to check collisions with the screen edges, as we do in the example above, you can use
 the predefined [ScreenHitbox](#screenhitbox) class.
 
+By default all hitboxes are hollow, this means that one hitbox can be fully enclosed by another
+hitbox without triggering a collision. If you want to set your hitboxes to be solid you can set
+`isSolid = true`. A hollow hitbox inside of a solid hitbox will trigger a collision, but not the
+other way around. If there are no intersections with the edges on a solid hitbox the center
+position is instead returned.
+
 
 ## ShapeHitbox
 
@@ -111,7 +118,7 @@ Remember that you can add as many `ShapeHitbox`s as you want to your `PositionCo
 more complex areas. For example a snowman with a hat could be represented by three `CircleHitbox`s
 and two `RectangleHitbox`s as its hat.
 
-A hitbox can be used either for collision detection or for making gesture detection more accurate 
+A hitbox can be used either for collision detection or for making gesture detection more accurate
 on top of components, see more regarding the latter in the section about the
 [GestureHitboxes](inputs/gesture-input.md#gesturehitboxes) mixin.
 
@@ -196,13 +203,14 @@ collisions to the whole hat, instead of for just each hitbox separately.
 
 ## Broad phase
 
-Usually you don't have to worry about the broad phase system that is used, so if the standard
-implementation is performant enough for you, you probably don't have to read this section.
+If your game field is small and do not have a lot of collidable components - you don't have to
+worry about the broad phase system that is used, so if the standard implementation is performant
+enough for you, you probably don't have to read this section.
 
 A broad phase is the first step of collision detection where potential collisions are calculated.
 To calculate these potential collisions are a lot cheaper to calculate than to check the exact
-intersections from the directly and it removes the need to check all hitboxes against each other
-and therefore avoiding O(n²). The broad phase produces a set of potential collisions (a set of
+intersections directly and it removes the need to check all hitboxes against each other and
+therefore avoiding O(n²). The broad phase produces a set of potential collisions (a set of
 `CollisionProspect`s), this set is then used to check the exact intersections between hitboxes, this
 is sometimes called narrow phase.
 
@@ -210,24 +218,107 @@ By default Flame's collision detection is using a sweep and prune broadphase ste
 requires another type of broadphase you can write your own broadphase by extending `Broadphase` and
 manually setting the collision detection system that should be used.
 
-For example if you have implemented a broadphase built on a quad tree instead of the standard
+For example if you have implemented a broadphase built on a magic algorithm instead of the standard
 sweep and prune, then you would do the following:
 
 ```dart
 class MyGame extends FlameGame with HasCollisionDetection {
   MyGame() : super() {
-    collisionDetection = 
-        StandardCollisionDetection(broadphase: QuadTreeBroadphase());
+    collisionDetection =
+        StandardCollisionDetection(broadphase: MagicAlgorithmBroadphase());
   }
 }
 ```
 
 
+## Quad Tree broad phase
+
+If your game field is large and the game contains a lot of collidable
+components (more than a hundred), standard sweep and prune can
+become inefficient. If it does, you can try to use the quad tree broad phase.
+To do this, add the `HasQuadTreeCollisionDetection` mixin to your game instead of
+`HasCollisionDetection` and call the `initializeCollisionDetection` function on game load:
+
+```dart
+class MyGame extends FlameGame with HasQuadTreeCollisionDetection {
+  Future<void> onLoad() async {
+    initializeCollisionDetection(
+      mapDimensions: const Rect.fromLTWH(0, 0, mapWidth, mapHeight),
+      minimumDistance: 10,
+    );
+  }
+}
+```
+
+When calling `initializeCollisionDetection` you should pass it the correct map dimensions, to make
+the quad tree algorithm to work properly. There are also additional parameters to make the system
+more efficient:
+
+- `minimumDistance`: minimum distance between objects to consider them as possibly colliding.
+  If `null` - the check is disabled, it is default behavior
+- `maxObjects`: maximum objects count in one quadrant. Default to 25.
+- `maxDepth`: - maximum nesting levels inside quadrant. Default to 10
+
+If you use the quad tree system, you can make it even more efficient by implementing the
+`onComponentTypeCheck` function of the `CollisionCallbacks` mixin in your components. It is useful if
+you need to prevent collisions of items of different types. The result of the calculation is cached so
+you should not check any dynamic parameters here, the function is intended to be used as a pure
+type checker:
+
+```dart
+class Bullet extends PositionComponent with CollisionCallbacks {
+
+  @override
+  bool onComponentTypeCheck(PositionComponent other) {
+    if (other is Player || other is Water) {
+      // do NOT collide with Player or Water
+      return false;
+    }
+    return super.onComponentTypeCheck(other);
+  }
+
+  @override
+  void onCollisionStart(
+    Set<Vector2> intersectionPoints,
+    PositionComponent other,
+  ) {
+    // Removes the component when it comes in contact with a Brick.
+    // Neither Player nor Water would be passed to this function
+    // because these classes are filtered out by [onComponentTypeCheck]
+    // in an earlier stage.
+    if (other is Brick) {
+      removeFromParent();
+    }
+    super.onCollisionStart(intersectionPoints, other);
+  }
+}
+```
+
+After intensive gameplay a map could become over-clusterized with a lot of empty quadrants.
+Run `QuadTree.optimize()` to perform a cleanup of empty quadrants:
+
+```dart
+class QuadTreeExample extends FlameGame
+        with HasQuadTreeCollisionDetection {
+
+  /// A function called when intensive gameplay session is over
+  /// It also might be scheduled, but no need to run it on every update.
+  /// Use right interval depending on your game circumstances
+  onGameIdle() {
+    (collisionDetection as QuadTreeCollisionDetection)
+            .quadBroadphase
+            .tree
+            .optimize();
+  }
+}
+
+```
+
+
 ## Ray casting and Ray tracing
 
-Ray casting and ray tracing are methods for sending out rays from a point in your game and
-being able to see what these rays collide with and how they reflect after hitting
-something.
+Ray casting and ray tracing are methods for sending out rays from a point in your game and being
+able to see what these rays collide with and how they reflect after hitting something.
 
 For all of the following methods, if there are any hitboxes that you wish to ignore, you can add the
 `ignoreHitboxes` argument which is a list of the hitboxes that you wish to disregard for the call.
@@ -271,10 +362,11 @@ from `0, 100` and shoots a ray straight to the right.
 
 The result from this operation will either be `null` if the ray didn't hit anything, or a
 `RaycastResult` which contains:
-  - Which hitbox the ray hit
-  - The intersection point of the collision
-  - The reflection ray, i.e. how the ray would reflect on the hitbox that it hix
-  - The normal of the collision, i.e. a vector perpendicular to the face of the hitbox that it hits
+
+- Which hitbox the ray hit
+- The intersection point of the collision
+- The reflection ray, i.e. how the ray would reflect on the hitbox that it hix
+- The normal of the collision, i.e. a vector perpendicular to the face of the hitbox that it hits
 
 If you are concerned about performance you can pre create a `RaycastResult` object that you send in
 to the method with the `out` argument, this will make it possible for the method to reuse this
@@ -372,12 +464,14 @@ the accuracy of gestures, Flame's built-in collision detection will serve you ve
 
 If you have the following needs you should at least consider to use
 [Forge2D](https://github.com/flame-engine/forge2d):
+
 - Interacting realistic forces
 - Particle systems that can interact with other bodies
 - Joints between bodies
 
 It is a good idea to just use the Flame collision detection system if you on the other hand only
 need some of the following things (since it is simpler to not involve Forge2D):
+
 - The ability to act on some of your components colliding
 - The ability to act on your components colliding with the screen boundaries
 - Complex shapes to act as a hitbox for your component so that gestures will be more accurate
@@ -402,18 +496,18 @@ Since the hitboxes now are `Component`s you add them to your component with `add
 
 ### Name changes
 
- - `ScreenCollidable` -> `ScreenHitbox`
- - `HitboxCircle` -> `CircleHitbox`
- - `HitboxRectangle` -> `RectangleHitbox`
- - `HitboxPolygon` -> `PolygonHitbox`
- - `Collidable` -> `CollisionCallbacks` (Only needed when you want to receive the callbacks)
- - `HasHitboxes` -> `GestureHitboxes` (Only when you need hitboxes for gestures)
- - `CollidableType` -> `CollisionType`
+- `ScreenCollidable` -> `ScreenHitbox`
+- `HitboxCircle` -> `CircleHitbox`
+- `HitboxRectangle` -> `RectangleHitbox`
+- `HitboxPolygon` -> `PolygonHitbox`
+- `Collidable` -> `CollisionCallbacks` (Only needed when you want to receive the callbacks)
+- `HasHitboxes` -> `GestureHitboxes` (Only when you need hitboxes for gestures)
+- `CollidableType` -> `CollisionType`
 
 
 ## Examples
 
- - https://examples.flame-engine.org/#/Collision%20Detection_Collidable%20AnimationComponent
- - https://examples.flame-engine.org/#/Collision%20Detection_Circles 
- - https://examples.flame-engine.org/#/Collision%20Detection_Multiple%20shapes 
- - https://github.com/flame-engine/flame/tree/main/examples/lib/stories/collision_detection
+- [https://examples.flame-engine.org/#/Collision%20Detection_Collidable%20AnimationComponent]
+- [https://examples.flame-engine.org/#/Collision%20Detection_Circles]
+- [https://examples.flame-engine.org/#/Collision%20Detection_Multiple%20shapes]
+- [https://github.com/flame-engine/flame/tree/main/examples/lib/stories/collision_detection]
