@@ -1,4 +1,4 @@
-``` mermaid
+``` {mermaid}
 %%{init: { 'theme': 'dark' } }%%
   graph TD  
 
