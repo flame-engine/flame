@@ -1,0 +1,8 @@
+{
+    "version": "0.1",
+    "language": "en",
+    "flagWords": [],
+    "ignoreWords":["broadphase","subdir","Hitbox","Raycast","positionable","Renderable","pallete","raytracing"] ,
+    "ignorePaths":["./media/**"],
+    "dictionaries": ["en_US","softwareTerms"]
+}
