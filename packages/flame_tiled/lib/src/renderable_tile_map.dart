@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:ui' as ui;
 
 import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
@@ -49,7 +48,7 @@ class RenderableTiledMap {
   Camera? camera;
 
   /// Paint for the map's background color, if there is one
-  late final ui.Paint? _backgroundPaint;
+  late final Paint? _backgroundPaint;
 
   final Map<tiled.Tile, TileFrames> animationFrames;
 
@@ -63,9 +62,9 @@ class RenderableTiledMap {
   }) {
     _refreshCache();
 
-    final backgroundColor = _parseTiledColor(map.backgroundColor);
+    final backgroundColor = map.backgroundColor;
     if (backgroundColor != null) {
-      _backgroundPaint = ui.Paint();
+      _backgroundPaint = Paint();
       _backgroundPaint!.color = backgroundColor;
     } else {
       _backgroundPaint = null;
@@ -353,21 +352,5 @@ class RenderableTiledMap {
     for (final layer in renderableLayers) {
       layer.update(dt);
     }
-  }
-}
-
-Color? _parseTiledColor(String? tiledColor) {
-  int? colorValue;
-  if (tiledColor?.length == 7) {
-    // parse '#rrbbgg'  as hex '0xaarrggbb' with the alpha channel on full
-    colorValue = int.tryParse(tiledColor!.replaceFirst('#', '0xff'));
-  } else if (tiledColor?.length == 9) {
-    // parse '#aarrbbgg'  as hex '0xaarrggbb'
-    colorValue = int.tryParse(tiledColor!.replaceFirst('#', '0x'));
-  }
-  if (colorValue != null) {
-    return Color(colorValue);
-  } else {
-    return null;
   }
 }
