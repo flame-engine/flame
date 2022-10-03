@@ -32,7 +32,7 @@ void main() {
     });
 
     testRandom(
-        'toRect has left to 0, top to 0, width to offset.dx and height to offset.dy',
+        'toRect has left: 0, top: 0, width: offset.dx, height: offset.dy',
         (Random r) {
       final offset = Offset(r.nextDouble(), r.nextDouble());
       final rect = offset.toRect();

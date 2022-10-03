@@ -43,7 +43,8 @@ void main() {
         'using fromRGBHexString returns a new Paint with the right Color',
         (Random r) {
       // As documentation says
-      // valid inputs are : ccc, CCC, #ccc, #CCC, #c1c1c1, #C1C1C1, c1c1c1, C1C1C1
+      // valid inputs are : ccc, CCC, #ccc, #CCC, #c1c1c1, #C1C1C1, c1c1c1,
+      // C1C1C1
       final color = ColorExtension.random();
       final sixHexColor = color.red.toRadixString(16).padLeft(2, '0') +
           color.green.toRadixString(16).padLeft(2, '0') +
@@ -197,7 +198,8 @@ void main() {
     });
 
     testRandom('random returns a new Paint with the right Color', (Random r) {
-      // withAlpha is used by Color.fromRGBO witch takes an argument between 0 and 1
+      // withAlpha is used by Color.fromRGBO witch takes an argument between 0
+      // and 1
       final withAlpha = r.nextDouble();
       final base = r.nextInt(256);
 

@@ -126,8 +126,8 @@ void main() {
     });
 
     testRandom(
-        'toVertices returns an array of [topLeft, topRight, bottomRight, bottomLeft]',
-        (Random r) {
+        'toVertices returns an array of [topLeft, topRight, bottomRight, '
+        'bottomLeft]', (Random r) {
       final left = r.nextDouble();
       final top = r.nextDouble();
       final right = r.nextDouble();

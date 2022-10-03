@@ -43,8 +43,8 @@ void main() {
     });
 
     test(
-        'renderRotated saves, translates, rotates, draws, translatesBack and then restores',
-        () {
+        'renderRotated saves, translates, rotates, draws, translatesBack'
+        ' and then restores', () {
       final canvas = MocktailCanvas();
       when(canvas.save).thenReturn(null);
       when(() => canvas.rotate(.5)).thenReturn(null);

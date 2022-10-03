@@ -31,7 +31,7 @@ void main() {
     });
 
     testRandom(
-        'toRect has left to 0, top to 0, width to size.dx and height to size.dy',
+        'toRect has left to 0, top to 0, width: size.dx and height: size.dy',
         (Random r) {
       final size = Size(r.nextDouble(), r.nextDouble());
       final rect = size.toRect();
