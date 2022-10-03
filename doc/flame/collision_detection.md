@@ -48,6 +48,14 @@ automatically be checked for collisions.
 To react to a collision you should add the `CollisionCallbacks` mixin to your component.
 Example:
 
+```{flutter-app}
+:sources: ../flame/examples
+:page: collision_detection
+:show: widget code infobox
+:width: 180
+:height: 160
+```
+
 ```dart
 class MyCollidable extends PositionComponent with CollisionCallbacks {
   @override
