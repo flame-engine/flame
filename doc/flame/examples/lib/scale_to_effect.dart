@@ -8,10 +8,6 @@ class ScaleToEffectGame extends FlameGame with HasTappableComponents {
   bool hold = false;
   @override
   Future<void> onLoad() async {
-    final effect = ScaleEffect.to(
-      Vector2.zero(),
-      EffectController(duration: 0.5),
-    );
     final flower = Flower(
       size: 60,
       position: canvasSize / 2,
