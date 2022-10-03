@@ -26,7 +26,7 @@ import 'package:flame/src/text/text_renderer.dart';
 class SpriteFontRenderer
     extends FormatterTextRenderer<SpriteFontTextFormatter> {
   @Deprecated('Use SpriteFontRenderer.fromFont() instead; this constructor '
-      'will be removed in 1.5.0')
+      'will be removed in 1.6.0')
   SpriteFontRenderer({
     required Image source,
     required double charWidth,
