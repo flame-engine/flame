@@ -19,7 +19,7 @@ class ValueRouteExample extends FlameGame with HasTappableComponents {
   }
 }
 
-class HomePage extends Component with HasGameRef<ValueRouteExample> {
+class HomePage extends Component with HasGameReference<ValueRouteExample> {
   @override
   Future<void> onLoad() async {
     add(
@@ -44,7 +44,8 @@ class HomePage extends Component with HasGameRef<ValueRouteExample> {
   }
 }
 
-class RateRoute extends ValueRoute<int> with HasGameRef<ValueRouteExample> {
+class RateRoute extends ValueRoute<int>
+    with HasGameReference<ValueRouteExample> {
   RateRoute() : super(value: -1, transparent: true);
 
   @override

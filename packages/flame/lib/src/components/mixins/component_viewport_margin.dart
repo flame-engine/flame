@@ -13,7 +13,7 @@ import 'package:meta/meta.dart';
 /// If you set the position of the component instead of a margin when
 /// initializing the component, the margin to the edge of the screen from that
 /// position will be used.
-mixin ComponentViewportMargin on PositionComponent, HasGameRef<FlameGame> {
+mixin ComponentViewportMargin on PositionComponent, HasGameRef {
   @override
   PositionType positionType = PositionType.viewport;
 
