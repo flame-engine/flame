@@ -1,20 +1,18 @@
 import 'package:flame/src/components/core/component.dart';
-import 'package:flame/src/experimental/has_game_reference.dart';
-import 'package:flame/src/game/flame_game.dart';
+import 'package:flame/src/components/mixins/has_game_ref.dart';
 import 'package:flame/src/game/game.dart';
 import 'package:flame/src/game/mixins/single_game_instance.dart';
-import 'package:meta/meta.dart';
 
-/// [HasGameRef] mixin provides property [game] (or [gameRef]), which is the
-/// cached accessor for the top-level game instance.
+/// [HasGameReference] mixin provides property [game], which is the cached
+/// accessor for the top-level game instance.
 ///
 /// The type [T] on the mixin is the type of your game class. This type will be
 /// the type of the [game] reference, and the mixin will check at runtime that
 /// the actual type matches the expectation.
 ///
-/// [HasGameReference] is a newer version of this mixin, and will replace it in
-/// Flame v2.0.
-mixin HasGameRef<T extends FlameGame> on Component {
+/// This class is equivalent to [HasGameRef] in all respects except that its
+/// generic parameter [T] can be any [Game], not just a "FlameGame".
+mixin HasGameReference<T extends Game> on Component {
   T? _game;
 
   /// Reference to the top-level Game instance that owns this component.
@@ -28,17 +26,6 @@ mixin HasGameRef<T extends FlameGame> on Component {
   /// tests, or if you're planning to move the component to another game
   /// instance.
   set game(T? value) => _game = value;
-
-  /// Equivalent to the [game] property.
-  T get gameRef => game;
-
-  /// Directly assigns (and override if one is already set) a [gameRef] to the
-  /// component.
-  ///
-  /// This is meant to be used only for testing purposes.
-  @visibleForTesting
-  @Deprecated('Use .game setter instead. Will be removed in 1.5.0')
-  void mockGameRef(T gameRef) => _game = gameRef;
 
   @override
   Game? findGame() => _game ?? super.findGame();
