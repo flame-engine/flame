@@ -24,7 +24,7 @@ function convertVersionsToHtmlLinks(versionsList, currentVersion) {
     if (version === currentVersion) {
       classes += ' selected';
     }
-    out += `<a href="/${version}/">
+    out += `<a href="/${version}/" onclick="adjustAPI('${version}')">
       <button class="${classes}">
         <i class="fa fa-code-branch"></i> ${version}
       </button>
@@ -54,6 +54,17 @@ function buildVersionsMenu(data) {
     // A timeout ensures that `click` can propagate to child <A/> elements.
     setTimeout(() => $(this).removeClass("active"), 200);
   });
+
+  var lnkVersion = currentVersion;
+  if(lnkVersion=='main' || lnkVersion=='local') lnkVersion = 'latest';
+  var lnk = $('.sidebar-left-area > .sidebar-left > .nav-left a').filter(function(index) { return $(this).text() === "Flame API"; }).attr("href");
+  $('.sidebar-left-area > .sidebar-left > .nav-left a').filter(function(index) { return $(this).text() === "Flame API"; }).attr("href",lnk.replace('VERSION',lnkVersion));
+}
+
+function adjustAPI(lnkVersion){
+  if(lnkVersion=='main' || lnkVersion=='local') lnkVersion = 'latest';
+  var lnk = $('.sidebar-left-area > .sidebar-left > .nav-left a').filter(function(index) { return $(this).text() === "Flame API"; }).attr("href");
+  $('.sidebar-left-area > .sidebar-left > .nav-left a').filter(function(index) { return $(this).text() === "Flame API"; }).attr("href",lnk.replace('VERSION',lnkVersion));
 }
 
 // Start loading the versions list as soon as possible, don't wait for DOM
