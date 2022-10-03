@@ -7,7 +7,7 @@ import 'package:meta/meta.dart';
 /// A glyph has an associated "glyph box", which is the box where the glyph is
 /// logically located. Here "logically" means that it includes not only the
 /// character itself, but also some padding around it as necessary for the
-/// character's to look nice within the text. For all glyphs in a font, their
+/// character to look nice within the text. For all glyphs in a font, their
 /// boxes will have the same height (which is the font size), the same ascent
 /// and descent, but possibly different widths.
 ///
@@ -18,7 +18,7 @@ import 'package:meta/meta.dart';
 /// box", which describes a rectangle within the source image where the glyph's
 /// pixels are actually located. The source box may be larger or smaller than
 /// the glyph box. It will be larger if the glyph has a particularly large
-/// flourish that trespasses upon other character's space; or smaller if the
+/// flourish that trespasses upon other characters' space; or smaller if the
 /// characters are packed too tightly in the source image, or if you're trying
 /// to improve rendering performance by not copying empty pixels.
 class Glyph {
