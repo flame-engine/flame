@@ -36,7 +36,7 @@ Other useful links:
 - [The official Flame site](https://flame-engine.org/).
 - [Examples](https://examples.flame-engine.org/) of most features which can be tried out from your
   browser.
-  - To access the code for each example, press the `< >` button in the top right corner.
+- To access the code for each example, press the `< >` button in the top right corner.
 - [Tutorials](https://tutorials.flame-engine.org/) - A simple tutorial to get started.
 - [API Reference](https://pub.dev/documentation/flame/latest/) - The generated dartdoc API
   reference.
