@@ -199,7 +199,7 @@ This effect works similar to `ScaleEffect.by`, but sets the absolute value of th
  ```
 
 ```dart
-final effect = ScaleEffect.to(Vector2.zero(), EffectController(duration: 0.5));
+final effect = ScaleEffect.to(Vector2.all(0.5), EffectController(duration: 0.5));
 ```
 
 
