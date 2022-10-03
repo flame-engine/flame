@@ -262,7 +262,6 @@ uses multiple paints, the effect can target any individual color using the `pain
 
 ```dart
 final effect = OpacityEffect.to(0.5, EffectController(duration: 0.75));
-```
 
 The opacity value of 0 corresponds to a fully transparent component, and the opacity value of 1 is
 fully opaque. Convenience constructors `OpacityEffect.fadeOut()` and `OpacityEffect.fadeIn()` will
