@@ -1,6 +1,7 @@
 # Components
 
-![Component tree](../images/component_tree.png)
+```{include} diagrams/component.md
+```
 
 This diagram might look intimidating, but don't worry, it is not as complex as it looks.
 
@@ -32,7 +33,8 @@ Every `Component` has a few methods that you can optionally implement, which are
 
 ### Component lifecycle
 
-![Component Lifecycle Diagram](../images/component_lifecycle.png)
+```{include} diagrams/component_life_cycle.md
+```
 
 The `onGameResize` method is called whenever the screen is resized, and once in the beginning when
 the component is added to the game via the `add` method.
@@ -124,7 +126,7 @@ children are rendered and updated with the same conditions.
 Example of usage, where visibility of two components are handled by a wrapper:
 
 ```dart
-class GameOverPanel extends PositionComponent with HasGameRef<MyGame> {
+class GameOverPanel extends PositionComponent {
   bool visible = false;
   final Image spriteImage;
 
@@ -439,10 +441,10 @@ class MyGame extends FlameGame {
 
     // Vector2(0.0, 0.0) by default, can also be set in the constructor
     player.position = ...
-    
+
     // 0 by default, can also be set in the constructor
     player.angle = ...
-    
+
     // Adds the component
     add(player);
   }
@@ -749,7 +751,7 @@ Advanced example:
 ```dart
 final images = [
   loadParallaxImage(
-    'stars.jpg', 
+    'stars.jpg',
     repeat: ImageRepeat.repeat,
     alignment: Alignment.center,
     fill: LayerFill.width,

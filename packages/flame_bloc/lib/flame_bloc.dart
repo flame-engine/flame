@@ -1,5 +1,3 @@
-export 'src/flame_bloc_game.dart';
-
 export 'src/flame_bloc_listenable.dart';
 export 'src/flame_bloc_listener.dart';
 export 'src/flame_bloc_provider.dart';
