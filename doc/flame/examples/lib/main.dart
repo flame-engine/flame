@@ -24,6 +24,8 @@ void main() {
     page = page.substring(1);
   }
   final routes = <String, Game Function()>{
+    'anchor_by_effect': AnchorByEffectGame.new,
+    'anchor_to_effect': AnchorToEffectGame.new,
     'collision_detection': CollisionDetectionGame.new,
     'decorator_blur': DecoratorBlurGame.new,
     'decorator_grayscale': DecoratorGrayscaleGame.new,
@@ -32,11 +34,6 @@ void main() {
     'decorator_tint': DecoratorTintGame.new,
     'drag_events': DragEventsGame.new,
     'router': RouterGame.new,
-    'tap_events': TapEventsGame.new,
-    'value_route': ValueRouteExample.new,
-    'sequence_effect': SequenceEffectGame.new,
-    'anchor_by_effect': AnchorByEffectGame.new,
-    'anchor_to_effect': AnchorToEffectGame.new,
     'scale_by_effect': ScaleByEffectGame.new,
     'scale_to_effect': ScaleToEffectGame.new,
     'sequence_effect': SequenceEffectGame.new,
