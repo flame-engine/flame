@@ -926,6 +926,38 @@ void main() {
           closeToVector(Vector2(1, -1)..normalize()),
         );
       },
+      'raycast with maxDistance': (game) async {
+        game.ensureAddAll([
+          PositionComponent(
+            position: Vector2.all(20),
+            size: Vector2.all(40),
+            children: [RectangleHitbox()],
+          ),
+        ]);
+        await game.ready();
+        final ray = Ray2(
+          origin: Vector2.all(10),
+          direction: Vector2.all(1)..normalize(),
+        );
+
+        final result = RaycastResult<ShapeHitbox>();
+
+        // No hit cast
+        game.collisionDetection.raycast(
+          ray,
+          maxDistance: Vector2.all(9).length,
+          out: result,
+        );
+        expect(result.hitbox?.parent, isNull);
+
+        // Extended cast
+        game.collisionDetection.raycast(
+          ray,
+          maxDistance: Vector2.all(10).length,
+          out: result,
+        );
+        expect(result.hitbox?.parent, game.children.first);
+      },
     });
 
     group('Rectangle hitboxes', () {
@@ -1208,6 +1240,44 @@ void main() {
           );
           expect(results.every((r) => r.isActive), isTrue);
           expect(results.length, 4);
+        },
+        'raycastAll with maxDistance': (game) async {
+          game.ensureAddAll([
+            PositionComponent(
+              position: Vector2(10, 0),
+              size: Vector2.all(10),
+            )..add(RectangleHitbox()),
+            PositionComponent(
+              position: Vector2(20, 10),
+              size: Vector2.all(10),
+            )..add(RectangleHitbox()),
+            PositionComponent(
+              position: Vector2(10, 20),
+              size: Vector2.all(10),
+            )..add(RectangleHitbox()),
+            PositionComponent(
+              position: Vector2(0, 10),
+              size: Vector2.all(10),
+            )..add(RectangleHitbox()),
+          ]);
+          await game.ready();
+          final origin = Vector2.all(15);
+
+          // No hit
+          final results1 = game.collisionDetection.raycastAll(
+            origin,
+            maxDistance: 4,
+            numberOfRays: 4,
+          );
+          expect(results1.length, isZero);
+
+          // Hit all four
+          final results2 = game.collisionDetection.raycastAll(
+            origin,
+            maxDistance: 5,
+            numberOfRays: 4,
+          );
+          expect(results2.length, 4);
         },
       });
     });
