@@ -71,7 +71,7 @@ abstract class CollisionDetection<T extends Hitbox<T>,
   /// Returns the first hitbox that the given [ray] hits and the associated
   /// intersection information; or null if the ray doesn't hit any hitbox.
   ///
-  /// [maxDistance] can be provided to the limit raycast to only return hits
+  /// [maxDistance] can be provided to limit the raycast to only return hits
   /// within this distance from the ray origin.
   ///
   /// [ignoreHitboxes] can be used if you want to ignore certain hitboxes, i.e.
@@ -92,7 +92,7 @@ abstract class CollisionDetection<T extends Hitbox<T>,
   /// the rays hit.
   /// [numberOfRays] is the number of rays that should be casted.
   ///
-  /// [maxDistance] can be provided to the limit raycasts to only return hits
+  /// [maxDistance] can be provided to limit the raycasts to only return hits
   /// within this distance from the ray origin.
   ///
   /// If the [rays] argument is provided its [Ray2]s are populated with the rays
