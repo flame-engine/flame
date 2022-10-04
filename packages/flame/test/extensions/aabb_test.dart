@@ -12,7 +12,7 @@ void main() {
     test('Default aabb constructor', () {
       final aab2 = Aabb2();
       // With this constructor, min and max are set to the origin (0,0)
-      // So the rect corresponding should be (0,0,0,0)
+      // So the corresponding rect should be (0,0,0,0)
       final aab2Rect = aab2.toRect();
       _checkRectValues(
         aab2Rect,
