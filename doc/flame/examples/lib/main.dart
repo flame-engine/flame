@@ -8,9 +8,9 @@ import 'package:doc_flame_examples/decorator_shadow3d.dart';
 import 'package:doc_flame_examples/decorator_tint.dart';
 import 'package:doc_flame_examples/drag_events.dart';
 import 'package:doc_flame_examples/router.dart';
-import 'package:doc_flame_examples/sequence_effect.dart';
 import 'package:doc_flame_examples/scale_by_effect.dart';
 import 'package:doc_flame_examples/scale_to_effect.dart';
+import 'package:doc_flame_examples/sequence_effect.dart';
 import 'package:doc_flame_examples/tap_events.dart';
 import 'package:doc_flame_examples/value_route.dart';
 import 'package:flame/game.dart';
@@ -22,6 +22,7 @@ void main() {
     page = page.substring(1);
   }
   final routes = <String, Game Function()>{
+    'collision_detection': CollisionDetectionGame.new,
     'decorator_blur': DecoratorBlurGame.new,
     'decorator_grayscale': DecoratorGrayscaleGame.new,
     'decorator_rotate3d': DecoratorRotate3DGame.new,
@@ -29,12 +30,11 @@ void main() {
     'decorator_tint': DecoratorTintGame.new,
     'drag_events': DragEventsGame.new,
     'router': RouterGame.new,
-    'tap_events': TapEventsGame.new,
-    'value_route': ValueRouteExample.new,
-    'sequence_effect': SequenceEffectGame.new,
     'scale_by_effect': ScaleByEffectGame.new,
     'scale_to_effect': ScaleToEffectGame.new,
-    'collision_detection': CollisionDetectionGame.new,
+    'sequence_effect': SequenceEffectGame.new,
+    'tap_events': TapEventsGame.new,
+    'value_route': ValueRouteExample.new,
   };
   final game = routes[page]?.call();
   if (game != null) {
