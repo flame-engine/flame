@@ -54,6 +54,11 @@ throughout the component's lifetime. This method will only run if the parent is 
 If the parent is not mounted yet, then this method will wait in a queue (this will have no effect
 on the rest of the game engine).
 
+The `onChildrenChanged` method can be overridden if it's needed to detect changes in a parent's
+children. This method is called whenever a child is added to or removed from a parent (this includes
+if a child is changing its parent). Its parameters contain the targeting child and the type of
+change it went through (`added` or `removed`).
+
 A component lifecycle state can be checked by a series of getters:
 
 - `isLoaded`: Returns a bool with the current loaded state

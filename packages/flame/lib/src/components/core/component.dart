@@ -463,6 +463,10 @@ class Component {
     _children?.forEach((c) => c.updateTree(dt));
   }
 
+  /// This method will be invoked from lifecycle if [child] has been added
+  /// to or removed from its parent children list.
+  void onChildrenChanged(Component child, ChildrenChangeType type) {}
+
   void render(Canvas canvas) {}
 
   void renderTree(Canvas canvas) {
@@ -898,6 +902,8 @@ class Component {
 
 typedef ComponentSetFactory = ComponentSet Function();
 
+enum ChildrenChangeType { added, removed }
+
 /// Helper class to assist [Component] with its lifecycle.
 ///
 /// Most lifecycle events -- add, remove, change parent -- live for a very short
@@ -983,6 +989,7 @@ class _LifecycleManager {
       if (child.isLoaded) {
         child._mount();
         _children.removeFirst();
+        owner.onChildrenChanged(child, ChildrenChangeType.added);
       } else if (child.isLoading) {
         break;
       } else {
@@ -996,6 +1003,7 @@ class _LifecycleManager {
       final component = _removals.removeFirst();
       if (component.isMounted) {
         component._remove();
+        owner.onChildrenChanged(component, ChildrenChangeType.removed);
       }
       assert(!component.isMounted);
     }
@@ -1004,9 +1012,12 @@ class _LifecycleManager {
   void _processAdoptionQueue() {
     while (_adoption.isNotEmpty) {
       final child = _adoption.removeFirst();
+      final oldParent = child._parent;
       child._remove();
+      oldParent?.onChildrenChanged(child, ChildrenChangeType.removed);
       child._parent = owner;
       child._mount();
+      owner.onChildrenChanged(child, ChildrenChangeType.added);
     }
   }
 }
