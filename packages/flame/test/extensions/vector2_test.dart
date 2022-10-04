@@ -282,7 +282,7 @@ void main() {
 
   testRandom('Creating a Vector2 fromRadians points to the correct direction',
       (Random r) {
-    // See  more on https://en.wikipedia.org/wiki/Rotation_matrix
+    // See more on https://en.wikipedia.org/wiki/Rotation_matrix
     // TL;DR;
     // (x', y') = (x cos(p) - y sin(p) , x sin(p) + y cos(p))
     // Our x is 0 and y -1
@@ -305,7 +305,7 @@ void main() {
 
   testRandom('Creating a Vector2 fromDegrees points to the correct direction',
       (Random r) {
-    // See  more on https://en.wikipedia.org/wiki/Rotation_matrix
+    // See more on https://en.wikipedia.org/wiki/Rotation_matrix
     // TL;DR;
     // (x', y') = (x cos(p) - y sin(p) , x sin(p) + y cos(p))
     // Our x is 0 and y -1
