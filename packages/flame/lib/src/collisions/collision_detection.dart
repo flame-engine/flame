@@ -79,6 +79,7 @@ abstract class CollisionDetection<T extends Hitbox<T>,
   /// result.
   RaycastResult<T>? raycast(
     Ray2 ray, {
+    double? maxDistance,
     List<T>? ignoreHitboxes,
     RaycastResult<T>? out,
   });
