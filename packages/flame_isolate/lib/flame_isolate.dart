@@ -1,5 +1,4 @@
 import 'package:flame/components.dart';
-import 'package:flutter/foundation.dart';
 import 'package:integral_isolates/integral_isolates.dart';
 
 export 'package:integral_isolates/integral_isolates.dart';
@@ -47,7 +46,7 @@ mixin FlameIsolate on Component implements IsolateGetter {
 
   @override
   Future<R> isolate<Q, R>(
-    ComputeCallback<Q, R> callback,
+    IsolateCallback<Q, R> callback,
     Q message, {
     String? debugLabel,
   }) {
