@@ -232,7 +232,10 @@ using `AnchorEffect.by()`.
 ```
 
 ```dart
-final effect = AnchorByEffect(Vector2(0.1, 0.1), EffectController(speed: 1));
+final effect = AnchorByEffect(
+  Vector2(0.1, 0.1), 
+  EffectController(speed: 1),
+);
 ```
 
 
@@ -250,7 +253,10 @@ Changes the location of the target's anchor. This effect can also be created usi
 ```
 
 ```dart
-final effect = AnchorToEffect(Anchor.center, EffectController(speed: 1));
+final effect = AnchorToEffect(
+  Anchor.center, 
+  EffectController(speed: 1),
+);
 ```
 
 
