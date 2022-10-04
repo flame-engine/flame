@@ -467,4 +467,52 @@ void main() {
       expect(p2.x, p2.y);
     });
   });
+
+  testRandom('Creating a Vector2 fromRadians points to the correct direction',
+      (Random r) {
+    // See more on https://en.wikipedia.org/wiki/Rotation_matrix
+    // TL;DR;
+    // (x', y') = (x cos(p) - y sin(p) , x sin(p) + y cos(p))
+    // Our x is 0 and y -1
+    // (x', y') = (0 - -sin(p), 0 + -cos(p))
+    // (x', y') = (sin(p),-cos(p))
+
+    var angleInRadians = r.nextDouble() * 2 * math.pi;
+    var pointingVector = Vector2Extension.fromRadians(angleInRadians);
+
+    expectDouble(pointingVector.x, math.sin(angleInRadians));
+    // Base Vector2 is (0, -1)
+    expectDouble(pointingVector.y, -math.cos(angleInRadians));
+
+    // Same with negative Radians
+    angleInRadians = -r.nextDouble() * 2 * math.pi;
+    pointingVector = Vector2Extension.fromRadians(angleInRadians);
+    expectDouble(pointingVector.x, math.sin(angleInRadians));
+    expectDouble(pointingVector.y, -math.cos(angleInRadians));
+  });
+
+  testRandom('Creating a Vector2 fromDegrees points to the correct direction',
+      (Random r) {
+    // See more on https://en.wikipedia.org/wiki/Rotation_matrix
+    // TL;DR;
+    // (x', y') = (x cos(p) - y sin(p) , x sin(p) + y cos(p))
+    // Our x is 0 and y -1
+    // (x', y') = (0 - -sin(p), 0 + -cos(p))
+    // (x', y') = (sin(p),-cos(p))
+
+    var angleInDegrees = r.nextDouble() * 360;
+    var pointingVector = Vector2Extension.fromDegrees(angleInDegrees);
+
+    var angleInRadians = angleInDegrees * math.pi / 180;
+    expectDouble(pointingVector.x, math.sin(angleInRadians));
+    expectDouble(pointingVector.y, -math.cos(angleInRadians));
+
+    // Same with negative Degrees
+    angleInDegrees = -r.nextDouble() * 360;
+    pointingVector = Vector2Extension.fromDegrees(angleInDegrees);
+
+    angleInRadians = angleInDegrees * math.pi / 180;
+    expectDouble(pointingVector.x, math.sin(angleInRadians));
+    expectDouble(pointingVector.y, -math.cos(angleInRadians));
+  });
 }
