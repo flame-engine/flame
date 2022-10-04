@@ -7,6 +7,7 @@ import 'package:examples/stories/collision_detection/multiple_shapes_example.dar
 import 'package:examples/stories/collision_detection/quadtree_example.dart';
 import 'package:examples/stories/collision_detection/raycast_example.dart';
 import 'package:examples/stories/collision_detection/raycast_light_example.dart';
+import 'package:examples/stories/collision_detection/raycast_max_distance_example.dart';
 import 'package:examples/stories/collision_detection/raytrace_example.dart';
 import 'package:flame/game.dart';
 
@@ -60,5 +61,12 @@ void addCollisionDetectionStories(Dashbook dashbook) {
       (_) => GameWidget(game: RaytraceExample()),
       codeLink: baseLink('collision_detection/raytrace.dart'),
       info: RaytraceExample.description,
+    )
+    ..add(
+      'Raycasting Max Distance',
+      (_) => GameWidget(game: RaycastMaxDistanceExample()),
+      codeLink:
+          baseLink('collision_detection/raycast_max_distance_example.dart'),
+      info: RaycastMaxDistanceExample.description,
     );
 }
