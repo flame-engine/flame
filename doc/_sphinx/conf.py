@@ -26,7 +26,6 @@ extensions = [
     'myst_parser',  # Markdown support
     'sphinxcontrib.mermaid',
     'extensions.flutter_app',
-    'sphinx.ext.extlinks', #Support external link with parameters
 ]
 
 # Configuration options for MyST:
@@ -67,9 +66,6 @@ pygments_style = 'monokai'
 html_static_path = ['images', 'scripts', 'theme']
 html_js_files = ['versions.js', 'menu-expand.js']
 
-#External Link Setup
-extlinks = {'flame_api': ('https://pub.dev/documentation/flame/<VERSION>/',
-                      'Flame API')}
 
 # -- Custom setup ------------------------------------------------------------
 class TitleCollector(docutils.nodes.SparseNodeVisitor):
