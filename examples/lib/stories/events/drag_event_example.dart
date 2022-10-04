@@ -29,7 +29,7 @@ class Player extends PositionComponent with DragCallbacks {
   }
 }
 
-class SpaceShooterGame extends FlameGame {
+class SpaceShooterGame extends FlameGame with HasDraggableComponents {
   @override
   Future<void> onLoad() async {
     add(
