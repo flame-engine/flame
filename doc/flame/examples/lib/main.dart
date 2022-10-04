@@ -1,5 +1,7 @@
 import 'dart:html'; // ignore: avoid_web_libraries_in_flutter
 
+import 'package:doc_flame_examples/anchor_by_effect.dart';
+import 'package:doc_flame_examples/anchor_to_effect.dart';
 import 'package:doc_flame_examples/collision_detection.dart';
 import 'package:doc_flame_examples/decorator_blur.dart';
 import 'package:doc_flame_examples/decorator_grayscale.dart';
@@ -30,6 +32,11 @@ void main() {
     'decorator_tint': DecoratorTintGame.new,
     'drag_events': DragEventsGame.new,
     'router': RouterGame.new,
+    'tap_events': TapEventsGame.new,
+    'value_route': ValueRouteExample.new,
+    'sequence_effect': SequenceEffectGame.new,
+    'anchor_by_effect': AnchorByEffectGame.new,
+    'anchor_to_effect': AnchorToEffectGame.new,
     'scale_by_effect': ScaleByEffectGame.new,
     'scale_to_effect': ScaleToEffectGame.new,
     'sequence_effect': SequenceEffectGame.new,
