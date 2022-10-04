@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:flame/extensions.dart';
 import 'package:flame/src/events/messages/position_event.dart';
 import 'package:flame/src/events/messages/tap_down_event.dart';
@@ -36,4 +38,9 @@ class TapUpEvent extends PositionEvent {
       ),
     );
   }
+
+  @override
+  String toString() =>
+      'TapUpEvent(pointerId;$pointerId, deviceKind:$deviceKind,'
+      'canvasPosition:$canvasPosition, devicePosition:$devicePosition)';
 }

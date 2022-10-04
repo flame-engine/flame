@@ -1,8 +1,9 @@
 import 'package:flame/components.dart';
+import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 
-class Player extends PositionComponent {
+class Player extends PositionComponent with DragCallbacks {
   static final _paint = Paint()..color = Colors.white;
 
   @override
