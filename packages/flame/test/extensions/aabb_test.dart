@@ -60,13 +60,9 @@ void main() {
 
 void _checkRectValues(
   Rect rect, {
-  // top left angle x
   required double left,
-  // top left angle y
   required double top,
-  // bottom right angle's x
   required double right,
-  // bottom right angle's y
   required double bottom,
 }) {
   expect(rect.left, left, reason: 'left does not match');
