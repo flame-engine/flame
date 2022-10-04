@@ -19,11 +19,7 @@ class ValueRouteExample extends FlameGame with HasTappableComponents {
   }
 }
 
-mixin HasGameReference on Component {
-  ValueRouteExample get game => findGame()! as ValueRouteExample;
-}
-
-class HomePage extends Component with HasGameReference {
+class HomePage extends Component with HasGameReference<ValueRouteExample> {
   @override
   Future<void> onLoad() async {
     add(
@@ -48,7 +44,8 @@ class HomePage extends Component with HasGameReference {
   }
 }
 
-class RateRoute extends ValueRoute<int> with HasGameReference {
+class RateRoute extends ValueRoute<int>
+    with HasGameReference<ValueRouteExample> {
   RateRoute() : super(value: -1, transparent: true);
 
   @override
