@@ -2,7 +2,7 @@ import 'package:flame/src/extensions/double.dart';
 import 'package:test/test.dart';
 
 void main() {
-  group('toFinite', () {
+  group('DoubleExtension', () {
     test('Properly converts infinite values to maxFinite', () {
       const infinity = double.infinity;
       expect(infinity.toFinite(), double.maxFinite);
