@@ -24,7 +24,7 @@ void main() {
     });
 
     testRandom('centerAndHalfExtents constructor', (Random r) {
-      // This constructor is usefull in circles (see lib/src/experimental/geometry/shapes/circle.dart)
+      // This constructor is useful in circles (see lib/src/experimental/geometry/shapes/circle.dart)
       final center = Vector2(r.nextDouble(), r.nextDouble());
       final halfExtends = Vector2(r.nextDouble(), r.nextDouble());
 
