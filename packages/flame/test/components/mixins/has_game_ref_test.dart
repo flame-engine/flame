@@ -36,7 +36,7 @@ void main() {
       final component = _BarComponent();
       await game.ensureAdd(component);
 
-      component.mockGameRef(MockFlameGame());
+      component.game = MockFlameGame();
 
       expect(component.gameRef, isA<MockFlameGame>());
     });

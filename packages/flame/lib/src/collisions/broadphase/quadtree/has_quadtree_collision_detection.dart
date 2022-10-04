@@ -68,16 +68,16 @@ mixin HasQuadTreeCollisionDetection on FlameGame
 
   bool onComponentTypeCheck(PositionComponent one, PositionComponent another) {
     var checkParent = false;
-    if (one is CollisionCallbacks) {
-      if (!(one as CollisionCallbacks).onComponentTypeCheck(another)) {
+    if (one is GenericCollisionCallbacks) {
+      if (!(one as GenericCollisionCallbacks).onComponentTypeCheck(another)) {
         return false;
       }
     } else {
       checkParent = true;
     }
 
-    if (another is CollisionCallbacks) {
-      if (!(another as CollisionCallbacks).onComponentTypeCheck(one)) {
+    if (another is GenericCollisionCallbacks) {
+      if (!(another as GenericCollisionCallbacks).onComponentTypeCheck(one)) {
         return false;
       }
     } else {

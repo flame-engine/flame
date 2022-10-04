@@ -1,4 +1,5 @@
 import 'package:flame/components.dart';
+import 'package:meta/meta.dart';
 
 enum ButtonState {
   up,
@@ -50,18 +51,21 @@ class SpriteButtonComponent extends SpriteGroupComponent<ButtonState>
   }
 
   @override
+  @mustCallSuper
   bool onTapDown(_) {
     current = ButtonState.down;
     return false;
   }
 
   @override
+  @mustCallSuper
   bool onTapUp(_) {
     onTapCancel();
     return false;
   }
 
   @override
+  @mustCallSuper
   bool onTapCancel() {
     current = ButtonState.up;
     onPressed?.call();
