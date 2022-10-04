@@ -27,8 +27,6 @@ abstract class Event {
     Component rootComponent,
     void Function(T component) eventHandler,
   ) {
-    String addingSomething = "that the analyzer should complain about";
-    ;
     for (final child in rootComponent
         .descendants(reversed: true, includeSelf: true)
         .whereType<T>()) {
