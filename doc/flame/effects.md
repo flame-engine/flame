@@ -245,8 +245,19 @@ final effect = SizeEffect.to(Vector2(120, 120), EffectController(duration: 1));
 Changes the location of the target's anchor by the specified offset. This effect can also be created
 using `AnchorEffect.by()`.
 
+```{flutter-app}
+:sources: ../flame/examples
+:page: anchor_by_effect
+:show: widget code infobox
+:width: 180
+:height: 160
+```
+
 ```dart
-final effect = AnchorByEffect(Vector2(0.1, 0.1), EffectController(speed: 1));
+final effect = AnchorByEffect(
+  Vector2(0.1, 0.1), 
+  EffectController(speed: 1),
+);
 ```
 
 
@@ -255,8 +266,19 @@ final effect = AnchorByEffect(Vector2(0.1, 0.1), EffectController(speed: 1));
 Changes the location of the target's anchor. This effect can also be created using
 `AnchorEffect.to()`.
 
+```{flutter-app}
+:sources: ../flame/examples
+:page: anchor_to_effect
+:show: widget code infobox
+:width: 180
+:height: 160
+```
+
 ```dart
-final effect = AnchorToEffect(Anchor.center, EffectController(speed: 1));
+final effect = AnchorToEffect(
+  Anchor.center, 
+  EffectController(speed: 1),
+);
 ```
 
 
@@ -283,11 +305,35 @@ may have different types.
 The sequence effect can also be alternating (the sequence will first run forward, and then
 backward); and also repeat a certain predetermined number of times, or infinitely.
 
+```{flutter-app}
+:sources: ../flame/examples
+:page: sequence_effect
+:show: widget code infobox
+:width: 180
+:height: 160
+```
+
 ```dart
 final effect = SequenceEffect([
-  ScaleEffect.by(1.5, EffectController(duration: 0.2, alternate: true)),
-  MoveEffect.by(Vector2(30, -50), EffectController(duration: 0.5)),
-  OpacityEffect.to(0, EffectController(duration: 0.3)),
+  ScaleEffect.by(
+    Vector2.all(1.5), 
+    EffectController(
+      duration: 0.2, 
+      alternate: true,
+    ),
+  ),
+  MoveEffect.by(
+    Vector2(30, -50), 
+    EffectController(
+      duration: 0.5,
+    ),
+  ),
+  OpacityEffect.to(
+    0, 
+    EffectController(
+      duration: 0.3,
+    ),
+  ),
   RemoveEffect(),
 ]);
 ```
