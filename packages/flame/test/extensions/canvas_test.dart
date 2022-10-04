@@ -4,7 +4,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
 void main() {
-  group('Canvas extensions tests', () {
+  group('CanvasExtension', () {
     test('scaleVector calls scale', () {
       final canvas = MocktailCanvas();
       when(() => canvas.scale(1, 2)).thenReturn(null);

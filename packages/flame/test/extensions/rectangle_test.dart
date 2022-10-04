@@ -5,7 +5,7 @@ import 'package:flame_test/flame_test.dart';
 import 'package:test/test.dart';
 
 void main() {
-  group('Rectangle extensions tests', () {
+  group('RectangleExtension', () {
     testRandom('Default rectangle constructor', (Random r) {
       final rectangle = Rectangle(
         r.nextDouble(),

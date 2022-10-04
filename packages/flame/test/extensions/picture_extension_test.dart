@@ -5,7 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
 void main() {
-  group('Picture extensions tests', () {
+  group('PictureExtension', () {
     test('toImageSafe calls dispose on the Picture', () async {
       final picture = MockPicture();
 

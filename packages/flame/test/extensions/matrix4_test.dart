@@ -8,7 +8,7 @@ import 'package:test/test.dart';
 import '_help.dart';
 
 void main() {
-  group('Matrix4 test', () {
+  group('Matrix4Extension', () {
     final matrix4 = Matrix4.fromList([
       1, 2, 3, 4, // first row
       5, 6, 7, 8, // second row

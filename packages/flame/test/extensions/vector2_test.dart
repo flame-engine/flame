@@ -6,7 +6,7 @@ import 'package:flame_test/flame_test.dart';
 import 'package:test/test.dart';
 
 void main() {
-  group('Vector2 test', () {
+  group('Vector2Extension', () {
     testRandom('Converting a vector to an offset matches x/dx and y/dy',
         (Random r) {
       final vector = Vector2(r.nextDouble(), r.nextDouble());

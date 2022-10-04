@@ -8,7 +8,7 @@ import 'package:flutter_test/flutter_test.dart';
 final output = List.filled(8 * 8 * 4, 255);
 
 void main() {
-  group('image extensions tests', () {
+  group('ImageExtension', () {
     test('fromPixels', () async {
       final data = Uint8List(8 * 8 * 4);
       for (var i = 0; i < data.length; i += 4) {

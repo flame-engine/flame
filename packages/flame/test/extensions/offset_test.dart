@@ -5,7 +5,7 @@ import 'package:flame_test/flame_test.dart';
 import 'package:test/test.dart';
 
 void main() {
-  group('Offset extensions tests', () {
+  group('OffsetExtension', () {
     testRandom('toVector2 has x to offset.dx and y to offset.dy', (Random r) {
       final offset = Offset(r.nextDouble(), r.nextDouble());
       final vector2 = offset.toVector2();

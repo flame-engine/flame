@@ -5,7 +5,7 @@ import 'package:flame_test/flame_test.dart';
 import 'package:test/test.dart';
 
 void main() {
-  group('Size extensions tests', () {
+  group('SizeExtension', () {
     testRandom('toVector2 has x to size.dx and y to size.dy', (Random r) {
       final size = Size(r.nextDouble(), r.nextDouble());
       final vector2 = size.toVector2();

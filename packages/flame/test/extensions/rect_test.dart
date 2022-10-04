@@ -8,7 +8,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
 void main() {
-  group('Rect test', () {
+  group('RectExtension', () {
     test('toOffset dx is width and dy is height', () {
       const rect = Rect.fromLTWH(0, 0, 1, 2);
       final offset = rect.toOffset();

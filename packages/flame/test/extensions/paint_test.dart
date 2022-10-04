@@ -6,7 +6,7 @@ import 'package:flame_test/flame_test.dart';
 import 'package:test/test.dart';
 
 void main() {
-  group('Paint extensions tests', () {
+  group('PaintExtension', () {
     testRandom('calling darken changes the color of the paint', (Random r) {
       final baseColor = ColorExtension.random(rng: r);
       final paint = Paint()..color = baseColor;
