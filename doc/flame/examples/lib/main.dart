@@ -1,5 +1,6 @@
 import 'dart:html'; // ignore: avoid_web_libraries_in_flutter
 
+import 'package:doc_flame_examples/collision_detection.dart';
 import 'package:doc_flame_examples/decorator_blur.dart';
 import 'package:doc_flame_examples/decorator_grayscale.dart';
 import 'package:doc_flame_examples/decorator_rotate3d.dart';
@@ -31,6 +32,7 @@ void main() {
     'value_route': ValueRouteExample.new,
     'scale_by_effect': ScaleByEffectGame.new,
     'scale_to_effect': ScaleToEffectGame.new,
+    'collision_detection': CollisionDetectionGame.new,
   };
   final game = routes[page]?.call();
   if (game != null) {
