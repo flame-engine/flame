@@ -11,6 +11,72 @@ void main() {
       expect(ColorExtension.fromRGBHexString('b1f'), const Color(0xFFBB11FF));
     });
 
+    test('Parse RGB fails if format is not correct', () {
+      var colorHex = ''.padRight(1);
+      expect(
+        () => ColorExtension.fromRGBHexString(colorHex),
+        throwsA((Object e) => true),
+      );
+      colorHex = '#'.padRight(1);
+      expect(
+        () => ColorExtension.fromRGBHexString(colorHex),
+        throwsA((Object e) => true),
+      );
+      colorHex = ''.padRight(2);
+      expect(
+        () => ColorExtension.fromRGBHexString(colorHex),
+        throwsA((Object e) => true),
+      );
+      colorHex = '#'.padRight(2);
+      expect(
+        () => ColorExtension.fromRGBHexString(colorHex),
+        throwsA((Object e) => true),
+      );
+      colorHex = ''.padRight(7);
+      expect(
+        () => ColorExtension.fromRGBHexString(colorHex),
+        throwsA((Object e) => true),
+      );
+      colorHex = '#'.padRight(7);
+      expect(
+        () => ColorExtension.fromRGBHexString(colorHex),
+        throwsA((Object e) => true),
+      );
+    });
+
+    test('Parse ARGB fails if format is not correct', () {
+      var colorHex = ''.padRight(1);
+      expect(
+        () => ColorExtension.fromARGBHexString(colorHex),
+        throwsA((Object e) => true),
+      );
+      colorHex = '#'.padRight(1);
+      expect(
+        () => ColorExtension.fromARGBHexString(colorHex),
+        throwsA((Object e) => true),
+      );
+      colorHex = ''.padRight(2);
+      expect(
+        () => ColorExtension.fromARGBHexString(colorHex),
+        throwsA((Object e) => true),
+      );
+      colorHex = '#'.padRight(2);
+      expect(
+        () => ColorExtension.fromARGBHexString(colorHex),
+        throwsA((Object e) => true),
+      );
+      colorHex = ''.padRight(8);
+      expect(
+        () => ColorExtension.fromARGBHexString(colorHex),
+        throwsA((Object e) => true),
+      );
+      colorHex = '#'.padRight(8);
+      expect(
+        () => ColorExtension.fromARGBHexString(colorHex),
+        throwsA((Object e) => true),
+      );
+    });
+
     test('parse long RGB', () {
       expect(
         ColorExtension.fromRGBHexString('#121314'),
