@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:flame/extensions.dart';
 import 'package:flame/src/events/messages/position_event.dart';
 import 'package:flame/src/events/messages/tap_down_event.dart';
