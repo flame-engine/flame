@@ -173,8 +173,19 @@ final effect = RotateEffect.to(tau/4, EffectController(duration: 2));
 This effect will change the target's scale by the specified amount. For example, this will cause
 the component to grow 50% larger:
 
+ ```{flutter-app}
+ :sources: ../flame/examples
+ :page: scale_by_effect
+ :show: widget code infobox
+ :width: 180
+ :height: 160
+ ```
+
 ```dart
-final effect = ScaleEffect.by(Vector2.all(1.5), EffectController(duration: 0.3));
+final effect = ScaleEffect.by(
+  Vector2.all(1.5),
+  EffectController(duration: 0.3),
+);
 ```
 
 
@@ -182,8 +193,19 @@ final effect = ScaleEffect.by(Vector2.all(1.5), EffectController(duration: 0.3))
 
 This effect works similar to `ScaleEffect.by`, but sets the absolute value of the target's scale.
 
+ ```{flutter-app}
+ :sources: ../flame/examples
+ :page: scale_to_effect
+ :show: widget code infobox
+ :width: 180
+ :height: 160
+ ```
+
 ```dart
-final effect = ScaleEffect.to(Vector2.zero(), EffectController(duration: 0.5));
+final effect = ScaleEffect.to(
+  Vector2.all(0.5),
+  EffectController(duration: 0.5),
+);
 ```
 
 

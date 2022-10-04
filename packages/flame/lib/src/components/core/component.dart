@@ -6,6 +6,7 @@ import 'package:flame/src/cache/value_cache.dart';
 import 'package:flame/src/components/core/component_set.dart';
 import 'package:flame/src/components/core/position_type.dart';
 import 'package:flame/src/components/mixins/coordinate_transform.dart';
+import 'package:flame/src/components/mixins/has_game_ref.dart';
 import 'package:flame/src/game/flame_game.dart';
 import 'package:flame/src/game/game.dart';
 import 'package:flame/src/gestures/events.dart';
@@ -375,8 +376,8 @@ class Component {
   ///   - it is invoked when the size of the game canvas is already known.
   ///
   /// If your loading logic requires knowing the size of the game canvas, then
-  /// add `HasGameRef` mixin and then query `gameRef.size` or
-  /// `gameRef.canvasSize`.
+  /// add [HasGameRef] mixin and then query `game.size` or
+  /// `game.canvasSize`.
   ///
   /// The default implementation returns `null`, indicating that there is no
   /// need to await anything. When overriding this method, you have a choice
