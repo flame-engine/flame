@@ -99,6 +99,7 @@ class StandardCollisionDetection<B extends Broadphase<ShapeHitbox>>
     required int numberOfRays,
     double startAngle = 0,
     double sweepAngle = tau,
+    double? maxDistance,
     List<Ray2>? rays,
     List<ShapeHitbox>? ignoreHitboxes,
     List<RaycastResult<ShapeHitbox>>? out,
@@ -128,7 +129,12 @@ class StandardCollisionDetection<B extends Broadphase<ShapeHitbox>>
         result = RaycastResult();
         out?.add(result);
       }
-      result = raycast(ray, ignoreHitboxes: ignoreHitboxes, out: result);
+      result = raycast(
+        ray,
+        maxDistance: maxDistance,
+        ignoreHitboxes: ignoreHitboxes,
+        out: result,
+      );
 
       if (result != null) {
         results.add(result);

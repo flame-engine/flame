@@ -71,6 +71,9 @@ abstract class CollisionDetection<T extends Hitbox<T>,
   /// Returns the first hitbox that the given [ray] hits and the associated
   /// intersection information; or null if the ray doesn't hit any hitbox.
   ///
+  /// [maxDistance] can be provided to limit raycast to scan for hits within
+  /// that limit.
+  ///
   /// [ignoreHitboxes] can be used if you want to ignore certain hitboxes, i.e.
   /// the rays will go straight through them. For example the hitbox of the
   /// component that you might be casting the rays from.
@@ -89,6 +92,9 @@ abstract class CollisionDetection<T extends Hitbox<T>,
   /// the rays hit.
   /// [numberOfRays] is the number of rays that should be casted.
   ///
+  /// [maxDistance] can be provided to limit raycast to scan for hits within
+  /// that limit.
+  ///
   /// If the [rays] argument is provided its [Ray2]s are populated with the rays
   /// needed to perform the operation.
   /// If there are less objects in [rays] than the operation requires, the
@@ -106,6 +112,7 @@ abstract class CollisionDetection<T extends Hitbox<T>,
     required int numberOfRays,
     double startAngle = 0,
     double sweepAngle = tau,
+    double? maxDistance,
     List<Ray2>? rays,
     List<T>? ignoreHitboxes,
     List<RaycastResult<T>>? out,
