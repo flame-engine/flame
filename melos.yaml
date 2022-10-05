@@ -51,6 +51,22 @@ scripts:
     run: melos exec flutter pub run dartdoc
     description: Run dartdoc checks for all packages.
 
+  doc-build:
+    run: cd "$MELOS_ROOT_PATH/doc/_sphinx" && make html
+    description: Create the sphinx html docs.
+
+  doc-build-live:
+    run: cd "$MELOS_ROOT_PATH/doc/_sphinx" && make livehtml
+    description: Recompiles the docs enerytime there is a change in them and opens your browser.
+
+  doc-clean:
+    run: cd "$MELOS_ROOT_PATH/doc/_sphinx" && make clean
+    description: Removes all Sphinx's cached generated files.
+
+  doc-linkcheck:
+    run: cd "$MELOS_ROOT_PATH/doc/_sphinx" && make linkcheck
+    description: Checks whether there are any broken links in the docs.
+
   test:select:
     run: melos exec -- flutter test
     select-package:
