@@ -10,7 +10,7 @@ class PlainTextNode extends TextNode {
   final String text;
 
   @override
-  void fillStyles(DocumentStyle stylesheet, TextStyle parentTextStyle) {
+  void fillStyles(DocumentStyle stylesheet, FlameTextStyle parentTextStyle) {
     textStyle = parentTextStyle;
   }
 

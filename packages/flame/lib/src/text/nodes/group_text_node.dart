@@ -10,7 +10,7 @@ class GroupTextNode extends TextNode {
   final List<TextNode> children;
 
   @override
-  void fillStyles(DocumentStyle stylesheet, TextStyle parentTextStyle) {
+  void fillStyles(DocumentStyle stylesheet, FlameTextStyle parentTextStyle) {
     textStyle = parentTextStyle;
     for (final node in children) {
       node.fillStyles(stylesheet, textStyle);

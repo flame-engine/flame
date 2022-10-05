@@ -15,7 +15,7 @@ abstract class TextBlockNode extends BlockNode {
 
   @mustCallSuper
   @override
-  void fillStyles(DocumentStyle stylesheet, TextStyle parentTextStyle) {
+  void fillStyles(DocumentStyle stylesheet, FlameTextStyle parentTextStyle) {
     child.fillStyles(stylesheet, parentTextStyle);
   }
 

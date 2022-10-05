@@ -17,28 +17,28 @@ class HeaderNode extends TextBlockNode {
   final int level;
 
   static BlockStyle defaultStyleH1 = BlockStyle(
-    text: TextStyle(fontScale: 2.0, fontWeight: FontWeight.bold),
+    text: FlameTextStyle(fontScale: 2.0, fontWeight: FontWeight.bold),
     margin: const EdgeInsets.fromLTRB(0, 24, 0, 12),
   );
   static BlockStyle defaultStyleH2 = BlockStyle(
-    text: TextStyle(fontScale: 1.5, fontWeight: FontWeight.bold),
+    text: FlameTextStyle(fontScale: 1.5, fontWeight: FontWeight.bold),
     margin: const EdgeInsets.fromLTRB(0, 24, 0, 8),
   );
   static BlockStyle defaultStyleH3 = BlockStyle(
-    text: TextStyle(fontScale: 1.25, fontWeight: FontWeight.bold),
+    text: FlameTextStyle(fontScale: 1.25, fontWeight: FontWeight.bold),
   );
   static BlockStyle defaultStyleH4 = BlockStyle(
-    text: TextStyle(fontScale: 1.0, fontWeight: FontWeight.bold),
+    text: FlameTextStyle(fontScale: 1.0, fontWeight: FontWeight.bold),
   );
   static BlockStyle defaultStyleH5 = BlockStyle(
-    text: TextStyle(fontScale: 0.875, fontWeight: FontWeight.bold),
+    text: FlameTextStyle(fontScale: 0.875, fontWeight: FontWeight.bold),
   );
   static BlockStyle defaultStyleH6 = BlockStyle(
-    text: TextStyle(fontScale: 0.85, fontWeight: FontWeight.bold),
+    text: FlameTextStyle(fontScale: 0.85, fontWeight: FontWeight.bold),
   );
 
   @override
-  void fillStyles(DocumentStyle stylesheet, TextStyle parentTextStyle) {
+  void fillStyles(DocumentStyle stylesheet, FlameTextStyle parentTextStyle) {
     style = level == 1
         ? stylesheet.header1
         : level == 2

@@ -16,5 +16,5 @@ abstract class BlockNode {
 
   BlockElement format(double availableWidth);
 
-  void fillStyles(DocumentStyle stylesheet, TextStyle parentTextStyle);
+  void fillStyles(DocumentStyle stylesheet, FlameTextStyle parentTextStyle);
 }

@@ -24,9 +24,9 @@ class DocumentStyle extends Style {
     this.height,
     this.padding = EdgeInsets.zero,
     this.background,
-    TextStyle? text,
-    TextStyle? boldText,
-    TextStyle? italicText,
+    FlameTextStyle? text,
+    FlameTextStyle? boldText,
+    FlameTextStyle? italicText,
     BlockStyle? paragraph,
     BlockStyle? header1,
     BlockStyle? header2,
@@ -45,9 +45,9 @@ class DocumentStyle extends Style {
         _header5 = Style.merge(header5, HeaderNode.defaultStyleH5),
         _header6 = Style.merge(header6, HeaderNode.defaultStyleH6);
 
-  final TextStyle? _text;
-  final TextStyle? _boldText;
-  final TextStyle? _italicText;
+  final FlameTextStyle? _text;
+  final FlameTextStyle? _boldText;
+  final FlameTextStyle? _italicText;
   final BlockStyle? _paragraph;
   final BlockStyle? _header1;
   final BlockStyle? _header2;
@@ -96,9 +96,9 @@ class DocumentStyle extends Style {
   /// document page(s).
   final BackgroundStyle? background;
 
-  TextStyle get text => _text!;
-  TextStyle get boldText => _boldText!;
-  TextStyle get italicText => _italicText!;
+  FlameTextStyle get text => _text!;
+  FlameTextStyle get boldText => _boldText!;
+  FlameTextStyle get italicText => _italicText!;
 
   /// Style for [ParagraphNode]s.
   BlockStyle get paragraph => _paragraph!;
@@ -111,7 +111,7 @@ class DocumentStyle extends Style {
   BlockStyle get header5 => _header5!;
   BlockStyle get header6 => _header6!;
 
-  static TextStyle defaultTextStyle = TextStyle(fontSize: 16.0);
+  static FlameTextStyle defaultTextStyle = FlameTextStyle(fontSize: 16.0);
 
   @override
   DocumentStyle copyWith(DocumentStyle other) {

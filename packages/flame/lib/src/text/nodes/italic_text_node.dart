@@ -17,10 +17,10 @@ class ItalicTextNode extends TextNode {
 
   final TextNode child;
 
-  static final defaultStyle = TextStyle(fontStyle: FontStyle.italic);
+  static final defaultStyle = FlameTextStyle(fontStyle: FontStyle.italic);
 
   @override
-  void fillStyles(DocumentStyle stylesheet, TextStyle parentTextStyle) {
+  void fillStyles(DocumentStyle stylesheet, FlameTextStyle parentTextStyle) {
     textStyle = Style.merge(parentTextStyle, stylesheet.italicText)!;
     child.fillStyles(stylesheet, textStyle);
   }

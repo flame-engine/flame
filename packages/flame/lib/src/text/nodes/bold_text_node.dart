@@ -16,10 +16,10 @@ class BoldTextNode extends TextNode {
 
   final TextNode child;
 
-  static final defaultStyle = TextStyle(fontWeight: FontWeight.bold);
+  static final defaultStyle = FlameTextStyle(fontWeight: FontWeight.bold);
 
   @override
-  void fillStyles(DocumentStyle stylesheet, TextStyle parentTextStyle) {
+  void fillStyles(DocumentStyle stylesheet, FlameTextStyle parentTextStyle) {
     textStyle = Style.merge(parentTextStyle, stylesheet.boldText)!;
     child.fillStyles(stylesheet, textStyle);
   }

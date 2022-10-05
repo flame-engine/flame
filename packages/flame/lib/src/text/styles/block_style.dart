@@ -19,7 +19,7 @@ class BlockStyle extends Style {
   final EdgeInsets? _margin;
   final EdgeInsets? _padding;
   final BackgroundStyle? background;
-  final TextStyle? text;
+  final FlameTextStyle? text;
 
   EdgeInsets get margin => _margin ?? EdgeInsets.zero;
   EdgeInsets get padding => _padding ?? EdgeInsets.zero;
