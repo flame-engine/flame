@@ -54,7 +54,6 @@ function buildVersionsMenu(data) {
     // A timeout ensures that `click` can propagate to child <A/> elements.
     setTimeout(() => $(this).removeClass("active"), 200);
   });
-
 }
 
 // Start loading the versions list as soon as possible, don't wait for DOM

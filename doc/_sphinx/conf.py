@@ -66,7 +66,6 @@ pygments_style = 'monokai'
 html_static_path = ['images', 'scripts', 'theme']
 html_js_files = ['versions.js', 'menu-expand.js']
 
-
 # -- Custom setup ------------------------------------------------------------
 class TitleCollector(docutils.nodes.SparseNodeVisitor):
     def __init__(self, document):
@@ -84,7 +83,6 @@ class TitleCollector(docutils.nodes.SparseNodeVisitor):
 
     def depart_section(self, node):
         self.level -= 1
-
 
 
 def get_local_toc(document):
