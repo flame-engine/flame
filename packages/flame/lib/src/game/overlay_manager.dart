@@ -19,9 +19,6 @@ class OverlayManager {
     return UnmodifiableListView(_activeOverlays);
   }
 
-  @Deprecated('Use .activeOverlays instead. Will be removed in 1.4.0')
-  Set<String> get value => _activeOverlays.toSet();
-
   /// Returns if the given [overlayName] is active
   bool isActive(String overlayName) => _activeOverlays.contains(overlayName);
 
