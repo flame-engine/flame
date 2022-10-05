@@ -4,7 +4,7 @@ import 'package:flame/src/text/elements/element.dart';
 import 'package:flame/src/text/elements/group_element.dart';
 import 'package:flame/src/text/nodes/block_node.dart';
 import 'package:flame/src/text/styles/document_style.dart';
-import 'package:flame/src/text/styles/text_style.dart';
+import 'package:flame/src/text/styles/flame_text_style.dart';
 import 'package:meta/meta.dart';
 
 /// [ColumnNode] is a block node containing other block nodes arranged as a

@@ -1,7 +1,7 @@
 import 'package:flame/src/text/elements/block_element.dart';
 import 'package:flame/src/text/styles/block_style.dart';
 import 'package:flame/src/text/styles/document_style.dart';
-import 'package:flame/src/text/styles/text_style.dart';
+import 'package:flame/src/text/styles/flame_text_style.dart';
 
 /// [BlockNode] is a base class for all nodes with "block" placement rules; it
 /// roughly corresponds to `<div/>` in HTML.

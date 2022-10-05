@@ -6,7 +6,7 @@ import 'package:flame/src/text/styles/background_style.dart';
 import 'package:flame/src/text/styles/block_style.dart';
 import 'package:flame/src/text/styles/overflow.dart';
 import 'package:flame/src/text/styles/style.dart';
-import 'package:flame/src/text/styles/text_style.dart';
+import 'package:flame/src/text/styles/flame_text_style.dart';
 import 'package:flutter/painting.dart' show EdgeInsets;
 
 /// [DocumentStyle] is a user-facing description of how to render an entire

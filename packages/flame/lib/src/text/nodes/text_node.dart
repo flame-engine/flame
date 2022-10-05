@@ -1,6 +1,6 @@
 import 'package:flame/src/text/elements/text_element.dart';
 import 'package:flame/src/text/styles/document_style.dart';
-import 'package:flame/src/text/styles/text_style.dart';
+import 'package:flame/src/text/styles/flame_text_style.dart';
 
 abstract class TextNode {
   late FlameTextStyle textStyle;

@@ -2,7 +2,7 @@ import 'package:flame/src/text/elements/text_element.dart';
 import 'package:flame/src/text/formatters/text_formatter.dart';
 import 'package:flame/src/text/nodes/text_node.dart';
 import 'package:flame/src/text/styles/document_style.dart';
-import 'package:flame/src/text/styles/text_style.dart';
+import 'package:flame/src/text/styles/flame_text_style.dart';
 
 class PlainTextNode extends TextNode {
   PlainTextNode(this.text);
