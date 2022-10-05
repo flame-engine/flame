@@ -35,7 +35,7 @@ Put the pub package as your dependency by putting the following in your `pubspec
 
 ```yaml
 dependencies:
-  flame: <VERSION>
+  flame: --VERSION--
 ```
 
 The latest version can be found on [pub.dev](https://pub.dev/packages/flame/install).
