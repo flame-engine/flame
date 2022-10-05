@@ -347,7 +347,7 @@ works similarly but sends out multiple rays uniformly around the origin, or with
 centered at the origin.
 
 By default, `raycast` and `raycastAll` scan for the nearest hit irrespective of how far it lies from
-the ray origin. But in some use cases, it might be interesting in finding hits only within a certain
+the ray origin. But in some use cases, it might be interesting to find hits only within a certain
 range. For such cases, an optional `maxDistance` can be provided for `raycast` and `raycastAll`.
 
 To use the ray casting functionality you have to have the `HasCollisionDetection` mixin on your
