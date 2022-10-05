@@ -24,7 +24,7 @@ function convertVersionsToHtmlLinks(versionsList, currentVersion) {
     if (version === currentVersion) {
       classes += ' selected';
     }
-    out += `<a href="/${version}/" onclick="adjustAPI('${version}')">
+    out += `<a href="/${version}/">
       <button class="${classes}">
         <i class="fa fa-code-branch"></i> ${version}
       </button>
