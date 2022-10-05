@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/extensions.dart';
@@ -5,16 +7,21 @@ import 'package:flame/game.dart';
 import 'package:flame_isolate/flame_isolate.dart';
 import 'package:flutter/material.dart';
 
-class SimpleIsolateExample extends FlameGame with FlameIsolate, HasTappables {
+class SimpleIsolateExample extends FlameGame with HasTappables {
   static const String description = '''
-    This example showcases a simple FlameIsolate example.
+    This example showcases a simple FlameIsolate example, making easy to 
+    continually run heavy load possible without stutter.
+    
+    Tap the brown square to swap between running heavy load in in an isolate or
+    synchronous.
+    
+    The selected backpressure strategy used for this example is
+    DiscardNewBackPressureStrategy. This strategy discards all new jobs added to
+    the queue if there is already a job in the queue.
   ''';
 
   @override
-  BackpressureStrategy get backpressureStrategy => NoBackPressureStrategy();
-
-  @override
-  Future onMount() {
+  void onMount() {
     camera.viewport = FixedResolutionViewport(Vector2(400, 600));
 
     const rect = Rect.fromLTRB(80, 230, 320, 470);
@@ -73,14 +80,14 @@ class CalculatePrimeNumber extends PositionComponent
 
   @override
   Future<void>? onLoad() {
-    width = 150;
+    width = 200;
     height = 70;
     return super.onLoad();
   }
 
   @override
   Future onMount() {
-    _interval = Timer(0.05, repeat: true, onTick: _checkNextAgainstPrime)
+    _interval = Timer(0.4, repeat: true, onTick: _checkNextAgainstPrime)
       ..start();
     return super.onMount();
   }
@@ -96,7 +103,15 @@ class CalculatePrimeNumber extends PositionComponent
     super.onRemove();
   }
 
-  MapEntry<int, bool> _primeData = MapEntry(500000, _isPrime(500000));
+  static const _minStartValue = 500000000;
+  static const _maxStartValue = 600000000;
+  static final _primeStartNumber =
+      Random().nextInt(_maxStartValue - _minStartValue) + _minStartValue;
+
+  MapEntry<int, bool> _primeData = MapEntry(
+    _primeStartNumber,
+    _isPrime(_primeStartNumber),
+  );
 
   Future _checkNextAgainstPrime() async {
     final nextInt = _primeData.key + 1;
@@ -155,6 +170,7 @@ class CalculatePrimeNumber extends PositionComponent
 }
 
 bool _isPrime(int value) {
+  // Simulating heavy load
   if (value == 1) {
     return false;
   }
