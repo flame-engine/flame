@@ -1,12 +1,11 @@
 import 'package:flame/components.dart';
+import 'package:flame/effects.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
-import 'package:flame/input.dart';
-import 'package:flame/palette.dart';
 import 'package:flame_isolate/flame_isolate.dart';
-import 'package:flutter/painting.dart';
+import 'package:flutter/material.dart';
 
-class SimpleIsolateExample extends FlameGame with FlameIsolate, TapDetector {
+class SimpleIsolateExample extends FlameGame with FlameIsolate, HasTappables {
   static const String description = '''
     This example showcases a simple FlameIsolate example.
   ''';
@@ -14,51 +13,155 @@ class SimpleIsolateExample extends FlameGame with FlameIsolate, TapDetector {
   @override
   BackpressureStrategy get backpressureStrategy => NoBackPressureStrategy();
 
-  Rect get button => const Rect.fromLTWH(40, 40, 200, 100);
-
-  static Paint black = BasicPalette.black.paint();
-  static Paint gray = const PaletteEntry(Color(0xFFCCCCCC)).paint();
-  static TextPaint text = TextPaint(
-    style: TextStyle(color: BasicPalette.white.color),
-  );
-
   @override
-  Future<void>? onLoad() {}
+  Future onMount() {
+    camera.viewport = FixedResolutionViewport(Vector2(400, 600));
 
-  void fireOne() {}
+    const rect = Rect.fromLTRB(80, 230, 320, 470);
 
-  void fireTwo() {}
-
-  @override
-  void render(Canvas canvas) {
-    super.render(canvas);
-    canvas.drawRect(size.toRect(), black);
-
-    text.render(
-      canvas,
-      '(click anywhere for 1)',
-      Vector2(size.x / 2, 200),
-      anchor: Anchor.topCenter,
+    add(
+      CalculatePrimeNumber(
+        position: rect.center.toVector2(),
+        anchor: Anchor.center,
+      ),
     );
 
-    canvas.drawRect(button, gray);
-
-    text.render(
-      canvas,
-      'click here for 2',
-      Vector2(size.x / 2, size.y - 200),
-      anchor: Anchor.bottomCenter,
-    );
-  }
-
-  @override
-  void onTapDown(TapDownInfo details) {
-    if (button.containsPoint(details.eventPosition.game)) {
-      fireTwo();
-    } else {
-      fireOne();
+    final circle = Path()..addOval(rect);
+    for (var i = 0; i < 20; i++) {
+      add(
+        RectangleComponent.square(size: 10)
+          ..paint = (Paint()..color = Colors.tealAccent)
+          ..add(
+            MoveAlongPathEffect(
+              circle,
+              EffectController(
+                duration: 6,
+                startDelay: i * 0.3,
+                infinite: true,
+              ),
+              oriented: true,
+            ),
+          ),
+      );
     }
+    return super.onMount();
   }
 }
 
+enum ComputeType {
+  isolate('Running in isolate'),
+  synchronous('Running synchronously');
 
+  final String description;
+
+  const ComputeType(this.description);
+}
+
+class CalculatePrimeNumber extends PositionComponent
+    with Tappable, FlameIsolate {
+  CalculatePrimeNumber({
+    required super.position,
+    required super.anchor,
+  });
+
+  ComputeType computeType = ComputeType.isolate;
+  late Timer _interval;
+
+  @override
+  BackpressureStrategy get backpressureStrategy =>
+      DiscardNewBackPressureStrategy();
+
+  @override
+  Future<void>? onLoad() {
+    width = 150;
+    height = 70;
+    return super.onLoad();
+  }
+
+  @override
+  Future onMount() {
+    _interval = Timer(0.05, repeat: true, onTick: _checkNextAgainstPrime)
+      ..start();
+    return super.onMount();
+  }
+
+  @override
+  void update(double t) {
+    _interval.update(t);
+  }
+
+  @override
+  void onRemove() {
+    _interval.stop();
+    super.onRemove();
+  }
+
+  MapEntry<int, bool> _primeData = MapEntry(500000, _isPrime(500000));
+
+  Future _checkNextAgainstPrime() async {
+    final nextInt = _primeData.key + 1;
+
+    try {
+      final bool isPrime;
+
+      switch (computeType) {
+        case ComputeType.isolate:
+          isPrime = await isolate(_isPrime, nextInt);
+          break;
+        case ComputeType.synchronous:
+          isPrime = _isPrime(nextInt);
+          break;
+      }
+
+      _primeData = MapEntry(nextInt, isPrime);
+    } on BackpressureDropException catch (_) {
+      debugPrint('Backpressure kicked in');
+    }
+  }
+
+  @override
+  bool onTapDown(_) {
+    computeType =
+        ComputeType.values[(computeType.index + 1) % ComputeType.values.length];
+    return false;
+  }
+
+  final _paint = Paint()..color = const Color(0xa98d560d);
+
+  final _textPaint = TextPaint(
+    style: const TextStyle(
+      fontSize: 10,
+    ),
+  );
+
+  @override
+  void render(Canvas canvas) {
+    final rect = Rect.fromLTWH(0, 0, width, height);
+    canvas.drawRect(rect, _paint);
+
+    _textPaint.render(
+      canvas,
+      computeType.description,
+      rect.topLeft.toVector2(),
+    );
+
+    _textPaint.render(
+      canvas,
+      '${_primeData.key} is${_primeData.value ? '' : ' not'} a prime number',
+      rect.center.toVector2(),
+      anchor: Anchor.center,
+    );
+  }
+}
+
+bool _isPrime(int value) {
+  if (value == 1) {
+    return false;
+  }
+  for (var i = 2; i < value; ++i) {
+    if (value % i == 0) {
+      return false;
+    }
+  }
+  return true;
+}
