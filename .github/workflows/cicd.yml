@@ -27,9 +27,12 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
-          cache: true
-      - uses: bluefireteam/melos-action@main
-      - run: melos run analyze
+      - uses: bluefireteam/melos-action@v2
+      - name: "Analyze"
+        uses: invertase/github-action-dart-analyzer@v1
+        with:
+          fatal-infos: true
+          fatal-warnings: true
 
   markdown-lint:
     runs-on: ubuntu-latest
