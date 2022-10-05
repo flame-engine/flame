@@ -1,6 +1,6 @@
 import 'package:flame/src/text/styles/background_style.dart';
-import 'package:flame/src/text/styles/style.dart';
 import 'package:flame/src/text/styles/flame_text_style.dart';
+import 'package:flame/src/text/styles/style.dart';
 import 'package:flutter/painting.dart' hide TextStyle;
 import 'package:meta/meta.dart';
 

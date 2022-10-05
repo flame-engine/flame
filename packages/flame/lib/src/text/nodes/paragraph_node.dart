@@ -4,8 +4,8 @@ import 'package:flame/src/text/nodes/text_block_node.dart';
 import 'package:flame/src/text/nodes/text_node.dart';
 import 'package:flame/src/text/styles/block_style.dart';
 import 'package:flame/src/text/styles/document_style.dart';
-import 'package:flame/src/text/styles/style.dart';
 import 'package:flame/src/text/styles/flame_text_style.dart';
+import 'package:flame/src/text/styles/style.dart';
 import 'package:flutter/rendering.dart' show EdgeInsets;
 
 class ParagraphNode extends TextBlockNode {

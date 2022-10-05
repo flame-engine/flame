@@ -4,8 +4,8 @@ import 'package:flame/src/text/nodes/group_text_node.dart';
 import 'package:flame/src/text/nodes/plain_text_node.dart';
 import 'package:flame/src/text/nodes/text_node.dart';
 import 'package:flame/src/text/styles/document_style.dart';
-import 'package:flame/src/text/styles/style.dart';
 import 'package:flame/src/text/styles/flame_text_style.dart';
+import 'package:flame/src/text/styles/style.dart';
 
 class ItalicTextNode extends TextNode {
   ItalicTextNode(this.child);
