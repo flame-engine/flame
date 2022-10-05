@@ -22,7 +22,7 @@ section will focus on the Markdown extensions that are enabled in our build syst
 The table of contents for the site must be created manually. This is done using special `{toctree}`
 blocks, one per each subdirectory:
 
-`````{markdown}
+`````markdown
 ```{toctree}
 :hidden:
 
@@ -40,7 +40,7 @@ the toctrees -- otherwise you will see a warning during the build that the docum
 Admonitions are emphasized blocks of text with a distinct appearance. They are created using the
 triple-backticks syntax:
 
-`````{markdown}
+`````markdown
 ```{note}
 Please note this very important caveat.
 ```
@@ -77,7 +77,7 @@ Also check out this cool thingy.
 The special `{deprecated}` block can be used to mark some part of documentation or syntax as being
 deprecated. This block requires specifying the version when the deprecation has occurred
 
-`````{markdown}
+`````markdown
 ```{deprecated} v1.3.0
 
 Please use this **other** thing instead.
@@ -99,7 +99,7 @@ Flutter widgets and embedding them alongside with the overall documentation cont
 
 In Markdown, the code for inserting an embed looks like this:
 
-`````{markdown}
+`````markdown
 ```{flutter-app}
 :sources: ../flame/examples
 :page: tap_events
@@ -191,7 +191,7 @@ Then you can open the site at `http://localhost:8000/`.
 If you ever run the **melos doc-clean** or the **make clean** command, the server will need to be
 restarted, because the clean command deletes the entire `html` directory.
 
-```note
+```{note}
 Avoid having spaces in the paths to the docs since that will keep you from
 building the project due to
 [this bug](https://github.com/ipython/ipython/pull/13765).
