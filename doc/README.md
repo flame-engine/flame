@@ -54,16 +54,16 @@ Simple examples for all features can be found in the
 [examples folder](https://github.com/flame-engine/flame/tree/main/examples).
 
 You can also check out the
-[awesome flame repository](https://github.com/flame-engine/awesome-flame#user-content-articles--tutorials).
-It contains quite a lot of good tutorials and articles written by the community to get you started
+[awesome flame repository](https://github.com/flame-engine/awesome-flame#user-content-articles--tutorials),
+it contains quite a lot of good tutorials and articles written by the community to get you started
 with Flame.
 
 
 ## Outside of the scope of the engine
 
-Games sometimes require complex feature sets depending on what the game is all about. Also, some of
-those feature sets are outside of the scope of the Flame Engine ecosystem. In this section you can find
-them. You will also find some recommendations of packages/services that can be used:
+Games sometimes require complex feature sets depending on what the game is all about. Some of
+these feature sets are outside of the scope of the Flame Engine ecosystem, in this section you can find
+them, and also some recommendations of packages/services that can be used:
 
 
 ### Multiplayer (netcode)
