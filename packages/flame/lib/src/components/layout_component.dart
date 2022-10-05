@@ -4,6 +4,9 @@ import 'package:flutter/widgets.dart';
 enum Direction { horizontal, vertical }
 
 /// Super class for [RowComponent] and ComponentColumn
+/// A relayout is performed when
+///  - a change in this component's children takes place
+///  - the [gap] parameter is changed
 abstract class LayoutComponent extends PositionComponent with HasGameRef {
   LayoutComponent(this.direction, this.mainAxisAlignment, this._gap);
   final Direction direction;

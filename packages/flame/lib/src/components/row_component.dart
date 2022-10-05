@@ -2,10 +2,6 @@ import 'package:flame/components.dart';
 import 'package:flutter/widgets.dart';
 
 /// Allows laying out children in a row by defining a [MainAxisAlignment] type.
-/// A relayout is performed when
-///  - a new child is added
-///  - an existing child changes its size
-///  - the [gap] parameter is changed
 class RowComponent extends LayoutComponent {
   RowComponent({
     MainAxisAlignment mainAxisAlignment = MainAxisAlignment.start,
