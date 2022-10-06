@@ -30,6 +30,7 @@ export 'src/experimental/bounded_position_behavior.dart'
     show BoundedPositionBehavior;
 export 'src/experimental/camera_component.dart' show CameraComponent;
 export 'src/experimental/circular_viewport.dart' show CircularViewport;
+export 'src/experimental/column_component.dart';
 export 'src/experimental/fixed_aspect_ratio_viewport.dart'
     show FixedAspectRatioViewport;
 export 'src/experimental/fixed_integer_resolution_viewport.dart'
@@ -43,7 +44,9 @@ export 'src/experimental/geometry/shapes/rounded_rectangle.dart'
     show RoundedRectangle;
 export 'src/experimental/geometry/shapes/shape.dart' show Shape;
 export 'src/experimental/has_game_reference.dart' show HasGameReference;
+export 'src/experimental/layout_component.dart';
 export 'src/experimental/max_viewport.dart' show MaxViewport;
+export 'src/experimental/row_component.dart';
 export 'src/experimental/viewfinder.dart' show Viewfinder;
 export 'src/experimental/viewport.dart' show Viewport;
 export 'src/experimental/world.dart' show World;
