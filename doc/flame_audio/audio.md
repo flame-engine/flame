@@ -7,7 +7,7 @@ list in your `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  flame_audio: <VERSION>
+  flame_audio: VERSION
 ```
 
 The latest version can be found on [pub.dev](https://pub.dev/packages/flame_audio/install).

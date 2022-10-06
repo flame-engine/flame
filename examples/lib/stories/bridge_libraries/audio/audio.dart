@@ -7,7 +7,7 @@ void addAudioStories(Dashbook dashbook) {
   dashbook.storiesOf('Audio').add(
         'Basic Audio',
         (_) => GameWidget(game: BasicAudioExample()),
-        codeLink: baseLink('audio/basic_audio_example.dart'),
+        codeLink: baseLink('bridge_libraries/audio/basic_audio_example.dart'),
         info: BasicAudioExample.description,
       );
 }
