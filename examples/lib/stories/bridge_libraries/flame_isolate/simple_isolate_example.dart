@@ -9,19 +9,19 @@ import 'package:flutter/material.dart';
 
 class SimpleIsolateExample extends FlameGame with HasTappables {
   static const String description = '''
-    This example showcases a simple FlameIsolate example, making easy to 
-    continually run heavy load possible without stutter.
+    This example showcases a simple FlameIsolate example, making it easy to 
+    continually run heavy load without stutter.
     
     Tap the brown square to swap between running heavy load in in an isolate or
     synchronous.
     
     The selected backpressure strategy used for this example is
-    DiscardNewBackPressureStrategy. This strategy discards all new jobs added to
-    the queue if there is already a job in the queue.
+    `DiscardNewBackPressureStrategy`. This strategy discards all new jobs added
+    to the queue if there is already a job in the queue.
   ''';
 
   @override
-  void onMount() {
+  Future onLoad() async {
     camera.viewport = FixedResolutionViewport(Vector2(400, 600));
 
     const rect = Rect.fromLTRB(80, 230, 320, 470);
