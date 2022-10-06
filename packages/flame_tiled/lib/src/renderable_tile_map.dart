@@ -11,6 +11,7 @@ import 'package:flame_tiled/src/renderable_layers/object_layer.dart';
 import 'package:flame_tiled/src/renderable_layers/renderable_layer.dart';
 import 'package:flame_tiled/src/renderable_layers/tile_layer.dart';
 import 'package:flame_tiled/src/tile_animation.dart';
+import 'package:flame_tiled/src/tile_atlas.dart';
 import 'package:flame_tiled/src/tile_stack.dart';
 import 'package:flutter/painting.dart';
 import 'package:tiled/tiled.dart' as tiled;
@@ -224,6 +225,10 @@ class RenderableTiledMap {
     // the update cycle for these in one place.
     final animationFrames = <tiled.Tile, TileFrames>{};
 
+    // While this _should_ not be needed - it is possible have tilesets out of
+    // order and Tiled won't complain, but we'll fail.
+    map.tilesets.sort((l, r) => (l.firstGid ?? 0) - (r.firstGid ?? 0));
+
     final renderableLayers = await _renderableLayers(
       map.layers,
       null,
@@ -231,6 +236,7 @@ class RenderableTiledMap {
       destTileSize,
       camera,
       animationFrames,
+      atlas: await TiledAtlas.fromTiledMap(map),
     );
 
     return RenderableTiledMap(
@@ -248,60 +254,75 @@ class RenderableTiledMap {
     tiled.TiledMap map,
     Vector2 destTileSize,
     Camera? camera,
-    Map<tiled.Tile, TileFrames> animationFrames,
-  ) async {
-    return Future.wait(
-      layers.where((layer) => layer.visible).toList().map((layer) async {
-        switch (layer.runtimeType) {
-          case tiled.TileLayer:
-            return TileLayer.load(
+    Map<tiled.Tile, TileFrames> animationFrames, {
+    required TiledAtlas atlas,
+  }) async {
+    final renderLayers = <RenderableLayer<tiled.Layer>>[];
+    for (final layer in layers.where((layer) => layer.visible)) {
+      switch (layer.runtimeType) {
+        case tiled.TileLayer:
+          renderLayers.add(
+            await TileLayer.load(
               layer as tiled.TileLayer,
               parent,
               map,
               destTileSize,
               animationFrames,
-            );
-          case tiled.ImageLayer:
-            return ImageLayer.load(
+              atlas.clone(),
+            ),
+          );
+          break;
+        case tiled.ImageLayer:
+          renderLayers.add(
+            await ImageLayer.load(
               layer as tiled.ImageLayer,
               parent,
               camera,
               map,
               destTileSize,
-            );
+            ),
+          );
+          break;
 
-          case tiled.Group:
-            final groupLayer = layer as tiled.Group;
-            final renderableGroup = GroupLayer(
-              groupLayer,
-              parent,
-              map,
-              destTileSize,
-            );
-            final children = _renderableLayers(
-              groupLayer.layers,
-              renderableGroup,
-              map,
-              destTileSize,
-              camera,
-              animationFrames,
-            );
-            renderableGroup.children = await children;
-            return renderableGroup;
+        case tiled.Group:
+          final groupLayer = layer as tiled.Group;
+          final renderableGroup = GroupLayer(
+            groupLayer,
+            parent,
+            map,
+            destTileSize,
+          );
+          renderableGroup.children = await _renderableLayers(
+            groupLayer.layers,
+            renderableGroup,
+            map,
+            destTileSize,
+            camera,
+            animationFrames,
+            atlas: atlas,
+          );
+          renderLayers.add(renderableGroup);
+          break;
 
-          case tiled.ObjectGroup:
-            return ObjectLayer.load(
+        case tiled.ObjectGroup:
+          renderLayers.add(
+            await ObjectLayer.load(
               layer as tiled.ObjectGroup,
               map,
               destTileSize,
-            );
+            ),
+          );
+          break;
 
-          default:
-            assert(false, '$layer layer is unsupported.');
-            return UnsupportedLayer(layer, parent, map, destTileSize);
-        }
-      }),
-    );
+        default:
+          assert(false, '$layer layer is unsupported.');
+          renderLayers.add(
+            UnsupportedLayer(layer, parent, map, destTileSize),
+          );
+          break;
+      }
+    }
+    return renderLayers;
   }
 
   /// Handle game resize and propagate it to renderable layers

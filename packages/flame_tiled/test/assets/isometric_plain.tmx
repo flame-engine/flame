@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.9" tiledversion="1.9.2" orientation="staggered" renderorder="right-down" width="2" height="5" tilewidth="128" tileheight="74" infinite="0" staggeraxis="y" staggerindex="odd" nextlayerid="3" nextobjectid="1">
+ <tileset firstgid="1" source="tiles/isometric_plain_1.tsx"/>
+ <tileset firstgid="7" name="isometric_plain_2" tilewidth="128" tileheight="74" tilecount="3" columns="0">
+  <grid orientation="orthogonal" width="1" height="1"/>
+  <tile id="0">
+   <image width="128" height="74" source="images/box2.png"/>
+  </tile>
+  <tile id="1">
+   <image width="128" height="74" source="images/diamond.png"/>
+  </tile>
+  <tile id="2">
+   <image width="128" height="74" source="images/gear.png"/>
+  </tile>
+ </tileset>
+ <layer id="1" name="Tile Layer 1" width="2" height="5">
+  <data encoding="csv">
+1,1,
+1,1,
+2,5,
+2,6,
+3,2
+</data>
+ </layer>
+ <layer id="2" name="Tile Layer 2" width="2" height="5">
+  <data encoding="csv">
+0,0,
+8,0,
+3221225480,1610612744,
+1073741832,0,
+0,0
+</data>
+ </layer>
+</map>

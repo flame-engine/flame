@@ -10,4 +10,5 @@ flame_forge2d  <flame_forge2d/flame_forge2d.md>
 Tutorials      <tutorials/tutorials.md>
 Other Modules  <other_modules/other_modules.md>
 Development    <development/development.md>
+Resources      <resources/resources.md>
 ```
