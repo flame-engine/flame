@@ -607,7 +607,6 @@ pre {
   margin: 0;
   padding: 10px;
   padding-right: 41px;
-  position: unset;
 }
 
 div[class^="highlight-"] pre:before {
