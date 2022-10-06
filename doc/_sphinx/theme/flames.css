@@ -40,6 +40,10 @@ a:hover {
   color: #ddbb99;
 }
 
+a.reference.external {
+  word-wrap: break-word;
+}
+
 a.reference.external::after {
   content: "\f35d";
   font-family: var(--font-awesome);
