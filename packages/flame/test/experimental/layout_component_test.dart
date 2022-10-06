@@ -143,7 +143,8 @@ void main() {
       await component.add(rowComponent);
       await rowComponent.ensureAddAll([firstText, secondText, thirdText]);
       await game.ready();
-      final startPosition = (gameSize.x - rowComponent.position.x - componentsWidth)/2;
+      final startPosition =
+          (gameSize.x - rowComponent.position.x - componentsWidth) / 2;
       expect(firstText.position.x, startPosition);
       expect(secondText.position.x, startPosition + 50);
       expect(thirdText.position.x, startPosition + 150);

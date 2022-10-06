@@ -67,7 +67,7 @@ abstract class LayoutComponent extends PositionComponent with HasGameRef {
       case MainAxisAlignment.spaceBetween:
         final freeSpacePerComponent =
             (dimensionAvailable - componentsDimension - gapDimension) /
-                (list.length-1);
+                (list.length - 1);
         for (final child in list) {
           child.position = Vector2(currentPosition.x, currentPosition.y);
           currentPosition[vectorIndex] += direction == Direction.horizontal
