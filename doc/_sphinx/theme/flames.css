@@ -597,15 +597,19 @@ pre {
   border-radius: 0.4em;
   box-shadow: 0px 0px 3px black;
   color: #888;
+  margin: 0;
+  padding: 10px;
+}
+
+div[class^="highlight-"] {
+  position: relative;
   font-family: var(--font-mono);
   font-size: 85%;
   line-height: 125%;
-  margin: 0;
-  padding: 10px;
-  position: relative;
 }
 
-div[class^="highlight-"] pre:before {
+
+div[class^="highlight-"]:before {
   background: black;
   border-bottom-left-radius: 5px;
   border-top-right-radius: 5px;
@@ -615,20 +619,21 @@ div[class^="highlight-"] pre:before {
   position: absolute;
   right: 0;
   top: 0;
+  z-index: 1;
 }
 
-div.highlight-console pre:before {
+div.highlight-console:before {
   content: "bash";
   color: #666;
 }
-div.highlight-dart pre:before {
+div.highlight-dart:before {
   content: "dart";
 }
-div.highlight-yaml pre:before {
+div.highlight-yaml:before {
   content: "yaml";
   color: #5f5;
 }
-div.highlight-text pre:before {
+div.highlight-text:before {
   content: "text";
   color: #666;
 }
