@@ -591,6 +591,10 @@ div.document :is(h1, h2, h3, h4) > code {
  * Code
  *----------------------------------------------------------------------------*/
 
+ div[class^="highlight-"] {
+  position: relative;
+}
+
 pre {
   background: #202020;
   border: none;
@@ -602,7 +606,8 @@ pre {
   line-height: 125%;
   margin: 0;
   padding: 10px;
-  position: relative;
+  padding-right: 41px;
+  position: unset;
 }
 
 div[class^="highlight-"] pre:before {
