@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 
 enum Direction { horizontal, vertical }
 
-/// Super class for [RowComponent] and ComponentColumn
+/// Super class for [RowComponent] and [ColumnComponent]
 /// A relayout is performed when
 ///  - a change in this component's children takes place
 ///  - the [gap] parameter is changed
