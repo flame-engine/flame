@@ -186,6 +186,7 @@ class Component {
   static const int _loaded = 2;
   static const int _mounted = 4;
   static const int _removing = 8;
+  static const int _removed = 16;
 
   /// Whether the component is currently executing its [onLoad] step.
   bool get isLoading => (_state & _loading) != 0;
@@ -206,6 +207,12 @@ class Component {
   void _setRemovingBit() => _state |= _removing;
   void _clearRemovingBit() => _state &= ~_removing;
 
+  /// Whether the component is removed.
+  bool get isRemoved => (_state & _removed) != 0;
+  void _setRemovedBit() => _state |= _removed;
+  // Is this ever needed? A removed component should surely not be replaced?
+  void _clearRemovedBit() => _state &= ~_removed;
+
   /// A future that completes when this component finishes loading.
   ///
   /// If the component is already loaded (see [isLoaded]), this returns an
@@ -218,6 +225,13 @@ class Component {
   /// already completed future.
   Future<void> get mounted =>
       isMounted ? Future.value() : lifecycle.mountFuture;
+
+  /// A future that completes when this component has been removed.
+  ///
+  /// If the component is already removed (see [isRemoved]), this returns an
+  /// already completed future.
+  Future<void> get removed =>
+      isRemoving ? Future.value() : lifecycle.removeFuture;
 
   //#endregion
 
@@ -815,6 +829,7 @@ class Component {
         component.onRemove();
         component._clearMountedBit();
         component._clearRemovingBit();
+        component._setRemovedBit();
         component._parent = null;
         return true;
       },
@@ -919,6 +934,7 @@ class _LifecycleManager {
 
   Completer<void>? _mountCompleter;
   Completer<void>? _loadCompleter;
+  Completer<void>? _removeCompleter;
 
   Future<void> get loadFuture {
     _loadCompleter ??= Completer<void>();
@@ -928,6 +944,11 @@ class _LifecycleManager {
   Future<void> get mountFuture {
     _mountCompleter ??= Completer<void>();
     return _mountCompleter!.future;
+  }
+
+  Future<void> get removeFuture {
+    _removeCompleter ??= Completer<void>();
+    return _removeCompleter!.future;
   }
 
   void finishLoading() {
