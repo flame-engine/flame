@@ -35,7 +35,7 @@ class MyGame extends FlameGame with FlameIsolate {
 
 ### Performance note
 
-Keep in mind that every component with `FlameIsolate` mixin that you create and add to your game 
+Keep in mind that every component with `FlameIsolate` mixin that you create and add to your game
 will create a new isolate. This means you will probably want to create a manager component to
 manage a lot of "dumber" components. Think of it like ants, where the queen controls the worker
 ants. If every individual worker ant got it's own isolate, it would be a total waste of power,
