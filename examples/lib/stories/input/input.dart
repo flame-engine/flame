@@ -97,7 +97,7 @@ void addInputStories(Dashbook dashbook) {
     ..add(
       'Gesture Hitboxes',
       (_) => GameWidget(game: GestureHitboxesExample()),
-      codeLink: baseLink('input/simple_shapes_example.dart'),
+      codeLink: baseLink('input/Gesture Hitboxes_example.dart'),
       info: GestureHitboxesExample.description,
     )
     ..add(
