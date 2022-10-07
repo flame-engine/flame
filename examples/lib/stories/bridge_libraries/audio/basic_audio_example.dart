@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
@@ -80,5 +82,10 @@ class BasicAudioExample extends FlameGame with TapDetector {
     } else {
       fireOne();
     }
+  }
+
+  @override
+  void onRemove() {
+    FlameAudio.bgm.dispose();
   }
 }
