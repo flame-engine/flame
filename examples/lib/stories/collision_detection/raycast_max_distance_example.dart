@@ -123,7 +123,6 @@ class _Character extends PositionComponent {
         position: Vector2(12, 5),
       ),
     );
-    return super.onLoad();
   }
 
   @override
