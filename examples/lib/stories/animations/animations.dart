@@ -16,7 +16,7 @@ void addAnimationStories(Dashbook dashbook) {
     ..add(
       'Group animation',
       (_) => GameWidget(game: AnimationGroupExample()),
-      codeLink: baseLink('animations/aseprite_example.dart'),
+      codeLink: baseLink('animations/animation_group_example.dart'),
       info: AnimationGroupExample.description,
     )
     ..add(

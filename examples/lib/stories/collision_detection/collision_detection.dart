@@ -59,7 +59,7 @@ void addCollisionDetectionStories(Dashbook dashbook) {
     ..add(
       'Raytracing',
       (_) => GameWidget(game: RaytraceExample()),
-      codeLink: baseLink('collision_detection/raytrace.dart'),
+      codeLink: baseLink('collision_detection/raytrace_example.dart'),
       info: RaytraceExample.description,
     )
     ..add(

@@ -4,6 +4,7 @@ import 'package:flame/src/events/flame_game_mixins/has_tappable_components.dart'
 import 'package:flame/src/events/messages/tap_cancel_event.dart';
 import 'package:flame/src/events/messages/tap_down_event.dart';
 import 'package:flame/src/events/messages/tap_up_event.dart';
+import 'package:meta/meta.dart';
 
 /// This mixin can be added to a [Component] allowing it to receive tap events.
 ///
@@ -22,6 +23,7 @@ mixin TapCallbacks on Component {
   void onTapCancel(TapCancelEvent event) {}
 
   @override
+  @mustCallSuper
   void onMount() {
     super.onMount();
     assert(
