@@ -128,6 +128,5 @@ class _Character extends PositionComponent {
   @override
   void render(Canvas canvas) {
     canvas.drawLine(_rayOriginPoint, _rayEndPoint, _rayPaint);
-    super.render(canvas);
   }
 }
