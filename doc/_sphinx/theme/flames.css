@@ -599,8 +599,8 @@ div.document :is(h1, h2, h3, h4) > code {
   position: relative;
   overflow-x: auto;
   padding: 2px;
-  padding-top: 18px;
-  margin-top: -18px;
+  padding-top: 11px;
+  margin-top: -11px;
 }
 
 pre {
@@ -614,13 +614,11 @@ pre {
   line-height: 125%;
   margin: 0;
   padding: 10px;
-  border-top-right-radius: 0;
 }
 
 div[class^="highlight-"] pre:before {
   background: black;
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
+  border-radius: 5px;
   color: #58d0ff;
   font-size: 80%;
   padding: 1px 8px;
