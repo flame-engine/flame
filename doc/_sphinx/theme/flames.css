@@ -623,7 +623,7 @@ div[class^="highlight-"] pre:before {
   font-size: 80%;
   padding: 1px 8px;
   position: absolute;
-  right: 1px;
+  right: 0;
   top: 0;
 }
 
