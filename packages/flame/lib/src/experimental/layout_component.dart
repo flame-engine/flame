@@ -57,11 +57,19 @@ abstract class LayoutComponent extends PositionComponent with HasGameRef {
         }
         break;
       case MainAxisAlignment.end:
+        var index = 0;
+        double componentsGap;
         for (final child in list.reversed) {
+          if (index == 0) {
+            componentsGap = 0;
+          } else {
+            componentsGap = gap;
+          }
           currentPosition[vectorIndex] -= direction == Direction.horizontal
-              ? child.width + gap
-              : child.height + gap;
+              ? child.width + componentsGap
+              : child.height + componentsGap;
           child.position = Vector2(currentPosition.x, currentPosition.y);
+          index++;
         }
         break;
       case MainAxisAlignment.spaceBetween:
