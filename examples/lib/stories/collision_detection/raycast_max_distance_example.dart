@@ -102,7 +102,7 @@ class _Character extends PositionComponent {
   final _rayPaint = BasicPalette.gray.paint();
 
   @override
-  Future<void>? onLoad() {
+  Future<void>? onLoad() async {
     add(
       CircleComponent(
         radius: 20,
