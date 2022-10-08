@@ -8,6 +8,7 @@ enum Direction { horizontal, vertical }
 /// Super class for [RowComponent] and [ColumnComponent]
 /// A relayout is performed when
 ///  - a change in this component's children takes place
+///  - the size of this component or a parent changes
 ///  - the [gap] parameter is changed
 abstract class LayoutComponent extends PositionComponent with HasGameRef {
   LayoutComponent(
