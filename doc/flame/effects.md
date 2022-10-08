@@ -100,7 +100,7 @@ functionality inherited by all other effects. This includes:
 
 ```{flutter-app}
 :sources: ../flame/examples
-:page: effects_moveby
+:page: move_by_effect
 :show: widget code infobox
 :width: 180
 :height: 160
@@ -124,7 +124,7 @@ superposition of all the individual effects.
 
 ```{flutter-app}
 :sources: ../flame/examples
-:page: effects_moveto
+:page: move_to_effect
 :show: widget code infobox
 :width: 180
 :height: 160
@@ -143,7 +143,7 @@ It is possible, but not recommended to attach multiple such effects to the same 
 ### `MoveAlongPathEffect`
 ```{flutter-app}
 :sources: ../flame/examples
-:page: effects_movealongpath
+:page: move_along_path_effect
 :show: widget code infobox
 :width: 180
 :height: 160
