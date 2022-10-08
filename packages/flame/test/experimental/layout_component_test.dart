@@ -137,11 +137,11 @@ void main() {
       await _initScene(game, MainAxisAlignment.spaceAround, Vector2(50, 50));
       final gap = (rowComponent.size.x - componentsWidth) / 3;
       expect(double.parse((firstText.position.x).toStringAsFixed(1)),
-          double.parse((gap / 2).toStringAsFixed(1)));
+          double.parse((gap / 2).toStringAsFixed(1)),);
       expect(double.parse((secondText.position.x).toStringAsFixed(1)),
-          double.parse((1.5 * gap + 50).toStringAsFixed(1)));
+          double.parse((1.5 * gap + 50).toStringAsFixed(1)),);
       expect(double.parse((thirdText.position.x).toStringAsFixed(1)),
-          double.parse((2.5 * gap + 150).toStringAsFixed(1)));
+          double.parse((2.5 * gap + 150).toStringAsFixed(1)),);
     });
 
     testWithFlameGame('mainAxisAlignment.center with position and size',
