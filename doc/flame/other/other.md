@@ -1,10 +1,9 @@
 # Other
 
-```{eval-rst}
-.. toctree::
-    :hidden:
+```{toctree}
+:hidden:
     
-    Debugging    <debug.md>
-    Utils        <util.md>
-    Widgets      <widgets.md>
+Debugging    <debug.md>
+Utils        <util.md>
+Widgets      <widgets.md>
 ```

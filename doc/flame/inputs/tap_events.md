@@ -1,4 +1,4 @@
-# Tap events
+# Tap Events
 
 ```{note}
 This document describes a new experimental API. The more traditional approach

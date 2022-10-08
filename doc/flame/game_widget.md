@@ -1,4 +1,4 @@
-# GameWidget
+# Game Widget
 
 The `GameWidget` is a Flutter `Widget` that is used to insert a [`Game`](game.md) inside the Flutter
 widget tree.

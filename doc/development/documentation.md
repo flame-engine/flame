@@ -17,7 +17,7 @@ basics of the Markdown syntax (if not, there are plenty of guides on the Interne
 section will focus on the Markdown extensions that are enabled in our build system.
 
 
-### Table of contents
+## Table of contents
 
 The table of contents for the site must be created manually. This is done using special `{toctree}`
 blocks, one per each subdirectory:
@@ -26,7 +26,7 @@ blocks, one per each subdirectory:
 ```{toctree}
 :hidden:
 
-First Topic    <topic1.md>
+First Topic    <relative_path/to_topic1.md>
 Second Topic   <topic2.md>
 ```
 `````
@@ -35,7 +35,7 @@ When adding new documents into the documentation site, make sure that they are m
 the toctrees -- otherwise you will see a warning during the build that the document is orphaned.
 
 
-### Admonitions
+## Admonitions
 
 Admonitions are emphasized blocks of text with a distinct appearance. They are created using the
 triple-backticks syntax:
@@ -72,7 +72,7 @@ Also check out this cool thingy.
 ```
 
 
-### Deprecations
+## Deprecations
 
 The special `{deprecated}` block can be used to mark some part of documentation or syntax as being
 deprecated. This block requires specifying the version when the deprecation has occurred
@@ -92,7 +92,7 @@ Please use this **other** thing instead.
 ```
 
 
-### Live examples
+## Live examples
 
 Our documentation site includes a custom-built **flutter-app** directive which allows creating
 Flutter widgets and embedding them alongside with the overall documentation content.
@@ -104,6 +104,8 @@ In Markdown, the code for inserting an embed looks like this:
 :sources: ../flame/examples
 :page: tap_events
 :show: widget code popup
+:width: 180
+:height: 160
 ```
 ``````
 
@@ -130,10 +132,28 @@ Here's what the different options mean:
   Finally, the `infobox` mode will display the result in a floating window -- this mode is best
   combined with `widget` and `code`.
 
+- **width**: an integer that defines the width of the embedded application.  If this is not defined, the width will be 100%.
+
+- **height**: an integer that defines the height of the embedded application.  If this is not defined, the height will be 350px.
+
 ```{flutter-app}
 :sources: ../flame/examples
 :page: tap_events
 :show: widget code popup
+```
+
+
+## Standardization and Templates
+
+For every section or package added to the documentation, naming conventions, pathing, and standardized table of contents are important.  Every section and package must have a table of contents or an entry in the parent markdown file to allow navigation from the left sidebar menu in logical or alphabetical order.  Additionally, naming conventions should be followed for organization, such as: 
+
+- bridge_packages/package_name/package_name.md
+- documentation_section/documentation_section.md
+
+```{note}
+Avoid having spaces in the paths to the docs since that will keep you from
+building the project due to
+[this bug](https://github.com/ipython/ipython/pull/13765).
 ```
 
 
@@ -154,9 +174,9 @@ following:
       ```console
       pip install -r doc/_sphinx/requirements.txt
       ```
+4. Melos as per the [contributing](../../CONTRIBUTING.md#environment-setup) guide.
 
-Once these prerequisites are met, you can build the documentation by switching to the `doc/_sphinx`
-directory and running `make html`, or use the built-in Melos target:
+Once these prerequisites are met, you can build the documentation by switching to the root project and running the built-in Melos target:
 
 ```console
 melos doc-build
@@ -190,9 +210,3 @@ Then you can open the site at `http://localhost:8000/`.
 
 If you ever run the **melos doc-clean** or the **make clean** command, the server will need to be
 restarted, because the clean command deletes the entire `html` directory.
-
-```{note}
-Avoid having spaces in the paths to the docs since that will keep you from
-building the project due to
-[this bug](https://github.com/ipython/ipython/pull/13765).
-```

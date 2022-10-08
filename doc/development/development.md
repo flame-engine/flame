@@ -1,7 +1,7 @@
 # Development
 
 ```{toctree}
-:maxdepth: 2
+:hidden:
 
 Documentation  <documentation.md>
 Style Guide    <style_guide.md>

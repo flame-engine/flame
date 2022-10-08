@@ -10,9 +10,9 @@
   - [Camera & Viewport](flame/camera_and_viewport.md)
 
 - Inputs
-  - [Gesture Input](flame/inputs/gesture-input.md)
-  - [Keyboard Input](flame/inputs/keyboard-input.md)
-  - [Other Inputs](flame/inputs/other-inputs.md)
+  - [Gesture Input](flame/inputs/gesture_input.md)
+  - [Keyboard Input](flame/inputs/keyboard_input.md)
+  - [Other Inputs](flame/inputs/other_inputs.md)
 
 - Audio
   - [General Audio](flame_audio/audio.md)
@@ -23,7 +23,7 @@
 
 - Rendering
   - [Images, Sprites and Animations](flame/rendering/images.md)
-  - [Text Rendering](flame/rendering/text.md)
+  - [Text Rendering](flame/rendering/text_rendering.md)
   - [Colors and the Palette](flame/rendering/palette.md)
   - [Particles](flame/rendering/particles.md)
   - [Layers](flame/rendering/layers.md)

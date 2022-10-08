@@ -1,4 +1,4 @@
-# Other inputs
+# Other Inputs
 
 This includes documentation for input methods besides keyboard and mouse.
 

@@ -14,7 +14,7 @@ void main() {
 }
 ```
 
-The file structure Flame would expect to find the files in would be:
+The following file structure is where Flame would expect to find the files:
 
 ```text
 .
@@ -23,7 +23,7 @@ The file structure Flame would expect to find the files in would be:
     │   └── explosion.mp3
     └── images
         ├── enemy.png
-        └── player.png
+        └── player.png        
 ```
 
 Optionally you can split your `audio` folder into two subfolders, one for `music` and one for `sfx`.
@@ -38,6 +38,6 @@ flutter:
     - assets/images/enemy.png
 ```
 
-If you want to change this structure, this is possible by using the `prefix` parameter and creating
-your own instances of `AssetsCache`, `ImagesCache`, `AudioCache` and `SoundPool`s, instead of using
+If you want to change this structure, this is possible by using the `prefix` parameter and creating 
+your instances of `AssetsCache`, `ImagesCache`, `AudioCache`, and `SoundPool`s, instead of using
 the global ones provided by Flame.
