@@ -1,10 +1,13 @@
-import 'dart:ui';
-
 import 'package:flame/src/text/elements/block_element.dart';
 import 'package:flame/src/text/elements/element.dart';
+import 'package:flutter/rendering.dart' hide TextStyle;
 
 class GroupElement extends BlockElement {
-  GroupElement(super.width, super.height, this.children);
+  GroupElement({
+    required double width,
+    required double height,
+    required this.children,
+  }) : super(width, height);
 
   final List<Element> children;
 
