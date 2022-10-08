@@ -1,16 +1,4 @@
-# Tiled
-
-[Tiled](https://www.mapeditor.org/) is a great tool to design levels and maps.
-
-Flame provides a package ([flame_tiled](https://github.com/flame-engine/flame_tiled)) that 
-bundles a [dart](https://pub.dev/packages/tiled) package](https://pub.dev/packages/tiled) which
- allows you to parse tmx (xml) files and access the tiles, objects, and everything in there.
-
-Flame also provides a simple `Tiled` class and its component wrapper `TiledComponent`, for the map
-rendering, which renders the tiles on the screen and supports rotations and flips.
-
-
-## Layers
+# Layers
 
 At its simplest, layers can be retrieved from a Tilemap by invoking:
 
@@ -24,7 +12,7 @@ getLayer<Group>("myGroupLayer");
 These methods will either return the requested layer type or null if it does not exist.
 
 
-### Layer properties
+## Layer properties
 
 | Property              | Supported?  |
 | -----------           | ----------- |
@@ -46,7 +34,7 @@ These methods will either return the requested layer type or null if it does not
 ## Other features
 
 Other advanced features are not yet supported, but you can easily read the objects and other
-features of the tmx and add custom behavior (eg regions for triggers and walking areas, custom
+features of the TMX and add custom behavior (eg regions for triggers and walking areas, custom
 animated objects).
 
 
