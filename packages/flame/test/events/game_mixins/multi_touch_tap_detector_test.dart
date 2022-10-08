@@ -23,7 +23,7 @@ void main() {
     );
 
     withMultiTouchTapDetector.testGameWidget(
-      'render canvas and taps are delivered',
+      'update game and render canvas',
       verify: (game, tester) async {
         await tester.pumpWidget(GameWidget(game: game));
         await tester.pump();
