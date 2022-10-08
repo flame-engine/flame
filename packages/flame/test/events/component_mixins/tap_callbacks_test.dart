@@ -3,16 +3,15 @@ import 'package:flame/components.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
 import 'package:flame_test/flame_test.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  final withHasTappableComponents =
+  final _withHasTappableComponents =
       FlameTester(_GameWithHasTappableComponents.new);
 
   group('TapCallbacks', () {
-    withHasTappableComponents
+    _withHasTappableComponents
         .test('make sure they can be added to game with HasTappableComponents',
             (game) async {
       await game.ensureAdd(_TapCallbacksComponent());
@@ -46,25 +45,17 @@ void main() {
 
         // [onTapUp] will call, if there was an [onTapDown] event before
         game.onTapUp(
-          TapUpEvent(
-            1,
-            TapUpDetails(
-              kind: PointerDeviceKind.touch,
-              localPosition: const Offset(12, 12),
-              globalPosition: const Offset(12, 12),
-            ),
+          createTapUpEvents(
+            localPosition: const Offset(12, 12),
+            globalPosition: const Offset(12, 12),
           ),
         );
         expect(game.tapUpEvent, 0);
 
         game.onTapDown(
-          TapDownEvent(
-            1,
-            TapDownDetails(
-              kind: PointerDeviceKind.touch,
-              localPosition: const Offset(12, 12),
-              globalPosition: const Offset(12, 12),
-            ),
+          createTapDownEvents(
+            localPosition: const Offset(12, 12),
+            globalPosition: const Offset(12, 12),
           ),
         );
         expect(component.containsLocalPoint(Vector2(10, 10)), false);
@@ -72,13 +63,9 @@ void main() {
 
         // [onTapUp] will call, if there was an [onTapDown] event before
         game.onTapUp(
-          TapUpEvent(
-            1,
-            TapUpDetails(
-              kind: PointerDeviceKind.touch,
-              localPosition: const Offset(12, 12),
-              globalPosition: const Offset(12, 12),
-            ),
+          createTapUpEvents(
+            localPosition: const Offset(12, 12),
+            globalPosition: const Offset(12, 12),
           ),
         );
         expect(component.containsLocalPoint(Vector2(9, 9)), true);
@@ -108,13 +95,9 @@ void main() {
         await game.ensureAdd(component);
 
         game.onTapDown(
-          TapDownEvent(
-            1,
-            TapDownDetails(
-              kind: PointerDeviceKind.touch,
-              localPosition: const Offset(12, 12),
-              globalPosition: const Offset(12, 12),
-            ),
+          createTapDownEvents(
+            localPosition: const Offset(12, 12),
+            globalPosition: const Offset(12, 12),
           ),
         );
         expect(game.tapDownEvent, 1);
@@ -122,13 +105,9 @@ void main() {
         // [onLongTapDown] will call, if there was an [onTapDown] event before
         // ,and who remain at the point where the user is touching the screen.
         game.onLongTapDown(
-          TapDownEvent(
-            1,
-            TapDownDetails(
-              kind: PointerDeviceKind.touch,
-              localPosition: const Offset(12, 12),
-              globalPosition: const Offset(12, 12),
-            ),
+          createTapDownEvents(
+            localPosition: const Offset(12, 12),
+            globalPosition: const Offset(12, 12),
           ),
         );
         expect(game.longTapDownEvent, 1);
@@ -141,6 +120,153 @@ void main() {
           ),
         );
         expect(game.tapCancelEvent, 1);
+      },
+    );
+
+    testWithGame<_GameWithHasTappableComponents>(
+      'updates and renders children',
+      _GameWithHasTappableComponents.new,
+      (game) async {
+        final child = _MyTapComponent();
+        final parent = Component()..add(child);
+        game.add(parent);
+        await game.ready();
+
+        game.update(0);
+        expect(child.updated, true);
+        game.render(MockCanvas());
+        expect(child.rendered, true);
+      },
+    );
+
+    _withHasTappableComponents.testGameWidget(
+      'tap correctly registered handled event',
+      setUp: (game, _) async {
+        await game.ensureAdd(
+          _TapCallbacksComponent()
+            ..x = 10
+            ..y = 10
+            ..width = 10
+            ..height = 10,
+        );
+      },
+      verify: (game, tester) async {
+        await tester.tapAt(const Offset(10, 10));
+        await tester.pump(const Duration(seconds: 1));
+        expect(game.tapDownEvent, 1);
+        expect(game.longTapDownEvent, 0);
+        expect(game.tapUpEvent, 1);
+        expect(game.tapCancelEvent, 0);
+      },
+    );
+
+    _withHasTappableComponents.testGameWidget(
+      'long tap correctly registered handled event',
+      setUp: (game, _) async {
+        await game.ensureAdd(
+          _TapCallbacksComponent()
+            ..x = 10
+            ..y = 10
+            ..width = 10
+            ..height = 10,
+        );
+      },
+      verify: (game, tester) async {
+        await tester.longPressAt(const Offset(10, 10));
+        await tester.pump(const Duration(seconds: 1));
+        expect(game.tapDownEvent, 1);
+        expect(game.longTapDownEvent, 1);
+        expect(game.tapUpEvent, 1);
+        expect(game.tapCancelEvent, 0);
+      },
+    );
+
+    _withHasTappableComponents.testGameWidget(
+      'tap outside of component is not registered as handled',
+      setUp: (game, _) async {
+        await game.ensureAdd(
+          _TapCallbacksComponent()
+            ..x = 10
+            ..y = 10
+            ..width = 10
+            ..height = 10,
+        );
+      },
+      verify: (game, tester) async {
+        await tester.tapAt(const Offset(110, 110));
+        await tester.pump();
+        await tester.pump(const Duration(seconds: 1));
+        expect(game.tapDownEvent, 0);
+        expect(game.longTapDownEvent, 0);
+        expect(game.tapUpEvent, 0);
+        expect(game.tapCancelEvent, 0);
+      },
+    );
+
+    testWithGame<_GameWithHasTappableComponents>(
+      'taps and resizes children',
+      _GameWithHasTappableComponents.new,
+      (game) async {
+        final child = _MyTapComponent()..size = Vector2.all(1);
+        final parent = Component();
+        game.add(parent..add(child));
+        await game.ready();
+
+        game.onTapDown(
+          createTapDownEvents(),
+        );
+        expect(child.gameSize, Vector2(800, 600));
+        expect(child.tapped, true);
+      },
+    );
+
+    testWithGame<_GameWithHasTappableComponents>(
+      'tap on offset children',
+      _GameWithHasTappableComponents.new,
+      (game) async {
+        final child = _MyTapComponent()
+          ..position = Vector2.all(100)
+          ..size = Vector2.all(100)
+          ..addToParent(
+            PositionComponent()
+              ..position = Vector2.all(100)
+              ..size = Vector2.all(300)
+              ..addToParent(game),
+          );
+        await game.ready();
+
+        game.onTapDown(
+          createTapDownEvents(
+            localPosition: const Offset(250, 250),
+            globalPosition: const Offset(250, 250),
+          ),
+        );
+
+        expect(child.gameSize, Vector2(800, 600));
+        expect(child.tapped, true);
+        expect(child.tapTimes, 1);
+      },
+    );
+
+    testWithGame<_GameWithHasTappableComponents>(
+      'tap on child on top of child without propagation',
+      _GameWithHasTappableComponents.new,
+      (game) async {
+        final child1 = _MyTapComponent()..size = Vector2.all(100);
+        final child2 = _MyTapComponent()..size = Vector2.all(100);
+        final parent = PositionComponent()..size = Vector2.all(300);
+        game.add(parent..addAll([child1, child2]));
+        await game.ready();
+        game.onTapDown(
+          createTapDownEvents(
+            globalPosition: const Offset(50, 50),
+          ),
+        );
+
+        expect(child2.tapped, true);
+        expect(child2.tapTimes, 1);
+        expect(child1.tapped, false);
+        expect(child1.tapTimes, 0);
       },
     );
 
