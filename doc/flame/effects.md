@@ -98,6 +98,14 @@ functionality inherited by all other effects. This includes:
 
 ### `MoveByEffect`
 
+```{flutter-app}
+:sources: ../flame/examples
+:page: effects_moveby
+:show: widget code infobox
+:width: 180
+:height: 160
+```
+
 This effect applies to a `PositionComponent` and shifts it by a prescribed `offset` amount. This
 offset is relative to the current position of the target:
 
@@ -114,6 +122,14 @@ superposition of all the individual effects.
 
 ### `MoveToEffect`
 
+```{flutter-app}
+:sources: ../flame/examples
+:page: effects_moveto
+:show: widget code infobox
+:width: 180
+:height: 160
+```
+
 This effect moves a `PositionComponent` from its current position to the specified destination
 point in a straight line.
 
@@ -125,7 +141,13 @@ It is possible, but not recommended to attach multiple such effects to the same 
 
 
 ### `MoveAlongPathEffect`
-
+```{flutter-app}
+:sources: ../flame/examples
+:page: effects_movealongpath
+:show: widget code infobox
+:width: 180
+:height: 160
+```
 This effect moves a `PositionComponent` along the specified path relative to the component's
 current position. The path can have non-linear segments, but must be singly connected. It is
 recommended to start a path at `Vector2.zero()` in order to avoid sudden jumps in the component's
