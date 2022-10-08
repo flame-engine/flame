@@ -1,5 +1,6 @@
 import 'package:flame/components.dart';
 import 'package:flame/experimental.dart';
+import 'package:flame/src/game/notifying_vector2.dart';
 import 'package:flutter/widgets.dart';
 
 enum Direction { horizontal, vertical }
@@ -9,9 +10,15 @@ enum Direction { horizontal, vertical }
 ///  - a change in this component's children takes place
 ///  - the [gap] parameter is changed
 abstract class LayoutComponent extends PositionComponent with HasGameRef {
-  LayoutComponent(this.direction, this.mainAxisAlignment, this._gap);
+  LayoutComponent(
+    this.direction,
+    this.mainAxisAlignment,
+    this._gap,
+    this.isManuallySized,
+  );
   final Direction direction;
   final MainAxisAlignment mainAxisAlignment;
+  bool isManuallySized = false;
 
   /// gap between components
   double _gap;
@@ -22,6 +29,15 @@ abstract class LayoutComponent extends PositionComponent with HasGameRef {
   }
 
   double get gap => _gap;
+
+  NotifyingVector2? get _bounds =>
+      isManuallySized ? size : findParent<PositionComponent>()?.size;
+
+  @override
+  Future<void> onLoad() async {
+    final size = _bounds;
+    size?.addListener(layoutChildren);
+  }
 
   @override
   void onChildrenChanged(Component child, ChildrenChangeType changeType) {
@@ -42,11 +58,14 @@ abstract class LayoutComponent extends PositionComponent with HasGameRef {
     );
     final vectorIndex = direction == Direction.horizontal ? 0 : 1;
     final gapDimension = gap * (list.length - 1);
-    final dimensionAvailable = size[vectorIndex] != 0.0
-        ? size[vectorIndex] - absoluteTopLeftPosition[vectorIndex]
-        : gameRef.canvasSize[vectorIndex] -
-            absoluteTopLeftPosition[vectorIndex];
 
+    /// Either we have a defined size or we just use the summed width/height of
+    /// the current children.
+    final componentBounds = _bounds;
+    final dimensionAvailable =
+        componentBounds != null && componentBounds[vectorIndex] != 0.0
+            ? componentBounds[vectorIndex]
+            : componentsDimension;
     switch (mainAxisAlignment) {
       case MainAxisAlignment.start:
         for (final child in list) {

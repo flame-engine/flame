@@ -53,7 +53,7 @@ void main() {
 
     setUp(() async {
       component = Component();
-      gameSize = Vector2(1025, 768);
+      gameSize = Vector2(1000, 768);
       component.onGameResize(gameSize);
       _initChildren();
       componentsWidth = firstText.size.x + secondText.size.x + thirdText.size.x;
@@ -70,13 +70,15 @@ void main() {
       rowComponent = RowComponent(
         mainAxisAlignment: alignment,
         gap: gap,
+        size: Vector2(1000, 768),
       )..position = position;
       await component.add(rowComponent);
       await rowComponent.ensureAddAll([firstText, secondText, thirdText]);
       await game.ready();
     }
 
-    testWithFlameGame('mainAxisAlignment.start with position', (game) async {
+    testWithFlameGame('mainAxisAlignment.start with position and size',
+        (game) async {
       await _initScene(game, MainAxisAlignment.start, Vector2(50, 50));
       expect(firstText.absolutePosition.x, 50);
 
@@ -86,7 +88,7 @@ void main() {
       expect(thirdText.position.x, 150);
     });
 
-    testWithFlameGame('mainAxisAlignment.start with position and gap',
+    testWithFlameGame('mainAxisAlignment.start with position, size and gap',
         (game) async {
       await _initScene(game, MainAxisAlignment.start, Vector2(50, 50), 10);
       expect(firstText.absolutePosition.x, 50);
@@ -95,7 +97,8 @@ void main() {
       expect(thirdText.position.x, 170);
     });
 
-    testWithFlameGame('mainAxisAlignment.end with position', (game) async {
+    testWithFlameGame('mainAxisAlignment.end with position and size',
+        (game) async {
       await _initScene(game, MainAxisAlignment.end, Vector2(500, 50));
       expect(firstText.absolutePosition.x, 200);
       expect(firstText.position.x, -300);
@@ -103,7 +106,7 @@ void main() {
       expect(thirdText.position.x, -150);
     });
 
-    testWithFlameGame('mainAxisAlignment.end with position and gap',
+    testWithFlameGame('mainAxisAlignment.end with position, size and gap',
         (game) async {
       await _initScene(game, MainAxisAlignment.end, Vector2(500, 50), 20);
       expect(firstText.absolutePosition.x, 160);
@@ -112,46 +115,48 @@ void main() {
       expect(thirdText.position.x, -150);
     });
 
-    testWithFlameGame('mainAxisAlignment.spaceBetween with position',
+    testWithFlameGame('mainAxisAlignment.spaceBetween with position and size',
         (game) async {
       await _initScene(game, MainAxisAlignment.spaceBetween, Vector2(50, 50));
-      final gap = (gameSize.x - rowComponent.position.x - componentsWidth) / 2;
+      final gap = (rowComponent.size.x - componentsWidth) / 2;
       expect(secondText.position.x, gap + 50);
       expect(thirdText.position.x, 2 * gap + 150);
     });
 
-    testWithFlameGame('mainAxisAlignment.spaceEvenly with position',
+    testWithFlameGame('mainAxisAlignment.spaceEvenly with position and size',
         (game) async {
       await _initScene(game, MainAxisAlignment.spaceEvenly, Vector2(50, 50));
-      final gap = (gameSize.x - rowComponent.position.x - componentsWidth) / 4;
+      final gap = (rowComponent.size.x - componentsWidth) / 4;
       expect(firstText.position.x, gap);
       expect(secondText.position.x, 2 * gap + 50);
       expect(thirdText.position.x, 3 * gap + 150);
     });
 
-    testWithFlameGame('mainAxisAlignment.spaceAround with position',
+    testWithFlameGame('mainAxisAlignment.spaceAround with position and size',
         (game) async {
       await _initScene(game, MainAxisAlignment.spaceAround, Vector2(50, 50));
-      final gap = (gameSize.x - rowComponent.position.x - componentsWidth) / 3;
-      expect(firstText.position.x, gap / 2);
-      expect(secondText.position.x, 1.5 * gap + 50);
-      expect(thirdText.position.x, 2.5 * gap + 150);
+      final gap = (rowComponent.size.x - componentsWidth) / 3;
+      expect(double.parse((firstText.position.x).toStringAsFixed(1)),
+          double.parse((gap / 2).toStringAsFixed(1)));
+      expect(double.parse((secondText.position.x).toStringAsFixed(1)),
+          double.parse((1.5 * gap + 50).toStringAsFixed(1)));
+      expect(double.parse((thirdText.position.x).toStringAsFixed(1)),
+          double.parse((2.5 * gap + 150).toStringAsFixed(1)));
     });
 
-    testWithFlameGame('mainAxisAlignment.center with position', (game) async {
+    testWithFlameGame('mainAxisAlignment.center with position and size',
+        (game) async {
       await _initScene(game, MainAxisAlignment.center, Vector2(50, 50));
-      final startPosition =
-          (gameSize.x - rowComponent.position.x - componentsWidth) / 2;
+      final startPosition = (rowComponent.size.x - componentsWidth) / 2;
       expect(firstText.position.x, startPosition);
       expect(secondText.position.x, startPosition + 50);
       expect(thirdText.position.x, startPosition + 150);
     });
 
-    testWithFlameGame('mainAxisAlignment.center with position and gap',
+    testWithFlameGame('mainAxisAlignment.center with position, size and gap',
         (game) async {
       await _initScene(game, MainAxisAlignment.center, Vector2(50, 50), 10);
-      final startPosition =
-          (gameSize.x - rowComponent.position.x - componentsWidth - 20) / 2;
+      final startPosition = (rowComponent.size.x - componentsWidth - 20) / 2;
       expect(firstText.absolutePosition.x, startPosition + 50);
       expect(firstText.position.x, startPosition);
       expect(secondText.position.x, startPosition + 60);
@@ -165,7 +170,7 @@ void main() {
 
     setUp(() async {
       component = Component();
-      gameSize = Vector2(1025, 768);
+      gameSize = Vector2(1030, 768);
       component.onGameResize(gameSize);
       _initChildren();
       componentsHeight =
@@ -183,13 +188,15 @@ void main() {
       columnComponent = ColumnComponent(
         mainAxisAlignment: alignment,
         gap: gap,
+        size: Vector2(1000, 768),
       )..position = position;
       await component.add(columnComponent);
       await columnComponent.ensureAddAll([firstText, secondText, thirdText]);
       await game.ready();
     }
 
-    testWithFlameGame('mainAxisAlignment.start with position', (game) async {
+    testWithFlameGame('mainAxisAlignment.start with position and size',
+        (game) async {
       await _initScene(game, MainAxisAlignment.start, Vector2(50, 50));
       expect(firstText.absolutePosition.y, 50);
 
@@ -199,7 +206,7 @@ void main() {
       expect(thirdText.position.y, 150);
     });
 
-    testWithFlameGame('mainAxisAlignment.start with position and gap',
+    testWithFlameGame('mainAxisAlignment.start with position, size and gap',
         (game) async {
       await _initScene(game, MainAxisAlignment.start, Vector2(50, 50), 10);
       expect(firstText.absolutePosition.y, 50);
@@ -208,7 +215,8 @@ void main() {
       expect(thirdText.position.y, 170);
     });
 
-    testWithFlameGame('mainAxisAlignment.end with position', (game) async {
+    testWithFlameGame('mainAxisAlignment.end with position and size',
+        (game) async {
       await _initScene(game, MainAxisAlignment.end, Vector2(500, 500));
       expect(firstText.absolutePosition.y, 200);
       expect(firstText.position.y, -300);
@@ -216,7 +224,7 @@ void main() {
       expect(thirdText.position.y, -150);
     });
 
-    testWithFlameGame('mainAxisAlignment.end with position and gap',
+    testWithFlameGame('mainAxisAlignment.end with position, size and gap',
         (game) async {
       await _initScene(game, MainAxisAlignment.end, Vector2(500, 500), 20);
       expect(firstText.absolutePosition.y, 160);
@@ -225,49 +233,46 @@ void main() {
       expect(thirdText.position.y, -150);
     });
 
-    testWithFlameGame('mainAxisAlignment.spaceBetween with position',
+    testWithFlameGame('mainAxisAlignment.spaceBetween with position and size',
         (game) async {
       await _initScene(game, MainAxisAlignment.spaceBetween, Vector2(50, 50));
-      final gap =
-          (gameSize.y - columnComponent.position.y - componentsHeight) / 2;
+      final gap = (columnComponent.size.y - componentsHeight) / 2;
       expect(secondText.position.y, gap + 50);
       expect(thirdText.position.y, 2 * gap + 150);
     });
 
-    testWithFlameGame('mainAxisAlignment.spaceEvenly with position',
+    testWithFlameGame('mainAxisAlignment.spaceEvenly with position and size',
         (game) async {
       await _initScene(game, MainAxisAlignment.spaceEvenly, Vector2(50, 50));
-      final gap =
-          (gameSize.y - columnComponent.position.y - componentsHeight) / 4;
+      final gap = (columnComponent.size.y - componentsHeight) / 4;
       expect(firstText.position.y, gap);
       expect(secondText.position.y, 2 * gap + 50);
       expect(thirdText.position.y, 3 * gap + 150);
     });
 
-    testWithFlameGame('mainAxisAlignment.spaceAround with position',
+    testWithFlameGame('mainAxisAlignment.spaceAround with position and size',
         (game) async {
       await _initScene(game, MainAxisAlignment.spaceAround, Vector2(50, 50));
-      final gap =
-          (gameSize.y - columnComponent.position.x - componentsHeight) / 3;
+      final gap = (columnComponent.size.y - componentsHeight) / 3;
       expect(firstText.position.y, gap / 2);
       expect(secondText.position.y, 1.5 * gap + 50);
       expect(thirdText.position.y, 2.5 * gap + 150);
     });
 
-    testWithFlameGame('mainAxisAlignment.center with position', (game) async {
+    testWithFlameGame('mainAxisAlignment.center with position and size',
+        (game) async {
       await _initScene(game, MainAxisAlignment.center, Vector2(50, 50));
-      final startPosition =
-          (gameSize.y - columnComponent.position.x - componentsHeight) / 2;
+      final startPosition = (columnComponent.size.y - componentsHeight) / 2;
       expect(firstText.position.y, startPosition);
       expect(secondText.position.y, startPosition + 50);
       expect(thirdText.position.y, startPosition + 150);
     });
 
-    testWithFlameGame('mainAxisAlignment.center with position and gap',
+    testWithFlameGame('mainAxisAlignment.center with position, size and gap',
         (game) async {
       await _initScene(game, MainAxisAlignment.center, Vector2(50, 50), 10);
       final startPosition =
-          (gameSize.y - columnComponent.position.y - componentsHeight - 20) / 2;
+          (columnComponent.size.y - componentsHeight - 20) / 2;
       expect(firstText.position.y, startPosition);
       expect(secondText.position.y, startPosition + 60);
       expect(thirdText.position.y, startPosition + 170);
