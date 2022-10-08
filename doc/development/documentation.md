@@ -174,7 +174,7 @@ following:
       ```console
       pip install -r doc/_sphinx/requirements.txt
       ```
-4. Melos as per the [contributing](../../CONTRIBUTING.md#environment-setup) guide.
+4. Melos as per the [contributing](https://github.com/flame-engine/flame/blob/main/CONTRIBUTING.md#environment-setup) guide.
 
 Once these prerequisites are met, you can build the documentation by switching to the root project and running the built-in Melos target:
 
@@ -184,7 +184,7 @@ melos doc-build
 
 The **melos doc-build** command here renders the documentation site into HTML. This command needs to
 be re-run every time you make changes to any of the documents. Luckily, it is smart enough to only
-rebuild the documents that have changed since the previous run, so usually a rebuild takes only
+rebuild the documents that have changed since the previous run, so usually, a rebuild takes only
 a second or two.
 
 If you want to automatically recompile the docs every time there is a change to one of the files
