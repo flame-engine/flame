@@ -312,7 +312,7 @@ uses multiple paints, the effect can target any individual color using the `pain
 
 ```{flutter-app}
 :sources: ../flame/examples
-:page: opacity_effect
+:page: opacity_to_effect
 :show: widget code infobox
 :width: 180
 :height: 160
