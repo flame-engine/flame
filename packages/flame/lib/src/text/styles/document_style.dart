@@ -1,12 +1,13 @@
-import 'package:flame/src/text/nodes/block_node.dart';
+import 'package:flame/src/text/nodes/bold_text_node.dart';
 import 'package:flame/src/text/nodes/header_node.dart';
+import 'package:flame/src/text/nodes/italic_text_node.dart';
 import 'package:flame/src/text/nodes/paragraph_node.dart';
 import 'package:flame/src/text/styles/background_style.dart';
 import 'package:flame/src/text/styles/block_style.dart';
+import 'package:flame/src/text/styles/flame_text_style.dart';
 import 'package:flame/src/text/styles/overflow.dart';
 import 'package:flame/src/text/styles/style.dart';
 import 'package:flutter/painting.dart' show EdgeInsets;
-import 'package:meta/meta.dart';
 
 /// [DocumentStyle] is a user-facing description of how to render an entire
 /// body of text; it roughly corresponds to a stylesheet in HTML.
@@ -21,25 +22,39 @@ class DocumentStyle extends Style {
   DocumentStyle({
     this.width,
     this.height,
-    EdgeInsets? padding,
-    BackgroundStyle? background,
-    BlockStyle? paragraphStyle,
-    BlockStyle? header1Style,
-    BlockStyle? header2Style,
-    BlockStyle? header3Style,
-    BlockStyle? header4Style,
-    BlockStyle? header5Style,
-    BlockStyle? header6Style,
-  }) : padding = padding ?? EdgeInsets.zero {
-    backgroundStyle = acquire(background);
-    this.paragraphStyle = acquire(paragraphStyle ?? defaultParagraphStyle)!;
-    this.header1Style = acquire(header1Style ?? defaultHeader1Style)!;
-    this.header2Style = acquire(header2Style ?? defaultHeader2Style)!;
-    this.header3Style = acquire(header3Style ?? defaultHeader3Style)!;
-    this.header4Style = acquire(header4Style ?? defaultHeader4Style)!;
-    this.header5Style = acquire(header5Style ?? defaultHeader5Style)!;
-    this.header6Style = acquire(header6Style ?? defaultHeader6Style)!;
-  }
+    this.padding = EdgeInsets.zero,
+    this.background,
+    FlameTextStyle? text,
+    FlameTextStyle? boldText,
+    FlameTextStyle? italicText,
+    BlockStyle? paragraph,
+    BlockStyle? header1,
+    BlockStyle? header2,
+    BlockStyle? header3,
+    BlockStyle? header4,
+    BlockStyle? header5,
+    BlockStyle? header6,
+  })  : _text = Style.merge(text, DocumentStyle.defaultTextStyle),
+        _boldText = Style.merge(boldText, BoldTextNode.defaultStyle),
+        _italicText = Style.merge(italicText, ItalicTextNode.defaultStyle),
+        _paragraph = Style.merge(paragraph, ParagraphNode.defaultStyle),
+        _header1 = Style.merge(header1, HeaderNode.defaultStyleH1),
+        _header2 = Style.merge(header2, HeaderNode.defaultStyleH2),
+        _header3 = Style.merge(header3, HeaderNode.defaultStyleH3),
+        _header4 = Style.merge(header4, HeaderNode.defaultStyleH4),
+        _header5 = Style.merge(header5, HeaderNode.defaultStyleH5),
+        _header6 = Style.merge(header6, HeaderNode.defaultStyleH6);
+
+  final FlameTextStyle? _text;
+  final FlameTextStyle? _boldText;
+  final FlameTextStyle? _italicText;
+  final BlockStyle? _paragraph;
+  final BlockStyle? _header1;
+  final BlockStyle? _header2;
+  final BlockStyle? _header3;
+  final BlockStyle? _header4;
+  final BlockStyle? _header5;
+  final BlockStyle? _header6;
 
   /// Outer width of the document page.
   ///
@@ -65,7 +80,7 @@ class DocumentStyle extends Style {
   /// Behavior of the document when the amount of content that needs to be laid
   /// out exceeds the provided [height]. See the [Overflow] enum description for
   /// more details.
-  final Overflow overflow = Overflow.expand;
+  Overflow get overflow => Overflow.expand;
 
   /// The distance from the outer edges of the page to the inner content box of
   /// the document.
@@ -79,89 +94,51 @@ class DocumentStyle extends Style {
 
   /// If present, describes what kind of background and borders to draw for the
   /// document page(s).
-  late final BackgroundStyle? backgroundStyle;
+  final BackgroundStyle? background;
 
-  /// Style for paragraph nodes in the document.
-  late final BlockStyle paragraphStyle;
+  FlameTextStyle get text => _text!;
+  FlameTextStyle get boldText => _boldText!;
+  FlameTextStyle get italicText => _italicText!;
 
-  /// Style for level-1 headers.
-  late final BlockStyle header1Style;
+  /// Style for [ParagraphNode]s.
+  BlockStyle get paragraph => _paragraph!;
 
-  /// Style for level-2 headers.
-  late final BlockStyle header2Style;
+  /// Styles for [HeaderNode]s, levels 1 to 6.
+  BlockStyle get header1 => _header1!;
+  BlockStyle get header2 => _header2!;
+  BlockStyle get header3 => _header3!;
+  BlockStyle get header4 => _header4!;
+  BlockStyle get header5 => _header5!;
+  BlockStyle get header6 => _header6!;
 
-  /// Style for level-3 headers.
-  late final BlockStyle header3Style;
-
-  /// Style for level-4 headers.
-  late final BlockStyle header4Style;
-
-  /// Style for level-5 headers.
-  late final BlockStyle header5Style;
-
-  /// Style for level-6 headers.
-  late final BlockStyle header6Style;
-
-  static BlockStyle defaultParagraphStyle = BlockStyle();
-  static BlockStyle defaultHeader1Style = BlockStyle();
-  static BlockStyle defaultHeader2Style = BlockStyle();
-  static BlockStyle defaultHeader3Style = BlockStyle();
-  static BlockStyle defaultHeader4Style = BlockStyle();
-  static BlockStyle defaultHeader5Style = BlockStyle();
-  static BlockStyle defaultHeader6Style = BlockStyle();
+  static FlameTextStyle defaultTextStyle = FlameTextStyle(fontSize: 16.0);
 
   @override
-  DocumentStyle clone() => copyWith();
-
-  DocumentStyle copyWith({
-    double? width,
-    double? height,
-    EdgeInsets? padding,
-    BackgroundStyle? background,
-    BlockStyle? paragraphStyle,
-    BlockStyle? header1Style,
-    BlockStyle? header2Style,
-    BlockStyle? header3Style,
-    BlockStyle? header4Style,
-    BlockStyle? header5Style,
-    BlockStyle? header6Style,
-  }) {
+  DocumentStyle copyWith(DocumentStyle other) {
     return DocumentStyle(
-      width: width ?? this.width,
-      height: height ?? this.height,
-      padding: padding ?? this.padding,
-      background: background ?? backgroundStyle,
-      paragraphStyle: paragraphStyle ?? this.paragraphStyle,
-      header1Style: header1Style ?? this.header1Style,
-      header2Style: header2Style ?? this.header2Style,
-      header3Style: header3Style ?? this.header3Style,
-      header4Style: header4Style ?? this.header4Style,
-      header5Style: header5Style ?? this.header5Style,
-      header6Style: header6Style ?? this.header6Style,
+      width: other.width ?? width,
+      height: other.height ?? height,
+      padding: other.padding,
+      background: merge(other.background, background)! as BackgroundStyle,
+      paragraph: merge(other.paragraph, paragraph)! as BlockStyle,
+      header1: merge(other.header1, header1)! as BlockStyle,
+      header2: merge(other.header2, header2)! as BlockStyle,
+      header3: merge(other.header3, header3)! as BlockStyle,
+      header4: merge(other.header4, header4)! as BlockStyle,
+      header5: merge(other.header5, header5)! as BlockStyle,
+      header6: merge(other.header6, header6)! as BlockStyle,
     );
   }
 
-  @internal
-  BlockStyle styleFor(BlockNode node) {
-    if (node is ParagraphNode) {
-      return paragraphStyle;
+  final Map<Style, Map<Style, Style>> _mergedStylesCache = {};
+  Style? merge(Style? style1, Style? style2) {
+    if (style1 == null) {
+      return style2;
+    } else if (style2 == null) {
+      return style1;
+    } else {
+      return (_mergedStylesCache[style1] ??= {})[style2] ??=
+          style1.copyWith(style2);
     }
-    if (node is HeaderNode) {
-      switch (node.level) {
-        case 1:
-          return header1Style;
-        case 2:
-          return header2Style;
-        case 3:
-          return header3Style;
-        case 4:
-          return header4Style;
-        case 5:
-          return header5Style;
-        default:
-          return header6Style;
-      }
-    }
-    return BlockStyle();
   }
 }

@@ -1,12 +1,12 @@
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
-import 'package:flame/sprite.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 import 'package:flame_tiled/src/mutable_rect.dart';
 import 'package:flame_tiled/src/mutable_transform.dart';
 import 'package:flame_tiled/src/renderable_layers/group_layer.dart';
 import 'package:flame_tiled/src/renderable_layers/renderable_layer.dart';
 import 'package:flame_tiled/src/tile_animation.dart';
+import 'package:flame_tiled/src/tile_atlas.dart';
 import 'package:flame_tiled/src/tile_transform.dart';
 import 'package:flutter/painting.dart';
 import 'package:meta/meta.dart';
@@ -16,7 +16,7 @@ import 'package:tiled/tiled.dart';
 @internal
 class TileLayer extends RenderableLayer<tiled.TileLayer> {
   late final _layerPaint = Paint();
-  late final Map<String, SpriteBatch> _cachedSpriteBatches;
+  final TiledAtlas tiledAtlas;
   late List<List<MutableRSTransform?>> indexes;
   final animations = <TileAnimation>[];
   final Map<Tile, TileFrames> animationFrames;
@@ -26,7 +26,7 @@ class TileLayer extends RenderableLayer<tiled.TileLayer> {
     super.parent,
     super.map,
     super.destTileSize,
-    this._cachedSpriteBatches,
+    this.tiledAtlas,
     this.animationFrames,
   ) {
     _layerPaint.color = Color.fromRGBO(255, 255, 255, opacity);
@@ -51,9 +51,7 @@ class TileLayer extends RenderableLayer<tiled.TileLayer> {
   }
 
   void _cacheLayerTiles() {
-    for (final batch in _cachedSpriteBatches.values) {
-      batch.clear();
-    }
+    tiledAtlas.batch?.clear();
 
     if (map.orientation == null) {
       return;
@@ -77,9 +75,12 @@ class TileLayer extends RenderableLayer<tiled.TileLayer> {
 
   void _cacheOrthogonalLayerTiles() {
     final tileData = layer.tileData!;
-    final batchMap = _cachedSpriteBatches;
     final size = destTileSize;
     final halfMapTile = Vector2(map.tileWidth / 2, map.tileHeight / 2);
+    final batch = tiledAtlas.batch;
+    if (batch == null) {
+      return;
+    }
 
     for (var ty = 0; ty < tileData.length; ty++) {
       final tileRow = tileData[ty];
@@ -98,13 +99,18 @@ class TileLayer extends RenderableLayer<tiled.TileLayer> {
           continue;
         }
 
-        final batch = batchMap[img.source];
-        if (batch == null) {
-          continue;
+        if (!tiledAtlas.contains(img.source)) {
+          return;
         }
 
-        final src =
-            MutableRect.fromRect(tileset.computeDrawRect(tile).toRect());
+        final spriteOffset = tiledAtlas.offsets[img.source]!;
+        final src = MutableRect.fromRect(
+          tileset
+              .computeDrawRect(tile)
+              .toRect()
+              .translate(spriteOffset.dx, spriteOffset.dy),
+        );
+
         final flips = SimpleFlips.fromFlips(tileGid.flips);
         final scale = size.x / src.width;
         final anchorX = src.width - halfMapTile.x;
@@ -142,12 +148,15 @@ class TileLayer extends RenderableLayer<tiled.TileLayer> {
 
   void _cacheIsometricTiles() {
     final tileData = layer.tileData!;
-    final batchMap = _cachedSpriteBatches;
     final halfDestinationTile = destTileSize / 2;
     final size = destTileSize;
     final isometricXShift = map.height * halfDestinationTile.x;
     final isometricYShift = halfDestinationTile.y;
     final halfMapTile = Vector2(map.tileWidth / 2, map.tileHeight / 2);
+    final batch = tiledAtlas.batch;
+    if (batch == null) {
+      return;
+    }
 
     for (var ty = 0; ty < tileData.length; ty++) {
       final tileRow = tileData[ty];
@@ -165,13 +174,17 @@ class TileLayer extends RenderableLayer<tiled.TileLayer> {
           continue;
         }
 
-        final batch = batchMap[img.source];
-        if (batch == null) {
-          continue;
+        if (!tiledAtlas.contains(img.source)) {
+          return;
         }
 
-        final src =
-            MutableRect.fromRect(tileset.computeDrawRect(tile).toRect());
+        final spriteOffset = tiledAtlas.offsets[img.source]!;
+        final src = MutableRect.fromRect(
+          tileset
+              .computeDrawRect(tile)
+              .toRect()
+              .translate(spriteOffset.dx, spriteOffset.dy),
+        );
         final flips = SimpleFlips.fromFlips(tileGid.flips);
         final scale = size.x / src.width;
         final anchorX = src.width - halfMapTile.x;
@@ -210,10 +223,13 @@ class TileLayer extends RenderableLayer<tiled.TileLayer> {
 
   void _cacheIsometricStaggeredTiles() {
     final tileData = layer.tileData!;
-    final batchMap = _cachedSpriteBatches;
     final halfDestinationTile = destTileSize / 2;
     final size = destTileSize;
     final halfMapTile = Vector2(map.tileWidth / 2, map.tileHeight / 2);
+    final batch = tiledAtlas.batch;
+    if (batch == null) {
+      return;
+    }
 
     var staggerY = 0.0;
     var staggerX = 0.0;
@@ -257,10 +273,17 @@ class TileLayer extends RenderableLayer<tiled.TileLayer> {
           continue;
         }
 
-        final batch = batchMap[img.source];
-        if (batch == null) {
-          continue;
+        if (!tiledAtlas.contains(img.source)) {
+          return;
         }
+
+        final spriteOffset = tiledAtlas.offsets[img.source]!;
+        final src = MutableRect.fromRect(
+          tileset
+              .computeDrawRect(tile)
+              .toRect()
+              .translate(spriteOffset.dx, spriteOffset.dy),
+        );
 
         // Tiles shift up and down as we move across the row.
         if (map.staggerAxis == tiled.StaggerAxis.x) {
@@ -272,8 +295,6 @@ class TileLayer extends RenderableLayer<tiled.TileLayer> {
           }
         }
 
-        final src =
-            MutableRect.fromRect(tileset.computeDrawRect(tile).toRect());
         final flips = SimpleFlips.fromFlips(tileGid.flips);
         final scale = size.x / src.width;
         final anchorX = src.width - halfMapTile.x;
@@ -336,10 +357,13 @@ class TileLayer extends RenderableLayer<tiled.TileLayer> {
 
   void _cacheHexagonalTiles() {
     final tileData = layer.tileData!;
-    final batchMap = _cachedSpriteBatches;
     final halfDestinationTile = destTileSize / 2;
     final size = destTileSize;
     final halfMapTile = Vector2(map.tileWidth / 2, map.tileHeight / 2);
+    final batch = tiledAtlas.batch;
+    if (batch == null) {
+      return;
+    }
 
     var staggerY = 0.0;
     var staggerX = 0.0;
@@ -383,10 +407,17 @@ class TileLayer extends RenderableLayer<tiled.TileLayer> {
           continue;
         }
 
-        final batch = batchMap[img.source];
-        if (batch == null) {
-          continue;
+        if (!tiledAtlas.contains(img.source)) {
+          return;
         }
+
+        final spriteOffset = tiledAtlas.offsets[img.source]!;
+        final src = MutableRect.fromRect(
+          tileset
+              .computeDrawRect(tile)
+              .toRect()
+              .translate(spriteOffset.dx, spriteOffset.dy),
+        );
 
         // Hexagonal Flat tiles shift up and down as we move across the row.
         if (map.staggerAxis == tiled.StaggerAxis.x) {
@@ -398,8 +429,6 @@ class TileLayer extends RenderableLayer<tiled.TileLayer> {
           }
         }
 
-        final src =
-            MutableRect.fromRect(tileset.computeDrawRect(tile).toRect());
         final flips = SimpleFlips.fromFlips(tileGid.flips);
         final scale = size.x / src.width;
         final anchorX = src.width - halfMapTile.x;
@@ -461,6 +490,10 @@ class TileLayer extends RenderableLayer<tiled.TileLayer> {
 
   @override
   void render(Canvas canvas, Camera? camera) {
+    if (tiledAtlas.batch == null) {
+      return;
+    }
+
     canvas.save();
 
     canvas.translate(offsetX, offsetY);
@@ -469,9 +502,7 @@ class TileLayer extends RenderableLayer<tiled.TileLayer> {
       applyParallaxOffset(canvas, camera);
     }
 
-    for (final batch in _cachedSpriteBatches.values) {
-      batch.render(canvas, paint: _layerPaint);
-    }
+    tiledAtlas.batch!.render(canvas, paint: _layerPaint);
 
     canvas.restore();
   }
@@ -482,30 +513,16 @@ class TileLayer extends RenderableLayer<tiled.TileLayer> {
     tiled.TiledMap map,
     Vector2 destTileSize,
     Map<tiled.Tile, TileFrames> animationFrames,
+    TiledAtlas atlas,
   ) async {
     return TileLayer(
       layer,
       parent,
       map,
       destTileSize,
-      await _loadImages(map),
+      atlas,
       animationFrames,
     );
-  }
-
-  static Future<Map<String, SpriteBatch>> _loadImages(
-    tiled.TiledMap map,
-  ) async {
-    final result = <String, SpriteBatch>{};
-
-    for (final img in map.tiledImages()) {
-      final src = img.source;
-      if (src != null) {
-        result[src] = await SpriteBatch.load(src);
-      }
-    }
-
-    return result;
   }
 
   @override
@@ -513,15 +530,24 @@ class TileLayer extends RenderableLayer<tiled.TileLayer> {
 
   void _addAnimation(Tile tile, Tileset tileset, MutableRect source) {
     final frames = animationFrames[tile] ??= () {
-      final rects = <Rect>[];
+      final frameRectangles = <Rect>[];
       final durations = <double>[];
       for (final frame in tile.animation) {
         final newTile = tileset.tiles[frame.tileId];
-        final rect = tileset.computeDrawRect(newTile).toRect();
-        rects.add(rect);
+        final image = newTile.image ?? tileset.image;
+        if (image?.source == null || !tiledAtlas.contains(image!.source)) {
+          continue;
+        }
+
+        final spriteOffset = tiledAtlas.offsets[image.source]!;
+        final rect = tileset
+            .computeDrawRect(newTile)
+            .toRect()
+            .translate(spriteOffset.dx, spriteOffset.dy);
+        frameRectangles.add(rect);
         durations.add(frame.duration / 1000);
       }
-      return TileFrames(rects, durations);
+      return TileFrames(frameRectangles, durations);
     }();
     animations.add(TileAnimation(source, frames));
   }

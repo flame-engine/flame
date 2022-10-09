@@ -736,6 +736,82 @@ void main() {
       );
     });
 
+    group('onChildrenChanged()', () {
+      testWithFlameGame(
+        'after adding a child the method onChildrenChanged should be called',
+        (game) async {
+          final child = Component();
+          final parent = _OnChildrenChangedComponent();
+          await game.ensureAdd(parent);
+          expect(parent.onChangedChildrenRuns, 0);
+          await parent.ensureAdd(child);
+          expect(parent.onChangedChildrenRuns, 1);
+          expect(parent.lastChangeType, ChildrenChangeType.added);
+        },
+      );
+
+      testWithFlameGame(
+        'after adding several childs using addAll the method onChildrenChanged '
+        'should be called list.length times',
+        (game) async {
+          final list = [Component(), Component()];
+          final parent = _OnChildrenChangedComponent();
+          await game.ensureAdd(parent);
+          expect(parent.onChangedChildrenRuns, 0);
+          await parent.ensureAddAll(list);
+          expect(parent.onChangedChildrenRuns, 2);
+          expect(parent.lastChangeType, ChildrenChangeType.added);
+        },
+      );
+
+      testWithFlameGame(
+        'changing the parent should call onChildrenChanged on both parents',
+        (game) async {
+          final child = Component();
+          final parent1 = _OnChildrenChangedComponent();
+          final parent2 = _OnChildrenChangedComponent();
+          await game.ensureAdd(parent1);
+          await game.ensureAdd(parent2);
+          await parent1.ensureAdd(child);
+          child.changeParent(parent2);
+          await game.ready();
+          expect(parent1.onChangedChildrenRuns, 2);
+          expect(parent1.lastChangeType, ChildrenChangeType.removed);
+          expect(parent2.onChangedChildrenRuns, 1);
+          expect(parent2.lastChangeType, ChildrenChangeType.added);
+        },
+      );
+
+      testWithFlameGame(
+        'after removing a child the method onChildrenChanged should be called',
+        (game) async {
+          final child = Component();
+          final parent = _OnChildrenChangedComponent();
+          await game.ensureAdd(parent);
+          await parent.ensureAdd(child);
+          parent.remove(child);
+          await game.ready();
+          expect(parent.onChangedChildrenRuns, 2);
+          expect(parent.lastChangeType, ChildrenChangeType.removed);
+        },
+      );
+
+      testWithFlameGame(
+        'after removing a list of components the method onChildrenChanged '
+        'should be called list.length times',
+        (game) async {
+          final list = [Component(), Component()];
+          final parent = _OnChildrenChangedComponent();
+          await game.ensureAdd(parent);
+          await parent.ensureAddAll(list);
+          parent.removeAll(list);
+          await game.ready();
+          expect(parent.onChangedChildrenRuns, 4);
+          expect(parent.lastChangeType, ChildrenChangeType.removed);
+        },
+      );
+    });
+
     group('componentsAtPoint()', () {
       testWithFlameGame('nested components', (game) async {
         final compA = PositionComponent()
@@ -1036,5 +1112,16 @@ class _GameResizeComponent extends PositionComponent {
   void onGameResize(Vector2 gameSize) {
     super.onGameResize(gameSize);
     this.gameSize = gameSize;
+  }
+}
+
+class _OnChildrenChangedComponent extends PositionComponent {
+  int onChangedChildrenRuns = 0;
+  ChildrenChangeType? lastChangeType;
+
+  @override
+  void onChildrenChanged(Component child, ChildrenChangeType type) {
+    onChangedChildrenRuns++;
+    lastChangeType = type;
   }
 }

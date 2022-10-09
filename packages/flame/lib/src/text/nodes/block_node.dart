@@ -1,55 +1,20 @@
-import 'package:flame/src/text/elements/element.dart';
-import 'package:flame/src/text/elements/group_element.dart';
-import 'package:flame/src/text/elements/rect_element.dart';
-import 'package:flame/src/text/elements/rrect_element.dart';
-import 'package:flame/src/text/styles/background_style.dart';
+import 'package:flame/src/text/elements/block_element.dart';
+import 'package:flame/src/text/styles/block_style.dart';
+import 'package:flame/src/text/styles/document_style.dart';
+import 'package:flame/src/text/styles/flame_text_style.dart';
 
-/// An abstract base class for all entities with "block" placement rules.
+/// [BlockNode] is a base class for all nodes with "block" placement rules; it
+/// roughly corresponds to `<div/>` in HTML.
+///
+/// A block node should be able to find its style in the root stylesheet, via
+/// the method [fillStyles], and then based on that style build the
+/// corresponding element in the [format] method. Both of these methods must be
+/// implemented by subclasses.
 abstract class BlockNode {
-  Element? makeBackground(BackgroundStyle? style, double width, double height) {
-    if (style == null) {
-      return null;
-    }
-    final out = <Element>[];
-    final backgroundPaint = style.backgroundPaint;
-    final borderPaint = style.borderPaint;
-    final borders = style.borderWidths;
-    final radius = style.borderRadius;
+  /// The runtime style applied to this node, this will be set by [fillStyles].
+  late BlockStyle style;
 
-    if (backgroundPaint != null) {
-      if (radius == 0) {
-        out.add(RectElement(width, height, backgroundPaint));
-      } else {
-        out.add(RRectElement(width, height, radius, backgroundPaint));
-      }
-    }
-    if (borderPaint != null) {
-      if (radius == 0) {
-        out.add(
-          RectElement(
-            width - borders.horizontal / 2,
-            height - borders.vertical / 2,
-            borderPaint,
-          )..translate(borders.left / 2, borders.top / 2),
-        );
-      } else {
-        out.add(
-          RRectElement(
-            width - borders.horizontal / 2,
-            height - borders.vertical / 2,
-            radius,
-            borderPaint,
-          )..translate(borders.left / 2, borders.top / 2),
-        );
-      }
-    }
-    if (out.isEmpty) {
-      return null;
-    }
-    if (out.length == 1) {
-      return out.first;
-    } else {
-      return GroupElement(width, height, out);
-    }
-  }
+  BlockElement format(double availableWidth);
+
+  void fillStyles(DocumentStyle stylesheet, FlameTextStyle parentTextStyle);
 }

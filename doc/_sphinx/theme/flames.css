@@ -40,6 +40,10 @@ a:hover {
   color: #ddbb99;
 }
 
+a.reference.external {
+  word-wrap: break-word;
+}
+
 a.reference.external::after {
   content: "\f35d";
   font-family: var(--font-awesome);
@@ -591,6 +595,14 @@ div.document :is(h1, h2, h3, h4) > code {
  * Code
  *----------------------------------------------------------------------------*/
 
+ div[class^="highlight-"] {
+  position: relative;
+  overflow-x: auto;
+  padding: 2px;
+  padding-top: 11px;
+  margin-top: -11px;
+}
+
 pre {
   background: #202020;
   border: none;
@@ -602,13 +614,11 @@ pre {
   line-height: 125%;
   margin: 0;
   padding: 10px;
-  position: relative;
 }
 
 div[class^="highlight-"] pre:before {
   background: black;
-  border-bottom-left-radius: 5px;
-  border-top-right-radius: 5px;
+  border-radius: 5px;
   color: #58d0ff;
   font-size: 80%;
   padding: 1px 8px;

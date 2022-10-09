@@ -1,4 +1,4 @@
-# Collision detection
+# Collision Detection
 
 Collision detection is needed in most games to detect and act upon two components intersecting each
 other. For example an arrow hitting an enemy or the player picking up a coin.
@@ -47,6 +47,15 @@ automatically be checked for collisions.
 
 To react to a collision you should add the `CollisionCallbacks` mixin to your component.
 Example:
+
+
+```{flutter-app}
+:sources: ../flame/examples
+:page: collision_detection
+:show: widget code infobox
+:width: 180
+:height: 160
+```
 
 ```dart
 class MyCollidable extends PositionComponent with CollisionCallbacks {
@@ -336,6 +345,10 @@ a single ray and gets back a result with information about what and where the ra
 extra information like the distance, the normal and the reflection ray. The second one, `raycastAll`,
 works similarly but sends out multiple rays uniformly around the origin, or within an angle
 centered at the origin.
+
+By default, `raycast` and `raycastAll` scan for the nearest hit irrespective of how far it lies from
+the ray origin. But in some use cases, it might be interesting to find hits only within a certain
+range. For such cases, an optional `maxDistance` can be provided.
 
 To use the ray casting functionality you have to have the `HasCollisionDetection` mixin on your
 game. After you have added that you can call `collisionDetection.raycast(...)` on your game class.
