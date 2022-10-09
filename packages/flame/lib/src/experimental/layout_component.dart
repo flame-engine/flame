@@ -16,14 +16,13 @@ abstract class LayoutComponent extends PositionComponent with HasGameRef {
     this.mainAxisAlignment,
     this._gap,
     Vector2? size,
-  ) : super(
+  )   : isManuallySized = size != null,
+        super(
           size: size,
-        ) {
-    isManuallySized = size != null;
-  }
+        );
   final Direction direction;
   final MainAxisAlignment mainAxisAlignment;
-  late bool isManuallySized;
+  bool isManuallySized;
 
   /// gap between components
   double _gap;
