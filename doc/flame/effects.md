@@ -310,6 +310,14 @@ This effect will change over time the opacity of the target to the specified alp
 this effect can only be applied to components that have a `HasPaint` mixin. If the target component
 uses multiple paints, the effect can target any individual color using the `paintId` parameter.
 
+```{flutter-app}
+:sources: ../flame/examples
+:page: opacity_effect
+:show: widget code infobox
+:width: 180
+:height: 160
+```
+
 ```dart
 final effect = OpacityEffect.to(0.5, EffectController(duration: 0.75));
 ```

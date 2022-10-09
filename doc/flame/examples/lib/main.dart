@@ -9,6 +9,7 @@ import 'package:doc_flame_examples/decorator_rotate3d.dart';
 import 'package:doc_flame_examples/decorator_shadow3d.dart';
 import 'package:doc_flame_examples/decorator_tint.dart';
 import 'package:doc_flame_examples/drag_events.dart';
+import 'package:doc_flame_examples/opacity_effect.dart';
 import 'package:doc_flame_examples/rotate_by_effect.dart';
 import 'package:doc_flame_examples/rotate_to_effect.dart';
 import 'package:doc_flame_examples/router.dart';
@@ -35,6 +36,7 @@ void main() {
     'decorator_shadow3d': DecoratorShadowGame.new,
     'decorator_tint': DecoratorTintGame.new,
     'drag_events': DragEventsGame.new,
+    'opacity_effect': OpacityGame.new,
     'rotate_by_effect': RotateByEffectGame.new,
     'rotate_to_effect': RotateToEffectGame.new,
     'router': RouterGame.new,
