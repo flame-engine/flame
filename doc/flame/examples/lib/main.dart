@@ -36,7 +36,7 @@ void main() {
     'decorator_shadow3d': DecoratorShadowGame.new,
     'decorator_tint': DecoratorTintGame.new,
     'drag_events': DragEventsGame.new,
-    'opacity_effect': OpacityGame.new,
+    'opacity_effect': OpacityToEffectGame.new,
     'rotate_by_effect': RotateByEffectGame.new,
     'rotate_to_effect': RotateToEffectGame.new,
     'router': RouterGame.new,
