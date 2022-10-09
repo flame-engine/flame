@@ -21,7 +21,7 @@ class MoveByEffectGame extends FlameGame with HasTappableComponents {
         } else {
           flower.add(
             MoveEffect.by(
-              Vector2(size.x / 2, size.y / 2),
+              size / 2,
               EffectController(duration: 1.0),
             ),
           );
