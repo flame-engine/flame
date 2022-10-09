@@ -355,7 +355,7 @@ animate the target into full transparency / full visibility respectively.
 ### `OpacityByEffect`
 
 This effect will change the opacity of the target relative to the specified alpha-value. For example,
-the following effect will change the opacity of the target by 50%:
+the following effect will change the opacity of the target by `90%`:
 
 ```{flutter-app}
 :sources: ../flame/examples
