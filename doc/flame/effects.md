@@ -101,6 +101,14 @@ functionality inherited by all other effects. This includes:
 This effect applies to a `PositionComponent` and shifts it by a prescribed `offset` amount. This
 offset is relative to the current position of the target:
 
+```{flutter-app}
+:sources: ../flame/examples
+:page: move_by_effect
+:show: widget code infobox
+:width: 180
+:height: 160
+```
+
 ```dart
 final effect = MoveByEffect(Vector2(0, -10), EffectController(duration: 0.5));
 ```
@@ -117,6 +125,14 @@ superposition of all the individual effects.
 This effect moves a `PositionComponent` from its current position to the specified destination
 point in a straight line.
 
+```{flutter-app}
+:sources: ../flame/examples
+:page: move_to_effect
+:show: widget code infobox
+:width: 180
+:height: 160
+```
+
 ```dart
 final effect = MoveToEffect(Vector2(100, 500), EffectController(duration: 3));
 ```
@@ -130,6 +146,14 @@ This effect moves a `PositionComponent` along the specified path relative to the
 current position. The path can have non-linear segments, but must be singly connected. It is
 recommended to start a path at `Vector2.zero()` in order to avoid sudden jumps in the component's
 position.
+
+```{flutter-app}
+:sources: ../flame/examples
+:page: move_along_path_effect
+:show: widget code infobox
+:width: 180
+:height: 160
+```
 
 ```dart
 final effect = MoveAlongPathEffect(
