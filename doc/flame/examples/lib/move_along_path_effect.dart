@@ -16,7 +16,8 @@ class MoveAlongPathEffectGame extends FlameGame with HasTappableComponents {
       position: canvasSize / 2,
       onTap: (flower) {
         if (reset = !reset) {
-          flower.add(MoveAlongPathEffect(
+          flower.add(
+            MoveAlongPathEffect(
               Path()..quadraticBezierTo(100, 0, 50, -50),
               EffectController(duration: 1.5),
             ),

@@ -98,6 +98,9 @@ functionality inherited by all other effects. This includes:
 
 ### `MoveByEffect`
 
+This effect applies to a `PositionComponent` and shifts it by a prescribed `offset` amount. This
+offset is relative to the current position of the target:
+
 ```{flutter-app}
 :sources: ../flame/examples
 :page: move_by_effect
@@ -105,9 +108,6 @@ functionality inherited by all other effects. This includes:
 :width: 180
 :height: 160
 ```
-
-This effect applies to a `PositionComponent` and shifts it by a prescribed `offset` amount. This
-offset is relative to the current position of the target:
 
 ```dart
 final effect = MoveByEffect(Vector2(0, -10), EffectController(duration: 0.5));
@@ -122,6 +122,9 @@ superposition of all the individual effects.
 
 ### `MoveToEffect`
 
+This effect moves a `PositionComponent` from its current position to the specified destination
+point in a straight line.
+
 ```{flutter-app}
 :sources: ../flame/examples
 :page: move_to_effect
@@ -129,9 +132,6 @@ superposition of all the individual effects.
 :width: 180
 :height: 160
 ```
-
-This effect moves a `PositionComponent` from its current position to the specified destination
-point in a straight line.
 
 ```dart
 final effect = MoveToEffect(Vector2(100, 500), EffectController(duration: 3));
@@ -141,6 +141,12 @@ It is possible, but not recommended to attach multiple such effects to the same 
 
 
 ### `MoveAlongPathEffect`
+
+This effect moves a `PositionComponent` along the specified path relative to the component's
+current position. The path can have non-linear segments, but must be singly connected. It is
+recommended to start a path at `Vector2.zero()` in order to avoid sudden jumps in the component's
+position.
+
 ```{flutter-app}
 :sources: ../flame/examples
 :page: move_along_path_effect
@@ -148,10 +154,6 @@ It is possible, but not recommended to attach multiple such effects to the same 
 :width: 180
 :height: 160
 ```
-This effect moves a `PositionComponent` along the specified path relative to the component's
-current position. The path can have non-linear segments, but must be singly connected. It is
-recommended to start a path at `Vector2.zero()` in order to avoid sudden jumps in the component's
-position.
 
 ```dart
 final effect = MoveAlongPathEffect(
