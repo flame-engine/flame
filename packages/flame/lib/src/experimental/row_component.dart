@@ -12,10 +12,6 @@ class RowComponent extends LayoutComponent {
           Direction.horizontal,
           mainAxisAlignment,
           gap,
-          size != null || false,
-        ) {
-    if (size != null) {
-      this.size = size;
-    }
-  }
+          size,
+        );
 }

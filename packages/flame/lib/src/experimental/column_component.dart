@@ -13,10 +13,6 @@ class ColumnComponent extends LayoutComponent {
           Direction.vertical,
           mainAxisAlignment,
           gap,
-          size != null || false,
-        ) {
-    if (size != null) {
-      this.size = size;
-    }
-  }
+          size,
+        );
 }
