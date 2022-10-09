@@ -11,6 +11,9 @@ import 'package:doc_flame_examples/decorator_tint.dart';
 import 'package:doc_flame_examples/drag_events.dart';
 import 'package:doc_flame_examples/opacity_by_effect.dart';
 import 'package:doc_flame_examples/opacity_to_effect.dart';
+import 'package:doc_flame_examples/move_along_path_effect.dart';
+import 'package:doc_flame_examples/move_by_effect.dart';
+import 'package:doc_flame_examples/move_to_effect.dart';
 import 'package:doc_flame_examples/rotate_by_effect.dart';
 import 'package:doc_flame_examples/rotate_to_effect.dart';
 import 'package:doc_flame_examples/router.dart';
@@ -39,6 +42,9 @@ void main() {
     'drag_events': DragEventsGame.new,
     'opacity_to_effect': OpacityToEffectGame.new,
     'opacity_by_effect': OpacityByEffectGame.new,
+    'move_along_path_effect': MoveAlongPathEffectGame.new,
+    'move_by_effect': MoveByEffectGame.new,
+    'move_to_effect': MoveToEffectGame.new,
     'rotate_by_effect': RotateByEffectGame.new,
     'rotate_to_effect': RotateToEffectGame.new,
     'router': RouterGame.new,
