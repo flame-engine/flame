@@ -64,7 +64,7 @@ mixin HasPaint<T extends Object> on Component {
       throw ArgumentError('Opacity needs to be between 0 and 1');
     }
 
-    getPaint(paintId).color = paint.color.withOpacity(opacity);
+    setColor(getPaint(paintId).color.withOpacity(opacity), paintId: paintId);
   }
 
   /// Returns the current opacity.
@@ -78,7 +78,7 @@ mixin HasPaint<T extends Object> on Component {
       throw ArgumentError('Alpha needs to be between 0 and 255');
     }
 
-    getPaint(paintId).color = paint.color.withAlpha(alpha);
+    setColor(getPaint(paintId).color.withAlpha(alpha), paintId: paintId);
   }
 
   /// Returns the current opacity.
