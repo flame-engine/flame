@@ -1,63 +1,63 @@
-import 'package:flame/components.dart';
-import 'package:flame/src/effects/component_effect.dart';
-import 'package:flame/src/effects/controllers/effect_controller.dart';
+import 'package:flame/effects.dart';
+import 'package:flame/src/effects/provider_interfaces.dart';
 
 /// Change the opacity of a component over time.
 ///
 /// This effect applies incremental changes to the component's opacity, and
 /// requires that any other effect or update logic applied to the same component
 /// also used incremental updates.
-class OpacityEffect extends ComponentEffect<HasPaint> {
+class OpacityEffect extends Effect with EffectTarget<OpacityProvider> {
   int _alphaOffset;
   double _roundingError = 0.0;
-  final String? paintId;
 
   /// This constructor will set the opacity in relation to it's current opacity
   /// over time.
   OpacityEffect.by(
     double offset,
     super.controller, {
-    this.paintId,
+    OpacityProvider? target,
     super.onComplete,
-  }) : _alphaOffset = (255 * offset).round();
+  }) : _alphaOffset = (255 * offset).round() {
+    this.target = target;
+  }
 
   /// This constructor will set the opacity to the specified opacity over time.
   factory OpacityEffect.to(
     double targetOpacity,
     EffectController controller, {
-    String? paintId,
+    OpacityProvider? target,
     void Function()? onComplete,
   }) {
     return _OpacityToEffect(
       targetOpacity,
       controller,
-      paintId: paintId,
+      target: target,
       onComplete: onComplete,
     );
   }
 
   factory OpacityEffect.fadeIn(
     EffectController controller, {
-    String? paintId,
+    OpacityProvider? target,
     void Function()? onComplete,
   }) {
     return _OpacityToEffect(
       1.0,
       controller,
-      paintId: paintId,
+      target: target,
       onComplete: onComplete,
     );
   }
 
   factory OpacityEffect.fadeOut(
     EffectController controller, {
-    String? paintId,
+    OpacityProvider? target,
     void Function()? onComplete,
   }) {
     return _OpacityToEffect(
       0.0,
       controller,
-      paintId: paintId,
+      target: target,
       onComplete: onComplete,
     );
   }
@@ -65,13 +65,13 @@ class OpacityEffect extends ComponentEffect<HasPaint> {
   @override
   void apply(double progress) {
     final deltaProgress = progress - previousProgress;
-    final currentAlpha = target.getAlpha(paintId: paintId);
+    final currentAlpha = target.alpha;
     final deltaAlpha =
         (_alphaOffset * deltaProgress) + _roundingError * deltaProgress.sign;
     var nextAlpha = (currentAlpha + deltaAlpha).round();
     _roundingError = (currentAlpha + deltaAlpha) - nextAlpha;
     nextAlpha = nextAlpha.clamp(0, 255);
-    target.setAlpha(nextAlpha, paintId: paintId);
+    target.alpha = nextAlpha;
   }
 
   @override
@@ -90,18 +90,17 @@ class _OpacityToEffect extends OpacityEffect {
   _OpacityToEffect(
     this._targetOpacity,
     EffectController controller, {
-    String? paintId,
+    OpacityProvider? target,
     void Function()? onComplete,
   }) : super.by(
           0.0,
           controller,
-          paintId: paintId,
+          target: target,
           onComplete: onComplete,
         );
 
   @override
   void onStart() {
-    _alphaOffset =
-        (_targetOpacity * 255 - target.getAlpha(paintId: paintId)).round();
+    _alphaOffset = (_targetOpacity * 255 - target.alpha).round();
   }
 }
