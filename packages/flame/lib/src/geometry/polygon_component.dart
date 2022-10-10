@@ -106,7 +106,8 @@ class PolygonComponent extends ShapeComponent {
 
   // Used to not create new Vector2 objects when calculating the top left of the
   // bounds of the polygon.
-  final _topLeft = Vector2.zero();
+  @internal
+  final topLeft = Vector2.zero();
 
   @protected
   void refreshVertices({required List<Vector2> newVertices}) {
@@ -114,32 +115,26 @@ class PolygonComponent extends ShapeComponent {
       newVertices.length == _vertices.length,
       'A polygon can not change their number of vertices',
     );
-    _topLeft.setFrom(newVertices[0]);
+    topLeft.setFrom(newVertices[0]);
     newVertices.forEachIndexed((i, _) {
       final newVertex = newVertices[i];
       _vertices[i].setFrom(newVertex);
-      _topLeft.x = min(_topLeft.x, newVertex.x);
-      _topLeft.y = min(_topLeft.y, newVertex.y);
+      topLeft.x = min(topLeft.x, newVertex.x);
+      topLeft.y = min(topLeft.y, newVertex.y);
     });
     _path
       ..reset()
       ..addPolygon(
-        vertices.map((p) => (p - _topLeft).toOffset()).toList(growable: false),
+        vertices.map((p) => (p - topLeft).toOffset()).toList(growable: false),
         true,
       );
     if (shrinkToBounds) {
       final bounds = _path.getBounds();
       size.setValues(bounds.width, bounds.height);
       if (!manuallyPositioned) {
-        position = Anchor.topLeft.toOtherAnchorPosition(_topLeft, anchor, size);
+        position = Anchor.topLeft.toOtherAnchorPosition(topLeft, anchor, size);
       }
     }
-    _vertices.forEach((p) {
-      p.setValues(
-        p.x - _topLeft.x,
-        p.y - _topLeft.y,
-      );
-    });
   }
 
   /// gives back the shape vectors multiplied by the size and scale
@@ -156,6 +151,7 @@ class PolygonComponent extends ShapeComponent {
       vertices.forEachIndexed((i, vertex) {
         _globalVertices[i]
           ..setFrom(vertex)
+          ..sub(topLeft)
           ..multiply(scale)
           ..add(position)
           ..rotate(angle, center: position);
@@ -216,8 +212,9 @@ class PolygonComponent extends ShapeComponent {
     }
     for (var i = 0; i < _vertices.length; i++) {
       final edge = getEdge(i, vertices: vertices);
-      final isOutside = (edge.to.x - edge.from.x) * (point.y - edge.from.y) -
-              (point.x - edge.from.x) * (edge.to.y - edge.from.y) >
+      final isOutside = (edge.to.x - edge.from.x) *
+                  (point.y - edge.from.y + topLeft.y) -
+              (point.x - edge.from.x + topLeft.x) * (edge.to.y - edge.from.y) >
           0;
       if (isOutside) {
         return false;
