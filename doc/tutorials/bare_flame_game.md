@@ -4,8 +4,8 @@ This tutorial assumes that you have basic familiarity with using the command lin
 following programs on your computer (all of them are free):
 
 - [Flutter], version 2.10.0 or above;
-- [Android Studio], or any other IDE, for example [Visual Studio Code];
-- [git] (optional), in order to save your project on GitHub.
+- [Android Studio], or any other IDE, for example, Visual Studio Code];
+- [git] (optional), to save your project on GitHub.
 
 
 ## 1. Check flutter installation
@@ -25,17 +25,15 @@ $ flutter doctor
 ```
 
 Your output will be slightly different, but the important thing is to verify
-that no errors are reported, and that your Flutter version is at least **2.10.0**.
+that no errors are reported and that your Flutter version is at least **2.10.0**.
 
 
-## 2. Create project directory
+## 2. Create the Project Directory
 
 Now you need to come up with a name for your project. The name can only use
-lowercase latin letters, digits, and underscores. It must also be a valid Dart
-identifier (thus, for example, it cannot be a keyword).
-
-In this tutorial we're going to call the project **syzygy**, which is a totally
-real non-made-up word.
+lowercase Latin letters, digits, and underscores. It must also be a valid Dart
+identifier (thus, for example, it cannot be a keyword).In this tutorial, we're
+going to call the project **syzygy**, which is a totally real non-made-up word.
 
 Create the directory for your new project:
 
@@ -45,9 +43,9 @@ cd ~/projects/syzygy
 ```
 
 
-## 3. Initialize empty Flutter project
+## 3. Initialize Empty Flutter Project
 
-In order to turn this barren directory into an actual Flutter project, run the
+To turn this barren directory into an actual Flutter project, run the
 following command:
 
 ```console
@@ -108,17 +106,16 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flame: ^1.1.0
+  flame: ^--VERSION--
 ```
 
-After that, press the `[Pub get]` button at the top of the window; or
-alternatively you could run command `flutter pub get` from the terminal. This
-will "apply" the changes in `pubspec` file to your project, in particular it
-will download the Flame library which we have declared as a dependency. In the
-future, you should run `flutter pub get` whenever you make changes to this
-file.
+After that, press the `[Pub get]` button at the top of the window, or you could
+run command `flutter pub get` from the terminal. This will "apply" the changes
+in `pubspec` file to your project, in particular, it will download the Flame
+library which we have declared as a dependency. In the future, you should run
+`flutter pub get` whenever you make changes to this file.
 
-Now, open file `lib/main.dart` and replace its content with the following:
+Now, open the file `lib/main.dart` and replace its content with the following:
 
 ```dart
 import 'package:flame/game.dart';
@@ -144,20 +141,20 @@ After that open the `main.dart` file and press the green arrow next to the
 `void main()` function in line 4. Select `[Run main.dart]` from the menu.
 
 This should open a new Chrome window (which may take 10-30 seconds) and run
-your project in that window. For now it will simply show a black screen, which
+your project in that window. For now, it will simply show a black screen, which
 is expected because we created the game in its simplest blank configuration.
 
 
 ## 7. Sync to GitHub
 
-The last step is to upload your project to GitHub. This is not required, but
+The last step is to upload your project to GitHub. This is not required but
 strongly recommended as it will serve as a backup for your code. This step
 assumes that you already have a GitHub account.
 
 Log into your GitHub account, select `[Your repositories]` from your profile
-dropdown, and press the green `[New]` button. In the form enter repository
+dropdown, and press the green `[New]` button. In the form, enter the repository
 name the same as your project name; select type "private"; and opt out of
-adding initial files like README, license and gitignore.
+adding initial files like `README`, `license`, and `.gitignore`.
 
 Now go to your project's directory in the terminal and execute the following
 commands (make sure to replace the URL with the link to the repository that
@@ -172,7 +169,7 @@ git branch -M main
 git push -u origin main
 ```
 
-At this point if you go to your repository page on GitHub, you shall see that
+At this point, if you go to your repository page on GitHub, you shall see that
 all your project files are there.
 
 
@@ -190,4 +187,3 @@ Happy coding!
 [Flutter]: https://docs.flutter.dev/get-started/install
 [git]: https://git-scm.com/downloads
 [Android Studio]: https://developer.android.com/studio
-[Visual Studio Code]: https://code.visualstudio.com/download
