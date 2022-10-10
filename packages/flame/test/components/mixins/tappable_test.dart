@@ -6,6 +6,8 @@ import 'package:flutter/gestures.dart';
 import 'package:test/test.dart';
 
 void main() {
+  final withTappables = FlameTester(_GameHasTappables.new);
+
   group('Tappable', () {
     testWithGame<_GameHasTappables>(
       'make sure they can be added to game with HasTappables',
@@ -18,12 +20,12 @@ void main() {
 
     testWithFlameGame(
       'make sure they cannot be added to invalid games',
-      (game) async {
+          (game) async {
         expect(
-          () => game.ensureAdd(_TappableComponent()),
+              () => game.ensureAdd(_TappableComponent()),
           failsAssert(
             'Tappable components can only be added to '
-            'a FlameGame with HasTappables',
+                'a FlameGame with HasTappables',
           ),
         );
       },
@@ -32,7 +34,7 @@ void main() {
     testWithGame<_GameHasTappables>(
       'can be Tapped Down',
       _GameHasTappables.new,
-      (game) async {
+          (game) async {
         final component = _TappableComponent()
           ..x = 10
           ..y = 10
@@ -57,7 +59,7 @@ void main() {
     testWithGame<_GameHasTappables>(
       'can be Tapped Up',
       _GameHasTappables.new,
-      (game) async {
+          (game) async {
         final component = _TappableComponent()
           ..x = 10
           ..y = 10
@@ -91,7 +93,7 @@ void main() {
     testWithGame<_GameHasTappables>(
       'can be Tapped Canceled',
       _GameHasTappables.new,
-      (game) async {
+          (game) async {
         final component = _TappableComponent()
           ..x = 10
           ..y = 10
@@ -120,7 +122,7 @@ void main() {
     testWithGame<_GameHasTappables>(
       'can be Long Tapped Down',
       _GameHasTappables.new,
-      (game) async {
+          (game) async {
         final component = _TappableComponent()
           ..x = 10
           ..y = 10
@@ -151,6 +153,70 @@ void main() {
       },
     );
   });
+
+  withTappables.testGameWidget(
+    'tap correctly registered handled event',
+    setUp: (game, _) async {
+      final component = _TappableComponent()
+        ..x = 10
+        ..y = 10
+        ..width = 10
+        ..height = 10;
+
+      await game.ensureAdd(component);
+    },
+    verify: (game, tester) async {
+      await tester.tapAt(const Offset(10, 10));
+      await tester.pump(const Duration(seconds: 1));
+
+      expect(game.handledOnTapDown, 1);
+      expect(game.handledOnLongTapDown, 0);
+      expect(game.handledOnTapUp, 1);
+      expect(game.handledOnTapCancel, 0);
+    },
+  );
+
+  withTappables.testGameWidget(
+    'long tap correctly registered handled event',
+    setUp: (game, _) async {
+      final component = _TappableComponent()
+        ..x = 10
+        ..y = 10
+        ..width = 10
+        ..height = 10;
+
+      await game.ensureAdd(component);
+    },
+    verify: (game, tester) async {
+      await tester.longPressAt(const Offset(10, 10));
+      await tester.pump(const Duration(seconds: 1));
+      expect(game.handledOnTapDown, 1);
+      expect(game.handledOnLongTapDown, 1);
+      expect(game.handledOnTapUp, 1);
+      expect(game.handledOnTapCancel, 0);
+    },
+  );
+
+  withTappables.testGameWidget(
+    'tap outside of component is not registered as handled',
+    setUp: (game, _) async {
+      final component = _TappableComponent()
+        ..x = 10
+        ..y = 10
+        ..width = 10
+        ..height = 10;
+
+      await game.ensureAdd(component);
+    },
+    verify: (game, tester) async {
+      await tester.tapAt(const Offset(200, 200));
+      await tester.pump(const Duration(seconds: 1));
+      expect(game.handledOnTapDown, 0);
+      expect(game.handledOnLongTapDown, 0);
+      expect(game.handledOnTapUp, 0);
+      expect(game.handledOnTapCancel, 0);
+    },
+  );
 }
 
 class _TappableComponent extends PositionComponent with Tappable {
@@ -161,12 +227,14 @@ class _TappableComponent extends PositionComponent with Tappable {
 
   @override
   bool onTapDown(TapDownInfo info) {
+    info.handled = true;
     hasOnTapDown = true;
     return true;
   }
 
   @override
   bool onTapUp(TapUpInfo info) {
+    info.handled = true;
     hasOnTapUp = true;
     return true;
   }
@@ -179,9 +247,45 @@ class _TappableComponent extends PositionComponent with Tappable {
 
   @override
   bool onLongTapDown(TapDownInfo info) {
+    info.handled = true;
     hasOnLongTapDown = true;
     return true;
   }
 }
 
-class _GameHasTappables extends FlameGame with HasTappables {}
+class _GameHasTappables extends FlameGame with HasTappables {
+  int handledOnTapDown = 0;
+  int handledOnLongTapDown = 0;
+  int handledOnTapUp = 0;
+  int handledOnTapCancel = 0;
+
+  @override
+  void onTapDown(int pointerId, TapDownInfo info) {
+    super.onTapDown(pointerId, info);
+    if (info.handled) {
+      handledOnTapDown++;
+    }
+  }
+
+  @override
+  void onLongTapDown(int pointerId, TapDownInfo info) {
+    super.onLongTapDown(pointerId, info);
+    if (info.handled) {
+      handledOnLongTapDown++;
+    }
+  }
+
+  @override
+  void onTapUp(int pointerId, TapUpInfo info) {
+    super.onTapUp(pointerId, info);
+    if (info.handled) {
+      handledOnTapUp++;
+    }
+  }
+
+  @override
+  void onTapCancel(int pointerId) {
+    super.onTapCancel(pointerId);
+    handledOnTapCancel++;
+  }
+}
