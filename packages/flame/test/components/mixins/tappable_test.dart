@@ -20,12 +20,12 @@ void main() {
 
     testWithFlameGame(
       'make sure they cannot be added to invalid games',
-          (game) async {
+      (game) async {
         expect(
-              () => game.ensureAdd(_TappableComponent()),
+          () => game.ensureAdd(_TappableComponent()),
           failsAssert(
             'Tappable components can only be added to '
-                'a FlameGame with HasTappables',
+            'a FlameGame with HasTappables',
           ),
         );
       },
@@ -34,7 +34,7 @@ void main() {
     testWithGame<_GameHasTappables>(
       'can be Tapped Down',
       _GameHasTappables.new,
-          (game) async {
+      (game) async {
         final component = _TappableComponent()
           ..x = 10
           ..y = 10
@@ -59,7 +59,7 @@ void main() {
     testWithGame<_GameHasTappables>(
       'can be Tapped Up',
       _GameHasTappables.new,
-          (game) async {
+      (game) async {
         final component = _TappableComponent()
           ..x = 10
           ..y = 10
@@ -93,7 +93,7 @@ void main() {
     testWithGame<_GameHasTappables>(
       'can be Tapped Canceled',
       _GameHasTappables.new,
-          (game) async {
+      (game) async {
         final component = _TappableComponent()
           ..x = 10
           ..y = 10
@@ -122,7 +122,7 @@ void main() {
     testWithGame<_GameHasTappables>(
       'can be Long Tapped Down',
       _GameHasTappables.new,
-          (game) async {
+      (game) async {
         final component = _TappableComponent()
           ..x = 10
           ..y = 10
