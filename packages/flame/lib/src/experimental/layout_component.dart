@@ -54,29 +54,26 @@ abstract class LayoutComponent extends PositionComponent {
       return;
     }
     final currentPosition = Vector2.zero();
-    final componentsDimension = list.fold<double>(
-      0,
-      (previousValue, element) => direction == Direction.horizontal
-          ? previousValue + element.width
-          : previousValue + element.height,
-    );
     final vectorIndex = direction == Direction.horizontal ? 0 : 1;
-    final gapDimension = gap * (list.length - 1);
+    final totalSizeOfComponents = list.fold<double>(
+      0,
+      (previousValue, element) => previousValue + element.size[vectorIndex],
+    );
+
+    final totalGapsSize = gap * (list.length - 1);
 
     /// Either we have a defined size or we just use the summed width/height of
     /// the current children.
     final componentBounds = _bounds;
-    final dimensionAvailable =
+    final availableSpace =
         componentBounds != null && componentBounds[vectorIndex] != 0.0
             ? componentBounds[vectorIndex]
-            : componentsDimension;
+            : totalSizeOfComponents;
     switch (mainAxisAlignment) {
       case MainAxisAlignment.start:
         for (final child in list) {
-          child.position = Vector2(currentPosition.x, currentPosition.y);
-          currentPosition[vectorIndex] += direction == Direction.horizontal
-              ? child.width + gap
-              : child.height + gap;
+          child.position.setFrom(currentPosition);
+          currentPosition[vectorIndex] += child.size[vectorIndex] + gap;
         }
         break;
       case MainAxisAlignment.end:
@@ -88,57 +85,51 @@ abstract class LayoutComponent extends PositionComponent {
           } else {
             componentsGap = gap;
           }
-          currentPosition[vectorIndex] -= direction == Direction.horizontal
-              ? child.width + componentsGap
-              : child.height + componentsGap;
-          child.position = Vector2(currentPosition.x, currentPosition.y);
+          currentPosition[vectorIndex] -=
+              child.size[vectorIndex] + componentsGap;
+          child.position.setFrom(currentPosition);
           index++;
         }
         break;
       case MainAxisAlignment.spaceBetween:
         final freeSpacePerComponent =
-            (dimensionAvailable - componentsDimension - gapDimension) /
+            (availableSpace - totalSizeOfComponents - totalGapsSize) /
                 (list.length - 1);
         for (final child in list) {
-          child.position = Vector2(currentPosition.x, currentPosition.y);
-          currentPosition[vectorIndex] += direction == Direction.horizontal
-              ? freeSpacePerComponent + child.width + gap
-              : freeSpacePerComponent + child.height + gap;
+          child.position.setFrom(currentPosition);
+          currentPosition[vectorIndex] +=
+              freeSpacePerComponent + child.size[vectorIndex] + gap;
         }
         break;
       case MainAxisAlignment.spaceEvenly:
         final freeSpacePerComponent =
-            (dimensionAvailable - componentsDimension - gapDimension) /
+            (availableSpace - totalSizeOfComponents - totalGapsSize) /
                 (list.length + 1);
         currentPosition[vectorIndex] += freeSpacePerComponent;
         for (final child in list) {
-          child.position = Vector2(currentPosition.x, currentPosition.y);
-          currentPosition[vectorIndex] += direction == Direction.horizontal
-              ? freeSpacePerComponent + child.width + gap
-              : freeSpacePerComponent + child.height + gap;
+          child.position.setFrom(currentPosition);
+          currentPosition[vectorIndex] +=
+              freeSpacePerComponent + child.size[vectorIndex] + gap;
         }
         break;
       case MainAxisAlignment.spaceAround:
         final freeSpacePerComponent =
-            (dimensionAvailable - componentsDimension - gapDimension) /
+            (availableSpace - totalSizeOfComponents - totalGapsSize) /
                 list.length;
         currentPosition[vectorIndex] += freeSpacePerComponent / 2;
         for (final child in list) {
-          child.position = Vector2(currentPosition.x, currentPosition.y);
-          currentPosition[vectorIndex] += direction == Direction.horizontal
-              ? freeSpacePerComponent + child.width + gap
-              : freeSpacePerComponent + child.height + gap;
+          child.position.setFrom(currentPosition);
+          currentPosition[vectorIndex] +=
+              freeSpacePerComponent + child.size[vectorIndex] + gap;
         }
         break;
       case MainAxisAlignment.center:
         final freeSpace =
-            dimensionAvailable - componentsDimension - gapDimension;
+            availableSpace - totalSizeOfComponents - totalGapsSize;
         currentPosition[vectorIndex] += freeSpace / 2;
         for (final child in list) {
-          child.position = Vector2(currentPosition.x, currentPosition.y);
-          currentPosition[vectorIndex] += direction == Direction.horizontal
-              ? child.width + gap
-              : child.height + gap;
+          child.position.setFrom(currentPosition);
+          currentPosition[vectorIndex] += child.size[vectorIndex] + gap;
         }
         break;
     }
