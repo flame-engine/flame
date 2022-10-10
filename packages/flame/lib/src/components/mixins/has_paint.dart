@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flame/components.dart';
+import 'package:flame/src/effects/provider_interfaces.dart';
 import 'package:flame/src/palette.dart';
 
 /// Adds a collection of paints to a component
@@ -9,7 +10,7 @@ import 'package:flame/src/palette.dart';
 /// by the [paint] attribute and other paints can be manipulated/accessed
 /// using [getPaint], [setPaint] and [deletePaint] by a paintId of generic type
 /// [T], that can be omitted if the component only have one paint.
-mixin HasPaint<T extends Object> on Component {
+mixin HasPaint<T extends Object> on Component implements OpacityProvider {
   final Map<T, Paint> _paints = {};
 
   Paint paint = BasicPalette.white.paint();
@@ -97,4 +98,16 @@ mixin HasPaint<T extends Object> on Component {
   void tint(Color color, {T? paintId}) {
     getPaint(paintId).colorFilter = ColorFilter.mode(color, BlendMode.srcATop);
   }
+
+  @override
+  double get opacity => paint.color.opacity;
+
+  @override
+  set opacity(double value) => paint.color = paint.color.withOpacity(value);
+
+  @override
+  int get alpha => paint.color.alpha;
+
+  @override
+  set alpha(int value) => paint.color = paint.color.withAlpha(value);
 }
