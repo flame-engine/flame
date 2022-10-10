@@ -3,10 +3,20 @@ import 'dart:math';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/game.dart';
+import 'package:flame/palette.dart';
 import 'package:flame_test/flame_test.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 class _PaintComponent extends Component with HasPaint {}
+
+class _CustomPaintComponent extends Component with HasPaint<String> {
+  _CustomPaintComponent(Map<String, Paint> paints) {
+    for (final p in paints.entries) {
+      setPaint(p.key, p.value);
+    }
+  }
+}
 
 void main() {
   const _epsilon = 0.004; // 1/255, since alpha only holds 8 bits
@@ -185,6 +195,29 @@ void main() {
           game.update(3);
           expectDouble(component.getOpacity(), 0.0);
         }
+      },
+    );
+
+    flameGame.test(
+      'on custom paint',
+      (game) async {
+        final component =
+            _CustomPaintComponent({'bluePaint': BasicPalette.blue.paint()});
+        await game.ensureAdd(component);
+
+        await component.add(
+          OpacityEffect.fadeOut(
+            EffectController(duration: 1),
+            paintId: 'bluePaint',
+          ),
+        );
+
+        game.update(1);
+
+        // RGB components shouldn't be affected after opacity efffect.
+        expect(component.getPaint('bluePaint').color.blue, 255);
+        expect(component.getPaint('bluePaint').color.red, 0);
+        expect(component.getPaint('bluePaint').color.green, 0);
       },
     );
 
