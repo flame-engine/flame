@@ -345,8 +345,8 @@ uses multiple paints, the effect can target any individual color using the `pain
 
 ```dart
  final effect = OpacityEffect.to(
-    0.2,
-    EffectController(duration: 0.75),
+  0.2,
+  EffectController(duration: 0.75),
   );
 ```
 
@@ -370,8 +370,8 @@ the following effect will change the opacity of the target by `90%`:
 
 ```dart
  final effect = OpacityEffect.by(
-    0.9,
-    EffectController(duration: 0.75),
+  0.9,
+  EffectController(duration: 0.75),
   );
 ```
 
