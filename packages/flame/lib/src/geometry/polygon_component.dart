@@ -134,12 +134,6 @@ class PolygonComponent extends ShapeComponent {
         position = Anchor.topLeft.toOtherAnchorPosition(_topLeft, anchor, size);
       }
     }
-    _vertices.forEach((p) {
-      p.setValues(
-        p.x - _topLeft.x,
-        p.y - _topLeft.y,
-      );
-    });
   }
 
   /// gives back the shape vectors multiplied by the size and scale
@@ -156,6 +150,7 @@ class PolygonComponent extends ShapeComponent {
       vertices.forEachIndexed((i, vertex) {
         _globalVertices[i]
           ..setFrom(vertex)
+          ..sub(_topLeft)
           ..multiply(scale)
           ..add(position)
           ..rotate(angle, center: position);
@@ -254,7 +249,7 @@ class PolygonComponent extends ShapeComponent {
 
   Vector2 getVertex(int i, {List<Vector2>? vertices}) {
     vertices ??= globalVertices();
-    return vertices[i % vertices.length];
+    return vertices[i % vertices.length] - _topLeft;
   }
 
   void _reverseList(List<Object> list) {
