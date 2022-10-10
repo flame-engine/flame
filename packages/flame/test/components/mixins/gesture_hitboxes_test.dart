@@ -25,6 +25,28 @@ void main() {
       expect(component.containsPoint(point), true);
     });
 
+    testWithFlameGame(
+        'hitbox is larger than the component and the point is outside '
+        "of the component's size", (game) async {
+      final component = _HitboxComponent();
+      component.position.setValues(1.0, 1.0);
+      component.anchor = Anchor.topLeft;
+      component.size.setValues(2.0, 2.0);
+
+      final hitbox = PolygonHitbox([
+        Vector2(10, 0),
+        Vector2(0, -10),
+        Vector2(-10, 0),
+        Vector2(0, 10),
+      ]);
+
+      component.add(hitbox);
+      await game.ensureAdd(component);
+
+      final point = Vector2(9, 0);
+      expect(component.containsPoint(point), true);
+    });
+
     testWithFlameGame('get component hitboxes', (game) async {
       final component = _HitboxComponent();
       component.position.setValues(1.0, 1.0);
