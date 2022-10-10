@@ -208,7 +208,7 @@ void main() {
         await component.add(
           OpacityEffect.fadeOut(
             EffectController(duration: 1),
-            paintId: 'bluePaint',
+            target: component.opacityProviderForPaint('bluePaint'),
           ),
         );
 
