@@ -50,3 +50,12 @@ abstract class SizeProvider {
   Vector2 get size;
   set size(Vector2 value);
 }
+
+/// Interface for a component that can be affected by opacity effects.
+abstract class OpacityProvider {
+  double get opacity;
+  set opacity(double value);
+
+  int get alpha;
+  set alpha(int value);
+}
