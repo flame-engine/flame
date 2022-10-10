@@ -110,4 +110,27 @@ mixin HasPaint<T extends Object> on Component implements OpacityProvider {
 
   @override
   set alpha(int value) => paint.color = paint.color.withAlpha(value);
+
+  OpacityProvider opacityProviderForPaint(T paintId) {
+    return _ProxyOpacityProvider(paintId, this);
+  }
+}
+
+class _ProxyOpacityProvider<T extends Object> implements OpacityProvider {
+  _ProxyOpacityProvider(this.paintId, this.target);
+
+  final T paintId;
+  final HasPaint target;
+
+  @override
+  double get opacity => target.getOpacity(paintId: paintId);
+
+  @override
+  set opacity(double value) => target.setOpacity(opacity, paintId: paintId);
+
+  @override
+  int get alpha => target.getAlpha(paintId: paintId);
+
+  @override
+  set alpha(int value) => target.setAlpha(alpha, paintId: paintId);
 }
