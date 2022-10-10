@@ -344,7 +344,10 @@ uses multiple paints, the effect can target any individual color using the `pain
 ```
 
 ```dart
-final effect = OpacityEffect.to(0.2, EffectController(duration: 0.75));
+ final effect = OpacityEffect.to(
+      0.2,
+      EffectController(duration: 0.75),
+    );
 ```
 
 The opacity value of 0 corresponds to a fully transparent component, and the opacity value of 1 is
@@ -366,7 +369,10 @@ the following effect will change the opacity of the target by `90%`:
 ```
 
 ```dart
-final effect = OpacityEffect.by(0.9, EffectController(duration: 0.75));
+ final effect = OpacityEffect.by(
+      0.9,
+      EffectController(duration: 0.75),
+    );
 ```
 
 Currently this effect can only be applied to components that have a `HasPaint` mixin. If the target component
