@@ -19,7 +19,6 @@ void main() {
         game.onGameResize(initialGameSize);
 
         await game.ensureAdd(component);
-        await game.ready();
 
         final initialMargin = component.margin;
 
@@ -27,7 +26,14 @@ void main() {
 
         final marginAfterGameResize = component.margin;
 
+        final actualNewPosition = component.position.toOffset();
+
+        final expectedNewPosition =
+            game.size.toOffset() + margin.bottomRight - const Offset(10, 10);
+
         expect(initialMargin, equals(marginAfterGameResize));
+
+        expect(actualNewPosition, equals(expectedNewPosition));
       },
     );
   });
