@@ -89,10 +89,12 @@ component is removed from the component tree.
 
 ## Debug mode
 
-Flame's `FlameGame` class provides a variable called `debugMode`, which by default is `false`. It 
-can, however, be set to `true` to enable debug features for the components of the game. **Be aware**
- that the value of this variable is passed through to its components when they are added to the game, so
-if you change the `debugMode` at runtime, it will not affect already added components by default.
+Flame's `FlameGame` class provides a variable called `debugMode`, which by
+default is `false`. It can, however, be set to `true` to enable debug features
+ for the components of the game. **Be aware** that the value of this variable is
+passed through to its components when they are added to the game, so if you
+change the `debugMode` at runtime, it will not affect already added components
+by default.
 
 To read more about the `debugMode` on Flame, please refer to the [Debug Docs](other/debug.md)
 
@@ -117,8 +119,9 @@ just draw a background that covers the whole canvas if you would want it to chan
 
 ## SingleGameInstance mixin
 
-An optional mixin `SingleGameInstance` can be applied to your game if you are making a single-game
-application. This is a common scenario when building games: there is a single full-screen `GameWidget` that hosts a single `Game` instance.
+An optional mixin `SingleGameInstance` can be applied to your game if you are
+making a single-game application. This is a common scenario when building games:
+there is a single full-screen `GameWidget` that hosts a single `Game` instance.
 
 Adding this mixin provides performance advantages in certain scenarios. In particular, a component's
 `onLoad` method is guaranteed to start when that component is added to its parent, even if the
@@ -199,10 +202,11 @@ widgets. But still, there is the Widgets Overlay API that makes things even easi
 `Game.overlays` enables any Flutter widget to be shown on top of a game instance, this makes it very
 easy to create things like a pause menu or an inventory screen for example.
 
-This management is done via the `game.overlays.add` and `game.overlays.remove` methods that mark 
-an overlay to be shown or hidden, respectively, via a `String` argument that identifies the overlay.  
-After that, it can be specified which widgets represent each overlay in the `GameWidget` declaration
-by setting an `overlayBuilderMap`.
+This management is done via the `game.overlays.add` and `game.overlays.remove`
+methods that mark an overlay to be shown or hidden, respectively, via a `String`
+argument that identifies the overlay. After that, it can be specified which
+widgets represent each overlay in the `GameWidget` declaration by setting an
+`overlayBuilderMap`.
 
 ```dart
 void main() {

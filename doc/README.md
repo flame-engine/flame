@@ -59,8 +59,11 @@ with Flame.
 
 ## Outside of the scope of the engine
 
-Games sometimes require complex feature sets depending on what the game is all about. Some of
-these feature sets are outside of the scope of the Flame Engine ecosystem.  The [awesome flame repository](https://github.com/flame-engine/awesome-flame#user-content-articles--tutorials) has some excellent recommendations that can address these issues.
+Games sometimes require complex feature sets depending on what the game is all
+about. Some of these feature sets are outside of the scope of the Flame Engine
+ecosystem.  The [awesome flame
+repository](https://github.com/flame-engine/awesome-flame#user-content-articles--tutorials)
+has some excellent recommendations that can address these issues.
 
 
 ### Multiplayer (netcode)

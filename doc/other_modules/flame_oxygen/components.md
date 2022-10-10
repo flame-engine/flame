@@ -1,20 +1,21 @@
 # Components
 
-Components in Oxygen are different than the ones from FCS mainly because instead of containing
-logic they only contain data. This data is then used in systems which in turn define the logic.
-
-To accomdate people who are switching from FCS to Oxygen we implemented a few components to help
-you get started. Some of these components are based on the multiple functionalities that the
-`PositionComponent` from FCS has. Others are just easy wrappers around certain Flame API
-functionality, they are often accompanied by predefined systems that you can use.
+Components in Oxygen are different than the ones from FCS mainly because instead
+of containing logic they only contain data. This data is then used in systems
+which in turn define the logic. To accommodate people who are switching from FCS
+to Oxygen we implemented a few components to help you get started. Some of these
+components are based on the multiple functionalities that the
+`PositionComponent` from FCS has. Others are just easy wrappers around certain
+Flame API functionality, they are often accompanied by predefined systems that
+you can use.
 
 Components can be registered to the world using the `world.registerComponent` method on
-[OxygenGame](#oxygengame-game-extension).
+`OxygenGame`.
 
 
-### PositionComponent
+## PositionComponent
 
-The `PositionComponent` is as its name implies is a component that describe the position of an
+The `PositionComponent` as its name implies is a component that describes the position of an
 entity. And it is registered to the world by default.
 
 Creating a positioned entity using OxygenGame:
@@ -34,9 +35,9 @@ world.createEntity()
 ```
 
 
-### SizeComponent
+## SizeComponent
 
-The `SizeComponent` is as its name implies is a component that describe the size of an entity.
+The `SizeComponent` as its name implies is a component that describes the size of an entity.
 And it is registered to the world by default.
 
 Creating a sized entity using OxygenGame:
@@ -56,13 +57,13 @@ world.createEntity()
 ```
 
 
-### AnchorComponent
+## AnchorComponent
 
-The `AnchorComponent` is as its name implies is a component that describe the anchor position of an
+The `AnchorComponent` as its name implies is a component that describes the anchor position of an
 entity. And it is registered to the world by default.
 
-This component is especially useful when you are using the [BaseSystem](#basesystem). But can also
-be used for your own anchoring logic.
+This component is especially useful when you are using the `BaseSystem`. But can also
+be used for your anchoring logic.
 
 Creating an anchored entity using OxygenGame:
 
@@ -87,7 +88,7 @@ world.createEntity()
 The `AngleComponent` is as its name implies is a component that describe the angle of an entity.
 And it is registered to the world by default. The angle is in radians.
 
-This component is especially useful when you are using the [BaseSystem](#basesystem). But can also
+This component is especially useful when you are using the `BaseSystem`. But can also
 be used for your own angle logic.
 
 Creating an angled entity using OxygenGame:
@@ -108,15 +109,15 @@ world.createEntity()
 ```
 
 
-### FlipComponent
+## FlipComponent
 
 The `FlipComponent` can be used to flip your rendering on either the X or Y axis. It is registered
 to the world by default.
 
-This component is especially useful when you are using the [BaseSystem](#basesystem). But can also
+This component is especially useful when you are using the `BaseSystem`. But can also
 be used for your own flipping logic.
 
-Creating an entity that is flipped on it's X axis using OxygenGame:
+Creating an entity that is flipped on its X-axis using OxygenGame:
 
 ```dart
 game.createEntity(
@@ -126,7 +127,7 @@ game.createEntity(
 );
 ```
 
-Creating an entity that is flipped on it's X axis using the World:
+Creating an entity that is flipped on its X-axis using the World:
 
 ```dart
 world.createEntity()
@@ -134,12 +135,12 @@ world.createEntity()
 ```
 
 
-### SpriteComponent
+## SpriteComponent
 
-The `SpriteComponent` is as its name implies is a component that describe the sprite of an entity.
+The `SpriteComponent` as its name implies is a component that describes the sprite of an entity.
 And it is registered to the world by default.
 
-This allows you to assigning a Sprite to an Entity.
+This allows you to assign a Sprite to an Entity.
 
 Creating an entity with a sprite using OxygenGame:
 
@@ -162,9 +163,9 @@ world.createEntity()
 ```
 
 
-### TextComponent
+## TextComponent
 
-The `TextComponent` is as its name implies is a component that adds a text component to an entity.
+The `TextComponent` as its name implies is a component that adds a text component to an entity.
 And it is registered to the world by default.
 
 This allows you to add text to your entity, combined with the `PositionComponent` you can use it
@@ -197,10 +198,10 @@ world.createEntity()
 ```
 
 
-### ParticleComponent
+## ParticleComponent
 
 The `ParticleComponent` wraps a `Particle` from Flame. Combined with the
-[ParticleSystem](#particlesystem) you can easily add particles to your game without having to
+`ParticleSystem` you can easily add particles to your game without having to
 worry about how to render a particle or when/how to update one.
 
 Creating an entity with a particle using OxygenGame:

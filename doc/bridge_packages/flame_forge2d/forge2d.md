@@ -8,10 +8,11 @@ If you want to use Forge2D specifically for Flame you should use our bridge libr
 just want to use it in a Dart project you can use the
 [forge2d](https://github.com/flame-engine/forge2d) library directly.
 
-To use it in your game you just need to add `flame_forge2d` to your `pubspec.yaml`, as can be seen
-in the
-[Forge2D [example](https://github.com/flame-engine/flame/tree/main/packages/flame_forge2d/example) 
-and the pub. dev [installation instructions](https://pub.dev/packages/flame_forge2d)](https://pub.dev/packages/flame_forge2d).
+To use it in your game you just need to add `flame_forge2d` to your
+`pubspec.yaml`, as can be seen in the [Forge2D
+[example](https://github.com/flame-engine/flame/tree/main/packages/flame_forge2d/example)
+and the pub. dev [installation
+instructions](https://pub.dev/packages/flame_forge2d)](<https://pub.dev/packages/flame_forge2d>).
 
 
 ## Forge2DGame
@@ -22,10 +23,12 @@ If you are going to use Forge2D in your project it can be a good idea to use the
 It is called `Forge2DGame` and it will control the adding and removal of Forge2D's `BodyComponents`
 as well as your normal components.
 
-In `Forge2DGame` the `Camera` has a zoom level set to 10 by default, so your components will be a
-lot bigger than in a normal Flame game. This is due to the speed limit in the `Forge2D` world,
-which you would hit very quickly if you are using it with `zoom = 1.0`. You can easily change the
-zoom level either by calling `super(zoom: yourZoom)` in your constructor or doing `game.camera.zoom = yourZoom;` at a later stage.
+In `Forge2DGame` the `Camera` has a zoom level set to 10 by default, so your
+components will be a lot bigger than in a normal Flame game. This is due to the
+speed limit in the `Forge2D` world, which you would hit very quickly if you are
+using it with `zoom = 1.0`. You can easily change the zoom level either by
+calling `super(zoom: yourZoom)` in your constructor or doing `game.camera.zoom =
+yourZoom;` at a later stage.
 
 If you are previously familiar with Box2D it can be good to know that the whole concept of the
 Box2d world is mapped to `world` in the `Forge2DGame` component and every `Body` that you want to
@@ -37,7 +40,7 @@ physics engine to properly update every `BodyComponent` and other components in 
 updated according to the normal `FlameGame` way.
 
 In `Forge2DGame` the gravity is flipped compared to `Forge2D` to keep the same coordinate system as
-in Flame, so a positive y-axis in the gravity like `Vector2(0, 10)` would be pulling bodies downwards, 
+in Flame, so a positive y-axis in the gravity like `Vector2(0, 10)` would be pulling bodies downwards,
 meanwhile, a negative y-axis would pull them upwards. The gravity can be set directly in
 the constructor of the `Forge2DGame`.
 
@@ -112,8 +115,8 @@ class Ball extends BodyComponent with ContactCallbacks {
 Every time `Ball` and `Wall` begin to come in contact `beginContact` will be called, and once the
 fixtures cease being in contact, `endContact` will be called.
 
-An implementation example can be seen in the
-[Flame Forge2D example](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/bridge_libraries/forge2d/utils/balls.dart).
+An implementation example can be seen in the [Flame Forge2D
+example](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/bridge_libraries/forge2d/utils/balls.dart).
 
 
 ### Forge2DCamera.followBodyComponent
