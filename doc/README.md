@@ -1,6 +1,5 @@
 # Getting Started
 
-
 ## About Flame
 
 Flame is a modular Flutter game engine that provides a complete set of out-of-the-way solutions for
@@ -20,6 +19,7 @@ We also provide stand-alone packages that extend the Flame functionality:
   our own `Box2D` port called `Forge2D`.
 - [flame_tiled](https://pub.dev/packages/flame_tiled) Which provides integration with the
   [tiled](https://pub.dev/packages/tiled) package.
+- [flame_svg](https://pub.dev/packages/flame_svg) Which provides the possibility to add SVG rendering support for the Flame game engine
 
 You can pick and choose whichever parts you want, as they are all independent and modular.
 
@@ -27,7 +27,6 @@ The engine and its ecosystem is constantly being improved by the community, so p
 reach out, open issues, PRs and make suggestions.
 
 Give us a star if you want to help give the engine exposure and grow the community. :)
-
 
 ## Installation
 
@@ -44,7 +43,6 @@ then run `pub get` and you are ready to start using it!
 
 The latest version can be found on [pub.dev](https://pub.dev/packages/flame/install).
 
-
 ## Getting started
 
 There is a set of tutorials that you can follow to get started in the
@@ -58,13 +56,11 @@ You can also check out the
 it contains quite a lot of good tutorials and articles written by the community to get you started
 with Flame.
 
-
 ## Outside of the scope of the engine
 
 Games sometimes require complex feature sets depending on what the game is all about. Some of
 these feature sets are outside of the scope of the Flame Engine ecosystem, in this section you can find
 them, and also some recommendations of packages/services that can be used:
-
 
 ### Multiplayer (netcode)
 
@@ -73,10 +69,9 @@ Flame doesn't bundle any network feature, which may be needed to write online mu
 If you are building a multipler game, here are some recommendations of packages/services:
 
 - [Nakama](https://github.com/Allan-Nava/nakama-flutter): Nakama is an open-source server designed
- to power modern games and apps.
+  to power modern games and apps.
 - [Firebase](https://firebase.google.com/): Provides dozens of services that can be used to write
-simpler multiplayer experiences.
-
+  simpler multiplayer experiences.
 
 ### External assets
 
