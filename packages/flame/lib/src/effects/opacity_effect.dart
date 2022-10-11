@@ -14,7 +14,9 @@ class OpacityEffect extends Effect with EffectTarget<OpacityProvider> {
     super.controller, {
     OpacityProvider? target,
     super.onComplete,
-  }) : _opacityOffset = offset;
+  }) : _opacityOffset = offset {
+    this.target = target;
+  }
 
   /// This constructor will set the opacity to the specified opacity over time.
   factory OpacityEffect.to(
@@ -59,7 +61,6 @@ class OpacityEffect extends Effect with EffectTarget<OpacityProvider> {
 
   double _opacityOffset;
   double _roundingError = 0.0;
-  final String? paintId;
 
   @override
   void apply(double progress) {
