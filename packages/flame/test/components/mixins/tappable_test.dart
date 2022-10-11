@@ -149,7 +149,7 @@ void main() {
             ),
           );
 
-        expect(component.hasOnLongTapDown, true);
+        expect(component.hasOnLongTapDown, isTrue);
       },
     );
   });
