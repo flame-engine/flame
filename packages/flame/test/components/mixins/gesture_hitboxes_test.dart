@@ -44,7 +44,7 @@ void main() {
       await game.ensureAdd(component);
 
       final point = Vector2(9, 0);
-      expect(component.containsPoint(point), true);
+      expect(component.containsPoint(point), isTrue);
     });
 
     testWithFlameGame('get component hitboxes', (game) async {
