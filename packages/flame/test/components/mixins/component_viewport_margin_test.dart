@@ -29,7 +29,7 @@ void main() {
         final actualNewPosition = component.position.toOffset();
 
         final expectedNewPosition =
-            game.size.toOffset() + margin.bottomRight - const Offset(10, 10);
+            game.size.toOffset() + margin.bottomRight - componentSize.toOffset;
 
         expect(initialMargin, equals(marginAfterGameResize));
 
