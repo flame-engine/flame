@@ -111,7 +111,10 @@ offset is relative to the current position of the target:
 ```
 
 ```dart
-final effect = MoveByEffect(Vector2(0, -10), EffectController(duration: 0.5));
+final effect = MoveByEffect(
+  Vector2(0, -10),
+  EffectController(duration: 0.5),
+);
 ```
 
 If the component is currently at `Vector2(250, 200)`, then at the end of the effect its position
@@ -135,7 +138,10 @@ point in a straight line.
 ```
 
 ```dart
-final effect = MoveToEffect(Vector2(100, 500), EffectController(duration: 3));
+final effect = MoveToEffect(
+  Vector2(100, 500),
+  EffectController(duration: 3),
+);
 ```
 
 It is possible, but not recommended to attach multiple such effects to the same component.
