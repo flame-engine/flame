@@ -55,7 +55,4 @@ abstract class SizeProvider {
 abstract class OpacityProvider {
   double get opacity;
   set opacity(double value);
-
-  int get alpha;
-  set alpha(int value);
 }

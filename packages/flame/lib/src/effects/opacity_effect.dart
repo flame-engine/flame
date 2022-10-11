@@ -65,13 +65,13 @@ class OpacityEffect extends Effect with EffectTarget<OpacityProvider> {
   @override
   void apply(double progress) {
     final deltaProgress = progress - previousProgress;
-    final currentAlpha = target.alpha;
     final deltaAlpha =
         (_alphaOffset * deltaProgress) + _roundingError * deltaProgress.sign;
+    final currentAlpha = (target.opacity * 255).round();
     var nextAlpha = (currentAlpha + deltaAlpha).round();
     _roundingError = (currentAlpha + deltaAlpha) - nextAlpha;
     nextAlpha = nextAlpha.clamp(0, 255);
-    target.alpha = nextAlpha;
+    target.opacity = nextAlpha / 255;
   }
 
   @override
@@ -101,6 +101,6 @@ class _OpacityToEffect extends OpacityEffect {
 
   @override
   void onStart() {
-    _alphaOffset = (_targetOpacity * 255 - target.alpha).round();
+    _alphaOffset = ((_targetOpacity - target.opacity) * 255).round();
   }
 }
