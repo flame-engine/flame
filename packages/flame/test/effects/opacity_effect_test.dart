@@ -22,7 +22,7 @@ void main() {
   const _epsilon = 0.004; // 1/255, since alpha only holds 8 bits
 
   group('OpacityEffect', () {
-    flameGame.test('relative', (game) async {
+    testWithFlameGame('relative', (game) async {
       final component = _PaintComponent();
       await game.ensureAdd(component);
 
@@ -44,7 +44,7 @@ void main() {
       expectDouble(component.getOpacity(), 0.6, epsilon: _epsilon);
     });
 
-    flameGame.test('absolute', (game) async {
+    testWithFlameGame('absolute', (game) async {
       final component = _PaintComponent();
       await game.ensureAdd(component);
 
@@ -66,7 +66,7 @@ void main() {
       expectDouble(component.getOpacity(), 0.4, epsilon: _epsilon);
     });
 
-    flameGame.test('reset relative', (game) async {
+    testWithFlameGame('reset relative', (game) async {
       final component = _PaintComponent();
       await game.ensureAdd(component);
 
@@ -92,7 +92,7 @@ void main() {
       }
     });
 
-    flameGame.test('reset absolute', (game) async {
+    testWithFlameGame('reset absolute', (game) async {
       final component = _PaintComponent();
       await game.ensureAdd(component);
 
@@ -107,13 +107,11 @@ void main() {
         // regardless of its initial opacity.
         effect.reset();
         game.update(1);
-        // TODO(spydon): This is not good, since it sometimes won't hit the
-        // minima.
-        expectDouble(component.getOpacity(), 0.0, epsilon: _epsilon);
+        expect(component.getOpacity(), 0.0);
       }
     });
 
-    flameGame.test('opacity composition', (game) async {
+    testWithFlameGame('opacity composition', (game) async {
       final component = _PaintComponent();
       component.setOpacity(0.0);
       await game.ensureAdd(component);
@@ -151,7 +149,7 @@ void main() {
       expect(component.children.length, 0);
     });
 
-    flameGame.test(
+    testWithFlameGame(
       'fade out',
       (game) async {
         final rng = Random();
@@ -176,7 +174,7 @@ void main() {
       },
     );
 
-    flameGame.test(
+    testWithFlameGame(
       'infinite fade out',
       (game) async {
         final component = _PaintComponent();
@@ -198,7 +196,7 @@ void main() {
       },
     );
 
-    flameGame.test(
+    testWithFlameGame(
       'on custom paint',
       (game) async {
         final component =
@@ -242,11 +240,7 @@ void main() {
         game.update(dt);
       }
       game.update(1000 - totalTime);
-      // TODO(spydon): The loop above has an average of 100fps.
-      // It should change from 0-255 in 1s so it will change alpha with an
-      // average of 255/100=2.5 per tick, which should not result in a need of
-      // an epsilon value this high.
-      expectDouble(component.getOpacity(), 1.0, epsilon: 100 * _epsilon);
+      expectDouble(component.getOpacity(), 1.0, epsilon: _epsilon);
     });
   });
 }

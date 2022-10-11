@@ -7,9 +7,6 @@ import 'package:flame/src/effects/provider_interfaces.dart';
 /// requires that any other effect or update logic applied to the same component
 /// also used incremental updates.
 class OpacityEffect extends Effect with EffectTarget<OpacityProvider> {
-  int _alphaOffset;
-  double _roundingError = 0.0;
-
   /// This constructor will set the opacity in relation to it's current opacity
   /// over time.
   OpacityEffect.by(
@@ -17,9 +14,7 @@ class OpacityEffect extends Effect with EffectTarget<OpacityProvider> {
     super.controller, {
     OpacityProvider? target,
     super.onComplete,
-  }) : _alphaOffset = (255 * offset).round() {
-    this.target = target;
-  }
+  }) : _opacityOffset = offset;
 
   /// This constructor will set the opacity to the specified opacity over time.
   factory OpacityEffect.to(
@@ -62,16 +57,18 @@ class OpacityEffect extends Effect with EffectTarget<OpacityProvider> {
     );
   }
 
+  double _opacityOffset;
+  double _roundingError = 0.0;
+  final String? paintId;
+
   @override
   void apply(double progress) {
     final deltaProgress = progress - previousProgress;
-    final deltaAlpha =
-        (_alphaOffset * deltaProgress) + _roundingError * deltaProgress.sign;
-    final currentAlpha = (target.opacity * 255).round();
-    var nextAlpha = (currentAlpha + deltaAlpha).round();
-    _roundingError = (currentAlpha + deltaAlpha) - nextAlpha;
-    nextAlpha = nextAlpha.clamp(0, 255);
-    target.opacity = nextAlpha / 255;
+    final currentOpacity = target.opacity + _roundingError;
+    final deltaOpacity = _opacityOffset * deltaProgress;
+    final newOpacity = (currentOpacity + deltaOpacity).clamp(0, 1).toDouble();
+    target.opacity = newOpacity;
+    _roundingError = newOpacity - target.opacity;
   }
 
   @override
@@ -101,6 +98,6 @@ class _OpacityToEffect extends OpacityEffect {
 
   @override
   void onStart() {
-    _alphaOffset = ((_targetOpacity - target.opacity) * 255).round();
+    _opacityOffset = _targetOpacity - target.opacity;
   }
 }
