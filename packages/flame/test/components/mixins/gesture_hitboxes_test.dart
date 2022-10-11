@@ -67,9 +67,9 @@ void main() {
       await game.ensureAdd(component);
 
       expect(component.hitboxes.length, 3);
-      expect(component.hitboxes.contains(polygonHitBox), true);
-      expect(component.hitboxes.contains(circleHitBox), true);
-      expect(component.hitboxes.contains(rectangleHitBox), true);
+      expect(component.hitboxes.contains(polygonHitBox), isTrue);
+      expect(component.hitboxes.contains(circleHitBox), isTrue);
+      expect(component.hitboxes.contains(rectangleHitBox), isTrue);
     });
   });
 }
