@@ -169,10 +169,10 @@ void main() {
       await tester.tapAt(const Offset(10, 10));
       await tester.pump(const Duration(seconds: 1));
 
-      expect(game.handledOnTapDown, 1);
-      expect(game.handledOnLongTapDown, 0);
-      expect(game.handledOnTapUp, 1);
-      expect(game.handledOnTapCancel, 0);
+      expect(game.handledOnTapDown, equals(1));
+      expect(game.handledOnLongTapDown, equals(0));
+      expect(game.handledOnTapUp, equals(1));
+      expect(game.handledOnTapCancel, equals(0));
     },
   );
 
