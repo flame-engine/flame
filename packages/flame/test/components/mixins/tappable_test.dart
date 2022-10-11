@@ -211,10 +211,10 @@ void main() {
     verify: (game, tester) async {
       await tester.tapAt(const Offset(200, 200));
       await tester.pump(const Duration(seconds: 1));
-      expect(game.handledOnTapDown, 0);
-      expect(game.handledOnLongTapDown, 0);
-      expect(game.handledOnTapUp, 0);
-      expect(game.handledOnTapCancel, 0);
+      expect(game.handledOnTapDown, equals(0));
+      expect(game.handledOnLongTapDown, equals(0));
+      expect(game.handledOnTapUp, equals(0));
+      expect(game.handledOnTapCancel, equals(0));
     },
   );
 }
