@@ -1103,6 +1103,7 @@ Check the example app
 [clip_component](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/components/clip_component_example.dart)
 for details on how to use it.
 
+
 ## LayoutComponent
 
 An abstract class extending `PositionComponent` whose two children `RowComponent` and `ColumnComponent`
@@ -1116,6 +1117,7 @@ one of these components is instantiated:
 If no size is defined the `LayoutComponent` instance tries to get the size from the nearest
 `PositionComponent` up the hierarchy tree. If there can also no size be determined the component
 grows with the size of its children.
+
 
 ## Effects
 
