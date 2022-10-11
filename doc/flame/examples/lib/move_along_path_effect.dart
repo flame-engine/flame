@@ -22,9 +22,9 @@ class MoveAlongPathEffectGame extends FlameGame with HasTappableComponents {
           );
         } else {
           flower.add(
-            MoveEffect.by(
-              size / 2,
-              EffectController(duration: 1.0),
+            MoveAlongPathEffect(
+              Path()..quadraticBezierTo(-100, 0, -50, 50),
+              EffectController(duration: 1.5),
             ),
           );
         }
