@@ -1,6 +1,6 @@
+import 'package:flame/src/text/elements/debug_text_painter_text_element.dart';
+import 'package:flame/src/text/elements/text_painter_text_element.dart';
 import 'package:flame/src/text/formatters/text_formatter.dart';
-import 'package:flame/src/text/inline/debug_text_painter_text_element.dart';
-import 'package:flame/src/text/inline/text_painter_text_element.dart';
 import 'package:flutter/rendering.dart';
 
 /// [TextPainterTextFormatter] applies a Flutter [TextStyle] to a string of
@@ -16,7 +16,7 @@ class TextPainterTextFormatter extends TextFormatter {
         this.debugMode = false,
   });
 
-  final TextStyle style;
+  final TextStyle style; // NOTE: this is a Flutter TextStyle
   final TextDirection textDirection;
   @Deprecated('Use DebugTextFormatter instead. Will be removed in 1.5.0')
   final bool debugMode;

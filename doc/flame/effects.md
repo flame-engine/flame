@@ -43,7 +43,8 @@ There are multiple effects provided by Flame, and you can also
 - [`SizeEffect.to`](#sizeeffectto)
 - [`AnchorByEffect`](#anchorbyeffect)
 - [`AnchorToEffect`](#anchortoeffect)
-- [`OpacityEffect`](#opacityeffect)
+- [`OpacityToEffect`](#opacitytoeffect)
+- [`OpacityByEffect`](#opacitybyeffect)
 - [`ColorEffect`](#coloreffect)
 - [`SequenceEffect`](#sequenceeffect)
 - [`RemoveEffect`](#removeeffect)
@@ -101,6 +102,14 @@ functionality inherited by all other effects. This includes:
 This effect applies to a `PositionComponent` and shifts it by a prescribed `offset` amount. This
 offset is relative to the current position of the target:
 
+```{flutter-app}
+:sources: ../flame/examples
+:page: move_by_effect
+:show: widget code infobox
+:width: 180
+:height: 160
+```
+
 ```dart
 final effect = MoveByEffect(Vector2(0, -10), EffectController(duration: 0.5));
 ```
@@ -117,6 +126,14 @@ superposition of all the individual effects.
 This effect moves a `PositionComponent` from its current position to the specified destination
 point in a straight line.
 
+```{flutter-app}
+:sources: ../flame/examples
+:page: move_to_effect
+:show: widget code infobox
+:width: 180
+:height: 160
+```
+
 ```dart
 final effect = MoveToEffect(Vector2(100, 500), EffectController(duration: 3));
 ```
@@ -130,6 +147,14 @@ This effect moves a `PositionComponent` along the specified path relative to the
 current position. The path can have non-linear segments, but must be singly connected. It is
 recommended to start a path at `Vector2.zero()` in order to avoid sudden jumps in the component's
 position.
+
+```{flutter-app}
+:sources: ../flame/examples
+:page: move_along_path_effect
+:show: widget code infobox
+:width: 180
+:height: 160
+```
 
 ```dart
 final effect = MoveAlongPathEffect(
@@ -153,8 +178,19 @@ Rotates the target clockwise by the specified angle relative to its current orie
 is in radians. For example, the following effect will rotate the target 90º (=[tau]/4 in radians)
 clockwise:
 
+```{flutter-app}
+:sources: ../flame/examples
+:page: rotate_by_effect
+:show: widget code infobox
+:width: 180
+:height: 160
+```
+
 ```dart
-final effect = RotateEffect.by(tau/4, EffectController(duration: 2));
+final effect = RotateEffect.by(
+  tau/4, 
+  EffectController(duration: 2),
+);
 ```
 
 
@@ -163,8 +199,19 @@ final effect = RotateEffect.by(tau/4, EffectController(duration: 2));
 Rotates the target clockwise to the specified angle. For example, the following will rotate the
 target to look east (0º is north, 90º=[tau]/4 east, 180º=tau/2 south, and 270º=tau*3/4 west):
 
+```{flutter-app}
+:sources: ../flame/examples
+:page: rotate_to_effect
+:show: widget code infobox
+:width: 180
+:height: 160
+```
+
 ```dart
-final effect = RotateEffect.to(tau/4, EffectController(duration: 2));
+final effect = RotateEffect.to(
+  tau/4, 
+  EffectController(duration: 2),
+);
 ```
 
 
@@ -282,19 +329,54 @@ final effect = AnchorToEffect(
 ```
 
 
-### `OpacityEffect`
+### `OpacityToEffect`
 
 This effect will change over time the opacity of the target to the specified alpha-value. Currently
 this effect can only be applied to components that have a `HasPaint` mixin. If the target component
 uses multiple paints, the effect can target any individual color using the `paintId` parameter.
 
+```{flutter-app}
+:sources: ../flame/examples
+:page: opacity_to_effect
+:show: widget code infobox
+:width: 180
+:height: 160
+```
+
 ```dart
-final effect = OpacityEffect.to(0.5, EffectController(duration: 0.75));
+final effect = OpacityEffect.to(
+  0.2,
+  EffectController(duration: 0.75),
+);
 ```
 
 The opacity value of 0 corresponds to a fully transparent component, and the opacity value of 1 is
 fully opaque. Convenience constructors `OpacityEffect.fadeOut()` and `OpacityEffect.fadeIn()` will
 animate the target into full transparency / full visibility respectively.
+
+
+### `OpacityByEffect`
+
+This effect will change the opacity of the target relative to the specified alpha-value. For example,
+the following effect will change the opacity of the target by `90%`:
+
+```{flutter-app}
+:sources: ../flame/examples
+:page: opacity_by_effect
+:show: widget code infobox
+:width: 180
+:height: 160
+```
+
+```dart
+final effect = OpacityEffect.by(
+  0.9,
+  EffectController(duration: 0.75),
+);
+```
+
+Currently this effect can only be applied to components that have a `HasPaint` mixin. If the target component
+uses multiple paints, the effect can target any individual color using the `paintId` parameter.
 
 
 ### `SequenceEffect`

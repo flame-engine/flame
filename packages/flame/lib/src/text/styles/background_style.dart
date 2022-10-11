@@ -1,6 +1,8 @@
 import 'package:flame/src/text/styles/style.dart';
 import 'package:flutter/rendering.dart';
+import 'package:meta/meta.dart';
 
+@immutable
 class BackgroundStyle extends Style {
   BackgroundStyle({
     Color? color,
@@ -13,45 +15,28 @@ class BackgroundStyle extends Style {
           'Parameters `paint` and `color` are exclusive',
         ),
         borderWidths = EdgeInsets.all(borderWidth ?? 0),
-        borderRadius = borderRadius ?? 0 {
-    if (paint != null) {
-      backgroundPaint = paint;
-    } else if (color != null) {
-      backgroundPaint = Paint()..color = color;
-    } else {
-      backgroundPaint = null;
-    }
-    if (borderColor != null) {
-      borderPaint = Paint()
-        ..color = borderColor
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = borderWidth ?? 0;
-    } else {
-      borderPaint = null;
-    }
-  }
+        borderRadius = borderRadius ?? 0,
+        backgroundPaint =
+            paint ?? (color != null ? (Paint()..color = color) : null),
+        borderPaint = borderColor != null
+            ? (Paint()
+              ..color = borderColor
+              ..style = PaintingStyle.stroke
+              ..strokeWidth = borderWidth ?? 0)
+            : null;
 
-  late final Paint? backgroundPaint;
-  late final Paint? borderPaint;
+  final Paint? backgroundPaint;
+  final Paint? borderPaint;
   final double borderRadius;
   final EdgeInsets borderWidths;
 
   @override
-  BackgroundStyle clone() => copyWith();
-
-  BackgroundStyle copyWith({
-    Color? color,
-    Paint? paint,
-    Color? borderColor,
-    double? borderRadius,
-    double? borderWidth,
-  }) {
+  BackgroundStyle copyWith(BackgroundStyle other) {
     return BackgroundStyle(
-      color: color ?? (paint == null ? backgroundPaint?.color : null),
-      paint: paint ?? backgroundPaint,
-      borderColor: borderColor ?? borderPaint?.color,
-      borderRadius: borderRadius ?? this.borderRadius,
-      borderWidth: borderWidth ?? borderWidths.left,
+      paint: other.backgroundPaint ?? backgroundPaint,
+      borderColor: other.borderPaint?.color ?? borderPaint?.color,
+      borderRadius: other.borderRadius,
+      borderWidth: other.borderWidths.top,
     );
   }
 }
