@@ -190,10 +190,10 @@ void main() {
     verify: (game, tester) async {
       await tester.longPressAt(const Offset(10, 10));
       await tester.pump(const Duration(seconds: 1));
-      expect(game.handledOnTapDown, 1);
-      expect(game.handledOnLongTapDown, 1);
-      expect(game.handledOnTapUp, 1);
-      expect(game.handledOnTapCancel, 0);
+      expect(game.handledOnTapDown, equals(1));
+      expect(game.handledOnLongTapDown, equals(1));
+      expect(game.handledOnTapUp, equals(1));
+      expect(game.handledOnTapCancel, equals(0));
     },
   );
 
