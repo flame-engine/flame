@@ -3,13 +3,14 @@ import 'dart:math';
 import 'package:flame/src/text/common/utils.dart';
 import 'package:flame/src/text/elements/element.dart';
 import 'package:flame/src/text/elements/group_element.dart';
-import 'package:flame/src/text/nodes.dart';
-import 'package:flame/src/text/nodes/paragraph_node.dart';
+import 'package:flame/src/text/nodes/block_node.dart';
 import 'package:flame/src/text/styles/document_style.dart';
 import 'package:flutter/painting.dart';
 
-class DocumentNode extends GroupBlockNode {
-  DocumentNode(super.children);
+class DocumentNode {
+  DocumentNode(this.children);
+
+  final List<BlockNode> children;
 
   /// Applies [style] to this document, producing an object that can be rendered
   /// on a canvas. Parameters [width] and [height] serve as the fallback values
@@ -21,21 +22,19 @@ class DocumentNode extends GroupBlockNode {
       'Width must be either provided explicitly or set in the stylesheet',
     );
     final out = <Element>[];
-    final border = style.backgroundStyle?.borderWidths ?? EdgeInsets.zero;
+    final border = style.background?.borderWidths ?? EdgeInsets.zero;
     final padding = style.padding;
 
     final pageWidth = style.width ?? width!;
-    final contentWidth = pageWidth - padding.horizontal - border.horizontal;
-    final horizontalOffset = padding.left + border.left;
+    final contentWidth = pageWidth - padding.horizontal;
+    final horizontalOffset = padding.left;
     var verticalOffset = border.top;
     var currentMargin = padding.top;
     for (final node in children) {
-      final blockStyle = style.styleFor(node);
+      node.fillStyles(style, style.text);
+      final blockStyle = node.style;
       verticalOffset += collapseMargin(currentMargin, blockStyle.margin.top);
-      final nodeElement = (node as ParagraphNode).format(
-        blockStyle,
-        parentWidth: contentWidth,
-      );
+      final nodeElement = node.format(contentWidth);
       nodeElement.translate(horizontalOffset, verticalOffset);
       out.add(nodeElement);
       currentMargin = blockStyle.margin.bottom;
@@ -48,13 +47,13 @@ class DocumentNode extends GroupBlockNode {
           border.bottom,
     );
     final background = makeBackground(
-      style.backgroundStyle,
+      style.background,
       pageWidth,
       pageHeight,
     );
     if (background != null) {
       out.insert(0, background);
     }
-    return GroupElement(pageWidth, pageHeight, out);
+    return GroupElement(width: pageWidth, height: pageHeight, children: out);
   }
 }

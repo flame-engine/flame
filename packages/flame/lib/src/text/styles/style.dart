@@ -1,5 +1,4 @@
 import 'package:flame/src/text/styles/document_style.dart';
-import 'package:meta/meta.dart';
 
 /// A [Style] is a base class for several classes that collectively describe
 /// the desired visual appearance of a "rich-text" document.
@@ -14,27 +13,18 @@ import 'package:meta/meta.dart';
 ///
 /// The tree of [Style]s is roughly equivalent to a CSS stylesheet.
 abstract class Style {
-  /// The owner of the current style.
-  ///
-  /// Usually, styles are organized into a tree, and this property allows
-  /// traversing up this tree. This property can be null when the style hasn't
-  /// been put into a tree yet, or when it is the root of the tree.
-  Style? get parent => _parent;
-  Style? _parent;
+  const Style();
 
-  /// Creates and returns a copy of the current object.
-  Style clone();
+  Style copyWith(covariant Style other);
 
-  /// Marks [style] as being owned by the current object and returns it.
-  /// However, if the [style] is already owned by some other object, then clones
-  /// the [style], marks the copy as being owned, and returns it.
-  @protected
-  S? acquire<S extends Style>(S? style) {
-    if (style == null) {
-      return null;
+  static T? merge<T extends Style>(T? style1, T? style2) {
+    if (style1 == null) {
+      return style2;
+    } else if (style2 == null) {
+      return style1;
+    } else {
+      assert(style1.runtimeType == style2.runtimeType);
+      return style1.copyWith(style2) as T;
     }
-    final useStyle = style._parent == null ? style : style.clone() as S;
-    useStyle._parent = this;
-    return useStyle;
   }
 }
