@@ -22,7 +22,7 @@ void main() {
       await game.ensureAdd(component);
 
       final point = component.position + component.size / 4;
-      expect(component.containsPoint(point), true);
+      expect(component.containsPoint(point), isTrue);
     });
 
     testWithFlameGame(
