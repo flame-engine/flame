@@ -70,9 +70,9 @@ void main() {
         await game.ready();
 
         // Check if the current artboard has animation
-        expect(riveComponent.artboard.hasAnimations, true);
+        expect(riveComponent.artboard.hasAnimations, isTrue);
         // Check if this artboard is attach to any RiveAnimationController
-        expect(riveComponent.artboard.animationControllers.isEmpty, true);
+        expect(riveComponent.artboard.animationControllers.isEmpty, isTrue);
       });
 
       testWithFlameGame('Animate when controller is attach', (game) async {
@@ -85,13 +85,13 @@ void main() {
         await game.ready();
 
         // Check if this artboard has animation
-        expect(riveComponent.artboard.hasAnimations, true);
+        expect(riveComponent.artboard.hasAnimations, isTrue);
         // Check if this artboard is attach to any RiveAnimationController
-        expect(riveComponent.artboard.animationControllers.isEmpty, false);
+        expect(riveComponent.artboard.animationControllers.isEmpty, isFalse);
         // Check if the attach RiveAnimationController is active
         expect(
           riveComponent.artboard.animationControllers.first.isActive,
-          true,
+          isTrue,
         );
       });
     });
@@ -106,7 +106,7 @@ class _RiveComponentWithAnimation extends RiveComponent {
   _RiveComponentWithAnimation({required super.artboard});
 
   @override
-  Future<void>? onLoad() {
+  Future<void>? onLoad() async {
     final controller = StateMachineController.fromArtboard(
       artboard,
       "Designer's Test",
@@ -114,7 +114,6 @@ class _RiveComponentWithAnimation extends RiveComponent {
     if (controller != null) {
       artboard.addController(controller);
     }
-    return super.onLoad();
   }
 }
 
