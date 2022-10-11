@@ -114,7 +114,7 @@ class _ProxyOpacityProvider<T extends Object> implements OpacityProvider {
   _ProxyOpacityProvider(this.paintId, this.target);
 
   final T paintId;
-  final HasPaint target;
+  final HasPaint<T> target;
 
   @override
   double get opacity => target.getOpacity(paintId: paintId);
