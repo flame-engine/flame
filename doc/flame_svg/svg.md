@@ -1,6 +1,7 @@
 
 
 # Flame SVG
+
 Flame provides a simple API to render SVG images in your game.
 
 Svg support is provided by the `flame_svg` external package, be sure to put it in your pubspec file
