@@ -80,10 +80,9 @@ class CirclePolygonIntersections
       intersectionPoints.addAll(circle.lineSegmentIntersections(line));
     }
     if (intersectionPoints.isEmpty && (circle.isSolid || polygon.isSolid)) {
-      final outerShape =
-          circle.containsPoint(polygon.vertices.first - polygon.topLeft)
-              ? circle
-              : (polygon.containsPoint(circle.position) ? polygon : null);
+      final outerShape = circle.containsPoint(polygon.globalVertices().first)
+          ? circle
+          : (polygon.containsPoint(circle.absoluteCenter) ? polygon : null);
       if (outerShape != null && outerShape.isSolid) {
         final innerShape = outerShape == circle ? polygon : circle;
         return {innerShape.absoluteCenter};
