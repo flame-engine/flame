@@ -94,6 +94,80 @@ void main() {
       },
     );
   });
+
+  group('SecondaryTapDetector', () {
+    final secondaryTapGame = FlameTester(_SecondaryTapDetectorGame.new);
+
+    secondaryTapGame.testGameWidget(
+      'can receive secondary taps',
+      verify: (game, tester) async {
+        await tester.tapAt(const Offset(10, 10), buttons: kSecondaryButton);
+
+        expect(game.hasOnSecondaryTapDown, isTrue);
+        expect(game.hasOnSecondaryTapUp, isTrue);
+      },
+    );
+
+    secondaryTapGame.testGameWidget(
+      'can receive secondaryTapDown',
+      verify: (game, tester) async {
+        await tester.startGesture(
+          const Offset(10, 10),
+          buttons: kSecondaryButton,
+        );
+        expect(game.hasOnSecondaryTapDown, isTrue);
+        expect(game.hasOnSecondaryTapUp, isFalse);
+      },
+    );
+    secondaryTapGame.testGameWidget(
+      'can receive secondaryTapCancel',
+      verify: (game, tester) async {
+        await tester.dragFrom(
+          const Offset(10, 10),
+          const Offset(20, 20),
+          buttons: kSecondaryButton,
+        );
+        expect(game.hasOnSecondaryTapDown, isTrue);
+        expect(game.hasOnSecondaryTapCancel, isTrue);
+      },
+    );
+
+    testWithGame<_SecondaryTapDetectorGame>(
+      'can be Secondary Tapped Down',
+      _SecondaryTapDetectorGame.new,
+      (game) async {
+        await game.ready();
+
+        game.handleSecondaryTapDown(TapDownDetails());
+
+        expect(game.hasOnSecondaryTapDown, isTrue);
+      },
+    );
+
+    testWithGame<_SecondaryTapDetectorGame>(
+      'can be Secondary Tapped Up',
+      _SecondaryTapDetectorGame.new,
+      (game) async {
+        await game.ready();
+
+        game.handleSecondaryTapUp(TapUpDetails(kind: PointerDeviceKind.touch));
+
+        expect(game.hasOnSecondaryTapUp, isTrue);
+      },
+    );
+    testWithGame<_SecondaryTapDetectorGame>(
+      'can be Secondary Tapped Canceled',
+      _SecondaryTapDetectorGame.new,
+      (game) async {
+        await game.ready();
+
+        game.handleSecondaryTapDown(TapDownDetails());
+        game.onSecondaryTapCancel();
+
+        expect(game.hasOnSecondaryTapCancel, isTrue);
+      },
+    );
+  });
 }
 
 class _TapDetectorGame extends FlameGame with TapDetector {
@@ -120,6 +194,27 @@ class _TapDetectorGame extends FlameGame with TapDetector {
   @override
   void onTapCancel() {
     hasOnTapCancel = true;
+  }
+}
+
+class _SecondaryTapDetectorGame extends FlameGame with SecondaryTapDetector {
+  bool hasOnSecondaryTapUp = false;
+  bool hasOnSecondaryTapDown = false;
+  bool hasOnSecondaryTapCancel = false;
+
+  @override
+  void onSecondaryTapDown(TapDownInfo info) {
+    hasOnSecondaryTapDown = true;
+  }
+
+  @override
+  void onSecondaryTapUp(TapUpInfo info) {
+    hasOnSecondaryTapUp = true;
+  }
+
+  @override
+  void onSecondaryTapCancel() {
+    hasOnSecondaryTapCancel = true;
   }
 }
 
