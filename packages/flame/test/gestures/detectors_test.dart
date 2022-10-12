@@ -58,18 +58,7 @@ void main() {
         expect(game.hasOnTapUp, isTrue);
       },
     );
-    testWithGame<_TapDetectorGame>(
-      'can be Tapped Canceled',
-      _TapDetectorGame.new,
-      (game) async {
-        await game.ready();
 
-        game.handleTapDown(TapDownDetails());
-        game.onTapCancel();
-
-        expect(game.hasOnTapCancel, isTrue);
-      },
-    );
     tapGame.testGameWidget(
       'can receive taps',
       verify: (game, tester) async {
