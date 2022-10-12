@@ -1,27 +1,7 @@
 # Installation
 
-## Use this package as a library
+## Use of the package
 
-To use this package as a dependency run this command:
-With flutter:
+It's possible to use this package in two way: as a **library** or **importing it**
 
-```
-flutter pub add flame_svg
-```
-
-This will add a line like this to your package's pubspec.yaml (and run an implicit `flutter pub get`):
-
-```yaml
-dependencies:
-  flame_svg: ^1.6.0
-```
-
-Alternatively, your editor might support `flutter pub get`. Check the docs for your editor to learn more.
-
-## Import it
-
-In your Dart code use:
-
-```
-import 'package:flame_svg/flame_svg.dart';
-```
+For more information visit [flame_svg](https://pub.dev/packages/flame_svg)
