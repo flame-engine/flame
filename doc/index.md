@@ -1,5 +1,4 @@
 ```{include} README.md
-
 ```
 
 ```{toctree}

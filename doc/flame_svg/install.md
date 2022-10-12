@@ -1,7 +1,7 @@
 # Installation
 
 
-## Use of the package
+## Use of the flame_svg package
 
 It's possible to use this package in two way: as a **library** or **importing it**
 

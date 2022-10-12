@@ -1,5 +1,3 @@
-
-
 # Flame SVG
 
 Flame provides a simple API to render SVG images in your game.
@@ -26,13 +24,14 @@ class MyGame extends FlameGame {
     Future<void> onLoad() async {
       final svgInstance = await Svg.load('android.svg');
       final size = Vector2.all(100);
-      final svgComponent = SvgComponent.fromSvg(size, svgInstance);
-      svgComponent.x = 100;
-      svgComponent.y = 100;
+      final position = Vector2.all(100);
+      final svgComponent = SvgComponent.fromSvg(
+        size, 
+        position, 
+        svgInstance,
+);
 
       add(svgComponent);
     }
 }
 ```
-
-More [here](https://docs.flame-engine.org/main/images.html#svg).
