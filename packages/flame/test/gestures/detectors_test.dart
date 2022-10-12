@@ -219,6 +219,50 @@ void main() {
       },
     );
   });
+
+  group('DoubleTapDetector', () {
+    final doubleTapGame = FlameTester(_DoubleTapDetectorGame.new);
+
+    doubleTapGame.testGameWidget(
+      'can receive double taps',
+      setUp: (game, tester) async {
+        await tester.tapAt(const Offset(10, 10));
+        await Future<void>.delayed(kDoubleTapMinTime);
+        await tester.tapAt(const Offset(10, 10));
+      },
+      verify: (game, tester) async {
+        expect(game.hasOnDoubleTapDown, isTrue);
+        expect(game.doubleTapRegistered, isTrue);
+      },
+    );
+    doubleTapGame.testGameWidget(
+      'can receive double tapCancel',
+      setUp: (game, tester) async {
+        await tester.tapAt(const Offset(10, 10));
+        await Future<void>.delayed(kDoubleTapMinTime);
+        await tester.dragFrom(
+          const Offset(10, 10),
+          const Offset(20, 20),
+        );
+      },
+      verify: (game, tester) async {
+        expect(game.hasOnDoubleTapDown, isTrue);
+        expect(game.hasOnDoubleTapCancel, isTrue);
+      },
+    );
+
+    testWithGame<_DoubleTapDetectorGame>(
+      'can be Double Tapped Down',
+      _DoubleTapDetectorGame.new,
+      (game) async {
+        await game.ready();
+
+        game.handleDoubleTapDown(TapDownDetails());
+
+        expect(game.hasOnDoubleTapDown, isTrue);
+      },
+    );
+  });
 }
 
 class _TapDetectorGame extends FlameGame with TapDetector {
@@ -287,6 +331,27 @@ class _TertiaryTapDetectorGame extends FlameGame with TertiaryTapDetector {
   @override
   void onTertiaryTapCancel() {
     hasOnTertiaryTapCancel = true;
+  }
+}
+
+class _DoubleTapDetectorGame extends FlameGame with DoubleTapDetector {
+  bool doubleTapRegistered = false;
+  bool hasOnDoubleTapDown = false;
+  bool hasOnDoubleTapCancel = false;
+
+  @override
+  void onDoubleTap() {
+    doubleTapRegistered = true;
+  }
+
+  @override
+  void onDoubleTapCancel() {
+    hasOnDoubleTapCancel = true;
+  }
+
+  @override
+  void onDoubleTapDown(TapDownInfo info) {
+    hasOnDoubleTapDown = true;
   }
 }
 
