@@ -168,6 +168,68 @@ void main() {
       },
     );
   });
+
+  group('TertiaryTapDetector', () {
+    final tertiaryTapGame = FlameTester(_TertiaryTapDetectorGame.new);
+
+    tertiaryTapGame.testGameWidget(
+      'can receive tertiary taps',
+      verify: (game, tester) async {
+        await tester.tapAt(const Offset(10, 10), buttons: kTertiaryButton);
+
+        expect(game.hasOnTertiaryTapDown, isTrue);
+        expect(game.hasOnTertiaryTapUp, isTrue);
+      },
+    );
+
+    tertiaryTapGame.testGameWidget(
+      'can receive tertiaryTapDown',
+      verify: (game, tester) async {
+        await tester.startGesture(
+          const Offset(10, 10),
+          buttons: kTertiaryButton,
+        );
+        expect(game.hasOnTertiaryTapDown, isTrue);
+        expect(game.hasOnTertiaryTapUp, isFalse);
+      },
+    );
+    tertiaryTapGame.testGameWidget(
+      'can receive tertiaryTapCancel',
+      verify: (game, tester) async {
+        await tester.dragFrom(
+          const Offset(10, 10),
+          const Offset(20, 20),
+          buttons: kTertiaryButton,
+        );
+        expect(game.hasOnTertiaryTapDown, isTrue);
+        expect(game.hasOnTertiaryTapCancel, isTrue);
+      },
+    );
+
+    testWithGame<_TertiaryTapDetectorGame>(
+      'can be Secondary Tapped Down',
+      _TertiaryTapDetectorGame.new,
+      (game) async {
+        await game.ready();
+
+        game.handleTertiaryTapDown(TapDownDetails());
+
+        expect(game.hasOnTertiaryTapDown, isTrue);
+      },
+    );
+
+    testWithGame<_TertiaryTapDetectorGame>(
+      'can be Secondary Tapped Up',
+      _TertiaryTapDetectorGame.new,
+      (game) async {
+        await game.ready();
+
+        game.handleTertiaryTapUp(TapUpDetails(kind: PointerDeviceKind.touch));
+
+        expect(game.hasOnTertiaryTapUp, isTrue);
+      },
+    );
+  });
 }
 
 class _TapDetectorGame extends FlameGame with TapDetector {
@@ -215,6 +277,27 @@ class _SecondaryTapDetectorGame extends FlameGame with SecondaryTapDetector {
   @override
   void onSecondaryTapCancel() {
     hasOnSecondaryTapCancel = true;
+  }
+}
+
+class _TertiaryTapDetectorGame extends FlameGame with TertiaryTapDetector {
+  bool hasOnTertiaryTapUp = false;
+  bool hasOnTertiaryTapDown = false;
+  bool hasOnTertiaryTapCancel = false;
+
+  @override
+  void onTertiaryTapDown(TapDownInfo info) {
+    hasOnTertiaryTapDown = true;
+  }
+
+  @override
+  void onTertiaryTapUp(TapUpInfo info) {
+    hasOnTertiaryTapUp = true;
+  }
+
+  @override
+  void onTertiaryTapCancel() {
+    hasOnTertiaryTapCancel = true;
   }
 }
 
