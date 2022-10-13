@@ -156,10 +156,10 @@ class RiveArtboardRenderer {
   }
 }
 
-/// loads the Artboard from the specified Rive File
+/// Loads the Artboard from the specified Rive File.
 ///
-/// when [artboardName] is not null, Returns an artboard from the specified
-/// name, or [AssertionError] if no artboard with that name exists in the file
+/// When [artboardName] is not null it returns the artboard with the specified
+/// name, an assertion is triggered if no artboard with that name exists in the file.
 Future<Artboard> loadArtboard(
   FutureOr<RiveFile> file, {
   String? artboardName,

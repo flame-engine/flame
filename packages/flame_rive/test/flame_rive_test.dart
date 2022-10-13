@@ -33,7 +33,7 @@ void main() {
         expect(artboard.name, artboardName);
       });
 
-      test('Load the Specified Artboard that does not exist', () async {
+      test('Load an artboard that does not exist', () async {
         expect(
           () => loadArtboard(
             riveFile,
