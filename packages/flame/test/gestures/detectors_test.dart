@@ -344,6 +344,146 @@ void main() {
       },
     );
   });
+
+  group('VerticalDragDetector', () {
+    final verticalDragGame = FlameTester(_VerticalDragDetectorGame.new);
+
+    verticalDragGame.testGameWidget(
+      'can register vertical drag',
+      verify: (game, tester) async {
+        await tester.dragFrom(const Offset(10, 10), const Offset(10, 50));
+
+        expect(game.hasVerticaDragDown, isTrue);
+        expect(game.hasVerticaDragStart, isTrue);
+        expect(game.hasVerticaDragUpdate, isTrue);
+        expect(game.hasVerticaDragEnd, isTrue);
+      },
+    );
+
+    // TODO(dipak): should not detect horizontal drags.
+    verticalDragGame.testGameWidget(
+      "can't register horizontal drag",
+      verify: (game, tester) async {
+        await tester.dragFrom(const Offset(10, 10), const Offset(50, 10));
+
+        // expect(game.hasVerticaDragDown, isFalse);
+        // expect(game.hasVerticaDragStart, isFalse);
+        // expect(game.hasVerticaDragUpdate, isFalse);
+        // expect(game.hasVerticaDragEnd, isFalse);
+      },
+    );
+
+    testWithGame<_VerticalDragDetectorGame>(
+      'can be Vertical Dragged Down',
+      _VerticalDragDetectorGame.new,
+      (game) async {
+        await game.ready();
+        game.handleVerticalDragDown(DragDownDetails());
+
+        expect(game.hasVerticaDragDown, isTrue);
+      },
+    );
+    testWithGame<_VerticalDragDetectorGame>(
+      'can be Vertical Dragged Start',
+      _VerticalDragDetectorGame.new,
+      (game) async {
+        await game.ready();
+
+        game.handleVerticalDragStart(DragStartDetails());
+
+        expect(game.hasVerticaDragStart, isTrue);
+      },
+    );
+    testWithGame<_VerticalDragDetectorGame>(
+      'can be Vertical Dragged Update',
+      _VerticalDragDetectorGame.new,
+      (game) async {
+        game.handleVerticalDragUpdate(
+          DragUpdateDetails(globalPosition: const Offset(10, 10)),
+        );
+
+        expect(game.hasVerticaDragUpdate, isTrue);
+      },
+    );
+    testWithGame<_VerticalDragDetectorGame>(
+      'can be Vertical Dragged End',
+      _VerticalDragDetectorGame.new,
+      (game) async {
+        game.handleVerticalDragEnd(DragEndDetails());
+
+        expect(game.hasVerticaDragEnd, isTrue);
+      },
+    );
+  });
+
+  group('HorizontalDragDetector', () {
+    final horizontalDragGame = FlameTester(_HorizontalDragDetectorGame.new);
+
+    horizontalDragGame.testGameWidget(
+      'can register horizontal drag',
+      verify: (game, tester) async {
+        await tester.dragFrom(const Offset(10, 10), const Offset(50, 10));
+
+        expect(game.hasHorizontalDragDown, isTrue);
+        expect(game.hasHorizontalDragUpdate, isTrue);
+        expect(game.hasHorizontalDragEnd, isTrue);
+      },
+    );
+    // TODO(dipak): should not detect vertical drags.
+    horizontalDragGame.testGameWidget(
+      "can't register vertical drag",
+      verify: (game, tester) async {
+        await tester.dragFrom(const Offset(10, 10), const Offset(10, 50));
+
+        // expect(game.hasHorizontalDragDown, isFalse);
+        // expect(game.hasHorizontalDragUpdate, isFalse);
+        // expect(game.hasHorizontalDragCancel, isTrue);
+      },
+    );
+
+    testWithGame<_HorizontalDragDetectorGame>(
+      'can be horizontal Dragged Down',
+      _HorizontalDragDetectorGame.new,
+      (game) async {
+        await game.ready();
+        game.handleHorizontalDragDown(DragDownDetails());
+
+        expect(game.hasHorizontalDragDown, isTrue);
+      },
+    );
+    testWithGame<_HorizontalDragDetectorGame>(
+      'can be horizontal Dragged Start',
+      _HorizontalDragDetectorGame.new,
+      (game) async {
+        await game.ready();
+        game.handleHorizontalDragStart(DragStartDetails());
+
+        expect(game.hasHorizontalDragStart, isTrue);
+      },
+    );
+    testWithGame<_HorizontalDragDetectorGame>(
+      'can be horizontal Dragged update',
+      _HorizontalDragDetectorGame.new,
+      (game) async {
+        await game.ready();
+        game.handleHorizontalDragUpdate(
+          DragUpdateDetails(globalPosition: const Offset(10, 10)),
+        );
+
+        expect(game.hasHorizontalDragUpdate, isTrue);
+      },
+    );
+    testWithGame<_HorizontalDragDetectorGame>(
+      'can be horizontal Dragged End',
+      _HorizontalDragDetectorGame.new,
+      (game) async {
+        await game.ready();
+        game.handleHorizontalDragEnd(DragEndDetails());
+
+        expect(game.hasHorizontalDragEnd, isTrue);
+      },
+    );
+  });
 }
 
 class _TapDetectorGame extends FlameGame with TapDetector {
@@ -469,6 +609,73 @@ class _LongPressDetectorGame extends FlameGame with LongPressDetector {
   @override
   void onLongPressStart(LongPressStartInfo info) {
     hasLongPressStarted = true;
+  }
+}
+
+class _HorizontalDragDetectorGame extends FlameGame
+    with HorizontalDragDetector {
+  bool hasHorizontalDragDown = false;
+  bool hasHorizontalDragCancel = false;
+  bool hasHorizontalDragEnd = false;
+  bool hasHorizontalDragUpdate = false;
+  bool hasHorizontalDragStart = false;
+
+  @override
+  void onHorizontalDragDown(DragDownInfo info) {
+    hasHorizontalDragDown = true;
+  }
+
+  @override
+  void onHorizontalDragStart(DragStartInfo info) {
+    hasHorizontalDragStart = true;
+  }
+
+  @override
+  void onHorizontalDragUpdate(DragUpdateInfo info) {
+    hasHorizontalDragUpdate = true;
+  }
+
+  @override
+  void onHorizontalDragEnd(DragEndInfo info) {
+    hasHorizontalDragEnd = true;
+  }
+
+  @override
+  void onHorizontalDragCancel() {
+    hasHorizontalDragCancel = true;
+  }
+}
+
+class _VerticalDragDetectorGame extends FlameGame with VerticalDragDetector {
+  bool hasVerticaDragDown = false;
+  bool hasVerticaDragCancel = false;
+  bool hasVerticaDragEnd = false;
+  bool hasVerticaDragUpdate = false;
+  bool hasVerticaDragStart = false;
+
+  @override
+  void onVerticalDragDown(DragDownInfo info) {
+    hasVerticaDragDown = true;
+  }
+
+  @override
+  void onVerticalDragCancel() {
+    hasVerticaDragCancel = true;
+  }
+
+  @override
+  void onVerticalDragEnd(DragEndInfo info) {
+    hasVerticaDragEnd = true;
+  }
+
+  @override
+  void onVerticalDragUpdate(DragUpdateInfo info) {
+    hasVerticaDragUpdate = true;
+  }
+
+  @override
+  void onVerticalDragStart(DragStartInfo info) {
+    hasVerticaDragStart = true;
   }
 }
 
