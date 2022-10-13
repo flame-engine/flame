@@ -175,7 +175,7 @@ class PadRacingGame extends Forge2DGame with KeyboardEvents {
         if (car.lapNotifier.value > numberOfLaps) {
           isGameOver = true;
           winner = car;
-          overlays.add('gameover');
+          overlays.add('game over');
           lapText.addAll([
             ScaleEffect.by(
               Vector2.all(1.5),

@@ -50,14 +50,14 @@ extension ParallaxExtension on Game {
 
   Future<ParallaxAnimation> loadParallaxAnimation(
     String path,
-    SpriteAnimationData animaitonData, {
+    SpriteAnimationData animationData, {
     ImageRepeat repeat = ImageRepeat.repeatX,
     Alignment alignment = Alignment.bottomLeft,
     LayerFill fill = LayerFill.height,
   }) {
     return ParallaxAnimation.load(
       path,
-      animaitonData,
+      animationData,
       repeat: repeat,
       alignment: alignment,
       fill: fill,
@@ -162,11 +162,11 @@ class ParallaxAnimation extends ParallaxRenderer {
 
   /// The animation's frames pre-rendered into images so it can be used in the
   /// parallax.
-  final List<Image> _prerenderedFrames;
+  final List<Image> _preRenderedFrames;
 
   ParallaxAnimation(
     this._animation,
-    this._prerenderedFrames, {
+    this._preRenderedFrames, {
     super.repeat,
     super.alignment,
     super.fill,
@@ -195,13 +195,13 @@ class ParallaxAnimation extends ParallaxRenderer {
 
     final animation =
         await SpriteAnimation.load(path, animationData, images: images);
-    final prerendedFrames = await Future.wait(
+    final preRendedFrames = await Future.wait(
       animation.frames.map((frame) => frame.sprite.toImage()).toList(),
     );
 
     return ParallaxAnimation(
       animation,
-      prerendedFrames,
+      preRendedFrames,
       repeat: repeat,
       alignment: alignment,
       fill: fill,
@@ -209,7 +209,7 @@ class ParallaxAnimation extends ParallaxRenderer {
   }
 
   @override
-  Image get image => _prerenderedFrames[_animation.currentIndex];
+  Image get image => _preRenderedFrames[_animation.currentIndex];
 
   @override
   void update(double dt) {

@@ -1,8 +1,37 @@
 {
-    "version": "0.1",
-    "language": "en",
-    "flagWords": [],
-    "ignoreWords":["broadphase","subdir","Hitbox","Raycast","positionable","Renderable","pallete","raytracing"] ,
-    "ignorePaths":["./media/**"],
-    "dictionaries": ["en_US","softwareTerms"]
+  "version": "0.1",
+  "language": "en",
+  "flagWords": [],
+  "ignoreWords": [
+    "broadphase",
+    "hitbox",
+    "raycast",
+    "positionable",
+    "renderable",
+    "raytracing",
+    "padracing",
+    "LTWH",
+    "ASDW",
+    "LTRBR",
+    "Everytime",
+    "dashbook",
+    "vsync",
+    "pressable",
+    "stylesheet",
+    "Strikethrough",
+    "blockquote",
+    "proxying",
+    "flippable",
+    "ianliu",
+    "renancarujo",
+    "illiapoplawski",
+    "audiopool"
+
+  ],
+  "ignorePaths": [
+    "**/media/**",
+    "**/assets/**",
+    "**/test/**"
+  ],
+  "dictionaries": ["en_US", "softwareTerms"]
 }
