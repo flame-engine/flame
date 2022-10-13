@@ -1,114 +1,124 @@
+import 'package:flame_yarn/src/errors.dart';
 import 'package:flame_yarn/src/parse/ascii.dart';
 import 'package:flame_yarn/src/parse/token.dart';
 
-class Lexer {
-  String text = '';
-  int pos = 0;
-  List<Token> tokens = [];
-  final List<_ModeFn> _modeStack = [];
-  final List<int> _indentStack = [];
+List<Token> tokenize(String input) {
+  return _Lexer(input).parse();
+}
 
-  List<Token> tokenize(String text) {
-    this.text = text;
-    pos = 0;
-    _indentStack.add(0);
+/// Main working class for the [tokenize] function.
+class _Lexer {
+  _Lexer(this.text)
+    : pos = 0,
+      lineNumber = 1,
+      tokens = [],
+      modeStack = [],
+      indentStack = [];
 
-    _pushMode(_nodeHeaderMode);
+  final String text;
+  final List<Token> tokens;
+  final List<_ModeFn> modeStack;
+  final List<int> indentStack;
+
+  /// Current parsing position, an offset within the [text].
+  int pos;
+
+  /// Current line number, for error reporting.
+  int lineNumber;
+
+  List<Token> parse() {
+    indentStack.add(0);
+    pushMode(modeNodeHeader);
     while (!eof) {
-      final parser = _modeStack.last;
-      final ok = parser();
+      final ok = (modeStack.last)();
       if (!ok) {
         throw SyntaxError();
       }
     }
-    _popMode(_nodeHeaderMode);
-    if (_modeStack.isNotEmpty) {
+    popMode(modeNodeHeader);
+    if (modeStack.isNotEmpty) {
       throw SyntaxError();
     }
-
     return tokens;
   }
 
-  /// Is current parse position reached the end of file?
+  /// Has current parse position reached the end of file?
   bool get eof => pos == text.length;
 
-  /// Returns the integer code unit at the current parse position, or -1 if the
-  /// parse reached the end of input.
+  /// Returns the integer code unit at the current parse position, or -1 if we
+  /// reached the end of input.
   int get codeUnit => eof ? -1 : text.codeUnitAt(pos);
 
-  void _pushMode(_ModeFn mode) => _modeStack.add(mode);
+  void pushMode(_ModeFn mode) => modeStack.add(mode);
 
-  void _popMode(_ModeFn mode) {
-    final removed = _modeStack.removeLast();
+  void popMode(_ModeFn mode) {
+    final removed = modeStack.removeLast();
     assert(removed == mode);
   }
 
-
-  bool _nodeHeaderMode() {
-    return _eatEmptyLine() ||
-        _eatCommentLine() ||
-        _eatHeaderEnd() ||
-        _eatId() ||
-        _eatHeaderDelimiterAndRestOfLine();
+  bool modeNodeHeader() {
+    return eatEmptyLine() ||
+        eatCommentLine() ||
+        eatHeaderEnd() ||
+        eatId() ||
+        eatHeaderDelimiterAndRestOfLine();
   }
 
-  bool _nodeBodyMode() {
-    return _eatEmptyLine() ||
-        _eatCommentLine() ||
-        _eatBodyEnd() ||
-        _eatIndent();
+  bool modeNodeBody() {
+    return eatEmptyLine() ||
+        eatCommentLine() ||
+        eatBodyEnd() ||
+        eatIndent();
   }
 
-  bool _nodeBodyLineMode() {
-    return _eatArrow() ||
-        _eatCommandStart() ||
-        _eatCharacterName() ||
-        _switchToTextMode();
+  bool modeNodeBodyLine() {
+    return eatArrow() ||
+        eatCommandStart() ||
+        eatCharacterName() ||
+        switchToTextMode();
   }
 
-  bool _switchToTextMode() {
-    _pushMode(_textMode);
+  bool switchToTextMode() {
+    pushMode(modeText);
     return true;
   }
 
-  bool _textMode() {
-    return _eatTextCommentOrNewline() ||
-        _eatTextEscapeSequence() ||
-        _eatExpressionStart() ||
-        _eatPlainText();
+  bool modeText() {
+    return eatTextCommentOrNewline() ||
+        eatTextEscapeSequence() ||
+        eatExpressionStart() ||
+        eatPlainText();
   }
 
-  bool _expressionMode() {
-    return _eatWhitespace() ||
-        _eatExpressionId() ||
-        _eatExpressionVariable() ||
-        _eatNumber() ||
-        _eatString() ||
-        _eatOperator() ||
-        _eatExpressionEnd() ||
-        _eatExpressionCommandEnd();
+  bool modeExpression() {
+    return eatWhitespace() ||
+        eatExpressionId() ||
+        eatExpressionVariable() ||
+        eatNumber() ||
+        eatString() ||
+        eatOperator() ||
+        eatExpressionEnd() ||
+        eatExpressionCommandEnd();
   }
 
-  bool _commandMode() {
-    return _eatWhitespace() ||
-      _eatCommandName() ||
-      _eatCommandEnd();
+  bool modeCommand() {
+    return eatWhitespace() || eatCommandName() || eatCommandEnd();
   }
 
   //----------------------------------------------------------------------------
-  /// All `_eat*()` methods will attempt to consume a specific type of syntax at
-  /// the current parsing location. If successful, the functions will:
-  ///   - advance the parsing position [pos];
-  ///   - emit 0 or 1 token into the [tokens] token stream;
-  ///   - possibly pushes a new mode or pops the current mode;
-  ///   - return `true`.
-  /// Otherwise, the function will:
-  ///   - leave [pos] unmodified;
-  ///   - return `false`.
+  // All `_eat*()` methods will attempt to consume a specific type of syntax at
+  // the current parsing location. If successful, the functions will:
+  //   - advance the parsing position [pos];
+  //   - emit 0 or 1 token into the [tokens] token stream;
+  //   - possibly pushes a new mode or pops the current mode;
+  //   - return `true`.
+  // Otherwise, the function will:
+  //   - leave [pos] unmodified;
+  //   - return `false`.
   //----------------------------------------------------------------------------
 
   /// Consumes a single character with code unit [cu].
-  bool _eat(int cu) {
+  bool eat(int cu) {
     if (codeUnit == cu) {
       pos += 1;
       return true;
@@ -118,10 +128,10 @@ class Lexer {
 
   /// Consumes an empty line, i.e. a line consisting of whitespace only. Does
   /// not emit any tokens.
-  bool _eatEmptyLine() {
+  bool eatEmptyLine() {
     final pos0 = pos;
-    _eatWhitespace();
-    if (_eatNewline()) {
+    eatWhitespace();
+    if (eatNewline()) {
       return true;
     } else {
       pos = pos0;
@@ -131,14 +141,14 @@ class Lexer {
 
   /// Consumes a comment line: `\s*//.*` up to and including the newline,
   /// without emitting any tokens.
-  bool _eatCommentLine() {
+  bool eatCommentLine() {
     final pos0 = pos;
-    _eatWhitespace();
-    if (_eat($slash) && _eat($slash)) {
+    eatWhitespace();
+    if (eat($slash) && eat($slash)) {
       while (!eof) {
         final cu = codeUnit;
         if (cu == $cr || cu == $lf) {
-          _eatNewline();
+          eatNewline();
           break;
         }
         pos += 1;
@@ -151,7 +161,7 @@ class Lexer {
 
   /// Consumes all available whitespace at the current parsing position, without
   /// emitting any tokens.
-  bool _eatWhitespace() {
+  bool eatWhitespace() {
     final pos0 = pos;
     while (true) {
       final cu = codeUnit;
@@ -165,7 +175,7 @@ class Lexer {
 
   /// Consumes a newline character, which can also be a Windows newline (\r\n),
   /// without emitting any tokens.
-  bool _eatNewline() {
+  bool eatNewline() {
     final cu = codeUnit;
     if (cu == $cr || cu == $lf) {
       pos += 1;
@@ -178,12 +188,12 @@ class Lexer {
   }
 
   /// Consumes an end-of-header token '---' followed by a newline, emits a
-  /// token, and switches to the [_nodeBodyMode].
-  bool _eatHeaderEnd() {
+  /// token, and switches to the [modeNodeBody].
+  bool eatHeaderEnd() {
     final pos0 = pos;
-    if (_eat($minus) && _eat($minus) && _eat($minus) && _eatNewline()) {
+    if (eat($minus) && eat($minus) && eat($minus) && eatNewline()) {
       tokens.add(Token.headerEnd);
-      _pushMode(_nodeBodyMode);
+      pushMode(modeNodeBody);
       return true;
     }
     pos = pos0;
@@ -192,11 +202,11 @@ class Lexer {
 
   /// Consumes an end-of-body token '===' followed by a newline, emits a token,
   /// and pops the current mode.
-  bool _eatBodyEnd() {
+  bool eatBodyEnd() {
     final pos0 = pos;
-    if (_eat($equals) && _eat($equals) && _eat($equals) && _eatNewline()) {
+    if (eat($equals) && eat($equals) && eat($equals) && eatNewline()) {
       tokens.add(Token.bodyEnd);
-      _popMode(_nodeBodyMode);
+      popMode(modeNodeBody);
       return true;
     }
     pos = pos0;
@@ -204,7 +214,7 @@ class Lexer {
   }
 
   /// Consumes a word that looks like an identifier, and emits an .id token.
-  bool _eatId() {
+  bool eatId() {
     final pos0 = pos;
     var cu = codeUnit;
     if ((cu >= $lowercaseA && cu <= $lowercaseZ) ||
@@ -229,16 +239,16 @@ class Lexer {
 
   /// Consumes a ':' within the header, and then the rest of the line which is
   /// emitted as a plain text token.
-  bool _eatHeaderDelimiterAndRestOfLine() {
+  bool eatHeaderDelimiterAndRestOfLine() {
     final pos0 = pos;
-    _eatWhitespace();
-    if (_eat($colon)) {
-      _eatWhitespace();
+    eatWhitespace();
+    if (eat($colon)) {
+      eatWhitespace();
       final pos0 = pos;
       var pos1 = pos;
       while (!eof) {
         pos1 = pos;
-        if (_eatNewline()) {
+        if (eatNewline()) {
           break;
         }
         pos += 1;
@@ -253,8 +263,8 @@ class Lexer {
 
   /// Consumes whitespace at the start of the line (if any) and emits indent/
   /// dedent tokens according to the indent stack. After that switches to the
-  /// [_nodeBodyLineMode]. Always returns true (even if a line had 0 spaces).
-  bool _eatIndent() {
+  /// [modeNodeBodyLine]. Always returns true (even if a line had 0 spaces).
+  bool eatIndent() {
     var lineIndent = 0;
     while (true) {
       final cu = codeUnit;
@@ -266,27 +276,27 @@ class Lexer {
         break;
       }
     }
-    if (lineIndent > _indentStack.last) {
-      _indentStack.add(lineIndent);
+    if (lineIndent > indentStack.last) {
+      indentStack.add(lineIndent);
       tokens.add(Token.indent);
     }
-    while (lineIndent < _indentStack.last) {
-      _indentStack.removeLast();
+    while (lineIndent < indentStack.last) {
+      indentStack.removeLast();
       tokens.add(Token.dedent);
     }
-    if (lineIndent > _indentStack.last) {
+    if (lineIndent > indentStack.last) {
       throw SyntaxError('Inconsistent indentation');
     }
-    _pushMode(_nodeBodyLineMode);
+    pushMode(modeNodeBodyLine);
     return true;
   }
 
   /// Consumes an arrow token '->' and emits it.
-  bool _eatArrow() {
+  bool eatArrow() {
     final pos0 = pos;
-    if (_eat($minus) && _eat($gt)) {
+    if (eat($minus) && eat($gt)) {
       tokens.add(Token.arrow);
-      _eatWhitespace();
+      eatWhitespace();
       return true;
     }
     pos = pos0;
@@ -294,25 +304,25 @@ class Lexer {
   }
 
   /// Consumes+emits a command start token '<<', and switches to the
-  /// [_commandMode].
-  bool _eatCommandStart() {
+  /// [modeCommand].
+  bool eatCommandStart() {
     final pos0 = pos;
-    if (_eat($lt) && _eat($lt)) {
+    if (eat($lt) && eat($lt)) {
       tokens.add(Token.commandStart);
-      _eatWhitespace();
-      _pushMode(_commandMode);
+      eatWhitespace();
+      pushMode(modeCommand);
       return true;
     }
     pos = pos0;
     return false;
   }
 
-  bool _eatCommandEnd() {
+  bool eatCommandEnd() {
     final pos0 = pos;
-    if (_eat($gt) && _eat($gt)) {
+    if (eat($gt) && eat($gt)) {
       tokens.add(Token.commandEnd);
-      _eatWhitespace();
-      _popMode(_commandMode);
+      eatWhitespace();
+      popMode(modeCommand);
       return true;
     }
     pos = pos0;
@@ -321,15 +331,15 @@ class Lexer {
 
   /// Consumes an ID at the start of the line, followed by a ':', then emits a
   /// .speaker token.
-  bool _eatCharacterName() {
+  bool eatCharacterName() {
     final numTokens = tokens.length;
     final pos0 = pos;
-    if (_eatId()) {
+    if (eatId()) {
       final idToken = tokens.removeLast();
       assert(tokens.length == numTokens && idToken.type == TokenType.id);
-      _eatWhitespace();
-      if (_eat($colon)) {
-        _eatWhitespace();
+      eatWhitespace();
+      if (eat($colon)) {
+        eatWhitespace();
         tokens.add(Token.speaker(idToken.content));
         return true;
       }
@@ -340,32 +350,36 @@ class Lexer {
 
   /// Consumes a comment at the end of line or a newline while in the text mode,
   /// and pops the current mode so that the next line will start again at
-  /// [_nodeBodyMode].
-  bool _eatTextCommentOrNewline() {
-    if (_eatNewline() || _eatCommentLine()) {
-      _popMode(_textMode);
-      _popMode(_nodeBodyLineMode);
-      assert(_modeStack.last == _nodeBodyMode);
+  /// [modeNodeBody].
+  bool eatTextCommentOrNewline() {
+    if (eatNewline() || eatCommentLine()) {
+      popMode(modeText);
+      popMode(modeNodeBodyLine);
+      assert(modeStack.last == modeNodeBody);
       return true;
     }
     return false;
   }
 
-  bool _eatTextEscapeSequence() {
-    if (_eat($backslash)) {
-      if (_eatNewline()) {
-        _eatWhitespace();
+  bool eatTextEscapeSequence() {
+    if (eat($backslash)) {
+      if (eatNewline()) {
+        eatWhitespace();
       } else {
         final cu = codeUnit;
-        if (cu == $backslash || cu == $slash || cu == $lt || cu == $gt ||
-            cu == $leftBrace || cu == $rightBrace || cu == $hash) {
+        if (cu == $backslash ||
+            cu == $slash ||
+            cu == $lt ||
+            cu == $gt ||
+            cu == $leftBrace ||
+            cu == $rightBrace ||
+            cu == $hash) {
           pos += 1;
           tokens.add(Token.text(String.fromCharCode(cu)));
         } else if (cu == $lowercaseN) {
           pos += 1;
           tokens.add(const Token.text('\n'));
-        }
-        else {
+        } else {
           throw SyntaxError('Invalid escape sequence');
         }
       }
@@ -374,43 +388,43 @@ class Lexer {
     return false;
   }
 
-  /// Consumes '{' and enters the [_expressionMode].
-  bool _eatExpressionStart() {
-    if (_eat($leftBrace)) {
+  /// Consumes '{' and enters the [modeExpression].
+  bool eatExpressionStart() {
+    if (eat($leftBrace)) {
       tokens.add(Token.expressionStart);
-      _pushMode(_expressionMode);
+      pushMode(modeExpression);
       return true;
     }
     return false;
   }
 
-  /// Consumes '}' and leaves the [_expressionMode].
-  bool _eatExpressionEnd() {
-    if (_eat($rightBrace)) {
+  /// Consumes '}' and leaves the [modeExpression].
+  bool eatExpressionEnd() {
+    if (eat($rightBrace)) {
       tokens.add(Token.expressionEnd);
-      _popMode(_expressionMode);
+      popMode(modeExpression);
       return true;
     }
     return false;
   }
 
   /// Consumes '>>' while in the expression mode, and leaves both the expression
-  /// mode and the [_commandMode].
-  bool _eatExpressionCommandEnd() {
+  /// mode and the [modeCommand].
+  bool eatExpressionCommandEnd() {
     final pos0 = pos;
-    if (_eat($gt) && _eat($gt)) {
+    if (eat($gt) && eat($gt)) {
       tokens.add(Token.expressionEnd);
       tokens.add(Token.commandEnd);
-      _eatWhitespace();
-      _popMode(_expressionMode);
-      _popMode(_commandMode);
+      eatWhitespace();
+      popMode(modeExpression);
+      popMode(modeCommand);
       return true;
     }
     pos = pos0;
     return false;
   }
 
-  bool _eatPlainText() {
+  bool eatPlainText() {
     final pos0 = pos;
     final cu = codeUnit;
     if (cu == $lt || cu == $slash) {
@@ -419,8 +433,13 @@ class Lexer {
     } else {
       while (!eof) {
         final cu = codeUnit;
-        if (cu == $cr || cu == $lf || cu == $hash || cu == $leftBrace ||
-            cu == $slash || cu == $backslash || cu == $lt) {
+        if (cu == $cr ||
+            cu == $lf ||
+            cu == $hash ||
+            cu == $leftBrace ||
+            cu == $slash ||
+            cu == $backslash ||
+            cu == $lt) {
           break;
         }
         pos += 1;
@@ -433,11 +452,11 @@ class Lexer {
   }
 
   /// Consumes a plain id within an expression, which is then emitted as either
-  /// one of the [_keywords] tokens, or as plain .id token.
-  bool _eatExpressionId() {
-    if (_eatId()) {
+  /// one of the [keywords] tokens, or as plain .id token.
+  bool eatExpressionId() {
+    if (eatId()) {
       final name = tokens.last.content;
-      final keywordToken = _keywords[name];
+      final keywordToken = keywords[name];
       if (keywordToken != null) {
         tokens.removeLast();
         tokens.add(keywordToken);
@@ -449,9 +468,9 @@ class Lexer {
 
   /// Consumes a variable within an expression. A variable is just a '$' sign
   /// followed by an id. Emits a .variable token.
-  bool _eatExpressionVariable() {
-    if (_eat($dollar)) {
-      if (_eatId()) {
+  bool eatExpressionVariable() {
+    if (eat($dollar)) {
+      if (eatId()) {
         final token = tokens.removeLast();
         tokens.add(Token.variable(token.content));
         return true;
@@ -463,10 +482,10 @@ class Lexer {
 
   /// Consumes a number in the form of `DIGITS (. DIGITS)?`, and emits a
   /// corresponding token.
-  bool _eatNumber() {
+  bool eatNumber() {
     final pos0 = pos;
-    if (_eatDigits()) {
-      _eat($dot) && _eatDigits();
+    if (eatDigits()) {
+      eat($dot) && eatDigits();
       tokens.add(Token.number(text.substring(pos, pos0)));
       return true;
     }
@@ -474,7 +493,7 @@ class Lexer {
   }
 
   /// Helper for [_eatNumber]: consumes a simple run of digits.
-  bool _eatDigits() {
+  bool eatDigits() {
     var found = false;
     while (!eof) {
       final cu = codeUnit;
@@ -488,12 +507,12 @@ class Lexer {
     return found;
   }
 
-  /// Consumes one of the operators defined in the [_keywords] map, and emits
+  /// Consumes one of the operators defined in the [keywords] map, and emits
   /// a corresponding token.
-  bool _eatOperator() {
+  bool eatOperator() {
     if (pos + 1 < text.length) {
       final op2 = text.substring(pos, pos + 2);
-      final keyword = _keywords[op2];
+      final keyword = keywords[op2];
       if (keyword != null) {
         pos += 2;
         tokens.add(keyword);
@@ -502,7 +521,7 @@ class Lexer {
     }
     if (pos < text.length) {
       final op1 = text.substring(pos, pos + 1);
-      final keyword = _keywords[op1];
+      final keyword = keywords[op1];
       if (keyword != null) {
         pos += 1;
         tokens.add(keyword);
@@ -516,7 +535,7 @@ class Lexer {
   /// token where all escape characters has been unescaped. Returns false if the
   /// string is invalid (for example ends without a closing quote, or contains
   /// an unknown escape sequence).
-  bool _eatString() {
+  bool eatString() {
     final pos0 = pos;
     final quote = codeUnit;
     if (quote == $doubleQuote || quote == $singleQuote) {
@@ -551,25 +570,25 @@ class Lexer {
     return false;
   }
 
-  bool _eatCommandName() {
-    if (_eatId()) {
+  bool eatCommandName() {
+    if (eatId()) {
       final token = tokens.removeLast();
       final name = token.content;
-      if (_commandsWithArgs.containsKey(name)) {
-        tokens.add(_commandsWithArgs[name]!);
-        _pushMode(_expressionMode);
-      } else if (_commandsWithoutArgs.containsKey(name)) {
-        tokens.add(_commandsWithoutArgs[name]!);
+      if (commandsWithArgs.containsKey(name)) {
+        tokens.add(commandsWithArgs[name]!);
+        pushMode(modeExpression);
+      } else if (commandsWithoutArgs.containsKey(name)) {
+        tokens.add(commandsWithoutArgs[name]!);
       } else {
         tokens.add(Token.command(name));
-        _pushMode(_expressionMode);
+        pushMode(modeExpression);
       }
       return true;
     }
     return false;
   }
 
-  static const Map<String, Token> _keywords = {
+  static const Map<String, Token> keywords = {
     'true': Token.constTrue,
     'false': Token.constFalse,
     'string': Token.typeString,
@@ -616,14 +635,14 @@ class Lexer {
     '(': Token.parenStart,
     ')': Token.parenEnd,
   };
-  static const Map<String, Token> _commandsWithArgs = {
+  static const Map<String, Token> commandsWithArgs = {
     'if': Token.commandIf,
     'elseif': Token.commandElseif,
     'set': Token.commandSet,
     'jump': Token.commandJump,
     'wait': Token.commandJump,
   };
-  static const Map<String, Token> _commandsWithoutArgs = {
+  static const Map<String, Token> commandsWithoutArgs = {
     'else': Token.commandElse,
     'endif': Token.commandEndif,
     'stop': Token.commandStop,
@@ -631,8 +650,3 @@ class Lexer {
 }
 
 typedef _ModeFn = bool Function();
-
-class SyntaxError implements Exception {
-  SyntaxError([this.message]);
-  final String? message;
-}
