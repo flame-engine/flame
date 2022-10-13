@@ -6,6 +6,7 @@ import 'package:flame/src/cache/value_cache.dart';
 import 'package:flame/src/components/core/component_set.dart';
 import 'package:flame/src/components/core/position_type.dart';
 import 'package:flame/src/components/mixins/coordinate_transform.dart';
+import 'package:flame/src/components/mixins/has_game_ref.dart';
 import 'package:flame/src/game/flame_game.dart';
 import 'package:flame/src/game/game.dart';
 import 'package:flame/src/gestures/events.dart';
@@ -375,8 +376,8 @@ class Component {
   ///   - it is invoked when the size of the game canvas is already known.
   ///
   /// If your loading logic requires knowing the size of the game canvas, then
-  /// add `HasGameRef` mixin and then query `gameRef.size` or
-  /// `gameRef.canvasSize`.
+  /// add [HasGameRef] mixin and then query `game.size` or
+  /// `game.canvasSize`.
   ///
   /// The default implementation returns `null`, indicating that there is no
   /// need to await anything. When overriding this method, you have a choice
@@ -461,6 +462,10 @@ class Component {
     update(dt);
     _children?.forEach((c) => c.updateTree(dt));
   }
+
+  /// This method will be invoked from lifecycle if [child] has been added
+  /// to or removed from its parent children list.
+  void onChildrenChanged(Component child, ChildrenChangeType type) {}
 
   void render(Canvas canvas) {}
 
@@ -897,6 +902,8 @@ class Component {
 
 typedef ComponentSetFactory = ComponentSet Function();
 
+enum ChildrenChangeType { added, removed }
+
 /// Helper class to assist [Component] with its lifecycle.
 ///
 /// Most lifecycle events -- add, remove, change parent -- live for a very short
@@ -982,6 +989,7 @@ class _LifecycleManager {
       if (child.isLoaded) {
         child._mount();
         _children.removeFirst();
+        owner.onChildrenChanged(child, ChildrenChangeType.added);
       } else if (child.isLoading) {
         break;
       } else {
@@ -995,6 +1003,7 @@ class _LifecycleManager {
       final component = _removals.removeFirst();
       if (component.isMounted) {
         component._remove();
+        owner.onChildrenChanged(component, ChildrenChangeType.removed);
       }
       assert(!component.isMounted);
     }
@@ -1003,9 +1012,12 @@ class _LifecycleManager {
   void _processAdoptionQueue() {
     while (_adoption.isNotEmpty) {
       final child = _adoption.removeFirst();
+      final oldParent = child._parent;
       child._remove();
+      oldParent?.onChildrenChanged(child, ChildrenChangeType.removed);
       child._parent = owner;
       child._mount();
+      owner.onChildrenChanged(child, ChildrenChangeType.added);
     }
   }
 }

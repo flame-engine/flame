@@ -1,30 +1,36 @@
 import 'package:flame/src/text/styles/background_style.dart';
+import 'package:flame/src/text/styles/flame_text_style.dart';
 import 'package:flame/src/text/styles/style.dart';
-import 'package:flutter/painting.dart';
+import 'package:flutter/painting.dart' hide TextStyle;
+import 'package:meta/meta.dart';
 
+/// [BlockStyle] is a generic descriptor for a visual appearance of a block-
+/// level element.
+@immutable
 class BlockStyle extends Style {
-  BlockStyle({
-    this.margin = EdgeInsets.zero,
-    this.padding = EdgeInsets.zero,
-    this.background,
-  });
-
-  EdgeInsets margin;
-  EdgeInsets padding;
-  BackgroundStyle? background;
-
-  @override
-  BlockStyle clone() => copyWith();
-
-  BlockStyle copyWith({
+  const BlockStyle({
     EdgeInsets? margin,
     EdgeInsets? padding,
-    BackgroundStyle? background,
-  }) {
+    this.background,
+    this.text,
+  })  : _margin = margin,
+        _padding = padding;
+
+  final EdgeInsets? _margin;
+  final EdgeInsets? _padding;
+  final BackgroundStyle? background;
+  final FlameTextStyle? text;
+
+  EdgeInsets get margin => _margin ?? EdgeInsets.zero;
+  EdgeInsets get padding => _padding ?? EdgeInsets.zero;
+
+  @override
+  BlockStyle copyWith(BlockStyle other) {
     return BlockStyle(
-      margin: margin ?? this.margin,
-      padding: padding ?? this.padding,
-      background: background ?? this.background,
+      margin: other._margin ?? _margin,
+      padding: other._padding ?? _padding,
+      background: other.background ?? background,
+      text: Style.merge(text, other.text),
     );
   }
 }
