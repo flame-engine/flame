@@ -11,6 +11,7 @@ class _Lexer {
   _Lexer(this.text)
     : pos = 0,
       lineNumber = 1,
+      lineStart = 0,
       tokens = [],
       modeStack = [],
       indentStack = [];
@@ -26,19 +27,26 @@ class _Lexer {
   /// Current line number, for error reporting.
   int lineNumber;
 
+  /// Offset of the start of the current line, used for error reporting.
+  int lineStart;
+
+  /// Main parsing function which handles transition between modes. This method
+  /// will parse the [text] and return a list of [tokens]. This function can
+  /// only be called once for the given [_Lexer] object.
   List<Token> parse() {
+    assert(pos == 0);
     indentStack.add(0);
-    pushMode(modeNodeHeader);
+    pushMode(modeMain);
     while (!eof) {
       final ok = (modeStack.last)();
       if (!ok) {
-        throw SyntaxError();
+        error('invalid syntax');
       }
     }
-    popMode(modeNodeHeader);
-    if (modeStack.isNotEmpty) {
-      throw SyntaxError();
+    if (modeStack.length > 1) {
+      error('incomplete node body');
     }
+    popMode(modeMain);
     return tokens;
   }
 
@@ -49,11 +57,28 @@ class _Lexer {
   /// reached the end of input.
   int get codeUnit => eof ? -1 : text.codeUnitAt(pos);
 
+  /// Pushes a new mode into the mode stack.
   void pushMode(_ModeFn mode) => modeStack.add(mode);
 
+  /// Pops the last mode from the stack and checks that it was [mode].
   void popMode(_ModeFn mode) {
     final removed = modeStack.removeLast();
     assert(removed == mode);
+  }
+
+  //----------------------------------------------------------------------------
+  // All `mode*()` methods have the [_ModeFn] signature, and are designed to be
+  // put onto the mode stack. The collection of all modes and transitions
+  // between them represent the lexer's Finite State Machine.
+  //
+  // Each `mode*()` method returns true if it was able to proceed in parsing,
+  // or false if it cannot recognize the syntax. In the latter case a syntax
+  // error will be thrown.
+  //----------------------------------------------------------------------------
+
+  bool modeMain() {
+    pushMode(modeNodeHeader);
+    return true;
   }
 
   bool modeNodeHeader() {
@@ -106,7 +131,7 @@ class _Lexer {
   }
 
   //----------------------------------------------------------------------------
-  // All `_eat*()` methods will attempt to consume a specific type of syntax at
+  // All `eat*()` methods will attempt to consume a specific type of syntax at
   // the current parsing location. If successful, the functions will:
   //   - advance the parsing position [pos];
   //   - emit 0 or 1 token into the [tokens] token stream;
@@ -182,6 +207,8 @@ class _Lexer {
       if (cu == $cr && codeUnit == $lf) {
         pos += 1;
       }
+      lineNumber += 1;
+      lineStart = pos;
       return true;
     }
     return false;
@@ -193,6 +220,7 @@ class _Lexer {
     final pos0 = pos;
     if (eat($minus) && eat($minus) && eat($minus) && eatNewline()) {
       tokens.add(Token.headerEnd);
+      popMode(modeNodeHeader);
       pushMode(modeNodeBody);
       return true;
     }
@@ -647,6 +675,40 @@ class _Lexer {
     'endif': Token.commandEndif,
     'stop': Token.commandStop,
   };
+
+  bool error(String message) {
+    final lineEnd = _findLineEnd();
+    String lineFragment, markerIndent;
+    if (lineEnd - lineStart <= 78) {
+      lineFragment = text.substring(lineStart, lineEnd);
+      markerIndent = ' ' * (pos - lineStart);
+    } else if (pos - lineStart <= 50) {
+      lineFragment = '${text.substring(lineStart, lineStart + 75)}...';
+      markerIndent = ' ' * (pos - lineStart);
+    } else {
+      lineFragment = '...${text.substring(pos - 36, pos + 36)}...';
+      markerIndent = ' ' * 36;
+    }
+    final parts = [
+      message,
+      '  at line $lineNumber column ${pos - lineStart}:',
+      '  $lineFragment',
+      '  $markerIndent^',
+    ];
+    throw SyntaxError(parts.join('\n'));
+  }
+
+  int _findLineEnd() {
+    var i = pos;
+    while (i < text.length) {
+      final cu = text.codeUnitAt(i);
+      if (cu == $lf || cu == $cr) {
+        break;
+      }
+      i += 1;
+    }
+    return i;
+  }
 }
 
 typedef _ModeFn = bool Function();
