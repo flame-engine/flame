@@ -10,13 +10,16 @@ import 'package:flutter_test/flutter_test.dart';
 
 class _PaintComponent extends Component with HasPaint {}
 
-class _CustomPaintComponent extends Component with HasPaint<String> {
-  _CustomPaintComponent(Map<String, Paint> paints) {
+class _CustomPaintComponent<T extends Object> extends Component
+    with HasPaint<T> {
+  _CustomPaintComponent(Map<T, Paint> paints) {
     for (final p in paints.entries) {
       setPaint(p.key, p.value);
     }
   }
 }
+
+enum _PaintTypes { paint1, paint2, paint3 }
 
 void main() {
   const _epsilon = 0.004; // 1/255, since alpha only holds 8 bits
@@ -199,8 +202,9 @@ void main() {
     testWithFlameGame(
       'on custom paint',
       (game) async {
-        final component =
-            _CustomPaintComponent({'bluePaint': BasicPalette.blue.paint()});
+        final component = _CustomPaintComponent<String>(
+          {'bluePaint': BasicPalette.blue.paint()},
+        );
         await game.ensureAdd(component);
 
         await component.add(
@@ -216,6 +220,31 @@ void main() {
         expect(component.getPaint('bluePaint').color.blue, 255);
         expect(component.getPaint('bluePaint').color.red, 0);
         expect(component.getPaint('bluePaint').color.green, 0);
+      },
+    );
+
+    testWithFlameGame(
+      'apply on all paints',
+      (game) async {
+        final component = _CustomPaintComponent<_PaintTypes>(
+          {
+            _PaintTypes.paint1: BasicPalette.red.paint(),
+            _PaintTypes.paint2: BasicPalette.green.paint(),
+            _PaintTypes.paint3: BasicPalette.blue.paint(),
+          },
+        );
+        await game.ensureAdd(component);
+
+        await component
+            .add(OpacityEffect.fadeOut(EffectController(duration: 1)));
+
+        game.update(1);
+
+        // All paints should have the same opacity after the effect completes.
+        expect(component.getPaint().color.opacity, isZero);
+        expect(component.getPaint(_PaintTypes.paint1).color.opacity, isZero);
+        expect(component.getPaint(_PaintTypes.paint2).color.opacity, isZero);
+        expect(component.getPaint(_PaintTypes.paint3).color.opacity, isZero);
       },
     );
 
