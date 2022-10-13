@@ -263,6 +263,87 @@ void main() {
       },
     );
   });
+
+  group('LongPressDetector', () {
+    final longPressGame = FlameTester(_LongPressDetectorGame.new);
+
+    longPressGame.testGameWidget(
+      'can register longPress',
+      verify: (game, tester) async {
+        await tester.longPressAt(const Offset(10, 10));
+
+        expect(game.hasLongPressRegistered, isTrue);
+      },
+    );
+    longPressGame.testGameWidget(
+      'can register moving longPress',
+      setUp: (game, tester) async {
+        final gesture =
+            await tester.startGesture(const Offset(10, 10), pointer: 7);
+
+        await Future<void>.delayed(kLongPressTimeout);
+
+        await gesture.moveTo(const Offset(20, 10));
+
+        await gesture.up();
+      },
+      verify: (game, tester) async {
+        expect(game.hasLongPressStarted, isTrue);
+        expect(game.hasLongPressMoveUpdated, isTrue);
+        expect(game.hasLongPressEnded, isTrue);
+      },
+    );
+
+    longPressGame.testGameWidget(
+      'can register longPressCancel',
+      setUp: (game, tester) async {
+        final gesture =
+            await tester.startGesture(const Offset(10, 10), pointer: 7);
+
+        await gesture.moveTo(const Offset(20, 10));
+
+        await gesture.up();
+      },
+      verify: (game, tester) async {
+        expect(game.hasLongPressCanceled, isTrue);
+        expect(game.hasLongPressStarted, isFalse);
+      },
+    );
+
+    testWithGame<_LongPressDetectorGame>(
+      'can be Long Pressed Start',
+      _LongPressDetectorGame.new,
+      (game) async {
+        await game.ready();
+
+        game.handleLongPressStart(const LongPressStartDetails());
+
+        expect(game.hasLongPressStarted, isTrue);
+      },
+    );
+    testWithGame<_LongPressDetectorGame>(
+      'can be Long Pressed Move Update',
+      _LongPressDetectorGame.new,
+      (game) async {
+        await game.ready();
+
+        game.handleLongPressMoveUpdate(const LongPressMoveUpdateDetails());
+
+        expect(game.hasLongPressMoveUpdated, isTrue);
+      },
+    );
+    testWithGame<_LongPressDetectorGame>(
+      'can be Long Pressed Move End',
+      _LongPressDetectorGame.new,
+      (game) async {
+        await game.ready();
+
+        game.handleLongPressEnd(const LongPressEndDetails());
+
+        expect(game.hasLongPressEnded, isTrue);
+      },
+    );
+  });
 }
 
 class _TapDetectorGame extends FlameGame with TapDetector {
@@ -352,6 +433,42 @@ class _DoubleTapDetectorGame extends FlameGame with DoubleTapDetector {
   @override
   void onDoubleTapDown(TapDownInfo info) {
     hasOnDoubleTapDown = true;
+  }
+}
+
+class _LongPressDetectorGame extends FlameGame with LongPressDetector {
+  bool hasLongPressRegistered = false;
+  bool hasLongPressCanceled = false;
+  bool hasLongPressEnded = false;
+  bool hasLongPressMoveUpdated = false;
+  bool hasLongPressStarted = false;
+
+  @override
+  void onLongPress() {
+    hasLongPressRegistered = true;
+  }
+
+  @override
+  void onLongPressCancel() {
+    hasLongPressCanceled = true;
+  }
+
+  @override
+  void onLongPressEnd(LongPressEndInfo info) {
+    hasLongPressEnded = true;
+  }
+
+  @override
+  void onLongPressUp() {}
+
+  @override
+  void onLongPressMoveUpdate(LongPressMoveUpdateInfo info) {
+    hasLongPressMoveUpdated = true;
+  }
+
+  @override
+  void onLongPressStart(LongPressStartInfo info) {
+    hasLongPressStarted = true;
   }
 }
 
