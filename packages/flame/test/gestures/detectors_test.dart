@@ -484,6 +484,141 @@ void main() {
       },
     );
   });
+
+  group('ForcePressDetector', () {
+    final forcePressGame = FlameTester(_ForcePressDetectorGame.new);
+
+    forcePressGame.testGameWidget(
+      'can register forcePress',
+      verify: (game, tester) async {
+        const forcePressOffset = Offset(10, 10);
+
+        final pointerValue = tester.nextPointer;
+
+        final gesture = await tester.createGesture();
+        await gesture.downWithCustomEvent(
+          forcePressOffset,
+          PointerDownEvent(
+            pointer: pointerValue,
+            position: forcePressOffset,
+            pressure: 0.0,
+            pressureMax: 6.0,
+            pressureMin: 0.0,
+          ),
+        );
+
+        await gesture.updateWithCustomEvent(
+          PointerMoveEvent(
+            pointer: pointerValue,
+            pressure: 0.3,
+            pressureMin: 0,
+          ),
+        );
+
+        expect(game.forcePressStart, equals(0));
+        expect(game.forcePressPeaked, equals(0));
+        expect(game.forcePressUpdate, equals(0));
+        expect(game.forcePressEnded, equals(0));
+
+        await gesture.updateWithCustomEvent(
+          PointerMoveEvent(
+            pointer: pointerValue,
+            pressure: 0.5,
+            pressureMin: 0,
+          ),
+        );
+
+        expect(game.forcePressStart, equals(1));
+        expect(game.forcePressPeaked, equals(0));
+        expect(game.forcePressUpdate, equals(1));
+        expect(game.forcePressEnded, equals(0));
+
+        await gesture.updateWithCustomEvent(
+          PointerMoveEvent(
+            pointer: pointerValue,
+            pressure: 0.9,
+            pressureMin: 0,
+          ),
+        );
+
+        expect(game.forcePressStart, equals(1));
+        expect(game.forcePressPeaked, equals(1));
+        expect(game.forcePressUpdate, equals(2));
+        expect(game.forcePressEnded, equals(0));
+
+        await gesture.up();
+
+        expect(game.forcePressStart, equals(1));
+        expect(game.forcePressPeaked, equals(1));
+        expect(game.forcePressUpdate, equals(2));
+        expect(game.forcePressEnded, equals(1));
+      },
+    );
+
+    testWithGame<_ForcePressDetectorGame>(
+      'can be Force Press started',
+      _ForcePressDetectorGame.new,
+      (game) async {
+        await game.ready();
+
+        game.handleForcePressStart(
+          ForcePressDetails(
+            globalPosition: const Offset(10, 10),
+            pressure: .4,
+          ),
+        );
+
+        expect(game.forcePressStart, equals(1));
+      },
+    );
+    testWithGame<_ForcePressDetectorGame>(
+      'can be Force Press Updated',
+      _ForcePressDetectorGame.new,
+      (game) async {
+        await game.ready();
+
+        game.handleForcePressUpdate(
+          ForcePressDetails(
+            globalPosition: const Offset(10, 10),
+            pressure: .7,
+          ),
+        );
+
+        expect(game.forcePressUpdate, equals(1));
+      },
+    );
+    testWithGame<_ForcePressDetectorGame>(
+      'can be Force Press peaked',
+      _ForcePressDetectorGame.new,
+      (game) async {
+        await game.ready();
+
+        game.handleForcePressPeak(
+          ForcePressDetails(
+            globalPosition: const Offset(10, 10),
+            pressure: .9,
+          ),
+        );
+
+        expect(game.forcePressPeaked, equals(1));
+      },
+    );
+    testWithGame<_ForcePressDetectorGame>(
+      'can be Force Press Ended',
+      _ForcePressDetectorGame.new,
+      (game) async {
+        await game.ready();
+
+        game.handleForcePressEnd(
+          ForcePressDetails(
+            globalPosition: const Offset(10, 10),
+            pressure: .2,
+          ),
+        );
+        expect(game.forcePressEnded, equals(1));
+      },
+    );
+  });
 }
 
 class _TapDetectorGame extends FlameGame with TapDetector {
@@ -676,6 +811,33 @@ class _VerticalDragDetectorGame extends FlameGame with VerticalDragDetector {
   @override
   void onVerticalDragStart(DragStartInfo info) {
     hasVerticaDragStart = true;
+  }
+}
+
+class _ForcePressDetectorGame extends FlameGame with ForcePressDetector {
+  int forcePressStart = 0;
+  int forcePressPeaked = 0;
+  int forcePressUpdate = 0;
+  int forcePressEnded = 0;
+
+  @override
+  void onForcePressStart(ForcePressInfo info) {
+    forcePressStart++;
+  }
+
+  @override
+  void onForcePressEnd(ForcePressInfo info) {
+    forcePressEnded++;
+  }
+
+  @override
+  void onForcePressUpdate(ForcePressInfo info) {
+    forcePressUpdate++;
+  }
+
+  @override
+  void onForcePressPeak(ForcePressInfo info) {
+    forcePressPeaked++;
   }
 }
 
