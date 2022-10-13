@@ -182,7 +182,7 @@ class Lexer {
   bool _eatHeaderEnd() {
     final pos0 = pos;
     if (_eat($minus) && _eat($minus) && _eat($minus) && _eatNewline()) {
-      tokens.add(const Token(TokenType.headerEnd));
+      tokens.add(Token.headerEnd);
       _pushMode(_nodeBodyMode);
       return true;
     }
@@ -195,7 +195,7 @@ class Lexer {
   bool _eatBodyEnd() {
     final pos0 = pos;
     if (_eat($equals) && _eat($equals) && _eat($equals) && _eatNewline()) {
-      tokens.add(const Token(TokenType.bodyEnd));
+      tokens.add(Token.bodyEnd);
       _popMode(_nodeBodyMode);
       return true;
     }
@@ -221,7 +221,7 @@ class Lexer {
           break;
         }
       }
-      tokens.add(Token(TokenType.id, text.substring(pos0, pos)));
+      tokens.add(Token.id(text.substring(pos0, pos)));
       return true;
     }
     return false;
@@ -243,7 +243,7 @@ class Lexer {
         }
         pos += 1;
       }
-      tokens.add(Token(TokenType.text, text.substring(pos0, pos1)));
+      tokens.add(Token.text(text.substring(pos0, pos1)));
       return true;
     } else {
       pos = pos0;
@@ -268,11 +268,11 @@ class Lexer {
     }
     if (lineIndent > _indentStack.last) {
       _indentStack.add(lineIndent);
-      tokens.add(const Token(TokenType.indent));
+      tokens.add(Token.indent);
     }
     while (lineIndent < _indentStack.last) {
       _indentStack.removeLast();
-      tokens.add(const Token(TokenType.dedent));
+      tokens.add(Token.dedent);
     }
     if (lineIndent > _indentStack.last) {
       throw SyntaxError('Inconsistent indentation');
@@ -285,7 +285,7 @@ class Lexer {
   bool _eatArrow() {
     final pos0 = pos;
     if (_eat($minus) && _eat($gt)) {
-      tokens.add(const Token(TokenType.arrow));
+      tokens.add(Token.arrow);
       _eatWhitespace();
       return true;
     }
@@ -298,7 +298,7 @@ class Lexer {
   bool _eatCommandStart() {
     final pos0 = pos;
     if (_eat($lt) && _eat($lt)) {
-      tokens.add(const Token(TokenType.commandStart));
+      tokens.add(Token.commandStart);
       _eatWhitespace();
       _pushMode(_commandMode);
       return true;
@@ -310,7 +310,7 @@ class Lexer {
   bool _eatCommandEnd() {
     final pos0 = pos;
     if (_eat($gt) && _eat($gt)) {
-      tokens.add(const Token(TokenType.commandEnd));
+      tokens.add(Token.commandEnd);
       _eatWhitespace();
       _popMode(_commandMode);
       return true;
@@ -330,7 +330,7 @@ class Lexer {
       _eatWhitespace();
       if (_eat($colon)) {
         _eatWhitespace();
-        tokens.add(Token(TokenType.speaker, idToken.content));
+        tokens.add(Token.speaker(idToken.content));
         return true;
       }
     }
@@ -360,10 +360,10 @@ class Lexer {
         if (cu == $backslash || cu == $slash || cu == $lt || cu == $gt ||
             cu == $leftBrace || cu == $rightBrace || cu == $hash) {
           pos += 1;
-          tokens.add(Token(TokenType.text, String.fromCharCode(cu)));
+          tokens.add(Token.text(String.fromCharCode(cu)));
         } else if (cu == $lowercaseN) {
           pos += 1;
-          tokens.add(const Token(TokenType.text, '\n'));
+          tokens.add(const Token.text('\n'));
         }
         else {
           throw SyntaxError('Invalid escape sequence');
@@ -377,7 +377,7 @@ class Lexer {
   /// Consumes '{' and enters the [_expressionMode].
   bool _eatExpressionStart() {
     if (_eat($leftBrace)) {
-      tokens.add(const Token(TokenType.expressionStart));
+      tokens.add(Token.expressionStart);
       _pushMode(_expressionMode);
       return true;
     }
@@ -387,7 +387,7 @@ class Lexer {
   /// Consumes '}' and leaves the [_expressionMode].
   bool _eatExpressionEnd() {
     if (_eat($rightBrace)) {
-      tokens.add(const Token(TokenType.expressionEnd));
+      tokens.add(Token.expressionEnd);
       _popMode(_expressionMode);
       return true;
     }
@@ -399,8 +399,8 @@ class Lexer {
   bool _eatExpressionCommandEnd() {
     final pos0 = pos;
     if (_eat($gt) && _eat($gt)) {
-      tokens.add(const Token(TokenType.expressionEnd));
-      tokens.add(const Token(TokenType.commandEnd));
+      tokens.add(Token.expressionEnd);
+      tokens.add(Token.commandEnd);
       _eatWhitespace();
       _popMode(_expressionMode);
       _popMode(_commandMode);
@@ -415,7 +415,7 @@ class Lexer {
     final cu = codeUnit;
     if (cu == $lt || cu == $slash) {
       pos += 1;
-      tokens.add(Token(TokenType.text, String.fromCharCode(cu)));
+      tokens.add(Token.text(String.fromCharCode(cu)));
     } else {
       while (!eof) {
         final cu = codeUnit;
@@ -426,7 +426,7 @@ class Lexer {
         pos += 1;
       }
       if (pos > pos0) {
-        tokens.add(Token(TokenType.text, text.substring(pos0, pos)));
+        tokens.add(Token.text(text.substring(pos0, pos)));
       }
     }
     return pos > pos0;
@@ -453,7 +453,7 @@ class Lexer {
     if (_eat($dollar)) {
       if (_eatId()) {
         final token = tokens.removeLast();
-        tokens.add(Token(TokenType.variable, token.content));
+        tokens.add(Token.variable(token.content));
         return true;
       }
       pos--;
@@ -467,7 +467,7 @@ class Lexer {
     final pos0 = pos;
     if (_eatDigits()) {
       _eat($dot) && _eatDigits();
-      tokens.add(Token(TokenType.number, text.substring(pos, pos0)));
+      tokens.add(Token.number(text.substring(pos, pos0)));
       return true;
     }
     return false;
@@ -526,7 +526,7 @@ class Lexer {
         final cu = codeUnit;
         if (cu == quote) {
           pos += 1;
-          tokens.add(Token(TokenType.string, buffer.toString()));
+          tokens.add(Token.string(buffer.toString()));
           return true;
         } else if (cu == $cr || cu == $lf) {
           break;
@@ -561,7 +561,7 @@ class Lexer {
       } else if (_commandsWithoutArgs.containsKey(name)) {
         tokens.add(_commandsWithoutArgs[name]!);
       } else {
-        tokens.add(Token(TokenType.command, name));
+        tokens.add(Token.command(name));
         _pushMode(_expressionMode);
       }
       return true;
@@ -570,63 +570,63 @@ class Lexer {
   }
 
   static const Map<String, Token> _keywords = {
-    'true': Token(TokenType.constTrue),
-    'false': Token(TokenType.constFalse),
-    'string': Token(TokenType.typeString),
-    'number': Token(TokenType.typeNumber),
-    'bool': Token(TokenType.typeBool),
-    'as': Token(TokenType.as),
-    'to': Token(TokenType.opAssign),
-    '=': Token(TokenType.opAssign),
-    'is': Token(TokenType.opEq),
-    'eq': Token(TokenType.opEq),
-    '==': Token(TokenType.opEq),
-    'neq': Token(TokenType.opNe),
-    'ne': Token(TokenType.opNe),
-    '!=': Token(TokenType.opNe),
-    'le': Token(TokenType.opLe),
-    'lte': Token(TokenType.opLe),
-    '<=': Token(TokenType.opLe),
-    'ge': Token(TokenType.opGe),
-    'gte': Token(TokenType.opGe),
-    '>=': Token(TokenType.opGe),
-    'lt': Token(TokenType.opLt),
-    '<': Token(TokenType.opLt),
-    'gt': Token(TokenType.opGt),
-    '>': Token(TokenType.opGt),
-    'and': Token(TokenType.opAnd),
-    '&&': Token(TokenType.opAnd),
-    'or': Token(TokenType.opOr),
-    '||': Token(TokenType.opOr),
-    'xor': Token(TokenType.opXor),
-    '^': Token(TokenType.opXor),
-    'not': Token(TokenType.opNot),
-    '!': Token(TokenType.opNot),
-    '+': Token(TokenType.opPlus),
-    '-': Token(TokenType.opMinus),
-    '*': Token(TokenType.opMultiply),
-    '/': Token(TokenType.opDivide),
-    '%': Token(TokenType.opModulo),
-    '+=': Token(TokenType.opPlusAssign),
-    '-=': Token(TokenType.opMinusAssign),
-    '*=': Token(TokenType.opMultiplyAssign),
-    '/=': Token(TokenType.opDivideAssign),
-    '%=': Token(TokenType.opModuloAssign),
-    ',': Token(TokenType.comma),
-    '(': Token(TokenType.parenStart),
-    ')': Token(TokenType.parenEnd),
+    'true': Token.constTrue,
+    'false': Token.constFalse,
+    'string': Token.typeString,
+    'number': Token.typeNumber,
+    'bool': Token.typeBool,
+    'as': Token.as,
+    'to': Token.opAssign,
+    '=': Token.opAssign,
+    'is': Token.opEq,
+    'eq': Token.opEq,
+    '==': Token.opEq,
+    'neq': Token.opNe,
+    'ne': Token.opNe,
+    '!=': Token.opNe,
+    'le': Token.opLe,
+    'lte': Token.opLe,
+    '<=': Token.opLe,
+    'ge': Token.opGe,
+    'gte': Token.opGe,
+    '>=': Token.opGe,
+    'lt': Token.opLt,
+    '<': Token.opLt,
+    'gt': Token.opGt,
+    '>': Token.opGt,
+    'and': Token.opAnd,
+    '&&': Token.opAnd,
+    'or': Token.opOr,
+    '||': Token.opOr,
+    'xor': Token.opXor,
+    '^': Token.opXor,
+    'not': Token.opNot,
+    '!': Token.opNot,
+    '+': Token.opPlus,
+    '-': Token.opMinus,
+    '*': Token.opMultiply,
+    '/': Token.opDivide,
+    '%': Token.opModulo,
+    '+=': Token.opPlusAssign,
+    '-=': Token.opMinusAssign,
+    '*=': Token.opMultiplyAssign,
+    '/=': Token.opDivideAssign,
+    '%=': Token.opModuloAssign,
+    ',': Token.comma,
+    '(': Token.parenStart,
+    ')': Token.parenEnd,
   };
   static const Map<String, Token> _commandsWithArgs = {
-    'if': Token(TokenType.commandIf),
-    'elseif': Token(TokenType.commandElseif),
-    'set': Token(TokenType.commandSet),
-    'jump': Token(TokenType.commandJump),
-    'wait': Token(TokenType.commandJump),
+    'if': Token.commandIf,
+    'elseif': Token.commandElseif,
+    'set': Token.commandSet,
+    'jump': Token.commandJump,
+    'wait': Token.commandJump,
   };
   static const Map<String, Token> _commandsWithoutArgs = {
-    'else': Token(TokenType.commandElse),
-    'endif': Token(TokenType.commandEndif),
-    'stop': Token(TokenType.commandEndif),
+    'else': Token.commandElse,
+    'endif': Token.commandEndif,
+    'stop': Token.commandStop,
   };
 }
 
