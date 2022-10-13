@@ -103,7 +103,12 @@ mixin HasPaint<T extends Object> on Component implements OpacityProvider {
   double get opacity => paint.color.opacity;
 
   @override
-  set opacity(double value) => paint.color = paint.color.withOpacity(value);
+  set opacity(double value) {
+    paint.color = paint.color.withOpacity(value);
+    for (final paint in _paints.values) {
+      paint.color = paint.color.withOpacity(value);
+    }
+  }
 
   OpacityProvider opacityProviderForPaint(T paintId) {
     return _ProxyOpacityProvider(paintId, this);
