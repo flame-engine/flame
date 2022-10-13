@@ -32,6 +32,16 @@ void main() {
         );
         expect(artboard.name, artboardName);
       });
+
+      test('Load an artboard that does not exist', () async {
+        expect(
+          () => loadArtboard(
+            riveFile,
+            artboardName: 'Empty',
+          ),
+          throwsA(isA<AssertionError>()),
+        );
+      });
     });
 
     group('RiveComponent', () {
