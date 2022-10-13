@@ -47,6 +47,7 @@ void main() {
         expect(game.hasOnTapDown, isTrue);
       },
     );
+
     testWithGame<_TapDetectorGame>(
       'can be Tapped Up',
       _TapDetectorGame.new,
@@ -66,6 +67,7 @@ void main() {
         expect(game.tapRegistered, isTrue);
       },
     );
+
     tapGame.testGameWidget(
       'can receive tapDown',
       verify: (game, tester) async {
@@ -74,6 +76,7 @@ void main() {
         expect(game.hasOnTapUp, isFalse);
       },
     );
+
     tapGame.testGameWidget(
       'can receive tapCancel',
       verify: (game, tester) async {
@@ -108,6 +111,7 @@ void main() {
         expect(game.hasOnSecondaryTapUp, isFalse);
       },
     );
+
     secondaryTapGame.testGameWidget(
       'can receive secondaryTapCancel',
       verify: (game, tester) async {
@@ -144,6 +148,7 @@ void main() {
         expect(game.hasOnSecondaryTapUp, isTrue);
       },
     );
+
     testWithGame<_SecondaryTapDetectorGame>(
       'can be Secondary Tapped Canceled',
       _SecondaryTapDetectorGame.new,
@@ -182,6 +187,7 @@ void main() {
         expect(game.hasOnTertiaryTapUp, isFalse);
       },
     );
+
     tertiaryTapGame.testGameWidget(
       'can receive tertiaryTapCancel',
       verify: (game, tester) async {
@@ -235,6 +241,7 @@ void main() {
         expect(game.doubleTapRegistered, isTrue);
       },
     );
+
     doubleTapGame.testGameWidget(
       'can receive double tapCancel',
       setUp: (game, tester) async {
@@ -275,6 +282,7 @@ void main() {
         expect(game.hasLongPressRegistered, isTrue);
       },
     );
+
     longPressGame.testGameWidget(
       'can register moving longPress',
       setUp: (game, tester) async {
@@ -321,6 +329,7 @@ void main() {
         expect(game.hasLongPressStarted, isTrue);
       },
     );
+
     testWithGame<_LongPressDetectorGame>(
       'can be Long Pressed Move Update',
       _LongPressDetectorGame.new,
@@ -332,6 +341,7 @@ void main() {
         expect(game.hasLongPressMoveUpdated, isTrue);
       },
     );
+
     testWithGame<_LongPressDetectorGame>(
       'can be Long Pressed Move End',
       _LongPressDetectorGame.new,
@@ -383,6 +393,7 @@ void main() {
         expect(game.hasVerticaDragDown, isTrue);
       },
     );
+
     testWithGame<_VerticalDragDetectorGame>(
       'can be Vertical Dragged Start',
       _VerticalDragDetectorGame.new,
@@ -394,6 +405,7 @@ void main() {
         expect(game.hasVerticaDragStart, isTrue);
       },
     );
+
     testWithGame<_VerticalDragDetectorGame>(
       'can be Vertical Dragged Update',
       _VerticalDragDetectorGame.new,
@@ -405,6 +417,7 @@ void main() {
         expect(game.hasVerticaDragUpdate, isTrue);
       },
     );
+
     testWithGame<_VerticalDragDetectorGame>(
       'can be Vertical Dragged End',
       _VerticalDragDetectorGame.new,
@@ -429,6 +442,7 @@ void main() {
         expect(game.hasHorizontalDragEnd, isTrue);
       },
     );
+
     // TODO(dipak): should not detect vertical drags.
     horizontalDragGame.testGameWidget(
       "can't register vertical drag",
@@ -451,6 +465,7 @@ void main() {
         expect(game.hasHorizontalDragDown, isTrue);
       },
     );
+
     testWithGame<_HorizontalDragDetectorGame>(
       'can be horizontal Dragged Start',
       _HorizontalDragDetectorGame.new,
@@ -461,6 +476,7 @@ void main() {
         expect(game.hasHorizontalDragStart, isTrue);
       },
     );
+
     testWithGame<_HorizontalDragDetectorGame>(
       'can be horizontal Dragged update',
       _HorizontalDragDetectorGame.new,
@@ -473,6 +489,7 @@ void main() {
         expect(game.hasHorizontalDragUpdate, isTrue);
       },
     );
+
     testWithGame<_HorizontalDragDetectorGame>(
       'can be horizontal Dragged End',
       _HorizontalDragDetectorGame.new,
@@ -571,6 +588,7 @@ void main() {
         expect(game.forcePressStart, equals(1));
       },
     );
+
     testWithGame<_ForcePressDetectorGame>(
       'can be Force Press Updated',
       _ForcePressDetectorGame.new,
@@ -587,6 +605,7 @@ void main() {
         expect(game.forcePressUpdate, equals(1));
       },
     );
+
     testWithGame<_ForcePressDetectorGame>(
       'can be Force Press peaked',
       _ForcePressDetectorGame.new,
@@ -603,6 +622,7 @@ void main() {
         expect(game.forcePressPeaked, equals(1));
       },
     );
+
     testWithGame<_ForcePressDetectorGame>(
       'can be Force Press Ended',
       _ForcePressDetectorGame.new,
@@ -634,6 +654,7 @@ void main() {
         expect(game.hasPanEnd, isTrue);
       },
     );
+
     // Todo(dipak) : should register pan cancel.
     panGame.testGameWidget(
       'can Register pan cancel',
@@ -658,6 +679,7 @@ void main() {
         expect(game.hasPanDown, isTrue);
       },
     );
+
     testWithGame<_PanDetectorGame>(
       'can receive onPanEnd',
       _PanDetectorGame.new,
@@ -668,6 +690,7 @@ void main() {
         expect(game.hasPanEnd, isTrue);
       },
     );
+
     testWithGame<_PanDetectorGame>(
       'can receive onPanStart',
       _PanDetectorGame.new,
@@ -678,6 +701,7 @@ void main() {
         expect(game.hasPanStart, isTrue);
       },
     );
+
     testWithGame<_PanDetectorGame>(
       'can receive onPanUpdate',
       _PanDetectorGame.new,
@@ -727,6 +751,7 @@ void main() {
         expect(game.hasOnScaleStart, isTrue);
       },
     );
+
     testWithGame<_ScaleDetectorGame>(
       'can receive onScaleUpdate',
       _ScaleDetectorGame.new,
@@ -737,6 +762,7 @@ void main() {
         expect(game.hasOnScaleUpdate, isTrue);
       },
     );
+
     testWithGame<_ScaleDetectorGame>(
       'can receive onScaleEnd',
       _ScaleDetectorGame.new,
