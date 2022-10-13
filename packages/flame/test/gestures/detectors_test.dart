@@ -691,6 +691,63 @@ void main() {
       },
     );
   });
+
+  group('ScaleDetector', () {
+    final scaleGame = FlameTester(_ScaleDetectorGame.new);
+
+    scaleGame.testGameWidget(
+      'can register Scale',
+      setUp: (game, tester) async {
+        final gesture1 = await tester.createGesture();
+        final gesture2 = await tester.createGesture();
+
+        await gesture1.down(const Offset(10, 10));
+        await gesture2.down(const Offset(20, 20));
+
+        await gesture1.moveTo(const Offset(15, 10));
+        await gesture2.moveTo(const Offset(15, 20));
+
+        await gesture1.up();
+        await gesture2.up();
+      },
+      verify: (game, tester) async {
+        expect(game.hasOnScaleStart, isTrue);
+        expect(game.hasOnScaleUpdate, isTrue);
+        expect(game.hasOnScaleEnd, isTrue);
+      },
+    );
+
+    testWithGame<_ScaleDetectorGame>(
+      'can receive onScaleStart',
+      _ScaleDetectorGame.new,
+      (game) async {
+        await game.ready();
+
+        game.handleScaleStart(ScaleStartDetails());
+        expect(game.hasOnScaleStart, isTrue);
+      },
+    );
+    testWithGame<_ScaleDetectorGame>(
+      'can receive onScaleUpdate',
+      _ScaleDetectorGame.new,
+      (game) async {
+        await game.ready();
+
+        game.handleScaleUpdate(ScaleUpdateDetails());
+        expect(game.hasOnScaleUpdate, isTrue);
+      },
+    );
+    testWithGame<_ScaleDetectorGame>(
+      'can receive onScaleEnd',
+      _ScaleDetectorGame.new,
+      (game) async {
+        await game.ready();
+
+        game.handleScaleEnd(ScaleEndDetails());
+        expect(game.hasOnScaleEnd, isTrue);
+      },
+    );
+  });
 }
 
 class _TapDetectorGame extends FlameGame with TapDetector {
@@ -943,6 +1000,27 @@ class _PanDetectorGame extends FlameGame with PanDetector {
   @override
   void onPanStart(DragStartInfo info) {
     hasPanStart = true;
+  }
+}
+
+class _ScaleDetectorGame extends FlameGame with ScaleDetector {
+  bool hasOnScaleStart = false;
+  bool hasOnScaleUpdate = false;
+  bool hasOnScaleEnd = false;
+
+  @override
+  void onScaleStart(ScaleStartInfo info) {
+    hasOnScaleStart = true;
+  }
+
+  @override
+  void onScaleUpdate(ScaleUpdateInfo info) {
+    hasOnScaleUpdate = true;
+  }
+
+  @override
+  void onScaleEnd(ScaleEndInfo info) {
+    hasOnScaleEnd = true;
   }
 }
 
