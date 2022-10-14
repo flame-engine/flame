@@ -207,7 +207,7 @@ class Component {
   void _setRemovingBit() => _state |= _removing;
   void _clearRemovingBit() => _state &= ~_removing;
 
-  /// Whether the component is removed.
+  /// Whether the component has been removed.
   bool get isRemoved => (_state & _removed) != 0;
   void _setRemovedBit() => _state |= _removed;
   void _clearRemovedBit() => _state &= ~_removed;
