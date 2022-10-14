@@ -19,4 +19,7 @@ class TapCancelEvent extends Event {
   /// The id of the event that has been cancelled. This id corresponds to the
   /// id of the previous [TapDownEvent].
   final int pointerId;
+
+  @override
+  String toString() => 'TapCancelEvent(pointerId: $pointerId)';
 }
