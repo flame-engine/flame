@@ -148,7 +148,10 @@ class _Lexer {
         (eatIndent() && pushMode(modeNodeBodyLine));
   }
 
-  /// The mode for parsing regular lines of a node body.
+  /// The mode for parsing regular lines of a node body. This mode is active at
+  /// the beginning of the line only, where it attempts to disambiguate between
+  /// what kind of line it is and then switches to either [modeCommand] or
+  /// [modeText].
   bool modeNodeBodyLine() {
     return eatArrow() ||
         eatCommandStart() ||
@@ -158,6 +161,9 @@ class _Lexer {
         pushMode(modeText);
   }
 
+  /// The mode of a regular text line within the node body. This mode will
+  /// consume the input until the end of the line, and then pop back to
+  /// [modeNodeBody].
   bool modeText() {
     return eatTextCommentOrNewline() ||
         eatTextEscapeSequence() ||
@@ -165,6 +171,16 @@ class _Lexer {
         eatPlainText();
   }
 
+  bool modeCommand() {
+    return eatWhitespace() ||
+        eatCommandName() ||
+        eatCommandEnd() ||
+        eatCommandNewline();
+  }
+
+  /// An expression within a [modeText] or [modeCommand]. Within the text, the
+  /// expression is surrounded with curly braces `{ }`, inside a command the
+  /// expression starts immediately after the command name and ends at `>>`.
   bool modeExpression() {
     return eatWhitespace() ||
         eatExpressionCommandEnd() ||
@@ -174,13 +190,6 @@ class _Lexer {
         eatString() ||
         eatOperator() ||
         eatExpressionEnd();
-  }
-
-  bool modeCommand() {
-    return eatWhitespace() ||
-        eatCommandName() ||
-        eatCommandEnd() ||
-        (eatNewline() && error('missing command close token ">>"'));
   }
 
   //----------------------------------------------------------------------------
@@ -500,22 +509,31 @@ class _Lexer {
         pushMode(modeExpression);
   }
 
-  /// Consumes '}' and pops the [modeExpression].
+  /// Consumes '}' and pops the [modeExpression] (but only when the parent mode
+  /// is [modeText]).
   bool eatExpressionEnd() {
-    return eat($rightBrace) &&
-        pushToken(Token.endExpression) &&
-        popMode(modeExpression);
+    if (eat($rightBrace)) {
+      if (modeStack[modeStack.length - 2] != modeText) {
+        pos -= 1;
+        error('invalid token "}" within a command');
+      }
+      pushToken(Token.endExpression);
+      popMode(modeExpression);
+      return true;
+    }
+    return false;
   }
 
   /// Consumes '>>' while in the expression mode, and leaves both the expression
   /// mode and the [modeCommand].
   /// This rule is only allowed within an expression within a command mode.
   bool eatExpressionCommandEnd() {
-    if (modeStack[modeStack.length - 2] != modeCommand) {
-      return false;
-    }
     final pos0 = pos;
     if (eat($greaterThan) && eat($greaterThan)) {
+      if (modeStack[modeStack.length - 2] != modeCommand) {
+        pos -= 2;
+        error('invalid token ">>" within an expression');
+      }
       pushToken(Token.endExpression);
       pushToken(Token.endCommand);
       eatWhitespace();
@@ -557,7 +575,7 @@ class _Lexer {
   }
 
   /// Consumes a plain id within an expression, which is then emitted as either
-  /// one of the [keywords] tokens, or as plain Token.id.
+  /// one of the [keywords] tokens, or as plain [Token.id].
   bool eatExpressionId() {
     if (eatId()) {
       final name = tokens.last.content;
@@ -572,7 +590,7 @@ class _Lexer {
   }
 
   /// Consumes a variable within an expression. A variable is just a '$' sign
-  /// followed by an id. Emits a .variable token.
+  /// followed by an id. Emits a [Token.variable].
   bool eatExpressionVariable() {
     if (eat($dollar)) {
       if (eatId()) {
@@ -677,6 +695,10 @@ class _Lexer {
     return false;
   }
 
+  /// Consumes a name of the command (ID) and emits it as a token. After that,
+  /// goes either into expression mode if the command expects arguments, or
+  /// remains in the command mode otherwise. User-defined commands are assumed
+  /// to always allow expressions.
   bool eatCommandName() {
     if (eatId()) {
       final token = tokens.removeLast();
@@ -693,6 +715,15 @@ class _Lexer {
         pushMode(modeExpression);
       }
       return true;
+    }
+    return false;
+  }
+
+  /// Check whether a command terminated prematurely.
+  bool eatCommandNewline() {
+    final cu = codeUnit;
+    if (cu == $carriageReturn || cu == $lineFeed) {
+      error('missing command close token ">>"');
     }
     return false;
   }
@@ -774,9 +805,12 @@ class _Lexer {
     } else if (pos - lineStart <= 50) {
       lineFragment = '${text.substring(lineStart, lineStart + 74)}...';
       markerIndent = ' ' * (pos - lineStart);
+    } else if (lineEnd - pos <= 40) {
+      lineFragment = '...${text.substring(lineEnd - 77, lineEnd)}';
+      markerIndent = ' ' * (pos - lineEnd + 80);
     } else {
       lineFragment = '...${text.substring(pos - 36, pos + 35)}...';
-      markerIndent = ' ' * 36;
+      markerIndent = ' ' * 39;
     }
     final parts = [
       message,

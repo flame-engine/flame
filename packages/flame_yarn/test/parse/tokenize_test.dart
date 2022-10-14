@@ -4,9 +4,8 @@ import 'package:flame_yarn/src/parse/tokenize.dart';
 import 'package:test/test.dart';
 
 void main() {
+  // Tests are organized according to which lexing Mode they are checking
   group('tokenize', () {
-    // Tests are organized according to which lexing Mode they are checking
-
     group('modeMain', () {
       test('empty input', () {
         expect(tokenize(''), <Token>[]);
@@ -524,22 +523,40 @@ void main() {
         );
       });
 
-      test('close command within a plain text expression', () {
+      test('expression with numbers', () {
         expect(
           tokenize('---\n'
-              '{ a >> b }\n'
+              '{ 0 -1  239444  0.5  17.1  2.  3.1415926535 111}\n'
               '===\n'),
           const [
             Token.startBody,
             Token.startExpression,
-            Token.id('a'),
-            Token.opGt,
-            Token.opGt,
-            Token.id('b'),
+            Token.number('0'),
+            Token.opMinus,
+            Token.number('1'),
+            Token.number('239444'),
+            Token.number('0.5'),
+            Token.number('17.1'),
+            Token.number('2.'),
+            Token.number('3.1415926535'),
+            Token.number('111'),
             Token.endExpression,
             Token.newline,
             Token.endBody,
           ],
+        );
+      });
+
+      test('close command within a plain text expression', () {
+        expect(
+          () => tokenize('---\n'
+              '{ a >> b }\n'
+              '===\n'),
+          hasSyntaxError(
+              'SyntaxError: invalid token ">>" within an expression\n'
+              '>  at line 2 column 5:\n'
+              '>  { a >> b }\n'
+              '>      ^\n'),
         );
       });
 
@@ -569,20 +586,119 @@ void main() {
       });
     });
 
-    // group('modeCommand', () {
-    //   test('incomplete command', () {
-    //     expect(
-    //       () => tokenize('---\n'
-    //           '<< stop\n'
-    //           '===\n'
-    //       ),
-    //       hasSyntaxError('SyntaxError: missing command close token ">>"\n'
-    //         '>  at line 2 column 10:\n'
-    //         '>  <<set a = b > 3 >\n'
-    //         '>           ^\n'),
-    //     );
-    //   });
-    // });
+    group('modeCommand', () {
+      test('normal commands', () {
+        expect(
+          tokenize('---\n'
+              '<< stop >>\n'
+              '<< fullStop >>\n'
+              '<< jump places >>\n'
+              '<< set \$n = 2 >>  // simple\n'
+              '===\n'),
+          const [
+            Token.startBody,
+            Token.startCommand,
+            Token.commandStop,
+            Token.endCommand,
+            Token.newline,
+            Token.startCommand,
+            Token.command('fullStop'),
+            Token.startExpression,
+            Token.endExpression,
+            Token.endCommand,
+            Token.newline,
+            Token.startCommand,
+            Token.commandJump,
+            Token.startExpression,
+            Token.id('places'),
+            Token.endExpression,
+            Token.endCommand,
+            Token.newline,
+            Token.startCommand,
+            Token.commandSet,
+            Token.startExpression,
+            Token.variable('n'),
+            Token.opAssign,
+            Token.number('2'),
+            Token.endExpression,
+            Token.endCommand,
+            Token.newline,
+            Token.endBody,
+          ],
+        );
+      });
+
+      test('closing brace', () {
+        expect(
+          () => tokenize('---\n'
+              '<< hello } >>\n'
+              '===\n'),
+          hasSyntaxError('SyntaxError: invalid token "}" within a command\n'
+              '>  at line 2 column 10:\n'
+              '>  << hello } >>\n'
+              '>           ^\n'),
+        );
+      });
+
+      test('incomplete command', () {
+        expect(
+          () => tokenize('---\n'
+              '<< stop\n'
+              '===\n'),
+          hasSyntaxError('SyntaxError: missing command close token ">>"\n'
+              '>  at line 2 column 8:\n'
+              '>  << stop\n'
+              '>         ^\n'),
+        );
+      });
+    });
+
+    // This group is for testing error mechanism itself, not any particular
+    // error conditions.
+    group('errors', () {
+      test('long line, error near the start', () {
+        expect(
+          () => tokenize('---\n'
+              '<< alpha beta gamma delta epsilon ~ zeta eta theta iota kappa '
+              'lambda mu nu xi omicron pi rho sigma tau >>\n'
+              '===\n'),
+          hasSyntaxError('SyntaxError: invalid token\n'
+              '>  at line 2 column 35:\n'
+              '>  << alpha beta gamma delta epsilon ~ zeta eta theta iota '
+              'kappa lambda mu nu...\n'
+              '>                                    ^\n'),
+        );
+      });
+
+      test('long line, error near the end', () {
+        expect(
+          () => tokenize('---\n'
+              '<< alpha beta gamma delta epsilon zeta eta theta iota kappa '
+              'lambda mu nu xi omicron pi rho @ sigma tau upsilon phi chi>>\n'
+              '===\n'),
+          hasSyntaxError('SyntaxError: invalid token\n'
+              '>  at line 2 column 92:\n'
+              '>  ...theta iota kappa lambda mu nu xi omicron pi rho @ sigma '
+              'tau upsilon phi chi>>\n'
+              '>                                                     ^\n'),
+        );
+      });
+
+      test('long line, error in the middle', () {
+        expect(
+          () => tokenize('---\n'
+              '<< alpha beta gamma delta epsilon zeta eta theta iota kappa '
+              'lambda ` mu nu xi omicron pi rho sigma tau upsilon phi chi psi '
+              'omega>>\n'
+              '===\n'),
+          hasSyntaxError('SyntaxError: invalid token\n'
+              '>  at line 2 column 68:\n'
+              '>  ...on zeta eta theta iota kappa lambda ` mu nu xi omicron '
+              'pi rho sigma tau...\n'
+              '>                                         ^\n'),
+        );
+      });
+    });
   });
 }
 
