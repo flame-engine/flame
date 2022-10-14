@@ -777,7 +777,6 @@ class _Lexer {
     return false;
   }
 
-
   static const Map<String, Token> keywords = {
     'true': Token.constTrue,
     'false': Token.constFalse,
