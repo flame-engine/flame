@@ -370,19 +370,6 @@ void main() {
       },
     );
 
-    // TODO(dipak): should not detect horizontal drags.
-    verticalDragGame.testGameWidget(
-      "can't register horizontal drag",
-      verify: (game, tester) async {
-        await tester.dragFrom(const Offset(10, 10), const Offset(50, 10));
-
-        // expect(game.hasVerticaDragDown, isFalse);
-        // expect(game.hasVerticaDragStart, isFalse);
-        // expect(game.hasVerticaDragUpdate, isFalse);
-        // expect(game.hasVerticaDragEnd, isFalse);
-      },
-    );
-
     testWithGame<_VerticalDragDetectorGame>(
       'can be Vertical Dragged Down',
       _VerticalDragDetectorGame.new,
@@ -440,18 +427,6 @@ void main() {
         expect(game.hasHorizontalDragDown, isTrue);
         expect(game.hasHorizontalDragUpdate, isTrue);
         expect(game.hasHorizontalDragEnd, isTrue);
-      },
-    );
-
-    // TODO(dipak): should not detect vertical drags.
-    horizontalDragGame.testGameWidget(
-      "can't register vertical drag",
-      verify: (game, tester) async {
-        await tester.dragFrom(const Offset(10, 10), const Offset(10, 50));
-
-        // expect(game.hasHorizontalDragDown, isFalse);
-        // expect(game.hasHorizontalDragUpdate, isFalse);
-        // expect(game.hasHorizontalDragCancel, isTrue);
       },
     );
 
@@ -652,20 +627,6 @@ void main() {
         expect(game.hasPanDown, isTrue);
         expect(game.hasPanUpdate, isTrue);
         expect(game.hasPanEnd, isTrue);
-      },
-    );
-
-    // Todo(dipak) : should register pan cancel.
-    panGame.testGameWidget(
-      'can Register pan cancel',
-      verify: (game, tester) async {
-        final gesture = await tester.startGesture(const Offset(10, 10));
-
-        await gesture.up();
-
-        // expect(game.hasPanStart, isTrue);
-        // expect(game.hasPanDown, isTrue);
-        // expect(game.hasPanCancel, isTrue);
       },
     );
 
