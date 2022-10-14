@@ -16,15 +16,15 @@ void main() {
       });
 
       test('comments only', () {
-        expect(tokenize('// hello'), <Token>[]);
-        expect(tokenize('// world\n\n'), <Token>[]);
+        expect(tokenize('// hello'), const <Token>[]);
+        expect(tokenize('// world\n\n'), const <Token>[]);
         expect(
           tokenize('\n'
               '//--------------------\n'
               '// BOILER PLATE       \n'
               '//--------------------\n'
               '\n'),
-          <Token>[],
+          const <Token>[],
         );
       });
 

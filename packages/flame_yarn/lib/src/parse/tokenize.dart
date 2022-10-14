@@ -17,7 +17,9 @@ List<Token> tokenize(String input) {
 ///     is a Node's header;
 ///   - Whitespace and comments are discarded and do not produce tokens;
 ///   - Individual input lines within Node's header or body are separated with
-///     newline tokens.
+///     newline tokens;
+///   - The lexer is deterministic: given the same input, it should always
+///     produce the same output.
 class _Lexer {
   _Lexer(this.text)
       : pos = 0,
@@ -45,7 +47,7 @@ class _Lexer {
   /// will parse the [text] and return a list of [tokens]. This function can
   /// only be called once for the given [_Lexer] object.
   List<Token> parse() {
-    assert(pos == 0);
+    assert(pos == 0 && lineNumber == 1 && lineStart == 0);
     indentStack.add(0);
     pushMode(modeMain);
     while (!eof) {
