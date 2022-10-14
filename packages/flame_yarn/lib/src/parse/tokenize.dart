@@ -2,6 +2,7 @@ import 'package:flame_yarn/src/errors.dart';
 import 'package:flame_yarn/src/parse/ascii.dart';
 import 'package:flame_yarn/src/parse/token.dart';
 
+/// Parses the [input] into a stream of [Token]s, according to the Yarn syntax.
 List<Token> tokenize(String input) {
   return _Lexer(input).parse();
 }
@@ -196,7 +197,7 @@ class _Lexer {
   }
 
   /// Consumes a newline character, which can also be a Windows newline (\r\n),
-  /// without emitting any tokens.
+  /// and emits a newline token.
   bool eatNewline() {
     final cu = codeUnit;
     if (cu == $carriageReturn || cu == $lineFeed) {
@@ -204,6 +205,7 @@ class _Lexer {
       if (cu == $carriageReturn && codeUnit == $lineFeed) {
         pos += 1;
       }
+      tokens.add(Token.newline);
       lineNumber += 1;
       lineStart = pos;
       return true;

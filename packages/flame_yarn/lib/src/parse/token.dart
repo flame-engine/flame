@@ -29,9 +29,11 @@ class Token {
   static const commandWait = Token._(TokenType.commandWait);
   static const constFalse = Token._(TokenType.constFalse);
   static const constTrue = Token._(TokenType.constTrue);
+  static const dedent = Token._(TokenType.dedent);
   static const expressionEnd = Token._(TokenType.expressionEnd);
   static const expressionStart = Token._(TokenType.expressionStart);
   static const headerEnd = Token._(TokenType.headerEnd);
+  static const indent = Token._(TokenType.indent);
   static const newline = Token._(TokenType.newline);
   static const opAnd = Token._(TokenType.opAnd);
   static const opAssign = Token._(TokenType.opAssign);
@@ -59,8 +61,6 @@ class Token {
   static const typeBool = Token._(TokenType.typeBool);
   static const typeNumber = Token._(TokenType.typeNumber);
   static const typeString = Token._(TokenType.typeString);
-  static const indent = Token._(TokenType.indent);
-  static const dedent = Token._(TokenType.dedent);
 
   final TokenType type;
   final String? _content;
@@ -70,7 +70,8 @@ class Token {
   String get content => _content!;
 
   @override
-  String toString() => 'Token.$type${_content == null ? '' : '($_content)'})';
+  String toString() =>
+      'Token.${type.name}${_content == null ? '' : "('$_content')"}';
 }
 
 @internal
