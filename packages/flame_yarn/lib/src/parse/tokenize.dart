@@ -64,10 +64,12 @@ class _Lexer {
     return true;
   }
 
-  /// Pops the last mode from the stack and checks that it was [mode].
-  void popMode(_ModeFn mode) {
+  /// Pops the last mode from the stack, checks that it was [mode], and returns
+  /// `true`.
+  bool popMode(_ModeFn mode) {
     final removed = modeStack.removeLast();
     assert(removed == mode);
+    return true;
   }
 
   /// Pushes a new token into the output and returns `true`.
@@ -137,6 +139,8 @@ class _Lexer {
     return eatArrow() ||
         eatCommandStart() ||
         eatCharacterName() ||
+        eatWhitespace() ||
+        (eatNewline() && popMode(modeNodeBodyLine)) ||
         pushMode(modeText);
   }
 
@@ -149,13 +153,13 @@ class _Lexer {
 
   bool modeExpression() {
     return eatWhitespace() ||
+        eatExpressionCommandEnd() ||
         eatExpressionId() ||
         eatExpressionVariable() ||
         eatNumber() ||
         eatString() ||
         eatOperator() ||
-        eatExpressionEnd() ||
-        eatExpressionCommandEnd();
+        eatExpressionEnd();
   }
 
   bool modeCommand() {
@@ -378,8 +382,8 @@ class _Lexer {
   bool eatCommandStart() {
     final pos0 = pos;
     if (eat($lessThan) && eat($lessThan)) {
-      tokens.add(Token.commandStart);
       eatWhitespace();
+      pushToken(Token.commandStart);
       pushMode(modeCommand);
       return true;
     }
@@ -390,8 +394,8 @@ class _Lexer {
   bool eatCommandEnd() {
     final pos0 = pos;
     if (eat($greaterThan) && eat($greaterThan)) {
-      tokens.add(Token.commandEnd);
       eatWhitespace();
+      pushToken(Token.commandEnd);
       popMode(modeCommand);
       return true;
     }
@@ -400,7 +404,12 @@ class _Lexer {
   }
 
   /// Consumes a Unicode ID at the start of the line, followed by a ':', then
-  /// emits a [Token.character] and a [Token.colon].
+  /// emits a [Token.speaker] and a [Token.colon], and also switches into the
+  /// [modeText].
+  ///
+  /// Note: we have to consume detect both the character name and the subsequent
+  /// ':' at the same time, because without the colon a simple word at a start
+  /// of the line must be considered the plain text.
   bool eatCharacterName() {
     final pos0 = pos;
     final it = RuneIterator.at(text, pos);
@@ -408,9 +417,12 @@ class _Lexer {
       while (it.moveNext() && isUnicodeIdentifierChar(it.current)) {}
       pos = it.rawIndex;
       final pos1 = pos;
-      if (eatWhitespace() && eat($colon)) {
-        pushToken(Token.character(text.substring(pos0, pos1)));
+      eatWhitespace();
+      if (eat($colon)) {
+        eatWhitespace();
+        pushToken(Token.speaker(text.substring(pos0, pos1)));
         pushToken(Token.colon);
+        pushMode(modeText);
         return true;
       }
     }
@@ -645,12 +657,14 @@ class _Lexer {
       final token = tokens.removeLast();
       final name = token.content;
       if (commandsWithArgs.containsKey(name)) {
-        tokens.add(commandsWithArgs[name]!);
+        pushToken(commandsWithArgs[name]!);
+        pushToken(Token.expressionStart);
         pushMode(modeExpression);
       } else if (commandsWithoutArgs.containsKey(name)) {
-        tokens.add(commandsWithoutArgs[name]!);
+        pushToken(commandsWithoutArgs[name]!);
       } else {
-        tokens.add(Token.command(name));
+        pushToken(Token.command(name));
+        pushToken(Token.expressionStart);
         pushMode(modeExpression);
       }
       return true;

@@ -253,6 +253,107 @@ void main() {
         );
       });
     });
+
+    group('modeNodeBodyLine', () {
+      test('option lines', () {
+        expect(
+          tokenize('---\n'
+              '->something\n'
+              '  -> other\n'
+              '===\n'),
+          const [
+            Token.headerEnd,
+            Token.arrow,
+            Token.text('something'),
+            Token.newline,
+            Token.indent,
+            Token.arrow,
+            Token.text('other'),
+            Token.newline,
+            Token.dedent,
+            Token.bodyEnd,
+          ],
+        );
+      });
+
+      test('commands', () {
+        expect(
+          tokenize('---\n'
+              '<< >>\n'
+              '<< stop >>\n'
+              '===\n'),
+          const [
+            Token.headerEnd,
+            Token.commandStart,
+            Token.commandEnd,
+            Token.newline,
+            Token.commandStart,
+            Token.commandStop,
+            Token.commandEnd,
+            Token.newline,
+            Token.bodyEnd,
+          ],
+        );
+      });
+
+      test('line speakers', () {
+        expect(
+          tokenize('---\n'
+              'Marge: Hello!\n'
+              'Mr Smith: You too\n'
+              'ПанГолова :...\n'
+              '===\n'),
+          const [
+            Token.headerEnd,
+            Token.speaker('Marge'),
+            Token.colon,
+            Token.text('Hello!'),
+            Token.newline,
+            Token.text('Mr Smith: You too'),
+            Token.newline,
+            Token.speaker('ПанГолова'),
+            Token.colon,
+            Token.text('...'),
+            Token.newline,
+            Token.bodyEnd,
+          ],
+        );
+      });
+
+      test('repeated arrow', () {
+        expect(
+          tokenize('---\n'
+              '-> -> -> \n'
+              '===\n'),
+          const [
+            Token.headerEnd,
+            Token.arrow,
+            Token.arrow,
+            Token.arrow,
+            Token.newline,
+            Token.bodyEnd,
+          ],
+        );
+      });
+
+      test('repeated character name', () {
+        expect(
+          tokenize('---\n'
+              'Pig: Horse: Moo!\n'
+              '===\n'),
+          const [
+            Token.headerEnd,
+            Token.speaker('Pig'),
+            Token.colon,
+            Token.text('Horse: Moo!'),
+            Token.newline,
+            Token.bodyEnd,
+          ],
+        );
+      });
+    });
+
+    group('modeText', () {});
   });
 }
 

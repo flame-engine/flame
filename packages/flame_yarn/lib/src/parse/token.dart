@@ -6,10 +6,10 @@ import 'package:meta/meta.dart';
 class Token {
   const Token._(this.type, [this._content]);
 
-  const Token.character(String text) : this._(TokenType.character, text);
   const Token.command(String text) : this._(TokenType.command, text);
   const Token.id(String text) : this._(TokenType.id, text);
   const Token.number(String text) : this._(TokenType.number, text);
+  const Token.speaker(String text) : this._(TokenType.speaker, text);
   const Token.string(String text) : this._(TokenType.string, text);
   const Token.text(String text) : this._(TokenType.text, text);
   const Token.variable(String text) : this._(TokenType.variable, text);
@@ -68,7 +68,7 @@ class Token {
   final String? _content;
 
   /// The content can only be accessed for tokens of type "text", "number",
-  /// "string", "command", "variable", "character", and "id".
+  /// "string", "command", "variable", "speaker", and "id".
   String get content => _content!;
 
   @override
@@ -85,60 +85,61 @@ class Token {
 
 @internal
 enum TokenType {
-  text,
-  number,
-  string,
-  indent,
+  command,
   dedent,
   id,
-  character,
-  command,
-  variable, //         '$' ID
-  newline, //          '\r' | '\n' | '\r\n'
-  headerEnd, //        '---'
-  bodyEnd, //          '==='
+  indent,
+  number,
+  speaker,
+  string,
+  text,
+  variable,
+
   arrow, //            '->'
-  colon, //            ':'
-  commandStart, //     '<<'
-  commandEnd, //       '>>'
-  expressionStart, //  '{'
-  expressionEnd, //    '}'
-  parenStart, //       '('
-  parenEnd, //         ')'
-  comma, //            ','
-  constTrue, //        'true'
-  constFalse, //       'false'
-  typeString, //       'string'
-  typeNumber, //       'number'
-  typeBool, //         'bool'
   as, //               'as'
-  opAssign, //         'to' | '='
-  opEq, //             'is' | 'eq' | '=='
-  opNe, //             'ne' | 'neq' | '!='
-  opLe, //             'le' | 'lte | '<='
-  opGe, //             'ge' | 'gte' | '>='
-  opLt, //             'lt' | '<'
-  opGt, //             'gt' | '>'
-  opAnd, //            'and' | '&&'
-  opOr, //             'or' | '||'
-  opXor, //            'xor' | '^'
-  opNot, //            'not' | '!'
-  opPlus, //           '+'
-  opMinus, //          '-'
-  opMultiply, //       '*'
-  opDivide, //         '/'
-  opModulo, //         '%'
-  opPlusAssign, //     '+='
-  opMinusAssign, //    '-='
-  opMultiplyAssign, // '*='
-  opDivideAssign, //   '/='
-  opModuloAssign, //   '%='
-  commandIf, //        'if'
-  commandElseif, //    'elseif'
+  bodyEnd, //          '==='
+  colon, //            ':'
+  comma, //            ','
   commandElse, //      'else'
+  commandElseif, //    'elseif'
+  commandEnd, //       '>>'
   commandEndif, //     'endif'
-  commandSet, //       'set'
+  commandIf, //        'if'
   commandJump, //      'jump'
-  commandWait, //      'wait'
+  commandSet, //       'set'
+  commandStart, //     '<<'
   commandStop, //      'stop'
+  commandWait, //      'wait'
+  constFalse, //       'false'
+  constTrue, //        'true'
+  expressionEnd, //    '}'
+  expressionStart, //  '{'
+  headerEnd, //        '---'
+  newline, //          '\r' | '\n' | '\r\n'
+  opAnd, //            'and' | '&&'
+  opAssign, //         'to' | '='
+  opDivide, //         '/'
+  opDivideAssign, //   '/='
+  opEq, //             'is' | 'eq' | '=='
+  opGe, //             'ge' | 'gte' | '>='
+  opGt, //             'gt' | '>'
+  opLe, //             'le' | 'lte | '<='
+  opLt, //             'lt' | '<'
+  opMinus, //          '-'
+  opMinusAssign, //    '-='
+  opModulo, //         '%'
+  opModuloAssign, //   '%='
+  opMultiply, //       '*'
+  opMultiplyAssign, // '*='
+  opNe, //             'ne' | 'neq' | '!='
+  opNot, //            'not' | '!'
+  opOr, //             'or' | '||'
+  opPlus, //           '+'
+  opPlusAssign, //     '+='
+  opXor, //            'xor' | '^'
+  parenEnd, //         ')'
+  parenStart, //       '('
+  typeBool, //         'bool'
+  typeNumber, //       'number'
+  typeString, //       'string'
 }
