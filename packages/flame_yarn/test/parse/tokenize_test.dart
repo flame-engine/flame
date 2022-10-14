@@ -43,7 +43,7 @@ void main() {
       test('no header lines', () {
         expect(
           tokenize('---\n===\n'),
-          [Token.headerEnd, Token.bodyEnd],
+          [Token.bodyStart, Token.bodyEnd],
         );
       });
 
@@ -58,7 +58,7 @@ void main() {
               Token.colon,
               Token.text('node: 1'),
               Token.newline,
-              Token.headerEnd,
+              Token.bodyStart,
               Token.bodyEnd,
             ]);
       });
@@ -83,7 +83,7 @@ void main() {
             Token.colon,
             Token.text('1'),
             Token.newline,
-            Token.headerEnd,
+            Token.bodyStart,
             Token.bodyEnd,
           ],
         );
@@ -97,7 +97,7 @@ void main() {
             Token.colon,
             Token.text(''),
             Token.newline,
-            Token.headerEnd,
+            Token.bodyStart,
             Token.bodyEnd,
           ],
         );
@@ -110,7 +110,7 @@ void main() {
           Token.colon,
           Token.text('bar'),
           Token.newline,
-          Token.headerEnd,
+          Token.bodyStart,
           Token.bodyEnd,
         ]);
       });
@@ -130,7 +130,7 @@ void main() {
             Token.colon,
             Token.text('some data '),
             Token.newline,
-            Token.headerEnd,
+            Token.bodyStart,
             Token.bodyEnd,
           ],
         );
@@ -171,7 +171,7 @@ void main() {
       test('without final newline', () {
         expect(
           tokenize('---\n==='),
-          const [Token.headerEnd, Token.bodyEnd],
+          const [Token.bodyStart, Token.bodyEnd],
         );
       });
 
@@ -182,7 +182,7 @@ void main() {
               '   \t  \r\n'
               ' // also could be some comments here\n'
               '==='),
-          const [Token.headerEnd, Token.bodyEnd],
+          const [Token.bodyStart, Token.bodyEnd],
         );
       });
 
@@ -195,7 +195,7 @@ void main() {
               '  delta\n'
               '===\n'),
           const [
-            Token.headerEnd,
+            Token.bodyStart,
             Token.indent,
             Token.text('alpha'),
             Token.newline,
@@ -237,7 +237,7 @@ void main() {
               '    three\n'
               '==='),
           const [
-            Token.headerEnd,
+            Token.bodyStart,
             Token.text('one'),
             Token.newline,
             Token.indent,
@@ -272,7 +272,7 @@ void main() {
               '  -> other\n'
               '===\n'),
           const [
-            Token.headerEnd,
+            Token.bodyStart,
             Token.arrow,
             Token.text('something'),
             Token.newline,
@@ -293,7 +293,7 @@ void main() {
               '<< stop >>\n'
               '===\n'),
           const [
-            Token.headerEnd,
+            Token.bodyStart,
             Token.commandStart,
             Token.commandEnd,
             Token.newline,
@@ -314,7 +314,7 @@ void main() {
               'ПанГолова :...\n'
               '===\n'),
           const [
-            Token.headerEnd,
+            Token.bodyStart,
             Token.speaker('Marge'),
             Token.colon,
             Token.text('Hello!'),
@@ -336,7 +336,7 @@ void main() {
               '-> -> -> \n'
               '===\n'),
           const [
-            Token.headerEnd,
+            Token.bodyStart,
             Token.arrow,
             Token.arrow,
             Token.arrow,
@@ -352,7 +352,7 @@ void main() {
               'Pig: Horse: Moo!\n'
               '===\n'),
           const [
-            Token.headerEnd,
+            Token.bodyStart,
             Token.speaker('Pig'),
             Token.colon,
             Token.text('Horse: Moo!'),
@@ -371,7 +371,7 @@ void main() {
               'other text\n'
               '===\n'),
           const [
-            Token.headerEnd,
+            Token.bodyStart,
             Token.text('some text '),
             Token.newline,
             Token.text('other text'),
@@ -391,7 +391,7 @@ void main() {
               'line with a newline:\\n ok\n'
               '===\n'),
           const [
-            Token.headerEnd,
+            Token.bodyStart,
             Token.text('<'),
             Token.text('{'),
             Token.text(' inside '),
@@ -428,7 +428,7 @@ void main() {
               '{ } // noop\n'
               '===\n'),
           const [
-            Token.headerEnd,
+            Token.bodyStart,
             Token.expressionStart,
             Token.expressionEnd,
             Token.newline,
@@ -445,7 +445,7 @@ void main() {
               '{ \$x += 33 - 7/random() }\n'
               '===\n'),
           const [
-            Token.headerEnd,
+            Token.bodyStart,
             Token.expressionStart,
             Token.variable('x'),
             Token.opPlusAssign,
@@ -463,13 +463,65 @@ void main() {
         );
       });
 
+      test('expression with keywords', () {
+        expect(
+          tokenize('---\n'
+              '{ true * false as string }\n'
+              '===\n'),
+          const [
+            Token.bodyStart,
+            Token.expressionStart,
+            Token.constTrue,
+            Token.opMultiply,
+            Token.constFalse,
+            Token.as,
+            Token.typeString,
+            Token.expressionEnd,
+            Token.newline,
+            Token.bodyEnd,
+          ],
+        );
+      });
+
+      test('expression with strings', () {
+        expect(
+          tokenize('---\n'
+              '{ \$x = "hello" + ", world" }\n'
+              '{ "one\' two", \'"\' }\n'
+              '{ "last \\\' \\" \\\\ one\\n" }\n'
+              '===\n'),
+          const [
+            Token.bodyStart,
+            Token.expressionStart,
+            Token.variable('x'),
+            Token.opAssign,
+            Token.string('hello'),
+            Token.opPlus,
+            Token.string(', world'),
+            Token.expressionEnd,
+            Token.newline,
+            Token.expressionStart,
+            Token.string("one' two"),
+            Token.comma,
+            Token.string('"'),
+            Token.expressionEnd,
+            Token.newline,
+            Token.expressionStart,
+            Token.string('last \' " \\ one\n'),
+            Token.expressionEnd,
+            Token.newline,
+            Token.bodyEnd,
+          ],
+        );
+      });
+
       test('close command within a plain text expression', () {
         expect(
           tokenize('---\n'
               '{ a >> b }\n'
               '===\n'),
           const [
-            Token.headerEnd,
+            Token.bodyStart,
             Token.expressionStart,
             Token.id('a'),
             Token.opGt,
@@ -481,22 +533,47 @@ void main() {
           ],
         );
       });
-    });
 
-    group('modeCommand', () {
-      test('incomplete command', () {
-        // expect(
-        //   () => tokenize('---\n'
-        //       '<<set a = b > 3 >>\n'
-        //       '===\n'
-        //   ),
-        //   hasSyntaxError('SyntaxError: missing command close token ">>"\n'
-        //     '>  in line 2 column 10:\n'
-        //     '>  <<set a = b > 3 >\n'
-        //     '>           ^\n'),
-        // );
+      test('invalid variable name', () {
+        expect(
+          () => tokenize('---\n'
+              '{ \$a = \$7b }\n'
+              '===\n'),
+          hasSyntaxError('SyntaxError: invalid variable name\n'
+              '>  at line 2 column 8:\n'
+              '>  { \$a = \$7b }\n'
+              '>         ^\n'),
+        );
+      });
+
+      test('invalid string', () {
+        expect(
+          () => tokenize('---\n'
+              '{ "starting... }\n'
+              '===\n'),
+          hasSyntaxError(
+              'SyntaxError: unexpected end of line while parsing a string\n'
+              '>  at line 2 column 17:\n'
+              '>  { "starting... }\n'
+              '>                  ^\n'),
+        );
       });
     });
+
+    // group('modeCommand', () {
+    //   test('incomplete command', () {
+    //     expect(
+    //       () => tokenize('---\n'
+    //           '<< stop\n'
+    //           '===\n'
+    //       ),
+    //       hasSyntaxError('SyntaxError: missing command close token ">>"\n'
+    //         '>  at line 2 column 10:\n'
+    //         '>  <<set a = b > 3 >\n'
+    //         '>           ^\n'),
+    //     );
+    //   });
+    // });
   });
 }
 

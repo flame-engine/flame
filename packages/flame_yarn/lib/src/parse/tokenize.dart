@@ -265,7 +265,7 @@ class _Lexer {
     final pos0 = pos;
     if (eat($minus) && eat($minus) && eat($minus) && eatNewline()) {
       popToken(Token.newline);
-      pushToken(Token.headerEnd);
+      pushToken(Token.bodyStart);
       popMode(modeNodeHeader);
       pushMode(modeNodeBody);
       return true;
@@ -567,6 +567,7 @@ class _Lexer {
         return true;
       }
       pos--;
+      error('invalid variable name');
     }
     return false;
   }
@@ -639,6 +640,7 @@ class _Lexer {
           pushToken(Token.string(buffer.toString()));
           return true;
         } else if (cu == $carriageReturn || cu == $lineFeed) {
+          error('unexpected end of line while parsing a string');
           break;
         } else if (cu == $backslash) {
           pos += 1;

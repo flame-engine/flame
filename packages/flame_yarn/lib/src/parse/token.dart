@@ -34,7 +34,7 @@ class Token {
   static const dedent = Token._(TokenType.dedent);
   static const expressionEnd = Token._(TokenType.expressionEnd);
   static const expressionStart = Token._(TokenType.expressionStart);
-  static const headerEnd = Token._(TokenType.headerEnd);
+  static const bodyStart = Token._(TokenType.bodyStart);
   static const indent = Token._(TokenType.indent);
   static const newline = Token._(TokenType.newline);
   static const opAnd = Token._(TokenType.opAnd);
@@ -114,7 +114,7 @@ enum TokenType {
   constTrue, //        'true'
   expressionEnd, //    '}'
   expressionStart, //  '{'
-  headerEnd, //        '---'
+  bodyStart, //        '---'
   newline, //          '\r' | '\n' | '\r\n'
   opAnd, //            'and' | '&&'
   opAssign, //         'to' | '='
