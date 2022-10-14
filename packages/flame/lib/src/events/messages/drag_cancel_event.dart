@@ -12,5 +12,5 @@ class DragCancelEvent extends Event {
 
   DragEndEvent toDragEnd() => DragEndEvent(pointerId, DragEndDetails());
   @override
-  String toString() => 'DragCancelEvent(pointerId:$pointerId)';
+  String toString() => 'DragCancelEvent(pointerId: $pointerId)';
 }

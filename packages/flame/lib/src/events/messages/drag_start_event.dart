@@ -36,7 +36,7 @@ class DragStartEvent extends PositionEvent {
   }
 
   @override
-  String toString() =>
-      'DragStartEvent(pointerId: $pointerId, deviceKind: $deviceKind, '
-      'canvasPosition: $canvasPosition, devicePosition: $devicePosition)';
+  String toString() => 'DragStartEvent(canvasPosition: $canvasPosition, '
+      'devicePosition: $devicePosition, '
+      'pointedId: $pointerId, deviceKind: $deviceKind)';
 }

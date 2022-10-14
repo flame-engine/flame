@@ -21,5 +21,5 @@ class TapCancelEvent extends Event {
   final int pointerId;
 
   @override
-  String toString() => 'TapCancelEvent(pointerId;$pointerId)';
+  String toString() => 'TapCancelEvent(pointerId: $pointerId)';
 }
