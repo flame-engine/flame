@@ -439,6 +439,7 @@ void main() {
             Token.startBody,
             Token.startExpression,
             Token.endExpression,
+            Token.text(' '),
             Token.newline,
             Token.endBody,
           ],
@@ -593,6 +594,7 @@ void main() {
               '<< stop >>\n'
               '<< fullStop >>\n'
               '<< jump places >>\n'
+              '<<wait 2>>\n'
               '<< set \$n = 2 >>  // simple\n'
               '===\n'),
           const [
@@ -615,12 +617,52 @@ void main() {
             Token.endCommand,
             Token.newline,
             Token.startCommand,
+            Token.commandWait,
+            Token.startExpression,
+            Token.number('2'),
+            Token.endExpression,
+            Token.endCommand,
+            Token.newline,
+            Token.startCommand,
             Token.commandSet,
             Token.startExpression,
             Token.variable('n'),
             Token.opAssign,
             Token.number('2'),
             Token.endExpression,
+            Token.endCommand,
+            Token.newline,
+            Token.endBody,
+          ],
+        );
+      });
+
+      test('if-else', () {
+        expect(
+          tokenize('---\n'
+              '<<if \$gold_amount < 10>>\n'
+              "    Baker: Well, you can't afford one!\n"
+              '<<endif>>\n'
+              '===\n'),
+          const [
+            Token.startBody,
+            Token.startCommand,
+            Token.commandIf,
+            Token.startExpression,
+            Token.variable('gold_amount'),
+            Token.opLt,
+            Token.number('10'),
+            Token.endExpression,
+            Token.endCommand,
+            Token.newline,
+            Token.startIndent,
+            Token.speaker('Baker'),
+            Token.colon,
+            Token.text("Well, you can't afford one!"),
+            Token.newline,
+            Token.endIndent,
+            Token.startCommand,
+            Token.commandEndif,
             Token.endCommand,
             Token.newline,
             Token.endBody,
@@ -649,6 +691,82 @@ void main() {
               '>  at line 2 column 8:\n'
               '>  << stop\n'
               '>         ^\n'),
+        );
+      });
+    });
+
+    group('modeLineEnd', () {
+      test('hashtags in lines', () {
+        expect(
+          tokenize('---\n'
+              'line1 #tag #some:other@tag! // whatever\n'
+              'line2 { 33 } #here-be-dragons//2\n'
+              '===\n'),
+          const [
+            Token.startBody,
+            Token.text('line1 '),
+            Token.hashtag('#tag'),
+            Token.hashtag('#some:other@tag!'),
+            Token.newline,
+            Token.text('line2 '),
+            Token.startExpression,
+            Token.number('33'),
+            Token.endExpression,
+            Token.text(' '),
+            Token.hashtag('#here-be-dragons'),
+            Token.newline,
+            Token.endBody,
+          ],
+        );
+      });
+
+      test('commands in lines', () {
+        expect(
+          tokenize('---\n'
+              '-> Sure I am! The boss knows me! <<if \$reputation > 10>>\n'
+              '-> Please?\n'
+              '===\n'),
+          const [
+            Token.startBody,
+            Token.arrow,
+            Token.text('Sure I am! The boss knows me! '),
+            Token.startCommand,
+            Token.commandIf,
+            Token.startExpression,
+            Token.variable('reputation'),
+            Token.opGt,
+            Token.number('10'),
+            Token.endExpression,
+            Token.endCommand,
+            Token.newline,
+            Token.arrow,
+            Token.text('Please?'),
+            Token.newline,
+            Token.endBody,
+          ],
+        );
+      });
+
+      test('multiple commands and hashtags', () {
+        expect(
+          tokenize('---\n'
+              '#one <<two>> <<stop>> #four\n'
+              '===\n'),
+          const [
+            Token.startBody,
+            Token.hashtag('#one'),
+            Token.startCommand,
+            Token.command('two'),
+            Token.startExpression,
+            Token.endExpression,
+            Token.endCommand,
+            Token.startCommand,
+            Token.commandStop,
+            Token.endCommand,
+            Token.hashtag('#four'),
+            Token.newline,
+            Token.endBody,
+          ],
         );
       });
     });

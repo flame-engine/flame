@@ -92,6 +92,9 @@ class _Lexer {
     return true;
   }
 
+  _ModeFn get currentMode => modeStack.last;
+  _ModeFn get parentMode => modeStack[modeStack.length - 2];
+
   /// Pops the last token from the output stack and checks that it is equal to
   /// [token].
   void popToken(Token token) {
@@ -165,12 +168,15 @@ class _Lexer {
   /// consume the input until the end of the line, and then pop back to
   /// [modeNodeBody].
   bool modeText() {
-    return eatTextCommentOrNewline() ||
-        eatTextEscapeSequence() ||
+    return eatTextEscapeSequence() ||
         eatExpressionStart() ||
-        eatPlainText();
+        eatPlainText() ||
+        (popMode(modeText) && pushMode(modeLineEnd));
   }
 
+  /// The command mode starts with a '<<', then consumes the command name, and
+  /// after that either switches to the [modeExpression], or looks for a '>>'
+  /// token to exit the mode.
   bool modeCommand() {
     return eatWhitespace() ||
         eatCommandName() ||
@@ -190,6 +196,15 @@ class _Lexer {
         eatString() ||
         eatOperator() ||
         eatExpressionEnd();
+  }
+
+  /// Mode at the end of a line, allows hashtags and comments.
+  bool modeLineEnd() {
+    assert(parentMode == modeNodeBodyLine);
+    return eatWhitespace() ||
+        eatCommentOrNewline() ||
+        eatHashtag() ||
+        eatCommandStart();
   }
 
   //----------------------------------------------------------------------------
@@ -424,6 +439,9 @@ class _Lexer {
       eatWhitespace();
       pushToken(Token.endCommand);
       popMode(modeCommand);
+      if (currentMode != modeLineEnd) {
+        pushMode(modeLineEnd);
+      }
       return true;
     }
     pos = pos0;
@@ -457,14 +475,14 @@ class _Lexer {
     return false;
   }
 
-  /// Consumes a comment at the end of line or a newline while in the text mode,
-  /// and pops the current mode so that the next line will start again at
-  /// [modeNodeBody].
-  bool eatTextCommentOrNewline() {
+  /// Consumes a comment at the end of line or a newline while in the
+  /// [modeLineEnd], and pops the current mode so that the next line will start
+  /// again at [modeNodeBody].
+  bool eatCommentOrNewline() {
     if (eatNewline() || (eatCommentLine() && pushToken(Token.newline))) {
-      popMode(modeText);
+      popMode(modeLineEnd);
       popMode(modeNodeBodyLine);
-      assert(modeStack.last == modeNodeBody);
+      assert(currentMode == modeNodeBody);
       return true;
     }
     return false;
@@ -513,7 +531,7 @@ class _Lexer {
   /// is [modeText]).
   bool eatExpressionEnd() {
     if (eat($rightBrace)) {
-      if (modeStack[modeStack.length - 2] != modeText) {
+      if (parentMode != modeText) {
         pos -= 1;
         error('invalid token "}" within a command');
       }
@@ -530,7 +548,7 @@ class _Lexer {
   bool eatExpressionCommandEnd() {
     final pos0 = pos;
     if (eat($greaterThan) && eat($greaterThan)) {
-      if (modeStack[modeStack.length - 2] != modeCommand) {
+      if (parentMode != modeCommand) {
         pos -= 2;
         error('invalid token ">>" within an expression');
       }
@@ -728,6 +746,38 @@ class _Lexer {
     return false;
   }
 
+  /// Consumes a simple hash-tag sequence, consisting of '#' followed by any
+  /// number of non-control characters.
+  bool eatHashtag() {
+    final pos0 = pos;
+    if (eat($hash)) {
+      while (!eof) {
+        final cu = codeUnit;
+        if (cu == $slash && eat($slash) && eat($slash)) {
+          pos -= 2;
+          break;
+        }
+        if (cu == $lineFeed ||
+            cu == $carriageReturn ||
+            cu == $space ||
+            cu == $tab ||
+            cu == $hash ||
+            cu == $dollar ||
+            cu == $lessThan) {
+          break;
+        }
+        pos += 1;
+      }
+      if (pos > pos0 + 1) {
+        pushToken(Token.hashtag(text.substring(pos0, pos)));
+        return true;
+      }
+    }
+    pos = pos0;
+    return false;
+  }
+
+
   static const Map<String, Token> keywords = {
     'true': Token.constTrue,
     'false': Token.constFalse,
@@ -780,7 +830,7 @@ class _Lexer {
     'elseif': Token.commandElseif,
     'set': Token.commandSet,
     'jump': Token.commandJump,
-    'wait': Token.commandJump,
+    'wait': Token.commandWait,
   };
   static const Map<String, Token> commandsWithoutArgs = {
     'else': Token.commandElse,

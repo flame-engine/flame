@@ -7,6 +7,7 @@ class Token {
   const Token._(this.type, [this._content]);
 
   const Token.command(String text) : this._(TokenType.command, text);
+  const Token.hashtag(String text) : this._(TokenType.hashtag, text);
   const Token.id(String text) : this._(TokenType.id, text);
   const Token.number(String text) : this._(TokenType.number, text);
   const Token.speaker(String text) : this._(TokenType.speaker, text);
@@ -86,6 +87,7 @@ class Token {
 @internal
 enum TokenType {
   command,
+  hashtag,
   id,
   number,
   speaker,
