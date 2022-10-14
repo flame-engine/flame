@@ -311,7 +311,9 @@ void main() {
           tokenize('---\n'
               'Marge: Hello!\n'
               'Mr Smith: You too\n'
-              'ПанГолова :...\n'
+              'Пан_Голова :...\n'
+              'Ḟḷḁṃḙ: // nothing\n'
+              '𐀆𒐰ï︮𒐜   :::\n'
               '===\n'),
           const [
             Token.startBody,
@@ -321,9 +323,16 @@ void main() {
             Token.newline,
             Token.text('Mr Smith: You too'),
             Token.newline,
-            Token.speaker('ПанГолова'),
+            Token.speaker('Пан_Голова'),
             Token.colon,
             Token.text('...'),
+            Token.newline,
+            Token.speaker('Ḟḷḁṃḙ'),
+            Token.colon,
+            Token.newline,
+            Token.speaker('𐀆𒐰ï︮𒐜'),
+            Token.colon,
+            Token.text('::'),
             Token.newline,
             Token.endBody,
           ],
