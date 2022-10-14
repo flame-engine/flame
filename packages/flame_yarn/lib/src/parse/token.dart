@@ -6,13 +6,13 @@ import 'package:meta/meta.dart';
 class Token {
   const Token._(this.type, [this._content]);
 
-  const Token.text(String text) : this._(TokenType.text, text);
+  const Token.character(String text) : this._(TokenType.character, text);
+  const Token.command(String text) : this._(TokenType.command, text);
+  const Token.id(String text) : this._(TokenType.id, text);
   const Token.number(String text) : this._(TokenType.number, text);
   const Token.string(String text) : this._(TokenType.string, text);
-  const Token.command(String text) : this._(TokenType.command, text);
+  const Token.text(String text) : this._(TokenType.text, text);
   const Token.variable(String text) : this._(TokenType.variable, text);
-  const Token.speaker(String text) : this._(TokenType.speaker, text);
-  const Token.id(String text) : this._(TokenType.id, text);
 
   static const arrow = Token._(TokenType.arrow);
   static const as = Token._(TokenType.as);
@@ -68,7 +68,7 @@ class Token {
   final String? _content;
 
   /// The content can only be accessed for tokens of type "text", "number",
-  /// "string", "command", "variable", "speaker", and "id".
+  /// "string", "command", "variable", "character", and "id".
   String get content => _content!;
 
   @override
@@ -91,7 +91,7 @@ enum TokenType {
   indent,
   dedent,
   id,
-  speaker,
+  character,
   command,
   variable, //         '$' ID
   newline, //          '\r' | '\n' | '\r\n'

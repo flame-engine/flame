@@ -132,16 +132,12 @@ class _Lexer {
         (eatIndent() && pushMode(modeNodeBodyLine));
   }
 
+  /// The mode for parsing regular lines of a node body.
   bool modeNodeBodyLine() {
     return eatArrow() ||
         eatCommandStart() ||
         eatCharacterName() ||
-        switchToTextMode();
-  }
-
-  bool switchToTextMode() {
-    pushMode(modeText);
-    return true;
+        pushMode(modeText);
   }
 
   bool modeText() {
@@ -297,16 +293,11 @@ class _Lexer {
   bool eatId() {
     final pos0 = pos;
     var cu = codeUnit;
-    if ((cu >= $lowercaseA && cu <= $lowercaseZ) ||
-        (cu >= $uppercaseA && cu <= $uppercaseZ) ||
-        cu == $underscore) {
+    if (isAsciiIdentifierStart(cu)) {
       pos += 1;
       while (true) {
         cu = codeUnit;
-        if ((cu >= $lowercaseA && cu <= $lowercaseZ) ||
-            (cu >= $uppercaseA && cu <= $uppercaseZ) ||
-            (cu >= $digit0 && cu <= $digit9) ||
-            cu == $underscore) {
+        if (isAsciiIdentifierChar(cu)) {
           pos += 1;
         } else {
           break;
@@ -374,7 +365,7 @@ class _Lexer {
   bool eatArrow() {
     final pos0 = pos;
     if (eat($minus) && eat($greaterThan)) {
-      tokens.add(Token.arrow);
+      pushToken(Token.arrow);
       eatWhitespace();
       return true;
     }
@@ -382,7 +373,7 @@ class _Lexer {
     return false;
   }
 
-  /// Consumes+emits a command start token '<<', and switches to the
+  /// Consumes+emits a command-start token '<<', and switches to the
   /// [modeCommand].
   bool eatCommandStart() {
     final pos0 = pos;
@@ -408,18 +399,18 @@ class _Lexer {
     return false;
   }
 
-  /// Consumes an ID at the start of the line, followed by a ':', then emits a
-  /// .speaker token.
+  /// Consumes a Unicode ID at the start of the line, followed by a ':', then
+  /// emits a [Token.character] and a [Token.colon].
   bool eatCharacterName() {
-    final numTokens = tokens.length;
     final pos0 = pos;
-    if (eatId()) {
-      final idToken = tokens.removeLast();
-      assert(tokens.length == numTokens && idToken.type == TokenType.id);
-      eatWhitespace();
-      if (eat($colon)) {
-        eatWhitespace();
-        tokens.add(Token.speaker(idToken.content));
+    final it = RuneIterator.at(text, pos);
+    if (it.moveNext() && isUnicodeIdentifierStart(it.current)) {
+      while (it.moveNext() && isUnicodeIdentifierChar(it.current)) {}
+      pos = it.rawIndex;
+      final pos1 = pos;
+      if (eatWhitespace() && eat($colon)) {
+        pushToken(Token.character(text.substring(pos0, pos1)));
+        pushToken(Token.colon);
         return true;
       }
     }
@@ -770,6 +761,63 @@ class _Lexer {
       i += 1;
     }
     return i;
+  }
+
+  /// Is [cp] a valid code-point to start an ASCII identifier?
+  static bool isAsciiIdentifierStart(int cp) {
+    return (cp >= $lowercaseA && cp <= $lowercaseZ) ||
+        (cp >= $uppercaseA && cp <= $uppercaseZ) ||
+        cp == $underscore;
+  }
+
+  /// Is [cp] a valid code-point to continue an ASCII identifier?
+  static bool isAsciiIdentifierChar(int cp) {
+    return isAsciiIdentifierStart(cp) || (cp >= $digit0 && cp <= $digit9);
+  }
+
+  /// Is [cp] a valid code-point to start a Unicode identifier?
+  static bool isUnicodeIdentifierStart(int cp) {
+    if (cp < 0x80) {
+      return isAsciiIdentifierStart(cp);
+    } else if (cp <= 0x1FFF) {
+      return (cp == 0xA8 || cp == 0xAA || cp == 0xAD || cp == 0xAF) ||
+          (cp >= 0xB2 && cp <= 0xBE && cp != 0xB6 && cp != 0xBB) ||
+          (cp >= 0xC0 && cp <= 0x2FF && cp != 0xD7 && cp != 0xF7) ||
+          (cp >= 0x370 && cp <= 0x1DBF && cp != 0x1680 && cp != 0x180E) ||
+          (cp >= 0x1E00 && cp <= 0x1FFF);
+    } else {
+      return (cp >= 0x200B && cp <= 0x200D) ||
+          (cp >= 0x202A && cp <= 0x202E) ||
+          (cp >= 0x203F && cp <= 0x2040) ||
+          (cp == 0x2054) ||
+          (cp >= 0x2060 && cp <= 0x20CF) ||
+          (cp >= 0x2100 && cp <= 0x218F) ||
+          (cp >= 0x2460 && cp <= 0x24FF) ||
+          (cp >= 0x2776 && cp <= 0x2793) ||
+          (cp >= 0x2C00 && cp <= 0x2DFF) ||
+          (cp >= 0x2E80 && cp <= 0x2FFF) ||
+          (cp >= 0x3004 && cp <= 0x3007) ||
+          (cp >= 0x3021 && cp <= 0xD7FF && cp != 0x3030) ||
+          (cp >= 0xF900 && cp <= 0xFD3D) ||
+          (cp >= 0xFD40 && cp <= 0xFDCF) ||
+          (cp >= 0xFDF0 && cp <= 0xFE1F) ||
+          (cp >= 0xFE30 && cp <= 0xFE44) ||
+          (cp >= 0xFE47 && cp <= 0xFFFD) ||
+          (cp >= 0x10000 && cp <= 0xEFFFF && ((cp + 2) & 0xFFFF) >= 2);
+    }
+  }
+
+  /// Is [cp] a valid code-point to continue a Unicode identifier?
+  static bool isUnicodeIdentifierChar(int cp) {
+    if (cp < 0x80) {
+      return isAsciiIdentifierChar(cp);
+    } else {
+      return isUnicodeIdentifierStart(cp) ||
+          (cp >= 0x300 && cp <= 0x36F) ||
+          (cp >= 0x1DC0 && cp <= 0x1DFF) ||
+          (cp >= 0x20D0 && cp <= 0x20FF) ||
+          (cp >= 0xFE20 && cp <= 0xFE2F);
+    }
   }
 }
 
