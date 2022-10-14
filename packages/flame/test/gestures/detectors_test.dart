@@ -791,6 +791,23 @@ void main() {
       },
     );
   });
+
+  group('ScrollDetector', () {
+    final scrollGame = FlameTester(_ScrollDetectorGame.new);
+
+    scrollGame.testGameWidget(
+      'Can register Scrolling',
+      verify: (game, tester) async {
+        const scrollEventLocation = Offset(0, 300);
+        final testPointer = TestPointer(1, PointerDeviceKind.mouse);
+        testPointer.hover(scrollEventLocation);
+        await tester
+            .sendEventToBinding(testPointer.scroll(const Offset(0.0, -300.0)));
+
+        expect(game.registeredScrolling, isTrue);
+      },
+    );
+  });
 }
 
 class _TapDetectorGame extends FlameGame with TapDetector {
@@ -1073,6 +1090,15 @@ class _MouseMovementDetectorGame extends FlameGame with MouseMovementDetector {
   @override
   void onMouseMove(PointerHoverInfo info) {
     hasReceivedMouseMove = true;
+  }
+}
+
+class _ScrollDetectorGame extends FlameGame with ScrollDetector {
+  bool registeredScrolling = false;
+
+  @override
+  void onScroll(PointerScrollInfo info) {
+    registeredScrolling = true;
   }
 }
 
