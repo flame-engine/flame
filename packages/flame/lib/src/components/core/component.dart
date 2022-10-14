@@ -210,7 +210,6 @@ class Component {
   /// Whether the component is removed.
   bool get isRemoved => (_state & _removed) != 0;
   void _setRemovedBit() => _state |= _removed;
-  // Is this ever needed? A removed component should surely not be replaced?
   void _clearRemovedBit() => _state &= ~_removed;
 
   /// A future that completes when this component finishes loading.
@@ -231,7 +230,7 @@ class Component {
   /// If the component is already removed (see [isRemoved]), this returns an
   /// already completed future.
   Future<void> get removed =>
-      isRemoving ? Future.value() : lifecycle.removeFuture;
+      isRemoved ? Future.value() : lifecycle.removeFuture;
 
   //#endregion
 
@@ -794,9 +793,12 @@ class Component {
       onGameResize(findGame()!.canvasSize);
     }
     _clearLoadingBit();
-    if (isRemoving) {
+    if (isRemoved) {
+      _clearRemovedBit();
+    } else if (isRemoving) {
       _parent = null;
       _clearRemovingBit();
+      _setRemovedBit();
       return;
     }
     debugMode |= _parent!.debugMode;
@@ -829,12 +831,18 @@ class Component {
         component.onRemove();
         component._clearMountedBit();
         component._clearRemovingBit();
-        component._setRemovedBit();
         component._parent = null;
+
+        component._finishRemoving();
         return true;
       },
       includeSelf: true,
     );
+  }
+
+  void _finishRemoving() {
+    _setRemovedBit();
+    _lifecycleManager?.finishRemoving();
   }
 
   //#endregion
@@ -934,7 +942,7 @@ class _LifecycleManager {
 
   Completer<void>? _mountCompleter;
   Completer<void>? _loadCompleter;
-  Completer<void>? _removeCompleter;
+  Completer<void>? _removedCompleter;
 
   Future<void> get loadFuture {
     _loadCompleter ??= Completer<void>();
@@ -947,8 +955,8 @@ class _LifecycleManager {
   }
 
   Future<void> get removeFuture {
-    _removeCompleter ??= Completer<void>();
-    return _removeCompleter!.future;
+    _removedCompleter ??= Completer<void>();
+    return _removedCompleter!.future;
   }
 
   void finishLoading() {
@@ -959,6 +967,11 @@ class _LifecycleManager {
   void finishMounting() {
     _mountCompleter?.complete();
     _mountCompleter = null;
+  }
+
+  void finishRemoving() {
+    _removedCompleter?.complete();
+    _removedCompleter = null;
   }
 
   /// Queue for adding children to a component.
@@ -984,6 +997,9 @@ class _LifecycleManager {
   /// Queue for moving components from another parent to this one.
   final Queue<Component> _adoption = Queue();
 
+  /// Wheter or not there are any pending lifecycle events for this component.
+  ///
+  /// [Component.removed] is not regarded as a pending event.
   bool get hasPendingEvents {
     return _children.isNotEmpty ||
         _removals.isNotEmpty ||
