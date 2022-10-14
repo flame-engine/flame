@@ -163,7 +163,10 @@ class _Lexer {
   }
 
   bool modeCommand() {
-    return eatWhitespace() || eatCommandName() || eatCommandEnd();
+    return eatWhitespace() ||
+        eatCommandName() ||
+        eatCommandEnd() ||
+        (eatNewline() && error('missing command close token ">>"'));
   }
 
   //----------------------------------------------------------------------------
@@ -391,6 +394,7 @@ class _Lexer {
     return false;
   }
 
+  /// Consumes+emits the end-of-command token '>>', and pops the [modeCommand].
   bool eatCommandEnd() {
     final pos0 = pos;
     if (eat($greaterThan) && eat($greaterThan)) {
@@ -434,7 +438,7 @@ class _Lexer {
   /// and pops the current mode so that the next line will start again at
   /// [modeNodeBody].
   bool eatTextCommentOrNewline() {
-    if (eatNewline() || eatCommentLine()) {
+    if (eatNewline() || (eatCommentLine() && pushToken(Token.newline))) {
       popMode(modeText);
       popMode(modeNodeBodyLine);
       assert(modeStack.last == modeNodeBody);
@@ -443,26 +447,31 @@ class _Lexer {
     return false;
   }
 
+  /// Consumes an escape syntax while in the [modeText]. An escape syntax
+  /// consists of a backslash followed by the character being escaped. An error
+  /// will be raised if the escaped character is invalid (e.g. '\1'). Emits a
+  /// text token with the unescaped character.
   bool eatTextEscapeSequence() {
     if (eat($backslash)) {
       if (eatNewline()) {
+        popToken(Token.newline);
         eatWhitespace();
       } else {
         final cu = codeUnit;
         if (cu == $backslash ||
             cu == $slash ||
+            cu == $hash ||
             cu == $lessThan ||
             cu == $greaterThan ||
             cu == $leftBrace ||
-            cu == $rightBrace ||
-            cu == $hash) {
+            cu == $rightBrace) {
           pos += 1;
-          tokens.add(Token.text(String.fromCharCode(cu)));
+          pushToken(Token.text(String.fromCharCode(cu)));
         } else if (cu == $lowercaseN) {
           pos += 1;
-          tokens.add(const Token.text('\n'));
+          pushToken(const Token.text('\n'));
         } else {
-          throw SyntaxError('Invalid escape sequence');
+          error('invalid escape sequence');
         }
       }
       return true;
@@ -472,22 +481,16 @@ class _Lexer {
 
   /// Consumes '{' and enters the [modeExpression].
   bool eatExpressionStart() {
-    if (eat($leftBrace)) {
-      tokens.add(Token.expressionStart);
-      pushMode(modeExpression);
-      return true;
-    }
-    return false;
+    return eat($leftBrace) &&
+        pushToken(Token.expressionStart) &&
+        pushMode(modeExpression);
   }
 
-  /// Consumes '}' and leaves the [modeExpression].
+  /// Consumes '}' and pops the [modeExpression].
   bool eatExpressionEnd() {
-    if (eat($rightBrace)) {
-      tokens.add(Token.expressionEnd);
-      popMode(modeExpression);
-      return true;
-    }
-    return false;
+    return eat($rightBrace) &&
+        pushToken(Token.expressionEnd) &&
+        popMode(modeExpression);
   }
 
   /// Consumes '>>' while in the expression mode, and leaves both the expression
@@ -495,8 +498,8 @@ class _Lexer {
   bool eatExpressionCommandEnd() {
     final pos0 = pos;
     if (eat($greaterThan) && eat($greaterThan)) {
-      tokens.add(Token.expressionEnd);
-      tokens.add(Token.commandEnd);
+      pushToken(Token.expressionEnd);
+      pushToken(Token.commandEnd);
       eatWhitespace();
       popMode(modeExpression);
       popMode(modeCommand);
@@ -506,31 +509,33 @@ class _Lexer {
     return false;
   }
 
+  /// Consumes regular text within the [modeText]. Stops upon seeing one of the
+  /// special characters such as '\n', '\r', '#', '\\', '{', '<<', or '//'.
+  /// Emits the text token corresponding to the text processed.
   bool eatPlainText() {
     final pos0 = pos;
-    final cu = codeUnit;
-    if (cu == $lessThan || cu == $slash) {
-      pos += 1;
-      tokens.add(Token.text(String.fromCharCode(cu)));
-    } else {
-      while (!eof) {
-        final cu = codeUnit;
-        if (cu == $carriageReturn ||
-            cu == $lineFeed ||
-            cu == $hash ||
-            cu == $leftBrace ||
-            cu == $slash ||
-            cu == $backslash ||
-            cu == $lessThan) {
+    while (!eof) {
+      final cu = codeUnit;
+      if (cu == $lessThan || cu == $slash) {
+        pos += 1;
+        if (codeUnit == cu) {
+          pos -= 1;
           break;
         }
-        pos += 1;
+      } else if (cu == $carriageReturn ||
+          cu == $lineFeed ||
+          cu == $hash ||
+          cu == $backslash ||
+          cu == $leftBrace) {
+        break;
       }
-      if (pos > pos0) {
-        tokens.add(Token.text(text.substring(pos0, pos)));
-      }
+      pos += 1;
     }
-    return pos > pos0;
+    if (pos > pos0) {
+      pushToken(Token.text(text.substring(pos0, pos)));
+      return true;
+    }
+    return false;
   }
 
   /// Consumes a plain id within an expression, which is then emitted as either
@@ -541,7 +546,7 @@ class _Lexer {
       final keywordToken = keywords[name];
       if (keywordToken != null) {
         tokens.removeLast();
-        tokens.add(keywordToken);
+        pushToken(keywordToken);
       }
       return true;
     }
@@ -554,7 +559,7 @@ class _Lexer {
     if (eat($dollar)) {
       if (eatId()) {
         final token = tokens.removeLast();
-        tokens.add(Token.variable(token.content));
+        pushToken(Token.variable(token.content));
         return true;
       }
       pos--;
@@ -568,7 +573,7 @@ class _Lexer {
     final pos0 = pos;
     if (eatDigits()) {
       eat($dot) && eatDigits();
-      tokens.add(Token.number(text.substring(pos, pos0)));
+      pushToken(Token.number(text.substring(pos, pos0)));
       return true;
     }
     return false;
@@ -597,7 +602,7 @@ class _Lexer {
       final keyword = keywords[op2];
       if (keyword != null) {
         pos += 2;
-        tokens.add(keyword);
+        pushToken(keyword);
         return true;
       }
     }
@@ -606,7 +611,7 @@ class _Lexer {
       final keyword = keywords[op1];
       if (keyword != null) {
         pos += 1;
-        tokens.add(keyword);
+        pushToken(keyword);
         return true;
       }
     }
@@ -627,7 +632,7 @@ class _Lexer {
         final cu = codeUnit;
         if (cu == quote) {
           pos += 1;
-          tokens.add(Token.string(buffer.toString()));
+          pushToken(Token.string(buffer.toString()));
           return true;
         } else if (cu == $carriageReturn || cu == $lineFeed) {
           break;

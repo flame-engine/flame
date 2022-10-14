@@ -252,6 +252,16 @@ void main() {
           ],
         );
       });
+
+      test('invalid body end', () {
+        expect(
+          () => tokenize('---\n===='),
+          hasSyntaxError('SyntaxError: incomplete node body\n'
+              '>  at line 2 column 5:\n'
+              '>  ====\n'
+              '>      ^\n'),
+        );
+      });
     });
 
     group('modeNodeBodyLine', () {
@@ -353,7 +363,96 @@ void main() {
       });
     });
 
-    group('modeText', () {});
+    group('modeText', () {
+      test('text with comment', () {
+        expect(
+          tokenize('---\n'
+              'some text // here be dragons\n'
+              'other text\n'
+              '===\n'),
+          const [
+            Token.headerEnd,
+            Token.text('some text '),
+            Token.newline,
+            Token.text('other text'),
+            Token.newline,
+            Token.bodyEnd,
+          ],
+        );
+      });
+
+      test('escape sequences', () {
+        expect(
+          tokenize('---\n'
+              r'\<\{ inside \}\>'
+              '\n'
+              'very long \\\n'
+              '  text\n'
+              'line with a newline:\\n ok\n'
+              '===\n'),
+          const [
+            Token.headerEnd,
+            Token.text('<'),
+            Token.text('{'),
+            Token.text(' inside '),
+            Token.text('}'),
+            Token.text('>'),
+            Token.newline,
+            Token.text('very long '),
+            Token.text('text'),
+            Token.newline,
+            Token.text('line with a newline:'),
+            Token.text('\n'),
+            Token.text(' ok'),
+            Token.newline,
+            Token.bodyEnd,
+          ],
+        );
+      });
+
+      test('invalid escape sequence', () {
+        expect(
+          () => tokenize('---\n'
+              'some text \\a\n'
+              '===\n'),
+          hasSyntaxError('SyntaxError: invalid escape sequence\n'
+              '>  at line 2 column 12:\n'
+              '>  some text \\a\n'
+              '>             ^\n'),
+        );
+      });
+
+      test('expressions', (){
+        expect(
+          tokenize('---\n'
+              '{ } // noop\n'
+              '===\n'
+          ),
+          const [
+            Token.headerEnd,
+            Token.expressionStart,
+            Token.expressionEnd,
+            Token.newline,
+            Token.bodyEnd,
+          ],
+        );
+      });
+    });
+
+    group('modeCommand', () {
+      test('incomplete command', () {
+        // expect(
+        //   () => tokenize('---\n'
+        //       '<<set a = b > 3 >>\n'
+        //       '===\n'
+        //   ),
+        //   hasSyntaxError('SyntaxError: missing command close token ">>"\n'
+        //     '>  in line 2 column 10:\n'
+        //     '>  <<set a = b > 3 >\n'
+        //     '>           ^\n'),
+        // );
+      });
+    });
   });
 }
 
