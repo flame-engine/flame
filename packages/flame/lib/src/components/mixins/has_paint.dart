@@ -125,5 +125,5 @@ class _ProxyOpacityProvider<T extends Object> implements OpacityProvider {
   double get opacity => target.getOpacity(paintId: paintId);
 
   @override
-  set opacity(double value) => target.setOpacity(opacity, paintId: paintId);
+  set opacity(double value) => target.setOpacity(value, paintId: paintId);
 }

@@ -216,10 +216,12 @@ void main() {
 
         game.update(1);
 
+        expect(component.getPaint('bluePaint').color.opacity, isZero);
+
         // RGB components shouldn't be affected after opacity efffect.
         expect(component.getPaint('bluePaint').color.blue, 255);
-        expect(component.getPaint('bluePaint').color.red, 0);
-        expect(component.getPaint('bluePaint').color.green, 0);
+        expect(component.getPaint('bluePaint').color.red, isZero);
+        expect(component.getPaint('bluePaint').color.green, isZero);
       },
     );
 
