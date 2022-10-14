@@ -11,7 +11,7 @@ class RichTextExample extends FlameGame {
 
   @override
   Future<void> onLoad() async {
-    add(MyTextComponent()..position = Vector2.all(100));
+    add(MyTextComponent()..position = Vector2(100, 50));
   }
 }
 
@@ -29,8 +29,7 @@ class MyTextComponent extends PositionComponent {
         borderColor: const Color(0xFF000000),
         borderWidth: 2.0,
       ),
-      paragraphStyle: BlockStyle(
-        margin: const EdgeInsets.symmetric(vertical: 6),
+      paragraph: BlockStyle(
         padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 6),
         background: BackgroundStyle(
           color: const Color(0xFFFFF0CB),
@@ -39,6 +38,7 @@ class MyTextComponent extends PositionComponent {
       ),
     );
     final document = DocumentNode([
+      HeaderNode.simple('1984', level: 1),
       ParagraphNode.simple(
         'Anything could be true. The so-called laws of nature were nonsense.',
       ),
@@ -48,11 +48,16 @@ class MyTextComponent extends PositionComponent {
         'out. "If he thinks he floats off the floor, and I simultaneously '
         'think I can see him do it, then the thing happens."',
       ),
-      ParagraphNode.simple(
-        'Suddenly, like a lump of submerged wreckage breaking the surface of '
-        'water, the thought burst into his mind: "It doesn\'t really happen. '
-        'We imagine it. It is hallucination."',
-      ),
+      ParagraphNode.group([
+        PlainTextNode(
+            'Suddenly, like a lump of submerged wreckage breaking the surface '
+            'of water, the thought burst into his mind: '),
+        ItalicTextNode.group([
+          PlainTextNode('"It doesn\'t really happen. We imagine it. It is '),
+          BoldTextNode.simple('hallucination'),
+          PlainTextNode('."'),
+        ]),
+      ]),
       ParagraphNode.simple(
         'He pushed the thought under instantly. The fallacy was obvious. It '
         'presupposed that somewhere or other, outside oneself, there was a '

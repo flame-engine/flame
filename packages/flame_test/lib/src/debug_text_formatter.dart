@@ -27,7 +27,7 @@ class DebugTextFormatter extends TextFormatter {
   TextElement format(String text) => _DebugTextElement(this, text);
 }
 
-class _DebugTextElement extends TextElement implements TextLine {
+class _DebugTextElement extends TextElement {
   _DebugTextElement(this.style, this.text) {
     final charWidth = style.fontSize * 1.0;
     final charHeight = style.fontSize;
@@ -51,9 +51,6 @@ class _DebugTextElement extends TextElement implements TextLine {
   final Paint paint = Paint();
   @override
   late final LineMetrics metrics;
-
-  @override
-  TextLine get lastLine => this;
 
   @override
   void render(Canvas canvas) {

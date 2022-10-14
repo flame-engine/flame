@@ -1,83 +1,85 @@
 import 'dart:typed_data';
 import 'dart:ui' hide LineMetrics;
 
+import 'package:flame/src/text/common/glyph.dart';
 import 'package:flame/src/text/common/glyph_data.dart';
-import 'package:flame/src/text/common/glyph_info.dart';
 import 'package:flame/src/text/common/line_metrics.dart';
+import 'package:flame/src/text/common/sprite_font.dart';
+import 'package:flame/src/text/elements/sprite_font_text_element.dart';
+import 'package:flame/src/text/elements/text_element.dart';
 import 'package:flame/src/text/formatters/text_formatter.dart';
-import 'package:flame/src/text/inline/sprite_font_text_element.dart';
 
 class SpriteFontTextFormatter extends TextFormatter {
+  @Deprecated('Use SpriteFontTextFormatter.fromFont() instead; this '
+      'constructor will be removed in 1.6.0')
   SpriteFontTextFormatter({
-    required this.source,
+    required Image source,
     required double charWidth,
     required double charHeight,
+    // ignore: deprecated_member_use_from_same_package
     required Map<String, GlyphData> glyphs,
     this.scale = 1,
     this.letterSpacing = 0,
-  })  : scaledCharWidth = charWidth * scale,
-        scaledCharHeight = charHeight * scale,
-        _glyphs = glyphs.map((char, rect) {
-          assert(
-            char.length == 1,
-            'A glyph must have a single character: "$char"',
-          );
-          final info = GlyphInfo();
-          info.srcLeft = rect.left;
-          info.srcTop = rect.top;
-          info.srcRight = rect.right ?? rect.left + charWidth;
-          info.srcBottom = rect.bottom ?? rect.top + charHeight;
-          info.rstSCos = scale;
-          info.rstTy = (charHeight - (info.srcBottom - info.srcTop)) * scale;
-          info.width = charWidth * scale;
-          info.height = charHeight * scale;
-          return MapEntry(char.codeUnitAt(0), info);
-        });
+  })  : font = SpriteFont(
+          source: source,
+          size: charHeight,
+          ascent: charHeight,
+          defaultCharWidth: charWidth,
+          glyphs: [
+            for (final kv in glyphs.entries)
+              Glyph.fromGlyphData(kv.key, kv.value)
+          ],
+        ),
+        paint = Paint();
 
-  final Image source;
-  final paint = Paint()..color = const Color(0xFFFFFFFF);
-  final double letterSpacing;
+  SpriteFontTextFormatter.fromFont(
+    this.font, {
+    this.scale = 1.0,
+    this.letterSpacing = 0.0,
+    Color? color,
+  }) : paint = Paint() {
+    if (color != null) {
+      paint.colorFilter = ColorFilter.mode(color, BlendMode.srcIn);
+    }
+  }
+
+  final SpriteFont font;
   final double scale;
-  final double scaledCharWidth;
-  final double scaledCharHeight;
-  final Map<int, GlyphInfo> _glyphs;
+  final double letterSpacing;
+  final Paint paint;
 
   @override
-  SpriteFontTextElement format(String text) {
-    final rstTransforms = Float32List(4 * text.length);
-    final rects = Float32List(4 * text.length);
+  TextElement format(String text) {
+    var rects = Float32List(text.length * 4);
+    var rsts = Float32List(text.length * 4);
     var j = 0;
     var x0 = 0.0;
-    final y0 = -scaledCharHeight;
-    for (final glyph in _textToGlyphs(text)) {
+    for (final glyph in font.textToGlyphs(text)) {
       rects[j + 0] = glyph.srcLeft;
       rects[j + 1] = glyph.srcTop;
       rects[j + 2] = glyph.srcRight;
       rects[j + 3] = glyph.srcBottom;
-      rstTransforms[j + 0] = glyph.rstSCos;
-      rstTransforms[j + 1] = glyph.rstSSin;
-      rstTransforms[j + 2] = x0 + glyph.rstTx;
-      rstTransforms[j + 3] = y0 + glyph.rstTy;
-      x0 += glyph.width + letterSpacing;
+      rsts[j + 0] = scale;
+      rsts[j + 1] = 0;
+      rsts[j + 2] = x0 + (glyph.srcLeft - glyph.left) * scale;
+      rsts[j + 3] = (glyph.srcTop - glyph.top - font.ascent) * scale;
       j += 4;
+      x0 += glyph.width * scale + letterSpacing;
+    }
+    if (j < text.length * 4) {
+      rects = rects.sublist(0, j);
+      rsts = rsts.sublist(0, j);
     }
     return SpriteFontTextElement(
-      source: source,
-      transforms: rstTransforms,
+      source: font.source,
+      transforms: rsts,
       rects: rects,
       paint: paint,
-      metrics: LineMetrics(width: x0, height: scaledCharHeight, descent: 0),
+      metrics: LineMetrics(
+        width: x0 - letterSpacing,
+        height: font.size * scale,
+        ascent: font.ascent * scale,
+      ),
     );
-  }
-
-  Iterable<GlyphInfo> _textToGlyphs(String text) {
-    return text.codeUnits.map((int i) {
-      final glyph = _glyphs[i];
-      assert(
-        glyph != null,
-        'No glyph for character "${String.fromCharCode(i)}"',
-      );
-      return glyph!;
-    });
   }
 }

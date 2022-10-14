@@ -7,6 +7,7 @@ import 'package:flame/src/text/elements/element.dart';
 /// such as `<div>` or `<blockquote>`.
 abstract class BlockElement extends Element {
   BlockElement(this.width, this.height);
-  double width;
-  double height;
+
+  final double width;
+  final double height;
 }

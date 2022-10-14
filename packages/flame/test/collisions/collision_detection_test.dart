@@ -830,6 +830,141 @@ void main() {
         reason: "Should return the enclosed circle's position",
       );
     });
+
+    test('solid circle enclosed by solid polygon', () {
+      final outerPolygon = PolygonComponent(
+        [
+          Vector2(5, 1),
+          Vector2(1, 1),
+          Vector2(1, 5),
+          Vector2(6, 5),
+        ],
+      )..isSolid = true;
+      final innerCircle = CircleComponent(
+        position: Vector2.all(3),
+        radius: 1.5,
+        anchor: Anchor.center,
+      )..isSolid = true;
+      final intersections = geometry.intersections(outerPolygon, innerCircle);
+      expect(
+        intersections,
+        {innerCircle.position},
+        reason: "Should return the enclosed circle's position",
+      );
+    });
+
+    test('solid circle enclosed by hollow polygon', () {
+      final outerPolygon = PolygonComponent(
+        [
+          Vector2(5, 1),
+          Vector2(1, 1),
+          Vector2(1, 5),
+          Vector2(6, 5),
+        ],
+      );
+      final innerCircle = CircleComponent(
+        position: Vector2.all(3),
+        radius: 1.5,
+        anchor: Anchor.center,
+      )..isSolid = true;
+      final intersections = geometry.intersections(outerPolygon, innerCircle);
+      expect(
+        intersections.isEmpty,
+        isTrue,
+        reason: 'Should not contain any intersection',
+      );
+    });
+
+    test('hollow circle enclosed by solid polygon', () {
+      final outerPolygon = PolygonComponent(
+        [
+          Vector2(5, 1),
+          Vector2(1, 1),
+          Vector2(1, 5),
+          Vector2(6, 5),
+        ],
+      )..isSolid = true;
+      final innerCircle = CircleComponent(
+        position: Vector2.all(3),
+        radius: 1.5,
+        anchor: Anchor.center,
+      );
+      final intersections = geometry.intersections(outerPolygon, innerCircle);
+      expect(
+        intersections,
+        {innerCircle.position},
+        reason: "Should return the enclosed circle's position",
+      );
+    });
+
+    test('solid polygon enclosed by solid circle', () {
+      final outerCircle = CircleComponent(
+        position: Vector2.all(3),
+        radius: 3,
+        anchor: Anchor.center,
+      )..isSolid = true;
+      final innerPolygon = PolygonComponent(
+        [
+          Vector2(4, 2),
+          Vector2(2, 2),
+          Vector2(2, 4),
+          Vector2(4.5, 4.5),
+        ],
+        anchor: Anchor.center,
+      )..isSolid = true;
+      final intersections = geometry.intersections(outerCircle, innerPolygon);
+      expect(
+        intersections,
+        {innerPolygon.position},
+        reason: "Should return the enclosed polygon's position",
+      );
+    });
+
+    test('solid polygon enclosed by hollow circle', () {
+      final outerCircle = CircleComponent(
+        position: Vector2.all(3),
+        radius: 3,
+        anchor: Anchor.center,
+      );
+      final innerPolygon = PolygonComponent(
+        [
+          Vector2(4, 2),
+          Vector2(2, 2),
+          Vector2(2, 4),
+          Vector2(4.5, 4.5),
+        ],
+        anchor: Anchor.center,
+      )..isSolid = true;
+      final intersections = geometry.intersections(outerCircle, innerPolygon);
+      expect(
+        intersections.isEmpty,
+        isTrue,
+        reason: 'Should not contain any intersection',
+      );
+    });
+
+    test('hollow polygon enclosed by solid circle', () {
+      final outerCircle = CircleComponent(
+        position: Vector2.all(3),
+        radius: 3,
+        anchor: Anchor.center,
+      )..isSolid = true;
+      final innerPolygon = PolygonComponent(
+        [
+          Vector2(4, 2),
+          Vector2(2, 2),
+          Vector2(2, 4),
+          Vector2(4.5, 4.5),
+        ],
+        anchor: Anchor.center,
+      );
+      final intersections = geometry.intersections(outerCircle, innerPolygon);
+      expect(
+        intersections,
+        {innerPolygon.position},
+        reason: "Should return the enclosed polygon's position",
+      );
+    });
   });
 
   group('Raycasting', () {
@@ -925,6 +1060,38 @@ void main() {
           result?.reflectionRay?.direction,
           closeToVector(Vector2(1, -1)..normalize()),
         );
+      },
+      'raycast with maxDistance': (game) async {
+        game.ensureAddAll([
+          PositionComponent(
+            position: Vector2.all(20),
+            size: Vector2.all(40),
+            children: [RectangleHitbox()],
+          ),
+        ]);
+        await game.ready();
+        final ray = Ray2(
+          origin: Vector2.all(10),
+          direction: Vector2.all(1)..normalize(),
+        );
+
+        final result = RaycastResult<ShapeHitbox>();
+
+        // No hit cast
+        game.collisionDetection.raycast(
+          ray,
+          maxDistance: Vector2.all(9).length,
+          out: result,
+        );
+        expect(result.hitbox?.parent, isNull);
+
+        // Extended cast
+        game.collisionDetection.raycast(
+          ray,
+          maxDistance: Vector2.all(10).length,
+          out: result,
+        );
+        expect(result.hitbox?.parent, game.children.first);
       },
     });
 
@@ -1208,6 +1375,44 @@ void main() {
           );
           expect(results.every((r) => r.isActive), isTrue);
           expect(results.length, 4);
+        },
+        'raycastAll with maxDistance': (game) async {
+          game.ensureAddAll([
+            PositionComponent(
+              position: Vector2(10, 0),
+              size: Vector2.all(10),
+            )..add(RectangleHitbox()),
+            PositionComponent(
+              position: Vector2(20, 10),
+              size: Vector2.all(10),
+            )..add(RectangleHitbox()),
+            PositionComponent(
+              position: Vector2(10, 20),
+              size: Vector2.all(10),
+            )..add(RectangleHitbox()),
+            PositionComponent(
+              position: Vector2(0, 10),
+              size: Vector2.all(10),
+            )..add(RectangleHitbox()),
+          ]);
+          await game.ready();
+          final origin = Vector2.all(15);
+
+          // No hit
+          final results1 = game.collisionDetection.raycastAll(
+            origin,
+            maxDistance: 4,
+            numberOfRays: 4,
+          );
+          expect(results1.length, isZero);
+
+          // Hit all four
+          final results2 = game.collisionDetection.raycastAll(
+            origin,
+            maxDistance: 5,
+            numberOfRays: 4,
+          );
+          expect(results2.length, 4);
         },
       });
     });

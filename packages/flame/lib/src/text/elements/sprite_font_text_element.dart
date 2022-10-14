@@ -2,10 +2,9 @@ import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:flame/src/text/common/line_metrics.dart';
-import 'package:flame/src/text/common/text_line.dart';
 import 'package:flame/src/text/elements/text_element.dart';
 
-class SpriteFontTextElement extends TextElement implements TextLine {
+class SpriteFontTextElement extends TextElement {
   SpriteFontTextElement({
     required this.source,
     required this.transforms,
@@ -19,9 +18,6 @@ class SpriteFontTextElement extends TextElement implements TextLine {
   final Float32List rects;
   final Paint paint;
   final LineMetrics _box;
-
-  @override
-  TextLine get lastLine => this;
 
   @override
   LineMetrics get metrics => _box;
