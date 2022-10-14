@@ -5,7 +5,8 @@
 The `FlameGame` class implements a `Component` based `Game`. It has a tree of components
 and calls the `update` and `render` methods of all components that have been added to the game.
 
-We refer to this component-based system as the Flame Component System (FCS).
+We refer to this component-based system as the Flame Component System (FCS).  Throughout the
+documentation, FCS is used to reference this system.
 
 Components can be added to the `FlameGame` directly in the constructor with the named `children`
 argument, or from anywhere else with the `add`/`addAll` methods.
@@ -59,17 +60,17 @@ The `GameLoop` module is a simple abstraction of the game loop concept. Basicall
 built upon two methods:
 
 - The render method takes the canvas for drawing the current state of the game.
-- The update method receives the delta time in microseconds since the last update and allows you to move
-  to the next state.
+- The update method receives the delta time in microseconds since the last update and allows you to
+  move to the next state.
 
 The `GameLoop` is used by all of Flame's `Game` implementations.
 
 
 ## Resizing
 
-Every time the game needs to be resized, for example when the orientation is changed,
-`FlameGame` will call all of the `Component`s `onGameResize` methods and it will also pass this
-information to the camera and viewport.
+Every time the game needs to be resized, for example when the orientation is changed, `FlameGame`
+will call all of the `Component`s `onGameResize` methods and it will also pass this information to
+the camera and viewport.
 
 The `FlameGame.camera` controls which point in the coordinate space should be the top-left of the
 screen (it defaults to [0,0] like a regular `Canvas`).
@@ -89,12 +90,11 @@ component is removed from the component tree.
 
 ## Debug mode
 
-Flame's `FlameGame` class provides a variable called `debugMode`, which by
-default is `false`. It can, however, be set to `true` to enable debug features
- for the components of the game. **Be aware** that the value of this variable is
-passed through to its components when they are added to the game, so if you
-change the `debugMode` at runtime, it will not affect already added components
-by default.
+Flame's `FlameGame` class provides a variable called `debugMode`, which by default is `false`. It
+can, however, be set to `true` to enable debug features for the components of the game. **Be aware**
+ that the value of this variable is passed through to its components when they are added to the
+game, so if you change the `debugMode` at runtime, it will not affect already added components by
+default.
 
 To read more about the `debugMode` on Flame, please refer to the [Debug Docs](other/debug.md)
 
@@ -119,9 +119,9 @@ just draw a background that covers the whole canvas if you would want it to chan
 
 ## SingleGameInstance mixin
 
-An optional mixin `SingleGameInstance` can be applied to your game if you are
-making a single-game application. This is a common scenario when building games:
-there is a single full-screen `GameWidget` that hosts a single `Game` instance.
+An optional mixin `SingleGameInstance` can be applied to your game if you are making a single-game
+application. This is a common scenario when building games: there is a single full-screen
+`GameWidget` that hosts a single `Game` instance.
 
 Adding this mixin provides performance advantages in certain scenarios. In particular, a component's
 `onLoad` method is guaranteed to start when that component is added to its parent, even if the
@@ -157,7 +157,7 @@ The `Game` class allows for more freedom of how to implement things, but you
 are also missing out on all of the built-in features in Flame if you use it.
 ```
 
-An example of how a `Game` implementation could look like this:
+An example of how a `Game` implementation could look like is:
 
 ```dart
 class MyGameSubClass extends Game {
@@ -202,11 +202,10 @@ widgets. But still, there is the Widgets Overlay API that makes things even easi
 `Game.overlays` enables any Flutter widget to be shown on top of a game instance, this makes it very
 easy to create things like a pause menu or an inventory screen for example.
 
-This management is done via the `game.overlays.add` and `game.overlays.remove`
-methods that mark an overlay to be shown or hidden, respectively, via a `String`
-argument that identifies the overlay. After that, it can be specified which
-widgets represent each overlay in the `GameWidget` declaration by setting an
-`overlayBuilderMap`.
+This management is done via the `game.overlays.add` and `game.overlays.remove` methods that mark an
+overlay to be shown or hidden, respectively, via a `String` argument that identifies the overlay.
+After that, it can be specified which widgets represent each overlay in the `GameWidget` declaration
+by setting an `overlayBuilderMap`.
 
 ```dart
 void main() {
@@ -239,5 +238,5 @@ Widget build(BuildContext context) {
 The order of rendering for an overlay is determined by the order of the keys in the
 `overlayBuilderMap`.
 
-An example of this feature can be found:
+An example of this feature can be found
 [here](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/system/overlays_example.dart).

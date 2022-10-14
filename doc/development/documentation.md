@@ -95,7 +95,7 @@ Please use this **other** thing instead.
 ## Live examples
 
 Our documentation site includes a custom-built **flutter-app** directive which allows creating
-Flutter widgets and embedding them alongside with the overall documentation content.
+Flutter widgets and embedding them alongside the overall documentation content.
 
 In Markdown, the code for inserting an embed looks like this:
 
@@ -132,11 +132,11 @@ Here's what the different options mean:
   Finally, the `infobox` mode will display the result in a floating window -- this mode is best
   combined with `widget` and `code`.
 
-- **width**: an integer that defines the width of the embedded application.  If
-  this is not defined, the width will be 100%.
+- **width**: an integer that defines the width of the embedded application.  If this is not defined,
+  the width will be 100%.
 
-- **height**: an integer that defines the height of the embedded application.
-  If this is not defined, the height will be 350px.
+- **height**: an integer that defines the height of the embedded application. If this is not
+  defined, the height will be 350px.
 
 ```{flutter-app}
 :sources: ../flame/examples
@@ -147,11 +147,11 @@ Here's what the different options mean:
 
 ## Standardization and Templates
 
-For every section or package added to the documentation, naming conventions,
-pathing, and standardized table of contents are important.  Every section and
-package must have a table of contents or an entry in the parent markdown file to
-allow navigation from the left sidebar menu in logical or alphabetical order.
-Additionally, naming conventions should be followed for organization, such as:
+For every section or package added to the documentation, naming conventions, pathing, and
+standardized table of contents are important.  Every section and package must have a table of
+contents or an entry in the parent markdown file to allow navigation from the left sidebar menu in
+logical or alphabetical order. Additionally, naming conventions should be followed for organization,
+such as:
 
 - bridge_packages/package_name/package_name.md
 - documentation_section/documentation_section.md
@@ -183,8 +183,8 @@ following:
 
 4. Melos as per the [contributing](contributing.md#environment-setup) guide.
 
-Once these prerequisites are met, you can build the documentation by switching
-to the root project and running the built-in Melos target:
+Once these prerequisites are met, you can build the documentation by switching to the root project
+and running the built-in Melos target:
 
 ```console
 melos doc-build
@@ -192,12 +192,12 @@ melos doc-build
 
 The **melos doc-build** command here renders the documentation site into HTML. This command needs to
 be re-run every time you make changes to any of the documents. Luckily, it is smart enough to only
-rebuild the documents that have changed since the previous run, so usually, a rebuild takes only
-a second or two.
+rebuild the documents that have changed since the previous run, so usually, a rebuild takes only a
+second or two.
 
-If you want to automatically recompile the docs every time there is a change to one of the files
-you can use the **melos doc-build-live** command, which will also serve and open your default
-browser with the docs.
+If you want to automatically recompile the docs every time there is a change to one of the files you
+can use the **melos doc-build-live** command, which will also serve and open your default browser
+with the docs.
 
 There are other make commands that you may find occasionally useful too:
 
@@ -205,10 +205,10 @@ There are other make commands that you may find occasionally useful too:
 state).
 - **melos doc-linkcheck** to check whether there are any broken links in the documentation.
 
-The generated html files will be in the `doc/_build/html` directory, you can view them directly
-by opening the file `doc/_build/html/index.html` in your browser. The only drawback is that the
-browser won't allow any dynamic content in a file opened from a local drive. The solution to this
-is to either run **melos doc-build-live** or run your own local http server:
+The generated html files will be in the `doc/_build/html` directory, you can view them directly by
+opening the file `doc/_build/html/index.html` in your browser. The only drawback is that the browser
+won't allow any dynamic content in a file opened from a local drive. The solution to this is to
+either run **melos doc-build-live** or run your own local http server:
 
 ```console
 python -m http.server 8000 --directory doc/_build/html

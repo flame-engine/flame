@@ -1,13 +1,11 @@
 # Components
 
-Components in Oxygen are different than the ones from FCS mainly because instead
-of containing logic they only contain data. This data is then used in systems
-which in turn define the logic. To accommodate people who are switching from FCS
-to Oxygen we implemented a few components to help you get started. Some of these
-components are based on the multiple functionalities that the
-`PositionComponent` from FCS has. Others are just easy wrappers around certain
-Flame API functionality, they are often accompanied by predefined systems that
-you can use.
+Components in Oxygen are different than the ones from FCS mainly because instead of containing logic
+they only contain data. This data is then used in systems which in turn define the logic. To
+accommodate people who are switching from FCS to Oxygen we implemented a few components to help you
+get started. Some of these components are based on the multiple functionalities that the
+`PositionComponent` from FCS has. Others are just easy wrappers around certain Flame API
+functionality, they are often accompanied by predefined systems that you can use.
 
 Components can be registered to the world using the `world.registerComponent` method on
 `OxygenGame`.
@@ -85,11 +83,11 @@ world.createEntity()
 
 ### AngleComponent
 
-The `AngleComponent` is as its name implies is a component that describe the angle of an entity.
-And it is registered to the world by default. The angle is in radians.
+The `AngleComponent` as its name implies is a component that describes the angle of an entity and
+it is registered to the world by default. The angle is in radians.
 
 This component is especially useful when you are using the `BaseSystem`. But can also
-be used for your own angle logic.
+be used for your angle logic.
 
 Creating an angled entity using OxygenGame:
 
@@ -115,7 +113,7 @@ The `FlipComponent` can be used to flip your rendering on either the X or Y axis
 to the world by default.
 
 This component is especially useful when you are using the `BaseSystem`. But can also
-be used for your own flipping logic.
+be used for your flipping logic.
 
 Creating an entity that is flipped on its X-axis using OxygenGame:
 
@@ -137,8 +135,8 @@ world.createEntity()
 
 ## SpriteComponent
 
-The `SpriteComponent` as its name implies is a component that describes the sprite of an entity.
-And it is registered to the world by default.
+The `SpriteComponent` as its name implies is a component that describes the sprite of an entity and
+it is registered to the world by default.
 
 This allows you to assign a Sprite to an Entity.
 
@@ -200,9 +198,9 @@ world.createEntity()
 
 ## ParticleComponent
 
-The `ParticleComponent` wraps a `Particle` from Flame. Combined with the
-`ParticleSystem` you can easily add particles to your game without having to
-worry about how to render a particle or when/how to update one.
+The `ParticleComponent` wraps a `Particle` from Flame. Combined with the `ParticleSystem` you can
+easily add particles to your game without having to worry about how to render a particle or when/how
+to update one.
 
 Creating an entity with a particle using OxygenGame:
 

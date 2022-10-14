@@ -1,15 +1,13 @@
 # Other Modules
 
-- [flame_oxygen](flame_oxygen/flame_oxygen.md) - Want to utilize the Flame
-  Component System in a different project?  This package will do that!
-- [flame_splash_screen](flame_splash_screen/flame_splash_screen.md) - Add the
-  beautiful "Powered by Flame" splash screen.
+- [oxygen](oxygen/oxygen.md) - Oxygen is a lightweight Entity Component System
+  framework written in Dart, with a focus on performance and ease of use.  This package will replace
+  the Flame Component System with the Oxygen Entity Component System.
 - [Tiled](tiled.md)
 
 ```{toctree}
 :hidden:
 
-flame_oxygen        <flame_oxygen/flame_oxygen.md>
-flame_splash_screen <flame_splash_screen/flame_splash_screen.md>
+oxygen              <oxygen/oxygen.md>
 Tiled               <tiled.md>
 ```

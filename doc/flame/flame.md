@@ -1,7 +1,5 @@
 # flame
 
-The flame game engine in all its glory.
-
 - [File Structure](structure.md)
 - [Game Widget](game_widget.md)
 - [Game Loop](game.md)

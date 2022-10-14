@@ -164,9 +164,9 @@ class SimpleBaseSystem extends BaseSystem {
 ### ParticleSystem
 
 The `ParticleSystem` is a simple system that brings the Particle API from Flame to Oxygen. This
-allows you to use the `ParticleComponent` without having to worry about how
-it will render or when to update it. As most of that logic is already contained in the Particle
-itself.
+allows you to use the [ParticleComponent](components.md#particlecomponent) without having to worry
+about how it will render or when to update it. As most of that logic is already contained in the
+Particle itself.
 
 Simply register the `ParticleSystem` and the `ParticleComponent` to your world like so:
 
@@ -178,3 +178,9 @@ world.registerComponent<ParticleComponent, Particle>(() => ParticleComponent);
 
 You can now create a new entity with a `ParticleComponent`. For more info about that see the
 `ParticleComponent` section.
+
+```{toctree}
+:hidden:
+
+Components     <components.md>
+```
