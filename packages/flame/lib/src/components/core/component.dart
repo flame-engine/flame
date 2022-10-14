@@ -832,7 +832,6 @@ class Component {
         component._clearMountedBit();
         component._clearRemovingBit();
         component._parent = null;
-
         component._finishRemoving();
         return true;
       },
