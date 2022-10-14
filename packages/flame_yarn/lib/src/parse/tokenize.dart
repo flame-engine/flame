@@ -41,7 +41,7 @@ class _Lexer {
     while (!eof) {
       final ok = (modeStack.last)();
       if (!ok) {
-        error('invalid syntax');
+        error('invalid token');
       }
     }
     if (modeStack.length > 1) {
@@ -97,9 +97,7 @@ class _Lexer {
   /// and then jumps into the [modeNodeHeader]. In the future versions of Yarn
   /// they're planning to add some file-level tags here.
   bool modeMain() {
-    return eatEmptyLine() ||
-      eatCommentLine() ||
-      pushMode(modeNodeHeader);
+    return eatEmptyLine() || eatCommentLine() || pushMode(modeNodeHeader);
   }
 
   /// Parsing node header, this mode is only active at a start of a line, and
@@ -115,14 +113,23 @@ class _Lexer {
         eatHeaderEnd();
   }
 
+  /// Mode which activates at each line of [modeNodeHeader] after an ID at the
+  /// start of the line is consumed, and remains active until the end of the
+  /// line.
   bool modeNodeHeaderLine() {
     return eatWhitespace() ||
         (eat($colon) && pushToken(Token.colon)) ||
         eatHeaderRestOfLine();
   }
 
+  /// The top-level mode for parsing the body of a Node. This mode is active at
+  /// the start of each line only, and will turn into [modeNodeBodyLine] after
+  /// taking care of whitespace.
   bool modeNodeBody() {
-    return eatEmptyLine() || eatCommentLine() || eatBodyEnd() || eatIndent();
+    return eatEmptyLine() ||
+        eatCommentLine() ||
+        eatBodyEnd() ||
+        (eatIndent() && pushMode(modeNodeBodyLine));
   }
 
   bool modeNodeBodyLine() {
@@ -187,7 +194,8 @@ class _Lexer {
     eatWhitespace();
     if (eof) {
       return true;
-    } if (eatNewline()) {
+    }
+    if (eatNewline()) {
       popToken(Token.newline);
       return true;
     } else {
@@ -267,8 +275,16 @@ class _Lexer {
   /// and pops the current mode.
   bool eatBodyEnd() {
     final pos0 = pos;
-    if (eat($equals) && eat($equals) && eat($equals) && eatNewline()) {
-      popToken(Token.newline);
+    if (eat($equals) && eat($equals) && eat($equals)) {
+      pos -= 3;
+      eatIndent(); // ensures that dedent tokens are properly inserted
+      pos += 3;
+      if (eatNewline()) {
+        popToken(Token.newline);
+      } else if (!eof) {
+        pos = pos0;
+        return false;
+      }
       pushToken(Token.bodyEnd);
       popMode(modeNodeBody);
       return true;
@@ -282,7 +298,8 @@ class _Lexer {
     final pos0 = pos;
     var cu = codeUnit;
     if ((cu >= $lowercaseA && cu <= $lowercaseZ) ||
-        (cu >= $uppercaseA && cu <= $uppercaseZ) || cu == $underscore) {
+        (cu >= $uppercaseA && cu <= $uppercaseZ) ||
+        cu == $underscore) {
       pos += 1;
       while (true) {
         cu = codeUnit;
@@ -324,8 +341,8 @@ class _Lexer {
   }
 
   /// Consumes whitespace at the start of the line (if any) and emits indent/
-  /// dedent tokens according to the indent stack. After that switches to the
-  /// [modeNodeBodyLine]. Always returns true (even if a line had 0 spaces).
+  /// dedent tokens according to the indent stack. Always returns true (even if
+  /// a line had 0 spaces).
   bool eatIndent() {
     var lineIndent = 0;
     while (true) {
@@ -337,6 +354,7 @@ class _Lexer {
       } else {
         break;
       }
+      pos += 1;
     }
     if (lineIndent > indentStack.last) {
       indentStack.add(lineIndent);
@@ -347,9 +365,8 @@ class _Lexer {
       tokens.add(Token.dedent);
     }
     if (lineIndent > indentStack.last) {
-      throw SyntaxError('Inconsistent indentation');
+      error('inconsistent indentation');
     }
-    pushMode(modeNodeBodyLine);
     return true;
   }
 
@@ -733,7 +750,7 @@ class _Lexer {
     }
     final parts = [
       message,
-      '>  at line $lineNumber column ${pos - lineStart}:',
+      '>  at line $lineNumber column ${pos - lineStart + 1}:',
       '>  $lineFragment',
       '>  $markerIndent^',
       ''

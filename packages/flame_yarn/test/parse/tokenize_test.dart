@@ -27,6 +27,16 @@ void main() {
           <Token>[],
         );
       });
+
+      test('only header separator', () {
+        expect(
+          () => tokenize('---\n'),
+          hasSyntaxError('SyntaxError: incomplete node body\n'
+              '>  at line 2 column 1:\n'
+              '>  \n'
+              '>  ^\n'),
+        );
+      });
     });
 
     group('modeNodeHeader', () {
@@ -130,7 +140,7 @@ void main() {
         expect(
           () => tokenize('  title: this\n---\n===\n'),
           hasSyntaxError('SyntaxError: unexpected indentation\n'
-              '>  at line 1 column 2:\n'
+              '>  at line 1 column 3:\n'
               '>    title: this\n'
               '>    ^\n'),
         );
@@ -139,10 +149,107 @@ void main() {
       test('without id', () {
         expect(
           () => tokenize(':\n---\n===\n'),
-          hasSyntaxError('SyntaxError: invalid syntax\n'
-              '>  at line 1 column 0:\n'
+          hasSyntaxError('SyntaxError: invalid token\n'
+              '>  at line 1 column 1:\n'
               '>  :\n'
               '>  ^\n'),
+        );
+      });
+
+      test('overlong separator', () {
+        expect(
+          () => tokenize('----\n===\n'),
+          hasSyntaxError('SyntaxError: invalid token\n'
+              '>  at line 1 column 1:\n'
+              '>  ----\n'
+              '>  ^\n'),
+        );
+      });
+    });
+
+    group('modeNodeBody', () {
+      test('without final newline', () {
+        expect(
+          tokenize('---\n==='),
+          const [Token.headerEnd, Token.bodyEnd],
+        );
+      });
+
+      test('whitespace in body', () {
+        expect(
+          tokenize('---\n'
+              '\n'
+              '   \t  \r\n'
+              ' // also could be some comments here\n'
+              '==='),
+          const [Token.headerEnd, Token.bodyEnd],
+        );
+      });
+
+      test('indentation', () {
+        expect(
+          tokenize('---\n'
+              '  alpha\n'
+              '   beta\n'
+              '\t     gamma\n'
+              '  delta\n'
+              '===\n'),
+          const [
+            Token.headerEnd,
+            Token.indent,
+            Token.text('alpha'),
+            Token.newline,
+            Token.indent,
+            Token.text('beta'),
+            Token.newline,
+            Token.indent,
+            Token.text('gamma'),
+            Token.newline,
+            Token.dedent,
+            Token.dedent,
+            Token.text('delta'),
+            Token.newline,
+            Token.dedent,
+            Token.bodyEnd,
+          ],
+        );
+      });
+
+      test('invalid indentation', () {
+        expect(
+          () => tokenize('---\n'
+              ' alpha\n'
+              '     beta\n'
+              '  gamma\n'
+              '===\n'),
+          hasSyntaxError('SyntaxError: inconsistent indentation\n'
+              '>  at line 4 column 3:\n'
+              '>    gamma\n'
+              '>    ^\n'),
+        );
+      });
+
+      test('dedents at end of body', () {
+        expect(
+          tokenize('---\n'
+              'one\n'
+              '  two\n'
+              '    three\n'
+              '==='),
+          const [
+            Token.headerEnd,
+            Token.text('one'),
+            Token.newline,
+            Token.indent,
+            Token.text('two'),
+            Token.newline,
+            Token.indent,
+            Token.text('three'),
+            Token.newline,
+            Token.dedent,
+            Token.dedent,
+            Token.bodyEnd,
+          ],
         );
       });
     });
