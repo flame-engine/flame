@@ -783,7 +783,7 @@ class _Lexer {
     'string': Token.typeString,
     'number': Token.typeNumber,
     'bool': Token.typeBool,
-    'as': Token.as,
+    'as': Token.asType,
     'to': Token.opAssign,
     '=': Token.opAssign,
     'is': Token.opEq,

@@ -4,7 +4,7 @@ import 'package:test/test.dart';
 void main() {
   group('Token', () {
     test('tokens without args', () {
-      expect('${Token.as}', 'Token.as');
+      expect('${Token.asType}', 'Token.asType');
       expect('${Token.colon}', 'Token.colon');
       expect('${Token.endIndent}', 'Token.endIndent');
       expect('${Token.commandEndif}', 'Token.commandEndif');

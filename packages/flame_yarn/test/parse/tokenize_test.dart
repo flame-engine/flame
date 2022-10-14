@@ -483,7 +483,7 @@ void main() {
             Token.constTrue,
             Token.opMultiply,
             Token.constFalse,
-            Token.as,
+            Token.asType,
             Token.typeString,
             Token.endExpression,
             Token.newline,

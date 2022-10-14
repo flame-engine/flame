@@ -16,7 +16,7 @@ class Token {
   const Token.variable(String text) : this._(TokenType.variable, text);
 
   static const arrow = Token._(TokenType.arrow);
-  static const as = Token._(TokenType.as);
+  static const asType = Token._(TokenType.asType);
   static const colon = Token._(TokenType.colon);
   static const comma = Token._(TokenType.comma);
   static const commandElse = Token._(TokenType.commandElse);
@@ -96,7 +96,7 @@ enum TokenType {
   variable,
 
   arrow, //            '->'
-  as, //               'as'
+  asType, //               'as'
   colon, //            ':'
   comma, //            ','
   commandElse, //      'else'
