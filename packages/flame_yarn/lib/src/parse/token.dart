@@ -33,34 +33,36 @@ class Token {
   static const endCommand = Token._(TokenType.endCommand);
   static const endExpression = Token._(TokenType.endExpression);
   static const endIndent = Token._(TokenType.endIndent);
-  static const endParen = Token._(TokenType.endParen);
+  static const endParenthesis = Token._(TokenType.endParenthesis);
   static const newline = Token._(TokenType.newline);
-  static const opAnd = Token._(TokenType.opAnd);
-  static const opAssign = Token._(TokenType.opAssign);
-  static const opDivide = Token._(TokenType.opDivide);
-  static const opDivideAssign = Token._(TokenType.opDivideAssign);
-  static const opEq = Token._(TokenType.opEq);
-  static const opGe = Token._(TokenType.opGe);
-  static const opGt = Token._(TokenType.opGt);
-  static const opLe = Token._(TokenType.opLe);
-  static const opLt = Token._(TokenType.opLt);
-  static const opMinus = Token._(TokenType.opMinus);
-  static const opMinusAssign = Token._(TokenType.opMinusAssign);
-  static const opModulo = Token._(TokenType.opModulo);
-  static const opModuloAssign = Token._(TokenType.opModuloAssign);
-  static const opMultiply = Token._(TokenType.opMultiply);
-  static const opMultiplyAssign = Token._(TokenType.opMultiplyAssign);
-  static const opNe = Token._(TokenType.opNe);
-  static const opNot = Token._(TokenType.opNot);
-  static const opOr = Token._(TokenType.opOr);
-  static const opPlus = Token._(TokenType.opPlus);
-  static const opPlusAssign = Token._(TokenType.opPlusAssign);
-  static const opXor = Token._(TokenType.opXor);
+  static const operatorAnd = Token._(TokenType.operatorAnd);
+  static const operatorAssign = Token._(TokenType.operatorAssign);
+  static const operatorDivide = Token._(TokenType.operatorDivide);
+  static const operatorDivideAssign = Token._(TokenType.operatorDivideAssign);
+  static const operatorEqual = Token._(TokenType.operatorEqual);
+  static const operatorGreaterOrEqual =
+      Token._(TokenType.operatorGreaterOrEqual);
+  static const operatorGreaterThan = Token._(TokenType.operatorGreaterThan);
+  static const operatorLessOrEqual = Token._(TokenType.operatorLessOrEqual);
+  static const operatorLessThan = Token._(TokenType.operatorLessThan);
+  static const operatorMinus = Token._(TokenType.operatorMinus);
+  static const operatorMinusAssign = Token._(TokenType.operatorMinusAssign);
+  static const operatorModulo = Token._(TokenType.operatorModulo);
+  static const operatorModuloAssign = Token._(TokenType.operatorModuloAssign);
+  static const operatorMultiply = Token._(TokenType.operatorMultiply);
+  static const operatorMultiplyAssign =
+      Token._(TokenType.operatorMultiplyAssign);
+  static const operatorNotEqual = Token._(TokenType.operatorNotEqual);
+  static const operatorNot = Token._(TokenType.operatorNot);
+  static const operatorOr = Token._(TokenType.operatorOr);
+  static const operatorPlus = Token._(TokenType.operatorPlus);
+  static const operatorPlusAssign = Token._(TokenType.operatorPlusAssign);
+  static const operatorXor = Token._(TokenType.operatorXor);
   static const startBody = Token._(TokenType.startBody);
   static const startCommand = Token._(TokenType.startCommand);
   static const startExpression = Token._(TokenType.startExpression);
   static const startIndent = Token._(TokenType.startIndent);
-  static const startParen = Token._(TokenType.startParen);
+  static const startParenthesis = Token._(TokenType.startParenthesis);
   static const typeBool = Token._(TokenType.typeBool);
   static const typeNumber = Token._(TokenType.typeNumber);
   static const typeString = Token._(TokenType.typeString);
@@ -95,53 +97,53 @@ enum TokenType {
   text,
   variable,
 
-  arrow, //            '->'
-  asType, //               'as'
-  colon, //            ':'
-  comma, //            ','
-  commandElse, //      'else'
-  commandElseif, //    'elseif'
-  commandEndif, //     'endif'
-  commandIf, //        'if'
-  commandJump, //      'jump'
-  commandSet, //       'set'
-  commandStop, //      'stop'
-  commandWait, //      'wait'
-  constFalse, //       'false'
-  constTrue, //        'true'
-  endBody, //          '==='
-  endCommand, //       '>>'
-  endExpression, //    '}'
-  endIndent, //        RegExp(r'^\s*')
-  endParen, //         ')'
-  newline, //          '\r' | '\n' | '\r\n'
-  opAnd, //            'and' | '&&'
-  opAssign, //         'to' | '='
-  opDivide, //         '/'
-  opDivideAssign, //   '/='
-  opEq, //             'is' | 'eq' | '=='
-  opGe, //             'ge' | 'gte' | '>='
-  opGt, //             'gt' | '>'
-  opLe, //             'le' | 'lte | '<='
-  opLt, //             'lt' | '<'
-  opMinus, //          '-'
-  opMinusAssign, //    '-='
-  opModulo, //         '%'
-  opModuloAssign, //   '%='
-  opMultiply, //       '*'
-  opMultiplyAssign, // '*='
-  opNe, //             'ne' | 'neq' | '!='
-  opNot, //            'not' | '!'
-  opOr, //             'or' | '||'
-  opPlus, //           '+'
-  opPlusAssign, //     '+='
-  opXor, //            'xor' | '^'
-  startBody, //        '---'
-  startCommand, //     '<<'
-  startExpression, //  '{'
-  startIndent, //      RegExp(r'^\s*')
-  startParen, //       '('
-  typeBool, //         'bool'
-  typeNumber, //       'number'
-  typeString, //       'string'
+  arrow, //                  '->'
+  asType, //                 'as'
+  colon, //                  ':'
+  comma, //                  ','
+  commandElse, //            'else'
+  commandElseif, //          'elseif'
+  commandEndif, //           'endif'
+  commandIf, //              'if'
+  commandJump, //            'jump'
+  commandSet, //             'set'
+  commandStop, //            'stop'
+  commandWait, //            'wait'
+  constFalse, //             'false'
+  constTrue, //              'true'
+  endBody, //                '==='
+  endCommand, //             '>>'
+  endExpression, //          '}'
+  endIndent, //              RegExp(r'^\s*')
+  endParenthesis, //         ')'
+  newline, //                '\r' | '\n' | '\r\n'
+  operatorAnd, //            'and' | '&&'
+  operatorAssign, //         'to' | '='
+  operatorDivide, //         '/'
+  operatorDivideAssign, //   '/='
+  operatorEqual, //          'is' | 'eq' | '=='
+  operatorGreaterOrEqual, // 'ge' | 'gte' | '>='
+  operatorGreaterThan, //    'gt' | '>'
+  operatorLessOrEqual, //    'le' | 'lte | '<='
+  operatorLessThan, //       'lt' | '<'
+  operatorMinus, //          '-'
+  operatorMinusAssign, //    '-='
+  operatorModulo, //         '%'
+  operatorModuloAssign, //   '%='
+  operatorMultiply, //       '*'
+  operatorMultiplyAssign, // '*='
+  operatorNot, //            'not' | '!'
+  operatorNotEqual, //       'ne' | 'neq' | '!='
+  operatorOr, //             'or' | '||'
+  operatorPlus, //           '+'
+  operatorPlusAssign, //     '+='
+  operatorXor, //            'xor' | '^'
+  startBody, //              '---'
+  startCommand, //           '<<'
+  startExpression, //        '{'
+  startIndent, //            RegExp(r'^\s*')
+  startParenthesis, //       '('
+  typeBool, //               'bool'
+  typeNumber, //             'number'
+  typeString, //             'string'
 }

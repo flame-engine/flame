@@ -10,8 +10,8 @@ void main() {
       expect('${Token.commandEndif}', 'Token.commandEndif');
       expect('${Token.constTrue}', 'Token.constTrue');
       expect('${Token.startExpression}', 'Token.startExpression');
-      expect('${Token.opMinusAssign}', 'Token.opMinusAssign');
-      expect('${Token.opXor}', 'Token.opXor');
+      expect('${Token.operatorMinusAssign}', 'Token.operatorMinusAssign');
+      expect('${Token.operatorXor}', 'Token.operatorXor');
       expect('${Token.typeString}', 'Token.typeString');
     });
 
@@ -58,8 +58,8 @@ void main() {
     });
 
     test('equality', () {
-      expect(Token.startParen == Token.startParen, true);
-      expect(Token.startParen == Token.endParen, false);
+      expect(Token.startParenthesis == Token.startParenthesis, true);
+      expect(Token.startParenthesis == Token.endParenthesis, false);
       expect(const Token.text('foo') == const Token.text('foo'), true);
       expect(const Token.text('foo') == const Token.string('foo'), false);
       expect(const Token.text('foo') == const Token.text('bar'), false);
