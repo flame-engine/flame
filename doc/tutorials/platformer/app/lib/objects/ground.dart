@@ -1,6 +1,5 @@
 import 'package:EmberQuest/main.dart';
 import 'package:flame/components.dart';
-import 'package:flame/flame.dart';
 import 'package:flame/parallax.dart';
 
 class GroundComponent extends ParallaxComponent<EmberQuestGame> {
@@ -8,7 +7,7 @@ class GroundComponent extends ParallaxComponent<EmberQuestGame> {
 
   @override
   Future<void> onLoad() async {
-    final groundImage = await Flame.images.load('ground.png');
+    final groundImage = await gameRef.images.load('ground.png');
     parallax = Parallax([
       ParallaxLayer(
         ParallaxImage(
