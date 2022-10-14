@@ -188,7 +188,8 @@ python -m http.server 8000 --directory doc/_build/html
 
 Then you can open the site at `http://localhost:8000/`.
 
-If you ever run the **melos doc-clean** command, the server will need to be restarted, because the clean command deletes the entire `html` directory.
+If you ever run the **melos doc-clean** command, the server will need to be restarted, because the
+clean command deletes the entire `html` directory.
 
 ```{note}
 Avoid having spaces in the paths to the docs since that will keep you from
