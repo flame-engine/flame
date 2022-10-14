@@ -422,15 +422,59 @@ void main() {
         );
       });
 
-      test('expressions', (){
+      test('expressions', () {
         expect(
           tokenize('---\n'
               '{ } // noop\n'
-              '===\n'
-          ),
+              '===\n'),
           const [
             Token.headerEnd,
             Token.expressionStart,
+            Token.expressionEnd,
+            Token.newline,
+            Token.bodyEnd,
+          ],
+        );
+      });
+    });
+
+    group('modeExpression', () {
+      test('expression with assorted tokens', () {
+        expect(
+          tokenize('---\n'
+              '{ \$x += 33 - 7/random() }\n'
+              '===\n'),
+          const [
+            Token.headerEnd,
+            Token.expressionStart,
+            Token.variable('x'),
+            Token.opPlusAssign,
+            Token.number('33'),
+            Token.opMinus,
+            Token.number('7'),
+            Token.opDivide,
+            Token.id('random'),
+            Token.parenStart,
+            Token.parenEnd,
+            Token.expressionEnd,
+            Token.newline,
+            Token.bodyEnd,
+          ],
+        );
+      });
+
+      test('close command within a plain text expression', () {
+        expect(
+          tokenize('---\n'
+              '{ a >> b }\n'
+              '===\n'),
+          const [
+            Token.headerEnd,
+            Token.expressionStart,
+            Token.id('a'),
+            Token.opGt,
+            Token.opGt,
+            Token.id('b'),
             Token.expressionEnd,
             Token.newline,
             Token.bodyEnd,

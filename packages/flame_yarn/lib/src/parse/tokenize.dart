@@ -495,7 +495,11 @@ class _Lexer {
 
   /// Consumes '>>' while in the expression mode, and leaves both the expression
   /// mode and the [modeCommand].
+  /// This rule is only allowed within an expression within a command mode.
   bool eatExpressionCommandEnd() {
+    if (modeStack[modeStack.length - 2] != modeCommand) {
+      return false;
+    }
     final pos0 = pos;
     if (eat($greaterThan) && eat($greaterThan)) {
       pushToken(Token.expressionEnd);
@@ -539,7 +543,7 @@ class _Lexer {
   }
 
   /// Consumes a plain id within an expression, which is then emitted as either
-  /// one of the [keywords] tokens, or as plain .id token.
+  /// one of the [keywords] tokens, or as plain Token.id.
   bool eatExpressionId() {
     if (eatId()) {
       final name = tokens.last.content;
@@ -573,7 +577,7 @@ class _Lexer {
     final pos0 = pos;
     if (eatDigits()) {
       eat($dot) && eatDigits();
-      pushToken(Token.number(text.substring(pos, pos0)));
+      pushToken(Token.number(text.substring(pos0, pos)));
       return true;
     }
     return false;
