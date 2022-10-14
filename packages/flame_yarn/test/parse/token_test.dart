@@ -36,12 +36,35 @@ void main() {
       expect(token.content, 'xyz127');
     });
 
+    test('Token.variable', () {
+      const token = Token.variable('flame');
+      expect('$token', "Token.variable('flame')");
+      expect(token.type, TokenType.variable);
+      expect(token.content, 'flame');
+    });
+
+    test('Token.speaker', () {
+      const token = Token.speaker('Mr_Obama');
+      expect('$token', "Token.speaker('Mr_Obama')");
+      expect(token.type, TokenType.speaker);
+      expect(token.content, 'Mr_Obama');
+    });
+
+    test('Token.command', () {
+      const token = Token.command('else');
+      expect('$token', "Token.command('else')");
+      expect(token.type, TokenType.command);
+      expect(token.content, 'else');
+    });
+
     test('equality', () {
       expect(Token.parenStart == Token.parenStart, true);
       expect(Token.parenStart == Token.parenEnd, false);
       expect(const Token.text('foo') == const Token.text('foo'), true);
       expect(const Token.text('foo') == const Token.string('foo'), false);
       expect(const Token.text('foo') == const Token.text('bar'), false);
+
+      expect(Token.arrow.hashCode == Token.comma.hashCode, false);
     });
   });
 }
