@@ -70,7 +70,7 @@ class _Lexer {
 
   /// Returns the integer code unit at the current parse position, or -1 if we
   /// reached the end of input.
-  int get codeUnit => eof ? -1 : text.codeUnitAt(position);
+  int get currentCodeUnit => eof ? -1 : text.codeUnitAt(position);
 
   /// Pushes a new mode into the mode stack and returns `true`.
   bool pushMode(_ModeFn mode) {
@@ -219,9 +219,9 @@ class _Lexer {
   //   - return `false`.
   //----------------------------------------------------------------------------
 
-  /// Consumes a single character with code unit [cu].
-  bool eat(int cu) {
-    if (codeUnit == cu) {
+  /// Consumes a single character with code unit [codeUnit].
+  bool eat(int codeUnit) {
+    if (currentCodeUnit == codeUnit) {
       position += 1;
       return true;
     }
@@ -252,7 +252,7 @@ class _Lexer {
     eatWhitespace();
     if (eat($slash) && eat($slash)) {
       while (!eof) {
-        final cu = codeUnit;
+        final cu = currentCodeUnit;
         if (cu == $carriageReturn || cu == $lineFeed) {
           eatNewline();
           popToken(Token.newline);
@@ -271,7 +271,7 @@ class _Lexer {
   bool eatWhitespace() {
     final pos0 = position;
     while (true) {
-      final cu = codeUnit;
+      final cu = currentCodeUnit;
       if (!(cu == $space || cu == $tab)) {
         break;
       }
@@ -283,10 +283,10 @@ class _Lexer {
   /// Consumes a newline character, which can also be a Windows newline (\r\n),
   /// and emits a newline token.
   bool eatNewline() {
-    final cu = codeUnit;
+    final cu = currentCodeUnit;
     if (cu == $carriageReturn || cu == $lineFeed) {
       position += 1;
-      if (cu == $carriageReturn && codeUnit == $lineFeed) {
+      if (cu == $carriageReturn && currentCodeUnit == $lineFeed) {
         position += 1;
       }
       tokens.add(Token.newline);
@@ -337,11 +337,11 @@ class _Lexer {
   /// Consumes a word that looks like an identifier, and emits an .id token.
   bool eatId() {
     final pos0 = position;
-    var cu = codeUnit;
+    var cu = currentCodeUnit;
     if (isAsciiIdentifierStart(cu)) {
       position += 1;
       while (true) {
-        cu = codeUnit;
+        cu = currentCodeUnit;
         if (isAsciiIdentifierChar(cu)) {
           position += 1;
         } else {
@@ -359,7 +359,7 @@ class _Lexer {
   bool eatHeaderRestOfLine() {
     final pos0 = position;
     for (; !eof; position++) {
-      final cu = codeUnit;
+      final cu = currentCodeUnit;
       if (cu == $carriageReturn || cu == $lineFeed) {
         break;
       } else if (cu == $slash && eat($slash) && eat($slash)) {
@@ -382,7 +382,7 @@ class _Lexer {
   bool eatIndent() {
     var lineIndent = 0;
     while (true) {
-      final cu = codeUnit;
+      final cu = currentCodeUnit;
       if (cu == $space) {
         lineIndent += 1;
       } else if (cu == $tab) {
@@ -498,7 +498,7 @@ class _Lexer {
         popToken(Token.newline);
         eatWhitespace();
       } else {
-        final cu = codeUnit;
+        final cu = currentCodeUnit;
         if (cu == $backslash ||
             cu == $slash ||
             cu == $hash ||
@@ -569,10 +569,10 @@ class _Lexer {
   bool eatPlainText() {
     final pos0 = position;
     while (!eof) {
-      final cu = codeUnit;
+      final cu = currentCodeUnit;
       if (cu == $lessThan || cu == $slash) {
         position += 1;
-        if (codeUnit == cu) {
+        if (currentCodeUnit == cu) {
           position -= 1;
           break;
         }
@@ -638,7 +638,7 @@ class _Lexer {
   bool eatDigits() {
     var found = false;
     while (!eof) {
-      final cu = codeUnit;
+      final cu = currentCodeUnit;
       if (cu >= $digit0 && cu <= $digit9) {
         found = true;
         position++;
@@ -679,12 +679,12 @@ class _Lexer {
   /// an unknown escape sequence).
   bool eatString() {
     final pos0 = position;
-    final quote = codeUnit;
+    final quote = currentCodeUnit;
     if (quote == $doubleQuote || quote == $singleQuote) {
       final buffer = StringBuffer();
       position += 1;
       while (!eof) {
-        final cu = codeUnit;
+        final cu = currentCodeUnit;
         if (cu == quote) {
           position += 1;
           pushToken(Token.string(buffer.toString()));
@@ -694,7 +694,7 @@ class _Lexer {
           break;
         } else if (cu == $backslash) {
           position += 1;
-          final cu2 = codeUnit;
+          final cu2 = currentCodeUnit;
           position += 1;
           if (cu2 == $singleQuote || cu2 == $doubleQuote || cu2 == $backslash) {
             buffer.writeCharCode(cu2);
@@ -739,7 +739,7 @@ class _Lexer {
 
   /// Check whether a command terminated prematurely.
   bool eatCommandNewline() {
-    final cu = codeUnit;
+    final cu = currentCodeUnit;
     if (cu == $carriageReturn || cu == $lineFeed) {
       error('missing command close token ">>"');
     }
@@ -752,7 +752,7 @@ class _Lexer {
     final pos0 = position;
     if (eat($hash)) {
       while (!eof) {
-        final cu = codeUnit;
+        final cu = currentCodeUnit;
         if (cu == $slash && eat($slash) && eat($slash)) {
           position -= 2;
           break;
