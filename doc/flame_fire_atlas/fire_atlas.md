@@ -1,6 +1,6 @@
 # FireAtlas
 
-FireAtlas is a mapping file that can hold several Sprites and SpriteAnimations.
+FireAtlas is a tool for handling texture atlases.
 
 To
 install [flame_fire_atlas](https://github.com/flame-engine/flame/tree/main/packages/flame_fire_atlas)
