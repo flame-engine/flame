@@ -1,8 +1,6 @@
 import 'dart:ui';
 
-import 'package:flame/src/text/common/text_line.dart';
-
-/// The [LineMetrics] object contains measurements of a [TextLine].
+/// The [LineMetrics] object contains measurements of a text line.
 ///
 /// A line of text can be thought of as surrounded by a box (rect) that outlines
 /// the boundaries of the text, plus there is a [baseline] inside the box which

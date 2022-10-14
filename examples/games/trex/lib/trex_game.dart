@@ -52,14 +52,16 @@ class TRexGame extends FlameGame
     add(gameOverPanel);
 
     const chars = '0123456789HI ';
-    final renderer = SpriteFontRenderer(
-      source: spriteImage,
-      charWidth: 20,
-      charHeight: 23,
-      glyphs: {
-        for (var i = 0; i < chars.length; i++)
-          chars[i]: GlyphData(left: 954.0 + 20 * i, top: 0)
-      },
+    final renderer = SpriteFontRenderer.fromFont(
+      SpriteFont(
+        source: spriteImage,
+        size: 23,
+        ascent: 23,
+        glyphs: [
+          for (var i = 0; i < chars.length; i++)
+            Glyph(chars[i], left: 954.0 + 20 * i, top: 0, width: 20)
+        ],
+      ),
       letterSpacing: 2,
     );
     add(
