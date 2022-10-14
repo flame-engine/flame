@@ -7,7 +7,17 @@ List<Token> tokenize(String input) {
   return _Lexer(input).parse();
 }
 
-/// Main working class for the [tokenize] function.
+/// Main working class for the [tokenize] function -- produces a stream of
+/// [Token]s via its [parse] method.
+///
+/// The tokens emitted by the class follow these general considerations:
+///   - Every `start*` token should have a corresponding `end*` token, properly
+///     nested;
+///   - Tokens `startBody`/`endBody` denote a Node body -- any content outside
+///     is a Node's header;
+///   - Whitespace and comments are discarded and do not produce tokens;
+///   - Individual input lines within Node's header or body are separated with
+///     newline tokens.
 class _Lexer {
   _Lexer(this.text)
       : pos = 0,
@@ -265,7 +275,7 @@ class _Lexer {
     final pos0 = pos;
     if (eat($minus) && eat($minus) && eat($minus) && eatNewline()) {
       popToken(Token.newline);
-      pushToken(Token.bodyStart);
+      pushToken(Token.startBody);
       popMode(modeNodeHeader);
       pushMode(modeNodeBody);
       return true;
@@ -288,7 +298,7 @@ class _Lexer {
         pos = pos0;
         return false;
       }
-      pushToken(Token.bodyEnd);
+      pushToken(Token.endBody);
       popMode(modeNodeBody);
       return true;
     }
@@ -356,11 +366,11 @@ class _Lexer {
     }
     if (lineIndent > indentStack.last) {
       indentStack.add(lineIndent);
-      tokens.add(Token.indent);
+      tokens.add(Token.startIndent);
     }
     while (lineIndent < indentStack.last) {
       indentStack.removeLast();
-      tokens.add(Token.dedent);
+      tokens.add(Token.endIndent);
     }
     if (lineIndent > indentStack.last) {
       error('inconsistent indentation');
@@ -386,7 +396,7 @@ class _Lexer {
     final pos0 = pos;
     if (eat($lessThan) && eat($lessThan)) {
       eatWhitespace();
-      pushToken(Token.commandStart);
+      pushToken(Token.startCommand);
       pushMode(modeCommand);
       return true;
     }
@@ -399,7 +409,7 @@ class _Lexer {
     final pos0 = pos;
     if (eat($greaterThan) && eat($greaterThan)) {
       eatWhitespace();
-      pushToken(Token.commandEnd);
+      pushToken(Token.endCommand);
       popMode(modeCommand);
       return true;
     }
@@ -482,14 +492,14 @@ class _Lexer {
   /// Consumes '{' and enters the [modeExpression].
   bool eatExpressionStart() {
     return eat($leftBrace) &&
-        pushToken(Token.expressionStart) &&
+        pushToken(Token.startExpression) &&
         pushMode(modeExpression);
   }
 
   /// Consumes '}' and pops the [modeExpression].
   bool eatExpressionEnd() {
     return eat($rightBrace) &&
-        pushToken(Token.expressionEnd) &&
+        pushToken(Token.endExpression) &&
         popMode(modeExpression);
   }
 
@@ -502,8 +512,8 @@ class _Lexer {
     }
     final pos0 = pos;
     if (eat($greaterThan) && eat($greaterThan)) {
-      pushToken(Token.expressionEnd);
-      pushToken(Token.commandEnd);
+      pushToken(Token.endExpression);
+      pushToken(Token.endCommand);
       eatWhitespace();
       popMode(modeExpression);
       popMode(modeCommand);
@@ -669,13 +679,13 @@ class _Lexer {
       final name = token.content;
       if (commandsWithArgs.containsKey(name)) {
         pushToken(commandsWithArgs[name]!);
-        pushToken(Token.expressionStart);
+        pushToken(Token.startExpression);
         pushMode(modeExpression);
       } else if (commandsWithoutArgs.containsKey(name)) {
         pushToken(commandsWithoutArgs[name]!);
       } else {
         pushToken(Token.command(name));
-        pushToken(Token.expressionStart);
+        pushToken(Token.startExpression);
         pushMode(modeExpression);
       }
       return true;
@@ -727,8 +737,8 @@ class _Lexer {
     '/=': Token.opDivideAssign,
     '%=': Token.opModuloAssign,
     ',': Token.comma,
-    '(': Token.parenStart,
-    ')': Token.parenEnd,
+    '(': Token.startParen,
+    ')': Token.endParen,
   };
   static const Map<String, Token> commandsWithArgs = {
     'if': Token.commandIf,

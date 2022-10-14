@@ -16,26 +16,23 @@ class Token {
 
   static const arrow = Token._(TokenType.arrow);
   static const as = Token._(TokenType.as);
-  static const bodyEnd = Token._(TokenType.bodyEnd);
   static const colon = Token._(TokenType.colon);
   static const comma = Token._(TokenType.comma);
   static const commandElse = Token._(TokenType.commandElse);
   static const commandElseif = Token._(TokenType.commandElseif);
-  static const commandEnd = Token._(TokenType.commandEnd);
   static const commandEndif = Token._(TokenType.commandEndif);
   static const commandIf = Token._(TokenType.commandIf);
   static const commandJump = Token._(TokenType.commandJump);
   static const commandSet = Token._(TokenType.commandSet);
-  static const commandStart = Token._(TokenType.commandStart);
   static const commandStop = Token._(TokenType.commandStop);
   static const commandWait = Token._(TokenType.commandWait);
   static const constFalse = Token._(TokenType.constFalse);
   static const constTrue = Token._(TokenType.constTrue);
-  static const dedent = Token._(TokenType.dedent);
-  static const expressionEnd = Token._(TokenType.expressionEnd);
-  static const expressionStart = Token._(TokenType.expressionStart);
-  static const bodyStart = Token._(TokenType.bodyStart);
-  static const indent = Token._(TokenType.indent);
+  static const endBody = Token._(TokenType.endBody);
+  static const endCommand = Token._(TokenType.endCommand);
+  static const endExpression = Token._(TokenType.endExpression);
+  static const endIndent = Token._(TokenType.endIndent);
+  static const endParen = Token._(TokenType.endParen);
   static const newline = Token._(TokenType.newline);
   static const opAnd = Token._(TokenType.opAnd);
   static const opAssign = Token._(TokenType.opAssign);
@@ -58,8 +55,11 @@ class Token {
   static const opPlus = Token._(TokenType.opPlus);
   static const opPlusAssign = Token._(TokenType.opPlusAssign);
   static const opXor = Token._(TokenType.opXor);
-  static const parenEnd = Token._(TokenType.parenEnd);
-  static const parenStart = Token._(TokenType.parenStart);
+  static const startBody = Token._(TokenType.startBody);
+  static const startCommand = Token._(TokenType.startCommand);
+  static const startExpression = Token._(TokenType.startExpression);
+  static const startIndent = Token._(TokenType.startIndent);
+  static const startParen = Token._(TokenType.startParen);
   static const typeBool = Token._(TokenType.typeBool);
   static const typeNumber = Token._(TokenType.typeNumber);
   static const typeString = Token._(TokenType.typeString);
@@ -86,9 +86,7 @@ class Token {
 @internal
 enum TokenType {
   command,
-  dedent,
   id,
-  indent,
   number,
   speaker,
   string,
@@ -97,24 +95,23 @@ enum TokenType {
 
   arrow, //            '->'
   as, //               'as'
-  bodyEnd, //          '==='
   colon, //            ':'
   comma, //            ','
   commandElse, //      'else'
   commandElseif, //    'elseif'
-  commandEnd, //       '>>'
   commandEndif, //     'endif'
   commandIf, //        'if'
   commandJump, //      'jump'
   commandSet, //       'set'
-  commandStart, //     '<<'
   commandStop, //      'stop'
   commandWait, //      'wait'
   constFalse, //       'false'
   constTrue, //        'true'
-  expressionEnd, //    '}'
-  expressionStart, //  '{'
-  bodyStart, //        '---'
+  endBody, //          '==='
+  endCommand, //       '>>'
+  endExpression, //    '}'
+  endIndent, //        RegExp(r'^\s*')
+  endParen, //         ')'
   newline, //          '\r' | '\n' | '\r\n'
   opAnd, //            'and' | '&&'
   opAssign, //         'to' | '='
@@ -137,8 +134,11 @@ enum TokenType {
   opPlus, //           '+'
   opPlusAssign, //     '+='
   opXor, //            'xor' | '^'
-  parenEnd, //         ')'
-  parenStart, //       '('
+  startBody, //        '---'
+  startCommand, //     '<<'
+  startExpression, //  '{'
+  startIndent, //      RegExp(r'^\s*')
+  startParen, //       '('
   typeBool, //         'bool'
   typeNumber, //       'number'
   typeString, //       'string'

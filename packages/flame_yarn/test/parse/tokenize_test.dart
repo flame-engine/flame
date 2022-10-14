@@ -43,7 +43,7 @@ void main() {
       test('no header lines', () {
         expect(
           tokenize('---\n===\n'),
-          [Token.bodyStart, Token.bodyEnd],
+          [Token.startBody, Token.endBody],
         );
       });
 
@@ -58,8 +58,8 @@ void main() {
               Token.colon,
               Token.text('node: 1'),
               Token.newline,
-              Token.bodyStart,
-              Token.bodyEnd,
+              Token.startBody,
+              Token.endBody,
             ]);
       });
 
@@ -83,8 +83,8 @@ void main() {
             Token.colon,
             Token.text('1'),
             Token.newline,
-            Token.bodyStart,
-            Token.bodyEnd,
+            Token.startBody,
+            Token.endBody,
           ],
         );
       });
@@ -97,8 +97,8 @@ void main() {
             Token.colon,
             Token.text(''),
             Token.newline,
-            Token.bodyStart,
-            Token.bodyEnd,
+            Token.startBody,
+            Token.endBody,
           ],
         );
       });
@@ -110,8 +110,8 @@ void main() {
           Token.colon,
           Token.text('bar'),
           Token.newline,
-          Token.bodyStart,
-          Token.bodyEnd,
+          Token.startBody,
+          Token.endBody,
         ]);
       });
 
@@ -130,8 +130,8 @@ void main() {
             Token.colon,
             Token.text('some data '),
             Token.newline,
-            Token.bodyStart,
-            Token.bodyEnd,
+            Token.startBody,
+            Token.endBody,
           ],
         );
       });
@@ -171,7 +171,7 @@ void main() {
       test('without final newline', () {
         expect(
           tokenize('---\n==='),
-          const [Token.bodyStart, Token.bodyEnd],
+          const [Token.startBody, Token.endBody],
         );
       });
 
@@ -182,7 +182,7 @@ void main() {
               '   \t  \r\n'
               ' // also could be some comments here\n'
               '==='),
-          const [Token.bodyStart, Token.bodyEnd],
+          const [Token.startBody, Token.endBody],
         );
       });
 
@@ -195,22 +195,22 @@ void main() {
               '  delta\n'
               '===\n'),
           const [
-            Token.bodyStart,
-            Token.indent,
+            Token.startBody,
+            Token.startIndent,
             Token.text('alpha'),
             Token.newline,
-            Token.indent,
+            Token.startIndent,
             Token.text('beta'),
             Token.newline,
-            Token.indent,
+            Token.startIndent,
             Token.text('gamma'),
             Token.newline,
-            Token.dedent,
-            Token.dedent,
+            Token.endIndent,
+            Token.endIndent,
             Token.text('delta'),
             Token.newline,
-            Token.dedent,
-            Token.bodyEnd,
+            Token.endIndent,
+            Token.endBody,
           ],
         );
       });
@@ -237,18 +237,18 @@ void main() {
               '    three\n'
               '==='),
           const [
-            Token.bodyStart,
+            Token.startBody,
             Token.text('one'),
             Token.newline,
-            Token.indent,
+            Token.startIndent,
             Token.text('two'),
             Token.newline,
-            Token.indent,
+            Token.startIndent,
             Token.text('three'),
             Token.newline,
-            Token.dedent,
-            Token.dedent,
-            Token.bodyEnd,
+            Token.endIndent,
+            Token.endIndent,
+            Token.endBody,
           ],
         );
       });
@@ -272,16 +272,16 @@ void main() {
               '  -> other\n'
               '===\n'),
           const [
-            Token.bodyStart,
+            Token.startBody,
             Token.arrow,
             Token.text('something'),
             Token.newline,
-            Token.indent,
+            Token.startIndent,
             Token.arrow,
             Token.text('other'),
             Token.newline,
-            Token.dedent,
-            Token.bodyEnd,
+            Token.endIndent,
+            Token.endBody,
           ],
         );
       });
@@ -293,15 +293,15 @@ void main() {
               '<< stop >>\n'
               '===\n'),
           const [
-            Token.bodyStart,
-            Token.commandStart,
-            Token.commandEnd,
+            Token.startBody,
+            Token.startCommand,
+            Token.endCommand,
             Token.newline,
-            Token.commandStart,
+            Token.startCommand,
             Token.commandStop,
-            Token.commandEnd,
+            Token.endCommand,
             Token.newline,
-            Token.bodyEnd,
+            Token.endBody,
           ],
         );
       });
@@ -314,7 +314,7 @@ void main() {
               'ПанГолова :...\n'
               '===\n'),
           const [
-            Token.bodyStart,
+            Token.startBody,
             Token.speaker('Marge'),
             Token.colon,
             Token.text('Hello!'),
@@ -325,7 +325,7 @@ void main() {
             Token.colon,
             Token.text('...'),
             Token.newline,
-            Token.bodyEnd,
+            Token.endBody,
           ],
         );
       });
@@ -336,12 +336,12 @@ void main() {
               '-> -> -> \n'
               '===\n'),
           const [
-            Token.bodyStart,
+            Token.startBody,
             Token.arrow,
             Token.arrow,
             Token.arrow,
             Token.newline,
-            Token.bodyEnd,
+            Token.endBody,
           ],
         );
       });
@@ -352,12 +352,12 @@ void main() {
               'Pig: Horse: Moo!\n'
               '===\n'),
           const [
-            Token.bodyStart,
+            Token.startBody,
             Token.speaker('Pig'),
             Token.colon,
             Token.text('Horse: Moo!'),
             Token.newline,
-            Token.bodyEnd,
+            Token.endBody,
           ],
         );
       });
@@ -371,12 +371,12 @@ void main() {
               'other text\n'
               '===\n'),
           const [
-            Token.bodyStart,
+            Token.startBody,
             Token.text('some text '),
             Token.newline,
             Token.text('other text'),
             Token.newline,
-            Token.bodyEnd,
+            Token.endBody,
           ],
         );
       });
@@ -391,7 +391,7 @@ void main() {
               'line with a newline:\\n ok\n'
               '===\n'),
           const [
-            Token.bodyStart,
+            Token.startBody,
             Token.text('<'),
             Token.text('{'),
             Token.text(' inside '),
@@ -405,7 +405,7 @@ void main() {
             Token.text('\n'),
             Token.text(' ok'),
             Token.newline,
-            Token.bodyEnd,
+            Token.endBody,
           ],
         );
       });
@@ -428,11 +428,11 @@ void main() {
               '{ } // noop\n'
               '===\n'),
           const [
-            Token.bodyStart,
-            Token.expressionStart,
-            Token.expressionEnd,
+            Token.startBody,
+            Token.startExpression,
+            Token.endExpression,
             Token.newline,
-            Token.bodyEnd,
+            Token.endBody,
           ],
         );
       });
@@ -445,8 +445,8 @@ void main() {
               '{ \$x += 33 - 7/random() }\n'
               '===\n'),
           const [
-            Token.bodyStart,
-            Token.expressionStart,
+            Token.startBody,
+            Token.startExpression,
             Token.variable('x'),
             Token.opPlusAssign,
             Token.number('33'),
@@ -454,11 +454,11 @@ void main() {
             Token.number('7'),
             Token.opDivide,
             Token.id('random'),
-            Token.parenStart,
-            Token.parenEnd,
-            Token.expressionEnd,
+            Token.startParen,
+            Token.endParen,
+            Token.endExpression,
             Token.newline,
-            Token.bodyEnd,
+            Token.endBody,
           ],
         );
       });
@@ -469,16 +469,16 @@ void main() {
               '{ true * false as string }\n'
               '===\n'),
           const [
-            Token.bodyStart,
-            Token.expressionStart,
+            Token.startBody,
+            Token.startExpression,
             Token.constTrue,
             Token.opMultiply,
             Token.constFalse,
             Token.as,
             Token.typeString,
-            Token.expressionEnd,
+            Token.endExpression,
             Token.newline,
-            Token.bodyEnd,
+            Token.endBody,
           ],
         );
       });
@@ -491,26 +491,26 @@ void main() {
               '{ "last \\\' \\" \\\\ one\\n" }\n'
               '===\n'),
           const [
-            Token.bodyStart,
-            Token.expressionStart,
+            Token.startBody,
+            Token.startExpression,
             Token.variable('x'),
             Token.opAssign,
             Token.string('hello'),
             Token.opPlus,
             Token.string(', world'),
-            Token.expressionEnd,
+            Token.endExpression,
             Token.newline,
-            Token.expressionStart,
+            Token.startExpression,
             Token.string("one' two"),
             Token.comma,
             Token.string('"'),
-            Token.expressionEnd,
+            Token.endExpression,
             Token.newline,
-            Token.expressionStart,
+            Token.startExpression,
             Token.string('last \' " \\ one\n'),
-            Token.expressionEnd,
+            Token.endExpression,
             Token.newline,
-            Token.bodyEnd,
+            Token.endBody,
           ],
         );
       });
@@ -521,15 +521,15 @@ void main() {
               '{ a >> b }\n'
               '===\n'),
           const [
-            Token.bodyStart,
-            Token.expressionStart,
+            Token.startBody,
+            Token.startExpression,
             Token.id('a'),
             Token.opGt,
             Token.opGt,
             Token.id('b'),
-            Token.expressionEnd,
+            Token.endExpression,
             Token.newline,
-            Token.bodyEnd,
+            Token.endBody,
           ],
         );
       });
