@@ -210,12 +210,12 @@ class _Lexer {
   //----------------------------------------------------------------------------
   // All `eat*()` methods will attempt to consume a specific type of syntax at
   // the current parsing location. If successful, the functions will:
-  //   - advance the parsing position [pos];
-  //   - emit 0 or 1 token into the [tokens] token stream;
+  //   - advance the parsing position [position];
+  //   - emit 0 or more tokens into the [tokens] stream;
   //   - possibly pushes a new mode or pops the current mode;
   //   - return `true`.
   // Otherwise, the function will:
-  //   - leave [pos] unmodified;
+  //   - leave [position] unmodified;
   //   - return `false`.
   //----------------------------------------------------------------------------
 
@@ -289,7 +289,7 @@ class _Lexer {
       if (cu == $carriageReturn && currentCodeUnit == $lineFeed) {
         position += 1;
       }
-      tokens.add(Token.newline);
+      pushToken(Token.newline);
       lineNumber += 1;
       lineStart = position;
       return true;
@@ -348,7 +348,7 @@ class _Lexer {
           break;
         }
       }
-      tokens.add(Token.id(text.substring(position0, position)));
+      pushToken(Token.id(text.substring(position0, position)));
       return true;
     }
     return false;
@@ -394,11 +394,11 @@ class _Lexer {
     }
     if (lineIndent > indentStack.last) {
       indentStack.add(lineIndent);
-      tokens.add(Token.startIndent);
+      pushToken(Token.startIndent);
     }
     while (lineIndent < indentStack.last) {
       indentStack.removeLast();
-      tokens.add(Token.endIndent);
+      pushToken(Token.endIndent);
     }
     if (lineIndent > indentStack.last) {
       error('inconsistent indentation');
