@@ -12,6 +12,7 @@ If you want to know more about the installation visit [flame_svg on pubdev](http
 
 
 ## How to use flame_svg
+
 To use it just import the `Svg` class from `'package:flame_svg/flame_svg.dart'`, and use the
 following snippet to render it on the canvas:
 
