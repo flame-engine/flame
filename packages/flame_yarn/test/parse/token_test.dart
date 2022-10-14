@@ -34,5 +34,13 @@ void main() {
       expect(token.type, TokenType.id);
       expect(token.content, 'xyz127');
     });
+
+    test('equality', () {
+      expect(Token.parenStart == Token.parenStart, true);
+      expect(Token.parenStart == Token.parenEnd, false);
+      expect(const Token.text('foo') == const Token.text('foo'), true);
+      expect(const Token.text('foo') == const Token.string('foo'), false);
+      expect(const Token.text('foo') == const Token.text('bar'), false);
+    });
   });
 }
