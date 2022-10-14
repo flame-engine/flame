@@ -9,12 +9,12 @@ List<Token> tokenize(String input) {
 /// Main working class for the [tokenize] function.
 class _Lexer {
   _Lexer(this.text)
-    : pos = 0,
-      lineNumber = 1,
-      lineStart = 0,
-      tokens = [],
-      modeStack = [],
-      indentStack = [];
+      : pos = 0,
+        lineNumber = 1,
+        lineStart = 0,
+        tokens = [],
+        modeStack = [],
+        indentStack = [];
 
   final String text;
   final List<Token> tokens;
@@ -90,10 +90,7 @@ class _Lexer {
   }
 
   bool modeNodeBody() {
-    return eatEmptyLine() ||
-        eatCommentLine() ||
-        eatBodyEnd() ||
-        eatIndent();
+    return eatEmptyLine() || eatCommentLine() || eatBodyEnd() || eatIndent();
   }
 
   bool modeNodeBodyLine() {
@@ -172,7 +169,7 @@ class _Lexer {
     if (eat($slash) && eat($slash)) {
       while (!eof) {
         final cu = codeUnit;
-        if (cu == $cr || cu == $lf) {
+        if (cu == $carriageReturn || cu == $lineFeed) {
           eatNewline();
           break;
         }
@@ -202,9 +199,9 @@ class _Lexer {
   /// without emitting any tokens.
   bool eatNewline() {
     final cu = codeUnit;
-    if (cu == $cr || cu == $lf) {
+    if (cu == $carriageReturn || cu == $lineFeed) {
       pos += 1;
-      if (cu == $cr && codeUnit == $lf) {
+      if (cu == $carriageReturn && codeUnit == $lineFeed) {
         pos += 1;
       }
       lineNumber += 1;
@@ -322,7 +319,7 @@ class _Lexer {
   /// Consumes an arrow token '->' and emits it.
   bool eatArrow() {
     final pos0 = pos;
-    if (eat($minus) && eat($gt)) {
+    if (eat($minus) && eat($greaterThan)) {
       tokens.add(Token.arrow);
       eatWhitespace();
       return true;
@@ -335,7 +332,7 @@ class _Lexer {
   /// [modeCommand].
   bool eatCommandStart() {
     final pos0 = pos;
-    if (eat($lt) && eat($lt)) {
+    if (eat($lessThan) && eat($lessThan)) {
       tokens.add(Token.commandStart);
       eatWhitespace();
       pushMode(modeCommand);
@@ -347,7 +344,7 @@ class _Lexer {
 
   bool eatCommandEnd() {
     final pos0 = pos;
-    if (eat($gt) && eat($gt)) {
+    if (eat($greaterThan) && eat($greaterThan)) {
       tokens.add(Token.commandEnd);
       eatWhitespace();
       popMode(modeCommand);
@@ -397,8 +394,8 @@ class _Lexer {
         final cu = codeUnit;
         if (cu == $backslash ||
             cu == $slash ||
-            cu == $lt ||
-            cu == $gt ||
+            cu == $lessThan ||
+            cu == $greaterThan ||
             cu == $leftBrace ||
             cu == $rightBrace ||
             cu == $hash) {
@@ -440,7 +437,7 @@ class _Lexer {
   /// mode and the [modeCommand].
   bool eatExpressionCommandEnd() {
     final pos0 = pos;
-    if (eat($gt) && eat($gt)) {
+    if (eat($greaterThan) && eat($greaterThan)) {
       tokens.add(Token.expressionEnd);
       tokens.add(Token.commandEnd);
       eatWhitespace();
@@ -455,19 +452,19 @@ class _Lexer {
   bool eatPlainText() {
     final pos0 = pos;
     final cu = codeUnit;
-    if (cu == $lt || cu == $slash) {
+    if (cu == $lessThan || cu == $slash) {
       pos += 1;
       tokens.add(Token.text(String.fromCharCode(cu)));
     } else {
       while (!eof) {
         final cu = codeUnit;
-        if (cu == $cr ||
-            cu == $lf ||
+        if (cu == $carriageReturn ||
+            cu == $lineFeed ||
             cu == $hash ||
             cu == $leftBrace ||
             cu == $slash ||
             cu == $backslash ||
-            cu == $lt) {
+            cu == $lessThan) {
           break;
         }
         pos += 1;
@@ -575,7 +572,7 @@ class _Lexer {
           pos += 1;
           tokens.add(Token.string(buffer.toString()));
           return true;
-        } else if (cu == $cr || cu == $lf) {
+        } else if (cu == $carriageReturn || cu == $lineFeed) {
           break;
         } else if (cu == $backslash) {
           pos += 1;
@@ -584,7 +581,7 @@ class _Lexer {
           if (cu2 == $singleQuote || cu2 == $doubleQuote || cu2 == $backslash) {
             buffer.writeCharCode(cu2);
           } else if (cu2 == $lowercaseN) {
-            buffer.writeCharCode($lf);
+            buffer.writeCharCode($lineFeed);
           } else {
             break;
           }
@@ -676,8 +673,16 @@ class _Lexer {
     'stop': Token.commandStop,
   };
 
+  /// Throws a [SyntaxError] with the given [message], augmenting it with the
+  /// information about the current parsing location.
+  ///
+  /// The return type is bool, although the method never actually returns
+  /// anything -- this is so that the method can be used in a parsing chain:
+  /// ```dart
+  /// eatThis() || eatThat() || error('oops, did not expect that');
+  /// ```
   bool error(String message) {
-    final lineEnd = _findLineEnd();
+    final lineEnd = findLineEnd();
     String lineFragment, markerIndent;
     if (lineEnd - lineStart <= 78) {
       lineFragment = text.substring(lineStart, lineEnd);
@@ -698,11 +703,13 @@ class _Lexer {
     throw SyntaxError(parts.join('\n'));
   }
 
-  int _findLineEnd() {
+  /// Returns the position where the current (starting at [pos]) line ends,
+  /// without altering the parsing location.
+  int findLineEnd() {
     var i = pos;
     while (i < text.length) {
       final cu = text.codeUnitAt(i);
-      if (cu == $lf || cu == $cr) {
+      if (cu == $lineFeed || cu == $carriageReturn) {
         break;
       }
       i += 1;
