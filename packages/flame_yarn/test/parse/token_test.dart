@@ -5,6 +5,7 @@ void main() {
   group('Token', () {
     test('tokens without args', () {
       expect('${Token.as}', 'Token.as');
+      expect('${Token.colon}', 'Token.colon');
       expect('${Token.dedent}', 'Token.dedent');
       expect('${Token.commandEndif}', 'Token.commandEndif');
       expect('${Token.constTrue}', 'Token.constTrue');

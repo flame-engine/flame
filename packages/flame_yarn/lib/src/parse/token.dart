@@ -17,6 +17,7 @@ class Token {
   static const arrow = Token._(TokenType.arrow);
   static const as = Token._(TokenType.as);
   static const bodyEnd = Token._(TokenType.bodyEnd);
+  static const colon = Token._(TokenType.colon);
   static const comma = Token._(TokenType.comma);
   static const commandElse = Token._(TokenType.commandElse);
   static const commandElseif = Token._(TokenType.commandElseif);
@@ -97,6 +98,7 @@ enum TokenType {
   headerEnd, //        '---'
   bodyEnd, //          '==='
   arrow, //            '->'
+  colon, //            ':'
   commandStart, //     '<<'
   commandEnd, //       '>>'
   expressionStart, //  '{'

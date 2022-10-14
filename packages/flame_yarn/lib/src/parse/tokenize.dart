@@ -58,13 +58,29 @@ class _Lexer {
   /// reached the end of input.
   int get codeUnit => eof ? -1 : text.codeUnitAt(pos);
 
-  /// Pushes a new mode into the mode stack.
-  void pushMode(_ModeFn mode) => modeStack.add(mode);
+  /// Pushes a new mode into the mode stack and returns `true`.
+  bool pushMode(_ModeFn mode) {
+    modeStack.add(mode);
+    return true;
+  }
 
   /// Pops the last mode from the stack and checks that it was [mode].
   void popMode(_ModeFn mode) {
     final removed = modeStack.removeLast();
     assert(removed == mode);
+  }
+
+  /// Pushes a new token into the output and returns `true`.
+  bool pushToken(Token token) {
+    tokens.add(token);
+    return true;
+  }
+
+  /// Pops the last token from the output stack and checks that it is equal to
+  /// [token].
+  void popToken(Token token) {
+    final removed = tokens.removeLast();
+    assert(removed == token);
   }
 
   //----------------------------------------------------------------------------
@@ -77,17 +93,32 @@ class _Lexer {
   // error will be thrown.
   //----------------------------------------------------------------------------
 
+  /// Initial mode. Not much happens here -- it only consumes some whitespace
+  /// and then jumps into the [modeNodeHeader]. In the future versions of Yarn
+  /// they're planning to add some file-level tags here.
   bool modeMain() {
-    pushMode(modeNodeHeader);
-    return true;
+    return eatEmptyLine() ||
+      eatCommentLine() ||
+      pushMode(modeNodeHeader);
   }
 
+  /// Parsing node header, this mode is only active at a start of a line, and
+  /// after parsing an initial token, it pushes [modeNodeHeaderLine] which
+  /// remains active until the end of the line.
+  ///
+  /// The mode switches to [modeNodeBody] upon encountering the '---' sequence.
   bool modeNodeHeader() {
     return eatEmptyLine() ||
         eatCommentLine() ||
-        eatHeaderEnd() ||
-        eatId() ||
-        eatHeaderDelimiterAndRestOfLine();
+        (eatId() && pushMode(modeNodeHeaderLine)) ||
+        (eatWhitespace() && error('unexpected indentation')) ||
+        eatHeaderEnd();
+  }
+
+  bool modeNodeHeaderLine() {
+    return eatWhitespace() ||
+        (eat($colon) && pushToken(Token.colon)) ||
+        eatHeaderRestOfLine();
   }
 
   bool modeNodeBody() {
@@ -154,7 +185,10 @@ class _Lexer {
   bool eatEmptyLine() {
     final pos0 = pos;
     eatWhitespace();
-    if (eatNewline()) {
+    if (eof) {
+      return true;
+    } if (eatNewline()) {
+      popToken(Token.newline);
       return true;
     } else {
       pos = pos0;
@@ -172,6 +206,7 @@ class _Lexer {
         final cu = codeUnit;
         if (cu == $carriageReturn || cu == $lineFeed) {
           eatNewline();
+          popToken(Token.newline);
           break;
         }
         pos += 1;
@@ -218,7 +253,8 @@ class _Lexer {
   bool eatHeaderEnd() {
     final pos0 = pos;
     if (eat($minus) && eat($minus) && eat($minus) && eatNewline()) {
-      tokens.add(Token.headerEnd);
+      popToken(Token.newline);
+      pushToken(Token.headerEnd);
       popMode(modeNodeHeader);
       pushMode(modeNodeBody);
       return true;
@@ -232,7 +268,8 @@ class _Lexer {
   bool eatBodyEnd() {
     final pos0 = pos;
     if (eat($equals) && eat($equals) && eat($equals) && eatNewline()) {
-      tokens.add(Token.bodyEnd);
+      popToken(Token.newline);
+      pushToken(Token.bodyEnd);
       popMode(modeNodeBody);
       return true;
     }
@@ -245,7 +282,7 @@ class _Lexer {
     final pos0 = pos;
     var cu = codeUnit;
     if ((cu >= $lowercaseA && cu <= $lowercaseZ) ||
-        (cu >= $uppercaseA && cu <= $uppercaseZ)) {
+        (cu >= $uppercaseA && cu <= $uppercaseZ) || cu == $underscore) {
       pos += 1;
       while (true) {
         cu = codeUnit;
@@ -264,28 +301,26 @@ class _Lexer {
     return false;
   }
 
-  /// Consumes a ':' within the header, and then the rest of the line which is
-  /// emitted as a plain text token.
-  bool eatHeaderDelimiterAndRestOfLine() {
+  /// Consumes a plain text until the end of the line and emits it as a plain
+  /// text token, followed by a newline token. Always returns `true`.
+  bool eatHeaderRestOfLine() {
     final pos0 = pos;
-    eatWhitespace();
-    if (eat($colon)) {
-      eatWhitespace();
-      final pos0 = pos;
-      var pos1 = pos;
-      while (!eof) {
-        pos1 = pos;
-        if (eatNewline()) {
-          break;
-        }
-        pos += 1;
+    for (; !eof; pos++) {
+      final cu = codeUnit;
+      if (cu == $carriageReturn || cu == $lineFeed) {
+        break;
+      } else if (cu == $slash && eat($slash) && eat($slash)) {
+        pos -= 2;
+        break;
       }
-      tokens.add(Token.text(text.substring(pos0, pos1)));
-      return true;
-    } else {
-      pos = pos0;
-      return false;
     }
+    pushToken(Token.text(text.substring(pos0, pos)));
+    if (!eatNewline()) {
+      eatCommentLine();
+      pushToken(Token.newline);
+    }
+    popMode(modeNodeHeaderLine);
+    return true;
   }
 
   /// Consumes whitespace at the start of the line (if any) and emits indent/
@@ -686,21 +721,22 @@ class _Lexer {
   bool error(String message) {
     final lineEnd = findLineEnd();
     String lineFragment, markerIndent;
-    if (lineEnd - lineStart <= 78) {
+    if (lineEnd - lineStart <= 74) {
       lineFragment = text.substring(lineStart, lineEnd);
       markerIndent = ' ' * (pos - lineStart);
     } else if (pos - lineStart <= 50) {
-      lineFragment = '${text.substring(lineStart, lineStart + 75)}...';
+      lineFragment = '${text.substring(lineStart, lineStart + 74)}...';
       markerIndent = ' ' * (pos - lineStart);
     } else {
-      lineFragment = '...${text.substring(pos - 36, pos + 36)}...';
+      lineFragment = '...${text.substring(pos - 36, pos + 35)}...';
       markerIndent = ' ' * 36;
     }
     final parts = [
       message,
-      '  at line $lineNumber column ${pos - lineStart}:',
-      '  $lineFragment',
-      '  $markerIndent^',
+      '>  at line $lineNumber column ${pos - lineStart}:',
+      '>  $lineFragment',
+      '>  $markerIndent^',
+      ''
     ];
     throw SyntaxError(parts.join('\n'));
   }
