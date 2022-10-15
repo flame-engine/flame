@@ -107,20 +107,40 @@ class _Parser {
   /// Consumes a regular line of text from the input, up to and including the
   /// NEWLINE token.
   void parseLine(_LineBuilder line) {
-    var token = peekToken();
+    maybeParseLineSpeaker(line);
+    parseLineContent(line);
+    maybeParseLineCondition(line);
+    maybeParseHashtags(line);
+    if (peekToken() == Token.startCommand) {
+      if (line.tags != null) {
+        error('the command must come before the hashtags');
+      } else {
+        error('multiple commands are not allowed on a line');
+      }
+    }
+    takeNewline();
+  }
+
+  void maybeParseLineSpeaker(_LineBuilder line) {
+    final token = peekToken();
     if (token.isSpeaker) {
       line.speaker = token.content;
       takeSpeaker();
       take(Token.colon);
     }
+  }
+
+  void parseLineContent(_LineBuilder line) {
     final parts = <Expression<String>>[];
     while (true) {
-      token = peekToken();
+      final token = peekToken();
       if (token.isText) {
         parts.add(Literal<String>(token.content));
       } else if (token == Token.startExpression) {
         final expressionBuilder = _ExpressionBuilder<String>();
+        take(Token.startExpression);
         parseExpression(expressionBuilder);
+        take(Token.endExpression);
       } else {
         break;
       }
@@ -132,8 +152,31 @@ class _Parser {
     }
   }
 
-  void parseExpression(_ExpressionBuilder<String> expression) {
+  void maybeParseLineCondition(_LineBuilder line) {
+    final token = peekToken();
+    if (token == Token.startCommand) {
+      final position0 = position + 1;
+      final commandBuilder = _CommandBuilder();
+      parseCommand();
+      // if command is not <<if>>, revert to position0 and issue error
+      // otherwise, store the command into the [line]
+    }
+  }
 
+  void maybeParseHashtags(_LineBuilder line) {
+    while (true) {
+      final token = peekToken();
+      if (token.isHashtag) {
+        line.tags ??= [];
+        line.tags!.add(token.content);
+        position += 1;
+      } else {
+        break;
+      }
+    }
+  }
+
+  void parseExpression(_ExpressionBuilder<String> expression) {
   }
 
 
@@ -196,6 +239,10 @@ class _LineBuilder {
   );
 }
 
+class _CommandBuilder {
+  String? command;
+}
+
 class _ExpressionBuilder<T> {
-    Expression<T> build() => Expression<T>();
+    Expression<T> build() => throw 'error';
 }
