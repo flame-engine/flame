@@ -168,8 +168,14 @@ rebuild the documents that have changed since the previous run, so usually a reb
 a second or two.
 
 If you want to automatically recompile the docs every time there is a change to one of the files
-you can use the **melos doc-serve** command, which will also serve and open your default
+you can use the the built-in Melos target below, which will also serve and open your default
 browser with the docs.
+
+```console
+melos doc-serve
+```
+
+When using the **melos doc-serve** command, the **melos doc-build** need not be used every time, because it also compiles and then serves. This serves the site at `http://localhost:8000/`.
 
 There are other make commands that you may find occasionally useful too:
 
@@ -180,13 +186,7 @@ state).
 The generated html files will be in the `doc/_build/html` directory, you can view them directly
 by opening the file `doc/_build/html/index.html` in your browser. The only drawback is that the
 browser won't allow any dynamic content in a file opened from a local drive. The solution to this
-is to either run **melos doc-serve** or run your own local http server:
-
-```console
-python -m http.server 8000 --directory doc/_build/html
-```
-
-Then you can open the site at `http://localhost:8000/`.
+is to run **melos doc-serve**.
 
 If you ever run the **melos doc-clean** command, the server will need to be restarted, because the
 clean command deletes the entire `html` directory.
