@@ -8,5 +8,6 @@ class Literal<T> extends Expression<T> {
   final T value;
 }
 
+const constEmptyString = Literal<String>('');
 const constTrue = Literal<bool>(true);
 const constFalse = Literal<bool>(false);

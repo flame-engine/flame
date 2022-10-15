@@ -1,4 +1,4 @@
 
-class Statement {
-
+abstract class Statement {
+  const Statement();
 }

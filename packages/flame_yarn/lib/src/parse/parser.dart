@@ -1,6 +1,9 @@
 import 'package:flame_yarn/src/errors.dart';
 import 'package:flame_yarn/src/parse/token.dart';
 import 'package:flame_yarn/src/parse/tokenize.dart';
+import 'package:flame_yarn/src/structure/expressions/expression.dart';
+import 'package:flame_yarn/src/structure/expressions/literal.dart';
+import 'package:flame_yarn/src/structure/line.dart';
 import 'package:flame_yarn/src/structure/node.dart';
 import 'package:flame_yarn/src/structure/statement.dart';
 import 'package:flame_yarn/src/yarn_ball.dart';
@@ -41,11 +44,11 @@ class _Parser {
 
   void parse() {
     while (position < tokens.length) {
-      final node = _NodeBuilder();
-      parseNodeHeader(node);
-      parseNodeBody(node);
-      assert(!project.nodes.containsKey(node.title));
-      project.nodes[node.title!] = node.build();
+      final nodeBuilder = _NodeBuilder();
+      parseNodeHeader(nodeBuilder);
+      parseNodeBody(nodeBuilder);
+      assert(!project.nodes.containsKey(nodeBuilder.title));
+      project.nodes[nodeBuilder.title!] = nodeBuilder.build();
     }
   }
 
@@ -87,7 +90,9 @@ class _Parser {
       } else if (nextToken == Token.startCommand) {
         parseCommand();
       } else if (nextToken.isText || nextToken.isSpeaker) {
-        parseLine();
+        final lineBuilder = _LineBuilder();
+        parseLine(lineBuilder);
+        out.add(lineBuilder.build());
       } else {
         break;
       }
@@ -98,7 +103,38 @@ class _Parser {
 
   void parseCommand() {}
 
-  void parseLine() {}
+  /// Consumes a regular line of text from the input, up to and including the
+  /// NEWLINE token.
+  void parseLine(_LineBuilder line) {
+    var token = peekToken();
+    if (token.isSpeaker) {
+      line.speaker = token.content;
+      takeSpeaker();
+      take(Token.colon);
+    }
+    final parts = <Expression<String>>[];
+    while (true) {
+      token = peekToken();
+      if (token.isText) {
+        parts.add(Literal<String>(token.content));
+      } else if (token == Token.startExpression) {
+        final expressionBuilder = _ExpressionBuilder<String>();
+        parseExpression(expressionBuilder);
+      } else {
+        break;
+      }
+    }
+    if (parts.length == 1) {
+      line.content = parts.first;
+    } else if (parts.length > 1) {
+      line.content = StrCat(parts);
+    }
+  }
+
+  void parseExpression(_ExpressionBuilder<String> expression) {
+
+  }
+
 
   //----------------------------------------------------------------------------
   // All `take*` methods will consume a single token of the specified kind,
@@ -109,6 +145,7 @@ class _Parser {
 
   bool takeId() => takeTokenType(TokenType.id);
   bool takeText() => takeTokenType(TokenType.text);
+  bool takeSpeaker() => takeTokenType(TokenType.speaker);
   bool takeNewline() => take(Token.newline);
 
   bool take(Token token) {
@@ -144,6 +181,20 @@ class _NodeBuilder {
       );
 }
 
-class _StatementBuilder {
-  Statement build() => Statement();
+class _LineBuilder {
+  String? speaker;
+  Expression<String>? content;
+  Expression<bool>? condition;
+  List<String>? tags;
+
+  Line build() => Line(
+    speaker: speaker,
+    content: content ?? constEmptyString,
+    condition: condition,
+    tags: tags,
+  );
+}
+
+class _ExpressionBuilder<T> {
+    Expression<T> build() => Expression<T>();
 }
