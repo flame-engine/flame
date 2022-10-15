@@ -143,3 +143,7 @@ class _NodeBuilder {
         lines: statements,
       );
 }
+
+class _StatementBuilder {
+  Statement build() => Statement();
+}
