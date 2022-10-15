@@ -7,8 +7,6 @@ import 'package:flame/components.dart';
 /// center.
 /// A point can be determined to be within of outside of a shape.
 abstract class ShapeComponent extends PositionComponent with HasPaint {
-  Paint? paintSecond;
-
   ShapeComponent({
     super.position,
     super.size,
@@ -18,7 +16,6 @@ abstract class ShapeComponent extends PositionComponent with HasPaint {
     super.children,
     super.priority,
     Paint? paint,
-    this.paintSecond,
   }) {
     this.paint = paint ?? this.paint;
   }

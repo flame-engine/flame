@@ -13,7 +13,6 @@ class RectangleComponent extends PolygonComponent {
     super.children,
     super.priority,
     super.paint,
-    super.paintSecond,
   }) : super(sizeToVertices(size ?? Vector2.zero(), anchor));
 
   RectangleComponent.square({
@@ -23,7 +22,6 @@ class RectangleComponent extends PolygonComponent {
     super.anchor,
     super.priority,
     super.paint,
-    super.paintSecond,
     super.children,
   }) : super(sizeToVertices(Vector2.all(size), anchor));
 
@@ -40,7 +38,6 @@ class RectangleComponent extends PolygonComponent {
     super.anchor,
     super.priority,
     super.paint,
-    super.paintSecond,
     super.shrinkToBounds,
   }) : super.relative([
           relation.clone(),
@@ -56,7 +53,6 @@ class RectangleComponent extends PolygonComponent {
     Anchor anchor = Anchor.topLeft,
     int? priority,
     Paint? paint,
-    Paint? paintSecond,
   }) {
     return RectangleComponent(
       position: anchor == Anchor.topLeft
@@ -71,7 +67,6 @@ class RectangleComponent extends PolygonComponent {
       anchor: anchor,
       priority: priority,
       paint: paint,
-      paintSecond: paintSecond,
     );
   }
 

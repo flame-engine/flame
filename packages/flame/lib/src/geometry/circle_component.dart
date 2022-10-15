@@ -18,7 +18,6 @@ class CircleComponent extends ShapeComponent implements SizeProvider {
     super.children,
     super.priority,
     super.paint,
-    super.paintSecond,
   }) : super(size: Vector2.all((radius ?? 0) * 2));
 
   /// With this constructor you define the [CircleComponent] in relation to the
@@ -31,7 +30,6 @@ class CircleComponent extends ShapeComponent implements SizeProvider {
     super.angle,
     super.anchor,
     super.paint,
-    super.paintSecond,
   }) : super(size: Vector2.all(relation * min(parentSize.x, parentSize.y)));
 
   /// Get the radius of the circle before scaling.
@@ -59,9 +57,6 @@ class CircleComponent extends ShapeComponent implements SizeProvider {
   void render(Canvas canvas) {
     if (renderShape) {
       canvas.drawCircle((size / 2).toOffset(), radius, paint);
-      if (paintSecond != null) {
-        canvas.drawCircle((size / 2).toOffset(), radius, paintSecond!);
-      }
     }
   }
 

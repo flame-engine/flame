@@ -38,7 +38,6 @@ class PolygonComponent extends ShapeComponent {
     super.children,
     super.priority,
     super.paint,
-    super.paintSecond,
     bool? shrinkToBounds,
   })  : assert(
           _vertices.length > 2,
@@ -77,7 +76,6 @@ class PolygonComponent extends ShapeComponent {
     Anchor? anchor,
     int? priority,
     Paint? paint,
-    Paint? paintSecond,
     bool? shrinkToBounds,
   }) : this(
           normalsToVertices(relation, parentSize),
@@ -88,7 +86,6 @@ class PolygonComponent extends ShapeComponent {
           scale: scale,
           priority: priority,
           paint: paint,
-          paintSecond: paintSecond,
           shrinkToBounds: shrinkToBounds,
         );
 
@@ -176,9 +173,6 @@ class PolygonComponent extends ShapeComponent {
   void render(Canvas canvas) {
     if (renderShape) {
       canvas.drawPath(_path, paint);
-      if (paintSecond != null) {
-        canvas.drawPath(_path, paintSecond!);
-      }
     }
   }
 
