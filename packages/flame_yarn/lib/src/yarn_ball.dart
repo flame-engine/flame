@@ -1,5 +1,5 @@
 
-import 'package:flame_yarn/src/node.dart';
+import 'package:flame_yarn/src/structure/node.dart';
 import 'package:flame_yarn/src/variable_storage.dart';
 
 class YarnBall {

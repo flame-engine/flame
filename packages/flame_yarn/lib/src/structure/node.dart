@@ -1,4 +1,6 @@
 
+import 'package:flame_yarn/src/structure/statement.dart';
+
 class Node {
   Node({
     required this.title,
@@ -8,7 +10,5 @@ class Node {
 
   final String title;
   final List<String>? tags;
-  final List<Entry> lines;
+  final List<Statement> lines;
 }
-
-class Entry {}

@@ -70,6 +70,15 @@ class Token {
   final TokenType type;
   final String? _content;
 
+  bool get isCommand => type == TokenType.command;
+  bool get isHashtag => type == TokenType.hashtag;
+  bool get isId => type == TokenType.id;
+  bool get isNumber => type == TokenType.number;
+  bool get isSpeaker => type == TokenType.speaker;
+  bool get isString => type == TokenType.string;
+  bool get isText => type == TokenType.text;
+  bool get isVariable => type == TokenType.variable;
+
   /// The content can only be accessed for tokens of type "text", "number",
   /// "string", "command", "variable", "speaker", and "id".
   String get content => _content!;

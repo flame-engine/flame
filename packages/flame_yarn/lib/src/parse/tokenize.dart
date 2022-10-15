@@ -4,7 +4,7 @@ import 'package:flame_yarn/src/parse/token.dart';
 import 'package:meta/meta.dart';
 
 /// Parses the [input] into a stream of [Token]s, according to the Yarn syntax.
-@visibleForTesting
+@internal
 List<Token> tokenize(String input) {
   return _Lexer(input).parse();
 }
