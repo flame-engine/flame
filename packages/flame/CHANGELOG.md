@@ -933,7 +933,7 @@
 - Fixed build on travis
 - Updated readme badges
 - Fixed changelog
-- Fixed warning on audiopool, added audiopool example in docs
+- Fixed warning on AudioPool, added AudioPool example in docs
 
 ## 0.14.0
 - Adding Timer#isRunning method

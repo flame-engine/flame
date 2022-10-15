@@ -162,11 +162,11 @@ class ParallaxAnimation extends ParallaxRenderer {
 
   /// The animation's frames pre-rendered into images so it can be used in the
   /// parallax.
-  final List<Image> _preRenderedFrames;
+  final List<Image> _prerenderedFrames;
 
   ParallaxAnimation(
     this._animation,
-    this._preRenderedFrames, {
+    this._prerenderedFrames, {
     super.repeat,
     super.alignment,
     super.fill,
@@ -209,7 +209,7 @@ class ParallaxAnimation extends ParallaxRenderer {
   }
 
   @override
-  Image get image => _preRenderedFrames[_animation.currentIndex];
+  Image get image => _prerenderedFrames[_animation.currentIndex];
 
   @override
   void update(double dt) {
