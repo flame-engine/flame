@@ -1,6 +1,19 @@
 # FireAtlas
 
-FireAtlas is a tool for handling texture atlases.
+FireAtlas is a tool for handling `texture atlases`. Using FireAtlas we can access images using keys
+from texture atlas like accessing key-value pair.
+
+
+## Texture atlas
+
+A texture atlas(also called a spritesheet or an image sprite in 2d game development) is an image
+that contains data from several smaller images that have been packed together to reduce overall
+dimensions. Texture atlasing enables batching for several static objects that share this texture
+atlas and the same material. Batching reduces the number of draw calls. Fewer draw calls results in
+better performance when the game is CPU-bound.
+
+
+## Usage
 
 To
 install [flame_fire_atlas](https://github.com/flame-engine/flame/tree/main/packages/flame_fire_atlas)
@@ -19,8 +32,8 @@ dependencies:
 
 The latest version can be found on [pub.dev](https://pub.dev/packages/flame_fire_atlas/install).
 
-After installing the `flame_fire_atlas` package, you can add FiraAtlas (`.fa`) files in the assets section
-of your `pubspec.yaml`.
+After installing the `flame_fire_atlas` package, you can add FiraAtlas (`.fa`) files in the assets
+section of your `pubspec.yaml`.
 
 For the examples below, your `pubspec.yaml` file needs to contain something like this:
 
