@@ -55,7 +55,7 @@ scripts:
     run: cd "$MELOS_ROOT_PATH/doc/_sphinx" && make html
     description: Create the sphinx html docs.
 
-  doc-build-live:
+  doc-serve:
     run: cd "$MELOS_ROOT_PATH/doc/_sphinx" && make livehtml
     description: Recompiles the docs enerytime there is a change in them and opens your browser.
 
