@@ -56,6 +56,8 @@ abstract class SizeProvider {
 /// It is allowed for implementers of this interface to use an integer for
 /// internal representation. In such cases, [opacity] get/set are expected
 /// to perform necessary conversions from integer to double and vice versa.
+/// As a side effect of this, setting the opacity to some `x` value would not
+/// necessarily produce the same `x` when reading it back.
 ///
 /// See [HasPaint] for an example implementation.
 abstract class OpacityProvider {
