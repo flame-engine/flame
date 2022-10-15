@@ -110,7 +110,7 @@ mixin HasPaint<T extends Object> on Component implements OpacityProvider {
     }
   }
 
-  OpacityProvider opacityProviderForPaint(T paintId) {
+  OpacityProvider opacityProviderOf(T paintId) {
     return _ProxyOpacityProvider(paintId, this);
   }
 }
