@@ -250,6 +250,118 @@ void main() {
       },
     );
 
+    testWithFlameGame(
+      'maintains opacity ratios',
+      (game) async {
+        const redInitialOpacity = 0.9;
+        const greenInitialOpacity = 0.5;
+        const blueInitialOpacity = 0.2;
+        const targetOpacity = 0.5;
+
+        final component = _CustomPaintComponent<_PaintTypes>(
+          {
+            _PaintTypes.paint1: BasicPalette.red.paint()
+              ..color = BasicPalette.green
+                  .paint()
+                  .color
+                  .withOpacity(redInitialOpacity),
+            _PaintTypes.paint2: BasicPalette.green.paint()
+              ..color = BasicPalette.green
+                  .paint()
+                  .color
+                  .withOpacity(greenInitialOpacity),
+            _PaintTypes.paint3: BasicPalette.blue.paint()
+              ..color = BasicPalette.blue
+                  .paint()
+                  .color
+                  .withOpacity(blueInitialOpacity),
+          },
+        );
+        await game.ensureAdd(component);
+
+        await component.add(
+          OpacityEffect.to(
+            targetOpacity,
+            EffectController(duration: 1),
+            target:
+                component.opacityProviderOfList(paintIds: _PaintTypes.values),
+          ),
+        );
+
+        game.update(1);
+
+        expectDouble(
+          component.getPaint(_PaintTypes.paint1).color.opacity,
+          targetOpacity,
+        );
+        expectDouble(
+          component.getPaint(_PaintTypes.paint2).color.opacity,
+          (greenInitialOpacity / redInitialOpacity) * targetOpacity,
+        );
+        expectDouble(
+          component.getPaint(_PaintTypes.paint3).color.opacity,
+          (blueInitialOpacity / redInitialOpacity) * targetOpacity,
+        );
+      },
+    );
+
+    testWithFlameGame(
+      'maintains opacity ratios while ignoring some paints',
+      (game) async {
+        const redInitialOpacity = 0.9;
+        const greenInitialOpacity = 0.5;
+        const blueInitialOpacity = 0.2;
+        const targetOpacity = 1.0;
+
+        final component = _CustomPaintComponent<_PaintTypes>(
+          {
+            _PaintTypes.paint1: BasicPalette.red.paint()
+              ..color = BasicPalette.green
+                  .paint()
+                  .color
+                  .withOpacity(redInitialOpacity),
+            _PaintTypes.paint2: BasicPalette.green.paint()
+              ..color = BasicPalette.green
+                  .paint()
+                  .color
+                  .withOpacity(greenInitialOpacity),
+            _PaintTypes.paint3: BasicPalette.blue.paint()
+              ..color = BasicPalette.blue
+                  .paint()
+                  .color
+                  .withOpacity(blueInitialOpacity),
+          },
+        );
+        await game.ensureAdd(component);
+
+        await component.add(
+          OpacityEffect.fadeIn(
+            EffectController(duration: 1),
+            target: component.opacityProviderOfList(
+              paintIds: const [_PaintTypes.paint1, _PaintTypes.paint2],
+            ),
+          ),
+        );
+
+        game.update(1);
+
+        expectDouble(
+          component.getPaint(_PaintTypes.paint1).color.opacity,
+          targetOpacity,
+        );
+        expectDouble(
+          component.getPaint(_PaintTypes.paint2).color.opacity,
+          (greenInitialOpacity / redInitialOpacity) * targetOpacity,
+        );
+
+        // Opacity of this paint shouldn't be changed.
+        expectDouble(
+          component.getPaint(_PaintTypes.paint3).color.opacity,
+          blueInitialOpacity,
+        );
+      },
+    );
+
     testRandom('a very long opacity change', (Random rng) async {
       final game = FlameGame()..onGameResize(Vector2(1, 1));
       final component = _PaintComponent();
