@@ -132,7 +132,7 @@ class _Parser {
   }
 
   void parseLineContent(_LineBuilder line) {
-    final parts = <Expression<String>>[];
+    final parts = <TypedExpression<String>>[];
     while (true) {
       final token = peekToken();
       if (token.isText) {
@@ -181,8 +181,8 @@ class _Parser {
 
   void parseExpression(_ExpressionBuilder<String> expression) {}
 
-  ExpressionBase parseExpression2() {
-    ExpressionBase parsePrimary() {
+  Expression parseExpression2() {
+    Expression parsePrimary() {
       final token = peekToken();
       position += 1;
       if (token == Token.startParenthesis) {
@@ -210,7 +210,7 @@ class _Parser {
       throw UnimplementedError();
     }
 
-    ExpressionBase parse_expression1(ExpressionBase lhs, int min_precedence) {
+    Expression parse_expression1(Expression lhs, int min_precedence) {
       var result = lhs;
       var token = peekToken();
       while ((binaryOperatorsPrecedence[token] ?? -1) >= min_precedence) {
@@ -222,7 +222,7 @@ class _Parser {
       return result;
     }
 
-    ExpressionBase parse_expression() => parse_expression1(parsePrimary(), 0);
+    Expression parse_expression() => parse_expression1(parsePrimary(), 0);
     throw UnimplementedError();
   }
 
@@ -298,8 +298,8 @@ class _NodeBuilder {
 
 class _LineBuilder {
   String? speaker;
-  Expression<String>? content;
-  Expression<bool>? condition;
+  TypedExpression<String>? content;
+  TypedExpression<bool>? condition;
   List<String>? tags;
 
   Line build() => Line(
@@ -315,9 +315,9 @@ class _CommandBuilder {
 }
 
 class _ExpressionBuilder<T> {
-  Expression<T> build() => throw 'error';
+  TypedExpression<T> build() => throw 'error';
 }
 
-typedef Expr = ExpressionBase;
-typedef _BinaryExpressionFn = ExpressionBase Function(
-    ExpressionBase, ExpressionBase);
+typedef Expr = Expression;
+typedef _BinaryExpressionFn = Expression Function(
+    Expression, Expression);

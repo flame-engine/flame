@@ -22,6 +22,6 @@ class IfCommand extends Command {
 class IfBlock {
   const IfBlock(this.condition, this.entries);
 
-  final Expression<bool> condition;
+  final TypedExpression<bool> condition;
   final List<Statement> entries;
 }

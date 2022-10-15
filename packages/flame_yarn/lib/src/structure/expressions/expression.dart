@@ -1,5 +1,13 @@
-abstract class Expression<T> extends ExpressionBase {
+
+abstract class Expression {
   const Expression();
+
+  dynamic get value;
+  ExpressionType get type;
+}
+
+abstract class TypedExpression<T> extends Expression {
+  const TypedExpression();
 
   @override
   T get value;
@@ -14,13 +22,6 @@ abstract class Expression<T> extends ExpressionBase {
                 ? ExpressionType.string
                 : ExpressionType.unknown;
   }
-}
-
-abstract class ExpressionBase {
-  const ExpressionBase();
-
-  dynamic get value;
-  ExpressionType get type;
 }
 
 enum ExpressionType {

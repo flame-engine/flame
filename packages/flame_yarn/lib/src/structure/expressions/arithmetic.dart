@@ -1,51 +1,51 @@
 
 import 'package:flame_yarn/src/structure/expressions/expression.dart';
 
-class Add extends Expression<num> {
+class Add extends TypedExpression<num> {
   const Add(this.lhs, this.rhs);
 
-  final Expression<num> lhs;
-  final Expression<num> rhs;
+  final TypedExpression<num> lhs;
+  final TypedExpression<num> rhs;
 
   @override
   num get value => lhs.value + rhs.value;
 }
 
-class Subtract extends Expression<num> {
+class Subtract extends TypedExpression<num> {
   const Subtract(this.lhs, this.rhs);
 
-  final Expression<num> lhs;
-  final Expression<num> rhs;
+  final TypedExpression<num> lhs;
+  final TypedExpression<num> rhs;
 
   @override
   num get value => lhs.value - rhs.value;
 }
 
-class Multiply extends Expression<num> {
+class Multiply extends TypedExpression<num> {
   const Multiply(this.lhs, this.rhs);
 
-  final Expression<num> lhs;
-  final Expression<num> rhs;
+  final TypedExpression<num> lhs;
+  final TypedExpression<num> rhs;
 
   @override
   num get value => lhs.value * rhs.value;
 }
 
-class Divide extends Expression<num> {
+class Divide extends TypedExpression<num> {
   const Divide(this.lhs, this.rhs);
 
-  final Expression<num> lhs;
-  final Expression<num> rhs;
+  final TypedExpression<num> lhs;
+  final TypedExpression<num> rhs;
 
   @override
   num get value => lhs.value / rhs.value;
 }
 
-class Modulo extends Expression<num> {
+class Modulo extends TypedExpression<num> {
   const Modulo(this.lhs, this.rhs);
 
-  final Expression<num> lhs;
-  final Expression<num> rhs;
+  final TypedExpression<num> lhs;
+  final TypedExpression<num> rhs;
 
   @override
   num get value => lhs.value % rhs.value;

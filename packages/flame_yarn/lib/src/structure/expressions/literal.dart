@@ -1,7 +1,7 @@
 
 import 'package:flame_yarn/src/structure/expressions/expression.dart';
 
-class Literal<T> extends Expression<T> {
+class Literal<T> extends TypedExpression<T> {
   const Literal(this.value);
 
   @override
