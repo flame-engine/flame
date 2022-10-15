@@ -175,7 +175,8 @@ browser with the docs.
 melos doc-serve
 ```
 
-When using the **melos doc-serve** command, the **melos doc-build** need not be used every time, because it also compiles and then serves. This serves the site at `http://localhost:8000/`.
+When using the **melos doc-serve** command, the **melos doc-build** need not be used every time,
+because it also compiles and then serves. This serves the site at `http://localhost:8000/`.
 
 There are other make commands that you may find occasionally useful too:
 
