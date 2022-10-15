@@ -176,7 +176,7 @@ melos doc-serve
 ```
 
 When using the **melos doc-serve** command, the **melos doc-build** is only needed when
-there are changes to the sphinx theme. This is because **melos doc-serve** both automatically
+there are changes to the sphinx theme. This is because the serve command both automatically
 compiles the docs on changes and also hosts them locally. The docs are served at
 `http://localhost:8000/` by default.
 
