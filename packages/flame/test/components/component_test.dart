@@ -38,12 +38,8 @@ void main() {
 
         game.remove(component);
         game.update(0);
-        var hasTimedOut = false;
-        await removed.timeout(
-          const Duration(milliseconds: 1),
-          onTimeout: () => hasTimedOut = true,
-        );
-        expect(hasTimedOut, isTrue);
+
+        await expectLater(removed, completes);
       });
 
       testWithFlameGame(
@@ -90,28 +86,6 @@ void main() {
         await expectLater(removed, completes);
         expect(child.isRemoved, true);
       });
-
-      testWithFlameGame(
-        'component removed times out when changing parent from a null parent',
-        (game) async {
-          final child = LifecycleComponent('child');
-
-          await game.ready();
-          final removed = child.removed;
-          expect(child.isMounted, isFalse);
-          expect(child.isRemoved, isFalse);
-
-          child.changeParent(game);
-          game.update(0);
-
-          var hasTimedOut = false;
-          await removed.timeout(
-            const Duration(milliseconds: 1),
-            onTimeout: () => hasTimedOut = true,
-          );
-          expect(hasTimedOut, isTrue);
-        },
-      );
 
       testWithFlameGame(
         'component mounted completes when changing parent',

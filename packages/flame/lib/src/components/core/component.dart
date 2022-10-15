@@ -740,7 +740,8 @@ class Component {
   void processPendingLifecycleEvents() {
     if (_lifecycleManager != null) {
       _lifecycleManager!.processQueues();
-      if (!_lifecycleManager!.hasPendingEvents) {
+      if (!_lifecycleManager!.hasPendingEvents &&
+          _lifecycleManager!._removedCompleter == null) {
         _lifecycleManager = null;
       }
     }
