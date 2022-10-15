@@ -19,9 +19,8 @@ dependencies:
 
 The latest version can be found on [pub.dev](https://pub.dev/packages/flame_fire_atlas/install).
 
-After installing the `flame_fire_atlas` package, you can add mapping files in the assets section of
-your
-`pubspec.yaml`
+After installing the `flame_fire_atlas` package, you can add FiraAtlas (`.fa`) files in the assets section
+of your `pubspec.yaml`.
 
 For the examples below, your `pubspec.yaml` file needs to contain something like this:
 
