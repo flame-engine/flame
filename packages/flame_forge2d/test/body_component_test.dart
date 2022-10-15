@@ -1,10 +1,11 @@
-import 'dart:ui';
-
+import 'package:flame/extensions.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+
+import 'helpers/mocks.dart';
 
 class _TestBodyComponent extends BodyComponent {
   @override
@@ -52,6 +53,9 @@ void main() {
             await game.add(component);
 
             game.camera.followVector2(Vector2.zero());
+
+            // a CircleShape contains point
+            expect(component.containsPoint(Vector2.all(1.5)), isTrue);
           },
           verify: (game, tester) async {
             await expectLater(
@@ -107,6 +111,9 @@ void main() {
             await game.add(component);
 
             game.camera.followVector2(Vector2.zero());
+
+            // a PolygonShape contains point
+            expect(component.containsPoint(Vector2.all(10)), isTrue);
           },
           verify: (game, tester) async {
             await expectLater(
@@ -256,6 +263,64 @@ void main() {
             returnsNormally,
           );
         });
+      });
+    });
+
+    group('Add component to parent', () {
+      final flameTester = FlameTester(Forge2DGame.new);
+      final testPaint = Paint()..color = const Color(0xffff0000);
+
+      flameTester.testGameWidget(
+        'add and remove child to BodyComponent',
+        setUp: (game, tester) async {
+          final worldCenter =
+              game.screenToWorld(game.size * game.camera.zoom / 2);
+
+          final bodyDef = BodyDef(position: worldCenter.clone());
+          final body = game.world.createBody(bodyDef);
+          final shape = PolygonShape()
+            ..set(
+              [
+                Vector2.zero(),
+                Vector2.all(10),
+                Vector2(0, 10),
+              ],
+            );
+          body.createFixture(FixtureDef(shape));
+
+          final component = _TestBodyComponent()
+            ..body = body
+            ..paint = testPaint;
+
+          component.addToParent(game);
+          await game.ready();
+
+          expect(game.contains(component), true);
+          expect(component.isMounted, true);
+          expect(game.children.length, 1);
+          component.removeFromParent();
+          await game.ready();
+
+          expect(component.isMounted, false);
+          expect(component.isLoaded, true);
+          expect(game.children.length, 0);
+        },
+      );
+    });
+
+    group('BodyComponent contact events', () {
+      test('beginContact called', () {
+        final contactCallback = MockContactCallback();
+        final contact = MockContact();
+        final bodyA = MockBody()..angularDamping = 1.0;
+        final fixtureA = MockFixture();
+        when(() => bodyA.userData).thenReturn(contactCallback);
+        when(() => fixtureA.userData).thenReturn(Object());
+        contactCallback.beginContact(fixtureA.userData!, contact);
+
+        verify(
+          () => contactCallback.beginContact(fixtureA.userData!, contact),
+        ).called(1);
       });
     });
   });
