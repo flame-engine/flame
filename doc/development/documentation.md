@@ -181,7 +181,7 @@ following:
       pip install -r doc/_sphinx/requirements.txt
       ```
 
-    - On Windows, verify that `sphinx-autobuild` installs correctly, otherwise an error may occur.
+    - Verify that all packages where installed correctly, otherwise an error may occur.
 
 4. Melos as per the [contributing](contributing.md#environment-setup) guide.
 
