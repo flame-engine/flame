@@ -3,6 +3,7 @@ import 'package:flame_yarn/src/parse/token.dart';
 import 'package:flame_yarn/src/parse/tokenize.dart';
 import 'package:flame_yarn/src/structure/expressions/expression.dart';
 import 'package:flame_yarn/src/structure/expressions/literal.dart';
+import 'package:flame_yarn/src/structure/expressions/string.dart';
 import 'package:flame_yarn/src/structure/line.dart';
 import 'package:flame_yarn/src/structure/node.dart';
 import 'package:flame_yarn/src/structure/statement.dart';
@@ -127,7 +128,7 @@ class _Parser {
     if (parts.length == 1) {
       line.content = parts.first;
     } else if (parts.length > 1) {
-      line.content = StrCat(parts);
+      line.content = Concat(parts);
     }
   }
 
