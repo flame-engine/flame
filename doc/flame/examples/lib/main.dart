@@ -20,6 +20,8 @@ import 'package:doc_flame_examples/router.dart';
 import 'package:doc_flame_examples/scale_by_effect.dart';
 import 'package:doc_flame_examples/scale_to_effect.dart';
 import 'package:doc_flame_examples/sequence_effect.dart';
+import 'package:doc_flame_examples/size_by_effect.dart';
+import 'package:doc_flame_examples/size_to_effect.dart';
 import 'package:doc_flame_examples/tap_events.dart';
 import 'package:doc_flame_examples/value_route.dart';
 import 'package:flame/game.dart';
@@ -50,6 +52,8 @@ void main() {
     'router': RouterGame.new,
     'scale_by_effect': ScaleByEffectGame.new,
     'scale_to_effect': ScaleToEffectGame.new,
+    'size_by_effect': SizeByEffectGame.new,
+    'size_to_effect': SizeToEffectGame.new,
     'sequence_effect': SequenceEffectGame.new,
     'tap_events': TapEventsGame.new,
     'value_route': ValueRouteExample.new,
