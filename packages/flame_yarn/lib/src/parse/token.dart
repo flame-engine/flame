@@ -87,12 +87,12 @@ class Token {
   String toString() =>
       'Token.${type.name}${_content == null ? '' : "('$_content')"}';
 
-  @override
-  int get hashCode => Object.hash(type, _content);
-
-  @override
-  bool operator ==(Object other) =>
-      other is Token && other.type == type && other._content == _content;
+  // @override
+  // int get hashCode => Object.hash(type, _content);
+  //
+  // @override
+  // bool operator ==(Object other) =>
+  //     other is Token && other.type == type && other._content == _content;
 }
 
 @internal

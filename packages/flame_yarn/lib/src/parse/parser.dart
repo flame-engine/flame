@@ -1,6 +1,7 @@
 import 'package:flame_yarn/src/errors.dart';
 import 'package:flame_yarn/src/parse/token.dart';
 import 'package:flame_yarn/src/parse/tokenize.dart';
+import 'package:flame_yarn/src/structure/expressions/arithmetic.dart';
 import 'package:flame_yarn/src/structure/expressions/expression.dart';
 import 'package:flame_yarn/src/structure/expressions/literal.dart';
 import 'package:flame_yarn/src/structure/expressions/string.dart';
@@ -155,11 +156,13 @@ class _Parser {
   void maybeParseLineCondition(_LineBuilder line) {
     final token = peekToken();
     if (token == Token.startCommand) {
-      final position0 = position + 1;
-      final commandBuilder = _CommandBuilder();
-      parseCommand();
-      // if command is not <<if>>, revert to position0 and issue error
-      // otherwise, store the command into the [line]
+      position += 1;
+      if (peekToken() != Token.commandIf) {
+        error('only if commands are allowed on a line');
+      }
+      position += 1;
+
+      take(Token.endCommand);
     }
   }
 
@@ -176,9 +179,52 @@ class _Parser {
     }
   }
 
-  void parseExpression(_ExpressionBuilder<String> expression) {
-  }
+  void parseExpression(_ExpressionBuilder<String> expression) {}
 
+  ExpressionBase parseExpression2() {
+    ExpressionBase parsePrimary() {
+      final token = peekToken();
+      position += 1;
+      if (token == Token.startParenthesis) {
+        final expression = parse_expression();
+        if (peekToken() != Token.endParenthesis) {
+          error('closing ) is expected');
+        }
+        return expression;
+      } else if (token == Token.operatorMinus) {
+        final expression = parsePrimary();
+        if (expression is Literal<num>) {
+          return Literal<num>(-expression.value);
+        } else if (expression.type == ExpressionType.numeric) {
+          return UnaryMinus(expression);
+        } else {
+          error('unary - can only be applied to numbers');
+        }
+      } else if (token.isNumber) {
+        return Literal<num>(num.parse(token.content));
+      } else if (token.isString) {
+        return Literal<String>(token.content);
+      } else if (token.isVariable) {
+        return Variable(token.content);
+      }
+      throw UnimplementedError();
+    }
+
+    ExpressionBase parse_expression1(ExpressionBase lhs, int min_precedence) {
+      var result = lhs;
+      var token = peekToken();
+      while ((binaryOperatorsPrecedence[token] ?? -1) >= min_precedence) {
+        final op = token;
+        position += 1;
+        final rhs = parsePrimary();
+        token = peekToken();
+      }
+      return result;
+    }
+
+    ExpressionBase parse_expression() => parse_expression1(parsePrimary(), 0);
+    throw UnimplementedError();
+  }
 
   //----------------------------------------------------------------------------
   // All `take*` methods will consume a single token of the specified kind,
@@ -208,6 +254,31 @@ class _Parser {
     return error('unexpected token');
   }
 
+  static const Map<Token, int> binaryOperatorsPrecedence = {
+    Token.operatorMultiply: 6,
+    Token.operatorDivide: 6,
+    Token.operatorModulo: 6,
+    //
+    Token.operatorMinus: 5,
+    Token.operatorPlus: 5,
+    //
+    Token.operatorEqual: 4,
+    Token.operatorNotEqual: 4,
+    Token.operatorGreaterOrEqual: 4,
+    Token.operatorGreaterThan: 4,
+    Token.operatorLessOrEqual: 4,
+    Token.operatorLessThan: 4,
+    //
+    Token.operatorNot: 3,
+    Token.operatorAnd: 2,
+    Token.operatorXor: 2,
+    Token.operatorOr: 1,
+  };
+
+  static const Map<Token, _BinaryExpressionFn> binaryOperatorConstructors = {
+    Token.operatorMultiply: Multiply.new,
+  };
+
   bool error(String message) {
     throw SyntaxError(message);
   }
@@ -232,11 +303,11 @@ class _LineBuilder {
   List<String>? tags;
 
   Line build() => Line(
-    speaker: speaker,
-    content: content ?? constEmptyString,
-    condition: condition,
-    tags: tags,
-  );
+        speaker: speaker,
+        content: content ?? constEmptyString,
+        condition: condition,
+        tags: tags,
+      );
 }
 
 class _CommandBuilder {
@@ -244,5 +315,9 @@ class _CommandBuilder {
 }
 
 class _ExpressionBuilder<T> {
-    Expression<T> build() => throw 'error';
+  Expression<T> build() => throw 'error';
 }
+
+typedef Expr = ExpressionBase;
+typedef _BinaryExpressionFn = ExpressionBase Function(
+    ExpressionBase, ExpressionBase);
