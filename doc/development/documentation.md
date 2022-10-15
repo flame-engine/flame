@@ -185,8 +185,9 @@ following:
 
 4. Melos as per the [contributing](contributing.md#environment-setup) guide.
 
-Once these prerequisites are met, you can build the documentation by switching to the root project
-and running the built-in Melos target:
+Once these prerequisites are met, you can build the documentation by using the built-in Melos
+target:
+
 
 ```console
 melos doc-build
@@ -197,9 +198,18 @@ be re-run every time you make changes to any of the documents. Luckily, it is sm
 rebuild the documents that have changed since the previous run, so usually, a rebuild takes only a
 second or two.
 
-If you want to automatically recompile the docs every time there is a change to one of the files you
-can use the **melos doc-build-live** command, which will also serve and open your default browser
-with the docs.
+If you want to automatically recompile the docs every time there is a change to one of the files
+you can use the the built-in Melos target below, which will also serve and open your default
+browser with the docs.
+
+```console
+melos doc-serve
+```
+
+When using the **melos doc-serve** command, the **melos doc-build** is only needed when
+there are changes to the sphinx theme. This is because the serve command both automatically
+compiles the docs on changes and also hosts them locally. The docs are served at
+`http://localhost:8000/` by default.
 
 There are other make commands that you may find occasionally useful too:
 
@@ -207,16 +217,16 @@ There are other make commands that you may find occasionally useful too:
 state).
 - **melos doc-linkcheck** to check whether there are any broken links in the documentation.
 
-The generated html files will be in the `doc/_build/html` directory, you can view them directly by
-opening the file `doc/_build/html/index.html` in your browser. The only drawback is that the browser
-won't allow any dynamic content in a file opened from a local drive. The solution to this is to
-either run **melos doc-build-live** or run your own local http server:
+The generated html files will be in the `doc/_build/html` directory, you can view them directly
+by opening the file `doc/_build/html/index.html` in your browser. The only drawback is that the
+browser won't allow any dynamic content in a file opened from a local drive. The solution to this
+is to run **melos doc-serve**.
 
-```console
-python -m http.server 8000 --directory doc/_build/html
+If you ever run the **melos doc-clean** command, the server will need to be restarted, because the
+clean command deletes the entire `html` directory.
+
+```{note}
+Avoid having spaces in the paths to the docs since that will keep you from
+building the project due to
+[this bug](https://github.com/ipython/ipython/pull/13765).
 ```
-
-Then you can open the site at `http://localhost:8000/`.
-
-If you ever run the **melos doc-clean** or the **make clean** command, the server will need to be
-restarted, because the clean command deletes the entire `html` directory.
