@@ -278,7 +278,7 @@ course, the new size will be `Vector2(120, 50)`:
 
 ```dart
 final effect = SizeEffect.by(
-  Vector2(20, 20),
+   Vector2(-15, 30),
    EffectController(duration: 1),
 );
 ```
@@ -310,7 +310,7 @@ Changes the size of the target component to the specified size. Target size cann
 
 ```dart
 final effect = SizeEffect.to(
-  Vector2(80, 80),
+  Vector2(90, 80),
   EffectController(duration: 1),
 );
 ```

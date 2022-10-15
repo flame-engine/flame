@@ -1,4 +1,5 @@
-import 'package:doc_flame_examples/flower.dart';
+import 'package:doc_flame_examples/ember.dart';
+import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
@@ -7,27 +8,28 @@ class SizeToEffectGame extends FlameGame with HasTappableComponents {
   bool reset = false;
   @override
   Future<void> onLoad() async {
-    final flower = Flower(
-      size: 40,
-      position: canvasSize / 2,
-      onTap: (flower) {
+    final ember = EmberPlayer(
+      position: size / 2,
+      size: Vector2(45, 40),
+      onTap: (ember) {
         if (reset = !reset) {
-          flower.add(
+          ember.add(
             SizeEffect.to(
-              Vector2(80, 80),
-              EffectController(duration: 1),
+              Vector2(90, 80),
+              EffectController(duration: 0.75),
             ),
           );
         } else {
-          flower.add(
+          ember.add(
             SizeEffect.to(
-              Vector2(60, 60),
-              EffectController(duration: 1),
+              Vector2(45, 40),
+              EffectController(duration: 0.75),
             ),
           );
         }
       },
-    );
-    add(flower);
+    )..anchor = Anchor.center;
+
+    add(ember);
   }
 }
