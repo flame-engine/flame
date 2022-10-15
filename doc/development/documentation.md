@@ -181,6 +181,8 @@ following:
       pip install -r doc/_sphinx/requirements.txt
       ```
 
+    - On Windows, verify that `sphinx-autobuild` installs correctly, otherwise an error may occur.
+
 4. Melos as per the [contributing](contributing.md#environment-setup) guide.
 
 Once these prerequisites are met, you can build the documentation by switching to the root project
