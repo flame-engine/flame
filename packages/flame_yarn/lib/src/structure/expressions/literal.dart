@@ -1,4 +1,6 @@
 
+import 'package:flame_yarn/src/structure/expressions/expression.dart';
+
 class Literal<T> extends Expression<T> {
   const Literal(this.value);
 
