@@ -195,13 +195,13 @@ class ParallaxAnimation extends ParallaxRenderer {
 
     final animation =
         await SpriteAnimation.load(path, animationData, images: images);
-    final preRendedFrames = await Future.wait(
+    final prerendedFrames = await Future.wait(
       animation.frames.map((frame) => frame.sprite.toImage()).toList(),
     );
 
     return ParallaxAnimation(
       animation,
-      preRendedFrames,
+      prerendedFrames,
       repeat: repeat,
       alignment: alignment,
       fill: fill,
