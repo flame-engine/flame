@@ -93,6 +93,6 @@ class ExampleGame extends FlameGame {
 
 ## Full Example
 
-You can check a working example
+You can check an example
 [here](https://github.com/flame-engine/flame/tree/main/packages/flame_fire_atlas/example).
 
