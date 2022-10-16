@@ -6,7 +6,7 @@ animations stored in a `.fa` texture atlas by referring to them by their named k
 
 ## Texture atlas
 
-A texture atlas(also called a spritesheet or an image sprite in 2d game development) is an image
+A texture atlas is an image
 that contains data from several smaller images that have been packed together to reduce overall
 dimensions.
 
