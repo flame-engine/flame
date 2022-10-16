@@ -164,9 +164,11 @@ class _Parser {
       }
       position += 1;
       take(Token.startExpression);
+      final position0 = position;
       final expression = parseExpression();
       take(Token.endExpression);
       if (!expression.isBoolean) {
+        position = position0;
         error('the condition in "if" should be boolean');
       }
       line.condition = expression as BoolExpression;

@@ -169,7 +169,7 @@ void main() {
         expect(line.condition, isNotNull);
       });
 
-      test('line with wrong condition', () {
+      test('line with non-if condition', () {
         expect(
           () => YarnBall().parse('title:A\n---\n.hello <<stop>>\n===\n'),
           hasSyntaxError(
@@ -177,6 +177,17 @@ void main() {
               '>  at line 3 column 10:\n'
               '>  .hello <<stop>>\n'
               '>           ^\n'),
+        );
+      });
+
+      test('line with non-boolean condition', () {
+        expect(
+          () => YarnBall().parse('title:A\n---\n.hello <<if 42 % 2>>\n===\n'),
+          hasSyntaxError(
+              'SyntaxError: the condition in "if" should be boolean\n'
+              '>  at line 3 column 13:\n'
+              '>  .hello <<if 42 % 2>>\n'
+              '>              ^\n'),
         );
       });
     });
