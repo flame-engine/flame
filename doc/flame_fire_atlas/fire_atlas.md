@@ -1,7 +1,7 @@
 # FireAtlas
 
-FireAtlas is a tool for handling `texture atlases`. Using FireAtlas we can access images using keys
-from texture atlas like accessing key-value pair.
+FireAtlas is a tool for handling texture atlases. With FireAtlas one can access images and animations
+stored in a `.fa` texture atlas by referring to them by their named keys.
 
 
 ## Texture atlas
