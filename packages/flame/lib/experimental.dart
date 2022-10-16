@@ -44,7 +44,6 @@ export 'src/experimental/geometry/shapes/rounded_rectangle.dart'
     show RoundedRectangle;
 export 'src/experimental/geometry/shapes/shape.dart' show Shape;
 export 'src/experimental/has_game_reference.dart' show HasGameReference;
-export 'src/experimental/layout_component.dart';
 export 'src/experimental/max_viewport.dart' show MaxViewport;
 export 'src/experimental/row_component.dart';
 export 'src/experimental/viewfinder.dart' show Viewfinder;

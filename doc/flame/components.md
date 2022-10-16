@@ -1104,19 +1104,16 @@ Check the example app
 for details on how to use it.
 
 
-## LayoutComponent
+## RowComponent & ColumnComponent
 
-An abstract class extending `PositionComponent` whose two children `RowComponent` and `ColumnComponent`
-allow to layout its children horizontally and vertically. The following parameters can be used when
-one of these components is instantiated:
+These two components allow to layout their added children horizontally or vertically. The 
+following parameters can be used when one of these components is instantiated:
 
-- `mainAxisAlignment`: Offers the same `MainAxisAlignment` modes as known from Flutter
+- `alignment`: Offers the same `MainAxisAlignment` modes as known from Flutter
 - `gap`: Allows to define a gap to be applied between the children
-- `size`: Optionally allows to define the size for this `LayoutComponent`
 
-If no size is defined the `LayoutComponent` instance tries to get the size from the nearest
-`PositionComponent` up the hierarchy tree. If there can also no size be determined the component
-grows with the size of its children.
+At the moment a component grows with the size of its children, therefore setting a size
+won't have any effect.
 
 
 ## Effects

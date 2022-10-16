@@ -1,6 +1,5 @@
 import 'package:flame/components.dart';
 import 'package:flame/experimental.dart';
-import 'package:flame/src/game/notifying_vector2.dart';
 import 'package:flutter/widgets.dart';
 
 enum Direction { horizontal, vertical }
@@ -8,21 +7,16 @@ enum Direction { horizontal, vertical }
 /// Super class for [RowComponent] and [ColumnComponent]
 /// A relayout is performed when
 ///  - a change in this component's children takes place
-///  - the size of this component or a parent changes
 ///  - the [gap] parameter is changed
 abstract class LayoutComponent extends PositionComponent {
   LayoutComponent(
     this.direction,
-    this.mainAxisAlignment,
+    this.alignment,
     this._gap,
-    Vector2? size,
-  )   : isManuallySized = size != null,
-        super(
-          size: size,
-        );
+  );
   final Direction direction;
-  final MainAxisAlignment mainAxisAlignment;
-  bool isManuallySized;
+  final MainAxisAlignment alignment;
+  bool _allowSetSize = false;
 
   /// gap between components
   double _gap;
@@ -32,16 +26,14 @@ abstract class LayoutComponent extends PositionComponent {
     layoutChildren();
   }
 
-  double get gap => _gap;
-
-  NotifyingVector2? get _bounds =>
-      isManuallySized ? size : findParent<PositionComponent>()?.size;
-
   @override
-  Future<void> onLoad() async {
-    final size = _bounds;
-    size?.addListener(layoutChildren);
+  set size(Vector2 size) {
+    if (_allowSetSize) {
+      this.size = size;
+    }
   }
+
+  double get gap => _gap;
 
   @override
   void onChildrenChanged(Component child, ChildrenChangeType changeType) {
@@ -59,17 +51,14 @@ abstract class LayoutComponent extends PositionComponent {
       0,
       (previousValue, element) => previousValue + element.size[vectorIndex],
     );
+    _allowSetSize = true;
+    size[vectorIndex] = totalSizeOfComponents;
+    _allowSetSize = false;
 
     final totalGapsSize = gap * (list.length - 1);
 
-    /// Either we have a defined size or we just use the summed width/height of
-    /// the current children.
-    final componentBounds = _bounds;
-    final availableSpace =
-        componentBounds != null && componentBounds[vectorIndex] != 0.0
-            ? componentBounds[vectorIndex]
-            : totalSizeOfComponents;
-    switch (mainAxisAlignment) {
+    final availableSpace = totalSizeOfComponents;
+    switch (alignment) {
       case MainAxisAlignment.start:
         for (final child in list) {
           child.position.setFrom(currentPosition);

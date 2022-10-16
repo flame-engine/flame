@@ -30,7 +30,7 @@ void main() {
 
   for (var k = 0; k <= 1; k++) {
     group(k == 0 ? 'RowComponent' : 'ColumnComponent', () {
-      late LayoutComponent layoutComponent;
+      late PositionComponent layoutComponent;
       setUp(() async {
         component = Component();
         gameSize = Vector2(1000, 768);
@@ -52,14 +52,12 @@ void main() {
         await component.add(
           k == 0
               ? layoutComponent = RowComponent(
-                  mainAxisAlignment: alignment,
+                  alignment: alignment,
                   gap: gap,
-                  size: Vector2(1000, 768),
                 )
               : layoutComponent = ColumnComponent(
-                  mainAxisAlignment: alignment,
+                  alignment: alignment,
                   gap: gap,
-                  size: Vector2(1000, 768),
                 ),
         );
         layoutComponent.position = position;
@@ -68,8 +66,7 @@ void main() {
         await game.ready();
       }
 
-      testWithFlameGame('mainAxisAlignment.start with position and size',
-          (game) async {
+      testWithFlameGame('mainAxisAlignment.start with position', (game) async {
         await _initScene(game, MainAxisAlignment.start, Vector2(50, 50));
         expect(firstComponent.absolutePosition[k], 50);
 
@@ -79,7 +76,7 @@ void main() {
         expect(thirdComponent.position[k], 150);
       });
 
-      testWithFlameGame('mainAxisAlignment.start with position, size and gap',
+      testWithFlameGame('mainAxisAlignment.start with position and gap',
           (game) async {
         await _initScene(game, MainAxisAlignment.start, Vector2(50, 50), 10);
         expect(firstComponent.absolutePosition[k], 50);
@@ -88,8 +85,7 @@ void main() {
         expect(thirdComponent.position[k], 170);
       });
 
-      testWithFlameGame('mainAxisAlignment.end with position and size',
-          (game) async {
+      testWithFlameGame('mainAxisAlignment.end with position', (game) async {
         await _initScene(game, MainAxisAlignment.end, Vector2(500, 500));
         expect(firstComponent.absolutePosition[k], 200);
         expect(firstComponent.position[k], -300);
@@ -97,7 +93,7 @@ void main() {
         expect(thirdComponent.position[k], -150);
       });
 
-      testWithFlameGame('mainAxisAlignment.end with position, size and gap',
+      testWithFlameGame('mainAxisAlignment.end with position and gap',
           (game) async {
         await _initScene(game, MainAxisAlignment.end, Vector2(500, 500), 20);
         expect(firstComponent.absolutePosition[k], 160);
@@ -106,7 +102,7 @@ void main() {
         expect(thirdComponent.position[k], -150);
       });
 
-      testWithFlameGame('mainAxisAlignment.spaceBetween with position and size',
+      testWithFlameGame('mainAxisAlignment.spaceBetween with position',
           (game) async {
         await _initScene(game, MainAxisAlignment.spaceBetween, Vector2(50, 50));
         final gap = (layoutComponent.size[k] - totalSizeOfComponents) / 2;
@@ -114,7 +110,7 @@ void main() {
         expect(thirdComponent.position[k], 2 * gap + 150);
       });
 
-      testWithFlameGame('mainAxisAlignment.spaceEvenly with position and size',
+      testWithFlameGame('mainAxisAlignment.spaceEvenly with position',
           (game) async {
         await _initScene(game, MainAxisAlignment.spaceEvenly, Vector2(50, 50));
         final gap = (layoutComponent.size[k] - totalSizeOfComponents) / 4;
@@ -123,7 +119,7 @@ void main() {
         expect(thirdComponent.position[k], 3 * gap + 150);
       });
 
-      testWithFlameGame('mainAxisAlignment.spaceAround with position and size',
+      testWithFlameGame('mainAxisAlignment.spaceAround with position',
           (game) async {
         await _initScene(game, MainAxisAlignment.spaceAround, Vector2(50, 50));
         final gap = (layoutComponent.size[k] - totalSizeOfComponents) / 3;
@@ -141,8 +137,7 @@ void main() {
         );
       });
 
-      testWithFlameGame('mainAxisAlignment.center with position and size',
-          (game) async {
+      testWithFlameGame('mainAxisAlignment.center with position', (game) async {
         await _initScene(game, MainAxisAlignment.center, Vector2(50, 50));
         final startPosition =
             (layoutComponent.size[k] - totalSizeOfComponents) / 2;
@@ -151,7 +146,7 @@ void main() {
         expect(thirdComponent.position[k], startPosition + 150);
       });
 
-      testWithFlameGame('mainAxisAlignment.center with position, size and gap',
+      testWithFlameGame('mainAxisAlignment.center with position and gap',
           (game) async {
         await _initScene(game, MainAxisAlignment.center, Vector2(50, 50), 10);
         final startPosition =
