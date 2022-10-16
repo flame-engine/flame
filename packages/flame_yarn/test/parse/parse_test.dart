@@ -1,6 +1,7 @@
 import 'package:flame_yarn/flame_yarn.dart';
 import 'package:flame_yarn/src/parse/parser.dart';
 import 'package:flame_yarn/src/structure/dialogue.dart';
+import 'package:flame_yarn/src/structure/option.dart';
 import 'package:test/test.dart';
 
 import 'tokenize_test.dart';
@@ -147,7 +148,7 @@ void main() {
     group('parseDialogueLine', () {
       test('line with a speaker', () {
         final yarn = YarnProject()
-            ..parse('title:A\n---\nMrGoo: whatever\n===\n');
+          ..parse('title:A\n---\nMrGoo: whatever\n===\n');
         expect(yarn.nodes['A']!.lines.first, isA<Dialogue>());
         final line = yarn.nodes['A']!.lines[0] as Dialogue;
         expect(line.speaker, 'MrGoo');
@@ -198,18 +199,82 @@ void main() {
     });
 
     group('parseOption', () {
-      // test('option with a non-boolean condition', () {
-      //   expect(
-      //         () => YarnProject().parse(
-      //       'title:A\n---\n-> ok! <<if 42 % 2>>\n===\n',
-      //     ),
-      //     hasSyntaxError(
-      //         'SyntaxError: the condition in "if" should be boolean\n'
-      //             '>  at line 3 column 10:\n'
-      //             '>  -> ok! <<if 42 % 2>>\n'
-      //             '>           ^\n'),
-      //   );
-      // });
+      test('simple options', () {
+        final yarn = YarnProject()
+          ..parse('title: test\n---\n'
+              '-> Alpha\n'
+              '-> Beta\n'
+              '->    Gamma\n'
+              '===\n');
+        final node = yarn.nodes['test']!;
+        expect(node.lines.length, 3);
+        for (var i = 0; i < 3; i++) {
+          expect(node.lines[i], isA<Option>());
+          final line = node.lines[i] as Option;
+          expect(line.speaker, isNull);
+          expect(line.tags, isNull);
+          expect(line.condition, isNull);
+          expect(line.block, isEmpty);
+          expect(line.content.value, ['Alpha', 'Beta', 'Gamma'][i]);
+        }
+      });
+
+      test('speakers in options', () {
+        final yarn = YarnProject()
+          ..parse('title:A\n---\n'
+              '-> Alice: Hello!\n'
+              '-> Bob: Hi: there!\n'
+              '===\n');
+        final node = yarn.nodes['A']!;
+        final line0 = node.lines[0] as Option;
+        final line1 = node.lines[1] as Option;
+        expect(line0.speaker, 'Alice');
+        expect(line0.content.value, 'Hello!');
+        expect(line1.speaker, 'Bob');
+        expect(line1.content.value, 'Hi: there!');
+      });
+
+      test('option with a non-if command', () {
+        expect(
+          () => YarnProject().parse(
+            'title:A\n---\n-> ok! <<stop>>\n===\n',
+          ),
+          hasSyntaxError(
+              'SyntaxError: only "if" command is allowed for an option\n'
+              '>  at line 3 column 10:\n'
+              '>  -> ok! <<stop>>\n'
+              '>           ^\n'),
+        );
+      });
+
+      test('option with a non-boolean condition', () {
+        expect(
+            () => YarnProject().parse(
+                  'title:A\n---\n'
+                  '-> ok! <<if 42 % 2>>\n'
+                  '===\n',
+                ),
+            hasSyntaxError(
+                'SyntaxError: the condition in "if" should be boolean\n'
+                '>  at line 3 column 13:\n'
+                '>  -> ok! <<if 42 % 2>>\n'
+                '>              ^\n'));
+      });
+
+      test('option with multiple conditions', () {
+        expect(
+          () => YarnProject().parse(
+            'title:A\n---\n'
+            '-> ok! <<if true>> <<if false>>\n'
+            '===\n',
+          ),
+          hasSyntaxError(
+              'SyntaxError: multiple commands are not allowed on a line\n'
+              '>  at line 3 column 20:\n'
+              '>  -> ok! <<if true>> <<if false>>\n'
+              '>                     ^\n'),
+        );
+      });
     });
 
     group('parseExpression', () {
@@ -330,6 +395,53 @@ void main() {
         );
       });
 
+      test('modulo', () {
+        final yarn = YarnProject()
+          ..parse('title:A\n---\n'
+              '{ 48 % 5 }\n'
+              '{ 4 % 1.2 }\n'
+              '===\n');
+        expect((yarn.nodes['A']!.lines[0] as Dialogue).content.value, '3');
+        expect(
+          num.parse((yarn.nodes['A']!.lines[1] as Dialogue).content.value),
+          closeTo(4 % 1.2, 1e-10),
+        );
+        expect(
+          () => yarn.parse('title:E\n---\n{ 17 % true }\n===\n'),
+          hasSyntaxError('SyntaxError: both lhs and rhs of % must be numeric\n'
+              '>  at line 3 column 6:\n'
+              '>  { 17 % true }\n'
+              '>       ^\n'),
+        );
+      });
+
+      test('equals', () {
+        final yarn = YarnProject()
+          ..setVariable(r'$famous', true)
+          ..setVariable(r'$name', 'Mr.Bronze')
+          ..parse('title: test\n---\n'
+              '{ \$famous == true }\n'
+              '{ 8 % 3 == 2 }\n'
+              '{ \$name == "monkey" }\n'
+              '===\n');
+        expect(
+          yarn.nodes['test']!.lines
+              .map((line) => (line as Dialogue).content.value),
+          ['true', 'true', 'false'],
+        );
+        expect(
+          () => yarn.parse('title:Error\n---\n'
+              '{ \$name == 9.99 }\n'
+              '===\n'),
+          hasSyntaxError(
+              'SyntaxError: equality operator between operands of unrelated '
+              'types string and numeric\n'
+              '>  at line 3 column 9:\n'
+              '>  { \$name == 9.99 }\n'
+              '>          ^\n'),
+        );
+      });
+
       test('complicated expressions', () {
         final yarn = YarnProject()
           ..parse('title: test\n---\n'
@@ -351,6 +463,30 @@ void main() {
               '>  at line 3 column 3:\n'
               '>  { \$x + 1 }\n'
               '>    ^\n'),
+        );
+      });
+
+      test('invalid expression', () {
+        expect(
+          () => YarnProject().parse('title:A\n---\n'
+              '{ 1 + * 5 }\n'
+              '===\n'),
+          hasSyntaxError('SyntaxError: unexpected expression\n'
+              '>  at line 3 column 7:\n'
+              '>  { 1 + * 5 }\n'
+              '>        ^\n'),
+        );
+      });
+
+      test('mismatched parentheses', () {
+        expect(
+          () => YarnProject().parse('title:A\n---\n'
+              '{ (12 }\n'
+              '===\n'),
+          hasSyntaxError('SyntaxError: missing closing ")"\n'
+              '>  at line 3 column 7:\n'
+              '>  { (12 }\n'
+              '>        ^\n'),
         );
       });
     });

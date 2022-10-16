@@ -10,6 +10,7 @@ import 'package:flame_yarn/src/structure/expressions/relational.dart';
 import 'package:flame_yarn/src/structure/expressions/string.dart';
 import 'package:flame_yarn/src/structure/expressions/variables.dart';
 import 'package:flame_yarn/src/structure/node.dart';
+import 'package:flame_yarn/src/structure/option.dart';
 import 'package:flame_yarn/src/structure/statement.dart';
 import 'package:flame_yarn/src/yarn_project.dart';
 import 'package:meta/meta.dart';
@@ -81,23 +82,18 @@ class _Parser {
     while (true) {
       final nextToken = peekToken();
       if (nextToken == Token.arrow) {
-        parseOption();
+        out.add(parseOption());
       } else if (nextToken == Token.startCommand) {
         parseCommand();
       } else if (nextToken.isText ||
           nextToken.isSpeaker ||
           nextToken == Token.startExpression) {
-        final line = parseDialogueLine();
-        out.add(line);
+        out.add(parseDialogueLine());
       } else {
         break;
       }
     }
   }
-
-  void parseOption() {}
-
-  void parseCommand() {}
 
   /// Consumes a regular line of text from the input, up to and including the
   /// NEWLINE token.
@@ -110,8 +106,24 @@ class _Parser {
       error('commands are not allowed on a dialogue line');
     }
     takeNewline();
-    return line.build();
+    return line.build() as Dialogue;
   }
+
+  Option parseOption() {
+    final optionBuilder = _OptionBuilder();
+    take(Token.arrow);
+    maybeParseLineSpeaker(optionBuilder);
+    parseLineContent(optionBuilder);
+    optionBuilder.condition = maybeParseLineCondition();
+    maybeParseHashtags(optionBuilder);
+    if (peekToken() == Token.startCommand) {
+      error('multiple commands are not allowed on a line');
+    }
+    take(Token.newline);
+    return optionBuilder.build() as Option;
+  }
+
+  void parseCommand() {}
 
   void maybeParseLineSpeaker(_DialogueBuilder line) {
     final token = peekToken();
@@ -151,6 +163,28 @@ class _Parser {
     }
   }
 
+  BoolExpression? maybeParseLineCondition() {
+    final token = peekToken();
+    if (token == Token.startCommand) {
+      position += 1;
+      if (peekToken() != Token.commandIf) {
+        error('only "if" command is allowed for an option');
+      }
+      position += 1;
+      take(Token.startExpression);
+      final position0 = position;
+      final expression = parseExpression();
+      take(Token.endExpression);
+      if (!expression.isBoolean) {
+        position = position0;
+        error('the condition in "if" should be boolean');
+      }
+      take(Token.endCommand);
+      return expression as BoolExpression;
+    }
+    return null;
+  }
+
   void maybeParseHashtags(_DialogueBuilder line) {
     while (true) {
       final token = peekToken();
@@ -177,6 +211,9 @@ class _Parser {
       final op = token;
       position += 1;
       var rhs = parsePrimary();
+      if (rhs is VoidLiteral) {
+        error('unexpected expression');
+      }
       token = peekToken();
       while ((precedences[token] ?? -1) > opPrecedence) {
         rhs = parseExpression1(rhs, opPrecedence + 1);
@@ -193,7 +230,7 @@ class _Parser {
     if (token == Token.startParenthesis) {
       final expression = parseExpression();
       if (peekToken() != Token.endParenthesis) {
-        error('closing ")" is expected');
+        error('missing closing ")"');
       }
       position += 1;
       return expression;
@@ -356,8 +393,8 @@ class _Parser {
     }
     position = opPosition;
     error(
-      'equality operator between operands of unrelated types ${lhs.type} '
-      'and ${rhs.type}',
+      'equality operator between operands of unrelated types ${lhs.type.name} '
+      'and ${rhs.type.name}',
     );
   }
 
@@ -389,9 +426,23 @@ class _DialogueBuilder {
   StringExpression? content;
   List<String>? tags;
 
-  Dialogue build() => Dialogue(
+  Statement build() => Dialogue(
         speaker: speaker,
         content: content ?? constEmptyString,
         tags: tags,
+      );
+}
+
+class _OptionBuilder extends _DialogueBuilder {
+  BoolExpression? condition;
+  List<Statement>? block;
+
+  @override
+  Statement build() => Option(
+        content: content ?? constEmptyString,
+        speaker: speaker,
+        tags: tags,
+        condition: condition,
+        block: block ?? const <Statement>[],
       );
 }

@@ -5,14 +5,16 @@ import 'package:flame_yarn/src/structure/statement.dart';
 class Option extends Statement {
   Option({
     required this.content,
+    this.speaker,
     this.condition,
     this.tags,
-    this.continuation = const <Statement>[],
+    this.block = const <Statement>[],
   });
 
+  final String? speaker;
   final StringExpression content;
-  final BoolExpression? condition;
   final List<String>? tags;
-  final List<Statement> continuation;
+  final BoolExpression? condition;
+  final List<Statement> block;
   bool available = true;
 }
