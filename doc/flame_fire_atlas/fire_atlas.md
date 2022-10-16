@@ -1,16 +1,14 @@
 # FireAtlas
 
-FireAtlas is a tool for handling texture atlases. With FireAtlas one can access images and animations
-stored in a `.fa` texture atlas by referring to them by their named keys.
+FireAtlas is a tool for handling texture atlases. With FireAtlas one can access images and
+animations stored in a `.fa` texture atlas by referring to them by their named keys.
 
 
 ## Texture atlas
 
 A texture atlas(also called a spritesheet or an image sprite in 2d game development) is an image
 that contains data from several smaller images that have been packed together to reduce overall
-dimensions. Texture atlasing enables batching for several static objects that share this texture
-atlas and the same material. Batching reduces the number of draw calls. Fewer draw calls results in
-better performance when the game is CPU-bound.
+dimensions.
 
 
 ## Usage
@@ -58,8 +56,8 @@ FireAtlas.getSprite('bomb_ptero')
 FireAtlas.getAnimation('bla')
 ```
 
-To use FireAtlas in your game, load the fire atlas file in an `onLoad` method, either in your game or a component.
-Then you can use [getSprite] and [getAnimation] to retrieve the mapped assets.
+To use FireAtlas in your game, load the fire atlas file in an `onLoad` method, either in your game
+or a component. Then you can use [getSprite] and [getAnimation] to retrieve the mapped assets.
 
 ```dart
 class ExampleGame extends FlameGame {
@@ -71,19 +69,19 @@ class ExampleGame extends FlameGame {
     _atlas = await loadFireAtlas('caveace.fa');
 
     add(
-      SpriteAnimationComponent(
-        size: Vector2(150, 100),
-        animation: _atlas.getAnimation('shooting_ptero'),
-      )
-        ..y = 50,
+      SpriteComponent(
+        size: Vector2(50, 50),
+        position: Vector2(0, 50),
+        sprite: _atlas.getSprite('shooting_ptero'),
+      ),
     );
 
     add(
       SpriteComponent(
         size: Vector2(50, 50),
+        position: Vector2(0, 50),
         sprite: _atlas.getSprite('bullet'),
-      )
-        ..y = 200,
+      ),
     );
   }
 
