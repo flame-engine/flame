@@ -268,8 +268,19 @@ This effect will change the size of the target component, relative to its curren
 if the target has size `Vector2(100, 100)`, then after the following effect is applied and runs its
 course, the new size will be `Vector2(120, 50)`:
 
+ ```{flutter-app}
+ :sources: ../flame/examples
+ :page: size_by_effect
+ :show: widget code infobox
+ :width: 180
+ :height: 160
+ ```
+
 ```dart
-final effect = SizeEffect.by(Vector2(20, -50), EffectController(duration: 1));
+final effect = SizeEffect.by(
+   Vector2(-15, 30),
+   EffectController(duration: 1),
+);
 ```
 
 The size of a `PositionComponent` cannot be negative. If an effect attempts to set the size to a
@@ -288,8 +299,20 @@ target component and its children.
 
 Changes the size of the target component to the specified size. Target size cannot be negative:
 
+
+ ```{flutter-app}
+ :sources: ../flame/examples
+ :page: size_to_effect
+ :show: widget code infobox
+ :width: 180
+ :height: 160
+ ```
+
 ```dart
-final effect = SizeEffect.to(Vector2(120, 120), EffectController(duration: 1));
+final effect = SizeEffect.to(
+  Vector2(90, 80),
+  EffectController(duration: 1),
+);
 ```
 
 

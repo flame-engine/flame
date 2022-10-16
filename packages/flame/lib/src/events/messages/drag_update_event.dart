@@ -36,4 +36,10 @@ class DragUpdateEvent extends PositionEvent {
       ),
     );
   }
+
+  @override
+  String toString() => 'DragUpdateEvent(devicePosition: $devicePosition, '
+      'canvasPosition: $canvasPosition, '
+      'delta: $delta, '
+      'pointerId: $pointerId, timestamp: $timestamp)';
 }
