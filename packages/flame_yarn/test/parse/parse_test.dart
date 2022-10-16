@@ -62,14 +62,20 @@ void main() {
       test('multiple colons', () {
         expect(
           () => YarnBall().parse('title:: Hamlet\n---\n===\n'),
-          hasSyntaxError('SyntaxError: unexpected token'),
+          hasSyntaxError('SyntaxError: unexpected token\n'
+              '>  at line 1 column 7:\n'
+              '>  title:: Hamlet\n'
+              '>        ^\n'),
         );
       });
 
       test('node without a title', () {
         expect(
           () => YarnBall().parse('Title: Despicable Me!\n---\n===\n'),
-          hasSyntaxError('SyntaxError: node does not have a title'),
+          hasSyntaxError('SyntaxError: node does not have a title\n'
+              '>  at line 2 column 1:\n'
+              '>  ---\n'
+              '>  ^\n'),
         );
       });
 
@@ -80,7 +86,10 @@ void main() {
               'keyword: value\n'
               'title: two\n'
               '---\n===\n'),
-          hasSyntaxError('SyntaxError: a node can only have one title'),
+          hasSyntaxError('SyntaxError: a node can only have one title\n'
+              '>  at line 4 column 1:\n'
+              '>  title: two\n'
+              '>  ^\n'),
         );
       });
 
@@ -92,7 +101,10 @@ void main() {
               'title: xyz\n'
               '---\n===\n'),
           hasSyntaxError(
-            'SyntaxError: node with title "xyz" has already been defined',
+            'SyntaxError: node with title "xyz" has already been defined\n'
+            '>  at line 5 column 1:\n'
+            '>  title: xyz\n'
+            '>  ^\n',
           ),
         );
       });
@@ -101,8 +113,11 @@ void main() {
     group('parseBody', () {
       test('indent in a body', () {
         expect(
-          () => YarnBall().parse('title:a\n---\n hi\n===\n'),
-          hasSyntaxError('SyntaxError: unexpected indent'),
+          () => YarnBall().parse('title:a\n---\n    hi\n===\n'),
+          hasSyntaxError('SyntaxError: unexpected indent\n'
+              '>  at line 3 column 1:\n'
+              '>      hi\n'
+              '>  ^\n'),
         );
       });
     });

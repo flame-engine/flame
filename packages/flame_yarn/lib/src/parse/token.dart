@@ -14,6 +14,7 @@ class Token {
   const Token.string(String text) : this._(TokenType.string, text);
   const Token.text(String text) : this._(TokenType.text, text);
   const Token.variable(String text) : this._(TokenType.variable, text);
+  const Token.error(String text) : this._(TokenType.error, text);
 
   static const arrow = Token._(TokenType.arrow);
   static const asType = Token._(TokenType.asType);
@@ -155,4 +156,6 @@ enum TokenType {
   typeBool, //               'bool'
   typeNumber, //             'number'
   typeString, //             'string'
+
+  error,
 }

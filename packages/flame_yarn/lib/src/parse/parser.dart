@@ -386,7 +386,10 @@ class _Parser {
   }
 
   Never error(String message) {
-    throw SyntaxError(message);
+    final newTokens = tokenize(text, addErrorTokenAtIndex: position);
+    final errorToken = newTokens[position];
+    final location = errorToken.content;
+    throw SyntaxError('$message\n$location\n');
   }
 }
 
