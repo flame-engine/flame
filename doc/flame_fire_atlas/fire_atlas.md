@@ -54,7 +54,7 @@ loadFireAtlas('caveace.fa')
 // To get Sprite with the given selectionId.
 FireAtlas.getSprite('bomb_ptero')
 
-// To get SpriteAnimation with the given selectionId.
+// Get a SpriteAnimation with the given key.
 FireAtlas.getAnimation('bla')
 ```
 
