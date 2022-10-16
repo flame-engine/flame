@@ -249,16 +249,17 @@ void main() {
 
       test('option with a non-boolean condition', () {
         expect(
-            () => YarnProject().parse(
-                  'title:A\n---\n'
-                  '-> ok! <<if 42 % 2>>\n'
-                  '===\n',
-                ),
-            hasSyntaxError(
-                'SyntaxError: the condition in "if" should be boolean\n'
-                '>  at line 3 column 13:\n'
-                '>  -> ok! <<if 42 % 2>>\n'
-                '>              ^\n'));
+          () => YarnProject().parse(
+            'title:A\n---\n'
+            '-> ok! <<if 42 % 2>>\n'
+            '===\n',
+          ),
+          hasSyntaxError(
+              'SyntaxError: the condition in "if" should be boolean\n'
+              '>  at line 3 column 13:\n'
+              '>  -> ok! <<if 42 % 2>>\n'
+              '>              ^\n'),
+        );
       });
 
       test('option with multiple conditions', () {

@@ -1,4 +1,3 @@
-
 import 'package:flame_yarn/src/structure/expressions/expression.dart';
 
 class Add extends NumExpression {

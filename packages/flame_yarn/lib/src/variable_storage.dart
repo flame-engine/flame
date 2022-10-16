@@ -1,4 +1,3 @@
-
 class VariableStorage {
   final Map<String, dynamic> variables = <String, dynamic>{};
 
