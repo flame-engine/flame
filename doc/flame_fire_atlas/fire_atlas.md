@@ -57,7 +57,7 @@ FireAtlas.getAnimation('bla')
 ```
 
 To use FireAtlas in your game, load the fire atlas file in an `onLoad` method, either in your game
-or a component. Then you can use [getSprite] and [getAnimation] to retrieve the mapped assets.
+or a component. Then you can use `getSprite` and `getAnimation` to retrieve the mapped assets.
 
 ```dart
 class ExampleGame extends FlameGame {
