@@ -7,18 +7,18 @@ Random $randomGenerator = Random();
 // TODO(st-pasha): visited(String nodeName)
 // TODO(st-pasha): visited_count(String nodeName)
 
-class RandomFn extends TypedExpression<num> {
+class RandomFn extends NumExpression {
   const RandomFn();
 
   @override
   num get value => $randomGenerator.nextDouble();
 }
 
-class RandomRangeFn extends TypedExpression<num> {
+class RandomRangeFn extends NumExpression {
   const RandomRangeFn(this.a, this.b);
 
-  final TypedExpression<num> a;
-  final TypedExpression<num> b;
+  final NumExpression a;
+  final NumExpression b;
 
   @override
   num get value {
@@ -28,29 +28,29 @@ class RandomRangeFn extends TypedExpression<num> {
   }
 }
 
-class DiceFn extends TypedExpression<num> {
+class DiceFn extends NumExpression {
   const DiceFn(this.sides);
 
-  final TypedExpression<num> sides;
+  final NumExpression sides;
 
   @override
   num get value => $randomGenerator.nextInt(sides.value.toInt()) + 1;
 }
 
-class RoundFn extends TypedExpression<num> {
+class RoundFn extends NumExpression {
   const RoundFn(this.arg);
 
-  final TypedExpression<num> arg;
+  final NumExpression arg;
 
   @override
   num get value => arg.value.round();
 }
 
-class RoundPlacesFn extends TypedExpression<num> {
+class RoundPlacesFn extends NumExpression {
   const RoundPlacesFn(this.arg, this.places);
 
-  final TypedExpression<num> arg;
-  final TypedExpression<num> places;
+  final NumExpression arg;
+  final NumExpression places;
 
   @override
   num get value {
@@ -60,37 +60,37 @@ class RoundPlacesFn extends TypedExpression<num> {
   }
 }
 
-class FloorFn extends TypedExpression<num> {
+class FloorFn extends NumExpression {
   const FloorFn(this.arg);
 
-  final TypedExpression<num> arg;
+  final NumExpression arg;
 
   @override
   num get value => arg.value.floor();
 }
 
-class CeilFn extends TypedExpression<num> {
+class CeilFn extends NumExpression {
   const CeilFn(this.arg);
 
-  final TypedExpression<num> arg;
+  final NumExpression arg;
 
   @override
   num get value => arg.value.ceil();
 }
 
-class IncFn extends TypedExpression<num> {
+class IncFn extends NumExpression {
   const IncFn(this.arg);
 
-  final TypedExpression<num> arg;
+  final NumExpression arg;
 
   @override
   num get value => arg.value.toInt() + 1;
 }
 
-class DecFn extends TypedExpression<num> {
+class DecFn extends NumExpression {
   const DecFn(this.arg);
 
-  final TypedExpression<num> arg;
+  final NumExpression arg;
 
   @override
   num get value {
@@ -100,10 +100,10 @@ class DecFn extends TypedExpression<num> {
   }
 }
 
-class DecimalFn extends TypedExpression<num> {
+class DecimalFn extends NumExpression {
   const DecimalFn(this.arg);
 
-  final TypedExpression<num> arg;
+  final NumExpression arg;
 
   @override
   num get value {
@@ -112,50 +112,50 @@ class DecimalFn extends TypedExpression<num> {
   }
 }
 
-class IntFn extends TypedExpression<num> {
+class IntFn extends NumExpression {
   const IntFn(this.arg);
 
-  final TypedExpression<num> arg;
+  final NumExpression arg;
 
   @override
   num get value => arg.value.truncate();
 }
 
 /// Function `string(num x)`.
-class NumToStringFn extends TypedExpression<String> {
+class NumToStringFn extends StringExpression {
   const NumToStringFn(this.arg);
 
-  final TypedExpression<num> arg;
+  final NumExpression arg;
 
   @override
   String get value => arg.value.toString();
 }
 
 /// Function `string(bool x)`.
-class BoolToStringFn extends TypedExpression<String> {
+class BoolToStringFn extends StringExpression {
   const BoolToStringFn(this.arg);
 
-  final TypedExpression<bool> arg;
+  final BoolExpression arg;
 
   @override
   String get value => arg.value.toString();
 }
 
 /// Function `number(String x)`.
-class StringToNumFn extends TypedExpression<num> {
+class StringToNumFn extends NumExpression {
   const StringToNumFn(this.arg);
 
-  final TypedExpression<String> arg;
+  final StringExpression arg;
 
   @override
   num get value => double.parse(arg.value);
 }
 
 /// Function `bool(num x)`.
-class NumToBoolFn extends TypedExpression<bool> {
+class NumToBoolFn extends BoolExpression {
   const NumToBoolFn(this.arg);
 
-  final TypedExpression<num> arg;
+  final NumExpression arg;
 
   @override
   bool get value => arg.value != 0;

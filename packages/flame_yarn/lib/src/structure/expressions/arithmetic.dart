@@ -1,60 +1,60 @@
 
 import 'package:flame_yarn/src/structure/expressions/expression.dart';
 
-class Add extends TypedExpression<num> {
+class Add extends NumExpression {
   const Add(this.lhs, this.rhs);
 
-  final TypedExpression<num> lhs;
-  final TypedExpression<num> rhs;
+  final NumExpression lhs;
+  final NumExpression rhs;
 
   @override
   num get value => lhs.value + rhs.value;
 }
 
-class Subtract extends TypedExpression<num> {
+class Subtract extends NumExpression {
   const Subtract(this.lhs, this.rhs);
 
-  final TypedExpression<num> lhs;
-  final TypedExpression<num> rhs;
+  final NumExpression lhs;
+  final NumExpression rhs;
 
   @override
   num get value => lhs.value - rhs.value;
 }
 
-class Multiply extends TypedExpression<num> {
+class Multiply extends NumExpression {
   const Multiply(this.lhs, this.rhs);
 
-  final TypedExpression<num> lhs;
-  final TypedExpression<num> rhs;
+  final NumExpression lhs;
+  final NumExpression rhs;
 
   @override
   num get value => lhs.value * rhs.value;
 }
 
-class Divide extends TypedExpression<num> {
+class Divide extends NumExpression {
   const Divide(this.lhs, this.rhs);
 
-  final TypedExpression<num> lhs;
-  final TypedExpression<num> rhs;
+  final NumExpression lhs;
+  final NumExpression rhs;
 
   @override
   num get value => lhs.value / rhs.value;
 }
 
-class Modulo extends TypedExpression<num> {
+class Modulo extends NumExpression {
   const Modulo(this.lhs, this.rhs);
 
-  final TypedExpression<num> lhs;
-  final TypedExpression<num> rhs;
+  final NumExpression lhs;
+  final NumExpression rhs;
 
   @override
   num get value => lhs.value % rhs.value;
 }
 
-class Negate extends TypedExpression<num> {
+class Negate extends NumExpression {
   const Negate(this.arg);
 
-  final TypedExpression<num> arg;
+  final NumExpression arg;
 
   @override
   num get value => -arg.value;

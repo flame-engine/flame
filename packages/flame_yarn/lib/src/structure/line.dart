@@ -11,7 +11,7 @@ class Line extends Statement {
   });
 
   final String? speaker;
-  final TypedExpression<String> content;
-  final TypedExpression<bool>? condition;
+  final StringExpression content;
+  final BoolExpression? condition;
   final List<String>? tags;
 }

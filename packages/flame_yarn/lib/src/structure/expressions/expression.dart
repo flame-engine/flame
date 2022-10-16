@@ -3,9 +3,9 @@ abstract class Expression {
 
   dynamic get value;
 
-  bool get isNumeric;
-  bool get isBoolean;
-  bool get isString;
+  bool get isNumeric => false;
+  bool get isBoolean => false;
+  bool get isString => false;
 
   ExpressionType get type {
     return isNumeric
@@ -18,20 +18,34 @@ abstract class Expression {
   }
 }
 
-abstract class TypedExpression<T> extends Expression {
-  const TypedExpression();
+abstract class NumExpression extends Expression {
+  const NumExpression();
 
   @override
-  T get value;
+  num get value;
 
   @override
-  bool get isNumeric => T is num;
+  bool get isNumeric => true;
+}
+
+abstract class StringExpression extends Expression {
+  const StringExpression();
 
   @override
-  bool get isBoolean => T is bool;
+  String get value;
 
   @override
-  bool get isString => T is String;
+  bool get isString => true;
+}
+
+abstract class BoolExpression extends Expression {
+  const BoolExpression();
+
+  @override
+  bool get value;
+
+  @override
+  bool get isBoolean => true;
 }
 
 enum ExpressionType {

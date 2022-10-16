@@ -3,7 +3,7 @@ import 'package:flame_yarn/src/structure/expressions/expression.dart';
 import 'package:flame_yarn/src/variable_storage.dart';
 
 
-class NumericVariable extends TypedExpression<num> {
+class NumericVariable extends NumExpression {
   const NumericVariable(this.name, this.storage);
 
   final String name;
@@ -13,7 +13,7 @@ class NumericVariable extends TypedExpression<num> {
   num get value => storage.getNumericValue(name);
 }
 
-class StringVariable extends TypedExpression<String> {
+class StringVariable extends StringExpression {
   const StringVariable(this.name, this.storage);
 
   final String name;
@@ -23,7 +23,7 @@ class StringVariable extends TypedExpression<String> {
   String get value => storage.getStringValue(name);
 }
 
-class BooleanVariable extends TypedExpression<bool> {
+class BooleanVariable extends BoolExpression {
   const BooleanVariable(this.name, this.storage);
 
   final String name;

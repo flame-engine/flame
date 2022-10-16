@@ -1,4 +1,3 @@
-
 import 'package:flame_yarn/src/parse/parser.dart' as internal;
 import 'package:flame_yarn/src/structure/node.dart';
 import 'package:flame_yarn/src/variable_storage.dart';
@@ -15,5 +14,9 @@ class YarnBall {
 
   void parse(String text) {
     internal.parse(text, this);
+  }
+
+  void setVariable(String name, dynamic value) {
+    variables.setVariable(name, value);
   }
 }

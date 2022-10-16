@@ -1,5 +1,6 @@
 import 'package:flame_yarn/flame_yarn.dart';
 import 'package:flame_yarn/src/parse/parser.dart';
+import 'package:flame_yarn/src/structure/line.dart';
 import 'package:test/test.dart';
 
 import 'tokenize_test.dart';
@@ -110,7 +111,7 @@ void main() {
       });
     });
 
-    group('parseBody', () {
+    group('parseNodeBody', () {
       test('indent in a body', () {
         expect(
           () => YarnBall().parse('title:a\n---\n    hi\n===\n'),
@@ -118,6 +119,64 @@ void main() {
               '>  at line 3 column 1:\n'
               '>      hi\n'
               '>  ^\n'),
+        );
+      });
+    });
+
+    group('parseStatementList', () {
+      test('multiple lines', () {
+        final yarn = YarnBall()
+          ..parse('title: test\n'
+              '---\n'
+              'Jupyter\n'
+              'Saturn\n'
+              'Uranus\n'
+              '===\n');
+        final node = yarn.nodes['test']!;
+        expect(node.lines.length, 3);
+        for (var i = 0; i < 3; i++) {
+          expect(node.lines[i], isA<Line>());
+          final line = node.lines[i] as Line;
+          expect(line.speaker, isNull);
+          expect(line.tags, isNull);
+          expect(line.condition, isNull);
+          expect(line.content.value, ['Jupyter', 'Saturn', 'Uranus'][i]);
+        }
+      });
+    });
+
+    group('parseLine', () {
+      test('line with hashtags', () {
+        final yarn = YarnBall()
+          ..parse('title:A\n---\n.hello #here #zzz\n===\n');
+        final node = yarn.nodes['A']!;
+        expect(node.lines.length, 1);
+        final line = node.lines[0] as Line;
+        expect(line.tags, isNotNull);
+        expect(line.tags!.length, 2);
+        expect(line.tags, contains('#here'));
+        expect(line.tags, contains('#zzz'));
+      });
+
+      test('line with condition', () {
+        final yarn = YarnBall()
+          ..setVariable(r'$friendly', true)
+          ..parse('title:A\n---\n.hello <<if \$friendly>>\n===\n');
+        final node = yarn.nodes['A']!;
+        expect(node.lines.length, 1);
+        final line = node.lines[0] as Line;
+        expect(line.tags, isNull);
+        expect(line.condition, isNotNull);
+      });
+
+      test('line with wrong condition', () {
+        expect(
+          () => YarnBall().parse('title:A\n---\n.hello <<stop>>\n===\n'),
+          hasSyntaxError(
+              'SyntaxError: only "if" commands are allowed on a line\n'
+              '>  at line 3 column 10:\n'
+              '>  .hello <<stop>>\n'
+              '>           ^\n'),
         );
       });
     });

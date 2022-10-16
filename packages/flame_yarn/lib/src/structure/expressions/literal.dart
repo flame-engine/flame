@@ -1,14 +1,35 @@
 
 import 'package:flame_yarn/src/structure/expressions/expression.dart';
 
-class Literal<T> extends TypedExpression<T> {
-  const Literal(this.value);
+class NumLiteral extends NumExpression {
+  const NumLiteral(this.value);
 
   @override
-  final T value;
+  final num value;
 }
 
-const constEmptyString = Literal<String>('');
-const constTrue = Literal<bool>(true);
-const constFalse = Literal<bool>(false);
-const constVoid = Literal<void>(null);
+class StringLiteral extends StringExpression {
+  const StringLiteral(this.value);
+
+  @override
+  final String value;
+}
+
+class BoolLiteral extends BoolExpression {
+  const BoolLiteral(this.value);
+
+  @override
+  final bool value;
+}
+
+class VoidLiteral extends Expression {
+  const VoidLiteral();
+
+  @override
+  dynamic get value => null;
+}
+
+const constEmptyString = StringLiteral('');
+const constTrue = BoolLiteral(true);
+const constFalse = BoolLiteral(false);
+const constVoid = VoidLiteral();

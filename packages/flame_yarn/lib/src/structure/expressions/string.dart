@@ -1,19 +1,19 @@
 import 'package:flame_yarn/src/structure/expressions/expression.dart';
 
-class Concat extends TypedExpression<String> {
+class Concat extends StringExpression {
   const Concat(this.parts);
 
-  final List<TypedExpression<String>> parts;
+  final List<StringExpression> parts;
 
   @override
   String get value => parts.map((p) => p.value).join();
 }
 
-class Remove extends TypedExpression<String> {
+class Remove extends StringExpression {
   const Remove(this.lhs, this.rhs);
 
-  final TypedExpression<String> lhs;
-  final TypedExpression<String> rhs;
+  final StringExpression lhs;
+  final StringExpression rhs;
 
   @override
   String get value {
@@ -28,11 +28,11 @@ class Remove extends TypedExpression<String> {
   }
 }
 
-class Repeat extends TypedExpression<String> {
+class Repeat extends StringExpression {
   const Repeat(this.lhs, this.rhs);
 
-  final TypedExpression<String> lhs;
-  final TypedExpression<num> rhs;
+  final StringExpression lhs;
+  final NumExpression rhs;
 
   @override
   String get value => List.filled(rhs.value.toInt(), lhs.value).join();

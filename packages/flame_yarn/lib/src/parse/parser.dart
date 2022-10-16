@@ -30,22 +30,9 @@ class _Parser {
   /// The index of the next token to parse.
   int position;
 
-  bool advance() {
-    position += 1;
-    return true;
-  }
-
   Token peekToken([int delta = 0]) => tokens[position + delta];
 
-  Token nextToken() {
-    final token = tokens[position];
-    position += 1;
-    return token;
-  }
 
-  void returnToken() {
-    position -= 1;
-  }
 
   void parseMain() {
     while (position < tokens.length) {
@@ -140,20 +127,21 @@ class _Parser {
   }
 
   void parseLineContent(_LineBuilder line) {
-    final parts = <TypedExpression<String>>[];
+    final parts = <StringExpression>[];
     while (true) {
       final token = peekToken();
       if (token.isText) {
-        parts.add(Literal<String>(token.content));
+        parts.add(StringLiteral(token.content));
+        position += 1;
       } else if (token == Token.startExpression) {
         take(Token.startExpression);
         final expression = parseExpression();
         if (expression.isString) {
-          parts.add(expression as StrExpr);
+          parts.add(expression as StringExpression);
         } else if (expression.isNumeric) {
-          parts.add(NumToStringFn(expression as NumExpr));
+          parts.add(NumToStringFn(expression as NumExpression));
         } else if (expression.isBoolean) {
-          parts.add(BoolToStringFn(expression as BoolExpr));
+          parts.add(BoolToStringFn(expression as BoolExpression));
         }
         take(Token.endExpression);
       } else {
@@ -172,10 +160,16 @@ class _Parser {
     if (token == Token.startCommand) {
       position += 1;
       if (peekToken() != Token.commandIf) {
-        error('only if commands are allowed on a line');
+        error('only "if" commands are allowed on a line');
       }
       position += 1;
-
+      take(Token.startExpression);
+      final expression = parseExpression();
+      take(Token.endExpression);
+      if (!expression.isBoolean) {
+        error('the condition in "if" should be boolean');
+      }
+      line.condition = expression as BoolExpression;
       take(Token.endCommand);
     }
   }
@@ -222,22 +216,24 @@ class _Parser {
     if (token == Token.startParenthesis) {
       final expression = parseExpression();
       if (peekToken() != Token.endParenthesis) {
+        position -= 1;
         error('closing ")" is expected');
       }
       return expression;
     } else if (token == Token.operatorMinus) {
       final expression = parsePrimary();
-      if (expression is Literal<num>) {
-        return Literal<num>(-expression.value);
+      if (expression is NumLiteral) {
+        return NumLiteral(-expression.value);
       } else if (expression.isNumeric) {
-        return Negate(expression as NumExpr);
+        return Negate(expression as NumExpression);
       } else {
+        position -= 1;
         error('unary minus can only be applied to numbers');
       }
     } else if (token.isNumber) {
-      return Literal<num>(num.parse(token.content));
+      return NumLiteral(num.parse(token.content));
     } else if (token.isString) {
-      return Literal<String>(token.content);
+      return StringLiteral(token.content);
     } else if (token.isVariable) {
       final name = token.content;
       if (project.variables.hasVariable(name)) {
@@ -251,6 +247,7 @@ class _Parser {
           return BooleanVariable(name, project.variables);
         }
       } else {
+        position -= 1;
         error('variable $name is not defined');
       }
     } else if (token.isId) {
@@ -321,10 +318,10 @@ class _Parser {
 
   Expression _add(Expression lhs, Expression rhs, int opPosition) {
     if (lhs.isNumeric && rhs.isNumeric) {
-      return Add(lhs as NumExpr, rhs as NumExpr);
+      return Add(lhs as NumExpression, rhs as NumExpression);
     }
     if (lhs.isString && rhs.isString) {
-      return Concat([lhs as StrExpr, rhs as StrExpr]);
+      return Concat([lhs as StringExpression, rhs as StringExpression]);
     }
     position = opPosition;
     error('both lhs and rhs of + must be numeric or strings');
@@ -332,10 +329,10 @@ class _Parser {
 
   Expression _subtract(Expression lhs, Expression rhs, int opPosition) {
     if (lhs.isNumeric && rhs.isNumeric) {
-      return Subtract(lhs as NumExpr, rhs as NumExpr);
+      return Subtract(lhs as NumExpression, rhs as NumExpression);
     }
     if (lhs.isString && rhs.isString) {
-      return Remove(lhs as StrExpr, rhs as StrExpr);
+      return Remove(lhs as StringExpression, rhs as StringExpression);
     }
     position = opPosition;
     error('both lhs and rhs of - must be numeric or strings');
@@ -343,10 +340,10 @@ class _Parser {
 
   Expression _multiply(Expression lhs, Expression rhs, int opPosition) {
     if (lhs.isNumeric && rhs.isNumeric) {
-      return Multiply(lhs as NumExpr, rhs as NumExpr);
+      return Multiply(lhs as NumExpression, rhs as NumExpression);
     }
     if (lhs.isString && rhs.isNumeric) {
-      return Repeat(lhs as StrExpr, rhs as NumExpr);
+      return Repeat(lhs as StringExpression, rhs as NumExpression);
     }
     position = opPosition;
     error('both lhs and rhs of * must be numeric');
@@ -354,7 +351,7 @@ class _Parser {
 
   Expression _divide(Expression lhs, Expression rhs, int opPosition) {
     if (lhs.isNumeric && rhs.isNumeric) {
-      return Divide(lhs as NumExpr, rhs as NumExpr);
+      return Divide(lhs as NumExpression, rhs as NumExpression);
     }
     position = opPosition;
     error('both lhs and rhs of / must be numeric');
@@ -362,7 +359,7 @@ class _Parser {
 
   Expression _modulo(Expression lhs, Expression rhs, int opPosition) {
     if (lhs.isNumeric && rhs.isNumeric) {
-      return Modulo(lhs as NumExpr, rhs as NumExpr);
+      return Modulo(lhs as NumExpression, rhs as NumExpression);
     }
     position = opPosition;
     error('both lhs and rhs of % must be numeric');
@@ -370,13 +367,13 @@ class _Parser {
 
   Expression _equal(Expression lhs, Expression rhs, int opPosition) {
     if (lhs.isNumeric && rhs.isNumeric) {
-      return NumericEqual(lhs as NumExpr, rhs as NumExpr);
+      return NumericEqual(lhs as NumExpression, rhs as NumExpression);
     }
     if (lhs.isString && rhs.isString) {
-      return StringEqual(lhs as StrExpr, rhs as StrExpr);
+      return StringEqual(lhs as StringExpression, rhs as StringExpression);
     }
     if (lhs.isBoolean && rhs.isBoolean) {
-      return BoolEqual(lhs as BoolExpr, rhs as BoolExpr);
+      return BoolEqual(lhs as BoolExpression, rhs as BoolExpression);
     }
     position = opPosition;
     error(
@@ -407,8 +404,8 @@ class _NodeBuilder {
 
 class _LineBuilder {
   String? speaker;
-  TypedExpression<String>? content;
-  TypedExpression<bool>? condition;
+  StringExpression? content;
+  BoolExpression? condition;
   List<String>? tags;
 
   Line build() => Line(
@@ -418,7 +415,3 @@ class _LineBuilder {
         tags: tags,
       );
 }
-
-typedef NumExpr = TypedExpression<num>;
-typedef StrExpr = TypedExpression<String>;
-typedef BoolExpr = TypedExpression<bool>;

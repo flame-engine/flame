@@ -101,13 +101,14 @@ class _Lexer {
 
   /// Pops the last token from the output stack and checks that it is equal to
   /// [token].
-  void popToken(Token token) {
+  Token popToken([Token? token]) {
     final removed = tokens.removeLast();
-    assert(removed == token);
+    assert(token == null || removed == token);
     if (tokens.length == addErrorTokenAtIndex + 1) {
       final removed = tokens.removeLast();
       assert(removed.type == TokenType.error);
     }
+    return removed;
   }
 
   //----------------------------------------------------------------------------
@@ -612,7 +613,7 @@ class _Lexer {
       final name = tokens.last.content;
       final keywordToken = keywords[name];
       if (keywordToken != null) {
-        tokens.removeLast();
+        popToken();
         pushToken(keywordToken, position0);
       }
       return true;
@@ -626,8 +627,8 @@ class _Lexer {
     final position0 = position;
     if (eat($dollar)) {
       if (eatId()) {
-        final token = tokens.removeLast();
-        pushToken(Token.variable(token.content), position0);
+        final token = popToken();
+        pushToken(Token.variable(r'$' + token.content), position0);
         return true;
       }
       position--;
@@ -734,7 +735,7 @@ class _Lexer {
   bool eatCommandName() {
     final position0 = position;
     if (eatId()) {
-      final token = tokens.removeLast();
+      final token = popToken();
       final name = token.content;
       if (commandsWithArgs.containsKey(name)) {
         pushToken(commandsWithArgs[name]!, position0);
