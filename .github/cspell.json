@@ -1,8 +1,8 @@
 {
-  "version": "0.1",
+  "version": "0.2",
   "language": "en",
   "flagWords": [],
-  "ignoreWords": [
+  "words": [
     "ASDW",
     "blockquote",
     "broadphase",
@@ -22,11 +22,7 @@
     "stylesheet",
     "vsync"
   ],
-  "ignorePaths": [
-    "**/media/**",
-    "**/assets/**",
-    "**/test/**"
-  ],
-  "ignoreRegExpList":["@\\w+"], 
+  "ignorePaths": ["**/media/**", "**/assets/**", "**/test/**"],
+  "ignoreRegExpList": ["@\\w+"],
   "dictionaries": ["en_US", "softwareTerms"]
 }

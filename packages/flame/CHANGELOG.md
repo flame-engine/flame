@@ -650,7 +650,7 @@
  - Code improvements and preparing APIs to null-safety
  - BaseComponent removes children marked as shouldRemove during update
  - Use `find` instead of `globstar` pattern in `scripts/lint.sh` as the later isn't enabled by default in bash
- - Fixes aseprite constructor bug
+ - Fixes Aseprite constructor bug
  - Improve error handling for the onLoad function
  - Add test for child removal
  - Fix bug where `Timer` callback doesn't fire for non-repeating timers, also fixing bug with `Particle` lifespan
@@ -983,7 +983,7 @@
 - Svg support
 - Adding `Animation#reversed` allowing a new reversed animation to be created from an existing animation.
 - Fix games inside regular apps when the component is inside a sliver
-- Support aseprite animations
+- Support Aseprite animations
 
 ## [0.10.2]
 - Fixed some warnings and formatting
