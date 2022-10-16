@@ -102,6 +102,7 @@ class Svg {
     _imageCache.keys.forEach((key) {
       _imageCache.getValue(key)?.dispose();
     });
+    _imageCache.clearCache();
   }
 }
 
