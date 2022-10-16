@@ -74,7 +74,7 @@ void main() {
       test('node without a title', () {
         expect(
           () => YarnProject().parse('Title: Despicable Me!\n---\n===\n'),
-          hasSyntaxError('SyntaxError: node does not have a title\n'
+          hasNameError('NameError: node does not have a title\n'
               '>  at line 2 column 1:\n'
               '>  ---\n'
               '>  ^\n'),
@@ -102,8 +102,8 @@ void main() {
               '---\n===\n'
               'title: xyz\n'
               '---\n===\n'),
-          hasSyntaxError(
-            'SyntaxError: node with title "xyz" has already been defined\n'
+          hasNameError(
+            'NameError: node with title "xyz" has already been defined\n'
             '>  at line 5 column 1:\n'
             '>  title: xyz\n'
             '>  ^\n',

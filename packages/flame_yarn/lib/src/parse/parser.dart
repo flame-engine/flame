@@ -56,7 +56,10 @@ class _Parser {
           node.title = text.content;
           if (project.nodes.containsKey(node.title)) {
             position -= 4;
-            error('node with title "${node.title}" has already been defined');
+            error(
+              'node with title "${node.title}" has already been defined',
+              NameError.new,
+            );
           }
         } else {
           node.tags ??= {};
@@ -65,7 +68,7 @@ class _Parser {
       }
     }
     if (node.title == null) {
-      error('node does not have a title');
+      error('node does not have a title', NameError.new);
     }
   }
 
