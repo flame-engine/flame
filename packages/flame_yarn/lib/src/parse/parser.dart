@@ -211,6 +211,8 @@ class _Parser {
       return NumLiteral(num.parse(token.content));
     } else if (token.isString) {
       return StringLiteral(token.content);
+    } else if (token == Token.constTrue || token == Token.constFalse) {
+      return BoolLiteral(token == Token.constTrue);
     } else if (token.isVariable) {
       final name = token.content;
       if (project.variables.hasVariable(name)) {
@@ -225,7 +227,7 @@ class _Parser {
         }
       } else {
         position -= 1;
-        error('variable $name is not defined');
+        error('variable $name is not defined', NameError.new);
       }
     } else if (token.isId) {
       // A function call...
@@ -359,11 +361,14 @@ class _Parser {
     );
   }
 
-  Never error(String message) {
+  Never error(
+    String message, [
+    Exception Function(String) errorConstructor = SyntaxError.new,
+  ]) {
     final newTokens = tokenize(text, addErrorTokenAtIndex: position);
     final errorToken = newTokens[position];
     final location = errorToken.content;
-    throw SyntaxError('$message\n$location\n');
+    throw errorConstructor('$message\n$location\n');
   }
 }
 

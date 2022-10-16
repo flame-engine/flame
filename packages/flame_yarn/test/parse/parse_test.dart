@@ -145,6 +145,24 @@ void main() {
     });
 
     group('parseDialogueLine', () {
+      test('line with a speaker', () {
+        final yarn = YarnProject()
+            ..parse('title:A\n---\nMrGoo: whatever\n===\n');
+        expect(yarn.nodes['A']!.lines.first, isA<Dialogue>());
+        final line = yarn.nodes['A']!.lines[0] as Dialogue;
+        expect(line.speaker, 'MrGoo');
+        expect(line.content.value, 'whatever');
+      });
+
+      test('line with multiple expressions', () {
+        final yarn = YarnProject()
+          ..parse('title:A\n---\n{1} {false} {"fake news"}\n===\n');
+        expect(yarn.nodes['A']!.lines.first, isA<Dialogue>());
+        final line = yarn.nodes['A']!.lines[0] as Dialogue;
+        expect(line.speaker, isNull);
+        expect(line.content.value, '1 false fake news');
+      });
+
       test('line with hashtags', () {
         final yarn = YarnProject()
           ..parse('title:A\n---\n.hello #here #zzz\n===\n');
@@ -195,20 +213,6 @@ void main() {
     });
 
     group('parseExpression', () {
-      test('arithmetic', () {
-        final yarn = YarnProject()
-          ..parse('title: test\n---\n'
-              '{(4 - 5)}\n'
-              '{ 2 + 7 * 3 - 1 }\n'
-              '{ 44 / (3 - 1) % 15 }\n'
-              '===\n');
-        final node = yarn.nodes['test']!;
-        expect(node.lines.length, 3);
-        expect((node.lines[0] as Dialogue).content.value, '-1');
-        expect((node.lines[1] as Dialogue).content.value, '22');
-        expect((node.lines[2] as Dialogue).content.value, '7.0');
-      });
-
       test('unary minus', () {
         final yarn = YarnProject()
           ..setVariable(r'$x', 42)
@@ -234,12 +238,12 @@ void main() {
         );
       });
 
-      test('plus', () {
+      test('add', () {
         final yarn = YarnProject()
-          ..setVariable(r'$x', 42)
+          ..setVariable(r'$world', 'world')
           ..parse('title: test\n---\n'
               '{ 2.16 + 4.6 + 9 }\n'
-              '{ "hello," + " " + "world" }\n'
+              '{ "hello," + " " + \$world }\n'
               '===\n');
         expect(
           yarn.nodes['test']!.lines
@@ -255,7 +259,106 @@ void main() {
               '>  { 3 + " swords" }\n'
               '>      ^\n'),
         );
+        expect(
+          () => yarn.parse('title:E\n---\n{ 3 + true }\n===\n'),
+          hasSyntaxError(
+              'SyntaxError: both lhs and rhs of + must be numeric or strings\n'
+              '>  at line 3 column 5:\n'
+              '>  { 3 + true }\n'
+              '>      ^\n'),
+        );
+      });
+
+      test('subtract', () {
+        final yarn = YarnProject()
+          ..parse('title: test\n---\n'
+              '{ 22 - 7 - 1 }\n'
+              '{ "hello," - "hell" - "paradise" }\n'
+              '===\n');
+        expect(
+          yarn.nodes['test']!.lines
+              .map((line) => (line as Dialogue).content.value)
+              .toList(),
+          ['14', 'o,'],
+        );
+        expect(
+          () => yarn.parse('title:E\n---\n{ 3 - "zero" }\n===\n'),
+          hasSyntaxError(
+              'SyntaxError: both lhs and rhs of - must be numeric or strings\n'
+              '>  at line 3 column 5:\n'
+              '>  { 3 - "zero" }\n'
+              '>      ^\n'),
+        );
+      });
+
+      test('multiply', () {
+        final yarn = YarnProject()
+          ..parse('title: test\n---\n'
+              '{ 11 * 8 * 0.5 }\n'
+              '{ "hello! " * 3 }\n'
+              '===\n');
+        expect(
+          yarn.nodes['test']!.lines
+              .map((line) => (line as Dialogue).content.value)
+              .toList(),
+          ['44.0', 'hello! hello! hello! '],
+        );
+        expect(
+          () => yarn.parse('title:E\n---\n{ "x" * "zero" }\n===\n'),
+          hasSyntaxError('SyntaxError: both lhs and rhs of * must be numeric\n'
+              '>  at line 3 column 7:\n'
+              '>  { "x" * "zero" }\n'
+              '>        ^\n'),
+        );
+      });
+
+      test('divide', () {
+        final yarn = YarnProject()
+          ..parse('title: test\n---\n'
+              '{ 48 / 2 / 3 }\n'
+              '===\n');
+        expect(
+          (yarn.nodes['test']!.lines[0] as Dialogue).content.value,
+          '8.0',
+        );
+        expect(
+          () => yarn.parse('title:E\n---\n{ "x" / "y" }\n===\n'),
+          hasSyntaxError('SyntaxError: both lhs and rhs of / must be numeric\n'
+              '>  at line 3 column 7:\n'
+              '>  { "x" / "y" }\n'
+              '>        ^\n'),
+        );
+      });
+
+      test('complicated expressions', () {
+        final yarn = YarnProject()
+          ..parse('title: test\n---\n'
+              '{(4 - 5)}\n'
+              '{ 2 + 7 * 3 - 1 }\n'
+              '{ 44 / (3 - 1) % 15 }\n'
+              '===\n');
+        final node = yarn.nodes['test']!;
+        expect(node.lines.length, 3);
+        expect((node.lines[0] as Dialogue).content.value, '-1');
+        expect((node.lines[1] as Dialogue).content.value, '22');
+        expect((node.lines[2] as Dialogue).content.value, '7.0');
+      });
+
+      test('unknown variable', () {
+        expect(
+          () => YarnProject().parse('title:A\n---\n{ \$x + 1 }\n===\n'),
+          hasNameError('NameError: variable \$x is not defined\n'
+              '>  at line 3 column 3:\n'
+              '>  { \$x + 1 }\n'
+              '>    ^\n'),
+        );
       });
     });
   });
+}
+
+Matcher hasNameError(String message) {
+  return throwsA(
+    isA<NameError>().having((e) => e.toString(), 'toString', message),
+  );
 }
