@@ -1106,7 +1106,7 @@ for details on how to use it.
 
 ## RowComponent & ColumnComponent
 
-These two components allow to layout their added children horizontally or vertically. The 
+These two components allow to layout their added children horizontally or vertically. The
 following parameters can be used when one of these components is instantiated:
 
 - `alignment`: Offers the same `MainAxisAlignment` modes as known from Flutter
