@@ -8,14 +8,14 @@ import 'package:flame_yarn/src/structure/expressions/literal.dart';
 import 'package:flame_yarn/src/structure/expressions/relational.dart';
 import 'package:flame_yarn/src/structure/expressions/string.dart';
 import 'package:flame_yarn/src/structure/expressions/variables.dart';
-import 'package:flame_yarn/src/structure/line.dart';
+import 'package:flame_yarn/src/structure/dialogue.dart';
 import 'package:flame_yarn/src/structure/node.dart';
 import 'package:flame_yarn/src/structure/statement.dart';
-import 'package:flame_yarn/src/yarn_ball.dart';
+import 'package:flame_yarn/src/yarn_project.dart';
 import 'package:meta/meta.dart';
 
 @internal
-void parse(String text, YarnBall project) {
+void parse(String text, YarnProject project) {
   final tokens = tokenize(text);
   _Parser(project, text, tokens).parseMain();
 }
@@ -23,7 +23,7 @@ void parse(String text, YarnBall project) {
 class _Parser {
   _Parser(this.project, this.text, this.tokens) : position = 0;
 
-  final YarnBall project;
+  final YarnProject project;
   final String text;
   final List<Token> tokens;
 
@@ -410,7 +410,7 @@ class _LineBuilder {
   BoolExpression? condition;
   List<String>? tags;
 
-  Line build() => Line(
+  Dialogue build() => Dialogue(
         speaker: speaker,
         content: content ?? constEmptyString,
         condition: condition,

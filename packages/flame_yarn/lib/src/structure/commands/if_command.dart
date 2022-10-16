@@ -1,7 +1,7 @@
 import 'package:flame_yarn/src/structure/commands/command.dart';
 import 'package:flame_yarn/src/structure/expressions/expression.dart';
 import 'package:flame_yarn/src/structure/statement.dart';
-import 'package:flame_yarn/src/yarn_ball.dart';
+import 'package:flame_yarn/src/yarn_project.dart';
 
 class IfCommand extends Command {
   const IfCommand(this.ifs);
@@ -9,7 +9,7 @@ class IfCommand extends Command {
   final List<IfBlock> ifs;
 
   @override
-  void execute(YarnBall runtime) {
+  void execute(YarnProject runtime) {
     for (final block in ifs) {
       if (block.condition.value) {
         // runtime.executeEntries(block.entries);

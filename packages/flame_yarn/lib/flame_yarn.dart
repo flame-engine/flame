@@ -1,2 +1,2 @@
 export 'src/errors.dart' show SyntaxError;
-export 'src/yarn_ball.dart' show YarnBall;
+export 'src/yarn_project.dart' show YarnProject;
