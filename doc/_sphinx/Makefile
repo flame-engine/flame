@@ -2,7 +2,7 @@
 
 # You can set these variables from the command line.
 # SPHINXOPTS and SPHINXBUILD can also be set from the environment.
-SOURCEDIR     = "$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))/.."
+SOURCEDIR     = $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))/..
 SPHINXOPTS    ?= -c "${SOURCEDIR}/_sphinx"
 SPHINXBUILD   ?= sphinx-build
 BUILDDIR      = "${SOURCEDIR}/_build"
@@ -14,7 +14,7 @@ help:
 .PHONY: help Makefile
 
 livehtml:
-	sphinx-autobuild "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O) --ignore "**/.*" --ignore "*build*" --open-browser
+	sphinx-autobuild $(SOURCEDIR) $(BUILDDIR)/html $(SPHINXOPTS) $(O) --ignore "**/.*" --ignore "*build*" --open-browser
 
 # Catch-all target: route all unknown targets to Sphinx using the new
 # "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).
