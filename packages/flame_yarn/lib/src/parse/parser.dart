@@ -17,7 +17,7 @@ import 'package:meta/meta.dart';
 @internal
 void parse(String text, YarnBall project) {
   final tokens = tokenize(text);
-  _Parser(project, text, tokens).parse();
+  _Parser(project, text, tokens).parseMain();
 }
 
 class _Parser {
@@ -47,7 +47,7 @@ class _Parser {
     position -= 1;
   }
 
-  void parse() {
+  void parseMain() {
     while (position < tokens.length) {
       final nodeBuilder = _NodeBuilder();
       parseNodeHeader(nodeBuilder);
@@ -63,13 +63,18 @@ class _Parser {
         final id = peekToken(-4);
         final text = peekToken(-2);
         if (id.content == 'title') {
+          if (node.title != null) {
+            position -= 4;
+            error('a node can only have one title');
+          }
           node.title = text.content;
           if (project.nodes.containsKey(node.title)) {
-            error('node with title ${node.title} has already been defined');
+            position -= 4;
+            error('node with title "${node.title}" has already been defined');
           }
         } else {
-          node.tags ??= [];
-          node.tags!.add(text.content);
+          node.tags ??= {};
+          node.tags![id.content] = text.content;
         }
       }
     }
@@ -283,7 +288,7 @@ class _Parser {
     return error('unexpected token');
   }
 
-  static const Map<Token, int> precedences = {
+  static final Map<Token, int> precedences = {
     Token.operatorMultiply: 6,
     Token.operatorDivide: 6,
     Token.operatorModulo: 6,
@@ -387,7 +392,7 @@ class _Parser {
 
 class _NodeBuilder {
   String? title;
-  List<String>? tags;
+  Map<String, String>? tags;
   List<Statement> statements = [];
 
   Node build() => Node(

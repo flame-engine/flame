@@ -1,4 +1,5 @@
 
+import 'package:flame_yarn/src/parse/parser.dart' as internal;
 import 'package:flame_yarn/src/structure/node.dart';
 import 'package:flame_yarn/src/variable_storage.dart';
 
@@ -12,4 +13,7 @@ class YarnBall {
 
   final VariableStorage variables;
 
+  void parse(String text) {
+    internal.parse(text, this);
+  }
 }

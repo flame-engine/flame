@@ -9,6 +9,9 @@ class Node {
   });
 
   final String title;
-  final List<String>? tags;
+  final Map<String, String>? tags;
   final List<Statement> lines;
+
+  @override
+  String toString() => 'Node($title)';
 }
