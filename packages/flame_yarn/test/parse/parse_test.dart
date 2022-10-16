@@ -139,13 +139,12 @@ void main() {
           final line = node.lines[i] as Dialogue;
           expect(line.speaker, isNull);
           expect(line.tags, isNull);
-          expect(line.condition, isNull);
           expect(line.content.value, ['Jupyter', 'Saturn', 'Uranus'][i]);
         }
       });
     });
 
-    group('parseLine', () {
+    group('parseDialogueLine', () {
       test('line with hashtags', () {
         final yarn = YarnProject()
           ..parse('title:A\n---\n.hello #here #zzz\n===\n');
@@ -158,36 +157,103 @@ void main() {
         expect(line.tags, contains('#zzz'));
       });
 
-      test('line with condition', () {
-        final yarn = YarnProject()
-          ..setVariable(r'$friendly', true)
-          ..parse('title:A\n---\n.hello <<if \$friendly>>\n===\n');
-        final node = yarn.nodes['A']!;
-        expect(node.lines.length, 1);
-        final line = node.lines[0] as Dialogue;
-        expect(line.tags, isNull);
-        expect(line.condition, isNotNull);
-      });
-
-      test('line with non-if condition', () {
+      test('line with a command', () {
         expect(
-          () => YarnProject().parse('title:A\n---\n.hello <<stop>>\n===\n'),
+          () => YarnProject().parse('title:A\n---\nz <<if true>>\n===\n'),
           hasSyntaxError(
-              'SyntaxError: only "if" commands are allowed on a line\n'
-              '>  at line 3 column 10:\n'
-              '>  .hello <<stop>>\n'
-              '>           ^\n'),
+              'SyntaxError: commands are not allowed on a dialogue line\n'
+              '>  at line 3 column 3:\n'
+              '>  z <<if true>>\n'
+              '>    ^\n'),
         );
       });
 
-      test('line with non-boolean condition', () {
+      test('line with no content but a hashtag', () {
         expect(
-          () => YarnProject().parse('title:A\n---\n.hello <<if 42 % 2>>\n===\n'),
+          () => YarnProject().parse('title:A\n---\n#tag\n===\n'),
+          hasSyntaxError('SyntaxError: unexpected token\n'
+              '>  at line 3 column 1:\n'
+              '>  #tag\n'
+              '>  ^\n'),
+        );
+      });
+    });
+
+    group('parseOption', () {
+      // test('option with a non-boolean condition', () {
+      //   expect(
+      //         () => YarnProject().parse(
+      //       'title:A\n---\n-> ok! <<if 42 % 2>>\n===\n',
+      //     ),
+      //     hasSyntaxError(
+      //         'SyntaxError: the condition in "if" should be boolean\n'
+      //             '>  at line 3 column 10:\n'
+      //             '>  -> ok! <<if 42 % 2>>\n'
+      //             '>           ^\n'),
+      //   );
+      // });
+    });
+
+    group('parseExpression', () {
+      test('arithmetic', () {
+        final yarn = YarnProject()
+          ..parse('title: test\n---\n'
+              '{(4 - 5)}\n'
+              '{ 2 + 7 * 3 - 1 }\n'
+              '{ 44 / (3 - 1) % 15 }\n'
+              '===\n');
+        final node = yarn.nodes['test']!;
+        expect(node.lines.length, 3);
+        expect((node.lines[0] as Dialogue).content.value, '-1');
+        expect((node.lines[1] as Dialogue).content.value, '22');
+        expect((node.lines[2] as Dialogue).content.value, '7.0');
+      });
+
+      test('unary minus', () {
+        final yarn = YarnProject()
+          ..setVariable(r'$x', 42)
+          ..parse('title: test\n---\n'
+              '{ -7 + 1 }\n'
+              '{ 2 * -7 }\n'
+              '{ -\$x }\n'
+              '{ -(3 + 111) }\n'
+              '===\n');
+        expect(
+          yarn.nodes['test']!.lines
+              .map((line) => num.parse((line as Dialogue).content.value))
+              .toList(),
+          [-6, -14, -42, -114],
+        );
+        expect(
+          () => yarn.parse('title:E\n---\n{ -"banana" }\n===\n'),
           hasSyntaxError(
-              'SyntaxError: the condition in "if" should be boolean\n'
-              '>  at line 3 column 13:\n'
-              '>  .hello <<if 42 % 2>>\n'
-              '>              ^\n'),
+              'SyntaxError: unary minus can only be applied to numbers\n'
+              '>  at line 3 column 4:\n'
+              '>  { -"banana" }\n'
+              '>     ^\n'),
+        );
+      });
+
+      test('plus', () {
+        final yarn = YarnProject()
+          ..setVariable(r'$x', 42)
+          ..parse('title: test\n---\n'
+              '{ 2.16 + 4.6 + 9 }\n'
+              '{ "hello," + " " + "world" }\n'
+              '===\n');
+        expect(
+          yarn.nodes['test']!.lines
+              .map((line) => (line as Dialogue).content.value)
+              .toList(),
+          ['15.76', 'hello, world'],
+        );
+        expect(
+          () => yarn.parse('title:E\n---\n{ 3 + " swords" }\n===\n'),
+          hasSyntaxError(
+              'SyntaxError: both lhs and rhs of + must be numeric or strings\n'
+              '>  at line 3 column 5:\n'
+              '>  { 3 + " swords" }\n'
+              '>      ^\n'),
         );
       });
     });

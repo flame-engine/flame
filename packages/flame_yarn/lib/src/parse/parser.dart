@@ -1,6 +1,7 @@
 import 'package:flame_yarn/src/errors.dart';
 import 'package:flame_yarn/src/parse/token.dart';
 import 'package:flame_yarn/src/parse/tokenize.dart';
+import 'package:flame_yarn/src/structure/dialogue.dart';
 import 'package:flame_yarn/src/structure/expressions/arithmetic.dart';
 import 'package:flame_yarn/src/structure/expressions/expression.dart';
 import 'package:flame_yarn/src/structure/expressions/functions.dart';
@@ -8,7 +9,6 @@ import 'package:flame_yarn/src/structure/expressions/literal.dart';
 import 'package:flame_yarn/src/structure/expressions/relational.dart';
 import 'package:flame_yarn/src/structure/expressions/string.dart';
 import 'package:flame_yarn/src/structure/expressions/variables.dart';
-import 'package:flame_yarn/src/structure/dialogue.dart';
 import 'package:flame_yarn/src/structure/node.dart';
 import 'package:flame_yarn/src/structure/statement.dart';
 import 'package:flame_yarn/src/yarn_project.dart';
@@ -31,8 +31,6 @@ class _Parser {
   int position;
 
   Token peekToken([int delta = 0]) => tokens[position + delta];
-
-
 
   void parseMain() {
     while (position < tokens.length) {
@@ -86,10 +84,11 @@ class _Parser {
         parseOption();
       } else if (nextToken == Token.startCommand) {
         parseCommand();
-      } else if (nextToken.isText || nextToken.isSpeaker) {
-        final lineBuilder = _LineBuilder();
-        parseLine(lineBuilder);
-        out.add(lineBuilder.build());
+      } else if (nextToken.isText ||
+          nextToken.isSpeaker ||
+          nextToken == Token.startExpression) {
+        final line = parseDialogueLine();
+        out.add(line);
       } else {
         break;
       }
@@ -102,22 +101,19 @@ class _Parser {
 
   /// Consumes a regular line of text from the input, up to and including the
   /// NEWLINE token.
-  void parseLine(_LineBuilder line) {
+  Dialogue parseDialogueLine() {
+    final line = _DialogueBuilder();
     maybeParseLineSpeaker(line);
     parseLineContent(line);
-    maybeParseLineCondition(line);
     maybeParseHashtags(line);
     if (peekToken() == Token.startCommand) {
-      if (line.tags != null) {
-        error('the command must come before the hashtags');
-      } else {
-        error('multiple commands are not allowed on a line');
-      }
+      error('commands are not allowed on a dialogue line');
     }
     takeNewline();
+    return line.build();
   }
 
-  void maybeParseLineSpeaker(_LineBuilder line) {
+  void maybeParseLineSpeaker(_DialogueBuilder line) {
     final token = peekToken();
     if (token.isSpeaker) {
       line.speaker = token.content;
@@ -126,7 +122,7 @@ class _Parser {
     }
   }
 
-  void parseLineContent(_LineBuilder line) {
+  void parseLineContent(_DialogueBuilder line) {
     final parts = <StringExpression>[];
     while (true) {
       final token = peekToken();
@@ -155,28 +151,7 @@ class _Parser {
     }
   }
 
-  void maybeParseLineCondition(_LineBuilder line) {
-    final token = peekToken();
-    if (token == Token.startCommand) {
-      position += 1;
-      if (peekToken() != Token.commandIf) {
-        error('only "if" commands are allowed on a line');
-      }
-      position += 1;
-      take(Token.startExpression);
-      final position0 = position;
-      final expression = parseExpression();
-      take(Token.endExpression);
-      if (!expression.isBoolean) {
-        position = position0;
-        error('the condition in "if" should be boolean');
-      }
-      line.condition = expression as BoolExpression;
-      take(Token.endCommand);
-    }
-  }
-
-  void maybeParseHashtags(_LineBuilder line) {
+  void maybeParseHashtags(_DialogueBuilder line) {
     while (true) {
       final token = peekToken();
       if (token.isHashtag) {
@@ -203,11 +178,11 @@ class _Parser {
       position += 1;
       var rhs = parsePrimary();
       token = peekToken();
-      while ((precedences[token] ?? -1) > minPrecedence) {
+      while ((precedences[token] ?? -1) > opPrecedence) {
         rhs = parseExpression1(rhs, opPrecedence + 1);
         token = peekToken();
       }
-      result = binaryOperatorConstructors[op]!(lhs, rhs, position0);
+      result = binaryOperatorConstructors[op]!(result, rhs, position0);
     }
     return result;
   }
@@ -218,9 +193,9 @@ class _Parser {
     if (token == Token.startParenthesis) {
       final expression = parseExpression();
       if (peekToken() != Token.endParenthesis) {
-        position -= 1;
         error('closing ")" is expected');
       }
+      position += 1;
       return expression;
     } else if (token == Token.operatorMinus) {
       final expression = parsePrimary();
@@ -404,16 +379,14 @@ class _NodeBuilder {
       );
 }
 
-class _LineBuilder {
+class _DialogueBuilder {
   String? speaker;
   StringExpression? content;
-  BoolExpression? condition;
   List<String>? tags;
 
   Dialogue build() => Dialogue(
         speaker: speaker,
         content: content ?? constEmptyString,
-        condition: condition,
         tags: tags,
       );
 }
