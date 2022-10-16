@@ -131,8 +131,11 @@ mixin HasPaint<T extends Object> on Component implements OpacityProvider {
   ///
   /// Note: Each call results in a new [OpacityProvider] and hence the cached
   /// opacity ratios are calculated using opacities when this method was called.
-  OpacityProvider opacityProviderOfList({List<T>? paintIds}) {
-    return _MultiPaintOpacityProvider(paintIds, this);
+  OpacityProvider opacityProviderOfList({List<T?>? paintIds}) {
+    return _MultiPaintOpacityProvider(
+      paintIds ?? (List<T?>.from(_paints.keys)..add(null)),
+      this,
+    );
   }
 }
 
@@ -153,30 +156,23 @@ class _MultiPaintOpacityProvider<T extends Object> implements OpacityProvider {
   _MultiPaintOpacityProvider(this.paintIds, this.target) {
     final maxOpacity = opacity;
 
-    _opacityRatios = (paintIds != null)
-        ? List<double>.generate(
-            paintIds!.length,
-            (index) =>
-                target.getOpacity(paintId: paintIds!.elementAt(index)) /
-                maxOpacity,
-          )
-        : null;
+    _opacityRatios = List<double>.generate(
+      paintIds.length,
+      (index) =>
+          target.getOpacity(paintId: paintIds.elementAt(index)) / maxOpacity,
+    );
   }
 
-  final List<T>? paintIds;
+  final List<T?> paintIds;
   final HasPaint<T> target;
-  late final List<double>? _opacityRatios;
+  late final List<double> _opacityRatios;
 
   @override
   double get opacity {
     var maxOpacity = 0.0;
 
-    if (paintIds != null) {
-      for (final paintId in paintIds!) {
-        maxOpacity = max(target.getOpacity(paintId: paintId), maxOpacity);
-      }
-    } else {
-      maxOpacity = target.getOpacity();
+    for (final paintId in paintIds) {
+      maxOpacity = max(target.getOpacity(paintId: paintId), maxOpacity);
     }
 
     return maxOpacity;
@@ -184,15 +180,11 @@ class _MultiPaintOpacityProvider<T extends Object> implements OpacityProvider {
 
   @override
   set opacity(double value) {
-    if (paintIds != null) {
-      for (var i = 0; i < paintIds!.length; ++i) {
-        target.setOpacity(
-          value * _opacityRatios!.elementAt(i),
-          paintId: paintIds!.elementAt(i),
-        );
-      }
-    } else {
-      target.setOpacity(value);
+    for (var i = 0; i < paintIds.length; ++i) {
+      target.setOpacity(
+        value * _opacityRatios.elementAt(i),
+        paintId: paintIds.elementAt(i),
+      );
     }
   }
 }

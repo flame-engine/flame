@@ -283,8 +283,7 @@ void main() {
           OpacityEffect.to(
             targetOpacity,
             EffectController(duration: 1),
-            target:
-                component.opacityProviderOfList(paintIds: _PaintTypes.values),
+            target: component.opacityProviderOfList(),
           ),
         );
 
@@ -292,15 +291,15 @@ void main() {
 
         expectDouble(
           component.getPaint(_PaintTypes.paint1).color.opacity,
-          targetOpacity,
+          redInitialOpacity * targetOpacity,
         );
         expectDouble(
           component.getPaint(_PaintTypes.paint2).color.opacity,
-          (greenInitialOpacity / redInitialOpacity) * targetOpacity,
+          greenInitialOpacity * targetOpacity,
         );
         expectDouble(
           component.getPaint(_PaintTypes.paint3).color.opacity,
-          (blueInitialOpacity / redInitialOpacity) * targetOpacity,
+          blueInitialOpacity * targetOpacity,
         );
       },
     );
