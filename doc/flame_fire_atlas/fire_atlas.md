@@ -51,7 +51,7 @@ import 'package:flame_fire_atlas/flame_fire_atlas.dart';
 // Load your exported fire atlas file.
 loadFireAtlas('caveace.fa')
 
-// To get Sprite with the given selectionId.
+// Get a Sprite with the given key.
 FireAtlas.getSprite('bomb_ptero')
 
 // Get a SpriteAnimation with the given key.
