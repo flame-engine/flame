@@ -1,21 +1,28 @@
 
 import 'package:flame_yarn/src/structure/expressions/expression.dart';
 
-class Equal extends TypedExpression<bool> {
-  const Equal(this.lhs, this.rhs);
+typedef NumericEqual = _Equal<num>;
+typedef StringEqual = _Equal<String>;
+typedef BoolEqual = _Equal<bool>;
+typedef NumericNotEqual = _NotEqual<num>;
+typedef StringNotEqual = _NotEqual<String>;
+typedef BoolNotEqual = _NotEqual<bool>;
 
-  final TypedExpression<num> lhs;
-  final TypedExpression<num> rhs;
+class _Equal<T> extends TypedExpression<bool> {
+  const _Equal(this.lhs, this.rhs);
+
+  final TypedExpression<T> lhs;
+  final TypedExpression<T> rhs;
 
   @override
   bool get value => lhs.value == rhs.value;
 }
 
-class NotEqual extends TypedExpression<bool> {
-  const NotEqual(this.lhs, this.rhs);
+class _NotEqual<T> extends TypedExpression<bool> {
+  const _NotEqual(this.lhs, this.rhs);
 
-  final TypedExpression<num> lhs;
-  final TypedExpression<num> rhs;
+  final TypedExpression<T> lhs;
+  final TypedExpression<T> rhs;
 
   @override
   bool get value => lhs.value != rhs.value;
@@ -59,16 +66,6 @@ class GreaterThanOrEqual extends TypedExpression<bool> {
 
   @override
   bool get value => lhs.value >= rhs.value;
-}
-
-class StringsEqual extends TypedExpression<bool> {
-  const StringsEqual(this.lhs, this.rhs);
-
-  final TypedExpression<String> lhs;
-  final TypedExpression<String> rhs;
-
-  @override
-  bool get value => lhs.value == rhs.value;
 }
 
 class StringsNotEqual extends TypedExpression<bool> {

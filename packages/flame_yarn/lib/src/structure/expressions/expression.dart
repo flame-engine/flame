@@ -1,9 +1,21 @@
-
 abstract class Expression {
   const Expression();
 
   dynamic get value;
-  ExpressionType get type;
+
+  bool get isNumeric;
+  bool get isBoolean;
+  bool get isString;
+
+  ExpressionType get type {
+    return isNumeric
+        ? ExpressionType.numeric
+        : isBoolean
+            ? ExpressionType.boolean
+            : isString
+                ? ExpressionType.string
+                : ExpressionType.unknown;
+  }
 }
 
 abstract class TypedExpression<T> extends Expression {
@@ -13,15 +25,13 @@ abstract class TypedExpression<T> extends Expression {
   T get value;
 
   @override
-  ExpressionType get type {
-    return (T is bool)
-        ? ExpressionType.boolean
-        : (T is num)
-            ? ExpressionType.numeric
-            : (T is String)
-                ? ExpressionType.string
-                : ExpressionType.unknown;
-  }
+  bool get isNumeric => T is num;
+
+  @override
+  bool get isBoolean => T is bool;
+
+  @override
+  bool get isString => T is String;
 }
 
 enum ExpressionType {

@@ -11,6 +11,7 @@ class VariableStorage {
   String getStringValue(String name) => variables[name]! as String;
 
   bool hasVariable(String name) => variables.containsKey(name);
+  dynamic getVariable(String name) => variables[name]!;
 
   void setVariable(String name, dynamic value) {
     variables[name] = value;

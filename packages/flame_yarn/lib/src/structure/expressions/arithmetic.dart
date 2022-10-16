@@ -50,3 +50,12 @@ class Modulo extends TypedExpression<num> {
   @override
   num get value => lhs.value % rhs.value;
 }
+
+class Negate extends TypedExpression<num> {
+  const Negate(this.arg);
+
+  final TypedExpression<num> arg;
+
+  @override
+  num get value => -arg.value;
+}

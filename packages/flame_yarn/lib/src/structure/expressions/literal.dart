@@ -11,3 +11,4 @@ class Literal<T> extends TypedExpression<T> {
 const constEmptyString = Literal<String>('');
 const constTrue = Literal<bool>(true);
 const constFalse = Literal<bool>(false);
+const constVoid = Literal<void>(null);
