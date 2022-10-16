@@ -48,7 +48,7 @@ Then you have the following methods at your disposal:
 ```dart
 import 'package:flame_fire_atlas/flame_fire_atlas.dart';
 
-// To load your Mapping file
+// Load your exported fire atlas file.
 loadFireAtlas('caveace.fa')
 
 // To get Sprite with the given selectionId.
