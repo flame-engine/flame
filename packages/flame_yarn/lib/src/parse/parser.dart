@@ -35,15 +35,15 @@ class _Parser {
 
   void parseMain() {
     while (position < tokens.length) {
-      final nodeBuilder = _NodeBuilder();
-      parseNodeHeader(nodeBuilder);
-      parseNodeBody(nodeBuilder);
+      final nodeBuilder = parseNodeHeader();
+      nodeBuilder.statements = parseNodeBody();
       assert(!project.nodes.containsKey(nodeBuilder.title));
       project.nodes[nodeBuilder.title!] = nodeBuilder.build();
     }
   }
 
-  void parseNodeHeader(_NodeBuilder node) {
+  _NodeBuilder parseNodeHeader() {
+    final node = _NodeBuilder();
     while (peekToken() != Token.startBody) {
       if (takeId() && take(Token.colon) && takeText() && takeNewline()) {
         final id = peekToken(-4);
@@ -70,15 +70,18 @@ class _Parser {
     if (node.title == null) {
       error('node does not have a title', NameError.new);
     }
+    return node;
   }
 
-  void parseNodeBody(_NodeBuilder node) {
+  List<Statement> parseNodeBody() {
+    final out = <Statement>[];
     take(Token.startBody);
     if (peekToken() == Token.startIndent) {
       error('unexpected indent');
     }
-    node.statements.addAll(parseStatementList());
+    out.addAll(parseStatementList());
     take(Token.endBody);
+    return out;
   }
 
   List<Statement> parseStatementList() {
@@ -104,9 +107,9 @@ class _Parser {
   /// NEWLINE token.
   Dialogue parseDialogueLine() {
     final line = _DialogueBuilder();
-    maybeParseLineSpeaker(line);
-    parseLineContent(line);
-    maybeParseHashtags(line);
+    line.speaker = maybeParseLineSpeaker();
+    line.content = parseLineContent();
+    line.tags = maybeParseHashtags();
     if (peekToken() == Token.startCommand) {
       error('commands are not allowed on a dialogue line');
     }
@@ -117,10 +120,10 @@ class _Parser {
   Option parseOption() {
     final option = _OptionBuilder();
     take(Token.arrow);
-    maybeParseLineSpeaker(option);
-    parseLineContent(option);
+    option.speaker = maybeParseLineSpeaker();
+    option.content = parseLineContent();
     option.condition = maybeParseLineCondition();
-    maybeParseHashtags(option);
+    option.tags = maybeParseHashtags();
     if (peekToken() == Token.startCommand) {
       error('multiple commands are not allowed on a line');
     }
@@ -133,18 +136,23 @@ class _Parser {
     return option.build() as Option;
   }
 
-  void parseCommand() {}
+  void parseCommand() {
+    take(Token.startCommand);
 
-  void maybeParseLineSpeaker(_DialogueBuilder line) {
-    final token = peekToken();
-    if (token.isSpeaker) {
-      line.speaker = token.content;
-      takeSpeaker();
-      take(Token.colon);
-    }
+    take(Token.endCommand);
   }
 
-  void parseLineContent(_DialogueBuilder line) {
+  String? maybeParseLineSpeaker() {
+    final token = peekToken();
+    if (token.isSpeaker) {
+      takeSpeaker();
+      take(Token.colon);
+      return token.content;
+    }
+    return null;
+  }
+
+  StringExpression parseLineContent() {
     final parts = <StringExpression>[];
     while (true) {
       final token = peekToken();
@@ -167,9 +175,11 @@ class _Parser {
       }
     }
     if (parts.length == 1) {
-      line.content = parts.first;
+      return parts.first;
     } else if (parts.length > 1) {
-      line.content = Concat(parts);
+      return Concat(parts);
+    } else {
+      return constEmptyString;
     }
   }
 
@@ -195,17 +205,18 @@ class _Parser {
     return null;
   }
 
-  void maybeParseHashtags(_DialogueBuilder line) {
+  List<String>? maybeParseHashtags() {
+    final out = <String>[];
     while (true) {
       final token = peekToken();
       if (token.isHashtag) {
-        line.tags ??= [];
-        line.tags!.add(token.content);
+        out.add(token.content);
         position += 1;
       } else {
         break;
       }
     }
+    return out.isEmpty? null : out;
   }
 
   Expression parseExpression() {
