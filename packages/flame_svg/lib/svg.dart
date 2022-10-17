@@ -22,7 +22,7 @@ class Svg {
   final MemoryCache<Size, Image> _imageCache = MemoryCache();
 
   /// paint on svg
-  Paint paint = Paint()..filterQuality = FilterQuality.high;
+  final _paint = Paint()..filterQuality = FilterQuality.high;
 
   final List<Size> _lock = [];
 
@@ -42,14 +42,21 @@ class Svg {
   }
 
   /// Renders the svg on the [canvas] using the dimensions provided by [size].
-  void render(Canvas canvas, Vector2 size) {
+  void render(
+    Canvas canvas,
+    Vector2 size, {
+    Paint? overridePaint,
+  }) {
     final _size = size.toSize();
     final image = _getImage(_size);
 
     if (image != null) {
       canvas.save();
       canvas.scale(1 / pixelRatio);
-      canvas.drawImage(image, Offset.zero, paint);
+
+      final drawPaint = overridePaint ?? _paint;
+
+      canvas.drawImage(image, Offset.zero, drawPaint);
       canvas.restore();
     } else {
       _render(canvas, _size);
