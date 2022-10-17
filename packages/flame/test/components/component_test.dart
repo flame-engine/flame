@@ -29,7 +29,7 @@ void main() {
       });
 
       testWithFlameGame(
-          'component.removed completes even if obtained before the game was ready',
+          'component.removed completes if obtained before the game was ready',
           (game) async {
         final component = LifecycleComponent('component');
         final removed = component.removed;
