@@ -25,7 +25,7 @@ final size = Vector2(300, 300);
 svgInstance.renderPosition(canvas, position, size);
 ```
 
-or use the [SvgComponent]:
+or use the `SvgComponent`:
 
 ```dart
 class MyGame extends FlameGame {
