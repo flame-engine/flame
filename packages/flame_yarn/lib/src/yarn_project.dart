@@ -21,4 +21,5 @@ class YarnProject {
   }
 
   void jumpToNode(String node) {}
+  void stopNode() {}
 }

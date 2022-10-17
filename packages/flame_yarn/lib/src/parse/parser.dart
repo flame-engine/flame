@@ -4,6 +4,7 @@ import 'package:flame_yarn/src/parse/tokenize.dart';
 import 'package:flame_yarn/src/structure/commands/command.dart';
 import 'package:flame_yarn/src/structure/commands/if_command.dart';
 import 'package:flame_yarn/src/structure/commands/jump_command.dart';
+import 'package:flame_yarn/src/structure/commands/stop_command.dart';
 import 'package:flame_yarn/src/structure/dialogue.dart';
 import 'package:flame_yarn/src/structure/expressions/arithmetic.dart';
 import 'package:flame_yarn/src/structure/expressions/expression.dart';
@@ -145,12 +146,15 @@ class _Parser {
       return parseCommandIf();
     } else if (token == Token.commandJump) {
       return parseCommandJump();
+    } else if (token == Token.commandStop) {
+      return parseCommandStop();
     }
     throw UnimplementedError();
   }
 
   Command parseCommandIf() {
     final parts = <IfBlock>[];
+    var hasElse = false;
     while (true) {
       take(Token.startCommand);
       final command = peekToken();
@@ -170,6 +174,10 @@ class _Parser {
         parts.add(IfBlock(expression as BoolExpression, statements));
         take(Token.endIndent);
       } else if (command == Token.commandElse) {
+        if (hasElse) {
+          error('only one <<else>> is allowed');
+        }
+        hasElse = true;
         take(command);
         take(Token.endCommand);
         take(Token.newline);
@@ -208,6 +216,12 @@ class _Parser {
     }
     take(Token.endCommand);
     return JumpCommand(target);
+  }
+  Command parseCommandStop() {
+    take(Token.startCommand);
+    take(Token.commandStop);
+    take(Token.endCommand);
+    return const StopCommand();
   }
 
   String? maybeParseLineSpeaker() {
