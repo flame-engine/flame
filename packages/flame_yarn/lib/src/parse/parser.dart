@@ -77,25 +77,27 @@ class _Parser {
     if (peekToken() == Token.startIndent) {
       error('unexpected indent');
     }
-    parseStatementList(node.statements);
+    node.statements.addAll(parseStatementList());
     take(Token.endBody);
   }
 
-  void parseStatementList(List<Statement> out) {
+  List<Statement> parseStatementList() {
+    final result = <Statement>[];
     while (true) {
       final nextToken = peekToken();
       if (nextToken == Token.arrow) {
-        out.add(parseOption());
+        result.add(parseOption());
       } else if (nextToken == Token.startCommand) {
         parseCommand();
       } else if (nextToken.isText ||
           nextToken.isSpeaker ||
           nextToken == Token.startExpression) {
-        out.add(parseDialogueLine());
+        result.add(parseDialogueLine());
       } else {
         break;
       }
     }
+    return result;
   }
 
   /// Consumes a regular line of text from the input, up to and including the
@@ -113,17 +115,22 @@ class _Parser {
   }
 
   Option parseOption() {
-    final optionBuilder = _OptionBuilder();
+    final option = _OptionBuilder();
     take(Token.arrow);
-    maybeParseLineSpeaker(optionBuilder);
-    parseLineContent(optionBuilder);
-    optionBuilder.condition = maybeParseLineCondition();
-    maybeParseHashtags(optionBuilder);
+    maybeParseLineSpeaker(option);
+    parseLineContent(option);
+    option.condition = maybeParseLineCondition();
+    maybeParseHashtags(option);
     if (peekToken() == Token.startCommand) {
       error('multiple commands are not allowed on a line');
     }
     take(Token.newline);
-    return optionBuilder.build() as Option;
+    if (peekToken() == Token.startIndent) {
+      position += 1;
+      option.block = parseStatementList();
+      take(Token.endIndent);
+    }
+    return option.build() as Option;
   }
 
   void parseCommand() {}

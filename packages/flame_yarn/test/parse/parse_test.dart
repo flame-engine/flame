@@ -234,6 +234,36 @@ void main() {
         expect(line1.content.value, 'Hi: there!');
       });
 
+      test('option with a followup dialogue', () {
+        final yarn = YarnProject()
+          ..parse('title:A\n---\n'
+              '-> choice one\n'
+              '    Nice one, James!\n'
+              '    Back to ya!\n'
+              '-> choice two\n'
+              '    My condolences...\n'
+              '===\n');
+        final node = yarn.nodes['A']!;
+        expect(node.lines.length, 2);
+        final choice1 = node.lines[0] as Option;
+        final choice2 = node.lines[1] as Option;
+        expect(choice1.content.value, 'choice one');
+        expect(choice1.block, isNotNull);
+        expect(choice1.block.length, 2);
+        expect(
+          (choice1.block[0] as Dialogue).content.value,
+          'Nice one, James!',
+        );
+        expect((choice1.block[1] as Dialogue).content.value, 'Back to ya!');
+        expect(choice2.content.value, 'choice two');
+        expect(choice2.block, isNotNull);
+        expect(choice2.block.length, 1);
+        expect(
+          (choice2.block[0] as Dialogue).content.value,
+          'My condolences...',
+        );
+      });
+
       test('option with a non-if command', () {
         expect(
           () => YarnProject().parse(
