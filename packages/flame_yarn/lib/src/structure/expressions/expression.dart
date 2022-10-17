@@ -1,3 +1,5 @@
+import 'package:flame_yarn/src/structure/expressions/expression_type.dart';
+
 abstract class Expression {
   const Expression();
 
@@ -46,11 +48,4 @@ abstract class BoolExpression extends Expression {
 
   @override
   bool get isBoolean => true;
-}
-
-enum ExpressionType {
-  unknown,
-  boolean,
-  numeric,
-  string,
 }

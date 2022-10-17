@@ -1,3 +1,5 @@
+import 'package:flame_yarn/src/structure/expressions/expression_type.dart';
+
 class VariableStorage {
   final Map<String, dynamic> variables = <String, dynamic>{};
 
@@ -11,6 +13,17 @@ class VariableStorage {
 
   bool hasVariable(String name) => variables.containsKey(name);
   dynamic getVariable(String name) => variables[name]!;
+
+  ExpressionType getVariableType(String name) {
+    final dynamic value = variables[name];
+    return value is String
+        ? ExpressionType.string
+        : value is num
+            ? ExpressionType.numeric
+            : value is bool
+                ? ExpressionType.boolean
+                : ExpressionType.unknown;
+  }
 
   void setVariable(String name, dynamic value) {
     variables[name] = value;

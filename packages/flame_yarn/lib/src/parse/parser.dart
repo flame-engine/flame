@@ -4,6 +4,7 @@ import 'package:flame_yarn/src/parse/tokenize.dart';
 import 'package:flame_yarn/src/structure/commands/command.dart';
 import 'package:flame_yarn/src/structure/commands/if_command.dart';
 import 'package:flame_yarn/src/structure/commands/jump_command.dart';
+import 'package:flame_yarn/src/structure/commands/set_command.dart';
 import 'package:flame_yarn/src/structure/commands/stop_command.dart';
 import 'package:flame_yarn/src/structure/commands/wait_command.dart';
 import 'package:flame_yarn/src/structure/dialogue.dart';
@@ -151,6 +152,8 @@ class _Parser {
       return parseCommandStop();
     } else if (token == Token.commandWait) {
       return parseCommandWait();
+    } else if (token == Token.commandSet) {
+      return parseCommandSet();
     }
     throw UnimplementedError();
   }
@@ -161,13 +164,13 @@ class _Parser {
     while (true) {
       take(Token.startCommand);
       final command = peekToken();
-      if (command == (parts.isEmpty? Token.commandIf : Token.commandElseif)) {
+      if (command == (parts.isEmpty ? Token.commandIf : Token.commandElseif)) {
         take(command);
         final position0 = position;
         final expression = parseExpression();
         if (!expression.isBoolean) {
           position = position0;
-          final name = command == Token.commandIf? 'if' : 'elseif';
+          final name = command == Token.commandIf ? 'if' : 'elseif';
           error('expression in an a <<$name>> command must be boolean');
         }
         take(Token.endCommand);
@@ -237,6 +240,54 @@ class _Parser {
     }
     take(Token.endCommand);
     return WaitCommand(expression as NumExpression);
+  }
+
+  Command parseCommandSet() {
+    take(Token.startCommand);
+    take(Token.commandSet);
+    final variableToken = peekToken();
+    if (variableToken.isVariable) {
+      position += 1;
+    } else {
+      error('variable expected');
+    }
+    final variableName = variableToken.content;
+    final variableExists = project.variables.hasVariable(variableName);
+    final assignmentToken = peekToken();
+    if (assignmentTokens.contains(assignmentToken)) {
+      position += 1;
+    } else {
+      error('an assignment operator is expected');
+    }
+    final expression = parseExpression();
+    if (variableExists) {
+      final variableType = project.variables.getVariableType(variableName);
+      if (variableType != expression.type) {
+        error(
+          'variable $variableName of type ${variableType.name} cannot be '
+          'assigned a value of type ${expression.type.name}',
+        );
+      }
+    } else {
+      final variableType = expression.type;
+      final dynamic initialValue = variableType is String
+          ? ''
+          : variableType is num
+              ? 0
+              : variableType is bool
+                  ? false
+                  : null;
+      project.variables.setVariable(variableName, initialValue);
+      assert(project.variables.getVariableType(variableName) == variableType);
+    }
+    if (assignmentToken != Token.operatorAssign) {
+      if (!variableExists) {
+        nameError('variable $variableName was not defined');
+      }
+      throw UnimplementedError();
+    }
+    take(Token.endCommand);
+    return SetCommand(variableName, expression);
   }
 
   String? maybeParseLineSpeaker() {
@@ -313,7 +364,7 @@ class _Parser {
         break;
       }
     }
-    return out.isEmpty? null : out;
+    return out.isEmpty ? null : out;
   }
 
   Expression parseExpression() {
@@ -418,6 +469,15 @@ class _Parser {
     }
     return error('unexpected token');
   }
+
+  static const List<Token> assignmentTokens = [
+    Token.operatorAssign,
+    Token.operatorDivideAssign,
+    Token.operatorMinusAssign,
+    Token.operatorModuloAssign,
+    Token.operatorMultiplyAssign,
+    Token.operatorPlusAssign,
+  ];
 
   static final Map<Token, int> precedences = {
     Token.operatorMultiply: 6,
@@ -525,6 +585,8 @@ class _Parser {
     final location = errorToken.content;
     throw errorConstructor('$message\n$location\n');
   }
+
+  Never nameError(String message) => error(message, NameError.new);
 }
 
 class _NodeBuilder {
