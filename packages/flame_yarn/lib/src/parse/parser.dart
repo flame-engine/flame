@@ -112,34 +112,43 @@ class _Parser {
   /// Consumes a regular line of text from the input, up to and including the
   /// NEWLINE token.
   Dialogue parseDialogueLine() {
-    final line = _DialogueBuilder();
-    line.speaker = maybeParseLineSpeaker();
-    line.content = parseLineContent();
-    line.tags = maybeParseHashtags();
+    final speaker = maybeParseLineSpeaker();
+    final content = parseLineContent();
+    final tags = maybeParseHashtags();
     if (peekToken() == Token.startCommand) {
       error('commands are not allowed on a dialogue line');
     }
     takeNewline();
-    return line.build() as Dialogue;
+    return Dialogue(
+      speaker: speaker,
+      content: content,
+      tags: tags,
+    );
   }
 
   Option parseOption() {
-    final option = _OptionBuilder();
     take(Token.arrow);
-    option.speaker = maybeParseLineSpeaker();
-    option.content = parseLineContent();
-    option.condition = maybeParseLineCondition();
-    option.tags = maybeParseHashtags();
+    final speaker = maybeParseLineSpeaker();
+    final content = parseLineContent();
+    final condition = maybeParseLineCondition();
+    final tags = maybeParseHashtags();
     if (peekToken() == Token.startCommand) {
       error('multiple commands are not allowed on a line');
     }
     take(Token.newline);
+    var block = const <Statement>[];
     if (peekToken() == Token.startIndent) {
       position += 1;
-      option.block = parseStatementList();
+      block = parseStatementList();
       take(Token.endIndent);
     }
-    return option.build() as Option;
+    return Option(
+      content: content,
+      speaker: speaker,
+      tags: tags,
+      condition: condition,
+      block: block,
+    );
   }
 
   Command parseCommand() {
@@ -598,31 +607,5 @@ class _NodeBuilder {
         title: title!,
         tags: tags,
         lines: statements,
-      );
-}
-
-class _DialogueBuilder {
-  String? speaker;
-  StringExpression? content;
-  List<String>? tags;
-
-  Statement build() => Dialogue(
-        speaker: speaker,
-        content: content ?? constEmptyString,
-        tags: tags,
-      );
-}
-
-class _OptionBuilder extends _DialogueBuilder {
-  BoolExpression? condition;
-  List<Statement>? block;
-
-  @override
-  Statement build() => Option(
-        content: content ?? constEmptyString,
-        speaker: speaker,
-        tags: tags,
-        condition: condition,
-        block: block ?? const <Statement>[],
       );
 }
