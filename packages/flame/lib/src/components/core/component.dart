@@ -228,7 +228,7 @@ class Component {
   Future<void> get mounted =>
       isMounted ? Future.value() : lifecycle.mountFuture;
 
-  /// A future that completes when this component has been removed.
+  /// A future that completes when this component is removed from its parent.
   ///
   /// If the component is already removed (see [isRemoved]), this returns an
   /// already completed future.
