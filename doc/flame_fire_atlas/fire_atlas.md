@@ -18,48 +18,28 @@ together to reduce overall dimensions.
 
 ## Usage
 
-To
-install [flame_fire_atlas](https://github.com/flame-engine/flame/tree/main/packages/flame_fire_atlas)
-run this command:
-
-```bash
-flutter pub add flame_fire_atlas
-```
-
-this will add following line in your `pubspec.yaml` file:
-
-```yaml
-dependencies:
-  flame_fire_atlas: VERSION
-```
-
-The latest version can be found on [pub.dev](https://pub.dev/packages/flame_fire_atlas/install).
-
-After installing the `flame_fire_atlas` package, you can add FiraAtlas (`.fa`) files in the assets
-section of your `pubspec.yaml`.
-
-For the examples below, your `pubspec.yaml` file needs to contain something like this:
-
-```yaml
-flutter:
-  assets:
-    - assets/caveace.fa
-```
+To use it in your game you just need to add `flame_bloc` to your pubspec.yaml, as can be seen in the
+[Flame Fire Atlas example](https://github.com/flame-engine/flame/tree/main/packages/flame_fire_atlas/example)
+and in the pub.dev [installation instructions](https://pub.dev/packages/flame_fire_atlas).
 
 Then you have the following methods at your disposal:
 
 ```dart
 import 'package:flame_fire_atlas/flame_fire_atlas.dart';
 
-// Load your exported fire atlas file.
-loadFireAtlas
-('caveace.fa')
+// Load the atlas from your assets
+// file at assets/atlas.fa
+final atlas = await loadFireAtlas('atlas.fa');
+
+//or when inside a game instance, the loadFireAtlas can be used:
+// file at assets/atlas.fa
+final atlas = await loadFireAtlas('atlas.fa');
 
 // Get a Sprite with the given key.
-FireAtlas.getSprite('bomb_ptero')
+FireAtlas.getSprite('sprite_name')
 
 // Get a SpriteAnimation with the given key.
-FireAtlas.getAnimation('bla')
+FireAtlas.getAnimation('animation_name')
 ```
 
 To use FireAtlas in your game, load the fire atlas file in an `onLoad` method, either in your game
@@ -72,21 +52,21 @@ class ExampleGame extends FlameGame {
 
   @override
   Future<void> onLoad() async {
-    _atlas = await loadFireAtlas('caveace.fa');
+    _atlas = await loadFireAtlas('atlas.fa');
 
     add(
       SpriteComponent(
         size: Vector2(50, 50),
         position: Vector2(0, 50),
-        sprite: _atlas.getSprite('shooting_ptero'),
+        sprite: _atlas.getSprite('sprite_name'),
       ),
     );
 
     add(
-      SpriteComponent(
-        size: Vector2(50, 50),
-        position: Vector2(0, 50),
-        sprite: _atlas.getSprite('bullet'),
+      SpriteAnimationComponent(
+        size: Vector2(150, 100),
+        position: Vector2(150, 100),
+        animation: _atlas.getAnimation('animation_name'),
       ),
     );
   }
