@@ -1,6 +1,6 @@
 # Flame SVG
 
-Flame provides a simple API to render SVG images in your game.
+flame_svg provides a simple API for render SVG images in your game.
 
 
 ## Installation
