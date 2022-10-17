@@ -19,4 +19,6 @@ class YarnProject {
   void setVariable(String name, dynamic value) {
     variables.setVariable(name, value);
   }
+
+  void jumpToNode(String node) {}
 }

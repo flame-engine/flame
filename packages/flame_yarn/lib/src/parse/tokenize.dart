@@ -737,12 +737,22 @@ class _Lexer {
     if (eatId()) {
       final token = popToken();
       final name = token.content;
-      if (commandsWithArgs.containsKey(name)) {
-        pushToken(commandsWithArgs[name]!, position0);
-        pushToken(Token.startExpression, position0);
-        pushMode(modeExpression);
-      } else if (commandsWithoutArgs.containsKey(name)) {
-        pushToken(commandsWithoutArgs[name]!, position0);
+      final commandToken = commandTokens[name];
+      if (commandToken != null) {
+        pushToken(commandToken, position0);
+        if (commandToken == Token.commandIf ||
+            commandToken == Token.commandElseif ||
+            commandToken == Token.commandWait ||
+            commandToken == Token.commandSet ||
+            commandToken == Token.commandDeclare) {
+          pushToken(Token.startExpression, position0);
+          pushMode(modeExpression);
+        } else if (commandToken == Token.commandJump) {
+          eatWhitespace();
+          eatId() ||
+              eatExpressionStart() ||
+              error('an ID or an expression expected');
+        } else if (commandToken == Token.commandSet) {}
       } else {
         pushToken(Token.command(name), position0);
         pushToken(Token.startExpression, position0);
@@ -841,17 +851,16 @@ class _Lexer {
     '(': Token.startParenthesis,
     ')': Token.endParenthesis,
   };
-  static const Map<String, Token> commandsWithArgs = {
-    'if': Token.commandIf,
-    'elseif': Token.commandElseif,
-    'set': Token.commandSet,
-    'jump': Token.commandJump,
-    'wait': Token.commandWait,
-  };
-  static const Map<String, Token> commandsWithoutArgs = {
+  static const Map<String, Token> commandTokens = {
+    'declare': Token.commandDeclare,
     'else': Token.commandElse,
+    'elseif': Token.commandElseif,
     'endif': Token.commandEndif,
+    'if': Token.commandIf,
+    'jump': Token.commandJump,
+    'set': Token.commandSet,
     'stop': Token.commandStop,
+    'wait': Token.commandWait,
   };
 
   /// Throws a [SyntaxError] with the given [message], augmenting it with the

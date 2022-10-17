@@ -20,6 +20,7 @@ class Token {
   static const asType = Token._(TokenType.asType);
   static const colon = Token._(TokenType.colon);
   static const comma = Token._(TokenType.comma);
+  static const commandDeclare = Token._(TokenType.commandDeclare);
   static const commandElse = Token._(TokenType.commandElse);
   static const commandElseif = Token._(TokenType.commandElseif);
   static const commandEndif = Token._(TokenType.commandEndif);
@@ -111,6 +112,7 @@ enum TokenType {
   asType, //                 'as'
   colon, //                  ':'
   comma, //                  ','
+  commandDeclare, //         'declare'
   commandElse, //            'else'
   commandElseif, //          'elseif'
   commandEndif, //           'endif'

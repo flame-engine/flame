@@ -1,6 +1,9 @@
 import 'package:flame_yarn/src/errors.dart';
 import 'package:flame_yarn/src/parse/token.dart';
 import 'package:flame_yarn/src/parse/tokenize.dart';
+import 'package:flame_yarn/src/structure/commands/command.dart';
+import 'package:flame_yarn/src/structure/commands/if_command.dart';
+import 'package:flame_yarn/src/structure/commands/jump_command.dart';
 import 'package:flame_yarn/src/structure/dialogue.dart';
 import 'package:flame_yarn/src/structure/expressions/arithmetic.dart';
 import 'package:flame_yarn/src/structure/expressions/expression.dart';
@@ -136,10 +139,75 @@ class _Parser {
     return option.build() as Option;
   }
 
-  void parseCommand() {
-    take(Token.startCommand);
+  Command parseCommand() {
+    final token = peekToken(1);
+    if (token == Token.commandIf) {
+      return parseCommandIf();
+    } else if (token == Token.commandJump) {
+      return parseCommandJump();
+    }
+    throw UnimplementedError();
+  }
 
+  Command parseCommandIf() {
+    final parts = <IfBlock>[];
+    while (true) {
+      take(Token.startCommand);
+      final command = peekToken();
+      if (command == (parts.isEmpty? Token.commandIf : Token.commandElseif)) {
+        take(command);
+        final position0 = position;
+        final expression = parseExpression();
+        if (!expression.isBoolean) {
+          position = position0;
+          final name = command == Token.commandIf? 'if' : 'elseif';
+          error('expression in an a <<$name>> command must be boolean');
+        }
+        take(Token.endCommand);
+        take(Token.newline);
+        take(Token.startIndent);
+        final statements = parseStatementList();
+        parts.add(IfBlock(expression as BoolExpression, statements));
+        take(Token.endIndent);
+      } else if (command == Token.commandElse) {
+        take(command);
+        take(Token.endCommand);
+        take(Token.newline);
+        take(Token.startIndent);
+        final statements = parseStatementList();
+        parts.add(IfBlock(constTrue, statements));
+        take(Token.endIndent);
+      } else if (command == Token.commandEndif) {
+        take(command);
+        take(Token.endCommand);
+        takeNewline();
+        break;
+      } else {
+        error('<<endif>> expected');
+      }
+    }
+    return IfCommand(parts);
+  }
+
+  Command parseCommandJump() {
+    take(Token.startCommand);
+    take(Token.commandJump);
+    final token = peekToken();
+    StringExpression target;
+    if (token.isId) {
+      target = StringLiteral(token.content);
+    } else {
+      take(Token.startExpression);
+      final expression = parseExpression();
+      take(Token.endExpression);
+      if (expression.isString) {
+        target = expression as StringExpression;
+      } else {
+        error('target of <<jump>> must be a string expression');
+      }
+    }
     take(Token.endCommand);
+    return JumpCommand(target);
   }
 
   String? maybeParseLineSpeaker() {

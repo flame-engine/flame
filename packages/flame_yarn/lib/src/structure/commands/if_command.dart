@@ -6,6 +6,10 @@ import 'package:flame_yarn/src/yarn_project.dart';
 class IfCommand extends Command {
   const IfCommand(this.ifs);
 
+  /// First entry here is the <<if>> command, subsequent entries are the
+  /// <<elseif>> commands, and the last entry is the <<else>> block (if
+  /// present), which is represented as an [IfBlock] with `condition =
+  /// constTrue`.
   final List<IfBlock> ifs;
 
   @override
@@ -20,8 +24,8 @@ class IfCommand extends Command {
 }
 
 class IfBlock {
-  const IfBlock(this.condition, this.entries);
+  const IfBlock(this.condition, this.block);
 
   final BoolExpression condition;
-  final List<Statement> entries;
+  final List<Statement> block;
 }
