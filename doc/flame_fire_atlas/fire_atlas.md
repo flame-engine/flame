@@ -1,14 +1,19 @@
-# FireAtlas
+# Flame fire atlas
 
-FireAtlas is a tool for handling texture atlases. With FireAtlas one can access images and
-animations stored in a `.fa` texture atlas by referring to them by their named keys.
+Flame fire atlas is a texture atlas lib for Flame. Using `Flame fire atlas` one can access images
+and animations stored in a `.fa` texture atlas by referring to them by their named keys.
+
+
+## FireAtlas
+
+FireAtlas is a tool for handling texture atlases. Atlases can be created using
+the [Fire Atlas Editor](https://fire-atlas.flame-engine.org/#/).
 
 
 ## Texture atlas
 
-A texture atlas is an image
-that contains data from several smaller images that have been packed together to reduce overall
-dimensions.
+A texture atlas is an image that contains data from several smaller images that have been packed
+together to reduce overall dimensions.
 
 
 ## Usage
@@ -47,7 +52,8 @@ Then you have the following methods at your disposal:
 import 'package:flame_fire_atlas/flame_fire_atlas.dart';
 
 // Load your exported fire atlas file.
-loadFireAtlas('caveace.fa')
+loadFireAtlas
+('caveace.fa')
 
 // Get a Sprite with the given key.
 FireAtlas.getSprite('bomb_ptero')
