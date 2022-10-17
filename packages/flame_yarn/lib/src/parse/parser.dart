@@ -5,6 +5,7 @@ import 'package:flame_yarn/src/structure/commands/command.dart';
 import 'package:flame_yarn/src/structure/commands/if_command.dart';
 import 'package:flame_yarn/src/structure/commands/jump_command.dart';
 import 'package:flame_yarn/src/structure/commands/stop_command.dart';
+import 'package:flame_yarn/src/structure/commands/wait_command.dart';
 import 'package:flame_yarn/src/structure/dialogue.dart';
 import 'package:flame_yarn/src/structure/expressions/arithmetic.dart';
 import 'package:flame_yarn/src/structure/expressions/expression.dart';
@@ -148,6 +149,8 @@ class _Parser {
       return parseCommandJump();
     } else if (token == Token.commandStop) {
       return parseCommandStop();
+    } else if (token == Token.commandWait) {
+      return parseCommandWait();
     }
     throw UnimplementedError();
   }
@@ -217,11 +220,23 @@ class _Parser {
     take(Token.endCommand);
     return JumpCommand(target);
   }
+
   Command parseCommandStop() {
     take(Token.startCommand);
     take(Token.commandStop);
     take(Token.endCommand);
     return const StopCommand();
+  }
+
+  Command parseCommandWait() {
+    take(Token.startCommand);
+    take(Token.commandWait);
+    final expression = parseExpression();
+    if (!expression.isNumeric) {
+      error('<<wait>> command expects a numeric argument');
+    }
+    take(Token.endCommand);
+    return WaitCommand(expression as NumExpression);
   }
 
   String? maybeParseLineSpeaker() {

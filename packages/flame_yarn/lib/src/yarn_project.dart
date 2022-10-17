@@ -22,4 +22,5 @@ class YarnProject {
 
   void jumpToNode(String node) {}
   void stopNode() {}
+  void wait(num seconds) {}
 }
