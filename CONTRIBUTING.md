@@ -204,5 +204,5 @@ There are a few things to think about when doing a release:
 [Melos]: https://github.com/invertase/melos
 [pubspec doc]: https://dart.dev/tools/pub/pubspec
 [conventional commit]: https://www.conventionalcommits.org
-[style guide]: https://docs.flame-engine.org/main/development/style_guide.md
-[test writing guide]: https://docs.flame-engine.org/main/development/testing_guide.md
+[style guide]: https://docs.flame-engine.org/main/development/style_guide
+[test writing guide]: https://docs.flame-engine.org/main/development/testing_guide
