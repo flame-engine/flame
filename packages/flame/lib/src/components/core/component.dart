@@ -997,7 +997,7 @@ class _LifecycleManager {
   /// Queue for moving components from another parent to this one.
   final Queue<Component> _adoption = Queue();
 
-  /// Wheter or not there are any pending lifecycle events for this component.
+  /// Whether or not there are any pending lifecycle events for this component.
   ///
   /// [Component.removed] is not regarded as a pending event.
   bool get hasPendingEvents {
