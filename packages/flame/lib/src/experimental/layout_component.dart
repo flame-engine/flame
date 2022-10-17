@@ -28,7 +28,7 @@ abstract class LayoutComponent extends PositionComponent {
 
   @override
   set size(Vector2 size) {
-    assert(_allowSetSize);
+    assert(_allowSetSize, 'Setting the size is currently unsupported.');
     this.size = size;
   }
 
