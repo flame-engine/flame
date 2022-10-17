@@ -12,8 +12,17 @@ the [Fire Atlas Editor](https://fire-atlas.flame-engine.org/#/).
 
 ## Texture atlas
 
-A texture atlas is an image that contains data from several smaller images that have been packed
-together to reduce overall dimensions.
+A [Texture atlas](https://en.wikipedia.org/wiki/Texture_atlas) is an image that contains data from
+several smaller images that have been packed together to reduce overall dimensions.With it, you
+reduce the number of images loaded and speedup the game loading.
+
+
+### Example
+
+![fighter atlas](./images/fighter.png)
+
+you can find some good examples of texture
+atlas [here](https://www.pngwing.com/en/search?q=texture+atlas).
 
 
 ## Usage
@@ -29,11 +38,11 @@ import 'package:flame_fire_atlas/flame_fire_atlas.dart';
 
 // Load the atlas from your assets
 // file at assets/atlas.fa
-final atlas = await loadFireAtlas('atlas.fa');
+final atlas = awaitloadFireAtlas('atlas.fa');
 
 //or when inside a game instance, the loadFireAtlas can be used:
 // file at assets/atlas.fa
-final atlas = await loadFireAtlas('atlas.fa');
+final atlas = awaitloadFireAtlas('atlas.fa');
 
 // Get a Sprite with the given key.
 FireAtlas.getSprite('sprite_name')
