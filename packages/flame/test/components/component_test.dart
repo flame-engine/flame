@@ -29,7 +29,7 @@ void main() {
       });
 
       testWithFlameGame(
-          'component removed times out when set before game is ready',
+          'component.removed completes even if obtained before the game was ready',
           (game) async {
         final component = LifecycleComponent('component');
         final removed = component.removed;
