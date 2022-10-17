@@ -207,7 +207,10 @@ class Component {
   void _setRemovingBit() => _state |= _removing;
   void _clearRemovingBit() => _state &= ~_removing;
 
-  /// Whether the component has been removed.
+  /// Whether the component has been removed. Originally this flag is `false`,
+  /// but it becomes `true` after the component was mounted and then removed
+  /// from its parent. The flag becomes `false` again when the component is
+  /// mounted to a new parent.
   bool get isRemoved => (_state & _removed) != 0;
   void _setRemovedBit() => _state |= _removed;
   void _clearRemovedBit() => _state &= ~_removed;
