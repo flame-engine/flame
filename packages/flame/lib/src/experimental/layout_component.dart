@@ -28,9 +28,8 @@ abstract class LayoutComponent extends PositionComponent {
 
   @override
   set size(Vector2 size) {
-    if (_allowSetSize) {
-      this.size = size;
-    }
+    assert(_allowSetSize);
+    this.size = size;
   }
 
   double get gap => _gap;
