@@ -31,10 +31,13 @@ class RectangleHitbox extends RectangleComponent
     required super.parentSize,
     super.angle,
     super.anchor,
+    bool isSolid = false,
   })  : shouldFillParent = false,
         super.relative(
           shrinkToBounds: true,
-        );
+        ) {
+    this.isSolid = isSolid;
+  }
 
   @override
   void fillParent() {
