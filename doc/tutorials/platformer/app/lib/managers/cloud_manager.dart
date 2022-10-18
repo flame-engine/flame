@@ -1,5 +1,5 @@
+import 'package:EmberQuest/ember_quest.dart';
 import 'package:EmberQuest/extensions/random.dart';
-import 'package:EmberQuest/main.dart';
 import 'package:EmberQuest/objects/cloud.dart';
 import 'package:flame/components.dart';
 
@@ -18,7 +18,7 @@ class CloudManager extends PositionComponent with HasGameRef<EmberQuestGame> {
     add(Cloud(position: cloudPosition));
   }
 
-  double get cloudSpeed => bgCloudSpeed / 1000 * gameRef.currentSpeed;
+  double get cloudSpeed => bgCloudSpeed / 1000 * gameRef.cloudSpeed;
 
   @override
   void update(double dt) {

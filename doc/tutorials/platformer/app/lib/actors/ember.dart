@@ -1,6 +1,8 @@
-import 'package:EmberQuest/main.dart';
+import 'package:EmberQuest/actors/water_enemy.dart';
+import 'package:EmberQuest/ember_quest.dart';
 import 'package:EmberQuest/objects/ground_block.dart';
 import 'package:EmberQuest/objects/platform_block.dart';
+import 'package:EmberQuest/objects/star.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
@@ -12,14 +14,16 @@ class EmberPlayer extends SpriteAnimationComponent
     required super.position,
   }) : super(size: Vector2.all(64), anchor: Anchor.center);
 
-  final Vector2 _velocity = Vector2.zero();
-  int _hAxisInput = 0;
-  final Vector2 _up = Vector2(0, -1);
-  bool _jumpInput = false;
-  bool _isOnGround = false;
-  final double _gravity = 15;
-  final double _jumpSpeed = 600;
-  double moveSpeed = 200;
+  final Vector2 velocity = Vector2.zero();
+  final Vector2 fromAbove = Vector2(0, -1);
+  final double gravity = 15;
+  final double jumpSpeed = 600;
+  final double moveSpeed = 200;
+  int horizontalDirection = 0;
+
+  bool hasJumped = false;
+  bool isOnGround = false;
+  bool hitByEnemy = false;
 
   @override
   Future<void> onLoad() async {
@@ -32,7 +36,6 @@ class EmberPlayer extends SpriteAnimationComponent
       ),
     );
 
-    //debugMode = true; //Set to true to see the bounding boxes
     add(
       CircleHitbox()..collisionType = CollisionType.active,
     );
@@ -40,52 +43,61 @@ class EmberPlayer extends SpriteAnimationComponent
 
   @override
   bool onKeyEvent(RawKeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
-    //if (isAlive) {
-    _hAxisInput = 0;
-
-    _hAxisInput += (keysPressed.contains(LogicalKeyboardKey.keyA) ||
+    horizontalDirection = 0;
+    horizontalDirection += (keysPressed.contains(LogicalKeyboardKey.keyA) ||
             keysPressed.contains(LogicalKeyboardKey.arrowLeft))
         ? -1
         : 0;
-    _hAxisInput += (keysPressed.contains(LogicalKeyboardKey.keyD) ||
+    horizontalDirection += (keysPressed.contains(LogicalKeyboardKey.keyD) ||
             keysPressed.contains(LogicalKeyboardKey.arrowRight))
         ? 1
         : 0;
 
-    _jumpInput = keysPressed.contains(LogicalKeyboardKey.space);
-
-    // }
-
+    hasJumped = keysPressed.contains(LogicalKeyboardKey.space);
     return true;
   }
 
   @override
   void update(double dt) {
-    _velocity.x = _hAxisInput * moveSpeed;
-    if (position.x - 36 <= 0 && _hAxisInput < 0) {
-      _velocity.x = 0;
+    velocity.x = horizontalDirection * moveSpeed;
+    gameRef.objectSpeed = 0;
+    //Prevent ember from going backwards at screen edge
+    if (position.x - 36 <= 0 && horizontalDirection < 0) {
+      velocity.x = 0;
     }
-    if (position.x + 64 >= gameRef.size.x / 2 && _hAxisInput > 0) {
-      _velocity.x = 0;
+    //Prevent ember from going beyond half screen
+    if (position.x + 64 >= gameRef.size.x / 2 && horizontalDirection > 0) {
+      velocity.x = 0;
+      gameRef.objectSpeed = -moveSpeed;
     }
-    _velocity.y += _gravity;
 
-    if (_jumpInput) {
-      if (_isOnGround) {
-        _velocity.y = -_jumpSpeed;
-        _isOnGround = false;
+    //Apply basic gravity
+    velocity.y += gravity;
+
+    //Determine if ember has jumped
+    if (hasJumped) {
+      if (isOnGround) {
+        velocity.y = -jumpSpeed;
+        isOnGround = false;
       }
-      _jumpInput = false;
+      hasJumped = false;
     }
 
-    _velocity.y = _velocity.y.clamp(-_jumpSpeed, 150);
+    //Prevent ember from jumping to crazy fast
+    velocity.y = velocity.y.clamp(-jumpSpeed, 150);
 
-    position += _velocity * dt;
+    //Adjust ember position
+    position += velocity * dt;
 
-    // Flip player if needed.
-    if (_hAxisInput < 0 && scale.x > 0) {
+    //If ember fell in pit, then game over
+    if (position.y > gameRef.size.y + 64) {
+      gameRef.health = 0;
+    }
+
+    // Flip ember if needed.
+    if (horizontalDirection < 0 && scale.x > 0) {
       flipHorizontallyAroundCenter();
-    } else if (_hAxisInput > 0 && scale.x < 0) {
+    } else if (horizontalDirection > 0 && scale.x < 0) {
       flipHorizontallyAroundCenter();
     }
     super.update(dt);
@@ -105,26 +117,35 @@ class EmberPlayer extends SpriteAnimationComponent
         collisionNormal.normalize();
 
         // If collision normal is almost upwards,
-        // player must be on ground.
-        if (_up.dot(collisionNormal) > 0.9) {
-          _isOnGround = true;
+        // ember must be on ground.
+        if (fromAbove.dot(collisionNormal) > 0.9) {
+          isOnGround = true;
         }
 
-        // Resolve collision by moving player along
+        // Resolve collision by moving ember along
         // collision normal by separation distance.
         position += collisionNormal.scaled(separationDistance);
       }
     }
 
-    if (other is ScreenHitbox) {
-      removeFromParent();
+    if (other is Star) {
+      other.removeFromParent();
+      gameRef.starsCollected++;
+    }
+
+    if (other is WaterEnemy) {
+      hit();
     }
     super.onCollision(intersectionPoints, other);
   }
 
-  // This method runs an opacity effect on player
+  // This method runs an opacity effect on ember
   // to make it blink.
   void hit() {
+    if (!hitByEnemy) {
+      gameRef.health--;
+      hitByEnemy = true;
+    }
     add(
       OpacityEffect.fadeOut(
         EffectController(
@@ -132,13 +153,9 @@ class EmberPlayer extends SpriteAnimationComponent
           duration: 0.1,
           repeatCount: 5,
         ),
-      ),
+      )..onComplete = () {
+          hitByEnemy = false;
+        },
     );
-  }
-
-  // Makes the player jump forcefully.
-  void jump() {
-    _jumpInput = true;
-    _isOnGround = true;
   }
 }

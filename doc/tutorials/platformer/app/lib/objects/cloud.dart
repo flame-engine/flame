@@ -1,5 +1,5 @@
+import 'package:EmberQuest/ember_quest.dart';
 import 'package:EmberQuest/extensions/random.dart';
-import 'package:EmberQuest/main.dart';
 import 'package:EmberQuest/managers/cloud_manager.dart';
 import 'package:flame/components.dart';
 

@@ -1,0 +1,63 @@
+import 'package:EmberQuest/ember_quest.dart';
+import 'package:EmberQuest/overlays/heart.dart';
+import 'package:flame/components.dart';
+import 'package:flutter/material.dart';
+
+class Hud extends PositionComponent with HasGameRef<EmberQuestGame> {
+  Hud({
+    super.position,
+    super.size,
+    super.scale,
+    super.angle,
+    super.anchor,
+    super.children,
+    super.priority = 5,
+  }) {
+    positionType = PositionType.viewport;
+  }
+
+  late TextComponent _scoreTextComponent;
+
+  @override
+  Future<void>? onLoad() async {
+    _scoreTextComponent = TextComponent(
+      text: '${gameRef.starsCollected.toInt()}',
+      textRenderer: TextPaint(
+        style: const TextStyle(
+          fontSize: 32,
+          color: Color.fromRGBO(10, 10, 10, 1),
+        ),
+      ),
+      anchor: Anchor.center,
+      position: Vector2(gameRef.size.x - 60, 20),
+    );
+    add(_scoreTextComponent);
+
+    final starSprite = await gameRef.loadSprite('star.png');
+    add(
+      SpriteComponent(
+        sprite: starSprite,
+        position: Vector2(gameRef.size.x - 100, 20),
+        size: Vector2.all(32),
+        anchor: Anchor.center,
+      ),
+    );
+
+    for (int i = 1; i <= gameRef.health; i++) {
+      int positionX = (40 * i);
+      await add(HeartHealthComponent(
+        heartNumber: i,
+        position: Vector2(positionX.toDouble(), 20),
+        size: Vector2.all(32),
+      ));
+    }
+
+    return super.onLoad();
+  }
+
+  @override
+  void update(double dt) {
+    _scoreTextComponent.text = '${gameRef.starsCollected.toInt()}';
+    super.update(dt);
+  }
+}
