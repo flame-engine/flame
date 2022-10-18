@@ -27,7 +27,7 @@ atlas [here](https://www.pngwing.com/en/search?q=texture+atlas).
 
 ## Usage
 
-To use it in your game you just need to add `flame_bloc` to your pubspec.yaml, as can be seen in the
+To use it in your game you just need to add `flame_fire_atlas` to your pubspec.yaml, as can be seen in the
 [Flame Fire Atlas example](https://github.com/flame-engine/flame/tree/main/packages/flame_fire_atlas/example)
 and in the pub.dev [installation instructions](https://pub.dev/packages/flame_fire_atlas).
 
