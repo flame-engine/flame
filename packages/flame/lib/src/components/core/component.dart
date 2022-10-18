@@ -186,6 +186,7 @@ class Component {
   static const int _loaded = 2;
   static const int _mounted = 4;
   static const int _removing = 8;
+  static const int _removed = 16;
 
   /// Whether the component is currently executing its [onLoad] step.
   bool get isLoading => (_state & _loading) != 0;
@@ -206,6 +207,14 @@ class Component {
   void _setRemovingBit() => _state |= _removing;
   void _clearRemovingBit() => _state &= ~_removing;
 
+  /// Whether the component has been removed. Originally this flag is `false`,
+  /// but it becomes `true` after the component was mounted and then removed
+  /// from its parent. The flag becomes `false` again when the component is
+  /// mounted to a new parent.
+  bool get isRemoved => (_state & _removed) != 0;
+  void _setRemovedBit() => _state |= _removed;
+  void _clearRemovedBit() => _state &= ~_removed;
+
   /// A future that completes when this component finishes loading.
   ///
   /// If the component is already loaded (see [isLoaded]), this returns an
@@ -218,6 +227,13 @@ class Component {
   /// already completed future.
   Future<void> get mounted =>
       isMounted ? Future.value() : lifecycle.mountFuture;
+
+  /// A future that completes when this component is removed from its parent.
+  ///
+  /// If the component is already removed (see [isRemoved]), this returns an
+  /// already completed future.
+  Future<void> get removed =>
+      isRemoved ? Future.value() : lifecycle.removeFuture;
 
   //#endregion
 
@@ -727,7 +743,8 @@ class Component {
   void processPendingLifecycleEvents() {
     if (_lifecycleManager != null) {
       _lifecycleManager!.processQueues();
-      if (!_lifecycleManager!.hasPendingEvents) {
+      if (!_lifecycleManager!.hasPendingEvents &&
+          _lifecycleManager!._removedCompleter == null) {
         _lifecycleManager = null;
       }
     }
@@ -780,9 +797,12 @@ class Component {
       onGameResize(findGame()!.canvasSize);
     }
     _clearLoadingBit();
-    if (isRemoving) {
+    if (isRemoved) {
+      _clearRemovedBit();
+    } else if (isRemoving) {
       _parent = null;
       _clearRemovingBit();
+      _setRemovedBit();
       return;
     }
     debugMode |= _parent!.debugMode;
@@ -816,10 +836,16 @@ class Component {
         component._clearMountedBit();
         component._clearRemovingBit();
         component._parent = null;
+        component._finishRemoving();
         return true;
       },
       includeSelf: true,
     );
+  }
+
+  void _finishRemoving() {
+    _setRemovedBit();
+    _lifecycleManager?.finishRemoving();
   }
 
   //#endregion
@@ -919,6 +945,7 @@ class _LifecycleManager {
 
   Completer<void>? _mountCompleter;
   Completer<void>? _loadCompleter;
+  Completer<void>? _removedCompleter;
 
   Future<void> get loadFuture {
     _loadCompleter ??= Completer<void>();
@@ -930,6 +957,11 @@ class _LifecycleManager {
     return _mountCompleter!.future;
   }
 
+  Future<void> get removeFuture {
+    _removedCompleter ??= Completer<void>();
+    return _removedCompleter!.future;
+  }
+
   void finishLoading() {
     _loadCompleter?.complete();
     _loadCompleter = null;
@@ -938,6 +970,11 @@ class _LifecycleManager {
   void finishMounting() {
     _mountCompleter?.complete();
     _mountCompleter = null;
+  }
+
+  void finishRemoving() {
+    _removedCompleter?.complete();
+    _removedCompleter = null;
   }
 
   /// Queue for adding children to a component.
@@ -963,6 +1000,9 @@ class _LifecycleManager {
   /// Queue for moving components from another parent to this one.
   final Queue<Component> _adoption = Queue();
 
+  /// Whether or not there are any pending lifecycle events for this component.
+  ///
+  /// [Component.removed] is not regarded as a pending event.
   bool get hasPendingEvents {
     return _children.isNotEmpty ||
         _removals.isNotEmpty ||
