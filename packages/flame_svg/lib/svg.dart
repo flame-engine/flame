@@ -21,6 +21,9 @@ class Svg {
 
   final MemoryCache<Size, Image> _imageCache = MemoryCache();
 
+  /// paint on svg
+  final _paint = Paint()..filterQuality = FilterQuality.high;
+
   final List<Size> _lock = [];
 
   /// Loads an [Svg] with the received [cache]. When no [cache] is provided,
@@ -39,7 +42,11 @@ class Svg {
   }
 
   /// Renders the svg on the [canvas] using the dimensions provided by [size].
-  void render(Canvas canvas, Vector2 size, Paint paint) {
+  void render(
+    Canvas canvas,
+    Vector2 size, {
+    Paint? overridePaint,
+  }) {
     final _size = size.toSize();
     final image = _getImage(_size);
 
@@ -47,7 +54,9 @@ class Svg {
       canvas.save();
       canvas.scale(1 / pixelRatio);
 
-      canvas.drawImage(image, Offset.zero, paint);
+      final drawPaint = overridePaint ?? _paint;
+
+      canvas.drawImage(image, Offset.zero, drawPaint);
       canvas.restore();
     } else {
       _render(canvas, _size);
@@ -61,8 +70,7 @@ class Svg {
     Vector2 position,
     Vector2 size,
   ) {
-    final _paint = Paint()..filterQuality = FilterQuality.high;
-    canvas.renderAt(position, (c) => render(c, size, _paint));
+    canvas.renderAt(position, (c) => render(c, size));
   }
 
   Image? _getImage(Size size) {
