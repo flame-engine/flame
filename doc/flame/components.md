@@ -61,10 +61,12 @@ change it went through (`added` or `removed`).
 
 A component lifecycle state can be checked by a series of getters:
 
-- `isLoaded`: Returns a bool with the current loaded state
-- `loaded`: Returns a future that will complete once the component has finished loading
-- `isMounted`: Returns a bool with the current mounted state
-- `mounted`: Returns a future that will complete once the component has finished mounting
+- `isLoaded`: Returns a bool with the current loaded state.
+- `loaded`: Returns a future that will complete once the component has finished loading.
+- `isMounted`: Returns a bool with the current mounted state.
+- `mounted`: Returns a future that will complete once the component has finished mounting.
+- `isRemoved`: Returns a bool with the current removed state.
+- `removed`: Returns a future that will complete once the component has been removed.
 
 
 ### Priority

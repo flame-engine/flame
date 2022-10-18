@@ -28,5 +28,28 @@ void main() {
       expect(cache.getValue(1), 'ble');
       expect(cache.size, 1);
     });
+
+    test('clear', () async {
+      final cache = MemoryCache<int, String>();
+      cache.setValue(0, 'bla');
+      expect(cache.containsKey(0), true);
+      expect(cache.size, 1);
+      cache.clear(0);
+      expect(cache.containsKey(0), false);
+      expect(cache.size, 0);
+    });
+
+    test('clearCache', () async {
+      final cache = MemoryCache<int, String>();
+      cache.setValue(0, 'bla');
+      cache.setValue(1, 'ble');
+      expect(cache.containsKey(0), true);
+      expect(cache.containsKey(1), true);
+      expect(cache.size, 2);
+      cache.clearCache();
+      expect(cache.containsKey(0), false);
+      expect(cache.containsKey(1), false);
+      expect(cache.size, 0);
+    });
   });
 }
