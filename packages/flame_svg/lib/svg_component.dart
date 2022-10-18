@@ -20,9 +20,7 @@ class SvgComponent extends PositionComponent with HasPaint {
     super.priority,
     Paint? paint,
   }) : _svg = svg {
-    if (paint != null) {
-      this.paint = paint;
-    }
+    this.paint = paint ?? this.paint..filterQuality = FilterQuality.high;
   }
 
   set svg(Svg? svg) {
