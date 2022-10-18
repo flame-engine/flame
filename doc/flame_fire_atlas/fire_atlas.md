@@ -17,18 +17,10 @@ several smaller images that have been packed together to reduce overall dimensio
 reduce the number of images loaded and can speed up the loading time of the game.
 
 
-### Example
-
-![fighter atlas](./images/fighter.png)
-
-you can find some good examples of texture
-atlas [here](https://www.pngwing.com/en/search?q=texture+atlas).
-
-
 ## Usage
 
-To use it in your game you just need to add `flame_fire_atlas` to your pubspec.yaml, as can be seen in the
-[Flame Fire Atlas example](https://github.com/flame-engine/flame/tree/main/packages/flame_fire_atlas/example)
+To use it in your game you just need to add `flame_fire_atlas` to your pubspec.yaml, as can be
+seen in the [Flame Fire Atlas example](https://github.com/flame-engine/flame/tree/main/packages/flame_fire_atlas/example)
 and in the pub.dev [installation instructions](https://pub.dev/packages/flame_fire_atlas).
 
 Then you have the following methods at your disposal:
