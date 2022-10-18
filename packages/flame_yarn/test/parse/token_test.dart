@@ -13,11 +13,21 @@ void main() {
       expect('${Token.operatorMinusAssign}', 'Token.operatorMinusAssign');
       expect('${Token.operatorXor}', 'Token.operatorXor');
       expect('${Token.typeString}', 'Token.typeString');
+
+      expect(Token.comma.isText, false);
+      expect(Token.comma.isId, false);
+      expect(Token.comma.isVariable, false);
+      expect(Token.comma.isNumber, false);
+      expect(Token.comma.isPerson, false);
+      expect(Token.comma.isCommand, false);
+      expect(Token.comma.isString, false);
+      expect(Token.comma.isHashtag, false);
     });
 
     test('Token.text', () {
       const token = Token.text('some text');
       expect('$token', "Token.text('some text')");
+      expect(token.isText, true);
       expect(token.type, TokenType.text);
       expect(token.content, 'some text');
     });
@@ -25,6 +35,7 @@ void main() {
     test('Token.number', () {
       const token = Token.number('3.14159');
       expect('$token', "Token.number('3.14159')");
+      expect(token.isNumber, true);
       expect(token.type, TokenType.number);
       expect(token.content, '3.14159');
     });
@@ -32,6 +43,7 @@ void main() {
     test('Token.id', () {
       const token = Token.id('xyz127');
       expect('$token', "Token.id('xyz127')");
+      expect(token.isId, true);
       expect(token.type, TokenType.id);
       expect(token.content, 'xyz127');
     });
@@ -39,6 +51,7 @@ void main() {
     test('Token.variable', () {
       const token = Token.variable('flame');
       expect('$token', "Token.variable('flame')");
+      expect(token.isVariable, true);
       expect(token.type, TokenType.variable);
       expect(token.content, 'flame');
     });
@@ -46,6 +59,7 @@ void main() {
     test('Token.person', () {
       const token = Token.person('Mr_Obama');
       expect('$token', "Token.person('Mr_Obama')");
+      expect(token.isPerson, true);
       expect(token.type, TokenType.person);
       expect(token.content, 'Mr_Obama');
     });
@@ -53,6 +67,7 @@ void main() {
     test('Token.command', () {
       const token = Token.command('else');
       expect('$token', "Token.command('else')");
+      expect(token.isCommand, true);
       expect(token.type, TokenType.command);
       expect(token.content, 'else');
     });
