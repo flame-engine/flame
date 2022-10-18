@@ -349,6 +349,8 @@ class _Parser {
     final token = peekToken();
     StringExpression target;
     if (token.isId) {
+      // TODO(st-pasha): add verification for node existence at the end of
+      //                 project setup
       target = StringLiteral(token.content);
     } else {
       take(Token.startExpression);

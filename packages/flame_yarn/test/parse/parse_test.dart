@@ -1,6 +1,7 @@
 import 'package:flame_yarn/flame_yarn.dart';
 import 'package:flame_yarn/src/parse/parse.dart';
 import 'package:flame_yarn/src/structure/commands/if_command.dart';
+import 'package:flame_yarn/src/structure/commands/jump_command.dart';
 import 'package:flame_yarn/src/structure/dialogue.dart';
 import 'package:flame_yarn/src/structure/option.dart';
 import 'package:test/test.dart';
@@ -618,7 +619,7 @@ void main() {
         );
       });
 
-      test('no indentation', () {
+      test('no indentation in <<if>>', () {
         expect(
           () => YarnProject()
             ..parse('title:A\n---\n'
@@ -634,7 +635,24 @@ void main() {
         );
       });
 
-      test('non-boolean condition', () {
+      test('no indentation in <<else>>', () {
+        expect(
+          () => YarnProject()
+            ..parse('title:A\n---\n'
+                '<<if true>>\n'
+                '<<else>>\n'
+                'text\n'
+                '<<endif>>\n'
+                '===\n'),
+          hasSyntaxError(
+              'SyntaxError: the body of the <<else>> command must be indented\n'
+              '>  at line 5 column 1:\n'
+              '>  text\n'
+              '>  ^\n'),
+        );
+      });
+
+      test('non-boolean condition in <<if>>', () {
         expect(
           () => YarnProject()
             ..parse('title:A\n---\n'
@@ -648,6 +666,21 @@ void main() {
               '>  <<if "true">>\n'
               '>       ^\n'),
         );
+      });
+
+      test('<<jump>>', () {
+        final yarn = YarnProject()
+          ..setVariable(r'$target', 'DOWN')
+          ..parse('title:A\n---\n'
+            '<<jump UP>>\n'
+            '<<jump {\$target}>>\n'
+            '===\n');
+        final node = yarn.nodes['A']!;
+        expect(node.lines.length, 2);
+        expect(node.lines[0], isA<JumpCommand>());
+        expect(node.lines[1], isA<JumpCommand>());
+        expect((node.lines[0] as JumpCommand).target.value, 'UP');
+        expect((node.lines[1] as JumpCommand).target.value, 'DOWN');
       });
     });
   });
