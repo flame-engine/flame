@@ -1,6 +1,6 @@
 # Flame fire atlas
 
-Flame fire atlas is a texture atlas lib for Flame. Using `Flame fire atlas` one can access images
+Flame fire atlas is a texture atlas lib for Flame. By using `flame_fire_atlas` one can access images
 and animations stored in a `.fa` texture atlas by referring to them by their named keys.
 
 
