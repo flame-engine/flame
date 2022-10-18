@@ -4,9 +4,9 @@ import 'package:flame_yarn/src/parse/token.dart';
 import 'package:meta/meta.dart';
 
 /// Parses the [input] into a stream of [Token]s, according to the Yarn syntax.
-@visibleForTesting
-List<Token> tokenize(String input) {
-  return _Lexer(input).parse();
+@internal
+List<Token> tokenize(String input, {int addErrorTokenAtIndex = -2}) {
+  return _Lexer(input, addErrorTokenAtIndex).parse();
 }
 
 /// Main working class for the [tokenize] function -- produces a stream of
@@ -23,7 +23,7 @@ List<Token> tokenize(String input) {
 ///   - The lexer is deterministic: given the same input, it should always
 ///     produce the same output.
 class _Lexer {
-  _Lexer(this.text)
+  _Lexer(this.text, this.addErrorTokenAtIndex)
       : position = 0,
         lineNumber = 1,
         lineStart = 0,
@@ -35,6 +35,7 @@ class _Lexer {
   final List<Token> tokens;
   final List<_ModeFn> modeStack;
   final List<int> indentStack;
+  final int addErrorTokenAtIndex;
 
   /// Current parsing position, an offset within the [text].
   int position;
@@ -87,7 +88,10 @@ class _Lexer {
   }
 
   /// Pushes a new token into the output and returns `true`.
-  bool pushToken(Token token) {
+  bool pushToken(Token token, int tokenStartPosition) {
+    if (tokens.length == addErrorTokenAtIndex) {
+      tokens.add(Token.error(_errorMessageAtPosition(tokenStartPosition)));
+    }
     tokens.add(token);
     return true;
   }
@@ -97,9 +101,14 @@ class _Lexer {
 
   /// Pops the last token from the output stack and checks that it is equal to
   /// [token].
-  void popToken(Token token) {
+  Token popToken([Token? token]) {
     final removed = tokens.removeLast();
-    assert(removed == token);
+    assert(token == null || removed == token);
+    if (tokens.length == addErrorTokenAtIndex + 1) {
+      final removed = tokens.removeLast();
+      assert(removed.type == TokenType.error);
+    }
+    return removed;
   }
 
   //----------------------------------------------------------------------------
@@ -137,7 +146,7 @@ class _Lexer {
   /// line.
   bool modeNodeHeaderLine() {
     return eatWhitespace() ||
-        (eat($colon) && pushToken(Token.colon)) ||
+        (eat($colon) && pushToken(Token.colon, position - 1)) ||
         eatHeaderRestOfLine();
   }
 
@@ -285,11 +294,12 @@ class _Lexer {
   bool eatNewline() {
     final cu = currentCodeUnit;
     if (cu == $carriageReturn || cu == $lineFeed) {
+      final position0 = position;
       position += 1;
       if (cu == $carriageReturn && currentCodeUnit == $lineFeed) {
         position += 1;
       }
-      pushToken(Token.newline);
+      pushToken(Token.newline, position0);
       lineNumber += 1;
       lineStart = position;
       return true;
@@ -303,7 +313,7 @@ class _Lexer {
     final position0 = position;
     if (eat($minus) && eat($minus) && eat($minus) && eatNewline()) {
       popToken(Token.newline);
-      pushToken(Token.startBody);
+      pushToken(Token.startBody, position0);
       popMode(modeNodeHeader);
       pushMode(modeNodeBody);
       return true;
@@ -326,7 +336,7 @@ class _Lexer {
         position = position0;
         return false;
       }
-      pushToken(Token.endBody);
+      pushToken(Token.endBody, position0);
       popMode(modeNodeBody);
       return true;
     }
@@ -348,7 +358,7 @@ class _Lexer {
           break;
         }
       }
-      pushToken(Token.id(text.substring(position0, position)));
+      pushToken(Token.id(text.substring(position0, position)), position0);
       return true;
     }
     return false;
@@ -367,10 +377,10 @@ class _Lexer {
         break;
       }
     }
-    pushToken(Token.text(text.substring(position0, position)));
+    pushToken(Token.text(text.substring(position0, position)), position0);
     if (!eatNewline()) {
       eatCommentLine();
-      pushToken(Token.newline);
+      pushToken(Token.newline, position - 1);
     }
     popMode(modeNodeHeaderLine);
     return true;
@@ -380,6 +390,7 @@ class _Lexer {
   /// dedent tokens according to the indent stack. Always returns true (even if
   /// a line had 0 spaces).
   bool eatIndent() {
+    final position0 = position;
     var lineIndent = 0;
     while (true) {
       final cu = currentCodeUnit;
@@ -394,11 +405,11 @@ class _Lexer {
     }
     if (lineIndent > indentStack.last) {
       indentStack.add(lineIndent);
-      pushToken(Token.startIndent);
+      pushToken(Token.startIndent, position0);
     }
     while (lineIndent < indentStack.last) {
       indentStack.removeLast();
-      pushToken(Token.endIndent);
+      pushToken(Token.endIndent, position0);
     }
     if (lineIndent > indentStack.last) {
       error('inconsistent indentation');
@@ -410,7 +421,7 @@ class _Lexer {
   bool eatArrow() {
     final position0 = position;
     if (eat($minus) && eat($greaterThan)) {
-      pushToken(Token.arrow);
+      pushToken(Token.arrow, position0);
       eatWhitespace();
       return true;
     }
@@ -424,7 +435,7 @@ class _Lexer {
     final position0 = position;
     if (eat($lessThan) && eat($lessThan)) {
       eatWhitespace();
-      pushToken(Token.startCommand);
+      pushToken(Token.startCommand, position0);
       pushMode(modeCommand);
       return true;
     }
@@ -437,7 +448,7 @@ class _Lexer {
     final position0 = position;
     if (eat($greaterThan) && eat($greaterThan)) {
       eatWhitespace();
-      pushToken(Token.endCommand);
+      pushToken(Token.endCommand, position0);
       popMode(modeCommand);
       if (currentMode != modeLineEnd) {
         pushMode(modeLineEnd);
@@ -449,7 +460,7 @@ class _Lexer {
   }
 
   /// Consumes a Unicode ID at the start of the line, followed by a ':', then
-  /// emits a [Token.speaker] and a [Token.colon], and also switches into the
+  /// emits a [Token.person] and a [Token.colon], and also switches into the
   /// [modeText].
   ///
   /// Note: we have to consume detect both the character name and the subsequent
@@ -465,8 +476,9 @@ class _Lexer {
       eatWhitespace();
       if (eat($colon)) {
         eatWhitespace();
-        pushToken(Token.speaker(text.substring(position0, position1)));
-        pushToken(Token.colon);
+        final name = Token.person(text.substring(position0, position1));
+        pushToken(name, position0);
+        pushToken(Token.colon, position1);
         pushMode(modeText);
         return true;
       }
@@ -479,7 +491,8 @@ class _Lexer {
   /// [modeLineEnd], and pops the current mode so that the next line will start
   /// again at [modeNodeBody].
   bool eatCommentOrNewline() {
-    if (eatNewline() || (eatCommentLine() && pushToken(Token.newline))) {
+    if (eatNewline() ||
+        (eatCommentLine() && pushToken(Token.newline, position - 1))) {
       popMode(modeLineEnd);
       popMode(modeNodeBodyLine);
       assert(currentMode == modeNodeBody);
@@ -506,11 +519,11 @@ class _Lexer {
             cu == $greaterThan ||
             cu == $leftBrace ||
             cu == $rightBrace) {
+          pushToken(Token.text(String.fromCharCode(cu)), position);
           position += 1;
-          pushToken(Token.text(String.fromCharCode(cu)));
         } else if (cu == $lowercaseN) {
+          pushToken(const Token.text('\n'), position);
           position += 1;
-          pushToken(const Token.text('\n'));
         } else {
           error('invalid escape sequence');
         }
@@ -523,7 +536,7 @@ class _Lexer {
   /// Consumes '{' and enters the [modeExpression].
   bool eatExpressionStart() {
     return eat($leftBrace) &&
-        pushToken(Token.startExpression) &&
+        pushToken(Token.startExpression, position - 1) &&
         pushMode(modeExpression);
   }
 
@@ -535,7 +548,7 @@ class _Lexer {
         position -= 1;
         error('invalid token "}" within a command');
       }
-      pushToken(Token.endExpression);
+      pushToken(Token.endExpression, position - 1);
       popMode(modeExpression);
       return true;
     }
@@ -552,8 +565,8 @@ class _Lexer {
         position -= 2;
         error('invalid token ">>" within an expression');
       }
-      pushToken(Token.endExpression);
-      pushToken(Token.endCommand);
+      pushToken(Token.endExpression, position0);
+      pushToken(Token.endCommand, position0);
       eatWhitespace();
       popMode(modeExpression);
       popMode(modeCommand);
@@ -586,7 +599,7 @@ class _Lexer {
       position += 1;
     }
     if (position > position0) {
-      pushToken(Token.text(text.substring(position0, position)));
+      pushToken(Token.text(text.substring(position0, position)), position0);
       return true;
     }
     return false;
@@ -595,12 +608,13 @@ class _Lexer {
   /// Consumes a plain id within an expression, which is then emitted as either
   /// one of the [keywords] tokens, or as plain [Token.id].
   bool eatExpressionId() {
+    final position0 = position;
     if (eatId()) {
       final name = tokens.last.content;
       final keywordToken = keywords[name];
       if (keywordToken != null) {
-        tokens.removeLast();
-        pushToken(keywordToken);
+        popToken();
+        pushToken(keywordToken, position0);
       }
       return true;
     }
@@ -610,10 +624,11 @@ class _Lexer {
   /// Consumes a variable within an expression. A variable is just a '$' sign
   /// followed by an id. Emits a [Token.variable].
   bool eatExpressionVariable() {
+    final position0 = position;
     if (eat($dollar)) {
       if (eatId()) {
-        final token = tokens.removeLast();
-        pushToken(Token.variable(token.content));
+        final token = popToken();
+        pushToken(Token.variable(r'$' + token.content), position0);
         return true;
       }
       position--;
@@ -628,7 +643,7 @@ class _Lexer {
     final position0 = position;
     if (eatDigits()) {
       eat($dot) && eatDigits();
-      pushToken(Token.number(text.substring(position0, position)));
+      pushToken(Token.number(text.substring(position0, position)), position0);
       return true;
     }
     return false;
@@ -656,8 +671,8 @@ class _Lexer {
       final op2 = text.substring(position, position + 2);
       final keyword = keywords[op2];
       if (keyword != null) {
+        pushToken(keyword, position);
         position += 2;
-        pushToken(keyword);
         return true;
       }
     }
@@ -665,8 +680,8 @@ class _Lexer {
       final op1 = text.substring(position, position + 1);
       final keyword = keywords[op1];
       if (keyword != null) {
+        pushToken(keyword, position);
         position += 1;
-        pushToken(keyword);
         return true;
       }
     }
@@ -687,7 +702,7 @@ class _Lexer {
         final cu = currentCodeUnit;
         if (cu == quote) {
           position += 1;
-          pushToken(Token.string(buffer.toString()));
+          pushToken(Token.string(buffer.toString()), position0);
           return true;
         } else if (cu == $carriageReturn || cu == $lineFeed) {
           error('unexpected end of line while parsing a string');
@@ -718,18 +733,29 @@ class _Lexer {
   /// remains in the command mode otherwise. User-defined commands are assumed
   /// to always allow expressions.
   bool eatCommandName() {
+    final position0 = position;
     if (eatId()) {
-      final token = tokens.removeLast();
+      final token = popToken();
       final name = token.content;
-      if (commandsWithArgs.containsKey(name)) {
-        pushToken(commandsWithArgs[name]!);
-        pushToken(Token.startExpression);
-        pushMode(modeExpression);
-      } else if (commandsWithoutArgs.containsKey(name)) {
-        pushToken(commandsWithoutArgs[name]!);
+      final commandToken = commandTokens[name];
+      if (commandToken != null) {
+        pushToken(commandToken, position0);
+        if (commandToken == Token.commandIf ||
+            commandToken == Token.commandElseif ||
+            commandToken == Token.commandWait ||
+            commandToken == Token.commandSet ||
+            commandToken == Token.commandDeclare) {
+          pushToken(Token.startExpression, position0);
+          pushMode(modeExpression);
+        } else if (commandToken == Token.commandJump) {
+          eatWhitespace();
+          eatId() ||
+              eatExpressionStart() ||
+              error('an ID or an expression expected');
+        } else if (commandToken == Token.commandSet) {}
       } else {
-        pushToken(Token.command(name));
-        pushToken(Token.startExpression);
+        pushToken(Token.command(name), position0);
+        pushToken(Token.startExpression, position0);
         pushMode(modeExpression);
       }
       return true;
@@ -769,7 +795,8 @@ class _Lexer {
         position += 1;
       }
       if (position > position0 + 1) {
-        pushToken(Token.hashtag(text.substring(position0, position)));
+        final tag = text.substring(position0, position);
+        pushToken(Token.hashtag(tag), position0);
         return true;
       }
     }
@@ -824,17 +851,16 @@ class _Lexer {
     '(': Token.startParenthesis,
     ')': Token.endParenthesis,
   };
-  static const Map<String, Token> commandsWithArgs = {
-    'if': Token.commandIf,
-    'elseif': Token.commandElseif,
-    'set': Token.commandSet,
-    'jump': Token.commandJump,
-    'wait': Token.commandWait,
-  };
-  static const Map<String, Token> commandsWithoutArgs = {
+  static const Map<String, Token> commandTokens = {
+    'declare': Token.commandDeclare,
     'else': Token.commandElse,
+    'elseif': Token.commandElseif,
     'endif': Token.commandEndif,
+    'if': Token.commandIf,
+    'jump': Token.commandJump,
+    'set': Token.commandSet,
     'stop': Token.commandStop,
+    'wait': Token.commandWait,
   };
 
   /// Throws a [SyntaxError] with the given [message], augmenting it with the
@@ -846,7 +872,13 @@ class _Lexer {
   /// eatThis() || eatThat() || error('oops, did not expect that');
   /// ```
   bool error(String message) {
-    final lineEnd = findLineEnd();
+    final locationDescription = _errorMessageAtPosition(position);
+    throw SyntaxError('$message\n$locationDescription\n');
+  }
+
+  String _errorMessageAtPosition(int position) {
+    final lineEnd = _findLineEnd(position);
+    final lineStart = _findLineStart(position);
     String lineFragment, markerIndent;
     if (lineEnd - lineStart <= 74) {
       lineFragment = text.substring(lineStart, lineEnd);
@@ -861,19 +893,27 @@ class _Lexer {
       lineFragment = '...${text.substring(position - 36, position + 35)}...';
       markerIndent = ' ' * 39;
     }
-    final parts = [
-      message,
-      '>  at line $lineNumber column ${position - lineStart + 1}:',
-      '>  $lineFragment',
-      '>  $markerIndent^',
-      ''
-    ];
-    throw SyntaxError(parts.join('\n'));
+    final line = this.position <= lineEnd ? lineNumber : lineNumber - 1;
+    return '>  at line $line column ${position - lineStart + 1}:\n'
+        '>  $lineFragment\n'
+        '>  $markerIndent^';
+  }
+
+  int _findLineStart(int position) {
+    var i = position - 1;
+    while (i >= 0) {
+      final cu = text.codeUnitAt(i);
+      if (cu == $lineFeed || cu == $carriageReturn) {
+        break;
+      }
+      i -= 1;
+    }
+    return i + 1;
   }
 
   /// Returns the position where the current (starting at [position]) line ends,
   /// without altering the parsing location.
-  int findLineEnd() {
+  int _findLineEnd(int position) {
     var i = position;
     while (i < text.length) {
       final cu = text.codeUnitAt(i);

@@ -43,10 +43,10 @@ void main() {
       expect(token.content, 'flame');
     });
 
-    test('Token.speaker', () {
-      const token = Token.speaker('Mr_Obama');
-      expect('$token', "Token.speaker('Mr_Obama')");
-      expect(token.type, TokenType.speaker);
+    test('Token.person', () {
+      const token = Token.person('Mr_Obama');
+      expect('$token', "Token.person('Mr_Obama')");
+      expect(token.type, TokenType.person);
       expect(token.content, 'Mr_Obama');
     });
 
