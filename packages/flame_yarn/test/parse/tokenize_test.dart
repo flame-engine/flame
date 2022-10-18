@@ -30,7 +30,7 @@ void main() {
 
       test('only header separator', () {
         expect(
-              () => tokenize('---\n'),
+          () => tokenize('---\n'),
           hasSyntaxError('SyntaxError: incomplete node body\n'
               '>  at line 2 column 1:\n'
               '>  \n'
@@ -138,7 +138,7 @@ void main() {
 
       test('extra whitespace', () {
         expect(
-              () => tokenize('  title: this\n---\n===\n'),
+          () => tokenize('  title: this\n---\n===\n'),
           hasSyntaxError('SyntaxError: unexpected indentation\n'
               '>  at line 1 column 3:\n'
               '>    title: this\n'
@@ -148,7 +148,7 @@ void main() {
 
       test('without id', () {
         expect(
-              () => tokenize(':\n---\n===\n'),
+          () => tokenize(':\n---\n===\n'),
           hasSyntaxError('SyntaxError: invalid token\n'
               '>  at line 1 column 1:\n'
               '>  :\n'
@@ -158,7 +158,7 @@ void main() {
 
       test('overlong separator', () {
         expect(
-              () => tokenize('----\n===\n'),
+          () => tokenize('----\n===\n'),
           hasSyntaxError('SyntaxError: invalid token\n'
               '>  at line 1 column 1:\n'
               '>  ----\n'
@@ -217,7 +217,7 @@ void main() {
 
       test('invalid indentation', () {
         expect(
-              () => tokenize('---\n'
+          () => tokenize('---\n'
               ' alpha\n'
               '     beta\n'
               '  gamma\n'
@@ -255,7 +255,7 @@ void main() {
 
       test('invalid body end', () {
         expect(
-              () => tokenize('---\n===='),
+          () => tokenize('---\n===='),
           hasSyntaxError('SyntaxError: incomplete node body\n'
               '>  at line 2 column 5:\n'
               '>  ====\n'
@@ -393,8 +393,8 @@ void main() {
       test('escape sequences', () {
         expect(
           tokenize('---\n'
-          r'\<\{ inside \}\>'
-          '\n'
+              r'\<\{ inside \}\>'
+              '\n'
               'very long \\\n'
               '  text\n'
               'line with a newline:\\n ok\n'
@@ -421,7 +421,7 @@ void main() {
 
       test('invalid escape sequence', () {
         expect(
-              () => tokenize('---\n'
+          () => tokenize('---\n'
               'some text \\a\n'
               '===\n'),
           hasSyntaxError('SyntaxError: invalid escape sequence\n'
@@ -551,20 +551,20 @@ void main() {
 
       test('close command within a plain text expression', () {
         expect(
-              () => tokenize('---\n'
+          () => tokenize('---\n'
               '{ a >> b }\n'
               '===\n'),
           hasSyntaxError(
               'SyntaxError: invalid token ">>" within an expression\n'
-                  '>  at line 2 column 5:\n'
-                  '>  { a >> b }\n'
-                  '>      ^\n'),
+              '>  at line 2 column 5:\n'
+              '>  { a >> b }\n'
+              '>      ^\n'),
         );
       });
 
       test('invalid variable name', () {
         expect(
-              () => tokenize('---\n'
+          () => tokenize('---\n'
               '{ \$a = \$7b }\n'
               '===\n'),
           hasSyntaxError('SyntaxError: invalid variable name\n'
@@ -576,14 +576,14 @@ void main() {
 
       test('invalid string', () {
         expect(
-              () => tokenize('---\n'
+          () => tokenize('---\n'
               '{ "starting... }\n'
               '===\n'),
           hasSyntaxError(
               'SyntaxError: unexpected end of line while parsing a string\n'
-                  '>  at line 2 column 17:\n'
-                  '>  { "starting... }\n'
-                  '>                  ^\n'),
+              '>  at line 2 column 17:\n'
+              '>  { "starting... }\n'
+              '>                  ^\n'),
         );
       });
     });
@@ -671,7 +671,7 @@ void main() {
 
       test('closing brace', () {
         expect(
-              () => tokenize('---\n'
+          () => tokenize('---\n'
               '<< hello } >>\n'
               '===\n'),
           hasSyntaxError('SyntaxError: invalid token "}" within a command\n'
@@ -683,7 +683,7 @@ void main() {
 
       test('incomplete command', () {
         expect(
-              () => tokenize('---\n'
+          () => tokenize('---\n'
               '<< stop\n'
               '===\n'),
           hasSyntaxError('SyntaxError: missing command close token ">>"\n'
@@ -775,7 +775,7 @@ void main() {
     group('errors', () {
       test('long line, error near the start', () {
         expect(
-              () => tokenize('---\n'
+          () => tokenize('---\n'
               '<< alpha beta gamma delta epsilon ~ zeta eta theta iota kappa '
               'lambda mu nu xi omicron pi rho sigma tau >>\n'
               '===\n'),
@@ -789,7 +789,7 @@ void main() {
 
       test('long line, error near the end', () {
         expect(
-              () => tokenize('---\n'
+          () => tokenize('---\n'
               '<< alpha beta gamma delta epsilon zeta eta theta iota kappa '
               'lambda mu nu xi omicron pi rho @ sigma tau upsilon phi chi>>\n'
               '===\n'),
@@ -803,7 +803,7 @@ void main() {
 
       test('long line, error in the middle', () {
         expect(
-              () => tokenize('---\n'
+          () => tokenize('---\n'
               '<< alpha beta gamma delta epsilon zeta eta theta iota kappa '
               'lambda ` mu nu xi omicron pi rho sigma tau upsilon phi chi psi '
               'omega>>\n'
