@@ -13,8 +13,8 @@ the [Fire Atlas Editor](https://fire-atlas.flame-engine.org/#/).
 ## Texture atlas
 
 A [Texture atlas](https://en.wikipedia.org/wiki/Texture_atlas) is an image that contains data from
-several smaller images that have been packed together to reduce overall dimensions.With it, you
-reduce the number of images loaded and speedup the game loading.
+several smaller images that have been packed together to reduce overall dimensions. With it, you
+reduce the number of images loaded and can speed up the loading time of the game.
 
 
 ### Example
