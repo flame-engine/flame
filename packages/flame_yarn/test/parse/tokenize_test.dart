@@ -1,7 +1,8 @@
-import 'package:flame_yarn/flame_yarn.dart';
 import 'package:flame_yarn/src/parse/token.dart';
 import 'package:flame_yarn/src/parse/tokenize.dart';
 import 'package:test/test.dart';
+
+import 'utils.dart';
 
 void main() {
   // Tests are organized according to which lexing Mode they are checking
@@ -316,20 +317,20 @@ void main() {
               '===\n'),
           const [
             Token.startBody,
-            Token.speaker('Marge'),
+            Token.person('Marge'),
             Token.colon,
             Token.text('Hello!'),
             Token.newline,
             Token.text('Mr Smith: You too'),
             Token.newline,
-            Token.speaker('Пан_Голова'),
+            Token.person('Пан_Голова'),
             Token.colon,
             Token.text('...'),
             Token.newline,
-            Token.speaker('Ḟḷḁṃḙ'),
+            Token.person('Ḟḷḁṃḙ'),
             Token.colon,
             Token.newline,
-            Token.speaker('𐀆𒐰ï︮𒐜'),
+            Token.person('𐀆𒐰ï︮𒐜'),
             Token.colon,
             Token.text('::'),
             Token.newline,
@@ -361,7 +362,7 @@ void main() {
               '===\n'),
           const [
             Token.startBody,
-            Token.speaker('Pig'),
+            Token.person('Pig'),
             Token.colon,
             Token.text('Horse: Moo!'),
             Token.newline,
@@ -654,7 +655,7 @@ void main() {
             Token.endCommand,
             Token.newline,
             Token.startIndent,
-            Token.speaker('Baker'),
+            Token.person('Baker'),
             Token.colon,
             Token.text("Well, you can't afford one!"),
             Token.newline,
@@ -816,10 +817,4 @@ void main() {
       });
     });
   });
-}
-
-Matcher hasSyntaxError(String message) {
-  return throwsA(
-    isA<SyntaxError>().having((e) => e.toString(), 'toString', message),
-  );
 }

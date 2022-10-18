@@ -18,3 +18,12 @@ class NameError implements Exception {
   @override
   String toString() => 'NameError: $message';
 }
+
+class TypeError implements Exception {
+  TypeError([this.message]);
+
+  final String? message;
+
+  @override
+  String toString() => 'TypeError: $message';
+}

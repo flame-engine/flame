@@ -1,10 +1,11 @@
 import 'package:flame_yarn/flame_yarn.dart';
-import 'package:flame_yarn/src/parse/parser.dart';
+import 'package:flame_yarn/src/parse/parse.dart';
+import 'package:flame_yarn/src/structure/commands/if_command.dart';
 import 'package:flame_yarn/src/structure/dialogue.dart';
 import 'package:flame_yarn/src/structure/option.dart';
 import 'package:test/test.dart';
 
-import 'tokenize_test.dart';
+import 'utils.dart';
 
 void main() {
   // The tests here are further organized into subgroups according to which
@@ -74,7 +75,7 @@ void main() {
       test('node without a title', () {
         expect(
           () => YarnProject().parse('Title: Despicable Me!\n---\n===\n'),
-          hasNameError('NameError: node does not have a title\n'
+          hasSyntaxError('SyntaxError: node does not have a title\n'
               '>  at line 2 column 1:\n'
               '>  ---\n'
               '>  ^\n'),
@@ -138,7 +139,7 @@ void main() {
         for (var i = 0; i < 3; i++) {
           expect(node.lines[i], isA<Dialogue>());
           final line = node.lines[i] as Dialogue;
-          expect(line.speaker, isNull);
+          expect(line.person, isNull);
           expect(line.tags, isNull);
           expect(line.content.value, ['Jupyter', 'Saturn', 'Uranus'][i]);
         }
@@ -151,7 +152,7 @@ void main() {
           ..parse('title:A\n---\nMrGoo: whatever\n===\n');
         expect(yarn.nodes['A']!.lines.first, isA<Dialogue>());
         final line = yarn.nodes['A']!.lines[0] as Dialogue;
-        expect(line.speaker, 'MrGoo');
+        expect(line.person, 'MrGoo');
         expect(line.content.value, 'whatever');
       });
 
@@ -160,7 +161,7 @@ void main() {
           ..parse('title:A\n---\n{1} {false} {"fake news"}\n===\n');
         expect(yarn.nodes['A']!.lines.first, isA<Dialogue>());
         final line = yarn.nodes['A']!.lines[0] as Dialogue;
-        expect(line.speaker, isNull);
+        expect(line.person, isNull);
         expect(line.content.value, '1 false fake news');
       });
 
@@ -174,6 +175,17 @@ void main() {
         expect(line.tags!.length, 2);
         expect(line.tags, contains('#here'));
         expect(line.tags, contains('#zzz'));
+      });
+
+      test('line starting with an escaped character', () {
+        final yarn = YarnProject()
+          ..parse('title:A\n---\n'
+              '\\{ curly text \\}\n'
+              '===\n');
+        expect(
+          (yarn.nodes['A']!.lines[0] as Dialogue).content.value,
+          '{ curly text }',
+        );
       });
 
       test('line with a command', () {
@@ -211,7 +223,7 @@ void main() {
         for (var i = 0; i < 3; i++) {
           expect(node.lines[i], isA<Option>());
           final line = node.lines[i] as Option;
-          expect(line.speaker, isNull);
+          expect(line.person, isNull);
           expect(line.tags, isNull);
           expect(line.condition, isNull);
           expect(line.block, isEmpty);
@@ -228,9 +240,9 @@ void main() {
         final node = yarn.nodes['A']!;
         final line0 = node.lines[0] as Option;
         final line1 = node.lines[1] as Option;
-        expect(line0.speaker, 'Alice');
+        expect(line0.person, 'Alice');
         expect(line0.content.value, 'Hello!');
-        expect(line1.speaker, 'Bob');
+        expect(line1.person, 'Bob');
         expect(line1.content.value, 'Hi: there!');
       });
 
@@ -284,8 +296,7 @@ void main() {
             '-> ok! <<if 42 % 2>>\n'
             '===\n',
           ),
-          hasSyntaxError(
-              'SyntaxError: the condition in "if" should be boolean\n'
+          hasTypeError('TypeError: the condition in "if" should be boolean\n'
               '>  at line 3 column 13:\n'
               '>  -> ok! <<if 42 % 2>>\n'
               '>              ^\n'),
@@ -300,7 +311,8 @@ void main() {
             '===\n',
           ),
           hasSyntaxError(
-              'SyntaxError: multiple commands are not allowed on a line\n'
+              'SyntaxError: multiple commands are not allowed on an option '
+              'line\n'
               '>  at line 3 column 20:\n'
               '>  -> ok! <<if true>> <<if false>>\n'
               '>                     ^\n'),
@@ -326,8 +338,7 @@ void main() {
         );
         expect(
           () => yarn.parse('title:E\n---\n{ -"banana" }\n===\n'),
-          hasSyntaxError(
-              'SyntaxError: unary minus can only be applied to numbers\n'
+          hasTypeError('TypeError: unary minus can only be applied to numbers\n'
               '>  at line 3 column 4:\n'
               '>  { -"banana" }\n'
               '>     ^\n'),
@@ -349,16 +360,16 @@ void main() {
         );
         expect(
           () => yarn.parse('title:E\n---\n{ 3 + " swords" }\n===\n'),
-          hasSyntaxError(
-              'SyntaxError: both lhs and rhs of + must be numeric or strings\n'
+          hasTypeError(
+              'TypeError: both lhs and rhs of + must be numeric or strings\n'
               '>  at line 3 column 5:\n'
               '>  { 3 + " swords" }\n'
               '>      ^\n'),
         );
         expect(
           () => yarn.parse('title:E\n---\n{ 3 + true }\n===\n'),
-          hasSyntaxError(
-              'SyntaxError: both lhs and rhs of + must be numeric or strings\n'
+          hasTypeError(
+              'TypeError: both lhs and rhs of + must be numeric or strings\n'
               '>  at line 3 column 5:\n'
               '>  { 3 + true }\n'
               '>      ^\n'),
@@ -379,8 +390,8 @@ void main() {
         );
         expect(
           () => yarn.parse('title:E\n---\n{ 3 - "zero" }\n===\n'),
-          hasSyntaxError(
-              'SyntaxError: both lhs and rhs of - must be numeric or strings\n'
+          hasTypeError(
+              'TypeError: both lhs and rhs of - must be numeric or strings\n'
               '>  at line 3 column 5:\n'
               '>  { 3 - "zero" }\n'
               '>      ^\n'),
@@ -391,17 +402,17 @@ void main() {
         final yarn = YarnProject()
           ..parse('title: test\n---\n'
               '{ 11 * 8 * 0.5 }\n'
-              '{ "hello! " * 3 }\n'
+              '{ 2 * -3 }\n'
               '===\n');
         expect(
           yarn.nodes['test']!.lines
               .map((line) => (line as Dialogue).content.value)
               .toList(),
-          ['44.0', 'hello! hello! hello! '],
+          ['44.0', '-6'],
         );
         expect(
           () => yarn.parse('title:E\n---\n{ "x" * "zero" }\n===\n'),
-          hasSyntaxError('SyntaxError: both lhs and rhs of * must be numeric\n'
+          hasTypeError('TypeError: both lhs and rhs of * must be numeric\n'
               '>  at line 3 column 7:\n'
               '>  { "x" * "zero" }\n'
               '>        ^\n'),
@@ -419,7 +430,7 @@ void main() {
         );
         expect(
           () => yarn.parse('title:E\n---\n{ "x" / "y" }\n===\n'),
-          hasSyntaxError('SyntaxError: both lhs and rhs of / must be numeric\n'
+          hasTypeError('TypeError: both lhs and rhs of / must be numeric\n'
               '>  at line 3 column 7:\n'
               '>  { "x" / "y" }\n'
               '>        ^\n'),
@@ -439,7 +450,7 @@ void main() {
         );
         expect(
           () => yarn.parse('title:E\n---\n{ 17 % true }\n===\n'),
-          hasSyntaxError('SyntaxError: both lhs and rhs of % must be numeric\n'
+          hasTypeError('TypeError: both lhs and rhs of % must be numeric\n'
               '>  at line 3 column 6:\n'
               '>  { 17 % true }\n'
               '>       ^\n'),
@@ -464,8 +475,8 @@ void main() {
           () => yarn.parse('title:Error\n---\n'
               '{ \$name == 9.99 }\n'
               '===\n'),
-          hasSyntaxError(
-              'SyntaxError: equality operator between operands of unrelated '
+          hasTypeError(
+              'TypeError: equality operator between operands of unrelated '
               'types string and numeric\n'
               '>  at line 3 column 9:\n'
               '>  { \$name == 9.99 }\n'
@@ -521,11 +532,123 @@ void main() {
         );
       });
     });
-  });
-}
 
-Matcher hasNameError(String message) {
-  return throwsA(
-    isA<NameError>().having((e) => e.toString(), 'toString', message),
-  );
+    group('parseCommand', () {
+      test('<<if>>', () {
+        final yarn = YarnProject()
+          ..parse('title:A\n---\n'
+              '<<if 2 > 0>>\n'
+              '  First!\n'
+              '<<else>>\n'
+              '  Second\n'
+              '<<endif>>\n'
+              '===\n');
+        final node = yarn.nodes['A']!;
+        expect(node.lines.length, 1);
+        expect(node.lines[0], isA<IfCommand>());
+        final command = node.lines[0] as IfCommand;
+        expect(command.ifs.length, 2);
+        expect(command.ifs[0].condition.value, true);
+        expect(command.ifs[0].block[0], isA<Dialogue>());
+        expect((command.ifs[0].block[0] as Dialogue).content.value, 'First!');
+        expect(command.ifs[1].condition.value, true);
+        expect((command.ifs[1].block[0] as Dialogue).content.value, 'Second');
+      });
+
+      test('<<elseif>>s', () {
+        final yarn = YarnProject()
+          ..parse('title:A\n---\n'
+              '<<if true>>\n'
+              '  First!\n'
+              '<<elseif false>>\n'
+              '  Second\n'
+              '<<elseif true>>\n'
+              '  Third\n'
+              '<<endif>>\n'
+              '===\n');
+        final node = yarn.nodes['A']!;
+        final command = node.lines[0] as IfCommand;
+        expect(command.ifs.length, 3);
+        expect(command.ifs[0].condition.value, true);
+        expect(command.ifs[1].condition.value, false);
+        expect(command.ifs[2].condition.value, true);
+      });
+
+      test('no <<endif>> 1', () {
+        expect(
+          () => YarnProject()
+            ..parse('title:A\n---\n'
+                '<<if true>>\n'
+                '  ha\n'
+                '===\n'),
+          hasSyntaxError('SyntaxError: <<endif>> expected\n'
+              '>  at line 5 column 1:\n'
+              '>  ===\n'
+              '>  ^\n'),
+        );
+      });
+
+      test('no <<endif>> 2', () {
+        expect(
+          () => YarnProject()
+            ..parse('title:A\n---\n'
+                '<<if true>>\n'
+                '<<stop>>\n'
+                '===\n'),
+          hasSyntaxError('SyntaxError: <<endif>> expected\n'
+              '>  at line 4 column 1:\n'
+              '>  <<stop>>\n'
+              '>  ^\n'),
+        );
+      });
+
+      test('double <<else>>', () {
+        expect(
+          () => YarnProject()
+            ..parse('title:A\n---\n'
+                '<<if true>>\n'
+                '<<else>>\n'
+                '<<else>>\n'
+                '<<endif>>\n'
+                '===\n'),
+          hasSyntaxError('SyntaxError: only one <<else>> is allowed\n'
+              '>  at line 5 column 1:\n'
+              '>  <<else>>\n'
+              '>  ^\n'),
+        );
+      });
+
+      test('no indentation', () {
+        expect(
+          () => YarnProject()
+            ..parse('title:A\n---\n'
+                '<<if true>>\n'
+                'text\n'
+                '<<endif>>\n'
+                '===\n'),
+          hasSyntaxError(
+              'SyntaxError: the body of the <<if>> command must be indented\n'
+              '>  at line 4 column 1:\n'
+              '>  text\n'
+              '>  ^\n'),
+        );
+      });
+
+      test('non-boolean condition', () {
+        expect(
+          () => YarnProject()
+            ..parse('title:A\n---\n'
+                '<<if "true">>\n'
+                '    text\n'
+                '<<endif>>\n'
+                '===\n'),
+          hasTypeError(
+              'TypeError: expression in an <<if>> command must be boolean\n'
+              '>  at line 3 column 6:\n'
+              '>  <<if "true">>\n'
+              '>       ^\n'),
+        );
+      });
+    });
+  });
 }

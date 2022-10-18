@@ -1,7 +1,7 @@
 import 'package:flame_yarn/src/structure/expressions/expression.dart';
 
-class NotExpression extends BoolExpression {
-  const NotExpression(this.arg);
+class LogicalNot extends BoolExpression {
+  const LogicalNot(this.arg);
 
   final BoolExpression arg;
 
@@ -9,8 +9,8 @@ class NotExpression extends BoolExpression {
   bool get value => !arg.value;
 }
 
-class AndExpression extends BoolExpression {
-  const AndExpression(this.lhs, this.rhs);
+class LogicalAnd extends BoolExpression {
+  const LogicalAnd(this.lhs, this.rhs);
 
   final BoolExpression lhs;
   final BoolExpression rhs;
@@ -19,8 +19,8 @@ class AndExpression extends BoolExpression {
   bool get value => lhs.value && rhs.value;
 }
 
-class OrExpression extends BoolExpression {
-  const OrExpression(this.lhs, this.rhs);
+class LogicalOr extends BoolExpression {
+  const LogicalOr(this.lhs, this.rhs);
 
   final BoolExpression lhs;
   final BoolExpression rhs;
@@ -29,8 +29,8 @@ class OrExpression extends BoolExpression {
   bool get value => lhs.value || rhs.value;
 }
 
-class XorExpression extends BoolExpression {
-  const XorExpression(this.lhs, this.rhs);
+class LogicalXor extends BoolExpression {
+  const LogicalXor(this.lhs, this.rhs);
 
   final BoolExpression lhs;
   final BoolExpression rhs;

@@ -1,6 +1,7 @@
-import 'package:flame_yarn/src/parse/parser.dart' as internal;
+import 'package:flame_yarn/src/parse/parse.dart' as impl;
 import 'package:flame_yarn/src/structure/node.dart';
 import 'package:flame_yarn/src/variable_storage.dart';
+import 'package:meta/meta.dart';
 
 class YarnProject {
   YarnProject()
@@ -13,14 +14,19 @@ class YarnProject {
   final VariableStorage variables;
 
   void parse(String text) {
-    internal.parse(text, this);
+    impl.parse(text, this);
   }
 
   void setVariable(String name, dynamic value) {
     variables.setVariable(name, value);
   }
 
+  @internal
   void jumpToNode(String node) {}
+
+  @internal
   void stopNode() {}
+
+  @internal
   void wait(num seconds) {}
 }

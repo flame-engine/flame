@@ -3,12 +3,12 @@ import 'package:flame_yarn/src/structure/statement.dart';
 
 class Dialogue extends Statement {
   const Dialogue({
-    this.speaker,
+    this.person,
     required this.content,
     this.tags,
   });
 
-  final String? speaker;
+  final String? person;
   final StringExpression content;
   final List<String>? tags;
 }

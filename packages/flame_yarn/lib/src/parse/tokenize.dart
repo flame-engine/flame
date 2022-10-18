@@ -460,7 +460,7 @@ class _Lexer {
   }
 
   /// Consumes a Unicode ID at the start of the line, followed by a ':', then
-  /// emits a [Token.speaker] and a [Token.colon], and also switches into the
+  /// emits a [Token.person] and a [Token.colon], and also switches into the
   /// [modeText].
   ///
   /// Note: we have to consume detect both the character name and the subsequent
@@ -476,7 +476,7 @@ class _Lexer {
       eatWhitespace();
       if (eat($colon)) {
         eatWhitespace();
-        final name = Token.speaker(text.substring(position0, position1));
+        final name = Token.person(text.substring(position0, position1));
         pushToken(name, position0);
         pushToken(Token.colon, position1);
         pushMode(modeText);

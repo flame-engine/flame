@@ -27,13 +27,3 @@ class Remove extends StringExpression {
     }
   }
 }
-
-class Repeat extends StringExpression {
-  const Repeat(this.lhs, this.rhs);
-
-  final StringExpression lhs;
-  final NumExpression rhs;
-
-  @override
-  String get value => List.filled(rhs.value.toInt(), lhs.value).join();
-}
