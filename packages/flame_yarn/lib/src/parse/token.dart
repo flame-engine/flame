@@ -10,15 +10,17 @@ class Token {
   const Token.hashtag(String text) : this._(TokenType.hashtag, text);
   const Token.id(String text) : this._(TokenType.id, text);
   const Token.number(String text) : this._(TokenType.number, text);
-  const Token.speaker(String text) : this._(TokenType.speaker, text);
+  const Token.person(String text) : this._(TokenType.person, text);
   const Token.string(String text) : this._(TokenType.string, text);
   const Token.text(String text) : this._(TokenType.text, text);
   const Token.variable(String text) : this._(TokenType.variable, text);
+  const Token.error(String text) : this._(TokenType.error, text);
 
   static const arrow = Token._(TokenType.arrow);
   static const asType = Token._(TokenType.asType);
   static const colon = Token._(TokenType.colon);
   static const comma = Token._(TokenType.comma);
+  static const commandDeclare = Token._(TokenType.commandDeclare);
   static const commandElse = Token._(TokenType.commandElse);
   static const commandElseif = Token._(TokenType.commandElseif);
   static const commandEndif = Token._(TokenType.commandEndif);
@@ -34,6 +36,7 @@ class Token {
   static const endExpression = Token._(TokenType.endExpression);
   static const endIndent = Token._(TokenType.endIndent);
   static const endParenthesis = Token._(TokenType.endParenthesis);
+  static const eof = Token._(TokenType.eof);
   static const newline = Token._(TokenType.newline);
   static const operatorAnd = Token._(TokenType.operatorAnd);
   static const operatorAssign = Token._(TokenType.operatorAssign);
@@ -70,8 +73,17 @@ class Token {
   final TokenType type;
   final String? _content;
 
+  bool get isCommand => type == TokenType.command;
+  bool get isHashtag => type == TokenType.hashtag;
+  bool get isId => type == TokenType.id;
+  bool get isNumber => type == TokenType.number;
+  bool get isPerson => type == TokenType.person;
+  bool get isString => type == TokenType.string;
+  bool get isText => type == TokenType.text;
+  bool get isVariable => type == TokenType.variable;
+
   /// The content can only be accessed for tokens of type "text", "number",
-  /// "string", "command", "variable", "speaker", and "id".
+  /// "string", "command", "variable", "person", and "id".
   String get content => _content!;
 
   @override
@@ -92,7 +104,7 @@ enum TokenType {
   hashtag,
   id,
   number,
-  speaker,
+  person,
   string,
   text,
   variable,
@@ -101,6 +113,7 @@ enum TokenType {
   asType, //                 'as'
   colon, //                  ':'
   comma, //                  ','
+  commandDeclare, //         'declare'
   commandElse, //            'else'
   commandElseif, //          'elseif'
   commandEndif, //           'endif'
@@ -146,4 +159,7 @@ enum TokenType {
   typeBool, //               'bool'
   typeNumber, //             'number'
   typeString, //             'string'
+
+  error,
+  eof,
 }
