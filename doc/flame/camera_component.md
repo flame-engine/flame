@@ -41,6 +41,10 @@ and a single camera, then switching that camera's target from A to B will
 instantaneously switch the view to world B without having to unmount A and
 then mount B.
 
+Just like with most `Component`s, children can be added to `World` by using the
+`children` argument in its constructor, or by using the `add` or `addAll`
+methods.
+
 
 ## CameraComponent
 
