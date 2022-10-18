@@ -20,7 +20,8 @@ class SvgComponent extends PositionComponent with HasPaint {
     super.priority,
     Paint? paint,
   }) : _svg = svg {
-    this.paint = paint ?? this.paint..filterQuality = FilterQuality.high;
+    this.paint = paint ?? this.paint
+      ..filterQuality = FilterQuality.high;
   }
 
   set svg(Svg? svg) {
@@ -33,7 +34,7 @@ class SvgComponent extends PositionComponent with HasPaint {
 
   @override
   void render(Canvas canvas) {
-    _svg?.render(canvas, size, overridePaint: paint);
+    _svg?.render(canvas, size, paint);
   }
 
   @override
