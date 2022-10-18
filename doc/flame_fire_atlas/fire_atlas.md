@@ -6,8 +6,8 @@ and animations stored in a `.fa` texture atlas by referring to them by their nam
 
 ## FireAtlas
 
-FireAtlas is a tool for handling texture atlases. Atlases can be created using
-the [Fire Atlas Editor](https://fire-atlas.flame-engine.org/#/).
+FireAtlas is a tool for handling texture atlases. Atlases can be created using the
+[Fire Atlas Editor](https://fire-atlas.flame-engine.org).
 
 
 ## Texture atlas
