@@ -29,6 +29,65 @@ void main() {
       });
 
       testWithFlameGame(
+          'component.removed completes if obtained before the game was ready',
+          (game) async {
+        final component = LifecycleComponent('component');
+        final removed = component.removed;
+        await game.add(component);
+        await game.ready();
+
+        game.remove(component);
+        game.update(0);
+
+        await expectLater(removed, completes);
+      });
+
+      testWithFlameGame(
+          'component removed completes when set after game is ready',
+          (game) async {
+        final component = LifecycleComponent('component');
+        await game.add(component);
+        await game.ready();
+        final removed = component.removed;
+
+        game.remove(component);
+        game.update(0);
+        await expectLater(removed, completes);
+      });
+
+      testWithFlameGame(
+        'component removed completes after changing parent',
+        (game) async {
+          final parent = LifecycleComponent('parent')..addToParent(game);
+          final child = LifecycleComponent('child')..addToParent(parent);
+          await game.ready();
+          final removed = child.removed;
+
+          child.changeParent(game);
+          game.update(0);
+          await expectLater(removed, completes);
+
+          final removedFromParent = child.removed;
+          child.removeFromParent();
+          game.update(0);
+          await expectLater(removedFromParent, completes);
+        },
+      );
+
+      testWithFlameGame('remove parent of child that has removed set',
+          (game) async {
+        final parent = LifecycleComponent('parent')..addToParent(game);
+        final child = LifecycleComponent('child')..addToParent(parent);
+        await game.ready();
+        final removed = child.removed;
+
+        parent.removeFromParent();
+        game.update(0);
+        await expectLater(removed, completes);
+        expect(child.isRemoved, true);
+      });
+
+      testWithFlameGame(
         'component mounted completes when changing parent',
         (game) async {
           final parent = LifecycleComponent('parent');
