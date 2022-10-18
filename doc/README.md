@@ -20,7 +20,8 @@ We also provide stand-alone packages that extend the Flame functionality:
   our own `Box2D` port called `Forge2D`.
 - [flame_tiled](https://pub.dev/packages/flame_tiled) Which provides integration with the
   [tiled](https://pub.dev/packages/tiled) package.
-- [flame_svg](https://pub.dev/packages/flame_svg) Which provides integration with [flutter_svg](https://pub.dev/packages/flutter_svg).
+- [flame_svg](https://pub.dev/packages/flame_svg) Which provides integration with
+  [flutter_svg](https://pub.dev/packages/flutter_svg).
 
 You can pick and choose whichever parts you want, as they are all independent and modular.
 
