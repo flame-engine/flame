@@ -1,19 +1,21 @@
 # flame_bloc
 
 `flame_bloc` is a bridge library for using Bloc in your Flame game. `flame_bloc` offers a simple and
-natural (as in similar to flutter_bloc) way to use blocs and cubits inside a FlameGame. Bloc attempts to make game state
-changes predictable by regulating when a game state change can occur and enforcing a single way to change game state
+natural (as in similar to flutter_bloc)
+way to use blocs and cubits inside a FlameGame. Bloc attempts to make game state changes predictable
+by regulating when a game state change can occur and enforcing a single way to change game state
 throughout an entire Game.
 
-To use it in your game you just need to add `flame_bloc` to your pubspec.yaml, as can be seen in
-the [Flame Bloc example](https://github.com/flame-engine/flame/tree/main/packages/flame_bloc/example) and in the
-pub.dev [installation instructions](https://pub.dev/packages/flame_bloc).
+To use it in your game you just need to add `flame_bloc` to your pubspec.yaml, as can be seen in the
+[Flame Bloc example](https://github.com/flame-engine/flame/tree/main/packages/flame_bloc/example)
+and in the pub.dev [installation instructions](https://pub.dev/packages/flame_bloc).
+
 
 ## FlameBlocProvider
 
-FlameBlocProvider is a Component which creates and provides a bloc to its children. The bloc will only live while this
-component is alive.It is used as a dependency injection (DI) widget so that a single instance of a bloc can be provided
-to multiple Components within a subtree.
+FlameBlocProvider is a Component which creates and provides a bloc to its children.  
+The bloc will only live while this component is alive.It is used as a dependency injection (DI)
+widget so that a single instance of a bloc can be provided to multiple Components within a subtree.
 
 FlameBlocProvider should be used to create new blocs which will be made available to the rest of the
 subtree.
@@ -62,11 +64,13 @@ FlameMultiBlocProvider(
 
 ## FlameBlocListener
 
-FlameBlocListener is Component which can listen to changes in a Bloc state. It invokes the `onNewState` in response to
-state changes in the bloc. For fine-grained control over when the `onNewState` function is called an
-optional `listenWhen` can be provided. `listenWhen` takes the previous bloc state and current bloc state and returns a
-boolean. If `listenWhen` returns true, `onNewState` will be called with `state`. If `listenWhen` returns
-false, `onNewState` will not be called with `state`.
+FlameBlocListener is Component which can listen to changes in a Bloc state. It invokes
+the `onNewState`
+in response to state changes in the bloc. For fine-grained control over when the `onNewState`
+function is called an optional `listenWhen` can be provided. `listenWhen` takes the previous bloc
+state and current bloc state and returns a boolean. If `listenWhen` returns true, `onNewState` will
+be called with
+`state`. If `listenWhen` returns false, `onNewState` will not be called with `state`.
 
 alternatively you can use `FlameBlocListenable` mixin to listen state changes on Component.
 
@@ -108,8 +112,10 @@ class ComponentA extends Component
 
 ## FlameBlocReader
 
-FlameBlocReader is mixin that allows you to read the current state of bloc on Component. It is Useful for components
-that needs to only read a bloc current state or to trigger an event on it. You can have only One reader on Component
+FlameBlocReader is mixin that allows you to read the current state of bloc on Component. It is
+Useful for components that needs to only read a bloc current state or to trigger an event on it. You
+can have only One reader on Component
+
 
 ```dart
 
@@ -120,7 +126,7 @@ class InventoryReader extends Component
     
     final component = InventoryReader();
     // reading current state
-    var state = component.bloc;
+    var state = component.bloc
 ```
 
 
