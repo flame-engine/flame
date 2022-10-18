@@ -19,8 +19,8 @@ reduce the number of images loaded and can speed up the loading time of the game
 
 ## Usage
 
-To use it in your game you just need to add `flame_fire_atlas` to your pubspec.yaml, as can be
-seen in the [Flame Fire Atlas example](https://github.com/flame-engine/flame/tree/main/packages/flame_fire_atlas/example)
+To use the bridge library in your game you just need to add `flame_fire_atlas` to your pubspec.yaml,
+as can be seen in the [Flame Fire Atlas example](https://github.com/flame-engine/flame/tree/main/packages/flame_fire_atlas/example)
 and in the pub.dev [installation instructions](https://pub.dev/packages/flame_fire_atlas).
 
 Then you have the following methods at your disposal:
