@@ -5,7 +5,7 @@ flame_svg provides a simple API for rendering SVG images in your game.
 
 ## Installation
 
-Svg support is provided by the `flame_svg` external package, be sure to put it in your pubspec file
+Svg support is provided by the `flame_svg` bridge package, be sure to put it in your pubspec file
 to use it.
 
 If you want to know more about the installation visit [flame_svg on pubdev](https://pub.dev/packages/flame_svg/install).
