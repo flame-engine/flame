@@ -53,9 +53,7 @@ class Svg {
     if (image != null) {
       canvas.save();
       canvas.scale(1 / pixelRatio);
-
       final drawPaint = overridePaint ?? _paint;
-
       canvas.drawImage(image, Offset.zero, drawPaint);
       canvas.restore();
     } else {
