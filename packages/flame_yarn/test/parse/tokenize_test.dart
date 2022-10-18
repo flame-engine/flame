@@ -1,7 +1,8 @@
-import 'package:flame_yarn/flame_yarn.dart';
 import 'package:flame_yarn/src/parse/token.dart';
 import 'package:flame_yarn/src/parse/tokenize.dart';
 import 'package:test/test.dart';
+
+import 'utils.dart';
 
 void main() {
   // Tests are organized according to which lexing Mode they are checking
@@ -29,7 +30,7 @@ void main() {
 
       test('only header separator', () {
         expect(
-          () => tokenize('---\n'),
+              () => tokenize('---\n'),
           hasSyntaxError('SyntaxError: incomplete node body\n'
               '>  at line 2 column 1:\n'
               '>  \n'
@@ -137,7 +138,7 @@ void main() {
 
       test('extra whitespace', () {
         expect(
-          () => tokenize('  title: this\n---\n===\n'),
+              () => tokenize('  title: this\n---\n===\n'),
           hasSyntaxError('SyntaxError: unexpected indentation\n'
               '>  at line 1 column 3:\n'
               '>    title: this\n'
@@ -147,7 +148,7 @@ void main() {
 
       test('without id', () {
         expect(
-          () => tokenize(':\n---\n===\n'),
+              () => tokenize(':\n---\n===\n'),
           hasSyntaxError('SyntaxError: invalid token\n'
               '>  at line 1 column 1:\n'
               '>  :\n'
@@ -157,7 +158,7 @@ void main() {
 
       test('overlong separator', () {
         expect(
-          () => tokenize('----\n===\n'),
+              () => tokenize('----\n===\n'),
           hasSyntaxError('SyntaxError: invalid token\n'
               '>  at line 1 column 1:\n'
               '>  ----\n'
@@ -216,7 +217,7 @@ void main() {
 
       test('invalid indentation', () {
         expect(
-          () => tokenize('---\n'
+              () => tokenize('---\n'
               ' alpha\n'
               '     beta\n'
               '  gamma\n'
@@ -254,7 +255,7 @@ void main() {
 
       test('invalid body end', () {
         expect(
-          () => tokenize('---\n===='),
+              () => tokenize('---\n===='),
           hasSyntaxError('SyntaxError: incomplete node body\n'
               '>  at line 2 column 5:\n'
               '>  ====\n'
@@ -316,20 +317,20 @@ void main() {
               '===\n'),
           const [
             Token.startBody,
-            Token.speaker('Marge'),
+            Token.person('Marge'),
             Token.colon,
             Token.text('Hello!'),
             Token.newline,
             Token.text('Mr Smith: You too'),
             Token.newline,
-            Token.speaker('Пан_Голова'),
+            Token.person('Пан_Голова'),
             Token.colon,
             Token.text('...'),
             Token.newline,
-            Token.speaker('Ḟḷḁṃḙ'),
+            Token.person('Ḟḷḁṃḙ'),
             Token.colon,
             Token.newline,
-            Token.speaker('𐀆𒐰ï︮𒐜'),
+            Token.person('𐀆𒐰ï︮𒐜'),
             Token.colon,
             Token.text('::'),
             Token.newline,
@@ -361,7 +362,7 @@ void main() {
               '===\n'),
           const [
             Token.startBody,
-            Token.speaker('Pig'),
+            Token.person('Pig'),
             Token.colon,
             Token.text('Horse: Moo!'),
             Token.newline,
@@ -392,8 +393,8 @@ void main() {
       test('escape sequences', () {
         expect(
           tokenize('---\n'
-              r'\<\{ inside \}\>'
-              '\n'
+          r'\<\{ inside \}\>'
+          '\n'
               'very long \\\n'
               '  text\n'
               'line with a newline:\\n ok\n'
@@ -420,7 +421,7 @@ void main() {
 
       test('invalid escape sequence', () {
         expect(
-          () => tokenize('---\n'
+              () => tokenize('---\n'
               'some text \\a\n'
               '===\n'),
           hasSyntaxError('SyntaxError: invalid escape sequence\n'
@@ -456,7 +457,7 @@ void main() {
           const [
             Token.startBody,
             Token.startExpression,
-            Token.variable('x'),
+            Token.variable(r'$x'),
             Token.operatorPlusAssign,
             Token.number('33'),
             Token.operatorMinus,
@@ -502,7 +503,7 @@ void main() {
           const [
             Token.startBody,
             Token.startExpression,
-            Token.variable('x'),
+            Token.variable(r'$x'),
             Token.operatorAssign,
             Token.string('hello'),
             Token.operatorPlus,
@@ -550,20 +551,20 @@ void main() {
 
       test('close command within a plain text expression', () {
         expect(
-          () => tokenize('---\n'
+              () => tokenize('---\n'
               '{ a >> b }\n'
               '===\n'),
           hasSyntaxError(
               'SyntaxError: invalid token ">>" within an expression\n'
-              '>  at line 2 column 5:\n'
-              '>  { a >> b }\n'
-              '>      ^\n'),
+                  '>  at line 2 column 5:\n'
+                  '>  { a >> b }\n'
+                  '>      ^\n'),
         );
       });
 
       test('invalid variable name', () {
         expect(
-          () => tokenize('---\n'
+              () => tokenize('---\n'
               '{ \$a = \$7b }\n'
               '===\n'),
           hasSyntaxError('SyntaxError: invalid variable name\n'
@@ -575,14 +576,14 @@ void main() {
 
       test('invalid string', () {
         expect(
-          () => tokenize('---\n'
+              () => tokenize('---\n'
               '{ "starting... }\n'
               '===\n'),
           hasSyntaxError(
               'SyntaxError: unexpected end of line while parsing a string\n'
-              '>  at line 2 column 17:\n'
-              '>  { "starting... }\n'
-              '>                  ^\n'),
+                  '>  at line 2 column 17:\n'
+                  '>  { "starting... }\n'
+                  '>                  ^\n'),
         );
       });
     });
@@ -611,9 +612,7 @@ void main() {
             Token.newline,
             Token.startCommand,
             Token.commandJump,
-            Token.startExpression,
             Token.id('places'),
-            Token.endExpression,
             Token.endCommand,
             Token.newline,
             Token.startCommand,
@@ -626,7 +625,7 @@ void main() {
             Token.startCommand,
             Token.commandSet,
             Token.startExpression,
-            Token.variable('n'),
+            Token.variable(r'$n'),
             Token.operatorAssign,
             Token.number('2'),
             Token.endExpression,
@@ -649,14 +648,14 @@ void main() {
             Token.startCommand,
             Token.commandIf,
             Token.startExpression,
-            Token.variable('gold_amount'),
+            Token.variable(r'$gold_amount'),
             Token.operatorLessThan,
             Token.number('10'),
             Token.endExpression,
             Token.endCommand,
             Token.newline,
             Token.startIndent,
-            Token.speaker('Baker'),
+            Token.person('Baker'),
             Token.colon,
             Token.text("Well, you can't afford one!"),
             Token.newline,
@@ -672,7 +671,7 @@ void main() {
 
       test('closing brace', () {
         expect(
-          () => tokenize('---\n'
+              () => tokenize('---\n'
               '<< hello } >>\n'
               '===\n'),
           hasSyntaxError('SyntaxError: invalid token "}" within a command\n'
@@ -684,7 +683,7 @@ void main() {
 
       test('incomplete command', () {
         expect(
-          () => tokenize('---\n'
+              () => tokenize('---\n'
               '<< stop\n'
               '===\n'),
           hasSyntaxError('SyntaxError: missing command close token ">>"\n'
@@ -733,7 +732,7 @@ void main() {
             Token.startCommand,
             Token.commandIf,
             Token.startExpression,
-            Token.variable('reputation'),
+            Token.variable(r'$reputation'),
             Token.operatorGreaterThan,
             Token.number('10'),
             Token.endExpression,
@@ -776,7 +775,7 @@ void main() {
     group('errors', () {
       test('long line, error near the start', () {
         expect(
-          () => tokenize('---\n'
+              () => tokenize('---\n'
               '<< alpha beta gamma delta epsilon ~ zeta eta theta iota kappa '
               'lambda mu nu xi omicron pi rho sigma tau >>\n'
               '===\n'),
@@ -790,7 +789,7 @@ void main() {
 
       test('long line, error near the end', () {
         expect(
-          () => tokenize('---\n'
+              () => tokenize('---\n'
               '<< alpha beta gamma delta epsilon zeta eta theta iota kappa '
               'lambda mu nu xi omicron pi rho @ sigma tau upsilon phi chi>>\n'
               '===\n'),
@@ -804,7 +803,7 @@ void main() {
 
       test('long line, error in the middle', () {
         expect(
-          () => tokenize('---\n'
+              () => tokenize('---\n'
               '<< alpha beta gamma delta epsilon zeta eta theta iota kappa '
               'lambda ` mu nu xi omicron pi rho sigma tau upsilon phi chi psi '
               'omega>>\n'
@@ -818,10 +817,4 @@ void main() {
       });
     });
   });
-}
-
-Matcher hasSyntaxError(String message) {
-  return throwsA(
-    isA<SyntaxError>().having((e) => e.toString(), 'toString', message),
-  );
 }
