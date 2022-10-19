@@ -10,6 +10,25 @@ FireAtlas is a tool for handling texture atlases. Atlases can be created using t
 [Fire Atlas Editor](https://fire-atlas.flame-engine.org).
 
 
+### Creating Atlas
+
+To create `Atlas` open [Fire Atlas Editor](https://fire-atlas.flame-engine.org).
+
+Select new atlas and give atlas name, tile width, tile height and an Image and Press okay.
+it will take you to atlas editor.
+
+To create new `Sprite` in atlas, select portion and click plus button on top left and give
+selection name(which refer given sprite) and select type `Sprite` and press `Create Sprite`. you can
+see preview on right panel of editor.
+
+To create new `SpriteAnimation` in atlas, select portion and click plus button on top left and give
+selection name(which refer given sprite) and select type `Animation` and provide `frame count`
+and `steps times(in millisecond)` and select checkbox to loop the animation then
+press `Create Animation`. you can see preview of animation on right panel of editor.
+
+once done with editing you can download atlas file from top left `download` icon button.
+
+
 ## Texture atlas
 
 A [Texture atlas](https://en.wikipedia.org/wiki/Texture_atlas) is an image that contains data from
@@ -30,11 +49,11 @@ import 'package:flame_fire_atlas/flame_fire_atlas.dart';
 
 // Load the atlas from your assets
 // file at assets/atlas.fa
-final atlas = awaitloadFireAtlas('atlas.fa');
+final atlas = await FireAtlas.loadAsset('atlas.fa');
 
 //or when inside a game instance, the loadFireAtlas can be used:
 // file at assets/atlas.fa
-final atlas = awaitloadFireAtlas('atlas.fa');
+final atlas = await loadFireAtlas('atlas.fa');
 
 // Get a Sprite with the given key.
 FireAtlas.getSprite('sprite_name')
