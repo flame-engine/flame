@@ -8,10 +8,6 @@ import 'package:flame/src/effects/controllers/effect_controller.dart';
 /// requires that any other effect or update logic applied to the same component
 /// also used incremental updates.
 class OpacityEffect extends ComponentEffect<HasPaint> {
-  int _alphaOffset;
-  double _roundingError = 0.0;
-  final String? paintId;
-
   /// This constructor will set the opacity in relation to it's current opacity
   /// over time.
   OpacityEffect.by(
@@ -19,7 +15,7 @@ class OpacityEffect extends ComponentEffect<HasPaint> {
     super.controller, {
     this.paintId,
     super.onComplete,
-  }) : _alphaOffset = (255 * offset).round();
+  }) : _opacityOffset = offset;
 
   /// This constructor will set the opacity to the specified opacity over time.
   factory OpacityEffect.to(
@@ -62,16 +58,18 @@ class OpacityEffect extends ComponentEffect<HasPaint> {
     );
   }
 
+  double _opacityOffset;
+  double _roundingError = 0.0;
+  final String? paintId;
+
   @override
   void apply(double progress) {
     final deltaProgress = progress - previousProgress;
-    final currentAlpha = target.getAlpha(paintId: paintId);
-    final deltaAlpha =
-        (_alphaOffset * deltaProgress) + _roundingError * deltaProgress.sign;
-    var nextAlpha = (currentAlpha + deltaAlpha).round();
-    _roundingError = (currentAlpha + deltaAlpha) - nextAlpha;
-    nextAlpha = nextAlpha.clamp(0, 255);
-    target.setAlpha(nextAlpha, paintId: paintId);
+    final currentOpacity = target.getOpacity(paintId: paintId) + _roundingError;
+    final deltaOpacity = _opacityOffset * deltaProgress;
+    final newOpacity = (currentOpacity + deltaOpacity).clamp(0, 1).toDouble();
+    target.setOpacity(newOpacity, paintId: paintId);
+    _roundingError = newOpacity - target.getOpacity(paintId: paintId);
   }
 
   @override
@@ -101,7 +99,6 @@ class _OpacityToEffect extends OpacityEffect {
 
   @override
   void onStart() {
-    _alphaOffset =
-        (_targetOpacity * 255 - target.getAlpha(paintId: paintId)).round();
+    _opacityOffset = _targetOpacity - target.getOpacity(paintId: paintId);
   }
 }

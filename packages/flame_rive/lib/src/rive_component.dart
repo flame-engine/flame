@@ -61,7 +61,9 @@ class RiveArtboardRenderer {
     required this.fit,
     required this.alignment,
     required this.artboard,
-  });
+  }) {
+    artboard.antialiasing = antialiasing;
+  }
 
   void advance(double dt) {
     artboard.advance(dt, nested: true);
@@ -156,12 +158,24 @@ class RiveArtboardRenderer {
   }
 }
 
+/// Loads the Artboard from the specified Rive File.
+///
+/// When [artboardName] is not null it returns the artboard with the specified
+/// name, an assertion is triggered if no artboard with that name exists in the
+/// file.
 Future<Artboard> loadArtboard(
   FutureOr<RiveFile> file, {
   String? artboardName,
 }) async {
   final loaded = await file;
-  return artboardName == null
-      ? loaded.mainArtboard.instance()
-      : loaded.artboardByName(artboardName)!.instance();
+  if (artboardName == null) {
+    return loaded.mainArtboard.instance();
+  } else {
+    final artboard = loaded.artboardByName(artboardName)?.instance();
+    assert(
+      artboard != null,
+      'No artboard with the specified name exists in the RiveFile',
+    );
+    return artboard!;
+  }
 }
