@@ -44,7 +44,7 @@ FlameBlocProvider<BlocA, BlocAState>.value(
 
 ## FlameMultiBlocProvider
 
-it is Similar to FlameBlocProvider, but provides multiples blocs down to the component tree
+Similar to FlameBlocProvider, but provides multiples blocs down to the component tree
 
 ```dart
 FlameMultiBlocProvider(
