@@ -27,7 +27,7 @@ class PlatformBlock extends SpriteComponent
   void update(double dt) {
     Vector2 velocity = Vector2(gameRef.objectSpeed, 0);
     position += velocity * dt;
-    if (position.x < -64) removeFromParent();
+    if (position.x < -64 || gameRef.health <= 0) removeFromParent();
     super.update(dt);
   }
 }

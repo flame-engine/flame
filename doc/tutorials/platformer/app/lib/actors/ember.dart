@@ -94,6 +94,10 @@ class EmberPlayer extends SpriteAnimationComponent
       gameRef.health = 0;
     }
 
+    if (gameRef.health <= 0) {
+      removeFromParent();
+    }
+
     // Flip ember if needed.
     if (horizontalDirection < 0 && scale.x > 0) {
       flipHorizontallyAroundCenter();

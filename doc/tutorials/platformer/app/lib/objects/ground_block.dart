@@ -2,11 +2,13 @@ import 'package:EmberQuest/ember_quest.dart';
 import 'package:EmberQuest/extensions/random.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flutter/cupertino.dart';
 
 class GroundBlock extends SpriteComponent
     with CollisionCallbacks, HasGameRef<EmberQuestGame> {
   late Vector2 _gridPosition;
   late double _xPositionOffset;
+  final GlobalKey _blockKey = GlobalKey();
 
   GroundBlock({
     required Vector2 gridPosition,
@@ -24,6 +26,7 @@ class GroundBlock extends SpriteComponent
         gameRef.size.y - (_gridPosition.y * size.y));
     add(RectangleHitbox()..collisionType = CollisionType.passive);
     if (_gridPosition.x == 9 && position.x > gameRef.lastBlockXPosition) {
+      gameRef.lastBlockKey = _blockKey;
       gameRef.lastBlockXPosition = position.x + size.x;
     }
   }
@@ -40,8 +43,13 @@ class GroundBlock extends SpriteComponent
             random.fromRange(0, 4).toInt(), gameRef.lastBlockXPosition);
       }
     }
-    if (_gridPosition.x == 9 && position.x > gameRef.lastBlockXPosition) {
-      gameRef.lastBlockXPosition = position.x;
+    if (_gridPosition.x == 9) {
+      if (gameRef.lastBlockKey == _blockKey) {
+        gameRef.lastBlockXPosition = position.x + size.x - 5;
+      }
+    }
+    if (gameRef.health <= 0) {
+      removeFromParent();
     }
 
     super.update(dt);

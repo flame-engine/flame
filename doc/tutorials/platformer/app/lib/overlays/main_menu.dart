@@ -11,22 +11,12 @@ class MainMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     const Color blackTextColor = Color.fromRGBO(0, 0, 0, 1.0);
     const Color whiteTextColor = Color.fromRGBO(255, 255, 255, 1.0);
-    //gameRef.pauseEngine();
+
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: Center(
         child: Container(
           padding: const EdgeInsets.all(10.0),
-          /* decoration: ShapeDecoration(
-            shape: PixelBorder.solid(
-              pixelSize: 2.0,
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(8.0),
-                bottomRight: Radius.circular(16.0),
-              ),
-              color: whiteTextColor,
-            ),
-          ), */
           height: 320,
           width: 300,
           color: blackTextColor,
@@ -51,10 +41,6 @@ class MainMenu extends StatelessWidget {
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: whiteTextColor,
-                    /* shape: PixelBorder.shape(
-                      borderRadius: BorderRadius.circular(10.0),
-                      pixelSize: 5.0,
-                    ), */
                   ),
                   child: const Text(
                     'Play',
@@ -75,10 +61,6 @@ class MainMenu extends StatelessWidget {
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: whiteTextColor,
-                    /* shape: PixelBorder.shape(
-                      borderRadius: BorderRadius.circular(10.0),
-                      pixelSize: 5.0,
-                    ), */
                   ),
                   child: const Text(
                     'Settings',
