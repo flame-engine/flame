@@ -54,7 +54,7 @@ FlameMultiBlocProvider(
     ),
     FlameBlocProvider<BlocB, BlocBState>.value(
       create: () => BlocB(),
-      ),
+    ),
     ],
   children: [...],
 )
