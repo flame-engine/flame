@@ -80,7 +80,7 @@ FlameBlocListener<GameStatsBloc, GameStatsState>(
   },
   onNewState: (state) {
           // do stuff here based on state
-    },
+  },
 )
 ```
 
