@@ -1,9 +1,9 @@
 # flame_bloc
 
 `flame_bloc` is a bridge library for using Bloc in your Flame game. `flame_bloc` offers a simple and
-natural (as in similar to flutter_bloc) way to use blocs and cubits inside a FlameGame. Bloc
-attempts to make game state changes predictable by regulating when a game state change can occur and
-enforcing a single way to change game state throughout an entire Game.
+natural (as in similar to flutter_bloc) way to use blocs and cubits inside a FlameGame. Bloc offers
+way to make game state changes predictable by regulating when a game state change can occur and
+offers a single way to change game state throughout an entire Game.
 
 To use it in your game you just need to add `flame_bloc` to your pubspec.yaml, as can be seen in the
 [Flame Bloc example](https://github.com/flame-engine/flame/tree/main/packages/flame_bloc/example)
