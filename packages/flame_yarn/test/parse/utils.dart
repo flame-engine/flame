@@ -1,4 +1,3 @@
-
 import 'package:flame_yarn/src/errors.dart';
 import 'package:test/test.dart';
 
