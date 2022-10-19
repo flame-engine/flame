@@ -18,7 +18,7 @@ class Star extends SpriteComponent
 
   @override
   Future<void> onLoad() async {
-    final starImage = await gameRef.images.load('star.png');
+    final starImage = gameRef.images.fromCache('star.png');
     sprite = Sprite(starImage);
     position = Vector2(
         (_gridPosition.x * size.x) + _xPositionOffset + (size.x / 2),

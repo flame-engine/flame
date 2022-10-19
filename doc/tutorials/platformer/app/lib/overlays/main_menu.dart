@@ -17,9 +17,17 @@ class MainMenu extends StatelessWidget {
       body: Center(
         child: Container(
           padding: const EdgeInsets.all(10.0),
-          height: 320,
+          height: 250,
           width: 300,
-          color: blackTextColor,
+          decoration: BoxDecoration(
+            color: blackTextColor,
+            border: Border.all(
+              color: blackTextColor,
+            ),
+            borderRadius: const BorderRadius.all(
+              Radius.circular(20),
+            ),
+          ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -45,27 +53,7 @@ class MainMenu extends StatelessWidget {
                   child: const Text(
                     'Play',
                     style: TextStyle(
-                      fontSize: 14.0,
-                      color: blackTextColor,
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 10),
-              SizedBox(
-                width: 200,
-                height: 75,
-                child: ElevatedButton(
-                  onPressed: () {
-                    gameRef.overlays.add('SettingsMenu');
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: whiteTextColor,
-                  ),
-                  child: const Text(
-                    'Settings',
-                    style: TextStyle(
-                      fontSize: 14.0,
+                      fontSize: 40.0,
                       color: blackTextColor,
                     ),
                   ),
@@ -74,6 +62,7 @@ class MainMenu extends StatelessWidget {
               const SizedBox(height: 20),
               const Text(
                 'Use WASD or Arrow Keys for movement.  Space bar to jump. Collect as many stars as you can and avoid enemies!',
+                textAlign: TextAlign.center,
                 style: TextStyle(
                   color: whiteTextColor,
                   fontSize: 14,

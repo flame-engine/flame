@@ -18,7 +18,7 @@ class WaterEnemy extends SpriteAnimationComponent
   @override
   Future<void> onLoad() async {
     animation = SpriteAnimation.fromFrameData(
-      await gameRef.images.load('water_enemy.png'),
+      gameRef.images.fromCache('water_enemy.png'),
       SpriteAnimationData.sequenced(
         amount: 2,
         textureSize: Vector2.all(16),

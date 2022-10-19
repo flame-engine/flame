@@ -18,7 +18,15 @@ class GameOver extends StatelessWidget {
           padding: const EdgeInsets.all(10.0),
           height: 200,
           width: 300,
-          color: blackTextColor,
+          decoration: BoxDecoration(
+            color: blackTextColor,
+            border: Border.all(
+              color: blackTextColor,
+            ),
+            borderRadius: const BorderRadius.all(
+              Radius.circular(20),
+            ),
+          ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -44,7 +52,7 @@ class GameOver extends StatelessWidget {
                   child: const Text(
                     'Play Again',
                     style: TextStyle(
-                      fontSize: 14.0,
+                      fontSize: 28.0,
                       color: blackTextColor,
                     ),
                   ),

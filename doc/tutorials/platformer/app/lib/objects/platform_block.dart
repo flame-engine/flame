@@ -16,7 +16,7 @@ class PlatformBlock extends SpriteComponent
 
   @override
   Future<void> onLoad() async {
-    final platformImage = await gameRef.images.load('block.png');
+    final platformImage = gameRef.images.fromCache('block.png');
     sprite = Sprite(platformImage);
     position = Vector2((_gridPosition.x * size.x) + _xPositionOffset,
         gameRef.size.y - (_gridPosition.y * size.y));

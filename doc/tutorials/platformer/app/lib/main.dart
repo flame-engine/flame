@@ -22,7 +22,6 @@ class EmberQuestGameApp extends StatelessWidget {
           overlayBuilderMap: {
             'MainMenu': (_, gameRef) => MainMenu(gameRef: gameRef),
             'GameOver': (_, gameRef) => GameOver(gameRef: gameRef),
-            //'SettingsMenu': (_, gameRef) => SettingsMenu(gameRef: gameRef),
           },
           initialActiveOverlays: const ['MainMenu'],
         ),

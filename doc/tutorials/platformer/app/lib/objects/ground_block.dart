@@ -20,7 +20,7 @@ class GroundBlock extends SpriteComponent
 
   @override
   Future<void> onLoad() async {
-    final groundImage = await gameRef.images.load('ground.png');
+    final groundImage = gameRef.images.fromCache('ground.png');
     sprite = Sprite(groundImage);
     position = Vector2((_gridPosition.x * size.x) + _xPositionOffset,
         gameRef.size.y - (_gridPosition.y * size.y));

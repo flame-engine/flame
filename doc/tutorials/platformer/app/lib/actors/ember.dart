@@ -28,7 +28,7 @@ class EmberPlayer extends SpriteAnimationComponent
   @override
   Future<void> onLoad() async {
     animation = SpriteAnimation.fromFrameData(
-      await gameRef.images.load('ember.png'),
+      gameRef.images.fromCache('ember.png'),
       SpriteAnimationData.sequenced(
         amount: 4,
         textureSize: Vector2.all(16),

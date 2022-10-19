@@ -26,6 +26,15 @@ class EmberQuestGame extends FlameGame
   @override
   Future<void> onLoad() async {
     //debugMode = true; //Uncomment to see the bounding boxes
+    await images.loadAll([
+      'block.png',
+      'ember.png',
+      'ground.png',
+      'heart_half.png',
+      'heart.png',
+      'star.png',
+      'water_enemy.png',
+    ]);
     initializeGame(true);
   }
 
@@ -77,8 +86,6 @@ class EmberQuestGame extends FlameGame
     //Assume that size.x < 3200
     int segmentsToLoad = (size.x / 640).ceil();
     segmentsToLoad.clamp(0, 4);
-
-    segmentsToLoad = 2;
 
     for (int i = 0; i <= segmentsToLoad; i++) {
       loadGameSegments(i, (640 * i).toDouble());
