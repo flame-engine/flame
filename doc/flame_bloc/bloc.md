@@ -36,7 +36,7 @@ FlameBlocProvider can be used to provide an existing bloc to a new portion of th
 
 ```dart
 FlameBlocProvider<BlocA, BlocAState>.value(
-  value: BlocA,
+  value: blocA,
   children: [...],
 );
 ```
