@@ -830,6 +830,141 @@ void main() {
         reason: "Should return the enclosed circle's position",
       );
     });
+
+    test('solid circle enclosed by solid polygon', () {
+      final outerPolygon = PolygonComponent(
+        [
+          Vector2(5, 1),
+          Vector2(1, 1),
+          Vector2(1, 5),
+          Vector2(6, 5),
+        ],
+      )..isSolid = true;
+      final innerCircle = CircleComponent(
+        position: Vector2.all(3),
+        radius: 1.5,
+        anchor: Anchor.center,
+      )..isSolid = true;
+      final intersections = geometry.intersections(outerPolygon, innerCircle);
+      expect(
+        intersections,
+        {innerCircle.position},
+        reason: "Should return the enclosed circle's position",
+      );
+    });
+
+    test('solid circle enclosed by hollow polygon', () {
+      final outerPolygon = PolygonComponent(
+        [
+          Vector2(5, 1),
+          Vector2(1, 1),
+          Vector2(1, 5),
+          Vector2(6, 5),
+        ],
+      );
+      final innerCircle = CircleComponent(
+        position: Vector2.all(3),
+        radius: 1.5,
+        anchor: Anchor.center,
+      )..isSolid = true;
+      final intersections = geometry.intersections(outerPolygon, innerCircle);
+      expect(
+        intersections.isEmpty,
+        isTrue,
+        reason: 'Should not contain any intersection',
+      );
+    });
+
+    test('hollow circle enclosed by solid polygon', () {
+      final outerPolygon = PolygonComponent(
+        [
+          Vector2(5, 1),
+          Vector2(1, 1),
+          Vector2(1, 5),
+          Vector2(6, 5),
+        ],
+      )..isSolid = true;
+      final innerCircle = CircleComponent(
+        position: Vector2.all(3),
+        radius: 1.5,
+        anchor: Anchor.center,
+      );
+      final intersections = geometry.intersections(outerPolygon, innerCircle);
+      expect(
+        intersections,
+        {innerCircle.position},
+        reason: "Should return the enclosed circle's position",
+      );
+    });
+
+    test('solid polygon enclosed by solid circle', () {
+      final outerCircle = CircleComponent(
+        position: Vector2.all(3),
+        radius: 3,
+        anchor: Anchor.center,
+      )..isSolid = true;
+      final innerPolygon = PolygonComponent(
+        [
+          Vector2(4, 2),
+          Vector2(2, 2),
+          Vector2(2, 4),
+          Vector2(4.5, 4.5),
+        ],
+        anchor: Anchor.center,
+      )..isSolid = true;
+      final intersections = geometry.intersections(outerCircle, innerPolygon);
+      expect(
+        intersections,
+        {innerPolygon.position},
+        reason: "Should return the enclosed polygon's position",
+      );
+    });
+
+    test('solid polygon enclosed by hollow circle', () {
+      final outerCircle = CircleComponent(
+        position: Vector2.all(3),
+        radius: 3,
+        anchor: Anchor.center,
+      );
+      final innerPolygon = PolygonComponent(
+        [
+          Vector2(4, 2),
+          Vector2(2, 2),
+          Vector2(2, 4),
+          Vector2(4.5, 4.5),
+        ],
+        anchor: Anchor.center,
+      )..isSolid = true;
+      final intersections = geometry.intersections(outerCircle, innerPolygon);
+      expect(
+        intersections.isEmpty,
+        isTrue,
+        reason: 'Should not contain any intersection',
+      );
+    });
+
+    test('hollow polygon enclosed by solid circle', () {
+      final outerCircle = CircleComponent(
+        position: Vector2.all(3),
+        radius: 3,
+        anchor: Anchor.center,
+      )..isSolid = true;
+      final innerPolygon = PolygonComponent(
+        [
+          Vector2(4, 2),
+          Vector2(2, 2),
+          Vector2(2, 4),
+          Vector2(4.5, 4.5),
+        ],
+        anchor: Anchor.center,
+      );
+      final intersections = geometry.intersections(outerCircle, innerPolygon);
+      expect(
+        intersections,
+        {innerPolygon.position},
+        reason: "Should return the enclosed polygon's position",
+      );
+    });
   });
 
   group('Raycasting', () {

@@ -20,4 +20,8 @@ class DragEndEvent extends Event {
       ),
     );
   }
+
+  @override
+  String toString() =>
+      'DragEndEvent(pointerId: $pointerId, velocity: $velocity)';
 }

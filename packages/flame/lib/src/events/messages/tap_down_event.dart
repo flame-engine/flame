@@ -44,4 +44,9 @@ class TapDownEvent extends PositionEvent {
       ),
     );
   }
+
+  @override
+  String toString() => 'TapDownEvent(canvasPosition: $canvasPosition, '
+      'devicePosition: $devicePosition, '
+      'pointerId: $pointerId, deviceKind: $deviceKind)';
 }

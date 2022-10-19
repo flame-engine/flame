@@ -162,6 +162,54 @@ void main() {
         expect(component.containsPoint(point), true);
       });
 
+      testWithFlameGame('component with hitbox with position contains point',
+          (game) async {
+        final component = _MyHitboxComponent();
+        component.position.setValues(1.0, 1.0);
+        component.anchor = Anchor.topLeft;
+        component.size.setValues(2.0, 2.0);
+        final hitbox = PolygonHitbox(
+          [
+            Vector2(1, 0),
+            Vector2(0, -1),
+            Vector2(-1, 0),
+            Vector2(0, 1),
+          ],
+          position: Vector2(5, 6),
+        );
+        component.add(hitbox);
+        await game.ensureAdd(component);
+
+        final point =
+            component.position + (component.size / 4) + hitbox.position;
+        expect(component.containsPoint(point), true);
+      });
+
+      testWithFlameGame('component with hitbox with position just misses point',
+          (game) async {
+        final component = _MyHitboxComponent();
+        component.position.setValues(1.0, 1.0);
+        component.anchor = Anchor.topLeft;
+        component.size.setValues(2.0, 2.0);
+        final hitbox = PolygonHitbox(
+          [
+            Vector2(1, 0),
+            Vector2(0, -1),
+            Vector2(-1, 0),
+            Vector2(0, 1),
+          ],
+          position: Vector2(5, 6),
+        );
+        component.add(hitbox);
+        await game.ensureAdd(component);
+
+        final point = component.position +
+            (component.size / 4) -
+            Vector2(0.01, 0) +
+            hitbox.position;
+        expect(component.containsPoint(point), false);
+      });
+
       testWithFlameGame(
         'component with anchor topLeft contains point on edge',
         (game) async {
