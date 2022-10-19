@@ -1,4 +1,3 @@
-
 import 'package:flame_yarn/src/structure/commands/command.dart';
 import 'package:flame_yarn/src/structure/expressions/expression.dart';
 import 'package:flame_yarn/src/yarn_project.dart';

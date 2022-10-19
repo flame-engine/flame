@@ -672,9 +672,9 @@ void main() {
         final yarn = YarnProject()
           ..setVariable(r'$target', 'DOWN')
           ..parse('title:A\n---\n'
-            '<<jump UP>>\n'
-            '<<jump {\$target}>>\n'
-            '===\n');
+              '<<jump UP>>\n'
+              '<<jump {\$target}>>\n'
+              '===\n');
         final node = yarn.nodes['A']!;
         expect(node.lines.length, 2);
         expect(node.lines[0], isA<JumpCommand>());

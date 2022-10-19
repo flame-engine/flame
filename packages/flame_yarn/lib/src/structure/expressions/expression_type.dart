@@ -1,4 +1,3 @@
-
 enum ExpressionType {
   unknown,
   boolean,
