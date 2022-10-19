@@ -77,7 +77,7 @@ FlameBlocListener<GameStatsBloc, GameStatsState>(
   listenWhen: (previousState, newState) {
       // return true/false to determine whether or not
       // to call listener with state
-    },
+  },
   onNewState: (state) {
           // do stuff here based on state
     },
