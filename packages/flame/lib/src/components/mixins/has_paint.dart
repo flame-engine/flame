@@ -19,8 +19,14 @@ mixin HasPaint<T extends Object> on Component {
   List<Paint> paintLayers = [BasicPalette.white.paint()];
 
   /// Main paint. The first paint in the [paintLayers] list.
-  Paint get paint => paintLayers.isEmpty ? _emptyPaint : paintLayers[0];
-  set paint(Paint newPaint) => paintLayers[0] = newPaint;
+  Paint get paint => paintLayers.isEmpty ? _emptyPaint : paintLayers.first;
+  set paint(Paint newPaint) {
+    if (paintLayers.isEmpty) {
+      paintLayers.add(newPaint);
+    } else {
+      paintLayers.first = newPaint;
+    }
+  }
 
   /// Gets a paint from the collection.
   ///
