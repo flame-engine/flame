@@ -51,7 +51,7 @@ FlameMultiBlocProvider(
   providers: [
     FlameBlocProvider<BlocA, BlocAState>(
       create: () => BlocA(),
-      ),
+    ),
     FlameBlocProvider<BlocB, BlocBState>.value(
       create: () => BlocB(),
       ),
