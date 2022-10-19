@@ -1,7 +1,6 @@
 import 'dart:ui';
 
 import 'package:flame/components.dart';
-import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -25,25 +24,13 @@ void main() {
     );
 
     test(
-      'getPaint throws exception when retrieving a paint that does not exists',
+      'getPaint throws exception when retrieving a paint that does not exist',
       () {
         final comp = _MyComponentWithType();
 
         expect(
           () => comp.getPaint(_MyComponentKeys.background),
           throwsArgumentError,
-        );
-      },
-    );
-
-    test(
-      'getPaint throws exception when used on genericless component',
-      () {
-        final comp = _MyComponent();
-
-        expect(
-          () => comp.getPaint(_MyComponentKeys.background),
-          failsAssert('A generics type is missing on the HasPaint mixin'),
         );
       },
     );
@@ -57,22 +44,6 @@ void main() {
         comp.setPaint(_MyComponentKeys.background, Paint()..color = color);
 
         expect(comp.getPaint(_MyComponentKeys.background).color, color);
-      },
-    );
-
-    test(
-      'setPaint throws exception when used on genericless component',
-      () {
-        final comp = _MyComponent();
-
-        const color = Color(0xFFA9A9A9);
-        expect(
-          () => comp.setPaint(
-            _MyComponentKeys.background,
-            Paint()..color = color,
-          ),
-          failsAssert('A generics type is missing on the HasPaint mixin'),
-        );
       },
     );
 
@@ -91,14 +62,163 @@ void main() {
       },
     );
 
+    test('paintLayers set to default', () {
+      final comp = _MyComponent();
+
+      expect(
+        (comp.paintLayers.length == 1) &&
+            (comp.paintLayers[0] == comp.getPaint()),
+        true,
+      );
+    });
+
     test(
-      'deletePaint throws exception when used on genericless component',
+      'append paint to paintLayers',
       () {
         final comp = _MyComponent();
 
+        const color = Color(0xFFE5E5E5);
+        comp.paintLayers.add(Paint()..color = color);
+
+        expect(comp.paintLayers[1].color, color);
+      },
+    );
+
+    test(
+      'append paint to paintLayers using addPaintLayer',
+      () {
+        final comp = _MyComponent();
+
+        const color = Color(0xFFE5E5E5);
+        const anotherColor = Color(0xFFABABAB);
+        comp.setPaint('test', Paint()..color = color, updatePaintLayers: false);
+        comp.setPaint(
+          'anotherTest',
+          Paint()..color = anotherColor,
+          updatePaintLayers: false,
+        );
+        comp.addPaintLayer('test');
+
+        expect(comp.paintLayers[1].color, color);
+      },
+    );
+
+    test(
+      'setPaint appends paint to paintLayers by default',
+      () {
+        final comp = _MyComponent();
+
+        const color = Color(0xFFE5E5E5);
+        comp.setPaint('test', Paint()..color = color);
+
+        expect(comp.paintLayers[1].color, color);
+      },
+    );
+
+    test(
+      'setPaint does not append paint to paintLayers when updatePaintLayers '
+      'is false',
+      () {
+        final comp = _MyComponent();
+
+        const color = Color(0xFFE5E5E5);
+        comp.setPaint('test', Paint()..color = color, updatePaintLayers: false);
+
+        expect(comp.paintLayers.length, 1);
+      },
+    );
+
+    test(
+      'deletePaint deletes paint from paintLayers by default',
+      () {
+        final comp = _MyComponent();
+
+        const color = Color(0xFFE5E5E5);
+        comp.setPaint('test', Paint()..color = color);
+        comp.deletePaint('test');
+
+        expect(comp.paintLayers.length, 1);
+      },
+    );
+
+    test(
+      'deletePaint does not delete paint from paintLayers when '
+      'updatePaintLayers is false',
+      () {
+        final comp = _MyComponent();
+
+        const color = Color(0xFFE5E5E5);
+        comp.setPaint('test', Paint()..color = color);
+        comp.deletePaint('test', updatePaintLayers: false);
+
+        expect(comp.paintLayers[1].color, color);
+      },
+    );
+
+    test(
+      'delete paint from paintLayers using removePaintIdFromLayers',
+      () {
+        final comp = _MyComponent();
+
+        const color = Color(0xFFE5E5E5);
+        const anotherColor = Color(0xFFABABAB);
+        const thirdColor = Color(0xFF123456);
+        comp.setPaint('test', Paint()..color = color);
+        comp.setPaint('anotherTest', Paint()..color = anotherColor);
+        comp.setPaint('thirdTest', Paint()..color = thirdColor);
+        comp.removePaintIdFromLayers('anotherTest');
+
+        expect(comp.paintLayers[2].color, thirdColor);
+      },
+    );
+
+    test(
+      'use setPaintLayers to set mutliple paintIds in paintLayers',
+      () {
+        final comp = _MyComponent();
+
+        const color = Color(0xFFE5E5E5);
+        const anotherColor = Color(0xFFABABAB);
+        const thirdColor = Color(0xFF123456);
+        comp.setPaint(
+          'test',
+          Paint()..color = color,
+          updatePaintLayers: false,
+        );
+        comp.setPaint(
+          'anotherTest',
+          Paint()..color = anotherColor,
+          updatePaintLayers: false,
+        );
+        comp.setPaint(
+          'thirdTest',
+          Paint()..color = thirdColor,
+          updatePaintLayers: false,
+        );
+
+        comp.setPaintLayers(['thirdTest', 'test']);
+
         expect(
-          () => comp.deletePaint(_MyComponentKeys.background),
-          failsAssert('A generics type is missing on the HasPaint mixin'),
+          (comp.paintLayers[0].color == thirdColor) &&
+              (comp.paintLayers[1].color == color),
+          true,
+        );
+      },
+    );
+
+    test(
+      'setPaintLayers throws exception if unrecognised paintId',
+      () {
+        final comp = _MyComponent();
+
+        const color = Color(0xFFE5E5E5);
+        comp.setPaint('test', Paint()..color = color);
+        comp.setPaint('anotherTest', Paint()..color = color);
+        comp.setPaint('thirdTest', Paint()..color = color);
+
+        expect(
+          () => comp.setPaintLayers(['thirdTest', 'wrong']),
+          throwsArgumentError,
         );
       },
     );

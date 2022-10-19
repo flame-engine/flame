@@ -3,20 +3,24 @@ import 'dart:ui';
 import 'package:flame/components.dart';
 import 'package:flame/src/palette.dart';
 
-/// Adds a collection of paints to a component
+/// Adds a collection of paints and paint layers to a component
 ///
 /// Component will always have a main Paint that can be accessed
 /// by the [paint] attribute and other paints can be manipulated/accessed
 /// using [getPaint], [setPaint] and [deletePaint] by a paintId of generic type
-/// [T], that can be omitted if the component only have one paint.
+/// [T], that can be omitted if the component only has one paint.
+/// [paintLayers] paints should be drawn in list order during the render. The
+/// main Paint is the first element.
 mixin HasPaint<T extends Object> on Component {
   final Map<T, Paint> _paints = {};
+  final _emptyPaint = BasicPalette.white.paint();
 
-  Paint paint = BasicPalette.white.paint();
+  /// List of paints to use (in order) during render.
+  List<Paint> paintLayers = [BasicPalette.white.paint()];
 
-  void _assertGenerics() {
-    assert(T != Object, 'A generics type is missing on the HasPaint mixin');
-  }
+  /// Main paint. The first paint in the [paintLayers] list.
+  Paint get paint => paintLayers.isEmpty ? _emptyPaint : paintLayers[0];
+  set paint(Paint newPaint) => paintLayers[0] = newPaint;
 
   /// Gets a paint from the collection.
   ///
@@ -26,7 +30,6 @@ mixin HasPaint<T extends Object> on Component {
       return paint;
     }
 
-    _assertGenerics();
     final _paint = _paints[paintId];
 
     if (_paint == null) {
@@ -37,15 +40,66 @@ mixin HasPaint<T extends Object> on Component {
   }
 
   /// Sets a paint on the collection.
-  void setPaint(T paintId, Paint paint) {
-    _assertGenerics();
+  /// If [updatePaintLayers] then also adds a new [paintId], or replaces
+  /// matching paints, in [paintLayers].
+  void setPaint(T paintId, Paint paint, {bool updatePaintLayers = true}) {
+    if (updatePaintLayers) {
+      final oldPaint = _paints[paintId];
+      if (oldPaint == paint) {
+        return; // nothing to do
+      }
+      if (oldPaint == null) {
+        // add new paint to paintLayers
+        paintLayers.add(paint);
+      } else {
+        // replace all oldPaint references in paintLayers with new paint
+        for (var i = 0; i < paintLayers.length; ++i) {
+          if (paintLayers[i] == oldPaint) {
+            paintLayers[i] = paint;
+          }
+        }
+      }
+    }
+
     _paints[paintId] = paint;
   }
 
   /// Removes a paint from the collection.
-  void deletePaint(T paintId) {
-    _assertGenerics();
-    _paints.remove(paintId);
+  /// If [updatePaintLayers] then also removes matching paints from
+  /// [paintLayers].
+  void deletePaint(T paintId, {bool updatePaintLayers = true}) {
+    final removedPaint = _paints.remove(paintId);
+    if (updatePaintLayers) {
+      paintLayers.removeWhere((element) => element == removedPaint);
+    }
+  }
+
+  /// Adds [paintId] to paintLayers.
+  /// Shortcut for paintLayers.add(getPaint(paintId)).
+  void addPaintLayer(T paintId) {
+    final _paint = _paints[paintId];
+
+    if (_paint == null) {
+      throw ArgumentError('No Paint found for $paintId');
+    }
+
+    paintLayers.add(_paint);
+  }
+
+  /// Removes all [paintId] from paintLayers.
+  void removePaintIdFromLayers(T paintId) {
+    final _paint = _paints[paintId];
+
+    if (_paint == null) {
+      throw ArgumentError('No Paint found for $paintId');
+    }
+
+    paintLayers.removeWhere((element) => element == _paint);
+  }
+
+  /// Sets paintLayers from [paintIds] list.
+  void setPaintLayers(List<T> paintIds) {
+    paintLayers = paintIds.map(getPaint).toList();
   }
 
   /// Manipulate the paint to make it fully transparent.

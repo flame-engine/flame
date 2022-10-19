@@ -16,8 +16,10 @@ abstract class ShapeComponent extends PositionComponent with HasPaint {
     super.children,
     super.priority,
     Paint? paint,
+    List<Paint>? paintLayers,
   }) {
     this.paint = paint ?? this.paint;
+    this.paintLayers = paintLayers ?? this.paintLayers;
   }
 
   bool renderShape = true;
