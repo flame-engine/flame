@@ -6,6 +6,7 @@
 
 flame          <flame/flame.md>
 flame_audio    <flame_audio/flame_audio.md>
+flame_bloc     <flame_bloc/flame_bloc.md>
 flame_forge2d  <flame_forge2d/flame_forge2d.md>
 flame_tiled    <flame_tiled/flame_tiled.md>
 Tutorials      <tutorials/tutorials.md>
