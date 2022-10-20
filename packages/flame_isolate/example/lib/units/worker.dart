@@ -116,15 +116,6 @@ class Worker extends PositionComponent
   @override
   void update(double dt) {
     _currentAnimation.update(dt);
-    //DONE: Move to object
-    //DONE: V2 path finding
-
-    // TODO(lohnn): Check if object is close enough
-    // TODO(lohnn): V2 path finding
-    // TODO(lohnn): Pick object up
-    // TODO(lohnn): Move to destination
-    // TODO(lohnn): Drop object
-
     super.update(dt);
   }
 

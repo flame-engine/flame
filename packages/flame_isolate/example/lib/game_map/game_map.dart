@@ -63,8 +63,6 @@ class GameMap extends Component with HasGameRef<ColonistsGame> {
 
   Set<Worker> workers = {};
 
-  // TODO(lohnn): A class should probably take care of difficulty as well as
-  //  height to properly calculate difficulty between two tiles.
   final Map<IntVector2, Terrain> _terrain = {};
   final List<ColonistsObject> _worldObjects = [];
 

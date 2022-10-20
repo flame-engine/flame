@@ -32,7 +32,7 @@ class WorkerOvermind extends Component
     return super.onMount();
   }
 
-  // TODO(lohnn): Would, in reality, also be moved to isolate
+  // Note: This would, in reality, also be moved to isolate
   void calculateTasks() {
     gameRef.worldObjects.whereType<Bread>().forEach((bread) {
       moveObject(bread, Vector2(8, 2));

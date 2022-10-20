@@ -42,7 +42,6 @@ class PathFinderData {
   }
 
   bool _complies(IntVector2 position, IntVector2 destination) {
-    // TODO(lohnn): Handle complying with world objects in diagonal axis.
     return position == destination ||
         terrain.containsKey(position) && !unWalkableTiles.contains(position);
   }
@@ -91,7 +90,6 @@ class PathFinderData {
   }
 
   double cost(IntVector2 current, IntVector2 next) {
-    // TODO(lohnn): Check terrain difficulty between the two tiles
     return terrain[next]! * current.distanceTo(next);
   }
 }
