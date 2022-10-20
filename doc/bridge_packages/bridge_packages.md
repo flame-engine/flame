@@ -13,7 +13,7 @@
   System.
 - [flame_rive](flame_rive/flame_rive.md) for
   [Rive](https://rive.app/): Create interactive animations.
-- [flame_splash_screen](flame_splash_screen/flame_splash_screen.md) - Add the beautiful "Powered by
+- [flame_splash_screen](flame_splash_screen/flame_splash_screen.md) - Add the "Powered by
   Flame" splash screen.
 - [flame_svg](flame_svg/flame_svg.md) for
   [flutter_svg](https://github.com/dnfield/flutter_svg): Draw SVG files in Flutter.
