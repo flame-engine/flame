@@ -5,11 +5,11 @@ then give it a **name**. For this tutorial and game, I got inspiration from @spy
 the Flame game engine GitHub repository reaching 7000 stars and I thought, excellent! Ember will be
 on a quest to gather as many stars as possible and I will call the game, `Ember Quest`.
 
-![Tweet](../../images/tutorials/tweet.png)
+![Tweet](../../images/tutorials/platformer/tweet.jpg)
 
-Now it is time to get started but first, you need to go to the tutorial and complete the necessary
-setup steps. When you come back, you should already have the `main.dart` file with the following
-content:
+Now it is time to get started but first, you need to go to the [bare flame game
+tutorial](../bare_flame_game.md) and complete the necessary setup steps. When you come back, you
+should already have the `main.dart` file with the following content:
 
 ```dart
 import 'package:flame/game.dart';
@@ -25,21 +25,23 @@ void main() {
 ## Planning
 
 Like in the [klondike](../klondike/klondike.md) tutorial, starting a new game can feel overwhelming.
-I like to first decide what platform am I trying to target. Will this be a mobile game, a desktop
+I like to first decide what platform I am trying to target. Will this be a mobile game, a desktop
 game, or maybe a web game, with Flutter and Flame, these are all possible.  For this game though, I
-am going to focus on a web game.  Starting with a simple sketch (it doesn't have to be perfect as
-mine is very rough) is the best way to get an understanding of what will need to be accomplished.
-Take for instance the below sketch, we know we will need the following:
+am going to focus on a web game.  This means my users will interact with the game using their
+keyboards.  
+
+Starting with a simple sketch (it doesn't have to be perfect as mine is very rough) is
+the best way to get an understanding of what will need to be accomplished. Take for instance the
+below sketch, we know we will need the following:
 
 - Player Class
-- Player Data Class (this will handle health and star count)
 - Enemy Class
 - Star Class
 - Platform Class
-- Background Class
-- HUD Controls Class
+- Ground Class
+- HUD Class (health and stars collected)
 
-![Sketch of Ember Quest](../../images/tutorials/ember_quest_sketch.png)
+![Sketch of Ember Quest](../../images/tutorials/platformer/ember_quest_sketch.png)
 
 All of these will be brought together in `EmberQuestGame` derived from `FlameGame`.
 

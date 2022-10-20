@@ -45,7 +45,7 @@ class GroundBlock extends SpriteComponent
     }
     if (_gridPosition.x == 9) {
       if (gameRef.lastBlockKey == _blockKey) {
-        gameRef.lastBlockXPosition = position.x + size.x - 5;
+        gameRef.lastBlockXPosition = position.x + size.x - 10;
       }
     }
     if (gameRef.health <= 0) {
