@@ -19,6 +19,16 @@ class MemoryCache<K, V> {
     }
   }
 
+  /// Removes the value from the cache.
+  void clear(K key) {
+    _cache.remove(key);
+  }
+
+  /// Removes all the values from the cache.
+  void clearCache() {
+    _cache.clear();
+  }
+
   V? getValue(K key) => _cache[key];
 
   bool containsKey(K key) => _cache.containsKey(key);
