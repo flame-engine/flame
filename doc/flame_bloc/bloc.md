@@ -98,8 +98,8 @@ class Player extends PositionComponent
 
 ```
 
-If all your component need is to simply access a bloc, the `FlameBlocReader` mixin can be applied to a
-component:
+If all your component need is to simply access a bloc, the `FlameBlocReader` mixin can be applied to
+a component:
 
 ```dart
 class Player extends PositionComponent
