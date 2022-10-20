@@ -28,8 +28,11 @@ class CircleHitbox extends CircleComponent with ShapeHitbox {
     required super.parentSize,
     super.angle,
     super.anchor,
+    bool isSolid = false,
   })  : shouldFillParent = false,
-        super.relative();
+        super.relative() {
+    this.isSolid = isSolid;
+  }
 
   @override
   void fillParent() {

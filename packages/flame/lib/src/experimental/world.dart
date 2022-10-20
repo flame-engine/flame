@@ -12,6 +12,8 @@ import 'package:vector_math/vector_math_64.dart';
 /// and allows itself to be rendered through a [CameraComponent] only. The
 /// updates proceed through the world tree normally.
 class World extends Component implements CoordinateTransform {
+  World({super.children});
+
   @override
   void renderTree(Canvas canvas) {}
 
