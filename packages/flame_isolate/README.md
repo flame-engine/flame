@@ -26,6 +26,7 @@ class MyGame extends FlameGame with FlameIsolate {
 }
 ```
 
+
 ### Performance note
 
 Keep in mind that every component with `FlameIsolate` mixin that you create and add to your game
@@ -46,11 +47,11 @@ queue handler. Also known as `BackpressureStrategy`.
 
 The ones currently supported are:
 
-* `NoBackPressureStrategy` that basically does not handle back pressure. It uses a FIFO stack for
+- `NoBackPressureStrategy` that basically does not handle back pressure. It uses a FIFO stack for
   storing a backlog of unhandled jobs.
-* `ReplaceBackpressureStrategy` that has a job queue with size one, and discards the queue upon
+-`ReplaceBackpressureStrategy` that has a job queue with size one, and discards the queue upon
   adding a new job.
-* `DiscardNewBackPressureStrategy` that has a job queue with size one, and as long as the queue is
+-`DiscardNewBackPressureStrategy` that has a job queue with size one, and as long as the queue is
   populated a new job will not be added.
 
 You can specify a backpressure strategy by overriding the `backpressureStrategy` field. This will
