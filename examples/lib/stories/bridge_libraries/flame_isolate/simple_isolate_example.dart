@@ -149,21 +149,24 @@ class CalculatePrimeNumber extends PositionComponent
     ),
   );
 
+  late final rect = Rect.fromLTWH(0, 0, width, height);
+  late final topLeftVector = rect.topLeft.toVector2();
+  late final centerVector = rect.center.toVector2();
+
   @override
   void render(Canvas canvas) {
-    final rect = Rect.fromLTWH(0, 0, width, height);
     canvas.drawRect(rect, _paint);
 
     _textPaint.render(
       canvas,
       computeType.description,
-      rect.topLeft.toVector2(),
+      topLeftVector,
     );
 
     _textPaint.render(
       canvas,
       '${_primeData.key} is${_primeData.value ? '' : ' not'} a prime number',
-      rect.center.toVector2(),
+      centerVector,
       anchor: Anchor.center,
     );
   }

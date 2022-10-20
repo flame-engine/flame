@@ -40,15 +40,17 @@ class WorkerOvermindHud extends PositionComponent with Tappable {
     ),
   );
 
+  late final rect = toRect();
+  late final centerVector = rect.center.toVector2();
+
   @override
   void render(Canvas canvas) {
-    final rect = toRect();
     canvas.drawRect(rect, _paint);
 
     textPaint.render(
       canvas,
       computeType.description,
-      rect.center.toVector2(),
+      centerVector,
       anchor: Anchor.center,
     );
   }

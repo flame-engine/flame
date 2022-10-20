@@ -80,13 +80,13 @@ class ColonistsGame extends FlameGame with HasTappables, KeyboardEvents {
     return super.onKeyEvent(event, keysPressed);
   }
 
+  final direction = Vector2(0, 0);
+
   @override
   void update(double dt) {
-    final direction = Vector2(_rightForce - _leftForce, _downForce - _upForce);
+    direction.setValues(_rightForce - _leftForce, _downForce - _upForce);
     final step = direction..scale(cameraSpeed * dt * 4);
-
     _cameraPos.position += step;
-
     super.update(dt);
   }
 

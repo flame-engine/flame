@@ -6,13 +6,17 @@ class Grass extends PositionComponent with Terrain {
   static final _color = Paint()..color = const Color(0xff567d46);
   static final _debugColor = Paint()..color = Colors.black.withOpacity(.5);
 
+  late final _rect = size.toRect();
+  late final _rect2 = Rect.fromCenter(
+    center: _rect.center,
+    height: 10,
+    width: 10,
+  );
+
   @override
   void render(Canvas canvas) {
-    final rect = size.toRect();
-    canvas.drawRect(rect, _color);
-
-    final rect2 = Rect.fromCenter(center: rect.center, height: 10, width: 10);
-    canvas.drawRect(rect2, _debugColor);
+    canvas.drawRect(_rect, _color);
+    canvas.drawRect(_rect2, _debugColor);
   }
 
   @override
