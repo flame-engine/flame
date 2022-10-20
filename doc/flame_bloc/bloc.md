@@ -1,130 +1,115 @@
 # flame_bloc
 
-`flame_bloc` is a bridge library for using Bloc in your Flame game. `flame_bloc` offers a simple and
-natural (as in similar to flutter_bloc) way to use blocs and cubits inside a FlameGame. Bloc offers
-way to make game state changes predictable by regulating when a game state change can occur and
-offers a single way to change game state throughout an entire Game.
+`flame_bloc` is a bridge library for using [Bloc](https://bloclibrary.dev/#/) in your Flame
+game. `flame_bloc` offers a simple and natural (as in similar to flutter_bloc) way to use blocs and
+cubits inside a FlameGame. Bloc offers way to make game state changes predictable by regulating when
+a game state change can occur and offers a single way to change game state throughout an entire
+Game.
 
 To use it in your game you just need to add `flame_bloc` to your pubspec.yaml, as can be seen in the
 [Flame Bloc example](https://github.com/flame-engine/flame/tree/main/packages/flame_bloc/example)
 and in the pub.dev [installation instructions](https://pub.dev/packages/flame_bloc).
 
 
-## FlameBlocProvider
+## How to use
 
-FlameBlocProvider is a Component which creates and provides a bloc to its children.  
-The bloc will only live while this component is alive.It is used as a dependency injection (DI)
-widget so that a single instance of a bloc can be provided to multiple Components within a subtree.
+Lets assume we have a bloc that handles player inventory, first we need to make it available to our
+components.
 
-FlameBlocProvider should be used to create new blocs which will be made available to the rest of the
-subtree.
+We can do that by using `FlameBlocProvider` component:
 
 ```dart
-FlameBlocProvider<BlocA, BlocAState>(
-  create: () => BlocA(),
-  children: [...]
-);
-```
-
-FlameBlocProvider<BlocA, BlocAState>(
-    create: () => BlocA(),
-    children: [...]
-);
-
-
-FlameBlocProvider can be used to provide an existing bloc to a new portion of the Component tree.
-
-```dart
-FlameBlocProvider<BlocA, BlocAState>.value(
-  value: blocA,
-  children: [...],
-);
-```
-
-
-## FlameMultiBlocProvider
-
-Similar to FlameBlocProvider, but provides multiples blocs down to the component tree
-
-```dart
-FlameMultiBlocProvider(
-  providers: [
-    FlameBlocProvider<BlocA, BlocAState>(
-      create: () => BlocA(),
-    ),
-    FlameBlocProvider<BlocB, BlocBState>.value(
-      create: () => BlocB(),
-    ),
-    ],
-  children: [...],
-)
-```
-
-
-## FlameBlocListener
-
-FlameBlocListener is Component which can listen to changes in a Bloc state. It invokes
-the `onNewState` in response to state changes in the bloc. For fine-grained control over when
-the `onNewState` function is called an optional `listenWhen` can be provided. `listenWhen` takes the
-previous bloc state and current bloc state and returns a boolean. If `listenWhen` returns
-true, `onNewState` will be called with `state`. If `listenWhen` returns false, `onNewState` will not
-be called with `state`.
-
-alternatively you can use `FlameBlocListenable` mixin to listen state changes on Component.
-
-```dart
-FlameBlocListener<GameStatsBloc, GameStatsState>(
-  listenWhen: (previousState, newState) {
-      // return true/false to determine whether or not
-      // to call listener with state
-  },
-  onNewState: (state) {
-          // do stuff here based on state
-  },
-)
-```
-
-
-## FlameBlocListenable
-
-FlameBlocListenable is an alternative to FlameBlocListener to listen state changes.
-
-```dart
-class ComponentA extends Component
-    with FlameBlocListenable<BlocA, BlocAState> {
-
+class MyGame extends FlameGame {
   @override
-  bool listenWhen(PlayerState previousState, PlayerState newState) {
-    // return true/false to determine whether or not
-    // to call listener with state
-  }
-
-  @override
-  void onNewState(PlayerState state) {
-    super.onNewState(state);
-    // do stuff here based on state
+  Future<void> onLoad() async {
+    await add(
+      FlameBlocProvider<PlayerInventoryBloc, PlayerInventoryState>(
+        create: () => PlayerInventoryBloc(),
+        children: [
+          Player(),
+          // ...
+        ],
+      ),
+    );
   }
 }
 ```
 
+With the above changes, the `Player` component will now have access to our bloc.
 
-## FlameBlocReader
+If more than one bloc needs to be provided, `FlameMultiBlocProvider` can be used in a similar
+fashion:
 
-FlameBlocReader is mixin that allows you to read the current state of bloc on Component. It is
-Useful for components that needs to only read a bloc current state or to trigger an event on it. You
-can have only One reader on Component
+```dart
+class MyGame extends FlameGame {
+  @override
+  Future<void> onLoad() async {
+    await add(
+      FlameMultiBlocProvider(
+        providers: [
+          FlameBlocProvider<PlayerInventoryBloc, PlayerInventoryState>(
+            create: () => PlayerInventoryBloc(),
+          ),
+          FlameBlocProvider<PlayerStatsBloc, PlayerStatsState>(
+            create: () => PlayerStatsBloc(),
+          ),
+        ],
+        children: [
+          Player(),
+          // ...
+        ],
+      ),
+    );
+  }
+}
+```
 
+Listening to states changes at the component level can be done with two approaches:
+
+By using `FlameBlocListener` component:
+
+```dart
+class Player extends PositionComponent {
+  @override
+  Future<void> onLoad() async {
+    await add(
+      FlameBlocListener<PlayerInventoryBloc, PlayerInventoryState>(
+        listener: (state) {
+          updateGear(state);
+        },
+      ),
+    );
+  }
+}
+```
+
+Or by using `FlameBlocListenable` mixin:
 
 ```dart
 
-class InventoryReader extends Component
-    with FlameBlocReader<InventoryCubit, InventoryState> {}
+class Player extends PositionComponent
+    with FlameBlocListenable<PlayerInventoryBloc, PlayerInventoryState> {
 
-    /// Inside game
-    
-    final component = InventoryReader();
-    // reading current state
-    var state = component.bloc
+  @override
+  void onNewState(state) {
+    updateGear(state);
+  }
+}
+
+```
+
+If all your component need is to simply access a bloc, the `FlameBlocReader` mixin can be applied to a
+component:
+
+```dart
+class Player extends PositionComponent
+    with FlameBlocReader<PlayerStatsBloc, PlayerStatsState> {
+
+  void takeHit() {
+    bloc.add(const PlayerDamaged());
+  }
+}
+
 ```
 
 
