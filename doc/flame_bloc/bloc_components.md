@@ -99,7 +99,7 @@ class ComponentA extends Component
 
 FlameBlocReader is mixin that allows you to read the current state of bloc on Component. It is
 Useful for components that needs to only read a bloc current state or to trigger an event on it. You
-can have only One reader on Component
+can have only one reader on Component
 
 
 ```dart
