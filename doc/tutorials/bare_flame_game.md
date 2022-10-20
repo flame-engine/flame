@@ -3,7 +3,7 @@
 This tutorial assumes that you have basic familiarity with using the command line, and the following
 programs on your computer (all of them are free):
 
-- [Flutter], version 2.10.0 or above;
+- [Flutter], version 3.3.0 or above.
 - [Android Studio], or any other IDE for example [Visual Studio Code].
 - [git] (optional), to save your project on GitHub.
 
