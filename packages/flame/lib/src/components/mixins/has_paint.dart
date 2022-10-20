@@ -12,8 +12,7 @@ import 'package:flame/src/palette.dart';
 /// [paintLayers] paints should be drawn in list order during the render. The
 /// main Paint is the first element.
 mixin HasPaint<T extends Object> on Component {
-  Map<T, Paint>? _paintsCollection;
-  Map<T, Paint> get _paints => _paintsCollection ?? (_paintsCollection = {});
+  late Map<T, Paint>? _paints = {};
 
   List<Paint>? _paintLayers;
 

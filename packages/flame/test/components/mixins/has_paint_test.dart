@@ -32,7 +32,7 @@ void main() {
       expect(
         (comp.paintLayers.first == comp.paint) &&
             (comp.paintLayers.length == 1),
-        true,
+        isTrue,
       );
     });
 
@@ -45,7 +45,7 @@ void main() {
       expect(
         (comp.paintLayers.first == comp.paint) &&
             (comp.paintLayers.length == 1),
-        true,
+        isTrue,
       );
     });
 
@@ -58,7 +58,7 @@ void main() {
       comp.paintLayers = [Paint()..color = color, Paint()..color = secondColor];
       comp.paintLayers.first = Paint()..color = thirdColor;
 
-      expect(comp.paint.color, thirdColor);
+      expect(comp.paint.color, equals(thirdColor));
     });
 
     test('setting paint sets paintLayers.first when length > 1', () {
@@ -70,7 +70,7 @@ void main() {
       comp.paintLayers = [Paint()..color = color, Paint()..color = secondColor];
       comp.paint = Paint()..color = thirdColor;
 
-      expect(comp.paintLayers.first.color, thirdColor);
+      expect(comp.paintLayers.first.color, equals(thirdColor));
     });
 
     test('paintLayers takes precedence over paint if both set on constructor',
@@ -88,7 +88,7 @@ void main() {
         paintLayers: [secondPaint, thirdPaint],
       );
 
-      expect(circle.paint.color, secondColor);
+      expect(circle.paint.color, equals(secondColor));
     });
 
     test('paint reverts to original constructor value if paintLayers cleared',
@@ -108,7 +108,7 @@ void main() {
 
       circle.paintLayers.clear();
 
-      expect(circle.paint.color, firstColor);
+      expect(circle.paint.color, equals(firstColor)));
     });
 
     test('paintLayers returns [paint] even after cleared', () {
@@ -130,7 +130,7 @@ void main() {
       expect(
         (circle.paintLayers.length == 1) &&
             (circle.paintLayers.first.color == firstColor),
-        true,
+        isTrue,
       );
     });
 
@@ -153,7 +153,7 @@ void main() {
       expect(
         (circle.paintLayers.length == 1) &&
             (circle.paintLayers.first.color == firstColor),
-        true,
+        isTrue,
       );
     });
 
@@ -177,7 +177,7 @@ void main() {
         const color = Color(0xFFA9A9A9);
         comp.setPaint(_MyComponentKeys.background, Paint()..color = color);
 
-        expect(comp.getPaint(_MyComponentKeys.background).color, color);
+        expect(comp.getPaint(_MyComponentKeys.background).color, equals(color));
       },
     );
 
@@ -202,7 +202,7 @@ void main() {
       expect(
         (comp.paintLayers.length == 1) &&
             (comp.paintLayers[0] == comp.getPaint()),
-        true,
+        isTrue,
       );
     });
 
@@ -214,7 +214,7 @@ void main() {
         const color = Color(0xFFE5E5E5);
         comp.paintLayers.add(Paint()..color = color);
 
-        expect(comp.paintLayers[1].color, color);
+        expect(comp.paintLayers[1].color, equals(color));
       },
     );
 
@@ -233,7 +233,7 @@ void main() {
         );
         comp.addPaintLayer('test');
 
-        expect(comp.paintLayers[1].color, color);
+        expect(comp.paintLayers[1].color, equals(color));
       },
     );
 
@@ -250,7 +250,7 @@ void main() {
         final newPaint = Paint()..color = newColor;
         comp.setPaint('test', newPaint);
 
-        expect(comp.paintLayers[0].color, newColor);
+        expect(comp.paintLayers[0].color, equals(newColor));
       },
     );
 
@@ -267,7 +267,7 @@ void main() {
         final newPaint = Paint()..color = const Color(0xFF123456);
         comp.setPaint('test', newPaint, updatePaintLayers: false);
 
-        expect(comp.paintLayers[0].color, testColor);
+        expect(comp.paintLayers[0].color, equals(testColor));
       },
     );
 
@@ -281,7 +281,7 @@ void main() {
         comp.addPaintLayer('test');
         comp.deletePaint('test');
 
-        expect(comp.paintLayers.length, 1);
+        expect(comp.paintLayers.length, equals(1));
       },
     );
 
@@ -296,7 +296,7 @@ void main() {
         comp.addPaintLayer('test');
         comp.deletePaint('test', updatePaintLayers: false);
 
-        expect(comp.paintLayers.length, 2);
+        expect(comp.paintLayers.length, equals(2));
       },
     );
 
@@ -314,7 +314,7 @@ void main() {
         comp.setPaintLayers(['test', 'anotherTest', 'thirdTest']);
         comp.removePaintIdFromLayers('anotherTest');
 
-        expect(comp.paintLayers[1].color, thirdColor);
+        expect(comp.paintLayers[1].color, equals(thirdColor));
       },
     );
 
@@ -335,7 +335,7 @@ void main() {
         expect(
           (comp.paintLayers[0].color == thirdColor) &&
               (comp.paintLayers[1].color == color),
-          true,
+          isTrue,
         );
       },
     );
