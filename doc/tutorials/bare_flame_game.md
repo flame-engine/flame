@@ -43,7 +43,7 @@ cd ~/projects/syzygy
 ```
 
 
-## 3. Initialize Empty Flutter Project
+## 3. Initialize empty Flutter project
 
 To turn this barren directory into an actual Flutter project, run the following command:
 

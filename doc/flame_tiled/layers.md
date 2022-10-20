@@ -12,32 +12,6 @@ getLayer<Group>("myGroupLayer");
 These methods will either return the requested layer type or null if it does not exist.
 
 
-## Layer properties
-
-| Property              | Supported?  |
-| -----------           | ----------- |
-| Visible               | ✅          |
-| Opacity               | ✅          |
-| Tint color            | ❌          |
-| Horizontal offset     | ✅          |
-| Horizontal offset     | ✅          |
-| Parallax Factor       | ✅          |
-| Custom properties     | ✅          |
-
-
-## Tiles properties
-
-- Tiles can have custom properties accessible at `tile.properties`.
-- Tiles can have a custom `type` (or `class` starting in Tiled v1.9) accessible at `tile.type`.
-
-
-## Other features
-
-Other advanced features are not yet supported, but you can easily read the objects and other
-features of the TMX and add custom behavior (eg regions for triggers and walking areas, custom
-animated objects).
-
-
 ## Full Example
 
 You can check a working example
