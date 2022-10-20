@@ -107,7 +107,7 @@ can have only one reader on Component
 class InventoryReader extends Component
     with FlameBlocReader<InventoryCubit, InventoryState> {}
 
-    /// Inside game
+    /// inside game
     
     final component = InventoryReader();
     // reading current state
