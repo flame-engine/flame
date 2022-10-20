@@ -12,20 +12,38 @@ import 'package:flame/src/palette.dart';
 /// [paintLayers] paints should be drawn in list order during the render. The
 /// main Paint is the first element.
 mixin HasPaint<T extends Object> on Component {
-  final Map<T, Paint> _paints = {};
-  final _emptyPaint = BasicPalette.white.paint();
+  Map<T, Paint>? _paintsCollection;
+  Map<T, Paint> get _paints => _paintsCollection ?? (_paintsCollection = {});
+
+  List<Paint>? _paintLayers;
+
+  Paint _paint = BasicPalette.white.paint();
 
   /// List of paints to use (in order) during render.
-  List<Paint> paintLayers = [BasicPalette.white.paint()];
+  List<Paint> get paintLayers {
+    if ((_paintLayers == null) || _paintLayers!.isEmpty) {
+      return _paintLayers = [_paint];
+    }
+    return _paintLayers!;
+  }
+
+  set paintLayers(List<Paint> pl) {
+    _paintLayers = pl;
+  }
 
   /// Main paint. The first paint in the [paintLayers] list.
-  Paint get paint => paintLayers.isEmpty ? _emptyPaint : paintLayers.first;
-  set paint(Paint newPaint) {
-    if (paintLayers.isEmpty) {
-      paintLayers.add(newPaint);
-    } else {
-      paintLayers.first = newPaint;
+  Paint get paint {
+    if ((_paintLayers == null) || _paintLayers!.isEmpty) {
+      return _paint;
     }
+    return paintLayers.first;
+  }
+
+  set paint(Paint p) {
+    if ((_paintLayers == null) || _paintLayers!.isEmpty) {
+      _paint = p;
+    }
+    paintLayers.first = p;
   }
 
   /// Gets a paint from the collection.
@@ -46,19 +64,14 @@ mixin HasPaint<T extends Object> on Component {
   }
 
   /// Sets a paint on the collection.
-  /// If [updatePaintLayers] then also adds a new [paintId], or replaces
-  /// matching paints, in [paintLayers].
   void setPaint(T paintId, Paint paint, {bool updatePaintLayers = true}) {
-    if (updatePaintLayers) {
+    if (updatePaintLayers && (_paintLayers != null)) {
       final oldPaint = _paints[paintId];
       if (oldPaint == paint) {
         return; // nothing to do
       }
-      if (oldPaint == null) {
-        // add new paint to paintLayers
-        paintLayers.add(paint);
-      } else {
-        // replace all oldPaint references in paintLayers with new paint
+      if (oldPaint != null) {
+        // replace any oldPaint references in paintLayers with new paint
         for (var i = 0; i < paintLayers.length; ++i) {
           if (paintLayers[i] == oldPaint) {
             paintLayers[i] = paint;
@@ -71,11 +84,9 @@ mixin HasPaint<T extends Object> on Component {
   }
 
   /// Removes a paint from the collection.
-  /// If [updatePaintLayers] then also removes matching paints from
-  /// [paintLayers].
   void deletePaint(T paintId, {bool updatePaintLayers = true}) {
     final removedPaint = _paints.remove(paintId);
-    if (updatePaintLayers) {
+    if (updatePaintLayers && (_paintLayers != null)) {
       paintLayers.removeWhere((element) => element == removedPaint);
     }
   }
@@ -100,7 +111,9 @@ mixin HasPaint<T extends Object> on Component {
       throw ArgumentError('No Paint found for $paintId');
     }
 
-    paintLayers.removeWhere((element) => element == _paint);
+    if (_paintLayers != null) {
+      paintLayers.removeWhere((element) => element == _paint);
+    }
   }
 
   /// Sets paintLayers from [paintIds] list.

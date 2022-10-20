@@ -23,6 +23,56 @@ void main() {
       },
     );
 
+    test('paintLayers defaults to [paint]', () {
+      final comp = _MyComponent();
+
+      const color = Color(0xFFE5E5E5);
+      comp.paint = Paint()..color = color;
+
+      expect(
+        (comp.paintLayers.first == comp.paint) &&
+            (comp.paintLayers.length == 1),
+        true,
+      );
+    });
+
+    test('setting paintLayers.first sets paint', () {
+      final comp = _MyComponent();
+
+      const color = Color(0xFFE5E5E5);
+      comp.paintLayers.first = Paint()..color = color;
+
+      expect(
+        (comp.paintLayers.first == comp.paint) &&
+            (comp.paintLayers.length == 1),
+        true,
+      );
+    });
+
+    test('setting paintLayers.first when length > 1 sets paint', () {
+      final comp = _MyComponent();
+
+      const color = Color(0xFFE5E5E5);
+      const secondColor = Color(0xFF123456);
+      const thirdColor = Color(0xFFABABAB);
+      comp.paintLayers = [Paint()..color = color, Paint()..color = secondColor];
+      comp.paintLayers.first = Paint()..color = thirdColor;
+
+      expect(comp.paint.color, thirdColor);
+    });
+
+    test('setting paint sets paintLayers.first when length > 1', () {
+      final comp = _MyComponent();
+
+      const color = Color(0xFFE5E5E5);
+      const secondColor = Color(0xFF123456);
+      const thirdColor = Color(0xFFABABAB);
+      comp.paintLayers = [Paint()..color = color, Paint()..color = secondColor];
+      comp.paint = Paint()..color = thirdColor;
+
+      expect(comp.paintLayers.first.color, thirdColor);
+    });
+
     test(
       'getPaint throws exception when retrieving a paint that does not exist',
       () {
@@ -104,27 +154,36 @@ void main() {
     );
 
     test(
-      'setPaint appends paint to paintLayers by default',
+      'setPaint changes paint on paintLayers by default',
       () {
         final comp = _MyComponent();
 
-        const color = Color(0xFFE5E5E5);
-        comp.setPaint('test', Paint()..color = color);
+        final testPaint = Paint()..color = const Color(0xFFE5E5E5);
+        comp.setPaint('test', testPaint);
+        comp.setPaintLayers(['test']);
 
-        expect(comp.paintLayers[1].color, color);
+        const newColor = Color(0xFF123456);
+        final newPaint = Paint()..color = newColor;
+        comp.setPaint('test', newPaint);
+
+        expect(comp.paintLayers[0].color, newColor);
       },
     );
 
     test(
-      'setPaint does not append paint to paintLayers when updatePaintLayers '
-      'is false',
+      'setPaint does not change paintLayers when updatePaintLayers is false',
       () {
         final comp = _MyComponent();
 
-        const color = Color(0xFFE5E5E5);
-        comp.setPaint('test', Paint()..color = color, updatePaintLayers: false);
+        const testColor = Color(0xFFE5E5E5);
+        final testPaint = Paint()..color = testColor;
+        comp.setPaint('test', testPaint);
+        comp.setPaintLayers(['test']);
 
-        expect(comp.paintLayers.length, 1);
+        final newPaint = Paint()..color = const Color(0xFF123456);
+        comp.setPaint('test', newPaint, updatePaintLayers: false);
+
+        expect(comp.paintLayers[0].color, testColor);
       },
     );
 
@@ -135,6 +194,7 @@ void main() {
 
         const color = Color(0xFFE5E5E5);
         comp.setPaint('test', Paint()..color = color);
+        comp.addPaintLayer('test');
         comp.deletePaint('test');
 
         expect(comp.paintLayers.length, 1);
@@ -149,9 +209,10 @@ void main() {
 
         const color = Color(0xFFE5E5E5);
         comp.setPaint('test', Paint()..color = color);
+        comp.addPaintLayer('test');
         comp.deletePaint('test', updatePaintLayers: false);
 
-        expect(comp.paintLayers[1].color, color);
+        expect(comp.paintLayers.length, 2);
       },
     );
 
@@ -166,9 +227,10 @@ void main() {
         comp.setPaint('test', Paint()..color = color);
         comp.setPaint('anotherTest', Paint()..color = anotherColor);
         comp.setPaint('thirdTest', Paint()..color = thirdColor);
+        comp.setPaintLayers(['test', 'anotherTest', 'thirdTest']);
         comp.removePaintIdFromLayers('anotherTest');
 
-        expect(comp.paintLayers[2].color, thirdColor);
+        expect(comp.paintLayers[1].color, thirdColor);
       },
     );
 
@@ -180,21 +242,9 @@ void main() {
         const color = Color(0xFFE5E5E5);
         const anotherColor = Color(0xFFABABAB);
         const thirdColor = Color(0xFF123456);
-        comp.setPaint(
-          'test',
-          Paint()..color = color,
-          updatePaintLayers: false,
-        );
-        comp.setPaint(
-          'anotherTest',
-          Paint()..color = anotherColor,
-          updatePaintLayers: false,
-        );
-        comp.setPaint(
-          'thirdTest',
-          Paint()..color = thirdColor,
-          updatePaintLayers: false,
-        );
+        comp.setPaint('test', Paint()..color = color);
+        comp.setPaint('anotherTest', Paint()..color = anotherColor);
+        comp.setPaint('thirdTest', Paint()..color = thirdColor);
 
         comp.setPaintLayers(['thirdTest', 'test']);
 
