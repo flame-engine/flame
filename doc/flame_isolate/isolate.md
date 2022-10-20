@@ -46,6 +46,20 @@ A simple example of this can be found in the example application for the FlameIs
 
 ### Backpressure Strategies
 
+Backpressure strategies is a way to cope with the job queue when job items are produced more rapidly
+than the isolate can handle them. This presents the problem of what to do with such a growing
+backlog of unhandled jobs. To mitigate this problem this library funnels all jobs through a job
+queue handler. Also known as `BackpressureStrategy`.
+
+The ones currently supported are:
+
+* `NoBackPressureStrategy` that basically does not handle back pressure. It uses a FIFO stack for
+storing a backlog of unhandled jobs.
+* `ReplaceBackpressureStrategy` that has a job queue with size one, and discards the queue upon
+adding a new job.
+* `DiscardNewBackPressureStrategy` that has a job queue with size one, and as long as the queue is
+populated a new job will not be added.
+
 You can specify a backpressure strategy by overriding the `backpressureStrategy` field. This will
 create the isolate with the specified strategy when component is mounted.
 
