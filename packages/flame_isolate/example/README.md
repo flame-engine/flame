@@ -12,4 +12,5 @@ Keyboard bindings for the game are:
 
 
 Thank you Wyrmsun for the wonderful
-[Germanic Worker](https://opengameart.org/content/germanic-worker) asset.
+[Germanic Worker](https://opengameart.org/content/germanic-worker) asset. As this asset is licenced
+under GPLv2, this example project is as well.
