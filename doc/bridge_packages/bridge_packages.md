@@ -9,7 +9,7 @@
   [FireAtlas](https://github.com/flame-engine/fire-atlas): Create texture atlases for games.
 - [flame_forge2d](flame_forge2d/flame_forge2d.md) for
   [Forge2D](https://github.com/flame-engine/forge2d): A Box2D physics engine.
-- [flame_oxygen](flame_oxygen/flame_oxygen.md):  Replace the FCS with the Oxygen Entity Component
+- [flame_oxygen](flame_oxygen/flame_oxygen.md): Replace FCS with the Oxygen Entity Component
   System.
 - [flame_rive](flame_rive/flame_rive.md) for
   [Rive](https://rive.app/): Create interactive animations.
