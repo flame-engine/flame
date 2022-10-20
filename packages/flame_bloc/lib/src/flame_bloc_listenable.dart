@@ -8,7 +8,7 @@ import 'package:meta/meta.dart';
 /// Adds [Bloc] access and listening to a [Component]
 mixin FlameBlocListenable<B extends BlocBase<S>, S> on Component {
   late S _state;
-  late final StreamSubscription<S> _subscription;
+  late StreamSubscription<S> _subscription;
   late B _bloc;
   B? _blocOverride;
 
