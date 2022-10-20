@@ -1,7 +1,6 @@
-import 'dart:ui';
-
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_isolates_example/colonists_game.dart';
 import 'package:flutter_isolates_example/standard/int_vector2.dart';
 
@@ -39,28 +38,33 @@ mixin Movable on PositionComponent, HasGameRef<ColonistsGame> {
 
   void reachedDestination();
 
+  @override
+  @mustCallSuper
+  Future<void>? onLoad() {
+    anchor = Anchor.center;
+    return super.onLoad();
+  }
+
   PathLine? pathLine;
 
   void _removePathLine() {
     pathLine?.getGone();
   }
 
-  void _walkAlongPath(List<IntVector2> path) {
+  void _walkAlongPath(List<Vector2> path) {
     if (path.isEmpty) {
-      currentDirection = MoveDirection.idle;
+      setCurrentDirection(MoveDirection.idle);
       _removePathLine();
       // Reached last position, make available again
       reachedDestination();
       return;
     }
 
-    final nextIntPoint = path.removeAt(0);
-    final nextPoint =
-        gameRef.tileAtPosition(nextIntPoint.x, nextIntPoint.y).position;
+    final nextPoint = path.removeAt(0);
 
     final normalizedDirection = (nextPoint - position).normalized();
     normalizedDirection.round();
-    currentDirection = directions[normalizedDirection] ?? MoveDirection.idle;
+    setCurrentDirection(directions[normalizedDirection] ?? MoveDirection.idle);
 
     add(
       MoveToEffect(
@@ -72,16 +76,18 @@ mixin Movable on PositionComponent, HasGameRef<ColonistsGame> {
   }
 
   void walkPath(List<IntVector2> path) {
-    _walkAlongPath(path);
     final absolutePath = path.map((e) {
       return gameRef.tileAtPosition(e.x, e.y).positionOfAnchor(Anchor.center);
-    }).toList(growable: false);
+    }).toList();
+
+    _walkAlongPath(absolutePath);
+
     if (path.length > 2) {
       gameRef.add(pathLine = PathLine(absolutePath));
     }
   }
 
-  set currentDirection(MoveDirection direction);
+  void setCurrentDirection(MoveDirection direction);
 
   final Map<Vector2, MoveDirection> directions = {
     Vector2(0, 0): MoveDirection.idle,
