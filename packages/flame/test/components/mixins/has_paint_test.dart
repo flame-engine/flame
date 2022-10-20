@@ -108,7 +108,7 @@ void main() {
 
       circle.paintLayers.clear();
 
-      expect(circle.paint.color, equals(firstColor)));
+      expect(circle.paint.color, equals(firstColor));
     });
 
     test('paintLayers returns [paint] even after cleared', () {
