@@ -21,6 +21,8 @@ abstract class ShapeComponent extends PositionComponent with HasPaint {
     if (paint != null) {
       this.paint = paint;
     }
+    // only read from this.paintLayers if paintLayers not null to prevent
+    // unnessesary creation of paintLayers List by get in HasPaint mixin
     if (paintLayers != null) {
       this.paintLayers = paintLayers;
     }
