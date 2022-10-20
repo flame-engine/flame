@@ -112,6 +112,8 @@ class Player extends PositionComponent
 
 ```
 
+Note that one limitation of the mixin is that it can access only a single bloc.
+
 
 ## Full Example
 
