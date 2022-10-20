@@ -4,7 +4,7 @@ This tutorial assumes that you have basic familiarity with using the command lin
 programs on your computer (all of them are free):
 
 - [Flutter], version 2.10.0 or above;
-- [Android Studio], or any other IDE for example, [Visual Studio Code];
+- [Android Studio], or any other IDE for example [Visual Studio Code].
 - [git] (optional), to save your project on GitHub.
 
 
