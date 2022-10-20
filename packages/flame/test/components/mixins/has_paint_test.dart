@@ -73,6 +73,90 @@ void main() {
       expect(comp.paintLayers.first.color, thirdColor);
     });
 
+    test('paintLayers takes precedence over paint if both set on constructor',
+        () {
+      const firstColor = Color(0xFFE5E5E5);
+      const secondColor = Color(0xFF123456);
+      const thirdColor = Color(0xFFABABAB);
+      final firstPaint = Paint()..color = firstColor;
+      final secondPaint = Paint()..color = secondColor;
+      final thirdPaint = Paint()..color = thirdColor;
+
+      final circle = CircleComponent(
+        radius: 10,
+        paint: firstPaint,
+        paintLayers: [secondPaint, thirdPaint],
+      );
+
+      expect(circle.paint.color, secondColor);
+    });
+
+    test('paint reverts to original constructor value if paintLayers cleared',
+        () {
+      const firstColor = Color(0xFFE5E5E5);
+      const secondColor = Color(0xFF123456);
+      const thirdColor = Color(0xFFABABAB);
+      final firstPaint = Paint()..color = firstColor;
+      final secondPaint = Paint()..color = secondColor;
+      final thirdPaint = Paint()..color = thirdColor;
+
+      final circle = CircleComponent(
+        radius: 10,
+        paint: firstPaint,
+        paintLayers: [secondPaint, thirdPaint],
+      );
+
+      circle.paintLayers.clear();
+
+      expect(circle.paint.color, firstColor);
+    });
+
+    test('paintLayers returns [paint] even after cleared', () {
+      const firstColor = Color(0xFFE5E5E5);
+      const secondColor = Color(0xFF123456);
+      const thirdColor = Color(0xFFABABAB);
+      final firstPaint = Paint()..color = firstColor;
+      final secondPaint = Paint()..color = secondColor;
+      final thirdPaint = Paint()..color = thirdColor;
+
+      final circle = CircleComponent(
+        radius: 10,
+        paint: firstPaint,
+        paintLayers: [secondPaint, thirdPaint],
+      );
+
+      circle.paintLayers.clear();
+
+      expect(
+        (circle.paintLayers.length == 1) &&
+            (circle.paintLayers.first.color == firstColor),
+        true,
+      );
+    });
+
+    test('paintLayers returns [paint] even after set to []', () {
+      const firstColor = Color(0xFFE5E5E5);
+      const secondColor = Color(0xFF123456);
+      const thirdColor = Color(0xFFABABAB);
+      final firstPaint = Paint()..color = firstColor;
+      final secondPaint = Paint()..color = secondColor;
+      final thirdPaint = Paint()..color = thirdColor;
+
+      final circle = CircleComponent(
+        radius: 10,
+        paint: firstPaint,
+        paintLayers: [secondPaint, thirdPaint],
+      );
+
+      circle.paintLayers = [];
+
+      expect(
+        (circle.paintLayers.length == 1) &&
+            (circle.paintLayers.first.color == firstColor),
+        true,
+      );
+    });
+
     test(
       'getPaint throws exception when retrieving a paint that does not exist',
       () {
