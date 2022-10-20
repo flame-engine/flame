@@ -25,7 +25,7 @@ $ flutter doctor
 ```
 
 Your output will be slightly different, but the important thing is to verify that no errors are
-reported and that your Flutter version is at least **2.10.0**.
+reported and that your Flutter version is at least **3.3.0**.
 
 
 ## 2. Create the Project Directory
