@@ -37,7 +37,6 @@ void main() {
   addComponentsStories(dashbook);
   addEffectsStories(dashbook);
   addExperimentalStories(dashbook);
-  addFlameIsolateExample(dashbook);
   addInputStories(dashbook);
   addParallaxStories(dashbook);
   addRenderingStories(dashbook);
@@ -50,6 +49,7 @@ void main() {
 
   // Bridge package examples
   addForge2DStories(dashbook);
+  addFlameIsolateExample(dashbook);
 
   runApp(dashbook);
 }
