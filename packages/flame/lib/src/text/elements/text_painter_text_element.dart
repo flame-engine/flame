@@ -1,28 +1,24 @@
 import 'dart:ui';
 
 import 'package:flame/src/text/common/line_metrics.dart';
-import 'package:flame/src/text/common/text_line.dart';
-import 'package:flame/src/text/elements/element.dart';
 import 'package:flame/src/text/elements/text_element.dart';
-import 'package:flutter/rendering.dart' show TextBaseline, TextPainter;
+import 'package:flutter/rendering.dart' as flutter;
 
-class TextPainterTextElement extends TextElement implements TextLine, Element {
+class TextPainterTextElement extends TextElement {
   TextPainterTextElement(this._textPainter)
       : _box = LineMetrics(
-          ascent: _textPainter
-              .computeDistanceToActualBaseline(TextBaseline.alphabetic),
+          ascent: _textPainter.computeDistanceToActualBaseline(
+            flutter.TextBaseline.alphabetic,
+          ),
           width: _textPainter.width,
           height: _textPainter.height,
         );
 
-  final TextPainter _textPainter;
+  final flutter.TextPainter _textPainter;
   final LineMetrics _box;
 
   @override
   LineMetrics get metrics => _box;
-
-  @override
-  TextLine get lastLine => this;
 
   @override
   void translate(double dx, double dy) => _box.translate(dx, dy);

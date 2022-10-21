@@ -134,12 +134,6 @@ class PolygonComponent extends ShapeComponent {
         position = Anchor.topLeft.toOtherAnchorPosition(_topLeft, anchor, size);
       }
     }
-    _vertices.forEach((p) {
-      p.setValues(
-        p.x - _topLeft.x,
-        p.y - _topLeft.y,
-      );
-    });
   }
 
   /// gives back the shape vectors multiplied by the size and scale
@@ -156,6 +150,7 @@ class PolygonComponent extends ShapeComponent {
       vertices.forEachIndexed((i, vertex) {
         _globalVertices[i]
           ..setFrom(vertex)
+          ..sub(_topLeft)
           ..multiply(scale)
           ..add(position)
           ..rotate(angle, center: position);
@@ -216,8 +211,9 @@ class PolygonComponent extends ShapeComponent {
     }
     for (var i = 0; i < _vertices.length; i++) {
       final edge = getEdge(i, vertices: vertices);
-      final isOutside = (edge.to.x - edge.from.x) * (point.y - edge.from.y) -
-              (point.x - edge.from.x) * (edge.to.y - edge.from.y) >
+      final isOutside = (edge.to.x - edge.from.x) *
+                  (point.y - edge.from.y + _topLeft.y) -
+              (point.x - edge.from.x + _topLeft.x) * (edge.to.y - edge.from.y) >
           0;
       if (isOutside) {
         return false;

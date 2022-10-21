@@ -20,6 +20,8 @@ We also provide stand-alone packages that extend the Flame functionality:
   our own `Box2D` port called `Forge2D`.
 - [flame_tiled](https://pub.dev/packages/flame_tiled) Which provides integration with the
   [tiled](https://pub.dev/packages/tiled) package.
+- [flame_svg](https://pub.dev/packages/flame_svg) Which provides integration with
+  [flutter_svg](https://pub.dev/packages/flutter_svg).
 
 You can pick and choose whichever parts you want, as they are all independent and modular.
 
@@ -35,7 +37,7 @@ Put the pub package as your dependency by putting the following in your `pubspec
 
 ```yaml
 dependencies:
-  flame: <VERSION>
+  flame: --VERSION--
 ```
 
 The latest version can be found on [pub.dev](https://pub.dev/packages/flame/install).
@@ -55,14 +57,14 @@ Simple examples for all features can be found in the
 
 You can also check out the
 [awesome flame repository](https://github.com/flame-engine/awesome-flame#user-content-articles--tutorials),
-It contains quite a lot of good tutorials and articles written by the community to get you started
+it contains quite a lot of good tutorials and articles written by the community to get you started
 with Flame.
 
 
 ## Outside of the scope of the engine
 
-Games sometimes require complex feature sets depending on what the game is all about. And some of
-those feature sets are outside of the scope of the Flame Engine ecosystem, in this section you can find
+Games sometimes require complex feature sets depending on what the game is all about. Some of
+these feature sets are outside of the scope of the Flame Engine ecosystem, in this section you can find
 them, and also some recommendations of packages/services that can be used:
 
 

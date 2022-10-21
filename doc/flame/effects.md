@@ -43,7 +43,8 @@ There are multiple effects provided by Flame, and you can also
 - [`SizeEffect.to`](#sizeeffectto)
 - [`AnchorByEffect`](#anchorbyeffect)
 - [`AnchorToEffect`](#anchortoeffect)
-- [`OpacityEffect`](#opacityeffect)
+- [`OpacityToEffect`](#opacitytoeffect)
+- [`OpacityByEffect`](#opacitybyeffect)
 - [`ColorEffect`](#coloreffect)
 - [`SequenceEffect`](#sequenceeffect)
 - [`RemoveEffect`](#removeeffect)
@@ -101,8 +102,19 @@ functionality inherited by all other effects. This includes:
 This effect applies to a `PositionComponent` and shifts it by a prescribed `offset` amount. This
 offset is relative to the current position of the target:
 
+```{flutter-app}
+:sources: ../flame/examples
+:page: move_by_effect
+:show: widget code infobox
+:width: 180
+:height: 160
+```
+
 ```dart
-final effect = MoveByEffect(Vector2(0, -10), EffectController(duration: 0.5));
+final effect = MoveByEffect(
+  Vector2(0, -10),
+  EffectController(duration: 0.5),
+);
 ```
 
 If the component is currently at `Vector2(250, 200)`, then at the end of the effect its position
@@ -117,8 +129,19 @@ superposition of all the individual effects.
 This effect moves a `PositionComponent` from its current position to the specified destination
 point in a straight line.
 
+```{flutter-app}
+:sources: ../flame/examples
+:page: move_to_effect
+:show: widget code infobox
+:width: 180
+:height: 160
+```
+
 ```dart
-final effect = MoveToEffect(Vector2(100, 500), EffectController(duration: 3));
+final effect = MoveToEffect(
+  Vector2(100, 500),
+  EffectController(duration: 3),
+);
 ```
 
 It is possible, but not recommended to attach multiple such effects to the same component.
@@ -130,6 +153,14 @@ This effect moves a `PositionComponent` along the specified path relative to the
 current position. The path can have non-linear segments, but must be singly connected. It is
 recommended to start a path at `Vector2.zero()` in order to avoid sudden jumps in the component's
 position.
+
+```{flutter-app}
+:sources: ../flame/examples
+:page: move_along_path_effect
+:show: widget code infobox
+:width: 180
+:height: 160
+```
 
 ```dart
 final effect = MoveAlongPathEffect(
@@ -153,8 +184,19 @@ Rotates the target clockwise by the specified angle relative to its current orie
 is in radians. For example, the following effect will rotate the target 90º (=[tau]/4 in radians)
 clockwise:
 
+```{flutter-app}
+:sources: ../flame/examples
+:page: rotate_by_effect
+:show: widget code infobox
+:width: 180
+:height: 160
+```
+
 ```dart
-final effect = RotateEffect.by(tau/4, EffectController(duration: 2));
+final effect = RotateEffect.by(
+  tau/4, 
+  EffectController(duration: 2),
+);
 ```
 
 
@@ -163,8 +205,19 @@ final effect = RotateEffect.by(tau/4, EffectController(duration: 2));
 Rotates the target clockwise to the specified angle. For example, the following will rotate the
 target to look east (0º is north, 90º=[tau]/4 east, 180º=tau/2 south, and 270º=tau*3/4 west):
 
+```{flutter-app}
+:sources: ../flame/examples
+:page: rotate_to_effect
+:show: widget code infobox
+:width: 180
+:height: 160
+```
+
 ```dart
-final effect = RotateEffect.to(tau/4, EffectController(duration: 2));
+final effect = RotateEffect.to(
+  tau/4, 
+  EffectController(duration: 2),
+);
 ```
 
 
@@ -215,8 +268,19 @@ This effect will change the size of the target component, relative to its curren
 if the target has size `Vector2(100, 100)`, then after the following effect is applied and runs its
 course, the new size will be `Vector2(120, 50)`:
 
+ ```{flutter-app}
+ :sources: ../flame/examples
+ :page: size_by_effect
+ :show: widget code infobox
+ :width: 180
+ :height: 160
+ ```
+
 ```dart
-final effect = SizeEffect.by(Vector2(20, -50), EffectController(duration: 1));
+final effect = SizeEffect.by(
+   Vector2(-15, 30),
+   EffectController(duration: 1),
+);
 ```
 
 The size of a `PositionComponent` cannot be negative. If an effect attempts to set the size to a
@@ -235,8 +299,20 @@ target component and its children.
 
 Changes the size of the target component to the specified size. Target size cannot be negative:
 
+
+ ```{flutter-app}
+ :sources: ../flame/examples
+ :page: size_to_effect
+ :show: widget code infobox
+ :width: 180
+ :height: 160
+ ```
+
 ```dart
-final effect = SizeEffect.to(Vector2(120, 120), EffectController(duration: 1));
+final effect = SizeEffect.to(
+  Vector2(90, 80),
+  EffectController(duration: 1),
+);
 ```
 
 
@@ -245,8 +321,19 @@ final effect = SizeEffect.to(Vector2(120, 120), EffectController(duration: 1));
 Changes the location of the target's anchor by the specified offset. This effect can also be created
 using `AnchorEffect.by()`.
 
+```{flutter-app}
+:sources: ../flame/examples
+:page: anchor_by_effect
+:show: widget code infobox
+:width: 180
+:height: 160
+```
+
 ```dart
-final effect = AnchorByEffect(Vector2(0.1, 0.1), EffectController(speed: 1));
+final effect = AnchorByEffect(
+  Vector2(0.1, 0.1), 
+  EffectController(speed: 1),
+);
 ```
 
 
@@ -255,24 +342,70 @@ final effect = AnchorByEffect(Vector2(0.1, 0.1), EffectController(speed: 1));
 Changes the location of the target's anchor. This effect can also be created using
 `AnchorEffect.to()`.
 
+```{flutter-app}
+:sources: ../flame/examples
+:page: anchor_to_effect
+:show: widget code infobox
+:width: 180
+:height: 160
+```
+
 ```dart
-final effect = AnchorToEffect(Anchor.center, EffectController(speed: 1));
+final effect = AnchorToEffect(
+  Anchor.center, 
+  EffectController(speed: 1),
+);
 ```
 
 
-### `OpacityEffect`
+### `OpacityToEffect`
 
 This effect will change over time the opacity of the target to the specified alpha-value. Currently
 this effect can only be applied to components that have a `HasPaint` mixin. If the target component
 uses multiple paints, the effect can target any individual color using the `paintId` parameter.
 
+```{flutter-app}
+:sources: ../flame/examples
+:page: opacity_to_effect
+:show: widget code infobox
+:width: 180
+:height: 160
+```
+
 ```dart
-final effect = OpacityEffect.to(0.5, EffectController(duration: 0.75));
+final effect = OpacityEffect.to(
+  0.2,
+  EffectController(duration: 0.75),
+);
 ```
 
 The opacity value of 0 corresponds to a fully transparent component, and the opacity value of 1 is
 fully opaque. Convenience constructors `OpacityEffect.fadeOut()` and `OpacityEffect.fadeIn()` will
 animate the target into full transparency / full visibility respectively.
+
+
+### `OpacityByEffect`
+
+This effect will change the opacity of the target relative to the specified alpha-value. For example,
+the following effect will change the opacity of the target by `90%`:
+
+```{flutter-app}
+:sources: ../flame/examples
+:page: opacity_by_effect
+:show: widget code infobox
+:width: 180
+:height: 160
+```
+
+```dart
+final effect = OpacityEffect.by(
+  0.9,
+  EffectController(duration: 0.75),
+);
+```
+
+Currently this effect can only be applied to components that have a `HasPaint` mixin. If the target component
+uses multiple paints, the effect can target any individual color using the `paintId` parameter.
 
 
 ### `SequenceEffect`
@@ -283,11 +416,35 @@ may have different types.
 The sequence effect can also be alternating (the sequence will first run forward, and then
 backward); and also repeat a certain predetermined number of times, or infinitely.
 
+```{flutter-app}
+:sources: ../flame/examples
+:page: sequence_effect
+:show: widget code infobox
+:width: 180
+:height: 160
+```
+
 ```dart
 final effect = SequenceEffect([
-  ScaleEffect.by(1.5, EffectController(duration: 0.2, alternate: true)),
-  MoveEffect.by(Vector2(30, -50), EffectController(duration: 0.5)),
-  OpacityEffect.to(0, EffectController(duration: 0.3)),
+  ScaleEffect.by(
+    Vector2.all(1.5), 
+    EffectController(
+      duration: 0.2, 
+      alternate: true,
+    ),
+  ),
+  MoveEffect.by(
+    Vector2(30, -50), 
+    EffectController(
+      duration: 0.5,
+    ),
+  ),
+  OpacityEffect.to(
+    0, 
+    EffectController(
+      duration: 0.3,
+    ),
+  ),
   RemoveEffect(),
 ]);
 ```

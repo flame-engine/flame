@@ -85,7 +85,6 @@ class TitleCollector(docutils.nodes.SparseNodeVisitor):
         self.level -= 1
 
 
-
 def get_local_toc(document):
     if not document:
         return ""

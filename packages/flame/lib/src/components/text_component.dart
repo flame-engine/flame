@@ -46,8 +46,8 @@ class TextComponent<T extends TextRenderer> extends PositionComponent {
     if (_textRenderer is FormatterTextRenderer) {
       _textElement =
           (_textRenderer as FormatterTextRenderer).formatter.format(_text);
-      final measurements = _textElement!.lastLine.metrics;
-      _textElement!.lastLine.translate(0, measurements.ascent);
+      final measurements = _textElement!.metrics;
+      _textElement!.translate(0, measurements.ascent);
       size.setValues(measurements.width, measurements.height);
     } else {
       final expectedSize = textRenderer.measureText(_text);
