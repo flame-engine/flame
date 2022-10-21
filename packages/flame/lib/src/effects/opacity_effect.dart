@@ -1,5 +1,4 @@
 import 'package:flame/effects.dart';
-import 'package:flame/src/effects/provider_interfaces.dart';
 
 /// Change the opacity of a component over time.
 ///

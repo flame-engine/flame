@@ -3,7 +3,6 @@ import 'dart:ui';
 
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
-import 'package:flame/src/effects/provider_interfaces.dart';
 import 'package:flame/src/palette.dart';
 
 /// Adds a collection of paints to a component
