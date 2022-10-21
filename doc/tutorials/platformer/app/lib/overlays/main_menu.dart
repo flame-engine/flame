@@ -45,7 +45,6 @@ class MainMenu extends StatelessWidget {
                 child: ElevatedButton(
                   onPressed: () {
                     gameRef.overlays.remove('MainMenu');
-                    gameRef.resumeEngine();
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: whiteTextColor,

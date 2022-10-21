@@ -2,8 +2,7 @@ import 'package:EmberQuest/ember_quest.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 
-class PlatformBlock extends SpriteComponent
-    with CollisionCallbacks, HasGameRef<EmberQuestGame> {
+class PlatformBlock extends SpriteComponent with HasGameRef<EmberQuestGame> {
   late Vector2 _gridPosition;
   late double _xPositionOffset;
   PlatformBlock({
@@ -27,7 +26,9 @@ class PlatformBlock extends SpriteComponent
   void update(double dt) {
     Vector2 velocity = Vector2(gameRef.objectSpeed, 0);
     position += velocity * dt;
-    if (position.x < -64 || gameRef.health <= 0) removeFromParent();
+    if (position.x < -size.x || gameRef.health <= 0) {
+      removeFromParent();
+    }
     super.update(dt);
   }
 }

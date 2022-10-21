@@ -171,33 +171,4 @@ Run your game now and you should now see Ember flickering in the lower left-hand
 ## Building Blocks
 
 Now that we have Ember showing on screen and we know our basic environment is all working correctly,
-it's time to create a world for Embers Quest!
-
-add Tiled sketch here
-
-Discuss random concept
-
-detail data manager class
-
-introduce extension
-
-start with ground_block
-
-Add platform block
-
-Add star block
-
-Add water enemy
-
-Add movement controls
-
-Add collisions
-
-Add HUD
-
-Add Main Menu
-
-Add Game Over
-
-Loose ends
-
+it's time to create a world for Embers Quest!  Proceed on to [](step_3.md)!

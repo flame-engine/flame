@@ -85,14 +85,14 @@ class EmberQuestGame extends FlameGame
   initializeGame(bool loadHud) {
     //Assume that size.x < 3200
     int segmentsToLoad = (size.x / 640).ceil();
-    segmentsToLoad.clamp(0, 4);
+    segmentsToLoad.clamp(0, segments.length);
 
     for (int i = 0; i <= segmentsToLoad; i++) {
       loadGameSegments(i, (640 * i).toDouble());
     }
 
     _ember = EmberPlayer(
-      position: Vector2(128, canvasSize.y - 70),
+      position: Vector2(128, canvasSize.y - 128),
     );
     add(_ember);
     if (loadHud) {

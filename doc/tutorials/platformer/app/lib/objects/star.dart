@@ -4,8 +4,7 @@ import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flutter/material.dart';
 
-class Star extends SpriteComponent
-    with CollisionCallbacks, HasGameRef<EmberQuestGame> {
+class Star extends SpriteComponent with HasGameRef<EmberQuestGame> {
   late Vector2 _gridPosition;
   late double _xPositionOffset;
   Star({
@@ -41,7 +40,9 @@ class Star extends SpriteComponent
   void update(double dt) {
     Vector2 velocity = Vector2(gameRef.objectSpeed, 0);
     position += velocity * dt;
-    if (position.x < -64 || gameRef.health <= 0) removeFromParent();
+    if (position.x < -size.x || gameRef.health <= 0) {
+      removeFromParent();
+    }
     super.update(dt);
   }
 }

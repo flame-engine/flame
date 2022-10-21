@@ -1,0 +1,400 @@
+# Adding the Remaining Components
+
+
+## Star
+
+The star is pretty simple.  It is just like the Platform block except we are going to add an effect
+to make it pulse in size.  For the effect to look correct, we need to change the object's `Anchor`
+to `center`.  This means we will need to adjust the position by half of the image size. For brevity,
+I am going to add the whole class and explain the additional changes after.
+
+```dart
+import 'package:EmberQuest/ember_quest.dart';
+import 'package:flame/collisions.dart';
+import 'package:flame/components.dart';
+import 'package:flame/effects.dart';
+import 'package:flutter/material.dart';
+
+class Star extends SpriteComponent
+    with HasGameRef<EmberQuestGame> {
+  late Vector2 _gridPosition;
+  late double _xPositionOffset;
+  Star({
+    required Vector2 gridPosition,
+    required double xPositionOffset,
+  }) : super(size: Vector2.all(64), anchor: Anchor.center) {
+    _gridPosition = gridPosition;
+    _xPositionOffset = xPositionOffset;
+  }
+
+  @override
+  Future<void> onLoad() async {
+    final starImage = gameRef.images.fromCache('star.png');
+    sprite = Sprite(starImage);
+    position = Vector2(
+        (_gridPosition.x * size.x) + _xPositionOffset + (size.x / 2),
+        gameRef.size.y - (_gridPosition.y * size.y) - (size.y / 2));
+    add(RectangleHitbox()..collisionType = CollisionType.passive);
+    add(
+      SizeEffect.by(
+        Vector2(-24, -24),
+        EffectController(
+          duration: .75,
+          reverseDuration: .5,
+          infinite: true,
+          curve: Curves.easeOut,
+        ),
+      ),
+    );
+  }
+
+  @override
+  void update(double dt) {
+    Vector2 velocity = Vector2(gameRef.objectSpeed, 0);
+    position += velocity * dt;
+    if (position.x < -size.x) removeFromParent();
+    super.update(dt);
+  }
+}
+```
+
+So the only change between the Star and the Platform beyond the anchor is simply the following:
+
+```dart
+add(
+    SizeEffect.by(
+    Vector2(-24, -24),
+    EffectController(
+        duration: .75,
+        reverseDuration: .5,
+        infinite: true,
+        curve: Curves.easeOut,
+    ),
+    ),
+);
+```
+
+The `SizeEffect` is best explained by going to their [help
+docs](../../flame/effects.md#sizeeffectby).  In short, we simply reduce the size of the star
+by -24 pixels in both directions and we make it pulse infinitely using the `EffectController`.
+
+Don't forget to add the star to your `lib/ember_quest.dart` file by doing:
+
+```dart
+case Star:
+    add(Star(
+        gridPosition: block.gridPosition,
+        xPositionOffset: xPositionOffset,
+    ));
+    break;
+```
+
+If you run your game, you should now see pulsing stars!
+
+
+## Water Enemy
+
+Now that we understand adding effects to our objects, let's do the same for the water drop enemy.
+Open `lib/actors/water_enemy.dart` and add the following code:
+
+```dart
+import 'package:EmberQuest/ember_quest.dart';
+import 'package:flame/collisions.dart';
+import 'package:flame/components.dart';
+import 'package:flame/effects.dart';
+
+class WaterEnemy extends SpriteAnimationComponent
+    with HasGameRef<EmberQuestGame> {
+  late Vector2 _gridPosition;
+  late double _xPositionOffset;
+  WaterEnemy({
+    required Vector2 gridPosition,
+    required double xPositionOffset,
+  }) : super(size: Vector2.all(64), anchor: Anchor.center) {
+    _gridPosition = gridPosition;
+    _xPositionOffset = xPositionOffset;
+  }
+
+  @override
+  Future<void> onLoad() async {
+    animation = SpriteAnimation.fromFrameData(
+      gameRef.images.fromCache('water_enemy.png'),
+      SpriteAnimationData.sequenced(
+        amount: 2,
+        textureSize: Vector2.all(16),
+        stepTime: 0.70,
+      ),
+    );
+    position = Vector2(
+        (_gridPosition.x * size.x) + _xPositionOffset + (size.x / 2),
+        gameRef.size.y - (_gridPosition.y * size.y) - (size.y / 2));
+    add(RectangleHitbox()..collisionType = CollisionType.passive);
+    add(
+      MoveEffect.by(
+        Vector2(-2 * size.x, 0),
+        EffectController(
+          duration: 3,
+          alternate: true,
+          infinite: true,
+        ),
+      ),
+    );
+  }
+
+  @override
+  void update(double dt) {
+    Vector2 velocity = Vector2(gameRef.objectSpeed, 0);
+    position += velocity * dt;
+    if (position.x < -size.x) removeFromParent();
+    super.update(dt);
+  }
+}
+
+```
+
+The water drop enemy is an animation just like Ember, so this class is extending the
+`SpriteAnimationComponent` class but it uses all of the previous code we have used for the Star and
+the Platform.  The only difference will be instead of the `SizeEffect`, we are going to use the
+`MoveEffect.  The best resource for information will be their [help
+docs](../../flame/effects.md#sizeeffectby).  
+
+In short, the `MoveEffect` will last for 3 seconds, alternate directions, and run infinitely.  It
+will move our enemy to the left, 128 pixels (-2 x image width).  You may have noticed that in the
+constructor, I set `Anchor` to `center`.  This was done just for the sake of making the calculations
+easier but could have been left as `bottomLeft`.
+
+Don't forget to add the water enemy to your `lib/ember_quest.dart` file by doing:
+
+```dart
+case WaterEnemy:
+    add(WaterEnemy(
+        gridPosition: block.gridPosition,
+        xPositionOffset: xPositionOffset,
+    ));
+    break;
+```
+
+If you run the game now, the Water Enemy should be displayed and moving!
+
+![Water Enemies](../../images/tutorials/platformer/Step4Enemies.jpg)
+
+
+## Ground Blocks
+
+Finally, the last component that needs to be displayed is the Ground Block!  This component is more
+complex than the others as we need to identify two times during a block's life cycle.
+
+- When the block is added, if it is the last block in the segment, we need to update a global value
+  as to its position.
+- When the block is removed, if it was the first block in the segment, we need to randomly get the
+  next segment to load.
+
+So let's start with the basic class which is nothing more than a copy of the Platform Block.
+
+```dart
+import 'package:EmberQuest/ember_quest.dart';
+import 'package:flame/collisions.dart';
+import 'package:flame/components.dart';
+import 'package:flutter/material.dart';
+
+class GroundBlock extends SpriteComponent with HasGameRef<EmberQuestGame> {
+  late Vector2 _gridPosition;
+  late double _xPositionOffset;
+
+  GroundBlock({
+    required Vector2 gridPosition,
+    required double xPositionOffset,
+  }) : super(size: Vector2.all(64), anchor: Anchor.bottomLeft) {
+    _gridPosition = gridPosition;
+    _xPositionOffset = xPositionOffset;
+  }
+
+  @override
+  Future<void> onLoad() async {
+    final groundImage = gameRef.images.fromCache('ground.png');
+    sprite = Sprite(groundImage);
+    position = Vector2((_gridPosition.x * size.x) + _xPositionOffset,
+        gameRef.size.y - (_gridPosition.y * size.y));
+    add(RectangleHitbox()..collisionType = CollisionType.passive);
+  }
+
+  @override
+  void update(double dt) {
+    Vector2 velocity = Vector2(gameRef.objectSpeed, 0);
+    position += velocity * dt;
+    super.update(dt);
+  }
+}
+```
+
+The first thing we will tackle is registering the block globally if it is the absolute last block to
+be loaded.  To do this, add two new global variables in `lib/ember_quest.dart` called:
+
+```dart
+  late double lastBlockXPosition = 0.0;
+  late GlobalKey lastBlockKey;
+```
+
+Declare the following variable at the top of your Ground Block class:
+
+```dart
+final GlobalKey _blockKey = GlobalKey();
+```
+
+Now in your Ground Block's `onLoad` method, add the following at the end of the method:
+
+```dart
+if (_gridPosition.x == 9 && position.x > gameRef.lastBlockXPosition) {
+    gameRef.lastBlockKey = _blockKey;
+    gameRef.lastBlockXPosition = position.x + size.x;
+}
+```
+
+All that is happening is if this block is the 10th block (9 as the segment grid is 0 based) AND
+this block's position is greater than the global `lastBlockXPosition`, set the global block key to be
+this block's key and set the global `lastBlockXPosition` to be this blocks position plus the width of
+the image (the anchor is bottom left and we want the next block to align right next to it).
+
+Now we can address updating this information, so in the `update` method, add the following code:
+
+```dart
+  @override
+  void update(double dt) {
+    Vector2 velocity = Vector2(gameRef.objectSpeed, 0);
+    position += velocity * dt;
+
+    if (_gridPosition.x == 9) {
+      if (gameRef.lastBlockKey == _blockKey) {
+        gameRef.lastBlockXPosition = position.x + size.x - 10;
+      }
+    }
+
+    super.update(dt);
+  }
+```
+
+`gameRef.lastBlockXPosition` is being updated by the block's current x-axis position plus its width -
+10 pixels.  This will cause a little overlap, but due to the potential variance in `dt` this
+prevents gaps in the map as it loads while a player is moving.
+
+
+### Loading the Next Random Segment
+
+To load the next random segment, we first will create an extension to assist in getting a random
+integer between a fixed range.  To do this, create a folder called `lib/extensions` and a file
+`random.dart`.  This is a pretty self-explanatory file, so I will just add the code:
+
+```dart
+import 'dart:math';
+
+Random random = Random();
+
+extension RandomExtension on Random {
+  double fromRange(double min, double max) =>
+      (nextDouble() * (max - min + 1)).floor() + min;
+}
+```
+
+Back in our Ground Block, we can now add the following to our 'update' method before the other block
+we just added:
+
+```dart
+if (position.x < -size.x) {
+  removeFromParent();
+  if (_gridPosition.x == 0) {
+    gameRef.loadGameSegments(
+        random.fromRange(0, segments.length.toDouble()).toInt(),
+        gameRef.lastBlockXPosition);
+  }
+}
+```
+
+This simply extends the code that we have in our other objects, where once the block is off the
+screen and if the block is the first block of the segment, we will call the `loadGameSegments`
+method in our game class, get a random number between 0 and the number of segments and pass in the
+offset.  If `random` or `segments.length` do not auto-import, you will need:
+
+```dart
+import 'package:EmberQuest/extensions/random.dart';
+import 'package:EmberQuest/managers/segment_manager.dart';
+```
+
+So our full Ground Block class should look like this:
+
+```dart
+import 'package:EmberQuest/ember_quest.dart';
+import 'package:EmberQuest/extensions/random.dart';
+import 'package:EmberQuest/managers/segment_manager.dart';
+import 'package:flame/collisions.dart';
+import 'package:flame/components.dart';
+import 'package:flutter/material.dart';
+
+class GroundBlock extends SpriteComponent with HasGameRef<EmberQuestGame> {
+  late Vector2 _gridPosition;
+  late double _xPositionOffset;
+  final GlobalKey _blockKey = GlobalKey();
+
+  GroundBlock({
+    required Vector2 gridPosition,
+    required double xPositionOffset,
+  }) : super(size: Vector2.all(64), anchor: Anchor.bottomLeft) {
+    _gridPosition = gridPosition;
+    _xPositionOffset = xPositionOffset;
+  }
+
+  @override
+  Future<void> onLoad() async {
+    final groundImage = gameRef.images.fromCache('ground.png');
+    sprite = Sprite(groundImage);
+    position = Vector2((_gridPosition.x * size.x) + _xPositionOffset,
+        gameRef.size.y - (_gridPosition.y * size.y));
+    add(RectangleHitbox()..collisionType = CollisionType.passive);
+    if (_gridPosition.x == 9 && position.x > gameRef.lastBlockXPosition) {
+      gameRef.lastBlockKey = _blockKey;
+      gameRef.lastBlockXPosition = position.x + size.x;
+    }
+  }
+
+  @override
+  void update(double dt) {
+    Vector2 velocity = Vector2(gameRef.objectSpeed, 0);
+    position += velocity * dt;
+
+    if (position.x < -size.x) {
+      removeFromParent();
+      if (_gridPosition.x == 0) {
+        gameRef.loadGameSegments(
+            random.fromRange(0, segments.length.toDouble()).toInt(),
+            gameRef.lastBlockXPosition);
+      }
+    }
+    if (_gridPosition.x == 9) {
+      if (gameRef.lastBlockKey == _blockKey) {
+        gameRef.lastBlockXPosition = position.x + size.x - 10;
+      }
+    }
+
+    super.update(dt);
+  }
+}
+
+```
+
+Finally, don't forget to add your Ground Block to `lib/ember_quest.dart` by adding the following:
+
+```dart
+case GroundBlock:
+    add(GroundBlock(
+        gridPosition: block.gridPosition,
+        xPositionOffset: xPositionOffset,
+    ));
+    break;
+```
+
+If you run your code, your game should now look like this:
+
+![Ground Blocks](../../images/tutorials/platformer/Step4Ground.jpg)
+
+You might say, but wait!  Ember is in the middle of the ground and that is correct because Ember's
+`Anchor` is set to center.  This is ok and we will be addressing this in the next
+[chapter](step_5.md) where we will be adding movement and collisions to Ember!

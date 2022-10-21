@@ -4,13 +4,13 @@ import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 
 class WaterEnemy extends SpriteAnimationComponent
-    with CollisionCallbacks, HasGameRef<EmberQuestGame> {
+    with HasGameRef<EmberQuestGame> {
   late Vector2 _gridPosition;
   late double _xPositionOffset;
   WaterEnemy({
     required Vector2 gridPosition,
     required double xPositionOffset,
-  }) : super(size: Vector2.all(64), anchor: Anchor.center) {
+  }) : super(size: Vector2.all(64), anchor: Anchor.bottomLeft) {
     _gridPosition = gridPosition;
     _xPositionOffset = xPositionOffset;
   }
@@ -25,13 +25,12 @@ class WaterEnemy extends SpriteAnimationComponent
         stepTime: 0.70,
       ),
     );
-    position = Vector2(
-        (_gridPosition.x * size.x) + _xPositionOffset + (size.x / 2),
-        gameRef.size.y - (_gridPosition.y * size.y) - (size.y / 2));
+    position = Vector2((_gridPosition.x * size.x) + _xPositionOffset,
+        gameRef.size.y - (_gridPosition.y * size.y));
     add(RectangleHitbox()..collisionType = CollisionType.passive);
     add(
       MoveEffect.by(
-        Vector2(-128, 0),
+        Vector2(-2 * size.x, 0),
         EffectController(
           duration: 3,
           alternate: true,
@@ -45,7 +44,9 @@ class WaterEnemy extends SpriteAnimationComponent
   void update(double dt) {
     Vector2 velocity = Vector2(gameRef.objectSpeed, 0);
     position += velocity * dt;
-    if (position.x < -64 || gameRef.health <= 0) removeFromParent();
+    if (position.x < -size.x || gameRef.health <= 0) {
+      removeFromParent();
+    }
     super.update(dt);
   }
 }

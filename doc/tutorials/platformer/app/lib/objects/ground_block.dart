@@ -1,11 +1,11 @@
 import 'package:EmberQuest/ember_quest.dart';
 import 'package:EmberQuest/extensions/random.dart';
+import 'package:EmberQuest/managers/segment_manager.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
-class GroundBlock extends SpriteComponent
-    with CollisionCallbacks, HasGameRef<EmberQuestGame> {
+class GroundBlock extends SpriteComponent with HasGameRef<EmberQuestGame> {
   late Vector2 _gridPosition;
   late double _xPositionOffset;
   final GlobalKey _blockKey = GlobalKey();
@@ -36,11 +36,12 @@ class GroundBlock extends SpriteComponent
     Vector2 velocity = Vector2(gameRef.objectSpeed, 0);
     position += velocity * dt;
 
-    if (position.x < -64) {
+    if (position.x < -size.x) {
       removeFromParent();
       if (_gridPosition.x == 0) {
         gameRef.loadGameSegments(
-            random.fromRange(0, 4).toInt(), gameRef.lastBlockXPosition);
+            random.fromRange(0, segments.length.toDouble()).toInt(),
+            gameRef.lastBlockXPosition);
       }
     }
     if (_gridPosition.x == 9) {
