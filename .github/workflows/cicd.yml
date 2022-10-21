@@ -49,12 +49,11 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
           cache: true
       - uses: bluefireteam/melos-action@main
-      - run: melos run test # TODO(spydon): Remove once Spec is fixed.
-      #- uses: bluefireteam/spec-action@main
+      - uses: bluefireteam/spec-action@main
   # END TESTING STAGE
