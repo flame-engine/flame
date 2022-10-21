@@ -17,16 +17,16 @@ To create `Atlas` open [Fire Atlas Editor](https://fire-atlas.flame-engine.org).
 Select new atlas and give atlas name, tile width, tile height and an Image and Press okay.
 it will take you to atlas editor.
 
-To create new `Sprite` in atlas, select portion and click plus button on top left and give
-selection name(which refer given sprite) and select type `Sprite` and press `Create Sprite`. you can
-see preview on right panel of editor.
+To create a new `Sprite` in the atlas, select a portion and click the plus button on top left and give
+the selection a name and then select type `Sprite` and press `Create Sprite`. You can now
+see a preview in the right panel of editor.
 
-To create new `SpriteAnimation` in atlas, select portion and click plus button on top left and give
-selection name(which refer given sprite) and select type `Animation` and provide `frame count`
-and `steps times(in millisecond)` and select checkbox to loop the animation then
-press `Create Animation`. you can see preview of animation on right panel of editor.
+To create a new `SpriteAnimation` in the atlas, select a portion and click the plus button on top left and give
+the selection a name and then select type `Animation` and provide `frame count`
+and `steps times (in milliseconds)` and select the checkbox to loop the animation, and then
+press `Create Animation`. You can now see a preview of the animation in the right panel of the editor.
 
-once done with editing you can download atlas file from top left `download` icon button.
+Once you are done with editing you can download the fire atlas file from top left with the `download` icon button.
 
 
 ## Texture atlas
