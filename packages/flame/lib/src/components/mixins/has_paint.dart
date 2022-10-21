@@ -1,6 +1,8 @@
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:flame/components.dart';
+import 'package:flame/effects.dart';
 import 'package:flame/src/palette.dart';
 
 /// Adds a collection of paints and paint layers to a component
@@ -11,7 +13,7 @@ import 'package:flame/src/palette.dart';
 /// [T], that can be omitted if the component only has one paint.
 /// [paintLayers] paints should be drawn in list order during the render. The
 /// main Paint is the first element.
-mixin HasPaint<T extends Object> on Component {
+mixin HasPaint<T extends Object> on Component implements OpacityProvider {
   late final Map<T, Paint> _paints = {};
 
   List<Paint>? _paintLayers;
@@ -168,5 +170,92 @@ mixin HasPaint<T extends Object> on Component {
   /// tinted with the given color.
   void tint(Color color, {T? paintId}) {
     getPaint(paintId).colorFilter = ColorFilter.mode(color, BlendMode.srcATop);
+  }
+
+  @override
+  double get opacity => paint.color.opacity;
+
+  @override
+  set opacity(double value) {
+    paint.color = paint.color.withOpacity(value);
+    for (final paint in _paints.values) {
+      paint.color = paint.color.withOpacity(value);
+    }
+  }
+
+  /// Creates an [OpacityProvider] for given [paintId] and can be used as
+  /// `target` for [OpacityEffect].
+  OpacityProvider opacityProviderOf(T paintId) {
+    return _ProxyOpacityProvider(paintId, this);
+  }
+
+  /// Creates an [OpacityProvider] for given list of [paintIds] and can be
+  /// used as `target` for [OpacityEffect].
+  ///
+  /// When opacities of all the given [paintIds] are not same, this provider
+  /// directly effects opacity of the most opaque paint. Additionally, it
+  /// modifies other paints such that their respective opacity ratio with most
+  /// opaque paint is maintained.
+  ///
+  /// If [paintIds] is null or empty, all the paints are used for creating the
+  /// [OpacityProvider].
+  ///
+  /// Note: Each call results in a new [OpacityProvider] and hence the cached
+  /// opacity ratios are calculated using opacities when this method was called.
+  OpacityProvider opacityProviderOfList({List<T?>? paintIds}) {
+    return _MultiPaintOpacityProvider(
+      paintIds ?? (List<T?>.from(_paints.keys)..add(null)),
+      this,
+    );
+  }
+}
+
+class _ProxyOpacityProvider<T extends Object> implements OpacityProvider {
+  _ProxyOpacityProvider(this.paintId, this.target);
+
+  final T paintId;
+  final HasPaint<T> target;
+
+  @override
+  double get opacity => target.getOpacity(paintId: paintId);
+
+  @override
+  set opacity(double value) => target.setOpacity(value, paintId: paintId);
+}
+
+class _MultiPaintOpacityProvider<T extends Object> implements OpacityProvider {
+  _MultiPaintOpacityProvider(this.paintIds, this.target) {
+    final maxOpacity = opacity;
+
+    _opacityRatios = List<double>.generate(
+      paintIds.length,
+      (index) =>
+          target.getOpacity(paintId: paintIds.elementAt(index)) / maxOpacity,
+    );
+  }
+
+  final List<T?> paintIds;
+  final HasPaint<T> target;
+  late final List<double> _opacityRatios;
+
+  @override
+  double get opacity {
+    var maxOpacity = 0.0;
+
+    for (final paintId in paintIds) {
+      maxOpacity = max(target.getOpacity(paintId: paintId), maxOpacity);
+    }
+
+    return maxOpacity;
+  }
+
+  @override
+  set opacity(double value) {
+    for (var i = 0; i < paintIds.length; ++i) {
+      target.setOpacity(
+        value * _opacityRatios.elementAt(i),
+        paintId: paintIds.elementAt(i),
+      );
+    }
   }
 }

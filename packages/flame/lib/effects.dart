@@ -32,7 +32,8 @@ export 'src/effects/provider_interfaces.dart'
         AngleProvider,
         PositionProvider,
         ScaleProvider,
-        SizeProvider;
+        SizeProvider,
+        OpacityProvider;
 export 'src/effects/remove_effect.dart';
 export 'src/effects/rotate_effect.dart';
 export 'src/effects/scale_effect.dart';
