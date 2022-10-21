@@ -9,6 +9,12 @@ export 'package:integral_isolates/integral_isolates.dart';
 /// Using isolate is done by just running [isolate] function the same way you
 /// would run Flutter's compute function.
 ///
+/// Keep in mind that every component you create and add with this mixin to the
+/// game will create and hold it's own isolate. This makes it easy to
+/// accidentally create a lot of isolates if attached to every instance of an
+/// NPC for example. What you´probably want to do is to instead create a manager
+/// component that does all the calculations and controls the NPCs.
+///
 /// The following is an example of running a world update cycle when enough time
 /// has passed.
 ///
