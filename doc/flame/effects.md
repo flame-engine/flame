@@ -360,11 +360,8 @@ final effect = AnchorToEffect(
 
 ### `OpacityToEffect`
 
-This effect will change the opacity of the target over time to the specified alpha-value. It can only
-be applied to components that implement the `OpacityProvider`. If the target component uses multiple
-paints, the effect can target one more more of those paints using the `target` parameter. The
-`HasPaint` mixin implements `OpacityProvider` and exposes APIs to easily create providers
-for desired paintIds.
+This effect will change the opacity of the target over time to the specified alpha-value.
+It can only be applied to components that implement the `OpacityProvider`.
 
 ```{flutter-app}
 :sources: ../flame/examples
@@ -378,8 +375,29 @@ for desired paintIds.
 final effect = OpacityEffect.to(
   0.2,
   EffectController(duration: 0.75),
+);
+```
+
+If the component uses multiple paints, the effect can target one more more of those paints
+using the `target` parameter. The `HasPaint` mixin implements `OpacityProvider` and exposes APIs
+to easily create providers for desired paintIds. For single paintId `opacityProviderOf` can be used
+and for multiple paintIds and `opacityProviderOfList` can be used.
+
+
+```{flutter-app}
+:sources: ../flame/examples
+:page: opacity_effect_with_target
+:show: widget code infobox
+:width: 180
+:height: 160
+```
+
+```dart
+final effect = OpacityEffect.to(
+  0.2,
+  EffectController(duration: 0.75),
   target: component.opacityProviderOfList(
-    paintIds: const [paintId1, paintId3],
+    paintIds: const [paintId1, paintId2],
   ),
 );
 ```
