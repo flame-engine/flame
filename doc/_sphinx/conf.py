@@ -4,6 +4,7 @@
 # list see the documentation:
 # https://www.sphinx-doc.org/en/master/usage/configuration.html
 import docutils
+import html
 import os
 import sys
 sys.path.insert(0, os.path.abspath('.'))
@@ -31,6 +32,7 @@ extensions = [
 # Configuration options for MyST:
 # https://myst-parser.readthedocs.io/en/latest/syntax/optional.html
 myst_enable_extensions = [
+    'attrs_image',
     'dollarmath',
     'html_admonition',
     'html_image',
@@ -66,6 +68,7 @@ pygments_style = 'monokai'
 html_static_path = ['images', 'scripts', 'theme']
 html_js_files = ['versions.js', 'menu-expand.js']
 
+
 # -- Custom setup ------------------------------------------------------------
 class TitleCollector(docutils.nodes.SparseNodeVisitor):
     def __init__(self, document):
@@ -100,17 +103,15 @@ def get_local_toc(document):
             "First title on the page is not <h1/>")
     del titles[0]  # remove the <h1> title
 
-    h1_seen = False
-    ul_level = 0
     html_text = "<div id='toc-local' class='list-group'>\n"
     html_text += " <div class='header'><i class='fa fa-list'></i> Contents</div>\n"
     for title, node_id, level in titles:
         if level <= 1:
             return document.reporter.error("More than one <h1> title on the page")
-        html_text += f"  <a href='#{node_id}' class='list-group-item level-{level-1}'>{title}</a>\n"
+        html_text += f"  <a href='#{node_id}' class='list-group-item level-{level-1}'>" \
+                     f"{html.escape(title)}</a>\n"
     html_text += "</div>\n"
     return html_text
-
 
 
 # Emitted when the HTML builder has created a context dictionary to render
