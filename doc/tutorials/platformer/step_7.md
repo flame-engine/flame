@@ -99,7 +99,7 @@ accomplished.
 
 ## Game Over Menu
 
-Next create a file called `lib/overlays/game_over.dart` and add the following code:
+Next, create a file called `lib/overlays/game_over.dart` and add the following code:
 
 ```dart
 import 'package:EmberQuest/ember_quest.dart';
