@@ -1,4 +1,4 @@
-# Controlling Movement
+# 5. Controlling Movement
 
 If you were waiting for some serious coding, this chapter is it.  Prepare yourself as we dive in!
 

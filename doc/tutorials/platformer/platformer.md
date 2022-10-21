@@ -12,6 +12,11 @@ with the [Dart] programming language.
 ```{toctree}
 :hidden:
 
-1. Preparation  <step1.md>
-2. Scaffolding  <step2.md>
+1. Preparation  <step_1.md>
+2. Beginning Coding  <step_2.md>
+3. Building the World  <step_3.md>
+4. Adding the Remaining Components  <step_4.md>
+5. Controlling Movement  <step_5.md>
+6. Adding the HUD  <step_6.md>
+7. Adding Menus  <step_7.md>
 ```

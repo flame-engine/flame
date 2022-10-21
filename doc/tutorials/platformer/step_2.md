@@ -1,4 +1,4 @@
-# Beginning Coding
+# 2. Beginning Coding
 
 
 ## The Plan

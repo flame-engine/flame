@@ -1,4 +1,4 @@
-# Adding the HUD
+# 6. Adding the HUD
 
 
 ## Setting up the HUD
