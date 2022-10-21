@@ -1,8 +1,8 @@
 import 'dart:ui';
 
 import 'package:flame/components.dart';
+import 'package:flame/effects.dart';
 import 'package:flame/experimental.dart';
-import 'package:flame/src/effects/provider_interfaces.dart';
 
 /// A function that creates a shape based on a size represented by a [Vector2]
 typedef ShapeBuilder = Shape Function(Vector2 size);
