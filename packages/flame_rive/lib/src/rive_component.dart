@@ -61,7 +61,9 @@ class RiveArtboardRenderer {
     required this.fit,
     required this.alignment,
     required this.artboard,
-  });
+  }) {
+    artboard.antialiasing = antialiasing;
+  }
 
   void advance(double dt) {
     artboard.advance(dt, nested: true);
