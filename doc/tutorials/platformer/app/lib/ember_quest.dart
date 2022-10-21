@@ -1,10 +1,10 @@
-import 'package:EmberQuest/actors/ember.dart';
-import 'package:EmberQuest/actors/water_enemy.dart';
-import 'package:EmberQuest/managers/segment_manager.dart';
-import 'package:EmberQuest/objects/ground_block.dart';
-import 'package:EmberQuest/objects/platform_block.dart';
-import 'package:EmberQuest/objects/star.dart';
-import 'package:EmberQuest/overlays/hud.dart';
+import 'package:ember_quest/actors/ember.dart';
+import 'package:ember_quest/actors/water_enemy.dart';
+import 'package:ember_quest/managers/segment_manager.dart';
+import 'package:ember_quest/objects/ground_block.dart';
+import 'package:ember_quest/objects/platform_block.dart';
+import 'package:ember_quest/objects/star.dart';
+import 'package:ember_quest/overlays/hud.dart';
 
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';

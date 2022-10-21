@@ -1,4 +1,4 @@
-import 'package:EmberQuest/ember_quest.dart';
+import 'package:ember_quest/ember_quest.dart';
 import 'package:flutter/material.dart';
 
 class GameOver extends StatelessWidget {

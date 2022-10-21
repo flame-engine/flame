@@ -1,6 +1,6 @@
-import 'package:EmberQuest/ember_quest.dart';
-import 'package:EmberQuest/overlays/game_over.dart';
-import 'package:EmberQuest/overlays/main_menu.dart';
+import 'package:ember_quest/ember_quest.dart';
+import 'package:ember_quest/overlays/game_over.dart';
+import 'package:ember_quest/overlays/main_menu.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 

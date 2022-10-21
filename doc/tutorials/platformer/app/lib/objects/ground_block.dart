@@ -1,6 +1,6 @@
-import 'package:EmberQuest/ember_quest.dart';
-import 'package:EmberQuest/extensions/random.dart';
-import 'package:EmberQuest/managers/segment_manager.dart';
+import 'package:ember_quest/ember_quest.dart';
+import 'package:ember_quest/extensions/random.dart';
+import 'package:ember_quest/managers/segment_manager.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';

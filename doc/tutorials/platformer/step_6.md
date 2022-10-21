@@ -17,7 +17,7 @@ Start by creating a folder called `lib/overlays`, and in that folder, create a c
 the game.  Add the following code:
 
 ```dart
-import 'package:EmberQuest/ember_quest.dart';
+import 'package:ember_quest/ember_quest.dart';
 import 'package:flame/components.dart';
 
 enum HeartState {
@@ -91,8 +91,8 @@ component to unavailable.
 To put this all together, create `hud.dart` in the same folder and add the following code:
 
 ```dart
-import 'package:EmberQuest/ember_quest.dart';
-import 'package:EmberQuest/overlays/heart.dart';
+import 'package:ember_quest/ember_quest.dart';
+import 'package:ember_quest/overlays/heart.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 
@@ -169,7 +169,7 @@ add(Hud());
 If the auto-import did not occur, you will need to add:
 
 ```dart
-import 'package:EmberQuest/overlays/hud.dart';
+import 'package:ember_quest/overlays/hud.dart';
 ```
 
 If you run the game now, you should see:

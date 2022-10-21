@@ -9,7 +9,7 @@ To add menus to the game, we will leverage Flames built-in
 In the `lib/overlays` folder, create `main_menu.dart` and add the following code:
 
 ```dart
-import 'package:EmberQuest/ember_quest.dart';
+import 'package:ember_quest/ember_quest.dart';
 import 'package:flutter/material.dart';
 
 class MainMenu extends StatelessWidget {
@@ -102,7 +102,7 @@ accomplished.
 Next, create a file called `lib/overlays/game_over.dart` and add the following code:
 
 ```dart
-import 'package:EmberQuest/ember_quest.dart';
+import 'package:ember_quest/ember_quest.dart';
 import 'package:flutter/material.dart';
 
 class GameOver extends StatelessWidget {
@@ -249,8 +249,8 @@ To display the menus, add the following code to `lib/main.dart`:
 If the menus did not auto-import, add the following:
 
 ```dart
-import 'package:EmberQuest/overlays/game_over.dart';
-import 'package:EmberQuest/overlays/main_menu.dart';
+import 'package:ember_quest/overlays/game_over.dart';
+import 'package:ember_quest/overlays/main_menu.dart';
 ```
 
 If you run the game now, you should be greeted with the Main Menu overlay.  Pressing play will

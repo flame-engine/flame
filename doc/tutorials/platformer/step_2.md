@@ -62,7 +62,7 @@ So now that we have our game file, let's prepare the `main.dart` file to receive
 `FlameGame`.  Change your entire `main.dart` file to the following:
 
 ```dart
-import 'package:EmberQuest/ember_quest.dart';
+import 'package:ember_quest/ember_quest.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 
@@ -98,7 +98,7 @@ organized by how they will be involved in my game.  So for Ember, let's create t
 `lib\actors` and in that folder, create `ember.dart`.  In that file, add the following code:
 
 ```dart
-import 'package:EmberQuest/ember_quest.dart';
+import 'package:ember_quest/ember_quest.dart';
 import 'package:flame/components.dart';
 
 class EmberPlayer extends SpriteAnimationComponent
@@ -138,7 +138,7 @@ Now before you rush to run the game again, we have to add Ember to the game worl
 back to `ember_quest.dart` and add the following:
 
 ```dart
-import 'package:EmberQuest/actors/ember.dart';
+import 'package:ember_quest/actors/ember.dart';
 import 'package:flame/game.dart';
 
 class EmberQuestGame extends FlameGame {

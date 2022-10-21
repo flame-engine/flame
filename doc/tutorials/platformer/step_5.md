@@ -161,8 +161,8 @@ void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
 You will need to import the following:
 
 ```dart
-import 'package:EmberQuest/objects/ground_block.dart';
-import 'package:EmberQuest/objects/platform_block.dart';
+import 'package:ember_quest/objects/ground_block.dart';
+import 'package:ember_quest/objects/platform_block.dart';
 ```
 
 As well as create these class variables:
@@ -279,8 +279,8 @@ void hit() {
 If the auto-imports did not occur, you will need to add the following imports to your file:
 
 ```dart
-import 'package:EmberQuest/actors/water_enemy.dart';
-import 'package:EmberQuest/objects/star.dart';
+import 'package:ember_quest/actors/water_enemy.dart';
+import 'package:ember_quest/objects/star.dart';
 import 'package:flame/effects.dart';
 ```
 

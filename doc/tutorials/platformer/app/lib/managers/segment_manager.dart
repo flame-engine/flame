@@ -1,7 +1,7 @@
-import 'package:EmberQuest/actors/water_enemy.dart';
-import 'package:EmberQuest/objects/ground_block.dart';
-import 'package:EmberQuest/objects/platform_block.dart';
-import 'package:EmberQuest/objects/star.dart';
+import 'package:ember_quest/actors/water_enemy.dart';
+import 'package:ember_quest/objects/ground_block.dart';
+import 'package:ember_quest/objects/platform_block.dart';
+import 'package:ember_quest/objects/star.dart';
 import 'package:flame/components.dart';
 
 class Block {

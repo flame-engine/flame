@@ -102,10 +102,10 @@ final segment0 = [
 Proceed to build the remaining segments.  The full segment manager should look like this:
 
 ```dart
-import 'package:EmberQuest/actors/water_enemy.dart';
-import 'package:EmberQuest/objects/ground_block.dart';
-import 'package:EmberQuest/objects/platform_block.dart';
-import 'package:EmberQuest/objects/star.dart';
+import 'package:ember_quest/actors/water_enemy.dart';
+import 'package:ember_quest/objects/ground_block.dart';
+import 'package:ember_quest/objects/platform_block.dart';
+import 'package:ember_quest/objects/star.dart';
 import 'package:flame/components.dart';
 
 class Block {
@@ -249,11 +249,11 @@ loadGameSegments(int segmentIndex, double xPositionOffset) {
 You will need to add the following imports if they were not auto-imported:
 
 ```dart
-import 'package:EmberQuest/actors/water_enemy.dart';
-import 'package:EmberQuest/managers/segment_manager.dart';
-import 'package:EmberQuest/objects/ground_block.dart';
-import 'package:EmberQuest/objects/platform_block.dart';
-import 'package:EmberQuest/objects/star.dart';
+import 'package:ember_quest/actors/water_enemy.dart';
+import 'package:ember_quest/managers/segment_manager.dart';
+import 'package:ember_quest/objects/ground_block.dart';
+import 'package:ember_quest/objects/platform_block.dart';
+import 'package:ember_quest/objects/star.dart';
 ```
 
 Now we can refactor our game a bit and create an `initializeGame()` method which will call our
@@ -317,7 +317,7 @@ it's an infinite level.
 Open the `lib/objects/platform_block.dart` file and add the following code:
 
 ```dart
-import 'package:EmberQuest/ember_quest.dart';
+import 'package:ember_quest/ember_quest.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 

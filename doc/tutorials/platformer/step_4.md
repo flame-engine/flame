@@ -9,7 +9,7 @@ to `center`.  This means we will need to adjust the position by half of the imag
 I am going to add the whole class and explain the additional changes after.
 
 ```dart
-import 'package:EmberQuest/ember_quest.dart';
+import 'package:ember_quest/ember_quest.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
@@ -98,7 +98,7 @@ Now that we understand adding effects to our objects, let's do the same for the 
 Open `lib/actors/water_enemy.dart` and add the following code:
 
 ```dart
-import 'package:EmberQuest/ember_quest.dart';
+import 'package:ember_quest/ember_quest.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
@@ -192,7 +192,7 @@ complex than the others as we need to identify two times during a block's life c
 So let's start with the basic class which is nothing more than a copy of the Platform Block.
 
 ```dart
-import 'package:EmberQuest/ember_quest.dart';
+import 'package:ember_quest/ember_quest.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
@@ -315,16 +315,16 @@ method in our game class, get a random number between 0 and the number of segmen
 offset.  If `random` or `segments.length` do not auto-import, you will need:
 
 ```dart
-import 'package:EmberQuest/extensions/random.dart';
-import 'package:EmberQuest/managers/segment_manager.dart';
+import 'package:ember_quest/extensions/random.dart';
+import 'package:ember_quest/managers/segment_manager.dart';
 ```
 
 So our full Ground Block class should look like this:
 
 ```dart
-import 'package:EmberQuest/ember_quest.dart';
-import 'package:EmberQuest/extensions/random.dart';
-import 'package:EmberQuest/managers/segment_manager.dart';
+import 'package:ember_quest/ember_quest.dart';
+import 'package:ember_quest/extensions/random.dart';
+import 'package:ember_quest/managers/segment_manager.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';

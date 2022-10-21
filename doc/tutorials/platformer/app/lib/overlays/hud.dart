@@ -1,5 +1,5 @@
-import 'package:EmberQuest/ember_quest.dart';
-import 'package:EmberQuest/overlays/heart.dart';
+import 'package:ember_quest/ember_quest.dart';
+import 'package:ember_quest/overlays/heart.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 
