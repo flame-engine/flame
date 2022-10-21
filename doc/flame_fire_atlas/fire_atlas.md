@@ -17,16 +17,18 @@ To create a texture atlas open [Fire Atlas Editor](https://fire-atlas.flame-engi
 Select new atlas and give the atlas a name, tile width, tile height and an image and press okay.
 This will take you to the atlas editor.
 
-To create a new `Sprite` in the atlas, select a portion and click the plus button on top left and give
-the selection a name and then select type `Sprite` and press `Create Sprite`. You can now
+To create a new `Sprite` in the atlas, select a portion and click the plus button on top left and
+give the selection a name and then select type `Sprite` and press `Create Sprite`. You can now
 see a preview in the right panel of editor.
 
-To create a new `SpriteAnimation` in the atlas, select a portion and click the plus button on top left and give
-the selection a name and then select type `Animation` and provide `frame count`
+To create a new `SpriteAnimation` in the atlas, select a portion and click the plus button on top
+left and give the selection a name and then select type `Animation` and provide `frame count`
 and `steps times (in milliseconds)` and select the checkbox to loop the animation, and then
-press `Create Animation`. You can now see a preview of the animation in the right panel of the editor.
+press `Create Animation`. You can now see a preview of the animation in the right panel of the
+editor.
 
-Once you are done with editing you can download the fire atlas file from top left with the `download` icon button.
+Once you are done with editing you can download the fire atlas file from top left with
+the `download` icon button.
 
 
 ## Texture atlas
@@ -39,7 +41,8 @@ reduce the number of images loaded and can speed up the loading time of the game
 ## Usage
 
 To use the bridge library in your game you just need to add `flame_fire_atlas` to your pubspec.yaml,
-as can be seen in the [Flame Fire Atlas example](https://github.com/flame-engine/flame/tree/main/packages/flame_fire_atlas/example)
+as can be seen in
+the [Flame Fire Atlas example](https://github.com/flame-engine/flame/tree/main/packages/flame_fire_atlas/example)
 and in the pub.dev [installation instructions](https://pub.dev/packages/flame_fire_atlas).
 
 Then you have the following methods at your disposal:
