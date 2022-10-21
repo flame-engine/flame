@@ -7,9 +7,9 @@ are, it will treat them as if they all were parts of a single large file.
 
 ## Nodes
 
-Each `.yarn` file may contain one or more **nodes**. A _node_ is a small fragment of text that
+Each `.yarn` file may contain one or more **nodes**. A *node* is a small fragment of text that
 approximately equal to a single conversation. For example, if you have a node named "Barn", then
-you can request `YarnProject` to _run_ this node -- that is, display its dialogue lines in turns,
+you can request `YarnProject` to *run* this node -- that is, display its dialogue lines in turns,
 until we reach the end of the node, at which point the dialogue stops.
 
 If you have a conversation that is too large to comfortably fit within a single node (or where
@@ -90,8 +90,8 @@ select one of them in order to continue. The options are indicated with an arrow
 of the line:
 
 ```text
-You arrive at the edge of the forest. The road dives in, but there is another one going \
-around the edge.
+You arrive at the edge of the forest. The road dives in, but there is another \
+one going around the edge.
 -> Go straight ahead, on the beaten path
 -> Take the road along the forest's edge
 -> Turn back
@@ -116,7 +116,8 @@ Guard: 50 coins and you can cross the bridge.
    <<take gold:100>>
    <<grant bridge_pass>>
    Guard: Wow, so generous!
-   Guard: But I wouldn't recommend going around telling everyone that you have "so much money"
+   Guard: But I wouldn't recommend going around telling everyone that you \
+          have "so much money"
 -> That's too expensive!
    Guard: Is it? My condolences
 -> How about I kick your butt instead?

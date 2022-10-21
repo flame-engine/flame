@@ -13,6 +13,7 @@ sophisticated non-linear conversations that adjust with the game state. The `fla
 was inspired by the [Yarn Spinner] library for Unity.
 
 Adding dialogue into the game consists of two major stages:
+
 1. Writing the text for the dialogue script;
 2. Interactively displaying it within the game.
 
@@ -65,8 +66,8 @@ title: Slughorn_encounter
 Slughorn: Oh hello, Tom, is there anything I can help you with?
 Tom: Good {time_of_day()}, Professor.
 -> I was curious about the 12 uses of the dragon blood.
-    Slughorn: Such an inquisitive mind! You can read about that in the "Most Potente Potions" \
-              in the Restricted Section of the library.
+    Slughorn: Such an inquisitive mind! You can read about that in the "Most \
+              Potente Potions" in the Restricted Section of the library.
     <<give restricted_library_pass>>
     Tom: Thank you, Professor, this is very munificent of you.
 -> I wanted to ask... about Horcruxes <<if $knows_about_horcruxes>>
@@ -78,25 +79,30 @@ title: Horcrux_question
 ---
 Slughorn: Where... did you hear that?
 -> Tom: It was mentioned in an old book in the library...
-    Slughorn: I see that you have read more books from the Restricted Section than is wise.
+    Slughorn: I see that you have read more books from the Restricted Section \
+              than is wise.
     Slughorn: I'm sorry, Tom, I should have seen you'd be tempted...
     <<take restricted_library_pass>>
     -> But Professor!..
         Slughorn: This is for your good, Tom. Many of those books are dangerous!
-        Slughorn: Now off you go. And do your best to forget about what you asked...
+        Slughorn: Now off you go. And do your best to forget about what you \
+                  asked...
         <<stop>>
 -> Tom: I overheard it... And the word felt sharp and frigid, like it was the \
    embodiment of Dark Art <<if luck() >= 80>>
-    Slughorn: It is a very Dark Art indeed, it is not good for you to know about it...
-    Tom: But if I don't know about this Dark Art, how can I defend myself against it?
-    Slughorn: It is a Ritual, one of the darkest known to wizard-kind
+    Slughorn: It is a very Dark Art indeed, it is not good for you to know \
+              about it...
+    Tom: But if I don't know about this Dark Art, how can I defend myself \
+         against it?
+    Slughorn: It is a Ritual, one of the darkest known to wizard-kind ...
     ...
     <<achievement "The Darkest Secret">>
 ===
 ```
 
 This fragment demonstrates many of the features of the `.yarn` language, including:
-- ability to divide the text into smaller chunks called _nodes_;
+
+- ability to divide the text into smaller chunks called *nodes*;
 - control the flow of the dialog via commands such as `<<if>>` or `<<jump>>`;
 - different dialogue path depending on player's choices;
 - disable certain menu choices dynamically;
