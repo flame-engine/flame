@@ -14,7 +14,7 @@ FireAtlas is a tool for handling texture atlases. Atlases can be created using t
 
 To create `Atlas` open [Fire Atlas Editor](https://fire-atlas.flame-engine.org).
 
-Select new atlas and give atlas name, tile width, tile height and an Image and Press okay.
+Select new atlas and give the atlas a name, tile width, tile height and an image and press okay.
 This will take you to the atlas editor.
 
 To create a new `Sprite` in the atlas, select a portion and click the plus button on top left and give
