@@ -360,7 +360,7 @@ final effect = AnchorToEffect(
 
 ### `OpacityToEffect`
 
-This effect will change over time the opacity of the target to the specified alpha-value. It can only
+This effect will change the opacity of the target over time to the specified alpha-value. It can only
 be applied to components that implement the `OpacityProvider`. If the target component uses multiple
 paints, the effect can target one more more of those paints using the `target` parameter. `HasPaint`
 mixin implements `OpacityProvider` and exposes APIs to easily create providers for desired
