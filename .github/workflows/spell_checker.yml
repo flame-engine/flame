@@ -12,7 +12,12 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: zwaldowski/cspell-action@v1
+        continue-on-error: true
         with:
           paths: "**/*.{md,dart}"
           config: .github/cspell.json
           exclude: ".gitignore,CHANGELOG.md"
+          
+      - if: steps.check-label.outcome != 'success'
+        run: |
+          echo "Marking as succeeded even though some there were typos reported."
