@@ -1,5 +1,6 @@
+import 'dart:math';
+
 import 'package:ember_quest/ember_quest.dart';
-import 'package:ember_quest/extensions/random.dart';
 import 'package:ember_quest/managers/segment_manager.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
@@ -40,8 +41,7 @@ class GroundBlock extends SpriteComponent with HasGameRef<EmberQuestGame> {
       removeFromParent();
       if (_gridPosition.x == 0) {
         gameRef.loadGameSegments(
-            random.fromRange(0, segments.length.toDouble()).toInt(),
-            gameRef.lastBlockXPosition);
+            Random().nextInt(segments.length + 1), gameRef.lastBlockXPosition);
       }
     }
     if (_gridPosition.x == 9) {

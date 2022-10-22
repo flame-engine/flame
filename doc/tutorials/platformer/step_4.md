@@ -280,31 +280,24 @@ prevents gaps in the map as it loads while a player is moving.
 
 ### Loading the Next Random Segment
 
-To load the next random segment, we first will create an extension to assist in getting a random
-integer between a fixed range.  To do this, create a folder called `lib/extensions` and a file
-`random.dart`.  This is a pretty self-explanatory file, so I will just add the code:
+To load the next random segment, we will use the `Random()` function that is built-in to
+`dart:math`.  The following line of code gets a random integer from 0 (inclusive) to the max number
+in the passed parameter (exclusive), because we need to include our max number, we can simply add 1
+to the length.
 
 ```dart
-import 'dart:math';
-
-Random random = Random();
-
-extension RandomExtension on Random {
-  double fromRange(double min, double max) =>
-      (nextDouble() * (max - min + 1)).floor() + min;
-}
+Random().nextInt(segments.length + 1),
 ```
 
-Back in our Ground Block, we can now add the following to our 'update' method before the other block
-we just added:
+Back in our Ground Block, we can now add the following to our 'update' method before
+the other block we just added:
 
 ```dart
 if (position.x < -size.x) {
   removeFromParent();
   if (_gridPosition.x == 0) {
     gameRef.loadGameSegments(
-        random.fromRange(0, segments.length.toDouble()).toInt(),
-        gameRef.lastBlockXPosition);
+        Random().nextInt(segments.length + 1), gameRef.lastBlockXPosition);
   }
 }
 ```
@@ -312,10 +305,10 @@ if (position.x < -size.x) {
 This simply extends the code that we have in our other objects, where once the block is off the
 screen and if the block is the first block of the segment, we will call the `loadGameSegments`
 method in our game class, get a random number between 0 and the number of segments and pass in the
-offset.  If `random` or `segments.length` do not auto-import, you will need:
+offset.  If `Random()` or `segments.length` does not auto-import, you will need:
 
 ```dart
-import 'package:ember_quest/extensions/random.dart';
+import 'dart:math';
 import 'package:ember_quest/managers/segment_manager.dart';
 ```
 
