@@ -9,9 +9,9 @@ class _GameHasDraggables extends FlameGame with HasDraggables {}
 
 void main() {
   group('JoystickDirection tests', () {
-    testWithGame<_GameHasDraggables>('can convert angle to JoystickDirection', 
-    _GameHasDraggables.new,
-    (game) async {
+    testWithGame<_GameHasDraggables>(
+        'can convert angle to JoystickDirection', _GameHasDraggables.new,
+        (game) async {
       final joystick = JoystickComponent(
         knob: CircleComponent(radius: 5.0),
         size: 20,
