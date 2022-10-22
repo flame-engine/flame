@@ -17,9 +17,11 @@ techniques, tiles and layers can be offset by a custom distance and their
 rendering order can be configured.
 ```
 
-Flame provides a package ([flame_tiled]) that bundles a
-[dart] package which allows you to parse TMX (XML) files and access
-the tiles, objects, and everything in there.
+![Tiled Editor](../../images/TiledEditor.jpg)
+
+
+Flame provides a package ([flame_tiled]) that bundles a [dart] package which allows you to parse TMX
+(XML) files and access the tiles, objects, and everything in there.
 
 The [dart] package provides a simple `Tiled` class and [flame_tiled] provides a component wrapper
 `TiledComponent`, for the map rendering, which renders the tiles on the screen and supports

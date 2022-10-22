@@ -1,6 +1,5 @@
 # flame_fire_atlas
 
 ```{toctree}
-:hidden:
-
+Overview    <fire_atlas.md>
 ```

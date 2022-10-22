@@ -1,6 +1,5 @@
 # flame_svg
 
 ```{toctree}
-:hidden:
-
+Overview    <svg.md>
 ```
