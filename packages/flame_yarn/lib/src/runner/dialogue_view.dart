@@ -1,11 +1,12 @@
 import 'dart:async';
 
+import 'package:flame_yarn/src/structure/dialogue_choice.dart';
 import 'package:flame_yarn/src/structure/dialogue_line.dart';
 import 'package:flame_yarn/src/structure/node.dart';
 import 'package:flame_yarn/src/structure/option.dart';
 import 'package:meta/meta.dart';
 
-class DialogueView {
+abstract class DialogueView {
   const DialogueView();
 
   /// Called before the start of a new dialogue, i.e. before any lines, options,
@@ -80,10 +81,10 @@ class DialogueView {
   ///
   /// The future returned by this method should deliver an integer value of the
   /// index of the option that was selected. This index must not exceed the
-  /// length of the [options] list, and the indicated option must not be marked
+  /// length of the [choice] list, and the indicated option must not be marked
   /// as "unavailable". If these conditions are violated, an exception will be
   /// raised.
-  Future<int> onChoiceStart(List<Option> options) => never;
+  Future<int> onChoiceStart(DialogueChoice choice) => never;
 
   /// Called when the choice has been made, and the [option] was selected.
   ///

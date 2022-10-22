@@ -135,11 +135,11 @@ void main() {
               'Saturn\n'
               'Uranus\n'
               '===\n');
-        final node = yarn.nodes['test']!;
-        expect(node.lines.length, 3);
+        final block = yarn.nodes['test']!.content;
+        expect(block.lines.length, 3);
         for (var i = 0; i < 3; i++) {
-          expect(node.lines[i], isA<DialogueLine>());
-          final line = node.lines[i] as DialogueLine;
+          expect(block.lines[i], isA<DialogueLine>());
+          final line = block.lines[i] as DialogueLine;
           expect(line.person, isNull);
           expect(line.tags, isNull);
           expect(line.content.value, ['Jupyter', 'Saturn', 'Uranus'][i]);
@@ -264,15 +264,18 @@ void main() {
         expect(choice1.block, isNotNull);
         expect(choice1.block.length, 2);
         expect(
-          (choice1.block[0] as DialogueLine).content.value,
+          (choice1.block.lines[0] as DialogueLine).content.value,
           'Nice one, James!',
         );
-        expect((choice1.block[1] as DialogueLine).content.value, 'Back to ya!');
+        expect(
+          (choice1.block.lines[1] as DialogueLine).content.value,
+          'Back to ya!',
+        );
         expect(choice2.content.value, 'choice two');
         expect(choice2.block, isNotNull);
-        expect(choice2.block.length, 1);
+        expect(choice2.block.lines.length, 1);
         expect(
-          (choice2.block[0] as DialogueLine).content.value,
+          (choice2.block.lines[0] as DialogueLine).content.value,
           'My condolences...',
         );
       });
@@ -550,10 +553,16 @@ void main() {
         final command = node.lines[0] as IfCommand;
         expect(command.ifs.length, 2);
         expect(command.ifs[0].condition.value, true);
-        expect(command.ifs[0].block[0], isA<DialogueLine>());
-        expect((command.ifs[0].block[0] as DialogueLine).content.value, 'First!');
+        expect(command.ifs[0].block.lines[0], isA<DialogueLine>());
+        expect(
+          (command.ifs[0].block.lines[0] as DialogueLine).content.value,
+          'First!',
+        );
         expect(command.ifs[1].condition.value, true);
-        expect((command.ifs[1].block[0] as DialogueLine).content.value, 'Second');
+        expect(
+          (command.ifs[1].block.lines[0] as DialogueLine).content.value,
+          'Second',
+        );
       });
 
       test('<<elseif>>s', () {

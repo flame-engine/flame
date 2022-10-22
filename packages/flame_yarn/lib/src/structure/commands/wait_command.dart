@@ -1,6 +1,6 @@
+import 'package:flame_yarn/src/runner/dialogue_runner.dart';
 import 'package:flame_yarn/src/structure/commands/command.dart';
 import 'package:flame_yarn/src/structure/expressions/expression.dart';
-import 'package:flame_yarn/src/yarn_project.dart';
 
 class WaitCommand extends Command {
   const WaitCommand(this.arg);
@@ -8,7 +8,10 @@ class WaitCommand extends Command {
   final NumExpression arg;
 
   @override
-  void execute(YarnProject project) {
-    project.wait(arg.value.toDouble());
+  Future<void> execute(DialogueRunner dialogue) {
+    final duration = Duration(
+      microseconds: (arg.value.toDouble() * 1000000).toInt(),
+    );
+    return Future.delayed(duration);
   }
 }

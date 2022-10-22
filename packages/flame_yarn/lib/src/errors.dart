@@ -27,3 +27,12 @@ class TypeError implements Exception {
   @override
   String toString() => 'TypeError: $message';
 }
+
+class DialogueError implements Exception {
+  DialogueError([this.message]);
+
+  final String? message;
+
+  @override
+  String toString() => 'DialogueError: $message';
+}

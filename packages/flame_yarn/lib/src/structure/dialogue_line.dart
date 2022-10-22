@@ -11,4 +11,7 @@ class DialogueLine extends Statement {
   final String? person;
   final StringExpression content;
   final List<String>? tags;
+
+  @override
+  StatementKind get kind => StatementKind.line;
 }
