@@ -1,6 +1,7 @@
 # flame_bloc
 
 ```{toctree}
-:hidden:
-
+Overview    <bloc.md>
+Components    <bloc_components.md>
 ```
+

@@ -6,5 +6,6 @@ flame_tiled is the bridge package that connects the flame game engine to Tiled m
 ```{toctree}
 :hidden:
 
+Tiled  <tiled.md>
 Layers <layers.md>
 ```
