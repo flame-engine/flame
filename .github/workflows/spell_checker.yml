@@ -14,6 +14,6 @@ jobs:
       - uses: zwaldowski/cspell-action@v1
         with:
           paths: "**/*.{md,dart}"
-          config: .github/cspell.json /// This file would include spelling exceptions
+          config: .github/cspell.json
           exclude: ".gitignore"
           unique: true
