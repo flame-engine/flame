@@ -11,16 +11,17 @@ void main() {
   final withTappables = FlameTester(_GameWithTappables.new);
 
   group('HasTappables', () {
-    withTappables.test(
+    testWithGame<_GameWithTappables>(
       'make sure Tappables can be added to valid games',
+      _GameWithTappables.new,
       (game) async {
         await game.ensureAdd(_TappableComponent());
       },
     );
 
-    flameGame.test(
+    testWithFlameGame(
       'make sure Tappables cannot be added to invalid games',
-      (game) {
+      (game) async {
         expect(
           () => game.ensureAdd(_TappableComponent()),
           failsAssert(
