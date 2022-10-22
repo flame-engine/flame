@@ -4,11 +4,15 @@
   "flagWords": [],
   "words": [
     "ASDW",
+    "backtick",
     "blockquote",
     "broadphase",
+    "conformant",
     "dashbook",
+    "fireslime",
     "flippable",
     "hitbox",
+    "linkcheck",
     "LTRBR",
     "LTWH",
     "markdownlint",
@@ -18,12 +22,16 @@
     "proxying",
     "raycast",
     "raytracing",
+    "refactor",
     "renderable",
+    "socio",
     "Strikethrough",
     "stylesheet",
+    "typedef",
+    "toctree",
     "vsync"
   ],
   "ignorePaths": ["**/media/**", "**/assets/**", "**/test/**"],
-  "ignoreRegExpList": ["@\\w+", "\\$\\w+", "\\{\\w+", "\\`\\w+"],
+  "ignoreRegExpList": ["@\\w+", "\\$\\w+", "\\{\\w+", "\\`\\w+", "\\:\\w+", "\\/\\w+"],
   "dictionaries": ["en_US", "softwareTerms"]
 }
