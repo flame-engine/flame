@@ -37,7 +37,6 @@
   "languageSettings": [
       {
           "languageId": "markdown",
-          // Exclude code in tripple backticks.
           "ignoreRegExpList": [
               "/^\\s*```[\\s\\S]*?^\\s*```/gm"
           ]
