@@ -139,7 +139,7 @@ Just like `FlameGame`, components also have an `onLoad` method that can be overr
 initializations. But before we implement our player's own load method, note that we use an attribute
 and the `loadSprite` method from the `FlameGame` class.
 
-That is not a problem! Everytime our component needs to access things from its game class, we can
+That is not a problem! Every time our component needs to access things from its game class, we can
 mix our component with the `HasGameRef` mixin; that will add a new variable to our component called
 `gameRef` which will point to the game instance where the component is running. Now, lets refactor
 our game a little bit:

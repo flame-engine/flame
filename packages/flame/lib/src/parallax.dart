@@ -50,14 +50,14 @@ extension ParallaxExtension on Game {
 
   Future<ParallaxAnimation> loadParallaxAnimation(
     String path,
-    SpriteAnimationData animaitonData, {
+    SpriteAnimationData animationData, {
     ImageRepeat repeat = ImageRepeat.repeatX,
     Alignment alignment = Alignment.bottomLeft,
     LayerFill fill = LayerFill.height,
   }) {
     return ParallaxAnimation.load(
       path,
-      animaitonData,
+      animationData,
       repeat: repeat,
       alignment: alignment,
       fill: fill,
