@@ -7,7 +7,7 @@ import 'package:flame_yarn/src/structure/commands/jump_command.dart';
 import 'package:flame_yarn/src/structure/commands/set_command.dart';
 import 'package:flame_yarn/src/structure/commands/stop_command.dart';
 import 'package:flame_yarn/src/structure/commands/wait_command.dart';
-import 'package:flame_yarn/src/structure/dialogue.dart';
+import 'package:flame_yarn/src/structure/dialogue_line.dart';
 import 'package:flame_yarn/src/structure/expressions/arithmetic.dart';
 import 'package:flame_yarn/src/structure/expressions/expression.dart';
 import 'package:flame_yarn/src/structure/expressions/functions.dart';
@@ -114,7 +114,7 @@ class _Parser {
 
   /// Consumes a regular line of text from the input, up to and including the
   /// NEWLINE token.
-  Dialogue parseDialogueLine() {
+  DialogueLine parseDialogueLine() {
     final person = maybeParseLinePerson();
     final content = parseLineContent();
     final tags = maybeParseHashtags();
@@ -122,7 +122,7 @@ class _Parser {
       syntaxError('commands are not allowed on a dialogue line');
     }
     takeNewline();
-    return Dialogue(
+    return DialogueLine(
       person: person,
       content: content,
       tags: tags,

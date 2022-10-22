@@ -1,8 +1,8 @@
 import 'package:flame_yarn/src/structure/expressions/expression.dart';
 import 'package:flame_yarn/src/structure/statement.dart';
 
-class Dialogue extends Statement {
-  const Dialogue({
+class DialogueLine extends Statement {
+  const DialogueLine({
     this.person,
     required this.content,
     this.tags,
