@@ -33,5 +33,14 @@
   ],
   "ignorePaths": ["**/media/**", "**/assets/**", "**/test/**"],
   "ignoreRegExpList": ["@\\w+", "\\$\\w+", "\\{\\w+", "\\`\\w+", "\\:\\w+", "\\/\\w+", "\\#\\w+"],
-  "dictionaries": ["en_US", "softwareTerms"]
+  "dictionaries": ["en_US", "softwareTerms"],
+  "languageSettings": [
+      {
+          "languageId": "markdown",
+          // Exclude code in tripple backticks.
+          "ignoreRegExpList": [
+              "/^\\s*```[\\s\\S]*?^\\s*```/gm"
+          ]
+      }
+  ]
 }
