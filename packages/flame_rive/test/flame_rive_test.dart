@@ -105,6 +105,27 @@ void main() {
         );
       });
     });
+
+    group('Antialiasing', () {
+      test('Default value', () async {
+        final skillsArtboard = await loadArtboard(riveFile);
+        final riveComponent = RiveComponent(
+          artboard: skillsArtboard,
+        );
+
+        expect(riveComponent.artboard.antialiasing, isTrue);
+      });
+
+      test('Can change to false', () async {
+        final skillsArtboard = await loadArtboard(riveFile);
+        final riveComponent = RiveComponent(
+          artboard: skillsArtboard,
+          antialiasing: false,
+        );
+
+        expect(riveComponent.artboard.antialiasing, isFalse);
+      });
+    });
   });
 }
 

@@ -268,8 +268,19 @@ This effect will change the size of the target component, relative to its curren
 if the target has size `Vector2(100, 100)`, then after the following effect is applied and runs its
 course, the new size will be `Vector2(120, 50)`:
 
+ ```{flutter-app}
+ :sources: ../flame/examples
+ :page: size_by_effect
+ :show: widget code infobox
+ :width: 180
+ :height: 160
+ ```
+
 ```dart
-final effect = SizeEffect.by(Vector2(20, -50), EffectController(duration: 1));
+final effect = SizeEffect.by(
+   Vector2(-15, 30),
+   EffectController(duration: 1),
+);
 ```
 
 The size of a `PositionComponent` cannot be negative. If an effect attempts to set the size to a
@@ -288,8 +299,20 @@ target component and its children.
 
 Changes the size of the target component to the specified size. Target size cannot be negative:
 
+
+ ```{flutter-app}
+ :sources: ../flame/examples
+ :page: size_to_effect
+ :show: widget code infobox
+ :width: 180
+ :height: 160
+ ```
+
 ```dart
-final effect = SizeEffect.to(Vector2(120, 120), EffectController(duration: 1));
+final effect = SizeEffect.to(
+  Vector2(90, 80),
+  EffectController(duration: 1),
+);
 ```
 
 
@@ -337,9 +360,8 @@ final effect = AnchorToEffect(
 
 ### `OpacityToEffect`
 
-This effect will change over time the opacity of the target to the specified alpha-value. Currently
-this effect can only be applied to components that have a `HasPaint` mixin. If the target component
-uses multiple paints, the effect can target any individual color using the `paintId` parameter.
+This effect will change the opacity of the target over time to the specified alpha-value.
+It can only be applied to components that implement the `OpacityProvider`.
 
 ```{flutter-app}
 :sources: ../flame/examples
@@ -353,6 +375,30 @@ uses multiple paints, the effect can target any individual color using the `pain
 final effect = OpacityEffect.to(
   0.2,
   EffectController(duration: 0.75),
+);
+```
+
+If the component uses multiple paints, the effect can target one more more of those paints
+using the `target` parameter. The `HasPaint` mixin implements `OpacityProvider` and exposes APIs
+to easily create providers for desired paintIds. For single paintId `opacityProviderOf` can be used
+and for multiple paintIds and `opacityProviderOfList` can be used.
+
+
+```{flutter-app}
+:sources: ../flame/examples
+:page: opacity_effect_with_target
+:show: widget code infobox
+:width: 180
+:height: 160
+```
+
+```dart
+final effect = OpacityEffect.to(
+  0.2,
+  EffectController(duration: 0.75),
+  target: component.opacityProviderOfList(
+    paintIds: const [paintId1, paintId2],
+  ),
 );
 ```
 

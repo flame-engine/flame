@@ -10,13 +10,16 @@ import 'package:flutter_test/flutter_test.dart';
 
 class _PaintComponent extends Component with HasPaint {}
 
-class _CustomPaintComponent extends Component with HasPaint<String> {
-  _CustomPaintComponent(Map<String, Paint> paints) {
+class _CustomPaintComponent<T extends Object> extends Component
+    with HasPaint<T> {
+  _CustomPaintComponent(Map<T, Paint> paints) {
     for (final p in paints.entries) {
       setPaint(p.key, p.value);
     }
   }
 }
+
+enum _PaintTypes { paint1, paint2, paint3 }
 
 void main() {
   const _epsilon = 0.004; // 1/255, since alpha only holds 8 bits
@@ -199,23 +202,162 @@ void main() {
     testWithFlameGame(
       'on custom paint',
       (game) async {
-        final component =
-            _CustomPaintComponent({'bluePaint': BasicPalette.blue.paint()});
+        final component = _CustomPaintComponent<String>(
+          {'bluePaint': BasicPalette.blue.paint()},
+        );
         await game.ensureAdd(component);
 
         await component.add(
           OpacityEffect.fadeOut(
             EffectController(duration: 1),
-            paintId: 'bluePaint',
+            target: component.opacityProviderOf('bluePaint'),
           ),
         );
 
         game.update(1);
 
+        expect(component.getPaint('bluePaint').color.opacity, isZero);
+
         // RGB components shouldn't be affected after opacity efffect.
         expect(component.getPaint('bluePaint').color.blue, 255);
-        expect(component.getPaint('bluePaint').color.red, 0);
-        expect(component.getPaint('bluePaint').color.green, 0);
+        expect(component.getPaint('bluePaint').color.red, isZero);
+        expect(component.getPaint('bluePaint').color.green, isZero);
+      },
+    );
+
+    testWithFlameGame(
+      'apply on all paints',
+      (game) async {
+        final component = _CustomPaintComponent<_PaintTypes>(
+          {
+            _PaintTypes.paint1: BasicPalette.red.paint(),
+            _PaintTypes.paint2: BasicPalette.green.paint(),
+            _PaintTypes.paint3: BasicPalette.blue.paint(),
+          },
+        );
+        await game.ensureAdd(component);
+
+        await component
+            .add(OpacityEffect.fadeOut(EffectController(duration: 1)));
+
+        game.update(1);
+
+        // All paints should have the same opacity after the effect completes.
+        expect(component.getPaint().color.opacity, isZero);
+        expect(component.getPaint(_PaintTypes.paint1).color.opacity, isZero);
+        expect(component.getPaint(_PaintTypes.paint2).color.opacity, isZero);
+        expect(component.getPaint(_PaintTypes.paint3).color.opacity, isZero);
+      },
+    );
+
+    testWithFlameGame(
+      'maintains opacity ratios',
+      (game) async {
+        const redInitialOpacity = 0.9;
+        const greenInitialOpacity = 0.5;
+        const blueInitialOpacity = 0.2;
+        const targetOpacity = 0.5;
+
+        final component = _CustomPaintComponent<_PaintTypes>(
+          {
+            _PaintTypes.paint1: BasicPalette.red.paint()
+              ..color = BasicPalette.green
+                  .paint()
+                  .color
+                  .withOpacity(redInitialOpacity),
+            _PaintTypes.paint2: BasicPalette.green.paint()
+              ..color = BasicPalette.green
+                  .paint()
+                  .color
+                  .withOpacity(greenInitialOpacity),
+            _PaintTypes.paint3: BasicPalette.blue.paint()
+              ..color = BasicPalette.blue
+                  .paint()
+                  .color
+                  .withOpacity(blueInitialOpacity),
+          },
+        );
+        await game.ensureAdd(component);
+
+        await component.add(
+          OpacityEffect.to(
+            targetOpacity,
+            EffectController(duration: 1),
+            target: component.opacityProviderOfList(),
+          ),
+        );
+
+        game.update(1);
+
+        expectDouble(
+          component.getPaint(_PaintTypes.paint1).color.opacity,
+          redInitialOpacity * targetOpacity,
+        );
+        expectDouble(
+          component.getPaint(_PaintTypes.paint2).color.opacity,
+          greenInitialOpacity * targetOpacity,
+        );
+        expectDouble(
+          component.getPaint(_PaintTypes.paint3).color.opacity,
+          blueInitialOpacity * targetOpacity,
+        );
+      },
+    );
+
+    testWithFlameGame(
+      'maintains opacity ratios while ignoring some paints',
+      (game) async {
+        const redInitialOpacity = 0.9;
+        const greenInitialOpacity = 0.5;
+        const blueInitialOpacity = 0.2;
+        const targetOpacity = 1.0;
+
+        final component = _CustomPaintComponent<_PaintTypes>(
+          {
+            _PaintTypes.paint1: BasicPalette.red.paint()
+              ..color = BasicPalette.green
+                  .paint()
+                  .color
+                  .withOpacity(redInitialOpacity),
+            _PaintTypes.paint2: BasicPalette.green.paint()
+              ..color = BasicPalette.green
+                  .paint()
+                  .color
+                  .withOpacity(greenInitialOpacity),
+            _PaintTypes.paint3: BasicPalette.blue.paint()
+              ..color = BasicPalette.blue
+                  .paint()
+                  .color
+                  .withOpacity(blueInitialOpacity),
+          },
+        );
+        await game.ensureAdd(component);
+
+        await component.add(
+          OpacityEffect.fadeIn(
+            EffectController(duration: 1),
+            target: component.opacityProviderOfList(
+              paintIds: const [_PaintTypes.paint1, _PaintTypes.paint2],
+            ),
+          ),
+        );
+
+        game.update(1);
+
+        expectDouble(
+          component.getPaint(_PaintTypes.paint1).color.opacity,
+          targetOpacity,
+        );
+        expectDouble(
+          component.getPaint(_PaintTypes.paint2).color.opacity,
+          (greenInitialOpacity / redInitialOpacity) * targetOpacity,
+        );
+
+        // Opacity of this paint shouldn't be changed.
+        expectDouble(
+          component.getPaint(_PaintTypes.paint3).color.opacity,
+          blueInitialOpacity,
+        );
       },
     );
 

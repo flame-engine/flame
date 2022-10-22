@@ -13,6 +13,7 @@ import 'package:doc_flame_examples/move_along_path_effect.dart';
 import 'package:doc_flame_examples/move_by_effect.dart';
 import 'package:doc_flame_examples/move_to_effect.dart';
 import 'package:doc_flame_examples/opacity_by_effect.dart';
+import 'package:doc_flame_examples/opacity_effect_with_target.dart';
 import 'package:doc_flame_examples/opacity_to_effect.dart';
 import 'package:doc_flame_examples/rotate_by_effect.dart';
 import 'package:doc_flame_examples/rotate_to_effect.dart';
@@ -20,6 +21,8 @@ import 'package:doc_flame_examples/router.dart';
 import 'package:doc_flame_examples/scale_by_effect.dart';
 import 'package:doc_flame_examples/scale_to_effect.dart';
 import 'package:doc_flame_examples/sequence_effect.dart';
+import 'package:doc_flame_examples/size_by_effect.dart';
+import 'package:doc_flame_examples/size_to_effect.dart';
 import 'package:doc_flame_examples/tap_events.dart';
 import 'package:doc_flame_examples/value_route.dart';
 import 'package:flame/game.dart';
@@ -41,6 +44,7 @@ void main() {
     'decorator_tint': DecoratorTintGame.new,
     'drag_events': DragEventsGame.new,
     'opacity_to_effect': OpacityToEffectGame.new,
+    'opacity_effect_with_target': OpacityEffectWithTargetGame.new,
     'opacity_by_effect': OpacityByEffectGame.new,
     'move_along_path_effect': MoveAlongPathEffectGame.new,
     'move_by_effect': MoveByEffectGame.new,
@@ -50,6 +54,8 @@ void main() {
     'router': RouterGame.new,
     'scale_by_effect': ScaleByEffectGame.new,
     'scale_to_effect': ScaleToEffectGame.new,
+    'size_by_effect': SizeByEffectGame.new,
+    'size_to_effect': SizeToEffectGame.new,
     'sequence_effect': SequenceEffectGame.new,
     'tap_events': TapEventsGame.new,
     'value_route': ValueRouteExample.new,

@@ -7,7 +7,10 @@ import 'package:flame/rendering.dart';
 
 const tau = 2 * pi;
 
-class Flower extends PositionComponent with TapCallbacks {
+enum FlowerPaint { paintId1, paintId2, paintId3, paintId4, paintId5 }
+
+class Flower extends PositionComponent
+    with TapCallbacks, HasPaint<FlowerPaint> {
   Flower({
     required double size,
     void Function(Flower)? onTap,
@@ -22,15 +25,15 @@ class Flower extends PositionComponent with TapCallbacks {
     _paths.add(_makePath(radius * 0.8, 6, 0.3, 1.4));
     _paths.add(_makePath(radius * 0.55, 6, 0.2, 1.5));
     _paths.add(_makePath(radius * 0.1, 12, 0.1, 6));
-    _paints.add(Paint()..color = const Color(0xff255910));
-    _paints.add(Paint()..color = const Color(0xffee3f3f));
-    _paints.add(Paint()..color = const Color(0xffffbd66));
-    _paints.add(Paint()..color = const Color(0xfff6f370));
-    _paints.add(Paint()..color = const Color(0xfffffff0));
+
+    setPaint(FlowerPaint.paintId1, Paint()..color = const Color(0xff255910));
+    setPaint(FlowerPaint.paintId2, Paint()..color = const Color(0xffee3f3f));
+    setPaint(FlowerPaint.paintId3, Paint()..color = const Color(0xffffbd66));
+    setPaint(FlowerPaint.paintId4, Paint()..color = const Color(0xfff6f370));
+    setPaint(FlowerPaint.paintId5, Paint()..color = const Color(0xfffffff0));
   }
 
   final List<Path> _paths = [];
-  final List<Paint> _paints = [];
   final void Function(Flower)? _onTap;
 
   Path _makePath(double radius, int n, double sharpness, double f) {
@@ -50,7 +53,10 @@ class Flower extends PositionComponent with TapCallbacks {
   @override
   void render(Canvas canvas) {
     for (var i = 0; i < _paths.length; i++) {
-      canvas.drawPath(_paths[i], _paints[i]);
+      canvas.drawPath(
+        _paths[i],
+        getPaint(FlowerPaint.values.elementAt(i)),
+      );
     }
   }
 
