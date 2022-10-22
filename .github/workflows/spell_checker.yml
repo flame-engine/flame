@@ -16,4 +16,3 @@ jobs:
           paths: "**/*.{md,dart}"
           config: .github/cspell.json
           exclude: ".gitignore,CHANGELOG.md"
-          unique: true
