@@ -2,7 +2,7 @@
 
 > Note: This release has breaking changes.
 
- - **REFACTOR**: move broadphase-related functionality into separate subdir ([#1943](https://github.com/flame-engine/flame/issues/1943)). ([f23acd41](https://github.com/flame-engine/flame/commit/f23acd41e0341909200437bfb6487cbe9ca58a53))
+ - **REFACTOR**: move broadphase-related functionality into separate subdirectory ([#1943](https://github.com/flame-engine/flame/issues/1943)). ([f23acd41](https://github.com/flame-engine/flame/commit/f23acd41e0341909200437bfb6487cbe9ca58a53))
  - **REFACTOR**: used simpler and more implicit widgets in GameWidget ([#1862](https://github.com/flame-engine/flame/issues/1862)). ([44d17c64](https://github.com/flame-engine/flame/commit/44d17c64f80601159cc7f579cef8568727d411b3))
  - **PERF**: SpriteAnimationWidget will re-render only when needed ([#1876](https://github.com/flame-engine/flame/issues/1876)). ([bb678301](https://github.com/flame-engine/flame/commit/bb6783010f3c14362dcb4ed9182c4d240080a7f6))
  - **FIX**: Hitbox children of a CompositeHitbox to return correct parent ([#1922](https://github.com/flame-engine/flame/issues/1922)). ([d518705e](https://github.com/flame-engine/flame/commit/d518705e1665bfc3f54256f113f0d2227fab14dd))
@@ -55,7 +55,7 @@
  - **FIX**: SpriteAnimationWidget can now be update animation safely ([#1738](https://github.com/flame-engine/flame/issues/1738)). ([eb070195](https://github.com/flame-engine/flame/commit/eb0701951c165576fac1f540c8860e560a8961e6))
  - **FIX**: JoystickComponent drags using the delta Viewport ([#1831](https://github.com/flame-engine/flame/issues/1831)). ([54e40de6](https://github.com/flame-engine/flame/commit/54e40de674f628282ea19af4f5ce2173ee48fd6e))
  - **FIX**: Specify size for the SpriteWidget ([#1760](https://github.com/flame-engine/flame/issues/1760)). ([82f75fcb](https://github.com/flame-engine/flame/commit/82f75fcb57c8185a7138ee6ceb9082a418099df8))
- - **FEAT**: New colours to pallete.dart ([#1783](https://github.com/flame-engine/flame/issues/1783)). ([85cd60e1](https://github.com/flame-engine/flame/commit/85cd60e16c7b4dafdf1823bf85a7ae8a50fd05f2))
+ - **FEAT**: New colours to palette.dart ([#1783](https://github.com/flame-engine/flame/issues/1783)). ([85cd60e1](https://github.com/flame-engine/flame/commit/85cd60e16c7b4dafdf1823bf85a7ae8a50fd05f2))
  - **FEAT**: add `children` argument to `SpriteComponent.fromImage` ([#1793](https://github.com/flame-engine/flame/issues/1793)). ([80a63362](https://github.com/flame-engine/flame/commit/80a633622a5784f377ef08515115d66ff200b848))
  - **FEAT**: Added Decorator class and HasDecorator mixin ([#1781](https://github.com/flame-engine/flame/issues/1781)). ([8d00847c](https://github.com/flame-engine/flame/commit/8d00847cfcecb60a96772ccba1bcf3aec56b78ff))
  - **FEAT**: Added TextFormatter classes ([#1720](https://github.com/flame-engine/flame/issues/1720)). ([c44272be](https://github.com/flame-engine/flame/commit/c44272be45eadfabc8f03ef250eb663e59ef2aab))
@@ -94,7 +94,7 @@
  - **FIX**: ButtonComponent behavior when the engine is paused ([#1726](https://github.com/flame-engine/flame/issues/1726)). ([197e63d6](https://github.com/flame-engine/flame/commit/197e63d69e2a4c6779e49b918d05a60447ce9462))
  - **FIX**: Add missing paint arguments on shapes ([#1727](https://github.com/flame-engine/flame/issues/1727)). ([e59f3428](https://github.com/flame-engine/flame/commit/e59f3428469e4298d812bb665171679df8895daf))
  - **FIX**: Merge basic and advanced gesture detectors ([#1718](https://github.com/flame-engine/flame/issues/1718)). ([f08f8e12](https://github.com/flame-engine/flame/commit/f08f8e12f5322c7bea1491908f06b350e13c14b7))
- - **FEAT**: New colours to pallete.dart ([#1783](https://github.com/flame-engine/flame/issues/1783)). ([85cd60e1](https://github.com/flame-engine/flame/commit/85cd60e16c7b4dafdf1823bf85a7ae8a50fd05f2))
+ - **FEAT**: New colours to palette.dart ([#1783](https://github.com/flame-engine/flame/issues/1783)). ([85cd60e1](https://github.com/flame-engine/flame/commit/85cd60e16c7b4dafdf1823bf85a7ae8a50fd05f2))
  - **FEAT**: Added TextFormatter classes ([#1720](https://github.com/flame-engine/flame/issues/1720)). ([c44272be](https://github.com/flame-engine/flame/commit/c44272be45eadfabc8f03ef250eb663e59ef2aab))
  - **FEAT**: Drag events that dispatch using componentsAtPoint ([#1715](https://github.com/flame-engine/flame/issues/1715)). ([10669c12](https://github.com/flame-engine/flame/commit/10669c12702a3a82fcf5be9161107dce4349a79f))
  - **FEAT**: add `HasAncestor` mixin ([#1711](https://github.com/flame-engine/flame/issues/1711)). ([987a44f4](https://github.com/flame-engine/flame/commit/987a44f441429534c743388b44e6d84b28e8f5ca))
@@ -650,7 +650,7 @@
  - Code improvements and preparing APIs to null-safety
  - BaseComponent removes children marked as shouldRemove during update
  - Use `find` instead of `globstar` pattern in `scripts/lint.sh` as the later isn't enabled by default in bash
- - Fixes aseprite constructor bug
+ - Fixes Aseprite constructor bug
  - Improve error handling for the onLoad function
  - Add test for child removal
  - Fix bug where `Timer` callback doesn't fire for non-repeating timers, also fixing bug with `Particle` lifespan
@@ -933,7 +933,7 @@
 - Fixed build on travis
 - Updated readme badges
 - Fixed changelog
-- Fixed warning on audiopool, added audiopool example in docs
+- Fixed warning on AudioPool, added AudioPool example in docs
 
 ## 0.14.0
 - Adding Timer#isRunning method
@@ -961,7 +961,7 @@
 - Fixing PositionComponent#toRect which was not considering the anchor property (thanks, @illiapoplawski)
 
 ## [0.11.2]
-- Fixed bug on animatons with a single frame
+- Fixed bug on animations with a single frame
 - Fixed warning on using specific version o flutter_svg on pubspec
 - ParallaxComponent is not abstract anymore, as it does not include any abstract method
 - Added some functionality to Position class
@@ -983,7 +983,7 @@
 - Svg support
 - Adding `Animation#reversed` allowing a new reversed animation to be created from an existing animation.
 - Fix games inside regular apps when the component is inside a sliver
-- Support asesprite animations
+- Support Aseprite animations
 
 ## [0.10.2]
 - Fixed some warnings and formatting
@@ -997,7 +997,7 @@
 ## [0.10.0]
 - Fixing a few minor bugs, typos, improving docs
 - Adding the Palette concept: easy access to white and black colors/paints, create your palette to keep your game organized.
-- Adding the Anchor concept: specify where thins should anchor, added to PositionComponent and to the new text releated features.
+- Adding the Anchor concept: specify where thins should anchor, added to PositionComponent and to the new text related features.
 - Added a whole bunch of text related components: TextConfig allows you to easily define your typography information, TextComponent allows for easy rendering of stuff and TextBox can make sized texts and also typing effects.
 - Improved Utils to have better and more concise APIs, removed unused stuff.
 - Adding TiledComponent to integrate with tiled
@@ -1040,7 +1040,7 @@
  - Bump required dart version
 
 ## [0.6.0]
- - Adding audio suport for iOS (bumping audioplayers version)
+ - Adding audio support for iOS (bumping audioplayers version)
 
 ## [0.5.0]
  - Adding a text method to Util to more easily render a Paragraph
