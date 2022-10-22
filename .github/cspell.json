@@ -32,6 +32,6 @@
     "vsync"
   ],
   "ignorePaths": ["**/media/**", "**/assets/**", "**/test/**"],
-  "ignoreRegExpList": ["@\\w+", "\\$\\w+", "\\{\\w+", "\\`\\w+", "\\:\\w+", "\\/\\w+"],
+  "ignoreRegExpList": ["@\\w+", "\\$\\w+", "\\{\\w+", "\\`\\w+", "\\:\\w+", "\\/\\w+", "\\#\\w+"],
   "dictionaries": ["en_US", "softwareTerms"]
 }
