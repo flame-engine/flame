@@ -11,6 +11,7 @@
     "hitbox",
     "LTRBR",
     "LTWH",
+    "markdownlint",
     "positionable",
     "prerendered",
     "pressable",
