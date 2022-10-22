@@ -396,5 +396,5 @@ If you run your code, your game should now look like this:
 ![Ground Blocks](../../images/tutorials/platformer/Step4Ground.jpg)
 
 You might say, but wait!  Ember is in the middle of the ground and that is correct because Ember's
-`Anchor` is set to center.  This is ok and we will be addressing this in the next
-[chapter](step_5.md) where we will be adding movement and collisions to Ember!
+`Anchor` is set to center.  This is ok and we will be addressing this in [](step_5.md) where we will
+be adding movement and collisions to Ember!

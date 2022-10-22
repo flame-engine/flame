@@ -448,5 +448,5 @@ Color backgroundColor() {
 
 Excellent!  Ember is now in front of a blue sky.
 
-In the next [chapter](step_4.md), we will add the rest of the components now that we have a basic
+On to [](step_4.md), where we will add the rest of the components now that we have a basic
 understanding of what we are going to accomplish.

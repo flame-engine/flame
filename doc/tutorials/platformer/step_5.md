@@ -313,5 +313,5 @@ are now updating `gameRef.objectSpeed` which we established early on in the seri
 you will see the next random segment be generated and added to the level based on the work we did in
 Ground Block.
 
-We are almost done!  In the next [chapter](step_6.md), we will add the health system, keep track of
+We are almost done!  In [](step_6.md), we will add the health system, keep track of
 the score, and provide a HUD to relay that information to the player.

@@ -212,5 +212,5 @@ add(
 ```
 
 If you run the game now, you will see that your health is updated and the stars are incremented as
-appropriate.  In the next [chapter](step_7), we will finish the game by adding the main menu and the
-game over menu.
+appropriate.  Finally, in [](step_7), we will finish the game by adding the main menu and the
+game-over menu.
