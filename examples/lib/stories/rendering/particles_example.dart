@@ -403,7 +403,7 @@ class ParticlesExample extends FlameGame {
   /// use of [ComputedParticle] within other particles,
   /// mixing predefined and fully custom behavior.
   Particle fireworkParticle() {
-    // A pallete to paint over the "sky"
+    // A palette to paint over the "sky"
     final paints = [
       Colors.amber,
       Colors.amberAccent,
