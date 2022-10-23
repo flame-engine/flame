@@ -1,8 +1,8 @@
-# Tap events
+# Tap Events
 
 ```{note}
 This document describes a new experimental API. The more traditional approach
-for handling tap events is described in [](gesture-input.md).
+for handling tap events is described in [](gesture_input.md).
 ```
 
 **Tap events** are one of the most basic methods of interaction with a Flame game. These events
