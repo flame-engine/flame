@@ -21,6 +21,7 @@ class DialogueRunner {
   final List<DialogueView> _dialogueViews;
   final List<Node> _currentNodes;
   final List<NodeIterator> _iterators;
+  _LineDeliveryPipeline? _linePipeline;
 
   Future<void> runNode(String nodeName) async {
     if (_currentNodes.isNotEmpty) {
@@ -58,7 +59,17 @@ class DialogueRunner {
     }
   }
 
-  Future<void> deliverLine(DialogueLine line) async {}
+  Future<void> deliverLine(DialogueLine line) async {
+    final pipeline = _LineDeliveryPipeline(line, _dialogueViews);
+    _linePipeline = pipeline;
+    pipeline.start();
+    await pipeline.future;
+    _linePipeline = null;
+  }
+
+  void interruptLine() {
+    _linePipeline?.interrupt();
+  }
 
   Future<void> deliverChoices(DialogueChoice choice) async {
     final futures = [
@@ -110,5 +121,82 @@ class DialogueRunner {
       for (final maybeFuture in maybeFutures)
         if (maybeFuture is Future) maybeFuture
     ]);
+  }
+}
+
+
+class _LineDeliveryPipeline {
+  _LineDeliveryPipeline(this.line, this.views)
+    : _completer = Completer(),
+      _futures = List.generate(views.length, (i) => null, growable: false);
+
+  final DialogueLine line;
+  final List<DialogueView> views;
+  final List<FutureOr<void>> _futures;
+  final Completer<void> _completer;
+  int _numPendingFutures = 0;
+  bool _interrupted = false;
+
+  Future<void> get future => _completer.future;
+
+  void start() {
+    assert(_numPendingFutures == 0);
+    for (var i = 0; i < views.length; i++) {
+      final maybeFuture = views[i].onLineStart(line);
+      if (maybeFuture == null) {
+        continue;
+      } else {
+        // ignore: cast_nullable_to_non_nullable
+        final future = maybeFuture as Future<void>;
+        _futures[i] = future.then((_) => startCompleted(i));
+        _numPendingFutures++;
+      }
+    }
+  }
+
+  void interrupt() {
+    _interrupted = true;
+    for (var i = 0; i < views.length; i++) {
+      if (_futures[i] != null) {
+        _futures[i] = views[i].onLineCancel(line);
+      }
+    }
+  }
+
+  void finish() {
+    assert(_numPendingFutures == 0);
+    for (var i = 0; i < views.length; i++) {
+      final maybeFuture = views[i].onLineFinish(line);
+      if (maybeFuture == null) {
+        continue;
+      } else {
+        // ignore: cast_nullable_to_non_nullable
+        final future = maybeFuture as Future<void>;
+        _futures[i] = future.then((_) => finishCompleted(i));
+        _numPendingFutures++;
+      }
+    }
+  }
+
+  void startCompleted(int i) {
+    if (!_interrupted) {
+      assert(_futures[i] != null);
+      assert(_numPendingFutures > 0);
+      _futures[i] = null;
+      _numPendingFutures -= 1;
+      if (_numPendingFutures == 0) {
+        finish();
+      }
+    }
+  }
+
+  void finishCompleted(int i) {
+    assert(_futures[i] != null);
+    assert(_numPendingFutures > 0);
+    _futures[i] = null;
+    _numPendingFutures -= 1;
+    if (_numPendingFutures == 0) {
+      _completer.complete();
+    }
   }
 }

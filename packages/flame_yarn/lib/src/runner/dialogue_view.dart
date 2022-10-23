@@ -31,7 +31,7 @@ abstract class DialogueView {
   /// Called when the next dialogue [line] is ready to be presented to the user.
   ///
   /// The dialogue view may decide to present the [line] to the user in whatever
-  /// way it wants, or not to present it at all. If this method returns a
+  /// way it wants, or to not present it at all. If this method returns a
   /// future, then the dialogue runner will wait for that future to complete
   /// before advancing to the next line. If multiple [DialogueView]s return
   /// such futures, then the dialogue runner will wait for all of them to
@@ -57,7 +57,7 @@ abstract class DialogueView {
   FutureOr<void> onLineRush(DialogueLine line) {}
 
   // ???
-  // FutureOr<void> onLineCancel(DialogueLine line) {}
+  FutureOr<void> onLineCancel(DialogueLine line) {}
 
   /// Called when the [line] has finished presenting in all dialog views.
   ///
