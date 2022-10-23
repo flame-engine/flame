@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/src/palette.dart';
+import 'package:meta/meta.dart';
 
 /// Adds a collection of paints and paint layers to a component
 ///
@@ -15,37 +16,10 @@ import 'package:flame/src/palette.dart';
 /// main Paint is the first element.
 mixin HasPaint<T extends Object> on Component implements OpacityProvider {
   late final Map<T, Paint> _paints = {};
+  Paint paint = BasicPalette.white.paint();
 
-  List<Paint>? _paintLayers;
-
-  Paint _paint = BasicPalette.white.paint();
-
-  /// List of paints to use (in order) during render.
-  List<Paint> get paintLayers {
-    if ((_paintLayers == null) || _paintLayers!.isEmpty) {
-      return _paintLayers = [_paint];
-    }
-    return _paintLayers!;
-  }
-
-  set paintLayers(List<Paint> paintLayers) {
-    _paintLayers = paintLayers;
-  }
-
-  /// Main paint. The first paint in the [paintLayers] list.
-  Paint get paint {
-    if ((_paintLayers == null) || _paintLayers!.isEmpty) {
-      return _paint;
-    }
-    return paintLayers.first;
-  }
-
-  set paint(Paint newPaint) {
-    if ((_paintLayers == null) || _paintLayers!.isEmpty) {
-      _paint = newPaint;
-    }
-    paintLayers.first = newPaint;
-  }
+  @internal
+  List<Paint>? paintLayersInternal;
 
   /// Gets a paint from the collection.
   ///
@@ -65,62 +39,29 @@ mixin HasPaint<T extends Object> on Component implements OpacityProvider {
   }
 
   /// Sets a paint on the collection.
-  void setPaint(T paintId, Paint paint, {bool updatePaintLayers = true}) {
-    if (updatePaintLayers && (_paintLayers != null)) {
-      final oldPaint = _paints[paintId];
-      if (oldPaint == paint) {
-        return; // nothing to do
-      }
-      if (oldPaint != null) {
-        // replace any oldPaint references in paintLayers with new paint
-        for (var i = 0; i < paintLayers.length; ++i) {
-          if (paintLayers[i] == oldPaint) {
-            paintLayers[i] = paint;
-          }
-        }
-      }
-    }
-
+  void setPaint(T paintId, Paint paint) {
     _paints[paintId] = paint;
   }
 
   /// Removes a paint from the collection.
-  void deletePaint(T paintId, {bool updatePaintLayers = true}) {
-    final removedPaint = _paints.remove(paintId);
-    if (updatePaintLayers && (_paintLayers != null)) {
-      paintLayers.removeWhere((element) => element == removedPaint);
-    }
+  void deletePaint(T paintId) {
+    _paints.remove(paintId);
   }
 
-  /// Adds [paintId] to paintLayers.
-  /// Shortcut for paintLayers.add(getPaint(paintId)).
-  void addPaintLayer(T paintId) {
-    final _paint = _paints[paintId];
-
-    if (_paint == null) {
-      throw ArgumentError('No Paint found for $paintId');
+  /// List of paints to use (in order) during render.
+  List<Paint> get paintLayers {
+    if (!hasPaintLayers) {
+      return paintLayersInternal = [];
     }
-
-    paintLayers.add(_paint);
+    return paintLayersInternal!;
   }
 
-  /// Removes all [paintId] from paintLayers.
-  void removePaintIdFromLayers(T paintId) {
-    final _paint = _paints[paintId];
-
-    if (_paint == null) {
-      throw ArgumentError('No Paint found for $paintId');
-    }
-
-    if (_paintLayers != null) {
-      paintLayers.removeWhere((element) => element == _paint);
-    }
+  set paintLayers(List<Paint> paintLayers) {
+    paintLayersInternal = paintLayers;
   }
 
-  /// Sets paintLayers from [paintIds] list.
-  void setPaintLayers(List<T> paintIds) {
-    paintLayers = paintIds.map(getPaint).toList();
-  }
+  /// Whether there are any paint layers defined for the component.
+  bool get hasPaintLayers => paintLayersInternal?.isNotEmpty ?? false;
 
   /// Manipulate the paint to make it fully transparent.
   void makeTransparent({T? paintId}) {
@@ -202,9 +143,13 @@ mixin HasPaint<T extends Object> on Component implements OpacityProvider {
   ///
   /// Note: Each call results in a new [OpacityProvider] and hence the cached
   /// opacity ratios are calculated using opacities when this method was called.
-  OpacityProvider opacityProviderOfList({List<T?>? paintIds}) {
+  OpacityProvider opacityProviderOfList({
+    List<T?>? paintIds,
+    bool includeLayers = true,
+  }) {
     return _MultiPaintOpacityProvider(
       paintIds ?? (List<T?>.from(_paints.keys)..add(null)),
+      includeLayers,
       this,
     );
   }
@@ -224,19 +169,25 @@ class _ProxyOpacityProvider<T extends Object> implements OpacityProvider {
 }
 
 class _MultiPaintOpacityProvider<T extends Object> implements OpacityProvider {
-  _MultiPaintOpacityProvider(this.paintIds, this.target) {
+  _MultiPaintOpacityProvider(this.paintIds, this.includeLayers, this.target) {
     final maxOpacity = opacity;
 
-    _opacityRatios = List<double>.generate(
-      paintIds.length,
-      (index) =>
-          target.getOpacity(paintId: paintIds.elementAt(index)) / maxOpacity,
-    );
+    _opacityRatios = [
+      for (final paintId in paintIds)
+        target.getOpacity(paintId: paintId) / maxOpacity,
+    ];
+    _layerOpacityRatios = target.paintLayersInternal
+        ?.map(
+          (paint) => paint.color.opacity / maxOpacity,
+        )
+        .toList(growable: false);
   }
 
   final List<T?> paintIds;
   final HasPaint<T> target;
+  final bool includeLayers;
   late final List<double> _opacityRatios;
+  late final List<double>? _layerOpacityRatios;
 
   @override
   double get opacity {
@@ -244,6 +195,11 @@ class _MultiPaintOpacityProvider<T extends Object> implements OpacityProvider {
 
     for (final paintId in paintIds) {
       maxOpacity = max(target.getOpacity(paintId: paintId), maxOpacity);
+    }
+    if (includeLayers) {
+      target.paintLayersInternal?.forEach(
+        (paint) => maxOpacity = max(paint.color.opacity, maxOpacity),
+      );
     }
 
     return maxOpacity;
@@ -256,6 +212,14 @@ class _MultiPaintOpacityProvider<T extends Object> implements OpacityProvider {
         value * _opacityRatios.elementAt(i),
         paintId: paintIds.elementAt(i),
       );
+    }
+    if (includeLayers) {
+      final paintLayersInternal = target.paintLayersInternal;
+      for (var i = 0; i < (paintLayersInternal?.length ?? 0); ++i) {
+        paintLayersInternal![i].color = paintLayersInternal[i]
+            .color
+            .withOpacity(value * _layerOpacityRatios![i]);
+      }
     }
   }
 }
