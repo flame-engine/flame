@@ -100,6 +100,7 @@ class GameTester<T extends Game> {
   ///
   /// Use [verify] closure to make verifications/assertions.
   @isTest
+  @Deprecated('Will be removed in version 1.6.0')
   void test(
     String description,
     VerifyFunction<T> verify, {

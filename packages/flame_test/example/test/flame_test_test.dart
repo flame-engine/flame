@@ -7,9 +7,10 @@ void main() {
   group('flameTest', () {
     TestWidgetsFlutterBinding.ensureInitialized();
 
-    myGame.test(
+    testWithGame<MyGame>(
       'can load the game',
-      (game) {
+      MyGame.new,
+      (game) async {
         expect(game.children.length, 1);
       },
     );

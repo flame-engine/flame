@@ -50,7 +50,7 @@ Future<void> main() async {
   });
 
   group('SpriteAnimationComponent removal', () {
-    flameGame.test(
+    testWithFlameGame(
       'removeOnFinish is true and animation#loop is false',
       (game) async {
         final animation = SpriteAnimation.spriteList(
@@ -77,7 +77,7 @@ Future<void> main() async {
       },
     );
 
-    flameGame.test(
+    testWithFlameGame(
       'removeOnFinish is true and animation#loop is true',
       (game) async {
         final animation = SpriteAnimation.spriteList(
@@ -108,7 +108,7 @@ Future<void> main() async {
       },
     );
 
-    flameGame.test(
+    testWithFlameGame(
       'removeOnFinish is false and animation#loop is false',
       (game) async {
         final animation = SpriteAnimation.spriteList(
@@ -139,7 +139,7 @@ Future<void> main() async {
       },
     );
 
-    flameGame.test(
+    testWithFlameGame(
       'removeOnFinish is false and animation#loop is true',
       (game) async {
         final animation = SpriteAnimation.spriteList(
@@ -171,7 +171,7 @@ Future<void> main() async {
       },
     );
 
-    flameGame.test(
+    testWithFlameGame(
       "component isn't removed if it is not playing",
       (game) async {
         final animation = SpriteAnimation.spriteList(
@@ -222,7 +222,7 @@ Future<void> main() async {
       expect(callbackInvoked, 1);
     });
     // See https://github.com/flame-engine/flame/issues/895
-    flameGame.test('Last animation frame is not skipped', (game) async {
+    testWithFlameGame('Last animation frame is not skipped', (game) async {
       // Non-looping animation, with the expected total duration of 0.500 s
       final animation = SpriteAnimation.spriteList(
         List.filled(5, Sprite(image)),
