@@ -225,7 +225,7 @@ void main() {
         expect(choiceSet.options.length, 3);
         for (var i = 0; i < 3; i++) {
           final line = choiceSet.options[i];
-          expect(line.person, isNull);
+          expect(line.character, isNull);
           expect(line.tags, isNull);
           expect(line.condition, isNull);
           expect(line.block, isEmpty);
@@ -243,8 +243,8 @@ void main() {
         final choice = node.lines[0] as DialogueChoice;
         final option0 = choice.options[0];
         final option1 = choice.options[1];
-        expect(option0.person, 'Alice');
-        expect(option1.person, 'Bob');
+        expect(option0.character, 'Alice');
+        expect(option1.character, 'Bob');
         expect(option0.content.value, 'Hello!');
         expect(option1.content.value, 'Hi: there!');
       });

@@ -4,13 +4,13 @@ import 'package:flame_yarn/src/structure/expressions/expression.dart';
 class Option {
   Option({
     required this.content,
-    this.person,
+    this.character,
     this.condition,
     this.tags,
     this.block = const Block([]),
   });
 
-  final String? person;
+  final String? character;
   final StringExpression content;
   final List<String>? tags;
   final BoolExpression? condition;
@@ -19,7 +19,7 @@ class Option {
 
   @override
   String toString() {
-    final prefix = person == null? '' : '$person: ';
+    final prefix = character == null? '' : '$character: ';
     final suffix = available? '' : ' #disabled';
     return 'Option($prefix${content.value}$suffix)';
   }

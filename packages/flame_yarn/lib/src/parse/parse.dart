@@ -153,7 +153,7 @@ class _Parser {
     }
     return Option(
       content: content,
-      person: person,
+      character: person,
       tags: tags,
       condition: condition,
       block: block,
