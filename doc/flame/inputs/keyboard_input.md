@@ -4,8 +4,8 @@ This includes documentation for keyboard inputs.
 
 For other input documents, see also:
 
-- [Gesture Input](gesture-input.md): for mouse and touch pointer gestures
-- [Other Inputs](other-inputs.md): For joysticks, game pads, etc.
+- [Gesture Input](gesture_input.md): for mouse and touch pointer gestures
+- [Other Inputs](other_inputs.md): For joysticks, game pads, etc.
 
 
 ## Intro
