@@ -2,11 +2,11 @@ import 'package:flame_yarn/flame_yarn.dart';
 import 'package:flame_yarn/src/parse/parse.dart';
 import 'package:flame_yarn/src/structure/commands/if_command.dart';
 import 'package:flame_yarn/src/structure/commands/jump_command.dart';
+import 'package:flame_yarn/src/structure/dialogue_choice.dart';
 import 'package:flame_yarn/src/structure/dialogue_line.dart';
-import 'package:flame_yarn/src/structure/option.dart';
 import 'package:test/test.dart';
 
-import 'utils.dart';
+import '../utils.dart';
 
 void main() {
   // The tests here are further organized into subgroups according to which
@@ -220,10 +220,11 @@ void main() {
               '->    Gamma\n'
               '===\n');
         final node = yarn.nodes['test']!;
-        expect(node.lines.length, 3);
+        expect(node.lines.length, 1);
+        final choiceSet = node.lines.first as DialogueChoice;
+        expect(choiceSet.options.length, 3);
         for (var i = 0; i < 3; i++) {
-          expect(node.lines[i], isA<Option>());
-          final line = node.lines[i] as Option;
+          final line = choiceSet.options[i];
           expect(line.person, isNull);
           expect(line.tags, isNull);
           expect(line.condition, isNull);
@@ -239,12 +240,13 @@ void main() {
               '-> Bob: Hi: there!\n'
               '===\n');
         final node = yarn.nodes['A']!;
-        final line0 = node.lines[0] as Option;
-        final line1 = node.lines[1] as Option;
-        expect(line0.person, 'Alice');
-        expect(line0.content.value, 'Hello!');
-        expect(line1.person, 'Bob');
-        expect(line1.content.value, 'Hi: there!');
+        final choice = node.lines[0] as DialogueChoice;
+        final option0 = choice.options[0];
+        final option1 = choice.options[1];
+        expect(option0.person, 'Alice');
+        expect(option1.person, 'Bob');
+        expect(option0.content.value, 'Hello!');
+        expect(option1.content.value, 'Hi: there!');
       });
 
       test('option with a followup dialogue', () {
@@ -257,9 +259,10 @@ void main() {
               '    My condolences...\n'
               '===\n');
         final node = yarn.nodes['A']!;
-        expect(node.lines.length, 2);
-        final choice1 = node.lines[0] as Option;
-        final choice2 = node.lines[1] as Option;
+        final choiceSet = node.lines[0] as DialogueChoice;
+        expect(choiceSet.options.length, 2);
+        final choice1 = choiceSet.options[0];
+        final choice2 = choiceSet.options[1];
         expect(choice1.content.value, 'choice one');
         expect(choice1.block, isNotNull);
         expect(choice1.block.length, 2);

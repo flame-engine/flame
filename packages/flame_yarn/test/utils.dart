@@ -18,3 +18,9 @@ Matcher hasTypeError(String message) {
     isA<TypeError>().having((e) => e.toString(), 'toString', message),
   );
 }
+
+Matcher hasDialogueError(String message) {
+  return throwsA(
+    isA<DialogueError>().having((e) => e.message, 'message', message),
+  );
+}

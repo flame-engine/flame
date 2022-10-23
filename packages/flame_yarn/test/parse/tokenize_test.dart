@@ -2,7 +2,7 @@ import 'package:flame_yarn/src/parse/token.dart';
 import 'package:flame_yarn/src/parse/tokenize.dart';
 import 'package:test/test.dart';
 
-import 'utils.dart';
+import '../utils.dart';
 
 void main() {
   // Tests are organized according to which lexing Mode they are checking
