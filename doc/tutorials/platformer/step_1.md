@@ -1,11 +1,8 @@
 # 1. Preparation
 
 Before you begin any kind of game project, you need an idea of what you want to make and I like to
-then give it a **name**. For this tutorial and game, I got inspiration from @spydon's tweet about
-the Flame game engine GitHub repository reaching 7000 stars and I thought, excellent! Ember will be
-on a quest to gather as many stars as possible and I will call the game, `Ember Quest`.
-
-![Tweet](../../images/tutorials/platformer/tweet.jpg)
+then give it a **name**. For this tutorial and game, Ember will be on a quest to gather as many
+(GitHub) stars as possible and I will call the game, `Ember Quest`.
 
 Now it is time to get started but first, you need to go to the [bare flame game
 tutorial](../bare_flame_game.md) and complete the necessary setup steps. When you come back, you
