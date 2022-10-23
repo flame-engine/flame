@@ -3,12 +3,12 @@ import 'package:flame_yarn/src/structure/statement.dart';
 
 class DialogueLine extends Statement {
   const DialogueLine({
-    this.person,
+    this.character,
     required this.content,
     this.tags,
   });
 
-  final String? person;
+  final String? character;
   final StringExpression content;
   final List<String>? tags;
 

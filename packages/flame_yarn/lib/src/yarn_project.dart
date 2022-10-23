@@ -1,7 +1,6 @@
 import 'package:flame_yarn/src/parse/parse.dart' as impl;
 import 'package:flame_yarn/src/structure/node.dart';
 import 'package:flame_yarn/src/variable_storage.dart';
-import 'package:meta/meta.dart';
 
 /// [YarnProject] is a central place where all dialogue-related information
 /// is held:
@@ -27,13 +26,4 @@ class YarnProject {
   void setVariable(String name, dynamic value) {
     variables.setVariable(name, value);
   }
-
-  @internal
-  void jumpToNode(String node) {}
-
-  @internal
-  void stopNode() {}
-
-  @internal
-  void wait(num seconds) {}
 }

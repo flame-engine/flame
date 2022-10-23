@@ -3,7 +3,7 @@ import 'package:flame_yarn/src/structure/option.dart';
 import 'package:flame_yarn/src/structure/statement.dart';
 
 class DialogueChoice extends Statement {
-  DialogueChoice(this.options);
+  const DialogueChoice(this.options);
 
   final List<Option> options;
 

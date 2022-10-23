@@ -129,7 +129,7 @@ class _Parser {
     }
     takeNewline();
     return DialogueLine(
-      person: person,
+      character: person,
       content: content,
       tags: tags,
     );

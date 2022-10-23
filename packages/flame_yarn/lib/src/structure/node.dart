@@ -1,8 +1,8 @@
 import 'package:flame_yarn/src/structure/block.dart';
 import 'package:flame_yarn/src/structure/statement.dart';
 
-class Node {
-  Node({
+class Node extends Iterable<Statement> {
+  const Node({
     required this.title,
     required this.content,
     this.tags,
@@ -17,6 +17,7 @@ class Node {
   @override
   String toString() => 'Node($title)';
 
+  @override
   NodeIterator get iterator => NodeIterator(this);
 }
 

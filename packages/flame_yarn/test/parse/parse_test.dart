@@ -140,7 +140,7 @@ void main() {
         for (var i = 0; i < 3; i++) {
           expect(block.lines[i], isA<DialogueLine>());
           final line = block.lines[i] as DialogueLine;
-          expect(line.person, isNull);
+          expect(line.character, isNull);
           expect(line.tags, isNull);
           expect(line.content.value, ['Jupyter', 'Saturn', 'Uranus'][i]);
         }
@@ -153,7 +153,7 @@ void main() {
           ..parse('title:A\n---\nMrGoo: whatever\n===\n');
         expect(yarn.nodes['A']!.lines.first, isA<DialogueLine>());
         final line = yarn.nodes['A']!.lines[0] as DialogueLine;
-        expect(line.person, 'MrGoo');
+        expect(line.character, 'MrGoo');
         expect(line.content.value, 'whatever');
       });
 
@@ -162,7 +162,7 @@ void main() {
           ..parse('title:A\n---\n{1} {false} {"fake news"}\n===\n');
         expect(yarn.nodes['A']!.lines.first, isA<DialogueLine>());
         final line = yarn.nodes['A']!.lines[0] as DialogueLine;
-        expect(line.person, isNull);
+        expect(line.character, isNull);
         expect(line.content.value, '1 false fake news');
       });
 
