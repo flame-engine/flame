@@ -1,4 +1,3 @@
-
 import 'package:flame_yarn/src/structure/statement.dart';
 
 class Block {

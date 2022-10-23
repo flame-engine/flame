@@ -181,8 +181,8 @@ void main() {
     test('no decision-making views', () {
       final yarn = YarnProject()..parse('title:A\n---\n-> One\n===\n');
       final dialogue = DialogueRunner(
-          yarnProject: yarn,
-          dialogueViews: [_SimpleDialogueView(), _SimpleDialogueView()],
+        yarnProject: yarn,
+        dialogueViews: [_SimpleDialogueView(), _SimpleDialogueView()],
       );
       expect(
         () => dialogue.runNode('A'),

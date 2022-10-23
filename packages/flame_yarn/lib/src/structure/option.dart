@@ -19,8 +19,8 @@ class Option {
 
   @override
   String toString() {
-    final prefix = character == null? '' : '$character: ';
-    final suffix = available? '' : ' #disabled';
+    final prefix = character == null ? '' : '$character: ';
+    final suffix = available ? '' : ' #disabled';
     return 'Option($prefix${content.value}$suffix)';
   }
 }

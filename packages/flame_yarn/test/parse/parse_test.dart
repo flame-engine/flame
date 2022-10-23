@@ -2,8 +2,6 @@ import 'package:flame_yarn/flame_yarn.dart';
 import 'package:flame_yarn/src/parse/parse.dart';
 import 'package:flame_yarn/src/structure/commands/if_command.dart';
 import 'package:flame_yarn/src/structure/commands/jump_command.dart';
-import 'package:flame_yarn/src/structure/dialogue_choice.dart';
-import 'package:flame_yarn/src/structure/dialogue_line.dart';
 import 'package:test/test.dart';
 
 import '../utils.dart';

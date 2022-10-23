@@ -40,9 +40,11 @@ class DialogueRunner {
     _currentNodes.add(newNode);
     _iterators.add(newNode.iterator);
     await combineFutures(
-        [for (final view in _dialogueViews) view.onDialogueStart()]);
+      [for (final view in _dialogueViews) view.onDialogueStart()],
+    );
     await combineFutures(
-        [for (final view in _dialogueViews) view.onNodeStart(newNode)]);
+      [for (final view in _dialogueViews) view.onNodeStart(newNode)],
+    );
 
     while (_iterators.isNotEmpty) {
       final iterator = _iterators.last;
@@ -65,7 +67,8 @@ class DialogueRunner {
       }
     }
     await combineFutures(
-        [for (final view in _dialogueViews) view.onDialogueFinish()]);
+      [for (final view in _dialogueViews) view.onDialogueFinish()],
+    );
   }
 
   Future<void> deliverLine(DialogueLine line) async {

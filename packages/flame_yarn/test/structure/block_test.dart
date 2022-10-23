@@ -1,4 +1,3 @@
-
 import 'package:flame_yarn/src/structure/block.dart';
 import 'package:flame_yarn/src/structure/dialogue_line.dart';
 import 'package:flame_yarn/src/structure/expressions/literal.dart';

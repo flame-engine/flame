@@ -17,7 +17,7 @@ class DialogueLine extends Statement {
 
   @override
   String toString() {
-    final prefix = character == null? '' : '$character: ';
+    final prefix = character == null ? '' : '$character: ';
     return 'DialogueLine($prefix${content.value})';
   }
 }
