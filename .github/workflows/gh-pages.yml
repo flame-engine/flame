@@ -16,3 +16,8 @@ jobs:
         with:
           workingDir: examples
           webRenderer: canvaskit
+
+  build-docs:
+  - name: Trigger building the docs
+      run: |
+        curl -XPOST -u "${{ secrets.GIT_CREDENTIALS }}" -H "Accept:application/vnd.github" -H "Content-Type:application/json" https://api.github.com/flame-engine/flame-docs-site/actions/workflows/gh-pages.yml/dispatches --data '{"ref": "main" }'
