@@ -8,7 +8,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('SizeEffect', () {
-    flameGame.test('relative', (game) async {
+    testWithFlameGame('relative', (game) async {
       final component = ResizableComponent();
       await game.ensureAdd(component);
 
@@ -30,7 +30,7 @@ void main() {
       expect(component.size, closeToVector(Vector2(2, 2)));
     });
 
-    flameGame.test('absolute', (game) async {
+    testWithFlameGame('absolute', (game) async {
       final component = ResizableComponent();
       await game.ensureAdd(component);
 
@@ -52,7 +52,7 @@ void main() {
       expect(component.size, closeToVector(Vector2(3, 3)));
     });
 
-    flameGame.test('reset relative', (game) async {
+    testWithFlameGame('reset relative', (game) async {
       final component = ResizableComponent();
       await game.ensureAdd(component);
 
@@ -72,7 +72,7 @@ void main() {
       }
     });
 
-    flameGame.test('reset absolute', (game) {
+    testWithFlameGame('reset absolute', (game) async {
       final component = ResizableComponent();
       game.ensureAdd(component);
 
@@ -91,7 +91,7 @@ void main() {
       }
     });
 
-    flameGame.test('size composition', (game) async {
+    testWithFlameGame('size composition', (game) async {
       final component = ResizableComponent();
       await game.ensureAdd(component);
 
