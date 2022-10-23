@@ -48,7 +48,7 @@ Future<void> main() async {
   });
 
   group('SpriteAnimationGroupComponent.shouldRemove', () {
-    flameGame.test('removeOnFinish is true and there is no any state yet',
+    testWithFlameGame('removeOnFinish is true and there is no any state yet',
         (game) async {
       final animation = SpriteAnimation.spriteList(
         [
@@ -75,7 +75,7 @@ Future<void> main() async {
       expect(game.children.length, 1);
     });
 
-    flameGame.test(
+    testWithFlameGame(
       'removeOnFinish is true and current state animation#loop is false',
       (game) async {
         final animation = SpriteAnimation.spriteList(
@@ -103,7 +103,8 @@ Future<void> main() async {
       },
     );
 
-    flameGame.test('removeOnFinish is true and current animation#loop is true',
+    testWithFlameGame(
+        'removeOnFinish is true and current animation#loop is true',
         (game) async {
       final animation = SpriteAnimation.spriteList(
         [
@@ -132,9 +133,9 @@ Future<void> main() async {
       expect(game.children.length, 1);
     });
 
-    flameGame
-        .test('removeOnFinish is false and current animation#loop is false',
-            (game) async {
+    testWithFlameGame(
+        'removeOnFinish is false and current animation#loop is false',
+        (game) async {
       final animation = SpriteAnimation.spriteList(
         [
           Sprite(image),
@@ -161,7 +162,8 @@ Future<void> main() async {
       expect(game.children.length, 1);
     });
 
-    flameGame.test('removeOnFinish is false and current animation#loop is true',
+    testWithFlameGame(
+        'removeOnFinish is false and current animation#loop is true',
         (game) async {
       final animation = SpriteAnimation.spriteList(
         [

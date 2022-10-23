@@ -1,0 +1,55 @@
+{
+  "version": "0.2",
+  "language": "en",
+  "flagWords": [],
+  "words": [
+    "ASDW",
+    "backtick",
+    "backticks",
+    "blockquote",
+    "broadphase",
+    "conformant",
+    "dartdoc",
+    "dartdocs",
+    "dashbook",
+    "discoverability",
+    "fireslime",
+    "flippable",
+    "hitbox",
+    "linkcheck",
+    "LTRBR",
+    "LTWH",
+    "markdownlint",
+    "platformer",
+    "positionable",
+    "prerendered",
+    "pressable",
+    "proxying",
+    "raycast",
+    "raytracing",
+    "refactor",
+    "refactoring",
+    "refactorings",
+    "renderable",
+    "socio",
+    "Strikethrough",
+    "stylesheet",
+    "sublists",
+    "typedef",
+    "typedefs",
+    "toctree",
+    "toctrees",
+    "vsync"
+  ],
+  "ignorePaths": ["**/media/**", "**/assets/**", "**/test/**"],
+  "ignoreRegExpList": ["@\\w+", "\\$\\w+", "\\{\\w+", "\\`\\w+", "\\:\\w+", "\\/\\w+", "\\#\\w+"],
+  "dictionaries": ["en_US", "softwareTerms"],
+  "languageSettings": [
+      {
+          "languageId": "markdown",
+          "ignoreRegExpList": [
+              "/^\\s*```[\\s\\S]*?^\\s*```/gm"
+          ]
+      }
+  ]
+}
