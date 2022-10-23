@@ -24,8 +24,8 @@ void main() {
 Like in the [klondike](../klondike/klondike.md) tutorial, starting a new game can feel overwhelming.
 I like to first decide what platform I am trying to target. Will this be a mobile game, a desktop
 game, or maybe a web game, with Flutter and Flame, these are all possible.  For this game though, I
-am going to focus on a web game.  This means my users will interact with the game using their
-keyboards.  
+am going to focus on a web game. This means my users will interact with the game using their
+keyboards.
 
 Starting with a simple sketch (it doesn't have to be perfect as mine is very rough) is
 the best way to get an understanding of what will need to be accomplished. Take for instance the
