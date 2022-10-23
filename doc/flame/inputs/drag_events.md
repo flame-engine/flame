@@ -1,8 +1,8 @@
-# Drag events
+# Drag Events
 
 ```{note}
 This document describes a new experimental API. The more traditional approach
-for handling drag events is described in [](gesture-input.md).
+for handling drag events is described in [](gesture_input.md).
 ```
 
 **Drag events** occur when the user moves their finger across the screen of the device, or when they
