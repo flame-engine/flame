@@ -28,8 +28,8 @@ am going to focus on a web game. This means my users will interact with the game
 keyboards.
 
 Starting with a simple sketch (it doesn't have to be perfect as mine is very rough) is
-the best way to get an understanding of what will need to be accomplished. Take for instance the
-below sketch, we know we will need the following:
+the best way to get an understanding of what will need to be accomplished. For the sketch below,
+we know we will need the following:
 
 - Player Class
 - Enemy Class
