@@ -12,8 +12,11 @@ import 'package:flame_yarn/src/yarn_project.dart';
 
 ///
 class DialogueRunner {
-  DialogueRunner(this.project)
-      : _dialogueViews = [],
+  DialogueRunner({
+    required YarnProject yarnProject,
+    List<DialogueView>? dialogueViews,
+  })  : project = yarnProject,
+        _dialogueViews = dialogueViews ?? [],
         _currentNodes = [],
         _iterators = [];
 
@@ -36,6 +39,10 @@ class DialogueRunner {
     }
     _currentNodes.add(newNode);
     _iterators.add(newNode.iterator);
+    await combineFutures(
+        [for (final view in _dialogueViews) view.onDialogueStart()]);
+    await combineFutures(
+        [for (final view in _dialogueViews) view.onNodeStart(newNode)]);
 
     while (_iterators.isNotEmpty) {
       final iterator = _iterators.last;
@@ -57,6 +64,8 @@ class DialogueRunner {
         _currentNodes.removeLast();
       }
     }
+    await combineFutures(
+        [for (final view in _dialogueViews) view.onDialogueFinish()]);
   }
 
   Future<void> deliverLine(DialogueLine line) async {
@@ -72,29 +81,30 @@ class DialogueRunner {
   }
 
   Future<void> deliverChoices(DialogueChoice choice) async {
+    // Compute which options are available and which aren't. This must be done
+    // only once, because some options may have non-deterministic conditionals
+    // which may produce different results on each invocation.
+    for (final option in choice.options) {
+      option.available = option.condition?.value ?? true;
+    }
     final futures = [
       for (final view in _dialogueViews) view.onChoiceStart(choice)
     ];
     if (futures.every((future) => future == DialogueView.never)) {
-      throw DialogueError(
-        'No DialogueView capable of making a dialogue choice',
-      );
+      error('No dialogue views capable of making a dialogue choice');
     }
     final chosenIndex = await Future.any(futures);
     if (chosenIndex < 0 || chosenIndex >= choice.options.length) {
-      throw DialogueError(
-        'Invalid option index chosen in a dialogue: $chosenIndex',
-      );
+      error('Invalid option index chosen in a dialogue: $chosenIndex');
     }
     final chosenOption = choice.options[chosenIndex];
     if (!chosenOption.available) {
-      throw DialogueError(
-        'A dialogue view chosen an option that was not available: $chosenIndex',
-      );
+      error('A dialogue view selected a disabled option: $chosenOption');
     }
     await combineFutures(
       [for (final view in _dialogueViews) view.onChoiceFinish(chosenOption)],
     );
+    enterBlock(chosenOption.block);
   }
 
   FutureOr<void> deliverCommand(Command command) {
@@ -122,13 +132,17 @@ class DialogueRunner {
         if (maybeFuture is Future) maybeFuture
     ]);
   }
-}
 
+  Never error(String message) {
+    stop();
+    throw DialogueError(message);
+  }
+}
 
 class _LineDeliveryPipeline {
   _LineDeliveryPipeline(this.line, this.views)
-    : _completer = Completer(),
-      _futures = List.generate(views.length, (i) => null, growable: false);
+      : _completer = Completer(),
+        _futures = List.generate(views.length, (i) => null, growable: false);
 
   final DialogueLine line;
   final List<DialogueView> views;
@@ -151,6 +165,9 @@ class _LineDeliveryPipeline {
         _futures[i] = future.then((_) => startCompleted(i));
         _numPendingFutures++;
       }
+    }
+    if (_numPendingFutures == 0) {
+      finish();
     }
   }
 
@@ -175,6 +192,9 @@ class _LineDeliveryPipeline {
         _futures[i] = future.then((_) => finishCompleted(i));
         _numPendingFutures++;
       }
+    }
+    if (_numPendingFutures == 0) {
+      _completer.complete();
     }
   }
 

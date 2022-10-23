@@ -9,4 +9,7 @@ class DialogueChoice extends Statement {
 
   @override
   StatementKind get kind => StatementKind.choice;
+
+  @override
+  String toString() => 'DialogueChoice($options)';
 }

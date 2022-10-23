@@ -16,4 +16,11 @@ class Option {
   final BoolExpression? condition;
   final Block block;
   bool available = true;
+
+  @override
+  String toString() {
+    final prefix = person == null? '' : '$person: ';
+    final suffix = available? '' : ' #disabled';
+    return 'Option($prefix${content.value}$suffix)';
+  }
 }

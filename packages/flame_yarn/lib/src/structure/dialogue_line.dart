@@ -14,4 +14,10 @@ class DialogueLine extends Statement {
 
   @override
   StatementKind get kind => StatementKind.line;
+
+  @override
+  String toString() {
+    final prefix = character == null? '' : '$character: ';
+    return 'DialogueLine($prefix${content.value})';
+  }
 }

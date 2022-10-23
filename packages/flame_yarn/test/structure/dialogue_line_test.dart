@@ -1,4 +1,4 @@
-import 'package:flame_yarn/src/structure/dialogue_line.dart';
+import 'package:flame_yarn/flame_yarn.dart';
 import 'package:flame_yarn/src/structure/expressions/literal.dart';
 import 'package:flame_yarn/src/structure/statement.dart';
 import 'package:test/test.dart';
@@ -11,20 +11,22 @@ void main() {
       expect(line.tags, isNull);
       expect(line.content.value, '');
       expect(line.kind, StatementKind.line);
+      expect('$line', 'DialogueLine()');
     });
 
     test('line with meta information', () {
       const line = DialogueLine(
         character: 'Bob',
-        content: constEmptyString,
+        content: StringLiteral('Hello!'),
         tags: ['#red', '#fast'],
       );
       expect(line.kind, StatementKind.line);
-      expect(line.content.value, '');
+      expect(line.content.value, 'Hello!');
       expect(line.character, 'Bob');
       expect(line.tags!.length, 2);
       expect(line.tags![0], '#red');
       expect(line.tags![1], '#fast');
+      expect('$line', 'DialogueLine(Bob: Hello!)');
     });
   });
 }
