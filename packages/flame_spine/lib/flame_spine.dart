@@ -9,3 +9,4 @@
 library flame_spine;
 
 export 'src/flame_spine.dart';
+export 'src/skeleton_component.dart';
