@@ -11,9 +11,9 @@ void main() {
       FlameTester(_GameWithHasTappableComponents.new);
 
   group('TapCallbacks', () {
-    _withHasTappableComponents
-        .test('make sure they can be added to game with HasTappableComponents',
-            (game) async {
+    testWithGame<_GameWithHasTappableComponents>(
+        'make sure they can be added to game with HasTappableComponents',
+        _GameWithHasTappableComponents.new, (game) async {
       await game.ensureAdd(_TapCallbacksComponent());
     });
 
