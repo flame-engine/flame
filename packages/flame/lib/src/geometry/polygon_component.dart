@@ -174,8 +174,12 @@ class PolygonComponent extends ShapeComponent {
   @override
   void render(Canvas canvas) {
     if (renderShape) {
-      for (final currentPaint in paintLayers) {
-        canvas.drawPath(_path, currentPaint);
+      if (hasPaintLayers) {
+        for (final paint in paintLayers) {
+          canvas.drawPath(_path, paint);
+        }
+      } else {
+        canvas.drawPath(_path, paint);
       }
     }
   }

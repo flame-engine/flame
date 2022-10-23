@@ -5,6 +5,7 @@ import 'package:flame/extensions.dart';
 import 'package:flame/geometry.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
 import 'package:flame/src/utils/solve_quadratic.dart';
+import 'package:meta/meta.dart';
 
 class CircleComponent extends ShapeComponent implements SizeProvider {
   /// With this constructor you can create your [CircleComponent] from a radius
@@ -34,6 +35,16 @@ class CircleComponent extends ShapeComponent implements SizeProvider {
     super.paintLayers,
   }) : super(size: Vector2.all(relation * min(parentSize.x, parentSize.y)));
 
+  @override
+  @mustCallSuper
+  Future<void> onLoad() async {
+    void updateCenterOffset() => _centerOffset = Offset(size.x / 2, size.y / 2);
+    size.addListener(updateCenterOffset);
+    updateCenterOffset();
+  }
+
+  late Offset _centerOffset;
+
   /// Get the radius of the circle before scaling.
   double get radius {
     return min(size.x, size.y) / 2;
@@ -58,8 +69,12 @@ class CircleComponent extends ShapeComponent implements SizeProvider {
   @override
   void render(Canvas canvas) {
     if (renderShape) {
-      for (final currentPaint in paintLayers) {
-        canvas.drawCircle((size / 2).toOffset(), radius, currentPaint);
+      if (hasPaintLayers) {
+        for (final paint in paintLayers) {
+          canvas.drawCircle(_centerOffset, radius, paint);
+        }
+      } else {
+        canvas.drawCircle(_centerOffset, radius, paint);
       }
     }
   }
@@ -67,7 +82,7 @@ class CircleComponent extends ShapeComponent implements SizeProvider {
   @override
   void renderDebugMode(Canvas canvas) {
     super.renderDebugMode(canvas);
-    canvas.drawCircle((size / 2).toOffset(), radius, debugPaint);
+    canvas.drawCircle(_centerOffset, radius, debugPaint);
   }
 
   /// Checks whether the represented circle contains the [point].
