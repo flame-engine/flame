@@ -238,6 +238,7 @@ void main() {
       expect(game2, isNull);
     });
   });
+
   group('focus', () {
     testWidgets('autofocus starts focused', (tester) async {
       final gameFocusNode = FocusNode();
