@@ -5,15 +5,12 @@ import 'package:flame/effects.dart';
 
 class WaterEnemy extends SpriteAnimationComponent
     with HasGameRef<EmberQuestGame> {
-  late Vector2 _gridPosition;
-  late double _xPositionOffset;
+  final Vector2 gridPosition;
+  double xOffset;
   WaterEnemy({
-    required Vector2 gridPosition,
-    required double xPositionOffset,
-  }) : super(size: Vector2.all(64), anchor: Anchor.bottomLeft) {
-    _gridPosition = gridPosition;
-    _xPositionOffset = xPositionOffset;
-  }
+    required this.gridPosition,
+    required this.xOffset,
+  }) : super(size: Vector2.all(64), anchor: Anchor.bottomLeft);
 
   @override
   Future<void> onLoad() async {
