@@ -37,7 +37,6 @@ class RayCastExample extends FlameGame with HasCollisionDetection {
 
   @override
   void update(double dt) {
-    super.update(dt);
     final ray = Ray2(
       origin: origin,
       direction: direction,
