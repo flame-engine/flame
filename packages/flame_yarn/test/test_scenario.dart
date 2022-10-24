@@ -10,22 +10,27 @@ import 'package:test/test.dart';
 /// Common indents will be removed from both the [input] and the [testPlan],
 /// for convenience.
 @isTest
-Future<void> testScenario(
-  String testName, {
+Future<void> testScenario({
+  required String testName,
   required String input,
   required String testPlan,
+  bool skip = false,
 }) async {
-  test(testName, () async {
-    final yarn = YarnProject()..parse(_dedent(input));
-    final plan = _TestPlan(_dedent(testPlan));
-    final dialogue = DialogueRunner(yarnProject: yarn, dialogueViews: [plan]);
-    await dialogue.runNode(plan.startNode);
-    assert(
-      plan.done,
-      'Expected: ${plan.nextEntry}\n'
-      'Actual  : END OF DIALOGUE\n',
-    );
-  });
+  test(
+    testName,
+    () async {
+      final yarn = YarnProject()..parse(_dedent(input));
+      final plan = _TestPlan(_dedent(testPlan));
+      final dialogue = DialogueRunner(yarnProject: yarn, dialogueViews: [plan]);
+      await dialogue.runNode(plan.startNode);
+      assert(
+        plan.done,
+        'Expected: ${plan.nextEntry}\n'
+        'Actual  : END OF DIALOGUE\n',
+      );
+    },
+    skip: skip,
+  );
 }
 
 /// Removes common indent from a multi-line [input] string.
@@ -145,9 +150,9 @@ class _TestPlan extends DialogueView {
   void _parse(String input) {
     final rxEmpty = RegExp(r'^\s*$');
     final rxLine = RegExp(r'^line:\s+((\w+):\s+)?(.*)$');
-    final rxOption =
-        RegExp(r'^option:\s+((\w+):\s+)?(.*?)\s*(\[disabled\])?$');
+    final rxOption = RegExp(r'^option:\s+((\w+):\s+)?(.*?)\s*(\[disabled\])?$');
     final rxSelect = RegExp(r'^select:\s+(\d+)$');
+    final rxRun = RegExp(r'^run: (.*)$');
 
     final lines = const LineSplitter().convert(input);
     for (var i = 0; i < lines.length; i++) {
@@ -156,6 +161,7 @@ class _TestPlan extends DialogueView {
       final match1 = rxLine.firstMatch(line);
       final match2 = rxOption.firstMatch(line);
       final match3 = rxSelect.firstMatch(line);
+      final match4 = rxRun.firstMatch(line);
       if (match0 != null) {
         continue;
       } else if (match1 != null) {
@@ -174,6 +180,8 @@ class _TestPlan extends DialogueView {
           options.insert(0, _expected.removeLast() as _Option);
         }
         _expected.add(_Choice(options, index));
+      } else if (match4 != null) {
+        startNode = match4.group(1)!;
       } else {
         throw 'Unrecognized test plan line $i: "$line"';
       }

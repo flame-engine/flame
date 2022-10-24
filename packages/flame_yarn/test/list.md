@@ -1,0 +1,85 @@
+
+- [ ] TestCases/
+- [ ]   ParseFailures/
+- [ ]     Inference-FunctionsAndVarsCannotBeSolelyImplicit.yarn
+- [ ]     Inference-FunctionsCannotChangeType.yarn
+- [ ]     Jumps-ExpressionsMustBeStrings.yarn
+- [ ]     Nodes-MustHaveNodeBody.yarn
+- [ ]     OptionConditions-MustHaveExpressions.yarn
+- [ ]     Variables-MustBeAbleToInferDefinition.yarn
+- [ ]   Commands.testplan
+- [ ]   Commands.yarn
+- [ ]   DecimalNumbers.testplan
+- [ ]   DecimalNumbers.yarn
+- [ ]   DuplicateLineTags.yarn
+- [ ]   Escaping.testplan
+- [ ]   Escaping.yarn
+- [ ]   Expressions.testplan
+- [ ]   Expressions.yarn
+- [ ]   FormatFunctions.testplan
+- [ ]   FormatFunctions.yarn
+- [ ]   Functions.testplan
+- [ ]   Functions.yarn
+- [ ]   Identifiers.testplan
+- [ ]   Identifiers.yarn
+- [ ]   IfStatements.testplan
+- [ ]   IfStatements.yarn
+- [ ]   Inference-FunctionsAndVarsInheritType.testplan
+- [ ]   Inference-FunctionsAndVarsInheritType.yarn
+- [ ]   InlineExpressions.testplan
+- [ ]   InlineExpressions.yarn
+- [ ]   Jumps.testplan
+- [ ]   Jumps.yarn
+- [ ]   Lines.testplan
+- [ ]   Lines.yarn
+- [ ]   NodeHeaders.testplan
+- [ ]   NodeHeaders.yarn
+- [ ]   ShortcutOptions.testplan
+- [ ]   ShortcutOptions.yarn
+- [ ]   Smileys.testplan
+- [ ]   Smileys.yarn
+- [ ]   Types.testplan
+- [ ]   Types.yarn
+- [ ]   VariableStorage.testplan
+- [ ]   VariableStorage.yarn
+- [ ]   VisitCount.testplan
+- [ ]   VisitCount.yarn
+- [ ]   Visited.testplan
+- [ ]   Visited.yarn
+- [ ]   VisitTracking.testplan
+- [ ]   VisitTracking.yarn
+- [ ] Upgrader/
+- [ ]   V1toV2/
+- [ ]     FormatFunctions/
+- [ ]       FormatFunctions.testplan
+- [ ]       FormatFunctions.upgraded.yarn
+- [ ]       FormatFunctions.yarn
+- [ ]       Program.upgraded.yarnprogram
+- [ ]     NodeNames/
+- [ ]       NodeNames.testplan
+- [ ]       NodeNames.upgraded.yarn
+- [ ]       NodeNames.yarn
+- [ ]     SimplifiedOptions/
+- [ ]       SimplifiedOptions.testplan
+- [ ]       SimplifiedOptions.upgraded.yarn
+- [ ]       SimplifiedOptions.yarn
+- [ ]     Variables/
+- [ ]       Program.upgraded.yarnprogram
+- [ ]       Variables.upgraded.yarn
+- [ ]       Variables.yarn
+- [ ]     Variables-Invalid/
+- [ ]       Program.upgraded.yarnprogram
+- [ ]       Variables-Invalid.upgraded.yarn
+- [ ]       Variables-Invalid.yarn
+- [x] AnalysisTest.yarn
+- [x] Basic.yarn
+- [x] Compiler.yarn
+- [x] Example.testplan
+- [x] Example.yarn
+- [ ] Headers.yarn
+- [ ] InvalidNodeTitle.yarn
+- [x] Options.yarn
+- [ ] RandomOptions.yarn
+- [x] SkippedOptions.yarn
+- [ ] Strings.yarn
+- [ ] TaggedLines.yarn

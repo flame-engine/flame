@@ -194,7 +194,7 @@ void main() {
     });
 
     testScenario(
-      'Example',
+      testName: 'Example.plan',
       input: '''
         title: Start
         tags: 
@@ -245,6 +245,58 @@ void main() {
         line: A: Oh, goodbye!
         line: B: You'll be back soon!
       ''',
+    );
+
+    testScenario(testName: 'Compiler.plan',
+      input: r'''
+        title: Start
+        ---
+        // Compiler tests
+        This is a line!
+
+        <<if false>>
+          What what this is also a line!
+        <<endif>>
+
+        <<this is a custom command>>
+
+        <<set $foo to 1+2>>
+
+        <<if $foo is 3>>
+          Foo is 3!
+        <<elseif $foo is 4>>
+          Foo is 4!
+        <<else>>
+          Foo is something TOTALLY DIFFERENT.
+        <<endif>>
+
+        -> This is a shortcut option that you'll never see <<if false>>
+            Nice.
+        -> This is a different shortcut option
+            Sweet, but what about this?
+            -> It's ok
+                Cool.
+            -> Huh?
+        -> This is a shortcut option with no consequential text.
+
+        All done with the shortcut options!
+        ===
+      ''',
+      testPlan: '''
+        line: This is a line!
+        line: Foo is 3!
+        option: This is a shortcut option that you'll never see [disabled]
+        option: This is a different shortcut option
+        option: This is a shortcut option with no consequential text.
+        select: 2
+        line: Sweet, but what about this?
+        option: It's ok
+        option: Huh?
+        select: 1
+        line: Cool.
+        line: All done with the shortcut options!
+      ''',
+      skip: true,
     );
   });
 }
