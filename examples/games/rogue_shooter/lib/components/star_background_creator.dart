@@ -1,12 +1,10 @@
 import 'dart:math';
 
-import 'package:collision_detection_performance/components/star_component.dart';
-import 'package:collision_detection_performance/game.dart';
 import 'package:flame/components.dart';
 import 'package:flame/sprite.dart';
+import 'package:rogue_shooter/components/star_component.dart';
 
-class StarBackGroundCreator extends Component
-    with HasGameRef<SpaceShooterGame> {
+class StarBackGroundCreator extends Component with HasGameRef {
   final gapSize = 12;
 
   late final SpriteSheet spriteSheet;
@@ -24,11 +22,13 @@ class StarBackGroundCreator extends Component
 
     final starGapTime = (gameRef.size.y / gapSize) / StarComponent.speed;
 
-    add(TimerComponent(
-      period: starGapTime,
-      repeat: true,
-      onTick: () => _createRowOfStars(0),
-    ),);
+    add(
+      TimerComponent(
+        period: starGapTime,
+        repeat: true,
+        onTick: () => _createRowOfStars(0),
+      ),
+    );
 
     _createInitialStars();
   }
@@ -48,8 +48,10 @@ class StarBackGroundCreator extends Component
     final starGap = gameRef.size.x / gapSize;
 
     for (var i = 0; i < gapSize; i++) {
-      _createStarAt(starGap * i + (random.nextDouble() * starGap),
-          y + (random.nextDouble() * 20),);
+      _createStarAt(
+        starGap * i + (random.nextDouble() * starGap),
+        y + (random.nextDouble() * 20),
+      );
     }
   }
 

@@ -1,12 +1,17 @@
-import 'package:collision_detection_performance/components/enemy_creator.dart';
-import 'package:collision_detection_performance/components/player_component.dart';
-import 'package:collision_detection_performance/components/star_background_creator.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
+import 'package:rogue_shooter/components/enemy_creator.dart';
+import 'package:rogue_shooter/components/player_component.dart';
+import 'package:rogue_shooter/components/star_background_creator.dart';
 
-class SpaceShooterGame extends FlameGame
+class RogueShooterGame extends FlameGame
     with PanDetector, HasCollisionDetection {
+  static const String description = '''
+    A simple space shooter game used for testing performance of the collision
+    detection system in Flame.
+  ''';
+
   late final PlayerComponent player;
   late final TextComponent componentCounter;
   late final TextComponent scoreText;

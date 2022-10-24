@@ -1,10 +1,10 @@
-import 'package:collision_detection_performance/components/explosion_component.dart';
-import 'package:collision_detection_performance/game.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:rogue_shooter/components/explosion_component.dart';
+import 'package:rogue_shooter/rogue_shooter_game.dart';
 
 class EnemyComponent extends SpriteAnimationComponent
-    with HasGameRef<SpaceShooterGame>, CollisionCallbacks {
+    with HasGameRef<RogueShooterGame>, CollisionCallbacks {
   static const speed = 150;
   static Vector2 initialSize = Vector2.all(25);
 

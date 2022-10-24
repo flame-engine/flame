@@ -1,10 +1,9 @@
-import 'package:collision_detection_performance/components/enemy_component.dart';
-import 'package:collision_detection_performance/game.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:rogue_shooter/components/enemy_component.dart';
 
 class BulletComponent extends SpriteAnimationComponent
-    with HasGameRef<SpaceShooterGame>, CollisionCallbacks {
+    with HasGameRef, CollisionCallbacks {
   static const speed = 500.0;
   late final Vector2 velocity;
   final Vector2 deltaPosition = Vector2.zero();

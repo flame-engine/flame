@@ -1,8 +1,6 @@
-import 'package:collision_detection_performance/game.dart';
 import 'package:flame/components.dart';
 
-class ExplosionComponent extends SpriteAnimationComponent
-    with HasGameRef<SpaceShooterGame> {
+class ExplosionComponent extends SpriteAnimationComponent with HasGameRef {
   ExplosionComponent({super.position})
       : super(
           size: Vector2.all(50),

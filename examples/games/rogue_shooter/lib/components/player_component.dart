@@ -1,12 +1,11 @@
-import 'package:collision_detection_performance/components/bullet_component.dart';
-import 'package:collision_detection_performance/components/enemy_component.dart';
-import 'package:collision_detection_performance/components/explosion_component.dart';
-import 'package:collision_detection_performance/game.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:rogue_shooter/components/bullet_component.dart';
+import 'package:rogue_shooter/components/enemy_component.dart';
+import 'package:rogue_shooter/components/explosion_component.dart';
 
 class PlayerComponent extends SpriteAnimationComponent
-    with HasGameRef<SpaceShooterGame>, CollisionCallbacks {
+    with HasGameRef, CollisionCallbacks {
   late TimerComponent bulletCreator;
 
   PlayerComponent()
