@@ -74,7 +74,7 @@ final double moveSpeed = 200;
 ```
 
 This establishes a base velocity of 0 and stores `moveSpeed` so we can adjust as necessary to suit
-how the gameplay should be. Next, add the `update` method with the following:
+how the game-play should be. Next, add the `update` method with the following:
 
 
 ```dart
@@ -161,8 +161,8 @@ void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
 You will need to import the following:
 
 ```dart
-import 'package:ember_quest/objects/ground_block.dart';
-import 'package:ember_quest/objects/platform_block.dart';
+import '../objects/ground_block.dart';
+import '../objects/platform_block.dart';
 ```
 
 As well as create these class variables:
@@ -177,7 +177,7 @@ method, add the following:
 
 ```dart
 add(
-    CircleHitbox()..collisionType = CollisionType.active,
+    CircleHitbox(),
 );
 ```
 
@@ -279,9 +279,10 @@ void hit() {
 If the auto-imports did not occur, you will need to add the following imports to your file:
 
 ```dart
-import 'package:ember_quest/actors/water_enemy.dart';
-import 'package:ember_quest/objects/star.dart';
 import 'package:flame/effects.dart';
+
+import '../objects/star.dart';
+import 'water_enemy.dart';
 ```
 
 If you run the game now, you should be able to move around, make stars disappear, and if you
@@ -296,11 +297,11 @@ following to our `update` method:
 
 ```dart
 gameRef.objectSpeed = 0;
-//Prevent ember from going backwards at screen edge
+// Prevent ember from going backwards at screen edge.
 if (position.x - 36 <= 0 && horizontalDirection < 0) {
     velocity.x = 0;
 }
-//Prevent ember from going beyond half screen
+// Prevent ember from going beyond half screen.
 if (position.x + 64 >= gameRef.size.x / 2 && horizontalDirection > 0) {
     velocity.x = 0;
     gameRef.objectSpeed = -moveSpeed;

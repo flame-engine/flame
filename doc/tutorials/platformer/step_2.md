@@ -11,7 +11,7 @@ what the game should do:
 - The level will be infinite, so we need a way to randomly load sections of the level.
 - The objective is to collect stars while avoiding enemies.
 - Enemies cannot be killed as you need to use the platforms to avoid them.
-- If Ember is hit by an enemy, it should reduce Ebers' health by 1.
+- If Ember is hit by an enemy, it should reduce Ember's health by 1.
 - Ember should have 3 lives to lose.
 - There should be pits that if Ember falls into, it is automatically game over.
 - There should be a main menu and a game-over screen that lets the player start over.
@@ -62,29 +62,17 @@ So now that we have our game file, let's prepare the `main.dart` file to receive
 `FlameGame`.  Change your entire `main.dart` file to the following:
 
 ```dart
-import 'package:ember_quest/ember_quest.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 
+import 'ember_quest.dart';
+
 void main() {
-  runApp(const EmberQuestGameApp());
-}
-
-class EmberQuestGameApp extends StatelessWidget {
-  const EmberQuestGameApp({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Ember Quest',
-      home: Scaffold(
-        body: GameWidget<EmberQuestGame>(
-          game: EmberQuestGame(),
-        ),
-      ),
-    );
-  }
+  runApp(
+    const GameWidget<EmberQuestGame>.controlled(
+      gameFactory: EmberQuestGame.new,
+    ),
+  );
 }
 ```
 
@@ -98,8 +86,9 @@ organized by how they will be involved in my game.  So for Ember, let's create t
 `lib\actors` and in that folder, create `ember.dart`.  In that file, add the following code:
 
 ```dart
-import 'package:ember_quest/ember_quest.dart';
 import 'package:flame/components.dart';
+
+import '../ember_quest.dart';
 
 class EmberPlayer extends SpriteAnimationComponent
     with HasGameRef<EmberQuestGame> {
@@ -138,8 +127,9 @@ Now before you rush to run the game again, we have to add Ember to the game worl
 back to `ember_quest.dart` and add the following:
 
 ```dart
-import 'package:ember_quest/actors/ember.dart';
 import 'package:flame/game.dart';
+
+import 'actors/ember.dart';
 
 class EmberQuestGame extends FlameGame {
   EmberQuestGame();

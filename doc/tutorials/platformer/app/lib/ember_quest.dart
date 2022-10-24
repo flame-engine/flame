@@ -1,14 +1,14 @@
-import 'package:ember_quest/actors/ember.dart';
-import 'package:ember_quest/actors/water_enemy.dart';
-import 'package:ember_quest/managers/segment_manager.dart';
-import 'package:ember_quest/objects/ground_block.dart';
-import 'package:ember_quest/objects/platform_block.dart';
-import 'package:ember_quest/objects/star.dart';
-import 'package:ember_quest/overlays/hud.dart';
-
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
+
+import 'actors/ember.dart';
+import 'actors/water_enemy.dart';
+import 'managers/segment_manager.dart';
+import 'objects/ground_block.dart';
+import 'objects/platform_block.dart';
+import 'objects/star.dart';
+import 'overlays/hud.dart';
 
 class EmberQuestGame extends FlameGame
     with HasCollisionDetection, HasKeyboardHandlerComponents {
@@ -51,43 +51,51 @@ class EmberQuestGame extends FlameGame
     return const Color.fromARGB(255, 173, 223, 247);
   }
 
-  loadGameSegments(int segmentIndex, double xPositionOffset) {
-    for (var block in segments[segmentIndex]) {
+  void loadGameSegments(int segmentIndex, double xPositionOffset) {
+    for (final block in segments[segmentIndex]) {
       switch (block.blockType) {
         case GroundBlock:
-          add(GroundBlock(
-            gridPosition: block.gridPosition,
-            xPositionOffset: xPositionOffset,
-          ));
+          add(
+            GroundBlock(
+              gridPosition: block.gridPosition,
+              xOffset: xPositionOffset,
+            ),
+          );
           break;
         case PlatformBlock:
-          add(PlatformBlock(
-            gridPosition: block.gridPosition,
-            xPositionOffset: xPositionOffset,
-          ));
+          add(
+            PlatformBlock(
+              gridPosition: block.gridPosition,
+              xOffset: xPositionOffset,
+            ),
+          );
           break;
         case Star:
-          add(Star(
-            gridPosition: block.gridPosition,
-            xPositionOffset: xPositionOffset,
-          ));
+          add(
+            Star(
+              gridPosition: block.gridPosition,
+              xOffset: xPositionOffset,
+            ),
+          );
           break;
         case WaterEnemy:
-          add(WaterEnemy(
-            gridPosition: block.gridPosition,
-            xPositionOffset: xPositionOffset,
-          ));
+          add(
+            WaterEnemy(
+              gridPosition: block.gridPosition,
+              xOffset: xPositionOffset,
+            ),
+          );
           break;
       }
     }
   }
 
-  initializeGame(bool loadHud) {
-    //Assume that size.x < 3200
-    int segmentsToLoad = (size.x / 640).ceil();
+  void initializeGame(bool loadHud) {
+    // Assume that size.x < 3200
+    final segmentsToLoad = (size.x / 640).ceil();
     segmentsToLoad.clamp(0, segments.length);
 
-    for (int i = 0; i <= segmentsToLoad; i++) {
+    for (var i = 0; i <= segmentsToLoad; i++) {
       loadGameSegments(i, (640 * i).toDouble());
     }
 

@@ -9,31 +9,31 @@ to `center`.  This means we will need to adjust the position by half of the imag
 I am going to add the whole class and explain the additional changes after.
 
 ```dart
-import 'package:ember_quest/ember_quest.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flutter/material.dart';
 
+import '../ember_quest.dart';
+
 class Star extends SpriteComponent
     with HasGameRef<EmberQuestGame> {
-  late Vector2 _gridPosition;
-  late double _xPositionOffset;
+  final Vector2 gridPosition;
+  double xOffset;
+
   Star({
-    required Vector2 gridPosition,
-    required double xPositionOffset,
-  }) : super(size: Vector2.all(64), anchor: Anchor.center) {
-    _gridPosition = gridPosition;
-    _xPositionOffset = xPositionOffset;
-  }
+    required this.gridPosition,
+    required this.xOffset,
+  }) : super(size: Vector2.all(64), anchor: Anchor.center);
 
   @override
   Future<void> onLoad() async {
     final starImage = gameRef.images.fromCache('star.png');
     sprite = Sprite(starImage);
     position = Vector2(
-        (_gridPosition.x * size.x) + _xPositionOffset + (size.x / 2),
-        gameRef.size.y - (_gridPosition.y * size.y) - (size.y / 2));
+        (gridPosition.x * size.x) + xOffset + (size.x / 2),
+        gameRef.size.y - (gridPosition.y * size.y) - (size.y / 2),
+    );
     add(RectangleHitbox()..collisionType = CollisionType.passive);
     add(
       SizeEffect.by(
@@ -84,7 +84,7 @@ Don't forget to add the star to your `lib/ember_quest.dart` file by doing:
 case Star:
     add(Star(
         gridPosition: block.gridPosition,
-        xPositionOffset: xPositionOffset,
+        xOffset: xPositionOffset,
     ));
     break;
 ```
@@ -98,22 +98,21 @@ Now that we understand adding effects to our objects, let's do the same for the 
 Open `lib/actors/water_enemy.dart` and add the following code:
 
 ```dart
-import 'package:ember_quest/ember_quest.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 
+import '../ember_quest.dart';
+
 class WaterEnemy extends SpriteAnimationComponent
     with HasGameRef<EmberQuestGame> {
-  late Vector2 _gridPosition;
-  late double _xPositionOffset;
+  final Vector2 gridPosition;
+  double xOffset;
+
   WaterEnemy({
-    required Vector2 gridPosition,
-    required double xPositionOffset,
-  }) : super(size: Vector2.all(64), anchor: Anchor.center) {
-    _gridPosition = gridPosition;
-    _xPositionOffset = xPositionOffset;
-  }
+    required this.gridPosition,
+    required this.xOffset,
+  }) : super(size: Vector2.all(64), anchor: Anchor.bottomLeft);
 
   @override
   Future<void> onLoad() async {
@@ -126,8 +125,9 @@ class WaterEnemy extends SpriteAnimationComponent
       ),
     );
     position = Vector2(
-        (_gridPosition.x * size.x) + _xPositionOffset + (size.x / 2),
-        gameRef.size.y - (_gridPosition.y * size.y) - (size.y / 2));
+        (gridPosition.x * size.x) + xOffset + (size.x / 2),
+        gameRef.size.y - (gridPosition.y * size.y) - (size.y / 2),
+    );
     add(RectangleHitbox()..collisionType = CollisionType.passive);
     add(
       MoveEffect.by(
@@ -169,7 +169,7 @@ Don't forget to add the water enemy to your `lib/ember_quest.dart` file by doing
 case WaterEnemy:
     add(WaterEnemy(
         gridPosition: block.gridPosition,
-        xPositionOffset: xPositionOffset,
+        xOffset: xPositionOffset,
     ));
     break;
 ```
@@ -192,29 +192,28 @@ complex than the others as we need to identify two times during a block's life c
 So let's start with the basic class which is nothing more than a copy of the Platform Block.
 
 ```dart
-import 'package:ember_quest/ember_quest.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 
+import '../ember_quest.dart';
+
 class GroundBlock extends SpriteComponent with HasGameRef<EmberQuestGame> {
-  late Vector2 _gridPosition;
-  late double _xPositionOffset;
+  final Vector2 gridPosition;
+  double xOffset;
 
   GroundBlock({
-    required Vector2 gridPosition,
-    required double xPositionOffset,
-  }) : super(size: Vector2.all(64), anchor: Anchor.bottomLeft) {
-    _gridPosition = gridPosition;
-    _xPositionOffset = xPositionOffset;
-  }
+    required this.gridPosition,
+    required this.xOffset,
+  }) : super(size: Vector2.all(64), anchor: Anchor.bottomLeft);
 
   @override
   Future<void> onLoad() async {
     final groundImage = gameRef.images.fromCache('ground.png');
     sprite = Sprite(groundImage);
-    position = Vector2((_gridPosition.x * size.x) + _xPositionOffset,
-        gameRef.size.y - (_gridPosition.y * size.y));
+    position = Vector2((gridPosition.x * size.x) + xOffset,
+        gameRef.size.y - (gridPosition.y * size.y),
+    );
     add(RectangleHitbox()..collisionType = CollisionType.passive);
   }
 
@@ -244,7 +243,7 @@ final GlobalKey _blockKey = GlobalKey();
 Now in your Ground Block's `onLoad` method, add the following at the end of the method:
 
 ```dart
-if (_gridPosition.x == 9 && position.x > gameRef.lastBlockXPosition) {
+if (gridPosition.x == 9 && position.x > gameRef.lastBlockXPosition) {
     gameRef.lastBlockKey = _blockKey;
     gameRef.lastBlockXPosition = position.x + size.x;
 }
@@ -263,7 +262,7 @@ Now we can address updating this information, so in the `update` method, add the
     Vector2 velocity = Vector2(gameRef.objectSpeed, 0);
     position += velocity * dt;
 
-    if (_gridPosition.x == 9) {
+    if (gridPosition.x == 9) {
       if (gameRef.lastBlockKey == _blockKey) {
         gameRef.lastBlockXPosition = position.x + size.x - 10;
       }
@@ -295,7 +294,7 @@ the other block we just added:
 ```dart
 if (position.x < -size.x) {
   removeFromParent();
-  if (_gridPosition.x == 0) {
+  if (gridPosition.x == 0) {
     gameRef.loadGameSegments(
         Random().nextInt(segments.length + 1), gameRef.lastBlockXPosition);
   }
@@ -309,40 +308,41 @@ offset.  If `Random()` or `segments.length` does not auto-import, you will need:
 
 ```dart
 import 'dart:math';
-import 'package:ember_quest/managers/segment_manager.dart';
+
+import '../managers/segment_manager.dart';
 ```
 
 So our full Ground Block class should look like this:
 
 ```dart
-import 'package:ember_quest/ember_quest.dart';
-import 'package:ember_quest/extensions/random.dart';
-import 'package:ember_quest/managers/segment_manager.dart';
+import 'dart:math';
+
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 
+import '../ember_quest.dart';
+import '../managers/segment_manager.dart';
+
 class GroundBlock extends SpriteComponent with HasGameRef<EmberQuestGame> {
-  late Vector2 _gridPosition;
-  late double _xPositionOffset;
+  final Vector2 gridPosition;
+  double xOffset;
   final GlobalKey _blockKey = GlobalKey();
 
   GroundBlock({
-    required Vector2 gridPosition,
-    required double xPositionOffset,
-  }) : super(size: Vector2.all(64), anchor: Anchor.bottomLeft) {
-    _gridPosition = gridPosition;
-    _xPositionOffset = xPositionOffset;
-  }
+    required this.gridPosition,
+    required this.xOffset,
+  }) : super(size: Vector2.all(64), anchor: Anchor.bottomLeft);
 
   @override
   Future<void> onLoad() async {
     final groundImage = gameRef.images.fromCache('ground.png');
     sprite = Sprite(groundImage);
-    position = Vector2((_gridPosition.x * size.x) + _xPositionOffset,
-        gameRef.size.y - (_gridPosition.y * size.y));
+    position = Vector2((gridPosition.x * size.x) + xOffset,
+        gameRef.size.y - (gridPosition.y * size.y),
+    );
     add(RectangleHitbox()..collisionType = CollisionType.passive);
-    if (_gridPosition.x == 9 && position.x > gameRef.lastBlockXPosition) {
+    if (gridPosition.x == 9 && position.x > gameRef.lastBlockXPosition) {
       gameRef.lastBlockKey = _blockKey;
       gameRef.lastBlockXPosition = position.x + size.x;
     }
@@ -355,13 +355,13 @@ class GroundBlock extends SpriteComponent with HasGameRef<EmberQuestGame> {
 
     if (position.x < -size.x) {
       removeFromParent();
-      if (_gridPosition.x == 0) {
+      if (gridPosition.x == 0) {
         gameRef.loadGameSegments(
-            random.fromRange(0, segments.length.toDouble()).toInt(),
+            Random().nextInt(segments.length + 1),
             gameRef.lastBlockXPosition);
       }
     }
-    if (_gridPosition.x == 9) {
+    if (gridPosition.x == 9) {
       if (gameRef.lastBlockKey == _blockKey) {
         gameRef.lastBlockXPosition = position.x + size.x - 10;
       }
@@ -379,7 +379,7 @@ Finally, don't forget to add your Ground Block to `lib/ember_quest.dart` by addi
 case GroundBlock:
     add(GroundBlock(
         gridPosition: block.gridPosition,
-        xPositionOffset: xPositionOffset,
+        xOffset: xPositionOffset,
     ));
     break;
 ```

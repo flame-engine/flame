@@ -27,26 +27,17 @@ enum HeartState {
 
 class HeartHealthComponent extends SpriteGroupComponent<HeartState>
     with HasGameRef<EmberQuestGame> {
-  late int _heartNumber;
+  final int heartNumber;
 
   HeartHealthComponent({
-    required int heartNumber,
-    required Vector2? position,
-    required Vector2? size,
-    Vector2? scale,
-    double? angle,
-    Anchor? anchor,
-    int? priority,
-  }) : super(
-          position: position,
-          size: size,
-          scale: scale,
-          angle: angle,
-          anchor: anchor,
-          priority: priority,
-        ) {
-    _heartNumber = heartNumber;
-  }
+    required this.heartNumber,
+    required super.position,
+    required super.size,
+    super.scale,
+    super.angle,
+    super.anchor,
+    super.priority,
+  });
 
   @override
   Future<void> onLoad() async {
@@ -71,7 +62,7 @@ class HeartHealthComponent extends SpriteGroupComponent<HeartState>
 
   @override
   Future<void> update(double dt) async {
-    if (gameRef.health < _heartNumber) {
+    if (gameRef.health < heartNumber) {
       current = HeartState.unavailable;
     } else {
       current = HeartState.available;
@@ -83,18 +74,19 @@ class HeartHealthComponent extends SpriteGroupComponent<HeartState>
 ```
 
 The `HeartHealthComponent` is just a [SpriteGroupComponent](../../flame/components.md#spritegroup)
-that uses the heart images that were created early on.  The only unique thing that is being done, is
-when the component is created, it requires a `heartNumber`, so in the `update` method, we check to
-see if the `gameRef.health` is less than the `heartNumber` and if so, change the state of the
-component to unavailable.
+that uses the heart images that were created early on.  The unique thing that is being done, is when
+the component is created, it requires a `heartNumber`, so in the `update` method, we check to see if
+the `gameRef.health` is less than the `heartNumber` and if so, change the state of the component to
+unavailable.
 
 To put this all together, create `hud.dart` in the same folder and add the following code:
 
 ```dart
-import 'package:ember_quest/ember_quest.dart';
-import 'package:ember_quest/overlays/heart.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
+
+import '../ember_quest.dart';
+import 'heart.dart';
 
 class Hud extends PositionComponent with HasGameRef<EmberQuestGame> {
   Hud({
@@ -114,7 +106,7 @@ class Hud extends PositionComponent with HasGameRef<EmberQuestGame> {
   @override
   Future<void>? onLoad() async {
     _scoreTextComponent = TextComponent(
-      text: '${gameRef.starsCollected.toInt()}',
+      text: '${gameRef.starsCollected}',
       textRenderer: TextPaint(
         style: const TextStyle(
           fontSize: 32,
@@ -136,13 +128,15 @@ class Hud extends PositionComponent with HasGameRef<EmberQuestGame> {
       ),
     );
 
-    for (int i = 1; i <= gameRef.health; i++) {
-      int positionX = (40 * i);
-      await add(HeartHealthComponent(
-        heartNumber: i,
-        position: Vector2(positionX.toDouble(), 20),
-        size: Vector2.all(32),
-      ));
+    for (var i = 1; i <= gameRef.health; i++) {
+      final positionX = 40 * i;
+      await add(
+        HeartHealthComponent(
+          heartNumber: i,
+          position: Vector2(positionX.toDouble(), 20),
+          size: Vector2.all(32),
+        ),
+      );
     }
 
     return super.onLoad();
@@ -150,7 +144,7 @@ class Hud extends PositionComponent with HasGameRef<EmberQuestGame> {
 
   @override
   void update(double dt) {
-    _scoreTextComponent.text = '${gameRef.starsCollected.toInt()}';
+    _scoreTextComponent.text = '${gameRef.starsCollected}';
     super.update(dt);
   }
 }
@@ -169,7 +163,7 @@ add(Hud());
 If the auto-import did not occur, you will need to add:
 
 ```dart
-import 'package:ember_quest/overlays/hud.dart';
+import 'overlays/hud.dart';
 ```
 
 If you run the game now, you should see:

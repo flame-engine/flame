@@ -1,13 +1,14 @@
-import 'package:ember_quest/actors/water_enemy.dart';
-import 'package:ember_quest/objects/ground_block.dart';
-import 'package:ember_quest/objects/platform_block.dart';
-import 'package:ember_quest/objects/star.dart';
 import 'package:flame/components.dart';
 
+import '../actors/water_enemy.dart';
+import '../objects/ground_block.dart';
+import '../objects/platform_block.dart';
+import '../objects/star.dart';
+
 class Block {
-  //gridPosition position is always segment based X,Y.
-  //0,0 is the bottom left corner
-  //10,10 is the upper right corner
+  // gridPosition position is always segment based X,Y.
+  // 0,0 is the bottom left corner.
+  // 10,10 is the upper right corner.
   final Vector2 gridPosition;
   final Type blockType;
   Block(this.gridPosition, this.blockType);

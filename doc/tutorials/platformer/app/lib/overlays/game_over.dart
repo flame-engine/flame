@@ -1,5 +1,6 @@
-import 'package:ember_quest/ember_quest.dart';
 import 'package:flutter/material.dart';
+
+import '../ember_quest.dart';
 
 class GameOver extends StatelessWidget {
   // Reference to parent game.
@@ -8,8 +9,8 @@ class GameOver extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const Color blackTextColor = Color.fromRGBO(0, 0, 0, 1.0);
-    const Color whiteTextColor = Color.fromRGBO(255, 255, 255, 1.0);
+    const blackTextColor = Color.fromRGBO(0, 0, 0, 1.0);
+    const whiteTextColor = Color.fromRGBO(255, 255, 255, 1.0);
 
     return Scaffold(
       backgroundColor: Colors.transparent,
@@ -18,12 +19,9 @@ class GameOver extends StatelessWidget {
           padding: const EdgeInsets.all(10.0),
           height: 200,
           width: 300,
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             color: blackTextColor,
-            border: Border.all(
-              color: blackTextColor,
-            ),
-            borderRadius: const BorderRadius.all(
+            borderRadius: BorderRadius.all(
               Radius.circular(20),
             ),
           ),

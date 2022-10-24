@@ -47,9 +47,9 @@ whatever you design, the segment must follow the rules outlined above. Add the f
 
 ```dart
 class Block {
-  //gridPosition position is always segment based X,Y.
-  //0,0 is the bottom left corner
-  //10,10 is the upper right corner
+  // gridPosition position is always segment based X,Y.
+  // 0,0 is the bottom left corner.
+  // 10,10 is the upper right corner.
   final Vector2 gridPosition;
   final Type blockType;
   Block(this.gridPosition, this.blockType);
@@ -102,16 +102,17 @@ final segment0 = [
 Proceed to build the remaining segments.  The full segment manager should look like this:
 
 ```dart
-import 'package:ember_quest/actors/water_enemy.dart';
-import 'package:ember_quest/objects/ground_block.dart';
-import 'package:ember_quest/objects/platform_block.dart';
-import 'package:ember_quest/objects/star.dart';
 import 'package:flame/components.dart';
 
+import '../actors/water_enemy.dart';
+import '../objects/ground_block.dart';
+import '../objects/platform_block.dart';
+import '../objects/star.dart';
+
 class Block {
-  //gridPosition position is always segment based X,Y.
-  //0,0 is the bottom left corner
-  //10,10 is the upper right corner
+  // gridPosition position is always segment based X,Y.
+  // 0,0 is the bottom left corner.
+  // 10,10 is the upper right corner.
   final Vector2 gridPosition;
   final Type blockType;
   Block(this.gridPosition, this.blockType);
@@ -230,8 +231,8 @@ method that when given an index for the segments list, will then loop through th
 our `segment_manager` and we will add the appropriate blocks later.  It should look like this:
 
 ```dart
-loadGameSegments(int segmentIndex, double xPositionOffset) {
-    for (var block in segments[segmentIndex]) {
+void loadGameSegments(int segmentIndex, double xPositionOffset) {
+    for (final block in segments[segmentIndex]) {
       switch (block.blockType) {
         case GroundBlock:
           break;
@@ -249,23 +250,23 @@ loadGameSegments(int segmentIndex, double xPositionOffset) {
 You will need to add the following imports if they were not auto-imported:
 
 ```dart
-import 'package:ember_quest/actors/water_enemy.dart';
-import 'package:ember_quest/managers/segment_manager.dart';
-import 'package:ember_quest/objects/ground_block.dart';
-import 'package:ember_quest/objects/platform_block.dart';
-import 'package:ember_quest/objects/star.dart';
+import 'actors/water_enemy.dart';
+import 'managers/segment_manager.dart';
+import 'objects/ground_block.dart';
+import 'objects/platform_block.dart';
+import 'objects/star.dart';
 ```
 
 Now we can refactor our game a bit and create an `initializeGame()` method which will call our
 `loadGameSegments` method.
 
 ```dart
-  initializeGame() {
-    //Assume that size.x < 3200
-    int segmentsToLoad = (size.x / 640).ceil();
+  void initializeGame() {
+    // Assume that size.x < 3200
+    final segmentsToLoad = (size.x / 640).ceil();
     segmentsToLoad.clamp(0, segments.length);
 
-    for (int i = 0; i <= segmentsToLoad; i++) {
+    for (var i = 0; i <= segmentsToLoad; i++) {
       loadGameSegments(i, (640 * i).toDouble());
     }
 
@@ -317,21 +318,20 @@ it's an infinite level.
 Open the `lib/objects/platform_block.dart` file and add the following code:
 
 ```dart
-import 'package:ember_quest/ember_quest.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 
+import '../ember_quest.dart';
+
 class PlatformBlock extends SpriteComponent
     with HasGameRef<EmberQuestGame> {
-  late Vector2 _gridPosition;
-  late double _xPositionOffset;
+  final Vector2 gridPosition;
+  double xOffset;
+
   PlatformBlock({
-    required Vector2 gridPosition,
-    required double xPositionOffset,
-  }) : super(size: Vector2.all(64), anchor: Anchor.bottomLeft) {
-    _gridPosition = gridPosition;
-    _xPositionOffset = xPositionOffset;
-  }
+    required this.gridPosition,
+    required this.xOffset,
+  }) : super(size: Vector2.all(64), anchor: Anchor.bottomLeft);
 
   @override
   Future<void> onLoad() async {
@@ -392,7 +392,7 @@ Now we just need to finish the `onLoad` method.  So make your `onLoad` method lo
   Future<void> onLoad() async {
     final platformImage = gameRef.images.fromCache('block.png');
     sprite = Sprite(platformImage);
-    position = Vector2((_gridPosition.x * size.x) + _xPositionOffset,
+    position = Vector2((_gridPosition.x * size.x) + _xOffset,
         gameRef.size.y - (_gridPosition.y * size.y));
     add(RectangleHitbox()..collisionType = CollisionType.passive);
   }
@@ -405,7 +405,7 @@ calculate its starting position.  This is where all the magic happens, so let's 
 Just like in the `update` method we will be setting the `position` variable to a `Vector2`.  To
 determine where it needs to be, we need to calculate the x and y positions.  Focusing on the x
 first, we can see that we are taking `gridPosition.x` times the width of the image and then we will
-add that to the `xPositionOffset` that we pass in.  With the y-axis, we will take the height of the
+add that to the `xOffset` that we pass in.  With the y-axis, we will take the height of the
 game and we will subtract the `gridPosition.y` times the height of the image.
 
 Lastly, as we want Ember to be able to interact with the platform, we will add a `RectangleHitbox`
@@ -415,15 +415,15 @@ with a `passive` `CollisionType`.  Collisions will be explained more in a later 
 #### Display the Platform
 
 In our `loadGameSegments` method from earlier, we will need to add the call to add our block.  We
-will need to define `gridPosition` and `xPositionOffset` to be passed in.  `gridPostion` will be a
-`Vector2` and `xPositionOffset` is a double as that will be used to calculate the x-axis offset for
+will need to define `gridPosition` and `xOffset` to be passed in.  `gridPostion` will be a
+`Vector2` and `xOffset` is a double as that will be used to calculate the x-axis offset for
 the block in a `Vector2`.  So add the following to your `loadGameSegments` method:
 
 ```dart
 case PlatformBlock:
     add(PlatformBlock(
-    gridPosition: block.gridPosition,
-    xPositionOffset: xPositionOffset,
+      gridPosition: block.gridPosition,
+      xOffset: xPositionOffset,
     ));
     break;
 ```
@@ -431,7 +431,6 @@ case PlatformBlock:
 If you run your code, you should now see:
 
 ![Platforms Displayed](../../images/tutorials/platformer/Step3Platforms.jpg)
-
 
 While this does run, the black just makes it look like Ember is in a dungeon.  Let's change that
 background real quick so there is a nice blue sky.  Just add the following code to

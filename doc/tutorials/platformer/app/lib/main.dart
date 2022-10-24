@@ -1,31 +1,19 @@
-import 'package:ember_quest/ember_quest.dart';
-import 'package:ember_quest/overlays/game_over.dart';
-import 'package:ember_quest/overlays/main_menu.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 
+import 'ember_quest.dart';
+import 'overlays/game_over.dart';
+import 'overlays/main_menu.dart';
+
 void main() {
-  runApp(const EmberQuestGameApp());
-}
-
-class EmberQuestGameApp extends StatelessWidget {
-  const EmberQuestGameApp({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Ember Quest',
-      home: Scaffold(
-        body: GameWidget<EmberQuestGame>(
-          game: EmberQuestGame(),
-          overlayBuilderMap: {
-            'MainMenu': (_, gameRef) => MainMenu(gameRef: gameRef),
-            'GameOver': (_, gameRef) => GameOver(gameRef: gameRef),
-          },
-          initialActiveOverlays: const ['MainMenu'],
-        ),
-      ),
-    );
-  }
+  runApp(
+    GameWidget<EmberQuestGame>.controlled(
+      gameFactory: EmberQuestGame.new,
+      overlayBuilderMap: {
+        'MainMenu': (_, gameRef) => MainMenu(gameRef: gameRef),
+        'GameOver': (_, gameRef) => GameOver(gameRef: gameRef),
+      },
+      initialActiveOverlays: const ['MainMenu'],
+    ),
+  );
 }

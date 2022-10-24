@@ -1,12 +1,13 @@
-import 'package:ember_quest/actors/water_enemy.dart';
-import 'package:ember_quest/ember_quest.dart';
-import 'package:ember_quest/objects/ground_block.dart';
-import 'package:ember_quest/objects/platform_block.dart';
-import 'package:ember_quest/objects/star.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flutter/services.dart';
+
+import '../ember_quest.dart';
+import '../objects/ground_block.dart';
+import '../objects/platform_block.dart';
+import '../objects/star.dart';
+import 'water_enemy.dart';
 
 class EmberPlayer extends SpriteAnimationComponent
     with KeyboardHandler, CollisionCallbacks, HasGameRef<EmberQuestGame> {
@@ -37,7 +38,7 @@ class EmberPlayer extends SpriteAnimationComponent
     );
 
     add(
-      CircleHitbox()..collisionType = CollisionType.active,
+      CircleHitbox(),
     );
   }
 
@@ -61,20 +62,20 @@ class EmberPlayer extends SpriteAnimationComponent
   void update(double dt) {
     velocity.x = horizontalDirection * moveSpeed;
     gameRef.objectSpeed = 0;
-    //Prevent ember from going backwards at screen edge
+    // Prevent ember from going backwards at screen edge.
     if (position.x - 36 <= 0 && horizontalDirection < 0) {
       velocity.x = 0;
     }
-    //Prevent ember from going beyond half screen
+    // Prevent ember from going beyond half screen.
     if (position.x + 64 >= gameRef.size.x / 2 && horizontalDirection > 0) {
       velocity.x = 0;
       gameRef.objectSpeed = -moveSpeed;
     }
 
-    //Apply basic gravity
+    // Apply basic gravity.
     velocity.y += gravity;
 
-    //Determine if ember has jumped
+    // Determine if ember has jumped.
     if (hasJumped) {
       if (isOnGround) {
         velocity.y = -jumpSpeed;
@@ -83,13 +84,13 @@ class EmberPlayer extends SpriteAnimationComponent
       hasJumped = false;
     }
 
-    //Prevent ember from jumping to crazy fast
+    // Prevent ember from jumping to crazy fast.
     velocity.y = velocity.y.clamp(-jumpSpeed, 150);
 
-    //Adjust ember position
+    // Adjust ember position.
     position += velocity * dt;
 
-    //If ember fell in pit, then game over
+    // If ember fell in pit, then game over.
     if (position.y > gameRef.size.y + 64) {
       gameRef.health = 0;
     }

@@ -1,6 +1,6 @@
 # 7. Adding Menus
 
-To add menus to the game, we will leverage Flames built-in
+To add menus to the game, we will leverage Flame's built-in
 [overlay](../../flame/game.md#flutter-widgets-and-game-instances) system.  
 
 
@@ -9,8 +9,9 @@ To add menus to the game, we will leverage Flames built-in
 In the `lib/overlays` folder, create `main_menu.dart` and add the following code:
 
 ```dart
-import 'package:ember_quest/ember_quest.dart';
 import 'package:flutter/material.dart';
+
+import '../ember_quest.dart';
 
 class MainMenu extends StatelessWidget {
   // Reference to parent game.
@@ -20,8 +21,8 @@ class MainMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const Color blackTextColor = Color.fromRGBO(0, 0, 0, 1.0);
-    const Color whiteTextColor = Color.fromRGBO(255, 255, 255, 1.0);
+    const blackTextColor = Color.fromRGBO(0, 0, 0, 1.0);
+    const whiteTextColor = Color.fromRGBO(255, 255, 255, 1.0);
 
     return Scaffold(
       backgroundColor: Colors.transparent,
@@ -30,11 +31,8 @@ class MainMenu extends StatelessWidget {
           padding: const EdgeInsets.all(10.0),
           height: 250,
           width: 300,
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             color: blackTextColor,
-            border: Border.all(
-              color: blackTextColor,
-            ),
             borderRadius: const BorderRadius.all(
               Radius.circular(20),
             ),
@@ -102,8 +100,9 @@ accomplished.
 Next, create a file called `lib/overlays/game_over.dart` and add the following code:
 
 ```dart
-import 'package:ember_quest/ember_quest.dart';
 import 'package:flutter/material.dart';
+
+import '../ember_quest.dart';
 
 class GameOver extends StatelessWidget {
   // Reference to parent game.
@@ -112,8 +111,8 @@ class GameOver extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const Color blackTextColor = Color.fromRGBO(0, 0, 0, 1.0);
-    const Color whiteTextColor = Color.fromRGBO(255, 255, 255, 1.0);
+    const blackTextColor = Color.fromRGBO(0, 0, 0, 1.0);
+    const whiteTextColor = Color.fromRGBO(255, 255, 255, 1.0);
 
     return Scaffold(
       backgroundColor: Colors.transparent,
@@ -122,11 +121,8 @@ class GameOver extends StatelessWidget {
           padding: const EdgeInsets.all(10.0),
           height: 200,
           width: 300,
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             color: blackTextColor,
-            border: Border.all(
-              color: blackTextColor,
-            ),
             borderRadius: const BorderRadius.all(
               Radius.circular(20),
             ),
@@ -191,23 +187,23 @@ Future<void> onLoad() async {
     initializeGame(true);
 }
 
-initializeGame(bool loadHud) {
-    //Assume that size.x < 3200
-    int segmentsToLoad = (size.x / 640).ceil();
+void initializeGame(bool loadHud) {
+    // Assume that size.x < 3200
+    final segmentsToLoad = (size.x / 640).ceil();
     segmentsToLoad.clamp(0, segments.length);
 
-    for (int i = 0; i <= segmentsToLoad; i++) {
-        loadGameSegments(i, (640 * i).toDouble());
+    for (var i = 0; i <= segmentsToLoad; i++) {
+      loadGameSegments(i, (640 * i).toDouble());
     }
 
     _ember = EmberPlayer(
-        position: Vector2(128, canvasSize.y - 128),
+      position: Vector2(128, canvasSize.y - 128),
     );
     add(_ember);
     if (loadHud) {
-        add(Hud());
+      add(Hud());
     }
-}
+  }
 
 void reset() {
     starsCollected = 0;
@@ -227,30 +223,25 @@ the values using `reset()`.
 To display the menus, add the following code to `lib/main.dart`:
 
 ```dart
-@override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Ember Quest',
-      home: Scaffold(
-        body: GameWidget<EmberQuestGame>(
-          game: EmberQuestGame(),
-          overlayBuilderMap: {
-            'MainMenu': (_, gameRef) => MainMenu(gameRef: gameRef),
-            'GameOver': (_, gameRef) => GameOver(gameRef: gameRef),
-          },
-          initialActiveOverlays: const ['MainMenu'],
-        ),
-      ),
-    );
-  }
+void main() {
+  runApp(
+    GameWidget<EmberQuestGame>.controlled(
+      gameFactory: EmberQuestGame.new,
+      overlayBuilderMap: {
+        'MainMenu': (_, gameRef) => MainMenu(gameRef: gameRef),
+        'GameOver': (_, gameRef) => GameOver(gameRef: gameRef),
+      },
+      initialActiveOverlays: const ['MainMenu'],
+    ),
+  );
+}
 ```
 
 If the menus did not auto-import, add the following:
 
 ```dart
-import 'package:ember_quest/overlays/game_over.dart';
-import 'package:ember_quest/overlays/main_menu.dart';
+import 'overlays/game_over.dart';
+import 'overlays/main_menu.dart';
 ```
 
 If you run the game now, you should be greeted with the Main Menu overlay.  Pressing play will
@@ -265,7 +256,7 @@ requires us to place similar code in all of our components.  So let's get starte
 In `lib/actors/ember.dart`, in the `update` method, add the following:
 
 ```dart
-//If ember fell in pit, then game over
+// If ember fell in pit, then game over.
 if (position.y > gameRef.size.y + 64) {
     gameRef.health = 0;
 }
