@@ -21,25 +21,25 @@ class RogueShooterGame extends FlameGame
   @override
   Future<void> onLoad() async {
     add(player = PlayerComponent());
-    add(FpsTextComponent());
-    add(
+    addAll([
+      FpsTextComponent(
+        position: size - Vector2(0, 50),
+        anchor: Anchor.bottomRight,
+      ),
+      scoreText = TextComponent(
+        position: size - Vector2(0, 25),
+        anchor: Anchor.bottomRight,
+        priority: 1,
+      ),
       componentCounter = TextComponent(
         position: size,
         anchor: Anchor.bottomRight,
         priority: 1,
       ),
-    );
+    ]);
 
     add(EnemyCreator());
     add(StarBackGroundCreator());
-
-    add(
-      scoreText = TextComponent(
-        position: Vector2(size.x, 0),
-        anchor: Anchor.topRight,
-        priority: 1,
-      ),
-    );
   }
 
   @override
