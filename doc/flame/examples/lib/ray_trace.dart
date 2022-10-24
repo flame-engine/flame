@@ -40,6 +40,7 @@ class RayTraceExample extends FlameGame
 
   @override
   void update(double dt) {
+    super.update(dt);
     if (isClicked) {
       _timePassed += dt;
     }
@@ -61,6 +62,7 @@ class RayTraceExample extends FlameGame
 
   @override
   void render(Canvas canvas) {
+    super.render(canvas);
     var originOffset = origin.toOffset();
     for (final result in results) {
       if (!result.isActive) {
