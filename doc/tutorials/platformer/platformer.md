@@ -1,6 +1,6 @@
 # Ember Quest Game Tutorial
 
-In this tutorial, we will follow the step-by-step process for coding this game using the Flame
+In this tutorial, we will follow a step-by-step process for coding a game using the Flame
 engine.
 
 This tutorial assumes that you have at least some familiarity with common programming concepts, and
