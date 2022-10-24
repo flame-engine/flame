@@ -26,14 +26,13 @@ class RayTraceExample extends FlameGame
 
   @override
   Future<void> onLoad() async {
-    addAll([
-      ScreenHitbox(),
+    add(
       CircleComponent(
         radius: min(camera.canvasSize.x, camera.canvasSize.y) / 2,
         paint: boxPaint,
         children: [CircleHitbox()],
       ),
-    ]);
+    );
   }
 
   var _timePassed = 0.0;
