@@ -9,7 +9,7 @@ To use it in your game you just need to add `flame_rive` to your pubspec.yaml, a
 and in the pub.dev [installation instructions](https://pub.dev/packages/flame_rive).
 
 
-## How to use
+## How to use it
 
 First, add `animation.riv` file in the assets folder. Then load the artboard of the animation to the
 game using the `loadArtboard` method. after, create `StateMachineController` from the loaded
