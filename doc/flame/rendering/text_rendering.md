@@ -12,8 +12,8 @@ and create a custom way to render text.
 
 ## TextPaint
 
-A `TextPaint` is the built in implementation of text rendering in Flame, it is based on top of
-Flutter's `TextPainter` class (hence the name), it can be configured by the style class `TextStyle`
+`TextPaint` is the built-in implementation of text rendering in Flame, it is based on top of
+Flutter's `TextPainter` class (hence the name), and it can be configured by the style class `TextStyle`
 which contains all typographical information required to render text; i.e., font size and color,
 font family, etc.
 

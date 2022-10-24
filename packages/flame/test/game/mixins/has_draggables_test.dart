@@ -59,16 +59,17 @@ void main() {
   final withDraggables = FlameTester(_GameWithDraggables.new);
 
   group('HasDraggables', () {
-    withDraggables.test(
+    testWithGame<_GameWithDraggables>(
       'make sure Draggables can be added to valid games',
+      _GameWithDraggables.new,
       (game) async {
         await game.ensureAdd(_DraggableComponent());
       },
     );
 
-    flameGame.test(
+    testWithFlameGame(
       'make sure Draggables cannot be added to invalid games',
-      (game) {
+      (game) async {
         expect(
           () => game.ensureAdd(_DraggableComponent()),
           failsAssert(

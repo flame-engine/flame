@@ -1,11 +1,11 @@
-# Other inputs
+# Other Inputs
 
 This includes documentation for input methods besides keyboard and mouse.
 
 For other input documents, see also:
 
-- [Gesture Input](gesture-input.md): for mouse and touch pointer gestures
-- [Keyboard Input](keyboard-input.md): for keystrokes
+- [Gesture Input](gesture_input.md): for mouse and touch pointer gestures
+- [Keyboard Input](keyboard_input.md): for keystrokes
 
 
 ## Joystick

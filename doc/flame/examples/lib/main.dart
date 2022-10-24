@@ -13,6 +13,7 @@ import 'package:doc_flame_examples/move_along_path_effect.dart';
 import 'package:doc_flame_examples/move_by_effect.dart';
 import 'package:doc_flame_examples/move_to_effect.dart';
 import 'package:doc_flame_examples/opacity_by_effect.dart';
+import 'package:doc_flame_examples/opacity_effect_with_target.dart';
 import 'package:doc_flame_examples/opacity_to_effect.dart';
 import 'package:doc_flame_examples/ray_cast.dart';
 import 'package:doc_flame_examples/ray_trace.dart';
@@ -45,6 +46,7 @@ void main() {
     'decorator_tint': DecoratorTintGame.new,
     'drag_events': DragEventsGame.new,
     'opacity_to_effect': OpacityToEffectGame.new,
+    'opacity_effect_with_target': OpacityEffectWithTargetGame.new,
     'opacity_by_effect': OpacityByEffectGame.new,
     'move_along_path_effect': MoveAlongPathEffectGame.new,
     'move_by_effect': MoveByEffectGame.new,

@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flame/components.dart';
+import 'package:flame/effects.dart';
 import 'package:flame/experimental.dart';
 
 /// A function that creates a shape based on a size represented by a [Vector2]
@@ -9,7 +10,7 @@ typedef ShapeBuilder = Shape Function(Vector2 size);
 /// {@template clip_component}
 /// A component that will clip its content.
 /// {@endtemplate}
-class ClipComponent extends PositionComponent {
+class ClipComponent extends PositionComponent implements SizeProvider {
   /// {@macro clip_component}
   ///
   /// Clips the canvas based its shape and size.

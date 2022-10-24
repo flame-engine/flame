@@ -343,7 +343,7 @@ void main() {
       },
     );
 
-    flameGame.test(
+    testWithFlameGame(
       'CircleComponent with multiple parents contains point',
       (game) async {
         PositionComponent createParent() {
@@ -372,7 +372,7 @@ void main() {
       },
     );
 
-    flameGame.test(
+    testWithFlameGame(
       'Rectangle with multiple parents contains point',
       (game) async {
         PositionComponent createParent() {
@@ -401,7 +401,7 @@ void main() {
       },
     );
 
-    flameGame.test(
+    testWithFlameGame(
       'PolygonComponent with multiple parents contains point',
       (game) async {
         PositionComponent createParent() {
