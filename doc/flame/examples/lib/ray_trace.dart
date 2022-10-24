@@ -64,7 +64,6 @@ class RayTraceExample extends FlameGame
   void render(Canvas canvas) {
     super.render(canvas);
 
-    // draw rays
     var originOffset = origin.toOffset();
     for (final result in results) {
       if (!result.isActive) {
