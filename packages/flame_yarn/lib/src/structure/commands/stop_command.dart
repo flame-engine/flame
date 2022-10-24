@@ -1,4 +1,4 @@
-import 'package:flame_yarn/src/runner/dialogue_runner.dart';
+import 'package:flame_yarn/src/dialogue_runner.dart';
 import 'package:flame_yarn/src/structure/commands/command.dart';
 
 class StopCommand extends Command {

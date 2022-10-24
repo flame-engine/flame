@@ -1,13 +1,13 @@
 import 'dart:async';
 
 import 'package:flame_yarn/src/errors.dart';
-import 'package:flame_yarn/src/runner/dialogue_view.dart';
 import 'package:flame_yarn/src/structure/block.dart';
 import 'package:flame_yarn/src/structure/commands/command.dart';
 import 'package:flame_yarn/src/structure/dialogue_choice.dart';
 import 'package:flame_yarn/src/structure/dialogue_line.dart';
 import 'package:flame_yarn/src/structure/node.dart';
 import 'package:flame_yarn/src/structure/statement.dart';
+import 'package:flame_yarn/src/views/dialogue_view.dart';
 import 'package:flame_yarn/src/yarn_project.dart';
 
 ///
