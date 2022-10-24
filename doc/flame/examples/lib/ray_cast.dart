@@ -6,7 +6,13 @@ import 'package:flame/palette.dart';
 import 'package:flutter/material.dart';
 
 class RayCastExample extends FlameGame with HasCollisionDetection {
-  Vector2 origin = Vector2(20, 20);
+  final origin = Vector2(20, 20);
+
+  final direction = Vector2(1, 0);
+  final acceleration = Vector2(0, 1);
+
+  Vector2 get resetPosition => Vector2(0, -canvasSize.y);
+
   Paint paint = Paint()..color = Colors.red.withOpacity(0.6);
 
   RaycastResult<ShapeHitbox>? result;
@@ -34,14 +40,14 @@ class RayCastExample extends FlameGame with HasCollisionDetection {
     super.update(dt);
     final ray = Ray2(
       origin: origin,
-      direction: Vector2(1, 0),
+      direction: direction,
     );
     result = collisionDetection.raycast(ray);
 
-    origin.add(Vector2(0, 1));
+    origin.add(acceleration);
 
     if (origin.y > canvasSize.y) {
-      origin.add(Vector2(0, -canvasSize.y));
+      origin.add(resetPosition);
     }
   }
 
