@@ -15,7 +15,7 @@ class StarBackGroundCreator extends Component with HasGameRef {
   @override
   Future<void> onLoad() async {
     spriteSheet = SpriteSheet.fromColumnsAndRows(
-      image: await gameRef.images.load('stars.png'),
+      image: await gameRef.images.load('rogue_shooter/stars.png'),
       rows: 4,
       columns: 4,
     );

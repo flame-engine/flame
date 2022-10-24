@@ -15,7 +15,7 @@ class BulletComponent extends SpriteAnimationComponent
   Future<void> onLoad() async {
     add(CircleHitbox());
     animation = await gameRef.loadSpriteAnimation(
-      'bullet.png',
+      'rogue_shooter/bullet.png',
       SpriteAnimationData.sequenced(
         stepTime: 0.2,
         amount: 4,

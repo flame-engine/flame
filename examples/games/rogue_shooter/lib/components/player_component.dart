@@ -27,7 +27,7 @@ class PlayerComponent extends SpriteAnimationComponent
       ),
     );
     animation = await gameRef.loadSpriteAnimation(
-      'player.png',
+      'rogue_shooter/player.png',
       SpriteAnimationData.sequenced(
         stepTime: 0.2,
         amount: 4,

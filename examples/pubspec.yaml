@@ -21,7 +21,7 @@ dependencies:
   google_fonts: ^2.3.2
   meta: ^1.8.0
   padracing: ^1.0.0
-  rogue_shooter: ^1.0.0
+  rogue_shooter: ^0.1.0
   trex_game: ^0.1.0
 
 dev_dependencies:
@@ -36,6 +36,7 @@ flutter:
     - assets/images/layers/
     - assets/images/parallax/
     - assets/images/parallax/
+    - assets/images/rogue_shooter/
     - assets/svgs/
     - assets/tiles/
     - assets/audio/music/

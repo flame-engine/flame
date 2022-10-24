@@ -11,7 +11,7 @@ class ExplosionComponent extends SpriteAnimationComponent with HasGameRef {
   @override
   Future<void> onLoad() async {
     animation = await gameRef.loadSpriteAnimation(
-      'explosion.png',
+      'rogue_shooter/explosion.png',
       SpriteAnimationData.sequenced(
         stepTime: 0.1,
         amount: 6,
