@@ -1,6 +1,7 @@
 import 'package:flame_yarn/flame_yarn.dart';
 import 'package:test/test.dart';
 
+import '../test_scenario.dart';
 import '../utils.dart';
 
 void main() {
@@ -191,6 +192,60 @@ void main() {
         ),
       );
     });
+
+    testScenario(
+      'Example',
+      input: '''
+        title: Start
+        tags: 
+        colorID: 0
+        position: 592,181
+        ---
+        A: Hey, I'm a character in a script!
+        B: And I am too! You are talking to me!
+        -> What's going on
+            A: Why this is a demo of the script system!
+            B: And you're in it!
+        -> Um ok
+        A: How delightful!
+        B: What would you prefer to do next?
+        -> Leave
+            <<jump Leave>>
+        -> Learn more
+            <<jump LearnMore>>
+        ===
+        title: Leave
+        tags: 
+        colorID: 0
+        position: 387,487
+        ---
+        A: Oh, goodbye!
+        B: You'll be back soon!
+        ===
+        title: LearnMore
+        tags: rawText
+        colorID: 0
+        position: 763,472
+        ---
+        A: HAHAHA
+        ===''',
+      testPlan: '''
+        line: A: Hey, I'm a character in a script!
+        line: B: And I am too! You are talking to me!
+        option: What's going on    
+        option: Um ok
+        select: 1
+        line: A: Why this is a demo of the script system!
+        line: B: And you're in it!
+        line: A: How delightful!
+        line: B: What would you prefer to do next?
+        option: Leave
+        option: Learn more
+        select: 1
+        line: A: Oh, goodbye!
+        line: B: You'll be back soon!
+      ''',
+    );
   });
 }
 

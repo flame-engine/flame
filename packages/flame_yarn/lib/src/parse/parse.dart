@@ -358,6 +358,7 @@ class _Parser {
       // TODO(st-pasha): add verification for node existence at the end of
       //                 project setup
       target = StringLiteral(token.content);
+      position += 1;
     } else {
       take(Token.startExpression);
       final expression = parseExpression();
@@ -369,6 +370,7 @@ class _Parser {
       }
     }
     take(Token.endCommand);
+    take(Token.newline);
     return JumpCommand(target);
   }
 
@@ -376,6 +378,7 @@ class _Parser {
     take(Token.startCommand);
     take(Token.commandStop);
     take(Token.endCommand);
+    take(Token.newline);
     return const StopCommand();
   }
 
@@ -387,6 +390,7 @@ class _Parser {
       typeError('<<wait>> command expects a numeric argument');
     }
     take(Token.endCommand);
+    take(Token.newline);
     return WaitCommand(expression as NumExpression);
   }
 
@@ -435,6 +439,7 @@ class _Parser {
       throw UnimplementedError();
     }
     take(Token.endCommand);
+    take(Token.newline);
     return SetCommand(variableName, expression);
   }
 
