@@ -9,9 +9,9 @@ class RayCastExample extends FlameGame with HasCollisionDetection {
   final origin = Vector2(20, 20);
 
   final direction = Vector2(1, 0);
-  final acceleration = Vector2(0, 1);
 
-  Vector2 get resetPosition => Vector2(0, -canvasSize.y);
+  final velocity = 60;
+  double get resetPosition => -canvasSize.y;
 
   Paint paint = Paint()..color = Colors.red.withOpacity(0.6);
 
@@ -44,10 +44,10 @@ class RayCastExample extends FlameGame with HasCollisionDetection {
     );
     result = collisionDetection.raycast(ray);
 
-    origin.add(acceleration);
+    origin.y += velocity * dt;
 
     if (origin.y > canvasSize.y) {
-      origin.add(resetPosition);
+      origin.y += resetPosition;
     }
   }
 
