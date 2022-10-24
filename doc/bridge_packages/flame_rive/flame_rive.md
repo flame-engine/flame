@@ -1,6 +1,6 @@
 # flame_rive
 
 ```{toctree}
-:hidden:
+Overview    <rive.md>
 
 ```

@@ -29,15 +29,18 @@ class _MyAppState extends State<MyApp> {
 
 class RiveExampleGame extends FlameGame with HasTappables {
   @override
-  Color backgroundColor() {
-    return const Color(0xFFFFFFFF);
-  }
-
-  @override
   Future<void> onLoad() async {
     final skillsArtboard =
         await loadArtboard(RiveFile.asset('assets/skills.riv'));
-    add(SkillsAnimationComponent(skillsArtboard));
+
+    final controller = StateMachineController.fromArtboard(
+      skillsArtboard,
+      "Designer's Test",
+    );
+
+    skillsArtboard.addController(controller!);
+
+    add(RiveComponent(artboard: skillsArtboard, size: Vector2.all(550)));
   }
 }
 
@@ -52,15 +55,15 @@ class SkillsAnimationComponent extends RiveComponent with Tappable {
 
   @override
   Future<void>? onLoad() {
-    final controller = StateMachineController.fromArtboard(
-      artboard,
-      "Designer's Test",
-    );
-    if (controller != null) {
-      artboard.addController(controller);
-      _levelInput = controller.findInput<double>('Level');
-      _levelInput?.value = 0;
-    }
+    // final controller = StateMachineController.fromArtboard(
+    //   artboard,
+    //   "Designer's Test",
+    // );
+    // if (controller != null) {
+    //   artboard.addController(controller);
+    //   // _levelInput = controller.findInput<double>('Level');
+    //   // _levelInput?.value = 0;
+    // }
     return super.onLoad();
   }
 
