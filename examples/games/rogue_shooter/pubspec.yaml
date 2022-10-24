@@ -1,0 +1,25 @@
+name: collision_detection_performance
+description: A simple game trying out collision detection performance.
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.17.0 <3.0.0"
+
+dependencies:
+  flame: ^1.4.0
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flame_lint: any
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  assets:
+    - assets/images/player.png
+    - assets/images/enemy.png
+    - assets/images/bullet.png
+    - assets/images/explosion.png
+    - assets/images/stars.png
