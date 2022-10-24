@@ -12,6 +12,9 @@ class MainMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     const blackTextColor = Color.fromRGBO(0, 0, 0, 1.0);
     const whiteTextColor = Color.fromRGBO(255, 255, 255, 1.0);
+    const text_1 = 'Use WASD or Arrow Keys for movement. ';
+    const text_2 = 'Space bar to jump. ';
+    const text_3 = 'Collect as many stars as you can and avoid enemies! ';
 
     return Scaffold(
       backgroundColor: Colors.transparent,
@@ -58,7 +61,7 @@ class MainMenu extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               const Text(
-                'Use WASD or Arrow Keys for movement.  Space bar to jump. Collect as many stars as you can and avoid enemies!',
+                text_1 + text_2 + text_3,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: whiteTextColor,
