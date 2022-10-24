@@ -7,10 +7,10 @@
 - [ ]     Nodes-MustHaveNodeBody.yarn
 - [ ]     OptionConditions-MustHaveExpressions.yarn
 - [ ]     Variables-MustBeAbleToInferDefinition.yarn
-- [ ]   Commands.testplan
-- [ ]   Commands.yarn
-- [ ]   DecimalNumbers.testplan
-- [ ]   DecimalNumbers.yarn
+- [x]   Commands.testplan
+- [x]   Commands.yarn
+- [x]   DecimalNumbers.testplan
+- [x]   DecimalNumbers.yarn
 - [ ]   DuplicateLineTags.yarn
 - [ ]   Escaping.testplan
 - [ ]   Escaping.yarn
@@ -20,8 +20,8 @@
 - [ ]   FormatFunctions.yarn
 - [ ]   Functions.testplan
 - [ ]   Functions.yarn
-- [ ]   Identifiers.testplan
-- [ ]   Identifiers.yarn
+- [-]   Identifiers.testplan
+- [-]   Identifiers.yarn
 - [ ]   IfStatements.testplan
 - [ ]   IfStatements.yarn
 - [ ]   Inference-FunctionsAndVarsInheritType.testplan
