@@ -6,8 +6,8 @@ import 'package:flame/game.dart';
 
 class RemoveEffectGame extends FlameGame with TapDetector {
   late Flower flower;
-  late TextComponent text;
-  late Timer countDown;
+  late TextComponent textComponent;
+  late RemoveEffect effect;
 
   @override
   Future<void> onLoad() async {
@@ -15,21 +15,25 @@ class RemoveEffectGame extends FlameGame with TapDetector {
       flower = Flower(
         position: size / 2,
         size: 45,
-        onTap: (flower) {
-          flower.add(
-            RemoveEffect(delay: 3),
-          );
-        },
       )..anchor = Anchor.center,
     );
-    add
-    add(text = TextComponent(text: countDown.current.toString()));
+    add(textComponent = TextComponent()..position = Vector2.all(5));
   }
 
   @override
   void onTap() {
     if (!children.contains(flower)) {
       add(flower);
+    } else {
+      flower.add(
+        effect = RemoveEffect(delay: 3),
+      );
     }
+  }
+
+  @override
+  void update(double dt) {
+    textComponent.text = '${effect.controller.progress}';
+    super.update(dt);
   }
 }
