@@ -11,9 +11,10 @@ and in the pub.dev [installation instructions](https://pub.dev/packages/flame_ri
 
 ## How to use it
 
-First, add `animation.riv` file in the assets folder. Then load the artboard of the animation to the
-game using the `loadArtboard` method. After, create `StateMachineController` from the loaded
-artboard and add controller to artboard. Then create a `RiveComponent` using artboard.
+First, start with adding the `animation.riv` file to the assets folder. Then load the artboard of
+the animation to the game using the `loadArtboard` method. After that, create the
+`StateMachineController` from the artboard and add a controller to it. Then you can create a
+`RiveComponent` using that artboard.
 
 ```dart
 class RiveExampleGame extends FlameGame with HasTappables {
