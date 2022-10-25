@@ -9,6 +9,8 @@ class Star extends SpriteComponent with HasGameRef<EmberQuestGame> {
   final Vector2 gridPosition;
   double xOffset;
 
+  final Vector2 velocity = Vector2.zero();
+
   Star({
     required this.gridPosition,
     required this.xOffset,
@@ -38,7 +40,7 @@ class Star extends SpriteComponent with HasGameRef<EmberQuestGame> {
 
   @override
   void update(double dt) {
-    final velocity = Vector2(gameRef.objectSpeed, 0);
+    velocity.x = gameRef.objectSpeed;
     position += velocity * dt;
     if (position.x < -size.x || gameRef.health <= 0) {
       removeFromParent();

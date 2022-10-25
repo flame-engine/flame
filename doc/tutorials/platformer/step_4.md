@@ -21,6 +21,8 @@ class Star extends SpriteComponent
   final Vector2 gridPosition;
   double xOffset;
 
+  final Vector2 velocity = Vector2.zero();
+
   Star({
     required this.gridPosition,
     required this.xOffset,
@@ -50,7 +52,7 @@ class Star extends SpriteComponent
 
   @override
   void update(double dt) {
-    Vector2 velocity = Vector2(gameRef.objectSpeed, 0);
+    velocity.x = gameRef.objectSpeed;
     position += velocity * dt;
     if (position.x < -size.x) removeFromParent();
     super.update(dt);
@@ -109,6 +111,8 @@ class WaterEnemy extends SpriteAnimationComponent
   final Vector2 gridPosition;
   double xOffset;
 
+  final Vector2 velocity = Vector2.zero();
+
   WaterEnemy({
     required this.gridPosition,
     required this.xOffset,
@@ -143,7 +147,7 @@ class WaterEnemy extends SpriteAnimationComponent
 
   @override
   void update(double dt) {
-    Vector2 velocity = Vector2(gameRef.objectSpeed, 0);
+    velocity.x = gameRef.objectSpeed;
     position += velocity * dt;
     if (position.x < -size.x) removeFromParent();
     super.update(dt);
@@ -202,6 +206,8 @@ class GroundBlock extends SpriteComponent with HasGameRef<EmberQuestGame> {
   final Vector2 gridPosition;
   double xOffset;
 
+  final Vector2 velocity = Vector2.zero();
+
   GroundBlock({
     required this.gridPosition,
     required this.xOffset,
@@ -219,7 +225,7 @@ class GroundBlock extends SpriteComponent with HasGameRef<EmberQuestGame> {
 
   @override
   void update(double dt) {
-    Vector2 velocity = Vector2(gameRef.objectSpeed, 0);
+    velocity.x = gameRef.objectSpeed;
     position += velocity * dt;
     super.update(dt);
   }
@@ -259,7 +265,7 @@ Now we can address updating this information, so in the `update` method, add the
 ```dart
   @override
   void update(double dt) {
-    Vector2 velocity = Vector2(gameRef.objectSpeed, 0);
+    velocity.x = gameRef.objectSpeed;
     position += velocity * dt;
 
     if (gridPosition.x == 9) {
@@ -327,7 +333,9 @@ import '../managers/segment_manager.dart';
 class GroundBlock extends SpriteComponent with HasGameRef<EmberQuestGame> {
   final Vector2 gridPosition;
   double xOffset;
+  
   final GlobalKey _blockKey = GlobalKey();
+  final Vector2 velocity = Vector2.zero();
 
   GroundBlock({
     required this.gridPosition,
@@ -350,7 +358,7 @@ class GroundBlock extends SpriteComponent with HasGameRef<EmberQuestGame> {
 
   @override
   void update(double dt) {
-    Vector2 velocity = Vector2(gameRef.objectSpeed, 0);
+    velocity.x = gameRef.objectSpeed;
     position += velocity * dt;
 
     if (position.x < -size.x) {

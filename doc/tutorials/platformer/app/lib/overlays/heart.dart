@@ -43,7 +43,7 @@ class HeartHealthComponent extends SpriteGroupComponent<HeartState>
   }
 
   @override
-  Future<void> update(double dt) async {
+  void update(double dt) {
     if (gameRef.health < heartNumber) {
       current = HeartState.unavailable;
     } else {

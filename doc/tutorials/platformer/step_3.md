@@ -363,21 +363,27 @@ class, add:
 double objectSpeed = 0.0;
 ```
 
-So to implement that movement, make your `update` method look like this:
+So to implement that movement, declare a variable at the top of your class and make your `update`
+method look like this:
+
+```dart
+final Vector2 velocity = Vector2.zero();
+```
 
 ```dart
   @override
   void update(double dt) {
-    Vector2 velocity = Vector2(gameRef.objectSpeed, 0);
+    velocity.x = gameRef.objectSpeed;
     position += velocity * dt;
     if (position.x < -size.x) removeFromParent();
     super.update(dt);
   }
 ```
 
-All that is happening is we define a base `velocity` using the global `objectSpeed` variable for the
-x-axis.  As this is our platform block, it will only scroll left and right, so our y-axis in the
-`velocity` will always be 0 as do not want our blocks jumping.
+All that is happening is we define a base `velocity` that is instantiated at 0 on both axes and then
+we update `velocity` using the global `objectSpeed` variable for the x-axis.  As this is our
+platform block, it will only scroll left and right, so our y-axis in the `velocity` will always be 0
+as do not want our blocks jumping.
 
 Next, we update the `position` which is a special variable built into the Flame engine components.
 By multiplying the `velocity` vector by the `dt` we can move our component to the required amount.
@@ -393,7 +399,8 @@ Now we just need to finish the `onLoad` method.  So make your `onLoad` method lo
     final platformImage = gameRef.images.fromCache('block.png');
     sprite = Sprite(platformImage);
     position = Vector2((_gridPosition.x * size.x) + _xOffset,
-        gameRef.size.y - (_gridPosition.y * size.y));
+        gameRef.size.y - (_gridPosition.y * size.y),
+    );
     add(RectangleHitbox()..collisionType = CollisionType.passive);
   }
 ```

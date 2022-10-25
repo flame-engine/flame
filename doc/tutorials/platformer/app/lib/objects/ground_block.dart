@@ -10,7 +10,9 @@ import '../managers/segment_manager.dart';
 class GroundBlock extends SpriteComponent with HasGameRef<EmberQuestGame> {
   final Vector2 gridPosition;
   double xOffset;
+
   final GlobalKey _blockKey = GlobalKey();
+  final Vector2 velocity = Vector2.zero();
 
   GroundBlock({
     required this.gridPosition,
@@ -34,7 +36,7 @@ class GroundBlock extends SpriteComponent with HasGameRef<EmberQuestGame> {
 
   @override
   void update(double dt) {
-    final velocity = Vector2(gameRef.objectSpeed, 0);
+    velocity.x = gameRef.objectSpeed;
     position += velocity * dt;
 
     if (position.x < -size.x) {
