@@ -13,9 +13,9 @@ class MainMenu extends StatelessWidget {
     const blackTextColor = Color.fromRGBO(0, 0, 0, 1.0);
     const whiteTextColor = Color.fromRGBO(255, 255, 255, 1.0);
 
-    return Scaffold(
-      backgroundColor: Colors.transparent,
-      body: Center(
+    return Material(
+      color: Colors.transparent,
+      child: Center(
         child: Container(
           padding: const EdgeInsets.all(10.0),
           height: 250,

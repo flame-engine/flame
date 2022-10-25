@@ -24,9 +24,9 @@ class MainMenu extends StatelessWidget {
     const blackTextColor = Color.fromRGBO(0, 0, 0, 1.0);
     const whiteTextColor = Color.fromRGBO(255, 255, 255, 1.0);
 
-    return Scaffold(
-      backgroundColor: Colors.transparent,
-      body: Center(
+    return Material(
+      color: Colors.transparent,
+      child: Center(
         child: Container(
           padding: const EdgeInsets.all(10.0),
           height: 250,
@@ -114,9 +114,9 @@ class GameOver extends StatelessWidget {
     const blackTextColor = Color.fromRGBO(0, 0, 0, 1.0);
     const whiteTextColor = Color.fromRGBO(255, 255, 255, 1.0);
 
-    return Scaffold(
-      backgroundColor: Colors.transparent,
-      body: Center(
+    return Material(
+      color: Colors.transparent,
+      child: Center(
         child: Container(
           padding: const EdgeInsets.all(10.0),
           height: 200,
@@ -225,19 +225,13 @@ To display the menus, add the following code to `lib/main.dart`:
 ```dart
 void main() {
   runApp(
-    MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Ember Quest',
-      home: Scaffold(
-        body: GameWidget<EmberQuestGame>.controlled(
-          gameFactory: EmberQuestGame.new,
-          overlayBuilderMap: {
-            'MainMenu': (_, gameRef) => MainMenu(gameRef: gameRef),
-            'GameOver': (_, gameRef) => GameOver(gameRef: gameRef),
-          },
-          initialActiveOverlays: const ['MainMenu'],
-        ),
-      ),
+    GameWidget<EmberQuestGame>.controlled(
+      gameFactory: EmberQuestGame.new,
+      overlayBuilderMap: {
+        'MainMenu': (_, gameRef) => MainMenu(gameRef: gameRef),
+        'GameOver': (_, gameRef) => GameOver(gameRef: gameRef),
+      },
+      initialActiveOverlays: const ['MainMenu'],
     ),
   );
 }
