@@ -16,7 +16,7 @@ class EmberQuestGame extends FlameGame
 
   late EmberPlayer _ember;
   late double lastBlockXPosition = 0.0;
-  late GlobalKey lastBlockKey;
+  late UniqueKey lastBlockKey;
 
   int starsCollected = 0;
   int health = 3;

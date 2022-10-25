@@ -237,13 +237,13 @@ be loaded.  To do this, add two new global variables in `lib/ember_quest.dart` c
 
 ```dart
   late double lastBlockXPosition = 0.0;
-  late GlobalKey lastBlockKey;
+  late UniqueKey lastBlockKey;
 ```
 
 Declare the following variable at the top of your Ground Block class:
 
 ```dart
-final GlobalKey _blockKey = GlobalKey();
+final UniqueKey _blockKey = UniqueKey();
 ```
 
 Now in your Ground Block's `onLoad` method, add the following at the end of the method:
@@ -287,11 +287,10 @@ prevents gaps in the map as it loads while a player is moving.
 
 To load the next random segment, we will use the `Random()` function that is built-in to
 `dart:math`.  The following line of code gets a random integer from 0 (inclusive) to the max number
-in the passed parameter (exclusive), because we need to include our max number, we can simply add 1
-to the length.
+in the passed parameter (exclusive).
 
 ```dart
-Random().nextInt(segments.length + 1),
+Random().nextInt(segments.length),
 ```
 
 Back in our Ground Block, we can now add the following to our 'update' method before
@@ -302,7 +301,7 @@ if (position.x < -size.x) {
   removeFromParent();
   if (gridPosition.x == 0) {
     gameRef.loadGameSegments(
-        Random().nextInt(segments.length + 1), gameRef.lastBlockXPosition);
+        Random().nextInt(segments.length), gameRef.lastBlockXPosition);
   }
 }
 ```
@@ -334,7 +333,7 @@ class GroundBlock extends SpriteComponent with HasGameRef<EmberQuestGame> {
   final Vector2 gridPosition;
   double xOffset;
   
-  final GlobalKey _blockKey = GlobalKey();
+  final UniqueKey _blockKey = UniqueKey();
   final Vector2 velocity = Vector2.zero();
 
   GroundBlock({
@@ -365,7 +364,7 @@ class GroundBlock extends SpriteComponent with HasGameRef<EmberQuestGame> {
       removeFromParent();
       if (gridPosition.x == 0) {
         gameRef.loadGameSegments(
-            Random().nextInt(segments.length + 1),
+            Random().nextInt(segments.length),
             gameRef.lastBlockXPosition);
       }
     }

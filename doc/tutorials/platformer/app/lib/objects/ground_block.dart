@@ -11,7 +11,7 @@ class GroundBlock extends SpriteComponent with HasGameRef<EmberQuestGame> {
   final Vector2 gridPosition;
   double xOffset;
 
-  final GlobalKey _blockKey = GlobalKey();
+  final UniqueKey _blockKey = UniqueKey();
   final Vector2 velocity = Vector2.zero();
 
   GroundBlock({
@@ -43,7 +43,7 @@ class GroundBlock extends SpriteComponent with HasGameRef<EmberQuestGame> {
       removeFromParent();
       if (gridPosition.x == 0) {
         gameRef.loadGameSegments(
-          Random().nextInt(segments.length + 1),
+          Random().nextInt(segments.length),
           gameRef.lastBlockXPosition,
         );
       }
