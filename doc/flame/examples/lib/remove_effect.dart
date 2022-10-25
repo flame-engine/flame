@@ -6,16 +6,15 @@ import 'package:flame/game.dart';
 import 'package:flutter/cupertino.dart';
 
 class RemoveEffectGame extends FlameGame with HasTappableComponents {
- 
   @override
   Future<void> onLoad() async {
     final flower = Flower(
       position: size / 2,
       size: 45,
       onTap: (flower) {
-          flower.add(
-            RemoveEffect(delay: 3),
-          );
+        flower.add(
+          RemoveEffect(delay: 3),
+        );
       },
     )..anchor = Anchor.center;
 
