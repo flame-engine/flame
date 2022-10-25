@@ -1,0 +1,23 @@
+{
+  "version": "0.2",
+  "language": "en",
+  "flagWords": [],
+  "ignorePaths": ["**/media/**", "**/assets/**", "**/test/**"],
+  "ignoreRegExpList": ["@\\w+", "\\$\\w+", "\\{\\w+", "\\`\\w+", "\\:\\w+", "\\/\\w+", "\\#\\w+"],
+  "dictionaries": ["en_US", "softwareTerms","flame_dictionary"],
+  "languageSettings": [
+      {
+          "languageId": "markdown",
+          "ignoreRegExpList": [
+              "/^\\s*```[\\s\\S]*?^\\s*```/gm"
+          ]
+      }
+  ],
+  "dictionaryDefinitions": [
+      {
+          "name": "flame_dictionary",
+          "path": "./.cspell/flame_dictionary.txt",
+          "addWords": true
+      }
+  ]
+}
