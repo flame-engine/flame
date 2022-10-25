@@ -35,7 +35,8 @@ class RiveExampleGame extends FlameGame with HasTappables {
 }
 ```
 
-You can use the controller to manage the state of animation. Check out an example for more.
+You can use the controller to manage the state of animation.
+Check out the example for more information.
 
 
 ## Full Example
