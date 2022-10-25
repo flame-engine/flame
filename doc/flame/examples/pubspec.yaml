@@ -9,6 +9,7 @@ environment:
 
 dependencies:
   flame: ^1.4.0
+  flame_rive: ^1.5.2
   flutter:
     sdk: flutter
 
@@ -17,4 +18,5 @@ dev_dependencies:
 
 flutter:
   assets:
+    - assets/
     - assets/images/

@@ -16,8 +16,16 @@ the animation to the game using the `loadArtboard` method. After that, create th
 `StateMachineController` from the artboard and add a controller to it. Then you can create a
 `RiveComponent` using that artboard.
 
+```{flutter-app}
+:sources: ../flame/examples
+:page: rive_example
+:show: widget code infobox
+:width: 200
+:height: 200
+```
+
 ```dart
-class RiveExampleGame extends FlameGame with HasTappables {
+class RiveExampleGame extends FlameGame {
   @override
   Future<void> onLoad() async {
     final skillsArtboard =
