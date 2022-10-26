@@ -57,7 +57,7 @@ sectioned and used as individual images.  For this tutorial though, I specifical
 images individually as I want to demonstrate the Flame engine's caching abilities.  Ember and the
 water enemy are spritesheets though as they contain multiple images to create animations.
 
-Right-click the images below, choose "Save as...", and store it in the `assets/images` folder of the
+Right-click the images below, choose "Save as...", and store them in the `assets/images` folder of the
 project. At this point our project's structure looks like this:
 
 ```text
