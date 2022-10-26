@@ -83,7 +83,7 @@ You can run this file and you should just have a blank screen now.  Let's get Em
 
 Keeping your game files organized can always be a challenge.  I like to keep things logically
 organized by how they will be involved in my game.  So for Ember, let's create the following folder,
-`lib\actors` and in that folder, create `ember.dart`.  In that file, add the following code:
+`lib/actors` and in that folder, create `ember.dart`.  In that file, add the following code:
 
 ```dart
 import 'package:flame/components.dart';
