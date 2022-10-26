@@ -13,7 +13,7 @@ class _MyEffect extends Transform2DEffect {
 
 void main() {
   group('Transform2DEffect', () {
-    flameGame.test(
+    testWithFlameGame(
       'onMount',
       (game) async {
         final component = PositionComponent();

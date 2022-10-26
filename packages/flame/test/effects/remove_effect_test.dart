@@ -1,6 +1,7 @@
 import 'package:flame/components.dart';
+import 'package:flame/effects.dart';
 import 'package:flame/game.dart';
-import 'package:flame/src/effects/remove_effect.dart';
+import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -39,6 +40,24 @@ void main() {
 
       game.update(0.5);
       game.update(0);
+      expect(game.children.length, 0);
+    });
+
+    testWithFlameGame('as a part of a sequence', (game) async {
+      final component = PositionComponent();
+      await game.ensureAdd(component);
+      component.add(
+        SequenceEffect([
+          MoveByEffect(Vector2.all(10), EffectController(duration: 1)),
+          RemoveEffect(),
+        ]),
+      );
+      game.update(0);
+      expect(game.children.length, 1);
+      game.update(0.5);
+      expect(game.children.length, 1);
+      game.update(1.0); // This completes the move effect
+      game.update(0); // This runs the remove effect
       expect(game.children.length, 0);
     });
   });

@@ -8,11 +8,11 @@ This library is currently under development. Many features are still missing.
 ![fireball](../images/fireball-small.jpg){align=right}
 
 The **flame_yarn** library allows you to easily add **dialogue** into your game, which includes
-anything from simple exchange of phrases between characters, to user selection of choices, to
-sophisticated non-linear conversations that adjust with the game state. The `flame_yarn` library
-was inspired by the [Yarn Spinner] library for Unity.
+anything from simple exchange of phrases between characters, to user-controlled responses and
+non-linear conversations that adjust with the game state. The `flame_yarn` library was inspired
+by the [Yarn Spinner] library for Unity.
 
-Adding dialogue into the game consists of two major stages:
+Adding dialogue into any game generally consists of two major stages:
 
 1. Writing the text for the dialogue script;
 2. Interactively displaying it within the game.
