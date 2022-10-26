@@ -4,7 +4,7 @@ Before you begin any kind of game project, you need an idea of what you want to 
 then give it a **name**. For this tutorial and game, Ember will be on a quest to gather as many
 (GitHub) stars as possible and I will call the game, `Ember Quest`.
 
-Now it is time to get started but first, you need to go to the [bare flame game
+Now it is time to get started, but first you need to go to the [bare flame game
 tutorial](../bare_flame_game.md) and complete the necessary setup steps. When you come back, you
 should already have the `main.dart` file with the following content:
 
