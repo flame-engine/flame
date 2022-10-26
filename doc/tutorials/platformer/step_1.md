@@ -64,12 +64,12 @@ project. At this point our project's structure looks like this:
 emberquest/
  ├─assets/
  │  └─images/
- │     └─block.png
- │     └─ember.png
- │     └─ground.png
- │     └─heart_half.png
- │     └─heart.png
- │     └─star.png
+ │     ├─block.png
+ │     ├─ember.png
+ │     ├─ground.png
+ │     ├─heart_half.png
+ │     ├─heart.png
+ │     ├─star.png
  │     └─water_enemy.png
  ├─lib/
  │  └─main.dart
