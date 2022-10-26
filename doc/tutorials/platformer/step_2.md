@@ -1,4 +1,4 @@
-# 2. Beginning Coding
+# 2. Start Coding
 
 
 ## The Plan

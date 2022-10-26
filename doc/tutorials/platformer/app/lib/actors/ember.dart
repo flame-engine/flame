@@ -101,9 +101,9 @@ class EmberPlayer extends SpriteAnimationComponent
 
     // Flip ember if needed.
     if (horizontalDirection < 0 && scale.x > 0) {
-      flipHorizontallyAroundCenter();
+      flipHorizontally();
     } else if (horizontalDirection > 0 && scale.x < 0) {
-      flipHorizontallyAroundCenter();
+      flipHorizontally();
     }
     super.update(dt);
   }
@@ -148,11 +148,12 @@ class EmberPlayer extends SpriteAnimationComponent
   // to make it blink.
   void hit() {
     if (!hitByEnemy) {
-      gameRef.health--;
+      game.health--;
       hitByEnemy = true;
     }
     add(
-      OpacityEffect.fadeOut(
+      OpacityEffect.to(
+        0.3,
         EffectController(
           alternate: true,
           duration: 0.1,

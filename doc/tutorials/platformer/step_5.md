@@ -92,9 +92,9 @@ following code at the end of your `update` method:
 
 ```dart
 if (horizontalDirection < 0 && scale.x > 0) {
-    flipHorizontallyAroundCenter();
+    flipHorizontally();
 } else if (horizontalDirection > 0 && scale.x < 0) {
-    flipHorizontallyAroundCenter();
+    flipHorizontally();
 }
 ```
 
@@ -206,8 +206,8 @@ velocity.y += gravity;
 //Determine if ember has jumped
 if (hasJumped) {
     if (isOnGround) {
-    velocity.y = -jumpSpeed;
-    isOnGround = false;
+        velocity.y = -jumpSpeed;
+        isOnGround = false;
     }
     hasJumped = false;
 }
@@ -263,7 +263,8 @@ void hit() {
         hitByEnemy = true;
     }
     add(
-        OpacityEffect.fadeOut(
+        OpacityEffect.to(
+        0.3,
         EffectController(
             alternate: true,
             duration: 0.1,

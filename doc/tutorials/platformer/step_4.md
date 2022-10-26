@@ -159,7 +159,7 @@ class WaterEnemy extends SpriteAnimationComponent
 The water drop enemy is an animation just like Ember, so this class is extending the
 `SpriteAnimationComponent` class but it uses all of the previous code we have used for the Star and
 the Platform.  The only difference will be instead of the `SizeEffect`, we are going to use the
-`MoveEffect.  The best resource for information will be their [help
+`MoveEffect`.  The best resource for information will be their [help
 docs](../../flame/effects.md#sizeeffectby).  
 
 In short, the `MoveEffect` will last for 3 seconds, alternate directions, and run infinitely.  It
