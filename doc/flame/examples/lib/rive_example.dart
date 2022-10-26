@@ -1,10 +1,15 @@
+import 'dart:async';
+
+import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flame_rive/flame_rive.dart';
 
 // ignore: depend_on_referenced_packages
 import 'package:rive/rive.dart';
 
-class RiveExampleGame extends FlameGame {
+class RiveExampleGame extends FlameGame with TapDetector {
+  late SMIInput<double>? levelInput;
+
   @override
   Future<void> onLoad() async {
     final skillsArtboard =
@@ -17,6 +22,16 @@ class RiveExampleGame extends FlameGame {
 
     skillsArtboard.addController(controller!);
 
+    levelInput = controller.findInput<double>('Level');
+
     add(RiveComponent(artboard: skillsArtboard, size: canvasSize));
+  }
+
+  @override
+  void onTap() {
+    super.onTap();
+    if (levelInput != null) {
+      levelInput!.value = (levelInput!.value + 1) % 3;
+    }
   }
 }
