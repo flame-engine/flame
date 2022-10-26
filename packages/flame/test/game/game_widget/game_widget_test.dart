@@ -1,6 +1,8 @@
+import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 class _Wrapper extends StatefulWidget {
@@ -14,6 +16,21 @@ class _Wrapper extends StatefulWidget {
 
   @override
   State<_Wrapper> createState() => _WrapperState();
+}
+
+class _GameWithKeyboardEvents extends FlameGame with KeyboardEvents {
+  final List<LogicalKeyboardKey> keyEvents = [];
+
+  _GameWithKeyboardEvents();
+
+  @override
+  KeyEventResult onKeyEvent(
+    RawKeyEvent event,
+    Set<LogicalKeyboardKey> keysPressed,
+  ) {
+    keyEvents.add(event.logicalKey);
+    return KeyEventResult.handled;
+  }
 }
 
 class _WrapperState extends State<_Wrapper> {
@@ -219,6 +236,245 @@ void main() {
       expect(game1.isAttached, true);
 
       expect(game2, isNull);
+    });
+  });
+
+  group('focus', () {
+    testWidgets('autofocus starts focused', (tester) async {
+      final gameFocusNode = FocusNode();
+
+      await tester.pumpWidget(
+        GameWidget(
+          focusNode: gameFocusNode,
+          game: FlameGame(),
+          // ignore: avoid_redundant_argument_values
+          autofocus: true,
+        ),
+      );
+
+      expect(gameFocusNode.hasFocus, isTrue);
+    });
+
+    testWidgets('autofocus false does not start focused', (tester) async {
+      final gameFocusNode = FocusNode();
+
+      await tester.pumpWidget(
+        GameWidget(
+          focusNode: gameFocusNode,
+          game: FlameGame(),
+          autofocus: false,
+        ),
+      );
+
+      expect(gameFocusNode.hasFocus, isFalse);
+    });
+
+    group('overlay with focus', () {
+      testWidgets('autofocus on overlay', (tester) async {
+        final gameFocusNode = FocusNode();
+        final overlayFocusNode = FocusNode();
+
+        final game = FlameGame();
+
+        await tester.pumpWidget(
+          GameWidget(
+            focusNode: gameFocusNode,
+            game: game,
+            autofocus: false,
+            initialActiveOverlays: const ['some-overlay'],
+            overlayBuilderMap: {
+              'some-overlay': (buildContext, game) {
+                return Focus(
+                  focusNode: overlayFocusNode,
+                  autofocus: true,
+                  child: const SizedBox.shrink(),
+                );
+              }
+            },
+          ),
+        );
+
+        await game.toBeLoaded();
+        await tester.pump();
+
+        expect(gameFocusNode.hasPrimaryFocus, isFalse);
+        expect(gameFocusNode.hasFocus, isTrue);
+        expect(overlayFocusNode.hasPrimaryFocus, isTrue);
+      });
+
+      testWidgets(
+        'focus goes back to game when overlays is removed',
+        (tester) async {
+          final gameFocusNode = FocusNode();
+          final overlayFocusNode = FocusNode();
+
+          final game = FlameGame();
+
+          await tester.pumpWidget(
+            GameWidget(
+              focusNode: gameFocusNode,
+              game: game,
+              initialActiveOverlays: const ['some-overlay'],
+              overlayBuilderMap: {
+                'some-overlay': (buildContext, game) {
+                  return Focus(
+                    focusNode: overlayFocusNode,
+                    child: const SizedBox.shrink(),
+                  );
+                }
+              },
+            ),
+          );
+
+          await game.toBeLoaded();
+          await tester.pump();
+
+          expect(overlayFocusNode.hasFocus, isFalse);
+          expect(gameFocusNode.hasPrimaryFocus, isTrue);
+
+          overlayFocusNode.requestFocus();
+          await tester.pump();
+
+          expect(overlayFocusNode.hasFocus, isTrue);
+          expect(gameFocusNode.hasPrimaryFocus, isFalse);
+
+          game.overlays.remove('some-overlay');
+
+          await tester.pump();
+
+          expect(overlayFocusNode.hasFocus, isFalse);
+          expect(gameFocusNode.hasPrimaryFocus, isTrue);
+        },
+      );
+
+      testWidgets('autofocus on overlay', (tester) async {
+        final gameFocusNode = FocusNode();
+        final overlayFocusNode = FocusNode();
+
+        final game = FlameGame();
+
+        await tester.pumpWidget(
+          GameWidget(
+            focusNode: gameFocusNode,
+            game: game,
+            autofocus: false,
+            initialActiveOverlays: const ['some-overlay'],
+            overlayBuilderMap: {
+              'some-overlay': (buildContext, game) {
+                return Focus(
+                  focusNode: overlayFocusNode,
+                  autofocus: true,
+                  child: const SizedBox.shrink(),
+                );
+              }
+            },
+          ),
+        );
+
+        await game.toBeLoaded();
+        await tester.pump();
+
+        expect(gameFocusNode.hasPrimaryFocus, isFalse);
+        expect(gameFocusNode.hasFocus, isTrue);
+        expect(overlayFocusNode.hasPrimaryFocus, isTrue);
+      });
+    });
+  });
+
+  group('keyboard events', () {
+    testWidgets('handles keys when game is KeyboardKeys', (tester) async {
+      final game = _GameWithKeyboardEvents();
+
+      await tester.pumpWidget(
+        GameWidget(
+          game: game,
+        ),
+      );
+
+      await game.toBeLoaded();
+      await tester.pump();
+
+      await simulateKeyDownEvent(LogicalKeyboardKey.keyA);
+      await tester.pump();
+
+      expect(game.keyEvents, [LogicalKeyboardKey.keyA]);
+    });
+
+    testWidgets(
+      'handles keys when focused regardless of being KeyboardKeys',
+      (tester) async {
+        final game = FlameGame();
+
+        await tester.pumpWidget(
+          GameWidget(
+            game: game,
+          ),
+        );
+
+        await game.toBeLoaded();
+        await tester.pump();
+
+        final handled = await simulateKeyDownEvent(LogicalKeyboardKey.keyA);
+
+        expect(handled, isTrue);
+      },
+    );
+
+    testWidgets('handles keys when KeyboardEvents', (tester) async {
+      final game = _GameWithKeyboardEvents();
+
+      await tester.pumpWidget(
+        GameWidget(
+          game: game,
+        ),
+      );
+
+      await game.toBeLoaded();
+      await tester.pump();
+
+      await simulateKeyDownEvent(LogicalKeyboardKey.keyA);
+      await tester.pump();
+
+      expect(game.keyEvents, [LogicalKeyboardKey.keyA]);
+    });
+
+    testWidgets('overlay handles keys', (tester) async {
+      final overlayKeyEvents = <LogicalKeyboardKey>[];
+      final overlayFocusNode = FocusNode(
+        onKey: (_, keyEvent) {
+          overlayKeyEvents.add(keyEvent.logicalKey);
+          return KeyEventResult.ignored;
+        },
+      );
+
+      final game = _GameWithKeyboardEvents();
+
+      await tester.pumpWidget(
+        GameWidget(
+          autofocus: false,
+          game: game,
+          initialActiveOverlays: const ['some-overlay'],
+          overlayBuilderMap: {
+            'some-overlay': (buildContext, game) {
+              return Focus(
+                focusNode: overlayFocusNode,
+                autofocus: true,
+                child: const SizedBox.shrink(),
+              );
+            }
+          },
+        ),
+      );
+
+      await game.toBeLoaded();
+      await tester.pump();
+
+      expect(overlayFocusNode.hasPrimaryFocus, isTrue);
+      await simulateKeyDownEvent(LogicalKeyboardKey.keyA);
+      await tester.pump();
+
+      expect(game.keyEvents, <RawKeyEvent>[]);
+      expect(overlayKeyEvents, [LogicalKeyboardKey.keyA]);
     });
   });
 }

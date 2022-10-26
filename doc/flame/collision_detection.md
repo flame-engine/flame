@@ -355,6 +355,14 @@ game. After you have added that you can call `collisionDetection.raycast(...)` o
 
 Example:
 
+```{flutter-app}
+:sources: ../flame/examples
+:page: ray_cast
+:show: widget code infobox
+:width: 180
+:height: 160
+```
+
 ```dart
 class MyGame extends FlameGame with HasCollisionDetection {
   @override
@@ -428,6 +436,14 @@ that you have traced the ray for long enough. If you imagine how a pool ball wou
 table for example, that information could be retrieved with the help of ray tracing.
 
 Example:
+
+```{flutter-app}
+:sources: ../flame/examples
+:page: ray_trace
+:show: widget code infobox
+:width: 180
+:height: 160
+```
 
 ```dart
 class MyGame extends FlameGame with HasCollisionDetection {
