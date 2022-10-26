@@ -6,14 +6,14 @@ import 'package:flame/game.dart';
 
 class RemoveEffectGame extends FlameGame with TapDetector {
   static const double delayTime = 3;
-  late EmberPlayer flower;
+  late EmberPlayer ember;
   late TextComponent textComponent;
   late RemoveEffect effect = RemoveEffect(delay: delayTime);
 
   @override
   Future<void> onLoad() async {
     add(
-      flower = EmberPlayer(
+      ember = EmberPlayer(
         position: size / 2,
         size: Vector2(45, 40),
       )..anchor = Anchor.center,
@@ -23,11 +23,11 @@ class RemoveEffectGame extends FlameGame with TapDetector {
 
   @override
   void onTap() {
-    if (!children.contains(flower)) {
+    if (!children.contains(ember)) {
       effect.reset();
-      add(flower);
+      add(ember);
     } else {
-      flower.add(effect);
+      ember.add(effect);
     }
   }
 
