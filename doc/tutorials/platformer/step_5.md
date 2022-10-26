@@ -5,7 +5,7 @@ If you were waiting for some serious coding, this chapter is it.  Prepare yourse
 
 ## Keyboard Controls
 
-The first step will to be allow control of Ember via the keyboard.  We need to start by adding the
+The first step will be to allow control of Ember via the keyboard.  We need to start by adding the
 appropriate mixins to the game class and Ember. Add the following:
 
 `lib/ember_quest.dart'
