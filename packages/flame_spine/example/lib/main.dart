@@ -1,7 +1,9 @@
+import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
-import 'package:flame/input.dart';
 import 'package:flame_spine/flame_spine.dart';
 import 'package:flutter/material.dart';
+
+// ignore: depend_on_referenced_packages
 import 'package:spine_flutter/spine_flutter.dart';
 
 void main() {
@@ -26,37 +28,56 @@ class _MyAppState extends State<MyApp> {
   }
 }
 
-class SpineExampleGame extends FlameGame with TapDetector {
+class SpineExampleGame extends FlameGame with HasTappableComponents {
   @override
   Color backgroundColor() {
     return const Color(0xFFE5E5E5);
   }
 
-  late SkeletonRender renderer;
-  late SkeletonAnimation skeleton;
+  @override
+  Future<void> onLoad() async {
+    final skeleton = await loadSkeleton('spineboy');
+    final animations = await loadAnimations('spineboy');
 
-  late Set<String> animations;
+    add(
+      MyComponent(
+        skeleton: skeleton,
+        animations: animations,
+        size: Vector2.all(300),
+      ),
+    );
+  }
+}
+
+class MyComponent extends SpineComponent with TapCallbacks {
+  MyComponent({
+    required this.skeleton,
+    required this.animations,
+    required super.size,
+  }) : super(renderer: SkeletonRender(skeleton: skeleton));
+
+  final SkeletonAnimation skeleton;
+  final Set<String> animations;
+
+  bool isClicked = false;
+
+  int _index = 0;
 
   @override
-  void onTap() {
-    print('tapped game');
+  Future<void>? onLoad() {
+    renderer.animation = animations.elementAt(_index);
 
-    renderer = SkeletonRender(
-      skeleton: skeleton,
-      animation: animations.first,
-    );
+    return super.onLoad();
   }
 
   @override
-  Future<void> onLoad() async {
-    skeleton = await loadSkeleton('spineboy');
-    animations = await loadAnimations('spineboy');
+  void onTapUp(TapUpEvent event) {
+    super.onTapUp(event);
 
-    renderer = SkeletonRender(
-      skeleton: skeleton,
-      animation: animations.last,
-    );
+    isClicked = !isClicked;
 
-    add(SpineComponent(renderer: renderer, size: Vector2.all(300)));
+    _index = (_index + 1) % (animations.length - 1);
+
+    renderer.updateAnimation(animations.elementAt(_index));
   }
 }

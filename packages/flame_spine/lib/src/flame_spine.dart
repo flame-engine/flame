@@ -59,12 +59,19 @@ class SkeletonRender {
       throw 'SkeletonRender was advanced before initialization. '
           'Run SkeletonRender.init() before calling .advance';
     }
+    applyState();
   }
 
   void updateAnimation(String animation) {
-    this.animation = animation;
+    final renderObject = _renderObject;
+    if (renderObject == null) {
+      throw 'SkeletonRender was advanced before initialization. '
+          'Run SkeletonRender.init() before calling .advance';
+    }
 
-    applyState();
+    renderObject.animation = animation;
+
+    // applyState();
   }
 
   void applyState() {
