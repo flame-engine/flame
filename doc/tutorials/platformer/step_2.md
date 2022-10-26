@@ -7,7 +7,7 @@ Now that we have the assets loaded and a very rough idea of what classes we will
 start thinking about how we will implement this game and our goals.  To do this, let's break down
 what the game should do:
 
-- Ember should be able to be controlled left, right, and jump.
+- Ember should be able to be controlled to move left, right, and jump.
 - The level will be infinite, so we need a way to randomly load sections of the level.
 - The objective is to collect stars while avoiding enemies.
 - Enemies cannot be killed as you need to use the platforms to avoid them.
