@@ -17,6 +17,7 @@ import 'package:doc_flame_examples/opacity_effect_with_target.dart';
 import 'package:doc_flame_examples/opacity_to_effect.dart';
 import 'package:doc_flame_examples/ray_cast.dart';
 import 'package:doc_flame_examples/ray_trace.dart';
+import 'package:doc_flame_examples/remove_effect.dart';
 import 'package:doc_flame_examples/rotate_by_effect.dart';
 import 'package:doc_flame_examples/rotate_to_effect.dart';
 import 'package:doc_flame_examples/router.dart';
@@ -63,6 +64,7 @@ void main() {
     'value_route': ValueRouteExample.new,
     'ray_cast': RayCastExample.new,
     'ray_trace': RayTraceExample.new,
+    'remove_effect': RemoveEffectGame.new,
   };
   final game = routes[page]?.call();
   if (game != null) {
