@@ -8,7 +8,7 @@ class RemoveEffectGame extends FlameGame with TapDetector {
   static const double delayTime = 3;
   late EmberPlayer ember;
   late TextComponent textComponent;
-  late RemoveEffect effect = RemoveEffect(delay: delayTime);
+  final RemoveEffect effect = RemoveEffect(delay: delayTime);
 
   @override
   Future<void> onLoad() async {
