@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:math' as math;
 
-import 'package:flame/extensions.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:spine_core/spine_core.dart';
@@ -9,86 +8,81 @@ import 'package:spine_flutter/spine_flutter.dart';
 
 class SkeletonRender {
   SkeletonRender({
-    required this.skeleton,
-    this.fit = BoxFit.contain,
-    this.alignment = Alignment.center,
-    this.playState = PlayState.playing,
-    this.debugRendering = false,
-    this.triangleRendering = true,
-    this.frameSizeMultiplier = 0.0,
-    this.animation,
-  });
+    required SkeletonAnimation skeleton,
+    BoxFit fit = BoxFit.contain,
+    Alignment alignment = Alignment.center,
+    PlayState playState = PlayState.playing,
+    bool debugRendering = false,
+    bool triangleRendering = true,
+    double frameSizeMultiplier = 0.0,
+    String? animation,
+  }) : _renderObject = SkeletonRenderObject()
+          ..skeleton = skeleton
+          ..fit = fit
+          ..alignment = alignment
+          ..playState = playState
+          ..debugRendering = debugRendering
+          ..triangleRendering = triangleRendering
+          ..frameSizeMultiplier = frameSizeMultiplier
+          ..animation = animation;
 
-  final SkeletonAnimation skeleton;
-  final BoxFit fit;
-  final Alignment alignment;
-  final PlayState playState;
-  final bool debugRendering;
-  final bool triangleRendering;
+  late final SkeletonRenderObject _renderObject;
+
+  SkeletonAnimation get skeleton => _renderObject.skeleton;
+
+  set skeleton(SkeletonAnimation value) {
+    _renderObject.skeleton = value;
+  }
+
+  Alignment get alignment => _renderObject.alignment as Alignment;
+
+  set alignment(AlignmentGeometry value) {
+    _renderObject.alignment = value as Alignment;
+  }
+
+  BoxFit get fit => _renderObject.fit;
+
+  set fit(BoxFit value) {
+    _renderObject.fit = value;
+  }
+
+  PlayState get playState => _renderObject.playState;
+
+  set playState(PlayState value) {
+    _renderObject.playState = value;
+  }
+
+  bool get debugRendering => _renderObject.debugRendering;
+
+  set debugRendering(bool value) {
+    _renderObject.debugRendering = value;
+  }
+
+  bool get triangleRendering => _renderObject.triangleRendering;
+
+  set triangleRendering(bool value) {
+    _renderObject.triangleRendering = value;
+  }
 
   /// Нow many percent increase the size of the animation
   /// relative to the size of the first frame.
-  final double frameSizeMultiplier;
+  double get frameSizeMultiplier => _renderObject.frameSizeMultiplier;
+
+  set frameSizeMultiplier(double value) {
+    _renderObject.frameSizeMultiplier = value;
+  }
 
   /// A start animation. We will use it for calculate bounds by frames.
-  late String? animation;
+  String? get animation => _renderObject.animation;
 
-  SkeletonRenderObject? _renderObject;
-
-  void init() {
-    _renderObject = _generateRenderObject();
+  set animation(String? value) {
+    _renderObject.animation = value;
   }
 
-  SkeletonRenderObject _generateRenderObject() {
-    final renderObject = SkeletonRenderObject()
-      ..skeleton = skeleton
-      ..fit = fit
-      ..alignment = alignment
-      ..playState = playState
-      ..debugRendering = debugRendering
-      ..triangleRendering = triangleRendering
-      ..frameSizeMultiplier = frameSizeMultiplier
-      ..animation = animation;
-
-    return renderObject;
-  }
-
-  void advance(double dt) {
-    final renderObject = _renderObject;
-    if (renderObject == null) {
-      throw 'SkeletonRender was advanced before initialization. '
-          'Run SkeletonRender.init() before calling .advance';
-    }
-    applyState();
-  }
-
-  void updateAnimation(String animation) {
-    final renderObject = _renderObject;
-    if (renderObject == null) {
-      throw 'SkeletonRender was advanced before initialization. '
-          'Run SkeletonRender.init() before calling .advance';
-    }
-
-    renderObject.animation = animation;
-
-    // applyState();
-  }
-
-  void applyState() {
-    skeleton
-      ..applyState()
-      ..updateWorldTransform();
-  }
+  void advance(double dt) {}
 
   void render(Canvas canvas, Size size) {
-    /// paint here on canvas
-    final renderObject = _renderObject;
-    if (renderObject == null) {
-      throw 'SkeletonRender was rendered before initialization. '
-          'Run SkeletonRender.init() before rendering it';
-    }
-
-    final bound = _renderObject!.bounds;
+    final bound = _renderObject.bounds;
 
     if (bound == null) {
       throw 'SkeletonRender was rendered but Bounds are not present ';
@@ -98,21 +92,10 @@ class SkeletonRender {
   }
 
   void destroy() {
-    final renderObject = _renderObject;
-    if (renderObject == null) {
-      throw 'SkeletonRender was destroyed before initialization. '
-          'Run SkeletonRender.init() before destroying it';
-    }
-    renderObject.dispose();
+    _renderObject.dispose();
   }
 
   void _paint(Canvas canvas, Bounds bounds, Size size) {
-    final renderObject = _renderObject;
-    if (renderObject == null) {
-      throw 'SkeletonRender was rendered before initialization. '
-          'Run SkeletonRender.init() before rendering it';
-    }
-
     /// draw
 
     final contentHeight = bounds.size.y;
@@ -171,7 +154,7 @@ class SkeletonRender {
       ..scale(scaleX, -scaleY)
       ..translate(x, y);
 
-    _renderObject!.draw(canvas);
+    _renderObject.draw(canvas);
 
     canvas.restore();
   }

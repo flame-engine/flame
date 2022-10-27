@@ -71,13 +71,19 @@ class MyComponent extends SpineComponent with TapCallbacks {
   }
 
   @override
+  void onTapDown(TapDownEvent event) {
+    super.onTapDown(event);
+
+    renderer.playState = PlayState.paused;
+  }
+
+  @override
   void onTapUp(TapUpEvent event) {
     super.onTapUp(event);
 
-    isClicked = !isClicked;
-
     _index = (_index + 1) % (animations.length - 1);
 
-    renderer.updateAnimation(animations.elementAt(_index));
+    renderer.playState = PlayState.playing;
+    renderer.animation = animations.elementAt(_index);
   }
 }

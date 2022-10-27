@@ -14,12 +14,6 @@ class SpineComponent extends PositionComponent {
   });
 
   @override
-  void onMount() {
-    super.onMount();
-    renderer.init();
-  }
-
-  @override
   @mustCallSuper
   void render(Canvas canvas) {
     renderer.render(canvas, size.toSize());
