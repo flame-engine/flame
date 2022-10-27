@@ -8,5 +8,5 @@
 /// Spine support for the Flame game engine.
 library flame_spine;
 
-export 'src/flame_spine.dart';
-export 'src/skeleton_component.dart';
+export 'src/sekele_render.dart';
+export 'src/spine_component.dart';
