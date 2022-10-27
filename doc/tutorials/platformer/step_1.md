@@ -84,6 +84,15 @@ emberquest/
 ![Star](app/assets/images/star.png)
 ![Water Enemy Animation](app/assets/images/water_enemy.png)
 
+```{note}
+You may ask, why are the images different sizes?
+
+Well, as I was using the online tool to make the assets, I had trouble getting
+the detail I desired for the game in a 16x16 block.  The heart worked out in 
+32x32 and the ground as well as the star were 64x64.  Regardless, the asset size
+does not matter for the game as we will resize as needed.
+```
+
 Also, you need to tell Flutter about these images (just having them inside the `assets` folder is
 not enough). To do this, let's add the following lines into the `pubspec.yaml` file:
 

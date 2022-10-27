@@ -316,7 +316,7 @@ are now updating `game.objectSpeed` which we established early on in the series.
 you will see the next random segment be generated and added to the level based on the work we did in
 Ground Block.
 
-```note
+```{note}
 As I mentioned earlier, I would add a section on how this game could be adapted
 to a traditional level game. As we built the segments in [](step_3.md), we
 could add a segment that has a door or a special block. For every `X` number of
