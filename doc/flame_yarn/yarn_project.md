@@ -1,3 +1,0 @@
-# Yarn Project
-
-TODO
