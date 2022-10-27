@@ -4,9 +4,9 @@ import '../ember_quest.dart';
 
 class MainMenu extends StatelessWidget {
   // Reference to parent game.
-  final EmberQuestGame gameRef;
+  final EmberQuestGame game;
 
-  const MainMenu({super.key, required this.gameRef});
+  const MainMenu({super.key, required this.game});
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +42,7 @@ class MainMenu extends StatelessWidget {
                 height: 75,
                 child: ElevatedButton(
                   onPressed: () {
-                    gameRef.overlays.remove('MainMenu');
+                    game.overlays.remove('MainMenu');
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: whiteTextColor,

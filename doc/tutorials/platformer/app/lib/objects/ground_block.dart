@@ -21,39 +21,39 @@ class GroundBlock extends SpriteComponent with HasGameRef<EmberQuestGame> {
 
   @override
   Future<void> onLoad() async {
-    final groundImage = gameRef.images.fromCache('ground.png');
+    final groundImage = game.images.fromCache('ground.png');
     sprite = Sprite(groundImage);
     position = Vector2(
       (gridPosition.x * size.x) + xOffset,
-      gameRef.size.y - (gridPosition.y * size.y),
+      game.size.y - (gridPosition.y * size.y),
     );
     add(RectangleHitbox()..collisionType = CollisionType.passive);
-    if (gridPosition.x == 9 && position.x > gameRef.lastBlockXPosition) {
-      gameRef.lastBlockKey = _blockKey;
-      gameRef.lastBlockXPosition = position.x + size.x;
+    if (gridPosition.x == 9 && position.x > game.lastBlockXPosition) {
+      game.lastBlockKey = _blockKey;
+      game.lastBlockXPosition = position.x + size.x;
     }
   }
 
   @override
   void update(double dt) {
-    velocity.x = gameRef.objectSpeed;
+    velocity.x = game.objectSpeed;
     position += velocity * dt;
 
     if (position.x < -size.x) {
       removeFromParent();
       if (gridPosition.x == 0) {
-        gameRef.loadGameSegments(
+        game.loadGameSegments(
           Random().nextInt(segments.length),
-          gameRef.lastBlockXPosition,
+          game.lastBlockXPosition,
         );
       }
     }
     if (gridPosition.x == 9) {
-      if (gameRef.lastBlockKey == _blockKey) {
-        gameRef.lastBlockXPosition = position.x + size.x - 10;
+      if (game.lastBlockKey == _blockKey) {
+        game.lastBlockXPosition = position.x + size.x - 10;
       }
     }
-    if (gameRef.health <= 0) {
+    if (game.health <= 0) {
       removeFromParent();
     }
 

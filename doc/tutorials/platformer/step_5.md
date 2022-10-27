@@ -187,6 +187,7 @@ with very basic physics.  To do that, we need to create some more variables:
 ```dart
   final double gravity = 15;
   final double jumpSpeed = 600;
+  final double terminalVelocity = 150;
 
   bool hasJumped = false;
 ```
@@ -200,10 +201,10 @@ hasJumped = keysPressed.contains(LogicalKeyboardKey.space);
 Finally, in our `update` method we can tie this all together with:
 
 ```dart
-//Apply basic gravity
+// Apply basic gravity
 velocity.y += gravity;
 
-//Determine if ember has jumped
+// Determine if ember has jumped
 if (hasJumped) {
     if (isOnGround) {
         velocity.y = -jumpSpeed;
@@ -212,8 +213,9 @@ if (hasJumped) {
     hasJumped = false;
 }
 
-//Prevent ember from jumping to crazy fast
-velocity.y = velocity.y.clamp(-jumpSpeed, 150);
+// Prevent ember from jumping to crazy fast as well as descending too fast and 
+// crashing through the ground or a platform.
+velocity.y = velocity.y.clamp(-jumpSpeed, terminalVelocity);
 ```
 
 Earlier I mentioned that Ember was in the center of the grass, to solve this and show how collisions
@@ -263,12 +265,11 @@ void hit() {
         hitByEnemy = true;
     }
     add(
-        OpacityEffect.to(
-        0.3,
+        OpacityEffect.fadeOut(
         EffectController(
             alternate: true,
             duration: 0.1,
-            repeatCount: 5,
+            repeatCount: 6,
         ),
         )..onComplete = () {
             hitByEnemy = false;
@@ -297,23 +298,32 @@ go off-screen and we never move the map.  So to implement this feature, we simpl
 following to our `update` method:
 
 ```dart
-gameRef.objectSpeed = 0;
+game.objectSpeed = 0;
 // Prevent ember from going backwards at screen edge.
 if (position.x - 36 <= 0 && horizontalDirection < 0) {
     velocity.x = 0;
 }
 // Prevent ember from going beyond half screen.
-if (position.x + 64 >= gameRef.size.x / 2 && horizontalDirection > 0) {
+if (position.x + 64 >= game.size.x / 2 && horizontalDirection > 0) {
     velocity.x = 0;
-    gameRef.objectSpeed = -moveSpeed;
+    game.objectSpeed = -moveSpeed;
 }
 ```
 
 If you run the game now, Ember can't move off-screen to the left, and as Ember moves to the right,
 once they get to the middle of the screen, the rest of the objects scroll by.  This is because we
-are now updating `gameRef.objectSpeed` which we established early on in the series.  Additionally,
+are now updating `game.objectSpeed` which we established early on in the series.  Additionally,
 you will see the next random segment be generated and added to the level based on the work we did in
 Ground Block.
+
+```note
+As I mentioned earlier, I would add a section on how this game could be adapted
+to a traditional level game. As we built the segments in [](step_3.md), we
+could add a segment that has a door or a special block. For every `X` number of
+segments loaded, we could then add that special segment. When Ember reaches that
+object, we could reload the level and start all over maintaining the stars 
+collected and health.
+```
 
 We are almost done!  In [](step_6.md), we will add the health system, keep track of
 the score, and provide a HUD to relay that information to the player.

@@ -18,11 +18,11 @@ class Star extends SpriteComponent with HasGameRef<EmberQuestGame> {
 
   @override
   Future<void> onLoad() async {
-    final starImage = gameRef.images.fromCache('star.png');
+    final starImage = game.images.fromCache('star.png');
     sprite = Sprite(starImage);
     position = Vector2(
       (gridPosition.x * size.x) + xOffset + (size.x / 2),
-      gameRef.size.y - (gridPosition.y * size.y) - (size.y / 2),
+      game.size.y - (gridPosition.y * size.y) - (size.y / 2),
     );
     add(RectangleHitbox()..collisionType = CollisionType.passive);
     add(
@@ -40,9 +40,9 @@ class Star extends SpriteComponent with HasGameRef<EmberQuestGame> {
 
   @override
   void update(double dt) {
-    velocity.x = gameRef.objectSpeed;
+    velocity.x = game.objectSpeed;
     position += velocity * dt;
-    if (position.x < -size.x || gameRef.health <= 0) {
+    if (position.x < -size.x || game.health <= 0) {
       removeFromParent();
     }
     super.update(dt);

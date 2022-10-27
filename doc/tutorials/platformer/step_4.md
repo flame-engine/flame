@@ -30,11 +30,11 @@ class Star extends SpriteComponent
 
   @override
   Future<void> onLoad() async {
-    final starImage = gameRef.images.fromCache('star.png');
+    final starImage = game.images.fromCache('star.png');
     sprite = Sprite(starImage);
     position = Vector2(
         (gridPosition.x * size.x) + xOffset + (size.x / 2),
-        gameRef.size.y - (gridPosition.y * size.y) - (size.y / 2),
+        game.size.y - (gridPosition.y * size.y) - (size.y / 2),
     );
     add(RectangleHitbox()..collisionType = CollisionType.passive);
     add(
@@ -52,7 +52,7 @@ class Star extends SpriteComponent
 
   @override
   void update(double dt) {
-    velocity.x = gameRef.objectSpeed;
+    velocity.x = game.objectSpeed;
     position += velocity * dt;
     if (position.x < -size.x) removeFromParent();
     super.update(dt);
@@ -121,7 +121,7 @@ class WaterEnemy extends SpriteAnimationComponent
   @override
   Future<void> onLoad() async {
     animation = SpriteAnimation.fromFrameData(
-      gameRef.images.fromCache('water_enemy.png'),
+      game.images.fromCache('water_enemy.png'),
       SpriteAnimationData.sequenced(
         amount: 2,
         textureSize: Vector2.all(16),
@@ -130,7 +130,7 @@ class WaterEnemy extends SpriteAnimationComponent
     );
     position = Vector2(
         (gridPosition.x * size.x) + xOffset + (size.x / 2),
-        gameRef.size.y - (gridPosition.y * size.y) - (size.y / 2),
+        game.size.y - (gridPosition.y * size.y) - (size.y / 2),
     );
     add(RectangleHitbox()..collisionType = CollisionType.passive);
     add(
@@ -147,7 +147,7 @@ class WaterEnemy extends SpriteAnimationComponent
 
   @override
   void update(double dt) {
-    velocity.x = gameRef.objectSpeed;
+    velocity.x = game.objectSpeed;
     position += velocity * dt;
     if (position.x < -size.x) removeFromParent();
     super.update(dt);
@@ -215,17 +215,17 @@ class GroundBlock extends SpriteComponent with HasGameRef<EmberQuestGame> {
 
   @override
   Future<void> onLoad() async {
-    final groundImage = gameRef.images.fromCache('ground.png');
+    final groundImage = game.images.fromCache('ground.png');
     sprite = Sprite(groundImage);
     position = Vector2((gridPosition.x * size.x) + xOffset,
-        gameRef.size.y - (gridPosition.y * size.y),
+        game.size.y - (gridPosition.y * size.y),
     );
     add(RectangleHitbox()..collisionType = CollisionType.passive);
   }
 
   @override
   void update(double dt) {
-    velocity.x = gameRef.objectSpeed;
+    velocity.x = game.objectSpeed;
     position += velocity * dt;
     super.update(dt);
   }
@@ -249,9 +249,9 @@ final UniqueKey _blockKey = UniqueKey();
 Now in your Ground Block's `onLoad` method, add the following at the end of the method:
 
 ```dart
-if (gridPosition.x == 9 && position.x > gameRef.lastBlockXPosition) {
-    gameRef.lastBlockKey = _blockKey;
-    gameRef.lastBlockXPosition = position.x + size.x;
+if (gridPosition.x == 9 && position.x > game.lastBlockXPosition) {
+    game.lastBlockKey = _blockKey;
+    game.lastBlockXPosition = position.x + size.x;
 }
 ```
 
@@ -265,12 +265,12 @@ Now we can address updating this information, so in the `update` method, add the
 ```dart
   @override
   void update(double dt) {
-    velocity.x = gameRef.objectSpeed;
+    velocity.x = game.objectSpeed;
     position += velocity * dt;
 
     if (gridPosition.x == 9) {
-      if (gameRef.lastBlockKey == _blockKey) {
-        gameRef.lastBlockXPosition = position.x + size.x - 10;
+      if (game.lastBlockKey == _blockKey) {
+        game.lastBlockXPosition = position.x + size.x - 10;
       }
     }
 
@@ -278,7 +278,7 @@ Now we can address updating this information, so in the `update` method, add the
   }
 ```
 
-`gameRef.lastBlockXPosition` is being updated by the block's current x-axis position plus its width -
+`game.lastBlockXPosition` is being updated by the block's current x-axis position plus its width -
 10 pixels.  This will cause a little overlap, but due to the potential variance in `dt` this
 prevents gaps in the map as it loads while a player is moving.
 
@@ -300,8 +300,8 @@ the other block we just added:
 if (position.x < -size.x) {
   removeFromParent();
   if (gridPosition.x == 0) {
-    gameRef.loadGameSegments(
-        Random().nextInt(segments.length), gameRef.lastBlockXPosition);
+    game.loadGameSegments(
+        Random().nextInt(segments.length), game.lastBlockXPosition);
   }
 }
 ```
@@ -343,34 +343,34 @@ class GroundBlock extends SpriteComponent with HasGameRef<EmberQuestGame> {
 
   @override
   Future<void> onLoad() async {
-    final groundImage = gameRef.images.fromCache('ground.png');
+    final groundImage = game.images.fromCache('ground.png');
     sprite = Sprite(groundImage);
     position = Vector2((gridPosition.x * size.x) + xOffset,
-        gameRef.size.y - (gridPosition.y * size.y),
+        game.size.y - (gridPosition.y * size.y),
     );
     add(RectangleHitbox()..collisionType = CollisionType.passive);
-    if (gridPosition.x == 9 && position.x > gameRef.lastBlockXPosition) {
-      gameRef.lastBlockKey = _blockKey;
-      gameRef.lastBlockXPosition = position.x + size.x;
+    if (gridPosition.x == 9 && position.x > game.lastBlockXPosition) {
+      game.lastBlockKey = _blockKey;
+      game.lastBlockXPosition = position.x + size.x;
     }
   }
 
   @override
   void update(double dt) {
-    velocity.x = gameRef.objectSpeed;
+    velocity.x = game.objectSpeed;
     position += velocity * dt;
 
     if (position.x < -size.x) {
       removeFromParent();
       if (gridPosition.x == 0) {
-        gameRef.loadGameSegments(
+        game.loadGameSegments(
             Random().nextInt(segments.length),
-            gameRef.lastBlockXPosition);
+            game.lastBlockXPosition);
       }
     }
     if (gridPosition.x == 9) {
-      if (gameRef.lastBlockKey == _blockKey) {
-        gameRef.lastBlockXPosition = position.x + size.x - 10;
+      if (game.lastBlockKey == _blockKey) {
+        game.lastBlockXPosition = position.x + size.x - 10;
       }
     }
 

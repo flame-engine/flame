@@ -16,20 +16,20 @@ class PlatformBlock extends SpriteComponent with HasGameRef<EmberQuestGame> {
 
   @override
   Future<void> onLoad() async {
-    final platformImage = gameRef.images.fromCache('block.png');
+    final platformImage = game.images.fromCache('block.png');
     sprite = Sprite(platformImage);
     position = Vector2(
       (gridPosition.x * size.x) + xOffset,
-      gameRef.size.y - (gridPosition.y * size.y),
+      game.size.y - (gridPosition.y * size.y),
     );
     add(RectangleHitbox()..collisionType = CollisionType.passive);
   }
 
   @override
   void update(double dt) {
-    velocity.x = gameRef.objectSpeed;
+    velocity.x = game.objectSpeed;
     position += velocity * dt;
-    if (position.x < -size.x || gameRef.health <= 0) {
+    if (position.x < -size.x || game.health <= 0) {
       removeFromParent();
     }
     super.update(dt);

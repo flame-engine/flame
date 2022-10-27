@@ -4,8 +4,8 @@ import '../ember_quest.dart';
 
 class GameOver extends StatelessWidget {
   // Reference to parent game.
-  final EmberQuestGame gameRef;
-  const GameOver({super.key, required this.gameRef});
+  final EmberQuestGame game;
+  const GameOver({super.key, required this.game});
 
   @override
   Widget build(BuildContext context) {
@@ -41,8 +41,8 @@ class GameOver extends StatelessWidget {
                 height: 75,
                 child: ElevatedButton(
                   onPressed: () {
-                    gameRef.reset();
-                    gameRef.overlays.remove('GameOver');
+                    game.reset();
+                    game.overlays.remove('GameOver');
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: whiteTextColor,

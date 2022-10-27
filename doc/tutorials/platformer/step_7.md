@@ -15,9 +15,9 @@ import '../ember_quest.dart';
 
 class MainMenu extends StatelessWidget {
   // Reference to parent game.
-  final EmberQuestGame gameRef;
+  final EmberQuestGame game;
 
-  const MainMenu({super.key, required this.gameRef});
+  const MainMenu({super.key, required this.game});
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +53,7 @@ class MainMenu extends StatelessWidget {
                 height: 75,
                 child: ElevatedButton(
                   onPressed: () {
-                    gameRef.overlays.remove('MainMenu');
+                    game.overlays.remove('MainMenu');
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: whiteTextColor,
@@ -89,7 +89,7 @@ class MainMenu extends StatelessWidget {
 
 This is a pretty self-explanatory file that just uses standard Flutter widgets to display
 information and provide a `Play` button.  The only Flame-related line is
-`gameRef.overlays.remove('MainMenu');` which simply removes the overlay so the user can play the
+`game.overlays.remove('MainMenu');` which simply removes the overlay so the user can play the
 game.  It should be noted that the user can technically move Ember while this is displayed, but
 trapping the input is outside the scope of this tutorial as there are multiple ways this can be
 accomplished.
@@ -106,8 +106,8 @@ import '../ember_quest.dart';
 
 class GameOver extends StatelessWidget {
   // Reference to parent game.
-  final EmberQuestGame gameRef;
-  const GameOver({super.key, required this.gameRef});
+  final EmberQuestGame game;
+  const GameOver({super.key, required this.game});
 
   @override
   Widget build(BuildContext context) {
@@ -143,8 +143,8 @@ class GameOver extends StatelessWidget {
                 height: 75,
                 child: ElevatedButton(
                   onPressed: () {
-                    gameRef.reset();
-                    gameRef.overlays.remove('GameOver');
+                    game.reset();
+                    game.overlays.remove('GameOver');
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: whiteTextColor,
@@ -168,7 +168,7 @@ class GameOver extends StatelessWidget {
 ```
 
 As with the Main Menu, this is all standard Flutter widgets except for the call to remove the
-overlay and also the call to `gameRef.reset()` which we will create now.  
+overlay and also the call to `game.reset()` which we will create now.  
 
 Open `lib/ember_quest.dart` and add / update the following code:
 
@@ -228,8 +228,8 @@ void main() {
     GameWidget<EmberQuestGame>.controlled(
       gameFactory: EmberQuestGame.new,
       overlayBuilderMap: {
-        'MainMenu': (_, gameRef) => MainMenu(gameRef: gameRef),
-        'GameOver': (_, gameRef) => GameOver(gameRef: gameRef),
+        'MainMenu': (_, game) => MainMenu(game: game),
+        'GameOver': (_, game) => GameOver(game: game),
       },
       initialActiveOverlays: const ['MainMenu'],
     ),
@@ -257,11 +257,11 @@ In `lib/actors/ember.dart`, in the `update` method, add the following:
 
 ```dart
 // If ember fell in pit, then game over.
-if (position.y > gameRef.size.y + 64) {
-    gameRef.health = 0;
+if (position.y > game.size.y + size.y) {
+    game.health = 0;
 }
 
-if (gameRef.health <= 0) {
+if (game.health <= 0) {
     removeFromParent();
 }
 ```
@@ -269,7 +269,7 @@ if (gameRef.health <= 0) {
 In `lib/actors/water_enemy.dart`, in the `update` method update the following code:
 
 ```dart
-if (position.x < -size.x || gameRef.health <= 0) {
+if (position.x < -size.x || game.health <= 0) {
     removeFromParent();
 }
 ```
@@ -277,7 +277,7 @@ if (position.x < -size.x || gameRef.health <= 0) {
 In `lib/objects/ground_block.dart`, in the `update` method update the following code:
 
 ```dart
-if (gameRef.health <= 0) {
+if (game.health <= 0) {
     removeFromParent();
 }
 ```
@@ -285,7 +285,7 @@ if (gameRef.health <= 0) {
 In `lib/objects/platform_block.dart`, in the `update` method update the following code:
 
 ```dart
-if (position.x < -size.x || gameRef.health <= 0) {
+if (position.x < -size.x || game.health <= 0) {
     removeFromParent();
 }
 ```
@@ -293,7 +293,7 @@ if (position.x < -size.x || gameRef.health <= 0) {
 In `lib/objects/star.dart`, in the `update` method update the following code:
 
 ```dart
-if (position.x < -size.x || gameRef.health <= 0) {
+if (position.x < -size.x || game.health <= 0) {
     removeFromParent();
 }
 ```

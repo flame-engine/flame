@@ -20,6 +20,7 @@ class EmberPlayer extends SpriteAnimationComponent
   final double gravity = 15;
   final double jumpSpeed = 600;
   final double moveSpeed = 200;
+  final double terminalVelocity = 150;
   int horizontalDirection = 0;
 
   bool hasJumped = false;
@@ -29,7 +30,7 @@ class EmberPlayer extends SpriteAnimationComponent
   @override
   Future<void> onLoad() async {
     animation = SpriteAnimation.fromFrameData(
-      gameRef.images.fromCache('ember.png'),
+      game.images.fromCache('ember.png'),
       SpriteAnimationData.sequenced(
         amount: 4,
         textureSize: Vector2.all(16),
@@ -61,15 +62,15 @@ class EmberPlayer extends SpriteAnimationComponent
   @override
   void update(double dt) {
     velocity.x = horizontalDirection * moveSpeed;
-    gameRef.objectSpeed = 0;
+    game.objectSpeed = 0;
     // Prevent ember from going backwards at screen edge.
     if (position.x - 36 <= 0 && horizontalDirection < 0) {
       velocity.x = 0;
     }
     // Prevent ember from going beyond half screen.
-    if (position.x + 64 >= gameRef.size.x / 2 && horizontalDirection > 0) {
+    if (position.x + 64 >= game.size.x / 2 && horizontalDirection > 0) {
       velocity.x = 0;
-      gameRef.objectSpeed = -moveSpeed;
+      game.objectSpeed = -moveSpeed;
     }
 
     // Apply basic gravity.
@@ -85,17 +86,17 @@ class EmberPlayer extends SpriteAnimationComponent
     }
 
     // Prevent ember from jumping to crazy fast.
-    velocity.y = velocity.y.clamp(-jumpSpeed, 150);
+    velocity.y = velocity.y.clamp(-jumpSpeed, terminalVelocity);
 
     // Adjust ember position.
     position += velocity * dt;
 
     // If ember fell in pit, then game over.
-    if (position.y > gameRef.size.y + 64) {
-      gameRef.health = 0;
+    if (position.y > game.size.y + size.y) {
+      game.health = 0;
     }
 
-    if (gameRef.health <= 0) {
+    if (game.health <= 0) {
       removeFromParent();
     }
 
@@ -135,7 +136,7 @@ class EmberPlayer extends SpriteAnimationComponent
 
     if (other is Star) {
       other.removeFromParent();
-      gameRef.starsCollected++;
+      game.starsCollected++;
     }
 
     if (other is WaterEnemy) {
@@ -152,8 +153,7 @@ class EmberPlayer extends SpriteAnimationComponent
       hitByEnemy = true;
     }
     add(
-      OpacityEffect.to(
-        0.3,
+      OpacityEffect.fadeOut(
         EffectController(
           alternate: true,
           duration: 0.1,

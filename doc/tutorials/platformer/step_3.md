@@ -373,7 +373,7 @@ final Vector2 velocity = Vector2.zero();
 ```dart
   @override
   void update(double dt) {
-    velocity.x = gameRef.objectSpeed;
+    velocity.x = game.objectSpeed;
     position += velocity * dt;
     if (position.x < -size.x) removeFromParent();
     super.update(dt);
@@ -396,10 +396,10 @@ Now we just need to finish the `onLoad` method.  So make your `onLoad` method lo
 ```dart
   @override
   Future<void> onLoad() async {
-    final platformImage = gameRef.images.fromCache('block.png');
+    final platformImage = game.images.fromCache('block.png');
     sprite = Sprite(platformImage);
     position = Vector2((_gridPosition.x * size.x) + _xOffset,
-        gameRef.size.y - (_gridPosition.y * size.y),
+        game.size.y - (_gridPosition.y * size.y),
     );
     add(RectangleHitbox()..collisionType = CollisionType.passive);
   }

@@ -19,6 +19,16 @@ what the game should do:
 Now that this is planned out, I know you are probably as excited as I am to begin and I just want to
 see Ember on the screen.  So let's do that first.
 
+```note
+Why did I choose to make this game an infinite side scrolling platformer?
+
+Well, I wanted to be able to showcase random level loading. No two game plays
+will be the same. This exact setup can be easily adapted to be a traditional 
+level game. As you make your way through this tutorial, you will see how we 
+could modify the level code to have an end.  I will add a note in that section
+to explain the appropriate mechanics.
+```
+
 
 ## Loading Assets
 
@@ -99,7 +109,7 @@ class EmberPlayer extends SpriteAnimationComponent
   @override
   Future<void> onLoad() async {
     animation = SpriteAnimation.fromFrameData(
-      gameRef.images.fromCache('ember.png'),
+      game.images.fromCache('ember.png'),
       SpriteAnimationData.sequenced(
         amount: 4,
         textureSize: Vector2.all(16),
@@ -112,7 +122,7 @@ class EmberPlayer extends SpriteAnimationComponent
 
 This file uses the `HasGameRef` mixin which allows us to reach back to `ember_quest.dart` and
 leverage any of the variables or methods that are defined in the game class.  You can see this in
-use with the line `gameRef.images.fromCache('ember.png')`.  Earlier, we loaded all the files into
+use with the line `game.images.fromCache('ember.png')`.  Earlier, we loaded all the files into
 cache, so to use that file now, we call `fromCache` so it can be leveraged by the `SpriteAnimation`.
 The `EmberPlayer` class is extending a `SpriteAnimationComponent` which allows us to define
 animation as well as position it accordingly in our game world.  When we construct this class, the
