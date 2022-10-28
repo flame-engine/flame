@@ -30,14 +30,18 @@ extensions = [
 
 # Configuration options for MyST:
 # https://myst-parser.readthedocs.io/en/latest/syntax/optional.html
-myst_enable_extensions = [
-    'dollarmath',
+myst_enable_extensions = [e.lower() for e in [
+    'colon_fence',
+    'dollarMath',
     'html_admonition',
     'html_image',
     'linkify',
     'replacements',
-    'smartquotes',
-]
+    'smartQuotes',
+    'strikethrough',
+    'substitution',
+    'taskList',
+]]
 
 # Auto-generate link anchors for headers at levels H1 and H2
 myst_heading_anchors = 4
