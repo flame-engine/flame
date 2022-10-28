@@ -14,15 +14,15 @@ These methods will either return the requested layer type or null if it does not
 
 ## Layer properties
 
-| Property              | Supported?  |
-| -----------           | ----------- |
-| Visible               | ✅          |
-| Opacity               | ✅          |
-| Tint color            | ❌          |
-| Horizontal offset     | ✅          |
-| Horizontal offset     | ✅          |
-| Parallax Factor       | ✅          |
-| Custom properties     | ✅          |
+The following Tiled properties are supported:
+
+- [x] Visible
+- [x] Opacity
+- [ ] Tint color
+- [x] Horizontal offset
+- [x] Vertical offset
+- [x] Parallax factor
+- [x] Custom properties
 
 
 ## Tiles properties
