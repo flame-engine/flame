@@ -9,7 +9,6 @@ class GlowEffect extends ComponentEffect<HasPaint> {
   final MaskFilter filter;
   final String? paintId;
 
-
   @override
   void apply(double progress) {
     target.paint.maskFilter = filter;
