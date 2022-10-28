@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import os
+import shutil
 from docutils import nodes
 from sphinx.util.docutils import SphinxDirective
 
@@ -37,7 +38,13 @@ class PackageDirective(SphinxDirective):
 
 
 def setup(app):
+    base_dir = os.path.dirname(__file__)
+    target_dir = os.path.abspath('../_build/html/_static/')
+    os.makedirs(target_dir, exist_ok=True)
+    shutil.copy(os.path.join(base_dir, 'package.css'), target_dir)
+
     app.add_directive('package', PackageDirective)
+    app.add_css_file('package.css')
     return {
         'parallel_read_safe': True,
         'parallel_write_safe': True,
