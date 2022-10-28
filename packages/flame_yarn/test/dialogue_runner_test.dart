@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flame_yarn/flame_yarn.dart';
 import 'package:test/test.dart';
 
@@ -209,8 +211,6 @@ class _RecordingDialogueView extends DialogueView {
   final String name;
   final List<int> choices;
 
-  void _record(String event) => events.add('[$name] $event');
-
   @override
   void onDialogueStart() => _record('onDialogueStart()');
 
@@ -221,7 +221,8 @@ class _RecordingDialogueView extends DialogueView {
   void onNodeStart(Node node) => _record('onNodeStart($node)');
 
   @override
-  void onLineStart(DialogueLine line) => _record('onLineStart($line)');
+  FutureOr<bool> onLineStart(DialogueLine line) =>
+      _record('onLineStart($line)');
 
   @override
   void onLineFinish(DialogueLine line) => _record('onLineFinish($line)');
@@ -235,6 +236,11 @@ class _RecordingDialogueView extends DialogueView {
 
   @override
   void onChoiceFinish(Option option) => _record('onChoiceFinish($option)');
+
+  bool _record(String event) {
+    events.add('[$name] $event');
+    return true;
+  }
 }
 
 class _DelayedDialogueView extends _RecordingDialogueView {
@@ -249,10 +255,10 @@ class _DelayedDialogueView extends _RecordingDialogueView {
   final double lineFinishDelay;
 
   @override
-  Future<void> onLineStart(DialogueLine line) {
+  Future<bool> onLineStart(DialogueLine line) {
     super.onLineStart(line);
     final delay = Duration(milliseconds: (lineStartDelay * 1000).toInt());
-    return Future.delayed(delay);
+    return Future<bool>.delayed(delay, () => true);
   }
 
   @override

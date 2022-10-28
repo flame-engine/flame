@@ -92,8 +92,16 @@ class DialogueRunner {
     );
   }
 
-  void interruptLine() {
-    _linePipeline?.interrupt();
+  void sendSignal(dynamic signal) {
+    assert(_linePipeline != null);
+    final line = _linePipeline!.line;
+    for (final view in _dialogueViews) {
+      view.onLineSignal(line, signal);
+    }
+  }
+
+  void stopLine() {
+    _linePipeline?.stop();
   }
 
   Future<void> _deliverLine(DialogueLine line) async {
@@ -184,13 +192,13 @@ class _LineDeliveryPipeline {
     assert(_numPendingFutures == 0);
     for (var i = 0; i < views.length; i++) {
       final maybeFuture = views[i].onLineStart(line);
-      if (maybeFuture == null) {
-        continue;
-      } else {
+      if (maybeFuture is Future) {
         // ignore: cast_nullable_to_non_nullable
-        final future = maybeFuture as Future<void>;
+        final future = maybeFuture as Future<bool>;
         _futures[i] = future.then((_) => startCompleted(i));
         _numPendingFutures++;
+      } else {
+        continue;
       }
     }
     if (_numPendingFutures == 0) {
@@ -198,11 +206,11 @@ class _LineDeliveryPipeline {
     }
   }
 
-  void interrupt() {
+  void stop() {
     _interrupted = true;
     for (var i = 0; i < views.length; i++) {
       if (_futures[i] != null) {
-        _futures[i] = views[i].onLineCancel(line);
+        _futures[i] = views[i].onLineStop(line);
       }
     }
   }
@@ -211,13 +219,13 @@ class _LineDeliveryPipeline {
     assert(_numPendingFutures == 0);
     for (var i = 0; i < views.length; i++) {
       final maybeFuture = views[i].onLineFinish(line);
-      if (maybeFuture == null) {
-        continue;
-      } else {
-        // ignore: cast_nullable_to_non_nullable
+      if (maybeFuture is Future) {
+        // ignore: unnecessary_cast
         final future = maybeFuture as Future<void>;
         _futures[i] = future.then((_) => finishCompleted(i));
         _numPendingFutures++;
+      } else {
+        continue;
       }
     }
     if (_numPendingFutures == 0) {
