@@ -1,5 +1,5 @@
-import 'package:flame_yarn/src/parse/ascii.dart';
 import 'package:test/test.dart';
+import 'package:yarn/src/parse/ascii.dart';
 
 void main() {
   test('ASCII', () {

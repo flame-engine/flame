@@ -1,6 +1,6 @@
-import 'package:flame_yarn/src/errors.dart';
-import 'package:flame_yarn/src/parse/ascii.dart';
-import 'package:flame_yarn/src/parse/token.dart';
+import 'package:yarn/src/errors.dart';
+import 'package:yarn/src/parse/ascii.dart';
+import 'package:yarn/src/parse/token.dart';
 import 'package:meta/meta.dart';
 
 /// Parses the [input] into a stream of [Token]s, according to the Yarn syntax.
