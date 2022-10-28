@@ -26,6 +26,7 @@ extensions = [
     'myst_parser',  # Markdown support
     'sphinxcontrib.mermaid',
     'extensions.flutter_app',
+    'extensions.package',
 ]
 
 # Configuration options for MyST:
