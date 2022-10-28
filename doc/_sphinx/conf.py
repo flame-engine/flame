@@ -26,11 +26,13 @@ extensions = [
     'myst_parser',  # Markdown support
     'sphinxcontrib.mermaid',
     'extensions.flutter_app',
+    'extensions.package',
 ]
 
 # Configuration options for MyST:
 # https://myst-parser.readthedocs.io/en/latest/syntax/optional.html
 myst_enable_extensions = [
+    'colon_fence',
     'dollarmath',
     'html_admonition',
     'html_image',
