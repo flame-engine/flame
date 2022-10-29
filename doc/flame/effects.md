@@ -111,7 +111,6 @@ offset is relative to the current position of the target:
 ```
 
 ```dart
-
 final effect = MoveByEffect(
   Vector2(0, -10),
   EffectController(duration: 0.5),
@@ -139,7 +138,6 @@ point in a straight line.
 ```
 
 ```dart
-
 final effect = MoveToEffect(
   Vector2(100, 500),
   EffectController(duration: 3),
@@ -165,10 +163,8 @@ position.
 ```
 
 ```dart
-
 final effect = MoveAlongPathEffect(
-  Path()
-    ..quadraticBezierTo(100, 0, 50, -50),
+  Path()..quadraticBezierTo(100, 0, 50, -50),
   EffectController(duration: 1.5),
 );
 ```
@@ -197,9 +193,8 @@ clockwise:
 ```
 
 ```dart
-
 final effect = RotateEffect.by(
-  tau / 4,
+  tau/4, 
   EffectController(duration: 2),
 );
 ```
@@ -219,9 +214,8 @@ target to look east (0º is north, 90º=[tau]/4 east, 180º=tau/2 south, and 270
 ```
 
 ```dart
-
 final effect = RotateEffect.to(
-  tau / 4,
+  tau/4, 
   EffectController(duration: 2),
 );
 ```
@@ -241,7 +235,6 @@ the component to grow 50% larger:
  ```
 
 ```dart
-
 final effect = ScaleEffect.by(
   Vector2.all(1.5),
   EffectController(duration: 0.3),
@@ -262,7 +255,6 @@ This effect works similar to `ScaleEffect.by`, but sets the absolute value of th
  ```
 
 ```dart
-
 final effect = ScaleEffect.to(
   Vector2.all(0.5),
   EffectController(duration: 0.5),
@@ -285,10 +277,9 @@ course, the new size will be `Vector2(120, 50)`:
  ```
 
 ```dart
-
 final effect = SizeEffect.by(
-  Vector2(-15, 30),
-  EffectController(duration: 1),
+   Vector2(-15, 30),
+   EffectController(duration: 1),
 );
 ```
 
@@ -308,6 +299,7 @@ target component and its children.
 
 Changes the size of the target component to the specified size. Target size cannot be negative:
 
+
  ```{flutter-app}
  :sources: ../flame/examples
  :page: size_to_effect
@@ -317,7 +309,6 @@ Changes the size of the target component to the specified size. Target size cann
  ```
 
 ```dart
-
 final effect = SizeEffect.to(
   Vector2(90, 80),
   EffectController(duration: 1),
@@ -339,9 +330,8 @@ using `AnchorEffect.by()`.
 ```
 
 ```dart
-
 final effect = AnchorByEffect(
-  Vector2(0.1, 0.1),
+  Vector2(0.1, 0.1), 
   EffectController(speed: 1),
 );
 ```
@@ -361,9 +351,8 @@ Changes the location of the target's anchor. This effect can also be created usi
 ```
 
 ```dart
-
 final effect = AnchorToEffect(
-  Anchor.center,
+  Anchor.center, 
   EffectController(speed: 1),
 );
 ```
@@ -383,7 +372,6 @@ It can only be applied to components that implement the `OpacityProvider`.
 ```
 
 ```dart
-
 final effect = OpacityEffect.to(
   0.2,
   EffectController(duration: 0.75),
@@ -395,6 +383,7 @@ using the `target` parameter. The `HasPaint` mixin implements `OpacityProvider` 
 to easily create providers for desired paintIds. For single paintId `opacityProviderOf` can be used
 and for multiple paintIds and `opacityProviderOfList` can be used.
 
+
 ```{flutter-app}
 :sources: ../flame/examples
 :page: opacity_effect_with_target
@@ -404,7 +393,6 @@ and for multiple paintIds and `opacityProviderOfList` can be used.
 ```
 
 ```dart
-
 final effect = OpacityEffect.to(
   0.2,
   EffectController(duration: 0.75),
@@ -421,8 +409,7 @@ animate the target into full transparency / full visibility respectively.
 
 ### `OpacityByEffect`
 
-This effect will change the opacity of the target relative to the specified alpha-value. For
-example,
+This effect will change the opacity of the target relative to the specified alpha-value. For example,
 the following effect will change the opacity of the target by `90%`:
 
 ```{flutter-app}
@@ -434,15 +421,13 @@ the following effect will change the opacity of the target by `90%`:
 ```
 
 ```dart
-
 final effect = OpacityEffect.by(
   0.9,
   EffectController(duration: 0.75),
 );
 ```
 
-Currently this effect can only be applied to components that have a `HasPaint` mixin. If the target
-component
+Currently this effect can only be applied to components that have a `HasPaint` mixin. If the target component
 uses multiple paints, the effect can target any individual color using the `paintId` parameter.
 
 
@@ -488,23 +473,22 @@ backward); and also repeat a certain predetermined number of times, or infinitel
 ```
 
 ```dart
-
 final effect = SequenceEffect([
   ScaleEffect.by(
-    Vector2.all(1.5),
+    Vector2.all(1.5), 
     EffectController(
-      duration: 0.2,
+      duration: 0.2, 
       alternate: true,
     ),
   ),
   MoveEffect.by(
-    Vector2(30, -50),
+    Vector2(30, -50), 
     EffectController(
       duration: 0.5,
     ),
   ),
   OpacityEffect.to(
-    0,
+    0, 
     EffectController(
       duration: 0.3,
     ),
@@ -520,7 +504,6 @@ This is a simple effect that can be attached to a component causing it to be rem
 tree after the specified delay has passed:
 
 ```dart
-
 final effect = RemoveEffect(delay: 10.0);
 ```
 
@@ -533,7 +516,6 @@ the provided color between a provided range.
 Usage example:
 
 ```dart
-
 final effect = ColorEffect(
   const Color(0xFF00FF00),
   const Offset(0.0, 0.8),
@@ -585,18 +567,18 @@ common controllers. The syntax of the constructor is the following:
 
 ```dart
 EffectController({
-  required double duration,
-  Curve curve = Curves.linear,
-  double? reverseDuration,
-  Curve? reverseCurve,
-  bool alternate = false,
-  double atMaxDuration = 0.0,
-  double atMinDuration = 0.0,
-  int? repeatCount,
-  bool infinite = false,
-  double startDelay = 0.0,
-  VoidCallback? onMax,
-  VoidCallback? onMin,
+    required double duration,
+    Curve curve = Curves.linear,
+    double? reverseDuration,
+    Curve? reverseCurve,
+    bool alternate = false,
+    double atMaxDuration = 0.0,
+    double atMinDuration = 0.0,
+    int? repeatCount,
+    bool infinite = false,
+    double startDelay = 0.0,
+    VoidCallback? onMax,
+    VoidCallback? onMin,
 });
 ```
 
@@ -676,7 +658,6 @@ This is the simplest effect controller that grows linearly from 0 to 1 over the 
 `duration`:
 
 ```dart
-
 final ec = LinearEffectController(3);
 ```
 
@@ -687,7 +668,6 @@ Similar to the `LinearEffectController`, but it goes in the opposite direction a
 from 1 to 0 over the specified duration:
 
 ```dart
-
 final ec = ReverseLinearEffectController(1);
 ```
 
@@ -698,7 +678,6 @@ This effect controller grows non-linearly from 0 to 1 over the specified `durati
 the provided `curve`:
 
 ```dart
-
 final ec = CurvedEffectController(0.5, Curves.easeOut);
 ```
 
@@ -709,7 +688,6 @@ Similar to the `CurvedEffectController`, but the controller grows down from 1 to
 provided `curve`:
 
 ```dart
-
 final ec = ReverseCurvedEffectController(0.5, Curves.bounceInOut);
 ```
 
@@ -720,7 +698,6 @@ This effect controller keeps the progress at a constant value for the specified 
 Typically, the `progress` would be either 0 or 1:
 
 ```dart
-
 final ec = PauseEffectController(1.5, progress: 0);
 ```
 
@@ -731,7 +708,6 @@ This is a composite effect controller. It takes another effect controller as a c
 it multiple times, resetting before the start of each next cycle.
 
 ```dart
-
 final ec = RepeatedEffectController(LinearEffectController(1), 10);
 ```
 
@@ -744,7 +720,6 @@ re-initialized with new random values on each iteration.
 Similar to the `RepeatedEffectController`, but repeats its child controller indefinitely.
 
 ```dart
-
 final ec = InfiniteEffectController(LinearEffectController(1));
 ```
 
@@ -755,7 +730,6 @@ Executes a sequence of effect controllers, one after another. The list of contro
 empty.
 
 ```dart
-
 final ec = SequenceEffectController([
   LinearEffectController(1),
   PauseEffectController(0.2),
@@ -781,7 +755,6 @@ effect. For example, for move effects, they refer to the distance travelled; for
 the units are radians.
 
 ```dart
-
 final ec1 = SpeedEffectController(LinearEffectController(0), speed: 1);
 final ec2 = EffectController(speed: 1); // same as ec1
 ```
@@ -794,7 +767,6 @@ controller is executing the "delay" stage, the effect will be considered "not st
 `.started` property will be returning `false`.
 
 ```dart
-
 final ec = DelayedEffectController(LinearEffectController(1), delay: 5);
 ```
 
@@ -805,7 +777,6 @@ This effect controller exhibits noisy behavior, i.e. it oscillates randomly arou
 controller can be used to implement a variety of shake effects.
 
 ```dart
-
 final ec = NoiseEffectController(duration: 0.6, frequency: 10);
 ```
 
@@ -817,9 +788,8 @@ duration is re-generated upon each reset, which makes this controller particular
 repeated contexts, such as [](#repeatedeffectcontroller) or [](#infiniteeffectcontroller).
 
 ```dart
-
 final ec = RandomEffectController.uniform(
-  LinearEffectController(0), // duration here is irrelevant
+  LinearEffectController(0),  // duration here is irrelevant
   min: 0.5,
   max: 1.5,
 );
@@ -837,7 +807,6 @@ natural-looking harmonic oscillations. Two perpendicular move effects governed b
 `SineEffectControllers` with different periods, will create a [Lissajous curve].
 
 ```dart
-
 final ec = SineEffectController(period: 1);
 ```
 
@@ -850,7 +819,6 @@ starting position should be the center of the oscillations, rather than the extr
 by the standard alternating `EffectController`).
 
 ```dart
-
 final ec = ZigzagEffectController(period: 2);
 ```
 
@@ -859,6 +827,6 @@ final ec = ZigzagEffectController(period: 2);
 
 - [Examples of various effects](https://examples.flame-engine.org/).
 
-[tau]: https://en.wikipedia.org/wiki/Tau_(mathematical_constant)
 
+[tau]: https://en.wikipedia.org/wiki/Tau_(mathematical_constant)
 [Lissajous curve]: https://en.wikipedia.org/wiki/Lissajous_curve
