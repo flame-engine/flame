@@ -1,8 +1,9 @@
 import 'package:flame/components.dart';
 import 'package:flame/experimental.dart';
-import 'package:flutter/widgets.dart';
 
 enum Direction { horizontal, vertical }
+
+enum LayoutComponentAlignment { start, end, center }
 
 /// Super class for [RowComponent] and [ColumnComponent]
 /// A relayout is performed when
@@ -15,7 +16,7 @@ abstract class LayoutComponent extends PositionComponent {
     this._gap,
   );
   final Direction direction;
-  final MainAxisAlignment alignment;
+  final LayoutComponentAlignment alignment;
   bool _allowSetSize = false;
 
   /// gap between components
@@ -58,13 +59,13 @@ abstract class LayoutComponent extends PositionComponent {
 
     final availableSpace = totalSizeOfComponents;
     switch (alignment) {
-      case MainAxisAlignment.start:
+      case LayoutComponentAlignment.start:
         for (final child in list) {
           child.position.setFrom(currentPosition);
           currentPosition[vectorIndex] += child.size[vectorIndex] + gap;
         }
         break;
-      case MainAxisAlignment.end:
+      case LayoutComponentAlignment.end:
         var index = 0;
         double componentsGap;
         for (final child in list.reversed) {
@@ -79,39 +80,7 @@ abstract class LayoutComponent extends PositionComponent {
           index++;
         }
         break;
-      case MainAxisAlignment.spaceBetween:
-        final freeSpacePerComponent =
-            (availableSpace - totalSizeOfComponents - totalGapsSize) /
-                (list.length - 1);
-        for (final child in list) {
-          child.position.setFrom(currentPosition);
-          currentPosition[vectorIndex] +=
-              freeSpacePerComponent + child.size[vectorIndex] + gap;
-        }
-        break;
-      case MainAxisAlignment.spaceEvenly:
-        final freeSpacePerComponent =
-            (availableSpace - totalSizeOfComponents - totalGapsSize) /
-                (list.length + 1);
-        currentPosition[vectorIndex] += freeSpacePerComponent;
-        for (final child in list) {
-          child.position.setFrom(currentPosition);
-          currentPosition[vectorIndex] +=
-              freeSpacePerComponent + child.size[vectorIndex] + gap;
-        }
-        break;
-      case MainAxisAlignment.spaceAround:
-        final freeSpacePerComponent =
-            (availableSpace - totalSizeOfComponents - totalGapsSize) /
-                list.length;
-        currentPosition[vectorIndex] += freeSpacePerComponent / 2;
-        for (final child in list) {
-          child.position.setFrom(currentPosition);
-          currentPosition[vectorIndex] +=
-              freeSpacePerComponent + child.size[vectorIndex] + gap;
-        }
-        break;
-      case MainAxisAlignment.center:
+      case LayoutComponentAlignment.center:
         final freeSpace =
             availableSpace - totalSizeOfComponents - totalGapsSize;
         currentPosition[vectorIndex] += freeSpace / 2;

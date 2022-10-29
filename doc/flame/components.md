@@ -1109,7 +1109,7 @@ for details on how to use it.
 These two components allow to layout their added children horizontally or vertically. The
 following parameters can be used when one of these components is instantiated:
 
-- `alignment`: Offers the same `MainAxisAlignment` modes as known from Flutter
+- `alignment`: Currently offers the modes `start`, `end` and `center`
 - `gap`: Allows to define a gap to be applied between the children
 
 At the moment a component grows with the size of its children, therefore setting a size
