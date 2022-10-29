@@ -4,7 +4,6 @@ import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flame_rive/flame_rive.dart';
 
-// ignore: depend_on_referenced_packages
 import 'package:rive/rive.dart';
 
 class RiveExampleGame extends FlameGame with TapDetector {
