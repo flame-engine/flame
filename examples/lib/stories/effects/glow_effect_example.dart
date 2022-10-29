@@ -29,7 +29,7 @@ class GlowEffectExample extends FlameGame with TapDetector {
             10.0,
             EffectController(
               duration: 3,
-              // reverseDuration: 1.5,
+              reverseDuration: 1.5,
               infinite: true,
             ),
           ),
