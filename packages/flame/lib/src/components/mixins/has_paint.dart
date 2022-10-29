@@ -18,7 +18,9 @@ import 'package:meta/meta.dart';
 mixin HasPaint<T extends Object> on Component
     implements OpacityProvider, PaintProvider {
   late final Map<T, Paint> _paints = {};
-  Paint _paint = BasicPalette.white.paint();
+
+  @override
+  Paint paint = BasicPalette.white.paint();
 
   @internal
   List<Paint>? paintLayersInternal;
@@ -124,14 +126,6 @@ mixin HasPaint<T extends Object> on Component
     for (final paint in _paints.values) {
       paint.color = paint.color.withOpacity(value);
     }
-  }
-
-  @override
-  Paint get paint => _paint;
-
-  @override
-  set paint(Paint value) {
-    _paint = value;
   }
 
   /// Creates an [OpacityProvider] for given [paintId] and can be used as
