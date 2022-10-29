@@ -3,9 +3,6 @@ import 'package:flame/game.dart';
 import 'package:flame_spine/flame_spine.dart';
 import 'package:flutter/material.dart';
 
-// ignore: depend_on_referenced_packages
-import 'package:spine_flutter/spine_flutter.dart';
-
 void main() {
   runApp(GameWidget(game: SpineExampleGame()));
 }
