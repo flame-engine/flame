@@ -67,7 +67,6 @@ abstract class OpacityProvider {
   set opacity(double value);
 }
 
-
 /// Interface for a component that can be affected by Paint effects.
 ///
 /// See [HasPaint] for an example implementation.
