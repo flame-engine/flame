@@ -3,6 +3,7 @@ import 'dart:html'; // ignore: avoid_web_libraries_in_flutter
 import 'package:doc_flame_examples/anchor_by_effect.dart';
 import 'package:doc_flame_examples/anchor_to_effect.dart';
 import 'package:doc_flame_examples/collision_detection.dart';
+import 'package:doc_flame_examples/color_effect.dart';
 import 'package:doc_flame_examples/decorator_blur.dart';
 import 'package:doc_flame_examples/decorator_grayscale.dart';
 import 'package:doc_flame_examples/decorator_rotate3d.dart';
@@ -18,6 +19,8 @@ import 'package:doc_flame_examples/opacity_effect_with_target.dart';
 import 'package:doc_flame_examples/opacity_to_effect.dart';
 import 'package:doc_flame_examples/ray_cast.dart';
 import 'package:doc_flame_examples/ray_trace.dart';
+import 'package:doc_flame_examples/remove_effect.dart';
+import 'package:doc_flame_examples/rive_example.dart';
 import 'package:doc_flame_examples/rotate_by_effect.dart';
 import 'package:doc_flame_examples/rotate_to_effect.dart';
 import 'package:doc_flame_examples/router.dart';
@@ -62,9 +65,12 @@ void main() {
     'sequence_effect': SequenceEffectGame.new,
     'tap_events': TapEventsGame.new,
     'value_route': ValueRouteExample.new,
+    'rive_example': RiveExampleGame.new,
     'ray_cast': RayCastExample.new,
     'ray_trace': RayTraceExample.new,
     'glow_effect': GlowEffectExample.new,
+    'remove_effect': RemoveEffectGame.new,
+    'color_effect': ColorEffectExample.new,
   };
   final game = routes[page]?.call();
   if (game != null) {

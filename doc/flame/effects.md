@@ -503,8 +503,17 @@ final effect = SequenceEffect([
 This is a simple effect that can be attached to a component causing it to be removed from the game
 tree after the specified delay has passed:
 
+```{flutter-app}
+:sources: ../flame/examples
+:page: remove_effect
+:show: widget code infobox
+:width: 180
+:height: 160
+```
+
+
 ```dart
-final effect = RemoveEffect(delay: 10.0);
+final effect = RemoveEffect(delay: 3.0);
 ```
 
 
@@ -514,6 +523,14 @@ This effect will change the base color of the paint, causing the rendered compon
 the provided color between a provided range.
 
 Usage example:
+
+```{flutter-app}
+:sources: ../flame/examples
+:page: color_effect
+:show: widget code infobox
+:width: 180
+:height: 160
+```
 
 ```dart
 final effect = ColorEffect(
