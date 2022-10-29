@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
+import 'package:flame/src/effects/provider_interfaces.dart';
 import 'package:flame/src/palette.dart';
 import 'package:meta/meta.dart';
 
@@ -14,9 +15,10 @@ import 'package:meta/meta.dart';
 /// [T], that can be omitted if the component only has one paint.
 /// [paintLayers] paints should be drawn in list order during the render. The
 /// main Paint is the first element.
-mixin HasPaint<T extends Object> on Component implements OpacityProvider {
+mixin HasPaint<T extends Object> on Component
+    implements OpacityProvider, PaintProvider {
   late final Map<T, Paint> _paints = {};
-  Paint paint = BasicPalette.white.paint();
+  Paint _paint = BasicPalette.white.paint();
 
   @internal
   List<Paint>? paintLayersInternal;
@@ -122,6 +124,14 @@ mixin HasPaint<T extends Object> on Component implements OpacityProvider {
     for (final paint in _paints.values) {
       paint.color = paint.color.withOpacity(value);
     }
+  }
+
+  @override
+  Paint get paint => _paint;
+
+  @override
+  set paint(Paint value) {
+    _paint = value;
   }
 
   /// Creates an [OpacityProvider] for given [paintId] and can be used as

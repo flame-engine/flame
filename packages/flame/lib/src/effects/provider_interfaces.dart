@@ -72,5 +72,5 @@ abstract class OpacityProvider {
 /// See [HasPaint] for an example implementation.
 abstract class PaintProvider {
   Paint get paint;
-  set opacity(Paint value);
+  set paint(Paint value);
 }
