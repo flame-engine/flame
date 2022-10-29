@@ -16,7 +16,7 @@ class GlowEffectExample extends FlameGame with TapDetector {
 
   @override
   Future<void> onLoad() async {
-    final paint2 = Paint()
+    final paint = Paint()
       ..color = const Color(0xff39FF14)
       ..style = PaintingStyle.stroke;
 
