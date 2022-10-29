@@ -57,7 +57,7 @@ class MyComponent extends SpineComponent with TapCallbacks {
   }) : super(renderer: SkeletonRender(skeleton: skeleton));
 
   final SkeletonAnimation skeleton;
-  final Set<String> animations;
+  final List<String> animations;
 
   bool isClicked = false;
 

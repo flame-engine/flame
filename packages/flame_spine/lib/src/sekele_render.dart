@@ -162,7 +162,7 @@ Future<SkeletonAnimation> loadSkeleton(String name) async {
   return SkeletonAnimation.createWithFiles(name, pathBase: pathPrefix);
 }
 
-Future<Set<String>> loadAnimations(String name) async {
+Future<List<String>> loadAnimations(String name) async {
   final skeletonFile = '$name.json';
   const pathPrefix = 'assets/';
   final s = await rootBundle.loadString('$pathPrefix$name/$skeletonFile');
@@ -170,5 +170,5 @@ Future<Set<String>> loadAnimations(String name) async {
 
   return ((data['animations'] ?? <String, dynamic>{}) as Map<String, dynamic>)
       .keys
-      .toSet();
+      .toList();
 }
