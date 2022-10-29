@@ -3,6 +3,7 @@ import 'dart:html'; // ignore: avoid_web_libraries_in_flutter
 import 'package:doc_flame_examples/anchor_by_effect.dart';
 import 'package:doc_flame_examples/anchor_to_effect.dart';
 import 'package:doc_flame_examples/collision_detection.dart';
+import 'package:doc_flame_examples/color_effect.dart';
 import 'package:doc_flame_examples/decorator_blur.dart';
 import 'package:doc_flame_examples/decorator_grayscale.dart';
 import 'package:doc_flame_examples/decorator_rotate3d.dart';
@@ -67,6 +68,7 @@ void main() {
     'ray_cast': RayCastExample.new,
     'ray_trace': RayTraceExample.new,
     'remove_effect': RemoveEffectGame.new,
+    'color_effect': ColorEffectExample.new,
   };
   final game = routes[page]?.call();
   if (game != null) {

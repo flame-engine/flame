@@ -499,6 +499,14 @@ the provided color between a provided range.
 
 Usage example:
 
+```{flutter-app}
+:sources: ../flame/examples
+:page: color_effect
+:show: widget code infobox
+:width: 180
+:height: 160
+```
+
 ```dart
 final effect = ColorEffect(
   const Color(0xFF00FF00),
