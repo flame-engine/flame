@@ -6,9 +6,8 @@ import 'package:flame/src/effects/provider_interfaces.dart';
 /// Change the MaskFilter on Paint of a component over time.
 ///
 /// This effect applies incremental changes to the MaskFilter on Paint of a
-/// component and
-/// requires that any other effect or update logic applied to the same component
-/// also used incremental updates.
+/// component and requires that any other effect or update logic applied to the
+/// same component also used incremental updates.
 class GlowEffect extends Effect with EffectTarget<PaintProvider> {
   GlowEffect(this.strength, super.controller, {this.style = BlurStyle.outer});
 
