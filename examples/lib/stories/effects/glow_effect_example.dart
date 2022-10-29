@@ -1,4 +1,3 @@
-import 'package:examples/commons/ember.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/game.dart';
@@ -21,28 +20,10 @@ class GlowEffectExample extends FlameGame with TapDetector {
       ..style = PaintingStyle.stroke;
 
     add(
-      Ember(
-        position: Vector2(280, 280),
-        size: Vector2.all(100),
-      )..add(
-          RectangleComponent(paint: paint2, size: Vector2.all(100))
-            ..add(
-              GlowEffect(
-                30.0,
-                EffectController(
-                  duration: 3.5,
-                  infinite: true,
-                ),
-              ),
-            ),
-        ),
-    );
-
-    add(
       CircleComponent(
         radius: 50,
         position: Vector2(300, 400),
-        paint: paint2,
+        paint: paint,
       )..add(
           GlowEffect(
             10.0,
