@@ -194,12 +194,12 @@ if (!hitByEnemy) {
 add(
     OpacityEffect.fadeOut(
     EffectController(
-        alternate: true,
-        duration: 0.1,
-        repeatCount: 5,
+      alternate: true,
+      duration: 0.1,
+      repeatCount: 5,
     ),
     )..onComplete = () {
-        hitByEnemy = false;
+      hitByEnemy = false;
     },
 );
 }

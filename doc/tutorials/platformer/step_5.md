@@ -92,9 +92,9 @@ following code at the end of your `update` method:
 
 ```dart
 if (horizontalDirection < 0 && scale.x > 0) {
-    flipHorizontally();
+  flipHorizontally();
 } else if (horizontalDirection > 0 && scale.x < 0) {
-    flipHorizontally();
+  flipHorizontally();
 }
 ```
 
@@ -131,30 +131,29 @@ Now add the following `onCollision` method:
 ```dart
 @override
 void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
-    if (other is GroundBlock || other is PlatformBlock) {
-        if (intersectionPoints.length == 2) {
-        // Calculate the collision normal and separation distance.
-        final mid = (intersectionPoints.elementAt(0) +
-                intersectionPoints.elementAt(1)) /
-            2;
+  if (other is GroundBlock || other is PlatformBlock) {
+    if (intersectionPoints.length == 2) {
+      // Calculate the collision normal and separation distance.
+      final mid = (intersectionPoints.elementAt(0) +
+        intersectionPoints.elementAt(1)) / 2;
 
-        final collisionNormal = absoluteCenter - mid;
-        final separationDistance = (size.x / 2) - collisionNormal.length;
-        collisionNormal.normalize();
+      final collisionNormal = absoluteCenter - mid;
+      final separationDistance = (size.x / 2) - collisionNormal.length;
+      collisionNormal.normalize();
 
-        // If collision normal is almost upwards,
-        // ember must be on ground.
-        if (fromAbove.dot(collisionNormal) > 0.9) {
-            isOnGround = true;
-        }
+      // If collision normal is almost upwards,
+      // ember must be on ground.
+      if (fromAbove.dot(collisionNormal) > 0.9) {
+        isOnGround = true;
+      }
 
-        // Resolve collision by moving ember along
-        // collision normal by separation distance.
-        position += collisionNormal.scaled(separationDistance);
-        }
+      // Resolve collision by moving ember along
+      // collision normal by separation distance.
+      position += collisionNormal.scaled(separationDistance);
+      }
     }
 
-    super.onCollision(intersectionPoints, other);
+  super.onCollision(intersectionPoints, other);
 }
 ```
 
@@ -177,7 +176,7 @@ method, add the following:
 
 ```dart
 add(
-    CircleHitbox(),
+  CircleHitbox(),
 );
 ```
 
@@ -206,11 +205,11 @@ velocity.y += gravity;
 
 // Determine if ember has jumped
 if (hasJumped) {
-    if (isOnGround) {
-        velocity.y = -jumpSpeed;
-        isOnGround = false;
-    }
-    hasJumped = false;
+  if (isOnGround) {
+    velocity.y = -jumpSpeed;
+    isOnGround = false;
+  }
+  hasJumped = false;
 }
 
 // Prevent ember from jumping to crazy fast as well as descending too fast and 
@@ -224,7 +223,7 @@ and gravity work with Ember, I like to add a little drop-in when you start the g
 
 ```dart
 _ember = EmberPlayer(
-    position: Vector2(128, canvasSize.y - 128),
+  position: Vector2(128, canvasSize.y - 128),
 );
 ```
 
@@ -238,11 +237,11 @@ following to the bottom of the `onCollision` method:
 
 ```dart
 if (other is Star) {
-    other.removeFromParent();
+  other.removeFromParent();
 }
 
 if (other is WaterEnemy) {
-    hit();
+  hit();
 }
 ```
 
@@ -261,20 +260,20 @@ Additionally, add this method to your class:
 // This method runs an opacity effect on ember
 // to make it blink.
 void hit() {
-    if (!hitByEnemy) {
-        hitByEnemy = true;
-    }
-    add(
-        OpacityEffect.fadeOut(
-        EffectController(
-            alternate: true,
-            duration: 0.1,
-            repeatCount: 6,
-        ),
-        )..onComplete = () {
-            hitByEnemy = false;
-        },
-    );
+  if (!hitByEnemy) {
+    hitByEnemy = true;
+  }
+  add(
+    OpacityEffect.fadeOut(
+    EffectController(
+      alternate: true,
+      duration: 0.1,
+      repeatCount: 6,
+    ),
+    )..onComplete = () {
+      hitByEnemy = false;
+    },
+  );
 }
 ```
 
@@ -301,12 +300,12 @@ following to our `update` method:
 game.objectSpeed = 0;
 // Prevent ember from going backwards at screen edge.
 if (position.x - 36 <= 0 && horizontalDirection < 0) {
-    velocity.x = 0;
+  velocity.x = 0;
 }
 // Prevent ember from going beyond half screen.
 if (position.x + 64 >= game.size.x / 2 && horizontalDirection > 0) {
-    velocity.x = 0;
-    game.objectSpeed = -moveSpeed;
+  velocity.x = 0;
+  game.objectSpeed = -moveSpeed;
 }
 ```
 
