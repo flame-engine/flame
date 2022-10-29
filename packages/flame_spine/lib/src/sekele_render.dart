@@ -9,7 +9,7 @@ import 'package:spine_flutter/spine_flutter.dart';
 class SkeletonRender {
   SkeletonRender({
     required SkeletonAnimation skeleton,
-    BoxFit fit = BoxFit.contain,
+    BoxFit boxFit = BoxFit.contain,
     Alignment alignment = Alignment.center,
     PlayState playState = PlayState.playing,
     bool debugRendering = false,
@@ -18,7 +18,7 @@ class SkeletonRender {
     String? animation,
   }) : _renderObject = SkeletonRenderObject()
           ..skeleton = skeleton
-          ..fit = fit
+          ..fit = boxFit
           ..alignment = alignment
           ..playState = playState
           ..debugRendering = debugRendering
@@ -40,9 +40,9 @@ class SkeletonRender {
     _renderObject.alignment = value as Alignment;
   }
 
-  BoxFit get fit => _renderObject.fit;
+  BoxFit get boxFit => _renderObject.fit;
 
-  set fit(BoxFit value) {
+  set boxFit(BoxFit value) {
     _renderObject.fit = value;
   }
 
@@ -107,7 +107,7 @@ class SkeletonRender {
 
     var scaleX = 1.0, scaleY = 1.0;
 
-    switch (fit) {
+    switch (boxFit) {
       case BoxFit.fill:
         scaleX = size.width / contentWidth;
         scaleY = size.height / contentHeight;
