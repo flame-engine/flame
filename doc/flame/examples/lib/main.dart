@@ -10,6 +10,7 @@ import 'package:doc_flame_examples/decorator_rotate3d.dart';
 import 'package:doc_flame_examples/decorator_shadow3d.dart';
 import 'package:doc_flame_examples/decorator_tint.dart';
 import 'package:doc_flame_examples/drag_events.dart';
+import 'package:doc_flame_examples/glow_effect.dart';
 import 'package:doc_flame_examples/move_along_path_effect.dart';
 import 'package:doc_flame_examples/move_by_effect.dart';
 import 'package:doc_flame_examples/move_to_effect.dart';
@@ -67,6 +68,7 @@ void main() {
     'rive_example': RiveExampleGame.new,
     'ray_cast': RayCastExample.new,
     'ray_trace': RayTraceExample.new,
+    'glow_effect': GlowEffectExample.new,
     'remove_effect': RemoveEffectGame.new,
     'color_effect': ColorEffectExample.new,
   };

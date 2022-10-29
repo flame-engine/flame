@@ -82,17 +82,17 @@ The base `Effect` class is not usable on its own (it is abstract), but it provid
 functionality inherited by all other effects. This includes:
 
 - The ability to pause/resume the effect using `effect.pause()` and `effect.resume()`. You can
-    check whether the effect is currently paused using `effect.isPaused`.
+  check whether the effect is currently paused using `effect.isPaused`.
 
 - The ability to reverse the effect's time direction using `effect.reverse()`. Use
-    `effect.isReversed` to check if the effect is currently running back in time.
+  `effect.isReversed` to check if the effect is currently running back in time.
 
 - Property `removeOnFinish` (which is true by default) will cause the effect component to be
-    removed from the game tree and garbage-collected once the effect completes. Set this to false
-    if you plan to reuse the effect after it is finished.
+  removed from the game tree and garbage-collected once the effect completes. Set this to false
+  if you plan to reuse the effect after it is finished.
 
 - Optional user-provided `onComplete`, which will be invoked when the effect has just
-    completed its execution but before it is removed from the game.
+  completed its execution but before it is removed from the game.
 
 - The `reset()` method reverts the effect to its original state, allowing it to run once again.
 
@@ -429,6 +429,30 @@ final effect = OpacityEffect.by(
 
 Currently this effect can only be applied to components that have a `HasPaint` mixin. If the target component
 uses multiple paints, the effect can target any individual color using the `paintId` parameter.
+
+
+### GlowEffect
+
+This effect will apply the glowing shade around target relative to the specified
+`glow-strength`. The color of shade will be targets paint color. For example, the following effect
+will apply the glowing shade around target by strength of `10`:
+
+```{flutter-app}
+:sources: ../flame/examples
+:page: glow_effect
+:show: widget code infobox
+:width: 180
+:height: 160
+```
+
+```dart
+final effect = GlowEffect(
+  10.0,
+  EffectController(duration: 3),
+);
+```
+
+Currently this effect can only be applied to components that have a `HasPaint` mixin.
 
 
 ### `SequenceEffect`
