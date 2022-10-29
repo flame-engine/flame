@@ -147,6 +147,13 @@ For bigger changes, or if in doubt, make sure to talk about your contribution to
 via an issue, GitHub discussion, or reach out to the team either using the
 [Discord server](https://discord.gg/pxrBmy4).
 
+## Thanks to all your contributions ♥️
+
+<a href="https://github.com/flame-engine/flame/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=flame-engine/flame" />
+</a>
+
+Made with [contrib.rocks](https://contrib.rocks).
 
 ## Credits
 
