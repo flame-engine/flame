@@ -47,7 +47,7 @@ class MyComponent extends SpineComponent with TapCallbacks {
 
   @override
   Future<void>? onLoad() {
-    renderer.animation = animations.elementAt(_index);
+    renderer.animation = animations[_index];
 
     return super.onLoad();
   }
