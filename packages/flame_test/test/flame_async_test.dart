@@ -8,7 +8,7 @@ void main() {
   tearDown(() {
     assert(instructions == 9, 'There should be exactly 9 instructions');
   });
-  flameGame.test(
+  testWithFlameGame(
     'runs all the async tests',
     (game) async {
       await game.ensureAdd(Component());

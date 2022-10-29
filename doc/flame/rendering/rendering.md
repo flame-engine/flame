@@ -1,13 +1,19 @@
 # Rendering
 
-```{eval-rst}
-.. toctree::
-    :hidden:
+- [Colors and Palette](palette.md)
+- [Decorators](decorators.md)
+- [Images, Sprites and Animations](images.md)
+- [Layers](layers.md)
+- [Particles](particles.md)
+- [Text Rendering](text_rendering.md)
 
-    Images, sprites and animations  <images.md>
-    Text rendering                  <text.md>
-    Colors and palette              <palette.md>
-    Particles                       <particles.md>
-    Decorators                      <decorators.md>
-    Layers                          <layers.md>
+```{toctree}
+:hidden:
+
+Colors and Palette              <palette.md>
+Decorators                      <decorators.md>
+Images, Sprites and Animations  <images.md>
+Layers                          <layers.md>
+Particles                       <particles.md>
+Text Rendering                  <text_rendering.md>
 ```

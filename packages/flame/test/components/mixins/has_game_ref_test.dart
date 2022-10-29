@@ -22,17 +22,15 @@ class _BarComponent extends Component with HasGameRef<_MyGame> {}
 class MockFlameGame extends Mock implements _MyGame {}
 
 void main() {
-  final withHasGameRef = FlameTester(_MyGame.new);
-
   group('HasGameRef', () {
-    withHasGameRef.test('simple test', (game) {
+    testWithGame<_MyGame>('simple test', _MyGame.new, (game) async {
       final c = _FooComponent();
       game.add(c);
       c.foo();
       expect(game.calledFoo, true);
     });
 
-    withHasGameRef.test('gameRef can be mocked', (game) async {
+    testWithGame<_MyGame>('gameRef can be mocked', _MyGame.new, (game) async {
       final component = _BarComponent();
       await game.ensureAdd(component);
 

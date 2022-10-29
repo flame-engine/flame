@@ -30,7 +30,7 @@ void main() {
   }
 
   group('priority test', () {
-    flameGame.test(
+    testWithFlameGame(
       'components with different priorities are sorted in the list',
       (game) async {
         final priorityComponents = List.generate(10, _PriorityComponent.new);
@@ -40,7 +40,7 @@ void main() {
       },
     );
 
-    flameGame.test(
+    testWithFlameGame(
       'changing priority should reorder component list',
       (game) async {
         final firstComponent = _PriorityComponent(-1);
@@ -57,7 +57,7 @@ void main() {
       },
     );
 
-    flameGame.test(
+    testWithFlameGame(
       'changing priority with the priority setter should reorder the list',
       (game) async {
         final firstComponent = _PriorityComponent(-1);
@@ -74,7 +74,7 @@ void main() {
       },
     );
 
-    flameGame.test(
+    testWithFlameGame(
       'changing priorities should reorder component list',
       (game) async {
         final priorityComponents = List.generate(10, _PriorityComponent.new);
@@ -94,7 +94,7 @@ void main() {
       },
     );
 
-    flameGame.test(
+    testWithFlameGame(
       'changing child priority should reorder component list',
       (game) async {
         final parentComponent = _PriorityComponent(0);
@@ -112,7 +112,7 @@ void main() {
       },
     );
 
-    flameGame.test(
+    testWithFlameGame(
       'changing child priorities should reorder component list',
       (game) async {
         final parentComponent = _PriorityComponent(0);
@@ -134,7 +134,7 @@ void main() {
       },
     );
 
-    flameGame.test(
+    testWithFlameGame(
       'changing grand child priority should reorder component list',
       (game) async {
         final grandParentComponent = _PriorityComponent(0);
@@ -154,7 +154,7 @@ void main() {
       },
     );
 
-    flameGame.test(
+    testWithFlameGame(
       '#reorderChildren is only called once per parent per tick',
       (game) async {
         final a = _ParentWithReorderSpy(1);
