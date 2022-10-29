@@ -1,6 +1,7 @@
 [![Powered by Flame](https://img.shields.io/badge/Powered%20by-%F0%9F%94%A5-orange.svg)](https://flame-engine.org)
 [![Discord](https://img.shields.io/discord/509714518008528896.svg)](https://discord.gg/pxrBmy4)
 
+
 # Flame Examples
 
 This is a set of small examples showcasing specific features of the Flame Engine; it's a great
@@ -13,6 +14,7 @@ the code and see how it works.
 
 For a very simple, but complete game in Flame, check the
 [example folder inside the Flame package](https://github.com/flame-engine/flame/tree/main/packages/flame/example).
+
 
 ## Help
 
