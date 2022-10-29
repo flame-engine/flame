@@ -96,8 +96,6 @@ class SkeletonRender {
   }
 
   void _paint(Canvas canvas, Bounds bounds, Size size) {
-    /// draw
-
     final contentHeight = bounds.size.y;
     final contentWidth = bounds.size.x;
     final x = -bounds.offset.x -
