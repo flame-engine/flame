@@ -12,8 +12,6 @@ dependencies:
   flame_rive: ^1.5.2
   flutter:
     sdk: flutter
-  rive: ^0.9.1
-
 
 dev_dependencies:
   flame_lint: ^0.1.3
