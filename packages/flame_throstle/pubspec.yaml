@@ -1,7 +1,7 @@
-name: flame_yarn
-description: Yarn Spinner support for the Flame game engine.
+name: flame_throstle
+description: Throstle (Yarn Spinner) support for the Flame game engine.
 version: 0.0.0
-homepage: https://github.com/flame-engine/flame/tree/main/packages/flame_yarn
+homepage: https://github.com/flame-engine/flame/tree/main/packages/flame_throstle
 funding:
   - https://patreon.com/bluefireoss
   - https://www.buymeacoffee.com/bluefire
@@ -16,7 +16,7 @@ dependencies:
   flutter:
     sdk: flutter
   meta: ^1.7.0
-  yarn: ^0.0.0
+  throstle: ^0.0.0
 
 dev_dependencies:
   dartdoc: ^6.0.1
