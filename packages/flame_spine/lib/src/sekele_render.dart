@@ -107,7 +107,6 @@ class SkeletonRender {
 
     var scaleX = 1.0, scaleY = 1.0;
 
-    // boxfit
     switch (fit) {
       case BoxFit.fill:
         scaleX = size.width / contentWidth;
