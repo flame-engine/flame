@@ -11,8 +11,8 @@ class GlowEffectExample extends FlameGame {
 
     add(
       CircleComponent(
-        radius: canvasSize.y / 4,
-        position: canvasSize / 2,
+        radius: size.y / 4,
+        position: size / 2,
         anchor: Anchor.center,
         paint: paint,
       )..add(
