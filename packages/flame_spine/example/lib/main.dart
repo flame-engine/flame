@@ -7,25 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:spine_flutter/spine_flutter.dart';
 
 void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatefulWidget {
-  const MyApp({super.key});
-
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  late final game = SpineExampleGame();
-
-  @override
-  Widget build(BuildContext context) {
-    return GameWidget(
-      game: game,
-    );
-  }
+  runApp(GameWidget(game: SpineExampleGame()));
 }
 
 class SpineExampleGame extends FlameGame with HasTappableComponents {
