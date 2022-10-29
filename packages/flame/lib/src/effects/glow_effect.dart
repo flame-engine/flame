@@ -4,15 +4,14 @@ import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 
 class GlowEffect extends ComponentEffect<HasPaint> {
-  GlowEffect(this.style, this.blurValue, super.controller, {this.paintId});
+  GlowEffect(this.strength, super.controller, {this.style = BlurStyle.outer});
 
   final BlurStyle style;
-  final double blurValue;
-  final String? paintId;
+  final double strength;
 
   @override
   void apply(double progress) {
-    final _value = blurValue * progress;
+    final _value = strength * progress;
 
     target.paint.maskFilter = MaskFilter.blur(style, _value);
   }

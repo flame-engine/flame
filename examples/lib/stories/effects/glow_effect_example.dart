@@ -15,17 +15,18 @@ class GlowEffectExample extends FlameGame with TapDetector {
 
   @override
   Future<void> onLoad() async {
+    final paint2 = Paint()..color = const Color(0xff39FF14);
+
     add(
       CircleComponent(
         radius: 50,
         position: Vector2(280, 280),
-        paint: Paint()..color = const Color(0xff39FF14),
+        paint: paint2,
       )..add(
           GlowEffect(
-            BlurStyle.outer,
-            50.0,
+            10.0,
             EffectController(
-              duration: 1.5,
+              duration: 3,
               reverseDuration: 1.5,
               infinite: true,
             ),
