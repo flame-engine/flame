@@ -446,7 +446,6 @@ will apply the glowing shade around target by strength of `10`:
 ```
 
 ```dart
-
 final effect = GlowEffect(
   10.0,
   EffectController(duration: 3),
