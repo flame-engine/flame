@@ -1,7 +1,7 @@
-name: yarn
-description: Yarn support for Dart.
+name: throstle
+description: Yarn Spinner equivalent for Dart.
 version: 0.0.0
-homepage: https://github.com/flame-engine/flame/tree/main/packages/flame_yarn/yarn
+homepage: https://github.com/flame-engine/flame/tree/main/packages/flame_yarn/throstle
 funding:
   - https://patreon.com/bluefireoss
   - https://www.buymeacoffee.com/bluefire

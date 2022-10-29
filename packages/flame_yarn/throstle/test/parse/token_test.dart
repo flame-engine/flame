@@ -1,5 +1,5 @@
 import 'package:test/test.dart';
-import 'package:yarn/src/parse/token.dart';
+import 'package:throstle/src/parse/token.dart';
 
 void main() {
   group('Token', () {

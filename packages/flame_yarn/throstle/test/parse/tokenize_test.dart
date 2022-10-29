@@ -1,6 +1,6 @@
 import 'package:test/test.dart';
-import 'package:yarn/src/parse/token.dart';
-import 'package:yarn/src/parse/tokenize.dart';
+import 'package:throstle/src/parse/token.dart';
+import 'package:throstle/src/parse/tokenize.dart';
 
 import 'utils.dart';
 

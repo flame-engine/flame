@@ -1,5 +1,5 @@
 import 'package:test/test.dart';
-import 'package:yarn/src/errors.dart';
+import 'package:throstle/src/errors.dart';
 
 Matcher hasSyntaxError(String message) {
   return throwsA(
