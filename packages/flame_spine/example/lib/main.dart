@@ -66,6 +66,6 @@ class MyComponent extends SpineComponent with TapCallbacks {
     _index = (_index + 1) % (animations.length - 1);
 
     renderer.playState = PlayState.playing;
-    renderer.animation = animations.elementAt(_index);
+    renderer.animation = animations[_index];
   }
 }
