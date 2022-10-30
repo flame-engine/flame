@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.9" tiledversion="1.9.2" orientation="staggered" renderorder="right-down" width="4" height="1" tilewidth="16" tileheight="16" infinite="0" staggeraxis="y" staggerindex="odd" nextlayerid="5" nextobjectid="1">
+ <tileset firstgid="1" name="0x72_DungeonTilesetII_v1.4" tilewidth="16" tileheight="16" tilecount="1024" columns="32">
+  <image source="0x72_DungeonTilesetII_v1.4.png" width="512" height="512"/>
+  <tile id="40">
+   <animation>
+    <frame tileid="40" duration="300"/>
+   </animation>
+  </tile>
+  <tile id="100">
+   <animation>
+    <frame tileid="100" duration="180"/>
+    <frame tileid="101" duration="170"/>
+    <frame tileid="102" duration="150"/>
+   </animation>
+  </tile>
+  <tile id="186">
+   <animation>
+    <frame tileid="183" duration="300"/>
+    <frame tileid="184" duration="300"/>
+    <frame tileid="185" duration="300"/>
+    <frame tileid="186" duration="300"/>
+   </animation>
+  </tile>
+  <tile id="353">
+   <animation>
+    <frame tileid="353" duration="176"/>
+    <frame tileid="354" duration="176"/>
+    <frame tileid="355" duration="176"/>
+    <frame tileid="356" duration="176"/>
+   </animation>
+  </tile>
+  <tile id="627">
+   <animation>
+    <frame tileid="627" duration="300"/>
+    <frame tileid="628" duration="300"/>
+    <frame tileid="629" duration="300"/>
+   </animation>
+  </tile>
+ </tileset>
+ <layer id="1" name="single" width="4" height="1">
+  <data encoding="base64" compression="zlib">
+   eJxTYmBgUAJiTSA+AsQACCABMg==
+  </data>
+ </layer>
+ <layer id="2" name="spike" width="4" height="1">
+  <data encoding="base64" compression="zlib">
+   eJxLZWBgSGJkgAMACwMAyQ==
+  </data>
+ </layer>
+ <group id="3" name="group">
+  <layer id="4" name="chest" width="4" height="1">
+   <data encoding="base64" compression="zlib">
+   eJwrYWJAAQAHbgB3
+  </data>
+  </layer>
+ </group>
+</map>
