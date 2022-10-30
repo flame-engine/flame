@@ -36,8 +36,8 @@ to a variable inside our game class, adding a method `move` to our `Player`, and
 them:
 
 ```dart
-class Player extends PositionComponent { static final _paint = Paint()..color =
-  Colors.white;
+class Player extends PositionComponent { 
+  static final _paint = Paint()..color = Colors.white;
   
   @override
   void render(Canvas canvas) {

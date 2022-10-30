@@ -71,7 +71,6 @@ If you run this, you will now see a white rectangle being rendered in the center
 
 A couple of points worth commenting:
 
-- Always call `await super.onLoad()` as the first instruction of your custom `onLoad` method.
 - `size` is a `Vector2` variable from the game class and it holds the current dimension of the game
 area, where `x` is the horizontal dimension or the width, and `y` is the vertical dimension or the
 height.
