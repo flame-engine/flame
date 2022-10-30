@@ -15,15 +15,15 @@ void main() {
 
   void _initChildren() {
     firstComponent = PositionComponent(
-      size: Vector2(50, 50),
+      size: Vector2.all(50),
     );
 
     secondComponent = PositionComponent(
-      size: Vector2(100, 100),
+      size: Vector2.all(100),
     );
 
     thirdComponent = PositionComponent(
-      size: Vector2(150, 150),
+      size: Vector2.all(150),
     );
   }
 
@@ -67,7 +67,7 @@ void main() {
 
       testWithFlameGame('layoutComponentAlignment.start with position',
           (game) async {
-        await _initScene(game, LayoutComponentAlignment.start, Vector2(50, 50));
+        await _initScene(game, LayoutComponentAlignment.start, Vector2.all(50));
         expect(firstComponent.absolutePosition[k], 50);
 
         /// these positions refer to inside rowComponent
@@ -81,7 +81,7 @@ void main() {
         await _initScene(
           game,
           LayoutComponentAlignment.start,
-          Vector2(50, 50),
+          Vector2.all(50),
           10,
         );
         expect(firstComponent.absolutePosition[k], 50);
@@ -92,7 +92,7 @@ void main() {
 
       testWithFlameGame('layoutComponentAlignment.end with position',
           (game) async {
-        await _initScene(game, LayoutComponentAlignment.end, Vector2(500, 500));
+        await _initScene(game, LayoutComponentAlignment.end, Vector2.all(500));
         expect(firstComponent.absolutePosition[k], 200);
         expect(firstComponent.position[k], -300);
         expect(secondComponent.position[k], -250);
@@ -104,7 +104,7 @@ void main() {
         await _initScene(
           game,
           LayoutComponentAlignment.end,
-          Vector2(500, 500),
+          Vector2.all(500),
           20,
         );
         expect(firstComponent.absolutePosition[k], 160);
@@ -118,7 +118,7 @@ void main() {
         await _initScene(
           game,
           LayoutComponentAlignment.center,
-          Vector2(50, 50),
+          Vector2.all(50),
         );
         final startPosition =
             (layoutComponent.size[k] - totalSizeOfComponents) / 2;
@@ -132,7 +132,7 @@ void main() {
         await _initScene(
           game,
           LayoutComponentAlignment.center,
-          Vector2(50, 50),
+          Vector2.all(50),
           10,
         );
         final startPosition =
