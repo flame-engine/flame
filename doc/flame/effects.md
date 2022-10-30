@@ -194,7 +194,7 @@ clockwise:
 
 ```dart
 final effect = RotateEffect.by(
-  tau/4, 
+  tau/4,
   EffectController(duration: 2),
 );
 ```
@@ -215,7 +215,7 @@ target to look east (0º is north, 90º=[tau]/4 east, 180º=tau/2 south, and 270
 
 ```dart
 final effect = RotateEffect.to(
-  tau/4, 
+  tau/4,
   EffectController(duration: 2),
 );
 ```
@@ -331,7 +331,7 @@ using `AnchorEffect.by()`.
 
 ```dart
 final effect = AnchorByEffect(
-  Vector2(0.1, 0.1), 
+  Vector2(0.1, 0.1),
   EffectController(speed: 1),
 );
 ```
@@ -352,7 +352,7 @@ Changes the location of the target's anchor. This effect can also be created usi
 
 ```dart
 final effect = AnchorToEffect(
-  Anchor.center, 
+  Anchor.center,
   EffectController(speed: 1),
 );
 ```
@@ -433,6 +433,10 @@ uses multiple paints, the effect can target any individual color using the `pain
 
 ### GlowEffect
 
+```{note}
+This effect is currently experimental, and its API may change in the future.
+```
+
 This effect will apply the glowing shade around target relative to the specified
 `glow-strength`. The color of shade will be targets paint color. For example, the following effect
 will apply the glowing shade around target by strength of `10`:
@@ -474,20 +478,20 @@ backward); and also repeat a certain predetermined number of times, or infinitel
 ```dart
 final effect = SequenceEffect([
   ScaleEffect.by(
-    Vector2.all(1.5), 
+    Vector2.all(1.5),
     EffectController(
-      duration: 0.2, 
+      duration: 0.2,
       alternate: true,
     ),
   ),
   MoveEffect.by(
-    Vector2(30, -50), 
+    Vector2(30, -50),
     EffectController(
       duration: 0.5,
     ),
   ),
   OpacityEffect.to(
-    0, 
+    0,
     EffectController(
       duration: 0.3,
     ),
