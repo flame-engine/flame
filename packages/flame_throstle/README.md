@@ -1,4 +1,4 @@
-# flame_yarn
+# flame_throstle
 
 Bridge package for [Yarn Spinner](https://docs.yarnspinner.dev).
 

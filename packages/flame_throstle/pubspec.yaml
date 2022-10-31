@@ -1,7 +1,7 @@
-name: flame_yarn
+name: flame_throstle
 description: Yarn Spinner support for the Flame game engine.
 version: 0.0.0
-homepage: https://github.com/flame-engine/flame/tree/main/packages/flame_yarn
+homepage: https://github.com/flame-engine/flame/tree/main/packages/flame_throstle
 funding:
   - https://patreon.com/bluefireoss
   - https://www.buymeacoffee.com/bluefire
