@@ -1,5 +1,5 @@
-import 'package:flame_yarn/src/structure/expressions/expression.dart';
-import 'package:flame_yarn/src/variable_storage.dart';
+import 'package:throstle/src/structure/expressions/expression.dart';
+import 'package:throstle/src/variable_storage.dart';
 
 class NumericVariable extends NumExpression {
   const NumericVariable(this.name, this.storage);

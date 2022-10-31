@@ -1,10 +1,10 @@
-import 'package:flame_yarn/flame_yarn.dart';
-import 'package:flame_yarn/src/parse/parse.dart';
-import 'package:flame_yarn/src/structure/commands/if_command.dart';
-import 'package:flame_yarn/src/structure/commands/jump_command.dart';
-import 'package:flame_yarn/src/structure/dialogue.dart';
-import 'package:flame_yarn/src/structure/option.dart';
 import 'package:test/test.dart';
+import 'package:throstle/src/parse/parse.dart';
+import 'package:throstle/src/structure/commands/if_command.dart';
+import 'package:throstle/src/structure/commands/jump_command.dart';
+import 'package:throstle/src/structure/dialogue.dart';
+import 'package:throstle/src/structure/option.dart';
+import 'package:throstle/throstle.dart';
 
 import 'utils.dart';
 

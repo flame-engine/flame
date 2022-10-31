@@ -1,7 +1,7 @@
-import 'package:flame_yarn/src/structure/commands/command.dart';
-import 'package:flame_yarn/src/structure/expressions/expression.dart';
-import 'package:flame_yarn/src/structure/statement.dart';
-import 'package:flame_yarn/src/yarn_project.dart';
+import 'package:throstle/src/structure/commands/command.dart';
+import 'package:throstle/src/structure/expressions/expression.dart';
+import 'package:throstle/src/structure/statement.dart';
+import 'package:throstle/src/yarn_project.dart';
 
 class IfCommand extends Command {
   const IfCommand(this.ifs);

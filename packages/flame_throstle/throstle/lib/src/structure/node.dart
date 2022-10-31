@@ -1,4 +1,4 @@
-import 'package:flame_yarn/src/structure/statement.dart';
+import 'package:throstle/src/structure/statement.dart';
 
 class Node {
   Node({

@@ -1,4 +1,4 @@
-import 'package:flame_yarn/src/structure/expressions/expression_type.dart';
+import 'package:throstle/src/structure/expressions/expression_type.dart';
 
 abstract class Expression {
   const Expression();

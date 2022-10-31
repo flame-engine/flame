@@ -1,4 +1,4 @@
-import 'package:flame_yarn/src/structure/expressions/expression.dart';
+import 'package:throstle/src/structure/expressions/expression.dart';
 
 class Concat extends StringExpression {
   const Concat(this.parts);

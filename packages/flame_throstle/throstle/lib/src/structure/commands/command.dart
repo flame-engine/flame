@@ -1,5 +1,5 @@
-import 'package:flame_yarn/src/structure/statement.dart';
-import 'package:flame_yarn/src/yarn_project.dart';
+import 'package:throstle/src/structure/statement.dart';
+import 'package:throstle/src/yarn_project.dart';
 
 abstract class Command extends Statement {
   const Command();

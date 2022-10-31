@@ -1,7 +1,7 @@
-import 'package:flame_yarn/src/parse/parse.dart' as impl;
-import 'package:flame_yarn/src/structure/node.dart';
-import 'package:flame_yarn/src/variable_storage.dart';
 import 'package:meta/meta.dart';
+import 'package:throstle/src/parse/parse.dart' as impl;
+import 'package:throstle/src/structure/node.dart';
+import 'package:throstle/src/variable_storage.dart';
 
 class YarnProject {
   YarnProject()

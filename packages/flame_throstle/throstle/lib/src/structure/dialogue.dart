@@ -1,5 +1,5 @@
-import 'package:flame_yarn/src/structure/expressions/expression.dart';
-import 'package:flame_yarn/src/structure/statement.dart';
+import 'package:throstle/src/structure/expressions/expression.dart';
+import 'package:throstle/src/structure/statement.dart';
 
 class Dialogue extends Statement {
   const Dialogue({

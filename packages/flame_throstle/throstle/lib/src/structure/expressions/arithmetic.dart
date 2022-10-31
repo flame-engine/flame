@@ -1,4 +1,4 @@
-import 'package:flame_yarn/src/structure/expressions/expression.dart';
+import 'package:throstle/src/structure/expressions/expression.dart';
 
 class Add extends NumExpression {
   const Add(this.lhs, this.rhs);
