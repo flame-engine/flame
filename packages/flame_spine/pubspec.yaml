@@ -20,7 +20,4 @@ dev_dependencies:
   flame_test: ^1.8.0
   flutter_test:
     sdk: flutter
-
-flutter:
-  assets:
-    - assets/spineboy/
+  mocktail: ^0.3.0

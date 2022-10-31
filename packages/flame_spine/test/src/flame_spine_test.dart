@@ -1,21 +1,51 @@
 import 'package:flame_spine/flame_spine.dart';
+import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  test('can load skeleton', () async {
-    final skeleton = await loadSkeleton('spineboy');
+  group('SpineComponent', () {
+    testWithFlameGame('Can Add to FlameGame', (game) async {
+      final spineComponent = SpineComponent(
+        renderer: SkeletonRender(skeleton: MockAnimation()),
+        size: game.size / 2,
+      );
 
-    expect(skeleton, isA<SkeletonAnimation>());
-    expect(skeleton, isNotNull);
-  });
+      game.add(spineComponent);
+      await game.ready();
 
-  test('can load animations', () async {
-    final animation = await loadAnimations('spineboy');
+      expect(spineComponent.parent, game);
+    });
 
-    expect(animation, isA<List<String>>());
-    expect(animation, isNotNull);
-    expect(animation.length, equals(7));
+    testWithFlameGame('Can play animation', (game) async {
+      final spineComponent = SpineComponent(
+        renderer: SkeletonRender(skeleton: MockAnimation()),
+        size: game.size / 2,
+      );
+
+      game.add(spineComponent);
+      await game.ready();
+
+      spineComponent.renderer.playState = PlayState.playing;
+
+      expect(spineComponent.renderer.playState, PlayState.playing);
+    });
+    testWithFlameGame('Can pause animation', (game) async {
+      final spineComponent = SpineComponent(
+        renderer: SkeletonRender(skeleton: MockAnimation()),
+        size: game.size / 2,
+      );
+
+      game.add(spineComponent);
+      await game.ready();
+
+      spineComponent.renderer.playState = PlayState.paused;
+
+      expect(spineComponent.renderer.playState, PlayState.paused);
+    });
   });
 }
+
+class MockAnimation extends Mock implements SkeletonAnimation {}
