@@ -1,6 +1,6 @@
-import 'package:flame_yarn/src/parse/token.dart';
-import 'package:flame_yarn/src/parse/tokenize.dart';
 import 'package:test/test.dart';
+import 'package:throstle/src/parse/token.dart';
+import 'package:throstle/src/parse/tokenize.dart';
 
 import 'utils.dart';
 

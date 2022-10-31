@@ -30,6 +30,7 @@ socio
 Strikethrough
 stylesheet
 sublists
+throstle
 typedef
 typedefs
 toctree
