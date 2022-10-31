@@ -1,5 +1,5 @@
+import 'package:jenny/src/parse/ascii.dart';
 import 'package:test/test.dart';
-import 'package:throstle/src/parse/ascii.dart';
 
 void main() {
   test('ASCII', () {
