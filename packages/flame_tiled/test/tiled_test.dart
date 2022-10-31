@@ -8,9 +8,7 @@ import 'package:flame/game.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 import 'package:flame_tiled/src/renderable_layers/tile_layer.dart'
     as renderable;
-
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tiled/tiled.dart';
 
 import 'test_asset_bundle.dart';
 import 'test_image_utils.dart';
@@ -692,9 +690,9 @@ void main() {
         test('handle single frame animations ($mapType)', () {
           expect(
             map.renderableLayers.first,
-            isInstanceOf<renderable.TileLayer>(),
+            isInstanceOf<renderable.FlameTileLayer>(),
           );
-          final layer = map.renderableLayers.first as renderable.TileLayer;
+          final layer = map.renderableLayers.first as renderable.FlameTileLayer;
           expect(
             layer.animations,
             hasLength(1),
@@ -709,8 +707,9 @@ void main() {
         });
 
         test('handle single frame animations ($mapType)', () {
-          expect(map.renderableLayers[1], isInstanceOf<renderable.TileLayer>());
-          final layer = map.renderableLayers[1] as renderable.TileLayer;
+          expect(map.renderableLayers[1],
+              isInstanceOf<renderable.FlameTileLayer>());
+          final layer = map.renderableLayers[1] as renderable.FlameTileLayer;
           expect(
             layer.animations,
             hasLength(2),

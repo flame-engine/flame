@@ -3,7 +3,6 @@ import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 import 'package:flutter/widgets.dart' hide Animation, Image;
-import 'package:tiled/tiled.dart';
 
 void main() {
   runApp(GameWidget(game: TiledGame()));
