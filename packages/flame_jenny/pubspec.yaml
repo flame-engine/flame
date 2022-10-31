@@ -15,8 +15,8 @@ dependencies:
   flame: ^1.4.0
   flutter:
     sdk: flutter
-  meta: ^1.7.0
   jenny: ^0.0.0
+  meta: ^1.7.0
 
 dev_dependencies:
   dartdoc: ^6.0.1
