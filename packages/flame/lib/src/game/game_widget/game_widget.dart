@@ -297,6 +297,11 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
 
   KeyEventResult _handleKeyEvent(FocusNode focusNode, RawKeyEvent event) {
     final game = currentGame;
+
+    if (!_focusNode.hasPrimaryFocus) {
+      return KeyEventResult.ignored;
+    }
+
     if (game is KeyboardEvents) {
       return game.onKeyEvent(event, RawKeyboard.instance.keysPressed);
     }
@@ -336,50 +341,54 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
       // We can use Directionality.maybeOf when that method lands on stable
       final textDir = widget.textDirection ?? TextDirection.ltr;
 
-      return Focus(
-        focusNode: _focusNode,
-        autofocus: widget.autofocus,
-        onKey: _handleKeyEvent,
-        child: MouseRegion(
-          cursor: currentGame.mouseCursor,
-          child: Directionality(
-            textDirection: textDir,
-            child: ColoredBox(
-              color: currentGame.backgroundColor(),
-              child: LayoutBuilder(
-                builder: (_, BoxConstraints constraints) {
-                  return _protectedBuild(() {
-                    final size = constraints.biggest.toVector2();
-                    if (size.isZero()) {
-                      return widget.loadingBuilder?.call(context) ??
-                          Container();
-                    }
-                    currentGame.onGameResize(size);
-                    return FutureBuilder(
-                      future: loaderFuture,
-                      builder: (_, snapshot) {
-                        if (snapshot.hasError) {
-                          final errorBuilder = widget.errorBuilder;
-                          if (errorBuilder == null) {
-                            throw Error.throwWithStackTrace(
-                              snapshot.error!,
-                              snapshot.stackTrace!,
-                            );
-                          } else {
-                            return errorBuilder(context, snapshot.error!);
-                          }
-                        }
-
-                        if (snapshot.connectionState == ConnectionState.done) {
-                          return Stack(children: stackedWidgets);
-                        }
-
+      return FocusScope(
+        child: Focus(
+          focusNode: _focusNode,
+          autofocus: widget.autofocus,
+          descendantsAreFocusable: true,
+          onKey: _handleKeyEvent,
+          child: MouseRegion(
+            cursor: currentGame.mouseCursor,
+            child: Directionality(
+              textDirection: textDir,
+              child: ColoredBox(
+                color: currentGame.backgroundColor(),
+                child: LayoutBuilder(
+                  builder: (_, BoxConstraints constraints) {
+                    return _protectedBuild(() {
+                      final size = constraints.biggest.toVector2();
+                      if (size.isZero()) {
                         return widget.loadingBuilder?.call(context) ??
-                            const SizedBox.expand();
-                      },
-                    );
-                  });
-                },
+                            Container();
+                      }
+                      currentGame.onGameResize(size);
+                      return FutureBuilder(
+                        future: loaderFuture,
+                        builder: (_, snapshot) {
+                          if (snapshot.hasError) {
+                            final errorBuilder = widget.errorBuilder;
+                            if (errorBuilder == null) {
+                              throw Error.throwWithStackTrace(
+                                snapshot.error!,
+                                snapshot.stackTrace!,
+                              );
+                            } else {
+                              return errorBuilder(context, snapshot.error!);
+                            }
+                          }
+
+                          if (snapshot.connectionState ==
+                              ConnectionState.done) {
+                            return Stack(children: stackedWidgets);
+                          }
+
+                          return widget.loadingBuilder?.call(context) ??
+                              const SizedBox.expand();
+                        },
+                      );
+                    });
+                  },
+                ),
               ),
             ),
           ),
