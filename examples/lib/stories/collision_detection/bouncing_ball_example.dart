@@ -34,7 +34,8 @@ class Ball extends CircleComponent
   static const degree = math.pi / 180;
 
   @override
-  Future<void>? onLoad() {
+  Future<void> onLoad() async {
+    super.onLoad();
     _resetBall;
     final hitBox = CircleHitbox(
       radius: radius,
@@ -43,8 +44,6 @@ class Ball extends CircleComponent
     addAll([
       hitBox,
     ]);
-
-    return super.onLoad();
   }
 
   @override

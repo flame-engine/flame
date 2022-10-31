@@ -1,7 +1,7 @@
-import 'package:flame_yarn/src/errors.dart';
-import 'package:flame_yarn/src/parse/ascii.dart';
-import 'package:flame_yarn/src/parse/token.dart';
 import 'package:meta/meta.dart';
+import 'package:throstle/src/errors.dart';
+import 'package:throstle/src/parse/ascii.dart';
+import 'package:throstle/src/parse/token.dart';
 
 /// Parses the [input] into a stream of [Token]s, according to the Yarn syntax.
 @internal

@@ -209,7 +209,7 @@ class SpriteBatch {
   /// Whether to use [Canvas.drawAtlas] or not.
   final bool useAtlas;
 
-  /// Does this batch contain any operatiosn?
+  /// Does this batch contain any operations?
   bool get isEmpty => _batchItems.isEmpty;
 
   Future<void> _makeFlippedAtlas() async {
@@ -291,7 +291,7 @@ class SpriteBatch {
   /// You can transform the sprite from its [offset] using [scale], [rotation],
   /// [anchor] and [flip].
   ///
-  /// The [color] paramater allows you to render a color behind the batch item,
+  /// The [color] parameter allows you to render a color behind the batch item,
   /// as a background color.
   ///
   /// This method creates a new [RSTransform] based on the given transform

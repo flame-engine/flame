@@ -14,7 +14,7 @@ void main() {
 }
 ```
 
-The file structure Flame would expect to find the files in would be:
+The following file structure is where Flame would expect to find the files:
 
 ```text
 .
@@ -39,5 +39,5 @@ flutter:
 ```
 
 If you want to change this structure, this is possible by using the `prefix` parameter and creating
-your own instances of `AssetsCache`, `ImagesCache`, `AudioCache` and `SoundPool`s, instead of using
-the global ones provided by Flame.
+your instances of `AssetsCache`, `ImagesCache`, `AudioCache`, and `SoundPool`s, instead of using the
+global ones provided by Flame.

@@ -1,5 +1,6 @@
-import 'package:flame/src/anchor.dart';
-import 'package:vector_math/vector_math_64.dart';
+import 'dart:ui';
+
+import 'package:flame/components.dart';
 
 /// Interface for a component that can be affected by move effects.
 abstract class PositionProvider {
@@ -49,4 +50,27 @@ abstract class AnchorProvider {
 abstract class SizeProvider {
   Vector2 get size;
   set size(Vector2 value);
+}
+
+/// Interface for a component that can be affected by opacity effects.
+/// Value of [opacity] must be in the range of 0-1 (both inclusive).
+///
+/// It is allowed for implementers of this interface to use an integer for
+/// internal representation. In such cases, [opacity] get/set are expected
+/// to perform necessary conversions from integer to double and vice versa.
+/// As a side effect of this, setting the opacity to some `x` value would not
+/// necessarily produce the same `x` when reading it back.
+///
+/// See [HasPaint] for an example implementation.
+abstract class OpacityProvider {
+  double get opacity;
+  set opacity(double value);
+}
+
+/// Interface for a component that can be affected by Paint effects.
+///
+/// See [HasPaint] for an example implementation.
+abstract class PaintProvider {
+  Paint get paint;
+  set paint(Paint value);
 }
