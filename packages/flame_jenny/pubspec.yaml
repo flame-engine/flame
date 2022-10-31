@@ -1,7 +1,7 @@
-name: flame_throstle
-description: Throstle (Yarn Spinner) support for the Flame game engine.
+name: flame_jenny
+description: Flame bridge package to Jenny (a Dart port of Yarn Spinner).
 version: 0.0.0
-homepage: https://github.com/flame-engine/flame/tree/main/packages/flame_throstle
+homepage: https://github.com/flame-engine/flame/tree/main/packages/flame_jenny
 funding:
   - https://patreon.com/bluefireoss
   - https://www.buymeacoffee.com/bluefire
@@ -15,8 +15,8 @@ dependencies:
   flame: ^1.4.0
   flutter:
     sdk: flutter
+  jenny: ^0.0.0
   meta: ^1.7.0
-  throstle: ^0.0.0
 
 dev_dependencies:
   dartdoc: ^6.0.1
