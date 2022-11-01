@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flame/components.dart';
 
 /// Interface for a component that can be affected by move effects.
@@ -63,4 +65,12 @@ abstract class SizeProvider {
 abstract class OpacityProvider {
   double get opacity;
   set opacity(double value);
+}
+
+/// Interface for a component that can be affected by Paint effects.
+///
+/// See [HasPaint] for an example implementation.
+abstract class PaintProvider {
+  Paint get paint;
+  set paint(Paint value);
 }

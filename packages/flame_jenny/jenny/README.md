@@ -1,15 +1,11 @@
-# jenny
+# Jenny
 
-The `flame_yarn` library supports dialogue and narration within games. It will prove useful for any
-game that has elements of story-telling, or conversational mechanics. See [documentation] for more
-details.
+The **jenny** library supports building *dialogues*, interactive *conversations*, *narratives*,
+or non-linear *story-telling*. The dialogue itself is written in a simple text-based Yarn language.
+The `jenny` library allows you to load these `yarn` files into a YarnProject and then present this
+dialogue to users within a game or an app.
 
-This library was inspired by [Yarn Spinner](https://docs.yarnspinner.dev) for Unity.
-
-[documentation]: https://docs.flame-engine.org/main/bridge_packages/flame_yarn/overview.md
+The `jenny` library mimics the features and functionality of the [Yarn Spinner] library for Unity.
 
 
-## See Also
-
-- [Yarn 2.0 spec](https://github.com/YarnSpinnerTool/YarnSpinner/blob/main/Documentation/Yarn-Spec.md)
-- [Yarn sandbox](https://try.yarnspinner.dev)
+[Yarn Spinner]: https://docs.yarnspinner.dev/

@@ -82,17 +82,17 @@ The base `Effect` class is not usable on its own (it is abstract), but it provid
 functionality inherited by all other effects. This includes:
 
 - The ability to pause/resume the effect using `effect.pause()` and `effect.resume()`. You can
-    check whether the effect is currently paused using `effect.isPaused`.
+  check whether the effect is currently paused using `effect.isPaused`.
 
 - The ability to reverse the effect's time direction using `effect.reverse()`. Use
-    `effect.isReversed` to check if the effect is currently running back in time.
+  `effect.isReversed` to check if the effect is currently running back in time.
 
 - Property `removeOnFinish` (which is true by default) will cause the effect component to be
-    removed from the game tree and garbage-collected once the effect completes. Set this to false
-    if you plan to reuse the effect after it is finished.
+  removed from the game tree and garbage-collected once the effect completes. Set this to false
+  if you plan to reuse the effect after it is finished.
 
 - Optional user-provided `onComplete`, which will be invoked when the effect has just
-    completed its execution but before it is removed from the game.
+  completed its execution but before it is removed from the game.
 
 - The `reset()` method reverts the effect to its original state, allowing it to run once again.
 
@@ -194,7 +194,7 @@ clockwise:
 
 ```dart
 final effect = RotateEffect.by(
-  tau/4, 
+  tau/4,
   EffectController(duration: 2),
 );
 ```
@@ -215,7 +215,7 @@ target to look east (0º is north, 90º=[tau]/4 east, 180º=tau/2 south, and 270
 
 ```dart
 final effect = RotateEffect.to(
-  tau/4, 
+  tau/4,
   EffectController(duration: 2),
 );
 ```
@@ -331,7 +331,7 @@ using `AnchorEffect.by()`.
 
 ```dart
 final effect = AnchorByEffect(
-  Vector2(0.1, 0.1), 
+  Vector2(0.1, 0.1),
   EffectController(speed: 1),
 );
 ```
@@ -352,7 +352,7 @@ Changes the location of the target's anchor. This effect can also be created usi
 
 ```dart
 final effect = AnchorToEffect(
-  Anchor.center, 
+  Anchor.center,
   EffectController(speed: 1),
 );
 ```
@@ -431,6 +431,34 @@ Currently this effect can only be applied to components that have a `HasPaint` m
 uses multiple paints, the effect can target any individual color using the `paintId` parameter.
 
 
+### GlowEffect
+
+```{note}
+This effect is currently experimental, and its API may change in the future.
+```
+
+This effect will apply the glowing shade around target relative to the specified
+`glow-strength`. The color of shade will be targets paint color. For example, the following effect
+will apply the glowing shade around target by strength of `10`:
+
+```{flutter-app}
+:sources: ../flame/examples
+:page: glow_effect
+:show: widget code infobox
+:width: 180
+:height: 160
+```
+
+```dart
+final effect = GlowEffect(
+  10.0,
+  EffectController(duration: 3),
+);
+```
+
+Currently this effect can only be applied to components that have a `HasPaint` mixin.
+
+
 ### `SequenceEffect`
 
 This effect can be used to run multiple other effects one after another. The constituent effects
@@ -450,20 +478,20 @@ backward); and also repeat a certain predetermined number of times, or infinitel
 ```dart
 final effect = SequenceEffect([
   ScaleEffect.by(
-    Vector2.all(1.5), 
+    Vector2.all(1.5),
     EffectController(
-      duration: 0.2, 
+      duration: 0.2,
       alternate: true,
     ),
   ),
   MoveEffect.by(
-    Vector2(30, -50), 
+    Vector2(30, -50),
     EffectController(
       duration: 0.5,
     ),
   ),
   OpacityEffect.to(
-    0, 
+    0,
     EffectController(
       duration: 0.3,
     ),
@@ -498,6 +526,14 @@ This effect will change the base color of the paint, causing the rendered compon
 the provided color between a provided range.
 
 Usage example:
+
+```{flutter-app}
+:sources: ../flame/examples
+:page: color_effect
+:show: widget code infobox
+:width: 180
+:height: 160
+```
 
 ```dart
 final effect = ColorEffect(
