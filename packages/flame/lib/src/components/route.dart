@@ -27,6 +27,7 @@ class Route extends PositionComponent with ParentIsA<RouterComponent> {
   Route(
     Component Function()? builder, {
     this.transparent = false,
+    this.pageTransient = true,
   })  : _builder = builder,
         _renderEffect = Decorator();
 
@@ -35,6 +36,13 @@ class Route extends PositionComponent with ParentIsA<RouterComponent> {
   /// completely obscure any route that would be underneath, and therefore the
   /// route underneath doesn't need to be rendered.
   final bool transparent;
+
+  /// If false, the route will not maintain the state of this route's page
+  /// component.  By default, once a route becomes active, the component
+  /// built by the build routine is maintained by the route after the route
+  /// is popped off the stack.  Setting [pageTransient] to false will drop the
+  /// page component when the route is popped off the stack.
+  final bool pageTransient;
 
   /// The name of the route (set by the [RouterComponent]).
   String get name => _name;
@@ -132,8 +140,16 @@ class Route extends PositionComponent with ParentIsA<RouterComponent> {
 
   /// Invoked by the [RouterComponent] when this route is popped off the top
   /// of the navigation stack.
+  /// If pageTransient is false, the page component rendered by this route
+  /// is not retained when the route it popped.
   @internal
-  void didPop(Route previousRoute) => onPop(previousRoute);
+  void didPop(Route previousRoute) {
+    onPop(previousRoute);
+    if (!pageTransient) {
+      _page?.removeFromParent();
+      _page = null;
+    }
+  }
 
   @override
   void renderTree(Canvas canvas) {
