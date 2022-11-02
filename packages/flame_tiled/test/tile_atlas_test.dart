@@ -2,9 +2,7 @@ import 'package:flame/components.dart';
 import 'package:flame/flame.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 import 'package:flame_tiled/src/tile_atlas.dart';
-
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tiled/tiled.dart';
 
 import 'test_asset_bundle.dart';
 import 'test_image_utils.dart';
