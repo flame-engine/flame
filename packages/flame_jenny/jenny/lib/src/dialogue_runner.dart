@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:jenny/src/dialogue_view.dart';
 import 'package:jenny/src/errors.dart';
 import 'package:jenny/src/structure/block.dart';
 import 'package:jenny/src/structure/commands/command.dart';
@@ -7,7 +8,6 @@ import 'package:jenny/src/structure/dialogue_choice.dart';
 import 'package:jenny/src/structure/dialogue_line.dart';
 import 'package:jenny/src/structure/node.dart';
 import 'package:jenny/src/structure/statement.dart';
-import 'package:jenny/src/views/dialogue_view.dart';
 import 'package:jenny/src/yarn_project.dart';
 import 'package:meta/meta.dart';
 
