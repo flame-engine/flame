@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:jenny/src/runner/dialogue_runner.dart';
+import 'package:jenny/src/dialogue_runner.dart';
 import 'package:jenny/src/structure/statement.dart';
 
 abstract class Command extends Statement {

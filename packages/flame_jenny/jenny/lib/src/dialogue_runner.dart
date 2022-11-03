@@ -1,7 +1,8 @@
 import 'dart:async';
 
+import 'package:jenny/src/dialogue_view.dart';
 import 'package:jenny/src/errors.dart';
-import 'package:jenny/src/runner/dialogue_view.dart';
+import 'package:jenny/src/dialogue_view.dart';
 import 'package:jenny/src/structure/block.dart';
 import 'package:jenny/src/structure/commands/command.dart';
 import 'package:jenny/src/structure/dialogue_choice.dart';

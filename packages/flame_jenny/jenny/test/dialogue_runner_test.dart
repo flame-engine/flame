@@ -1,8 +1,10 @@
+import 'dart:async';
+
 import 'package:jenny/jenny.dart';
 import 'package:test/test.dart';
 
-import '../test_scenario.dart';
-import '../utils.dart';
+import 'test_scenario.dart';
+import 'utils.dart';
 
 void main() {
   group('DialogueRunner', () {

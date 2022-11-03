@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:jenny/jenny.dart';
@@ -77,7 +78,7 @@ class _TestPlan extends DialogueView {
   dynamic get nextEntry => done ? null : _expected[_currentIndex];
 
   @override
-  void onLineStart(DialogueLine line) {
+  FutureOr<bool> onLineStart(DialogueLine line) {
     assert(
       !done,
       'Expected: END OF DIALOGUE\n'
@@ -102,6 +103,7 @@ class _TestPlan extends DialogueView {
       'Actual line  : $text2\n',
     );
     _currentIndex++;
+    return true;
   }
 
   @override

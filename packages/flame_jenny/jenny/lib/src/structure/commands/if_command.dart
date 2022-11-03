@@ -1,4 +1,4 @@
-import 'package:jenny/src/runner/dialogue_runner.dart';
+import 'package:jenny/src/dialogue_runner.dart';
 import 'package:jenny/src/structure/block.dart';
 import 'package:jenny/src/structure/commands/command.dart';
 import 'package:jenny/src/structure/expressions/expression.dart';
