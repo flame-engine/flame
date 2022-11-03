@@ -1,5 +1,5 @@
-import 'package:flame_yarn/src/structure/expressions/expression.dart';
-import 'package:flame_yarn/src/structure/statement.dart';
+import 'package:jenny/src/structure/expressions/expression.dart';
+import 'package:jenny/src/structure/statement.dart';
 
 class DialogueLine extends Statement {
   const DialogueLine({

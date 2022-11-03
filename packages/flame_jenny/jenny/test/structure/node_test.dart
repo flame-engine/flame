@@ -1,10 +1,10 @@
-import 'package:flame_yarn/src/structure/block.dart';
-import 'package:flame_yarn/src/structure/dialogue_choice.dart';
-import 'package:flame_yarn/src/structure/dialogue_line.dart';
-import 'package:flame_yarn/src/structure/expressions/literal.dart';
-import 'package:flame_yarn/src/structure/node.dart';
-import 'package:flame_yarn/src/structure/option.dart';
-import 'package:flame_yarn/src/structure/statement.dart';
+import 'package:jenny/src/structure/block.dart';
+import 'package:jenny/src/structure/dialogue_choice.dart';
+import 'package:jenny/src/structure/dialogue_line.dart';
+import 'package:jenny/src/structure/expressions/literal.dart';
+import 'package:jenny/src/structure/node.dart';
+import 'package:jenny/src/structure/option.dart';
+import 'package:jenny/src/structure/statement.dart';
 import 'package:test/test.dart';
 
 void main() {

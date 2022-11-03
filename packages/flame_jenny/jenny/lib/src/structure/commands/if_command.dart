@@ -1,7 +1,7 @@
-import 'package:flame_yarn/src/runner/dialogue_runner.dart';
-import 'package:flame_yarn/src/structure/block.dart';
-import 'package:flame_yarn/src/structure/commands/command.dart';
-import 'package:flame_yarn/src/structure/expressions/expression.dart';
+import 'package:jenny/src/runner/dialogue_runner.dart';
+import 'package:jenny/src/structure/block.dart';
+import 'package:jenny/src/structure/commands/command.dart';
+import 'package:jenny/src/structure/expressions/expression.dart';
 
 class IfCommand extends Command {
   const IfCommand(this.ifs);

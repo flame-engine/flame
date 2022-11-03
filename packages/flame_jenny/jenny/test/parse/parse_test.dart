@@ -1,7 +1,7 @@
-import 'package:flame_yarn/flame_yarn.dart';
-import 'package:flame_yarn/src/parse/parse.dart';
-import 'package:flame_yarn/src/structure/commands/if_command.dart';
-import 'package:flame_yarn/src/structure/commands/jump_command.dart';
+import 'package:jenny/jenny.dart';
+import 'package:jenny/src/parse/parse.dart';
+import 'package:jenny/src/structure/commands/if_command.dart';
+import 'package:jenny/src/structure/commands/jump_command.dart';
 import 'package:test/test.dart';
 
 import '../utils.dart';

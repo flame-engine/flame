@@ -1,6 +1,6 @@
-import 'package:flame_yarn/src/runner/dialogue_runner.dart';
-import 'package:flame_yarn/src/structure/commands/command.dart';
-import 'package:flame_yarn/src/structure/expressions/expression.dart';
+import 'package:jenny/src/runner/dialogue_runner.dart';
+import 'package:jenny/src/structure/commands/command.dart';
+import 'package:jenny/src/structure/expressions/expression.dart';
 
 class WaitCommand extends Command {
   const WaitCommand(this.arg);

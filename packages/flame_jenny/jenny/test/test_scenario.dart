@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:flame_yarn/flame_yarn.dart';
+import 'package:jenny/jenny.dart';
 import 'package:meta/meta.dart';
 import 'package:test/test.dart';
 

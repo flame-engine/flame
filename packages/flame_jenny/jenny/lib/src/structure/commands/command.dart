@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:flame_yarn/src/runner/dialogue_runner.dart';
-import 'package:flame_yarn/src/structure/statement.dart';
+import 'package:jenny/src/runner/dialogue_runner.dart';
+import 'package:jenny/src/structure/statement.dart';
 
 abstract class Command extends Statement {
   const Command();

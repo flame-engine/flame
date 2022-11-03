@@ -1,6 +1,6 @@
-import 'package:flame_yarn/flame_yarn.dart';
-import 'package:flame_yarn/src/structure/expressions/literal.dart';
-import 'package:flame_yarn/src/structure/statement.dart';
+import 'package:jenny/jenny.dart';
+import 'package:jenny/src/structure/expressions/literal.dart';
+import 'package:jenny/src/structure/statement.dart';
 import 'package:test/test.dart';
 
 void main() {

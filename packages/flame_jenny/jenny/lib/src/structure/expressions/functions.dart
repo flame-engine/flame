@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:flame_yarn/src/structure/expressions/expression.dart';
+import 'package:jenny/src/structure/expressions/expression.dart';
 
 Random $randomGenerator = Random();
 

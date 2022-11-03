@@ -1,4 +1,4 @@
-import 'package:flame_yarn/src/structure/expressions/expression.dart';
+import 'package:jenny/src/structure/expressions/expression.dart';
 
 class NumericEqual extends BoolExpression {
   const NumericEqual(this.lhs, this.rhs);

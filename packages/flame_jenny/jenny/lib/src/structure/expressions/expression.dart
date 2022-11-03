@@ -1,4 +1,4 @@
-import 'package:flame_yarn/src/structure/expressions/expression_type.dart';
+import 'package:jenny/src/structure/expressions/expression_type.dart';
 
 abstract class Expression {
   const Expression();

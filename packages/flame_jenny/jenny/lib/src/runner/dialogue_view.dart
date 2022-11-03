@@ -1,9 +1,9 @@
 import 'dart:async';
 
-import 'package:flame_yarn/src/structure/dialogue_choice.dart';
-import 'package:flame_yarn/src/structure/dialogue_line.dart';
-import 'package:flame_yarn/src/structure/node.dart';
-import 'package:flame_yarn/src/structure/option.dart';
+import 'package:jenny/src/structure/dialogue_choice.dart';
+import 'package:jenny/src/structure/dialogue_line.dart';
+import 'package:jenny/src/structure/node.dart';
+import 'package:jenny/src/structure/option.dart';
 import 'package:meta/meta.dart';
 
 abstract class DialogueView {

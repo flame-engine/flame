@@ -1,5 +1,5 @@
-import 'package:flame_yarn/src/parse/token.dart';
-import 'package:flame_yarn/src/parse/tokenize.dart';
+import 'package:jenny/src/parse/token.dart';
+import 'package:jenny/src/parse/tokenize.dart';
 import 'package:test/test.dart';
 
 import '../utils.dart';

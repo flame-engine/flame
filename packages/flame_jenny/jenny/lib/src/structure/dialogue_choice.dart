@@ -1,5 +1,5 @@
-import 'package:flame_yarn/src/structure/option.dart';
-import 'package:flame_yarn/src/structure/statement.dart';
+import 'package:jenny/src/structure/option.dart';
+import 'package:jenny/src/structure/statement.dart';
 
 class DialogueChoice extends Statement {
   const DialogueChoice(this.options);

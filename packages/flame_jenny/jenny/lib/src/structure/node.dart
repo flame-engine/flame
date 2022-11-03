@@ -1,5 +1,5 @@
-import 'package:flame_yarn/src/structure/block.dart';
-import 'package:flame_yarn/src/structure/statement.dart';
+import 'package:jenny/src/structure/block.dart';
+import 'package:jenny/src/structure/statement.dart';
 
 class Node extends Iterable<Statement> {
   const Node({

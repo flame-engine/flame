@@ -1,6 +1,6 @@
-import 'package:flame_yarn/src/structure/commands/command.dart';
-import 'package:flame_yarn/src/structure/dialogue_choice.dart';
-import 'package:flame_yarn/src/structure/dialogue_line.dart';
+import 'package:jenny/src/structure/commands/command.dart';
+import 'package:jenny/src/structure/dialogue_choice.dart';
+import 'package:jenny/src/structure/dialogue_line.dart';
 
 /// Base class for all entries in a dialogue, where "entry" is a unit of
 /// processing in a dialogue. There are 3 [kind]s of [Statement]s:

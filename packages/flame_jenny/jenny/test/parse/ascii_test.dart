@@ -1,4 +1,4 @@
-import 'package:flame_yarn/src/parse/ascii.dart';
+import 'package:jenny/src/parse/ascii.dart';
 import 'package:test/test.dart';
 
 void main() {

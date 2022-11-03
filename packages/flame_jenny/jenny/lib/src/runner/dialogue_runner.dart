@@ -1,14 +1,14 @@
 import 'dart:async';
 
-import 'package:flame_yarn/src/errors.dart';
-import 'package:flame_yarn/src/runner/dialogue_view.dart';
-import 'package:flame_yarn/src/structure/block.dart';
-import 'package:flame_yarn/src/structure/commands/command.dart';
-import 'package:flame_yarn/src/structure/dialogue_choice.dart';
-import 'package:flame_yarn/src/structure/dialogue_line.dart';
-import 'package:flame_yarn/src/structure/node.dart';
-import 'package:flame_yarn/src/structure/statement.dart';
-import 'package:flame_yarn/src/yarn_project.dart';
+import 'package:jenny/src/errors.dart';
+import 'package:jenny/src/runner/dialogue_view.dart';
+import 'package:jenny/src/structure/block.dart';
+import 'package:jenny/src/structure/commands/command.dart';
+import 'package:jenny/src/structure/dialogue_choice.dart';
+import 'package:jenny/src/structure/dialogue_line.dart';
+import 'package:jenny/src/structure/node.dart';
+import 'package:jenny/src/structure/statement.dart';
+import 'package:jenny/src/yarn_project.dart';
 
 ///
 class DialogueRunner {

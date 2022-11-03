@@ -1,5 +1,5 @@
-import 'package:flame_yarn/src/errors.dart';
-import 'package:flame_yarn/src/structure/expressions/expression_type.dart';
+import 'package:jenny/src/errors.dart';
+import 'package:jenny/src/structure/expressions/expression_type.dart';
 import 'package:meta/meta.dart';
 
 class VariableStorage {

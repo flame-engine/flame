@@ -1,4 +1,4 @@
-import 'package:flame_yarn/flame_yarn.dart';
+import 'package:jenny/jenny.dart';
 import 'package:test/test.dart';
 
 import '../test_scenario.dart';

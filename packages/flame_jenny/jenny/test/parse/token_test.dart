@@ -1,4 +1,4 @@
-import 'package:flame_yarn/src/parse/token.dart';
+import 'package:jenny/src/parse/token.dart';
 import 'package:test/test.dart';
 
 void main() {

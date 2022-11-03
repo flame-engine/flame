@@ -1,4 +1,4 @@
-import 'package:flame_yarn/src/structure/statement.dart';
+import 'package:jenny/src/structure/statement.dart';
 
 class Block {
   const Block(this.lines);

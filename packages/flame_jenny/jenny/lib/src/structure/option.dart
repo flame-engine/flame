@@ -1,5 +1,5 @@
-import 'package:flame_yarn/src/structure/block.dart';
-import 'package:flame_yarn/src/structure/expressions/expression.dart';
+import 'package:jenny/src/structure/block.dart';
+import 'package:jenny/src/structure/expressions/expression.dart';
 
 class Option {
   Option({

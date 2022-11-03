@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:flame_yarn/flame_yarn.dart';
-import 'package:flame_yarn/src/errors.dart';
+import 'package:jenny/jenny.dart';
+import 'package:jenny/src/errors.dart';
 import 'package:meta/meta.dart';
 import 'package:test/test.dart';
 

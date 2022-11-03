@@ -1,5 +1,5 @@
-import 'package:flame_yarn/src/runner/dialogue_runner.dart';
-import 'package:flame_yarn/src/structure/commands/command.dart';
+import 'package:jenny/src/runner/dialogue_runner.dart';
+import 'package:jenny/src/structure/commands/command.dart';
 
 class StopCommand extends Command {
   const StopCommand();

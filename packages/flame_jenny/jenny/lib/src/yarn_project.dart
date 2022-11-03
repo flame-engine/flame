@@ -1,6 +1,6 @@
-import 'package:flame_yarn/src/parse/parse.dart' as impl;
-import 'package:flame_yarn/src/structure/node.dart';
-import 'package:flame_yarn/src/variable_storage.dart';
+import 'package:jenny/src/parse/parse.dart' as impl;
+import 'package:jenny/src/structure/node.dart';
+import 'package:jenny/src/variable_storage.dart';
 
 /// [YarnProject] is a central place where all dialogue-related information
 /// is held:
