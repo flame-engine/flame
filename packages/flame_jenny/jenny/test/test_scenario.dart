@@ -87,8 +87,8 @@ class _TestPlan extends DialogueView {
     assert(
       nextEntry is _Line,
       'Wrong event at test plan index $_currentIndex\n'
-      'Expected: $nextEntry\n'
-      'Actual  : $line\n',
+      'Expected: "$nextEntry"\n'
+      'Actual  : "$line"\n',
     );
     final expected = nextEntry as _Line;
     final text1 = (expected.character == null)
@@ -99,8 +99,8 @@ class _TestPlan extends DialogueView {
         : '${line.character}: ${line.content.value}';
     assert(
       text1 == text2,
-      'Expected line: $text1\n'
-      'Actual line  : $text2\n',
+      'Expected line: "$text1"\n'
+      'Actual line  : "$text2"\n',
     );
     _currentIndex++;
     return true;
