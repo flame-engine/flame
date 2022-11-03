@@ -1,11 +1,11 @@
-
 import 'package:test/test.dart';
 
 import '../../test_scenario.dart';
 
 void main() {
   group('UserDefinedCommand', () {
-    testScenario(testName: 'Commands.yarn',
+    testScenario(
+      testName: 'Commands.yarn',
       input: '''
         title: Start
         ---

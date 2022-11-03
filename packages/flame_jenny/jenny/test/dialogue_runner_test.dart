@@ -249,7 +249,8 @@ void main() {
       ''',
     );
 
-    testScenario(testName: 'Compiler.plan',
+    testScenario(
+      testName: 'Compiler.plan',
       input: r'''
         title: Start
         ---

@@ -23,7 +23,8 @@ void main() {
       skip: true,
     );
 
-    testScenario(testName: 'Basic.plan',
+    testScenario(
+      testName: 'Basic.plan',
       input: r'''
         title: Start
         ---
