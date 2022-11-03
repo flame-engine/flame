@@ -9,14 +9,33 @@ import 'package:jenny/src/structure/dialogue_line.dart';
 import 'package:jenny/src/structure/node.dart';
 import 'package:jenny/src/structure/statement.dart';
 import 'package:jenny/src/yarn_project.dart';
+import 'package:meta/meta.dart';
 
+/// [DialogueRunner] is a an engine in flame_yarn that runs a single dialogue.
 ///
+/// If you think of [YarnProject] as a dialogue "program", consisting of
+/// multiple Nodes as "functions", then [DialogueRunner] is like a VM, capable
+/// of executing a single "function" in that "program".
+///
+/// A single [DialogueRunner] may only execute one dialogue Node at a time. It
+/// is an error to try to run another Node before the first one concludes.
+/// However, it is possible to create multiple [DialogueRunner]s for the same
+/// [YarnProject], and then they would be able to execute multiple dialogues at
+/// once (for example, in a crowded room there could be multiple dialogues
+/// occurring at once within different groups of people).
+///
+/// The job of a [DialogueRunner] is to fetch the dialogue lines in the correct
+/// order, and at the appropriate pace, to execute the logic in dialogue
+/// scripts, and to branch according to user input in [DialogueChoice]s. The
+/// output of a [DialogueRunner], therefore, is a stream of dialogue statements
+/// that need to be presented to the player. Such presentation, however, is
+/// handled by the [DialogueView]s, not by the [DialogueRunner].
 class DialogueRunner {
   DialogueRunner({
     required YarnProject yarnProject,
-    List<DialogueView>? dialogueViews,
+    required List<DialogueView> dialogueViews,
   })  : project = yarnProject,
-        _dialogueViews = dialogueViews ?? [],
+        _dialogueViews = dialogueViews,
         _currentNodes = [],
         _iterators = [];
 
@@ -26,6 +45,8 @@ class DialogueRunner {
   final List<NodeIterator> _iterators;
   _LineDeliveryPipeline? _linePipeline;
 
+  /// Executes the node with the given name, and returns a future that finished
+  /// once the dialogue stops running.
   Future<void> runNode(String nodeName) async {
     if (_currentNodes.isNotEmpty) {
       throw DialogueError(
@@ -39,10 +60,10 @@ class DialogueRunner {
     }
     _currentNodes.add(newNode);
     _iterators.add(newNode.iterator);
-    await combineFutures(
+    await _combineFutures(
       [for (final view in _dialogueViews) view.onDialogueStart()],
     );
-    await combineFutures(
+    await _combineFutures(
       [for (final view in _dialogueViews) view.onNodeStart(newNode)],
     );
 
@@ -52,13 +73,13 @@ class DialogueRunner {
         final nextLine = iterator.current;
         switch (nextLine.kind) {
           case StatementKind.line:
-            await deliverLine(nextLine as DialogueLine);
+            await _deliverLine(nextLine as DialogueLine);
             break;
           case StatementKind.choice:
-            await deliverChoices(nextLine as DialogueChoice);
+            await _deliverChoices(nextLine as DialogueChoice);
             break;
           case StatementKind.command:
-            await deliverCommand(nextLine as Command);
+            await _deliverCommand(nextLine as Command);
             break;
         }
       } else {
@@ -66,12 +87,24 @@ class DialogueRunner {
         _currentNodes.removeLast();
       }
     }
-    await combineFutures(
+    await _combineFutures(
       [for (final view in _dialogueViews) view.onDialogueFinish()],
     );
   }
 
-  Future<void> deliverLine(DialogueLine line) async {
+  void sendSignal(dynamic signal) {
+    assert(_linePipeline != null);
+    final line = _linePipeline!.line;
+    for (final view in _dialogueViews) {
+      view.onLineSignal(line, signal);
+    }
+  }
+
+  void stopLine() {
+    _linePipeline?.stop();
+  }
+
+  Future<void> _deliverLine(DialogueLine line) async {
     final pipeline = _LineDeliveryPipeline(line, _dialogueViews);
     _linePipeline = pipeline;
     pipeline.start();
@@ -79,11 +112,7 @@ class DialogueRunner {
     _linePipeline = null;
   }
 
-  void interruptLine() {
-    _linePipeline?.interrupt();
-  }
-
-  Future<void> deliverChoices(DialogueChoice choice) async {
+  Future<void> _deliverChoices(DialogueChoice choice) async {
     // Compute which options are available and which aren't. This must be done
     // only once, because some options may have non-deterministic conditionals
     // which may produce different results on each invocation.
@@ -94,49 +123,52 @@ class DialogueRunner {
       for (final view in _dialogueViews) view.onChoiceStart(choice)
     ];
     if (futures.every((future) => future == DialogueView.never)) {
-      error('No dialogue views capable of making a dialogue choice');
+      _error('No dialogue views capable of making a dialogue choice');
     }
     final chosenIndex = await Future.any(futures);
     if (chosenIndex < 0 || chosenIndex >= choice.options.length) {
-      error('Invalid option index chosen in a dialogue: $chosenIndex');
+      _error('Invalid option index chosen in a dialogue: $chosenIndex');
     }
     final chosenOption = choice.options[chosenIndex];
     if (!chosenOption.available) {
-      error('A dialogue view selected a disabled option: $chosenOption');
+      _error('A dialogue view selected a disabled option: $chosenOption');
     }
-    await combineFutures(
+    await _combineFutures(
       [for (final view in _dialogueViews) view.onChoiceFinish(chosenOption)],
     );
     enterBlock(chosenOption.block);
   }
 
-  FutureOr<void> deliverCommand(Command command) {
+  FutureOr<void> _deliverCommand(Command command) {
     return command.execute(this);
   }
 
+  @internal
   void enterBlock(Block block) {
     _iterators.last.diveInto(block);
   }
 
+  @internal
   Future<void> jumpToNode(String nodeName) async {
     _currentNodes.removeLast();
     _iterators.removeLast();
     return runNode(nodeName);
   }
 
+  @internal
   void stop() {
     _currentNodes.clear();
     _iterators.clear();
   }
 
-  Future<void> combineFutures(List<FutureOr<void>> maybeFutures) {
+  Future<void> _combineFutures(List<FutureOr<void>> maybeFutures) {
     return Future.wait(<Future<void>>[
       for (final maybeFuture in maybeFutures)
         if (maybeFuture is Future) maybeFuture
     ]);
   }
 
-  Never error(String message) {
+  Never _error(String message) {
     stop();
     throw DialogueError(message);
   }
@@ -160,13 +192,13 @@ class _LineDeliveryPipeline {
     assert(_numPendingFutures == 0);
     for (var i = 0; i < views.length; i++) {
       final maybeFuture = views[i].onLineStart(line);
-      if (maybeFuture == null) {
-        continue;
-      } else {
+      if (maybeFuture is Future) {
         // ignore: cast_nullable_to_non_nullable
-        final future = maybeFuture as Future<void>;
+        final future = maybeFuture as Future<bool>;
         _futures[i] = future.then((_) => startCompleted(i));
         _numPendingFutures++;
+      } else {
+        continue;
       }
     }
     if (_numPendingFutures == 0) {
@@ -174,11 +206,11 @@ class _LineDeliveryPipeline {
     }
   }
 
-  void interrupt() {
+  void stop() {
     _interrupted = true;
     for (var i = 0; i < views.length; i++) {
       if (_futures[i] != null) {
-        _futures[i] = views[i].onLineCancel(line);
+        _futures[i] = views[i].onLineStop(line);
       }
     }
   }
@@ -187,13 +219,13 @@ class _LineDeliveryPipeline {
     assert(_numPendingFutures == 0);
     for (var i = 0; i < views.length; i++) {
       final maybeFuture = views[i].onLineFinish(line);
-      if (maybeFuture == null) {
-        continue;
-      } else {
-        // ignore: cast_nullable_to_non_nullable
+      if (maybeFuture is Future) {
+        // ignore: unnecessary_cast
         final future = maybeFuture as Future<void>;
         _futures[i] = future.then((_) => finishCompleted(i));
         _numPendingFutures++;
+      } else {
+        continue;
       }
     }
     if (_numPendingFutures == 0) {

@@ -1,4 +1,3 @@
-ASDW
 backtick
 backticks
 blockquote
@@ -31,8 +30,10 @@ socio
 Strikethrough
 stylesheet
 sublists
+throstle
 typedef
 typedefs
 toctree
 toctrees
 vsync
+WASD
