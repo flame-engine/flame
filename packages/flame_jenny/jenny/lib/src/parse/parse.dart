@@ -53,7 +53,8 @@ class _Parser {
   _NodeHeader parseNodeHeader() {
     String? title;
     final tags = <String, String>{};
-    while (peekToken() != Token.startBody) {
+    take(Token.startHeader);
+    while (peekToken() != Token.endHeader) {
       if (takeId() && take(Token.colon) && takeText() && takeNewline()) {
         final id = peekToken(-4);
         final text = peekToken(-2);
@@ -74,6 +75,7 @@ class _Parser {
         }
       }
     }
+    take(Token.endHeader);
     if (title == null) {
       syntaxError('node does not have a title');
     }
