@@ -89,7 +89,7 @@ class _Lexer {
   /// `true`.
   bool popMode(_ModeFn mode) {
     final removed = modeStack.removeLast();
-    assert(removed == mode);
+    assert(removed == mode, 'Expected $mode but found $removed');
     return true;
   }
 
@@ -140,6 +140,7 @@ class _Lexer {
     return eatEmptyLine() ||
         eatCommentLine() ||
         eatHashtagLine() ||
+        eatCommandStart() ||
         eatHeaderStart() ||
         (pushMode(modeNodeHeader) && pushToken(Token.startHeader, position));
   }
@@ -226,7 +227,6 @@ class _Lexer {
 
   /// Mode at the end of a line, allows hashtags and comments.
   bool modeLineEnd() {
-    assert(parentMode == modeNodeBodyLine);
     return eatWhitespace() ||
         eatCommentOrNewline() ||
         eatHashtag() ||
@@ -562,8 +562,10 @@ class _Lexer {
     if (eatNewline() ||
         (eatCommentLine() && pushToken(Token.newline, position - 1))) {
       popMode(modeLineEnd);
-      popMode(modeNodeBodyLine);
-      assert(currentMode == modeNodeBody);
+      if (currentMode == modeNodeBodyLine) {
+        popMode(modeNodeBodyLine);
+        assert(currentMode == modeNodeBody);
+      }
       return true;
     }
     return false;

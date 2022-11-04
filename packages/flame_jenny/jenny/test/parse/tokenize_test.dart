@@ -38,7 +38,7 @@ void main() {
         );
       });
 
-      test('file-level tags', () {
+      test('main-mode tags', () {
         expect(
           tokenize(
             '# version: 2.3\n'
@@ -48,6 +48,18 @@ void main() {
             Token.hashtag('# version: 2.3'),
             Token.newline,
             Token.hashtag('#ok'),
+            Token.newline,
+          ],
+        );
+      });
+
+      test('main-mode commands', () {
+        expect(
+          tokenize('<<stop>>\n'),
+          [
+            Token.startCommand,
+            Token.commandStop,
+            Token.endCommand,
             Token.newline,
           ],
         );
