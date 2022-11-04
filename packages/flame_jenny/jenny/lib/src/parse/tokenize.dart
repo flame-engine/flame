@@ -4,6 +4,12 @@ import 'package:jenny/src/parse/token.dart';
 import 'package:meta/meta.dart';
 
 /// Parses the [input] into a stream of [Token]s, according to the Yarn syntax.
+///
+/// If [addErrorTokenAtIndex] argument is given, then it would cause the lexer
+/// to insert a [Token.error] at the specified index in the stream. This token
+/// will be formatted to contain the line and column number at that parsing
+/// position, as well as the line sample. This functionality can be used when
+/// we need to throw an error from the parsing stage.
 @internal
 List<Token> tokenize(String input, {int addErrorTokenAtIndex = -2}) {
   return _Lexer(input, addErrorTokenAtIndex).parse();
@@ -87,7 +93,10 @@ class _Lexer {
     return true;
   }
 
-  /// Pushes a new token into the output and returns `true`.
+  /// Pushes a new [token] into the output and returns `true`.
+  ///
+  /// The [tokenStartPosition] indicates the position in the stream where the
+  /// current token starts.
   bool pushToken(Token token, int tokenStartPosition) {
     if (tokens.length == addErrorTokenAtIndex) {
       tokens.add(Token.error(_errorMessageAtPosition(tokenStartPosition)));
@@ -121,11 +130,17 @@ class _Lexer {
   // error will be thrown.
   //----------------------------------------------------------------------------
 
-  /// Initial mode. Not much happens here -- it only consumes some whitespace
-  /// and then jumps into the [modeNodeHeader]. In the future versions of Yarn
-  /// they're planning to add some file-level tags here.
+  /// Initial mode, outside of the nodes. The following syntaxes are allowed
+  /// here: file-level hashtags, and commands. The mode ends when it encounters
+  /// a start-of-header sequence '---', or if there is any content other than
+  /// hashtags and commands.
+  ///
+  /// Note that this mode is never popped off the mode stack.
   bool modeMain() {
-    return eatEmptyLine() || eatCommentLine() || pushMode(modeNodeHeader);
+    return eatEmptyLine() ||
+        eatCommentLine() ||
+        eatHeaderStart() ||
+        (pushMode(modeNodeHeader) && pushToken(Token.startHeader, position));
   }
 
   /// Parsing node header, this mode is only active at a start of a line, and
@@ -307,12 +322,37 @@ class _Lexer {
     return false;
   }
 
+  /// Consumes a start-of-header token (3 or more '-') followed by a newline,
+  /// then switches to the [modeNodeHeader]. Note that the same character
+  /// sequence encountered within the header body would mean the end of
+  /// header section.
+  bool eatHeaderStart() {
+    final position0 = position;
+    var numMinuses = 0;
+    while (eat($minus)) {
+      numMinuses++;
+    }
+    if (numMinuses >= 3 && eatNewline()) {
+      popToken(Token.newline);
+      pushToken(Token.startHeader, position0);
+      pushMode(modeNodeHeader);
+      return true;
+    }
+    position = position0;
+    return false;
+  }
+
   /// Consumes an end-of-header token '---' followed by a newline, emits a
   /// token, and switches to the [modeNodeBody].
   bool eatHeaderEnd() {
     final position0 = position;
-    if (eat($minus) && eat($minus) && eat($minus) && eatNewline()) {
+    var numMinuses = 0;
+    while (eat($minus)) {
+      numMinuses++;
+    }
+    if (numMinuses >= 3 && eatNewline()) {
       popToken(Token.newline);
+      pushToken(Token.endHeader, position0);
       pushToken(Token.startBody, position0);
       popMode(modeNodeHeader);
       pushMode(modeNodeBody);
