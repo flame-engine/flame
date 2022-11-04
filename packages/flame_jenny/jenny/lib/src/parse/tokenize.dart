@@ -139,6 +139,7 @@ class _Lexer {
   bool modeMain() {
     return eatEmptyLine() ||
         eatCommentLine() ||
+        eatHashtagLine() ||
         eatHeaderStart() ||
         (pushMode(modeNodeHeader) && pushToken(Token.startHeader, position));
   }
@@ -153,7 +154,8 @@ class _Lexer {
         eatCommentLine() ||
         (eatId() && pushMode(modeNodeHeaderLine)) ||
         (eatWhitespace() && error('unexpected indentation')) ||
-        eatHeaderEnd();
+        eatHeaderEnd() ||
+        error('expected end-of-header marker "---"');
   }
 
   /// Mode which activates at each line of [modeNodeHeader] after an ID at the
@@ -317,6 +319,32 @@ class _Lexer {
       pushToken(Token.newline, position0);
       lineNumber += 1;
       lineStart = position;
+      return true;
+    }
+    return false;
+  }
+
+  /// Consumes a hashtag '#' followed by all characters until the end of the
+  /// line. This is used for file-level tags. This rule is only used in
+  /// [modeMain].
+  bool eatHashtagLine() {
+    final position0 = position;
+    if (eat($hash)) {
+      eatWhitespace();
+      while (!eof) {
+        final cu = currentCodeUnit;
+        if (cu == $carriageReturn || cu == $lineFeed) {
+          break;
+        }
+        position += 1;
+      }
+      pushToken(
+        Token.hashtag(text.substring(position0, position)),
+        position0,
+      );
+      if (!eatNewline()) {
+        pushToken(Token.newline, position);
+      }
       return true;
     }
     return false;

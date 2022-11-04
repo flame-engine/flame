@@ -37,6 +37,21 @@ void main() {
               '>  ^\n'),
         );
       });
+
+      test('file-level tags', () {
+        expect(
+          tokenize(
+            '# version: 2.3\n'
+            '#ok',
+          ),
+          const [
+            Token.hashtag('# version: 2.3'),
+            Token.newline,
+            Token.hashtag('#ok'),
+            Token.newline,
+          ],
+        );
+      });
     });
 
     group('modeNodeHeader', () {
@@ -159,7 +174,7 @@ void main() {
       test('without id', () {
         expect(
           () => tokenize(':\n---\n===\n'),
-          hasSyntaxError('SyntaxError: invalid token\n'
+          hasSyntaxError('SyntaxError: expected end-of-header marker "---"\n'
               '>  at line 1 column 1:\n'
               '>  :\n'
               '>  ^\n'),
@@ -169,7 +184,7 @@ void main() {
       test('short separator', () {
         expect(
           () => tokenize('--\n===\n'),
-          hasSyntaxError('SyntaxError: invalid token\n'
+          hasSyntaxError('SyntaxError: expected end-of-header marker "---"\n'
               '>  at line 1 column 1:\n'
               '>  --\n'
               '>  ^\n'),
@@ -184,6 +199,44 @@ void main() {
         expect(
           tokenize('------------------------------------------\n---\n===\n'),
           [Token.startHeader, Token.endHeader, Token.startBody, Token.endBody],
+        );
+      });
+
+      test('explicit start&end of header', () {
+        expect(
+          tokenize(
+            '-----------------------------------------------\n'
+            'title: The_Best_Node\n'
+            '-----------------------------------------------\n'
+            '===\n',
+          ),
+          const [
+            Token.startHeader,
+            Token.id('title'),
+            Token.colon,
+            Token.text('The_Best_Node'),
+            Token.newline,
+            Token.endHeader,
+            Token.startBody,
+            Token.endBody,
+          ],
+        );
+      });
+
+      test('header with wrong content', () {
+        expect(
+          () => tokenize(
+            '---\n'
+            '# abc\n'
+            '---\n'
+            '===\n',
+          ),
+          hasSyntaxError(
+            'SyntaxError: expected end-of-header marker "---"\n'
+            '>  at line 2 column 1:\n'
+            '>  # abc\n'
+            '>  ^\n',
+          ),
         );
       });
     });
