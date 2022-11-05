@@ -14,8 +14,8 @@ class TimerComponent extends Component {
   /// [period] The period of time in seconds that the tick will be called
   /// [repeat] When true, this will continue running after [period] is reached
   /// [autoStart] When true, will start upon instantiation (default is true)
-  /// [onTick] When provided, will be called every time [period] is reached. This
-  /// overrides the [onTick] method
+  /// [onTick] When provided, will be called every time [period] is reached.
+  /// This overrides the [onTick] method
   TimerComponent({
     required double period,
     bool repeat = false,

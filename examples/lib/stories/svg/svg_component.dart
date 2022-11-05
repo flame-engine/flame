@@ -63,17 +63,18 @@ class Ballons extends SvgComponent with HasGameRef<SvgComponentExample> {
 
     final color = Random().nextBool() ? 'red' : 'green';
 
-    svg = await gameRef.loadSvg('svgs/${color}_ballons.svg');
+    svg = await gameRef.loadSvg('svgs/${color}_balloons.svg');
   }
 }
 
 class SvgComponentExample extends FlameGame
     with TapDetector, DoubleTapDetector {
   static const description = '''
-      Simple game showcasing how to use SVGs inside a flame game. This game uses several svgs
-      for its graphics. Click or touch the screen to make the player move, and double click/tap
-      to add a new set of ballons on the clicked position.
-''';
+      Simple game showcasing how to use SVGs inside a flame game. This game 
+      uses several SVGs for its graphics. Click or touch the screen to make the 
+      player move, and double click/tap to add a new set of balloons at the 
+      clicked position.
+  ''';
 
   late Player player;
 
