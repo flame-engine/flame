@@ -309,8 +309,8 @@ want them to respect the `Camera` and the `Viewport`. But quite often you want f
 and text to always show on the screen, no matter if you move the camera, then you want to use
 `PositionType.viewport`. In some rare cases you want to use `PositionType.widget` to position
 your widgets, when you don't want the component to respect the camera nor the viewport; this could
-for example be for controls or joysticks that would be unergonomic to use if they had to stay within
-the viewport.
+for example be for controls or joysticks that would not be ergonomic to use if they had to stay
+within the viewport.
 
 Do note that this setting is only respected if the component is added directly to the root
 `FlameGame` and not as a child component of another component.
