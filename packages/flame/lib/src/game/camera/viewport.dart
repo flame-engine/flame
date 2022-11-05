@@ -127,7 +127,7 @@ class DefaultViewport extends Viewport {
 /// used it will try to adapt the best as possible.
 class FixedResolutionViewport extends Viewport {
   /// By default, this viewport will clip anything rendered outside.
-  /// Use this variable to control that behaviour.
+  /// Use this variable to control that behavior.
   bool clip;
 
   @override

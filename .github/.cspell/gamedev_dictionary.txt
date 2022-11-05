@@ -16,6 +16,7 @@ WebP
 abelian
 ambiguate
 antialiasing
+arial
 autofocus
 backpressure
 backtick
@@ -24,6 +25,8 @@ bitfield
 blockquote
 bloodlust
 broadphase
+clusterize
+clusterized
 collidable
 composability
 conformant
@@ -33,6 +36,8 @@ deduplication
 deletable
 discoverability
 draggable
+draggables
+easings
 flippable
 fullscreen
 gamepad
@@ -40,12 +45,18 @@ gamepads
 gameplay
 gapless
 glyph
+glyph's
 grayscale
+hardcoding
 highscore
 hitbox
 hitboxes
 hoverable
+hoverables
+ints
+jank
 janky
+lerp
 lexer
 microtask
 mixin
@@ -54,6 +65,7 @@ monospace
 multitap
 mutator
 mutators
+netcode
 overmind
 overridable
 pathfinding
@@ -64,6 +76,7 @@ positionable
 postmultiply
 preload
 preorder
+prerender
 prerendered
 pressable
 proxying
@@ -71,8 +84,14 @@ pubdev
 pubspec
 queryable
 raycast
+raycasting
+raycasts
+raytrace
+raytraces
 raytracing
 rebalance
+rect
+rects
 refactor
 refactoring
 refactorings
@@ -82,9 +101,13 @@ renderable
 respawn
 respawned
 rrect
+rrects
+rsts
 scos
+serializable
 socio
 spritesheet
+spritesheets
 ssin
 strikethrough
 stylesheet
@@ -92,6 +115,9 @@ subfolder
 subfolders
 sublists
 tappable
+tappables
+tileset
+tilesets
 toolset
 typedef
 typedefs
@@ -99,5 +125,7 @@ unfollow
 unmount
 unproject
 viewport
+viewport's
 viewports
 vsync
+widget's

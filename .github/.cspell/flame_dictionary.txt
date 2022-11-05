@@ -1,6 +1,7 @@
 Artboard
 Aseprite
 Audioplayers
+BGUG
 Dashbook
 Fireslime
 Kinect
@@ -8,6 +9,8 @@ Klingsbo
 Lukas
 Nakama
 Patreon
+Skia
+Spritecow
 Tilemap
 padracing
 spydon
