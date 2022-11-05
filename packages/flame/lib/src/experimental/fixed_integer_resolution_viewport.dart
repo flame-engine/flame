@@ -13,7 +13,7 @@ import 'package:flame/game.dart';
 /// WidgetBindings.instance.window.devicePixelRatio.
 class FixedIntegerResolutionViewport extends Viewport {
   /// By default, this viewport will clip anything rendered outside.
-  /// Use this variable to control that behaviour.
+  /// Use this variable to control that behavior.
   bool clip;
   double devicePixelRatio = 1.0;
 

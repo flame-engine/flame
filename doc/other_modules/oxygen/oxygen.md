@@ -140,8 +140,7 @@ On each render loop the `BaseSystem` will prepare your canvas the same way the `
 from FCS would (translating, rotating and setting the anchor. After that it will call the
 `renderEntity` method so you can add your own render logic for that entity on a prepared canvas.
 
-The following components will be checked by `BaseSystem` for the prepartion of the
-canvas:
+The following components will be checked by `BaseSystem` for the preparation of the canvas:
 
 - `PositionComponent` (required)
 - `SizeComponent` (required)
