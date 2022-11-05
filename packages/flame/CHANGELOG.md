@@ -180,7 +180,7 @@
 
  - **BREAKING** **FIX**: Game.mouseCursor and Game.overlays can now be safely set during onLoad ([#1498](https://github.com/flame-engine/flame/issues/1498)). ([821d01c3](https://github.com/flame-engine/flame/commit/821d01c3fab3cdd9e80d6ead8d491ea2e8ec0643))
    Migration instructions:
-   The mouseCursor property is now a plain property with a setter, not a ChangeNotifier. 
+   The mouseCursor property is now a plain property with a setter, not a ChangeNotifier.
    Consequently, instead of writing game.mouseCursor.value = ...,
    one needs to write game.mouseCursor = ... now.
 
@@ -540,7 +540,7 @@
  - Refactor TextBoxComponent
  - Fix bugs with TextBoxComponent
  - Improve error message for composed components
- - Fix `game.size` to take zoom into consideration 
+ - Fix `game.size` to take zoom into consideration
  - Fix `camera.followComponent` when `zoom != 1`
  - Add `anchor` for `ShapeComponent` constructor
  - Fix rendering of polygons in `ShapeComponent`
@@ -552,7 +552,7 @@
  - `Camera.apply` is done with matrix transformations
  - `Camera` zooming is taking current `relativeOffset` into account
  - Fix gestures for when `isHud = true` and `Camera` is modified
- - Fix `Camera` zoom behaviour with offset/anchor
+ - Fix `Camera` zoom behavior with offset/anchor
 
 ## [1.0.0-releasecandidate.11]
  - Replace deprecated analysis option lines-of-executable-code with source-lines-of-code

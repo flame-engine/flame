@@ -17,7 +17,7 @@ when for example two `PositionComponent`s have intersecting hitboxes.
 Do note that the built-in collision detection system does not take collisions between two hitboxes
 that overshoot each other into account, this could happen when they either move very fast or
 `update` being called with a large delta time (for example if your app is not in the foreground).
-This behaviour is called tunneling, if you want to read more about it.
+This behavior is called tunneling, if you want to read more about it.
 
 Also note that the collision detection system has a limitation that makes it not work properly if
 you have certain types of combinations of flips and scales of the ancestors of the hitboxes.
@@ -410,14 +410,14 @@ class MyGame extends FlameGame with HasCollisionDetection {
     super.update(dt);
     final origin = Vector2(200, 200);
     final result = collisionDetection.raycastAll(
-      origin, 
+      origin,
       numberOfRays: 100,
     );
   }
 }
 ```
 
-In this example we would send out 100 rays from (200, 200) uniformingly spread in all directions.
+In this example we would send out 100 rays from (200, 200) uniformly spread in all directions.
 
 If you want to limit the directions you can use the `startAngle` and the `sweepAngle` arguments.
 Where the `startAngle` (counting from straight up) is where the rays will start and then the rays
@@ -455,7 +455,7 @@ class MyGame extends FlameGame with HasCollisionDetection {
         direction: Vector2(1, 1)..normalize()
     );
     final results = collisionDetection.raytrace(
-      ray, 
+      ray,
       maxDepth: 100,
     );
     for (final result in results) {
