@@ -22,4 +22,4 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-    - assets/cave_ace.fa
+    - assets/caveace.fa

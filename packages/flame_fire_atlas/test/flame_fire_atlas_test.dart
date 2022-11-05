@@ -26,7 +26,7 @@ class MockedGame extends Mock implements FlameGame {
 }
 
 Future<Uint8List> readExampleFile() async {
-  final exampleAtlas = File('./example/assets/cave_ace.fa');
+  final exampleAtlas = File('./example/assets/caveace.fa');
   final bytes = await exampleAtlas.readAsBytes();
   return bytes;
 }
@@ -58,7 +58,7 @@ void main() {
   group('FireAtlas', () {
     test('can load the asset', () async {
       final atlas = await readTestAtlas();
-      expect(atlas.id, 'cave_ace');
+      expect(atlas.id, 'caveace');
     });
 
     test('can load the asset using the global assets/images', () async {
@@ -139,7 +139,7 @@ void main() {
     test('converts to json', () async {
       final atlas = await readTestAtlas();
       final json = atlas.toJson();
-      expect(json['id'], 'cave_ace');
+      expect(json['id'], 'caveace');
     });
 
     test('serialize/deserialize', () async {
