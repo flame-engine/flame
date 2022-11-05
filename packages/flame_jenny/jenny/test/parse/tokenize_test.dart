@@ -690,11 +690,11 @@ void main() {
 
       test('unicode variable names', () {
         expect(
-          () => tokenize('---\n'
+          () => tokenize('---\n---\n'
               '{ \$эксперимент }\n'
               '===\n'),
           hasSyntaxError('SyntaxError: invalid variable name\n'
-              '>  at line 2 column 3:\n'
+              '>  at line 3 column 3:\n'
               '>  { \$эксперимент }\n'
               '>    ^\n'),
         );
