@@ -33,6 +33,7 @@ collidable
 collidables
 composability
 conformant
+coord
 coords
 dartdoc
 dartdocs
@@ -54,6 +55,7 @@ gapless
 glyph
 glyph's
 grayscale
+goldens
 hardcoding
 highscore
 hitbox
@@ -74,6 +76,7 @@ multitap
 mutator
 mutators
 netcode
+numpad
 overmind
 overridable
 pathfinding

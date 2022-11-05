@@ -1,7 +1,7 @@
 import 'package:jenny/src/structure/expressions/expression.dart';
 
-class Concat extends StringExpression {
-  const Concat(this.parts);
+class Concatenate extends StringExpression {
+  const Concatenate(this.parts);
 
   final List<StringExpression> parts;
 

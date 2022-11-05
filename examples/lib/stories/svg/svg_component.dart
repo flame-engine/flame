@@ -49,8 +49,8 @@ class Background extends SvgComponent with HasGameRef<SvgComponentExample> {
   }
 }
 
-class Ballons extends SvgComponent with HasGameRef<SvgComponentExample> {
-  Ballons()
+class Balloons extends SvgComponent with HasGameRef<SvgComponentExample> {
+  Balloons()
       : super(
           priority: 2,
           size: Vector2(75, 125),
@@ -87,31 +87,31 @@ class SvgComponentExample extends FlameGame
     add(Background());
 
     add(
-      Ballons()
+      Balloons()
         ..x = -10
         ..y = -20,
     );
 
     add(
-      Ballons()
+      Balloons()
         ..x = -100
         ..y = -150,
     );
 
     add(
-      Ballons()
+      Balloons()
         ..x = -200
         ..y = -140,
     );
 
     add(
-      Ballons()
+      Balloons()
         ..x = 100
         ..y = 130,
     );
 
     add(
-      Ballons()
+      Balloons()
         ..x = 50
         ..y = -130,
     );
@@ -124,6 +124,6 @@ class SvgComponentExample extends FlameGame
 
   @override
   void onDoubleTapDown(TapDownInfo info) {
-    add(Ballons()..position = info.eventPosition.game);
+    add(Balloons()..position = info.eventPosition.game);
   }
 }
