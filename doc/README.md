@@ -87,9 +87,8 @@ anywhere they need, and then load it into Flame's classes.
 
 Here are some suggestions for http client packages:
 
-- [http](https://pub.dev/packages/http): A simple pacakage for perfoming http requests.
-- [Dio](https://pub.dev/packages/dio): A popular and powerful package for perfoming http requests.
+- [http](https://pub.dev/packages/http): A simple package for performing http requests.
+- [Dio](https://pub.dev/packages/dio): A popular and powerful package for performing http requests.
 
 [awesome flame
 repository](https://github.com/flame-engine/awesome-flame#user-content-articles--tutorials)
-

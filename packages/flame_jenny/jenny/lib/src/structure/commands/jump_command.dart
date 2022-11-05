@@ -1,6 +1,6 @@
+import 'package:jenny/src/dialogue_runner.dart';
 import 'package:jenny/src/structure/commands/command.dart';
 import 'package:jenny/src/structure/expressions/expression.dart';
-import 'package:jenny/src/yarn_project.dart';
 
 class JumpCommand extends Command {
   const JumpCommand(this.target);
@@ -8,7 +8,7 @@ class JumpCommand extends Command {
   final StringExpression target;
 
   @override
-  void execute(YarnProject project) {
-    project.jumpToNode(target.value);
+  Future<void> execute(DialogueRunner dialogue) {
+    return dialogue.jumpToNode(target.value);
   }
 }

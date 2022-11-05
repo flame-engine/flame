@@ -1,8 +1,13 @@
+import 'dart:async';
+
+import 'package:jenny/src/dialogue_runner.dart';
 import 'package:jenny/src/structure/statement.dart';
-import 'package:jenny/src/yarn_project.dart';
 
 abstract class Command extends Statement {
   const Command();
 
-  void execute(YarnProject project);
+  FutureOr<void> execute(DialogueRunner dialogue);
+
+  @override
+  StatementKind get kind => StatementKind.command;
 }

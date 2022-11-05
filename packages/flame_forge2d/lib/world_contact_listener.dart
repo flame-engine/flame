@@ -17,7 +17,7 @@ import 'package:flame_forge2d/flame_forge2d.dart';
 /// If the colliding [Fixture] `userData` and [Body] `userData` are `null`, then
 /// the contact events are not called.
 ///
-/// The described behaviour is a simple out of the box solution to propagate
+/// The described behavior is a simple out of the box solution to propagate
 /// contact events. If you wish to implement your own logic you can subclass
 /// [ContactListener] and provide it to your [Forge2DGame].
 /// {@endtemplate}

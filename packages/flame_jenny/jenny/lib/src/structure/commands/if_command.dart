@@ -1,7 +1,7 @@
+import 'package:jenny/src/dialogue_runner.dart';
+import 'package:jenny/src/structure/block.dart';
 import 'package:jenny/src/structure/commands/command.dart';
 import 'package:jenny/src/structure/expressions/expression.dart';
-import 'package:jenny/src/structure/statement.dart';
-import 'package:jenny/src/yarn_project.dart';
 
 class IfCommand extends Command {
   const IfCommand(this.ifs);
@@ -13,10 +13,10 @@ class IfCommand extends Command {
   final List<IfBlock> ifs;
 
   @override
-  void execute(YarnProject runtime) {
-    for (final block in ifs) {
-      if (block.condition.value) {
-        // runtime.executeEntries(block.entries);
+  void execute(DialogueRunner dialogue) {
+    for (final ifBlock in ifs) {
+      if (ifBlock.condition.value) {
+        dialogue.enterBlock(ifBlock.block);
         break;
       }
     }
@@ -27,5 +27,5 @@ class IfBlock {
   const IfBlock(this.condition, this.block);
 
   final BoolExpression condition;
-  final List<Statement> block;
+  final Block block;
 }
