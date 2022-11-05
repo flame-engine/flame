@@ -34,6 +34,7 @@ class Token {
   static const endBody = Token._(TokenType.endBody);
   static const endCommand = Token._(TokenType.endCommand);
   static const endExpression = Token._(TokenType.endExpression);
+  static const endHeader = Token._(TokenType.endHeader);
   static const endIndent = Token._(TokenType.endIndent);
   static const endParenthesis = Token._(TokenType.endParenthesis);
   static const eof = Token._(TokenType.eof);
@@ -64,6 +65,7 @@ class Token {
   static const startBody = Token._(TokenType.startBody);
   static const startCommand = Token._(TokenType.startCommand);
   static const startExpression = Token._(TokenType.startExpression);
+  static const startHeader = Token._(TokenType.startHeader);
   static const startIndent = Token._(TokenType.startIndent);
   static const startParenthesis = Token._(TokenType.startParenthesis);
   static const typeBool = Token._(TokenType.typeBool);
@@ -127,6 +129,7 @@ enum TokenType {
   endBody, //                '==='
   endCommand, //             '>>'
   endExpression, //          '}'
+  endHeader, //              '---' '-'*
   endIndent, //              RegExp(r'^\s*')
   endParenthesis, //         ')'
   newline, //                '\r' | '\n' | '\r\n'
@@ -151,9 +154,10 @@ enum TokenType {
   operatorPlus, //           '+'
   operatorPlusAssign, //     '+='
   operatorXor, //            'xor' | '^'
-  startBody, //              '---'
+  startBody, //              '---' '-'*
   startCommand, //           '<<'
   startExpression, //        '{'
+  startHeader, //            ('---' '-'*)?
   startIndent, //            RegExp(r'^\s*')
   startParenthesis, //       '('
   typeBool, //               'bool'

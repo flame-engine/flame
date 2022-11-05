@@ -10,18 +10,21 @@ void main() {
   group('DialogueRunner', () {
     test('plain dialogue', () async {
       final yarn = YarnProject()
-        ..parse('title: Hamlet\n'
-            '---\n'
-            "Bernardo:  Who's there?\n"
-            'Francisco: Nay, answer me. Stand and unfold yourself.\n'
-            'Bernardo:  Long live the King!\n'
-            'Francisco: Bernardo?\n'
-            'Bernardo:  He\n'
-            'Francisco: You come most carefully upon your hour.\n'
-            "Bernardo:  'Tis now struck twelve. Get thee to bed, Francisco.\n"
-            "Francisco: For this relief much thanks. 'Tis bitter cold, "
-            'And I am sick at heart.\n'
-            '===\n');
+        ..parse(
+          '-------------\n'
+          'title: Hamlet\n'
+          '-------------\n'
+          "Bernardo:  Who's there?\n"
+          'Francisco: Nay, answer me. Stand and unfold yourself.\n'
+          'Bernardo:  Long live the King!\n'
+          'Francisco: Bernardo?\n'
+          'Bernardo:  He\n'
+          'Francisco: You come most carefully upon your hour.\n'
+          "Bernardo:  'Tis now struck twelve. Get thee to bed, Francisco.\n"
+          "Francisco: For this relief much thanks. 'Tis bitter cold, "
+          'And I am sick at heart.\n'
+          '===\n',
+        );
       final view = _RecordingDialogueView();
       final dialogue = DialogueRunner(yarnProject: yarn, dialogueViews: [view]);
       await dialogue.runNode('Hamlet');
