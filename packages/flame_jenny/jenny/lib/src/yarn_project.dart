@@ -1,8 +1,14 @@
 import 'package:jenny/src/parse/parse.dart' as impl;
 import 'package:jenny/src/structure/node.dart';
 import 'package:jenny/src/variable_storage.dart';
-import 'package:meta/meta.dart';
 
+/// [YarnProject] is a central place where all dialogue-related information
+/// is held:
+/// - [nodes]: the map of nodes parsed from yarn files;
+/// - [variables]: the repository of all variables accessible to yarn scripts;
+/// - [functions]: user-defined functions;
+/// - [commands]: user-defined commands;
+///
 class YarnProject {
   YarnProject()
       : nodes = <String, Node>{},
@@ -20,13 +26,4 @@ class YarnProject {
   void setVariable(String name, dynamic value) {
     variables.setVariable(name, value);
   }
-
-  @internal
-  void jumpToNode(String node) {}
-
-  @internal
-  void stopNode() {}
-
-  @internal
-  void wait(num seconds) {}
 }

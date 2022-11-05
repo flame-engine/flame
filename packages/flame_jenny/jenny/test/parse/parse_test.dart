@@ -2,11 +2,9 @@ import 'package:jenny/jenny.dart';
 import 'package:jenny/src/parse/parse.dart';
 import 'package:jenny/src/structure/commands/if_command.dart';
 import 'package:jenny/src/structure/commands/jump_command.dart';
-import 'package:jenny/src/structure/dialogue.dart';
-import 'package:jenny/src/structure/option.dart';
 import 'package:test/test.dart';
 
-import 'utils.dart';
+import '../utils.dart';
 
 void main() {
   // The tests here are further organized into subgroups according to which
@@ -135,12 +133,12 @@ void main() {
               'Saturn\n'
               'Uranus\n'
               '===\n');
-        final node = yarn.nodes['test']!;
-        expect(node.lines.length, 3);
+        final block = yarn.nodes['test']!.content;
+        expect(block.lines.length, 3);
         for (var i = 0; i < 3; i++) {
-          expect(node.lines[i], isA<Dialogue>());
-          final line = node.lines[i] as Dialogue;
-          expect(line.person, isNull);
+          expect(block.lines[i], isA<DialogueLine>());
+          final line = block.lines[i] as DialogueLine;
+          expect(line.character, isNull);
           expect(line.tags, isNull);
           expect(line.content.value, ['Jupyter', 'Saturn', 'Uranus'][i]);
         }
@@ -151,18 +149,18 @@ void main() {
       test('line with a speaker', () {
         final yarn = YarnProject()
           ..parse('title:A\n---\nMrGoo: whatever\n===\n');
-        expect(yarn.nodes['A']!.lines.first, isA<Dialogue>());
-        final line = yarn.nodes['A']!.lines[0] as Dialogue;
-        expect(line.person, 'MrGoo');
+        expect(yarn.nodes['A']!.lines.first, isA<DialogueLine>());
+        final line = yarn.nodes['A']!.lines[0] as DialogueLine;
+        expect(line.character, 'MrGoo');
         expect(line.content.value, 'whatever');
       });
 
       test('line with multiple expressions', () {
         final yarn = YarnProject()
           ..parse('title:A\n---\n{1} {false} {"fake news"}\n===\n');
-        expect(yarn.nodes['A']!.lines.first, isA<Dialogue>());
-        final line = yarn.nodes['A']!.lines[0] as Dialogue;
-        expect(line.person, isNull);
+        expect(yarn.nodes['A']!.lines.first, isA<DialogueLine>());
+        final line = yarn.nodes['A']!.lines[0] as DialogueLine;
+        expect(line.character, isNull);
         expect(line.content.value, '1 false fake news');
       });
 
@@ -171,7 +169,7 @@ void main() {
           ..parse('title:A\n---\n.hello #here #zzz\n===\n');
         final node = yarn.nodes['A']!;
         expect(node.lines.length, 1);
-        final line = node.lines[0] as Dialogue;
+        final line = node.lines[0] as DialogueLine;
         expect(line.tags, isNotNull);
         expect(line.tags!.length, 2);
         expect(line.tags, contains('#here'));
@@ -184,7 +182,7 @@ void main() {
               '\\{ curly text \\}\n'
               '===\n');
         expect(
-          (yarn.nodes['A']!.lines[0] as Dialogue).content.value,
+          (yarn.nodes['A']!.lines[0] as DialogueLine).content.value,
           '{ curly text }',
         );
       });
@@ -220,11 +218,12 @@ void main() {
               '->    Gamma\n'
               '===\n');
         final node = yarn.nodes['test']!;
-        expect(node.lines.length, 3);
+        expect(node.lines.length, 1);
+        final choiceSet = node.lines.first as DialogueChoice;
+        expect(choiceSet.options.length, 3);
         for (var i = 0; i < 3; i++) {
-          expect(node.lines[i], isA<Option>());
-          final line = node.lines[i] as Option;
-          expect(line.person, isNull);
+          final line = choiceSet.options[i];
+          expect(line.character, isNull);
           expect(line.tags, isNull);
           expect(line.condition, isNull);
           expect(line.block, isEmpty);
@@ -239,12 +238,13 @@ void main() {
               '-> Bob: Hi: there!\n'
               '===\n');
         final node = yarn.nodes['A']!;
-        final line0 = node.lines[0] as Option;
-        final line1 = node.lines[1] as Option;
-        expect(line0.person, 'Alice');
-        expect(line0.content.value, 'Hello!');
-        expect(line1.person, 'Bob');
-        expect(line1.content.value, 'Hi: there!');
+        final choice = node.lines[0] as DialogueChoice;
+        final option0 = choice.options[0];
+        final option1 = choice.options[1];
+        expect(option0.character, 'Alice');
+        expect(option1.character, 'Bob');
+        expect(option0.content.value, 'Hello!');
+        expect(option1.content.value, 'Hi: there!');
       });
 
       test('option with a followup dialogue', () {
@@ -257,22 +257,26 @@ void main() {
               '    My condolences...\n'
               '===\n');
         final node = yarn.nodes['A']!;
-        expect(node.lines.length, 2);
-        final choice1 = node.lines[0] as Option;
-        final choice2 = node.lines[1] as Option;
+        final choiceSet = node.lines[0] as DialogueChoice;
+        expect(choiceSet.options.length, 2);
+        final choice1 = choiceSet.options[0];
+        final choice2 = choiceSet.options[1];
         expect(choice1.content.value, 'choice one');
         expect(choice1.block, isNotNull);
         expect(choice1.block.length, 2);
         expect(
-          (choice1.block[0] as Dialogue).content.value,
+          (choice1.block.lines[0] as DialogueLine).content.value,
           'Nice one, James!',
         );
-        expect((choice1.block[1] as Dialogue).content.value, 'Back to ya!');
+        expect(
+          (choice1.block.lines[1] as DialogueLine).content.value,
+          'Back to ya!',
+        );
         expect(choice2.content.value, 'choice two');
         expect(choice2.block, isNotNull);
-        expect(choice2.block.length, 1);
+        expect(choice2.block.lines.length, 1);
         expect(
-          (choice2.block[0] as Dialogue).content.value,
+          (choice2.block.lines[0] as DialogueLine).content.value,
           'My condolences...',
         );
       });
@@ -333,7 +337,7 @@ void main() {
               '===\n');
         expect(
           yarn.nodes['test']!.lines
-              .map((line) => num.parse((line as Dialogue).content.value))
+              .map((line) => num.parse((line as DialogueLine).content.value))
               .toList(),
           [-6, -14, -42, -114],
         );
@@ -355,7 +359,7 @@ void main() {
               '===\n');
         expect(
           yarn.nodes['test']!.lines
-              .map((line) => (line as Dialogue).content.value)
+              .map((line) => (line as DialogueLine).content.value)
               .toList(),
           ['15.76', 'hello, world'],
         );
@@ -385,7 +389,7 @@ void main() {
               '===\n');
         expect(
           yarn.nodes['test']!.lines
-              .map((line) => (line as Dialogue).content.value)
+              .map((line) => (line as DialogueLine).content.value)
               .toList(),
           ['14', 'o,'],
         );
@@ -407,7 +411,7 @@ void main() {
               '===\n');
         expect(
           yarn.nodes['test']!.lines
-              .map((line) => (line as Dialogue).content.value)
+              .map((line) => (line as DialogueLine).content.value)
               .toList(),
           ['44.0', '-6'],
         );
@@ -426,7 +430,7 @@ void main() {
               '{ 48 / 2 / 3 }\n'
               '===\n');
         expect(
-          (yarn.nodes['test']!.lines[0] as Dialogue).content.value,
+          (yarn.nodes['test']!.lines[0] as DialogueLine).content.value,
           '8.0',
         );
         expect(
@@ -444,9 +448,9 @@ void main() {
               '{ 48 % 5 }\n'
               '{ 4 % 1.2 }\n'
               '===\n');
-        expect((yarn.nodes['A']!.lines[0] as Dialogue).content.value, '3');
+        expect((yarn.nodes['A']!.lines[0] as DialogueLine).content.value, '3');
         expect(
-          num.parse((yarn.nodes['A']!.lines[1] as Dialogue).content.value),
+          num.parse((yarn.nodes['A']!.lines[1] as DialogueLine).content.value),
           closeTo(4 % 1.2, 1e-10),
         );
         expect(
@@ -469,7 +473,7 @@ void main() {
               '===\n');
         expect(
           yarn.nodes['test']!.lines
-              .map((line) => (line as Dialogue).content.value),
+              .map((line) => (line as DialogueLine).content.value),
           ['true', 'true', 'false'],
         );
         expect(
@@ -494,9 +498,9 @@ void main() {
               '===\n');
         final node = yarn.nodes['test']!;
         expect(node.lines.length, 3);
-        expect((node.lines[0] as Dialogue).content.value, '-1');
-        expect((node.lines[1] as Dialogue).content.value, '22');
-        expect((node.lines[2] as Dialogue).content.value, '7.0');
+        expect((node.lines[0] as DialogueLine).content.value, '-1');
+        expect((node.lines[1] as DialogueLine).content.value, '22');
+        expect((node.lines[2] as DialogueLine).content.value, '7.0');
       });
 
       test('unknown variable', () {
@@ -550,10 +554,16 @@ void main() {
         final command = node.lines[0] as IfCommand;
         expect(command.ifs.length, 2);
         expect(command.ifs[0].condition.value, true);
-        expect(command.ifs[0].block[0], isA<Dialogue>());
-        expect((command.ifs[0].block[0] as Dialogue).content.value, 'First!');
+        expect(command.ifs[0].block.lines[0], isA<DialogueLine>());
+        expect(
+          (command.ifs[0].block.lines[0] as DialogueLine).content.value,
+          'First!',
+        );
         expect(command.ifs[1].condition.value, true);
-        expect((command.ifs[1].block[0] as Dialogue).content.value, 'Second');
+        expect(
+          (command.ifs[1].block.lines[0] as DialogueLine).content.value,
+          'Second',
+        );
       });
 
       test('<<elseif>>s', () {

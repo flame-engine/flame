@@ -1,13 +1,15 @@
 import 'package:jenny/src/errors.dart';
 import 'package:jenny/src/parse/token.dart';
 import 'package:jenny/src/parse/tokenize.dart';
+import 'package:jenny/src/structure/block.dart';
 import 'package:jenny/src/structure/commands/command.dart';
 import 'package:jenny/src/structure/commands/if_command.dart';
 import 'package:jenny/src/structure/commands/jump_command.dart';
 import 'package:jenny/src/structure/commands/set_command.dart';
 import 'package:jenny/src/structure/commands/stop_command.dart';
 import 'package:jenny/src/structure/commands/wait_command.dart';
-import 'package:jenny/src/structure/dialogue.dart';
+import 'package:jenny/src/structure/dialogue_choice.dart';
+import 'package:jenny/src/structure/dialogue_line.dart';
 import 'package:jenny/src/structure/expressions/arithmetic.dart';
 import 'package:jenny/src/structure/expressions/expression.dart';
 import 'package:jenny/src/structure/expressions/functions.dart';
@@ -41,11 +43,11 @@ class _Parser {
   void parseMain() {
     while (position < tokens.length) {
       final header = parseNodeHeader();
-      final statements = parseNodeBody();
+      final block = parseNodeBody();
       project.nodes[header.title!] = Node(
         title: header.title!,
         tags: header.tags,
-        lines: statements,
+        content: block,
       );
     }
   }
@@ -82,41 +84,45 @@ class _Parser {
     return _NodeHeader(title, tags.isEmpty ? null : tags);
   }
 
-  List<Statement> parseNodeBody() {
-    final out = <Statement>[];
+  Block parseNodeBody() {
     take(Token.startBody);
     if (peekToken() == Token.startIndent) {
       syntaxError('unexpected indent');
     }
-    out.addAll(parseStatementList());
+    final out = parseStatementList();
     take(Token.endBody);
     return out;
   }
 
-  List<Statement> parseStatementList() {
-    final result = <Statement>[];
+  Block parseStatementList() {
+    final lines = <Statement>[];
     while (true) {
       final nextToken = peekToken();
       if (nextToken == Token.arrow) {
-        result.add(parseOption());
+        final option = parseOption();
+        if (lines.isNotEmpty && lines.last is DialogueChoice) {
+          (lines.last as DialogueChoice).options.add(option);
+        } else {
+          lines.add(DialogueChoice([option]));
+        }
       } else if (nextToken == Token.startCommand) {
-        result.add(parseCommand());
+        lines.add(parseCommand());
       } else if (nextToken.isText ||
           nextToken.isPerson ||
           nextToken == Token.startExpression) {
-        result.add(parseDialogueLine());
+        lines.add(parseDialogueLine());
       } else {
         break;
       }
     }
-    return result;
+    return Block(lines);
   }
 
   //#region Line parsing
 
   /// Consumes a regular line of text from the input, up to and including the
   /// NEWLINE token.
-  Dialogue parseDialogueLine() {
+  DialogueLine parseDialogueLine() {
     final person = maybeParseLinePerson();
     final content = parseLineContent();
     final tags = maybeParseHashtags();
@@ -124,8 +130,8 @@ class _Parser {
       syntaxError('commands are not allowed on a dialogue line');
     }
     takeNewline();
-    return Dialogue(
-      person: person,
+    return DialogueLine(
+      character: person,
       content: content,
       tags: tags,
     );
@@ -141,7 +147,7 @@ class _Parser {
       syntaxError('multiple commands are not allowed on an option line');
     }
     take(Token.newline);
-    var block = const <Statement>[];
+    var block = const Block.empty();
     if (peekToken() == Token.startIndent) {
       position += 1;
       block = parseStatementList();
@@ -149,7 +155,7 @@ class _Parser {
     }
     return Option(
       content: content,
-      person: person,
+      character: person,
       tags: tags,
       condition: condition,
       block: block,
@@ -317,15 +323,15 @@ class _Parser {
     take(Token.endCommand);
     take(Token.newline);
     if (peekToken() == Token.startCommand) {
-      return IfBlock(expression as BoolExpression, []);
+      return IfBlock(expression as BoolExpression, const Block.empty());
     }
     if (peekToken() != Token.startIndent) {
       syntaxError('the body of the <<$commandName>> command must be indented');
     }
     take(Token.startIndent);
-    final statements = parseStatementList();
+    final block = parseStatementList();
     take(Token.endIndent);
-    return IfBlock(expression as BoolExpression, statements);
+    return IfBlock(expression as BoolExpression, block);
   }
 
   IfBlock parseCommandElseBlock() {
@@ -334,7 +340,7 @@ class _Parser {
     take(Token.endCommand);
     take(Token.newline);
     if (peekToken() == Token.startCommand) {
-      return const IfBlock(constTrue, []);
+      return const IfBlock(constTrue, Block.empty());
     }
     if (peekToken() != Token.startIndent) {
       syntaxError('the body of the <<else>> command must be indented');
