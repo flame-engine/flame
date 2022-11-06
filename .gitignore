@@ -28,3 +28,6 @@ coverage
 Makefile
 !doc/_sphinx/Makefile
 .bak
+
+# Web related
+lib/generated_plugin_registrant.dart
