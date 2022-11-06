@@ -364,9 +364,9 @@ Here we need to have two paint objects, one for the border and one for the suits
 ```
 
 The suit paint uses `BlendMode.luminosity` in order to convert the regular yellow/blue colors of
-the suit sprites into greyscale. The "color" of the paint is different depending whether the suit
+the suit sprites into grayscale. The "color" of the paint is different depending whether the suit
 is red or black because the original luminosity of those sprites is different. Therefore, I had to
-pick two different colors in order to make them look the same in greyscale.
+pick two different colors in order to make them look the same in grayscale.
 
 
 ### Tableau Piles

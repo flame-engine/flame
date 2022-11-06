@@ -26,15 +26,15 @@ class WorldContactListener extends ContactListener {
     Contact contact,
     void Function(ContactCallbacks contactCallback, Object other) callback,
   ) {
-    final userDatas = {
+    final userData = {
       contact.bodyA.userData,
       contact.fixtureA.userData,
       contact.bodyB.userData,
       contact.fixtureB.userData,
     }.whereType<Object>();
 
-    for (final contactCallback in userDatas.whereType<ContactCallbacks>()) {
-      for (final object in userDatas) {
+    for (final contactCallback in userData.whereType<ContactCallbacks>()) {
+      for (final object in userData) {
         if (object != contactCallback) {
           callback(contactCallback, object);
         }

@@ -365,7 +365,7 @@ class FlameTileLayer extends RenderableLayer<TileLayer> {
 
     var staggerY = 0.0;
     var staggerX = 0.0;
-    // Hexagonal Ponity Tiles move down by a fractional amount.
+    // Hexagonal Pointy Tiles move down by a fractional amount.
     if (map.staggerAxis == StaggerAxis.y) {
       staggerY = size.y * 0.75;
     } else
