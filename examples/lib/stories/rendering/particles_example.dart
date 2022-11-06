@@ -178,8 +178,8 @@ class ParticlesExample extends FlameGame {
     );
   }
 
-  /// Same example as above, but
-  /// with easing, utilising [CurvedParticle] extension
+  /// Same example as above, but with easing, utilizing [CurvedParticle]
+  /// extension.
   Particle easedMovingParticle() {
     return Particle.generate(
       count: 5,

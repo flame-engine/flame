@@ -68,7 +68,7 @@ them, and also some recommendations of packages/services that can be used:
 
 Flame doesn't bundle any network feature, which may be needed to write online multiplayer games.
 
-If you are building a multipler game, here are some recommendations of packages/services:
+If you are building a multiplayer game, here are some recommendations of packages/services:
 
 - [Nakama](https://github.com/Allan-Nava/nakama-flutter): Nakama is an open-source server designed
  to power modern games and apps.
