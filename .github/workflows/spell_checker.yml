@@ -22,7 +22,7 @@ jobs:
           paths: "**/*.{md,dart}"
           config: .github/cspell.json
           exclude: ".gitignore,CHANGELOG.md"
-          
+
       - if: steps.check-label.outcome != 'success'
         run: |
           echo "Marking as succeeded even though some there were typos reported."
