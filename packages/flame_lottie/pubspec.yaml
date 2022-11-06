@@ -1,0 +1,19 @@
+name: flame_lottie
+description: A Very Good Project created by Very Good CLI.
+version: 0.1.0+1
+publish_to: none
+
+environment:
+  sdk: ">=2.17.0 <3.0.0"
+  flutter: ">=3.3.0"
+
+dependencies:
+  flame: ^1.4.0
+  flare_flutter: ^3.0.2
+  flutter:
+    sdk: flutter
+  lottie: ^1.4.3
+
+dev_dependencies:
+  dartdoc: ^6.0.1
+  flame_lint: ^0.1.3
