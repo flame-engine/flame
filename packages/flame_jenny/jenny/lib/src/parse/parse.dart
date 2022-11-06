@@ -274,7 +274,7 @@ class _Parser {
       position += 1;
       syntaxError('this command is only allowed after an <<if>>');
     } else {
-      assert(token.isCommand);
+      assert(token.isCommand, 'unimplemented $token');
       return parseUserDefinedCommand();
     }
   }

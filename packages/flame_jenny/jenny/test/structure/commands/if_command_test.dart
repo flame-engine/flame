@@ -26,7 +26,6 @@ void main() {
         line: Sally: You snuck up on me.
         line: Sally: Don't do that.
       ''',
-      skip: true,
     );
   });
 }
