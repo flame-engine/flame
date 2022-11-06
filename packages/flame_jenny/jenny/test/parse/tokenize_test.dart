@@ -704,6 +704,18 @@ void main() {
         );
       });
 
+      test('unicode variable names', () {
+        expect(
+          () => tokenize('---\n---\n'
+              '{ \$эксперимент }\n'
+              '===\n'),
+          hasSyntaxError('SyntaxError: invalid variable name\n'
+              '>  at line 3 column 3:\n'
+              '>  { \$эксперимент }\n'
+              '>    ^\n'),
+        );
+      });
+
       test('invalid string', () {
         expect(
           () => tokenize('---\n---\n'
