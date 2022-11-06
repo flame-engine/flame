@@ -470,6 +470,23 @@ void main() {
           ],
         );
       });
+
+      test('line with hash tags', () {
+        expect(
+          tokenize('---\n---\n'
+              'Some text #with-tag\n'
+              '===\n'),
+          const [
+            Token.startHeader,
+            Token.endHeader,
+            Token.startBody,
+            Token.text('Some text'),
+            Token.hashtag('#with-tag'),
+            Token.newline,
+            Token.endBody,
+          ],
+        );
+      });
     });
 
     group('modeText', () {
@@ -823,7 +840,7 @@ void main() {
             Token.startHeader,
             Token.endHeader,
             Token.startBody,
-            Token.text('line1 '),
+            Token.text('line1'),
             Token.hashtag('#tag'),
             Token.hashtag('#some:other@tag!'),
             Token.newline,
@@ -831,7 +848,6 @@ void main() {
             Token.startExpression,
             Token.number('33'),
             Token.endExpression,
-            Token.text(' '),
             Token.hashtag('#here-be-dragons'),
             Token.newline,
             Token.endBody,
@@ -887,6 +903,24 @@ void main() {
             Token.commandStop,
             Token.endCommand,
             Token.hashtag('#four'),
+            Token.newline,
+            Token.endBody,
+          ],
+        );
+      });
+
+      test('text with escaped content', () {
+        expect(
+          tokenize('---\n---\n'
+              'One \\{ two\n'
+              '===\n'),
+          const [
+            Token.startHeader,
+            Token.endHeader,
+            Token.startBody,
+            Token.text('One '),
+            Token.text('{'),
+            Token.text(' two'),
             Token.newline,
             Token.endBody,
           ],

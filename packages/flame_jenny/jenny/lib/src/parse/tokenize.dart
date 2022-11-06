@@ -651,6 +651,7 @@ class _Lexer {
   /// Emits the text token corresponding to the text processed.
   bool eatPlainText() {
     final position0 = position;
+    var positionBeforeWhitespace = position;
     while (!eof) {
       final cu = currentCodeUnit;
       if (cu == $lessThan || cu == $slash) {
@@ -661,12 +662,17 @@ class _Lexer {
         }
       } else if (cu == $carriageReturn ||
           cu == $lineFeed ||
-          cu == $hash ||
           cu == $backslash ||
           cu == $leftBrace) {
         break;
+      } else if (cu == $hash) {
+        position = positionBeforeWhitespace;
+        break;
       }
       position += 1;
+      if (!(cu == $space || cu == $tab)) {
+        positionBeforeWhitespace = position;
+      }
     }
     if (position > position0) {
       pushToken(Token.text(text.substring(position0, position)), position0);
