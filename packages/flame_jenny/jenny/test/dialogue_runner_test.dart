@@ -3,24 +3,28 @@ import 'dart:async';
 import 'package:jenny/jenny.dart';
 import 'package:test/test.dart';
 
+import 'test_scenario.dart';
 import 'utils.dart';
 
 void main() {
   group('DialogueRunner', () {
     test('plain dialogue', () async {
       final yarn = YarnProject()
-        ..parse('title: Hamlet\n'
-            '---\n'
-            "Bernardo:  Who's there?\n"
-            'Francisco: Nay, answer me. Stand and unfold yourself.\n'
-            'Bernardo:  Long live the King!\n'
-            'Francisco: Bernardo?\n'
-            'Bernardo:  He\n'
-            'Francisco: You come most carefully upon your hour.\n'
-            "Bernardo:  'Tis now struck twelve. Get thee to bed, Francisco.\n"
-            "Francisco: For this relief much thanks. 'Tis bitter cold, "
-            'And I am sick at heart.\n'
-            '===\n');
+        ..parse(
+          '-------------\n'
+          'title: Hamlet\n'
+          '-------------\n'
+          "Bernardo:  Who's there?\n"
+          'Francisco: Nay, answer me. Stand and unfold yourself.\n'
+          'Bernardo:  Long live the King!\n'
+          'Francisco: Bernardo?\n'
+          'Bernardo:  He\n'
+          'Francisco: You come most carefully upon your hour.\n'
+          "Bernardo:  'Tis now struck twelve. Get thee to bed, Francisco.\n"
+          "Francisco: For this relief much thanks. 'Tis bitter cold, "
+          'And I am sick at heart.\n'
+          '===\n',
+        );
       final view = _RecordingDialogueView();
       final dialogue = DialogueRunner(yarnProject: yarn, dialogueViews: [view]);
       await dialogue.runNode('Hamlet');
@@ -193,6 +197,113 @@ void main() {
         ),
       );
     });
+
+    testScenario(
+      testName: 'Example.plan',
+      input: '''
+        title: Start
+        tags: 
+        colorID: 0
+        position: 592,181
+        ---
+        A: Hey, I'm a character in a script!
+        B: And I am too! You are talking to me!
+        -> What's going on
+            A: Why this is a demo of the script system!
+            B: And you're in it!
+        -> Um ok
+        A: How delightful!
+        B: What would you prefer to do next?
+        -> Leave
+            <<jump Leave>>
+        -> Learn more
+            <<jump LearnMore>>
+        ===
+        title: Leave
+        tags: 
+        colorID: 0
+        position: 387,487
+        ---
+        A: Oh, goodbye!
+        B: You'll be back soon!
+        ===
+        title: LearnMore
+        tags: rawText
+        colorID: 0
+        position: 763,472
+        ---
+        A: HAHAHA
+        ===''',
+      testPlan: '''
+        line: A: Hey, I'm a character in a script!
+        line: B: And I am too! You are talking to me!
+        option: What's going on    
+        option: Um ok
+        select: 1
+        line: A: Why this is a demo of the script system!
+        line: B: And you're in it!
+        line: A: How delightful!
+        line: B: What would you prefer to do next?
+        option: Leave
+        option: Learn more
+        select: 1
+        line: A: Oh, goodbye!
+        line: B: You'll be back soon!
+      ''',
+    );
+
+    testScenario(
+      testName: 'Compiler.plan',
+      input: r'''
+        title: Start
+        ---
+        // Compiler tests
+        This is a line!
+
+        <<if false>>
+          What what this is also a line!
+        <<endif>>
+
+        <<this is a custom command>>
+
+        <<set $foo to 1+2>>
+
+        <<if $foo is 3>>
+          Foo is 3!
+        <<elseif $foo is 4>>
+          Foo is 4!
+        <<else>>
+          Foo is something TOTALLY DIFFERENT.
+        <<endif>>
+
+        -> This is a shortcut option that you'll never see <<if false>>
+            Nice.
+        -> This is a different shortcut option
+            Sweet, but what about this?
+            -> It's ok
+                Cool.
+            -> Huh?
+        -> This is a shortcut option with no consequential text.
+
+        All done with the shortcut options!
+        ===
+      ''',
+      testPlan: '''
+        line: This is a line!
+        line: Foo is 3!
+        option: This is a shortcut option that you'll never see [disabled]
+        option: This is a different shortcut option
+        option: This is a shortcut option with no consequential text.
+        select: 2
+        line: Sweet, but what about this?
+        option: It's ok
+        option: Huh?
+        select: 1
+        line: Cool.
+        line: All done with the shortcut options!
+      ''',
+      skip: true,
+    );
   });
 }
 
