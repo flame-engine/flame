@@ -494,13 +494,13 @@ void main() {
         expect(
           tokenize('---\n---\n'
               'some text // here be dragons\n'
-              'other text\n'
+              'other text   \t\n'
               '===\n'),
           const [
             Token.startHeader,
             Token.endHeader,
             Token.startBody,
-            Token.text('some text '),
+            Token.text('some text'),
             Token.newline,
             Token.text('other text'),
             Token.newline,
@@ -563,7 +563,6 @@ void main() {
             Token.startBody,
             Token.startExpression,
             Token.endExpression,
-            Token.text(' '),
             Token.newline,
             Token.endBody,
           ],
@@ -849,6 +848,22 @@ void main() {
             Token.number('33'),
             Token.endExpression,
             Token.hashtag('#here-be-dragons'),
+            Token.newline,
+            Token.endBody,
+          ],
+        );
+      });
+
+      test('comments in lines', () {
+        expect(
+          tokenize('---\n---\n'
+              'line1 // whatever\n'
+              '===\n'),
+          const [
+            Token.startHeader,
+            Token.endHeader,
+            Token.startBody,
+            Token.text('line1'),
             Token.newline,
             Token.endBody,
           ],
