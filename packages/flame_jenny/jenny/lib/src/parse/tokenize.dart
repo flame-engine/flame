@@ -883,9 +883,9 @@ class _Lexer {
   static const Map<String, Token> keywords = {
     'true': Token.constTrue,
     'false': Token.constFalse,
-    'string': Token.typeString,
-    'number': Token.typeNumber,
-    'bool': Token.typeBool,
+    'String': Token.typeString,
+    'Number': Token.typeNumber,
+    'Bool': Token.typeBool,
     'as': Token.asType,
     'to': Token.operatorAssign,
     '=': Token.operatorAssign,

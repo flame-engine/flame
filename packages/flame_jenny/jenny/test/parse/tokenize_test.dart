@@ -600,7 +600,7 @@ void main() {
       test('expression with keywords', () {
         expect(
           tokenize('---\n---\n'
-              '{ true * false as string }\n'
+              '{ true * false as String }\n'
               '===\n'),
           const [
             Token.startHeader,

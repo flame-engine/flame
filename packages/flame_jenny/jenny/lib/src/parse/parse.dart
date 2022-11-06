@@ -41,6 +41,20 @@ class _Parser {
   int position;
 
   void parseMain() {
+    while (true) {
+      final token = peekToken();
+      if (token == Token.startCommand) {
+        final command = parseCommand();
+        // if (command is DeclareCommand) {}
+        take(Token.newline);
+      } else if (token == Token.startHeader) {
+        break;
+      } else if (token == Token.newline) {
+        position += 1;
+      } else {
+        syntaxError('unexpected token');
+      }
+    }
     while (position < tokens.length) {
       final header = parseNodeHeader();
       final block = parseNodeBody();
