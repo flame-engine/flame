@@ -23,7 +23,7 @@ components.
 Some bricks are highlighted when placed on an edge of a quadrant. It is
 important to understand that handling hitboxes on edges requires more
 resources.
-Blue lines visualise the quad tree's quadrant positions.
+Blue lines visualize the quad tree's quadrant positions.
 
 Use WASD to move the player and use the mouse scroll to change zoom.
 Hold direction button and press space to fire a bullet. 
@@ -224,7 +224,7 @@ class Player extends SpriteComponent
   ) {
     final myCenter =
         Vector2(position.x + tileSize / 2, position.y + tileSize / 2);
-    if (other is GameCollideable) {
+    if (other is GameCollidable) {
       final diffX = myCenter.x - other.cachedCenter.x;
       if (diffX < 0) {
         canMoveRight = false;
@@ -301,7 +301,7 @@ class Bullet extends PositionComponent with CollisionCallbacks, HasPaint {
 //#region Environment
 
 class Brick extends SpriteComponent
-    with CollisionCallbacks, GameCollideable, UpdateOnce {
+    with CollisionCallbacks, GameCollidable, UpdateOnce {
   Brick({
     required super.position,
     required super.size,
@@ -323,7 +323,7 @@ class Brick extends SpriteComponent
 }
 
 class Water extends SpriteComponent
-    with CollisionCallbacks, GameCollideable, UpdateOnce {
+    with CollisionCallbacks, GameCollidable, UpdateOnce {
   Water({
     required super.position,
     required super.size,
@@ -335,7 +335,7 @@ class Water extends SpriteComponent
   }
 }
 
-mixin GameCollideable on PositionComponent {
+mixin GameCollidable on PositionComponent {
   void initCollision() {
     add(RectangleHitbox()..collisionType = CollisionType.passive);
   }

@@ -189,7 +189,7 @@ class FlareActorAnimation {
       c.clipRect(size.toRect());
     }
 
-    // boxfit
+    // box fit
     switch (fit) {
       case BoxFit.fill:
         scaleX = size.x / contentWidth;

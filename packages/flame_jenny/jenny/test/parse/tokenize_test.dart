@@ -470,6 +470,23 @@ void main() {
           ],
         );
       });
+
+      test('line with hash tags', () {
+        expect(
+          tokenize('---\n---\n'
+              'Some text #with-tag\n'
+              '===\n'),
+          const [
+            Token.startHeader,
+            Token.endHeader,
+            Token.startBody,
+            Token.text('Some text'),
+            Token.hashtag('#with-tag'),
+            Token.newline,
+            Token.endBody,
+          ],
+        );
+      });
     });
 
     group('modeText', () {
@@ -477,13 +494,13 @@ void main() {
         expect(
           tokenize('---\n---\n'
               'some text // here be dragons\n'
-              'other text\n'
+              'other text   \t\n'
               '===\n'),
           const [
             Token.startHeader,
             Token.endHeader,
             Token.startBody,
-            Token.text('some text '),
+            Token.text('some text'),
             Token.newline,
             Token.text('other text'),
             Token.newline,
@@ -546,7 +563,6 @@ void main() {
             Token.startBody,
             Token.startExpression,
             Token.endExpression,
-            Token.text(' '),
             Token.newline,
             Token.endBody,
           ],
@@ -835,7 +851,7 @@ void main() {
             Token.startHeader,
             Token.endHeader,
             Token.startBody,
-            Token.text('line1 '),
+            Token.text('line1'),
             Token.hashtag('#tag'),
             Token.hashtag('#some:other@tag!'),
             Token.newline,
@@ -843,8 +859,23 @@ void main() {
             Token.startExpression,
             Token.number('33'),
             Token.endExpression,
-            Token.text(' '),
             Token.hashtag('#here-be-dragons'),
+            Token.newline,
+            Token.endBody,
+          ],
+        );
+      });
+
+      test('comments in lines', () {
+        expect(
+          tokenize('---\n---\n'
+              'line1 // whatever\n'
+              '===\n'),
+          const [
+            Token.startHeader,
+            Token.endHeader,
+            Token.startBody,
+            Token.text('line1'),
             Token.newline,
             Token.endBody,
           ],
@@ -899,6 +930,24 @@ void main() {
             Token.commandStop,
             Token.endCommand,
             Token.hashtag('#four'),
+            Token.newline,
+            Token.endBody,
+          ],
+        );
+      });
+
+      test('text with escaped content', () {
+        expect(
+          tokenize('---\n---\n'
+              'One \\{ two\n'
+              '===\n'),
+          const [
+            Token.startHeader,
+            Token.endHeader,
+            Token.startBody,
+            Token.text('One '),
+            Token.text('{'),
+            Token.text(' two'),
             Token.newline,
             Token.endBody,
           ],

@@ -77,7 +77,11 @@ class _Lexer {
 
   /// Returns the integer code unit at the current parse position, or -1 if we
   /// reached the end of input.
-  int get currentCodeUnit => eof ? -1 : text.codeUnitAt(position);
+  int get currentCodeUnit =>
+      position < text.length ? text.codeUnitAt(position) : -1;
+
+  int get nextCodeUnit =>
+      position < text.length - 1 ? text.codeUnitAt(position + 1) : -1;
 
   /// Pushes a new mode into the mode stack and returns `true`.
   bool pushMode(_ModeFn mode) {
@@ -651,22 +655,24 @@ class _Lexer {
   /// Emits the text token corresponding to the text processed.
   bool eatPlainText() {
     final position0 = position;
+    var positionBeforeWhitespace = position;
     while (!eof) {
       final cu = currentCodeUnit;
-      if (cu == $lessThan || cu == $slash) {
-        position += 1;
-        if (currentCodeUnit == cu) {
-          position -= 1;
-          break;
-        }
-      } else if (cu == $carriageReturn ||
-          cu == $lineFeed ||
+      if ((cu == $slash && nextCodeUnit == $slash) ||
           cu == $hash ||
+          cu == $carriageReturn ||
+          cu == $lineFeed) {
+        position = positionBeforeWhitespace;
+        break;
+      } else if ((cu == $lessThan && nextCodeUnit == $lessThan) ||
           cu == $backslash ||
           cu == $leftBrace) {
         break;
       }
       position += 1;
+      if (!(cu == $space || cu == $tab)) {
+        positionBeforeWhitespace = position;
+      }
     }
     if (position > position0) {
       pushToken(Token.text(text.substring(position0, position)), position0);

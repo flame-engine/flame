@@ -64,7 +64,7 @@ class PadracingWidget extends StatelessWidget {
         ),
         overlayBuilderMap: {
           'menu': (_, game) => Menu(game),
-          'gameover': (_, game) => GameOver(game),
+          'game_over': (_, game) => GameOver(game),
         },
         initialActiveOverlays: const ['menu'],
       ),

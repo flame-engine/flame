@@ -197,7 +197,7 @@ class _Parser {
     if (parts.length == 1) {
       return parts.first;
     } else if (parts.length > 1) {
-      return Concat(parts);
+      return Concatenate(parts);
     } else {
       return constEmptyString;
     }
@@ -576,7 +576,7 @@ class _Parser {
       return Add(lhs as NumExpression, rhs as NumExpression);
     }
     if (lhs.isString && rhs.isString) {
-      return Concat([lhs as StringExpression, rhs as StringExpression]);
+      return Concatenate([lhs as StringExpression, rhs as StringExpression]);
     }
     position = opPosition;
     typeError('both lhs and rhs of + must be numeric or strings');
