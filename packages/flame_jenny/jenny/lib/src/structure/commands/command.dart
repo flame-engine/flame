@@ -8,6 +8,8 @@ abstract class Command extends Statement {
 
   FutureOr<void> execute(DialogueRunner dialogue);
 
+  String get name;
+
   @override
   StatementKind get kind => StatementKind.command;
 }

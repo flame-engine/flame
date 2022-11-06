@@ -3,6 +3,7 @@ import 'package:jenny/src/parse/token.dart';
 import 'package:jenny/src/parse/tokenize.dart';
 import 'package:jenny/src/structure/block.dart';
 import 'package:jenny/src/structure/commands/command.dart';
+import 'package:jenny/src/structure/commands/declare_command.dart';
 import 'package:jenny/src/structure/commands/if_command.dart';
 import 'package:jenny/src/structure/commands/jump_command.dart';
 import 'package:jenny/src/structure/commands/set_command.dart';
@@ -44,8 +45,14 @@ class _Parser {
     while (true) {
       final token = peekToken();
       if (token == Token.startCommand) {
+        final position0 = position;
         final command = parseCommand();
-        // if (command is DeclareCommand) {}
+        if (command is DeclareCommand) {
+          command.executeInProject(project);
+        } else {
+          position = position0;
+          typeError('command <<${command.name}>> is only allowed inside nodes');
+        }
         take(Token.newline);
       } else if (token == Token.startHeader) {
         break;
@@ -282,6 +289,8 @@ class _Parser {
       return parseCommandWait();
     } else if (token == Token.commandSet) {
       return parseCommandSet();
+    } else if (token == Token.commandDeclare) {
+      return parseCommandDeclare();
     } else if (token == Token.commandElseif ||
         token == Token.commandElse ||
         token == Token.commandEndif) {
@@ -452,6 +461,13 @@ class _Parser {
     }
     take(Token.endCommand);
     return SetCommand(variableName, expression);
+  }
+
+  Command parseCommandDeclare() {
+    take(Token.startCommand);
+    take(Token.commandDeclare);
+    take(Token.endCommand);
+    throw UnimplementedError('<<declare>> command is not supported yet');
   }
 
   Command parseUserDefinedCommand() {

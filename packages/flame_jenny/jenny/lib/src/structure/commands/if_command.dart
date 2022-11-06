@@ -13,6 +13,9 @@ class IfCommand extends Command {
   final List<IfBlock> ifs;
 
   @override
+  String get name => 'if';
+
+  @override
   void execute(DialogueRunner dialogue) {
     for (final ifBlock in ifs) {
       if (ifBlock.condition.value) {

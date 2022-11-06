@@ -8,6 +8,9 @@ class JumpCommand extends Command {
   final StringExpression target;
 
   @override
+  String get name => 'jump';
+
+  @override
   Future<void> execute(DialogueRunner dialogue) {
     return dialogue.jumpToNode(target.value);
   }

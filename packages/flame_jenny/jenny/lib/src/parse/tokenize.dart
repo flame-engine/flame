@@ -828,7 +828,7 @@ class _Lexer {
           eatId() ||
               eatExpressionStart() ||
               error('an ID or an expression expected');
-        } else if (commandToken == Token.commandSet) {}
+        }
       } else {
         pushToken(Token.command(name), position0);
         pushToken(Token.startExpression, position0);
