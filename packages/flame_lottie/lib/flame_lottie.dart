@@ -9,3 +9,4 @@
 library flame_lottie;
 
 export 'src/flame_lottie.dart';
+export 'src/lottie_render.dart';

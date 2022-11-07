@@ -1,12 +1,24 @@
-import 'package:flame/components.dart';
 import 'package:flame/game.dart';
-import 'package:flame/input.dart';
-import 'package:flame/palette.dart';
-import 'package:flame_flare/flame_flare.dart';
-import 'package:flare_flutter/flare_controls.dart';
+import 'package:flame_lottie/flame_lottie.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 
 void main() {
-  runApp(Container());
+  runApp(GameWidget(game: LottieGame()));
 }
 
+class LottieGame extends FlameGame {
+  @override
+  Future<void>? onLoad() async {
+    final lottie = await AssetLottie('assets/LottieLogo1.json').load();
+
+    add(
+      LottieComponent(
+        renderer: LottieRenderer(composition: lottie),
+        size: Vector2.all(600),
+      ),
+    );
+
+    return super.onLoad();
+  }
+}

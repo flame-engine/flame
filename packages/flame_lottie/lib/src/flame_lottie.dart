@@ -1,14 +1,40 @@
-// Copyright (c) 2022, Very Good Ventures
-// https://verygood.ventures
-//
-// Use of this source code is governed by an MIT-style
-// license that can be found in the LICENSE file or at
-// https://opensource.org/licenses/MIT.
+import 'package:flame/components.dart';
+import 'package:flame/effects.dart';
+import 'package:flame_lottie/flame_lottie.dart';
+import 'package:flutter/widgets.dart';
 
-/// {@template flame_lottie}
-/// A Very Good Project created by Very Good CLI.
-/// {@endtemplate}
-class FlameLottie {
-  /// {@macro flame_lottie}
-  const FlameLottie();
+class LottieComponent extends PositionComponent {
+  late final LottieRenderer renderer;
+
+  LottieComponent({
+    required this.renderer,
+    required Vector2 super.size,
+    EffectController? controller,
+    super.position,
+  }) : _controller = controller ??
+      EffectController(
+        duration: 4,
+        infinite: true,
+      );
+
+  late final EffectController _controller;
+
+  @override
+  @mustCallSuper
+  void render(Canvas canvas) {
+    renderer.render(canvas, size.toSize());
+  }
+
+  @override
+  @mustCallSuper
+  void update(double dt) {
+    _controller.advance(dt);
+    renderer.advance(_controller.progress);
+  }
+
+  @override
+  void onRemove() {
+    renderer.destroy();
+    super.onRemove();
+  }
 }

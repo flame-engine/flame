@@ -9,11 +9,16 @@ environment:
 
 dependencies:
   flame: ^1.4.0
-  flare_flutter: ^3.0.2
+  flame_lottie:
   flutter:
     sdk: flutter
   lottie: ^1.4.3
 
 dev_dependencies:
   flame_lint: ^0.1.3
+
+
+flutter:
+  assets:
+    - assets/
 
