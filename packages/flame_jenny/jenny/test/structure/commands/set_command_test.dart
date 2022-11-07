@@ -7,12 +7,12 @@ void main() {
     testScenario(
       testName: 'AnalysisTest.plan',
       input: r'''
+        <<declare $foo = 0>> // used
+        <<declare $bar = 0>> // written to but never read
+
         title: Start
         ---
         // testing
-
-        <<declare $foo = 0>> // used
-        <<declare $bar = 0>> // written to but never read
 
         <<set $foo to 1>>
         <<set $bar to $foo>>
