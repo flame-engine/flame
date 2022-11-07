@@ -504,7 +504,7 @@ class _Parser {
       }
       expression = typeExpr;
       take(typeToken);
-    } else {
+    } else if (peekToken() == Token.operatorAssign) {
       take(Token.operatorAssign);
       expression = parseExpression();
       final nextToken = peekToken();
@@ -520,6 +520,8 @@ class _Parser {
         }
         take(typeToken);
       }
+    } else {
+      syntaxError('expected `= value` or `as Type`');
     }
     take(Token.endExpression);
     take(Token.endCommand);

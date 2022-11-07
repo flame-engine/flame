@@ -110,13 +110,13 @@ void main() {
         );
       });
 
-      test('no assignment operator', () {
+      test('no assignment', () {
         expect(
-          () => YarnProject()..parse(r'<<declare $error 5>>'),
-          hasSyntaxError('SyntaxError: unexpected token\n'
-              '>  at line 1 column 18:\n'
-              '>  <<declare \$error 5>>\n'
-              '>                   ^\n'),
+          () => YarnProject()..parse(r'<<declare $error>>'),
+          hasSyntaxError('SyntaxError: expected `= value` or `as Type`\n'
+              '>  at line 1 column 17:\n'
+              '>  <<declare \$error>>\n'
+              '>                  ^\n'),
         );
       });
 
