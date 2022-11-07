@@ -69,6 +69,9 @@ class _Lexer {
       error('incomplete node body');
     }
     popMode(modeMain);
+    if (tokens.length == addErrorTokenAtIndex) {
+      tokens.add(Token.error(_errorMessageAtPosition(position)));
+    }
     return tokens;
   }
 

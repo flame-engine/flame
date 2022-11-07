@@ -42,24 +42,21 @@ class _Parser {
   int position;
 
   void parseMain() {
-    while (true) {
+    while (position < tokens.length) {
       final token = peekToken();
       if (token == Token.startCommand) {
         final position0 = position;
         final command = parseCommand();
-        if (command is DeclareCommand) {
-          command.executeInProject(project);
-        } else {
+        if (command is! DeclareCommand) {
           position = position0;
           typeError('command <<${command.name}>> is only allowed inside nodes');
         }
-        take(Token.newline);
       } else if (token == Token.startHeader) {
         break;
       } else if (token == Token.newline) {
         position += 1;
       } else {
-        syntaxError('unexpected token');
+        syntaxError('unexpected token: $token');
       }
     }
     while (position < tokens.length) {
@@ -471,8 +468,47 @@ class _Parser {
   Command parseCommandDeclare() {
     take(Token.startCommand);
     take(Token.commandDeclare);
+    take(Token.startExpression);
+    final variableToken = peekToken();
+    if (!variableToken.isVariable) {
+      syntaxError('variable name expected');
+    }
+    final variableName = variableToken.content;
+    if (project.variables.hasVariable(variableName)) {
+      nameError('variable $variableName has already been declared');
+    }
+    position += 1;
+    late final Expression expression;
+    if (peekToken() == Token.asType) {
+      take(Token.asType);
+      final typeToken = peekToken();
+      final typeExpr = typesToDefaultValues[typeToken];
+      if (typeExpr == null) {
+        syntaxError('a type is expected');
+      }
+      expression = typeExpr;
+      take(typeToken);
+    } else {
+      take(Token.operatorAssign);
+      expression = parseExpression();
+      final nextToken = peekToken();
+      if (nextToken == Token.asType) {
+        take(Token.asType);
+        final typeToken = peekToken();
+        final typeExpr = typesToDefaultValues[typeToken];
+        if (typeExpr == null) {
+          syntaxError('a type is expected');
+        }
+        if (typeExpr.type != expression.type) {
+          typeError('the expression evaluates to ${expression.type.name} type');
+        }
+        take(typeToken);
+      }
+    }
+    take(Token.endExpression);
     take(Token.endCommand);
-    throw UnimplementedError('<<declare>> command is not supported yet');
+    project.variables.setVariable(variableName, expression.value);
+    return const DeclareCommand();
   }
 
   Command parseUserDefinedCommand() {
@@ -736,6 +772,12 @@ class _Parser {
     position = opPosition;
     typeError('both lhs and rhs of "^" must be boolean');
   }
+
+  static final Map<Token, Expression> typesToDefaultValues = {
+    Token.typeBool: constFalse,
+    Token.typeNumber: constZero,
+    Token.typeString: constEmptyString,
+  };
 
   static final Map<Token, int> precedences = {
     Token.operatorMultiply: 6,

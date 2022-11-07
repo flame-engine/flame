@@ -32,3 +32,4 @@ const constEmptyString = StringLiteral('');
 const constTrue = BoolLiteral(true);
 const constFalse = BoolLiteral(false);
 const constVoid = VoidLiteral();
+const constZero = NumLiteral(0);
