@@ -7,12 +7,12 @@ void main() {
     testScenario(
       testName: 'DecimalNumbers.yarn',
       input: r'''
+        // Declarations (i.e. constant values)
+        <<declare $myInteger = 1 as Number>>
+        <<declare $myFloat = 1.2 as Number>>
+
         title: Start
         ---
-
-        // Declarations (i.e. constant values)
-        <<declare $myInteger = 1 as number>>
-        <<declare $myFloat = 1.2 as number>>
 
         // Expressions
         <<if 1.2 >= 1.2>>
@@ -28,7 +28,6 @@ void main() {
         line: Success
         line: Here's a number: 45.1
       ''',
-      skip: true,
     );
   });
 }

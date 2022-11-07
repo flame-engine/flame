@@ -60,6 +60,10 @@ class _Parser {
       }
     }
     while (position < tokens.length) {
+      if (peekToken() == Token.newline) {
+        position += 1;
+        continue;
+      }
       final header = parseNodeHeader();
       final block = parseNodeBody();
       project.nodes[header.title!] = Node(
@@ -75,6 +79,10 @@ class _Parser {
     final tags = <String, String>{};
     take(Token.startHeader);
     while (peekToken() != Token.endHeader) {
+      if (peekToken() == Token.newline) {
+        position += 1;
+        continue;
+      }
       if (takeId() && take(Token.colon) && takeText() && takeNewline()) {
         final id = peekToken(-4);
         final text = peekToken(-2);
@@ -124,11 +132,19 @@ class _Parser {
           lines.add(DialogueChoice([option]));
         }
       } else if (nextToken == Token.startCommand) {
-        lines.add(parseCommand());
+        final position0 = position;
+        final command = parseCommand();
+        if (command is DeclareCommand) {
+          position = position0;
+          syntaxError('<<declare>> command cannot be used inside a node');
+        }
+        lines.add(command);
       } else if (nextToken.isText ||
           nextToken.isPerson ||
           nextToken == Token.startExpression) {
         lines.add(parseDialogueLine());
+      } else if (nextToken == Token.newline) {
+        position += 1;
       } else {
         break;
       }
@@ -507,6 +523,7 @@ class _Parser {
     }
     take(Token.endExpression);
     take(Token.endCommand);
+    takeNewline();
     project.variables.setVariable(variableName, expression.value);
     return const DeclareCommand();
   }
@@ -836,9 +853,20 @@ class _Parser {
   bool takeId() => takeTokenType(TokenType.id);
   bool takeText() => takeTokenType(TokenType.text);
   bool takePerson() => takeTokenType(TokenType.person);
-  bool takeNewline() => take(Token.newline);
+  bool takeNewline() {
+    if (position >= tokens.length) {
+      return true;
+    } else if (tokens[position] == Token.newline) {
+      position += 1;
+      return true;
+    }
+    syntaxError('expected end of line');
+  }
 
   bool take(Token token) {
+    if (position >= tokens.length) {
+      syntaxError('unexpected end of file');
+    }
     if (tokens[position] == token) {
       position += 1;
       return true;

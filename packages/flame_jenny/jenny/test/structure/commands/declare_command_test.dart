@@ -92,6 +92,13 @@ void main() {
       expect(yarn.variables.getStringValue(r'$z'), 'zzz');
     });
 
+    test('declare with a comment', () {
+      final yarn = YarnProject()
+        ..parse('<<declare \$x as String>>  // oh rly?\n');
+      expect(yarn.variables.hasVariable(r'$x'), true);
+      expect(yarn.variables.getVariableType(r'$x'), ExpressionType.string);
+    });
+
     group('errors', () {
       test('missing variable name', () {
         expect(
@@ -159,6 +166,23 @@ void main() {
             '>  at line 1 column 25:\n'
             '>  <<declare \$error = 0 as Bool>>\n'
             '>                          ^\n',
+          ),
+        );
+      });
+
+      test('declare inside a node', () {
+        expect(
+          () => YarnProject()
+            ..parse(
+              'title: error\n---\n'
+              '<<declare \$x = 1>>\n'
+              '===\n',
+            ),
+          hasSyntaxError(
+            'SyntaxError: <<declare>> command cannot be used inside a node\n'
+            '>  at line 3 column 1:\n'
+            '>  <<declare \$x = 1>>\n'
+            '>  ^\n',
           ),
         );
       });
