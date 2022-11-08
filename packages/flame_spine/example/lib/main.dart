@@ -1,3 +1,4 @@
+import 'package:flame/components.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
 import 'package:flame_spine/flame_spine.dart';
@@ -22,13 +23,14 @@ class SpineExampleGame extends FlameGame with HasTappableComponents {
       MyComponent(
         skeleton: skeleton,
         animations: animations,
-        size: Vector2.all(300),
+        size: Vector2.all(500),
       ),
     );
   }
 }
 
-class MyComponent extends SpineComponent with TapCallbacks {
+class MyComponent extends SpineComponent
+    with TapCallbacks, HasGameRef<SpineExampleGame> {
   MyComponent({
     required this.skeleton,
     required this.animations,
@@ -53,7 +55,7 @@ class MyComponent extends SpineComponent with TapCallbacks {
   void onTapDown(TapDownEvent event) {
     super.onTapDown(event);
 
-    renderer.playState = PlayState.paused;
+    gameRef.paused = true;
   }
 
   @override
@@ -64,5 +66,7 @@ class MyComponent extends SpineComponent with TapCallbacks {
 
     renderer.playState = PlayState.playing;
     renderer.animation = animations[_index];
+
+    gameRef.paused = false;
   }
 }
