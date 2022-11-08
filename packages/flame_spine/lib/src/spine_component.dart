@@ -13,10 +13,24 @@ class SpineComponent extends PositionComponent {
     super.position,
   });
 
+  late Size _size;
+
+  @override
+  void onMount() {
+    _size = size.toSize();
+    super.onMount();
+  }
+
+  @override
+  set size(Vector2 size) {
+    _size = size.toSize();
+    super.size = size;
+  }
+
   @override
   @mustCallSuper
   void render(Canvas canvas) {
-    renderer.render(canvas, size.toSize());
+    renderer.render(canvas, _size);
   }
 
   @override
