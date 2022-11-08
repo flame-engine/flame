@@ -1,6 +1,7 @@
 import 'package:flame/components.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
+import 'package:flame/input.dart';
 import 'package:flame_spine/flame_spine.dart';
 import 'package:flutter/material.dart';
 
@@ -8,10 +9,17 @@ void main() {
   runApp(GameWidget(game: SpineExampleGame()));
 }
 
-class SpineExampleGame extends FlameGame with HasTappableComponents {
+class SpineExampleGame extends FlameGame
+    with HasTappableComponents, DoubleTapDetector {
   @override
   Color backgroundColor() {
     return const Color(0xFFE5E5E5);
+  }
+
+  @override
+  void onDoubleTap() {
+    paused = !paused;
+    super.onDoubleTap();
   }
 
   @override
@@ -55,7 +63,7 @@ class MyComponent extends SpineComponent
   void onTapDown(TapDownEvent event) {
     super.onTapDown(event);
 
-    gameRef.paused = true;
+    renderer.playState = PlayState.paused;
   }
 
   @override
@@ -66,7 +74,5 @@ class MyComponent extends SpineComponent
 
     renderer.playState = PlayState.playing;
     renderer.animation = animations[_index];
-
-    gameRef.paused = false;
   }
 }
