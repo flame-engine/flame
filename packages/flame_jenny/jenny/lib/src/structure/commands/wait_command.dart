@@ -8,6 +8,9 @@ class WaitCommand extends Command {
   final NumExpression arg;
 
   @override
+  String get name => 'wait';
+
+  @override
   Future<void> execute(DialogueRunner dialogue) {
     final duration = Duration(
       microseconds: (arg.value.toDouble() * 1000000).toInt(),

@@ -51,6 +51,8 @@ void main() {
         final yarn = YarnProject();
         yarn.parse('title: Romeo v Juliette\n'
             'requires: Montagues and Capulets\n'
+            '\n'
+            '// comment\n'
             'location: fair Verona\n'
             '---\n===\n');
         final node = yarn.nodes['Romeo v Juliette'];
@@ -130,8 +132,8 @@ void main() {
           ..parse('title: test\n'
               '---\n'
               'Jupyter\n'
-              'Saturn\n'
-              'Uranus\n'
+              'Saturn\n\n'
+              'Uranus  // LOL\n'
               '===\n');
         final block = yarn.nodes['test']!.content;
         expect(block.lines.length, 3);

@@ -69,6 +69,9 @@ class _Lexer {
       error('incomplete node body');
     }
     popMode(modeMain);
+    if (tokens.length == addErrorTokenAtIndex) {
+      tokens.add(Token.error(_errorMessageAtPosition(position)));
+    }
     return tokens;
   }
 
@@ -267,7 +270,6 @@ class _Lexer {
       return true;
     }
     if (eatNewline()) {
-      popToken(Token.newline);
       return true;
     } else {
       position = position0;
@@ -285,7 +287,6 @@ class _Lexer {
         final cu = currentCodeUnit;
         if (cu == $carriageReturn || cu == $lineFeed) {
           eatNewline();
-          popToken(Token.newline);
           break;
         }
         position += 1;
@@ -452,7 +453,6 @@ class _Lexer {
     pushToken(Token.text(text.substring(position0, position)), position0);
     if (!eatNewline()) {
       eatCommentLine();
-      pushToken(Token.newline, position - 1);
     }
     popMode(modeNodeHeaderLine);
     return true;
@@ -563,8 +563,7 @@ class _Lexer {
   /// [modeLineEnd], and pops the current mode so that the next line will start
   /// again at [modeNodeBody].
   bool eatCommentOrNewline() {
-    if (eatNewline() ||
-        (eatCommentLine() && pushToken(Token.newline, position - 1))) {
+    if (eatNewline() || eatCommentLine()) {
       popMode(modeLineEnd);
       if (currentMode == modeNodeBodyLine) {
         popMode(modeNodeBodyLine);
@@ -828,7 +827,7 @@ class _Lexer {
           eatId() ||
               eatExpressionStart() ||
               error('an ID or an expression expected');
-        } else if (commandToken == Token.commandSet) {}
+        }
       } else {
         pushToken(Token.command(name), position0);
         pushToken(Token.startExpression, position0);
@@ -883,9 +882,9 @@ class _Lexer {
   static const Map<String, Token> keywords = {
     'true': Token.constTrue,
     'false': Token.constFalse,
-    'string': Token.typeString,
-    'number': Token.typeNumber,
-    'bool': Token.typeBool,
+    'String': Token.typeString,
+    'Number': Token.typeNumber,
+    'Bool': Token.typeBool,
     'as': Token.asType,
     'to': Token.operatorAssign,
     '=': Token.operatorAssign,

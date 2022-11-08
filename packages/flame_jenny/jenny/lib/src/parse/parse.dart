@@ -3,6 +3,7 @@ import 'package:jenny/src/parse/token.dart';
 import 'package:jenny/src/parse/tokenize.dart';
 import 'package:jenny/src/structure/block.dart';
 import 'package:jenny/src/structure/commands/command.dart';
+import 'package:jenny/src/structure/commands/declare_command.dart';
 import 'package:jenny/src/structure/commands/if_command.dart';
 import 'package:jenny/src/structure/commands/jump_command.dart';
 import 'package:jenny/src/structure/commands/set_command.dart';
@@ -42,6 +43,27 @@ class _Parser {
 
   void parseMain() {
     while (position < tokens.length) {
+      final token = peekToken();
+      if (token == Token.startCommand) {
+        final position0 = position;
+        final command = parseCommand();
+        if (command is! DeclareCommand) {
+          position = position0;
+          typeError('command <<${command.name}>> is only allowed inside nodes');
+        }
+      } else if (token == Token.startHeader) {
+        break;
+      } else if (token == Token.newline) {
+        position += 1;
+      } else {
+        syntaxError('unexpected token: $token');
+      }
+    }
+    while (position < tokens.length) {
+      if (peekToken() == Token.newline) {
+        position += 1;
+        continue;
+      }
       final header = parseNodeHeader();
       final block = parseNodeBody();
       project.nodes[header.title!] = Node(
@@ -57,6 +79,10 @@ class _Parser {
     final tags = <String, String>{};
     take(Token.startHeader);
     while (peekToken() != Token.endHeader) {
+      if (peekToken() == Token.newline) {
+        position += 1;
+        continue;
+      }
       if (takeId() && take(Token.colon) && takeText() && takeNewline()) {
         final id = peekToken(-4);
         final text = peekToken(-2);
@@ -106,11 +132,19 @@ class _Parser {
           lines.add(DialogueChoice([option]));
         }
       } else if (nextToken == Token.startCommand) {
-        lines.add(parseCommand());
+        final position0 = position;
+        final command = parseCommand();
+        if (command is DeclareCommand) {
+          position = position0;
+          syntaxError('<<declare>> command cannot be used inside a node');
+        }
+        lines.add(command);
       } else if (nextToken.isText ||
           nextToken.isPerson ||
           nextToken == Token.startExpression) {
         lines.add(parseDialogueLine());
+      } else if (nextToken == Token.newline) {
+        position += 1;
       } else {
         break;
       }
@@ -268,6 +302,8 @@ class _Parser {
       return parseCommandWait();
     } else if (token == Token.commandSet) {
       return parseCommandSet();
+    } else if (token == Token.commandDeclare) {
+      return parseCommandDeclare();
     } else if (token == Token.commandElseif ||
         token == Token.commandElse ||
         token == Token.commandEndif) {
@@ -443,6 +479,55 @@ class _Parser {
     take(Token.endCommand);
     take(Token.newline);
     return SetCommand(variableName, expression);
+  }
+
+  Command parseCommandDeclare() {
+    take(Token.startCommand);
+    take(Token.commandDeclare);
+    take(Token.startExpression);
+    final variableToken = peekToken();
+    if (!variableToken.isVariable) {
+      syntaxError('variable name expected');
+    }
+    final variableName = variableToken.content;
+    if (project.variables.hasVariable(variableName)) {
+      nameError('variable $variableName has already been declared');
+    }
+    position += 1;
+    late final Expression expression;
+    if (peekToken() == Token.asType) {
+      take(Token.asType);
+      final typeToken = peekToken();
+      final typeExpr = typesToDefaultValues[typeToken];
+      if (typeExpr == null) {
+        syntaxError('a type is expected');
+      }
+      expression = typeExpr;
+      take(typeToken);
+    } else if (peekToken() == Token.operatorAssign) {
+      take(Token.operatorAssign);
+      expression = parseExpression();
+      final nextToken = peekToken();
+      if (nextToken == Token.asType) {
+        take(Token.asType);
+        final typeToken = peekToken();
+        final typeExpr = typesToDefaultValues[typeToken];
+        if (typeExpr == null) {
+          syntaxError('a type is expected');
+        }
+        if (typeExpr.type != expression.type) {
+          typeError('the expression evaluates to ${expression.type.name} type');
+        }
+        take(typeToken);
+      }
+    } else {
+      syntaxError('expected `= value` or `as Type`');
+    }
+    take(Token.endExpression);
+    take(Token.endCommand);
+    takeNewline();
+    project.variables.setVariable(variableName, expression.value);
+    return const DeclareCommand();
   }
 
   Command parseUserDefinedCommand() {
@@ -707,6 +792,12 @@ class _Parser {
     typeError('both lhs and rhs of "^" must be boolean');
   }
 
+  static final Map<Token, Expression> typesToDefaultValues = {
+    Token.typeBool: constFalse,
+    Token.typeNumber: constZero,
+    Token.typeString: constEmptyString,
+  };
+
   static final Map<Token, int> precedences = {
     Token.operatorMultiply: 6,
     Token.operatorDivide: 6,
@@ -764,9 +855,20 @@ class _Parser {
   bool takeId() => takeTokenType(TokenType.id);
   bool takeText() => takeTokenType(TokenType.text);
   bool takePerson() => takeTokenType(TokenType.person);
-  bool takeNewline() => take(Token.newline);
+  bool takeNewline() {
+    if (position >= tokens.length) {
+      return true;
+    } else if (tokens[position] == Token.newline) {
+      position += 1;
+      return true;
+    }
+    syntaxError('expected end of line');
+  }
 
   bool take(Token token) {
+    if (position >= tokens.length) {
+      syntaxError('unexpected end of file');
+    }
     if (tokens[position] == token) {
       position += 1;
       return true;

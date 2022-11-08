@@ -9,6 +9,9 @@ class SetCommand extends Command {
   final Expression expression;
 
   @override
+  String get name => 'set';
+
+  @override
   void execute(DialogueRunner dialogue) {
     dialogue.project.variables.setVariable(variable, expression.value);
   }

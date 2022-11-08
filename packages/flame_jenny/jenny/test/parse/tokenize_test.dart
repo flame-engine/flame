@@ -11,20 +11,26 @@ void main() {
       test('empty input', () {
         expect(tokenize(''), <Token>[]);
         expect(tokenize(' '), <Token>[]);
-        expect(tokenize(' \t  \n'), <Token>[]);
-        expect(tokenize('\r\n\n   '), <Token>[]);
+        expect(tokenize(' \t  \n'), [Token.newline]);
+        expect(tokenize('\r\n\n   '), [Token.newline, Token.newline]);
       });
 
       test('comments only', () {
         expect(tokenize('// hello'), const <Token>[]);
-        expect(tokenize('// world\n\n'), const <Token>[]);
+        expect(tokenize('// world\n\n'), [Token.newline, Token.newline]);
         expect(
           tokenize('\n'
               '//--------------------\n'
               '// BOILER PLATE       \n'
               '//--------------------\n'
               '\n'),
-          const <Token>[],
+          const [
+            Token.newline,
+            Token.newline,
+            Token.newline,
+            Token.newline,
+            Token.newline,
+          ],
         );
       });
 
@@ -81,10 +87,12 @@ void main() {
                 '\n'
                 '---\n===\n'),
             const [
+              Token.newline,
               Token.startHeader,
               Token.id('title'),
               Token.colon,
               Token.text('node: 1'),
+              Token.newline,
               Token.newline,
               Token.endHeader,
               Token.startBody,
@@ -100,6 +108,7 @@ void main() {
               'some_other_keyword:1\n'
               '---\n===\n'),
           const [
+            Token.newline,
             Token.startHeader,
             Token.id('title'),
             Token.colon,
@@ -152,10 +161,11 @@ void main() {
 
       test('header lines with comments', () {
         expect(
-          tokenize('\n'
-              'one: // comment\n'
-              'two: some data //comment 2\n'
-              '---\n===\n'),
+          tokenize(
+            'one: // comment\n'
+            'two: some data //comment 2\n'
+            '---\n===\n',
+          ),
           const [
             Token.startHeader,
             Token.id('one'),
@@ -268,7 +278,15 @@ void main() {
               '   \t  \r\n'
               ' // also could be some comments here\n'
               '==='),
-          [Token.startHeader, Token.endHeader, Token.startBody, Token.endBody],
+          [
+            Token.startHeader,
+            Token.endHeader,
+            Token.startBody,
+            Token.newline,
+            Token.newline,
+            Token.newline,
+            Token.endBody,
+          ],
         );
       });
 
@@ -600,7 +618,7 @@ void main() {
       test('expression with keywords', () {
         expect(
           tokenize('---\n---\n'
-              '{ true * false as string }\n'
+              '{ true * false as String }\n'
               '===\n'),
           const [
             Token.startHeader,
