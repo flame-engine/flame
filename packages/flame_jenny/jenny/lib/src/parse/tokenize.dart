@@ -270,7 +270,6 @@ class _Lexer {
       return true;
     }
     if (eatNewline()) {
-      // popToken(Token.newline);
       return true;
     } else {
       position = position0;
@@ -288,7 +287,6 @@ class _Lexer {
         final cu = currentCodeUnit;
         if (cu == $carriageReturn || cu == $lineFeed) {
           eatNewline();
-          // popToken(Token.newline);
           break;
         }
         position += 1;
