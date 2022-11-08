@@ -34,12 +34,6 @@ class SpineComponent extends PositionComponent {
   }
 
   @override
-  @mustCallSuper
-  void update(double dt) {
-    renderer.advance(dt);
-  }
-
-  @override
   void onRemove() {
     renderer.destroy();
     super.onRemove();

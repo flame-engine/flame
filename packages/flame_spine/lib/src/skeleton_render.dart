@@ -79,8 +79,6 @@ class SkeletonRender {
     _renderObject.animation = value;
   }
 
-  void advance(double dt) {}
-
   void render(Canvas canvas, Size size) {
     final bound = _renderObject.bounds;
 
