@@ -1,7 +1,9 @@
+import 'package:jenny/jenny.dart';
 import 'package:jenny/src/parse/token.dart';
 import 'package:jenny/src/parse/tokenize.dart';
 import 'package:test/test.dart';
 
+import '../../parse/utils.dart';
 import '../../test_scenario.dart';
 
 void main() {
@@ -74,5 +76,96 @@ void main() {
         line: haha nice now 'set' works even when deeply nested
       ''',
     );
+
+    testScenario(
+      testName: 'modifying assignments',
+      input: r'''
+        <<declare $x = 0>>
+        <<declare $s = 'Hello'>>
+        ---
+        title: Start
+        ---
+        <<set $x += 12>>
+        $x = {$x}
+        <<set $x *= 4>>
+        $x = {$x}
+        <<set $x /= 6>>
+        $x = {$x}
+        <<set $x %= 5>>
+        $x = {$x}
+        <<set $x -= 2>>
+        $x = {$x}
+        <<set $s += " world">>
+        $s = '{$s}'
+        ===
+      ''',
+      testPlan: r'''
+        line: $x = 12
+        line: $x = 48
+        line: $x = 8.0
+        line: $x = 3.0
+        line: $x = 1.0
+        line: $s = 'Hello world'
+      ''',
+    );
+
+    group('errors', () {
+      test('undeclared variable', () {
+        expect(
+          () => YarnProject()
+            ..parse(
+              'title:E\n'
+              '---\n'
+              '<<set \$foo = 123>>\n'
+              '===\n',
+            ),
+          hasNameError(
+            'NameError: variable \$foo has not been declared\n'
+            '>  at line 3 column 7:\n'
+            '>  <<set \$foo = 123>>\n'
+            '>        ^\n',
+          ),
+        );
+      });
+
+      test('no assignment', () {
+        expect(
+          () => YarnProject()
+            ..parse(
+              '<<declare \$x as Number>>\n'
+              'title: X\n'
+              '---\n'
+              '<<set \$x as String>>\n'
+              '===\n',
+            ),
+          hasSyntaxError(
+            'SyntaxError: an assignment operator is expected\n'
+            '>  at line 4 column 10:\n'
+            '>  <<set \$x as String>>\n'
+            '>           ^\n',
+          ),
+        );
+      });
+
+      test('wrong type in assignment', () {
+        expect(
+          () => YarnProject()
+            ..parse(
+              '<<declare \$x as String>>\n'
+              'title: A\n'
+              '---\n'
+              '<<set \$x = 12>>\n'
+              '===\n',
+            ),
+          hasTypeError(
+            r'TypeError: variable $x of type string cannot be assigned a '
+            'value of type numeric\n'
+            '>  at line 4 column 12:\n'
+            '>  <<set \$x = 12>>\n'
+            '>             ^\n',
+          ),
+        );
+      });
+    });
   });
 }

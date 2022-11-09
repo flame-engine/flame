@@ -439,11 +439,11 @@ class _Parser {
     if (!variableToken.isVariable) {
       syntaxError('variable expected');
     }
-    position += 1;
     final variableName = variableToken.content;
     if (!project.variables.hasVariable(variableName)) {
       nameError('variable $variableName has not been declared');
     }
+    position += 1;
     final assignmentToken = peekToken();
     if (!assignmentTokens.containsKey(assignmentToken)) {
       syntaxError('an assignment operator is expected');
@@ -453,6 +453,7 @@ class _Parser {
     final expression = parseExpression();
     final variableType = project.variables.getVariableType(variableName);
     if (variableType != expression.type) {
+      position = expressionStartPosition;
       typeError(
         'variable $variableName of type ${variableType.name} cannot be '
         'assigned a value of type ${expression.type.name}',
