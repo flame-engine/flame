@@ -2,22 +2,21 @@ import 'package:flame/effects.dart';
 import 'package:flutter/rendering.dart';
 import 'package:lottie/lottie.dart';
 
-// TODO(Tobias): add tests
-
 class LottieRenderer extends CustomPainter {
   final LottieDrawable drawable;
   final EffectController _controller;
 
   final BoxFit? fit;
+  final Alignment? alignment;
 
   LottieRenderer({
     required LottieComposition composition,
+    required double progress,
     EffectController? controller,
     double? duration,
-    double progress = 0.0,
     bool? repeating,
+    this.alignment,
     this.fit,
-    // TODO(Tobias): expose parameters
     LottieDelegates? delegates,
     bool? enableMergePaths,
     FrameRate? frameRate,
@@ -45,10 +44,13 @@ class LottieRenderer extends CustomPainter {
     );
   }();
 
-  /// Size is not used but still kept as an argument to conform to CustomPainter
+  /// Paints the currente frame of the Lottie animation onto the canvas
+  ///
+  /// The [size] is not used ([Size.zero] is getting forwarded)
+  /// and the method argument is kept to conform to [CustomPainter] declaration.
   @override
   void paint(Canvas canvas, Size size) {
-    drawable.draw(canvas, boundingRect, fit: fit);
+    drawable.draw(canvas, boundingRect, fit: fit, alignment: alignment);
   }
 
   void update(double dt) {

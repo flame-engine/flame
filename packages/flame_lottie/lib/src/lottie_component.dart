@@ -6,22 +6,46 @@ import 'package:flame_lottie/src/lottie_renderer.dart';
 import 'package:flutter/widgets.dart';
 import 'package:lottie/lottie.dart';
 
+// TODO(Tobias): add tests for [LottieComponent]
+
+/// A flame [Component] which renders a [Lottie] animation using
+/// the already existing Flutter library [lottie](https://pub.dev/packages/lottie)
 class LottieComponent extends PositionComponent with HasPaint {
   final LottieRenderer _renderer;
 
   LottieComponent({
     required LottieComposition composition,
-    required Vector2 super.size,
-    bool? repeating,
+    // The controller which drives the animation. In case none is specified it
+    // will be created implicity
     EffectController? controller,
-    BoxFit? fit,
-    // TODO(Tobias) position component arguments
+    double? progress,
+    // Lottie configuration
+    LottieDelegates? delegates,
+    bool? enableMergePaths,
+    FrameRate? frameRate,
+    double? duration,
+    bool? repeating,
+    Alignment alignment = Alignment.center,
+    BoxFit? fit = BoxFit.contain,
+    // position component arguments
     super.position,
+    super.size,
+    super.scale,
+    double super.angle = 0.0,
+    Anchor super.anchor = Anchor.topLeft,
+    super.children,
+    super.priority,
   }) : _renderer = LottieRenderer(
           composition: composition,
+          progress: progress ?? 0.0,
           controller: controller,
-          fit: fit,
+          duration: duration,
           repeating: repeating,
+          alignment: alignment,
+          fit: fit,
+          delegates: delegates,
+          enableMergePaths: enableMergePaths,
+          frameRate: frameRate,
         );
 
   @mustCallSuper
@@ -37,6 +61,7 @@ class LottieComponent extends PositionComponent with HasPaint {
   }
 }
 
+/// Loads the Lottie animation from the specified Lottie file.
 Future<LottieComposition> loadLottie(
   FutureOr<LottieBuilder> file,
 ) async {
