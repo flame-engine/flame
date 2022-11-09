@@ -6,8 +6,6 @@ import 'package:flame_lottie/src/lottie_renderer.dart';
 import 'package:flutter/widgets.dart';
 import 'package:lottie/lottie.dart';
 
-// TODO(Tobias): add tests for [LottieComponent]
-
 /// A flame [Component] which renders a [Lottie] animation using
 /// the already existing Flutter library [lottie](https://pub.dev/packages/lottie)
 class LottieComponent extends PositionComponent with HasPaint {
