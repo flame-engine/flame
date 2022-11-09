@@ -46,7 +46,7 @@ class PathFinderData {
         terrain.containsKey(position) && !unWalkableTiles.contains(position);
   }
 
-  /// Returns an iterable of the possible neighbours to move to
+  /// Returns an iterable of the possible neighbors to move to
   /// Unreachable terrain will not be sent here
   Iterable<IntVector2> neighbors(
     IntVector2 current,
