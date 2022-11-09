@@ -110,6 +110,24 @@ void main() {
     );
 
     group('errors', () {
+      test('no variable', () {
+        expect(
+          () => YarnProject()
+            ..parse(
+              'title: W\n'
+              '---\n'
+              '<<set>>\n'
+              '===\n',
+            ),
+          hasSyntaxError(
+            'SyntaxError: variable expected\n'
+            '>  at line 3 column 6:\n'
+            '>  <<set>>\n'
+            '>       ^\n',
+          ),
+        );
+      });
+
       test('undeclared variable', () {
         expect(
           () => YarnProject()
