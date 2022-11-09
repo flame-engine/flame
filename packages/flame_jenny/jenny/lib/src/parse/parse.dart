@@ -18,7 +18,6 @@ import 'package:jenny/src/structure/expressions/literal.dart';
 import 'package:jenny/src/structure/expressions/logical.dart';
 import 'package:jenny/src/structure/expressions/relational.dart';
 import 'package:jenny/src/structure/expressions/string.dart';
-import 'package:jenny/src/structure/expressions/variables.dart';
 import 'package:jenny/src/structure/node.dart';
 import 'package:jenny/src/structure/option.dart';
 import 'package:jenny/src/structure/statement.dart';
@@ -435,50 +434,39 @@ class _Parser {
   Command parseCommandSet() {
     take(Token.startCommand);
     take(Token.commandSet);
+    take(Token.startExpression);
     final variableToken = peekToken();
-    if (variableToken.isVariable) {
-      position += 1;
-    } else {
+    if (!variableToken.isVariable) {
       syntaxError('variable expected');
     }
+    position += 1;
     final variableName = variableToken.content;
-    final variableExists = project.variables.hasVariable(variableName);
+    if (!project.variables.hasVariable(variableName)) {
+      nameError('variable $variableName has not been declared');
+    }
     final assignmentToken = peekToken();
-    if (assignmentTokens.contains(assignmentToken)) {
-      position += 1;
-    } else {
+    if (!assignmentTokens.containsKey(assignmentToken)) {
       syntaxError('an assignment operator is expected');
     }
+    position += 1;
+    final expressionStartPosition = position;
     final expression = parseExpression();
-    if (variableExists) {
-      final variableType = project.variables.getVariableType(variableName);
-      if (variableType != expression.type) {
-        typeError(
-          'variable $variableName of type ${variableType.name} cannot be '
-          'assigned a value of type ${expression.type.name}',
-        );
-      }
-    } else {
-      final variableType = expression.type;
-      final dynamic initialValue = variableType is String
-          ? ''
-          : variableType is num
-              ? 0
-              : variableType is bool
-                  ? false
-                  : null;
-      project.variables.setVariable(variableName, initialValue);
-      assert(project.variables.getVariableType(variableName) == variableType);
+    final variableType = project.variables.getVariableType(variableName);
+    if (variableType != expression.type) {
+      typeError(
+        'variable $variableName of type ${variableType.name} cannot be '
+        'assigned a value of type ${expression.type.name}',
+      );
     }
-    if (assignmentToken != Token.operatorAssign) {
-      if (!variableExists) {
-        nameError('variable $variableName was not defined');
-      }
-      throw UnimplementedError();
-    }
+    final assignmentExpression = assignmentTokens[assignmentToken]!(
+      project.variables.getVariableAsExpression(variableName),
+      expression,
+      expressionStartPosition,
+    );
+    take(Token.endExpression);
     take(Token.endCommand);
     take(Token.newline);
-    return SetCommand(variableName, expression);
+    return SetCommand(variableName, assignmentExpression);
   }
 
   Command parseCommandDeclare() {
@@ -534,14 +522,15 @@ class _Parser {
     throw UnimplementedError('user-defined commands are not supported yet');
   }
 
-  static const List<Token> assignmentTokens = [
-    Token.operatorAssign,
-    Token.operatorDivideAssign,
-    Token.operatorMinusAssign,
-    Token.operatorModuloAssign,
-    Token.operatorMultiplyAssign,
-    Token.operatorPlusAssign,
-  ];
+  late Map<Token, Expression Function(Expression, Expression, int)>
+      assignmentTokens = {
+    Token.operatorAssign: (lhs, rhs, pos) => rhs,
+    Token.operatorDivideAssign: _divide,
+    Token.operatorMinusAssign: _subtract,
+    Token.operatorModuloAssign: _modulo,
+    Token.operatorMultiplyAssign: _multiply,
+    Token.operatorPlusAssign: _add,
+  };
 
   //#endregion
 
@@ -627,15 +616,7 @@ class _Parser {
     } else if (token.isVariable) {
       final name = token.content;
       if (project.variables.hasVariable(name)) {
-        final dynamic variable = project.variables.getVariable(name);
-        if (variable is num) {
-          return NumericVariable(name, project.variables);
-        } else if (variable is String) {
-          return StringVariable(name, project.variables);
-        } else {
-          assert(variable is bool);
-          return BooleanVariable(name, project.variables);
-        }
+        return project.variables.getVariableAsExpression(name);
       } else {
         position -= 1;
         nameError('variable $name is not defined');

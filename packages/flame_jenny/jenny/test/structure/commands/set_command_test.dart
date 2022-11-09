@@ -1,9 +1,27 @@
+import 'package:jenny/src/parse/token.dart';
+import 'package:jenny/src/parse/tokenize.dart';
 import 'package:test/test.dart';
 
 import '../../test_scenario.dart';
 
 void main() {
   group('SetCommand', () {
+    test('tokenize <<set>>', () {
+      expect(
+        tokenize(r'<<set $x = 3>>'),
+        const [
+          Token.startCommand,
+          Token.commandSet,
+          Token.startExpression,
+          Token.variable(r'$x'),
+          Token.operatorAssign,
+          Token.number('3'),
+          Token.endExpression,
+          Token.endCommand,
+        ],
+      );
+    });
+
     testScenario(
       testName: 'AnalysisTest.plan',
       input: r'''
@@ -20,12 +38,13 @@ void main() {
         ===
       ''',
       testPlan: 'line: 1 1',
-      skip: true,
     );
 
     testScenario(
       testName: 'Basic.plan',
       input: r'''
+        <<declare $foo as Number>>
+        ---
         title: Start
         ---
         whoa what here's some text
@@ -40,7 +59,7 @@ void main() {
         <<else>>
             oh noooo it didn't work :(
         <<endif>>
-        
+
         <<if $foo is 54>>
             haha nice now 'set' works even when deeply nested
         <<else>>
@@ -54,7 +73,6 @@ void main() {
         line: NESTED IF BLOCK WHAAAT
         line: haha nice now 'set' works even when deeply nested
       ''',
-      skip: true,
     );
   });
 }

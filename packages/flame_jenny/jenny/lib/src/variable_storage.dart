@@ -1,5 +1,7 @@
 import 'package:jenny/src/errors.dart';
+import 'package:jenny/src/structure/expressions/expression.dart';
 import 'package:jenny/src/structure/expressions/expression_type.dart';
+import 'package:jenny/src/structure/expressions/variables.dart';
 import 'package:meta/meta.dart';
 
 class VariableStorage {
@@ -16,6 +18,18 @@ class VariableStorage {
 
   bool hasVariable(String name) => variables.containsKey(name);
   dynamic getVariable(String name) => variables[name]!;
+
+  Expression getVariableAsExpression(String name) {
+    final dynamic value = variables[name];
+    if (value is String) {
+      return StringVariable(name, this);
+    }
+    if (value is num) {
+      return NumericVariable(name, this);
+    }
+    assert (value is bool);
+    return BooleanVariable(name, this);
+  }
 
   ExpressionType getVariableType(String name) {
     final dynamic value = variables[name];
