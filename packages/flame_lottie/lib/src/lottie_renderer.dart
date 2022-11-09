@@ -44,7 +44,7 @@ class LottieRenderer extends CustomPainter {
     );
   }();
 
-  /// Paints the currente frame of the Lottie animation onto the canvas
+  /// Paints the current frame of the Lottie animation onto the canvas
   ///
   /// The [size] is not used ([Size.zero] is getting forwarded)
   /// and the method argument is kept to conform to [CustomPainter] declaration.

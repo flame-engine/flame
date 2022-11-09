@@ -16,7 +16,7 @@ class LottieComponent extends PositionComponent with HasPaint {
   LottieComponent({
     required LottieComposition composition,
     // The controller which drives the animation. In case none is specified it
-    // will be created implicity
+    // will be created implicitly
     EffectController? controller,
     double? progress,
     // Lottie configuration
