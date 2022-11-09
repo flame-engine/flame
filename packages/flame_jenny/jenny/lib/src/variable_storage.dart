@@ -27,7 +27,7 @@ class VariableStorage {
     if (value is num) {
       return NumericVariable(name, this);
     }
-    assert (value is bool);
+    assert(value is bool);
     return BooleanVariable(name, this);
   }
 
