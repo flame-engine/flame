@@ -2,6 +2,13 @@ import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:meta/meta.dart';
 
+/// Makes a component capable of notify listeners of changes.
+///
+/// Notifieable components will automatically notify when
+/// new instances are added or removed to the game instance.
+///
+/// To notify internal changes of a component instance, the component
+/// should call [notifyChanges].
 mixin Notifiable on Component {
   FlameGame get _gameRef {
     final game = findGame();
@@ -15,6 +22,8 @@ mixin Notifiable on Component {
   @override
   @mustCallSuper
   void onMount() {
+    super.onMount();
+
     _gameRef.notifiers[runtimeType]?.add(this);
   }
 
@@ -22,9 +31,13 @@ mixin Notifiable on Component {
   @mustCallSuper
   void onRemove() {
     _gameRef.notifiers[runtimeType]?.remove(this);
+
+    super.onRemove();
   }
 
-  void updated() {
-    _gameRef.notifiers[runtimeType]?.update();
+  /// When called, will notify listeners that a change happened on
+  /// this component's class notifier.
+  void notifyChanges() {
+    _gameRef.notifiers[runtimeType]?.notify();
   }
 }

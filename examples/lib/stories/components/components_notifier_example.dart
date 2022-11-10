@@ -3,19 +3,19 @@ import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class ComponentNotifierExampleWidget extends StatefulWidget {
-  const ComponentNotifierExampleWidget({super.key});
+class ComponentsNotifierExampleWidget extends StatefulWidget {
+  const ComponentsNotifierExampleWidget({super.key});
 
   static String description = '''
 ''';
 
   @override
-  State<ComponentNotifierExampleWidget> createState() =>
-      _ComponentNotifierExampleWidgetState();
+  State<ComponentsNotifierExampleWidget> createState() =>
+      _ComponentsNotifierExampleWidgetState();
 }
 
-class _ComponentNotifierExampleWidgetState
-    extends State<ComponentNotifierExampleWidget> {
+class _ComponentsNotifierExampleWidgetState
+    extends State<ComponentsNotifierExampleWidget> {
   @override
   void initState() {
     super.initState();
@@ -31,8 +31,8 @@ class _ComponentNotifierExampleWidgetState
       body: MultiProvider(
         providers: [
           Provider<ComponentNotifierExample>.value(value: game),
-          ChangeNotifierProvider<ComponentNotifier<Enemy>>(
-            create: (_) => game.componentNotifier<Enemy>(),
+          ChangeNotifierProvider<ComponentsNotifier<Enemy>>(
+            create: (_) => game.componentsNotifier<Enemy>(),
           ),
         ],
         child: Stack(
@@ -57,7 +57,7 @@ class GameHud extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final enemies = context.watch<ComponentNotifier<Enemy>>().components;
+    final enemies = context.watch<ComponentsNotifier<Enemy>>().components;
 
     return Card(
       child: Padding(

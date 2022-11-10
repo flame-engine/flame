@@ -3,9 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 
 /// A [ChangeNotifier] that notifies its listeners when a [Component] is
-/// added or removed, or updated.
-class ComponentNotifier<T extends Component> extends ChangeNotifier {
-  ComponentNotifier(List<T> initial) : _components = initial;
+/// added or removed, or updated. The meaning of an updated component
+/// will vary depending on the component implementation, this is something
+/// defined and executed by the component itself.
+///
+/// For example, in a Player component, that holds a health variable
+/// may notify changes when that variable has changed.
+class ComponentsNotifier<T extends Component> extends ChangeNotifier {
+  ComponentsNotifier(List<T> initial) : _components = initial;
 
   final List<T> _components;
 
@@ -35,5 +40,5 @@ class ComponentNotifier<T extends Component> extends ChangeNotifier {
   }
 
   @internal
-  void update() => notifyListeners();
+  void notify() => notifyListeners();
 }

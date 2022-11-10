@@ -1,8 +1,6 @@
 import 'dart:ui';
 
 import 'package:flame/components.dart';
-import 'package:flame/src/components/core/component.dart';
-import 'package:flame/src/extensions/vector2.dart';
 import 'package:flame/src/game/camera/camera.dart';
 import 'package:flame/src/game/camera/camera_wrapper.dart';
 import 'package:flame/src/game/game.dart';
@@ -32,7 +30,7 @@ class FlameGame extends Component with Game {
   late final CameraWrapper _cameraWrapper;
 
   @internal
-  Map<Type, ComponentNotifier> notifiers = {};
+  Map<Type, ComponentsNotifier> notifiers = {};
 
   /// The camera translates the coordinate space after the viewport is applied.
   Camera get camera => _cameraWrapper.camera;
@@ -155,12 +153,12 @@ class FlameGame extends Component with Game {
   @override
   Projector get projector => camera.combinedProjector;
 
-  ComponentNotifier<T> componentNotifier<T extends Component>() {
+  ComponentsNotifier<T> componentsNotifier<T extends Component>() {
     if (!notifiers.containsKey(T)) {
-      notifiers[T] = ComponentNotifier<T>(
+      notifiers[T] = ComponentsNotifier<T>(
         descendants().whereType<T>().toList(),
       );
     }
-    return notifiers[T]! as ComponentNotifier<T>;
+    return notifiers[T]! as ComponentsNotifier<T>;
   }
 }
