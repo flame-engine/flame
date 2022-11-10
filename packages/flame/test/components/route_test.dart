@@ -75,7 +75,6 @@ void main() {
       var onPushCalled = 0;
       var onPopCalled = 0;
       var buildFirstCalled = 0;
-      var buildSecondCalled = 0;
       Route? previousRoute;
       final router = RouterComponent(
         initialRoute: 'start',
@@ -105,7 +104,6 @@ void main() {
               previousRoute = prevRoute;
             },
             build: (self) {
-              buildSecondCalled++;
               return PositionComponent();
             },
           ),
