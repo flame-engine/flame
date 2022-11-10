@@ -147,8 +147,8 @@ Here's what the different options mean:
 
 ## Standardization and Templates
 
-For every section or package added to the documentation, naming conventions, pathing, and
-standardized table of contents are important.  Every section and package must have a table of
+For every section or package added to the documentation, naming conventions, directory structure,
+and standardized table of contents are important.  Every section and package must have a table of
 contents or an entry in the parent markdown file to allow navigation from the left sidebar menu in
 logical or alphabetical order. Additionally, naming conventions should be followed for organization,
 such as:

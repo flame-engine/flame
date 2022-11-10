@@ -5,7 +5,7 @@ import 'package:flame/image_composition.dart';
 import 'package:flame/sprite.dart';
 import 'package:flame_tiled/src/rectangle_bin_packer.dart';
 import 'package:meta/meta.dart';
-import 'package:tiled/tiled.dart' as tiled;
+import 'package:tiled/tiled.dart';
 
 /// One image atlas for all Tiled image sets in a map.
 class TiledAtlas {
@@ -40,14 +40,14 @@ class TiledAtlas {
   static final atlasMap = <String, TiledAtlas>{};
 
   @visibleForTesting
-  static String atlasKey(Iterable<tiled.TiledImage> images) {
+  static String atlasKey(Iterable<TiledImage> images) {
     final files = ([...images.map((e) => e.source)]..sort()).join(',');
     return 'atlas{$files}';
   }
 
   /// Collect images that we'll use in tiles - exclude image layers.
-  static Set<tiled.TiledImage> _onlyTileImages(tiled.TiledMap map) {
-    final imageSet = <tiled.TiledImage>{};
+  static Set<TiledImage> _onlyTileImages(TiledMap map) {
+    final imageSet = <TiledImage>{};
     for (var i = 0; i < map.tilesets.length; ++i) {
       final image = map.tilesets[i].image;
       if (image?.source != null) {
@@ -64,7 +64,7 @@ class TiledAtlas {
   }
 
   /// Loads all the tileset images for the [map] into one [TiledAtlas].
-  static Future<TiledAtlas> fromTiledMap(tiled.TiledMap map) async {
+  static Future<TiledAtlas> fromTiledMap(TiledMap map) async {
     final imageList = _onlyTileImages(map).toList();
 
     if (imageList.isEmpty) {

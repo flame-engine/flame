@@ -68,7 +68,7 @@ them, and also some recommendations of packages/services that can be used:
 
 Flame doesn't bundle any network feature, which may be needed to write online multiplayer games.
 
-If you are building a multipler game, here are some recommendations of packages/services:
+If you are building a multiplayer game, here are some recommendations of packages/services:
 
 - [Nakama](https://github.com/Allan-Nava/nakama-flutter): Nakama is an open-source server designed
  to power modern games and apps.
@@ -87,9 +87,8 @@ anywhere they need, and then load it into Flame's classes.
 
 Here are some suggestions for http client packages:
 
-- [http](https://pub.dev/packages/http): A simple pacakage for perfoming http requests.
-- [Dio](https://pub.dev/packages/dio): A popular and powerful package for perfoming http requests.
+- [http](https://pub.dev/packages/http): A simple package for performing http requests.
+- [Dio](https://pub.dev/packages/dio): A popular and powerful package for performing http requests.
 
 [awesome flame
 repository](https://github.com/flame-engine/awesome-flame#user-content-articles--tutorials)
-

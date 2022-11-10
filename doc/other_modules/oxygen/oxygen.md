@@ -127,7 +127,7 @@ class SimpleUpdateSystem extends System with UpdateSystem {
 
 ### BaseSystem
 
-The `BaseSystem` is an abstract class whoms logic can be compared to the `PositionComponent`
+The `BaseSystem` is an abstract class whose logic can be compared to the `PositionComponent`
 from FCS. The `BaseSystem` automatically filters all entities that have the `PositionComponent`
 and `SizeComponent` from `flame_oxygen`. On top of that you can add your own filters by defining
 a getter called `filters`. These filters are then used to filter down the entities you are
@@ -140,8 +140,7 @@ On each render loop the `BaseSystem` will prepare your canvas the same way the `
 from FCS would (translating, rotating and setting the anchor. After that it will call the
 `renderEntity` method so you can add your own render logic for that entity on a prepared canvas.
 
-The following components will be checked by `BaseSystem` for the prepartion of the
-canvas:
+The following components will be checked by `BaseSystem` for the preparation of the canvas:
 
 - `PositionComponent` (required)
 - `SizeComponent` (required)

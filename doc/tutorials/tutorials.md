@@ -12,10 +12,14 @@ This chapter contains only one tutorial for now, but we'll be adding more soon!
 - [](platformer/platformer.md) -- in this tutorial, we will build Ember Quest, a
   simple side-scrolling platformer.
 
+- [](space_shooter/space_shooter.md) -- in this tutorial, we will build Space
+  Shooter, a classic top-down shooting game.
+
 ```{toctree}
 :hidden:
 
 Bare Flame game   <bare_flame_game.md>
 Klondike          <klondike/klondike.md>
 Ember Quest       <platformer/platformer.md>
+Space Shooter     <space_shooter/space_shooter.md>
 ```
