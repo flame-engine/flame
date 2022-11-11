@@ -9,10 +9,22 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
-      - uses: subosito/flutter-action@v1
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
       - uses: bluefireteam/melos-action@main
       - uses: bluefireteam/flutter-gh-pages@v8
         with:
           workingDir: examples
           webRenderer: canvaskit
+
+  build-docs:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Trigger building the docs
+        run: |
+          curl -XPOST -u "${{ secrets.GIT_CREDENTIALS }}" \
+          -H "Accept:application/vnd.github" \
+          -H "Content-Type:application/json" \
+          https://api.github.com/flame-engine/flame-docs-site/actions/workflows/gh-pages.yml/dispatches \
+          --data '{"ref": "main" }'

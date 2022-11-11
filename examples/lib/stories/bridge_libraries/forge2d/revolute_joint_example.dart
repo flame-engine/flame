@@ -10,7 +10,7 @@ class RevoluteJointExample extends Forge2DGame with TapDetector {
     This example showcases a revolute joint, which is the spinning balls in the
     center.
     
-    If you tap the screen some colourful balls are added and will
+    If you tap the screen some colorful balls are added and will
     interact with the bodies tied to the revolute joint once they have fallen
     down the funnel.
   ''';

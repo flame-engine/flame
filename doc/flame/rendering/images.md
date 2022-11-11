@@ -193,7 +193,7 @@ In some cases you may want to merge multiple images into a single image; this is
 [Compositing](https://en.wikipedia.org/wiki/Compositing). This can be useful for example when
 working with the [SpriteBatch](#spritebatch) API to optimize your drawing calls.
 
-For such usecases Flame comes with the `ImageComposition` class. This allows you to add multiple
+For such use cases Flame comes with the `ImageComposition` class. This allows you to add multiple
 images, each at their own position, onto a new image:
 
 ```dart
@@ -211,42 +211,6 @@ Image image = await composition.compose();
 **Note:** Composing images is expensive, we do not recommend you run this every tick as it affect
 the performance badly. Instead we recommend to have your compositions pre-rendered so you can just
 reuse the output image.
-
-
-## Svg
-
-Flame provides a simple API to render SVG images in your game.
-
-Svg support is provided by the `flame_svg` external package, be sure to put it in your pubspec file
-to use it.
-
-To use it just import the `Svg` class from `'package:flame_svg/flame_svg.dart'`, and use the
-following snippet to render it on the canvas:
-
-```dart
-Svg svgInstance = Svg('android.svg');
-
-final position = Vector2(100, 100);
-final size = Vector2(300, 300);
-
-svgInstance.renderPosition(canvas, position, size);
-```
-
-or use the [SvgComponent]:
-
-```dart
-class MyGame extends FlameGame {
-    Future<void> onLoad() async {
-      final svgInstance = await Svg.load('android.svg');
-      final size = Vector2.all(100);
-      final svgComponent = SvgComponent.fromSvg(size, svgInstance);
-      svgComponent.x = 100;
-      svgComponent.y = 100;
-
-      add(svgComponent);
-    }
-}
-```
 
 
 ## Animation
@@ -314,7 +278,7 @@ final animation = SpriteAnimation.fromAsepriteData(image, jsonData);
 ```
 
 **Note:** trimmed sprite sheets are not supported by flame, so if you export your sprite sheet this
-kway, it will have the trimmed size, not the sprite original size.
+way, it will have the trimmed size, not the sprite original size.
 
 Animations, after created, have an update and render method; the latter renders the current frame,
 and the former ticks the internal clock to update the frames.

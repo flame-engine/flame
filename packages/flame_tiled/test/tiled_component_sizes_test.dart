@@ -2,9 +2,7 @@ import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame_tiled/flame_tiled.dart';
-
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tiled/tiled.dart';
 
 void main() {
   group('TiledComponent.computeSize', () {

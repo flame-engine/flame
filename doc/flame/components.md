@@ -72,13 +72,13 @@ A component lifecycle state can be checked by a series of getters:
 ### Priority
 
 In Flame every `Component` has the `int priority` property, which determines
-that component's sorting order within its parent's children, this is sometimes referred to
+that component's sorting order within its parent's children. This is sometimes referred to
 as `z-index` in other languages and frameworks. The higher the `priority` is set to, the
 closer the component will appear on the screen, since it will be rendered on top of any components
 with lower priority that were rendered before it.
 
-If you add two components and set one of them to priority 1 for example, then that component will be
-rendered on top of the other component (if they overlap), because the default priority is 0.
+If you add two components and set one of their priorities to 1 for example, then that component will
+be rendered on top of the other component (if they overlap), because the default priority is 0.
 
 All components take in `priority` as a named argument, so if you know the priority that you want
 your component at compile time, then you can pass it in to the constructor.
@@ -95,7 +95,7 @@ class MyGame extends FlameGame {
 }
 ```
 
-To update the priority of a component you have to either just set it to a new value, like
+To update the priority of a component you have to set it to a new value, like
 `component.priority = 2`, and it will be updated in the next tick.
 
 Example:
@@ -309,8 +309,8 @@ want them to respect the `Camera` and the `Viewport`. But quite often you want f
 and text to always show on the screen, no matter if you move the camera, then you want to use
 `PositionType.viewport`. In some rare cases you want to use `PositionType.widget` to position
 your widgets, when you don't want the component to respect the camera nor the viewport; this could
-for example be for controls or joysticks that would be unergonomic to use if they had to stay within
-the viewport.
+for example be for controls or joysticks that would not be ergonomic to use if they had to stay
+within the viewport.
 
 Do note that this setting is only respected if the component is added directly to the root
 `FlameGame` and not as a child component of another component.

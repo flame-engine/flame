@@ -197,7 +197,7 @@ const Documentation = {
   },
 
   /**
-   * Initialise the domain index toggle buttons
+   * Initialize the domain index toggle buttons
    */
   initDomainIndexTable: () => {
     const toggler = (el) => {
