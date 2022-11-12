@@ -1,5 +1,5 @@
-name: flame_lottie_example #example 
-description: An example for flame_lottie
+name: flame_lottie_example
+description: An example for flame_lottie. The example shows how load a Lottie animation and add it to a flame game.
 
 publish_to: 'none'
 version: 0.0.1+1
