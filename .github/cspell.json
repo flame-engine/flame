@@ -42,6 +42,11 @@
         "name": "sphinx_dictionary",
         "path": "./.cspell/sphinx_dictionary.txt",
         "addWords": true
+      },
+      {
+        "name": "flame_lottie_dictionary",
+        "path": "./.cspell/flame_lottie_dictionary.txt",
+        "addWords": true
       }
   ]
 }
