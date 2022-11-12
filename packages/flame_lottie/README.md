@@ -19,17 +19,17 @@ found on [pub dev](https://pub.dev/packages/lottie).
 
 To use it in your game you just need to add `flame_lottie` to your pubspec.yaml.
 
-Simply load the Lottie animation using the **loadLottie** method and the 
-[LottieBuilder](https://pub.dev/documentation/lottie/latest/lottie/LottieBuilder-class.html). It 
+Simply load the Lottie animation using the **loadLottie** method and the
+[LottieBuilder](https://pub.dev/documentation/lottie/latest/lottie/LottieBuilder-class.html). It
 allows all the various ways of loading a Lottie file:
 
-- [Lottie.asset](https://pub.dev/documentation/lottie/latest/lottie/Lottie/asset.html), for 
+- [Lottie.asset](https://pub.dev/documentation/lottie/latest/lottie/Lottie/asset.html), for
 obtaining a Lottie file from an AssetBundle using a key.
-- [Lottie.network](https://pub.dev/documentation/lottie/latest/lottie/Lottie/network.html), for 
+- [Lottie.network](https://pub.dev/documentation/lottie/latest/lottie/Lottie/network.html), for
 obtaining a lottie file from a URL.
 - [Lottie.file](https://pub.dev/documentation/lottie/latest/lottie/Lottie/file.html), for obtaining
  a lottie file from a File.
-- [Lottie.memory](https://pub.dev/documentation/lottie/latest/lottie/Lottie/memory.html), for 
+- [Lottie.memory](https://pub.dev/documentation/lottie/latest/lottie/Lottie/memory.html), for
 obtaining a lottie file from a Uint8List.
 
 ... and add it as `LottieComponent` to your flame 🔥 game.
