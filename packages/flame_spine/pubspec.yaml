@@ -1,7 +1,6 @@
 name: flame_spine
 description: Spine support for the Flame game engine.
 version: 0.1.0
-publish_to: none
 
 environment:
   sdk: ">=2.18.0 <3.0.0"
