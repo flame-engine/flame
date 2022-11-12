@@ -11,6 +11,7 @@ The native Lottie libraries (such as [lottie-android](https://github.com/airbnb/
 
 The Flutter package ``lottie``, on which this wrapper is based on, is by **xaha.dev** and can be found on [pub dev](https://pub.dev/packages/lottie).
 
+
 ## Usage
 
 To use it in your game you just need to add `flame_lottie` to your pubspec.yaml.
