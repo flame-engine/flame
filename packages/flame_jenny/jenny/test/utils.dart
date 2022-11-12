@@ -24,3 +24,9 @@ Matcher hasDialogueError(String message) {
     isA<DialogueError>().having((e) => e.message, 'message', message),
   );
 }
+
+Matcher throwsAssertionError(String message) {
+  return throwsA(
+    isA<AssertionError>().having((e) => e.message, 'message', message),
+  );
+}
