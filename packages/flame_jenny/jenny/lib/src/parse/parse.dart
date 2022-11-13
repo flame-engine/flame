@@ -104,6 +104,7 @@ class _Parser {
     }
     take(Token.endHeader);
     if (title == null) {
+      position -= 1;
       syntaxError('node does not have a title');
     }
     return _NodeHeader(title, tags.isEmpty ? null : tags);
