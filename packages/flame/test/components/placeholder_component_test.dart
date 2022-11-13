@@ -4,7 +4,11 @@ import 'package:test/test.dart';
 
 Future<void> main() async {
   group('PlaceholderComponent', () {
-    test('check color of PlaceholderComponent', () {
+    test('check default color of PlaceholderComponent', () {
+      final component1 = PlaceholderComponent();
+      expect(component1.color, Colors.red);
+    });
+    test('check constructor color of PlaceholderComponent', () {
       final component1 = PlaceholderComponent(color: Colors.blue);
       expect(component1.color, Colors.blue);
     });
