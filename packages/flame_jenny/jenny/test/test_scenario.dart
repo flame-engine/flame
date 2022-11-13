@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:jenny/jenny.dart';
+import 'package:jenny/src/structure/commands/user_defined_command.dart';
 import 'package:meta/meta.dart';
 import 'package:test/test.dart';
 
@@ -16,11 +17,13 @@ Future<void> testScenario({
   required String input,
   required String testPlan,
   bool skip = false,
+  List<String>? commands,
 }) async {
   test(
     testName,
     () async {
       final yarn = YarnProject()..parse(_dedent(input));
+      commands?.forEach(yarn.commands.addDialogueCommand);
       final plan = _TestPlan(_dedent(testPlan));
       final dialogue = DialogueRunner(yarnProject: yarn, dialogueViews: [plan]);
       await dialogue.runNode(plan.startNode);
@@ -149,12 +152,37 @@ class _TestPlan extends DialogueView {
     return expected.selectionIndex - 1;
   }
 
+  @override
+  void onCommand(UserDefinedCommand command) {
+    assert(
+      !done,
+      'Expected: END OF DIALOGUE\n'
+      'Actual  : $command',
+    );
+    assert(
+      nextEntry is _Command,
+      'Wrong event at test plan index $_currentIndex\n'
+      'Expected: "$nextEntry"\n'
+      'Actual  : "$command"\n',
+    );
+    final expected = nextEntry as _Command;
+    final text1 = '<<${expected.name} ${expected.content}>>';
+    final text2 = '<<${command.name} ${command.argumentString.value}>>';
+    assert(
+      text1 == text2,
+      'Expected line: "$text1"\n'
+      'Actual line  : "$text2"\n',
+    );
+    _currentIndex++;
+  }
+
   void _parse(String input) {
     final rxEmpty = RegExp(r'^\s*$');
     final rxLine = RegExp(r'^line:\s+((\w+):\s+)?(.*)$');
     final rxOption = RegExp(r'^option:\s+((\w+):\s+)?(.*?)\s*(\[disabled\])?$');
     final rxSelect = RegExp(r'^select:\s+(\d+)$');
     final rxRun = RegExp(r'^run: (.*)$');
+    final rxCommand = RegExp(r'command: (\w+)(?:\s+(.*))?$');
 
     final lines = const LineSplitter().convert(input);
     for (var i = 0; i < lines.length; i++) {
@@ -164,6 +192,7 @@ class _TestPlan extends DialogueView {
       final match2 = rxOption.firstMatch(line);
       final match3 = rxSelect.firstMatch(line);
       final match4 = rxRun.firstMatch(line);
+      final match5 = rxCommand.firstMatch(line);
       if (match0 != null) {
         continue;
       } else if (match1 != null) {
@@ -184,6 +213,8 @@ class _TestPlan extends DialogueView {
         _expected.add(_Choice(options, index));
       } else if (match4 != null) {
         startNode = match4.group(1)!;
+      } else if (match5 != null) {
+        _expected.add(_Command(match5.group(1)!, match5.group(2) ?? ''));
       } else {
         throw 'Unrecognized test plan line $i: "$line"';
       }
@@ -217,4 +248,12 @@ class _Option {
 
   @override
   String toString() => 'Option($character: $text [$enabled])';
+}
+
+class _Command {
+  const _Command(this.name, this.content);
+  final String name;
+  final String content;
+  @override
+  String toString() => 'Command($name, "$content")';
 }

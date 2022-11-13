@@ -69,24 +69,16 @@ void main() {
         title: Start
         ---
         // Testing commands
-
         <<flip Harley3 +1>>
 
         // Commands that begin with keywords
         <<toggle>>
-
         <<settings>>
-
         <<iffy>>
-
         <<nulled>>
-
         <<orion>>
-
         <<andorian>>
-
         <<note>>
-
         <<isActive>>
 
         // Commands with a single character
@@ -109,7 +101,6 @@ void main() {
         command: p
         command: hide Collision:GermOnPorch
       ''',
-      skip: true,
     );
   });
 }
