@@ -8,6 +8,7 @@ import 'package:jenny/src/structure/commands/if_command.dart';
 import 'package:jenny/src/structure/commands/jump_command.dart';
 import 'package:jenny/src/structure/commands/set_command.dart';
 import 'package:jenny/src/structure/commands/stop_command.dart';
+import 'package:jenny/src/structure/commands/user_defined_command.dart';
 import 'package:jenny/src/structure/commands/wait_command.dart';
 import 'package:jenny/src/structure/dialogue_choice.dart';
 import 'package:jenny/src/structure/dialogue_line.dart';
@@ -521,7 +522,14 @@ class _Parser {
   }
 
   Command parseUserDefinedCommand() {
-    throw UnimplementedError('user-defined commands are not supported yet');
+    take(Token.startCommand);
+    final commandToken = peekToken();
+    position += 1;
+    assert(commandToken.isCommand);
+    final arguments = parseLineContent();
+    take(Token.endCommand);
+    takeNewline();
+    return UserDefinedCommand(commandToken.content, arguments);
   }
 
   late Map<Token, Expression Function(Expression, Expression, int)>
