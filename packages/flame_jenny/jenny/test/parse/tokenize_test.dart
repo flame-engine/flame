@@ -701,14 +701,22 @@ void main() {
 
       test('close command within a plain text expression', () {
         expect(
-          () => tokenize('---\n---\n'
+          tokenize('---\n---\n'
               '{ a >> b }\n'
               '===\n'),
-          hasSyntaxError(
-              'SyntaxError: invalid token ">>" within an expression\n'
-              '>  at line 3 column 5:\n'
-              '>  { a >> b }\n'
-              '>      ^\n'),
+          const [
+            Token.startHeader,
+            Token.endHeader,
+            Token.startBody,
+            Token.startExpression,
+            Token.id('a'),
+            Token.operatorGreaterThan,
+            Token.operatorGreaterThan,
+            Token.id('b'),
+            Token.endExpression,
+            Token.newline,
+            Token.endBody,
+          ],
         );
       });
 

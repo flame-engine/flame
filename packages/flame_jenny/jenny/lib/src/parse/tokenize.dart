@@ -112,9 +112,6 @@ class _Lexer {
     return true;
   }
 
-  _ModeFn get currentMode => modeStack.last;
-  _ModeFn get parentMode => modeStack[modeStack.length - 2];
-
   /// Pops the last token from the output stack and checks that it is equal to
   /// [token].
   Token popToken([Token? token]) {
@@ -207,7 +204,7 @@ class _Lexer {
     return eatTextEscapeSequence() ||
         eatPlainText() ||
         eatCommandEndAsText() ||
-        (eatExpressionStart() && pushMode(modeExpression)) ||
+        (eatExpressionStart() && pushMode(modeTextExpression)) ||
         (popMode(modeText) && pushMode(modeTextEnd));
   }
 
@@ -221,8 +218,8 @@ class _Lexer {
   }
 
   /// The command mode starts with a '<<', then consumes the command name, and
-  /// after that either switches to the [modeExpression], or looks for a '>>'
-  /// token to exit the mode.
+  /// after that either switches to a different mode depending on which command
+  /// was encountered.
   bool modeCommand() {
     return eatWhitespace() ||
         (eatCommandName() &&
@@ -230,10 +227,11 @@ class _Lexer {
                 (simpleCommands.contains(tokens.last)) ||
                 (bareExpressionCommands.contains(tokens.last) &&
                     pushToken(Token.startExpression, position) &&
-                    pushMode(modeExpression)) ||
+                    pushMode(modeCommandExpression)) ||
                 (tokens.last == Token.commandJump &&
                     (eatId() ||
-                        (eatExpressionStart() && pushMode(modeExpression)) ||
+                        (eatExpressionStart() &&
+                            pushMode(modeTextExpression)) ||
                         error('an ID or an expression expected'))) ||
                 (tokens.last.isCommand && // user-defined commands
                     pushMode(modeCommandText)))) ||
@@ -241,25 +239,39 @@ class _Lexer {
         checkNewlineInCommand();
   }
 
+  /// Mode for the content of a user-defined command. It is almost the same as
+  /// [modeText], except that it ends at '>>'.
   bool modeCommandText() {
-    return (eatExpressionStart() && pushMode(modeExpression)) ||
+    return (eatExpressionStart() && pushMode(modeTextExpression)) ||
         (eatCommandEnd() && popMode(modeCommandText) && popMode(modeCommand)) ||
         eatTextEscapeSequence() ||
         eatPlainText();
   }
 
-  /// An expression within a [modeText] or [modeCommand]. Within the text, the
-  /// expression is surrounded with curly braces `{ }`, inside a command the
-  /// expression starts immediately after the command name and ends at `>>`.
-  bool modeExpression() {
+  /// An expression within a [modeText] or [modeCommandText]. The expression
+  /// is surrounded with curly braces `{ }`.
+  bool modeTextExpression() {
     return eatWhitespace() ||
-        eatExpressionCommandEnd() ||
         eatExpressionId() ||
         eatExpressionVariable() ||
         eatNumber() ||
         eatString() ||
         eatOperator() ||
-        eatExpressionEnd();
+        (eatExpressionEnd() && popMode(modeTextExpression));
+  }
+
+  /// An expression within a [modeCommand]. Such expression starts immediately
+  /// after the command name and ends at `>>`.
+  bool modeCommandExpression() {
+    return eatWhitespace() ||
+        (eatExpressionCommandEnd() &&
+            popMode(modeCommandExpression) &&
+            popMode(modeCommand)) ||
+        eatExpressionId() ||
+        eatExpressionVariable() ||
+        eatNumber() ||
+        eatString() ||
+        eatOperator();
   }
 
   //----------------------------------------------------------------------------
@@ -591,24 +603,14 @@ class _Lexer {
     return false;
   }
 
-  /// Consumes '{' and enters the [modeExpression].
+  /// Consumes '{' token.
   bool eatExpressionStart() {
     return eat($leftBrace) && pushToken(Token.startExpression, position - 1);
   }
 
-  /// Consumes '}' and pops the [modeExpression] (but only when the parent mode
-  /// is [modeText]).
+  /// Consumes '}' token.
   bool eatExpressionEnd() {
-    if (eat($rightBrace)) {
-      if (parentMode != modeText) {
-        position -= 1;
-        error('invalid token "}" within a command');
-      }
-      pushToken(Token.endExpression, position - 1);
-      popMode(modeExpression);
-      return true;
-    }
-    return false;
+    return eat($rightBrace) && pushToken(Token.endExpression, position - 1);
   }
 
   /// Consumes '>>' while in the expression mode, and leaves both the expression
@@ -617,15 +619,8 @@ class _Lexer {
   bool eatExpressionCommandEnd() {
     final position0 = position;
     if (eat($greaterThan) && eat($greaterThan)) {
-      if (parentMode != modeCommand) {
-        position -= 2;
-        error('invalid token ">>" within an expression');
-      }
       pushToken(Token.endExpression, position0);
       pushToken(Token.endCommand, position0);
-      eatWhitespace();
-      popMode(modeExpression);
-      popMode(modeCommand);
       return true;
     }
     position = position0;
@@ -649,7 +644,8 @@ class _Lexer {
       } else if ((cu == $lessThan && nextCodeUnit == $lessThan) ||
           (cu == $greaterThan && nextCodeUnit == $greaterThan) ||
           cu == $backslash ||
-          cu == $leftBrace || cu == $rightBrace) {
+          cu == $leftBrace ||
+          cu == $rightBrace) {
         break;
       }
       position += 1;
