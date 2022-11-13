@@ -8,7 +8,6 @@ funding:
 
 environment:
   sdk: ">=2.17.0 <3.0.0"
-  flutter: ">=3.3.0"
 
 dependencies:
   meta: ^1.7.0
