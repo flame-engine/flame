@@ -134,10 +134,12 @@ class _TestPlan extends DialogueView {
       final option2 = choice.options[i];
       final text1 =
           (option1.character == null ? '' : '${option1.character}: ') +
-              option1.text + (option1.enabled? '' : ' [disabled]');
+              option1.text +
+              (option1.enabled ? '' : ' [disabled]');
       final text2 =
           (option2.character == null ? '' : '${option2.character}: ') +
-              option2.content.value + (option2.available? '' : ' [disabled]');
+              option2.content.value +
+              (option2.available ? '' : ' [disabled]');
       assert(
         text1 == text2,
         'Expected (${i + 1}): $option1\n'
