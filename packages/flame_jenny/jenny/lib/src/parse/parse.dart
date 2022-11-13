@@ -526,10 +526,15 @@ class _Parser {
     final commandToken = peekToken();
     position += 1;
     assert(commandToken.isCommand);
+    final commandName = commandToken.content;
+    if (!project.commands.hasCommand(commandName)) {
+      position -= 1;
+      nameError('Unknown user-defined command <<$commandName>>');
+    }
     final arguments = parseLineContent();
     take(Token.endCommand);
     takeNewline();
-    return UserDefinedCommand(commandToken.content, arguments);
+    return UserDefinedCommand(commandName, arguments);
   }
 
   late Map<Token, Expression Function(Expression, Expression, int)>

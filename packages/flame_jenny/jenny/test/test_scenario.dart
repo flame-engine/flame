@@ -22,8 +22,9 @@ Future<void> testScenario({
   test(
     testName,
     () async {
-      final yarn = YarnProject()..parse(_dedent(input));
+      final yarn = YarnProject();
       commands?.forEach(yarn.commands.addDialogueCommand);
+      yarn.parse(_dedent(input));
       final plan = _TestPlan(_dedent(testPlan));
       final dialogue = DialogueRunner(yarnProject: yarn, dialogueViews: [plan]);
       await dialogue.runNode(plan.startNode);

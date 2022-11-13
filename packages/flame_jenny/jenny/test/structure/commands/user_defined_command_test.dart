@@ -1,9 +1,11 @@
 import 'package:jenny/jenny.dart';
+import 'package:jenny/src/parse/token.dart';
+import 'package:jenny/src/parse/tokenize.dart';
 import 'package:jenny/src/structure/commands/user_defined_command.dart';
 import 'package:test/test.dart';
-import 'package:jenny/src/parse/tokenize.dart';
-import 'package:jenny/src/parse/token.dart';
+
 import '../../test_scenario.dart';
+import '../../utils.dart';
 
 void main() {
   group('UserDefinedCommand', () {
@@ -29,7 +31,7 @@ void main() {
       );
     });
 
-    test('Parse simple dialogue command', () {
+    test('parse simple dialogue command', () {
       final project = YarnProject()
         ..commands.addDialogueCommand('hello')
         ..parse('title: start\n---\n'
@@ -42,7 +44,7 @@ void main() {
       expect(cmd.argumentString.value, 'world AB');
     });
 
-    test('Execute a live command', () {
+    test('execute a live command', () {
       var x = 0;
       var y = '';
       final project = YarnProject()
@@ -63,6 +65,18 @@ void main() {
       expect(y, 'world');
     });
 
+    test('undeclared user-defined command', () {
+      expect(
+        () => YarnProject()..parse('title:A\n---\n<<jenny>>\n===\n'),
+        hasNameError(
+          'NameError: Unknown user-defined command <<jenny>>\n'
+          '>  at line 3 column 3:\n'
+          '>  <<jenny>>\n'
+          '>    ^\n',
+        ),
+      );
+    });
+
     testScenario(
       testName: 'Commands.yarn',
       input: '''
@@ -75,9 +89,9 @@ void main() {
         <<toggle>>
         <<settings>>
         <<iffy>>
-        <<nulled>>
+        <<nullify>>
         <<orion>>
-        <<andorian>>
+        <<andromeda>>
         <<note>>
         <<isActive>>
 
@@ -93,14 +107,27 @@ void main() {
         command: toggle
         command: settings
         command: iffy
-        command: nulled
+        command: nullify
         command: orion
-        command: andorian
+        command: andromeda
         command: note
         command: isActive
         command: p
         command: hide Collision:GermOnPorch
       ''',
+      commands: [
+        'flip',
+        'toggle',
+        'settings',
+        'iffy',
+        'nullify',
+        'orion',
+        'andromeda',
+        'note',
+        'isActive',
+        'p',
+        'hide',
+      ],
     );
   });
 }
