@@ -588,7 +588,9 @@ class _Lexer {
             cu == $lessThan ||
             cu == $greaterThan ||
             cu == $leftBrace ||
-            cu == $rightBrace) {
+            cu == $rightBrace ||
+            cu == $leftBracket ||
+            cu == $rightBracket) {
           pushToken(Token.text(String.fromCharCode(cu)), position);
           position += 1;
         } else if (cu == $lowercaseN) {

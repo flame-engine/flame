@@ -24,8 +24,8 @@ Future<void> testScenario({
     () async {
       final yarn = YarnProject();
       commands?.forEach(yarn.commands.addDialogueCommand);
-      yarn.parse(_dedent(input));
-      final plan = _TestPlan(_dedent(testPlan));
+      yarn.parse(dedent(input));
+      final plan = _TestPlan(dedent(testPlan));
       final dialogue = DialogueRunner(yarnProject: yarn, dialogueViews: [plan]);
       await dialogue.runNode(plan.startNode);
       assert(
@@ -39,7 +39,7 @@ Future<void> testScenario({
 }
 
 /// Removes common indent from a multi-line [input] string.
-String _dedent(String input) {
+String dedent(String input) {
   var commonIndent = 1000;
   final lines = const LineSplitter().convert(input);
   for (final line in lines) {
