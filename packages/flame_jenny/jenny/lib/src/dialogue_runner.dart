@@ -4,6 +4,7 @@ import 'package:jenny/src/dialogue_view.dart';
 import 'package:jenny/src/errors.dart';
 import 'package:jenny/src/structure/block.dart';
 import 'package:jenny/src/structure/commands/command.dart';
+import 'package:jenny/src/structure/commands/user_defined_command.dart';
 import 'package:jenny/src/structure/dialogue_choice.dart';
 import 'package:jenny/src/structure/dialogue_line.dart';
 import 'package:jenny/src/structure/node.dart';
@@ -140,7 +141,11 @@ class DialogueRunner {
   }
 
   FutureOr<void> _deliverCommand(Command command) {
-    return command.execute(this);
+    return _combineFutures([
+      command.execute(this),
+      if (command is UserDefinedCommand)
+        for (final view in _dialogueViews) view.onCommand(command)
+    ]);
   }
 
   @internal
@@ -161,11 +166,17 @@ class DialogueRunner {
     _iterators.clear();
   }
 
-  Future<void> _combineFutures(List<FutureOr<void>> maybeFutures) {
-    return Future.wait(<Future<void>>[
+  FutureOr<void> _combineFutures(List<FutureOr<void>> maybeFutures) {
+    final futures = <Future<void>>[
       for (final maybeFuture in maybeFutures)
         if (maybeFuture is Future) maybeFuture
-    ]);
+    ];
+    if (futures.length == 1) {
+      return futures[0];
+    } else if (futures.isNotEmpty) {
+      final Future<void> result = Future.wait<void>(futures);
+      return result;
+    }
   }
 
   Never _error(String message) {

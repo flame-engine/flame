@@ -163,6 +163,7 @@ void main() {
         expect(
           tokenize(
             'one: // comment\n'
+            '\n'
             'two: some data //comment 2\n'
             '---\n===\n',
           ),
@@ -171,6 +172,7 @@ void main() {
             Token.id('one'),
             Token.colon,
             Token.text(''),
+            Token.newline,
             Token.newline,
             Token.id('two'),
             Token.colon,
@@ -699,14 +701,22 @@ void main() {
 
       test('close command within a plain text expression', () {
         expect(
-          () => tokenize('---\n---\n'
+          tokenize('---\n---\n'
               '{ a >> b }\n'
               '===\n'),
-          hasSyntaxError(
-              'SyntaxError: invalid token ">>" within an expression\n'
-              '>  at line 3 column 5:\n'
-              '>  { a >> b }\n'
-              '>      ^\n'),
+          const [
+            Token.startHeader,
+            Token.endHeader,
+            Token.startBody,
+            Token.startExpression,
+            Token.id('a'),
+            Token.operatorGreaterThan,
+            Token.operatorGreaterThan,
+            Token.id('b'),
+            Token.endExpression,
+            Token.newline,
+            Token.endBody,
+          ],
         );
       });
 
@@ -768,8 +778,6 @@ void main() {
             Token.newline,
             Token.startCommand,
             Token.command('fullStop'),
-            Token.startExpression,
-            Token.endExpression,
             Token.endCommand,
             Token.newline,
             Token.startCommand,
@@ -833,12 +841,31 @@ void main() {
         );
       });
 
+      test('user-defined commands', () {
+        expect(
+          tokenize('---\n---\n'
+              '<<hello one two three>>\n'
+              '===\n'),
+          const [
+            Token.startHeader,
+            Token.endHeader,
+            Token.startBody,
+            Token.startCommand,
+            Token.command('hello'),
+            Token.text('one two three'),
+            Token.endCommand,
+            Token.newline,
+            Token.endBody,
+          ],
+        );
+      });
+
       test('closing brace', () {
         expect(
           () => tokenize('---\n---\n'
               '<< hello } >>\n'
               '===\n'),
-          hasSyntaxError('SyntaxError: invalid token "}" within a command\n'
+          hasSyntaxError('SyntaxError: invalid token\n'
               '>  at line 3 column 10:\n'
               '>  << hello } >>\n'
               '>           ^\n'),
@@ -858,7 +885,7 @@ void main() {
       });
     });
 
-    group('modeLineEnd', () {
+    group('modeTextEnd', () {
       test('hashtags in lines', () {
         expect(
           tokenize('---\n---\n'
@@ -941,8 +968,6 @@ void main() {
             Token.hashtag('#one'),
             Token.startCommand,
             Token.command('two'),
-            Token.startExpression,
-            Token.endExpression,
             Token.endCommand,
             Token.startCommand,
             Token.commandStop,
@@ -979,25 +1004,25 @@ void main() {
       test('long line, error near the start', () {
         expect(
           () => tokenize('---\n---\n'
-              '<< alpha beta gamma delta epsilon ~ zeta eta theta iota kappa '
-              'lambda mu nu xi omicron pi rho sigma tau >>\n'
+              '<<set alpha beta gamma delta epsilon ~ zeta eta theta iota '
+              'kappa lambda mu nu xi omicron pi rho sigma tau >>\n'
               '===\n'),
           hasSyntaxError('SyntaxError: invalid token\n'
-              '>  at line 3 column 35:\n'
-              '>  << alpha beta gamma delta epsilon ~ zeta eta theta iota '
-              'kappa lambda mu nu...\n'
-              '>                                    ^\n'),
+              '>  at line 3 column 38:\n'
+              '>  <<set alpha beta gamma delta epsilon ~ zeta eta theta iota '
+              'kappa lambda mu...\n'
+              '>                                       ^\n'),
         );
       });
 
       test('long line, error near the end', () {
         expect(
           () => tokenize('---\n---\n'
-              '<< alpha beta gamma delta epsilon zeta eta theta iota kappa '
+              '<<set alpha beta gamma delta epsilon zeta eta theta iota kappa '
               'lambda mu nu xi omicron pi rho @ sigma tau upsilon phi chi>>\n'
               '===\n'),
           hasSyntaxError('SyntaxError: invalid token\n'
-              '>  at line 3 column 92:\n'
+              '>  at line 3 column 95:\n'
               '>  ...theta iota kappa lambda mu nu xi omicron pi rho @ sigma '
               'tau upsilon phi chi>>\n'
               '>                                                     ^\n'),
@@ -1007,12 +1032,12 @@ void main() {
       test('long line, error in the middle', () {
         expect(
           () => tokenize('---\n---\n'
-              '<< alpha beta gamma delta epsilon zeta eta theta iota kappa '
+              '<<set alpha beta gamma delta epsilon zeta eta theta iota kappa '
               'lambda ` mu nu xi omicron pi rho sigma tau upsilon phi chi psi '
               'omega>>\n'
               '===\n'),
           hasSyntaxError('SyntaxError: invalid token\n'
-              '>  at line 3 column 68:\n'
+              '>  at line 3 column 71:\n'
               '>  ...on zeta eta theta iota kappa lambda ` mu nu xi omicron '
               'pi rho sigma tau...\n'
               '>                                         ^\n'),

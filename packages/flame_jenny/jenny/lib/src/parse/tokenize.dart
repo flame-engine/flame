@@ -112,9 +112,6 @@ class _Lexer {
     return true;
   }
 
-  _ModeFn get currentMode => modeStack.last;
-  _ModeFn get parentMode => modeStack[modeStack.length - 2];
-
   /// Pops the last token from the output stack and checks that it is equal to
   /// [token].
   Token popToken([Token? token]) {
@@ -145,11 +142,11 @@ class _Lexer {
   /// Note that this mode is never popped off the mode stack.
   bool modeMain() {
     return eatEmptyLine() ||
-        eatCommentLine() ||
+        eatComment() ||
         eatHashtagLine() ||
-        eatCommandStart() ||
-        eatHeaderStart() ||
-        (pushMode(modeNodeHeader) && pushToken(Token.startHeader, position));
+        (eatCommandStart() && pushMode(modeCommand)) ||
+        (eatHeaderStart() && pushMode(modeNodeHeader)) ||
+        (pushToken(Token.startHeader, position) && pushMode(modeNodeHeader));
   }
 
   /// Parsing node header, this mode is only active at a start of a line, and
@@ -159,10 +156,13 @@ class _Lexer {
   /// The mode switches to [modeNodeBody] upon encountering the '---' sequence.
   bool modeNodeHeader() {
     return eatEmptyLine() ||
-        eatCommentLine() ||
+        eatComment() ||
         (eatId() && pushMode(modeNodeHeaderLine)) ||
         (eatWhitespace() && error('unexpected indentation')) ||
-        eatHeaderEnd() ||
+        (eatHeaderEnd() &&
+            popMode(modeNodeHeader) &&
+            pushToken(Token.startBody, position) &&
+            pushMode(modeNodeBody)) ||
         error('expected end-of-header marker "---"');
   }
 
@@ -172,7 +172,7 @@ class _Lexer {
   bool modeNodeHeaderLine() {
     return eatWhitespace() ||
         (eat($colon) && pushToken(Token.colon, position - 1)) ||
-        eatHeaderRestOfLine();
+        (eatHeaderRestOfLine() && popMode(modeNodeHeaderLine));
   }
 
   /// The top-level mode for parsing the body of a Node. This mode is active at
@@ -180,64 +180,98 @@ class _Lexer {
   /// taking care of whitespace.
   bool modeNodeBody() {
     return eatEmptyLine() ||
-        eatCommentLine() ||
-        eatBodyEnd() ||
+        eatComment() ||
+        (eatBodyEnd() && popMode(modeNodeBody)) ||
         (eatIndent() && pushMode(modeNodeBodyLine));
   }
 
   /// The mode for parsing regular lines of a node body. This mode is active at
-  /// the beginning of the line only, where it attempts to disambiguate between
-  /// what kind of line it is and then switches to either [modeCommand] or
-  /// [modeText].
+  /// the beginning of the line only (after the indent), where it attempts to
+  /// disambiguate between what kind of line it is and then switches to either
+  /// [modeCommand] or [modeText].
   bool modeNodeBodyLine() {
-    return eatArrow() ||
-        eatCommandStart() ||
-        eatCharacterName() ||
-        eatWhitespace() ||
+    return eatWhitespace() ||
+        eatArrow() ||
+        (eatCommandStart() && pushMode(modeCommand)) ||
+        (eatCharacterName() && pushMode(modeText)) ||
         (eatNewline() && popMode(modeNodeBodyLine)) ||
         pushMode(modeText);
   }
 
   /// The mode of a regular text line within the node body. This mode will
-  /// consume the input until the end of the line, and then pop back to
-  /// [modeNodeBody].
+  /// consume the input until the end of the line, and switch to [modeTextEnd].
   bool modeText() {
     return eatTextEscapeSequence() ||
-        eatExpressionStart() ||
         eatPlainText() ||
-        (popMode(modeText) && pushMode(modeLineEnd));
+        eatCommandEndAsText() ||
+        (eatExpressionStart() && pushMode(modeTextExpression)) ||
+        (popMode(modeText) && pushMode(modeTextEnd));
+  }
+
+  /// Mode at the end of a line, allows hashtags and comments.
+  bool modeTextEnd() {
+    return eatWhitespace() ||
+        eatComment() ||
+        eatHashtag() ||
+        (eatCommandStart() && pushMode(modeCommand)) ||
+        (eatNewline() && popMode(modeTextEnd) && popMode(modeNodeBodyLine));
   }
 
   /// The command mode starts with a '<<', then consumes the command name, and
-  /// after that either switches to the [modeExpression], or looks for a '>>'
-  /// token to exit the mode.
+  /// after that either switches to a different mode depending on which command
+  /// was encountered.
   bool modeCommand() {
     return eatWhitespace() ||
-        eatCommandName() ||
-        eatCommandEnd() ||
-        eatCommandNewline();
+        (eatCommandName() &&
+            (false || // subsequent mode will depend on the command type
+                (simpleCommands.contains(tokens.last)) ||
+                (bareExpressionCommands.contains(tokens.last) &&
+                    pushToken(Token.startExpression, position) &&
+                    pushMode(modeCommandExpression)) ||
+                (tokens.last == Token.commandJump &&
+                    (eatId() ||
+                        (eatExpressionStart() &&
+                            pushMode(modeTextExpression)) ||
+                        error('an ID or an expression expected'))) ||
+                (tokens.last.isCommand && // user-defined commands
+                    pushMode(modeCommandText)))) ||
+        (eatCommandEnd() && popMode(modeCommand)) ||
+        checkNewlineInCommand();
   }
 
-  /// An expression within a [modeText] or [modeCommand]. Within the text, the
-  /// expression is surrounded with curly braces `{ }`, inside a command the
-  /// expression starts immediately after the command name and ends at `>>`.
-  bool modeExpression() {
+  /// Mode for the content of a user-defined command. It is almost the same as
+  /// [modeText], except that it ends at '>>'.
+  bool modeCommandText() {
+    return (eatExpressionStart() && pushMode(modeTextExpression)) ||
+        (eatCommandEnd() && popMode(modeCommandText) && popMode(modeCommand)) ||
+        eatTextEscapeSequence() ||
+        eatPlainText();
+  }
+
+  /// An expression within a [modeText] or [modeCommandText]. The expression
+  /// is surrounded with curly braces `{ }`.
+  bool modeTextExpression() {
     return eatWhitespace() ||
-        eatExpressionCommandEnd() ||
         eatExpressionId() ||
         eatExpressionVariable() ||
         eatNumber() ||
         eatString() ||
         eatOperator() ||
-        eatExpressionEnd();
+        (eatExpressionEnd() && popMode(modeTextExpression));
   }
 
-  /// Mode at the end of a line, allows hashtags and comments.
-  bool modeLineEnd() {
+  /// An expression within a [modeCommand]. Such expression starts immediately
+  /// after the command name and ends at `>>`.
+  bool modeCommandExpression() {
     return eatWhitespace() ||
-        eatCommentOrNewline() ||
-        eatHashtag() ||
-        eatCommandStart();
+        (eatExpressionCommandEnd() &&
+            popMode(modeCommandExpression) &&
+            popMode(modeCommand)) ||
+        eatExpressionId() ||
+        eatExpressionVariable() ||
+        eatNumber() ||
+        eatString() ||
+        eatOperator();
   }
 
   //----------------------------------------------------------------------------
@@ -245,7 +279,6 @@ class _Lexer {
   // the current parsing location. If successful, the functions will:
   //   - advance the parsing position [position];
   //   - emit 0 or more tokens into the [tokens] stream;
-  //   - possibly pushes a new mode or pops the current mode;
   //   - return `true`.
   // Otherwise, the function will:
   //   - leave [position] unmodified;
@@ -261,8 +294,8 @@ class _Lexer {
     return false;
   }
 
-  /// Consumes an empty line, i.e. a line consisting of whitespace only. Does
-  /// not emit any tokens.
+  /// Consumes an empty line, i.e. a line consisting of whitespace only. Emits
+  /// a newline token.
   bool eatEmptyLine() {
     final position0 = position;
     eatWhitespace();
@@ -277,17 +310,16 @@ class _Lexer {
     }
   }
 
-  /// Consumes a comment line: `\s*//.*` up to and including the newline,
-  /// without emitting any tokens.
-  bool eatCommentLine() {
+  /// Consumes a comment line: `\s*//.*` up to but not including the newline,
+  /// emitting no tokens.
+  bool eatComment() {
     final position0 = position;
     eatWhitespace();
     if (eat($slash) && eat($slash)) {
       while (!eof) {
         final cu = currentCodeUnit;
         if (cu == $carriageReturn || cu == $lineFeed) {
-          eatNewline();
-          break;
+          return true;
         }
         position += 1;
       }
@@ -355,10 +387,9 @@ class _Lexer {
     return false;
   }
 
-  /// Consumes a start-of-header token (3 or more '-') followed by a newline,
-  /// then switches to the [modeNodeHeader]. Note that the same character
-  /// sequence encountered within the header body would mean the end of
-  /// header section.
+  /// Consumes a start-of-header token (3 or more '-') followed by a newline.
+  /// Note that the same character sequence encountered within the header body
+  /// would mean the end of header section.
   bool eatHeaderStart() {
     final position0 = position;
     var numMinuses = 0;
@@ -368,15 +399,14 @@ class _Lexer {
     if (numMinuses >= 3 && eatNewline()) {
       popToken(Token.newline);
       pushToken(Token.startHeader, position0);
-      pushMode(modeNodeHeader);
       return true;
     }
     position = position0;
     return false;
   }
 
-  /// Consumes an end-of-header token '---' followed by a newline, emits a
-  /// token, and switches to the [modeNodeBody].
+  /// Consumes an end-of-header token '---' followed by a newline, and emits a
+  /// corresponding token.
   bool eatHeaderEnd() {
     final position0 = position;
     var numMinuses = 0;
@@ -386,17 +416,13 @@ class _Lexer {
     if (numMinuses >= 3 && eatNewline()) {
       popToken(Token.newline);
       pushToken(Token.endHeader, position0);
-      pushToken(Token.startBody, position0);
-      popMode(modeNodeHeader);
-      pushMode(modeNodeBody);
       return true;
     }
     position = position0;
     return false;
   }
 
-  /// Consumes an end-of-body token '===' followed by a newline, emits a token,
-  /// and pops the current mode.
+  /// Consumes+emits an end-of-body token '===' followed by a newline.
   bool eatBodyEnd() {
     final position0 = position;
     if (eat($equals) && eat($equals) && eat($equals)) {
@@ -410,7 +436,6 @@ class _Lexer {
         return false;
       }
       pushToken(Token.endBody, position0);
-      popMode(modeNodeBody);
       return true;
     }
     position = position0;
@@ -443,18 +468,15 @@ class _Lexer {
     final position0 = position;
     for (; !eof; position++) {
       final cu = currentCodeUnit;
-      if (cu == $carriageReturn || cu == $lineFeed) {
-        break;
-      } else if (cu == $slash && eat($slash) && eat($slash)) {
-        position -= 2;
+      if (cu == $carriageReturn ||
+          cu == $lineFeed ||
+          (cu == $slash && nextCodeUnit == $slash)) {
         break;
       }
     }
     pushToken(Token.text(text.substring(position0, position)), position0);
-    if (!eatNewline()) {
-      eatCommentLine();
-    }
-    popMode(modeNodeHeaderLine);
+    eatComment();
+    eatNewline();
     return true;
   }
 
@@ -494,21 +516,17 @@ class _Lexer {
     final position0 = position;
     if (eat($minus) && eat($greaterThan)) {
       pushToken(Token.arrow, position0);
-      eatWhitespace();
       return true;
     }
     position = position0;
     return false;
   }
 
-  /// Consumes+emits a command-start token '<<', and switches to the
-  /// [modeCommand].
+  /// Consumes+emits a command-start token '<<'.
   bool eatCommandStart() {
     final position0 = position;
     if (eat($lessThan) && eat($lessThan)) {
-      eatWhitespace();
       pushToken(Token.startCommand, position0);
-      pushMode(modeCommand);
       return true;
     }
     position = position0;
@@ -519,12 +537,7 @@ class _Lexer {
   bool eatCommandEnd() {
     final position0 = position;
     if (eat($greaterThan) && eat($greaterThan)) {
-      eatWhitespace();
       pushToken(Token.endCommand, position0);
-      popMode(modeCommand);
-      if (currentMode != modeLineEnd) {
-        pushMode(modeLineEnd);
-      }
       return true;
     }
     position = position0;
@@ -535,7 +548,7 @@ class _Lexer {
   /// emits a [Token.person] and a [Token.colon], and also switches into the
   /// [modeText].
   ///
-  /// Note: we have to consume detect both the character name and the subsequent
+  /// Note: we have to detect both the character name and the subsequent
   /// ':' at the same time, because without the colon a simple word at a start
   /// of the line must be considered the plain text.
   bool eatCharacterName() {
@@ -551,26 +564,10 @@ class _Lexer {
         final name = Token.person(text.substring(position0, position1));
         pushToken(name, position0);
         pushToken(Token.colon, position1);
-        pushMode(modeText);
         return true;
       }
     }
     position = position0;
-    return false;
-  }
-
-  /// Consumes a comment at the end of line or a newline while in the
-  /// [modeLineEnd], and pops the current mode so that the next line will start
-  /// again at [modeNodeBody].
-  bool eatCommentOrNewline() {
-    if (eatNewline() || eatCommentLine()) {
-      popMode(modeLineEnd);
-      if (currentMode == modeNodeBodyLine) {
-        popMode(modeNodeBodyLine);
-        assert(currentMode == modeNodeBody);
-      }
-      return true;
-    }
     return false;
   }
 
@@ -606,26 +603,14 @@ class _Lexer {
     return false;
   }
 
-  /// Consumes '{' and enters the [modeExpression].
+  /// Consumes '{' token.
   bool eatExpressionStart() {
-    return eat($leftBrace) &&
-        pushToken(Token.startExpression, position - 1) &&
-        pushMode(modeExpression);
+    return eat($leftBrace) && pushToken(Token.startExpression, position - 1);
   }
 
-  /// Consumes '}' and pops the [modeExpression] (but only when the parent mode
-  /// is [modeText]).
+  /// Consumes '}' token.
   bool eatExpressionEnd() {
-    if (eat($rightBrace)) {
-      if (parentMode != modeText) {
-        position -= 1;
-        error('invalid token "}" within a command');
-      }
-      pushToken(Token.endExpression, position - 1);
-      popMode(modeExpression);
-      return true;
-    }
-    return false;
+    return eat($rightBrace) && pushToken(Token.endExpression, position - 1);
   }
 
   /// Consumes '>>' while in the expression mode, and leaves both the expression
@@ -634,15 +619,8 @@ class _Lexer {
   bool eatExpressionCommandEnd() {
     final position0 = position;
     if (eat($greaterThan) && eat($greaterThan)) {
-      if (parentMode != modeCommand) {
-        position -= 2;
-        error('invalid token ">>" within an expression');
-      }
       pushToken(Token.endExpression, position0);
       pushToken(Token.endCommand, position0);
-      eatWhitespace();
-      popMode(modeExpression);
-      popMode(modeCommand);
       return true;
     }
     position = position0;
@@ -664,8 +642,10 @@ class _Lexer {
         position = positionBeforeWhitespace;
         break;
       } else if ((cu == $lessThan && nextCodeUnit == $lessThan) ||
+          (cu == $greaterThan && nextCodeUnit == $greaterThan) ||
           cu == $backslash ||
-          cu == $leftBrace) {
+          cu == $leftBrace ||
+          cu == $rightBrace) {
         break;
       }
       position += 1;
@@ -675,6 +655,15 @@ class _Lexer {
     }
     if (position > position0) {
       pushToken(Token.text(text.substring(position0, position)), position0);
+      return true;
+    }
+    return false;
+  }
+
+  bool eatCommandEndAsText() {
+    if (currentCodeUnit == $greaterThan && nextCodeUnit == $greaterThan) {
+      pushToken(const Token.text('>>'), position);
+      position += 2;
       return true;
     }
     return false;
@@ -803,35 +792,17 @@ class _Lexer {
     return false;
   }
 
-  /// Consumes a name of the command (ID) and emits it as a token. After that,
-  /// goes either into expression mode if the command expects arguments, or
-  /// remains in the command mode otherwise. User-defined commands are assumed
-  /// to always allow expressions.
+  /// Consumes a name of the command (ID) and emits it as a token.
   bool eatCommandName() {
     final position0 = position;
     if (eatId()) {
+      eatWhitespace();
       final token = popToken();
-      final name = token.content;
-      final commandToken = commandTokens[name];
+      final commandToken = commandTokens[token.content];
       if (commandToken != null) {
         pushToken(commandToken, position0);
-        if (commandToken == Token.commandIf ||
-            commandToken == Token.commandElseif ||
-            commandToken == Token.commandWait ||
-            commandToken == Token.commandSet ||
-            commandToken == Token.commandDeclare) {
-          pushToken(Token.startExpression, position0);
-          pushMode(modeExpression);
-        } else if (commandToken == Token.commandJump) {
-          eatWhitespace();
-          eatId() ||
-              eatExpressionStart() ||
-              error('an ID or an expression expected');
-        }
       } else {
-        pushToken(Token.command(name), position0);
-        pushToken(Token.startExpression, position0);
-        pushMode(modeExpression);
+        pushToken(Token.command(token.content), position0);
       }
       return true;
     }
@@ -839,7 +810,7 @@ class _Lexer {
   }
 
   /// Check whether a command terminated prematurely.
-  bool eatCommandNewline() {
+  bool checkNewlineInCommand() {
     final cu = currentCodeUnit;
     if (cu == $carriageReturn || cu == $lineFeed) {
       error('missing command close token ">>"');
@@ -854,11 +825,8 @@ class _Lexer {
     if (eat($hash)) {
       while (!eof) {
         final cu = currentCodeUnit;
-        if (cu == $slash && eat($slash) && eat($slash)) {
-          position -= 2;
-          break;
-        }
-        if (cu == $lineFeed ||
+        if ((cu == $slash && nextCodeUnit == $slash) ||
+            cu == $lineFeed ||
             cu == $carriageReturn ||
             cu == $space ||
             cu == $tab ||
@@ -936,6 +904,22 @@ class _Lexer {
     'set': Token.commandSet,
     'stop': Token.commandStop,
     'wait': Token.commandWait,
+  };
+
+  /// Built-in commands that have no arguments.
+  static final Set<Token> simpleCommands = {
+    Token.commandElse,
+    Token.commandEndif,
+    Token.commandStop,
+  };
+
+  /// Built-in commands that are followed by an expression (without `{}`).
+  static final Set<Token> bareExpressionCommands = {
+    Token.commandDeclare,
+    Token.commandElseif,
+    Token.commandIf,
+    Token.commandSet,
+    Token.commandWait,
   };
 
   /// Throws a [SyntaxError] with the given [message], augmenting it with the

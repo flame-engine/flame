@@ -18,6 +18,7 @@ abelian
 ambiguate
 antialiasing
 arial
+arity
 autofocus
 backpressure
 backtick

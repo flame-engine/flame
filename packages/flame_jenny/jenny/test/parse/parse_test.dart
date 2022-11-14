@@ -696,7 +696,6 @@ void main() {
           expect((node.lines[0] as JumpCommand).target.value, 'UP');
           expect((node.lines[1] as JumpCommand).target.value, 'DOWN');
         },
-        skip: true,
       );
     });
   });
