@@ -9,7 +9,8 @@ void addFlameIsolateExample(Dashbook dashbook) {
         (_) => GameWidget(
           game: SimpleIsolateExample(),
         ),
-        codeLink: baseLink('flame_isolate/simple_isolate_example.dart'),
+        codeLink: baseLink(
+            'bridge_libraries/flame_isolate/simple_isolate_example.dart'),
         info: SimpleIsolateExample.description,
       );
 }

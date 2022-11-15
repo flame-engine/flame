@@ -1,6 +1,6 @@
 # Tutorials
 
-This chapter contains only one tutorial for now, but we'll be adding more soon!
+The following are tutorials that are maintained with every release of Flame.
 
 - [](bare_flame_game.md) -- this tutorial focuses on setting up your environment
   for making a new Flame game. This "initial state" is assumed as a starting

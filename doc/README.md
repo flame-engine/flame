@@ -48,7 +48,7 @@ then run `pub get` and you are ready to start using it!
 ## Getting started
 
 There is a set of tutorials that you can follow to get started in the
-[tutorials folder](https://github.com/flame-engine/flame/tree/main/tutorials).
+[tutorials folder](https://github.com/flame-engine/flame/tree/main/doc/tutorials).
 
 Simple examples for all features can be found in the
 [examples folder](https://github.com/flame-engine/flame/tree/main/examples).
