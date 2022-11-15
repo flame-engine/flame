@@ -71,7 +71,7 @@ void main() {
       expect(router.currentRoute.name, 'start');
     });
 
-    testWithFlameGame('pageTransient true', (game) async {
+    testWithFlameGame('pageTransient false', (game) async {
       var onPushCalled = 0;
       var onPopCalled = 0;
       var buildFirstCalled = 0;
@@ -158,7 +158,7 @@ void main() {
       expect(previousRoute!.name, 'start');
     });
 
-    testWithFlameGame('pageTransient false', (game) async {
+    testWithFlameGame('pageTransient true', (game) async {
       var onPushCalled = 0;
       var onPopCalled = 0;
       var buildFirstCalled = 0;
@@ -169,7 +169,7 @@ void main() {
         routes: {
           'start': Route(Component.new),
           'first': CustomRoute(
-            pageTransient: false,
+            pageTransient: true,
             onPush: (self, prevRoute) {
               onPushCalled++;
               previousRoute = prevRoute;
