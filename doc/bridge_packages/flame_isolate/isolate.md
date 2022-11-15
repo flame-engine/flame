@@ -46,10 +46,10 @@ A simple example of this can be found in the example application for the FlameIs
 
 ### Backpressure Strategies
 
-Backpressure strategies are a way to cope with the job queue when job items are produced more rapidly
-than the isolate can handle them. This presents the problem of what to do with such a growing
-backlog of unhandled jobs. To mitigate this problem this library funnels all jobs through a job
-queue handler. Also known as `BackpressureStrategy`.
+Backpressure strategies are a way to cope with the job queue when job items are produced more
+rapidly than the isolate can handle them. This presents the problem of what to do with such a
+growing backlog of unhandled jobs. To mitigate this problem this library funnels all jobs through a
+job queue handler. Also known as `BackpressureStrategy`.
 
 The ones currently supported are:
 
