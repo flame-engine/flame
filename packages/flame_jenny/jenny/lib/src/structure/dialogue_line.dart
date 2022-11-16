@@ -1,7 +1,8 @@
+import 'package:jenny/src/dialogue_runner.dart';
+import 'package:jenny/src/structure/dialogue_entry.dart';
 import 'package:jenny/src/structure/expressions/expression.dart';
-import 'package:jenny/src/structure/statement.dart';
 
-class DialogueLine extends Statement {
+class DialogueLine extends DialogueEntry {
   const DialogueLine({
     this.character,
     required this.content,
@@ -13,7 +14,9 @@ class DialogueLine extends Statement {
   final List<String>? tags;
 
   @override
-  StatementKind get kind => StatementKind.line;
+  Future<void> processInDialogueRunner(DialogueRunner runner) {
+    return runner.deliverLine(this);
+  }
 
   @override
   String toString() {

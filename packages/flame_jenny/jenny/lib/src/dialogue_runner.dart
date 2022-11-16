@@ -8,7 +8,6 @@ import 'package:jenny/src/structure/commands/user_defined_command.dart';
 import 'package:jenny/src/structure/dialogue_choice.dart';
 import 'package:jenny/src/structure/dialogue_line.dart';
 import 'package:jenny/src/structure/node.dart';
-import 'package:jenny/src/structure/statement.dart';
 import 'package:jenny/src/yarn_project.dart';
 import 'package:meta/meta.dart';
 
@@ -71,18 +70,8 @@ class DialogueRunner {
     while (_iterators.isNotEmpty) {
       final iterator = _iterators.last;
       if (iterator.moveNext()) {
-        final nextLine = iterator.current;
-        switch (nextLine.kind) {
-          case StatementKind.line:
-            await _deliverLine(nextLine as DialogueLine);
-            break;
-          case StatementKind.choice:
-            await _deliverChoices(nextLine as DialogueChoice);
-            break;
-          case StatementKind.command:
-            await _deliverCommand(nextLine as Command);
-            break;
-        }
+        final entry = iterator.current;
+        await entry.processInDialogueRunner(this);
       } else {
         _iterators.removeLast();
         _currentNodes.removeLast();
@@ -105,7 +94,8 @@ class DialogueRunner {
     _linePipeline?.stop();
   }
 
-  Future<void> _deliverLine(DialogueLine line) async {
+  @internal
+  Future<void> deliverLine(DialogueLine line) async {
     final pipeline = _LineDeliveryPipeline(line, _dialogueViews);
     _linePipeline = pipeline;
     pipeline.start();
@@ -113,7 +103,8 @@ class DialogueRunner {
     _linePipeline = null;
   }
 
-  Future<void> _deliverChoices(DialogueChoice choice) async {
+  @internal
+  Future<void> deliverChoices(DialogueChoice choice) async {
     // Compute which options are available and which aren't. This must be done
     // only once, because some options may have non-deterministic conditionals
     // which may produce different results on each invocation.
@@ -140,8 +131,9 @@ class DialogueRunner {
     enterBlock(chosenOption.block);
   }
 
-  FutureOr<void> _deliverCommand(Command command) {
-    return _combineFutures([
+  @internal
+  Future<void> deliverCommand(Command command) async {
+    await _combineFutures([
       command.execute(this),
       if (command is UserDefinedCommand)
         for (final view in _dialogueViews) view.onCommand(command)

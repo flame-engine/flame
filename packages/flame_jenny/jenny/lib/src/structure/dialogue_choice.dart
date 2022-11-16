@@ -1,13 +1,16 @@
+import 'package:jenny/src/dialogue_runner.dart';
+import 'package:jenny/src/structure/dialogue_entry.dart';
 import 'package:jenny/src/structure/option.dart';
-import 'package:jenny/src/structure/statement.dart';
 
-class DialogueChoice extends Statement {
+class DialogueChoice extends DialogueEntry {
   const DialogueChoice(this.options);
 
   final List<Option> options;
 
   @override
-  StatementKind get kind => StatementKind.choice;
+  Future<void> processInDialogueRunner(DialogueRunner runner) {
+    return runner.deliverChoices(this);
+  }
 
   @override
   String toString() => 'DialogueChoice($options)';

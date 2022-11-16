@@ -1,6 +1,5 @@
 import 'package:jenny/jenny.dart';
 import 'package:jenny/src/structure/expressions/literal.dart';
-import 'package:jenny/src/structure/statement.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -10,7 +9,6 @@ void main() {
       expect(line.character, isNull);
       expect(line.tags, isNull);
       expect(line.content.value, '');
-      expect(line.kind, StatementKind.line);
       expect('$line', 'DialogueLine()');
     });
 
@@ -20,7 +18,6 @@ void main() {
         content: StringLiteral('Hello!'),
         tags: ['#red', '#fast'],
       );
-      expect(line.kind, StatementKind.line);
       expect(line.content.value, 'Hello!');
       expect(line.character, 'Bob');
       expect(line.tags!.length, 2);

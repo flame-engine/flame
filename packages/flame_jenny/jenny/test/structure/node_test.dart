@@ -4,7 +4,7 @@ import 'package:jenny/src/structure/dialogue_line.dart';
 import 'package:jenny/src/structure/expressions/literal.dart';
 import 'package:jenny/src/structure/node.dart';
 import 'package:jenny/src/structure/option.dart';
-import 'package:jenny/src/structure/statement.dart';
+import 'package:jenny/src/structure/dialogue_entry.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -16,7 +16,7 @@ void main() {
       );
 
       expect(node.title, 'Introduction');
-      expect(node.lines, <Statement>[]);
+      expect(node.lines, <DialogueEntry>[]);
       expect(node.tags, isNull);
       expect('$node', 'Node(Introduction)');
     });
@@ -37,7 +37,7 @@ void main() {
     group('iterators', () {
       test('iterating an empty node', () {
         const node = Node(title: 'X', content: Block.empty());
-        final statements = List<Statement>.from(node);
+        final statements = List<DialogueEntry>.from(node);
         expect(statements, isEmpty);
       });
 
@@ -56,7 +56,7 @@ void main() {
           title: 'quadruple',
           content: Block([line1, line2, line3, line4]),
         );
-        expect(List<Statement>.from(node), [line1, line2, line3, line4]);
+        expect(List<DialogueEntry>.from(node), [line1, line2, line3, line4]);
       });
 
       test('iterating deep node', () {
@@ -84,14 +84,14 @@ void main() {
           ]),
         );
 
-        final lines0 = <Statement>[];
+        final lines0 = <DialogueEntry>[];
         final it0 = node.iterator;
         while (it0.moveNext()) {
           lines0.add(it0.current);
         }
         expect(lines0, node.lines);
 
-        final lines1 = <Statement>[];
+        final lines1 = <DialogueEntry>[];
         final it1 = node.iterator;
         while (it1.moveNext()) {
           final nextLine = it1.current;

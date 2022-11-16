@@ -21,7 +21,7 @@ import 'package:jenny/src/structure/expressions/relational.dart';
 import 'package:jenny/src/structure/expressions/string.dart';
 import 'package:jenny/src/structure/node.dart';
 import 'package:jenny/src/structure/option.dart';
-import 'package:jenny/src/structure/statement.dart';
+import 'package:jenny/src/structure/dialogue_entry.dart';
 import 'package:jenny/src/yarn_project.dart';
 import 'package:meta/meta.dart';
 
@@ -122,7 +122,7 @@ class _Parser {
   }
 
   Block parseStatementList() {
-    final lines = <Statement>[];
+    final lines = <DialogueEntry>[];
     while (true) {
       final nextToken = peekToken();
       if (nextToken == Token.arrow) {

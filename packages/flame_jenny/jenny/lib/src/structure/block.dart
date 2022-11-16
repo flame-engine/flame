@@ -1,10 +1,10 @@
-import 'package:jenny/src/structure/statement.dart';
+import 'package:jenny/src/structure/dialogue_entry.dart';
 
 class Block {
   const Block(this.lines);
   const Block.empty() : lines = const [];
 
-  final List<Statement> lines;
+  final List<DialogueEntry> lines;
 
   int get length => lines.length;
   bool get isEmpty => lines.isEmpty;

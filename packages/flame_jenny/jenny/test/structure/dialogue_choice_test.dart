@@ -1,5 +1,4 @@
 import 'package:jenny/src/structure/dialogue_choice.dart';
-import 'package:jenny/src/structure/statement.dart';
 import 'package:test/test.dart';
 
 import '../test_scenario.dart';
@@ -9,7 +8,6 @@ void main() {
     test('.kind', () {
       const choiceSet = DialogueChoice([]);
       expect(choiceSet.options.isEmpty, true);
-      expect(choiceSet.kind, StatementKind.choice);
     });
 
     testScenario(
