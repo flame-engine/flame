@@ -51,7 +51,6 @@ class MyGame extends FlameGame {
             repeating: true, // continuously loop the animation
         ),
     );
-
   }
   ...
 }
