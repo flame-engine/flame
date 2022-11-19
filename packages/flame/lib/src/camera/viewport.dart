@@ -1,9 +1,9 @@
 import 'dart:ui';
 
 import 'package:flame/src/anchor.dart';
+import 'package:flame/src/camera/camera_component.dart';
 import 'package:flame/src/components/core/component.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
-import 'package:flame/src/camera/camera_component.dart';
 import 'package:meta/meta.dart';
 import 'package:vector_math/vector_math_64.dart';
 

@@ -1,18 +1,18 @@
 import 'dart:ui';
 
+import 'package:flame/src/camera/behaviors/bounded_position_behavior.dart';
+import 'package:flame/src/camera/behaviors/follow_behavior.dart';
+import 'package:flame/src/camera/viewfinder.dart';
+import 'package:flame/src/camera/viewport.dart';
+import 'package:flame/src/camera/viewports/max_viewport.dart';
+import 'package:flame/src/camera/world.dart';
 import 'package:flame/src/components/core/component.dart';
 import 'package:flame/src/components/position_component.dart';
 import 'package:flame/src/effects/controllers/effect_controller.dart';
 import 'package:flame/src/effects/move_effect.dart';
 import 'package:flame/src/effects/move_to_effect.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
-import 'package:flame/src/camera/behaviors/bounded_position_behavior.dart';
-import 'package:flame/src/camera/behaviors/follow_behavior.dart';
 import 'package:flame/src/experimental/geometry/shapes/shape.dart';
-import 'package:flame/src/camera/viewports/max_viewport.dart';
-import 'package:flame/src/camera/viewfinder.dart';
-import 'package:flame/src/camera/viewport.dart';
-import 'package:flame/src/camera/world.dart';
 import 'package:meta/meta.dart';
 import 'package:vector_math/vector_math_64.dart';
 
