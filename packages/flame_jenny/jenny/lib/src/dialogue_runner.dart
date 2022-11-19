@@ -45,7 +45,7 @@ class DialogueRunner {
   final List<NodeIterator> _iterators;
   _LineDeliveryPipeline? _linePipeline;
 
-  /// Executes the node with the given name, and returns a future that finished
+  /// Executes the node with the given name, and returns a future that finishes
   /// once the dialogue stops running.
   Future<void> runNode(String nodeName) async {
     if (_currentNodes.isNotEmpty) {
