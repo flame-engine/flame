@@ -14,7 +14,6 @@ class FixedSizeViewport extends Viewport {
     super.children,
   }) {
     size = Vector2(width, height);
-    onViewportResize();
   }
 
   late Rect _clipRect;
