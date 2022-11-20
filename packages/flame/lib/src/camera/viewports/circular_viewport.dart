@@ -4,6 +4,10 @@ import 'package:flame/src/camera/viewport.dart';
 import 'package:vector_math/vector_math_64.dart';
 
 /// A fixed-size viewport in the shape of a circle (or ellipse).
+///
+/// This viewport does not adjust its size or position on the screen in response
+/// to game resize events. However, the [size] of the viewport can be changed
+/// manually at runtime.
 class CircularViewport extends Viewport {
   CircularViewport(double radius, {super.children}) {
     // This will also call [onViewportResize]
