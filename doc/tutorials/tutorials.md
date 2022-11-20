@@ -1,19 +1,18 @@
 # Tutorials
 
-This chapter contains only one tutorial for now, but we'll be adding more soon!
+The following are tutorials that are maintained with every release of Flame.
 
-- [](bare_flame_game.md) -- this tutorial focuses on setting up your environment
-  for making a new Flame game. This "initial state" is assumed as a starting
-  point for all other tutorials.
+- [](bare_flame_game.md) -- this tutorial focuses on setting up your environment for making a new
+  Flame game. This "initial state" is assumed as a starting point for all other tutorials.
 
 - [](klondike/klondike.md) -- in this tutorial, we will build the Klondike
   solitaire card game.
 
-- [](platformer/platformer.md) -- in this tutorial, we will build Ember Quest, a
-  simple side-scrolling platformer.
+- [](platformer/platformer.md) -- in this tutorial, we will build Ember Quest, a simple
+  side-scrolling platformer.
 
-- [](space_shooter/space_shooter.md) -- in this tutorial, we will build Space
-  Shooter, a classic top-down shooting game.
+- [](space_shooter/space_shooter.md) -- in this tutorial, we will build Space Shooter, a classic
+  top-down shooting game.
 
 ```{toctree}
 :hidden:

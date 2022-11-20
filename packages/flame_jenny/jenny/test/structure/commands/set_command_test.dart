@@ -3,8 +3,8 @@ import 'package:jenny/src/parse/token.dart';
 import 'package:jenny/src/parse/tokenize.dart';
 import 'package:test/test.dart';
 
-import '../../parse/utils.dart';
 import '../../test_scenario.dart';
+import '../../utils.dart';
 
 void main() {
   group('SetCommand', () {

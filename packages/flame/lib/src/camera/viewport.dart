@@ -1,9 +1,9 @@
 import 'dart:ui';
 
 import 'package:flame/src/anchor.dart';
+import 'package:flame/src/camera/camera_component.dart';
 import 'package:flame/src/components/core/component.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
-import 'package:flame/src/experimental/camera_component.dart';
 import 'package:meta/meta.dart';
 import 'package:vector_math/vector_math_64.dart';
 
@@ -23,6 +23,8 @@ import 'package:vector_math/vector_math_64.dart';
 abstract class Viewport extends Component
     implements AnchorProvider, PositionProvider, SizeProvider {
   Viewport({super.children});
+
+  final Vector2 _size = Vector2.zero();
 
   /// Position of the viewport's anchor in the parent's coordinate frame.
   ///
@@ -53,7 +55,6 @@ abstract class Viewport extends Component
   /// size cannot be negative.
   @override
   Vector2 get size => _size;
-  final Vector2 _size = Vector2.zero();
   @override
   set size(Vector2 value) {
     assert(
@@ -87,10 +88,15 @@ abstract class Viewport extends Component
   @override
   bool containsLocalPoint(Vector2 point);
 
-  /// Override in order to perform a custom action upon resize.
+  /// Called after the size of the viewport has changed.
   ///
-  /// A typical use-case would be to adjust the viewport's clip mask to match
-  /// the new size.
+  /// The new size will be stored in the [size] property. This method could be
+  /// invoked either when the user explicitly changes the size of the viewport,
+  /// or when the size changes automatically in response to the change in game
+  /// canvas size.
+  ///
+  /// A typical implementation would need to adjust the viewport's clip mask to
+  /// match the new size.
   @protected
   void onViewportResize();
 
