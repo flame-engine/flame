@@ -6,14 +6,17 @@ import 'package:vector_math/vector_math_64.dart';
 /// A fixed-size viewport in the shape of a circle (or ellipse).
 class CircularViewport extends Viewport {
   CircularViewport(double radius, {super.children}) {
-    _radiusX = radius;
-    _radiusY = radius;
+    // This will also call [onViewportResize]
     size = Vector2.all(2 * radius);
   }
 
+  CircularViewport.ellipse(double radiusX, double radiusY, {super.children}) {
+    size = Vector2(2 * radiusX, 2 * radiusY);
+  }
+
   Path _clipPath = Path();
-  double _radiusX = 0;
-  double _radiusY = 0;
+  double _radiusX = 0.0;
+  double _radiusY = 0.0;
 
   @override
   void clip(Canvas canvas) => canvas.clipPath(_clipPath, doAntiAlias: false);
@@ -30,5 +33,10 @@ class CircularViewport extends Viewport {
     _radiusX = size.x / 2;
     _radiusY = size.y / 2;
     _clipPath = Path()..addOval(Rect.fromLTRB(0, 0, size.x, size.y));
+  }
+
+  @override
+  void renderDebugMode(Canvas canvas) {
+    canvas.drawPath(_clipPath, debugPaint);
   }
 }
