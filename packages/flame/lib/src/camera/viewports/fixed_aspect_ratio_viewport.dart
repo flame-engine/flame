@@ -1,6 +1,5 @@
 import 'dart:ui';
 
-import 'package:flame/extensions.dart';
 import 'package:flame/src/camera/viewport.dart';
 import 'package:vector_math/vector_math_64.dart';
 
@@ -9,25 +8,31 @@ import 'package:vector_math/vector_math_64.dart';
 /// aspect ratio.
 ///
 /// This viewport will automatically adjust its size and position when the
-/// game canvas changes in size.
+/// game canvas changes in size. At the same time, manually changing the size
+/// of this viewport is not supported.
 class FixedAspectRatioViewport extends Viewport {
   FixedAspectRatioViewport({
     required this.aspectRatio,
     super.children,
-  })  : _canvasSize = Vector2.zero(),
-        assert(aspectRatio > 0);
+  }) : assert(aspectRatio > 0);
 
   /// The ratio of width to height of the viewport.
   final double aspectRatio;
 
-  final Vector2 _canvasSize;
   Rect _clipRect = Rect.zero;
 
   @override
   void onGameResize(Vector2 canvasSize) {
     super.onGameResize(canvasSize);
-    _canvasSize.setFrom(canvasSize);
-    onViewportResize();
+
+    final availableWidth = canvasSize.x;
+    final availableHeight = canvasSize.y;
+    size = (availableHeight * aspectRatio > availableWidth)
+        ? Vector2(availableWidth, availableWidth / aspectRatio)
+        : Vector2(availableHeight * aspectRatio, availableHeight);
+    position.x = (availableWidth - size.x) / 2 + anchor.x * size.x;
+    position.y = (availableHeight - size.y) / 2 + anchor.y * size.y;
+    _clipRect = Rect.fromLTRB(0, 0, size.x, size.y);
   }
 
   @override
@@ -42,17 +47,7 @@ class FixedAspectRatioViewport extends Viewport {
 
   @override
   void onViewportResize() {
-    final availableWidth = _canvasSize.x;
-    final availableHeight = _canvasSize.y;
-    if (availableHeight * aspectRatio > availableWidth) {
-      size.x = availableWidth;
-      size.y = availableWidth / aspectRatio;
-    } else {
-      size.x = availableHeight * aspectRatio;
-      size.y = availableHeight;
-    }
-    position.x = (availableWidth - size.x) / 2 + anchor.x * size.x;
-    position.y = (availableHeight - size.y) / 2 + anchor.y * size.y;
-    _clipRect = Rect.fromLTRB(0, 0, size.x, size.y);
+    // The size is set in [onGameResize]. Setting size manually is not
+    // supported.
   }
 }
