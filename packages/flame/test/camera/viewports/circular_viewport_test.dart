@@ -114,6 +114,13 @@ void main() {
       expect(hit(180, 50), true);
       expect(hit(180, 49), false);
       expect(hit(180, 51), false);
+
+      final nestedPoints = <Vector2>[];
+      final center = Vector2(100, 50);
+      for (final point in game.componentsAtPoint(center, nestedPoints)) {
+        print(nestedPoints);
+        break;
+      }
     });
 
     test('set wrong size', () {
