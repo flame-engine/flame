@@ -117,8 +117,9 @@ void main() {
 
       final nestedPoints = <Vector2>[];
       final center = Vector2(100, 50);
-      for (final point in game.componentsAtPoint(center, nestedPoints)) {
-        print(nestedPoints);
+      for (final component in game.componentsAtPoint(center, nestedPoints)) {
+        expect(component, world);
+        expect(nestedPoints.last, Vector2.zero());
         break;
       }
     });
