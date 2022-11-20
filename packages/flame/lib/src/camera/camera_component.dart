@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:flame/experimental.dart';
 import 'package:flame/src/camera/behaviors/bounded_position_behavior.dart';
 import 'package:flame/src/camera/behaviors/follow_behavior.dart';
 import 'package:flame/src/camera/viewfinder.dart';
@@ -44,6 +45,24 @@ class CameraComponent extends Component {
     Viewfinder? viewfinder,
   })  : viewport = viewport ?? MaxViewport(),
         viewfinder = viewfinder ?? Viewfinder();
+
+  /// Create a camera that shows a portion of the game world of fixed size
+  /// [width] x [height].
+  factory CameraComponent.withFixedResolution({
+    required World world,
+    required double width,
+    required double height,
+    List<Component>? hudComponents,
+  }) {
+    final viewfinder = Viewfinder()..visibleGameSize = Vector2(width, height);
+    final viewport = FixedAspectRatioViewport(aspectRatio: width / height);
+    if (hudComponents != null) {
+      viewport.addAll(hudComponents);
+    }
+    return CameraComponent(
+        world: world, viewport: viewport, viewfinder: viewfinder,
+    );
+  }
 
   /// The [viewport] is the "window" through which the game world is observed.
   ///
