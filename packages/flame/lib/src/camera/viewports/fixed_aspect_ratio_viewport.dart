@@ -47,7 +47,15 @@ class FixedAspectRatioViewport extends Viewport {
 
   @override
   void onViewportResize() {
-    // The size is set in [onGameResize]. Setting size manually is not
-    // supported.
+    final desiredWidth = size.y * aspectRatio;
+    if (desiredWidth > size.x) {
+      size.y = size.x / aspectRatio;
+    } else {
+      size.x = desiredWidth;
+    }
+
+    final x = size.x / 2;
+    final y = size.y / 2;
+    _clipRect = Rect.fromLTRB(-x, -y, x, y);
   }
 }
