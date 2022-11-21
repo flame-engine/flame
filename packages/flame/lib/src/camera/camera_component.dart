@@ -1,10 +1,10 @@
 import 'dart:ui';
 
-import 'package:flame/experimental.dart';
 import 'package:flame/src/camera/behaviors/bounded_position_behavior.dart';
 import 'package:flame/src/camera/behaviors/follow_behavior.dart';
 import 'package:flame/src/camera/viewfinder.dart';
 import 'package:flame/src/camera/viewport.dart';
+import 'package:flame/src/camera/viewports/fixed_aspect_ratio_viewport.dart';
 import 'package:flame/src/camera/viewports/max_viewport.dart';
 import 'package:flame/src/camera/world.dart';
 import 'package:flame/src/components/core/component.dart';
@@ -48,19 +48,24 @@ class CameraComponent extends Component {
 
   /// Create a camera that shows a portion of the game world of fixed size
   /// [width] x [height].
+  ///
+  /// The viewport will be centered within the canvas, expanding as much as
+  /// possible on all sides while maintaining the [width]:[height] aspect ratio.
+  /// The zoom level will be set such in such a way that exactly [width] x
+  /// [height] pixels are visible within the viewport. The viewfinder will be
+  /// initially set up to show world coordinates (0, 0) at the center of the
+  /// viewport.
   factory CameraComponent.withFixedResolution({
     required World world,
     required double width,
     required double height,
     List<Component>? hudComponents,
   }) {
-    final viewfinder = Viewfinder()..visibleGameSize = Vector2(width, height);
-    final viewport = FixedAspectRatioViewport(aspectRatio: width / height);
-    if (hudComponents != null) {
-      viewport.addAll(hudComponents);
-    }
     return CameraComponent(
-        world: world, viewport: viewport, viewfinder: viewfinder,
+      world: world,
+      viewport: FixedAspectRatioViewport(aspectRatio: width / height)
+        ..addAll(hudComponents ?? []),
+      viewfinder: Viewfinder()..visibleGameSize = Vector2(width, height),
     );
   }
 
