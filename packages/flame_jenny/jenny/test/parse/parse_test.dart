@@ -229,7 +229,7 @@ void main() {
           expect(line.tags, isNull);
           expect(line.condition, isNull);
           expect(line.block, isEmpty);
-          expect(line.content.value, ['Alpha', 'Beta', 'Gamma'][i]);
+          expect(line.value, ['Alpha', 'Beta', 'Gamma'][i]);
         }
       });
 
@@ -245,8 +245,8 @@ void main() {
         final option1 = choice.options[1];
         expect(option0.character, 'Alice');
         expect(option1.character, 'Bob');
-        expect(option0.content.value, 'Hello!');
-        expect(option1.content.value, 'Hi: there!');
+        expect(option0.value, 'Hello!');
+        expect(option1.value, 'Hi: there!');
       });
 
       test('option with a followup dialogue', () {
@@ -263,7 +263,7 @@ void main() {
         expect(choiceSet.options.length, 2);
         final choice1 = choiceSet.options[0];
         final choice2 = choiceSet.options[1];
-        expect(choice1.content.value, 'choice one');
+        expect(choice1.value, 'choice one');
         expect(choice1.block, isNotNull);
         expect(choice1.block.length, 2);
         expect(
@@ -274,7 +274,7 @@ void main() {
           (choice1.block.lines[1] as DialogueLine).value,
           'Back to ya!',
         );
-        expect(choice2.content.value, 'choice two');
+        expect(choice2.value, 'choice two');
         expect(choice2.block, isNotNull);
         expect(choice2.block.lines.length, 1);
         expect(

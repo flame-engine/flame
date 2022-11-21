@@ -1,6 +1,7 @@
+import 'package:jenny/jenny.dart';
 import 'package:jenny/src/dialogue_runner.dart';
 import 'package:jenny/src/structure/dialogue_entry.dart';
-import 'package:jenny/src/structure/expressions/expression.dart';
+import 'package:jenny/src/structure/line_content.dart';
 
 /// [DialogueLine] is a single line of "normal" text within the dialogue.
 ///
@@ -14,7 +15,7 @@ import 'package:jenny/src/structure/expressions/expression.dart';
 /// ```
 class DialogueLine extends DialogueEntry {
   DialogueLine({
-    required StringExpression content,
+    required LineContent content,
     this.character,
     this.tags,
   }) : _content = content;
@@ -23,7 +24,7 @@ class DialogueLine extends DialogueEntry {
   /// the line does not indicate the speaker.
   final String? character;
   final List<String>? tags;
-  final StringExpression _content;
+  final LineContent _content;
 
   String get value => _value ??= _evaluateLine();
   String? _value;
@@ -34,7 +35,7 @@ class DialogueLine extends DialogueEntry {
   }
 
   String _evaluateLine() {
-    return _content.value;
+    return _content.evaluate();
   }
 
   @override
@@ -42,4 +43,10 @@ class DialogueLine extends DialogueEntry {
     final prefix = character == null ? '' : '$character: ';
     return 'DialogueLine($prefix$value)';
   }
+
+  @override
+  bool operator==(Object other) =>
+    other is DialogueLine &&
+    value == other.value &&
+    character == other.character;
 }

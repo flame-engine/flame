@@ -641,6 +641,11 @@ class _Lexer {
         popToken(Token.operatorDivide);
         pushToken(Token.closeMarkupTag, position - 2);
       }
+      if (tokens.last == Token.closeMarkupTag) {
+        // Self-closing markup tag such as `[img/]`: consume a single whitespace
+        // character after such tag (if present).
+        eat($space);
+      }
       pushToken(Token.endMarkupTag, position - 1);
       return true;
     }

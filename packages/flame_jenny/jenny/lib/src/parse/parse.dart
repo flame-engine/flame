@@ -208,14 +208,12 @@ class _Parser {
     return null;
   }
 
-  StringExpression parseLineContent() {
-    final parts = <StringExpression>[];
+  LineContent parseLineContent() {
     final stringBuilder = StringBuffer();
     final expressions = <InlineExpression>[];
     while (true) {
       final token = peekToken();
       if (token.isText) {
-        parts.add(StringLiteral(token.content));
         stringBuilder.write(token.content);
         position += 1;
       } else if (token == Token.startExpression) {
@@ -232,24 +230,14 @@ class _Parser {
                     : expression as StringExpression,
           ),
         );
-        if (expression.isString) {
-          parts.add(expression as StringExpression);
-        } else if (expression.isNumeric) {
-          parts.add(NumToStringFn(expression as NumExpression));
-        } else if (expression.isBoolean) {
-          parts.add(BoolToStringFn(expression as BoolExpression));
-        }
       } else {
         break;
       }
     }
-    if (parts.length == 1) {
-      return parts.first;
-    } else if (parts.length > 1) {
-      return Concatenate(parts);
-    } else {
-      return constEmptyString;
-    }
+    return LineContent(
+      stringBuilder.toString(),
+      expressions.isEmpty? null : expressions,
+    );
   }
 
   BoolExpression? maybeParseLineCondition() {

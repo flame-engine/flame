@@ -2,7 +2,7 @@ import 'package:jenny/src/structure/block.dart';
 import 'package:jenny/src/structure/dialogue_choice.dart';
 import 'package:jenny/src/structure/dialogue_entry.dart';
 import 'package:jenny/src/structure/dialogue_line.dart';
-import 'package:jenny/src/structure/expressions/literal.dart';
+import 'package:jenny/src/structure/line_content.dart';
 import 'package:jenny/src/structure/node.dart';
 import 'package:jenny/src/structure/option.dart';
 import 'package:test/test.dart';
@@ -42,16 +42,16 @@ void main() {
       });
 
       test('iterating node with one line', () {
-        final line0 = DialogueLine(content: constEmptyString);
+        final line0 = DialogueLine(content: LineContent(''));
         final node = Node(title: 'X', content: Block([line0]));
         expect(node.toList(), [line0]);
       });
 
       test('iterating multi-line node', () {
-        final line1 = DialogueLine(content: const StringLiteral('one'));
-        final line2 = DialogueLine(content: const StringLiteral('two'));
-        final line3 = DialogueLine(content: const StringLiteral('three'));
-        final line4 = DialogueLine(content: const StringLiteral('four'));
+        final line1 = DialogueLine(content: LineContent('one'));
+        final line2 = DialogueLine(content: LineContent('two'));
+        final line3 = DialogueLine(content: LineContent('three'));
+        final line4 = DialogueLine(content: LineContent('four'));
         final node = Node(
           title: 'quadruple',
           content: Block([line1, line2, line3, line4]),
@@ -63,24 +63,24 @@ void main() {
         final node = Node(
           title: 'complicated',
           content: Block([
-            DialogueLine(content: const StringLiteral('one')),
-            DialogueLine(content: const StringLiteral('two')),
+            DialogueLine(content: LineContent('one')),
+            DialogueLine(content: LineContent('two')),
             DialogueChoice([
               Option(
-                content: const StringLiteral('select 1'),
+                content: LineContent('select 1'),
                 block: Block([
-                  DialogueLine(content: const StringLiteral('so one it is')),
-                  DialogueLine(content: const StringLiteral('good choice!')),
+                  DialogueLine(content: LineContent('so one it is')),
+                  DialogueLine(content: LineContent('good choice!')),
                 ]),
               ),
               Option(
-                content: const StringLiteral('select 2'),
-                block:  Block([
-                  DialogueLine(content: const StringLiteral('oops!')),
+                content: LineContent('select 2'),
+                block: Block([
+                  DialogueLine(content: LineContent('oops!')),
                 ]),
               ),
             ]),
-            DialogueLine(content: const StringLiteral('bye!')),
+            DialogueLine(content: LineContent('bye!')),
           ]),
         );
 
@@ -103,12 +103,12 @@ void main() {
         expect(
           lines1,
           [
-            DialogueLine(content: const StringLiteral('one')),
-            DialogueLine(content: const StringLiteral('two')),
+            DialogueLine(content: LineContent('one')),
+            DialogueLine(content: LineContent('two')),
             node.lines[2] as DialogueChoice,
-            DialogueLine(content: const StringLiteral('so one it is')),
-            DialogueLine(content: const StringLiteral('good choice!')),
-            DialogueLine(content: const StringLiteral('bye!')),
+            DialogueLine(content: LineContent('so one it is')),
+            DialogueLine(content: LineContent('good choice!')),
+            DialogueLine(content: LineContent('bye!')),
           ],
         );
       });

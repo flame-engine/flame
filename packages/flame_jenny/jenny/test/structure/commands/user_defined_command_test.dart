@@ -41,7 +41,7 @@ void main() {
       expect(project.nodes['start']!.lines[0], isA<UserDefinedCommand>());
       final cmd = project.nodes['start']!.lines[0] as UserDefinedCommand;
       expect(cmd.name, 'hello');
-      expect(cmd.argumentString.value, 'world AB');
+      expect(cmd.argumentString.evaluate(), 'world AB');
     });
 
     test('execute a live command', () {

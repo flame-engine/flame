@@ -1,11 +1,12 @@
 import 'package:jenny/jenny.dart';
 import 'package:jenny/src/structure/expressions/literal.dart';
+import 'package:jenny/src/structure/line_content.dart';
 import 'package:test/test.dart';
 
 void main() {
   group('DialogueLine', () {
     test('empty line', () {
-      final line = DialogueLine(content: constEmptyString);
+      final line = DialogueLine(content: LineContent(''));
       expect(line.character, isNull);
       expect(line.tags, isNull);
       expect(line.value, '');
@@ -15,7 +16,7 @@ void main() {
     test('line with meta information', () {
       final line = DialogueLine(
         character: 'Bob',
-        content: const StringLiteral('Hello!'),
+        content: LineContent('Hello!'),
         tags: ['#red', '#fast'],
       );
       expect(line.value, 'Hello!');
