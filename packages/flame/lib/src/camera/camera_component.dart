@@ -43,7 +43,8 @@ class CameraComponent extends Component {
     required this.world,
     Viewport? viewport,
     Viewfinder? viewfinder,
-  })  : viewport = viewport ?? MaxViewport(),
+    List<Component>? hudComponents,
+  })  : viewport = (viewport ?? MaxViewport())..addAll(hudComponents ?? []),
         viewfinder = viewfinder ?? Viewfinder();
 
   /// Create a camera that shows a portion of the game world of fixed size
