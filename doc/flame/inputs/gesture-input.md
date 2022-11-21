@@ -4,8 +4,8 @@ This includes documentation for gesture inputs, which is, mouse and touch pointe
 
 For other input documents, see also:
 
-- [Keyboard Input](keyboard-input.md): for keystrokes
-- [Other Inputs](other-inputs.md): For joysticks, game pads, etc.
+- [Keyboard Input](keyboard_input.md): for keystrokes
+- [Other Inputs](other_inputs.md): For joysticks, game pads, etc.
 
 
 ## Intro
@@ -17,7 +17,7 @@ of these `mixin`s and its methods:
 
 ## Touch and mouse detectors
 
-```txt
+```text
 - TapDetector
   - onTap
   - onTapCancel
@@ -89,7 +89,7 @@ of these `mixin`s and its methods:
 
 Mouse only events
 
-```txt
+```text
  - MouseMovementDetector
   - onMouseMove
  - ScrollDetector
@@ -112,8 +112,8 @@ also read more about Flutter's gestures
 
 ## PanDetector and ScaleDetector
 
-If you add a `PanDetector` together with a `ScaleDetector` you will be prompted with a quite
-cryptic assertion from Flutter that says:
+If you add a `PanDetector` together with a `ScaleDetector` you will be prompted with a quite cryptic
+assertion from Flutter that says:
 
 ```{note}
 Having both a pan gesture recognizer and a scale gesture recognizer is
