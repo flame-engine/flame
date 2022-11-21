@@ -20,6 +20,7 @@ import 'package:jenny/src/structure/expressions/literal.dart';
 import 'package:jenny/src/structure/expressions/logical.dart';
 import 'package:jenny/src/structure/expressions/relational.dart';
 import 'package:jenny/src/structure/expressions/string.dart';
+import 'package:jenny/src/structure/line_content.dart';
 import 'package:jenny/src/structure/node.dart';
 import 'package:jenny/src/structure/option.dart';
 import 'package:jenny/src/yarn_project.dart';
@@ -209,14 +210,28 @@ class _Parser {
 
   StringExpression parseLineContent() {
     final parts = <StringExpression>[];
+    final stringBuilder = StringBuffer();
+    final expressions = <InlineExpression>[];
     while (true) {
       final token = peekToken();
       if (token.isText) {
         parts.add(StringLiteral(token.content));
+        stringBuilder.write(token.content);
         position += 1;
       } else if (token == Token.startExpression) {
         take(Token.startExpression);
         final expression = parseExpression();
+        take(Token.endExpression);
+        expressions.add(
+          InlineExpression(
+            stringBuilder.length,
+            expression.isNumeric
+                ? NumToStringFn(expression as NumExpression)
+                : expression.isBoolean
+                    ? BoolToStringFn(expression as BoolExpression)
+                    : expression as StringExpression,
+          ),
+        );
         if (expression.isString) {
           parts.add(expression as StringExpression);
         } else if (expression.isNumeric) {
@@ -224,7 +239,6 @@ class _Parser {
         } else if (expression.isBoolean) {
           parts.add(BoolToStringFn(expression as BoolExpression));
         }
-        take(Token.endExpression);
       } else {
         break;
       }
