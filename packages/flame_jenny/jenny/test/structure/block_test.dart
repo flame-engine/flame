@@ -13,10 +13,10 @@ void main() {
     });
 
     test('non-empty block', () {
-      const line0 = DialogueLine(content: constEmptyString);
-      const line1 = DialogueLine(content: StringLiteral('one'));
-      const line2 = DialogueLine(content: StringLiteral('two'));
-      const block = Block([line0, line1, line2]);
+      final line0 = DialogueLine(content: constEmptyString);
+      final line1 = DialogueLine(content: const StringLiteral('one'));
+      final line2 = DialogueLine(content: const StringLiteral('two'));
+      final block = Block([line0, line1, line2]);
       expect(block.length, 3);
       expect(block.isEmpty, false);
       expect(block.isNotEmpty, true);

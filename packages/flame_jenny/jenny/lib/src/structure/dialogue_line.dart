@@ -13,28 +13,33 @@ import 'package:jenny/src/structure/expressions/expression.dart';
 /// Hermione: Holy cricket! You're Harry Potter.  #surprised
 /// ```
 class DialogueLine extends DialogueEntry {
-  const DialogueLine({
+  DialogueLine({
+    required StringExpression content,
     this.character,
-    required this.content,
     this.tags,
-  });
+  }) : _content = content;
 
   /// The name of the character who is speaking the line. This can be null if
   /// the line does not indicate the speaker.
   final String? character;
-  final StringExpression content;
   final List<String>? tags;
+  final StringExpression _content;
+
+  String get value => _value ??= _evaluateLine();
+  String? _value;
 
   @override
   Future<void> processInDialogueRunner(DialogueRunner runner) {
     return runner.deliverLine(this);
   }
 
-  void _evaluateLine() {}
+  String _evaluateLine() {
+    return _content.value;
+  }
 
   @override
   String toString() {
     final prefix = character == null ? '' : '$character: ';
-    return 'DialogueLine($prefix${content.value})';
+    return 'DialogueLine($prefix$value)';
   }
 }

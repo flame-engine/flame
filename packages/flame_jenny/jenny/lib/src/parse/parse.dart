@@ -11,6 +11,7 @@ import 'package:jenny/src/structure/commands/stop_command.dart';
 import 'package:jenny/src/structure/commands/user_defined_command.dart';
 import 'package:jenny/src/structure/commands/wait_command.dart';
 import 'package:jenny/src/structure/dialogue_choice.dart';
+import 'package:jenny/src/structure/dialogue_entry.dart';
 import 'package:jenny/src/structure/dialogue_line.dart';
 import 'package:jenny/src/structure/expressions/arithmetic.dart';
 import 'package:jenny/src/structure/expressions/expression.dart';
@@ -21,7 +22,6 @@ import 'package:jenny/src/structure/expressions/relational.dart';
 import 'package:jenny/src/structure/expressions/string.dart';
 import 'package:jenny/src/structure/node.dart';
 import 'package:jenny/src/structure/option.dart';
-import 'package:jenny/src/structure/dialogue_entry.dart';
 import 'package:jenny/src/yarn_project.dart';
 import 'package:meta/meta.dart';
 
