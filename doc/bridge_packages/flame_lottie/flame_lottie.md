@@ -12,7 +12,7 @@ The native Lottie libraries (such as [lottie-android](https://github.com/airbnb/
 are maintained by **Airbnb**.
 
 The Flutter package ``lottie``, on which this wrapper is based on, is by developed **xaha.dev** and
-can be found on [pub dev](https://pub.dev/packages/lottie).
+can be found on [pub.dev](https://pub.dev/packages/lottie).
 
 
 ## Usage
