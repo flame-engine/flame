@@ -32,7 +32,7 @@ obtaining a lottie file from a URL.
 - [Lottie.memory](https://pub.dev/documentation/lottie/latest/lottie/Lottie/memory.html), for
 obtaining a lottie file from a Uint8List.
 
-... and add it as `LottieComponent` to your flame 🔥 game.
+... and add it as `LottieComponent` to your Flame 🔥 game.
 
 Example:
 
