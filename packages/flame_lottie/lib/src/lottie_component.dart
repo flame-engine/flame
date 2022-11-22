@@ -9,7 +9,7 @@ import 'package:lottie/lottie.dart';
 /// A Flame [Component] which renders a [Lottie] animation using the already
 /// existing Flutter library [lottie](https://pub.dev/packages/lottie).
 class LottieComponent extends PositionComponent with HasPaint {
-  final LottieRenderer _renderer;
+  late final LottieRenderer _renderer;
 
   /// The [controller] drives the [Lottie] animation. In case none is specified
   /// it will be created implicitly in the [LottieRenderer].
@@ -17,7 +17,6 @@ class LottieComponent extends PositionComponent with HasPaint {
     required LottieComposition composition,
     EffectController? controller,
     double? progress,
-    // Lottie configuration
     LottieDelegates? delegates,
     bool? enableMergePaths,
     FrameRate? frameRate,
@@ -25,26 +24,28 @@ class LottieComponent extends PositionComponent with HasPaint {
     bool? repeating,
     Alignment alignment = Alignment.center,
     BoxFit? fit = BoxFit.contain,
-    // position component arguments
     super.position,
     super.size,
     super.scale,
-    double super.angle = 0.0,
-    Anchor super.anchor = Anchor.topLeft,
+    super.angle,
+    super.anchor,
     super.children,
     super.priority,
-  }) : _renderer = LottieRenderer(
-          composition: composition,
-          progress: progress ?? 0.0,
-          controller: controller,
-          duration: duration,
-          repeating: repeating,
-          alignment: alignment,
-          fit: fit,
-          delegates: delegates,
-          enableMergePaths: enableMergePaths,
-          frameRate: frameRate,
-        );
+  }) {
+    _renderer = LottieRenderer(
+      composition: composition,
+      progress: progress ?? 0.0,
+      size: size,
+      controller: controller,
+      duration: duration,
+      repeating: repeating,
+      alignment: alignment,
+      fit: fit,
+      delegates: delegates,
+      enableMergePaths: enableMergePaths,
+      frameRate: frameRate,
+    );
+  }
 
   @mustCallSuper
   @override

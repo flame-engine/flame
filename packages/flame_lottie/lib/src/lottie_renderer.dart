@@ -1,4 +1,5 @@
 import 'package:flame/effects.dart';
+import 'package:flame/game.dart';
 import 'package:flutter/rendering.dart';
 import 'package:lottie/lottie.dart';
 
@@ -9,9 +10,12 @@ class LottieRenderer {
   final BoxFit? fit;
   final Alignment? alignment;
 
+  late Rect boundingRect;
+
   LottieRenderer({
     required LottieComposition composition,
     required double progress,
+    required NotifyingVector2 size,
     EffectController? controller,
     double? duration,
     bool? repeating,
@@ -21,6 +25,7 @@ class LottieRenderer {
     bool? enableMergePaths,
     FrameRate? frameRate,
   })  : assert(progress >= 0.0 && progress <= 1.0),
+        boundingRect = size.toRect(),
         drawable = LottieDrawable(composition)
           ..setProgress(
             progress,
@@ -32,17 +37,11 @@ class LottieRenderer {
             EffectController(
               duration: duration ?? composition.duration.inSeconds.toDouble(),
               infinite: repeating ?? false,
-            );
-
-  late Rect boundingRect = () {
-    final bounds = drawable.composition.bounds;
-    return Rect.fromLTRB(
-      bounds.left.toDouble(),
-      bounds.top.toDouble(),
-      bounds.right.toDouble(),
-      bounds.bottom.toDouble(),
-    );
-  }();
+            ) {
+    size.addListener(() {
+      boundingRect = size.toRect();
+    });
+  }
 
   /// Renders the current frame of the Lottie animation onto the canvas.
   void render(Canvas canvas) {

@@ -9,7 +9,7 @@ class LottieAnimationExample extends FlameGame {
   ''';
 
   @override
-  Future onLoad() async {
+  Future<void> onLoad() async {
     final asset = await loadLottie(
       Lottie.asset('assets/images/animations/lottieLogo.json'),
     );
@@ -17,10 +17,9 @@ class LottieAnimationExample extends FlameGame {
     add(
       LottieComponent(
         composition: asset,
+        size: Vector2.all(400),
         repeating: true,
       ),
     );
-
-    return super.onLoad();
   }
 }
