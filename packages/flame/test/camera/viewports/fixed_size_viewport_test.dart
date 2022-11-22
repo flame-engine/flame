@@ -74,7 +74,7 @@ void main() {
         ]);
         game.addAll([world, camera]);
       },
-      goldenFile: '../_goldens/fixed_size_viewport_test_1.png',
+      goldenFile: '../../_goldens/fixed_size_viewport_test_1.png',
     );
   });
 }
