@@ -6,13 +6,13 @@ import 'package:flame_lottie/src/lottie_renderer.dart';
 import 'package:flutter/widgets.dart';
 import 'package:lottie/lottie.dart';
 
-/// A Flame [Component] which renders a [Lottie] animation using
-/// the already existing Flutter library [lottie](https://pub.dev/packages/lottie)
+/// A Flame [Component] which renders a [Lottie] animation using the already
+/// existing Flutter library [lottie](https://pub.dev/packages/lottie).
 class LottieComponent extends PositionComponent with HasPaint {
   final LottieRenderer _renderer;
 
-  /// The [controller] drives the [Lottie] animation. In case none is
-  /// specified it will be created implicitly in the [LottieRenderer]
+  /// The [controller] drives the [Lottie] animation. In case none is specified
+  /// it will be created implicitly in the [LottieRenderer].
   LottieComponent({
     required LottieComposition composition,
     EffectController? controller,
@@ -49,7 +49,7 @@ class LottieComponent extends PositionComponent with HasPaint {
   @mustCallSuper
   @override
   void render(Canvas canvas) {
-    _renderer.paint(canvas, Size.zero);
+    _renderer.render(canvas);
   }
 
   @mustCallSuper

@@ -2,7 +2,7 @@ import 'package:flame/effects.dart';
 import 'package:flutter/rendering.dart';
 import 'package:lottie/lottie.dart';
 
-class LottieRenderer extends CustomPainter {
+class LottieRenderer {
   final LottieDrawable drawable;
   final EffectController _controller;
 
@@ -44,22 +44,13 @@ class LottieRenderer extends CustomPainter {
     );
   }();
 
-  /// Paints the current frame of the Lottie animation onto the canvas
-  ///
-  /// The [size] is not used ([Size.zero] is getting forwarded)
-  /// and the method argument is kept to conform to [CustomPainter] declaration.
-  @override
-  void paint(Canvas canvas, Size size) {
+  /// Renders the current frame of the Lottie animation onto the canvas.
+  void render(Canvas canvas) {
     drawable.draw(canvas, boundingRect, fit: fit, alignment: alignment);
   }
 
   void update(double dt) {
     _controller.advance(dt);
     drawable.setProgress(_controller.progress);
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return true;
   }
 }
