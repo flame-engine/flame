@@ -1,8 +1,8 @@
 import 'dart:ui';
 
+import 'package:flame/src/camera/camera_component.dart';
 import 'package:flame/src/components/core/component.dart';
 import 'package:flame/src/components/mixins/coordinate_transform.dart';
-import 'package:flame/src/experimental/camera_component.dart';
 import 'package:meta/meta.dart';
 import 'package:vector_math/vector_math_64.dart';
 
