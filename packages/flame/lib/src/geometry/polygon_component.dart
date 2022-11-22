@@ -82,7 +82,6 @@ class PolygonComponent extends ShapeComponent {
   }) : this(
           normalsToVertices(relation, parentSize),
           position: position,
-          size: parentSize,
           angle: angle,
           anchor: anchor,
           scale: scale,
