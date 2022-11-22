@@ -6,7 +6,7 @@ import 'package:flame_lottie/src/lottie_renderer.dart';
 import 'package:flutter/widgets.dart';
 import 'package:lottie/lottie.dart';
 
-/// A flame [Component] which renders a [Lottie] animation using
+/// A Flame [Component] which renders a [Lottie] animation using
 /// the already existing Flutter library [lottie](https://pub.dev/packages/lottie)
 ///
 /// @param controller The controller which drives the animation. In case none is
