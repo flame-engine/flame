@@ -10,8 +10,8 @@ void main() {
   testWithFlameGame(
     'Game holds LottieComponent',
     (game) async {
-      // here, in tests, we have to sync read the file (and can not use the
-      // recommended [loadLottie] function
+      // When running tests we have to sync read the file and can not use the
+      // recommended [loadLottie] function.
       final data = File('example/assets/LottieLogo1.json').readAsBytesSync();
       final composition = await LottieComposition.fromBytes(data);
 
