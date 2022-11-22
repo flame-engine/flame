@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:jenny/src/errors.dart';
+import 'package:jenny/src/structure/commands/user_defined_command.dart';
 import 'package:jenny/src/structure/dialogue_choice.dart';
 import 'package:jenny/src/structure/dialogue_line.dart';
 import 'package:jenny/src/structure/node.dart';
@@ -129,6 +130,12 @@ abstract class DialogueView {
   /// If this method returns a future, the dialogue runner will wait for that
   /// future to complete before proceeding with the dialogue.
   FutureOr<void> onChoiceFinish(Option option) {}
+
+  /// Called when the dialogue encounters a user-defined command.
+  ///
+  /// If this method returns a future, the dialogue runner will wait for that
+  /// future to complete before proceeding with the dialogue.
+  FutureOr<void> onCommand(UserDefinedCommand command) {}
 
   /// Called when the dialogue has ended.
   ///

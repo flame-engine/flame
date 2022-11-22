@@ -67,17 +67,18 @@ class CameraComponentExample extends FlameGame with PanDetector {
 
   void _updateMagnifyingGlassPosition(Vector2 point) {
     // [point] is in the canvas coordinate system.
-    // This shifts the original [point] by 1.4142*radius, which happens to be
-    // in the middle of the magnifying glass' handle.
-    final handlePoint = point - Vector2.all(radius);
     magnifyingGlass
-      ..viewport.position = handlePoint
-      ..viewfinder.position = handlePoint - canvasSize / 2 + center;
+      ..viewport.position = point - Vector2.all(radius)
+      ..viewfinder.position = point - canvasSize / 2 + center;
   }
 }
 
-class Bezel extends Component {
-  Bezel(this.radius);
+class Bezel extends PositionComponent {
+  Bezel(this.radius)
+      : super(
+          size: Vector2.all(2 * radius),
+          position: Vector2.all(radius),
+        );
 
   final double radius;
   late final Path rim;

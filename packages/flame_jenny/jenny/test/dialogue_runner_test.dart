@@ -255,6 +255,8 @@ void main() {
     testScenario(
       testName: 'Compiler.plan',
       input: r'''
+        <<declare $foo as Number>>
+        
         title: Start
         ---
         // Compiler tests
@@ -290,6 +292,7 @@ void main() {
       ''',
       testPlan: '''
         line: This is a line!
+        command: this is a custom command
         line: Foo is 3!
         option: This is a shortcut option that you'll never see [disabled]
         option: This is a different shortcut option
@@ -302,6 +305,7 @@ void main() {
         line: Cool.
         line: All done with the shortcut options!
       ''',
+      commands: ['this'],
       skip: true,
     );
   });
