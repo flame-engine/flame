@@ -15,7 +15,7 @@ class LottieExampleGame extends FlameGame {
         asset,
         size: Vector2.all(400),
         repeating: true,
-      )
+      ),
     );
   }
 }
