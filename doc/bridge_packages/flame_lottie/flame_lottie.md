@@ -2,11 +2,6 @@
 
 This package allows you to load and add Lottie animations to your Flame game.
 
-> Lottie is a mobile library for Android and iOS that parses Adobe After Effects animations
-exported as json with Bodymovin and renders them natively on mobile!
-
-Source: [lottie-android](https://github.com/airbnb/lottie-android) on Github
-
 
 The native Lottie libraries (such as [lottie-android](https://github.com/airbnb/lottie-android))
 are maintained by **Airbnb**.
