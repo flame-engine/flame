@@ -9,8 +9,7 @@ environment:
 
 dependencies:
   flame: ^1.4.0
-  flame_lottie:
-    path: "../"
+  flame_lottie: ^0.1.0
   flutter:
     sdk: flutter
   lottie:
