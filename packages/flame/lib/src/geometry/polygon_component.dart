@@ -112,7 +112,10 @@ class PolygonComponent extends ShapeComponent {
   final _topLeft = Vector2.zero();
 
   @protected
-  void refreshVertices({required List<Vector2> newVertices}) {
+  void refreshVertices({
+    required List<Vector2> newVertices,
+    bool? shrinkToBoundsOverride,
+  }) {
     assert(
       newVertices.length == _vertices.length,
       'A polygon can not change their number of vertices',
@@ -130,7 +133,7 @@ class PolygonComponent extends ShapeComponent {
         vertices.map((p) => (p - _topLeft).toOffset()).toList(growable: false),
         true,
       );
-    if (shrinkToBounds) {
+    if (shrinkToBoundsOverride ?? shrinkToBounds) {
       final bounds = _path.getBounds();
       size.setValues(bounds.width, bounds.height);
       if (!manuallyPositioned) {

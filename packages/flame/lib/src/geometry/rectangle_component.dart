@@ -16,7 +16,10 @@ class RectangleComponent extends PolygonComponent {
     super.paintLayers,
   }) : super(sizeToVertices(size ?? Vector2.zero(), anchor)) {
     size.addListener(
-      () => refreshVertices(newVertices: sizeToVertices(size, anchor)),
+      () => refreshVertices(
+        newVertices: sizeToVertices(size, anchor),
+        shrinkToBoundsOverride: false,
+      ),
     );
   }
 
@@ -31,7 +34,10 @@ class RectangleComponent extends PolygonComponent {
     super.children,
   }) : super(sizeToVertices(Vector2.all(size), anchor)) {
     this.size.addListener(
-          () => refreshVertices(newVertices: sizeToVertices(this.size, anchor)),
+          () => refreshVertices(
+            newVertices: sizeToVertices(this.size, anchor),
+            shrinkToBoundsOverride: false,
+          ),
         );
   }
 
@@ -57,7 +63,10 @@ class RectangleComponent extends PolygonComponent {
           Vector2(-relation.x, relation.y),
         ]) {
     size.addListener(
-      () => refreshVertices(newVertices: sizeToVertices(size, anchor)),
+      () => refreshVertices(
+        newVertices: sizeToVertices(size, anchor),
+        shrinkToBoundsOverride: false,
+      ),
     );
   }
 
