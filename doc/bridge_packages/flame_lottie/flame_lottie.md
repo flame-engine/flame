@@ -40,8 +40,8 @@ class MyGame extends FlameGame {
     final animation = await loadLottie(asset);
     add(
       LottieComponent(
-        composition: animation,
-        repeating: true, // continuously loop the animation
+        animation,
+        repeating: true, // Continuously loop the animation.
         size: Vector2.all(400),
       ),
     );

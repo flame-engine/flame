@@ -1,5 +1,4 @@
 import 'package:flame/game.dart';
-
 import 'package:flame_lottie/flame_lottie.dart';
 
 class LottieAnimationExample extends FlameGame {
@@ -14,12 +13,6 @@ class LottieAnimationExample extends FlameGame {
       Lottie.asset('assets/images/animations/lottieLogo.json'),
     );
 
-    add(
-      LottieComponent(
-        composition: asset,
-        size: Vector2.all(400),
-        repeating: true,
-      ),
-    );
+    add(LottieComponent(asset, size: Vector2.all(400), repeating: true));
   }
 }

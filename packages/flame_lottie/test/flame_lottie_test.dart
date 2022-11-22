@@ -15,7 +15,7 @@ void main() {
       final data = File('example/assets/LottieLogo1.json').readAsBytesSync();
       final composition = await LottieComposition.fromBytes(data);
 
-      final lottieComponent = LottieComponent(composition: composition);
+      final lottieComponent = LottieComponent(composition);
 
       await game.add(lottieComponent);
       await game.ready();
