@@ -42,6 +42,7 @@ class MyGame extends FlameGame {
       LottieComponent(
         composition: animation,
         repeating: true, // continuously loop the animation
+        size: Vector2.all(400),
       ),
     );
   }
