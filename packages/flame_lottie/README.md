@@ -42,9 +42,7 @@ class MyGame extends FlameGame {
   @override
   Future<void> onLoad() async {
     final asset = Lottie.asset('assets/LottieLogo1.json');
-
     final animation = await loadLottie(asset);
-    
     add(
         LottieComponent(
             composition: animation,
