@@ -8,13 +8,11 @@ import 'package:lottie/lottie.dart';
 
 /// A Flame [Component] which renders a [Lottie] animation using
 /// the already existing Flutter library [lottie](https://pub.dev/packages/lottie)
-///
-/// @param controller The controller which drives the animation. In case none is
-///   specified it will be created implicitly in the [LottieRenderer]
-///
 class LottieComponent extends PositionComponent with HasPaint {
   final LottieRenderer _renderer;
 
+  /// The [controller] drives the [Lottie] animation. In case none is
+  /// specified it will be created implicitly in the [LottieRenderer]
   LottieComponent({
     required LottieComposition composition,
     EffectController? controller,
