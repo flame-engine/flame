@@ -11,8 +11,8 @@ Source: [lottie-android](https://github.com/airbnb/lottie-android) on Github
 The native Lottie libraries (such as [lottie-android](https://github.com/airbnb/lottie-android))
 are maintained by **Airbnb**.
 
-The Flutter package ``lottie``, on which this wrapper is based on, is developed by **xaha.dev**
-and can be found on [pub dev](https://pub.dev/packages/lottie).
+The Flutter package ``lottie``, on which this wrapper is based on, is by developed **xaha.dev** and
+can be found on [pub dev](https://pub.dev/packages/lottie).
 
 
 ## Usage
@@ -44,12 +44,11 @@ class MyGame extends FlameGame {
     final asset = Lottie.asset('assets/LottieLogo1.json');
     final animation = await loadLottie(asset);
     add(
-        LottieComponent(
-            composition: animation,
-            repeating: true, // continuously loop the animation
-        ),
+      LottieComponent(
+        composition: animation,
+        repeating: true, // continuously loop the animation
+      ),
     );
-
   }
   ...
 }
