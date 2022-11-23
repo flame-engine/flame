@@ -1187,6 +1187,23 @@ void main() {
               '>                                         ^\n'),
         );
       });
+
+      test('error at end of line', () {
+        const text = '---\n---\nSome text\n===\n';
+        final tokens0 = tokenize(text);
+        expect(tokens0[4], Token.newline);
+
+        final tokens1 = tokenize(text, addErrorTokenAtIndex: 4);
+        final errorToken = tokens1.removeAt(4);
+        expect(tokens1, tokens0);
+        expect(errorToken.type, TokenType.error);
+        expect(
+          errorToken.content,
+          '>  at line 3 column 10:\n'
+          '>  Some text\n'
+          '>           ^',
+        );
+      });
     });
   });
 }

@@ -17,40 +17,25 @@ class LineContent {
     if (expressions == null) {
       return text;
     }
-    _resetAttributes();
+    attributes?.forEach((a) => a.reset());
     final out = StringBuffer();
     var previousPosition = 0;
+    var subIndex = 0;
     for (final e in expressions!) {
-      out.write(text.substring(previousPosition, e.position));
+      if (previousPosition < e.position) {
+        out.write(text.substring(previousPosition, e.position));
+        subIndex = 0;
+      }
       final insert = e.expression.value;
-      _adjustAttributes(e.position, insert.length);
-      previousPosition = e.position;
+      attributes?.forEach((a) {
+        a.maybeShift(e.position, insert.length, subIndex);
+      });
       out.write(insert);
+      subIndex += 1;
+      previousPosition = e.position;
     }
     out.write(text.substring(previousPosition));
     return out.toString();
-  }
-
-  void _resetAttributes() {
-    if (attributes != null) {
-      for (final attribute in attributes!) {
-        attribute.start = attribute.startPosition;
-        attribute.end = attribute.endPosition;
-      }
-    }
-  }
-
-  void _adjustAttributes(int position, int length) {
-    if (attributes != null) {
-      for (final attribute in attributes!) {
-        if (attribute.start > position) {
-          attribute.start += length;
-          attribute.end += length;
-        } else if (attribute.end >= position) {
-          attribute.end += length;
-        }
-      }
-    }
   }
 }
 

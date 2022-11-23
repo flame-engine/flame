@@ -74,6 +74,8 @@ class DialogueLine extends DialogueEntry {
   /// The list of markup attributes associated with the text line.
   List<MarkupAttribute> get attributes => _content.attributes ?? const [];
 
+  bool get isConst => _content.isConst;
+
   @override
   Future<void> processInDialogueRunner(DialogueRunner runner) async {
     if (_content.isDynamic) {

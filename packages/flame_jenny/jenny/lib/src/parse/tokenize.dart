@@ -371,9 +371,9 @@ class _Lexer {
       if (cu == $carriageReturn && currentCodeUnit == $lineFeed) {
         position += 1;
       }
-      pushToken(Token.newline, position0);
       lineNumber += 1;
       lineStart = position;
+      pushToken(Token.newline, position0);
       return true;
     }
     return false;

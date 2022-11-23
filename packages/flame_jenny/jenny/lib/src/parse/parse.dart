@@ -144,7 +144,8 @@ class _Parser {
         lines.add(command);
       } else if (nextToken.isText ||
           nextToken.isPerson ||
-          nextToken == Token.startExpression) {
+          nextToken == Token.startExpression ||
+          nextToken == Token.startMarkupTag) {
         lines.add(parseDialogueLine());
       } else if (nextToken == Token.newline) {
         position += 1;
@@ -214,12 +215,15 @@ class _Parser {
     final expressions = <InlineExpression>[];
     final attributes = <MarkupAttribute>[];
     final markupStack = <_Markup>[];
+    var subIndex = 0;
     while (true) {
       final token = peekToken();
       if (token.isText) {
+        subIndex = 0;
         stringBuilder.write(token.content);
         position += 1;
       } else if (token == Token.startExpression) {
+        subIndex += 1;
         take(Token.startExpression);
         final expression = parseExpression();
         take(Token.endExpression);
@@ -234,36 +238,40 @@ class _Parser {
           ),
         );
       } else if (token == Token.startMarkupTag) {
-        final position0 = position;
         take(Token.startMarkupTag);
+        final position0 = position;
         final markupTag = parseMarkupTag();
         take(Token.endMarkupTag);
         if (markupTag.closing) {
           if (markupStack.isEmpty) {
             position = position0;
-            syntaxError('Closing markup tag without any tags open');
+            syntaxError('unexpected closing markup tag');
           }
           // close-all tag
           if (markupTag.name == null) {
             while (markupStack.isNotEmpty) {
               final tag = markupStack.removeLast();
-              tag.end = stringBuilder.length;
+              tag.endTextPosition = stringBuilder.length;
+              tag.endSubIndex = subIndex;
               attributes.add(tag.build());
             }
           } else {
             final openTag = markupStack.removeLast();
             if (openTag.name != markupTag.name) {
               position = position0 + 1;
-              syntaxError('Expected closing tag for ${openTag.name}');
+              syntaxError('Expected closing tag for [${openTag.name}]');
             }
-            openTag.end = stringBuilder.length;
+            openTag.endTextPosition = stringBuilder.length;
+            openTag.endSubIndex = subIndex;
             attributes.add(openTag.build());
           }
         } else {
-          markupTag.start = stringBuilder.length;
+          markupTag.startTextPosition = stringBuilder.length;
+          markupTag.startSubIndex = subIndex;
           // TODO(stpasha): check that the name of the markup tag is known
           if (markupTag.selfClosing) {
-            markupTag.end = stringBuilder.length;
+            markupTag.endTextPosition = stringBuilder.length;
+            markupTag.endSubIndex = subIndex;
             attributes.add(markupTag.build());
           } else {
             markupStack.add(markupTag);
@@ -274,7 +282,7 @@ class _Parser {
       }
     }
     if (markupStack.isNotEmpty) {
-      syntaxError('Unclosed markup attribute ${markupStack.last.name}');
+      syntaxError('markup tag [${markupStack.last.name}] was not closed');
     }
     return LineContent(
       stringBuilder.toString(),
@@ -340,6 +348,7 @@ class _Parser {
         syntaxError('a markup tag name is expected');
       }
       while (peekToken().isId) {
+        final position0 = position;
         final parameter = peekToken().content;
         position += 1;
         final Expression expression;
@@ -350,6 +359,7 @@ class _Parser {
           expression = constTrue;
         }
         if (result.parameters.containsKey(parameter)) {
+          position = position0;
           syntaxError('duplicate parameter $parameter in a markup attribute');
         }
         result.parameters[parameter] = expression;
@@ -991,19 +1001,20 @@ class _Markup {
   bool closing = false;
   bool selfClosing = false;
   String? name;
-  int? start;
-  int? end;
+  int? startTextPosition;
+  int? endTextPosition;
+  int? startSubIndex;
+  int? endSubIndex;
   Map<String, Expression> parameters = {};
 
   MarkupAttribute build() {
     assert(!closing);
-    assert(name != null);
-    assert(start != null);
-    assert(end != null);
     return MarkupAttribute(
       name!,
-      start!,
-      end!,
+      startTextPosition!,
+      endTextPosition!,
+      startSubIndex!,
+      endSubIndex!,
       parameters.isEmpty ? null : parameters,
     );
   }
