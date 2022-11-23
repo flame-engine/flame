@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:jenny/src/dialogue_runner.dart';
 import 'package:jenny/src/structure/commands/command.dart';
-import 'package:jenny/src/structure/expressions/expression.dart';
 import 'package:jenny/src/structure/line_content.dart';
 
 class UserDefinedCommand extends Command {
@@ -14,6 +13,7 @@ class UserDefinedCommand extends Command {
 
   @override
   FutureOr<void> execute(DialogueRunner dialogue) {
-    return dialogue.project.commands.runCommand(name, argumentString.evaluate());
+    return dialogue.project.commands
+        .runCommand(name, argumentString.evaluate());
   }
 }

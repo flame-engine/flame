@@ -1,5 +1,4 @@
 import 'package:jenny/jenny.dart';
-import 'package:jenny/src/structure/expressions/literal.dart';
 import 'package:jenny/src/structure/line_content.dart';
 import 'package:test/test.dart';
 

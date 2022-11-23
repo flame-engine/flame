@@ -45,8 +45,8 @@ class DialogueLine extends DialogueEntry {
   }
 
   @override
-  bool operator==(Object other) =>
-    other is DialogueLine &&
-    value == other.value &&
-    character == other.character;
+  bool operator ==(Object other) =>
+      other is DialogueLine &&
+      value == other.value &&
+      character == other.character;
 }

@@ -21,6 +21,7 @@ import 'package:jenny/src/structure/expressions/logical.dart';
 import 'package:jenny/src/structure/expressions/relational.dart';
 import 'package:jenny/src/structure/expressions/string.dart';
 import 'package:jenny/src/structure/line_content.dart';
+import 'package:jenny/src/structure/markup_attribute.dart';
 import 'package:jenny/src/structure/node.dart';
 import 'package:jenny/src/structure/option.dart';
 import 'package:jenny/src/yarn_project.dart';
@@ -211,6 +212,8 @@ class _Parser {
   LineContent parseLineContent() {
     final stringBuilder = StringBuffer();
     final expressions = <InlineExpression>[];
+    final attributes = <MarkupAttribute>[];
+    final markupStack = <_Markup>[];
     while (true) {
       final token = peekToken();
       if (token.isText) {
@@ -230,13 +233,53 @@ class _Parser {
                     : expression as StringExpression,
           ),
         );
+      } else if (token == Token.startMarkupTag) {
+        final position0 = position;
+        take(Token.startMarkupTag);
+        final markupTag = parseMarkupTag();
+        take(Token.endMarkupTag);
+        if (markupTag.closing) {
+          if (markupStack.isEmpty) {
+            position = position0;
+            syntaxError('Closing markup tag without any tags open');
+          }
+          // close-all tag
+          if (markupTag.name == null) {
+            while (markupStack.isNotEmpty) {
+              final tag = markupStack.removeLast();
+              tag.end = stringBuilder.length;
+              attributes.add(tag.build());
+            }
+          } else {
+            final openTag = markupStack.removeLast();
+            if (openTag.name != markupTag.name) {
+              position = position0 + 1;
+              syntaxError('Expected closing tag for ${openTag.name}');
+            }
+            openTag.end = stringBuilder.length;
+            attributes.add(openTag.build());
+          }
+        } else {
+          markupTag.start = stringBuilder.length;
+          // TODO(stpasha): check that the name of the markup tag is known
+          if (markupTag.selfClosing) {
+            markupTag.end = stringBuilder.length;
+            attributes.add(markupTag.build());
+          } else {
+            markupStack.add(markupTag);
+          }
+        }
       } else {
         break;
       }
     }
+    if (markupStack.isNotEmpty) {
+      syntaxError('Unclosed markup attribute ${markupStack.last.name}');
+    }
     return LineContent(
       stringBuilder.toString(),
-      expressions.isEmpty? null : expressions,
+      expressions.isEmpty ? null : expressions,
+      attributes.isEmpty ? null : attributes,
     );
   }
 
@@ -274,6 +317,50 @@ class _Parser {
       }
     }
     return out.isEmpty ? null : out;
+  }
+
+  _Markup parseMarkupTag() {
+    final result = _Markup();
+    if (peekToken() == Token.closeMarkupTag) {
+      position += 1;
+      result.closing = true;
+      final nextToken = peekToken();
+      if (nextToken.isId) {
+        result.name = nextToken.content;
+        position += 1;
+      } else if (nextToken != Token.endMarkupTag) {
+        syntaxError('a markup tag name is expected');
+      }
+    } else {
+      final nextToken = peekToken();
+      if (nextToken.isId) {
+        result.name = nextToken.content;
+        position += 1;
+      } else {
+        syntaxError('a markup tag name is expected');
+      }
+      while (peekToken().isId) {
+        final parameter = peekToken().content;
+        position += 1;
+        final Expression expression;
+        if (peekToken() == Token.operatorAssign) {
+          position += 1;
+          expression = parseExpression();
+        } else {
+          expression = constTrue;
+        }
+        if (result.parameters.containsKey(parameter)) {
+          syntaxError('duplicate parameter $parameter in a markup attribute');
+        }
+        result.parameters[parameter] = expression;
+      }
+      final lastToken = peekToken();
+      if (lastToken == Token.closeMarkupTag) {
+        result.selfClosing = true;
+        position += 1;
+      }
+    }
+    return result;
   }
 
   //#endregion
@@ -898,4 +985,26 @@ class _NodeHeader {
   _NodeHeader(this.title, this.tags);
   String? title;
   Map<String, String>? tags;
+}
+
+class _Markup {
+  bool closing = false;
+  bool selfClosing = false;
+  String? name;
+  int? start;
+  int? end;
+  Map<String, Expression> parameters = {};
+
+  MarkupAttribute build() {
+    assert(!closing);
+    assert(name != null);
+    assert(start != null);
+    assert(end != null);
+    return MarkupAttribute(
+      name!,
+      start!,
+      end!,
+      parameters.isEmpty ? null : parameters,
+    );
+  }
 }

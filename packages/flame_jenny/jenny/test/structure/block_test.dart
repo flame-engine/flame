@@ -1,6 +1,5 @@
 import 'package:jenny/src/structure/block.dart';
 import 'package:jenny/src/structure/dialogue_line.dart';
-import 'package:jenny/src/structure/expressions/literal.dart';
 import 'package:jenny/src/structure/line_content.dart';
 import 'package:test/test.dart';
 

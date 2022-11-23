@@ -474,8 +474,7 @@ void main() {
               '{ \$name == "monkey" }\n'
               '===\n');
         expect(
-          yarn.nodes['test']!.lines
-              .map((line) => (line as DialogueLine).value),
+          yarn.nodes['test']!.lines.map((line) => (line as DialogueLine).value),
           ['true', 'true', 'false'],
         );
         expect(
