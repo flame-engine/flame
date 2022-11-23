@@ -7,8 +7,9 @@ void main() {
     test('empty line', () {
       final line = DialogueLine(content: LineContent(''));
       expect(line.character, isNull);
-      expect(line.tags, isNull);
-      expect(line.value, '');
+      expect(line.tags, isEmpty);
+      expect(line.attributes, isEmpty);
+      expect(line.text, '');
       expect('$line', 'DialogueLine()');
     });
 
@@ -18,11 +19,9 @@ void main() {
         content: LineContent('Hello!'),
         tags: ['#red', '#fast'],
       );
-      expect(line.value, 'Hello!');
+      expect(line.text, 'Hello!');
       expect(line.character, 'Bob');
-      expect(line.tags!.length, 2);
-      expect(line.tags![0], '#red');
-      expect(line.tags![1], '#fast');
+      expect(line.tags, ['#red', '#fast']);
       expect('$line', 'DialogueLine(Bob: Hello!)');
     });
   });

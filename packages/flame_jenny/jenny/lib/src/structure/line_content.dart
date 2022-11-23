@@ -10,6 +10,9 @@ class LineContent {
   final List<InlineExpression>? expressions;
   final List<MarkupAttribute>? attributes;
 
+  bool get isConst => expressions == null;
+  bool get isDynamic => expressions != null;
+
   String evaluate() {
     if (expressions == null) {
       return text;
@@ -40,10 +43,10 @@ class LineContent {
   void _adjustAttributes(int position, int length) {
     if (attributes != null) {
       for (final attribute in attributes!) {
-        if (attribute.start >= position) {
+        if (attribute.start > position) {
           attribute.start += length;
           attribute.end += length;
-        } else if (attribute.end > position) {
+        } else if (attribute.end >= position) {
           attribute.end += length;
         }
       }

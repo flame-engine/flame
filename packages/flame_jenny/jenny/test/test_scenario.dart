@@ -99,8 +99,8 @@ class _TestPlan extends DialogueView {
         ? expected.text
         : '${expected.character}: ${expected.text}';
     final text2 = (line.character == null)
-        ? line.value
-        : '${line.character}: ${line.value}';
+        ? line.text
+        : '${line.character}: ${line.text}';
     assert(
       text1 == text2,
       'Expected line: "$text1"\n'
