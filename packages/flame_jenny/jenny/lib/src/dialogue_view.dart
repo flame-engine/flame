@@ -5,7 +5,7 @@ import 'package:jenny/src/structure/commands/user_defined_command.dart';
 import 'package:jenny/src/structure/dialogue_choice.dart';
 import 'package:jenny/src/structure/dialogue_line.dart';
 import 'package:jenny/src/structure/node.dart';
-import 'package:jenny/src/structure/option.dart';
+import 'package:jenny/src/structure/dialogue_option.dart';
 import 'package:meta/meta.dart';
 
 abstract class DialogueView {
@@ -129,7 +129,7 @@ abstract class DialogueView {
   ///
   /// If this method returns a future, the dialogue runner will wait for that
   /// future to complete before proceeding with the dialogue.
-  FutureOr<void> onChoiceFinish(Option option) {}
+  FutureOr<void> onChoiceFinish(DialogueOption option) {}
 
   /// Called when the dialogue encounters a user-defined command.
   ///

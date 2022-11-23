@@ -62,7 +62,7 @@ class DialogueLine extends DialogueEntry {
   /// This value may change upon subsequent re-evaluations of the line (which
   /// occur each time the line goes through the Dialogue runner).
   String get text {
-    assert(_value != null, 'DialogueLine was not evaluated');
+    assert(_value != null, 'Line was not evaluated');
     return _value!;
   }
 
@@ -74,6 +74,8 @@ class DialogueLine extends DialogueEntry {
   /// The list of markup attributes associated with the text line.
   List<MarkupAttribute> get attributes => _content.attributes ?? const [];
 
+  /// True if the line will never change upon subsequent reruns. That is, when
+  /// the line does not depend on any dynamic expressions.
   bool get isConst => _content.isConst;
 
   @override

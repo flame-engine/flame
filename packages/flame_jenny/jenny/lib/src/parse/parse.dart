@@ -23,7 +23,7 @@ import 'package:jenny/src/structure/expressions/string.dart';
 import 'package:jenny/src/structure/line_content.dart';
 import 'package:jenny/src/structure/markup_attribute.dart';
 import 'package:jenny/src/structure/node.dart';
-import 'package:jenny/src/structure/option.dart';
+import 'package:jenny/src/structure/dialogue_option.dart';
 import 'package:jenny/src/yarn_project.dart';
 import 'package:meta/meta.dart';
 
@@ -175,7 +175,7 @@ class _Parser {
     );
   }
 
-  Option parseOption() {
+  DialogueOption parseOption() {
     take(Token.arrow);
     final person = maybeParseLinePerson();
     final content = parseLineContent();
@@ -191,7 +191,7 @@ class _Parser {
       block = parseStatementList();
       take(Token.endIndent);
     }
-    return Option(
+    return DialogueOption(
       content: content,
       character: person,
       tags: tags,

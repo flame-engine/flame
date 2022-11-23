@@ -4,7 +4,7 @@ import 'package:jenny/src/structure/dialogue_entry.dart';
 import 'package:jenny/src/structure/dialogue_line.dart';
 import 'package:jenny/src/structure/line_content.dart';
 import 'package:jenny/src/structure/node.dart';
-import 'package:jenny/src/structure/option.dart';
+import 'package:jenny/src/structure/dialogue_option.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -66,14 +66,14 @@ void main() {
             DialogueLine(content: LineContent('one')),
             DialogueLine(content: LineContent('two')),
             DialogueChoice([
-              Option(
+              DialogueOption(
                 content: LineContent('select 1'),
                 block: Block([
                   DialogueLine(content: LineContent('so one it is')),
                   DialogueLine(content: LineContent('good choice!')),
                 ]),
               ),
-              Option(
+              DialogueOption(
                 content: LineContent('select 2'),
                 block: Block([
                   DialogueLine(content: LineContent('oops!')),

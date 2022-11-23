@@ -350,7 +350,7 @@ class _RecordingDialogueView extends DialogueView {
   }
 
   @override
-  void onChoiceFinish(Option option) => _record('onChoiceFinish($option)');
+  void onChoiceFinish(DialogueOption option) => _record('onChoiceFinish($option)');
 
   bool _record(String event) {
     events.add('[$name] $event');
