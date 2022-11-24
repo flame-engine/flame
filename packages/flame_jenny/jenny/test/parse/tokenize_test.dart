@@ -1082,7 +1082,7 @@ void main() {
             Token.endHeader,
             Token.startBody,
             Token.arrow,
-            Token.text('Sure I am! The boss knows me! '),
+            Token.text('Sure I am! The boss knows me!'),
             Token.startCommand,
             Token.commandIf,
             Token.startExpression,
