@@ -6,6 +6,7 @@ import 'package:jenny/src/structure/commands/command.dart';
 import 'package:jenny/src/structure/commands/declare_command.dart';
 import 'package:jenny/src/structure/commands/if_command.dart';
 import 'package:jenny/src/structure/commands/jump_command.dart';
+import 'package:jenny/src/structure/commands/local_command.dart';
 import 'package:jenny/src/structure/commands/set_command.dart';
 import 'package:jenny/src/structure/commands/stop_command.dart';
 import 'package:jenny/src/structure/commands/user_defined_command.dart';
@@ -24,6 +25,7 @@ import 'package:jenny/src/structure/expressions/string.dart';
 import 'package:jenny/src/structure/line_content.dart';
 import 'package:jenny/src/structure/markup_attribute.dart';
 import 'package:jenny/src/structure/node.dart';
+import 'package:jenny/src/variable_storage.dart';
 import 'package:jenny/src/yarn_project.dart';
 import 'package:meta/meta.dart';
 
@@ -39,6 +41,7 @@ class _Parser {
   final YarnProject project;
   final String text;
   final List<Token> tokens;
+  VariableStorage? localVariables;
 
   /// The index of the next token to parse.
   int position;
@@ -72,7 +75,9 @@ class _Parser {
         title: header.title!,
         tags: header.tags,
         content: block,
+        variables: localVariables,
       );
+      localVariables = null;
     }
   }
 
@@ -402,8 +407,8 @@ class _Parser {
       return parseCommandWait();
     } else if (token == Token.commandSet) {
       return parseCommandSet();
-    } else if (token == Token.commandDeclare) {
-      return parseCommandDeclare();
+    } else if (token == Token.commandDeclare || token == Token.commandLocal) {
+      return parseCommandDeclareOrLocal();
     } else if (token == Token.commandElseif ||
         token == Token.commandElse ||
         token == Token.commandEndif) {
@@ -541,7 +546,12 @@ class _Parser {
       syntaxError('variable expected');
     }
     final variableName = variableToken.content;
-    if (!project.variables.hasVariable(variableName)) {
+    final VariableStorage variableStorage;
+    if (localVariables?.hasVariable(variableName) ?? false) {
+      variableStorage = localVariables!;
+    } else if (project.variables.hasVariable(variableName)) {
+      variableStorage = project.variables;
+    } else {
       nameError('variable $variableName has not been declared');
     }
     position += 1;
@@ -552,7 +562,7 @@ class _Parser {
     position += 1;
     final expressionStartPosition = position;
     final expression = parseExpression();
-    final variableType = project.variables.getVariableType(variableName);
+    final variableType = variableStorage.getVariableType(variableName);
     if (variableType != expression.type) {
       position = expressionStartPosition;
       typeError(
@@ -561,31 +571,48 @@ class _Parser {
       );
     }
     final assignmentExpression = assignmentTokens[assignmentToken]!(
-      project.variables.getVariableAsExpression(variableName),
+      variableStorage.getVariableAsExpression(variableName),
       expression,
       expressionStartPosition,
     );
     take(Token.endExpression);
     take(Token.endCommand);
     take(Token.newline);
-    return SetCommand(variableName, assignmentExpression);
+    return SetCommand(variableName, assignmentExpression, variableStorage);
   }
 
-  Command parseCommandDeclare() {
+  Command parseCommandDeclareOrLocal() {
     take(Token.startCommand);
-    take(Token.commandDeclare);
+    final isDeclare = peekToken() == Token.commandDeclare;
+    final isLocal = peekToken() == Token.commandLocal;
+    assert(isDeclare || isLocal);
+    position += 1;
     take(Token.startExpression);
+    if (isLocal) {
+      localVariables ??= VariableStorage();
+    }
     final variableToken = peekToken();
     if (!variableToken.isVariable) {
       syntaxError('variable name expected');
     }
     final variableName = variableToken.content;
+    if (isLocal && localVariables!.hasVariable(variableName)) {
+      nameError('redeclaration of local variable $variableName');
+    }
     if (project.variables.hasVariable(variableName)) {
-      nameError('variable $variableName has already been declared');
+      nameError(
+        isLocal
+            ? 'variable $variableName shadows a global variable with the '
+                'same name'
+            : 'variable $variableName has already been declared',
+      );
     }
     position += 1;
     late final Expression expression;
     if (peekToken() == Token.asType) {
+      if (isLocal) {
+        syntaxError('assignment operator is expected');
+      }
       take(Token.asType);
       final typeToken = peekToken();
       final typeExpr = typesToDefaultValues[typeToken];
@@ -616,8 +643,17 @@ class _Parser {
     take(Token.endExpression);
     take(Token.endCommand);
     takeNewline();
-    project.variables.setVariable(variableName, expression.value);
-    return const DeclareCommand();
+    if (isLocal) {
+      final dynamic initialValue = typesToDefaultValues.values
+          .where((Expression v) => v.type == expression.type)
+          .first
+          .value;
+      localVariables!.setVariable(variableName, initialValue);
+      return LocalCommand(variableName, expression, localVariables!);
+    } else {
+      project.variables.setVariable(variableName, expression.value);
+      return const DeclareCommand();
+    }
   }
 
   Command parseUserDefinedCommand() {
@@ -729,13 +765,16 @@ class _Parser {
       return BoolLiteral(token == Token.constTrue);
     } else if (token.isVariable) {
       final name = token.content;
-      if (project.variables.hasVariable(name)) {
+      if (localVariables?.hasVariable(name) ?? false) {
+        return localVariables!.getVariableAsExpression(name);
+      } else if (project.variables.hasVariable(name)) {
         return project.variables.getVariableAsExpression(name);
       } else {
         position -= 1;
         nameError('variable $name is not defined');
       }
     } else if (token.isId) {
+      // Function call
       throw UnimplementedError();
     } else if (token == Token.operatorNot) {
       final position0 = position;

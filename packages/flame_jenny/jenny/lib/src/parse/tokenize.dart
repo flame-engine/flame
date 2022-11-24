@@ -966,6 +966,7 @@ class _Lexer {
     'endif': Token.commandEndif,
     'if': Token.commandIf,
     'jump': Token.commandJump,
+    'local': Token.commandLocal,
     'set': Token.commandSet,
     'stop': Token.commandStop,
     'wait': Token.commandWait,
@@ -983,6 +984,7 @@ class _Lexer {
     Token.commandDeclare,
     Token.commandElseif,
     Token.commandIf,
+    Token.commandLocal,
     Token.commandSet,
     Token.commandWait,
   };

@@ -27,6 +27,7 @@ class Token {
   static const commandEndif = Token._(TokenType.commandEndif);
   static const commandIf = Token._(TokenType.commandIf);
   static const commandJump = Token._(TokenType.commandJump);
+  static const commandLocal = Token._(TokenType.commandLocal);
   static const commandSet = Token._(TokenType.commandSet);
   static const commandStop = Token._(TokenType.commandStop);
   static const commandWait = Token._(TokenType.commandWait);
@@ -125,6 +126,7 @@ enum TokenType {
   commandEndif, //           'endif'
   commandIf, //              'if'
   commandJump, //            'jump'
+  commandLocal, //           'local'
   commandSet, //             'set'
   commandStop, //            'stop'
   commandWait, //            'wait'
