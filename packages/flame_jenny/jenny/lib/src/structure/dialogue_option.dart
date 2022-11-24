@@ -1,26 +1,30 @@
 import 'package:jenny/src/structure/block.dart';
+import 'package:jenny/src/structure/dialogue_line.dart';
 import 'package:jenny/src/structure/expressions/expression.dart';
 
-class Option {
-  Option({
-    required this.content,
-    this.character,
+class DialogueOption extends DialogueLine {
+  DialogueOption({
+    required super.content,
+    super.character,
+    super.tags,
     this.condition,
-    this.tags,
     this.block = const Block([]),
   });
 
-  final String? character;
-  final StringExpression content;
-  final List<String>? tags;
   final BoolExpression? condition;
   final Block block;
   bool available = true;
 
   @override
+  void evaluate() {
+    super.evaluate();
+    available = condition?.value ?? true;
+  }
+
+  @override
   String toString() {
     final prefix = character == null ? '' : '$character: ';
     final suffix = available ? '' : ' #disabled';
-    return 'Option($prefix${content.value}$suffix)';
+    return 'Option($prefix$text$suffix)';
   }
 }

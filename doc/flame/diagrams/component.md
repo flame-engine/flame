@@ -3,7 +3,7 @@
   graph TD  
 
     %% Node Color %%
-    classDef yellow fill:#F6BE00,stroke:#F6BE00,stroke-width:4px,color:#000 ;
+    classDef yellow fill:#F6BE00,stroke:#F6BE00,stroke-width:4px,color:#AAA ;
     classDef default fill:#282828,stroke:#F6BE00;
     
     %% Nodes %%
@@ -15,45 +15,58 @@
 
 ```{mermaid}
 %%{init: { 'theme': 'dark'  } }%%
-
 graph TD
     %% Node Color %%
-    classDef yellow fill:#F6BE00,stroke:#F6BE00,stroke-width:4px,color:#000 ;
+    classDef yellow fill:#F6BE00,stroke:#F6BE00,stroke-width:4px,color:#AAA;
     classDef default fill:#282828,stroke:#F6BE00;
     
     %% Nodes %%
        
-    Component[Component]
-    TimerComponent(TimerComponent <br/>ParticleComponent <br>SpriteBatchComponent)
-    Effects("Effects <br/> (See the effects section)"):::yellow
-    FlameGame(Flame Game)
+    Component(Component)
+    Misc("
+        TimerComponent
+        ParticleComponent
+        SpriteBatchComponent
+    ")
+    Effects("Effects<br/>(See the effects section)"):::yellow
+    Game(Game)
+    FlameGame(FlameGame)
     PositionComponent(PositionComponent)
    
-    SpriteComponent("SpriteComponent  <br/> SpriteGroupComponent 
-    <br/> SpriteAnimationComponent <br/> 
-    SpriteAnimationGroupComponent <br/> ParallaxComponent 
-    <br/> IsoMetricTileMapComponent")
+    Sprites("
+        SpriteComponent
+        SpriteGroupComponent 
+        SpriteAnimationComponent
+        SpriteAnimationGroupComponent
+        ParallaxComponent 
+        IsoMetricTileMapComponent
+    ")
     
     HudMarginComponent(HudMarginComponent)
-    HudButtonComponent(HudButtonComponent  <br/> JoystickComponent)
+    HudComponents("
+        HudButtonComponent
+        JoystickComponent
+    ")
     
-    ButtonComponent("ButtonComponent <br/> CustomPainterComponent 
-    <br/> ShapeComponent <br/> SpriteButtonComponent 
-    <br/> TextComponent <br/> TextBoxComponent 
-    <br/> NineTileBoxComponent")
-    
-    Loadable("Loadable (Mixin)"):::yellow
-    
+    OtherPositionComponents("
+        ButtonComponent
+        CustomPainterComponent
+        ShapeComponent
+        SpriteButtonComponent
+        TextComponent
+        TextBoxComponent
+        NineTileBoxComponent
+    ")
+        
     %% Flow %%
-    Component --> TimerComponent
+    Component --> Misc
     Component --> Effects
     Component --> PositionComponent
     Component --> FlameGame
    
-    Loadable --> FlameGame
-    PositionComponent --> SpriteComponent
+    Game --> FlameGame
+    PositionComponent --> Sprites
     PositionComponent --> HudMarginComponent
-    PositionComponent --> ButtonComponent
-    HudMarginComponent --> HudButtonComponent
-    
+    PositionComponent --> OtherPositionComponents
+    HudMarginComponent --> HudComponents    
 ```

@@ -130,11 +130,11 @@ abstract class Effect extends Component {
   /// similar to `EffectController.advance`.
   @internal
   double advance(double dt) {
-    final remainingDt = controller.advance(dt);
     if (!_started && controller.started) {
       _started = true;
       onStart();
     }
+    final remainingDt = controller.advance(dt);
     if (_started) {
       final progress = controller.progress;
       apply(progress);

@@ -11,7 +11,9 @@ import 'package:jenny/src/structure/commands/stop_command.dart';
 import 'package:jenny/src/structure/commands/user_defined_command.dart';
 import 'package:jenny/src/structure/commands/wait_command.dart';
 import 'package:jenny/src/structure/dialogue_choice.dart';
+import 'package:jenny/src/structure/dialogue_entry.dart';
 import 'package:jenny/src/structure/dialogue_line.dart';
+import 'package:jenny/src/structure/dialogue_option.dart';
 import 'package:jenny/src/structure/expressions/arithmetic.dart';
 import 'package:jenny/src/structure/expressions/expression.dart';
 import 'package:jenny/src/structure/expressions/functions.dart';
@@ -19,9 +21,9 @@ import 'package:jenny/src/structure/expressions/literal.dart';
 import 'package:jenny/src/structure/expressions/logical.dart';
 import 'package:jenny/src/structure/expressions/relational.dart';
 import 'package:jenny/src/structure/expressions/string.dart';
+import 'package:jenny/src/structure/line_content.dart';
+import 'package:jenny/src/structure/markup_attribute.dart';
 import 'package:jenny/src/structure/node.dart';
-import 'package:jenny/src/structure/option.dart';
-import 'package:jenny/src/structure/statement.dart';
 import 'package:jenny/src/yarn_project.dart';
 import 'package:meta/meta.dart';
 
@@ -122,7 +124,7 @@ class _Parser {
   }
 
   Block parseStatementList() {
-    final lines = <Statement>[];
+    final lines = <DialogueEntry>[];
     while (true) {
       final nextToken = peekToken();
       if (nextToken == Token.arrow) {
@@ -142,7 +144,8 @@ class _Parser {
         lines.add(command);
       } else if (nextToken.isText ||
           nextToken.isPerson ||
-          nextToken == Token.startExpression) {
+          nextToken == Token.startExpression ||
+          nextToken == Token.startMarkupTag) {
         lines.add(parseDialogueLine());
       } else if (nextToken == Token.newline) {
         position += 1;
@@ -172,7 +175,7 @@ class _Parser {
     );
   }
 
-  Option parseOption() {
+  DialogueOption parseOption() {
     take(Token.arrow);
     final person = maybeParseLinePerson();
     final content = parseLineContent();
@@ -188,7 +191,7 @@ class _Parser {
       block = parseStatementList();
       take(Token.endIndent);
     }
-    return Option(
+    return DialogueOption(
       content: content,
       character: person,
       tags: tags,
@@ -207,35 +210,85 @@ class _Parser {
     return null;
   }
 
-  StringExpression parseLineContent() {
-    final parts = <StringExpression>[];
+  LineContent parseLineContent() {
+    final stringBuilder = StringBuffer();
+    final expressions = <InlineExpression>[];
+    final attributes = <MarkupAttribute>[];
+    final markupStack = <_Markup>[];
+    var subIndex = 0;
     while (true) {
       final token = peekToken();
       if (token.isText) {
-        parts.add(StringLiteral(token.content));
+        subIndex = 0;
+        stringBuilder.write(token.content);
         position += 1;
       } else if (token == Token.startExpression) {
+        subIndex += 1;
         take(Token.startExpression);
         final expression = parseExpression();
-        if (expression.isString) {
-          parts.add(expression as StringExpression);
-        } else if (expression.isNumeric) {
-          parts.add(NumToStringFn(expression as NumExpression));
-        } else if (expression.isBoolean) {
-          parts.add(BoolToStringFn(expression as BoolExpression));
-        }
         take(Token.endExpression);
+        expressions.add(
+          InlineExpression(
+            stringBuilder.length,
+            expression.isNumeric
+                ? NumToStringFn(expression as NumExpression)
+                : expression.isBoolean
+                    ? BoolToStringFn(expression as BoolExpression)
+                    : expression as StringExpression,
+          ),
+        );
+      } else if (token == Token.startMarkupTag) {
+        take(Token.startMarkupTag);
+        final position0 = position;
+        final markupTag = parseMarkupTag();
+        take(Token.endMarkupTag);
+        if (markupTag.closing) {
+          if (markupStack.isEmpty) {
+            position = position0;
+            syntaxError('unexpected closing markup tag');
+          }
+          // close-all tag
+          if (markupTag.name == null) {
+            while (markupStack.isNotEmpty) {
+              final tag = markupStack.removeLast();
+              tag.endTextPosition = stringBuilder.length;
+              tag.endSubIndex = subIndex;
+              attributes.add(tag.build());
+            }
+          } else {
+            final openTag = markupStack.removeLast();
+            if (openTag.name != markupTag.name) {
+              position = position0 + 1;
+              syntaxError('Expected closing tag for [${openTag.name}]');
+            }
+            openTag.endTextPosition = stringBuilder.length;
+            openTag.endSubIndex = subIndex;
+            attributes.add(openTag.build());
+          }
+        } else {
+          markupTag.startTextPosition = stringBuilder.length;
+          markupTag.startSubIndex = subIndex;
+          // TODO(stpasha): check that the name of the markup tag is known
+          if (markupTag.selfClosing) {
+            markupTag.endTextPosition = stringBuilder.length;
+            markupTag.endSubIndex = subIndex;
+            attributes.add(markupTag.build());
+          } else {
+            markupStack.add(markupTag);
+          }
+        }
       } else {
         break;
       }
     }
-    if (parts.length == 1) {
-      return parts.first;
-    } else if (parts.length > 1) {
-      return Concatenate(parts);
-    } else {
-      return constEmptyString;
+    if (markupStack.isNotEmpty) {
+      syntaxError('markup tag [${markupStack.last.name}] was not closed');
     }
+    return LineContent(
+      stringBuilder.toString(),
+      expressions.isEmpty ? null : expressions,
+      attributes.isEmpty ? null : attributes,
+    );
   }
 
   BoolExpression? maybeParseLineCondition() {
@@ -272,6 +325,52 @@ class _Parser {
       }
     }
     return out.isEmpty ? null : out;
+  }
+
+  _Markup parseMarkupTag() {
+    final result = _Markup();
+    if (peekToken() == Token.closeMarkupTag) {
+      position += 1;
+      result.closing = true;
+      final nextToken = peekToken();
+      if (nextToken.isId) {
+        result.name = nextToken.content;
+        position += 1;
+      } else if (nextToken != Token.endMarkupTag) {
+        syntaxError('a markup tag name is expected');
+      }
+    } else {
+      final nextToken = peekToken();
+      if (nextToken.isId) {
+        result.name = nextToken.content;
+        position += 1;
+      } else {
+        syntaxError('a markup tag name is expected');
+      }
+      while (peekToken().isId) {
+        final position0 = position;
+        final parameter = peekToken().content;
+        position += 1;
+        final Expression expression;
+        if (peekToken() == Token.operatorAssign) {
+          position += 1;
+          expression = parseExpression();
+        } else {
+          expression = constTrue;
+        }
+        if (result.parameters.containsKey(parameter)) {
+          position = position0;
+          syntaxError('duplicate parameter $parameter in a markup attribute');
+        }
+        result.parameters[parameter] = expression;
+      }
+      final lastToken = peekToken();
+      if (lastToken == Token.closeMarkupTag) {
+        result.selfClosing = true;
+        position += 1;
+      }
+    }
+    return result;
   }
 
   //#endregion
@@ -896,4 +995,27 @@ class _NodeHeader {
   _NodeHeader(this.title, this.tags);
   String? title;
   Map<String, String>? tags;
+}
+
+class _Markup {
+  bool closing = false;
+  bool selfClosing = false;
+  String? name;
+  int? startTextPosition;
+  int? endTextPosition;
+  int? startSubIndex;
+  int? endSubIndex;
+  Map<String, Expression> parameters = {};
+
+  MarkupAttribute build() {
+    assert(!closing);
+    return MarkupAttribute(
+      name!,
+      startTextPosition!,
+      endTextPosition!,
+      startSubIndex!,
+      endSubIndex!,
+      parameters.isEmpty ? null : parameters,
+    );
+  }
 }

@@ -1,10 +1,10 @@
 import 'package:jenny/src/structure/block.dart';
 import 'package:jenny/src/structure/dialogue_choice.dart';
+import 'package:jenny/src/structure/dialogue_entry.dart';
 import 'package:jenny/src/structure/dialogue_line.dart';
-import 'package:jenny/src/structure/expressions/literal.dart';
+import 'package:jenny/src/structure/dialogue_option.dart';
+import 'package:jenny/src/structure/line_content.dart';
 import 'package:jenny/src/structure/node.dart';
-import 'package:jenny/src/structure/option.dart';
-import 'package:jenny/src/structure/statement.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -16,7 +16,7 @@ void main() {
       );
 
       expect(node.title, 'Introduction');
-      expect(node.lines, <Statement>[]);
+      expect(node.lines, <DialogueEntry>[]);
       expect(node.tags, isNull);
       expect('$node', 'Node(Introduction)');
     });
@@ -37,61 +37,61 @@ void main() {
     group('iterators', () {
       test('iterating an empty node', () {
         const node = Node(title: 'X', content: Block.empty());
-        final statements = List<Statement>.from(node);
+        final statements = List<DialogueEntry>.from(node);
         expect(statements, isEmpty);
       });
 
       test('iterating node with one line', () {
-        const line0 = DialogueLine(content: constEmptyString);
-        const node = Node(title: 'X', content: Block([line0]));
+        final line0 = DialogueLine(content: LineContent(''));
+        final node = Node(title: 'X', content: Block([line0]));
         expect(node.toList(), [line0]);
       });
 
       test('iterating multi-line node', () {
-        const line1 = DialogueLine(content: StringLiteral('one'));
-        const line2 = DialogueLine(content: StringLiteral('two'));
-        const line3 = DialogueLine(content: StringLiteral('three'));
-        const line4 = DialogueLine(content: StringLiteral('four'));
-        const node = Node(
+        final line1 = DialogueLine(content: LineContent('one'));
+        final line2 = DialogueLine(content: LineContent('two'));
+        final line3 = DialogueLine(content: LineContent('three'));
+        final line4 = DialogueLine(content: LineContent('four'));
+        final node = Node(
           title: 'quadruple',
           content: Block([line1, line2, line3, line4]),
         );
-        expect(List<Statement>.from(node), [line1, line2, line3, line4]);
+        expect(List<DialogueEntry>.from(node), [line1, line2, line3, line4]);
       });
 
       test('iterating deep node', () {
         final node = Node(
           title: 'complicated',
           content: Block([
-            const DialogueLine(content: StringLiteral('one')),
-            const DialogueLine(content: StringLiteral('two')),
+            DialogueLine(content: LineContent('one')),
+            DialogueLine(content: LineContent('two')),
             DialogueChoice([
-              Option(
-                content: const StringLiteral('select 1'),
-                block: const Block([
-                  DialogueLine(content: StringLiteral('so one it is')),
-                  DialogueLine(content: StringLiteral('good choice!')),
+              DialogueOption(
+                content: LineContent('select 1'),
+                block: Block([
+                  DialogueLine(content: LineContent('so one it is')),
+                  DialogueLine(content: LineContent('good choice!')),
                 ]),
               ),
-              Option(
-                content: const StringLiteral('select 2'),
-                block: const Block([
-                  DialogueLine(content: StringLiteral('oops!')),
+              DialogueOption(
+                content: LineContent('select 2'),
+                block: Block([
+                  DialogueLine(content: LineContent('oops!')),
                 ]),
               ),
             ]),
-            const DialogueLine(content: StringLiteral('bye!')),
+            DialogueLine(content: LineContent('bye!')),
           ]),
         );
 
-        final lines0 = <Statement>[];
+        final lines0 = <DialogueEntry>[];
         final it0 = node.iterator;
         while (it0.moveNext()) {
           lines0.add(it0.current);
         }
         expect(lines0, node.lines);
 
-        final lines1 = <Statement>[];
+        final lines1 = <DialogueEntry>[];
         final it1 = node.iterator;
         while (it1.moveNext()) {
           final nextLine = it1.current;
@@ -103,12 +103,12 @@ void main() {
         expect(
           lines1,
           [
-            const DialogueLine(content: StringLiteral('one')),
-            const DialogueLine(content: StringLiteral('two')),
+            DialogueLine(content: LineContent('one')),
+            DialogueLine(content: LineContent('two')),
             node.lines[2] as DialogueChoice,
-            const DialogueLine(content: StringLiteral('so one it is')),
-            const DialogueLine(content: StringLiteral('good choice!')),
-            const DialogueLine(content: StringLiteral('bye!')),
+            DialogueLine(content: LineContent('so one it is')),
+            DialogueLine(content: LineContent('good choice!')),
+            DialogueLine(content: LineContent('bye!')),
           ],
         );
       });
