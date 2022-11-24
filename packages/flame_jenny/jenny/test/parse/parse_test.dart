@@ -1208,7 +1208,6 @@ void main() {
         option: Here's some escaped markup: [a]hello[/a]
         select: 1
       ''',
-      // skip: true, // needs [markup] support
     );
   });
 }

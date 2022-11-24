@@ -306,7 +306,6 @@ void main() {
         line: All done with the shortcut options!
       ''',
       commands: ['this'],
-      skip: true,
     );
   });
 }
