@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:jenny/src/parse/parse.dart';
 import 'package:jenny/src/structure/expressions/expression.dart';
+import 'package:jenny/src/structure/expressions/functions/_utils.dart';
 import 'package:jenny/src/yarn_project.dart';
 
 Random $randomGenerator = Random();
@@ -9,45 +10,6 @@ Random $randomGenerator = Random();
 // TODO(st-pasha): visited(String nodeName)
 // TODO(st-pasha): visited_count(String nodeName)
 
-/// Function `random_range(a, b)` returns a random integer between `a` and `b`,
-/// inclusive.
-class RandomRangeFn extends NumExpression {
-  const RandomRangeFn(this.a, this.b);
-
-  final NumExpression a;
-  final NumExpression b;
-
-  static Expression make(
-    List<FunctionArgument> args,
-    YarnProject yarnProject,
-    ErrorFn errorFn,
-  ) =>
-      _num2Builder('random_range', RandomRangeFn.new, args, errorFn);
-
-  @override
-  num get value {
-    final lower = a.value.toInt();
-    final upper = b.value.toInt();
-    return $randomGenerator.nextInt(upper - lower + 1) + lower;
-  }
-}
-
-/// Function `dice(n)` returns a random integer between 1 and `n`, inclusive.
-class DiceFn extends NumExpression {
-  const DiceFn(this.sides);
-
-  final NumExpression sides;
-
-  static Expression make(
-    List<FunctionArgument> args,
-    YarnProject yarnProject,
-    ErrorFn errorFn,
-  ) =>
-      _num1Builder('dice', DiceFn.new, args, errorFn);
-
-  @override
-  num get value => $randomGenerator.nextInt(sides.value.toInt()) + 1;
-}
 
 /// Function `round(x)` will round `x` to the nearest integer.
 class RoundFn extends NumExpression {
@@ -60,7 +22,7 @@ class RoundFn extends NumExpression {
     YarnProject yarnProject,
     ErrorFn errorFn,
   ) =>
-      _num1Builder('round', RoundFn.new, args, errorFn);
+      num1Builder('round', RoundFn.new, args, errorFn);
 
   @override
   num get value => arg.value.round();
@@ -78,7 +40,7 @@ class RoundPlacesFn extends NumExpression {
     YarnProject yarnProject,
     ErrorFn errorFn,
   ) =>
-      _num2Builder('round_places', RoundPlacesFn.new, args, errorFn);
+      num2Builder('round_places', RoundPlacesFn.new, args, errorFn);
 
   @override
   num get value {
@@ -99,7 +61,7 @@ class FloorFn extends NumExpression {
     YarnProject yarnProject,
     ErrorFn errorFn,
   ) =>
-      _num1Builder('floor', FloorFn.new, args, errorFn);
+      num1Builder('floor', FloorFn.new, args, errorFn);
 
   @override
   num get value => arg.value.floor();
@@ -116,7 +78,7 @@ class CeilFn extends NumExpression {
     YarnProject yarnProject,
     ErrorFn errorFn,
   ) =>
-      _num1Builder('ceil', CeilFn.new, args, errorFn);
+      num1Builder('ceil', CeilFn.new, args, errorFn);
 
   @override
   num get value => arg.value.ceil();
@@ -134,7 +96,7 @@ class IncFn extends NumExpression {
     YarnProject yarnProject,
     ErrorFn errorFn,
   ) =>
-      _num1Builder('inc', IncFn.new, args, errorFn);
+      num1Builder('inc', IncFn.new, args, errorFn);
 
   @override
   num get value => arg.value.toInt() + 1;
@@ -152,7 +114,7 @@ class DecFn extends NumExpression {
     YarnProject yarnProject,
     ErrorFn errorFn,
   ) =>
-      _num1Builder('dec', DecFn.new, args, errorFn);
+      num1Builder('dec', DecFn.new, args, errorFn);
 
   @override
   num get value {
@@ -173,7 +135,7 @@ class DecimalFn extends NumExpression {
     YarnProject yarnProject,
     ErrorFn errorFn,
   ) =>
-      _num1Builder('decimal', DecimalFn.new, args, errorFn);
+      num1Builder('decimal', DecimalFn.new, args, errorFn);
 
   @override
   num get value {
@@ -193,7 +155,7 @@ class IntFn extends NumExpression {
     YarnProject yarnProject,
     ErrorFn errorFn,
   ) =>
-      _num1Builder('int', IntFn.new, args, errorFn);
+      num1Builder('int', IntFn.new, args, errorFn);
 
   @override
   num get value => arg.value.truncate();
@@ -238,40 +200,4 @@ class NumToBoolFn extends BoolExpression {
 
   @override
   bool get value => arg.value != 0;
-}
-
-Expression _num1Builder(
-  String name,
-  Expression Function(NumExpression) constructor,
-  List<FunctionArgument> args,
-  ErrorFn errorFn,
-) {
-  if (args.length != 1) {
-    errorFn('function $name() requires a single argument');
-  }
-  if (!args[0].expression.isNumeric) {
-    errorFn('the argument should be numeric', args[0].position);
-  }
-  return constructor(args[0].expression as NumExpression);
-}
-
-Expression _num2Builder(
-  String name,
-  Expression Function(NumExpression, NumExpression) constructor,
-  List<FunctionArgument> args,
-  ErrorFn errorFn,
-) {
-  if (args.length != 2) {
-    errorFn('function $name() requires 2 arguments');
-  }
-  if (!args[0].expression.isNumeric) {
-    errorFn('first argument should be numeric', args[0].position);
-  }
-  if (!args[1].expression.isNumeric) {
-    errorFn('second argument should be numeric', args[1].position);
-  }
-  return constructor(
-    args[0].expression as NumExpression,
-    args[1].expression as NumExpression,
-  );
 }
