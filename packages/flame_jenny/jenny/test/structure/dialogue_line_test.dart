@@ -41,5 +41,25 @@ void main() {
       expect(line.attributes[0].name, 'i');
       expect(line.attributes[1].name, 'b');
     });
+
+    test('dynamic markup attributes', () {
+      final yarn = YarnProject()
+        ..variables.setVariable(r'$index', 1)
+        ..parse('title: A\n---\n'
+            'X [box index=\$index /] Y Z\n'
+            '===\n',);
+      final line = yarn.nodes['A']!.lines[0] as DialogueLine;
+
+      line.evaluate();
+      expect(line.text, 'X Y Z');
+      expect(line.attributes[0].name, 'box');
+      expect(line.attributes[0].parameters['index'], 1);
+
+      yarn.variables.setVariable(r'$index', 42);
+      line.evaluate();
+      expect(line.text, 'X Y Z');
+      expect(line.attributes[0].name, 'box');
+      expect(line.attributes[0].parameters['index'], 42);
+    });
   });
 }

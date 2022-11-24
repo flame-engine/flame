@@ -727,7 +727,7 @@ void main() {
         expect(attribute.name, 'big');
         expect(attribute.start, 7);
         expect(attribute.end, 12);
-        expect(attribute.parameters, isNull);
+        expect(attribute.parameters, isEmpty);
         expect(line.text.substring(attribute.start, attribute.end), 'world');
       });
 
@@ -743,7 +743,7 @@ void main() {
         expect(attribute.name, 'wave');
         expect(attribute.start, 7);
         expect(attribute.end, 7);
-        expect(attribute.parameters, isNull);
+        expect(attribute.parameters, isEmpty);
       });
 
       test('parse nested tags', () {
@@ -806,13 +806,13 @@ void main() {
         expect(attr.start, 0);
         expect(attr.end, 4);
         expect(attr.parameters, isNotNull);
-        final parameters = attr.parameters!;
+        final parameters = attr.parameters;
         expect(parameters.length, 4);
         expect(parameters.keys.toSet(), {'r', 'g', 'b', 'name'});
-        expect(parameters['r']!.value, 0);
-        expect(parameters['g']!.value, false);
-        expect(parameters['b']!.value, 100);
-        expect(parameters['name']!.value, 'BLUE');
+        expect(parameters['r'], 0);
+        expect(parameters['g'], false);
+        expect(parameters['b'], 100);
+        expect(parameters['name'], 'BLUE');
       });
 
       test('markup tag with bare parameters', () {
@@ -823,10 +823,9 @@ void main() {
         final line = yarn.nodes['A']!.lines[0] as DialogueLine;
         final attr = line.attributes[0];
         expect(attr.parameters, isNotNull);
-        final parameters = attr.parameters!;
+        final parameters = attr.parameters;
         expect(parameters.length, 1);
-        expect(parameters.containsKey('blue'), true);
-        expect(parameters['blue']!.value, true);
+        expect(parameters['blue'], true);
       });
 
       test('markup tags with inline expressions', () {

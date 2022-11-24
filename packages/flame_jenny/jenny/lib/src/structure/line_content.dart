@@ -11,13 +11,12 @@ class LineContent {
   final List<MarkupAttribute>? attributes;
 
   bool get isConst => expressions == null;
-  bool get isDynamic => expressions != null;
 
   String evaluate() {
+    attributes?.forEach((a) => a.reset());
     if (expressions == null) {
       return text;
     }
-    attributes?.forEach((a) => a.reset());
     final out = StringBuffer();
     var previousPosition = 0;
     var subIndex = 0;

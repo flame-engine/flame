@@ -46,7 +46,7 @@ class DialogueLine extends DialogueEntry {
   })  : _content = content,
         _character = character,
         _tags = tags,
-        _value = content.isDynamic ? null : content.text;
+        _value = content.isConst ? content.text : null;
 
   final String? _character;
   final List<String>? _tags;
@@ -79,14 +79,9 @@ class DialogueLine extends DialogueEntry {
   bool get isConst => _content.isConst;
 
   @override
-  Future<void> processInDialogueRunner(DialogueRunner runner) async {
-    if (_content.isDynamic) {
-      evaluate();
-    }
-    await runner.deliverLine(this);
-    if (_content.isDynamic) {
-      _value = null;
-    }
+  Future<void> processInDialogueRunner(DialogueRunner runner) {
+    evaluate();
+    return runner.deliverLine(this);
   }
 
   void evaluate() {
