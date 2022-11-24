@@ -230,11 +230,9 @@ class _Parser {
         expressions.add(
           InlineExpression(
             stringBuilder.length,
-            expression.isNumeric
-                ? NumToStringFn(expression as NumExpression)
-                : expression.isBoolean
-                    ? BoolToStringFn(expression as BoolExpression)
-                    : expression as StringExpression,
+            expression.isString
+                ? expression as StringExpression
+                : StringFn(expression),
           ),
         );
       } else if (token == Token.startMarkupTag) {
@@ -671,6 +669,9 @@ class _Parser {
     // We're using the Operator-Precedence parsing algorithm here, see
     // https://en.wikipedia.org/wiki/Operator-precedence_parser
     final lhs = parsePrimary();
+    if (lhs == constVoid) {
+      return lhs;
+    }
     return _parseExpressionImpl(lhs, 0);
   }
 
@@ -706,10 +707,7 @@ class _Parser {
     position += 1;
     if (token == Token.startParenthesis) {
       final expression = parseExpression();
-      if (peekToken() != Token.endParenthesis) {
-        syntaxError('missing closing ")"');
-      }
-      position += 1;
+      take(Token.endParenthesis, 'missing closing ")"');
       return expression;
     } else if (token == Token.operatorMinus) {
       final expression = parsePrimary();
@@ -736,7 +734,16 @@ class _Parser {
         nameError('variable $name is not defined');
       }
     } else if (token.isId) {
-      throw UnimplementedError();
+      final position0 = position;
+      final name = token.content;
+      take(Token.startParenthesis, 'an opening parenthesis "(" is expected');
+      final arguments = parseFunctionArguments();
+      take(Token.endParenthesis, 'missing closing ")"');
+      final builder = builtinFunctions[name];
+      if (builder == null) {
+        nameError('unknown function name $name', position0);
+      }
+      return builder(arguments, typeError);
     } else if (token == Token.operatorNot) {
       final position0 = position;
       final lhs = parsePrimary();
@@ -749,6 +756,27 @@ class _Parser {
     }
     position -= 1;
     return constVoid;
+  }
+
+  List<FunctionArgument> parseFunctionArguments() {
+    final out = <FunctionArgument>[];
+    while (true) {
+      final position0 = position;
+      final expression = parseExpression();
+      if (expression == constVoid) {
+        break;
+      }
+      out.add(FunctionArgument(expression, position0));
+      final nextToken = peekToken();
+      if (nextToken == Token.comma) {
+        position += 1;
+      } else if (nextToken == Token.endParenthesis) {
+        break;
+      } else {
+        syntaxError('unexpected token');
+      }
+    }
+    return out;
   }
 
   Expression _add(Expression lhs, Expression rhs, int opPosition) {
@@ -932,6 +960,21 @@ class _Parser {
     Token.operatorXor: _xor,
   };
 
+  static const Map<String, FunctionBuilder> builtinFunctions = {
+    'ceil': CeilFn.make,
+    'dec': DecFn.make,
+    'decimal': DecimalFn.make,
+    'dice': DiceFn.make,
+    'floor': FloorFn.make,
+    'inc': IncFn.make,
+    'int': IntFn.make,
+    'random': RandomFn.make,
+    'random_range': RandomRangeFn.make,
+    'round': RoundFn.make,
+    'round_places': RoundPlacesFn.make,
+    'string': StringFn.make,
+  };
+
   //#endregion
 
   //----------------------------------------------------------------------------
@@ -960,7 +1003,7 @@ class _Parser {
     syntaxError('expected end of line');
   }
 
-  bool take(Token token) {
+  bool take(Token token, [String? message]) {
     if (position >= tokens.length) {
       syntaxError('unexpected end of file');
     }
@@ -968,7 +1011,7 @@ class _Parser {
       position += 1;
       return true;
     }
-    return syntaxError('unexpected token');
+    return syntaxError(message ?? 'unexpected token');
   }
 
   bool takeTokenType(TokenType type) {
@@ -979,17 +1022,30 @@ class _Parser {
     return syntaxError('unexpected token');
   }
 
-  Never nameError(String message) => _error(message, NameError.new);
-  Never syntaxError(String message) => _error(message, SyntaxError.new);
-  Never typeError(String message) => _error(message, TypeError.new);
+  Never nameError(String message, [int? position]) =>
+      _error(message, position, NameError.new);
 
-  Never _error(String message, Exception Function(String) errorConstructor) {
-    final newTokens = tokenize(text, addErrorTokenAtIndex: position);
-    final errorToken = newTokens[position];
+  Never syntaxError(String message, [int? position]) =>
+      _error(message, position, SyntaxError.new);
+
+  Never typeError(String message, [int? position]) =>
+      _error(message, position, TypeError.new);
+
+  Never _error(
+    String message,
+    int? position,
+    Exception Function(String) errorConstructor,
+  ) {
+    final errorPosition = position ?? this.position;
+    final newTokens = tokenize(text, addErrorTokenAtIndex: errorPosition);
+    final errorToken = newTokens[errorPosition];
     final location = errorToken.content;
     throw errorConstructor('$message\n$location\n');
   }
 }
+
+typedef ErrorFn = Never Function(String message, [int? position]);
+typedef FunctionBuilder = Expression Function(List<FunctionArgument>, ErrorFn);
 
 class _NodeHeader {
   _NodeHeader(this.title, this.tags);
