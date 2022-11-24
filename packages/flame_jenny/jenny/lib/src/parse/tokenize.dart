@@ -686,17 +686,17 @@ class _Lexer {
     var positionBeforeWhitespace = position;
     while (!eof) {
       final cu = currentCodeUnit;
-      // Stop when seeing (\n|\r|#|//) and discard any preceding whitespace
+      // Stop when seeing (\n|\r|#|//|<<) and discard any preceding whitespace
       if ((cu == $slash && nextCodeUnit == $slash) ||
+          (cu == $lessThan && nextCodeUnit == $lessThan) ||
           cu == $hash ||
           cu == $carriageReturn ||
           cu == $lineFeed) {
         position = positionBeforeWhitespace;
         break;
       }
-      // Stop when seeing (<<|>>|\\|{|[) and keep the whitespace
-      else if ((cu == $lessThan && nextCodeUnit == $lessThan) ||
-          (cu == $greaterThan && nextCodeUnit == $greaterThan) ||
+      // Stop when seeing (>>|\\|{|[) and keep the whitespace
+      else if ((cu == $greaterThan && nextCodeUnit == $greaterThan) ||
           cu == $backslash ||
           cu == $leftBrace ||
           cu == $leftBracket) {

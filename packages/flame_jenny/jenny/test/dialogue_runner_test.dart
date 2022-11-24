@@ -135,7 +135,7 @@ void main() {
           '[*] onDialogueStart()',
           '[*] onNodeStart(Node(X))',
           '[*] onChoiceStart(DialogueChoice([Option(Hi there), ' +
-              'Option(Howdy), Option(Yo!  #disabled)])) -> 1',
+              'Option(Howdy), Option(Yo! #disabled)])) -> 1',
           '[*] onChoiceFinish(Option(Howdy))',
           '[*] onLineStart(DialogueLine(Greetings to you too))',
           '[*] onLineFinish(DialogueLine(Greetings to you too))',
@@ -154,7 +154,7 @@ void main() {
           '[*] onDialogueStart()',
           '[*] onNodeStart(Node(X))',
           '[*] onChoiceStart(DialogueChoice([Option(Hi there), ' +
-              'Option(Howdy), Option(Yo!  #disabled)])) -> 0',
+              'Option(Howdy), Option(Yo! #disabled)])) -> 0',
           '[*] onChoiceFinish(Option(Hi there))',
           '[*] onLineStart(DialogueLine(Kk-thx-bye))',
           '[*] onLineFinish(DialogueLine(Kk-thx-bye))',
@@ -179,7 +179,7 @@ void main() {
         () => dialogue.runNode('A'),
         hasDialogueError(
           'A dialogue view selected a disabled option: '
-          'Option(Only two  #disabled)',
+          'Option(Only two #disabled)',
         ),
       );
     });
