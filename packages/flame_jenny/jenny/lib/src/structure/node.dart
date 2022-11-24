@@ -1,3 +1,4 @@
+import 'package:jenny/jenny.dart';
 import 'package:jenny/src/structure/block.dart';
 import 'package:jenny/src/structure/dialogue_entry.dart';
 
@@ -6,11 +7,13 @@ class Node extends Iterable<DialogueEntry> {
     required this.title,
     required this.content,
     this.tags,
+    this.variables,
   });
 
   final String title;
   final Map<String, String>? tags;
   final Block content;
+  final VariableStorage? variables;
 
   List<DialogueEntry> get lines => content.lines;
 

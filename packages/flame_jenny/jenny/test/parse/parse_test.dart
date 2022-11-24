@@ -5,6 +5,7 @@ import 'package:jenny/src/structure/commands/jump_command.dart';
 import 'package:jenny/src/structure/dialogue_entry.dart';
 import 'package:test/test.dart';
 
+import '../test_scenario.dart';
 import '../utils.dart';
 
 void main() {
@@ -113,6 +114,60 @@ void main() {
           ),
         );
       });
+
+      test('Headers.yarn', () {
+        final yarn = YarnProject();
+        yarn.parse(
+          dedent('''
+            title: EmptyTags
+            tags:
+            ---
+            In this test, the 'tags' header is provided, but has no value.
+            ===
+            title: Tags
+            tags: one two three
+            ---
+            In this test, the 'tags' header is provided, and has three values.
+            ===
+            title: ArbitraryHeaderWithValue
+            // test
+            arbitraryHeader: some-arbitrary-text
+            ---
+            In this test, an arbitrary header is defined with some text.
+            ===
+            title: Comments
+            tags: one two three
+            metadata:
+            ---
+            This node demonstrates the use of comments in node headers.
+            ===
+          '''),
+        );
+        final node1 = yarn.nodes['EmptyTags']!;
+        expect(node1.tags, isNotNull);
+        expect(node1.tags!['tags'], '');
+
+        final node2 = yarn.nodes['Tags']!;
+        expect(node2.tags!['tags'], 'one two three');
+
+        final node3 = yarn.nodes['ArbitraryHeaderWithValue']!;
+        expect(node3.tags!['arbitraryHeader'], 'some-arbitrary-text');
+
+        final node4 = yarn.nodes['Comments']!;
+        expect(node4.tags!['tags'], 'one two three');
+        expect(node4.tags!['metadata'], '');
+      });
+
+      test(
+        'InvalidNodeTitle.yarn',
+        () {
+          expect(
+            () => YarnProject().parse('title: \$InvalidTitle\n---\n===\n'),
+            hasNameError(r'NameError: invalid title name "$InvalidTitle"'),
+          );
+        },
+        skip: true,
+      );
     });
 
     group('parseNodeBody', () {
@@ -693,23 +748,20 @@ void main() {
         );
       });
 
-      test(
-        '<<jump>>',
-        () {
-          final yarn = YarnProject()
-            ..setVariable(r'$target', 'DOWN')
-            ..parse('title:A\n---\n'
-                '<<jump UP>>\n'
-                '<<jump {\$target}>>\n'
-                '===\n');
-          final node = yarn.nodes['A']!;
-          expect(node.lines.length, 2);
-          expect(node.lines[0], isA<JumpCommand>());
-          expect(node.lines[1], isA<JumpCommand>());
-          expect((node.lines[0] as JumpCommand).target.value, 'UP');
-          expect((node.lines[1] as JumpCommand).target.value, 'DOWN');
-        },
-      );
+      test('<<jump>>', () {
+        final yarn = YarnProject()
+          ..setVariable(r'$target', 'DOWN')
+          ..parse('title:A\n---\n'
+              '<<jump UP>>\n'
+              '<<jump {\$target}>>\n'
+              '===\n');
+        final node = yarn.nodes['A']!;
+        expect(node.lines.length, 2);
+        expect(node.lines[0], isA<JumpCommand>());
+        expect(node.lines[1], isA<JumpCommand>());
+        expect((node.lines[0] as JumpCommand).target.value, 'UP');
+        expect((node.lines[1] as JumpCommand).target.value, 'DOWN');
+      });
     });
 
     group('parseMarkupTag', () {
@@ -1079,5 +1131,83 @@ void main() {
         });
       });
     });
+
+    testScenario(
+      testName: 'Escaping.yarn',
+      input: r'''
+        title: Start
+        ---
+        Here's a line with a hashtag #hashtag
+        Here's a line with an escaped hashtag \#hashtag
+        Here's a line with an expression {0}
+        Here's a line with an escaped expression \{0\}
+
+        // Commented out because this isn't actually allowed, but we're just
+        // maintaining the pattern here:
+        // Here's a line with a command <<foo>
+        Here's a line with an escaped command \<\<foo\>\>
+        Here's a line with a comment // wow
+        Here's a line with an escaped comment \/\/ wow
+        Here's a line with an escaped backslash \\
+        Here's some styling with a color code: <color=\#fff>wow</color>
+        Here's a url: http:\/\/github.com\/YarnSpinnerTool
+
+        // Escaped markup is handled by the LineParser class, not the main
+        // grammar itself
+        Here's some markup: [a]hello[/a]
+        Here's some escaped markup: \[a\]hello\[/a\]
+
+        -> Here's an option with a hashtag #hashtag
+        -> Here's an option with an escaped hashtag \#hashtag
+
+        -> Here's an option with an expression {0}
+        -> Here's an option with an escaped expression \{0\}
+
+        // Commented out because this isn't actually allowed, but we're just
+        // maintaining the pattern here:
+        -> Here's an option with a condition <<if true>>
+        -> Here's an option with an escaped condition \<\<if true\>\>
+        -> Here's an option with a comment // wow
+        -> Here's an option with an escaped comment \/\/ wow
+        -> Here's an option with an escaped backslash \\
+        -> Here's some styling with a color code: <color=\#fff>wow</color>
+        -> Here's a url: http:\/\/github.com\/YarnSpinnerTool
+
+        // Escaped markup is handled by the LineParser class, not the main
+        // grammar itself
+        -> Here's some markup: [a]hello[/a]
+        -> Here's some escaped markup: \[a\]hello\[/a\]
+        ===
+      ''',
+      testPlan: r'''
+        line: Here's a line with a hashtag
+        line: Here's a line with an escaped hashtag #hashtag
+        line: Here's a line with an expression 0
+        line: Here's a line with an escaped expression {0}
+        line: Here's a line with an escaped command <<foo>>
+        line: Here's a line with a comment
+        line: Here's a line with an escaped comment // wow
+        line: Here's a line with an escaped backslash \
+        line: Here's some styling with a color code: <color=#fff>wow</color>
+        line: Here's a url: http://github.com/YarnSpinnerTool
+        line: Here's some markup: hello
+        line: Here's some escaped markup: [a]hello[/a]
+
+        option: Here's an option with a hashtag
+        option: Here's an option with an escaped hashtag #hashtag
+        option: Here's an option with an expression 0
+        option: Here's an option with an escaped expression {0}
+        option: Here's an option with a condition
+        option: Here's an option with an escaped condition <<if true>>
+        option: Here's an option with a comment
+        option: Here's an option with an escaped comment // wow
+        option: Here's an option with an escaped backslash \
+        option: Here's some styling with a color code: <color=#fff>wow</color>
+        option: Here's a url: http://github.com/YarnSpinnerTool
+        option: Here's some markup: hello
+        option: Here's some escaped markup: [a]hello[/a]
+        select: 1
+      ''',
+    );
   });
 }
