@@ -105,12 +105,6 @@ class DialogueRunner {
 
   @internal
   Future<void> deliverChoices(DialogueChoice choice) async {
-    // Compute which options are available and which aren't. This must be done
-    // only once, because some options may have non-deterministic conditionals
-    // which may produce different results on each invocation.
-    for (final option in choice.options) {
-      option.available = option.condition?.value ?? true;
-    }
     final futures = [
       for (final view in _dialogueViews) view.onChoiceStart(choice)
     ];

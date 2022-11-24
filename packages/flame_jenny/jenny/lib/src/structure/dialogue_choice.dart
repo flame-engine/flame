@@ -9,6 +9,9 @@ class DialogueChoice extends DialogueEntry {
 
   @override
   Future<void> processInDialogueRunner(DialogueRunner runner) {
+    for (final option in options) {
+      option.evaluate();
+    }
     return runner.deliverChoices(this);
   }
 

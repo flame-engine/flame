@@ -16,6 +16,12 @@ class DialogueOption extends DialogueLine {
   bool available = true;
 
   @override
+  void evaluate() {
+    super.evaluate();
+    available = condition?.value ?? true;
+  }
+
+  @override
   String toString() {
     final prefix = character == null ? '' : '$character: ';
     final suffix = available ? '' : ' #disabled';

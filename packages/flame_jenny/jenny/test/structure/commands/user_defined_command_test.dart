@@ -77,6 +77,24 @@ void main() {
       );
     });
 
+    test('markup within user-defined command', () {
+      expect(
+        () => YarnProject()
+          ..commands.addDialogueCommand('hello')
+          ..parse(
+            'title:A\n---\n'
+            '<<hello Big [bad/] Wolf>>\n'
+            '===\n',
+          ),
+        hasSyntaxError(
+          'SyntaxError: invalid token\n'
+          '>  at line 3 column 13:\n'
+          '>  <<hello Big [bad/] Wolf>>\n'
+          '>              ^\n',
+        ),
+      );
+    });
+
     testScenario(
       testName: 'Commands.yarn',
       input: '''
