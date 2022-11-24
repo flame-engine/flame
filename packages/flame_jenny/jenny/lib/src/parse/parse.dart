@@ -18,6 +18,7 @@ import 'package:jenny/src/structure/dialogue_option.dart';
 import 'package:jenny/src/structure/expressions/arithmetic.dart';
 import 'package:jenny/src/structure/expressions/expression.dart';
 import 'package:jenny/src/structure/expressions/functions/functions.dart';
+import 'package:jenny/src/structure/expressions/functions/plural.dart';
 import 'package:jenny/src/structure/expressions/literal.dart';
 import 'package:jenny/src/structure/expressions/logical.dart';
 import 'package:jenny/src/structure/expressions/relational.dart';
@@ -1006,6 +1007,7 @@ class _Parser {
     'floor': FloorFn.make,
     'inc': IncFn.make,
     'int': IntFn.make,
+    'plural': PluralFn.make,
     'random': RandomFn.make,
     'random_range': RandomRangeFn.make,
     'round': RoundFn.make,
