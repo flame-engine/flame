@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:jenny/jenny.dart';
-import 'package:jenny/src/parse/parse.dart';
 import 'package:jenny/src/structure/expressions/functions/dice.dart';
 import 'package:jenny/src/structure/expressions/literal.dart';
 import 'package:test/test.dart';

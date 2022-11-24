@@ -14,7 +14,7 @@ class RandomFn extends NumExpression {
     ErrorFn errorFn,
   ) {
     if (arguments.isNotEmpty) {
-      errorFn('function random() has no arguments');
+      errorFn('function random() requires no arguments', arguments[0].position);
     }
     return RandomFn(yarnProject);
   }
