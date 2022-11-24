@@ -30,7 +30,7 @@ class FlameGame extends Component with Game {
   late final CameraWrapper _cameraWrapper;
 
   @internal
-  Map<Type, ComponentsNotifier> notifiers = {};
+  List<ComponentsNotifier> notifiers = [];
 
   /// The camera translates the coordinate space after the viewport is applied.
   Camera get camera => _cameraWrapper.camera;
@@ -154,11 +154,29 @@ class FlameGame extends Component with Game {
   Projector get projector => camera.combinedProjector;
 
   ComponentsNotifier<T> componentsNotifier<T extends Component>() {
-    if (!notifiers.containsKey(T)) {
-      notifiers[T] = ComponentsNotifier<T>(
-        descendants().whereType<T>().toList(),
-      );
+    for (final notifier in notifiers) {
+      if (notifier is ComponentsNotifier<T>) {
+        return notifier;
+      }
     }
-    return notifiers[T]! as ComponentsNotifier<T>;
+
+    final notifier = ComponentsNotifier<T>(
+      descendants().whereType<T>().toList(),
+    );
+    notifiers.add(notifier);
+
+    return notifier;
+  }
+
+  @internal
+  void propagateToApplicableNotifiers(
+    Component component,
+    void Function(ComponentsNotifier) callback,
+  ) {
+    for (final notifier in notifiers) {
+      if (notifier.applicable(component)) {
+        callback(notifier);
+      }
+    }
   }
 }

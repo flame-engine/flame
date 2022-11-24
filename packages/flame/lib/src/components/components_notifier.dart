@@ -28,6 +28,9 @@ class ComponentsNotifier<T extends Component> extends ChangeNotifier {
   }
 
   @internal
+  bool applicable(Component component) => component is T;
+
+  @internal
   void add(T component) {
     _components.add(component);
     notifyListeners();

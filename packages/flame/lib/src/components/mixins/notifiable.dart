@@ -8,7 +8,7 @@ import 'package:meta/meta.dart';
 /// new instances are added or removed to the game instance.
 ///
 /// To notify internal changes of a component instance, the component
-/// should call [notifyChanges].
+/// should call [notifyListeners].
 mixin Notifiable on Component {
   FlameGame get _gameRef {
     final game = findGame();
@@ -24,20 +24,26 @@ mixin Notifiable on Component {
   void onMount() {
     super.onMount();
 
-    _gameRef.notifiers[runtimeType]?.add(this);
+    _gameRef.propagateToApplicableNotifiers(this, (notifier) {
+      notifier.add(this);
+    });
   }
 
   @override
   @mustCallSuper
   void onRemove() {
-    _gameRef.notifiers[runtimeType]?.remove(this);
+    _gameRef.propagateToApplicableNotifiers(this, (notifier) {
+      notifier.remove(this);
+    });
 
     super.onRemove();
   }
 
   /// When called, will notify listeners that a change happened on
   /// this component's class notifier.
-  void notifyChanges() {
-    _gameRef.notifiers[runtimeType]?.notify();
+  void notifyListeners() {
+    _gameRef.propagateToApplicableNotifiers(this, (notifier) {
+      notifier.notify();
+    });
   }
 }

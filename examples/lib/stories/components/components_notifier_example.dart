@@ -1,12 +1,17 @@
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
+import 'package:flame/widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class ComponentsNotifierExampleWidget extends StatefulWidget {
   const ComponentsNotifierExampleWidget({super.key});
 
   static String description = '''
+      Showcases how the components notifier can be used between
+      a flame game instance and widgets.
+
+      Tap the red dots to defeat the enemies and see the hud being updated
+      to reflect the current state of the game.
 ''';
 
   @override
@@ -28,48 +33,51 @@ class _ComponentsNotifierExampleWidgetState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: MultiProvider(
-        providers: [
-          Provider<ComponentNotifierExample>.value(value: game),
-          ChangeNotifierProvider<ComponentsNotifier<Enemy>>(
-            create: (_) => game.componentsNotifier<Enemy>(),
+      body: Stack(
+        children: [
+          Positioned.fill(
+            child: GameWidget(game: game),
+          ),
+          Positioned(
+            left: 16,
+            top: 16,
+            child: ComponentsNotifierBuilder<Enemy>(
+              notifier: game.componentsNotifier<Enemy>(),
+              builder: (context, notifier) {
+                return GameHud(
+                  remainingEnemies: notifier.components.length,
+                  onReplay: game.replay,
+                );
+              },
+            ),
           ),
         ],
-        child: Stack(
-          children: [
-            Positioned.fill(
-              child: GameWidget(game: game),
-            ),
-            const Positioned(
-              left: 16,
-              top: 16,
-              child: GameHud(),
-            ),
-          ],
-        ),
       ),
     );
   }
 }
 
 class GameHud extends StatelessWidget {
-  const GameHud({super.key});
+  const GameHud({
+    super.key,
+    required this.remainingEnemies,
+    required this.onReplay,
+  });
+
+  final int remainingEnemies;
+  final VoidCallback onReplay;
 
   @override
   Widget build(BuildContext context) {
-    final enemies = context.watch<ComponentsNotifier<Enemy>>().components;
-
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(16),
-        child: enemies.isEmpty
+        child: remainingEnemies == 0
             ? ElevatedButton(
+                onPressed: onReplay,
                 child: const Text('Play again'),
-                onPressed: () {
-                  context.read<ComponentNotifierExample>().replay();
-                },
               )
-            : Text('Remaining enemies: ${enemies.length}'),
+            : Text('Remaining enemies: $remainingEnemies'),
       ),
     );
   }
