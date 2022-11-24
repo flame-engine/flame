@@ -1,4 +1,5 @@
 
+import 'package:jenny/src/errors.dart';
 import 'package:jenny/src/parse/parse.dart';
 import 'package:jenny/src/structure/expressions/expression.dart';
 import 'package:jenny/src/yarn_project.dart';
@@ -25,5 +26,11 @@ class DiceFn extends NumExpression {
   }
 
   @override
-  num get value => _yarn.random.nextInt(_n.value.toInt()) + 1;
+  num get value {
+    final n = _n.value.toInt();
+    if (n <= 0) {
+      throw DialogueError('Argument to dice() must be positive: $n');
+    }
+    return _yarn.random.nextInt(n) + 1;
+  }
 }

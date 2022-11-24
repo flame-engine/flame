@@ -18,16 +18,22 @@ Future<void> testScenario({
   required String testPlan,
   bool skip = false,
   List<String>? commands,
+  YarnProject? yarn,
 }) async {
+  final yarnProject = yarn ?? YarnProject();
+  commands?.forEach(yarnProject.commands.addDialogueCommand);
+
   Future<void> testBody() async {
-    final yarn = YarnProject();
-    commands?.forEach(yarn.commands.addDialogueCommand);
-    yarn.parse(dedent(input));
+    yarnProject.parse(dedent(input));
     final plan = _TestPlan(dedent(testPlan));
-    final dialogue = DialogueRunner(yarnProject: yarn, dialogueViews: [plan]);
+    final dialogue = DialogueRunner(
+      yarnProject: yarnProject,
+      dialogueViews: [plan],
+    );
     await dialogue.runNode(plan.startNode);
     assert(
       plan.done,
+      '\n'
       'Expected: ${plan.nextEntry}\n'
       'Actual  : END OF DIALOGUE\n',
     );
