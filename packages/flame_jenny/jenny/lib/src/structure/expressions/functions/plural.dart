@@ -1,16 +1,22 @@
 import 'package:jenny/src/parse/parse.dart';
 import 'package:jenny/src/structure/expressions/expression.dart';
-import 'package:jenny/src/structure/expressions/functions/functions.dart';
+import 'package:jenny/src/yarn_project.dart';
 
 class PluralFn extends StringExpression {
-  PluralFn(this._num, this._words);
+  PluralFn(this._num, this._words, this._yarn);
 
   final NumExpression _num;
   final List<StringExpression> _words;
+  final YarnProject _yarn;
 
-  static Expression make(List<FunctionArgument> arguments, ErrorFn errorFn) {
-    const min = 1 + 1;
-    const max = 1 + 2;
+  /// Static constructor, used by <parse.dart>.
+  static Expression make(
+    List<FunctionArgument> arguments,
+    YarnProject yarnProject,
+    ErrorFn errorFn,
+  ) {
+    final min = 1 + yarnProject.pluralMinWordCount;
+    final max = 1 + yarnProject.pluralMaxWordCount;
     if (arguments.length < min) {
       errorFn('function plural() requires at least $min arguments');
     }
@@ -30,7 +36,11 @@ class PluralFn extends StringExpression {
       }
       convertedArgs.add(argument.expression as StringExpression);
     }
-    return PluralFn(arguments[0].expression as NumExpression, convertedArgs);
+    return PluralFn(
+      arguments[0].expression as NumExpression,
+      convertedArgs,
+      yarnProject,
+    );
   }
 
   @override
@@ -38,7 +48,7 @@ class PluralFn extends StringExpression {
     final value = _num.value.round();
     final n = value.abs();
     final words = _words.map((w) => w.value).toList(growable: false);
-    final result = _pluralEn(n, words);
+    final result = _yarn.pluralFunction(n, words);
     if (result.contains('%')) {
       return result.replaceAll('%', value.toString());
     } else {
@@ -47,7 +57,8 @@ class PluralFn extends StringExpression {
   }
 }
 
-String _pluralEn(int n, List<String> words) {
+/// Plural function for English language.
+String pluralEn(int n, List<String> words) {
   assert(words.isNotEmpty);
   final singular = words[0];
   if (n % 10 == 1 && n % 100 != 11) {

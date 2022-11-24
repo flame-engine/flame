@@ -19,6 +19,7 @@ import 'package:jenny/src/structure/expressions/arithmetic.dart';
 import 'package:jenny/src/structure/expressions/expression.dart';
 import 'package:jenny/src/structure/expressions/functions/functions.dart';
 import 'package:jenny/src/structure/expressions/functions/plural.dart';
+import 'package:jenny/src/structure/expressions/functions/random.dart';
 import 'package:jenny/src/structure/expressions/literal.dart';
 import 'package:jenny/src/structure/expressions/logical.dart';
 import 'package:jenny/src/structure/expressions/relational.dart';
@@ -782,7 +783,7 @@ class _Parser {
       if (builder == null) {
         nameError('unknown function name $name', position0);
       }
-      return builder(arguments, typeError);
+      return builder(arguments, project, typeError);
     } else if (token == Token.operatorNot) {
       final position0 = position;
       final lhs = parsePrimary();
@@ -1085,7 +1086,17 @@ class _Parser {
 }
 
 typedef ErrorFn = Never Function(String message, [int? position]);
-typedef FunctionBuilder = Expression Function(List<FunctionArgument>, ErrorFn);
+typedef FunctionBuilder = Expression Function(
+  List<FunctionArgument>,
+  YarnProject,
+  ErrorFn,
+);
+
+class FunctionArgument {
+  FunctionArgument(this.expression, this.position);
+  final Expression expression;
+  final int position;
+}
 
 class _NodeHeader {
   _NodeHeader(this.title, this.tags);

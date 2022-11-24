@@ -2,32 +2,12 @@ import 'dart:math';
 
 import 'package:jenny/src/parse/parse.dart';
 import 'package:jenny/src/structure/expressions/expression.dart';
+import 'package:jenny/src/yarn_project.dart';
 
 Random $randomGenerator = Random();
 
-class FunctionArgument {
-  FunctionArgument(this.expression, this.position);
-  final Expression expression;
-  final int position;
-}
-
 // TODO(st-pasha): visited(String nodeName)
 // TODO(st-pasha): visited_count(String nodeName)
-
-/// Function `random()` returns a random double between 0 and 1.
-class RandomFn extends NumExpression {
-  const RandomFn();
-
-  static Expression make(List<FunctionArgument> arguments, ErrorFn errorFn) {
-    if (arguments.isNotEmpty) {
-      errorFn('function random() has no arguments');
-    }
-    return const RandomFn();
-  }
-
-  @override
-  num get value => $randomGenerator.nextDouble();
-}
 
 /// Function `random_range(a, b)` returns a random integer between `a` and `b`,
 /// inclusive.
@@ -37,7 +17,11 @@ class RandomRangeFn extends NumExpression {
   final NumExpression a;
   final NumExpression b;
 
-  static Expression make(List<FunctionArgument> args, ErrorFn errorFn) =>
+  static Expression make(
+    List<FunctionArgument> args,
+    YarnProject yarnProject,
+    ErrorFn errorFn,
+  ) =>
       _num2Builder('random_range', RandomRangeFn.new, args, errorFn);
 
   @override
@@ -54,7 +38,11 @@ class DiceFn extends NumExpression {
 
   final NumExpression sides;
 
-  static Expression make(List<FunctionArgument> args, ErrorFn errorFn) =>
+  static Expression make(
+    List<FunctionArgument> args,
+    YarnProject yarnProject,
+    ErrorFn errorFn,
+  ) =>
       _num1Builder('dice', DiceFn.new, args, errorFn);
 
   @override
@@ -67,7 +55,11 @@ class RoundFn extends NumExpression {
 
   final NumExpression arg;
 
-  static Expression make(List<FunctionArgument> args, ErrorFn errorFn) =>
+  static Expression make(
+    List<FunctionArgument> args,
+    YarnProject yarnProject,
+    ErrorFn errorFn,
+  ) =>
       _num1Builder('round', RoundFn.new, args, errorFn);
 
   @override
@@ -81,7 +73,11 @@ class RoundPlacesFn extends NumExpression {
   final NumExpression arg;
   final NumExpression places;
 
-  static Expression make(List<FunctionArgument> args, ErrorFn errorFn) =>
+  static Expression make(
+    List<FunctionArgument> args,
+    YarnProject yarnProject,
+    ErrorFn errorFn,
+  ) =>
       _num2Builder('round_places', RoundPlacesFn.new, args, errorFn);
 
   @override
@@ -98,7 +94,11 @@ class FloorFn extends NumExpression {
 
   final NumExpression arg;
 
-  static Expression make(List<FunctionArgument> args, ErrorFn errorFn) =>
+  static Expression make(
+    List<FunctionArgument> args,
+    YarnProject yarnProject,
+    ErrorFn errorFn,
+  ) =>
       _num1Builder('floor', FloorFn.new, args, errorFn);
 
   @override
@@ -111,7 +111,11 @@ class CeilFn extends NumExpression {
 
   final NumExpression arg;
 
-  static Expression make(List<FunctionArgument> args, ErrorFn errorFn) =>
+  static Expression make(
+    List<FunctionArgument> args,
+    YarnProject yarnProject,
+    ErrorFn errorFn,
+  ) =>
       _num1Builder('ceil', CeilFn.new, args, errorFn);
 
   @override
@@ -125,7 +129,11 @@ class IncFn extends NumExpression {
 
   final NumExpression arg;
 
-  static Expression make(List<FunctionArgument> args, ErrorFn errorFn) =>
+  static Expression make(
+    List<FunctionArgument> args,
+    YarnProject yarnProject,
+    ErrorFn errorFn,
+  ) =>
       _num1Builder('inc', IncFn.new, args, errorFn);
 
   @override
@@ -139,7 +147,11 @@ class DecFn extends NumExpression {
 
   final NumExpression arg;
 
-  static Expression make(List<FunctionArgument> args, ErrorFn errorFn) =>
+  static Expression make(
+    List<FunctionArgument> args,
+    YarnProject yarnProject,
+    ErrorFn errorFn,
+  ) =>
       _num1Builder('dec', DecFn.new, args, errorFn);
 
   @override
@@ -156,7 +168,11 @@ class DecimalFn extends NumExpression {
 
   final NumExpression arg;
 
-  static Expression make(List<FunctionArgument> args, ErrorFn errorFn) =>
+  static Expression make(
+    List<FunctionArgument> args,
+    YarnProject yarnProject,
+    ErrorFn errorFn,
+  ) =>
       _num1Builder('decimal', DecimalFn.new, args, errorFn);
 
   @override
@@ -172,7 +188,11 @@ class IntFn extends NumExpression {
 
   final NumExpression arg;
 
-  static Expression make(List<FunctionArgument> args, ErrorFn errorFn) =>
+  static Expression make(
+    List<FunctionArgument> args,
+    YarnProject yarnProject,
+    ErrorFn errorFn,
+  ) =>
       _num1Builder('int', IntFn.new, args, errorFn);
 
   @override
@@ -185,7 +205,11 @@ class StringFn extends StringExpression {
 
   final Expression arg;
 
-  static Expression make(List<FunctionArgument> arguments, ErrorFn errorFn) {
+  static Expression make(
+    List<FunctionArgument> arguments,
+    YarnProject yarnProject,
+    ErrorFn errorFn,
+  ) {
     if (arguments.length != 1) {
       errorFn('function string() requires a single argument');
     }

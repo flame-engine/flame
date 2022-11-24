@@ -1,5 +1,8 @@
+import 'dart:math';
+
 import 'package:jenny/src/command_storage.dart';
 import 'package:jenny/src/parse/parse.dart' as impl;
+import 'package:jenny/src/structure/expressions/functions/plural.dart';
 import 'package:jenny/src/structure/node.dart';
 import 'package:jenny/src/variable_storage.dart';
 
@@ -15,14 +18,24 @@ class YarnProject {
   YarnProject()
       : nodes = <String, Node>{},
         variables = VariableStorage(),
-        commands = CommandStorage();
+        commands = CommandStorage(),
+        random = Random();
 
   /// All parsed [Node]s, keyed by their titles.
   final Map<String, Node> nodes;
 
   final VariableStorage variables;
 
+  /// Repository for user-defined commands.
   final CommandStorage commands;
+
+  /// Random number generator used by the dialogue whenever randomization is
+  /// needed.
+  Random random;
+
+  int pluralMinWordCount = 1;
+  int pluralMaxWordCount = 2;
+  String Function(int, List<String>) pluralFunction = pluralEn;
 
   /// Parses a single yarn file, given as a [text] string.
   ///

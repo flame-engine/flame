@@ -1,0 +1,24 @@
+import 'package:jenny/src/parse/parse.dart';
+import 'package:jenny/src/structure/expressions/expression.dart';
+import 'package:jenny/src/yarn_project.dart';
+
+/// Function `random()` returns a random double between 0 and 1.
+class RandomFn extends NumExpression {
+  RandomFn(this._yarn);
+
+  final YarnProject _yarn;
+
+  static Expression make(
+    List<FunctionArgument> arguments,
+    YarnProject yarnProject,
+    ErrorFn errorFn,
+  ) {
+    if (arguments.isNotEmpty) {
+      errorFn('function random() has no arguments');
+    }
+    return RandomFn(yarnProject);
+  }
+
+  @override
+  num get value => _yarn.random.nextDouble();
+}
