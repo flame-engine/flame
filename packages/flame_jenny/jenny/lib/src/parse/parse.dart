@@ -646,7 +646,8 @@ class _Parser {
     if (isLocal) {
       final dynamic initialValue = typesToDefaultValues.values
           .where((Expression v) => v.type == expression.type)
-          .first.value;
+          .first
+          .value;
       localVariables!.setVariable(variableName, initialValue);
       return LocalCommand(variableName, expression, localVariables!);
     } else {
