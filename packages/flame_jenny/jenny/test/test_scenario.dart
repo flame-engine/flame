@@ -99,8 +99,8 @@ class _TestPlan extends DialogueView {
         ? expected.text
         : '${expected.character}: ${expected.text}';
     final text2 = (line.character == null)
-        ? line.content.value
-        : '${line.character}: ${line.content.value}';
+        ? line.text
+        : '${line.character}: ${line.text}';
     assert(
       text1 == text2,
       'Expected line: "$text1"\n'
@@ -138,7 +138,7 @@ class _TestPlan extends DialogueView {
               (option1.enabled ? '' : ' [disabled]');
       final text2 =
           (option2.character == null ? '' : '${option2.character}: ') +
-              option2.content.value +
+              option2.text +
               (option2.available ? '' : ' [disabled]');
       assert(
         text1 == text2,
@@ -170,7 +170,7 @@ class _TestPlan extends DialogueView {
     );
     final expected = nextEntry as _Command;
     final text1 = '<<${expected.name} ${expected.content}>>';
-    final text2 = '<<${command.name} ${command.argumentString.value}>>';
+    final text2 = '<<${command.name} ${command.argumentString.evaluate()}>>';
     assert(
       text1 == text2,
       'Expected line: "$text1"\n'

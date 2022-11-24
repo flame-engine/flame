@@ -1,7 +1,7 @@
 import 'package:jenny/src/structure/block.dart';
-import 'package:jenny/src/structure/statement.dart';
+import 'package:jenny/src/structure/dialogue_entry.dart';
 
-class Node extends Iterable<Statement> {
+class Node extends Iterable<DialogueEntry> {
   const Node({
     required this.title,
     required this.content,
@@ -12,7 +12,7 @@ class Node extends Iterable<Statement> {
   final Map<String, String>? tags;
   final Block content;
 
-  List<Statement> get lines => content.lines;
+  List<DialogueEntry> get lines => content.lines;
 
   @override
   String toString() => 'Node($title)';
@@ -21,7 +21,7 @@ class Node extends Iterable<Statement> {
   NodeIterator get iterator => NodeIterator(this);
 }
 
-class NodeIterator implements Iterator<Statement> {
+class NodeIterator implements Iterator<DialogueEntry> {
   NodeIterator(this.node) {
     diveInto(node.content);
   }
@@ -31,7 +31,7 @@ class NodeIterator implements Iterator<Statement> {
   final List<int> multiIndex = [];
 
   @override
-  Statement get current => blocks.last.lines[multiIndex.last];
+  DialogueEntry get current => blocks.last.lines[multiIndex.last];
 
   @override
   bool moveNext() {

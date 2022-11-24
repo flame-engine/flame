@@ -41,7 +41,7 @@ void main() {
       expect(project.nodes['start']!.lines[0], isA<UserDefinedCommand>());
       final cmd = project.nodes['start']!.lines[0] as UserDefinedCommand;
       expect(cmd.name, 'hello');
-      expect(cmd.argumentString.value, 'world AB');
+      expect(cmd.argumentString.evaluate(), 'world AB');
     });
 
     test('execute a live command', () {
@@ -73,6 +73,24 @@ void main() {
           '>  at line 3 column 3:\n'
           '>  <<jenny>>\n'
           '>    ^\n',
+        ),
+      );
+    });
+
+    test('markup within user-defined command', () {
+      expect(
+        () => YarnProject()
+          ..commands.addDialogueCommand('hello')
+          ..parse(
+            'title:A\n---\n'
+            '<<hello Big [bad/] Wolf>>\n'
+            '===\n',
+          ),
+        hasSyntaxError(
+          'SyntaxError: invalid token\n'
+          '>  at line 3 column 13:\n'
+          '>  <<hello Big [bad/] Wolf>>\n'
+          '>              ^\n',
         ),
       );
     });

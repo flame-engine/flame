@@ -142,6 +142,7 @@ unfollow
 unmount
 unproject
 unscale
+vantablack
 viewport
 viewport's
 viewports

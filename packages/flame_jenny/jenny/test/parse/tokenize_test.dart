@@ -560,6 +560,22 @@ void main() {
         );
       });
 
+      test('">>" sequence', () {
+        expect(
+            tokenize('---\n---\n'
+                '>> hello\n'
+                '===\n'),
+            const [
+              Token.startHeader,
+              Token.endHeader,
+              Token.startBody,
+              Token.text('>>'),
+              Token.text(' hello'),
+              Token.newline,
+              Token.endBody,
+            ]);
+      });
+
       test('invalid escape sequence', () {
         expect(
           () => tokenize('---\n---\n'
@@ -570,6 +586,19 @@ void main() {
               '>  some text \\a\n'
               '>             ^\n'),
         );
+      });
+
+      test('missing escape sequence', () {
+        for (final ch in [']', '}']) {
+          expect(
+            () => tokenize('---\n---\ntext $ch\n'),
+            hasSyntaxError(
+                'SyntaxError: special character needs to be escaped\n'
+                '>  at line 3 column 6:\n'
+                '>  text $ch\n'
+                '>       ^\n'),
+          );
+        }
       });
 
       test('expressions', () {
@@ -865,7 +894,7 @@ void main() {
           () => tokenize('---\n---\n'
               '<< hello } >>\n'
               '===\n'),
-          hasSyntaxError('SyntaxError: invalid token\n'
+          hasSyntaxError('SyntaxError: special character needs to be escaped\n'
               '>  at line 3 column 10:\n'
               '>  << hello } >>\n'
               '>           ^\n'),
@@ -881,6 +910,121 @@ void main() {
               '>  at line 3 column 8:\n'
               '>  << stop\n'
               '>         ^\n'),
+        );
+      });
+    });
+
+    group('modeMarkup', () {
+      test('tokenize simple markup tag', () {
+        expect(
+          tokenize('---\n---\n[wave]\n===\n'),
+          const [
+            Token.startHeader,
+            Token.endHeader,
+            Token.startBody,
+            Token.startMarkupTag,
+            Token.id('wave'),
+            Token.endMarkupTag,
+            Token.newline,
+            Token.endBody,
+          ],
+        );
+      });
+
+      test('tokenize closing markup tag', () {
+        expect(
+          tokenize('---\n---\n[/wave]\n===\n'),
+          const [
+            Token.startHeader,
+            Token.endHeader,
+            Token.startBody,
+            Token.startMarkupTag,
+            Token.closeMarkupTag,
+            Token.id('wave'),
+            Token.endMarkupTag,
+            Token.newline,
+            Token.endBody,
+          ],
+        );
+      });
+
+      test('tokenize self-closing markup tag', () {
+        expect(
+          tokenize('---\n---\n[wave/]\n===\n'),
+          const [
+            Token.startHeader,
+            Token.endHeader,
+            Token.startBody,
+            Token.startMarkupTag,
+            Token.id('wave'),
+            Token.closeMarkupTag,
+            Token.endMarkupTag,
+            Token.newline,
+            Token.endBody,
+          ],
+        );
+      });
+
+      test('tokenize complex markup tag', () {
+        expect(
+          tokenize('---\n---\n'
+              'One [red shade=12 hex="#ff0000"]color[/red]\n'
+              '===\n'),
+          const [
+            Token.startHeader,
+            Token.endHeader,
+            Token.startBody,
+            Token.text('One '),
+            Token.startMarkupTag,
+            Token.id('red'),
+            Token.id('shade'),
+            Token.operatorAssign,
+            Token.number('12'),
+            Token.id('hex'),
+            Token.operatorAssign,
+            Token.string('#ff0000'),
+            Token.endMarkupTag,
+            Token.text('color'),
+            Token.startMarkupTag,
+            Token.closeMarkupTag,
+            Token.id('red'),
+            Token.endMarkupTag,
+            Token.newline,
+            Token.endBody,
+          ],
+        );
+      });
+
+      test('whitespace after self-closing command', () {
+        expect(
+          tokenize('---\n---\n'
+              'Hello [yes/] world!\n'
+              '===\n'),
+          const [
+            Token.startHeader,
+            Token.endHeader,
+            Token.startBody,
+            Token.text('Hello '),
+            Token.startMarkupTag,
+            Token.id('yes'),
+            Token.closeMarkupTag,
+            Token.endMarkupTag,
+            Token.text('world!'),
+            Token.newline,
+            Token.endBody,
+          ],
+        );
+      });
+
+      test('unclosed markup tag', () {
+        expect(
+          () => tokenize('---\n---\n[blue\n===\n'),
+          hasSyntaxError(
+            'SyntaxError: missing markup tag close token "]"\n'
+            '>  at line 3 column 6:\n'
+            '>  [blue\n'
+            '>       ^\n',
+          ),
         );
       });
     });
@@ -1041,6 +1185,23 @@ void main() {
               '>  ...on zeta eta theta iota kappa lambda ` mu nu xi omicron '
               'pi rho sigma tau...\n'
               '>                                         ^\n'),
+        );
+      });
+
+      test('error at end of line', () {
+        const text = '---\n---\nSome text\n===\n';
+        final tokens0 = tokenize(text);
+        expect(tokens0[4], Token.newline);
+
+        final tokens1 = tokenize(text, addErrorTokenAtIndex: 4);
+        final errorToken = tokens1.removeAt(4);
+        expect(tokens1, tokens0);
+        expect(errorToken.type, TokenType.error);
+        expect(
+          errorToken.content,
+          '>  at line 3 column 10:\n'
+          '>  Some text\n'
+          '>           ^',
         );
       });
     });

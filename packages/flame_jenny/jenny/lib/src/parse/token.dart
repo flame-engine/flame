@@ -18,6 +18,7 @@ class Token {
 
   static const arrow = Token._(TokenType.arrow);
   static const asType = Token._(TokenType.asType);
+  static const closeMarkupTag = Token._(TokenType.closeMarkupTag);
   static const colon = Token._(TokenType.colon);
   static const comma = Token._(TokenType.comma);
   static const commandDeclare = Token._(TokenType.commandDeclare);
@@ -36,6 +37,7 @@ class Token {
   static const endExpression = Token._(TokenType.endExpression);
   static const endHeader = Token._(TokenType.endHeader);
   static const endIndent = Token._(TokenType.endIndent);
+  static const endMarkupTag = Token._(TokenType.endMarkupTag);
   static const endParenthesis = Token._(TokenType.endParenthesis);
   static const eof = Token._(TokenType.eof);
   static const newline = Token._(TokenType.newline);
@@ -67,6 +69,7 @@ class Token {
   static const startExpression = Token._(TokenType.startExpression);
   static const startHeader = Token._(TokenType.startHeader);
   static const startIndent = Token._(TokenType.startIndent);
+  static const startMarkupTag = Token._(TokenType.startMarkupTag);
   static const startParenthesis = Token._(TokenType.startParenthesis);
   static const typeBool = Token._(TokenType.typeBool);
   static const typeNumber = Token._(TokenType.typeNumber);
@@ -113,6 +116,7 @@ enum TokenType {
 
   arrow, //                  '->'
   asType, //                 'as'
+  closeMarkupTag, //         '/'  (e.g. in "[br/]")
   colon, //                  ':'
   comma, //                  ','
   commandDeclare, //         'declare'
@@ -131,6 +135,7 @@ enum TokenType {
   endExpression, //          '}'
   endHeader, //              '---' '-'*
   endIndent, //              RegExp(r'^\s*')
+  endMarkupTag, //           ']'
   endParenthesis, //         ')'
   newline, //                '\r' | '\n' | '\r\n'
   operatorAnd, //            'and' | '&&'
@@ -159,6 +164,7 @@ enum TokenType {
   startExpression, //        '{'
   startHeader, //            ('---' '-'*)?
   startIndent, //            RegExp(r'^\s*')
+  startMarkupTag, //         '['
   startParenthesis, //       '('
   typeBool, //               'bool'
   typeNumber, //             'number'
