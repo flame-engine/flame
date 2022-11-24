@@ -45,9 +45,11 @@ void main() {
     test('dynamic markup attributes', () {
       final yarn = YarnProject()
         ..variables.setVariable(r'$index', 1)
-        ..parse('title: A\n---\n'
-            'X [box index=\$index /] Y Z\n'
-            '===\n',);
+        ..parse(
+          'title: A\n---\n'
+          'X [box index=\$index /] Y Z\n'
+          '===\n',
+        );
       final line = yarn.nodes['A']!.lines[0] as DialogueLine;
 
       line.evaluate();

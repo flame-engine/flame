@@ -13,6 +13,7 @@ import 'package:jenny/src/structure/commands/wait_command.dart';
 import 'package:jenny/src/structure/dialogue_choice.dart';
 import 'package:jenny/src/structure/dialogue_entry.dart';
 import 'package:jenny/src/structure/dialogue_line.dart';
+import 'package:jenny/src/structure/dialogue_option.dart';
 import 'package:jenny/src/structure/expressions/arithmetic.dart';
 import 'package:jenny/src/structure/expressions/expression.dart';
 import 'package:jenny/src/structure/expressions/functions.dart';
@@ -23,7 +24,6 @@ import 'package:jenny/src/structure/expressions/string.dart';
 import 'package:jenny/src/structure/line_content.dart';
 import 'package:jenny/src/structure/markup_attribute.dart';
 import 'package:jenny/src/structure/node.dart';
-import 'package:jenny/src/structure/dialogue_option.dart';
 import 'package:jenny/src/yarn_project.dart';
 import 'package:meta/meta.dart';
 

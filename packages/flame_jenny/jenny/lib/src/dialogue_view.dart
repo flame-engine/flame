@@ -4,8 +4,8 @@ import 'package:jenny/src/errors.dart';
 import 'package:jenny/src/structure/commands/user_defined_command.dart';
 import 'package:jenny/src/structure/dialogue_choice.dart';
 import 'package:jenny/src/structure/dialogue_line.dart';
-import 'package:jenny/src/structure/node.dart';
 import 'package:jenny/src/structure/dialogue_option.dart';
+import 'package:jenny/src/structure/node.dart';
 import 'package:meta/meta.dart';
 
 abstract class DialogueView {

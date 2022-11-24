@@ -2,9 +2,9 @@ import 'package:jenny/src/structure/block.dart';
 import 'package:jenny/src/structure/dialogue_choice.dart';
 import 'package:jenny/src/structure/dialogue_entry.dart';
 import 'package:jenny/src/structure/dialogue_line.dart';
+import 'package:jenny/src/structure/dialogue_option.dart';
 import 'package:jenny/src/structure/line_content.dart';
 import 'package:jenny/src/structure/node.dart';
-import 'package:jenny/src/structure/dialogue_option.dart';
 import 'package:test/test.dart';
 
 void main() {
