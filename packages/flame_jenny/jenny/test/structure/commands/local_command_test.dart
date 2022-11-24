@@ -1,7 +1,6 @@
 import 'package:jenny/jenny.dart';
 import 'package:jenny/src/parse/token.dart';
 import 'package:jenny/src/parse/tokenize.dart';
-import 'package:jenny/src/structure/commands/command.dart';
 import 'package:jenny/src/structure/commands/local_command.dart';
 import 'package:test/test.dart';
 
@@ -37,12 +36,12 @@ void main() {
 
     test('parse', () {
       final yarn = YarnProject()
-          ..parse(
-            'title: Start\n'
-            '---\n'
-            '<<local \$x = 3>>\n'
-            '===\n',
-          );
+        ..parse(
+          'title: Start\n'
+          '---\n'
+          '<<local \$x = 3>>\n'
+          '===\n',
+        );
       final node = yarn.nodes['Start']!;
       expect(node.lines.length, 1);
       expect(node.lines[0], isA<LocalCommand>());
