@@ -2,16 +2,12 @@ import 'dart:math';
 
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
-import 'package:flame/game.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('SequenceEffect', () {
     group('properties', () {
-      final game = FlameGame()..onGameResize(Vector2.all(1000));
-      assert(game.isMounted);
-
       test('simple', () {
         final effect = SequenceEffect([
           MoveEffect.to(Vector2(10, 10), EffectController(duration: 3)),
@@ -89,8 +85,7 @@ void main() {
     });
 
     group('sequence progression', () {
-      test('simple sequence', () async {
-        final game = FlameGame()..onGameResize(Vector2.all(1000));
+      testWithFlameGame('simple sequence', (game) async {
         final effect = SequenceEffect([
           MoveEffect.by(Vector2(10, 0), EffectController(duration: 1)),
           MoveEffect.by(Vector2(0, 10), EffectController(duration: 2)),
@@ -115,8 +110,7 @@ void main() {
         }
       });
 
-      test('large step', () async {
-        final game = FlameGame()..onGameResize(Vector2.all(1000));
+      testWithFlameGame('large step', (game) async {
         final effect = SequenceEffect([
           MoveEffect.by(Vector2(10, 0), EffectController(duration: 1)),
           MoveEffect.by(Vector2(0, 10), EffectController(duration: 2)),
@@ -131,8 +125,7 @@ void main() {
         expect(component.position, closeToVector(Vector2(30, 40)));
       });
 
-      test('k-step sequence', () async {
-        final game = FlameGame()..onGameResize(Vector2.all(1000));
+      testWithFlameGame('k-step sequence', (game) async {
         final effect = SequenceEffect(
           [
             MoveEffect.by(Vector2(10, 0), EffectController(duration: 1)),
@@ -157,8 +150,7 @@ void main() {
         expect(component.position, closeToVector(Vector2(50, 50)));
       });
 
-      test('alternating sequence', () async {
-        final game = FlameGame()..onGameResize(Vector2.all(1000));
+      testWithFlameGame('alternating sequence', (game) async {
         final effect = SequenceEffect(
           [
             MoveEffect.by(Vector2(10, 0), EffectController(duration: 1)),
@@ -186,10 +178,9 @@ void main() {
         expect(effect.controller.completed, true);
       });
 
-      test('sequence of alternates', () async {
+      testWithFlameGame('sequence of alternates', (game) async {
         EffectController controller() =>
             EffectController(duration: 1, alternate: true);
-        final game = FlameGame()..onGameResize(Vector2.all(1000));
         final effect = SequenceEffect(
           [
             MoveEffect.by(Vector2(1, 0), controller()),
@@ -222,7 +213,24 @@ void main() {
         expect(effect.controller.completed, true);
       });
 
-      test('sequence in sequence', () async {
+      testWithFlameGame('with SpeedEffectController', (game) async {
+        final effect = SequenceEffect([
+          MoveEffect.to(
+            Vector2(10, 0),
+            EffectController(speed: 10.0),
+          ),
+          MoveEffect.by(
+            Vector2(10, 0),
+            EffectController(duration: 1.0),
+          ),
+        ]);
+        await game.ensureAdd(PositionComponent(children: [effect]));
+        game.update(0);
+        expect(effect.controller.duration, 2.0);
+        expect(effect.controller.completed, false);
+      });
+
+      testWithFlameGame('sequence in sequence', (game) async {
         EffectController duration(double t) => EffectController(duration: t);
         const dt = 0.01;
         const x0 = 0.0, y0 = 0.0;
@@ -232,7 +240,6 @@ void main() {
         const x4 = 10.0, y4 = 30.0;
         const dx5 = 1.6, dy5 = 0.9;
 
-        final game = FlameGame()..onGameResize(Vector2.all(1000));
         final effect = SequenceEffect(
           [
             MoveEffect.by(Vector2(x1 - x0, y1 - y0), duration(1)),

@@ -14,7 +14,14 @@ class RectangleComponent extends PolygonComponent {
     super.priority,
     super.paint,
     super.paintLayers,
-  }) : super(sizeToVertices(size ?? Vector2.zero(), anchor));
+  }) : super(sizeToVertices(size ?? Vector2.zero(), anchor)) {
+    size.addListener(
+      () => refreshVertices(
+        newVertices: sizeToVertices(size, anchor),
+        shrinkToBoundsOverride: false,
+      ),
+    );
+  }
 
   RectangleComponent.square({
     double size = 0,
@@ -25,7 +32,14 @@ class RectangleComponent extends PolygonComponent {
     super.paint,
     super.paintLayers,
     super.children,
-  }) : super(sizeToVertices(Vector2.all(size), anchor));
+  }) : super(sizeToVertices(Vector2.all(size), anchor)) {
+    this.size.addListener(
+          () => refreshVertices(
+            newVertices: sizeToVertices(this.size, anchor),
+            shrinkToBoundsOverride: false,
+          ),
+        );
+  }
 
   /// With this constructor you define the [RectangleComponent] in relation to
   /// the `parentSize`. For example having [relation] as of (0.8, 0.5) would
@@ -47,7 +61,14 @@ class RectangleComponent extends PolygonComponent {
           Vector2(relation.x, -relation.y),
           -relation,
           Vector2(-relation.x, relation.y),
-        ]);
+        ]) {
+    size.addListener(
+      () => refreshVertices(
+        newVertices: sizeToVertices(size, anchor),
+        shrinkToBoundsOverride: false,
+      ),
+    );
+  }
 
   /// This factory will create a [RectangleComponent] from a positioned [Rect].
   factory RectangleComponent.fromRect(
