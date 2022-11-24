@@ -1,3 +1,4 @@
+import 'package:jenny/src/errors.dart';
 import 'package:jenny/src/parse/parse.dart';
 import 'package:jenny/src/structure/expressions/expression.dart';
 import 'package:jenny/src/yarn_project.dart';
@@ -18,13 +19,13 @@ class RandomRangeFn extends NumExpression {
     ErrorFn errorFn,
   ) {
     if (args.length != 2) {
-      errorFn('function random_range() requires 2 arguments');
+      errorFn('function random_range() requires two arguments');
     }
     if (!args[0].expression.isNumeric) {
-      errorFn('first argument should be numeric', args[0].position);
+      errorFn('the first argument should be numeric', args[0].position);
     }
     if (!args[1].expression.isNumeric) {
-      errorFn('second argument should be numeric', args[1].position);
+      errorFn('the second argument should be numeric', args[1].position);
     }
     return RandomRangeFn(
       args[0].expression as NumExpression,
@@ -37,6 +38,12 @@ class RandomRangeFn extends NumExpression {
   num get value {
     final lower = _a.value.toInt();
     final upper = _b.value.toInt();
+    if (upper < lower) {
+      throw DialogueError(
+        'In random_range(a=$lower, b=$upper) the upper bound cannot be less '
+        'than the lower bound',
+      );
+    }
     return _yarn.random.nextInt(upper - lower + 1) + lower;
   }
 }
