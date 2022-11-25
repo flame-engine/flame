@@ -1,6 +1,13 @@
-import 'package:jenny/src/parse/parse.dart';
 import 'package:jenny/src/structure/expressions/expression.dart';
 import 'package:meta/meta.dart';
+
+typedef ErrorFn = Never Function(String message, [int? position]);
+
+class FunctionArgument {
+  FunctionArgument(this.expression, this.position);
+  final Expression expression;
+  final int position;
+}
 
 @internal
 Expression num1Builder(

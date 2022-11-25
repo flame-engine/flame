@@ -17,7 +17,10 @@ import 'package:jenny/src/structure/dialogue_line.dart';
 import 'package:jenny/src/structure/dialogue_option.dart';
 import 'package:jenny/src/structure/expressions/arithmetic.dart';
 import 'package:jenny/src/structure/expressions/expression.dart';
+import 'package:jenny/src/structure/expressions/functions/_utils.dart';
+import 'package:jenny/src/structure/expressions/functions/ceil.dart';
 import 'package:jenny/src/structure/expressions/functions/dice.dart';
+import 'package:jenny/src/structure/expressions/functions/floor.dart';
 import 'package:jenny/src/structure/expressions/functions/functions.dart';
 import 'package:jenny/src/structure/expressions/functions/plural.dart';
 import 'package:jenny/src/structure/expressions/functions/random.dart';
@@ -1089,18 +1092,11 @@ class _Parser {
   }
 }
 
-typedef ErrorFn = Never Function(String message, [int? position]);
 typedef FunctionBuilder = Expression Function(
   List<FunctionArgument>,
   YarnProject,
   ErrorFn,
 );
-
-class FunctionArgument {
-  FunctionArgument(this.expression, this.position);
-  final Expression expression;
-  final int position;
-}
 
 class _NodeHeader {
   _NodeHeader(this.title, this.tags);

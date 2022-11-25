@@ -1,5 +1,5 @@
-import 'package:jenny/src/parse/parse.dart';
 import 'package:jenny/src/structure/expressions/expression.dart';
+import 'package:jenny/src/structure/expressions/functions/_utils.dart';
 import 'package:jenny/src/yarn_project.dart';
 
 /// Function `random()` returns a random double between 0 and 1.

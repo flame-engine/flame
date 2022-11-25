@@ -2,9 +2,9 @@ import 'package:jenny/src/structure/expressions/expression.dart';
 import 'package:jenny/src/structure/expressions/functions/_utils.dart';
 import 'package:jenny/src/yarn_project.dart';
 
-/// Function `round(x)` will round `x` to the nearest integer.
-class RoundFn extends NumExpression {
-  const RoundFn(this.arg);
+/// Function `floor(x)` will round `x` down towards negative infinity.
+class FloorFn extends NumExpression {
+  const FloorFn(this.arg);
 
   final NumExpression arg;
 
@@ -13,8 +13,8 @@ class RoundFn extends NumExpression {
     YarnProject yarnProject,
     ErrorFn errorFn,
   ) =>
-      num1Builder('round', RoundFn.new, args, errorFn);
+      num1Builder('floor', FloorFn.new, args, errorFn);
 
   @override
-  num get value => arg.value.round();
+  num get value => arg.value.floor();
 }
