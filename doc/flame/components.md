@@ -1084,13 +1084,14 @@ Check the example app
 [custom_painter_component](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/widgets/custom_painter_example.dart)
 for details on how to use it.
 
+
 ## ComponentsNotifier
 
 Most of the time just accessing children and their attributes is enough to build the logic of game.
 
 But sometimes, reactivity can help the developer simplify and write better code, to help with that
 Flame provides `ComponentsNotifier`, which are implementations of a `ChangeNotifier` that notifies
-listeners everytime a component is added, removed or manually changed.
+listeners every time a component is added, removed or manually changed.
 
 For example, lets say that we want to show a game over text when the player lives reach zero.
 
@@ -1167,6 +1168,7 @@ class Hud extends PositionComponent with HasGameRef {
 `FlameGame`, to help with that Flame provides a `ComponentsNotifierBuilder` widget.
 
 To see an example of its use check the running example [here](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/components/components_notifier_example.dart);
+
 
 ## ClipComponent
 
