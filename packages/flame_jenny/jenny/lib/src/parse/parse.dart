@@ -31,6 +31,7 @@ import 'package:jenny/src/structure/expressions/functions/random.dart';
 import 'package:jenny/src/structure/expressions/functions/random_range.dart';
 import 'package:jenny/src/structure/expressions/functions/round.dart';
 import 'package:jenny/src/structure/expressions/functions/round_places.dart';
+import 'package:jenny/src/structure/expressions/functions/string.dart';
 import 'package:jenny/src/structure/expressions/literal.dart';
 import 'package:jenny/src/structure/expressions/logical.dart';
 import 'package:jenny/src/structure/expressions/relational.dart';
