@@ -104,6 +104,7 @@ raytracing
 rebalance
 rect
 rects
+redeclaration
 refactor
 refactoring
 refactorings
@@ -142,6 +143,7 @@ unfollow
 unmount
 unproject
 unscale
+vantablack
 viewport
 viewport's
 viewports

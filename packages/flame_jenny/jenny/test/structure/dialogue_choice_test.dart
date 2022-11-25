@@ -1,5 +1,4 @@
 import 'package:jenny/src/structure/dialogue_choice.dart';
-import 'package:jenny/src/structure/statement.dart';
 import 'package:test/test.dart';
 
 import '../test_scenario.dart';
@@ -9,7 +8,6 @@ void main() {
     test('.kind', () {
       const choiceSet = DialogueChoice([]);
       expect(choiceSet.options.isEmpty, true);
-      expect(choiceSet.kind, StatementKind.choice);
     });
 
     testScenario(
@@ -54,6 +52,25 @@ void main() {
         ===
         ''',
       testPlan: '',
+    );
+
+    testScenario(
+      testName: 'options with dynamic text',
+      input: r'''
+        <<declare $money = 100>>
+        <<declare $player = "Steve">>
+        ------------
+        title: Start
+        ------------
+        -> Hi, My name is [bold]{$player}[/bold]
+        -> I can give you only {$money / 2} coins -- that's all I have
+        ===
+      ''',
+      testPlan: '''
+        option: Hi, My name is Steve
+        option: I can give you only 50.0 coins -- that's all I have
+        select: 1
+      ''',
     );
   });
 }

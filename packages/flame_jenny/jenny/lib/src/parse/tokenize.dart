@@ -205,6 +205,7 @@ class _Lexer {
         eatPlainText() ||
         eatCommandEndAsText() ||
         (eatExpressionStart() && pushMode(modeTextExpression)) ||
+        (eatMarkupStart() && pushMode(modeMarkup)) ||
         (popMode(modeText) && pushMode(modeTextEnd));
   }
 
@@ -260,6 +261,16 @@ class _Lexer {
         (eatExpressionEnd() && popMode(modeTextExpression));
   }
 
+  bool modeMarkupExpression() {
+    return eatWhitespace() ||
+        eatExpressionId() ||
+        eatExpressionVariable() ||
+        eatNumber() ||
+        eatString() ||
+        eatOperator() ||
+        popMode(modeMarkupExpression);
+  }
+
   /// An expression within a [modeCommand]. Such expression starts immediately
   /// after the command name and ends at `>>`.
   bool modeCommandExpression() {
@@ -272,6 +283,13 @@ class _Lexer {
         eatNumber() ||
         eatString() ||
         eatOperator();
+  }
+
+  bool modeMarkup() {
+    return checkNewlineInMarkup() ||
+        eatMarkupCloseTag() ||
+        (eatMarkupEnd() && popMode(modeMarkup)) ||
+        pushMode(modeMarkupExpression);
   }
 
   //----------------------------------------------------------------------------
@@ -353,9 +371,9 @@ class _Lexer {
       if (cu == $carriageReturn && currentCodeUnit == $lineFeed) {
         position += 1;
       }
-      pushToken(Token.newline, position0);
       lineNumber += 1;
       lineStart = position;
+      pushToken(Token.newline, position0);
       return true;
     }
     return false;
@@ -588,7 +606,9 @@ class _Lexer {
             cu == $lessThan ||
             cu == $greaterThan ||
             cu == $leftBrace ||
-            cu == $rightBrace) {
+            cu == $rightBrace ||
+            cu == $leftBracket ||
+            cu == $rightBracket) {
           pushToken(Token.text(String.fromCharCode(cu)), position);
           position += 1;
         } else if (cu == $lowercaseN) {
@@ -598,6 +618,37 @@ class _Lexer {
           error('invalid escape sequence');
         }
       }
+      return true;
+    }
+    return false;
+  }
+
+  /// Consumes '[' character.
+  bool eatMarkupStart() {
+    return eat($leftBracket) && pushToken(Token.startMarkupTag, position - 1);
+  }
+
+  /// Consumes '/' character inside a markup tag.
+  bool eatMarkupCloseTag() {
+    return eat($slash) && pushToken(Token.closeMarkupTag, position - 1);
+  }
+
+  /// Consumes ']' character. If previous character was '/' and it was parsed
+  /// as an `operatorDivide` token, then replace that token with
+  /// [Token.closeMarkupTag].
+  bool eatMarkupEnd() {
+    if (eat($rightBracket)) {
+      final previousCodeUnit = text.codeUnitAt(position - 2);
+      if (previousCodeUnit == $slash && tokens.last == Token.operatorDivide) {
+        popToken(Token.operatorDivide);
+        pushToken(Token.closeMarkupTag, position - 2);
+      }
+      if (tokens.last == Token.closeMarkupTag) {
+        // Self-closing markup tag such as `[img/]`: consume a single whitespace
+        // character after such tag (if present).
+        eat($space);
+      }
+      pushToken(Token.endMarkupTag, position - 1);
       return true;
     }
     return false;
@@ -635,18 +686,25 @@ class _Lexer {
     var positionBeforeWhitespace = position;
     while (!eof) {
       final cu = currentCodeUnit;
+      // Stop when seeing (\n|\r|#|//|<<) and discard any preceding whitespace
       if ((cu == $slash && nextCodeUnit == $slash) ||
+          (cu == $lessThan && nextCodeUnit == $lessThan) ||
           cu == $hash ||
           cu == $carriageReturn ||
           cu == $lineFeed) {
         position = positionBeforeWhitespace;
         break;
-      } else if ((cu == $lessThan && nextCodeUnit == $lessThan) ||
-          (cu == $greaterThan && nextCodeUnit == $greaterThan) ||
+      }
+      // Stop when seeing (>>|\\|{|[) and keep the whitespace
+      else if ((cu == $greaterThan && nextCodeUnit == $greaterThan) ||
           cu == $backslash ||
           cu == $leftBrace ||
-          cu == $rightBrace) {
+          cu == $leftBracket) {
         break;
+      }
+      // Error when seeing unescaped (]|})
+      else if (cu == $rightBrace || cu == $rightBracket) {
+        error('special character needs to be escaped');
       }
       position += 1;
       if (!(cu == $space || cu == $tab)) {
@@ -818,6 +876,15 @@ class _Lexer {
     return false;
   }
 
+  /// Check whether a command terminated prematurely.
+  bool checkNewlineInMarkup() {
+    final cu = currentCodeUnit;
+    if (cu == $carriageReturn || cu == $lineFeed) {
+      error('missing markup tag close token "]"');
+    }
+    return false;
+  }
+
   /// Consumes a simple hash-tag sequence, consisting of '#' followed by any
   /// number of non-control characters.
   bool eatHashtag() {
@@ -901,6 +968,7 @@ class _Lexer {
     'endif': Token.commandEndif,
     'if': Token.commandIf,
     'jump': Token.commandJump,
+    'local': Token.commandLocal,
     'set': Token.commandSet,
     'stop': Token.commandStop,
     'wait': Token.commandWait,
@@ -918,6 +986,7 @@ class _Lexer {
     Token.commandDeclare,
     Token.commandElseif,
     Token.commandIf,
+    Token.commandLocal,
     Token.commandSet,
     Token.commandWait,
   };

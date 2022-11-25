@@ -4,6 +4,7 @@ Audioplayers
 BGUG
 Dashbook
 Fireslime
+Hermione
 Kawabunga
 Kinect
 Klingsbo
@@ -20,7 +21,10 @@ erayzesen
 padracing
 ptero
 spydon
+stpasha
 tavian
 trex
 wolfenrain
 Wyrmsun
+Bodymovin
+xaha

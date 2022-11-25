@@ -6,12 +6,15 @@ import 'package:jenny/src/structure/commands/command.dart';
 import 'package:jenny/src/structure/commands/declare_command.dart';
 import 'package:jenny/src/structure/commands/if_command.dart';
 import 'package:jenny/src/structure/commands/jump_command.dart';
+import 'package:jenny/src/structure/commands/local_command.dart';
 import 'package:jenny/src/structure/commands/set_command.dart';
 import 'package:jenny/src/structure/commands/stop_command.dart';
 import 'package:jenny/src/structure/commands/user_defined_command.dart';
 import 'package:jenny/src/structure/commands/wait_command.dart';
 import 'package:jenny/src/structure/dialogue_choice.dart';
+import 'package:jenny/src/structure/dialogue_entry.dart';
 import 'package:jenny/src/structure/dialogue_line.dart';
+import 'package:jenny/src/structure/dialogue_option.dart';
 import 'package:jenny/src/structure/expressions/arithmetic.dart';
 import 'package:jenny/src/structure/expressions/expression.dart';
 import 'package:jenny/src/structure/expressions/functions.dart';
@@ -19,9 +22,10 @@ import 'package:jenny/src/structure/expressions/literal.dart';
 import 'package:jenny/src/structure/expressions/logical.dart';
 import 'package:jenny/src/structure/expressions/relational.dart';
 import 'package:jenny/src/structure/expressions/string.dart';
+import 'package:jenny/src/structure/line_content.dart';
+import 'package:jenny/src/structure/markup_attribute.dart';
 import 'package:jenny/src/structure/node.dart';
-import 'package:jenny/src/structure/option.dart';
-import 'package:jenny/src/structure/statement.dart';
+import 'package:jenny/src/variable_storage.dart';
 import 'package:jenny/src/yarn_project.dart';
 import 'package:meta/meta.dart';
 
@@ -37,6 +41,7 @@ class _Parser {
   final YarnProject project;
   final String text;
   final List<Token> tokens;
+  VariableStorage? localVariables;
 
   /// The index of the next token to parse.
   int position;
@@ -70,7 +75,9 @@ class _Parser {
         title: header.title!,
         tags: header.tags,
         content: block,
+        variables: localVariables,
       );
+      localVariables = null;
     }
   }
 
@@ -122,7 +129,7 @@ class _Parser {
   }
 
   Block parseStatementList() {
-    final lines = <Statement>[];
+    final lines = <DialogueEntry>[];
     while (true) {
       final nextToken = peekToken();
       if (nextToken == Token.arrow) {
@@ -142,7 +149,8 @@ class _Parser {
         lines.add(command);
       } else if (nextToken.isText ||
           nextToken.isPerson ||
-          nextToken == Token.startExpression) {
+          nextToken == Token.startExpression ||
+          nextToken == Token.startMarkupTag) {
         lines.add(parseDialogueLine());
       } else if (nextToken == Token.newline) {
         position += 1;
@@ -172,7 +180,7 @@ class _Parser {
     );
   }
 
-  Option parseOption() {
+  DialogueOption parseOption() {
     take(Token.arrow);
     final person = maybeParseLinePerson();
     final content = parseLineContent();
@@ -188,7 +196,7 @@ class _Parser {
       block = parseStatementList();
       take(Token.endIndent);
     }
-    return Option(
+    return DialogueOption(
       content: content,
       character: person,
       tags: tags,
@@ -207,35 +215,85 @@ class _Parser {
     return null;
   }
 
-  StringExpression parseLineContent() {
-    final parts = <StringExpression>[];
+  LineContent parseLineContent() {
+    final stringBuilder = StringBuffer();
+    final expressions = <InlineExpression>[];
+    final attributes = <MarkupAttribute>[];
+    final markupStack = <_Markup>[];
+    var subIndex = 0;
     while (true) {
       final token = peekToken();
       if (token.isText) {
-        parts.add(StringLiteral(token.content));
+        subIndex = 0;
+        stringBuilder.write(token.content);
         position += 1;
       } else if (token == Token.startExpression) {
+        subIndex += 1;
         take(Token.startExpression);
         final expression = parseExpression();
-        if (expression.isString) {
-          parts.add(expression as StringExpression);
-        } else if (expression.isNumeric) {
-          parts.add(NumToStringFn(expression as NumExpression));
-        } else if (expression.isBoolean) {
-          parts.add(BoolToStringFn(expression as BoolExpression));
-        }
         take(Token.endExpression);
+        expressions.add(
+          InlineExpression(
+            stringBuilder.length,
+            expression.isNumeric
+                ? NumToStringFn(expression as NumExpression)
+                : expression.isBoolean
+                    ? BoolToStringFn(expression as BoolExpression)
+                    : expression as StringExpression,
+          ),
+        );
+      } else if (token == Token.startMarkupTag) {
+        take(Token.startMarkupTag);
+        final position0 = position;
+        final markupTag = parseMarkupTag();
+        take(Token.endMarkupTag);
+        if (markupTag.closing) {
+          if (markupStack.isEmpty) {
+            position = position0;
+            syntaxError('unexpected closing markup tag');
+          }
+          // close-all tag
+          if (markupTag.name == null) {
+            while (markupStack.isNotEmpty) {
+              final tag = markupStack.removeLast();
+              tag.endTextPosition = stringBuilder.length;
+              tag.endSubIndex = subIndex;
+              attributes.add(tag.build());
+            }
+          } else {
+            final openTag = markupStack.removeLast();
+            if (openTag.name != markupTag.name) {
+              position = position0 + 1;
+              syntaxError('Expected closing tag for [${openTag.name}]');
+            }
+            openTag.endTextPosition = stringBuilder.length;
+            openTag.endSubIndex = subIndex;
+            attributes.add(openTag.build());
+          }
+        } else {
+          markupTag.startTextPosition = stringBuilder.length;
+          markupTag.startSubIndex = subIndex;
+          // TODO(stpasha): check that the name of the markup tag is known
+          if (markupTag.selfClosing) {
+            markupTag.endTextPosition = stringBuilder.length;
+            markupTag.endSubIndex = subIndex;
+            attributes.add(markupTag.build());
+          } else {
+            markupStack.add(markupTag);
+          }
+        }
       } else {
         break;
       }
     }
-    if (parts.length == 1) {
-      return parts.first;
-    } else if (parts.length > 1) {
-      return Concatenate(parts);
-    } else {
-      return constEmptyString;
+    if (markupStack.isNotEmpty) {
+      syntaxError('markup tag [${markupStack.last.name}] was not closed');
     }
+    return LineContent(
+      stringBuilder.toString(),
+      expressions.isEmpty ? null : expressions,
+      attributes.isEmpty ? null : attributes,
+    );
   }
 
   BoolExpression? maybeParseLineCondition() {
@@ -274,6 +332,52 @@ class _Parser {
     return out.isEmpty ? null : out;
   }
 
+  _Markup parseMarkupTag() {
+    final result = _Markup();
+    if (peekToken() == Token.closeMarkupTag) {
+      position += 1;
+      result.closing = true;
+      final nextToken = peekToken();
+      if (nextToken.isId) {
+        result.name = nextToken.content;
+        position += 1;
+      } else if (nextToken != Token.endMarkupTag) {
+        syntaxError('a markup tag name is expected');
+      }
+    } else {
+      final nextToken = peekToken();
+      if (nextToken.isId) {
+        result.name = nextToken.content;
+        position += 1;
+      } else {
+        syntaxError('a markup tag name is expected');
+      }
+      while (peekToken().isId) {
+        final position0 = position;
+        final parameter = peekToken().content;
+        position += 1;
+        final Expression expression;
+        if (peekToken() == Token.operatorAssign) {
+          position += 1;
+          expression = parseExpression();
+        } else {
+          expression = constTrue;
+        }
+        if (result.parameters.containsKey(parameter)) {
+          position = position0;
+          syntaxError('duplicate parameter $parameter in a markup attribute');
+        }
+        result.parameters[parameter] = expression;
+      }
+      final lastToken = peekToken();
+      if (lastToken == Token.closeMarkupTag) {
+        result.selfClosing = true;
+        position += 1;
+      }
+    }
+    return result;
+  }
+
   //#endregion
 
   //#region Commands parsing
@@ -303,8 +407,8 @@ class _Parser {
       return parseCommandWait();
     } else if (token == Token.commandSet) {
       return parseCommandSet();
-    } else if (token == Token.commandDeclare) {
-      return parseCommandDeclare();
+    } else if (token == Token.commandDeclare || token == Token.commandLocal) {
+      return parseCommandDeclareOrLocal();
     } else if (token == Token.commandElseif ||
         token == Token.commandElse ||
         token == Token.commandEndif) {
@@ -442,7 +546,12 @@ class _Parser {
       syntaxError('variable expected');
     }
     final variableName = variableToken.content;
-    if (!project.variables.hasVariable(variableName)) {
+    final VariableStorage variableStorage;
+    if (localVariables?.hasVariable(variableName) ?? false) {
+      variableStorage = localVariables!;
+    } else if (project.variables.hasVariable(variableName)) {
+      variableStorage = project.variables;
+    } else {
       nameError('variable $variableName has not been declared');
     }
     position += 1;
@@ -453,7 +562,7 @@ class _Parser {
     position += 1;
     final expressionStartPosition = position;
     final expression = parseExpression();
-    final variableType = project.variables.getVariableType(variableName);
+    final variableType = variableStorage.getVariableType(variableName);
     if (variableType != expression.type) {
       position = expressionStartPosition;
       typeError(
@@ -462,31 +571,48 @@ class _Parser {
       );
     }
     final assignmentExpression = assignmentTokens[assignmentToken]!(
-      project.variables.getVariableAsExpression(variableName),
+      variableStorage.getVariableAsExpression(variableName),
       expression,
       expressionStartPosition,
     );
     take(Token.endExpression);
     take(Token.endCommand);
     take(Token.newline);
-    return SetCommand(variableName, assignmentExpression);
+    return SetCommand(variableName, assignmentExpression, variableStorage);
   }
 
-  Command parseCommandDeclare() {
+  Command parseCommandDeclareOrLocal() {
     take(Token.startCommand);
-    take(Token.commandDeclare);
+    final isDeclare = peekToken() == Token.commandDeclare;
+    final isLocal = peekToken() == Token.commandLocal;
+    assert(isDeclare || isLocal);
+    position += 1;
     take(Token.startExpression);
+    if (isLocal) {
+      localVariables ??= VariableStorage();
+    }
     final variableToken = peekToken();
     if (!variableToken.isVariable) {
       syntaxError('variable name expected');
     }
     final variableName = variableToken.content;
+    if (isLocal && localVariables!.hasVariable(variableName)) {
+      nameError('redeclaration of local variable $variableName');
+    }
     if (project.variables.hasVariable(variableName)) {
-      nameError('variable $variableName has already been declared');
+      nameError(
+        isLocal
+            ? 'variable $variableName shadows a global variable with the '
+                'same name'
+            : 'variable $variableName has already been declared',
+      );
     }
     position += 1;
     late final Expression expression;
     if (peekToken() == Token.asType) {
+      if (isLocal) {
+        syntaxError('assignment operator is expected');
+      }
       take(Token.asType);
       final typeToken = peekToken();
       final typeExpr = typesToDefaultValues[typeToken];
@@ -517,8 +643,17 @@ class _Parser {
     take(Token.endExpression);
     take(Token.endCommand);
     takeNewline();
-    project.variables.setVariable(variableName, expression.value);
-    return const DeclareCommand();
+    if (isLocal) {
+      final dynamic initialValue = typesToDefaultValues.values
+          .where((Expression v) => v.type == expression.type)
+          .first
+          .value;
+      localVariables!.setVariable(variableName, initialValue);
+      return LocalCommand(variableName, expression, localVariables!);
+    } else {
+      project.variables.setVariable(variableName, expression.value);
+      return const DeclareCommand();
+    }
   }
 
   Command parseUserDefinedCommand() {
@@ -630,13 +765,16 @@ class _Parser {
       return BoolLiteral(token == Token.constTrue);
     } else if (token.isVariable) {
       final name = token.content;
-      if (project.variables.hasVariable(name)) {
+      if (localVariables?.hasVariable(name) ?? false) {
+        return localVariables!.getVariableAsExpression(name);
+      } else if (project.variables.hasVariable(name)) {
         return project.variables.getVariableAsExpression(name);
       } else {
         position -= 1;
         nameError('variable $name is not defined');
       }
     } else if (token.isId) {
+      // Function call
       throw UnimplementedError();
     } else if (token == Token.operatorNot) {
       final position0 = position;
@@ -896,4 +1034,27 @@ class _NodeHeader {
   _NodeHeader(this.title, this.tags);
   String? title;
   Map<String, String>? tags;
+}
+
+class _Markup {
+  bool closing = false;
+  bool selfClosing = false;
+  String? name;
+  int? startTextPosition;
+  int? endTextPosition;
+  int? startSubIndex;
+  int? endSubIndex;
+  Map<String, Expression> parameters = {};
+
+  MarkupAttribute build() {
+    assert(!closing);
+    return MarkupAttribute(
+      name!,
+      startTextPosition!,
+      endTextPosition!,
+      startSubIndex!,
+      endSubIndex!,
+      parameters.isEmpty ? null : parameters,
+    );
+  }
 }

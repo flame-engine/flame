@@ -5,13 +5,17 @@ void main() {
   group('Token', () {
     test('tokens without args', () {
       expect('${Token.asType}', 'Token.asType');
+      expect('${Token.closeMarkupTag}', 'Token.closeMarkupTag');
       expect('${Token.colon}', 'Token.colon');
-      expect('${Token.endIndent}', 'Token.endIndent');
       expect('${Token.commandEndif}', 'Token.commandEndif');
+      expect('${Token.commandLocal}', 'Token.commandLocal');
       expect('${Token.constTrue}', 'Token.constTrue');
-      expect('${Token.startExpression}', 'Token.startExpression');
+      expect('${Token.endIndent}', 'Token.endIndent');
+      expect('${Token.endMarkupTag}', 'Token.endMarkupTag');
       expect('${Token.operatorMinusAssign}', 'Token.operatorMinusAssign');
       expect('${Token.operatorXor}', 'Token.operatorXor');
+      expect('${Token.startExpression}', 'Token.startExpression');
+      expect('${Token.startMarkupTag}', 'Token.startMarkupTag');
       expect('${Token.typeString}', 'Token.typeString');
 
       expect(Token.comma.isText, false);
@@ -65,11 +69,11 @@ void main() {
     });
 
     test('Token.command', () {
-      const token = Token.command('else');
-      expect('$token', "Token.command('else')");
+      const token = Token.command('go');
+      expect('$token', "Token.command('go')");
       expect(token.isCommand, true);
       expect(token.type, TokenType.command);
-      expect(token.content, 'else');
+      expect(token.content, 'go');
     });
 
     test('equality', () {
