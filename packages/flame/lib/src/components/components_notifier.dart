@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
@@ -15,7 +17,7 @@ class ComponentsNotifier<T extends Component> extends ChangeNotifier {
   final List<T> _components;
 
   /// The list of components.
-  List<T> get components => _components;
+  List<T> get components => UnmodifiableListView(_components);
 
   /// Returns a single element of the components on the game.
   ///

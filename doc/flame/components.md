@@ -1101,7 +1101,7 @@ To make the component automatically report when new instances are added or remov
 mixin can be applied to the component class:
 
 ```dart
-class Player extends SpriteComponent with Nofieable {}
+class Player extends SpriteComponent with Notifier {}
 ```
 
 Then to listen to changes on that component the `componentsNotifier` method from `FlameGame` can
