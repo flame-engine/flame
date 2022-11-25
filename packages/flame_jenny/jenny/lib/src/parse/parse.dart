@@ -18,6 +18,7 @@ import 'package:jenny/src/structure/dialogue_option.dart';
 import 'package:jenny/src/structure/expressions/arithmetic.dart';
 import 'package:jenny/src/structure/expressions/expression.dart';
 import 'package:jenny/src/structure/expressions/functions/_utils.dart';
+import 'package:jenny/src/structure/expressions/functions/bool.dart';
 import 'package:jenny/src/structure/expressions/functions/ceil.dart';
 import 'package:jenny/src/structure/expressions/functions/dec.dart';
 import 'package:jenny/src/structure/expressions/functions/decimal.dart';
@@ -1014,6 +1015,7 @@ class _Parser {
   };
 
   static const Map<String, FunctionBuilder> builtinFunctions = {
+    'bool': BoolFn.make,
     'ceil': CeilFn.make,
     'dec': DecFn.make,
     'decimal': DecimalFn.make,
