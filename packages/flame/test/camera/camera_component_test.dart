@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flame/components.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame_test/flame_test.dart';
@@ -5,6 +7,38 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('CameraComponent', () {
+    testGolden(
+      'CameraComponent.withFixedResolution',
+      (game) async {
+        final world = World()
+          ..addAll([
+            _SolidBackground(const Color(0xFF333333)),
+            RectangleComponent(
+              anchor: Anchor.center,
+              position: Vector2.zero(),
+              size: Vector2(480, 180),
+              paint: Paint()
+                ..style = PaintingStyle.stroke
+                ..strokeWidth = 2
+                ..color = const Color(0xFF00FF33),
+            ),
+            RectangleComponent(
+              anchor: Anchor.center,
+              size: Vector2.all(50),
+              paint: Paint()..color = const Color(0xFFFFEEDD),
+            ),
+          ])
+          ..addToParent(game);
+        CameraComponent.withFixedResolution(
+          world: world,
+          width: 500,
+          height: 200,
+        ).addToParent(game);
+      },
+      goldenFile: '../_goldens/camera_component_test1.png',
+      size: Vector2(200, 150),
+    );
+
     testWithFlameGame('simple camera follow', (game) async {
       final world = World()..addToParent(game);
       final camera = CameraComponent(world: world)..addToParent(game);
@@ -152,4 +186,11 @@ void main() {
       );
     });
   });
+}
+
+class _SolidBackground extends Component with HasPaint {
+  _SolidBackground(this.color);
+  final Color color;
+  @override
+  void render(Canvas canvas) => canvas.drawColor(color, BlendMode.src);
 }
