@@ -1087,15 +1087,17 @@ for details on how to use it.
 
 ## ComponentsNotifier
 
-Most of the time just accessing children and their attributes is enough to build the logic of game.
+Most of the time just accessing children and their attributes is enough to build the logic of
+your game.
 
-But sometimes, reactivity can help the developer simplify and write better code, to help with that
-Flame provides `ComponentsNotifier`, which are implementations of a `ChangeNotifier` that notifies
-listeners every time a component is added, removed or manually changed.
+But sometimes, reactivity can help the developer to simplify and write better code, to help with
+that Flame provides the `ComponentsNotifier`, which is an implementation of a
+`ChangeNotifier` that notifies listeners every time a component is added, removed or manually
+changed.
 
-For example, lets say that we want to show a game over text when the player lives reach zero.
+For example, lets say that we want to show a game over text when the player's lives reach zero.
 
-To make the component automatically report when new instances are added or removed, the `Nofieable`
+To make the component automatically report when new instances are added or removed, the `Notifiable`
 mixin can be applied to the component class:
 
 ```dart
@@ -1167,7 +1169,8 @@ class Hud extends PositionComponent with HasGameRef {
 `ComponentsNotifier`s can also come in handy to rebuild widgets when state changes inside a
 `FlameGame`, to help with that Flame provides a `ComponentsNotifierBuilder` widget.
 
-To see an example of its use check the running example [here](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/components/components_notifier_example.dart);
+To see an example of its use check the running example
+[here](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/components/components_notifier_example.dart);
 
 
 ## ClipComponent

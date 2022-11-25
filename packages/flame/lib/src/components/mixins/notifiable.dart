@@ -2,7 +2,7 @@ import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:meta/meta.dart';
 
-/// Makes a component capable of notify listeners of changes.
+/// Makes a component capable of notifying listeners of changes.
 ///
 /// Notifieable components will automatically notify when
 /// new instances are added or removed to the game instance.

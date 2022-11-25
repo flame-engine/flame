@@ -8,7 +8,7 @@ import 'package:meta/meta.dart';
 /// defined and executed by the component itself.
 ///
 /// For example, in a Player component, that holds a health variable
-/// may notify changes when that variable has changed.
+/// you may want to notify changes when that variable has changed.
 class ComponentsNotifier<T extends Component> extends ChangeNotifier {
   ComponentsNotifier(List<T> initial) : _components = initial;
 
