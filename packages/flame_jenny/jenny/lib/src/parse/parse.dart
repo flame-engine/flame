@@ -23,9 +23,9 @@ import 'package:jenny/src/structure/expressions/functions/dec.dart';
 import 'package:jenny/src/structure/expressions/functions/decimal.dart';
 import 'package:jenny/src/structure/expressions/functions/dice.dart';
 import 'package:jenny/src/structure/expressions/functions/floor.dart';
-import 'package:jenny/src/structure/expressions/functions/functions.dart';
 import 'package:jenny/src/structure/expressions/functions/inc.dart';
 import 'package:jenny/src/structure/expressions/functions/int.dart';
+import 'package:jenny/src/structure/expressions/functions/number.dart';
 import 'package:jenny/src/structure/expressions/functions/plural.dart';
 import 'package:jenny/src/structure/expressions/functions/random.dart';
 import 'package:jenny/src/structure/expressions/functions/random_range.dart';
@@ -1021,6 +1021,7 @@ class _Parser {
     'floor': FloorFn.make,
     'inc': IncFn.make,
     'int': IntFn.make,
+    'number': NumberFn.make,
     'plural': PluralFn.make,
     'random': RandomFn.make,
     'random_range': RandomRangeFn.make,

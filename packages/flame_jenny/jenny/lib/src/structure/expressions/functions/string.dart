@@ -4,9 +4,9 @@ import 'package:jenny/src/yarn_project.dart';
 
 /// Function `string(x)` converts a numeric or boolean `x` into a string.
 class StringFn extends StringExpression {
-  StringFn(this.arg);
+  StringFn(this._arg);
 
-  final Expression arg;
+  final Expression _arg;
 
   /// Static constructor to be used in <parse.dart>.
   static Expression make(
@@ -24,5 +24,5 @@ class StringFn extends StringExpression {
   }
 
   @override
-  String get value => arg.value.toString();
+  String get value => _arg.value.toString();
 }
