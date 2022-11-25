@@ -80,6 +80,20 @@ extension Vector2Extension on Vector2 {
     }
   }
 
+  /// Clamps the [length] of this vector.
+  ///
+  /// This means that if the length is less than [min] the length will be set to
+  /// [min] and if the length is larger than [max], the length will be set to
+  /// [max]. If the length is in between [min] and [max], no changes will be
+  /// made.
+  void clampLength(double min, double max) {
+    if (length2 > max * max) {
+      scaleTo(max);
+    } else if (length2 < min) {
+      scaleTo(min);
+    }
+  }
+
   /// Project this onto [other].
   ///
   /// [other] needs to have a length > 0;
