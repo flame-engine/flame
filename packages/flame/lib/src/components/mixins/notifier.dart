@@ -4,17 +4,17 @@ import 'package:meta/meta.dart';
 
 /// Makes a component capable of notifying listeners of changes.
 ///
-/// Notifieable components will automatically notify when
+/// Notifier components will automatically notify when
 /// new instances are added or removed to the game instance.
 ///
 /// To notify internal changes of a component instance, the component
 /// should call [notifyListeners].
-mixin Notifiable on Component {
+mixin Notifier on Component {
   FlameGame get _gameRef {
     final game = findGame();
     assert(
       game == null || game is FlameGame,
-      "Notifiable can't be used without FlameGame",
+      "Notifier can't be used without FlameGame",
     );
     return game! as FlameGame;
   }

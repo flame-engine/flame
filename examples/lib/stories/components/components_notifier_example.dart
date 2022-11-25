@@ -83,7 +83,7 @@ class GameHud extends StatelessWidget {
   }
 }
 
-class Enemy extends CircleComponent with Tappable, Notifiable {
+class Enemy extends CircleComponent with Tappable, Notifier {
   Enemy({super.position})
       : super(
           radius: 20,

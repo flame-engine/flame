@@ -1097,7 +1097,7 @@ changed.
 
 For example, lets say that we want to show a game over text when the player's lives reach zero.
 
-To make the component automatically report when new instances are added or removed, the `Notifiable`
+To make the component automatically report when new instances are added or removed, the `Notifier`
 mixin can be applied to the component class:
 
 ```dart
@@ -1133,7 +1133,7 @@ the example above to make a hud component to blink when the player has half of t
 order to do so, we need that the `Player` component notify a change manually, example:
 
 ```dart
-class Player extends SpriteComponent with Nofieable {
+class Player extends SpriteComponent with Notifier {
   double health = 1;
 
   void takeHit() {

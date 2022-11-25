@@ -22,7 +22,7 @@ export 'src/components/mixins/has_game_ref.dart' show HasGameRef;
 export 'src/components/mixins/has_paint.dart';
 export 'src/components/mixins/hoverable.dart';
 export 'src/components/mixins/keyboard_handler.dart';
-export 'src/components/mixins/notifiable.dart';
+export 'src/components/mixins/notifier.dart';
 export 'src/components/mixins/parent_is_a.dart';
 export 'src/components/mixins/single_child_particle.dart';
 export 'src/components/mixins/tappable.dart';
