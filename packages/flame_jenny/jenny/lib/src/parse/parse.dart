@@ -33,6 +33,7 @@ import 'package:jenny/src/structure/expressions/functions/random_range.dart';
 import 'package:jenny/src/structure/expressions/functions/round.dart';
 import 'package:jenny/src/structure/expressions/functions/round_places.dart';
 import 'package:jenny/src/structure/expressions/functions/string.dart';
+import 'package:jenny/src/structure/expressions/functions/visited.dart';
 import 'package:jenny/src/structure/expressions/literal.dart';
 import 'package:jenny/src/structure/expressions/logical.dart';
 import 'package:jenny/src/structure/expressions/relational.dart';
@@ -86,12 +87,14 @@ class _Parser {
       }
       final header = parseNodeHeader();
       final block = parseNodeBody();
-      project.nodes[header.title!] = Node(
-        title: header.title!,
+      final name = header.title!;
+      project.nodes[name] = Node(
+        title: name,
         tags: header.tags,
         content: block,
         variables: localVariables,
       );
+      project.variables.setVariable('@$name', 0);
       localVariables = null;
     }
   }
@@ -1030,6 +1033,7 @@ class _Parser {
     'round': RoundFn.make,
     'round_places': RoundPlacesFn.make,
     'string': StringFn.make,
+    'visited': VisitedFn.make,
   };
 
   //#endregion
