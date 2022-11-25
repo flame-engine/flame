@@ -33,6 +33,7 @@ import 'package:jenny/src/structure/expressions/functions/random_range.dart';
 import 'package:jenny/src/structure/expressions/functions/round.dart';
 import 'package:jenny/src/structure/expressions/functions/round_places.dart';
 import 'package:jenny/src/structure/expressions/functions/string.dart';
+import 'package:jenny/src/structure/expressions/functions/visit_count.dart';
 import 'package:jenny/src/structure/expressions/functions/visited.dart';
 import 'package:jenny/src/structure/expressions/literal.dart';
 import 'package:jenny/src/structure/expressions/logical.dart';
@@ -1033,6 +1034,8 @@ class _Parser {
     'round': RoundFn.make,
     'round_places': RoundPlacesFn.make,
     'string': StringFn.make,
+    'visit_count': VisitCountFn.make,
+    'visited_count': VisitCountFn.make,
     'visited': VisitedFn.make,
   };
 
