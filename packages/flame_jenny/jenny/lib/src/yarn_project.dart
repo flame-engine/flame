@@ -6,6 +6,7 @@ import 'package:jenny/src/localization.dart';
 import 'package:jenny/src/parse/parse.dart' as impl;
 import 'package:jenny/src/structure/node.dart';
 import 'package:jenny/src/variable_storage.dart';
+import 'package:meta/meta.dart';
 
 /// [YarnProject] is a central place where all dialogue-related information
 /// is held:
@@ -21,8 +22,10 @@ class YarnProject {
         variables = VariableStorage(),
         commands = CommandStorage(),
         random = Random() {
-    setUpPluralFunctionForLocale('en');
+    locale = 'en';
   }
+
+  late String _locale;
 
   /// All parsed [Node]s, keyed by their titles.
   final Map<String, Node> nodes;
@@ -36,7 +39,30 @@ class YarnProject {
   /// needed.
   Random random;
 
+  /// Locale (language) used in this YarnProject.
+  ///
+  /// The default locale is 'en' (English), but you can select a different
+  /// locale after a YarnProject is created.
+  ///
+  /// If you need a locale that is not currently supported by Jenny, you can add
+  /// the corresponding entry into the `localizationInfo` map.
+  String get locale => _locale;
+  set locale(String value) {
+    final entry = localizationInfo[value];
+    if (entry == null) {
+      throw DialogueError('Unknown locale "$value"');
+    }
+    if (nodes.isNotEmpty) {
+      throw DialogueError(
+        'The locale cannot be changed after nodes have been added',
+      );
+    }
+    localization = entry;
+    _locale = value;
+  }
+
   /// Settings related to localization.
+  @internal
   late Localization localization;
 
   /// Parses a single yarn file, given as a [text] string.
@@ -49,16 +75,5 @@ class YarnProject {
 
   void setVariable(String name, dynamic value) {
     variables.setVariable(name, value);
-  }
-
-  void setUpPluralFunctionForLocale(String locale) {
-    final entry = localizationInfo[locale];
-    if (entry == null) {
-      throw DialogueError(
-        'Unknown locale "$locale". Add the corresponding plural() function '
-        'into the `localizationInfo` map',
-      );
-    }
-    localization = entry;
   }
 }
