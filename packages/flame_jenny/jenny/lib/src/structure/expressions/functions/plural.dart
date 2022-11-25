@@ -25,7 +25,7 @@ class PluralFn extends StringExpression {
     }
     if (!arguments[0].expression.isNumeric) {
       errorFn(
-        'first argument in plural() must be numeric',
+        'the first argument in plural() should be numeric',
         arguments[0].position,
       );
     }
@@ -74,6 +74,9 @@ String pluralEn(int n, List<String> words) {
       (ch2 == 's' && ch1 == 'h') ||
       ch1 == 'x') {
     return '${singular}es';
+  }
+  if (ch1 == 'y') {
+    return '${singular.substring(0, singular.length - 1)}ies';
   }
   return '${singular}s';
 }
