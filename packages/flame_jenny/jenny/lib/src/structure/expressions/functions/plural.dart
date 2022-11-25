@@ -21,7 +21,10 @@ class PluralFn extends StringExpression {
       errorFn('function plural() requires at least $min arguments');
     }
     if (arguments.length > max) {
-      errorFn('function plural() requires at most $max arguments');
+      errorFn(
+        'function plural() requires at most $max arguments',
+        arguments[max].position,
+      );
     }
     if (!arguments[0].expression.isNumeric) {
       errorFn(

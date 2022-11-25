@@ -69,9 +69,9 @@ void main() {
           ),
         hasTypeError(
           'TypeError: function plural() requires at least 2 arguments\n'
-          '>  at line 3 column 11:\n'
+          '>  at line 3 column 10:\n'
           '>  {plural(1)}\n'
-          '>            ^\n',
+          '>           ^\n',
         ),
       );
     });
@@ -84,9 +84,9 @@ void main() {
           ),
         hasTypeError(
           'TypeError: function plural() requires at most 3 arguments\n'
-          '>  at line 3 column 20:\n'
+          '>  at line 3 column 18:\n'
           '>  {plural(1, 2, 3, 4)}\n'
-          '>                     ^\n',
+          '>                   ^\n',
         ),
       );
     });

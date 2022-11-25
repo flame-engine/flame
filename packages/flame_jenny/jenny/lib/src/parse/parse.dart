@@ -22,6 +22,7 @@ import 'package:jenny/src/structure/expressions/functions/functions.dart';
 import 'package:jenny/src/structure/expressions/functions/plural.dart';
 import 'package:jenny/src/structure/expressions/functions/random.dart';
 import 'package:jenny/src/structure/expressions/functions/random_range.dart';
+import 'package:jenny/src/structure/expressions/functions/round.dart';
 import 'package:jenny/src/structure/expressions/literal.dart';
 import 'package:jenny/src/structure/expressions/logical.dart';
 import 'package:jenny/src/structure/expressions/relational.dart';
@@ -780,12 +781,13 @@ class _Parser {
       final name = token.content;
       take(Token.startParenthesis, 'an opening parenthesis "(" is expected');
       final arguments = parseFunctionArguments();
-      take(Token.endParenthesis, 'missing closing ")"');
       final builder = builtinFunctions[name];
       if (builder == null) {
         nameError('unknown function name $name', position0);
       }
-      return builder(arguments, project, typeError);
+      final functionExpr = builder(arguments, project, typeError);
+      take(Token.endParenthesis, 'missing closing ")"');
+      return functionExpr;
     } else if (token == Token.operatorNot) {
       final position0 = position;
       final lhs = parsePrimary();

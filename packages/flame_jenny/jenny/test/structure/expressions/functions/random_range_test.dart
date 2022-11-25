@@ -84,9 +84,9 @@ void main() {
           ),
         hasTypeError(
           'TypeError: function random_range() requires two arguments\n'
-          '>  at line 3 column 17:\n'
+          '>  at line 3 column 16:\n'
           '>  {random_range(1)}\n'
-          '>                  ^\n',
+          '>                 ^\n',
         ),
       );
     });

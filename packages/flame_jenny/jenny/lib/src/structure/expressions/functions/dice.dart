@@ -16,7 +16,10 @@ class DiceFn extends NumExpression {
     ErrorFn errorFn,
   ) {
     if (args.length != 1) {
-      errorFn('function dice() requires a single argument');
+      errorFn(
+        'function dice() requires a single argument',
+        args.isEmpty ? null : args[1].position,
+      );
     }
     if (!args[0].expression.isNumeric) {
       errorFn('the argument should be numeric', args[0].position);

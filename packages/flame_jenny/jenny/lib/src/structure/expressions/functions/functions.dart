@@ -10,23 +10,6 @@ Random $randomGenerator = Random();
 // TODO(st-pasha): visited(String nodeName)
 // TODO(st-pasha): visited_count(String nodeName)
 
-/// Function `round(x)` will round `x` to the nearest integer.
-class RoundFn extends NumExpression {
-  const RoundFn(this.arg);
-
-  final NumExpression arg;
-
-  static Expression make(
-    List<FunctionArgument> args,
-    YarnProject yarnProject,
-    ErrorFn errorFn,
-  ) =>
-      num1Builder('round', RoundFn.new, args, errorFn);
-
-  @override
-  num get value => arg.value.round();
-}
-
 /// Function `round_places(x, n)` will round `x` to `n` decimal places.
 class RoundPlacesFn extends NumExpression {
   const RoundPlacesFn(this.arg, this.places);

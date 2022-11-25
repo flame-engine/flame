@@ -55,9 +55,9 @@ void main() {
         () => YarnProject()..parse('title:A\n---\n{dice()}\n===\n'),
         hasTypeError(
           'TypeError: function dice() requires a single argument\n'
-          '>  at line 3 column 8:\n'
+          '>  at line 3 column 7:\n'
           '>  {dice()}\n'
-          '>         ^\n',
+          '>        ^\n',
         ),
       );
     });
@@ -67,9 +67,9 @@ void main() {
         () => YarnProject()..parse('title:A\n---\n{dice(3, 6)}\n===\n'),
         hasTypeError(
           'TypeError: function dice() requires a single argument\n'
-          '>  at line 3 column 12:\n'
+          '>  at line 3 column 10:\n'
           '>  {dice(3, 6)}\n'
-          '>             ^\n',
+          '>           ^\n',
         ),
       );
     });

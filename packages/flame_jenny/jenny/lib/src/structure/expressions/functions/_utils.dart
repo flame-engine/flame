@@ -10,10 +10,13 @@ Expression num1Builder(
   ErrorFn errorFn,
 ) {
   if (args.length != 1) {
-    errorFn('function $name() requires a single argument');
+    errorFn(
+      'function $name() requires a single argument',
+      args.isEmpty ? null : args[1].position,
+    );
   }
   if (!args[0].expression.isNumeric) {
-    errorFn('the argument should be numeric', args[0].position);
+    errorFn('the argument in $name() should be numeric', args[0].position);
   }
   return constructor(args[0].expression as NumExpression);
 }
