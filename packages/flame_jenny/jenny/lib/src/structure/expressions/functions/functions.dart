@@ -4,32 +4,8 @@ import 'package:jenny/src/structure/expressions/expression.dart';
 import 'package:jenny/src/structure/expressions/functions/_utils.dart';
 import 'package:jenny/src/yarn_project.dart';
 
-Random $randomGenerator = Random();
-
 // TODO(st-pasha): visited(String nodeName)
 // TODO(st-pasha): visited_count(String nodeName)
-
-/// Function `round_places(x, n)` will round `x` to `n` decimal places.
-class RoundPlacesFn extends NumExpression {
-  const RoundPlacesFn(this.arg, this.places);
-
-  final NumExpression arg;
-  final NumExpression places;
-
-  static Expression make(
-    List<FunctionArgument> args,
-    YarnProject yarnProject,
-    ErrorFn errorFn,
-  ) =>
-      num2Builder('round_places', RoundPlacesFn.new, args, errorFn);
-
-  @override
-  num get value {
-    final precision = places.value.toInt();
-    final factor = pow(10, precision);
-    return (arg.value * factor).roundToDouble() / factor;
-  }
-}
 
 /// Function `decimal(x)` returns a fractional point of `x`.
 class DecimalFn extends NumExpression {
