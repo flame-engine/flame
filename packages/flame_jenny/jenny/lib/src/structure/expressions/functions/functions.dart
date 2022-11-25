@@ -31,46 +31,6 @@ class RoundPlacesFn extends NumExpression {
   }
 }
 
-/// Function `inc(x)` increases `x` towards next integer. It is equal to `x + 1`
-/// if `x` is already integer, or `ceil(x)` if `x` is not integer.
-class IncFn extends NumExpression {
-  const IncFn(this.arg);
-
-  final NumExpression arg;
-
-  static Expression make(
-    List<FunctionArgument> args,
-    YarnProject yarnProject,
-    ErrorFn errorFn,
-  ) =>
-      num1Builder('inc', IncFn.new, args, errorFn);
-
-  @override
-  num get value => arg.value.toInt() + 1;
-}
-
-/// Function `dec(x)` decreases `x` towards previous integer. It is equal to
-/// `x - 1` if `x` is already integer, or `floor(x)` if `x` is not integer.
-class DecFn extends NumExpression {
-  const DecFn(this.arg);
-
-  final NumExpression arg;
-
-  static Expression make(
-    List<FunctionArgument> args,
-    YarnProject yarnProject,
-    ErrorFn errorFn,
-  ) =>
-      num1Builder('dec', DecFn.new, args, errorFn);
-
-  @override
-  num get value {
-    final x = arg.value;
-    final y = x.toInt();
-    return x == y ? y - 1 : y;
-  }
-}
-
 /// Function `decimal(x)` returns a fractional point of `x`.
 class DecimalFn extends NumExpression {
   const DecimalFn(this.arg);
