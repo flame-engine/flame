@@ -1,5 +1,4 @@
 import 'package:jenny/jenny.dart';
-import 'package:jenny/src/yarn_project.dart';
 import 'package:test/test.dart';
 
 import '../../../test_scenario.dart';
@@ -32,8 +31,8 @@ void main() {
         final yarn = YarnProject()
           ..parse(
             'title:A\n---\n'
-                '{bool("$arg")}\n'
-                '===\n',
+            '{bool("$arg")}\n'
+            '===\n',
           );
         final line = yarn.nodes['A']!.lines.first as DialogueLine;
         expect(

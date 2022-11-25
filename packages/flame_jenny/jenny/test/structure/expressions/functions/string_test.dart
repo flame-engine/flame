@@ -40,8 +40,7 @@ void main() {
 
     test('too many arguments', () {
       expect(
-        () => YarnProject()
-          ..parse('title:A\n---\n{string(3, 6)}\n===\n'),
+        () => YarnProject()..parse('title:A\n---\n{string(3, 6)}\n===\n'),
         hasTypeError(
           'TypeError: function string() requires a single argument\n'
           '>  at line 3 column 12:\n'

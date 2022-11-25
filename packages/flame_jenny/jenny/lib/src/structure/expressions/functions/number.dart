@@ -1,4 +1,3 @@
-
 import 'package:jenny/src/errors.dart';
 import 'package:jenny/src/structure/expressions/expression.dart';
 import 'package:jenny/src/structure/expressions/functions/_utils.dart';
@@ -15,10 +14,10 @@ class NumberFn extends NumExpression {
 
   /// Static constructor to be used in <parse.dart>.
   static Expression make(
-      List<FunctionArgument> args,
-      YarnProject yarnProject,
-      ErrorFn errorFn,
-      ) {
+    List<FunctionArgument> args,
+    YarnProject yarnProject,
+    ErrorFn errorFn,
+  ) {
     if (args.length != 1) {
       errorFn(
         'function number() requires a single argument',
@@ -32,7 +31,7 @@ class NumberFn extends NumExpression {
   num get value {
     final dynamic value = _arg.value;
     if (value is bool) {
-      return value? 1 : 0;
+      return value ? 1 : 0;
     }
     if (value is String) {
       final result = num.tryParse(value);

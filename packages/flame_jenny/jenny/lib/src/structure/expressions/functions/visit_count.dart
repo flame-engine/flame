@@ -10,10 +10,10 @@ class VisitCountFn extends NumExpression {
   final YarnProject _yarn;
 
   static Expression make(
-      List<FunctionArgument> args,
-      YarnProject yarnProject,
-      ErrorFn errorFn,
-      ) {
+    List<FunctionArgument> args,
+    YarnProject yarnProject,
+    ErrorFn errorFn,
+  ) {
     if (args.length != 1) {
       errorFn(
         'function visit_count() requires a single argument',
