@@ -1128,7 +1128,7 @@ class MyGame extends FlameGame {
 }
 ```
 
-A notifiable component can also manually notify its listeners that something changed. Lets expand
+A `Notifier` component can also manually notify its listeners that something changed. Lets expand
 the example above to make a hud component to blink when the player has half of their health. In
 order to do so, we need that the `Player` component notify a change manually, example:
 

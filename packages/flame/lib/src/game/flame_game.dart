@@ -153,10 +153,10 @@ class FlameGame extends Component with Game {
   @override
   Projector get projector => camera.combinedProjector;
 
-  /// Returns a [ComponentsNotifier] for the informed type [T].
+  /// Returns a [ComponentsNotifier] for the given type [T].
   ///
   /// This method handles duplications, so there will never be
-  /// more than one `ComponentsNotifier] for a given type, meaning
+  /// more than one [ComponentsNotifier] for a given type, meaning
   /// that this method can be called as many times as needed for a type.
   ComponentsNotifier<T> componentsNotifier<T extends Component>() {
     for (final notifier in notifiers) {
