@@ -87,9 +87,10 @@ extension Vector2Extension on Vector2 {
   /// [max]. If the length is in between [min] and [max], no changes will be
   /// made.
   void clampLength(double min, double max) {
-    if (length2 > max * max) {
+    final lengthSquared = length2;
+    if (lengthSquared > max * max) {
       scaleTo(max);
-    } else if (length2 < min) {
+    } else if (lengthSquared < min * min) {
       scaleTo(min);
     }
   }
