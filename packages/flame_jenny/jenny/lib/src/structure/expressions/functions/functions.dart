@@ -7,43 +7,6 @@ import 'package:jenny/src/yarn_project.dart';
 // TODO(st-pasha): visited(String nodeName)
 // TODO(st-pasha): visited_count(String nodeName)
 
-/// Function `decimal(x)` returns a fractional point of `x`.
-class DecimalFn extends NumExpression {
-  const DecimalFn(this.arg);
-
-  final NumExpression arg;
-
-  static Expression make(
-    List<FunctionArgument> args,
-    YarnProject yarnProject,
-    ErrorFn errorFn,
-  ) =>
-      num1Builder('decimal', DecimalFn.new, args, errorFn);
-
-  @override
-  num get value {
-    final x = arg.value;
-    return x - x.floor();
-  }
-}
-
-/// Function `int(x)` truncates fractional part of `x`, rounding it towards 0.
-class IntFn extends NumExpression {
-  const IntFn(this.arg);
-
-  final NumExpression arg;
-
-  static Expression make(
-    List<FunctionArgument> args,
-    YarnProject yarnProject,
-    ErrorFn errorFn,
-  ) =>
-      num1Builder('int', IntFn.new, args, errorFn);
-
-  @override
-  num get value => arg.value.truncate();
-}
-
 /// Function `string(x)` converts a numeric or boolean `x` into a string.
 class StringFn extends StringExpression {
   StringFn(this.arg);
