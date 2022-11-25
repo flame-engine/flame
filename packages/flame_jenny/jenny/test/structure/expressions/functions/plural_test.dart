@@ -13,18 +13,30 @@ void main() {
         input: '''
           title: Start
           ---
-          {plural(0, "apple")} {plural(1, "apple")} {plural(2, "apple")} 
-          {plural(11, "apple")} {plural(20, "apple")} {plural(21, "apple")} 
-          {plural(101, "apple")} {plural(111, "apple")} {plural(1111, "apple")}
+          0 = {plural(0, "apple")} 
+          1 = {plural(1, "apple")} 
+          2 = {plural(2, "apple")} 
+          11 = {plural(11, "apple")} 
+          20 = {plural(20, "apple")} 
+          21 = {plural(21, "apple")} 
+          101 = {plural(101, "apple")} 
+          111 = {plural(111, "apple")} 
+          1111 = {plural(1111, "apple")}
           
           {plural(1, "% table")} - {plural(5, "% table")}
           {plural(1, "% foot", "% feet")} - {plural(20, "% foot", "% feet")}
           ===
         ''',
         testPlan: '''
-          line: apples apple apples
-          line: apples apples apple
-          line: apple apples apples
+          line: 0 = apples
+          line: 1 = apple
+          line: 2 = apples
+          line: 11 = apples
+          line: 20 = apples
+          line: 21 = apples
+          line: 101 = apples
+          line: 111 = apples
+          line: 1111 = apples
           line: 1 table - 5 tables
           line: 1 foot - 20 feet
         ''',
@@ -39,13 +51,9 @@ void main() {
 
       expect(plural(1, 'spoon'), '1 spoon');
       expect(plural(2, 'spoon'), '2 spoons');
-      expect(plural(21, 'fox'), '21 fox');
-      expect(plural(30, 'fox'), '30 foxes');
-      expect(plural(101, 'fox'), '101 fox');
-      expect(plural(111, 'fox'), '111 foxes');
-      expect(plural(121, 'fox'), '121 fox');
+      expect(plural(21, 'fox'), '21 foxes');
       expect(plural(-5, 'dollar'), '-5 dollars');
-      expect(plural(-1, 'dollar'), '-1 dollar');
+      expect(plural(-1, 'dollar'), '-1 dollars');
       expect(plural(17, 'bench'), '17 benches');
       expect(plural(2, 'stash'), '2 stashes');
       expect(plural(200, 'ass'), '200 asses');

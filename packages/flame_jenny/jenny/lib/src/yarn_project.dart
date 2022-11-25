@@ -1,6 +1,8 @@
 import 'dart:math';
 
 import 'package:jenny/src/command_storage.dart';
+import 'package:jenny/src/errors.dart';
+import 'package:jenny/src/localization.dart';
 import 'package:jenny/src/parse/parse.dart' as impl;
 import 'package:jenny/src/structure/expressions/functions/plural.dart';
 import 'package:jenny/src/structure/node.dart';
@@ -19,7 +21,9 @@ class YarnProject {
       : nodes = <String, Node>{},
         variables = VariableStorage(),
         commands = CommandStorage(),
-        random = Random();
+        random = Random() {
+    setUpPluralFunctionForLocale('en');
+  }
 
   /// All parsed [Node]s, keyed by their titles.
   final Map<String, Node> nodes;
@@ -33,9 +37,7 @@ class YarnProject {
   /// needed.
   Random random;
 
-  int pluralMinWordCount = 1;
-  int pluralMaxWordCount = 2;
-  String Function(int, List<String>) pluralFunction = pluralEn;
+  late Localization localization;
 
   /// Parses a single yarn file, given as a [text] string.
   ///
@@ -47,5 +49,16 @@ class YarnProject {
 
   void setVariable(String name, dynamic value) {
     variables.setVariable(name, value);
+  }
+
+  void setUpPluralFunctionForLocale(String locale) {
+    final entry = localizationInfo[locale];
+    if (entry == null) {
+      throw DialogueError(
+        'Unknown locale "$locale". Add the corresponding plural() function '
+        'into the `localizationInfo` map',
+      );
+    }
+    localization = entry;
   }
 }

@@ -15,8 +15,8 @@ class PluralFn extends StringExpression {
     YarnProject yarnProject,
     ErrorFn errorFn,
   ) {
-    final min = 1 + yarnProject.pluralMinWordCount;
-    final max = 1 + yarnProject.pluralMaxWordCount;
+    final min = 1 + yarnProject.localization.pluralMinWordCount;
+    final max = 1 + yarnProject.localization.pluralMaxWordCount;
     if (arguments.length < min) {
       errorFn('function plural() requires at least $min arguments');
     }
@@ -45,38 +45,13 @@ class PluralFn extends StringExpression {
 
   @override
   String get value {
-    final value = _num.value.round();
-    final n = value.abs();
+    final value = _num.value;
     final words = _words.map((w) => w.value).toList(growable: false);
-    final result = _yarn.pluralFunction(n, words);
+    final result = _yarn.localization.pluralFunction(value, words);
     if (result.contains('%')) {
       return result.replaceAll('%', value.toString());
     } else {
       return result;
     }
   }
-}
-
-/// Plural function for English language.
-String pluralEn(int n, List<String> words) {
-  assert(words.isNotEmpty);
-  final singular = words[0];
-  if (n % 10 == 1 && n % 100 != 11) {
-    return singular;
-  }
-  if (words.length == 2) {
-    return words[1];
-  }
-  final ch1 = singular.isNotEmpty ? singular[singular.length - 1] : '';
-  final ch2 = singular.length >= 2 ? singular[singular.length - 2] : '';
-  if ((ch2 == 's' && ch1 == 's') ||
-      (ch2 == 'c' && ch1 == 'h') ||
-      (ch2 == 's' && ch1 == 'h') ||
-      ch1 == 'x') {
-    return '${singular}es';
-  }
-  if (ch1 == 'y') {
-    return '${singular.substring(0, singular.length - 1)}ies';
-  }
-  return '${singular}s';
 }
