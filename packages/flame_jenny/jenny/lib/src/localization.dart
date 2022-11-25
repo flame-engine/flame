@@ -34,7 +34,7 @@ final Map<String, Localization> localizationInfo = {
   'mn': const Localization(_plural8, 2),
   'nl': const Localization(_plural4, 2),
   'no': const Localization(_plural8, 2),
-  'pl': const Localization(_plural25, 4),
+  'pl': const Localization(_plural25, 3),
   'pt': const Localization(_plural2, 2),
   'ru': const Localization(_plural29, 3),
   'sv': const Localization(_plural4, 2),
@@ -51,8 +51,14 @@ final Map<String, Localization> localizationInfo = {
 //------------------------------------------------------------------------------
 // Plural functions
 //------------------------------------------------------------------------------
+const Set<String> _enVowels = {'a', 'e', 'i', 'o', 'u'};
 
 /// English (en)
+///
+/// Either 1 or 2 arguments are accepted. In the first case the argument is the
+/// singular form of the word, and we attempt to form a plural by adding either
+/// '-s' or '-es'. In cases when this produces a wrong plural, the 2-argument
+/// form should be used, where the second argument is the plural form.
 String _pluralEn(num number, List<String> words) {
   assert(words.isNotEmpty);
   if (number == 1.0) {
@@ -70,7 +76,7 @@ String _pluralEn(num number, List<String> words) {
       ch1 == 'x') {
     return '${singular}es';
   }
-  if (ch1 == 'y') {
+  if (ch1 == 'y' && !_enVowels.contains(ch2)) {
     return '${singular.substring(0, singular.length - 1)}ies';
   }
   return '${singular}s';
@@ -108,34 +114,36 @@ String _plural8(num number, List<String> words) {
 /// Polish (pl)
 String _plural25(num number, List<String> words) {
   final i = number.toInt();
-  if (i == number) {
-    if (i == 1) {
-      return words[0];
-    }
-    if ((i % 10) >= 2 && (i % 10) <= 4 && ((i % 100) < 12 || (i % 100) > 14)) {
-      return words[1];
-    }
+  final iMod10 = i % 10;
+  final iMod100 = i % 100;
+  if (i == 1) {
+    return words[0];
   }
-  if (((i != 1) && (i % 10) >= 0 && (i % 10) <= 1) ||
-      ((i % 10) >= 5 && (i % 10) <= 9) ||
-      ((i % 100) >= 12 && (i % 100) <= 14)) {
-    return words[2];
+  if (iMod10 >= 2 && iMod10 <= 4 && (iMod100 < 12 || iMod100 > 14)) {
+    return words[1];
   }
-  return words[3];
+  return words[2];
 }
 
 /// Ukrainian (uk), Russian (ru)
+///
+/// The function requires 3 forms of the word: single-, few-, and many-. You
+/// can think of them as words needed for "1 X", "2 X", and "10 X". For example,
+/// the words for "рушниця" (rifle) would be:
+/// ```
+/// plural(n, ["рушниця", "рушниці", "рушниць"])
+/// ```
 String _plural29(num number, List<String> words) {
   final i = number.toInt();
   if (i == number) {
     final iMod10 = i % 10;
     final iMod100 = i % 100;
     if (iMod10 == 1 && iMod100 != 11) {
-      return words[1];
+      return words[0];
     }
     if (iMod10 >= 2 && iMod10 <= 4 && (iMod100 < 12 || iMod100 > 14)) {
-      return words[2];
+      return words[1];
     }
   }
-  return words[0];
+  return words[2];
 }

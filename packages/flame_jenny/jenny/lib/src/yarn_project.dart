@@ -4,7 +4,6 @@ import 'package:jenny/src/command_storage.dart';
 import 'package:jenny/src/errors.dart';
 import 'package:jenny/src/localization.dart';
 import 'package:jenny/src/parse/parse.dart' as impl;
-import 'package:jenny/src/structure/expressions/functions/plural.dart';
 import 'package:jenny/src/structure/node.dart';
 import 'package:jenny/src/variable_storage.dart';
 
@@ -37,6 +36,7 @@ class YarnProject {
   /// needed.
   Random random;
 
+  /// Settings related to localization.
   late Localization localization;
 
   /// Parses a single yarn file, given as a [text] string.

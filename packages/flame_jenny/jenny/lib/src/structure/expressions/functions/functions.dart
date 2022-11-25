@@ -10,7 +10,6 @@ Random $randomGenerator = Random();
 // TODO(st-pasha): visited(String nodeName)
 // TODO(st-pasha): visited_count(String nodeName)
 
-
 /// Function `round(x)` will round `x` to the nearest integer.
 class RoundFn extends NumExpression {
   const RoundFn(this.arg);

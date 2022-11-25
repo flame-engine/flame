@@ -1,15 +1,14 @@
-
 import 'package:jenny/src/parse/parse.dart';
 import 'package:jenny/src/structure/expressions/expression.dart';
 import 'package:meta/meta.dart';
 
 @internal
 Expression num1Builder(
-    String name,
-    Expression Function(NumExpression) constructor,
-    List<FunctionArgument> args,
-    ErrorFn errorFn,
-    ) {
+  String name,
+  Expression Function(NumExpression) constructor,
+  List<FunctionArgument> args,
+  ErrorFn errorFn,
+) {
   if (args.length != 1) {
     errorFn('function $name() requires a single argument');
   }
@@ -21,11 +20,11 @@ Expression num1Builder(
 
 @internal
 Expression num2Builder(
-    String name,
-    Expression Function(NumExpression, NumExpression) constructor,
-    List<FunctionArgument> args,
-    ErrorFn errorFn,
-    ) {
+  String name,
+  Expression Function(NumExpression, NumExpression) constructor,
+  List<FunctionArgument> args,
+  ErrorFn errorFn,
+) {
   if (args.length != 2) {
     errorFn('function $name() requires 2 arguments');
   }

@@ -1,4 +1,3 @@
-
 import 'package:jenny/src/errors.dart';
 import 'package:jenny/src/parse/parse.dart';
 import 'package:jenny/src/structure/expressions/expression.dart';
@@ -12,10 +11,10 @@ class DiceFn extends NumExpression {
   final YarnProject _yarn;
 
   static Expression make(
-      List<FunctionArgument> args,
-      YarnProject yarnProject,
-      ErrorFn errorFn,
-      ) {
+    List<FunctionArgument> args,
+    YarnProject yarnProject,
+    ErrorFn errorFn,
+  ) {
     if (args.length != 1) {
       errorFn('function dice() requires a single argument');
     }
