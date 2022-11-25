@@ -787,18 +787,16 @@ class _Parser {
       } else if (project.variables.hasVariable(name)) {
         return project.variables.getVariableAsExpression(name);
       } else {
-        position -= 1;
-        nameError('variable $name is not defined');
+        nameError('variable $name is not defined', position - 1);
       }
     } else if (token.isId) {
-      final position0 = position;
       final name = token.content;
-      take(Token.startParenthesis, 'an opening parenthesis "(" is expected');
-      final arguments = parseFunctionArguments();
       final builder = builtinFunctions[name];
       if (builder == null) {
-        nameError('unknown function name $name', position0);
+        nameError('unknown function name $name', position - 1);
       }
+      take(Token.startParenthesis, 'an opening parenthesis "(" is expected');
+      final arguments = parseFunctionArguments();
       final functionExpr = builder(arguments, project, typeError);
       take(Token.endParenthesis, 'missing closing ")"');
       return functionExpr;
