@@ -1085,6 +1085,94 @@ Check the example app
 for details on how to use it.
 
 
+## ComponentsNotifier
+
+Most of the time just accessing children and their attributes is enough to build the logic of
+your game.
+
+But sometimes, reactivity can help the developer to simplify and write better code, to help with
+that Flame provides the `ComponentsNotifier`, which is an implementation of a
+`ChangeNotifier` that notifies listeners every time a component is added, removed or manually
+changed.
+
+For example, lets say that we want to show a game over text when the player's lives reach zero.
+
+To make the component automatically report when new instances are added or removed, the `Notifier`
+mixin can be applied to the component class:
+
+```dart
+class Player extends SpriteComponent with Notifier {}
+```
+
+Then to listen to changes on that component the `componentsNotifier` method from `FlameGame` can
+be used:
+
+```dart
+class MyGame extends FlameGame {
+  int lives = 2;
+
+  Future<void> onLoad() {
+  final playerNotifier = componentsNotifier<Player>()
+    ..addListener(() {
+      final player = playerNotifier.single;
+      if (player == null) {
+        lives--;
+        if (lives == 0) {
+          add(GameOverComponent());
+        } else {
+          add(Player());
+        }
+      }
+    });
+  }
+}
+```
+
+A `Notifier` component can also manually notify its listeners that something changed. Lets expand
+the example above to make a hud component to blink when the player has half of their health. In
+order to do so, we need that the `Player` component notify a change manually, example:
+
+```dart
+class Player extends SpriteComponent with Notifier {
+  double health = 1;
+
+  void takeHit() {
+    health -= .1;
+    if (health == 0) {
+      removeFromParent();
+    } else if (health <= .5) {
+      notifyListeners();
+    }
+  }
+}
+```
+
+Then our hud component could look like:
+
+```dart
+class Hud extends PositionComponent with HasGameRef {
+
+  Future<void> onLoad() {
+  final playerNotifier = gameRef.componentsNotifier<Player>()
+    ..addListener(() {
+      final player = playerNotifier.single;
+      if (player != null) {
+        if (player.health <= .5) {
+          add(BlinkEffect());
+        }
+      }
+    });
+  }
+}
+```
+
+`ComponentsNotifier`s can also come in handy to rebuild widgets when state changes inside a
+`FlameGame`, to help with that Flame provides a `ComponentsNotifierBuilder` widget.
+
+To see an example of its use check the running example
+[here](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/components/components_notifier_example.dart);
+
+
 ## ClipComponent
 
 A `ClipComponent` is a component that will clip the canvas to its size and shape. This means that
