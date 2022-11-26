@@ -25,7 +25,7 @@ mixin HasQuadTreeCollisionDetection on FlameGame
     _collisionDetection = cd;
   }
 
-  /// Initialise the QuadTree.
+  /// Initialize the QuadTree.
   ///
   /// - [mapDimensions] describes the collision area coordinates and size.
   ///   Should match to game map's position and size.

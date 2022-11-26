@@ -57,9 +57,9 @@ class SpriteFont {
   final double ascent;
 
   /// Contains information about the characters of the font. The keys in this
-  /// map are the characters' codepoints. If a particular "character" has a
-  /// length greater than 1, then the key will be the first codepoint of this
-  /// character, and all subsequent codepoints will be stored within the
+  /// map are the characters' code points. If a particular "character" has a
+  /// length greater than 1, then the key will be the first code point of this
+  /// character, and all subsequent code points will be stored within the
   /// [_Chain].
   final Map<int, _Chain> _data;
 

@@ -193,7 +193,7 @@ In some cases you may want to merge multiple images into a single image; this is
 [Compositing](https://en.wikipedia.org/wiki/Compositing). This can be useful for example when
 working with the [SpriteBatch](#spritebatch) API to optimize your drawing calls.
 
-For such usecases Flame comes with the `ImageComposition` class. This allows you to add multiple
+For such use cases Flame comes with the `ImageComposition` class. This allows you to add multiple
 images, each at their own position, onto a new image:
 
 ```dart
@@ -278,7 +278,7 @@ final animation = SpriteAnimation.fromAsepriteData(image, jsonData);
 ```
 
 **Note:** trimmed sprite sheets are not supported by flame, so if you export your sprite sheet this
-kway, it will have the trimmed size, not the sprite original size.
+way, it will have the trimmed size, not the sprite original size.
 
 Animations, after created, have an update and render method; the latter renders the current frame,
 and the former ticks the internal clock to update the frames.

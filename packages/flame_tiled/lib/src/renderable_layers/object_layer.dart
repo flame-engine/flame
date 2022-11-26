@@ -18,7 +18,7 @@ class ObjectLayer extends RenderableLayer<ObjectGroup> {
     // nothing to do
   }
 
-  // ignore unrenderable layers when looping over the layers to render
+  // ignore non-renderable layers when looping over the layers to render
   @override
   bool get visible => false;
 
