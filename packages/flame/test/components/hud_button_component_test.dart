@@ -96,6 +96,7 @@ void main() {
           button: RectangleComponent(size: componentSize),
           onPressed: () => pressedTimes++,
           onReleased: () => releasedTimes++,
+          onCancelled: () => cancelledTimes++,
           size: componentSize,
           margin: margin,
         ),
