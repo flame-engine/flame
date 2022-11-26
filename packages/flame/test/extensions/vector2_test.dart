@@ -213,6 +213,28 @@ void main() {
       });
     });
 
+    group('clampLength', () {
+      test('clamp length min', () {
+        final v = Vector2(1, 0)..clampLength(2.0, 3.0);
+        expect(v.length, 2.0);
+      });
+
+      test('clamp length max', () {
+        final v = Vector2(1, 0)..clampLength(0.5, 0.8);
+        expect(v.length, 0.8);
+      });
+
+      test('clamp negative vector', () {
+        final v = Vector2(-1, -1)..clampLength(0.5, 0.8);
+        expect(v.length, 0.8);
+      });
+
+      test('no effect on vector in range', () {
+        final v = Vector2(1, 0)..clampLength(0.5, 2.0);
+        expect(v.length, 1.0);
+      });
+    });
+
     group('projection', () {
       test('Project onto longer vector', () {
         final u = Vector2(5, 2);

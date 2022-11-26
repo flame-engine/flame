@@ -65,6 +65,27 @@ example, some components may decide to skip rendering themselves and their
 children if they are outside of the camera's viewport.
 
 
+### CameraComponent.withFixedResolution()
+
+This factory constructor will let you pretend that the user's device has a fixed resolution of your
+choice. For example:
+
+```dart
+final camera = CameraComponent.withFixedResolution(
+  world: myWorldComponent,
+  width: 800,
+  height: 600,
+);
+```
+
+This will create a camera with a viewport centered in the middle of the screen, taking as much
+space as possible while still maintaining the 800:600 aspect ratio, and showing a game world region
+of size 800 x 600.
+
+A "fixed resolution" is very simple to work with, but it will underutilize the user's available
+screen space, unless their device happens to have the same pixel ratio as your chosen dimensions.
+
+
 ## Viewport
 
 The `Viewport` is a window through which the `World` is seen. That window
