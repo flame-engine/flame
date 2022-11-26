@@ -74,7 +74,7 @@ only a part of the screen.
 
 By default, routes maintain the state of the page component after being popped from the stack
 and the `builder` function is only called the first time a route is activated.  Setting
-`pageTransient` to `true` drops the page component after the route is popped from the route stack
+`pagePermanent` to `false` drops the page component after the route is popped from the route stack
 and the `builder` function is called each time the route is activated.
 
 

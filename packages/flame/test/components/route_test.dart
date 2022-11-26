@@ -71,7 +71,7 @@ void main() {
       expect(router.currentRoute.name, 'start');
     });
 
-    testWithFlameGame('pageTransient false', (game) async {
+    testWithFlameGame('pagePermanent true', (game) async {
       var onPushCalled = 0;
       var onPopCalled = 0;
       var buildFirstCalled = 0;
@@ -111,7 +111,7 @@ void main() {
       )..addToParent(game);
       await game.ready();
 
-      //Go to first route
+      // Go to first route
       router.pushNamed('first');
       expect(buildFirstCalled, 1);
       await game.ready();
@@ -129,7 +129,7 @@ void main() {
       expect(previousRoute!.name, 'start');
       expect(router.currentRoute.name, 'start');
 
-      //Go to second route after first route is popped
+      // Go to second route after first route is popped
       router.pushNamed('second');
       expect(buildFirstCalled, 1);
       await game.ready();
@@ -147,7 +147,7 @@ void main() {
       expect(previousRoute!.name, 'start');
       expect(router.currentRoute.name, 'start');
 
-      //Go to first route again after popping second route
+      // Go to first route again after popping second route
       router.pushNamed('first');
       expect(buildFirstCalled, 1);
       await game.ready();
@@ -158,7 +158,7 @@ void main() {
       expect(previousRoute!.name, 'start');
     });
 
-    testWithFlameGame('pageTransient true', (game) async {
+    testWithFlameGame('pagePermanent false', (game) async {
       var onPushCalled = 0;
       var onPopCalled = 0;
       var buildFirstCalled = 0;
@@ -169,7 +169,7 @@ void main() {
         routes: {
           'start': Route(Component.new),
           'first': CustomRoute(
-            pageTransient: true,
+            pagePermanent: false,
             onPush: (self, prevRoute) {
               onPushCalled++;
               previousRoute = prevRoute;
@@ -201,7 +201,7 @@ void main() {
       )..addToParent(game);
       await game.ready();
 
-      //Go to first route
+      // Go to first route
       router.pushNamed('first');
       expect(buildFirstCalled, 1);
       await game.ready();
@@ -220,7 +220,7 @@ void main() {
       expect(previousRoute!.name, 'start');
       expect(router.currentRoute.name, 'start');
 
-      //Go to second route after first route is popped
+      // Go to second route after first route is popped
       router.pushNamed('second');
       expect(buildFirstCalled, 1);
       await game.ready();
@@ -239,8 +239,8 @@ void main() {
       expect(previousRoute!.name, 'start');
       expect(router.currentRoute.name, 'start');
 
-      //Go to first route again after popping second route
-      //Expect the build method to be called again
+      // Go to first route again after popping second route
+      // Expect the build method to be called again
       router.pushNamed('first');
       expect(buildFirstCalled, 2);
       await game.ready();
@@ -470,7 +470,7 @@ class CustomRoute extends Route {
   CustomRoute({
     Component Function()? builder,
     super.transparent,
-    super.pageTransient,
+    super.pagePermanent,
     void Function(Route, Route?)? onPush,
     void Function(Route, Route)? onPop,
     Component Function(Route)? build,
