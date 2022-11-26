@@ -37,6 +37,7 @@ import 'package:jenny/src/structure/expressions/functions/visit_count.dart';
 import 'package:jenny/src/structure/expressions/functions/visited.dart';
 import 'package:jenny/src/structure/expressions/literal.dart';
 import 'package:jenny/src/structure/expressions/logical.dart';
+import 'package:jenny/src/structure/expressions/logical/not.dart';
 import 'package:jenny/src/structure/expressions/relational.dart';
 import 'package:jenny/src/structure/expressions/string.dart';
 import 'package:jenny/src/structure/line_content.dart';
@@ -805,8 +806,7 @@ class _Parser {
       final lhs = parsePrimary();
       final arg = _parseExpressionImpl(lhs, precedences[Token.operatorNot]!);
       if (!arg.isBoolean) {
-        position = position0;
-        typeError('operator `not` can only be applied to booleans');
+        typeError('operator `not` can only be applied to booleans', position0);
       }
       return LogicalNot(arg as BoolExpression);
     }
