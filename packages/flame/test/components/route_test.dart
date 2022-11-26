@@ -71,7 +71,7 @@ void main() {
       expect(router.currentRoute.name, 'start');
     });
 
-    testWithFlameGame('pagePermanent true', (game) async {
+    testWithFlameGame('maintainState true', (game) async {
       var onPushCalled = 0;
       var onPopCalled = 0;
       var buildFirstCalled = 0;
@@ -158,7 +158,7 @@ void main() {
       expect(previousRoute!.name, 'start');
     });
 
-    testWithFlameGame('pagePermanent false', (game) async {
+    testWithFlameGame('maintainState false', (game) async {
       var onPushCalled = 0;
       var onPopCalled = 0;
       var buildFirstCalled = 0;
@@ -169,7 +169,7 @@ void main() {
         routes: {
           'start': Route(Component.new),
           'first': CustomRoute(
-            pagePermanent: false,
+            maintainState: false,
             onPush: (self, prevRoute) {
               onPushCalled++;
               previousRoute = prevRoute;
@@ -470,7 +470,7 @@ class CustomRoute extends Route {
   CustomRoute({
     Component Function()? builder,
     super.transparent,
-    super.pagePermanent,
+    super.maintainState,
     void Function(Route, Route?)? onPush,
     void Function(Route, Route)? onPop,
     Component Function(Route)? build,
