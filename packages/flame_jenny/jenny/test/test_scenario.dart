@@ -13,29 +13,37 @@ import 'package:test/test.dart';
 /// for convenience.
 @isTest
 Future<void> testScenario({
-  required String testName,
+  String? testName,
   required String input,
   required String testPlan,
   bool skip = false,
   List<String>? commands,
+  YarnProject? yarn,
 }) async {
-  test(
-    testName,
-    () async {
-      final yarn = YarnProject();
-      commands?.forEach(yarn.commands.addDialogueCommand);
-      yarn.parse(dedent(input));
-      final plan = _TestPlan(dedent(testPlan));
-      final dialogue = DialogueRunner(yarnProject: yarn, dialogueViews: [plan]);
-      await dialogue.runNode(plan.startNode);
-      assert(
-        plan.done,
-        'Expected: ${plan.nextEntry}\n'
-        'Actual  : END OF DIALOGUE\n',
-      );
-    },
-    skip: skip,
-  );
+  final yarnProject = yarn ?? YarnProject();
+  commands?.forEach(yarnProject.commands.addDialogueCommand);
+
+  Future<void> testBody() async {
+    yarnProject.parse(dedent(input));
+    final plan = _TestPlan(dedent(testPlan));
+    final dialogue = DialogueRunner(
+      yarnProject: yarnProject,
+      dialogueViews: [plan],
+    );
+    await dialogue.runNode(plan.startNode);
+    assert(
+      plan.done,
+      '\n'
+      'Expected: ${plan.nextEntry}\n'
+      'Actual  : END OF DIALOGUE\n',
+    );
+  }
+
+  if (testName == null) {
+    return testBody();
+  } else {
+    test(testName, testBody, skip: skip);
+  }
 }
 
 /// Removes common indent from a multi-line [input] string.
