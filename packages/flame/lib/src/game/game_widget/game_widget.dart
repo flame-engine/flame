@@ -3,11 +3,10 @@ import 'dart:async';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
+import 'package:flame/src/game/game_render_box.dart';
 import 'package:flame/src/game/game_widget/gestures.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-
-import '../game_render_box.dart';
 
 typedef GameLoadingWidgetBuilder = Widget Function(
   BuildContext,

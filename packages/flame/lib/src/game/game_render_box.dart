@@ -1,4 +1,4 @@
-import 'package:flame/src/game/game.dart';
+import 'package:flame/game.dart';
 import 'package:flame/src/game/game_loop.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart' hide WidgetBuilder;
