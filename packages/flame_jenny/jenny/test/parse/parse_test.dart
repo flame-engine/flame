@@ -583,6 +583,18 @@ void main() {
         );
       });
 
+      test('unknown function', () {
+        expect(
+          () => YarnProject().parse('title:A\n---\n{ foo() }\n===\n'),
+          hasNameError(
+            'NameError: unknown function name foo\n'
+            '>  at line 3 column 3:\n'
+            '>  { foo() }\n'
+            '>    ^\n',
+          ),
+        );
+      });
+
       test('invalid expression', () {
         expect(
           () => YarnProject().parse('title:A\n---\n'

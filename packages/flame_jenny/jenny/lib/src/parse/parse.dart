@@ -17,7 +17,24 @@ import 'package:jenny/src/structure/dialogue_line.dart';
 import 'package:jenny/src/structure/dialogue_option.dart';
 import 'package:jenny/src/structure/expressions/arithmetic.dart';
 import 'package:jenny/src/structure/expressions/expression.dart';
-import 'package:jenny/src/structure/expressions/functions.dart';
+import 'package:jenny/src/structure/expressions/functions/_utils.dart';
+import 'package:jenny/src/structure/expressions/functions/bool.dart';
+import 'package:jenny/src/structure/expressions/functions/ceil.dart';
+import 'package:jenny/src/structure/expressions/functions/dec.dart';
+import 'package:jenny/src/structure/expressions/functions/decimal.dart';
+import 'package:jenny/src/structure/expressions/functions/dice.dart';
+import 'package:jenny/src/structure/expressions/functions/floor.dart';
+import 'package:jenny/src/structure/expressions/functions/inc.dart';
+import 'package:jenny/src/structure/expressions/functions/int.dart';
+import 'package:jenny/src/structure/expressions/functions/number.dart';
+import 'package:jenny/src/structure/expressions/functions/plural.dart';
+import 'package:jenny/src/structure/expressions/functions/random.dart';
+import 'package:jenny/src/structure/expressions/functions/random_range.dart';
+import 'package:jenny/src/structure/expressions/functions/round.dart';
+import 'package:jenny/src/structure/expressions/functions/round_places.dart';
+import 'package:jenny/src/structure/expressions/functions/string.dart';
+import 'package:jenny/src/structure/expressions/functions/visit_count.dart';
+import 'package:jenny/src/structure/expressions/functions/visited.dart';
 import 'package:jenny/src/structure/expressions/literal.dart';
 import 'package:jenny/src/structure/expressions/logical.dart';
 import 'package:jenny/src/structure/expressions/relational.dart';
@@ -71,12 +88,14 @@ class _Parser {
       }
       final header = parseNodeHeader();
       final block = parseNodeBody();
-      project.nodes[header.title!] = Node(
-        title: header.title!,
+      final name = header.title!;
+      project.nodes[name] = Node(
+        title: name,
         tags: header.tags,
         content: block,
         variables: localVariables,
       );
+      project.variables.setVariable('@$name', 0);
       localVariables = null;
     }
   }
@@ -235,11 +254,9 @@ class _Parser {
         expressions.add(
           InlineExpression(
             stringBuilder.length,
-            expression.isNumeric
-                ? NumToStringFn(expression as NumExpression)
-                : expression.isBoolean
-                    ? BoolToStringFn(expression as BoolExpression)
-                    : expression as StringExpression,
+            expression.isString
+                ? expression as StringExpression
+                : StringFn(expression),
           ),
         );
       } else if (token == Token.startMarkupTag) {
@@ -707,6 +724,9 @@ class _Parser {
     // We're using the Operator-Precedence parsing algorithm here, see
     // https://en.wikipedia.org/wiki/Operator-precedence_parser
     final lhs = parsePrimary();
+    if (lhs == constVoid) {
+      return lhs;
+    }
     return _parseExpressionImpl(lhs, 0);
   }
 
@@ -742,10 +762,7 @@ class _Parser {
     position += 1;
     if (token == Token.startParenthesis) {
       final expression = parseExpression();
-      if (peekToken() != Token.endParenthesis) {
-        syntaxError('missing closing ")"');
-      }
-      position += 1;
+      take(Token.endParenthesis, 'missing closing ")"');
       return expression;
     } else if (token == Token.operatorMinus) {
       final expression = parsePrimary();
@@ -770,12 +787,19 @@ class _Parser {
       } else if (project.variables.hasVariable(name)) {
         return project.variables.getVariableAsExpression(name);
       } else {
-        position -= 1;
-        nameError('variable $name is not defined');
+        nameError('variable $name is not defined', position - 1);
       }
     } else if (token.isId) {
-      // Function call
-      throw UnimplementedError();
+      final name = token.content;
+      final builder = builtinFunctions[name];
+      if (builder == null) {
+        nameError('unknown function name $name', position - 1);
+      }
+      take(Token.startParenthesis, 'an opening parenthesis "(" is expected');
+      final arguments = parseFunctionArguments();
+      final functionExpr = builder(arguments, project, typeError);
+      take(Token.endParenthesis, 'missing closing ")"');
+      return functionExpr;
     } else if (token == Token.operatorNot) {
       final position0 = position;
       final lhs = parsePrimary();
@@ -788,6 +812,27 @@ class _Parser {
     }
     position -= 1;
     return constVoid;
+  }
+
+  List<FunctionArgument> parseFunctionArguments() {
+    final out = <FunctionArgument>[];
+    while (true) {
+      final position0 = position;
+      final expression = parseExpression();
+      if (expression == constVoid) {
+        break;
+      }
+      out.add(FunctionArgument(expression, position0));
+      final nextToken = peekToken();
+      if (nextToken == Token.comma) {
+        position += 1;
+      } else if (nextToken == Token.endParenthesis) {
+        break;
+      } else {
+        syntaxError('unexpected token');
+      }
+    }
+    return out;
   }
 
   Expression _add(Expression lhs, Expression rhs, int opPosition) {
@@ -971,6 +1016,27 @@ class _Parser {
     Token.operatorXor: _xor,
   };
 
+  static const Map<String, FunctionBuilder> builtinFunctions = {
+    'bool': BoolFn.make,
+    'ceil': CeilFn.make,
+    'dec': DecFn.make,
+    'decimal': DecimalFn.make,
+    'dice': DiceFn.make,
+    'floor': FloorFn.make,
+    'inc': IncFn.make,
+    'int': IntFn.make,
+    'number': NumberFn.make,
+    'plural': PluralFn.make,
+    'random': RandomFn.make,
+    'random_range': RandomRangeFn.make,
+    'round': RoundFn.make,
+    'round_places': RoundPlacesFn.make,
+    'string': StringFn.make,
+    'visit_count': VisitCountFn.make,
+    'visited_count': VisitCountFn.make,
+    'visited': VisitedFn.make,
+  };
+
   //#endregion
 
   //----------------------------------------------------------------------------
@@ -999,7 +1065,7 @@ class _Parser {
     syntaxError('expected end of line');
   }
 
-  bool take(Token token) {
+  bool take(Token token, [String? message]) {
     if (position >= tokens.length) {
       syntaxError('unexpected end of file');
     }
@@ -1007,7 +1073,7 @@ class _Parser {
       position += 1;
       return true;
     }
-    return syntaxError('unexpected token');
+    return syntaxError(message ?? 'unexpected token');
   }
 
   bool takeTokenType(TokenType type) {
@@ -1018,17 +1084,33 @@ class _Parser {
     return syntaxError('unexpected token');
   }
 
-  Never nameError(String message) => _error(message, NameError.new);
-  Never syntaxError(String message) => _error(message, SyntaxError.new);
-  Never typeError(String message) => _error(message, TypeError.new);
+  Never nameError(String message, [int? position]) =>
+      _error(message, position, NameError.new);
 
-  Never _error(String message, Exception Function(String) errorConstructor) {
-    final newTokens = tokenize(text, addErrorTokenAtIndex: position);
-    final errorToken = newTokens[position];
+  Never syntaxError(String message, [int? position]) =>
+      _error(message, position, SyntaxError.new);
+
+  Never typeError(String message, [int? position]) =>
+      _error(message, position, TypeError.new);
+
+  Never _error(
+    String message,
+    int? position,
+    Exception Function(String) errorConstructor,
+  ) {
+    final errorPosition = position ?? this.position;
+    final newTokens = tokenize(text, addErrorTokenAtIndex: errorPosition);
+    final errorToken = newTokens[errorPosition];
     final location = errorToken.content;
     throw errorConstructor('$message\n$location\n');
   }
 }
+
+typedef FunctionBuilder = Expression Function(
+  List<FunctionArgument>,
+  YarnProject,
+  ErrorFn,
+);
 
 class _NodeHeader {
   _NodeHeader(this.title, this.tags);

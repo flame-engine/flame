@@ -73,13 +73,24 @@ class DialogueRunner {
         final entry = iterator.current;
         await entry.processInDialogueRunner(this);
       } else {
-        _iterators.removeLast();
-        _currentNodes.removeLast();
+        _finishCurrentNode();
       }
     }
     await _combineFutures(
       [for (final view in _dialogueViews) view.onDialogueFinish()],
     );
+  }
+
+  void _finishCurrentNode() {
+    // Increment visit count for the node
+    assert(_currentNodes.isNotEmpty);
+    final nodeVariable = '@${_currentNodes.last.title}';
+    project.variables.setVariable(
+      nodeVariable,
+      project.variables.getNumericValue(nodeVariable) + 1,
+    );
+    _currentNodes.removeLast();
+    _iterators.removeLast();
   }
 
   void sendSignal(dynamic signal) {
@@ -141,8 +152,7 @@ class DialogueRunner {
 
   @internal
   Future<void> jumpToNode(String nodeName) async {
-    _currentNodes.removeLast();
-    _iterators.removeLast();
+    _finishCurrentNode();
     return runNode(nodeName);
   }
 

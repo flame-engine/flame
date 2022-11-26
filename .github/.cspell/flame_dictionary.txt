@@ -2,6 +2,7 @@ Artboard
 Aseprite
 Audioplayers
 BGUG
+Bodymovin
 Dashbook
 Fireslime
 Hermione
@@ -16,6 +17,7 @@ Spritecow
 Tiled
 Tiled's
 Tilemap
+Wyrmsun
 caveace
 erayzesen
 padracing
@@ -25,6 +27,7 @@ stpasha
 tavian
 trex
 wolfenrain
-Wyrmsun
-Bodymovin
 xaha
+рушниці
+рушниць
+рушниця
