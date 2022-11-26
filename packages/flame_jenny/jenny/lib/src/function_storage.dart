@@ -6,10 +6,40 @@ import 'package:jenny/src/structure/expressions/functions/user_defined_function.
 import 'package:jenny/src/yarn_project.dart';
 import 'package:meta/meta.dart';
 
+/// [FunctionStorage] is the container for all user-defined functions in a yarn
+/// project.
+///
+/// This repository is populates by the user, with methods [addFunction0],
+/// [addFunction1], [addFunction2], [addFunction3], [addFunction4], depending
+/// on the number of arguments of the function.
+///
+/// A function can be registered as a user-defined function if it satisfies the
+/// following conditions:
+/// - its return type is one of `int`, `double`, `num`, `bool`, or `String`;
+/// - all its arguments have types `int`, `int?`, `double`, `double?`, `num`,
+///   `num?`, `bool`, `bool?`, `String`, or `String?`;
+/// - the nullable arguments must be after the non-nullable ones. These
+///   arguments become optional in Yarn script, and if not provided they will
+///   be passed as `null` values;
+/// - the first argument in a function can also be `YarnProject`. If such
+///   argument is present, then it will be passed automatically. For example,
+///   if you have a function `fn(YarnProject, int)`, then it can be invoked
+///   from the yarn script simply as `fn(1)`.
+///
+/// The functions must be added to the YarnProject before parsing the yarn
+/// scripts, since the parser would throw an error if it sees a function which
+/// it does not recognize.
 class FunctionStorage {
-  FunctionStorage() : _functions = <String, Udf>{};
+  FunctionStorage();
 
-  final Map<String, Udf> _functions;
+  /// The central repository of all functions registered in this
+  /// function storage.
+  final Map<String, Udf> _functions = {};
+
+  /// Number of functions that have been registered.
+  int get length => _functions.length;
+  bool get isEmpty => _functions.isEmpty;
+  bool get isNotEmpty => _functions.isNotEmpty;
 
   /// Returns `true` if function with the given [name] has been registered.
   bool hasFunction(String name) => _functions.containsKey(name);
@@ -77,7 +107,7 @@ class FunctionStorage {
         case ExpressionType.string:
           return StringUserDefinedFn(function, arguments);
         default:
-          throw AssertionError('Unexpected function return type');
+          throw AssertionError('Bad return type'); // coverage:ignore-line
       }
     };
   }
@@ -193,42 +223,49 @@ class Udf {
   }
 
   static ExpressionType _convertReturnType(Type type) {
-    if (type is String) {
+    if (type == String) {
       return ExpressionType.string;
-    } else if (type is bool) {
+    } else if (type == bool) {
       return ExpressionType.boolean;
-    } else if (type is int || type is double || type is num) {
+    } else if (type == int || type == double || type == num) {
       return ExpressionType.numeric;
     }
     throw TypeError(
-      'Unsupported return type, expected one of: bool, int, double, num, '
-      'or String',
+      'Unsupported return type <$type>, expected one of: bool, int, double, '
+      'num, or String',
     );
   }
+
+  static Type _getType<T>() => T;
+  static final Type _maybeInt = _getType<int?>();
+  static final Type _maybeBool = _getType<bool?>();
+  static final Type _maybeDouble = _getType<double?>();
+  static final Type _maybeNum = _getType<num?>();
+  static final Type _maybeString = _getType<String?>();
 
   static List<_Type> _convertArgumentTypes(List<Type> types) {
     final outTypes = <_Type>[];
     for (final type in types) {
-      if (type is YarnProject) {
+      if (type == YarnProject) {
         if (outTypes.isNotEmpty) {
           throw TypeError(
             'Argument of type YarnProject must be the first in a function',
           );
         }
         outTypes.add(_Type.yarn);
-      } else if (type is int || type is int?) {
+      } else if (type == int || type == _maybeInt) {
         outTypes.add(_Type.integer);
-      } else if (type is num || type is num?) {
+      } else if (type == num || type == _maybeNum) {
         outTypes.add(_Type.numeric);
-      } else if (type is double || type is double?) {
+      } else if (type == double || type == _maybeDouble) {
         outTypes.add(_Type.double);
-      } else if (type is bool || type is bool?) {
+      } else if (type == bool || type == _maybeBool) {
         outTypes.add(_Type.boolean);
-      } else if (type is String || type is String?) {
+      } else if (type == String || type == _maybeString) {
         outTypes.add(_Type.string);
       } else {
         throw TypeError(
-          'Unsupported type $type for argument at index ${outTypes.length}',
+          'Unsupported type <$type> for argument at index ${outTypes.length}',
         );
       }
     }
@@ -238,11 +275,12 @@ class Udf {
   static int _countOptionalArguments(List<Type> types) {
     var nOptionalArguments = 0;
     for (final type in types) {
-      final isOptional = (type is int?) ||
-          (type is bool?) ||
-          (type is double?) ||
-          (type is num?) ||
-          (type is String?);
+      final isOptional = false ||
+          (type == _maybeInt) ||
+          (type == _maybeBool) ||
+          (type == _maybeDouble) ||
+          (type == _maybeNum) ||
+          (type == _maybeString);
       if (isOptional) {
         nOptionalArguments += 1;
       } else if (nOptionalArguments > 0) {
