@@ -145,6 +145,32 @@ void main() {
       );
     });
 
+    test('Functions.yarn', () async {
+      final yarn = YarnProject();
+      yarn.functions.addFunction3(
+        'add_three_operands',
+        (num x, num y, num z) => x + y + z,
+      );
+      await testScenario(
+        yarn: yarn,
+        input: '''
+          title: Start
+          ---
+          // Function tests
+          // "add_three_operands" is a function that sums three operands
+          assert -> { add_three_operands(1, 2, 4*1) == 7 }
+          
+          // function calls as parameters
+          assert -> {add_three_operands(1, 2, add_three_operands(1,2,3)) == 9}
+          ===
+        ''',
+        testPlan: '''
+          line: assert -> true
+          line: assert -> true
+        ''',
+      );
+    });
+
     group('errors', () {
       test('invalid function name', () {
         for (final name in ['', '++', 'very nice', '1object']) {
