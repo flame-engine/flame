@@ -13,6 +13,7 @@ void main() {
         'correctly registers taps', GameWithTappables.new, (game) async {
       var pressedTimes = 0;
       var releasedTimes = 0;
+      var cancelledTimes = 0;
       final initialGameSize = Vector2.all(100);
       final componentSize = Vector2.all(10);
       final buttonPosition = Vector2.all(100);
@@ -23,6 +24,7 @@ void main() {
           button: RectangleComponent(size: componentSize),
           onPressed: () => pressedTimes++,
           onReleased: () => releasedTimes++,
+          onCancelled: () => cancelledTimes++,
           position: buttonPosition,
           size: componentSize,
         ),
@@ -30,10 +32,12 @@ void main() {
 
       expect(pressedTimes, 0);
       expect(releasedTimes, 0);
+      expect(cancelledTimes, 0);
 
       game.onTapDown(1, createTapDownEvent(game));
       expect(pressedTimes, 0);
       expect(releasedTimes, 0);
+      expect(cancelledTimes, 0);
 
       game.onTapUp(
         1,
@@ -44,6 +48,7 @@ void main() {
       );
       expect(pressedTimes, 0);
       expect(releasedTimes, 0);
+      expect(cancelledTimes, 0);
 
       game.onTapDown(
         1,
@@ -54,6 +59,7 @@ void main() {
       );
       expect(pressedTimes, 1);
       expect(releasedTimes, 0);
+      expect(cancelledTimes, 0);
 
       game.onTapUp(
         1,
@@ -64,6 +70,12 @@ void main() {
       );
       expect(pressedTimes, 1);
       expect(releasedTimes, 1);
+      expect(cancelledTimes, 0);
+
+      game.onTapCancel(1);
+      expect(pressedTimes, 1);
+      expect(releasedTimes, 1);
+      expect(cancelledTimes, 1);
     });
 
     testWithGame<GameWithTappables>(
@@ -71,6 +83,7 @@ void main() {
         (game) async {
       var pressedTimes = 0;
       var releasedTimes = 0;
+      var cancelledTimes = 0;
       final initialGameSize = Vector2.all(100);
       final componentSize = Vector2.all(10);
       final buttonPosition = Vector2.all(100);
@@ -98,6 +111,7 @@ void main() {
       );
       expect(pressedTimes, 1);
       expect(releasedTimes, 0);
+      expect(cancelledTimes, 0);
 
       game.onTapUp(
         1,
@@ -108,6 +122,12 @@ void main() {
       );
       expect(pressedTimes, 1);
       expect(releasedTimes, 1);
+      expect(cancelledTimes, 0);
+
+      game.onTapCancel(1);
+      expect(pressedTimes, 1);
+      expect(releasedTimes, 1);
+      expect(cancelledTimes, 1);
     });
 
     testWidgets(

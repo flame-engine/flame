@@ -12,20 +12,20 @@ class ButtonComponent extends PositionComponent with Tappable {
   late final PositionComponent? buttonDown;
 
   /// Callback for what should happen when the button is pressed.
-  /// If you want to interact with [onTapCancel] it is recommended
-  /// to extend [ButtonComponent].
   void Function()? onPressed;
 
   /// Callback for what should happen when the button is released.
-  /// If you want to interact with [onTapCancel] it is recommended
-  /// to extend [ButtonComponent].
   void Function()? onReleased;
+
+  /// Callback for what should happen when the button is cancelled.
+  void Function()? onCancelled;
 
   ButtonComponent({
     this.button,
     this.buttonDown,
     this.onPressed,
     this.onReleased,
+    this.onCancelled,
     super.position,
     Vector2? size,
     super.scale,
@@ -76,6 +76,7 @@ class ButtonComponent extends PositionComponent with Tappable {
       buttonDown!.removeFromParent();
       button!.parent = this;
     }
+    onCancelled?.call();
     return false;
   }
 }
