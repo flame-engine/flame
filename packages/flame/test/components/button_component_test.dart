@@ -72,8 +72,15 @@ void main() {
       expect(releasedTimes, 1);
       expect(cancelledTimes, 0);
 
+      game.onTapDown(
+        1,
+        createTapDownEvent(
+          game,
+          globalPosition: buttonPosition.toOffset(),
+        ),
+      );
       game.onTapCancel(1);
-      expect(pressedTimes, 1);
+      expect(pressedTimes, 2);
       expect(releasedTimes, 1);
       expect(cancelledTimes, 1);
     });
@@ -125,8 +132,15 @@ void main() {
       expect(releasedTimes, 1);
       expect(cancelledTimes, 0);
 
+      game.onTapDown(
+        1,
+        createTapDownEvent(
+          game,
+          globalPosition: previousPosition,
+        ),
+      );
       game.onTapCancel(1);
-      expect(pressedTimes, 1);
+      expect(pressedTimes, 2);
       expect(releasedTimes, 1);
       expect(cancelledTimes, 1);
     });

@@ -74,8 +74,17 @@ void main() {
       expect(releasedTimes, 1);
       expect(cancelledTimes, 0);
 
+      game.onTapDown(
+        1,
+        createTapDownEvent(
+          game,
+          globalPosition: initialGameSize.toOffset() +
+              margin.bottomRight -
+              const Offset(1, 1),
+        ),
+      );
       game.onTapCancel(1);
-      expect(pressedTimes, 1);
+      expect(pressedTimes, 2);
       expect(releasedTimes, 1);
       expect(cancelledTimes, 1);
     });
@@ -147,8 +156,16 @@ void main() {
       expect(releasedTimes, 1);
       expect(cancelledTimes, 0);
 
+      game.onTapDown(
+        1,
+        createTapDownEvent(
+          game,
+          globalPosition:
+              game.size.toOffset() + margin.bottomRight - const Offset(1, 1),
+        ),
+      );
       game.onTapCancel(1);
-      expect(pressedTimes, 1);
+      expect(pressedTimes, 2);
       expect(releasedTimes, 1);
       expect(cancelledTimes, 1);
     });
