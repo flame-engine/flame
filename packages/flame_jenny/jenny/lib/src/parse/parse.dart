@@ -572,27 +572,37 @@ class _Parser {
     } else {
       nameError('variable $variableName has not been declared');
     }
+    final variableExpression =
+        variableStorage.getVariableAsExpression(variableName);
     position += 1;
+
     final assignmentToken = peekToken();
-    if (!assignmentTokens.containsKey(assignmentToken)) {
+    if (!(assignmentToken == Token.operatorAssign ||
+        assignmentTokens.containsKey(assignmentToken))) {
       syntaxError('an assignment operator is expected');
     }
     position += 1;
     final expressionStartPosition = position;
     final expression = parseExpression();
-    final variableType = variableStorage.getVariableType(variableName);
-    if (variableType != expression.type) {
-      position = expressionStartPosition;
+    if (variableExpression.type != expression.type) {
       typeError(
-        'variable $variableName of type ${variableType.name} cannot be '
-        'assigned a value of type ${expression.type.name}',
+        'variable $variableName of type ${variableExpression.type.name} '
+        'cannot be assigned a value of type ${expression.type.name}',
+        expressionStartPosition,
       );
     }
-    final assignmentExpression = assignmentTokens[assignmentToken]!(
-      variableStorage.getVariableAsExpression(variableName),
-      expression,
-      expressionStartPosition,
-    );
+    final Expression assignmentExpression;
+    if (assignmentToken == Token.operatorAssign) {
+      assignmentExpression = expression;
+    } else {
+      assignmentExpression = makeBinaryOperatorExpression(
+        assignmentTokens[assignmentToken]!,
+        variableExpression,
+        expression,
+        expressionStartPosition,
+        typeError,
+      )!;
+    }
     take(Token.endExpression);
     take(Token.endCommand);
     take(Token.newline);
@@ -690,14 +700,12 @@ class _Parser {
     return UserDefinedCommand(commandName, arguments);
   }
 
-  late Map<Token, Expression Function(Expression, Expression, int)>
-      assignmentTokens = {
-    Token.operatorAssign: (lhs, rhs, pos) => rhs,
-    // Token.operatorDivideAssign: _divide,
-    // Token.operatorMinusAssign: _subtract,
-    // Token.operatorModuloAssign: _modulo,
-    // Token.operatorMultiplyAssign: _multiply,
-    // Token.operatorPlusAssign: _add,
+  late Map<Token, Token> assignmentTokens = {
+    Token.operatorDivideAssign: Token.operatorDivide,
+    Token.operatorMinusAssign: Token.operatorMinus,
+    Token.operatorModuloAssign: Token.operatorModulo,
+    Token.operatorMultiplyAssign: Token.operatorMultiply,
+    Token.operatorPlusAssign: Token.operatorPlus,
   };
 
   //#endregion
@@ -837,23 +845,6 @@ class _Parser {
     return out;
   }
 
-  Expression _notEqual(Expression lhs, Expression rhs, int opPosition) {
-    if (lhs.isNumeric && rhs.isNumeric) {
-      return NumericNotEqual(lhs as NumExpression, rhs as NumExpression);
-    }
-    if (lhs.isString && rhs.isString) {
-      return StringNotEqual(lhs as StringExpression, rhs as StringExpression);
-    }
-    if (lhs.isBoolean && rhs.isBoolean) {
-      return BoolNotEqual(lhs as BoolExpression, rhs as BoolExpression);
-    }
-    position = opPosition;
-    typeError(
-      'inequality operator between operands of unrelated types '
-      '${lhs.type.name} and ${rhs.type.name}',
-    );
-  }
-
   Expression _greaterOrEqual(Expression lhs, Expression rhs, int opPosition) {
     if (lhs.isNumeric && rhs.isNumeric) {
       return GreaterThanOrEqual(lhs as NumExpression, rhs as NumExpression);
@@ -915,7 +906,6 @@ class _Parser {
 
   late Map<Token, Expression Function(Expression, Expression, int)>
       binaryOperatorConstructors = {
-    Token.operatorNotEqual: _notEqual,
     Token.operatorGreaterOrEqual: _greaterOrEqual,
     Token.operatorGreaterThan: _greaterThan,
     Token.operatorLessOrEqual: _lessOrEqual,

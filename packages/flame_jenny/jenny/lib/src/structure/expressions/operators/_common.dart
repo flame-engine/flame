@@ -6,6 +6,7 @@ import 'package:jenny/src/structure/expressions/operators/divide.dart';
 import 'package:jenny/src/structure/expressions/operators/equal.dart';
 import 'package:jenny/src/structure/expressions/operators/modulo.dart';
 import 'package:jenny/src/structure/expressions/operators/multiply.dart';
+import 'package:jenny/src/structure/expressions/operators/not_equal.dart';
 import 'package:jenny/src/structure/expressions/operators/or.dart';
 import 'package:jenny/src/structure/expressions/operators/subtract.dart';
 import 'package:jenny/src/structure/expressions/operators/xor.dart';
@@ -38,7 +39,6 @@ final Map<Token, String> _operatorNames = {
   Token.operatorGreaterThan: '>',
   Token.operatorLessOrEqual: '<=',
   Token.operatorLessThan: '<',
-  Token.operatorNotEqual: '!=',
 };
 
 final Map<Token, BinaryOperatorBuilder> _builders = {
@@ -52,5 +52,6 @@ final Map<Token, BinaryOperatorBuilder> _builders = {
   Token.operatorXor: Xor.make,
 
   Token.operatorEqual: Equal.make,
+  Token.operatorNotEqual: NotEqual.make,
 
 };
