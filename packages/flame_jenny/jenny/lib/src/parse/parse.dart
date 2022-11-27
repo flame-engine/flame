@@ -18,23 +18,7 @@ import 'package:jenny/src/structure/dialogue_option.dart';
 import 'package:jenny/src/structure/expressions/arithmetic.dart';
 import 'package:jenny/src/structure/expressions/expression.dart';
 import 'package:jenny/src/structure/expressions/functions/_utils.dart';
-import 'package:jenny/src/structure/expressions/functions/bool.dart';
-import 'package:jenny/src/structure/expressions/functions/ceil.dart';
-import 'package:jenny/src/structure/expressions/functions/dec.dart';
-import 'package:jenny/src/structure/expressions/functions/decimal.dart';
-import 'package:jenny/src/structure/expressions/functions/dice.dart';
-import 'package:jenny/src/structure/expressions/functions/floor.dart';
-import 'package:jenny/src/structure/expressions/functions/inc.dart';
-import 'package:jenny/src/structure/expressions/functions/int.dart';
-import 'package:jenny/src/structure/expressions/functions/number.dart';
-import 'package:jenny/src/structure/expressions/functions/plural.dart';
-import 'package:jenny/src/structure/expressions/functions/random.dart';
-import 'package:jenny/src/structure/expressions/functions/random_range.dart';
-import 'package:jenny/src/structure/expressions/functions/round.dart';
-import 'package:jenny/src/structure/expressions/functions/round_places.dart';
 import 'package:jenny/src/structure/expressions/functions/string.dart';
-import 'package:jenny/src/structure/expressions/functions/visit_count.dart';
-import 'package:jenny/src/structure/expressions/functions/visited.dart';
 import 'package:jenny/src/structure/expressions/literal.dart';
 import 'package:jenny/src/structure/expressions/logical.dart';
 import 'package:jenny/src/structure/expressions/relational.dart';
@@ -791,7 +775,8 @@ class _Parser {
       }
     } else if (token.isId) {
       final name = token.content;
-      final builder = builtinFunctions[name];
+      final builder =
+          builtinFunctions[name] ?? project.functions.builderForFunction(name);
       if (builder == null) {
         nameError('unknown function name $name', position - 1);
       }
@@ -1014,27 +999,6 @@ class _Parser {
     Token.operatorAnd: _and,
     Token.operatorOr: _or,
     Token.operatorXor: _xor,
-  };
-
-  static const Map<String, FunctionBuilder> builtinFunctions = {
-    'bool': BoolFn.make,
-    'ceil': CeilFn.make,
-    'dec': DecFn.make,
-    'decimal': DecimalFn.make,
-    'dice': DiceFn.make,
-    'floor': FloorFn.make,
-    'inc': IncFn.make,
-    'int': IntFn.make,
-    'number': NumberFn.make,
-    'plural': PluralFn.make,
-    'random': RandomFn.make,
-    'random_range': RandomRangeFn.make,
-    'round': RoundFn.make,
-    'round_places': RoundPlacesFn.make,
-    'string': StringFn.make,
-    'visit_count': VisitCountFn.make,
-    'visited_count': VisitCountFn.make,
-    'visited': VisitedFn.make,
   };
 
   //#endregion
