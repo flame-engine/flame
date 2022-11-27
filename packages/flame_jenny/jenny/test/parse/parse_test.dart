@@ -416,46 +416,6 @@ void main() {
         );
       });
 
-      test('divide', () {
-        final yarn = YarnProject()
-          ..parse('title: test\n---\n'
-              '{ 48 / 2 / 3 }\n'
-              '===\n');
-        expect(
-          linesToText(yarn.nodes['test']!.lines),
-          ['8.0'],
-        );
-        expect(
-          () => yarn.parse('title:E\n---\n{ "x" / "y" }\n===\n'),
-          hasTypeError(
-            'TypeError: both lhs and rhs of / must be numeric\n'
-            '>  at line 3 column 7:\n'
-            '>  { "x" / "y" }\n'
-            '>        ^\n',
-          ),
-        );
-      });
-
-      test('modulo', () {
-        final yarn = YarnProject()
-          ..parse('title:A\n---\n'
-              '{ 48 % 5 }\n'
-              '{ 4 % 1.2 }\n'
-              '===\n');
-        final texts = linesToText(yarn.nodes['A']!.lines);
-        expect(texts[0], '3');
-        expect(num.parse(texts[1]), closeTo(4 % 1.2, 1e-10));
-        expect(
-          () => yarn.parse('title:E\n---\n{ 17 % true }\n===\n'),
-          hasTypeError(
-            'TypeError: both lhs and rhs of % must be numeric\n'
-            '>  at line 3 column 6:\n'
-            '>  { 17 % true }\n'
-            '>       ^\n',
-          ),
-        );
-      });
-
       test('equals', () {
         final yarn = YarnProject()
           ..setVariable(r'$famous', true)

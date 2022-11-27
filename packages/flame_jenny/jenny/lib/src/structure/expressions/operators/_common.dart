@@ -1,9 +1,9 @@
 import 'package:jenny/src/parse/token.dart';
-import 'package:jenny/src/structure/expressions/arithmetic.dart';
 import 'package:jenny/src/structure/expressions/expression.dart';
 import 'package:jenny/src/structure/expressions/operators/add.dart';
 import 'package:jenny/src/structure/expressions/operators/and.dart';
 import 'package:jenny/src/structure/expressions/operators/divide.dart';
+import 'package:jenny/src/structure/expressions/operators/modulo.dart';
 import 'package:jenny/src/structure/expressions/operators/multiply.dart';
 import 'package:jenny/src/structure/expressions/operators/or.dart';
 import 'package:jenny/src/structure/expressions/operators/subtract.dart';
@@ -50,4 +50,5 @@ final Map<Token, BinaryOperatorBuilder> _builders = {
   Token.operatorMinus: Subtract.make,
   Token.operatorMultiply: Multiply.make,
   Token.operatorDivide: Divide.make,
+  Token.operatorModulo: Modulo.make,
 };
