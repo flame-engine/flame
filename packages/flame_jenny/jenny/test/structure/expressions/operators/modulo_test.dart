@@ -26,6 +26,22 @@ void main() {
       );
     });
 
+    test('x %= y', () async {
+      await testScenario(
+        input: r'''
+          title: Start
+          ---
+          <<local $x = 10>>
+          <<set $x %= 7>>
+          { $x }
+          ===
+        ''',
+        testPlan: '''
+          line: 3
+        ''',
+      );
+    });
+
     test('negative divisor', () {
       final yarn = YarnProject()
         ..parse(

@@ -29,6 +29,26 @@ void main() {
       );
     });
 
+    test('x += y', () async {
+      await testScenario(
+        input: r'''
+          title: Start
+          ---
+          <<local $x = 7>>
+          <<local $world = "World">>
+          <<set $x += 3>>
+          <<set $world += '!'>>
+          {$x}
+          {$world}
+          ===
+        ''',
+        testPlan: '''
+          line: 10
+          line: World!
+        ''',
+      );
+    });
+
     test('wrong argument types 1', () {
       expect(
         () => YarnProject()

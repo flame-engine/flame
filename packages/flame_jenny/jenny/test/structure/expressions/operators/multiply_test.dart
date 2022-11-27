@@ -22,6 +22,22 @@ void main() {
       );
     });
 
+    test('x *= y', () async {
+      await testScenario(
+        input: r'''
+          title: Start
+          ---
+          <<local $x = 2.5>>
+          <<set $x *= 4>>
+          { $x }
+          ===
+        ''',
+        testPlan: '''
+          line: 10.0
+        ''',
+      );
+    });
+
     test('wrong argument types', () {
       expect(
         () => YarnProject()

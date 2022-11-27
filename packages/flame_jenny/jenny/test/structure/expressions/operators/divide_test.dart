@@ -20,6 +20,22 @@ void main() {
       );
     });
 
+    test('x /= y', () async {
+      await testScenario(
+        input: r'''
+          title: Start
+          ---
+          <<local $x = 8>>
+          <<set $x /= 2>>
+          {$x}
+          ===
+        ''',
+        testPlan: '''
+          line: 4.0
+        ''',
+      );
+    });
+
     test('division by zero', () {
       final yarn = YarnProject()
         ..parse(
