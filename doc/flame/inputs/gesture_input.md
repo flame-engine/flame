@@ -505,6 +505,7 @@ which provides the position of the hover event, as well as the raw
 ```{warning}
 This should not be used on platforms that do not support mouse cursors.
 ```
+
 Example:
 
 ```dart
