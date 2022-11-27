@@ -1,7 +1,6 @@
 import 'package:jenny/src/parse/token.dart';
 import 'package:jenny/src/structure/expressions/arithmetic.dart';
 import 'package:jenny/src/structure/expressions/expression.dart';
-import 'package:jenny/src/structure/expressions/literal.dart';
 import 'package:jenny/src/structure/expressions/operators/add.dart';
 import 'package:jenny/src/structure/expressions/operators/and.dart';
 import 'package:jenny/src/structure/expressions/operators/or.dart';

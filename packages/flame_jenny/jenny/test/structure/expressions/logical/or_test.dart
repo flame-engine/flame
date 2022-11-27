@@ -5,40 +5,41 @@ import '../../../test_scenario.dart';
 import '../../../utils.dart';
 
 void main() {
-  group('Not', () {
-    test('not', () async {
+  group('Or', () {
+    test('x || y', () async {
       await testScenario(
         input: '''
           title: Start
           ---
-          {! true} {! false}
-          {not true} {not false}
-          {! 5==5}
-          {! (false || true)}
+          {true || true}
+          {true || false}
+          {false || true}
+          {false || false}
           ===
         ''',
         testPlan: '''
-          line: false true
-          line: false true
-          line: false
+          line: true
+          line: true
+          line: true
           line: false
         ''',
       );
     });
 
-    test('not with wrong type', () {
+    test('wrong argument types', () {
       expect(
         () => YarnProject()
           ..parse(
             'title:A\n---\n'
-            '{! 5}\n'
+            '{true || "false"}\n'
             '===\n',
           ),
         hasTypeError(
-          'TypeError: operator `not` can only be applied to booleans\n'
-          '>  at line 3 column 4:\n'
-          '>  {! 5}\n'
-          '>     ^\n',
+          'TypeError: both left and right sides of `||` must be boolean, '
+          'instead the types are (boolean, string)\n'
+          '>  at line 3 column 7:\n'
+          '>  {true || "false"}\n'
+          '>        ^\n',
         ),
       );
     });

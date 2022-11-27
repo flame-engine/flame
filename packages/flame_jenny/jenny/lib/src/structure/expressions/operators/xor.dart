@@ -22,7 +22,8 @@ class Xor extends BoolExpression {
       return Xor(lhs as BoolExpression, rhs as BoolExpression);
     }
     errorFn(
-      'both left and right sides of "^" must be boolean',
+      'both left and right sides of `^` must be boolean, instead the types '
+      'are (${lhs.type.name}, ${rhs.type.name})',
       operatorPosition,
     );
   }

@@ -36,12 +36,9 @@ import 'package:jenny/src/structure/expressions/functions/string.dart';
 import 'package:jenny/src/structure/expressions/functions/visit_count.dart';
 import 'package:jenny/src/structure/expressions/functions/visited.dart';
 import 'package:jenny/src/structure/expressions/literal.dart';
-import 'package:jenny/src/structure/expressions/operators/_common.dart';
+import 'package:jenny/src/structure/expressions/operators/_common.dart' hide ErrorFn;
 import 'package:jenny/src/structure/expressions/operators/add.dart';
-import 'package:jenny/src/structure/expressions/operators/and.dart';
 import 'package:jenny/src/structure/expressions/operators/not.dart';
-import 'package:jenny/src/structure/expressions/operators/or.dart';
-import 'package:jenny/src/structure/expressions/operators/xor.dart';
 import 'package:jenny/src/structure/expressions/relational.dart';
 import 'package:jenny/src/structure/expressions/string.dart';
 import 'package:jenny/src/structure/line_content.dart';
@@ -814,7 +811,7 @@ class _Parser {
       if (!arg.isBoolean) {
         typeError('operator `not` can only be applied to booleans', position0);
       }
-      return LogicalNot(arg as BoolExpression);
+      return Not(arg as BoolExpression);
     }
     position -= 1;
     return constVoid;
@@ -953,30 +950,6 @@ class _Parser {
     typeError('both lhs and rhs of "<" must be numeric');
   }
 
-  Expression _and(Expression lhs, Expression rhs, int opPosition) {
-    if (lhs.isBoolean && rhs.isBoolean) {
-      return And(lhs as BoolExpression, rhs as BoolExpression);
-    }
-    position = opPosition;
-    typeError('both lhs and rhs of "&&" must be boolean');
-  }
-
-  Expression _or(Expression lhs, Expression rhs, int opPosition) {
-    if (lhs.isBoolean && rhs.isBoolean) {
-      return Or(lhs as BoolExpression, rhs as BoolExpression);
-    }
-    position = opPosition;
-    typeError('both lhs and rhs of "||" must be boolean');
-  }
-
-  Expression _xor(Expression lhs, Expression rhs, int opPosition) {
-    if (lhs.isBoolean && rhs.isBoolean) {
-      return Xor(lhs as BoolExpression, rhs as BoolExpression);
-    }
-    position = opPosition;
-    typeError('both lhs and rhs of "^" must be boolean');
-  }
-
   static final Map<Token, Expression> typesToDefaultValues = {
     Token.typeBool: constFalse,
     Token.typeNumber: constZero,
@@ -1017,9 +990,9 @@ class _Parser {
     Token.operatorGreaterThan: _greaterThan,
     Token.operatorLessOrEqual: _lessOrEqual,
     Token.operatorLessThan: _lessThan,
-    Token.operatorAnd: _and,
-    Token.operatorOr: _or,
-    Token.operatorXor: _xor,
+    // Token.operatorAnd: _and,
+    // Token.operatorOr: _or,
+    // Token.operatorXor: _xor,
   };
 
   static const Map<String, FunctionBuilder> builtinFunctions = {

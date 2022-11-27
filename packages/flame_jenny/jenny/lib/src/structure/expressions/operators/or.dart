@@ -1,7 +1,5 @@
-
 import 'package:jenny/src/structure/expressions/expression.dart';
 import 'package:jenny/src/structure/expressions/operators/_common.dart';
-
 
 /// Logical OR operator, applies to binary operands only.
 ///
@@ -14,16 +12,17 @@ class Or extends BoolExpression {
   final BoolExpression _rhs;
 
   static Expression make(
-      Expression lhs,
-      Expression rhs,
-      int operatorPosition,
-      ErrorFn errorFn,
-      ) {
+    Expression lhs,
+    Expression rhs,
+    int operatorPosition,
+    ErrorFn errorFn,
+  ) {
     if (lhs.isBoolean && rhs.isBoolean) {
       return Or(lhs as BoolExpression, rhs as BoolExpression);
     }
     errorFn(
-      'both left and right sides of "||" must be boolean',
+      'both left and right sides of `||` must be boolean, instead the types '
+      'are (${lhs.type.name}, ${rhs.type.name})',
       operatorPosition,
     );
   }
