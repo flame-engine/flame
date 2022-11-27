@@ -519,7 +519,7 @@ class MouseCursorExample extends FlameGame with MouseMovementDetector {
 
 ### MouseMovement on the component level
 
-To recieve mouse movement/hover events in components, use the `HasCursorHandlerComponents` mixin on any `Game` sub class first, and remove the `MouseMovementDetector` mixin (if present). 
+To receive mouse movement/hover events in components, use the `HasCursorHandlerComponents` mixin on any `Game` sub class first, and remove the `MouseMovementDetector` mixin (if present). 
 
 Then, use the `CursorHandler` mixin on any `Component` sub class.
 
