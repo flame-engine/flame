@@ -15,6 +15,7 @@ class HudButtonComponent extends ButtonComponent
     EdgeInsets? margin,
     Function()? super.onPressed,
     Function()? super.onReleased,
+    Function()? super.onCancelled,
     super.position,
     Vector2? size,
     super.scale,
