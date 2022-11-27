@@ -18,6 +18,8 @@ abstract class Expression {
                 ? ExpressionType.string
                 : ExpressionType.unknown;
   }
+
+  String get name => '<unknown>';
 }
 
 abstract class NumExpression extends Expression {

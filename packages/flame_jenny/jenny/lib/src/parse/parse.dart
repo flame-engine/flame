@@ -36,8 +36,12 @@ import 'package:jenny/src/structure/expressions/functions/string.dart';
 import 'package:jenny/src/structure/expressions/functions/visit_count.dart';
 import 'package:jenny/src/structure/expressions/functions/visited.dart';
 import 'package:jenny/src/structure/expressions/literal.dart';
-import 'package:jenny/src/structure/expressions/logical.dart';
-import 'package:jenny/src/structure/expressions/logical/not.dart';
+import 'package:jenny/src/structure/expressions/operators/_common.dart';
+import 'package:jenny/src/structure/expressions/operators/add.dart';
+import 'package:jenny/src/structure/expressions/operators/and.dart';
+import 'package:jenny/src/structure/expressions/operators/not.dart';
+import 'package:jenny/src/structure/expressions/operators/or.dart';
+import 'package:jenny/src/structure/expressions/operators/xor.dart';
 import 'package:jenny/src/structure/expressions/relational.dart';
 import 'package:jenny/src/structure/expressions/string.dart';
 import 'package:jenny/src/structure/line_content.dart';
@@ -753,7 +757,9 @@ class _Parser {
         token = peekToken();
         position0 = position;
       }
-      result = binaryOperatorConstructors[op]!(result, rhs, position0);
+      result =
+          makeBinaryOperatorExpression(op, result, rhs, position0, typeError) ??
+          binaryOperatorConstructors[op]!(result, rhs, position0);
     }
     return result;
   }
@@ -949,7 +955,7 @@ class _Parser {
 
   Expression _and(Expression lhs, Expression rhs, int opPosition) {
     if (lhs.isBoolean && rhs.isBoolean) {
-      return LogicalAnd(lhs as BoolExpression, rhs as BoolExpression);
+      return And(lhs as BoolExpression, rhs as BoolExpression);
     }
     position = opPosition;
     typeError('both lhs and rhs of "&&" must be boolean');
@@ -957,7 +963,7 @@ class _Parser {
 
   Expression _or(Expression lhs, Expression rhs, int opPosition) {
     if (lhs.isBoolean && rhs.isBoolean) {
-      return LogicalOr(lhs as BoolExpression, rhs as BoolExpression);
+      return Or(lhs as BoolExpression, rhs as BoolExpression);
     }
     position = opPosition;
     typeError('both lhs and rhs of "||" must be boolean');
@@ -965,7 +971,7 @@ class _Parser {
 
   Expression _xor(Expression lhs, Expression rhs, int opPosition) {
     if (lhs.isBoolean && rhs.isBoolean) {
-      return LogicalXor(lhs as BoolExpression, rhs as BoolExpression);
+      return Xor(lhs as BoolExpression, rhs as BoolExpression);
     }
     position = opPosition;
     typeError('both lhs and rhs of "^" must be boolean');
