@@ -10,7 +10,4 @@ class Not extends BoolExpression {
 
   @override
   bool get value => !_arg.value;
-
-  @override
-  String get name => '!';
 }

@@ -36,10 +36,10 @@ import 'package:jenny/src/structure/expressions/functions/string.dart';
 import 'package:jenny/src/structure/expressions/functions/visit_count.dart';
 import 'package:jenny/src/structure/expressions/functions/visited.dart';
 import 'package:jenny/src/structure/expressions/literal.dart';
-import 'package:jenny/src/structure/expressions/operators/_common.dart' hide ErrorFn;
+import 'package:jenny/src/structure/expressions/operators/_common.dart'
+    hide ErrorFn;
 import 'package:jenny/src/structure/expressions/operators/not.dart';
 import 'package:jenny/src/structure/expressions/relational.dart';
-import 'package:jenny/src/structure/expressions/string.dart';
 import 'package:jenny/src/structure/line_content.dart';
 import 'package:jenny/src/structure/markup_attribute.dart';
 import 'package:jenny/src/structure/node.dart';
@@ -694,7 +694,7 @@ class _Parser {
       assignmentTokens = {
     Token.operatorAssign: (lhs, rhs, pos) => rhs,
     Token.operatorDivideAssign: _divide,
-    Token.operatorMinusAssign: _subtract,
+    // Token.operatorMinusAssign: _subtract,
     Token.operatorModuloAssign: _modulo,
     Token.operatorMultiplyAssign: _multiply,
     // Token.operatorPlusAssign: _add,
@@ -755,7 +755,7 @@ class _Parser {
       }
       result =
           makeBinaryOperatorExpression(op, result, rhs, position0, typeError) ??
-          binaryOperatorConstructors[op]!(result, rhs, position0);
+              binaryOperatorConstructors[op]!(result, rhs, position0);
     }
     return result;
   }
@@ -835,17 +835,6 @@ class _Parser {
       }
     }
     return out;
-  }
-
-  Expression _subtract(Expression lhs, Expression rhs, int opPosition) {
-    if (lhs.isNumeric && rhs.isNumeric) {
-      return Subtract(lhs as NumExpression, rhs as NumExpression);
-    }
-    if (lhs.isString && rhs.isString) {
-      return Remove(lhs as StringExpression, rhs as StringExpression);
-    }
-    position = opPosition;
-    typeError('both lhs and rhs of - must be numeric or strings');
   }
 
   Expression _multiply(Expression lhs, Expression rhs, int opPosition) {
@@ -968,7 +957,6 @@ class _Parser {
   late Map<Token, Expression Function(Expression, Expression, int)>
       binaryOperatorConstructors = {
     Token.operatorDivide: _divide,
-    Token.operatorMinus: _subtract,
     Token.operatorModulo: _modulo,
     Token.operatorMultiply: _multiply,
     Token.operatorEqual: _equal,
