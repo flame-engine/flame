@@ -23,7 +23,7 @@ class Modulo extends NumExpression {
       return Modulo(lhs as NumExpression, rhs as NumExpression);
     }
     errorFn(
-      'both left and right sides of `/` must be numeric, instead the types are '
+      'both left and right sides of `%` must be numeric, instead the types are '
       '(${lhs.type.name}, ${rhs.type.name})',
       operatorPosition,
     );

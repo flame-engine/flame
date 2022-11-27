@@ -47,14 +47,14 @@ void main() {
         () => YarnProject()
           ..parse(
             'title:A\n---\n'
-            '{"X" / "y"}\n'
+            '{"X" % "y"}\n'
             '===\n',
           ),
         hasTypeError(
-          'TypeError: both left and right sides of `/` must be numeric, '
+          'TypeError: both left and right sides of `%` must be numeric, '
           'instead the types are (string, string)\n'
           '>  at line 3 column 6:\n'
-          '>  {"X" / "y"}\n'
+          '>  {"X" % "y"}\n'
           '>       ^\n',
         ),
       );
