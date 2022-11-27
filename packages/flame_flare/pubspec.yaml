@@ -1,6 +1,6 @@
 name: flame_flare
 description: This packages allows you to use flare animations into a Flame game.
-version: 1.5.0
+version: 1.5.1
 homepage: https://github.com/flame-engine/flame/tree/main/packages/flame_flare
 funding:
   - https://patreon.com/bluefireoss
@@ -11,7 +11,7 @@ environment:
   flutter: ">=3.3.0"
 
 dependencies:
-  flame: ^1.4.0
+  flame: ^1.5.0
   flare_flutter: ^3.0.2
   flutter:
     sdk: flutter

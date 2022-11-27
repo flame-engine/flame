@@ -1,3 +1,7 @@
+## 1.9.0
+
+ - **FEAT**: Add support for styles propagating through the text node tree ([#1915](https://github.com/flame-engine/flame/issues/1915)). ([b5780d42](https://github.com/flame-engine/flame/commit/b5780d421234636144794e663559cec8987656a4))
+
 ## 1.8.0
 
 > Note: This release has breaking changes.
