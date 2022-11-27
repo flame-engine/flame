@@ -391,31 +391,6 @@ void main() {
             .toList();
       }
 
-      test('unary minus', () {
-        final yarn = YarnProject()
-          ..setVariable(r'$x', 42)
-          ..parse('title: test\n---\n'
-              '{ -7 + 1 }\n'
-              '{ 2 * -7 }\n'
-              '{ -\$x }\n'
-              '{ -(3 + 111) }\n'
-              '===\n');
-        final texts = linesToText(yarn.nodes['test']!.lines);
-        expect(
-          texts.map(num.parse).toList(),
-          [-6, -14, -42, -114],
-        );
-        expect(
-          () => yarn.parse('title:E\n---\n{ -"banana" }\n===\n'),
-          hasTypeError(
-            'TypeError: unary minus can only be applied to numbers\n'
-            '>  at line 3 column 4:\n'
-            '>  { -"banana" }\n'
-            '>     ^\n',
-          ),
-        );
-      });
-
       test('equals', () {
         final yarn = YarnProject()
           ..setVariable(r'$famous', true)

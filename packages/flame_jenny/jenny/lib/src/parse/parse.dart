@@ -15,7 +15,6 @@ import 'package:jenny/src/structure/dialogue_choice.dart';
 import 'package:jenny/src/structure/dialogue_entry.dart';
 import 'package:jenny/src/structure/dialogue_line.dart';
 import 'package:jenny/src/structure/dialogue_option.dart';
-import 'package:jenny/src/structure/expressions/arithmetic.dart';
 import 'package:jenny/src/structure/expressions/expression.dart';
 import 'package:jenny/src/structure/expressions/functions/_utils.dart';
 import 'package:jenny/src/structure/expressions/functions/bool.dart';
@@ -38,6 +37,7 @@ import 'package:jenny/src/structure/expressions/functions/visited.dart';
 import 'package:jenny/src/structure/expressions/literal.dart';
 import 'package:jenny/src/structure/expressions/operators/_common.dart'
     hide ErrorFn;
+import 'package:jenny/src/structure/expressions/operators/negate.dart';
 import 'package:jenny/src/structure/expressions/operators/not.dart';
 import 'package:jenny/src/structure/expressions/relational.dart';
 import 'package:jenny/src/structure/line_content.dart';
