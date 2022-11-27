@@ -39,7 +39,6 @@ import 'package:jenny/src/structure/expressions/operators/_common.dart'
     hide ErrorFn;
 import 'package:jenny/src/structure/expressions/operators/negate.dart';
 import 'package:jenny/src/structure/expressions/operators/not.dart';
-import 'package:jenny/src/structure/expressions/relational.dart';
 import 'package:jenny/src/structure/line_content.dart';
 import 'package:jenny/src/structure/markup_attribute.dart';
 import 'package:jenny/src/structure/node.dart';
@@ -595,13 +594,13 @@ class _Parser {
     if (assignmentToken == Token.operatorAssign) {
       assignmentExpression = expression;
     } else {
-      assignmentExpression = makeBinaryOperatorExpression(
+      assignmentExpression = makeBinaryOpExpression(
         assignmentTokens[assignmentToken]!,
         variableExpression,
         expression,
         expressionStartPosition,
         typeError,
-      )!;
+      );
     }
     take(Token.endExpression);
     take(Token.endCommand);
@@ -761,9 +760,7 @@ class _Parser {
         token = peekToken();
         position0 = position;
       }
-      result =
-          makeBinaryOperatorExpression(op, result, rhs, position0, typeError) ??
-              binaryOperatorConstructors[op]!(result, rhs, position0);
+      result = makeBinaryOpExpression(op, result, rhs, position0, typeError);
     }
     return result;
   }
@@ -845,38 +842,6 @@ class _Parser {
     return out;
   }
 
-  Expression _greaterOrEqual(Expression lhs, Expression rhs, int opPosition) {
-    if (lhs.isNumeric && rhs.isNumeric) {
-      return GreaterThanOrEqual(lhs as NumExpression, rhs as NumExpression);
-    }
-    position = opPosition;
-    typeError('both lhs and rhs of ">=" must be numeric');
-  }
-
-  Expression _greaterThan(Expression lhs, Expression rhs, int opPosition) {
-    if (lhs.isNumeric && rhs.isNumeric) {
-      return GreaterThan(lhs as NumExpression, rhs as NumExpression);
-    }
-    position = opPosition;
-    typeError('both lhs and rhs of ">" must be numeric');
-  }
-
-  Expression _lessOrEqual(Expression lhs, Expression rhs, int opPosition) {
-    if (lhs.isNumeric && rhs.isNumeric) {
-      return LessThanOrEqual(lhs as NumExpression, rhs as NumExpression);
-    }
-    position = opPosition;
-    typeError('both lhs and rhs of "<=" must be numeric');
-  }
-
-  Expression _lessThan(Expression lhs, Expression rhs, int opPosition) {
-    if (lhs.isNumeric && rhs.isNumeric) {
-      return LessThan(lhs as NumExpression, rhs as NumExpression);
-    }
-    position = opPosition;
-    typeError('both lhs and rhs of "<" must be numeric');
-  }
-
   static final Map<Token, Expression> typesToDefaultValues = {
     Token.typeBool: constFalse,
     Token.typeNumber: constZero,
@@ -902,14 +867,6 @@ class _Parser {
     Token.operatorAnd: 2,
     Token.operatorXor: 2,
     Token.operatorOr: 1,
-  };
-
-  late Map<Token, Expression Function(Expression, Expression, int)>
-      binaryOperatorConstructors = {
-    Token.operatorGreaterOrEqual: _greaterOrEqual,
-    Token.operatorGreaterThan: _greaterThan,
-    Token.operatorLessOrEqual: _lessOrEqual,
-    Token.operatorLessThan: _lessThan,
   };
 
   static const Map<String, FunctionBuilder> builtinFunctions = {

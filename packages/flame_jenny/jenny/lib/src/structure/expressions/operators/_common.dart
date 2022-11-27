@@ -4,6 +4,10 @@ import 'package:jenny/src/structure/expressions/operators/add.dart';
 import 'package:jenny/src/structure/expressions/operators/and.dart';
 import 'package:jenny/src/structure/expressions/operators/divide.dart';
 import 'package:jenny/src/structure/expressions/operators/equal.dart';
+import 'package:jenny/src/structure/expressions/operators/greater_or_equal.dart';
+import 'package:jenny/src/structure/expressions/operators/greater_than.dart';
+import 'package:jenny/src/structure/expressions/operators/less_or_equal.dart';
+import 'package:jenny/src/structure/expressions/operators/less_than.dart';
 import 'package:jenny/src/structure/expressions/operators/modulo.dart';
 import 'package:jenny/src/structure/expressions/operators/multiply.dart';
 import 'package:jenny/src/structure/expressions/operators/not_equal.dart';
@@ -12,7 +16,6 @@ import 'package:jenny/src/structure/expressions/operators/subtract.dart';
 import 'package:jenny/src/structure/expressions/operators/xor.dart';
 
 typedef ErrorFn = Never Function(String message, [int? position]);
-
 typedef BinaryOperatorBuilder = Expression Function(
   Expression lhs,
   Expression rhs,
@@ -20,7 +23,9 @@ typedef BinaryOperatorBuilder = Expression Function(
   ErrorFn errorFn,
 );
 
-Expression? makeBinaryOperatorExpression(
+/// Static constructor of expressions involving binary operators. Used by
+/// <parser.dart>.
+Expression makeBinaryOpExpression(
   Token operator,
   Expression lhs,
   Expression rhs,
@@ -28,30 +33,22 @@ Expression? makeBinaryOperatorExpression(
   ErrorFn errorFn,
 ) {
   final builder = _builders[operator];
-  if (builder == null) {
-    return null;
-  }
-  return builder(lhs, rhs, operatorPosition, errorFn);
+  return builder!(lhs, rhs, operatorPosition, errorFn);
 }
-
-final Map<Token, String> _operatorNames = {
-  Token.operatorGreaterOrEqual: '>=',
-  Token.operatorGreaterThan: '>',
-  Token.operatorLessOrEqual: '<=',
-  Token.operatorLessThan: '<',
-};
 
 final Map<Token, BinaryOperatorBuilder> _builders = {
   Token.operatorAnd: And.make,
   Token.operatorDivide: Divide.make,
+  Token.operatorEqual: Equal.make,
+  Token.operatorGreaterOrEqual: GreaterOrEqual.make,
+  Token.operatorGreaterThan: GreaterThan.make,
+  Token.operatorLessOrEqual: LessOrEqual.make,
+  Token.operatorLessThan: LessThan.make,
   Token.operatorMinus: Subtract.make,
   Token.operatorModulo: Modulo.make,
   Token.operatorMultiply: Multiply.make,
+  Token.operatorNotEqual: NotEqual.make,
   Token.operatorOr: Or.make,
   Token.operatorPlus: Add.make,
   Token.operatorXor: Xor.make,
-
-  Token.operatorEqual: Equal.make,
-  Token.operatorNotEqual: NotEqual.make,
-
 };
