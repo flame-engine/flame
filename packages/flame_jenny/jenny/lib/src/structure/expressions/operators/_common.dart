@@ -3,6 +3,7 @@ import 'package:jenny/src/structure/expressions/arithmetic.dart';
 import 'package:jenny/src/structure/expressions/expression.dart';
 import 'package:jenny/src/structure/expressions/operators/add.dart';
 import 'package:jenny/src/structure/expressions/operators/and.dart';
+import 'package:jenny/src/structure/expressions/operators/divide.dart';
 import 'package:jenny/src/structure/expressions/operators/multiply.dart';
 import 'package:jenny/src/structure/expressions/operators/or.dart';
 import 'package:jenny/src/structure/expressions/operators/subtract.dart';
@@ -32,13 +33,11 @@ Expression? makeBinaryOperatorExpression(
 }
 
 final Map<Token, String> _operatorNames = {
-  Token.operatorDivide: '/',
   Token.operatorEqual: '==',
   Token.operatorGreaterOrEqual: '>=',
   Token.operatorGreaterThan: '>',
   Token.operatorLessOrEqual: '<=',
   Token.operatorLessThan: '<',
-  Token.operatorMinus: '-',
   Token.operatorModulo: '%',
   Token.operatorNotEqual: '!=',
 };
@@ -50,4 +49,5 @@ final Map<Token, BinaryOperatorBuilder> _builders = {
   Token.operatorPlus: Add.make,
   Token.operatorMinus: Subtract.make,
   Token.operatorMultiply: Multiply.make,
+  Token.operatorDivide: Divide.make,
 };

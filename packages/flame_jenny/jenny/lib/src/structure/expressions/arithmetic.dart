@@ -1,15 +1,6 @@
 import 'package:jenny/src/structure/expressions/expression.dart';
 import 'package:jenny/src/structure/expressions/operators/_common.dart';
 
-class Divide extends NumExpression {
-  const Divide(this.lhs, this.rhs);
-
-  final NumExpression lhs;
-  final NumExpression rhs;
-
-  @override
-  num get value => lhs.value / rhs.value;
-}
 
 class Modulo extends NumExpression {
   const Modulo(this.lhs, this.rhs);

@@ -693,7 +693,7 @@ class _Parser {
   late Map<Token, Expression Function(Expression, Expression, int)>
       assignmentTokens = {
     Token.operatorAssign: (lhs, rhs, pos) => rhs,
-    Token.operatorDivideAssign: _divide,
+    // Token.operatorDivideAssign: _divide,
     // Token.operatorMinusAssign: _subtract,
     Token.operatorModuloAssign: _modulo,
     // Token.operatorMultiplyAssign: _multiply,
@@ -837,13 +837,6 @@ class _Parser {
     return out;
   }
 
-  Expression _divide(Expression lhs, Expression rhs, int opPosition) {
-    if (lhs.isNumeric && rhs.isNumeric) {
-      return Divide(lhs as NumExpression, rhs as NumExpression);
-    }
-    position = opPosition;
-    typeError('both lhs and rhs of / must be numeric');
-  }
 
   Expression _modulo(Expression lhs, Expression rhs, int opPosition) {
     if (lhs.isNumeric && rhs.isNumeric) {
@@ -948,7 +941,6 @@ class _Parser {
 
   late Map<Token, Expression Function(Expression, Expression, int)>
       binaryOperatorConstructors = {
-    Token.operatorDivide: _divide,
     Token.operatorModulo: _modulo,
     Token.operatorEqual: _equal,
     Token.operatorNotEqual: _notEqual,
