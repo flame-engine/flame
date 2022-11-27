@@ -577,7 +577,7 @@ class _Parser {
 
     final assignmentToken = peekToken();
     if (!(assignmentToken == Token.operatorAssign ||
-        assignmentTokens.containsKey(assignmentToken))) {
+        assignmentTokensToOperators.containsKey(assignmentToken))) {
       syntaxError('an assignment operator is expected');
     }
     position += 1;
@@ -595,7 +595,7 @@ class _Parser {
       assignmentExpression = expression;
     } else {
       assignmentExpression = makeBinaryOpExpression(
-        assignmentTokens[assignmentToken]!,
+        assignmentTokensToOperators[assignmentToken]!,
         variableExpression,
         expression,
         expressionStartPosition,
@@ -699,14 +699,6 @@ class _Parser {
     return UserDefinedCommand(commandName, arguments);
   }
 
-  late Map<Token, Token> assignmentTokens = {
-    Token.operatorDivideAssign: Token.operatorDivide,
-    Token.operatorMinusAssign: Token.operatorMinus,
-    Token.operatorModuloAssign: Token.operatorModulo,
-    Token.operatorMultiplyAssign: Token.operatorMultiply,
-    Token.operatorPlusAssign: Token.operatorPlus,
-  };
-
   //#endregion
 
   //#region Expression parsing
@@ -779,8 +771,7 @@ class _Parser {
       } else if (expression.isNumeric) {
         return Negate(expression as NumExpression);
       } else {
-        position -= 1;
-        typeError('unary minus can only be applied to numbers');
+        typeError('unary minus can only be applied to numbers', position - 1);
       }
     } else if (token.isNumber) {
       return NumLiteral(num.parse(token.content));
@@ -846,6 +837,14 @@ class _Parser {
     Token.typeBool: constFalse,
     Token.typeNumber: constZero,
     Token.typeString: constEmptyString,
+  };
+
+  late Map<Token, Token> assignmentTokensToOperators = {
+    Token.operatorDivideAssign: Token.operatorDivide,
+    Token.operatorMinusAssign: Token.operatorMinus,
+    Token.operatorModuloAssign: Token.operatorModulo,
+    Token.operatorMultiplyAssign: Token.operatorMultiply,
+    Token.operatorPlusAssign: Token.operatorPlus,
   };
 
   static final Map<Token, int> precedences = {
