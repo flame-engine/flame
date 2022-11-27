@@ -1,3 +1,7 @@
+## 1.9.0
+
+ - **FEAT**: Rename internal classes clashes with Tiled ([#2139](https://github.com/flame-engine/flame/issues/2139)). ([2224eaac](https://github.com/flame-engine/flame/commit/2224eaac701414deb76bac7f7c40a56387cdf817))
+
 ## 1.8.0
 
  - **REFACTOR**: Split layers into files ([#1916](https://github.com/flame-engine/flame/issues/1916)). ([dac2ee13](https://github.com/flame-engine/flame/commit/dac2ee1375a0ed9535ccd5052e0960043ec8d3d2))

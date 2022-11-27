@@ -1,3 +1,7 @@
+## 1.8.1
+
+ - **FIX**: flame-bloc : Remove final keyword from subscription in FlameBlocListenable ([#2098](https://github.com/flame-engine/flame/issues/2098)). ([8a136c99](https://github.com/flame-engine/flame/commit/8a136c9985d7878940f2103484b90e1ffb202a03))
+
 ## 1.8.0
 
  - **FEAT**: Add avoid_final_parameters, depend_on_referenced_packages, unnecessary_to_list_in_spreads ([#1927](https://github.com/flame-engine/flame/issues/1927)). ([deccb434](https://github.com/flame-engine/flame/commit/deccb4349d38b6a91ccf5bdf229980b2a3296ce5))
