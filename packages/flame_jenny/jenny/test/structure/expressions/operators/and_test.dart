@@ -11,17 +11,17 @@ void main() {
         input: '''
           title: Start
           ---
-          {true && true}
-          {true && false}
-          {false && true}
-          {false && false}
+          {true && true} {true and true}
+          {true && false} {true and false}
+          {false && true} {false and true}
+          {false && false} {false and false}
           ===
         ''',
         testPlan: '''
-          line: true
-          line: false
-          line: false
-          line: false
+          line: true true
+          line: false false
+          line: false false
+          line: false false
         ''',
       );
     });

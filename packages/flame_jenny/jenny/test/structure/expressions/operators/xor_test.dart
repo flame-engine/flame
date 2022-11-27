@@ -15,9 +15,17 @@ void main() {
           {true ^ false}
           {false ^ true}
           {false ^ false}
+          {true xor true}
+          {true xor false}
+          {false xor true}
+          {false xor false}
           ===
         ''',
         testPlan: '''
+          line: false
+          line: true
+          line: true
+          line: false
           line: false
           line: true
           line: true

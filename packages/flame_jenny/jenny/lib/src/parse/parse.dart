@@ -37,7 +37,6 @@ import 'package:jenny/src/structure/expressions/functions/visit_count.dart';
 import 'package:jenny/src/structure/expressions/functions/visited.dart';
 import 'package:jenny/src/structure/expressions/literal.dart';
 import 'package:jenny/src/structure/expressions/operators/_common.dart' hide ErrorFn;
-import 'package:jenny/src/structure/expressions/operators/add.dart';
 import 'package:jenny/src/structure/expressions/operators/not.dart';
 import 'package:jenny/src/structure/expressions/relational.dart';
 import 'package:jenny/src/structure/expressions/string.dart';
@@ -698,7 +697,7 @@ class _Parser {
     Token.operatorMinusAssign: _subtract,
     Token.operatorModuloAssign: _modulo,
     Token.operatorMultiplyAssign: _multiply,
-    Token.operatorPlusAssign: _add,
+    // Token.operatorPlusAssign: _add,
   };
 
   //#endregion
@@ -838,17 +837,6 @@ class _Parser {
     return out;
   }
 
-  Expression _add(Expression lhs, Expression rhs, int opPosition) {
-    if (lhs.isNumeric && rhs.isNumeric) {
-      return Add(lhs as NumExpression, rhs as NumExpression);
-    }
-    if (lhs.isString && rhs.isString) {
-      return Concatenate([lhs as StringExpression, rhs as StringExpression]);
-    }
-    position = opPosition;
-    typeError('both lhs and rhs of + must be numeric or strings');
-  }
-
   Expression _subtract(Expression lhs, Expression rhs, int opPosition) {
     if (lhs.isNumeric && rhs.isNumeric) {
       return Subtract(lhs as NumExpression, rhs as NumExpression);
@@ -983,16 +971,12 @@ class _Parser {
     Token.operatorMinus: _subtract,
     Token.operatorModulo: _modulo,
     Token.operatorMultiply: _multiply,
-    Token.operatorPlus: _add,
     Token.operatorEqual: _equal,
     Token.operatorNotEqual: _notEqual,
     Token.operatorGreaterOrEqual: _greaterOrEqual,
     Token.operatorGreaterThan: _greaterThan,
     Token.operatorLessOrEqual: _lessOrEqual,
     Token.operatorLessThan: _lessThan,
-    // Token.operatorAnd: _and,
-    // Token.operatorOr: _or,
-    // Token.operatorXor: _xor,
   };
 
   static const Map<String, FunctionBuilder> builtinFunctions = {

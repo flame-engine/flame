@@ -30,7 +30,6 @@ Expression? makeBinaryOperatorExpression(
 }
 
 final Map<Token, String> _operatorNames = {
-  Token.operatorAnd: '&&',
   Token.operatorDivide: '/',
   Token.operatorEqual: '==',
   Token.operatorGreaterOrEqual: '>=',
@@ -40,15 +39,13 @@ final Map<Token, String> _operatorNames = {
   Token.operatorMinus: '-',
   Token.operatorModulo: '%',
   Token.operatorMultiply: '*',
-  Token.operatorNot: '!',
   Token.operatorNotEqual: '!=',
-  Token.operatorOr: '||',
-  Token.operatorPlus: '+',
-  Token.operatorXor: '^',
 };
 
 final Map<Token, BinaryOperatorBuilder> _builders = {
   Token.operatorAnd: And.make,
   Token.operatorOr: Or.make,
   Token.operatorXor: Xor.make,
+
+  Token.operatorPlus: Add.make,
 };
