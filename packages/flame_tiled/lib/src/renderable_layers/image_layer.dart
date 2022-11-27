@@ -5,15 +5,15 @@ import 'package:flame_tiled/src/renderable_layers/group_layer.dart';
 import 'package:flame_tiled/src/renderable_layers/renderable_layer.dart';
 import 'package:flutter/rendering.dart';
 import 'package:meta/meta.dart';
-import 'package:tiled/tiled.dart' as tiled;
+import 'package:tiled/tiled.dart';
 
 @internal
-class ImageLayer extends RenderableLayer<tiled.ImageLayer> {
+class FlameImageLayer extends RenderableLayer<ImageLayer> {
   final Image _image;
   late final ImageRepeat _repeat;
   Rect _paintArea = Rect.zero;
 
-  ImageLayer(
+  FlameImageLayer(
     super.layer,
     super.parent,
     this._image,
@@ -62,14 +62,14 @@ class ImageLayer extends RenderableLayer<tiled.ImageLayer> {
     }
   }
 
-  static Future<ImageLayer> load(
-    tiled.ImageLayer layer,
+  static Future<FlameImageLayer> load(
+    ImageLayer layer,
     GroupLayer? parent,
     Camera? camera,
-    tiled.TiledMap map,
+    TiledMap map,
     Vector2 destTileSize,
   ) async {
-    return ImageLayer(
+    return FlameImageLayer(
       layer,
       parent,
       await Flame.images.load(layer.image.source!),

@@ -1,3 +1,15 @@
+## 1.8.0
+
+ - **REFACTOR**: Split layers into files ([#1916](https://github.com/flame-engine/flame/issues/1916)). ([dac2ee13](https://github.com/flame-engine/flame/commit/dac2ee1375a0ed9535ccd5052e0960043ec8d3d2))
+ - **FIX**: Take scale into account ([#1906](https://github.com/flame-engine/flame/issues/1906)). ([27ab12ff](https://github.com/flame-engine/flame/commit/27ab12ff6865e5d3d567c4714c4737cd7a0bc1fa))
+ - **FEAT**: Animated tile support! ([#1930](https://github.com/flame-engine/flame/issues/1930)). ([6410dc75](https://github.com/flame-engine/flame/commit/6410dc753ce1d044e2d8ea8061186c88d80589e9))
+ - **FEAT**: Add avoid_final_parameters, depend_on_referenced_packages, unnecessary_to_list_in_spreads ([#1927](https://github.com/flame-engine/flame/issues/1927)). ([deccb434](https://github.com/flame-engine/flame/commit/deccb4349d38b6a91ccf5bdf229980b2a3296ce5))
+ - **FEAT**: Tiled component is positionable ([#1900](https://github.com/flame-engine/flame/issues/1900)). ([88cb2a05](https://github.com/flame-engine/flame/commit/88cb2a05c37535053ece3eb19311c4c78fac249c))
+ - **FEAT**: Add support for isometric staggered maps ([#1895](https://github.com/flame-engine/flame/issues/1895)). ([96be8408](https://github.com/flame-engine/flame/commit/96be840899022a024cef1eb853818d8138592000))
+ - **FEAT**: Adding support for Group layer nesting for RenderableTileMap ([#1886](https://github.com/flame-engine/flame/issues/1886)). ([5ed34547](https://github.com/flame-engine/flame/commit/5ed345471da0586a2a3071a523c4e5b6d7f184c0))
+ - **FEAT**: Hexagonal maps ([#1892](https://github.com/flame-engine/flame/issues/1892)). ([29bda336](https://github.com/flame-engine/flame/commit/29bda336b8febe9cb08dc621da3dc0271c6d2802))
+ - **FEAT**: Add isometric support for flame_tiled ([#1885](https://github.com/flame-engine/flame/issues/1885)). ([cf828823](https://github.com/flame-engine/flame/commit/cf82882390efc45a0b2323463b4b28e557f5df48))
+
 ## 1.7.2
 
  - **FIX**: Remove unnecessary x offset ([#1838](https://github.com/flame-engine/flame/issues/1838)). ([4ea12b72](https://github.com/flame-engine/flame/commit/4ea12b724e04843b3b7dcd02dc2fb5060c9cf283))

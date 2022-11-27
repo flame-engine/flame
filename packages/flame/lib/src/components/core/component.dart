@@ -6,6 +6,7 @@ import 'package:flame/src/cache/value_cache.dart';
 import 'package:flame/src/components/core/component_set.dart';
 import 'package:flame/src/components/core/position_type.dart';
 import 'package:flame/src/components/mixins/coordinate_transform.dart';
+import 'package:flame/src/components/mixins/has_game_ref.dart';
 import 'package:flame/src/game/flame_game.dart';
 import 'package:flame/src/game/game.dart';
 import 'package:flame/src/gestures/events.dart';
@@ -185,6 +186,7 @@ class Component {
   static const int _loaded = 2;
   static const int _mounted = 4;
   static const int _removing = 8;
+  static const int _removed = 16;
 
   /// Whether the component is currently executing its [onLoad] step.
   bool get isLoading => (_state & _loading) != 0;
@@ -205,6 +207,14 @@ class Component {
   void _setRemovingBit() => _state |= _removing;
   void _clearRemovingBit() => _state &= ~_removing;
 
+  /// Whether the component has been removed. Originally this flag is `false`,
+  /// but it becomes `true` after the component was mounted and then removed
+  /// from its parent. The flag becomes `false` again when the component is
+  /// mounted to a new parent.
+  bool get isRemoved => (_state & _removed) != 0;
+  void _setRemovedBit() => _state |= _removed;
+  void _clearRemovedBit() => _state &= ~_removed;
+
   /// A future that completes when this component finishes loading.
   ///
   /// If the component is already loaded (see [isLoaded]), this returns an
@@ -217,6 +227,13 @@ class Component {
   /// already completed future.
   Future<void> get mounted =>
       isMounted ? Future.value() : lifecycle.mountFuture;
+
+  /// A future that completes when this component is removed from its parent.
+  ///
+  /// If the component is already removed (see [isRemoved]), this returns an
+  /// already completed future.
+  Future<void> get removed =>
+      isRemoved ? Future.value() : lifecycle.removeFuture;
 
   //#endregion
 
@@ -375,8 +392,8 @@ class Component {
   ///   - it is invoked when the size of the game canvas is already known.
   ///
   /// If your loading logic requires knowing the size of the game canvas, then
-  /// add `HasGameRef` mixin and then query `gameRef.size` or
-  /// `gameRef.canvasSize`.
+  /// add [HasGameRef] mixin and then query `game.size` or
+  /// `game.canvasSize`.
   ///
   /// The default implementation returns `null`, indicating that there is no
   /// need to await anything. When overriding this method, you have a choice
@@ -461,6 +478,10 @@ class Component {
     update(dt);
     _children?.forEach((c) => c.updateTree(dt));
   }
+
+  /// This method will be invoked from lifecycle if [child] has been added
+  /// to or removed from its parent children list.
+  void onChildrenChanged(Component child, ChildrenChangeType type) {}
 
   void render(Canvas canvas) {}
 
@@ -722,7 +743,8 @@ class Component {
   void processPendingLifecycleEvents() {
     if (_lifecycleManager != null) {
       _lifecycleManager!.processQueues();
-      if (!_lifecycleManager!.hasPendingEvents) {
+      if (!_lifecycleManager!.hasPendingEvents &&
+          _lifecycleManager!._removedCompleter == null) {
         _lifecycleManager = null;
       }
     }
@@ -775,9 +797,12 @@ class Component {
       onGameResize(findGame()!.canvasSize);
     }
     _clearLoadingBit();
-    if (isRemoving) {
+    if (isRemoved) {
+      _clearRemovedBit();
+    } else if (isRemoving) {
       _parent = null;
       _clearRemovingBit();
+      _setRemovedBit();
       return;
     }
     debugMode |= _parent!.debugMode;
@@ -811,10 +836,16 @@ class Component {
         component._clearMountedBit();
         component._clearRemovingBit();
         component._parent = null;
+        component._finishRemoving();
         return true;
       },
       includeSelf: true,
     );
+  }
+
+  void _finishRemoving() {
+    _setRemovedBit();
+    _lifecycleManager?.finishRemoving();
   }
 
   //#endregion
@@ -897,6 +928,8 @@ class Component {
 
 typedef ComponentSetFactory = ComponentSet Function();
 
+enum ChildrenChangeType { added, removed }
+
 /// Helper class to assist [Component] with its lifecycle.
 ///
 /// Most lifecycle events -- add, remove, change parent -- live for a very short
@@ -912,6 +945,7 @@ class _LifecycleManager {
 
   Completer<void>? _mountCompleter;
   Completer<void>? _loadCompleter;
+  Completer<void>? _removedCompleter;
 
   Future<void> get loadFuture {
     _loadCompleter ??= Completer<void>();
@@ -923,6 +957,11 @@ class _LifecycleManager {
     return _mountCompleter!.future;
   }
 
+  Future<void> get removeFuture {
+    _removedCompleter ??= Completer<void>();
+    return _removedCompleter!.future;
+  }
+
   void finishLoading() {
     _loadCompleter?.complete();
     _loadCompleter = null;
@@ -931,6 +970,11 @@ class _LifecycleManager {
   void finishMounting() {
     _mountCompleter?.complete();
     _mountCompleter = null;
+  }
+
+  void finishRemoving() {
+    _removedCompleter?.complete();
+    _removedCompleter = null;
   }
 
   /// Queue for adding children to a component.
@@ -956,6 +1000,9 @@ class _LifecycleManager {
   /// Queue for moving components from another parent to this one.
   final Queue<Component> _adoption = Queue();
 
+  /// Whether or not there are any pending lifecycle events for this component.
+  ///
+  /// [Component.removed] is not regarded as a pending event.
   bool get hasPendingEvents {
     return _children.isNotEmpty ||
         _removals.isNotEmpty ||
@@ -982,6 +1029,7 @@ class _LifecycleManager {
       if (child.isLoaded) {
         child._mount();
         _children.removeFirst();
+        owner.onChildrenChanged(child, ChildrenChangeType.added);
       } else if (child.isLoading) {
         break;
       } else {
@@ -995,6 +1043,7 @@ class _LifecycleManager {
       final component = _removals.removeFirst();
       if (component.isMounted) {
         component._remove();
+        owner.onChildrenChanged(component, ChildrenChangeType.removed);
       }
       assert(!component.isMounted);
     }
@@ -1003,9 +1052,12 @@ class _LifecycleManager {
   void _processAdoptionQueue() {
     while (_adoption.isNotEmpty) {
       final child = _adoption.removeFirst();
+      final oldParent = child._parent;
       child._remove();
+      oldParent?.onChildrenChanged(child, ChildrenChangeType.removed);
       child._parent = owner;
       child._mount();
+      owner.onChildrenChanged(child, ChildrenChangeType.added);
     }
   }
 }

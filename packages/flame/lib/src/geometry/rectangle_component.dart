@@ -13,7 +13,15 @@ class RectangleComponent extends PolygonComponent {
     super.children,
     super.priority,
     super.paint,
-  }) : super(sizeToVertices(size ?? Vector2.zero(), anchor));
+    super.paintLayers,
+  }) : super(sizeToVertices(size ?? Vector2.zero(), anchor)) {
+    size.addListener(
+      () => refreshVertices(
+        newVertices: sizeToVertices(size, anchor),
+        shrinkToBoundsOverride: false,
+      ),
+    );
+  }
 
   RectangleComponent.square({
     double size = 0,
@@ -22,8 +30,16 @@ class RectangleComponent extends PolygonComponent {
     super.anchor,
     super.priority,
     super.paint,
+    super.paintLayers,
     super.children,
-  }) : super(sizeToVertices(Vector2.all(size), anchor));
+  }) : super(sizeToVertices(Vector2.all(size), anchor)) {
+    this.size.addListener(
+          () => refreshVertices(
+            newVertices: sizeToVertices(this.size, anchor),
+            shrinkToBoundsOverride: false,
+          ),
+        );
+  }
 
   /// With this constructor you define the [RectangleComponent] in relation to
   /// the `parentSize`. For example having [relation] as of (0.8, 0.5) would
@@ -38,13 +54,21 @@ class RectangleComponent extends PolygonComponent {
     super.anchor,
     super.priority,
     super.paint,
+    super.paintLayers,
     super.shrinkToBounds,
   }) : super.relative([
           relation.clone(),
           Vector2(relation.x, -relation.y),
           -relation,
           Vector2(-relation.x, relation.y),
-        ]);
+        ]) {
+    size.addListener(
+      () => refreshVertices(
+        newVertices: sizeToVertices(size, anchor),
+        shrinkToBoundsOverride: false,
+      ),
+    );
+  }
 
   /// This factory will create a [RectangleComponent] from a positioned [Rect].
   factory RectangleComponent.fromRect(
@@ -53,6 +77,7 @@ class RectangleComponent extends PolygonComponent {
     Anchor anchor = Anchor.topLeft,
     int? priority,
     Paint? paint,
+    List<Paint>? paintLayers,
   }) {
     return RectangleComponent(
       position: anchor == Anchor.topLeft
@@ -67,6 +92,7 @@ class RectangleComponent extends PolygonComponent {
       anchor: anchor,
       priority: priority,
       paint: paint,
+      paintLayers: paintLayers,
     );
   }
 

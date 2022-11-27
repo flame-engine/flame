@@ -1,28 +1,44 @@
+
+# Miscellaneous
+*.class
+*.bak
+*.fvm
+*.log
+*.pyc
+*.swp
 .DS_Store
 .atom/
-.idea
-*.iml
-.packages
-.dart_tool/
-.pub/
-pubspec.lock
-packages/flame/doc/api/
-.flutter-plugins
+.buildlog/
+.history
 .vscode/
-**/.flutter-plugins
-**/.flutter-plugins-dependencies
-**/pubspec_overrides.yaml
+.venv/
 
+# IntelliJ related
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# Flutter/Dart/Pub related
+**/doc/api/
+**/failures
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
 android/
 ios/
 desktop/
 build/
+coverage/
+pubspec.lock
+pubspec_overrides.yaml
+
+# Sphinx related
+__pycache__/
 _build/
 
-coverage
-**/failures
-
-.fvm
-Makefile
-!doc/_sphinx/Makefile
-.bak
+# Custom
+lib/generated_plugin_registrant.dart

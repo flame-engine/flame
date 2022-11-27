@@ -1,6 +1,7 @@
 # Components
 
-![Component tree](../images/component_tree.png)
+```{include} diagrams/component.md
+```
 
 This diagram might look intimidating, but don't worry, it is not as complex as it looks.
 
@@ -32,7 +33,8 @@ Every `Component` has a few methods that you can optionally implement, which are
 
 ### Component lifecycle
 
-![Component Lifecycle Diagram](../images/component_lifecycle.png)
+```{include} diagrams/component_life_cycle.md
+```
 
 The `onGameResize` method is called whenever the screen is resized, and once in the beginning when
 the component is added to the game via the `add` method.
@@ -52,24 +54,31 @@ throughout the component's lifetime. This method will only run if the parent is 
 If the parent is not mounted yet, then this method will wait in a queue (this will have no effect
 on the rest of the game engine).
 
+The `onChildrenChanged` method can be overridden if it's needed to detect changes in a parent's
+children. This method is called whenever a child is added to or removed from a parent (this includes
+if a child is changing its parent). Its parameters contain the targeting child and the type of
+change it went through (`added` or `removed`).
+
 A component lifecycle state can be checked by a series of getters:
 
-- `isLoaded`: Returns a bool with the current loaded state
-- `loaded`: Returns a future that will complete once the component has finished loading
-- `isMounted`: Returns a bool with the current mounted state
-- `mounted`: Returns a future that will complete once the component has finished mounting
+- `isLoaded`: Returns a bool with the current loaded state.
+- `loaded`: Returns a future that will complete once the component has finished loading.
+- `isMounted`: Returns a bool with the current mounted state.
+- `mounted`: Returns a future that will complete once the component has finished mounting.
+- `isRemoved`: Returns a bool with the current removed state.
+- `removed`: Returns a future that will complete once the component has been removed.
 
 
 ### Priority
 
 In Flame every `Component` has the `int priority` property, which determines
-that component's sorting order within its parent's children, this is sometimes referred to
+that component's sorting order within its parent's children. This is sometimes referred to
 as `z-index` in other languages and frameworks. The higher the `priority` is set to, the
 closer the component will appear on the screen, since it will be rendered on top of any components
 with lower priority that were rendered before it.
 
-If you add two components and set one of them to priority 1 for example, then that component will be
-rendered on top of the other component (if they overlap), because the default priority is 0.
+If you add two components and set one of their priorities to 1 for example, then that component will
+be rendered on top of the other component (if they overlap), because the default priority is 0.
 
 All components take in `priority` as a named argument, so if you know the priority that you want
 your component at compile time, then you can pass it in to the constructor.
@@ -86,7 +95,7 @@ class MyGame extends FlameGame {
 }
 ```
 
-To update the priority of a component you have to either just set it to a new value, like
+To update the priority of a component you have to set it to a new value, like
 `component.priority = 2`, and it will be updated in the next tick.
 
 Example:
@@ -119,7 +128,7 @@ children are rendered and updated with the same conditions.
 Example of usage, where visibility of two components are handled by a wrapper:
 
 ```dart
-class GameOverPanel extends PositionComponent with HasGameRef<MyGame> {
+class GameOverPanel extends PositionComponent {
   bool visible = false;
   final Image spriteImage;
 
@@ -300,8 +309,8 @@ want them to respect the `Camera` and the `Viewport`. But quite often you want f
 and text to always show on the screen, no matter if you move the camera, then you want to use
 `PositionType.viewport`. In some rare cases you want to use `PositionType.widget` to position
 your widgets, when you don't want the component to respect the camera nor the viewport; this could
-for example be for controls or joysticks that would be unergonomic to use if they had to stay within
-the viewport.
+for example be for controls or joysticks that would not be ergonomic to use if they had to stay
+within the viewport.
 
 Do note that this setting is only respected if the component is added directly to the root
 `FlameGame` and not as a child component of another component.
@@ -434,10 +443,10 @@ class MyGame extends FlameGame {
 
     // Vector2(0.0, 0.0) by default, can also be set in the constructor
     player.position = ...
-    
+
     // 0 by default, can also be set in the constructor
     player.angle = ...
-    
+
     // Adds the component
     add(player);
   }
@@ -744,7 +753,7 @@ Advanced example:
 ```dart
 final images = [
   loadParallaxImage(
-    'stars.jpg', 
+    'stars.jpg',
     repeat: ImageRepeat.repeat,
     alignment: Alignment.center,
     fill: LayerFill.width,
@@ -1074,6 +1083,94 @@ widgets.
 Check the example app
 [custom_painter_component](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/widgets/custom_painter_example.dart)
 for details on how to use it.
+
+
+## ComponentsNotifier
+
+Most of the time just accessing children and their attributes is enough to build the logic of
+your game.
+
+But sometimes, reactivity can help the developer to simplify and write better code, to help with
+that Flame provides the `ComponentsNotifier`, which is an implementation of a
+`ChangeNotifier` that notifies listeners every time a component is added, removed or manually
+changed.
+
+For example, lets say that we want to show a game over text when the player's lives reach zero.
+
+To make the component automatically report when new instances are added or removed, the `Notifier`
+mixin can be applied to the component class:
+
+```dart
+class Player extends SpriteComponent with Notifier {}
+```
+
+Then to listen to changes on that component the `componentsNotifier` method from `FlameGame` can
+be used:
+
+```dart
+class MyGame extends FlameGame {
+  int lives = 2;
+
+  Future<void> onLoad() {
+  final playerNotifier = componentsNotifier<Player>()
+    ..addListener(() {
+      final player = playerNotifier.single;
+      if (player == null) {
+        lives--;
+        if (lives == 0) {
+          add(GameOverComponent());
+        } else {
+          add(Player());
+        }
+      }
+    });
+  }
+}
+```
+
+A `Notifier` component can also manually notify its listeners that something changed. Lets expand
+the example above to make a hud component to blink when the player has half of their health. In
+order to do so, we need that the `Player` component notify a change manually, example:
+
+```dart
+class Player extends SpriteComponent with Notifier {
+  double health = 1;
+
+  void takeHit() {
+    health -= .1;
+    if (health == 0) {
+      removeFromParent();
+    } else if (health <= .5) {
+      notifyListeners();
+    }
+  }
+}
+```
+
+Then our hud component could look like:
+
+```dart
+class Hud extends PositionComponent with HasGameRef {
+
+  Future<void> onLoad() {
+  final playerNotifier = gameRef.componentsNotifier<Player>()
+    ..addListener(() {
+      final player = playerNotifier.single;
+      if (player != null) {
+        if (player.health <= .5) {
+          add(BlinkEffect());
+        }
+      }
+    });
+  }
+}
+```
+
+`ComponentsNotifier`s can also come in handy to rebuild widgets when state changes inside a
+`FlameGame`, to help with that Flame provides a `ComponentsNotifierBuilder` widget.
+
+To see an example of its use check the running example
+[here](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/components/components_notifier_example.dart);
 
 
 ## ClipComponent

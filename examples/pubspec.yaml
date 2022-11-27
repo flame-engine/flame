@@ -11,22 +11,24 @@ environment:
 
 dependencies:
   dashbook: 0.1.8
-  flame: ^1.3.0
-  flame_audio: ^1.3.1
+  flame: ^1.4.0
+  flame_audio: ^1.3.2
   flame_forge2d: ^0.12.2
-  flame_svg: ^1.5.0
-  flame_tiled: ^1.7.2
+  flame_isolate: ^0.1.0
+  flame_lottie: ^0.1.0
+  flame_svg: ^1.6.0
+  flame_tiled: ^1.8.0
   flutter:
     sdk: flutter
   google_fonts: ^2.3.2
   meta: ^1.8.0
-  padracing:
-    path: games/padracing
-  trex_game:
-    path: games/trex
+  padracing: ^1.0.0
+  provider: ^6.0.3
+  rogue_shooter: ^0.1.0
+  trex_game: ^0.1.0
 
 dev_dependencies:
-  flame_lint: ^0.1.2
+  flame_lint: ^0.1.3
 flutter:
   uses-material-design: true
 
@@ -37,6 +39,7 @@ flutter:
     - assets/images/layers/
     - assets/images/parallax/
     - assets/images/parallax/
+    - assets/images/rogue_shooter/
     - assets/svgs/
     - assets/tiles/
     - assets/audio/music/

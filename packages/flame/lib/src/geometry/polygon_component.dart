@@ -38,6 +38,7 @@ class PolygonComponent extends ShapeComponent {
     super.children,
     super.priority,
     super.paint,
+    super.paintLayers,
     bool? shrinkToBounds,
   })  : assert(
           _vertices.length > 2,
@@ -76,16 +77,17 @@ class PolygonComponent extends ShapeComponent {
     Anchor? anchor,
     int? priority,
     Paint? paint,
+    List<Paint>? paintLayers,
     bool? shrinkToBounds,
   }) : this(
           normalsToVertices(relation, parentSize),
           position: position,
-          size: parentSize,
           angle: angle,
           anchor: anchor,
           scale: scale,
           priority: priority,
           paint: paint,
+          paintLayers: paintLayers,
           shrinkToBounds: shrinkToBounds,
         );
 
@@ -109,7 +111,10 @@ class PolygonComponent extends ShapeComponent {
   final _topLeft = Vector2.zero();
 
   @protected
-  void refreshVertices({required List<Vector2> newVertices}) {
+  void refreshVertices({
+    required List<Vector2> newVertices,
+    bool? shrinkToBoundsOverride,
+  }) {
     assert(
       newVertices.length == _vertices.length,
       'A polygon can not change their number of vertices',
@@ -127,19 +132,13 @@ class PolygonComponent extends ShapeComponent {
         vertices.map((p) => (p - _topLeft).toOffset()).toList(growable: false),
         true,
       );
-    if (shrinkToBounds) {
+    if (shrinkToBoundsOverride ?? shrinkToBounds) {
       final bounds = _path.getBounds();
       size.setValues(bounds.width, bounds.height);
       if (!manuallyPositioned) {
         position = Anchor.topLeft.toOtherAnchorPosition(_topLeft, anchor, size);
       }
     }
-    _vertices.forEach((p) {
-      p.setValues(
-        p.x - _topLeft.x,
-        p.y - _topLeft.y,
-      );
-    });
   }
 
   /// gives back the shape vectors multiplied by the size and scale
@@ -156,6 +155,7 @@ class PolygonComponent extends ShapeComponent {
       vertices.forEachIndexed((i, vertex) {
         _globalVertices[i]
           ..setFrom(vertex)
+          ..sub(_topLeft)
           ..multiply(scale)
           ..add(position)
           ..rotate(angle, center: position);
@@ -176,7 +176,13 @@ class PolygonComponent extends ShapeComponent {
   @override
   void render(Canvas canvas) {
     if (renderShape) {
-      canvas.drawPath(_path, paint);
+      if (hasPaintLayers) {
+        for (final paint in paintLayers) {
+          canvas.drawPath(_path, paint);
+        }
+      } else {
+        canvas.drawPath(_path, paint);
+      }
     }
   }
 
@@ -216,8 +222,9 @@ class PolygonComponent extends ShapeComponent {
     }
     for (var i = 0; i < _vertices.length; i++) {
       final edge = getEdge(i, vertices: vertices);
-      final isOutside = (edge.to.x - edge.from.x) * (point.y - edge.from.y) -
-              (point.x - edge.from.x) * (edge.to.y - edge.from.y) >
+      final isOutside = (edge.to.x - edge.from.x) *
+                  (point.y - edge.from.y + _topLeft.y) -
+              (point.x - edge.from.x + _topLeft.x) * (edge.to.y - edge.from.y) >
           0;
       if (isOutside) {
         return false;

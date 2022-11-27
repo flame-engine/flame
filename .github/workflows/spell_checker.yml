@@ -1,0 +1,23 @@
+name: spell_checker
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, reopened, synchronize]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: zwaldowski/cspell-action@v1
+        with:
+          paths: "**/*.{md,dart}"
+          config: .github/cspell.json
+          exclude: ".gitignore,CHANGELOG.md"

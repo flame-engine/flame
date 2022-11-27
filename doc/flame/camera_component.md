@@ -41,6 +41,10 @@ and a single camera, then switching that camera's target from A to B will
 instantaneously switch the view to world B without having to unmount A and
 then mount B.
 
+Just like with most `Component`s, children can be added to `World` by using the
+`children` argument in its constructor, or by using the `add` or `addAll`
+methods.
+
 
 ## CameraComponent
 
@@ -59,6 +63,27 @@ currently performs rendering. This is needed only for certain advanced use
 cases where the rendering of a component depends on the camera settings. For
 example, some components may decide to skip rendering themselves and their
 children if they are outside of the camera's viewport.
+
+
+### CameraComponent.withFixedResolution()
+
+This factory constructor will let you pretend that the user's device has a fixed resolution of your
+choice. For example:
+
+```dart
+final camera = CameraComponent.withFixedResolution(
+  world: myWorldComponent,
+  width: 800,
+  height: 600,
+);
+```
+
+This will create a camera with a viewport centered in the middle of the screen, taking as much
+space as possible while still maintaining the 800:600 aspect ratio, and showing a game world region
+of size 800 x 600.
+
+A "fixed resolution" is very simple to work with, but it will underutilize the user's available
+screen space, unless their device happens to have the same pixel ratio as your chosen dimensions.
 
 
 ## Viewport

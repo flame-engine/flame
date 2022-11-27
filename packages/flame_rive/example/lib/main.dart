@@ -3,7 +3,6 @@ import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flame_rive/flame_rive.dart';
 import 'package:flutter/material.dart';
-import 'package:rive/rive.dart';
 
 void main() {
   runApp(const MyApp());

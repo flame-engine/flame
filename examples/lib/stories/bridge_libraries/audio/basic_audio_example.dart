@@ -81,4 +81,9 @@ class BasicAudioExample extends FlameGame with TapDetector {
       fireOne();
     }
   }
+
+  @override
+  void onRemove() {
+    FlameAudio.bgm.dispose();
+  }
 }

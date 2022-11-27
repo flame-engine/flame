@@ -1,7 +1,6 @@
 import 'dart:ui';
 
-import 'package:flame/src/components/core/component.dart';
-import 'package:flame/src/extensions/vector2.dart';
+import 'package:flame/components.dart';
 import 'package:flame/src/game/camera/camera.dart';
 import 'package:flame/src/game/camera/camera_wrapper.dart';
 import 'package:flame/src/game/game.dart';
@@ -29,6 +28,9 @@ class FlameGame extends Component with Game {
   }
 
   late final CameraWrapper _cameraWrapper;
+
+  @internal
+  late final List<ComponentsNotifier> notifiers = [];
 
   /// The camera translates the coordinate space after the viewport is applied.
   Camera get camera => _cameraWrapper.camera;
@@ -150,4 +152,36 @@ class FlameGame extends Component with Game {
 
   @override
   Projector get projector => camera.combinedProjector;
+
+  /// Returns a [ComponentsNotifier] for the given type [T].
+  ///
+  /// This method handles duplications, so there will never be
+  /// more than one [ComponentsNotifier] for a given type, meaning
+  /// that this method can be called as many times as needed for a type.
+  ComponentsNotifier<T> componentsNotifier<T extends Component>() {
+    for (final notifier in notifiers) {
+      if (notifier is ComponentsNotifier<T>) {
+        return notifier;
+      }
+    }
+
+    final notifier = ComponentsNotifier<T>(
+      descendants().whereType<T>().toList(),
+    );
+    notifiers.add(notifier);
+
+    return notifier;
+  }
+
+  @internal
+  void propagateToApplicableNotifiers(
+    Component component,
+    void Function(ComponentsNotifier) callback,
+  ) {
+    for (final notifier in notifiers) {
+      if (notifier.applicable(component)) {
+        callback(notifier);
+      }
+    }
+  }
 }

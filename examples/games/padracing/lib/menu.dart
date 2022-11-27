@@ -49,7 +49,7 @@ class Menu extends StatelessWidget {
                       },
                     ),
                     Text(
-                      'ASDW',
+                      'WASD',
                       style: textTheme.bodyText2,
                     ),
                   ],

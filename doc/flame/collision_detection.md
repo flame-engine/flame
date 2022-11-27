@@ -1,4 +1,4 @@
-# Collision detection
+# Collision Detection
 
 Collision detection is needed in most games to detect and act upon two components intersecting each
 other. For example an arrow hitting an enemy or the player picking up a coin.
@@ -17,7 +17,7 @@ when for example two `PositionComponent`s have intersecting hitboxes.
 Do note that the built-in collision detection system does not take collisions between two hitboxes
 that overshoot each other into account, this could happen when they either move very fast or
 `update` being called with a large delta time (for example if your app is not in the foreground).
-This behaviour is called tunneling, if you want to read more about it.
+This behavior is called tunneling, if you want to read more about it.
 
 Also note that the collision detection system has a limitation that makes it not work properly if
 you have certain types of combinations of flips and scales of the ancestors of the hitboxes.
@@ -47,6 +47,15 @@ automatically be checked for collisions.
 
 To react to a collision you should add the `CollisionCallbacks` mixin to your component.
 Example:
+
+
+```{flutter-app}
+:sources: ../flame/examples
+:page: collision_detection
+:show: widget code infobox
+:width: 180
+:height: 160
+```
 
 ```dart
 class MyCollidable extends PositionComponent with CollisionCallbacks {
@@ -203,13 +212,14 @@ collisions to the whole hat, instead of for just each hitbox separately.
 
 ## Broad phase
 
-Usually you don't have to worry about the broad phase system that is used, so if the standard
-implementation is performant enough for you, you probably don't have to read this section.
+If your game field is small and do not have a lot of collidable components - you don't have to
+worry about the broad phase system that is used, so if the standard implementation is performant
+enough for you, you probably don't have to read this section.
 
 A broad phase is the first step of collision detection where potential collisions are calculated.
 To calculate these potential collisions are a lot cheaper to calculate than to check the exact
-intersections from the directly and it removes the need to check all hitboxes against each other
-and therefore avoiding O(n²). The broad phase produces a set of potential collisions (a set of
+intersections directly and it removes the need to check all hitboxes against each other and
+therefore avoiding O(n²). The broad phase produces a set of potential collisions (a set of
 `CollisionProspect`s), this set is then used to check the exact intersections between hitboxes, this
 is sometimes called narrow phase.
 
@@ -217,24 +227,107 @@ By default Flame's collision detection is using a sweep and prune broadphase ste
 requires another type of broadphase you can write your own broadphase by extending `Broadphase` and
 manually setting the collision detection system that should be used.
 
-For example if you have implemented a broadphase built on a quad tree instead of the standard
+For example if you have implemented a broadphase built on a magic algorithm instead of the standard
 sweep and prune, then you would do the following:
 
 ```dart
 class MyGame extends FlameGame with HasCollisionDetection {
   MyGame() : super() {
-    collisionDetection = 
-        StandardCollisionDetection(broadphase: QuadTreeBroadphase());
+    collisionDetection =
+        StandardCollisionDetection(broadphase: MagicAlgorithmBroadphase());
   }
 }
 ```
 
 
+## Quad Tree broad phase
+
+If your game field is large and the game contains a lot of collidable
+components (more than a hundred), standard sweep and prune can
+become inefficient. If it does, you can try to use the quad tree broad phase.
+To do this, add the `HasQuadTreeCollisionDetection` mixin to your game instead of
+`HasCollisionDetection` and call the `initializeCollisionDetection` function on game load:
+
+```dart
+class MyGame extends FlameGame with HasQuadTreeCollisionDetection {
+  Future<void> onLoad() async {
+    initializeCollisionDetection(
+      mapDimensions: const Rect.fromLTWH(0, 0, mapWidth, mapHeight),
+      minimumDistance: 10,
+    );
+  }
+}
+```
+
+When calling `initializeCollisionDetection` you should pass it the correct map dimensions, to make
+the quad tree algorithm to work properly. There are also additional parameters to make the system
+more efficient:
+
+- `minimumDistance`: minimum distance between objects to consider them as possibly colliding.
+  If `null` - the check is disabled, it is default behavior
+- `maxObjects`: maximum objects count in one quadrant. Default to 25.
+- `maxDepth`: - maximum nesting levels inside quadrant. Default to 10
+
+If you use the quad tree system, you can make it even more efficient by implementing the
+`onComponentTypeCheck` function of the `CollisionCallbacks` mixin in your components. It is useful if
+you need to prevent collisions of items of different types. The result of the calculation is cached so
+you should not check any dynamic parameters here, the function is intended to be used as a pure
+type checker:
+
+```dart
+class Bullet extends PositionComponent with CollisionCallbacks {
+
+  @override
+  bool onComponentTypeCheck(PositionComponent other) {
+    if (other is Player || other is Water) {
+      // do NOT collide with Player or Water
+      return false;
+    }
+    return super.onComponentTypeCheck(other);
+  }
+
+  @override
+  void onCollisionStart(
+    Set<Vector2> intersectionPoints,
+    PositionComponent other,
+  ) {
+    // Removes the component when it comes in contact with a Brick.
+    // Neither Player nor Water would be passed to this function
+    // because these classes are filtered out by [onComponentTypeCheck]
+    // in an earlier stage.
+    if (other is Brick) {
+      removeFromParent();
+    }
+    super.onCollisionStart(intersectionPoints, other);
+  }
+}
+```
+
+After intensive gameplay a map could become over-clusterized with a lot of empty quadrants.
+Run `QuadTree.optimize()` to perform a cleanup of empty quadrants:
+
+```dart
+class QuadTreeExample extends FlameGame
+        with HasQuadTreeCollisionDetection {
+
+  /// A function called when intensive gameplay session is over
+  /// It also might be scheduled, but no need to run it on every update.
+  /// Use right interval depending on your game circumstances
+  onGameIdle() {
+    (collisionDetection as QuadTreeCollisionDetection)
+            .quadBroadphase
+            .tree
+            .optimize();
+  }
+}
+
+```
+
+
 ## Ray casting and Ray tracing
 
-Ray casting and ray tracing are methods for sending out rays from a point in your game and
-being able to see what these rays collide with and how they reflect after hitting
-something.
+Ray casting and ray tracing are methods for sending out rays from a point in your game and being
+able to see what these rays collide with and how they reflect after hitting something.
 
 For all of the following methods, if there are any hitboxes that you wish to ignore, you can add the
 `ignoreHitboxes` argument which is a list of the hitboxes that you wish to disregard for the call.
@@ -253,10 +346,22 @@ extra information like the distance, the normal and the reflection ray. The seco
 works similarly but sends out multiple rays uniformly around the origin, or within an angle
 centered at the origin.
 
+By default, `raycast` and `raycastAll` scan for the nearest hit irrespective of how far it lies from
+the ray origin. But in some use cases, it might be interesting to find hits only within a certain
+range. For such cases, an optional `maxDistance` can be provided.
+
 To use the ray casting functionality you have to have the `HasCollisionDetection` mixin on your
 game. After you have added that you can call `collisionDetection.raycast(...)` on your game class.
 
 Example:
+
+```{flutter-app}
+:sources: ../flame/examples
+:page: ray_cast
+:show: widget code infobox
+:width: 180
+:height: 160
+```
 
 ```dart
 class MyGame extends FlameGame with HasCollisionDetection {
@@ -305,14 +410,14 @@ class MyGame extends FlameGame with HasCollisionDetection {
     super.update(dt);
     final origin = Vector2(200, 200);
     final result = collisionDetection.raycastAll(
-      origin, 
+      origin,
       numberOfRays: 100,
     );
   }
 }
 ```
 
-In this example we would send out 100 rays from (200, 200) uniformingly spread in all directions.
+In this example we would send out 100 rays from (200, 200) uniformly spread in all directions.
 
 If you want to limit the directions you can use the `startAngle` and the `sweepAngle` arguments.
 Where the `startAngle` (counting from straight up) is where the rays will start and then the rays
@@ -332,6 +437,14 @@ table for example, that information could be retrieved with the help of ray trac
 
 Example:
 
+```{flutter-app}
+:sources: ../flame/examples
+:page: ray_trace
+:show: widget code infobox
+:width: 180
+:height: 160
+```
+
 ```dart
 class MyGame extends FlameGame with HasCollisionDetection {
   @override
@@ -342,7 +455,7 @@ class MyGame extends FlameGame with HasCollisionDetection {
         direction: Vector2(1, 1)..normalize()
     );
     final results = collisionDetection.raytrace(
-      ray, 
+      ray,
       maxDepth: 100,
     );
     for (final result in results) {

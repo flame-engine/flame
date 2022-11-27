@@ -26,18 +26,23 @@ extensions = [
     'myst_parser',  # Markdown support
     'sphinxcontrib.mermaid',
     'extensions.flutter_app',
+    'extensions.package',
 ]
 
 # Configuration options for MyST:
 # https://myst-parser.readthedocs.io/en/latest/syntax/optional.html
-myst_enable_extensions = [
-    'dollarmath',
+myst_enable_extensions = [e.lower() for e in [
+    'colon_fence',
+    'dollarMath',
     'html_admonition',
     'html_image',
     'linkify',
     'replacements',
-    'smartquotes',
-]
+    'smartQuotes',
+    'strikethrough',
+    'substitution',
+    'taskList',
+]]
 
 # Auto-generate link anchors for headers at levels H1 and H2
 myst_heading_anchors = 4
@@ -45,7 +50,7 @@ myst_heading_anchors = 4
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
-exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store', 'summary.md']
+exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
 
 # -- Options for HTML output -------------------------------------------------
@@ -83,7 +88,6 @@ class TitleCollector(docutils.nodes.SparseNodeVisitor):
 
     def depart_section(self, node):
         self.level -= 1
-
 
 
 def get_local_toc(document):

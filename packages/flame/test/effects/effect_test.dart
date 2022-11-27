@@ -68,7 +68,7 @@ void main() {
       expect(effect.x, closeTo(1, 1e-15));
     });
 
-    flameGame.test(
+    testWithFlameGame(
       'removeOnFinish = true',
       (game) async {
         final obj = Component();
@@ -89,7 +89,7 @@ void main() {
       },
     );
 
-    flameGame.test(
+    testWithFlameGame(
       'removeOnFinish = false',
       (game) async {
         final obj = Component();

@@ -67,6 +67,7 @@ class StandardCollisionDetection<B extends Broadphase<ShapeHitbox>>
   @override
   RaycastResult<ShapeHitbox>? raycast(
     Ray2 ray, {
+    double? maxDistance,
     List<ShapeHitbox>? ignoreHitboxes,
     RaycastResult<ShapeHitbox>? out,
   }) {
@@ -80,7 +81,8 @@ class StandardCollisionDetection<B extends Broadphase<ShapeHitbox>>
       final possiblyFirstResult = !(finalResult?.isActive ?? false);
       if (currentResult != null &&
           (possiblyFirstResult ||
-              currentResult.distance! < finalResult!.distance!)) {
+              currentResult.distance! < finalResult!.distance!) &&
+          (currentResult.distance! <= (maxDistance ?? double.infinity))) {
         if (finalResult == null) {
           finalResult = currentResult.clone();
         } else {
@@ -97,6 +99,7 @@ class StandardCollisionDetection<B extends Broadphase<ShapeHitbox>>
     required int numberOfRays,
     double startAngle = 0,
     double sweepAngle = tau,
+    double? maxDistance,
     List<Ray2>? rays,
     List<ShapeHitbox>? ignoreHitboxes,
     List<RaycastResult<ShapeHitbox>>? out,
@@ -126,7 +129,12 @@ class StandardCollisionDetection<B extends Broadphase<ShapeHitbox>>
         result = RaycastResult();
         out?.add(result);
       }
-      result = raycast(ray, ignoreHitboxes: ignoreHitboxes, out: result);
+      result = raycast(
+        ray,
+        maxDistance: maxDistance,
+        ignoreHitboxes: ignoreHitboxes,
+        out: result,
+      );
 
       if (result != null) {
         results.add(result);

@@ -12,7 +12,7 @@ class FormatterTextRenderer<T extends TextFormatter> extends TextRenderer {
 
   @override
   Vector2 measureText(String text) {
-    final box = formatter.format(text).lastLine.metrics;
+    final box = formatter.format(text).metrics;
     return Vector2(box.width, box.height);
   }
 
@@ -24,8 +24,8 @@ class FormatterTextRenderer<T extends TextFormatter> extends TextRenderer {
     Anchor anchor = Anchor.topLeft,
   }) {
     final txt = formatter.format(text);
-    final box = txt.lastLine.metrics;
-    txt.lastLine.translate(
+    final box = txt.metrics;
+    txt.translate(
       position.x - box.width * anchor.x,
       position.y - box.height * anchor.y - box.top,
     );
