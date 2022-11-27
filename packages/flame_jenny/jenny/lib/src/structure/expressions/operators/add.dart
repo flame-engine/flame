@@ -1,8 +1,8 @@
 import 'package:jenny/src/structure/expressions/expression.dart';
 import 'package:jenny/src/structure/expressions/operators/_common.dart';
 
-class Add {
-  static Expression make(
+abstract class Add extends Expression {
+  factory Add.make(
     Expression lhs,
     Expression rhs,
     int operatorPosition,
@@ -23,7 +23,7 @@ class Add {
 }
 
 /// Operator PLUS (+) for numeric arguments.
-class _NumAdd extends NumExpression {
+class _NumAdd extends NumExpression implements Add {
   _NumAdd(this._lhs, this._rhs);
 
   final NumExpression _lhs;
@@ -33,8 +33,9 @@ class _NumAdd extends NumExpression {
   num get value => _lhs.value + _rhs.value;
 }
 
-/// Operator PLUS (+) for string arguments.
-class _StringAdd extends StringExpression {
+/// Operator PLUS (+) for string arguments. This operator simply concatenates
+/// strings.
+class _StringAdd extends StringExpression implements Add {
   _StringAdd(this._lhs, this._rhs);
 
   final StringExpression _lhs;

@@ -696,7 +696,7 @@ class _Parser {
     Token.operatorDivideAssign: _divide,
     // Token.operatorMinusAssign: _subtract,
     Token.operatorModuloAssign: _modulo,
-    Token.operatorMultiplyAssign: _multiply,
+    // Token.operatorMultiplyAssign: _multiply,
     // Token.operatorPlusAssign: _add,
   };
 
@@ -837,14 +837,6 @@ class _Parser {
     return out;
   }
 
-  Expression _multiply(Expression lhs, Expression rhs, int opPosition) {
-    if (lhs.isNumeric && rhs.isNumeric) {
-      return Multiply(lhs as NumExpression, rhs as NumExpression);
-    }
-    position = opPosition;
-    typeError('both lhs and rhs of * must be numeric');
-  }
-
   Expression _divide(Expression lhs, Expression rhs, int opPosition) {
     if (lhs.isNumeric && rhs.isNumeric) {
       return Divide(lhs as NumExpression, rhs as NumExpression);
@@ -958,7 +950,6 @@ class _Parser {
       binaryOperatorConstructors = {
     Token.operatorDivide: _divide,
     Token.operatorModulo: _modulo,
-    Token.operatorMultiply: _multiply,
     Token.operatorEqual: _equal,
     Token.operatorNotEqual: _notEqual,
     Token.operatorGreaterOrEqual: _greaterOrEqual,

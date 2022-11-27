@@ -12,7 +12,7 @@ class Xor extends BoolExpression {
   final BoolExpression _rhs;
 
   /// Static constructor, used by <parse.dart>.
-  static Expression make(
+  factory Xor.make(
     Expression lhs,
     Expression rhs,
     int operatorPosition,

@@ -11,7 +11,7 @@ class Or extends BoolExpression {
   final BoolExpression _lhs;
   final BoolExpression _rhs;
 
-  static Expression make(
+  factory Or.make(
     Expression lhs,
     Expression rhs,
     int operatorPosition,

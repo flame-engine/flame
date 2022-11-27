@@ -416,27 +416,6 @@ void main() {
         );
       });
 
-      test('multiply', () {
-        final yarn = YarnProject()
-          ..parse('title: test\n---\n'
-              '{ 11 * 8 * 0.5 }\n'
-              '{ 2 * -3 }\n'
-              '===\n');
-        expect(
-          linesToText(yarn.nodes['test']!.lines),
-          ['44.0', '-6'],
-        );
-        expect(
-          () => yarn.parse('title:E\n---\n{ "x" * "zero" }\n===\n'),
-          hasTypeError(
-            'TypeError: both lhs and rhs of * must be numeric\n'
-            '>  at line 3 column 7:\n'
-            '>  { "x" * "zero" }\n'
-            '>        ^\n',
-          ),
-        );
-      });
-
       test('divide', () {
         final yarn = YarnProject()
           ..parse('title: test\n---\n'

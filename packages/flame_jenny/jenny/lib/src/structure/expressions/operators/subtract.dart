@@ -1,8 +1,10 @@
 import 'package:jenny/src/structure/expressions/expression.dart';
 import 'package:jenny/src/structure/expressions/operators/_common.dart';
 
-class Subtract {
-  static Expression make(
+/// Common class for the MINUS (-) operator, with separate implementations for
+/// the numeric and string arguments.
+abstract class Subtract extends Expression {
+  factory Subtract.make(
     Expression lhs,
     Expression rhs,
     int operatorPosition,
@@ -23,7 +25,7 @@ class Subtract {
 }
 
 /// Operator MINUS (-) for numeric arguments.
-class _NumSubtract extends NumExpression {
+class _NumSubtract extends NumExpression implements Subtract {
   _NumSubtract(this._lhs, this._rhs);
 
   final NumExpression _lhs;
@@ -34,7 +36,11 @@ class _NumSubtract extends NumExpression {
 }
 
 /// Operator MINUS (-) for string arguments.
-class _StringSubtract extends StringExpression {
+///
+/// In the expression `x - y`, the first occurrence of string `y` is removed
+/// from `x`. For example, `"YarnSpinner" - "n" == "YarSpinner"`. If there is
+/// no string `y` in `x`, then `x` is returned unmodified.
+class _StringSubtract extends StringExpression implements Subtract {
   _StringSubtract(this._lhs, this._rhs);
 
   final StringExpression _lhs;
