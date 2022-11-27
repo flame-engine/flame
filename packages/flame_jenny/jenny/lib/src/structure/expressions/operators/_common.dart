@@ -44,11 +44,11 @@ final Map<Token, String> _operatorNames = {
 
 final Map<Token, BinaryOperatorBuilder> _builders = {
   Token.operatorAnd: And.make,
-  Token.operatorOr: Or.make,
-  Token.operatorXor: Xor.make,
-  Token.operatorPlus: Add.make,
-  Token.operatorMinus: Subtract.make,
-  Token.operatorMultiply: Multiply.make,
   Token.operatorDivide: Divide.make,
+  Token.operatorMinus: Subtract.make,
   Token.operatorModulo: Modulo.make,
+  Token.operatorMultiply: Multiply.make,
+  Token.operatorOr: Or.make,
+  Token.operatorPlus: Add.make,
+  Token.operatorXor: Xor.make,
 };

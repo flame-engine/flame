@@ -10,11 +10,11 @@ class Multiply extends NumExpression {
 
   /// Static constructor, used by <parser.dart>
   factory Multiply.make(
-      Expression lhs,
-      Expression rhs,
-      int operatorPosition,
-      ErrorFn errorFn,
-      ) {
+    Expression lhs,
+    Expression rhs,
+    int operatorPosition,
+    ErrorFn errorFn,
+  ) {
     if (lhs.isNumeric && rhs.isNumeric) {
       return Multiply(lhs as NumExpression, rhs as NumExpression);
     }
