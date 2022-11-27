@@ -14,7 +14,7 @@ void main() {
           {5 - 7}
           {3.5 - 2}
           {'Yarn' - 'Spinner'}
-          { 'Hello' - 'Hell' }
+          { 'Hello' - 'Hell' - 'Paradise' }
           ===
         ''',
         testPlan: '''

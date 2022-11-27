@@ -416,58 +416,6 @@ void main() {
         );
       });
 
-      test('add', () {
-        final yarn = YarnProject()
-          ..setVariable(r'$world', 'world')
-          ..parse('title: test\n---\n'
-              '{ 2.16 + 4.6 + 9 }\n'
-              '{ "hello," + " " + \$world }\n'
-              '===\n');
-        expect(
-          linesToText(yarn.nodes['test']!.lines),
-          ['15.76', 'hello, world'],
-        );
-        expect(
-          () => yarn.parse('title:E\n---\n{ 3 + " swords" }\n===\n'),
-          hasTypeError(
-            'TypeError: both lhs and rhs of + must be numeric or strings\n'
-            '>  at line 3 column 5:\n'
-            '>  { 3 + " swords" }\n'
-            '>      ^\n',
-          ),
-        );
-        expect(
-          () => yarn.parse('title:E\n---\n{ 3 + true }\n===\n'),
-          hasTypeError(
-            'TypeError: both lhs and rhs of + must be numeric or strings\n'
-            '>  at line 3 column 5:\n'
-            '>  { 3 + true }\n'
-            '>      ^\n',
-          ),
-        );
-      });
-
-      test('subtract', () {
-        final yarn = YarnProject()
-          ..parse('title: test\n---\n'
-              '{ 22 - 7 - 1 }\n'
-              '{ "hello," - "hell" - "paradise" }\n'
-              '===\n');
-        expect(
-          linesToText(yarn.nodes['test']!.lines),
-          ['14', 'o,'],
-        );
-        expect(
-          () => yarn.parse('title:E\n---\n{ 3 - "zero" }\n===\n'),
-          hasTypeError(
-            'TypeError: both lhs and rhs of - must be numeric or strings\n'
-            '>  at line 3 column 5:\n'
-            '>  { 3 - "zero" }\n'
-            '>      ^\n',
-          ),
-        );
-      });
-
       test('multiply', () {
         final yarn = YarnProject()
           ..parse('title: test\n---\n'

@@ -8,14 +8,15 @@ void main() {
   group('Add', () {
     test('x + y', () async {
       await testScenario(
-        input: '''
+        input: r'''
           title: Start
           ---
+          <<local $world = "World">>
           {5 + 7}
           {3.5 + 2}
           {1 + 2 + 3 + 4 + 5 + 6 + 7 + 8 + 9}
           {'Yarn' + 'Spinner'}
-          { 'Hello' + ', ' + 'World' + '!' }
+          { 'Hello' + ', ' + $world + '!' }
           ===
         ''',
         testPlan: '''
