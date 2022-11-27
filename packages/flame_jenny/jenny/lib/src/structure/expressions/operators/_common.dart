@@ -38,7 +38,6 @@ final Map<Token, String> _operatorNames = {
   Token.operatorGreaterThan: '>',
   Token.operatorLessOrEqual: '<=',
   Token.operatorLessThan: '<',
-  Token.operatorModulo: '%',
   Token.operatorNotEqual: '!=',
 };
 
