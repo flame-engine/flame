@@ -837,23 +837,6 @@ class _Parser {
     return out;
   }
 
-  Expression _equal(Expression lhs, Expression rhs, int opPosition) {
-    if (lhs.isNumeric && rhs.isNumeric) {
-      return NumericEqual(lhs as NumExpression, rhs as NumExpression);
-    }
-    if (lhs.isString && rhs.isString) {
-      return StringEqual(lhs as StringExpression, rhs as StringExpression);
-    }
-    if (lhs.isBoolean && rhs.isBoolean) {
-      return BoolEqual(lhs as BoolExpression, rhs as BoolExpression);
-    }
-    position = opPosition;
-    typeError(
-      'equality operator between operands of unrelated types ${lhs.type.name} '
-      'and ${rhs.type.name}',
-    );
-  }
-
   Expression _notEqual(Expression lhs, Expression rhs, int opPosition) {
     if (lhs.isNumeric && rhs.isNumeric) {
       return NumericNotEqual(lhs as NumExpression, rhs as NumExpression);
@@ -932,7 +915,6 @@ class _Parser {
 
   late Map<Token, Expression Function(Expression, Expression, int)>
       binaryOperatorConstructors = {
-    Token.operatorEqual: _equal,
     Token.operatorNotEqual: _notEqual,
     Token.operatorGreaterOrEqual: _greaterOrEqual,
     Token.operatorGreaterThan: _greaterThan,

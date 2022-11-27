@@ -391,33 +391,6 @@ void main() {
             .toList();
       }
 
-      test('equals', () {
-        final yarn = YarnProject()
-          ..setVariable(r'$famous', true)
-          ..setVariable(r'$name', 'Mr.Bronze')
-          ..parse('title: test\n---\n'
-              '{ \$famous == true }\n'
-              '{ 8 % 3 == 2 }\n'
-              '{ \$name == "monkey" }\n'
-              '===\n');
-        expect(
-          linesToText(yarn.nodes['test']!.lines),
-          ['true', 'true', 'false'],
-        );
-        expect(
-          () => yarn.parse('title:Error\n---\n'
-              '{ \$name == 9.99 }\n'
-              '===\n'),
-          hasTypeError(
-            'TypeError: equality operator between operands of unrelated '
-            'types string and numeric\n'
-            '>  at line 3 column 9:\n'
-            '>  { \$name == 9.99 }\n'
-            '>          ^\n',
-          ),
-        );
-      });
-
       test('complicated expressions', () {
         final yarn = YarnProject()
           ..parse('title: test\n---\n'

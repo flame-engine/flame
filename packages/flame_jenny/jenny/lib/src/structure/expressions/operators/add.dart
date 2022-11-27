@@ -1,6 +1,8 @@
 import 'package:jenny/src/structure/expressions/expression.dart';
 import 'package:jenny/src/structure/expressions/operators/_common.dart';
 
+/// Common class for the PLUS (+) operator, with separate implementations for
+/// the numeric and string arguments.
 abstract class Add extends Expression {
   factory Add.make(
     Expression lhs,
