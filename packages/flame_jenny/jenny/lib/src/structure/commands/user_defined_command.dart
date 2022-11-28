@@ -16,4 +16,7 @@ class UserDefinedCommand extends Command {
     return dialogue.project.commands
         .runCommand(name, argumentString.evaluate());
   }
+
+  @override
+  String toString() => 'Command($name)';
 }

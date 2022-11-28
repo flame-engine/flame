@@ -37,7 +37,9 @@ class DialogueRunner {
   })  : project = yarnProject,
         _dialogueViews = dialogueViews,
         _currentNodes = [],
-        _iterators = [];
+        _iterators = [] {
+    dialogueViews.forEach((dv) => dv.dialogueRunner = this);
+  }
 
   final YarnProject project;
   final List<DialogueView> _dialogueViews;
@@ -217,8 +219,15 @@ class _LineDeliveryPipeline {
     _interrupted = true;
     for (var i = 0; i < views.length; i++) {
       if (_futures[i] != null) {
-        _futures[i] = views[i].onLineStop(line);
+        final newFuture = views[i].onLineStop(line);
+        _futures[i] = newFuture;
+        if (newFuture == null) {
+          _numPendingFutures -= 1;
+        }
       }
+    }
+    if (_numPendingFutures == 0) {
+      finish();
     }
   }
 
