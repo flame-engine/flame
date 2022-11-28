@@ -22,9 +22,7 @@ jobs:
 
     steps:
       - name: Trigger building the docs
+        env:
+          GITHUB_TOKEN: ${{ secrets.docs_token }}
         run: |
-          curl -XPOST -u "${{ secrets.GIT_CREDENTIALS }}" \
-          -H "Accept:application/vnd.github" \
-          -H "Content-Type:application/json" \
-          https://api.github.com/flame-engine/flame-docs-site/actions/workflows/gh-pages.yml/dispatches \
-          --data '{"ref": "main" }'
+          gh workflow run 13757924 -R flame-engine/flame-docs-site
