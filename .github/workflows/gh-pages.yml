@@ -24,5 +24,6 @@ jobs:
       - name: Dispatch docs build
         uses: peter-evans/repository-dispatch@v2
         with:
+          repository: flame-engine/flame-docs-site
           token: ${{ secrets.docs_token }}
-          event-type: trigger-docs-builc
+          event-type: trigger-docs-build
