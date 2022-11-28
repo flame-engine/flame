@@ -42,6 +42,21 @@ void main() {
       expect(line.attributes[1].name, 'b');
     });
 
+    test('line with inline expressions', () {
+      final yarn = YarnProject()
+        ..variables.setVariable(r'$value', 'ok')
+        ..parse(
+          'title: A\n'
+          '---\n'
+          'Test line: {\$value}\n'
+          '===\n',
+        );
+      final line = yarn.nodes['A']!.lines.first as DialogueLine;
+      expect('$line', 'DialogueLine(<unevaluated>)');
+      line.evaluate();
+      expect('$line', 'DialogueLine(Test line: ok)');
+    });
+
     test('dynamic markup attributes', () {
       final yarn = YarnProject()
         ..variables.setVariable(r'$index', 1)
