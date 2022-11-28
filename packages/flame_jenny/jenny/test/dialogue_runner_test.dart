@@ -307,6 +307,33 @@ void main() {
       ''',
       commands: ['this'],
     );
+
+    test('Dialogue runs node before finishing the previous one', () async {
+      final yarn = YarnProject()
+        ..parse(
+          dedent('''
+            title: Start
+            ---
+            First line
+            Second line
+            ===
+            title: Other
+            ---
+            Third line
+            ===
+          '''),
+        );
+      final view = _RecordingDialogueView();
+      final dialogue = DialogueRunner(yarnProject: yarn, dialogueViews: [view]);
+      dialogue.runNode('Start');
+      expect(
+        () => dialogue.runNode('Other'),
+        hasDialogueError(
+          'Cannot run node "Other" because another node is currently running: '
+          '"Start"',
+        ),
+      );
+    });
   });
 }
 
