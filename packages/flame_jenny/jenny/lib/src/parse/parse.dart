@@ -15,14 +15,14 @@ import 'package:jenny/src/structure/dialogue_choice.dart';
 import 'package:jenny/src/structure/dialogue_entry.dart';
 import 'package:jenny/src/structure/dialogue_line.dart';
 import 'package:jenny/src/structure/dialogue_option.dart';
-import 'package:jenny/src/structure/expressions/arithmetic.dart';
 import 'package:jenny/src/structure/expressions/expression.dart';
-import 'package:jenny/src/structure/expressions/functions/_utils.dart';
+import 'package:jenny/src/structure/expressions/functions/_common.dart';
 import 'package:jenny/src/structure/expressions/functions/string.dart';
 import 'package:jenny/src/structure/expressions/literal.dart';
-import 'package:jenny/src/structure/expressions/logical.dart';
-import 'package:jenny/src/structure/expressions/relational.dart';
-import 'package:jenny/src/structure/expressions/string.dart';
+import 'package:jenny/src/structure/expressions/operators/_common.dart'
+    hide ErrorFn;
+import 'package:jenny/src/structure/expressions/operators/negate.dart';
+import 'package:jenny/src/structure/expressions/operators/not.dart';
 import 'package:jenny/src/structure/line_content.dart';
 import 'package:jenny/src/structure/markup_attribute.dart';
 import 'package:jenny/src/structure/node.dart';
@@ -555,27 +555,37 @@ class _Parser {
     } else {
       nameError('variable $variableName has not been declared');
     }
+    final variableExpression =
+        variableStorage.getVariableAsExpression(variableName);
     position += 1;
+
     final assignmentToken = peekToken();
-    if (!assignmentTokens.containsKey(assignmentToken)) {
+    if (!(assignmentToken == Token.operatorAssign ||
+        assignmentTokensToOperators.containsKey(assignmentToken))) {
       syntaxError('an assignment operator is expected');
     }
     position += 1;
     final expressionStartPosition = position;
     final expression = parseExpression();
-    final variableType = variableStorage.getVariableType(variableName);
-    if (variableType != expression.type) {
-      position = expressionStartPosition;
+    if (variableExpression.type != expression.type) {
       typeError(
-        'variable $variableName of type ${variableType.name} cannot be '
-        'assigned a value of type ${expression.type.name}',
+        'variable $variableName of type ${variableExpression.type.name} '
+        'cannot be assigned a value of type ${expression.type.name}',
+        expressionStartPosition,
       );
     }
-    final assignmentExpression = assignmentTokens[assignmentToken]!(
-      variableStorage.getVariableAsExpression(variableName),
-      expression,
-      expressionStartPosition,
-    );
+    final Expression assignmentExpression;
+    if (assignmentToken == Token.operatorAssign) {
+      assignmentExpression = expression;
+    } else {
+      assignmentExpression = makeBinaryOpExpression(
+        assignmentTokensToOperators[assignmentToken]!,
+        variableExpression,
+        expression,
+        expressionStartPosition,
+        typeError,
+      );
+    }
     take(Token.endExpression);
     take(Token.endCommand);
     take(Token.newline);
@@ -673,16 +683,6 @@ class _Parser {
     return UserDefinedCommand(commandName, arguments);
   }
 
-  late Map<Token, Expression Function(Expression, Expression, int)>
-      assignmentTokens = {
-    Token.operatorAssign: (lhs, rhs, pos) => rhs,
-    Token.operatorDivideAssign: _divide,
-    Token.operatorMinusAssign: _subtract,
-    Token.operatorModuloAssign: _modulo,
-    Token.operatorMultiplyAssign: _multiply,
-    Token.operatorPlusAssign: _add,
-  };
-
   //#endregion
 
   //#region Expression parsing
@@ -736,7 +736,7 @@ class _Parser {
         token = peekToken();
         position0 = position;
       }
-      result = binaryOperatorConstructors[op]!(result, rhs, position0);
+      result = makeBinaryOpExpression(op, result, rhs, position0, typeError);
     }
     return result;
   }
@@ -755,8 +755,7 @@ class _Parser {
       } else if (expression.isNumeric) {
         return Negate(expression as NumExpression);
       } else {
-        position -= 1;
-        typeError('unary minus can only be applied to numbers');
+        typeError('unary minus can only be applied to numbers', position - 1);
       }
     } else if (token.isNumber) {
       return NumLiteral(num.parse(token.content));
@@ -790,10 +789,9 @@ class _Parser {
       final lhs = parsePrimary();
       final arg = _parseExpressionImpl(lhs, precedences[Token.operatorNot]!);
       if (!arg.isBoolean) {
-        position = position0;
-        typeError('operator `not` can only be applied to booleans');
+        typeError('operator `not` can only be applied to booleans', position0);
       }
-      return LogicalNot(arg as BoolExpression);
+      return Not(arg as BoolExpression);
     }
     position -= 1;
     return constVoid;
@@ -820,146 +818,18 @@ class _Parser {
     return out;
   }
 
-  Expression _add(Expression lhs, Expression rhs, int opPosition) {
-    if (lhs.isNumeric && rhs.isNumeric) {
-      return Add(lhs as NumExpression, rhs as NumExpression);
-    }
-    if (lhs.isString && rhs.isString) {
-      return Concatenate([lhs as StringExpression, rhs as StringExpression]);
-    }
-    position = opPosition;
-    typeError('both lhs and rhs of + must be numeric or strings');
-  }
-
-  Expression _subtract(Expression lhs, Expression rhs, int opPosition) {
-    if (lhs.isNumeric && rhs.isNumeric) {
-      return Subtract(lhs as NumExpression, rhs as NumExpression);
-    }
-    if (lhs.isString && rhs.isString) {
-      return Remove(lhs as StringExpression, rhs as StringExpression);
-    }
-    position = opPosition;
-    typeError('both lhs and rhs of - must be numeric or strings');
-  }
-
-  Expression _multiply(Expression lhs, Expression rhs, int opPosition) {
-    if (lhs.isNumeric && rhs.isNumeric) {
-      return Multiply(lhs as NumExpression, rhs as NumExpression);
-    }
-    position = opPosition;
-    typeError('both lhs and rhs of * must be numeric');
-  }
-
-  Expression _divide(Expression lhs, Expression rhs, int opPosition) {
-    if (lhs.isNumeric && rhs.isNumeric) {
-      return Divide(lhs as NumExpression, rhs as NumExpression);
-    }
-    position = opPosition;
-    typeError('both lhs and rhs of / must be numeric');
-  }
-
-  Expression _modulo(Expression lhs, Expression rhs, int opPosition) {
-    if (lhs.isNumeric && rhs.isNumeric) {
-      return Modulo(lhs as NumExpression, rhs as NumExpression);
-    }
-    position = opPosition;
-    typeError('both lhs and rhs of % must be numeric');
-  }
-
-  Expression _equal(Expression lhs, Expression rhs, int opPosition) {
-    if (lhs.isNumeric && rhs.isNumeric) {
-      return NumericEqual(lhs as NumExpression, rhs as NumExpression);
-    }
-    if (lhs.isString && rhs.isString) {
-      return StringEqual(lhs as StringExpression, rhs as StringExpression);
-    }
-    if (lhs.isBoolean && rhs.isBoolean) {
-      return BoolEqual(lhs as BoolExpression, rhs as BoolExpression);
-    }
-    position = opPosition;
-    typeError(
-      'equality operator between operands of unrelated types ${lhs.type.name} '
-      'and ${rhs.type.name}',
-    );
-  }
-
-  Expression _notEqual(Expression lhs, Expression rhs, int opPosition) {
-    if (lhs.isNumeric && rhs.isNumeric) {
-      return NumericNotEqual(lhs as NumExpression, rhs as NumExpression);
-    }
-    if (lhs.isString && rhs.isString) {
-      return StringNotEqual(lhs as StringExpression, rhs as StringExpression);
-    }
-    if (lhs.isBoolean && rhs.isBoolean) {
-      return BoolNotEqual(lhs as BoolExpression, rhs as BoolExpression);
-    }
-    position = opPosition;
-    typeError(
-      'inequality operator between operands of unrelated types '
-      '${lhs.type.name} and ${rhs.type.name}',
-    );
-  }
-
-  Expression _greaterOrEqual(Expression lhs, Expression rhs, int opPosition) {
-    if (lhs.isNumeric && rhs.isNumeric) {
-      return GreaterThanOrEqual(lhs as NumExpression, rhs as NumExpression);
-    }
-    position = opPosition;
-    typeError('both lhs and rhs of ">=" must be numeric');
-  }
-
-  Expression _greaterThan(Expression lhs, Expression rhs, int opPosition) {
-    if (lhs.isNumeric && rhs.isNumeric) {
-      return GreaterThan(lhs as NumExpression, rhs as NumExpression);
-    }
-    position = opPosition;
-    typeError('both lhs and rhs of ">" must be numeric');
-  }
-
-  Expression _lessOrEqual(Expression lhs, Expression rhs, int opPosition) {
-    if (lhs.isNumeric && rhs.isNumeric) {
-      return LessThanOrEqual(lhs as NumExpression, rhs as NumExpression);
-    }
-    position = opPosition;
-    typeError('both lhs and rhs of "<=" must be numeric');
-  }
-
-  Expression _lessThan(Expression lhs, Expression rhs, int opPosition) {
-    if (lhs.isNumeric && rhs.isNumeric) {
-      return LessThan(lhs as NumExpression, rhs as NumExpression);
-    }
-    position = opPosition;
-    typeError('both lhs and rhs of "<" must be numeric');
-  }
-
-  Expression _and(Expression lhs, Expression rhs, int opPosition) {
-    if (lhs.isBoolean && rhs.isBoolean) {
-      return LogicalAnd(lhs as BoolExpression, rhs as BoolExpression);
-    }
-    position = opPosition;
-    typeError('both lhs and rhs of "&&" must be boolean');
-  }
-
-  Expression _or(Expression lhs, Expression rhs, int opPosition) {
-    if (lhs.isBoolean && rhs.isBoolean) {
-      return LogicalOr(lhs as BoolExpression, rhs as BoolExpression);
-    }
-    position = opPosition;
-    typeError('both lhs and rhs of "||" must be boolean');
-  }
-
-  Expression _xor(Expression lhs, Expression rhs, int opPosition) {
-    if (lhs.isBoolean && rhs.isBoolean) {
-      return LogicalXor(lhs as BoolExpression, rhs as BoolExpression);
-    }
-    position = opPosition;
-    typeError('both lhs and rhs of "^" must be boolean');
-  }
-
   static final Map<Token, Expression> typesToDefaultValues = {
     Token.typeBool: constFalse,
     Token.typeNumber: constZero,
     Token.typeString: constEmptyString,
+  };
+
+  late Map<Token, Token> assignmentTokensToOperators = {
+    Token.operatorDivideAssign: Token.operatorDivide,
+    Token.operatorMinusAssign: Token.operatorMinus,
+    Token.operatorModuloAssign: Token.operatorModulo,
+    Token.operatorMultiplyAssign: Token.operatorMultiply,
+    Token.operatorPlusAssign: Token.operatorPlus,
   };
 
   static final Map<Token, int> precedences = {
@@ -981,24 +851,6 @@ class _Parser {
     Token.operatorAnd: 2,
     Token.operatorXor: 2,
     Token.operatorOr: 1,
-  };
-
-  late Map<Token, Expression Function(Expression, Expression, int)>
-      binaryOperatorConstructors = {
-    Token.operatorDivide: _divide,
-    Token.operatorMinus: _subtract,
-    Token.operatorModulo: _modulo,
-    Token.operatorMultiply: _multiply,
-    Token.operatorPlus: _add,
-    Token.operatorEqual: _equal,
-    Token.operatorNotEqual: _notEqual,
-    Token.operatorGreaterOrEqual: _greaterOrEqual,
-    Token.operatorGreaterThan: _greaterThan,
-    Token.operatorLessOrEqual: _lessOrEqual,
-    Token.operatorLessThan: _lessThan,
-    Token.operatorAnd: _and,
-    Token.operatorOr: _or,
-    Token.operatorXor: _xor,
   };
 
   //#endregion

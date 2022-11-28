@@ -1,5 +1,5 @@
 import 'package:jenny/src/structure/expressions/expression.dart';
-import 'package:jenny/src/structure/expressions/functions/_utils.dart';
+import 'package:jenny/src/structure/expressions/functions/_common.dart';
 import 'package:jenny/src/yarn_project.dart';
 
 /// Function `decimal(x)` returns a fractional point of `x`.

@@ -1,5 +1,5 @@
 import 'package:jenny/src/structure/expressions/expression.dart';
-import 'package:jenny/src/structure/expressions/functions/_utils.dart';
+import 'package:jenny/src/structure/expressions/functions/_common.dart';
 import 'package:jenny/src/yarn_project.dart';
 
 /// Function `inc(x)` increases `x` towards next integer. It is equal to `x + 1`
