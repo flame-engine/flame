@@ -21,10 +21,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Trigger building the docs
-        run: |
-          curl -XPOST -u "${{ secrets.docs_token }}" \
-          -H "Accept:application/vnd.github" \
-          -H "Content-Type:application/json" \
-          https://api.github.com/flame-engine/flame-docs-site/actions/workflows/gh-pages.yml/dispatches \
-          --data '{"ref": "main" }'
+      - name: Dispatch docs build
+        uses: peter-evans/repository-dispatch@v2
+        with:
+          token: ${{ secrets.docs_token }}
+          event-type: trigger-docs-builc
