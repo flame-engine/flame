@@ -23,7 +23,6 @@ jobs:
     steps:
       - name: Trigger building the docs
         env:
-          GITHUB_TOKEN: ${{ secrets.docs_token }}
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.docs_token }}
         run: |
           gh workflow run 13757924 -R flame-engine/flame-docs-site
