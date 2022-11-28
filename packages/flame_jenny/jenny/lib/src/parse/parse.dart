@@ -529,10 +529,13 @@ class _Parser {
   Command parseCommandWait() {
     take(Token.startCommand);
     take(Token.commandWait);
+    take(Token.startExpression);
+    final position0 = position;
     final expression = parseExpression();
     if (!expression.isNumeric) {
-      typeError('<<wait>> command expects a numeric argument');
+      typeError('<<wait>> command expects a numeric argument', position0);
     }
+    take(Token.endExpression);
     take(Token.endCommand);
     take(Token.newline);
     return WaitCommand(expression as NumExpression);
