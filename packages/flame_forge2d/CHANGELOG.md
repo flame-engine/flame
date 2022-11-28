@@ -1,3 +1,7 @@
+## 0.12.4
+
+ - **FIX**: 🐛 unit test for `Forge2dGame` ([#2068](https://github.com/flame-engine/flame/issues/2068)). ([d659b85d](https://github.com/flame-engine/flame/commit/d659b85d090614ebb3df06fb68254c087f6f9dff))
+
 ## 0.12.3
 
  - **FEAT**: Allow flame_forge2d's followBodyComponent to follow centre of mass ([#1947](https://github.com/flame-engine/flame/issues/1947)) ([#1948](https://github.com/flame-engine/flame/issues/1948)). ([c4fd2ba5](https://github.com/flame-engine/flame/commit/c4fd2ba5402f42d5a333270f401bb7208e050986))

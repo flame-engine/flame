@@ -18,6 +18,7 @@ abelian
 ambiguate
 antialiasing
 arial
+arities
 arity
 autofocus
 backpressure

@@ -72,6 +72,11 @@ below it from rendering or receiving pointer events, a transparent route doesn't
 thumb, declare the route opaque if it is full-screen, and transparent if it is supposed to cover
 only a part of the screen.
 
+By default, routes maintain the state of the page component after being popped from the stack
+and the `builder` function is only called the first time a route is activated. Setting
+`maintainState` to `false` drops the page component after the route is popped from the route stack
+and the `builder` function is called each time the route is activated.
+
 
 ## OverlayRoute
 

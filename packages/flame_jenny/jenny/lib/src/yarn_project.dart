@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:jenny/src/command_storage.dart';
 import 'package:jenny/src/errors.dart';
+import 'package:jenny/src/function_storage.dart';
 import 'package:jenny/src/localization.dart';
 import 'package:jenny/src/parse/parse.dart' as impl;
 import 'package:jenny/src/structure/node.dart';
@@ -20,6 +21,7 @@ class YarnProject {
   YarnProject()
       : nodes = <String, Node>{},
         variables = VariableStorage(),
+        functions = FunctionStorage(),
         commands = CommandStorage(),
         random = Random() {
     locale = 'en';
@@ -31,6 +33,9 @@ class YarnProject {
   final Map<String, Node> nodes;
 
   final VariableStorage variables;
+
+  /// User-defined functions are stored here.
+  final FunctionStorage functions;
 
   /// Repository for user-defined commands.
   final CommandStorage commands;
