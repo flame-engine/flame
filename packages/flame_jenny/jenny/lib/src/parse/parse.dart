@@ -16,7 +16,7 @@ import 'package:jenny/src/structure/dialogue_entry.dart';
 import 'package:jenny/src/structure/dialogue_line.dart';
 import 'package:jenny/src/structure/dialogue_option.dart';
 import 'package:jenny/src/structure/expressions/expression.dart';
-import 'package:jenny/src/structure/expressions/functions/_utils.dart';
+import 'package:jenny/src/structure/expressions/functions/_common.dart';
 import 'package:jenny/src/structure/expressions/functions/string.dart';
 import 'package:jenny/src/structure/expressions/literal.dart';
 import 'package:jenny/src/structure/expressions/operators/_common.dart'
