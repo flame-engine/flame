@@ -2,6 +2,8 @@ import 'package:jenny/jenny.dart';
 import 'package:jenny/src/parse/token.dart';
 import 'package:jenny/src/parse/tokenize.dart';
 import 'package:jenny/src/structure/commands/command.dart';
+import 'package:jenny/src/structure/commands/wait_command.dart';
+import 'package:jenny/src/structure/expressions/literal.dart';
 import 'package:test/test.dart';
 
 import '../../test_scenario.dart';
@@ -81,16 +83,11 @@ void main() {
     });
 
     test('negative duration', () {
-      final yarn = YarnProject()
-        ..parse(
-          'title: A\n---\n'
-          '<<wait -1>>\n'
-          '===\n',
-        );
-      final line = yarn.nodes['A']!.lines[0] as Command;
+      const command = WaitCommand(NumLiteral(-1.0));
+      expect(command.name, 'wait');
       expect(
-        () => line.execute(
-          DialogueRunner(yarnProject: yarn, dialogueViews: []),
+        () => command.execute(
+          DialogueRunner(yarnProject: YarnProject(), dialogueViews: []),
         ),
         hasDialogueError('<<wait>> command with negative duration: -1.0'),
       );
