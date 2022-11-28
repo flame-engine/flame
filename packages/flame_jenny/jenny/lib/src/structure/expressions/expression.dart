@@ -1,5 +1,3 @@
-import 'package:jenny/src/structure/expressions/expression_type.dart';
-
 abstract class Expression {
   const Expression();
 
@@ -18,6 +16,13 @@ abstract class Expression {
                 ? ExpressionType.string
                 : ExpressionType.unknown;
   }
+}
+
+enum ExpressionType {
+  unknown,
+  boolean,
+  numeric,
+  string,
 }
 
 abstract class NumExpression extends Expression {

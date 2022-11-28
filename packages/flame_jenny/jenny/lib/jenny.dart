@@ -4,7 +4,7 @@ export 'src/errors.dart' show SyntaxError, NameError, TypeError, DialogueError;
 export 'src/structure/dialogue_choice.dart' show DialogueChoice;
 export 'src/structure/dialogue_line.dart' show DialogueLine;
 export 'src/structure/dialogue_option.dart' show DialogueOption;
-export 'src/structure/expressions/expression_type.dart' show ExpressionType;
+export 'src/structure/expressions/expression.dart' show ExpressionType;
 export 'src/structure/node.dart' show Node;
 export 'src/variable_storage.dart' show VariableStorage;
 export 'src/yarn_project.dart' show YarnProject;

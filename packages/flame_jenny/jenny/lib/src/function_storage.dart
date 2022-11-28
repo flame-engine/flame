@@ -1,6 +1,5 @@
 import 'package:jenny/src/errors.dart';
 import 'package:jenny/src/structure/expressions/expression.dart';
-import 'package:jenny/src/structure/expressions/expression_type.dart';
 import 'package:jenny/src/structure/expressions/functions/_utils.dart';
 import 'package:jenny/src/structure/expressions/functions/user_defined_function.dart';
 import 'package:jenny/src/yarn_project.dart';
