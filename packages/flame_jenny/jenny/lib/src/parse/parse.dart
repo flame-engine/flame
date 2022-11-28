@@ -505,12 +505,13 @@ class _Parser {
       position += 1;
     } else {
       take(Token.startExpression);
+      final position0 = position;
       final expression = parseExpression();
       take(Token.endExpression);
       if (expression.isString) {
         target = expression as StringExpression;
       } else {
-        typeError('target of <<jump>> must be a string expression');
+        typeError('target of <<jump>> must be a string expression', position0);
       }
     }
     take(Token.endCommand);
