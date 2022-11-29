@@ -887,7 +887,7 @@ class _Parser {
 
   bool take(Token token, [String? message]) {
     if (position >= tokens.length) {
-      syntaxError('unexpected end of file');  // coverage:ignore-line
+      syntaxError('unexpected end of file'); // coverage:ignore-line
     }
     if (tokens[position] == token) {
       position += 1;
