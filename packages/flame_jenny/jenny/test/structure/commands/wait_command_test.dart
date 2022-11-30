@@ -25,15 +25,27 @@ void main() {
     });
 
     test('normal command <<wait>>', () async {
-      final t0 = DateTime.now().millisecondsSinceEpoch;
+      final yarn = YarnProject();
+      var t0 = 0;
+      var t1 = 0;
+      yarn.functions
+        ..addFunction0('startTimer', () {
+          t0 = DateTime.now().millisecondsSinceEpoch;
+          return '';
+        })
+        ..addFunction0('finishTimer', () {
+          t1 = DateTime.now().millisecondsSinceEpoch;
+          return '';
+        });
       await testScenario(
+        yarn: yarn,
         input: r'''
           title: Start
           ---
           <<local $duration = 1.0>>
-          before wait
+          before wait{startTimer()}
           <<wait $duration>>
-          after wait
+          after wait{finishTimer()}
           ===
         ''',
         testPlan: '''
@@ -41,10 +53,9 @@ void main() {
           line: after wait
         ''',
       );
-      final t1 = DateTime.now().millisecondsSinceEpoch;
       final elapsedTimeMs = t1 - t0;
-      expect(elapsedTimeMs >= 1000, true);
-      expect(elapsedTimeMs < 1100, true);
+      expect(elapsedTimeMs, greaterThanOrEqualTo(1000));
+      expect(elapsedTimeMs, lessThan(1100));
     });
 
     test('wrong argument type', () {
