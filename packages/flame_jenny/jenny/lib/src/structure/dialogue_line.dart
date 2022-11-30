@@ -91,9 +91,7 @@ class DialogueLine extends DialogueEntry {
   @override
   String toString() {
     final prefix = character == null ? '' : '$character: ';
-    if (_value == null) {
-      evaluate();
-    }
+    final text = _value ?? '<unevaluated>';
     return 'DialogueLine($prefix$text)';
   }
 

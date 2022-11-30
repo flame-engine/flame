@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:jenny/src/dialogue_runner.dart';
 import 'package:jenny/src/errors.dart';
 import 'package:jenny/src/structure/commands/user_defined_command.dart';
 import 'package:jenny/src/structure/dialogue_choice.dart';
@@ -9,7 +10,13 @@ import 'package:jenny/src/structure/node.dart';
 import 'package:meta/meta.dart';
 
 abstract class DialogueView {
-  const DialogueView();
+  DialogueView();
+
+  late DialogueRunner _dialogueRunner;
+
+  DialogueRunner get dialogueRunner => _dialogueRunner;
+  @internal
+  set dialogueRunner(DialogueRunner value) => _dialogueRunner = value;
 
   /// Called before the start of a new dialogue, i.e. before any lines, options,
   /// or commands are delivered.

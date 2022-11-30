@@ -1,7 +1,6 @@
 import 'package:jenny/jenny.dart';
 import 'package:jenny/src/parse/parse.dart';
 import 'package:jenny/src/structure/commands/if_command.dart';
-import 'package:jenny/src/structure/commands/jump_command.dart';
 import 'package:jenny/src/structure/dialogue_entry.dart';
 import 'package:test/test.dart';
 
@@ -432,9 +431,11 @@ void main() {
 
       test('invalid expression', () {
         expect(
-          () => YarnProject().parse('title:A\n---\n'
-              '{ 1 + * 5 }\n'
-              '===\n'),
+          () => YarnProject().parse(
+            'title:A\n---\n'
+            '{ 1 + * 5 }\n'
+            '===\n',
+          ),
           hasSyntaxError('SyntaxError: unexpected expression\n'
               '>  at line 3 column 7:\n'
               '>  { 1 + * 5 }\n'
@@ -444,13 +445,29 @@ void main() {
 
       test('mismatched parentheses', () {
         expect(
-          () => YarnProject().parse('title:A\n---\n'
-              '{ (12 }\n'
-              '===\n'),
+          () => YarnProject().parse(
+            'title:A\n---\n'
+            '{ (12 }\n'
+            '===\n',
+          ),
           hasSyntaxError('SyntaxError: missing closing ")"\n'
               '>  at line 3 column 7:\n'
               '>  { (12 }\n'
               '>        ^\n'),
+        );
+      });
+
+      test('invalid function expression', () {
+        expect(
+          () => YarnProject().parse(
+            'title:A\n---\n'
+            '{ random_range(1, 3 ()) }\n'
+            '===\n',
+          ),
+          hasSyntaxError('SyntaxError: unexpected token\n'
+              '>  at line 3 column 21:\n'
+              '>  { random_range(1, 3 ()) }\n'
+              '>                      ^\n'),
         );
       });
     });
@@ -579,35 +596,19 @@ void main() {
         );
       });
 
-      test('non-boolean condition in <<if>>', () {
+      test('double command on a line', () {
         expect(
           () => YarnProject()
-            ..parse('title:A\n---\n'
-                '<<if "true">>\n'
-                '    text\n'
-                '<<endif>>\n'
-                '===\n'),
-          hasTypeError(
-              'TypeError: expression in an <<if>> command must be boolean\n'
-              '>  at line 3 column 6:\n'
-              '>  <<if "true">>\n'
-              '>       ^\n'),
+            ..parse(
+              'title:A\n---\n'
+              '<<wait 1>> <<wait 2>>\n'
+              '===\n',
+            ),
+          hasSyntaxError('SyntaxError: expected end of line\n'
+              '>  at line 3 column 12:\n'
+              '>  <<wait 1>> <<wait 2>>\n'
+              '>             ^\n'),
         );
-      });
-
-      test('<<jump>>', () {
-        final yarn = YarnProject()
-          ..setVariable(r'$target', 'DOWN')
-          ..parse('title:A\n---\n'
-              '<<jump UP>>\n'
-              '<<jump {\$target}>>\n'
-              '===\n');
-        final node = yarn.nodes['A']!;
-        expect(node.lines.length, 2);
-        expect(node.lines[0], isA<JumpCommand>());
-        expect(node.lines[1], isA<JumpCommand>());
-        expect((node.lines[0] as JumpCommand).target.value, 'UP');
-        expect((node.lines[1] as JumpCommand).target.value, 'DOWN');
       });
     });
 

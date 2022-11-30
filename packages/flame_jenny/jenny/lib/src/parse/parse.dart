@@ -62,7 +62,7 @@ class _Parser {
       } else if (token == Token.newline) {
         position += 1;
       } else {
-        syntaxError('unexpected token: $token');
+        syntaxError('unexpected token: $token'); // coverage:ignore-line
       }
     }
     while (position < tokens.length) {
@@ -505,12 +505,13 @@ class _Parser {
       position += 1;
     } else {
       take(Token.startExpression);
+      final position0 = position;
       final expression = parseExpression();
       take(Token.endExpression);
       if (expression.isString) {
         target = expression as StringExpression;
       } else {
-        typeError('target of <<jump>> must be a string expression');
+        typeError('target of <<jump>> must be a string expression', position0);
       }
     }
     take(Token.endCommand);
@@ -529,12 +530,15 @@ class _Parser {
   Command parseCommandWait() {
     take(Token.startCommand);
     take(Token.commandWait);
+    take(Token.startExpression);
+    final position0 = position;
     final expression = parseExpression();
     if (!expression.isNumeric) {
-      typeError('<<wait>> command expects a numeric argument');
+      typeError('<<wait>> command expects a numeric argument', position0);
     }
+    take(Token.endExpression);
     take(Token.endCommand);
-    take(Token.newline);
+    takeNewline();
     return WaitCommand(expression as NumExpression);
   }
 
@@ -588,7 +592,7 @@ class _Parser {
     }
     take(Token.endExpression);
     take(Token.endCommand);
-    take(Token.newline);
+    takeNewline();
     return SetCommand(variableName, assignmentExpression, variableStorage);
   }
 
@@ -883,7 +887,7 @@ class _Parser {
 
   bool take(Token token, [String? message]) {
     if (position >= tokens.length) {
-      syntaxError('unexpected end of file');
+      syntaxError('unexpected end of file'); // coverage:ignore-line
     }
     if (tokens[position] == token) {
       position += 1;

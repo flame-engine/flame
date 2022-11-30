@@ -1204,6 +1204,23 @@ void main() {
           '>           ^',
         );
       });
+
+      test('error at the end of text', () {
+        const text = '---\n---\nSome text\n===\n';
+        final tokens0 = tokenize(text);
+        expect(tokens0.length, 6);
+
+        final tokens1 = tokenize(text, addErrorTokenAtIndex: 6);
+        final errorToken = tokens1.removeAt(6);
+        expect(tokens1, tokens0);
+        expect(errorToken.type, TokenType.error);
+        expect(
+          errorToken.content,
+          '>  at line 5 column 1:\n'
+          '>  \n'
+          '>  ^',
+        );
+      });
     });
   });
 }

@@ -1,4 +1,5 @@
 import 'package:jenny/src/dialogue_runner.dart';
+import 'package:jenny/src/errors.dart';
 import 'package:jenny/src/structure/commands/command.dart';
 import 'package:jenny/src/structure/expressions/expression.dart';
 
@@ -12,9 +13,12 @@ class WaitCommand extends Command {
 
   @override
   Future<void> execute(DialogueRunner dialogue) {
-    final duration = Duration(
-      microseconds: (arg.value.toDouble() * 1000000).toInt(),
+    final seconds = arg.value.toDouble();
+    if (seconds < 0) {
+      throw DialogueError('<<wait>> command with negative duration: $seconds');
+    }
+    return Future.delayed(
+      Duration(microseconds: (seconds * 1000000).toInt()),
     );
-    return Future.delayed(duration);
   }
 }

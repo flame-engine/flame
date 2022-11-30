@@ -24,90 +24,91 @@ void main() {
       );
     });
 
-    testScenario(
-      testName: 'AnalysisTest.plan',
-      input: r'''
-        <<declare $foo = 0>> // used
-        <<declare $bar = 0>> // written to but never read
+    test('AnalysisTest.plan', () async {
+      await testScenario(
+        input: r'''
+          <<declare $foo = 0>> // used
+          <<declare $bar = 0>> // written to but never read
+          ---
+          title: Start
+          ---
+          <<set $foo to 1>>
+          <<set $bar to $foo>>
+          {$foo} {$bar}
+          ===
+        ''',
+        testPlan: 'line: 1 1',
+      );
+    });
 
-        title: Start
-        ---
-        // testing
+    test('Basic.plan', () async {
+      await testScenario(
+        input: r'''
+          <<declare $foo as Number>>
+          ---
+          title: Start
+          ---
+          whoa what here's some text
+          <<set $foo to (1+3*3/9)-1>>
 
-        <<set $foo to 1>>
-        <<set $bar to $foo>>
-        {$foo} {$bar}
-        ===
-      ''',
-      testPlan: 'line: 1 1',
-    );
+          <<if $foo is 1>> // testing a comment
+              this should appear :)
+              <<if 1 is 1>>
+                  NESTED IF BLOCK WHA-A-AT
+                  <<set $foo += 47 + 6>>
+              <<endif>>
+          <<else>>
+              oh noooo it didn't work :(
+          <<endif>>
 
-    testScenario(
-      testName: 'Basic.plan',
-      input: r'''
-        <<declare $foo as Number>>
-        ---
-        title: Start
-        ---
-        whoa what here's some text
-        <<set $foo to (1+3*3/9)-1>>
-        
-        <<if $foo is 1>> // testing a comment
-            this should appear :)
-            <<if 1 is 1>>
-                NESTED IF BLOCK WHAAAT
-                <<set $foo += 47 + 6>>
-            <<endif>>
-        <<else>>
-            oh noooo it didn't work :(
-        <<endif>>
+          <<if $foo is 54>>
+              haha nice now 'set' works even when deeply nested
+          <<else>>
+              aaargh :(
+          <<endif>>
+          ===
+        ''',
+        testPlan: '''
+          line: whoa what here's some text
+          line: this should appear :)
+          line: NESTED IF BLOCK WHA-A-AT
+          line: haha nice now 'set' works even when deeply nested
+        ''',
+      );
+    });
 
-        <<if $foo is 54>>
-            haha nice now 'set' works even when deeply nested
-        <<else>>
-            aaargh :(
-        <<endif>>
-        ===
-      ''',
-      testPlan: '''
-        line: whoa what here's some text
-        line: this should appear :)
-        line: NESTED IF BLOCK WHAAAT
-        line: haha nice now 'set' works even when deeply nested
-      ''',
-    );
-
-    testScenario(
-      testName: 'modifying assignments',
-      input: r'''
-        <<declare $x = 0>>
-        <<declare $s = 'Hello'>>
-        ---
-        title: Start
-        ---
-        <<set $x += 12>>
-        $x = {$x}
-        <<set $x *= 4>>
-        $x = {$x}
-        <<set $x /= 6>>
-        $x = {$x}
-        <<set $x %= 5>>
-        $x = {$x}
-        <<set $x -= 2>>
-        $x = {$x}
-        <<set $s += " world">>
-        $s = '{$s}'
-        ===
-      ''',
-      testPlan: r'''
-        line: $x = 12
-        line: $x = 48
-        line: $x = 8.0
-        line: $x = 3.0
-        line: $x = 1.0
-        line: $s = 'Hello world'
-      ''',
-    );
+    test('modifying assignments', () async {
+      await testScenario(
+        input: r'''
+          <<declare $x = 0>>
+          <<declare $s = 'Hello'>>
+          ---
+          title: Start
+          ---
+          <<set $x += 12>>
+          $x = {$x}
+          <<set $x *= 4>>
+          $x = {$x}
+          <<set $x /= 6>>
+          $x = {$x}
+          <<set $x %= 5>>
+          $x = {$x}
+          <<set $x -= 2>>
+          $x = {$x}
+          <<set $s += " world">>
+          $s = '{$s}'
+          ===
+        ''',
+        testPlan: r'''
+          line: $x = 12
+          line: $x = 48
+          line: $x = 8.0
+          line: $x = 3.0
+          line: $x = 1.0
+          line: $s = 'Hello world'
+        ''',
+      );
+    });
 
     group('errors', () {
       test('no variable', () {
@@ -181,6 +182,22 @@ void main() {
             '>  at line 4 column 12:\n'
             '>  <<set \$x = 12>>\n'
             '>             ^\n',
+          ),
+        );
+      });
+
+      test('<<set>> at root level', () {
+        expect(
+          () => YarnProject()
+            ..parse(
+              '<<declare \$x as Number>>\n'
+              '<<set \$x = 1>>\n',
+            ),
+          hasTypeError(
+            'TypeError: command <<set>> is only allowed inside nodes\n'
+            '>  at line 2 column 1:\n'
+            '>  <<set \$x = 1>>\n'
+            '>  ^\n',
           ),
         );
       });

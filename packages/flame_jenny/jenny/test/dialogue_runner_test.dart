@@ -74,6 +74,7 @@ void main() {
       final view1 = _DelayedDialogueView(
         target: events,
         name: 'A',
+        dialogueStartDelay: 0.1,
         lineStartDelay: 0.1,
         lineFinishDelay: 0.02,
       );
@@ -85,6 +86,7 @@ void main() {
       final view3 = _DelayedDialogueView(
         target: events,
         name: 'C',
+        dialogueStartDelay: 0.25,
         lineStartDelay: 0.15,
       );
       final dialogue = DialogueRunner(
@@ -307,6 +309,33 @@ void main() {
       ''',
       commands: ['this'],
     );
+
+    test('Dialogue runs node before finishing the previous one', () async {
+      final yarn = YarnProject()
+        ..parse(
+          dedent('''
+            title: Start
+            ---
+            First line
+            Second line
+            ===
+            title: Other
+            ---
+            Third line
+            ===
+          '''),
+        );
+      final view = _RecordingDialogueView();
+      final dialogue = DialogueRunner(yarnProject: yarn, dialogueViews: [view]);
+      dialogue.runNode('Start');
+      expect(
+        () => dialogue.runNode('Other'),
+        hasDialogueError(
+          'Cannot run node "Other" because another node is currently running: '
+          '"Start"',
+        ),
+      );
+    });
   });
 }
 
@@ -362,12 +391,23 @@ class _DelayedDialogueView extends _RecordingDialogueView {
   _DelayedDialogueView({
     super.target,
     super.name,
+    this.dialogueStartDelay = 0,
     this.lineStartDelay = 0,
     this.lineFinishDelay = 0,
   });
 
+  final double dialogueStartDelay;
   final double lineStartDelay;
   final double lineFinishDelay;
+
+  @override
+  FutureOr<void> onDialogueStart() {
+    super.onDialogueStart();
+    if (dialogueStartDelay > 0) {
+      final delay = Duration(milliseconds: (dialogueStartDelay * 1000).toInt());
+      return Future.delayed(delay, () => null);
+    }
+  }
 
   @override
   Future<bool> onLineStart(DialogueLine line) {
