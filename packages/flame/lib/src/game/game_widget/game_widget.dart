@@ -415,3 +415,51 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
     );
   }
 }
+
+class SecondaryGameWidget extends StatefulWidget {
+  const SecondaryGameWidget({
+    Key? key,
+    required this.game,
+    required this.secondaryKey,
+  }) : super(key: key);
+
+  final Game game;
+
+  final String secondaryKey;
+
+  @override
+  State<SecondaryGameWidget> createState() => _SecondaryGameWidgetState();
+}
+
+class _SecondaryGameWidgetState extends State<SecondaryGameWidget> {
+  late final Future<void> loaderCompleter = (() async {
+    final onLoad = widget.game.onLoadFuture;
+    if (onLoad != null) {
+      await onLoad;
+    }
+  })();
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox.expand(
+      child: FutureBuilder(
+        future: loaderCompleter,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState != ConnectionState.done) {
+            return const SizedBox.shrink();
+          }
+
+          final size = widget.game.size;
+          final aspectRatio = size.x / size.y;
+          return AspectRatio(
+            aspectRatio: aspectRatio,
+            child: SecondaryRenderGameWidget(
+              game: widget.game,
+              secondaryKey: widget.secondaryKey,
+            ),
+          );
+        },
+      ),
+    );
+  }
+}

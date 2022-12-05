@@ -35,6 +35,8 @@ class FlameGame extends Component with Game {
   /// The camera translates the coordinate space after the viewport is applied.
   Camera get camera => _cameraWrapper.camera;
 
+  Camera secondaryCamera(String key) => _cameraWrapper.secondaryCameras[key]!;
+
   /// This is overwritten to consider the viewport transformation.
   ///
   /// Which means that this is the logical size of the game screen area as

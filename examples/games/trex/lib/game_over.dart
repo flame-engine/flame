@@ -20,7 +20,8 @@ class GameOverPanel extends Component {
   }
 }
 
-class GameOverText extends SpriteComponent with HasGameRef<TRexGame> {
+class GameOverText extends SpriteComponentDarkOnSecondary
+    with HasGameRef<TRexGame> {
   GameOverText() : super(size: Vector2(382, 25), anchor: Anchor.center);
 
   @override
@@ -40,7 +41,8 @@ class GameOverText extends SpriteComponent with HasGameRef<TRexGame> {
   }
 }
 
-class GameOverRestart extends SpriteComponent with HasGameRef<TRexGame> {
+class GameOverRestart extends SpriteComponentDarkOnSecondary
+    with HasGameRef<TRexGame> {
   GameOverRestart() : super(size: Vector2(72, 64), anchor: Anchor.center);
 
   @override

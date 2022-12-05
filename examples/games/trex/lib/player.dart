@@ -4,7 +4,7 @@ import 'package:trex_game/trex_game.dart';
 
 enum PlayerState { crashed, jumping, running, waiting }
 
-class Player extends SpriteAnimationGroupComponent<PlayerState>
+class Player extends SpriteAnimationGroupComponentDarkOnSecondary<PlayerState>
     with HasGameRef<TRexGame>, CollisionCallbacks {
   Player() : super(size: Vector2(90, 88));
 

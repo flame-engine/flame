@@ -127,6 +127,108 @@ class GameRenderBox extends RenderBox with WidgetsBindingObserver {
   }
 }
 
+class SecondaryRenderGameWidget extends LeafRenderObjectWidget {
+  const SecondaryRenderGameWidget({
+    Key? key,
+    required this.game,
+    required this.secondaryKey,
+  }) : super(key: key);
+
+  final Game game;
+
+  final String secondaryKey;
+
+  @override
+  RenderObject createRenderObject(BuildContext context) {
+    return SecondaryRenderBox(game, secondaryKey);
+  }
+
+  @override
+  void updateRenderObject(
+      BuildContext context, SecondaryRenderBox renderObject) {
+    renderObject.game = game;
+  }
+}
+
+class SecondaryRenderBox extends RenderBox {
+  SecondaryRenderBox(this._game, this.secondaryKey);
+
+  final String secondaryKey;
+
+  GameLoop? gameLoop;
+
+  Game _game;
+
+  Game get game => _game;
+
+  set game(Game value) {
+    // Identities are equal, no need to update.
+    if (_game == value) {
+      return;
+    }
+
+    if (attached) {
+      _detachGame();
+    }
+
+    _game = value;
+
+    if (attached) {
+      _attachGame();
+    }
+  }
+
+  @override
+  bool get isRepaintBoundary => false;
+
+  @override
+  bool get sizedByParent => true;
+
+  @override
+  Size computeDryLayout(BoxConstraints constraints) => constraints.biggest;
+
+  @override
+  void attach(PipelineOwner owner) {
+    super.attach(owner);
+    _attachGame();
+  }
+
+  void _attachGame() {
+    final gameLoop = this.gameLoop = GameLoop(gameLoopCallback);
+
+    if (!game.paused) {
+      gameLoop.start();
+    }
+  }
+
+  @override
+  void detach() {
+    super.detach();
+    _detachGame();
+  }
+
+  void _detachGame() {
+    gameLoop?.dispose();
+    gameLoop = null;
+  }
+
+  void gameLoopCallback(double dt) {
+    assert(attached);
+    if (!attached) {
+      return;
+    }
+    markNeedsPaint();
+  }
+
+  @override
+  void paint(PaintingContext context, Offset offset) {
+    context.canvas.save();
+    context.canvas.translate(offset.dx, offset.dy);
+    game.render(CanvasSecondary(context.canvas, secondaryKey));
+    context.canvas.restore();
+  }
+}
+
 /// This allows a value of type T or T?
 /// to be treated as a value of type T?.
 ///

@@ -3,7 +3,7 @@ import 'package:trex_game/background/cloud_manager.dart';
 import 'package:trex_game/random_extension.dart';
 import 'package:trex_game/trex_game.dart';
 
-class Cloud extends SpriteComponent
+class Cloud extends SpriteComponentDarkOnSecondary
     with ParentIsA<CloudManager>, HasGameRef<TRexGame> {
   Cloud({required Vector2 position})
       : cloudGap = random.fromRange(

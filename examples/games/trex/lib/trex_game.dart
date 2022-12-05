@@ -11,6 +11,8 @@ import 'package:trex_game/background/horizon.dart';
 import 'package:trex_game/game_over.dart';
 import 'package:trex_game/player.dart';
 
+export 'my_sprite_component.dart';
+
 enum GameState { playing, intro, gameOver }
 
 class TRexGame extends FlameGame
@@ -24,7 +26,7 @@ class TRexGame extends FlameGame
   late final Image spriteImage;
 
   @override
-  Color backgroundColor() => const Color(0xFFFFFFFF);
+  Color backgroundColor() => const Color(0x00000000);
 
   late final player = Player();
   late final horizon = Horizon();
@@ -33,7 +35,9 @@ class TRexGame extends FlameGame
 
   int _score = 0;
   int _highscore = 0;
+
   int get score => _score;
+
   set score(int newScore) {
     _score = newScore;
     scoreText.text = '${scoreString(_score)}  HI ${scoreString(_highscore)}';
@@ -46,10 +50,10 @@ class TRexGame extends FlameGame
 
   @override
   Future<void> onLoad() async {
-    spriteImage = await Flame.images.load('trex.png');
+    spriteImage = await Flame.images.load('nitetrex.png');
     add(horizon);
     add(player);
-    add(gameOverPanel);
+    add(ComponentDarkOnSecondary(children: [gameOverPanel]));
 
     const chars = '0123456789HI ';
     final renderer = SpriteFontRenderer.fromFont(
@@ -65,10 +69,14 @@ class TRexGame extends FlameGame
       letterSpacing: 2,
     );
     add(
-      scoreText = TextComponent(
-        position: Vector2(20, 20),
-        textRenderer: renderer,
-      )..positionType = PositionType.viewport,
+      ComponentHideOnSecondary(
+        children: [
+          scoreText = TextComponent(
+            position: Vector2(20, 20),
+            textRenderer: renderer,
+          )..positionType = PositionType.viewport,
+        ],
+      ),
     );
     score = 0;
   }
@@ -82,7 +90,9 @@ class TRexGame extends FlameGame
   final double startSpeed = 600;
 
   bool get isPlaying => state == GameState.playing;
+
   bool get isGameOver => state == GameState.gameOver;
+
   bool get isIntro => state == GameState.intro;
 
   @override
@@ -115,6 +125,7 @@ class TRexGame extends FlameGame
     state = GameState.gameOver;
     player.current = PlayerState.crashed;
     currentSpeed = 0.0;
+    horizon.stop();
   }
 
   void restart() {
@@ -146,6 +157,46 @@ class TRexGame extends FlameGame
       if (currentSpeed < maxSpeed) {
         currentSpeed += acceleration * dt;
       }
+    }
+  }
+}
+
+class ComponentHideOnSecondary extends Component {
+  ComponentHideOnSecondary({super.children, super.priority});
+
+  @override
+  void render(Canvas canvas) {}
+
+  @override
+  void renderTree(Canvas canvas) {
+    if (canvas is CanvasSecondary) {
+      return;
+    }
+    super.renderTree(canvas);
+  }
+}
+
+class ComponentDarkOnSecondary extends Component {
+  ComponentDarkOnSecondary({super.children, super.priority});
+
+  @override
+  void render(Canvas canvas) {}
+
+  @override
+  void renderTree(Canvas canvas) {
+    if (canvas is CanvasSecondary) {
+      canvas.saveLayer(
+        null,
+        Paint()
+          ..colorFilter = const ColorFilter.mode(
+            Color(0xFF000000),
+            BlendMode.srcATop,
+          ),
+      );
+      super.renderTree(canvas);
+      canvas.restore();
+    } else {
+      super.renderTree(canvas);
     }
   }
 }
