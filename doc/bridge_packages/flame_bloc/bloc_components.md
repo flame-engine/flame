@@ -6,7 +6,7 @@
 ## FlameBlocProvider
 
 FlameBlocProvider is a Component which creates and provides a bloc to its children.  
-The bloc will only live while this component is alive.It is used as a dependency injection (DI)
+The bloc will only live while this component is alive. It is used as a dependency injection (DI)
 widget so that a single instance of a bloc can be provided to multiple Components within a subtree.
 
 FlameBlocProvider should be used to create new blocs which will be made available to the rest of the

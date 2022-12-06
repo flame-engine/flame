@@ -1,6 +1,7 @@
 dollarmath
 linkcheck
 markdownlint
+seealso
 smartquotes
 tasklist
 toctree

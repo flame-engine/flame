@@ -30,6 +30,6 @@ the [](#fpstextcomponent).
 
 ### FpsTextComponent
 
-The `FpsTextComponent` is simply a [](../rendering/text.md#textcomponent) that wraps an
-[](../rendering/text.md#textcomponent), since you most commonly want to show the current FPS
-somewhere when you the [](#fpscomponent) is used.
+The `FpsTextComponent` is simply a [](../rendering/text_rendering.md#textcomponent) that wraps an
+[](../rendering/text_rendering.md#textcomponent), since you most commonly want to show the current
+FPS somewhere when you the [](#fpscomponent) is used.

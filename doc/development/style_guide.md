@@ -224,5 +224,5 @@ The following style rules generally apply when writing documentation:
 
 
 [effective dart]: https://dart.dev/guides/language/effective-dart
-[flutter documentation guide]: https://github.com/flutter/flutter/wiki/Style-guide-for-Flutter-repo#documentation-dartdocs-javadocs-etc
+[flutter documentation guide]: https://github.com/flutter/flutter/wiki/Style-guide-for-Flutter-repo#user-content-documentation-dartdocs-javadocs-etc
 [documentation]: documentation.md

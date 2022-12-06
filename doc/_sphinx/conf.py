@@ -38,7 +38,6 @@ myst_enable_extensions = [
     'dollarmath',
     'html_admonition',
     'html_image',
-    'linkify',
     'replacements',
     'smartquotes',
     'strikethrough',
@@ -54,6 +53,11 @@ myst_heading_anchors = 4
 # This pattern also affects html_static_path and html_extra_path.
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
+# https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-the-linkcheck-builder
+linkcheck_ignore = [
+    r'https://examples.flame-engine.org/#/.*',
+    r'https://pub.dev/documentation/flame/--VERSION--/',
+]
 
 # -- Options for HTML output -------------------------------------------------
 

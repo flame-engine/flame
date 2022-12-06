@@ -1170,7 +1170,7 @@ class Hud extends PositionComponent with HasGameRef {
 `FlameGame`, to help with that Flame provides a `ComponentsNotifierBuilder` widget.
 
 To see an example of its use check the running example
-[here](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/components/components_notifier_example.dart);
+[here](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/components/components_notifier_example.dart).
 
 
 ## ClipComponent

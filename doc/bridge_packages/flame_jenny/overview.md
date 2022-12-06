@@ -5,7 +5,7 @@ This library is currently under development. Many features are still missing.
 ```
 
 <!-- Image taken from https://pxhere.com/en/photo/932518  License: CC0 Public Domain -->
-![fireball](../images/fireball-small.jpg){align=right}
+![fireball](../../images/fireball-small.jpg){align=right}
 
 The **flame_yarn** library allows you to easily add **dialogue** into your game, which includes
 anything from simple exchange of phrases between characters, to user-controlled responses and
