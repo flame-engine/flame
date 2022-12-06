@@ -71,6 +71,186 @@ void main() {
       expect(router.currentRoute.name, 'start');
     });
 
+    testWithFlameGame('maintainState true', (game) async {
+      var onPushCalled = 0;
+      var onPopCalled = 0;
+      var buildFirstCalled = 0;
+      Route? previousRoute;
+      final router = RouterComponent(
+        initialRoute: 'start',
+        routes: {
+          'start': Route(Component.new),
+          'first': CustomRoute(
+            onPush: (self, prevRoute) {
+              onPushCalled++;
+              previousRoute = prevRoute;
+            },
+            onPop: (self, prevRoute) {
+              onPopCalled++;
+              previousRoute = prevRoute;
+            },
+            build: (self) {
+              buildFirstCalled++;
+              return PositionComponent();
+            },
+          ),
+          'second': CustomRoute(
+            onPush: (self, prevRoute) {
+              onPushCalled++;
+              previousRoute = prevRoute;
+            },
+            onPop: (self, prevRoute) {
+              onPopCalled++;
+              previousRoute = prevRoute;
+            },
+            build: (self) {
+              return PositionComponent();
+            },
+          ),
+        },
+      )..addToParent(game);
+      await game.ready();
+
+      // Go to first route
+      router.pushNamed('first');
+      expect(buildFirstCalled, 1);
+      await game.ready();
+      expect(router.currentRoute.name, 'first');
+      expect(router.currentRoute.children.first, isA<PositionComponent>());
+      expect(onPushCalled, 1);
+      expect(onPopCalled, 0);
+      expect(previousRoute!.name, 'start');
+
+      previousRoute = null;
+      router.pop();
+      await game.ready();
+      expect(onPushCalled, 1);
+      expect(onPopCalled, 1);
+      expect(previousRoute!.name, 'start');
+      expect(router.currentRoute.name, 'start');
+
+      // Go to second route after first route is popped
+      router.pushNamed('second');
+      expect(buildFirstCalled, 1);
+      await game.ready();
+      expect(router.currentRoute.name, 'second');
+      expect(router.currentRoute.children.first, isA<PositionComponent>());
+      expect(onPushCalled, 2);
+      expect(onPopCalled, 1);
+      expect(previousRoute!.name, 'start');
+
+      previousRoute = null;
+      router.pop();
+      await game.ready();
+      expect(onPushCalled, 2);
+      expect(onPopCalled, 2);
+      expect(previousRoute!.name, 'start');
+      expect(router.currentRoute.name, 'start');
+
+      // Go to first route again after popping second route
+      router.pushNamed('first');
+      expect(buildFirstCalled, 1);
+      await game.ready();
+      expect(router.currentRoute.name, 'first');
+      expect(router.currentRoute.children.first, isA<PositionComponent>());
+      expect(onPushCalled, 3);
+      expect(onPopCalled, 2);
+      expect(previousRoute!.name, 'start');
+    });
+
+    testWithFlameGame('maintainState false', (game) async {
+      var onPushCalled = 0;
+      var onPopCalled = 0;
+      var buildFirstCalled = 0;
+      var buildSecondCalled = 0;
+      Route? previousRoute;
+      final router = RouterComponent(
+        initialRoute: 'start',
+        routes: {
+          'start': Route(Component.new),
+          'first': CustomRoute(
+            maintainState: false,
+            onPush: (self, prevRoute) {
+              onPushCalled++;
+              previousRoute = prevRoute;
+            },
+            onPop: (self, prevRoute) {
+              onPopCalled++;
+              previousRoute = prevRoute;
+            },
+            build: (self) {
+              buildFirstCalled++;
+              return PositionComponent();
+            },
+          ),
+          'second': CustomRoute(
+            onPush: (self, prevRoute) {
+              onPushCalled++;
+              previousRoute = prevRoute;
+            },
+            onPop: (self, prevRoute) {
+              onPopCalled++;
+              previousRoute = prevRoute;
+            },
+            build: (self) {
+              buildSecondCalled++;
+              return PositionComponent();
+            },
+          ),
+        },
+      )..addToParent(game);
+      await game.ready();
+
+      // Go to first route
+      router.pushNamed('first');
+      expect(buildFirstCalled, 1);
+      await game.ready();
+      expect(router.currentRoute.name, 'first');
+      expect(router.currentRoute.children.first, isA<PositionComponent>());
+      expect(onPushCalled, 1);
+      expect(onPopCalled, 0);
+      expect(buildFirstCalled, 1);
+      expect(previousRoute!.name, 'start');
+
+      previousRoute = null;
+      router.pop();
+      await game.ready();
+      expect(onPushCalled, 1);
+      expect(onPopCalled, 1);
+      expect(previousRoute!.name, 'start');
+      expect(router.currentRoute.name, 'start');
+
+      // Go to second route after first route is popped
+      router.pushNamed('second');
+      expect(buildFirstCalled, 1);
+      await game.ready();
+      expect(router.currentRoute.name, 'second');
+      expect(router.currentRoute.children.first, isA<PositionComponent>());
+      expect(onPushCalled, 2);
+      expect(onPopCalled, 1);
+      expect(buildSecondCalled, 1);
+      expect(previousRoute!.name, 'start');
+
+      previousRoute = null;
+      router.pop();
+      await game.ready();
+      expect(onPushCalled, 2);
+      expect(onPopCalled, 2);
+      expect(previousRoute!.name, 'start');
+      expect(router.currentRoute.name, 'start');
+
+      // Go to first route again after popping second route
+      // Expect the build method to be called again
+      router.pushNamed('first');
+      expect(buildFirstCalled, 2);
+      await game.ready();
+      expect(router.currentRoute.name, 'first');
+      expect(router.currentRoute.children.first, isA<PositionComponent>());
+      expect(onPushCalled, 3);
+      expect(onPopCalled, 2);
+      expect(previousRoute!.name, 'start');
+    });
+
     testWithFlameGame('Stop and resume time', (game) async {
       final router = RouterComponent(
         initialRoute: 'start',
@@ -290,6 +470,7 @@ class CustomRoute extends Route {
   CustomRoute({
     Component Function()? builder,
     super.transparent,
+    super.maintainState,
     void Function(Route, Route?)? onPush,
     void Function(Route, Route)? onPop,
     Component Function(Route)? build,

@@ -1,0 +1,7 @@
+dollarmath
+linkcheck
+markdownlint
+smartquotes
+tasklist
+toctree
+toctrees

@@ -102,7 +102,7 @@ void main() {
           await tester.pumpWidget(
             Builder(
               builder: (BuildContext context) {
-                renderBox = GameRenderBox(context, game);
+                renderBox = GameRenderBox(game, context);
                 return GameWidget(game: game);
               },
             ),
@@ -395,7 +395,7 @@ void main() {
             game.projector.unprojectVector(Vector2.all(5)),
             Vector2.all(-100),
           );
-          // TODO(luan): we might want to change the behaviour so that the zoom
+          // TODO(luan): we might want to change the behavior so that the zoom
           // is applied w.r.t. the relativeOffset and not topLeft
 
           // For deltas, we consider only the zoom.

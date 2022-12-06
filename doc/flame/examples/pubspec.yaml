@@ -8,7 +8,8 @@ environment:
   flutter: ">=3.3.0"
 
 dependencies:
-  flame: ^1.4.0
+  flame: ^1.5.0
+  flame_rive: ^1.5.3
   flutter:
     sdk: flutter
 
@@ -17,4 +18,5 @@ dev_dependencies:
 
 flutter:
   assets:
+    - assets/
     - assets/images/

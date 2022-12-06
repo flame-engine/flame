@@ -29,16 +29,16 @@ void addSpritesStories(Dashbook dashbook) {
       info: SpritesheetExample.description,
     )
     ..add(
-      'Spritebatch',
-      (_) => GameWidget(game: SpritebatchExample()),
+      'SpriteBatch',
+      (_) => GameWidget(game: SpriteBatchExample()),
       codeLink: baseLink('sprites/spritebatch_example.dart'),
-      info: SpritebatchExample.description,
+      info: SpriteBatchExample.description,
     )
     ..add(
-      'Spritebatch Auto Load',
-      (_) => GameWidget(game: SpritebatchLoadExample()),
+      'SpriteBatch Auto Load',
+      (_) => GameWidget(game: SpriteBatchLoadExample()),
       codeLink: baseLink('sprites/spritebatch_load_example.dart'),
-      info: SpritebatchLoadExample.description,
+      info: SpriteBatchLoadExample.description,
     )
     ..add(
       'SpriteGroup',

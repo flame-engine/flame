@@ -1,0 +1,25 @@
+name: flutter_isolates_example
+description: Flame game example for running threaded workloads
+
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=2.18.0 <3.0.0'
+
+dependencies:
+  collection: ^1.16.0
+  flame: ^1.5.0
+  flame_isolate: ^0.1.1
+  flutter:
+    sdk: flutter
+  integral_isolates: ^0.3.0
+  quiver: ^3.1.0
+
+dev_dependencies:
+  flame_lint: ^0.1.3
+
+flutter:
+  assets:
+    - assets/images/

@@ -1,0 +1,24 @@
+name: tutorials_space_shooter
+description: Flame Space Shooter Tutorial
+
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=2.17.0 <3.0.0'
+
+dependencies:
+  flame: ^1.5.0
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flame_lint: ^0.1.3
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/

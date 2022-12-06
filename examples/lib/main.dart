@@ -1,6 +1,8 @@
 import 'package:dashbook/dashbook.dart';
 import 'package:examples/stories/animations/animations.dart';
 import 'package:examples/stories/bridge_libraries/audio/audio.dart';
+import 'package:examples/stories/bridge_libraries/flame_isolate/isolate.dart';
+import 'package:examples/stories/bridge_libraries/flame_lottie/lottie.dart';
 import 'package:examples/stories/bridge_libraries/forge2d/flame_forge2d.dart';
 import 'package:examples/stories/camera_and_viewport/camera_and_viewport.dart';
 import 'package:examples/stories/collision_detection/collision_detection.dart';
@@ -48,6 +50,8 @@ void main() {
 
   // Bridge package examples
   addForge2DStories(dashbook);
+  addFlameIsolateExample(dashbook);
+  addFlameLottieExample(dashbook);
 
   runApp(dashbook);
 }

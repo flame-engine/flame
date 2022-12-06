@@ -1,0 +1,24 @@
+name: flame_jenny
+description: Flame bridge package to Jenny (a Dart port of Yarn Spinner).
+version: 0.0.0
+homepage: https://github.com/flame-engine/flame/tree/main/packages/flame_jenny
+funding:
+  - https://patreon.com/bluefireoss
+  - https://www.buymeacoffee.com/bluefire
+
+environment:
+  sdk: ">=2.17.0 <3.0.0"
+  flutter: ">=3.3.0"
+
+dependencies:
+  collection: ^1.15.0
+  flame: ^1.5.0
+  flutter:
+    sdk: flutter
+  jenny: ^0.0.0
+  meta: ^1.7.0
+
+dev_dependencies:
+  dartdoc: ^6.0.1
+  flame_lint: ^0.1.3
+  test: any

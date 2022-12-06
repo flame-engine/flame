@@ -311,7 +311,9 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
   @override
   Widget build(BuildContext context) {
     return _protectedBuild(() {
-      Widget internalGameWidget = _GameRenderObjectWidget(currentGame);
+      Widget? internalGameWidget = RenderGameWidget(
+        game: currentGame,
+      );
 
       assert(
         !(currentGame is MultiTouchDragDetector && currentGame is PanDetector),
@@ -411,21 +413,5 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
     stackWidgets.addAll(
       currentGame.overlays.buildCurrentOverlayWidgets(context),
     );
-  }
-}
-
-class _GameRenderObjectWidget extends LeafRenderObjectWidget {
-  final Game game;
-
-  const _GameRenderObjectWidget(this.game);
-
-  @override
-  RenderBox createRenderObject(BuildContext context) {
-    return GameRenderBox(context, game);
-  }
-
-  @override
-  void updateRenderObject(BuildContext context, GameRenderBox renderObject) {
-    renderObject.game = game;
   }
 }

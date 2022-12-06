@@ -27,18 +27,23 @@ extensions = [
     'myst_parser',  # Markdown support
     'sphinxcontrib.mermaid',
     'extensions.flutter_app',
+    'extensions.package',
 ]
 
 # Configuration options for MyST:
 # https://myst-parser.readthedocs.io/en/latest/syntax/optional.html
 myst_enable_extensions = [
     'attrs_image',
+    'colon_fence',
     'dollarmath',
     'html_admonition',
     'html_image',
     'linkify',
     'replacements',
     'smartquotes',
+    'strikethrough',
+    'substitution',
+    'tasklist',
 ]
 
 # Auto-generate link anchors for headers at levels H1 and H2

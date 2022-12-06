@@ -3,8 +3,22 @@
   "language": "en",
   "flagWords": [],
   "ignorePaths": ["**/media/**", "**/assets/**", "**/test/**"],
-  "ignoreRegExpList": ["@\\w+", "\\$\\w+", "\\{\\w+", "\\`\\w+", "\\:\\w+", "\\/\\w+", "\\#\\w+"],
-  "dictionaries": ["en_US", "softwareTerms","flame_dictionary"],
+  "ignoreRegExpList": [
+      "@[\\w\\-]+",
+      "\\$\\w+",
+      "\\{\\w+",
+      "\\`\\w+",
+      "\\:\\w+",
+      "\\/\\w+",
+      "\\#[\\w\\-]+"
+  ],
+  "dictionaries": [
+      "en_US",
+      "softwareTerms",
+      "flame_dictionary",
+      "gamedev_dictionary",
+      "sphinx_dictionary"
+  ],
   "languageSettings": [
       {
           "languageId": "markdown",
@@ -18,6 +32,16 @@
           "name": "flame_dictionary",
           "path": "./.cspell/flame_dictionary.txt",
           "addWords": true
+      },
+      {
+        "name": "gamedev_dictionary",
+        "path": "./.cspell/gamedev_dictionary.txt",
+        "addWords": true
+      },
+      {
+        "name": "sphinx_dictionary",
+        "path": "./.cspell/sphinx_dictionary.txt",
+        "addWords": true
       }
   ]
 }

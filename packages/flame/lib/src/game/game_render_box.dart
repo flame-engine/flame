@@ -1,15 +1,60 @@
-import 'package:flame/src/game/game.dart';
+import 'package:flame/game.dart';
 import 'package:flame/src/game/game_loop.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart' hide WidgetBuilder;
-//ignore_for_file: unnecessary_non_null_assertion
+
+/// A [RenderObjectWidget] that renders the [GameRenderBox].
+///
+/// This is the widget that is used by the [GameWidget] to ACTUALLY
+/// render the game.
+class RenderGameWidget extends LeafRenderObjectWidget {
+  final Game game;
+
+  const RenderGameWidget({
+    super.key,
+    required this.game,
+  });
+
+  @override
+  RenderBox createRenderObject(BuildContext context) {
+    return GameRenderBox(game, context);
+  }
+
+  @override
+  void updateRenderObject(BuildContext context, GameRenderBox renderObject) {
+    renderObject
+      ..game = game
+      ..buildContext = context;
+  }
+}
 
 class GameRenderBox extends RenderBox with WidgetsBindingObserver {
-  BuildContext buildContext;
-  Game game;
+  GameRenderBox(this._game, this.buildContext);
+
   GameLoop? gameLoop;
 
-  GameRenderBox(this.buildContext, this.game);
+  BuildContext buildContext;
+
+  Game _game;
+
+  Game get game => _game;
+
+  set game(Game value) {
+    // Identities are equal, no need to update.
+    if (_game == value) {
+      return;
+    }
+
+    if (attached) {
+      _detachGame();
+    }
+
+    _game = value;
+
+    if (attached) {
+      _attachGame(owner!);
+    }
+  }
 
   @override
   bool get isRepaintBoundary => true;
@@ -23,12 +68,13 @@ class GameRenderBox extends RenderBox with WidgetsBindingObserver {
   @override
   void attach(PipelineOwner owner) {
     super.attach(owner);
+    _attachGame(owner);
+  }
+
+  void _attachGame(PipelineOwner owner) {
     game.attach(owner, this);
 
     final gameLoop = this.gameLoop = GameLoop(gameLoopCallback);
-
-    game.pauseEngineFn = gameLoop.stop;
-    game.resumeEngineFn = gameLoop.start;
 
     if (!game.paused) {
       gameLoop.start();
@@ -40,6 +86,10 @@ class GameRenderBox extends RenderBox with WidgetsBindingObserver {
   @override
   void detach() {
     super.detach();
+    _detachGame();
+  }
+
+  void _detachGame() {
     game.detach();
     gameLoop?.dispose();
     gameLoop = null;
@@ -47,6 +97,7 @@ class GameRenderBox extends RenderBox with WidgetsBindingObserver {
   }
 
   void gameLoopCallback(double dt) {
+    assert(attached);
     if (!attached) {
       return;
     }

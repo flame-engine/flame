@@ -21,9 +21,8 @@ class FlameBlocProvider<B extends BlocBase<S>, S> extends Component {
 
   /// {@macro flame_bloc_provider}
   ///
-  /// Will provide the given [value] to its children,
-  /// when this constructor is used, the user is responsable for
-  /// disposing the bloc.
+  /// Will provide the given [value] to its children, when this constructor is
+  /// used, the user is responsible for disposing of the bloc.
   FlameBlocProvider.value({
     required B value,
     List<Component>? children,
@@ -41,7 +40,7 @@ class FlameBlocProvider<B extends BlocBase<S>, S> extends Component {
     }
   }
 
-  /// Return the [Bloc] provided by this [FlameBlocProvider]
+  /// Returns the [Bloc] provided by this [FlameBlocProvider]
   B get bloc => _bloc;
 
   @override

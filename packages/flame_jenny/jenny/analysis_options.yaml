@@ -1,0 +1,6 @@
+include: package:flame_lint/analysis_options.yaml
+
+linter:
+  rules:
+    avoid_equals_and_hash_code_on_mutable_classes: false
+    hash_and_equals: false
