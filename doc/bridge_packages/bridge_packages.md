@@ -73,5 +73,4 @@ flame_rive          <flame_rive/flame_rive.md>
 flame_splash_screen <flame_splash_screen/flame_splash_screen.md>
 flame_svg           <flame_svg/flame_svg.md>
 flame_tiled         <flame_tiled/flame_tiled.md>
-flame_jenny         <flame_jenny/overview.md>
 ```

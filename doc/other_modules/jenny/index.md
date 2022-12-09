@@ -1,16 +1,10 @@
-# flame_yarn
+# Jenny
 
-```{warning}
-This library is currently under development. Many features are still missing.
-```
-
-<!-- Image taken from https://pxhere.com/en/photo/932518  License: CC0 Public Domain -->
-![fireball](../../images/fireball-small.jpg){align=right}
-
-The **flame_yarn** library allows you to easily add **dialogue** into your game, which includes
-anything from simple exchange of phrases between characters, to user-controlled responses and
-non-linear conversations that adjust with the game state. The `flame_yarn` library was inspired
-by the [Yarn Spinner] library for Unity.
+The **jenny** library is a toolset for adding *dialogue* into a game. The dialogue may have 
+considerable complexity, including user-controlled interactions, branching, dynamically-generated
+content, commands, markup, state controlled either from Jenny or from the game, custom functions 
+and commands, etc. The `jenny` library is an unofficial port of the [Yarn Spinner] library for 
+Unity.
 
 Adding dialogue into any game generally consists of two major stages:
 
