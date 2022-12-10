@@ -10,6 +10,31 @@ class YarnLexer(RegexLexer):
     filenames = ['*.yarn']
     mimetypes = ['text/yarn']
 
+    CONSTANTS = [
+        'Bool',
+        'Numeric',
+        'String',
+        'false',
+        'true',
+    ]
+    OPERATORS = [
+        'and',
+        'as',
+        'eq',
+        'ge',
+        'gt',
+        'gte',
+        'is',
+        'le',
+        'lt',
+        'lte',
+        'ne',
+        'neq',
+        'not',
+        'or',
+        'to',
+        'xor',
+    ]
     BUILTIN_COMMANDS = [
         'character',
         'declare',
@@ -62,13 +87,13 @@ class YarnLexer(RegexLexer):
             (r'\n', Whitespace, '#pop:2'),
             (r'\s+', Whitespace),
             (r'//[^\n]*', Comment),
-            (r'\\[\{\}\[\]\<\>\/\\]', String.Escape),
+            (r'\\[\{\}\[\]\<\>\/\\:]', String.Escape),
             (r'\\\n\s*', String.Escape),
             (r'\\.', Error),
             (r'\{', Punctuation, 'curly_expression'),
             include('<commands>'),
-            (r'[<>]', Text),
             (r'#[^\s]+', Comment.Hashbang),
+            (r'[<>]', Text),
             (r'[^\n\{\}\\<>\[\]#]+', Text),
             (r'.', Error),
         ],
@@ -91,7 +116,8 @@ class YarnLexer(RegexLexer):
         '<expression>': [
             include('<whitespace>'),
             (r'(//.*)(\n)', bygroups(Comment, Error)),
-            (r'(?:false)', Name.Builtin),
+            (words(CONSTANTS, suffix=r'\b'), Name.Builtin),
+            (words(OPERATORS, suffix=r'\b'), Operator),
             (r'\$\w+', Name.Variable),
             (r'([+\-*/%><=]=?)', Operator),
             (r'\d+(?:\.\d+)?(?:[eE][+\-]?\d+)?', Number),

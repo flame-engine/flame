@@ -1,38 +1,71 @@
 # Nodes
 
-Each `.yarn` file will contain one or more **nodes**. A *node* is a small section of text,
-approximately the size of a single conversation. For example, if you have a node named "Barn", then
-you can request `YarnProject` to *run* this node -- that is, display its dialogue lines in turns,
-until we reach the end of the node, at which point the dialogue stops.
+A **node** is a small section of text, that represents a single conversation or interaction with
+an NPC. Each node has a **title**, which can be used to *run* that node in a [DialogueRunner], or to
+[jump] to that node from another node.
 
-If you have a conversation that is too large to comfortably fit within a single node (or where
-parts are reused), then such conversation can be split into multiple nodes, and then you can use
-`<<jump>>` commands to transition between them.
+You can think of a node as if it was a function in a regular programming language. Running a node
+is equivalent to calling a function, and it is not possible to start execution in the middle of a
+node/function. When a function becomes too large, we will usually want to split it into multiple
+smaller ones -- the same is true for nodes, when a node becomes too long it is a good idea to split
+it into several smaller nodes.
 
-Each node has the following format:
+Each node consists of a **header** and a **body**. The header is separated from the body with 3
+(or more) dashes, and the body is terminated with 3 "=" signs:
 
 ```yarn
-title: NODE_TITLE
-custom_tag: content
+// NODE HEADER
 ---
-NODE_BODY
+// NODE BODY
 ===
 ```
 
-Here `NODE_TITLE` is the name of the node. Preferably this should be an ID (that is, contain only
-latin letters, digits, or underscores). All nodes within the project must have unique titles.
+In addition, you can use 3 (or more) dashes to separate the header from the previous content, which
+means the following is also a valid node:
 
-Optional `NODE_TAGS` allow you to attach arbitrary information to the node, which will be visible
-to the game but not to the player. These tags come in the form `tag_name: tag text`.
+```yarn
+---------------
+// NODE HEADER
+---------------
+// NODE BODY
+===
+```
 
-The `NODE_BODY` is where the dialogue itself is located. There are three main types of content
-within the body: [Lines](#lines), [Options](#options), and [Commands](#commands).
 
-For example:
+## Header
+
+The header of a node consists of one or more lines of the form `TAG: CONTENT`. One of these lines
+must contain the node's **title**, which is the name of the node:
+
+```yarn
+title: NodeName
+```
+
+The title of a node must be a valid ID (that is, starts with a letter, followed by any number of
+letters, digits, or underscores). All nodes within a single project must have unique titles.
+
+Besides the title, you can add any number of extra tags into the node's header. Jenny will store
+these tags with the node's metadata, but will not interpret them in any other way. You will then
+be able to access these tags programmatically
+
+```yarn
+title: Alert
+colorID: 0
+modal: true
+---
+WARNING\: Entering Radioactive Zone!
+===
+```
+
+
+## Body
+
+The body of a node is where the dialogue itself is located. The body is just a sequence of
+statements, where each statement is either a [Line], an [Option], or a [Command]. For example:
 
 ```yarn
 title: Gloomy_Morning
-CameraZoom: 2
+camera_zoom: 2
 ---
 You  : Good morning!
 Guard: You call this good? 'Tis as crappy as could be
@@ -40,7 +73,13 @@ You  : Why, what happened?
 Guard: Don't you see the fog? Chills me through to the bones
 You  : Sorry to hear that... 
 You  : So, can I pass?
-Guard: Can I get some exercise cutting you into pieces? Maybe that'll cheer me up!
+Guard: Can I get some exercise cutting you into pieces? Maybe that'll warm me up!
 You  : Ok, I think I'll be going. Hope you feel better soon!
 ===
 ```
+
+[DialogueRunner]: ../dialogue_runner.md
+[jump]: commands/jump.md
+[Line]: lines.md
+[Option]: options.md
+[Command]: commands/commands.md
