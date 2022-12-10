@@ -9,6 +9,12 @@
   color: #10d576;
 }
 
+/* Variable */
+.highlight-yarn span.nv {
+  color: #80a4da;
+}
+
+/* Hashtag */
 .highlight-yarn span.ch {
   color: #1e6557;
   font-style: italic;
