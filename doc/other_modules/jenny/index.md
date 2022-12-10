@@ -1,31 +1,32 @@
 # Jenny
 
-The **jenny** library is a toolset for adding *dialogue* into a game. The dialogue may have 
-considerable complexity, including user-controlled interactions, branching, dynamically-generated
-content, commands, markup, state controlled either from Jenny or from the game, custom functions 
-and commands, etc. The `jenny` library is an unofficial port of the [Yarn Spinner] library for 
-Unity.
+The **jenny** library is a toolset for adding *dialogue* into a game. The dialogue may be quite 
+complex, including user-controlled interactions, branching, dynamically-generated content, commands, 
+markup, state controlled either from Jenny or from the game, custom functions and commands, etc. 
+The `jenny` library is an unofficial port of the [Yarn Spinner] library for Unity. The name of the
+library comes from [spinning jenny], a kind of yarn-spinning machine.
 
-Adding dialogue into any game generally consists of two major stages:
+Adding dialogue into any game generally consists of two stages:
 
-1. Writing the text for the dialogue script;
+1. Writing the text of the dialogue;
 2. Interactively displaying it within the game.
 
-In fact, these tasks are so different, that they will often be done by separate people on the team.
-The `flame_yarn` library allows these tasks to be carried out completely independently.
+With `jenny`, these two tasks are completely separate, allowing the creation of game content and
+development of the game engine to be independent.
 
 [Yarn Spinner]: https://docs.yarnspinner.dev/
+[spinning jenny]: https://en.wikipedia.org/wiki/Spinning_jenny
 
 
 ## Writing dialogue
 
-In `flame_yarn`, the dialogue is written in plain text and stored in `.yarn` files that are added
+In `jenny`, the dialogue is written in plain text and stored in `.yarn` files that are added
 to the game as assets. The `.yarn` file format is developed by the authors of [Yarn Spinner], and
-is specifically designed to make writing easy.
+is specifically designed for writing dialogue.
 
 The simplest form of the yarn dialogue looks like a play:
 
-```text
+```yarn
 title: Scene1_Gregory_and_Sampson
 ---
 Sampson: Gregory, on my word, we'll not carry coals.
@@ -34,9 +35,6 @@ Sampson: I mean, an we be in choler, we'll draw.
 Gregory: Ay, while you live, draw your neck out of collar.
 Sampson: I strike quickly being moved.
 Gregory: But thou are not quickly moved to strike.
-Sampson: A dog of the house of Montague moves me.
-Gregory: To move is to stir, and to be valiant is to stand. Therefore, \
-         if thou art moved, thou runn'st away.
 ===
 ```
 
@@ -49,10 +47,10 @@ non-linearly, supporting variables and conditional execution, giving the player 
 select their response, etc. Most importantly, the format is so intuitive that it can be generally
 understood without having to learn it:
 
-```text
+```yarn
 title: Slughorn_encounter
 ---
-<<if visited(Horcrux_question)>>
+<<if visited("Horcrux_question")>>
   Slughorn: Sorry, Tom, I don't have time right now.
   <<stop>>
 <<endif>>
@@ -69,6 +67,7 @@ Tom: Good {time_of_day()}, Professor.
 -> I just wanted to say how much I always admire your lectures.
     Slughorn: Thank you, Tom. I do enjoy flattery, even if it is well-deserved.
 ===
+
 title: Horcrux_question
 ---
 Slughorn: Where... did you hear that?
@@ -103,17 +102,22 @@ This fragment demonstrates many of the features of the `.yarn` language, includi
 - keep state information in variables;
 - user-defined functions (`time_of_day`, `luck`) and commands (`<<give>>`, `<<take>>`).
 
-For more information, see the [Yarn Language](language.md) section.
+For more information, see the [Yarn Language](language/language.md) section.
 
 
 ## Using the dialogue in a game
 
-Once you have written your dialogue in yarn files, you will want to display it within your game.
-In order to do this, you create a `YarnProject`, which is a central place where all dialogue-related
-information will be gathered.
+By itself, the `jenny` library does not integrate with any game engine. However, it provides a
+runtime that can be used to build such an integration. This runtime consists of the following
+components:
 
-Once a dialogue is initiated, the `YarnProject` will send the lines to one or more `DialogueView`s,
-whose responsibility is to display those lines within the game itself.
+- [`YarnProject`](yarn_project.md) -- the central repository of information, which knows about all
+  your yarn scripts, variables, custom functions and commands, settings, etc.
+- [`DialogueRunner`](dialogue_runner.md) -- an executor that can run a specific dialogue node. This
+  executor will send the dialogue lines into one or more `DialogueView`s.
+- [`DialogueView`](dialogue_view.md) -- an abstract interface describing how the dialogue will be
+  presented to the end user. Implementing this interface is the primary way of integrating `jenny`
+  into a specific environment.
 
 ```dart
 final yarn = YarnProject()
@@ -125,12 +129,12 @@ final yarn = YarnProject()
     ..finalize();
 ```
 
-For more information, see the [Yarn Project](yarn_project.md) section.
-
 
 ```{toctree}
 :hidden:
 
-Yarn language     <language.md>
-Yarn Project      <yarn_project.md>
+YarnSpinner language  <language/language.md>
+YarnProject           <yarn_project.md>
+DialogueRunner        <dialogue_runner.md>
+DialogueView          <dialogue_view.md>
 ```

@@ -28,6 +28,7 @@ extensions = [
     'sphinxcontrib.mermaid',
     'extensions.flutter_app',
     'extensions.package',
+    'extensions.yarn_lexer',
 ]
 
 # Configuration options for MyST:

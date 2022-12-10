@@ -50,15 +50,15 @@ void main() {
     group('parseNodeHeader', () {
       test('node with tags', () {
         final yarn = YarnProject();
-        yarn.parse('title: Romeo v Juliette\n'
+        yarn.parse('title: Romeo_v_Juliette\n'
             'requires: Montagues and Capulets\n'
             '\n'
             '// comment\n'
             'location: fair Verona\n'
             '---\n===\n');
-        final node = yarn.nodes['Romeo v Juliette'];
+        final node = yarn.nodes['Romeo_v_Juliette'];
         expect(node, isNotNull);
-        expect(node!.title, 'Romeo v Juliette');
+        expect(node!.title, 'Romeo_v_Juliette');
         expect(node.tags, isNotNull);
         expect(node.tags!['requires'], 'Montagues and Capulets');
         expect(node.tags!['location'], 'fair Verona');
