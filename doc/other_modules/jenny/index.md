@@ -111,13 +111,13 @@ By itself, the `jenny` library does not integrate with any game engine. However,
 runtime that can be used to build such an integration. This runtime consists of the following
 components:
 
-- [`YarnProject`](yarn_project.md) -- the central repository of information, which knows about all
-  your yarn scripts, variables, custom functions and commands, settings, etc.
-- [`DialogueRunner`](dialogue_runner.md) -- an executor that can run a specific dialogue node. This
-  executor will send the dialogue lines into one or more `DialogueView`s.
-- [`DialogueView`](dialogue_view.md) -- an abstract interface describing how the dialogue will be
-  presented to the end user. Implementing this interface is the primary way of integrating `jenny`
-  into a specific environment.
+- [`YarnProject`](runtime/yarn_project.md) -- the central repository of information, which knows
+  about all your yarn scripts, variables, custom functions and commands, settings, etc.
+- [`DialogueRunner`](runtime/dialogue_runner.md) -- an executor that can run a specific dialogue
+  node. This executor will send the dialogue lines into one or more `DialogueView`s.
+- [`DialogueView`](runtime/dialogue_view.md) -- an abstract interface describing how the dialogue
+  will be presented to the end user. Implementing this interface is the primary way of integrating
+  `jenny` into a specific environment.
 
 ```dart
 final yarn = YarnProject()
@@ -134,7 +134,5 @@ final yarn = YarnProject()
 :hidden:
 
 YarnSpinner language  <language/language.md>
-YarnProject           <yarn_project.md>
-DialogueRunner        <dialogue_runner.md>
-DialogueView          <dialogue_view.md>
+Jenny runtime         <runtime/index.md>
 ```

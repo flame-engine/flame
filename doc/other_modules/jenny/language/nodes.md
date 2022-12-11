@@ -78,7 +78,7 @@ You  : Ok, I think I'll be going. Hope you feel better soon!
 ===
 ```
 
-[DialogueRunner]: ../dialogue_runner.md
+[DialogueRunner]: ../runtime/dialogue_runner.md
 [jump]: commands/jump.md
 [Line]: lines.md
 [Option]: options.md
