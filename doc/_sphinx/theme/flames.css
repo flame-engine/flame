@@ -40,6 +40,10 @@ a:hover {
   color: #ddbb99;
 }
 
+a:hover code {
+  color: white;
+}
+
 a.reference.external {
   word-wrap: break-word;
 }

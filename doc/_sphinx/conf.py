@@ -36,6 +36,7 @@ extensions = [
 myst_enable_extensions = [
     'attrs_image',
     'colon_fence',
+    'deflist',
     'dollarmath',
     'html_admonition',
     'html_image',

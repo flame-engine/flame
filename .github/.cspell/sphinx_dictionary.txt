@@ -1,3 +1,4 @@
+deflist
 dollarmath
 linkcheck
 markdownlint

@@ -73,8 +73,9 @@ No special separator is needed between nodes: as soon as one node ends, the next
 ```{toctree}
 :hidden:
 
-Nodes     <nodes.md>
-Lines     <lines.md>
-Options   <options.md>
-Commands  <commands/commands.md>
+Nodes        <nodes.md>
+Lines        <lines.md>
+Options      <options.md>
+Commands     <commands/commands.md>
+Expressions  <expressions.md>
 ```

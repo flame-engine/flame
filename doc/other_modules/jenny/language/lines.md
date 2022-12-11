@@ -10,11 +10,13 @@ in a [node body]. A line may contain the following elements:
 - Interpolated expressions;
 - Markup;
 - Hashtags;
-- A comment at the end of the line.
+- A comment at the end of the line;
+- (a line, however, cannot contain commands).
 
-A line, however, cannot contain commands.
+A **line** is represented with the [DialogueLine] class in Jenny runtime. 
 
 [node body]: nodes.md#body
+[DialogueLine]: ../runtime/dialogue_line.md
 
 
 ## Character ID
