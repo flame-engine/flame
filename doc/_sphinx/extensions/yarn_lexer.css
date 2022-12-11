@@ -19,3 +19,8 @@
   color: #1e6557;
   font-style: italic;
 }
+
+/* Markup */
+.highlight-yarn span.sb {
+  color: #816417;
+}

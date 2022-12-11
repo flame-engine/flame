@@ -49,6 +49,25 @@ class YarnLexer(RegexLexer):
         'visit',
         'wait',
     ]
+    BUILTIN_FUNCTIONS = [
+        'bool',
+        'ceil',
+        'dec',
+        'decimal',
+        'dice',
+        'floor',
+        'inc',
+        'int',
+        'number',
+        'plural',
+        'random',
+        'random_range',
+        'round',
+        'round_places',
+        'string',
+        'visit_count',
+        'visited',
+    ]
 
     tokens = {
         'root': [
@@ -92,10 +111,11 @@ class YarnLexer(RegexLexer):
             (r'\\.', Error),
             (r'\{', Punctuation, 'curly_expression'),
             include('<commands>'),
+            include('<markup>'),
             (r'#[^\s]+', Comment.Hashbang),
             (r'[<>/]', Text),
             (r'[^\n\\\[\]{}<>/#]+', Text),
-            (r'.', Error),
+            (r'.', Text),  # just in case
         ],
 
         '<commands>': [
@@ -114,14 +134,16 @@ class YarnLexer(RegexLexer):
         ],
 
         '<expression>': [
-            include('<whitespace>'),
+            (r'\n', Error),
+            (r'\s+', Whitespace),
             (r'(//.*)(\n)', bygroups(Comment, Error)),
+            (words(BUILTIN_FUNCTIONS, suffix=r'\b'), Name.Builtin),
             (words(CONSTANTS, suffix=r'\b'), Name.Builtin),
             (words(OPERATORS, suffix=r'\b'), Operator),
             (r'\$\w+', Name.Variable),
             (r'([+\-*/%><=]=?)', Operator),
             (r'\d+(?:\.\d+)?(?:[eE][+\-]?\d+)?', Number),
-            (r'[()]', Punctuation),
+            (r'[(),]', Punctuation),
             (r'"', String.Delimeter, 'string'),
             (r'\w+', Name.Function),
             (r'.', Error),
@@ -137,6 +159,18 @@ class YarnLexer(RegexLexer):
         'string_expression': [
             (r'\}', String.Interpol, '#pop'),
             include('<expression>'),
+        ],
+
+        '<markup>': [
+            (r'\[', String.Backtick, 'markup_start'),
+        ],
+        'markup_start': [
+            (r'/?\w+', String.Backtick, 'markup_body'),
+            (r'/?\]', String.Backtick, '#pop'),
+        ],
+        'markup_body': [
+            (r'/?\]', String.Backtick, '#pop:2'),
+            (r'[^/\]]+', String.Backtick),
         ],
 
         'string': [

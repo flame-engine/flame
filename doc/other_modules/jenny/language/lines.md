@@ -63,8 +63,64 @@ Attention\: The cake is NOT a lie
 
 ## Interpolated expressions
 
+You can insert dynamic text into a line with the help of **interpolated expression**s. These
+expressions are surrounded with curly braces `{}`, and everything inside the braces will be
+evaluated, and then the result of the evaluation will be inserted into the text.
+
+```yarn
+title: Greeting
+---
+Trader: Hello, {$player_name}! Would you like to see my wares?
+Player: I have only {plural($money, "% coin")}, do you have anything I can afford?
+===
+```
+
+The expressions will be evaluated at runtime when the line is delivered, which means it can produce
+different text during different runs of the line. 
+
+```yarn
+title: Exam_Greeting
+---
+<<if $n_attempts == 0>>
+  Professor: Welcome to the exam!
+  <<jump Exam>>
+<<elseif $n_attempts < 5>>
+  Professor: You have tried {plural($n_attempts, "% time")} already, but I can give you \
+             another try.
+  <<jump Exam>>
+<<else>>
+  Professor: You have failed the exam 5 times in a row! How is this even possible?
+<<endif>> 
+===
+```
+
+After evaluation, the text of the expression will be inserted into the line as-is, without any
+further processing. Which means that the text of the expression may contain special characters
+(such as `[`, `]`, `{`, `}`, `\`, etc), and they don't need to be escaped. It also means that the
+expression cannot contain markup, or produce a hashtag, etc.
+
+Read more about expressions in the [Expressions](expressions.md) section.
+
 
 ## Markup
+
+The **markup** is a mechanism for text annotation. It is somewhat similar to HTML tags, except that
+it uses square brackets `[]` instead of angular ones:
+
+```yarn
+title: Markup
+---
+Wizard: No, no, no! [em]This is insanity![/em]
+===
+```
+
+The markup tags do not alter the text of the line, they merely insert annotations in it. Thus, the
+line above will be delivered in game as "No, no, no! This is insanity!", however there will be
+additional information attached to the line that shows that the last 17 characters were marked with
+the `em` tag.
+
+Markup tags can be nested, or be zero-width, they can also include parameters whose values can be
+dynamic. Read more about this in the [Markup](markup.md) document.
 
 
 ## Hashtags
@@ -79,7 +135,7 @@ comments are allowed). A line can have multiple hashtags associated with it.
 title: Hashtags
 ---
 Harry: There is no justice in the laws of Nature, Headmaster, no term for fairness \
-    in the equations of motion. #sad  // HPMOR.39
+       in the equations of motion. #sad  // HPMOR.39
 Harry: The universe is neither evil, nor good, it simply does not care.
 Harry: The stars don't care, or the Sun, or the sky.
 Harry: But they don't have to! We care! #elated #volume:+1
@@ -98,7 +154,7 @@ one of the special syntaxes mentioned above, then such a character can be **esca
 backslash `\`.
 
 The following escape sequences are recognized: `\\`, `\/`, `\#`, `\<`, `\>`, `\[`, `\]`, `\{`, `\}`,
-`:`, `\n`. In addition, there is also `\⏎` (i.e. backslash followed immediately by a newline).
+`\:`, `\n`. In addition, there is also `\⏎` (i.e. backslash followed immediately by a newline).
 
 ```yarn
 title: Escapes
@@ -119,8 +175,8 @@ newline symbol and all the whitespace at the start of the next line:
 title: One_long_line
 ---
 This line is so long that it becomes uncomfortable to read in a text editor. Therefore, \
-    we use the \\-newline escape sequence to split it into several physical lines. The \
-    indentation at the start of the continuation lines is for convenience only, and will \
-    be removed from the resulting text.
+    we use the backslash-newline escape sequence to split it into several physical lines. \
+    The indentation at the start of the continuation lines is for convenience only, and \
+    will be removed from the resulting text.
 ===
 ```
