@@ -60,8 +60,8 @@ void main() {
         expect(node, isNotNull);
         expect(node!.title, 'Romeo_v_Juliette');
         expect(node.tags, isNotNull);
-        expect(node.tags!['requires'], 'Montagues and Capulets');
-        expect(node.tags!['location'], 'fair Verona');
+        expect(node.tags['requires'], 'Montagues and Capulets');
+        expect(node.tags['location'], 'fair Verona');
       });
 
       test('multiple colons', () {
@@ -143,18 +143,18 @@ void main() {
           '''),
         );
         final node1 = yarn.nodes['EmptyTags']!;
-        expect(node1.tags, isNotNull);
-        expect(node1.tags!['tags'], '');
+        expect(node1.tags, isNotEmpty);
+        expect(node1.tags['tags'], '');
 
         final node2 = yarn.nodes['Tags']!;
-        expect(node2.tags!['tags'], 'one two three');
+        expect(node2.tags['tags'], 'one two three');
 
         final node3 = yarn.nodes['ArbitraryHeaderWithValue']!;
-        expect(node3.tags!['arbitraryHeader'], 'some-arbitrary-text');
+        expect(node3.tags['arbitraryHeader'], 'some-arbitrary-text');
 
         final node4 = yarn.nodes['Comments']!;
-        expect(node4.tags!['tags'], 'one two three');
-        expect(node4.tags!['metadata'], '');
+        expect(node4.tags['tags'], 'one two three');
+        expect(node4.tags['metadata'], '');
       });
 
       test(
@@ -190,11 +190,11 @@ void main() {
               'Saturn\n\n'
               'Uranus  // LOL\n'
               '===\n');
-        final block = yarn.nodes['test']!.content;
-        expect(block.lines.length, 3);
+        final lines = yarn.nodes['test']!.lines;
+        expect(lines.length, 3);
         for (var i = 0; i < 3; i++) {
-          expect(block.lines[i], isA<DialogueLine>());
-          final line = block.lines[i] as DialogueLine;
+          expect(lines[i], isA<DialogueLine>());
+          final line = lines[i] as DialogueLine;
           expect(line.character, isNull);
           expect(line.tags, isEmpty);
           expect(line.text, ['Jupyter', 'Saturn', 'Uranus'][i]);

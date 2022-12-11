@@ -31,6 +31,10 @@ means the following is also a valid node:
 ===
 ```
 
+A **node** is represented with a [Node] class in Jenny runtime.
+
+[Node]: ../runtime/node.md
+
 
 ## Header
 

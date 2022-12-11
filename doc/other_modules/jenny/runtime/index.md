@@ -6,6 +6,7 @@
 YarnProject        <yarn_project.md>
 DialogueRunner     <dialogue_runner.md>
 DialogueView       <dialogue_view.md>
+Node               <node.md>
 DialogueLine       <dialogue_line.md>
 MarkupAttribute    <markup_attribute.md>
 ```
