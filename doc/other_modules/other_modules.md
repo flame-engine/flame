@@ -3,7 +3,7 @@
 :::{package} jenny
 
 This module lets you add interactive dialogue into your game. The module itself handles Yarn scripts
-and the dialogue runtime; use bridge package `flame_yarn` in order to add it into a Flame game.
+and the dialogue runtime; use bridge package `flame_jenny` in order to add it into a Flame game.
 :::
 
 :::{package} oxygen

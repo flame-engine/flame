@@ -7,24 +7,27 @@ class DialogueOption extends DialogueLine {
     required super.content,
     super.character,
     super.tags,
-    this.condition,
+    BoolExpression? condition,
     this.block = const Block([]),
-  });
+  }) : _condition = condition;
 
-  final BoolExpression? condition;
+  final BoolExpression? _condition;
   final Block block;
-  bool available = true;
+  bool _available = true;
+
+  bool get isAvailable => _available;
+  bool get isDisabled => !_available;
 
   @override
   void evaluate() {
     super.evaluate();
-    available = condition?.value ?? true;
+    _available = _condition?.value ?? true;
   }
 
   @override
   String toString() {
     final prefix = character == null ? '' : '$character: ';
-    final suffix = available ? '' : ' #disabled';
+    final suffix = _available ? '' : ' #disabled';
     return 'Option($prefix$text$suffix)';
   }
 }

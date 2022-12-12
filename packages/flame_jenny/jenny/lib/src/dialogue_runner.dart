@@ -129,7 +129,7 @@ class DialogueRunner {
       _error('Invalid option index chosen in a dialogue: $chosenIndex');
     }
     final chosenOption = choice.options[chosenIndex];
-    if (!chosenOption.available) {
+    if (!chosenOption.isAvailable) {
       _error('A dialogue view selected a disabled option: $chosenOption');
     }
     await _combineFutures(

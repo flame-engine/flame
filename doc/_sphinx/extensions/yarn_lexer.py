@@ -119,7 +119,7 @@ class YarnLexer(RegexLexer):
         ],
 
         '<commands>': [
-            (r'<<', Keyword, 'command_name'),
+            (r'<<', Punctuation, 'command_name'),
         ],
         'command_name': [
             (words(BUILTIN_COMMANDS, suffix=r'\b'), Keyword, 'command_body'),
@@ -128,7 +128,7 @@ class YarnLexer(RegexLexer):
         'command_body': [
             include('<whitespace>'),
             (r'\{', Punctuation, 'curly_expression'),
-            (r'>>', Keyword, '#pop:2'),
+            (r'>>', Punctuation, '#pop:2'),
             (r'>', Text),
             default('command_expression'),
         ],
@@ -149,7 +149,7 @@ class YarnLexer(RegexLexer):
             (r'.', Error),
         ],
         'command_expression': [
-            (r'>>', Keyword, '#pop:3'),
+            (r'>>', Punctuation, '#pop:3'),
             include('<expression>'),
         ],
         'curly_expression': [
@@ -181,9 +181,6 @@ class YarnLexer(RegexLexer):
             (r'\n', Error),
         ],
     }
-
-
-
 
 
 def setup(app):

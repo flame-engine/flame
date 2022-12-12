@@ -282,7 +282,7 @@ void main() {
           final line = choiceSet.options[i];
           expect(line.character, isNull);
           expect(line.tags, isEmpty);
-          expect(line.condition, isNull);
+          expect(line.isAvailable, true);
           expect(line.block, isEmpty);
           expect(line.text, ['Alpha', 'Beta', 'Gamma'][i]);
         }

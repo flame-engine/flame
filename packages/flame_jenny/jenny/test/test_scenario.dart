@@ -147,7 +147,7 @@ class _TestPlan extends DialogueView {
       final text2 =
           (option2.character == null ? '' : '${option2.character}: ') +
               option2.text +
-              (option2.available ? '' : ' [disabled]');
+              (option2.isAvailable ? '' : ' [disabled]');
       assert(
         text1 == text2,
         '\n'
@@ -155,10 +155,10 @@ class _TestPlan extends DialogueView {
         'Actual   (${i + 1}): $text2\n',
       );
       assert(
-        option1.enabled == option2.available,
+        option1.enabled == option2.isAvailable,
         '\n'
         'Expected option(${i + 1}): $option1; available=${option1.enabled}\n'
-        'Actual   option(${i + 1}): $option2; available=${option2.available}\n',
+        'Actual   option(${i + 1}): $option2; available=${option2.isAvailable}\n',
       );
     }
     _currentIndex++;

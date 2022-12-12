@@ -134,5 +134,5 @@ final yarn = YarnProject()
 :hidden:
 
 YarnSpinner language  <language/language.md>
-Jenny runtime         <runtime/index.md>
+Jenny API             <runtime/index.md>
 ```
