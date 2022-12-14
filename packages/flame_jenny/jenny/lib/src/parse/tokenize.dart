@@ -603,6 +603,7 @@ class _Lexer {
         if (cu == $backslash ||
             cu == $slash ||
             cu == $hash ||
+            cu == $minus ||
             cu == $lessThan ||
             cu == $greaterThan ||
             cu == $leftBrace ||

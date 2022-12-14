@@ -537,6 +537,7 @@ void main() {
               'very long \\\n'
               '  text\n'
               'line with a newline:\\n ok\n'
+              '\\-> text with arrow\n'
               '===\n'),
           const [
             Token.startHeader,
@@ -554,6 +555,9 @@ void main() {
             Token.text('line with a newline:'),
             Token.text('\n'),
             Token.text(' ok'),
+            Token.newline,
+            Token.text('-'),
+            Token.text('> text with arrow'),
             Token.newline,
             Token.endBody,
           ],
