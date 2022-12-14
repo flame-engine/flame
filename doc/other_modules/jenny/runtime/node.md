@@ -14,7 +14,7 @@ will be delivered to your [DialogueView]s with the methods `onNodeStart()`, `onN
   besides the required `title` tag.
 
 **iterator** `Iterator<DialogueEntry>`
-: The content of the node, which is a sequence of `DialogueLine`s, `DialogueChoice`s, or 
+: The content of the node, which is a sequence of `DialogueLine`s, `DialogueChoice`s, or
   `Command`s.
 
 [node]: ../language/nodes.md

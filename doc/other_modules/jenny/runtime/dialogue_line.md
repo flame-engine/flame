@@ -4,6 +4,7 @@ The **DialogueLine** class represents a single [Line] of text in the `.yarn` scr
 `DialogueLine` objects will be delivered to your `DialogueView` with the methods `onLineStart()`,
 `onLineSignal()`, `onLineStop()`, and `onLineFinish()`.
 
+
 ## Properties
 
 **character** `String?`

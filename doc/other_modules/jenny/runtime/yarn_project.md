@@ -39,8 +39,9 @@ final yarn = YarnProject()
 : All [Node]s loaded into the project, keyed by their titles.
 
 **variables** `VariableStorage`
-: The container for all global variables used in this yarn project. There are several reasons to
-  access this storage:
+: The container for all global variables used in this yarn project.
+
+  There could be several reasons to access this storage:
 
   - to change the value of a yarn variable from the game. This enables you to pass the information
     from the game into the dialogue. For example, your dialogue may have variable `$gold`, which

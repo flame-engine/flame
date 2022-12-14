@@ -18,6 +18,7 @@ requirements on the number of files or their relationship.
 
 Each `.yarn` file may contain **comments**, **tags**, **[commands]**, and **[nodes]**.
 For example:
+
 ```yarn
 // This is a comment
 // The line below, however, is a tag:

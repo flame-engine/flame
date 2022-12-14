@@ -1,8 +1,8 @@
 # Jenny
 
-The **jenny** library is a toolset for adding *dialogue* into a game. The dialogue may be quite 
-complex, including user-controlled interactions, branching, dynamically-generated content, commands, 
-markup, state controlled either from Jenny or from the game, custom functions and commands, etc. 
+The **jenny** library is a toolset for adding *dialogue* into a game. The dialogue may be quite
+complex, including user-controlled interactions, branching, dynamically-generated content, commands,
+markup, state controlled either from Jenny or from the game, custom functions and commands, etc.
 The `jenny` library is an unofficial port of the [Yarn Spinner] library for Unity. The name of the
 library comes from [spinning jenny], a kind of yarn-spinning machine.
 

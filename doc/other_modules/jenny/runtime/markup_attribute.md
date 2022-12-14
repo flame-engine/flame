@@ -5,10 +5,12 @@ tags. For example, in a `.yarn` line below there are two ranges of text surround
 and therefore there will be two `MarkupAttribute`s associated with this line:
 
 ```yarn
-[b]Jenny[/b] is a library based on [link url="docs.yarnspinner.dev"]YarnSpinner[/link] for Unity.
+[b]Jenny[/b] is a library based on \
+    [link url="docs.yarnspinner.dev"]YarnSpinner[/link] for Unity.
 ```
 
 These `MarkupAttribute`s can be found in the `.attributes` property of a [DialogueLine][line].
+
 
 ## Properties
 

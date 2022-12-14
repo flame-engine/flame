@@ -13,7 +13,7 @@ in a [node body]. A line may contain the following elements:
 - A comment at the end of the line;
 - (a line, however, cannot contain commands).
 
-A **line** is represented with the [DialogueLine] class in Jenny runtime. 
+A **line** is represented with the [DialogueLine] class in Jenny runtime.
 
 [node body]: nodes.md#body
 [DialogueLine]: ../runtime/dialogue_line.md
@@ -78,7 +78,7 @@ Player: I have only {plural($money, "% coin")}, do you have anything I can affor
 ```
 
 The expressions will be evaluated at runtime when the line is delivered, which means it can produce
-different text during different runs of the line. 
+different text during different runs of the line.
 
 ```yarn
 title: Exam_Greeting
@@ -87,11 +87,11 @@ title: Exam_Greeting
   Professor: Welcome to the exam!
   <<jump Exam>>
 <<elseif $n_attempts < 5>>
-  Professor: You have tried {plural($n_attempts, "% time")} already, but I can give you \
-             another try.
+  Professor: You have tried {plural($n_attempts, "% time")} already, but I \
+             can give you another try.
   <<jump Exam>>
 <<else>>
-  Professor: You have failed the exam 5 times in a row! How is this even possible?
+  Professor: You've failed 5 times in a row! How is this even possible?
 <<endif>> 
 ===
 ```
@@ -136,8 +136,8 @@ comments are allowed). A line can have multiple hashtags associated with it.
 ```yarn
 title: Hashtags
 ---
-Harry: There is no justice in the laws of Nature, Headmaster, no term for fairness \
-       in the equations of motion. #sad  // HPMOR.39
+Harry: There is no justice in the laws of Nature, Headmaster, no term for \
+       fairness in the equations of motion. #sad  // HPMOR.39
 Harry: The universe is neither evil, nor good, it simply does not care.
 Harry: The stars don't care, or the Sun, or the sky.
 Harry: But they don't have to! We care! #elated #volume:+1
@@ -176,9 +176,10 @@ newline symbol and all the whitespace at the start of the next line:
 ```yarn
 title: One_long_line
 ---
-This line is so long that it becomes uncomfortable to read in a text editor. Therefore, \
-    we use the backslash-newline escape sequence to split it into several physical lines. \
-    The indentation at the start of the continuation lines is for convenience only, and \
-    will be removed from the resulting text.
+This line is so long that it becomes uncomfortable to read in a text editor. \
+    Therefore, we use the backslash-newline escape sequence to split it into \
+    several physical lines. The indentation at the start of the continuation \
+    lines is for convenience only, and will be removed from the resulting \
+    text.
 ===
 ```
