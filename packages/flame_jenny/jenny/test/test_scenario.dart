@@ -151,14 +151,14 @@ class _TestPlan extends DialogueView {
       assert(
         text1 == text2,
         '\n'
-        'Expected (${i + 1}): $text1\n'
-        'Actual   (${i + 1}): $text2\n',
+        'Expected ($i): $text1\n'
+        'Actual   ($i): $text2\n',
       );
       assert(
         option1.enabled == option2.isAvailable,
         '\n'
-        'Expected option(${i + 1}): $option1; available=${option1.enabled}\n'
-        'Actual   option(${i + 1}): $option2; available=${option2.isAvailable}\n',
+        'Expected option($i): $option1; available=${option1.enabled}\n'
+        'Actual   option($i): $option2; available=${option2.isAvailable}\n',
       );
     }
     _currentIndex++;

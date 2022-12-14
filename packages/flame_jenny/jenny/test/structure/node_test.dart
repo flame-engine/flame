@@ -17,7 +17,7 @@ void main() {
 
       expect(node.title, 'Introduction');
       expect(node.lines, <DialogueEntry>[]);
-      expect(node.tags, isNull);
+      expect(node.tags, isEmpty);
       expect('$node', 'Node(Introduction)');
     });
 
