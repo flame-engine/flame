@@ -156,7 +156,8 @@ one of the special syntaxes mentioned above, then such a character can be **esca
 backslash `\`.
 
 The following escape sequences are recognized: `\\`, `\/`, `\#`, `\<`, `\>`, `\[`, `\]`, `\{`, `\}`,
-`\:`, `\-`, \n`. In addition, there is also `\⏎` (i.e. backslash followed immediately by a newline).
+`\:`, `\-`, `\n`. In addition, there is also `\⏎` (i.e. backslash followed immediately by a
+newline).
 
 ```yarn
 title: Escapes
