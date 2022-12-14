@@ -39,15 +39,16 @@ final yarn = YarnProject()
 : All [Node]s loaded into the project, keyed by their titles.
 
 **variables** `VariableStorage`
-: The container for all global variables used in this yarn project.
+: The container for all global variables used in this yarn project. There could be several reasons
+  to access this storage:
 
-  There could be several reasons to access this storage:
-
+  <!-- markdownlint-disable MD006 MD007 -->
   - to change the value of a yarn variable from the game. This enables you to pass the information
     from the game into the dialogue. For example, your dialogue may have variable `$gold`, which
     you may want to update whenever the player's amount of money changes within the game.
-  - to store the values of all yarn variables during the save game, and to restore them when loading
-    the game.
+  - to store the values of all yarn variables during the save game, and to restore them when
+    loading the game.
+  <!-- markdownlint-enable MD006 MD007 -->
 
 **functions** `FunctionStorage`
 : The container for all user-defined functions linked into the project. The main reason to access
