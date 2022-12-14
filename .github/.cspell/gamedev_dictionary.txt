@@ -130,6 +130,7 @@ subfolder
 subfolders
 sublist
 sublists
+subrange
 tappable
 tappables
 tileset
