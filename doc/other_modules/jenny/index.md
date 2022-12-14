@@ -34,7 +34,7 @@ Gregory: No, for then we should be colliers.
 Sampson: I mean, an we be in choler, we'll draw.
 Gregory: Ay, while you live, draw your neck out of collar.
 Sampson: I strike quickly being moved.
-Gregory: But thou are not quickly moved to strike.
+Gregory: But thou art not quickly moved to strike.
 ===
 ```
 
@@ -118,16 +118,6 @@ components:
 - [`DialogueView`](runtime/dialogue_view.md) -- an abstract interface describing how the dialogue
   will be presented to the end user. Implementing this interface is the primary way of integrating
   `jenny` into a specific environment.
-
-```dart
-final yarn = YarnProject()
-    ..addFunction('luck', player.luckDraw)
-    ..parseFilesFromPattern(r'/assets/yarn/.*\.yarn$')
-    ..addDialogueView(playerLineDialogueView)
-    ..addDialogueView(playerOptionsDialogueView)
-    ..addDialogueView(npcDialogueView)
-    ..finalize();
-```
 
 
 ```{toctree}

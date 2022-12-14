@@ -155,8 +155,8 @@ class _RecordingDialogueView extends DialogueView {
 class _InterruptingCow extends DialogueView {
   @override
   FutureOr<bool> onLineStart(DialogueLine line) async {
-    dialogueRunner.sendSignal("I'm a banana!");
-    dialogueRunner.stopLine();
+    dialogueRunner!.sendSignal("I'm a banana!");
+    dialogueRunner!.stopLine();
     return false;
   }
 }

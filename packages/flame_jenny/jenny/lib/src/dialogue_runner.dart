@@ -37,9 +37,7 @@ class DialogueRunner {
   })  : project = yarnProject,
         _dialogueViews = dialogueViews,
         _currentNodes = [],
-        _iterators = [] {
-    dialogueViews.forEach((dv) => dv.dialogueRunner = this);
-  }
+        _iterators = [];
 
   final YarnProject project;
   final List<DialogueView> _dialogueViews;
@@ -50,37 +48,42 @@ class DialogueRunner {
   /// Executes the node with the given name, and returns a future that finishes
   /// once the dialogue stops running.
   Future<void> runNode(String nodeName) async {
-    if (_currentNodes.isNotEmpty) {
-      throw DialogueError(
-        'Cannot run node "$nodeName" because another node is '
-        'currently running: "${_currentNodes.last.title}"',
-      );
-    }
-    final newNode = project.nodes[nodeName];
-    if (newNode == null) {
-      throw NameError('Node "$nodeName" could not be found');
-    }
-    _currentNodes.add(newNode);
-    _iterators.add(newNode.iterator);
-    await _combineFutures(
-      [for (final view in _dialogueViews) view.onDialogueStart()],
-    );
-    await _combineFutures(
-      [for (final view in _dialogueViews) view.onNodeStart(newNode)],
-    );
-
-    while (_iterators.isNotEmpty) {
-      final iterator = _iterators.last;
-      if (iterator.moveNext()) {
-        final entry = iterator.current;
-        await entry.processInDialogueRunner(this);
-      } else {
-        _finishCurrentNode();
+    try {
+      if (_currentNodes.isNotEmpty) {
+        throw DialogueError(
+          'Cannot run node "$nodeName" because another node is '
+          'currently running: "${_currentNodes.last.title}"',
+        );
       }
+      final newNode = project.nodes[nodeName];
+      if (newNode == null) {
+        throw NameError('Node "$nodeName" could not be found');
+      }
+      _dialogueViews.forEach((dv) => dv.dialogueRunner = this);
+      _currentNodes.add(newNode);
+      _iterators.add(newNode.iterator);
+      await _combineFutures(
+        [for (final view in _dialogueViews) view.onDialogueStart()],
+      );
+      await _combineFutures(
+        [for (final view in _dialogueViews) view.onNodeStart(newNode)],
+      );
+
+      while (_iterators.isNotEmpty) {
+        final iterator = _iterators.last;
+        if (iterator.moveNext()) {
+          final entry = iterator.current;
+          await entry.processInDialogueRunner(this);
+        } else {
+          _finishCurrentNode();
+        }
+      }
+      await _combineFutures(
+        [for (final view in _dialogueViews) view.onDialogueFinish()],
+      );
+    } finally {
+      _dialogueViews.forEach((dv) => dv.dialogueRunner = null);
     }
-    await _combineFutures(
-      [for (final view in _dialogueViews) view.onDialogueFinish()],
-    );
   }
 
   void _finishCurrentNode() {
