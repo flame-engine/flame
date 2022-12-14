@@ -48,7 +48,7 @@ cache, so make sure that you don't use the image afterwards.
 It can manually be used by instantiating it:
 
 ```dart
-import 'package:flame/images.dart';
+import 'package:flame/cache.dart';
 final imagesLoader = Images();
 Image image = await imagesLoader.load('yourImage.png');
 ```

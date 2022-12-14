@@ -604,6 +604,7 @@ class _Lexer {
             cu == $colon ||
             cu == $slash ||
             cu == $hash ||
+            cu == $minus ||
             cu == $lessThan ||
             cu == $greaterThan ||
             cu == $leftBrace ||

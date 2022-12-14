@@ -66,12 +66,14 @@ void main() {
           ------------
           -> Hi, My name is [bold]{$player}[/bold]
           -> I can give you only {$money / 2} coins -- that's all I have
+          \-> Not an option!
           ===
         ''',
         testPlan: '''
           option: Hi, My name is Steve
           option: I can give you only 50.0 coins -- that's all I have
           select: 1
+          line: -> Not an option!
         ''',
       );
     });
