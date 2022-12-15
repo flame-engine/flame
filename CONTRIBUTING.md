@@ -9,7 +9,7 @@ please read these instructions carefully.
 
 ### Bug Reports
 
-- If you find a bug, please first report it using [Github issue]s.
+- If you find a bug, please first report it using [Github issues].
   - First check if there is not already an issue for it; duplicated issues will be closed.
 
 
@@ -197,6 +197,7 @@ There are a few things to think about when doing a release:
 
 
 [GitHub issue]: https://github.com/flame-engine/flame/issues
+[GitHub issues]: https://github.com/flame-engine/flame/issues
 [PRs]: https://github.com/flame-engine/flame/pulls
 [fork guide]: https://docs.github.com/en/get-started/quickstart/contributing-to-projects
 [Discord]: https://discord.com/invite/pxrBmy4
