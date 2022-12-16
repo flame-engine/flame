@@ -12,11 +12,11 @@ import 'package:meta/meta.dart';
 abstract class DialogueView {
   DialogueView();
 
-  late DialogueRunner _dialogueRunner;
+  DialogueRunner? _dialogueRunner;
 
-  DialogueRunner get dialogueRunner => _dialogueRunner;
+  DialogueRunner? get dialogueRunner => _dialogueRunner;
   @internal
-  set dialogueRunner(DialogueRunner value) => _dialogueRunner = value;
+  set dialogueRunner(DialogueRunner? value) => _dialogueRunner = value;
 
   /// Called before the start of a new dialogue, i.e. before any lines, options,
   /// or commands are delivered.
@@ -26,6 +26,13 @@ abstract class DialogueView {
   /// future, then the dialogue will start running only after the future
   /// completes.
   FutureOr<void> onDialogueStart() {}
+
+  /// Called when the dialogue has ended.
+  ///
+  /// This method can be used to clean up any of the dialogue UI. The returned
+  /// future will be awaited before the dialogue runner considers its job
+  /// finished.
+  FutureOr<void> onDialogueFinish() {}
 
   /// Called when the dialogue enters a new [node].
   ///
@@ -143,13 +150,6 @@ abstract class DialogueView {
   /// If this method returns a future, the dialogue runner will wait for that
   /// future to complete before proceeding with the dialogue.
   FutureOr<void> onCommand(UserDefinedCommand command) {}
-
-  /// Called when the dialogue has ended.
-  ///
-  /// This method can be used to clean up any of the dialogue UI. The returned
-  /// future will be awaited before the dialogue runner considers its job
-  /// finished.
-  FutureOr<void> onDialogueFinish() {}
 
   /// A future that never completes.
   @internal

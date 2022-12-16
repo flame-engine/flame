@@ -168,9 +168,9 @@ enum TokenType {
   startIndent, //            RegExp(r'^\s*')
   startMarkupTag, //         '['
   startParenthesis, //       '('
-  typeBool, //               'bool'
-  typeNumber, //             'number'
-  typeString, //             'string'
+  typeBool, //               'Bool'
+  typeNumber, //             'Number'
+  typeString, //             'String'
 
   error,
   eof,

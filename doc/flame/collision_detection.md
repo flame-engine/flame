@@ -5,7 +5,7 @@ other. For example an arrow hitting an enemy or the player picking up a coin.
 
 In most collision detection systems you use something called hitboxes to create more precise
 bounding boxes of your components. In Flame the hitboxes are areas of the component that can react
-to collisions (and make [gesture input](inputs/gesture-input.md#gesturehitboxes)) more accurate.
+to collisions (and make [gesture input](inputs/gesture_input.md#gesturehitboxes)) more accurate.
 
 The collision detection system supports three different types of shapes that you can build hitboxes
 from, these shapes are Polygon, Rectangle and Circle. Multiple hitbox can be added to a component to
@@ -129,7 +129,7 @@ and two `RectangleHitbox`s as its hat.
 
 A hitbox can be used either for collision detection or for making gesture detection more accurate
 on top of components, see more regarding the latter in the section about the
-[GestureHitboxes](inputs/gesture-input.md#gesturehitboxes) mixin.
+[GestureHitboxes](inputs/gesture_input.md#gesturehitboxes) mixin.
 
 
 ### CollisionType

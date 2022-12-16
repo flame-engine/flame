@@ -40,6 +40,10 @@ a:hover {
   color: #ddbb99;
 }
 
+a:hover code {
+  color: white;
+}
+
 a.reference.external {
   word-wrap: break-word;
 }
@@ -75,7 +79,7 @@ div.expander {
   flex: 1;
 }
 
-p + ul {
+p + ul, p + ol {
   margin-top: -0.5em;
 }
 
@@ -768,7 +772,7 @@ div.admonition.warning {
   --admonition-border-color: orange;
   --admonition-icon: '\f071';
   --admonition-icon-color: gold;
-  --admonition-title-background-color: #503e1a;
+  --admonition-title-background-color: #a16820;
 }
 
 div.admonition.error {

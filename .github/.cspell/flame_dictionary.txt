@@ -12,6 +12,7 @@ Klingsbo
 Lukas
 Nakama
 Patreon
+Prosser
 Skia
 Spritecow
 Tiled
@@ -28,6 +29,7 @@ tavian
 trex
 wolfenrain
 xaha
+yarnspinner
 рушниці
 рушниць
 рушниця

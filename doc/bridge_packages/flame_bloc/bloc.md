@@ -1,6 +1,6 @@
 # flame_bloc
 
-`flame_bloc` is a bridge library for using [Bloc](https://bloclibrary.dev/#/) in your Flame
+`flame_bloc` is a bridge library for using [Bloc](https://bloclibrary.dev/) in your Flame
 game. `flame_bloc` offers a simple and natural (as in similar to flutter_bloc) way to use blocs and
 cubits inside a FlameGame. Bloc offers way to make game state changes predictable by regulating when
 a game state change can occur and offers a single way to change game state throughout an entire

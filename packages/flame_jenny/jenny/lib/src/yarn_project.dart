@@ -77,8 +77,4 @@ class YarnProject {
   void parse(String text) {
     impl.parse(text, this);
   }
-
-  void setVariable(String name, dynamic value) {
-    variables.setVariable(name, value);
-  }
 }

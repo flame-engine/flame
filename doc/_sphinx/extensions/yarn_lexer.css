@@ -1,0 +1,26 @@
+
+/* Single-line comment */
+.highlight-yarn span.c {
+  color: #505050;
+}
+
+/* Character name at the start of a line */
+.highlight-yarn span.nt {
+  color: #10d576;
+}
+
+/* Variable */
+.highlight-yarn span.nv {
+  color: #80a4da;
+}
+
+/* Hashtag */
+.highlight-yarn span.ch {
+  color: #1e6557;
+  font-style: italic;
+}
+
+/* Markup */
+.highlight-yarn span.sb {
+  color: #816417;
+}

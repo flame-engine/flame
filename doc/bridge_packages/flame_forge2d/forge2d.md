@@ -122,5 +122,5 @@ example](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/br
 
 Just like with normal `PositionComponent`s you can make the `Forge2DCamera` follow `BodyComponent`s
 by calling `camera.followBodyComponent(...)` which works the same as
-[camera.followComponent](../flame/camera_and_viewport.md#camerafollowcomponent). When you want to
+[camera.followComponent](../../flame/camera_and_viewport.md#camerafollowcomponent). When you want to
 stop following a `BodyComponent` you should call `camera.unfollowBodyComponent`.

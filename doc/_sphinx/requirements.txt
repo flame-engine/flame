@@ -1,5 +1,5 @@
 linkify-it-py==2.0.0
-myst-parser==0.18.0
+myst-parser==0.18.1
 Pygments==2.12.0
 Sphinx==5.0.2
 sphinxcontrib-mermaid==0.7.1

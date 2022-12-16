@@ -67,7 +67,7 @@ and it will be automatically reflected in the PR.
 ## Open an issue and fork the repository
 
 - If it is a bigger change or a new feature, first of all
-   [file a bug or feature report][GitHub issues], so that we can discuss what direction to follow.
+   [file a bug or feature report][GitHub issue], so that we can discuss what direction to follow.
 - [Fork the project][fork guide] on GitHub.
 - Clone the forked repository to your local development machine
    (e.g. `git clone git@github.com:<YOUR_GITHUB_USER>/flame.git`).
@@ -196,11 +196,11 @@ There are a few things to think about when doing a release:
 - Create a PR containing the updated changelog and `pubspec.yaml` files.
 
 
-[GitHub issue]: https://github.com/flame-engine/flame/issues/new
-[GitHub issues]: https://github.com/flame-engine/flame/issues/new
+[GitHub issue]: https://github.com/flame-engine/flame/issues
+[GitHub issues]: https://github.com/flame-engine/flame/issues
 [PRs]: https://github.com/flame-engine/flame/pulls
-[fork guide]: https://guides.github.com/activities/forking/#fork
-[Discord]: https://discord.gg/pxrBmy4
+[fork guide]: https://docs.github.com/en/get-started/quickstart/contributing-to-projects
+[Discord]: https://discord.com/invite/pxrBmy4
 [Melos]: https://github.com/invertase/melos
 [pubspec doc]: https://dart.dev/tools/pub/pubspec
 [conventional commit]: https://www.conventionalcommits.org
