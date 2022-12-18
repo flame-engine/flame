@@ -41,7 +41,8 @@ void main() {
       expect(project.nodes['start']!.lines[0], isA<UserDefinedCommand>());
       final cmd = project.nodes['start']!.lines[0] as UserDefinedCommand;
       expect(cmd.name, 'hello');
-      expect(cmd.argumentString.evaluate(), 'world AB');
+      project.commands.runCommand(cmd);
+      expect(cmd.argumentString, 'world AB');
     });
 
     test('execute a live command', () {
@@ -94,6 +95,34 @@ void main() {
         ),
       );
     });
+
+    test('evaluate a command multiple times', () async {
+      var counter = 0;
+      await testScenario(
+        yarn: YarnProject()..functions.addFunction0('next', () => counter += 1),
+        input: r'''
+          <<declare $i = 0>> 
+          title: Start
+          ---
+          <<print {$i} {next()}>>
+          <<set $i += 1>>
+          <<if $i < 5>>
+            <<jump Start>>
+          <<endif>>
+          ===
+        ''',
+        testPlan: '''
+          command: print 0 1
+          command: print 1 2
+          command: print 2 3
+          command: print 3 4
+          command: print 4 5
+        ''',
+        commands: ['print'],
+      );
+    });
+
+    test('access command arguments', () async {});
 
     testScenario(
       testName: 'Commands.yarn',

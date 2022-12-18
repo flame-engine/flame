@@ -180,7 +180,7 @@ class _TestPlan extends DialogueView {
     );
     final expected = nextEntry as _Command;
     final text1 = '<<${expected.name} ${expected.content}>>';
-    final text2 = '<<${command.name} ${command.argumentString.evaluate()}>>';
+    final text2 = '<<${command.name} ${command.argumentString}>>';
     assert(
       text1 == text2,
       'Expected line: "$text1"\n'
