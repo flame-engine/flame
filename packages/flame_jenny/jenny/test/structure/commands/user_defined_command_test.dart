@@ -122,7 +122,41 @@ void main() {
       );
     });
 
-    test('access command arguments', () async {});
+    test('access command arguments', () async {
+      var fnCounter = 0;
+      final yarn = YarnProject()
+        ..commands.addCommand3('xyz', (String p0, String p1, String p2) => null)
+        ..functions.addFunction0('fn', () => fnCounter += 1)
+        ..parse(
+          dedent('''
+            title: Start
+            ---
+            <<xyz a b {fn()}>>
+            ===
+            '''),
+        );
+      final view1 = _CommandDialogueView();
+      final view2 = _CommandDialogueView();
+      final dialogueRunner = DialogueRunner(
+        yarnProject: yarn,
+        dialogueViews: [view1, view2],
+      );
+
+      await dialogueRunner.runNode('Start');
+      expect(fnCounter, 1);
+      expect(view1.numCalled, 1);
+      expect(view1.argumentString, 'a b 1');
+      expect(view1.arguments, ['a', 'b', '1']);
+      expect(view2.numCalled, 1);
+      expect(view2.argumentString, 'a b 1');
+      expect(view2.arguments, ['a', 'b', '1']);
+
+      await dialogueRunner.runNode('Start');
+      expect(fnCounter, 2);
+      expect(view2.numCalled, 2);
+      expect(view2.argumentString, 'a b 2');
+      expect(view2.arguments, ['a', 'b', '2']);
+    });
 
     testScenario(
       testName: 'Commands.yarn',
@@ -177,4 +211,17 @@ void main() {
       ],
     );
   });
+}
+
+class _CommandDialogueView extends DialogueView {
+  int numCalled = 0;
+  String argumentString = '';
+  List<dynamic> arguments = <int>[];
+
+  @override
+  void onCommand(UserDefinedCommand command) {
+    numCalled += 1;
+    arguments = command.arguments!;
+    argumentString = command.argumentString;
+  }
 }
