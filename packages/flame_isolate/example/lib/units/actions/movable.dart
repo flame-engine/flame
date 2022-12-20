@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flutter/material.dart';
@@ -40,7 +42,7 @@ mixin Movable on PositionComponent, HasGameRef<ColonistsGame> {
 
   @override
   @mustCallSuper
-  Future<void>? onLoad() {
+  FutureOr<void> onLoad() {
     anchor = Anchor.center;
     return super.onLoad();
   }

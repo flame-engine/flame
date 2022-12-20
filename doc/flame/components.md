@@ -88,7 +88,7 @@ Example:
 ```dart
 class MyGame extends FlameGame {
   @override
-  Future<void> onLoad() {
+  void onLoad() {
     final myComponent = PositionComponent(priority: 5);
     add(myComponent);
   }
@@ -135,7 +135,7 @@ class GameOverPanel extends PositionComponent {
   GameOverPanel(this.spriteImage);
 
   @override
-  Future<void> onLoad() async {
+  void onLoad() {
     final gameOverText = GameOverText(spriteImage); // GameOverText is a Component
     final gameOverButton = GameOverButton(spriteImage); // GameOverRestart is a SpriteComponent
 
@@ -163,7 +163,7 @@ constructor. This approach more closely resembles the standard Flutter API:
 ```dart
 class MyGame extends FlameGame {
   @override
-  Future<void> onLoad() async {
+  void onLoad() {
     add(
       PositionComponent(
         position: Vector2(30, 0),
@@ -198,7 +198,7 @@ Example:
 ```dart
 class MyComponent extends Component with ParentIsA<MyParentComponent> {
   @override
-  Future<void> onLoad() async {
+  void onLoad() {
     // parent is of type MyParentComponent
     print(parent.myValue);
   }
@@ -221,7 +221,7 @@ Example:
 ```dart
 class MyComponent extends Component with HasAncestor<MyAncestorComponent> {
   @override
-  Future<void> onLoad() async {
+  void onLoad() {
     // ancestor is of type MyAncestorComponent.
     print(ancestor.myValue);
   }
@@ -247,7 +247,7 @@ Example:
 
 ```dart
 @override
-Future<void> onLoad() async {
+void onLoad() {
   children.register<PositionComponent>();
 }
 ```
@@ -442,10 +442,10 @@ class MyGame extends FlameGame {
     final player = SpriteComponent(size: size, sprite: sprite);
 
     // Vector2(0.0, 0.0) by default, can also be set in the constructor
-    player.position = ...
+    player.position = Vector2(10, 20);
 
     // 0 by default, can also be set in the constructor
-    player.angle = ...
+    player.angle = 0;
 
     // Adds the component
     add(player);
@@ -461,32 +461,36 @@ This class is used to represent a Component that has sprites that run in a singl
 This will create a simple three frame animation using 3 different images:
 
 ```dart
-final sprites = [0, 1, 2]
-    .map((i) => Sprite.load('player_$i.png'));
-final animation = SpriteAnimation.spriteList(
-  await Future.wait(sprites),
-  stepTime: 0.01,
-);
-this.player = SpriteAnimationComponent(
-  animation: animation,
-  size: Vector2.all(64.0),
-);
+Future<void> onLoad() async {
+  final sprites = [0, 1, 2]
+      .map((i) => Sprite.load('player_$i.png'));
+  final animation = SpriteAnimation.spriteList(
+    await Future.wait(sprites),
+    stepTime: 0.01,
+  );
+  this.player = SpriteAnimationComponent(
+    animation: animation,
+    size: Vector2.all(64.0),
+  );
+}
 ```
 
 If you have a sprite sheet, you can use the `sequenced` constructor from the `SpriteAnimationData`
 class (check more details on [Images &gt; Animation](rendering/images.md#animation)):
 
 ```dart
-final size = Vector2.all(64.0);
-final data = SpriteAnimationData.sequenced(
-  textureSize: size,
-  amount: 2,
-  stepTime: 0.1,
-);
-this.player = SpriteAnimationComponent.fromFrameData(
-  await images.load('player.png'),
-  data,
-);
+Future<void> onLoad() async {
+  final size = Vector2.all(64.0);
+  final data = SpriteAnimationData.sequenced(
+    textureSize: size,
+    amount: 2,
+    stepTime: 0.1,
+  );
+  this.player = SpriteAnimationComponent.fromFrameData(
+    await images.load('player.png'),
+    data,
+  );
+}
 ```
 
 If you are not using `FlameGame`, don't forget this component needs to be updated, because the
@@ -580,7 +584,7 @@ class ButtonComponent extends SpriteGroupComponent<ButtonState>
   @override
   Future<void>? onLoad() async {
     final pressedSprite = await gameRef.loadSprite(/* omitted */);
-    final unpressedSprite = await gameRef.loadSprite(/* omitted /*);
+    final unpressedSprite = await gameRef.loadSprite(/* omitted */);
 
     sprites = {
       ButtonState.pressed: pressedSprite,
@@ -604,12 +608,14 @@ This component uses an instance of `Svg` class to represent a Component that has
 rendered in the game:
 
 ```dart
-final svg = await Svg.load('android.svg');
-final android = SvgComponent.fromSvg(
-  svg,
-  position: Vector2.all(100),
-  size: Vector2.all(100),
-);
+Future<void> onLoad() async {
+  final svg = await Svg.load('android.svg');
+  final android = SvgComponent.fromSvg(
+    svg,
+    position: Vector2.all(100),
+    size: Vector2.all(100),
+  );
+}
 ```
 
 
@@ -711,7 +717,7 @@ class MyParallaxComponent extends ParallaxComponent<MyGame> {
 
 class MyGame extends FlameGame {
   @override
-  Future<void> onLoad() async {
+  void onLoad() {
     add(MyParallaxComponent());
   }
 }
@@ -726,20 +732,24 @@ They simplest way is to set the named optional parameters `baseVelocity` and
 background images along the X-axis with a faster speed the "closer" the image is:
 
 ```dart
-final parallaxComponent = await loadParallaxComponent(
-  _dataList,
-  baseVelocity: Vector2(20, 0),
-  velocityMultiplierDelta: Vector2(1.8, 1.0),
-);
+Future<void> onLoad() async {
+  final parallaxComponent = await loadParallaxComponent(
+    _dataList,
+    baseVelocity: Vector2(20, 0),
+    velocityMultiplierDelta: Vector2(1.8, 1.0),
+  );
+}
 ```
 
 You can set the baseSpeed and layerDelta at any time, for example if your character jumps or your
 game speeds up.
 
 ```dart
-final parallax = parallaxComponent.parallax;
-parallax.baseSpeed = Vector2(100, 0);
-parallax.velocityMultiplierDelta = Vector2(2.0, 1.0);
+Future<void> onLoad() async {
+  final parallax = parallaxComponent.parallax;
+  parallax.baseSpeed = Vector2(100, 0);
+  parallax.velocityMultiplierDelta = Vector2(2.0, 1.0);
+}
 ```
 
 By default, the images are aligned to the bottom left, repeated along the X-axis and scaled
@@ -997,20 +1007,23 @@ then add animation. Removing the stack will not remove the tiles from the map.
 > **Note**: This currently only supports position based effects.
 
 ```dart
-    final stack = map.tileMap.tileStack(4, 0, named: {'floor_under'});
-    stack.add(
-      SequenceEffect(
-        [
-          MoveEffect.by(
-            Vector2(5, 0),
-            NoiseEffectController(duration: 1, frequency: 20),
-          ),
-          MoveEffect.by(Vector2.zero(), LinearEffectController(2)),
-        ],
-        repeatCount: 3,
-      )..onComplete = () => stack.removeFromParent(),
-    );
-    map.add(stack);
+void onLoad() {
+  final stack = map.tileMap.tileStack(4, 0, named: {'floor_under'});
+  stack.add(
+    SequenceEffect(
+      [
+        MoveEffect.by(
+          Vector2(5, 0),
+          NoiseEffectController(duration: 1, frequency: 20),
+        ),
+        MoveEffect.by(Vector2.zero(), LinearEffectController(2)),
+      ],
+      repeatCount: 3,
+    )
+      ..onComplete = () => stack.removeFromParent(),
+  );
+  map.add(stack);
+}
 ```
 
 
@@ -1111,19 +1124,20 @@ be used:
 class MyGame extends FlameGame {
   int lives = 2;
 
-  Future<void> onLoad() {
-  final playerNotifier = componentsNotifier<Player>()
-    ..addListener(() {
-      final player = playerNotifier.single;
-      if (player == null) {
-        lives--;
-        if (lives == 0) {
-          add(GameOverComponent());
-        } else {
-          add(Player());
-        }
-      }
-    });
+  @override
+  void onLoad() {
+    final playerNotifier = componentsNotifier<Player>()
+        ..addListener(() {
+          final player = playerNotifier.single;
+          if (player == null) {
+            lives--;
+            if (lives == 0) {
+              add(GameOverComponent());
+            } else {
+              add(Player());
+            }
+          }
+        });
   }
 }
 ```
@@ -1152,16 +1166,17 @@ Then our hud component could look like:
 ```dart
 class Hud extends PositionComponent with HasGameRef {
 
-  Future<void> onLoad() {
-  final playerNotifier = gameRef.componentsNotifier<Player>()
-    ..addListener(() {
-      final player = playerNotifier.single;
-      if (player != null) {
-        if (player.health <= .5) {
-          add(BlinkEffect());
-        }
-      }
-    });
+  @override
+  void onLoad() {
+    final playerNotifier = gameRef.componentsNotifier<Player>()
+        ..addListener(() {
+          final player = playerNotifier.single;
+          if (player != null) {
+            if (player.health <= .5) {
+              add(BlinkEffect());
+            }
+          }
+        });
   }
 }
 ```
