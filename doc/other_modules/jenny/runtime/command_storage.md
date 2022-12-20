@@ -173,7 +173,6 @@ void give(int amount, String item, String source) {
   is being executed.
 
 
-
 [DialogueView]: dialogue_view.md
 [UserDefinedCommand]: user_defined_command.md
 [YarnProject]: yarn_project.md
