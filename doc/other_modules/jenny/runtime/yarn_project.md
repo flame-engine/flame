@@ -58,8 +58,8 @@ final yarn = YarnProject()
   dialogue script -- otherwise a compile error will occur when encountering an unknown function.
 
 **commands** `CommandStorage`
-: The container for all user-defined commands linked into the project. The main reason to access
-  this container is to register new custom commands.
+: The [container][CommandStorage] for all user-defined commands linked into the project. The main
+  reason to access this container is to register new custom commands.
 
   All custom commands must be added before they can be used in the dialogue script.
 
@@ -74,4 +74,5 @@ final yarn = YarnProject()
   existing ones.
 
 
+[CommandStorage]: command_storage.md
 [Node]: node.md

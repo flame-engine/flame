@@ -21,7 +21,7 @@ Future<void> testScenario({
   YarnProject? yarn,
 }) async {
   final yarnProject = yarn ?? YarnProject();
-  commands?.forEach(yarnProject.commands.addDialogueCommand);
+  commands?.forEach(yarnProject.commands.addOrphanedCommand);
 
   Future<void> testBody() async {
     yarnProject.parse(dedent(input));

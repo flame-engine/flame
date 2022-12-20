@@ -11,6 +11,7 @@ are both built-in and user-defined commands.
 <<if>>       <if.md>
 <<jump>>     <jump.md>
 <<set>>      <set.md>
-<<stop>>     <stop.md>
-<<wait>>     <wait.md>
+<<stop>>               <stop.md>
+<<wait>>               <wait.md>
+User-defined commands  <user_defined_commands.md>
 ```

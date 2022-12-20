@@ -9,7 +9,7 @@ import 'package:meta/meta.dart';
 /// YarnProject.
 ///
 /// This repository is populated by the user, using commands [addCommand0],
-/// [addCommand1], [addCommand2], [addCommand3], and [addDialogueCommand],
+/// [addCommand1], [addCommand2], [addCommand3], and [addOrphanedCommand],
 /// depending on the arity of the function that needs to be invoked. All user-
 /// defined commands need to be declared before parsing any Yarn scripts.
 class CommandStorage {
@@ -59,7 +59,7 @@ class CommandStorage {
 
   /// Registers a command [name] which is not backed by any Dart function.
   /// Instead, this command will be delivered directly to the dialogue views.
-  void addDialogueCommand(String name) {
+  void addOrphanedCommand(String name) {
     _commands[name] = null;
   }
 

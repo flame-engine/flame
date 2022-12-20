@@ -33,7 +33,7 @@ void main() {
 
     test('parse simple dialogue command', () {
       final project = YarnProject()
-        ..commands.addDialogueCommand('hello')
+        ..commands.addOrphanedCommand('hello')
         ..parse('title: start\n---\n'
             '<<hello world {"A" + "B"}>>\n'
             '===');
@@ -81,7 +81,7 @@ void main() {
     test('markup within user-defined command', () {
       expect(
         () => YarnProject()
-          ..commands.addDialogueCommand('hello')
+          ..commands.addOrphanedCommand('hello')
           ..parse(
             'title:A\n---\n'
             '<<hello Big [bad/] Wolf>>\n'

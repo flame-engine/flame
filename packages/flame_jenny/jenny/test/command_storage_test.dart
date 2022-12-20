@@ -9,7 +9,7 @@ void main() {
   group('CommandStorage', () {
     test('A dialogue command', () {
       final storage = CommandStorage();
-      storage.addDialogueCommand('simple');
+      storage.addOrphanedCommand('simple');
       expect(storage.hasCommand('simple'), true);
 
       storage.runCommand(
