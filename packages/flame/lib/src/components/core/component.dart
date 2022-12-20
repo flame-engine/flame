@@ -409,12 +409,11 @@ class Component {
   /// ```
   ///
   /// Alternatively, if your [onLoad] function doesn't use any `await`ing, then
-  /// you can declare it as a regular method and then return `null`:
+  /// you can declare it as a regular method returning `void`:
   /// ```dart
   /// @override
-  /// Future<void>? onLoad() {
+  /// void onLoad() {
   ///   // your code here
-  ///   return null;
   /// }
   /// ```
   ///
