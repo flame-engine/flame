@@ -420,7 +420,7 @@ class Component {
   ///
   /// The engine ensures that this method will be called exactly once during
   /// the lifetime of the [Component] object. Do not call this method manually.
-  Future<void>? onLoad() => null;
+  FutureOr<void> onLoad() => null;
 
   /// Called when the component is added to its parent.
   ///
@@ -530,14 +530,14 @@ class Component {
   /// try to add it to multiple parents, or even to the same parent multiple
   /// times. If you need to change the parent of a component, use the
   /// [changeParent] method.
-  Future<void>? add(Component component) => component.addToParent(this);
+  FutureOr<void> add(Component component) => component.addToParent(this);
 
   /// A convenience method to [add] multiple children at once.
   Future<void> addAll(Iterable<Component> components) {
     final futures = <Future<void>>[];
     for (final component in components) {
       final future = add(component);
-      if (future != null) {
+      if (future is Future) {
         futures.add(future);
       }
     }
@@ -545,7 +545,7 @@ class Component {
   }
 
   /// Adds this component as a child of [parent] (see [add] for details).
-  Future<void>? addToParent(Component parent) {
+  FutureOr<void> addToParent(Component parent) {
     assert(
       _parent == null,
       '$this cannot be added to $parent because it already has a parent: '
@@ -556,7 +556,6 @@ class Component {
     if (!isLoaded && (parent.findGame()?.hasLayout ?? false)) {
       return _startLoading();
     }
-    return null;
   }
 
   /// Removes a component from the component tree.
@@ -760,7 +759,7 @@ class Component {
     });
   }
 
-  Future<void>? _startLoading() {
+  FutureOr<void> _startLoading() {
     assert(_state == _initial);
     assert(_parent != null);
     assert(_parent!.findGame() != null);
@@ -768,11 +767,10 @@ class Component {
     _setLoadingBit();
     onGameResize(_parent!.findGame()!.canvasSize);
     final onLoadFuture = onLoad();
-    if (onLoadFuture == null) {
-      _finishLoading();
-      return null;
+    if (onLoadFuture is Future) {
+      return onLoadFuture.then((dynamic _) => _finishLoading());
     } else {
-      return onLoadFuture.then((_) => _finishLoading());
+      _finishLoading();
     }
   }
 
