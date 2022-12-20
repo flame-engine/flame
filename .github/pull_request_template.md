@@ -13,7 +13,8 @@ Before you create this PR confirm that it meets all requirements listed below by
 relevant checkboxes with `[x]`. If some checkbox is not applicable, mark it as `[-]`.
 -->
 
-- [ ] The title of my PR starts with a [Conventional Commit] prefix (`fix:`, `feat:`, `docs:` etc).
+- [ ] The title of my PR starts with a [Conventional Commit] prefix (`fix:`, `feat:`, `docs:`,
+  `test:`, `chore:`, `refactor:`, `perf:`, `build:`, `ci:`, `style:`, `revert:`).
 - [ ] I have followed the [Contributor Guide] when preparing my PR.
 - [ ] I have updated/added tests for ALL new/updated/fixed functionality.
 - [ ] I have updated/added relevant documentation in `docs` and added dartdoc comments with `///`.
@@ -41,6 +42,7 @@ currently released version to the new proposed way.
 ## Related Issues
 <!--
 Indicate which issues this PR resolves, if any. For example:
+
 Closes #1234
 !-->
 
