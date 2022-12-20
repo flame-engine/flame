@@ -27,10 +27,10 @@ within a yarn script. Objects of this type will be delivered to a [DialogueView]
   In the same example as above, the `arguments` will be `['Hippo', 3.17]`, assuming the linked Dart
   function is `move(String target, double distance)`.
 
-:::{seealso}
+```{seealso}
 - the description of [User-defined Commands] in the YarnSpinner language;
 - the guide on how to register a new custom command in the [CommandStorage] document.
-:::
+```
 
 [CommandStorage]: command_storage.md
 [DialogueView]: dialogue_view.md

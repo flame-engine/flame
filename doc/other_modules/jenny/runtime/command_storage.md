@@ -51,6 +51,7 @@ In order to register a function as a yarn command, the function must satisfy sev
 
 ## Examples
 
+
 ### `<<StartQuest>>`
 
 Suppose we want to have a yarn command `<<StartQuest>>`, which would initiate a quest. The command
@@ -164,11 +165,11 @@ void give(int amount, String item, String source) {
 }
 ```
 
-:::{seealso}
+```{seealso}
 - the description of [user-defined commands] in the YarnSpinner language;
 - the [UserDefinedCommand] class, which is used to inform a [DialogueView]
   that a custom command is being executed.
-:::
+```
 
 
 [DialogueView]: dialogue_view.md
