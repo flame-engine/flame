@@ -31,7 +31,7 @@ void main() {
         yarnProject: yarn,
         dialogueViews: [view1, view2],
       );
-      await dialogueRunner.runNode('Start');
+      await dialogueRunner.startDialogue('Start');
       expect(
         view2.events,
         const [
@@ -68,7 +68,7 @@ void main() {
         yarnProject: yarn,
         dialogueViews: [view1, view2, view3],
       );
-      await dialogueRunner.runNode('Start');
+      await dialogueRunner.startDialogue('Start');
       expect(
         view2.events,
         const [

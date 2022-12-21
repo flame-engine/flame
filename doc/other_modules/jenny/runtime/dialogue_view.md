@@ -39,9 +39,8 @@ simultaneously).
 : Called when the dialogue is about to finish.
 
 **onNodeStart**(`Node node`)
-: Called when the dialogue runner starts executing the [Node]. This will be called at the start of
-  `DialogueView.runNode()` (but after the **onDialogueStart**), and then each time the dialogue
-  jumps to another node.
+: Called when the dialogue runner starts executing the [Node]. This will be called right after the
+  **onDialogueStart** event, and then each time the dialogue jumps to another node.
 
   This method is a good place to perform node-specific initialization, for example by querying the
   `node`'s properties or metadata.

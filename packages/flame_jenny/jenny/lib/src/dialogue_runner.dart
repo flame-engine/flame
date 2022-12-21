@@ -47,7 +47,7 @@ class DialogueRunner {
 
   /// Executes the node with the given name, and returns a future that finishes
   /// once the dialogue stops running.
-  Future<void> runNode(String nodeName) async {
+  Future<void> startDialogue(String nodeName) async {
     try {
       if (_currentNodes.isNotEmpty) {
         throw DialogueError(
@@ -158,7 +158,7 @@ class DialogueRunner {
   @internal
   Future<void> jumpToNode(String nodeName) async {
     _finishCurrentNode();
-    return runNode(nodeName);
+    return startDialogue(nodeName);
   }
 
   @internal

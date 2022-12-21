@@ -36,7 +36,7 @@ The constructor takes two required parameters:
 
 ## Methods
 
-**runNode**(`String nodeName`)
+**startDialogue**(`String nodeName`)
 : Executes the node with the given name, and returns a future that completes only when the dialogue
   finishes running (which may be a while). A single `DialogueRunner` can only run one node at a
   time.
