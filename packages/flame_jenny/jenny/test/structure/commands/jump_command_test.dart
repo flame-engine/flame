@@ -114,7 +114,8 @@ void main() {
           '===\n',
         );
       expect(
-        () => DialogueRunner(yarnProject: yarn, dialogueViews: []).startDialogue('A'),
+        () => DialogueRunner(yarnProject: yarn, dialogueViews: [])
+            .startDialogue('A'),
         hasNameError('NameError: Node "Up" could not be found'),
       );
     });

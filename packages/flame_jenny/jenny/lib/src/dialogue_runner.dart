@@ -44,45 +44,55 @@ class DialogueRunner {
   final List<Node> _currentNodes;
   final List<NodeIterator> _iterators;
   _LineDeliveryPipeline? _linePipeline;
+  String? _initialNode;
 
   /// Executes the node with the given name, and returns a future that finishes
   /// once the dialogue stops running.
   Future<void> startDialogue(String nodeName) async {
     try {
-      if (_currentNodes.isNotEmpty) {
+      if (_initialNode != null) {
         throw DialogueError(
           'Cannot run node "$nodeName" because another node is '
-          'currently running: "${_currentNodes.last.title}"',
+          'currently running: "$_initialNode"',
         );
       }
-      final newNode = project.nodes[nodeName];
-      if (newNode == null) {
-        throw NameError('Node "$nodeName" could not be found');
-      }
+      _initialNode = nodeName;
       _dialogueViews.forEach((dv) => dv.dialogueRunner = this);
-      _currentNodes.add(newNode);
-      _iterators.add(newNode.iterator);
-      await _combineFutures(
-        [for (final view in _dialogueViews) view.onDialogueStart()],
-      );
-      await _combineFutures(
-        [for (final view in _dialogueViews) view.onNodeStart(newNode)],
-      );
-
-      while (_iterators.isNotEmpty) {
-        final iterator = _iterators.last;
-        if (iterator.moveNext()) {
-          final entry = iterator.current;
-          await entry.processInDialogueRunner(this);
-        } else {
-          _finishCurrentNode();
-        }
-      }
-      await _combineFutures(
-        [for (final view in _dialogueViews) view.onDialogueFinish()],
-      );
+      await _event((view) => view.onDialogueStart());
+      await _runNode(nodeName);
+      await _event((view) => view.onDialogueFinish());
     } finally {
       _dialogueViews.forEach((dv) => dv.dialogueRunner = null);
+      _initialNode = null;
+    }
+  }
+
+  FutureOr<void> _event(FutureOr<void> Function(DialogueView v) callback) {
+    return _combineFutures([
+      for (final view in _dialogueViews) callback(view)
+    ]);
+  }
+
+  Future<void> _runNode(String nodeName) async {
+    final node = project.nodes[nodeName];
+    if (node == null) {
+      throw NameError('Node "$nodeName" could not be found');
+    }
+
+    _currentNodes.add(node);
+    _iterators.add(node.iterator);
+
+    await _combineFutures(
+        [for (final view in _dialogueViews) view.onNodeStart(node)],
+    );
+    while (_iterators.isNotEmpty) {
+      final iterator = _iterators.last;
+      if (iterator.moveNext()) {
+        final entry = iterator.current;
+        await entry.processInDialogueRunner(this);
+      } else {
+        _finishCurrentNode();
+      }
     }
   }
 
@@ -158,7 +168,7 @@ class DialogueRunner {
   @internal
   Future<void> jumpToNode(String nodeName) async {
     _finishCurrentNode();
-    return startDialogue(nodeName);
+    return _runNode(nodeName);
   }
 
   @internal
