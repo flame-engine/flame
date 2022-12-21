@@ -7,10 +7,11 @@ are both built-in and user-defined commands.
 ```{toctree}
 :hidden:
 
-<<declare>>  <declare.md>
-<<if>>       <if.md>
-<<jump>>     <jump.md>
-<<set>>      <set.md>
-<<stop>>     <stop.md>
-<<wait>>     <wait.md>
+<<declare>>            <declare.md>
+<<if>>                 <if.md>
+<<jump>>               <jump.md>
+<<set>>                <set.md>
+<<stop>>               <stop.md>
+<<wait>>               <wait.md>
+User-defined commands  <user_defined_commands.md>
 ```
