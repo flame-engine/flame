@@ -94,8 +94,8 @@ the sequence of emitted events will be as follows (assuming the second option is
 - `onDialogueFinish()`
 
 :::{note}
-Keep in mind that if a `DialogueError` is thrown while running the dialogue, then it will terminate
-immediately and none of the `*Finish` callbacks will run.
+Keep in mind that if a `DialogueError` is thrown while running the dialogue, then the dialogue will
+terminate immediately and none of the `*Finish` callbacks will run.
 :::
 
 
