@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flame/cache.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
@@ -51,12 +53,12 @@ abstract class Game {
   Vector2? _size;
 
   /// This variable ensures that Game's [onLoad] is called no more than once.
-  late final Future<void>? _onLoadFuture = onLoad();
+  late final FutureOr<void> _onLoadFuture = onLoad();
 
   bool _debugOnLoadStarted = false;
 
   @internal
-  Future<void>? get onLoadFuture {
+  FutureOr<void> get onLoadFuture {
     assert(
       () {
         _debugOnLoadStarted = true;
@@ -69,7 +71,7 @@ abstract class Game {
   /// To be used for tests that needs to evaluate the game after it has been
   /// loaded by the game widget.
   @visibleForTesting
-  Future<void>? toBeLoaded() {
+  FutureOr<void> toBeLoaded() {
     assert(
       _debugOnLoadStarted,
       'Make sure the game has passed to a mounted '
@@ -159,7 +161,7 @@ abstract class Game {
   ///
   /// The engine ensures that this method will be called exactly once during
   /// the lifetime of the [Game] instance. Do not call this method manually.
-  Future<void>? onLoad() => null;
+  FutureOr<void> onLoad() => null;
 
   void onMount() {}
 
