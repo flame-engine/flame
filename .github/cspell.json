@@ -1,7 +1,7 @@
 {
   "version": "0.2",
   "language": "en",
-  "flagWords": [],
+  "flagWords": ["teh", "hte"],
   "ignorePaths": ["**/media/**", "**/assets/**", "**/test/**"],
   "ignoreRegExpList": [
       "@[\\w\\-]+",
