@@ -2,6 +2,8 @@ import 'package:jenny/src/structure/expressions/expression.dart';
 import 'package:jenny/src/structure/markup_attribute.dart';
 import 'package:meta/meta.dart';
 
+/// The content of a single line in a dialogue. This contains both regular text,
+/// inline expressions, and markup attributes.
 @internal
 class LineContent {
   LineContent(this.text, [this.expressions, this.attributes]);
@@ -12,6 +14,8 @@ class LineContent {
 
   bool get isConst => expressions == null;
 
+  /// Evaluates the line, substituting all inline expressions, and updating the
+  /// markup attributes accordingly.
   String evaluate() {
     attributes?.forEach((a) => a.reset());
     if (expressions == null) {

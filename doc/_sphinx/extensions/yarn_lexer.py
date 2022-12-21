@@ -45,6 +45,7 @@ class YarnLexer(RegexLexer):
         'if',
         'jump',
         'local',
+        'set',
         'stop',
         'visit',
         'wait',
@@ -123,7 +124,7 @@ class YarnLexer(RegexLexer):
         ],
         'command_name': [
             (words(BUILTIN_COMMANDS, suffix=r'\b'), Keyword, 'command_body'),
-            (r'\w+', Name.Class, 'command_body'),
+            (r'\w+', Name.Class, 'command_custom'),
         ],
         'command_body': [
             include('<whitespace>'),
@@ -131,6 +132,13 @@ class YarnLexer(RegexLexer):
             (r'>>', Punctuation, '#pop:2'),
             (r'>', Text),
             default('command_expression'),
+        ],
+        'command_custom': [
+            include('<whitespace>'),
+            (r'>>', Punctuation, '#pop:2'),
+            (r'\{', Punctuation, 'curly_expression'),
+            (r'[^>{\n]+', Text),
+            ('.', Text),
         ],
 
         '<expression>': [

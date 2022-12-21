@@ -10,7 +10,7 @@ void main() {
   group('DialogueView', () {
     test('run a sample dialogue', () async {
       final yarn = YarnProject()
-        ..commands.addDialogueCommand('myCommand')
+        ..commands.addOrphanedCommand('myCommand')
         ..parse(
           dedent('''
             title: Start
