@@ -1,3 +1,4 @@
+# See https://github.com/amannn/action-semantic-pull-request
 name: 'PR Title is Conventional'
 
 on:
@@ -15,3 +16,19 @@ jobs:
       - uses: amannn/action-semantic-pull-request@v4
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          types: |
+            build
+            chore
+            ci
+            docs
+            feat
+            fix
+            perf
+            refactor
+            revert
+            style
+            test
+          subjectPattern: ^[A-Z].+$
+          subjectPatternError: |
+            The subject of the PR must begin with an uppercase letter.

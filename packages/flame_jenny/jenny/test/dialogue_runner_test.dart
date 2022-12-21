@@ -327,7 +327,7 @@ void main() {
         );
       final view = _RecordingDialogueView();
       final dialogue = DialogueRunner(yarnProject: yarn, dialogueViews: [view]);
-      dialogue.runNode('Start');
+      unawaited(dialogue.runNode('Start'));
       expect(
         () => dialogue.runNode('Other'),
         hasDialogueError(

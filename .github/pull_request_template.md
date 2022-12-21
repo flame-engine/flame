@@ -1,3 +1,10 @@
+<!--
+The title of your PR on the line above should start with a [Conventional Commit] prefix
+(`fix:`, `feat:`, `docs:`, `test:`, `chore:`, `refactor:`, `perf:`, `build:`, `ci:`,
+`style:`, `revert:`). This title will later become an entry in the [CHANGELOG], so please
+make sure that it summarizes the PR adequately.
+-->
+
 # Description
 <!--
 Provide a description of what this PR is doing.
@@ -13,7 +20,6 @@ Before you create this PR confirm that it meets all requirements listed below by
 relevant checkboxes with `[x]`. If some checkbox is not applicable, mark it as `[-]`.
 -->
 
-- [ ] The title of my PR starts with a [Conventional Commit] prefix (`fix:`, `feat:`, `docs:` etc).
 - [ ] I have followed the [Contributor Guide] when preparing my PR.
 - [ ] I have updated/added tests for ALL new/updated/fixed functionality.
 - [ ] I have updated/added relevant documentation in `docs` and added dartdoc comments with `///`.
@@ -41,9 +47,11 @@ currently released version to the new proposed way.
 ## Related Issues
 <!--
 Indicate which issues this PR resolves, if any. For example:
+
 Closes #1234
 !-->
 
 <!-- Links -->
 [Contributor Guide]: https://github.com/flame-engine/flame/blob/main/CONTRIBUTING.md
 [Conventional Commit]: https://conventionalcommits.org
+[CHANGELOG]: https://github.com/flame-engine/flame/blob/main/CHANGELOG.md

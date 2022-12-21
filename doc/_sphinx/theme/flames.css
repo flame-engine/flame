@@ -642,6 +642,10 @@ div.highlight-yaml pre:before {
   content: "yaml";
   color: #5f5;
 }
+div.highlight-yarn pre:before {
+  content: "yarn";
+  color: #a6e22e;
+}
 div.highlight-text pre:before {
   content: "text";
   color: #666;

@@ -1,4 +1,6 @@
 import 'package:jenny/src/command_storage.dart';
+import 'package:jenny/src/structure/commands/user_defined_command.dart';
+import 'package:jenny/src/structure/line_content.dart';
 import 'package:test/test.dart';
 
 import 'utils.dart';
@@ -7,10 +9,15 @@ void main() {
   group('CommandStorage', () {
     test('A dialogue command', () {
       final storage = CommandStorage();
-      storage.addDialogueCommand('simple');
+      storage.addOrphanedCommand('simple');
       expect(storage.hasCommand('simple'), true);
-      storage.runCommand('simple', '');
-      storage.runCommand('simple', '1 2 3');
+
+      storage.runCommand(
+        UserDefinedCommand('simple', LineContent('')),
+      );
+      storage.runCommand(
+        UserDefinedCommand('simple', LineContent('1 2 3')),
+      );
       expect(
         () => storage.addCommand0('simple', () => null),
         throwsAssertionError('Command <<simple>> has already been defined'),
@@ -32,7 +39,7 @@ void main() {
       expect(storage.hasCommand('one'), true);
 
       void check(String arg, int expectedValue) {
-        storage.runCommand('one', arg);
+        storage.runCommand(UserDefinedCommand('one', LineContent(arg)));
         expect(value, expectedValue);
       }
 
@@ -42,7 +49,7 @@ void main() {
       check('+666', 666);
       check(' "42" ', 42);
       expect(
-        () => storage.runCommand('one', '2.0'),
+        () => check('2.0', 2),
         hasTypeError(
           'TypeError: Argument 1 for command <<one>> has value "2.0", which '
           'is not integer',
@@ -57,7 +64,7 @@ void main() {
       expect(storage.hasCommand('check'), true);
 
       void check(String arg, bool expectedValue) {
-        storage.runCommand('check', arg);
+        storage.runCommand(UserDefinedCommand('check', LineContent(arg)));
         expect(value, expectedValue);
       }
 
@@ -74,7 +81,7 @@ void main() {
       check('1', true);
       check('0', false);
       expect(
-        () => storage.runCommand('check', '12'),
+        () => check('12', true),
         hasTypeError(
           'TypeError: Argument 1 for command <<check>> has value "12", which '
           'is not a boolean',
@@ -93,7 +100,7 @@ void main() {
       expect(storage.hasCommand('two'), true);
 
       void check(String args, double expectedValue1, String expectedValue2) {
-        storage.runCommand('two', args);
+        storage.runCommand(UserDefinedCommand('two', LineContent(args)));
         expect(value1, expectedValue1);
         expect(value2, expectedValue2);
       }
@@ -103,7 +110,7 @@ void main() {
       check('-0.001 "Yarn Spinner"', -0.001, 'Yarn Spinner');
       check(r'+3e+100 "\""', 3e100, '"');
       expect(
-        () => storage.runCommand('two', '2.0.3 error'),
+        () => check('2.0.3 error', 2.03, 'error'),
         hasTypeError(
           'TypeError: Argument 1 for command <<two>> has value "2.0.3", which '
           'is not a floating-point value',
@@ -124,7 +131,7 @@ void main() {
       expect(storage.hasCommand('three'), true);
 
       void check(String args, num v1, num v2, num v3) {
-        storage.runCommand('three', args);
+        storage.runCommand(UserDefinedCommand('three', LineContent(args)));
         expect(value1, v1);
         expect(value2, v2);
         expect(value3, v3);
@@ -134,7 +141,7 @@ void main() {
       check('1.1 2.2 3.3', 1.1, 2.2, 3.3);
       check('Infinity -0.0 333', double.infinity, 0, 333);
       expect(
-        () => storage.runCommand('three', '0 0 error'),
+        () => check('0 0 error', 0, 0, 0),
         hasTypeError(
           'TypeError: Argument 3 for command <<three>> has value "error", '
           'which is not numeric',
@@ -155,7 +162,7 @@ void main() {
       expect(storage.hasCommand('three'), true);
 
       void check(String args, bool v1, bool v2, bool v3) {
-        storage.runCommand('three', args);
+        storage.runCommand(UserDefinedCommand('three', LineContent(args)));
         expect(value1, v1);
         expect(value2, v2);
         expect(value3, v3);
@@ -206,14 +213,16 @@ void main() {
         final storage = CommandStorage()
           ..addCommand2('xyz', (int z, bool f) => null);
         expect(
-          () => storage.runCommand('xyz', '1 true 3'),
+          () => storage.runCommand(
+            UserDefinedCommand('xyz', LineContent('1 true 3')),
+          ),
           hasTypeError(
             'TypeError: Command <<xyz>> expects 2 arguments but received 3 '
             'arguments',
           ),
         );
         expect(
-          () => storage.runCommand('xyz', ''),
+          () => storage.runCommand(UserDefinedCommand('xyz', LineContent(''))),
           hasTypeError(
             'TypeError: Command <<xyz>> expects 2 arguments but received 0 '
             'arguments',
