@@ -73,7 +73,22 @@ class DialogueRunner {
     } finally {
       _dialogueViews.forEach((dv) => dv.dialogueRunner = null);
       _initialNodeName = null;
+      _nextNode = null;
+      _currentIterator = null;
+      _currentNode = null;
     }
+  }
+
+  void sendSignal(dynamic signal) {
+    assert(_linePipeline != null);
+    final line = _linePipeline!.line;
+    for (final view in _dialogueViews) {
+      view.onLineSignal(line, signal);
+    }
+  }
+
+  void stopLine() {
+    _linePipeline?.stop();
   }
 
   Future<void> _runNode(String nodeName) async {
@@ -104,18 +119,6 @@ class DialogueRunner {
       nodeVariable,
       project.variables.getNumericValue(nodeVariable) + 1,
     );
-  }
-
-  void sendSignal(dynamic signal) {
-    assert(_linePipeline != null);
-    final line = _linePipeline!.line;
-    for (final view in _dialogueViews) {
-      view.onLineSignal(line, signal);
-    }
-  }
-
-  void stopLine() {
-    _linePipeline?.stop();
   }
 
   @internal
@@ -178,16 +181,16 @@ class DialogueRunner {
     _nextNode = nodeName;
   }
 
+  /// Similar to `Future.wait()`, but accepts `FutureOr`s.
   FutureOr<void> _combineFutures(List<FutureOr<void>> maybeFutures) {
-    final futures = <Future<void>>[
-      for (final maybeFuture in maybeFutures)
-        if (maybeFuture is Future) maybeFuture
-    ];
-    if (futures.length == 1) {
-      return futures[0];
-    } else if (futures.isNotEmpty) {
-      final Future<void> result = Future.wait<void>(futures);
-      return result;
+    final futures = maybeFutures.whereType<Future<void>>().toList();
+    if (futures.isNotEmpty) {
+      if (futures.length == 1) {
+        return futures[0];
+      } else {
+        final Future<void> result = Future.wait(futures);
+        return result;
+      }
     }
   }
 
