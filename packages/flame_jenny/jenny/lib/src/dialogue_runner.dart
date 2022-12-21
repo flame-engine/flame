@@ -43,6 +43,7 @@ class DialogueRunner {
   Node? _currentNode;
   NodeIterator? _currentIterator;
   String? _initialNodeName;
+  String? _nextNode;
 
   /// Starts the dialogue with the node [nodeName], and returns a future that
   /// finishes once the dialogue stops running.
@@ -64,7 +65,10 @@ class DialogueRunner {
         view.dialogueRunner = this;
       });
       await _event((view) => view.onDialogueStart());
-      await _runNode(nodeName);
+      _nextNode = nodeName;
+      while (_nextNode != null) {
+        await _runNode(_nextNode!);
+      }
       await _event((view) => view.onDialogueFinish());
     } finally {
       _dialogueViews.forEach((dv) => dv.dialogueRunner = null);
@@ -78,30 +82,26 @@ class DialogueRunner {
       throw NameError('Node "$nodeName" could not be found');
     }
 
+    _nextNode = null;
     _currentNode = node;
     _currentIterator = node.iterator;
 
     await _event((view) => view.onNodeStart(node));
-    while (_currentIterator != null) {
-      if (_currentIterator!.moveNext()) {
-        final entry = _currentIterator!.current;
-        await entry.processInDialogueRunner(this);
-      } else {
-        _finishCurrentNode();
-      }
+    while (_currentIterator?.moveNext() ?? false) {
+      final entry = _currentIterator!.current;
+      await entry.processInDialogueRunner(this);
     }
+    _incrementNodeVisitCount();
+    _currentNode = null;
+    _currentIterator = null;
   }
 
-  void _finishCurrentNode() {
-    // Increment visit count for the node
-    assert(_currentNode != null);
+  void _incrementNodeVisitCount() {
     final nodeVariable = '@${_currentNode!.title}';
     project.variables.setVariable(
       nodeVariable,
       project.variables.getNumericValue(nodeVariable) + 1,
     );
-    _currentNode = null;
-    _currentIterator = null;
   }
 
   void sendSignal(dynamic signal) {
@@ -131,15 +131,21 @@ class DialogueRunner {
       for (final view in _dialogueViews) view.onChoiceStart(choice)
     ];
     if (futures.every((future) => future == DialogueView.never)) {
-      _error('No dialogue views capable of making a dialogue choice');
+      throw DialogueError(
+        'No dialogue views capable of making a dialogue choice',
+      );
     }
     final chosenIndex = await Future.any(futures);
     if (chosenIndex < 0 || chosenIndex >= choice.options.length) {
-      _error('Invalid option index chosen in a dialogue: $chosenIndex');
+      throw DialogueError(
+        'Invalid option index chosen in a dialogue: $chosenIndex',
+      );
     }
     final chosenOption = choice.options[chosenIndex];
     if (!chosenOption.isAvailable) {
-      _error('A dialogue view selected a disabled option: $chosenOption');
+      throw DialogueError(
+        'A dialogue view selected a disabled option: $chosenOption',
+      );
     }
     await _event((view) => view.onChoiceFinish(chosenOption));
     enterBlock(chosenOption.block);
@@ -159,15 +165,12 @@ class DialogueRunner {
     _currentIterator!.diveInto(block);
   }
 
+  /// Stops the current node, and then starts running [nodeName]. If [nodeName]
+  /// is null, then stops the dialogue completely.
   @internal
-  Future<void> jumpToNode(String nodeName) async {
-    _finishCurrentNode();
-    return _runNode(nodeName);
-  }
-
-  @internal
-  void stop() {
+  void jumpToNode(String? nodeName) {
     _currentIterator = null;
+    _nextNode = nodeName;
   }
 
   FutureOr<void> _combineFutures(List<FutureOr<void>> maybeFutures) {
@@ -184,14 +187,7 @@ class DialogueRunner {
   }
 
   FutureOr<void> _event(FutureOr<void> Function(DialogueView) callback) {
-    return _combineFutures([
-      for (final view in _dialogueViews) callback(view)
-    ]);
-  }
-
-  Never _error(String message) {
-    stop();
-    throw DialogueError(message);
+    return _combineFutures([for (final view in _dialogueViews) callback(view)]);
   }
 }
 
