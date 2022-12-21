@@ -29,6 +29,6 @@ jobs:
             revert
             style
             test
-          subjectPattern: ^[A-Z]
+          subjectPattern: ^[A-Z].*
           subjectPatternError: |
             The subject of the PR must begin with an uppercase letter.
