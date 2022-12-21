@@ -35,18 +35,17 @@ class DialogueRunner {
     required YarnProject yarnProject,
     required List<DialogueView> dialogueViews,
   })  : project = yarnProject,
-        _dialogueViews = dialogueViews,
-        _iterators = [];
+        _dialogueViews = dialogueViews;
 
   final YarnProject project;
   final List<DialogueView> _dialogueViews;
-  final List<NodeIterator> _iterators;
   _LineDeliveryPipeline? _linePipeline;
   Node? _currentNode;
+  NodeIterator? _currentIterator;
   String? _initialNodeName;
 
-  /// Executes the node with the given name, and returns a future that finishes
-  /// once the dialogue stops running.
+  /// Starts the dialogue with the node [nodeName], and returns a future that
+  /// finishes once the dialogue stops running.
   Future<void> startDialogue(String nodeName) async {
     try {
       if (_initialNodeName != null) {
@@ -80,13 +79,12 @@ class DialogueRunner {
     }
 
     _currentNode = node;
-    _iterators.add(node.iterator);
+    _currentIterator = node.iterator;
 
     await _event((view) => view.onNodeStart(node));
-    while (_iterators.isNotEmpty) {
-      final iterator = _iterators.last;
-      if (iterator.moveNext()) {
-        final entry = iterator.current;
+    while (_currentIterator != null) {
+      if (_currentIterator!.moveNext()) {
+        final entry = _currentIterator!.current;
         await entry.processInDialogueRunner(this);
       } else {
         _finishCurrentNode();
@@ -103,7 +101,7 @@ class DialogueRunner {
       project.variables.getNumericValue(nodeVariable) + 1,
     );
     _currentNode = null;
-    _iterators.removeLast();
+    _currentIterator = null;
   }
 
   void sendSignal(dynamic signal) {
@@ -158,7 +156,7 @@ class DialogueRunner {
 
   @internal
   void enterBlock(Block block) {
-    _iterators.last.diveInto(block);
+    _currentIterator!.diveInto(block);
   }
 
   @internal
@@ -169,7 +167,7 @@ class DialogueRunner {
 
   @internal
   void stop() {
-    _iterators.clear();
+    _currentIterator = null;
   }
 
   FutureOr<void> _combineFutures(List<FutureOr<void>> maybeFutures) {
