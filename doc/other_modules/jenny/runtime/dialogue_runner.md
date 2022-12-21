@@ -93,6 +93,11 @@ the sequence of emitted events will be as follows (assuming the second option is
 - `onNodeFinish(Node("Away"))`
 - `onDialogueFinish()`
 
+:::{note}
+Keep in mind that if a `DialogueError` is thrown while running the dialogue, then it will terminate
+immediately and none of the `*Finish` callbacks will run.
+:::
+
 
 [DialogueChoice]: dialogue_choice.md
 [DialogueView]: dialogue_view.md

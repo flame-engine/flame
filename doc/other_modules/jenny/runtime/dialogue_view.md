@@ -46,7 +46,11 @@ simultaneously).
   `node`'s properties or metadata.
 
 **onNodeFinish**(`Node node`)
-: TODO
+: Called when the dialogue runner finishes executing the [Node], before **onDialogueFinish**. This
+  will also be called every time a node is exited via `<<stop>>` or a `<<jump>>` command (including
+  jumps from node to itself).
+
+  This callback can be used to clean up any preparations that were performed in `onNodeStart`.
 
 **onLineStart**(`DialogueLine line`) `-> bool`
 : Called when the next dialogue [line] should be presented to the user.
