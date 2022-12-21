@@ -92,6 +92,8 @@ class DialogueRunner {
       await entry.processInDialogueRunner(this);
     }
     _incrementNodeVisitCount();
+    await _event((view) => view.onNodeFinish(node));
+
     _currentNode = null;
     _currentIterator = null;
   }
@@ -167,6 +169,9 @@ class DialogueRunner {
 
   /// Stops the current node, and then starts running [nodeName]. If [nodeName]
   /// is null, then stops the dialogue completely.
+  ///
+  /// This command is synchronous, i.e. it does not wait for the node to
+  /// *actually* finish (which calls the `onNodeFinish` callback).
   @internal
   void jumpToNode(String? nodeName) {
     _currentIterator = null;
