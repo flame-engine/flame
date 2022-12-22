@@ -16,10 +16,10 @@ scripts. For a full description of these commands, see the document on [user-def
 
 ### Variables
 
-**[\<\<declare\>\>](declare.md)** x
+**[\<\<declare\>\>](declare.md)**
 : Declares a global variable.
 
-**[\<\<local\>\>](local.md)** x
+**[\<\<local\>\>](local.md)**
 : Declares a local variable.
 
 **[\<\<set\>\>](set.md)**
@@ -28,17 +28,17 @@ scripts. For a full description of these commands, see the document on [user-def
 
 ### Control flow
 
-**[\<\<if\>\>](if.md)** x
+**[\<\<if\>\>](if.md)**
 : Conditionally executes certain statements. This is equivalent to the **if** keyword in most
   programming languages.
 
-**[\<\<jump\>\>](jump.md)** x
+**[\<\<jump\>\>](jump.md)**
 : Switches execution to another node.
 
-**[\<\<stop\>\>](stop.md)** x
+**[\<\<stop\>\>](stop.md)**
 : Stops executing the current node.
 
-**[\<\<wait\>\>](wait.md)** x
+**[\<\<wait\>\>](wait.md)**
 : Pauses the dialogue for the specified amount of time.
 
 
