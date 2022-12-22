@@ -32,11 +32,11 @@ scripts. For a full description of these commands, see the document on [user-def
 : Conditionally executes certain statements. This is equivalent to the **if** keyword in most
   programming languages.
 
-**[\<\<stop\>\>](stop.md)**
-: Stops executing the current node.
-
 **[\<\<jump\>\>](jump.md)**
 : Switches execution to another node.
+
+**[\<\<stop\>\>](stop.md)**
+: Stops executing the current node.
 
 **[\<\<wait\>\>](wait.md)**
 : Pauses the dialogue for the specified amount of time.
