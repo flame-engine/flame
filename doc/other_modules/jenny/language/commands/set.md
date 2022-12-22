@@ -1,7 +1,8 @@
 # `<<set>>`
 
 The **\<\<set\>\>** command is used to update the value of an existing variable. The variable
-must be declared with [`<<declare>>`] or [`<<local>>`] before it can be used in `<<set>>`.
+must be declared with [\<\<declare\>\>][declare] or [\<\<local\>\>][local] before it can be used
+in `<<set>>`.
 
 The command `<<set>>` allows either regular assignment, or modifying assignment, like follows:
 
@@ -61,5 +62,5 @@ What is your favorite color?
 ```
 
 
-[`<<declare>>`]: declare.md
-[`<<local>>`]: local.md
+[declare]: declare.md
+[local]: local.md

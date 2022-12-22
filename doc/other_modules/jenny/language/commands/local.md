@@ -1,8 +1,8 @@
 # `<<local>>`
 
 The **\<\<local\>\>** command creates a new variable within the current node, and initializes it
-to some starting value. Thus, it is similar to [`<<declare>>`], except that the variable it creates
-is visible within a single node only.
+to some starting value. Thus, it is similar to [\<\<declare\>\>][declare], except that the variable
+it creates is visible within a single node only.
 
 The syntax of the `<<local>>` command can be one of the following:
 
@@ -45,4 +45,4 @@ title: a_dice_roll
 ===
 ```
 
-[`<<declare>>`]: declare.md
+[declare]: declare.md
