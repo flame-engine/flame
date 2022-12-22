@@ -19,7 +19,7 @@ scripts. For a full description of these commands, see the document on [user-def
 **[\<\<declare\>\>](declare.md)** x
 : Declares a global variable.
 
-**[\<\<local\>\>](local.md)**
+**[\<\<local\>\>](local.md)** x
 : Declares a local variable.
 
 **[\<\<set\>\>](set.md)**
