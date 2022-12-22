@@ -28,17 +28,17 @@ scripts. For a full description of these commands, see the document on [user-def
 
 ### Control flow
 
-**[\<\<if\>\>](if.md)**
+**[\<\<if\>\>](if.md)** x
 : Conditionally executes certain statements. This is equivalent to the **if** keyword in most
   programming languages.
 
-**[\<\<jump\>\>](jump.md)**
+**[\<\<jump\>\>](jump.md)** x
 : Switches execution to another node.
 
-**[\<\<stop\>\>](stop.md)**
+**[\<\<stop\>\>](stop.md)** x
 : Stops executing the current node.
 
-**[\<\<wait\>\>](wait.md)**
+**[\<\<wait\>\>](wait.md)** x
 : Pauses the dialogue for the specified amount of time.
 
 

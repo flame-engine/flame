@@ -24,3 +24,9 @@
 .highlight-yarn span.sb {
   color: #816417;
 }
+
+/* Built-in command */
+.highlight-yarn span.k {
+  color: #76e9ff;
+  font-weight: bold;
+}
