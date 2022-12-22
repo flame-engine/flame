@@ -16,7 +16,7 @@ scripts. For a full description of these commands, see the document on [user-def
 
 ### Variables
 
-**[\<\<declare\>\>](declare.md)**
+**[\<\<declare\>\>](declare.md)** x
 : Declares a global variable.
 
 **[\<\<local\>\>](local.md)**
