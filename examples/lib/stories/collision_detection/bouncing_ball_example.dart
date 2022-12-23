@@ -12,12 +12,11 @@ class BouncingBallExample extends FlameGame with HasCollisionDetection {
     collides with the screen boundaries and then update it to bounce off these boundaries.
   ''';
   @override
-  Future<void>? onLoad() {
+  void onLoad() {
     addAll([
       ScreenHitbox(),
       Ball(),
     ]);
-    return super.onLoad();
   }
 }
 

@@ -16,13 +16,12 @@ class WorkerOvermindHud extends PositionComponent with Tappable {
   ComputeType computeType = ComputeType.isolate;
 
   @override
-  Future<void>? onLoad() {
+  void onLoad() {
     x = 10;
     y = 10;
     width = 210;
     height = 80;
     positionType = PositionType.viewport;
-    return super.onLoad();
   }
 
   @override
