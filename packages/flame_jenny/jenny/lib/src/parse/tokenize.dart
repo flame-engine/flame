@@ -35,7 +35,13 @@ class _Lexer {
         lineStart = 0,
         tokens = [],
         modeStack = [],
-        indentStack = [];
+        indentStack = [],
+        assert(
+          commandTokens.length ==
+              simpleCommands.length +
+                  bareExpressionCommands.length +
+                  nodeTargetingCommands.length,
+        );
 
   final String text;
   final List<Token> tokens;
@@ -229,7 +235,7 @@ class _Lexer {
                 (bareExpressionCommands.contains(tokens.last) &&
                     pushToken(Token.startExpression, position) &&
                     pushMode(modeCommandExpression)) ||
-                (tokens.last == Token.commandJump &&
+                (nodeTargetingCommands.contains(tokens.last) &&
                     (eatId() ||
                         (eatExpressionStart() &&
                             pushMode(modeTextExpression)) ||
@@ -973,6 +979,7 @@ class _Lexer {
     'local': Token.commandLocal,
     'set': Token.commandSet,
     'stop': Token.commandStop,
+    'visit': Token.commandVisit,
     'wait': Token.commandWait,
   };
 
@@ -991,6 +998,11 @@ class _Lexer {
     Token.commandLocal,
     Token.commandSet,
     Token.commandWait,
+  };
+
+  static final Set<Token> nodeTargetingCommands = {
+    Token.commandJump,
+    Token.commandVisit,
   };
 
   /// Throws a [SyntaxError] with the given [message], augmenting it with the
