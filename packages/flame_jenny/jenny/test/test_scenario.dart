@@ -30,7 +30,7 @@ Future<void> testScenario({
       yarnProject: yarnProject,
       dialogueViews: [plan],
     );
-    await dialogue.runNode(plan.startNode);
+    await dialogue.startDialogue(plan.startNode);
     assert(
       plan.done,
       '\n'

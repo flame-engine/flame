@@ -18,6 +18,9 @@ void main() {
             jumping...
             <<jump Start>>
           <<endif>>
+          // Also let's make sure <<stop>> doesn't prevent calculation
+          // of node visits
+          <<stop>>
           ===
         ''',
         testPlan: '''

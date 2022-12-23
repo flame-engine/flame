@@ -36,7 +36,7 @@ The constructor takes two required parameters:
 
 ## Methods
 
-**runNode**(`String nodeName`)
+**startDialogue**(`String nodeName`)
 : Executes the node with the given name, and returns a future that completes only when the dialogue
   finishes running (which may be a while). A single `DialogueRunner` can only run one node at a
   time.
@@ -92,6 +92,11 @@ the sequence of emitted events will be as follows (assuming the second option is
 - `onCommand(Command("OhNo"))`
 - `onNodeFinish(Node("Away"))`
 - `onDialogueFinish()`
+
+:::{note}
+Keep in mind that if a `DialogueError` is thrown while running the dialogue, then the dialogue will
+terminate immediately and none of the `*Finish` callbacks will run.
+:::
 
 
 [DialogueChoice]: dialogue_choice.md

@@ -39,15 +39,18 @@ simultaneously).
 : Called when the dialogue is about to finish.
 
 **onNodeStart**(`Node node`)
-: Called when the dialogue runner starts executing the [Node]. This will be called at the start of
-  `DialogueView.runNode()` (but after the **onDialogueStart**), and then each time the dialogue
-  jumps to another node.
+: Called when the dialogue runner starts executing the [Node]. This will be called right after the
+  **onDialogueStart** event, and then each time the dialogue jumps to another node.
 
   This method is a good place to perform node-specific initialization, for example by querying the
   `node`'s properties or metadata.
 
 **onNodeFinish**(`Node node`)
-: TODO
+: Called when the dialogue runner finishes executing the [Node], before **onDialogueFinish**. This
+  will also be called every time a node is exited via `<<stop>>` or a `<<jump>>` command (including
+  jumps from node to itself).
+
+  This callback can be used to clean up any preparations that were performed in `onNodeStart`.
 
 **onLineStart**(`DialogueLine line`) `-> bool`
 : Called when the next dialogue [line] should be presented to the user.

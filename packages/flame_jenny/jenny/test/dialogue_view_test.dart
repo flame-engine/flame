@@ -31,7 +31,7 @@ void main() {
         yarnProject: yarn,
         dialogueViews: [view1, view2],
       );
-      await dialogueRunner.runNode('Start');
+      await dialogueRunner.startDialogue('Start');
       expect(
         view2.events,
         const [
@@ -46,6 +46,7 @@ void main() {
           'onLineStart(Last line)',
           'onLineFinish(Last line)',
           'onCommand(<<Command(myCommand)>>)',
+          'onNodeFinish(Start)',
           'onDialogueFinish()',
         ],
       );
@@ -68,7 +69,7 @@ void main() {
         yarnProject: yarn,
         dialogueViews: [view1, view2, view3],
       );
-      await dialogueRunner.runNode('Start');
+      await dialogueRunner.startDialogue('Start');
       expect(
         view2.events,
         const [
@@ -78,6 +79,7 @@ void main() {
           'onLineSignal(line="First line", signal=<I\'m a banana!>)',
           'onLineStop(First line)',
           'onLineFinish(First line)',
+          'onNodeFinish(Start)',
           'onDialogueFinish()',
         ],
       );
@@ -100,6 +102,11 @@ class _RecordingDialogueView extends DialogueView {
   @override
   FutureOr<void> onNodeStart(Node node) {
     events.add('onNodeStart(${node.title})');
+  }
+
+  @override
+  FutureOr<void> onNodeFinish(Node node) {
+    events.add('onNodeFinish(${node.title})');
   }
 
   @override
