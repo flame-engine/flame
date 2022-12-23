@@ -65,10 +65,7 @@ class DialogueRunner {
         view.dialogueRunner = this;
       });
       await _event((view) => view.onDialogueStart());
-      _nextNode = nodeName;
-      while (_nextNode != null) {
-        await _runNode(_nextNode!);
-      }
+      await _runNode(nodeName);
       await _event((view) => view.onDialogueFinish());
     } finally {
       _dialogueViews.forEach((dv) => dv.dialogueRunner = null);
@@ -92,25 +89,28 @@ class DialogueRunner {
   }
 
   Future<void> _runNode(String nodeName) async {
-    final node = project.nodes[nodeName];
-    if (node == null) {
-      throw NameError('Node "$nodeName" could not be found');
+    _nextNode = nodeName;
+    while (_nextNode != null) {
+      final node = project.nodes[_nextNode!];
+      if (node == null) {
+        throw NameError('Node "$_nextNode" could not be found');
+      }
+
+      _nextNode = null;
+      _currentNode = node;
+      _currentIterator = node.iterator;
+
+      await _event((view) => view.onNodeStart(node));
+      while (_currentIterator?.moveNext() ?? false) {
+        final entry = _currentIterator!.current;
+        await entry.processInDialogueRunner(this);
+      }
+      _incrementNodeVisitCount();
+      await _event((view) => view.onNodeFinish(node));
+
+      _currentNode = null;
+      _currentIterator = null;
     }
-
-    _nextNode = null;
-    _currentNode = node;
-    _currentIterator = node.iterator;
-
-    await _event((view) => view.onNodeStart(node));
-    while (_currentIterator?.moveNext() ?? false) {
-      final entry = _currentIterator!.current;
-      await entry.processInDialogueRunner(this);
-    }
-    _incrementNodeVisitCount();
-    await _event((view) => view.onNodeFinish(node));
-
-    _currentNode = null;
-    _currentIterator = null;
   }
 
   void _incrementNodeVisitCount() {
@@ -179,6 +179,15 @@ class DialogueRunner {
   void jumpToNode(String? nodeName) {
     _currentIterator = null;
     _nextNode = nodeName;
+  }
+
+  @internal
+  Future<void> visitNode(String nodeName) async {
+    final node = _currentNode;
+    final iterator = _currentIterator;
+    await _runNode(nodeName);
+    _currentNode = node;
+    _currentIterator = iterator;
   }
 
   /// Similar to `Future.wait()`, but accepts `FutureOr`s.

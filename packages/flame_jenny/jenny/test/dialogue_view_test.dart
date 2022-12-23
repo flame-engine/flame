@@ -52,6 +52,62 @@ void main() {
       );
     });
 
+    test('jumps and visits', () async {
+      final yarn = YarnProject()
+        ..parse(
+          dedent('''
+            title: Start
+            ---
+            First line
+            <<visit AnotherNode>>
+            Second line
+            <<jump SomewhereElse>>
+            ===
+            title: AnotherNode
+            ---
+            Inside another node
+            <<jump SomewhereElse>>
+            ===
+            title: SomewhereElse
+            ---
+            This is nowhere...
+            ===
+          '''),
+        );
+      final view1 = _DefaultDialogueView();
+      final view2 = _RecordingDialogueView();
+      final dialogueRunner = DialogueRunner(
+        yarnProject: yarn,
+        dialogueViews: [view1, view2],
+      );
+      await dialogueRunner.startDialogue('Start');
+      expect(
+        view2.events,
+        const [
+          'onDialogueStart',
+          'onNodeStart(Start)',
+          'onLineStart(First line)',
+          'onLineFinish(First line)',
+          'onNodeStart(AnotherNode)',
+          'onLineStart(Inside another node)',
+          'onLineFinish(Inside another node)',
+          'onNodeFinish(AnotherNode)',
+          'onNodeStart(SomewhereElse)',
+          'onLineStart(This is nowhere...)',
+          'onLineFinish(This is nowhere...)',
+          'onNodeFinish(SomewhereElse)',
+          'onLineStart(Second line)',
+          'onLineFinish(Second line)',
+          'onNodeFinish(Start)',
+          'onNodeStart(SomewhereElse)',
+          'onLineStart(This is nowhere...)',
+          'onLineFinish(This is nowhere...)',
+          'onNodeFinish(SomewhereElse)',
+          'onDialogueFinish()',
+        ],
+      );
+    });
+
     test('stop line', () async {
       final yarn = YarnProject()
         ..parse(

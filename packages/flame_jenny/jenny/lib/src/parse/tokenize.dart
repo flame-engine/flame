@@ -239,7 +239,8 @@ class _Lexer {
                     (eatId() ||
                         (eatExpressionStart() &&
                             pushMode(modeTextExpression)) ||
-                        error('an ID or an expression expected'))) ||
+                        error('an ID or an expression in curly braces '
+                            'expected'))) ||
                 (tokens.last.isCommand && // user-defined commands
                     pushMode(modeCommandText)))) ||
         (eatCommandEnd() && popMode(modeCommand)) ||

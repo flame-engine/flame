@@ -10,6 +10,7 @@ import 'package:jenny/src/structure/commands/local_command.dart';
 import 'package:jenny/src/structure/commands/set_command.dart';
 import 'package:jenny/src/structure/commands/stop_command.dart';
 import 'package:jenny/src/structure/commands/user_defined_command.dart';
+import 'package:jenny/src/structure/commands/visit_command.dart';
 import 'package:jenny/src/structure/commands/wait_command.dart';
 import 'package:jenny/src/structure/dialogue_choice.dart';
 import 'package:jenny/src/structure/dialogue_entry.dart';
@@ -400,8 +401,8 @@ class _Parser {
     final token = peekToken(1);
     if (token == Token.commandIf) {
       return parseCommandIf();
-    } else if (token == Token.commandJump) {
-      return parseCommandJump();
+    } else if (token == Token.commandJump || token == Token.commandVisit) {
+      return parseCommandJumpOrVisit();
     } else if (token == Token.commandStop) {
       return parseCommandStop();
     } else if (token == Token.commandWait) {
@@ -493,9 +494,12 @@ class _Parser {
     return IfBlock(constTrue, statements);
   }
 
-  Command parseCommandJump() {
+  Command parseCommandJumpOrVisit() {
     take(Token.startCommand);
-    take(Token.commandJump);
+    final isJump = peekToken() == Token.commandJump;
+    final isVisit = peekToken() == Token.commandVisit;
+    assert(isJump || isVisit);
+    position += 1;
     final token = peekToken();
     StringExpression target;
     if (token.isId) {
@@ -516,7 +520,7 @@ class _Parser {
     }
     take(Token.endCommand);
     take(Token.newline);
-    return JumpCommand(target);
+    return isJump ? JumpCommand(target) : VisitCommand(target);
   }
 
   Command parseCommandStop() {
@@ -724,9 +728,9 @@ class _Parser {
   /// The initial [lhs] sub-expression is provided, and the parsing position
   /// should be at the start of the next operator.
   Expression _parseExpressionImpl(Expression lhs, int minPrecedence) {
-    var position0 = position;
     var result = lhs;
     while ((precedences[peekToken()] ?? -1) >= minPrecedence) {
+      var position0 = position;
       final op = peekToken();
       final opPrecedence = precedences[op]!;
       position += 1;
