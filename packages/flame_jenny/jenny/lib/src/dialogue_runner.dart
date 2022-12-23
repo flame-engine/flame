@@ -132,15 +132,30 @@ class DialogueRunner {
 
   @internal
   Future<void> deliverChoices(DialogueChoice choice) async {
-    final futures = [
-      for (final view in _dialogueViews) view.onChoiceStart(choice)
-    ];
-    if (futures.every((future) => future == DialogueView.never)) {
-      throw DialogueError(
-        'No dialogue views capable of making a dialogue choice',
-      );
+    final futures = <Future<int?>>[];
+    final choices = <int>[];
+    for (final view in _dialogueViews) {
+      final futureOrResult = view.onChoiceStart(choice);
+      if (futureOrResult != null) {
+        if (futureOrResult is int) {
+          choices.add(futureOrResult);
+        } else {
+          // ignore: cast_nullable_to_non_nullable
+          futures.add(futureOrResult as Future<int?>);
+        }
+      }
     }
-    final chosenIndex = await Future.any(futures);
+    for (final future in futures) {
+      final choice = await future;
+      if (choice != null) {
+        choices.add(choice);
+      }
+    }
+
+    if (choices.isEmpty) {
+      throw DialogueError('No option selected in a DialogueChoice');
+    }
+    final chosenIndex = choices.first;
     if (chosenIndex < 0 || chosenIndex >= choice.options.length) {
       throw DialogueError(
         'Invalid option index chosen in a dialogue: $chosenIndex',

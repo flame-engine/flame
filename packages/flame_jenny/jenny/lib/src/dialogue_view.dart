@@ -132,20 +132,14 @@ abstract class DialogueView {
   /// make a choice on how to proceed. If a dialogue view presents this choice
   /// to the player and allows them to make a selection, then it must return a
   /// future that completes when the choice is made. If the dialogue view does
-  /// not display menu choice, then it should return a future that never
-  /// completes (which is the default implementation).
-  ///
-  /// The dialogue runner will assume the choice has been made whenever any of
-  /// the dialogue views will have completed their futures. If none of the
-  /// dialogue views are capable of making a choice, then the dialogue will get
-  /// stuck.
+  /// not display menu choice, then it should return `null`.
   ///
   /// The future returned by this method should deliver an integer value of the
   /// index of the option that was selected. This index must not exceed the
   /// length of the [choice] list, and the indicated option must not be marked
   /// as "unavailable". If these conditions are violated, an exception will be
   /// raised.
-  Future<int> onChoiceStart(DialogueChoice choice) => never;
+  FutureOr<int?> onChoiceStart(DialogueChoice choice) => null;
 
   /// Called when the choice has been made, and the [option] was selected.
   ///
@@ -158,8 +152,4 @@ abstract class DialogueView {
   /// If this method returns a future, the dialogue runner will wait for that
   /// future to complete before proceeding with the dialogue.
   FutureOr<void> onCommand(UserDefinedCommand command) {}
-
-  /// A future that never completes.
-  @internal
-  static Future<Never> never = Completer<Never>().future;
 }
