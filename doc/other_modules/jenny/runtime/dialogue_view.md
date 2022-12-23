@@ -116,9 +116,11 @@ simultaneously).
 
   An error will be thrown if:
 
+  <!-- markdownlint-disable MD006 MD007 -->
   - None of the views return a valid selection (i.e. all return `null`);
   - The returned index is invalid for the `choice` list;
   - The selected option is marked as disabled.
+  <!-- markdownlint-enable MD006 MD007 -->
 
 **onChoiceFinish**(`DialogueOption option`)
 : Called when the choice has been made, and an [option] has been selected.
