@@ -9,6 +9,6 @@ class StopCommand extends Command {
 
   @override
   void execute(DialogueRunner dialogue) {
-    dialogue.stop();
+    dialogue.jumpToNode(null);
   }
 }

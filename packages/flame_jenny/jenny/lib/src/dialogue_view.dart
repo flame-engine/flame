@@ -44,6 +44,14 @@ abstract class DialogueView {
   /// to complete before proceeding with the actual dialogue.
   FutureOr<void> onNodeStart(Node node) {}
 
+  /// Called when the dialogue exits the [node].
+  ///
+  /// For example, during a `<<jump>>` this callback will be called with the
+  /// current node, and then [onNodeStart] will be called with the new node.
+  /// Similarly, the command `<<stop>>` will trigger this callback too. At the
+  /// same time, during `<<visit>>` this callback will not be invoked.
+  FutureOr<void> onNodeFinish(Node node) {}
+
   /// Called when the next dialogue [line] should be presented to the user.
   ///
   /// The [DialogueView] may decide to present the [line] in whatever way it

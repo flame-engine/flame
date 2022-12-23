@@ -11,7 +11,7 @@ class JumpCommand extends Command {
   String get name => 'jump';
 
   @override
-  Future<void> execute(DialogueRunner dialogue) {
-    return dialogue.jumpToNode(target.value);
+  void execute(DialogueRunner dialogue) {
+    dialogue.jumpToNode(target.value);
   }
 }
