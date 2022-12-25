@@ -63,6 +63,39 @@ useful if you want to add for example animations or other components on top of y
 The body that you create in `createBody` should be defined according to Flame's coordinate system,
 not according to the coordinate system of Forge2D (where the Y-axis is flipped).
 
+:exclamation: Please note that In Forge2D (you shouldn't add any bodies as children to other components.
+Since Forge2D/Box2D doesn't have a concept of nested bodies, all bodies should live on a top level in the physics world.
+So below is **wrong**
+```dart
+class Bullet extends BodyComponent  {
+
+  @override
+  Future<void> onLoad() async {
+    ...
+    isBullet = true;
+    ...
+  }
+}
+
+class Player extends BodyComponent  {
+  @override
+  Future<void> onLoad() async {
+    add(Bullet());
+  }
+}
+```
+So instead of `add(Bullet()))`, `parent?.add(Bullet())` should be used (as bellow).
+
+```dart
+class Player extends BodyComponent  {
+
+  @override
+  Future<void> onLoad() async {
+    parent?.add(Bullet());
+  }
+}
+```
+
 
 ## Contact callbacks
 
