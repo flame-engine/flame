@@ -38,6 +38,9 @@ scripts. For a full description of these commands, see the document on [user-def
 **[\<\<stop\>\>](stop.md)**
 : Stops executing the current node.
 
+**[\<\<visit\>\>](visit.md)**
+: Temporarily jumps to another node, and then comes back.
+
 **[\<\<wait\>\>](wait.md)**
 : Pauses the dialogue for the specified amount of time.
 
@@ -53,6 +56,7 @@ scripts. For a full description of these commands, see the document on [user-def
 <<local>>              <local.md>
 <<set>>                <set.md>
 <<stop>>               <stop.md>
+<<visit>>              <visit.md>
 <<wait>>               <wait.md>
 User-defined commands  <user_defined_commands.md>
 ```

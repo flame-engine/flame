@@ -80,7 +80,7 @@ void main() {
             '===\n',
           ),
         hasSyntaxError(
-          'SyntaxError: an ID or an expression expected\n'
+          'SyntaxError: an ID or an expression in curly braces expected\n'
           '>  at line 3 column 8:\n'
           '>  <<jump 1>>\n'
           '>         ^\n',
