@@ -79,10 +79,9 @@ class CalculatePrimeNumber extends PositionComponent
       DiscardNewBackPressureStrategy();
 
   @override
-  Future<void>? onLoad() {
+  void onLoad() {
     width = 200;
     height = 70;
-    return super.onLoad();
   }
 
   @override
