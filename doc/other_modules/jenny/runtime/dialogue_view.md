@@ -106,11 +106,24 @@ simultaneously).
   Some dialogue views may need to clear their display when this event happens, or make some other
   preparations to receive the next dialogue line.
 
-**onChoiceStart**(`DialogueChoice choice`) `-> int`
-: TODO
+**onChoiceStart**(`DialogueChoice choice`) → `FutureOr<int?>`
+: Called when the dialogue enters a [choice]: the player needs to select among several presented
+  [option]s.
+
+  This callback is invoked on all dialogue views, however, normally only one of them should be
+  making a selection. A view that performs the actual selection should return a future that resolves
+  with the index of the chosen option; all other views should return `null`.
+
+  An error will be thrown if:
+
+  <!-- markdownlint-disable MD006 MD007 -->
+  - None of the views return a valid selection (i.e. all return `null`);
+  - The returned index is invalid for the `choice` list;
+  - The selected option is marked as disabled.
+  <!-- markdownlint-enable MD006 MD007 -->
 
 **onChoiceFinish**(`DialogueOption option`)
-: Called when the choice has been made, and the [option] has been selected.
+: Called when the choice has been made, and an [option] has been selected.
 
   The `option` will be the one returned from the **onChoiceStart** method by one of the dialogue
   views.
@@ -130,6 +143,7 @@ simultaneously).
 [DialogueRunner]: dialogue_runner.md
 [Node]: node.md
 [YarnProject]: yarn_project.md
+[choice]: dialogue_choice.md
 [command]: user_defined_command.md
 [line]: dialogue_line.md
 [option]: dialogue_option.md
