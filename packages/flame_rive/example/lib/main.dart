@@ -50,7 +50,7 @@ class SkillsAnimationComponent extends RiveComponent with Tappable {
   SMIInput<double>? _levelInput;
 
   @override
-  Future<void>? onLoad() {
+  void onLoad() {
     final controller = StateMachineController.fromArtboard(
       artboard,
       "Designer's Test",
@@ -60,7 +60,6 @@ class SkillsAnimationComponent extends RiveComponent with Tappable {
       _levelInput = controller.findInput<double>('Level');
       _levelInput?.value = 0;
     }
-    return super.onLoad();
   }
 
   @override

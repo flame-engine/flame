@@ -194,9 +194,7 @@ void main() {
       );
       expect(
         () => dialogue.startDialogue('A'),
-        hasDialogueError(
-          'No dialogue views capable of making a dialogue choice',
-        ),
+        hasDialogueError('No option selected in a DialogueChoice'),
       );
     });
 

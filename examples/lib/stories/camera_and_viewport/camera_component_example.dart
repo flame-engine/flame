@@ -97,7 +97,7 @@ class Bezel extends PositionComponent {
   late final Paint specularPaint;
 
   @override
-  Future<void> onLoad() async {
+  void onLoad() {
     rim = Path()..addOval(Rect.fromLTRB(-radius, -radius, radius, radius));
     final outer = radius + rimWidth / 2;
     final inner = radius - rimWidth / 2;
