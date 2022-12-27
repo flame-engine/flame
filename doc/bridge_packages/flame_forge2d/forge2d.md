@@ -63,8 +63,8 @@ useful if you want to add for example animations or other components on top of y
 The body that you create in `createBody` should be defined according to Flame's coordinate system,
 not according to the coordinate system of Forge2D (where the Y-axis is flipped).
 
-:exclamation: In Forge2D (you shouldn't add any bodies as children to other components.
-Forge2D doesn't have a concept of nested bodies.
+:exclamation: In Forge2D you shouldn't add any bodies as children to other components,
+since Forge2D doesn't have a concept of nested bodies.
 So bodies should live on the top level in the physics world.
 Consequently, below is **wrong**
 
