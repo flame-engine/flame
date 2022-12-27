@@ -104,6 +104,7 @@ class CommandStorage {
     'set',
     'stop',
     'stop',
+    'visit',
     'wait',
     'while',
   ];
