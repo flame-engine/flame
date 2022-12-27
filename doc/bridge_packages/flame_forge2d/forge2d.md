@@ -66,7 +66,7 @@ not according to the coordinate system of Forge2D (where the Y-axis is flipped).
 :exclamation: In Forge2D you shouldn't add any bodies as children to other components,
 since Forge2D doesn't have a concept of nested bodies.
 So bodies should live on the top level in the physics world.
-Consequently, below is **wrong**
+Instead of `add(Bullet()))`, `parent?.add(Bullet())` should be used (as bellow).
 
 ```dart
 class Bullet extends BodyComponent  {
@@ -78,17 +78,6 @@ class Bullet extends BodyComponent  {
   }
 }
 
-class Player extends BodyComponent  {
-  @override
-  Future<void> onLoad() async {
-    add(Bullet());
-  }
-}
-```
-
-So instead of `add(Bullet()))`, `parent?.add(Bullet())` should be used (as bellow).
-
-```dart
 class Player extends BodyComponent  {
   @override
   Future<void> onLoad() async {
