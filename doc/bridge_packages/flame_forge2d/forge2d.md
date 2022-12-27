@@ -70,7 +70,6 @@ Consequently, below is **wrong**
 
 ```dart
 class Bullet extends BodyComponent  {
-
   @override
   Future<void> onLoad() async {
     ...
