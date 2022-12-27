@@ -537,6 +537,7 @@ void main() {
               'very long \\\n'
               '  text\n'
               'line with a newline:\\n ok\n'
+              '\\-> text with arrow\n'
               '===\n'),
           const [
             Token.startHeader,
@@ -554,6 +555,31 @@ void main() {
             Token.text('line with a newline:'),
             Token.text('\n'),
             Token.text(' ok'),
+            Token.newline,
+            Token.text('-'),
+            Token.text('> text with arrow'),
+            Token.newline,
+            Token.endBody,
+          ],
+        );
+      });
+
+      test('escaped colon', () {
+        expect(
+          tokenize('---\n---\n'
+              'One\\: two\n'
+              'One two three\\:\n'
+              '===\n'),
+          const [
+            Token.startHeader,
+            Token.endHeader,
+            Token.startBody,
+            Token.text('One'),
+            Token.text(':'),
+            Token.text(' two'),
+            Token.newline,
+            Token.text('One two three'),
+            Token.text(':'),
             Token.newline,
             Token.endBody,
           ],

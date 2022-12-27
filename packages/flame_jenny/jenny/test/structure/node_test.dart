@@ -17,7 +17,7 @@ void main() {
 
       expect(node.title, 'Introduction');
       expect(node.lines, <DialogueEntry>[]);
-      expect(node.tags, isNull);
+      expect(node.tags, isEmpty);
       expect('$node', 'Node(Introduction)');
     });
 
@@ -29,9 +29,9 @@ void main() {
       );
       expect(node.title, 'Conclusion');
       expect(node.tags, isNotEmpty);
-      expect(node.tags!.length, 2);
-      expect(node.tags!['line'], 'af451');
-      expect(node.tags!['characters'], 'Alice, Bob');
+      expect(node.tags.length, 2);
+      expect(node.tags['line'], 'af451');
+      expect(node.tags['characters'], 'Alice, Bob');
     });
 
     group('iterators', () {

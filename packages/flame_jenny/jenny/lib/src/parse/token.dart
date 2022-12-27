@@ -30,6 +30,7 @@ class Token {
   static const commandLocal = Token._(TokenType.commandLocal);
   static const commandSet = Token._(TokenType.commandSet);
   static const commandStop = Token._(TokenType.commandStop);
+  static const commandVisit = Token._(TokenType.commandVisit);
   static const commandWait = Token._(TokenType.commandWait);
   static const constFalse = Token._(TokenType.constFalse);
   static const constTrue = Token._(TokenType.constTrue);
@@ -129,6 +130,7 @@ enum TokenType {
   commandLocal, //           'local'
   commandSet, //             'set'
   commandStop, //            'stop'
+  commandVisit, //           'visit'
   commandWait, //            'wait'
   constFalse, //             'false'
   constTrue, //              'true'
@@ -168,9 +170,9 @@ enum TokenType {
   startIndent, //            RegExp(r'^\s*')
   startMarkupTag, //         '['
   startParenthesis, //       '('
-  typeBool, //               'bool'
-  typeNumber, //             'number'
-  typeString, //             'string'
+  typeBool, //               'Bool'
+  typeNumber, //             'Number'
+  typeString, //             'String'
 
   error,
   eof,

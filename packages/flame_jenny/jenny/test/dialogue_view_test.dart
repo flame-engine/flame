@@ -10,7 +10,7 @@ void main() {
   group('DialogueView', () {
     test('run a sample dialogue', () async {
       final yarn = YarnProject()
-        ..commands.addDialogueCommand('myCommand')
+        ..commands.addOrphanedCommand('myCommand')
         ..parse(
           dedent('''
             title: Start
@@ -31,7 +31,7 @@ void main() {
         yarnProject: yarn,
         dialogueViews: [view1, view2],
       );
-      await dialogueRunner.runNode('Start');
+      await dialogueRunner.startDialogue('Start');
       expect(
         view2.events,
         const [
@@ -46,6 +46,63 @@ void main() {
           'onLineStart(Last line)',
           'onLineFinish(Last line)',
           'onCommand(<<Command(myCommand)>>)',
+          'onNodeFinish(Start)',
+          'onDialogueFinish()',
+        ],
+      );
+    });
+
+    test('jumps and visits', () async {
+      final yarn = YarnProject()
+        ..parse(
+          dedent('''
+            title: Start
+            ---
+            First line
+            <<visit AnotherNode>>
+            Second line
+            <<jump SomewhereElse>>
+            ===
+            title: AnotherNode
+            ---
+            Inside another node
+            <<jump SomewhereElse>>
+            ===
+            title: SomewhereElse
+            ---
+            This is nowhere...
+            ===
+          '''),
+        );
+      final view1 = _DefaultDialogueView();
+      final view2 = _RecordingDialogueView();
+      final dialogueRunner = DialogueRunner(
+        yarnProject: yarn,
+        dialogueViews: [view1, view2],
+      );
+      await dialogueRunner.startDialogue('Start');
+      expect(
+        view2.events,
+        const [
+          'onDialogueStart',
+          'onNodeStart(Start)',
+          'onLineStart(First line)',
+          'onLineFinish(First line)',
+          'onNodeStart(AnotherNode)',
+          'onLineStart(Inside another node)',
+          'onLineFinish(Inside another node)',
+          'onNodeFinish(AnotherNode)',
+          'onNodeStart(SomewhereElse)',
+          'onLineStart(This is nowhere...)',
+          'onLineFinish(This is nowhere...)',
+          'onNodeFinish(SomewhereElse)',
+          'onLineStart(Second line)',
+          'onLineFinish(Second line)',
+          'onNodeFinish(Start)',
+          'onNodeStart(SomewhereElse)',
+          'onLineStart(This is nowhere...)',
+          'onLineFinish(This is nowhere...)',
+          'onNodeFinish(SomewhereElse)',
           'onDialogueFinish()',
         ],
       );
@@ -68,7 +125,7 @@ void main() {
         yarnProject: yarn,
         dialogueViews: [view1, view2, view3],
       );
-      await dialogueRunner.runNode('Start');
+      await dialogueRunner.startDialogue('Start');
       expect(
         view2.events,
         const [
@@ -78,6 +135,7 @@ void main() {
           'onLineSignal(line="First line", signal=<I\'m a banana!>)',
           'onLineStop(First line)',
           'onLineFinish(First line)',
+          'onNodeFinish(Start)',
           'onDialogueFinish()',
         ],
       );
@@ -100,6 +158,11 @@ class _RecordingDialogueView extends DialogueView {
   @override
   FutureOr<void> onNodeStart(Node node) {
     events.add('onNodeStart(${node.title})');
+  }
+
+  @override
+  FutureOr<void> onNodeFinish(Node node) {
+    events.add('onNodeFinish(${node.title})');
   }
 
   @override
@@ -155,8 +218,8 @@ class _RecordingDialogueView extends DialogueView {
 class _InterruptingCow extends DialogueView {
   @override
   FutureOr<bool> onLineStart(DialogueLine line) async {
-    dialogueRunner.sendSignal("I'm a banana!");
-    dialogueRunner.stopLine();
+    dialogueRunner!.sendSignal("I'm a banana!");
+    dialogueRunner!.stopLine();
     return false;
   }
 }

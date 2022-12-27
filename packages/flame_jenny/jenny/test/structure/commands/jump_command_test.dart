@@ -9,7 +9,7 @@ void main() {
   group('JumpCommand', () {
     test('<<jump>> command', () {
       final yarn = YarnProject()
-        ..setVariable(r'$target', 'DOWN')
+        ..variables.setVariable(r'$target', 'DOWN')
         ..parse('title:A\n---\n'
             '<<jump UP>>\n'
             '<<jump {\$target}>>\n'
@@ -80,7 +80,7 @@ void main() {
             '===\n',
           ),
         hasSyntaxError(
-          'SyntaxError: an ID or an expression expected\n'
+          'SyntaxError: an ID or an expression in curly braces expected\n'
           '>  at line 3 column 8:\n'
           '>  <<jump 1>>\n'
           '>         ^\n',
@@ -114,7 +114,8 @@ void main() {
           '===\n',
         );
       expect(
-        () => DialogueRunner(yarnProject: yarn, dialogueViews: []).runNode('A'),
+        () => DialogueRunner(yarnProject: yarn, dialogueViews: [])
+            .startDialogue('A'),
         hasNameError('NameError: Node "Up" could not be found'),
       );
     });

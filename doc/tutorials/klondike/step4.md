@@ -193,9 +193,9 @@ Aces. This doesn't make a very exciting gameplay though, so add line
 in the `KlondikeGame` class right after the list of cards is created.
 
 
-```{seealso}
-For more information about tap functionality, see [](../../flame/inputs/tap-events.md).
-```
+:::{seealso}
+For more information about tap functionality, see [](../../flame/inputs/tap_events.md).
+:::
 
 
 ### Stock pile -- visual representation

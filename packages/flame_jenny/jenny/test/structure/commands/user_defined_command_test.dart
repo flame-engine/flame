@@ -33,7 +33,7 @@ void main() {
 
     test('parse simple dialogue command', () {
       final project = YarnProject()
-        ..commands.addDialogueCommand('hello')
+        ..commands.addOrphanedCommand('hello')
         ..parse('title: start\n---\n'
             '<<hello world {"A" + "B"}>>\n'
             '===');
@@ -41,7 +41,8 @@ void main() {
       expect(project.nodes['start']!.lines[0], isA<UserDefinedCommand>());
       final cmd = project.nodes['start']!.lines[0] as UserDefinedCommand;
       expect(cmd.name, 'hello');
-      expect(cmd.argumentString.evaluate(), 'world AB');
+      project.commands.runCommand(cmd);
+      expect(cmd.argumentString, 'world AB');
     });
 
     test('execute a live command', () {
@@ -80,7 +81,7 @@ void main() {
     test('markup within user-defined command', () {
       expect(
         () => YarnProject()
-          ..commands.addDialogueCommand('hello')
+          ..commands.addOrphanedCommand('hello')
           ..parse(
             'title:A\n---\n'
             '<<hello Big [bad/] Wolf>>\n'
@@ -93,6 +94,68 @@ void main() {
           '>              ^\n',
         ),
       );
+    });
+
+    test('evaluate a command multiple times', () async {
+      var counter = 0;
+      await testScenario(
+        yarn: YarnProject()..functions.addFunction0('next', () => counter += 1),
+        input: r'''
+          <<declare $i = 0>> 
+          title: Start
+          ---
+          <<print {$i} {next()}>>
+          <<set $i += 1>>
+          <<if $i < 5>>
+            <<jump Start>>
+          <<endif>>
+          ===
+        ''',
+        testPlan: '''
+          command: print 0 1
+          command: print 1 2
+          command: print 2 3
+          command: print 3 4
+          command: print 4 5
+        ''',
+        commands: ['print'],
+      );
+    });
+
+    test('access command arguments', () async {
+      var fnCounter = 0;
+      final yarn = YarnProject()
+        ..commands.addCommand3('xyz', (String p0, String p1, String p2) => null)
+        ..functions.addFunction0('fn', () => fnCounter += 1)
+        ..parse(
+          dedent('''
+            title: Start
+            ---
+            <<xyz a b {fn()}>>
+            ===
+            '''),
+        );
+      final view1 = _CommandDialogueView();
+      final view2 = _CommandDialogueView();
+      final dialogueRunner = DialogueRunner(
+        yarnProject: yarn,
+        dialogueViews: [view1, view2],
+      );
+
+      await dialogueRunner.startDialogue('Start');
+      expect(fnCounter, 1);
+      expect(view1.numCalled, 1);
+      expect(view1.argumentString, 'a b 1');
+      expect(view1.arguments, ['a', 'b', '1']);
+      expect(view2.numCalled, 1);
+      expect(view2.argumentString, 'a b 1');
+      expect(view2.arguments, ['a', 'b', '1']);
+
+      await dialogueRunner.startDialogue('Start');
+      expect(fnCounter, 2);
+      expect(view2.numCalled, 2);
+      expect(view2.argumentString, 'a b 2');
+      expect(view2.arguments, ['a', 'b', '2']);
     });
 
     testScenario(
@@ -148,4 +211,17 @@ void main() {
       ],
     );
   });
+}
+
+class _CommandDialogueView extends DialogueView {
+  int numCalled = 0;
+  String argumentString = '';
+  List<dynamic> arguments = <int>[];
+
+  @override
+  void onCommand(UserDefinedCommand command) {
+    numCalled += 1;
+    arguments = command.arguments!;
+    argumentString = command.argumentString;
+  }
 }

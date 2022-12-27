@@ -27,7 +27,7 @@ void main() {
         );
       final view = _RecordingDialogueView();
       final dialogue = DialogueRunner(yarnProject: yarn, dialogueViews: [view]);
-      await dialogue.runNode('Hamlet');
+      await dialogue.startDialogue('Hamlet');
       expect(
         view.events,
         [
@@ -93,7 +93,7 @@ void main() {
         yarnProject: yarn,
         dialogueViews: [view1, view2, view3],
       );
-      await dialogue.runNode('The Robot and the Mattress');
+      await dialogue.startDialogue('The Robot and the Mattress');
       expect(events, [
         '[A] onDialogueStart()',
         '[B] onDialogueStart()',
@@ -130,7 +130,7 @@ void main() {
             '===\n');
       final view = _RecordingDialogueView(choices: [1]);
       final dialogue = DialogueRunner(yarnProject: yarn, dialogueViews: [view]);
-      await dialogue.runNode('X');
+      await dialogue.startDialogue('X');
       expect(
         view.events,
         [
@@ -149,7 +149,7 @@ void main() {
 
       view.events.clear();
       view.choices.add(0);
-      await dialogue.runNode('X');
+      await dialogue.startDialogue('X');
       expect(
         view.events,
         [
@@ -174,11 +174,11 @@ void main() {
       final view = _RecordingDialogueView(choices: [2, 1]);
       final dialogue = DialogueRunner(yarnProject: yarn, dialogueViews: [view]);
       await expectLater(
-        () => dialogue.runNode('A'),
+        () => dialogue.startDialogue('A'),
         hasDialogueError('Invalid option index chosen in a dialogue: 2'),
       );
       await expectLater(
-        () => dialogue.runNode('A'),
+        () => dialogue.startDialogue('A'),
         hasDialogueError(
           'A dialogue view selected a disabled option: '
           'Option(Only two #disabled)',
@@ -193,10 +193,8 @@ void main() {
         dialogueViews: [_SimpleDialogueView(), _SimpleDialogueView()],
       );
       expect(
-        () => dialogue.runNode('A'),
-        hasDialogueError(
-          'No dialogue views capable of making a dialogue choice',
-        ),
+        () => dialogue.startDialogue('A'),
+        hasDialogueError('No option selected in a DialogueChoice'),
       );
     });
 
@@ -327,9 +325,9 @@ void main() {
         );
       final view = _RecordingDialogueView();
       final dialogue = DialogueRunner(yarnProject: yarn, dialogueViews: [view]);
-      dialogue.runNode('Start');
+      unawaited(dialogue.startDialogue('Start'));
       expect(
-        () => dialogue.runNode('Other'),
+        () => dialogue.startDialogue('Other'),
         hasDialogueError(
           'Cannot run node "Other" because another node is currently running: '
           '"Start"',
