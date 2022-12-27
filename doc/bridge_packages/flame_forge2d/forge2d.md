@@ -91,7 +91,6 @@ So instead of `add(Bullet()))`, `parent?.add(Bullet())` should be used (as bello
 
 ```dart
 class Player extends BodyComponent  {
-
   @override
   Future<void> onLoad() async {
     parent?.add(Bullet());
