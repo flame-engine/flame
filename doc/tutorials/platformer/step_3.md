@@ -355,16 +355,16 @@ called.  This `dt` variable then allows you to calculate how far your component 
 on-screen.  
 
 All components in our game will need to move at the same speed, so to do this, open
-`lib/ember_quest.dart`, and let's define a global variable called `objectSpeed`.  At the top of your
-class, add:
+`lib/ember_quest.dart`, and let's define a global variable called `objectSpeed`.  At the top of the
+`EmberQuestGame` class, add:
 
 ```dart
   late EmberPlayer _ember;
 double objectSpeed = 0.0;
 ```
 
-So to implement that movement, declare a variable at the top of your class and make your `update`
-method look like this:
+So to implement that movement, declare a variable at the top of the `EmberQuestGame` class and make
+your `update` method look like this:
 
 ```dart
 final Vector2 velocity = Vector2.zero();
