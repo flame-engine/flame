@@ -2,26 +2,28 @@ import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
+import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
+  final draggableTester = GameTester(_GameWithHasDraggableComponents.new);
+  final dualDraggableTester = GameTester(_GameWithDualDraggableComponents.new);
+
   group('HasDraggableComponents', () {
-    testWidgets(
+    draggableTester.testGameWidget(
       'drags are delivered to DragCallbacks components',
-      (tester) async {
+      verify: (game, tester) async {
         var nDragStartCalled = 0;
         var nDragUpdateCalled = 0;
         var nDragEndCalled = 0;
-        final game = _GameWithHasDraggableComponents(
-          children: [
-            _DragCallbacksComponent(
-              position: Vector2(20, 20),
-              size: Vector2(100, 100),
-              onDragStart: (e) => nDragStartCalled++,
-              onDragUpdate: (e) => nDragUpdateCalled++,
-              onDragEnd: (e) => nDragEndCalled++,
-            )
-          ],
+        game.add(
+          _DragCallbacksComponent(
+            position: Vector2(20, 20),
+            size: Vector2(100, 100),
+            onDragStart: (e) => nDragStartCalled++,
+            onDragUpdate: (e) => nDragUpdateCalled++,
+            onDragEnd: (e) => nDragEndCalled++,
+          ),
         );
         await tester.pumpWidget(GameWidget(game: game));
         await tester.pump();
@@ -48,12 +50,12 @@ void main() {
       },
     );
 
-    testWidgets(
+    draggableTester.testGameWidget(
       'drag event does not affect more than one component',
-      (tester) async {
+      verify: (game, tester) async {
         var nEvents = 0;
-        final game = _GameWithHasDraggableComponents(
-          children: [
+        game.addAll(
+          [
             _DragCallbacksComponent(
               size: Vector2.all(100),
               onDragStart: (e) => nEvents++,
@@ -77,18 +79,16 @@ void main() {
       },
     );
 
-    testWidgets(
+    draggableTester.testGameWidget(
       'drag event can move outside the component bounds',
-      (tester) async {
+      verify: (game, tester) async {
         final points = <Vector2>[];
-        final game = _GameWithHasDraggableComponents(
-          children: [
-            _DragCallbacksComponent(
-              size: Vector2.all(95),
-              position: Vector2.all(5),
-              onDragUpdate: (e) => points.add(e.localPosition),
-            ),
-          ],
+        game.add(
+          _DragCallbacksComponent(
+            size: Vector2.all(95),
+            position: Vector2.all(5),
+            onDragUpdate: (e) => points.add(e.localPosition),
+          ),
         );
         await tester.pumpWidget(GameWidget(game: game));
         await tester.pump();
@@ -114,13 +114,13 @@ void main() {
       },
     );
 
-    testWidgets(
-      'game with Draggables',
-      (tester) async {
+    dualDraggableTester.testGameWidget(
+      'game with Draggables and DragCallbacks',
+      verify: (game, tester) async {
         var nDragCallbackUpdates = 0;
         var nDraggableUpdates = 0;
-        final game = _GameWithDualDraggableComponents(
-          children: [
+        game.addAll(
+          [
             _DragCallbacksComponent(
               size: Vector2.all(100),
               onDragStart: (e) => e.continuePropagation = true,

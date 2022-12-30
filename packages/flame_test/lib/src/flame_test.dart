@@ -17,6 +17,9 @@ extension FlameGameExtension on Component {
   /// Makes sure that the [component] is added to the tree if you wait for the
   /// returned future to resolve.
   Future<void> ensureAdd(Component component) async {
+    if (this is FlameGame) {
+      await (this as FlameGame).ready();
+    }
     await add(component);
     await (component.findGame()! as FlameGame).ready();
   }
@@ -24,6 +27,9 @@ extension FlameGameExtension on Component {
   /// Makes sure that the [components] are added to the tree if you wait for the
   /// returned future to resolve.
   Future<void> ensureAddAll(Iterable<Component> components) async {
+    if (this is FlameGame) {
+      await (this as FlameGame).ready();
+    }
     await addAll(components);
     await (components.first.findGame()! as FlameGame).ready();
   }
@@ -89,9 +95,12 @@ class GameTester<T extends Game> {
     game.onGameResize(size);
 
     await game.onLoad();
+    game.onMount();
     game.update(0);
     if (game is FlameGame && makeReady) {
       await game.ready();
+      // ignore: invalid_use_of_visible_for_testing_member
+      game.setMounted();
     }
     return game;
   }
@@ -157,6 +166,12 @@ class GameTester<T extends Game> {
 
           await _pump(gameWidget, tester);
           await tester.pump();
+
+          if (makeReady && game is FlameGame) {
+            // ignore: invalid_use_of_visible_for_testing_member
+            game.setMounted();
+            await game.ready();
+          }
 
           if (setUp != null) {
             await setUp.call(game, tester);
