@@ -71,12 +71,12 @@ void main() {
     testWithFlameGame(
       'removeOnFinish = true',
       (game) async {
-        final obj = Component();
-        game.add(obj);
+        final component = Component();
+        game.add(component);
         final effect = _MyEffect(EffectController(duration: 1));
-        obj.add(effect);
+        component.add(effect);
         await game.ready();
-        expect(obj.children.length, 1);
+        expect(component.children.length, 1);
 
         expect(effect.removeOnFinish, true);
         expect(effect.isMounted, true);
@@ -85,20 +85,20 @@ void main() {
         expect(effect.controller.completed, true);
         game.update(0);
         expect(effect.isMounted, false);
-        expect(obj.children.length, 0);
+        expect(component.children.length, 0);
       },
     );
 
     testWithFlameGame(
       'removeOnFinish = false',
       (game) async {
-        final obj = Component();
-        game.add(obj);
+        final component = Component();
+        game.add(component);
         final effect = _MyEffect(EffectController(duration: 1));
         effect.removeOnFinish = false;
-        obj.add(effect);
+        component.add(effect);
         await game.ready();
-        expect(obj.children.length, 1);
+        expect(component.children.length, 1);
 
         expect(effect.removeOnFinish, false);
         expect(effect.isMounted, true);
@@ -109,7 +109,7 @@ void main() {
         expect(effect.controller.completed, true);
         game.update(0);
         expect(effect.isMounted, true);
-        expect(obj.children.length, 1);
+        expect(component.children.length, 1);
 
         // Even as more time is passing, the effect remains mounted and in
         // the completed state

@@ -2,28 +2,30 @@ import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
+import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
+  final tappableTester = GameTester(_GameWithHasTappableComponents.new);
+  final dualTappableTester = GameTester(_GameWithDualTappableComponents.new);
+
   group('HasTappableComponents', () {
-    testWidgets(
+    tappableTester.testGameWidget(
       'taps are delivered to a TapCallbacks component',
-      (tester) async {
+      verify: (game, tester) async {
         var nTapDown = 0;
         var nLongTapDown = 0;
         var nTapCancel = 0;
         var nTapUp = 0;
-        final game = _GameWithHasTappableComponents(
-          children: [
-            _TapCallbacksComponent(
-              size: Vector2(200, 100),
-              position: Vector2(50, 50),
-              onTapDown: (e) => nTapDown++,
-              onLongTapDown: (e) => nLongTapDown++,
-              onTapCancel: (e) => nTapCancel++,
-              onTapUp: (e) => nTapUp++,
-            )
-          ],
+        game.add(
+          _TapCallbacksComponent(
+            size: Vector2(200, 100),
+            position: Vector2(50, 50),
+            onTapDown: (e) => nTapDown++,
+            onLongTapDown: (e) => nLongTapDown++,
+            onTapCancel: (e) => nTapCancel++,
+            onTapUp: (e) => nTapUp++,
+          ),
         );
         await tester.pumpWidget(GameWidget(game: game));
         await tester.pump();
@@ -64,37 +66,35 @@ void main() {
       },
     );
 
-    testWidgets(
+    tappableTester.testGameWidget(
       'TapCallbacks component nested in another TapCallbacks component',
-      (tester) async {
+      verify: (game, tester) async {
         var nTapDownChild = 0;
         var nTapDownParent = 0;
         var nTapCancelChild = 0;
         var nTapCancelParent = 0;
         var nTapUpChild = 0;
         var nTapUpParent = 0;
-        final game = _GameWithHasTappableComponents(
-          children: [
-            _TapCallbacksComponent(
-              size: Vector2.all(100),
-              position: Vector2.zero(),
-              onTapDown: (e) => nTapDownParent++,
-              onTapUp: (e) => nTapUpParent++,
-              onTapCancel: (e) => nTapCancelParent++,
-              children: [
-                _TapCallbacksComponent(
-                  size: Vector2.all(50),
-                  position: Vector2.all(25),
-                  onTapDown: (e) {
-                    nTapDownChild++;
-                    e.continuePropagation = true;
-                  },
-                  onTapCancel: (e) => nTapCancelChild++,
-                  onTapUp: (e) => nTapUpChild++,
-                )
-              ],
-            ),
-          ],
+        game.add(
+          _TapCallbacksComponent(
+            size: Vector2.all(100),
+            position: Vector2.zero(),
+            onTapDown: (e) => nTapDownParent++,
+            onTapUp: (e) => nTapUpParent++,
+            onTapCancel: (e) => nTapCancelParent++,
+            children: [
+              _TapCallbacksComponent(
+                size: Vector2.all(50),
+                position: Vector2.all(25),
+                onTapDown: (e) {
+                  nTapDownChild++;
+                  e.continuePropagation = true;
+                },
+                onTapCancel: (e) => nTapCancelChild++,
+                onTapUp: (e) => nTapUpChild++,
+              )
+            ],
+          ),
         );
         await tester.pumpWidget(GameWidget(game: game));
         await tester.pump();
@@ -124,25 +124,23 @@ void main() {
       },
     );
 
-    testWidgets(
+    tappableTester.testGameWidget(
       'tap events do not propagate down by default',
-      (tester) async {
+      verify: (game, tester) async {
         var nTapDownParent = 0;
         var nTapCancelParent = 0;
         var nTapUpParent = 0;
-        final game = _GameWithHasTappableComponents(
-          children: [
-            _TapCallbacksComponent(
-              size: Vector2.all(100),
-              position: Vector2.zero(),
-              onTapDown: (e) => nTapDownParent++,
-              onTapUp: (e) => nTapUpParent++,
-              onTapCancel: (e) => nTapCancelParent++,
-              children: [
-                _SimpleTapCallbacksComponent(size: Vector2.all(100)),
-              ],
-            ),
-          ],
+        game.add(
+          _TapCallbacksComponent(
+            size: Vector2.all(100),
+            position: Vector2.zero(),
+            onTapDown: (e) => nTapDownParent++,
+            onTapUp: (e) => nTapUpParent++,
+            onTapCancel: (e) => nTapCancelParent++,
+            children: [
+              _SimpleTapCallbacksComponent(size: Vector2.all(100)),
+            ],
+          ),
         );
         await tester.pumpWidget(GameWidget(game: game));
         await tester.pump();
@@ -166,31 +164,29 @@ void main() {
       },
     );
 
-    testWidgets(
+    tappableTester.testGameWidget(
       'local coordinates during tap events',
-      (tester) async {
+      verify: (game, tester) async {
         TapDownEvent? tapDownEvent;
-        final game = _GameWithHasTappableComponents(
-          children: [
-            PositionComponent(
-              size: Vector2.all(400),
-              position: Vector2.all(10),
-              children: [
-                PositionComponent(
-                  size: Vector2(300, 200),
-                  scale: Vector2(1.5, 2),
-                  position: Vector2.all(40),
-                  children: [
-                    _TapCallbacksComponent(
-                      size: Vector2(100, 50),
-                      position: Vector2(50, 50),
-                      onTapDown: (e) => tapDownEvent = e,
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ],
+        game.add(
+          PositionComponent(
+            size: Vector2.all(400),
+            position: Vector2.all(10),
+            children: [
+              PositionComponent(
+                size: Vector2(300, 200),
+                scale: Vector2(1.5, 2),
+                position: Vector2.all(40),
+                children: [
+                  _TapCallbacksComponent(
+                    size: Vector2(100, 50),
+                    position: Vector2(50, 50),
+                    onTapDown: (e) => tapDownEvent = e,
+                  ),
+                ],
+              ),
+            ],
+          ),
         );
         await tester.pumpWidget(GameWidget(game: game));
         await tester.pump();
@@ -214,15 +210,15 @@ void main() {
   });
 
   group('HasTappablesBridge', () {
-    testWidgets(
+    dualTappableTester.testGameWidget(
       'taps are delivered to tappables of both kings',
-      (tester) async {
+      verify: (game, tester) async {
         var nTappableDown = 0;
         var nTappableCancelled = 0;
         var nTapCallbacksDown = 0;
         var nTapCallbacksCancelled = 0;
-        final game = _GameWithDualTappableComponents(
-          children: [
+        game.addAll(
+          [
             _TapCallbacksComponent(
               size: Vector2(100, 100),
               position: Vector2(20, 20),
@@ -240,7 +236,7 @@ void main() {
                 nTappableCancelled++;
                 return true;
               },
-            )
+            ),
           ],
         );
         await tester.pumpWidget(GameWidget(game: game));

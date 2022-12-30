@@ -130,12 +130,12 @@ void main() {
   group('Subscription is valid after game change', () {
     testWidgets('Uncontolled to uncontrolled', (tester) async {
       const key = Key('flame-game');
-      final game1 = FlameGame();
+      final game1 = await initializeFlameGame();
       await tester.pumpWidget(GameWidget(key: key, game: game1));
       expect(game1.isMounted, true);
       expect(game1.gameStateListeners.length, 1);
 
-      final game2 = FlameGame();
+      final game2 = await initializeFlameGame();
       await tester.pumpWidget(GameWidget(key: key, game: game2));
       final widget = tester.firstWidget<GameWidget>(
         find.byWidgetPredicate((widget) => widget is GameWidget),
@@ -148,7 +148,7 @@ void main() {
 
     testWidgets('Uncontrolled to controlled', (tester) async {
       const key = Key('flame-game');
-      final game1 = FlameGame();
+      final game1 = await initializeFlameGame();
       await tester.pumpWidget(GameWidget(key: key, game: game1));
       expect(game1.isMounted, true);
       expect(game1.gameStateListeners.length, 1);
@@ -164,6 +164,8 @@ void main() {
       final widget = tester.firstWidget<GameWidget>(
         find.byWidgetPredicate((widget) => widget is GameWidget),
       );
+      // TODO(Lukas): Is there a better way to do this for these tests?
+      game2.setMounted();
 
       expect(widget.game, null);
 
@@ -174,6 +176,7 @@ void main() {
       expect(game2.isAttached, true);
       expect(game2.isMounted, true);
     });
+
     testWidgets('Controlled to uncontrolled', (tester) async {
       const key = Key('flame-game');
 
@@ -184,6 +187,7 @@ void main() {
           gameFactory: () => game1 = FlameGame(),
         ),
       );
+      game1.setMounted();
 
       expect(game1.isMounted, true);
       expect(game1.gameStateListeners.length, 1);
@@ -204,6 +208,7 @@ void main() {
       expect(game2.isAttached, true);
       expect(game2.isMounted, true);
     });
+
     testWidgets('Controlled to controlled', (tester) async {
       const key = Key('flame-game');
 
@@ -214,6 +219,7 @@ void main() {
           gameFactory: () => game1 = FlameGame(),
         ),
       );
+      game1.setMounted();
 
       expect(game1.isMounted, true);
       expect(game1.gameStateListeners.length, 1);

@@ -7,9 +7,7 @@ void main() {
   group('GlowEffect', () {
     testWithFlameGame('can apply to component having HasPaint', (game) async {
       final component = _PaintComponent();
-
       await game.ensureAdd(component);
-
       await component.add(
         GlowEffect(1, EffectController(duration: 1)),
       );
