@@ -53,9 +53,10 @@ There is a set of tutorials that you can follow to get started in the
 Simple examples for all features can be found in the
 [examples folder](https://github.com/flame-engine/flame/tree/main/examples).
 
-You can also check out the 
-[awesome flame repository](https://github.com/flame-engine/awesome-flame#user-content-articles--tutorials), 
-it contains quite a lot of good tutorials and articles written by the community to get you started with Flame.
+You can also check out the [awesome flame
+repository](https://github.com/flame-engine/awesome-flame#user-content-articles--tutorials),
+it contains quite a lot of good tutorials and articles written by the community
+to get you started with Flame.
 
 
 ## Outside of the scope of the engine
