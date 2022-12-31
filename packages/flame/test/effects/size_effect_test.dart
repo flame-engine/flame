@@ -122,7 +122,7 @@ void main() {
     });
 
     testRandom('a very long size change', (Random rng) async {
-      final game = FlameGame()..onGameResize(Vector2(1, 1));
+      final game = await initializeFlameGame();
       final component = ResizableComponent();
       await game.ensureAdd(component);
 
