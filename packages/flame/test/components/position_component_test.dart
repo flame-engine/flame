@@ -404,7 +404,9 @@ void main() {
           await game.ready();
 
           expect(
-              child.absoluteTopLeftPosition, child.position + parent.position);
+            child.absoluteTopLeftPosition,
+            child.position + parent.position,
+          );
           expect(
             child.absoluteTopLeftPosition,
             child.topLeftPosition + parent.topLeftPosition,
