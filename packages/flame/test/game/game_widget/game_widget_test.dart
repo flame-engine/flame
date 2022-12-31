@@ -198,6 +198,7 @@ void main() {
       final widget = tester.firstWidget<GameWidget>(
         find.byWidgetPredicate((widget) => widget is GameWidget),
       );
+      game2.setMounted();
 
       expect(widget.game, game2);
 
