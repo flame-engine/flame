@@ -33,6 +33,14 @@ function convertVersionsToHtmlLinks(versionsList, currentVersion) {
   return out;
 }
 
+function maybeAddWarning(currentVersion) {
+  if (currentVersion !== 'main') {
+    $('#version-warning')
+      .find('.version').text(currentVersion).end()
+      .removeClass('hidden');
+  }
+}
+
 function buildVersionsMenu(data) {
   const currentVersion = getCurrentDocVersion();
   const versionButtons = convertVersionsToHtmlLinks(data.split('\n'), currentVersion);
@@ -54,6 +62,8 @@ function buildVersionsMenu(data) {
     // A timeout ensures that `click` can propagate to child <A/> elements.
     setTimeout(() => $(this).removeClass("active"), 200);
   });
+
+  maybeAddWarning(currentVersion);
 }
 
 // Start loading the versions list as soon as possible, don't wait for DOM
