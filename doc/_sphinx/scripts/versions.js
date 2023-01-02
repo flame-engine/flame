@@ -33,8 +33,13 @@ function convertVersionsToHtmlLinks(versionsList, currentVersion) {
   return out;
 }
 
-function maybeAddWarning(currentVersion) {
-  if (currentVersion !== 'main') {
+function maybeAddWarning(versions, currentVersion) {
+  const specialVersions = ['main', 'local'];
+  const latestVersion = versions.filter(e => !specialVersions.includes(e))[0];
+  const nonWarningVersions = [...specialVersions, latestVersion];
+  const showWarning = !nonWarningVersions.includes(currentVersion);
+  console.log(nonWarningVersions, showWarning);
+  if (showWarning) {
     $('#version-warning')
       .find('.version').text(currentVersion).end()
       .removeClass('hidden');
@@ -42,8 +47,9 @@ function maybeAddWarning(currentVersion) {
 }
 
 function buildVersionsMenu(data) {
+  const versions = data.split('\n');
   const currentVersion = getCurrentDocVersion();
-  const versionButtons = convertVersionsToHtmlLinks(data.split('\n'), currentVersion);
+  const versionButtons = convertVersionsToHtmlLinks(versions, currentVersion);
   $('div.versions-placeholder').append(`
     <div id="versions-menu" tabindex="-1">
       <div class="btn">
@@ -63,7 +69,7 @@ function buildVersionsMenu(data) {
     setTimeout(() => $(this).removeClass("active"), 200);
   });
 
-  maybeAddWarning(currentVersion);
+  maybeAddWarning(versions, currentVersion);
 }
 
 // Start loading the versions list as soon as possible, don't wait for DOM
