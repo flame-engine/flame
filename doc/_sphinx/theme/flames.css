@@ -473,6 +473,24 @@ div.document-wrapper {
   margin-top: 25px;
 }
 
+div.warning {
+  background: #9b6814;
+  color: white;
+  border-radius: 2pt;
+  box-shadow: 2px 2px 3px #ffc43c;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+div.warning .version {
+  font-style: italic;
+  text-decoration: dashed underline;
+}
+
+.hidden {
+  display: none;
+}
+
 div.document {
   background-color: #282828;
   color: #b0b0b0;
