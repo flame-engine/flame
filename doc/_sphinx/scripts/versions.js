@@ -38,7 +38,6 @@ function maybeAddWarning(versions, currentVersion) {
   const latestVersion = versions.filter(e => !specialVersions.includes(e))[0];
   const nonWarningVersions = [...specialVersions, latestVersion];
   const showWarning = !nonWarningVersions.includes(currentVersion);
-  console.log(nonWarningVersions, showWarning);
   if (showWarning) {
     $('#version-warning')
       .find('.version').text(currentVersion).end()
