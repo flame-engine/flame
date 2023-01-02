@@ -119,7 +119,7 @@ class RouterComponent extends Component {
     if (route == currentRoute) {
       return;
     } else {
-      _popWithoutAssert();
+      _popWithoutMinimumAssert();
     }
     if (_routeStack.contains(route)) {
       _routeStack.remove(route);
@@ -165,7 +165,7 @@ class RouterComponent extends Component {
     if (name.isNotEmpty) {
       _routes[name] = route;
     }
-    _popWithoutAssert();
+    _popWithoutMinimumAssert();
     add(route);
     _routeStack.add(route);
     _adjustRoutesOrder();
@@ -255,7 +255,7 @@ class RouterComponent extends Component {
   }
 
   /// Local method to bypass [pop]'s assert
-  void _popWithoutAssert() {
+  void _popWithoutMinimumAssert() {
     assert(
       _routeStack.isNotEmpty,
       'There must be a route to pop.',
