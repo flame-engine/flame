@@ -145,9 +145,10 @@ void main() {
       expect(cancelledTimes, 1);
     });
 
-    gameWithTappables.testGameWidget(
+    testWidgets(
       '[#1723] can be pressed while the engine is paused',
-      verify: (game, tester) async {
+      (tester) async {
+        final game = GameWithTappables();
         game.add(
           ButtonComponent(
             button: CircleComponent(radius: 40),
@@ -195,8 +196,6 @@ void main() {
     );
   });
 }
-
-final gameWithTappables = FlameTester(GameWithTappables.new);
 
 class SimpleStatelessWidget extends StatelessWidget {
   const SimpleStatelessWidget({

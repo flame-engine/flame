@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flame/components.dart';
+import 'package:flame/game.dart';
 import 'package:flame/src/effects/controllers/effect_controller.dart';
 import 'package:flame/src/effects/scale_effect.dart';
 import 'package:flame_test/flame_test.dart';
@@ -124,7 +125,7 @@ void main() {
     });
 
     testRandom('a very long scale change', (Random rng) async {
-      final game = await initializeFlameGame();
+      final game = FlameGame()..onGameResize(Vector2(1, 1));
       final component = PositionComponent();
       await game.ensureAdd(component);
 

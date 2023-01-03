@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../game/flame_game_test.dart';
-import '../button_component_test.dart';
 
 enum _ButtonState {
   up,
@@ -130,9 +129,11 @@ Future<void> main() async {
       expect(component.current, _ButtonState.up);
     });
 
-    gameWithTappables.testGameWidget(
+    testWidgets(
       'Button can be pressed while the engine is paused',
-      verify: (game, tester) async {
+      (tester) async {
+        final game = GameWithTappables();
+
         final buttonSheet = SpriteSheet.fromColumnsAndRows(
           image: image,
           columns: 1,

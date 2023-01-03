@@ -1,7 +1,6 @@
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
-import 'package:flame_test/flame_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -77,8 +76,6 @@ class _GamePage extends StatelessWidget {
 }
 
 void main() {
-  final withKeyboardHandlerComponents =
-      FlameTester(_HasKeyboardHandlerComponentsGame.new);
   final size = Vector2(1.0, 1.0);
 
   group('GameWidget', () {
@@ -117,9 +114,11 @@ void main() {
       expect(game.keysPressed, ['a', 'b', 'c']);
     });
 
-    withKeyboardHandlerComponents.testGameWidget(
+    testWidgets(
       'game with HasKeyboardHandlerComponents receives key events',
-      verify: (game, tester) async {
+      (tester) async {
+        final game = _HasKeyboardHandlerComponentsGame();
+
         await tester.pumpWidget(
           _GamePage(
             child: GameWidget(
@@ -178,9 +177,11 @@ void main() {
       expect(game.keysPressed, ['a', 'b', 'c']);
     });
 
-    withKeyboardHandlerComponents.testGameWidget(
+    testWidgets(
       'game with HasKeyboardHandlerComponents receives key events',
-      verify: (game, tester) async {
+      (tester) async {
+        final game = _HasKeyboardHandlerComponentsGame();
+
         await tester.pumpWidget(
           _GamePage(
             child: GameWidget.controlled(
