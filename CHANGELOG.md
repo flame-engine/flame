@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2023-01-03
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`flame_audio` - `v1.3.4`](#flame_audio---v134)
+
+---
+
+#### `flame_audio` - `v1.3.4`
+
+
 ## 2022-11-28
 
 ### Changes
