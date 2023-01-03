@@ -58,8 +58,6 @@ void testGolden(
         }
         await tester.pumpWidget(widget);
         await tester.pump();
-        // ignore: invalid_use_of_visible_for_testing_member
-        gameInstance.setMounted();
         await testBody(gameInstance);
         await gameInstance.ready();
         await tester.pump();

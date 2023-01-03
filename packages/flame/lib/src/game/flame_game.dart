@@ -97,8 +97,12 @@ class FlameGame extends Component with Game {
   @override
   @mustCallSuper
   void onGameResize(Vector2 canvasSize) {
+    if (!isMounted) {
+      // TODO(st-pasha): remove this hack, which is for test purposes only
+      setMounted();
+    }
     camera.handleResize(canvasSize);
-    super.onGameResize(canvasSize);
+    super.onGameResize(canvasSize); // Game.onGameResize
     // [onGameResize] is declared both in [Component] and in [Game]. Since
     // there is no way to explicitly call the [Component]'s implementation,
     // we propagate the event to [FlameGame]'s children manually.

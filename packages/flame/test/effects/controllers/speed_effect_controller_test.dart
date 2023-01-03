@@ -42,12 +42,13 @@ void main() {
         );
       });
 
-      testWithFlameGame('negative measure', (game) async {
+      test('negative measure', () {
         expect(
           () async {
             final effect = BadEffect(
               SpeedEffectController(LinearEffectController(1), speed: 1),
             );
+            final game = FlameGame()..onGameResize(Vector2.all(100));
             await game.ensureAdd(PositionComponent()..add(effect));
             game.update(0);
           },
@@ -57,9 +58,10 @@ void main() {
     });
 
     group('applied to various effects', () {
-      testWithFlameGame('speed on MoveEffect', (game) async {
+      test('speed on MoveEffect', () async {
         final effect =
             MoveEffect.to(Vector2(8, 12), EffectController(speed: 1));
+        final game = FlameGame()..onGameResize(Vector2.all(100));
         final component = PositionComponent(position: Vector2(5, 8));
         component.add(effect);
         await game.ensureAdd(component);
@@ -70,7 +72,7 @@ void main() {
         expect(component.position, closeToVector(Vector2(8, 12)));
       });
 
-      testWithFlameGame('speed on MoveAlongPathEffect', (game) async {
+      test('speed on MoveAlongPathEffect', () async {
         final effect = MoveAlongPathEffect(
           Path()
             ..lineTo(30, 40)
@@ -80,6 +82,7 @@ void main() {
           EffectController(speed: 4),
           absolute: true,
         );
+        final game = FlameGame()..onGameResize(Vector2.all(100));
         final component = PositionComponent(position: Vector2(5, 8));
         component.add(effect);
         await game.ensureAdd(component);
@@ -90,9 +93,10 @@ void main() {
         expect(component.position, closeToVector(Vector2(10, 30)));
       });
 
-      testWithFlameGame('speed on RotateEffect', (game) async {
+      test('speed on RotateEffect', () async {
         const tau = Transform2D.tau;
         final effect = RotateEffect.to(tau, EffectController(speed: 1));
+        final game = FlameGame()..onGameResize(Vector2.all(100));
         final component = PositionComponent(position: Vector2(5, 8));
         component.add(effect);
         await game.ensureAdd(component);
@@ -103,11 +107,12 @@ void main() {
         expect(component.angle, closeTo(tau, 1e-15));
       });
 
-      testWithFlameGame('reset', (game) async {
+      test('reset', () async {
         final effect = MoveEffect.to(
           Vector2(10, 0),
           SpeedEffectController(LinearEffectController(0), speed: 1),
         );
+        final game = FlameGame()..onGameResize(Vector2.all(100));
         final component = PositionComponent();
         component.add(effect..removeOnFinish = false);
         await game.ensureAdd(component);

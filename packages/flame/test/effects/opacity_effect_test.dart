@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
+import 'package:flame/game.dart';
 import 'package:flame/palette.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter/rendering.dart';
@@ -361,7 +362,7 @@ void main() {
     );
 
     testRandom('a very long opacity change', (Random rng) async {
-      final game = await initializeFlameGame();
+      final game = FlameGame()..onGameResize(Vector2(1, 1));
       final component = _PaintComponent();
       await game.ensureAdd(component);
 

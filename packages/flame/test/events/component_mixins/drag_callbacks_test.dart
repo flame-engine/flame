@@ -126,7 +126,7 @@ void main() {
     withHasDraggableComponents.testGameWidget(
       'drag correctly registered handled event',
       setUp: (game, _) async {
-        await game.add(
+        await game.ensureAdd(
           _DragCallbacksComponent()
             ..x = 10
             ..y = 10

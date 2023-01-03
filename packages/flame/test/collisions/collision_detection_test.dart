@@ -970,7 +970,7 @@ void main() {
   group('Raycasting', () {
     runCollisionTestRegistry({
       'one hitbox': (game) async {
-        await game.ensureAdd(
+        game.ensureAdd(
           PositionComponent(
             children: [RectangleHitbox()],
             position: Vector2(100, 0),
@@ -990,7 +990,7 @@ void main() {
         expect(result?.reflectionRay?.direction, closeToVector(Vector2(-1, 0)));
       },
       'multiple hitboxes after each other': (game) async {
-        await game.ensureAddAll([
+        game.ensureAddAll([
           for (var i = 0.0; i < 10; i++)
             PositionComponent(
               position: Vector2.all(100 + i * 10),
@@ -1012,7 +1012,7 @@ void main() {
         );
       },
       'multiple hitboxes after each other with one ignored': (game) async {
-        await game.ensureAddAll([
+        game.ensureAddAll([
           for (var i = 0.0; i < 10; i++)
             PositionComponent(
               position: Vector2.all(100 + i * 10),
@@ -1042,7 +1042,7 @@ void main() {
         );
       },
       'ray with origin on hitbox corner': (game) async {
-        await game.ensureAddAll([
+        game.ensureAddAll([
           PositionComponent(
             position: Vector2.all(10),
             size: Vector2.all(10),
@@ -1062,7 +1062,7 @@ void main() {
         );
       },
       'raycast with maxDistance': (game) async {
-        await game.ensureAddAll([
+        game.ensureAddAll([
           PositionComponent(
             position: Vector2.all(20),
             size: Vector2.all(40),
@@ -1098,7 +1098,7 @@ void main() {
     group('Rectangle hitboxes', () {
       runCollisionTestRegistry({
         'ray from within RectangleHitbox': (game) async {
-          await game.ensureAddAll([
+          game.ensureAddAll([
             PositionComponent(
               position: Vector2.all(0),
               size: Vector2.all(10),
@@ -1119,7 +1119,7 @@ void main() {
           );
         },
         'ray from the left of RectangleHitbox': (game) async {
-          await game.ensureAddAll([
+          game.ensureAddAll([
             PositionComponent(
               position: Vector2.zero(),
               size: Vector2.all(10),
@@ -1136,7 +1136,7 @@ void main() {
           );
         },
         'ray from the top of RectangleHitbox': (game) async {
-          await game.ensureAddAll([
+          game.ensureAddAll([
             PositionComponent(
               position: Vector2.zero(),
               size: Vector2.all(10),
@@ -1153,7 +1153,7 @@ void main() {
           );
         },
         'ray from the right of RectangleHitbox': (game) async {
-          await game.ensureAddAll([
+          game.ensureAddAll([
             PositionComponent(
               position: Vector2.zero(),
               size: Vector2.all(10),
@@ -1170,7 +1170,7 @@ void main() {
           );
         },
         'ray from the bottom of RectangleHitbox': (game) async {
-          await game.ensureAddAll([
+          game.ensureAddAll([
             PositionComponent(
               position: Vector2.zero(),
               size: Vector2.all(10),
@@ -1192,7 +1192,7 @@ void main() {
     group('Circle hitboxes', () {
       runCollisionTestRegistry({
         'ray from top to bottom within CircleHitbox': (game) async {
-          await game.ensureAddAll([
+          game.ensureAddAll([
             PositionComponent(
               position: Vector2.zero(),
               size: Vector2.all(10),
@@ -1210,7 +1210,7 @@ void main() {
           );
         },
         'ray from bottom-right to top-left within CircleHitbox': (game) async {
-          await game.ensureAddAll([
+          game.ensureAddAll([
             PositionComponent(
               position: Vector2.zero(),
               size: Vector2.all(10),
@@ -1234,7 +1234,7 @@ void main() {
           );
         },
         'ray from bottom within CircleHitbox going down': (game) async {
-          await game.ensureAddAll([
+          game.ensureAddAll([
             PositionComponent(
               position: Vector2.zero(),
               size: Vector2.all(10),
@@ -1256,7 +1256,7 @@ void main() {
           );
         },
         'ray from the left of CircleHitbox': (game) async {
-          await game.ensureAddAll([
+          game.ensureAddAll([
             PositionComponent(
               position: Vector2.zero(),
               size: Vector2.all(10),
@@ -1273,7 +1273,7 @@ void main() {
           );
         },
         'ray from the top of CircleHitbox': (game) async {
-          await game.ensureAddAll([
+          game.ensureAddAll([
             PositionComponent(
               position: Vector2.zero(),
               size: Vector2.all(10),
@@ -1290,7 +1290,7 @@ void main() {
           );
         },
         'ray from the right of CircleHitbox': (game) async {
-          await game.ensureAddAll([
+          game.ensureAddAll([
             PositionComponent(
               position: Vector2.zero(),
               size: Vector2.all(10),
@@ -1307,7 +1307,7 @@ void main() {
           );
         },
         'ray from the bottom of CircleHitbox': (game) async {
-          await game.ensureAddAll([
+          game.ensureAddAll([
             PositionComponent(
               position: Vector2.zero(),
               size: Vector2.all(10),
@@ -1328,7 +1328,7 @@ void main() {
             position: Vector2.zero(),
             size: Vector2.all(10),
           )..add(CircleHitbox());
-          await game.ensureAdd(positionComponent);
+          game.ensureAdd(positionComponent);
 
           await game.ready();
           final ray = Ray2(
@@ -1349,7 +1349,7 @@ void main() {
     group('raycastAll', () {
       runCollisionTestRegistry({
         'All directions and all hits': (game) async {
-          await game.ensureAddAll([
+          game.ensureAddAll([
             PositionComponent(
               position: Vector2(10, 0),
               size: Vector2.all(10),
@@ -1377,7 +1377,7 @@ void main() {
           expect(results.length, 4);
         },
         'raycastAll with maxDistance': (game) async {
-          await game.ensureAddAll([
+          game.ensureAddAll([
             PositionComponent(
               position: Vector2(10, 0),
               size: Vector2.all(10),
@@ -1419,7 +1419,7 @@ void main() {
 
     runCollisionTestRegistry({
       'All directions and all hits': (game) async {
-        await game.ensureAddAll([
+        game.ensureAddAll([
           PositionComponent(
             position: Vector2(10, 0),
             size: Vector2.all(10),

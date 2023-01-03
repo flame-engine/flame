@@ -74,7 +74,7 @@ void main() {
 
     testWithFlameGame('reset absolute', (game) async {
       final component = ResizableComponent();
-      await game.ensureAdd(component);
+      game.ensureAdd(component);
 
       final effect = SizeEffect.to(
         Vector2.all(1.0),

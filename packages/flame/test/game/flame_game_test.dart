@@ -21,12 +21,13 @@ void main() {
       },
     );
 
-    testWithFlameGame('game resize in zoomed game', (game) async {
-      game
+    test('game resize in zoomed game', () async {
+      final game = FlameGame()
         ..camera.zoom = 10
         ..onGameResize(Vector2(300, 200));
       final component = ComponentWithSizeHistory();
-      await game.ensureAdd(component);
+      game.add(component);
+      await game.ready();
 
       game.onGameResize(Vector2(400, 500));
       expect(
@@ -96,7 +97,7 @@ void main() {
       testWidgets(
         'component render and update is called',
         (WidgetTester tester) async {
-          final game = await initializeFlameGame();
+          final game = FlameGame();
           late GameRenderBox renderBox;
           await tester.pumpWidget(
             Builder(
@@ -107,11 +108,9 @@ void main() {
             ),
           );
           renderBox.attach(PipelineOwner());
+          final component = _MyComponent()..addToParent(game);
 
-          final component = _MyComponent();
-          await game.add(component);
           renderBox.gameLoopCallback(1.0);
-
           expect(component.isUpdateCalled, true);
           renderBox.paint(
             PaintingContext(ContainerLayer(), Rect.zero),
@@ -160,7 +159,6 @@ void main() {
           expect(game.hasLayout, false);
 
           await tester.pumpWidget(GameWidget(game: game));
-          game.setMounted();
           game.update(0);
           expect(game.children.length, 1);
           expect(game.children.first, component);

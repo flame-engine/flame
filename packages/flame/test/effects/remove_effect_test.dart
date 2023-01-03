@@ -6,26 +6,34 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('RemoveEffect', () {
-    testWithFlameGame('no delay', (game) async {
-      final component = Component();
-      await game.ensureAdd(component);
+    test('no delay', () {
+      final game = FlameGame();
+      game.onGameResize(Vector2.all(1));
+      expect(game.children.length, 0);
+      final obj = Component();
+      game.add(obj);
+      game.update(0);
       expect(game.children.length, 1);
 
-      // First `game.update()` invokes the destroy effect and schedules
-      // `component` for deletion; second `game.update()` processes the deletion
-      // queue and actually removes the component.
-      component.add(RemoveEffect());
+      // First `game.update()` invokes the destroy effect and schedules `obj`
+      // for deletion; second `game.update()` processes the deletion queue and
+      // actually removes the component
+      obj.add(RemoveEffect());
       game.update(0);
       game.update(0);
       expect(game.children.length, 0);
     });
 
-    testWithFlameGame('delayed', (game) async {
-      final component = Component();
-      await game.ensureAdd(component);
+    test('delayed', () {
+      final game = FlameGame();
+      game.onGameResize(Vector2.all(1));
+      expect(game.children.length, 0);
+      final obj = Component();
+      game.add(obj);
+      game.update(0);
       expect(game.children.length, 1);
 
-      component.add(RemoveEffect(delay: 1));
+      obj.add(RemoveEffect(delay: 1));
       game.update(0.5);
       game.update(0);
       expect(game.children.length, 1);

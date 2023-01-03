@@ -10,15 +10,17 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('MoveAlongPathEffect', () {
-    testWithFlameGame('relative path', (game) async {
+    test('relative path', () {
       const tau = Transform2D.tau;
       const x0 = 32.5;
       const y0 = 14.88;
-      final component = PositionComponent(position: Vector2(x0, y0));
-      game.add(component);
+      final game = FlameGame();
+      game.onGameResize(Vector2(100, 100));
+      final object = PositionComponent()..position = Vector2(x0, y0);
+      game.add(object);
       game.update(0);
 
-      component.add(
+      object.add(
         MoveAlongPathEffect(
           Path()
             ..addOval(Rect.fromCircle(center: const Offset(6, 10), radius: 50)),
@@ -31,14 +33,15 @@ void main() {
         // Apparently, in Flutter circle paths are not truly circles, but only
         // appear circle-ish to an unsuspecting observer. Which is why the
         // precision in `closeTo()` is so low: only 0.1 pixels.
-        expect(component.position.x, closeTo(x0 + 6 + 50 * cos(a), 0.1));
-        expect(component.position.y, closeTo(y0 + 10 + 50 * sin(a), 0.1));
+        expect(object.position.x, closeTo(x0 + 6 + 50 * cos(a), 0.1));
+        expect(object.position.y, closeTo(y0 + 10 + 50 * sin(a), 0.1));
         game.update(0.01);
       }
     });
 
-    testWithFlameGame('absolute path', (game) async {
-      final component = PositionComponent(position: Vector2(17, -5));
+    test('absolute path', () {
+      final game = FlameGame()..onGameResize(Vector2(100, 100));
+      final component = PositionComponent()..position = Vector2(17, -5);
       game.add(component);
       game.update(0);
 
@@ -59,7 +62,8 @@ void main() {
       }
     });
 
-    testWithFlameGame('absolute oriented path', (game) async {
+    test('absolute oriented path', () {
+      final game = FlameGame()..onGameResize(Vector2(100, 100));
       final component = PositionComponent(
         position: Vector2(17, -5),
         angle: -30.5,
