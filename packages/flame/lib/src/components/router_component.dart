@@ -104,7 +104,7 @@ class RouterComponent extends Component {
     _adjustRoutesVisibility();
   }
 
-  /// Pops the current route and places the route [name] on top of the
+  /// Pops the current route and places the route with [name] on top of the
   /// navigation stack.
   ///
   /// If the route is already in the stack, it will be simply moved to the top.
