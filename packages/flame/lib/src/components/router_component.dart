@@ -108,8 +108,8 @@ class RouterComponent extends Component {
   /// navigation stack.
   ///
   /// If the route is already in the stack, it will simply be moved to the top.
-  /// Otherwise the route will be mounted and added at the top. We will also
-  /// initiate building the route's page if it hasn't been built before. If the
+  /// Otherwise the route will be mounted and added at the top. The route's
+  /// page will also start building if it hasn't been built before. If the
   /// route is already on top of the stack, this method will do nothing.
   ///
   /// The method calls the [Route.didPush] callback for the newly activated
