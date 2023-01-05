@@ -107,7 +107,7 @@ class RouterComponent extends Component {
   /// Pops the current route and places the route with [name] on top of the
   /// navigation stack.
   ///
-  /// If the route is already in the stack, it will be simply moved to the top.
+  /// If the route is already in the stack, it will simply be moved to the top.
   /// Otherwise the route will be mounted and added at the top. We will also
   /// initiate building the route's page if it hasn't been built before. If the
   /// route is already on top of the stack, this method will do nothing.
