@@ -88,6 +88,7 @@ class GameTester<T extends Game> {
     this.pumpWidget,
   });
 
+  @Deprecated('Will be removed in version 1.7.0')
   Future<T> initializeGame() async {
     final game = createGame();
 
@@ -96,12 +97,12 @@ class GameTester<T extends Game> {
 
     await game.onLoad();
     game.onMount();
-    game.update(0);
     if (game is FlameGame && makeReady) {
-      await game.ready();
-      // ignore: invalid_use_of_visible_for_testing_member
+      // ignore: invalid_use_of_internal_member
       game.setMounted();
+      await game.ready();
     }
+    game.update(0);
     return game;
   }
 
@@ -168,8 +169,6 @@ class GameTester<T extends Game> {
           await tester.pump();
 
           if (makeReady && game is FlameGame) {
-            // ignore: invalid_use_of_visible_for_testing_member
-            game.setMounted();
             await game.ready();
           }
 

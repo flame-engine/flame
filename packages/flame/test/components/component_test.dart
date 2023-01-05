@@ -228,8 +228,6 @@ void main() {
               ],
             ),
           );
-          game1.setMounted();
-          game2.setMounted();
           final component1 = LifecycleComponent('A')..addToParent(game1);
           final component2 = LifecycleComponent('B')..addToParent(game2);
           await game1.ready();

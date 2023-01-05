@@ -160,7 +160,6 @@ void main() {
           expect(game.hasLayout, false);
 
           await tester.pumpWidget(GameWidget(game: game));
-          game.setMounted();
           game.update(0);
           expect(game.children.length, 1);
           expect(game.children.first, component);

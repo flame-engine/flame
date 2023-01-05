@@ -128,7 +128,7 @@ void main() {
   );
 
   group('Subscription is valid after game change', () {
-    testWidgets('Uncontolled to uncontrolled', (tester) async {
+    testWidgets('Uncontrolled to uncontrolled', (tester) async {
       const key = Key('flame-game');
       final game1 = await initializeFlameGame();
       await tester.pumpWidget(GameWidget(key: key, game: game1));
@@ -164,8 +164,6 @@ void main() {
       final widget = tester.firstWidget<GameWidget>(
         find.byWidgetPredicate((widget) => widget is GameWidget),
       );
-      // TODO(Lukas): Is there a better way to do this for these tests?
-      game2.setMounted();
 
       expect(widget.game, null);
 
@@ -187,7 +185,6 @@ void main() {
           gameFactory: () => game1 = FlameGame(),
         ),
       );
-      game1.setMounted();
 
       expect(game1.isMounted, true);
       expect(game1.gameStateListeners.length, 1);
@@ -198,7 +195,6 @@ void main() {
       final widget = tester.firstWidget<GameWidget>(
         find.byWidgetPredicate((widget) => widget is GameWidget),
       );
-      game2.setMounted();
 
       expect(widget.game, game2);
 
@@ -220,7 +216,6 @@ void main() {
           gameFactory: () => game1 = FlameGame(),
         ),
       );
-      game1.setMounted();
 
       expect(game1.isMounted, true);
       expect(game1.gameStateListeners.length, 1);

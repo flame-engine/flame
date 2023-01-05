@@ -817,7 +817,7 @@ class Component {
     _lifecycleManager?.processQueues();
   }
 
-  @visibleForTesting
+  @internal
   void setMounted() {
     _setLoadedBit();
     _setMountedBit();
