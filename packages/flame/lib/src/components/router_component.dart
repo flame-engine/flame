@@ -112,7 +112,7 @@ class RouterComponent extends Component {
   /// page will also start building if it hasn't been built before. If the
   /// route is already on top of the stack, this method will do nothing.
   ///
-  /// The method calls the [Route.didPush] callback for the newly activated
+  /// This method calls the [Route.didPush] callback for the newly activated
   /// route and also calls the [Route.didPop] callback for the popped route.
   void pushReplacementNamed(String name) {
     final route = _resolveRoute(name);
