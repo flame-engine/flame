@@ -1,7 +1,7 @@
 # Variables
 
 A **variable** is a place to store some piece of information -- it is the same notion as in any
-other programming language. Each variable has a **name**, a **value**, a **type**, and a **scope**.
+other programming language. Each variable has a **name**, **value**, **type**, and a **scope**.
 
 
 ## Name
@@ -19,7 +19,7 @@ $climbed_over_wall_and_avoided_all_guard_patrols
 $DoorPassword
 ```
 
-while the following are not:
+while the following are NOT valid names:
 
 ```
 $2000_years
@@ -32,7 +32,7 @@ victory
 ## Type
 
 Each variable has a certain **type** associated with it. The type of a variable is determined when
-the variable is first declared, and never changes afterwards.
+the variable is first declared, and it never changes afterwards.
 
 There are three types of variables in YarnSpinner: `string`, `number`, and `bool`.
 

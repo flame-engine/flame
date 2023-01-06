@@ -1,7 +1,7 @@
 # Expressions
 
 The **expressions** in YarnSpinner provide a way to dynamically change the flow or the content
-of the dialogue, based on *variables* or *function* calls. They are used in several places:
+of the dialogue, based on [variables] or *function* calls. They are used in several places:
 
 - to insert a dynamic text into a [line];
 - as part of a [command] such as `<<if>>` or `<<set>>`;
@@ -32,3 +32,4 @@ Operators   <operators.md>
 [command]: ../commands/commands.md
 [line]: ../lines.md
 [markup]: ../markup.md
+[variables]: variables.md
