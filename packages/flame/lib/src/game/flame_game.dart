@@ -5,6 +5,7 @@ import 'package:flame/src/game/camera/camera.dart';
 import 'package:flame/src/game/camera/camera_wrapper.dart';
 import 'package:flame/src/game/game.dart';
 import 'package:flame/src/game/projector.dart';
+import 'package:flutter/rendering.dart';
 import 'package:meta/meta.dart';
 
 /// This is a more complete and opinionated implementation of [Game].
@@ -43,6 +44,12 @@ class FlameGame extends Component with Game {
   /// This does not match the Flutter widget size; for that see [canvasSize].
   @override
   Vector2 get size => camera.gameSize;
+
+  @override
+  void mount() {
+    super.mount();
+    setMounted();
+  }
 
   /// This implementation of render renders each component, making sure the
   /// canvas is reset for each one.
