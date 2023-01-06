@@ -139,9 +139,9 @@ class RouterComponent extends Component {
   /// same name, it will be overwritten).
   ///
   /// The method calls [Route.didPush] for this new route after it is added.
-  void pushRoute(Route route, {String name = ''}) {
-    route.name = name;
-    if (name.isNotEmpty) {
+  void pushRoute(Route route, {String? name}) {
+    if (name != null) {
+      route.name = name;
       _routes[name] = route;
     }
     add(route);
@@ -160,9 +160,9 @@ class RouterComponent extends Component {
   ///
   /// The method calls [Route.didPush] for this new route after it is added and
   /// also calls the [Route.didPop] callback for the popped route.
-  void pushReplacement(Route route, {String name = ''}) {
-    route.name = name;
-    if (name.isNotEmpty) {
+  void pushReplacement(Route route, {String? name}) {
+    if (name != null) {
+      route.name = name;
       _routes[name] = route;
     }
     _popWithoutMinimumAssert();
