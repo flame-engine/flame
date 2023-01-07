@@ -9,6 +9,7 @@ void main() {
       expect('${Token.colon}', 'Token.colon');
       expect('${Token.commandEndif}', 'Token.commandEndif');
       expect('${Token.commandLocal}', 'Token.commandLocal');
+      expect('${Token.commandVisit}', 'Token.commandVisit');
       expect('${Token.constTrue}', 'Token.constTrue');
       expect('${Token.endIndent}', 'Token.endIndent');
       expect('${Token.endMarkupTag}', 'Token.endMarkupTag');

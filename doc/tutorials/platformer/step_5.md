@@ -66,7 +66,8 @@ Now in our `onKeyEvent` method, we can register the key pressed by adding:
 ```
 
 Let's make Ember move by adding a few lines of code and creating our `update` method.  First, we
-need to define a velocity variable for Ember.  Add the following at the top of your class:
+need to define a velocity variable for Ember.  Add the following at the top of the `EmberPlayer`
+class:
 
 ```dart
 final Vector2 velocity = Vector2.zero();
@@ -248,13 +249,13 @@ if (other is WaterEnemy) {
 When Ember collides with a star, the game will remove the star, and to implement the `hit` method for
 when Ember collides with an enemy, we need to do the following:
 
-Add the following variable at the top of your class:
+Add the following variable at the top of the `EmberPlayer` class:
 
 ```dart
 bool hitByEnemy = false;
 ```
 
-Additionally, add this method to your class:
+Additionally, add this method to the `EmberPlayer` class:
 
 ```dart
 // This method runs an opacity effect on ember

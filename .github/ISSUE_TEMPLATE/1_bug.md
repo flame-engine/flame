@@ -19,6 +19,7 @@ assignees: ''
 # Steps to reproduce
 <!-- This one is very important, please be very precise in how we can reproduce this bug -->
 <!-- If possible please report steps based on the example from this plugin! -->
+<!-- If you can make a minimal reproducible example it is incredibly helpful, the simplest way is to share a link from https://zapp.run, you can start from https://zapp.run/edit/flame where all dependencies are already set up. -->
 
 # Flutter doctor output
 <!-- Execute in a terminal and put output into code block below -->
