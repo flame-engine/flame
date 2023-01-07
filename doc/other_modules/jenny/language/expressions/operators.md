@@ -8,6 +8,7 @@ into the following categories:
 
 ## Operator types
 
+
 ### Arithmetic
 
 The **arithmetic** operators, have the same meaning as in regular math. These apply to numeric
