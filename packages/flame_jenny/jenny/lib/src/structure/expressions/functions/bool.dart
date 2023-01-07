@@ -34,11 +34,11 @@ class BoolFn extends BoolExpression {
       return x != 0;
     }
     if (x is String) {
-      final value = x.trim().toLowerCase();
-      if (value == 'true') {
+      final value = x.trim();
+      if (YarnProject.trueValues.contains(value)) {
         return true;
       }
-      if (value == 'false') {
+      if (YarnProject.falseValues.contains(value)) {
         return false;
       }
       throw DialogueError(

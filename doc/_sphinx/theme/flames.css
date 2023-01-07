@@ -815,7 +815,7 @@ div.admonition.seealso {
   --admonition-border-color: #54d452;
   --admonition-icon: '\f064';
   --admonition-icon-color: #acfab6;
-  --admonition-title-background-color: #285131;
+  --admonition-title-background-color: #28513140;
 }
 
 div.admonition.admonition-deprecated {
