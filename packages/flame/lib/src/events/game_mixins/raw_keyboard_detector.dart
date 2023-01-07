@@ -54,10 +54,9 @@ mixin RawKeyboardDetector on Game {
   /// are being pressed. This event handler is fired at the start of every game
   /// tick.
   ///
-  /// The [keysPressed] argument contains the list of keys currently being
-  /// pressed, in the order in which they were pressed. It the same list as the
-  /// [physicalKeysPressed] property.
-  void onKeysPressed(List<PhysicalKeyboardKey> keysPressed) {}
+  /// The list of keys currently being pressed can be accessed via the
+  /// [physicalKeysPressed] or [logicalKeysPressed] properties.
+  void onKeysPressed() {}
 
   /// Internal handler of raw key events.
   void _onRawKeyEvent(RawKeyEvent event) {
@@ -96,7 +95,7 @@ mixin RawKeyboardDetector on Game {
   @override
   void update(double dt) {
     if (physicalKeysPressed.isNotEmpty) {
-      onKeysPressed(physicalKeysPressed);
+      onKeysPressed();
     }
     super.update(dt);
   }
