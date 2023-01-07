@@ -30,9 +30,9 @@ arguments:
   - [`string(x)`](type.md#stringx)
 
 - **Other**
-  - `plural(x, ...)`
-  - `visit_count(node)`
-  - `visited(node)`
+  - [`plural(x, ...)`](misc.md#pluralx-words)
+  - [`visit_count(node)`](misc.md#visit_countnode)
+  - [`visited(node)`](misc.md#visitednode)
 
 
 ```{toctree}
@@ -41,5 +41,5 @@ arguments:
 Random functions          <random.md>
 Numeric functions         <numeric.md>
 Type conversion functions <type.md>
-Miscellaneous functions   <other.md>
+Miscellaneous functions   <misc.md>
 ```
