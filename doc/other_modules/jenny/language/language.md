@@ -5,8 +5,6 @@
 **Jenny** implementation, which may not contain all the original features, but may also contain
 some that were not implemented in the YarnSpinner yet.
 
-[official documentation]: https://docs.yarnspinner.dev/getting-started/writing-in-yarn
-
 
 ## Yarn files
 
@@ -32,9 +30,6 @@ title: Start
 // Node content
 ===
 ```
-
-[commands]: commands/commands.md
-[nodes]: nodes.md
 
 
 ### Comments
@@ -78,5 +73,9 @@ Nodes        <nodes.md>
 Lines        <lines.md>
 Options      <options.md>
 Commands     <commands/commands.md>
-Expressions  <expressions.md>
+Expressions  <expressions/expressions.md>
 ```
+
+[commands]: commands/commands.md
+[nodes]: nodes.md
+[official documentation]: https://docs.yarnspinner.dev/getting-started/writing-in-yarn
