@@ -57,7 +57,7 @@ Returns the number of times that the `node` was visited.
 
 A node is considered "visited" if the dialogue enters and then exits that node. The node can be
 exited either through the normal dialogue flow, or via the [\<\<stop\>\>] command. However, if a
-runtime exception occurs while running the node, then the visit will not count. 
+runtime exception occurs while running the node, then the visit will not count.
 
 The `node` argument must be a string, and it must contain a valid node name. If a node with the
 given name does not exist in the project, an exception will be thrown.

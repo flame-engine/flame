@@ -12,7 +12,7 @@ Converts its argument into a boolean value.
 - If `x` is already a boolean, then it returns the argument as-is.
 - If `x` is numeric, then the result is `false` when `x` is `0`, and `true` for all other values
   of `x`.
-- If `x` is string, then the function will check whether that string can be found within 
+- If `x` is string, then the function will check whether that string can be found within
   `YarnProject.trueValues` or `YarnProject.falseValues` sets. If yes, then it will return the
   `true` / `false` value respectively. Otherwise, an error will be thrown.
 
@@ -44,4 +44,4 @@ Converts its argument `x` into a string value.
   - if `x` is a double in the range `1e-6` to `1e21`, returns its decimal representation
     with a decimal point;
   - for all other doubles, returns `x` written in the scientific (exponential) format.
-- If `x` is a string, then it is returned as-is. 
+- If `x` is a string, then it is returned as-is.
