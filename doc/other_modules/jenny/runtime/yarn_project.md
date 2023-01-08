@@ -63,6 +63,9 @@ final yarn = YarnProject()
 
   All custom commands must be added before they can be used in the dialogue script.
 
+**trueValues**, **falseValues** `Set<String>`
+: The strings that can be recognized as `true`/`false` values respectively.
+
 
 ## Methods
 

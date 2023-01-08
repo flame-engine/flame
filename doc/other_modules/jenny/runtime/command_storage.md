@@ -21,12 +21,6 @@ In order to register a function as a yarn command, the function must satisfy sev
   considered optional and will default to `false`.
 
 
-## Properties
-
-**trueValues**, **falseValues** `Set<String>`
-: The strings that can be recognized as `true`/`false` values respectively.
-
-
 ## Methods
 
 **hasCommand**(`String name`) → `bool`

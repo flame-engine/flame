@@ -13,8 +13,8 @@ void main() {
           ---
           {bool(0)} {bool(1)} {bool(0.005)}
           {bool(false)} {bool(true)}
-          {bool("true")} {bool("True")} {bool("  TRUE  ")}
-          {bool("false")} {bool("False")} {bool("FALSE")} {bool("fAlSe")}
+          {bool("true")} {bool("yes")} {bool("  true  ")}
+          {bool("false")} {bool("off")} {bool("no")} {bool("F")}
           ===
         ''',
         testPlan: '''
@@ -44,11 +44,11 @@ void main() {
       }
 
       expectFails('');
-      expectFails('T');
+      expectFails('t');
       expectFails('t r u e');
       expectFails('tru');
       expectFails('true 1');
-      expectFails('1');
+      expectFails('1.0');
     });
 
     test('too few arguments', () {

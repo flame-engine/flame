@@ -15,6 +15,8 @@ void main() {
           {string(true)}
           {string(false)}
           {string("Jenny")}
+          {string(12345678900000000000000000)}
+          {string(0.000000001)}
           ===
         ''',
         testPlan: '''
@@ -22,6 +24,8 @@ void main() {
           line: true
           line: false
           line: Jenny
+          line: 1.23456789e+25
+          line: 1e-9
         ''',
       );
     });
