@@ -1,5 +1,9 @@
 # Type conversion functions
 
+These functions convert values of one type into another type, if possible. All of these functions
+take a single argument of arbitrary type, and return the result of the type corresponding to the
+name of the function.
+
 
 ## `bool(x)`
 

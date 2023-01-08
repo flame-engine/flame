@@ -1,6 +1,7 @@
 # Numeric functions
 
-These functions are used to manipulate numeric values.
+These functions are used to manipulate numeric values. Most of them take a single numeric argument
+and produce a numeric result.
 
 
 ## `ceil(x)`
