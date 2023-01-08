@@ -833,3 +833,17 @@ pre, div[class*="highlight-"] {
 h2, h3, h4, h5, h6 {
   clear: both;
 }
+
+table.first-col-align-center tr td:first-child,
+table.first-col-align-center tr th:first-child {
+  text-align: center;
+}
+
+table.docutils td {
+  border-color: rgba(255, 255, 255, 0.125);
+  vertical-align: top;
+}
+
+table.docutils th {
+  color: #9d9175;
+}
