@@ -96,10 +96,9 @@ class GameTester<T extends Game> {
     game.onGameResize(size);
 
     await game.onLoad();
-    game.onMount();
+    // ignore: invalid_use_of_internal_member
+    game.mount();
     if (game is FlameGame && makeReady) {
-      // ignore: invalid_use_of_internal_member
-      game.setMounted();
       await game.ready();
     }
     game.update(0);

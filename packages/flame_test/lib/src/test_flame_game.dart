@@ -66,9 +66,8 @@ Future<T> initializeGame<T extends FlameGame>(CreateFunction<T> create) async {
   final game = create();
   game.onGameResize(Vector2(800, 600));
   await game.onLoad();
-  game.onMount();
   // ignore: invalid_use_of_internal_member
-  game.setMounted();
+  game.mount();
   game.update(0);
   return game;
 }

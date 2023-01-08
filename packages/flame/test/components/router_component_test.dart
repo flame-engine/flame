@@ -172,12 +172,13 @@ void main() {
       expect(router.currentRoute.name, 'A');
     });
 
-    flameGame.testGameWidget(
+    testWidgets(
       'can handle overlays via the Router',
-      verify: (game, tester) async {
+      (tester) async {
         const key1 = ValueKey('one');
         const key2 = ValueKey('two');
         const key3 = ValueKey('three');
+        final game = FlameGame();
         final router = RouterComponent(
           initialRoute: 'home',
           routes: {'home': Route(Component.new)},

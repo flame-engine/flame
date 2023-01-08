@@ -96,7 +96,7 @@ void main() {
       testWidgets(
         'component render and update is called',
         (WidgetTester tester) async {
-          final game = await initializeFlameGame();
+          final game = FlameGame();
           late GameRenderBox renderBox;
           await tester.pumpWidget(
             Builder(

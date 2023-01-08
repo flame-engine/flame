@@ -201,10 +201,7 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
         if (onLoad != null) {
           await onLoad;
         }
-        game.onMount();
-        if (game is FlameGame) {
-          game.setMounted();
-        }
+        game.mount();
       })();
 
   Future<void>? _loaderFuture;

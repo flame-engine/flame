@@ -5,7 +5,6 @@ import 'package:flame/src/game/camera/camera.dart';
 import 'package:flame/src/game/camera/camera_wrapper.dart';
 import 'package:flame/src/game/game.dart';
 import 'package:flame/src/game/projector.dart';
-import 'package:flutter/rendering.dart';
 import 'package:meta/meta.dart';
 
 /// This is a more complete and opinionated implementation of [Game].
@@ -46,6 +45,7 @@ class FlameGame extends Component with Game {
   Vector2 get size => camera.gameSize;
 
   @override
+  @internal
   void mount() {
     super.mount();
     setMounted();
