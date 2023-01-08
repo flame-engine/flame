@@ -817,7 +817,6 @@ class Component {
     _lifecycleManager?.processQueues();
   }
 
-  // TODO(st-pasha): remove this after #1351 is done
   @internal
   void setMounted() {
     _setLoadedBit();
