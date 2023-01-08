@@ -23,8 +23,8 @@ Expression makeIfFn(
   final type2 = args[2].expression.type;
   if (type1 != type2) {
     errorFn(
-      'the types of the second and the third argument in if() must be the '
-      'same, instead they were $type1 and $type2',
+      'the types of the second and the third arguments in if() must be the '
+      'same, instead they were ${type1.name} and ${type2.name}',
       args[2].position,
     );
   }
