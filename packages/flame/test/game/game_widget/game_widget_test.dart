@@ -128,7 +128,7 @@ void main() {
   );
 
   group('Subscription is valid after game change', () {
-    testWidgets('Uncontolled to uncontrolled', (tester) async {
+    testWidgets('Uncontrolled to uncontrolled', (tester) async {
       const key = Key('flame-game');
       final game1 = FlameGame();
       await tester.pumpWidget(GameWidget(key: key, game: game1));
@@ -174,6 +174,7 @@ void main() {
       expect(game2.isAttached, true);
       expect(game2.isMounted, true);
     });
+
     testWidgets('Controlled to uncontrolled', (tester) async {
       const key = Key('flame-game');
 
@@ -204,6 +205,7 @@ void main() {
       expect(game2.isAttached, true);
       expect(game2.isMounted, true);
     });
+
     testWidgets('Controlled to controlled', (tester) async {
       const key = Key('flame-game');
 

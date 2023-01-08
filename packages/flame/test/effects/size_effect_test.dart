@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
-import 'package:flame/game.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -74,7 +73,7 @@ void main() {
 
     testWithFlameGame('reset absolute', (game) async {
       final component = ResizableComponent();
-      game.ensureAdd(component);
+      await game.ensureAdd(component);
 
       final effect = SizeEffect.to(
         Vector2.all(1.0),
@@ -122,7 +121,7 @@ void main() {
     });
 
     testRandom('a very long size change', (Random rng) async {
-      final game = FlameGame()..onGameResize(Vector2(1, 1));
+      final game = await initializeFlameGame();
       final component = ResizableComponent();
       await game.ensureAdd(component);
 

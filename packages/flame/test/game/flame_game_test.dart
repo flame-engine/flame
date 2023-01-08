@@ -21,13 +21,12 @@ void main() {
       },
     );
 
-    test('game resize in zoomed game', () async {
-      final game = FlameGame()
+    testWithFlameGame('game resize in zoomed game', (game) async {
+      game
         ..camera.zoom = 10
         ..onGameResize(Vector2(300, 200));
       final component = ComponentWithSizeHistory();
-      game.add(component);
-      await game.ready();
+      await game.ensureAdd(component);
 
       game.onGameResize(Vector2(400, 500));
       expect(
@@ -108,9 +107,11 @@ void main() {
             ),
           );
           renderBox.attach(PipelineOwner());
-          final component = _MyComponent()..addToParent(game);
 
+          final component = _MyComponent();
+          await game.add(component);
           renderBox.gameLoopCallback(1.0);
+
           expect(component.isUpdateCalled, true);
           renderBox.paint(
             PaintingContext(ContainerLayer(), Rect.zero),
