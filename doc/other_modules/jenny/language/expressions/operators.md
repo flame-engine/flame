@@ -8,6 +8,7 @@ into the following categories:
 
 ## Operator types
 
+
 ### Arithmetic
 
 The **arithmetic** operators, have the same meaning as in regular math. These apply to numeric
@@ -36,14 +37,15 @@ arguments (with the exception of `+` which can also be used with strings):
   - Division by `0` is not allowed, and will throw a runtime error if it occurs.
 * - `%`
   - modulo
-  - This operator can apply to both integer and decimal numbers, and it returns the remainder of
-    integer division of two numbers. The right-hand side of `%` cannot be zero or a negative number,
-    otherwise a runtime error will be thrown. The result of `x % y` is always a number in the
-    range `[0; y)`, regardless of the sign of `x`.
+  - This operator can apply to both integer and decimal numbers, and it returns
+    the remainder of integer division of two numbers. The right-hand side of
+    `%` cannot be zero or a negative number, otherwise a runtime error will be
+    thrown. The result of `x % y` is always a number in the range `[0; y)`,
+    regardless of the sign of `x`.
 * - `+`
   - concatenation
-  - When applied to strings, the `+` operator simply glues them together. For example,
-    `"Hello" + "World"` produces string `"HelloWorld"`.
+  - When applied to strings, the `+` operator simply glues them together. For
+    example, `"Hello" + "World"` produces string `"HelloWorld"`.
 ```
 
 
@@ -63,7 +65,8 @@ symbolic or word form -- both forms are equivalent:
   - notes
 * - `!`, `not`
   - logical NOT
-  - This is a unary operator that inverts its operand: `!true` is `false`, and `!false` is `true`.
+  - This is a unary operator that inverts its operand: `!true` is `false`,
+    and `!false` is `true`.
 * - `&&`, `and`
   - logical AND
   - Returns `true` if both of its arguments are `true`.
@@ -72,7 +75,8 @@ symbolic or word form -- both forms are equivalent:
   - Returns `true` if at least one of its arguments is `true`.
 * - `^`, `xor`
   - logical XOR
-  - Returns `true` if the arguments are different, and `false` if they are the same.
+  - Returns `true` if the arguments are different, and `false` if they are
+    the same.
 ```
 
 

@@ -10,7 +10,7 @@ The **name** of a variable is how you refer to it in a `.yarn` script. The names
 start with a `$` sign, followed by a letter or an underscore, and then by any number of letters,
 digits, or underscores. Thus, the following are all valid variables names:
 
-```
+```text
 $i
 $WARNING
 $_secret_
@@ -21,7 +21,7 @@ $DoorPassword
 
 while the following are NOT valid names:
 
-```
+```text
 $2000_years
 $[main]
 @today
