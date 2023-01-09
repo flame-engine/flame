@@ -37,6 +37,7 @@ user-defined functions as well.
   - [`string(x)`](type.md#stringx)
 
 - **Other functions**
+  - [`if(condition, then, else)`](misc.md#ifcondition-then-else)
   - [`plural(x, ...)`](misc.md#pluralx-words)
   - [`visit_count(node)`](misc.md#visit_countnode)
   - [`visited(node)`](misc.md#visitednode)

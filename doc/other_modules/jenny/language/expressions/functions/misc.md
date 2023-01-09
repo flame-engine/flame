@@ -1,6 +1,25 @@
 # Miscellaneous functions
 
 
+## if(condition, then, else)
+
+This function implements the ternary-if condition, it is equivalent to the `?:` operator in Dart.
+
+The function evaluates its `condition` (which must be a boolean), and then returns either the value
+of `then` if the condition was `true`, or the value of `else` if the condition was `false`. The
+types of arguments `then` and `else` must be the same.
+
+Note: Only one of the `then`/`else` values will be evaluated, depending on the `condition`. This
+may be important in cases when evaluating those expressions may produce a side-effect.
+
+```yarn
+title: Birth
+---
+Doctor: Congratulations, you have a { if($gender == "m", "boy", "girl") }!
+===
+```
+
+
 ## plural(x, words...)
 
 Returns the correct plural form depending on the value of variable `x`.
