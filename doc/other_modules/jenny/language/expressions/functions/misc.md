@@ -3,7 +3,7 @@
 
 ## if(condition, then, else)
 
-This function implements the ternary-if condition, it is equivalent to the `?:` operator in C/C++.
+This function implements the ternary-if condition, it is equivalent to the `?:` operator in Dart.
 
 The function evaluates its `condition` (which must be a boolean), and then returns either the value
 of `then` if the condition was `true`, or the value of `else` if the condition was `false`. The
