@@ -64,7 +64,7 @@ quotes, otherwise it would be parsed as four different arguments `"Get"`, `"rid"
 
 In order to implement this command, we create a Dart function `startQuest()` with two string
 arguments. The function will do a brief animated "Started quest X" message, but we don't want the
-game to dialogue to wait for that message, so we'll make the function return `void`, not a future.
+game dialogue to wait for that message, so we'll make the function return `void`, not a future.
 Finally, we register the command with `commands.addCommand2()`.
 
 ```dart
