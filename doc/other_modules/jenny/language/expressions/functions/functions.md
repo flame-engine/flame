@@ -11,7 +11,7 @@ are required, even when there are no arguments:
 ```
 
 There are around 20 built-in functions in Jenny, listed below; and it is also possible to add
-[user-defined functions] as well.
+user-defined functions as well.
 
 
 ## Built-in functions
@@ -42,6 +42,54 @@ There are around 20 built-in functions in Jenny, listed below; and it is also po
   - [`visited(node)`](misc.md#visitednode)
 
 
+## User-defined functions
+
+In addition to the built-in functions, you can also define any number of **user-defined functions**
+which can later be used in your yarn scripts. The syntax for these functions is exactly the same
+as for the built-in functions: it consists of a function name, followed by the arguments in
+parentheses.
+
+Each user-defined function has a fixed signature, declared at the time when the function is added
+to the `YarnProject`. A function must have a fixed number of arguments of specific types, and a
+fixed return type.
+
+All user-defined functions must be added to the `YarnProject` before they can be used. A compile
+error will be raised if the parser encounters an unknown function, or if the number or types of
+arguments do not match.
+
+User-defined functions can be used for a variety of purposes, such as:
+
+- implement functionality that is currently missing in Jenny;
+- interface with the game engine;
+- provide access to "variables" stored outside of Jenny;
+- etc.
+
+```yarn
+title: Blacksmith
+---
+// This example showcases several hypothetical user-defined functions:
+// - broken(slot): checks whether the item in the given slot is broken;
+// - name(slot): gives the name for an item in a slot, e.g. "sword" or "bow";
+// - money(): returns the current amount of money that the player has.
+// At the same time, functions `round()` and `plural()` are built-in.
+
+<<if broken("mainhand")>>
+  <<local $repair_cost = round(value("mainhand") / 5)>>
+
+  Blacksmith: Your {name("mainhand")} seems to be completely broken!
+  Blacksmith: I can fix it for just {plural($repair_cost, "% coin")}
+  -> Ok, do it  <<if money() >= $repair_cost>>
+  -> I'll be fine...
+<<endif>>
+===
+```
+
+```{seealso}
+- [`FunctionStorage`](../../../runtime/function_storage.md) -- document
+  describing how to add user-defined functions to a `YarnProject`.
+```
+
+
 ```{toctree}
 :hidden:
 
@@ -49,7 +97,4 @@ Random functions          <random.md>
 Numeric functions         <numeric.md>
 Type conversion functions <type.md>
 Miscellaneous functions   <misc.md>
-User-defined functions    <user_defined_functions.md>
 ```
-
-[user-defined functions]: user_defined_functions.md
