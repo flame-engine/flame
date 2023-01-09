@@ -51,7 +51,7 @@ final yarn = YarnProject()
   <!-- markdownlint-enable MD006 MD007 -->
 
 **functions** `FunctionStorage`
-: The [container][FunctionStorage] for all user-defined functions linked into the project. The main 
+: The [container][FunctionStorage] for all user-defined functions linked into the project. The main
   reason to access this property is to register new custom function to be available at runtime.
 
   Note that all custom functions must be added to the `YarnProject` before they can be used in a

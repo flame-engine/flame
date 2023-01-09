@@ -3,8 +3,8 @@
 The **FunctionStorage** is a part of [YarnProject] responsible for storing all [user-defined
 functions]. You can access it as the `YarnProject.functions` property.
 
-The function storage can be used to register any number of custom functions, making them 
-available to use in yarn scripts. Such functions must be registered before parsing the yarn 
+The function storage can be used to register any number of custom functions, making them
+available to use in yarn scripts. Such functions must be registered before parsing the yarn
 scripts, or the compiler will throw an error that the function name is not recognized.
 
 A Dart function can be registered as a user-defined function in Jenny, if it satisfies the

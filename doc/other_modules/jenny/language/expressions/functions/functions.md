@@ -85,8 +85,8 @@ title: Blacksmith
 ```
 
 ```{seealso}
-- [`FunctionStorage`](../../../runtime/function_storage.md) -- document describing how to add
-  user-defined functions to a `YarnProject`.
+- [`FunctionStorage`](../../../runtime/function_storage.md) -- document
+  describing how to add user-defined functions to a `YarnProject`.
 ```
 
 
