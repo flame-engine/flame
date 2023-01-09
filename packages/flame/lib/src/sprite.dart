@@ -107,11 +107,7 @@ class Sprite {
       _tmpRenderPosition.setZero();
     }
 
-    if (size != null) {
-      _tmpRenderSize.setFrom(size);
-    } else {
-      _tmpRenderSize.setFrom(srcSize);
-    }
+    _tmpRenderSize.setFrom(size ?? srcSize);
 
     _tmpRenderPosition.setValues(
       _tmpRenderPosition.x - (anchor.x * _tmpRenderSize.x),
