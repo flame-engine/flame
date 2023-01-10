@@ -112,7 +112,7 @@ was registered, it can be activated either via the regular `.pushNamed()` method
 make it more clear in your code that an overlay is being added instead of a regular route.
 
 The current overlay can be replaced using `pushReplacementOverlay`.  This method executes
-`pushReplacementName` or `pushReplacement` based on the status of the overlay being pushed.
+`pushReplacementNamed` or `pushReplacement` based on the status of the overlay being pushed.
 
 
 ## ValueRoute
