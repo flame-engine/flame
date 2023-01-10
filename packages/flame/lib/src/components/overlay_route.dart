@@ -34,9 +34,12 @@ class OverlayRoute extends Route {
   Game get game => findGame()!;
 
   @override
+  String get name => super.name!;
+
+  @override
   Component build() {
     if (_builder != null) {
-      game.overlays.addEntry(name!, _builder!);
+      game.overlays.addEntry(name, _builder!);
     }
     return Component();
   }
@@ -44,14 +47,14 @@ class OverlayRoute extends Route {
   @mustCallSuper
   @override
   void onPush(Route? previousRoute) {
-    final didAdd = game.overlays.add(name!);
+    final didAdd = game.overlays.add(name);
     assert(didAdd, 'An overlay $name was already added before');
   }
 
   @mustCallSuper
   @override
   void onPop(Route nextRoute) {
-    final didRemove = game.overlays.remove(name!);
+    final didRemove = game.overlays.remove(name);
     assert(didRemove, 'An overlay $name was already removed');
   }
 }

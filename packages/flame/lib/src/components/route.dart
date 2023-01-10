@@ -46,7 +46,7 @@ class Route extends PositionComponent with ParentIsA<RouterComponent> {
 
   /// The name of the route (set by the [RouterComponent]).
   String? get name => _name;
-  late String? _name;
+  String? _name;
   @internal
   set name(String? value) => _name = value;
 
