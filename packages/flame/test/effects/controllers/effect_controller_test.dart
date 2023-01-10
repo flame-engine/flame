@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
-import 'package:flame/game.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter/animation.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -166,11 +165,10 @@ void main() {
       expect(ec.isInfinite, true);
     });
 
-    test('with speed', () async {
+    testWithFlameGame('with speed', (game) async {
       final ec = EffectController(speed: 1);
       expect(ec.duration, isNaN);
 
-      final game = FlameGame()..onGameResize(Vector2.zero());
       final component = PositionComponent();
       final effect = MoveEffect.by(Vector2(10, 0), ec);
       component.add(effect);

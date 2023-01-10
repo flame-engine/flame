@@ -80,6 +80,11 @@ abstract class Game {
     return _onLoadFuture;
   }
 
+  @internal
+  void mount() {
+    onMount();
+  }
+
   /// Current game viewport size, updated every resize via the [onGameResize]
   /// method hook.
   Vector2 get size {

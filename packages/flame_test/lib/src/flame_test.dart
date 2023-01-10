@@ -82,6 +82,7 @@ class GameTester<T extends Game> {
     this.pumpWidget,
   });
 
+  @Deprecated('Will be removed in version 1.7.0')
   Future<T> initializeGame() async {
     final game = createGame();
 
@@ -89,7 +90,8 @@ class GameTester<T extends Game> {
     game.onGameResize(size);
 
     await game.onLoad();
-    game.update(0);
+    // ignore: invalid_use_of_internal_member
+    game.mount();
     if (game is FlameGame && makeReady) {
       await game.ready();
     }
