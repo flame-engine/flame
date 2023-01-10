@@ -65,8 +65,8 @@ Hello, \[world\]!
 ```
 
 ```{seealso}
-- [MarkupAttribute](../runtime/markup_attribute.md): the runtime representation of a markup
-  attribute within a line.
+- [MarkupAttribute](../runtime/markup_attribute.md): the runtime representation
+  of a markup attribute within a line.
 ```
 
 
