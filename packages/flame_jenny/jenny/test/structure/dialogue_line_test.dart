@@ -78,5 +78,26 @@ void main() {
       expect(line.attributes[0].name, 'box');
       expect(line.attributes[0].parameters['index'], 42);
     });
+
+    test('space after markup attribute', () {
+      final yarn = YarnProject()
+        ..parse(
+          'title: A\n---\n'
+          'The price is 243[gp/] per item\n'
+          '[test attr=0/] ?\n'
+          '===\n',
+        );
+      final line1 = yarn.nodes['A']!.lines[0] as DialogueLine;
+      line1.evaluate();
+      expect(line1.text, 'The price is 243 per item');
+      expect(line1.attributes[0].name, 'gp');
+      expect(line1.attributes[0].length, 0);
+      expect(line1.attributes[0].start, 'The price is 243'.length);
+
+      final line2 = yarn.nodes['A']!.lines[1] as DialogueLine;
+      line2.evaluate();
+      expect(line2.text, ' ?');
+      expect(line2.attributes[0].name, 'test');
+    });
   });
 }

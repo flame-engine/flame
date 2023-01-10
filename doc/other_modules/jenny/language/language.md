@@ -74,6 +74,7 @@ Lines        <lines.md>
 Options      <options.md>
 Commands     <commands/commands.md>
 Expressions  <expressions/expressions.md>
+Markup       <markup.md>
 ```
 
 [commands]: commands/commands.md

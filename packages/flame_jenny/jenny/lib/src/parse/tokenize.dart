@@ -653,9 +653,18 @@ class _Lexer {
         pushToken(Token.closeMarkupTag, position - 2);
       }
       if (tokens.last == Token.closeMarkupTag) {
-        // Self-closing markup tag such as `[img/]`: consume a single whitespace
-        // character after such tag (if present).
-        eat($space);
+        final iter = tokens.reversed
+            .skipWhile((token) => token != Token.startMarkupTag)
+            .skip(1);
+        if (iter.isNotEmpty) {
+          final tokenBeforeMarkupStart = iter.first;
+          if (tokenBeforeMarkupStart.isText &&
+              tokenBeforeMarkupStart.content.endsWith(' ')) {
+            // Self-closing markup tag such as `[img/]`: consume a single
+            // whitespace character after such tag (if present).
+            eat($space);
+          }
+        }
       }
       pushToken(Token.endMarkupTag, position - 1);
       return true;
