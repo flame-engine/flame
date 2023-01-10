@@ -653,11 +653,11 @@ class _Lexer {
         pushToken(Token.closeMarkupTag, position - 2);
       }
       if (tokens.last == Token.closeMarkupTag) {
-        final iter = tokens.reversed
+        final iterable = tokens.reversed
             .skipWhile((token) => token != Token.startMarkupTag)
             .skip(1);
-        if (iter.isNotEmpty) {
-          final tokenBeforeMarkupStart = iter.first;
+        if (iterable.isNotEmpty) {
+          final tokenBeforeMarkupStart = iterable.first;
           if (tokenBeforeMarkupStart.isText &&
               tokenBeforeMarkupStart.content.endsWith(' ')) {
             // Self-closing markup tag such as `[img/]`: consume a single
