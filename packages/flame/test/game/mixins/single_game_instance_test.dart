@@ -27,12 +27,10 @@ void main() {
       game.onRemove();
     });
 
-    test(
+    testWithGame<SingletonGame>(
       'Component starts loading before the parent is mounted',
-      () async {
-        final game = SingletonGame()
-          ..onGameResize(Vector2.all(100))
-          ..onMount();
+      SingletonGame.new,
+      (game) async {
         final parent = Component();
         final child = DelayedComponent();
         final future = child.addToParent(parent);

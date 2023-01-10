@@ -40,7 +40,7 @@ void main() {
       final yarn = YarnProject()
         ..parse(
           'title:A\n---\n'
-          '{ 4 / 0 }\n'
+          '{ 4.0 / 0.0 }\n'
           '===\n',
         );
       final line = yarn.nodes['A']!.lines[0] as DialogueLine;

@@ -388,27 +388,32 @@ void main() {
         );
       });
 
-      test('component with parent has the correct center', () async {
-        final game = FlameGame()..onGameResize(Vector2.all(100));
-        final parent = PositionComponent();
-        parent.position.setValues(2.0, 1.0);
-        parent.anchor = Anchor.topLeft;
-        final child = PositionComponent();
-        child.position.setValues(2.0, 1.0);
-        child.size.setValues(3.0, 1.0);
-        child.angle = 0.0;
-        child.anchor = Anchor.topLeft;
-        parent.add(child);
-        game.add(parent);
-        await game.ready();
+      testWithFlameGame(
+        'component with parent has the correct center',
+        (game) async {
+          final parent = PositionComponent();
+          parent.position.setValues(2.0, 1.0);
+          parent.anchor = Anchor.topLeft;
+          final child = PositionComponent();
+          child.position.setValues(2.0, 1.0);
+          child.size.setValues(3.0, 1.0);
+          child.angle = 0.0;
+          child.anchor = Anchor.topLeft;
+          parent.add(child);
+          game.add(parent);
+          await game.ready();
 
-        expect(child.absoluteTopLeftPosition, child.position + parent.position);
-        expect(
-          child.absoluteTopLeftPosition,
-          child.topLeftPosition + parent.topLeftPosition,
-        );
-        expect(child.absoluteCenter, parent.position + child.center);
-      });
+          expect(
+            child.absoluteTopLeftPosition,
+            child.position + parent.position,
+          );
+          expect(
+            child.absoluteTopLeftPosition,
+            child.topLeftPosition + parent.topLeftPosition,
+          );
+          expect(child.absoluteCenter, parent.position + child.center);
+        },
+      );
     });
 
     group('Coordinates transforms', () {
@@ -736,8 +741,7 @@ void main() {
         expect(comp1.distance(comp2), 50);
       });
 
-      test('deep nested', () async {
-        final game = FlameGame()..onGameResize(Vector2.all(100));
+      testWithFlameGame('deep nested', (game) async {
         final c1 = PositionComponent()..position = Vector2(10, 20);
         final c2 = Component();
         final c3 = PositionComponent()..position = Vector2(-1, -1);
@@ -755,8 +759,7 @@ void main() {
         expect(c5.absoluteToLocal(Vector2(14, 19)), Vector2.zero());
       });
 
-      test('auxiliary getters/setters', () async {
-        final game = FlameGame()..onGameResize(Vector2.all(100));
+      testWithFlameGame('auxiliary getters/setters', (game) async {
         final parent = PositionComponent(position: Vector2(12, 19));
         final child =
             PositionComponent(position: Vector2(11, -1), size: Vector2(4, 6));
@@ -968,8 +971,7 @@ void main() {
         }
       });
 
-      test('absolute toRect', () async {
-        final game = FlameGame()..onGameResize(Vector2.all(100));
+      testWithFlameGame('absolute toRect', (game) async {
         final parent = PositionComponent(
           position: Vector2(10, 10),
           size: Vector2(6, 6),

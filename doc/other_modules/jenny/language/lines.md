@@ -101,7 +101,7 @@ further processing. Which means that the text of the expression may contain spec
 (such as `[`, `]`, `{`, `}`, `\`, etc), and they don't need to be escaped. It also means that the
 expression cannot contain markup, or produce a hashtag, etc.
 
-Read more about expressions in the [Expressions](expressions.md) section.
+Read more about expressions in the [Expressions](expressions/expressions.md) section.
 
 
 ## Markup

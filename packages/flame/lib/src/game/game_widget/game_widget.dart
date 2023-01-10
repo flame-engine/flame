@@ -195,12 +195,13 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
   late T currentGame;
 
   Future<void> get loaderFuture => _loaderFuture ??= (() async {
-        assert(currentGame.hasLayout);
-        final onLoad = currentGame.onLoadFuture;
+        final game = currentGame;
+        assert(game.hasLayout);
+        final onLoad = game.onLoadFuture;
         if (onLoad != null) {
           await onLoad;
         }
-        currentGame.onMount();
+        game.mount();
       })();
 
   Future<void>? _loaderFuture;

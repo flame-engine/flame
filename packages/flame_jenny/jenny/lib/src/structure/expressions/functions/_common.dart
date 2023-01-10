@@ -5,6 +5,7 @@ import 'package:jenny/src/structure/expressions/functions/dec.dart';
 import 'package:jenny/src/structure/expressions/functions/decimal.dart';
 import 'package:jenny/src/structure/expressions/functions/dice.dart';
 import 'package:jenny/src/structure/expressions/functions/floor.dart';
+import 'package:jenny/src/structure/expressions/functions/if.dart';
 import 'package:jenny/src/structure/expressions/functions/inc.dart';
 import 'package:jenny/src/structure/expressions/functions/int.dart';
 import 'package:jenny/src/structure/expressions/functions/number.dart';
@@ -33,6 +34,10 @@ typedef FunctionBuilder = Expression Function(
   ErrorFn,
 );
 
+/// This is a complete list of all builtin functions in Jenny.
+///
+/// When adding a new function, make sure to also update the list in
+/// /doc/_sphinx/extensions/yarn_lexer.py.
 const Map<String, FunctionBuilder> builtinFunctions = {
   'bool': BoolFn.make,
   'ceil': CeilFn.make,
@@ -40,6 +45,7 @@ const Map<String, FunctionBuilder> builtinFunctions = {
   'decimal': DecimalFn.make,
   'dice': DiceFn.make,
   'floor': FloorFn.make,
+  'if': makeIfFn,
   'inc': IncFn.make,
   'int': IntFn.make,
   'number': NumberFn.make,
