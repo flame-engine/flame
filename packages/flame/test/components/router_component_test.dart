@@ -42,6 +42,21 @@ void main() {
       expect(router.currentRoute.children.length, 1);
       expect(router.currentRoute.children.first, isA<_ComponentD>());
       expect(router.stack.length, 2);
+
+      router.pushReplacementNamed('B');
+      await game.ready();
+      expect(router.routes.length, 4);
+      expect(router.currentRoute.name, 'B');
+      expect(router.currentRoute.children.length, 1);
+      expect(router.currentRoute.children.first, isA<_ComponentB>());
+
+      router.pushReplacement(Route(_ComponentE.new), name: 'E');
+      await game.ready();
+      expect(router.routes.length, 5);
+      expect(router.currentRoute.name, 'E');
+      expect(router.currentRoute.children.length, 1);
+      expect(router.currentRoute.children.first, isA<_ComponentE>());
+      expect(router.stack.length, 2);
     });
 
     testWithFlameGame('Route factories', (game) async {
@@ -217,16 +232,26 @@ void main() {
         expect(game.overlays.activeOverlays, ['first!', 'second']);
         expect(find.byKey(key1), findsOneWidget);
         expect(find.byKey(key2), findsOneWidget);
+        router.pop();
+        await tester.pump();
+        expect(game.overlays.activeOverlays, ['first!']);
 
         router.pushRoute(
           OverlayRoute((ctx, game) => Container(key: key3)),
           name: 'new-route',
         );
         await tester.pump();
-        expect(game.overlays.activeOverlays, ['first!', 'second', 'new-route']);
+        expect(game.overlays.activeOverlays, ['first!', 'new-route']);
+        expect(find.byKey(key1), findsOneWidget);
+        expect(find.byKey(key2), findsNothing);
+        expect(find.byKey(key3), findsOneWidget);
+
+        router.pushReplacementOverlay('second');
+        await tester.pump();
+        expect(game.overlays.activeOverlays, ['first!', 'second']);
         expect(find.byKey(key1), findsOneWidget);
         expect(find.byKey(key2), findsOneWidget);
-        expect(find.byKey(key3), findsOneWidget);
+        expect(find.byKey(key3), findsNothing);
       },
     );
   });
@@ -239,3 +264,5 @@ class _ComponentB extends Component {}
 class _ComponentC extends Component {}
 
 class _ComponentD extends Component {}
+
+class _ComponentE extends Component {}

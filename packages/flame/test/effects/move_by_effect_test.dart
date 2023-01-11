@@ -2,46 +2,41 @@ import 'dart:ui';
 
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
-import 'package:flame/game.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('MoveByEffect', () {
-    test('simple linear motion', () {
-      final game = FlameGame();
-      game.onGameResize(Vector2(100, 100));
-      final object = PositionComponent()..position = Vector2(3, 4);
-      game.add(object);
+    testWithFlameGame('simple linear motion', (game) async {
+      final component = PositionComponent(position: Vector2(3, 4));
+      game.add(component);
       game.update(0);
 
-      object.add(
+      component.add(
         MoveByEffect(Vector2(5, -1), EffectController(duration: 1)),
       );
       game.update(0.5);
-      expect(object.position.x, closeTo(3 + 2.5, 1e-15));
-      expect(object.position.y, closeTo(4 + -0.5, 1e-15));
+      expect(component.position.x, closeTo(3 + 2.5, 1e-15));
+      expect(component.position.y, closeTo(4 + -0.5, 1e-15));
       game.update(0.5);
-      expect(object.position.x, closeTo(3 + 5, 1e-15));
-      expect(object.position.y, closeTo(4 + -1, 1e-15));
+      expect(component.position.x, closeTo(3 + 5, 1e-15));
+      expect(component.position.y, closeTo(4 + -1, 1e-15));
     });
 
-    test('#to', () {
-      final game = FlameGame();
-      game.onGameResize(Vector2(100, 100));
-      final object = PositionComponent()..position = Vector2(3, 4);
-      game.add(object);
+    testWithFlameGame('#to', (game) async {
+      final component = PositionComponent(position: Vector2(3, 4));
+      game.add(component);
       game.update(0);
 
-      object.add(
+      component.add(
         MoveEffect.to(Vector2(5, -1), LinearEffectController(1)),
       );
       game.update(0.5);
-      expect(object.position.x, closeTo(3 * 0.5 + 5 * 0.5, 1e-15));
-      expect(object.position.y, closeTo(4 * 0.5 + -1 * 0.5, 1e-15));
+      expect(component.position.x, closeTo(3 * 0.5 + 5 * 0.5, 1e-15));
+      expect(component.position.y, closeTo(4 * 0.5 + -1 * 0.5, 1e-15));
       game.update(0.5);
-      expect(object.position.x, closeTo(5, 1e-15));
-      expect(object.position.y, closeTo(-1, 1e-15));
+      expect(component.position.x, closeTo(5, 1e-15));
+      expect(component.position.y, closeTo(-1, 1e-15));
     });
 
     testWithFlameGame('custom target', (game) async {

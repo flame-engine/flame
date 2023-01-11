@@ -57,6 +57,7 @@ class YarnLexer(RegexLexer):
         'decimal',
         'dice',
         'floor',
+        'if',
         'inc',
         'int',
         'number',

@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:jenny/src/errors.dart';
+import 'package:jenny/jenny.dart';
 import 'package:jenny/src/parse/ascii.dart';
 import 'package:jenny/src/structure/commands/user_defined_command.dart';
 import 'package:meta/meta.dart';
@@ -16,11 +16,6 @@ class CommandStorage {
   CommandStorage() : _commands = {};
 
   final Map<String, _Cmd?> _commands;
-
-  /// Tokens that represent valid true/false values when converting an argument
-  /// into a boolean. These sets can be modified by the user.
-  static Set<String> trueValues = {'true', 'yes', 'on', '+', 'T', '1'};
-  static Set<String> falseValues = {'false', 'no', 'off', '-', 'F', '0'};
 
   /// Returns `true` if command with the given [name] has been registered.
   bool hasCommand(String name) => _commands.containsKey(name);
@@ -146,9 +141,9 @@ class _Cmd {
       final strValue = stringArguments[i];
       switch (_signature[i]) {
         case _Type.boolean:
-          if (CommandStorage.falseValues.contains(strValue)) {
+          if (YarnProject.falseValues.contains(strValue)) {
             _arguments[i] = false;
-          } else if (CommandStorage.trueValues.contains(strValue)) {
+          } else if (YarnProject.trueValues.contains(strValue)) {
             _arguments[i] = true;
           } else {
             throw TypeError(

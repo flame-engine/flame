@@ -40,6 +40,11 @@ class YarnProject {
   /// Repository for user-defined commands.
   final CommandStorage commands;
 
+  /// Tokens that represent valid true/false values when converting an argument
+  /// into a boolean. These sets can be modified by the user.
+  static Set<String> trueValues = {'true', 'yes', 'on', '+', 'T', '1'};
+  static Set<String> falseValues = {'false', 'no', 'off', '-', 'F', '0'};
+
   /// Random number generator used by the dialogue whenever randomization is
   /// needed.
   Random random;

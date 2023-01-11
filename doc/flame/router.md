@@ -16,16 +16,16 @@ The **RouterComponent**'s job is to manage navigation across multiple screens wi
 similar in spirit to Flutter's [Navigator][Flutter Navigator] class, except that it works with Flame
 components instead of Flutter widgets.
 
-A typical game will usually consists of multiple pages: the splash screen, the starting menu page,
+A typical game will usually consist of multiple pages: the splash screen, the starting menu page,
 the settings page, credits, the main game page, several pop-ups, etc. The router will organize
 all these destinations and allow you to transition between them.
 
 Internally, the `RouterComponent` contains a stack of routes. When you request it to show a route,
-it will be placed on top of all other pages in the stack. Later you can `popPage()` to remove the
+it will be placed on top of all other pages in the stack. Later you can `pop()` to remove the
 topmost page from the stack. The pages of the router are addressed by their unique names.
 
 Each page in the router can be either transparent or opaque. If a page is opaque, then the pages
-below it in the stack are not rendered, and do not receive pointer events (such as taps or drags).
+below it in the stack are not rendered and do not receive pointer events (such as taps or drags).
 On the contrary, if a page is transparent, then the page below it will be rendered and receive
 events normally. Such transparent pages are useful for implementing modal dialogs, inventory or
 dialogue UIs, etc.
@@ -77,6 +77,9 @@ and the `builder` function is only called the first time a route is activated. S
 `maintainState` to `false` drops the page component after the route is popped from the route stack
 and the `builder` function is called each time the route is activated.
 
+The current route can be replaced using `pushReplacementNamed` or `pushReplacement`.  Each method
+simply executes `pop` on the current route and then `pushNamed` or `pushRoute`.
+
 
 ## OverlayRoute
 
@@ -105,8 +108,11 @@ final router = RouterComponent(
 Overlays that were defined within the `GameWidget` don't even need to be declared within the routes
 map beforehand: the `RouterComponent.pushOverlay()` method can do it for you. Once an overlay route
 was registered, it can be activated either via the regular `.pushNamed()` method, or via the
-`.pushOverlay()` -- the two method will do exactly the same, though you can use the second one to
+`.pushOverlay()` -- the two methods will do exactly the same, though you can use the second one to
 make it more clear in your code that an overlay is being added instead of a regular route.
+
+The current overlay can be replaced using `pushReplacementOverlay`.  This method executes
+`pushReplacementNamed` or `pushReplacement` based on the status of the overlay being pushed.
 
 
 ## ValueRoute

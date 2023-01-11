@@ -34,6 +34,9 @@ class OverlayRoute extends Route {
   Game get game => findGame()!;
 
   @override
+  String get name => super.name!;
+
+  @override
   Component build() {
     if (_builder != null) {
       game.overlays.addEntry(name, _builder!);

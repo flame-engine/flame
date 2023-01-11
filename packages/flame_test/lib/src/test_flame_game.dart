@@ -55,17 +55,24 @@ Future<void> testWithGame<T extends FlameGame>(
   AsyncGameFunction<T> testBody,
 ) async {
   test(testName, () async {
-    final game = create();
-    game.onGameResize(Vector2(800, 600));
-    await game.onLoad();
-    game.onMount();
-    game.update(0);
-
+    final game = await initializeGame<T>(create);
     await testBody(game);
 
     game.onRemove();
   });
 }
+
+Future<T> initializeGame<T extends FlameGame>(CreateFunction<T> create) async {
+  final game = create();
+  game.onGameResize(Vector2(800, 600));
+  await game.onLoad();
+  // ignore: invalid_use_of_internal_member
+  game.mount();
+  game.update(0);
+  return game;
+}
+
+Future<FlameGame> initializeFlameGame() async => initializeGame(FlameGame.new);
 
 typedef CreateFunction<T> = T Function();
 typedef AsyncVoidFunction = Future<void> Function();

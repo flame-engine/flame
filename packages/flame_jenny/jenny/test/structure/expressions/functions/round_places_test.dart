@@ -16,6 +16,7 @@ void main() {
           7.001 -> {round_places(7.001, 0)}, {round_places(7.001, 2)}
           1/7 -> {round_places(1/7, 3)}, {round_places(1/7, 5)}
           -1/7 -> {round_places(-1/7, 3)}, {round_places(-1/7, 5)}
+          274.5 -> {round_places(274.5, -1)}, {round_places(274.5, -2)}
           ===
         ''',
         testPlan: '''
@@ -24,6 +25,7 @@ void main() {
           line: 7.001 -> 7.0, 7.0
           line: 1/7 -> 0.143, 0.14286
           line: -1/7 -> -0.143, -0.14286
+          line: 274.5 -> 270.0, 300.0
         ''',
       );
     });

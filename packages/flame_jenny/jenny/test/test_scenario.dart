@@ -190,7 +190,7 @@ class _TestPlan extends DialogueView {
   }
 
   void _parse(String input) {
-    final rxEmpty = RegExp(r'^\s*$');
+    final rxEmpty = RegExp(r'^\s*(//.*)?$');
     final rxLine = RegExp(r'^line:\s+((\w+):\s+)?(.*)$');
     final rxOption = RegExp(r'^option:\s+((\w+):\s+)?(.*?)\s*(\[disabled\])?$');
     final rxSelect = RegExp(r'^select:\s+(\d+)$');
