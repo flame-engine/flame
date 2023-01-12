@@ -29,7 +29,7 @@ class Viewfinder extends Component
   @override
   set position(Vector2 value) {
     _transform.offset = -value;
-    camera.resetVisibleRect();
+    _visibleRect = null;
   }
 
   /// Zoom level of the game.
@@ -45,7 +45,7 @@ class Viewfinder extends Component
   set zoom(double value) {
     assert(value > 0, 'zoom level must be positive: $value');
     _transform.scale = Vector2.all(value);
-    camera.resetVisibleRect();
+    _visibleRect = null;
   }
 
   /// Rotation angle of the game world, in radians.
@@ -56,7 +56,7 @@ class Viewfinder extends Component
   @override
   set angle(double value) {
     _transform.angle = -value;
-    camera.resetVisibleRect();
+    _visibleRect = null;
   }
 
   /// The point within the viewport that is considered the "logical center" of
@@ -111,6 +111,29 @@ class Viewfinder extends Component
     }
   }
 
+  /// See [CameraComponent.visibleWorldRect].
+  @internal
+  Aabb2 get visibleWorldRect => _visibleRect ??= _computeVisibleRect();
+  Aabb2? _visibleRect;
+
+  static final Vector2 _tmpMin = Vector2.zero();
+  static final Vector2 _tmpMax = Vector2.zero();
+  Aabb2 _computeVisibleRect() {
+    final viewportSize = camera.viewport.size;
+    final topLeft = _transform.globalToLocal(Vector2.zero());
+    final bottomRight = _transform.globalToLocal(viewportSize);
+    _tmpMin.x = min(topLeft.x, bottomRight.x);
+    _tmpMin.y = min(topLeft.y, bottomRight.y);
+    _tmpMax.x = max(topLeft.x, bottomRight.x);
+    _tmpMax.y = max(topLeft.y, bottomRight.y);
+    final result = Aabb2.minMax(_tmpMin, _tmpMax);
+    if (angle != 0) {
+      result.hullPoint(_transform.globalToLocal(Vector2(viewportSize.x, 0)));
+      result.hullPoint(_transform.globalToLocal(Vector2(0, viewportSize.y)));
+    }
+    return result;
+  }
+
   /// Set [zoom] level based on the [_visibleGameSize].
   void _initZoom() {
     if (parent != null && _visibleGameSize != null) {
@@ -134,7 +157,7 @@ class Viewfinder extends Component
       final viewportSize = camera.viewport.size;
       _transform.position.x = viewportSize.x * _anchor.x;
       _transform.position.y = viewportSize.y * _anchor.y;
-      camera.resetVisibleRect();
+      _visibleRect = null;
     }
   }
 
@@ -162,6 +185,6 @@ class Viewfinder extends Component
     );
     assert(value.x > 0, 'Zoom must be positive: ${value.x}');
     _transform.scale = value;
-    camera.resetVisibleRect();
+    _visibleRect = null;
   }
 }

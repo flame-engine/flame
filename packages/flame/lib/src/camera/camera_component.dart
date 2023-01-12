@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'dart:ui';
 
 import 'package:flame/src/camera/behaviors/bounded_position_behavior.dart';
@@ -99,13 +98,11 @@ class CameraComponent extends Component {
   /// this variable is a mere reference to it.
   World world;
 
-  Aabb2? _visibleRect;
-
   /// The axis-aligned bounding rectangle of a [world] region which is currently
   /// visible through the viewport.
   ///
-  /// This property can be useful in order to determine which parts of the
-  /// game's world are currently visible to the player, and which aren't.
+  /// This property can be useful in order to determine which components within
+  /// the game's world are currently visible to the player, and which aren't.
   ///
   /// If the viewport is non-rectangular, or if the world's view is rotated,
   /// then the [visibleWorldRect] will be larger than the actual viewing area.
@@ -114,32 +111,15 @@ class CameraComponent extends Component {
   /// visible.
   ///
   /// This property is cached, and is recalculated whenever the camera moves
-  /// or the viewport is resized.
-  Aabb2 get visibleWorldRect => _visibleRect ??= _computeVisibleRect();
-
-  static final Vector2 _tmpMin = Vector2.zero();
-  static final Vector2 _tmpMax = Vector2.zero();
-  Aabb2 _computeVisibleRect() {
-    final topLeft = viewfinder.transform.globalToLocal(Vector2.zero());
-    final bottomRight = viewfinder.transform.globalToLocal(viewport.size);
-    _tmpMin.x = min(topLeft.x, bottomRight.x);
-    _tmpMin.y = min(topLeft.y, bottomRight.y);
-    _tmpMax.x = max(topLeft.x, bottomRight.x);
-    _tmpMax.y = max(topLeft.y, bottomRight.y);
-    final result = Aabb2.minMax(_tmpMin, _tmpMax);
-    if (viewfinder.angle != 0) {
-      result.hullPoint(
-        viewfinder.transform.globalToLocal(Vector2(viewport.size.x, 0)),
-      );
-      result.hullPoint(
-        viewfinder.transform.globalToLocal(Vector2(0, viewport.size.y)),
-      );
-    }
-    return result;
+  /// or the viewport is resized. At the same time, it may only be accessed
+  /// after the camera was fully mounted.
+  Aabb2 get visibleWorldRect {
+    assert(
+      viewport.isMounted && viewfinder.isMounted,
+      'This property cannot be accessed before the camera is mounted',
+    );
+    return viewfinder.visibleWorldRect;
   }
-
-  @internal
-  void resetVisibleRect() => _visibleRect = null;
 
   @mustCallSuper
   @override
