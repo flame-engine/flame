@@ -198,6 +198,14 @@ void main() {
       );
     });
 
+    test('dialogue view that makes immediate choice selection', () async {
+      final yarn = YarnProject()..parse('title:A\n---\n-> One\n===\n');
+      final view = _ImmediateChoiceDialogueView();
+      final dialogue = DialogueRunner(yarnProject: yarn, dialogueViews: [view]);
+      await dialogue.startDialogue('A');
+      expect(view.finished, true);
+    });
+
     testScenario(
       testName: 'Example.plan',
       input: '''
@@ -420,4 +428,14 @@ class _DelayedDialogueView extends _RecordingDialogueView {
     final delay = Duration(milliseconds: (lineFinishDelay * 1000).toInt());
     return Future.delayed(delay);
   }
+}
+
+class _ImmediateChoiceDialogueView extends DialogueView {
+  bool finished = false;
+
+  @override
+  int onChoiceStart(DialogueChoice choice) => 0;
+
+  @override
+  void onDialogueFinish() => finished = true;
 }

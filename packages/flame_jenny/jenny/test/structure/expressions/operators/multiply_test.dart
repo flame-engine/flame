@@ -16,7 +16,7 @@ void main() {
           ===
         ''',
         testPlan: '''
-          line: 44.0
+          line: 44
           line: -6
         ''',
       );
@@ -33,7 +33,7 @@ void main() {
           ===
         ''',
         testPlan: '''
-          line: 10.0
+          line: 10
         ''',
       );
     });
