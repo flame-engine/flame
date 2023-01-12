@@ -71,7 +71,7 @@ void main() {
         ''',
         testPlan: '''
           option: Hi, My name is Steve
-          option: I can give you only 50.0 coins -- that's all I have
+          option: I can give you only 50 coins -- that's all I have
           select: 1
           line: -> Not an option!
         ''',

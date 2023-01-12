@@ -401,7 +401,7 @@ void main() {
         expect(node.lines.length, 3);
         expect(
           linesToText(yarn.nodes['test']!.lines),
-          ['-1', '22', '7.0'],
+          ['-1', '22', '7'],
         );
       });
 
