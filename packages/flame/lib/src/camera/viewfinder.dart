@@ -27,7 +27,10 @@ class Viewfinder extends Component
   @override
   Vector2 get position => -_transform.offset;
   @override
-  set position(Vector2 value) => _transform.offset = -value;
+  set position(Vector2 value) {
+    _transform.offset = -value;
+    camera.resetVisibleRect();
+  }
 
   /// Zoom level of the game.
   ///
@@ -42,6 +45,7 @@ class Viewfinder extends Component
   set zoom(double value) {
     assert(value > 0, 'zoom level must be positive: $value');
     _transform.scale = Vector2.all(value);
+    camera.resetVisibleRect();
   }
 
   /// Rotation angle of the game world, in radians.
@@ -50,7 +54,10 @@ class Viewfinder extends Component
   @override
   double get angle => -_transform.angle;
   @override
-  set angle(double value) => _transform.angle = -value;
+  set angle(double value) {
+    _transform.angle = -value;
+    camera.resetVisibleRect();
+  }
 
   /// The point within the viewport that is considered the "logical center" of
   /// the camera.
@@ -127,6 +134,7 @@ class Viewfinder extends Component
       final viewportSize = camera.viewport.size;
       _transform.position.x = viewportSize.x * _anchor.x;
       _transform.position.y = viewportSize.y * _anchor.y;
+      camera.resetVisibleRect();
     }
   }
 
@@ -154,5 +162,6 @@ class Viewfinder extends Component
     );
     assert(value.x > 0, 'Zoom must be positive: ${value.x}');
     _transform.scale = value;
+    camera.resetVisibleRect();
   }
 }
