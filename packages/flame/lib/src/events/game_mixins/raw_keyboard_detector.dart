@@ -62,7 +62,9 @@ mixin RawKeyboardDetector on Game {
   void _onRawKeyEvent(RawKeyEvent event) {
     logicalKeysPressed = RawKeyboard.instance.keysPressed;
     if (event is RawKeyDownEvent) {
-      physicalKeysPressed.add(event.physicalKey);
+      if (!physicalKeysPressed.contains(event.physicalKey)) {
+        physicalKeysPressed.add(event.physicalKey);
+      }
     } else if (event is RawKeyUpEvent) {
       physicalKeysPressed.remove(event.physicalKey);
     }
