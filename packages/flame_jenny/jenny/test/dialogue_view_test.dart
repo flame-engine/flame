@@ -5,6 +5,7 @@ import 'package:jenny/src/structure/commands/user_defined_command.dart';
 import 'package:test/test.dart';
 
 import 'test_scenario.dart';
+import 'utils.dart';
 
 void main() {
   group('DialogueView', () {
@@ -138,6 +139,24 @@ void main() {
           'onNodeFinish(Start)',
           'onDialogueFinish()',
         ],
+      );
+    });
+
+    test('dialogue view cannot be attached to two dialogue runners', () {
+      final yarn = YarnProject()..parse('title:A\n---\nOne\n===\n');
+      final view = _DefaultDialogueView();
+      final d1 = DialogueRunner(yarnProject: yarn, dialogueViews: [view]);
+      final d2 = DialogueRunner(yarnProject: yarn, dialogueViews: [view]);
+      expect(
+        () async {
+          await Future.wait([
+            d1.startDialogue('A'),
+            d2.startDialogue('A'),
+          ]);
+        },
+        hasDialogueError(
+          'DialogueView is currently attached to another DialogueRunner',
+        ),
       );
     });
   });
