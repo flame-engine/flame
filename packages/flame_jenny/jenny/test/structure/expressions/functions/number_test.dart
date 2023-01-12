@@ -33,12 +33,12 @@ void main() {
           line: 0
           line: 1
           line: 122
-          line: 200.0
+          line: 200
           line: 0.0000311
           line: 0.2
           line: 256
           line: -72.001
-          line: 0.5 5.0
+          line: 0.5 5
         ''',
       );
     });

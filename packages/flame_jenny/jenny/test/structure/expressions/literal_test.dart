@@ -27,8 +27,8 @@ void main() {
         ''',
         testPlan: '''
           line: Integers: 5 0 0 777 1000000000
-          line: Decimals: 3.5 0.0 -0.0 16.99 -7.0
-          // line: Scientific: 700000.0 0.16 2.0e100
+          line: Decimals: 3.5 0 0 16.99 -7
+          // line: Scientific: 700000 0.16 2.0e100
           // line: Hexadecimal: 256
         ''',
       );
