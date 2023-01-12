@@ -5,10 +5,10 @@ import 'package:flutter/services.dart';
 /// widget in Flutter.
 ///
 /// The mixin provides two event handlers that can be overridden in your game:
-/// - [onKeyEvent] fires whenever the user presses or releases any key on a
+/// - [onRawKeyEvent] fires whenever the user presses or releases any key on a
 ///   keyboard. Use this to handle "one-off" key events, such as the user
 ///   pressing <Space> to jump, or <Esc> to open a menu.
-/// - [onKeysPressed] fires on every game tick as long as the user presses at
+/// - [onRawKeysPressed] fires on every game tick as long as the user presses at
 ///   least some keys on the keyboard. Use this to reliably handle repeating
 ///   key events, such as user pressing arrow keys to move their character, or
 ///   holding down <Ctrl> to shoot continuously.
@@ -47,8 +47,8 @@ mixin RawKeyboardDetector on Game {
   /// down. In such a case `event.repeat` property will be set to `true`.
   /// However, this should not be used for character navigation, since this
   /// behavior may not be reliable, and the frequency of such events is system-
-  /// dependent. Use [onKeysPressed] event handler instead.
-  void onKeyEvent(RawKeyEvent event) {}
+  /// dependent. Use [onRawKeysPressed] event handler instead.
+  void onRawKeyEvent(RawKeyEvent event) {}
 
   /// Override this event handler if you want to get notified whenever any keys
   /// are being pressed. This event handler is fired at the start of every game
@@ -56,7 +56,7 @@ mixin RawKeyboardDetector on Game {
   ///
   /// The list of keys currently being pressed can be accessed via the
   /// [physicalKeysPressed] or [logicalKeysPressed] properties.
-  void onKeysPressed() {}
+  void onRawKeysPressed() {}
 
   /// Internal handler of raw key events.
   void _onRawKeyEvent(RawKeyEvent event) {
@@ -77,7 +77,7 @@ mixin RawKeyboardDetector on Game {
               .toList(),
         );
     }
-    onKeyEvent(event);
+    onRawKeyEvent(event);
   }
 
   @override
@@ -95,7 +95,7 @@ mixin RawKeyboardDetector on Game {
   @override
   void update(double dt) {
     if (physicalKeysPressed.isNotEmpty) {
-      onKeysPressed();
+      onRawKeysPressed();
     }
     super.update(dt);
   }
