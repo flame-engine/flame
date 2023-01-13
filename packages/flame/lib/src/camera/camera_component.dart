@@ -113,7 +113,7 @@ class CameraComponent extends Component {
   /// This property is cached, and is recalculated whenever the camera moves
   /// or the viewport is resized. At the same time, it may only be accessed
   /// after the camera was fully mounted.
-  Aabb2 get visibleWorldRect {
+  Rect get visibleWorldRect {
     assert(
       viewport.isMounted && viewfinder.isMounted,
       'This property cannot be accessed before the camera is mounted',

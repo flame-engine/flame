@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'dart:ui';
 
 import 'package:flame/src/anchor.dart';
 import 'package:flame/src/camera/camera_component.dart';
@@ -113,25 +114,25 @@ class Viewfinder extends Component
 
   /// See [CameraComponent.visibleWorldRect].
   @internal
-  Aabb2 get visibleWorldRect => _visibleRect ??= _computeVisibleRect();
-  Aabb2? _visibleRect;
-
-  static final Vector2 _tmpMin = Vector2.zero();
-  static final Vector2 _tmpMax = Vector2.zero();
-  Aabb2 _computeVisibleRect() {
+  Rect get visibleWorldRect => _visibleRect ??= _computeVisibleRect();
+  Rect? _visibleRect;
+  Rect _computeVisibleRect() {
     final viewportSize = camera.viewport.size;
     final topLeft = _transform.globalToLocal(Vector2.zero());
     final bottomRight = _transform.globalToLocal(viewportSize);
-    _tmpMin.x = min(topLeft.x, bottomRight.x);
-    _tmpMin.y = min(topLeft.y, bottomRight.y);
-    _tmpMax.x = max(topLeft.x, bottomRight.x);
-    _tmpMax.y = max(topLeft.y, bottomRight.y);
-    final result = Aabb2.minMax(_tmpMin, _tmpMax);
+    var minX = min(topLeft.x, bottomRight.x);
+    var minY = min(topLeft.y, bottomRight.y);
+    var maxX = max(topLeft.x, bottomRight.x);
+    var maxY = max(topLeft.y, bottomRight.y);
     if (angle != 0) {
-      result.hullPoint(_transform.globalToLocal(Vector2(viewportSize.x, 0)));
-      result.hullPoint(_transform.globalToLocal(Vector2(0, viewportSize.y)));
+      final topRight = _transform.globalToLocal(Vector2(viewportSize.x, 0));
+      final bottomLeft = _transform.globalToLocal(Vector2(0, viewportSize.y));
+      minX = min(minX, min(topRight.x, bottomLeft.x));
+      minY = min(minY, min(topRight.y, bottomLeft.y));
+      maxX = max(maxX, max(topRight.x, bottomLeft.x));
+      maxY = max(maxY, max(topRight.y, bottomLeft.y));
     }
-    return result;
+    return Rect.fromLTRB(minX, minY, maxX, maxY);
   }
 
   /// Set [zoom] level based on the [_visibleGameSize].
