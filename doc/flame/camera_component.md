@@ -141,7 +141,7 @@ There are several ways to modify camera's settings at runtime:
      The effects and behaviors are special kinds of components whose purpose is
      to modify over time some property of a component that they attach to.
 
-  3. Use special camera functions such as `follow()`, `moveBy` and `moveTo()`. 
+  3. Use special camera functions such as `follow()`, `moveBy()` and `moveTo()`. 
      Under the hood, this approach uses the same effects/behaviors as in (2).
 
 Camera has several methods for controlling its behavior:
