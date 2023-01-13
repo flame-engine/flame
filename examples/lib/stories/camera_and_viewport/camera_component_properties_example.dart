@@ -65,10 +65,14 @@ class CameraComponentPropertiesExample extends FlameGame
     camera.viewport.anchor = Anchor.center;
     camera.viewport.size = size * 0.7;
     camera.viewport.position = size * 0.6;
-    _cullRect.position = camera.visibleWorldRect.min + Vector2.all(1);
-    _cullRect.size = camera.visibleWorldRect.max -
-        camera.visibleWorldRect.min -
-        Vector2.all(2);
+    _cullRect.position = Vector2(
+      camera.visibleWorldRect.left + 1,
+      camera.visibleWorldRect.top + 1,
+    );
+    _cullRect.size = Vector2(
+      camera.visibleWorldRect.width - 2,
+      camera.visibleWorldRect.height - 2,
+    );
   }
 }
 
