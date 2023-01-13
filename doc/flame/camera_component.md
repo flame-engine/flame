@@ -173,6 +173,19 @@ The `visibleWorldRect` is a cached property, and it updates automatically whenev
 moves or the viewport changes its size.
 
 
+### Check if a component is visible from the camera point of view
+
+The `CameraComponent` has a method `inView` which can be used to check if a component is visible
+from the camera point of view. This is useful for example to cull components that are not in
+view.
+
+```dart
+if (!camera.inView(component)) {
+   component.removeFromParent(); // Cull the component
+}
+```
+
+
 ## Comparison to the traditional camera
 
 Compared to the normal [Camera](camera_and_viewport.md), the `CameraComponent`

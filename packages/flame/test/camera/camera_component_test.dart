@@ -240,6 +240,40 @@ void main() {
         ),
       );
     });
+
+    testWithFlameGame('component is in view for the camera', (game) async {
+      final world = World();
+      final camera = CameraComponent(
+        world: world,
+        viewport: FixedSizeViewport(60, 40),
+      );
+      game.addAll([world, camera]);
+      await game.ready();
+
+      final component = PositionComponent(
+        size: Vector2(10, 10),
+        position: Vector2(0, 0),
+      );
+
+      expect(camera.inView(component), isTrue);
+    });
+
+    testWithFlameGame('component is out of view for the camera', (game) async {
+      final world = World();
+      final camera = CameraComponent(
+        world: world,
+        viewport: FixedSizeViewport(60, 40),
+      );
+      game.addAll([world, camera]);
+      await game.ready();
+
+      final component = PositionComponent(
+        size: Vector2(10, 10),
+        position: Vector2(100, 100),
+      );
+
+      expect(camera.inView(component), isFalse);
+    });
   });
 }
 
