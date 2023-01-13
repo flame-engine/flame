@@ -141,8 +141,8 @@ There are several ways to modify camera's settings at runtime:
      The effects and behaviors are special kinds of components whose purpose is
      to modify over time some property of a component that they attach to.
 
-  3. Use special camera functions such as `follow()` and `moveTo()`. Under the
-     hood, this approach uses the same effects/behaviors as in (2).
+  3. Use special camera functions such as `follow()`, `moveBy()` and `moveTo()`.
+     Under the hood, this approach uses the same effects/behaviors as in (2).
 
 Camera has several methods for controlling its behavior:
 
@@ -152,6 +152,10 @@ Camera has several methods for controlling its behavior:
 
 - `Camera.stop()` will undo the effect of the previous call and stop the camera
    at its current position.
+
+- `Camera.moveBy()` can be used to move the camera by the specified offset.
+   If the camera was already following another component or moving towards,
+   those behaviors would be automatically cancelled.
 
 - `Camera.moveTo()` can be used to move the camera to the designated point on
    the world map. If the camera was already following another component or

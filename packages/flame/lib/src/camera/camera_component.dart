@@ -10,6 +10,7 @@ import 'package:flame/src/camera/world.dart';
 import 'package:flame/src/components/core/component.dart';
 import 'package:flame/src/components/position_component.dart';
 import 'package:flame/src/effects/controllers/effect_controller.dart';
+import 'package:flame/src/effects/move_by_effect.dart';
 import 'package:flame/src/effects/move_effect.dart';
 import 'package:flame/src/effects/move_to_effect.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
@@ -250,6 +251,12 @@ class CameraComponent extends Component {
     viewfinder.add(
       MoveToEffect(point, EffectController(speed: speed)),
     );
+  }
+
+  /// Move the camera by the given [offset].
+  void moveBy(Vector2 offset, {double speed = double.infinity}) {
+    stop();
+    viewfinder.add(MoveByEffect(offset, EffectController(speed: speed)));
   }
 
   /// Sets or clears the world bounds for the camera's viewfinder.

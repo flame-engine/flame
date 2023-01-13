@@ -102,6 +102,39 @@ void main() {
       expect(camera.viewfinder.children.length, 1);
     });
 
+    testWithFlameGame('moveBy', (game) async {
+      final world = World()..addToParent(game);
+      final camera = CameraComponent(world: world)..addToParent(game);
+      await game.ready();
+
+      final point = Vector2(100, 200);
+      camera.moveBy(point);
+      game.update(1);
+      expect(camera.viewfinder.position, Vector2(100, 200));
+      // updating [point] doesn't affect the offset.
+      point.x = 0;
+      game.update(1);
+      expect(camera.viewfinder.position, Vector2(100, 200));
+    });
+
+    testWithFlameGame('moveBy x 2', (game) async {
+      final world = World()..addToParent(game);
+      final camera = CameraComponent(world: world)..addToParent(game);
+      await game.ready();
+
+      camera.moveBy(Vector2(100, 0), speed: 5);
+      for (var i = 0; i < 10; i++) {
+        expect(camera.viewfinder.position, closeToVector(Vector2(0.5 * i, 0)));
+        game.update(0.1);
+      }
+      camera.moveTo(Vector2(5, 200), speed: 10);
+      for (var i = 0; i < 10; i++) {
+        expect(camera.viewfinder.position, closeToVector(Vector2(5, 1.0 * i)));
+        game.update(0.1);
+      }
+      expect(camera.viewfinder.children.length, 1);
+    });
+
     testWithFlameGame('setBounds', (game) async {
       final world = World()..addToParent(game);
       final camera = CameraComponent(world: world)..addToParent(game);
