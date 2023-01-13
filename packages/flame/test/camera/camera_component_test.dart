@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:flame/components.dart';
@@ -183,6 +184,60 @@ void main() {
       expect(
         component.componentsAtPoint(Vector2(100, 50)).toList(),
         [component],
+      );
+    });
+
+    testWithFlameGame('visibleWorldRect', (game) async {
+      final world = World();
+      final camera = CameraComponent(
+        world: world,
+        viewport: FixedSizeViewport(60, 40),
+      );
+      game.addAll([world, camera]);
+      await game.ready();
+
+      // By default, the viewfinder's position is (0,0), and its anchor is in
+      // the center of the viewport.
+      expect(camera.visibleWorldRect, const Rect.fromLTRB(-30, -20, 30, 20));
+
+      camera.viewfinder.position = Vector2(100, 200);
+      expect(camera.visibleWorldRect, const Rect.fromLTRB(70, 180, 130, 220));
+
+      camera.viewfinder.zoom = 2;
+      camera.viewfinder.position = Vector2(20, 30);
+      expect(camera.visibleWorldRect, const Rect.fromLTRB(5, 20, 35, 40));
+
+      camera.viewport.size = Vector2(100, 60);
+      expect(camera.visibleWorldRect, const Rect.fromLTRB(-5, 15, 45, 45));
+
+      camera.viewfinder.position = Vector2.zero();
+      expect(camera.visibleWorldRect, const Rect.fromLTRB(-25, -15, 25, 15));
+
+      // Rotation angle: cos(a) = 0.6, sin(a) = 0.8
+      // Each point (x, y) becomes (x*cos(a) - y*sin(a), x*sin(a) + y*cos(a)),
+      // and each of the 4 corners turns into
+      //   (25, 15) -> (3, 29)
+      //   (25, -15) -> (27, 11)
+      //   (-25, -15) -> (-3, -29)
+      //   (-25, 15) -> (-27, -11)
+      // which means the culling rect is (-27, -29, 27, 29)
+      camera.viewfinder.angle = acos(0.6);
+      expect(camera.visibleWorldRect, const Rect.fromLTRB(-27, -29, 27, 29));
+    });
+
+    testWithFlameGame('visibleWorldRect accessed too early', (game) async {
+      final world = World();
+      final camera = CameraComponent(
+        world: world,
+        viewport: FixedSizeViewport(60, 40),
+      );
+      game.addAll([world, camera]);
+
+      expect(
+        () => camera.visibleWorldRect,
+        failsAssert(
+          'This property cannot be accessed before the camera is mounted',
+        ),
       );
     });
   });

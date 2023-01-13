@@ -98,6 +98,29 @@ class CameraComponent extends Component {
   /// this variable is a mere reference to it.
   World world;
 
+  /// The axis-aligned bounding rectangle of a [world] region which is currently
+  /// visible through the viewport.
+  ///
+  /// This property can be useful in order to determine which components within
+  /// the game's world are currently visible to the player, and which aren't.
+  ///
+  /// If the viewport is non-rectangular, or if the world's view is rotated,
+  /// then the [visibleWorldRect] will be larger than the actual viewing area.
+  /// Thus, this property is "conservative": everything outside of this rect
+  /// is definitely not visible, while the points inside may or may not be
+  /// visible.
+  ///
+  /// This property is cached, and is recalculated whenever the camera moves
+  /// or the viewport is resized. At the same time, it may only be accessed
+  /// after the camera was fully mounted.
+  Rect get visibleWorldRect {
+    assert(
+      viewport.isMounted && viewfinder.isMounted,
+      'This property cannot be accessed before the camera is mounted',
+    );
+    return viewfinder.visibleWorldRect;
+  }
+
   @mustCallSuper
   @override
   Future<void> onLoad() async {
