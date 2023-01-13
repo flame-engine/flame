@@ -75,6 +75,11 @@ the camera and viewport.
 The `FlameGame.camera` controls which point in the coordinate space should be the top-left of the
 screen (it defaults to [0,0] like a regular `Canvas`).
 
+```{note}
+Utilizing `FlameGame.camera.gameSize` in the `onGameResize` event should be done
+after the call to `super.onGameResize(canvasSize);`.
+```
+
 
 ## Lifecycle
 
