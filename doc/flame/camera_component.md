@@ -175,12 +175,12 @@ moves or the viewport changes its size.
 
 ### Check if a component is visible from the camera point of view
 
-The `CameraComponent` has a method `inView` which can be used to check if a component is visible
+The `CameraComponent` has a method `isInView` which can be used to check if a component is visible
 from the camera point of view. This is useful for example to cull components that are not in
 view.
 
 ```dart
-if (!camera.inView(component)) {
+if (!camera.isInView(component)) {
    component.removeFromParent(); // Cull the component
 }
 ```

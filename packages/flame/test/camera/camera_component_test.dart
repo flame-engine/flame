@@ -255,7 +255,7 @@ void main() {
         position: Vector2(0, 0),
       );
 
-      expect(camera.inView(component), isTrue);
+      expect(camera.isInView(component), isTrue);
     });
 
     testWithFlameGame('component is out of view for the camera', (game) async {
@@ -272,7 +272,7 @@ void main() {
         position: Vector2(100, 100),
       );
 
-      expect(camera.inView(component), isFalse);
+      expect(camera.isInView(component), isFalse);
     });
   });
 }

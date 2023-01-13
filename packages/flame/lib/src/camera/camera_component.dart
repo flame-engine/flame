@@ -274,7 +274,7 @@ class CameraComponent extends Component {
 
   /// Returns true if the given [component] is currently visible through this
   /// camera.
-  bool inView(PositionComponent component) {
+  bool isInView(PositionComponent component) {
     return visibleWorldRect.overlaps(component.toAbsoluteRect());
   }
 }
