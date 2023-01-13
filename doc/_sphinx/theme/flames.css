@@ -317,7 +317,6 @@ div.nav-left ul {
   padding: 0 0 0 16px;
 }
 
-div.nav-left ul.current,
 div.nav-left > ul {
   display: block;
 }
