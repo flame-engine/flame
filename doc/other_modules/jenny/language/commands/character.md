@@ -11,14 +11,14 @@ The command has several purposes:
   nodes (an alias may even be in a different language than the full name);
 - you can associate additional data with each character, which will then be available at runtime.
 
-This format of this command is the following:
+The format of this command is the following:
 
 ```yarn
 <<character "FULL NAME" alias1 alias2...>>
 ```
 
-The *full name* here is optional: if optional, it will be considered *the* name of the character.
-However, if the name is omitted then the first alias will be considered the true character's name.
+The *full name* here is optional: if given, it will be considered *the* name of the character.
+However, if the name is omitted, then the first alias will be considered the true character's name.
 Each *alias* must be a valid ID, and at least one alias must be provided. For example:
 
 ```yarn
