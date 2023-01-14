@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:jenny/src/character_storage.dart';
 import 'package:jenny/src/command_storage.dart';
 import 'package:jenny/src/errors.dart';
 import 'package:jenny/src/function_storage.dart';
@@ -23,6 +24,7 @@ class YarnProject {
         variables = VariableStorage(),
         functions = FunctionStorage(),
         commands = CommandStorage(),
+        characters = CharacterStorage(),
         random = Random() {
     locale = 'en';
   }
@@ -32,6 +34,8 @@ class YarnProject {
   /// All parsed [Node]s, keyed by their titles.
   final Map<String, Node> nodes;
 
+  /// All global variables accessible within the yarn scripts are stored here.
+  /// In addition, this also keeps information about node visit counts.
   final VariableStorage variables;
 
   /// User-defined functions are stored here.
@@ -39,6 +43,8 @@ class YarnProject {
 
   /// Repository for user-defined commands.
   final CommandStorage commands;
+
+  final CharacterStorage characters;
 
   /// Tokens that represent valid true/false values when converting an argument
   /// into a boolean. These sets can be modified by the user.

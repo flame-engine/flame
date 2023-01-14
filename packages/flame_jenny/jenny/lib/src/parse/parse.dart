@@ -1,4 +1,4 @@
-import 'package:jenny/src/errors.dart';
+import 'package:jenny/jenny.dart';
 import 'package:jenny/src/parse/token.dart';
 import 'package:jenny/src/parse/tokenize.dart';
 import 'package:jenny/src/structure/block.dart';
@@ -13,10 +13,7 @@ import 'package:jenny/src/structure/commands/stop_command.dart';
 import 'package:jenny/src/structure/commands/user_defined_command.dart';
 import 'package:jenny/src/structure/commands/visit_command.dart';
 import 'package:jenny/src/structure/commands/wait_command.dart';
-import 'package:jenny/src/structure/dialogue_choice.dart';
 import 'package:jenny/src/structure/dialogue_entry.dart';
-import 'package:jenny/src/structure/dialogue_line.dart';
-import 'package:jenny/src/structure/dialogue_option.dart';
 import 'package:jenny/src/structure/expressions/expression.dart';
 import 'package:jenny/src/structure/expressions/functions/_common.dart';
 import 'package:jenny/src/structure/expressions/functions/string.dart';
@@ -27,9 +24,6 @@ import 'package:jenny/src/structure/expressions/operators/negate.dart';
 import 'package:jenny/src/structure/expressions/operators/not.dart';
 import 'package:jenny/src/structure/line_content.dart';
 import 'package:jenny/src/structure/markup_attribute.dart';
-import 'package:jenny/src/structure/node.dart';
-import 'package:jenny/src/variable_storage.dart';
-import 'package:jenny/src/yarn_project.dart';
 import 'package:meta/meta.dart';
 
 @internal
@@ -55,7 +49,7 @@ class _Parser {
       if (token == Token.startCommand) {
         final position0 = position;
         final command = parseCommand();
-        if (command is! DeclareCommand) {
+        if (command is! DeclareCommand && command is! CharacterCommand) {
           position = position0;
           typeError('command <<${command.name}>> is only allowed inside nodes');
         }
@@ -689,7 +683,12 @@ class _Parser {
     }
     final aliases = <String>[];
     while (peekToken().isId) {
-      aliases.add(peekToken().content);
+      final alias = peekToken().content;
+      if (project.characters.contains(alias)) {
+        final char = project.characters[alias]!;
+        nameError('character "$alias" was already defined: $char');
+      }
+      aliases.add(alias);
       position += 1;
     }
     take(Token.endExpression);
@@ -698,6 +697,11 @@ class _Parser {
     }
     take(Token.endCommand);
     takeNewline();
+    final character = Character(
+      name: realName ?? aliases.first,
+      aliases: aliases,
+    );
+    project.characters.add(character);
     return const CharacterCommand();
   }
 
