@@ -411,6 +411,8 @@ class _Parser {
       return parseCommandSet();
     } else if (token == Token.commandDeclare || token == Token.commandLocal) {
       return parseCommandDeclareOrLocal();
+    } else if (token == Token.commandCharacter) {
+      return parseCommandCharacter();
     } else if (token == Token.commandElseif ||
         token == Token.commandElse ||
         token == Token.commandEndif) {
@@ -673,6 +675,28 @@ class _Parser {
       project.variables.setVariable(variableName, expression.value);
       return const DeclareCommand();
     }
+  }
+
+  Command parseCharacterCommand() {
+    take(Token.startCommand);
+    take(Token.commandCharacter);
+    take(Token.startExpression);
+    String? realName;
+    if (peekToken().isString) {
+      realName = peekToken().content;
+      position += 1;
+    }
+    final aliases = <String>[];
+    while (peekToken().isId) {
+      aliases.add(peekToken().content);
+      position += 1;
+    }
+    if (aliases.isEmpty) {
+      syntaxError('at least one character id is required');
+    }
+    take(Token.endExpression);
+    take(Token.endCommand);
+    takeNewline();
   }
 
   Command parseUserDefinedCommand() {
