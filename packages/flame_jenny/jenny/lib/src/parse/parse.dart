@@ -204,12 +204,16 @@ class _Parser {
     );
   }
 
-  String? maybeParseLinePerson() {
+  Character? maybeParseLinePerson() {
     final token = peekToken();
     if (token.isPerson) {
       takePerson();
       take(Token.colon);
-      return token.content;
+      final name = token.content;
+      if (project.strictCharacterNames && !project.characters.contains(name)) {
+        nameError('unknown character "$name"', position - 2);
+      }
+      return project.characters[name] ?? Character(name);
     }
     return null;
   }
@@ -697,10 +701,7 @@ class _Parser {
     }
     take(Token.endCommand);
     takeNewline();
-    final character = Character(
-      name: realName ?? aliases.first,
-      aliases: aliases,
-    );
+    final character = Character(realName ?? aliases.first, aliases: aliases);
     project.characters.add(character);
     return const CharacterCommand();
   }

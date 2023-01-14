@@ -46,6 +46,8 @@ class YarnProject {
 
   final CharacterStorage characters;
 
+  bool strictCharacterNames = true;
+
   /// Tokens that represent valid true/false values when converting an argument
   /// into a boolean. These sets can be modified by the user.
   static Set<String> trueValues = {'true', 'yes', 'on', '+', 'T', '1'};

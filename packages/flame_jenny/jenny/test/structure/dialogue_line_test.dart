@@ -17,12 +17,12 @@ void main() {
 
     test('line with meta information', () {
       final line = DialogueLine(
-        character: 'Bob',
+        character: Character('Bob'),
         content: LineContent('Hello!'),
         tags: ['#red', '#fast'],
       );
       expect(line.text, 'Hello!');
-      expect(line.character, 'Bob');
+      expect(line.character!.name, 'Bob');
       expect(line.tags, ['#red', '#fast']);
       expect('$line', 'DialogueLine(Bob: Hello!)');
     });

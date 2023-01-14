@@ -1,5 +1,4 @@
 import 'package:jenny/jenny.dart';
-import 'package:jenny/src/dialogue_runner.dart';
 import 'package:jenny/src/structure/dialogue_entry.dart';
 import 'package:jenny/src/structure/line_content.dart';
 import 'package:jenny/src/structure/markup_attribute.dart';
@@ -41,21 +40,21 @@ import 'package:jenny/src/structure/markup_attribute.dart';
 class DialogueLine extends DialogueEntry {
   DialogueLine({
     required LineContent content,
-    String? character,
+    Character? character,
     List<String>? tags,
   })  : _content = content,
         _character = character,
         _tags = tags,
         _value = content.isConst ? content.text : null;
 
-  final String? _character;
+  final Character? _character;
   final List<String>? _tags;
   final LineContent _content;
   String? _value;
 
-  /// The name of the character who is speaking the line. This can be null if
-  /// the line does not contain a speaker.
-  String? get character => _character;
+  /// The character who is speaking the line. This can be null if the line does
+  /// not contain a speaker.
+  Character? get character => _character;
 
   /// The computed text of the line, after substituting all inline expressions.
   ///
@@ -90,7 +89,7 @@ class DialogueLine extends DialogueEntry {
 
   @override
   String toString() {
-    final prefix = character == null ? '' : '$character: ';
+    final prefix = character == null ? '' : '${character!.name}: ';
     final text = _value ?? '<unevaluated>';
     return 'DialogueLine($prefix$text)';
   }

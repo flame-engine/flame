@@ -1,4 +1,3 @@
-
 class CharacterStorage {
   final Map<String, Character> _cache = {};
 
@@ -7,7 +6,7 @@ class CharacterStorage {
 
   bool contains(String name) => _cache.containsKey(name);
 
-  Character? operator[](String name) => _cache[name];
+  Character? operator [](String name) => _cache[name];
 
   void add(Character character) {
     for (final alias in character.aliases) {
@@ -17,7 +16,7 @@ class CharacterStorage {
 }
 
 class Character {
-  Character({required this.name, required this.aliases});
+  Character(this.name, {List<String>? aliases}) : aliases = aliases ?? [];
 
   final String name;
   final List<String> aliases;

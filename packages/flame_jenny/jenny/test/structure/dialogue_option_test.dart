@@ -1,4 +1,4 @@
-import 'package:jenny/src/structure/dialogue_option.dart';
+import 'package:jenny/jenny.dart';
 import 'package:jenny/src/structure/expressions/literal.dart';
 import 'package:jenny/src/structure/line_content.dart';
 import 'package:test/test.dart';
@@ -21,11 +21,11 @@ void main() {
     test('simple option', () {
       final option = DialogueOption(
         content: LineContent('me'),
-        character: 'Rook',
+        character: Character('Rook'),
         condition: constFalse,
       );
       option.evaluate();
-      expect(option.character, 'Rook');
+      expect(option.character!.name, 'Rook');
       expect(option.tags, isEmpty);
       expect(option.attributes, isEmpty);
       expect(option.text, 'me');
