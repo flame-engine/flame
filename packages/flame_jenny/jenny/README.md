@@ -7,5 +7,8 @@ dialogue to users within a game or an app.
 
 The `jenny` library mimics the features and functionality of the [Yarn Spinner] library for Unity.
 
+See Jenny's [official documentation site] for more information.
+
 
 [Yarn Spinner]: https://docs.yarnspinner.dev/
+[official documentation site]: https://docs.flame-engine.org/main/other_modules/jenny/index.html

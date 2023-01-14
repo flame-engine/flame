@@ -141,8 +141,8 @@ There are several ways to modify camera's settings at runtime:
      The effects and behaviors are special kinds of components whose purpose is
      to modify over time some property of a component that they attach to.
 
-  3. Use special camera functions such as `follow()` and `moveTo()`. Under the
-     hood, this approach uses the same effects/behaviors as in (2).
+  3. Use special camera functions such as `follow()`, `moveBy()` and `moveTo()`.
+     Under the hood, this approach uses the same effects/behaviors as in (2).
 
 Camera has several methods for controlling its behavior:
 
@@ -153,6 +153,10 @@ Camera has several methods for controlling its behavior:
 - `Camera.stop()` will undo the effect of the previous call and stop the camera
    at its current position.
 
+- `Camera.moveBy()` can be used to move the camera by the specified offset.
+   If the camera was already following another component or moving towards,
+   those behaviors would be automatically cancelled.
+
 - `Camera.moveTo()` can be used to move the camera to the designated point on
    the world map. If the camera was already following another component or
    moving towards another point, those behaviors would be automatically
@@ -162,12 +166,21 @@ Camera has several methods for controlling its behavior:
    are in the form of a `Shape`, which is commonly a rectangle, but can also be any other shape.
 
 
+### visibleWorldRect
+
+The camera exposes property `visibleWorldRect`, which is a rect that describes the world's region
+which is currently visible through the camera. This region can be used in order to avoid rendering
+components that are out of view, or updating objects that are far away from the player less
+frequently.
+
+The `visibleWorldRect` is a cached property, and it updates automatically whenever the camera
+moves or the viewport changes its size.
+
+
 ## Comparison to the traditional camera
 
 Compared to the normal [Camera](camera_and_viewport.md), the `CameraComponent`
-has several advantages and drawbacks.
-
-Pros:
+has several advantages:
 
 - Multiple cameras can be added to the game at the same time;
 - More flexibility in choosing the placement and the size of the viewport;

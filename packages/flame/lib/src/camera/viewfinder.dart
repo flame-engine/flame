@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'dart:ui';
 
 import 'package:flame/src/anchor.dart';
 import 'package:flame/src/camera/camera_component.dart';
@@ -27,7 +28,10 @@ class Viewfinder extends Component
   @override
   Vector2 get position => -_transform.offset;
   @override
-  set position(Vector2 value) => _transform.offset = -value;
+  set position(Vector2 value) {
+    _transform.offset = -value;
+    _visibleRect = null;
+  }
 
   /// Zoom level of the game.
   ///
@@ -42,6 +46,7 @@ class Viewfinder extends Component
   set zoom(double value) {
     assert(value > 0, 'zoom level must be positive: $value');
     _transform.scale = Vector2.all(value);
+    _visibleRect = null;
   }
 
   /// Rotation angle of the game world, in radians.
@@ -50,7 +55,10 @@ class Viewfinder extends Component
   @override
   double get angle => -_transform.angle;
   @override
-  set angle(double value) => _transform.angle = -value;
+  set angle(double value) {
+    _transform.angle = -value;
+    _visibleRect = null;
+  }
 
   /// The point within the viewport that is considered the "logical center" of
   /// the camera.
@@ -104,6 +112,29 @@ class Viewfinder extends Component
     }
   }
 
+  /// See [CameraComponent.visibleWorldRect].
+  @internal
+  Rect get visibleWorldRect => _visibleRect ??= _computeVisibleRect();
+  Rect? _visibleRect;
+  Rect _computeVisibleRect() {
+    final viewportSize = camera.viewport.size;
+    final topLeft = _transform.globalToLocal(Vector2.zero());
+    final bottomRight = _transform.globalToLocal(viewportSize);
+    var minX = min(topLeft.x, bottomRight.x);
+    var minY = min(topLeft.y, bottomRight.y);
+    var maxX = max(topLeft.x, bottomRight.x);
+    var maxY = max(topLeft.y, bottomRight.y);
+    if (angle != 0) {
+      final topRight = _transform.globalToLocal(Vector2(viewportSize.x, 0));
+      final bottomLeft = _transform.globalToLocal(Vector2(0, viewportSize.y));
+      minX = min(minX, min(topRight.x, bottomLeft.x));
+      minY = min(minY, min(topRight.y, bottomLeft.y));
+      maxX = max(maxX, max(topRight.x, bottomLeft.x));
+      maxY = max(maxY, max(topRight.y, bottomLeft.y));
+    }
+    return Rect.fromLTRB(minX, minY, maxX, maxY);
+  }
+
   /// Set [zoom] level based on the [_visibleGameSize].
   void _initZoom() {
     if (parent != null && _visibleGameSize != null) {
@@ -127,6 +158,7 @@ class Viewfinder extends Component
       final viewportSize = camera.viewport.size;
       _transform.position.x = viewportSize.x * _anchor.x;
       _transform.position.y = viewportSize.y * _anchor.y;
+      _visibleRect = null;
     }
   }
 
@@ -154,5 +186,6 @@ class Viewfinder extends Component
     );
     assert(value.x > 0, 'Zoom must be positive: ${value.x}');
     _transform.scale = value;
+    _visibleRect = null;
   }
 }

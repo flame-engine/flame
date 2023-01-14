@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:jenny/jenny.dart';
-import 'package:jenny/src/structure/commands/user_defined_command.dart';
 import 'package:meta/meta.dart';
 import 'package:test/test.dart';
 
