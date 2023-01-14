@@ -3,6 +3,7 @@ import 'package:jenny/src/parse/tokenize.dart';
 import 'package:jenny/src/yarn_project.dart';
 import 'package:test/test.dart';
 
+import '../../test_scenario.dart';
 import '../../utils.dart';
 
 void main() {
@@ -57,6 +58,51 @@ void main() {
       expect(yarn.characters['Voldemort'], isNull);
     });
 
+    test('script with strict characters', () async {
+      await testScenario(
+        input: '''
+          <<character Alice>>
+          <<character Cat>>
+          ---
+          title: Start
+          ---
+          Alice: Cheshire Puss, would you tell me which way to go from here?
+          Cat:   That depends a great deal on where you want to get to
+          Alice: I don't much care where --
+          Cat:   Then it doesn't matter which way you go
+          Alice: so long as I get [i]somewhere[/i]
+          Cat:   Oh, you're sure to do that, if you only walk long enough
+          ===
+        ''',
+        testPlan: '''
+          line: Alice: Cheshire Puss, would you tell me which way to go from here?
+          line: Cat: That depends a great deal on where you want to get to
+          line: Alice: I don't much care where --
+          line: Cat: Then it doesn't matter which way you go
+          line: Alice: so long as I get somewhere
+          line: Cat: Oh, you're sure to do that, if you only walk long enough
+        ''',
+      );
+    });
+
+    test('script without character declared', () {
+      expect(
+        () => YarnProject()
+          ..parse(
+            'title: Start\n'
+            '---\n'
+            'Alice: Do cats eat bats?\n'
+            '===\n',
+          ),
+        hasNameError(
+          'NameError: unknown character "Alice"\n'
+          '>  at line 3 column 1:\n'
+          '>  Alice: Do cats eat bats?\n'
+          '>  ^\n',
+        ),
+      );
+    });
+
     group('errors', () {
       test('invalid syntax', () {
         expect(
@@ -101,6 +147,24 @@ void main() {
             '>  at line 2 column 32:\n'
             '>  <<character "Lame Bob" LameBob bob>>\n'
             '>                                 ^\n',
+          ),
+        );
+      });
+
+      test('character command inside a node', () {
+        expect(
+          () => YarnProject()
+            ..parse(
+              'title: X\n'
+              '---\n'
+              '<<character Charlie>>\n'
+              '===\n',
+            ),
+          hasSyntaxError(
+            'SyntaxError: <<character>> command cannot be used inside a node\n'
+            '>  at line 3 column 1:\n'
+            '>  <<character Charlie>>\n'
+            '>  ^\n',
           ),
         );
       });

@@ -141,9 +141,11 @@ class _Parser {
       } else if (nextToken == Token.startCommand) {
         final position0 = position;
         final command = parseCommand();
-        if (command is DeclareCommand) {
-          position = position0;
-          syntaxError('<<declare>> command cannot be used inside a node');
+        if (command is DeclareCommand || command is CharacterCommand) {
+          syntaxError(
+            '<<${command.name}>> command cannot be used inside a node',
+            position0,
+          );
         }
         lines.add(command);
       } else if (nextToken.isText ||
