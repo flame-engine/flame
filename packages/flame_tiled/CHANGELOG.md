@@ -1,3 +1,7 @@
+## 1.9.1
+
+ - Update a dependency to the latest release.
+
 ## 1.9.0
 
  - **FEAT**: Rename internal classes clashes with Tiled ([#2139](https://github.com/flame-engine/flame/issues/2139)). ([2224eaac](https://github.com/flame-engine/flame/commit/2224eaac701414deb76bac7f7c40a56387cdf817))
