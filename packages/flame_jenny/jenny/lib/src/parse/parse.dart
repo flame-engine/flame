@@ -2,6 +2,7 @@ import 'package:jenny/src/errors.dart';
 import 'package:jenny/src/parse/token.dart';
 import 'package:jenny/src/parse/tokenize.dart';
 import 'package:jenny/src/structure/block.dart';
+import 'package:jenny/src/structure/commands/character_command.dart';
 import 'package:jenny/src/structure/commands/command.dart';
 import 'package:jenny/src/structure/commands/declare_command.dart';
 import 'package:jenny/src/structure/commands/if_command.dart';
@@ -677,7 +678,7 @@ class _Parser {
     }
   }
 
-  Command parseCharacterCommand() {
+  Command parseCommandCharacter() {
     take(Token.startCommand);
     take(Token.commandCharacter);
     take(Token.startExpression);
@@ -691,12 +692,13 @@ class _Parser {
       aliases.add(peekToken().content);
       position += 1;
     }
+    take(Token.endExpression);
     if (aliases.isEmpty) {
       syntaxError('at least one character id is required');
     }
-    take(Token.endExpression);
     take(Token.endCommand);
     takeNewline();
+    return const CharacterCommand();
   }
 
   Command parseUserDefinedCommand() {
