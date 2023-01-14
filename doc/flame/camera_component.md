@@ -179,10 +179,9 @@ moves or the viewport changes its size.
 
 ### Check if a component is visible from the camera point of view
 
-The `CameraComponent` has a method called `canSee` which can be used
-to check if a component is visible from the camera point of view.
-This is useful for example to cull components that are not in
-view.
+The `CameraComponent` has a method called `canSee` which can be used to check
+if a component is visible from the camera point of view.
+This is useful for example to cull components that are not in view.
 
 ```dart
 if (!camera.canSee(component)) {
