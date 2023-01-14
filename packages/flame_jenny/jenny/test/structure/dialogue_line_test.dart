@@ -1,6 +1,5 @@
 import 'package:jenny/jenny.dart';
 import 'package:jenny/src/structure/line_content.dart';
-import 'package:jenny/src/structure/markup_attribute.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -17,12 +16,12 @@ void main() {
 
     test('line with meta information', () {
       final line = DialogueLine(
-        character: 'Bob',
+        character: Character('Bob'),
         content: LineContent('Hello!'),
         tags: ['#red', '#fast'],
       );
       expect(line.text, 'Hello!');
-      expect(line.character, 'Bob');
+      expect(line.character!.name, 'Bob');
       expect(line.tags, ['#red', '#fast']);
       expect('$line', 'DialogueLine(Bob: Hello!)');
     });

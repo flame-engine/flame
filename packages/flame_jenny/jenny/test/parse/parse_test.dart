@@ -205,10 +205,12 @@ void main() {
     group('parseDialogueLine', () {
       test('line with a speaker', () {
         final yarn = YarnProject()
+          ..strictCharacterNames = false
           ..parse('title:A\n---\nMrGoo: whatever\n===\n');
         expect(yarn.nodes['A']!.lines.first, isA<DialogueLine>());
         final line = yarn.nodes['A']!.lines[0] as DialogueLine;
-        expect(line.character, 'MrGoo');
+        expect(line.character, isA<Character>());
+        expect(line.character!.name, 'MrGoo');
         expect(line.text, 'whatever');
       });
 
@@ -290,6 +292,7 @@ void main() {
 
       test('speakers in options', () {
         final yarn = YarnProject()
+          ..strictCharacterNames = false
           ..parse('title:A\n---\n'
               '-> Alice: Hello!\n'
               '-> Bob: Hi: there!\n'
@@ -298,8 +301,9 @@ void main() {
         final choice = node.lines[0] as DialogueChoice;
         final option0 = choice.options[0];
         final option1 = choice.options[1];
-        expect(option0.character, 'Alice');
-        expect(option1.character, 'Bob');
+        expect(option0.character, isA<Character>());
+        expect(option0.character!.name, 'Alice');
+        expect(option1.character!.name, 'Bob');
         expect(option0.text, 'Hello!');
         expect(option1.text, 'Hi: there!');
       });
@@ -648,11 +652,13 @@ void main() {
 
       test('parse nested tags', () {
         final yarn = YarnProject()
+          ..strictCharacterNames = false
           ..parse('title: A\n---\n'
               'Warning: [a]Spinning [b][c]Je[/c]nny[/b][/a]\n'
               '===\n');
         final line = yarn.nodes['A']!.lines[0] as DialogueLine;
-        expect(line.character, 'Warning');
+        expect(line.character, isA<Character>());
+        expect(line.character!.name, 'Warning');
         expect(line.text, 'Spinning Jenny');
 
         expect(line.attributes.length, 3);

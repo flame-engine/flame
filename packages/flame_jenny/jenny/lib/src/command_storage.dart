@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:jenny/jenny.dart';
 import 'package:jenny/src/parse/ascii.dart';
-import 'package:jenny/src/structure/commands/user_defined_command.dart';
 import 'package:meta/meta.dart';
 
 /// [CommandStorage] is the repository of user-defined commands known to the
