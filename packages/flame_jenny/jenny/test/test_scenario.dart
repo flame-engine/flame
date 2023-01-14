@@ -19,7 +19,8 @@ Future<void> testScenario({
   List<String>? commands,
   YarnProject? yarn,
 }) async {
-  final yarnProject = yarn ?? YarnProject();
+  final yarnProject = yarn ?? YarnProject()
+    ..strictCharacterNames = false;
   commands?.forEach(yarnProject.commands.addOrphanedCommand);
 
   Future<void> testBody() async {
@@ -107,7 +108,7 @@ class _TestPlan extends DialogueView {
         : '${expected.character}: ${expected.text}';
     final text2 = (line.character == null)
         ? line.text
-        : '${line.character}: ${line.text}';
+        : '${line.character!.name}: ${line.text}';
     assert(
       text1 == text2,
       'Expected line: "$text1"\n'
@@ -144,7 +145,7 @@ class _TestPlan extends DialogueView {
               option1.text +
               (option1.enabled ? '' : ' [disabled]');
       final text2 =
-          (option2.character == null ? '' : '${option2.character}: ') +
+          (option2.character == null ? '' : '${option2.character!.name}: ') +
               option2.text +
               (option2.isAvailable ? '' : ' [disabled]');
       assert(

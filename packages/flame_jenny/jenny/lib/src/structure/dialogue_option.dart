@@ -26,7 +26,7 @@ class DialogueOption extends DialogueLine {
 
   @override
   String toString() {
-    final prefix = character == null ? '' : '$character: ';
+    final prefix = character == null ? '' : '${character!.name}: ';
     final suffix = _available ? '' : ' #disabled';
     return 'Option($prefix$text$suffix)';
   }

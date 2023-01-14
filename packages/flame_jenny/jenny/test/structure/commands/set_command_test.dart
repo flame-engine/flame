@@ -64,7 +64,7 @@ void main() {
           <<if $foo is 54>>
               haha nice now 'set' works even when deeply nested
           <<else>>
-              aaargh :(
+              aaargh >:(
           <<endif>>
           ===
         ''',

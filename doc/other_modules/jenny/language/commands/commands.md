@@ -16,6 +16,9 @@ scripts. For a full description of these commands, see the document on [user-def
 
 ### Variables
 
+**[\<\<character\>\>](character.md)**
+: Declares a character (person).
+
 **[\<\<declare\>\>](declare.md)**
 : Declares a global variable.
 
@@ -50,6 +53,7 @@ scripts. For a full description of these commands, see the document on [user-def
 ```{toctree}
 :hidden:
 
+<<character>>          <character.md>
 <<declare>>            <declare.md>
 <<if>>                 <if.md>
 <<jump>>               <jump.md>

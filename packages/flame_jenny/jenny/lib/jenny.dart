@@ -1,3 +1,5 @@
+export 'src/character.dart' show Character;
+export 'src/character_storage.dart' show CharacterStorage;
 export 'src/command_storage.dart' show CommandStorage;
 export 'src/dialogue_runner.dart' show DialogueRunner;
 export 'src/dialogue_view.dart' show DialogueView;

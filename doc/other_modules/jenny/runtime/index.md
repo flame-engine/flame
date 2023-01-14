@@ -3,6 +3,8 @@
 ```{toctree}
 :hidden:
 
+Character          <character.md>
+CharacterStorage   <character_storage.md>
 CommandStorage     <command_storage.md>
 DialogueChoice     <dialogue_choice.md>
 DialogueLine       <dialogue_line.md>

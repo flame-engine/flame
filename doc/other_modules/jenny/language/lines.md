@@ -15,9 +15,6 @@ in a [node body]. A line may contain the following elements:
 
 A **line** is represented with the [DialogueLine] class in Jenny runtime.
 
-[node body]: nodes.md#body
-[DialogueLine]: ../runtime/dialogue_line.md
-
 
 ## Character ID
 
@@ -62,6 +59,11 @@ Attention\: The cake is NOT a lie
 ===
 ```
 
+```{note}
+All characters must be **declared** using the [\<\<character\>\>] command
+before they can be used in a script.
+```
+
 
 ## Interpolated expressions
 
@@ -101,7 +103,7 @@ further processing. Which means that the text of the expression may contain spec
 (such as `[`, `]`, `{`, `}`, `\`, etc), and they don't need to be escaped. It also means that the
 expression cannot contain markup, or produce a hashtag, etc.
 
-Read more about expressions in the [Expressions](expressions/expressions.md) section.
+Read more about expressions in the [Expressions] section.
 
 
 ## Markup
@@ -122,7 +124,7 @@ additional information attached to the line that shows that the last 17 characte
 the `em` tag.
 
 Markup tags can be nested, or be zero-width, they can also include parameters whose values can be
-dynamic. Read more about this in the [Markup](markup.md) document.
+dynamic. Read more about this in the [Markup] document.
 
 
 ## Hashtags
@@ -184,3 +186,9 @@ This line is so long that it becomes uncomfortable to read in a text editor. \
     text.
 ===
 ```
+
+
+[node body]: nodes.md#body
+[DialogueLine]: ../runtime/dialogue_line.md
+[Expressions]: expressions/expressions.md
+[Markup]: markup.md
