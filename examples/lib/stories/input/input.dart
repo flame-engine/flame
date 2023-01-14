@@ -12,9 +12,9 @@ import 'package:examples/stories/input/mouse_movement_example.dart';
 import 'package:examples/stories/input/multitap_advanced_example.dart';
 import 'package:examples/stories/input/multitap_example.dart';
 import 'package:examples/stories/input/overlapping_tappables_example.dart';
+import 'package:examples/stories/input/raw_keyboard_example.dart';
 import 'package:examples/stories/input/scroll_example.dart';
 import 'package:examples/stories/input/tappables_example.dart';
-import 'package:examples/stories/raw_keyboard_example.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 
