@@ -10,7 +10,6 @@ import 'package:jenny/src/structure/commands/jump_command.dart';
 import 'package:jenny/src/structure/commands/local_command.dart';
 import 'package:jenny/src/structure/commands/set_command.dart';
 import 'package:jenny/src/structure/commands/stop_command.dart';
-import 'package:jenny/src/structure/commands/user_defined_command.dart';
 import 'package:jenny/src/structure/commands/visit_command.dart';
 import 'package:jenny/src/structure/commands/wait_command.dart';
 import 'package:jenny/src/structure/dialogue_entry.dart';
@@ -23,7 +22,6 @@ import 'package:jenny/src/structure/expressions/operators/_common.dart'
 import 'package:jenny/src/structure/expressions/operators/negate.dart';
 import 'package:jenny/src/structure/expressions/operators/not.dart';
 import 'package:jenny/src/structure/line_content.dart';
-import 'package:jenny/src/structure/markup_attribute.dart';
 import 'package:meta/meta.dart';
 
 @internal
