@@ -980,6 +980,7 @@ class _Lexer {
     ')': Token.endParenthesis,
   };
   static const Map<String, Token> commandTokens = {
+    'character': Token.commandCharacter,
     'declare': Token.commandDeclare,
     'else': Token.commandElse,
     'elseif': Token.commandElseif,
@@ -1002,6 +1003,7 @@ class _Lexer {
 
   /// Built-in commands that are followed by an expression (without `{}`).
   static final Set<Token> bareExpressionCommands = {
+    Token.commandCharacter,
     Token.commandDeclare,
     Token.commandElseif,
     Token.commandIf,
