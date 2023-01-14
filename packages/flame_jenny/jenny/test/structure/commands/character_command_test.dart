@@ -54,6 +54,10 @@ void main() {
       expect(harry.data['age'], 11);
       expect(harry.data['affiliation'], 'Dumbledore');
 
+      final peeves = yarn.characters['Peeves']!;
+      expect(peeves.name, 'Peeves');
+      expect(peeves.aliases, isEmpty);
+
       expect(yarn.characters['Hermione'], isNotNull);
       expect(yarn.characters['Voldemort'], isNull);
     });

@@ -63,6 +63,15 @@ final yarn = YarnProject()
 
   All custom commands must be added before they can be used in the dialogue script.
 
+**characters** `CharacterStorage`
+: The [container][CharacterStorage] for all [Character] objects declared in your yarn scripts.
+
+**strictCharacterNames** `bool`
+: If `true` (default), the validity of character names will be strictly enforced. That is, all
+  characters must be declared before they can be used, using the [\<\<character\>\>] commands. If
+  this property is set to false, then new [Character] objects will be created automatically as
+  they are encountered in scripts.
+
 **trueValues**, **falseValues** `Set<String>`
 : The strings that can be recognized as `true`/`false` values respectively.
 
@@ -77,6 +86,9 @@ final yarn = YarnProject()
   existing ones.
 
 
+[\<\<character\>\>]: ../language/commands/character.md
+[Character]: character.md
+[CharacterStorage]: character_storage.md
 [CommandStorage]: command_storage.md
 [FunctionStorage]: function_storage.md
 [Node]: node.md

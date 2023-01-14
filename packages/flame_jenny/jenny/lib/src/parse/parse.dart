@@ -701,9 +701,13 @@ class _Parser {
     if (aliases.isEmpty) {
       syntaxError('at least one character id is required');
     }
+    if (realName == null) {
+      realName = aliases.first;
+      aliases.removeAt(0);
+    }
     take(Token.endCommand);
     takeNewline();
-    final character = Character(realName ?? aliases.first, aliases: aliases);
+    final character = Character(realName, aliases: aliases);
     project.characters.add(character);
     return const CharacterCommand();
   }

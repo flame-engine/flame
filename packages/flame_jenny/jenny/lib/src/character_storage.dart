@@ -1,3 +1,5 @@
+import 'package:jenny/src/character.dart';
+
 class CharacterStorage {
   final Map<String, Character> _cache = {};
 
@@ -9,21 +11,9 @@ class CharacterStorage {
   Character? operator [](String name) => _cache[name];
 
   void add(Character character) {
+    _cache[character.name] = character;
     for (final alias in character.aliases) {
       _cache[alias] = character;
     }
   }
-}
-
-class Character {
-  Character(this.name, {List<String>? aliases}) : aliases = aliases ?? [];
-
-  final String name;
-  final List<String> aliases;
-  Map<String, dynamic>? _data;
-
-  Map<String, dynamic> get data => _data ??= <String, dynamic>{};
-
-  @override
-  String toString() => 'Character($name)';
 }
