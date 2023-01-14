@@ -280,7 +280,7 @@ class CameraComponent extends Component {
   }
 
   /// Returns true if this camera is able to see the [component].
-  bool sees(PositionComponent component) {
+  bool canSee(PositionComponent component) {
     return visibleWorldRect.overlaps(component.toAbsoluteRect());
   }
 }
