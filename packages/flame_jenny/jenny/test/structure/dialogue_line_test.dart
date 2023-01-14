@@ -1,6 +1,5 @@
 import 'package:jenny/jenny.dart';
 import 'package:jenny/src/structure/line_content.dart';
-import 'package:jenny/src/structure/markup_attribute.dart';
 import 'package:test/test.dart';
 
 void main() {

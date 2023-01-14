@@ -1,7 +1,6 @@
 import 'package:jenny/jenny.dart';
 import 'package:jenny/src/structure/dialogue_entry.dart';
 import 'package:jenny/src/structure/line_content.dart';
-import 'package:jenny/src/structure/markup_attribute.dart';
 
 /// [DialogueLine] is a single line of "normal" text within the dialogue.
 ///

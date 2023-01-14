@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:jenny/jenny.dart';
-import 'package:jenny/src/structure/commands/user_defined_command.dart';
 import 'package:test/test.dart';
 
 import 'test_scenario.dart';
