@@ -278,4 +278,9 @@ class CameraComponent extends Component {
       boundedBehavior.bounds = bounds;
     }
   }
+
+  /// Returns true if this camera is able to see the [component].
+  bool canSee(PositionComponent component) {
+    return visibleWorldRect.overlaps(component.toAbsoluteRect());
+  }
 }
