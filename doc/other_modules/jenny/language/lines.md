@@ -188,7 +188,6 @@ This line is so long that it becomes uncomfortable to read in a text editor. \
 ```
 
 
-[\<\<character\>\>]: commands/character.md
 [node body]: nodes.md#body
 [DialogueLine]: ../runtime/dialogue_line.md
 [Expressions]: expressions/expressions.md
