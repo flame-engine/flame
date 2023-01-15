@@ -70,7 +70,6 @@ void main() {
   });
 }
 
-
 class _GameWithHardwareKeyboardDetector extends FlameGame
     with HardwareKeyboardDetector {
   final List<KeyEvent> events = [];
