@@ -23,28 +23,28 @@ mixin HardwareKeyboardDetector on Game {
   /// to search for keys in a keyboard-layout-independent way.
   Set<LogicalKeyboardKey> logicalKeysPressed = {};
 
-  /// Is the <Ctrl> key currently being pressed (either left or right)?
+  /// True if the <kbd>Ctrl</kbd> key is currently being pressed.
   bool get isControlPressed =>
       logicalKeysPressed.contains(LogicalKeyboardKey.controlLeft) ||
       logicalKeysPressed.contains(LogicalKeyboardKey.controlRight);
 
-  /// Is the <Shift> key currently being pressed (either left or right)?
+  /// True if the <kbd>Shift</kbd> key is currently being pressed.
   bool get isShiftPressed =>
       logicalKeysPressed.contains(LogicalKeyboardKey.shiftLeft) ||
       logicalKeysPressed.contains(LogicalKeyboardKey.shiftRight);
 
-  /// Is the <Alt> key currently being pressed (either left or right)?
+  /// True if the <kbd>Alt</kbd> key is currently being pressed.
   bool get isAltPressed =>
       logicalKeysPressed.contains(LogicalKeyboardKey.altLeft) ||
       logicalKeysPressed.contains(LogicalKeyboardKey.altRight);
 
-  /// Is <NumLock> currently turned on?
+  /// True if <kbd>NumLock</kbd> currently turned on.
   bool get isNumLockOn => _hasLock(KeyboardLockMode.numLock);
 
-  /// Is <CapsLock> currently turned on?
+  /// True if <kbd>CapsLock</kbd> currently turned on.
   bool get isCapsLockOn => _hasLock(KeyboardLockMode.capsLock);
 
-  /// Is <ScrollLock> currently turned on?
+  /// True if <kbd>ScrollLock</kbd> currently turned on.
   bool get isScrollLockOn => _hasLock(KeyboardLockMode.scrollLock);
 
   bool _hasLock(KeyboardLockMode key) =>
