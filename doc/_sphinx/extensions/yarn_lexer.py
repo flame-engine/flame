@@ -152,7 +152,7 @@ class YarnLexer(RegexLexer):
             (r'\$\w+', Name.Variable),
             (r'([+\-*/%><=]=?)', Operator),
             (r'\d+(?:\.\d+)?(?:[eE][+\-]?\d+)?', Number),
-            (r'[(),]', Punctuation),
+            (r'[(),]|\.\.\.', Punctuation),
             (r'"', String.Delimeter, 'string'),
             (r'\w+', Name.Function),
             (r'.', Error),

@@ -21,6 +21,7 @@ class Token {
   static const closeMarkupTag = Token._(TokenType.closeMarkupTag);
   static const colon = Token._(TokenType.colon);
   static const comma = Token._(TokenType.comma);
+  static const commandCharacter = Token._(TokenType.commandCharacter);
   static const commandDeclare = Token._(TokenType.commandDeclare);
   static const commandElse = Token._(TokenType.commandElse);
   static const commandElseif = Token._(TokenType.commandElseif);
@@ -121,6 +122,7 @@ enum TokenType {
   closeMarkupTag, //         '/'  (e.g. in "[br/]")
   colon, //                  ':'
   comma, //                  ','
+  commandCharacter, //       'character'
   commandDeclare, //         'declare'
   commandElse, //            'else'
   commandElseif, //          'elseif'

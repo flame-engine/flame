@@ -25,5 +25,6 @@ options will be grouped into [DialogueChoice] objects.
 **isDisabled** `bool`
 : Same as `!isAvailable`.
 
+
 [Option]: ../language/options.md
 [DialogueChoice]: dialogue_choice.md

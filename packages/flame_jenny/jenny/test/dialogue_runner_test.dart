@@ -10,6 +10,7 @@ void main() {
   group('DialogueRunner', () {
     test('plain dialogue', () async {
       final yarn = YarnProject()
+        ..strictCharacterNames = false
         ..parse(
           '-------------\n'
           'title: Hamlet\n'
@@ -65,6 +66,7 @@ void main() {
 
     test('DialogueViews with delays', () async {
       final yarn = YarnProject()
+        ..strictCharacterNames = false
         ..parse('title: The Robot and the Mattress\n'
             '---\n'
             'Zem: Hello, robot\n'

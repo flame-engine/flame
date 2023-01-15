@@ -7,7 +7,7 @@ The **DialogueLine** class represents a single [Line] of text in the `.yarn` scr
 
 ## Properties
 
-**character** `String?`
+**character** `Character?`
 : The name of the character who is speaking the line, or `null` if the line has no speaker.
 
 **text** `String`

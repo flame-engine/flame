@@ -1,3 +1,7 @@
+## 1.7.1
+
+ - Update a dependency to the latest release.
+
 ## 1.7.0
 
  - **FIX**: Exception when having multiple calls to dispose() function of a Svg instance ([#2085](https://github.com/flame-engine/flame/issues/2085)). ([a287904e](https://github.com/flame-engine/flame/commit/a287904eb5dbbe70128207a6f6a56ff98dfbf579))
