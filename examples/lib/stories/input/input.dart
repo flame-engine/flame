@@ -12,7 +12,7 @@ import 'package:examples/stories/input/mouse_movement_example.dart';
 import 'package:examples/stories/input/multitap_advanced_example.dart';
 import 'package:examples/stories/input/multitap_example.dart';
 import 'package:examples/stories/input/overlapping_tappables_example.dart';
-import 'package:examples/stories/input/raw_keyboard_example.dart';
+import 'package:examples/stories/input/hardware_keyboard_example.dart';
 import 'package:examples/stories/input/scroll_example.dart';
 import 'package:examples/stories/input/tappables_example.dart';
 import 'package:flame/game.dart';
@@ -57,10 +57,10 @@ void addInputStories(Dashbook dashbook) {
       info: KeyboardListenerComponentExample.description,
     )
     ..add(
-      'Raw Keyboard',
-      (_) => GameWidget(game: RawKeyboardExample()),
-      codeLink: baseLink('input/raw_keyboard_example.dart'),
-      info: RawKeyboardExample.description,
+      'Hardware Keyboard',
+      (_) => GameWidget(game: HardwareKeyboardExample()),
+      codeLink: baseLink('input/hardware_keyboard_example.dart'),
+      info: HardwareKeyboardExample.description,
     )
     ..add(
       'Mouse Movement',

@@ -5,10 +5,10 @@ import 'package:flame/text.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 
-class RawKeyboardExample extends FlameGame with RawKeyboardDetector {
+class HardwareKeyboardExample extends FlameGame with HardwareKeyboardDetector {
   static String description = '''
-    This example uses the RawKeyboardDetector mixin in order to keep track of
-    which keys on a keyboard are currently pressed.
+    This example uses the HardwareKeyboardDetector mixin in order to keep
+    track of which keys on a keyboard are currently pressed.
   ''';
 
   /// The list of [KeyboardKey] components currently shown on the screen. This
@@ -32,7 +32,7 @@ class RawKeyboardExample extends FlameGame with RawKeyboardDetector {
   }
 
   @override
-  void onRawKeyEvent(RawKeyEvent event) {
+  void onKeyEvent(KeyEvent event) {
     clearKeys();
     var x0 = 80.0;
     const y0 = 100.0;
