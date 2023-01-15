@@ -16,6 +16,7 @@ void main() {
       expect(game.isCapsLockOn, false);
       expect(game.isNumLockOn, false);
       expect(game.isScrollLockOn, false);
+      expect(game.pauseKeyEvents, false);
     });
 
     testWithGame<_GameWithHardwareKeyboardDetector>(
@@ -65,6 +66,22 @@ void main() {
 
         await simulateKeyDownEvent(LogicalKeyboardKey.keyZ);
         expect(checkedAll, true);
+      },
+    );
+
+    testWithGame<_GameWithHardwareKeyboardDetector>(
+      'key events paused',
+      _GameWithHardwareKeyboardDetector.new,
+      (game) async {
+        game.pauseKeyEvents = true;
+        await simulateKeyDownEvent(LogicalKeyboardKey.enter);
+        await simulateKeyUpEvent(LogicalKeyboardKey.enter);
+        expect(game.events, isEmpty);
+
+        game.pauseKeyEvents = false;
+        await simulateKeyDownEvent(LogicalKeyboardKey.enter);
+        await simulateKeyUpEvent(LogicalKeyboardKey.enter);
+        expect(game.events.length, 2);
       },
     );
   });

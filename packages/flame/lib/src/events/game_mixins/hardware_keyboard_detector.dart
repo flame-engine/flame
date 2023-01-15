@@ -9,6 +9,9 @@ import 'package:flutter/services.dart';
 /// your game. This event handler fires whenever the user presses or releases
 /// any key on a keyboard, and also when a key is being held.
 mixin HardwareKeyboardDetector on Game {
+  /// If set to `true`, delivery of key events will be temporarily suspended.
+  bool pauseKeyEvents = false;
+
   /// The list of keys that are currently being pressed on the keyboard (or a
   /// keyboard-like device). The keys are listed in the order in which they
   /// were pressed, except for the modifier keys which may be listed
@@ -60,7 +63,9 @@ mixin HardwareKeyboardDetector on Game {
     } else if (event is KeyUpEvent) {
       physicalKeysPressed.remove(event.physicalKey);
     }
-    onKeyEvent(event);
+    if (!pauseKeyEvents) {
+      onKeyEvent(event);
+    }
     return true; // handled
   }
 
