@@ -4,6 +4,7 @@
 # list see the documentation:
 # https://www.sphinx-doc.org/en/master/usage/configuration.html
 import docutils
+import docutils.nodes
 import html
 import os
 import sys
@@ -20,12 +21,15 @@ root_doc = "index"
 
 # -- General configuration ---------------------------------------------------
 
+primary_domain = 'dart'
+
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
     'myst_parser',  # Markdown support
     'sphinxcontrib.mermaid',
+    'extensions.dart_domain',
     'extensions.flutter_app',
     'extensions.package',
     'extensions.yarn_lexer',
@@ -60,6 +64,12 @@ linkcheck_ignore = [
     r'https://examples.flame-engine.org/#/.*',
     r'https://pub.dev/documentation/flame/--VERSION--/',
 ]
+
+# -- Options for dartdoc extension -------------------------------------------
+dartdoc_roots = {
+    'flame': '~/github/flame-engine/flame/packages/flame/lib',
+}
+dartdoc_parser = '/Users/stpasha/github/flame-engine/flame/doc/_build/dartdoc_json.jit'
 
 # -- Options for HTML output -------------------------------------------------
 

@@ -9,7 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
 typedef GameLoadingWidgetBuilder = Widget Function(
-  BuildContext,
+   BuildContext,
 );
 
 typedef GameErrorWidgetBuilder = Widget Function(

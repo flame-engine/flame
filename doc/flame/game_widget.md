@@ -63,4 +63,25 @@ class MyGamePage extends StatelessWidget {
 ```
 
 Do note that if the `GameWidget.controlled` constructor is used, the `GameWidget.game` field will
-always be null.
+always be null {ref}`FlameGame` [](GameWicket).
+
+```{dart:dartdoc}
+:file:   src/game/game_widget/game_widget.dart
+:symbol: GameWidget
+:package: flame
+```
+
+
+```{dart:dartdoc}
+:file:   src/components/core/component.dart
+:symbol: Component
+:package: flame
+```
+
+```{dart:dartdoc}
+:file:   src/game/flame_game.dart
+:symbol: FlameGame
+:package: flame
+```
+
+[StatefulWidget]: https://api.flutter.dev/flutter/widgets/StatefulWidget-class.html
