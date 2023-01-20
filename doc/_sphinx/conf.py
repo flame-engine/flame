@@ -10,6 +10,9 @@ import os
 import sys
 sys.path.insert(0, os.path.abspath('.'))
 
+root_dir = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), '..', '..')
+)
 
 # -- Project information -----------------------------------------------------
 
@@ -67,9 +70,11 @@ linkcheck_ignore = [
 
 # -- Options for dartdoc extension -------------------------------------------
 dartdoc_roots = {
-    'flame': '~/github/flame-engine/flame/packages/flame/lib',
+    'flame': os.path.join(root_dir, 'packages/flame/lib'),
+    'jenny': os.path.join(root_dir, 'packages/flame_jenny/jenny/lib'),
 }
 dartdoc_parser = '/Users/stpasha/github/flame-engine/flame/doc/_build/dartdoc_json.jit'
+dartdoc_show_overrides = False
 
 # -- Options for HTML output -------------------------------------------------
 

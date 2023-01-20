@@ -84,7 +84,7 @@ class DartdocDirective(SphinxDirective):
             if self.package not in roots:
                 raise self.error(
                     f'Unknown package name `{self.package}`: please include it in the '
-                    f'`dartdoc_roots` configuration setting.'
+                    f'`dartdoc_roots` configuration setting (file conf.py).'
                 )
             return roots[self.package]
         else:
@@ -317,29 +317,23 @@ class DartdocDirective(SphinxDirective):
         if 'description' not in data:
             return None
         lines = data['description'].split('\n')
-        result = nodes.container(classes=['dartdoc', 'description', f'doc{level}'])
+        result = nodes.container(classes=['description', f'doc{level}'])
         self.state.nested_parse(lines, 0, result)
         return result
 
     def _generate_constructors_section(self, data: Dict, level: int) -> Optional[Element]:
-        if 'members' not in data:
-            return None
-        constructors = [
-            entry
-            for entry in data['members']
-            if entry['kind'] == 'constructor'
-        ]
+        constructors = self._select_class_members(data, ['constructor'])
         if not constructors:
             return None
         # A section needs an id, otherwise Sphinx breaks
-        result = nodes.section(ids=['constructors'], classes=['dartdoc'])
+        result = nodes.section(ids=['constructors'])
         result += nodes.title(text='Constructors')
         for constructor in constructors:
             result += self._generate_node_for_declaration(constructor, level + 1)
         return result
 
     def _generate_methods_section(self, data: Dict, level: int) -> Optional[Element]:
-        methods = [entry for entry in data.get('members', []) if entry['kind'] == 'method']
+        methods = self._select_class_members(data, ['method'])
         if not methods:
             return None
         # A section needs an id, otherwise Sphinx breaks
@@ -350,11 +344,7 @@ class DartdocDirective(SphinxDirective):
         return result
 
     def _generate_properties_section(self, data: Dict, level: int) -> Optional[Element]:
-        fields = [
-            entry
-            for entry in data.get('members', [])
-            if entry['kind'] in {'field', 'getter', 'setter'}
-        ]
+        fields = self._select_class_members(data, ['field', 'getter', 'setter'])
         if not fields:
             return None
         for i, field in enumerate(fields):
@@ -373,6 +363,22 @@ class DartdocDirective(SphinxDirective):
         for i, field in enumerate(fields):
             if field is not None:
                 result += self._generate_node_for_declaration(field, level + 1)
+        return result
+
+    def _select_class_members(self, data: Dict, kinds: List[str]) -> List[Dict]:
+        filter_overrides = not self.env.config.dartdoc_show_overrides
+        result = []
+        for entry in data.get('members', []):
+            if entry['kind'] not in kinds:
+                continue
+            if filter_overrides:
+                annotations = [
+                    annotation['name']
+                    for annotation in entry.get('annotations', [])
+                ]
+                if '@override' in annotations:
+                    continue
+            result.append(entry)
         return result
 
 
@@ -470,6 +476,7 @@ def setup(app: Sphinx):
     app.add_config_value('dartdoc_root', '', 'env', str)
     app.add_config_value('dartdoc_roots', {}, 'env', Dict[str, str])
     app.add_config_value('dartdoc_parser', 'dartdoc_json.dart', '', str)
+    app.add_config_value('dartdoc_show_overrides', False, 'env', bool)
     app.add_domain(DartDomain)
     app.connect('build-finished', copy_asset_files)
     return {
