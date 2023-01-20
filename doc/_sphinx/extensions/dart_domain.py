@@ -4,7 +4,7 @@ import re
 import subprocess
 import sys
 import tempfile
-from typing import List, Tuple, Dict, Optional
+from typing import List, Tuple, Dict, Optional, Set
 
 from docutils import nodes
 from docutils.nodes import Element
@@ -405,7 +405,7 @@ class DartDomain(Domain):
             #    -> object_data: Dict = {
             #         'json': Dict,  # object's raw API data, in JSON format
             #         'source': str,  # file name where the API data came from
-            #         'timestamp': int,  # last modified time of [source]
+            #         'timestamp': float,  # last modified time of [source]
             #         'docname': str,  # doc where the symbol is documented
             #       }
         },
@@ -471,6 +471,23 @@ def copy_asset_files(app, exc):
         copy_asset_file(css_file, static_dir)
 
 
+# https://www.sphinx-doc.org/en/master/extdev/appapi.html#event-env-get-outdated
+def on_env_get_outdated(_: Sphinx, env: BuildEnvironment, added: Set[str], changed: Set[str],
+                        removed: Set[str]) -> List[str]:
+    existing = added | changed | removed
+    modified = set()
+    for package, package_data in env.domaindata['dart']['objects'].items():
+        for symbol, record in package_data.items():
+            docname = record['docname']
+            if docname in existing or docname in modified:
+                continue
+            last_scan_time = record['timestamp']
+            last_modified_time = os.path.getmtime(record['filename'])
+            if last_scan_time < last_modified_time:
+                modified.add(docname)
+    return list(modified)
+
+
 def setup(app: Sphinx):
     app.add_css_file('dart_domain.css')
     app.add_config_value('dartdoc_root', '', 'env', str)
@@ -479,6 +496,7 @@ def setup(app: Sphinx):
     app.add_config_value('dartdoc_show_overrides', False, 'env', bool)
     app.add_domain(DartDomain)
     app.connect('build-finished', copy_asset_files)
+    app.connect("env-get-outdated", on_env_get_outdated)
     return {
         'version': '1.0.0',
         'parallel_read_safe': True,
