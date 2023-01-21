@@ -183,7 +183,7 @@ following:
 
     - Verify that all packages were installed correctly, otherwise, an error may occur.
 
-4. Melos as per the [contributing](contributing.md#environment-setup) guide.
+4. **Melos** as per the [contributing](contributing.md#environment-setup) guide.
 
 Once these prerequisites are met, you can build the documentation by using the built-in Melos
 target:

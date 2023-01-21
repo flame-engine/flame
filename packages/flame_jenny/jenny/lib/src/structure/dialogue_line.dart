@@ -2,7 +2,12 @@ import 'package:jenny/jenny.dart';
 import 'package:jenny/src/structure/dialogue_entry.dart';
 import 'package:jenny/src/structure/line_content.dart';
 
-/// [DialogueLine] is a single line of "normal" text within the dialogue.
+/// The **DialogueLine** class represents a single line of text within the
+/// dialogue [](Line).
+///
+/// The `DialogueLine` objects will be delivered to your [DialogueView] with
+/// methods `onLineStart()`, `onLineSignal()`, `onLineStop()`, and
+/// `onLineFinish()`.
 ///
 /// A dialogue line may contain a [character] (the name of the entity who is
 /// speaking), and [tags] -- a list of hashtag tokens that specify some meta
@@ -55,21 +60,24 @@ class DialogueLine extends DialogueEntry {
   /// not contain a speaker.
   Character? get character => _character;
 
-  /// The computed text of the line, after substituting all inline expressions.
+  /// The computed text of the line, after substituting all inline expressions,
+  /// stripping the markup, and processing the escape sequences.
   ///
-  /// This value may change upon subsequent re-evaluations of the line (which
-  /// occur each time the line goes through the Dialogue runner).
+  /// This value can only be accessed after the line was [evaluate]d. It may
+  /// change upon subsequent re-evaluations of the line (which occur each time
+  /// the line goes through a [DialogueRunner]).
   String get text {
     assert(_value != null, 'Line was not evaluated');
     return _value!;
   }
 
-  /// The list of hashtags associated with the line.
+  /// The list of hashtags associated with the line. If there are no hashtags,
+  /// the list will be empty.
   ///
-  /// Each value in the list will start with the '#' symbol.
+  /// Each value in the list will start with the `#` symbol.
   List<String> get tags => _tags ?? const [];
 
-  /// The list of markup attributes associated with the text line.
+  /// The list of markup spans associated with the line.
   List<MarkupAttribute> get attributes => _content.attributes ?? const [];
 
   /// True if the line will never change upon subsequent reruns. That is, when
@@ -82,6 +90,13 @@ class DialogueLine extends DialogueEntry {
     return runner.deliverLine(this);
   }
 
+  /// Computes the [text] of the line, substituting the current values of all
+  /// inline expressions.
+  ///
+  /// Normally, you wouldn't need to call this method manually -- the
+  /// [DialogueRunner] will take care to do that for you. However, it may be
+  /// necessary to call this if you need to access `DialogueLine`s outside of
+  /// a dialogue runner.
   void evaluate() {
     _value = _content.evaluate();
   }

@@ -9,7 +9,6 @@ import 'package:meta/meta.dart';
 /// command, unless [YarnProject]'s setting `strictCharacterNames` is set to
 /// false.
 class Character {
-  @internal
   Character(this.name, {List<String>? aliases}) : aliases = aliases ?? [];
 
   Map<String, dynamic>? _data;
