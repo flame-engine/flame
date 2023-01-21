@@ -73,7 +73,7 @@ dartdoc_roots = {
     'flame': os.path.join(root_dir, 'packages/flame/lib'),
     'jenny': os.path.join(root_dir, 'packages/flame_jenny/jenny/lib'),
 }
-dartdoc_parser = '/Users/stpasha/github/flame-engine/flame/doc/_build/dartdoc_json.jit'
+dartdoc_parser = os.path.join(root_dir, 'doc/_build/dartdoc_json.jit')
 dartdoc_show_overrides = False
 
 # -- Options for HTML output -------------------------------------------------
