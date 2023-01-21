@@ -497,7 +497,7 @@ def on_env_get_outdated(_: Sphinx, env: BuildEnvironment, added: Set[str], chang
 # caches in attributes of the environment.
 #
 # https://www.sphinx-doc.org/en/master/extdev/appapi.html#event-env-purge-doc
-def on_env_purge_doc(app: Sphinx, env: BuildEnvironment, docname: str):
+def on_env_purge_doc(_: Sphinx, env: BuildEnvironment, docname: str) -> None:
     for package, package_data in env.domaindata['dart']['objects'].items():
         symbols_to_remove = []
         for symbol, record in package_data.items():
@@ -505,6 +505,22 @@ def on_env_purge_doc(app: Sphinx, env: BuildEnvironment, docname: str):
                 symbols_to_remove.append(symbol)
         for symbol in symbols_to_remove:
             del package_data[symbol]
+
+
+# Emitted after the environment has determined the list of all added and changed files and just
+# before it reads them. It allows extension authors to reorder the list of docnames (inplace)
+# before processing, or add more docnames that Sphinx did not consider changed.
+#
+# https://www.sphinx-doc.org/en/master/extdev/appapi.html#event-env-before-read-docs
+def on_env_before_read_docs(_: Sphinx, __: BuildEnvironment, docnames: List[str]) -> None:
+    # This ensures that within each directory, the 'index.md' document is processed first.
+    def key(docname: str) -> str:
+        basename = os.path.basename(docname)
+        if docname == 'index':
+            return '_index'
+        return basename
+
+    docnames.sort(key=key)
 
 
 def setup(app: Sphinx):
@@ -517,6 +533,7 @@ def setup(app: Sphinx):
     app.connect('build-finished', copy_asset_files)
     app.connect('env-get-outdated', on_env_get_outdated)
     app.connect('env-purge-doc', on_env_purge_doc)
+    app.connect('env-before-read-docs', on_env_before_read_docs)
     return {
         'version': '1.0.0',
         'parallel_read_safe': True,
