@@ -471,6 +471,10 @@ def copy_asset_files(app, exc):
         copy_asset_file(css_file, static_dir)
 
 
+# Emitted when the environment determines which source files have changed and should be re-read.
+# `added`, `changed` and `removed` are sets of docnames that the environment has determined. You
+# can return a list of docnames to re-read in addition to these.
+#
 # https://www.sphinx-doc.org/en/master/extdev/appapi.html#event-env-get-outdated
 def on_env_get_outdated(_: Sphinx, env: BuildEnvironment, added: Set[str], changed: Set[str],
                         removed: Set[str]) -> List[str]:
@@ -488,6 +492,21 @@ def on_env_get_outdated(_: Sphinx, env: BuildEnvironment, added: Set[str], chang
     return list(modified)
 
 
+# Emitted when all traces of a source file should be cleaned from the environment, that is, if the
+# source file is removed or before it is freshly read. This is for extensions that keep their own
+# caches in attributes of the environment.
+#
+# https://www.sphinx-doc.org/en/master/extdev/appapi.html#event-env-purge-doc
+def on_env_purge_doc(app: Sphinx, env: BuildEnvironment, docname: str):
+    for package, package_data in env.domaindata['dart']['objects'].items():
+        symbols_to_remove = []
+        for symbol, record in package_data.items():
+            if record['docname'] == docname:
+                symbols_to_remove.append(symbol)
+        for symbol in symbols_to_remove:
+            del package_data[symbol]
+
+
 def setup(app: Sphinx):
     app.add_css_file('dart_domain.css')
     app.add_config_value('dartdoc_root', '', 'env', str)
@@ -496,7 +515,8 @@ def setup(app: Sphinx):
     app.add_config_value('dartdoc_show_overrides', False, 'env', bool)
     app.add_domain(DartDomain)
     app.connect('build-finished', copy_asset_files)
-    app.connect("env-get-outdated", on_env_get_outdated)
+    app.connect('env-get-outdated', on_env_get_outdated)
+    app.connect('env-purge-doc', on_env_purge_doc)
     return {
         'version': '1.0.0',
         'parallel_read_safe': True,
