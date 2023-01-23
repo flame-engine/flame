@@ -51,6 +51,19 @@ scripts:
     run: melos exec flutter pub run dartdoc
     description: Run dartdoc checks for all packages.
 
+  doc-setup:
+    run: |
+      echo '\033[1;32mChecking python version:\033[m' &&
+      python --version &&
+      echo '\n\033[1;32mInstalling required python modules:\033[m' &&
+      (python -c 'import sys; sys.exit(0 if sys.version_info>=(3,8) else 2)' ||
+       (echo '\033[1;31mError: Python 3.8+ is required\033[m' && false)) &&
+      python -m pip install -r "$MELOS_ROOT_PATH/doc/_sphinx/requirements.txt" &&
+      echo '\n\033[1;32mInstalling dartdoc_json:\033[m' &&
+      dart pub global activate dartdoc_json &&
+      echo '\n\033[1;32mDone.\033[m'
+    description: Prepares the environment for documentation development.
+
   doc-build:
     run: cd "$MELOS_ROOT_PATH/doc/_sphinx" && make html
     description: Create the sphinx html docs.
