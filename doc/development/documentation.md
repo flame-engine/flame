@@ -176,6 +176,7 @@ following:
    virtual environment is recommended but not required;
 
 4. Install the remaining requirements using the command
+
    ```console
     melos run doc-setup
    ```
