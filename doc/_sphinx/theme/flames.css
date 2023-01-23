@@ -67,6 +67,16 @@ code {
   padding: 2pt 3pt;
 }
 
+code.xref {
+  background: none;
+  color: #f75151;
+  padding: 0;
+}
+
+a.reference code.xref {
+  color: #ffbb3e;
+}
+
 p {
   margin-top: 0;
 }

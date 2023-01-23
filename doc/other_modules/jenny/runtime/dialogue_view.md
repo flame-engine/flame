@@ -1,5 +1,12 @@
 # DialogueView
 
+```{dartdoc}
+:file: src/dialogue_view.dart
+:symbol: DialogueView
+:package: jenny
+```
+
+-----
 The **DialogueView** class is the main mechanism of integrating Jenny with any existing framework,
 such as a game engine. This class describes how [line]s and [option]s are presented to the user.
 

@@ -9,6 +9,14 @@ import 'package:jenny/src/structure/dialogue_option.dart';
 import 'package:jenny/src/structure/node.dart';
 import 'package:meta/meta.dart';
 
+/// The **DialogueView** class is the main mechanism of integrating Jenny with
+/// a game engine. This class describes how {ref}`line <DialogueLine>`s and
+/// {ref}`option <DialogueOption>`s are presented to the user.
+///
+/// This class is abstract, which means you must create a concrete
+/// implementation in order to use Jenny's dialogue system. The concrete
+/// `DialogueView` objects will then be passed to a [DialogueRunner], which
+/// will orchestrate the dialogue's progression.
 abstract class DialogueView {
   DialogueView();
 

@@ -20,11 +20,6 @@ from sphinx.util.fileutil import copy_asset_file
 from sphinx.util.nodes import make_refnode
 
 
-def remove_nulls(items: List):
-    """Helper methods for filtering out `None` values from a list."""
-    return [item for item in items if item is not None]
-
-
 class DartdocDirective(SphinxDirective):
     """
     Directive to add auto-generated documentation for a particular symbol in
@@ -32,13 +27,22 @@ class DartdocDirective(SphinxDirective):
 
     Example of usage (in a markdown file):
 
+        # Component
         ```{dartdoc}
         :file: src/components/core/component.dart
         :symbol: Component
         :package: flame
+
+        [[Link1]]: url1
+        ...
+        [[LinkN]]: urlN
         ```
+
+    We recommend documenting only one such symbol per page; however, it is
+    possible to add extra content on the page after the {dartdoc} directive.
+    Such content may include additional examples, see-also section, etc.
     """
-    has_content = False
+    has_content = True
     required_arguments = 0
     optional_arguments = 0
     option_spec = {
@@ -47,15 +51,21 @@ class DartdocDirective(SphinxDirective):
         "package": directives.unchanged,
     }
 
+    rx_reference_line = re.compile(r'^\[\[(.*)]]:\s+(.*)$')
+
     def __init__(self, name, arguments, options, content, lineno, content_offset, block_text, state,
                  state_machine):
         super().__init__(name, arguments, options, content, lineno, content_offset, block_text,
                          state, state_machine)
-        self.package = None
+        self.package: str = ''
         self.root = None
         self.source_file = None
         self.symbol = None
         self.record = None
+        # Explicit reference targets provided to the directive within the content. These are
+        # references in double-square brackets.
+        self.links: Dict[str, str] = {}
+        self.member_links: Set[str] = set()
 
     def run(self):
         self.package = self._parse_option_package()
@@ -63,7 +73,11 @@ class DartdocDirective(SphinxDirective):
         self.source_file = self._parse_option_file()
         self.symbol = self._parse_option_symbol()
         self.record = self._get_data_record()
+        self.links = self._parse_links()
         self._scan_source_file_if_needed()
+        for member in self.record['json'].get('members', {}):
+            self.member_links.add(member['name'])
+        print(self.member_links)
         result = nodes.container(
             '',
             self._generate_node_for_declaration(self.record['json'], 1),
@@ -71,7 +85,7 @@ class DartdocDirective(SphinxDirective):
         )
         return [result]
 
-    def _parse_option_package(self):
+    def _parse_option_package(self) -> str:
         package = self.options['package']
         if not package:
             data = self.env.domaindata['dart']
@@ -105,6 +119,22 @@ class DartdocDirective(SphinxDirective):
         if not re.fullmatch(r'[a-zA-Z_][a-zA-Z0-9_]*', symbol):
             raise ValueError(f'Invalid symbol name `{symbol}`')
         return symbol
+
+    def _parse_links(self) -> Dict[str, str]:
+        links = {}
+        for line in self.content:
+            line = line.strip()
+            if not line:
+                continue
+            match = re.fullmatch(self.rx_reference_line, line)
+            if match:
+                links[match.group(1)] = match.group(2)
+            else:
+                raise self.error(
+                    f'Invalid reference definition: `{line}`; expected the '
+                    f'following format: `[[NAME]]: TARGET`'
+                )
+        return links
 
     def _get_data_record(self):
         objects = self.env.domaindata['dart']['objects']
@@ -200,9 +230,7 @@ class DartdocDirective(SphinxDirective):
             result += self._generate_description(data, level)
         else:
             raise self.error(f'Unknown symbol kind: {kind}')
-        if level == 1:
-            sig_node = result[0]
-            self.state.document.note_explicit_target(sig_node)
+        self.state.document.note_explicit_target(result[0])
         return result
 
     def _generate_class_signature_node(self, data: Dict, level: int) -> Element:
@@ -234,7 +262,10 @@ class DartdocDirective(SphinxDirective):
         return result
 
     def _generate_function_signature_node(self, data: Dict, level: int) -> Element:
-        result = nodes.container(classes=['signature', f'sig{level}'], ids=[data['name']])
+        node_id = data['name']
+        if level >= 2:
+            node_id = f'{self.symbol}.{node_id}'
+        result = nodes.container(classes=['signature', f'sig{level}'], ids=[node_id])
         first_line = nodes.container()
         first_line += nodes.inline(text=data['name'], classes=['name'])
         first_line += self._generate_type_parameters_node(data)
@@ -314,9 +345,12 @@ class DartdocDirective(SphinxDirective):
         return result
 
     def _generate_description(self, data: Dict, level: int) -> Optional[Element]:
-        if 'description' not in data:
+        if not data.get('description'):
             return None
-        lines = data['description'].split('\n')
+        lines = [
+            self._augment_comment_line(line)
+            for line in data['description'].split('\n')
+        ]
         result = nodes.container(classes=['description', f'doc{level}'])
         self.state.nested_parse(lines, 0, result)
         return result
@@ -366,6 +400,11 @@ class DartdocDirective(SphinxDirective):
         return result
 
     def _select_class_members(self, data: Dict, kinds: List[str]) -> List[Dict]:
+        """
+        Given the JSON object [data] which describes a single Dart object such
+        as class/mixin/etc, this method returns all entries in `data.members`
+        whose "kind" property is among the provided [kinds].
+        """
         filter_overrides = not self.env.config.dartdoc_show_overrides
         result = []
         for entry in data.get('members', []):
@@ -380,6 +419,30 @@ class DartdocDirective(SphinxDirective):
                     continue
             result.append(entry)
         return result
+
+    rx_simple_reference = re.compile(r'\[(\w+)](?!\()')
+    rx_manual_reference = re.compile(r'\[\[(.*?)]]')
+
+    def _augment_comment_line(self, line: str) -> str:
+        # Links of the form `[[NAME]]` are converted into `[NAME](URL)`. The
+        # `NAME` must be listed beforehand within the directive's content.
+        def resolve_manual_reference(match: re.Match) -> str:
+            target = match.group(1)
+            if target in self.links:
+                url = self.links[target]
+                return f'[{target}]({url})'
+
+        # Links of the form `[NAME]` are converted into "{ref}`NAME`", so that
+        # they can be resolved later by the domain.
+        def resolve_simple_reference(match: re.Match) -> str:
+            target = match.group(1)
+            if target in self.member_links:
+                return f'{{ref}}`{target} <{self.symbol}.{target}>`'
+            return f'{{ref}}`{target}`'
+
+        line = re.sub(self.rx_manual_reference, resolve_manual_reference, line)
+        line = re.sub(self.rx_simple_reference, resolve_simple_reference, line)
+        return line
 
 
 class DartDomain(Domain):
@@ -444,18 +507,24 @@ class DartDomain(Domain):
                      typ: str, target: str, node: pending_xref, contnode: Element
                      ) \
             -> Optional[Element]:
+        target_id = target
+        if '.' in target:
+            target, suffix = target.split('.', 2)
+        print(f'resolving xref `{target_id}`', end='')
         symbol_data = None
         for package, package_data in self.data['objects'].items():
             if target in package_data:
                 symbol_data = package_data[target]
                 break
         if not symbol_data:
+            print(' -> None')
             return None
+        print(f' -> {symbol_data["docname"]}')
         return make_refnode(
             builder=builder,
             fromdocname=fromdocname,
             todocname=symbol_data['docname'],
-            targetid=target,
+            targetid=target_id,
             child=contnode,
             title=None,
         )
@@ -523,6 +592,10 @@ def on_env_before_read_docs(_: Sphinx, __: BuildEnvironment, docnames: List[str]
     docnames.sort(key=key)
 
 
+# def on_doctree_read(app, doctree):
+#     import pdb; pdb.set_trace()
+
+
 def setup(app: Sphinx):
     app.add_css_file('dart_domain.css')
     app.add_config_value('dartdoc_root', '', 'env', str)
@@ -534,6 +607,7 @@ def setup(app: Sphinx):
     app.connect('env-get-outdated', on_env_get_outdated)
     app.connect('env-purge-doc', on_env_purge_doc)
     app.connect('env-before-read-docs', on_env_before_read_docs)
+    # app.connect('doctree-read', on_doctree_read)
     return {
         'version': '1.0.0',
         'parallel_read_safe': True,
