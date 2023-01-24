@@ -9,6 +9,7 @@
 
 .dartdoc .signature.sig2 {
   border-radius: 6pt;
+  box-shadow: 1px 1px 3px rgb(0 0 0 / 50%);
   font-family: var(--font-mono);
   margin-bottom: 6pt;
   padding: 6pt 6pt 6pt 30pt;
@@ -31,3 +32,14 @@
 .dartdoc .field .signature,
 .dartdoc .getter .signature,
 .dartdoc .setter .signature { background: rgb(63 92 86 / 25%); }
+
+.dartdoc span.param {
+  background: #111;
+  border: 1px solid rgb(170 204 221 / 50%);
+  border-radius: 3pt;
+  color: #a6c3de;
+  font-family: var(--font-mono);
+  font-size: 85%;
+  padding: 1pt 3pt;
+  white-space: nowrap;
+}

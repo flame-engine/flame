@@ -4,26 +4,11 @@
 :file: src/dialogue_view.dart
 :symbol: DialogueView
 :package: jenny
+
+[Completer]: https://api.dart.dev/stable/2.18.6/dart-async/Completer-class.html
 ```
 
 -----
-The **DialogueView** class is the main mechanism of integrating Jenny with any existing framework,
-such as a game engine. This class describes how [line]s and [option]s are presented to the user.
-
-This class is abstract, which means you must create a concrete implementation in order to use the
-dialogue system. The concrete `DialogueView` objects will then be passed to a [DialogueRunner],
-which will orchestrate the dialogue's progression.
-
-
-## Properties
-
-**dialogueRunner**: `DialogueRunner?`
-: The owner of this DialogueView. This property is non-`null` when the dialogue view is actively
-  used by a `DialogueRunner`.
-
-  This property can be used in order to access the parent [YarnProject], or to send signals into the
-  sibling `DialogueView`s.
-
 
 ## Methods
 

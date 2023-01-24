@@ -4,11 +4,12 @@ import re
 import subprocess
 import sys
 import tempfile
-from typing import List, Tuple, Dict, Optional, Set
+from typing import List, Tuple, Dict, Optional, Set, Any
 
 from docutils import nodes
 from docutils.nodes import Element
 from docutils.parsers.rst import directives
+from docutils.parsers.rst.states import Inliner
 from sphinx.addnodes import pending_xref
 from sphinx.application import Sphinx
 from sphinx.builders import Builder
@@ -51,7 +52,7 @@ class DartdocDirective(SphinxDirective):
         "package": directives.unchanged,
     }
 
-    rx_reference_line = re.compile(r'^\[\[(.*)]]:\s+(.*)$')
+    rx_reference_line = re.compile(r'^\[{1,2}(.*)]{1,2}:\s+(.*)$')
 
     def __init__(self, name, arguments, options, content, lineno, content_offset, block_text, state,
                  state_machine):
@@ -62,10 +63,18 @@ class DartdocDirective(SphinxDirective):
         self.source_file = None
         self.symbol = None
         self.record = None
-        # Explicit reference targets provided to the directive within the content. These are
+        # Explicit reference targets provided to the directive within its content. These are
         # references in double-square brackets.
         self.links: Dict[str, str] = {}
-        self.member_links: Set[str] = set()
+        # Names of members (fields/methods) of the current class/mixin/enum. Within the body of
+        # this directive, references to these members may be given as plain text in square
+        # brackets.
+        self.member_set: Set[str] = set()
+        # Names of parameters to the current method. This set is populated only when processing
+        # some method/constructor within the class. Within the description of the method, the names
+        # of these parameters can be mentioned in square brackets, which will be converted into a
+        # special :param: role.
+        self.param_set: Set[str] = set()
 
     def run(self):
         self.package = self._parse_option_package()
@@ -76,8 +85,7 @@ class DartdocDirective(SphinxDirective):
         self.links = self._parse_links()
         self._scan_source_file_if_needed()
         for member in self.record['json'].get('members', {}):
-            self.member_links.add(member['name'])
-        print(self.member_links)
+            self.member_set.add(member['name'])
         result = nodes.container(
             '',
             self._generate_node_for_declaration(self.record['json'], 1),
@@ -223,8 +231,11 @@ class DartdocDirective(SphinxDirective):
             result += self._generate_properties_section(data, level)
             result += self._generate_methods_section(data, level)
         elif kind in {'constructor', 'method', 'function'}:
+            for param in data.get('parameters', {}).get('all', []):
+                self.param_set.add(param['name'])
             result += self._generate_function_signature_node(data, level)
             result += self._generate_description(data, level)
+            self.param_set.clear()
         elif kind in {'field', 'getter', 'setter'}:
             result += self._generate_field_signature_node(data, level)
             result += self._generate_description(data, level)
@@ -436,13 +447,24 @@ class DartdocDirective(SphinxDirective):
         # they can be resolved later by the domain.
         def resolve_simple_reference(match: re.Match) -> str:
             target = match.group(1)
-            if target in self.member_links:
+            if target in self.param_set:
+                return f'{{param}}`{target}`'
+            if target in self.member_set:
                 return f'{{ref}}`{target} <{self.symbol}.{target}>`'
+            if target in self.links:
+                url = self.links[target]
+                return f'[{target}]({url})'
             return f'{{ref}}`{target}`'
 
         line = re.sub(self.rx_manual_reference, resolve_manual_reference, line)
         line = re.sub(self.rx_simple_reference, resolve_simple_reference, line)
         return line
+
+
+def ParamRole(name: str, rawtext: str, text: str, lineno: int, inliner: Inliner,
+              options: Dict[str, Any], content: List[str]) \
+        -> Tuple[List[nodes.Node], List[nodes.system_message]]:
+    return [nodes.inline(text=text, classes=['param'])], []
 
 
 class DartDomain(Domain):
@@ -454,6 +476,7 @@ class DartDomain(Domain):
 
     roles = {
         'ref': XRefRole(),
+        'param': ParamRole,
     }
     directives = {
         'dartdoc': DartdocDirective,
@@ -510,16 +533,13 @@ class DartDomain(Domain):
         target_id = target
         if '.' in target:
             target, suffix = target.split('.', 2)
-        print(f'resolving xref `{target_id}`', end='')
         symbol_data = None
         for package, package_data in self.data['objects'].items():
             if target in package_data:
                 symbol_data = package_data[target]
                 break
         if not symbol_data:
-            print(' -> None')
             return None
-        print(f' -> {symbol_data["docname"]}')
         return make_refnode(
             builder=builder,
             fromdocname=fromdocname,

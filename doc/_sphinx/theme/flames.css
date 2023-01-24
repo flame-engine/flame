@@ -59,7 +59,7 @@ a.reference.external::after {
 }
 
 code {
-  background-color: #181818;
+  background-color: #111;
   border-radius: 3pt;
   color: #8b9fb1;
   font-family: var(--font-mono);
@@ -73,9 +73,8 @@ code.xref {
   padding: 0;
 }
 
-a.reference code.xref {
-  color: #ffbb3e;
-}
+a.reference code.xref { color: #ffbb3e; }
+a.reference:hover code.xref { color: #ffffff; }
 
 p {
   margin-top: 0;
