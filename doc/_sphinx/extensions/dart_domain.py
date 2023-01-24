@@ -34,9 +34,9 @@ class DartdocDirective(SphinxDirective):
         :symbol: Component
         :package: flame
 
-        [[Link1]]: url1
+        [Link1]: url1
         ...
-        [[LinkN]]: urlN
+        [LinkN]: urlN
         ```
 
     We recommend documenting only one such symbol per page; however, it is
