@@ -52,8 +52,6 @@ class DartdocDirective(SphinxDirective):
         "package": directives.unchanged,
     }
 
-    rx_reference_line = re.compile(r'^\[{1,2}([^]]*?)]{1,2}:\s+(.*)$')
-
     def __init__(self, name, arguments, options, content, lineno, content_offset, block_text, state,
                  state_machine):
         super().__init__(name, arguments, options, content, lineno, content_offset, block_text,
@@ -129,12 +127,13 @@ class DartdocDirective(SphinxDirective):
         return symbol
 
     def _parse_links(self) -> Dict[str, str]:
+        rx_reference_line = re.compile(r'^\[(.*?)]:\s+(.*)$')
         links = {}
         for line in self.content:
             line = line.strip()
             if not line:
                 continue
-            match = re.fullmatch(self.rx_reference_line, line)
+            match = re.fullmatch(rx_reference_line, line)
             if match:
                 links[match.group(1)] = match.group(2)
             else:
@@ -271,7 +270,7 @@ class DartdocDirective(SphinxDirective):
     def _generate_function_signature_node(self, data: Dict, level: int) -> Element:
         node_id = data['name']
         if level >= 2:
-            node_id = f'{self.symbol}.{node_id}'
+            node_id = f'{self.symbol}-{node_id}'
         result = nodes.container(classes=['signature', f'sig{level}'], ids=[node_id])
         first_line = nodes.container()
         first_line += nodes.inline(text=data['name'], classes=['name'])
@@ -314,7 +313,10 @@ class DartdocDirective(SphinxDirective):
         return result
 
     def _generate_field_signature_node(self, data: Dict, level: int) -> Element:
-        result = nodes.container(classes=['signature', f'sig{level}'], ids=[data['name']])
+        node_id = data['name']
+        if level >= 2:
+            node_id = f'{self.symbol}-{node_id}'
+        result = nodes.container(classes=['signature', f'sig{level}'], ids=[node_id])
         result += nodes.inline(text=data['name'], classes=['name'])
         if data['kind'] == 'field':
             arrow = ':'
@@ -354,10 +356,7 @@ class DartdocDirective(SphinxDirective):
     def _generate_description(self, data: Dict, level: int) -> Optional[Element]:
         if not data.get('description'):
             return None
-        lines = [
-            self._augment_comment_line(line)
-            for line in data['description'].split('\n')
-        ]
+        lines = self._augment_comment(data['description']).split('\n')
         result = nodes.container(classes=['description', f'doc{level}'])
         self.state.nested_parse(lines, 0, result)
         return result
@@ -427,42 +426,78 @@ class DartdocDirective(SphinxDirective):
             result.append(entry)
         return result
 
-    rx_simple_reference = re.compile(r'\[(\w+)](?!\()')
-    rx_manual_reference = re.compile(r'\[\[(.*?)]]')
-    rx_escape = re.compile(r'([<>`*])')
+    def _augment_comment(self, text: str) -> str:
+        rx_escape = re.compile(r'([<>`*])')
 
-    def _augment_comment_line(self, line: str) -> str:
         def escape(text: str) -> str:
-            return re.sub(self.rx_escape, r'\\\1', text)
+            return re.sub(rx_escape, r'\\\1', text)
 
-        # Links of the form `[[NAME]]` are converted into `[NAME](URL)`. The
-        # `NAME` must be listed beforehand within the directive's content.
-        def resolve_manual_reference(match: re.Match) -> str:
-            target = match.group(1)
-            if target in self.links:
-                url = self.links[target]
-                return f'[{escape(target)}]({url})'
-            raise self.error(
-                f'Unexpected link {target}, please specify its target URL '
-                f'within the content section of the directive.'
-            )
+        def count(char, text, j):
+            n = 0
+            while j < len(text):
+                if text[j] == char:
+                    n += 1
+                else:
+                    break
+                j += 1
+            return n
 
-        # Links of the form `[NAME]` are converted into "{ref}`NAME`", so that
-        # they can be resolved later by the domain.
-        def resolve_simple_reference(match: re.Match) -> str:
-            target = match.group(1)
-            if target in self.param_set:
-                return f'{{param}}`{target}`'
-            if target in self.member_set:
-                return f'{{ref}}`{target} <{self.symbol}.{target}>`'
-            if target in self.links:
-                url = self.links[target]
-                return f'[{escape(target)}]({url})'
-            return f'{{ref}}`{escape(target)}`'
-
-        line = re.sub(self.rx_manual_reference, resolve_manual_reference, line)
-        line = re.sub(self.rx_simple_reference, resolve_simple_reference, line)
-        return line
+        parts: List[str] = []
+        i = 0
+        i0 = 0
+        while i < len(text):
+            ch = text[i]
+            if ch == '`':
+                # Skip any backtick-escaped text
+                num_backticks = count('`', text, i)
+                i += num_backticks
+                assert num_backticks > 0
+                while i < len(text):
+                    if count('`', text, i) >= num_backticks:
+                        i += num_backticks
+                        break
+                    i += 1
+            elif ch == '[':
+                parts.append(text[i0:i])
+                num_brackets = count('[', text, i)
+                i += num_brackets
+                assert num_brackets > 0
+                start = i
+                while i < len(text):
+                    if count(']', text, i) >= num_brackets:
+                        i += num_brackets
+                        break
+                    i += 1
+                target = text[start:i - num_brackets]
+                i0 = i
+                if num_brackets >= 2:
+                    # Links of the form `[[NAME]]` are converted into `[NAME](URL)`. The
+                    # `NAME` must be listed beforehand within the directive's content.
+                    if target in self.links:
+                        url = self.links[target]
+                        parts.append(f'[{escape(target)}]({url})')
+                    else:
+                        raise self.error(
+                            f'Unexpected link {target}, please specify its '
+                            f'target URL within the content section of the '
+                            f'directive.'
+                        )
+                else:
+                    # Links of the form `[NAME]` are converted into "{ref}`NAME`", so that
+                    # they can be resolved later by the domain.
+                    if target in self.param_set:
+                        parts.append(f'{{param}}`{target}`')
+                    elif target in self.member_set:
+                        parts.append(f'{{ref}}`{target} <{self.symbol}-{target}>`')
+                    elif target in self.links:
+                        url = self.links[target]
+                        parts.append(f'[{escape(target)}]({url})')
+                    else:
+                        parts.append(f'{{ref}}`{escape(target)}`')
+            else:
+                i += 1
+        parts.append(text[i0:])
+        return ''.join(parts)
 
 
 def ParamRole(name: str, rawtext: str, text: str, lineno: int, inliner: Inliner,
@@ -535,8 +570,8 @@ class DartDomain(Domain):
                      ) \
             -> Optional[Element]:
         target_id = target
-        if '.' in target:
-            target, suffix = target.split('.', 2)
+        if '-' in target:
+            target, suffix = target.split('-', 2)
         symbol_data = None
         for package, package_data in self.data['objects'].items():
             if target in package_data:

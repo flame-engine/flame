@@ -5,5 +5,5 @@
 :symbol: DialogueLine
 :file: src/structure/dialogue_line.dart
 
-[[Line]]: ../language/lines.md
+[Line]: ../language/lines.md
 ```
