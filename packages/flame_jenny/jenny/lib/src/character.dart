@@ -1,5 +1,4 @@
 import 'package:jenny/jenny.dart';
-import 'package:meta/meta.dart';
 
 /// A **Character** represents a person who is speaking a particular line in a
 /// dialogue. This object is available as the `.character` property of a
@@ -14,7 +13,7 @@ class Character {
   Map<String, dynamic>? _data;
 
   /// The canonical name of the character, which was the first argument in the
-  /// [\<\<character\>\>] command.
+  /// [<<character>>] command.
   final String name;
 
   /// Additional names (IDs) that may be used for this character in yarn
