@@ -51,7 +51,4 @@ terminate immediately and none of the `*Finish` callbacks will run.
 :::
 
 
-[DialogueChoice]: dialogue_choice.md
 [DialogueView]: dialogue_view.md
-[Node]: node.md
-[YarnProject]: yarn_project.md
