@@ -17,17 +17,19 @@ abstract class Broadphase<T extends Hitbox<T>> {
   void update() {}
 
   /// Returns a flat List of items regardless of what data structure is used to
-  /// store collision information
+  /// store collision information.
   List<T> get items;
 
-  /// Add item to broadphase. Should be called in [CollisionDetection] class
-  /// while adding a hitbox into collision detection system
+  /// Adds an item to the broadphase. Should be called in a
+  /// [CollisionDetection] class while adding a hitbox into its collision
+  /// detection system.
   void add(T item);
 
   void addAll(Iterable<T> items) => items.forEach(add);
 
-  /// Remove item from broadphase. Should be called in [CollisionDetection]
-  /// class while removing a hitbox into collision detection system
+  /// Removes an item from the broadphase. Should be called in a
+  /// [CollisionDetection] class while removing a hitbox from its collision
+  /// detection system.
   void remove(T item);
 
   void removeAll(Iterable<T> items) => items.forEach(remove);
