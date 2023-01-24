@@ -3,7 +3,7 @@ import 'package:jenny/src/structure/dialogue_entry.dart';
 import 'package:jenny/src/structure/line_content.dart';
 
 /// The **DialogueLine** class represents a single line of text within the
-/// dialogue [](Line).
+/// dialogue [[Line]].
 ///
 /// The `DialogueLine` objects will be delivered to your [DialogueView] with
 /// methods `onLineStart()`, `onLineSignal()`, `onLineStop()`, and

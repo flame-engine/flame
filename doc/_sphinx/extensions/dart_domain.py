@@ -168,14 +168,10 @@ class DartdocDirective(SphinxDirective):
         self.record['timestamp'] = source_last_modified_time
 
     def _scan_source_file(self):
-        dart_cmd = 'dart'
-        if sys.platform == 'win32':
-            dart_cmd = 'dart.exe'
         with tempfile.NamedTemporaryFile(mode='rt', suffix='json') as temp_file:
             try:
                 subprocess.run(
-                    [dart_cmd, 'run', self.env.config.dartdoc_parser,
-                     self.source_file, '--output', temp_file.name],
+                    ['dartdoc_json', self.source_file, '--output', temp_file.name],
                     stdout=subprocess.PIPE,
                     stderr=subprocess.STDOUT,
                     check=True,
@@ -620,22 +616,16 @@ def on_env_before_read_docs(_: Sphinx, __: BuildEnvironment, docnames: List[str]
     docnames.sort(key=key)
 
 
-# def on_doctree_read(app, doctree):
-#     import pdb; pdb.set_trace()
-
-
 def setup(app: Sphinx):
     app.add_css_file('dart_domain.css')
     app.add_config_value('dartdoc_root', '', 'env', str)
     app.add_config_value('dartdoc_roots', {}, 'env', Dict[str, str])
-    app.add_config_value('dartdoc_parser', 'dartdoc_json.dart', '', str)
     app.add_config_value('dartdoc_show_overrides', False, 'env', bool)
     app.add_domain(DartDomain)
     app.connect('build-finished', copy_asset_files)
     app.connect('env-get-outdated', on_env_get_outdated)
     app.connect('env-purge-doc', on_env_purge_doc)
     app.connect('env-before-read-docs', on_env_before_read_docs)
-    # app.connect('doctree-read', on_doctree_read)
     return {
         'version': '1.0.0',
         'parallel_read_safe': True,
