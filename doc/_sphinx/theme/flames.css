@@ -855,3 +855,13 @@ table.docutils td {
 table.docutils th {
   color: #9d9175;
 }
+
+/* This ensures that when navigating to a link within a page, the link
+   will be visible and not obscured by the top-page header. */
+:target::before {
+  content: '';
+  display: block;
+  height: calc(25px + var(--top-menu-height));
+  margin-top: calc(-25px - var(--top-menu-height));
+  visibility: hidden;
+}

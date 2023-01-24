@@ -233,6 +233,6 @@ MD051: true
 MD052: true
 
 # MD053/link-image-reference-definitions - Link and image reference definitions should be needed
-MD053: false
+MD053:
   # Ignored definitions
-  # ignored_definitions: ["//"]
+  ignored_definitions: ["//"]
