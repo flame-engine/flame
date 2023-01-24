@@ -52,7 +52,7 @@ class DartdocDirective(SphinxDirective):
         "package": directives.unchanged,
     }
 
-    rx_reference_line = re.compile(r'^\[{1,2}(.*)]{1,2}:\s+(.*)$')
+    rx_reference_line = re.compile(r'^\[{1,2}([^]]*?)]{1,2}:\s+(.*)$')
 
     def __init__(self, name, arguments, options, content, lineno, content_offset, block_text, state,
                  state_machine):
@@ -433,15 +433,23 @@ class DartdocDirective(SphinxDirective):
 
     rx_simple_reference = re.compile(r'\[(\w+)](?!\()')
     rx_manual_reference = re.compile(r'\[\[(.*?)]]')
+    rx_escape = re.compile(r'([<>`*])')
 
     def _augment_comment_line(self, line: str) -> str:
+        def escape(text: str) -> str:
+            return re.sub(self.rx_escape, r'\\\1', text)
+
         # Links of the form `[[NAME]]` are converted into `[NAME](URL)`. The
         # `NAME` must be listed beforehand within the directive's content.
         def resolve_manual_reference(match: re.Match) -> str:
             target = match.group(1)
             if target in self.links:
                 url = self.links[target]
-                return f'[{target}]({url})'
+                return f'[{escape(target)}]({url})'
+            raise self.error(
+                f'Unexpected link {target}, please specify its target URL '
+                f'within the content section of the directive.'
+            )
 
         # Links of the form `[NAME]` are converted into "{ref}`NAME`", so that
         # they can be resolved later by the domain.
@@ -453,8 +461,8 @@ class DartdocDirective(SphinxDirective):
                 return f'{{ref}}`{target} <{self.symbol}.{target}>`'
             if target in self.links:
                 url = self.links[target]
-                return f'[{target}]({url})'
-            return f'{{ref}}`{target}`'
+                return f'[{escape(target)}]({url})'
+            return f'{{ref}}`{escape(target)}`'
 
         line = re.sub(self.rx_manual_reference, resolve_manual_reference, line)
         line = re.sub(self.rx_simple_reference, resolve_simple_reference, line)
