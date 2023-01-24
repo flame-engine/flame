@@ -6,9 +6,11 @@ import 'package:meta/meta.dart';
 /// actual intersections are calculated.
 ///
 /// Currently there are two implementations of [Broadphase]:
-/// - [Sweep] is the simplest but slowest system, yet nice for small amounts of hitboxes.
-/// - [QuadTree] usually works faster, but requires additional setup and works only
-///   with fixed-size maps. See [HasQuadTreeCollisionDetection] for details.
+/// - [Sweep] is the simplest but slowest system, yet nice for small amounts of
+///   hitboxes.
+/// - [QuadTree] usually works faster, but requires additional setup and works
+///   only with fixed-size maps. See [HasQuadTreeCollisionDetection] for
+///   details.
 abstract class Broadphase<T extends Hitbox<T>> {
   Broadphase();
 
