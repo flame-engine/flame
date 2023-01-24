@@ -1,10 +1,19 @@
 import 'package:flame/collisions.dart';
 
 class Sweep<T extends Hitbox<T>> extends Broadphase<T> {
-  Sweep({super.items});
+  Sweep({List<T>? items}) : items = items ?? [];
+
+  @override
+  final List<T> items;
 
   late final List<T> _active = [];
   late final Set<CollisionProspect<T>> _potentials = {};
+
+  @override
+  void add(T item) => items.add(item);
+
+  @override
+  void remove(T item) => items.remove(item);
 
   @override
   void update() {

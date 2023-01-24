@@ -8,13 +8,27 @@ import 'package:meta/meta.dart';
 /// Currently there is only one implementation of [Broadphase] and that is
 /// [Sweep].
 abstract class Broadphase<T extends Hitbox<T>> {
-  final List<T> items;
-
-  Broadphase({List<T>? items}) : items = items ?? [];
+  Broadphase();
 
   /// This method can be used if there are things that needs to be prepared in
   /// each tick.
   void update() {}
+
+  /// Returns a flat List of items regardless of what data structure is used to
+  /// store collision information
+  List<T> get items;
+
+  /// Add item to broadphase. Should be called in [CollisionDetection] class
+  /// while adding a hitbox into collision detection system
+  void add(T item);
+
+  void addAll(Iterable<T> items) => items.forEach(add);
+
+  /// Remove item from broadphase. Should be called in [CollisionDetection]
+  /// class while removing a hitbox into collision detection system
+  void remove(T item);
+
+  void removeAll(Iterable<T> items) => items.forEach(remove);
 
   /// Returns the potential hitbox collisions
   Set<CollisionProspect<T>> query();
