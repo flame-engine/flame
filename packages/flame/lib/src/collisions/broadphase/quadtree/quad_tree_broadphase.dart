@@ -129,6 +129,14 @@ class QuadTreeBroadphase<T extends Hitbox<T>> extends Broadphase<T> {
     if (item.collisionType == CollisionType.active) {
       activeCollisions.remove(item);
     }
+
+    final checkCache = _broadphaseCheckCache[item];
+    if (checkCache != null) {
+      for (final entry in checkCache.entries) {
+        _broadphaseCheckCache[entry.key]?.remove(item);
+      }
+      _broadphaseCheckCache.remove(item);
+    }
   }
 
   void clear() {
