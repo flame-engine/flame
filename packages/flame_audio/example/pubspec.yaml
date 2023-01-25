@@ -10,7 +10,7 @@ environment:
 
 dependencies:
   flame: ^1.6.0
-  flame_audio: ^1.3.5
+  flame_audio: ^1.4.0
   flutter:
     sdk: flutter
 
