@@ -170,24 +170,19 @@ following:
 
 1. A working **Flutter** installation, accessible from the command line;
 
-2. A **Python** environment, with python version 3.8+ or higher;
-    - You can verify this by running `python --version` from the command line;
-    - Having a dedicated python virtual environment is recommended but not required;
+2. **Melos** command-line tool, as per the [contributing] guide.
 
-3. A set of python **modules** listed in the `doc/_sphinx/requirements.txt` file;
-    - The easiest way to install these is to run
+3. A **Python** environment, with python version 3.8+ or higher. Having a dedicated python
+   virtual environment is recommended but not required;
 
-      ```console
-      pip install -r doc/_sphinx/requirements.txt
-      ```
+4. Install the remaining requirements using the command
 
-    - Verify that all packages were installed correctly, otherwise, an error may occur.
-
-4. Melos as per the [contributing](contributing.md#environment-setup) guide.
+   ```console
+    melos run doc-setup
+   ```
 
 Once these prerequisites are met, you can build the documentation by using the built-in Melos
 target:
-
 
 ```console
 melos doc-build
@@ -230,3 +225,6 @@ Avoid having spaces in the paths to the docs since that will keep you from
 building the project due to
 [this bug](https://github.com/ipython/ipython/pull/13765).
 ```
+
+
+[contributing]: contributing.md#environment-setup

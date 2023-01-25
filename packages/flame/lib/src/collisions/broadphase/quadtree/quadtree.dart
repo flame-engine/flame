@@ -234,13 +234,12 @@ class QuadTree<T extends Hitbox<T>> {
     var id = -1;
     final values = <T>[];
     if (node == null) {
-      throw '${node.toString()} not found';
-    } else {
-      id = node.id;
-      values.addAll(node.hitboxes as List<T>);
-      values.addAll(_getChildrenItems(node));
-      values.addAll(_getParentItems(node));
+      throw '$node not found';
     }
+    id = node.id;
+    values.addAll(node.hitboxes as List<T>);
+    values.addAll(_getChildrenItems(node));
+    values.addAll(_getParentItems(node));
     return {id: values};
   }
 
