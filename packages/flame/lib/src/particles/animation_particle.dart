@@ -6,7 +6,6 @@ import 'package:flame/src/particles/particle.dart';
 import 'package:flame/src/sprite_animation.dart';
 
 export '../sprite_animation.dart';
-export '../sprite_animation.dart';
 
 class SpriteAnimationParticle extends Particle {
   final SpriteAnimation animation;

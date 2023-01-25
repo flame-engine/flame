@@ -32,12 +32,12 @@ scripts:
     description: Run `flutter analyze` for all packages.
 
   format:
-    run: melos exec flutter format . --fix
-    description: Run `flutter format` for all packages.
+    run: melos exec dart format . --fix
+    description: Run `dart format` for all packages.
 
   format-check:
     run: melos exec flutter format . --set-exit-if-changed
-    description: Run `flutter format` checks for all packages.
+    description: Run `dart format` checks for all packages.
 
   markdown-check:
     run: markdownlint . --ignore-path .markdownlintignore --config .markdownlint.yaml
