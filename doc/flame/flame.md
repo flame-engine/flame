@@ -18,7 +18,7 @@
 :hidden:
 
 File Structure       <structure.md>
-Game Widget           <game_widget.md>
+Game Widget          <game_widget.md>
 Game Loop            <game.md>
 Components           <components.md>
 Router               <router.md>

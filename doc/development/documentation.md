@@ -168,17 +168,17 @@ building the project due to
 Building the documentation site on your own computer is fairly simple. All you need is the
 following:
 
-1. A working **Flutter** installation, accessible from the command line;
+1. A working **Flutter** installation, accessible from the command line.
 
 2. **Melos** command-line tool, as per the [contributing] guide.
 
 3. A **Python** environment, with python version 3.8+ or higher. Having a dedicated python
-   virtual environment is recommended but not required;
+   virtual environment is recommended but not required.
 
 4. Install the remaining requirements using the command
 
    ```console
-    melos run doc-setup
+   melos run doc-setup
    ```
 
 Once these prerequisites are met, you can build the documentation by using the built-in Melos
