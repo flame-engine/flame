@@ -9,6 +9,9 @@ class HardwareKeyboardExample extends FlameGame with HardwareKeyboardDetector {
   static String description = '''
     This example uses the HardwareKeyboardDetector mixin in order to keep
     track of which keys on a keyboard are currently pressed.
+
+    Tap as many keys on the keyboard at once as you want, and see whether the
+    system can detect them or not.
   ''';
 
   /// The list of [KeyboardKey] components currently shown on the screen. This
