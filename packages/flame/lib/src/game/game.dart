@@ -56,6 +56,9 @@ abstract class Game {
   /// This variable ensures that Game's [onLoad] is called no more than once.
   late final FutureOr<void> _onLoadFuture = onLoad();
 
+  /// Implement this getter in your game class to create custom
+  /// loading screen with progress reporting functionality like progress bar.
+  /// Note that it should not to create new instance on every call!
   GameLoadProgressNotifier? get progressNotifier => null;
 
   bool _debugOnLoadStarted = false;

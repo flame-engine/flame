@@ -4,34 +4,40 @@ import 'package:meta/meta.dart';
 
 typedef _LoadingFutureFactory = Future<void>? Function();
 
+/// The wrapper for the stream, encapsulating all initialisation process.
+/// Just use [reportLoadingProgress] function to send messages to custom
+/// splash screen widget or to a component with "ProgressListener" mixin.
+/// Please note that the type of message should be same for all participants
+/// of messages exchange!
 class GameLoadProgressNotifier<M> {
-  StreamController<M>? loadingStreamController;
+  StreamController<M>? _loadingStreamController;
 
   _LoadingFutureFactory? _externalLoaderFuture;
 
+  /// Sends a message to all subscribers
   void reportLoadingProgress(M message) =>
-      loadingStreamController?.add(message);
+      _loadingStreamController?.add(message);
 
   @internal
   Stream<M> getInGameStream() {
-    final stream = loadingStreamController?.stream;
+    final stream = _loadingStreamController?.stream;
     if (stream != null) {
       return stream;
     }
-    loadingStreamController = StreamController<M>.broadcast();
-    return loadingStreamController!.stream;
+    _loadingStreamController = StreamController<M>.broadcast();
+    return _loadingStreamController!.stream;
   }
 
   @internal
   Stream<M> initStreamLoader(_LoadingFutureFactory loaderFutureFactory) {
-    final stream = loadingStreamController?.stream;
+    final stream = _loadingStreamController?.stream;
     if (stream != null) {
       return stream;
     }
-    loadingStreamController =
+    _loadingStreamController =
         StreamController<M>.broadcast(onListen: _startOnLoadWithStream);
     _externalLoaderFuture = loaderFutureFactory;
-    return loadingStreamController!.stream;
+    return _loadingStreamController!.stream;
   }
 
   Future<void> _startOnLoadWithStream() async {
@@ -41,7 +47,7 @@ class GameLoadProgressNotifier<M> {
   }
 
   void dispose() {
-    loadingStreamController?.close();
-    loadingStreamController = null;
+    _loadingStreamController?.close();
+    _loadingStreamController = null;
   }
 }
