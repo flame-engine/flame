@@ -44,4 +44,12 @@ class FlameMultiBlocProvider extends Component {
     }
     await _lastProvider?.add(component);
   }
+
+  @override
+  void remove(Component component) {
+    if (_lastProvider == null) {
+      super.remove(component);
+    }
+    _lastProvider?.remove(component);
+  }
 }

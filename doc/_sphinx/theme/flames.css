@@ -67,6 +67,15 @@ code {
   padding: 2pt 3pt;
 }
 
+code.xref {
+  background: none;
+  color: #f75151;
+  padding: 0;
+}
+
+a.reference code.xref { color: #ffbb3e; }
+a.reference:hover code.xref { color: #ffffff; }
+
 p {
   margin-top: 0;
 }
@@ -845,4 +854,14 @@ table.docutils td {
 
 table.docutils th {
   color: #9d9175;
+}
+
+/* This ensures that when navigating to a link within a page, the link
+   will be visible and not obscured by the top-page header. */
+:target::before {
+  content: '';
+  display: block;
+  height: calc(25px + var(--top-menu-height));
+  margin-top: calc(-25px - var(--top-menu-height));
+  visibility: hidden;
 }

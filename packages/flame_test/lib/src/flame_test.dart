@@ -27,6 +27,20 @@ extension FlameGameExtension on Component {
     await addAll(components);
     await (components.first.findGame()! as FlameGame).ready();
   }
+
+  /// Makes sure that the [component] is removed from the tree if you wait for
+  /// the returned future to resolve.
+  Future<void> ensureRemove(Component component) async {
+    remove(component);
+    await (component.findGame()! as FlameGame).ready();
+  }
+
+  /// Makes sure that the [components] are removed from the tree if you wait for
+  /// the returned future to resolve.
+  Future<void> ensureRemoveAll(Iterable<Component> components) async {
+    removeAll(components);
+    await (components.first.findGame()! as FlameGame).ready();
+  }
 }
 
 typedef GameCreateFunction<T extends Game> = T Function();
