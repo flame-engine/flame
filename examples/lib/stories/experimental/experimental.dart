@@ -1,6 +1,7 @@
 import 'package:dashbook/dashbook.dart';
 import 'package:examples/commons/commons.dart';
 import 'package:examples/stories/experimental/camera_follow_and_world_bounds.dart';
+import 'package:examples/stories/experimental/loading_screen.dart';
 import 'package:examples/stories/experimental/shapes.dart';
 import 'package:flame/game.dart';
 
@@ -17,5 +18,14 @@ void addExperimentalStories(Dashbook dashbook) {
       (_) => GameWidget(game: CameraFollowAndWorldBoundsExample()),
       codeLink: baseLink('experimental/camera_follow_and_world_bounds.dart'),
       info: CameraFollowAndWorldBoundsExample.description,
+    )
+    ..add(
+      'Loading screen',
+      (_) => GameWidget(
+        game: LoadingScreenExample(),
+        loadingProgressWidget: LoadingScreenExampleWidget(),
+      ),
+      codeLink: baseLink('experimental/loading_screen.dart'),
+      info: LoadingScreenExample.description,
     );
 }

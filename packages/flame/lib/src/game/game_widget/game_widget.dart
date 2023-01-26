@@ -5,6 +5,7 @@ import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flame/src/game/game_render_box.dart';
 import 'package:flame/src/game/game_widget/gestures.dart';
+import 'package:flame/src/widgets/loading_widget.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
@@ -38,6 +39,8 @@ class GameWidget<T extends Game> extends StatefulWidget {
 
   /// The text direction to be used in text elements in a game.
   final TextDirection? textDirection;
+
+  final LoadingWidgetMixin? loadingProgressWidget;
 
   /// Builder to provide a widget tree to be built while the Game's [Future]
   /// provided via `Game.onLoad` and `Game.onMount` is not resolved.
@@ -120,6 +123,7 @@ class GameWidget<T extends Game> extends StatefulWidget {
   GameWidget({
     super.key,
     required T this.game,
+    this.loadingProgressWidget,
     this.textDirection,
     this.loadingBuilder,
     this.errorBuilder,
@@ -158,6 +162,7 @@ class GameWidget<T extends Game> extends StatefulWidget {
     required GameFactory<T> this.gameFactory,
     this.textDirection,
     this.loadingBuilder,
+    this.loadingProgressWidget,
     this.errorBuilder,
     this.backgroundBuilder,
     this.overlayBuilderMap,
@@ -365,30 +370,41 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
                             Container();
                       }
                       currentGame.onGameResize(size);
-                      return FutureBuilder(
-                        future: loaderFuture,
-                        builder: (_, snapshot) {
-                          if (snapshot.hasError) {
-                            final errorBuilder = widget.errorBuilder;
-                            if (errorBuilder == null) {
-                              throw Error.throwWithStackTrace(
-                                snapshot.error!,
-                                snapshot.stackTrace!,
-                              );
-                            } else {
-                              return errorBuilder(context, snapshot.error!);
+                      final progressWidget = widget.loadingProgressWidget;
+                      final stream = currentGame.progressNotifier
+                          ?.initStreamLoader(() => loaderFuture);
+                      if (progressWidget != null && stream != null) {
+                        return LoadingProxyWidget(
+                          gameWidget: Stack(children: stackedWidgets),
+                          stream: stream,
+                          child: progressWidget,
+                        );
+                      } else {
+                        return FutureBuilder(
+                          future: loaderFuture,
+                          builder: (_, snapshot) {
+                            if (snapshot.hasError) {
+                              final errorBuilder = widget.errorBuilder;
+                              if (errorBuilder == null) {
+                                throw Error.throwWithStackTrace(
+                                  snapshot.error!,
+                                  snapshot.stackTrace!,
+                                );
+                              } else {
+                                return errorBuilder(context, snapshot.error!);
+                              }
                             }
-                          }
 
-                          if (snapshot.connectionState ==
-                              ConnectionState.done) {
-                            return Stack(children: stackedWidgets);
-                          }
+                            if (snapshot.connectionState ==
+                                ConnectionState.done) {
+                              return Stack(children: stackedWidgets);
+                            }
 
-                          return widget.loadingBuilder?.call(context) ??
-                              const SizedBox.expand();
-                        },
-                      );
+                            return widget.loadingBuilder?.call(context) ??
+                                const SizedBox.expand();
+                          },
+                        );
+                      }
                     });
                   },
                 ),

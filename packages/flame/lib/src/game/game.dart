@@ -55,6 +55,8 @@ abstract class Game {
   /// This variable ensures that Game's [onLoad] is called no more than once.
   late final FutureOr<void> _onLoadFuture = onLoad();
 
+  GameLoadProgressNotifier? get progressNotifier => null;
+
   bool _debugOnLoadStarted = false;
 
   @internal
@@ -196,7 +198,7 @@ abstract class Game {
   /// Should not be called manually.
   void detach() {
     _gameRenderBox = null;
-
+    progressNotifier?.dispose();
     onDetach();
   }
 
@@ -342,5 +344,38 @@ abstract class Game {
   @internal
   void refreshWidget() {
     gameStateListeners.forEach((callback) => callback());
+  }
+}
+
+typedef LoadingFutureFactory = Future<void>? Function();
+
+class GameLoadProgressNotifier<M> {
+  StreamController<M>? loadingStreamController;
+
+  LoadingFutureFactory? _externalLoaderFuture;
+
+  void reportLoadingProgress(M message) =>
+      loadingStreamController?.add(message);
+
+  Stream<dynamic> initStreamLoader(LoadingFutureFactory loaderFutureFactory) {
+    final stream = loadingStreamController?.stream;
+    if (stream != null) {
+      return stream;
+    }
+    loadingStreamController =
+        StreamController<M>(onListen: _startOnLoadWithStream);
+    _externalLoaderFuture = loaderFutureFactory;
+    return loadingStreamController!.stream;
+  }
+
+  Future<void> _startOnLoadWithStream() async {
+    assert(_externalLoaderFuture != null);
+    await _externalLoaderFuture!.call();
+    _externalLoaderFuture = null;
+  }
+
+  void dispose() {
+    loadingStreamController?.close();
+    loadingStreamController = null;
   }
 }
