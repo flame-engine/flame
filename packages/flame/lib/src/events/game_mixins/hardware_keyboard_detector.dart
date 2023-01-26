@@ -13,7 +13,8 @@ import 'package:flutter/services.dart';
 /// every [KeyDownEvent] there will always be the corresponding [KeyUpEvent],
 /// possibly with some [KeyRepeatEvent]s in the middle. Depending on the
 /// platform, some of these events may be "synthesized", i.e. created by the
-/// framework artificially in order to preserve the correct event sequence.
+/// framework artificially in order to preserve the correct event sequence. See
+/// Flutter's [HardwareKeyboard] for more details.
 ///
 /// Use [pauseKeyEvents] property to temporarily halt/resume the delivery of
 /// [onKeyEvent]s.
