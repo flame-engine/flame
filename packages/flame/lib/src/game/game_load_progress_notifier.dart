@@ -4,7 +4,7 @@ import 'package:meta/meta.dart';
 
 typedef _LoadingFutureFactory = Future<void>? Function();
 
-/// The wrapper for the stream, encapsulating all initialisation process.
+/// The wrapper for the stream, encapsulating all initialization process.
 /// Just use [reportLoadingProgress] function to send messages to custom
 /// splash screen widget or to a component with "ProgressListener" mixin.
 /// Please note that the type of message should be same for all participants
