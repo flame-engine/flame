@@ -15,10 +15,11 @@ void main() {
       expect(component.isCapsLockOn, false);
       expect(component.isNumLockOn, false);
       expect(component.isScrollLockOn, false);
-      expect(component.pauseKeyEvents, false);
+      expect(component.pauseKeyEvents, true);
     });
 
     testWithFlameGame('game detects key presses', (game) async {
+      HardwareKeyboard.instance.clearState();
       final detector = _MyKeyboardDetector()..addToParent(game);
       await game.ready();
 
@@ -38,6 +39,7 @@ void main() {
     });
 
     testWithFlameGame('modifier keys', (game) async {
+      HardwareKeyboard.instance.clearState();
       await simulateKeyDownEvent(LogicalKeyboardKey.altLeft);
       await simulateKeyDownEvent(LogicalKeyboardKey.numLock);
       await simulateKeyUpEvent(LogicalKeyboardKey.numLock);
@@ -64,9 +66,16 @@ void main() {
 
       await simulateKeyDownEvent(LogicalKeyboardKey.keyZ);
       expect(checkedAll, true);
+
+      await simulateKeyUpEvent(LogicalKeyboardKey.altLeft);
+      await simulateKeyUpEvent(LogicalKeyboardKey.altRight);
+      await simulateKeyUpEvent(LogicalKeyboardKey.controlRight);
+      await simulateKeyUpEvent(LogicalKeyboardKey.shiftLeft);
+      await simulateKeyUpEvent(LogicalKeyboardKey.keyZ);
     });
 
     testWithFlameGame('key events paused', (game) async {
+      HardwareKeyboard.instance.clearState();
       final detector = _MyKeyboardDetector()..addToParent(game);
       await game.ready();
 
@@ -82,6 +91,7 @@ void main() {
     });
 
     testWithFlameGame('pause key events while keys are pressed', (game) async {
+      HardwareKeyboard.instance.clearState();
       final detector = _MyKeyboardDetector()..addToParent(game);
       await game.ready();
 
@@ -108,6 +118,7 @@ void main() {
     });
 
     testWithFlameGame('stop listening when component unmounts', (game) async {
+      HardwareKeyboard.instance.clearState();
       final detector = _MyKeyboardDetector()..addToParent(game);
       await game.ready();
 
