@@ -1,27 +1,26 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/widgets.dart';
 import 'package:flutter/material.dart' hide Image, Draggable;
 
-const tileSize = 8.0;
-
 class LoadingScreenExample extends FlameGame {
   LoadingScreenExample();
 
   static const description = '''
-  
+  Just enjoy how the progress bar fills.
   ''';
-
-  static const mapSize = 300;
-  static const bricksCount = 8000;
 
   final _progressNotifier = GameLoadProgressNotifier<ProgressMessage>();
 
   @override
   GameLoadProgressNotifier<ProgressMessage> get progressNotifier =>
       _progressNotifier;
+
+  double anyProgressEmulation = 0;
+  int messagesSent = 0;
 
   @override
   FutureOr<void> onLoad() async {
@@ -48,11 +47,14 @@ class LoadingScreenExample extends FlameGame {
     );
 
     add(
-      TextComponent(text: 'This text is the game')
+      TextComponent(text: 'This is in-game text components')
         ..anchor = Anchor.topCenter
         ..x = size.x / 2
         ..y = 50,
     );
+
+    add(InGameProgressText(verticalPosition: 100, size: size));
+    add(InGameProgressText(verticalPosition: 150, size: size));
 
     await Future<void>.delayed(const Duration(seconds: 5));
 
@@ -68,6 +70,23 @@ class LoadingScreenExample extends FlameGame {
     progressNotifier.reportLoadingProgress(const ProgressMessage.finished());
 
     return super.onLoad();
+  }
+
+  @override
+  void update(double dt) {
+    anyProgressEmulation += dt;
+    final random = Random();
+    final probability = random.nextInt(100);
+    if (probability < 1) {
+      messagesSent++;
+      progressNotifier.reportLoadingProgress(
+        ProgressMessage(
+          message: 'The notification message #$messagesSent',
+          progress: (anyProgressEmulation * 100).toInt(),
+        ),
+      );
+    }
+    super.update(dt);
   }
 }
 
@@ -104,10 +123,10 @@ class _LoadingScreenExampleWidgetState extends State<LoadingScreenExampleWidget>
     super.initState();
     _controller = AnimationController(vsync: this);
     _controller.addListener(() => setState(() {}));
-    widget.initMessageListener(onNewMessage);
+    widget.initMessageListener(onProgressMessage);
   }
 
-  void onNewMessage(ProgressMessage message) {
+  void onProgressMessage(ProgressMessage message) {
     setState(() {
       if (message.progress == 101) {
         showGame = true;
@@ -163,5 +182,25 @@ class _LoadingScreenExampleWidgetState extends State<LoadingScreenExampleWidget>
         ),
       ),
     );
+  }
+}
+
+class InGameProgressText extends TextComponent
+    with ProgressListener<ProgressMessage> {
+  InGameProgressText({required double verticalPosition, required super.size}) {
+    anchor = Anchor.topLeft;
+    x = 10;
+    y = verticalPosition;
+    text = 'This will show in-game progress message';
+  }
+
+  @override
+  FutureOr<void> onLoad() {
+    return super.onLoad();
+  }
+
+  @override
+  void onProgressMessage(ProgressMessage message) {
+    text = '${message.message}. The progress is: ${message.progress}';
   }
 }

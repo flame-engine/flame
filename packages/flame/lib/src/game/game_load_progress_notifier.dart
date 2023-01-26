@@ -13,13 +13,23 @@ class GameLoadProgressNotifier<M> {
       loadingStreamController?.add(message);
 
   @internal
-  Stream<dynamic> initStreamLoader(_LoadingFutureFactory loaderFutureFactory) {
+  Stream<M> getInGameStream() {
+    final stream = loadingStreamController?.stream;
+    if (stream != null) {
+      return stream;
+    }
+    loadingStreamController = StreamController<M>.broadcast();
+    return loadingStreamController!.stream;
+  }
+
+  @internal
+  Stream<M> initStreamLoader(_LoadingFutureFactory loaderFutureFactory) {
     final stream = loadingStreamController?.stream;
     if (stream != null) {
       return stream;
     }
     loadingStreamController =
-        StreamController<M>(onListen: _startOnLoadWithStream);
+        StreamController<M>.broadcast(onListen: _startOnLoadWithStream);
     _externalLoaderFuture = loaderFutureFactory;
     return loadingStreamController!.stream;
   }
