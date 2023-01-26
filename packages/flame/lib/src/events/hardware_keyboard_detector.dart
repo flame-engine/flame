@@ -26,12 +26,11 @@ import 'package:flutter/services.dart';
 /// removed from the component tree. If the user was holding any keys when the
 /// `HardwareKeyboardDetector` was mounted, then artificial `KeyDownEvent`s
 /// will be fired; if the user was holding keys when this component was removed,
-/// then `KeyUpEvent`s will be synthesized. No events will be triggered while
-/// the component is unmounted.
+/// then `KeyUpEvent`s will be synthesized.
 ///
 /// Use [pauseKeyEvents] property to temporarily halt/resume the delivery of
-/// [onKeyEvent]s. The events will stop being delivered when the component is
-/// removed from the component tree.
+/// [onKeyEvent]s. The events will also stop being delivered when the component
+/// is removed from the component tree.
 class HardwareKeyboardDetector extends Component {
   HardwareKeyboardDetector({void Function(KeyEvent)? onKeyEvent})
       : _onKeyEvent = onKeyEvent;
