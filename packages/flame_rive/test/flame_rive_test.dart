@@ -125,6 +125,32 @@ void main() {
         expect(riveComponent.artboard.antialiasing, isFalse);
       });
     });
+
+    group('useArtboardSize', () {
+      test('Default value: `false`', () async {
+        final skillsArtboard = await loadArtboard(riveFile);
+        final riveComponent = RiveComponent(
+          artboard: skillsArtboard,
+          size: Vector2.all(250.0),
+        );
+
+        expect(riveComponent.size, Vector2.all(250.0));
+      });
+
+      test('as true', () async {
+        final skillsArtboard = await loadArtboard(riveFile);
+        final riveComponent = RiveComponent(
+          artboard: skillsArtboard,
+          useArtboardSize: true,
+          size: Vector2.all(250.0),
+        );
+
+        expect(
+          riveComponent.size,
+          Vector2(skillsArtboard.width, skillsArtboard.height),
+        );
+      });
+    });
   });
 }
 
