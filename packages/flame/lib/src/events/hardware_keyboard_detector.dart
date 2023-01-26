@@ -22,6 +22,13 @@ import 'package:flutter/services.dart';
 /// framework artificially in order to preserve the correct event sequence. See
 /// Flutter's [HardwareKeyboard] for more details.
 ///
+/// Similar normalization guarantee exists when this component is added to or
+/// removed from the component tree. If the user was holding any keys when the
+/// `HardwareKeyboardDetector` was mounted, then artificial `KeyDownEvent`s
+/// will be fired; if the user was holding keys when this component was removed,
+/// then `KeyUpEvent`s will be synthesized. No events will be triggered while
+/// the component is unmounted.
+///
 /// Use [pauseKeyEvents] property to temporarily halt/resume the delivery of
 /// [onKeyEvent]s. The events will stop being delivered when the component is
 /// removed from the component tree.
