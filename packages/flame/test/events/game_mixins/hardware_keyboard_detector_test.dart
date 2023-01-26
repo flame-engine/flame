@@ -84,6 +84,33 @@ void main() {
         expect(game.events.length, 2);
       },
     );
+
+    testWithGame<_GameWithHardwareKeyboardDetector>(
+      'pause key events while the user holds down a key',
+      _GameWithHardwareKeyboardDetector.new,
+      (game) async {
+        await simulateKeyDownEvent(LogicalKeyboardKey.enter);
+        await simulateKeyDownEvent(LogicalKeyboardKey.capsLock);
+        expect(game.events.length, 2);
+        expect(game.events.whereType<KeyDownEvent>().length, 2);
+
+        game.pauseKeyEvents = true;
+        expect(game.events.length, 4);
+        expect(game.events.whereType<KeyDownEvent>().length, 2);
+        expect(game.events.whereType<KeyUpEvent>().length, 2);
+
+        game.pauseKeyEvents = false;
+        expect(game.events.length, 6);
+        expect(game.events.whereType<KeyDownEvent>().length, 4);
+        expect(game.events.whereType<KeyUpEvent>().length, 2);
+
+        await simulateKeyUpEvent(LogicalKeyboardKey.enter);
+        await simulateKeyUpEvent(LogicalKeyboardKey.capsLock);
+        expect(game.events.length, 8);
+        expect(game.events.whereType<KeyDownEvent>().length, 4);
+        expect(game.events.whereType<KeyUpEvent>().length, 4);
+      },
+    );
   });
 }
 

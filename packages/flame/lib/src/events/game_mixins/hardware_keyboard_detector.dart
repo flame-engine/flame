@@ -8,47 +8,83 @@ import 'package:flutter/services.dart';
 /// The mixin provides the [onKeyEvent] event handler that can be overridden in
 /// your game. This event handler fires whenever the user presses or releases
 /// any key on a keyboard, and also when a key is being held.
+///
+/// The stream of key events will be normalized by Flutter, meaning that for
+/// every [KeyDownEvent] there will always be the corresponding [KeyUpEvent],
+/// possibly with some [KeyRepeatEvent]s in the middle. Depending on the
+/// platform, some of these events may be "synthesized", i.e. created by the
+/// framework artificially in order to preserve the correct event sequence.
+///
+/// Use [pauseKeyEvents] property to temporarily halt/resume the delivery of
+/// [onKeyEvent]s.
 mixin HardwareKeyboardDetector on Game {
-  /// If set to `true`, delivery of key events will be temporarily suspended.
-  bool pauseKeyEvents = false;
+  final List<PhysicalKeyboardKey> _physicalKeys = [];
+  Set<LogicalKeyboardKey> _logicalKeys = {};
+  bool _pause = false;
 
   /// The list of keys that are currently being pressed on the keyboard (or a
   /// keyboard-like device). The keys are listed in the order in which they
   /// were pressed, except for the modifier keys which may be listed
   /// out-of-order on some systems.
-  List<PhysicalKeyboardKey> physicalKeysPressed = [];
+  List<PhysicalKeyboardKey> get physicalKeysPressed => _physicalKeys;
 
   /// The set of logical keys that are currently being pressed on the keyboard.
   /// This set corresponds to the [physicalKeysPressed] list, and can be used
   /// to search for keys in a keyboard-layout-independent way.
-  Set<LogicalKeyboardKey> logicalKeysPressed = {};
+  Set<LogicalKeyboardKey> get logicalKeysPressed => _logicalKeys;
 
   /// True if the <kbd>Ctrl</kbd> key is currently being pressed.
   bool get isControlPressed =>
-      logicalKeysPressed.contains(LogicalKeyboardKey.controlLeft) ||
-      logicalKeysPressed.contains(LogicalKeyboardKey.controlRight);
+      _logicalKeys.contains(LogicalKeyboardKey.controlLeft) ||
+      _logicalKeys.contains(LogicalKeyboardKey.controlRight);
 
   /// True if the <kbd>Shift</kbd> key is currently being pressed.
   bool get isShiftPressed =>
-      logicalKeysPressed.contains(LogicalKeyboardKey.shiftLeft) ||
-      logicalKeysPressed.contains(LogicalKeyboardKey.shiftRight);
+      _logicalKeys.contains(LogicalKeyboardKey.shiftLeft) ||
+      _logicalKeys.contains(LogicalKeyboardKey.shiftRight);
 
   /// True if the <kbd>Alt</kbd> key is currently being pressed.
   bool get isAltPressed =>
-      logicalKeysPressed.contains(LogicalKeyboardKey.altLeft) ||
-      logicalKeysPressed.contains(LogicalKeyboardKey.altRight);
+      _logicalKeys.contains(LogicalKeyboardKey.altLeft) ||
+      _logicalKeys.contains(LogicalKeyboardKey.altRight);
 
-  /// True if <kbd>NumLock</kbd> currently turned on.
+  /// True if <kbd>Num Lock</kbd> currently turned on.
   bool get isNumLockOn => _hasLock(KeyboardLockMode.numLock);
 
-  /// True if <kbd>CapsLock</kbd> currently turned on.
+  /// True if <kbd>Caps Lock</kbd> currently turned on.
   bool get isCapsLockOn => _hasLock(KeyboardLockMode.capsLock);
 
-  /// True if <kbd>ScrollLock</kbd> currently turned on.
+  /// True if <kbd>Scroll Lock</kbd> currently turned on.
   bool get isScrollLockOn => _hasLock(KeyboardLockMode.scrollLock);
 
   bool _hasLock(KeyboardLockMode key) =>
       HardwareKeyboard.instance.lockModesEnabled.contains(key);
+
+  /// When `true`, delivery of key events will be suspended.
+  ///
+  /// When this property is set to true, the system generates KeyUp events for
+  /// all keys currently being held, as if the user has released them.
+  /// Conversely, when this property is switched back to `false`, and the user
+  /// was holding some keys at the time, the system will generate KeyDown
+  /// events as if the user just started pressing those buttons.
+  bool get pauseKeyEvents => _pause;
+  set pauseKeyEvents(bool value) {
+    if (value == _pause) {
+      return;
+    }
+    _pause = value;
+    final timeStamp = ServicesBinding.instance.currentSystemFrameTimeStamp;
+    for (final physicalKey in _physicalKeys) {
+      onKeyEvent(
+        (_pause ? KeyUpEvent.new : KeyDownEvent.new)(
+          physicalKey: physicalKey,
+          logicalKey: HardwareKeyboard.instance.lookUpLayout(physicalKey)!,
+          timeStamp: timeStamp,
+          synthesized: true,
+        ),
+      );
+    }
+  }
 
   /// Override this event handler if you want to get notified whenever any key
   /// on a keyboard is pressed, held, or released. The [event] will be one of
@@ -57,13 +93,13 @@ mixin HardwareKeyboardDetector on Game {
 
   /// Internal handler of raw key events.
   bool _handleKeyEvent(KeyEvent event) {
-    logicalKeysPressed = HardwareKeyboard.instance.logicalKeysPressed;
+    _logicalKeys = HardwareKeyboard.instance.logicalKeysPressed;
     if (event is KeyDownEvent) {
-      physicalKeysPressed.add(event.physicalKey);
+      _physicalKeys.add(event.physicalKey);
     } else if (event is KeyUpEvent) {
-      physicalKeysPressed.remove(event.physicalKey);
+      _physicalKeys.remove(event.physicalKey);
     }
-    if (!pauseKeyEvents) {
+    if (!_pause) {
       onKeyEvent(event);
     }
     return true; // handled
