@@ -28,8 +28,6 @@ class QuadTreeCollisionDetection
 
   @override
   void add(ShapeHitbox item) {
-    super.add(item);
-
     item.onAabbChanged = () => _scheduledUpdate.add(item);
     // ignore: prefer_function_declarations_over_variables
     final listenerCollisionType = () {
@@ -44,7 +42,7 @@ class QuadTreeCollisionDetection
     item.collisionTypeNotifier.addListener(listenerCollisionType);
     _listenerCollisionType[item] = listenerCollisionType;
 
-    broadphase.add(item);
+    super.add(item);
   }
 
   @override
@@ -61,7 +59,6 @@ class QuadTreeCollisionDetection
       _listenerCollisionType.remove(item);
     }
 
-    broadphase.remove(item);
     super.remove(item);
   }
 

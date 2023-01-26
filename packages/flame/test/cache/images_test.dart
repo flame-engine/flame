@@ -8,6 +8,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
   // A simple 1x1 pixel encoded as base64 - just so that we have something to
   // load into the Images cache.
   const pixel =
