@@ -106,6 +106,36 @@ void main() {
       expect(detector.events.whereType<KeyDownEvent>().length, 4);
       expect(detector.events.whereType<KeyUpEvent>().length, 4);
     });
+
+    testWithFlameGame('stop listening when component unmounts', (game) async {
+      final detector = _MyKeyboardDetector()..addToParent(game);
+      await game.ready();
+
+      await simulateKeyDownEvent(LogicalKeyboardKey.keyA);
+      detector.removeFromParent();
+      await game.ready();
+
+      // The detector will send a synthesized "keyUp" event when it unmounts.
+      expect(detector.events.length, 2);
+      expect(detector.events.whereType<KeyDownEvent>().length, 1);
+      expect(detector.events.whereType<KeyUpEvent>().length, 1);
+
+      // But new events will not be listened.
+      await simulateKeyUpEvent(LogicalKeyboardKey.keyA);
+      expect(detector.events.length, 2);
+
+      // The fact that Q button is pressed will be delivered once the detector
+      // mounts, whereas the W button was pressed and released while the
+      // detector was unmounted, so it won't be seen.
+      await simulateKeyDownEvent(LogicalKeyboardKey.keyQ);
+      await simulateKeyDownEvent(LogicalKeyboardKey.keyW);
+      await simulateKeyUpEvent(LogicalKeyboardKey.keyW);
+      expect(detector.events.length, 2);
+      game.add(detector);
+      await game.ready();
+      expect(detector.events.length, 3);
+      expect(detector.events.last.physicalKey, PhysicalKeyboardKey.keyQ);
+    });
   });
 }
 

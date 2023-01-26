@@ -23,14 +23,15 @@ import 'package:flutter/services.dart';
 /// Flutter's [HardwareKeyboard] for more details.
 ///
 /// Use [pauseKeyEvents] property to temporarily halt/resume the delivery of
-/// [onKeyEvent]s.
+/// [onKeyEvent]s. The events will stop being delivered when the component is
+/// removed from the component tree.
 class HardwareKeyboardDetector extends Component {
   HardwareKeyboardDetector({void Function(KeyEvent)? onKeyEvent})
       : _onKeyEvent = onKeyEvent;
 
   final List<PhysicalKeyboardKey> _physicalKeys = [];
   Set<LogicalKeyboardKey> _logicalKeys = {};
-  bool _pause = false;
+  bool _pause = true;
   final void Function(KeyEvent)? _onKeyEvent;
 
   /// The list of keys that are currently being pressed on the keyboard (or a
@@ -86,10 +87,11 @@ class HardwareKeyboardDetector extends Component {
     _pause = value;
     final timeStamp = ServicesBinding.instance.currentSystemFrameTimeStamp;
     for (final physicalKey in _physicalKeys) {
+      final logicalKey = HardwareKeyboard.instance.lookUpLayout(physicalKey)!;
       onKeyEvent(
         (_pause ? KeyUpEvent.new : KeyDownEvent.new)(
           physicalKey: physicalKey,
-          logicalKey: HardwareKeyboard.instance.lookUpLayout(physicalKey)!,
+          logicalKey: logicalKey,
           timeStamp: timeStamp,
           synthesized: true,
         ),
@@ -120,6 +122,7 @@ class HardwareKeyboardDetector extends Component {
   void onMount() {
     super.onMount();
     HardwareKeyboard.instance.addHandler(_handleKeyEvent);
+    _physicalKeys.addAll(HardwareKeyboard.instance.physicalKeysPressed);
     pauseKeyEvents = false;
   }
 
@@ -128,5 +131,6 @@ class HardwareKeyboardDetector extends Component {
     super.onRemove();
     HardwareKeyboard.instance.removeHandler(_handleKeyEvent);
     pauseKeyEvents = true;
+    _physicalKeys.clear();
   }
 }
