@@ -19,12 +19,12 @@ class GameOver extends StatelessWidget {
               children: [
                 Text(
                   'Player ${game.winner!.playerNumber + 1} wins!',
-                  style: textTheme.headline1,
+                  style: textTheme.displayLarge,
                 ),
                 const SizedBox(height: 10),
                 Text(
                   'Time: ${game.timePassed}',
-                  style: textTheme.bodyText1,
+                  style: textTheme.bodyLarge,
                 ),
                 const SizedBox(height: 10),
                 ElevatedButton(

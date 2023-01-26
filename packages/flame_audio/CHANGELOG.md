@@ -1,3 +1,7 @@
+## 1.4.0
+
+ - Bump to audioplayers v3.0.0
+ 
 ## 1.3.5
 
  - Update a dependency to the latest release.
