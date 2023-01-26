@@ -1,13 +1,19 @@
-import 'package:flame/src/game/game.dart';
+import 'package:flame/src/components/core/component.dart';
 import 'package:flutter/services.dart';
 
-/// This mixin allows directly listening to events from a hardware keyboard,
-/// bypassing the `Focus` widget in Flutter. It will not listen for events from
-/// any on-screen keyboards.
+/// The **HardwareKeyboardDetector** component allows you to directly listen
+/// to events from a hardware keyboard, bypassing the `Focus` widget in Flutter.
+/// It will not listen for events from any on-screen (software) keyboards.
 ///
-/// The mixin provides the [onKeyEvent] event handler that can be overridden in
-/// your game. This event handler fires whenever the user presses or releases
-/// any key on a keyboard, and also when a key is being held.
+/// This component can be placed anywhere in the component tree. For example,
+/// it can be attached to the root level of the Game class, or to the player
+/// being controlled. Multiple `HardwareKeyboardDetector` components can coexist
+/// within the same game, and they all will receive the key events.
+///
+/// The component provides the [onKeyEvent] event handler, which can either be
+/// overridden or passed as a parameter in the constructor. This event handler
+/// fires whenever the user presses or releases any key on a keyboard, and also
+/// when a key is being held.
 ///
 /// The stream of key events will be normalized by Flutter, meaning that for
 /// every [KeyDownEvent] there will always be the corresponding [KeyUpEvent],
@@ -18,10 +24,14 @@ import 'package:flutter/services.dart';
 ///
 /// Use [pauseKeyEvents] property to temporarily halt/resume the delivery of
 /// [onKeyEvent]s.
-mixin HardwareKeyboardDetector on Game {
+class HardwareKeyboardDetector extends Component {
+  HardwareKeyboardDetector({void Function(KeyEvent)? onKeyEvent})
+      : _onKeyEvent = onKeyEvent;
+
   final List<PhysicalKeyboardKey> _physicalKeys = [];
   Set<LogicalKeyboardKey> _logicalKeys = {};
   bool _pause = false;
+  final void Function(KeyEvent)? _onKeyEvent;
 
   /// The list of keys that are currently being pressed on the keyboard (or a
   /// keyboard-like device). The keys are listed in the order in which they
@@ -90,7 +100,7 @@ mixin HardwareKeyboardDetector on Game {
   /// Override this event handler if you want to get notified whenever any key
   /// on a keyboard is pressed, held, or released. The [event] will be one of
   /// [KeyDownEvent], [KeyRepeatEvent], or [KeyUpEvent], respectively.
-  void onKeyEvent(KeyEvent event) {}
+  void onKeyEvent(KeyEvent event) => _onKeyEvent?.call(event);
 
   /// Internal handler of raw key events.
   bool _handleKeyEvent(KeyEvent event) {
@@ -110,11 +120,13 @@ mixin HardwareKeyboardDetector on Game {
   void onMount() {
     super.onMount();
     HardwareKeyboard.instance.addHandler(_handleKeyEvent);
+    pauseKeyEvents = false;
   }
 
   @override
   void onRemove() {
     super.onRemove();
     HardwareKeyboard.instance.removeHandler(_handleKeyEvent);
+    pauseKeyEvents = true;
   }
 }

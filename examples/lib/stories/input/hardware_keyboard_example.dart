@@ -1,11 +1,12 @@
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
+import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
 import 'package:flame/text.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 
-class HardwareKeyboardExample extends FlameGame with HardwareKeyboardDetector {
+class HardwareKeyboardExample extends FlameGame {
   static String description = '''
     This example uses the HardwareKeyboardDetector mixin in order to keep
     track of which keys on a keyboard are currently pressed.
@@ -17,10 +18,20 @@ class HardwareKeyboardExample extends FlameGame with HardwareKeyboardDetector {
   /// The list of [KeyboardKey] components currently shown on the screen. This
   /// list is re-generated on every RawKeyEvent. These components are also
   /// attached as children.
-  final List<KeyboardKey> keyComponents = [];
+  List<KeyboardKey> _keyComponents = [];
+
+  void replaceKeyComponents(List<KeyboardKey> newComponents) {
+    for (final key in _keyComponents) {
+      key.visible = false;
+      key.removeFromParent();
+    }
+    _keyComponents = newComponents;
+    addAll(_keyComponents);
+  }
 
   @override
   void onLoad() {
+    add(MyKeyboardDetector());
     add(
       TextComponent(
         text: 'Press any key(s)',
@@ -33,10 +44,13 @@ class HardwareKeyboardExample extends FlameGame with HardwareKeyboardDetector {
       )..position = Vector2(80, 60),
     );
   }
+}
 
+class MyKeyboardDetector extends HardwareKeyboardDetector
+    with HasGameReference<HardwareKeyboardExample> {
   @override
   void onKeyEvent(KeyEvent event) {
-    clearKeys();
+    final newComponents = <KeyboardKey>[];
     var x0 = 80.0;
     const y0 = 100.0;
     for (final key in physicalKeysPressed) {
@@ -44,18 +58,10 @@ class HardwareKeyboardExample extends FlameGame with HardwareKeyboardDetector {
         text: keyNames[key] ?? '[${key.usbHidUsage} ${key.debugName}]',
         position: Vector2(x0, y0),
       );
-      keyComponents.add(keyComponent);
+      newComponents.add(keyComponent);
       x0 += keyComponent.width + 10;
     }
-    addAll(keyComponents);
-  }
-
-  void clearKeys() {
-    for (final key in keyComponents) {
-      key.visible = false;
-    }
-    removeAll(keyComponents);
-    keyComponents.clear();
+    game.replaceKeyComponents(newComponents);
   }
 
   /// The names of keyboard keys (at least the most important ones). We can't

@@ -1,4 +1,4 @@
-export 'src/events/game_mixins/hardware_keyboard_detector.dart'
+export 'src/events/hardware_keyboard_detector.dart'
     show HardwareKeyboardDetector;
 export 'src/events/game_mixins/multi_touch_drag_detector.dart'
     show MultiTouchDragDetector;
