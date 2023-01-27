@@ -6,7 +6,9 @@ import 'package:flutter_test/flutter_test.dart';
 
 class _TestRoute extends Route {
   int onPopTimes = 0;
+  int onPushTimes = 0;
   int didPopTimes = 0;
+  int didPushTimes = 0;
 
   _TestRoute(super.builder);
 
@@ -17,9 +19,21 @@ class _TestRoute extends Route {
   }
 
   @override
+  void onPush(Route? previousRoute) {
+    super.onPush(previousRoute);
+    onPushTimes++;
+  }
+
+  @override
   void didPop(Route previousRoute) {
     super.didPop(previousRoute);
     didPopTimes++;
+  }
+
+  @override
+  void didPush(Route? previousRoute) {
+    super.didPush(previousRoute);
+    didPushTimes++;
   }
 }
 
@@ -101,6 +115,90 @@ void main() {
       expect(router.currentRoute.children.first, isA<_ComponentB>());
       expect(router.stack.length, 1);
     });
+
+    testWithFlameGame(
+      'didPop/onPop/didPush/onPush was called correctly',
+      (game) async {
+        const initialRouteName = 'A';
+        final router = RouterComponent(
+          routes: {
+            'A': _TestRoute(_ComponentA.new),
+            'B': _TestRoute(_ComponentB.new),
+            'C': _TestRoute(_ComponentC.new),
+          },
+          initialRoute: initialRouteName,
+        );
+        game.add(router);
+        await game.ready();
+
+        expect(
+          router.routes.values.whereType<_TestRoute>().every(
+                (e) =>
+                    e.onPopTimes == 0 &&
+                    e.didPopTimes == 0 &&
+                    (e.name == initialRouteName ||
+                        (e.onPushTimes == 0 && e.didPushTimes == 0)),
+              ),
+          isTrue,
+        );
+
+        final routeA = router.routes[initialRouteName]! as _TestRoute;
+        expect(routeA.onPushTimes, 1);
+        expect(routeA.didPushTimes, 1);
+
+        router.pushNamed('B');
+        await game.ready();
+
+        final routeB = router.routes['B']! as _TestRoute;
+        expect(routeB.onPopTimes, 0);
+        expect(routeB.didPopTimes, 0);
+        expect(routeB.onPushTimes, 1);
+        expect(routeB.didPushTimes, 1);
+        router.pop();
+        expect(routeB.onPopTimes, 1);
+        expect(routeB.didPopTimes, 1);
+        expect(routeB.onPushTimes, 1);
+        expect(routeB.didPushTimes, 1);
+
+        // Check that all other still hasn't been called.
+        expect(
+          router.routes.values
+              .whereType<_TestRoute>()
+              .where((e) => e.name != 'B')
+              .every(
+                (e) =>
+                    e.onPopTimes == 0 &&
+                    e.didPopTimes == 0 &&
+                    (e.name == initialRouteName ||
+                        (e.onPushTimes == 0 && e.didPushTimes == 0)),
+              ),
+          isTrue,
+        );
+        await game.ready();
+
+        final routeD = _TestRoute(_ComponentD.new);
+        router.pushReplacement(routeD, name: 'D');
+        expect(routeD.onPopTimes, 0);
+        expect(routeD.didPopTimes, 0);
+        expect(routeD.onPushTimes, 1);
+        expect(routeD.didPushTimes, 1);
+        expect(routeA.onPopTimes, 1);
+        expect(routeA.didPopTimes, 1);
+        expect(routeA.onPushTimes, 1);
+        expect(routeA.didPushTimes, 1);
+        await game.ready();
+
+        router.pushReplacementNamed('B');
+        expect(routeB.onPopTimes, 1);
+        expect(routeB.didPopTimes, 1);
+        expect(routeB.onPushTimes, 2);
+        expect(routeB.didPushTimes, 2);
+        expect(routeD.onPopTimes, 1);
+        expect(routeD.didPopTimes, 1);
+        expect(routeD.onPushTimes, 1);
+        expect(routeD.didPushTimes, 1);
+      },
+    );
 
     testWithFlameGame('Route factories', (game) async {
       final router = RouterComponent(
