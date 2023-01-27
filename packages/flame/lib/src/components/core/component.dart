@@ -589,12 +589,10 @@ class Component {
       _children?.remove(component);
     }
     if (component._state == _initial) {
-      lifecycle._children.remove(component);
       component._parent = null;
     } else if (component.isLoading) {
       if (component.isLoaded) {
         component._parent = null;
-        lifecycle._children.remove(component);
         component._clearLoadingBit();
       } else {
         component._setRemovingBit();
@@ -764,11 +762,6 @@ class Component {
   @internal
   void handleResize(Vector2 size) {
     _children?.forEach((child) {
-      if (child.isLoading || child.isLoaded) {
-        child.onGameResize(size);
-      }
-    });
-    _lifecycleManager?._children.forEach((child) {
       if (child.isLoading || child.isLoaded) {
         child.onGameResize(size);
       }
@@ -1001,20 +994,6 @@ class _LifecycleManager {
     _removedCompleter = null;
   }
 
-  /// Queue for adding children to a component.
-  ///
-  /// When the user `add()`s a child to a component, we immediately place it
-  /// into that component's queue, and only after that do the standard lifecycle
-  /// processing: resizing, loading, mounting, etc. After all that is finished,
-  /// the child component is retrieved from the queue and placed into the
-  /// children list.
-  ///
-  /// Since the components are processed in the FIFO order, this ensures that
-  /// they will be added to the parent in exactly the same order as the user
-  /// invoked `add()`s, even though they are loading asynchronously and may
-  /// finish loading in arbitrary order.
-  final Queue<Component> _children = Queue();
-
   /// Queue for removing children from a component.
   ///
   /// Components that were placed into this queue will be removed from [owner]
@@ -1028,8 +1007,7 @@ class _LifecycleManager {
   ///
   /// [Component.removed] is not regarded as a pending event.
   bool get hasPendingEvents {
-    return _children.isNotEmpty ||
-        _removals.isNotEmpty ||
+    return _removals.isNotEmpty ||
         _adoption.isNotEmpty ||
         _mountCompleter != null ||
         _loadCompleter != null;
@@ -1041,25 +1019,8 @@ class _LifecycleManager {
   /// ensure that the components get properly added/removed from the component
   /// tree.
   void processQueues() {
-    _processChildrenQueue();
     _processRemovalQueue();
     _processAdoptionQueue();
-  }
-
-  void _processChildrenQueue() {
-    while (_children.isNotEmpty) {
-      final child = _children.first;
-      assert(child._parent!.isMounted);
-      if (child.isLoaded) {
-        child.internalMount();
-        _children.removeFirst();
-        // owner.onChildrenChanged(child, ChildrenChangeType.added);
-      } else if (child.isLoading) {
-        break;
-      } else {
-        child.internalStartLoading();
-      }
-    }
   }
 
   void _processRemovalQueue() {
