@@ -4,47 +4,6 @@ import 'package:flame_test/flame_test.dart';
 import 'package:flutter/widgets.dart' hide Route, OverlayRoute;
 import 'package:flutter_test/flutter_test.dart';
 
-class _TestRoute extends Route {
-  int onPopTimes = 0;
-  int onPushTimes = 0;
-  int didPopTimes = 0;
-  int didPushTimes = 0;
-  String? lastOnPopNextRoute;
-  String? lastOnPushPreviousRoute;
-  String? lastDidPopNextRoute;
-  String? lastDidPushPreviousRoute;
-
-  _TestRoute(super.builder);
-
-  @override
-  void onPop(Route nextRoute) {
-    super.onPop(nextRoute);
-    onPopTimes++;
-    lastOnPopNextRoute = nextRoute.name;
-  }
-
-  @override
-  void onPush(Route? previousRoute) {
-    super.onPush(previousRoute);
-    onPushTimes++;
-    lastOnPushPreviousRoute = previousRoute?.name;
-  }
-
-  @override
-  void didPop(Route nextRoute) {
-    super.didPop(nextRoute);
-    didPopTimes++;
-    lastDidPopNextRoute = nextRoute.name;
-  }
-
-  @override
-  void didPush(Route? previousRoute) {
-    super.didPush(previousRoute);
-    didPushTimes++;
-    lastDidPushPreviousRoute = previousRoute?.name;
-  }
-}
-
 void main() {
   group('RouterComponent', () {
     testWithFlameGame('normal route pushing/popping', (game) async {
@@ -458,3 +417,44 @@ class _ComponentC extends Component {}
 class _ComponentD extends Component {}
 
 class _ComponentE extends Component {}
+
+class _TestRoute extends Route {
+  int onPopTimes = 0;
+  int onPushTimes = 0;
+  int didPopTimes = 0;
+  int didPushTimes = 0;
+  String? lastOnPopNextRoute;
+  String? lastOnPushPreviousRoute;
+  String? lastDidPopNextRoute;
+  String? lastDidPushPreviousRoute;
+
+  _TestRoute(super.builder);
+
+  @override
+  void onPop(Route nextRoute) {
+    super.onPop(nextRoute);
+    onPopTimes++;
+    lastOnPopNextRoute = nextRoute.name;
+  }
+
+  @override
+  void onPush(Route? previousRoute) {
+    super.onPush(previousRoute);
+    onPushTimes++;
+    lastOnPushPreviousRoute = previousRoute?.name;
+  }
+
+  @override
+  void didPop(Route nextRoute) {
+    super.didPop(nextRoute);
+    didPopTimes++;
+    lastDidPopNextRoute = nextRoute.name;
+  }
+
+  @override
+  void didPush(Route? previousRoute) {
+    super.didPush(previousRoute);
+    didPushTimes++;
+    lastDidPushPreviousRoute = previousRoute?.name;
+  }
+}

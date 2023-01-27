@@ -94,7 +94,7 @@ class RouterComponent extends Component {
     if (route == currentRoute) {
       return;
     } else if (replace) {
-      _replaceRoute(route);
+      _removeTopRoute(route);
     }
     if (_routeStack.contains(route)) {
       _routeStack.remove(route);
@@ -135,7 +135,7 @@ class RouterComponent extends Component {
       _routes[name] = route;
     }
     if (replace) {
-      _replaceRoute(route);
+      _removeTopRoute(route);
     }
     add(route);
     _routeStack.add(route);
@@ -239,7 +239,7 @@ class RouterComponent extends Component {
   }
 
   /// Local method to bypass [pop]'s assert
-  void _replaceRoute(Route nextRoute) {
+  void _removeTopRoute(Route nextRoute) {
     final route = _routeStack.removeLast();
     route.didPop(nextRoute);
     route.removeFromParent();
