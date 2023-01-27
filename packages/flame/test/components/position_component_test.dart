@@ -258,23 +258,29 @@ void main() {
         expect(component.containsPoint(Vector2(1.1, 3.1)), false);
       });
 
-      test('component with hitbox does not contains point', () {
-        final component = _MyHitboxComponent();
-        component.position.setValues(1.0, 1.0);
-        component.anchor = Anchor.topLeft;
-        component.size.setValues(2.0, 2.0);
-        component.add(
-          PolygonHitbox([
-            Vector2(1, 0),
-            Vector2(0, -1),
-            Vector2(-1, 0),
-            Vector2(0, 1),
-          ]),
-        );
+      testWithFlameGame(
+        'component with hitbox does not contain point',
+        (game) async {
+          final component = _MyHitboxComponent()
+            ..addToParent(game)
+            ..position.setValues(1.0, 1.0)
+            ..anchor = Anchor.topLeft
+            ..size.setValues(2.0, 2.0)
+            ..add(
+              PolygonHitbox([
+                Vector2(1, 0),
+                Vector2(0, -1),
+                Vector2(-1, 0),
+                Vector2(0, 1),
+              ]),
+            );
+          await game.ready();
 
-        final point = Vector2(1.1, 1.1);
-        expect(component.containsPoint(point), false);
-      });
+          final point = Vector2(1.1, 1.1);
+          expect(component.hitboxes.length, 1);
+          expect(component.containsPoint(point), false);
+        },
+      );
 
       test('component with zero size does not contain point', () {
         final component = PositionComponent();

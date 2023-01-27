@@ -128,8 +128,8 @@ class Component {
   ///      by the user. When the user removes the component in this state, we
   ///      simply set the [_parent] to null and remove it from the parent's
   ///      queue of pending children.
-  ///  - When we [_startLoading] the component, we set the [_loading] bit,
-  ///    invoke the [onGameResize] callback, and then [onLoad] immediately
+  ///  - When we [internalStartLoading] the component, we set the [_loading]
+  ///    bit, invoke the [onGameResize] callback, and then [onLoad] immediately
   ///    afterwards. The onLoad will be either sync or async, in both cases we
   ///    arrange to turn on the [_loaded] bit at the end of [onLoad]'s run.
   ///  - At this point we're in an execution gap: either the async [onLoad] is
@@ -148,12 +148,12 @@ class Component {
   ///    gets mounted. For each component in its queue of pending children, the
   ///    following checks are performed:
   ///      - if the component is already [_loaded], then it will now be
-  ///        [_mount]ed;
+  ///        [internalMount]ed;
   ///      - otherwise, if the component is not even [_loading], then it will
-  ///        now [_startLoading];
+  ///        now [internalStartLoading];
   ///      - otherwise do nothing: need to wait until the component finishes
   ///        loading.
-  ///  - During [_mount]ing, we perform the following sequence:
+  ///  - During [internalMount]ing, we perform the following sequence:
   ///      - first check whether we need to run [onGameResize] -- this could
   ///        happen if mounting a component that was  added to the game earlier
   ///        and then removed;
@@ -551,9 +551,15 @@ class Component {
       '$_parent',
     );
     _parent = parent;
-    parent.lifecycle._children.add(this);
-    if (!isLoaded && (parent.findGame()?.hasLayout ?? false)) {
-      return _startLoading();
+    if (parent.isMounted) {
+      final game = parent.findGame()!;
+      game.fcsRoot!.enqueueAdd(this, parent);
+      if (!isLoaded && game.hasLayout) {
+        return internalStartLoading();
+      }
+    } else {
+      // This will be reconciled during the mounting stage
+      parent.children.add(this);
     }
   }
 
@@ -576,6 +582,9 @@ class Component {
       'Trying to remove a component that belongs to a different parent: this = '
       "$this, component's parent = ${component._parent}",
     );
+    if (!isMounted) {
+      _children?.remove(component);
+    }
     if (component._state == _initial) {
       lifecycle._children.remove(component);
       component._parent = null;
@@ -758,7 +767,8 @@ class Component {
     });
   }
 
-  FutureOr<void> _startLoading() {
+  @internal
+  FutureOr<void> internalStartLoading() {
     assert(_state == _initial);
     assert(_parent != null);
     assert(_parent!.findGame() != null);
@@ -786,7 +796,8 @@ class Component {
   /// and later re-mounted. For these components we need to run [onGameResize]
   /// (since they haven't passed through [add]), but we don't have to add them
   /// to the parent's children because they are already there.
-  void _mount({Component? parent, bool existingChild = false}) {
+  @internal
+  void internalMount({Component? parent, bool existingChild = false}) {
     _parent ??= parent;
     assert(_parent != null && _parent!.isMounted);
     assert(isLoaded);
@@ -809,18 +820,27 @@ class Component {
     if (!existingChild) {
       _parent!.children.add(this);
     }
-    if (_children != null) {
-      _children!.forEach(
-        (child) => child._mount(parent: this, existingChild: true),
-      );
-    }
+    _reAddChildren();
     _lifecycleManager?.processQueues();
+    _parent!.onChildrenChanged(this, ChildrenChangeType.added);
+  }
+
+  void _reAddChildren() {
+    if (_children != null) {
+      final children = List<Component>.from(_children!, growable: false);
+      _children!.clear();
+      for (final child in children) {
+        child._parent = null;
+        add(child);
+      }
+    }
   }
 
   @internal
   void setMounted() {
     _setLoadedBit();
     _setMountedBit();
+    _reAddChildren();
   }
 
   void _remove() {
@@ -1023,13 +1043,13 @@ class _LifecycleManager {
       final child = _children.first;
       assert(child._parent!.isMounted);
       if (child.isLoaded) {
-        child._mount();
+        child.internalMount();
         _children.removeFirst();
-        owner.onChildrenChanged(child, ChildrenChangeType.added);
+        // owner.onChildrenChanged(child, ChildrenChangeType.added);
       } else if (child.isLoading) {
         break;
       } else {
-        child._startLoading();
+        child.internalStartLoading();
       }
     }
   }
@@ -1052,8 +1072,8 @@ class _LifecycleManager {
       child._remove();
       oldParent?.onChildrenChanged(child, ChildrenChangeType.removed);
       child._parent = owner;
-      child._mount();
-      owner.onChildrenChanged(child, ChildrenChangeType.added);
+      child.internalMount();
+      // owner.onChildrenChanged(child, ChildrenChangeType.added);
     }
   }
 }

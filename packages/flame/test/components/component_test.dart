@@ -201,10 +201,10 @@ void main() {
       testWithFlameGame(
         'components added in correct order even with different load times',
         (game) async {
-          final a = SlowComponent(0.1);
-          final b = SlowComponent(0.02);
-          final c = SlowComponent(0.05);
-          final d = SlowComponent(0);
+          final a = SlowComponent('A', 0.1);
+          final b = SlowComponent('B', 0.02);
+          final c = SlowComponent('C', 0.05);
+          final d = SlowComponent('D', 0);
           game.add(a);
           game.add(b);
           game.add(c);
@@ -361,6 +361,7 @@ void main() {
         'not run double onMount',
         _PrepareGame.new,
         (game) async {
+          await game.ready();
           final parent = game.prepareParent;
           expect(parent.onMountRuns, 1);
           expect(parent.children.isNotEmpty, true);
@@ -512,12 +513,15 @@ void main() {
           final parent = Component();
           final component = _SlowLoadingComponent();
           parent.add(component);
+          // Since [parent] is detached, the [component] cannot start loading
           expect(component.isLoading, false);
           parent.remove(component);
           expect(component.isLoading, false);
           expect(component.onLoadCalledCount, 0);
 
           final newParent = Component()..addToParent(game);
+          await game.ready();
+          expect(newParent.isMounted, true);
           newParent.add(component);
           expect(component.isLoading, true);
           expect(component.onLoadCalledCount, 1);
@@ -659,7 +663,7 @@ void main() {
           expect(game.descendants().length, 0);
           final component = Component()..add(Component()..add(Component()));
           game.add(component);
-          expect(game.hasPendingLifecycleEvents, true);
+          expect(game.hasLifecycleEvents, true);
           expect(game.descendants().length, 0);
           await game.ready();
 
@@ -680,11 +684,11 @@ void main() {
           final component = Component()..add(Component()..add(Component()));
           await game.add(component);
           await game.ready();
-          expect(game.hasPendingLifecycleEvents, false);
+          expect(game.hasLifecycleEvents, false);
 
           game.add(Component());
 
-          expect(game.hasPendingLifecycleEvents, true);
+          expect(game.hasLifecycleEvents, true);
           expect(game.descendants().length, 3);
         },
       );
@@ -1090,14 +1094,18 @@ class _SlowLoadingComponent extends Component {
 }
 
 class SlowComponent extends Component {
-  SlowComponent(this.loadTime);
+  SlowComponent(this.name, this.loadTime);
   final double loadTime;
+  final String name;
 
   @override
   Future<void> onLoad() async {
     final ms = (loadTime * 1000).toInt();
     await Future<int?>.delayed(Duration(milliseconds: ms));
   }
+
+  @override
+  String toString() => 'SlowComponent($name, loadTime=$loadTime)';
 }
 
 class _SelfRemovingOnLoadComponent extends Component {
