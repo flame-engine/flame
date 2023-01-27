@@ -275,6 +275,7 @@ void main() {
               ]),
             );
           await game.ready();
+          expect(component.children.length, 1);
 
           expect(component.containsPoint(Vector2.all(1.1)), false);
           expect(component.containsPoint(Vector2.all(1.4)), false);
