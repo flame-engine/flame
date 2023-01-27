@@ -257,7 +257,7 @@ class RouterComponent extends Component {
   /// Local method to bypass [pop]'s assert
   void _popWithoutMinimumAssert() {
     final route = _routeStack.removeLast();
-    route.didPop(_routeStack.last);
+    route.didPop(route);
     route.removeFromParent();
   }
 

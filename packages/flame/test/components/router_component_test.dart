@@ -59,6 +59,35 @@ void main() {
       expect(router.stack.length, 2);
     });
 
+    testWithFlameGame('pushing/popping with 2 initial routes', (game) async {
+      final router = RouterComponent(
+        routes: {
+          'A': Route(_ComponentA.new),
+          'B': Route(_ComponentB.new),
+        },
+        initialRoute: 'A',
+      );
+      game.add(router);
+      await game.ready();
+
+      expect(router.routes.length, 2);
+      expect(router.currentRoute.name, 'A');
+      expect(router.currentRoute.children.length, 1);
+      expect(router.currentRoute.children.first, isA<_ComponentA>());
+
+      router.pushNamed('B');
+      await game.ready();
+      expect(router.currentRoute.name, 'B');
+      expect(router.currentRoute.children.length, 1);
+      expect(router.currentRoute.children.first, isA<_ComponentB>());
+      expect(router.stack.length, 2);
+
+      router.pop();
+      await game.ready();
+      expect(router.currentRoute.name, 'A');
+      expect(router.stack.length, 1);
+    });
+
     testWithFlameGame('Route factories', (game) async {
       final router = RouterComponent(
         initialRoute: 'initial',
