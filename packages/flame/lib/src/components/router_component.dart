@@ -119,7 +119,7 @@ class RouterComponent extends Component {
     if (route == currentRoute) {
       return;
     } else {
-      _popWithoutMinimumAssert();
+      _replaceRoute(route);
     }
     if (_routeStack.contains(route)) {
       _routeStack.remove(route);
@@ -165,7 +165,7 @@ class RouterComponent extends Component {
       route.name = name;
       _routes[name] = route;
     }
-    _popWithoutMinimumAssert();
+    _replaceRoute(route);
     add(route);
     _routeStack.add(route);
     _adjustRoutesOrder();
@@ -229,7 +229,7 @@ class RouterComponent extends Component {
     final route = _routeStack.removeLast();
     _adjustRoutesOrder();
     _adjustRoutesVisibility();
-    route.didPop(route);
+    route.didPop(_routeStack.last);
     route.removeFromParent();
   }
 
@@ -255,9 +255,9 @@ class RouterComponent extends Component {
   }
 
   /// Local method to bypass [pop]'s assert
-  void _popWithoutMinimumAssert() {
+  void _replaceRoute(Route nextRoute) {
     final route = _routeStack.removeLast();
-    route.didPop(route);
+    route.didPop(nextRoute);
     route.removeFromParent();
   }
 

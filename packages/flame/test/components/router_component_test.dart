@@ -4,6 +4,25 @@ import 'package:flame_test/flame_test.dart';
 import 'package:flutter/widgets.dart' hide Route, OverlayRoute;
 import 'package:flutter_test/flutter_test.dart';
 
+class _TestRoute extends Route {
+  int onPopTimes = 0;
+  int didPopTimes = 0;
+
+  _TestRoute(super.builder);
+
+  @override
+  void onPop(Route nextRoute) {
+    super.onPop(nextRoute);
+    onPopTimes++;
+  }
+
+  @override
+  void didPop(Route previousRoute) {
+    super.didPop(previousRoute);
+    didPopTimes++;
+  }
+}
+
 void main() {
   group('RouterComponent', () {
     testWithFlameGame('normal route pushing/popping', (game) async {
@@ -59,7 +78,7 @@ void main() {
       expect(router.stack.length, 2);
     });
 
-    testWithFlameGame('pushing/popping with 2 initial routes', (game) async {
+    testWithFlameGame('replacing with 2 routes', (game) async {
       final router = RouterComponent(
         routes: {
           'A': Route(_ComponentA.new),
@@ -75,16 +94,11 @@ void main() {
       expect(router.currentRoute.children.length, 1);
       expect(router.currentRoute.children.first, isA<_ComponentA>());
 
-      router.pushNamed('B');
+      router.pushReplacementNamed('B');
       await game.ready();
       expect(router.currentRoute.name, 'B');
       expect(router.currentRoute.children.length, 1);
       expect(router.currentRoute.children.first, isA<_ComponentB>());
-      expect(router.stack.length, 2);
-
-      router.pop();
-      await game.ready();
-      expect(router.currentRoute.name, 'A');
       expect(router.stack.length, 1);
     });
 
