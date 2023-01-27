@@ -229,7 +229,7 @@ class RouterComponent extends Component {
     final route = _routeStack.removeLast();
     _adjustRoutesOrder();
     _adjustRoutesVisibility();
-    route.didPop(_routeStack.last);
+    route.didPop(route);
     route.removeFromParent();
   }
 
