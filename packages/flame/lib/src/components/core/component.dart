@@ -551,15 +551,16 @@ class Component {
       '$_parent',
     );
     _parent = parent;
+    final game = parent.findGame();
     if (parent.isMounted) {
-      final game = parent.findGame()!;
-      game.fcsRoot!.enqueueAdd(this, parent);
-      if (!isLoaded && game.hasLayout) {
-        return internalStartLoading();
-      }
+      assert(game != null);
+      game!.fcsRoot!.enqueueAdd(this, parent);
     } else {
       // This will be reconciled during the mounting stage
       parent.children.add(this);
+    }
+    if (!isLoaded && (game?.hasLayout ?? false)) {
+      return internalStartLoading();
     }
   }
 
