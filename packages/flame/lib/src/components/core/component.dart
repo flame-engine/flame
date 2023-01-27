@@ -129,7 +129,7 @@ class Component {
   ///      by the user. When the user removes the component in this state, we
   ///      simply set the [_parent] to null and remove it from the parent's
   ///      queue of pending children.
-  ///  - When we [internalStartLoading] the component, we set the [_loading]
+  ///  - When we [_startLoading] the component, we set the [_loading]
   ///    bit, invoke the [onGameResize] callback, and then [onLoad] immediately
   ///    afterwards. The onLoad will be either sync or async, in both cases we
   ///    arrange to turn on the [_loaded] bit at the end of [onLoad]'s run.
@@ -149,12 +149,12 @@ class Component {
   ///    gets mounted. For each component in its queue of pending children, the
   ///    following checks are performed:
   ///      - if the component is already [_loaded], then it will now be
-  ///        [internalMount]ed;
+  ///        [_mount]ed;
   ///      - otherwise, if the component is not even [_loading], then it will
-  ///        now [internalStartLoading];
+  ///        now [_startLoading];
   ///      - otherwise do nothing: need to wait until the component finishes
   ///        loading.
-  ///  - During [internalMount]ing, we perform the following sequence:
+  ///  - During [_mount]ing, we perform the following sequence:
   ///      - first check whether we need to run [onGameResize] -- this could
   ///        happen if mounting a component that was  added to the game earlier
   ///        and then removed;
@@ -563,7 +563,7 @@ class Component {
       children.add(child);
     }
     if (!child.isLoaded && !child.isLoading && (game?.hasLayout ?? false)) {
-      return child.internalStartLoading();
+      return child._startLoading();
     }
   }
 
@@ -762,11 +762,11 @@ class Component {
   LifecycleEventStatus handleLifecycleEventAdd(Component parent) {
     assert(!isMounted);
     if (parent.isMounted && isLoaded) {
-      internalMount(parent: parent);
+      _mount(parent: parent);
       return LifecycleEventStatus.done;
     } else {
       if (parent.isMounted && !isLoading) {
-        internalStartLoading();
+        _startLoading();
       }
       return LifecycleEventStatus.block;
     }
@@ -782,8 +782,7 @@ class Component {
     });
   }
 
-  @internal
-  FutureOr<void> internalStartLoading() {
+  FutureOr<void> _startLoading() {
     assert(_state == _initial);
     assert(_parent != null);
     assert(_parent!.findGame() != null);
@@ -811,8 +810,7 @@ class Component {
   /// and later re-mounted. For these components we need to run [onGameResize]
   /// (since they haven't passed through [add]), but we don't have to add them
   /// to the parent's children because they are already there.
-  @internal
-  void internalMount({Component? parent, bool existingChild = false}) {
+  void _mount({Component? parent, bool existingChild = false}) {
     _parent ??= parent;
     assert(_parent != null && _parent!.isMounted);
     assert(isLoaded);
@@ -1055,7 +1053,7 @@ class _LifecycleManager {
       child._remove();
       oldParent?.onChildrenChanged(child, ChildrenChangeType.removed);
       child._parent = owner;
-      child.internalMount();
+      child._mount();
       // owner.onChildrenChanged(child, ChildrenChangeType.added);
     }
   }
