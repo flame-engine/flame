@@ -269,16 +269,20 @@ void main() {
             ..add(
               PolygonHitbox([
                 Vector2(1, 0),
-                Vector2(0, -1),
-                Vector2(-1, 0),
                 Vector2(0, 1),
+                Vector2(1, 2),
+                Vector2(2, 1),
               ]),
             );
           await game.ready();
+          expect(component.children.length, 1);
 
-          final point = Vector2(1.1, 1.1);
-          expect(component.hitboxes.length, 1);
-          expect(component.containsPoint(point), false);
+          expect(component.containsPoint(Vector2.all(1.1)), false);
+          expect(component.containsPoint(Vector2.all(1.4)), false);
+          expect(component.containsPoint(Vector2.all(2.0)), true);
+          expect(component.containsPoint(Vector2.all(2.6)), false);
+          expect(component.containsPoint(Vector2.all(2.9)), false);
+          expect(component.containsPoint(Vector2(2.6, 1.5)), false);
         },
       );
 
