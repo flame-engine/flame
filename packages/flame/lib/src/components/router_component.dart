@@ -88,10 +88,13 @@ class RouterComponent extends Component {
   ///
   /// The method calls the [Route.didPush] callback for the newly activated
   /// route.
-  void pushNamed(String name) {
+  void pushNamed(String name, {bool replace = false}) {
     final route = _resolveRoute(name);
+    final previousRouteArgument = currentRoute;
     if (route == currentRoute) {
       return;
+    } else if (replace) {
+      _replaceRoute(route);
     }
     if (_routeStack.contains(route)) {
       _routeStack.remove(route);
@@ -100,7 +103,7 @@ class RouterComponent extends Component {
     }
     _routeStack.add(route);
     _adjustRoutesOrder();
-    route.didPush(previousRoute);
+    route.didPush(previousRouteArgument);
     _adjustRoutesVisibility();
   }
 
@@ -115,21 +118,7 @@ class RouterComponent extends Component {
   /// This method calls the [Route.didPush] callback for the newly activated
   /// route and also calls the [Route.didPop] callback for the popped route.
   void pushReplacementNamed(String name) {
-    final route = _resolveRoute(name);
-    if (route == currentRoute) {
-      return;
-    } else {
-      _replaceRoute(route);
-    }
-    if (_routeStack.contains(route)) {
-      _routeStack.remove(route);
-    } else {
-      add(route);
-    }
-    _routeStack.add(route);
-    _adjustRoutesOrder();
-    route.didPush(previousRoute);
-    _adjustRoutesVisibility();
+    pushNamed(name, replace: true);
   }
 
   /// Puts a new [route] on top of the navigation stack.
@@ -139,15 +128,19 @@ class RouterComponent extends Component {
   /// same name, it will be overwritten).
   ///
   /// The method calls [Route.didPush] for this new route after it is added.
-  void pushRoute(Route route, {String? name}) {
+  void pushRoute(Route route, {String? name, bool replace = false}) {
+    final previousRouteArgument = currentRoute;
     if (name != null) {
       route.name = name;
       _routes[name] = route;
     }
+    if (replace) {
+      _replaceRoute(route);
+    }
     add(route);
     _routeStack.add(route);
     _adjustRoutesOrder();
-    route.didPush(previousRoute);
+    route.didPush(previousRouteArgument);
     _adjustRoutesVisibility();
   }
 
@@ -161,16 +154,7 @@ class RouterComponent extends Component {
   /// The method calls [Route.didPush] for this new route after it is added and
   /// also calls the [Route.didPop] callback for the popped route.
   void pushReplacement(Route route, {String? name}) {
-    if (name != null) {
-      route.name = name;
-      _routes[name] = route;
-    }
-    _replaceRoute(route);
-    add(route);
-    _routeStack.add(route);
-    _adjustRoutesOrder();
-    route.didPush(previousRoute);
-    _adjustRoutesVisibility();
+    pushRoute(route, name: name, replace: true);
   }
 
   /// Puts the overlay route [name] on top of the navigation stack.

@@ -9,6 +9,10 @@ class _TestRoute extends Route {
   int onPushTimes = 0;
   int didPopTimes = 0;
   int didPushTimes = 0;
+  String? lastOnPopNextRoute;
+  String? lastOnPushPreviousRoute;
+  String? lastDidPopNextRoute;
+  String? lastDidPushPreviousRoute;
 
   _TestRoute(super.builder);
 
@@ -16,24 +20,28 @@ class _TestRoute extends Route {
   void onPop(Route nextRoute) {
     super.onPop(nextRoute);
     onPopTimes++;
+    lastOnPopNextRoute = nextRoute.name;
   }
 
   @override
   void onPush(Route? previousRoute) {
     super.onPush(previousRoute);
     onPushTimes++;
+    lastOnPushPreviousRoute = previousRoute?.name;
   }
 
   @override
-  void didPop(Route previousRoute) {
-    super.didPop(previousRoute);
+  void didPop(Route nextRoute) {
+    super.didPop(nextRoute);
     didPopTimes++;
+    lastDidPopNextRoute = nextRoute.name;
   }
 
   @override
   void didPush(Route? previousRoute) {
     super.didPush(previousRoute);
     didPushTimes++;
+    lastDidPushPreviousRoute = previousRoute?.name;
   }
 }
 
@@ -145,6 +153,10 @@ void main() {
         final routeA = router.routes[initialRouteName]! as _TestRoute;
         expect(routeA.onPushTimes, 1);
         expect(routeA.didPushTimes, 1);
+        expect(routeA.lastDidPushPreviousRoute, isNull);
+        expect(routeA.lastOnPushPreviousRoute, isNull);
+        expect(routeA.lastDidPopNextRoute, isNull);
+        expect(routeA.lastOnPopNextRoute, isNull);
 
         router.pushNamed('B');
         await game.ready();
@@ -154,11 +166,27 @@ void main() {
         expect(routeB.didPopTimes, 0);
         expect(routeB.onPushTimes, 1);
         expect(routeB.didPushTimes, 1);
+
+        expect(routeA.lastDidPushPreviousRoute, isNull);
+        expect(routeA.lastOnPushPreviousRoute, isNull);
+        expect(routeA.lastDidPopNextRoute, isNull);
+        expect(routeA.lastOnPopNextRoute, isNull);
+
+        expect(routeB.lastDidPushPreviousRoute, routeA.name);
+        expect(routeB.lastOnPushPreviousRoute, routeA.name);
+        expect(routeB.lastDidPopNextRoute, isNull);
+        expect(routeB.lastOnPopNextRoute, isNull);
+
         router.pop();
         expect(routeB.onPopTimes, 1);
         expect(routeB.didPopTimes, 1);
         expect(routeB.onPushTimes, 1);
         expect(routeB.didPushTimes, 1);
+
+        expect(routeB.lastDidPushPreviousRoute, routeA.name);
+        expect(routeB.lastOnPushPreviousRoute, routeA.name);
+        expect(routeB.lastDidPopNextRoute, routeA.name);
+        expect(routeB.lastOnPopNextRoute, routeA.name);
 
         // Check that all other still hasn't been called.
         expect(
@@ -182,10 +210,22 @@ void main() {
         expect(routeD.didPopTimes, 0);
         expect(routeD.onPushTimes, 1);
         expect(routeD.didPushTimes, 1);
+
         expect(routeA.onPopTimes, 1);
         expect(routeA.didPopTimes, 1);
         expect(routeA.onPushTimes, 1);
         expect(routeA.didPushTimes, 1);
+
+        expect(routeA.lastDidPushPreviousRoute, isNull);
+        expect(routeA.lastOnPushPreviousRoute, isNull);
+        expect(routeA.lastDidPopNextRoute, routeD.name);
+        expect(routeA.lastOnPopNextRoute, routeD.name);
+
+        expect(routeD.lastDidPushPreviousRoute, routeA.name);
+        expect(routeD.lastOnPushPreviousRoute, routeA.name);
+        expect(routeD.lastDidPopNextRoute, isNull);
+        expect(routeD.lastOnPopNextRoute, isNull);
+
         await game.ready();
 
         router.pushReplacementNamed('B');
@@ -193,10 +233,21 @@ void main() {
         expect(routeB.didPopTimes, 1);
         expect(routeB.onPushTimes, 2);
         expect(routeB.didPushTimes, 2);
+
         expect(routeD.onPopTimes, 1);
         expect(routeD.didPopTimes, 1);
         expect(routeD.onPushTimes, 1);
         expect(routeD.didPushTimes, 1);
+
+        expect(routeB.lastDidPushPreviousRoute, routeD.name);
+        expect(routeB.lastOnPushPreviousRoute, routeD.name);
+        expect(routeB.lastDidPopNextRoute, routeA.name);
+        expect(routeB.lastOnPopNextRoute, routeA.name);
+
+        expect(routeD.lastDidPushPreviousRoute, routeA.name);
+        expect(routeD.lastOnPushPreviousRoute, routeA.name);
+        expect(routeD.lastDidPopNextRoute, routeB.name);
+        expect(routeD.lastOnPopNextRoute, routeB.name);
       },
     );
 
