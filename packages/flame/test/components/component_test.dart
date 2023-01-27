@@ -375,6 +375,7 @@ void main() {
           final component = ComponentWithSizeHistory();
           game.add(component);
           expect(component.history, equals([Vector2(800, 600)]));
+          expect(component.isLoading, true);
           expect(component.isMounted, false);
           game.onGameResize(Vector2(500, 300));
           game.onGameResize(Vector2(300, 500));

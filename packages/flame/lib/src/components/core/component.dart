@@ -559,7 +559,7 @@ class Component {
       // This will be reconciled during the mounting stage
       parent.children.add(this);
     }
-    if (!isLoaded && (game?.hasLayout ?? false)) {
+    if (!isLoaded && !isLoading && (game?.hasLayout ?? false)) {
       return internalStartLoading();
     }
   }
@@ -758,9 +758,14 @@ class Component {
     }
   }
 
+  @mustCallSuper
   @internal
   void handleResize(Vector2 size) {
-    _children?.forEach((child) => child.onGameResize(size));
+    _children?.forEach((child) {
+      if (child.isLoading || child.isLoaded) {
+        child.onGameResize(size);
+      }
+    });
     _lifecycleManager?._children.forEach((child) {
       if (child.isLoading || child.isLoaded) {
         child.onGameResize(size);
