@@ -529,7 +529,10 @@ class Component {
   /// try to add it to multiple parents, or even to the same parent multiple
   /// times. If you need to change the parent of a component, use the
   /// [changeParent] method.
-  FutureOr<void> add(Component component) => component.addToParent(this);
+  FutureOr<void> add(Component component) => _addChildImpl(component);
+
+  /// Adds this component as a child of [parent] (see [add] for details).
+  FutureOr<void> addToParent(Component parent) => parent._addChildImpl(this);
 
   /// A convenience method to [add] multiple children at once.
   Future<void> addAll(Iterable<Component> components) {
@@ -543,24 +546,23 @@ class Component {
     return Future.wait(futures);
   }
 
-  /// Adds this component as a child of [parent] (see [add] for details).
-  FutureOr<void> addToParent(Component parent) {
+  FutureOr<void> _addChildImpl(Component child) {
     assert(
-      _parent == null,
-      '$this cannot be added to $parent because it already has a parent: '
-      '$_parent',
+      child._parent == null,
+      '$child cannot be added to $this because it already has a parent: '
+      '${child._parent}',
     );
-    _parent = parent;
-    final game = parent.findGame();
-    if (parent.isMounted) {
+    child._parent = this;
+    final game = findGame();
+    if (isMounted) {
       assert(game != null);
-      game!.fcsRoot!.enqueueAdd(this, parent);
+      game!.fcsRoot!.enqueueAdd(child, this);
     } else {
       // This will be reconciled during the mounting stage
-      parent.children.add(this);
+      children.add(child);
     }
-    if (!isLoaded && !isLoading && (game?.hasLayout ?? false)) {
-      return internalStartLoading();
+    if (!child.isLoaded && !child.isLoading && (game?.hasLayout ?? false)) {
+      return child.internalStartLoading();
     }
   }
 
@@ -837,7 +839,7 @@ class Component {
       _children!.clear();
       for (final child in children) {
         child._parent = null;
-        add(child);
+        _addChildImpl(child);
       }
     }
   }
