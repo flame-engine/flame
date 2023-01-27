@@ -39,23 +39,25 @@ class ComponentTreeRoot extends Component {
             _blocked.contains(identityHashCode(parent))) {
           continue;
         }
+        LifecycleEventStatus status;
         switch (event.kind) {
           case _LifecycleEventKind.add:
-            if (parent!.isMounted && child.isLoaded) {
-              child.internalMount(parent: parent);
-              _queue.removeCurrent();
-            } else {
-              if (parent.isMounted && !child.isLoading) {
-                child.internalStartLoading();
-              }
-              _blocked.add(identityHashCode(child));
-              _blocked.add(identityHashCode(parent));
-            }
+            status = child.handleLifecycleEventAdd(parent!);
             break;
           case _LifecycleEventKind.remove:
-            break;
           default:
             throw UnsupportedError('Event ${event.kind} not supported');
+        }
+        switch (status) {
+          case LifecycleEventStatus.done:
+            _queue.removeCurrent();
+            break;
+          case LifecycleEventStatus.block:
+            _blocked.add(identityHashCode(child));
+            _blocked.add(identityHashCode(parent));
+            break;
+          default:
+            break;
         }
       }
       _blocked.clear();
@@ -74,6 +76,12 @@ class ComponentTreeRoot extends Component {
       }
     });
   }
+}
+
+enum LifecycleEventStatus {
+  skip,
+  block,
+  done,
 }
 
 enum _LifecycleEventKind {

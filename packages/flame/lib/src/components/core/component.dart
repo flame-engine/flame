@@ -4,6 +4,7 @@ import 'dart:collection';
 import 'package:collection/collection.dart';
 import 'package:flame/src/cache/value_cache.dart';
 import 'package:flame/src/components/core/component_set.dart';
+import 'package:flame/src/components/core/component_tree_root.dart';
 import 'package:flame/src/components/core/position_type.dart';
 import 'package:flame/src/components/mixins/coordinate_transform.dart';
 import 'package:flame/src/components/mixins/has_game_ref.dart';
@@ -755,6 +756,19 @@ class Component {
           _lifecycleManager!._removedCompleter == null) {
         _lifecycleManager = null;
       }
+    }
+  }
+
+  LifecycleEventStatus handleLifecycleEventAdd(Component parent) {
+    assert(!isMounted);
+    if (parent.isMounted && isLoaded) {
+      internalMount(parent: parent);
+      return LifecycleEventStatus.done;
+    } else {
+      if (parent.isMounted && !isLoading) {
+        internalStartLoading();
+      }
+      return LifecycleEventStatus.block;
     }
   }
 
