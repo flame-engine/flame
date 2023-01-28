@@ -16,7 +16,9 @@ import 'package:meta/meta.dart';
 ///
 /// This is the recommended base class to use for most games made with Flame.
 /// It is based on the Flame Component System (also known as FCS).
-class FlameGame extends ComponentTreeRoot with Game implements FlameComponentSystemGame {
+class FlameGame extends ComponentTreeRoot
+    with Game
+    implements FlameComponentSystemGame {
   FlameGame({
     super.children,
     Camera? camera,
