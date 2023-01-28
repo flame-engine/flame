@@ -1058,7 +1058,6 @@ class _LifecycleManager {
       oldParent?.onChildrenChanged(child, ChildrenChangeType.removed);
       child._parent = owner;
       child._mount();
-      // owner.onChildrenChanged(child, ChildrenChangeType.added);
     }
   }
 }
