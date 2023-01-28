@@ -125,6 +125,28 @@ void main() {
         expect(riveComponent.artboard.antialiasing, isFalse);
       });
     });
+
+    group('Component size', () {
+      test('use specifiy size', () async {
+        final skillsArtboard = await loadArtboard(riveFile);
+        final riveComponent = RiveComponent(
+          artboard: skillsArtboard,
+          size: Vector2.all(250.0),
+        );
+
+        expect(riveComponent.size, Vector2.all(250.0));
+      });
+
+      test('deafult value (ArtboardSize)', () async {
+        final skillsArtboard = await loadArtboard(riveFile);
+        final riveComponent = RiveComponent(artboard: skillsArtboard);
+
+        expect(
+          riveComponent.size,
+          Vector2(skillsArtboard.width, skillsArtboard.height),
+        );
+      });
+    });
   });
 }
 
