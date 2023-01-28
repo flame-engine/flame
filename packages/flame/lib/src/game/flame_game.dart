@@ -4,7 +4,7 @@ import 'package:flame/components.dart';
 import 'package:flame/src/components/core/component_tree_root.dart';
 import 'package:flame/src/game/camera/camera.dart';
 import 'package:flame/src/game/camera/camera_wrapper.dart';
-import 'package:flame/src/game/fcs_game.dart';
+import 'package:flame/src/game/flame_component_system_game.dart';
 import 'package:flame/src/game/game.dart';
 import 'package:flame/src/game/projector.dart';
 import 'package:meta/meta.dart';
@@ -16,7 +16,7 @@ import 'package:meta/meta.dart';
 ///
 /// This is the recommended base class to use for most games made with Flame.
 /// It is based on the Flame Component System (also known as FCS).
-class FlameGame extends ComponentTreeRoot with Game implements FcsGame {
+class FlameGame extends ComponentTreeRoot with Game implements FlameComponentSystemGame {
   FlameGame({
     super.children,
     Camera? camera,
