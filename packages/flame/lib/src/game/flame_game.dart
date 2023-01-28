@@ -47,7 +47,7 @@ class FlameGame extends ComponentTreeRoot with Game implements FcsGame {
   Vector2 get size => camera.gameSize;
 
   @override
-  ComponentTreeRoot get fcsRoot => this;
+  ComponentTreeRoot get componentTreeRoot => this;
 
   @override
   @internal

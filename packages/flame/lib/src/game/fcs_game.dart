@@ -7,5 +7,5 @@ import 'package:meta/meta.dart';
 @internal
 abstract class FcsGame {
   /// The root [Component] of the component tree.
-  ComponentTreeRoot get fcsRoot;
+  ComponentTreeRoot get componentTreeRoot;
 }

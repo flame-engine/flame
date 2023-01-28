@@ -557,7 +557,7 @@ class Component {
     child._parent = this;
     final game = findGame();
     if (isMounted) {
-      (game! as FcsGame).fcsRoot.enqueueAdd(child, this);
+      (game! as FcsGame).componentTreeRoot.enqueueAdd(child, this);
     } else {
       // This will be reconciled during the mounting stage
       children.add(child);
