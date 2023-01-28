@@ -14,25 +14,22 @@ class RiveComponent extends PositionComponent {
   final Artboard artboard;
   final RiveArtboardRenderer _renderer;
 
-  /// Determines whether to use the default size of the [artboard], i.e. the
-  /// absolute size defined by the artboard, or size the widget based on the
-  /// [size].
-  ///
-  /// Defaults to `false`, i.e. defaults to sizing based on the [size].
-  ///
-  /// When `true`, the artboard size is used.
-  final bool useArtboardSize;
-
   RiveComponent({
     required this.artboard,
     bool antialiasing = true,
-    this.useArtboardSize = false,
+    @Deprecated(
+      "Will be removed in v1.8.0, use size's default value for ArtboardSize",
+    )
+        bool useArtboardSize = true,
     BoxFit fit = BoxFit.contain,
     Alignment alignment = Alignment.center,
 
     // position component arguments
     super.position,
-    super.size,
+
+    /// The logical size of the component.
+    /// Default value is ArtboardSize
+    Vector2? size,
     super.scale,
     double super.angle = 0.0,
     Anchor super.anchor = Anchor.topLeft,
@@ -45,9 +42,8 @@ class RiveComponent extends PositionComponent {
           alignment: alignment,
           artboard: artboard,
         ) {
-    if (useArtboardSize) {
-      size.setValues(artboard.width, artboard.height);
-    }
+    size ??= Vector2(artboard.width, artboard.height);
+    super.size.setFrom(size);
   }
 
   @override

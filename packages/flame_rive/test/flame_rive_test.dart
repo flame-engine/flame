@@ -126,8 +126,8 @@ void main() {
       });
     });
 
-    group('useArtboardSize', () {
-      test('Default value: `false`', () async {
+    group('Component size', () {
+      test('use specifiy size', () async {
         final skillsArtboard = await loadArtboard(riveFile);
         final riveComponent = RiveComponent(
           artboard: skillsArtboard,
@@ -137,13 +137,9 @@ void main() {
         expect(riveComponent.size, Vector2.all(250.0));
       });
 
-      test('as true', () async {
+      test('deafult value (ArtboardSize)', () async {
         final skillsArtboard = await loadArtboard(riveFile);
-        final riveComponent = RiveComponent(
-          artboard: skillsArtboard,
-          useArtboardSize: true,
-          size: Vector2.all(250.0),
-        );
+        final riveComponent = RiveComponent(artboard: skillsArtboard);
 
         expect(
           riveComponent.size,
