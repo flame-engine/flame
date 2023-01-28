@@ -83,9 +83,11 @@ class ComponentTreeRoot extends Component {
 enum LifecycleEventStatus {
   /// The event cannot be processed, move over to the next one.
   skip,
+
   /// Same as [skip], but also prevent processing of any other events for the
   /// same child or parent.
   block,
+
   /// The event was fully processed and can now be removed from the queue.
   done,
 }
@@ -94,7 +96,7 @@ enum _LifecycleEventKind {
   unknown,
   add,
   remove,
-  // reparent,
+  // move,
   // rebalance,
 }
 
