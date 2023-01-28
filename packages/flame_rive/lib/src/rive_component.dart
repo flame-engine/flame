@@ -35,16 +35,14 @@ class RiveComponent extends PositionComponent {
     Anchor super.anchor = Anchor.topLeft,
     super.children,
     super.priority,
-  }) : _renderer = RiveArtboardRenderer(
+  })  : _renderer = RiveArtboardRenderer(
           antialiasing: antialiasing,
           useArtboardSize: useArtboardSize,
           fit: fit,
           alignment: alignment,
           artboard: artboard,
-        ) {
-    size ??= Vector2(artboard.width, artboard.height);
-    super.size.setFrom(size);
-  }
+        ),
+        super(size: size ?? Vector2(artboard.width, artboard.height));
 
   @override
   void render(ui.Canvas canvas) {
