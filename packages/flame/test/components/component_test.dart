@@ -521,8 +521,6 @@ void main() {
           expect(component.onLoadCalledCount, 0);
 
           final newParent = Component()..addToParent(game);
-          await game.ready();
-          expect(newParent.isMounted, true);
           newParent.add(component);
           expect(component.isLoading, true);
           expect(component.onLoadCalledCount, 1);

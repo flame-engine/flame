@@ -129,8 +129,8 @@ class Component {
   ///      by the user. When the user removes the component in this state, we
   ///      simply set the [_parent] to null and remove it from the parent's
   ///      queue of pending children.
-  ///  - When we [_startLoading] the component, we set the [_loading]
-  ///    bit, invoke the [onGameResize] callback, and then [onLoad] immediately
+  ///  - When we [_startLoading] the component, we set the [_loading] bit,
+  ///    invoke the [onGameResize] callback, and then [onLoad] immediately
   ///    afterwards. The onLoad will be either sync or async, in both cases we
   ///    arrange to turn on the [_loaded] bit at the end of [onLoad]'s run.
   ///  - At this point we're in an execution gap: either the async [onLoad] is
@@ -759,6 +759,7 @@ class Component {
     }
   }
 
+  @internal
   LifecycleEventStatus handleLifecycleEventAdd(Component parent) {
     assert(!isMounted);
     if (parent.isMounted && isLoaded) {

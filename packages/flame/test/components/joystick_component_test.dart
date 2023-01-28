@@ -17,8 +17,7 @@ void main() {
         size: 20,
         margin: const EdgeInsets.only(left: 20, bottom: 20),
       );
-      game.add(joystick);
-      await game.ready();
+      await game.ensureAdd(joystick);
 
       expect(joystick.direction, JoystickDirection.idle);
       joystick.delta.setValues(1.0, 0.0);
