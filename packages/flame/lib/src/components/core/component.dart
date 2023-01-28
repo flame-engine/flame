@@ -619,6 +619,24 @@ class Component {
     parent = newParent;
   }
 
+  /// Replaces a [replaceFrom] child of this component with [replaceWith].
+  /// I.e., removes [replaceFrom], and adds [replaceWith] instead.
+  FutureOr<void> replaceChild(Component replaceFrom, Component replaceWith) {
+    if (replaceFrom == replaceWith) {
+      // nothing to do
+      return Future.value();
+    }
+    remove(replaceFrom);
+    return add(replaceWith);
+  }
+
+  /// Same as [replaceChild], but takes a map of replacements.
+  /// Removes the key and adds the value instead.
+  FutureOr<void> replaceAll(Map<Component, Component> replacements) {
+    removeAll(replacements.keys);
+    return addAll(replacements.values);
+  }
+
   //#endregion
 
   //#region Hit Testing

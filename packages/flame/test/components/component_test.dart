@@ -652,6 +652,55 @@ void main() {
       );
     });
 
+    group('Replacing components', () {
+      testWithFlameGame('replaces single child', (game) async {
+        final child1 = Component();
+        final child2 = Component();
+
+        final parent = Component();
+        await game.ensureAdd(parent);
+        expect(parent.isMounted, true);
+
+        await parent.add(child1);
+        game.update(0); // children are only updated on the next tick
+        expect(parent.contains(child1), true);
+        expect(parent.contains(child2), false);
+
+        parent.replaceChild(child1, child2);
+        game.update(0); // children are only updated on the next tick
+        expect(parent.contains(child1), false);
+        expect(parent.contains(child2), true);
+      });
+
+      testWithFlameGame('replaces a map', (game) async {
+        final child1 = Component();
+        final child2 = Component();
+        final child3 = Component();
+        final child4 = Component();
+        final child5 = Component();
+
+        final parent = Component();
+        await game.ensureAdd(parent);
+        expect(parent.isMounted, true);
+
+        await parent.addAll([child1, child2, child3]);
+        game.update(0); // children are only updated on the next tick
+        expect(parent.contains(child1), true);
+        expect(parent.contains(child2), true);
+        expect(parent.contains(child3), true);
+        expect(parent.contains(child4), false);
+        expect(parent.contains(child5), false);
+
+        parent.replaceAll({child1: child5, child3: child4});
+        game.update(0); // children are only updated on the next tick
+        expect(parent.contains(child1), false);
+        expect(parent.contains(child2), true);
+        expect(parent.contains(child3), false);
+        expect(parent.contains(child4), true);
+        expect(parent.contains(child5), true);
+      });
+    });
+
     group('descendants()', () {
       testWithFlameGame(
         'descendants in a deep component tree',
@@ -810,8 +859,8 @@ void main() {
       );
 
       testWithFlameGame(
-        'after adding several childs using addAll the method onChildrenChanged '
-        'should be called list.length times',
+        'after adding several children using addAll the method '
+        'onChildrenChanged should be called list.length times',
         (game) async {
           final list = [Component(), Component()];
           final parent = _OnChildrenChangedComponent();

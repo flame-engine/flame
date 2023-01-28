@@ -53,6 +53,9 @@ To remove components from the list on a `FlameGame` the `remove` or `removeAll` 
 The first can be used if you just want to remove one component, and the second can be used when you
 want to remove a list of components.
 
+If you want to replace a component with another, utility methods `replaceChild` and `replaceAll` are
+available (which are equivalent to removing the original and then adding the new replacement).
+
 
 ## Game Loop
 
