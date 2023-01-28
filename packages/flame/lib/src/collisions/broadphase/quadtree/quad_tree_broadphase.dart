@@ -20,7 +20,6 @@ typedef ExternalMinDistanceCheck = bool Function(
 /// detailed description of its initialization parameters.
 class QuadTreeBroadphase<T extends Hitbox<T>> extends Broadphase<T> {
   QuadTreeBroadphase({
-    super.items,
     required Rect mainBoxSize,
     required this.broadphaseCheck,
     required this.minimumDistanceCheck,
@@ -32,7 +31,7 @@ class QuadTreeBroadphase<T extends Hitbox<T>> extends Broadphase<T> {
           maxDepth: maxDepth,
         );
 
-  final QuadTree tree;
+  final QuadTree<T> tree;
 
   final activeCollisions = HashSet<T>();
 
@@ -44,6 +43,9 @@ class QuadTreeBroadphase<T extends Hitbox<T>> extends Broadphase<T> {
 
   final _potentials = HashSet<CollisionProspect<T>>();
   final _potentialsTmp = <List<ShapeHitbox>>[];
+
+  @override
+  List<T> get items => tree.hitboxes;
 
   @override
   HashSet<CollisionProspect<T>> query() {
@@ -84,7 +86,7 @@ class QuadTreeBroadphase<T extends Hitbox<T>> extends Broadphase<T> {
           continue;
         }
 
-        _potentialsTmp.add([asShapeItem, potential]);
+        _potentialsTmp.add([asShapeItem, asShapePotential]);
       }
     }
 
@@ -111,6 +113,7 @@ class QuadTreeBroadphase<T extends Hitbox<T>> extends Broadphase<T> {
     tree.add(item);
   }
 
+  @override
   void add(T hitbox) {
     tree.add(hitbox);
     if (hitbox.collisionType == CollisionType.active) {
@@ -119,11 +122,20 @@ class QuadTreeBroadphase<T extends Hitbox<T>> extends Broadphase<T> {
     _cacheCenterOfHitbox(hitbox as ShapeHitbox);
   }
 
+  @override
   void remove(T item) {
     tree.remove(item);
     _cachedCenters.remove(item);
     if (item.collisionType == CollisionType.active) {
       activeCollisions.remove(item);
+    }
+
+    final checkCache = _broadphaseCheckCache[item];
+    if (checkCache != null) {
+      for (final entry in checkCache.entries) {
+        _broadphaseCheckCache[entry.key]?.remove(item);
+      }
+      _broadphaseCheckCache.remove(item);
     }
   }
 
