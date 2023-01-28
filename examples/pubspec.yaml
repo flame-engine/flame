@@ -28,7 +28,7 @@ dependencies:
   trex_game: ^0.1.0
 
 dev_dependencies:
-  flame_lint: ^0.1.3
+  flame_lint: ^0.2.0
 flutter:
   uses-material-design: true
 
