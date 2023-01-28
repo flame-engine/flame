@@ -36,7 +36,7 @@ scripts:
     description: Run `dart format` for all packages.
 
   format-check:
-    run: melos exec flutter format . --set-exit-if-changed
+    run: melos exec dart format . --set-exit-if-changed
     description: Run `dart format` checks for all packages.
 
   markdown-check:

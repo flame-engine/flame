@@ -143,8 +143,8 @@ class Route extends PositionComponent with ParentIsA<RouterComponent> {
   /// If [maintainState] is false, the page component rendered by this route
   /// is not retained when the route it popped.
   @internal
-  void didPop(Route previousRoute) {
-    onPop(previousRoute);
+  void didPop(Route nextRoute) {
+    onPop(nextRoute);
     if (!maintainState) {
       _page?.removeFromParent();
       _page = null;
