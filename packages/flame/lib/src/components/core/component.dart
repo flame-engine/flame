@@ -530,10 +530,10 @@ class Component {
   /// try to add it to multiple parents, or even to the same parent multiple
   /// times. If you need to change the parent of a component, use the
   /// [changeParent] method.
-  FutureOr<void> add(Component component) => _addChildImpl(component);
+  FutureOr<void> add(Component component) => _addChild(component);
 
   /// Adds this component as a child of [parent] (see [add] for details).
-  FutureOr<void> addToParent(Component parent) => parent._addChildImpl(this);
+  FutureOr<void> addToParent(Component parent) => parent._addChild(this);
 
   /// A convenience method to [add] multiple children at once.
   Future<void> addAll(Iterable<Component> components) {
@@ -547,7 +547,7 @@ class Component {
     return Future.wait(futures);
   }
 
-  FutureOr<void> _addChildImpl(Component child) {
+  FutureOr<void> _addChild(Component child) {
     assert(
       child._parent == null,
       '$child cannot be added to $this because it already has a parent: '
@@ -836,7 +836,7 @@ class Component {
       _children!.clear();
       for (final child in children) {
         child._parent = null;
-        _addChildImpl(child);
+        _addChild(child);
       }
     }
   }
