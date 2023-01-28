@@ -422,7 +422,7 @@ with a `passive` `CollisionType`.  Collisions will be explained more in a later 
 #### Display the Platform
 
 In our `loadGameSegments` method from earlier, we will need to add the call to add our block.  We
-will need to define `gridPosition` and `xOffset` to be passed in.  `gridPostion` will be a
+will need to define `gridPosition` and `xOffset` to be passed in.  `gridPosition` will be a
 `Vector2` and `xOffset` is a double as that will be used to calculate the x-axis offset for
 the block in a `Vector2`.  So add the following to your `loadGameSegments` method:
 
