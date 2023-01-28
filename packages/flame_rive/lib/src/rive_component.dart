@@ -17,25 +17,32 @@ class RiveComponent extends PositionComponent {
   RiveComponent({
     required this.artboard,
     bool antialiasing = true,
-    bool useArtboardSize = true,
+    @Deprecated(
+      "Will be removed in v1.8.0, use size's default value for ArtboardSize",
+    )
+        bool useArtboardSize = true,
     BoxFit fit = BoxFit.contain,
     Alignment alignment = Alignment.center,
 
     // position component arguments
     super.position,
-    super.size,
+
+    /// The logical size of the component.
+    /// Default value is ArtboardSize
+    Vector2? size,
     super.scale,
     double super.angle = 0.0,
     Anchor super.anchor = Anchor.topLeft,
     super.children,
     super.priority,
-  }) : _renderer = RiveArtboardRenderer(
+  })  : _renderer = RiveArtboardRenderer(
           antialiasing: antialiasing,
           useArtboardSize: useArtboardSize,
           fit: fit,
           alignment: alignment,
           artboard: artboard,
-        );
+        ),
+        super(size: size ?? Vector2(artboard.width, artboard.height));
 
   @override
   void render(ui.Canvas canvas) {
