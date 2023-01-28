@@ -51,6 +51,7 @@ class ComponentTreeRoot extends Component {
         switch (status) {
           case LifecycleEventStatus.done:
             _queue.removeCurrent();
+            repeatLoop = true;
             break;
           case LifecycleEventStatus.block:
             _blocked.add(identityHashCode(child));
@@ -78,9 +79,14 @@ class ComponentTreeRoot extends Component {
   }
 }
 
+/// The status of processing a Lifecycle event.
 enum LifecycleEventStatus {
+  /// The event cannot be processed, move over to the next one.
   skip,
+  /// Same as [skip], but also prevent processing of any other events for the
+  /// same child or parent.
   block,
+  /// The event was fully processed and can now be removed from the queue.
   done,
 }
 
