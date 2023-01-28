@@ -832,14 +832,26 @@ class Component {
     _parent!.onChildrenChanged(this, ChildrenChangeType.added);
   }
 
+  /// Used by [_reAddChildren].
+  static final List<Component> _tmpChildren = [];
+
+  /// At the end of mounting, we remove all children components and then re-add
+  /// them one-by-one. The reason for this is that before the current component
+  /// was mounted, its [children] may have contained components in arbitrary
+  /// state -- initial, loading, unmounted, etc. However, we don't want to
+  /// have such components in a component tree. By removing and then re-adding
+  /// them, we ensure that they are placed in a queue, and will only be placed
+  /// into [children] once they are fully mounted.
   void _reAddChildren() {
-    if (_children != null) {
-      final children = List<Component>.from(_children!, growable: false);
+    if (_children != null && _children!.isNotEmpty) {
+      assert(_tmpChildren.isEmpty);
+      _tmpChildren.addAll(_children!);
       _children!.clear();
-      for (final child in children) {
+      for (final child in _tmpChildren) {
         child._parent = null;
         _addChild(child);
       }
+      _tmpChildren.clear();
     }
   }
 
