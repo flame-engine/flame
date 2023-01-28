@@ -8,6 +8,7 @@ import 'package:flame/src/components/core/component_tree_root.dart';
 import 'package:flame/src/components/core/position_type.dart';
 import 'package:flame/src/components/mixins/coordinate_transform.dart';
 import 'package:flame/src/components/mixins/has_game_ref.dart';
+import 'package:flame/src/game/fcs_game.dart';
 import 'package:flame/src/game/flame_game.dart';
 import 'package:flame/src/game/game.dart';
 import 'package:flame/src/gestures/events.dart';
@@ -557,7 +558,8 @@ class Component {
     final game = findGame();
     if (isMounted) {
       assert(game != null);
-      game!.fcsRoot!.enqueueAdd(child, this);
+      assert(game is FcsGame);
+      (game! as FcsGame).fcsRoot.enqueueAdd(child, this);
     } else {
       // This will be reconciled during the mounting stage
       children.add(child);
