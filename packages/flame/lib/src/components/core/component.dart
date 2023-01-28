@@ -763,7 +763,8 @@ class Component {
   LifecycleEventStatus handleLifecycleEventAdd(Component parent) {
     assert(!isMounted);
     if (parent.isMounted && isLoaded) {
-      _mount(parent: parent);
+      _parent ??= parent;
+      _mount();
       return LifecycleEventStatus.done;
     } else {
       if (parent.isMounted && !isLoading) {
@@ -804,18 +805,10 @@ class Component {
   }
 
   /// Mount the component that is already loaded and has a mounted parent.
-  ///
-  /// The flag [existingChild] allows us to distinguish between components that
-  /// are new versus those that are already children of their parents. The
-  /// latter ones may exist if a parent was detached from the component tree,
-  /// and later re-mounted. For these components we need to run [onGameResize]
-  /// (since they haven't passed through [add]), but we don't have to add them
-  /// to the parent's children because they are already there.
-  void _mount({Component? parent, bool existingChild = false}) {
-    _parent ??= parent;
+  void _mount() {
     assert(_parent != null && _parent!.isMounted);
     assert(isLoaded);
-    if (existingChild || !isLoading) {
+    if (!isLoading) {
       onGameResize(findGame()!.canvasSize);
     }
     _clearLoadingBit();
@@ -831,9 +824,7 @@ class Component {
     onMount();
     _setMountedBit();
     _lifecycleManager?.finishMounting();
-    if (!existingChild) {
-      _parent!.children.add(this);
-    }
+    _parent!.children.add(this);
     _reAddChildren();
     _lifecycleManager?.processQueues();
     _parent!.onChildrenChanged(this, ChildrenChangeType.added);
