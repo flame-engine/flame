@@ -83,5 +83,15 @@ class Circle extends Shape {
   }
 
   @override
+  Vector2 nearestPoint(Vector2 point) {
+    if (_radius == 0) {
+      return _center;
+    }
+    final vectorToPoint = point - _center;
+    final distance = vectorToPoint.length;
+    return _center + vectorToPoint * (_radius/distance);
+  }
+
+  @override
   String toString() => 'Circle([${_center.x}, ${_center.y}], $_radius)';
 }

@@ -82,4 +82,11 @@ abstract class Shape {
   ///
   /// This method is only used for convex shapes.
   Vector2 support(Vector2 direction);
+
+  /// Returns a point on the shape's boundary which is closest to the given
+  /// [externalPoint].
+  ///
+  /// The [externalPoint] must lie outside of the shape. If there are multiple
+  /// nearest points, any one can be returned.
+  Vector2 nearestPoint(Vector2 externalPoint);
 }

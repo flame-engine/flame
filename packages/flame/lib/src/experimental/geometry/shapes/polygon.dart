@@ -216,5 +216,10 @@ class Polygon extends Shape {
   }
 
   @override
+  Vector2 nearestPoint(Vector2 point) {
+    throw UnimplementedError();
+  }
+
+  @override
   String toString() => 'Polygon($vertices)';
 }

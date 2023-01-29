@@ -147,5 +147,21 @@ void main() {
         closeToVector(Vector2(2 - 20 / sqrt(5), 1 - 10 / sqrt(5))),
       );
     });
+
+    test('nearestPoint', () {
+      final circle = Circle(Vector2(1, 1), 1);
+      const a = 0.7071067811865475; // sqrt(1/2)
+      expect(circle.nearestPoint(Vector2(0, 0)), Vector2.all(1 - a));
+      expect(circle.nearestPoint(Vector2(1, 0)), Vector2(1, 0));
+      expect(circle.nearestPoint(Vector2(2, 0)), Vector2(1 + a, 1 - a));
+      expect(circle.nearestPoint(Vector2(2, 2)), Vector2(1 + a, 1 + a));
+    });
+
+    test('nearestPoint for zero-radius circle', () {
+      final circle = Circle(Vector2(3, 4), 0);
+      expect(circle.nearestPoint(Vector2(3, 4)), Vector2(3, 4));
+      expect(circle.nearestPoint(Vector2(5, 7)), Vector2(3, 4));
+      expect(circle.nearestPoint(Vector2(0, 0)), Vector2(3, 4));
+    });
   });
 }

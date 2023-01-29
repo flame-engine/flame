@@ -124,5 +124,12 @@ class Rectangle extends Shape {
   }
 
   @override
+  Vector2 nearestPoint(Vector2 point) {
+    final xx = (point.x).clamp(_left, _right);
+    final yy = (point.y).clamp(_top, _bottom);
+    return Vector2(xx, yy);
+  }
+
+  @override
   String toString() => 'Rectangle([$_left, $_top], [$_right, $_bottom])';
 }

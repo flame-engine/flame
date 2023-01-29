@@ -172,6 +172,11 @@ class RoundedRectangle extends Shape {
   }
 
   @override
+  Vector2 nearestPoint(Vector2 point) {
+    throw UnimplementedError();
+  }
+
+  @override
   String toString() =>
       'RoundedRectangle([$_left, $_top], [$_right, $_bottom], $_radius)';
 }
