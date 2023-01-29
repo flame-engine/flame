@@ -154,8 +154,12 @@ class FlameNetworkImages {
     final file = File(path.join(appDir.path, id));
 
     if (file.existsSync()) {
-      final bytes = await file.readAsBytes();
-      return decodeImageFromList(bytes);
+      try {
+        final bytes = await file.readAsBytes();
+        return await decodeImageFromList(bytes);
+      } on Exception catch (_) {
+        return null;
+      }
     }
 
     return null;
@@ -168,7 +172,9 @@ class FlameNetworkImages {
     final data = await image.toByteData();
 
     if (data != null) {
-      unawaited(file.writeAsBytes(data.buffer.asUint8List()));
+      print(id);
+      await file.writeAsBytes(data.buffer.asUint8List());
+      print('sarvou');
     }
   }
 }
