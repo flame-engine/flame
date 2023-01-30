@@ -28,11 +28,15 @@ class FlameImageResponse {
   final Uint8List bytes;
 }
 
-/// Function signature used by Flame Networks Images to fetch images.
-typedef GetImagefunction = Future<FlameImageResponse> Function(
+/// Function signature used by Flame Network Images to fetch images.
+typedef GetImageFunction = Future<FlameImageResponse> Function(
   String url, {
   Map<String, String>? headers,
 });
+
+/// Function signature by Flame Network Images to get the app directory
+/// which is used for the local storage caching.
+typedef GetAppDirectoryFunction = Future<Directory> Function();
 
 /// {@template flame_network_images}
 ///
@@ -40,7 +44,7 @@ typedef GetImagefunction = Future<FlameImageResponse> Function(
 /// loading images from the assets bundle, it loads from networks urls.
 ///
 /// By default, [FlameNetworkImages] uses [http.get] method to make the requests
-/// ,that can be custumized by passing a different [GetImagefunction] to the get
+/// ,that can be custumized by passing a different [GetImageFunction] to the get
 /// argument on the constructor.
 ///
 /// [FlameNetworkImages] also will also automatically cache files in a two layer
@@ -48,7 +52,9 @@ typedef GetImagefunction = Future<FlameImageResponse> Function(
 ///
 /// The first layer is an in memory cache, handled by an internal [MemoryCache],
 /// while the second is the device own's file system, where images are cached in
-/// the application document directoy.
+/// the application document directoy, which by default is provided by
+/// path_providers' [getApplicationDocumentsDirectory] method, and can be
+/// custumized using the getAppDirectory argument in the constructor.
 ///
 /// When an image is requested, [FlameImageResponse] will first check on its
 /// cache layers before making the http request, if both layer are cache miss,
@@ -72,7 +78,8 @@ typedef GetImagefunction = Future<FlameImageResponse> Function(
 class FlameNetworkImages {
   /// {@macro flame_network_images}
   FlameNetworkImages({
-    GetImagefunction? get,
+    GetImageFunction? get,
+    GetAppDirectoryFunction? getAppDirectory,
     this.cacheInMemory = true,
     this.cacheInStorage = true,
   }) : _isWeb = kIsWeb {
@@ -87,9 +94,12 @@ class FlameNetworkImages {
                 bytes: response.bodyBytes,
               );
             });
+
+    _getAppDirectory = getAppDirectory ?? getApplicationDocumentsDirectory;
   }
 
-  late final GetImagefunction _get;
+  late final GetImageFunction _get;
+  late final GetAppDirectoryFunction _getAppDirectory;
 
   /// Flag indicating if files will be cached in memory.
   final bool cacheInMemory;
@@ -150,7 +160,7 @@ class FlameNetworkImages {
   }
 
   Future<Image?> _fetchFileFromStorageCache(String id) async {
-    final appDir = await getApplicationDocumentsDirectory();
+    final appDir = await _getAppDirectory();
     final file = File(path.join(appDir.path, id));
 
     if (file.existsSync()) {
@@ -166,15 +176,13 @@ class FlameNetworkImages {
   }
 
   Future<void> _saveImageInLocalStorage(String id, Image image) async {
-    final appDir = await getApplicationDocumentsDirectory();
+    final appDir = await _getAppDirectory();
     final file = File(path.join(appDir.path, id));
 
-    final data = await image.toByteData();
+    final data = await image.toByteData(format: ImageByteFormat.png);
 
     if (data != null) {
-      print(id);
       await file.writeAsBytes(data.buffer.asUint8List());
-      print('sarvou');
     }
   }
 }

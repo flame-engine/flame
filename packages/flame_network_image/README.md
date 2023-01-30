@@ -20,3 +20,7 @@ Adds network images support to <a href="https://github.com/flame-engine/flame">F
 ---
 
 This package makes it easy to use and cache images from the network inside a Flame game.
+
+For instructions on how to use this package, check Flame docs:
+
+https://docs.flame-engine.org/1.6.0/flame/rendering/images.html

@@ -12,7 +12,6 @@ void main() {
 }
 
 class MyGame extends FlameGame with TapDetector {
-
   final networkImages = FlameNetworkImages();
   late Image charSprite;
 
@@ -25,7 +24,6 @@ class MyGame extends FlameGame with TapDetector {
 
   @override
   bool onTapUp(TapUpInfo info) {
-
     add(
       SpriteAnimationComponent.fromFrameData(
         charSprite,

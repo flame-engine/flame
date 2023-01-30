@@ -11,10 +11,12 @@ environment:
   flutter: ">=1.17.0"
 
 dependencies:
+  dev: ^1.0.0
   flame: ^1.6.0
   flutter:
     sdk: flutter
   http: ^0.13.5
+  mocktail: ^0.3.0
   path: ^1.8.2
   path_provider: ^2.0.12
 
