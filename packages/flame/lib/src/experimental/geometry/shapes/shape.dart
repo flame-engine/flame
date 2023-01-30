@@ -88,5 +88,9 @@ abstract class Shape {
   ///
   /// The [externalPoint] must lie outside of the shape. If there are multiple
   /// nearest points, any one can be returned.
+  ///
+  /// This method will not modify [externalPoint]. At the same time, the caller
+  /// does not get ownership of the returned object: they must treat it as an
+  /// immutable short-lived object.
   Vector2 nearestPoint(Vector2 externalPoint);
 }

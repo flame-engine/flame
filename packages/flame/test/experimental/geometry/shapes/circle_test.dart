@@ -163,5 +163,20 @@ void main() {
       expect(circle.nearestPoint(Vector2(5, 7)), Vector2(3, 4));
       expect(circle.nearestPoint(Vector2(0, 0)), Vector2(3, 4));
     });
+
+    test('nearestPoint object ownership', () {
+      final circle = Circle(Vector2(3, 4), 5);
+      final point1 = Vector2(10, 20);
+      final point2 = Vector2(-3, -4);
+      final result1 = circle.nearestPoint(point1);
+      final result2 = circle.nearestPoint(point2);
+
+      // This checks that nearestPoint() does not modify its argument.
+      expect(point1, Vector2(10, 20));
+      expect(point2, Vector2(-3, -4));
+      // at this point result1 can have any value...
+      expect(result1, isNotNull);
+      expect(result2, Vector2(0, 0));
+    });
   });
 }

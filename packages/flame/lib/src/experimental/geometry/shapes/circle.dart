@@ -82,14 +82,18 @@ class Circle extends Shape {
       ..add(_center);
   }
 
+  static final Vector2 _tmpVector = Vector2.zero();
+
   @override
   Vector2 nearestPoint(Vector2 point) {
     if (_radius == 0) {
       return _center;
     }
-    final vectorToPoint = point - _center;
-    final distance = vectorToPoint.length;
-    return _center + vectorToPoint * (_radius / distance);
+    return _tmpVector
+      ..setFrom(point)
+      ..sub(_center)
+      ..length = _radius
+      ..add(_center);
   }
 
   @override
