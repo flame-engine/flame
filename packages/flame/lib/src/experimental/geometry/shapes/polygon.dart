@@ -217,7 +217,21 @@ class Polygon extends Shape {
 
   @override
   Vector2 nearestPoint(Vector2 point) {
-    throw UnimplementedError();
+    final result = Vector2.zero();
+    var shortestDistance2 = double.infinity;
+    for (var i = 0; i < _vertices.length; i++) {
+      final vertex = _vertices[i];
+      final edge = _edges[i];
+      final dotProduct = (point - vertex).dot(edge);
+      final t = (dotProduct / edge.length2).clamp(-1.0, 0.0);
+      final edgePoint = vertex + edge * t;
+      final distance2 = (edgePoint - point).length2;
+      if (distance2 < shortestDistance2) {
+        shortestDistance2 = distance2;
+        result.setFrom(edgePoint);
+      }
+    }
+    return result;
   }
 
   @override
