@@ -96,8 +96,6 @@ enum _LifecycleEventKind {
   unknown,
   add,
   remove,
-  // move,
-  // rebalance,
 }
 
 class _LifecycleEvent implements Disposable {
