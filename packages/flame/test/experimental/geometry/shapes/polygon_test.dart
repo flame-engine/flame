@@ -295,5 +295,18 @@ void main() {
         Vector2(45.294117647058826, 18.823529411764707),
       );
     });
+
+    test('nearestPoint with 0-length edges', () {
+      final polygon = Polygon([
+        Vector2(0, 0),
+        Vector2(10, 10),
+        Vector2(-10, 10),
+        Vector2(0, 0),
+      ]);
+
+      expect(polygon.edges[0].length, 0);
+      expect(polygon.nearestPoint(Vector2(0, -20)), Vector2(0, 0));
+      expect(polygon.nearestPoint(Vector2(5, 20)), Vector2(5, 10));
+    });
   });
 }

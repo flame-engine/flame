@@ -215,23 +215,28 @@ class Polygon extends Shape {
     return bestVertex;
   }
 
+  static final Vector2 _tmpResult = Vector2.zero();
+
   @override
-  Vector2 nearestPoint(Vector2 point) {
-    final result = Vector2.zero();
+  Vector2 nearestPoint(Vector2 externalPoint) {
     var shortestDistance2 = double.infinity;
     for (var i = 0; i < _vertices.length; i++) {
       final vertex = _vertices[i];
       final edge = _edges[i];
-      final dotProduct = (point - vertex).dot(edge);
+      final dotProduct = (externalPoint.x - vertex.x) * edge.x +
+          (externalPoint.y - vertex.y) * edge.y;
       final t = (dotProduct / edge.length2).clamp(-1.0, 0.0);
-      final edgePoint = vertex + edge * t;
-      final distance2 = (edgePoint - point).length2;
+      final edgePointX = vertex.x + edge.x * t;
+      final edgePointY = vertex.y + edge.y * t;
+      final dx = edgePointX - externalPoint.x;
+      final dy = edgePointY - externalPoint.y;
+      final distance2 = dx * dx + dy * dy;
       if (distance2 < shortestDistance2) {
         shortestDistance2 = distance2;
-        result.setFrom(edgePoint);
+        _tmpResult.setValues(edgePointX, edgePointY);
       }
     }
-    return result;
+    return _tmpResult;
   }
 
   @override
