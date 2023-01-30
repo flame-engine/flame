@@ -89,7 +89,7 @@ class Circle extends Shape {
     }
     final vectorToPoint = point - _center;
     final distance = vectorToPoint.length;
-    return _center + vectorToPoint * (_radius/distance);
+    return _center + vectorToPoint * (_radius / distance);
   }
 
   @override
