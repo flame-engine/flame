@@ -171,22 +171,27 @@ class RoundedRectangle extends Shape {
     return result;
   }
 
+  static final Vector2 _tmpResult = Vector2.zero();
+  static final Vector2 _tmpCenter = Vector2.zero();
+
   @override
   Vector2 nearestPoint(Vector2 point) {
-    final xx = (point.x).clamp(_left, _right);
-    final yy = (point.y).clamp(_top, _bottom);
-    final result = Vector2(xx, yy);
-    if (containsPoint(result)) {
-      return result;
+    _tmpResult.setValues(
+      (point.x).clamp(_left, _right),
+      (point.y).clamp(_top, _bottom),
+    );
+    if (containsPoint(_tmpResult)) {
+      return _tmpResult;
     }
-    final center = result
-      ..setValues(
-        result.x <= _left + _radius ? _left + _radius : _right - _radius,
-        result.y <= _top + _radius ? _top + _radius : _bottom - _radius,
-      );
-    final vectorToPoint = point - center;
-    final distance = vectorToPoint.length;
-    return center..addScaled(vectorToPoint, _radius / distance);
+    _tmpCenter.setValues(
+      _tmpResult.x <= _left + _radius ? _left + _radius : _right - _radius,
+      _tmpResult.y <= _top + _radius ? _top + _radius : _bottom - _radius,
+    );
+    return _tmpResult
+      ..setFrom(point)
+      ..sub(_tmpCenter)
+      ..length = _radius
+      ..add(_tmpCenter);
   }
 
   @override
