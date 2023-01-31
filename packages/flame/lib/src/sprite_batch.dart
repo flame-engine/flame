@@ -369,12 +369,13 @@ class SpriteBatch {
   /// Clear the SpriteBatch so it can be reused.
   void clear() {
     _sources.clear();
-    _flippedSources.clear();
     _transforms.clear();
-    _flippedTransforms.clear();
     _colors.clear();
-    _flippedColors.clear();
     _batchItems.clear();
+
+    _flippedSources.clear();
+    _flippedTransforms.clear();
+    _flippedColors.clear();
   }
 
   // Used to not create new paint objects in [render] on every tick.
