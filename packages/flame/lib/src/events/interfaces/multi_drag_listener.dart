@@ -1,6 +1,7 @@
 import 'package:flame/src/events/flame_game_mixins/has_draggable_components.dart';
 import 'package:flame/src/events/game_mixins/multi_touch_drag_detector.dart';
 import 'package:flame/src/events/interfaces/multi_tap_listener.dart';
+import 'package:flame/src/game/game_render_box.dart';
 import 'package:flutter/gestures.dart';
 
 /// Interface that must be implemented by a game in order for it to be eligible
@@ -37,4 +38,6 @@ abstract class MultiDragListener {
   /// For example, this may happen if the drag was interrupted by a system-
   /// modal dialog appearing during the drag.
   void handleDragCancel(int pointerId);
+
+  GameRenderBox get renderBox;
 }

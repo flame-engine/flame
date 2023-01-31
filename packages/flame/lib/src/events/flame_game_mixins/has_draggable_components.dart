@@ -1,5 +1,7 @@
+import 'package:flame/src/components/core/component.dart';
 import 'package:flame/src/components/mixins/draggable.dart';
 import 'package:flame/src/events/component_mixins/drag_callbacks.dart';
+import 'package:flame/src/events/flame_drag_adapter.dart';
 import 'package:flame/src/events/flame_game_mixins/has_draggables_bridge.dart';
 import 'package:flame/src/events/flame_game_mixins/has_tappable_components.dart';
 import 'package:flame/src/events/game_mixins/multi_touch_drag_detector.dart';
@@ -10,6 +12,7 @@ import 'package:flame/src/events/messages/drag_start_event.dart';
 import 'package:flame/src/events/messages/drag_update_event.dart';
 import 'package:flame/src/events/tagged_component.dart';
 import 'package:flame/src/game/flame_game.dart';
+import 'package:flame/src/game/game_render_box.dart';
 import 'package:flutter/gestures.dart';
 import 'package:meta/meta.dart';
 
@@ -31,9 +34,15 @@ import 'package:meta/meta.dart';
 ///   [HasDraggablesBridge] mixin as well (instead of `HasDraggables`).
 /// - If your game has no draggable components, then do not use this mixin.
 ///   Instead, consider using [MultiTouchDragDetector].
-mixin HasDraggableComponents on FlameGame implements MultiDragListener {
+@Deprecated('This mixin will be removed in 1.7.0')
+mixin HasDraggableComponents on FlameGame {}
+
+class MultiDragDispatcher extends Component implements MultiDragListener {
   /// The record of all components currently being touched.
   final Set<TaggedComponent<DragCallbacks>> _records = {};
+  bool _eventHandlerRegistered = false;
+
+  FlameGame get game => parent! as FlameGame;
 
   /// Called when the user initiates a drag gesture, for example by touching the
   /// screen and then moving the finger.
@@ -55,15 +64,15 @@ mixin HasDraggableComponents on FlameGame implements MultiDragListener {
   @mustCallSuper
   void onDragStart(DragStartEvent event) {
     event.deliverAtPoint(
-      rootComponent: this,
+      rootComponent: game,
       eventHandler: (DragCallbacks component) {
         _records.add(TaggedComponent(event.pointerId, component));
         component.onDragStart(event);
       },
     );
-    if (this is HasDraggablesBridge) {
-      final info = event.asInfo(this)..handled = event.handled;
-      propagateToChildren<Draggable>(
+    if (game is HasDraggablesBridge) {
+      final info = event.asInfo(game)..handled = event.handled;
+      game.propagateToChildren<Draggable>(
         (c) => c.handleDragStart(event.pointerId, info),
       );
       event.handled = info.handled;
@@ -80,7 +89,7 @@ mixin HasDraggableComponents on FlameGame implements MultiDragListener {
   void onDragUpdate(DragUpdateEvent event) {
     final updated = <TaggedComponent<DragCallbacks>>{};
     event.deliverAtPoint(
-      rootComponent: this,
+      rootComponent: game,
       deliverToAll: true,
       eventHandler: (DragCallbacks component) {
         final record = TaggedComponent(event.pointerId, component);
@@ -95,9 +104,9 @@ mixin HasDraggableComponents on FlameGame implements MultiDragListener {
         record.component.onDragUpdate(event);
       }
     }
-    if (this is HasDraggablesBridge) {
-      final info = event.asInfo(this)..handled = event.handled;
-      propagateToChildren<Draggable>(
+    if (game is HasDraggablesBridge) {
+      final info = event.asInfo(game)..handled = event.handled;
+      game.propagateToChildren<Draggable>(
         (c) => c.handleDragUpdated(event.pointerId, info),
       );
       event.handled = info.handled;
@@ -118,9 +127,9 @@ mixin HasDraggableComponents on FlameGame implements MultiDragListener {
       }
       return false;
     });
-    if (this is HasDraggablesBridge) {
-      final info = event.asInfo(this)..handled = event.handled;
-      propagateToChildren<Draggable>(
+    if (game is HasDraggablesBridge) {
+      final info = event.asInfo(game)..handled = event.handled;
+      game.propagateToChildren<Draggable>(
         (c) => c.handleDragEnded(event.pointerId, info),
       );
       event.handled = info.handled;
@@ -136,8 +145,8 @@ mixin HasDraggableComponents on FlameGame implements MultiDragListener {
       }
       return false;
     });
-    if (this is HasDraggablesBridge) {
-      propagateToChildren<Draggable>(
+    if (game is HasDraggablesBridge) {
+      game.propagateToChildren<Draggable>(
         (c) => c.handleDragCanceled(event.pointerId),
       );
     }
@@ -168,6 +177,33 @@ mixin HasDraggableComponents on FlameGame implements MultiDragListener {
   void handleDragCancel(int pointerId) {
     onDragCancel(DragCancelEvent(pointerId));
   }
+
+  @override
+  void onMount() {
+    if (game.firstChild<MultiDragDispatcher>() == null) {
+      game.gestureDetectors.add<ImmediateMultiDragGestureRecognizer>(
+        ImmediateMultiDragGestureRecognizer.new,
+        (ImmediateMultiDragGestureRecognizer instance) {
+          instance.onStart = (Offset point) => FlameDragAdapter(this, point);
+        },
+      );
+      _eventHandlerRegistered = true;
+    } else {
+      // Ensures that only one MultiDragDispatcher is attached to the Game.
+      removeFromParent();
+    }
+  }
+
+  @override
+  void onRemove() {
+    if (_eventHandlerRegistered) {
+      game.gestureDetectors.remove<ImmediateMultiDragGestureRecognizer>();
+      _eventHandlerRegistered = false;
+    }
+  }
+
+  @override
+  GameRenderBox get renderBox => game.renderBox;
 
   //#endregion
 }
