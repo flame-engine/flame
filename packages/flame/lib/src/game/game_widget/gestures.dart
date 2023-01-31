@@ -8,16 +8,29 @@ class GestureDetectorBuilder {
   GestureDetectorBuilder([this._onChange]);
 
   final Map<Type, GestureRecognizerFactory> _gestures = {};
+  final Map<Type, int> _counters = {};
   final void Function()? _onChange;
 
   void addGestureRecognizer<T extends GestureRecognizer>(
     T Function() constructor,
     void Function(T) initializer,
   ) {
-    if (!_gestures.containsKey(T)) {
+    final count = _counters[T];
+    if (count == null) {
       _gestures[T] =
           GestureRecognizerFactoryWithHandlers<T>(constructor, initializer);
       _onChange?.call();
+    }
+    _counters[T] = (count ?? 0) + 1;
+  }
+
+  void removeGestureRecognizer<T extends GestureRecognizer>() {
+    final count = _counters[T]!;
+    if (count == 1) {
+      _counters.remove(T);
+      _gestures.remove(T);
+    } else {
+      _counters[T] = count - 1;
     }
   }
 
