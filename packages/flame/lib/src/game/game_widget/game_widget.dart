@@ -323,7 +323,8 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
         'not receive events',
       );
 
-      internalGameWidget = currentGame.gestureDetectors.build(internalGameWidget);
+      internalGameWidget =
+          currentGame.gestureDetectors.build(internalGameWidget);
 
       if (hasMouseDetectors(currentGame)) {
         internalGameWidget = applyMouseDetectors(

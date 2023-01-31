@@ -13,7 +13,7 @@ void main() {
         var nDragStartCalled = 0;
         var nDragUpdateCalled = 0;
         var nDragEndCalled = 0;
-        final game = _GameWithHasDraggableComponents(
+        final game = FlameGame(
           children: [
             _DragCallbacksComponent(
               position: Vector2(20, 20),
@@ -55,7 +55,7 @@ void main() {
       'drag event does not affect more than one component',
       (tester) async {
         var nEvents = 0;
-        final game = _GameWithHasDraggableComponents(
+        final game = FlameGame(
           children: [
             _DragCallbacksComponent(
               size: Vector2.all(100),
@@ -85,7 +85,7 @@ void main() {
       'drag event can move outside the component bounds',
       (tester) async {
         final points = <Vector2>[];
-        final game = _GameWithHasDraggableComponents(
+        final game = FlameGame(
           children: [
             _DragCallbacksComponent(
               size: Vector2.all(95),
@@ -159,13 +159,8 @@ void main() {
   });
 }
 
-class _GameWithHasDraggableComponents extends FlameGame
-    with HasDraggableComponents {
-  _GameWithHasDraggableComponents({super.children});
-}
-
 class _GameWithDualDraggableComponents extends FlameGame
-    with HasDraggableComponents, HasDraggablesBridge {
+    with HasDraggablesBridge {
   _GameWithDualDraggableComponents({super.children});
 }
 
