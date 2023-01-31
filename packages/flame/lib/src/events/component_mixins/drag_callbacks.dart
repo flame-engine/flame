@@ -15,9 +15,6 @@ import 'package:meta/meta.dart';
 /// a drag if the point where the initial touch event has occurred was inside
 /// the component.
 ///
-/// When using this mixin with any component, make sure to also add the
-/// [HasDraggableComponents] mixin to your game.
-///
 /// This mixin is intended as a replacement of the [Draggable] mixin.
 mixin DragCallbacks on Component {
   /// The user initiated a drag gesture on top of this component.

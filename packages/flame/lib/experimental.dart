@@ -24,6 +24,7 @@ export 'src/camera/world.dart' show World;
 export 'src/events/component_mixins/drag_callbacks.dart' show DragCallbacks;
 export 'src/events/component_mixins/tap_callbacks.dart' show TapCallbacks;
 export 'src/events/flame_game_mixins/has_draggable_components.dart'
+    // ignore: deprecated_member_use_from_same_package
     show HasDraggableComponents;
 export 'src/events/flame_game_mixins/has_draggables_bridge.dart'
     show HasDraggablesBridge;
