@@ -86,6 +86,7 @@ abstract class Game {
     return _onLoadFuture;
   }
 
+  @mustCallSuper
   @internal
   void mount() {
     onMount();

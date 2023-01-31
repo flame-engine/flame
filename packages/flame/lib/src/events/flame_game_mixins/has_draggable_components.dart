@@ -3,8 +3,6 @@ import 'package:flame/src/components/mixins/draggable.dart';
 import 'package:flame/src/events/component_mixins/drag_callbacks.dart';
 import 'package:flame/src/events/flame_drag_adapter.dart';
 import 'package:flame/src/events/flame_game_mixins/has_draggables_bridge.dart';
-import 'package:flame/src/events/flame_game_mixins/has_tappable_components.dart';
-import 'package:flame/src/events/game_mixins/multi_touch_drag_detector.dart';
 import 'package:flame/src/events/interfaces/multi_drag_listener.dart';
 import 'package:flame/src/events/messages/drag_cancel_event.dart';
 import 'package:flame/src/events/messages/drag_end_event.dart';
@@ -16,27 +14,14 @@ import 'package:flame/src/game/game_render_box.dart';
 import 'package:flutter/gestures.dart';
 import 'package:meta/meta.dart';
 
-/// This mixin allows a [FlameGame] to respond to drag events, and also delivers
-/// those events to components that have the [DragCallbacks] mixin.
-///
-/// The following events are supported by the mixin: [onDragStart],
-/// [onDragUpdate], [onDragEnd], and [onDragCancel] -- see their individual
-/// descriptions for more details.
-///
-/// Each event handler can be overridden. One scenario when this could be useful
-/// is to check the `event.handled` property after the event has been sent down
-/// the component tree.
-///
-/// === Usage notes ===
-/// - If your game uses components with [DragCallbacks], then this mixin must be
-///   added to the [FlameGame] in order for [DragCallbacks] to work properly.
-/// - If your game also uses [Draggable] components, then add the
-///   [HasDraggablesBridge] mixin as well (instead of `HasDraggables`).
-/// - If your game has no draggable components, then do not use this mixin.
-///   Instead, consider using [MultiTouchDragDetector].
 @Deprecated('This mixin will be removed in 1.7.0')
 mixin HasDraggableComponents on FlameGame {}
 
+/// **MultiDragDispatcher** facilitates dispatching of drag events to the
+/// [DragCallbacks] components in the component tree. It will be attached to
+/// the [FlameGame] instance automatically whenever any [DragCallbacks]
+/// components are mounted into the component tree.
+@internal
 class MultiDragDispatcher extends Component implements MultiDragListener {
   /// The record of all components currently being touched.
   final Set<TaggedComponent<DragCallbacks>> _records = {};
@@ -54,13 +39,6 @@ class MultiDragDispatcher extends Component implements MultiDragListener {
   ///
   /// Each [event] has an `event.pointerId` to keep track of multiple touches
   /// that may occur simultaneously.
-  ///
-  /// If [HasDraggableComponents] is the only pointer events mixin in use, then
-  /// [onDragStart] will be called immediately when the user touches the screen.
-  /// If, however, the game uses other pointer events mixins as well, such as
-  /// [HasTappableComponents], then this even will only occur after the gesture
-  /// can be unambiguously interpreted as a drag, i.e. only after the user has
-  /// both touched the screen and moved their finger for some minimum distance.
   @mustCallSuper
   void onDragStart(DragStartEvent event) {
     event.deliverAtPoint(

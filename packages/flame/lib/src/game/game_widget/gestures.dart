@@ -1,5 +1,4 @@
 import 'package:flame/events.dart';
-import 'package:flame/src/events/flame_drag_adapter.dart';
 import 'package:flame/src/game/game.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
@@ -164,15 +163,6 @@ class GestureDetectorBuilder {
           instance.onTapUp = g.handleTapUp;
           instance.onTapCancel = g.handleTapCancel;
           instance.onLongTapDown = g.handleLongTapDown;
-        },
-      );
-    }
-    if (game is MultiDragListener) {
-      add(
-        ImmediateMultiDragGestureRecognizer.new,
-        (ImmediateMultiDragGestureRecognizer instance) {
-          final g = game as MultiDragListener;
-          instance.onStart = (Offset point) => FlameDragAdapter(g, point);
         },
       );
     }
