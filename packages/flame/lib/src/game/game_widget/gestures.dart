@@ -4,6 +4,35 @@ import 'package:flame/src/game/game.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
 
+class GestureDetectorBuilder {
+  GestureDetectorBuilder([this._onChange]);
+
+  final Map<Type, GestureRecognizerFactory> _gestures = {};
+  final void Function()? _onChange;
+
+  void addGestureRecognizer<T extends GestureRecognizer>(
+    T Function() constructor,
+    void Function(T) initializer,
+  ) {
+    if (!_gestures.containsKey(T)) {
+      _gestures[T] =
+          GestureRecognizerFactoryWithHandlers<T>(constructor, initializer);
+      _onChange?.call();
+    }
+  }
+
+  Widget build(Widget child) {
+    if (_gestures.isEmpty) {
+      return child;
+    }
+    return RawGestureDetector(
+      gestures: _gestures,
+      behavior: HitTestBehavior.opaque,
+      child: child,
+    );
+  }
+}
+
 bool hasGestureDetectors(Game game) {
   return game is TapDetector ||
       game is SecondaryTapDetector ||
@@ -26,19 +55,21 @@ bool hasMouseDetectors(Game game) {
 }
 
 Widget applyGesturesDetectors(Game game, Widget child) {
-  final gestures = <Type, GestureRecognizerFactory>{};
+  final builder = GestureDetectorBuilder();
 
-  void addRecognizer<T extends GestureRecognizer>(
-    T Function() factory,
-    void Function(T) handlers,
-  ) {
-    gestures[T] = GestureRecognizerFactoryWithHandlers<T>(factory, handlers);
-  }
+  // final gestures = <Type, GestureRecognizerFactory>{};
+
+  // void addRecognizer<T extends GestureRecognizer>(
+  //   T Function() factory,
+  //   void Function(T) handlers,
+  // ) {
+  //   gestures[T] = GestureRecognizerFactoryWithHandlers<T>(factory, handlers);
+  // }
 
   if (game is TapDetector ||
       game is SecondaryTapDetector ||
       game is TertiaryTapDetector) {
-    addRecognizer(
+    builder.addGestureRecognizer(
       TapGestureRecognizer.new,
       (TapGestureRecognizer instance) {
         if (game is TapDetector) {
@@ -61,7 +92,7 @@ Widget applyGesturesDetectors(Game game, Widget child) {
     );
   }
   if (game is DoubleTapDetector) {
-    addRecognizer(
+    builder.addGestureRecognizer(
       DoubleTapGestureRecognizer.new,
       (DoubleTapGestureRecognizer instance) {
         instance.onDoubleTap = game.onDoubleTap;
@@ -71,7 +102,7 @@ Widget applyGesturesDetectors(Game game, Widget child) {
     );
   }
   if (game is LongPressDetector) {
-    addRecognizer(
+    builder.addGestureRecognizer(
       LongPressGestureRecognizer.new,
       (LongPressGestureRecognizer instance) {
         instance.onLongPress = game.onLongPress;
@@ -84,7 +115,7 @@ Widget applyGesturesDetectors(Game game, Widget child) {
     );
   }
   if (game is VerticalDragDetector) {
-    addRecognizer(
+    builder.addGestureRecognizer(
       VerticalDragGestureRecognizer.new,
       (VerticalDragGestureRecognizer instance) {
         instance.onDown = game.handleVerticalDragDown;
@@ -96,7 +127,7 @@ Widget applyGesturesDetectors(Game game, Widget child) {
     );
   }
   if (game is HorizontalDragDetector) {
-    addRecognizer(
+    builder.addGestureRecognizer(
       HorizontalDragGestureRecognizer.new,
       (HorizontalDragGestureRecognizer instance) {
         instance.onDown = game.handleHorizontalDragDown;
@@ -108,7 +139,7 @@ Widget applyGesturesDetectors(Game game, Widget child) {
     );
   }
   if (game is ForcePressDetector) {
-    addRecognizer(
+    builder.addGestureRecognizer(
       ForcePressGestureRecognizer.new,
       (ForcePressGestureRecognizer instance) {
         instance.onStart = game.handleForcePressStart;
@@ -119,7 +150,7 @@ Widget applyGesturesDetectors(Game game, Widget child) {
     );
   }
   if (game is PanDetector) {
-    addRecognizer(
+    builder.addGestureRecognizer(
       PanGestureRecognizer.new,
       (PanGestureRecognizer instance) {
         instance.onDown = game.handlePanDown;
@@ -131,7 +162,7 @@ Widget applyGesturesDetectors(Game game, Widget child) {
     );
   }
   if (game is ScaleDetector) {
-    addRecognizer(
+    builder.addGestureRecognizer(
       ScaleGestureRecognizer.new,
       (ScaleGestureRecognizer instance) {
         instance.onStart = game.handleScaleStart;
@@ -141,7 +172,7 @@ Widget applyGesturesDetectors(Game game, Widget child) {
     );
   }
   if (game is MultiTapListener) {
-    addRecognizer(
+    builder.addGestureRecognizer(
       MultiTapGestureRecognizer.new,
       (MultiTapGestureRecognizer instance) {
         final g = game as MultiTapListener;
@@ -157,7 +188,7 @@ Widget applyGesturesDetectors(Game game, Widget child) {
     );
   }
   if (game is MultiDragListener) {
-    addRecognizer(
+    builder.addGestureRecognizer(
       ImmediateMultiDragGestureRecognizer.new,
       (ImmediateMultiDragGestureRecognizer instance) {
         final g = game as MultiDragListener;
@@ -165,11 +196,12 @@ Widget applyGesturesDetectors(Game game, Widget child) {
       },
     );
   }
-  return RawGestureDetector(
-    gestures: gestures,
-    behavior: HitTestBehavior.opaque,
-    child: child,
-  );
+  return builder.build(child);
+  // return RawGestureDetector(
+  //   gestures: gestures,
+  //   behavior: HitTestBehavior.opaque,
+  //   child: child,
+  // );
 }
 
 Widget applyMouseDetectors(Game game, Widget child) {
