@@ -77,6 +77,20 @@ class BatchItem {
   final Paint paint;
 }
 
+enum SpriteBatchFlipStatus {
+  none,
+
+  /// Whether any [BatchItem]s needs a flippable atlas.
+  /// The status of the atlas image loading operations.
+  generateInProgress,
+  ready,
+  ;
+
+  bool get isNone => this == none;
+  bool get isGenerateInProgress => this == generateInProgress;
+  bool get isReady => this == ready;
+}
+
 /// The SpriteBatch API allows for rendering multiple items at once.
 ///
 /// This class allows for optimization when you want to draw many parts of an
@@ -134,6 +148,9 @@ class SpriteBatch {
   /// The sources to use on the [atlas].
   final _sources = <Rect>[];
 
+  /// The sources to use on the [atlas].
+  final _flippedSources = <Rect>[];
+
   /// The sources list shouldn't be modified directly, that is why an
   /// [UnmodifiableListView] is used. If you want to add sources use the
   /// [add] or [addTransform] method.
@@ -143,6 +160,9 @@ class SpriteBatch {
 
   /// The transforms that should be applied on the [_sources].
   final _transforms = <RSTransform>[];
+
+  /// The transforms that should be applied on the [_sources].
+  final _flippedTransforms = <RSTransform>[];
 
   /// The transforms list shouldn't be modified directly, that is why an
   /// [UnmodifiableListView] is used. If you want to add transforms use the
@@ -154,6 +174,9 @@ class SpriteBatch {
   /// The background color for the [_sources].
   final _colors = <Color>[];
 
+  /// The background color for the [_sources].
+  final _flippedColors = <Color>[];
+
   /// The colors list shouldn't be modified directly, that is why an
   /// [UnmodifiableListView] is used. If you want to add colors use the
   /// [add] or [addTransform] method.
@@ -162,7 +185,9 @@ class SpriteBatch {
   }
 
   /// The atlas used by the [SpriteBatch].
-  Image atlas;
+  final Image atlas;
+
+  Image? flippedAtlas;
 
   /// The image cache used by the [SpriteBatch] to store image assets.
   final Images? _imageCache;
@@ -173,6 +198,8 @@ class SpriteBatch {
   /// The root key use by the [SpriteBatch] to store image assets.
   final String? _imageKey;
 
+  String? _flippedImageKey;
+
   /// When the [_imageKey] isn't specified [imageKey] will return either the key
   /// for the [atlas] stored in [imageCache] or a key generated from the
   /// identityHashCode.
@@ -181,11 +208,9 @@ class SpriteBatch {
       imageCache.findKeyForImage(atlas) ??
       'image[${identityHashCode(atlas)}]';
 
-  /// Whether any [BatchItem]s needs a flippable atlas.
-  bool _hasFlips = false;
+  String? get flippedImageKey => _imageKey;
 
-  /// The status of the atlas image loading operations.
-  bool _atlasReady = true;
+  SpriteBatchFlipStatus flipStatus = SpriteBatchFlipStatus.none;
 
   /// The default color, used as a background color for a [BatchItem].
   final Color defaultColor;
@@ -206,6 +231,8 @@ class SpriteBatch {
   /// The size of the [atlas].
   Vector2 get size => atlas.size;
 
+  bool get hasFlip => _flippedImageKey != null;
+
   /// Whether to use [Canvas.drawAtlas] or not.
   final bool useAtlas;
 
@@ -213,26 +240,23 @@ class SpriteBatch {
   bool get isEmpty => _batchItems.isEmpty;
 
   Future<void> _makeFlippedAtlas() async {
-    _hasFlips = true;
-    _atlasReady = false;
-    final key = '$imageKey#with-flips';
-    atlas = await imageCache.fetchOrGenerate(
+    flipStatus = SpriteBatchFlipStatus.generateInProgress;
+    final key = _flippedImageKey = '$imageKey#with-flips';
+    flippedAtlas = await imageCache.fetchOrGenerate(
       key,
       () => _generateFlippedAtlas(atlas),
     );
-    _atlasReady = true;
+    flipStatus = SpriteBatchFlipStatus.ready;
   }
 
   Future<Image> _generateFlippedAtlas(Image image) {
     final recorder = PictureRecorder();
     final canvas = Canvas(recorder);
     final _emptyPaint = Paint();
-    canvas.drawImage(image, Offset.zero, _emptyPaint);
     canvas.scale(-1, 1);
-    canvas.drawImage(image, Offset(-image.width * 2, 0), _emptyPaint);
-
+    canvas.drawImage(image, Offset(-image.width.toDouble(), 0), _emptyPaint);
     final picture = recorder.endRecording();
-    return picture.toImageSafe(image.width * 2, image.height);
+    return picture.toImageSafe(image.width, image.height);
   }
 
   /// Add a new batch item using a RSTransform.
@@ -263,24 +287,27 @@ class SpriteBatch {
       color: color ?? defaultColor,
     );
 
-    if (flip && useAtlas && !_hasFlips) {
+    if (flip && useAtlas && flipStatus.isNone) {
       _makeFlippedAtlas();
     }
 
     _batchItems.add(batchItem);
-
-    _sources.add(
-      flip
-          ? Rect.fromLTWH(
-              (atlas.width * (!_atlasReady ? 2 : 1)) - source.right,
-              source.top,
-              source.width,
-              source.height,
-            )
-          : batchItem.source,
-    );
-    _transforms.add(batchItem.transform);
-    _colors.add(batchItem.color);
+    if (flip) {
+      _flippedTransforms.add(batchItem.transform);
+      _flippedSources.add(
+        Rect.fromLTWH(
+          atlas.width - source.right,
+          source.top,
+          source.width,
+          source.height,
+        ),
+      );
+      _flippedColors.add(batchItem.color);
+    } else {
+      _transforms.add(batchItem.transform);
+      _sources.add(batchItem.source);
+      _colors.add(batchItem.color);
+    }
   }
 
   /// Add a new batch item.
@@ -342,8 +369,11 @@ class SpriteBatch {
   /// Clear the SpriteBatch so it can be reused.
   void clear() {
     _sources.clear();
+    _flippedSources.clear();
     _transforms.clear();
+    _flippedTransforms.clear();
     _colors.clear();
+    _flippedColors.clear();
     _batchItems.clear();
   }
 
@@ -362,7 +392,7 @@ class SpriteBatch {
 
     paint ??= _emptyPaint;
 
-    if (useAtlas && _atlasReady) {
+    if (useAtlas) {
       canvas.drawAtlas(
         atlas,
         _transforms,
@@ -372,6 +402,17 @@ class SpriteBatch {
         cullRect,
         paint,
       );
+      if (flippedAtlas != null) {
+        canvas.drawAtlas(
+          flippedAtlas!,
+          _flippedTransforms,
+          _flippedSources,
+          _flippedColors,
+          blendMode ?? defaultBlendMode,
+          cullRect,
+          paint,
+        );
+      }
     } else {
       for (final batchItem in _batchItems) {
         paint.blendMode = blendMode ?? paint.blendMode;
