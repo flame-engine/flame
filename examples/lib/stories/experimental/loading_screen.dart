@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:flame/components.dart';
+import 'package:flame/effects.dart';
 import 'package:flame/game.dart';
 import 'package:flame/widgets.dart';
 import 'package:flutter/material.dart' hide Image, Draggable;
@@ -26,6 +27,8 @@ class LoadingScreenExample extends FlameGame {
   double anyProgressEmulation = 0;
   int messagesSent = 0;
 
+  bool startGame = false;
+
   @override
   FutureOr<void> onLoad() async {
     /// the message will be send to loading screen, if the one is specified
@@ -33,7 +36,7 @@ class LoadingScreenExample extends FlameGame {
       const ProgressMessage(message: 'onLoad started', progress: 1),
     );
 
-    await Future<void>.delayed(const Duration(seconds: 5));
+    await Future<void>.delayed(const Duration(seconds: 1));
 
     progressNotifier.reportLoadingProgress(
       const ProgressMessage(
@@ -42,7 +45,7 @@ class LoadingScreenExample extends FlameGame {
       ),
     );
 
-    await Future<void>.delayed(const Duration(seconds: 5));
+    await Future<void>.delayed(const Duration(seconds: 1));
 
     progressNotifier.reportLoadingProgress(
       const ProgressMessage(
@@ -51,18 +54,27 @@ class LoadingScreenExample extends FlameGame {
       ),
     );
 
-    add(
-      TextComponent(text: 'This is in-game text components')
-        ..anchor = Anchor.topCenter
-        ..x = size.x / 2
-        ..y = 50,
+    final captionComponent =
+        TextComponent(text: 'This is in-game text components')
+          ..anchor = Anchor.topCenter
+          ..x = size.x / 2
+          ..y = 100;
+
+    final path = Path();
+    path.addOval(Rect.fromCircle(center: const Offset(0, 25), radius: 30));
+    final effect = MoveAlongPathEffect(
+      path,
+      EffectController(duration: 5, infinite: true),
     );
+    captionComponent.add(effect);
+
+    add(captionComponent);
 
     /// These components will receive notifications during game loop.
-    add(InGameProgressText(verticalPosition: 100, size: size));
-    add(InGameProgressText(verticalPosition: 150, size: size));
+    add(InGameProgressText(verticalPosition: 200, size: size));
+    add(InGameProgressText(verticalPosition: 250, size: size));
 
-    await Future<void>.delayed(const Duration(seconds: 5));
+    await Future<void>.delayed(const Duration(seconds: 1));
 
     progressNotifier.reportLoadingProgress(
       const ProgressMessage(
@@ -117,11 +129,46 @@ class ProgressMessage {
   final int progress;
 }
 
+/// Stateless class responsible to call widgets depending on received message
+class ExampleBuilder extends LoadingWidgetBuilder<ProgressMessage> {
+  @override
+  Widget buildOnMessage(BuildContext context, ProgressMessage message) {
+    Widget child;
+
+    /// We need to save somewhere game's "loaded" state, because ExampleBuilder
+    /// does not preserve any state
+    if (message.progress == 101) {
+      (game as LoadingScreenExample).startGame = true;
+    }
+    if ((game as LoadingScreenExample).startGame) {
+      child = gameWidget;
+    } else {
+      child = _buildLoadingScreen(message.message, message.progress);
+    }
+    return AnimatedSwitcher(
+      duration: const Duration(seconds: 3),
+      child: child,
+    );
+  }
+
+  Widget _buildLoadingScreen(String message, int progress) =>
+      LoadingScreenExampleWidget(
+        text: message,
+        progress: progress / 100,
+      );
+}
+
 /// The loading screen widget with animated progress bar anf fade effect
 /// when displaying the game.
-class LoadingScreenExampleWidget extends StatefulWidget
-    with LoadingWidgetMixin<ProgressMessage> {
-  LoadingScreenExampleWidget({super.key});
+class LoadingScreenExampleWidget extends StatefulWidget {
+  const LoadingScreenExampleWidget({
+    super.key,
+    required this.text,
+    required this.progress,
+  });
+
+  final String text;
+  final double progress;
 
   @override
   State<LoadingScreenExampleWidget> createState() =>
@@ -131,9 +178,6 @@ class LoadingScreenExampleWidget extends StatefulWidget
 class _LoadingScreenExampleWidgetState extends State<LoadingScreenExampleWidget>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
-  String text = '';
-  double value = 0;
-  bool showGame = false;
 
   /// Message listener should be initialized here. The best place is the end of
   /// function to minimize a chance to loose an message, because everything is
@@ -143,34 +187,6 @@ class _LoadingScreenExampleWidgetState extends State<LoadingScreenExampleWidget>
     super.initState();
     _controller = AnimationController(vsync: this);
     _controller.addListener(() => setState(() {}));
-
-    /// Just call this and everything will work!
-    widget.initMessageListener(onProgressMessage);
-  }
-
-  /// Process received messages here.
-  /// This is a place for calling [setState] or whatever you prefer to
-  /// use for widget's state management.
-  void onProgressMessage(ProgressMessage message) {
-    setState(() {
-      if (message.progress == 101) {
-        showGame = true;
-        _controller.value = 0;
-        _controller.animateTo(
-          1,
-          duration: const Duration(seconds: 3),
-          curve: Curves.easeOut,
-        );
-      } else {
-        value = message.progress / 100;
-        text = message.message;
-        _controller.animateTo(
-          value,
-          duration: const Duration(seconds: 1),
-          curve: Curves.easeIn,
-        );
-      }
-    });
   }
 
   @override
@@ -180,38 +196,37 @@ class _LoadingScreenExampleWidgetState extends State<LoadingScreenExampleWidget>
   }
 
   @override
-  Widget build(BuildContext context) {
-    /// This is the game's widget. You should manually decide, when it is the
-    /// time to show it. But in return you have ability to add some effects!
-    if (showGame) {
-      return Opacity(
-        opacity: _controller.value,
-        child: widget.gameWidget(context),
+  void didUpdateWidget(covariant LoadingScreenExampleWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.progress != widget.progress) {
+      _controller.animateTo(
+        widget.progress,
+        duration: const Duration(seconds: 1),
       );
     }
-
-    /// This is the loading screen
-    return Center(
-      child: Container(
-        width: double.infinity,
-        height: 75.0,
-        padding: const EdgeInsets.symmetric(horizontal: 24.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            Text(
-              text,
-              style: const TextStyle(fontSize: 20),
-            ),
-            LinearProgressIndicator(
-              value: _controller.value,
-              semanticsLabel: 'Game loading progress',
-            ),
-          ],
-        ),
-      ),
-    );
   }
+
+  @override
+  Widget build(BuildContext context) => Center(
+        child: Container(
+          width: double.infinity,
+          height: 75.0,
+          padding: const EdgeInsets.symmetric(horizontal: 24.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              Text(
+                widget.text,
+                style: const TextStyle(fontSize: 20),
+              ),
+              LinearProgressIndicator(
+                value: _controller.value,
+                semanticsLabel: 'Game loading progress',
+              ),
+            ],
+          ),
+        ),
+      );
 }
 
 /// Example of a component which receive messages during game loop.

@@ -5,9 +5,13 @@ import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flame/src/game/game_render_box.dart';
 import 'package:flame/src/game/game_widget/gestures.dart';
-import 'package:flame/src/widgets/loading_widget.dart';
+import 'package:flame/src/widgets/loading_widget_builder.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+
+typedef GameLoadingProgressBuilder = LoadingWidgetBuilder Function(
+  BuildContext,
+);
 
 typedef GameLoadingWidgetBuilder = Widget Function(
   BuildContext,
@@ -40,7 +44,7 @@ class GameWidget<T extends Game> extends StatefulWidget {
   /// The text direction to be used in text elements in a game.
   final TextDirection? textDirection;
 
-  final LoadingWidgetMixin? loadingProgressWidget;
+  final GameLoadingProgressBuilder? loadingProgressBuilder;
 
   /// Builder to provide a widget tree to be built while the Game's [Future]
   /// provided via `Game.onLoad` and `Game.onMount` is not resolved.
@@ -123,7 +127,7 @@ class GameWidget<T extends Game> extends StatefulWidget {
   GameWidget({
     super.key,
     required T this.game,
-    this.loadingProgressWidget,
+    this.loadingProgressBuilder,
     this.textDirection,
     this.loadingBuilder,
     this.errorBuilder,
@@ -162,7 +166,7 @@ class GameWidget<T extends Game> extends StatefulWidget {
     required GameFactory<T> this.gameFactory,
     this.textDirection,
     this.loadingBuilder,
-    this.loadingProgressWidget,
+    this.loadingProgressBuilder,
     this.errorBuilder,
     this.backgroundBuilder,
     this.overlayBuilderMap,
@@ -370,15 +374,15 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
                             Container();
                       }
                       currentGame.onGameResize(size);
-                      final progressWidget = widget.loadingProgressWidget;
+                      final loadingProgressBuilder =
+                          widget.loadingProgressBuilder;
                       final stream = currentGame.progressNotifier
                           ?.initStreamLoader(() => loaderFuture);
-                      if (progressWidget != null && stream != null) {
-                        return LoadingProxyWidget(
-                          gameWidget: Stack(children: stackedWidgets),
-                          stream: stream,
-                          child: progressWidget,
-                        );
+                      if (loadingProgressBuilder != null && stream != null) {
+                        final builder = loadingProgressBuilder(context);
+                        builder.gameWidget = Stack(children: stackedWidgets);
+                        builder.game = currentGame;
+                        return builder.createStreamBuilder(stream);
                       } else {
                         return FutureBuilder(
                           future: loaderFuture,
