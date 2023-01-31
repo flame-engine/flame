@@ -38,7 +38,7 @@ class GestureDetectorBuilder {
         game is TertiaryTapDetector) {
       addGestureRecognizer(
         TapGestureRecognizer.new,
-            (TapGestureRecognizer instance) {
+        (TapGestureRecognizer instance) {
           if (game is TapDetector) {
             instance.onTap = game.onTap;
             instance.onTapCancel = game.onTapCancel;
@@ -61,7 +61,7 @@ class GestureDetectorBuilder {
     if (game is DoubleTapDetector) {
       addGestureRecognizer(
         DoubleTapGestureRecognizer.new,
-            (DoubleTapGestureRecognizer instance) {
+        (DoubleTapGestureRecognizer instance) {
           instance.onDoubleTap = game.onDoubleTap;
           instance.onDoubleTapDown = game.handleDoubleTapDown;
           instance.onDoubleTapCancel = game.onDoubleTapCancel;
@@ -71,7 +71,7 @@ class GestureDetectorBuilder {
     if (game is LongPressDetector) {
       addGestureRecognizer(
         LongPressGestureRecognizer.new,
-            (LongPressGestureRecognizer instance) {
+        (LongPressGestureRecognizer instance) {
           instance.onLongPress = game.onLongPress;
           instance.onLongPressStart = game.handleLongPressStart;
           instance.onLongPressMoveUpdate = game.handleLongPressMoveUpdate;
@@ -84,7 +84,7 @@ class GestureDetectorBuilder {
     if (game is VerticalDragDetector) {
       addGestureRecognizer(
         VerticalDragGestureRecognizer.new,
-            (VerticalDragGestureRecognizer instance) {
+        (VerticalDragGestureRecognizer instance) {
           instance.onDown = game.handleVerticalDragDown;
           instance.onStart = game.handleVerticalDragStart;
           instance.onUpdate = game.handleVerticalDragUpdate;
@@ -96,7 +96,7 @@ class GestureDetectorBuilder {
     if (game is HorizontalDragDetector) {
       addGestureRecognizer(
         HorizontalDragGestureRecognizer.new,
-            (HorizontalDragGestureRecognizer instance) {
+        (HorizontalDragGestureRecognizer instance) {
           instance.onDown = game.handleHorizontalDragDown;
           instance.onStart = game.handleHorizontalDragStart;
           instance.onUpdate = game.handleHorizontalDragUpdate;
@@ -108,7 +108,7 @@ class GestureDetectorBuilder {
     if (game is ForcePressDetector) {
       addGestureRecognizer(
         ForcePressGestureRecognizer.new,
-            (ForcePressGestureRecognizer instance) {
+        (ForcePressGestureRecognizer instance) {
           instance.onStart = game.handleForcePressStart;
           instance.onPeak = game.handleForcePressPeak;
           instance.onUpdate = game.handleForcePressUpdate;
@@ -119,7 +119,7 @@ class GestureDetectorBuilder {
     if (game is PanDetector) {
       addGestureRecognizer(
         PanGestureRecognizer.new,
-            (PanGestureRecognizer instance) {
+        (PanGestureRecognizer instance) {
           instance.onDown = game.handlePanDown;
           instance.onStart = game.handlePanStart;
           instance.onUpdate = game.handlePanUpdate;
@@ -131,7 +131,7 @@ class GestureDetectorBuilder {
     if (game is ScaleDetector) {
       addGestureRecognizer(
         ScaleGestureRecognizer.new,
-            (ScaleGestureRecognizer instance) {
+        (ScaleGestureRecognizer instance) {
           instance.onStart = game.handleScaleStart;
           instance.onUpdate = game.handleScaleUpdate;
           instance.onEnd = game.handleScaleEnd;
@@ -141,7 +141,7 @@ class GestureDetectorBuilder {
     if (game is MultiTapListener) {
       addGestureRecognizer(
         MultiTapGestureRecognizer.new,
-            (MultiTapGestureRecognizer instance) {
+        (MultiTapGestureRecognizer instance) {
           final g = game as MultiTapListener;
           instance.longTapDelay = Duration(
             milliseconds: (g.longTapDelay * 1000).toInt(),
@@ -157,7 +157,7 @@ class GestureDetectorBuilder {
     if (game is MultiDragListener) {
       addGestureRecognizer(
         ImmediateMultiDragGestureRecognizer.new,
-            (ImmediateMultiDragGestureRecognizer instance) {
+        (ImmediateMultiDragGestureRecognizer instance) {
           final g = game as MultiDragListener;
           instance.onStart = (Offset point) => FlameDragAdapter(g, point);
         },
@@ -166,27 +166,11 @@ class GestureDetectorBuilder {
   }
 }
 
-bool hasGestureDetectors(Game game) {
-  return game is TapDetector ||
-      game is SecondaryTapDetector ||
-      game is TertiaryTapDetector ||
-      game is DoubleTapDetector ||
-      game is LongPressDetector ||
-      game is VerticalDragDetector ||
-      game is HorizontalDragDetector ||
-      game is ForcePressDetector ||
-      game is PanDetector ||
-      game is ScaleDetector ||
-      game is MultiTapListener ||
-      game is MultiDragListener;
-}
-
 bool hasMouseDetectors(Game game) {
   return game is MouseMovementDetector ||
       game is ScrollDetector ||
       game is HasHoverables;
 }
-
 
 Widget applyMouseDetectors(Game game, Widget child) {
   final mouseMoveFn = game is MouseMovementDetector
