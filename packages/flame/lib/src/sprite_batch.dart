@@ -390,46 +390,67 @@ class SpriteBatch {
     if (isEmpty) {
       return;
     }
+    var maybePaint = paint, maybeBlendMode = blendMode;
 
-    paint ??= _emptyPaint;
+    maybePaint ??= _emptyPaint;
+    maybeBlendMode ??= defaultBlendMode;
 
     if (useAtlas) {
-      canvas.drawAtlas(
-        atlas,
-        _transforms,
-        _sources,
-        _colors,
-        blendMode ?? defaultBlendMode,
-        cullRect,
-        paint,
-      );
-      if (flippedAtlas != null) {
-        canvas.drawAtlas(
-          flippedAtlas!,
-          _flippedTransforms,
-          _flippedSources,
-          _flippedColors,
-          blendMode ?? defaultBlendMode,
-          cullRect,
-          paint,
-        );
-      }
+      _renderByAtlas(canvas, blendMode: maybeBlendMode, paint: maybePaint);
     } else {
-      for (final batchItem in _batchItems) {
-        paint.blendMode = blendMode ?? paint.blendMode;
+      maybePaint.blendMode = blendMode ?? maybePaint.blendMode;
+      _renderByImage(canvas, paint: maybePaint);
+    }
+  }
 
-        canvas
-          ..save()
-          ..transform(batchItem.matrix.storage)
-          ..drawRect(batchItem.destination, batchItem.paint)
-          ..drawImageRect(
-            atlas,
-            batchItem.source,
-            batchItem.destination,
-            paint,
-          )
-          ..restore();
-      }
+  void _renderByAtlas(
+    Canvas canvas, {
+    required BlendMode blendMode,
+    required Paint paint,
+    Rect? cullRect,
+  }) {
+    canvas.drawAtlas(
+      atlas,
+      _transforms,
+      _sources,
+      _colors,
+      blendMode,
+      cullRect,
+      paint,
+    );
+
+    final maybeFlippedAtlas = flippedAtlas;
+    if (maybeFlippedAtlas == null) {
+      return;
+    }
+
+    canvas.drawAtlas(
+      maybeFlippedAtlas,
+      _flippedTransforms,
+      _flippedSources,
+      _flippedColors,
+      blendMode,
+      cullRect,
+      paint,
+    );
+  }
+
+  void _renderByImage(
+    Canvas canvas, {
+    required Paint paint,
+  }) {
+    for (final batchItem in _batchItems) {
+      canvas
+        ..save()
+        ..transform(batchItem.matrix.storage)
+        ..drawRect(batchItem.destination, batchItem.paint)
+        ..drawImageRect(
+          atlas,
+          batchItem.source,
+          batchItem.destination,
+          paint,
+        )
+        ..restore();
     }
   }
 }
