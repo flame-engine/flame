@@ -19,7 +19,7 @@ class Inventory extends StatelessWidget {
   String _mapWeaponName(Weapon weapon) {
     switch (weapon) {
       case Weapon.bullet:
-        return 'Kinect';
+        return 'Kinetic';
       case Weapon.laser:
         return 'Laser';
       case Weapon.plasma:
