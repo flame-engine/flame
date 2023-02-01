@@ -7,7 +7,6 @@ import 'package:flame/game.dart';
 import 'package:flame/src/flame.dart';
 import 'package:flame/src/game/game_render_box.dart';
 import 'package:flame/src/game/overlay_manager.dart';
-import 'package:flame/src/game/projector.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:meta/meta.dart';
