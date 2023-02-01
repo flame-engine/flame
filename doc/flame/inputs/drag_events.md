@@ -1,7 +1,7 @@
 # Drag Events
 
 ```{note}
-This document describes the new drag events API. The old (legacy) approach
+This document describes the new drag events API. The old (legacy) approach,
 which is still supported, is described in [](gesture_input.md).
 ```
 
@@ -35,7 +35,7 @@ class MyComponent extends PositionComponent with DragCallbacks {
 ## Demo
 
 In this example you can use drag gestures to either drag star-like shapes across the screen, or to
-draw curves inside the pink rectangle.
+draw curves inside the magenta rectangle.
 
 ```{flutter-app}
 :sources: ../flame/examples
@@ -150,7 +150,7 @@ effect, every drag event will be propagated twice through the system: first tryi
 components with `DragCallbacks` mixin, and then components with `Draggable`.
 
 ```dart
-class MyGame extends FlameGame with HasDraggableComponents, HasDraggablesBridge {
+class MyGame extends FlameGame with HasDraggablesBridge {
   // ...
 }
 ```
