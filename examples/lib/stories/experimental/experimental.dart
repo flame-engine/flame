@@ -23,7 +23,7 @@ void addExperimentalStories(Dashbook dashbook) {
       'Loading screen',
       (_) => GameWidget(
         game: LoadingScreenExample(),
-        loadingProgressBuilder: (_) => ExampleBuilder(),
+        loadingProgressBuilder: ExampleBuilder(),
       ),
       codeLink: baseLink('experimental/loading_screen.dart'),
       info: LoadingScreenExample.description,

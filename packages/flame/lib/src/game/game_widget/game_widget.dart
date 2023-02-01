@@ -9,10 +9,6 @@ import 'package:flame/src/widgets/loading_widget_builder.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
-typedef GameLoadingProgressBuilder = LoadingWidgetBuilder Function(
-  BuildContext,
-);
-
 typedef GameLoadingWidgetBuilder = Widget Function(
   BuildContext,
 );
@@ -44,7 +40,7 @@ class GameWidget<T extends Game> extends StatefulWidget {
   /// The text direction to be used in text elements in a game.
   final TextDirection? textDirection;
 
-  final GameLoadingProgressBuilder? loadingProgressBuilder;
+  final LoadingWidgetBuilder? loadingProgressBuilder;
 
   /// Builder to provide a widget tree to be built while the Game's [Future]
   /// provided via `Game.onLoad` and `Game.onMount` is not resolved.
@@ -379,11 +375,11 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
                       final stream = currentGame.progressNotifier
                           ?.initStreamLoader(() => loaderFuture);
                       if (loadingProgressBuilder != null && stream != null) {
-                        final builder = loadingProgressBuilder(context);
-                        builder.gameWidget = Stack(children: stackedWidgets);
-                        builder.game = currentGame;
-                        builder.errorBuilder = widget.errorBuilder;
-                        return builder.createBuilder(stream);
+                        loadingProgressBuilder
+                          ..gameWidget = Stack(children: stackedWidgets)
+                          ..game = currentGame
+                          ..errorBuilder = widget.errorBuilder;
+                        return loadingProgressBuilder.createBuilder(stream);
                       } else {
                         return FutureBuilder(
                           future: loaderFuture,

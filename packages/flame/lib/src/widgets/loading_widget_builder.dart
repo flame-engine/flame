@@ -14,11 +14,11 @@ import 'package:flutter/widgets.dart';
 ///   [buildOnStreamData] for details
 /// - [buildTransitionToGame] is responsible for rendering game widget,
 ///   optionally with a transition animation from loading screen.
-@immutable
+
 abstract class LoadingWidgetBuilder<M> {
-  late final Widget gameWidget;
-  late final Game game;
-  late final GameErrorWidgetBuilder? errorBuilder;
+  late Widget gameWidget;
+  late Game game;
+  late GameErrorWidgetBuilder? errorBuilder;
 
   final _loadingCompleter = Completer<void>();
 
