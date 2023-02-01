@@ -131,6 +131,8 @@ class ProgressMessage {
 /// Stateless immutable class responsible to call widgets depending on received
 /// message
 class ExampleBuilder extends LoadingWidgetBuilder<ProgressMessage> {
+  /// A global key to let Flutter know, that [AnimatedSwitcher] is the same
+  /// both in [buildOnMessage] and at [buildTransitionToGame]
   static final animatedSwitcherKey = GlobalKey();
 
   @override
