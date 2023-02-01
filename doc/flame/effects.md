@@ -771,7 +771,7 @@ following effects qualify: [`MoveByEffect`](#movebyeffect), [`MoveToEffect`](#mo
 [`RotateEffect.to`](#rotateeffectto).
 
 The parameter `speed` is in units per second, where the notion of a "unit" depends on the target
-effect. For example, for move effects, they refer to the distance travelled; for rotation effects
+effect. For example, for move effects, they refer to the distance traveled; for rotation effects
 the units are radians.
 
 ```dart

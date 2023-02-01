@@ -51,7 +51,7 @@ class SpriteFontTextFormatter extends TextFormatter {
   @override
   TextElement format(String text) {
     var rects = Float32List(text.length * 4);
-    var rsts = Float32List(text.length * 4);
+    var transforms = Float32List(text.length * 4);
     var j = 0;
     var x0 = 0.0;
     for (final glyph in font.textToGlyphs(text)) {
@@ -59,20 +59,20 @@ class SpriteFontTextFormatter extends TextFormatter {
       rects[j + 1] = glyph.srcTop;
       rects[j + 2] = glyph.srcRight;
       rects[j + 3] = glyph.srcBottom;
-      rsts[j + 0] = scale;
-      rsts[j + 1] = 0;
-      rsts[j + 2] = x0 + (glyph.srcLeft - glyph.left) * scale;
-      rsts[j + 3] = (glyph.srcTop - glyph.top - font.ascent) * scale;
+      transforms[j + 0] = scale;
+      transforms[j + 1] = 0;
+      transforms[j + 2] = x0 + (glyph.srcLeft - glyph.left) * scale;
+      transforms[j + 3] = (glyph.srcTop - glyph.top - font.ascent) * scale;
       j += 4;
       x0 += glyph.width * scale + letterSpacing;
     }
     if (j < text.length * 4) {
       rects = rects.sublist(0, j);
-      rsts = rsts.sublist(0, j);
+      transforms = transforms.sublist(0, j);
     }
     return SpriteFontTextElement(
       source: font.source,
-      transforms: rsts,
+      transforms: transforms,
       rects: rects,
       paint: paint,
       metrics: LineMetrics(

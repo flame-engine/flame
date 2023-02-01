@@ -11,33 +11,37 @@ import 'package:jenny/src/structure/node.dart';
 import 'package:jenny/src/yarn_project.dart';
 import 'package:meta/meta.dart';
 
-/// [DialogueRunner] is a an engine in flame_yarn that runs a single dialogue.
+/// The **DialogueRunner** is the engine that executes Jenny's dialogue at
+/// runtime.
 ///
-/// If you think of [YarnProject] as a dialogue "program", consisting of
-/// multiple Nodes as "functions", then [DialogueRunner] is like a VM, capable
-/// of executing a single "function" in that "program".
+/// If you imagine [YarnProject] as a "program", consisting of multiple [Node]s
+/// as "functions", then `DialogueRunner` is a virtual machine, capable of
+/// executing a single "function" in that "program".
 ///
-/// A single [DialogueRunner] may only execute one dialogue Node at a time. It
-/// is an error to try to run another Node before the first one concludes.
-/// However, it is possible to create multiple [DialogueRunner]s for the same
-/// [YarnProject], and then they would be able to execute multiple dialogues at
-/// once (for example, in a crowded room there could be multiple dialogues
-/// occurring at once within different groups of people).
+/// A single `DialogueRunner` may only execute one dialogue node at a time. It
+/// is an error to try to run another node before the first one concludes.
+/// However, it is possible to create multiple `DialogueRunner`s for the same
+/// [YarnProject], and then they would be able to execute multiple dialogues
+/// simultaneously (for example, in a crowded room there could be multiple
+/// dialogues occurring at once within different groups of people).
 ///
-/// The job of a [DialogueRunner] is to fetch the dialogue lines in the correct
-/// order, and at the appropriate pace, to execute the logic in dialogue
+/// The job of a `DialogueRunner` is to fetch the dialogue lines in the correct
+/// order and at the appropriate pace, to execute the logic in dialogue
 /// scripts, and to branch according to user input in [DialogueChoice]s. The
-/// output of a [DialogueRunner], therefore, is a stream of dialogue statements
-/// that need to be presented to the player. Such presentation, however, is
-/// handled by the [DialogueView]s, not by the [DialogueRunner].
+/// output of a `DialogueRunner`, therefore, is a stream of dialogue statements
+/// that need to be presented to the player. Such presentation, is handled by
+/// [DialogueView]s.
 class DialogueRunner {
+  /// Creates a `DialogueRunner` for executing the [yarnProject]. The dialogue
+  /// will be delivered to all the provided [dialogueViews]. Each of these
+  /// dialogue views may only be assigned to a single `DialogueRunner` at a
+  /// time.
   DialogueRunner({
     required YarnProject yarnProject,
     required List<DialogueView> dialogueViews,
   })  : project = yarnProject,
         _dialogueViews = dialogueViews;
 
-  final YarnProject project;
   final List<DialogueView> _dialogueViews;
   _LineDeliveryPipeline? _linePipeline;
   Node? _currentNode;
@@ -45,8 +49,12 @@ class DialogueRunner {
   String? _initialNodeName;
   String? _nextNode;
 
+  /// The `YarnProject` that this dialogue runner is executing.
+  final YarnProject project;
+
   /// Starts the dialogue with the node [nodeName], and returns a future that
-  /// finishes once the dialogue stops running.
+  /// completes once the dialogue finishes running. While this future is
+  /// pending, the `DialogueRunner` cannot start any other dialogue.
   Future<void> startDialogue(String nodeName) async {
     try {
       if (_initialNodeName != null) {
@@ -76,6 +84,13 @@ class DialogueRunner {
     }
   }
 
+  /// Delivers the given [signal] to all dialogue views, in the form of a
+  /// [DialogueView] method `onLineSignal(line, signal)`. This can be used, for
+  /// example, as a means of communication between the dialogue views.
+  ///
+  /// The [signal] object here is completely arbitrary, and it is up to the
+  /// implementations to decide which signals to send and to receive.
+  /// Implementations should ignore any signals they do not understand.
   void sendSignal(dynamic signal) {
     assert(_linePipeline != null);
     final line = _linePipeline!.line;
@@ -84,6 +99,9 @@ class DialogueRunner {
     }
   }
 
+  /// Requests (via `onLineStop()`) that the presentation of the current line
+  /// be finished as quickly as possible. The dialogue will then proceed
+  /// normally to the next line.
   void stopLine() {
     _linePipeline?.stop();
   }

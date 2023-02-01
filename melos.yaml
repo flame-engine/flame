@@ -32,12 +32,12 @@ scripts:
     description: Run `flutter analyze` for all packages.
 
   format:
-    run: melos exec flutter format . --fix
-    description: Run `flutter format` for all packages.
+    run: melos exec dart format . --fix
+    description: Run `dart format` for all packages.
 
   format-check:
-    run: melos exec flutter format . --set-exit-if-changed
-    description: Run `flutter format` checks for all packages.
+    run: melos exec dart format . --set-exit-if-changed
+    description: Run `dart format` checks for all packages.
 
   markdown-check:
     run: markdownlint . --ignore-path .markdownlintignore --config .markdownlint.yaml
@@ -50,6 +50,19 @@ scripts:
   dartdoc:
     run: melos exec flutter pub run dartdoc
     description: Run dartdoc checks for all packages.
+
+  doc-setup:
+    run: |
+      echo '\033[1;32mChecking python version:\033[m' &&
+      python --version &&
+      (python -c 'import sys; sys.exit(0 if sys.version_info>=(3,8) else 2)' ||
+       (echo '\033[1;31mError: Python 3.8+ is required\033[m' && false)) &&
+      echo '\n\033[1;32mInstalling required python modules:\033[m' &&
+      python -m pip install -r "$MELOS_ROOT_PATH/doc/_sphinx/requirements.txt" &&
+      echo '\n\033[1;32mInstalling dartdoc_json:\033[m' &&
+      dart pub global activate dartdoc_json &&
+      echo '\n\033[1;32mDone.\033[m'
+    description: Prepares the environment for documentation development.
 
   doc-build:
     run: cd "$MELOS_ROOT_PATH/doc/_sphinx" && make html

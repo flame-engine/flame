@@ -10,18 +10,20 @@ import 'package:flame/geometry.dart';
 abstract class CollisionDetection<T extends Hitbox<T>,
     B extends Broadphase<T>> {
   final B broadphase;
+
   List<T> get items => broadphase.items;
   final Set<CollisionProspect<T>> _lastPotentials = {};
 
   CollisionDetection({required this.broadphase});
 
-  void add(T item) => items.add(item);
+  void add(T item) => broadphase.add(item);
+
   void addAll(Iterable<T> items) => items.forEach(add);
 
   /// Removes the [item] from the collision detection, if you just want
   /// to temporarily inactivate it you can set
   /// `collisionType = CollisionType.inactive;` instead.
-  void remove(T item) => items.remove(item);
+  void remove(T item) => broadphase.remove(item);
 
   /// Removes all [items] from the collision detection, see [remove].
   void removeAll(Iterable<T> items) => items.forEach(remove);
@@ -64,8 +66,11 @@ abstract class CollisionDetection<T extends Hitbox<T>,
   /// Check what the intersection points of two items are,
   /// returns an empty list if there are no intersections.
   Set<Vector2> intersections(T itemA, T itemB);
+
   void handleCollisionStart(Set<Vector2> intersectionPoints, T itemA, T itemB);
+
   void handleCollision(Set<Vector2> intersectionPoints, T itemA, T itemB);
+
   void handleCollisionEnd(T itemA, T itemB);
 
   /// Returns the first hitbox that the given [ray] hits and the associated

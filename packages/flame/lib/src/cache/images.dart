@@ -3,6 +3,7 @@ import 'dart:convert' show base64, json;
 import 'dart:ui';
 
 import 'package:flame/src/flame.dart';
+import 'package:flutter/painting.dart';
 import 'package:flutter/services.dart';
 
 class Images {
@@ -155,19 +156,13 @@ class Images {
   Future<Image> _fetchFromBase64(String base64Data) {
     final data = base64Data.substring(base64Data.indexOf(',') + 1);
     final bytes = base64.decode(data);
-    return _loadBytes(bytes);
+    return decodeImageFromList(bytes);
   }
 
   Future<Image> _fetchToMemory(String name) async {
     final data = await Flame.bundle.load('$_prefix$name');
     final bytes = Uint8List.view(data.buffer);
-    return _loadBytes(bytes);
-  }
-
-  Future<Image> _loadBytes(Uint8List bytes) {
-    final completer = Completer<Image>();
-    decodeImageFromList(bytes, completer.complete);
-    return completer.future;
+    return decodeImageFromList(bytes);
   }
 }
 

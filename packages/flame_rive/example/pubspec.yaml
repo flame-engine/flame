@@ -14,7 +14,7 @@ dependencies:
   rive: 0.9.0
 
 dev_dependencies:
-  flame_lint: ^0.1.3
+  flame_lint: ^0.2.0
   flutter_test:
     sdk: flutter
 
