@@ -28,6 +28,7 @@ class GestureDetectorBuilder {
     if (count == 1) {
       _counters.remove(T);
       _gestures.remove(T);
+      _onChange?.call();
     } else {
       _counters[T] = count - 1;
     }

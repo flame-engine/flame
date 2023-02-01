@@ -5,7 +5,7 @@ import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/src/flame.dart';
 import 'package:flame/src/game/game_render_box.dart';
-import 'package:flame/src/game/game_widget/gestures.dart';
+import 'package:flame/src/game/game_widget/gesture_detector_builder.dart';
 import 'package:flame/src/game/overlay_manager.dart';
 import 'package:flame/src/game/projector.dart';
 import 'package:flutter/rendering.dart';

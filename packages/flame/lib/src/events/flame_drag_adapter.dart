@@ -7,11 +7,11 @@ import 'package:meta/meta.dart';
 /// [MultiDragListener].
 @internal
 class FlameDragAdapter implements Drag {
-  FlameDragAdapter(this._dragListener, Offset startPoint) {
+  FlameDragAdapter(this._listener, Offset startPoint) {
     start(startPoint);
   }
 
-  final MultiDragListener _dragListener;
+  final MultiDragListener _listener;
   late final int _id;
   static int _globalIdCounter = 0;
 
@@ -19,19 +19,19 @@ class FlameDragAdapter implements Drag {
     final event = DragStartDetails(
       sourceTimeStamp: Duration.zero,
       globalPosition: point,
-      localPosition: _dragListener.renderBox.globalToLocal(point),
+      localPosition: _listener.renderBox.globalToLocal(point),
     );
     _id = _globalIdCounter++;
-    _dragListener.handleDragStart(_id, event);
+    _listener.handleDragStart(_id, event);
   }
 
   @override
   void update(DragUpdateDetails event) =>
-      _dragListener.handleDragUpdate(_id, event);
+      _listener.handleDragUpdate(_id, event);
 
   @override
-  void end(DragEndDetails event) => _dragListener.handleDragEnd(_id, event);
+  void end(DragEndDetails event) => _listener.handleDragEnd(_id, event);
 
   @override
-  void cancel() => _dragListener.handleDragCancel(_id);
+  void cancel() => _listener.handleDragCancel(_id);
 }

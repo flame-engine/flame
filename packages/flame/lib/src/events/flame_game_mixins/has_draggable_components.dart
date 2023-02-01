@@ -14,7 +14,7 @@ import 'package:flame/src/game/game_render_box.dart';
 import 'package:flutter/gestures.dart';
 import 'package:meta/meta.dart';
 
-@Deprecated('This mixin will be removed in 1.7.0')
+@Deprecated('This mixin will be removed in 1.8.0')
 mixin HasDraggableComponents on FlameGame {}
 
 /// **MultiDragDispatcher** facilitates dispatching of drag events to the
