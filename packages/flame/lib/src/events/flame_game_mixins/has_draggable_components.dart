@@ -48,6 +48,7 @@ class MultiDragDispatcher extends Component implements MultiDragListener {
         component.onDragStart(event);
       },
     );
+    // ignore: deprecated_member_use_from_same_package
     if (game is HasDraggablesBridge) {
       final info = event.asInfo(game)..handled = event.handled;
       game.propagateToChildren<Draggable>(
@@ -82,6 +83,7 @@ class MultiDragDispatcher extends Component implements MultiDragListener {
         record.component.onDragUpdate(event);
       }
     }
+    // ignore: deprecated_member_use_from_same_package
     if (game is HasDraggablesBridge) {
       final info = event.asInfo(game)..handled = event.handled;
       game.propagateToChildren<Draggable>(
@@ -105,6 +107,7 @@ class MultiDragDispatcher extends Component implements MultiDragListener {
       }
       return false;
     });
+    // ignore: deprecated_member_use_from_same_package
     if (game is HasDraggablesBridge) {
       final info = event.asInfo(game)..handled = event.handled;
       game.propagateToChildren<Draggable>(
@@ -123,6 +126,7 @@ class MultiDragDispatcher extends Component implements MultiDragListener {
       }
       return false;
     });
+    // ignore: deprecated_member_use_from_same_package
     if (game is HasDraggablesBridge) {
       game.propagateToChildren<Draggable>(
         (c) => c.handleDragCanceled(event.pointerId),

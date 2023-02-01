@@ -160,7 +160,8 @@ void main() {
 }
 
 class _GameWithDualDraggableComponents extends FlameGame
-    with HasDraggablesBridge {
+    with HasDraggablesBridge // ignore: deprecated_member_use_from_same_package
+{
   _GameWithDualDraggableComponents({super.children});
 }
 

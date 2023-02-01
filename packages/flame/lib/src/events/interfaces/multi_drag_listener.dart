@@ -1,4 +1,3 @@
-import 'package:flame/src/events/flame_game_mixins/has_draggable_components.dart';
 import 'package:flame/src/events/game_mixins/multi_touch_drag_detector.dart';
 import 'package:flame/src/events/interfaces/multi_tap_listener.dart';
 import 'package:flame/src/game/game_render_box.dart';
@@ -9,7 +8,6 @@ import 'package:flutter/gestures.dart';
 ///
 /// Instead of implementing this class directly consider using one of the
 /// prebuilt mixins:
-///  - [HasDraggableComponents] for a `FlameGame`
 ///  - [MultiTouchDragDetector] for a custom `Game`
 abstract class MultiDragListener {
   /// The beginning of a drag operation.
