@@ -77,7 +77,7 @@ class BatchItem {
   final Paint paint;
 }
 
-enum SpriteBatchFlippedAtlasStatus {
+enum _SpriteBatchFlippedAtlasStatus {
   /// Flipped atlas is neither available nor generating.
   none,
 
@@ -212,13 +212,13 @@ class SpriteBatch {
       imageCache.findKeyForImage(atlas) ??
       'image[${identityHashCode(atlas)}]';
 
-  /// The key used by [SpriteBatch] to store flipped image asset.
+  /// The key for [imageCache] to store flipped image asset.
   /// This is available when there is flipped transform added by [addTransform].
   String? get flippedImageKey => _flippedImageKey;
 
   /// Indicates current status of [flippedAtlas]
-  SpriteBatchFlippedAtlasStatus flippedAtlasStatus =
-      SpriteBatchFlippedAtlasStatus.none;
+  _SpriteBatchFlippedAtlasStatus flippedAtlasStatus =
+      _SpriteBatchFlippedAtlasStatus.none;
 
   /// The default color, used as a background color for a [BatchItem].
   final Color defaultColor;
@@ -246,13 +246,13 @@ class SpriteBatch {
   bool get isEmpty => _batchItems.isEmpty;
 
   Future<void> _makeFlippedAtlas() async {
-    flippedAtlasStatus = SpriteBatchFlippedAtlasStatus.generateInProgress;
+    flippedAtlasStatus = _SpriteBatchFlippedAtlasStatus.generateInProgress;
     final key = _flippedImageKey = '$imageKey#with-flips';
     flippedAtlas = await imageCache.fetchOrGenerate(
       key,
       () => _generateFlippedAtlas(atlas),
     );
-    flippedAtlasStatus = SpriteBatchFlippedAtlasStatus.ready;
+    flippedAtlasStatus = _SpriteBatchFlippedAtlasStatus.ready;
   }
 
   Future<Image> _generateFlippedAtlas(Image image) {
