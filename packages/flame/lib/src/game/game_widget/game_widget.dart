@@ -382,7 +382,8 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
                         final builder = loadingProgressBuilder(context);
                         builder.gameWidget = Stack(children: stackedWidgets);
                         builder.game = currentGame;
-                        return builder.createStreamBuilder(stream);
+                        builder.errorBuilder = widget.errorBuilder;
+                        return builder.createBuilder(stream);
                       } else {
                         return FutureBuilder(
                           future: loaderFuture,

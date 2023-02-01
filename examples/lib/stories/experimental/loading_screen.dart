@@ -27,29 +27,43 @@ class LoadingScreenExample extends FlameGame {
   double anyProgressEmulation = 0;
   int messagesSent = 0;
 
-  bool startGame = false;
+  bool _gameLoadingFinished = false;
+
+  set gameLoadingFinished(bool finished) {
+    _gameLoadingFinished = finished;
+    if (finished) {
+      progressNotifier.reportLoadingProgress(
+        const ProgressMessage(
+          text: 'Finished! Be ready to play!',
+          progress: 100,
+        ),
+      );
+    }
+  }
+
+  bool get gameLoadingFinished => _gameLoadingFinished;
 
   @override
   FutureOr<void> onLoad() async {
     /// the message will be send to loading screen, if the one is specified
     progressNotifier.reportLoadingProgress(
-      const ProgressMessage(message: 'onLoad started', progress: 1),
+      const ProgressMessage(text: 'onLoad started', progress: 1),
     );
 
     await Future<void>.delayed(const Duration(seconds: 1));
 
     progressNotifier.reportLoadingProgress(
       const ProgressMessage(
-        message: 'Something happen while loading...',
+        text: 'Something happen while loading...',
         progress: 50,
       ),
     );
 
-    await Future<void>.delayed(const Duration(seconds: 1));
+    await Future<void>.delayed(const Duration(seconds: 5));
 
     progressNotifier.reportLoadingProgress(
       const ProgressMessage(
-        message: '...almost done!..',
+        text: '...almost done!..',
         progress: 90,
       ),
     );
@@ -74,22 +88,13 @@ class LoadingScreenExample extends FlameGame {
     add(InGameProgressText(verticalPosition: 200, size: size));
     add(InGameProgressText(verticalPosition: 250, size: size));
 
-    await Future<void>.delayed(const Duration(seconds: 1));
-
-    progressNotifier.reportLoadingProgress(
-      const ProgressMessage(
-        message: 'Finished! Be ready to play!',
-        progress: 100,
-      ),
-    );
-
     await Future<void>.delayed(const Duration(seconds: 5));
 
     /// You should to decide, what type of message would be trigger for
     /// showing game widget. You should to sent such message manually and
     /// also manually build game widget in loading screen component.
-    /// See [_LoadingScreenExampleWidgetState.build]
-    progressNotifier.reportLoadingProgress(const ProgressMessage.finished());
+    /// See [LoadingWidgetBuilder.buildTransitionToGame]
+    gameLoadingFinished = true;
 
     return super.onLoad();
   }
@@ -103,7 +108,7 @@ class LoadingScreenExample extends FlameGame {
       messagesSent++;
       progressNotifier.reportLoadingProgress(
         ProgressMessage(
-          message: 'The notification message #$messagesSent',
+          text: 'The notification message #$messagesSent',
           progress: (anyProgressEmulation * 100).toInt(),
         ),
       );
@@ -117,37 +122,23 @@ class LoadingScreenExample extends FlameGame {
 /// and even [dynamic], but the last option looks like heavy anti-pattern.
 @immutable
 class ProgressMessage {
-  const ProgressMessage({required this.message, required this.progress});
+  const ProgressMessage({required this.text, required this.progress});
 
-  /// Just for fast illustration - a special constructor to indicate, that
-  /// [Game.onLoad] is finished.
-  const ProgressMessage.finished()
-      : message = '',
-        progress = 101;
-
-  final String message;
+  final String text;
   final int progress;
 }
 
-/// Stateless class responsible to call widgets depending on received message
+/// Stateless immutable class responsible to call widgets depending on received
+/// message
 class ExampleBuilder extends LoadingWidgetBuilder<ProgressMessage> {
+  static final animatedSwitcherKey = GlobalKey();
+
   @override
   Widget buildOnMessage(BuildContext context, ProgressMessage message) {
-    Widget child;
-
-    /// We need to save somewhere game's "loaded" state, because ExampleBuilder
-    /// does not preserve any state
-    if (message.progress == 101) {
-      (game as LoadingScreenExample).startGame = true;
-    }
-    if ((game as LoadingScreenExample).startGame) {
-      child = gameWidget;
-    } else {
-      child = _buildLoadingScreen(message.message, message.progress);
-    }
     return AnimatedSwitcher(
+      key: animatedSwitcherKey,
       duration: const Duration(seconds: 3),
-      child: child,
+      child: _buildLoadingScreen(message.text, message.progress),
     );
   }
 
@@ -156,10 +147,25 @@ class ExampleBuilder extends LoadingWidgetBuilder<ProgressMessage> {
         text: message,
         progress: progress / 100,
       );
+
+  @override
+  Widget buildTransitionToGame(BuildContext context) {
+    return AnimatedSwitcher(
+      key: animatedSwitcherKey,
+      duration: const Duration(seconds: 3),
+      child: gameWidget,
+    );
+  }
+
+  @override
+  bool isGameLoadingFinished(ProgressMessage message) =>
+      (game as LoadingScreenExample).gameLoadingFinished;
 }
 
 /// The loading screen widget with animated progress bar anf fade effect
 /// when displaying the game.
+/// This is just ordinary Flutter widget without any special "relationships"
+/// with Flame. You can use everything you want to be used as a "progress bar"
 class LoadingScreenExampleWidget extends StatefulWidget {
   const LoadingScreenExampleWidget({
     super.key,
@@ -210,7 +216,7 @@ class _LoadingScreenExampleWidgetState extends State<LoadingScreenExampleWidget>
   Widget build(BuildContext context) => Center(
         child: Container(
           width: double.infinity,
-          height: 75.0,
+          height: 40.0,
           padding: const EdgeInsets.symmetric(horizontal: 24.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -249,6 +255,6 @@ class InGameProgressText extends TextComponent
   /// Just change the text here, but you might to do some more complex!
   @override
   void onProgressMessage(ProgressMessage message) {
-    text = '${message.message}. The progress is: ${message.progress}';
+    text = '${message.text}. The progress is: ${message.progress}';
   }
 }
