@@ -17,6 +17,7 @@ extension SpriteBatchExtension on Game {
     BlendMode defaultBlendMode = BlendMode.srcOver,
     RSTransform? defaultTransform,
     Images? imageCache,
+    bool? applyFlip,
     bool useAtlas = true,
   }) {
     return SpriteBatch.load(
@@ -26,6 +27,7 @@ extension SpriteBatchExtension on Game {
       defaultTransform: defaultTransform,
       images: imageCache ?? images,
       useAtlas: useAtlas,
+      applyFlip: applyFlip,
     );
   }
 }
@@ -100,10 +102,12 @@ class SpriteBatch {
     this.defaultBlendMode = BlendMode.srcOver,
     this.defaultTransform,
     this.useAtlas = true,
+    bool? applyFlip,
     Images? imageCache,
     String? imageKey,
   })  : _imageCache = imageCache,
-        _imageKey = imageKey;
+        _imageKey = imageKey,
+        _applyFlip = applyFlip ?? true;
 
   /// Takes a path of an image, and optional arguments for the SpriteBatch.
   ///
@@ -114,6 +118,7 @@ class SpriteBatch {
     BlendMode defaultBlendMode = BlendMode.srcOver,
     RSTransform? defaultTransform,
     Images? images,
+    bool? applyFlip,
     bool useAtlas = true,
   }) async {
     final _images = images ?? Flame.images;
@@ -125,6 +130,7 @@ class SpriteBatch {
       useAtlas: useAtlas,
       imageCache: _images,
       imageKey: path,
+      applyFlip: applyFlip,
     );
   }
 
@@ -186,6 +192,8 @@ class SpriteBatch {
 
   /// The status of the atlas image loading operations.
   bool _atlasReady = true;
+
+  final bool _applyFlip;
 
   /// The default color, used as a background color for a [BatchItem].
   final Color defaultColor;
@@ -263,7 +271,7 @@ class SpriteBatch {
       color: color ?? defaultColor,
     );
 
-    if (flip && useAtlas && !_hasFlips) {
+    if (_applyFlip && flip && useAtlas && !_hasFlips) {
       _makeFlippedAtlas();
     }
 

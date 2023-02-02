@@ -196,9 +196,15 @@ class RenderableTiledMap {
     String fileName,
     Vector2 destTileSize, {
     Camera? camera,
+    bool? applyFlip,
   }) async {
     final contents = await Flame.bundle.loadString('assets/tiles/$fileName');
-    return fromString(contents, destTileSize, camera: camera);
+    return fromString(
+      contents,
+      destTileSize,
+      camera: camera,
+      applyFlip: applyFlip,
+    );
   }
 
   /// Parses a string returning a [RenderableTiledMap].
@@ -206,12 +212,18 @@ class RenderableTiledMap {
     String contents,
     Vector2 destTileSize, {
     Camera? camera,
+    bool? applyFlip,
   }) async {
     final map = await TiledMap.fromString(
       contents,
       FlameTsxProvider.parse,
     );
-    return fromTiledMap(map, destTileSize, camera: camera);
+    return fromTiledMap(
+      map,
+      destTileSize,
+      camera: camera,
+      applyFlip: applyFlip,
+    );
   }
 
   /// Parses a [TiledMap] returning a [RenderableTiledMap].
@@ -219,6 +231,7 @@ class RenderableTiledMap {
     TiledMap map,
     Vector2 destTileSize, {
     Camera? camera,
+    bool? applyFlip,
   }) async {
     // We're not going to load animation frames that are never referenced; but
     // we do supply the common cache for all layers in this map, and maintain
@@ -236,7 +249,7 @@ class RenderableTiledMap {
       destTileSize,
       camera,
       animationFrames,
-      atlas: await TiledAtlas.fromTiledMap(map),
+      atlas: await TiledAtlas.fromTiledMap(map, applyFlip: applyFlip),
     );
 
     return RenderableTiledMap(
