@@ -7,6 +7,7 @@ import 'package:flame_tiled/flame_tiled.dart';
 Future<Uint8List> renderMapToPng(
   TiledComponent component,
 ) async {
+  await component.tileMap.waitForGeneratingFlippedAtlas();
   final canvasRecorder = PictureRecorder();
   final canvas = Canvas(canvasRecorder);
   component.tileMap.render(canvas);

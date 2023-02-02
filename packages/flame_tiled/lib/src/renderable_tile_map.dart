@@ -374,4 +374,12 @@ class RenderableTiledMap {
       layer.update(dt);
     }
   }
+
+  Future<void> waitForGeneratingFlippedAtlas() async {
+    await Future.wait(
+      renderableLayers
+          .whereType<FlameTileLayer>()
+          .map((layer) => layer.waitForGeneratingFlippedAtlas()),
+    );
+  }
 }

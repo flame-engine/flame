@@ -101,6 +101,7 @@ class FlameTileLayer extends RenderableLayer<TileLayer> {
     final completer = _flippedAtlasCompleter ??= _createFlipAtlasCompleter();
 
     completer.future.then((generatedFlippedAtlas) {
+      print('completer.future');
       generatedFlippedAtlas.batch?.addTransform(
         source: Rect.fromLTWH(
           atlasWidth - src.right,
@@ -616,5 +617,9 @@ class FlameTileLayer extends RenderableLayer<TileLayer> {
       return TileFrames(frameRectangles, durations);
     }();
     animations.add(TileAnimation(source, frames));
+  }
+
+  Future<void> waitForGeneratingFlippedAtlas() async {
+    await _flippedAtlasCompleter?.future;
   }
 }

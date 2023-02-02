@@ -177,43 +177,45 @@ void main() {
   });
 
   group('Flipped and rotated tiles render correctly with sprite batch:', () {
-    late Uint8List canvasPixelData, canvasPixelDataAtlas;
+    late Uint8List pixelsBeforeFlipGenerated, pixelsAfterFlipGenerated;
     late RenderableTiledMap overlapMap;
+
+    Future<Uint8List> storePixels(
+      RenderableTiledMap overlapMap,
+    ) async {
+      final canvasRecorder = PictureRecorder();
+      final canvas = Canvas(canvasRecorder);
+      overlapMap.render(canvas);
+      final picture = canvasRecorder.endRecording();
+
+      final image = await picture.toImageSafe(64, 32);
+      final bytes = await image.toByteData();
+      return bytes!.buffer.asUint8List();
+    }
+
     setUp(() async {
       Flame.bundle = TestAssetBundle(
-        imageNames: [
-          '4_color_sprite.png',
-        ],
+        imageNames: ['4_color_sprite.png'],
         mapPath: 'test/assets/8_tiles-flips.tmx',
       );
       overlapMap = await RenderableTiledMap.fromFile(
         '8_tiles-flips.tmx',
         Vector2.all(16),
       );
-      final canvasRecorder = PictureRecorder();
-      final canvas = Canvas(canvasRecorder);
-      overlapMap.render(canvas);
-      final picture = canvasRecorder.endRecording();
+      pixelsBeforeFlipGenerated = await storePixels(overlapMap);
 
-      final image = await picture.toImageSafe(64, 48);
-      final bytes = await image.toByteData();
-      canvasPixelData = bytes!.buffer.asUint8List();
+      await overlapMap.waitForGeneratingFlippedAtlas();
 
-      await Flame.images.ready();
-      final canvasRecorderAtlas = PictureRecorder();
-      final canvasAtlas = Canvas(canvasRecorderAtlas);
-      overlapMap.render(canvasAtlas);
-      final pictureAtlas = canvasRecorderAtlas.endRecording();
-
-      final imageAtlas = await pictureAtlas.toImageSafe(64, 48);
-      final bytesAtlas = await imageAtlas.toByteData();
-      canvasPixelDataAtlas = bytesAtlas!.buffer.asUint8List();
+      pixelsAfterFlipGenerated = await storePixels(overlapMap);
     });
 
-    test('[useAtlas = true] Green tile pixels are in correct spots', () {
+    test(
+        '''[Before flipped atlas generated] Green tile pixels are in correct spots''',
+        () {
       final leftTilePixels = <int>[];
       for (var i = 65 * 8 * 4; i < ((64 * 23) + (8 * 3)) * 4; i += 64 * 4) {
-        leftTilePixels.addAll(canvasPixelDataAtlas.getRange(i, i + (16 * 4)));
+        leftTilePixels
+            .addAll(pixelsBeforeFlipGenerated.getRange(i, i + (16 * 4)));
       }
 
       var allGreen = true;
@@ -227,36 +229,8 @@ void main() {
 
       final rightTilePixels = <int>[];
       for (var i = 69 * 8 * 4; i < ((64 * 23) + (8 * 7)) * 4; i += 64 * 4) {
-        rightTilePixels.addAll(canvasPixelDataAtlas.getRange(i, i + (16 * 4)));
-      }
-
-      for (var i = 0; i < rightTilePixels.length; i += 4) {
-        allGreen &= rightTilePixels[i] == 0 &&
-            rightTilePixels[i + 1] == 255 &&
-            rightTilePixels[i + 2] == 0 &&
-            rightTilePixels[i + 3] == 255;
-      }
-      expect(allGreen, true);
-    });
-
-    test('[useAtlas = false] Green tile pixels are in correct spots', () {
-      final leftTilePixels = <int>[];
-      for (var i = 65 * 8 * 4; i < ((64 * 23) + (8 * 3)) * 4; i += 64 * 4) {
-        leftTilePixels.addAll(canvasPixelData.getRange(i, i + (16 * 4)));
-      }
-
-      var allGreen = true;
-      for (var i = 0; i < leftTilePixels.length; i += 4) {
-        allGreen &= leftTilePixels[i] == 0 &&
-            leftTilePixels[i + 1] == 255 &&
-            leftTilePixels[i + 2] == 0 &&
-            leftTilePixels[i + 3] == 255;
-      }
-      expect(allGreen, true);
-
-      final rightTilePixels = <int>[];
-      for (var i = 69 * 8 * 4; i < ((64 * 23) + (8 * 7)) * 4; i += 64 * 4) {
-        rightTilePixels.addAll(canvasPixelData.getRange(i, i + (16 * 4)));
+        rightTilePixels
+            .addAll(pixelsBeforeFlipGenerated.getRange(i, i + (16 * 4)));
       }
 
       for (var i = 0; i < rightTilePixels.length; i += 4) {
@@ -264,6 +238,39 @@ void main() {
             rightTilePixels[i + 1] == 0 &&
             rightTilePixels[i + 2] == 0 &&
             rightTilePixels[i + 3] == 0;
+      }
+      expect(allGreen, true);
+    });
+
+    test(
+        '''[After flipped atlas generated] Green tile pixels are in correct spots''',
+        () {
+      final leftTilePixels = <int>[];
+      for (var i = 65 * 8 * 4; i < ((64 * 23) + (8 * 3)) * 4; i += 64 * 4) {
+        leftTilePixels
+            .addAll(pixelsAfterFlipGenerated.getRange(i, i + (16 * 4)));
+      }
+
+      var allGreen = true;
+      for (var i = 0; i < leftTilePixels.length; i += 4) {
+        allGreen &= leftTilePixels[i] == 0 &&
+            leftTilePixels[i + 1] == 255 &&
+            leftTilePixels[i + 2] == 0 &&
+            leftTilePixels[i + 3] == 255;
+      }
+      expect(allGreen, true);
+
+      final rightTilePixels = <int>[];
+      for (var i = 69 * 8 * 4; i < ((64 * 23) + (8 * 7)) * 4; i += 64 * 4) {
+        rightTilePixels
+            .addAll(pixelsAfterFlipGenerated.getRange(i, i + (16 * 4)));
+      }
+
+      for (var i = 0; i < rightTilePixels.length; i += 4) {
+        allGreen &= rightTilePixels[i] == 0 &&
+            rightTilePixels[i + 1] == 255 &&
+            rightTilePixels[i + 2] == 0 &&
+            rightTilePixels[i + 3] == 255;
       }
       expect(allGreen, true);
     });
@@ -614,6 +621,7 @@ void main() {
         mapPath: 'test/assets/test_isometric.tmx',
       );
       component = await TiledComponent.load('test_isometric.tmx', size);
+      await component.tileMap.waitForGeneratingFlippedAtlas();
     });
     test('from all layers', () {
       var stack = component.tileMap.tileStack(0, 0, all: true);
