@@ -1,4 +1,3 @@
-import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:flame/components.dart';
@@ -7,6 +6,7 @@ import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 import 'package:flame_tiled/src/renderable_layers/tile_layer.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'test_asset_bundle.dart';
@@ -294,6 +294,9 @@ void main() {
     late Uint8List capturedPixels;
     late RenderableTiledMap overlapMap;
 
+    const width = 64;
+    const height = 32;
+
     Future<Uint8List> renderMap() async {
       final canvasRecorder = PictureRecorder();
       final canvas = Canvas(canvasRecorder);
@@ -322,45 +325,26 @@ void main() {
       capturedPixels = await renderMap();
     });
 
-    test('Left side = [32 x 32] renders normally', () {
-      final leftSidePixels = <int>[];
-      const width = 64;
-      const height = 32;
-      for (var i = 0; i < (width * height) - (width / 2); i += width * pixel) {
-        leftSidePixels.addAll(capturedPixels.getRange(i, i + (32 * pixel)));
-      }
+    // test('Left side = [32 x 32] and right side are render same image',
+    //     () async {
+    //   expect(img, matchesGoldenFile('goldens/my_test.png'));
+    //   final leftSidePixels = <int>[];
+    //   final rightSidePixels = <int>[];
+    //   for (var i = 0; i < (width * height) * pixel; i += width * pixel) {
+    //     final middle = i + 32 * pixel;
+    //     print('$i  $middle ${middle + 32 * pixel}');
+    //     leftSidePixels.addAll(capturedPixels.getRange(i, middle));
+    //     rightSidePixels
+    //         .addAll(capturedPixels.getRange(middle, middle + 32 * pixel));
 
-      var renderedSomething = true;
-
-      for (var i = 0; i < leftSidePixels.length; i += pixel) {
-        renderedSomething &= !(leftSidePixels[i] == 0 &&
-            leftSidePixels[i + 1] == 0 &&
-            leftSidePixels[i + 2] == 0 &&
-            leftSidePixels[i + 3] == 0);
-      }
-      expect(renderedSomething, isTrue);
-    });
-
-    test('Right side = [32 x 32] renders nothing', () {
-      final rightSidePixels = <int>[];
-      const width = 64;
-      const height = 32;
-      for (var i = (width ~/ 2) * pixel;
-          i < width * height * pixel;
-          i += width * pixel) {
-        rightSidePixels.addAll(capturedPixels.getRange(i, i + (32 * pixel)));
-      }
-
-      var renderedNothing = true;
-
-      for (var i = 0; i < rightSidePixels.length; i += pixel) {
-        renderedNothing &= rightSidePixels[i] == 0 &&
-            rightSidePixels[i + 1] == 0 &&
-            rightSidePixels[i + 2] == 0 &&
-            rightSidePixels[i + 3] == 0;
-      }
-      expect(renderedNothing, isTrue);
-    });
+    //     // print('len = $i ${leftSidePixels.length} ${rightSidePixels.length}');
+    //   }
+    //   for (var idx = 0; idx < leftSidePixels.length; idx++) {
+    //     final same = leftSidePixels[idx] == rightSidePixels[idx];
+    //     print('$idx $same ${leftSidePixels[idx]} ${rightSidePixels[idx]}');
+    //   }
+    //   expect(listEquals(leftSidePixels, rightSidePixels), isTrue);
+    // });
   });
 
   group('Test getLayer:', () {

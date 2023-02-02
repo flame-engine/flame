@@ -279,9 +279,8 @@ class SpriteBatch {
     }
 
     _batchItems.add(batchItem);
-
     _sources.add(
-      flip
+      flip && _applyFlip
           ? Rect.fromLTWH(
               (atlas.width * (!_atlasReady ? 2 : 1)) - source.right,
               source.top,
