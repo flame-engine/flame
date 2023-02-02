@@ -2,8 +2,7 @@ import 'dart:async';
 import 'dart:typed_data';
 import 'dart:ui';
 
-import 'package:flame/src/extensions/color.dart';
-import 'package:flame/src/extensions/vector2.dart';
+import 'package:flame/extensions.dart';
 
 export 'dart:ui' show Image;
 
@@ -89,5 +88,14 @@ extension ImageExtension on Image {
       newPixelData[i + 3] = color.alpha;
     }
     return fromPixels(newPixelData, width, height);
+  }
+
+  Future<Image> flip() async {
+    final recorder = PictureRecorder();
+    final canvas = Canvas(recorder);
+    final _emptyPaint = Paint();
+    canvas.scale(-1, 1);
+    canvas.drawImage(this, Offset(-width.toDouble(), 0), _emptyPaint);
+    return recorder.endRecording().toImageSafe(width, height);
   }
 }

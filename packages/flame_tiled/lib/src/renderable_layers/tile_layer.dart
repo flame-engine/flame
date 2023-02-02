@@ -1,5 +1,6 @@
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
+import 'package:flame/sprite.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 import 'package:flame_tiled/src/mutable_rect.dart';
 import 'package:flame_tiled/src/mutable_transform.dart';
@@ -19,6 +20,9 @@ class FlameTileLayer extends RenderableLayer<TileLayer> {
   final animations = <TileAnimation>[];
   final Map<Tile, TileFrames> animationFrames;
 
+  TiledAtlas? flippedTiledAtlas;
+  Future<TiledAtlas>? _flippedAtlasGenerated;
+
   FlameTileLayer(
     super.layer,
     super.parent,
@@ -29,6 +33,8 @@ class FlameTileLayer extends RenderableLayer<TileLayer> {
   ) {
     _layerPaint.color = Color.fromRGBO(255, 255, 255, opacity);
   }
+
+  int get _atlasWidth => tiledAtlas.atlas?.width ?? 0;
 
   @override
   void refreshCache() {
@@ -71,11 +77,49 @@ class FlameTileLayer extends RenderableLayer<TileLayer> {
     }
   }
 
+  void addTransform({
+    required Rect src,
+    required RSTransform transform,
+    required SpriteBatch batch,
+    required int atlasWidth,
+    required bool flip,
+  }) {
+    if (flip) {
+      _addTransformWithFlip(atlasWidth, src, transform);
+    } else {
+      batch.addTransform(source: src, transform: transform);
+    }
+  }
+
+  void _addTransformWithFlip(
+    int atlasWidth,
+    Rect src,
+    RSTransform transform,
+  ) {
+    final flippedAtlasGenerated =
+        _flippedAtlasGenerated ??= tiledAtlas.flip().then(
+              (flipped) => flippedTiledAtlas = flipped,
+            );
+
+    flippedAtlasGenerated.then(
+      (flipped) => flippedTiledAtlas?.batch?.addTransform(
+        source: Rect.fromLTWH(
+          atlasWidth - src.right,
+          src.top,
+          src.width,
+          src.height,
+        ),
+        transform: transform,
+      ),
+    );
+  }
+
   void _cacheOrthogonalLayerTiles() {
     final tileData = layer.tileData!;
     final size = destTileSize;
     final halfMapTile = Vector2(map.tileWidth / 2, map.tileHeight / 2);
     final batch = tiledAtlas.batch;
+    final atlasWidth = _atlasWidth;
     if (batch == null) {
       return;
     }
@@ -122,7 +166,7 @@ class FlameTileLayer extends RenderableLayer<TileLayer> {
         final scos = flips.cos * scale;
         final ssin = flips.sin * scale;
 
-        indexes[tx][ty] = MutableRSTransform(
+        final transform = indexes[tx][ty] = MutableRSTransform(
           scos,
           ssin,
           offsetX,
@@ -131,10 +175,12 @@ class FlameTileLayer extends RenderableLayer<TileLayer> {
           -ssin * anchorX - scos * anchorY,
         );
 
-        batch.addTransform(
-          source: src,
-          transform: indexes[tx][ty],
+        addTransform(
           flip: flips.flip,
+          atlasWidth: atlasWidth,
+          src: src,
+          transform: transform,
+          batch: batch,
         );
 
         if (tile.animation.isNotEmpty) {
@@ -152,6 +198,7 @@ class FlameTileLayer extends RenderableLayer<TileLayer> {
     final isometricYShift = halfDestinationTile.y;
     final halfMapTile = Vector2(map.tileWidth / 2, map.tileHeight / 2);
     final batch = tiledAtlas.batch;
+    final atlasWidth = _atlasWidth;
     if (batch == null) {
       return;
     }
@@ -197,7 +244,7 @@ class FlameTileLayer extends RenderableLayer<TileLayer> {
         final scos = flips.cos * scale;
         final ssin = flips.sin * scale;
 
-        indexes[tx][ty] = MutableRSTransform(
+        final transform = indexes[tx][ty] = MutableRSTransform(
           scos,
           ssin,
           offsetX,
@@ -206,10 +253,12 @@ class FlameTileLayer extends RenderableLayer<TileLayer> {
           -ssin * anchorX - scos * anchorY,
         );
 
-        batch.addTransform(
-          source: src,
-          transform: indexes[tx][ty],
+        addTransform(
           flip: flips.flip,
+          atlasWidth: atlasWidth,
+          src: src,
+          transform: transform,
+          batch: batch,
         );
 
         if (tile.animation.isNotEmpty) {
@@ -224,6 +273,7 @@ class FlameTileLayer extends RenderableLayer<TileLayer> {
     final halfDestinationTile = destTileSize / 2;
     final size = destTileSize;
     final halfMapTile = Vector2(map.tileWidth / 2, map.tileHeight / 2);
+    final atlasWidth = _atlasWidth;
     final batch = tiledAtlas.batch;
     if (batch == null) {
       return;
@@ -332,10 +382,12 @@ class FlameTileLayer extends RenderableLayer<TileLayer> {
         if (map.staggerAxis == StaggerAxis.x && staggerY > 0) {
           xSecondPass.add(TileTransform(src, transform, flips.flip, batch));
         } else {
-          batch.addTransform(
-            source: src,
-            transform: transform,
+          addTransform(
             flip: flips.flip,
+            atlasWidth: atlasWidth,
+            src: src,
+            transform: transform,
+            batch: batch,
           );
         }
         if (tile.animation.isNotEmpty) {
@@ -344,10 +396,12 @@ class FlameTileLayer extends RenderableLayer<TileLayer> {
       }
 
       for (final tile in xSecondPass) {
-        tile.batch.addTransform(
-          source: tile.source,
-          transform: tile.transform,
+        addTransform(
           flip: tile.flip,
+          atlasWidth: atlasWidth,
+          src: tile.source,
+          transform: tile.transform,
+          batch: batch,
         );
       }
     }
@@ -358,6 +412,7 @@ class FlameTileLayer extends RenderableLayer<TileLayer> {
     final halfDestinationTile = destTileSize / 2;
     final size = destTileSize;
     final halfMapTile = Vector2(map.tileWidth / 2, map.tileHeight / 2);
+    final atlasWidth = _atlasWidth;
     final batch = tiledAtlas.batch;
     if (batch == null) {
       return;
@@ -465,10 +520,12 @@ class FlameTileLayer extends RenderableLayer<TileLayer> {
         if (map.staggerAxis == StaggerAxis.x && staggerY > 0) {
           xSecondPass.add(TileTransform(src, transform, flips.flip, batch));
         } else {
-          batch.addTransform(
-            source: src,
-            transform: transform,
+          addTransform(
             flip: flips.flip,
+            atlasWidth: atlasWidth,
+            src: src,
+            transform: transform,
+            batch: batch,
           );
         }
         if (tile.animation.isNotEmpty) {
@@ -477,10 +534,12 @@ class FlameTileLayer extends RenderableLayer<TileLayer> {
       }
 
       for (final tile in xSecondPass) {
-        tile.batch.addTransform(
-          source: tile.source,
-          transform: tile.transform,
+        addTransform(
           flip: tile.flip,
+          atlasWidth: atlasWidth,
+          src: tile.source,
+          transform: tile.transform,
+          batch: batch,
         );
       }
     }
@@ -501,6 +560,7 @@ class FlameTileLayer extends RenderableLayer<TileLayer> {
     }
 
     tiledAtlas.batch!.render(canvas, paint: _layerPaint);
+    flippedTiledAtlas?.batch?.render(canvas, paint: _layerPaint);
 
     canvas.restore();
   }

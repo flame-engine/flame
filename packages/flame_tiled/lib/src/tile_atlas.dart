@@ -28,6 +28,18 @@ class TiledAtlas {
   TiledAtlas._(this.atlas, this.offsets, this.key)
       : batch = atlas == null ? null : SpriteBatch(atlas, imageKey: key);
 
+  Future<TiledAtlas> flip() async {
+    final atlasWidth = atlas?.width ?? 0;
+    final flippedAtlas = await atlas?.flip();
+    final flippedOffsets = offsets.map(
+      (imageKey, offset) => MapEntry(
+        imageKey,
+        Offset(atlasWidth - offset.dx, offset.dy),
+      ),
+    );
+    return TiledAtlas._(flippedAtlas, flippedOffsets, '$key#with-flips');
+  }
+
   /// Returns whether or not this atlas contains [source].
   bool contains(String? source) => offsets.containsKey(source);
 
