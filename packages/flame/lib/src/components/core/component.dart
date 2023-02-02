@@ -185,6 +185,7 @@ class Component {
   static const int _initial = 0;
   static const int _loading = 1;
   static const int _loaded = 2;
+  static const int _mounting = 32;
   static const int _mounted = 4;
   static const int _removing = 8;
   static const int _removed = 16;
@@ -197,6 +198,11 @@ class Component {
   /// Whether this component has completed its [onLoad] step.
   bool get isLoaded => (_state & _loaded) != 0;
   void _setLoadedBit() => _state |= _loaded;
+
+  @internal
+  bool get isMounting => (_state & _mounting) != 0;
+  void _setMountingBit() => _state |= _mounting;
+  void _clearMountingBit() => _state &= ~_mounting;
 
   /// Whether this component is currently added to a component tree.
   bool get isMounted => (_state & _mounted) != 0;
@@ -575,33 +581,10 @@ class Component {
   /// A component can be removed even before it finishes mounting, however such
   /// component cannot be added back into the tree until it at least finishes
   /// loading.
-  void remove(Component component) {
-    assert(
-      component._parent != null,
-      "Trying to remove a component that doesn't belong to any parent",
-    );
-    assert(
-      component._parent == this,
-      'Trying to remove a component that belongs to a different parent: this = '
-      "$this, component's parent = ${component._parent}",
-    );
-    if (!isMounted) {
-      _children?.remove(component);
-    }
-    if (component._state == _initial) {
-      component._parent = null;
-    } else if (component.isLoading) {
-      if (component.isLoaded) {
-        component._parent = null;
-        component._clearLoadingBit();
-      } else {
-        component._setRemovingBit();
-      }
-    } else if (!component.isRemoving) {
-      lifecycle._removals.add(component);
-      component._setRemovingBit();
-    }
-  }
+  void remove(Component component) => _removeChild(component);
+
+  /// Remove the component from its parent in the next tick.
+  void removeFromParent() => _parent?._removeChild(this);
 
   /// Removes all the children in the list and calls [onRemove] for all of them
   /// and their children.
@@ -611,16 +594,52 @@ class Component {
 
   /// Removes all the children for which the [test] function returns true.
   void removeWhere(bool Function(Component component) test) {
-    children.forEach((component) {
+    for (final component in children) {
       if (test(component)) {
         remove(component);
       }
-    });
+    }
   }
 
-  /// Remove the component from its parent in the next tick.
-  void removeFromParent() {
-    _parent?.remove(this);
+  void _removeChild(Component child) {
+    assert(
+      child._parent != null,
+      "Trying to remove a component that doesn't belong to any parent",
+    );
+    assert(
+      child._parent == this,
+      'Trying to remove a component that belongs to a different parent: this = '
+      "$this, component's parent = ${child._parent}",
+    );
+    if (isMounted) {
+      final root = findGame()! as ComponentTreeRoot;
+      if (child.isMounted || child.isMounting) {
+        if (!child.isRemoving) {
+          root.enqueueRemove(child, this);
+          child._setRemovingBit();
+        }
+      } else {
+        root.dequeueAdd(child, this);
+        child._parent = null;
+      }
+    } else {
+      _children?.remove(child);
+      child._parent = null;
+    }
+
+    // if (child._state == _initial) {
+    //   child._parent = null;
+    // } else if (child.isLoading) {
+    //   if (child.isLoaded) {
+    //     child._parent = null;
+    //     child._clearLoadingBit();
+    //   } else {
+    //     child._setRemovingBit();
+    //   }
+    // } else if (!child.isRemoving) {
+    //   lifecycle._removals.add(child);
+    //   child._setRemovingBit();
+    // }
   }
 
   /// Changes the current parent for another parent and prepares the tree under
@@ -773,6 +792,17 @@ class Component {
     }
   }
 
+  @internal
+  LifecycleEventStatus handleLifecycleEventRemove(Component parent) {
+    if (_parent == null) {
+      parent._children?.remove(this);
+    } else {
+      _remove();
+      assert(_parent == null);
+    }
+    return LifecycleEventStatus.done;
+  }
+
   @mustCallSuper
   @internal
   void handleResize(Vector2 size) {
@@ -799,6 +829,7 @@ class Component {
   }
 
   void _finishLoading() {
+    _clearLoadingBit();
     _setLoadedBit();
     _lifecycleManager?.finishLoading();
   }
@@ -806,11 +837,11 @@ class Component {
   /// Mount the component that is already loaded and has a mounted parent.
   void _mount() {
     assert(_parent != null && _parent!.isMounted);
-    assert(isLoaded);
-    if (!isLoading) {
-      onGameResize(findGame()!.canvasSize);
-    }
-    _clearLoadingBit();
+    assert(isLoaded && !isLoading);
+    // if (!isLoading) {
+    //   onGameResize(findGame()!.canvasSize);
+    // }
+    _setMountingBit();
     if (isRemoved) {
       _clearRemovedBit();
     } else if (isRemoving) {
@@ -827,6 +858,7 @@ class Component {
     _reAddChildren();
     _lifecycleManager?.processQueues();
     _parent!.onChildrenChanged(this, ChildrenChangeType.added);
+    _clearMountingBit();
   }
 
   /// Used by [_reAddChildren].
@@ -864,20 +896,18 @@ class Component {
     _parent!.children.remove(this);
     propagateToChildren(
       (Component component) {
-        component.onRemove();
-        component._clearMountedBit();
-        component._clearRemovingBit();
-        component._parent = null;
-        component._finishRemoving();
+        component
+          ..onRemove()
+          .._clearMountedBit()
+          .._clearRemovingBit()
+          .._setRemovedBit()
+          .._lifecycleManager?.finishRemoving()
+          .._parent!.onChildrenChanged(component, ChildrenChangeType.removed)
+          .._parent = null;
         return true;
       },
       includeSelf: true,
     );
-  }
-
-  void _finishRemoving() {
-    _setRemovedBit();
-    _lifecycleManager?.finishRemoving();
   }
 
   //#endregion
@@ -1052,9 +1082,9 @@ class _LifecycleManager {
   void _processAdoptionQueue() {
     while (_adoption.isNotEmpty) {
       final child = _adoption.removeFirst();
-      final oldParent = child._parent;
+      // final oldParent = child._parent;
       child._remove();
-      oldParent?.onChildrenChanged(child, ChildrenChangeType.removed);
+      // oldParent?.onChildrenChanged(child, ChildrenChangeType.removed);
       child._parent = owner;
       child._mount();
     }

@@ -192,7 +192,6 @@ void main() {
             'onLoad',
             'onMount',
             'onRemove',
-            'onGameResize [800.0,600.0]',
             'onMount',
           ],
         );
@@ -375,7 +374,8 @@ void main() {
           final component = ComponentWithSizeHistory();
           game.add(component);
           expect(component.history, equals([Vector2(800, 600)]));
-          expect(component.isLoading, true);
+          expect(component.isLoading, false);
+          expect(component.isLoaded, true);
           expect(component.isMounted, false);
           game.onGameResize(Vector2(500, 300));
           game.onGameResize(Vector2(300, 500));
@@ -560,7 +560,6 @@ void main() {
           await game.ready();
 
           expect(game.children.length, 0);
-          expect(component.isLoaded, true);
           expect(component.isMounted, false);
         },
       );
@@ -613,12 +612,46 @@ void main() {
               'onGameResize [800.0,600.0]',
               'onLoad',
               '--',
-              'onGameResize [800.0,600.0]',
               'onMount',
             ],
           );
         },
       );
+
+      testWithFlameGame('remove a tree of components', (game) async {
+        final component1 = Component();
+        final component2 = Component();
+        final component3 = Component();
+        component1.addAll([component2, component3]);
+        game.add(component1);
+        await game.ready();
+
+        expect(component1.isMounted, true);
+        expect(component2.isMounted, true);
+        expect(component3.isMounted, true);
+        component1.removeFromParent();
+        component1.remove(component2);
+        await game.ready();
+
+        expect(component1.isMounted, false);
+        expect(component2.isMounted, false);
+        expect(component3.isMounted, false);
+
+        game.add(component1);
+        game.add(component2);
+        await game.ready();
+
+        expect(component1.isMounted, true);
+        expect(component2.isMounted, true);
+        expect(component3.isMounted, true);
+        expect(game.children.length, 2);
+        expect(component1.children.length, 1);
+
+        game.descendants().forEach((component) {
+          expect(component.isMounted, true);
+          expect(component.parent!.children.contains(component), true);
+        });
+      });
 
       testWithFlameGame(
         'remove component from a paused game',
