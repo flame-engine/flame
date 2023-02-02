@@ -17,8 +17,10 @@ mixin ProgressListener<M> on Component {
       game != null,
       "Notifier can't be used without Game",
     );
-    assert(game is HasProgressNotifier,
-        'Game must have HasProgressNotifier mixin');
+    assert(
+      game is HasProgressNotifier,
+      'Game must have HasProgressNotifier mixin',
+    );
     return game! as HasProgressNotifier;
   }
 
