@@ -44,6 +44,9 @@ class GameLoadProgressNotifier<M> {
   }
 
   Future<void> _startOnLoadWithStream() async {
+    if (_externalLoaderFuture == null) {
+      return;
+    }
     await _externalLoaderFuture?.call();
     _externalLoaderFuture = null;
     _onLoadCompleter.complete();

@@ -119,12 +119,16 @@ class ProgressMessage {
 class ExampleBuilder extends LoadingWidgetBuilder<ProgressMessage> {
   /// A global key to let Flutter know, that [AnimatedSwitcher] is the same
   /// both in [buildOnMessage] and at [buildTransitionToGame]
-  static final animatedSwitcherKey = GlobalKey();
+  final _animatedSwitcherKey = GlobalKey();
+
+  /// A key to make [AnimatedSwitcher] feel the difference between new and old
+  /// widget
+  final _loadingScreenKey = GlobalKey();
 
   @override
   Widget buildOnMessage(BuildContext context, ProgressMessage message) {
     return AnimatedSwitcher(
-      key: animatedSwitcherKey,
+      key: _animatedSwitcherKey,
       duration: const Duration(seconds: 3),
       child: _buildLoadingScreen(message.text, message.progress),
     );
@@ -132,6 +136,7 @@ class ExampleBuilder extends LoadingWidgetBuilder<ProgressMessage> {
 
   Widget _buildLoadingScreen(String message, int progress) =>
       LoadingScreenExampleWidget(
+        key: _loadingScreenKey,
         text: message,
         progress: progress / 100,
       );
@@ -139,7 +144,7 @@ class ExampleBuilder extends LoadingWidgetBuilder<ProgressMessage> {
   @override
   Widget buildTransitionToGame(BuildContext context) {
     return AnimatedSwitcher(
-      key: animatedSwitcherKey,
+      key: _animatedSwitcherKey,
       duration: const Duration(seconds: 10),
       child: gameWidget,
     );
