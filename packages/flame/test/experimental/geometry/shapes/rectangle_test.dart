@@ -208,5 +208,20 @@ void main() {
       );
       expect(rectangle.support(Vector2(9, -200)), closeToVector(Vector2(9, 2)));
     });
+
+    test('nearestPoint', () {
+      final rectangle = Rectangle.fromLTRB(0, 0, 5, 4);
+
+      expect(rectangle.nearestPoint(Vector2(0, 0)), Vector2(0, 0));
+      expect(rectangle.nearestPoint(Vector2(1, -1)), Vector2(1, 0));
+      expect(rectangle.nearestPoint(Vector2(-1, -1)), Vector2(0, 0));
+      expect(rectangle.nearestPoint(Vector2(-3, 2)), Vector2(0, 2));
+      expect(rectangle.nearestPoint(Vector2(-3, 7)), Vector2(0, 4));
+      expect(rectangle.nearestPoint(Vector2(-3, 7)), Vector2(0, 4));
+      expect(rectangle.nearestPoint(Vector2(3, 7)), Vector2(3, 4));
+      expect(rectangle.nearestPoint(Vector2(7, 7)), Vector2(5, 4));
+      expect(rectangle.nearestPoint(Vector2(17, 1)), Vector2(5, 1));
+      expect(rectangle.nearestPoint(Vector2(8, -2)), Vector2(5, 0));
+    });
   });
 }
