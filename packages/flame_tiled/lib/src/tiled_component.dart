@@ -87,13 +87,13 @@ class TiledComponent<T extends FlameGame> extends PositionComponent
     String fileName,
     Vector2 destTileSize, {
     int? priority,
-    bool? applyFlip,
+    bool? allowFlip,
   }) async {
     return TiledComponent(
       await RenderableTiledMap.fromFile(
         fileName,
         destTileSize,
-        applyFlip: applyFlip,
+        allowFlip: allowFlip,
       ),
       priority: priority,
     );

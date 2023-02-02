@@ -289,7 +289,7 @@ void main() {
     });
   });
 
-  group('No flipped tile is rendered if [applyFlip = false] with sprite batch:',
+  group('No flipped tile is rendered if [allowFlip = false] with sprite batch:',
       () {
     late Uint8List capturedPixels;
     late RenderableTiledMap overlapMap;
@@ -318,13 +318,14 @@ void main() {
       overlapMap = await RenderableTiledMap.fromFile(
         '8_tiles-flips.tmx',
         Vector2.all(16),
-        applyFlip: false,
+        allowFlip: false,
       );
 
       await Flame.images.ready();
       capturedPixels = await renderMap();
     });
 
+    // TODO(hwanseok): work in progress.
     // test('Left side = [32 x 32] and right side are render same image',
     //     () async {
     //   expect(img, matchesGoldenFile('goldens/my_test.png'));
