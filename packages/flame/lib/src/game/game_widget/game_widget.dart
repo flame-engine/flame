@@ -385,7 +385,7 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
                           ..errorBuilder = widget.errorBuilder;
                         return loadingProgressBuilder.createBuilder(
                           stream,
-                          gameWithProgress.progressNotifier.onLoadFuture,
+                          gameWithProgress.onLoadWithProgressFuture,
                         );
                       } else {
                         return FutureBuilder(

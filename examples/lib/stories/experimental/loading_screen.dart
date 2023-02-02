@@ -23,13 +23,13 @@ class LoadingScreenExample extends FlameGame
   @override
   FutureOr<void> onLoad() async {
     /// the message will be send to loading screen, if the one is specified
-    progressNotifier.reportLoadingProgress(
+    reportLoadingProgress(
       const ProgressMessage(text: 'onLoad started', progress: 1),
     );
 
     await Future<void>.delayed(const Duration(seconds: 1));
 
-    progressNotifier.reportLoadingProgress(
+    reportLoadingProgress(
       const ProgressMessage(
         text: 'Something happen while loading...',
         progress: 50,
@@ -38,7 +38,7 @@ class LoadingScreenExample extends FlameGame
 
     await Future<void>.delayed(const Duration(seconds: 5));
 
-    progressNotifier.reportLoadingProgress(
+    reportLoadingProgress(
       const ProgressMessage(
         text: '...almost done!..',
         progress: 90,
@@ -67,7 +67,7 @@ class LoadingScreenExample extends FlameGame
 
     await Future<void>.delayed(const Duration(seconds: 5));
 
-    progressNotifier.reportLoadingProgress(
+    reportLoadingProgress(
       const ProgressMessage(
         text: 'Finished! Be ready to play!',
         progress: 100,
@@ -86,7 +86,7 @@ class LoadingScreenExample extends FlameGame
     final probability = Random().nextInt(100);
     if (probability < 1) {
       messagesSent++;
-      progressNotifier.reportLoadingProgress(
+      reportLoadingProgress(
         ProgressMessage(
           text: 'The notification message #$messagesSent',
           progress: (anyProgressEmulation * 100).toInt(),
