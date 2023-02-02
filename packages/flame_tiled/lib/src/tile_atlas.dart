@@ -76,7 +76,7 @@ class TiledAtlas {
 
   /// Loads all the tileset images for the [map] into one [TiledAtlas].
   /// By default, [batch] renders flipped tile if exists.
-  /// You can shut it down by passing [applyFlip] as false.
+  /// You can disable it by passing [applyFlip] as false.
   static Future<TiledAtlas> fromTiledMap(
     TiledMap map, {
     bool? applyFlip,

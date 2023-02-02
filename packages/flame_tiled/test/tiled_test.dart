@@ -195,7 +195,7 @@ void main() {
       overlapMap.render(canvas);
       final picture = canvasRecorder.endRecording();
 
-      final image = await picture.toImageSafe(64, 48);
+      final image = await picture.toImageSafe(64, 32);
       final bytes = await image.toByteData();
       return bytes!.buffer.asUint8List();
     }
@@ -286,6 +286,80 @@ void main() {
             rightTilePixels[i + 3] == 255;
       }
       expect(allGreen, true);
+    });
+  });
+
+  group('No flipped tile is rendered if [applyFlip = false] with sprite batch:',
+      () {
+    late Uint8List capturedPixels;
+    late RenderableTiledMap overlapMap;
+
+    Future<Uint8List> renderMap() async {
+      final canvasRecorder = PictureRecorder();
+      final canvas = Canvas(canvasRecorder);
+      overlapMap.render(canvas);
+      final picture = canvasRecorder.endRecording();
+
+      final image = await picture.toImageSafe(64, 32);
+      final bytes = await image.toByteData();
+      return bytes!.buffer.asUint8List();
+    }
+
+    setUp(() async {
+      Flame.bundle = TestAssetBundle(
+        imageNames: [
+          '4_color_sprite.png',
+        ],
+        mapPath: 'test/assets/8_tiles-flips.tmx',
+      );
+      overlapMap = await RenderableTiledMap.fromFile(
+        '8_tiles-flips.tmx',
+        Vector2.all(16),
+        applyFlip: false,
+      );
+
+      await Flame.images.ready();
+      capturedPixels = await renderMap();
+    });
+
+    test('Left side = [32 x 32] renders normally', () {
+      final leftSidePixels = <int>[];
+      const width = 64;
+      const height = 32;
+      for (var i = 0; i < (width * height) - (width / 2); i += width * pixel) {
+        leftSidePixels.addAll(capturedPixels.getRange(i, i + (32 * pixel)));
+      }
+
+      var renderedSomething = true;
+
+      for (var i = 0; i < leftSidePixels.length; i += pixel) {
+        renderedSomething &= !(leftSidePixels[i] == 0 &&
+            leftSidePixels[i + 1] == 0 &&
+            leftSidePixels[i + 2] == 0 &&
+            leftSidePixels[i + 3] == 0);
+      }
+      expect(renderedSomething, isTrue);
+    });
+
+    test('Right side = [32 x 32] renders nothing', () {
+      final rightSidePixels = <int>[];
+      const width = 64;
+      const height = 32;
+      for (var i = (width ~/ 2) * pixel;
+          i < width * height * pixel;
+          i += width * pixel) {
+        rightSidePixels.addAll(capturedPixels.getRange(i, i + (32 * pixel)));
+      }
+
+      var renderedNothing = true;
+
+      for (var i = 0; i < rightSidePixels.length; i += pixel) {
+        renderedNothing &= rightSidePixels[i] == 0 &&
+            rightSidePixels[i + 1] == 0 &&
+            rightSidePixels[i + 2] == 0 &&
+            rightSidePixels[i + 3] == 0;
+      }
+      expect(renderedNothing, isTrue);
     });
   });
 
