@@ -13,6 +13,9 @@ class GameLoadProgressNotifier<M> {
   StreamController<M>? _loadingStreamController;
 
   _LoadingFutureFactory? _externalLoaderFuture;
+  final _onLoadCompleter = Completer<void>();
+
+  Future<void> get onLoadFuture => _onLoadCompleter.future;
 
   /// Sends a message to all subscribers
   void reportLoadingProgress(M message) =>
@@ -43,6 +46,7 @@ class GameLoadProgressNotifier<M> {
   Future<void> _startOnLoadWithStream() async {
     await _externalLoaderFuture?.call();
     _externalLoaderFuture = null;
+    _onLoadCompleter.complete();
   }
 
   void dispose() {

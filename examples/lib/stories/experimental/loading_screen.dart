@@ -27,22 +27,6 @@ class LoadingScreenExample extends FlameGame {
   double anyProgressEmulation = 0;
   int messagesSent = 0;
 
-  bool _gameLoadingFinished = false;
-
-  set gameLoadingFinished(bool finished) {
-    _gameLoadingFinished = finished;
-    if (finished) {
-      progressNotifier.reportLoadingProgress(
-        const ProgressMessage(
-          text: 'Finished! Be ready to play!',
-          progress: 100,
-        ),
-      );
-    }
-  }
-
-  bool get gameLoadingFinished => _gameLoadingFinished;
-
   @override
   FutureOr<void> onLoad() async {
     /// the message will be send to loading screen, if the one is specified
@@ -90,11 +74,14 @@ class LoadingScreenExample extends FlameGame {
 
     await Future<void>.delayed(const Duration(seconds: 5));
 
-    /// You should to decide, what type of message would be trigger for
-    /// showing game widget. You should to sent such message manually and
-    /// also manually build game widget in loading screen component.
-    /// See [LoadingWidgetBuilder.buildTransitionToGame]
-    gameLoadingFinished = true;
+    progressNotifier.reportLoadingProgress(
+      const ProgressMessage(
+        text: 'Finished! Be ready to play!',
+        progress: 100,
+      ),
+    );
+
+    await Future<void>.delayed(const Duration(seconds: 1));
 
     return super.onLoad();
   }
@@ -132,7 +119,7 @@ class ProgressMessage {
 class ExampleBuilder extends LoadingWidgetBuilder<ProgressMessage> {
   /// A global key to let Flutter know, that [AnimatedSwitcher] is the same
   /// both in [buildOnMessage] and at [buildTransitionToGame]
-  final animatedSwitcherKey = GlobalKey();
+  static final animatedSwitcherKey = GlobalKey();
 
   @override
   Widget buildOnMessage(BuildContext context, ProgressMessage message) {
@@ -153,14 +140,10 @@ class ExampleBuilder extends LoadingWidgetBuilder<ProgressMessage> {
   Widget buildTransitionToGame(BuildContext context) {
     return AnimatedSwitcher(
       key: animatedSwitcherKey,
-      duration: const Duration(seconds: 3),
+      duration: const Duration(seconds: 10),
       child: gameWidget,
     );
   }
-
-  @override
-  bool isGameLoadingFinished(ProgressMessage message) =>
-      (game as LoadingScreenExample).gameLoadingFinished;
 }
 
 /// The loading screen widget with animated progress bar anf fade effect
@@ -246,11 +229,6 @@ class InGameProgressText extends TextComponent
     x = 10;
     y = verticalPosition;
     text = 'This will show in-game progress message';
-  }
-
-  @override
-  FutureOr<void> onLoad() {
-    return super.onLoad();
   }
 
   /// Just change the text here, but you might to do some more complex!

@@ -372,14 +372,19 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
                       currentGame.onGameResize(size);
                       final loadingProgressBuilder =
                           widget.loadingProgressBuilder;
-                      final stream = currentGame.progressNotifier
-                          ?.initStreamLoader(() => loaderFuture);
-                      if (loadingProgressBuilder != null && stream != null) {
+                      final progressNotifier = currentGame.progressNotifier;
+                      if (loadingProgressBuilder != null &&
+                          progressNotifier != null) {
+                        final stream = progressNotifier
+                            .initStreamLoader(() => loaderFuture);
                         loadingProgressBuilder
                           ..gameWidget = Stack(children: stackedWidgets)
                           ..game = currentGame
                           ..errorBuilder = widget.errorBuilder;
-                        return loadingProgressBuilder.createBuilder(stream);
+                        return loadingProgressBuilder.createBuilder(
+                          stream,
+                          progressNotifier.onLoadFuture,
+                        );
                       } else {
                         return FutureBuilder(
                           future: loaderFuture,

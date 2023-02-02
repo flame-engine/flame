@@ -20,14 +20,13 @@ abstract class LoadingWidgetBuilder<M> {
   late Game game;
   late GameErrorWidgetBuilder? errorBuilder;
 
-  final _loadingCompleter = Completer<void>();
-
   /// StreamBuilder wrapped by FutureBuilder. When game loading process is
   /// finished, FutureBuilder removes StreamBuilder from widgets thee. This
   /// allows to avoid unnecessary rebuilds on every future progress messages
   /// received from the game.
-  Widget createBuilder(Stream<M> stream) => FutureBuilder<void>(
-        future: _loadingCompleter.future,
+  Widget createBuilder(Stream<M> stream, Future<void> onLoadComplete) =>
+      FutureBuilder<void>(
+        future: onLoadComplete,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             return buildTransitionToGame(context);
@@ -55,11 +54,7 @@ abstract class LoadingWidgetBuilder<M> {
     }
 
     if (snapshot.hasData) {
-      final message = snapshot.data as M;
-      if (isGameLoadingFinished(message)) {
-        _loadingCompleter.complete();
-      }
-      return buildOnMessage(context, message);
+      return buildOnMessage(context, snapshot.data as M);
     }
 
     return Container();
@@ -72,10 +67,4 @@ abstract class LoadingWidgetBuilder<M> {
   /// Function is responsible for rendering game widget, optionally with a
   /// transition animation from loading screen.
   Widget buildTransitionToGame(BuildContext context);
-
-  /// While receiving messages, StreamBuilder checks, if the message indicating
-  /// that loading process is finished. If true, the [buildTransitionToGame]
-  /// will be invoked instead of StreamBuilder. See [buildOnStreamData] for
-  /// details
-  bool isGameLoadingFinished(M message);
 }
