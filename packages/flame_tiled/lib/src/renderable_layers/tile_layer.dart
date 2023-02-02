@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame/sprite.dart';
@@ -21,7 +23,7 @@ class FlameTileLayer extends RenderableLayer<TileLayer> {
   final Map<Tile, TileFrames> animationFrames;
 
   TiledAtlas? flippedTiledAtlas;
-  Future<TiledAtlas>? _flippedAtlasGenerated;
+  Completer<TiledAtlas>? _flippedAtlasCompleter;
 
   FlameTileLayer(
     super.layer,
@@ -96,13 +98,10 @@ class FlameTileLayer extends RenderableLayer<TileLayer> {
     Rect src,
     RSTransform transform,
   ) {
-    final flippedAtlasGenerated =
-        _flippedAtlasGenerated ??= tiledAtlas.flip().then(
-              (flipped) => flippedTiledAtlas = flipped,
-            );
+    final completer = _flippedAtlasCompleter ??= _createFlipAtlasCompleter();
 
-    flippedAtlasGenerated.then(
-      (flipped) => flippedTiledAtlas?.batch?.addTransform(
+    completer.future.then((generatedFlippedAtlas) {
+      generatedFlippedAtlas.batch?.addTransform(
         source: Rect.fromLTWH(
           atlasWidth - src.right,
           src.top,
@@ -110,8 +109,17 @@ class FlameTileLayer extends RenderableLayer<TileLayer> {
           src.height,
         ),
         transform: transform,
-      ),
-    );
+      );
+    });
+  }
+
+  Completer<TiledAtlas> _createFlipAtlasCompleter() {
+    final completer = Completer<TiledAtlas>();
+    tiledAtlas
+        .flip()
+        .then((generatedAtlas) => flippedTiledAtlas = generatedAtlas)
+        .then(completer.complete);
+    return completer;
   }
 
   void _cacheOrthogonalLayerTiles() {
@@ -145,7 +153,7 @@ class FlameTileLayer extends RenderableLayer<TileLayer> {
           return;
         }
 
-        final spriteOffset = tiledAtlas.offsets[img.source]!;
+        final spriteOffset = tiledAtlas.imageKeyToOffsets[img.source]!;
         final src = MutableRect.fromRect(
           tileset
               .computeDrawRect(tile)
@@ -223,7 +231,7 @@ class FlameTileLayer extends RenderableLayer<TileLayer> {
           return;
         }
 
-        final spriteOffset = tiledAtlas.offsets[img.source]!;
+        final spriteOffset = tiledAtlas.imageKeyToOffsets[img.source]!;
         final src = MutableRect.fromRect(
           tileset
               .computeDrawRect(tile)
@@ -325,7 +333,7 @@ class FlameTileLayer extends RenderableLayer<TileLayer> {
           return;
         }
 
-        final spriteOffset = tiledAtlas.offsets[img.source]!;
+        final spriteOffset = tiledAtlas.imageKeyToOffsets[img.source]!;
         final src = MutableRect.fromRect(
           tileset
               .computeDrawRect(tile)
@@ -464,7 +472,7 @@ class FlameTileLayer extends RenderableLayer<TileLayer> {
           return;
         }
 
-        final spriteOffset = tiledAtlas.offsets[img.source]!;
+        final spriteOffset = tiledAtlas.imageKeyToOffsets[img.source]!;
         final src = MutableRect.fromRect(
           tileset
               .computeDrawRect(tile)
@@ -597,7 +605,7 @@ class FlameTileLayer extends RenderableLayer<TileLayer> {
           continue;
         }
 
-        final spriteOffset = tiledAtlas.offsets[image.source]!;
+        final spriteOffset = tiledAtlas.imageKeyToOffsets[image.source]!;
         final rect = tileset
             .computeDrawRect(newTile)
             .toRect()

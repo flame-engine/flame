@@ -261,9 +261,9 @@ void main() {
 
       for (var i = 0; i < rightTilePixels.length; i += 4) {
         allGreen &= rightTilePixels[i] == 0 &&
-            rightTilePixels[i + 1] == 255 &&
+            rightTilePixels[i + 1] == 0 &&
             rightTilePixels[i + 2] == 0 &&
-            rightTilePixels[i + 3] == 255;
+            rightTilePixels[i + 3] == 0;
       }
       expect(allGreen, true);
     });

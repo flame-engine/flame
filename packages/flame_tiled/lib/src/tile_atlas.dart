@@ -14,7 +14,8 @@ class TiledAtlas {
   final Image? atlas;
 
   /// Map of all source images to their new offset.
-  final Map<String, Offset> offsets;
+  /// this is empty if flipped TiledAtlas.
+  final Map<String, Offset> imageKeyToOffsets;
 
   /// The single batch operation for this atlas.
   final SpriteBatch? batch;
@@ -25,27 +26,23 @@ class TiledAtlas {
   /// Track one atlas for all images in the Tiled map.
   ///
   /// See [fromTiledMap] for asynchronous loading.
-  TiledAtlas._(this.atlas, this.offsets, this.key)
+  TiledAtlas._(this.atlas, this.imageKeyToOffsets, this.key)
       : batch = atlas == null ? null : SpriteBatch(atlas, imageKey: key);
 
   Future<TiledAtlas> flip() async {
-    final atlasWidth = atlas?.width ?? 0;
     final flippedAtlas = await atlas?.flip();
-    final flippedOffsets = offsets.map(
-      (imageKey, offset) => MapEntry(
-        imageKey,
-        Offset(atlasWidth - offset.dx, offset.dy),
-      ),
-    );
-    return TiledAtlas._(flippedAtlas, flippedOffsets, '$key#with-flips');
+
+    /// offsets are intend to be omitted since its not used and it needs
+    /// width of each source images to create.
+    return TiledAtlas._(flippedAtlas, {}, '$key#with-flips');
   }
 
   /// Returns whether or not this atlas contains [source].
-  bool contains(String? source) => offsets.containsKey(source);
+  bool contains(String? source) => imageKeyToOffsets.containsKey(source);
 
   /// Create a new atlas from this object with the intent of getting a new
   /// [SpriteBatch].
-  TiledAtlas clone() => TiledAtlas._(atlas?.clone(), offsets, key);
+  TiledAtlas clone() => TiledAtlas._(atlas?.clone(), imageKeyToOffsets, key);
 
   /// Maps of tilesets compiled to [TiledAtlas].
   @visibleForTesting

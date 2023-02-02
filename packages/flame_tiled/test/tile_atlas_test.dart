@@ -47,7 +47,7 @@ void main() {
         );
 
         expect(atlas.atlas, isNull);
-        expect(atlas.offsets, isEmpty);
+        expect(atlas.imageKeyToOffsets, isEmpty);
         expect(atlas.batch, isNull);
         expect(atlas.key, 'atlas{empty}');
         expect(atlas.clone().key, 'atlas{empty}');
@@ -77,7 +77,7 @@ void main() {
           simpleMap,
         );
 
-        expect(atlas.offsets, hasLength(1));
+        expect(atlas.imageKeyToOffsets, hasLength(1));
         expect(atlas.atlas, isNotNull);
         expect(atlas.atlas!.width, 128);
         expect(atlas.atlas!.height, 74);
