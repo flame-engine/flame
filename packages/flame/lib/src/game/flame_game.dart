@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flame/components.dart';
+import 'package:flame/src/components/core/component_tree_root.dart';
 import 'package:flame/src/game/camera/camera.dart';
 import 'package:flame/src/game/camera/camera_wrapper.dart';
 import 'package:flame/src/game/game.dart';
@@ -14,7 +15,7 @@ import 'package:meta/meta.dart';
 ///
 /// This is the recommended base class to use for most games made with Flame.
 /// It is based on the Flame Component System (also known as FCS).
-class FlameGame extends Component with Game {
+class FlameGame extends ComponentTreeRoot with Game {
   FlameGame({
     super.children,
     Camera? camera,
@@ -83,6 +84,7 @@ class FlameGame extends Component with Game {
 
   @override
   void updateTree(double dt) {
+    processLifecycleEvents();
     lifecycle.processQueues();
     children.updateComponentList();
     if (parent != null) {
@@ -127,6 +129,8 @@ class FlameGame extends Component with Game {
       // Give chance to other futures to execute first
       await Future<void>.delayed(Duration.zero);
       repeat = false;
+      processLifecycleEvents();
+      repeat |= hasLifecycleEvents;
       descendants(includeSelf: true).forEach(
         (Component child) {
           child.processPendingLifecycleEvents();

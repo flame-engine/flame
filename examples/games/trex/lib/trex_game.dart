@@ -42,7 +42,7 @@ class TRexGame extends FlameGame
   String scoreString(int score) => score.toString().padLeft(5, '0');
 
   /// Used for score calculation
-  double _distanceTravelled = 0;
+  double _distanceTraveled = 0;
 
   @override
   Future<void> onLoad() async {
@@ -128,7 +128,7 @@ class TRexGame extends FlameGame
       _highscore = score;
     }
     score = 0;
-    _distanceTravelled = 0;
+    _distanceTraveled = 0;
   }
 
   @override
@@ -140,8 +140,8 @@ class TRexGame extends FlameGame
 
     if (isPlaying) {
       timePlaying += dt;
-      _distanceTravelled += dt * currentSpeed;
-      score = _distanceTravelled ~/ 50;
+      _distanceTraveled += dt * currentSpeed;
+      score = _distanceTraveled ~/ 50;
 
       if (currentSpeed < maxSpeed) {
         currentSpeed += acceleration * dt;

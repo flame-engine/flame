@@ -9,7 +9,7 @@ Svg support is provided by the `flame_svg` bridge package, be sure to put it in 
 to use it.
 
 If you want to know more about the installation visit
-[flame_svg on pubdev](https://pub.dev/packages/flame_svg/install).
+[flame_svg on pub.dev](https://pub.dev/packages/flame_svg/install).
 
 
 ## How to use flame_svg

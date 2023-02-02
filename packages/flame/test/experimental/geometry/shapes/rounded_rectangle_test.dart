@@ -228,5 +228,27 @@ void main() {
         throwsUnimplementedError,
       );
     });
+
+    test('nearestPoint', () {
+      final rrect = RoundedRectangle.fromLTRBR(0, 0, 50, 30, 10);
+
+      expect(
+        rrect.nearestPoint(Vector2(0, 0)),
+        Vector2(2.9289321881345254, 2.9289321881345254),
+      );
+      expect(
+        rrect.nearestPoint(Vector2(0, -10)),
+        Vector2(5.52786404500042, 1.0557280900008408),
+      );
+      expect(rrect.nearestPoint(Vector2(10, -10)), Vector2(10, 0));
+      expect(rrect.nearestPoint(Vector2(30, -10)), Vector2(30, 0));
+      expect(
+        rrect.nearestPoint(Vector2(55, 5)),
+        Vector2(49.48683298050514, 6.83772233983162),
+      );
+      expect(rrect.nearestPoint(Vector2(60, 15)), Vector2(50, 15));
+      expect(rrect.nearestPoint(Vector2(20, 150)), Vector2(20, 30));
+      expect(rrect.nearestPoint(Vector2(100, 100)), Vector2(46, 28));
+    });
   });
 }
