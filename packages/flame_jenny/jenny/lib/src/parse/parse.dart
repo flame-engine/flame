@@ -965,12 +965,6 @@ class _Parser {
   }
 }
 
-typedef FunctionBuilder = Expression Function(
-  List<FunctionArgument>,
-  YarnProject,
-  ErrorFn,
-);
-
 class _NodeHeader {
   _NodeHeader(this.title, this.tags);
   String? title;
