@@ -275,7 +275,7 @@ class SpriteBatch {
       color: color ?? defaultColor,
     );
 
-    if (_allowFlip && flip && useAtlas && !_hasFlips) {
+    if (flip && _allowFlip && useAtlas && !_hasFlips) {
       _makeFlippedAtlas();
     }
 
