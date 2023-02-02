@@ -11,7 +11,7 @@ import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
 
 /// {@template flame_image_response}
-/// A class containg the relevant http attributes to
+/// A class containing the relevant http attributes to
 /// Flame Images Network package.
 /// {@endtemplate}
 class FlameImageResponse {
@@ -44,17 +44,17 @@ typedef GetAppDirectoryFunction = Future<Directory> Function();
 /// loading images from the assets bundle, it loads from networks urls.
 ///
 /// By default, [FlameNetworkImages] uses [http.get] method to make the requests
-/// ,that can be custumized by passing a different [GetImageFunction] to the get
+/// ,that can be customized by passing a different [GetImageFunction] to the get
 /// argument on the constructor.
 ///
 /// [FlameNetworkImages] also will also automatically cache files in a two layer
 /// system.
 ///
 /// The first layer is an in memory cache, handled by an internal [MemoryCache],
-/// while the second is the device own's file system, where images are cached in
-/// the application document directoy, which by default is provided by
+/// while the second is the device own file system, where images are cached in
+/// the application document directory, which by default is provided by
 /// path_providers' [getApplicationDocumentsDirectory] method, and can be
-/// custumized using the getAppDirectory argument in the constructor.
+/// customized using the getAppDirectory argument in the constructor.
 ///
 /// When an image is requested, [FlameImageResponse] will first check on its
 /// cache layers before making the http request, if both layer are cache miss,
@@ -67,7 +67,7 @@ typedef GetAppDirectoryFunction = Future<Directory> Function();
 ///
 /// Note that the local storage layer is not present when running on web since
 /// that platform doesn't really have a file system. The Browse caching will
-/// work as similar replacemente for this layer, though that can't be controlled
+/// work as similar replacement for this layer, though that can't be controlled
 /// this package, make sure that the server where the images are being fetched
 /// returns the correct cache header to make the browser cache the assets.
 ///
