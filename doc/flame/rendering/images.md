@@ -119,6 +119,45 @@ class MyGame extends Game {
 }
 ```
 
+## Loading images from the network
+
+Flame core package doesn't offer a built in method to loading images from the network.
+
+The reason for that is that Flutter/Dart does not have a built in http client, which required
+a package to be used and since there are a couple of packages available out there, we refrain
+from forcing, on even pushing the user in a specific package.
+
+With that said, it is quite simple to load images from the network once a http client package
+is chosen by the user. The following snippet shows how an `Image` can be fetched from the web
+using the [http](https://pub.dev/packages/http) package.
+
+```dart
+import 'package:http/http.dart' as http;
+import 'package:flutter/painting.dart';
+
+final response = await http.get('https://url.com/image.png');
+final image = await decodeImageFromList(response.bytes);
+```
+
+## FlameNetworkImages
+
+The snippet above can be enough for simple games, or simple features of some games, but
+more than often, developers will want to cache the images that were fetched from the web.
+
+To help in that regards, Flame provides a package that makes is easy to fetch images from the
+network, with automatic memory and file system cache.
+
+To use it, just add the `flame_network_image` package to your project and use the following
+code to fetch images:
+
+```dart
+final networkImages = FlameNetworkImages();
+final charSprite = await networkImages.load('https://url.com/image.png');
+```
+
+By default, that package relies on the `http` package to make http requests, and `path_provider`
+to get the place to store the local cache, to use a different approach for those, check the
+optional arguments in `FlameNetworkImages` constructor in order to customize that.
 
 ## Sprite
 

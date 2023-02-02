@@ -128,7 +128,7 @@ class FlameNetworkImages {
       return memoryCacheValue;
     }
 
-    if (!_isWeb) {
+    if (!_isWeb && cacheInStorage) {
       final storageImage = await _fetchFileFromStorageCache(id);
       if (storageImage != null) {
         if (cacheInMemory) {
@@ -160,29 +160,30 @@ class FlameNetworkImages {
   }
 
   Future<Image?> _fetchFileFromStorageCache(String id) async {
-    final appDir = await _getAppDirectory();
-    final file = File(path.join(appDir.path, id));
+    try {
+      final appDir = await _getAppDirectory();
+      final file = File(path.join(appDir.path, id));
 
-    if (file.existsSync()) {
-      try {
+      if (file.existsSync()) {
         final bytes = await file.readAsBytes();
         return await decodeImageFromList(bytes);
-      } on Exception catch (_) {
-        return null;
       }
+    } on Exception catch (_) {
+      return null;
     }
-
     return null;
   }
 
   Future<void> _saveImageInLocalStorage(String id, Image image) async {
-    final appDir = await _getAppDirectory();
-    final file = File(path.join(appDir.path, id));
+    try {
+      final appDir = await _getAppDirectory();
+      final file = File(path.join(appDir.path, id));
 
-    final data = await image.toByteData(format: ImageByteFormat.png);
+      final data = await image.toByteData(format: ImageByteFormat.png);
 
-    if (data != null) {
-      await file.writeAsBytes(data.buffer.asUint8List());
-    }
+      if (data != null) {
+        await file.writeAsBytes(data.buffer.asUint8List());
+      }
+    } on Exception catch (_) {}
   }
 }

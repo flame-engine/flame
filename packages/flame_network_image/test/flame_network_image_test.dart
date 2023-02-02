@@ -84,8 +84,109 @@ void main() {
     });
 
     test('returns the image', () async {
-      final loadedImage = await networkImages.load('https://image1.com');
+      const url = 'https://image1.com';
+      final loadedImage = await networkImages.load(url);
       expect(loadedImage, isA<Image>());
     });
+
+    test('fetches the image in the network', () async {
+      const url = 'https://image2.com';
+      await networkImages.load(url);
+      verify(() => httpClient.get(url)).called(1);
+    });
+
+    test('returns the image from memory once it is cached', () async {
+      const url = 'https://image3.com';
+      final image1 = await networkImages.load(url);
+      final image2 = await networkImages.load(url);
+
+      verify(() => httpClient.get(url)).called(1);
+      verify(pathProvider.getAppDirectory).called(2);
+
+      expect(image1, equals(image2));
+    });
+
+    test('returns the image from local storage', () async {
+      const url = 'https://image4.com';
+
+      final image1 = await networkImages.load(url);
+
+      final secondNetworkImages = FlameNetworkImages(
+        getAppDirectory: pathProvider.getAppDirectory,
+        get: httpClient.get,
+      );
+
+      await Future<void>.delayed(const Duration(milliseconds: 100));
+
+      final image2 = await secondNetworkImages.load(url);
+
+      verify(() => httpClient.get(url)).called(1);
+      verify(pathProvider.getAppDirectory).called(3);
+
+      expect(image1.width, equals(image2.width));
+      expect(image1.height, equals(image2.height));
+    });
+
+    test('can still get the image if the local storage breaks', () async {
+      const url = 'https://image5.com';
+
+      final image1 = await networkImages.load(url);
+
+      final brokenPathProvider = _MockPathProvider();
+      when(brokenPathProvider.getAppDirectory).thenThrow(Exception());
+      final secondNetworkImages = FlameNetworkImages(
+        getAppDirectory: brokenPathProvider.getAppDirectory,
+        get: httpClient.get,
+      );
+
+      await Future<void>.delayed(const Duration(milliseconds: 100));
+
+      final image2 = await secondNetworkImages.load(url);
+
+      verify(() => httpClient.get(url)).called(2);
+
+      expect(image1.width, equals(image2.width));
+      expect(image1.height, equals(image2.height));
+    });
+
+    test('does not cache in memory when cacheInMemory is false', () async {
+      final secondNetworkImages = FlameNetworkImages(
+        getAppDirectory: pathProvider.getAppDirectory,
+        get: httpClient.get,
+        cacheInMemory: false,
+      );
+      const url = 'https://image6.com';
+      final image1 = await secondNetworkImages.load(url);
+      await Future<void>.delayed(const Duration(milliseconds: 100));
+      final image2 = await secondNetworkImages.load(url);
+
+      verify(() => httpClient.get(url)).called(1);
+      verify(pathProvider.getAppDirectory).called(3);
+
+      expect(image1.width, equals(image2.width));
+      expect(image1.height, equals(image2.height));
+    });
+
+    test(
+      'does not cache in local storage when cacheInMemory is false',
+      () async {
+        final secondNetworkImages = FlameNetworkImages(
+          getAppDirectory: pathProvider.getAppDirectory,
+          get: httpClient.get,
+          cacheInMemory: false,
+          cacheInStorage: false,
+        );
+        const url = 'https://image7.com';
+        final image1 = await secondNetworkImages.load(url);
+        await Future<void>.delayed(const Duration(milliseconds: 100));
+        final image2 = await secondNetworkImages.load(url);
+
+        verify(() => httpClient.get(url)).called(2);
+        verifyNever(pathProvider.getAppDirectory);
+
+        expect(image1.width, equals(image2.width));
+        expect(image1.height, equals(image2.height));
+      },
+    );
   });
 }
