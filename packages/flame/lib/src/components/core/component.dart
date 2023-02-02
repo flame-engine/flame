@@ -4,6 +4,7 @@ import 'dart:collection';
 import 'package:collection/collection.dart';
 import 'package:flame/src/cache/value_cache.dart';
 import 'package:flame/src/components/core/component_set.dart';
+import 'package:flame/src/components/core/component_tree_root.dart';
 import 'package:flame/src/components/core/position_type.dart';
 import 'package:flame/src/components/mixins/coordinate_transform.dart';
 import 'package:flame/src/components/mixins/has_game_ref.dart';
@@ -529,7 +530,10 @@ class Component {
   /// try to add it to multiple parents, or even to the same parent multiple
   /// times. If you need to change the parent of a component, use the
   /// [changeParent] method.
-  FutureOr<void> add(Component component) => component.addToParent(this);
+  FutureOr<void> add(Component component) => _addChild(component);
+
+  /// Adds this component as a child of [parent] (see [add] for details).
+  FutureOr<void> addToParent(Component parent) => parent._addChild(this);
 
   /// A convenience method to [add] multiple children at once.
   Future<void> addAll(Iterable<Component> components) {
@@ -543,17 +547,22 @@ class Component {
     return Future.wait(futures);
   }
 
-  /// Adds this component as a child of [parent] (see [add] for details).
-  FutureOr<void> addToParent(Component parent) {
+  FutureOr<void> _addChild(Component child) {
     assert(
-      _parent == null,
-      '$this cannot be added to $parent because it already has a parent: '
-      '$_parent',
+      child._parent == null,
+      '$child cannot be added to $this because it already has a parent: '
+      '${child._parent}',
     );
-    _parent = parent;
-    parent.lifecycle._children.add(this);
-    if (!isLoaded && (parent.findGame()?.hasLayout ?? false)) {
-      return _startLoading();
+    child._parent = this;
+    final game = findGame();
+    if (isMounted) {
+      (game! as FlameGame).enqueueAdd(child, this);
+    } else {
+      // This will be reconciled during the mounting stage
+      children.add(child);
+    }
+    if (!child.isLoaded && !child.isLoading && (game?.hasLayout ?? false)) {
+      return child._startLoading();
     }
   }
 
@@ -576,13 +585,14 @@ class Component {
       'Trying to remove a component that belongs to a different parent: this = '
       "$this, component's parent = ${component._parent}",
     );
+    if (!isMounted) {
+      _children?.remove(component);
+    }
     if (component._state == _initial) {
-      lifecycle._children.remove(component);
       component._parent = null;
     } else if (component.isLoading) {
       if (component.isLoaded) {
         component._parent = null;
-        lifecycle._children.remove(component);
         component._clearLoadingBit();
       } else {
         component._setRemovingBit();
@@ -749,9 +759,24 @@ class Component {
   }
 
   @internal
+  LifecycleEventStatus handleLifecycleEventAdd(Component parent) {
+    assert(!isMounted);
+    if (parent.isMounted && isLoaded) {
+      _parent ??= parent;
+      _mount();
+      return LifecycleEventStatus.done;
+    } else {
+      if (parent.isMounted && !isLoading) {
+        _startLoading();
+      }
+      return LifecycleEventStatus.block;
+    }
+  }
+
+  @mustCallSuper
+  @internal
   void handleResize(Vector2 size) {
-    _children?.forEach((child) => child.onGameResize(size));
-    _lifecycleManager?._children.forEach((child) {
+    _children?.forEach((child) {
       if (child.isLoading || child.isLoaded) {
         child.onGameResize(size);
       }
@@ -779,18 +804,10 @@ class Component {
   }
 
   /// Mount the component that is already loaded and has a mounted parent.
-  ///
-  /// The flag [existingChild] allows us to distinguish between components that
-  /// are new versus those that are already children of their parents. The
-  /// latter ones may exist if a parent was detached from the component tree,
-  /// and later re-mounted. For these components we need to run [onGameResize]
-  /// (since they haven't passed through [add]), but we don't have to add them
-  /// to the parent's children because they are already there.
-  void _mount({Component? parent, bool existingChild = false}) {
-    _parent ??= parent;
+  void _mount() {
     assert(_parent != null && _parent!.isMounted);
     assert(isLoaded);
-    if (existingChild || !isLoading) {
+    if (!isLoading) {
       onGameResize(findGame()!.canvasSize);
     }
     _clearLoadingBit();
@@ -806,21 +823,40 @@ class Component {
     onMount();
     _setMountedBit();
     _lifecycleManager?.finishMounting();
-    if (!existingChild) {
-      _parent!.children.add(this);
-    }
-    if (_children != null) {
-      _children!.forEach(
-        (child) => child._mount(parent: this, existingChild: true),
-      );
-    }
+    _parent!.children.add(this);
+    _reAddChildren();
     _lifecycleManager?.processQueues();
+    _parent!.onChildrenChanged(this, ChildrenChangeType.added);
+  }
+
+  /// Used by [_reAddChildren].
+  static final List<Component> _tmpChildren = [];
+
+  /// At the end of mounting, we remove all children components and then re-add
+  /// them one-by-one. The reason for this is that before the current component
+  /// was mounted, its [children] may have contained components in arbitrary
+  /// state -- initial, loading, unmounted, etc. However, we don't want to
+  /// have such components in a component tree. By removing and then re-adding
+  /// them, we ensure that they are placed in a queue, and will only be placed
+  /// into [children] once they are fully mounted.
+  void _reAddChildren() {
+    if (_children != null && _children!.isNotEmpty) {
+      assert(_tmpChildren.isEmpty);
+      _tmpChildren.addAll(_children!);
+      _children!.clear();
+      for (final child in _tmpChildren) {
+        child._parent = null;
+        _addChild(child);
+      }
+      _tmpChildren.clear();
+    }
   }
 
   @internal
   void setMounted() {
     _setLoadedBit();
     _setMountedBit();
+    _reAddChildren();
   }
 
   void _remove() {
@@ -973,20 +1009,6 @@ class _LifecycleManager {
     _removedCompleter = null;
   }
 
-  /// Queue for adding children to a component.
-  ///
-  /// When the user `add()`s a child to a component, we immediately place it
-  /// into that component's queue, and only after that do the standard lifecycle
-  /// processing: resizing, loading, mounting, etc. After all that is finished,
-  /// the child component is retrieved from the queue and placed into the
-  /// children list.
-  ///
-  /// Since the components are processed in the FIFO order, this ensures that
-  /// they will be added to the parent in exactly the same order as the user
-  /// invoked `add()`s, even though they are loading asynchronously and may
-  /// finish loading in arbitrary order.
-  final Queue<Component> _children = Queue();
-
   /// Queue for removing children from a component.
   ///
   /// Components that were placed into this queue will be removed from [owner]
@@ -1000,8 +1022,7 @@ class _LifecycleManager {
   ///
   /// [Component.removed] is not regarded as a pending event.
   bool get hasPendingEvents {
-    return _children.isNotEmpty ||
-        _removals.isNotEmpty ||
+    return _removals.isNotEmpty ||
         _adoption.isNotEmpty ||
         _mountCompleter != null ||
         _loadCompleter != null;
@@ -1013,25 +1034,8 @@ class _LifecycleManager {
   /// ensure that the components get properly added/removed from the component
   /// tree.
   void processQueues() {
-    _processChildrenQueue();
     _processRemovalQueue();
     _processAdoptionQueue();
-  }
-
-  void _processChildrenQueue() {
-    while (_children.isNotEmpty) {
-      final child = _children.first;
-      assert(child._parent!.isMounted);
-      if (child.isLoaded) {
-        child._mount();
-        _children.removeFirst();
-        owner.onChildrenChanged(child, ChildrenChangeType.added);
-      } else if (child.isLoading) {
-        break;
-      } else {
-        child._startLoading();
-      }
-    }
   }
 
   void _processRemovalQueue() {
@@ -1053,7 +1057,6 @@ class _LifecycleManager {
       oldParent?.onChildrenChanged(child, ChildrenChangeType.removed);
       child._parent = owner;
       child._mount();
-      owner.onChildrenChanged(child, ChildrenChangeType.added);
     }
   }
 }
