@@ -22,9 +22,6 @@ class TiledAtlas {
   /// Image key for this atlas.
   final String key;
 
-  /// Whether apply a flip if its exists in [batch].
-  final bool _applyFlip;
-
   /// Track one atlas for all images in the Tiled map.
   ///
   /// See [fromTiledMap] for asynchronous loading.
@@ -33,10 +30,9 @@ class TiledAtlas {
     required this.offsets,
     required this.key,
     bool? applyFlip,
-  })  : _applyFlip = applyFlip ?? false,
-        batch = atlas == null
+  }) : batch = atlas == null
             ? null
-            : SpriteBatch(atlas, imageKey: key, applyFlip: applyFlip ?? false);
+            : SpriteBatch(atlas, imageKey: key, applyFlip: applyFlip);
 
   /// Returns whether or not this atlas contains [source].
   bool contains(String? source) => offsets.containsKey(source);
@@ -47,7 +43,7 @@ class TiledAtlas {
         atlas: atlas?.clone(),
         offsets: offsets,
         key: key,
-        applyFlip: _applyFlip,
+        applyFlip: batch?.applyFlip,
       );
 
   /// Maps of tilesets compiled to [TiledAtlas].
@@ -93,6 +89,7 @@ class TiledAtlas {
         atlas: null,
         offsets: {},
         key: 'atlas{empty}',
+        applyFlip: applyFlip,
       );
     }
 

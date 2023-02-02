@@ -193,6 +193,7 @@ class SpriteBatch {
   /// The status of the atlas image loading operations.
   bool _atlasReady = true;
 
+  /// Whether apply a flip if exists.
   final bool _applyFlip;
 
   /// The default color, used as a background color for a [BatchItem].
@@ -213,6 +214,8 @@ class SpriteBatch {
 
   /// The size of the [atlas].
   Vector2 get size => atlas.size;
+
+  bool get applyFlip => _applyFlip;
 
   /// Whether to use [Canvas.drawAtlas] or not.
   final bool useAtlas;

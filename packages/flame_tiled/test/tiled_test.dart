@@ -179,6 +179,18 @@ void main() {
   group('Flipped and rotated tiles render correctly with sprite batch:', () {
     late Uint8List canvasPixelData, canvasPixelDataAtlas;
     late RenderableTiledMap overlapMap;
+
+    Future<Uint8List> renderMap() async {
+      final canvasRecorder = PictureRecorder();
+      final canvas = Canvas(canvasRecorder);
+      overlapMap.render(canvas);
+      final picture = canvasRecorder.endRecording();
+
+      final image = await picture.toImageSafe(64, 48);
+      final bytes = await image.toByteData();
+      return bytes!.buffer.asUint8List();
+    }
+
     setUp(() async {
       Flame.bundle = TestAssetBundle(
         imageNames: [
@@ -190,24 +202,10 @@ void main() {
         '8_tiles-flips.tmx',
         Vector2.all(16),
       );
-      final canvasRecorder = PictureRecorder();
-      final canvas = Canvas(canvasRecorder);
-      overlapMap.render(canvas);
-      final picture = canvasRecorder.endRecording();
-
-      final image = await picture.toImageSafe(64, 48);
-      final bytes = await image.toByteData();
-      canvasPixelData = bytes!.buffer.asUint8List();
+      canvasPixelData = await renderMap();
 
       await Flame.images.ready();
-      final canvasRecorderAtlas = PictureRecorder();
-      final canvasAtlas = Canvas(canvasRecorderAtlas);
-      overlapMap.render(canvasAtlas);
-      final pictureAtlas = canvasRecorderAtlas.endRecording();
-
-      final imageAtlas = await pictureAtlas.toImageSafe(64, 48);
-      final bytesAtlas = await imageAtlas.toByteData();
-      canvasPixelDataAtlas = bytesAtlas!.buffer.asUint8List();
+      canvasPixelDataAtlas = await renderMap();
     });
 
     test('[useAtlas = true] Green tile pixels are in correct spots', () {
