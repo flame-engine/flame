@@ -74,18 +74,9 @@ class BoundedPositionBehavior extends Component {
     if (isValidPoint(currentPosition)) {
       _previousPosition.setFrom(currentPosition);
     } else {
-      var inBoundsPoint = _previousPosition;
-      var outOfBoundsPoint = currentPosition;
-      while (inBoundsPoint.taxicabDistanceTo(outOfBoundsPoint) > _precision) {
-        final newPoint = (inBoundsPoint + outOfBoundsPoint)..scale(0.5);
-        if (isValidPoint(newPoint)) {
-          inBoundsPoint = newPoint;
-        } else {
-          outOfBoundsPoint = newPoint;
-        }
-      }
-      _previousPosition.setFrom(inBoundsPoint);
-      _target!.position = inBoundsPoint;
+      final closestBoundaryPoint = _bounds.nearestPoint(currentPosition);
+      _previousPosition.setFrom(closestBoundaryPoint);
+      _target!.position = closestBoundaryPoint;
     }
   }
 }

@@ -271,5 +271,42 @@ void main() {
       expect(result.edges, [z, z, z, z, z]);
       expect(result.isConvex, true);
     });
+
+    test('nearestPoint', () {
+      final polygon = Polygon([
+        Vector2(10, 10),
+        Vector2(20, 30),
+        Vector2(10, 40),
+        Vector2(40, 40),
+        Vector2(50, 0),
+      ]);
+
+      expect(polygon.nearestPoint(Vector2(0, 0)), Vector2(10, 10));
+      expect(
+        polygon.nearestPoint(Vector2(10, 0)),
+        Vector2(12.352941176470589, 9.411764705882353),
+      );
+      expect(polygon.nearestPoint(Vector2(60, 0)), Vector2(50, 0));
+      expect(polygon.nearestPoint(Vector2(10, 30)), Vector2(15, 35));
+      expect(polygon.nearestPoint(Vector2(30, 50)), Vector2(30, 40));
+      expect(polygon.nearestPoint(Vector2(50, 50)), Vector2(40, 40));
+      expect(
+        polygon.nearestPoint(Vector2(50, 20)),
+        Vector2(45.294117647058826, 18.823529411764707),
+      );
+    });
+
+    test('nearestPoint with 0-length edges', () {
+      final polygon = Polygon([
+        Vector2(0, 0),
+        Vector2(10, 10),
+        Vector2(-10, 10),
+        Vector2(0, 0),
+      ]);
+
+      expect(polygon.edges[0].length, 0);
+      expect(polygon.nearestPoint(Vector2(0, -20)), Vector2(0, 0));
+      expect(polygon.nearestPoint(Vector2(5, 20)), Vector2(5, 10));
+    });
   });
 }
