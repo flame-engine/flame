@@ -8,16 +8,12 @@ import 'package:flutter/widgets.dart';
 /// three functions with user-defined logic:
 /// - [buildOnMessage] - this function is responsible on building loading screen
 ///   using data from received progress message
-/// - [isGameLoadingFinished] - while receiving messages, StreamBuilder checks,
-///   if the message indicating that loading process is finished. If true,
-///   the [buildTransitionToGame] will be invoked instead of StreamBuilder. See
-///   [buildOnStreamData] for details
 /// - [buildTransitionToGame] is responsible for rendering game widget,
 ///   optionally with a transition animation from loading screen.
 
 abstract class LoadingWidgetBuilder<M> {
   late Widget gameWidget;
-  late Game game;
+  late HasProgressNotifier game;
   late GameErrorWidgetBuilder? errorBuilder;
 
   /// StreamBuilder wrapped by FutureBuilder. When game loading process is

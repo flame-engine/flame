@@ -11,13 +11,15 @@ mixin ProgressListener<M> on Component {
   /// The function is subscribed on notifications
   void onProgressMessage(M message);
 
-  Game get _gameRef {
+  HasProgressNotifier get _gameRefWithProgress {
     final game = findGame();
     assert(
       game != null,
       "Notifier can't be used without Game",
     );
-    return game!;
+    assert(game is HasProgressNotifier,
+        'Game must have HasProgressNotifier mixin');
+    return game! as HasProgressNotifier;
   }
 
   StreamSubscription<M>? _streamSubscription;
@@ -26,13 +28,9 @@ mixin ProgressListener<M> on Component {
   @mustCallSuper
   void onMount() {
     super.onMount();
-    final stream = _gameRef.progressNotifier?.getInGameStream() as Stream<M>?;
-    assert(
-      stream != null,
-      'The progressNotifier is not initialized',
-    );
 
-    _streamSubscription = stream!.listen(onProgressMessage);
+    final stream = _gameRefWithProgress.messagingStream as Stream<M>;
+    _streamSubscription = stream.listen(onProgressMessage);
   }
 
   @override

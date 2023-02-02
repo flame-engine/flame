@@ -7,7 +7,8 @@ import 'package:flame/game.dart';
 import 'package:flame/widgets.dart';
 import 'package:flutter/material.dart' hide Image, Draggable;
 
-class LoadingScreenExample extends FlameGame {
+class LoadingScreenExample extends FlameGame
+    with HasProgressNotifier<ProgressMessage> {
   LoadingScreenExample();
 
   static const description = '''
@@ -15,14 +16,6 @@ class LoadingScreenExample extends FlameGame {
   The loading screen and in-game components are using the same API and same 
   message stream.
   ''';
-
-  final _progressNotifier = GameLoadProgressNotifier<ProgressMessage>();
-
-  /// Override [progressNotifier] getter with specifying target message type.
-  /// Is necessary to avoid [dynamic] types.
-  @override
-  GameLoadProgressNotifier<ProgressMessage> get progressNotifier =>
-      _progressNotifier;
 
   double anyProgressEmulation = 0;
   int messagesSent = 0;
