@@ -221,11 +221,17 @@ class Component {
   void _setRemovedBit() => _state |= _removed;
   void _clearRemovedBit() => _state &= ~_removed;
 
+  Completer<void>? _loadCompleter;
+
   /// A future that completes when this component finishes loading.
   ///
   /// If the component is already loaded (see [isLoaded]), this returns an
   /// already completed future.
-  Future<void> get loaded => isLoaded ? Future.value() : lifecycle.loadFuture;
+  Future<void> get loaded {
+    return isLoaded
+        ? Future.value()
+        : (_loadCompleter ??= Completer<void>()).future;
+  }
 
   /// A future that will complete once the component is mounted on its parent.
   ///
@@ -823,7 +829,8 @@ class Component {
   void _finishLoading() {
     _clearLoadingBit();
     _setLoadedBit();
-    _lifecycleManager?.finishLoading();
+    _loadCompleter?.complete();
+    _loadCompleter = null;
   }
 
   /// Mount the component that is already loaded and has a mounted parent.
@@ -994,13 +1001,7 @@ class _LifecycleManager {
   final Component owner;
 
   Completer<void>? _mountCompleter;
-  Completer<void>? _loadCompleter;
   Completer<void>? _removedCompleter;
-
-  Future<void> get loadFuture {
-    _loadCompleter ??= Completer<void>();
-    return _loadCompleter!.future;
-  }
 
   Future<void> get mountFuture {
     _mountCompleter ??= Completer<void>();
@@ -1010,11 +1011,6 @@ class _LifecycleManager {
   Future<void> get removeFuture {
     _removedCompleter ??= Completer<void>();
     return _removedCompleter!.future;
-  }
-
-  void finishLoading() {
-    _loadCompleter?.complete();
-    _loadCompleter = null;
   }
 
   void finishMounting() {
@@ -1031,6 +1027,6 @@ class _LifecycleManager {
   ///
   /// [Component.removed] is not regarded as a pending event.
   bool get hasPendingEvents {
-    return _mountCompleter != null || _loadCompleter != null;
+    return _mountCompleter != null;
   }
 }
