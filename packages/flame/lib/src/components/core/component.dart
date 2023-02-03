@@ -782,9 +782,15 @@ class Component {
 
   @internal
   LifecycleEventStatus handleLifecycleEventMove(Component newParent) {
-    _remove();
-    _parent = newParent;
-    _mount();
+    if (_parent != null) {
+      _remove();
+    }
+    if (newParent.isMounted) {
+      _parent = newParent;
+      _mount();
+    } else {
+      newParent.add(this);
+    }
     return LifecycleEventStatus.done;
   }
 
