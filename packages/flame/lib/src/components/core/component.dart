@@ -626,20 +626,6 @@ class Component {
       _children?.remove(child);
       child._parent = null;
     }
-
-    // if (child._state == _initial) {
-    //   child._parent = null;
-    // } else if (child.isLoading) {
-    //   if (child.isLoaded) {
-    //     child._parent = null;
-    //     child._clearLoadingBit();
-    //   } else {
-    //     child._setRemovingBit();
-    //   }
-    // } else if (!child.isRemoving) {
-    //   lifecycle._removals.add(child);
-    //   child._setRemovingBit();
-    // }
   }
 
   /// Changes the current parent for another parent and prepares the tree under
@@ -1039,12 +1025,6 @@ class _LifecycleManager {
     _removedCompleter = null;
   }
 
-  /// Queue for removing children from a component.
-  ///
-  /// Components that were placed into this queue will be removed from [owner]
-  /// when the pending events are resolved.
-  final Queue<Component> _removals = Queue();
-
   /// Queue for moving components from another parent to this one.
   final Queue<Component> _adoption = Queue();
 
@@ -1052,8 +1032,7 @@ class _LifecycleManager {
   ///
   /// [Component.removed] is not regarded as a pending event.
   bool get hasPendingEvents {
-    return _removals.isNotEmpty ||
-        _adoption.isNotEmpty ||
+    return _adoption.isNotEmpty ||
         _mountCompleter != null ||
         _loadCompleter != null;
   }
@@ -1064,27 +1043,13 @@ class _LifecycleManager {
   /// ensure that the components get properly added/removed from the component
   /// tree.
   void processQueues() {
-    _processRemovalQueue();
     _processAdoptionQueue();
-  }
-
-  void _processRemovalQueue() {
-    while (_removals.isNotEmpty) {
-      final component = _removals.removeFirst();
-      if (component.isMounted) {
-        component._remove();
-        owner.onChildrenChanged(component, ChildrenChangeType.removed);
-      }
-      assert(!component.isMounted);
-    }
   }
 
   void _processAdoptionQueue() {
     while (_adoption.isNotEmpty) {
       final child = _adoption.removeFirst();
-      // final oldParent = child._parent;
       child._remove();
-      // oldParent?.onChildrenChanged(child, ChildrenChangeType.removed);
       child._parent = owner;
       child._mount();
     }
