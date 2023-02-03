@@ -824,9 +824,6 @@ class Component {
   void _mount() {
     assert(_parent != null && _parent!.isMounted);
     assert(isLoaded && !isLoading);
-    // if (!isLoading) {
-    //   onGameResize(findGame()!.canvasSize);
-    // }
     _setMountingBit();
     if (isRemoved) {
       _clearRemovedBit();
