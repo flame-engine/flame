@@ -47,6 +47,9 @@ class TiledAtlas {
       );
 
   /// Maps of tilesets compiled to [TiledAtlas].
+  ///
+  /// This is recommended to be cleared on test setUp. Otherwise it
+  /// could lead to unexpected behavior
   @visibleForTesting
   static final atlasMap = <String, TiledAtlas>{};
 

@@ -6,6 +6,7 @@ import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 import 'package:flame_tiled/src/renderable_layers/tile_layer.dart';
+import 'package:flame_tiled/src/tile_atlas.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -24,6 +25,7 @@ void main() {
   const pixel = 4;
   TestWidgetsFlutterBinding.ensureInitialized();
 
+  setUp(TiledAtlas.atlasMap.clear);
   group('TiledComponent', () {
     late TiledComponent tiled;
     setUp(() async {
@@ -289,63 +291,46 @@ void main() {
     });
   });
 
-  group('No flipped tile is rendered if [allowFlip = false] with sprite batch:',
-      () {
-    late Uint8List capturedPixels;
-    late RenderableTiledMap overlapMap;
+  group('Texture generation', () {
+    Image? texture;
+    Uint8List? rendered;
 
-    const width = 64;
-    const height = 32;
-
-    Future<Uint8List> renderMap() async {
-      final canvasRecorder = PictureRecorder();
-      final canvas = Canvas(canvasRecorder);
-      overlapMap.render(canvas);
-      final picture = canvasRecorder.endRecording();
-
-      final image = await picture.toImageSafe(64, 32);
-      final bytes = await image.toByteData();
-      return bytes!.buffer.asUint8List();
-    }
-
-    setUp(() async {
+    Future<void> prepareForImages({required bool allowFlip}) async {
       Flame.bundle = TestAssetBundle(
         imageNames: [
           '4_color_sprite.png',
         ],
         mapPath: 'test/assets/8_tiles-flips.tmx',
       );
-      overlapMap = await RenderableTiledMap.fromFile(
-        '8_tiles-flips.tmx',
-        Vector2.all(16),
-        allowFlip: false,
+      final tiledComponent = TiledComponent(
+        await RenderableTiledMap.fromFile(
+          '8_tiles-flips.tmx',
+          Vector2.all(16),
+          allowFlip: allowFlip,
+        ),
       );
 
       await Flame.images.ready();
-      capturedPixels = await renderMap();
+
+      texture = (tiledComponent.tileMap.renderableLayers[0] as FlameTileLayer)
+          .tiledAtlas
+          .batch
+          ?.atlas;
+
+      rendered = await renderMapToPng(tiledComponent);
+    }
+
+    test('Texture flips well', () async {
+      await prepareForImages(allowFlip: true);
+      expect(texture, matchesGoldenFile('goldens/texture_with_flip.png'));
+      expect(rendered, matchesGoldenFile('goldens/rendered_with_flip.png'));
     });
 
-    // TODO(hwanseok): work in progress.
-    // test('Left side = [32 x 32] and right side are render same image',
-    //     () async {
-    //   expect(img, matchesGoldenFile('goldens/my_test.png'));
-    //   final leftSidePixels = <int>[];
-    //   final rightSidePixels = <int>[];
-    //   for (var i = 0; i < (width * height) * pixel; i += width * pixel) {
-    //     final middle = i + 32 * pixel;
-    //     print('$i  $middle ${middle + 32 * pixel}');
-    //     leftSidePixels.addAll(capturedPixels.getRange(i, middle));
-    //     rightSidePixels
-    //         .addAll(capturedPixels.getRange(middle, middle + 32 * pixel));
-
-    //     // print('len = $i ${leftSidePixels.length} ${rightSidePixels.length}');
-    //   }
-    //   for (var idx = 0; idx < leftSidePixels.length; idx++) {
-    //     final same = leftSidePixels[idx] == rightSidePixels[idx];
-    //     print('$idx $same ${leftSidePixels[idx]} ${rightSidePixels[idx]}');
-    //   }
-    //   expect(listEquals(leftSidePixels, rightSidePixels), isTrue);
-    // });
+    test('Texture not flip', () async {
+      await prepareForImages(allowFlip: false);
+      expect(texture, matchesGoldenFile('goldens/texture_non_flip.png'));
+      expect(rendered, matchesGoldenFile('goldens/rendered_non_flip.png'));
+    });
   });
 
   group('Test getLayer:', () {
