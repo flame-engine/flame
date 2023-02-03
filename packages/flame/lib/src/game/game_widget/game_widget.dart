@@ -5,7 +5,7 @@ import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flame/src/game/game_render_box.dart';
 import 'package:flame/src/game/game_widget/gestures.dart';
-import 'package:flame/src/widgets/loading_widget_builder.dart';
+import 'package:flame/src/game/game_widget/loading_widget_builder.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
