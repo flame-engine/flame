@@ -130,12 +130,6 @@ class FlameGame extends ComponentTreeRoot with Game {
       repeat = false;
       processLifecycleEvents();
       repeat |= hasLifecycleEvents;
-      descendants(includeSelf: true).forEach(
-        (Component child) {
-          child.processPendingLifecycleEvents();
-          repeat |= child.hasPendingLifecycleEvents;
-        },
-      );
     }
   }
 
@@ -170,12 +164,10 @@ class FlameGame extends ComponentTreeRoot with Game {
         return notifier;
       }
     }
-
     final notifier = ComponentsNotifier<T>(
       descendants().whereType<T>().toList(),
     );
     notifiers.add(notifier);
-
     return notifier;
   }
 

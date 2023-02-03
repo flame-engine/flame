@@ -222,6 +222,8 @@ class Component {
   void _clearRemovedBit() => _state &= ~_removed;
 
   Completer<void>? _loadCompleter;
+  Completer<void>? _mountCompleter;
+  Completer<void>? _removeCompleter;
 
   /// A future that completes when this component finishes loading.
   ///
@@ -237,15 +239,21 @@ class Component {
   ///
   /// If the component is already mounted (see [isMounted]), this returns an
   /// already completed future.
-  Future<void> get mounted =>
-      isMounted ? Future.value() : lifecycle.mountFuture;
+  Future<void> get mounted {
+    return isMounted
+        ? Future.value()
+        : (_mountCompleter ??= Completer<void>()).future;
+  }
 
   /// A future that completes when this component is removed from its parent.
   ///
   /// If the component is already removed (see [isRemoved]), this returns an
   /// already completed future.
-  Future<void> get removed =>
-      isRemoved ? Future.value() : lifecycle.removeFuture;
+  Future<void> get removed {
+    return isRemoved
+        ? Future.value()
+        : (_removeCompleter ??= Completer<void>()).future;
+  }
 
   //#endregion
 
@@ -746,27 +754,6 @@ class Component {
 
   //#region Internal lifecycle management
 
-  @protected
-  _LifecycleManager get lifecycle {
-    return _lifecycleManager ??= _LifecycleManager(this);
-  }
-
-  _LifecycleManager? _lifecycleManager;
-
-  bool get hasPendingLifecycleEvents {
-    return _lifecycleManager?.hasPendingEvents ?? false;
-  }
-
-  /// Attempt to resolve any pending lifecycle events on this component.
-  void processPendingLifecycleEvents() {
-    if (_lifecycleManager != null) {
-      if (!_lifecycleManager!.hasPendingEvents &&
-          _lifecycleManager!._removedCompleter == null) {
-        _lifecycleManager = null;
-      }
-    }
-  }
-
   @internal
   LifecycleEventStatus handleLifecycleEventAdd(Component parent) {
     assert(!isMounted);
@@ -849,7 +836,8 @@ class Component {
     debugMode |= _parent!.debugMode;
     onMount();
     _setMountedBit();
-    _lifecycleManager?.finishMounting();
+    _mountCompleter?.complete();
+    _mountCompleter = null;
     _parent!.children.add(this);
     _reAddChildren();
     _parent!.onChildrenChanged(this, ChildrenChangeType.added);
@@ -896,7 +884,8 @@ class Component {
           .._clearMountedBit()
           .._clearRemovingBit()
           .._setRemovedBit()
-          .._lifecycleManager?.finishRemoving()
+          .._removeCompleter?.complete()
+          .._removeCompleter = null
           .._parent!.onChildrenChanged(component, ChildrenChangeType.removed)
           .._parent = null;
         return true;
@@ -986,47 +975,3 @@ class Component {
 typedef ComponentSetFactory = ComponentSet Function();
 
 enum ChildrenChangeType { added, removed }
-
-/// Helper class to assist [Component] with its lifecycle.
-///
-/// Most lifecycle events -- add, remove, change parent -- live for a very short
-/// period of time, usually until the next game tick. When such events are
-/// resolved, there is no longer a need to carry around their supporting event
-/// queues. Which is why these queues are placed into a separate class, so that
-/// they can be easily disposed of at the end.
-class _LifecycleManager {
-  _LifecycleManager(this.owner);
-
-  /// The component which is the owner of this [_LifecycleManager].
-  final Component owner;
-
-  Completer<void>? _mountCompleter;
-  Completer<void>? _removedCompleter;
-
-  Future<void> get mountFuture {
-    _mountCompleter ??= Completer<void>();
-    return _mountCompleter!.future;
-  }
-
-  Future<void> get removeFuture {
-    _removedCompleter ??= Completer<void>();
-    return _removedCompleter!.future;
-  }
-
-  void finishMounting() {
-    _mountCompleter?.complete();
-    _mountCompleter = null;
-  }
-
-  void finishRemoving() {
-    _removedCompleter?.complete();
-    _removedCompleter = null;
-  }
-
-  /// Whether or not there are any pending lifecycle events for this component.
-  ///
-  /// [Component.removed] is not regarded as a pending event.
-  bool get hasPendingEvents {
-    return _mountCompleter != null;
-  }
-}
