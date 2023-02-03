@@ -83,6 +83,9 @@ class TiledComponent<T extends FlameGame> extends PositionComponent
   }
 
   /// Loads a [TiledComponent] from a file.
+  ///
+  /// By default, [RenderableTiledMap] renders flipped tile if exists.
+  /// You can disable it by passing [ignoreFlip] as `true`.
   static Future<TiledComponent> load(
     String fileName,
     Vector2 destTileSize, {
