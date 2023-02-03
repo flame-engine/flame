@@ -297,6 +297,19 @@ void main() {
           expect(a.size, isNot(Vector2.all(100)));
         },
       );
+
+      testWithFlameGame('mixin onGameResizeBeforeMount', (game) async {
+        final component = _LegacyComponent()..addToParent(game);
+        await game.ready();
+
+        component.removeFromParent();
+        game.update(0);
+        component.events.clear();
+        component.addToParent(game);
+
+        game.update(0);
+        expect(component.events, ['onGameResize[800.0,600.0]', 'onMount']);
+      });
     });
 
     group('Adding components', () {
@@ -1211,6 +1224,23 @@ class _GameResizeComponent extends PositionComponent {
   void onGameResize(Vector2 gameSize) {
     super.onGameResize(gameSize);
     this.gameSize = gameSize;
+  }
+}
+
+// ignore: deprecated_member_use_from_same_package
+class _LegacyComponent extends Component with OnGameResizeBeforeMount {
+  final List<String> events = [];
+
+  @override
+  void onGameResize(Vector2 size) {
+    super.onGameResize(size);
+    events.add('onGameResize$size');
+  }
+
+  @override
+  void onMount() {
+    super.onMount();
+    events.add('onMount');
   }
 }
 

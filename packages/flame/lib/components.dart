@@ -23,6 +23,7 @@ export 'src/components/mixins/has_paint.dart';
 export 'src/components/mixins/hoverable.dart';
 export 'src/components/mixins/keyboard_handler.dart';
 export 'src/components/mixins/notifier.dart';
+export 'src/components/mixins/on_game_resize_before_mount.dart';
 export 'src/components/mixins/parent_is_a.dart';
 export 'src/components/mixins/single_child_particle.dart';
 export 'src/components/mixins/tappable.dart';
