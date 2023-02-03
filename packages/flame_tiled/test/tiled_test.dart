@@ -295,7 +295,7 @@ void main() {
     Image? texture;
     Uint8List? rendered;
 
-    Future<void> prepareForImages({required bool allowFlip}) async {
+    Future<void> prepareForGolden({required bool ignoreFlip}) async {
       Flame.bundle = TestAssetBundle(
         imageNames: [
           '4_color_sprite.png',
@@ -306,7 +306,7 @@ void main() {
         await RenderableTiledMap.fromFile(
           '8_tiles-flips.tmx',
           Vector2.all(16),
-          allowFlip: allowFlip,
+          ignoreFlip: ignoreFlip,
         ),
       );
 
@@ -321,13 +321,13 @@ void main() {
     }
 
     test('Texture flips well', () async {
-      await prepareForImages(allowFlip: true);
+      await prepareForGolden(ignoreFlip: true);
       expect(texture, matchesGoldenFile('goldens/texture_with_flip.png'));
       expect(rendered, matchesGoldenFile('goldens/rendered_with_flip.png'));
     });
 
     test('Texture not flip', () async {
-      await prepareForImages(allowFlip: false);
+      await prepareForGolden(ignoreFlip: false);
       expect(texture, matchesGoldenFile('goldens/texture_non_flip.png'));
       expect(rendered, matchesGoldenFile('goldens/rendered_non_flip.png'));
     });

@@ -29,10 +29,7 @@ class TiledAtlas {
     required this.atlas,
     required this.offsets,
     required this.key,
-    bool? allowFlip,
-  }) : batch = atlas == null
-            ? null
-            : SpriteBatch(atlas, imageKey: key, allowFlip: allowFlip);
+  }) : batch = atlas == null ? null : SpriteBatch(atlas, imageKey: key);
 
   /// Returns whether or not this atlas contains [source].
   bool contains(String? source) => offsets.containsKey(source);
@@ -43,7 +40,6 @@ class TiledAtlas {
         atlas: atlas?.clone(),
         offsets: offsets,
         key: key,
-        allowFlip: batch?.allowFlip,
       );
 
   /// Maps of tilesets compiled to [TiledAtlas].
@@ -78,12 +74,7 @@ class TiledAtlas {
   }
 
   /// Loads all the tileset images for the [map] into one [TiledAtlas].
-  /// By default, [batch] renders flipped tile if exists.
-  /// You can disable it by passing [allowFlip] as false.
-  static Future<TiledAtlas> fromTiledMap(
-    TiledMap map, {
-    bool? allowFlip,
-  }) async {
+  static Future<TiledAtlas> fromTiledMap(TiledMap map) async {
     final imageList = _onlyTileImages(map).toList();
 
     if (imageList.isEmpty) {
@@ -92,7 +83,6 @@ class TiledAtlas {
         atlas: null,
         offsets: {},
         key: 'atlas{empty}',
-        allowFlip: allowFlip,
       );
     }
 
@@ -112,7 +102,6 @@ class TiledAtlas {
         atlas: image,
         offsets: {tiledImage.source!: Offset.zero},
         key: key,
-        allowFlip: allowFlip,
       );
     }
 
@@ -156,7 +145,6 @@ class TiledAtlas {
       atlas: image,
       offsets: offsetMap,
       key: key,
-      allowFlip: allowFlip,
     );
   }
 }

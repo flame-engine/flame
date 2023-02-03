@@ -196,14 +196,14 @@ class RenderableTiledMap {
     String fileName,
     Vector2 destTileSize, {
     Camera? camera,
-    bool? allowFlip,
+    bool? ignoreFlip,
   }) async {
     final contents = await Flame.bundle.loadString('assets/tiles/$fileName');
     return fromString(
       contents,
       destTileSize,
       camera: camera,
-      allowFlip: allowFlip,
+      ignoreFlip: ignoreFlip,
     );
   }
 
@@ -212,7 +212,7 @@ class RenderableTiledMap {
     String contents,
     Vector2 destTileSize, {
     Camera? camera,
-    bool? allowFlip,
+    bool? ignoreFlip,
   }) async {
     final map = await TiledMap.fromString(
       contents,
@@ -222,16 +222,19 @@ class RenderableTiledMap {
       map,
       destTileSize,
       camera: camera,
-      allowFlip: allowFlip,
+      ignoreFlip: ignoreFlip,
     );
   }
 
   /// Parses a [TiledMap] returning a [RenderableTiledMap].
+  ///
+  /// By default, [batch] renders flipped tile if exists.
+  /// You can disable it by passing [ignoreFlip] as true.
   static Future<RenderableTiledMap> fromTiledMap(
     TiledMap map,
     Vector2 destTileSize, {
     Camera? camera,
-    bool? allowFlip,
+    bool? ignoreFlip,
   }) async {
     // We're not going to load animation frames that are never referenced; but
     // we do supply the common cache for all layers in this map, and maintain
@@ -249,7 +252,8 @@ class RenderableTiledMap {
       destTileSize,
       camera,
       animationFrames,
-      atlas: await TiledAtlas.fromTiledMap(map, allowFlip: allowFlip),
+      atlas: await TiledAtlas.fromTiledMap(map),
+      ignoreFlip: ignoreFlip,
     );
 
     return RenderableTiledMap(
@@ -269,6 +273,7 @@ class RenderableTiledMap {
     Camera? camera,
     Map<Tile, TileFrames> animationFrames, {
     required TiledAtlas atlas,
+    bool? ignoreFlip,
   }) async {
     final renderLayers = <RenderableLayer<Layer>>[];
     for (final layer in layers.where((layer) => layer.visible)) {
@@ -276,12 +281,13 @@ class RenderableTiledMap {
         case TileLayer:
           renderLayers.add(
             await FlameTileLayer.load(
-              layer as TileLayer,
-              parent,
-              map,
-              destTileSize,
-              animationFrames,
-              atlas.clone(),
+              layer: layer as TileLayer,
+              parent: parent,
+              map: map,
+              destTileSize: destTileSize,
+              animationFrames: animationFrames,
+              atlas: atlas.clone(),
+              ignoreFlip: ignoreFlip,
             ),
           );
           break;
@@ -313,6 +319,7 @@ class RenderableTiledMap {
             camera,
             animationFrames,
             atlas: atlas,
+            ignoreFlip: ignoreFlip,
           );
           renderLayers.add(renderableGroup);
           break;

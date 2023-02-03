@@ -17,7 +17,6 @@ extension SpriteBatchExtension on Game {
     BlendMode defaultBlendMode = BlendMode.srcOver,
     RSTransform? defaultTransform,
     Images? imageCache,
-    bool? allowFlip,
     bool useAtlas = true,
   }) {
     return SpriteBatch.load(
@@ -27,7 +26,6 @@ extension SpriteBatchExtension on Game {
       defaultTransform: defaultTransform,
       images: imageCache ?? images,
       useAtlas: useAtlas,
-      allowFlip: allowFlip,
     );
   }
 }
@@ -102,12 +100,10 @@ class SpriteBatch {
     this.defaultBlendMode = BlendMode.srcOver,
     this.defaultTransform,
     this.useAtlas = true,
-    bool? allowFlip,
     Images? imageCache,
     String? imageKey,
   })  : _imageCache = imageCache,
-        _imageKey = imageKey,
-        _allowFlip = allowFlip ?? true;
+        _imageKey = imageKey;
 
   /// Takes a path of an image, and optional arguments for the SpriteBatch.
   ///
@@ -118,7 +114,6 @@ class SpriteBatch {
     BlendMode defaultBlendMode = BlendMode.srcOver,
     RSTransform? defaultTransform,
     Images? images,
-    bool? allowFlip,
     bool useAtlas = true,
   }) async {
     final _images = images ?? Flame.images;
@@ -130,7 +125,6 @@ class SpriteBatch {
       useAtlas: useAtlas,
       imageCache: _images,
       imageKey: path,
-      allowFlip: allowFlip,
     );
   }
 
@@ -193,9 +187,6 @@ class SpriteBatch {
   /// The status of the atlas image loading operations.
   bool _atlasReady = true;
 
-  /// Whether allow a flip if exists.
-  final bool _allowFlip;
-
   /// The default color, used as a background color for a [BatchItem].
   final Color defaultColor;
 
@@ -214,9 +205,6 @@ class SpriteBatch {
 
   /// The size of the [atlas].
   Vector2 get size => atlas.size;
-
-  /// Whether allow a flip if exists.
-  bool get allowFlip => _allowFlip;
 
   /// Whether to use [Canvas.drawAtlas] or not.
   final bool useAtlas;
@@ -275,13 +263,13 @@ class SpriteBatch {
       color: color ?? defaultColor,
     );
 
-    if (flip && _allowFlip && useAtlas && !_hasFlips) {
+    if (flip && useAtlas && !_hasFlips) {
       _makeFlippedAtlas();
     }
 
     _batchItems.add(batchItem);
     _sources.add(
-      flip && _allowFlip
+      flip
           ? Rect.fromLTWH(
               (atlas.width * (!_atlasReady ? 2 : 1)) - source.right,
               source.top,
