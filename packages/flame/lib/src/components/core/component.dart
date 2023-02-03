@@ -263,7 +263,9 @@ class Component {
     } else if (_parent == null) {
       addToParent(newParent);
     } else {
-      newParent.lifecycle._adoption.add(this);
+      final root = findGame()! as ComponentTreeRoot;
+      root.enqueueMove(this, newParent);
+      // newParent.lifecycle._adoption.add(this);
     }
   }
 
@@ -786,6 +788,14 @@ class Component {
       _remove();
       assert(_parent == null);
     }
+    return LifecycleEventStatus.done;
+  }
+
+  @internal
+  LifecycleEventStatus handleLifecycleEventMove(Component newParent) {
+    _remove();
+    _parent = newParent;
+    _mount();
     return LifecycleEventStatus.done;
   }
 
