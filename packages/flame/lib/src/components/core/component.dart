@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:collection';
 
 import 'package:collection/collection.dart';
 import 'package:flame/src/cache/value_cache.dart';
@@ -265,7 +264,6 @@ class Component {
     } else {
       final root = findGame()! as ComponentTreeRoot;
       root.enqueueMove(this, newParent);
-      // newParent.lifecycle._adoption.add(this);
     }
   }
 
@@ -482,7 +480,6 @@ class Component {
   /// priority of the direct siblings, not the children or the ancestors.
   void updateTree(double dt) {
     _children?.updateComponentList();
-    _lifecycleManager?.processQueues();
     update(dt);
     _children?.forEach((c) => c.updateTree(dt));
   }
@@ -757,7 +754,6 @@ class Component {
   /// Attempt to resolve any pending lifecycle events on this component.
   void processPendingLifecycleEvents() {
     if (_lifecycleManager != null) {
-      _lifecycleManager!.processQueues();
       if (!_lifecycleManager!.hasPendingEvents &&
           _lifecycleManager!._removedCompleter == null) {
         _lifecycleManager = null;
@@ -849,7 +845,6 @@ class Component {
     _lifecycleManager?.finishMounting();
     _parent!.children.add(this);
     _reAddChildren();
-    _lifecycleManager?.processQueues();
     _parent!.onChildrenChanged(this, ChildrenChangeType.added);
     _clearMountingBit();
   }
@@ -1032,33 +1027,10 @@ class _LifecycleManager {
     _removedCompleter = null;
   }
 
-  /// Queue for moving components from another parent to this one.
-  final Queue<Component> _adoption = Queue();
-
   /// Whether or not there are any pending lifecycle events for this component.
   ///
   /// [Component.removed] is not regarded as a pending event.
   bool get hasPendingEvents {
-    return _adoption.isNotEmpty ||
-        _mountCompleter != null ||
-        _loadCompleter != null;
-  }
-
-  /// Attempt to resolve pending events in all lifecycle event queues.
-  ///
-  /// This method must be periodically invoked by the game engine, in order to
-  /// ensure that the components get properly added/removed from the component
-  /// tree.
-  void processQueues() {
-    _processAdoptionQueue();
-  }
-
-  void _processAdoptionQueue() {
-    while (_adoption.isNotEmpty) {
-      final child = _adoption.removeFirst();
-      child._remove();
-      child._parent = owner;
-      child._mount();
-    }
+    return _mountCompleter != null || _loadCompleter != null;
   }
 }
