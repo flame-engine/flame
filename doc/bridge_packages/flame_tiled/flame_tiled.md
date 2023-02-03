@@ -8,7 +8,7 @@ To use this,
 2. Create a component and add it to the component tree as follows.
 
 ```dart
-final component = TiledComponent(
+final component = await TiledComponent.load(
   'my_map.tmx',
   Vector2.all(32),
 );
@@ -23,7 +23,7 @@ add(component);
 But there is a caution to use this. It's fine with the normal map. But note that it would drop the performance if you have a big texture. The big texture means you have dozens of tilesets(or a huge tileset) and the sum of their dimension is thousands. Fortunately, you can set `ignoreFlip = true` and it disables all the flips in the map.
 
 ```dart
-final component = TiledComponent(
+final component = await TiledComponent.load(
   'my_map.tmx',
   Vector2.all(32),
   ignoreFlip: true,
