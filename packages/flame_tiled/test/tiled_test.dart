@@ -291,7 +291,7 @@ void main() {
     });
   });
 
-  group('Texture generation', () {
+  group('ignoring flip makes different texture and rendering result', () {
     Image? texture;
     Uint8List? rendered;
 
@@ -320,16 +320,22 @@ void main() {
       rendered = await renderMapToPng(tiledComponent);
     }
 
-    test('Texture flips well', () async {
-      await prepareForGolden(ignoreFlip: true);
+    test('flip works with [ignoreFlip = false]', () async {
+      await prepareForGolden(ignoreFlip: false);
       expect(texture, matchesGoldenFile('goldens/texture_with_flip.png'));
       expect(rendered, matchesGoldenFile('goldens/rendered_with_flip.png'));
     });
 
-    test('Texture not flip', () async {
-      await prepareForGolden(ignoreFlip: false);
-      expect(texture, matchesGoldenFile('goldens/texture_non_flip.png'));
-      expect(rendered, matchesGoldenFile('goldens/rendered_non_flip.png'));
+    test('flip ignored with [ignoreFlip = true]', () async {
+      await prepareForGolden(ignoreFlip: true);
+      expect(
+        texture,
+        matchesGoldenFile('goldens/texture_with_flip_ignored.png'),
+      );
+      expect(
+        rendered,
+        matchesGoldenFile('goldens/rendered_with_flip_ignored.png'),
+      );
     });
   });
 
