@@ -34,12 +34,12 @@ void main() {
 
     test('readBinaryFile', () async {
       final assetsCache = AssetsCache(prefix: '');
-      final fileName = fixture('caveace.fa').path;
+      final fileName = fixture('cave_ace.fa').path;
       final file = await assetsCache.readBinaryFile(fileName);
       expect(file, isA<Uint8List>());
 
       expect(
-        () async => assetsCache.readFile(fixture('caveace.fa').path),
+        () async => assetsCache.readFile(fixture('cave_ace.fa').path),
         failsAssert('"$fileName" was previously loaded as a binary file'),
       );
     });
