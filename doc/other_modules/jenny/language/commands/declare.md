@@ -79,7 +79,7 @@ the same as `TYPE`, and will throw a compile-time error otherwise.
 <<declare $been_to_hell = false>>
 
 <<declare $name as String>>
-<<declare $distanceTravelled as Number>>
+<<declare $distanceTraveled as Number>>
 
 <<declare $birthDay = randomRange(1, 365) as Number>>
 <<declare $vulgarity = GetObscenitySetting() as Bool>>
