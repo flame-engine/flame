@@ -14,7 +14,7 @@ void main() {
 
         expect(
           component.events,
-          ['onGameResize [800.0,600.0]', 'onLoad', 'onMount'],
+          ['onLoad', 'onGameResize [800.0,600.0]', 'onMount'],
         );
       });
 
@@ -29,31 +29,33 @@ void main() {
       });
 
       testWithFlameGame(
-          'component.removed completes if obtained before the game was ready',
-          (game) async {
-        final component = LifecycleComponent('component');
-        final removed = component.removed;
-        await game.add(component);
-        await game.ready();
+        'component.removed completes if obtained before the game was ready',
+        (game) async {
+          final component = LifecycleComponent('component');
+          final removed = component.removed;
+          await game.add(component);
+          await game.ready();
 
-        game.remove(component);
-        game.update(0);
+          game.remove(component);
+          game.update(0);
 
-        await expectLater(removed, completes);
-      });
+          await expectLater(removed, completes);
+        },
+      );
 
       testWithFlameGame(
-          'component removed completes when set after game is ready',
-          (game) async {
-        final component = LifecycleComponent('component');
-        await game.add(component);
-        await game.ready();
-        final removed = component.removed;
+        'component removed completes when set after game is ready',
+        (game) async {
+          final component = LifecycleComponent('component');
+          await game.add(component);
+          await game.ready();
+          final removed = component.removed;
 
-        game.remove(component);
-        game.update(0);
-        await expectLater(removed, completes);
-      });
+          game.remove(component);
+          game.update(0);
+          await expectLater(removed, completes);
+        },
+      );
 
       testWithFlameGame(
         'component removed completes after changing parent',
@@ -181,17 +183,18 @@ void main() {
 
         expect(
           parent.events,
-          ['onGameResize [800.0,600.0]', 'onLoad', 'onMount'],
+          ['onLoad', 'onGameResize [800.0,600.0]', 'onMount'],
         );
         // onLoad should only be called the first time that the component is
         // loaded.
         expect(
           child.events,
           [
-            'onGameResize [800.0,600.0]',
             'onLoad',
+            'onGameResize [800.0,600.0]',
             'onMount',
             'onRemove',
+            'onGameResize [800.0,600.0]',
             'onMount',
           ],
         );
@@ -233,11 +236,11 @@ void main() {
           await game2.ready();
           expect(
             component1.events,
-            ['onGameResize [295.0,600.0]', 'onLoad', 'onMount'],
+            ['onLoad', 'onGameResize [295.0,600.0]', 'onMount'],
           );
           expect(
             component2.events,
-            ['onGameResize [505.0,600.0]', 'onLoad', 'onMount'],
+            ['onLoad', 'onGameResize [505.0,600.0]', 'onMount'],
           );
         });
       });
@@ -297,19 +300,6 @@ void main() {
           expect(a.size, isNot(Vector2.all(100)));
         },
       );
-
-      testWithFlameGame('mixin onGameResizeBeforeMount', (game) async {
-        final component = _LegacyComponent()..addToParent(game);
-        await game.ready();
-
-        component.removeFromParent();
-        game.update(0);
-        component.events.clear();
-        component.addToParent(game);
-
-        game.update(0);
-        expect(component.events, ['onGameResize[800.0,600.0]', 'onMount']);
-      });
     });
 
     group('Adding components', () {
@@ -386,7 +376,7 @@ void main() {
         (game) async {
           final component = ComponentWithSizeHistory();
           game.add(component);
-          expect(component.history, equals([Vector2(800, 600)]));
+          expect(component.history, isEmpty);
           expect(component.isLoading, false);
           expect(component.isLoaded, true);
           expect(component.isMounted, false);
@@ -394,7 +384,7 @@ void main() {
           game.onGameResize(Vector2(300, 500));
           expect(
             component.history,
-            equals([Vector2(800, 600), Vector2(500, 300), Vector2(300, 500)]),
+            equals([Vector2(500, 300), Vector2(300, 500)]),
           );
           await game.ready();
           expect(component.history.length, 3);
@@ -558,7 +548,7 @@ void main() {
           expect(component.isLoaded, true);
           expect(component.isMounted, false);
           // onRemove shouldn't be called because there was never an onMount
-          expect(component.events, ['onGameResize [800.0,600.0]', 'onLoad']);
+          expect(component.events, ['onLoad']);
         },
       );
 
@@ -622,9 +612,9 @@ void main() {
           expect(
             component.events,
             [
-              'onGameResize [800.0,600.0]',
               'onLoad',
               '--',
+              'onGameResize [800.0,600.0]',
               'onMount',
             ],
           );
@@ -1224,23 +1214,6 @@ class _GameResizeComponent extends PositionComponent {
   void onGameResize(Vector2 gameSize) {
     super.onGameResize(gameSize);
     this.gameSize = gameSize;
-  }
-}
-
-// ignore: deprecated_member_use_from_same_package
-class _LegacyComponent extends Component with OnGameResizeBeforeMount {
-  final List<String> events = [];
-
-  @override
-  void onGameResize(Vector2 size) {
-    super.onGameResize(size);
-    events.add('onGameResize$size');
-  }
-
-  @override
-  void onMount() {
-    super.onMount();
-    events.add('onMount');
   }
 }
 

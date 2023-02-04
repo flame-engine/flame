@@ -805,7 +805,6 @@ class Component {
     assert(_parent!.findGame() != null);
     assert(_parent!.findGame()!.hasLayout);
     _setLoadingBit();
-    onGameResize(_parent!.findGame()!.canvasSize);
     final onLoadFuture = onLoad();
     if (onLoadFuture is Future) {
       return onLoadFuture.then((dynamic _) => _finishLoading());
@@ -825,6 +824,7 @@ class Component {
     assert(_parent != null && _parent!.isMounted);
     assert(isLoaded && !isLoading);
     _setMountingBit();
+    onGameResize(_parent!.findGame()!.canvasSize);
     if (isRemoved) {
       _clearRemovedBit();
     } else if (isRemoving) {
