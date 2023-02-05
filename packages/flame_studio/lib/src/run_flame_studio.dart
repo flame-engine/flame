@@ -2,11 +2,15 @@ import 'package:flame_studio/src/framework/flame_studio.dart';
 import 'package:flutter/widgets.dart';
 
 void runFlameStudio(Widget app, {bool enabled = true}) {
+  var allowRun = true;
   assert(() {
     if (enabled) {
       runApp(FlameStudio(app));
+      allowRun = false;
     }
     return true;
   }());
-  runApp(app);
+  if (allowRun) {
+    runApp(app);
+  }
 }
