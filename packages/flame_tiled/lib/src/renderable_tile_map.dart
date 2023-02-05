@@ -287,12 +287,12 @@ class RenderableTiledMap {
         case TileLayer:
           renderLayers.add(
             await FlameTileLayer.load(
-              layer: layer as TileLayer,
-              parent: parent,
-              map: map,
-              destTileSize: destTileSize,
-              animationFrames: animationFrames,
-              atlas: atlas.clone(),
+              layer as TileLayer,
+              parent,
+              map,
+              destTileSize,
+              animationFrames,
+              atlas.clone(),
               ignoreFlip: ignoreFlip,
             ),
           );
