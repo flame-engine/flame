@@ -25,11 +25,11 @@ add(component);
 
 [Tiled] has a feature that allows you to flip a tile horizontally or vertically, or even rotate it.
 
-`flame_tiled` supports this but if you are using a large texture and have flipped tiles there will 
-be a drop in performance. If you want to ignore any flips in your tilemap you can set the 
+`flame_tiled` supports this but if you are using a large texture and have flipped tiles there will
+be a drop in performance. If you want to ignore any flips in your tilemap you can set the
 `ignoreFlip` to false in the constructor.
 
-**Note**: A large texture in this context means one with multiple tilesets (or a huge tileset) 
+**Note**: A large texture in this context means one with multiple tilesets (or a huge tileset)
 where the sum of their dimensions are in the thousands.
 
 ```dart
