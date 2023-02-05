@@ -14,9 +14,9 @@ import 'test_asset_bundle.dart';
 import 'test_image_utils.dart';
 
 void main() {
-  /// This represents byte count of one pixel.
+  /// This represents the byte count of one pixel.
   ///
-  /// Usually, Color is represented as [Uint8List] and Uint8 has ability to
+  /// Usually, Color is represented as [Uint8List] and Uint8 has the ability to
   /// store 0 - 255(8 bit = 1 byte) per index. And it can be interpreted
   /// as [Color] by using 4 indexes of [Uint8List] into one.
   /// Examples:

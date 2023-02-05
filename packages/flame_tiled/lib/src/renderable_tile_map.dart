@@ -193,7 +193,7 @@ class RenderableTiledMap {
   ///
   /// NOTE: this method looks for files under the path "assets/tiles/".
   ///
-  /// By default, [FlameTileLayer] renders flipped tile if exists.
+  /// By default, [FlameTileLayer] renders flipped tiles if they exist.
   /// You can disable it by passing [ignoreFlip] as `true`.
   static Future<RenderableTiledMap> fromFile(
     String fileName,
@@ -212,7 +212,7 @@ class RenderableTiledMap {
 
   /// Parses a string returning a [RenderableTiledMap].
   ///
-  /// By default, [FlameTileLayer] renders flipped tile if exists.
+  /// By default, [FlameTileLayer] renders flipped tiles if they exist.
   /// You can disable it by passing [ignoreFlip] as `true`.
   static Future<RenderableTiledMap> fromString(
     String contents,
@@ -234,7 +234,7 @@ class RenderableTiledMap {
 
   /// Parses a [TiledMap] returning a [RenderableTiledMap].
   ///
-  /// By default, [FlameTileLayer] renders flipped tile if exists.
+  /// By default, [FlameTileLayer] renders flipped tiles if they exist.
   /// You can disable it by passing [ignoreFlip] as `true`.
   static Future<RenderableTiledMap> fromTiledMap(
     TiledMap map,
