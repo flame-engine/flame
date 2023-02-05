@@ -2,6 +2,7 @@ import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
+import 'package:flame/src/events/flame_game_mixins/has_draggable_components.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -12,7 +13,7 @@ void main() {
         var nDragStartCalled = 0;
         var nDragUpdateCalled = 0;
         var nDragEndCalled = 0;
-        final game = _GameWithHasDraggableComponents(
+        final game = FlameGame(
           children: [
             _DragCallbacksComponent(
               position: Vector2(20, 20),
@@ -26,7 +27,9 @@ void main() {
         await tester.pumpWidget(GameWidget(game: game));
         await tester.pump();
         await tester.pump(const Duration(milliseconds: 10));
-        expect(game.children.length, 1);
+        expect(game.children.length, 2);
+        expect(game.children.elementAt(0), isA<_DragCallbacksComponent>());
+        expect(game.children.elementAt(1), isA<MultiDragDispatcher>());
 
         // regular drag
         await tester.timedDragFrom(
@@ -52,7 +55,7 @@ void main() {
       'drag event does not affect more than one component',
       (tester) async {
         var nEvents = 0;
-        final game = _GameWithHasDraggableComponents(
+        final game = FlameGame(
           children: [
             _DragCallbacksComponent(
               size: Vector2.all(100),
@@ -66,7 +69,8 @@ void main() {
         await tester.pumpWidget(GameWidget(game: game));
         await tester.pump();
         await tester.pump();
-        expect(game.children.length, 2);
+        expect(game.children.length, 3);
+        expect(game.children.last, isA<MultiDragDispatcher>());
 
         await tester.timedDragFrom(
           const Offset(20, 20),
@@ -81,7 +85,7 @@ void main() {
       'drag event can move outside the component bounds',
       (tester) async {
         final points = <Vector2>[];
-        final game = _GameWithHasDraggableComponents(
+        final game = FlameGame(
           children: [
             _DragCallbacksComponent(
               size: Vector2.all(95),
@@ -93,7 +97,8 @@ void main() {
         await tester.pumpWidget(GameWidget(game: game));
         await tester.pump();
         await tester.pump();
-        expect(game.children.length, 1);
+        expect(game.children.length, 2);
+        expect(game.children.last, isA<MultiDragDispatcher>());
 
         await tester.timedDragFrom(
           const Offset(80, 80),
@@ -139,7 +144,8 @@ void main() {
         await tester.pumpWidget(GameWidget(game: game));
         await tester.pump();
         await tester.pump();
-        expect(game.children.length, 2);
+        expect(game.children.length, 3);
+        expect(game.children.last, isA<MultiDragDispatcher>());
 
         await tester.timedDragFrom(
           const Offset(50, 50),
@@ -153,13 +159,9 @@ void main() {
   });
 }
 
-class _GameWithHasDraggableComponents extends FlameGame
-    with HasDraggableComponents {
-  _GameWithHasDraggableComponents({super.children});
-}
-
 class _GameWithDualDraggableComponents extends FlameGame
-    with HasDraggableComponents, HasDraggablesBridge {
+    with HasDraggablesBridge // ignore: deprecated_member_use_from_same_package
+{
   _GameWithDualDraggableComponents({super.children});
 }
 
