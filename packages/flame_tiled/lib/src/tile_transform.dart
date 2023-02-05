@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flame/sprite.dart';
+import 'package:flame_tiled/flame_tiled.dart';
 import 'package:flame_tiled/src/mutable_transform.dart';
 import 'package:meta/meta.dart';
 
@@ -9,7 +10,7 @@ import 'package:meta/meta.dart';
 class TileTransform {
   final Rect source;
   final MutableRSTransform transform;
-  final bool flip;
+  final SimpleFlips flip;
   final SpriteBatch batch;
 
   TileTransform(
