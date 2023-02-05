@@ -4,6 +4,8 @@ import 'package:flame_test/flame_test.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../custom_component.dart';
+
 void main() {
   group('Component', () {
     group('Lifecycle', () {
@@ -201,10 +203,10 @@ void main() {
       testWithFlameGame(
         'components added in correct order even with different load times',
         (game) async {
-          final a = SlowComponent(0.1);
-          final b = SlowComponent(0.02);
-          final c = SlowComponent(0.05);
-          final d = SlowComponent(0);
+          final a = SlowComponent('A', 0.1);
+          final b = SlowComponent('B', 0.02);
+          final c = SlowComponent('C', 0.05);
+          final d = SlowComponent('D', 0);
           game.add(a);
           game.add(b);
           game.add(c);
@@ -361,6 +363,7 @@ void main() {
         'not run double onMount',
         _PrepareGame.new,
         (game) async {
+          await game.ready();
           final parent = game.prepareParent;
           expect(parent.onMountRuns, 1);
           expect(parent.children.isNotEmpty, true);
@@ -374,6 +377,7 @@ void main() {
           final component = ComponentWithSizeHistory();
           game.add(component);
           expect(component.history, equals([Vector2(800, 600)]));
+          expect(component.isLoading, true);
           expect(component.isMounted, false);
           game.onGameResize(Vector2(500, 300));
           game.onGameResize(Vector2(300, 500));
@@ -512,6 +516,7 @@ void main() {
           final parent = Component();
           final component = _SlowLoadingComponent();
           parent.add(component);
+          // Since [parent] is detached, the [component] cannot start loading
           expect(component.isLoading, false);
           parent.remove(component);
           expect(component.isLoading, false);
@@ -659,7 +664,7 @@ void main() {
           expect(game.descendants().length, 0);
           final component = Component()..add(Component()..add(Component()));
           game.add(component);
-          expect(game.hasPendingLifecycleEvents, true);
+          expect(game.hasLifecycleEvents, true);
           expect(game.descendants().length, 0);
           await game.ready();
 
@@ -680,11 +685,11 @@ void main() {
           final component = Component()..add(Component()..add(Component()));
           await game.add(component);
           await game.ready();
-          expect(game.hasPendingLifecycleEvents, false);
+          expect(game.hasLifecycleEvents, false);
 
           game.add(Component());
 
-          expect(game.hasPendingLifecycleEvents, true);
+          expect(game.hasLifecycleEvents, true);
           expect(game.descendants().length, 3);
         },
       );
@@ -995,6 +1000,29 @@ void main() {
           expect(order, 5);
         },
       );
+
+      testWithFlameGame(
+        'Components added in onLoad can be accessed in onMount',
+        (game) async {
+          final component = CustomComponent(
+            onLoad: (self) {
+              self.add(Component());
+              self.add(_SlowLoadingComponent());
+              self.add(Component());
+            },
+            onMount: (self) {
+              expect(self.children.length, 3);
+              self.children.elementAt(0).add(Component());
+            },
+          );
+          game.add(component);
+          await game.ready();
+
+          expect(component.isMounted, true);
+          expect(component.children.length, 3);
+          expect(component.children.first.children.length, 1);
+        },
+      );
     });
   });
 }
@@ -1090,14 +1118,18 @@ class _SlowLoadingComponent extends Component {
 }
 
 class SlowComponent extends Component {
-  SlowComponent(this.loadTime);
+  SlowComponent(this.name, this.loadTime);
   final double loadTime;
+  final String name;
 
   @override
   Future<void> onLoad() async {
     final ms = (loadTime * 1000).toInt();
     await Future<int?>.delayed(Duration(milliseconds: ms));
   }
+
+  @override
+  String toString() => 'SlowComponent($name, loadTime=$loadTime)';
 }
 
 class _SelfRemovingOnLoadComponent extends Component {

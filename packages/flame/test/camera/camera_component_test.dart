@@ -150,8 +150,11 @@ void main() {
 
       camera.moveTo(Vector2(-20, 0), speed: 10);
       for (var i = 0; i < 20; i++) {
-        expect(camera.viewfinder.position, closeToVector(Vector2(0, 10), 0.5));
-        game.update(0.5);
+        expect(
+          camera.viewfinder.position,
+          closeToVector(Vector2(0, 10 - i * 0.45), 0.5),
+        );
+        game.update(0.1);
       }
 
       expect(
