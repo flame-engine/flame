@@ -23,11 +23,10 @@ add(component);
 
 ### Flip
 
-[Tiled] has a flip feature that flips tile to horizontally
-or vertically or even rotates it. It's also available in **flame_tiled**.
-But take caution using this. It's fine with a normal map.
-But note that it would drop the performance if you have a big texture.
-A big texture in this context means one with dozens of tilesets (or a huge tileset) and the sum of their dimensions are thousands.
+[Tiled] has a flip feature that flips tile to horizontally or vertically or even rotates it.
+It's also available in **flame_tiled**. But take caution using this. It's fine with a normal map.
+But note that it would drop the performance if you have a big texture. A big texture in this context
+means one with dozens of tilesets (or a huge tileset) and the sum of their dimensions are thousands.
 Fortunately, you can set `ignoreFlip = true` and it disables all the flips in the map.
 
 ```dart
