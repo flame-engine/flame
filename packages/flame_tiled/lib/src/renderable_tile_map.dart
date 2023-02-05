@@ -193,8 +193,10 @@ class RenderableTiledMap {
   ///
   /// NOTE: this method looks for files under the path "assets/tiles/".
   ///
+  /// {@template renderable_tile_map_factory}
   /// By default, [FlameTileLayer] renders flipped tiles if they exist.
-  /// You can disable it by passing [ignoreFlip] as `true`.
+  /// You can disable this by setting [ignoreFlip] to `true`.
+  /// {@endtemplate}
   static Future<RenderableTiledMap> fromFile(
     String fileName,
     Vector2 destTileSize, {
@@ -212,8 +214,7 @@ class RenderableTiledMap {
 
   /// Parses a string returning a [RenderableTiledMap].
   ///
-  /// By default, [FlameTileLayer] renders flipped tiles if they exist.
-  /// You can disable it by passing [ignoreFlip] as `true`.
+  /// {@macro renderable_tile_map_factory}
   static Future<RenderableTiledMap> fromString(
     String contents,
     Vector2 destTileSize, {
@@ -234,8 +235,7 @@ class RenderableTiledMap {
 
   /// Parses a [TiledMap] returning a [RenderableTiledMap].
   ///
-  /// By default, [FlameTileLayer] renders flipped tiles if they exist.
-  /// You can disable it by passing [ignoreFlip] as `true`.
+  /// {@macro renderable_tile_map_factory}
   static Future<RenderableTiledMap> fromTiledMap(
     TiledMap map,
     Vector2 destTileSize, {
