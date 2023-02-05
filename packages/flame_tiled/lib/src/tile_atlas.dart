@@ -25,17 +25,27 @@ class TiledAtlas {
   /// Track one atlas for all images in the Tiled map.
   ///
   /// See [fromTiledMap] for asynchronous loading.
-  TiledAtlas._(this.atlas, this.offsets, this.key)
-      : batch = atlas == null ? null : SpriteBatch(atlas, imageKey: key);
+  TiledAtlas._({
+    required this.atlas,
+    required this.offsets,
+    required this.key,
+  }) : batch = atlas == null ? null : SpriteBatch(atlas, imageKey: key);
 
   /// Returns whether or not this atlas contains [source].
   bool contains(String? source) => offsets.containsKey(source);
 
   /// Create a new atlas from this object with the intent of getting a new
   /// [SpriteBatch].
-  TiledAtlas clone() => TiledAtlas._(atlas?.clone(), offsets, key);
+  TiledAtlas clone() => TiledAtlas._(
+        atlas: atlas?.clone(),
+        offsets: offsets,
+        key: key,
+      );
 
   /// Maps of tilesets compiled to [TiledAtlas].
+  ///
+  /// This is recommended to be cleared on test setup. Otherwise it
+  /// could lead to unexpected behavior.
   @visibleForTesting
   static final atlasMap = <String, TiledAtlas>{};
 
@@ -69,7 +79,11 @@ class TiledAtlas {
 
     if (imageList.isEmpty) {
       // so this map has no tiles... Ok.
-      return TiledAtlas._(null, {}, 'atlas{empty}');
+      return TiledAtlas._(
+        atlas: null,
+        offsets: {},
+        key: 'atlas{empty}',
+      );
     }
 
     final key = atlasKey(imageList);
@@ -84,8 +98,11 @@ class TiledAtlas {
       final image =
           (await Flame.images.load(tiledImage.source!, key: key)).clone();
 
-      return atlasMap[key] ??=
-          TiledAtlas._(image, {tiledImage.source!: Offset.zero}, key);
+      return atlasMap[key] ??= TiledAtlas._(
+        atlas: image,
+        offsets: {tiledImage.source!: Offset.zero},
+        key: key,
+      );
     }
 
     final bin = RectangleBinPacker();
@@ -124,6 +141,10 @@ class TiledAtlas {
       pictureRect.height.toInt(),
     );
     Flame.images.add(key, image);
-    return atlasMap[key] = TiledAtlas._(image, offsetMap, key);
+    return atlasMap[key] = TiledAtlas._(
+      atlas: image,
+      offsets: offsetMap,
+      key: key,
+    );
   }
 }

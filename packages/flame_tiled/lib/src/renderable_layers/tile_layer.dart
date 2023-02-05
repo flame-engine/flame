@@ -18,6 +18,7 @@ class FlameTileLayer extends RenderableLayer<TileLayer> {
   late List<List<MutableRSTransform?>> indexes;
   final animations = <TileAnimation>[];
   final Map<Tile, TileFrames> animationFrames;
+  final bool ignoreFlip;
 
   FlameTileLayer(
     super.layer,
@@ -26,6 +27,7 @@ class FlameTileLayer extends RenderableLayer<TileLayer> {
     super.destTileSize,
     this.tiledAtlas,
     this.animationFrames,
+    this.ignoreFlip,
   ) {
     _layerPaint.color = Color.fromRGBO(255, 255, 255, opacity);
   }
@@ -134,7 +136,7 @@ class FlameTileLayer extends RenderableLayer<TileLayer> {
         batch.addTransform(
           source: src,
           transform: indexes[tx][ty],
-          flip: flips.flip,
+          flip: _shouldFlip(flips),
         );
 
         if (tile.animation.isNotEmpty) {
@@ -209,7 +211,7 @@ class FlameTileLayer extends RenderableLayer<TileLayer> {
         batch.addTransform(
           source: src,
           transform: indexes[tx][ty],
-          flip: flips.flip,
+          flip: _shouldFlip(flips),
         );
 
         if (tile.animation.isNotEmpty) {
@@ -330,12 +332,12 @@ class FlameTileLayer extends RenderableLayer<TileLayer> {
 
         // A second pass is only needed in the case of staggery.
         if (map.staggerAxis == StaggerAxis.x && staggerY > 0) {
-          xSecondPass.add(TileTransform(src, transform, flips.flip, batch));
+          xSecondPass.add(TileTransform(src, transform, flips, batch));
         } else {
           batch.addTransform(
             source: src,
             transform: transform,
-            flip: flips.flip,
+            flip: _shouldFlip(flips),
           );
         }
         if (tile.animation.isNotEmpty) {
@@ -347,7 +349,7 @@ class FlameTileLayer extends RenderableLayer<TileLayer> {
         tile.batch.addTransform(
           source: tile.source,
           transform: tile.transform,
-          flip: tile.flip,
+          flip: _shouldFlip(tile.flip),
         );
       }
     }
@@ -463,12 +465,12 @@ class FlameTileLayer extends RenderableLayer<TileLayer> {
         );
         // A second pass is only needed in the case of staggery.
         if (map.staggerAxis == StaggerAxis.x && staggerY > 0) {
-          xSecondPass.add(TileTransform(src, transform, flips.flip, batch));
+          xSecondPass.add(TileTransform(src, transform, flips, batch));
         } else {
           batch.addTransform(
             source: src,
             transform: transform,
-            flip: flips.flip,
+            flip: _shouldFlip(flips),
           );
         }
         if (tile.animation.isNotEmpty) {
@@ -480,11 +482,13 @@ class FlameTileLayer extends RenderableLayer<TileLayer> {
         tile.batch.addTransform(
           source: tile.source,
           transform: tile.transform,
-          flip: tile.flip,
+          flip: _shouldFlip(tile.flip),
         );
       }
     }
   }
+
+  bool _shouldFlip(SimpleFlips flips) => !ignoreFlip && flips.flip;
 
   @override
   void render(Canvas canvas, Camera? camera) {
@@ -511,8 +515,9 @@ class FlameTileLayer extends RenderableLayer<TileLayer> {
     TiledMap map,
     Vector2 destTileSize,
     Map<Tile, TileFrames> animationFrames,
-    TiledAtlas atlas,
-  ) async {
+    TiledAtlas atlas, {
+    bool? ignoreFlip,
+  }) async {
     return FlameTileLayer(
       layer,
       parent,
@@ -520,6 +525,7 @@ class FlameTileLayer extends RenderableLayer<TileLayer> {
       destTileSize,
       atlas,
       animationFrames,
+      ignoreFlip ?? false,
     );
   }
 
