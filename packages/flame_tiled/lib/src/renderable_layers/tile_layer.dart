@@ -18,17 +18,17 @@ class FlameTileLayer extends RenderableLayer<TileLayer> {
   late List<List<MutableRSTransform?>> indexes;
   final animations = <TileAnimation>[];
   final Map<Tile, TileFrames> animationFrames;
-  final bool _ignoreFlip;
+  final bool ignoreFlip;
 
   FlameTileLayer(
     super.layer,
     super.parent,
     super.map,
-    super.destTileSize, {
-    required this.tiledAtlas,
-    required this.animationFrames,
-    bool? ignoreFlip,
-  }) : _ignoreFlip = ignoreFlip ?? false {
+    super.destTileSize,
+    this.tiledAtlas,
+    this.animationFrames,
+    this.ignoreFlip,
+  ) {
     _layerPaint.color = Color.fromRGBO(255, 255, 255, opacity);
   }
 
@@ -136,7 +136,7 @@ class FlameTileLayer extends RenderableLayer<TileLayer> {
         batch.addTransform(
           source: src,
           transform: indexes[tx][ty],
-          flip: _shouldActuallyFlip(flips),
+          flip: _shouldFlip(flips),
         );
 
         if (tile.animation.isNotEmpty) {
@@ -211,7 +211,7 @@ class FlameTileLayer extends RenderableLayer<TileLayer> {
         batch.addTransform(
           source: src,
           transform: indexes[tx][ty],
-          flip: _shouldActuallyFlip(flips),
+          flip: _shouldFlip(flips),
         );
 
         if (tile.animation.isNotEmpty) {
@@ -337,7 +337,7 @@ class FlameTileLayer extends RenderableLayer<TileLayer> {
           batch.addTransform(
             source: src,
             transform: transform,
-            flip: _shouldActuallyFlip(flips),
+            flip: _shouldFlip(flips),
           );
         }
         if (tile.animation.isNotEmpty) {
@@ -349,7 +349,7 @@ class FlameTileLayer extends RenderableLayer<TileLayer> {
         tile.batch.addTransform(
           source: tile.source,
           transform: tile.transform,
-          flip: _shouldActuallyFlip(tile.flip),
+          flip: _shouldFlip(tile.flip),
         );
       }
     }
@@ -470,7 +470,7 @@ class FlameTileLayer extends RenderableLayer<TileLayer> {
           batch.addTransform(
             source: src,
             transform: transform,
-            flip: _shouldActuallyFlip(flips),
+            flip: _shouldFlip(flips),
           );
         }
         if (tile.animation.isNotEmpty) {
@@ -482,13 +482,13 @@ class FlameTileLayer extends RenderableLayer<TileLayer> {
         tile.batch.addTransform(
           source: tile.source,
           transform: tile.transform,
-          flip: _shouldActuallyFlip(tile.flip),
+          flip: _shouldFlip(tile.flip),
         );
       }
     }
   }
 
-  bool _shouldActuallyFlip(SimpleFlips flips) => !_ignoreFlip && flips.flip;
+  bool _shouldFlip(SimpleFlips flips) => !ignoreFlip && flips.flip;
 
   @override
   void render(Canvas canvas, Camera? camera) {
@@ -509,13 +509,13 @@ class FlameTileLayer extends RenderableLayer<TileLayer> {
     canvas.restore();
   }
 
-  static Future<FlameTileLayer> load({
-    required TileLayer layer,
-    required GroupLayer? parent,
-    required TiledMap map,
-    required Vector2 destTileSize,
-    required Map<Tile, TileFrames> animationFrames,
-    required TiledAtlas atlas,
+  static Future<FlameTileLayer> load(
+    TileLayer layer,
+    GroupLayer? parent,
+    TiledMap map,
+    Vector2 destTileSize,
+    Map<Tile, TileFrames> animationFrames,
+    TiledAtlas atlas, {
     bool? ignoreFlip,
   }) async {
     return FlameTileLayer(
@@ -523,9 +523,9 @@ class FlameTileLayer extends RenderableLayer<TileLayer> {
       parent,
       map,
       destTileSize,
-      tiledAtlas: atlas,
-      animationFrames: animationFrames,
-      ignoreFlip: ignoreFlip,
+      atlas,
+      animationFrames,
+      ignoreFlip ?? false,
     );
   }
 
