@@ -15,7 +15,7 @@ import 'package:flutter/painting.dart';
 import 'package:meta/meta.dart';
 
 /// {@template flame_tile_layer}
-/// [FlameTileLayer] is base class of following classes:
+/// [FlameTileLayer] is the base class of the following classes:
 ///
 /// - [OrthogonalTileLayer]
 /// - [StaggeredTileLayer]
@@ -181,7 +181,7 @@ abstract class FlameTileLayer extends RenderableLayer<TileLayer> {
     cacheTiles();
   }
 
-  /// We need to know following information for each tile to render a layer
+  /// We need to know the following information for each tile to render a layer
   /// correctly.
   ///
   /// - source offset
@@ -189,7 +189,7 @@ abstract class FlameTileLayer extends RenderableLayer<TileLayer> {
   /// - translation
   /// - flip
   ///
-  /// But gathering these in every tick is too heavy task to engine.
+  /// But gathering these in every tick is a too heavy task for the engine.
   /// So, [FlameTileLayer] caches these by [cacheTiles] and tiles quickly in
   /// every frame.
   @protected

@@ -6,7 +6,7 @@ import 'package:flame_tiled/src/renderable_layers/tile_layers/tile_layer.dart';
 import 'package:flame_tiled/src/tile_transform.dart';
 import 'package:meta/meta.dart';
 
-/// [StaggeredTileLayer] is an isometric map using staggered axis.
+/// [StaggeredTileLayer] is an isometric map using a staggered axis.
 @internal
 class StaggeredTileLayer extends FlameTileLayer {
   StaggeredTileLayer({

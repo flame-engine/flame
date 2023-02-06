@@ -6,7 +6,7 @@ import 'package:flame_tiled/src/renderable_layers/tile_layers/tile_layer.dart';
 import 'package:flame_tiled/src/tile_transform.dart';
 import 'package:meta/meta.dart';
 
-/// [HexagonalTileLayer] have hexagonal shaped tile and its overall shape
+/// [HexagonalTileLayer] have hexagonal-shaped tiles and also its overall shape
 /// is like a honeycomb.
 @internal
 class HexagonalTileLayer extends FlameTileLayer {

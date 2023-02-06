@@ -5,8 +5,8 @@ import 'package:flame_tiled/src/mutable_transform.dart';
 import 'package:flame_tiled/src/renderable_layers/tile_layers/tile_layer.dart';
 import 'package:meta/meta.dart';
 
-/// [OrthogonalTileLayer] is a tile layer that each axis are represented
-/// as orthogonally.
+/// [OrthogonalTileLayer] is a tile layer that each axis is represented
+/// orthogonally.
 @internal
 class OrthogonalTileLayer extends FlameTileLayer {
   OrthogonalTileLayer({
