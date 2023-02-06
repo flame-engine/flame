@@ -5,7 +5,9 @@ import 'package:flame/src/events/messages/double_tap_cancel_event.dart';
 import 'package:flame/src/events/messages/double_tap_down_event.dart';
 import 'package:flame/src/events/messages/double_tap_event.dart';
 import 'package:flutter/gestures.dart';
+import 'package:meta/meta.dart';
 
+@internal
 class DoubleTapDispatcher extends Component with HasGameRef<FlameGame> {
   final _components = <DoubleTapCallbacks>{};
   bool _eventHandlerRegistered = false;
