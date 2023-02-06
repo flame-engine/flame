@@ -16,7 +16,6 @@ class DoubleTapDispatcher extends Component with HasGameRef<FlameGame> {
   final _components = <DoubleTapCallbacks>{};
   bool _eventHandlerRegistered = false;
 
-  /// This triggers immediately after the down event of the second tap.
   void _onDoubleTapDown(DoubleTapDownEvent event) {
     event.deliverAtPoint(
       rootComponent: game,
@@ -26,8 +25,6 @@ class DoubleTapDispatcher extends Component with HasGameRef<FlameGame> {
     );
   }
 
-  /// This triggers when the pointer stops contacting the device after the
-  /// second tap.
   void _onDoubleTap(DoubleTapEvent event) {
     event.deliverToComponents(
       game,
@@ -36,8 +33,6 @@ class DoubleTapDispatcher extends Component with HasGameRef<FlameGame> {
     _components.clear();
   }
 
-  /// This triggers once the gesture loses the arena if [_onDoubleTapDown] has
-  /// previously been triggered.
   void _onDoubleTapCancel(DoubleTapCancelEvent event) {
     event.deliverToComponents(
       game,
