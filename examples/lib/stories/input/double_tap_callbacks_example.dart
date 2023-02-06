@@ -41,15 +41,7 @@ class DoubleTapCallbacksExample extends FlameGame with DoubleTapCallbacks {
   }
 }
 
-enum _EmberStatus {
-  initial,
-  down,
-  cancel,
-  doubleTap,
-}
-
 class DoubleTappableEmber extends Ember with DoubleTapCallbacks {
-  _EmberStatus status = _EmberStatus.initial;
   @override
   bool debugMode = true;
 
