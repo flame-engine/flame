@@ -16,15 +16,15 @@ class DoubleTapCallbacksExample extends FlameGame with DoubleTapCallbacks {
 
   @override
   Future<void> onLoad() async {
-    children.register<DoubleTappableEmper>();
+    children.register<DoubleTappableEmber>();
   }
 
   @override
   void onGameResize(Vector2 canvasSize) {
     children
-        .query<DoubleTappableEmper>()
+        .query<DoubleTappableEmber>()
         .forEach((element) => element.removeFromParent());
-    add(DoubleTappableEmper(position: canvasSize / 2));
+    add(DoubleTappableEmber(position: canvasSize / 2));
 
     super.onGameResize(canvasSize);
   }
@@ -48,12 +48,12 @@ enum _EmberStatus {
   doubleTap,
 }
 
-class DoubleTappableEmper extends Ember with DoubleTapCallbacks {
+class DoubleTappableEmber extends Ember with DoubleTapCallbacks {
   _EmberStatus status = _EmberStatus.initial;
   @override
   bool debugMode = true;
 
-  DoubleTappableEmper({Vector2? position})
+  DoubleTappableEmber({Vector2? position})
       : super(
           position: position ?? Vector2.all(100),
           size: Vector2.all(100),
