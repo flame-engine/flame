@@ -20,7 +20,8 @@ class FlameStudioSettings extends StatefulWidget {
 }
 
 class _FlameStudioSettingsState extends State<FlameStudioSettings> {
-  double _toolbarHeight = 25.0;
+  double toolbarHeight = 25.0;
+  double leftPanelWidth = 250.0;
 
   @override
   Widget build(BuildContext context) {
@@ -35,10 +36,17 @@ class _FlameStudioSettingsWidget extends InheritedWidget {
 
   final _FlameStudioSettingsState _state;
 
-  double get toolbarHeight => _state._toolbarHeight;
+  TextDirection get textDirection => TextDirection.ltr;
+
+  double get toolbarHeight => _state.toolbarHeight;
   set toolbarHeight(double value) => _state.setState(() {
-        _state._toolbarHeight = value;
+        _state.toolbarHeight = value;
       });
+
+  double get leftPanelWidth => _state.leftPanelWidth;
+  set leftPanelWidth(double value) => _state.setState(() {
+    _state.leftPanelWidth = value;
+  });
 
   @override
   bool updateShouldNotify(_FlameStudioSettingsWidget oldWidget) => true;
