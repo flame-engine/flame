@@ -25,6 +25,7 @@ abstract class RenderableLayer<T extends Layer> {
     required this.destTileSize,
   });
 
+  /// [load] is a factory method to create [RenderableLayer] by type of [layer].
   static Future<RenderableLayer> load({
     required Layer layer,
     required GroupLayer? parent,
