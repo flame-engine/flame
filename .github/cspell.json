@@ -6,7 +6,7 @@
     "**/media/**",
     "**/assets/**",
     "**/test/**",
-    "CHANGELOG.md"
+    "**/CHANGELOG.md"
   ],
   "ignoreRegExpList": [
       "@[\\w\\-]+",
