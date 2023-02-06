@@ -473,6 +473,32 @@ class MyGame extends FlameGame with HasHoverables {
 ```
 
 
+### DoubleTapCallbacks
+
+
+Flame also offers a mixin named `DoubleTapCallbacks` to receive a double-tap event from the
+component. The only thing that you should do to receive a double tap event is added
+`DoubleTapCallbacks` to your `PositionComponent`.
+
+```dart
+class MyComponent extends PositionComponent with DoubleTapCallbacks {
+  @override
+  void onDoubleTap(DoubleTapEvent event) {
+    /// Do something
+  }
+
+  @override
+  void onDoubleTapCancel(DoubleTapCancelEvent event) {
+    /// Do something
+  }
+
+  @override
+  void onDoubleTapDown(DoubleTapDownEvent event) {
+    /// Do something
+  }
+```
+
+
 ### GestureHitboxes
 
 The `GestureHitboxes` mixin is used to more accurately recognize gestures on top of your
