@@ -1,12 +1,15 @@
 import 'package:examples/commons/ember.dart';
+import 'package:flame/components.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 
-class DoubleTapCallbacksExample extends FlameGame {
+class DoubleTapCallbacksExample extends FlameGame with DoubleTapCallbacks {
   static const String description = '''
   In this example, we show you can use the `DoubleTapCallbacks` mixin on
   `Component`. Double tap the Ember and see the color changes.
+  This example also shows white circles to the position on the game you 
+  double-tapped.
 ''';
 
   DoubleTapCallbacksExample();
@@ -24,6 +27,17 @@ class DoubleTapCallbacksExample extends FlameGame {
     add(DoubleTappableEmper(position: canvasSize / 2));
 
     super.onGameResize(canvasSize);
+  }
+
+  @override
+  void onDoubleTapDown(DoubleTapDownEvent event) {
+    add(
+      CircleComponent(
+        radius: 30,
+        position: event.localPosition,
+        anchor: Anchor.center,
+      ),
+    );
   }
 }
 
