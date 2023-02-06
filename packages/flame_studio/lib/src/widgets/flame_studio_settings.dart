@@ -7,8 +7,8 @@ class FlameStudioSettings extends StatefulWidget {
   });
 
   static _FlameStudioSettingsWidget of(BuildContext context) {
-    final result = context.dependOnInheritedWidgetOfExactType<
-        _FlameStudioSettingsWidget>();
+    final result = context
+        .dependOnInheritedWidgetOfExactType<_FlameStudioSettingsWidget>();
     assert(result != null, 'No Settings widget among the ancestors');
     return result!;
   }
@@ -22,6 +22,8 @@ class FlameStudioSettings extends StatefulWidget {
 class _FlameStudioSettingsState extends State<FlameStudioSettings> {
   double toolbarHeight = 25.0;
   double leftPanelWidth = 250.0;
+  double minLeftPanelWidth = 200.0;
+  double maxLeftPanelWidth = 500.0;
 
   @override
   Widget build(BuildContext context) {
@@ -45,8 +47,11 @@ class _FlameStudioSettingsWidget extends InheritedWidget {
 
   double get leftPanelWidth => _state.leftPanelWidth;
   set leftPanelWidth(double value) => _state.setState(() {
-    _state.leftPanelWidth = value;
-  });
+        _state.leftPanelWidth = value.clamp(
+          _state.minLeftPanelWidth,
+          _state.maxLeftPanelWidth,
+        );
+      });
 
   @override
   bool updateShouldNotify(_FlameStudioSettingsWidget oldWidget) => true;
