@@ -2,12 +2,12 @@ import 'package:flame/extensions.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 import 'package:flame_tiled/src/mutable_rect.dart';
 import 'package:flame_tiled/src/mutable_transform.dart';
-import 'package:flame_tiled/src/renderable_layers/tile_layer/tile_layer.dart';
+import 'package:flame_tiled/src/renderable_layers/tile_layers/tile_layer.dart';
 import 'package:meta/meta.dart';
 
 @internal
-class OrthogonalTileLayer extends FlameTileLayer {
-  OrthogonalTileLayer({
+class IsometricTileLayer extends FlameTileLayer {
+  IsometricTileLayer({
     required super.layer,
     required super.parent,
     required super.map,
@@ -20,7 +20,10 @@ class OrthogonalTileLayer extends FlameTileLayer {
   @override
   void cacheTiles() {
     final tileData = layer.tileData!;
+    final halfDestinationTile = destTileSize / 2;
     final size = destTileSize;
+    final isometricXShift = map.height * halfDestinationTile.x;
+    final isometricYShift = halfDestinationTile.y;
     final halfMapTile = Vector2(map.tileWidth / 2, map.tileHeight / 2);
     final batch = tiledAtlas.batch;
     if (batch == null) {
@@ -39,7 +42,6 @@ class OrthogonalTileLayer extends FlameTileLayer {
         final tile = map.tileByGid(tileGid.tile)!;
         final tileset = map.tilesetByTileGId(tileGid.tile);
         final img = tile.image ?? tileset.image;
-
         if (img == null) {
           continue;
         }
@@ -55,7 +57,6 @@ class OrthogonalTileLayer extends FlameTileLayer {
               .toRect()
               .translate(spriteOffset.dx, spriteOffset.dy),
         );
-
         final flips = SimpleFlips.fromFlips(tileGid.flips);
         final scale = size.x / src.width;
         final anchorX = src.width - halfMapTile.x;
@@ -63,8 +64,9 @@ class OrthogonalTileLayer extends FlameTileLayer {
 
         late double offsetX;
         late double offsetY;
-        offsetX = (tx + .5) * size.x;
-        offsetY = (ty + .5) * size.y;
+
+        offsetX = halfDestinationTile.x * (tx - ty) + isometricXShift;
+        offsetY = halfDestinationTile.y * (tx + ty) + isometricYShift;
 
         final scos = flips.cos * scale;
         final ssin = flips.sin * scale;

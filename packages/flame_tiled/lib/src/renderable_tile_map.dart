@@ -7,7 +7,7 @@ import 'package:flame_tiled/src/flame_tsx_provider.dart';
 import 'package:flame_tiled/src/mutable_transform.dart';
 import 'package:flame_tiled/src/renderable_layers/group_layer.dart';
 import 'package:flame_tiled/src/renderable_layers/renderable_layer.dart';
-import 'package:flame_tiled/src/renderable_layers/tile_layer/tile_layer.dart';
+import 'package:flame_tiled/src/renderable_layers/tile_layers/tile_layer.dart';
 import 'package:flame_tiled/src/tile_animation.dart';
 import 'package:flame_tiled/src/tile_atlas.dart';
 import 'package:flame_tiled/src/tile_stack.dart';

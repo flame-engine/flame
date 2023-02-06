@@ -3,7 +3,7 @@ import 'package:flame/game.dart';
 import 'package:flame_tiled/src/renderable_layers/group_layer.dart';
 import 'package:flame_tiled/src/renderable_layers/image_layer.dart';
 import 'package:flame_tiled/src/renderable_layers/object_layer.dart';
-import 'package:flame_tiled/src/renderable_layers/tile_layer/tile_layer.dart';
+import 'package:flame_tiled/src/renderable_layers/tile_layers/tile_layer.dart';
 import 'package:flame_tiled/src/tile_animation.dart';
 import 'package:flame_tiled/src/tile_atlas.dart';
 import 'package:meta/meta.dart';
