@@ -1,4 +1,3 @@
-import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:flame/components.dart';
@@ -7,14 +6,26 @@ import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 import 'package:flame_tiled/src/renderable_layers/tile_layer.dart';
+import 'package:flame_tiled/src/tile_atlas.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'test_asset_bundle.dart';
 import 'test_image_utils.dart';
 
 void main() {
+  /// This represents the byte count of one pixel.
+  ///
+  /// Usually, Color is represented as [Uint8List] and Uint8 has the ability to
+  /// store 0 - 255(8 bit = 1 byte) per index. And it can be interpreted
+  /// as [Color] by using 4 indexes of [Uint8List] into one.
+  /// Examples:
+  ///   RGBA [255, 0, 0 255] => red,
+  ///   RGBA [255, 255, 0 255] => Yellow.
+  const pixel = 4;
   TestWidgetsFlutterBinding.ensureInitialized();
 
+  setUp(TiledAtlas.atlasMap.clear);
   group('TiledComponent', () {
     late TiledComponent tiled;
     setUp(() async {
@@ -123,26 +134,26 @@ void main() {
     test(
       'Canvas pixel dimensions match',
       () => expect(
-        canvasPixelData.length == 16 * 32 * 4,
+        canvasPixelData.length == 16 * 32 * pixel,
         true,
       ),
     );
 
     test('Base test - right tile pixel is red', () {
       expect(
-        canvasPixelData[16 * 4] == 255 &&
-            canvasPixelData[(16 * 4) + 1] == 0 &&
-            canvasPixelData[(16 * 4) + 2] == 0 &&
-            canvasPixelData[(16 * 4) + 3] == 255,
+        canvasPixelData[16 * pixel] == 255 &&
+            canvasPixelData[(16 * pixel) + 1] == 0 &&
+            canvasPixelData[(16 * pixel) + 2] == 0 &&
+            canvasPixelData[(16 * pixel) + 3] == 255,
         true,
       );
       final rightTilePixels = <int>[];
-      for (var i = 16 * 4; i < 16 * 32 * 4; i += 32 * 4) {
-        rightTilePixels.addAll(canvasPixelData.getRange(i, i + (16 * 4)));
+      for (var i = 16 * pixel; i < 16 * 32 * pixel; i += 32 * pixel) {
+        rightTilePixels.addAll(canvasPixelData.getRange(i, i + (16 * pixel)));
       }
 
       var allRed = true;
-      for (var i = 0; i < rightTilePixels.length; i += 4) {
+      for (var i = 0; i < rightTilePixels.length; i += pixel) {
         allRed &= rightTilePixels[i] == 255 &&
             rightTilePixels[i + 1] == 0 &&
             rightTilePixels[i + 2] == 0 &&
@@ -153,20 +164,20 @@ void main() {
 
     test('Left tile pixel is green', () {
       expect(
-        canvasPixelData[15 * 4] == 0 &&
-            canvasPixelData[(15 * 4) + 1] == 255 &&
-            canvasPixelData[(15 * 4) + 2] == 0 &&
-            canvasPixelData[(15 * 4) + 3] == 255,
+        canvasPixelData[15 * pixel] == 0 &&
+            canvasPixelData[(15 * pixel) + 1] == 255 &&
+            canvasPixelData[(15 * pixel) + 2] == 0 &&
+            canvasPixelData[(15 * pixel) + 3] == 255,
         true,
       );
 
       final leftTilePixels = <int>[];
-      for (var i = 0; i < 15 * 32 * 4; i += 32 * 4) {
-        leftTilePixels.addAll(canvasPixelData.getRange(i, i + (16 * 4)));
+      for (var i = 0; i < 15 * 32 * pixel; i += 32 * pixel) {
+        leftTilePixels.addAll(canvasPixelData.getRange(i, i + (16 * pixel)));
       }
 
       var allGreen = true;
-      for (var i = 0; i < leftTilePixels.length; i += 4) {
+      for (var i = 0; i < leftTilePixels.length; i += pixel) {
         allGreen &= leftTilePixels[i] == 0 &&
             leftTilePixels[i + 1] == 255 &&
             leftTilePixels[i + 2] == 0 &&
@@ -177,8 +188,20 @@ void main() {
   });
 
   group('Flipped and rotated tiles render correctly with sprite batch:', () {
-    late Uint8List canvasPixelData, canvasPixelDataAtlas;
+    late Uint8List pixelsBeforeFlipApplied, pixelsAfterFlipApplied;
     late RenderableTiledMap overlapMap;
+
+    Future<Uint8List> renderMap() async {
+      final canvasRecorder = PictureRecorder();
+      final canvas = Canvas(canvasRecorder);
+      overlapMap.render(canvas);
+      final picture = canvasRecorder.endRecording();
+
+      final image = await picture.toImageSafe(64, 32);
+      final bytes = await image.toByteData();
+      return bytes!.buffer.asUint8List();
+    }
+
     setUp(() async {
       Flame.bundle = TestAssetBundle(
         imageNames: [
@@ -190,34 +213,24 @@ void main() {
         '8_tiles-flips.tmx',
         Vector2.all(16),
       );
-      final canvasRecorder = PictureRecorder();
-      final canvas = Canvas(canvasRecorder);
-      overlapMap.render(canvas);
-      final picture = canvasRecorder.endRecording();
 
-      final image = await picture.toImageSafe(64, 48);
-      final bytes = await image.toByteData();
-      canvasPixelData = bytes!.buffer.asUint8List();
-
+      pixelsBeforeFlipApplied = await renderMap();
       await Flame.images.ready();
-      final canvasRecorderAtlas = PictureRecorder();
-      final canvasAtlas = Canvas(canvasRecorderAtlas);
-      overlapMap.render(canvasAtlas);
-      final pictureAtlas = canvasRecorderAtlas.endRecording();
-
-      final imageAtlas = await pictureAtlas.toImageSafe(64, 48);
-      final bytesAtlas = await imageAtlas.toByteData();
-      canvasPixelDataAtlas = bytesAtlas!.buffer.asUint8List();
+      pixelsAfterFlipApplied = await renderMap();
     });
 
     test('[useAtlas = true] Green tile pixels are in correct spots', () {
+      const oneColorRect = 8;
       final leftTilePixels = <int>[];
-      for (var i = 65 * 8 * 4; i < ((64 * 23) + (8 * 3)) * 4; i += 64 * 4) {
-        leftTilePixels.addAll(canvasPixelDataAtlas.getRange(i, i + (16 * 4)));
+      for (var i = 65 * oneColorRect * pixel;
+          i < ((64 * 23) + (oneColorRect * 3)) * pixel;
+          i += 64 * pixel) {
+        leftTilePixels
+            .addAll(pixelsAfterFlipApplied.getRange(i, i + (16 * pixel)));
       }
 
       var allGreen = true;
-      for (var i = 0; i < leftTilePixels.length; i += 4) {
+      for (var i = 0; i < leftTilePixels.length; i += pixel) {
         allGreen &= leftTilePixels[i] == 0 &&
             leftTilePixels[i + 1] == 255 &&
             leftTilePixels[i + 2] == 0 &&
@@ -226,11 +239,14 @@ void main() {
       expect(allGreen, true);
 
       final rightTilePixels = <int>[];
-      for (var i = 69 * 8 * 4; i < ((64 * 23) + (8 * 7)) * 4; i += 64 * 4) {
-        rightTilePixels.addAll(canvasPixelDataAtlas.getRange(i, i + (16 * 4)));
+      for (var i = 69 * 8 * pixel;
+          i < ((64 * 23) + (8 * 7)) * pixel;
+          i += 64 * pixel) {
+        rightTilePixels
+            .addAll(pixelsAfterFlipApplied.getRange(i, i + (16 * pixel)));
       }
 
-      for (var i = 0; i < rightTilePixels.length; i += 4) {
+      for (var i = 0; i < rightTilePixels.length; i += pixel) {
         allGreen &= rightTilePixels[i] == 0 &&
             rightTilePixels[i + 1] == 255 &&
             rightTilePixels[i + 2] == 0 &&
@@ -241,12 +257,15 @@ void main() {
 
     test('[useAtlas = false] Green tile pixels are in correct spots', () {
       final leftTilePixels = <int>[];
-      for (var i = 65 * 8 * 4; i < ((64 * 23) + (8 * 3)) * 4; i += 64 * 4) {
-        leftTilePixels.addAll(canvasPixelData.getRange(i, i + (16 * 4)));
+      for (var i = 65 * 8 * pixel;
+          i < ((64 * 23) + (8 * 3)) * pixel;
+          i += 64 * pixel) {
+        leftTilePixels
+            .addAll(pixelsBeforeFlipApplied.getRange(i, i + (16 * pixel)));
       }
 
       var allGreen = true;
-      for (var i = 0; i < leftTilePixels.length; i += 4) {
+      for (var i = 0; i < leftTilePixels.length; i += pixel) {
         allGreen &= leftTilePixels[i] == 0 &&
             leftTilePixels[i + 1] == 255 &&
             leftTilePixels[i + 2] == 0 &&
@@ -255,17 +274,68 @@ void main() {
       expect(allGreen, true);
 
       final rightTilePixels = <int>[];
-      for (var i = 69 * 8 * 4; i < ((64 * 23) + (8 * 7)) * 4; i += 64 * 4) {
-        rightTilePixels.addAll(canvasPixelData.getRange(i, i + (16 * 4)));
+      for (var i = 69 * 8 * pixel;
+          i < ((64 * 23) + (8 * 7)) * pixel;
+          i += 64 * pixel) {
+        rightTilePixels
+            .addAll(pixelsBeforeFlipApplied.getRange(i, i + (16 * pixel)));
       }
 
-      for (var i = 0; i < rightTilePixels.length; i += 4) {
+      for (var i = 0; i < rightTilePixels.length; i += pixel) {
         allGreen &= rightTilePixels[i] == 0 &&
             rightTilePixels[i + 1] == 255 &&
             rightTilePixels[i + 2] == 0 &&
             rightTilePixels[i + 3] == 255;
       }
       expect(allGreen, true);
+    });
+  });
+
+  group('ignoring flip makes different texture and rendering result', () {
+    Image? texture;
+    Uint8List? rendered;
+
+    Future<void> prepareForGolden({required bool ignoreFlip}) async {
+      Flame.bundle = TestAssetBundle(
+        imageNames: [
+          '4_color_sprite.png',
+        ],
+        mapPath: 'test/assets/8_tiles-flips.tmx',
+      );
+      final tiledComponent = TiledComponent(
+        await RenderableTiledMap.fromFile(
+          '8_tiles-flips.tmx',
+          Vector2.all(16),
+          ignoreFlip: ignoreFlip,
+        ),
+      );
+
+      await Flame.images.ready();
+
+      texture = (tiledComponent.tileMap.renderableLayers[0] as FlameTileLayer)
+          .tiledAtlas
+          .batch
+          ?.atlas;
+
+      rendered = await renderMapToPng(tiledComponent);
+    }
+
+    test('flip works with [ignoreFlip = false]', () async {
+      await prepareForGolden(ignoreFlip: false);
+      expect(texture, matchesGoldenFile('goldens/texture_with_flip.png'));
+      expect(rendered, matchesGoldenFile('goldens/rendered_with_flip.png'));
+    });
+
+    test('flip ignored with [ignoreFlip = true]', () async {
+      await prepareForGolden(ignoreFlip: true);
+      expect(
+        texture,
+        matchesGoldenFile('goldens/texture_with_flip_ignored.png'),
+      );
+      expect(
+        rendered,
+        matchesGoldenFile('goldens/rendered_with_flip_ignored.png'),
+      );
     });
   });
 
