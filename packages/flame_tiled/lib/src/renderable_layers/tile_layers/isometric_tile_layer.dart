@@ -5,6 +5,8 @@ import 'package:flame_tiled/src/mutable_transform.dart';
 import 'package:flame_tiled/src/renderable_layers/tile_layers/tile_layer.dart';
 import 'package:meta/meta.dart';
 
+/// [IsometricTileLayer] is the tile layer which has a isometric view.
+/// You can see the details in the [https://en.wikipedia.org/wiki/Isometric_video_game_graphics].
 @internal
 class IsometricTileLayer extends FlameTileLayer {
   IsometricTileLayer({
@@ -71,7 +73,7 @@ class IsometricTileLayer extends FlameTileLayer {
         final scos = flips.cos * scale;
         final ssin = flips.sin * scale;
 
-        indexes[tx][ty] = MutableRSTransform(
+        transforms[tx][ty] = MutableRSTransform(
           scos,
           ssin,
           offsetX,
@@ -82,7 +84,7 @@ class IsometricTileLayer extends FlameTileLayer {
 
         batch.addTransform(
           source: src,
-          transform: indexes[tx][ty],
+          transform: transforms[tx][ty],
           flip: shouldFlip(flips),
         );
 

@@ -179,8 +179,8 @@ class RenderableTiledMap {
           continue;
         }
 
-        if (layer.indexes[x][y] != null) {
-          tiles.add(layer.indexes[x][y]!);
+        if (layer.transforms[x][y] != null) {
+          tiles.add(layer.transforms[x][y]!);
         }
       }
     }

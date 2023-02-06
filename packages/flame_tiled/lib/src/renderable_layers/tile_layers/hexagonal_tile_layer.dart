@@ -6,6 +6,8 @@ import 'package:flame_tiled/src/renderable_layers/tile_layers/tile_layer.dart';
 import 'package:flame_tiled/src/tile_transform.dart';
 import 'package:meta/meta.dart';
 
+/// [HexagonalTileLayer] have hexagonal shaped tile and its overall shape
+/// is like a honeycomb.
 @internal
 class HexagonalTileLayer extends FlameTileLayer {
   HexagonalTileLayer({
@@ -119,7 +121,7 @@ class HexagonalTileLayer extends FlameTileLayer {
         final scos = flips.cos * scale;
         final ssin = flips.sin * scale;
 
-        final transform = indexes[tx][ty] = MutableRSTransform(
+        final transform = transforms[tx][ty] = MutableRSTransform(
           scos,
           ssin,
           offsetX,

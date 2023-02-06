@@ -14,11 +14,29 @@ import 'package:flame_tiled/src/tile_atlas.dart';
 import 'package:flutter/painting.dart';
 import 'package:meta/meta.dart';
 
+/// {@template flame_tile_layer}
+/// [FlameTileLayer] is base class of following classes:
+///
+/// - [OrthogonalTileLayer]
+/// - [StaggeredTileLayer]
+/// - [HexagonalTileLayer]
+/// - [IsometricTileLayer]
+///
+/// [FlameTileLayer] decides its concrete type by [MapOrientation]. So any
+/// subclass of this should implement [cacheTiles] to reflect their map
+/// orientation format.
+///
+/// [FlameTileLayer] stores its source image to [tiledAtlas]
+/// and transform it by [transforms].
+///
+/// The flip is ignored if the [ignoreFlip] is set to true.
+///
+/// {@endtemplate}
 @internal
 abstract class FlameTileLayer extends RenderableLayer<TileLayer> {
   late final _layerPaint = Paint();
   final TiledAtlas tiledAtlas;
-  late List<List<MutableRSTransform?>> indexes;
+  late List<List<MutableRSTransform?>> transforms;
   final animations = <TileAnimation>[];
   final Map<Tile, TileFrames> animationFrames;
   final bool ignoreFlip;
@@ -35,7 +53,8 @@ abstract class FlameTileLayer extends RenderableLayer<TileLayer> {
     _layerPaint.color = Color.fromRGBO(255, 255, 255, opacity);
   }
 
-  static Future<FlameTileLayer> load({
+  /// {@macro flame_tile_layer}
+  static FlameTileLayer load({
     required TileLayer layer,
     required GroupLayer? parent,
     required TiledMap map,
@@ -43,7 +62,7 @@ abstract class FlameTileLayer extends RenderableLayer<TileLayer> {
     required Map<Tile, TileFrames> animationFrames,
     required TiledAtlas atlas,
     bool? ignoreFlip,
-  }) async {
+  }) {
     ignoreFlip ??= false;
 
     final mapOrientation = map.orientation;
@@ -152,7 +171,7 @@ abstract class FlameTileLayer extends RenderableLayer<TileLayer> {
   @override
   void refreshCache() {
     animations.clear();
-    indexes = List.generate(
+    transforms = List.generate(
       layer.width,
       (index) => List.filled(layer.height, null),
     );
@@ -162,6 +181,17 @@ abstract class FlameTileLayer extends RenderableLayer<TileLayer> {
     cacheTiles();
   }
 
+  /// We need to know following information for each tile to render a layer
+  /// correctly.
+  ///
+  /// - source offset
+  /// - rotation
+  /// - translation
+  /// - flip
+  ///
+  /// But gathering these in every tick is too heavy task to engine.
+  /// So, [FlameTileLayer] caches these by [cacheTiles] and tiles quickly in
+  /// every frame.
   @protected
   void cacheTiles();
 

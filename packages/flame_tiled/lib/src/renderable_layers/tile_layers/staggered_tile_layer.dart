@@ -6,6 +6,7 @@ import 'package:flame_tiled/src/renderable_layers/tile_layers/tile_layer.dart';
 import 'package:flame_tiled/src/tile_transform.dart';
 import 'package:meta/meta.dart';
 
+/// [StaggeredTileLayer] is an isometric map using staggered axis.
 @internal
 class StaggeredTileLayer extends FlameTileLayer {
   StaggeredTileLayer({
@@ -119,7 +120,7 @@ class StaggeredTileLayer extends FlameTileLayer {
         final scos = flips.cos * scale;
         final ssin = flips.sin * scale;
 
-        final transform = indexes[tx][ty] = MutableRSTransform(
+        final transform = transforms[tx][ty] = MutableRSTransform(
           scos,
           ssin,
           offsetX,

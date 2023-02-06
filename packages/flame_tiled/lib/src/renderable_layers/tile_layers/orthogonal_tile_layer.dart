@@ -5,6 +5,8 @@ import 'package:flame_tiled/src/mutable_transform.dart';
 import 'package:flame_tiled/src/renderable_layers/tile_layers/tile_layer.dart';
 import 'package:meta/meta.dart';
 
+/// [OrthogonalTileLayer] is a tile layer that each axis are represented
+/// as orthogonally.
 @internal
 class OrthogonalTileLayer extends FlameTileLayer {
   OrthogonalTileLayer({
@@ -69,7 +71,7 @@ class OrthogonalTileLayer extends FlameTileLayer {
         final scos = flips.cos * scale;
         final ssin = flips.sin * scale;
 
-        indexes[tx][ty] = MutableRSTransform(
+        transforms[tx][ty] = MutableRSTransform(
           scos,
           ssin,
           offsetX,
@@ -80,7 +82,7 @@ class OrthogonalTileLayer extends FlameTileLayer {
 
         batch.addTransform(
           source: src,
-          transform: indexes[tx][ty],
+          transform: transforms[tx][ty],
           flip: shouldFlip(flips),
         );
 
