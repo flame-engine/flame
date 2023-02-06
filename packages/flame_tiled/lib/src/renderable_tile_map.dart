@@ -6,10 +6,8 @@ import 'package:flame/game.dart';
 import 'package:flame_tiled/src/flame_tsx_provider.dart';
 import 'package:flame_tiled/src/mutable_transform.dart';
 import 'package:flame_tiled/src/renderable_layers/group_layer.dart';
-import 'package:flame_tiled/src/renderable_layers/image_layer.dart';
-import 'package:flame_tiled/src/renderable_layers/object_layer.dart';
 import 'package:flame_tiled/src/renderable_layers/renderable_layer.dart';
-import 'package:flame_tiled/src/renderable_layers/tile_layer.dart';
+import 'package:flame_tiled/src/renderable_layers/tile_layer/tile_layer.dart';
 import 'package:flame_tiled/src/tile_animation.dart';
 import 'package:flame_tiled/src/tile_atlas.dart';
 import 'package:flame_tiled/src/tile_stack.dart';
@@ -281,74 +279,37 @@ class RenderableTiledMap {
     required TiledAtlas atlas,
     bool? ignoreFlip,
   }) async {
-    final renderLayers = <RenderableLayer<Layer>>[];
-    for (final layer in layers.where((layer) => layer.visible)) {
-      switch (layer.runtimeType) {
-        case TileLayer:
-          renderLayers.add(
-            await FlameTileLayer.load(
-              layer as TileLayer,
-              parent,
-              map,
-              destTileSize,
-              animationFrames,
-              atlas.clone(),
-              ignoreFlip: ignoreFlip,
-            ),
-          );
-          break;
-        case ImageLayer:
-          renderLayers.add(
-            await FlameImageLayer.load(
-              layer as ImageLayer,
-              parent,
-              camera,
-              map,
-              destTileSize,
-            ),
-          );
-          break;
+    final visibleLayers = layers.where((layer) => layer.visible);
 
-        case Group:
-          final groupLayer = layer as Group;
-          final renderableGroup = GroupLayer(
-            groupLayer,
-            parent,
-            map,
-            destTileSize,
-          );
-          renderableGroup.children = await _renderableLayers(
-            groupLayer.layers,
-            renderableGroup,
-            map,
-            destTileSize,
-            camera,
-            animationFrames,
-            atlas: atlas,
-            ignoreFlip: ignoreFlip,
-          );
-          renderLayers.add(renderableGroup);
-          break;
+    final layerLoaders = visibleLayers.map((layer) async {
+      final renderableLayer = await RenderableLayer.load(
+        layer: layer,
+        parent: parent,
+        map: map,
+        destTileSize: destTileSize,
+        camera: camera,
+        animationFrames: animationFrames,
+        atlas: atlas,
+        ignoreFlip: ignoreFlip,
+      );
 
-        case ObjectGroup:
-          renderLayers.add(
-            await ObjectLayer.load(
-              layer as ObjectGroup,
-              map,
-              destTileSize,
-            ),
-          );
-          break;
-
-        default:
-          assert(false, '$layer layer is unsupported.');
-          renderLayers.add(
-            UnsupportedLayer(layer, parent, map, destTileSize),
-          );
-          break;
+      if (layer is Group && renderableLayer is GroupLayer) {
+        renderableLayer.children = await _renderableLayers(
+          layer.layers,
+          renderableLayer,
+          map,
+          destTileSize,
+          camera,
+          animationFrames,
+          atlas: atlas,
+          ignoreFlip: ignoreFlip,
+        );
       }
-    }
-    return renderLayers;
+
+      return renderableLayer;
+    }).toList();
+
+    return Future.wait(layerLoaders);
   }
 
   /// Handle game resize and propagate it to renderable layers
