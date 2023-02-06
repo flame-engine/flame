@@ -26,18 +26,12 @@ class DoubleTapDispatcher extends Component with HasGameRef<FlameGame> {
   }
 
   void _onDoubleTap(DoubleTapEvent event) {
-    event.deliverToComponents(
-      game,
-      (DoubleTapCallbacks component) => component.onDoubleTap(event),
-    );
+    _components.forEach((component) => component.onDoubleTap(event));
     _components.clear();
   }
 
   void _onDoubleTapCancel(DoubleTapCancelEvent event) {
-    event.deliverToComponents(
-      game,
-      (DoubleTapCallbacks component) => component.onDoubleTapCancel(event),
-    );
+    _components.forEach((component) => component.onDoubleTapCancel(event));
     _components.clear();
   }
 
