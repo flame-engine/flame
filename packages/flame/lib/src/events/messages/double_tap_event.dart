@@ -1,3 +1,3 @@
-import 'package:flame/src/events/messages/position_event.dart';
+import 'package:flame/src/events/messages/event.dart';
 
-class DoubleTapEvent extends PositionEvent {}
+class DoubleTapEvent extends Event {}
