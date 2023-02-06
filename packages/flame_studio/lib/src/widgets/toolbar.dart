@@ -1,3 +1,4 @@
+import 'package:flame_studio/src/widgets/flame_studio_settings.dart';
 import 'package:flutter/widgets.dart';
 
 class Toolbar extends StatelessWidget {
@@ -5,8 +6,12 @@ class Toolbar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final settings = FlameStudioSettings.of(context);
+    final height = settings.toolbarHeight;
+    final gap = height * 0.20;
+
     return Container(
-      constraints: const BoxConstraints.tightFor(height: 25),
+      constraints: BoxConstraints.tightFor(height: height),
       decoration: const BoxDecoration(
         boxShadow: [
           BoxShadow(
@@ -18,7 +23,7 @@ class Toolbar extends StatelessWidget {
             color: Color(0xbf000000),
             offset: Offset(0, 1),
             blurRadius: 2.0,
-          )
+          ),
         ],
         color: Color(0xff303030),
       ),
@@ -26,7 +31,7 @@ class Toolbar extends StatelessWidget {
         textDirection: TextDirection.ltr,
         children: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(4, 4, 24, 4),
+            padding: EdgeInsets.fromLTRB(gap, gap / 2, height, gap),
             child: Image.asset('logo_flame.png', fit: BoxFit.scaleDown),
           ),
         ],
