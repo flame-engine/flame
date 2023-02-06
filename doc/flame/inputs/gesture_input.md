@@ -477,7 +477,7 @@ class MyGame extends FlameGame with HasHoverables {
 
 
 Flame also offers a mixin named `DoubleTapCallbacks` to receive a double-tap event from the
-component. The only thing that you should do to receive a double tap event is added
+component. The only thing that you should do to receive a double tap event is adding
 `DoubleTapCallbacks` to your `PositionComponent`.
 
 ```dart
