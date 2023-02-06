@@ -2,7 +2,12 @@
   "version": "0.2",
   "language": "en",
   "flagWords": ["teh", "hte"],
-  "ignorePaths": ["**/media/**", "**/assets/**", "**/test/**"],
+  "ignorePaths": [
+    "**/media/**",
+    "**/assets/**",
+    "**/test/**",
+    "CHANGELOG.md"
+  ],
   "ignoreRegExpList": [
       "@[\\w\\-]+",
       "\\$\\w+",
