@@ -22,6 +22,8 @@ class MyGame extends FlameGame {
     final size = findGame()!.canvasSize;
     final random = Random();
     for (var i = 0; i < 100; i++) {
+      final speed = random.nextDouble() * 500;
+      final angle = random.nextDouble() * 12;
       add(
         Circle(
           radius: random.nextDouble() * 10 + 10,
@@ -29,10 +31,7 @@ class MyGame extends FlameGame {
             (0.8 * random.nextDouble() + 0.1) * size.x,
             (0.8 * random.nextDouble() + 0.1) * size.y,
           ),
-          velocity: Vector2(
-            pow(2 * random.nextDouble() - 1, 3) * 500,
-            pow(2 * random.nextDouble() - 1, 3) * 500,
-          ),
+          velocity: Vector2(speed * sin(angle), speed * cos(angle)),
         ),
       );
     }

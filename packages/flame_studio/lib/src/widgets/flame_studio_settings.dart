@@ -1,9 +1,12 @@
+import 'package:flame/game.dart';
 import 'package:flutter/widgets.dart';
 import 'package:meta/meta.dart';
 
 class FlameStudioSettings extends StatefulWidget {
   const FlameStudioSettings({
     required this.child,
+    required this.gameWidget,
+    required this.gameWidgetState,
     super.key,
   });
 
@@ -15,6 +18,8 @@ class FlameStudioSettings extends StatefulWidget {
   }
 
   final Widget child;
+  final GameWidget? gameWidget;
+  final State? gameWidgetState;
 
   @override
   State<StatefulWidget> createState() => _FlameStudioSettingsState();
@@ -32,13 +37,19 @@ class _FlameStudioSettingsState extends State<FlameStudioSettings> {
   }
 }
 
-// ignore_for_file: invalid_use_of_protected_member
+// ignore_for_file: invalid_use_of_protected_member,  for setState() calls
 @internal
 class FlameStudioSettingsWidget extends InheritedWidget {
   const FlameStudioSettingsWidget(this._state, Widget child, {super.key})
       : super(child: child);
 
   final _FlameStudioSettingsState _state;
+
+  GameWidget? get gameWidget => _state.widget.gameWidget;
+  Game? get game {
+    // ignore: avoid_dynamic_calls
+    return (_state.widget.gameWidgetState as dynamic)?.currentGame as Game?;
+  }
 
   TextDirection get textDirection => TextDirection.ltr;
 
