@@ -68,15 +68,15 @@ abstract class RenderableLayer<T extends Layer> {
         map: map,
         destTileSize: destTileSize,
       );
-    } else {
-      assert(false, '$layer layer is unsupported.');
-      return UnsupportedLayer(
-        layer: layer,
-        parent: parent,
-        map: map,
-        destTileSize: destTileSize,
-      );
     }
+
+    assert(false, '$layer layer is unsupported.');
+    return UnsupportedLayer(
+      layer: layer,
+      parent: parent,
+      map: map,
+      destTileSize: destTileSize,
+    );
   }
 
   bool get visible => layer.visible;
