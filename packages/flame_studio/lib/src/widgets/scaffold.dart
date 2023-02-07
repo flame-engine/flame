@@ -1,7 +1,7 @@
 import 'package:flame_studio/src/widgets/flame_studio_settings.dart';
 import 'package:flame_studio/src/widgets/left_panel.dart';
 import 'package:flame_studio/src/widgets/left_panel_grip.dart';
-import 'package:flame_studio/src/widgets/toolbar.dart';
+import 'package:flame_studio/src/widgets/toolbar/toolbar.dart';
 import 'package:flutter/widgets.dart';
 
 class Scaffold extends StatelessWidget {
