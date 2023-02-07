@@ -1,4 +1,5 @@
 import 'package:flame_studio/src/widgets/flame_studio_settings.dart';
+import 'package:flame_studio/src/widgets/toolbar/start_button.dart';
 import 'package:flame_studio/src/widgets/toolbar/toolbar_button.dart';
 import 'package:flutter/widgets.dart';
 
@@ -38,7 +39,7 @@ class Toolbar extends StatelessWidget {
           Expanded(child: Container()),
           Padding(
             padding: EdgeInsets.symmetric(vertical: gap, horizontal: 2 * gap),
-            child: ToolbarButton.start(),
+            child: const StartButton(),
           ),
           Expanded(child: Container()),
         ],

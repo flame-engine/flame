@@ -2,18 +2,14 @@ import 'package:flame_studio/src/widgets/flame_studio_settings.dart';
 import 'package:flutter/widgets.dart';
 
 class ToolbarButton extends StatefulWidget {
-  const ToolbarButton({required this.icon, this.disabled = true, super.key});
+  const ToolbarButton({
+    required this.icon,
+    this.onClick,
+    this.disabled = false,
+    super.key,
+  });
 
-  factory ToolbarButton.start() {
-    return ToolbarButton(
-      icon: Path()
-        ..moveTo(-2.5, 5)
-        ..lineTo(-2.5, -5)
-        ..lineTo(6, 0)
-        ..close(),
-    );
-  }
-
+  final void Function()? onClick;
   final Path icon;
   final bool disabled;
 
@@ -48,8 +44,13 @@ class _ToolbarButtonState extends State<ToolbarButton> {
               cursor: SystemMouseCursors.click,
               child: GestureDetector(
                 onTapDown: (_) => setState(() => _isActive = true),
-                onTapUp: (_) => setState(() => _isActive = false),
                 onTapCancel: () => setState(() => _isActive = false),
+                onTapUp: (_) {
+                  if (_isActive) {
+                    widget.onClick?.call();
+                  }
+                  setState(() => _isActive = false);
+                },
                 child: painter,
               ),
             ),
