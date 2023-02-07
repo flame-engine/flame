@@ -128,15 +128,11 @@ abstract class FlameTileLayer extends RenderableLayer<TileLayer> {
     }
 
     canvas.save();
-
     canvas.translate(offsetX, offsetY);
-
     if (camera != null) {
       applyParallaxOffset(canvas, camera);
     }
-
     tiledAtlas.batch!.render(canvas, paint: _layerPaint);
-
     canvas.restore();
   }
 
