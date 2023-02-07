@@ -1,4 +1,5 @@
 import 'package:flame_studio/src/widgets/flame_studio_settings.dart';
+import 'package:flame_studio/src/widgets/toolbar_button.dart';
 import 'package:flutter/widgets.dart';
 
 class Toolbar extends StatelessWidget {
@@ -8,7 +9,7 @@ class Toolbar extends StatelessWidget {
   Widget build(BuildContext context) {
     final settings = FlameStudioSettings.of(context);
     final height = settings.toolbarHeight;
-    final gap = height * 0.20;
+    final gap = height * 0.10;
 
     return Container(
       constraints: BoxConstraints.tightFor(height: height),
@@ -31,9 +32,15 @@ class Toolbar extends StatelessWidget {
         textDirection: TextDirection.ltr,
         children: [
           Padding(
-            padding: EdgeInsets.fromLTRB(gap, gap / 2, height, gap),
+            padding: EdgeInsets.fromLTRB(gap * 2, gap, gap * 10, gap * 2),
             child: Image.asset('logo_flame.png', fit: BoxFit.scaleDown),
           ),
+          Expanded(child: Container()),
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: gap, horizontal: 2 * gap),
+            child: ToolbarButton.start(),
+          ),
+          Expanded(child: Container()),
         ],
       ),
     );

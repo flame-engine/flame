@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:meta/meta.dart';
 
 class FlameStudioSettings extends StatefulWidget {
   const FlameStudioSettings({
@@ -6,9 +7,9 @@ class FlameStudioSettings extends StatefulWidget {
     super.key,
   });
 
-  static _FlameStudioSettingsWidget of(BuildContext context) {
+  static FlameStudioSettingsWidget of(BuildContext context) {
     final result = context
-        .dependOnInheritedWidgetOfExactType<_FlameStudioSettingsWidget>();
+        .dependOnInheritedWidgetOfExactType<FlameStudioSettingsWidget>();
     assert(result != null, 'No Settings widget among the ancestors');
     return result!;
   }
@@ -20,20 +21,21 @@ class FlameStudioSettings extends StatefulWidget {
 }
 
 class _FlameStudioSettingsState extends State<FlameStudioSettings> {
-  double toolbarHeight = 25.0;
+  double toolbarHeight = 28.0;
   double leftPanelWidth = 250.0;
   double minLeftPanelWidth = 200.0;
   double maxLeftPanelWidth = 500.0;
 
   @override
   Widget build(BuildContext context) {
-    return _FlameStudioSettingsWidget(this, widget.child);
+    return FlameStudioSettingsWidget(this, widget.child);
   }
 }
 
 // ignore_for_file: invalid_use_of_protected_member
-class _FlameStudioSettingsWidget extends InheritedWidget {
-  const _FlameStudioSettingsWidget(this._state, Widget child)
+@internal
+class FlameStudioSettingsWidget extends InheritedWidget {
+  const FlameStudioSettingsWidget(this._state, Widget child, {super.key})
       : super(child: child);
 
   final _FlameStudioSettingsState _state;
@@ -53,6 +55,16 @@ class _FlameStudioSettingsWidget extends InheritedWidget {
         );
       });
 
+  double get buttonRadius => 5.0;
+  Color get buttonColor => const Color(0xFF404040);
+  Color get buttonHoverColor => const Color(0xFF606060);
+  Color get buttonActiveColor => const Color(0xFFA0A0A0);
+  Color get buttonDisabledColor => const Color(0x66404040);
+  Color get buttonTextColor => const Color(0xFFffd78d);
+  Color get buttonHoverTextColor => const Color(0xffffe95d);
+  Color get buttonActiveTextColor => const Color(0xffffffff);
+  Color get buttonDisabledTextColor => const Color(0x66ffd78d);
+
   @override
-  bool updateShouldNotify(_FlameStudioSettingsWidget oldWidget) => true;
+  bool updateShouldNotify(FlameStudioSettingsWidget oldWidget) => true;
 }

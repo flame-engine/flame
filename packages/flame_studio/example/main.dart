@@ -10,5 +10,5 @@ void main() {
 
 class MyGame extends FlameGame {
   @override
-  Color backgroundColor() => const Color(0xff5c3ffb);
+  Color backgroundColor() => const Color(0xff698dd0);
 }
