@@ -37,7 +37,6 @@ class DoubleTapDispatcher extends Component with HasGameRef<FlameGame> {
 
   @override
   void onMount() {
-    game.children.register();
     if (game.firstChild<DoubleTapDispatcher>() == null) {
       game.gestureDetectors.add(
         DoubleTapGestureRecognizer.new,
