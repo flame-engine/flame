@@ -36,9 +36,8 @@ class HexagonalTileLayer extends FlameTileLayer {
     // Hexagonal Pointy Tiles move down by a fractional amount.
     if (map.staggerAxis == StaggerAxis.y) {
       staggerY = size.y * 0.75;
-    } else
-    // Hexagonal Flat Tiles move right by a fractional amount.
-    if (map.staggerAxis == StaggerAxis.x) {
+    } else if (map.staggerAxis == StaggerAxis.x) {
+      // Hexagonal Flat Tiles move right by a fractional amount.
       staggerX = size.x * 0.75;
     }
 
