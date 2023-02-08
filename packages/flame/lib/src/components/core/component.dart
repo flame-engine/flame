@@ -40,8 +40,8 @@ import 'package:vector_math/vector_math_64.dart';
 /// Each component goes through several lifecycle stages during its lifetime,
 /// at each stage invoking certain user-defined "lifecycle methods":
 ///  - [onLoad] when the component is first added into the tree;
-///  - [onGameResize] + [onMount] when done loading, or when component is
-///    re-added into the component tree after having been removed;
+///  - [onGameResize] + [onMount] when done loading, or when the component is
+///    re-added to the component tree after having been removed;
 ///  - [onRemove] if the component is later removed from the component tree.
 ///
 /// The [onLoad] is only invoked once during the lifetime of the component,
