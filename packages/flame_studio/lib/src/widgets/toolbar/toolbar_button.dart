@@ -56,6 +56,16 @@ class _ToolbarButtonState extends State<ToolbarButton> {
             ),
     );
   }
+
+  @override
+  void didUpdateWidget(ToolbarButton oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.icon != oldWidget.icon ||
+        widget.disabled != oldWidget.disabled) {
+      _isActive = false;
+      _isHovered = false;
+    }
+  }
 }
 
 class _ToolbarButtonPainter extends CustomPainter {
