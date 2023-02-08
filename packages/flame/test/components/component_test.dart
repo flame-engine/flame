@@ -196,6 +196,7 @@ void main() {
             'onGameResize [800.0,600.0]',
             'onMount',
             'onRemove',
+            'onGameResize [800.0,600.0]',
             'onMount',
           ],
         );
@@ -615,6 +616,7 @@ void main() {
             [
               'onLoad',
               '--',
+              'onGameResize [800.0,600.0]',
               'onMount',
             ],
           );
