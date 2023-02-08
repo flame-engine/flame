@@ -12,7 +12,7 @@ command:
   version:
     # Only allow versioning to happen on main branch.
     branch: main
-    # Generates a link to a prefilled GitHug release creation page.
+    # Generates a link to a prefilled GitHub release creation page.
     releaseUrl: true
 
 scripts:
