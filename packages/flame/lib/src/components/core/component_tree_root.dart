@@ -25,6 +25,29 @@ class ComponentTreeRoot extends Component {
       ..parent = parent;
   }
 
+  @internal
+  void dequeueAdd(Component child, Component parent) {
+    for (final event in _queue) {
+      if (event.kind == _LifecycleEventKind.add &&
+          event.child == child &&
+          event.parent == parent) {
+        event.kind = _LifecycleEventKind.unknown;
+        return;
+      }
+    }
+    throw AssertionError(
+      'Cannot find a lifecycle event Add(child=$child, parent=$parent)',
+    );
+  }
+
+  @internal
+  void enqueueRemove(Component child, Component parent) {
+    _queue.addLast()
+      ..kind = _LifecycleEventKind.remove
+      ..child = child
+      ..parent = parent;
+  }
+
   bool get hasLifecycleEvents => _queue.isNotEmpty;
 
   void processLifecycleEvents() {
@@ -34,19 +57,21 @@ class ComponentTreeRoot extends Component {
       repeatLoop = false;
       for (final event in _queue) {
         final child = event.child!;
-        final parent = event.parent;
+        final parent = event.parent!;
         if (_blocked.contains(identityHashCode(child)) ||
             _blocked.contains(identityHashCode(parent))) {
           continue;
         }
-        LifecycleEventStatus status;
+        var status = LifecycleEventStatus.done;
         switch (event.kind) {
           case _LifecycleEventKind.add:
-            status = child.handleLifecycleEventAdd(parent!);
+            status = child.handleLifecycleEventAdd(parent);
             break;
           case _LifecycleEventKind.remove:
-          default:
-            throw UnsupportedError('Event ${event.kind} not supported');
+            status = child.handleLifecycleEventRemove(parent);
+            break;
+          case _LifecycleEventKind.unknown:
+            break;
         }
         switch (status) {
           case LifecycleEventStatus.done:
