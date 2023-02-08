@@ -32,14 +32,14 @@ class _SettingsProviderState extends State<SettingsProvider> {
   @override
   void initState() {
     super.initState();
-    _settings.controller.game = widget.game;
+    _settings.controller.setGame(widget.game);
   }
 
   @override
   void didUpdateWidget(SettingsProvider oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.game != oldWidget.game) {
-      _settings.controller.game = widget.game;
+      _settings.controller.setGame(widget.game);
     }
   }
 }

@@ -1,10 +1,10 @@
-
 import 'package:flame_studio/src/core/game_controller.dart';
 import 'package:flame_studio/src/widgets/settings_provider.dart';
 import 'package:flutter/widgets.dart';
 
 class Settings {
-  Settings(this._onChange);
+  Settings(this._onChange)
+    : controller = GameController(_onChange);
 
   static Settings of(BuildContext context) {
     final result = context
@@ -12,7 +12,7 @@ class Settings {
     return result!.settings;
   }
 
-  final GameController controller = GameController();
+  final GameController controller;
 
   final void Function() _onChange;
 
@@ -51,11 +51,11 @@ class Settings {
   Color get buttonColor => const Color(0xFF404040);
   Color get buttonHoverColor => const Color(0xFF606060);
   Color get buttonActiveColor => const Color(0xFFA0A0A0);
-  Color get buttonDisabledColor => const Color(0x66404040);
+  Color get buttonDisabledColor => const Color(0x44404040);
   Color get buttonTextColor => const Color(0xFFffd78d);
   Color get buttonHoverTextColor => const Color(0xffffe95d);
   Color get buttonActiveTextColor => const Color(0xffffffff);
-  Color get buttonDisabledTextColor => const Color(0x66ffd78d);
+  Color get buttonDisabledTextColor => const Color(0x16ffffff);
 
   void _notifyListeners() => _onChange();
 }
