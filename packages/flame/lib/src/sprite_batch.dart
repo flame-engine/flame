@@ -268,7 +268,6 @@ class SpriteBatch {
     }
 
     _batchItems.add(batchItem);
-
     _sources.add(
       flip
           ? Rect.fromLTWH(
