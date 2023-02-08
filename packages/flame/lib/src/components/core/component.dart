@@ -38,9 +38,9 @@ import 'package:vector_math/vector_math_64.dart';
 ///
 /// Each component goes through several lifecycle stages during its lifetime,
 /// at each stage invoking certain user-defined "lifecycle methods":
-///  - [onGameResize] when the component is first added into the tree;
-///  - [onLoad] immediately after;
-///  - [onMount] when done loading;
+///  - [onLoad] when the component is first added into the tree;
+///  - [onGameResize] + [onMount] when done loading, or when the component is
+///    re-added to the component tree after having been removed;
 ///  - [onRemove] if the component is later removed from the component tree.
 ///
 /// The [onLoad] is only invoked once during the lifetime of the component,
@@ -87,10 +87,9 @@ class Component {
   ///     this state no events has occurred so far.
   ///
   /// [_loading]: this flag is set while the component is running its [onLoad]
-  ///     method, and can be checked via [isLoading] getter. More specifically,
-  ///     this bit is set before invoking [onGameResize], it is on for the
-  ///     duration of [onLoad], and then it is turned off when the component is
-  ///     about to be mounted. After that, the bit is never turned on again.
+  ///     method, and can be checked via [isLoading] getter. This bit is turned
+  ///     on when the component starts loading, and then off when it has
+  ///     finished loading.
   ///
   /// [_loaded]: this flag is set after the component finishes running its
   ///     [onLoad] method, and can be checked via the [isLoaded] getter. Once
@@ -129,7 +128,7 @@ class Component {
   ///      simply set the [_parent] to null and remove it from the parent's
   ///      queue of pending children.
   ///  - When we [_startLoading] the component, we set the [_loading] bit,
-  ///    invoke the [onGameResize] callback, and then [onLoad] immediately
+  ///    and then [onLoad] immediately
   ///    afterwards. The onLoad will be either sync or async, in both cases we
   ///    arrange to turn on the [_loaded] bit at the end of [onLoad]'s run.
   ///  - At this point we're in an execution gap: either the async [onLoad] is
@@ -154,9 +153,7 @@ class Component {
   ///      - otherwise do nothing: need to wait until the component finishes
   ///        loading.
   ///  - During [_mount]ing, we perform the following sequence:
-  ///      - first check whether we need to run [onGameResize] -- this could
-  ///        happen if mounting a component that was  added to the game earlier
-  ///        and then removed;
+  ///      - first we run [onGameResize];
   ///      - check if the component was scheduled for removal while waiting in
   ///        the queue -- if so, remove it immediately without mounting;
   ///      - clear the [_loading] flag and start the [onMount] callback;
@@ -400,8 +397,7 @@ class Component {
 
   /// Called whenever the size of the top-level Canvas changes.
   ///
-  /// In addition, this method will be invoked once after the component is
-  /// attached to the game tree, and before [onLoad] is called.
+  /// In addition, this method will be invoked before each [onMount].
   @mustCallSuper
   void onGameResize(Vector2 size) => handleResize(size);
 
@@ -810,7 +806,6 @@ class Component {
     assert(_parent!.findGame() != null);
     assert(_parent!.findGame()!.hasLayout);
     _setLoadingBit();
-    onGameResize(_parent!.findGame()!.canvasSize);
     final onLoadFuture = onLoad();
     if (onLoadFuture is Future) {
       return onLoadFuture.then((dynamic _) => _finishLoading());
@@ -831,6 +826,7 @@ class Component {
     assert(_parent != null && _parent!.isMounted);
     assert(isLoaded && !isLoading);
     _setMountingBit();
+    onGameResize(_parent!.findGame()!.canvasSize);
     if (isRemoved) {
       _clearRemovedBit();
     } else if (isRemoving) {
