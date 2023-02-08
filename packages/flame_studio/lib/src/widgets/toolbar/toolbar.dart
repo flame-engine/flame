@@ -17,8 +17,8 @@ class Toolbar extends StatelessWidget {
 
     return Container(
       constraints: BoxConstraints.tightFor(height: height),
-      decoration: const BoxDecoration(
-        boxShadow: [
+      decoration: BoxDecoration(
+        boxShadow: const [
           BoxShadow(
             color: Color(0x66000000),
             offset: Offset(0, 3),
@@ -30,7 +30,7 @@ class Toolbar extends StatelessWidget {
             blurRadius: 2.0,
           ),
         ],
-        color: Color(0xff303030),
+        color: settings.toolbarColor,
       ),
       child: Row(
         textDirection: TextDirection.ltr,

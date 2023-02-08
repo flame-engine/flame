@@ -46,6 +46,10 @@ class Settings {
     _notifyListeners();
   }
 
+  Color get backdropColor => const Color(0xFF484848);
+  Color get toolbarColor => const Color(0xFF303030);
+  Color get panelColor => const Color(0xFF383838);
+
   double get buttonRadius => 5.0;
   Color get buttonColor => const Color(0xFF404040);
   Color get buttonHoverColor => const Color(0xFF606060);

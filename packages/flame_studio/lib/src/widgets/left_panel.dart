@@ -11,15 +11,15 @@ class LeftPanel extends StatelessWidget {
 
     return Container(
       constraints: BoxConstraints.tightFor(width: width),
-      decoration: const BoxDecoration(
-        boxShadow: [
+      decoration: BoxDecoration(
+        boxShadow: const [
           BoxShadow(
             blurRadius: 4.0,
             color: Color(0xA1000000),
             offset: Offset(2, 0),
           ),
         ],
-        color: Color(0xFF383838),
+        color: settings.panelColor,
       ),
     );
   }

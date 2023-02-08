@@ -13,7 +13,7 @@ class Scaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     final settings = Settings.of(context);
     return Container(
-      color: const Color(0xFF484848),
+      color: settings.backdropColor,
       child: Stack(
         textDirection: settings.textDirection,
         children: [
