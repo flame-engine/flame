@@ -11,8 +11,7 @@ class PauseButton extends StatelessWidget {
     return ToolbarButton(
       icon: Path()
         ..addRect(const Rect.fromLTRB(-4, -4.5, -1, 4.5))
-        ..addRect(const Rect.fromLTRB(1, -4.5, 4, 4.5))
-        ,
+        ..addRect(const Rect.fromLTRB(1, -4.5, 4, 4.5)),
       disabled: controller.isPaused,
       onClick: controller.pauseGame,
     );
