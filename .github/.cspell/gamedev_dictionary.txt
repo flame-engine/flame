@@ -1,3 +1,4 @@
+AABB # axis-aligned bounding box
 AHSL
 AHSV
 ARGB

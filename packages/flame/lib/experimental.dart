@@ -24,9 +24,10 @@ export 'src/camera/world.dart' show World;
 export 'src/events/component_mixins/drag_callbacks.dart' show DragCallbacks;
 export 'src/events/component_mixins/tap_callbacks.dart' show TapCallbacks;
 export 'src/events/flame_game_mixins/has_draggable_components.dart'
-    show HasDraggableComponents;
+    show
+        HasDraggableComponents; // ignore: deprecated_member_use_from_same_package
 export 'src/events/flame_game_mixins/has_draggables_bridge.dart'
-    show HasDraggablesBridge;
+    show HasDraggablesBridge; // ignore: deprecated_member_use_from_same_package
 export 'src/events/flame_game_mixins/has_tappable_components.dart'
     show HasTappableComponents;
 export 'src/events/flame_game_mixins/has_tappables_bridge.dart'

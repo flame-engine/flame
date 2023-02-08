@@ -4,6 +4,8 @@ import 'package:flame_test/flame_test.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../custom_component.dart';
+
 void main() {
   group('Component', () {
     group('Lifecycle', () {
@@ -1076,6 +1078,29 @@ void main() {
           expect(component2.value, 3);
           expect(component1.value, 4);
           expect(order, 5);
+        },
+      );
+
+      testWithFlameGame(
+        'Components added in onLoad can be accessed in onMount',
+        (game) async {
+          final component = CustomComponent(
+            onLoad: (self) {
+              self.add(Component());
+              self.add(_SlowLoadingComponent());
+              self.add(Component());
+            },
+            onMount: (self) {
+              expect(self.children.length, 3);
+              self.children.elementAt(0).add(Component());
+            },
+          );
+          game.add(component);
+          await game.ready();
+
+          expect(component.isMounted, true);
+          expect(component.children.length, 3);
+          expect(component.children.first.children.length, 1);
         },
       );
     });
