@@ -1,4 +1,4 @@
-import 'package:flame_studio/src/widgets/flame_studio_settings.dart';
+import 'package:flame_studio/src/core/settings.dart';
 import 'package:flutter/widgets.dart';
 
 class LeftPanelGrip extends StatelessWidget {
@@ -10,7 +10,7 @@ class LeftPanelGrip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final settings = FlameStudioSettings.of(context);
+    final settings = Settings.of(context);
     final panelWidth = settings.leftPanelWidth;
     return Row(
       textDirection: settings.textDirection,

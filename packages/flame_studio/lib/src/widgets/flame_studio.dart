@@ -1,6 +1,6 @@
 import 'package:flame/game.dart';
-import 'package:flame_studio/src/widgets/flame_studio_settings.dart';
 import 'package:flame_studio/src/widgets/scaffold.dart';
+import 'package:flame_studio/src/widgets/settings_provider.dart';
 import 'package:flutter/widgets.dart';
 
 class FlameStudio extends StatefulWidget {
@@ -13,35 +13,32 @@ class FlameStudio extends StatefulWidget {
 }
 
 class _FlameStudioState extends State<FlameStudio> {
-  GameWidget? _gameWidget;
-  State? _gameWidgetState;
+  Game? _game;
   Future<void>? _findGameWidgetFuture;
   void _scheduleGameWidgetSearch() {
     _findGameWidgetFuture ??= Future.microtask(
       () {
-        GameWidget? foundGameWidget;
-        State? gameWidgetState;
+        Game? game;
         void visitor(Element element) {
           if (element.widget is GameWidget) {
-            foundGameWidget = element.widget as GameWidget;
-            gameWidgetState = (element as StatefulElement).state;
+            final dynamic state = (element as StatefulElement).state;
+            // ignore: avoid_dynamic_calls
+            game = state.currentGame as Game;
           } else {
             element.visitChildElements(visitor);
           }
         }
 
         WidgetsBinding.instance.renderViewElement?.visitChildElements(visitor);
-        if (foundGameWidget == null) {
+        if (game == null) {
           setState(() {
-            _gameWidget = null;
-            _gameWidgetState = null;
             _findGameWidgetFuture = null;
+            _game = null;
             _scheduleGameWidgetSearch();
           });
-        } else if (foundGameWidget != _gameWidget) {
+        } else if (game != _game) {
           setState(() {
-            _gameWidget = foundGameWidget;
-            _gameWidgetState = gameWidgetState;
+            _game = game;
           });
         }
       },
@@ -53,9 +50,8 @@ class _FlameStudioState extends State<FlameStudio> {
     _ensureInitialized();
     _scheduleGameWidgetSearch();
 
-    return FlameStudioSettings(
-      gameWidget: _gameWidget,
-      gameWidgetState: _gameWidgetState,
+    return SettingsProvider(
+      game: _game,
       child: Scaffold(
         child: widget.child,
       ),

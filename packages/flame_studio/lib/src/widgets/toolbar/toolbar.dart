@@ -1,6 +1,5 @@
-import 'package:flame_studio/src/widgets/flame_studio_settings.dart';
+import 'package:flame_studio/src/core/settings.dart';
 import 'package:flame_studio/src/widgets/toolbar/start_button.dart';
-import 'package:flame_studio/src/widgets/toolbar/toolbar_button.dart';
 import 'package:flutter/widgets.dart';
 
 class Toolbar extends StatelessWidget {
@@ -8,7 +7,7 @@ class Toolbar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final settings = FlameStudioSettings.of(context);
+    final settings = Settings.of(context);
     final height = settings.toolbarHeight;
     final gap = height * 0.10;
 

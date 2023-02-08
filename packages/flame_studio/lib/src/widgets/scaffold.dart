@@ -1,4 +1,4 @@
-import 'package:flame_studio/src/widgets/flame_studio_settings.dart';
+import 'package:flame_studio/src/core/settings.dart';
 import 'package:flame_studio/src/widgets/left_panel.dart';
 import 'package:flame_studio/src/widgets/left_panel_grip.dart';
 import 'package:flame_studio/src/widgets/toolbar/toolbar.dart';
@@ -11,7 +11,7 @@ class Scaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final settings = FlameStudioSettings.of(context);
+    final settings = Settings.of(context);
     return Container(
       color: const Color(0xFF484848),
       child: Stack(

@@ -1,4 +1,4 @@
-import 'package:flame_studio/src/widgets/flame_studio_settings.dart';
+import 'package:flame_studio/src/core/settings.dart';
 import 'package:flutter/widgets.dart';
 
 class LeftPanel extends StatelessWidget {
@@ -6,7 +6,7 @@ class LeftPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final settings = FlameStudioSettings.of(context);
+    final settings = Settings.of(context);
     final width = settings.leftPanelWidth;
 
     return Container(

@@ -1,4 +1,4 @@
-import 'package:flame_studio/src/widgets/flame_studio_settings.dart';
+import 'package:flame_studio/src/core/settings.dart';
 import 'package:flutter/widgets.dart';
 
 class ToolbarButton extends StatefulWidget {
@@ -23,7 +23,7 @@ class _ToolbarButtonState extends State<ToolbarButton> {
 
   @override
   Widget build(BuildContext context) {
-    final settings = FlameStudioSettings.of(context);
+    final settings = Settings.of(context);
     final painter = CustomPaint(
       painter: _ToolbarButtonPainter(
         widget.disabled,
@@ -71,7 +71,7 @@ class _ToolbarButtonPainter extends CustomPainter {
   final bool isHovered;
   final bool isActive;
   final Path icon;
-  final FlameStudioSettingsWidget settings;
+  final Settings settings;
 
   @override
   void paint(Canvas canvas, Size size) {
