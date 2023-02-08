@@ -1,6 +1,8 @@
 import 'package:flame/game.dart';
 import 'package:flame_studio/src/widgets/scaffold.dart';
 import 'package:flame_studio/src/widgets/settings_provider.dart';
+import 'package:flame_studio/src/widgets/toolbar/pause_button.dart';
+import 'package:flame_studio/src/widgets/toolbar/start_button.dart';
 import 'package:flutter/widgets.dart';
 
 class FlameStudio extends StatefulWidget {
@@ -10,6 +12,13 @@ class FlameStudio extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() => _FlameStudioState();
+
+  static final List<Widget> toolbarLeft = [];
+  static final List<Widget> toolbarMiddle = [
+    const StartButton(),
+    const PauseButton(),
+  ];
+  static final List<Widget> toolbarRight = [];
 }
 
 class _FlameStudioState extends State<FlameStudio> {
@@ -47,23 +56,12 @@ class _FlameStudioState extends State<FlameStudio> {
 
   @override
   Widget build(BuildContext context) {
-    _ensureInitialized();
     _scheduleGameWidgetSearch();
-
     return SettingsProvider(
       game: _game,
       child: Scaffold(
         child: widget.child,
       ),
     );
-  }
-
-  static bool _initialized = false;
-
-  static void _ensureInitialized() {
-    if (_initialized) {
-      return;
-    }
-    _initialized = true;
   }
 }
