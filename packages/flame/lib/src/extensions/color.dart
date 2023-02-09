@@ -37,6 +37,9 @@ extension ColorExtension on Color {
     );
   }
 
+  // used as an example hex color code on the documentation below
+  // cSpell:ignore fccc
+
   /// Parses an RGB color from a valid hex string (e.g. #1C1C1C).
   ///
   /// The `#` is optional.

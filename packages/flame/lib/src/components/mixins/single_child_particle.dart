@@ -10,7 +10,7 @@ import 'package:flame/src/particles/particle.dart';
 ///   Particle child;
 ///
 ///   BehaviorParticle({
-///     @required this.child
+///     required this.child
 ///   });
 ///
 ///   @override

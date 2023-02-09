@@ -1,3 +1,6 @@
+// TODO(spydon): Tracked in https://github.com/flame-engine/flame/issues/2329
+// ignore_for_file: deprecated_member_use
+
 import 'dart:math';
 
 import 'package:flame/src/effects/controllers/duration_effect_controller.dart';

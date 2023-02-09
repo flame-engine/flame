@@ -36,8 +36,8 @@ Every `Component` has a few methods that you can optionally implement, which are
 ```{include} diagrams/component_life_cycle.md
 ```
 
-The `onGameResize` method is called whenever the screen is resized, and once in the beginning when
-the component is added to the game via the `add` method.
+The `onGameResize` method is called whenever the screen is resized, and also when this component
+gets added into the component tree, before the `onMount`.
 
 The `onRemove` method can be overridden to run code before the component is removed from the game,
 it is only run once even if the component is removed both by using the parents remove method and

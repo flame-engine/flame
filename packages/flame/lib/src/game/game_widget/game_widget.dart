@@ -4,7 +4,7 @@ import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flame/src/game/game_render_box.dart';
-import 'package:flame/src/game/game_widget/gestures.dart';
+import 'package:flame/src/game/game_widget/gesture_detector_builder.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
@@ -323,12 +323,8 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
         'not receive events',
       );
 
-      if (hasGestureDetectors(currentGame)) {
-        internalGameWidget = applyGesturesDetectors(
-          currentGame,
-          internalGameWidget,
-        );
-      }
+      internalGameWidget =
+          currentGame.gestureDetectors.build(internalGameWidget);
 
       if (hasMouseDetectors(currentGame)) {
         internalGameWidget = applyMouseDetectors(

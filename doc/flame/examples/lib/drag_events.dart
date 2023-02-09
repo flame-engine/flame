@@ -5,9 +5,7 @@ import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/rendering.dart';
 
-/// The main [FlameGame] class uses [HasDraggableComponents] in order to enable
-/// tap events propagation.
-class DragEventsGame extends FlameGame with HasDraggableComponents {
+class DragEventsGame extends FlameGame {
   @override
   Future<void> onLoad() async {
     addAll([
@@ -49,8 +47,7 @@ class DragEventsGame extends FlameGame with HasDraggableComponents {
 }
 
 /// This component is the pink-ish rectangle in the center of the game window.
-/// It uses the [DragCallbacks] mixin in order to inform the game that it wants
-/// to receive drag events.
+/// It uses the [DragCallbacks] mixin in order to receive drag events.
 class DragTarget extends PositionComponent with DragCallbacks {
   DragTarget() : super(anchor: Anchor.center);
 
