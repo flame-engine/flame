@@ -1,7 +1,6 @@
 import 'package:flame_studio/src/core/game_controller.dart';
 import 'package:flame_studio/src/widgets/settings_provider.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class Settings {
   Settings(this._onChange) : controller = GameController(_onChange);
@@ -16,29 +15,7 @@ class Settings {
 
   final void Function() _onChange;
 
-  double _leftPanelWidth = 250.0;
-  double _minLeftPanelWidth = 200.0;
-  double _maxLeftPanelWidth = 500.0;
-
   TextDirection get textDirection => TextDirection.ltr;
-
-  double get leftPanelWidth => _leftPanelWidth;
-  set leftPanelWidth(double value) {
-    _leftPanelWidth = value;
-    _notifyListeners();
-  }
-
-  double get minLeftPanelWidth => _minLeftPanelWidth;
-  set minLeftPanelWidth(double value) {
-    _minLeftPanelWidth = value;
-    _notifyListeners();
-  }
-
-  double get maxLeftPanelWidth => _maxLeftPanelWidth;
-  set maxLeftPanelWidth(double value) {
-    _maxLeftPanelWidth = value;
-    _notifyListeners();
-  }
 
   Color get backdropColor => const Color(0xFF484848);
   Color get toolbarColor => const Color(0xFF303030);
@@ -53,6 +30,4 @@ class Settings {
   Color get buttonHoverTextColor => const Color(0xffffe95d);
   Color get buttonActiveTextColor => const Color(0xffffffff);
   Color get buttonDisabledTextColor => const Color(0x16ffffff);
-
-  void _notifyListeners() => _onChange();
 }

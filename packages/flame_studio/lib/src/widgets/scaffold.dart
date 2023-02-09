@@ -20,7 +20,7 @@ class Scaffold extends ConsumerWidget {
         children: [
           Container(
             padding: EdgeInsets.fromLTRB(
-              settings.leftPanelWidth + 20,
+              ref.watch(leftPanelWidthProvider) + 20,
               ref.watch(toolbarHeightProvider) + 20,
               20,
               20,
