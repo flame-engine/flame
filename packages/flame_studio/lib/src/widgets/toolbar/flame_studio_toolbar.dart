@@ -1,19 +1,28 @@
 import 'package:flame_studio/src/core/settings.dart';
-import 'package:flame_studio/src/widgets/flame_studio.dart';
+import 'package:flame_studio/src/widgets/toolbar/pause_button.dart';
+import 'package:flame_studio/src/widgets/toolbar/start_button.dart';
 import 'package:flutter/widgets.dart';
 
-class Toolbar extends StatelessWidget {
-  const Toolbar({super.key});
+class FlameStudioToolbar extends StatelessWidget {
+  const FlameStudioToolbar({super.key});
+
+  /// List of widgets to show on the left side of the toolbar.
+  static final List<Widget> left = [];
+
+  /// List of widgets to show in the center of the toolbar.
+  static final List<Widget> middle = [
+    const StartButton(),
+    const PauseButton(),
+  ];
+
+  /// List of widgets to show on the right side of the toolbar.
+  static final List<Widget> right = [];
 
   @override
   Widget build(BuildContext context) {
     final settings = Settings.of(context);
     final height = settings.toolbarHeight;
     final gap = height * 0.10;
-
-    Widget _wrapButton(Widget button) {
-      return Padding(padding: EdgeInsets.all(gap), child: button);
-    }
 
     return Container(
       constraints: BoxConstraints.tightFor(height: height),
@@ -39,13 +48,25 @@ class Toolbar extends StatelessWidget {
             padding: EdgeInsets.fromLTRB(gap * 2, gap, gap * 10, gap * 2),
             child: Image.asset('logo_flame.png', fit: BoxFit.scaleDown),
           ),
-          for (final button in FlameStudio.toolbarLeft) _wrapButton(button),
+          for (final button in left) _ButtonWithPadding(button, gap),
           Expanded(child: Container()),
-          for (final button in FlameStudio.toolbarMiddle) _wrapButton(button),
+          for (final button in middle) _ButtonWithPadding(button, gap),
           Expanded(child: Container()),
-          for (final button in FlameStudio.toolbarRight) _wrapButton(button),
+          for (final button in right) _ButtonWithPadding(button, gap),
         ],
       ),
     );
+  }
+}
+
+class _ButtonWithPadding extends StatelessWidget {
+  const _ButtonWithPadding(this.button, this.padding);
+
+  final Widget button;
+  final double padding;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(padding: EdgeInsets.all(padding), child: button);
   }
 }
