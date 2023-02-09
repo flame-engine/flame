@@ -12,12 +12,12 @@ class GroupLayer extends RenderableLayer<Group> {
   ///       there are cyclic dependencies when loading the renderable layers.
   late final List<RenderableLayer> children;
 
-  GroupLayer(
-    super.layer,
-    super.parent,
-    super.map,
-    super.destTileSize,
-  );
+  GroupLayer({
+    required super.layer,
+    required super.parent,
+    required super.map,
+    required super.destTileSize,
+  });
 
   @override
   void refreshCache() {
