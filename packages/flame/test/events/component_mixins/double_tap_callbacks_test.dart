@@ -48,7 +48,7 @@ void main() {
     );
 
     testWidgets(
-      'not receives event when double-tapping position is far from component',
+      'does not receive an event when double-tapping a position far from the component',
       (tester) async {
         final component = _DoubleTapCallbacksComponent()
           ..position = Vector2.all(10);
@@ -82,7 +82,7 @@ void main() {
     );
 
     testWidgets(
-      'receives cancel event when gesture is canceled by drag',
+      'receives a cancel event when gesture is canceled by drag',
       (tester) async {
         final component = _DoubleTapCallbacksComponent()
           ..position = Vector2.all(10);
@@ -116,7 +116,7 @@ void main() {
     );
 
     testWidgets(
-      'receives cancel event when gesture is canceled by cancel',
+      'receives a cancel event when gesture is canceled by cancel',
       (tester) async {
         final component = _DoubleTapCallbacksComponent()
           ..position = Vector2.all(10);

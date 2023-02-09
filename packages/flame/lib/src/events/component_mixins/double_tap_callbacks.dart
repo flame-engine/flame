@@ -5,7 +5,7 @@ import 'package:flame/src/events/messages/double_tap_cancel_event.dart';
 import 'package:flame/src/events/messages/double_tap_down_event.dart';
 import 'package:flame/src/events/messages/double_tap_event.dart';
 
-/// [DoubleTapCallbacks] adds the ability to receive double-tap events to the
+/// [DoubleTapCallbacks] adds the ability to receive double-tap events in a
 /// component.
 ///
 /// In addition to adding this mixin, the component must also implement the
@@ -13,7 +13,7 @@ import 'package:flame/src/events/messages/double_tap_event.dart';
 ///
 /// At present, flutter detects only one double-tap events simultaneously.
 /// This means that if you're double-tapping two [DoubleTapCallbacks] located
-/// far away from each do not callback simultaneously.
+/// far away from each other, only one callback will be fired (or none).
 mixin DoubleTapCallbacks on Component {
   /// This triggers when the pointer stops contacting the device after the
   /// second tap.

@@ -7,8 +7,8 @@ import 'package:flutter/material.dart';
 class DoubleTapCallbacksExample extends FlameGame with DoubleTapCallbacks {
   static const String description = '''
   In this example, we show how you can use the `DoubleTapCallbacks` mixin on
-  `Component`. Double tap Ember and see her color changing.
-  The example also add white circles when double-tapped on the game area.
+  a `Component`. Double tap Ember and see her color changing.
+  The example also adds white circles when double-tapping on the game area.
 ''';
 
   @override
