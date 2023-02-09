@@ -39,9 +39,9 @@ import 'package:vector_math/vector_math_64.dart';
 ///
 /// Each component goes through several lifecycle stages during its lifetime,
 /// at each stage invoking certain user-defined "lifecycle methods":
-///  - [onGameResize] when the component is first added into the tree;
-///  - [onLoad] immediately after;
-///  - [onMount] when done loading;
+///  - [onLoad] when the component is first added into the tree;
+///  - [onGameResize] + [onMount] when done loading, or when the component is
+///    re-added to the component tree after having been removed;
 ///  - [onRemove] if the component is later removed from the component tree.
 ///
 /// The [onLoad] is only invoked once during the lifetime of the component,
@@ -88,10 +88,9 @@ class Component {
   ///     this state no events has occurred so far.
   ///
   /// [_loading]: this flag is set while the component is running its [onLoad]
-  ///     method, and can be checked via [isLoading] getter. More specifically,
-  ///     this bit is set before invoking [onGameResize], it is on for the
-  ///     duration of [onLoad], and then it is turned off when the component is
-  ///     about to be mounted. After that, the bit is never turned on again.
+  ///     method, and can be checked via [isLoading] getter. This bit is turned
+  ///     on when the component starts loading, and then off when it has
+  ///     finished loading.
   ///
   /// [_loaded]: this flag is set after the component finishes running its
   ///     [onLoad] method, and can be checked via the [isLoaded] getter. Once
@@ -130,7 +129,7 @@ class Component {
   ///      simply set the [_parent] to null and remove it from the parent's
   ///      queue of pending children.
   ///  - When we [_startLoading] the component, we set the [_loading] bit,
-  ///    invoke the [onGameResize] callback, and then [onLoad] immediately
+  ///    and then [onLoad] immediately
   ///    afterwards. The onLoad will be either sync or async, in both cases we
   ///    arrange to turn on the [_loaded] bit at the end of [onLoad]'s run.
   ///  - At this point we're in an execution gap: either the async [onLoad] is
@@ -155,9 +154,7 @@ class Component {
   ///      - otherwise do nothing: need to wait until the component finishes
   ///        loading.
   ///  - During [_mount]ing, we perform the following sequence:
-  ///      - first check whether we need to run [onGameResize] -- this could
-  ///        happen if mounting a component that was  added to the game earlier
-  ///        and then removed;
+  ///      - first we run [onGameResize];
   ///      - check if the component was scheduled for removal while waiting in
   ///        the queue -- if so, remove it immediately without mounting;
   ///      - clear the [_loading] flag and start the [onMount] callback;
@@ -185,6 +182,7 @@ class Component {
   static const int _initial = 0;
   static const int _loading = 1;
   static const int _loaded = 2;
+  static const int _mounting = 32;
   static const int _mounted = 4;
   static const int _removing = 8;
   static const int _removed = 16;
@@ -197,6 +195,11 @@ class Component {
   /// Whether this component has completed its [onLoad] step.
   bool get isLoaded => (_state & _loaded) != 0;
   void _setLoadedBit() => _state |= _loaded;
+
+  @internal
+  bool get isMounting => (_state & _mounting) != 0;
+  void _setMountingBit() => _state |= _mounting;
+  void _clearMountingBit() => _state &= ~_mounting;
 
   /// Whether this component is currently added to a component tree.
   bool get isMounted => (_state & _mounted) != 0;
@@ -380,8 +383,7 @@ class Component {
 
   /// Called whenever the size of the top-level Canvas changes.
   ///
-  /// In addition, this method will be invoked once after the component is
-  /// attached to the game tree, and before [onLoad] is called.
+  /// In addition, this method will be invoked before each [onMount].
   @mustCallSuper
   void onGameResize(Vector2 size) => handleResize(size);
 
@@ -575,33 +577,10 @@ class Component {
   /// A component can be removed even before it finishes mounting, however such
   /// component cannot be added back into the tree until it at least finishes
   /// loading.
-  void remove(Component component) {
-    assert(
-      component._parent != null,
-      "Trying to remove a component that doesn't belong to any parent",
-    );
-    assert(
-      component._parent == this,
-      'Trying to remove a component that belongs to a different parent: this = '
-      "$this, component's parent = ${component._parent}",
-    );
-    if (!isMounted) {
-      _children?.remove(component);
-    }
-    if (component._state == _initial) {
-      component._parent = null;
-    } else if (component.isLoading) {
-      if (component.isLoaded) {
-        component._parent = null;
-        component._clearLoadingBit();
-      } else {
-        component._setRemovingBit();
-      }
-    } else if (!component.isRemoving) {
-      lifecycle._removals.add(component);
-      component._setRemovingBit();
-    }
-  }
+  void remove(Component component) => _removeChild(component);
+
+  /// Remove the component from its parent in the next tick.
+  void removeFromParent() => _parent?._removeChild(this);
 
   /// Removes all the children in the list and calls [onRemove] for all of them
   /// and their children.
@@ -611,16 +590,38 @@ class Component {
 
   /// Removes all the children for which the [test] function returns true.
   void removeWhere(bool Function(Component component) test) {
-    children.forEach((component) {
+    for (final component in children) {
       if (test(component)) {
         remove(component);
       }
-    });
+    }
   }
 
-  /// Remove the component from its parent in the next tick.
-  void removeFromParent() {
-    _parent?.remove(this);
+  void _removeChild(Component child) {
+    assert(
+      child._parent != null,
+      "Trying to remove a component that doesn't belong to any parent",
+    );
+    assert(
+      child._parent == this,
+      'Trying to remove a component that belongs to a different parent: this = '
+      "$this, component's parent = ${child._parent}",
+    );
+    if (isMounted) {
+      final root = findGame()! as ComponentTreeRoot;
+      if (child.isMounted || child.isMounting) {
+        if (!child.isRemoving) {
+          root.enqueueRemove(child, this);
+          child._setRemovingBit();
+        }
+      } else {
+        root.dequeueAdd(child, this);
+        child._parent = null;
+      }
+    } else {
+      _children?.remove(child);
+      child._parent = null;
+    }
   }
 
   /// Changes the current parent for another parent and prepares the tree under
@@ -773,6 +774,17 @@ class Component {
     }
   }
 
+  @internal
+  LifecycleEventStatus handleLifecycleEventRemove(Component parent) {
+    if (_parent == null) {
+      parent._children?.remove(this);
+    } else {
+      _remove();
+      assert(_parent == null);
+    }
+    return LifecycleEventStatus.done;
+  }
+
   @mustCallSuper
   @internal
   void handleResize(Vector2 size) {
@@ -789,7 +801,6 @@ class Component {
     assert(_parent!.findGame() != null);
     assert(_parent!.findGame()!.hasLayout);
     _setLoadingBit();
-    onGameResize(_parent!.findGame()!.canvasSize);
     final onLoadFuture = onLoad();
     if (onLoadFuture is Future) {
       return onLoadFuture.then((dynamic _) => _finishLoading());
@@ -799,6 +810,7 @@ class Component {
   }
 
   void _finishLoading() {
+    _clearLoadingBit();
     _setLoadedBit();
     _lifecycleManager?.finishLoading();
   }
@@ -806,11 +818,9 @@ class Component {
   /// Mount the component that is already loaded and has a mounted parent.
   void _mount() {
     assert(_parent != null && _parent!.isMounted);
-    assert(isLoaded);
-    if (!isLoading) {
-      onGameResize(findGame()!.canvasSize);
-    }
-    _clearLoadingBit();
+    assert(isLoaded && !isLoading);
+    _setMountingBit();
+    onGameResize(_parent!.findGame()!.canvasSize);
     if (isRemoved) {
       _clearRemovedBit();
     } else if (isRemoving) {
@@ -827,6 +837,7 @@ class Component {
     _reAddChildren();
     _lifecycleManager?.processQueues();
     _parent!.onChildrenChanged(this, ChildrenChangeType.added);
+    _clearMountingBit();
   }
 
   /// Used by [_reAddChildren].
@@ -864,20 +875,18 @@ class Component {
     _parent!.children.remove(this);
     propagateToChildren(
       (Component component) {
-        component.onRemove();
-        component._clearMountedBit();
-        component._clearRemovingBit();
-        component._parent = null;
-        component._finishRemoving();
+        component
+          ..onRemove()
+          .._clearMountedBit()
+          .._clearRemovingBit()
+          .._setRemovedBit()
+          .._lifecycleManager?.finishRemoving()
+          .._parent!.onChildrenChanged(component, ChildrenChangeType.removed)
+          .._parent = null;
         return true;
       },
       includeSelf: true,
     );
-  }
-
-  void _finishRemoving() {
-    _setRemovedBit();
-    _lifecycleManager?.finishRemoving();
   }
 
   //#endregion
@@ -1009,12 +1018,6 @@ class _LifecycleManager {
     _removedCompleter = null;
   }
 
-  /// Queue for removing children from a component.
-  ///
-  /// Components that were placed into this queue will be removed from [owner]
-  /// when the pending events are resolved.
-  final Queue<Component> _removals = Queue();
-
   /// Queue for moving components from another parent to this one.
   final Queue<Component> _adoption = Queue();
 
@@ -1022,8 +1025,7 @@ class _LifecycleManager {
   ///
   /// [Component.removed] is not regarded as a pending event.
   bool get hasPendingEvents {
-    return _removals.isNotEmpty ||
-        _adoption.isNotEmpty ||
+    return _adoption.isNotEmpty ||
         _mountCompleter != null ||
         _loadCompleter != null;
   }
@@ -1034,27 +1036,13 @@ class _LifecycleManager {
   /// ensure that the components get properly added/removed from the component
   /// tree.
   void processQueues() {
-    _processRemovalQueue();
     _processAdoptionQueue();
-  }
-
-  void _processRemovalQueue() {
-    while (_removals.isNotEmpty) {
-      final component = _removals.removeFirst();
-      if (component.isMounted) {
-        component._remove();
-        owner.onChildrenChanged(component, ChildrenChangeType.removed);
-      }
-      assert(!component.isMounted);
-    }
   }
 
   void _processAdoptionQueue() {
     while (_adoption.isNotEmpty) {
       final child = _adoption.removeFirst();
-      final oldParent = child._parent;
       child._remove();
-      oldParent?.onChildrenChanged(child, ChildrenChangeType.removed);
       child._parent = owner;
       child._mount();
     }
