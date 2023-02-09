@@ -482,7 +482,7 @@ component. To start receiving double tap events in a component, add the
 ```dart
 class MyComponent extends PositionComponent with DoubleTapCallbacks {
   @override
-  void onDoubleTap(DoubleTapEvent event) {
+  void onDoubleTapUp(DoubleTapEvent event) {
     /// Do something
   }
 

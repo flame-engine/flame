@@ -49,7 +49,7 @@ class DoubleTappableEmber extends Ember with DoubleTapCallbacks {
         );
 
   @override
-  void onDoubleTap(DoubleTapEvent event) {
+  void onDoubleTapUp(DoubleTapEvent event) {
     debugColor = Colors.greenAccent;
   }
 

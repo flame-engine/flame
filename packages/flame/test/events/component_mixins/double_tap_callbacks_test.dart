@@ -174,7 +174,7 @@ class _DoubleTapCallbacksComponent extends PositionComponent
   int doubleTap = 0;
 
   @override
-  void onDoubleTap(DoubleTapEvent event) {
+  void onDoubleTapUp(DoubleTapEvent event) {
     doubleTap++;
   }
 

@@ -17,7 +17,7 @@ import 'package:flame/src/events/messages/double_tap_event.dart';
 mixin DoubleTapCallbacks on Component {
   /// This triggers when the pointer stops contacting the device after the
   /// second tap.
-  void onDoubleTap(DoubleTapEvent event) {}
+  void onDoubleTapUp(DoubleTapEvent event) {}
 
   /// This triggers immediately after the down event of the second tap.
   void onDoubleTapDown(DoubleTapDownEvent event) {}
