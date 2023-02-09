@@ -1,6 +1,7 @@
 import 'package:flame_studio/src/core/game_controller.dart';
 import 'package:flame_studio/src/widgets/settings_provider.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class Settings {
   Settings(this._onChange) : controller = GameController(_onChange);
@@ -15,18 +16,11 @@ class Settings {
 
   final void Function() _onChange;
 
-  double _toolbarHeight = 28.0;
   double _leftPanelWidth = 250.0;
   double _minLeftPanelWidth = 200.0;
   double _maxLeftPanelWidth = 500.0;
 
   TextDirection get textDirection => TextDirection.ltr;
-
-  double get toolbarHeight => _toolbarHeight;
-  set toolbarHeight(double value) {
-    _toolbarHeight = value;
-    _notifyListeners();
-  }
 
   double get leftPanelWidth => _leftPanelWidth;
   set leftPanelWidth(double value) {

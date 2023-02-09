@@ -2,8 +2,11 @@ import 'package:flame_studio/src/core/settings.dart';
 import 'package:flame_studio/src/widgets/toolbar/pause_button.dart';
 import 'package:flame_studio/src/widgets/toolbar/start_button.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class FlameStudioToolbar extends StatelessWidget {
+final toolbarHeightProvider = Provider((ref) => 28.0);
+
+class FlameStudioToolbar extends ConsumerWidget {
   const FlameStudioToolbar({super.key});
 
   /// List of widgets to show on the left side of the toolbar.
@@ -19,9 +22,9 @@ class FlameStudioToolbar extends StatelessWidget {
   static final List<Widget> right = [];
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final settings = Settings.of(context);
-    final height = settings.toolbarHeight;
+    final height = ref.watch(toolbarHeightProvider); // settings.toolbarHeight;
     final gap = height * 0.10;
 
     return Container(

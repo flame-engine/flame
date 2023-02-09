@@ -2,6 +2,7 @@ import 'package:flame/game.dart';
 import 'package:flame_studio/src/widgets/scaffold.dart';
 import 'package:flame_studio/src/widgets/settings_provider.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class FlameStudio extends StatefulWidget {
   const FlameStudio(this.child, {super.key});
@@ -48,10 +49,12 @@ class _FlameStudioState extends State<FlameStudio> {
   @override
   Widget build(BuildContext context) {
     _scheduleGameWidgetSearch();
-    return SettingsProvider(
-      game: _game,
-      child: Scaffold(
-        child: widget.child,
+    return ProviderScope(
+      child: SettingsProvider(
+        game: _game,
+        child: Scaffold(
+          child: widget.child,
+        ),
       ),
     );
   }
