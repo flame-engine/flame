@@ -23,7 +23,7 @@ class FlameStudioToolbar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final height = ref.watch(toolbarHeightProvider); // settings.toolbarHeight;
+    final height = ref.watch(toolbarHeightProvider);
     final gap = height * 0.10;
 
     return Container(
