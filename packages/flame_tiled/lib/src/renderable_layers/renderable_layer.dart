@@ -70,7 +70,6 @@ abstract class RenderableLayer<T extends Layer> {
       );
     }
 
-    assert(false, '$layer layer is unsupported.');
     return UnsupportedLayer(
       layer: layer,
       parent: parent,
