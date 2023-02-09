@@ -8,8 +8,6 @@ final gameControllerProvider =
 );
 
 Future<Game?> _findGame() async {
-  await null;
-
   Game? game;
   void visitor(Element element) {
     if (element.widget is GameWidget) {
