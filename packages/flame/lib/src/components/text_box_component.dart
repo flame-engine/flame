@@ -270,14 +270,20 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
     }
   }
 
+  final Set<Image> cachedToRemove = {};
+
   Future<void> redraw() async {
     final newSize = _recomputeSize();
     final cachedImage = cache;
-    if (cachedImage != null) {
+    if (cachedImage != null && !cachedToRemove.contains(cachedImage)) {
+      cachedToRemove.add(cachedImage);
       // Do not dispose of the cached image immediately, since it may have been
       // sent into the rendering pipeline where it is still pending to be used.
       // See issue #1618 for details.
-      Future.delayed(const Duration(milliseconds: 100), cachedImage.dispose);
+      Future.delayed(const Duration(milliseconds: 100), () {
+        cachedToRemove.remove(cachedImage);
+        cachedImage.dispose();
+      });
     }
     cache = await _fullRenderAsImage(newSize);
     size = newSize;
