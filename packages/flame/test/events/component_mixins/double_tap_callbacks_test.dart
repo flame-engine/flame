@@ -48,7 +48,7 @@ void main() {
     );
 
     testWidgets(
-      'does not receive an event when double-tapping a position far from the component',
+      '''does not receive an event when double-tapping a position far from the component''',
       (tester) async {
         final component = _DoubleTapCallbacksComponent()
           ..position = Vector2.all(10);
