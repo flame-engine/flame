@@ -1,7 +1,8 @@
-import 'package:flame_studio/src/core/settings.dart';
+import 'package:flame_studio/src/core/theme.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ToolbarButton extends StatefulWidget {
+class ToolbarButton extends ConsumerStatefulWidget {
   const ToolbarButton({
     required this.icon,
     this.onClick,
@@ -14,23 +15,22 @@ class ToolbarButton extends StatefulWidget {
   final bool disabled;
 
   @override
-  State<StatefulWidget> createState() => _ToolbarButtonState();
+  _ToolbarButtonState createState() => _ToolbarButtonState();
 }
 
-class _ToolbarButtonState extends State<ToolbarButton> {
+class _ToolbarButtonState extends ConsumerState<ToolbarButton> {
   bool _isHovered = false;
   bool _isActive = false;
 
   @override
   Widget build(BuildContext context) {
-    final settings = Settings.of(context);
     final painter = CustomPaint(
       painter: _ToolbarButtonPainter(
         widget.disabled,
         _isHovered,
         _isActive,
         widget.icon,
-        settings,
+        ref.watch(themeProvider),
       ),
     );
 
@@ -74,14 +74,14 @@ class _ToolbarButtonPainter extends CustomPainter {
     this.isHovered,
     this.isActive,
     this.icon,
-    this.settings,
+    this.theme,
   );
 
   final bool isDisabled;
   final bool isHovered;
   final bool isActive;
   final Path icon;
-  final Settings settings;
+  final Theme theme;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -89,26 +89,26 @@ class _ToolbarButtonPainter extends CustomPainter {
     canvas.save();
     canvas.scale(size.height / 20.0);
 
-    final radius = Radius.circular(settings.buttonRadius);
+    final radius = Radius.circular(theme.buttonRadius);
     final color = isDisabled
-        ? settings.buttonDisabledColor
+        ? theme.buttonDisabledColor
         : isActive
-            ? settings.buttonActiveColor
+            ? theme.buttonActiveColor
             : isHovered
-                ? settings.buttonHoverColor
-                : settings.buttonColor;
+                ? theme.buttonHoverColor
+                : theme.buttonColor;
     canvas.drawRRect(
       RRect.fromLTRBR(0, 0, size.width / scale, 20.0, radius),
       Paint()..color = color,
     );
 
     final textColor = isDisabled
-        ? settings.buttonDisabledTextColor
+        ? theme.buttonDisabledTextColor
         : isActive
-            ? settings.buttonActiveTextColor
+            ? theme.buttonActiveTextColor
             : isHovered
-                ? settings.buttonHoverTextColor
-                : settings.buttonTextColor;
+                ? theme.buttonHoverTextColor
+                : theme.buttonTextColor;
     canvas.translate(size.width / scale / 2, 10);
     canvas.drawPath(icon, Paint()..color = textColor);
     canvas.restore();

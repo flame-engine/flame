@@ -1,4 +1,4 @@
-import 'package:flame_studio/src/core/settings.dart';
+import 'package:flame_studio/src/core/theme.dart';
 import 'package:flame_studio/src/widgets/left_panel.dart';
 import 'package:flame_studio/src/widgets/left_panel_grip.dart';
 import 'package:flame_studio/src/widgets/toolbar/flame_studio_toolbar.dart';
@@ -12,11 +12,10 @@ class Scaffold extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final settings = Settings.of(context);
     return Container(
-      color: settings.backdropColor,
+      color: ref.watch(themeProvider).backdropColor,
       child: Stack(
-        textDirection: settings.textDirection,
+        textDirection: ref.watch(textDirectionProvider),
         children: [
           Container(
             padding: EdgeInsets.fromLTRB(

@@ -1,4 +1,4 @@
-import 'package:flame_studio/src/core/settings.dart';
+import 'package:flame_studio/src/core/theme.dart';
 import 'package:flame_studio/src/widgets/left_panel.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -12,11 +12,10 @@ class LeftPanelGrip extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final settings = Settings.of(context);
     final panelWidth = ref.watch(leftPanelWidthProvider);
 
     return Row(
-      textDirection: settings.textDirection,
+      textDirection: ref.watch(textDirectionProvider),
       children: [
         Container(
           constraints: BoxConstraints.tightFor(width: panelWidth - 5.0),

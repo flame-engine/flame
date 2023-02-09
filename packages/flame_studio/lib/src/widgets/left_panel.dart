@@ -1,4 +1,4 @@
-import 'package:flame_studio/src/core/settings.dart';
+import 'package:flame_studio/src/core/theme.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -7,7 +7,6 @@ class LeftPanel extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final settings = Settings.of(context);
     final width = ref.watch(leftPanelWidthProvider);
 
     return Container(
@@ -20,7 +19,7 @@ class LeftPanel extends ConsumerWidget {
             offset: Offset(2, 0),
           ),
         ],
-        color: settings.panelColor,
+        color: ref.watch(themeProvider).panelColor,
       ),
     );
   }

@@ -1,4 +1,4 @@
-import 'package:flame_studio/src/core/settings.dart';
+import 'package:flame_studio/src/core/theme.dart';
 import 'package:flame_studio/src/widgets/toolbar/pause_button.dart';
 import 'package:flame_studio/src/widgets/toolbar/start_button.dart';
 import 'package:flutter/widgets.dart';
@@ -23,7 +23,6 @@ class FlameStudioToolbar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final settings = Settings.of(context);
     final height = ref.watch(toolbarHeightProvider); // settings.toolbarHeight;
     final gap = height * 0.10;
 
@@ -42,7 +41,7 @@ class FlameStudioToolbar extends ConsumerWidget {
             blurRadius: 2.0,
           ),
         ],
-        color: settings.toolbarColor,
+        color: ref.watch(themeProvider).toolbarColor,
       ),
       child: Row(
         textDirection: TextDirection.ltr,
