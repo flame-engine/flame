@@ -13,7 +13,7 @@ class FlameStudioToolbar extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     const middleButtons = <Widget>[
       StartButton(),
-      PauseButton()
+      PauseButton(),
     ];
 
     final height = ref.watch(toolbarHeightProvider);
