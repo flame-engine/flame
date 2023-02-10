@@ -693,6 +693,53 @@ void main() {
       );
     });
 
+    group('Moving components', () {
+      testWithFlameGame('moving to unrelated component', (game) async {
+        final parentA = Component()..addToParent(game);
+        final parentB = Component()..addToParent(game);
+        final child = Component()..addToParent(parentA);
+        await game.ready();
+
+        expect(child.isMounted, true);
+        expect(child.parent, parentA);
+
+        child.parent = parentB;
+        await game.ready();
+        expect(child.isMounted, true);
+        expect(child.parent, parentB);
+        expect(parentA.hasChildren, false);
+        expect(parentB.hasChildren, true);
+      });
+
+      testWithFlameGame('moving to sibling', (game) async {
+        final componentA = Component()..addToParent(game);
+        final componentB = Component()..addToParent(game);
+        await game.ready();
+        expect(game.children.toList(), [componentA, componentB]);
+        expect(componentA.hasChildren, false);
+        expect(componentB.hasChildren, false);
+
+        componentA.parent = componentB;
+        await game.ready();
+        expect(game.children.toList(), [componentB]);
+        expect(componentB.children.toList(), [componentA]);
+        expect(componentA.parent, componentB);
+      });
+
+      testWithFlameGame('moving to parent', (game) async {
+        final parent = Component()..addToParent(game);
+        final child = Component()..addToParent(parent);
+        await game.ready();
+        expect(game.children.toList(), [parent]);
+        expect(parent.children.toList(), [child]);
+
+        child.parent = game;
+        await game.ready();
+        expect(game.children.toList(), [parent, child]);
+        expect(parent.children.toList(), isEmpty);
+      });
+    });
+
     group('descendants()', () {
       testWithFlameGame(
         'descendants in a deep component tree',
