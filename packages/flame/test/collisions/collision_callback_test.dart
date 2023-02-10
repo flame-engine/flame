@@ -556,7 +556,7 @@ void main() {
 
         // block <== collides with  ==> water
         // But as [TestBlock.onComponentTypeCheck] returns false with Water,
-        // they does not actually start to collide.
+        // they do not actually start to collide.
         block.position = Vector2.all(5);
         game.update(0);
 

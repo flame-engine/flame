@@ -213,12 +213,12 @@ mixin ShapeHitbox on ShapeComponent implements Hitbox<ShapeHitbox> {
     }
   }
 
-  /// Each other component should be available to collide to start actual
-  /// collision behavior.
+  /// Defines whether the [other] component should be able to collide with
+  /// this component.
   ///
   /// If the [hitboxParent] is not `CollisionCallbacks` but `PositionComponent`,
   /// there is no [CollisionCallbacks.onComponentTypeCheck] in that component.
-  /// As a result, it will always be available to collide with other types.
+  /// As a result, it will always be able to collide with all other types.
   @override
   @mustCallSuper
   bool onComponentTypeCheck(PositionComponent other) {
