@@ -1,12 +1,11 @@
 import 'dart:collection';
 
 import 'package:flame/collisions.dart';
-import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 
 typedef ExternalBroadphaseCheck = bool Function(
-  PositionComponent one,
-  PositionComponent another,
+  ShapeHitbox one,
+  ShapeHitbox another,
 );
 
 typedef ExternalMinDistanceCheck = bool Function(
@@ -35,8 +34,8 @@ class QuadTreeBroadphase<T extends Hitbox<T>> extends Broadphase<T> {
 
   final activeCollisions = HashSet<T>();
 
-  ExternalBroadphaseCheck broadphaseCheck;
-  ExternalMinDistanceCheck minimumDistanceCheck;
+  final ExternalBroadphaseCheck broadphaseCheck;
+  final ExternalMinDistanceCheck minimumDistanceCheck;
   final _broadphaseCheckCache = <T, Map<T, bool>>{};
 
   final _cachedCenters = <ShapeHitbox, Vector2>{};
