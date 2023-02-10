@@ -34,8 +34,8 @@ class QuadTreeBroadphase<T extends Hitbox<T>> extends Broadphase<T> {
 
   final activeCollisions = HashSet<T>();
 
-  final ExternalBroadphaseCheck broadphaseCheck;
-  final ExternalMinDistanceCheck minimumDistanceCheck;
+  ExternalBroadphaseCheck broadphaseCheck;
+  ExternalMinDistanceCheck minimumDistanceCheck;
   final _broadphaseCheckCache = <T, Map<T, bool>>{};
 
   final _cachedCenters = <ShapeHitbox, Vector2>{};
