@@ -21,6 +21,8 @@ export 'src/camera/viewports/fixed_aspect_ratio_viewport.dart'
 export 'src/camera/viewports/fixed_size_viewport.dart' show FixedSizeViewport;
 export 'src/camera/viewports/max_viewport.dart' show MaxViewport;
 export 'src/camera/world.dart' show World;
+export 'src/events/component_mixins/double_tap_callbacks.dart'
+    show DoubleTapCallbacks;
 export 'src/events/component_mixins/drag_callbacks.dart' show DragCallbacks;
 export 'src/events/component_mixins/tap_callbacks.dart' show TapCallbacks;
 export 'src/events/flame_game_mixins/has_draggable_components.dart'
@@ -32,6 +34,10 @@ export 'src/events/flame_game_mixins/has_tappable_components.dart'
     show HasTappableComponents;
 export 'src/events/flame_game_mixins/has_tappables_bridge.dart'
     show HasTappablesBridge;
+export 'src/events/messages/double_tap_cancel_event.dart'
+    show DoubleTapCancelEvent;
+export 'src/events/messages/double_tap_down_event.dart' show DoubleTapDownEvent;
+export 'src/events/messages/double_tap_event.dart' show DoubleTapEvent;
 export 'src/events/messages/drag_cancel_event.dart' show DragCancelEvent;
 export 'src/events/messages/drag_end_event.dart' show DragEndEvent;
 export 'src/events/messages/drag_start_event.dart' show DragStartEvent;

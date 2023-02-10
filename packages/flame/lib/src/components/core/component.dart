@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:collection';
 
 import 'package:collection/collection.dart';
 import 'package:flame/src/cache/value_cache.dart';
@@ -219,25 +218,39 @@ class Component {
   void _setRemovedBit() => _state |= _removed;
   void _clearRemovedBit() => _state &= ~_removed;
 
+  Completer<void>? _loadCompleter;
+  Completer<void>? _mountCompleter;
+  Completer<void>? _removeCompleter;
+
   /// A future that completes when this component finishes loading.
   ///
   /// If the component is already loaded (see [isLoaded]), this returns an
   /// already completed future.
-  Future<void> get loaded => isLoaded ? Future.value() : lifecycle.loadFuture;
+  Future<void> get loaded {
+    return isLoaded
+        ? Future.value()
+        : (_loadCompleter ??= Completer<void>()).future;
+  }
 
   /// A future that will complete once the component is mounted on its parent.
   ///
   /// If the component is already mounted (see [isMounted]), this returns an
   /// already completed future.
-  Future<void> get mounted =>
-      isMounted ? Future.value() : lifecycle.mountFuture;
+  Future<void> get mounted {
+    return isMounted
+        ? Future.value()
+        : (_mountCompleter ??= Completer<void>()).future;
+  }
 
   /// A future that completes when this component is removed from its parent.
   ///
   /// If the component is already removed (see [isRemoved]), this returns an
   /// already completed future.
-  Future<void> get removed =>
-      isRemoved ? Future.value() : lifecycle.removeFuture;
+  Future<void> get removed {
+    return isRemoved
+        ? Future.value()
+        : (_removeCompleter ??= Completer<void>()).future;
+  }
 
   //#endregion
 
@@ -260,7 +273,8 @@ class Component {
     } else if (_parent == null) {
       addToParent(newParent);
     } else {
-      newParent.lifecycle._adoption.add(this);
+      final root = findGame()! as ComponentTreeRoot;
+      root.enqueueMove(this, newParent);
     }
   }
 
@@ -476,7 +490,6 @@ class Component {
   /// priority of the direct siblings, not the children or the ancestors.
   void updateTree(double dt) {
     _children?.updateComponentList();
-    _lifecycleManager?.processQueues();
     update(dt);
     _children?.forEach((c) => c.updateTree(dt));
   }
@@ -737,28 +750,6 @@ class Component {
 
   //#region Internal lifecycle management
 
-  @protected
-  _LifecycleManager get lifecycle {
-    return _lifecycleManager ??= _LifecycleManager(this);
-  }
-
-  _LifecycleManager? _lifecycleManager;
-
-  bool get hasPendingLifecycleEvents {
-    return _lifecycleManager?.hasPendingEvents ?? false;
-  }
-
-  /// Attempt to resolve any pending lifecycle events on this component.
-  void processPendingLifecycleEvents() {
-    if (_lifecycleManager != null) {
-      _lifecycleManager!.processQueues();
-      if (!_lifecycleManager!.hasPendingEvents &&
-          _lifecycleManager!._removedCompleter == null) {
-        _lifecycleManager = null;
-      }
-    }
-  }
-
   @internal
   LifecycleEventStatus handleLifecycleEventAdd(Component parent) {
     assert(!isMounted);
@@ -781,6 +772,20 @@ class Component {
     } else {
       _remove();
       assert(_parent == null);
+    }
+    return LifecycleEventStatus.done;
+  }
+
+  @internal
+  LifecycleEventStatus handleLifecycleEventMove(Component newParent) {
+    if (_parent != null) {
+      _remove();
+    }
+    if (newParent.isMounted) {
+      _parent = newParent;
+      _mount();
+    } else {
+      newParent.add(this);
     }
     return LifecycleEventStatus.done;
   }
@@ -812,7 +817,8 @@ class Component {
   void _finishLoading() {
     _clearLoadingBit();
     _setLoadedBit();
-    _lifecycleManager?.finishLoading();
+    _loadCompleter?.complete();
+    _loadCompleter = null;
   }
 
   /// Mount the component that is already loaded and has a mounted parent.
@@ -832,10 +838,10 @@ class Component {
     debugMode |= _parent!.debugMode;
     onMount();
     _setMountedBit();
-    _lifecycleManager?.finishMounting();
+    _mountCompleter?.complete();
+    _mountCompleter = null;
     _parent!.children.add(this);
     _reAddChildren();
-    _lifecycleManager?.processQueues();
     _parent!.onChildrenChanged(this, ChildrenChangeType.added);
     _clearMountingBit();
   }
@@ -880,7 +886,8 @@ class Component {
           .._clearMountedBit()
           .._clearRemovingBit()
           .._setRemovedBit()
-          .._lifecycleManager?.finishRemoving()
+          .._removeCompleter?.complete()
+          .._removeCompleter = null
           .._parent!.onChildrenChanged(component, ChildrenChangeType.removed)
           .._parent = null;
         return true;
@@ -970,81 +977,3 @@ class Component {
 typedef ComponentSetFactory = ComponentSet Function();
 
 enum ChildrenChangeType { added, removed }
-
-/// Helper class to assist [Component] with its lifecycle.
-///
-/// Most lifecycle events -- add, remove, change parent -- live for a very short
-/// period of time, usually until the next game tick. When such events are
-/// resolved, there is no longer a need to carry around their supporting event
-/// queues. Which is why these queues are placed into a separate class, so that
-/// they can be easily disposed of at the end.
-class _LifecycleManager {
-  _LifecycleManager(this.owner);
-
-  /// The component which is the owner of this [_LifecycleManager].
-  final Component owner;
-
-  Completer<void>? _mountCompleter;
-  Completer<void>? _loadCompleter;
-  Completer<void>? _removedCompleter;
-
-  Future<void> get loadFuture {
-    _loadCompleter ??= Completer<void>();
-    return _loadCompleter!.future;
-  }
-
-  Future<void> get mountFuture {
-    _mountCompleter ??= Completer<void>();
-    return _mountCompleter!.future;
-  }
-
-  Future<void> get removeFuture {
-    _removedCompleter ??= Completer<void>();
-    return _removedCompleter!.future;
-  }
-
-  void finishLoading() {
-    _loadCompleter?.complete();
-    _loadCompleter = null;
-  }
-
-  void finishMounting() {
-    _mountCompleter?.complete();
-    _mountCompleter = null;
-  }
-
-  void finishRemoving() {
-    _removedCompleter?.complete();
-    _removedCompleter = null;
-  }
-
-  /// Queue for moving components from another parent to this one.
-  final Queue<Component> _adoption = Queue();
-
-  /// Whether or not there are any pending lifecycle events for this component.
-  ///
-  /// [Component.removed] is not regarded as a pending event.
-  bool get hasPendingEvents {
-    return _adoption.isNotEmpty ||
-        _mountCompleter != null ||
-        _loadCompleter != null;
-  }
-
-  /// Attempt to resolve pending events in all lifecycle event queues.
-  ///
-  /// This method must be periodically invoked by the game engine, in order to
-  /// ensure that the components get properly added/removed from the component
-  /// tree.
-  void processQueues() {
-    _processAdoptionQueue();
-  }
-
-  void _processAdoptionQueue() {
-    while (_adoption.isNotEmpty) {
-      final child = _adoption.removeFirst();
-      child._remove();
-      child._parent = owner;
-      child._mount();
-    }
-  }
-}

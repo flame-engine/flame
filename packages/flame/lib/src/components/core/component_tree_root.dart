@@ -48,6 +48,14 @@ class ComponentTreeRoot extends Component {
       ..parent = parent;
   }
 
+  @internal
+  void enqueueMove(Component child, Component newParent) {
+    _queue.addLast()
+      ..kind = _LifecycleEventKind.move
+      ..child = child
+      ..parent = newParent;
+  }
+
   bool get hasLifecycleEvents => _queue.isNotEmpty;
 
   void processLifecycleEvents() {
@@ -69,6 +77,9 @@ class ComponentTreeRoot extends Component {
             break;
           case _LifecycleEventKind.remove:
             status = child.handleLifecycleEventRemove(parent);
+            break;
+          case _LifecycleEventKind.move:
+            status = child.handleLifecycleEventMove(parent);
             break;
           case _LifecycleEventKind.unknown:
             break;
@@ -121,6 +132,7 @@ enum _LifecycleEventKind {
   unknown,
   add,
   remove,
+  move,
 }
 
 class _LifecycleEvent implements Disposable {
