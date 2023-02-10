@@ -7,23 +7,6 @@ final gameControllerProvider =
   (ref) => _GameController(),
 );
 
-Future<Game?> _findGame() async {
-  await null;
-  Game? game;
-  void visitor(Element element) {
-    if (element.widget is GameWidget) {
-      final dynamic state = (element as StatefulElement).state;
-      // ignore: avoid_dynamic_calls
-      game = state.currentGame as Game;
-    } else {
-      element.visitChildElements(visitor);
-    }
-  }
-
-  WidgetsBinding.instance.renderViewElement?.visitChildElements(visitor);
-  return game;
-}
-
 class _GameState {
   _GameState({this.game, this.paused = false});
 
@@ -43,7 +26,11 @@ class _GameState {
 
 class _GameController extends StateNotifier<_GameState> {
   _GameController() : super(_GameState()) {
-    _findGame().then(useGame);
+    WidgetsFlutterBinding.ensureInitialized();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final game = _findGame();
+      useGame(game);
+    });
   }
 
   bool get isPaused => state.paused;
@@ -60,5 +47,21 @@ class _GameController extends StateNotifier<_GameState> {
   void resumeGame() {
     state.game!.resumeEngine();
     state = state.copyWith(paused: false);
+  }
+
+  static Game? _findGame() {
+    Game? game;
+    void visitor(Element element) {
+      if (element.widget is GameWidget) {
+        final dynamic state = (element as StatefulElement).state;
+        // ignore: avoid_dynamic_calls
+        game = state.currentGame as Game;
+      } else {
+        element.visitChildElements(visitor);
+      }
+    }
+
+    WidgetsBinding.instance.renderViewElement?.visitChildElements(visitor);
+    return game;
   }
 }
