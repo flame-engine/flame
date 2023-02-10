@@ -65,9 +65,9 @@ mixin HasQuadTreeCollisionDetection on FlameGame
             (activeItemCenter.y - potentialCenter.y).abs() > minimumDistance!);
   }
 
-  bool onComponentTypeCheck(ShapeHitbox one, ShapeHitbox another) {
-    return one.onComponentTypeCheck(another) &&
-        another.onComponentTypeCheck(one);
+  bool onComponentTypeCheck(ShapeHitbox first, ShapeHitbox second) {
+    return first.onComponentTypeCheck(second) &&
+        second.onComponentTypeCheck(first);
   }
 
   @override
