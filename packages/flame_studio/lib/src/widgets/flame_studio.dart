@@ -10,7 +10,7 @@ class FlameStudio extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ProviderScope(
-      child: Scaffold(child: child),
+      child: Scaffold(gameApp: child),
     );
   }
 }
