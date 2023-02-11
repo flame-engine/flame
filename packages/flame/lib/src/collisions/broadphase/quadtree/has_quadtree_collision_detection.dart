@@ -1,5 +1,4 @@
 import 'package:flame/collisions.dart';
-import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 
@@ -66,28 +65,9 @@ mixin HasQuadTreeCollisionDetection on FlameGame
             (activeItemCenter.y - potentialCenter.y).abs() > minimumDistance!);
   }
 
-  bool onComponentTypeCheck(PositionComponent one, PositionComponent another) {
-    var checkParent = false;
-    if (one is GenericCollisionCallbacks) {
-      if (!(one as GenericCollisionCallbacks).onComponentTypeCheck(another)) {
-        return false;
-      }
-    } else {
-      checkParent = true;
-    }
-
-    if (another is GenericCollisionCallbacks) {
-      if (!(another as GenericCollisionCallbacks).onComponentTypeCheck(one)) {
-        return false;
-      }
-    } else {
-      checkParent = true;
-    }
-
-    if (checkParent && one is ShapeHitbox && another is ShapeHitbox) {
-      return onComponentTypeCheck(one.hitboxParent, another.hitboxParent);
-    }
-    return true;
+  bool onComponentTypeCheck(ShapeHitbox first, ShapeHitbox second) {
+    return first.onComponentTypeCheck(second) &&
+        second.onComponentTypeCheck(first);
   }
 
   @override
