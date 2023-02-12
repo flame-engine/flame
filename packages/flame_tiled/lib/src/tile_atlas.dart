@@ -95,9 +95,8 @@ class TiledAtlas {
       // The map contains one image, so its either an atlas already, or a
       // really boring map.
       final tiledImage = imageList.first;
-      final image =
-          (await Flame.images.load(tiledImage.source!, key: key)).clone();
-
+      final image = (await Flame.images.load(tiledImage.source!)).clone();
+      Flame.images.add(key, image);
       return atlasMap[key] ??= TiledAtlas._(
         atlas: image,
         offsets: {tiledImage.source!: Offset.zero},
