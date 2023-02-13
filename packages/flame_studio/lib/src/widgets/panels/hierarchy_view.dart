@@ -71,7 +71,7 @@ class HierarchyViewState extends ConsumerState<ConsumerStatefulWidget> {
       ),
     );
     final punctuation = Transform(
-      transform: Matrix4.translationValues(-4, 0, 0),
+      transform: Matrix4.translationValues(-3.0, 0, 0),
       child: Text(
         hasChildren ? (isExpanded ? ' {' : ' {...}') : ',',
         style: const TextStyle(color: Color(0x66f5d49a)),
