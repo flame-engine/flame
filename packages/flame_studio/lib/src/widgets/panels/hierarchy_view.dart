@@ -96,7 +96,7 @@ class HierarchyViewState extends ConsumerState<ConsumerStatefulWidget> {
         Row(
           children: [
             _ExpanderIcon(hasChildren: false, isLast: depth == 0),
-            indent,
+            SizedBox(width: 15.0 * depth + 5.0),
             const Text(
               '}',
               style: TextStyle(color: Color(0x66f5d49a)),
