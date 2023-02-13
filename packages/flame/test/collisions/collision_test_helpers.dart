@@ -90,6 +90,8 @@ class TestBlock extends PositionComponent with CollisionCallbacks {
   int onCollisionCounter = 0;
   int endCounter = 0;
 
+  final bool Function(PositionComponent other)? _onComponentTypeCheck;
+
   TestBlock(
     Vector2 position,
     Vector2 size, {
@@ -97,7 +99,9 @@ class TestBlock extends PositionComponent with CollisionCallbacks {
     bool addTestHitbox = true,
     super.children,
     this.name,
-  }) : super(
+    bool Function(PositionComponent other)? onComponentTypeCheck,
+  })  : _onComponentTypeCheck = onComponentTypeCheck,
+        super(
           position: position,
           size: size,
         ) {
@@ -155,4 +159,18 @@ class TestBlock extends PositionComponent with CollisionCallbacks {
     super.onCollisionEnd(other);
     endCounter++;
   }
+
+  @override
+  bool onComponentTypeCheck(PositionComponent other) {
+    return (_onComponentTypeCheck?.call(other) ?? true) &&
+        super.onComponentTypeCheck(other);
+  }
+}
+
+class Water extends PositionComponent {
+  Water({super.position, super.size, super.children});
+}
+
+class Brick extends PositionComponent {
+  Brick({super.position, super.size, super.children});
 }

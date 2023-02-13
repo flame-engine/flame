@@ -110,6 +110,60 @@ void main() {
         expect(hitboxA.endCounter, 1);
         expect(hitboxB.endCounter, 1);
       },
+      'hitboxes are in any descendants': (game) async {
+        // The hitboxParent of the `testHitbox` will be the `player`.
+        final player = TestBlock(
+          Vector2.all(0),
+          Vector2.all(10),
+          addTestHitbox: false,
+          children: [
+            Component(
+              children: [
+                Component(children: [TestHitbox()]),
+              ],
+            ),
+          ],
+        );
+        final block = TestBlock(Vector2.all(100), Vector2.all(10));
+
+        await game.ensureAddAll([player, block]);
+
+        expect(block.startCounter, 0);
+        expect(block.onCollisionCounter, 0);
+        expect(block.endCounter, 0);
+
+        // player <== collides with  ==> block
+        block.position = Vector2.all(5);
+        game.update(0);
+
+        expect(block.startCounter, 1);
+        expect(block.onCollisionCounter, 1);
+        expect(block.endCounter, 0);
+      },
+      'hitboxParent is PositionComponent but not CollisionCallbacks':
+          (game) async {
+        final player = PositionComponent(
+          position: Vector2.all(0),
+          size: Vector2.all(10),
+          children: [
+            Component(
+              children: [
+                Component(children: [TestHitbox()]),
+              ],
+            ),
+          ],
+        );
+        final block = TestBlock(Vector2.all(100), Vector2.all(10));
+
+        await game.ensureAddAll([player, block]);
+
+        block.position = Vector2.all(5);
+        game.update(0);
+
+        expect(block.startCounter, 1);
+        expect(block.onCollisionCounter, 1);
+        expect(block.endCounter, 0);
+      },
     });
   });
 
@@ -458,5 +512,66 @@ void main() {
       expect(outerBlock.onCollisionCounter, 1);
       expect(outerBlock.endCounter, 1);
     },
+  });
+
+  group('ComponentTypeCheck(only supported in the QuadTree)', () {
+    testQuadTreeCollisionDetectionGame(
+      'makes the correct Component type start to collide',
+      (game) async {
+        final water = Water(
+          position: Vector2.all(0),
+          size: Vector2.all(10),
+          children: [
+            Component(
+              children: [
+                Component(children: [TestHitbox()]),
+              ],
+            ),
+          ],
+        );
+        final brick = Brick(
+          position: Vector2.all(50),
+          size: Vector2.all(10),
+          children: [
+            Component(
+              children: [
+                Component(children: [TestHitbox()]),
+              ],
+            ),
+          ],
+        );
+
+        final block = TestBlock(
+          Vector2.all(100),
+          Vector2.all(10),
+          onComponentTypeCheck: (other) {
+            if (other is Water) {
+              return false;
+            }
+            return true;
+          },
+        );
+
+        await game.ensureAddAll([water, brick, block]);
+
+        // block <== collides with  ==> water
+        // But as [TestBlock.onComponentTypeCheck] returns false with Water,
+        // they do not actually start to collide.
+        block.position = Vector2.all(5);
+        game.update(0);
+
+        expect(block.startCounter, 0);
+        expect(block.onCollisionCounter, 0);
+        expect(block.endCounter, 0);
+
+        // block <== collides with  ==> brick
+        block.position = Vector2.all(55);
+        game.update(0);
+
+        expect(block.startCounter, 1);
+        expect(block.onCollisionCounter, 1);
+        expect(block.endCounter, 0);
+      },
+    );
   });
 }
