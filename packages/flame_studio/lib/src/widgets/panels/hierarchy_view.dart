@@ -40,15 +40,28 @@ class HierarchyViewState extends ConsumerState<ConsumerStatefulWidget> {
   }
 
   Widget _buildItem(ComponentTreeNode node, int depth) {
-    final pre = '[-]';
-    return GestureDetector(
-      onTap: () => _toggle(node.component),
-      child: Text(
-        '$pre ${'..' * depth}${node.name}',
-        style: const TextStyle(
-          color: Color(0xffffffff),
-        ),
-      ),
+    final isExpanded = expandedComponents.contains(node.component);
+    return Row(
+      children: [
+        if (node.hasChildren)
+          GestureDetector(
+            onTap: () => _toggle(node.component),
+            child: _ExpanderIcon(true, isExpanded),
+          )
+        else
+          _ExpanderIcon(false, isExpanded),
+        if (depth > 0)
+          Container(width: 15.0 * depth),
+        GestureDetector(
+          onTap: () => _toggle(node.component),
+          child: Text(
+            node.name,
+            style: const TextStyle(
+              color: Color(0xffffffff),
+            ),
+          ),
+        )
+      ],
     );
   }
 
@@ -60,5 +73,74 @@ class HierarchyViewState extends ConsumerState<ConsumerStatefulWidget> {
         expandedComponents.add(component);
       }
     });
+  }
+}
+
+class _ExpanderIcon extends StatelessWidget {
+  const _ExpanderIcon(this.hasChildren, this.isExpanded);
+  final bool hasChildren;
+  final bool isExpanded;
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomPaint(
+      size: const Size(20, 20),
+      painter: _ExpanderIconPainter(this),
+    );
+  }
+}
+
+class _ExpanderIconPainter extends CustomPainter {
+  _ExpanderIconPainter(this.icon);
+
+  final _ExpanderIcon icon;
+  static final _paint = Paint()
+    ..color = const Color(0xFFFFFFFF)
+    ..style = PaintingStyle.stroke;
+
+  @override
+  bool shouldRepaint(_ExpanderIconPainter old) =>
+      (icon.hasChildren != old.icon.hasChildren) ||
+      (icon.isExpanded != old.icon.isExpanded);
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    const iconSize = 10.0;
+    const halfSize = iconSize / 2;
+    final xExtent = size.width / 2;
+    final yExtent = size.height / 2;
+    canvas.save();
+    canvas.translate(xExtent, yExtent);
+    if (icon.hasChildren) {
+      canvas.drawLine(
+        Offset(0, -yExtent),
+        const Offset(0, -halfSize),
+        _paint,
+      );
+      canvas.drawRect(
+        const Rect.fromLTWH(-halfSize, -halfSize, iconSize, iconSize),
+        _paint,
+      );
+      canvas.drawLine(
+        const Offset(-iconSize / 4, 0),
+        const Offset(iconSize / 4, 0),
+        _paint,
+      );
+      if (!icon.isExpanded) {
+        canvas.drawLine(
+          const Offset(0, -iconSize / 4),
+          const Offset(0, iconSize / 4),
+          _paint,
+        );
+      }
+      canvas.drawLine(
+        const Offset(0, halfSize),
+        Offset(0, yExtent),
+        _paint,
+      );
+    } else {
+      canvas.drawLine(Offset(0, -yExtent), Offset(0, yExtent), _paint);
+    }
+    canvas.restore();
   }
 }

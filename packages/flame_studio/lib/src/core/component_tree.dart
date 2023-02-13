@@ -30,6 +30,7 @@ class ComponentTreeNode {
   final Component component;
   final List<ComponentTreeNode>? children;
   String get name => component.runtimeType.toString();
+  bool get hasChildren => children?.isNotEmpty ?? false;
 
   @override
   bool operator ==(Object other) =>
