@@ -27,3 +27,7 @@ dev_dependencies:
     sdk: flutter
   mocktail: ^0.3.0
   test: any
+
+screenshots:
+  - description: The Flame logo.
+    path: screenshots/logo.png
