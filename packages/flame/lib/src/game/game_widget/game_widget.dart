@@ -71,6 +71,9 @@ class GameWidget<T extends Game> extends StatefulWidget {
   final MouseCursor? mouseCursor;
   final List<String>? initialActiveOverlays;
 
+  /// Whether the game should assume the behavior of a [RepaintBoundary].
+  ///
+  /// Defaults to `true`.
   final bool addRepaintBoundary;
 
   /// Renders a [game] in a flutter widget tree.
