@@ -5,8 +5,8 @@ import 'package:flame_studio/src/widgets/toolbar/flame_studio_toolbar.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class Scaffold extends ConsumerWidget {
-  const Scaffold({required this.gameApp, super.key});
+class UiScaffold extends ConsumerWidget {
+  const UiScaffold({required this.gameApp, super.key});
 
   final Widget gameApp;
 
