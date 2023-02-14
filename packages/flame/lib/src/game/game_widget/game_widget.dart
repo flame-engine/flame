@@ -1,10 +1,10 @@
-import 'dart:developer';
+import 'dart:async';
 
 import 'package:flame/extensions.dart';
+import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flame/src/game/game_render_box.dart';
-import 'package:flame/src/game/game_widget/gestures.dart';
-import 'package:flame/src/game/mixins/game.dart';
+import 'package:flame/src/game/game_widget/gesture_detector_builder.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
@@ -22,11 +22,19 @@ typedef OverlayWidgetBuilder<T extends Game> = Widget Function(
   T game,
 );
 
+typedef GameFactory<T extends Game> = T Function();
+
 /// A [StatefulWidget] that is in charge of attaching a [Game] instance into the
 /// Flutter tree.
 class GameWidget<T extends Game> extends StatefulWidget {
-  /// The game instance in which this widget will render
-  final T game;
+  /// The game instance which this widget will render, if the normal constructor
+  /// is used.
+  /// If the [GameWidget.controlled] constructor is used, this will always be
+  /// `null`.
+  final T? game;
+
+  /// A function that creates a [Game] that this widget will render.
+  final GameFactory<T>? gameFactory;
 
   /// The text direction to be used in text elements in a game.
   final TextDirection? textDirection;
@@ -52,15 +60,6 @@ class GameWidget<T extends Game> extends StatefulWidget {
   /// - [Game.overlays]
   final Map<String, OverlayWidgetBuilder<T>>? overlayBuilderMap;
 
-  /// A List of the initially active overlays, this is used only on the first
-  /// build of the widget.
-  /// To control the overlays that are active use [Game.overlays].
-  ///
-  /// See also:
-  /// - [GameWidget]
-  /// - [Game.overlays]
-  final List<String>? initialActiveOverlays;
-
   /// The [FocusNode] to control the games focus to receive event inputs.
   /// If omitted, defaults to an internally controlled focus node.
   final FocusNode? focusNode;
@@ -69,18 +68,25 @@ class GameWidget<T extends Game> extends StatefulWidget {
   /// Defaults to true.
   final bool autofocus;
 
-  /// Initial mouse cursor for this [GameWidget]
-  /// mouse cursor can be changed in runtime using [Game.mouseCursor]
   final MouseCursor? mouseCursor;
+  final List<String>? initialActiveOverlays;
 
   /// Renders a [game] in a flutter widget tree.
   ///
   /// Ex:
   /// ```
+  /// // Inside a State...
+  /// late MyGameClass game;
+  ///
+  /// @override
+  /// void initState() {
+  ///   super.initState();
+  ///   game = MyGameClass();
+  /// }
   /// ...
   /// Widget build(BuildContext  context) {
   ///   return GameWidget(
-  ///     game: MyGameClass(),
+  ///     game: game,
   ///   )
   /// }
   /// ...
@@ -111,9 +117,9 @@ class GameWidget<T extends Game> extends StatefulWidget {
   /// ...
   /// game.overlays.add('PauseMenu');
   /// ```
-  const GameWidget({
-    Key? key,
-    required this.game,
+  GameWidget({
+    super.key,
+    required T this.game,
     this.textDirection,
     this.loadingBuilder,
     this.errorBuilder,
@@ -123,94 +129,166 @@ class GameWidget<T extends Game> extends StatefulWidget {
     this.focusNode,
     this.autofocus = true,
     this.mouseCursor,
-  }) : super(key: key);
+  }) : gameFactory = null {
+    _initializeGame(game!);
+  }
+
+  /// Creates a new game instance with the [gameFactory] and then
+  /// renders that game in the Flutter widget tree.
+  ///
+  /// Unlike the default constructor [GameWidget.new], this creates a
+  /// [GameWidget] that controls the creation and disposal of the game instance.
+  ///
+  /// This removes the necessity of creating the game class outside of the
+  /// widget or to wrap the [GameWidget] inside of a [StatefulWidget], to keep
+  /// the state of the game.
+  ///
+  /// Example:
+  /// ```
+  /// ...
+  /// Widget build(BuildContext  context) {
+  ///   return GameWidget.controlled(
+  ///     gameFactory: MyGameClass.new,
+  ///   )
+  /// }
+  /// ...
+  /// ```
+  const GameWidget.controlled({
+    super.key,
+    required GameFactory<T> this.gameFactory,
+    this.textDirection,
+    this.loadingBuilder,
+    this.errorBuilder,
+    this.backgroundBuilder,
+    this.overlayBuilderMap,
+    this.initialActiveOverlays,
+    this.focusNode,
+    this.autofocus = true,
+    this.mouseCursor,
+  }) : game = null;
 
   /// Renders a [game] in a flutter widget tree alongside widgets overlays.
   ///
   /// To use overlays, the game subclass has to be mixed with HasWidgetsOverlay.
   @override
   _GameWidgetState<T> createState() => _GameWidgetState<T>();
+
+  void _initializeGame(T game) {
+    if (mouseCursor != null) {
+      game.mouseCursor = mouseCursor!;
+    }
+    if (overlayBuilderMap != null) {
+      for (final kv in overlayBuilderMap!.entries) {
+        game.overlays.addEntry(
+          kv.key,
+          (ctx, game) => kv.value(ctx, game as T),
+        );
+      }
+    }
+    if (initialActiveOverlays != null) {
+      game.overlays.addAll(initialActiveOverlays!);
+    }
+  }
 }
 
 class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
-  Set<String> initialActiveOverlays = {};
-
-  MouseCursor? _mouseCursor;
+  late T currentGame;
 
   Future<void> get loaderFuture => _loaderFuture ??= (() async {
-        assert(widget.game.hasLayout);
-        final onLoad = widget.game.onLoadFuture;
+        final game = currentGame;
+        assert(game.hasLayout);
+        final onLoad = game.onLoadFuture;
         if (onLoad != null) {
           await onLoad;
         }
-        widget.game.onMount();
+        game.mount();
       })();
 
   Future<void>? _loaderFuture;
 
   late FocusNode _focusNode;
 
+  /// The number of `build()` functions currently executing.
+  int _buildDepth = 0;
+
+  /// If true, then a fresh build will be scheduled after the current one
+  /// completes. This should only be set to true when the [_buildDepth] is
+  /// non-zero.
+  bool _requiresRebuild = false;
+
+  /// Helper method that arranges to have `_buildDepth > 0` while the [build] is
+  /// executing, and then schedules a re-build if [_requiresRebuild] flag was
+  /// raised during the build.
+  ///
+  /// This is needed because our build function invokes user code, which in turn
+  /// may change some of the [Game]'s properties which would require the
+  /// [GameWidget] to be rebuilt. However, Flutter doesn't allow widgets to be
+  /// marked dirty while they are building. So, this method is needed to avoid
+  /// such a limitation and ensure that the user code can set [Game]'s
+  /// properties freely, and that they will be propagated to the [GameWidget]
+  /// at the earliest opportunity.
+  Widget _protectedBuild(Widget Function() build) {
+    late final Widget result;
+    try {
+      _buildDepth++;
+      result = build();
+    } finally {
+      _buildDepth--;
+    }
+    if (_requiresRebuild && _buildDepth == 0) {
+      Future.microtask(_onGameStateChange);
+    }
+    return result;
+  }
+
+  void _onGameStateChange() {
+    if (_buildDepth > 0) {
+      _requiresRebuild = true;
+    } else {
+      setState(() => _requiresRebuild = false);
+    }
+  }
+
+  void initCurrentGame() {
+    if (widget.game == null) {
+      currentGame = widget.gameFactory!.call();
+      widget._initializeGame(currentGame);
+    } else {
+      currentGame = widget.game!;
+    }
+    currentGame.addGameStateListener(_onGameStateChange);
+    _loaderFuture = null;
+  }
+
+  void disposeCurrentGame() {
+    currentGame.removeGameStateListener(_onGameStateChange);
+    currentGame.onRemove();
+  }
+
   @override
   void initState() {
     super.initState();
-
-    // Add the initial overlays
-    _initActiveOverlays();
-    addOverlaysListener();
-
-    // Add the initial mouse cursor
-    _initMouseCursor();
-    addMouseCursorListener();
-
+    initCurrentGame();
     _focusNode = widget.focusNode ?? FocusNode();
     if (widget.autofocus) {
       _focusNode.requestFocus();
     }
   }
 
-  void _initMouseCursor() {
-    if (widget.mouseCursor != null) {
-      widget.game.mouseCursor.value = widget.mouseCursor;
-      _mouseCursor = widget.game.mouseCursor.value;
-    }
-  }
-
-  void _initActiveOverlays() {
-    if (widget.initialActiveOverlays == null) {
-      return;
-    }
-    _checkOverlays(widget.initialActiveOverlays!.toSet());
-    widget.initialActiveOverlays!.forEach((key) {
-      widget.game.overlays.add(key);
-    });
-  }
-
   @override
   void didUpdateWidget(GameWidget<T> oldWidget) {
     super.didUpdateWidget(oldWidget);
+
     if (oldWidget.game != widget.game) {
-      removeOverlaysListener(oldWidget.game);
-
-      // Reset the overlays
-      _initActiveOverlays();
-      addOverlaysListener();
-
-      // Reset mouse cursor
-      _initMouseCursor();
-      addMouseCursorListener();
-
-      // Reset the loaderFuture so that onMount will run again
-      // (onLoad is still cached).
-      oldWidget.game.onRemove();
-      _loaderFuture = null;
+      disposeCurrentGame();
+      initCurrentGame();
     }
   }
 
   @override
   void dispose() {
     super.dispose();
-    widget.game.onRemove();
-    removeOverlaysListener(widget.game);
+    disposeCurrentGame();
     // If we received a focus node from the user, they are responsible
     // for disposing it
     if (widget.focusNode == null) {
@@ -218,47 +296,13 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
     }
   }
 
-  void addMouseCursorListener() {
-    widget.game.mouseCursor.addListener(onChangeMouseCursor);
-  }
-
-  void onChangeMouseCursor() {
-    setState(() {
-      _mouseCursor = widget.game.mouseCursor.value;
-    });
-  }
-
-  //#region Widget overlay methods
-
-  void addOverlaysListener() {
-    widget.game.overlays.addListener(onChangeActiveOverlays);
-    initialActiveOverlays = widget.game.overlays.value;
-  }
-
-  void removeOverlaysListener(T game) {
-    game.overlays.removeListener(onChangeActiveOverlays);
-  }
-
-  void _checkOverlays(Set<String> overlays) {
-    overlays.forEach((overlayKey) {
-      assert(
-        widget.overlayBuilderMap?.containsKey(overlayKey) ?? false,
-        'A non mapped overlay has been added: $overlayKey',
-      );
-    });
-  }
-
-  void onChangeActiveOverlays() {
-    _checkOverlays(widget.game.overlays.value);
-    setState(() {
-      initialActiveOverlays = widget.game.overlays.value;
-    });
-  }
-
-  //#endregion
-
   KeyEventResult _handleKeyEvent(FocusNode focusNode, RawKeyEvent event) {
-    final game = widget.game;
+    final game = currentGame;
+
+    if (!_focusNode.hasPrimaryFocus) {
+      return KeyEventResult.ignored;
+    }
+
     if (game is KeyboardEvents) {
       return game.onKeyEvent(event, RawKeyboard.instance.keysPressed);
     }
@@ -267,136 +311,104 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
 
   @override
   Widget build(BuildContext context) {
-    final game = widget.game;
-    Widget internalGameWidget = _GameRenderObjectWidget(game);
-
-    assert(
-      !(game is MultiTouchDragDetector && game is PanDetector),
-      'WARNING: Both MultiTouchDragDetector and a PanDetector detected. '
-      'The MultiTouchDragDetector will override the PanDetector and it will '
-      'not receive events',
-    );
-
-    if (hasBasicGestureDetectors(game)) {
-      internalGameWidget = applyBasicGesturesDetectors(
-        game,
-        internalGameWidget,
+    return _protectedBuild(() {
+      Widget? internalGameWidget = RenderGameWidget(
+        game: currentGame,
       );
-    }
 
-    if (hasAdvancedGestureDetectors(game)) {
-      internalGameWidget = applyAdvancedGesturesDetectors(
-        game,
-        internalGameWidget,
+      assert(
+        !(currentGame is MultiTouchDragDetector && currentGame is PanDetector),
+        'WARNING: Both MultiTouchDragDetector and a PanDetector detected. '
+        'The MultiTouchDragDetector will override the PanDetector and it will '
+        'not receive events',
       );
-    }
 
-    if (hasMouseDetectors(game)) {
-      internalGameWidget = applyMouseDetectors(
-        game,
-        internalGameWidget,
-      );
-    }
+      internalGameWidget =
+          currentGame.gestureDetectors.build(internalGameWidget);
 
-    final stackedWidgets = [internalGameWidget];
-    _addBackground(context, stackedWidgets);
-    _addOverlays(context, stackedWidgets);
+      if (hasMouseDetectors(currentGame)) {
+        internalGameWidget = applyMouseDetectors(
+          currentGame,
+          internalGameWidget,
+        );
+      }
 
-    // We can use Directionality.maybeOf when that method lands on stable
-    final textDir = widget.textDirection ?? TextDirection.ltr;
+      final stackedWidgets = [internalGameWidget];
+      _addBackground(context, stackedWidgets);
+      _addOverlays(context, stackedWidgets);
 
-    return Focus(
-      focusNode: _focusNode,
-      autofocus: widget.autofocus,
-      onKey: _handleKeyEvent,
-      child: MouseRegion(
-        cursor: _mouseCursor ?? MouseCursor.defer,
-        child: Directionality(
-          textDirection: textDir,
-          child: Container(
-            color: game.backgroundColor(),
-            child: LayoutBuilder(
-              builder: (_, BoxConstraints constraints) {
-                final size = constraints.biggest.toVector2();
-                if (size.isZero()) {
-                  return widget.loadingBuilder?.call(context) ?? Container();
-                }
-                game.onGameResize(size);
-                return FutureBuilder(
-                  future: loaderFuture,
-                  builder: (_, snapshot) {
-                    if (snapshot.hasError) {
-                      final errorBuilder = widget.errorBuilder;
-                      if (errorBuilder == null) {
-                        // @Since('2.16')
-                        // throw Error.throwWithStackTrace(
-                        //   snapshot.error!,
-                        //   snapshot.stackTrace,
-                        // )
-                        log(
-                          'Error while loading Game widget',
-                          error: snapshot.error,
-                          stackTrace: snapshot.stackTrace,
-                        );
-                        throw snapshot.error!;
-                      } else {
-                        return errorBuilder(context, snapshot.error!);
+      // We can use Directionality.maybeOf when that method lands on stable
+      final textDir = widget.textDirection ?? TextDirection.ltr;
+
+      return FocusScope(
+        child: Focus(
+          focusNode: _focusNode,
+          autofocus: widget.autofocus,
+          descendantsAreFocusable: true,
+          onKey: _handleKeyEvent,
+          child: MouseRegion(
+            cursor: currentGame.mouseCursor,
+            child: Directionality(
+              textDirection: textDir,
+              child: ColoredBox(
+                color: currentGame.backgroundColor(),
+                child: LayoutBuilder(
+                  builder: (_, BoxConstraints constraints) {
+                    return _protectedBuild(() {
+                      final size = constraints.biggest.toVector2();
+                      if (size.isZero()) {
+                        return widget.loadingBuilder?.call(context) ??
+                            Container();
                       }
-                    }
-                    if (snapshot.connectionState == ConnectionState.done) {
-                      return Stack(children: stackedWidgets);
-                    }
-                    return widget.loadingBuilder?.call(context) ?? Container();
+                      currentGame.onGameResize(size);
+                      return FutureBuilder(
+                        future: loaderFuture,
+                        builder: (_, snapshot) {
+                          if (snapshot.hasError) {
+                            final errorBuilder = widget.errorBuilder;
+                            if (errorBuilder == null) {
+                              throw Error.throwWithStackTrace(
+                                snapshot.error!,
+                                snapshot.stackTrace!,
+                              );
+                            } else {
+                              return errorBuilder(context, snapshot.error!);
+                            }
+                          }
+
+                          if (snapshot.connectionState ==
+                              ConnectionState.done) {
+                            return Stack(children: stackedWidgets);
+                          }
+
+                          return widget.loadingBuilder?.call(context) ??
+                              const SizedBox.expand();
+                        },
+                      );
+                    });
                   },
-                );
-              },
+                ),
+              ),
             ),
           ),
         ),
-      ),
-    );
-  }
-
-  List<Widget> _addBackground(BuildContext context, List<Widget> stackWidgets) {
-    if (widget.backgroundBuilder == null) {
-      return stackWidgets;
-    }
-    final backgroundContent = KeyedSubtree(
-      key: ValueKey(widget.game),
-      child: widget.backgroundBuilder!(context),
-    );
-    stackWidgets.insert(0, backgroundContent);
-    return stackWidgets;
-  }
-
-  List<Widget> _addOverlays(BuildContext context, List<Widget> stackWidgets) {
-    if (widget.overlayBuilderMap == null) {
-      return stackWidgets;
-    }
-    final widgets = initialActiveOverlays.map((String overlayKey) {
-      final builder = widget.overlayBuilderMap![overlayKey]!;
-      return KeyedSubtree(
-        key: ValueKey(overlayKey),
-        child: builder(context, widget.game),
       );
     });
-    stackWidgets.addAll(widgets);
-    return stackWidgets;
-  }
-}
-
-class _GameRenderObjectWidget extends LeafRenderObjectWidget {
-  final Game game;
-
-  const _GameRenderObjectWidget(this.game);
-
-  @override
-  RenderBox createRenderObject(BuildContext context) {
-    return GameRenderBox(context, game);
   }
 
-  @override
-  void updateRenderObject(BuildContext context, GameRenderBox renderObject) {
-    renderObject.game = game;
+  void _addBackground(BuildContext context, List<Widget> stackWidgets) {
+    if (widget.backgroundBuilder != null) {
+      final backgroundContent = KeyedSubtree(
+        key: ValueKey(widget.game),
+        child: widget.backgroundBuilder!(context),
+      );
+      stackWidgets.insert(0, backgroundContent);
+    }
+  }
+
+  void _addOverlays(BuildContext context, List<Widget> stackWidgets) {
+    stackWidgets.addAll(
+      currentGame.overlays.buildCurrentOverlayWidgets(context),
+    );
   }
 }

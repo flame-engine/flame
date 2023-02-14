@@ -3,7 +3,6 @@ import 'dart:ui';
 
 import 'package:flame/src/experimental/geometry/shapes/shape.dart';
 import 'package:flame/src/game/transform2d.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:meta/meta.dart';
 import 'package:vector_math/vector_math_64.dart';
 
@@ -170,6 +169,29 @@ class RoundedRectangle extends Shape {
     result.x += direction.x >= 0 ? _right - _radius : _left + _radius;
     result.y += direction.y >= 0 ? _bottom - _radius : _top + _radius;
     return result;
+  }
+
+  static final Vector2 _tmpResult = Vector2.zero();
+  static final Vector2 _tmpCenter = Vector2.zero();
+
+  @override
+  Vector2 nearestPoint(Vector2 point) {
+    _tmpResult.setValues(
+      (point.x).clamp(_left, _right),
+      (point.y).clamp(_top, _bottom),
+    );
+    if (containsPoint(_tmpResult)) {
+      return _tmpResult;
+    }
+    _tmpCenter.setValues(
+      _tmpResult.x <= _left + _radius ? _left + _radius : _right - _radius,
+      _tmpResult.y <= _top + _radius ? _top + _radius : _bottom - _radius,
+    );
+    return _tmpResult
+      ..setFrom(point)
+      ..sub(_tmpCenter)
+      ..length = _radius
+      ..add(_tmpCenter);
   }
 
   @override

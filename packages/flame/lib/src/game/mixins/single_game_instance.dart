@@ -1,5 +1,5 @@
-import 'package:flame/src/components/component.dart';
-import 'package:flame/src/game/mixins/game.dart';
+import 'package:flame/src/components/core/component.dart';
+import 'package:flame/src/game/game.dart';
 
 /// Mixin that declares a [Game] class as a singleton.
 ///

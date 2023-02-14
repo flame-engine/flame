@@ -186,11 +186,11 @@ class CollidablePolygon extends MyCollidable {
 
 class CollidableRectangle extends MyCollidable {
   CollidableRectangle(
-    Vector2 position,
-    Vector2 size,
-    Vector2 velocity,
-    ScreenHitbox screenHitbox,
-  ) : super(position, size, velocity, screenHitbox) {
+    super.position,
+    super.size,
+    super.velocity,
+    super.screenHitbox,
+  ) {
     hitbox = RectangleHitbox()..renderShape = true;
     add(hitbox!);
   }
@@ -198,11 +198,11 @@ class CollidableRectangle extends MyCollidable {
 
 class CollidableCircle extends MyCollidable {
   CollidableCircle(
-    Vector2 position,
-    Vector2 size,
-    Vector2 velocity,
-    ScreenHitbox screenHitbox,
-  ) : super(position, size, velocity, screenHitbox) {
+    super.position,
+    super.size,
+    super.velocity,
+    super.screenHitbox,
+  ) {
     hitbox = CircleHitbox()..renderShape = true;
     add(hitbox!);
   }

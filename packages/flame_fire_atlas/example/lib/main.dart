@@ -4,7 +4,7 @@ import 'package:flame/input.dart';
 import 'package:flame_fire_atlas/flame_fire_atlas.dart';
 import 'package:flutter/material.dart';
 
-void main() async {
+void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
   final game = ExampleGame();
@@ -16,7 +16,7 @@ class ExampleGame extends FlameGame with TapDetector {
 
   @override
   Future<void> onLoad() async {
-    _atlas = await loadFireAtlas('caveace.fa');
+    _atlas = await loadFireAtlas('cave_ace.fa');
     add(
       SpriteAnimationComponent(
         size: Vector2(150, 100),

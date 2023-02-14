@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:collection/collection.dart';
 import 'package:flame/src/experimental/geometry/shapes/shape.dart';
 import 'package:flame/src/game/transform2d.dart';
 import 'package:vector_math/vector_math_64.dart';
@@ -105,9 +106,7 @@ class Polygon extends Shape {
   @override
   double get perimeter => _perimeter ??= _calculatePerimeter();
   double? _perimeter;
-  double _calculatePerimeter() {
-    return _edges.fold<double>(0, (sum, edge) => sum + edge.length);
-  }
+  double _calculatePerimeter() => edges.map((e) => e.length).sum;
 
   @override
   Aabb2 get aabb => _aabb ??= _calculateAabb();
@@ -214,6 +213,30 @@ class Polygon extends Shape {
       }
     }
     return bestVertex;
+  }
+
+  static final Vector2 _tmpResult = Vector2.zero();
+
+  @override
+  Vector2 nearestPoint(Vector2 externalPoint) {
+    var shortestDistance2 = double.infinity;
+    for (var i = 0; i < _vertices.length; i++) {
+      final vertex = _vertices[i];
+      final edge = _edges[i];
+      final dotProduct = (externalPoint.x - vertex.x) * edge.x +
+          (externalPoint.y - vertex.y) * edge.y;
+      final t = (dotProduct / edge.length2).clamp(-1.0, 0.0);
+      final edgePointX = vertex.x + edge.x * t;
+      final edgePointY = vertex.y + edge.y * t;
+      final dx = edgePointX - externalPoint.x;
+      final dy = edgePointY - externalPoint.y;
+      final distance2 = dx * dx + dy * dy;
+      if (distance2 < shortestDistance2) {
+        shortestDistance2 = distance2;
+        _tmpResult.setValues(edgePointX, edgePointY);
+      }
+    }
+    return _tmpResult;
   }
 
   @override

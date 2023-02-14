@@ -1,6 +1,6 @@
-import 'package:flame/src/anchor.dart';
 import 'package:flame/src/cache/memory_cache.dart';
-import 'package:flame/src/extensions/vector2.dart';
+import 'package:flame/src/text/formatter_text_renderer.dart';
+import 'package:flame/src/text/formatters/text_painter_text_formatter.dart';
 import 'package:flame/src/text/text_renderer.dart';
 import 'package:flutter/rendering.dart';
 
@@ -10,14 +10,24 @@ import 'package:flutter/rendering.dart';
 /// modified dynamically, if you need to change any attribute of the text at
 /// runtime, such as color, then create a new [TextPaint] object using
 /// [copyWith].
-class TextPaint extends TextRenderer {
-  TextPaint({TextStyle? style, TextDirection? textDirection})
-      : style = style ?? defaultTextStyle,
-        textDirection = textDirection ?? TextDirection.ltr;
+class TextPaint extends FormatterTextRenderer<TextPainterTextFormatter> {
+  TextPaint({
+    TextStyle? style,
+    TextDirection? textDirection,
+    @Deprecated('Use DebugTextFormatter instead. Will be removed in 1.5.0')
+        bool? debugMode,
+  }) : super(
+          TextPainterTextFormatter(
+            style: style ?? defaultTextStyle,
+            textDirection: textDirection ?? TextDirection.ltr,
+            // ignore: deprecated_member_use_from_same_package
+            debugMode: debugMode ?? false,
+          ),
+        );
 
-  final TextStyle style;
+  TextStyle get style => formatter.style;
 
-  final TextDirection textDirection;
+  TextDirection get textDirection => formatter.textDirection;
 
   final MemoryCache<String, TextPainter> _textPainterCache = MemoryCache();
 
@@ -26,27 +36,6 @@ class TextPaint extends TextRenderer {
     fontFamily: 'Arial',
     fontSize: 24,
   );
-
-  @override
-  void render(
-    Canvas canvas,
-    String text,
-    Vector2 p, {
-    Anchor anchor = Anchor.topLeft,
-  }) {
-    final tp = toTextPainter(text);
-    final translatedPosition = Offset(
-      p.x - tp.width * anchor.x,
-      p.y - tp.height * anchor.y,
-    );
-    tp.paint(canvas, translatedPosition);
-  }
-
-  @override
-  Vector2 measureText(String text) {
-    final tp = toTextPainter(text);
-    return Vector2(tp.width, tp.height);
-  }
 
   /// Returns a [TextPainter] that allows for text rendering and size
   /// measuring.
@@ -79,6 +68,9 @@ class TextPaint extends TextRenderer {
     TextStyle Function(TextStyle) transform, {
     TextDirection? textDirection,
   }) {
-    return TextPaint(style: transform(style), textDirection: textDirection);
+    return TextPaint(
+      style: transform(formatter.style),
+      textDirection: textDirection ?? formatter.textDirection,
+    );
   }
 }

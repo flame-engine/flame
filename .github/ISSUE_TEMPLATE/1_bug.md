@@ -1,6 +1,6 @@
 ---
 name: Bug report.
-about: You are creating a Game with Flame but you are noticing some strange behaviour, that it throws an unexpected exception, or that it is not working according to the specifications.
+about: You are creating a Game with Flame but you are noticing some strange behavior, that it throws an unexpected exception, or that it is not working according to the specifications.
 title: ''
 labels: 'bug'
 assignees: ''
@@ -10,15 +10,16 @@ assignees: ''
 
 <!-- When reporting a bug, please read this complete template and fill all the questions in order to get a better response -->
 
-# Current bug behaviour
-<!-- What is the current behaviour that you see? -->
+# Current bug behavior
+<!-- What is the current behavior that you see? -->
 
-# Expected behaviour
-<!-- What behaviour did you expect? -->
+# Expected behavior
+<!-- What behavior did you expect? -->
 
 # Steps to reproduce
 <!-- This one is very important, please be very precise in how we can reproduce this bug -->
 <!-- If possible please report steps based on the example from this plugin! -->
+<!-- If you can make a minimal reproducible example it is incredibly helpful, the simplest way is to share a link from https://zapp.run, you can start from https://zapp.run/edit/flame where all dependencies are already set up. -->
 
 # Flutter doctor output
 <!-- Execute in a terminal and put output into code block below -->

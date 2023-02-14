@@ -1,4 +1,5 @@
 import 'package:flame/game.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:meta/meta.dart';
 
@@ -23,29 +24,52 @@ import 'package:meta/meta.dart';
 /// necessary game components, and possibly advancing the game clock. As a
 /// convenience, we will run `await game.ready()` before rendering, to ensure
 /// that all components that might be pending are properly mounted.
+///
+/// The [size] parameter controls the size of the "device" on which the game
+/// widget is rendered, if omitted it defaults to 2400x1800. This size will be
+/// equal to the canvas size of the game.
 @isTest
 void testGolden(
   String testName,
   PrepareGameFunction testBody, {
   required String goldenFile,
+  Vector2? size,
   FlameGame? game,
+  bool skip = false,
 }) {
-  testWidgets(testName, (tester) async {
-    final gameInstance = game ?? FlameGame();
+  testWidgets(
+    testName,
+    (tester) async {
+      final gameInstance = game ?? FlameGame();
+      const myKey = ValueKey('game-instance');
 
-    await tester.runAsync(() async {
-      await tester.pumpWidget(GameWidget(game: gameInstance));
-      await tester.pump();
-      await testBody(gameInstance);
-      await gameInstance.ready();
-      await tester.pump();
-    });
+      await tester.runAsync(() async {
+        Widget widget = GameWidget(key: myKey, game: gameInstance);
+        if (size != null) {
+          widget = Center(
+            child: SizedBox(
+              width: size.x,
+              height: size.y,
+              child: RepaintBoundary(
+                child: widget,
+              ),
+            ),
+          );
+        }
+        await tester.pumpWidget(widget);
+        await tester.pump();
+        await testBody(gameInstance);
+        await gameInstance.ready();
+        await tester.pump();
+      });
 
-    await expectLater(
-      find.byWidgetPredicate((widget) => widget is GameWidget),
-      matchesGoldenFile(goldenFile),
-    );
-  });
+      await expectLater(
+        find.byKey(myKey),
+        matchesGoldenFile(goldenFile),
+      );
+    },
+    skip: skip,
+  );
 }
 
 typedef PrepareGameFunction = Future<void> Function(FlameGame game);

@@ -67,17 +67,18 @@ class CameraComponentExample extends FlameGame with PanDetector {
 
   void _updateMagnifyingGlassPosition(Vector2 point) {
     // [point] is in the canvas coordinate system.
-    // This shifts the original [point] by 1.4142*radius, which happens to be
-    // in the middle of the magnifying glass' handle.
-    final handlePoint = point - Vector2.all(radius);
     magnifyingGlass
-      ..viewport.position = handlePoint
-      ..viewfinder.position = handlePoint - canvasSize / 2 + center;
+      ..viewport.position = point - Vector2.all(radius)
+      ..viewfinder.position = point - canvasSize / 2 + center;
   }
 }
 
-class Bezel extends Component {
-  Bezel(this.radius);
+class Bezel extends PositionComponent {
+  Bezel(this.radius)
+      : super(
+          size: Vector2.all(2 * radius),
+          position: Vector2.all(radius),
+        );
 
   final double radius;
   late final Path rim;
@@ -96,7 +97,7 @@ class Bezel extends Component {
   late final Paint specularPaint;
 
   @override
-  Future<void> onLoad() async {
+  void onLoad() {
     rim = Path()..addOval(Rect.fromLTRB(-radius, -radius, radius, radius));
     final outer = radius + rimWidth / 2;
     final inner = radius - rimWidth / 2;
@@ -421,7 +422,10 @@ class Ant extends PositionComponent {
       travelDirection = -travelDirection;
     }
     final nextIndex = travelPathNodeIndex + travelDirection;
-    assert(nextIndex >= 0 && nextIndex < travelPath.length);
+    assert(
+      nextIndex >= 0 && nextIndex < travelPath.length,
+      'nextIndex is outside of the bounds of travelPath',
+    );
     final nextPosition = travelPath[nextIndex];
     var nextAngle =
         angle = -(nextPosition - position).angleToSigned(Vector2(0, -1));
@@ -480,7 +484,7 @@ class InsectLeg {
         path = Path(),
         foot = Vector2.zero() {
     final ok = placeFoot(Vector2(x1, y1));
-    assert(ok);
+    assert(ok, 'The foot was not properly placed');
   }
 
   /// Place where the leg is attached to the body

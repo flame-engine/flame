@@ -40,6 +40,14 @@ a:hover {
   color: #ddbb99;
 }
 
+a:hover code {
+  color: white;
+}
+
+a.reference.external {
+  word-wrap: break-word;
+}
+
 a.reference.external::after {
   content: "\f35d";
   font-family: var(--font-awesome);
@@ -59,6 +67,15 @@ code {
   padding: 2pt 3pt;
 }
 
+code.xref {
+  background: none;
+  color: #f75151;
+  padding: 0;
+}
+
+a.reference code.xref { color: #ffbb3e; }
+a.reference:hover code.xref { color: #ffffff; }
+
 p {
   margin-top: 0;
 }
@@ -71,14 +88,26 @@ div.expander {
   flex: 1;
 }
 
-p + ul {
+p + ul, p + ol {
   margin-top: -0.5em;
+}
+
+ul.simple p + ul, ol.simple p + ul {
+  margin-top: 0;
 }
 
 ul ul.simple p {
   margin-bottom: 1em;
 }
 
+kbd {
+  background-color: #000;
+  border-radius: 4pt;
+  color: #fff;
+  font-family: var(--font-mono);
+  font-size: 85%;
+  padding: 2pt 5pt;
+}
 
 /*----------------------------------------------------------------------------*
  * Top navigation bar
@@ -305,7 +334,6 @@ div.nav-left ul {
   padding: 0 0 0 16px;
 }
 
-div.nav-left ul.current,
 div.nav-left > ul {
   display: block;
 }
@@ -316,55 +344,46 @@ div.nav-left li {
   margin: 0;
 }
 
-div.nav-left li > a {
+div.nav-left li > a,
+div.nav-left li > div.submenu > a.reference {
   border-radius: 5px 0 0 5px;
   color: #9d9175;
   display: block;
   font-size: 13px;
-  margin-left: -15px;
-  padding: 2px 0 2px 15px;
+  margin-left: -5px;
+  padding: 2px 0 2px 5px;
   text-decoration: none;
 }
 
-div.nav-left li > a:hover {
-  background-color: #303030;
+div.nav-left li a:hover {
+  background-color: #00000030;
+  color: #fff !important;
 }
 
-div.nav-left li > a:not(:only-child)::before {
-  color: #ffbb3e;
+div.nav-left li > div.submenu > a.arrow {
+  border-radius: 5px;
+  cursor: pointer;
+  left: -20px;
+  position: absolute;
+  width: 20px;
+}
+
+div.nav-left li > div.submenu > a.arrow::before {
   content: "\f0da";
   font-family: var(--font-awesome);
-  font-size: 70%;
-  font-weight: 900;
-  left: -9px;
-  position: absolute;
-  top: 5px;
+  font-size: 80%;
+  padding-left: 9px;
 }
 
-div.nav-left li > a:not(:only-child):not(.current):hover::before {
-  color: #fff;
-}
-
-div.nav-left li.current > ul {
-  display: block;
-}
-
-div.nav-left li.current > a.current {
+div.nav-left li > a.current,
+div.nav-left li > div.submenu > a.reference.current {
   background: #222;
   color: #aaa;
-  margin-left: -14px;
-  padding-left: 15px;
-  position: relative;
-  z-index: 40;
 }
 
-div.nav-left li.current > a:not(:only-child)::before {
+div.nav-left li.current > div.submenu > a.arrow::before {
   content: "\f0d7";
-  left: -10px;
-}
-
-div.nav-left li.current > a.current:not(:only-child)::before {
-  left: 4px;
+  padding-left: 6px;
 }
 
 div.nav-left li.current > ul {
@@ -470,12 +489,36 @@ div.document-wrapper {
   margin-top: 25px;
 }
 
+div.warning {
+  background: #9b6814;
+  color: white;
+  border-radius: 2pt;
+  box-shadow: 2px 2px 3px #ffc43c;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+div.warning .version {
+  font-style: italic;
+  text-decoration: dashed underline;
+}
+
+.hidden {
+  display: none;
+}
+
 div.document {
   background-color: #282828;
   color: #b0b0b0;
   border-radius: 2pt;
   box-shadow: 2px 2px 3px 0 #000;
   padding: var(--document-padding);
+}
+
+div.document::after { /* clearfix */
+  content: '';
+  display: block;
+  clear: both;
 }
 
 div.copyright {
@@ -493,6 +536,7 @@ div.document h1 {
 }
 
 div.document h2 {
+  color: #ddd;
   font-size: 1.5em;
   margin: 1.5em 0 .5em 0;
 }
@@ -589,6 +633,14 @@ div.document :is(h1, h2, h3, h4) > code {
  * Code
  *----------------------------------------------------------------------------*/
 
+ div[class^="highlight-"] {
+  position: relative;
+  overflow-x: auto;
+  padding: 2px;
+  padding-top: 11px;
+  margin-top: -11px;
+}
+
 pre {
   background: #202020;
   border: none;
@@ -600,13 +652,11 @@ pre {
   line-height: 125%;
   margin: 0;
   padding: 10px;
-  position: relative;
 }
 
 div[class^="highlight-"] pre:before {
   background: black;
-  border-bottom-left-radius: 5px;
-  border-top-right-radius: 5px;
+  border-radius: 5px;
   color: #58d0ff;
   font-size: 80%;
   padding: 1px 8px;
@@ -625,6 +675,10 @@ div.highlight-dart pre:before {
 div.highlight-yaml pre:before {
   content: "yaml";
   color: #5f5;
+}
+div.highlight-yarn pre:before {
+  content: "yarn";
+  color: #a6e22e;
 }
 div.highlight-text pre:before {
   content: "text";
@@ -756,7 +810,7 @@ div.admonition.warning {
   --admonition-border-color: orange;
   --admonition-icon: '\f071';
   --admonition-icon-color: gold;
-  --admonition-title-background-color: #503e1a;
+  --admonition-title-background-color: #a16820;
 }
 
 div.admonition.error {
@@ -777,7 +831,7 @@ div.admonition.seealso {
   --admonition-border-color: #54d452;
   --admonition-icon: '\f064';
   --admonition-icon-color: #acfab6;
-  --admonition-title-background-color: #285131;
+  --admonition-title-background-color: #28513140;
 }
 
 div.admonition.admonition-deprecated {
@@ -785,4 +839,37 @@ div.admonition.admonition-deprecated {
   --admonition-icon: '\f1f8';
   --admonition-icon-color: #555;
   --admonition-title-background-color: #1c1c1c;
+}
+
+
+pre, div[class*="highlight-"] {
+  clear: none;
+}
+
+h2, h3, h4, h5, h6 {
+  clear: both;
+}
+
+table.first-col-align-center tr td:first-child,
+table.first-col-align-center tr th:first-child {
+  text-align: center;
+}
+
+table.docutils td {
+  border-color: rgba(255, 255, 255, 0.125);
+  vertical-align: top;
+}
+
+table.docutils th {
+  color: #9d9175;
+}
+
+/* This ensures that when navigating to a link within a page, the link
+   will be visible and not obscured by the top-page header. */
+:target::before {
+  content: '';
+  display: block;
+  height: calc(25px + var(--top-menu-height));
+  margin-top: calc(-25px - var(--top-menu-height));
+  visibility: hidden;
 }

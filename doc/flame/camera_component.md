@@ -10,7 +10,7 @@ that allows more flexibility in placing the camera, or even having more than
 one camera simultaneously.
 
 In order to understand how this approach works, imagine that your game world is
-an entity that exists _somewhere_ independently from your application. Imagine
+an entity that exists *somewhere* independently from your application. Imagine
 that your game is merely a window through which you can look into that world.
 That you can close that window at any moment, and the game world would still be
 there. Or, on the contrary, you can open multiple windows that all look at the
@@ -41,6 +41,10 @@ and a single camera, then switching that camera's target from A to B will
 instantaneously switch the view to world B without having to unmount A and
 then mount B.
 
+Just like with most `Component`s, children can be added to `World` by using the
+`children` argument in its constructor, or by using the `add` or `addAll`
+methods.
+
 
 ## CameraComponent
 
@@ -61,6 +65,27 @@ example, some components may decide to skip rendering themselves and their
 children if they are outside of the camera's viewport.
 
 
+### CameraComponent.withFixedResolution()
+
+This factory constructor will let you pretend that the user's device has a fixed resolution of your
+choice. For example:
+
+```dart
+final camera = CameraComponent.withFixedResolution(
+  world: myWorldComponent,
+  width: 800,
+  height: 600,
+);
+```
+
+This will create a camera with a viewport centered in the middle of the screen, taking as much
+space as possible while still maintaining the 800:600 aspect ratio, and showing a game world region
+of size 800 x 600.
+
+A "fixed resolution" is very simple to work with, but it will underutilize the user's available
+screen space, unless their device happens to have the same pixel ratio as your chosen dimensions.
+
+
 ## Viewport
 
 The `Viewport` is a window through which the `World` is seen. That window
@@ -76,12 +101,13 @@ Adding elements to the viewport is a convenient way to implement "HUD"
 components.
 
 The following viewports are available:
-  - `MaxViewport` (default) -- this viewport expands to the maximum size allowed
+
+- `MaxViewport` (default) -- this viewport expands to the maximum size allowed
     by the game, i.e. it will be equal to the size of the game canvas.
-  - `FixedSizeViewport` -- a simple rectangular viewport with predefined size.
-  - `FixedAspectRatioViewport` -- a rectangular viewport which expands to fit
+- `FixedSizeViewport` -- a simple rectangular viewport with predefined size.
+- `FixedAspectRatioViewport` -- a rectangular viewport which expands to fit
     into the game canvas, but preserving its aspect ratio.
-  - `CircularViewport` -- a viewport in the shape of a circle, fixed size.
+- `CircularViewport` -- a viewport in the shape of a circle, fixed size.
 
 
 ## Viewfinder
@@ -115,41 +141,64 @@ There are several ways to modify camera's settings at runtime:
      The effects and behaviors are special kinds of components whose purpose is
      to modify over time some property of a component that they attach to.
 
-  3. Use special camera functions such as `follow()` and `moveTo()`. Under the
-     hood, this approach uses the same effects/behaviors as in (2).
+  3. Use special camera functions such as `follow()`, `moveBy()` and `moveTo()`.
+     Under the hood, this approach uses the same effects/behaviors as in (2).
 
 Camera has several methods for controlling its behavior:
 
- - `Camera.follow()` will force the camera to follow the provided target.
+- `Camera.follow()` will force the camera to follow the provided target.
    Optionally you can limit the maximum speed of movement of the camera, or
    allow it to move horizontally/vertically only.
 
- - `Camera.stop()` will undo the effect of the previous call and stop the camera
+- `Camera.stop()` will undo the effect of the previous call and stop the camera
    at its current position.
 
- - `Camera.moveTo()` can be used to move the camera to the designated point on
+- `Camera.moveBy()` can be used to move the camera by the specified offset.
+   If the camera was already following another component or moving towards,
+   those behaviors would be automatically cancelled.
+
+- `Camera.moveTo()` can be used to move the camera to the designated point on
    the world map. If the camera was already following another component or
    moving towards another point, those behaviors would be automatically
    cancelled.
 
- - `Camera.setBounds()` allows you to add limits to where the camera is allowed to go. These limits
+- `Camera.setBounds()` allows you to add limits to where the camera is allowed to go. These limits
    are in the form of a `Shape`, which is commonly a rectangle, but can also be any other shape.
+
+
+### visibleWorldRect
+
+The camera exposes property `visibleWorldRect`, which is a rect that describes the world's region
+which is currently visible through the camera. This region can be used in order to avoid rendering
+components that are out of view, or updating objects that are far away from the player less
+frequently.
+
+The `visibleWorldRect` is a cached property, and it updates automatically whenever the camera
+moves or the viewport changes its size.
+
+
+### Check if a component is visible from the camera point of view
+
+The `CameraComponent` has a method called `canSee` which can be used to check
+if a component is visible from the camera point of view.
+This is useful for example to cull components that are not in view.
+
+```dart
+if (!camera.canSee(component)) {
+   component.removeFromParent(); // Cull the component
+}
+```
 
 
 ## Comparison to the traditional camera
 
 Compared to the normal [Camera](camera_and_viewport.md), the `CameraComponent`
-has several advantages and drawbacks.
+has several advantages:
 
-Pros:
-  - Multiple cameras can be added to the game at the same time;
-  - More flexibility in choosing the placement and the size of the viewport;
-  - Switching camera from one world to another can happen instantaneously,
+- Multiple cameras can be added to the game at the same time;
+- More flexibility in choosing the placement and the size of the viewport;
+- Switching camera from one world to another can happen instantaneously,
     without having to unmount one world and then mount another;
-  - Support rotation of the world view;
-  - Effects can be applied either to the viewport, or to the viewfinder;
-  - More flexible camera controllers.
-
-Cons (we are planning to eliminate these in the near future):
-  - Camera controls are not yet implemented;
-  - Events propagation may not always work correctly.
+- Support rotation of the world view;
+- Effects can be applied either to the viewport, or to the viewfinder;
+- More flexible camera controllers.

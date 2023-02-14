@@ -1,10 +1,11 @@
 import 'dart:math';
-import 'dart:ui';
 
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/geometry.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
+import 'package:flame/src/utils/solve_quadratic.dart';
+import 'package:meta/meta.dart';
 
 class CircleComponent extends ShapeComponent implements SizeProvider {
   /// With this constructor you can create your [CircleComponent] from a radius
@@ -12,37 +13,37 @@ class CircleComponent extends ShapeComponent implements SizeProvider {
   /// the [CircleComponent].
   CircleComponent({
     double? radius,
-    Vector2? position,
-    double? angle,
-    Anchor? anchor,
-    Iterable<Component>? children,
-    int? priority,
-    Paint? paint,
-  }) : super(
-          position: position,
-          size: Vector2.all((radius ?? 0) * 2),
-          angle: angle,
-          anchor: anchor,
-          children: children,
-          priority: priority,
-          paint: paint,
-        );
+    super.position,
+    super.angle,
+    super.anchor,
+    super.children,
+    super.priority,
+    super.paint,
+    super.paintLayers,
+  }) : super(size: Vector2.all((radius ?? 0) * 2));
 
   /// With this constructor you define the [CircleComponent] in relation to the
   /// [parentSize]. For example having a [relation] of 0.5 would create a circle
   /// that fills half of the [parentSize].
   CircleComponent.relative(
     double relation, {
-    Vector2? position,
     required Vector2 parentSize,
-    double angle = 0,
-    Anchor? anchor,
-  }) : this(
-          radius: relation * (min(parentSize.x, parentSize.y) / 2),
-          position: position,
-          angle: angle,
-          anchor: anchor,
-        );
+    super.position,
+    super.angle,
+    super.anchor,
+    super.paint,
+    super.paintLayers,
+  }) : super(size: Vector2.all(relation * min(parentSize.x, parentSize.y)));
+
+  @override
+  @mustCallSuper
+  Future<void> onLoad() async {
+    void updateCenterOffset() => _centerOffset = Offset(size.x / 2, size.y / 2);
+    size.addListener(updateCenterOffset);
+    updateCenterOffset();
+  }
+
+  late Offset _centerOffset;
 
   /// Get the radius of the circle before scaling.
   double get radius {
@@ -68,14 +69,20 @@ class CircleComponent extends ShapeComponent implements SizeProvider {
   @override
   void render(Canvas canvas) {
     if (renderShape) {
-      canvas.drawCircle((size / 2).toOffset(), radius, paint);
+      if (hasPaintLayers) {
+        for (final paint in paintLayers) {
+          canvas.drawCircle(_centerOffset, radius, paint);
+        }
+      } else {
+        canvas.drawCircle(_centerOffset, radius, paint);
+      }
     }
   }
 
   @override
   void renderDebugMode(Canvas canvas) {
     super.renderDebugMode(canvas);
-    canvas.drawCircle((size / 2).toOffset(), radius, debugPaint);
+    canvas.drawCircle(_centerOffset, radius, debugPaint);
   }
 
   /// Checks whether the represented circle contains the [point].
@@ -94,52 +101,38 @@ class CircleComponent extends ShapeComponent implements SizeProvider {
     return dx * dx + dy * dy <= radius * radius;
   }
 
-  /// Returns the locus of points in which the provided line segment intersect
+  /// Returns the locus of points in which the provided line segment intersects
   /// the circle.
   ///
   /// This can be an empty list (if they don't intersect), one point (if the
   /// line is tangent) or two points (if the line is secant).
+  /// An edge point of the [lineSegment] that originates on the edge of the
+  /// circle doesn't count as an intersection.
   List<Vector2> lineSegmentIntersections(
-    LineSegment line, {
+    LineSegment lineSegment, {
     double epsilon = double.minPositive,
   }) {
-    double sq(double x) => x * x;
+    // A point on a line is `from + t*(to - from)`. We're trying to solve the
+    // equation `‖point - center‖² == radius²`. Or, denoting `Δ₂₁ = to - from`
+    // and `Δ₁₀ = from - center`, the equation is `‖t*Δ₂₁ + Δ₁₀‖² == radius²`.
+    // Expanding the norm, this becomes a square equation in `t`:
+    // `t²Δ₂₁² + 2tΔ₂₁Δ₁₀ + Δ₁₀² - radius² == 0`.
+    _delta21
+      ..setFrom(lineSegment.to)
+      ..sub(lineSegment.from); // to - from
+    _delta10
+      ..setFrom(lineSegment.from)
+      ..sub(absoluteCenter); // from - absoluteCenter
+    final a = _delta21.length2;
+    final b = 2 * _delta21.dot(_delta10);
+    final c = _delta10.length2 - radius * radius;
 
-    final cx = absoluteCenter.x;
-    final cy = absoluteCenter.y;
-
-    final point1 = line.from;
-    final point2 = line.to;
-
-    final delta = point2 - point1;
-
-    final A = sq(delta.x) + sq(delta.y);
-    final B = 2 * (delta.x * (point1.x - cx) + delta.y * (point1.y - cy));
-    final C = sq(point1.x - cx) + sq(point1.y - cy) - sq(radius);
-
-    final det = B * B - 4 * A * C;
-    final result = <Vector2>[];
-    if (A <= epsilon || det < 0) {
-      return [];
-    } else if (det == 0) {
-      final t = -B / (2 * A);
-      result.add(Vector2(point1.x + t * delta.x, point1.y + t * delta.y));
-    } else {
-      final t1 = (-B + sqrt(det)) / (2 * A);
-      final i1 = Vector2(
-        point1.x + t1 * delta.x,
-        point1.y + t1 * delta.y,
-      );
-
-      final t2 = (-B - sqrt(det)) / (2 * A);
-      final i2 = Vector2(
-        point1.x + t2 * delta.x,
-        point1.y + t2 * delta.y,
-      );
-
-      result.addAll([i1, i2]);
-    }
-    result.removeWhere((v) => !line.containsPoint(v));
-    return result;
+    return solveQuadratic(a, b, c)
+        .where((t) => t > 0 && t <= 1)
+        .map((t) => lineSegment.from.clone()..addScaled(_delta21, t))
+        .toList();
   }
+
+  static final Vector2 _delta21 = Vector2.zero();
+  static final Vector2 _delta10 = Vector2.zero();
 }

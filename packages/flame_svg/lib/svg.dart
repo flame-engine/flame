@@ -11,8 +11,13 @@ class Svg {
   /// The [DrawableRoot] that this [Svg] represents.
   final DrawableRoot svgRoot;
 
+  /// The pixel ratio that this [Svg] is rendered based on.
+  final double pixelRatio;
+
   /// Creates an [Svg] with the received [svgRoot].
-  Svg(this.svgRoot);
+  /// Default [pixelRatio] is the device pixel ratio.
+  Svg(this.svgRoot, {double? pixelRatio})
+      : pixelRatio = pixelRatio ?? window.devicePixelRatio;
 
   final MemoryCache<Size, Image> _imageCache = MemoryCache();
 
@@ -22,19 +27,34 @@ class Svg {
 
   /// Loads an [Svg] with the received [cache]. When no [cache] is provided,
   /// the global [Flame.assets] is used.
-  static Future<Svg> load(String fileName, {AssetsCache? cache}) async {
+  static Future<Svg> load(
+    String fileName, {
+    AssetsCache? cache,
+    double? pixelRatio,
+  }) async {
     cache ??= Flame.assets;
     final svgString = await cache.readFile(fileName);
-    return Svg(await svg.fromSvgString(svgString, svgString));
+    return Svg(
+      await svg.fromSvgString(svgString, svgString),
+      pixelRatio: pixelRatio,
+    );
   }
 
   /// Renders the svg on the [canvas] using the dimensions provided by [size].
-  void render(Canvas canvas, Vector2 size) {
+  void render(
+    Canvas canvas,
+    Vector2 size, {
+    Paint? overridePaint,
+  }) {
     final _size = size.toSize();
     final image = _getImage(_size);
 
     if (image != null) {
-      canvas.drawImage(image, Offset.zero, _paint);
+      canvas.save();
+      canvas.scale(1 / pixelRatio);
+      final drawPaint = overridePaint ?? _paint;
+      canvas.drawImage(image, Offset.zero, drawPaint);
+      canvas.restore();
     } else {
       _render(canvas, _size);
     }
@@ -56,12 +76,15 @@ class Svg {
     if (image == null && !_lock.contains(size)) {
       _lock.add(size);
       final recorder = PictureRecorder();
-
       final canvas = Canvas(recorder);
       _render(canvas, size);
       final _picture = recorder.endRecording();
-
-      _picture.toImage(size.width.toInt(), size.height.toInt()).then((image) {
+      _picture
+          .toImage(
+        (size.width * pixelRatio).ceil(),
+        (size.height * pixelRatio).ceil(),
+      )
+          .then((image) {
         _imageCache.setValue(size, image);
         _lock.remove(size);
         _picture.dispose();
@@ -72,6 +95,7 @@ class Svg {
   }
 
   void _render(Canvas canvas, Size size) {
+    canvas.scale(pixelRatio);
     svgRoot.scaleCanvasToViewBox(canvas, size);
     svgRoot.draw(canvas, svgRoot.viewport.viewBoxRect);
   }
@@ -83,6 +107,7 @@ class Svg {
     _imageCache.keys.forEach((key) {
       _imageCache.getValue(key)?.dispose();
     });
+    _imageCache.clearCache();
   }
 }
 

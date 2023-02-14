@@ -28,9 +28,11 @@ abstract class Particle {
     int count = 10,
     required ParticleGenerator generator,
     double? lifespan,
+    bool applyLifespanToChildren = true,
   }) {
     return ComposedParticle(
       lifespan: lifespan,
+      applyLifespanToChildren: applyLifespanToChildren,
       children: List<Particle>.generate(count, generator),
     );
   }
@@ -50,7 +52,7 @@ abstract class Particle {
   /// Construct a new [Particle].
   ///
   /// The [lifespan] is how long this [Particle] will live in seconds, with
-  /// microsceond precision.
+  /// microsecond precision.
   Particle({
     double? lifespan,
   }) {
@@ -167,7 +169,7 @@ abstract class Particle {
 
   /// Wraps this particle with a [ScaledParticle].
   ///
-  /// Allows for chainging the size of this particle and/or its children.
+  /// Allows for changing the size of this particle and/or its children.
   Particle scaled(double scale) {
     return ScaledParticle(scale: scale, child: this, lifespan: _lifespan);
   }

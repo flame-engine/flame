@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class Inventory extends StatelessWidget {
-  const Inventory({Key? key}) : super(key: key);
+  const Inventory({super.key});
 
   Color _mapWeaponColor(Weapon weapon) {
     switch (weapon) {
@@ -19,7 +19,7 @@ class Inventory extends StatelessWidget {
   String _mapWeaponName(Weapon weapon) {
     switch (weapon) {
       case Weapon.bullet:
-        return 'Kinect';
+        return 'Kinetic';
       case Weapon.laser:
         return 'Laser';
       case Weapon.plasma:

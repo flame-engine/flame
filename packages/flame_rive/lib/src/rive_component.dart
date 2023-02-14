@@ -17,18 +17,24 @@ class RiveComponent extends PositionComponent {
   RiveComponent({
     required this.artboard,
     bool antialiasing = true,
-    bool useArtboardSize = true,
+    @Deprecated(
+      "Will be removed in v1.8.0, use size's default value for ArtboardSize",
+    )
+        bool useArtboardSize = true,
     BoxFit fit = BoxFit.contain,
     Alignment alignment = Alignment.center,
 
     // position component arguments
-    Vector2? position,
+    super.position,
+
+    /// The logical size of the component.
+    /// Default value is ArtboardSize
     Vector2? size,
-    Vector2? scale,
-    double angle = 0.0,
-    Anchor anchor = Anchor.topLeft,
-    Iterable<Component>? children,
-    int? priority,
+    super.scale,
+    double super.angle = 0.0,
+    Anchor super.anchor = Anchor.topLeft,
+    super.children,
+    super.priority,
   })  : _renderer = RiveArtboardRenderer(
           antialiasing: antialiasing,
           useArtboardSize: useArtboardSize,
@@ -36,15 +42,7 @@ class RiveComponent extends PositionComponent {
           alignment: alignment,
           artboard: artboard,
         ),
-        super(
-          position: position,
-          size: size,
-          scale: scale,
-          angle: angle,
-          anchor: anchor,
-          children: children,
-          priority: priority,
-        );
+        super(size: size ?? Vector2(artboard.width, artboard.height));
 
   @override
   void render(ui.Canvas canvas) {
@@ -70,7 +68,9 @@ class RiveArtboardRenderer {
     required this.fit,
     required this.alignment,
     required this.artboard,
-  });
+  }) {
+    artboard.antialiasing = antialiasing;
+  }
 
   void advance(double dt) {
     artboard.advance(dt, nested: true);
@@ -165,12 +165,24 @@ class RiveArtboardRenderer {
   }
 }
 
+/// Loads the Artboard from the specified Rive File.
+///
+/// When [artboardName] is not null it returns the artboard with the specified
+/// name, an assertion is triggered if no artboard with that name exists in the
+/// file.
 Future<Artboard> loadArtboard(
   FutureOr<RiveFile> file, {
   String? artboardName,
 }) async {
   final loaded = await file;
-  return artboardName == null
-      ? loaded.mainArtboard
-      : loaded.artboardByName(artboardName) ?? loaded.mainArtboard;
+  if (artboardName == null) {
+    return loaded.mainArtboard.instance();
+  } else {
+    final artboard = loaded.artboardByName(artboardName)?.instance();
+    assert(
+      artboard != null,
+      'No artboard with the specified name exists in the RiveFile',
+    );
+    return artboard!;
+  }
 }

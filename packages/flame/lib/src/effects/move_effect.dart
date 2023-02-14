@@ -17,8 +17,11 @@ import 'package:vector_math/vector_math_64.dart';
 abstract class MoveEffect extends Effect
     with EffectTarget<PositionProvider>
     implements MeasurableEffect {
-  MoveEffect(EffectController controller, PositionProvider? target)
-      : super(controller) {
+  MoveEffect(
+    super.controller,
+    PositionProvider? target, {
+    super.onComplete,
+  }) {
     this.target = target;
   }
 
@@ -26,13 +29,25 @@ abstract class MoveEffect extends Effect
     Vector2 offset,
     EffectController controller, {
     PositionProvider? target,
+    void Function()? onComplete,
   }) =>
-      MoveByEffect(offset, controller, target: target);
+      MoveByEffect(
+        offset,
+        controller,
+        target: target,
+        onComplete: onComplete,
+      );
 
   factory MoveEffect.to(
     Vector2 destination,
     EffectController controller, {
     PositionProvider? target,
+    void Function()? onComplete,
   }) =>
-      MoveToEffect(destination, controller, target: target);
+      MoveToEffect(
+        destination,
+        controller,
+        target: target,
+        onComplete: onComplete,
+      );
 }

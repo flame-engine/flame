@@ -60,23 +60,17 @@ class ParallaxComponent<T extends FlameGame> extends PositionComponent
   /// Creates a component with an empty parallax which can be set later.
   ParallaxComponent({
     Parallax? parallax,
-    Vector2? position,
+    super.position,
     Vector2? size,
-    Vector2? scale,
-    double? angle,
-    Anchor? anchor,
-    Iterable<Component>? children,
-    int? priority,
+    super.scale,
+    super.angle,
+    super.anchor,
+    super.children,
+    super.priority,
   })  : _parallax = parallax,
         isFullscreen = size == null && !(parallax?.isSized ?? false),
         super(
-          position: position,
           size: size ?? ((parallax?.isSized ?? false) ? parallax?.size : null),
-          scale: scale,
-          angle: angle,
-          anchor: anchor,
-          children: children,
-          priority: priority,
         );
 
   @mustCallSuper
@@ -91,6 +85,7 @@ class ParallaxComponent<T extends FlameGame> extends PositionComponent
     parallax?.resize(newSize);
   }
 
+  @mustCallSuper
   @override
   void onMount() {
     assert(
@@ -99,6 +94,7 @@ class ParallaxComponent<T extends FlameGame> extends PositionComponent
     );
   }
 
+  @mustCallSuper
   @override
   void update(double dt) {
     parallax?.update(dt);

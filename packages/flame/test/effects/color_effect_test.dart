@@ -8,7 +8,7 @@ class _PaintComponent extends Component with HasPaint {}
 
 void main() {
   group('ColorEffect', () {
-    flameGame.test('applies the correct color filter', (game) async {
+    testWithFlameGame('applies the correct color filter', (game) async {
       final component = _PaintComponent();
       await game.ensureAdd(component);
       const color = Colors.red;
@@ -32,7 +32,7 @@ void main() {
       );
     });
 
-    flameGame.test(
+    testWithFlameGame(
       'resets the color filter to the original state',
       (game) async {
         final component = _PaintComponent();

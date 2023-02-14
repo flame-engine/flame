@@ -1,14 +1,17 @@
 import 'dart:math' as math;
 import 'dart:ui' hide Offset;
 
+import 'package:collection/collection.dart';
 import 'package:flame/src/anchor.dart';
-import 'package:flame/src/components/component.dart';
+import 'package:flame/src/components/core/component.dart';
 import 'package:flame/src/components/mixins/coordinate_transform.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
 import 'package:flame/src/extensions/offset.dart';
 import 'package:flame/src/extensions/vector2.dart';
 import 'package:flame/src/game/notifying_vector2.dart';
 import 'package:flame/src/game/transform2d.dart';
+import 'package:flame/src/rendering/decorator.dart';
+import 'package:flame/src/rendering/transform2d_decorator.dart';
 
 /// A [Component] implementation that represents an object that can be
 /// freely moved around the screen, rotated, and scaled.
@@ -71,13 +74,14 @@ class PositionComponent extends Component
     Vector2? size,
     Vector2? scale,
     double? angle,
+    this.nativeAngle = 0,
     Anchor? anchor,
-    Iterable<Component>? children,
-    int? priority,
+    super.children,
+    super.priority,
   })  : transform = Transform2D(),
         _anchor = anchor ?? Anchor.topLeft,
-        _size = NotifyingVector2.copy(size ?? Vector2.zero()),
-        super(children: children, priority: priority) {
+        _size = NotifyingVector2.copy(size ?? Vector2.zero()) {
+    decorator = Transform2DDecorator(transform);
     if (position != null) {
       transform.position = position;
     }
@@ -94,6 +98,26 @@ class PositionComponent extends Component
   final Transform2D transform;
   final NotifyingVector2 _size;
   Anchor _anchor;
+
+  /// The angle where this component is looking at when it is in
+  /// the default state, i.e. when [angle] is equal to zero.
+  /// For example, a nativeAngle of
+  ///     0 implies up/north direction
+  ///  pi/2 implies right/east direction
+  ///    pi implies down/south direction
+  /// -pi/2 implies left/west direction
+  double nativeAngle;
+
+  /// The decorator is used to apply visual effects to a component.
+  ///
+  /// By default, the [PositionComponent] is equipped with a
+  /// [Transform2DDecorator] which makes sure the component is rendered at a
+  /// proper location on the canvas. It is possible to replace this decorator
+  /// with another one if a different functionality is desired.
+  ///
+  /// A more common use for this field, however, is to apply additional visual
+  /// effects such as tints/shadows/etc using [Decorator.addLast].
+  late Decorator decorator;
 
   /// The total transformation matrix for the component. This matrix combines
   /// translation, rotation and scale transforms into a single entity. The
@@ -195,9 +219,10 @@ class PositionComponent extends Component
   /// has been applied.
   double get absoluteAngle {
     // TODO(spydon): take scale into consideration
-    return ancestors()
+    return ancestors(includeSelf: true)
         .whereType<PositionComponent>()
-        .fold<double>(angle, (totalAngle, c) => totalAngle + c.angle);
+        .map((c) => c.angle)
+        .sum;
   }
 
   /// The resulting scale after all the ancestors and the components own scale
@@ -317,6 +342,33 @@ class PositionComponent extends Component
   /// The absolute center of the component.
   Vector2 get absoluteCenter => absolutePositionOfAnchor(Anchor.center);
 
+  /// Returns the angle formed by component's orientation vector and a vector
+  /// starting at component's absolute position and ending at [target]. This
+  /// angle is measured in clockwise direction. [target] should be in absolute/world
+  /// coordinate system.
+  ///
+  /// Uses [nativeAngle] to decide the orientation direction of the component.
+  /// See [lookAt] to make the component instantly rotate towards target.
+  ///
+  /// Note: If target coincides with the current component, then it is treated
+  /// as being north.
+  double angleTo(Vector2 target) {
+    return math.atan2(
+          target.x - absolutePosition.x,
+          absolutePosition.y - target.y,
+        ) -
+        (nativeAngle + absoluteAngle);
+  }
+
+  /// Rotates/snaps the component to look at the [target].
+  ///
+  /// This method sets the [angle] so that the component's orientation
+  /// vector (as determined by the [nativeAngle]) is pointing at the target.
+  /// [target] should to be in absolute/world coordinate system.
+  ///
+  /// See also: [angleTo]
+  void lookAt(Vector2 target) => angle += angleTo(target);
+
   //#endregion
 
   //#region Mutators
@@ -346,6 +398,12 @@ class PositionComponent extends Component
     }
     transform.flipVertically();
   }
+
+  /// Whether it is currently flipped horizontally.
+  bool get isFlippedHorizontally => transform.scale.x.isNegative;
+
+  /// Whether it is currently flipped vertically.
+  bool get isFlippedVertically => transform.scale.y.isNegative;
 
   //#endregion
 
@@ -388,10 +446,7 @@ class PositionComponent extends Component
 
   @override
   void renderTree(Canvas canvas) {
-    canvas.save();
-    canvas.transform(transformMatrix.storage);
-    super.renderTree(canvas);
-    canvas.restore();
+    decorator.applyChain(super.renderTree, canvas);
   }
 
   /// Returns the bounding rectangle for this component.

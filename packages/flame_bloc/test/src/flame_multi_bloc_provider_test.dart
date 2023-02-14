@@ -90,6 +90,39 @@ void main() {
       expect(inventory.lastState, equals(InventoryState.bow));
     });
 
+    testWithFlameGame('Add and remove a child with two providers',
+        (game) async {
+      final inventoryCubit = InventoryCubit();
+      final playerCubit = PlayerCubit();
+
+      late FlameBlocProvider inventoryCubitProvider, playerCubitProvider;
+
+      final provider = FlameMultiBlocProvider(
+        providers: [
+          inventoryCubitProvider =
+              FlameBlocProvider<InventoryCubit, InventoryState>.value(
+            value: inventoryCubit,
+          ),
+          playerCubitProvider =
+              FlameBlocProvider<PlayerCubit, PlayerState>.value(
+            value: playerCubit,
+          ),
+        ],
+      );
+      await game.ensureAdd(provider);
+
+      final myTestComponent = PositionComponent(position: Vector2.all(10));
+
+      await provider.ensureAdd(myTestComponent);
+      expect(inventoryCubitProvider.children.length, 1);
+      expect(inventoryCubitProvider.firstChild(), playerCubitProvider);
+      expect(myTestComponent.parent, equals(playerCubitProvider));
+      expect(playerCubitProvider.firstChild(), equals(myTestComponent));
+      await provider.ensureRemove(myTestComponent);
+      expect(myTestComponent.parent, null);
+      expect(playerCubitProvider.children.length, 0);
+    });
+
     group('when using children on constructor', () {
       testWithFlameGame('Provides multiple blocs down on the tree',
           (game) async {

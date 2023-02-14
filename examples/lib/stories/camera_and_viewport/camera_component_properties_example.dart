@@ -3,9 +3,9 @@ import 'dart:ui';
 import 'package:flame/components.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame/game.dart' hide Viewport;
-import 'package:flame/input.dart';
 
-class CameraComponentPropertiesExample extends FlameGame with HasTappables {
+class CameraComponentPropertiesExample extends FlameGame
+    with HasTappableComponents {
   static const description = '''
     This example uses FixedSizeViewport which is dynamically sized and 
     positioned based on the size of the game widget.
@@ -15,10 +15,14 @@ class CameraComponentPropertiesExample extends FlameGame with HasTappables {
     declare its "center" half-way between the bottom left corner and the true
     center.
     
+    The thin yellow rectangle shows the camera's [visibleWorldRect]. It should
+    be visible along the edge of the viewport. 
+    
     Click at any point within the viewport to create a circle there.
   ''';
 
   CameraComponent? _camera;
+  late RectangleComponent _cullRect;
 
   @override
   Color backgroundColor() => const Color(0xff333333);
@@ -33,30 +37,42 @@ class CameraComponentPropertiesExample extends FlameGame with HasTappables {
     )
       ..viewfinder.zoom = 5
       ..viewfinder.anchor = const Anchor(0.25, 0.75);
+    _cullRect = RectangleComponent.fromRect(
+      Rect.zero,
+      paint: Paint()
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 0.25
+        ..color = const Color(0xaaffff00),
+    );
     await add(world);
     await add(_camera!);
-    onGameResize(canvasSize);
+    await world.add(_cullRect);
+    _camera!.mounted.then((_) {
+      updateSize(canvasSize);
+    });
   }
 
   @override
   void onGameResize(Vector2 size) {
     super.onGameResize(size);
-    _camera?.viewport.anchor = Anchor.center;
-    _camera?.viewport.size = size * 0.7;
-    _camera?.viewport.position = size * 0.6;
+    if (_camera != null) {
+      updateSize(size);
+    }
   }
 
-  @override
-  // ignore: must_call_super
-  void onTapDown(int pointerId, TapDownInfo info) {
-    final canvasPoint = info.eventPosition.widget;
-    for (final cp in componentsAtPoint(canvasPoint)) {
-      if (cp.component is Background) {
-        cp.component.add(
-          ExpandingCircle(cp.point.toOffset()),
-        );
-      }
-    }
+  void updateSize(Vector2 size) {
+    final camera = _camera!;
+    camera.viewport.anchor = Anchor.center;
+    camera.viewport.size = size * 0.7;
+    camera.viewport.position = size * 0.6;
+    _cullRect.position = Vector2(
+      camera.visibleWorldRect.left + 1,
+      camera.visibleWorldRect.top + 1,
+    );
+    _cullRect.size = Vector2(
+      camera.visibleWorldRect.width - 2,
+      camera.visibleWorldRect.height - 2,
+    );
   }
 }
 
@@ -79,7 +95,7 @@ class ViewportFrame extends Component {
   }
 }
 
-class Background extends Component {
+class Background extends Component with TapCallbacks {
   final bgPaint = Paint()..color = const Color(0xffff0000);
   final originPaint = Paint()..color = const Color(0xff19bf57);
   final axisPaint = Paint()
@@ -105,6 +121,11 @@ class Background extends Component {
 
   @override
   bool containsLocalPoint(Vector2 point) => true;
+
+  @override
+  void onTapDown(TapDownEvent event) {
+    add(ExpandingCircle(event.localPosition.toOffset()));
+  }
 }
 
 class ExpandingCircle extends CircleComponent {

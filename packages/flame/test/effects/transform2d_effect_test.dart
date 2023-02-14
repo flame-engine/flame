@@ -5,7 +5,7 @@ import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 class _MyEffect extends Transform2DEffect {
-  _MyEffect(EffectController controller) : super(controller);
+  _MyEffect(super.controller);
 
   @override
   void apply(double progress) {}
@@ -13,7 +13,7 @@ class _MyEffect extends Transform2DEffect {
 
 void main() {
   group('Transform2DEffect', () {
-    flameGame.test(
+    testWithFlameGame(
       'onMount',
       (game) async {
         final component = PositionComponent();

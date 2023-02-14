@@ -1,5 +1,4 @@
 import 'package:flame/components.dart';
-import 'package:flame/game.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -30,9 +29,7 @@ class _NonRepeatingTimerComponent extends TimerComponent {
 
 void main() {
   group('TimerComponent', () {
-    final tester = FlameTester(FlameGame.new);
-
-    tester.test('runs the tick method', (game) {
+    testWithFlameGame('runs the tick method', (game) async {
       final timer = _MyTimerComponent();
       game.add(timer);
       game.update(0);
@@ -43,7 +40,8 @@ void main() {
       expect(timer.count, equals(1));
     });
 
-    tester.test('never remove from the game when is repeating', (game) {
+    testWithFlameGame('never remove from the game when is repeating',
+        (game) async {
       game.add(_MyTimerComponent());
       game.update(0);
 
@@ -53,7 +51,8 @@ void main() {
       expect(game.children.length, equals(1));
     });
 
-    tester.test('is removed from the game when is finished', (game) {
+    testWithFlameGame('is removed from the game when is finished',
+        (game) async {
       game.add(_NonRepeatingTimerComponent());
       game.update(0);
 
@@ -63,7 +62,7 @@ void main() {
       expect(game.children.length, equals(0));
     });
 
-    tester.test('calls onTick when provided', (game) {
+    testWithFlameGame('calls onTick when provided', (game) async {
       var called = false;
       game.add(
         TimerComponent(

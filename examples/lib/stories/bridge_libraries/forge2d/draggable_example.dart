@@ -25,7 +25,7 @@ class DraggableExample extends Forge2DGame with HasDraggables {
 }
 
 class DraggableBall extends Ball with Draggable {
-  DraggableBall(Vector2 position) : super(position, radius: 5) {
+  DraggableBall(super.position) : super(radius: 5) {
     originalPaint = Paint()..color = Colors.amber;
     paint = originalPaint;
   }

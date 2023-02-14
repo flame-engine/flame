@@ -2,11 +2,13 @@ import 'dart:ui';
 
 import 'package:collection/collection.dart';
 import 'package:flame/cache.dart';
+import 'package:flame/flame.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
   // A simple 1x1 pixel encoded as base64 - just so that we have something to
   // load into the Images cache.
   const pixel =
@@ -81,11 +83,27 @@ void main() {
     testWithFlameGame(
       'prefix on game.images can be changed',
       (game) async {
+        game.images = Images();
         expect(game.images.prefix, 'assets/images/');
         game.images.prefix = 'assets/pictures/';
         expect(game.images.prefix, 'assets/pictures/');
         game.images.prefix = '';
         expect(game.images.prefix, '');
+      },
+    );
+
+    testWithFlameGame(
+      'Game.images is same as Flame.images',
+      (game) async {
+        expect(game.images, equals(Flame.images));
+
+        final img = _MockImage();
+        game.images.add('my image', img);
+        expect(Flame.images.containsKey('my image'), isTrue);
+
+        game.images = Images();
+        game.images.add('new image', img);
+        expect(Flame.images.containsKey('new image'), isFalse);
       },
     );
 

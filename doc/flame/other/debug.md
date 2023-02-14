@@ -1,5 +1,6 @@
 # Debug features
 
+
 ## FlameGame features
 
 Flame provides some debugging features for the `FlameGame` class. These features are enabled when
@@ -29,6 +30,8 @@ the [](#fpstextcomponent).
 
 ### FpsTextComponent
 
-The `FpsTextComponent` is simply a [](../rendering/text.md#textcomponent) that wraps an
-[](../rendering/text.md#textcomponent), since you most commonly want to show the current FPS
-somewhere when you the [](#fpscomponent) is used.
+The `FpsTextComponent` is simply a [TextComponent] that wraps an `FpsComponent`, since you most
+commonly want to show the current FPS somewhere when the `FpsComponent` is used.
+
+
+[TextComponent]: ../rendering/text_rendering.md#textcomponent

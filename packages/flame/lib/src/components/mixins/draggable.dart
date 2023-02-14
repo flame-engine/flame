@@ -1,4 +1,5 @@
 import 'package:flame/components.dart';
+import 'package:flame/src/events/flame_game_mixins/has_draggables_bridge.dart';
 import 'package:flame/src/game/mixins/has_draggables.dart';
 import 'package:flame/src/gestures/events.dart';
 import 'package:flutter/material.dart';
@@ -87,9 +88,13 @@ mixin Draggable on Component {
   void onMount() {
     super.onMount();
     assert(
-      findGame()! is HasDraggables,
+      (() {
+        final game = findGame()!;
+        // ignore: deprecated_member_use_from_same_package
+        return game is HasDraggables || game is HasDraggablesBridge;
+      })(),
       'Draggable Components can only be added to a FlameGame with '
-      'HasDraggables',
+      'HasDraggables or HasDraggablesBridge',
     );
   }
 }

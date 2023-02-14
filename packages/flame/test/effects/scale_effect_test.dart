@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:flame/components.dart';
-import 'package:flame/game.dart';
 import 'package:flame/src/effects/controllers/effect_controller.dart';
 import 'package:flame/src/effects/scale_effect.dart';
 import 'package:flame_test/flame_test.dart';
@@ -9,7 +8,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('ScaleEffect', () {
-    flameGame.test('relative', (game) async {
+    testWithFlameGame('relative', (game) async {
       final component = PositionComponent();
       await game.ensureAdd(component);
 
@@ -17,20 +16,20 @@ void main() {
         ScaleEffect.by(Vector2.all(2.0), EffectController(duration: 1)),
       );
       game.update(0);
-      expect(component.scale, closeToVector(1, 1));
+      expect(component.scale, closeToVector(Vector2(1, 1)));
       expect(component.children.length, 1);
 
       game.update(0.5);
-      expect(component.scale, closeToVector(1.5, 1.5));
+      expect(component.scale, closeToVector(Vector2(1.5, 1.5)));
 
       game.update(0.5);
-      expect(component.scale, closeToVector(2, 2));
+      expect(component.scale, closeToVector(Vector2(2, 2)));
       game.update(0);
       expect(component.children.length, 0);
-      expect(component.scale, closeToVector(2, 2));
+      expect(component.scale, closeToVector(Vector2(2, 2)));
     });
 
-    flameGame.test('absolute', (game) async {
+    testWithFlameGame('absolute', (game) async {
       final component = PositionComponent();
       await game.ensureAdd(component);
 
@@ -39,20 +38,20 @@ void main() {
         ScaleEffect.to(Vector2.all(3.0), EffectController(duration: 1)),
       );
       game.update(0);
-      expect(component.scale, closeToVector(1, 1));
+      expect(component.scale, closeToVector(Vector2(1, 1)));
       expect(component.children.length, 1);
 
       game.update(0.5);
-      expect(component.scale, closeToVector(2, 2));
+      expect(component.scale, closeToVector(Vector2(2, 2)));
 
       game.update(0.5);
-      expect(component.scale, closeToVector(3, 3));
+      expect(component.scale, closeToVector(Vector2(3, 3)));
       game.update(0);
       expect(component.children.length, 0);
-      expect(component.scale, closeToVector(3, 3));
+      expect(component.scale, closeToVector(Vector2(3, 3)));
     });
 
-    flameGame.test('reset relative', (game) async {
+    testWithFlameGame('reset relative', (game) async {
       final component = PositionComponent();
       await game.ensureAdd(component);
 
@@ -68,11 +67,11 @@ void main() {
         effect.reset();
         game.update(1);
         expectedScale *= 2;
-        expect(component.scale, closeToVector(expectedScale, expectedScale));
+        expect(component.scale, closeToVector(Vector2.all(expectedScale)));
       }
     });
 
-    flameGame.test('reset absolute', (game) async {
+    testWithFlameGame('reset absolute', (game) async {
       final component = PositionComponent();
       await game.ensureAdd(component);
 
@@ -87,11 +86,11 @@ void main() {
         // `Vector2(1, 1)`, regardless of its initial orientation.
         effect.reset();
         game.update(1);
-        expect(component.scale, closeToVector(1, 1));
+        expect(component.scale, closeToVector(Vector2.all(1)));
       }
     });
 
-    flameGame.test('scale composition', (game) async {
+    testWithFlameGame('scale composition', (game) async {
       final component = PositionComponent()..flipVertically();
       await game.ensureAdd(component);
 
@@ -125,7 +124,7 @@ void main() {
     });
 
     testRandom('a very long scale change', (Random rng) async {
-      final game = FlameGame()..onGameResize(Vector2(1, 1));
+      final game = await initializeFlameGame();
       final component = PositionComponent();
       await game.ensureAdd(component);
 
@@ -148,7 +147,7 @@ void main() {
       game.update(1000 - totalTime);
       // Typically, `component.scale` could accumulate numeric discrepancy on
       // the order of 1e-11 .. 1e-12 by now.
-      expect(component.scale, closeToVector(1, 1, epsilon: 1e-10));
+      expect(component.scale, closeToVector(Vector2.all(1), 1e-10));
     });
   });
 }

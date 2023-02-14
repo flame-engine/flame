@@ -84,7 +84,7 @@ class ImageComposition {
   /// Compose all the images into a single composition.
   Future<Image> compose() async {
     // Rect used to determine how big the output image will be.
-    var output = const Rect.fromLTWH(0, 0, 0, 0);
+    var output = Rect.zero;
     final recorder = PictureRecorder();
     final canvas = Canvas(recorder);
 
@@ -122,7 +122,7 @@ class ImageComposition {
 
     return recorder
         .endRecording()
-        .toImage(output.width.toInt(), output.height.toInt());
+        .toImageSafe(output.width.toInt(), output.height.toInt());
   }
 }
 

@@ -2,13 +2,12 @@ import 'dart:math';
 
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
-import 'package:flame/game.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('SizeEffect', () {
-    flameGame.test('relative', (game) async {
+    testWithFlameGame('relative', (game) async {
       final component = ResizableComponent();
       await game.ensureAdd(component);
 
@@ -17,20 +16,20 @@ void main() {
         SizeEffect.by(Vector2.all(1.0), EffectController(duration: 1)),
       );
       game.update(0);
-      expect(component.size, closeToVector(1, 1));
+      expect(component.size, closeToVector(Vector2(1, 1)));
       expect(component.children.length, 1);
 
       game.update(0.5);
-      expect(component.size, closeToVector(1.5, 1.5));
+      expect(component.size, closeToVector(Vector2(1.5, 1.5)));
 
       game.update(0.5);
-      expect(component.size, closeToVector(2, 2));
+      expect(component.size, closeToVector(Vector2(2, 2)));
       game.update(0);
       expect(component.children.length, 0);
-      expect(component.size, closeToVector(2, 2));
+      expect(component.size, closeToVector(Vector2(2, 2)));
     });
 
-    flameGame.test('absolute', (game) async {
+    testWithFlameGame('absolute', (game) async {
       final component = ResizableComponent();
       await game.ensureAdd(component);
 
@@ -39,20 +38,20 @@ void main() {
         SizeEffect.to(Vector2.all(3.0), EffectController(duration: 1)),
       );
       game.update(0);
-      expect(component.size, closeToVector(1, 1));
+      expect(component.size, closeToVector(Vector2(1, 1)));
       expect(component.children.length, 1);
 
       game.update(0.5);
-      expect(component.size, closeToVector(2, 2));
+      expect(component.size, closeToVector(Vector2(2, 2)));
 
       game.update(0.5);
-      expect(component.size, closeToVector(3, 3));
+      expect(component.size, closeToVector(Vector2(3, 3)));
       game.update(0);
       expect(component.children.length, 0);
-      expect(component.size, closeToVector(3, 3));
+      expect(component.size, closeToVector(Vector2(3, 3)));
     });
 
-    flameGame.test('reset relative', (game) async {
+    testWithFlameGame('reset relative', (game) async {
       final component = ResizableComponent();
       await game.ensureAdd(component);
 
@@ -68,13 +67,13 @@ void main() {
         effect.reset();
         game.update(1);
         expectedSize.add(Vector2.all(1.0));
-        expect(component.size, closeToVector(expectedSize.x, expectedSize.y));
+        expect(component.size, closeToVector(expectedSize));
       }
     });
 
-    flameGame.test('reset absolute', (game) {
+    testWithFlameGame('reset absolute', (game) async {
       final component = ResizableComponent();
-      game.ensureAdd(component);
+      await game.ensureAdd(component);
 
       final effect = SizeEffect.to(
         Vector2.all(1.0),
@@ -87,11 +86,11 @@ void main() {
         // `Vector2(1, 1)`, regardless of its initial orientation.
         effect.reset();
         game.update(1);
-        expect(component.size, closeToVector(1, 1));
+        expect(component.size, closeToVector(Vector2(1, 1)));
       }
     });
 
-    flameGame.test('size composition', (game) async {
+    testWithFlameGame('size composition', (game) async {
       final component = ResizableComponent();
       await game.ensureAdd(component);
 
@@ -110,18 +109,19 @@ void main() {
       );
 
       game.update(1);
-      expect(component.size, closeToVector(1, 1)); // 5*1/10 + 0.5*1
+      expect(component.size, closeToVector(Vector2(1, 1))); // 5*1/10 + 0.5*1
       game.update(1);
-      expect(component.size, closeToVector(1, 1)); // 5*2/10 + 0.5*1 - 0.5*1
+      // 5*2/10 + 0.5*1 - 0.5*1
+      expect(component.size, closeToVector(Vector2(1, 1)));
       for (var i = 0; i < 10; i++) {
         game.update(1);
       }
-      expect(component.size, closeToVector(5, 5));
+      expect(component.size, closeToVector(Vector2(5, 5)));
       expect(component.children.length, 0);
     });
 
     testRandom('a very long size change', (Random rng) async {
-      final game = FlameGame()..onGameResize(Vector2(1, 1));
+      final game = await initializeFlameGame();
       final component = ResizableComponent();
       await game.ensureAdd(component);
 
@@ -144,7 +144,7 @@ void main() {
       game.update(1000 - totalTime);
       // Typically, `component.size` could accumulate numeric discrepancy on the
       // order of 1e-11 .. 1e-12 by now.
-      expect(component.size, closeToVector(0, 0, epsilon: 1e-10));
+      expect(component.size, closeToVector(Vector2(0, 0), 1e-10));
     });
   });
 }

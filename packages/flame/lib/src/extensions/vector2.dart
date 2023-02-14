@@ -80,6 +80,41 @@ extension Vector2Extension on Vector2 {
     }
   }
 
+  /// Clamps the [length] of this vector.
+  ///
+  /// This means that if the length is less than [min] the length will be set to
+  /// [min] and if the length is larger than [max], the length will be set to
+  /// [max]. If the length is in between [min] and [max], no changes will be
+  /// made.
+  void clampLength(double min, double max) {
+    final lengthSquared = length2;
+    if (lengthSquared > max * max) {
+      scaleTo(max);
+    } else if (lengthSquared < min * min) {
+      scaleTo(min);
+    }
+  }
+
+  /// Project this onto [other].
+  ///
+  /// [other] needs to have a length > 0;
+  /// If [out] is specified, it will be used to provide the result.
+  Vector2 projection(Vector2 other, {Vector2? out}) {
+    assert(other.length2 > 0, 'other needs to have a length > 0');
+    final dotProduct = dot(other);
+    final result = (out?..setFrom(other)) ?? other.clone();
+    return result..scale(dotProduct / other.length2);
+  }
+
+  /// Inverts the vector.
+  void invert() {
+    x *= -1;
+    y *= -1;
+  }
+
+  /// Returns the inverse of this vector.
+  Vector2 inverted() => Vector2(-x, -y);
+
   /// Smoothly moves this [Vector2] in the direction [target] by a displacement
   /// given by a distance [ds] in that direction.
   ///
@@ -123,7 +158,7 @@ extension Vector2Extension on Vector2 {
   static Vector2 fromInts(int x, int y) => Vector2(x.toDouble(), y.toDouble());
 
   /// Creates a heading [Vector2] with the given angle in radians.
-  static Vector2 fromRadians(double r) => Vector2.zero()..rotate(r);
+  static Vector2 fromRadians(double r) => Vector2(0, -1)..rotate(r);
 
   /// Creates a heading [Vector2] with the given angle in degrees.
   static Vector2 fromDegrees(double d) => fromRadians(d * degrees2Radians);

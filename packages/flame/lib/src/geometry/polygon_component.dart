@@ -2,13 +2,11 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:collection/collection.dart';
+import 'package:flame/geometry.dart';
 import 'package:flame/src/anchor.dart';
 import 'package:flame/src/cache/value_cache.dart';
-import 'package:flame/src/components/component.dart';
 import 'package:flame/src/extensions/rect.dart';
 import 'package:flame/src/extensions/vector2.dart';
-import 'package:flame/src/geometry/line_segment.dart';
-import 'package:flame/src/geometry/shape_component.dart';
 import 'package:meta/meta.dart';
 
 class PolygonComponent extends ShapeComponent {
@@ -32,31 +30,22 @@ class PolygonComponent extends ShapeComponent {
   /// screen coordinate system).
   PolygonComponent(
     this._vertices, {
-    Vector2? position,
-    Vector2? size,
-    Vector2? scale,
-    double? angle,
-    Anchor? anchor,
-    Iterable<Component>? children,
-    int? priority,
-    Paint? paint,
+    super.position,
+    super.size,
+    super.scale,
+    super.angle,
+    super.anchor,
+    super.children,
+    super.priority,
+    super.paint,
+    super.paintLayers,
     bool? shrinkToBounds,
   })  : assert(
           _vertices.length > 2,
           'Number of vertices are too few to create a polygon',
         ),
         shrinkToBounds = shrinkToBounds ?? size == null,
-        manuallyPositioned = position != null,
-        super(
-          position: position,
-          size: size,
-          scale: scale,
-          angle: angle,
-          anchor: anchor,
-          children: children,
-          priority: priority,
-          paint: paint,
-        ) {
+        manuallyPositioned = position != null {
     refreshVertices(newVertices: _vertices);
 
     final verticesLength = _vertices.length;
@@ -88,16 +77,17 @@ class PolygonComponent extends ShapeComponent {
     Anchor? anchor,
     int? priority,
     Paint? paint,
+    List<Paint>? paintLayers,
     bool? shrinkToBounds,
   }) : this(
           normalsToVertices(relation, parentSize),
           position: position,
-          size: parentSize,
           angle: angle,
           anchor: anchor,
           scale: scale,
           priority: priority,
           paint: paint,
+          paintLayers: paintLayers,
           shrinkToBounds: shrinkToBounds,
         );
 
@@ -121,7 +111,10 @@ class PolygonComponent extends ShapeComponent {
   final _topLeft = Vector2.zero();
 
   @protected
-  void refreshVertices({required List<Vector2> newVertices}) {
+  void refreshVertices({
+    required List<Vector2> newVertices,
+    bool? shrinkToBoundsOverride,
+  }) {
     assert(
       newVertices.length == _vertices.length,
       'A polygon can not change their number of vertices',
@@ -139,19 +132,13 @@ class PolygonComponent extends ShapeComponent {
         vertices.map((p) => (p - _topLeft).toOffset()).toList(growable: false),
         true,
       );
-    if (shrinkToBounds) {
+    if (shrinkToBoundsOverride ?? shrinkToBounds) {
       final bounds = _path.getBounds();
       size.setValues(bounds.width, bounds.height);
       if (!manuallyPositioned) {
         position = Anchor.topLeft.toOtherAnchorPosition(_topLeft, anchor, size);
       }
     }
-    _vertices.forEach((p) {
-      p.setValues(
-        p.x - _topLeft.x,
-        p.y - _topLeft.y,
-      );
-    });
   }
 
   /// gives back the shape vectors multiplied by the size and scale
@@ -165,15 +152,14 @@ class PolygonComponent extends ShapeComponent {
       scale,
       angle,
     ])) {
-      var i = 0;
-      for (final vertex in vertices) {
+      vertices.forEachIndexed((i, vertex) {
         _globalVertices[i]
           ..setFrom(vertex)
+          ..sub(_topLeft)
           ..multiply(scale)
           ..add(position)
           ..rotate(angle, center: position);
-        i++;
-      }
+      });
       if (scale.y.isNegative || scale.x.isNegative) {
         // Since the list will be clockwise we have to reverse it for it to
         // become counterclockwise.
@@ -190,7 +176,13 @@ class PolygonComponent extends ShapeComponent {
   @override
   void render(Canvas canvas) {
     if (renderShape) {
-      canvas.drawPath(_path, paint);
+      if (hasPaintLayers) {
+        for (final paint in paintLayers) {
+          canvas.drawPath(_path, paint);
+        }
+      } else {
+        canvas.drawPath(_path, paint);
+      }
     }
   }
 
@@ -230,8 +222,9 @@ class PolygonComponent extends ShapeComponent {
     }
     for (var i = 0; i < _vertices.length; i++) {
       final edge = getEdge(i, vertices: vertices);
-      final isOutside = (edge.to.x - edge.from.x) * (point.y - edge.from.y) -
-              (point.x - edge.from.x) * (edge.to.y - edge.from.y) >
+      final isOutside = (edge.to.x - edge.from.x) *
+                  (point.y - edge.from.y + _topLeft.y) -
+              (point.x - edge.from.x + _topLeft.x) * (edge.to.y - edge.from.y) >
           0;
       if (isOutside) {
         return false;

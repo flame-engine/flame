@@ -31,6 +31,7 @@ the final value is provided by the user explicitly, and progression over time is
 
 There are multiple effects provided by Flame, and you can also
 [create your own](#creating-new-effects). The following effects are included:
+
 - [`MoveByEffect`](#movebyeffect)
 - [`MoveToEffect`](#movetoeffect)
 - [`MoveAlongPathEffect`](#movealongpatheffect)
@@ -42,7 +43,8 @@ There are multiple effects provided by Flame, and you can also
 - [`SizeEffect.to`](#sizeeffectto)
 - [`AnchorByEffect`](#anchorbyeffect)
 - [`AnchorToEffect`](#anchortoeffect)
-- [`OpacityEffect`](#opacityeffect)
+- [`OpacityToEffect`](#opacitytoeffect)
+- [`OpacityByEffect`](#opacitybyeffect)
 - [`ColorEffect`](#coloreffect)
 - [`SequenceEffect`](#sequenceeffect)
 - [`RemoveEffect`](#removeeffect)
@@ -53,6 +55,7 @@ the job of the effect controller is to map from the "physical" time, measured in
 "logical" time, which changes from 0 to 1.
 
 There are multiple effect controllers provided by the Flame framework as well:
+
 - [`EffectController`](#effectcontroller)
 - [`LinearEffectController`](#lineareffectcontroller)
 - [`ReverseLinearEffectController`](#reverselineareffectcontroller)
@@ -72,25 +75,26 @@ There are multiple effect controllers provided by the Flame framework as well:
 
 ## Built-in effects
 
+
 ### `Effect`
 
 The base `Effect` class is not usable on its own (it is abstract), but it provides some common
 functionality inherited by all other effects. This includes:
 
-  - The ability to pause/resume the effect using `effect.pause()` and `effect.resume()`. You can
-    check whether the effect is currently paused using `effect.isPaused`.
+- The ability to pause/resume the effect using `effect.pause()` and `effect.resume()`. You can
+  check whether the effect is currently paused using `effect.isPaused`.
 
-  - The ability to reverse the effect's time direction using `effect.reverse()`. Use
-    `effect.isReversed` to check if the effect is currently running back in time.
+- The ability to reverse the effect's time direction using `effect.reverse()`. Use
+  `effect.isReversed` to check if the effect is currently running back in time.
 
-  - Property `removeOnFinish` (which is true by default) will cause the effect component to be
-    removed from the game tree and garbage-collected once the effect completes. Set this to false
-    if you plan to reuse the effect after it is finished.
+- Property `removeOnFinish` (which is true by default) will cause the effect component to be
+  removed from the game tree and garbage-collected once the effect completes. Set this to false
+  if you plan to reuse the effect after it is finished.
 
-  - Optional user-provided `onFinishCallback`, which will be invoked when the effect has just
-    completed its execution but before it is removed from the game.
+- Optional user-provided `onComplete`, which will be invoked when the effect has just
+  completed its execution but before it is removed from the game.
 
-  - The `reset()` method reverts the effect to its original state, allowing it to run once again.
+- The `reset()` method reverts the effect to its original state, allowing it to run once again.
 
 
 ### `MoveByEffect`
@@ -98,8 +102,19 @@ functionality inherited by all other effects. This includes:
 This effect applies to a `PositionComponent` and shifts it by a prescribed `offset` amount. This
 offset is relative to the current position of the target:
 
+```{flutter-app}
+:sources: ../flame/examples
+:page: move_by_effect
+:show: widget code infobox
+:width: 180
+:height: 160
+```
+
 ```dart
-final effect = MoveByEffect(Vector2(0, -10), EffectController(duration: 0.5));
+final effect = MoveByEffect(
+  Vector2(0, -10),
+  EffectController(duration: 0.5),
+);
 ```
 
 If the component is currently at `Vector2(250, 200)`, then at the end of the effect its position
@@ -114,8 +129,19 @@ superposition of all the individual effects.
 This effect moves a `PositionComponent` from its current position to the specified destination
 point in a straight line.
 
+```{flutter-app}
+:sources: ../flame/examples
+:page: move_to_effect
+:show: widget code infobox
+:width: 180
+:height: 160
+```
+
 ```dart
-final effect = MoveToEffect(Vector2(100, 500), EffectController(duration: 3));
+final effect = MoveToEffect(
+  Vector2(100, 500),
+  EffectController(duration: 3),
+);
 ```
 
 It is possible, but not recommended to attach multiple such effects to the same component.
@@ -127,6 +153,14 @@ This effect moves a `PositionComponent` along the specified path relative to the
 current position. The path can have non-linear segments, but must be singly connected. It is
 recommended to start a path at `Vector2.zero()` in order to avoid sudden jumps in the component's
 position.
+
+```{flutter-app}
+:sources: ../flame/examples
+:page: move_along_path_effect
+:show: widget code infobox
+:width: 180
+:height: 160
+```
 
 ```dart
 final effect = MoveAlongPathEffect(
@@ -150,8 +184,19 @@ Rotates the target clockwise by the specified angle relative to its current orie
 is in radians. For example, the following effect will rotate the target 90º (=[tau]/4 in radians)
 clockwise:
 
+```{flutter-app}
+:sources: ../flame/examples
+:page: rotate_by_effect
+:show: widget code infobox
+:width: 180
+:height: 160
+```
+
 ```dart
-final effect = RotateEffect.by(tau/4, EffectController(duration: 2));
+final effect = RotateEffect.by(
+  tau/4,
+  EffectController(duration: 2),
+);
 ```
 
 
@@ -160,8 +205,19 @@ final effect = RotateEffect.by(tau/4, EffectController(duration: 2));
 Rotates the target clockwise to the specified angle. For example, the following will rotate the
 target to look east (0º is north, 90º=[tau]/4 east, 180º=tau/2 south, and 270º=tau*3/4 west):
 
+```{flutter-app}
+:sources: ../flame/examples
+:page: rotate_to_effect
+:show: widget code infobox
+:width: 180
+:height: 160
+```
+
 ```dart
-final effect = RotateEffect.to(tau/4, EffectController(duration: 2));
+final effect = RotateEffect.to(
+  tau/4,
+  EffectController(duration: 2),
+);
 ```
 
 
@@ -170,8 +226,19 @@ final effect = RotateEffect.to(tau/4, EffectController(duration: 2));
 This effect will change the target's scale by the specified amount. For example, this will cause
 the component to grow 50% larger:
 
+ ```{flutter-app}
+ :sources: ../flame/examples
+ :page: scale_by_effect
+ :show: widget code infobox
+ :width: 180
+ :height: 160
+ ```
+
 ```dart
-final effect = ScaleEffect.by(Vector2.all(1.5), EffectController(duration: 0.3));
+final effect = ScaleEffect.by(
+  Vector2.all(1.5),
+  EffectController(duration: 0.3),
+);
 ```
 
 
@@ -179,8 +246,19 @@ final effect = ScaleEffect.by(Vector2.all(1.5), EffectController(duration: 0.3))
 
 This effect works similar to `ScaleEffect.by`, but sets the absolute value of the target's scale.
 
+ ```{flutter-app}
+ :sources: ../flame/examples
+ :page: scale_to_effect
+ :show: widget code infobox
+ :width: 180
+ :height: 160
+ ```
+
 ```dart
-final effect = ScaleEffect.to(Vector2.zero(), EffectController(duration: 0.5));
+final effect = ScaleEffect.to(
+  Vector2.all(0.5),
+  EffectController(duration: 0.5),
+);
 ```
 
 
@@ -190,8 +268,19 @@ This effect will change the size of the target component, relative to its curren
 if the target has size `Vector2(100, 100)`, then after the following effect is applied and runs its
 course, the new size will be `Vector2(120, 50)`:
 
+ ```{flutter-app}
+ :sources: ../flame/examples
+ :page: size_by_effect
+ :show: widget code infobox
+ :width: 180
+ :height: 160
+ ```
+
 ```dart
-final effect = SizeEffect.by(Vector2(20, -50), EffectController(duration: 1));
+final effect = SizeEffect.by(
+   Vector2(-15, 30),
+   EffectController(duration: 1),
+);
 ```
 
 The size of a `PositionComponent` cannot be negative. If an effect attempts to set the size to a
@@ -210,8 +299,20 @@ target component and its children.
 
 Changes the size of the target component to the specified size. Target size cannot be negative:
 
+
+ ```{flutter-app}
+ :sources: ../flame/examples
+ :page: size_to_effect
+ :show: widget code infobox
+ :width: 180
+ :height: 160
+ ```
+
 ```dart
-final effect = SizeEffect.to(Vector2(120, 120), EffectController(duration: 1));
+final effect = SizeEffect.to(
+  Vector2(90, 80),
+  EffectController(duration: 1),
+);
 ```
 
 
@@ -220,8 +321,19 @@ final effect = SizeEffect.to(Vector2(120, 120), EffectController(duration: 1));
 Changes the location of the target's anchor by the specified offset. This effect can also be created
 using `AnchorEffect.by()`.
 
+```{flutter-app}
+:sources: ../flame/examples
+:page: anchor_by_effect
+:show: widget code infobox
+:width: 180
+:height: 160
+```
+
 ```dart
-final effect = AnchorByEffect(Vector2(0.1, 0.1), EffectController(speed: 1));
+final effect = AnchorByEffect(
+  Vector2(0.1, 0.1),
+  EffectController(speed: 1),
+);
 ```
 
 
@@ -230,24 +342,121 @@ final effect = AnchorByEffect(Vector2(0.1, 0.1), EffectController(speed: 1));
 Changes the location of the target's anchor. This effect can also be created using
 `AnchorEffect.to()`.
 
+```{flutter-app}
+:sources: ../flame/examples
+:page: anchor_to_effect
+:show: widget code infobox
+:width: 180
+:height: 160
+```
+
 ```dart
-final effect = AnchorToEffect(Anchor.center, EffectController(speed: 1));
+final effect = AnchorToEffect(
+  Anchor.center,
+  EffectController(speed: 1),
+);
 ```
 
 
-### `OpacityEffect`
+### `OpacityToEffect`
 
-This effect will change over time the opacity of the target to the specified alpha-value. Currently
-this effect can only be applied to components that have a `HasPaint` mixin. If the target component
-uses multiple paints, the effect can target any individual color using the `paintId` parameter.
+This effect will change the opacity of the target over time to the specified alpha-value.
+It can only be applied to components that implement the `OpacityProvider`.
+
+```{flutter-app}
+:sources: ../flame/examples
+:page: opacity_to_effect
+:show: widget code infobox
+:width: 180
+:height: 160
+```
 
 ```dart
-final effect = OpacityEffect.to(0.5, EffectController(duration: 0.75));
+final effect = OpacityEffect.to(
+  0.2,
+  EffectController(duration: 0.75),
+);
+```
+
+If the component uses multiple paints, the effect can target one more more of those paints
+using the `target` parameter. The `HasPaint` mixin implements `OpacityProvider` and exposes APIs
+to easily create providers for desired paintIds. For single paintId `opacityProviderOf` can be used
+and for multiple paintIds and `opacityProviderOfList` can be used.
+
+
+```{flutter-app}
+:sources: ../flame/examples
+:page: opacity_effect_with_target
+:show: widget code infobox
+:width: 180
+:height: 160
+```
+
+```dart
+final effect = OpacityEffect.to(
+  0.2,
+  EffectController(duration: 0.75),
+  target: component.opacityProviderOfList(
+    paintIds: const [paintId1, paintId2],
+  ),
+);
 ```
 
 The opacity value of 0 corresponds to a fully transparent component, and the opacity value of 1 is
 fully opaque. Convenience constructors `OpacityEffect.fadeOut()` and `OpacityEffect.fadeIn()` will
 animate the target into full transparency / full visibility respectively.
+
+
+### `OpacityByEffect`
+
+This effect will change the opacity of the target relative to the specified alpha-value. For example,
+the following effect will change the opacity of the target by `90%`:
+
+```{flutter-app}
+:sources: ../flame/examples
+:page: opacity_by_effect
+:show: widget code infobox
+:width: 180
+:height: 160
+```
+
+```dart
+final effect = OpacityEffect.by(
+  0.9,
+  EffectController(duration: 0.75),
+);
+```
+
+Currently this effect can only be applied to components that have a `HasPaint` mixin. If the target component
+uses multiple paints, the effect can target any individual color using the `paintId` parameter.
+
+
+### GlowEffect
+
+```{note}
+This effect is currently experimental, and its API may change in the future.
+```
+
+This effect will apply the glowing shade around target relative to the specified
+`glow-strength`. The color of shade will be targets paint color. For example, the following effect
+will apply the glowing shade around target by strength of `10`:
+
+```{flutter-app}
+:sources: ../flame/examples
+:page: glow_effect
+:show: widget code infobox
+:width: 180
+:height: 160
+```
+
+```dart
+final effect = GlowEffect(
+  10.0,
+  EffectController(duration: 3),
+);
+```
+
+Currently this effect can only be applied to components that have a `HasPaint` mixin.
 
 
 ### `SequenceEffect`
@@ -258,11 +467,35 @@ may have different types.
 The sequence effect can also be alternating (the sequence will first run forward, and then
 backward); and also repeat a certain predetermined number of times, or infinitely.
 
+```{flutter-app}
+:sources: ../flame/examples
+:page: sequence_effect
+:show: widget code infobox
+:width: 180
+:height: 160
+```
+
 ```dart
 final effect = SequenceEffect([
-  ScaleEffect.by(1.5, EffectController(duration: 0.2, alternate: true)),
-  MoveEffect.by(Vector2(30, -50), EffectController(duration: 0.5)),
-  OpacityEffect.to(0, EffectController(duration: 0.3)),
+  ScaleEffect.by(
+    Vector2.all(1.5),
+    EffectController(
+      duration: 0.2,
+      alternate: true,
+    ),
+  ),
+  MoveEffect.by(
+    Vector2(30, -50),
+    EffectController(
+      duration: 0.5,
+    ),
+  ),
+  OpacityEffect.to(
+    0,
+    EffectController(
+      duration: 0.3,
+    ),
+  ),
   RemoveEffect(),
 ]);
 ```
@@ -273,8 +506,17 @@ final effect = SequenceEffect([
 This is a simple effect that can be attached to a component causing it to be removed from the game
 tree after the specified delay has passed:
 
+```{flutter-app}
+:sources: ../flame/examples
+:page: remove_effect
+:show: widget code infobox
+:width: 180
+:height: 160
+```
+
+
 ```dart
-final effect = RemoveEffect(delay: 10.0);
+final effect = RemoveEffect(delay: 3.0);
 ```
 
 
@@ -284,6 +526,14 @@ This effect will change the base color of the paint, causing the rendered compon
 the provided color between a provided range.
 
 Usage example:
+
+```{flutter-app}
+:sources: ../flame/examples
+:page: color_effect
+:show: widget code infobox
+:width: 180
+:height: 160
+```
 
 ```dart
 final effect = ColorEffect(
@@ -296,7 +546,7 @@ final effect = ColorEffect(
 The `Offset` argument will determine "how much" of the color that will be applied to the component,
 in this example the effect will start with 0% and will go up to 80%.
 
-__Note:__ Due to how this effect is implemented, and how Flutter's `ColorFilter` class works, this
+**Note:** Due to how this effect is implemented, and how Flutter's `ColorFilter` class works, this
 effect can't be mixed with other `ColorEffect`s, when more than one is added to the component, only
 the last one will have effect.
 
@@ -329,6 +579,7 @@ without interfering with each other.
 
 ## Effect controllers
 
+
 ### `EffectController`
 
 The base `EffectController` class provides a factory constructor capable of creating a variety of
@@ -346,52 +597,60 @@ EffectController({
     int? repeatCount,
     bool infinite = false,
     double startDelay = 0.0,
+    VoidCallback? onMax,
+    VoidCallback? onMin,
 });
 ```
 
-- **`duration`** -- the length of the main part of the effect, i.e. how long it should take to go
+- *`duration`* -- the length of the main part of the effect, i.e. how long it should take to go
   from 0 to 100%. This parameter cannot be negative, but can be zero. If this is the only parameter
   specified then the effect will grow linearly over the `duration` seconds.
 
-- **`curve`** -- if given, creates a non-linear effect that grows from 0 to 100% according to the
+- *`curve`* -- if given, creates a non-linear effect that grows from 0 to 100% according to the
   provided [curve](https://api.flutter.dev/flutter/animation/Curves-class.html).
 
-- **`reverseDuration`** -- if provided, adds an additional step to the controller: after the effect
+- *`reverseDuration`* -- if provided, adds an additional step to the controller: after the effect
   has grown from 0 to 100% over the `duration` seconds, it will then go backwards from 100% to 0
   over the `reverseDuration` seconds. In addition, the effect will complete at progress level of 0
   (normally the effect completes at progress 1).
 
-- **`reverseCurve`** -- the curve to be used during the "reverse" step of the effect. If not given,
+- *`reverseCurve`* -- the curve to be used during the "reverse" step of the effect. If not given,
   this will default to `curve.flipped`.
 
-- **`alternate`** -- setting this to true is equivalent to specifying the `reverseDuration` equal
+- *`alternate`* -- setting this to true is equivalent to specifying the `reverseDuration` equal
   to the `duration`. If the `reverseDuration` is already set, this flag has no effect.
 
-- **`atMaxDuration`** -- if non-zero, this inserts a pause after the effect reaches its max
+- *`atMaxDuration`* -- if non-zero, this inserts a pause after the effect reaches its max
   progress and before the reverse stage. During this time the effect is kept at 100% progress. If
   there is no reverse stage, then this will simply be a pause before the effect is marked as
   completed.
 
-- **`atMinDuration`** -- if non-zero, this inserts a pause after the reaches its lowest progress
+- *`atMinDuration`* -- if non-zero, this inserts a pause after the reaches its lowest progress
   (0) at the end of the reverse stage. During this time, the effect's progress is at 0%. If there
   is no reverse stage, then this pause will still be inserted after the "at-max" pause if it's
   present, or after the forward stage otherwise. In addition, the effect will now complete at
   progress level of 0.
 
-- **`repeatCount`** -- if greater than one, it will cause the effect to repeat itself the prescribed
+- *`repeatCount`* -- if greater than one, it will cause the effect to repeat itself the prescribed
   number of times. Each iteration will consists of the forward stage, pause at max, reverse stage,
   then pause at min (skipping those that were not specified).
 
-- **`infinite`** -- if true, the effect will repeat infinitely and never reach completion. This is
+- *`infinite`* -- if true, the effect will repeat infinitely and never reach completion. This is
   equivalent to as if `repeatCount` was set to infinity.
 
-- **`startDelay`** -- an additional wait time inserted before the beginning of the effect. This
+- *`startDelay`* -- an additional wait time inserted before the beginning of the effect. This
   wait time is executed only once, even if the effect is repeating. During this time the effect's
   `.started` property returns false. The effect's `onStart()` callback will be executed at the end
   of this waiting period.
 
   Using this parameter is the simplest way to create a chain of effects that execute one after
   another (or with an overlap).
+
+- *`onMax`* -- callback function which will be invoked right after reaching its max progress and
+  before the optional pause and reverse stage.
+
+- *`onMin`* -- callback function which will be invoked right after reaching its lowest progress
+  at the end of the reverse stage and before the optional pause and forward stage.
 
 The effect controller returned by this factory constructor will be composited of multiple simpler
 effect controllers described further below. If this constructor proves to be too limited for your
@@ -512,7 +771,7 @@ following effects qualify: [`MoveByEffect`](#movebyeffect), [`MoveToEffect`](#mo
 [`RotateEffect.to`](#rotateeffectto).
 
 The parameter `speed` is in units per second, where the notion of a "unit" depends on the target
-effect. For example, for move effects, they refer to the distance travelled; for rotation effects
+effect. For example, for move effects, they refer to the distance traveled; for rotation effects
 the units are radians.
 
 ```dart
@@ -586,7 +845,7 @@ final ec = ZigzagEffectController(period: 2);
 
 ## See also
 
-* [Examples of various effects](https://examples.flame-engine.org/#/).
+- [Examples of various effects](https://examples.flame-engine.org/).
 
 
 [tau]: https://en.wikipedia.org/wiki/Tau_(mathematical_constant)

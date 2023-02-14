@@ -11,6 +11,7 @@ your game has some sort of game world with an intrinsic coordinate system that d
 screen coordinates. Flame adds two distinct concepts to help transform coordinate spaces. For the
 former, we have the Viewport class. And for the later, we have the Camera class.
 
+
 ## Viewport
 
 The Viewport is an attempt to unify multiple screen (or, rather, game widget) sizes into a single
@@ -22,8 +23,8 @@ or, if you are using `FlameGame` instead, it's already built-in (with a default 
 These are the viewports available to pick from (or you can implement the interface yourself to suit
 your needs):
 
- * `DefaultViewport`: this is the no-op viewport that is associated by default with any `FlameGame`.
- * `FixedResolutionViewport`: this viewport transforms your Canvas so that, from the game
+- `DefaultViewport`: this is the no-op viewport that is associated by default with any `FlameGame`.
+- `FixedResolutionViewport`: this viewport transforms your Canvas so that, from the game
    perspective, the dimensions are always set to a fixed pre-defined value. This means it will scale
    the game as much as possible and add black bars if needed.
 
@@ -33,14 +34,15 @@ the size as seen through the viewport together with the zoom of the camera. If f
 need to access the original real logical pixel size, you can use `canvasSize`. For a more in depth
 description on what each `Viewport` does and how it operates, check the documentation on its class.
 
+
 ## Camera
 
 Unlike the `Viewport`, the `Camera` is a more dynamic `Canvas` transformation that is normally
 dependent on:
 
- * World coordinates that do not match screen coordinates 1:1.
- * Centering or following the player around the game world (if the world is bigger than the screen).
- * User controlled zooming in and out.
+- World coordinates that do not match screen coordinates 1:1.
+- Centering or following the player around the game world (if the world is bigger than the screen).
+- User controlled zooming in and out.
 
 There is only one Camera implementation but it allows for many different configurations. Again, you
 can use it standalone on your `Game` but it's already included and wired into `FlameGame`.
@@ -59,21 +61,21 @@ components. So screen size here is considering the effective size after Viewport
 There are two types of transformations that the Camera can apply to the Canvas. The first and most
 complex one is translation. That can be applied by several factors:
 
- * nothing: by default the camera won't apply any transformation, so it's optional to use it.
- * relative offset: you can configure this to decide "where the center of the camera should be on
+- nothing: by default the camera won't apply any transformation, so it's optional to use it.
+- relative offset: you can configure this to decide "where the center of the camera should be on
    the screen". By default it's the top left corner, meaning that the centered coordinate or object
    will always be on the top left corner of the screen. You can smoothly change the relative offset
    during gameplay (that can be used to apply a dialogue or item pickup temporary camera transition
    for example).
- * moveTo: if you want to ad-hoc move your camera you can use this method; it will smoothly
+- moveTo: if you want to ad-hoc move your camera you can use this method; it will smoothly
    transition the camera to a new position, ignoring follows but respecting relative offset and
    world bounds. This can be reset by `resetMovement` if used in conjunction to follow so that the
    followed object starts being considered again.
- * follow: you can use this method so that your camera continuously "follow" an object (for example,
+- follow: you can use this method so that your camera continuously "follow" an object (for example,
    a `PositionComponent`). This is not smooth because the movement of the followed object itself is
    assumed to already be smooth (i.e. if your character teleport the camera will also immediately
    teleport).
- * world bounds: when using follow, you can optionally define the bounds of the world. If that is
+- world bounds: when using follow, you can optionally define the bounds of the world. If that is
    done, the camera will stop following/moving so that out-of-bounds areas are not shown (as long as
    the world is bigger than the screen).
 
@@ -136,7 +138,7 @@ class MyGame extends FlameGame {
        anchor: Anchor.center,
      );
      add(player);
-     
+
      camera.followComponent(player);
   }
 }
@@ -146,17 +148,20 @@ class MyGame extends FlameGame {
 ### Using the camera with the Game class
 
 If you are not using `FlameGame`, but instead are using the `Game` mixin, then you need to manage
-calling certain camera methods yourself. Let's say we have the following game structure, and we 
+calling certain camera methods yourself. Let's say we have the following game structure, and we
 want to add the camera functionality:
 
 ```dart
-class YourGame with Game {
+class YourGame extends Game {
   Camera? camera;
 
+  @override
   Future<void> onLoad() async {}
 
+  @override
   void render(Canvas canvas) {}
 
+  @override
   void update(double dt) {}
 }
 ```
@@ -164,8 +169,7 @@ class YourGame with Game {
 We first create a new camera instance on load and assign our game as the reference:
 
 ```dart
-  // ...
-  
+  @override
   Future<void> onLoad() async {
     camera = Camera();
 
@@ -177,51 +181,44 @@ We first create a new camera instance on load and assign our game as the referen
 
     // Rest of your on load code.
   }
-
-  // ...
 ```
 
-The camera can also be made aware of which position to follow, this is an optional feature as you 
-can also use the camare for just moving,snapping or shaking.
+The camera can also be made aware of which position to follow, this is an optional feature as you
+can also use the camera for just moving,snapping or shaking.
 
-To do this the `Camera` class provides multiple methods for it but let's showcase the simplest one 
+To do this the `Camera` class provides multiple methods for it but let's showcase the simplest one
 and that is the `followVector2`:
 
 ```dart
-  // Somewhere in your code.
-
+  // Somewhere in your code:
   camera?.followVector2(
     yourPositionToFollow,
-    worldBounds: yourWorldBounds, // Optional to pass, it will overwrite the previous bounds.
+    // Optional to pass, it will overwrite the previous bounds.
+    worldBounds: yourWorldBounds,
   );
 ```
 
-Now that the camera is created and it is aware of both the world bounds and the position it should 
+Now that the camera is created and it is aware of both the world bounds and the position it should
 follow, it can be used to translate the canvas in the render method:
 
 ```dart
-  // ...
-
+  @override
   void render(Canvas canvas) {
-    camera?.apply(canvas); // This will apply the camera transformation.
+    // This will apply the camera transformation.
+    camera?.apply(canvas);
 
     // Rest of your rendering code.
   }
-
-  // ...
 ```
 
-The only thing left to do is to call the `update` method on the `Camera` so it can smoothly follow 
+The only thing left to do is to call the `update` method on the `Camera` so it can smoothly follow
 your given position:
 
 ```dart
-  // ...
-
+  @override
   void update(double dt) {
     camera?.update(dt);
 
     // Rest of your update code.
   }
-
-  // ...
 ```

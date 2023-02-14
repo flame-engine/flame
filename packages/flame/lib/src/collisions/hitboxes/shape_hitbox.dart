@@ -1,6 +1,7 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
+import 'package:flame/geometry.dart';
 import 'package:flame/src/geometry/shape_intersections.dart'
     as intersection_system;
 import 'package:meta/meta.dart';
@@ -9,8 +10,18 @@ import 'package:meta/meta.dart';
 /// It is currently used by [CircleHitbox], [RectangleHitbox] and
 /// [PolygonHitbox].
 mixin ShapeHitbox on ShapeComponent implements Hitbox<ShapeHitbox> {
+  @internal
+  final collisionTypeNotifier = CollisionTypeNotifier(CollisionType.active);
+
+  set collisionType(CollisionType type) {
+    if (collisionTypeNotifier.value == type) {
+      return;
+    }
+    collisionTypeNotifier.value = type;
+  }
+
   @override
-  CollisionType collisionType = CollisionType.active;
+  CollisionType get collisionType => collisionTypeNotifier.value;
 
   /// Whether the hitbox is allowed to collide with another hitbox that is
   /// added to the same parent.
@@ -39,6 +50,9 @@ mixin ShapeHitbox on ShapeComponent implements Hitbox<ShapeHitbox> {
   final List<Transform2D> _transformAncestors = [];
   late Function() _transformListener;
 
+  @internal
+  Function()? onAabbChanged;
+
   final Vector2 _halfExtents = Vector2.zero();
   static const double _extentEpsilon = 0.000000000000001;
   final Matrix3 _rotationMatrix = Matrix3.zero();
@@ -46,8 +60,8 @@ mixin ShapeHitbox on ShapeComponent implements Hitbox<ShapeHitbox> {
   @override
   bool renderShape = false;
 
-  @protected
-  late PositionComponent hitboxParent;
+  late PositionComponent _hitboxParent;
+  PositionComponent get hitboxParent => _hitboxParent;
   void Function()? _parentSizeListener;
   @protected
   bool shouldFillParent = false;
@@ -55,24 +69,21 @@ mixin ShapeHitbox on ShapeComponent implements Hitbox<ShapeHitbox> {
   @override
   void onMount() {
     super.onMount();
-    hitboxParent = ancestors().firstWhere(
-      (c) => c is PositionComponent,
+    _hitboxParent = ancestors().firstWhere(
+      (c) => c is PositionComponent && c is! CompositeHitbox,
       orElse: () {
         throw StateError('A ShapeHitbox needs a PositionComponent ancestor');
       },
     ) as PositionComponent;
 
-    _transformListener = () => _validAabb = false;
+    _transformListener = () {
+      _validAabb = false;
+      onAabbChanged?.call();
+    };
     ancestors(includeSelf: true).whereType<PositionComponent>().forEach((c) {
       _transformAncestors.add(c.transform);
       c.transform.addListener(_transformListener);
     });
-
-    final parentGame = findParent<FlameGame>();
-    if (parentGame is HasCollisionDetection) {
-      _collisionDetection = parentGame.collisionDetection;
-      _collisionDetection?.add(this);
-    }
 
     if (shouldFillParent) {
       _parentSizeListener = () {
@@ -81,6 +92,14 @@ mixin ShapeHitbox on ShapeComponent implements Hitbox<ShapeHitbox> {
       };
       _parentSizeListener?.call();
       hitboxParent.size.addListener(_parentSizeListener!);
+    }
+
+    // This should be placed after the hitbox parent listener
+    // since the correct hitbox size is required by the QuadTree.
+    final parentGame = findParent<FlameGame>();
+    if (parentGame is HasCollisionDetection) {
+      _collisionDetection = parentGame.collisionDetection;
+      _collisionDetection?.add(this);
     }
   }
 
@@ -128,6 +147,15 @@ mixin ShapeHitbox on ShapeComponent implements Hitbox<ShapeHitbox> {
         allowSiblingCollision || hitboxParent != other.hitboxParent;
     return collisionAllowed && aabb.intersectsWithAabb2(other.aabb);
   }
+
+  /// Returns information about how the ray intersects the shape.
+  ///
+  /// If you are only interested in the intersection point use
+  /// [RaycastResult.intersectionPoint] of the result.
+  RaycastResult<ShapeHitbox>? rayIntersection(
+    Ray2 ray, {
+    RaycastResult<ShapeHitbox>? out,
+  });
 
   /// This determines how the shape should scale if it should try to fill its
   /// parents boundaries.
@@ -183,6 +211,29 @@ mixin ShapeHitbox on ShapeComponent implements Hitbox<ShapeHitbox> {
     if (hitboxParent is CollisionCallbacks) {
       (hitboxParent as CollisionCallbacks).onCollisionEnd(other.hitboxParent);
     }
+  }
+
+  /// Defines whether the [other] component should be able to collide with
+  /// this component.
+  ///
+  /// If the [hitboxParent] is not `CollisionCallbacks` but `PositionComponent`,
+  /// there is no [CollisionCallbacks.onComponentTypeCheck] in that component.
+  /// As a result, it will always be able to collide with all other types.
+  @override
+  @mustCallSuper
+  bool onComponentTypeCheck(PositionComponent other) {
+    final otherHitboxParent = (other as ShapeHitbox).hitboxParent;
+
+    final thisCanCollideWithOther = (hitboxParent is! CollisionCallbacks) ||
+        (hitboxParent as CollisionCallbacks)
+            .onComponentTypeCheck(otherHitboxParent);
+
+    final otherCanCollideWithThis =
+        (otherHitboxParent is! CollisionCallbacks) ||
+            (otherHitboxParent as CollisionCallbacks)
+                .onComponentTypeCheck(hitboxParent);
+
+    return thisCanCollideWithOther && otherCanCollideWithThis;
   }
 
   @override

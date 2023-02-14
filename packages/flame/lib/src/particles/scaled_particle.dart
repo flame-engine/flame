@@ -15,10 +15,8 @@ class ScaledParticle extends CurvedParticle with SingleChildParticle {
   ScaledParticle({
     required this.child,
     this.scale = 1.0,
-    double? lifespan,
-  }) : super(
-          lifespan: lifespan,
-        );
+    super.lifespan,
+  });
 
   @override
   void render(Canvas canvas) {

@@ -196,6 +196,36 @@ void main() {
     );
 
     testWithFlameGame(
+      'camera follow with zoom',
+      (game) async {
+        game.onGameResize(Vector2.all(100.0));
+        game.camera.zoom = 2;
+
+        final p = _TestComponent(Vector2.all(10.0))..anchor = Anchor.center;
+        await game.ensureAdd(p);
+        game.camera.followComponent(
+          p,
+          worldBounds: const Rect.fromLTWH(0, 0, 100, 100),
+        );
+
+        game.update(0);
+        expect(game.camera.position, Vector2(0, 0));
+
+        p.position.setValues(50.0, 60.0);
+        game.update(0);
+        expect(game.camera.position, Vector2(25, 35));
+
+        p.position.setValues(80.0, 90.0);
+        game.update(0);
+        expect(game.camera.position, Vector2(50, 50));
+
+        p.position.setValues(-10.0, -20.0);
+        game.update(0);
+        expect(game.camera.position, Vector2(0, 0));
+      },
+    );
+
+    testWithFlameGame(
       'camera relative offset without follow',
       (game) async {
         game.onGameResize(Vector2.all(200.0));

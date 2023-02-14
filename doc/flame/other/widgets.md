@@ -7,8 +7,9 @@ mind.
 Here you can find all the available widgets provided by Flame.
 
 You can also see all the widgets showcased inside a
-[Dashbook](https://github.com/erickzanardo/dashbook) sandbox
+[Dashbook](https://github.com/bluefireteam/dashbook) sandbox
 [here](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/widgets)
+
 
 ## Nine Tile Box
 
@@ -38,6 +39,7 @@ NineTileBox.asset(
 )
 ```
 
+
 ## SpriteButton
 
 `SpriteButton` is a simple widget that creates a button based on Flame sprites. This can be very
@@ -58,6 +60,7 @@ SpriteButton.asset(
 )
 ```
 
+
 ## SpriteWidget
 
 `SpriteWidget` is a widget used to display a [Sprite](../rendering/images.md#sprite) inside a widget
@@ -72,10 +75,11 @@ SpriteWidget.asset(
 )
 ```
 
+
 ## SpriteAnimationWidget
 
-`SpriteAnimationWidget` is a widget used to display [SpriteAnimations](../rendering/images.md#animation) inside
-a widget tree.
+`SpriteAnimationWidget` is a widget used to display
+[SpriteAnimations](../rendering/images.md#animation) inside a widget tree.
 
 This is how to use it:
 

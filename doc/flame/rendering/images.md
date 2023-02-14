@@ -28,7 +28,7 @@ It automatically caches any image loaded by filename, so you can safely call it 
 
 The methods for loading and clearing the cache are: `load`, `loadAll`, `clear` and `clearCache`.
 They return `Future`s for loading the images. These futures must be awaited for before the images
-can be used in any way. If you do not want to await these futures right away, you can initiate 
+can be used in any way. If you do not want to await these futures right away, you can initiate
 multiple `load()` operations and then await for all of them at once using `Images.ready()` method.
 
 To synchronously retrieve a previously cached image, the `fromCache` method can be used. If an image
@@ -42,17 +42,19 @@ You can also use `ImageExtension.fromPixels()` to dynamically create an image du
 For `clear` and `clearCache`, do note that `dispose` is called for each removed image from the
 cache, so make sure that you don't use the image afterwards.
 
+
 ### Standalone usage
 
 It can manually be used by instantiating it:
 
 ```dart
-import 'package:flame/images.dart';
+import 'package:flame/cache.dart';
 final imagesLoader = Images();
 Image image = await imagesLoader.load('yourImage.png');
 ```
 
 But Flame also offers two ways of using this class without instantiating it yourself.
+
 
 ### Flame.images
 
@@ -69,6 +71,7 @@ Image image = await Flame.images.load('player.png');
 
 final playerSprite = Sprite(image);
 ```
+
 
 ### Game.images
 
@@ -87,7 +90,8 @@ class MyGame extends Game {
 
   @override
   Future<void> onLoad() async {
-    final playerImage = await images.load('player.png'); // Note that you could also use Sprite.load for this
+    // Note that you could also use Sprite.load for this.
+    final playerImage = await images.load('player.png');
     player = Sprite(playerImage);
   }
 }
@@ -107,13 +111,14 @@ class MyGame extends Game {
   }
 
   void shoot() {
-    // This is just an example, in your game you probably don't want to instantiate new [Sprite]
-    // objects every time you shoot.
+    // This is just an example, in your game you probably don't want to
+    // instantiate new [Sprite] objects every time you shoot.
     final bulletSprite = Sprite(images.fromCache('bullet.png'));
     _bullets.add(bulletSprite);
   }
 }
 ```
+
 
 ## Sprite
 
@@ -163,7 +168,8 @@ render call.
 `Sprite`s can also be used as widgets, to do so just use `SpriteWidget` class.
 
 A complete example using sprite as widgets can be found
-[here](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/widget/sprite_widget.dart).
+[here](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/widgets/sprite_widget_example.dart).
+
 
 ## SpriteBatch
 
@@ -178,7 +184,8 @@ You render it with a `Canvas` and an optional `Paint`, `BlendMode` and `CullRect
 A `SpriteBatchComponent` is also available for your convenience.
 
 See the examples
-[here](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/sprites/spritebatch.dart).
+[here](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/sprites/spritebatch_example.dart).
+
 
 ## ImageComposition
 
@@ -186,7 +193,7 @@ In some cases you may want to merge multiple images into a single image; this is
 [Compositing](https://en.wikipedia.org/wiki/Compositing). This can be useful for example when
 working with the [SpriteBatch](#spritebatch) API to optimize your drawing calls.
 
-For such usecases Flame comes with the `ImageComposition` class. This allows you to add multiple
+For such use cases Flame comes with the `ImageComposition` class. This allows you to add multiple
 images, each at their own position, onto a new image:
 
 ```dart
@@ -205,40 +212,6 @@ Image image = await composition.compose();
 the performance badly. Instead we recommend to have your compositions pre-rendered so you can just
 reuse the output image.
 
-## Svg
-
-Flame provides a simple API to render SVG images in your game.
-
-Svg support is provided by the `flame_svg` external package, be sure to put it in your pubspec file
-to use it.
-
-To use it just import the `Svg` class from `'package:flame_svg/flame_svg.dart'`, and use the
-following snippet to render it on the canvas:
-
-```dart
-Svg svgInstance = Svg('android.svg');
-
-final position = Vector2(100, 100);
-final size = Vector2(300, 300);
-
-svgInstance.renderPosition(canvas, position, size);
-```
-
-or use the [SvgComponent]:
-
-```dart
-class MyGame extends FlameGame {
-    Future<void> onLoad() async {
-      final svgInstance = await Svg.load('android.svg');
-      final size = Vector2.all(100);
-      final svgComponent = SvgComponent.fromSvg(size, svgInstance);
-      svgComponent.x = 100;
-      svgComponent.y = 100;
-
-      add(svgComponent);
-    }
-}
-```
 
 ## Animation
 
@@ -305,7 +278,7 @@ final animation = SpriteAnimation.fromAsepriteData(image, jsonData);
 ```
 
 **Note:** trimmed sprite sheets are not supported by flame, so if you export your sprite sheet this
-kway, it will have the trimmed size, not the sprite original size.
+way, it will have the trimmed size, not the sprite original size.
 
 Animations, after created, have an update and render method; the latter renders the current frame,
 and the former ticks the internal clock to update the frames.
@@ -314,11 +287,15 @@ Animations are normally used inside `SpriteAnimationComponent`s, but custom comp
 Animations can be created as well.
 
 A complete example of using animations as widgets can be found
-[here](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/widgets/sprite_animation_widget.dart).
+[here](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/widgets/sprite_animation_widget_example.dart).
+
 
 ## FlareAnimation
 
-Flame provides a simple wrapper of [Flare](https://rive.app/#LearnMore) animations so you can use
+Do note that Flare is discontinued and [Rive](https://github.com/flame-engine/flame/tree/main/packages/flame_rive)
+is preferred.
+
+Flame provides a simple wrapper of [Flare](https://flare.rive.app/) animations so you can use
 them in Flame games.
 
 Check the following snippet on how to use this wrapper:
@@ -362,7 +339,8 @@ FlareAnimations are normally used inside `FlareComponent`s, that way `FlameGame`
 `render` and `update` automatically.
 
 You can see a full example of how to use Flare together with Flame in the example
-[here](https://github.com/flame-engine/flame_flare/tree/main/example).
+[here](https://github.com/flame-engine/flame/tree/main/packages/flame_flare/example).
+
 
 ## SpriteSheet
 
@@ -391,4 +369,4 @@ spritesheet.getSprite(0, 0) // row, column;
 ```
 
 You can see a full example of the `SpriteSheet` class
-[here](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/sprites/spritesheet.dart).
+[here](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/sprites/spritesheet_example.dart).

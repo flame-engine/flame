@@ -8,10 +8,10 @@ import 'package:test/test.dart';
 class _GameHasDraggables extends FlameGame with HasDraggables {}
 
 void main() {
-  final withDraggables = FlameTester(_GameHasDraggables.new);
-
   group('JoystickDirection tests', () {
-    withDraggables.test('can convert angle to JoystickDirection', (game) async {
+    testWithGame<_GameHasDraggables>(
+        'can convert angle to JoystickDirection', _GameHasDraggables.new,
+        (game) async {
       final joystick = JoystickComponent(
         knob: CircleComponent(radius: 5.0),
         size: 20,
@@ -40,9 +40,10 @@ void main() {
   });
 
   group('Joystick input tests', () {
-    withDraggables.test(
+    testWithGame<_GameHasDraggables>(
       'knob should stay on correct side when the total delta is larger than '
       'the size and then the knob is moved slightly back again',
+      _GameHasDraggables.new,
       (game) async {
         final joystick = JoystickComponent(
           knob: CircleComponent(radius: 5.0),
@@ -51,7 +52,7 @@ void main() {
         );
         await game.add(joystick);
         await game.ready();
-        expect(joystick.knob!.position, closeToVector(10, 10));
+        expect(joystick.knob!.position, closeToVector(Vector2(10, 10)));
         // Start dragging the joystick
         game.onDragStart(
           1,
@@ -77,7 +78,7 @@ void main() {
           ),
         );
         game.update(0);
-        expect(joystick.knob!.position, closeToVector(20, 10));
+        expect(joystick.knob!.position, closeToVector(Vector2(20, 10)));
         // Drag the knob back towards it's base position
         game.onDragUpdate(
           1,
@@ -91,7 +92,7 @@ void main() {
           ),
         );
         game.update(0);
-        expect(joystick.knob!.position, closeToVector(20, 10));
+        expect(joystick.knob!.position, closeToVector(Vector2(20, 10)));
       },
     );
   });

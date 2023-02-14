@@ -1,10 +1,18 @@
 # Inputs
 
-```{eval-rst}
-.. toctree::
-    :hidden:
-    
-    Gesture input   <gesture-input.md>
-    Keyboard input  <keyboard-input.md>
-    Other inputs    <other-inputs.md>
+- [Drag Events](drag_events.md)
+- [Gesture Input](gesture_input.md)
+- [Keyboard Input](keyboard_input.md)
+- [Other Inputs](other_inputs.md)
+- [Tap Events](tap_events.md)
+
+```{toctree}
+:hidden:
+
+Drag Events     <drag_events.md>
+Gesture Input   <gesture_input.md>
+Keyboard Input  <keyboard_input.md>
+Other Inputs    <other_inputs.md>
+Tap Events      <tap_events.md>
+HardwareKeyboardDetector  <hardware_keyboard_detector.md>
 ```

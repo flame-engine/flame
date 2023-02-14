@@ -8,25 +8,36 @@ import 'package:meta/meta.dart';
 /// Adds [Bloc] access and listening to a [Component]
 mixin FlameBlocListenable<B extends BlocBase<S>, S> on Component {
   late S _state;
-  late final StreamSubscription<S> _subscription;
-  B? _bloc;
+  late StreamSubscription<S> _subscription;
+  late B _bloc;
+  B? _blocOverride;
+
+  /// Returns the bloc that this component is reading from once the component
+  /// has been mounted.
+  B get bloc {
+    assert(
+      isMounted,
+      'Cannot access the bloc instance before it has been mounted.',
+    );
+    return _bloc;
+  }
 
   /// Explicitly set the bloc instance which the component will be listening to.
   /// This is useful in cases where the bloc being listened to
   /// has not be provided via [FlameBlocProvider].
   set bloc(B bloc) {
     assert(
-      _bloc == null,
+      _blocOverride == null,
       'Cannot update the bloc instance once it has been set.',
     );
-    _bloc = bloc;
+    _blocOverride = bloc;
   }
 
   @override
   @mustCallSuper
   void onMount() {
     super.onMount();
-    var bloc = _bloc;
+    var bloc = _blocOverride;
     if (bloc == null) {
       final providers = ancestors().whereType<FlameBlocProvider<B, S>>();
       assert(
@@ -35,8 +46,9 @@ mixin FlameBlocListenable<B extends BlocBase<S>, S> on Component {
       );
 
       final provider = providers.first;
-      _bloc = bloc = provider.bloc;
+      _blocOverride = bloc = provider.bloc;
     }
+    _bloc = bloc;
     _state = bloc.state;
     _subscription = bloc.stream.listen((newState) {
       if (_state != newState) {
@@ -56,7 +68,7 @@ mixin FlameBlocListenable<B extends BlocBase<S>, S> on Component {
   /// Default implementation returns true.
   bool listenWhen(S previousState, S newState) => true;
 
-  /// Listener called everytime a new state is emitted to this component.
+  /// Listener called every time a new state is emitted to this component.
   ///
   /// Default implementation is a no-op.
   void onNewState(S state) {}

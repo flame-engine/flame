@@ -3,14 +3,13 @@ import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flame_rive/flame_rive.dart';
 import 'package:flutter/material.dart';
-import 'package:rive/rive.dart';
 
 void main() {
   runApp(const MyApp());
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -51,7 +50,7 @@ class SkillsAnimationComponent extends RiveComponent with Tappable {
   SMIInput<double>? _levelInput;
 
   @override
-  Future<void>? onLoad() {
+  void onLoad() {
     final controller = StateMachineController.fromArtboard(
       artboard,
       "Designer's Test",
@@ -61,7 +60,6 @@ class SkillsAnimationComponent extends RiveComponent with Tappable {
       _levelInput = controller.findInput<double>('Level');
       _levelInput?.value = 0;
     }
-    return super.onLoad();
   }
 
   @override

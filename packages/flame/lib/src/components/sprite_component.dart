@@ -22,21 +22,16 @@ class SpriteComponent extends PositionComponent
   SpriteComponent({
     this.sprite,
     Paint? paint,
-    Vector2? position,
+    super.position,
     Vector2? size,
-    Vector2? scale,
-    double? angle,
-    Anchor? anchor,
-    Iterable<Component>? children,
-    int? priority,
+    super.scale,
+    super.angle,
+    super.nativeAngle,
+    super.anchor,
+    super.children,
+    super.priority,
   }) : super(
-          position: position,
           size: size ?? sprite?.srcSize,
-          scale: scale,
-          angle: angle,
-          anchor: anchor,
-          children: children,
-          priority: priority,
         ) {
     if (paint != null) {
       this.paint = paint;
@@ -53,6 +48,7 @@ class SpriteComponent extends PositionComponent
     Vector2? scale,
     double? angle,
     Anchor? anchor,
+    Iterable<Component>? children,
     int? priority,
   }) : this(
           sprite: Sprite(
@@ -66,6 +62,7 @@ class SpriteComponent extends PositionComponent
           scale: scale,
           angle: angle,
           anchor: anchor,
+          children: children,
           priority: priority,
         );
 

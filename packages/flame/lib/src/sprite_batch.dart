@@ -1,19 +1,22 @@
 import 'dart:collection';
+import 'dart:math' show pi;
 import 'dart:ui';
 
 import 'package:flame/game.dart';
 import 'package:flame/src/cache/images.dart';
 import 'package:flame/src/extensions/image.dart';
+import 'package:flame/src/extensions/picture_extension.dart';
 import 'package:flame/src/flame.dart';
 
 extension SpriteBatchExtension on Game {
   /// Utility method to load and cache the image for a [SpriteBatch] based on
-  /// its options
+  /// its options.
   Future<SpriteBatch> loadSpriteBatch(
     String path, {
     Color defaultColor = const Color(0x00000000),
     BlendMode defaultBlendMode = BlendMode.srcOver,
     RSTransform? defaultTransform,
+    Images? imageCache,
     bool useAtlas = true,
   }) {
     return SpriteBatch.load(
@@ -21,21 +24,24 @@ extension SpriteBatchExtension on Game {
       defaultColor: defaultColor,
       defaultBlendMode: defaultBlendMode,
       defaultTransform: defaultTransform,
-      images: images,
+      images: imageCache ?? images,
       useAtlas: useAtlas,
     );
   }
 }
 
-/// This is the scale value used in [BatchItem.matrix], we can't determine this
-/// from the [BatchItem.transform], but we also don't need to do so because it
-/// is already calculated inside the transform values.
-const _defaultScale = 0.0;
-
 /// A single item in a SpriteBatch.
 ///
-/// Holds all the important information of a batch item,
+/// Holds all the important information of a batch item.
 class BatchItem {
+  BatchItem({
+    required this.source,
+    required this.transform,
+    this.flip = false,
+    required this.color,
+  })  : paint = Paint()..color = color,
+        destination = Offset.zero & source.size;
+
   /// The source rectangle on the [SpriteBatch.atlas].
   final Rect source;
 
@@ -55,26 +61,20 @@ class BatchItem {
 
   /// Fallback matrix for the web.
   ///
-  /// Because `Canvas.drawAtlas` is not supported on the web we also
+  /// Since [Canvas.drawAtlas] is not supported on the web we also
   /// build a `Matrix4` based on the [transform] and [flip] values.
-  final Matrix4 matrix;
+  late final Matrix4 matrix = Matrix4(
+    transform.scos, transform.ssin, 0, 0, //
+    -transform.ssin, transform.scos, 0, 0, //
+    0, 0, 0, 0, //
+    transform.tx, transform.ty, 0, 1, //
+  )
+    ..translate(source.width / 2, source.height / 2)
+    ..rotateY(flip ? pi : 0)
+    ..translate(-source.width / 2, -source.height / 2);
 
   /// Paint object used for the web.
   final Paint paint;
-
-  BatchItem({
-    required this.source,
-    required this.transform,
-    this.flip = false,
-    required this.color,
-  })  : matrix = Matrix4(
-          transform.scos * (flip ? -1 : 1), transform.ssin, 0, 0, //
-          -transform.ssin, transform.scos, 0, 0, //
-          0, 0, _defaultScale, 0, //
-          transform.tx, transform.ty, 0, 1, //
-        ),
-        paint = Paint()..color = color,
-        destination = Offset.zero & source.size;
 }
 
 /// The SpriteBatch API allows for rendering multiple items at once.
@@ -94,6 +94,40 @@ class BatchItem {
 /// load method that you are using and each [BatchItem] will be rendered using
 /// the [Canvas.drawImageRect] method instead.
 class SpriteBatch {
+  SpriteBatch(
+    this.atlas, {
+    this.defaultColor = const Color(0x00000000),
+    this.defaultBlendMode = BlendMode.srcOver,
+    this.defaultTransform,
+    this.useAtlas = true,
+    Images? imageCache,
+    String? imageKey,
+  })  : _imageCache = imageCache,
+        _imageKey = imageKey;
+
+  /// Takes a path of an image, and optional arguments for the SpriteBatch.
+  ///
+  /// When the [images] is omitted, the global [Flame.images] is used.
+  static Future<SpriteBatch> load(
+    String path, {
+    Color defaultColor = const Color(0x00000000),
+    BlendMode defaultBlendMode = BlendMode.srcOver,
+    RSTransform? defaultTransform,
+    Images? images,
+    bool useAtlas = true,
+  }) async {
+    final _images = images ?? Flame.images;
+    return SpriteBatch(
+      await _images.load(path),
+      defaultColor: defaultColor,
+      defaultTransform: defaultTransform ?? RSTransform(1, 0, 0, 0),
+      defaultBlendMode: defaultBlendMode,
+      useAtlas: useAtlas,
+      imageCache: _images,
+      imageKey: path,
+    );
+  }
+
   /// List of all the existing batch items.
   final _batchItems = <BatchItem>[];
 
@@ -128,7 +162,30 @@ class SpriteBatch {
   }
 
   /// The atlas used by the [SpriteBatch].
-  final Image atlas;
+  Image atlas;
+
+  /// The image cache used by the [SpriteBatch] to store image assets.
+  final Images? _imageCache;
+
+  /// When the [_imageCache] isn't specified, the global [Flame.images] is used.
+  Images get imageCache => _imageCache ?? Flame.images;
+
+  /// The root key use by the [SpriteBatch] to store image assets.
+  final String? _imageKey;
+
+  /// When the [_imageKey] isn't specified [imageKey] will return either the key
+  /// for the [atlas] stored in [imageCache] or a key generated from the
+  /// identityHashCode.
+  String get imageKey =>
+      _imageKey ??
+      imageCache.findKeyForImage(atlas) ??
+      'image[${identityHashCode(atlas)}]';
+
+  /// Whether any [BatchItem]s needs a flippable atlas.
+  bool _hasFlips = false;
+
+  /// The status of the atlas image loading operations.
+  bool _atlasReady = true;
 
   /// The default color, used as a background color for a [BatchItem].
   final Color defaultColor;
@@ -152,37 +209,21 @@ class SpriteBatch {
   /// Whether to use [Canvas.drawAtlas] or not.
   final bool useAtlas;
 
-  SpriteBatch(
-    this.atlas, {
-    this.defaultColor = const Color(0x00000000),
-    this.defaultBlendMode = BlendMode.srcOver,
-    this.defaultTransform,
-    this.useAtlas = true,
-  });
+  /// Does this batch contain any operations?
+  bool get isEmpty => _batchItems.isEmpty;
 
-  /// Takes a path of an image, and optional arguments for the SpriteBatch.
-  ///
-  /// When the [images] is omitted, the global [Flame.images] is used.
-  static Future<SpriteBatch> load(
-    String path, {
-    Color defaultColor = const Color(0x00000000),
-    BlendMode defaultBlendMode = BlendMode.srcOver,
-    RSTransform? defaultTransform,
-    Images? images,
-    bool useAtlas = true,
-  }) async {
-    return SpriteBatch(
-      await _generateAtlas(images, path),
-      defaultColor: defaultColor,
-      defaultTransform: defaultTransform ?? RSTransform(1, 0, 0, 0),
-      defaultBlendMode: defaultBlendMode,
-      useAtlas: useAtlas,
+  Future<void> _makeFlippedAtlas() async {
+    _hasFlips = true;
+    _atlasReady = false;
+    final key = '$imageKey#with-flips';
+    atlas = await imageCache.fetchOrGenerate(
+      key,
+      () => _generateFlippedAtlas(atlas),
     );
+    _atlasReady = true;
   }
 
-  static Future<Image> _generateAtlas(Images? images, String path) async {
-    final _images = images ?? Flame.images;
-    final image = await _images.load(path);
+  Future<Image> _generateFlippedAtlas(Image image) {
     final recorder = PictureRecorder();
     final canvas = Canvas(recorder);
     final _emptyPaint = Paint();
@@ -191,8 +232,7 @@ class SpriteBatch {
     canvas.drawImage(image, Offset(-image.width * 2, 0), _emptyPaint);
 
     final picture = recorder.endRecording();
-    final atlas = picture.toImage(image.width * 2, image.height);
-    return atlas;
+    return picture.toImageSafe(image.width * 2, image.height);
   }
 
   /// Add a new batch item using a RSTransform.
@@ -223,12 +263,15 @@ class SpriteBatch {
       color: color ?? defaultColor,
     );
 
-    _batchItems.add(batchItem);
+    if (flip && useAtlas && !_hasFlips) {
+      _makeFlippedAtlas();
+    }
 
+    _batchItems.add(batchItem);
     _sources.add(
       flip
           ? Rect.fromLTWH(
-              atlas.width - source.left - source.width,
+              (atlas.width * (!_atlasReady ? 2 : 1)) - source.right,
               source.top,
               source.width,
               source.height,
@@ -247,7 +290,7 @@ class SpriteBatch {
   /// You can transform the sprite from its [offset] using [scale], [rotation],
   /// [anchor] and [flip].
   ///
-  /// The [color] paramater allows you to render a color behind the batch item,
+  /// The [color] parameter allows you to render a color behind the batch item,
   /// as a background color.
   ///
   /// This method creates a new [RSTransform] based on the given transform
@@ -312,9 +355,23 @@ class SpriteBatch {
     Rect? cullRect,
     Paint? paint,
   }) {
+    if (isEmpty) {
+      return;
+    }
+
     paint ??= _emptyPaint;
 
-    if (!useAtlas) {
+    if (useAtlas && _atlasReady) {
+      canvas.drawAtlas(
+        atlas,
+        _transforms,
+        _sources,
+        _colors,
+        blendMode ?? defaultBlendMode,
+        cullRect,
+        paint,
+      );
+    } else {
       for (final batchItem in _batchItems) {
         paint.blendMode = blendMode ?? paint.blendMode;
 
@@ -330,16 +387,6 @@ class SpriteBatch {
           )
           ..restore();
       }
-    } else {
-      canvas.drawAtlas(
-        atlas,
-        _transforms,
-        _sources,
-        _colors,
-        blendMode ?? defaultBlendMode,
-        cullRect,
-        paint,
-      );
     }
   }
 }

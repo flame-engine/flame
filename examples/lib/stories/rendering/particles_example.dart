@@ -178,8 +178,8 @@ class ParticlesExample extends FlameGame {
     );
   }
 
-  /// Same example as above, but
-  /// with easing, utilising [CurvedParticle] extension
+  /// Same example as above, but with easing, utilizing [CurvedParticle]
+  /// extension.
   Particle easedMovingParticle() {
     return Particle.generate(
       count: 5,
@@ -259,19 +259,19 @@ class ParticlesExample extends FlameGame {
   }
 
   /// Particle which is used in example below
-  Particle? reusablePatricle;
+  Particle? reusableParticle;
 
   /// A burst of white circles which actually using a single circle
   /// as a form of optimization. Look for reusing parts of particle effects
   /// whenever possible, as there are limits which are relatively easy to reach.
   Particle reuseParticles() {
-    reusablePatricle ??= circle();
+    reusableParticle ??= circle();
 
     return Particle.generate(
       generator: (i) => MovingParticle(
         curve: Interval(rnd.nextDouble() * .1, rnd.nextDouble() * .8 + .1),
         to: randomCellVector2()..scale(.5),
-        child: reusablePatricle!,
+        child: reusableParticle!,
       ),
     );
   }
@@ -403,7 +403,7 @@ class ParticlesExample extends FlameGame {
   /// use of [ComputedParticle] within other particles,
   /// mixing predefined and fully custom behavior.
   Particle fireworkParticle() {
-    // A pallete to paint over the "sky"
+    // A palette to paint over the "sky"
     final paints = [
       Colors.amber,
       Colors.amberAccent,

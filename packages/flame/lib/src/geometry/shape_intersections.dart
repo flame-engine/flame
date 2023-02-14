@@ -49,6 +49,17 @@ class PolygonPolygonIntersections
         intersectionPoints.addAll(lineA.intersections(lineB));
       }
     }
+    if (intersectionPoints.isEmpty && (polygonA.isSolid || polygonB.isSolid)) {
+      final outerShape = polygonA.containsPoint(polygonB.globalVertices().first)
+          ? polygonA
+          : (polygonB.containsPoint(polygonA.globalVertices().first)
+              ? polygonB
+              : null);
+      if (outerShape != null && outerShape.isSolid) {
+        final innerShape = outerShape == polygonA ? polygonB : polygonA;
+        return {innerShape.absoluteCenter};
+      }
+    }
     return intersectionPoints;
   }
 }
@@ -68,6 +79,15 @@ class CirclePolygonIntersections
     for (final line in possibleVertices) {
       intersectionPoints.addAll(circle.lineSegmentIntersections(line));
     }
+    if (intersectionPoints.isEmpty && (circle.isSolid || polygon.isSolid)) {
+      final outerShape = circle.containsPoint(polygon.globalVertices().first)
+          ? circle
+          : (polygon.containsPoint(circle.absoluteCenter) ? polygon : null);
+      if (outerShape != null && outerShape.isSolid) {
+        final innerShape = outerShape == circle ? polygon : circle;
+        return {innerShape.absoluteCenter};
+      }
+    }
     return intersectionPoints;
   }
 }
@@ -76,7 +96,9 @@ class CircleCircleIntersections
     extends Intersections<CircleComponent, CircleComponent> {
   @override
   Set<Vector2> intersect(CircleComponent shapeA, CircleComponent shapeB) {
-    final distance = shapeA.absoluteCenter.distanceTo(shapeB.absoluteCenter);
+    final centerA = shapeA.absoluteCenter;
+    final centerB = shapeB.absoluteCenter;
+    final distance = centerA.distanceTo(centerB);
     final radiusA = shapeA.radius;
     final radiusB = shapeB.radius;
     if (distance > radiusA + radiusB) {
@@ -84,9 +106,15 @@ class CircleCircleIntersections
       // return the empty set.
       return {};
     } else if (distance < (radiusA - radiusB).abs()) {
-      // Since one circle is contained within the other there can't be any
-      // intersections.
-      return {};
+      // When one circle is contained within the other there is only a collision
+      // if the outer circle isn't hollow.
+      final outerShape = radiusA > radiusB ? shapeA : shapeB;
+      if (outerShape.isSolid) {
+        final center = outerShape == shapeA ? centerB : centerA;
+        return {center};
+      } else {
+        return {};
+      }
     } else if (distance == 0 && radiusA == radiusB) {
       // The circles are identical and on top of each other, so there are an
       // infinite number of solutions. Since it is problematic to return a

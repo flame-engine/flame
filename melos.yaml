@@ -3,18 +3,17 @@ repository: https://github.com/flame-engine/flame
 
 packages:
   - packages/**
-  - examples/**
+  - examples/
+  - examples/games/**
   - tutorials/**
   - doc/**
 
 command:
   version:
-    # Generate commit links in package changelogs.
-    linkToCommits: true
     # Only allow versioning to happen on main branch.
     branch: main
-    # Additionally build a changelog at the root of the workspace.
-    workspaceChangelog: true
+    # Generates a link to a prefilled GitHub release creation page.
+    releaseUrl: true
 
 scripts:
   lint:all:
@@ -28,22 +27,58 @@ scripts:
     description: Run `flutter analyze` for all packages.
 
   format:
-    run: melos exec flutter format . --fix
-    description: Run `flutter format` for all packages.
+    run: melos exec dart format . --fix
+    description: Run `dart format` for all packages.
 
   format-check:
-    run: melos exec flutter format . --set-exit-if-changed
-    description: Run `flutter format` checks for all packages.
+    run: melos exec dart format . --set-exit-if-changed
+    description: Run `dart format` checks for all packages.
+
+  markdown-check:
+    run: markdownlint . --ignore-path .markdownlintignore --config .markdownlint.yaml
+    description: Runs the markdown linting check.
+
+  markdown-fix:
+    run: markdownlint . --fix --ignore-path .markdownlintignore --config .markdownlint.yaml
+    description: Fixes the markdown linting errors.
 
   dartdoc:
     run: melos exec flutter pub run dartdoc
     description: Run dartdoc checks for all packages.
 
+  doc-setup:
+    run: |
+      echo '\033[1;32mChecking python version:\033[m' &&
+      python --version &&
+      (python -c 'import sys; sys.exit(0 if sys.version_info>=(3,8) else 2)' ||
+       (echo '\033[1;31mError: Python 3.8+ is required\033[m' && false)) &&
+      echo '\n\033[1;32mInstalling required python modules:\033[m' &&
+      python -m pip install -r "$MELOS_ROOT_PATH/doc/_sphinx/requirements.txt" &&
+      echo '\n\033[1;32mInstalling dartdoc_json:\033[m' &&
+      dart pub global activate dartdoc_json &&
+      echo '\n\033[1;32mDone.\033[m'
+    description: Prepares the environment for documentation development.
+
+  doc-build:
+    run: cd "$MELOS_ROOT_PATH/doc/_sphinx" && make html
+    description: Create the sphinx html docs.
+
+  doc-serve:
+    run: cd "$MELOS_ROOT_PATH/doc/_sphinx" && make livehtml
+    description: Recompiles the docs enerytime there is a change in them and opens your browser.
+
+  doc-clean:
+    run: cd "$MELOS_ROOT_PATH/doc/_sphinx" && make clean
+    description: Removes all Sphinx's cached generated files.
+
+  doc-linkcheck:
+    run: cd "$MELOS_ROOT_PATH/doc/_sphinx" && make linkcheck
+    description: Checks whether there are any broken links in the docs.
+
   test:select:
     run: melos exec -- flutter test
-    select-package:
-      dir-exists:
-        - test
+    packageFilters:
+      dirExists: test
     description: Run `flutter test` for selected packages.
 
   test:
@@ -54,12 +89,12 @@ scripts:
     run: |
       melos exec -- flutter test --coverage &&
       melos exec -- genhtml coverage/lcov.info --output-directory=coverage/
-    select-package:
-      dir-exists: test
+    packageFilters:
+      dirExists: test
     description: Generate coverage for the selected package.
 
   update-goldens:
     run: melos exec -- flutter test --update-goldens
-    select-package:
-      dir-exists: test
+    packageFilters:
+      dirExists: test
     description: Re-generate all golden test files
