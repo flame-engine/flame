@@ -27,7 +27,7 @@ class RenderGameWidget extends LeafRenderObjectWidget {
     renderObject
       ..game = game
       ..buildContext = context
-      .._isRepaintBoundary = addRepaintBoundary;
+      ..isRepaintBoundary = addRepaintBoundary;
   }
 }
 
