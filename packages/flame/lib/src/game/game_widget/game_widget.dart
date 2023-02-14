@@ -71,6 +71,11 @@ class GameWidget<T extends Game> extends StatefulWidget {
   final MouseCursor? mouseCursor;
   final List<String>? initialActiveOverlays;
 
+  /// Whether the game should assume the behavior of a [RepaintBoundary].
+  ///
+  /// Defaults to `true`.
+  final bool addRepaintBoundary;
+
   /// Renders a [game] in a flutter widget tree.
   ///
   /// Ex:
@@ -129,6 +134,7 @@ class GameWidget<T extends Game> extends StatefulWidget {
     this.focusNode,
     this.autofocus = true,
     this.mouseCursor,
+    this.addRepaintBoundary = true,
   }) : gameFactory = null {
     _initializeGame(game!);
   }
@@ -165,6 +171,7 @@ class GameWidget<T extends Game> extends StatefulWidget {
     this.focusNode,
     this.autofocus = true,
     this.mouseCursor,
+    this.addRepaintBoundary = true,
   }) : game = null;
 
   /// Renders a [game] in a flutter widget tree alongside widgets overlays.
@@ -314,6 +321,7 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
     return _protectedBuild(() {
       Widget? internalGameWidget = RenderGameWidget(
         game: currentGame,
+        addRepaintBoundary: widget.addRepaintBoundary,
       );
 
       assert(
