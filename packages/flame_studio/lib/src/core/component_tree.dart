@@ -19,10 +19,7 @@ class ComponentTreeNode {
     return ComponentTreeNode._(
       component,
       component.hasChildren
-          ? [
-              for (final child in component.children)
-                ComponentTreeNode.fromComponent(child)
-            ]
+          ? component.children.map(ComponentTreeNode.fromComponent).toList()
           : null,
     );
   }
