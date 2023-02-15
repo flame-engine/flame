@@ -125,16 +125,18 @@ class GameWidget<T extends Game> extends StatefulWidget {
   /// ```
   /// void main() {
   ///   runApp(
-  ///     game: MyGame(),
-  ///     overlayBuilderMap: {
-  ///       'PauseMenu': (context, game) {
-  ///         return Container(
-  ///           color: const Color(0xFF000000),
-  ///           child: Text('A pause menu'),
-  ///         );
+  ///     GameWidget(
+  ///       game: MyGame(),
+  ///       overlayBuilderMap: {
+  ///         'PauseMenu': (context, game) {
+  ///           return Container(
+  ///             color: const Color(0xFF000000),
+  ///             child: Text('A pause menu'),
+  ///           );
+  ///         },
   ///       },
-  ///     },
-  ///   )
+  ///     ),
+  ///   );
   /// }
   /// ```
   final Map<String, OverlayWidgetBuilder<T>>? overlayBuilderMap;
