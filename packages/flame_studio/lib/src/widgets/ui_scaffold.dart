@@ -25,7 +25,7 @@ class UiScaffold extends ConsumerWidget {
               20,
               20,
             ),
-            child: gameApp,
+            child: ClipRect(child: gameApp),
           ),
           Container(
             padding: EdgeInsets.fromLTRB(0, toolbarHeight, 0, 0),

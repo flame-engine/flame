@@ -66,6 +66,10 @@ class ComponentTreeObserver extends StateNotifier<ComponentTreeState> {
   static Duration refreshFrequency = const Duration(milliseconds: 300);
 
   void _refresh() {
+    if (!mounted) {
+      // The Future.delayed may complete after the observer was disposed.
+      return;
+    }
     final newState = ComponentTreeState(state.root!.component);
     if (newState != state) {
       state = newState;
