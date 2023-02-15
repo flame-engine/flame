@@ -37,6 +37,11 @@ import 'package:flutter/widgets.dart';
 /// - [errorBuilder] which will be shows if the game throws an error;
 /// - [backgroundBuilder] to draw some decoration behind the game;
 /// - [overlayBuilderMap] to draw one or more widgets on top of the game.
+///
+/// It should be noted that `GameWidget` does not clip the content of its
+/// canvas, which means the game can potentially draw outside of its boundaries
+/// (not always, depending on which camera is used). If this is not desired,
+/// then consider wrapping the widget in Flutter's [ClipRect].
 class GameWidget<T extends Game> extends StatefulWidget {
   /// Renders the provided [game] instance.
   GameWidget({
