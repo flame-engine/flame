@@ -140,6 +140,7 @@ class _ExpanderIcon extends StatelessWidget {
     this.isFirst = false,
     this.isLast = false,
   });
+
   final bool hasChildren;
   final bool isExpanded;
   final bool isFirst;
