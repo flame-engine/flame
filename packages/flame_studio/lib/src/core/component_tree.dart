@@ -2,7 +2,6 @@ import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame_studio/src/core/game_controller.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final componentTreeProvider =
@@ -60,22 +59,17 @@ class ComponentTreeObserver extends StateNotifier<ComponentTreeState> {
   ComponentTreeObserver(Component? rootComponent)
       : super(ComponentTreeState(rootComponent)) {
     if (rootComponent != null) {
-      _refresh(Duration.zero);
+      _refresh();
     }
   }
 
   static Duration refreshFrequency = const Duration(milliseconds: 300);
-  Duration _timeSinceLastRefresh = Duration.zero;
 
-  void _refresh(Duration timeDelta) {
-    _timeSinceLastRefresh += timeDelta;
-    if (_timeSinceLastRefresh >= refreshFrequency) {
-      final newState = ComponentTreeState(state.root!.component);
-      if (newState != state) {
-        state = newState;
-      }
-      _timeSinceLastRefresh = Duration.zero;
+  void _refresh() {
+    final newState = ComponentTreeState(state.root!.component);
+    if (newState != state) {
+      state = newState;
     }
-    WidgetsBinding.instance.addPostFrameCallback(_refresh);
+    Future.delayed(refreshFrequency, _refresh);
   }
 }
