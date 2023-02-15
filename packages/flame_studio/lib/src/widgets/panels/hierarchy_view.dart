@@ -31,30 +31,75 @@ class HierarchyViewState extends ConsumerState<ConsumerStatefulWidget> {
   }
 
   void _buildList(ComponentTreeNode node, int depth, List<Widget> out) {
-    final isSelected = selectedComponent == node.component;
+    out.add(_ListItem(this, node, depth, out.isEmpty));
     final isExpanded = expandedComponents.contains(node.component);
+    if (isExpanded && node.hasChildren) {
+      for (final childNode in node.children!) {
+        _buildList(childNode, depth + 1, out);
+      }
+      out.add(_ClosingBrace(depth));
+    }
+  }
+
+  /// Used by the expander icons in the gutter: the component expands/collapses
+  /// without affecting the selection state.
+  void toggle(Component component) {
+    setState(() {
+      if (expandedComponents.contains(component)) {
+        expandedComponents.remove(component);
+      } else {
+        expandedComponents.add(component);
+      }
+    });
+  }
+
+  void toggleOrSelect(Component component) {
+    final isExpanded = expandedComponents.contains(component);
+    final isSelected = selectedComponent == component;
+    setState(() {
+      if (isExpanded && isSelected) {
+        expandedComponents.remove(component);
+      } else {
+        expandedComponents.add(component);
+      }
+      selectedComponent = component;
+    });
+  }
+}
+
+class _ListItem extends StatelessWidget {
+  const _ListItem(this.state, this.node, this.indent, this.isFirst);
+
+  final HierarchyViewState state;
+  final ComponentTreeNode node;
+  final int indent;
+  final bool isFirst;
+
+  @override
+  Widget build(BuildContext context) {
+    final isSelected = state.selectedComponent == node.component;
+    final isExpanded = state.expandedComponents.contains(node.component);
     final hasChildren = node.hasChildren;
 
     Widget expanderIcon = _ExpanderIcon(
       hasChildren: hasChildren,
       isExpanded: isExpanded,
-      isFirst: out.isEmpty,
-      isLast: depth == 0 && !(isExpanded && hasChildren),
+      isFirst: isFirst,
+      isLast: indent == 0 && !(isExpanded && hasChildren),
     );
     if (hasChildren) {
       expanderIcon = MouseRegion(
         cursor: SystemMouseCursors.click,
         child: GestureDetector(
-          onTap: () => _toggle(node.component),
+          onTap: () => state.toggle(node.component),
           child: expanderIcon,
         ),
       );
     }
-    final indent = SizedBox(width: 15.0 * depth);
     final componentName = MouseRegion(
       cursor: SystemMouseCursors.click,
       child: GestureDetector(
-        onTap: () => _toggleOrSelect(node.component),
+        onTap: () => state.toggleOrSelect(node.component),
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
           decoration: BoxDecoration(
@@ -78,58 +123,30 @@ class HierarchyViewState extends ConsumerState<ConsumerStatefulWidget> {
       ),
     );
 
-    out.add(
-      Row(
-        children: [
-          expanderIcon,
-          indent,
-          componentName,
-          punctuation,
-        ],
-      ),
+    return Row(
+      children: [
+        expanderIcon,
+        SizedBox(width: 15.0 * indent),
+        componentName,
+        punctuation,
+      ],
     );
-    if (isExpanded && hasChildren) {
-      for (final childNode in node.children!) {
-        _buildList(childNode, depth + 1, out);
-      }
-      out.add(
-        Row(
-          children: [
-            _ExpanderIcon(hasChildren: false, isLast: depth == 0),
-            SizedBox(width: 15.0 * depth + 5.0),
-            const Text(
-              '}',
-              style: TextStyle(color: Color(0x66f5d49a)),
-            ),
-          ],
-        ),
-      );
-    }
   }
+}
 
-  /// Used by the expander icons in the gutter: the component expands/collapses
-  /// without affecting the selection state.
-  void _toggle(Component component) {
-    setState(() {
-      if (expandedComponents.contains(component)) {
-        expandedComponents.remove(component);
-      } else {
-        expandedComponents.add(component);
-      }
-    });
-  }
+class _ClosingBrace extends StatelessWidget {
+  const _ClosingBrace(this.indent);
+  final int indent;
 
-  void _toggleOrSelect(Component component) {
-    final isExpanded = expandedComponents.contains(component);
-    final isSelected = selectedComponent == component;
-    setState(() {
-      if (isExpanded && isSelected) {
-        expandedComponents.remove(component);
-      } else {
-        expandedComponents.add(component);
-      }
-      selectedComponent = component;
-    });
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        _ExpanderIcon(hasChildren: false, isLast: indent == 0),
+        SizedBox(width: 15.0 * indent + 5.0),
+        const Text('}', style: TextStyle(color: Color(0x66f5d49a))),
+      ],
+    );
   }
 }
 
