@@ -8,117 +8,43 @@ import 'package:flame/src/game/game_widget/gesture_detector_builder.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
-typedef GameLoadingWidgetBuilder = Widget Function(
-  BuildContext,
-);
-
-typedef GameErrorWidgetBuilder = Widget Function(
-  BuildContext,
-  Object error,
-);
-
-typedef OverlayWidgetBuilder<T extends Game> = Widget Function(
-  BuildContext context,
-  T game,
-);
-
-typedef GameFactory<T extends Game> = T Function();
-
-/// A [StatefulWidget] that is in charge of attaching a [Game] instance into the
-/// Flutter tree.
+/// The **GameWidget** is a Flutter widget which is used to insert a [Game]
+/// instance into the Flutter widget tree.
+///
+/// The `GameWidget` is sufficiently feature-rich to run as the root of your
+/// Flutter application. Thus, the simplest way to use `GameWidget` is like
+/// this:
+/// ```dart
+/// void main() {
+///   runApp(
+///     GameWidget(game: MyGame()),
+///   );
+/// }
+/// ```
+///
+/// At the same time, `GameWidget` is a regular Flutter widget, and can be
+/// inserted arbitrarily deep into the widget tree, including the possibility
+/// of having multiple `GameWidget`s within a single app.
+///
+/// The layout behavior of this widget is that it will expand to fill all
+/// available space. Thus, when used as a root widget it will make the app
+/// full-screen. Inside any other layout widget it will take as much space as
+/// possible.
+///
+/// In addition to hosting a [Game] instance, the `GameWidget` also provides
+/// some structural support, with the following features:
+/// - [loadingBuilder] to display something while the game is loading;
+/// - [errorBuilder] which will be shows if the game throws an error;
+/// - [backgroundBuilder] to draw some decoration behind the game;
+/// - [overlayBuilderMap] to draw one or more widgets on top of the game.
+///
+/// It should be noted that `GameWidget` does not clip the content of its
+/// canvas, which means the game can potentially draw outside of its boundaries
+/// (not always, depending on which camera is used). If this is not desired,
+/// then consider wrapping the widget in Flutter's [ClipRect].
 class GameWidget<T extends Game> extends StatefulWidget {
-  /// The game instance which this widget will render, if the normal constructor
-  /// is used.
-  /// If the [GameWidget.controlled] constructor is used, this will always be
-  /// `null`.
-  final T? game;
-
-  /// A function that creates a [Game] that this widget will render.
-  final GameFactory<T>? gameFactory;
-
-  /// The text direction to be used in text elements in a game.
-  final TextDirection? textDirection;
-
-  /// Builder to provide a widget tree to be built while the Game's [Future]
-  /// provided via `Game.onLoad` and `Game.onMount` is not resolved.
-  /// By default this is an empty Container().
-  final GameLoadingWidgetBuilder? loadingBuilder;
-
-  /// If set, errors during the onLoad method will not be thrown
-  /// but instead this widget will be shown. If not provided, errors are
-  /// propagated up.
-  final GameErrorWidgetBuilder? errorBuilder;
-
-  /// Builder to provide a widget tree to be built between the game elements and
-  /// the background color provided via [Game.backgroundColor].
-  final WidgetBuilder? backgroundBuilder;
-
-  /// A map to show widgets overlay.
-  ///
-  /// See also:
-  /// - [GameWidget]
-  /// - [Game.overlays]
-  final Map<String, OverlayWidgetBuilder<T>>? overlayBuilderMap;
-
-  /// The [FocusNode] to control the games focus to receive event inputs.
-  /// If omitted, defaults to an internally controlled focus node.
-  final FocusNode? focusNode;
-
-  /// Whether the [focusNode] requests focus once the game is mounted.
-  /// Defaults to true.
-  final bool autofocus;
-
-  final MouseCursor? mouseCursor;
-  final List<String>? initialActiveOverlays;
-
-  /// Renders a [game] in a flutter widget tree.
-  ///
-  /// Ex:
-  /// ```
-  /// // Inside a State...
-  /// late MyGameClass game;
-  ///
-  /// @override
-  /// void initState() {
-  ///   super.initState();
-  ///   game = MyGameClass();
-  /// }
-  /// ...
-  /// Widget build(BuildContext  context) {
-  ///   return GameWidget(
-  ///     game: game,
-  ///   )
-  /// }
-  /// ...
-  /// ```
-  ///
-  /// It is also possible to render layers of widgets over the game surface with
-  /// widget subtrees.
-  ///
-  /// To do that a [overlayBuilderMap] should be provided. The visibility of
-  /// these overlays are controlled by [Game.overlays] property
-  ///
-  /// Ex:
-  /// ```
-  /// ...
-  ///
-  /// final game = MyGame();
-  ///
-  /// Widget build(BuildContext  context) {
-  ///   return GameWidget(
-  ///     game: game,
-  ///     overlayBuilderMap: {
-  ///       'PauseMenu': (ctx, game) {
-  ///         return Text('A pause menu');
-  ///       },
-  ///     },
-  ///   )
-  /// }
-  /// ...
-  /// game.overlays.add('PauseMenu');
-  /// ```
+  /// Renders the provided [game] instance.
   GameWidget({
-    super.key,
     required T this.game,
     this.textDirection,
     this.loadingBuilder,
@@ -129,32 +55,32 @@ class GameWidget<T extends Game> extends StatefulWidget {
     this.focusNode,
     this.autofocus = true,
     this.mouseCursor,
+    this.addRepaintBoundary = true,
+    super.key,
   }) : gameFactory = null {
     _initializeGame(game!);
   }
 
-  /// Creates a new game instance with the [gameFactory] and then
-  /// renders that game in the Flutter widget tree.
+  /// A `GameWidget` which will create and own a `Game` instance, using the
+  /// provided [gameFactory].
   ///
-  /// Unlike the default constructor [GameWidget.new], this creates a
-  /// [GameWidget] that controls the creation and disposal of the game instance.
-  ///
-  /// This removes the necessity of creating the game class outside of the
-  /// widget or to wrap the [GameWidget] inside of a [StatefulWidget], to keep
-  /// the state of the game.
-  ///
-  /// Example:
-  /// ```
-  /// ...
-  /// Widget build(BuildContext  context) {
-  ///   return GameWidget.controlled(
-  ///     gameFactory: MyGameClass.new,
-  ///   )
+  /// This constructor can be useful when you want to put `GameWidget` into
+  /// another widget, but would like to avoid the need to store the game's
+  /// instance yourself. For example:
+  /// ```dart
+  /// class MyWidget extends StatelessWidget {
+  ///   @override
+  ///   Widget build(BuildContext context) {
+  ///     return Container(
+  ///       padding: EdgeInsets.all(20),
+  ///       child: GameWidget.controlled(
+  ///         gameFactory: MyGame.new,
+  ///       ),
+  ///     );
+  ///   }
   /// }
-  /// ...
   /// ```
   const GameWidget.controlled({
-    super.key,
     required GameFactory<T> this.gameFactory,
     this.textDirection,
     this.loadingBuilder,
@@ -165,7 +91,75 @@ class GameWidget<T extends Game> extends StatefulWidget {
     this.focusNode,
     this.autofocus = true,
     this.mouseCursor,
+    this.addRepaintBoundary = true,
+    super.key,
   }) : game = null;
+
+  /// The game instance which this widget will render, if it was provided with
+  /// the default constructor. Otherwise, if the [GameWidget.controlled]
+  /// constructor was used, this will always be `null`.
+  final T? game;
+
+  /// A function that creates a [Game] that this widget will render.
+  final GameFactory<T>? gameFactory;
+
+  /// The text direction to be used in text elements in a game.
+  final TextDirection? textDirection;
+
+  /// Builder to provide a widget which will be displayed while the game is
+  /// loading. By default this is an empty `Container`.
+  final GameLoadingWidgetBuilder? loadingBuilder;
+
+  /// If set, errors during the game loading will be caught and this widget
+  /// will be shown. If not provided, errors are propagated normally.
+  final GameErrorWidgetBuilder? errorBuilder;
+
+  /// Builder to provide a widget tree to be built between the game elements and
+  /// the background color provided via [Game.backgroundColor].
+  final WidgetBuilder? backgroundBuilder;
+
+  /// A collection of widgets that can be displayed over the game's surface.
+  /// These widgets can be turned on-and-off dynamically from within the game
+  /// via the [Game.overlays] property.
+  ///
+  /// ```
+  /// void main() {
+  ///   runApp(
+  ///     GameWidget(
+  ///       game: MyGame(),
+  ///       overlayBuilderMap: {
+  ///         'PauseMenu': (context, game) {
+  ///           return Container(
+  ///             color: const Color(0xFF000000),
+  ///             child: Text('A pause menu'),
+  ///           );
+  ///         },
+  ///       },
+  ///     ),
+  ///   );
+  /// }
+  /// ```
+  final Map<String, OverlayWidgetBuilder<T>>? overlayBuilderMap;
+
+  /// The list of overlays that will be shown when the game starts (but after
+  /// it was loaded).
+  final List<String>? initialActiveOverlays;
+
+  /// The [FocusNode] to control the games focus to receive event inputs.
+  /// If omitted, defaults to an internally controlled focus node.
+  final FocusNode? focusNode;
+
+  /// Whether the [focusNode] requests focus once the game is mounted.
+  /// Defaults to true.
+  final bool autofocus;
+
+  /// The shape of the mouse cursor when it is hovering over the game canvas.
+  /// This property can be changed dynamically via [Game.mouseCursor].
+  final MouseCursor? mouseCursor;
+
+  /// Whether the game should assume the behavior of a [RepaintBoundary],
+  /// defaults to `true`.
+  final bool addRepaintBoundary;
 
   /// Renders a [game] in a flutter widget tree alongside widgets overlays.
   ///
@@ -314,6 +308,7 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
     return _protectedBuild(() {
       Widget? internalGameWidget = RenderGameWidget(
         game: currentGame,
+        addRepaintBoundary: widget.addRepaintBoundary,
       );
 
       assert(
@@ -412,3 +407,14 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
     );
   }
 }
+
+typedef GameLoadingWidgetBuilder = Widget Function(BuildContext);
+
+typedef GameErrorWidgetBuilder = Widget Function(BuildContext, Object error);
+
+typedef OverlayWidgetBuilder<T extends Game> = Widget Function(
+  BuildContext context,
+  T game,
+);
+
+typedef GameFactory<T extends Game> = T Function();

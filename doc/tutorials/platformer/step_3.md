@@ -363,7 +363,7 @@ All components in our game will need to move at the same speed, so to do this, o
 double objectSpeed = 0.0;
 ```
 
-So to implement that movement, declare a variable at the top of the `EmberQuestGame` class and make
+So to implement that movement, declare a variable at the top of the `PlatformBlock` class and make
 your `update` method look like this:
 
 ```dart

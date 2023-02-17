@@ -101,7 +101,7 @@ void main() {
           await tester.pumpWidget(
             Builder(
               builder: (BuildContext context) {
-                renderBox = GameRenderBox(game, context);
+                renderBox = GameRenderBox(game, context, true);
                 return GameWidget(game: game);
               },
             ),
