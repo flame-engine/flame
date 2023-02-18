@@ -6,7 +6,7 @@ import 'package:flame/components.dart';
 import 'package:flutter/rendering.dart';
 import 'package:rive/rive.dart';
 
-import 'package:rive/math.dart';
+import 'package:rive/src';
 
 class RiveComponent extends PositionComponent {
   final Artboard artboard;
