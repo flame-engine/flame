@@ -1,4 +1,5 @@
 import 'package:flame/components.dart';
+import 'package:flame/effects.dart';
 import 'package:flame/game.dart';
 import 'package:flame/layout.dart';
 
@@ -15,7 +16,45 @@ class AlignComponentExample extends FlameGame {
   void onLoad() {
     addAll([
       AlignComponent(
-        child: CircleComponent(radius: 40),
+        child: CircleComponent(radius: 40)
+          ..add(
+            SizeEffect.by(
+              Vector2.all(25),
+              EffectController(
+                infinite: true,
+                duration: 0.75,
+                reverseDuration: 0.5,
+              ),
+            ),
+          )
+          ..add(
+            AlignComponent(
+              alignment: Anchor.topCenter,
+              child: CircleComponent(radius: 10, anchor: Anchor.bottomCenter),
+              keepChildAnchor: true,
+            ),
+          )
+          ..add(
+            AlignComponent(
+              alignment: Anchor.bottomCenter,
+              child: CircleComponent(radius: 10, anchor: Anchor.topCenter),
+              keepChildAnchor: true,
+            ),
+          )
+          ..add(
+            AlignComponent(
+              alignment: Anchor.centerLeft,
+              child: CircleComponent(radius: 10, anchor: Anchor.centerRight),
+              keepChildAnchor: true,
+            ),
+          )
+          ..add(
+            AlignComponent(
+              alignment: Anchor.centerRight,
+              child: CircleComponent(radius: 10, anchor: Anchor.centerLeft),
+              keepChildAnchor: true,
+            ),
+          ),
         alignment: Anchor.center,
       ),
       AlignComponent(
