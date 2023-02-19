@@ -16,8 +16,9 @@ class AlignComponentExample extends FlameGame {
   void onLoad() {
     addAll([
       AlignComponent(
-        child: CircleComponent(radius: 40)
-          ..add(
+        child: CircleComponent(
+          radius: 40,
+          children: [
             SizeEffect.by(
               Vector2.all(25),
               EffectController(
@@ -26,35 +27,28 @@ class AlignComponentExample extends FlameGame {
                 reverseDuration: 0.5,
               ),
             ),
-          )
-          ..add(
             AlignComponent(
               alignment: Anchor.topCenter,
               child: CircleComponent(radius: 10, anchor: Anchor.bottomCenter),
               keepChildAnchor: true,
             ),
-          )
-          ..add(
             AlignComponent(
               alignment: Anchor.bottomCenter,
               child: CircleComponent(radius: 10, anchor: Anchor.topCenter),
               keepChildAnchor: true,
             ),
-          )
-          ..add(
             AlignComponent(
               alignment: Anchor.centerLeft,
               child: CircleComponent(radius: 10, anchor: Anchor.centerRight),
               keepChildAnchor: true,
             ),
-          )
-          ..add(
             AlignComponent(
               alignment: Anchor.centerRight,
               child: CircleComponent(radius: 10, anchor: Anchor.centerLeft),
               keepChildAnchor: true,
             ),
-          ),
+          ],
+        ),
         alignment: Anchor.center,
       ),
       AlignComponent(
