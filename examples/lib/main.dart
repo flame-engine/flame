@@ -11,6 +11,7 @@ import 'package:examples/stories/effects/effects.dart';
 import 'package:examples/stories/experimental/experimental.dart';
 import 'package:examples/stories/games/games.dart';
 import 'package:examples/stories/input/input.dart';
+import 'package:examples/stories/layout/layout.dart';
 import 'package:examples/stories/parallax/parallax.dart';
 import 'package:examples/stories/rendering/rendering.dart';
 import 'package:examples/stories/sprites/sprites.dart';
@@ -39,6 +40,7 @@ void main() {
   addEffectsStories(dashbook);
   addExperimentalStories(dashbook);
   addInputStories(dashbook);
+  addLayoutStories(dashbook);
   addParallaxStories(dashbook);
   addRenderingStories(dashbook);
   addTiledStories(dashbook);

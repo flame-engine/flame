@@ -36,9 +36,10 @@ class GameChangeTimer extends TimerComponent
   @override
   void onTick() {
     final child = gameRef.draggablesGame.square;
-    final newParent = child.parent == gameRef.draggablesGame
-        ? gameRef.composedGame.parentSquare
-        : gameRef.draggablesGame;
-    child.changeParent(newParent);
+    if (child.parent == gameRef.draggablesGame) {
+      child.parent = gameRef.composedGame.parentSquare;
+    } else {
+      child.parent = gameRef.draggablesGame;
+    }
   }
 }

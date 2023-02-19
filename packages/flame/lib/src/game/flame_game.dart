@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flame/components.dart';
 import 'package:flame/src/components/core/component_tree_root.dart';
+import 'package:flame/src/effects/provider_interfaces.dart';
 import 'package:flame/src/game/camera/camera.dart';
 import 'package:flame/src/game/camera/camera_wrapper.dart';
 import 'package:flame/src/game/game.dart';
@@ -15,7 +16,7 @@ import 'package:meta/meta.dart';
 ///
 /// This is the recommended base class to use for most games made with Flame.
 /// It is based on the Flame Component System (also known as FCS).
-class FlameGame extends ComponentTreeRoot with Game {
+class FlameGame extends ComponentTreeRoot with Game implements SizeProvider {
   FlameGame({
     super.children,
     Camera? camera,
@@ -111,6 +112,7 @@ class FlameGame extends ComponentTreeRoot with Game {
     // there is no way to explicitly call the [Component]'s implementation,
     // we propagate the event to [FlameGame]'s children manually.
     handleResize(canvasSize);
+    children.forEach((child) => child.onParentResize(canvasSize));
   }
 
   /// Ensure that all pending tree operations finish.
@@ -181,5 +183,10 @@ class FlameGame extends ComponentTreeRoot with Game {
         callback(notifier);
       }
     }
+  }
+
+  @override
+  set size(Vector2 value) {
+    throw UnsupportedError('The size of FlameGame cannot be set explicitly');
   }
 }

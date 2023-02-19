@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:collection/collection.dart';
+import 'package:flame/effects.dart';
 import 'package:flame/src/cache/value_cache.dart';
 import 'package:flame/src/components/core/component_set.dart';
 import 'package:flame/src/components/core/component_tree_root.dart';
@@ -474,6 +475,14 @@ class Component {
   /// [onMount] call before.
   void onRemove() {}
 
+  /// Called whenever the parent of this component changes size; and also once
+  /// before [onMount].
+  ///
+  /// The component may change its own size or perform layout in response to
+  /// this call. If the component changes size, then it should call
+  /// [onParentResize] for all its children.
+  void onParentResize(Vector2 maxSize) {}
+
   /// This method is called periodically by the game engine to request that your
   /// component updates itself.
   ///
@@ -827,6 +836,9 @@ class Component {
     assert(isLoaded && !isLoading);
     _setMountingBit();
     onGameResize(_parent!.findGame()!.canvasSize);
+    if (_parent is SizeProvider) {
+      onParentResize((_parent! as SizeProvider).size);
+    }
     if (isRemoved) {
       _clearRemovedBit();
     } else if (isRemoving) {
