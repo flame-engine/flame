@@ -5,7 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:vector_math/vector_math_64.dart';
 
 /// **AlignComponent** is a layout component that positions its child within
-/// itself using relative placement. It is similar to flutter's [Align] widget.
+/// itself using relative placement. It is similar to Flutter's [Align] widget.
 ///
 /// The component requires a single [child], which will be the target of this
 /// component's alignment. Of course, other children can be added to this
