@@ -56,23 +56,34 @@ class AlignComponent extends PositionComponent {
   /// be set to the [alignment], unless [keepChildAnchor] parameter is true.
   AlignComponent({
     required this.child,
-    required this.alignment,
+    required Anchor alignment,
     this.widthFactor,
     this.heightFactor,
     this.keepChildAnchor = false,
   }) {
+    this.alignment = alignment;
     add(child);
-    if (!keepChildAnchor) {
-      child.anchor = alignment;
-    }
   }
+
+  late Anchor _alignment;
 
   /// The component that will be positioned by this component. The [child] will
   /// be automatically mounted to the current component.
   final PositionComponent child;
 
   /// How the [child] will be positioned within the current component.
-  final Anchor alignment;
+  ///
+  /// Note: unlike Flutter's [Alignment], the top-left corner of the component
+  /// has relative coordinates `(0, 0)`, while the bottom-right corner has
+  /// coordinates `(1, 1)`.
+  Anchor get alignment => _alignment;
+  set alignment(Anchor value) {
+    _alignment = value;
+    if (!keepChildAnchor) {
+      child.anchor = value;
+    }
+    child.position = Vector2(size.x * alignment.x, size.y * alignment.y);
+  }
 
   /// If `null`, then the component's width will be equal to the width of the
   /// parent. Otherwise, the width will be equal to the child's width multiplied
@@ -94,13 +105,6 @@ class AlignComponent extends PositionComponent {
     throw UnsupportedError('The size of AlignComponent cannot be set directly');
   }
 
-  @override
-  set anchor(Anchor value) {
-    super.anchor = value;
-    if (!keepChildAnchor) {
-      child.anchor = value;
-    }
-  }
 
   @override
   void onMount() {
