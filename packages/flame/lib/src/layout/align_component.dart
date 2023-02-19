@@ -105,7 +105,6 @@ class AlignComponent extends PositionComponent {
     throw UnsupportedError('The size of AlignComponent cannot be set directly');
   }
 
-
   @override
   void onMount() {
     assert(
@@ -117,8 +116,8 @@ class AlignComponent extends PositionComponent {
   @override
   void onParentResize(Vector2 maxSize) {
     super.size = Vector2(
-      widthFactor == null? maxSize.x : child.size.x * widthFactor!,
-      heightFactor == null? maxSize.y : child.size.y * heightFactor!,
+      widthFactor == null ? maxSize.x : child.size.x * widthFactor!,
+      heightFactor == null ? maxSize.y : child.size.y * heightFactor!,
     );
     child.position = Vector2(size.x * alignment.x, size.y * alignment.y);
   }
