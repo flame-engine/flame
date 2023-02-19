@@ -79,7 +79,7 @@ void main() {
         await game.ready();
 
         // Check if the current artboard has animation
-        expect(riveComponent.artboard.hasAnimations, isTrue);
+        expect(riveComponent.artboard.animations.isNotEmpty, isTrue);
         // Check if this artboard is attach to any RiveAnimationController
         expect(riveComponent.artboard.animationControllers.isEmpty, isTrue);
       });
@@ -94,7 +94,7 @@ void main() {
         await game.ready();
 
         // Check if this artboard has animation
-        expect(riveComponent.artboard.hasAnimations, isTrue);
+        expect(riveComponent.artboard.animations.isNotEmpty, isTrue);
         // Check if this artboard is attach to any RiveAnimationController
         expect(riveComponent.artboard.animationControllers.isEmpty, isFalse);
         // Check if the attach RiveAnimationController is active
