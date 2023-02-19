@@ -728,11 +728,17 @@ class Component {
   int get priority => _priority;
   int _priority;
   set priority(int newPriority) {
-    if (parent == null) {
-      _priority = newPriority;
-    } else {
-      parent!.children.changePriority(this, newPriority);
+    _priority = newPriority;
+    final game = findGame();
+    if (game != null && _parent != null) {
+      (game as FlameGame).enqueueRebalance(_parent!);
     }
+
+    // if (parent == null) {
+    //   _priority = newPriority;
+    // } else {
+    //   parent!.children.changePriority(this, newPriority);
+    // }
   }
 
   /// Usually this is not something that the user would want to call since the
