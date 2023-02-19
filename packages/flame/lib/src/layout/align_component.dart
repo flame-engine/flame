@@ -48,7 +48,7 @@ import 'package:vector_math/vector_math_64.dart';
 /// );
 /// ```
 class AlignComponent extends PositionComponent {
-  /// Creates component that keeps its [child] positioned according to the
+  /// Creates a component that keeps its [child] positioned according to the
   /// [alignment] within this component's bounding box.
   ///
   /// More precisely, the child will be placed at [alignment] relative position
