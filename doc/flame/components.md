@@ -98,7 +98,7 @@ class MyGame extends FlameGame {
 To update the priority of a component you have to set it to a new value, like
 `component.priority = 2`, and it will be updated in the current tick before the rendering stage.
 
-In the following example we first initialize the component with priority 1, and then when the 
+In the following example we first initialize the component with priority 1, and then when the
 user taps the component we change its priority to 2:
 
 ```dart
