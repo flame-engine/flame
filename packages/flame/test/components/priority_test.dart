@@ -249,9 +249,9 @@ class _SpyComponentSet extends ComponentSet {
   int callCount = 0;
 
   @override
-  void rebalanceAll() {
+  void reorder() {
     callCount++;
-    super.rebalanceAll();
+    super.reorder();
   }
 }
 
