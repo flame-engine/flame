@@ -75,14 +75,20 @@ class ComponentSet extends QueryableOrderedSet<Component> {
   @Deprecated('Will be removed in 1.8.0.')
   void updateComponentList() {}
 
-  @Deprecated('Will be made internal in 1.8.0.')
-  @override
-  void rebalanceAll() {
+  /// Sorts the components according to their `priority`s. This method is
+  /// invoked by the framework when it knows that the priorities of the
+  /// components in this set has changed.
+  @internal
+  void reorder() {
     final elements = toList();
     // bypass the wrapper because the components are already added
     super.clear();
     elements.forEach(super.add);
   }
+
+  @Deprecated('Will be removed in 1.8.0.')
+  @override
+  void rebalanceAll() => reorder();
 
   @Deprecated('Will be removed in 1.8.0.')
   @override
