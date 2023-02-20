@@ -1,27 +1,7 @@
 import 'package:flame/components.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:test/test.dart';
-
-class _PriorityComponent extends Component {
-  _PriorityComponent(int priority) : super(priority: priority);
-}
-
-class _ParentWithReorderSpy extends Component {
-  int callCount = 0;
-
-  _ParentWithReorderSpy(int priority) : super(priority: priority);
-
-  @override
-  void reorderChildren() {
-    callCount++;
-    super.reorderChildren();
-  }
-
-  void assertCalled(int n) {
-    expect(callCount, n);
-    callCount = 0;
-  }
-}
+// ignore_for_file: deprecated_member_use_from_same_package
 
 void main() {
   void componentsSorted(Iterable<Component> components) {
@@ -223,4 +203,31 @@ void main() {
       },
     );
   });
+}
+
+class _SpyComponentSet extends ComponentSet {
+  int callCount = 0;
+
+  @override
+  void rebalanceAll() {
+    callCount++;
+    super.rebalanceAll();
+  }
+}
+
+class _PriorityComponent extends Component {
+  _PriorityComponent(int priority) : super(priority: priority);
+}
+
+class _ParentWithReorderSpy extends Component {
+  _ParentWithReorderSpy(int priority) : super(priority: priority);
+
+  @override
+  ComponentSet createComponentSet() => _SpyComponentSet();
+
+  void assertCalled(int n) {
+    final componentSet = children as _SpyComponentSet;
+    expect(componentSet.callCount, n);
+    componentSet.callCount = 0;
+  }
 }

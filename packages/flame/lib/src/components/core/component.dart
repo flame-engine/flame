@@ -489,7 +489,6 @@ class Component {
   /// children according to their [priority] order, relative to the
   /// priority of the direct siblings, not the children or the ancestors.
   void updateTree(double dt) {
-    _children?.updateComponentList();
     update(dt);
     _children?.forEach((c) => c.updateTree(dt));
   }
@@ -728,28 +727,26 @@ class Component {
   int get priority => _priority;
   int _priority;
   set priority(int newPriority) {
-    _priority = newPriority;
-    final game = findGame();
-    if (game != null && _parent != null) {
-      (game as FlameGame).enqueueRebalance(_parent!);
+    if (_priority != newPriority) {
+      _priority = newPriority;
+      final game = findGame();
+      if (game != null && _parent != null) {
+        (game as FlameGame).enqueueRebalance(_parent!);
+      }
     }
-
-    // if (parent == null) {
-    //   _priority = newPriority;
-    // } else {
-    //   parent!.children.changePriority(this, newPriority);
-    // }
   }
 
   /// Usually this is not something that the user would want to call since the
   /// component list isn't re-ordered when it is called.
   /// See FlameGame.changePriority instead.
+  @Deprecated('Will be removed in 1.8.0. Use priority setter instead.')
   void changePriorityWithoutResorting(int priority) => _priority = priority;
 
   /// Call this if any of this component's children priorities have changed
   /// at runtime.
   ///
   /// This will call [ComponentSet.rebalanceAll] on the [children] ordered set.
+  @Deprecated('Will be removed in 1.8.0.')
   void reorderChildren() => _children?.rebalanceAll();
 
   //#endregion
