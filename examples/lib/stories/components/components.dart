@@ -64,7 +64,8 @@ void addComponentsStories(Dashbook dashbook) {
     ..add(
       'Component Notifier (with provider)',
       (_) => const ComponentsNotifierProviderExampleWidget(),
-      codeLink: baseLink('components/components_notifier_provider_example.dart'),
+      codeLink:
+          baseLink('components/components_notifier_provider_example.dart'),
       info: ComponentsNotifierProviderExampleWidget.description,
     );
 }
