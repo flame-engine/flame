@@ -85,7 +85,6 @@ class FlameGame extends ComponentTreeRoot with Game {
   @override
   void updateTree(double dt) {
     processLifecycleEvents();
-    children.updateComponentList();
     if (parent != null) {
       update(dt);
     }

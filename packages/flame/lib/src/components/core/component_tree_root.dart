@@ -110,6 +110,7 @@ class ComponentTreeRoot extends Component {
 
   void processRebalanceEvents() {
     for (final component in _componentsToRebalance) {
+      // ignore: deprecated_member_use_from_same_package
       component.children.rebalanceAll();
     }
     _componentsToRebalance.clear();

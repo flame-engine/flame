@@ -73,8 +73,7 @@ class ComponentSet extends QueryableOrderedSet<Component> {
   /// and thus actually modifies the components set.
   /// Note: do not call this while iterating the set.
   @Deprecated('Will be removed in 1.8.0.')
-  void updateComponentList() {
-  }
+  void updateComponentList() {}
 
   @Deprecated('Will be made internal in 1.8.0.')
   @override
