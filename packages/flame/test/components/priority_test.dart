@@ -1,6 +1,10 @@
+import 'dart:ui';
+
 import 'package:flame/components.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:test/test.dart';
+
+import '../custom_component.dart';
 // ignore_for_file: deprecated_member_use_from_same_package
 
 void main() {
@@ -202,6 +206,42 @@ void main() {
         componentsSorted(c.children);
       },
     );
+
+    testWithFlameGame('child can update priority of its parent', (game) async {
+      final renderEvents = <String>[];
+
+      final parent = CustomComponent(
+        priority: 0,
+        onRender: (self, canvas) {
+          renderEvents.add('render:parent');
+        },
+      );
+      final child = CustomComponent(
+        onUpdate: (self, dt) {
+          self.parent!.priority = 10;
+        },
+      );
+      parent.add(child);
+      game.add(parent);
+      game.add(
+        CustomComponent(
+          priority: 1,
+          onRender: (self, canvas) {
+            renderEvents.add('render:another');
+          },
+        ),
+      );
+      await game.ready();
+
+      expect(parent.priority, 0);
+      expect(child.priority, 0);
+      game.update(0.1);
+      expect(parent.priority, 10);
+      expect(child.priority, 0);
+      expect(renderEvents, isEmpty);
+      game.render(Canvas(PictureRecorder()));
+      expect(renderEvents, ['render:another', 'render:parent']);
+    });
   });
 }
 

@@ -67,14 +67,6 @@ class ComponentSet extends QueryableOrderedSet<Component> {
   @override
   bool get isNotEmpty => !isEmpty;
 
-  /// Call this on your update method.
-  ///
-  /// This method effectuates any pending operations of insertion or removal,
-  /// and thus actually modifies the components set.
-  /// Note: do not call this while iterating the set.
-  @Deprecated('Will be removed in 1.8.0.')
-  void updateComponentList() {}
-
   /// Sorts the components according to their `priority`s. This method is
   /// invoked by the framework when it knows that the priorities of the
   /// components in this set has changed.
@@ -85,6 +77,14 @@ class ComponentSet extends QueryableOrderedSet<Component> {
     super.clear();
     elements.forEach(super.add);
   }
+
+  /// Call this on your update method.
+  ///
+  /// This method effectuates any pending operations of insertion or removal,
+  /// and thus actually modifies the components set.
+  /// Note: do not call this while iterating the set.
+  @Deprecated('Will be removed in 1.8.0.')
+  void updateComponentList() {}
 
   @Deprecated('Will be removed in 1.8.0.')
   @override
