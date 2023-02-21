@@ -85,8 +85,8 @@ As we already mentioned in the previous chapter, our game mainly consists of
 will defer implementation of that class to the next chapter.
 
 For now, let's create the container classes, as shown on the sketch. These are:
-`Stock`, `Waste`, `Pile` and `Foundation`. In your project directory create a
-sub-directory `components`, and then the file `components/stock.dart`. In that
+`Stock`, `Waste`, `Pile` and `Foundation`. Inside the `lib/` folder create a
+sub-directory `components`, and then the file `lib/components/stock.dart`. In that
 file write
 
 ```dart
