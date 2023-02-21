@@ -6,7 +6,7 @@ import 'dart:ui';
 ///
 /// Timer auto-starts by default.
 class Timer {
-  final double limit;
+  double limit;
   VoidCallback? onTick;
   bool repeat;
   double _current = 0;
