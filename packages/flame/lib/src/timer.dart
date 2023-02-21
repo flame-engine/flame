@@ -19,7 +19,7 @@ class Timer {
     bool autoStart = true,
   }) : _running = autoStart;
 
-  /// The current amount of ms that has passed on this iteration
+  /// The current amount of seconds that has passed on this iteration
   double get current => _current;
 
   /// If the timer is finished, timers that repeat never finish
