@@ -15,9 +15,9 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: zwaldowski/cspell-action@v1
+      - uses: actions/checkout@v3
+      - uses: streetsidesoftware/cspell-action@v2
         with:
-          paths: "**/*.{md,dart}"
+          files: "**/*.{md,dart}"
+          incremental_files_only: false
           config: .github/cspell.json
-          exclude: ".gitignore,CHANGELOG.md"

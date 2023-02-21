@@ -9,27 +9,34 @@ import 'package:flutter/widgets.dart' hide WidgetBuilder;
 /// render the game.
 class RenderGameWidget extends LeafRenderObjectWidget {
   final Game game;
+  final bool addRepaintBoundary;
 
   const RenderGameWidget({
     super.key,
     required this.game,
+    required this.addRepaintBoundary,
   });
 
   @override
   RenderBox createRenderObject(BuildContext context) {
-    return GameRenderBox(game, context);
+    return GameRenderBox(game, context, addRepaintBoundary);
   }
 
   @override
   void updateRenderObject(BuildContext context, GameRenderBox renderObject) {
     renderObject
       ..game = game
-      ..buildContext = context;
+      ..buildContext = context
+      ..isRepaintBoundary = addRepaintBoundary;
   }
 }
 
 class GameRenderBox extends RenderBox with WidgetsBindingObserver {
-  GameRenderBox(this._game, this.buildContext);
+  GameRenderBox(
+    this._game,
+    this.buildContext,
+    this._isRepaintBoundary,
+  );
 
   GameLoop? gameLoop;
 
@@ -56,8 +63,18 @@ class GameRenderBox extends RenderBox with WidgetsBindingObserver {
     }
   }
 
+  bool _isRepaintBoundary = false;
+
+  set isRepaintBoundary(bool value) {
+    if (_isRepaintBoundary == value) {
+      return;
+    }
+    _isRepaintBoundary = value;
+    markNeedsCompositingBitsUpdate();
+  }
+
   @override
-  bool get isRepaintBoundary => true;
+  bool get isRepaintBoundary => _isRepaintBoundary;
 
   @override
   bool get sizedByParent => true;

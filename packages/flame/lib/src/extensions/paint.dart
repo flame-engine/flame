@@ -42,6 +42,9 @@ extension PaintExtension on Paint {
     return Paint()..color = color;
   }
 
+  // used as an example hex color code on the documentation below
+  // cSpell:ignore fccc
+
   /// Parses an ARGB color from a valid hex string (e.g. #1C1C1C).
   ///
   /// The `#` is optional.

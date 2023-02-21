@@ -4,7 +4,6 @@ Audioplayers
 BGUG
 Bodymovin
 Dashbook
-Fireslime
 Hermione
 Kawabunga
 Klingsbo
@@ -18,10 +17,10 @@ Tiled
 Tiled's
 Tilemap
 Wyrmsun
-caveace
 erayzesen
 padracing
 ptero
+riverpod
 spydon
 stpasha
 tavian

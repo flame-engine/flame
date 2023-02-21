@@ -1,12 +1,11 @@
 import 'dart:collection';
 
 import 'package:flame/collisions.dart';
-import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 
 typedef ExternalBroadphaseCheck = bool Function(
-  PositionComponent one,
-  PositionComponent another,
+  ShapeHitbox first,
+  ShapeHitbox second,
 );
 
 typedef ExternalMinDistanceCheck = bool Function(

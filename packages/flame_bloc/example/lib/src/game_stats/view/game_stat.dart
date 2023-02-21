@@ -38,7 +38,7 @@ class GameStat extends StatelessWidget {
                     children: [
                       Text(
                         'Game Over',
-                        style: Theme.of(context).textTheme.headline2,
+                        style: Theme.of(context).textTheme.displayMedium,
                       ),
                       ElevatedButton(
                         onPressed: () {

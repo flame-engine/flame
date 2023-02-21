@@ -5,6 +5,7 @@ import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/src/flame.dart';
 import 'package:flame/src/game/game_render_box.dart';
+import 'package:flame/src/game/game_widget/gesture_detector_builder.dart';
 import 'package:flame/src/game/overlay_manager.dart';
 import 'package:flame/src/game/projector.dart';
 import 'package:flutter/rendering.dart';
@@ -28,6 +29,11 @@ abstract class Game {
   /// the global [Flame.assets] cache, but you can replace this with another
   /// instance if needed.
   AssetsCache assets = Flame.assets;
+
+  /// Used internally by various mixins that need to use gesture detection
+  /// functionality in Flutter.
+  late final GestureDetectorBuilder gestureDetectors =
+      GestureDetectorBuilder(refreshWidget)..initializeGestures(this);
 
   /// This should update the state of the game.
   void update(double dt);
@@ -80,6 +86,7 @@ abstract class Game {
     return _onLoadFuture;
   }
 
+  @mustCallSuper
   @internal
   void mount() {
     onMount();

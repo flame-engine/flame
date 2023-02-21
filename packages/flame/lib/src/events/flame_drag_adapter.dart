@@ -1,5 +1,4 @@
 import 'package:flame/src/events/interfaces/multi_drag_listener.dart';
-import 'package:flame/src/game/game.dart';
 import 'package:flutter/gestures.dart';
 import 'package:meta/meta.dart';
 
@@ -8,11 +7,11 @@ import 'package:meta/meta.dart';
 /// [MultiDragListener].
 @internal
 class FlameDragAdapter implements Drag {
-  FlameDragAdapter(this._game, Offset startPoint) {
+  FlameDragAdapter(this._listener, Offset startPoint) {
     start(startPoint);
   }
 
-  final MultiDragListener _game;
+  final MultiDragListener _listener;
   late final int _id;
   static int _globalIdCounter = 0;
 
@@ -20,18 +19,19 @@ class FlameDragAdapter implements Drag {
     final event = DragStartDetails(
       sourceTimeStamp: Duration.zero,
       globalPosition: point,
-      localPosition: (_game as Game).renderBox.globalToLocal(point),
+      localPosition: _listener.renderBox.globalToLocal(point),
     );
     _id = _globalIdCounter++;
-    _game.handleDragStart(_id, event);
+    _listener.handleDragStart(_id, event);
   }
 
   @override
-  void update(DragUpdateDetails event) => _game.handleDragUpdate(_id, event);
+  void update(DragUpdateDetails event) =>
+      _listener.handleDragUpdate(_id, event);
 
   @override
-  void end(DragEndDetails event) => _game.handleDragEnd(_id, event);
+  void end(DragEndDetails event) => _listener.handleDragEnd(_id, event);
 
   @override
-  void cancel() => _game.handleDragCancel(_id);
+  void cancel() => _listener.handleDragCancel(_id);
 }
