@@ -5,6 +5,10 @@ import 'dart:ui';
 /// interval like events.
 ///
 /// Timer auto-starts by default.
+///
+/// _NOTE :_ You can change the [limit], but keep in mind that the timer
+/// won't start automatically if the limit is raised and the timer currently
+/// is stopped.
 class Timer {
   double limit;
   VoidCallback? onTick;
