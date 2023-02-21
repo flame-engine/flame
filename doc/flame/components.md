@@ -385,18 +385,19 @@ as the point within the component by which Flame "grabs" it.
 
 All children of the `PositionComponent` will be transformed in relation to the parent, which means
 that the `position`, `angle` and `scale` will be relative to the parents state.
-So if you, for example, wanted to position a child 50 logical pixels above the center of the parent
-you would do this:
+So if you, for example, wanted to position a child in the center of the parent you would do this:
 
 ```dart
 Future<void> onLoad() async {
   final parent = PositionComponent(
     position: Vector2(100, 100),
     size: Vector2(100, 100),
+  );
+  final child = PositionComponent(
+    position: parent.size / 2,
     anchor: Anchor.center,
   );
-  final child = PositionComponent(position: Vector2(0, -50));
-  await parent.add(child);
+  parent.add(child);
 }
 ```
 
