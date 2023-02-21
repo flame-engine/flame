@@ -1,14 +1,14 @@
 import 'dart:io';
 import 'dart:ui';
 
-import 'package:flame_network_image/flame_network_image.dart';
+import 'package:flame_network_assets/flame_network_assets.dart';
 import 'package:flutter/material.dart' hide Image;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:path/path.dart' as path;
 
 abstract class __MockHttpClient {
-  Future<FlameImageResponse> get(
+  Future<FlameAssetResponse> get(
     String url, {
     Map<String, String>? headers,
   });
@@ -25,18 +25,18 @@ class _MockPathProvider extends Mock implements __MockPathProvider {}
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  group('FlameNetworkImages', () {
+  group('FlameNetworkAssets', () {
     late __MockHttpClient httpClient;
     late __MockPathProvider pathProvider;
     late Directory testDirectory;
-    late FlameNetworkImages networkImages;
+    late FlameNetworkImages networkAssets;
     late Image image;
 
     setUpAll(() {
       testDirectory = Directory(
         path.join(
           Directory.systemTemp.path,
-          'flame_network_image_test',
+          'flame_network_assets_test',
         ),
       )..createSync();
     });
@@ -51,7 +51,7 @@ void main() {
 
       when(pathProvider.getAppDirectory).thenAnswer((_) async => testDirectory);
 
-      networkImages = FlameNetworkImages(
+      networkAssets = FlameNetworkImages(
         get: httpClient.get,
         getAppDirectory: pathProvider.getAppDirectory,
       );
@@ -69,7 +69,7 @@ void main() {
 
       when(() => httpClient.get(any(), headers: any(named: 'headers')))
           .thenAnswer(
-        (_) async => FlameImageResponse(
+        (_) async => FlameAssetResponse(
           statusCode: 200,
           bytes: pngImage!.buffer.asUint8List(),
         ),
@@ -85,20 +85,20 @@ void main() {
 
     test('returns the image', () async {
       const url = 'https://image1.com';
-      final loadedImage = await networkImages.load(url);
+      final loadedImage = await networkAssets.load(url);
       expect(loadedImage, isA<Image>());
     });
 
     test('fetches the image in the network', () async {
       const url = 'https://image2.com';
-      await networkImages.load(url);
+      await networkAssets.load(url);
       verify(() => httpClient.get(url)).called(1);
     });
 
     test('returns the image from memory once it is cached', () async {
       const url = 'https://image3.com';
-      final image1 = await networkImages.load(url);
-      final image2 = await networkImages.load(url);
+      final image1 = await networkAssets.load(url);
+      final image2 = await networkAssets.load(url);
 
       verify(() => httpClient.get(url)).called(1);
       verify(pathProvider.getAppDirectory).called(2);
@@ -109,16 +109,16 @@ void main() {
     test('returns the image from local storage', () async {
       const url = 'https://image4.com';
 
-      final image1 = await networkImages.load(url);
+      final image1 = await networkAssets.load(url);
 
-      final secondNetworkImages = FlameNetworkImages(
+      final secondNetworkAssets = FlameNetworkImages(
         getAppDirectory: pathProvider.getAppDirectory,
         get: httpClient.get,
       );
 
       await Future<void>.delayed(const Duration(milliseconds: 100));
 
-      final image2 = await secondNetworkImages.load(url);
+      final image2 = await secondNetworkAssets.load(url);
 
       verify(() => httpClient.get(url)).called(1);
       verify(pathProvider.getAppDirectory).called(3);
@@ -130,18 +130,18 @@ void main() {
     test('can still get the image if the local storage breaks', () async {
       const url = 'https://image5.com';
 
-      final image1 = await networkImages.load(url);
+      final image1 = await networkAssets.load(url);
 
       final brokenPathProvider = _MockPathProvider();
       when(brokenPathProvider.getAppDirectory).thenThrow(Exception());
-      final secondNetworkImages = FlameNetworkImages(
+      final secondNetworkAssets = FlameNetworkImages(
         getAppDirectory: brokenPathProvider.getAppDirectory,
         get: httpClient.get,
       );
 
       await Future<void>.delayed(const Duration(milliseconds: 100));
 
-      final image2 = await secondNetworkImages.load(url);
+      final image2 = await secondNetworkAssets.load(url);
 
       verify(() => httpClient.get(url)).called(2);
 
@@ -150,15 +150,15 @@ void main() {
     });
 
     test('does not cache in memory when cacheInMemory is false', () async {
-      final secondNetworkImages = FlameNetworkImages(
+      final secondNetworkAssets = FlameNetworkImages(
         getAppDirectory: pathProvider.getAppDirectory,
         get: httpClient.get,
         cacheInMemory: false,
       );
       const url = 'https://image6.com';
-      final image1 = await secondNetworkImages.load(url);
+      final image1 = await secondNetworkAssets.load(url);
       await Future<void>.delayed(const Duration(milliseconds: 100));
-      final image2 = await secondNetworkImages.load(url);
+      final image2 = await secondNetworkAssets.load(url);
 
       verify(() => httpClient.get(url)).called(1);
       verify(pathProvider.getAppDirectory).called(3);
@@ -170,16 +170,16 @@ void main() {
     test(
       'does not cache in local storage when cacheInMemory is false',
       () async {
-        final secondNetworkImages = FlameNetworkImages(
+        final secondNetworkAssets = FlameNetworkImages(
           getAppDirectory: pathProvider.getAppDirectory,
           get: httpClient.get,
           cacheInMemory: false,
           cacheInStorage: false,
         );
         const url = 'https://image7.com';
-        final image1 = await secondNetworkImages.load(url);
+        final image1 = await secondNetworkAssets.load(url);
         await Future<void>.delayed(const Duration(milliseconds: 100));
-        final image2 = await secondNetworkImages.load(url);
+        final image2 = await secondNetworkAssets.load(url);
 
         verify(() => httpClient.get(url)).called(2);
         verifyNever(pathProvider.getAppDirectory);

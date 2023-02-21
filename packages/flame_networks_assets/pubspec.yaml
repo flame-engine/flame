@@ -1,7 +1,7 @@
-name: flame_network_image
-description: Network images support for Flame.
+name: flame_network_assets
+description: Network assets support for Flame.
 version: 0.0.1
-homepage: https://github.com/flame-engine/flame/tree/main/packages/flame_network_image
+homepage: https://github.com/flame-engine/flame/tree/main/packages/flame_network_assets
 funding:
   - https://patreon.com/bluefireoss
   - https://www.buymeacoffee.com/bluefire

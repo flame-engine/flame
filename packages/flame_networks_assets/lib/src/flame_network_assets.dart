@@ -10,13 +10,13 @@ import 'package:http/http.dart' as http;
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
 
-/// {@template flame_image_response}
+/// {@template flame_assets_response}
 /// A class containing the relevant http attributes to
-/// Flame Images Network package.
+/// Flame Assets Network package.
 /// {@endtemplate}
-class FlameImageResponse {
-  /// {@macro flame_image_response}
-  const FlameImageResponse({
+class FlameAssetResponse {
+  /// {@macro flame_assets_response}
+  const FlameAssetResponse({
     required this.statusCode,
     required this.bytes,
   });
@@ -28,26 +28,35 @@ class FlameImageResponse {
   final Uint8List bytes;
 }
 
-/// Function signature used by Flame Network Images to fetch images.
-typedef GetImageFunction = Future<FlameImageResponse> Function(
+/// Function signature used by Flame Network Assets to fetch assets.
+typedef GetAssetFunction = Future<FlameAssetResponse> Function(
   String url, {
   Map<String, String>? headers,
 });
 
-/// Function signature by Flame Network Images to get the app directory
+/// Function signature used by Flame Network Assets to decode assets from a
+/// raw format.
+typedef DecodeAssetFunction<T> = Future<T> Function(Uint8List);
+
+/// Function signature used by Flame Network Assets to encode assets to a
+/// raw format.
+typedef EncodeAssetFunction<T> = Future<Uint8List> Function(T);
+
+/// Function signature by Flame Network Assets to get the app directory
 /// which is used for the local storage caching.
 typedef GetAppDirectoryFunction = Future<Directory> Function();
 
-/// {@template flame_network_images}
+/// {@template flame_network_assets}
 ///
-/// [FlameNetworkImages] is a class similar to Flame's [Images], but instead of
-/// loading images from the assets bundle, it loads from networks urls.
+/// [FlameNetworkAssets] is a class similar to Flame's assets classes (like
+/// [Images] for example), but instead of loading assets from the assets bundle,
+/// it loads from networks urls.
 ///
-/// By default, [FlameNetworkImages] uses [http.get] method to make the requests
-/// ,that can be customized by passing a different [GetImageFunction] to the get
+/// By default, [FlameNetworkAssets] uses [http.get] method to make the requests
+/// ,that can be customized by passing a different [GetAssetFunction] to the get
 /// argument on the constructor.
 ///
-/// [FlameNetworkImages] also will also automatically cache files in a two layer
+/// [FlameNetworkAssets] also will also automatically cache files in a two layer
 /// system.
 ///
 /// The first layer is an in memory cache, handled by an internal [MemoryCache],
@@ -56,13 +65,13 @@ typedef GetAppDirectoryFunction = Future<Directory> Function();
 /// path_providers' [getApplicationDocumentsDirectory] method, and can be
 /// customized using the getAppDirectory argument in the constructor.
 ///
-/// When an image is requested, [FlameImageResponse] will first check on its
+/// When an asset is requested, [FlameAssetResponse] will first check on its
 /// cache layers before making the http request, if both layer are cache miss,
 /// then the request is made and both layers set with the response.
 ///
 /// Another important note about the cache layers is that the first layer, is a
 /// per instance cache, while the local storage is a app global cache. This
-/// means that two different [FlameImageResponse] instances will have the same
+/// means that two different [FlameAssetResponse] instances will have the same
 /// local storage cache, but not the memory cache.
 ///
 /// Note that the local storage layer is not present when running on web since
@@ -75,21 +84,25 @@ typedef GetAppDirectoryFunction = Future<Directory> Function();
 /// argument on the constructor.
 ///
 /// {@endtemplate}
-class FlameNetworkImages {
-  /// {@macro flame_network_images}
-  FlameNetworkImages({
-    GetImageFunction? get,
+abstract class FlameNetworkAssets<T> {
+  /// {@macro flame_network_assets}
+  FlameNetworkAssets({
+    required DecodeAssetFunction<T> decodeAsset,
+    required EncodeAssetFunction<T> encodeAsset,
+    GetAssetFunction? get,
     GetAppDirectoryFunction? getAppDirectory,
     this.cacheInMemory = true,
     this.cacheInStorage = true,
-  }) : _isWeb = kIsWeb {
+  })  : _isWeb = kIsWeb,
+        _decode = decodeAsset,
+        _encode = encodeAsset {
     _get = get ??
         (
           String url, {
           Map<String, String>? headers,
         }) =>
             http.get(Uri.parse(url), headers: headers).then((response) {
-              return FlameImageResponse(
+              return FlameAssetResponse(
                 statusCode: response.statusCode,
                 bytes: response.bodyBytes,
               );
@@ -98,8 +111,10 @@ class FlameNetworkImages {
     _getAppDirectory = getAppDirectory ?? getApplicationDocumentsDirectory;
   }
 
-  late final GetImageFunction _get;
+  late final GetAssetFunction _get;
   late final GetAppDirectoryFunction _getAppDirectory;
+  late final DecodeAssetFunction<T> _decode;
+  late final EncodeAssetFunction<T> _encode;
 
   /// Flag indicating if files will be cached in memory.
   final bool cacheInMemory;
@@ -109,15 +124,15 @@ class FlameNetworkImages {
 
   final bool _isWeb;
 
-  late final _memoryCache = MemoryCache<String, Image>();
+  late final _memoryCache = MemoryCache<String, T>();
 
   String _urlToId(String url) {
     final bytes = utf8.encode(url);
     return base64.encode(bytes);
   }
 
-  /// Loads the given an image from the given url.
-  Future<Image> load(
+  /// Loads the given asset from the given url.
+  Future<T> load(
     String url, {
     Map<String, String>? headers,
   }) async {
@@ -129,44 +144,44 @@ class FlameNetworkImages {
     }
 
     if (!_isWeb && cacheInStorage) {
-      final storageImage = await _fetchFileFromStorageCache(id);
-      if (storageImage != null) {
+      final storageAsset = await _fetchAssetFromStorageCache(id);
+      if (storageAsset != null) {
         if (cacheInMemory) {
-          _memoryCache.setValue(id, storageImage);
+          _memoryCache.setValue(id, storageAsset);
         }
-        return storageImage;
+        return storageAsset;
       }
     }
 
     final response = await _get(url, headers: headers);
     if (response.statusCode >= 200 && response.statusCode < 400) {
-      final image = await decodeImageFromList(response.bytes);
+      final image = await _decode(response.bytes);
 
       if (cacheInMemory) {
         _memoryCache.setValue(id, image);
       }
 
       if (!_isWeb && cacheInStorage) {
-        unawaited(_saveImageInLocalStorage(id, image));
+        unawaited(_saveAssetInLocalStorage(id, image));
       }
 
       return image;
     } else {
       throw Exception(
-        'Error fetching image $url, response return status code '
+        'Error fetching asset $url, response return status code '
         '${response.statusCode}',
       );
     }
   }
 
-  Future<Image?> _fetchFileFromStorageCache(String id) async {
+  Future<T?> _fetchAssetFromStorageCache(String id) async {
     try {
       final appDir = await _getAppDirectory();
       final file = File(path.join(appDir.path, id));
 
       if (file.existsSync()) {
         final bytes = await file.readAsBytes();
-        return await decodeImageFromList(bytes);
+        return await _decode(bytes);
       }
     } on Exception catch (_) {
       return null;
@@ -174,16 +189,35 @@ class FlameNetworkImages {
     return null;
   }
 
-  Future<void> _saveImageInLocalStorage(String id, Image image) async {
+  Future<void> _saveAssetInLocalStorage(String id, T asset) async {
     try {
       final appDir = await _getAppDirectory();
       final file = File(path.join(appDir.path, id));
 
-      final data = await image.toByteData(format: ImageByteFormat.png);
-
-      if (data != null) {
-        await file.writeAsBytes(data.buffer.asUint8List());
-      }
+      await file.writeAsBytes(await _encode(asset));
     } on Exception catch (_) {}
   }
+}
+
+/// {@template flame_network_images}
+/// A specialized [FlameAssetResponse] that can be used to load [Image]s.
+///
+/// {@macro flame_network_assets}
+///
+/// {@endtemplate}
+class FlameNetworkImages extends FlameNetworkAssets<Image> {
+  /// {@macro flame_network_images}
+  FlameNetworkImages({
+    super.get,
+    super.getAppDirectory,
+    super.cacheInMemory,
+    super.cacheInStorage,
+  }) : super(
+          decodeAsset: decodeImageFromList,
+          encodeAsset: (Image image) async {
+            final data = await image.toByteData(format: ImageByteFormat.png);
+
+            return data!.buffer.asUint8List();
+          },
+        );
 }

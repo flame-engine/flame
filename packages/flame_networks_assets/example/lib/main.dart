@@ -4,11 +4,11 @@ import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
-import 'package:flame_network_image/flame_network_image.dart';
+import 'package:flame_network_assets/flame_network_assets.dart';
 import 'package:flutter/material.dart' hide Image;
 
 void main() {
-  runApp(GameWidget.controlled(gameFactory: MyGame.new));
+  runApp(const GameWidget.controlled(gameFactory: MyGame.new));
 }
 
 class MyGame extends FlameGame with TapDetector {

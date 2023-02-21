@@ -139,20 +139,20 @@ final response = await http.get('https://url.com/image.png');
 final image = await decodeImageFromList(response.bytes);
 ```
 
-## FlameNetworkImages
+## FlameNetworkAssets
 
 The snippet above can be enough for simple games, or simple features of some games, but
 more than often, developers will want to cache the images that were fetched from the web.
 
-To help in that regards, Flame provides a package that makes is easy to fetch images from the
-network, with automatic memory and file system cache.
+To help in that regards, Flame provides a package that makes is easy to fetch images and other assets
+from the network, with automatic memory and file system cache.
 
-To use it, just add the `flame_network_image` package to your project and use the following
+To use it, just add the `flame_network_assets` package to your project and use the following
 code to fetch images:
 
 ```dart
-final networkImages = FlameNetworkImages();
-final charSprite = await networkImages.load('https://url.com/image.png');
+final networkAssets = FlameNetworkImages();
+final charSprite = await networkAssets.load('https://url.com/image.png');
 ```
 
 By default, that package relies on the `http` package to make http requests, and `path_provider`
