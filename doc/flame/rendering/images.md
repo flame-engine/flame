@@ -119,6 +119,7 @@ class MyGame extends Game {
 }
 ```
 
+
 ## Loading images from the network
 
 Flame core package doesn't offer a built in method to loading images from the network.
@@ -139,6 +140,7 @@ final response = await http.get('https://url.com/image.png');
 final image = await decodeImageFromList(response.bytes);
 ```
 
+
 ## FlameNetworkAssets
 
 The snippet above can be enough for simple games, or simple features of some games, but
@@ -158,6 +160,7 @@ final charSprite = await networkAssets.load('https://url.com/image.png');
 By default, that package relies on the `http` package to make http requests, and `path_provider`
 to get the place to store the local cache, to use a different approach for those, check the
 optional arguments in `FlameNetworkImages` constructor in order to customize that.
+
 
 ## Sprite
 
