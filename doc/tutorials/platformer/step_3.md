@@ -398,8 +398,8 @@ Now we just need to finish the `onLoad` method.  So make your `onLoad` method lo
   Future<void> onLoad() async {
     final platformImage = game.images.fromCache('block.png');
     sprite = Sprite(platformImage);
-    position = Vector2((_gridPosition.x * size.x) + _xOffset,
-        game.size.y - (_gridPosition.y * size.y),
+    position = Vector2((gridPosition.x * size.x) + _xOffset,
+        game.size.y - (gridPosition.y * size.y),
     );
     add(RectangleHitbox()..collisionType = CollisionType.passive);
   }
