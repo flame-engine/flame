@@ -81,6 +81,9 @@ void main() {
         expect(atlas.atlas, isNotNull);
         expect(atlas.atlas!.width, 128);
         expect(atlas.atlas!.height, 74);
+        expect(atlas.key, 'images/green.png');
+
+        expect(Flame.images.containsKey('images/green.png'), isTrue);
 
         expect(
           await imageToPng(atlas.atlas!),
