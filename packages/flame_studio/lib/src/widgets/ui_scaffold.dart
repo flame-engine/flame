@@ -5,13 +5,14 @@ import 'package:flame_studio/src/widgets/toolbar/flame_studio_toolbar.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class Scaffold extends ConsumerWidget {
-  const Scaffold({required this.child, super.key});
+class UiScaffold extends ConsumerWidget {
+  const UiScaffold({required this.gameApp, super.key});
 
-  final Widget child;
+  final Widget gameApp;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final toolbarHeight = ref.watch(toolbarHeightProvider);
     return Container(
       color: ref.watch(themeProvider).backdropColor,
       child: Stack(
@@ -20,13 +21,16 @@ class Scaffold extends ConsumerWidget {
           Container(
             padding: EdgeInsets.fromLTRB(
               ref.watch(leftPanelWidthProvider) + 20,
-              ref.watch(toolbarHeightProvider) + 20,
+              toolbarHeight + 20,
               20,
               20,
             ),
-            child: child,
+            child: ClipRect(child: gameApp),
           ),
-          const LeftPanel(),
+          Container(
+            padding: EdgeInsets.fromLTRB(0, toolbarHeight, 0, 0),
+            child: const LeftPanel(),
+          ),
           const LeftPanelGrip(),
           const FlameStudioToolbar(),
         ],
