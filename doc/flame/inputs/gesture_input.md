@@ -77,13 +77,13 @@ of these `mixin`s and its methods:
   - onScaleUpdate
   - onScaleEnd
 
- - MultiTouchTapDetector
+- MultiTouchTapDetector
   - onTap
   - onTapCancel
   - onTapDown
   - onTapUp
 
- - MultiTouchDragDetector
+- MultiTouchDragDetector
   - onReceiveDrag
 ```
 
