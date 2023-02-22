@@ -1,7 +1,7 @@
 # Joints
 
-Joints are used to connect two different bodies together in various way. 
-They help to simulate interaction between objects to create hinges, wheels, ropes, chains etc.
+Joints are used to connect two different bodies together in various ways. 
+They help to simulate interactions between objects to create hinges, wheels, ropes, chains etc.
 
 One `Body` may be `BodyType.static`. Joint between `BodyType.static` and/or `BodyType.kinematic` are allowed, 
 but have no effect and use some processing time.
@@ -29,7 +29,7 @@ To register a `Joint` use `world.createJoint` and to remove `world.destroyJoint`
 ### `ConstantVolumeJoint`
 
 This type of joint connects a group of bodies together and maintains a constant volume within them. 
-Essentially, a set of [`DistantJoint`](#distantjoint), that connects all bodies one after another.
+Essentially, it is a set of [`DistantJoint`](#distantjoint), that connects all bodies one after another.
 
 It might be useful for "soft-bodies" simulation.
 
