@@ -3,18 +3,18 @@
 Joints are used to connect two different bodies together in various ways.
 They help to simulate interactions between objects to create hinges, wheels, ropes, chains etc.
 
-One `Body` may be `BodyType.static`.
-Joint between `BodyType.static` and/or `BodyType.kinematic` are allowed,
+One `Body` in a join may be of type `BodyType.static`.
+Joints between `BodyType.static` and/or `BodyType.kinematic` are allowed,
 but have no effect and use some processing time.
 
-To construct a `Joint`, you need to create a corresponding subclass of `JointDef` and init it with parameters.
+To construct a `Joint`, you need to create a corresponding subclass of `JointDef` and initialize it with its parameters.
 
-To register a `Joint` use `world.createJoint` and to remove `world.destroyJoint`.
+To register a `Joint` use `world.createJoint` and later use `world.destroyJoint` when you want to remove it.
 
 
 ## Built-in joints
 
-Currently, Forge2D supports following joints:
+Currently, Forge2D supports the following joints:
 
 - [`ConstantVolumeJoint`](#constantvolumejoint)
 - DistanceJoint
@@ -33,9 +33,9 @@ Currently, Forge2D supports following joints:
 ### `ConstantVolumeJoint`
 
 This type of joint connects a group of bodies together and maintains a constant volume within them.
-Essentially, it is a set of `DistantJoint`, that connects all bodies one after another.
+Essentially, it is a set of `DistanceJoint`s, that connects all bodies one after another.
 
-It might be useful for "soft-bodies" simulation.
+It can for example be useful when simulating "soft-bodies".
 
 ```{flutter-app}
 :sources: ../../../packages/flame_forge2d/example
@@ -57,11 +57,11 @@ It might be useful for "soft-bodies" simulation.
   world.createJoint(ConstantVolumeJoint(world, constantVolumeJoint));
 ```
 
-`ConstantVolumeJointDef` requires at least 3 bodies to be added using `addBody` method.
+`ConstantVolumeJointDef` requires at least 3 bodies to be added using the `addBody` method.
 
 Optional param `frequencyHz` defines the frequency of oscillation of the joint.
-If it's not 0, the higher the value is, the less springy each of the compound `DistantJoint` is.
+If it's not 0, the higher the value is, the less springy each of the compound `DistantJoint`s are.
 
-Another optional param `dampingRatio` defines how fast the oscillation comes to rest.
+Another optional parameter is `dampingRatio`, it defines how fast the oscillation comes to rest.
 It takes values from 0 to 1, where 0 = no damping, 1 = critical damping.
 
