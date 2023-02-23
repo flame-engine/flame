@@ -3,7 +3,7 @@
 Joints are used to connect two different bodies together in various ways.
 They help to simulate interactions between objects to create hinges, wheels, ropes, chains etc.
 
-One `Body` in a join may be of type `BodyType.static`.
+One `Body` in a joint may be of type `BodyType.static`.
 Joints between `BodyType.static` and/or `BodyType.kinematic` are allowed,
 but have no effect and use some processing time.
 

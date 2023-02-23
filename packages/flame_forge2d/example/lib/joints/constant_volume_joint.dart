@@ -15,18 +15,17 @@ class ConstantVolumeJointExample extends Forge2DGame with TapDetector {
   @override
   Future<void> onTapDown(TapDownInfo details) async {
     super.onTapDown(details);
-    final tap = details.eventPosition.game;
+    final center = details.eventPosition.game;
 
     const numPieces = 20;
     const radius = 5.0;
-    final center = tap;
     final balls = <Ball>[];
 
     for (var i = 0; i < numPieces; i++) {
-      final xPos = radius * cos(2 * pi * (i / numPieces));
-      final yPos = radius * sin(2 * pi * (i / numPieces));
+      final x = radius * cos(2 * pi * (i / numPieces));
+      final y = radius * sin(2 * pi * (i / numPieces));
 
-      final ball = Ball(Vector2(xPos + center.x, yPos + center.y), radius: 0.5);
+      final ball = Ball(Vector2(x + center.x, y + center.y), radius: 0.5);
 
       add(ball);
       balls.add(ball);
