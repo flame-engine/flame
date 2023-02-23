@@ -11,6 +11,7 @@ To construct a `Joint`, you need to create a corresponding subclass of `JointDef
 
 To register a `Joint` use `world.createJoint` and to remove `world.destroyJoint`.
 
+
 ## Built-in joints
 
 Currently, Forge2D supports following joints:
@@ -27,6 +28,7 @@ Currently, Forge2D supports following joints:
 - RopeJoint
 - WeldJoint
 - WheelJoint
+
 
 ### `ConstantVolumeJoint`
 
