@@ -3,9 +3,15 @@
 Joints are used to connect two different bodies together in various ways.
 They help to simulate interactions between objects to create hinges, wheels, ropes, chains etc.
 
-One `Body` may be `BodyType.static`. 
+One `Body` may be `BodyType.static`.
 Joint between `BodyType.static` and/or `BodyType.kinematic` are allowed,
 but have no effect and use some processing time.
+
+To construct a `Joint`, you need to create a corresponding subclass of `JointDef` and init it with parameters.
+
+To register a `Joint` use `world.createJoint` and to remove `world.destroyJoint`.
+
+## Built-in joints
 
 Currently, Forge2D supports following joints:
 
@@ -21,12 +27,6 @@ Currently, Forge2D supports following joints:
 - RopeJoint
 - WeldJoint
 - WheelJoint
-
-To construct a `Joint`, you need to create a corresponding subclass of `JointDef` and init it with parameters.
-
-To register a `Joint` use `world.createJoint` and to remove `world.destroyJoint`.
-
-## Built-in joints
 
 ### `ConstantVolumeJoint`
 
