@@ -7,10 +7,10 @@ One `Body` in a joint may be of type `BodyType.static`.
 Joints between `BodyType.static` and/or `BodyType.kinematic` are allowed,
 but have no effect and use some processing time.
 
-To construct a `Joint`, you need to create a corresponding subclass of `JointDef` 
+To construct a `Joint`, you need to create a corresponding subclass of `JointDef`
 and initialize it with its parameters.
 
-To register a `Joint` use `world.createJoint` 
+To register a `Joint` use `world.createJoint`
 and later use `world.destroyJoint` when you want to remove it.
 
 
