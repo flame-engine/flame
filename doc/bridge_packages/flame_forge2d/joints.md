@@ -40,7 +40,7 @@ Essentially, it is a set of `DistanceJoint`s, that connects all bodies one after
 It can for example be useful when simulating "soft-bodies".
 
 ```{flutter-app}
-:sources: ../../../packages/flame_forge2d/example
+:sources: ../../../examples/stories/bridge_libraries/forge2d/joints/
 :page: constant_volume_joint
 :show: widget code infobox
 :width: 200

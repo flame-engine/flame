@@ -1,9 +1,9 @@
 import 'dart:math';
 
+import 'package:examples/stories/bridge_libraries/forge2d/utils/balls.dart';
+import 'package:examples/stories/bridge_libraries/forge2d/utils/boundaries.dart';
 import 'package:flame/input.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
-import 'package:flame_forge2d_example/utils/ball.dart';
-import 'package:flame_forge2d_example/utils/walls.dart';
 
 class ConstantVolumeJointExample extends Forge2DGame with TapDetector {
   @override

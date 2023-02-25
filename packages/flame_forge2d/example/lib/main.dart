@@ -1,9 +1,6 @@
-import 'dart:html';
-
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
-import 'package:flame_forge2d_example/joints/constant_volume_joint.dart';
 import 'package:flutter/widgets.dart';
 
 void main() {
