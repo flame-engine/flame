@@ -6,11 +6,9 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   testWidgets('Test equality of Flutter Text Widget and Flame Text Component',
-  (widgetTester) async {
+      (widgetTester) async {
     await widgetTester.pumpWidget(
-      const ProviderScope(
-        child: MyApp()
-      ),
+      const ProviderScope(child: MyApp()),
     );
     await widgetTester.pump(const Duration(seconds: 3));
 
@@ -18,8 +16,8 @@ void main() {
     final flutterCounterFinder = find.byType(FlutterCountingComponent);
     expect(flutterCounterFinder, findsOneWidget);
     final flutterCounterTextFinder = find.descendant(
-        of: flutterCounterFinder,
-        matching: find.byType(Text),
+      of: flutterCounterFinder,
+      matching: find.byType(Text),
     );
 
     // Expect a title 'e.g. Flutter' and the current count of the stream as
@@ -27,7 +25,7 @@ void main() {
     expect(flutterCounterTextFinder, findsNWidgets(2));
 
     final flutterCounterTextWidgets =
-      widgetTester.widgetList(flutterCounterTextFinder);
+        widgetTester.widgetList(flutterCounterTextFinder);
 
     // Current count of the stream as a [Text] widget
     final flutterCounterTextWidgetOfInterest =
@@ -53,18 +51,17 @@ void main() {
     expect(gameWidget.game?.children.isNotEmpty ?? false, true);
 
     final riverpodAwareTextComponent =
-      gameWidget.game?.children.elementAt(1) as RiverpodAwareTextComponent?;
+        gameWidget.game?.children.elementAt(1) as RiverpodAwareTextComponent?;
     expect(riverpodAwareTextComponent is RiverpodAwareTextComponent, true);
 
     final currentCount =
-    int.parse((flutterCounterTextWidgetOfInterest as Text).data!);
+        int.parse((flutterCounterTextWidgetOfInterest as Text).data!);
 
     // Expect equality (in the presented string value)
     // of the Text Component and the Text Widget
     expect(
-        riverpodAwareTextComponent?.textComponent.text ==
-        currentCount.toString(),
-        true,
+      riverpodAwareTextComponent?.textComponent.text == currentCount.toString(),
+      true,
     );
   });
 }
