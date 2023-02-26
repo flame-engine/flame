@@ -727,6 +727,7 @@ class Component {
   //#region Internal lifecycle management
 
   @protected
+  @visibleForTesting
   _LifecycleManager get lifecycle {
     return _lifecycleManager ??= _LifecycleManager(this);
   }
