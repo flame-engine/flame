@@ -27,7 +27,11 @@ class DistanceJointExample extends Forge2DGame with TapDetector {
   void createJoint(Ball first, Ball second) {
     final distanceJointDef = DistanceJointDef()
       ..initialize(
-          first.body, second.body, first.body.worldCenter, second.center,)
+        first.body,
+        second.body,
+        first.body.worldCenter,
+        second.center,
+      )
       ..length = 10
       ..frequencyHz = 3
       ..dampingRatio = 0.2;
