@@ -51,6 +51,10 @@ class TiledAtlas {
 
   @visibleForTesting
   static String atlasKey(Iterable<TiledImage> images) {
+    if (images.length == 1) {
+      return images.first.source!;
+    }
+
     final files = ([...images.map((e) => e.source)]..sort()).join(',');
     return 'atlas{$files}';
   }
@@ -94,13 +98,11 @@ class TiledAtlas {
     if (imageList.length == 1) {
       // The map contains one image, so its either an atlas already, or a
       // really boring map.
-      final tiledImage = imageList.first;
-      final image =
-          (await Flame.images.load(tiledImage.source!, key: key)).clone();
+      final image = (await Flame.images.load(key)).clone();
 
       return atlasMap[key] ??= TiledAtlas._(
         atlas: image,
-        offsets: {tiledImage.source!: Offset.zero},
+        offsets: {key: Offset.zero},
         key: key,
       );
     }

@@ -1,4 +1,5 @@
 import 'package:flame_studio/src/core/theme.dart';
+import 'package:flame_studio/src/widgets/panels/hierarchy_view.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -9,17 +10,23 @@ class LeftPanel extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final width = ref.watch(leftPanelWidthProvider);
 
-    return Container(
-      constraints: BoxConstraints.tightFor(width: width),
-      decoration: BoxDecoration(
-        boxShadow: const [
-          BoxShadow(
-            blurRadius: 4.0,
-            color: Color(0xA1000000),
-            offset: Offset(2, 0),
+    return Directionality(
+      textDirection: ref.watch(textDirectionProvider),
+      child: MediaQuery.fromWindow(
+        child: Container(
+          constraints: BoxConstraints.tightFor(width: width),
+          decoration: BoxDecoration(
+            boxShadow: const [
+              BoxShadow(
+                blurRadius: 4.0,
+                color: Color(0xA1000000),
+                offset: Offset(2, 0),
+              ),
+            ],
+            color: ref.watch(themeProvider).panelColor,
           ),
-        ],
-        color: ref.watch(themeProvider).panelColor,
+          child: const HierarchyView(),
+        ),
       ),
     );
   }

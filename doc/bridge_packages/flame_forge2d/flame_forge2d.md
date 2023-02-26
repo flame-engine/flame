@@ -4,4 +4,5 @@
 :hidden:
 
 Overview    <forge2d.md>
+Joints    <joints.md>
 ```
