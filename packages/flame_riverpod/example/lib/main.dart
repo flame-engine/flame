@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
         children: const [
           Expanded(child: FlutterCountingComponent()),
           Expanded(
-            child: RiverpodGameWidget.initialiseWithGame(
+            child: RiverpodGameWidget.initializeWithGame(
               uninitializedGame: RefExampleGame.new,
             ),
           )
@@ -94,7 +94,7 @@ class RefExampleGame extends FlameGame with HasComponentRef {
 class RiverpodGameWidget extends ConsumerStatefulWidget {
   const RiverpodGameWidget.readFromProvider({super.key})
       : uninitializedGame = null;
-  const RiverpodGameWidget.initialiseWithGame({
+  const RiverpodGameWidget.initializeWithGame({
     super.key,
     required this.uninitializedGame,
   });
