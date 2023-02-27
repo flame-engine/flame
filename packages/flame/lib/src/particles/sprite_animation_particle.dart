@@ -7,15 +7,20 @@ import 'package:flame/src/sprite_animation.dart';
 
 export '../sprite_animation.dart';
 
+/// A [Particle] which applies certain [SpriteAnimation].
 class SpriteAnimationParticle extends Particle {
   final SpriteAnimation animation;
+  final Vector2? position;
   final Vector2? size;
+  final Anchor anchor;
   final Paint? overridePaint;
   final bool alignAnimationTime;
 
   SpriteAnimationParticle({
     required this.animation,
+    this.position,
     this.size,
+    this.anchor = Anchor.center,
     this.overridePaint,
     super.lifespan,
     this.alignAnimationTime = true,
@@ -35,8 +40,9 @@ class SpriteAnimationParticle extends Particle {
   void render(Canvas canvas) {
     animation.getSprite().render(
           canvas,
+          position: position,
           size: size,
-          anchor: Anchor.center,
+          anchor: anchor,
           overridePaint: overridePaint,
         );
   }
