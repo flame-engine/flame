@@ -40,7 +40,7 @@ reference)
 ## 1.1.0
 
 * Added [RiverpodComponentMixin] to handle disposing of [ProviderSubscription]s.
-* Correction to the [RiverpodGameWidget] initialiseGame constructor - param is now 
+* Correction to the [RiverpodGameWidget] initializeGame constructor - param is now 
  [RiverpodAwareGameMixin Function (ref)] as originally intended.
 
 ## 1.0.0+1

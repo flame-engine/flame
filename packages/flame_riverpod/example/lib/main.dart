@@ -135,7 +135,7 @@ class RiverpodAwareTextComponent extends PositionComponent
   late TextComponent textComponent;
   int currentValue = 0;
 
-  /// [onMount] should be used over [onLoad] to initialise subscriptions,
+  /// [onMount] should be used over [onLoad] to initialize subscriptions,
   /// cancellation is handled for the user inside [onRemove],
   /// which is only called if the [Component] was mounted.
   @override
