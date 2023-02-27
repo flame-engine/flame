@@ -7,8 +7,7 @@ mixin HasComponentRef on Component {
   static late ComponentRef _reference;
   static set widgetRef(WidgetRef value) => _reference = ComponentRef(value);
 
-  // ignore: prefer_final_fields
-  List<ProviderSubscription> _subscriptions = [];
+  final List<ProviderSubscription> _subscriptions = [];
 
   @override
   Future<void> onLoad() async {
