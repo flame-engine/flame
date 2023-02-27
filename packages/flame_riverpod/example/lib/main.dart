@@ -56,8 +56,10 @@ class FlutterCountingComponent extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final textStyle =
-        Theme.of(context).textTheme.headline5?.copyWith(color: Colors.white);
+    final textStyle = Theme.of(context)
+        .textTheme
+        .headlineSmall
+        ?.copyWith(color: Colors.white);
 
     final stream = ref.watch(countingStreamProvider);
     return Material(

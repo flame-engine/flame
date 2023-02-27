@@ -40,7 +40,7 @@ void main() {
     expect(gameWidgetFinder, findsOneWidget);
 
     final gameWidget =
-      widgetTester.widget(gameWidgetFinder) as GameWidget<FlameGame>;
+        widgetTester.widget(gameWidgetFinder) as GameWidget<FlameGame>;
 
     // GameWidget contains a FutureBuilder, which calls setState when a Future
     // completes. We therefore need to pump / re-render the widget to ensure
@@ -66,10 +66,10 @@ void main() {
     // Current count of the stream from the [Text] widget. This is best
     // retrieved after all pumps.
     final flutterCounterTextWidgetOfInterest =
-      flutterCounterTextWidgets.elementAt(1);
+        flutterCounterTextWidgets.elementAt(1);
 
     final currentCount =
-      int.parse((flutterCounterTextWidgetOfInterest as Text).data!);
+        int.parse((flutterCounterTextWidgetOfInterest as Text).data!);
 
     // Expect equality (in the presented string value)
     // of the Text Component and the Text Widget
