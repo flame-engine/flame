@@ -10,6 +10,7 @@ When using Flame, we are interacting with components, which are *not* Widgets.
 `flame_riverpod` provides the `ComponentRef` and `HasComponentRef` to
 facilitate managing state from Providers in your Flame Game.
 
+
 ## Usage
 
 Your Widget that extends `FlameGame` should use the HasComponentRef mixin,
@@ -68,6 +69,7 @@ class RiverpodAwareTextComponent extends PositionComponent
 }
 
 ```
+
 
 ## Credits
 
