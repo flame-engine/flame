@@ -1,5 +1,7 @@
 name: flame_riverpod
-description: Helpers for using Riverpod in conjunction with Flame.
+description: Helpers for using Riverpod - a reactive caching and data-binding framework, 
+  in conjunction with Flame. The ComponentRef is used as an intermediary between Flame and
+  the Widget tree in order to provide state to Flame Components.
 version: 4.0.0+2
 homepage: https://github.com/flame-engine/flame/tree/main/packages/flame_riverpod
 environment:
