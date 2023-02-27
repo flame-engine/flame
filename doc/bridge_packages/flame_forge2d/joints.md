@@ -85,13 +85,13 @@ You can view this as a massless, rigid rod.
 ```
 
 ```dart
-    final distanceJointDef = DistanceJointDef()
-      ..initialize(firstBody, secondBody, firstBody.worldCenter, secondBody.worldCenter)
-      ..length = 10
-      ..frequencyHz = 3
-      ..dampingRatio = 0.2;
+final distanceJointDef = DistanceJointDef()
+  ..initialize(firstBody, secondBody, firstBody.worldCenter, secondBody.worldCenter)
+  ..length = 10
+  ..frequencyHz = 3
+  ..dampingRatio = 0.2;
 
-    world.createJoint(DistanceJoint(distanceJointDef));
+world.createJoint(DistanceJoint(distanceJointDef));
 ```
 
 To create a `DistanceJointDef`, you can use the `initialize` method,
