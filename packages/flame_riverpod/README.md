@@ -1,21 +1,28 @@
 # flame_riverpod
 
-Helpers for using Riverpod in conjunction with Flame - to share state from
-the game into other parts of your application, or from other parts of your
-application into your game.
+Riverpod is a reactive caching and data-binding framework for Dart & Flutter. 
 
-## Getting started
+In `flutter_riverpod`, widgets can be configured to rebuild when the state 
+of a provider changes.
 
-Check out the example package to see a FlameGame with a custom Component being updated alongside a comparable Flutter 
-widget. Both depend on a StreamProvider.
+When using Flame, we are interacting with components, which are *not* Widgets.
+
+`flame_riverpod` provides the `ComponentRef` and `HasComponentRef` to 
+facilitate managing state from Providers in your Flame Game.
 
 ## Usage
-Your widget that extends `FlameGame` should use the `HasComponentRef` mixin, and accept a WidgetRef inside its 
-constructor. This is mapped to a `ComponentRef`, which exposes a subset of the functionality users of Riverpod will 
-be familiar with - this is because Components are *not* Widgets!
+Your Widget that extends `FlameGame` should use the HasComponentRef mixin, 
+and accept a WidgetRef inside its constructor, and should be wrapped in a 
+ConsumerStatefulWidget, as per the example. 
 
-In Riverpod with Flame, you should use `listen` to subscribe to updates from a provider. Alternatively, you could use 
-`ref.read` as you would elsewhere in Flutter.
+The `listen` method can be used within any Component that uses the 
+HasComponentMixin to subscribe to updates from a provider. 
+
+Alternatively, you could use `ref.read` as you would elsewhere when consuming `flutter_riverpod`.
+
+Subscriptions to a provider are managed in accordance with the lifecycle 
+of a Flame Component: initialization occurs when a Component is mounted, and disposal 
+occurs when a Component is removed.
 
 ```dart
 /// An excerpt from the Example. Check it out!

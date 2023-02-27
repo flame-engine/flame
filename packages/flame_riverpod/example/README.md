@@ -1,16 +1,12 @@
-# example
+# flame_riverpod_example
 
-A new Flutter project.
+## Getting started
 
-## Getting Started
+The example consists of a very simple FlameGame with a custom 
+Component, updated alongside a comparable Flutter widget. 
 
-This project is a starting point for a Flutter application.
+Both the Component and the Widget depend on a `StreamProvider`
+that counts upwards indefinitely.
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Both a Flame Component and a Flutter Text Widget update in real-time from
+the same data source.
