@@ -3,15 +3,14 @@
 Joints are used to connect two different bodies together in various ways.
 They help to simulate interactions between objects to create hinges, wheels, ropes, chains etc.
 
-One `Body` in a joint may be of type `BodyType.static`.
-Joints between `BodyType.static` and/or `BodyType.kinematic` are allowed,
-but have no effect and use some processing time.
+One `Body` in a joint may be of type `BodyType.static`. Joints between `BodyType.static` and/or
+`BodyType.kinematic` are allowed, but have no effect and use some processing time.
 
-To construct a `Joint`, you need to create a corresponding subclass of `JointDef`
-and initialize it with its parameters.
+To construct a `Joint`, you need to create a corresponding subclass of `JointDef`and initialize it
+with its parameters.
 
-To register a `Joint` use `world.createJoint`
-and later use `world.destroyJoint` when you want to remove it.
+To register a `Joint` use `world.createJoint`and later use `world.destroyJoint` when you want to
+remove it.
 
 
 ## Built-in joints
@@ -60,15 +59,14 @@ It can for example be useful when simulating "soft-bodies".
   world.createJoint(ConstantVolumeJoint(world, constantVolumeJoint));
 ```
 
-`ConstantVolumeJointDef` requires at least 3 bodies to be added using the `addBody` method.
-It also has two optional parameters:
+`ConstantVolumeJointDef` requires at least 3 bodies to be added using the `addBody` method. It also
+has two optional parameters:
 
-- `frequencyHz`: This parameter sets the frequency of oscillation of the joint.
-  If it is not set to 0, the higher the value,
-the less springy each of the compound `DistantJoint`s are.
+- `frequencyHz`: This parameter sets the frequency of oscillation of the joint. If it is not set to
+0, the higher the value, the less springy each of the compound `DistantJoint`s are.
 
-- `dampingRatio`: This parameter defines how quickly the oscillation comes to rest.
-  It ranges from 0 to 1, where 0 means no damping and 1 indicates critical damping.
+- `dampingRatio`: This parameter defines how quickly the oscillation comes to rest. It ranges from
+0 to 1, where 0 means no damping and 1 indicates critical damping.
 
 
 ### `DistanceJoint`
@@ -95,21 +93,21 @@ final distanceJointDef = DistanceJointDef()
 world.createJoint(DistanceJoint(distanceJointDef));
 ```
 
-To create a `DistanceJointDef`, you can use the `initialize` method,
-which requires two bodies and a world anchor point on each body.
-The definition uses local anchor points, allowing for a slight violation of the constraint
-in the initial configuration. This is useful when saving and loading a game.
+To create a `DistanceJointDef`, you can use the `initialize` method, which requires two bodies and a
+world anchor point on each body. The definition uses local anchor points, allowing for a slight
+violation of the constraint in the initial configuration. This is useful when saving and
+loading a game.
 
 The `DistanceJointDef` has three optional parameters that you can set:
 
-- `length`: This parameter determines the distance between
-the two anchor points and must be greater than 0. The default value is 1.
+- `length`: This parameter determines the distance between the two anchor points and must be greater
+than 0. The default value is 1.
 
-- `frequencyHz`: This parameter sets the frequency of oscillation of the joint.
-If it is not set to 0, the higher the value, the less springy the joint becomes.
+- `frequencyHz`: This parameter sets the frequency of oscillation of the joint. If it is not set
+to 0, the higher the value, the less springy the joint becomes.
 
-- `dampingRatio`: This parameter defines how quickly the oscillation comes to rest.
-It ranges from 0 to 1, where 0 means no damping and 1 indicates critical damping.
+- `dampingRatio`: This parameter defines how quickly the oscillation comes to rest. It ranges from
+0 to 1, where 0 means no damping and 1 indicates critical damping.
 
 ```{warning}
 Do not use a zero or short length.
