@@ -59,3 +59,6 @@ class RiverpodAwareTextComponent extends PositionComponent
 }
 
 ```
+# Credits
+
+[Mark Videon](https://markvideon.dev) for the initial groundwork and implementation.
