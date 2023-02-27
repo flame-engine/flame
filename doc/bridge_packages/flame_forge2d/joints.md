@@ -102,7 +102,7 @@ in the initial configuration. This is useful when saving and loading a game.
 The `DistanceJointDef` has three optional parameters that you can set:
 
 - `length`: This parameter determines the distance between
-the two anchor points and must be greater than 0.
+the two anchor points and must be greater than 0. The default value is 1.
 
 - `frequencyHz`: This parameter sets the frequency of oscillation of the joint.
 If it is not set to 0, the higher the value, the less springy the joint becomes.
