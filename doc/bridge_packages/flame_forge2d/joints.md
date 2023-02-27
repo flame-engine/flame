@@ -35,7 +35,8 @@ Currently, Forge2D supports the following joints:
 ### `ConstantVolumeJoint`
 
 This type of joint connects a group of bodies together and maintains a constant volume within them.
-Essentially, it is a set of [`DistanceJoint`](#distancejoint)s, that connects all bodies one after another.
+Essentially, it is a set of [`DistanceJoint`](#distancejoint)s, that connects all bodies one after
+another.
 
 It can for example be useful when simulating "soft-bodies".
 
