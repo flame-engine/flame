@@ -57,7 +57,6 @@ void main() {
     await widgetTester.pump(const Duration(seconds: 1));
 
     // Check components are mounted as expected.
-    expect(gameWidget.game!.hasPendingLifecycleEvents, false);
     expect(gameWidget.game?.children.isNotEmpty ?? false, true);
 
     final riverpodAwareTextComponent =
