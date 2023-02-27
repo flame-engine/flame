@@ -273,9 +273,8 @@ class RouterComponent extends Component {
 
   void _adjustRoutesOrder() {
     for (var i = 0; i < _routeStack.length; i++) {
-      _routeStack[i].changePriorityWithoutResorting(i);
+      _routeStack[i].priority = i;
     }
-    reorderChildren();
   }
 
   void _adjustRoutesVisibility() {

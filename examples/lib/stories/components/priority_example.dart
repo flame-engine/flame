@@ -33,7 +33,7 @@ class Square extends RectangleComponent
   bool onTapDown(TapDownInfo info) {
     final topComponent = gameRef.children.last;
     if (topComponent != this) {
-      gameRef.children.changePriority(this, topComponent.priority + 1);
+      priority = topComponent.priority + 1;
     }
     return false;
   }

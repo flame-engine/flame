@@ -96,9 +96,10 @@ class MyGame extends FlameGame {
 ```
 
 To update the priority of a component you have to set it to a new value, like
-`component.priority = 2`, and it will be updated in the next tick.
+`component.priority = 2`, and it will be updated in the current tick before the rendering stage.
 
-Example:
+In the following example we first initialize the component with priority 1, and then when the
+user taps the component we change its priority to 2:
 
 ```dart
 class MyComponent extends PositionComponent with Tappable {
@@ -111,9 +112,6 @@ class MyComponent extends PositionComponent with Tappable {
   }
 }
 ```
-
-In the example above we first initialize the component with priority 1, and then when the user taps
-the component we change the priority to 2.
 
 
 ### Composability of components

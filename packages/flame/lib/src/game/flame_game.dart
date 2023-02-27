@@ -85,11 +85,11 @@ class FlameGame extends ComponentTreeRoot with Game {
   @override
   void updateTree(double dt) {
     processLifecycleEvents();
-    children.updateComponentList();
     if (parent != null) {
       update(dt);
     }
     children.forEach((c) => c.updateTree(dt));
+    processRebalanceEvents();
   }
 
   /// This passes the new size along to every component in the tree via their
