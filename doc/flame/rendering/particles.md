@@ -302,7 +302,7 @@ game.add(
 
 ## SpriteAnimationParticle
 
-A `Particle` which embeds an `SpriteAnimation`.
+A `Particle` which embeds a `SpriteAnimation`.
 By default, aligns the `SpriteAnimation`'s `stepTime` so that
 it's fully played during the `Particle` lifespan. It's possible to override this behavior with the
 `alignAnimationTime` argument.
