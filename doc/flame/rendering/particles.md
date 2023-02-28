@@ -300,9 +300,10 @@ game.add(
 ```
 
 
-## AnimationParticle
+## SpriteAnimationParticle
 
-A `Particle` which embeds an `Animation`. By default, aligns the `Animation`'s `stepTime` so that
+A `Particle` which embeds a `SpriteAnimation`.
+By default, aligns the `SpriteAnimation`'s `stepTime` so that
 it's fully played during the `Particle` lifespan. It's possible to override this behavior with the
 `alignAnimationTime` argument.
 
@@ -314,7 +315,7 @@ final spritesheet = SpriteSheet(
 
 game.add(
   ParticleSystemComponent(
-    particle: AnimationParticle(
+    particle: SpriteAnimationParticle(
       animation: spritesheet.createAnimation(0, stepTime: 0.1),
     );
   ),
