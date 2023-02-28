@@ -9,6 +9,7 @@ import 'package:examples/stories/bridge_libraries/forge2d/domino_example.dart';
 import 'package:examples/stories/bridge_libraries/forge2d/draggable_example.dart';
 import 'package:examples/stories/bridge_libraries/forge2d/joint_example.dart';
 import 'package:examples/stories/bridge_libraries/forge2d/joints/constant_volume_joint.dart';
+import 'package:examples/stories/bridge_libraries/forge2d/joints/distance_joint.dart';
 import 'package:examples/stories/bridge_libraries/forge2d/mouse_joint_example.dart';
 import 'package:examples/stories/bridge_libraries/forge2d/raycast_example.dart';
 import 'package:examples/stories/bridge_libraries/forge2d/revolute_joint_example.dart';
@@ -109,10 +110,18 @@ void addForge2DStories(Dashbook dashbook) {
 }
 
 void addJointsStories(Dashbook dashbook) {
-  dashbook.storiesOf('flame_forge2d/joints').add(
+  dashbook
+      .storiesOf('flame_forge2d/joints')
+      .add(
         'ConstantVolumeJoint',
         (DashbookContext ctx) => GameWidget(game: ConstantVolumeJointExample()),
         codeLink: link('constant_volume_joint.dart'),
+        info: BlobExample.description,
+      )
+      .add(
+        'DistanceJoint',
+        (DashbookContext ctx) => GameWidget(game: DistanceJointExample()),
+        codeLink: link('distance_joint.dart'),
         info: BlobExample.description,
       );
 }
