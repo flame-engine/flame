@@ -77,13 +77,13 @@ of these `mixin`s and its methods:
   - onScaleUpdate
   - onScaleEnd
 
- - MultiTouchTapDetector
+- MultiTouchTapDetector
   - onTap
   - onTapCancel
   - onTapDown
   - onTapUp
 
- - MultiTouchDragDetector
+- MultiTouchDragDetector
   - onReceiveDrag
 ```
 
@@ -470,6 +470,31 @@ class MyGame extends FlameGame with HasHoverables {
     }
   }
 }
+```
+
+
+### DoubleTapCallbacks
+
+Flame also offers a mixin named `DoubleTapCallbacks` to receive a double-tap event from the
+component. To start receiving double tap events in a component, add the
+`DoubleTapCallbacks` mixin to your `PositionComponent`.
+
+```dart
+class MyComponent extends PositionComponent with DoubleTapCallbacks {
+  @override
+  void onDoubleTapUp(DoubleTapEvent event) {
+    /// Do something
+  }
+
+  @override
+  void onDoubleTapCancel(DoubleTapCancelEvent event) {
+    /// Do something
+  }
+
+  @override
+  void onDoubleTapDown(DoubleTapDownEvent event) {
+    /// Do something
+  }
 ```
 
 

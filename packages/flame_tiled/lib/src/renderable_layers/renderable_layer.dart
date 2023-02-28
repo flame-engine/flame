@@ -1,6 +1,11 @@
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame_tiled/src/renderable_layers/group_layer.dart';
+import 'package:flame_tiled/src/renderable_layers/image_layer.dart';
+import 'package:flame_tiled/src/renderable_layers/object_layer.dart';
+import 'package:flame_tiled/src/renderable_layers/tile_layers/tile_layer.dart';
+import 'package:flame_tiled/src/tile_animation.dart';
+import 'package:flame_tiled/src/tile_atlas.dart';
 import 'package:meta/meta.dart';
 import 'package:tiled/tiled.dart';
 
@@ -13,12 +18,65 @@ abstract class RenderableLayer<T extends Layer> {
   /// The parent [Group] layer (if it exists)
   final GroupLayer? parent;
 
-  RenderableLayer(
-    this.layer,
-    this.parent,
-    this.map,
-    this.destTileSize,
-  );
+  RenderableLayer({
+    required this.layer,
+    required this.parent,
+    required this.map,
+    required this.destTileSize,
+  });
+
+  /// [load] is a factory method to create [RenderableLayer] by type of [layer].
+  static Future<RenderableLayer> load({
+    required Layer layer,
+    required GroupLayer? parent,
+    required TiledMap map,
+    required Vector2 destTileSize,
+    required Camera? camera,
+    required Map<Tile, TileFrames> animationFrames,
+    required TiledAtlas atlas,
+    bool? ignoreFlip,
+  }) async {
+    if (layer is TileLayer) {
+      return FlameTileLayer.load(
+        layer: layer,
+        parent: parent,
+        map: map,
+        destTileSize: destTileSize,
+        animationFrames: animationFrames,
+        atlas: atlas.clone(),
+        ignoreFlip: ignoreFlip,
+      );
+    } else if (layer is ImageLayer) {
+      return FlameImageLayer.load(
+        layer: layer,
+        parent: parent,
+        camera: camera,
+        map: map,
+        destTileSize: destTileSize,
+      );
+    } else if (layer is ObjectGroup) {
+      return ObjectLayer.load(
+        layer,
+        map,
+        destTileSize,
+      );
+    } else if (layer is Group) {
+      final groupLayer = layer;
+      return GroupLayer(
+        layer: groupLayer,
+        parent: parent,
+        map: map,
+        destTileSize: destTileSize,
+      );
+    }
+
+    return UnsupportedLayer(
+      layer: layer,
+      parent: parent,
+      map: map,
+      destTileSize: destTileSize,
+    );
+  }
 
   bool get visible => layer.visible;
 
@@ -72,12 +130,12 @@ abstract class RenderableLayer<T extends Layer> {
 
 @internal
 class UnsupportedLayer extends RenderableLayer {
-  UnsupportedLayer(
-    super.layer,
-    super.parent,
-    super.map,
-    super.destTileSize,
-  );
+  UnsupportedLayer({
+    required super.layer,
+    required super.parent,
+    required super.map,
+    required super.destTileSize,
+  });
 
   @override
   void render(Canvas canvas, Camera? camera) {}

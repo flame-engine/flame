@@ -363,7 +363,7 @@ All components in our game will need to move at the same speed, so to do this, o
 double objectSpeed = 0.0;
 ```
 
-So to implement that movement, declare a variable at the top of the `EmberQuestGame` class and make
+So to implement that movement, declare a variable at the top of the `PlatformBlock` class and make
 your `update` method look like this:
 
 ```dart
@@ -398,8 +398,8 @@ Now we just need to finish the `onLoad` method.  So make your `onLoad` method lo
   Future<void> onLoad() async {
     final platformImage = game.images.fromCache('block.png');
     sprite = Sprite(platformImage);
-    position = Vector2((_gridPosition.x * size.x) + _xOffset,
-        game.size.y - (_gridPosition.y * size.y),
+    position = Vector2((gridPosition.x * size.x) + _xOffset,
+        game.size.y - (gridPosition.y * size.y),
     );
     add(RectangleHitbox()..collisionType = CollisionType.passive);
   }

@@ -469,17 +469,8 @@ it into several smaller steps:
 
 ### 1. Simple movement
 
-So, we want to be able to drag the cards on the screen. This is almost as simple as making the
-`StockPile` tappable: first, we add the `HasDraggableComponents` mixin to our game class:
-
-```dart
-class KlondikeGame extends FlameGame
-    with HasTappableComponents, HasDraggableComponents {
-  ...
-}
-```
-
-Now, head over into the `Card` class and add the `DragCallbacks` mixin:
+So, we want to be able to drag the cards on the screen. This is even simpler than making the
+`StockPile` tappable: just head over into the `Card` class and add the `DragCallbacks` mixin:
 
 ```dart
 class Card extends PositionComponent with DragCallbacks {

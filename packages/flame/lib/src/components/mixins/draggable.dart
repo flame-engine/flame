@@ -90,6 +90,7 @@ mixin Draggable on Component {
     assert(
       (() {
         final game = findGame()!;
+        // ignore: deprecated_member_use_from_same_package
         return game is HasDraggables || game is HasDraggablesBridge;
       })(),
       'Draggable Components can only be added to a FlameGame with '

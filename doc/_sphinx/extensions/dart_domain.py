@@ -292,6 +292,8 @@ class DartdocDirective(SphinxDirective):
                 if i == n_simple_parameters:
                     arguments += nodes.inline(text=brackets[0], classes=['punct'])
                 argument = nodes.inline(classes=['argument'])
+                if 'required' in param:
+                    argument += nodes.inline(text='required ', classes=['keyword'])
                 if 'type' in param:
                     argument += nodes.Text(param['type'])
                     argument += nodes.Text(' ')

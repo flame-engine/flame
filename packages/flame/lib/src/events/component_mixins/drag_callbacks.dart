@@ -5,6 +5,7 @@ import 'package:flame/src/events/messages/drag_cancel_event.dart';
 import 'package:flame/src/events/messages/drag_end_event.dart';
 import 'package:flame/src/events/messages/drag_start_event.dart';
 import 'package:flame/src/events/messages/drag_update_event.dart';
+import 'package:flame/src/game/flame_game.dart';
 import 'package:meta/meta.dart';
 
 /// This mixin can be added to a [Component] allowing it to receive drag events.
@@ -13,9 +14,6 @@ import 'package:meta/meta.dart';
 /// [containsLocalPoint] method -- the component will only register the start of
 /// a drag if the point where the initial touch event has occurred was inside
 /// the component.
-///
-/// When using this mixin with any component, make sure to also add the
-/// [HasDraggableComponents] mixin to your game.
 ///
 /// This mixin is intended as a replacement of the [Draggable] mixin.
 mixin DragCallbacks on Component {
@@ -57,10 +55,9 @@ mixin DragCallbacks on Component {
   @mustCallSuper
   void onMount() {
     super.onMount();
-    assert(
-      findGame()! is HasDraggableComponents,
-      'The components with DragCallbacks can only be added to a FlameGame with '
-      'the HasDraggableComponents mixin',
-    );
+    final game = findGame()! as FlameGame;
+    if (game.firstChild<MultiDragDispatcher>() == null) {
+      game.add(MultiDragDispatcher());
+    }
   }
 }

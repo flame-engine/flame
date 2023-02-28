@@ -3,8 +3,8 @@ Aseprite
 Audioplayers
 BGUG
 Bodymovin
+Cypher
 Dashbook
-Fireslime
 Hermione
 Kawabunga
 Klingsbo
@@ -18,14 +18,15 @@ Tiled
 Tiled's
 Tilemap
 Wyrmsun
-caveace
 erayzesen
 padracing
 ptero
+riverpod
 spydon
 stpasha
 tavian
 trex
+Videon
 wolfenrain
 xaha
 yarnspinner

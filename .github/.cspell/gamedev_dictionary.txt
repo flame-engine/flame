@@ -1,3 +1,4 @@
+AABB # axis-aligned bounding box
 AHSL
 AHSV
 ARGB
@@ -109,6 +110,7 @@ redeclaration
 refactor
 refactoring
 refactorings
+refreshable
 reimplement
 reimplemented
 renderable

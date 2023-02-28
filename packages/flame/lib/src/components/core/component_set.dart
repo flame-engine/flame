@@ -22,12 +22,6 @@ class ComponentSet extends QueryableOrderedSet<Component> {
           strictMode: strictMode ?? defaultStrictMode,
         );
 
-  /// Components whose priority changed since the last update.
-  ///
-  /// When priorities change we need to re-balance the component set, but
-  /// we can only do that after each update to avoid concurrency issues.
-  final Set<Component> _changedPriorities = {};
-
   static bool defaultStrictMode = false;
 
   /// Marked as internal, because the users shouldn't be able to add elements
@@ -73,23 +67,30 @@ class ComponentSet extends QueryableOrderedSet<Component> {
   @override
   bool get isNotEmpty => !isEmpty;
 
-  /// Call this on your update method.
-  ///
-  /// This method effectuates any pending operations of insertion or removal,
-  /// and thus actually modifies the components set.
-  /// Note: do not call this while iterating the set.
-  void updateComponentList() {
-    _actuallyUpdatePriorities();
-  }
-
-  @override
-  void rebalanceAll() {
+  /// Sorts the components according to their `priority`s. This method is
+  /// invoked by the framework when it knows that the priorities of the
+  /// components in this set has changed.
+  @internal
+  void reorder() {
     final elements = toList();
     // bypass the wrapper because the components are already added
     super.clear();
     elements.forEach(super.add);
   }
 
+  /// Call this on your update method.
+  ///
+  /// This method effectuates any pending operations of insertion or removal,
+  /// and thus actually modifies the components set.
+  /// Note: do not call this while iterating the set.
+  @Deprecated('Will be removed in 1.8.0.')
+  void updateComponentList() {}
+
+  @Deprecated('Will be removed in 1.8.0.')
+  @override
+  void rebalanceAll() => reorder();
+
+  @Deprecated('Will be removed in 1.8.0.')
   @override
   void rebalanceWhere(bool Function(Component element) test) {
     // bypass the wrapper because the components are already added
@@ -104,33 +105,12 @@ class ComponentSet extends QueryableOrderedSet<Component> {
   /// either was a child of another component, if it didn't exist at all or if
   /// it was a component added directly on the game but its priority didn't
   /// change.
+  @Deprecated('Will be removed in 1.8.0.')
   bool changePriority(
     Component component,
     int priority,
   ) {
-    if (component.priority == priority) {
-      return false;
-    }
-    component.changePriorityWithoutResorting(priority);
-    _changedPriorities.add(component);
+    component.priority = priority;
     return true;
-  }
-
-  void _actuallyUpdatePriorities() {
-    var hasRootComponents = false;
-    final parents = <Component>{};
-    _changedPriorities.forEach((component) {
-      final parent = component.parent;
-      if (parent != null) {
-        parents.add(parent);
-      } else {
-        hasRootComponents |= contains(component);
-      }
-    });
-    if (hasRootComponents) {
-      rebalanceAll();
-    }
-    parents.forEach((parent) => parent.reorderChildren());
-    _changedPriorities.clear();
   }
 }
