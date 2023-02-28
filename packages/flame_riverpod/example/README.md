@@ -1,8 +1,4 @@
-
 # flame_riverpod_example
-
-
-## Getting started
 
 The example consists of a very simple FlameGame with a custom
 Component, updated alongside a comparable Flutter widget.
