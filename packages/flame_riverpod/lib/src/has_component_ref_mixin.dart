@@ -2,6 +2,10 @@ import 'package:flame/components.dart';
 import 'package:flame_riverpod/src/component_ref.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+/// The [HasComponentRef] mixin is a bridge between a [FlameGame] and a
+/// [ConsumerStatefulWidget]. A single [WidgetRef] is shared between components
+/// within a FlameGame, accessed through the [ComponentRef] type. Subscriptions
+/// to providers are managed in accordance with the [Component] lifecycle.
 mixin HasComponentRef on Component {
   ComponentRef get ref => _reference;
   static late ComponentRef _reference;
