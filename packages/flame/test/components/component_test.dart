@@ -33,7 +33,7 @@ void main() {
       testWithFlameGame(
         'component.removed completes if obtained before the game was ready',
         (game) async {
-          final component = LifecycleComponent('component');
+          final component = LifecycleComponent();
           final removed = component.removed;
           await game.add(component);
           await game.ready();
@@ -48,7 +48,7 @@ void main() {
       testWithFlameGame(
         'component removed completes when set after game is ready',
         (game) async {
-          final component = LifecycleComponent('component');
+          final component = LifecycleComponent();
           await game.add(component);
           await game.ready();
           final removed = component.removed;
@@ -1149,9 +1149,9 @@ class TwoChildrenComponent extends Component {
 
 class LifecycleComponent extends Component {
   final List<String> events = [];
-  final String? name;
+  final String name;
 
-  LifecycleComponent([this.name]);
+  LifecycleComponent([this.name = '']);
 
   int countEvents(String event) {
     return events.where((e) => e == event).length;
@@ -1188,6 +1188,9 @@ class LifecycleComponent extends Component {
     super.onGameResize(size);
     events.add('onGameResize $size');
   }
+
+  @override
+  String toString() => 'LifecycleComponent($name)';
 }
 
 class _SlowLoadingComponent extends Component {
