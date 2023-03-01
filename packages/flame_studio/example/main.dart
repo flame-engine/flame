@@ -21,7 +21,7 @@ class MyGame extends FlameGame {
   void onLoad() {
     final size = findGame()!.canvasSize;
     final random = Random();
-    for (var i = 0; i < 100; i++) {
+    for (var i = 0; i < 10; i++) {
       final speed = random.nextDouble() * 500;
       final angle = random.nextDouble() * 12;
       add(

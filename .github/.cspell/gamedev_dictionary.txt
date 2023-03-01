@@ -110,6 +110,7 @@ redeclaration
 refactor
 refactoring
 refactorings
+refreshable
 reimplement
 reimplemented
 renderable
