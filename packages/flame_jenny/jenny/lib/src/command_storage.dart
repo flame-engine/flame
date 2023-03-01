@@ -224,7 +224,7 @@ class ArgumentsLexer {
   List<String> tokenize() {
     pushMode(modeStartOfArgument);
     while (!eof) {
-      final ok = (modeStack.last)();
+      final ok = modeStack.last();
       assert(ok);
     }
     if (modeStack.last == modeTextArgument) {

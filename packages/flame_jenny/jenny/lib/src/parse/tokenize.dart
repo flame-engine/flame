@@ -66,7 +66,7 @@ class _Lexer {
     indentStack.add(0);
     pushMode(modeMain);
     while (!eof) {
-      final ok = (modeStack.last)();
+      final ok = modeStack.last();
       if (!ok) {
         error('invalid token');
       }
