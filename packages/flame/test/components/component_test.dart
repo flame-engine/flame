@@ -62,8 +62,8 @@ void main() {
       testWithFlameGame(
         'component removed completes after changing parent',
         (game) async {
-          final parent = LifecycleComponent()..addToParent(game);
-          final child = LifecycleComponent()..addToParent(parent);
+          final parent = LifecycleComponent('parent')..addToParent(game);
+          final child = LifecycleComponent('child')..addToParent(parent);
           await game.ready();
           final removed = child.removed;
 
@@ -80,8 +80,8 @@ void main() {
 
       testWithFlameGame('remove parent of child that has removed set',
           (game) async {
-        final parent = LifecycleComponent()..addToParent(game);
-        final child = LifecycleComponent()..addToParent(parent);
+        final parent = LifecycleComponent('parent')..addToParent(game);
+        final child = LifecycleComponent('child')..addToParent(parent);
         await game.ready();
         final removed = child.removed;
 
@@ -94,8 +94,8 @@ void main() {
       testWithFlameGame(
         'component mounted completes when changing parent',
         (game) async {
-          final parent = LifecycleComponent();
-          final child = LifecycleComponent();
+          final parent = LifecycleComponent('parent');
+          final child = LifecycleComponent('child');
           parent.add(child);
           game.add(parent);
 
@@ -116,8 +116,8 @@ void main() {
       testWithFlameGame(
         'component mounted completes when changing parent from a null parent',
         (game) async {
-          final parent = LifecycleComponent();
-          final child = LifecycleComponent();
+          final parent = LifecycleComponent('parent');
+          final child = LifecycleComponent('child');
           game.add(parent);
 
           final mounted = child.mounted;
@@ -174,8 +174,8 @@ void main() {
       );
 
       testWithFlameGame('correct lifecycle on parent change', (game) async {
-        final parent = LifecycleComponent();
-        final child = LifecycleComponent();
+        final parent = LifecycleComponent('parent');
+        final child = LifecycleComponent('child');
         parent.add(child);
         game.add(parent);
         await game.ready();
@@ -232,8 +232,8 @@ void main() {
               ],
             ),
           );
-          final component1 = LifecycleComponent()..addToParent(game1);
-          final component2 = LifecycleComponent()..addToParent(game2);
+          final component1 = LifecycleComponent('A')..addToParent(game1);
+          final component2 = LifecycleComponent('B')..addToParent(game2);
           await game1.ready();
           await game2.ready();
           expect(
@@ -250,8 +250,8 @@ void main() {
       testWithFlameGame(
         'Remove and re-add component with children',
         (game) async {
-          final parent = LifecycleComponent();
-          final child = LifecycleComponent()..addToParent(parent);
+          final parent = LifecycleComponent('parent');
+          final child = LifecycleComponent('child')..addToParent(parent);
           await game.add(parent);
           await game.ready();
 
@@ -1149,8 +1149,9 @@ class TwoChildrenComponent extends Component {
 
 class LifecycleComponent extends Component {
   final List<String> events = [];
+  final String name;
 
-  LifecycleComponent();
+  LifecycleComponent([this.name = '']);
 
   int countEvents(String event) {
     return events.where((e) => e == event).length;
@@ -1187,6 +1188,9 @@ class LifecycleComponent extends Component {
     super.onGameResize(size);
     events.add('onGameResize $size');
   }
+
+  @override
+  String toString() => 'LifecycleComponent($name)';
 }
 
 class _SlowLoadingComponent extends Component {
