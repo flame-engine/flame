@@ -50,6 +50,7 @@ mixin FlameBlocListenable<B extends BlocBase<S>, S> on Component {
     }
     _bloc = bloc;
     _state = bloc.state;
+    onNewState(_state);
     _subscription = bloc.stream.listen((newState) {
       if (_state != newState) {
         final _callNewState = listenWhen(_state, newState);

@@ -78,7 +78,7 @@ void main() {
 
         bloc.makeSad();
         await Future.microtask(() {});
-        expect(component.last, isNull);
+        expect(component.last, PlayerState.alive);
       },
     );
 
@@ -96,7 +96,7 @@ void main() {
 
         bloc.kill();
         await Future.microtask(() {});
-        expect(component.last, isNull);
+        expect(component.last, PlayerState.alive);
       },
     );
 
