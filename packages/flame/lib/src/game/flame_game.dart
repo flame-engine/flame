@@ -16,7 +16,9 @@ import 'package:meta/meta.dart';
 ///
 /// This is the recommended base class to use for most games made with Flame.
 /// It is based on the Flame Component System (also known as FCS).
-class FlameGame extends ComponentTreeRoot with Game implements SizeProvider {
+class FlameGame extends ComponentTreeRoot
+    with Game
+    implements ReadonlySizeProvider {
   FlameGame({
     super.children,
     Camera? camera,
@@ -183,10 +185,5 @@ class FlameGame extends ComponentTreeRoot with Game implements SizeProvider {
         callback(notifier);
       }
     }
-  }
-
-  @override
-  set size(Vector2 value) {
-    throw UnsupportedError('The size of FlameGame cannot be set explicitly');
   }
 }
