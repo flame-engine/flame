@@ -27,6 +27,23 @@ void main() {
         expect(blockA.activeCollisions.length, 1);
         expect(blockB.activeCollisions.length, 1);
       },
+      'intersections are returned': (game) async {
+        final blockA = TestBlock(
+          Vector2.zero(),
+          Vector2.all(10),
+        );
+        final blockB = TestBlock(
+          Vector2.all(1),
+          Vector2.all(10),
+        );
+        await game.ensureAddAll([blockA, blockB]);
+        game.update(0);
+
+        final points = blockA.intersections(blockB);
+        expect(points.length, 2);
+        expect(points, contains(Vector2(1, 10)));
+        expect(points, contains(Vector2(10, 1)));
+      },
       'passives do not collide': (game) async {
         final blockA = TestBlock(
           Vector2.zero(),
