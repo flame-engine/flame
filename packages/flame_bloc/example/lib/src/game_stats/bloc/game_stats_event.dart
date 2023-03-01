@@ -13,13 +13,6 @@ class ScoreEventAdded extends GameStatsEvent {
   List<Object?> get props => [score];
 }
 
-class ScoreEventCleared extends GameStatsEvent {
-  const ScoreEventCleared();
-
-  @override
-  List<Object?> get props => [];
-}
-
 class PlayerDied extends GameStatsEvent {
   const PlayerDied();
 
