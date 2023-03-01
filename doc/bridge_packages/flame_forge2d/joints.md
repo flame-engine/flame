@@ -19,7 +19,7 @@ Currently, Forge2D supports the following joints:
 
 - [`ConstantVolumeJoint`](#constantvolumejoint)
 - [`DistanceJoint`](#distancejoint)
-- FrictionJoint
+- [`FrictionJoint`](#frictionjoint)
 - GearJoint
 - MotorJoint
 - MouseJoint
@@ -112,3 +112,45 @@ to 0, the higher the value, the less springy the joint becomes.
 ```{warning}
 Do not use a zero or short length.
 ```
+
+
+### `FrictionJoint`
+
+A `FrictionJoint` is used for top-down friction. It provides 2D translational friction and angular
+friction.
+
+The `initialize` method requires two bodies and an anchor. The first body is the body the friction
+will be applied to. The second body can be any body in the world, like a floor or an invisible
+body. The reason is that the friction force will be applied to the first body when it collides with
+any other bodies, not only the second body of the joint.
+
+The third parameter is the anchor point in the world where the friction force will be applied.
+
+```{flutter-app}
+:sources: ../../examples
+:page: friction_joint
+:show: widget code infobox
+:width: 200
+:height: 200
+```
+
+```dart
+final frictionJointDef = FrictionJointDef()
+  ..initialize(ballBody, borderBody, ballBody.worldCenter)
+  ..maxForce = 50
+  ..maxTorque = 50;
+
+  world.createJoint(FrictionJoint(frictionJointDef));
+```
+
+When creating a `FrictionJoint`, simulated friction can be applied via maximum force and torque
+values:
+
+- `maxForce`: the maximum translational friction which applied to the joined body. A higher value
+- simulates higher friction.
+
+- `maxTorque`: the maximum angular friction which may be applied to the joined body. A higher value
+- simulates higher friction.
+
+In other words, the former simulates the friction, when the body is sliding and the latter simulates
+the friction when the body is spinning.
