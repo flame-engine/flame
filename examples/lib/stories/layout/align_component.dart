@@ -29,22 +29,34 @@ class AlignComponentExample extends FlameGame {
             ),
             AlignComponent(
               alignment: Anchor.topCenter,
-              child: CircleComponent(radius: 10, anchor: Anchor.bottomCenter),
+              child: CircleComponent(
+                radius: 10,
+                anchor: Anchor.bottomCenter,
+              ),
               keepChildAnchor: true,
             ),
             AlignComponent(
               alignment: Anchor.bottomCenter,
-              child: CircleComponent(radius: 10, anchor: Anchor.topCenter),
+              child: CircleComponent(
+                radius: 10,
+                anchor: Anchor.topCenter,
+              ),
               keepChildAnchor: true,
             ),
             AlignComponent(
               alignment: Anchor.centerLeft,
-              child: CircleComponent(radius: 10, anchor: Anchor.centerRight),
+              child: CircleComponent(
+                radius: 10,
+                anchor: Anchor.centerRight,
+              ),
               keepChildAnchor: true,
             ),
             AlignComponent(
               alignment: Anchor.centerRight,
-              child: CircleComponent(radius: 10, anchor: Anchor.centerLeft),
+              child: CircleComponent(
+                radius: 10,
+                anchor: Anchor.centerLeft,
+              ),
               keepChildAnchor: true,
             ),
           ],
