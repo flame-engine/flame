@@ -5,24 +5,22 @@ widgets in your tree. However, if you want to easily show widgets on top of your
 messages, menu screens or something of that nature, you can use the Widgets Overlay API to make
 things even easier.
 
-`Game.overlays` enables any Flutter widget to be shown on top of a game instance, this makes it very
+`Game.overlays` enables any Flutter widget to be shown on top of a game instance. This makes it very
 easy to create things like a pause menu or an inventory screen for example.
 
-This management is done via the `game.overlays.add` and `game.overlays.remove` methods that mark an
+The feature can be used via the `game.overlays.add` and `game.overlays.remove` methods that mark an
 overlay to be shown or hidden, respectively, via a `String` argument that identifies the overlay.
-After that, it can be specified which widgets represent each overlay in the `GameWidget` declaration
-by setting an `overlayBuilderMap`.
+After that, you can map each overlay to their correspoinding Widget in your `GameWidget` declaration
+by providing an `overlayBuilderMap`.
 
 ```dart
-void main() {
-  // Inside the game methods:
+  // Inside your game:
   final pauseOverlayIdentifier = 'PauseMenu';
 
   // Marks 'PauseMenu' to be rendered.
   overlays.add(pauseOverlayIdentifier);
   // Marks 'PauseMenu' to not be rendered.
   overlays.remove(pauseOverlayIdentifier);
-}
 ```
 
 ```dart
