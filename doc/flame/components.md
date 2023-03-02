@@ -39,6 +39,9 @@ Every `Component` has a few methods that you can optionally implement, which are
 The `onGameResize` method is called whenever the screen is resized, and also when this component
 gets added into the component tree, before the `onMount`.
 
+The `onParentResize` method is similar: it is also called when the component is mounted into the
+component tree, and also whenever the parent of the current component changes its size.
+
 The `onRemove` method can be overridden to run code before the component is removed from the game,
 it is only run once even if the component is removed both by using the parents remove method and
 the `Component` remove method.

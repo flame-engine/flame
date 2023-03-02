@@ -68,6 +68,7 @@ class PositionComponent extends Component
         AngleProvider,
         PositionProvider,
         ScaleProvider,
+        SizeProvider,
         CoordinateTransform {
   PositionComponent({
     Vector2? position,
@@ -184,8 +185,16 @@ class PositionComponent extends Component
   /// This property can be reassigned at runtime, although this is not
   /// recommended. Instead, in order to make the [PositionComponent] larger
   /// or smaller, change its [scale].
+  @override
   NotifyingVector2 get size => _size;
-  set size(Vector2 size) => _size.setFrom(size);
+
+  @override
+  set size(Vector2 size) {
+    _size.setFrom(size);
+    if (hasChildren) {
+      children.forEach((child) => child.onParentResize(_size));
+    }
+  }
 
   /// The width of the component in local coordinates. Note that the object
   /// may visually appear larger or smaller due to application of [scale].
