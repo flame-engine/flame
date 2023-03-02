@@ -10,7 +10,7 @@ easy to create things like a pause menu or an inventory screen for example.
 
 The feature can be used via the `game.overlays.add` and `game.overlays.remove` methods that mark an
 overlay to be shown or hidden, respectively, via a `String` argument that identifies the overlay.
-After that, you can map each overlay to their correspoinding Widget in your `GameWidget` declaration
+After that, you can map each overlay to their corresponding Widget in your `GameWidget` declaration
 by providing an `overlayBuilderMap`.
 
 ```dart
