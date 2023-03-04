@@ -119,13 +119,13 @@ Do not use a zero or short length.
 A `FrictionJoint` is used for simulating friction in a top-down game. It provides 2D translational
 friction and angular friction.
 
-The FrictionJoint isn't related to the friction that occurs when two shapes collide in the x-y plane
+The `FrictionJoint` isn't related to the friction that occurs when two shapes collide in the x-y plane
 of the screen. Instead, it's designed to simulate friction along the z-axis, which is perpendicular
 to the screen. The most common use-case for it is applying the friction force between a moving body
 and the game floor.
 
-The `initialize` of the `FrictionJointDef` method requires two bodies that will have friction force
-applied to them and an anchor.
+The `initialize` method of the `FrictionJointDef` method requires two bodies that will have friction
+force applied to them, and an anchor.
 
 The third parameter is the `anchor` point in the world coordinates where the friction force will be
 applied. In most cases, it would be the center of the first object. However, for more complex
