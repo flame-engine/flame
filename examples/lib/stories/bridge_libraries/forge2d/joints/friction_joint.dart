@@ -4,8 +4,10 @@ import 'package:flame/input.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 
 class FrictionJointExample extends Forge2DGame with TapDetector {
-  late Wall slope;
+  FrictionJointExample() : super(gravity: Vector2.all(0));
+
   late Wall border;
+  late Ball ball;
 
   @override
   Future<void> onLoad() async {
@@ -14,30 +16,26 @@ class FrictionJointExample extends Forge2DGame with TapDetector {
     border = boundaries.first;
     addAll(boundaries);
 
-    final slopeLeft = Vector2(size.x / 2 - 20, size.y / 2 - 10);
-    final slopeRight = Vector2(size.x / 2 + 20, size.y / 2 + 10);
-    slope = Wall(slopeLeft, slopeRight);
-    add(slope);
+    ball = Ball(size / 2, radius: 3);
+    add(ball);
+
+    await Future.wait([ball.loaded, border.loaded]);
+
+    createJoint(ball.body, border.body);
   }
 
   @override
   Future<void> onTapDown(TapDownInfo details) async {
     super.onTapDown(details);
-    final tap = details.eventPosition.game;
-
-    final ball = Ball(tap);
-    add(ball);
-
-    await ball.loaded;
-
-    createJoint(ball);
+    ball.body.applyLinearImpulse(Vector2.random() * 5000);
   }
 
-  void createJoint(Ball ball) {
+  void createJoint(Body first, Body second) {
     final frictionJointDef = FrictionJointDef()
-      ..initialize(ball.body, border.body, ball.body.worldCenter)
-      ..maxForce = 50
-      ..maxTorque = 50;
+      ..initialize(first, second, first.worldCenter)
+      ..collideConnected = true
+      ..maxForce = 500
+      ..maxTorque = 500;
 
     world.createJoint(FrictionJoint(frictionJointDef));
   }

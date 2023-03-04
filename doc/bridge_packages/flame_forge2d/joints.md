@@ -116,15 +116,21 @@ Do not use a zero or short length.
 
 ### `FrictionJoint`
 
-A `FrictionJoint` is used for top-down friction. It provides 2D translational friction and angular
-friction.
+A `FrictionJoint` is used for simulating friction in a top-down game. It provides 2D translational
+friction and angular friction.
 
-The `initialize` method requires two bodies and an anchor. The first body is the body the friction
-will be applied to. The second body can be any body in the world, like a floor or an invisible
-body. The reason is that the friction force will be applied to the first body when it collides with
-any other bodies, not only the second body of the joint.
+The FrictionJoint isn't related to the friction that occurs when two shapes collide in the x-y plane
+of the screen. Instead, it's designed to simulate friction along the z-axis, which is perpendicular
+to the screen. The most common use-case for it is applying the friction force between a moving body
+and the game floor.
 
-The third parameter is the anchor point in the world where the friction force will be applied.
+The `initialize` of the `FrictionJointDef` method requires two bodies that will have friction force
+applied to them and an anchor.
+
+The third parameter is the `anchor` point in the world coordinates where the friction force will be
+applied. In most cases, it would be the center of the first object. However, for more complex
+physics interactions between bodies, you can set the `anchor` point to a specific location on one or
+both of the bodies.
 
 ```{flutter-app}
 :sources: ../../examples
@@ -136,7 +142,7 @@ The third parameter is the anchor point in the world where the friction force wi
 
 ```dart
 final frictionJointDef = FrictionJointDef()
-  ..initialize(ballBody, borderBody, ballBody.worldCenter)
+  ..initialize(ballBody, floorBody, ballBody.worldCenter)
   ..maxForce = 50
   ..maxTorque = 50;
 
