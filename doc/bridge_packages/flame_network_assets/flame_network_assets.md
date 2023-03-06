@@ -29,6 +29,6 @@ class FlameNetworkCustomAsset extends FlameNetworkAssets<CustomAsset> {
     super.cacheInStorage,
   }) : super(
           decodeAsset: (bytes) => CustomAsset.decode(bytes),
-          encodeAsset: (CustomAsset asset) => asset.endcode(),
+          encodeAsset: (CustomAsset asset) => asset.encode(),
         );
 }
