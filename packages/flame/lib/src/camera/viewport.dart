@@ -66,6 +66,9 @@ abstract class Viewport extends Component
       camera.viewfinder.onViewportResize();
     }
     onViewportResize();
+    if (hasChildren) {
+      children.forEach((child) => child.onParentResize(_size));
+    }
   }
 
   /// Reference to the parent camera.

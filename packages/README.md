@@ -16,11 +16,3 @@ Bridge packages are packages which:
   Flame + Audioplayers, `flame_tiled`, which is Flame + tiled).
 - Packages with features that are somehow very context specific and doesn't have a place inside the
   core package (e.g. `flame_splash_screen`).
-
-
-## Index
-
-- [Flame](./flame)
-- [Flame Audio](./flame_audio)
-- [Fire Atlas](./flame_fire_atlas)
-- [Svg support](./flame_svg)

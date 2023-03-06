@@ -7,6 +7,7 @@ import 'package:flame/src/components/core/component_tree_root.dart';
 import 'package:flame/src/components/core/position_type.dart';
 import 'package:flame/src/components/mixins/coordinate_transform.dart';
 import 'package:flame/src/components/mixins/has_game_ref.dart';
+import 'package:flame/src/effects/provider_interfaces.dart';
 import 'package:flame/src/game/flame_game.dart';
 import 'package:flame/src/game/game.dart';
 import 'package:flame/src/gestures/events.dart';
@@ -474,6 +475,14 @@ class Component {
   /// [onMount] call before.
   void onRemove() {}
 
+  /// Called whenever the parent of this component changes size; and also once
+  /// before [onMount].
+  ///
+  /// The component may change its own size or perform layout in response to
+  /// this call. If the component changes size, then it should call
+  /// [onParentResize] for all its children.
+  void onParentResize(Vector2 maxSize) {}
+
   /// This method is called periodically by the game engine to request that your
   /// component updates itself.
   ///
@@ -489,7 +498,6 @@ class Component {
   /// children according to their [priority] order, relative to the
   /// priority of the direct siblings, not the children or the ancestors.
   void updateTree(double dt) {
-    _children?.updateComponentList();
     update(dt);
     _children?.forEach((c) => c.updateTree(dt));
   }
@@ -728,22 +736,26 @@ class Component {
   int get priority => _priority;
   int _priority;
   set priority(int newPriority) {
-    if (parent == null) {
+    if (_priority != newPriority) {
       _priority = newPriority;
-    } else {
-      parent!.children.changePriority(this, newPriority);
+      final game = findGame();
+      if (game != null && _parent != null) {
+        (game as FlameGame).enqueueRebalance(_parent!);
+      }
     }
   }
 
   /// Usually this is not something that the user would want to call since the
   /// component list isn't re-ordered when it is called.
   /// See FlameGame.changePriority instead.
+  @Deprecated('Will be removed in 1.8.0. Use priority setter instead.')
   void changePriorityWithoutResorting(int priority) => _priority = priority;
 
   /// Call this if any of this component's children priorities have changed
   /// at runtime.
   ///
   /// This will call [ComponentSet.rebalanceAll] on the [children] ordered set.
+  @Deprecated('Will be removed in 1.8.0.')
   void reorderChildren() => _children?.rebalanceAll();
 
   //#endregion
@@ -827,6 +839,9 @@ class Component {
     assert(isLoaded && !isLoading);
     _setMountingBit();
     onGameResize(_parent!.findGame()!.canvasSize);
+    if (_parent is ReadonlySizeProvider) {
+      onParentResize((_parent! as ReadonlySizeProvider).size);
+    }
     if (isRemoved) {
       _clearRemovedBit();
     } else if (isRemoving) {

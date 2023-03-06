@@ -1,27 +1,11 @@
+import 'dart:ui';
+
 import 'package:flame/components.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:test/test.dart';
 
-class _PriorityComponent extends Component {
-  _PriorityComponent(int priority) : super(priority: priority);
-}
-
-class _ParentWithReorderSpy extends Component {
-  int callCount = 0;
-
-  _ParentWithReorderSpy(int priority) : super(priority: priority);
-
-  @override
-  void reorderChildren() {
-    callCount++;
-    super.reorderChildren();
-  }
-
-  void assertCalled(int n) {
-    expect(callCount, n);
-    callCount = 0;
-  }
-}
+import '../custom_component.dart';
+// ignore_for_file: deprecated_member_use_from_same_package
 
 void main() {
   void componentsSorted(Iterable<Component> components) {
@@ -222,5 +206,68 @@ void main() {
         componentsSorted(c.children);
       },
     );
+
+    testWithFlameGame('child can update priority of its parent', (game) async {
+      final renderEvents = <String>[];
+
+      final parent = CustomComponent(
+        priority: 0,
+        onRender: (self, canvas) {
+          renderEvents.add('render:parent');
+        },
+      );
+      final child = CustomComponent(
+        onUpdate: (self, dt) {
+          self.parent!.priority = 10;
+        },
+      );
+      parent.add(child);
+      game.add(parent);
+      game.add(
+        CustomComponent(
+          priority: 1,
+          onRender: (self, canvas) {
+            renderEvents.add('render:another');
+          },
+        ),
+      );
+      await game.ready();
+
+      expect(parent.priority, 0);
+      expect(child.priority, 0);
+      game.update(0.1);
+      expect(parent.priority, 10);
+      expect(child.priority, 0);
+      expect(renderEvents, isEmpty);
+      game.render(Canvas(PictureRecorder()));
+      expect(renderEvents, ['render:another', 'render:parent']);
+    });
   });
+}
+
+class _SpyComponentSet extends ComponentSet {
+  int callCount = 0;
+
+  @override
+  void reorder() {
+    callCount++;
+    super.reorder();
+  }
+}
+
+class _PriorityComponent extends Component {
+  _PriorityComponent(int priority) : super(priority: priority);
+}
+
+class _ParentWithReorderSpy extends Component {
+  _ParentWithReorderSpy(int priority) : super(priority: priority);
+
+  @override
+  ComponentSet createComponentSet() => _SpyComponentSet();
+
+  void assertCalled(int n) {
+    final componentSet = children as _SpyComponentSet;
+    expect(componentSet.callCount, n);
+    componentSet.callCount = 0;
+  }
 }

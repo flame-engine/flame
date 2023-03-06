@@ -75,12 +75,19 @@ and it will be automatically reflected in the PR.
 
 ### Environment Setup
 
-Flame uses [Melos] to manage the project and dependencies.
+Flame is setup to run with the most recent `stable` version of Flutter, so make sure your version
+matches that:
+
+```bash
+flutter channel stable
+```
+
+Also, Flame uses [Melos] to manage the project and dependencies.
 
 To install Melos, run the following command from your terminal:
 
 ```bash
-flutter pub global activate melos
+flutter pub global activate melos 3.0.0-dev.0
 ```
 
 Next, at the root of your locally cloned repository bootstrap the projects dependencies:

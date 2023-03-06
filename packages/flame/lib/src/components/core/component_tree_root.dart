@@ -12,10 +12,12 @@ import 'package:vector_math/vector_math_64.dart';
 class ComponentTreeRoot extends Component {
   ComponentTreeRoot({super.children})
       : _queue = RecycledQueue(_LifecycleEvent.new),
-        _blocked = <int>{};
+        _blocked = <int>{},
+        _componentsToRebalance = <Component>{};
 
   final RecycledQueue<_LifecycleEvent> _queue;
   final Set<int> _blocked;
+  final Set<Component> _componentsToRebalance;
 
   @internal
   void enqueueAdd(Component child, Component parent) {
@@ -54,6 +56,11 @@ class ComponentTreeRoot extends Component {
       ..kind = _LifecycleEventKind.move
       ..child = child
       ..parent = newParent;
+  }
+
+  @internal
+  void enqueueRebalance(Component parent) {
+    _componentsToRebalance.add(parent);
   }
 
   bool get hasLifecycleEvents => _queue.isNotEmpty;
@@ -99,6 +106,13 @@ class ComponentTreeRoot extends Component {
       }
       _blocked.clear();
     }
+  }
+
+  void processRebalanceEvents() {
+    for (final component in _componentsToRebalance) {
+      component.children.reorder();
+    }
+    _componentsToRebalance.clear();
   }
 
   @mustCallSuper

@@ -46,9 +46,14 @@ abstract class AnchorProvider {
   set anchor(Anchor value);
 }
 
-/// Interface for a component that can be affected by size effects.
-abstract class SizeProvider {
+/// Interface for a class that has [size] property which can be read but not
+/// modified.
+abstract class ReadonlySizeProvider {
   Vector2 get size;
+}
+
+/// Interface for a component that can be affected by size effects.
+abstract class SizeProvider extends ReadonlySizeProvider {
   set size(Vector2 value);
 }
 

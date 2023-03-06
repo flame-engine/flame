@@ -3,6 +3,7 @@ Aseprite
 Audioplayers
 BGUG
 Bodymovin
+Cypher
 Dashbook
 Hermione
 Kawabunga
@@ -25,6 +26,7 @@ spydon
 stpasha
 tavian
 trex
+Videon
 wolfenrain
 xaha
 yarnspinner
