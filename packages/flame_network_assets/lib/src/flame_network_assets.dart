@@ -1,32 +1,13 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'dart:ui';
 
 import 'package:flame/cache.dart';
+import 'package:flame_network_assets/flame_network_assets.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/rendering.dart';
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
-
-/// {@template flame_assets_response}
-/// A class containing the relevant http attributes to
-/// Flame Assets Network package.
-/// {@endtemplate}
-class FlameAssetResponse {
-  /// {@macro flame_assets_response}
-  const FlameAssetResponse({
-    required this.statusCode,
-    required this.bytes,
-  });
-
-  /// Http status code.
-  final int statusCode;
-
-  /// response bytes.
-  final Uint8List bytes;
-}
 
 /// Function signature used by Flame Network Assets to fetch assets.
 typedef GetAssetFunction = Future<FlameAssetResponse> Function(
@@ -86,6 +67,19 @@ typedef GetAppDirectoryFunction = Future<Directory> Function();
 /// {@endtemplate}
 abstract class FlameNetworkAssets<T> {
   /// {@macro flame_network_assets}
+  ///
+  /// - [decodeAsset] a [DecodeAssetFunction] responsible for decoding the asset
+  /// from its raw format.
+  /// - [encodeAsset] a [EncodeAssetFunction] responsible for encoding the asset
+  /// to its raw format.
+  /// - [get] is an optional [GetAssetFunction], if omitted [http.get] is used
+  /// by default.
+  /// - [getAppDirectory] is an optional [GetAppDirectoryFunction], if omitted
+  /// [getApplicationDocumentsDirectory] is used by default.
+  /// - [cacheInMemory] when false, will not cache assets in the memory,
+  /// (true by default).
+  /// - [cacheInStorage] when false, will not cache assets in the file system,
+  /// (true by default).
   FlameNetworkAssets({
     required DecodeAssetFunction<T> decodeAsset,
     required EncodeAssetFunction<T> encodeAsset,
@@ -113,8 +107,8 @@ abstract class FlameNetworkAssets<T> {
 
   late final GetAssetFunction _get;
   late final GetAppDirectoryFunction _getAppDirectory;
-  late final DecodeAssetFunction<T> _decode;
-  late final EncodeAssetFunction<T> _encode;
+  final DecodeAssetFunction<T> _decode;
+  final EncodeAssetFunction<T> _encode;
 
   /// Flag indicating if files will be cached in memory.
   final bool cacheInMemory;
@@ -124,7 +118,7 @@ abstract class FlameNetworkAssets<T> {
 
   final bool _isWeb;
 
-  late final _memoryCache = MemoryCache<String, T>();
+  final _memoryCache = MemoryCache<String, T>();
 
   String _urlToId(String url) {
     final bytes = utf8.encode(url);
@@ -197,27 +191,4 @@ abstract class FlameNetworkAssets<T> {
       await file.writeAsBytes(await _encode(asset));
     } on Exception catch (_) {}
   }
-}
-
-/// {@template flame_network_images}
-/// A specialized [FlameAssetResponse] that can be used to load [Image]s.
-///
-/// {@macro flame_network_assets}
-///
-/// {@endtemplate}
-class FlameNetworkImages extends FlameNetworkAssets<Image> {
-  /// {@macro flame_network_images}
-  FlameNetworkImages({
-    super.get,
-    super.getAppDirectory,
-    super.cacheInMemory,
-    super.cacheInStorage,
-  }) : super(
-          decodeAsset: decodeImageFromList,
-          encodeAsset: (Image image) async {
-            final data = await image.toByteData(format: ImageByteFormat.png);
-
-            return data!.buffer.asUint8List();
-          },
-        );
 }
