@@ -1,4 +1,4 @@
-## FlameNetworkAssets
+# FlameNetworkAssets
 
 `FlameNetworkAssets` is bridge package focused in providing a solution to fetch, and cache assets
 from the network.
@@ -20,7 +20,7 @@ final charSprite = await networkAssets.load('https://url.com/image.png');
 To create an specific asset handler class, you just need to extend the `FlameNetworkAssets` class
 and define the `decodeAsset` and `endcodeAsset` arguments:
 
-```
+```dart
 class FlameNetworkCustomAsset extends FlameNetworkAssets<CustomAsset> {
   FlameNetworkImages({
     super.get,

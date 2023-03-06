@@ -141,9 +141,10 @@ final image = await decodeImageFromList(response.bytes);
 ```
 
 ```{note}
-Check [`flame_network_assets`](https://pub.dev/packages/flame_network_assets) for a ready to use
-network assets solution that provides built in cache.
+Check [`flame_network_assets`](https://pub.dev/packages/flame_network_assets)
+for a ready to use network assets solution that provides built in cache.
 ```
+
 
 ## Sprite
 
