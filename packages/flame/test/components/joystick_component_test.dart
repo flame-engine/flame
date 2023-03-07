@@ -37,6 +37,20 @@ void main() {
       joystick.delta.setValues(-1.0, 1.0);
       expect(joystick.direction, JoystickDirection.downLeft);
     });
+
+    testWithGame<_GameHasDraggables>(
+        'properly re-positions onGameSize', _GameHasDraggables.new,
+        (game) async {
+      game.onGameResize(Vector2(100, 200));
+      final joystick = JoystickComponent(
+        knob: CircleComponent(radius: 5.0),
+        size: 20,
+        margin: const EdgeInsets.only(left: 20, bottom: 20),
+      );
+      joystick.loaded.then((_) => game.onGameResize(Vector2(200, 100)));
+      await game.ensureAdd(joystick);
+      expect(joystick.position, Vector2(30, 70));
+    });
   });
 
   group('Joystick input tests', () {
