@@ -10,33 +10,51 @@ class _GameHasDraggables extends FlameGame with HasDraggables {}
 void main() {
   group('JoystickDirection tests', () {
     testWithGame<_GameHasDraggables>(
-        'can convert angle to JoystickDirection', _GameHasDraggables.new,
-        (game) async {
-      final joystick = JoystickComponent(
-        knob: CircleComponent(radius: 5.0),
-        size: 20,
-        margin: const EdgeInsets.only(left: 20, bottom: 20),
-      );
-      await game.ensureAdd(joystick);
+      'can convert angle to JoystickDirection',
+      _GameHasDraggables.new,
+      (game) async {
+        final joystick = JoystickComponent(
+          knob: CircleComponent(radius: 5.0),
+          size: 20,
+          margin: const EdgeInsets.only(left: 20, bottom: 20),
+        );
+        await game.ensureAdd(joystick);
 
-      expect(joystick.direction, JoystickDirection.idle);
-      joystick.delta.setValues(1.0, 0.0);
-      expect(joystick.direction, JoystickDirection.right);
-      joystick.delta.setValues(0.0, -1.0);
-      expect(joystick.direction, JoystickDirection.up);
-      joystick.delta.setValues(1.0, -1.0);
-      expect(joystick.direction, JoystickDirection.upRight);
-      joystick.delta.setValues(-1.0, -1.0);
-      expect(joystick.direction, JoystickDirection.upLeft);
-      joystick.delta.setValues(-1.0, 0.0);
-      expect(joystick.direction, JoystickDirection.left);
-      joystick.delta.setValues(0.0, 1.0);
-      expect(joystick.direction, JoystickDirection.down);
-      joystick.delta.setValues(1.0, 1.0);
-      expect(joystick.direction, JoystickDirection.downRight);
-      joystick.delta.setValues(-1.0, 1.0);
-      expect(joystick.direction, JoystickDirection.downLeft);
-    });
+        expect(joystick.direction, JoystickDirection.idle);
+        joystick.delta.setValues(1.0, 0.0);
+        expect(joystick.direction, JoystickDirection.right);
+        joystick.delta.setValues(0.0, -1.0);
+        expect(joystick.direction, JoystickDirection.up);
+        joystick.delta.setValues(1.0, -1.0);
+        expect(joystick.direction, JoystickDirection.upRight);
+        joystick.delta.setValues(-1.0, -1.0);
+        expect(joystick.direction, JoystickDirection.upLeft);
+        joystick.delta.setValues(-1.0, 0.0);
+        expect(joystick.direction, JoystickDirection.left);
+        joystick.delta.setValues(0.0, 1.0);
+        expect(joystick.direction, JoystickDirection.down);
+        joystick.delta.setValues(1.0, 1.0);
+        expect(joystick.direction, JoystickDirection.downRight);
+        joystick.delta.setValues(-1.0, 1.0);
+        expect(joystick.direction, JoystickDirection.downLeft);
+      },
+    );
+
+    testWithGame<_GameHasDraggables>(
+      'properly re-positions onGameSize',
+      _GameHasDraggables.new,
+      (game) async {
+        game.onGameResize(Vector2(100, 200));
+        final joystick = JoystickComponent(
+          knob: CircleComponent(radius: 5.0),
+          size: 20,
+          margin: const EdgeInsets.only(left: 20, bottom: 20),
+        );
+        joystick.loaded.then((_) => game.onGameResize(Vector2(200, 100)));
+        await game.ensureAdd(joystick);
+        expect(joystick.position, Vector2(30, 70));
+      },
+    );
   });
 
   group('Joystick input tests', () {
