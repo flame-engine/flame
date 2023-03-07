@@ -19,7 +19,7 @@ Currently, Forge2D supports the following joints:
 
 - [`ConstantVolumeJoint`](#constantvolumejoint)
 - [`DistanceJoint`](#distancejoint)
-- FrictionJoint
+- [`FrictionJoint`](#frictionjoint)
 - GearJoint
 - MotorJoint
 - MouseJoint
@@ -112,3 +112,51 @@ to 0, the higher the value, the less springy the joint becomes.
 ```{warning}
 Do not use a zero or short length.
 ```
+
+
+### `FrictionJoint`
+
+A `FrictionJoint` is used for simulating friction in a top-down game. It provides 2D translational
+friction and angular friction.
+
+The `FrictionJoint` isn't related to the friction that occurs when two shapes collide in the x-y plane
+of the screen. Instead, it's designed to simulate friction along the z-axis, which is perpendicular
+to the screen. The most common use-case for it is applying the friction force between a moving body
+and the game floor.
+
+The `initialize` method of the `FrictionJointDef` method requires two bodies that will have friction
+force applied to them, and an anchor.
+
+The third parameter is the `anchor` point in the world coordinates where the friction force will be
+applied. In most cases, it would be the center of the first object. However, for more complex
+physics interactions between bodies, you can set the `anchor` point to a specific location on one or
+both of the bodies.
+
+```{flutter-app}
+:sources: ../../examples
+:page: friction_joint
+:show: widget code infobox
+:width: 200
+:height: 200
+```
+
+```dart
+final frictionJointDef = FrictionJointDef()
+  ..initialize(ballBody, floorBody, ballBody.worldCenter)
+  ..maxForce = 50
+  ..maxTorque = 50;
+
+  world.createJoint(FrictionJoint(frictionJointDef));
+```
+
+When creating a `FrictionJoint`, simulated friction can be applied via maximum force and torque
+values:
+
+- `maxForce`: the maximum translational friction which applied to the joined body. A higher value
+- simulates higher friction.
+
+- `maxTorque`: the maximum angular friction which may be applied to the joined body. A higher value
+- simulates higher friction.
+
+In other words, the former simulates the friction, when the body is sliding and the latter simulates
+the friction when the body is spinning.
