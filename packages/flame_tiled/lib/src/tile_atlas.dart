@@ -100,7 +100,7 @@ class TiledAtlas {
       // really boring map.
       final image = (await Flame.images.load(key)).clone();
 
-      return atlasMap[key] ??= TiledAtlas._(
+      return atlasMap[key] = TiledAtlas._(
         atlas: image,
         offsets: {key: Offset.zero},
         key: key,
