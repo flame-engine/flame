@@ -37,7 +37,10 @@ void main() {
             'images/orange.png',
             'images/peach.png',
           ],
-          mapPath: 'test/assets/isometric_plain.tmx',
+          stringNames: [
+            'isometric_plain.tmx',
+            'tiles/isometric_plain_1.tsx',
+          ],
         );
       });
 
@@ -116,6 +119,53 @@ void main() {
         expect(
           renderMapToPng(component),
           matchesGoldenFile('goldens/larger_atlas_component.png'),
+        );
+      });
+    });
+
+    group('Single tileset map', () {
+      setUp(() async {
+        TiledAtlas.atlasMap.clear();
+        Flame.bundle = TestAssetBundle(
+          imageNames: [
+            '4_color_sprite.png',
+          ],
+          stringNames: [
+            'single_tile_map_1.tmx',
+            'single_tile_map_2.tmx',
+          ],
+        );
+      });
+
+      test(
+          '''Two maps with a same tileset but different tile alignment should be rendered differently''',
+          () async {
+        final component1 = await TiledComponent.load(
+          'single_tile_map_1.tmx',
+          Vector2(16, 16),
+        );
+        final component2 = await TiledComponent.load(
+          'single_tile_map_2.tmx',
+          Vector2(16, 16),
+        );
+
+        final atlas = TiledAtlas.atlasMap.values.first;
+        final imageRendered_1 = renderMapToPng(component1);
+        final imageRendered_2 = renderMapToPng(component2);
+
+        expect(TiledAtlas.atlasMap.length, 1);
+        expect(
+          await imageToPng(atlas.atlas!),
+          matchesGoldenFile('goldens/single_tile_atlas.png'),
+        );
+        expect(imageRendered_1, isNot(same(imageRendered_2)));
+        expect(
+          imageRendered_1,
+          matchesGoldenFile('goldens/single_tile_map_1.png'),
+        );
+        expect(
+          imageRendered_2,
+          matchesGoldenFile('goldens/single_tile_map_2.png'),
         );
       });
     });
