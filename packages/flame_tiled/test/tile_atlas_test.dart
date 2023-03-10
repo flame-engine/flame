@@ -140,18 +140,20 @@ void main() {
       test(
           '''Two maps with a same tileset but different tile alignment should be rendered differently''',
           () async {
-        final component1 = await TiledComponent.load(
-          'single_tile_map_1.tmx',
-          Vector2(16, 16),
-        );
-        final component2 = await TiledComponent.load(
-          'single_tile_map_2.tmx',
-          Vector2(16, 16),
-        );
+        final components = await Future.wait([
+          TiledComponent.load(
+            'single_tile_map_1.tmx',
+            Vector2(16, 16),
+          ),
+          TiledComponent.load(
+            'single_tile_map_2.tmx',
+            Vector2(16, 16),
+          )
+        ]);
 
         final atlas = TiledAtlas.atlasMap.values.first;
-        final imageRendered_1 = renderMapToPng(component1);
-        final imageRendered_2 = renderMapToPng(component2);
+        final imageRendered_1 = renderMapToPng(components[0]);
+        final imageRendered_2 = renderMapToPng(components[1]);
 
         expect(TiledAtlas.atlasMap.length, 1);
         expect(
