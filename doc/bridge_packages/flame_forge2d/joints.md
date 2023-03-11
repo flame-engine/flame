@@ -193,7 +193,7 @@ target rotation.
 
 - `correctionFactor`: position correction factor in range [0, 1]. It adjusts the joint's response to
 deviation from target position. A higher value makes the joint respond faster, while a lower value
-makes it respond slower. If the value is set too high, the joint may overcorrect and oscillate,
+makes it respond slower. If the value is set too high, the joint may overcompensate and oscillate,
 becoming unstable. If set too low, it may respond too slowly.
   
 The linear and angular offsets are the target distance and angle that the bodies should achieve
