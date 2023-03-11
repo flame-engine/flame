@@ -51,6 +51,7 @@ class DartdocDirective(SphinxDirective):
         "symbol": directives.unchanged_required,
         "package": directives.unchanged,
     }
+    temp_file_path = ''
 
     def __init__(self, name, arguments, options, content, lineno, content_offset, block_text, state,
                  state_machine):
@@ -165,15 +166,19 @@ class DartdocDirective(SphinxDirective):
         json_result = self._scan_source_file()
         self.record['json'] = json_result
         self.record['timestamp'] = source_last_modified_time
+        if os.path.isfile(self.temp_file_path):
+            os.remove(self.temp_file_path)
 
     def _scan_source_file(self):
-        with tempfile.NamedTemporaryFile(mode='rt', suffix='json') as temp_file:
+        with tempfile.NamedTemporaryFile(mode='rt', suffix='.json', delete=False) as temp_file:
             try:
+                self.temp_file_path = temp_file.name
                 subprocess.run(
                     ['dartdoc_json', self.source_file, '--output', temp_file.name],
                     stdout=subprocess.PIPE,
                     stderr=subprocess.STDOUT,
                     check=True,
+                    shell=True,
                 )
                 json_string = temp_file.read()
                 return self._extract_symbol(json_string)
