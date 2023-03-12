@@ -167,15 +167,18 @@ class DartdocDirective(SphinxDirective):
         self.record['timestamp'] = source_last_modified_time
 
     def _scan_source_file(self):
-        with tempfile.NamedTemporaryFile(mode='rt', suffix='json') as temp_file:
+        with tempfile.NamedTemporaryFile(mode='rt', suffix='.json', delete=False) as temp_file:
             try:
+                temp_file.close()
                 subprocess.run(
                     ['dartdoc_json', self.source_file, '--output', temp_file.name],
                     stdout=subprocess.PIPE,
                     stderr=subprocess.STDOUT,
                     check=True,
+                    shell=True,
                 )
-                json_string = temp_file.read()
+                with open(temp_file.name, 'r') as t:
+                    json_string = t.read()
                 return self._extract_symbol(json_string)
             except subprocess.CalledProcessError as e:
                 cmd = ' '.join(e.cmd)
@@ -183,6 +186,8 @@ class DartdocDirective(SphinxDirective):
                     f'Command `{cmd}` returned with exit status'
                     f' {e.returncode}\n{e.output.decode("utf-8")}'
                 )
+            finally:
+                os.remove(temp_file.name)
 
     def _extract_symbol(self, json_string: str) -> Dict:
         """
