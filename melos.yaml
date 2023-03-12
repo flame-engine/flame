@@ -50,7 +50,8 @@ scripts:
     run: >
       echo 'Checking python version:' &&
       python --version &&
-      python "$MELOS_ROOT_PATH/doc/_sphinx/doc-setup.py" &&
+      (python -c "import sys; sys.exit(0 if sys.version_info >= (3,8) else 2)" ||
+      (echo  'Error: Python 3.8+ is required' && exit 1)) &&
       echo 'Installing required python modules:' &&
       python -m pip install -r "$MELOS_ROOT_PATH/doc/_sphinx/requirements.txt" &&
       echo 'Installing dartdoc_json:' &&
