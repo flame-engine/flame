@@ -51,7 +51,6 @@ class DartdocDirective(SphinxDirective):
         "symbol": directives.unchanged_required,
         "package": directives.unchanged,
     }
-    temp_file_path = ''
 
     def __init__(self, name, arguments, options, content, lineno, content_offset, block_text, state,
                  state_machine):
