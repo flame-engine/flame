@@ -65,7 +65,11 @@ scripts:
 
   doc-serve:
     run: cd "$MELOS_ROOT_PATH/doc/_sphinx" && make livehtml
-    description: Recompiles the docs enerytime there is a change in them and opens your browser.
+    description: Recompiles the docs every time there is a change in them and opens your browser.
+  
+  doc-kill:
+    run: cd "$MELOS_ROOT_PATH/doc/_sphinx" && python kill-server.py
+    description: Kills any TCP processes running on port 8000.
 
   doc-clean:
     run: cd "$MELOS_ROOT_PATH/doc/_sphinx" && make clean
