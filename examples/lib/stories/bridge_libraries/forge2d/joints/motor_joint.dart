@@ -7,6 +7,11 @@ import 'package:flame/input.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 
 class MotorJointExample extends Forge2DGame with TapDetector, HasDraggables {
+  static const description = '''
+    This example shows how to use a `MotorJoint`. The ball spins around the 
+    center point. Tap the screen to change the direction.
+  ''';
+
   late Ball ball;
   late MotorJoint joint;
   final motorSpeed = 1;

@@ -118,24 +118,24 @@ void addJointsStories(Dashbook dashbook) {
         'ConstantVolumeJoint',
         (DashbookContext ctx) => GameWidget(game: ConstantVolumeJointExample()),
         codeLink: link('constant_volume_joint.dart'),
-        info: BlobExample.description,
+        info: ConstantVolumeJointExample.description,
       )
       .add(
         'DistanceJoint',
         (DashbookContext ctx) => GameWidget(game: DistanceJointExample()),
         codeLink: link('distance_joint.dart'),
-        info: BlobExample.description,
+        info: DistanceJointExample.description,
       )
       .add(
         'FrictionJoint',
         (DashbookContext ctx) => GameWidget(game: FrictionJointExample()),
         codeLink: link('friction_joint.dart'),
-        info: BlobExample.description,
+        info: FrictionJointExample.description,
       )
       .add(
         'MotorJoint',
         (DashbookContext ctx) => GameWidget(game: MotorJointExample()),
         codeLink: link('motor_joint.dart'),
-        info: BlobExample.description,
+        info: MotorJointExample.description,
       );
 }
