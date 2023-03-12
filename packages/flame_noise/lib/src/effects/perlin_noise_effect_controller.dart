@@ -4,10 +4,6 @@ import 'package:flutter/animation.dart' show Curve, Curves;
 
 /// Effect controller that oscillates around 0 following a noise curve.
 ///
-/// The [frequency] parameter controls smoothness/jerkiness of the oscillations.
-/// It is roughly proportional to the total number of swings for the duration
-/// of the effect.
-///
 /// The [taperingCurve] describes how the effect fades out over time. The
 /// curve that you supply will be flipped along the X axis, so that the effect
 /// starts at full force, and gradually reduces to zero towards the end.
