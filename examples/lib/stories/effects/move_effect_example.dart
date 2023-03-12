@@ -34,7 +34,7 @@ class MoveEffectExample extends FlameGame {
       ..style = PaintingStyle.stroke
       ..strokeWidth = 5.0
       ..color = Colors.greenAccent;
-    final paint3 = Paint()..color = const Color.fromARGB(255, 172, 90, 223);
+    final paint3 = Paint()..color = const Color(0xffb372dc);
 
     // Red square, moving back and forth
     add(
