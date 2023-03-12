@@ -1,7 +1,7 @@
 # 7. Adding Menus
 
 To add menus to the game, we will leverage Flame's built-in
-[overlay](../../flame/game.md#flutter-widgets-and-game-instances) system.  
+[overlay](../../flame/overlays.md) system.  
 
 
 ## Main Menu

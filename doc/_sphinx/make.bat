@@ -36,7 +36,7 @@ if "%1" == "livehtml" (
 goto end
 
 :livehtml
-sphinx-autobuild %SOURCEDIR% %BUILDDIR% %SPHINXOPTS% %2
+sphinx-autobuild %SOURCEDIR% %BUILDDIR%\html %SPHINXOPTS% %2 --ignore "**/.*" --ignore "*build*" --open-browser
 
 :build
 %SPHINXBUILD% -M %1 %SOURCEDIR% %BUILDDIR% %SPHINXOPTS% %2
