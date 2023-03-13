@@ -211,6 +211,7 @@ There are other make commands that you may find occasionally useful too:
 - **melos doc-clean** removes all cached generated files (in case the system gets stuck in a bad
 state).
 - **melos doc-linkcheck** to check whether there are any broken links in the documentation.
+- **melos doc-kill** removes any orphaned TCP threads running on port 8000.
 
 The generated html files will be in the `doc/_build/html` directory, you can view them directly
 by opening the file `doc/_build/html/index.html` in your browser. The only drawback is that the
