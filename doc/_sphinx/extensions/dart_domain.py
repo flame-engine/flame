@@ -2,7 +2,6 @@ import json
 import os
 import re
 import subprocess
-import sys
 import tempfile
 from typing import List, Tuple, Dict, Optional, Set, Any
 
@@ -168,14 +167,20 @@ class DartdocDirective(SphinxDirective):
 
     def _scan_source_file(self):
         with tempfile.NamedTemporaryFile(mode='rt', suffix='.json', delete=False) as temp_file:
+            # Note: on Windows, a temporary file cannot be opened in another
+            # process if it is already open in this process. Thus, we need to
+            # close the file handle first before handing the file name to
+            # `subprocess.run()`.
+            temp_file.close()
             try:
-                temp_file.close()
+                executable = 'dartdoc_json'
+                if os.name == 'nt':  # Windows
+                    executable = 'dartdoc_json.bat'
                 subprocess.run(
-                    ['dartdoc_json', self.source_file, '--output', temp_file.name],
+                    [executable, self.source_file, '--output', temp_file.name],
                     stdout=subprocess.PIPE,
                     stderr=subprocess.STDOUT,
                     check=True,
-                    shell=True,
                 )
                 with open(temp_file.name, 'r') as t:
                     json_string = t.read()
