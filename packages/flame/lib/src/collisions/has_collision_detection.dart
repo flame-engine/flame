@@ -1,6 +1,5 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-import 'package:flame/game.dart';
 
 /// Keeps track of all the [ShapeHitbox]s in the component tree and initiates
 /// collision detection every tick.
