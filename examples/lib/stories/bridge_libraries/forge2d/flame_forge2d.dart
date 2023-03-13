@@ -11,6 +11,7 @@ import 'package:examples/stories/bridge_libraries/forge2d/joint_example.dart';
 import 'package:examples/stories/bridge_libraries/forge2d/joints/constant_volume_joint.dart';
 import 'package:examples/stories/bridge_libraries/forge2d/joints/distance_joint.dart';
 import 'package:examples/stories/bridge_libraries/forge2d/joints/friction_joint.dart';
+import 'package:examples/stories/bridge_libraries/forge2d/joints/motor_joint.dart';
 import 'package:examples/stories/bridge_libraries/forge2d/mouse_joint_example.dart';
 import 'package:examples/stories/bridge_libraries/forge2d/raycast_example.dart';
 import 'package:examples/stories/bridge_libraries/forge2d/revolute_joint_example.dart';
@@ -117,18 +118,24 @@ void addJointsStories(Dashbook dashbook) {
         'ConstantVolumeJoint',
         (DashbookContext ctx) => GameWidget(game: ConstantVolumeJointExample()),
         codeLink: link('constant_volume_joint.dart'),
-        info: BlobExample.description,
+        info: ConstantVolumeJointExample.description,
       )
       .add(
         'DistanceJoint',
         (DashbookContext ctx) => GameWidget(game: DistanceJointExample()),
         codeLink: link('distance_joint.dart'),
-        info: BlobExample.description,
+        info: DistanceJointExample.description,
       )
       .add(
         'FrictionJoint',
         (DashbookContext ctx) => GameWidget(game: FrictionJointExample()),
         codeLink: link('friction_joint.dart'),
-        info: BlobExample.description,
+        info: FrictionJointExample.description,
+      )
+      .add(
+        'MotorJoint',
+        (DashbookContext ctx) => GameWidget(game: MotorJointExample()),
+        codeLink: link('motor_joint.dart'),
+        info: MotorJointExample.description,
       );
 }

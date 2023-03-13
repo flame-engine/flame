@@ -4,6 +4,10 @@ import 'package:flame/input.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 
 class FrictionJointExample extends Forge2DGame with TapDetector {
+  static const description = '''
+    This example shows how to use a `FrictionJoint`. Tap the screen to move the 
+    ball around and observe it slows down due to the friction force.
+  ''';
   FrictionJointExample() : super(gravity: Vector2.all(0));
 
   late Wall border;
