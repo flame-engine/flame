@@ -55,8 +55,8 @@ class CollisionDetectionWorld extends World with HasCollisionDetection {}
 ```
 
 ```{note}
-Hitboxes will only be connected to one collision detection system and that is the closest parent
-that has the `HasCollisionDetection` mixin.
+Hitboxes will only be connected to one collision detection system and that is
+the closest parent that has the `HasCollisionDetection` mixin.
 ```
 
 

@@ -5,11 +5,8 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/experimental.dart';
-import 'package:flame/extensions.dart' show OffsetExtension;
 import 'package:flame/game.dart';
-import 'package:flame/input.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
 
 class MultipleWorldsExample extends FlameGame {
   static const description = '''
