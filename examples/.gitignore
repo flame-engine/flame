@@ -44,3 +44,4 @@ app.*.symbols
 # Obfuscation related
 app.*.map.json
 .vscode/
+pubspec.lock
