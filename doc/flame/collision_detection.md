@@ -51,7 +51,7 @@ within one `FlameGame`.
 Example:
 
 ```dart
-class CollidableWorld extends World with HasCollisionDetection {}
+class CollisionDetectionWorld extends World with HasCollisionDetection {}
 ```
 
 ```{note}
