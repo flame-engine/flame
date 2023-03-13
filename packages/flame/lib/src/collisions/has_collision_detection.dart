@@ -1,8 +1,12 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 
-/// Keeps track of all the [ShapeHitbox]s in the component tree and initiates
+/// Keeps track of all the [ShapeHitbox]s in the component's tree and initiates
 /// collision detection every tick.
+///
+/// Hitboxes are only part of the collision detection performed by its closest
+/// parent with the [HasCollisionDetection] mixin, if there are multiple nested
+/// classes that has [HasCollisionDetection].
 mixin HasCollisionDetection<B extends Broadphase<ShapeHitbox>> on Component {
   CollisionDetection<ShapeHitbox, B> _collisionDetection =
       StandardCollisionDetection();
