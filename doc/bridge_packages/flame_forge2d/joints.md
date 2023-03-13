@@ -39,14 +39,6 @@ another.
 
 It can for example be useful when simulating "soft-bodies".
 
-```{flutter-app}
-:sources: ../../examples
-:page: constant_volume_joint
-:show: widget code infobox
-:width: 200
-:height: 200
-```
-
 ```dart
   final constantVolumeJoint = ConstantVolumeJointDef()
     ..frequencyHz = 10
@@ -57,6 +49,13 @@ It can for example be useful when simulating "soft-bodies".
   });
     
   world.createJoint(ConstantVolumeJoint(world, constantVolumeJoint));
+```
+
+```{flutter-app}
+:sources: ../../examples
+:subfolder: stories/bridge_libraries/forge2d/joints
+:page: constant_volume_joint
+:show: code popup
 ```
 
 `ConstantVolumeJointDef` requires at least 3 bodies to be added using the `addBody` method. It also
@@ -75,14 +74,6 @@ A `DistanceJoint` constrains two points on two bodies to remain at a fixed dista
 
 You can view this as a massless, rigid rod.
 
-```{flutter-app}
-:sources: ../../examples
-:page: distance_joint
-:show: widget code infobox
-:width: 200
-:height: 200
-```
-
 ```dart
 final distanceJointDef = DistanceJointDef()
   ..initialize(firstBody, secondBody, firstBody.worldCenter, secondBody.worldCenter)
@@ -91,6 +82,13 @@ final distanceJointDef = DistanceJointDef()
   ..dampingRatio = 0.2;
 
 world.createJoint(DistanceJoint(distanceJointDef));
+```
+
+```{flutter-app}
+:sources: ../../examples
+:page: distance_joint
+:subfolder: stories/bridge_libraries/forge2d/joints
+:show: code popup
 ```
 
 To create a `DistanceJointDef`, you can use the `initialize` method, which requires two bodies and a
@@ -132,14 +130,6 @@ applied. In most cases, it would be the center of the first object. However, for
 physics interactions between bodies, you can set the `anchor` point to a specific location on one or
 both of the bodies.
 
-```{flutter-app}
-:sources: ../../examples
-:page: friction_joint
-:show: widget code infobox
-:width: 200
-:height: 200
-```
-
 ```dart
 final frictionJointDef = FrictionJointDef()
   ..initialize(ballBody, floorBody, ballBody.worldCenter)
@@ -147,6 +137,13 @@ final frictionJointDef = FrictionJointDef()
   ..maxTorque = 50;
 
   world.createJoint(FrictionJoint(frictionJointDef));
+```
+
+```{flutter-app}
+:sources: ../../examples
+:page: friction_joint
+:subfolder: stories/bridge_libraries/forge2d/joints
+:show: code popup
 ```
 
 When creating a `FrictionJoint`, simulated friction can be applied via maximum force and torque
