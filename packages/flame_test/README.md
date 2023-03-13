@@ -23,4 +23,5 @@ A set of useful helpers and utilities for testing your [Flame](https://github.co
 
 # flame_test
 
-This package contains classes that helps with testing applications using the Flame Engine. It is also used for testing parts of Flame itself.
+This package contains classes that helps with testing applications using the Flame Engine.  
+It is also used for testing parts of Flame itself.

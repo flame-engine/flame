@@ -23,7 +23,8 @@ Adds support for <a href="https://github.com/flame-engine/fire-atlas">`fire_atla
 
 # flame_fire_atlas
 
-Flame Fire Atlas is a texture atlas lib for Flame. Atlases can be created using the <a href="https://github.com/flame-engine/fire-atlas">Fire Atlas Editor</a>.
+Flame Fire Atlas is a texture atlas lib for Flame. Atlases can be created using the  
+<a href="https://github.com/flame-engine/fire-atlas">Fire Atlas Editor</a>.
 
 
 ## How to use
