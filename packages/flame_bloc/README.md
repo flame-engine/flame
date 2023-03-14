@@ -6,7 +6,7 @@
 </p>
 
 <p align="center">
-Offers a simple and natural way to use <a href="https://github.com/felangel/bloc">`flutter_bloc`</a> inside <a href="https://github.com/flame-engine/flame">Flame</a>.
+Offers a simple and natural way to use <a href="https://github.com/felangel/bloc">flutter_bloc</a> inside <a href="https://github.com/flame-engine/flame">Flame</a>.
 </p>
 
 <p align="center">

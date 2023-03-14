@@ -6,7 +6,7 @@
 </p>
 
 <p align="center">
-Adds support for [Flare animations](https://rive.app/explore/popular/trending/all) to your [Flame](https://github.com/flame-engine/flame) games.
+Adds support for <a href="https://rive.app/explore/popular/trending/all">Flare animations</a> to your <a href="https://github.com/flame-engine/flame">Flame</a> games.
 </p>
 
 <p align="center">
