@@ -6,7 +6,7 @@
 </p>
 
 <p align="center">
-Integrates the different noises from the [fast_noise](https://github.com/frankpepermans/fast_noise) packages into useful [Flame](https://github.com/flame-engine/flame) components and effects.
+Integrates the different noises from the <a href="https://github.com/frankpepermans/fast_noise">fast_noise</a> packages into useful <a href="https://github.com/flame-engine/flame">Flame</a> components and effects.
 </p>
 
 <p align="center">
