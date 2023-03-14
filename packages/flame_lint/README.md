@@ -6,7 +6,7 @@
 </p>
 
 <p align="center">
-A strict and satisfying lint for any [Flame](https://github.com/flame-engine/flame), Flutter or Dart project.
+A strict and satisfying lint for any <a href="https://github.com/flame-engine/flame">Flame</a>, Flutter or Dart project.
 </p>
 
 <p align="center">

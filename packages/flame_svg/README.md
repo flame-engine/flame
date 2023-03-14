@@ -6,7 +6,7 @@
 </p>
 
 <p align="center">
-Adds support for rendering SVG (using the [flutter_svg](https://github.com/dnfield/flutter_svg) library) to your [Flame](https://github.com/flame-engine/flame) games.
+Adds support for rendering SVG (using the <a href="https://github.com/dnfield/flutter_svg">flutter_svg</a> library) to your <a href="https://github.com/flame-engine/flame">Flame</a> games.
 </p>
 
 <p align="center">

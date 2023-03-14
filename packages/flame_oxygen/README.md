@@ -6,7 +6,7 @@
 </p>
 
 <p align="center">
-Adds support for [Oxygen](https://github.com/flame-engine/oxygen), an alternative ECS written by the Flame Team, to your [Flame](https://github.com/flame-engine/flame) games.
+Adds support for <a href="https://github.com/flame-engine/oxygen">Oxygen</a>, an alternative ECS written by the Flame Team, to your <a href="https://github.com/flame-engine/flame">Flame</a> games.
 </p>
 
 <p align="center">

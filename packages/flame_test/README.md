@@ -6,7 +6,7 @@
 </p>
 
 <p align="center">
-A set of useful helpers and utilities for testing your [Flame](https://github.com/flame-engine/flame) games.
+A set of useful helpers and utilities for testing your <a href="https://github.com/flame-engine/flame">Flame</a> games.
 </p>
 
 <p align="center">

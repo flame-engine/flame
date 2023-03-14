@@ -6,7 +6,7 @@
 </p>
 
 <p align="center">
-Adds support for <a href="https://github.com/flame-engine/fire-atlas">`fire_atlas`</a>-based sprite sheets inside <a href="https://github.com/flame-engine/flame">Flame</a>.
+Adds support for <a href="https://github.com/flame-engine/fire-atlas">fire_atlas</a>-based sprite sheets inside <a href="https://github.com/flame-engine/flame">Flame</a>.
 </p>
 
 <p align="center">
