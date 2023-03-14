@@ -6,7 +6,7 @@
 </p>
 
 <p align="center">
-Adds support for [Forge2d](https://github.com/flame-engine/forge2d), the Box2d-based physics engine, to your [Flame](https://github.com/flame-engine/flame) games.
+Adds support for <a href="https://github.com/flame-engine/forge2d">Forge2d</a>, the Box2d-based physics engine, to your <a href="https://github.com/flame-engine/flame">Flame</a> games.
 </p>
 
 <p align="center">

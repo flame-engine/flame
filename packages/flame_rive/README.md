@@ -6,7 +6,7 @@
 </p>
 
 <p align="center">
-Adds support for [Rive animations](https://github.com/rive-app/rive-flutter) to your [Flame](https://github.com/flame-engine/flame) games.
+Adds support for <a href="https://github.com/rive-app/rive-flutter">Rive animations</a> to your <a href="https://github.com/flame-engine/flame">Flame</a> games.
 </p>
 
 <p align="center">

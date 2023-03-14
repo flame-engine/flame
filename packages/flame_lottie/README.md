@@ -6,7 +6,7 @@
 </p>
 
 <p align="center">
-Adds support for [Lottie animations](https://github.com/airbnb/lottie-android) to your [Flame](https://github.com/flame-engine/flame) games.
+Adds support for <a href="https://github.com/airbnb/lottie-android">Lottie animations</a> to your <a href="https://github.com/flame-engine/flame">Flame</a> games.
 </p>
 
 <p align="center">

@@ -6,7 +6,7 @@
 </p>
 
 <p align="center">
-Adds support for [jenny](https://pub.dev/packages/jenny), the Dart port of [YarnSpinner], to your [Flame](https://github.com/flame-engine/flame) games.
+Adds support for <a href="https://pub.dev/packages/jenny">jenny</a>, the Dart port of <a href="https://yarnspinner.dev/">YarnSpinner</a>, to your <a href="https://github.com/flame-engine/flame">Flame</a> games.
 </p>
 
 <p align="center">
