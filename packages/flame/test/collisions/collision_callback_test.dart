@@ -1,5 +1,7 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flame/experimental.dart';
+import 'package:flame/game.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:test/test.dart';
 
@@ -463,7 +465,8 @@ void main() {
       expect(player.endCounter, 0);
     },
     // Reproduced #1478
-    'collision callbacks with changed game size': (game) async {
+    'collision callbacks with changed game size': (collisionSystem) async {
+      final game = collisionSystem as FlameGame;
       final block = TestBlock(Vector2.all(20), Vector2.all(10))
         ..anchor = Anchor.center;
       await game.ensureAddAll([ScreenHitbox(), block]);
@@ -511,6 +514,46 @@ void main() {
       expect(outerBlock.startCounter, 1);
       expect(outerBlock.onCollisionCounter, 1);
       expect(outerBlock.endCounter, 1);
+    },
+    'collision callbacks for nested World': (outerCollisionSystem) async {
+      final game = outerCollisionSystem as FlameGame;
+      final world1 = CollisionDetectionWorld();
+      final world2 = CollisionDetectionWorld();
+      final camera1 = CameraComponent(world: world1);
+      final camera2 = CameraComponent(world: world2);
+      await game.ensureAddAll([world1, world2, camera1, camera2]);
+      final block1 = TestBlock(Vector2(1, 1), Vector2.all(2))
+        ..anchor = Anchor.center;
+      final block2 = TestBlock(Vector2(1, -1), Vector2.all(2))
+        ..anchor = Anchor.center;
+      final block3 = TestBlock(Vector2(-1, 1), Vector2.all(2))
+        ..anchor = Anchor.center;
+      final block4 = TestBlock(Vector2(-1, -1), Vector2.all(2))
+        ..anchor = Anchor.center;
+      await world1.ensureAddAll([block1, block2]);
+      await world2.ensureAddAll([block3, block4]);
+
+      game.update(0);
+      for (final block in [block1, block2, block3, block4]) {
+        expect(block.startCounter, 1);
+        expect(block.onCollisionCounter, 1);
+        expect(block.endCounter, 0);
+      }
+      expect(block1.collidedWithExactly([block2]), isTrue);
+      expect(block2.collidedWithExactly([block1]), isTrue);
+      expect(block3.collidedWithExactly([block4]), isTrue);
+      expect(block4.collidedWithExactly([block3]), isTrue);
+
+      for (final block in [block1, block2, block3, block4]) {
+        block.position.scale(3);
+      }
+
+      game.update(0);
+      for (final block in [block1, block2, block3, block4]) {
+        expect(block.startCounter, 1);
+        expect(block.onCollisionCounter, 1);
+        expect(block.endCounter, 1);
+      }
     },
   });
 

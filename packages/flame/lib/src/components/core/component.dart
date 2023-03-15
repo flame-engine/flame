@@ -300,8 +300,11 @@ class Component {
 
   /// Returns the closest parent further up the hierarchy that satisfies type=T,
   /// or null if no such parent can be found.
-  T? findParent<T extends Component>() {
-    return ancestors().whereType<T>().firstOrNull;
+  ///
+  /// If [includeSelf] is set to true (default is false) then the component
+  /// which the call is made for is also included in the search.
+  T? findParent<T extends Component>({bool includeSelf = false}) {
+    return ancestors(includeSelf: includeSelf).whereType<T>().firstOrNull;
   }
 
   /// Returns the first child that matches the given type [T], or null if there
