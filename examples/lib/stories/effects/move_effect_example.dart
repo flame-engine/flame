@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flame/effects.dart';
 import 'package:flame/game.dart';
 import 'package:flame/geometry.dart';
+import 'package:flame_noise/flame_noise.dart';
 import 'package:flutter/material.dart';
 
 class MoveEffectExample extends FlameGame {
@@ -96,12 +97,12 @@ class MoveEffectExample extends FlameGame {
             [
               MoveEffect.by(
                 Vector2(5, 0),
-                NoiseEffectController(duration: 1, frequency: 20),
+                PerlinNoiseEffectController(duration: 1, frequency: 20),
               ),
               MoveEffect.by(Vector2.zero(), LinearEffectController(2)),
               MoveEffect.by(
                 Vector2(0, 10),
-                NoiseEffectController(duration: 1, frequency: 10),
+                PerlinNoiseEffectController(duration: 1, frequency: 10),
               ),
             ],
             infinite: true,
