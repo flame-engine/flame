@@ -1,6 +1,6 @@
-import 'platform/stub_provider.dart'
-    if (dart.library.html) 'platform/web_provider.dart';
 import 'package:dashbook/dashbook.dart';
+import 'package:examples/platform/stub_provider.dart'
+    if (dart.library.html) 'platform/web_provider.dart';
 import 'package:examples/stories/animations/animations.dart';
 import 'package:examples/stories/bridge_libraries/audio/audio.dart';
 import 'package:examples/stories/bridge_libraries/flame_isolate/isolate.dart';
