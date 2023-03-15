@@ -27,6 +27,7 @@ dependencies:
   provider: ^6.0.3
   rogue_shooter: ^0.1.0
   trex_game: ^0.1.0
+  test: ^1.23.1
 
 dev_dependencies:
   flame_lint: ^0.2.0
