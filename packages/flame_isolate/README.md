@@ -6,7 +6,7 @@
 </p>
 
 <p align="center">
-Adds support for [integral_isolates](https://pub.dev/packages/integral_isolates) to your [Flame](https://github.com/flame-engine/flame) games.
+Adds support for <a href="https://pub.dev/packages/integral_isolates">integral_isolates</a> to your <a href="https://github.com/flame-engine/flame">Flame</a> games.
 </p>
 
 <p align="center">
