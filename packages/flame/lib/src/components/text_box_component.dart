@@ -133,20 +133,28 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
     double? lineHeight;
     final maxBoxWidth = _fixedSize ? width : _boxConfig.maxWidth;
     text.split(' ').forEach((word) {
-      final possibleLine = _lines.isEmpty ? word : '${_lines.last} $word';
+      final wordLines = word.split('\n');
+      final possibleLine =
+          _lines.isEmpty ? wordLines[0] : '${_lines.last} ${wordLines[0]}';
       lineHeight ??= textRenderer.measureTextHeight(possibleLine);
 
       final textWidth = textRenderer.measureTextWidth(possibleLine);
+      _updateMaxWidth(textWidth);
+      var canAppend = false;
       if (textWidth <= maxBoxWidth - _boxConfig.margins.horizontal) {
-        if (_lines.isNotEmpty) {
-          _lines.last = possibleLine;
-        } else {
-          _lines.add(possibleLine);
-        }
-        _updateMaxWidth(textWidth);
+        canAppend = _lines.isNotEmpty;
       } else {
-        _lines.add(word);
-        _updateMaxWidth(textWidth);
+        canAppend = _lines.isNotEmpty && _lines.last == '';
+      }
+
+      if (canAppend) {
+        _lines.last = '${_lines.last} ${wordLines[0]}';
+        wordLines.removeAt(0);
+        if (wordLines.isNotEmpty) {
+          _lines.addAll(wordLines);
+        }
+      } else {
+        _lines.addAll(wordLines);
       }
     });
     _totalLines = _lines.length;
