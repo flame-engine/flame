@@ -7,4 +7,5 @@ import 'package:flame/src/events/flame_game_mixins/has_tappable_components.dart'
 ///
 /// This is a temporary mixin to facilitate the transition between the old and
 /// the new event system. In the future it will be deprecated.
+@Deprecated('This mixin will be removed in 1.8.0')
 mixin HasTappablesBridge on HasTappableComponents {}

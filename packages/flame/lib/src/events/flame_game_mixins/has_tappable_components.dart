@@ -1,4 +1,4 @@
-import 'package:flame/src/components/mixins/tappable.dart';
+import 'package:flame/components.dart';
 import 'package:flame/src/events/component_mixins/tap_callbacks.dart';
 import 'package:flame/src/events/flame_game_mixins/has_tappables_bridge.dart';
 import 'package:flame/src/events/interfaces/multi_tap_listener.dart';
@@ -7,30 +7,24 @@ import 'package:flame/src/events/messages/tap_down_event.dart';
 import 'package:flame/src/events/messages/tap_up_event.dart';
 import 'package:flame/src/events/tagged_component.dart';
 import 'package:flame/src/game/flame_game.dart';
+import 'package:flame/src/game/game_render_box.dart';
 import 'package:flutter/gestures.dart';
 import 'package:meta/meta.dart';
 
-/// This mixin allows a [FlameGame] to respond to tap events, and also delivers
-/// those events to components that have the [TapCallbacks] mixin.
-///
-/// The following events are supported by the mixin: [onTapDown], [onTapUp],
-/// [onTapCancel] and [onLongTapDown] -- see their individual descriptions for
-/// more details. There is no "onTap" event though -- use [onTapUp] instead.
-///
-/// Each event handler can be overridden. One scenario when this could be useful
-/// is to check the `event.handled` property after the event has been sent down
-/// the component tree.
-///
-/// === Usage notes ===
-/// - If your game uses components with [TapCallbacks], then this mixin must be
-///   added to the [FlameGame] in order for [TapCallbacks] to work properly.
-/// - If your game also uses [Tappable] components, then add the
-///   [HasTappablesBridge] mixin as well (instead of `HasTappables`).
-/// - If your game has no tappable components, then do not use this mixin.
-///   Instead, consider `MultiTouchTapDetector`.
-mixin HasTappableComponents on FlameGame implements MultiTapListener {
+@Deprecated('''This mixin will be removed in 1.8.0
+
+This mixin does no longer do anything since you can now add tappable
+components directly to a game without this mixin.
+''')
+mixin HasTappableComponents on FlameGame implements MultiTapListener {}
+
+@internal
+class MultiTapDispatcher extends Component implements MultiTapListener {
   /// The record of all components currently being touched.
   final Set<TaggedComponent<TapCallbacks>> _record = {};
+  bool _eventHandlerRegistered = false;
+
+  FlameGame get game => parent! as FlameGame;
 
   /// Called when the user touches the device screen within the game canvas,
   /// either with a finger, a stylus, or a mouse.
@@ -45,14 +39,15 @@ mixin HasTappableComponents on FlameGame implements MultiTapListener {
   @mustCallSuper
   void onTapDown(TapDownEvent event) {
     event.deliverAtPoint(
-      rootComponent: this,
+      rootComponent: game,
       eventHandler: (TapCallbacks component) {
         _record.add(TaggedComponent(event.pointerId, component));
         component.onTapDown(event);
       },
     );
-    if (this is HasTappablesBridge) {
-      final info = event.asInfo(this)..handled = event.handled;
+    // ignore: deprecated_member_use_from_same_package
+    if (game is HasTappablesBridge) {
+      final info = event.asInfo(game)..handled = event.handled;
       propagateToChildren(
         (Tappable child) => child.handleTapDown(event.pointerId, info),
       );
@@ -78,8 +73,9 @@ mixin HasTappableComponents on FlameGame implements MultiTapListener {
       },
       deliverToAll: true,
     );
+    // ignore: deprecated_member_use_from_same_package
     if (this is HasTappablesBridge) {
-      final info = event.asInfo(this)..handled = event.handled;
+      final info = event.asInfo(game)..handled = event.handled;
       propagateToChildren(
         (Tappable child) => child.handleLongTapDown(event.pointerId, info),
       );
@@ -110,8 +106,9 @@ mixin HasTappableComponents on FlameGame implements MultiTapListener {
       deliverToAll: true,
     );
     _tapCancelImpl(TapCancelEvent(event.pointerId));
+    // ignore: deprecated_member_use_from_same_package
     if (this is HasTappablesBridge) {
-      final info = event.asInfo(this)..handled = event.handled;
+      final info = event.asInfo(game)..handled = event.handled;
       propagateToChildren(
         (Tappable child) => child.handleTapUp(event.pointerId, info),
       );
@@ -130,6 +127,7 @@ mixin HasTappableComponents on FlameGame implements MultiTapListener {
   @mustCallSuper
   void onTapCancel(TapCancelEvent event) {
     _tapCancelImpl(event);
+    // ignore: deprecated_member_use_from_same_package
     if (this is HasTappablesBridge) {
       propagateToChildren(
         (Tappable child) => child.handleTapCancel(event.pointerId),
@@ -179,5 +177,31 @@ mixin HasTappableComponents on FlameGame implements MultiTapListener {
   void handleLongTapDown(int pointerId, TapDownDetails details) {
     onLongTapDown(TapDownEvent(pointerId, details));
   }
+
   //#endregion
+
+  @override
+  void onMount() {
+    if (game.firstChild<MultiTapDispatcher>() == null) {
+      game.gestureDetectors.add<MultiTapGestureRecognizer>(
+        MultiTapGestureRecognizer.new,
+        (MultiTapGestureRecognizer instance) {},
+      );
+      _eventHandlerRegistered = true;
+    } else {
+      // Ensures that only one MultiDragDispatcher is attached to the Game.
+      removeFromParent();
+    }
+  }
+
+  @override
+  void onRemove() {
+    if (_eventHandlerRegistered) {
+      game.gestureDetectors.remove<MultiTapGestureRecognizer>();
+      _eventHandlerRegistered = false;
+    }
+  }
+
+  @override
+  GameRenderBox get renderBox => game.renderBox;
 }

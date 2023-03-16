@@ -36,6 +36,7 @@ mixin HasDraggables on FlameGame implements MultiDragListener {
   }
 
   //#region MultiDragListener API
+
   @override
   void handleDragStart(int pointerId, DragStartDetails details) {
     onDragStart(pointerId, DragStartInfo.fromDetails(this, details));
@@ -56,6 +57,8 @@ mixin HasDraggables on FlameGame implements MultiDragListener {
     onDragCancel(pointerId);
   }
 
+  //#endregion
+
   @override
   void mount() {
     gestureDetectors.add<ImmediateMultiDragGestureRecognizer>(
@@ -66,5 +69,4 @@ mixin HasDraggables on FlameGame implements MultiDragListener {
     );
     super.mount();
   }
-  //#endregion
 }

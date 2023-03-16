@@ -48,6 +48,7 @@ mixin HasTappables on FlameGame implements MultiTapListener {
   }
 
   //#region MultiTapListener API
+
   @override
   double get longTapDelay => 0.300;
 
@@ -71,5 +72,15 @@ mixin HasTappables on FlameGame implements MultiTapListener {
   void handleLongTapDown(int pointerId, TapDownDetails details) {
     onLongTapDown(pointerId, TapDownInfo.fromDetails(this, details));
   }
+
   //#endregion
+
+  @override
+  void mount() {
+    gestureDetectors.add<MultiTapGestureRecognizer>(
+      MultiTapGestureRecognizer.new,
+      (MultiTapGestureRecognizer instance) {},
+    );
+    super.mount();
+  }
 }

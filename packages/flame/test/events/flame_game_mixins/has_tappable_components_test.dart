@@ -1,6 +1,7 @@
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/experimental.dart';
+import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -13,7 +14,7 @@ void main() {
         var nLongTapDown = 0;
         var nTapCancel = 0;
         var nTapUp = 0;
-        final game = _GameWithHasTappableComponents(
+        final game = FlameGame(
           children: [
             _TapCallbacksComponent(
               size: Vector2(200, 100),
@@ -28,7 +29,7 @@ void main() {
         await tester.pumpWidget(GameWidget(game: game));
         await tester.pump();
         await tester.pump(const Duration(milliseconds: 10));
-        expect(game.children.length, 1);
+        expect(game.children.length, 2);
 
         // regular tap
         await tester.tapAt(const Offset(100, 100));
@@ -73,7 +74,7 @@ void main() {
         var nTapCancelParent = 0;
         var nTapUpChild = 0;
         var nTapUpParent = 0;
-        final game = _GameWithHasTappableComponents(
+        final game = FlameGame(
           children: [
             _TapCallbacksComponent(
               size: Vector2.all(100),
@@ -130,7 +131,7 @@ void main() {
         var nTapDownParent = 0;
         var nTapCancelParent = 0;
         var nTapUpParent = 0;
-        final game = _GameWithHasTappableComponents(
+        final game = FlameGame(
           children: [
             _TapCallbacksComponent(
               size: Vector2.all(100),
@@ -170,7 +171,7 @@ void main() {
       'local coordinates during tap events',
       (tester) async {
         TapDownEvent? tapDownEvent;
-        final game = _GameWithHasTappableComponents(
+        final game = FlameGame(
           children: [
             PositionComponent(
               size: Vector2.all(400),
@@ -221,7 +222,7 @@ void main() {
         var nTappableCancelled = 0;
         var nTapCallbacksDown = 0;
         var nTapCallbacksCancelled = 0;
-        final game = _GameWithDualTappableComponents(
+        final game = FlameGame(
           children: [
             _TapCallbacksComponent(
               size: Vector2(100, 100),
@@ -264,16 +265,6 @@ void main() {
       },
     );
   });
-}
-
-class _GameWithHasTappableComponents extends FlameGame
-    with HasTappableComponents {
-  _GameWithHasTappableComponents({super.children});
-}
-
-class _GameWithDualTappableComponents extends FlameGame
-    with HasTappableComponents, HasTappablesBridge {
-  _GameWithDualTappableComponents({super.children});
 }
 
 class _TapCallbacksComponent extends PositionComponent with TapCallbacks {

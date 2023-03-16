@@ -288,8 +288,7 @@ void main() {
   });
 }
 
-class _GameWithHasTappableComponents extends FlameGame
-    with HasTappableComponents {
+class _GameWithHasTappableComponents extends FlameGame with TapCallbacks {
   int tapDownEvent = 0;
   int longTapDownEvent = 0;
   int tapUpEvent = 0;

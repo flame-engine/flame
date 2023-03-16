@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:flame/components.dart';
+import 'package:flame/events.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
 import 'package:flame/palette.dart';
@@ -17,20 +18,20 @@ void main() {
 /// This example simply adds a rotating white square on the screen.
 /// If you press on a square, it will be removed.
 /// If you press anywhere else, another square will be added.
-class MyGame extends FlameGame with HasTappableComponents {
+class MyGame extends FlameGame {
   @override
   Future<void> onLoad() async {
     add(Square(size / 2));
   }
 
-  @override
-  void onTapDown(TapDownEvent event) {
-    super.onTapDown(event);
-    if (!event.handled) {
-      final touchPoint = event.canvasPosition;
-      add(Square(touchPoint));
-    }
-  }
+  //@override
+  //void onTapDown(TapDownEvent event) {
+  //  super.onTapDown(event);
+  //  if (!event.handled) {
+  //    final touchPoint = event.canvasPosition;
+  //    add(Square(touchPoint));
+  //  }
+  //}
 }
 
 class Square extends RectangleComponent with TapCallbacks {
@@ -76,6 +77,7 @@ class Square extends RectangleComponent with TapCallbacks {
 
   @override
   void onTapDown(TapDownEvent event) {
+    print('not gettin');
     removeFromParent();
     event.handled = true;
   }

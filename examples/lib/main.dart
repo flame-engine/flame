@@ -1,4 +1,3 @@
-import 'dart:html';
 import 'package:dashbook/dashbook.dart';
 import 'package:examples/stories/animations/animations.dart';
 import 'package:examples/stories/bridge_libraries/audio/audio.dart';
@@ -29,10 +28,10 @@ import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-  var page = window.location.search ?? '';
-  if (page.startsWith('?')) {
-    page = page.substring(1);
-  }
+  //var page = null;
+  //if (page.startsWith('?')) {
+  //  page = page.substring(1);
+  //}
 
   final routes = <String, FlameGame Function()>{
     'constant_volume_joint': ConstantVolumeJointExample.new,
@@ -40,12 +39,12 @@ void main() {
     'friction_joint': FrictionJointExample.new,
     'motor_joint': MotorJointExample.new,
   };
-  final game = routes[page]?.call();
-  if (game != null) {
-    runApp(GameWidget(game: game));
-  } else {
-    runAsDashbook();
-  }
+  //final game = null;
+  //if (game != null) {
+  //  runApp(GameWidget(game: game));
+  //} else {
+  runAsDashbook();
+  //}
 }
 
 void runAsDashbook() {
