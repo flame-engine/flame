@@ -1,5 +1,6 @@
-import 'dart:html';
 import 'package:dashbook/dashbook.dart';
+import 'package:examples/platform/stub_provider.dart'
+    if (dart.library.html) 'platform/web_provider.dart';
 import 'package:examples/stories/animations/animations.dart';
 import 'package:examples/stories/bridge_libraries/audio/audio.dart';
 import 'package:examples/stories/bridge_libraries/flame_isolate/isolate.dart';
@@ -29,10 +30,7 @@ import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-  var page = window.location.search ?? '';
-  if (page.startsWith('?')) {
-    page = page.substring(1);
-  }
+  final page = PageProviderImpl().getPage();
 
   final routes = <String, FlameGame Function()>{
     'constant_volume_joint': ConstantVolumeJointExample.new,
