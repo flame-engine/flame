@@ -293,7 +293,7 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
       disposeCurrentGame();
       initCurrentGame();
     }
-    widget.onDidUpdateWidget?.call();
+    widget.onDidUpdateWidget?.call(oldWidget);
   }
 
   @override
