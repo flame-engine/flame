@@ -239,9 +239,7 @@ class PadRacingGame extends Forge2DGame with KeyboardEvents {
 
   void reset() {
     _clearPressedKeys();
-    for (final keyMap in activeKeyMaps) {
-      keyMap.clear();
-    }
+    activeKeyMaps.clear();
     _timePassed = 0;
     overlays.remove('game_over');
     openMenu();
