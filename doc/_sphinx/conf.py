@@ -17,7 +17,7 @@ root_dir = os.path.abspath(
 # -- Project information -----------------------------------------------------
 
 project = 'Flame'
-copyright = '2021, Blue Fire Team'
+copyright = '2021-2023, Blue Fire Team'
 author = 'Blue Fire Team'
 root_doc = "index"
 
@@ -36,6 +36,7 @@ extensions = [
     'extensions.flutter_app',
     'extensions.package',
     'extensions.yarn_lexer',
+    'sphinxcontrib.jquery',
 ]
 
 # Configuration options for MyST:
