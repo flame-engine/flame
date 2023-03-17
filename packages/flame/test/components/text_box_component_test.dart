@@ -21,6 +21,32 @@ void main() {
       expect(c.size.y, greaterThan(1));
     });
 
+    test('size is properly computed with new line character', () async {
+      final c = TextBoxComponent(
+        text: 'The quick brown fox \n jumps over the lazy dog.',
+        boxConfig: TextBoxConfig(
+          maxWidth: 100.0,
+        ),
+      );
+
+      expect(c.size.x, 100 + 2 * 8);
+      expect(c.size.y, 256);
+    });
+
+    test('lines are properly computed with new line character', () async {
+      final c = TextBoxComponent(
+        text: 'The quick brown fox \n jumps over the lazy dog.',
+        boxConfig: TextBoxConfig(
+          maxWidth: 400.0,
+        ),
+      );
+
+      expect(
+        c.lines,
+        ['The quick brown', 'fox ', ' jumps over the', 'lazy dog.'],
+      );
+    });
+
     testWithFlameGame('onLoad waits for cache to be done', (game) async {
       final c = TextBoxComponent(text: 'foo bar');
 
