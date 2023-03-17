@@ -51,7 +51,8 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
   final TextBoxConfig _boxConfig;
   final double pixelRatio;
 
-  final List<String> _lines = [];
+  @visibleForTesting
+  final List<String> lines = [];
   double _maxLineWidth = 0.0;
   late double _lineHeight;
   late int _totalLines;
@@ -129,27 +130,35 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
   @override
   @internal
   void updateBounds() {
-    _lines.clear();
+    lines.clear();
     double? lineHeight;
     final maxBoxWidth = _fixedSize ? width : _boxConfig.maxWidth;
     text.split(' ').forEach((word) {
-      final possibleLine = _lines.isEmpty ? word : '${_lines.last} $word';
+      final wordLines = word.split('\n');
+      final possibleLine =
+          lines.isEmpty ? wordLines[0] : '${lines.last} ${wordLines[0]}';
       lineHeight ??= textRenderer.measureTextHeight(possibleLine);
 
       final textWidth = textRenderer.measureTextWidth(possibleLine);
+      _updateMaxWidth(textWidth);
+      var canAppend = false;
       if (textWidth <= maxBoxWidth - _boxConfig.margins.horizontal) {
-        if (_lines.isNotEmpty) {
-          _lines.last = possibleLine;
-        } else {
-          _lines.add(possibleLine);
-        }
-        _updateMaxWidth(textWidth);
+        canAppend = lines.isNotEmpty;
       } else {
-        _lines.add(word);
-        _updateMaxWidth(textWidth);
+        canAppend = lines.isNotEmpty && lines.last == '';
+      }
+
+      if (canAppend) {
+        lines.last = '${lines.last} ${wordLines[0]}';
+        wordLines.removeAt(0);
+        if (wordLines.isNotEmpty) {
+          lines.addAll(wordLines);
+        }
+      } else {
+        lines.addAll(wordLines);
       }
     });
-    _totalLines = _lines.length;
+    _totalLines = lines.length;
     _lineHeight = lineHeight ?? 0.0;
     size = _recomputeSize();
   }
@@ -165,7 +174,7 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
   bool get finished => _lifeTime > totalCharTime + _boxConfig.dismissDelay;
 
   int get _actualTextLength {
-    return _lines.map((e) => e.length).sum;
+    return lines.map((e) => e.length).sum;
   }
 
   int get currentChar => _boxConfig.timePerChar == 0.0
@@ -175,13 +184,13 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
   int get currentLine {
     var totalCharCount = 0;
     final _currentChar = currentChar;
-    for (var i = 0; i < _lines.length; i++) {
-      totalCharCount += _lines[i].length;
+    for (var i = 0; i < lines.length; i++) {
+      totalCharCount += lines[i].length;
       if (totalCharCount > _currentChar) {
         return i;
       }
     }
-    return _lines.length - 1;
+    return lines.length - 1;
   }
 
   double getLineWidth(String line, int charCount) {
@@ -198,7 +207,7 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
       var totalCharCount = 0;
       final _currentChar = currentChar;
       final _currentLine = currentLine;
-      final textWidth = _lines.sublist(0, _currentLine + 1).map((line) {
+      final textWidth = lines.sublist(0, _currentLine + 1).map((line) {
         final charCount =
             (i < _currentLine) ? line.length : (_currentChar - totalCharCount);
         totalCharCount += line.length;
@@ -207,7 +216,7 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
       }).reduce(math.max);
       return Vector2(
         textWidth + _boxConfig.margins.horizontal,
-        _lineHeight * _lines.length + _boxConfig.margins.vertical,
+        _lineHeight * lines.length + _boxConfig.margins.vertical,
       );
     } else {
       return Vector2(
@@ -250,7 +259,7 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
     final boxHeight = size.y - boxConfig.margins.vertical;
     var charCount = 0;
     for (var i = 0; i < nLines; i++) {
-      var line = _lines[i];
+      var line = lines[i];
       if (i == nLines - 1) {
         final nChars = math.min(currentChar - charCount, line.length);
         line = line.substring(0, nChars);
@@ -266,7 +275,7 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
               i * _lineHeight,
         ),
       );
-      charCount += _lines[i].length;
+      charCount += lines[i].length;
     }
   }
 
