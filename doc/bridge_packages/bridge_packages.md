@@ -27,7 +27,7 @@ Use isolates to offload heavy computations to another thread.
 
 :::{package} flame_network_assets
 
-Fetch assets from the network.
+Fetch assets over the network.
 :::
 
 :::{package} flame_oxygen
@@ -73,7 +73,7 @@ flame_fire_atlas    <flame_fire_atlas/flame_fire_atlas.md>
 flame_forge2d       <flame_forge2d/flame_forge2d.md>
 flame_isolate       <flame_isolate/flame_isolate.md>
 flame_lottie        <flame_lottie/flame_lottie.md>
-flame_lottie        <flame_network_assets/flame_network_assets.md>
+flame_network_assets        <flame_network_assets/flame_network_assets.md>
 flame_oxygen        <flame_oxygen/flame_oxygen.md>
 flame_rive          <flame_rive/flame_rive.md>
 flame_splash_screen <flame_splash_screen/flame_splash_screen.md>

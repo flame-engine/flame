@@ -33,33 +33,34 @@ typedef GetAppDirectoryFunction = Future<Directory> Function();
 /// [Images] for example), but instead of loading assets from the assets bundle,
 /// it loads from networks urls.
 ///
-/// By default, [FlameNetworkAssets] uses [http.get] method to make the requests
-/// ,that can be customized by passing a different [GetAssetFunction] to the get
-/// argument on the constructor.
+/// By default, [FlameNetworkAssets] uses the [http.get] method to make the
+/// requests. It can be customized by passing a different [GetAssetFunction] to
+/// the `get` argument on the constructor.
 ///
-/// [FlameNetworkAssets] also will also automatically cache files in a two layer
+/// [FlameNetworkAssets] also will automatically cache files in a two layer
 /// system.
 ///
-/// The first layer is an in memory cache, handled by an internal [MemoryCache],
-/// while the second is the device own file system, where images are cached in
-/// the application document directory, which by default is provided by
-/// path_providers' [getApplicationDocumentsDirectory] method, and can be
-/// customized using the getAppDirectory argument in the constructor.
+/// The first layer is an in-memory cache, handled by an internal [MemoryCache],
+/// while the second one is the device's own file system, where images are
+/// cached in the application document directory, which by default is provided
+/// by path_providers' [getApplicationDocumentsDirectory] method, and can
+/// be customized using the `getAppDirectory` argument in the constructor.
 ///
 /// When an asset is requested, [FlameAssetResponse] will first check on its
 /// cache layers before making the http request, if both layer are cache miss,
 /// then the request is made and both layers set with the response.
 ///
 /// Another important note about the cache layers is that the first layer, is a
-/// per instance cache, while the local storage is a app global cache. This
+/// per instance cache, while the local storage is an app global cache. This
 /// means that two different [FlameAssetResponse] instances will have the same
-/// local storage cache, but not the memory cache.
+/// local storage cache, but not the same memory cache.
 ///
 /// Note that the local storage layer is not present when running on web since
-/// that platform doesn't really have a file system. The Browse caching will
-/// work as similar replacement for this layer, though that can't be controlled
-/// this package, make sure that the server where the images are being fetched
-/// returns the correct cache header to make the browser cache the assets.
+/// that platform doesn't really have a file system. The browser caching will
+/// work as a similar replacement for this layer, though that can't be
+/// controlled by this package, make sure that the server where the images
+/// are being fetched returns the correct cache header to make the browser
+/// cache the assets.
 ///
 /// Each cache layer can be disabled by the [cacheInMemory] or [cacheInStorage]
 /// argument on the constructor.
@@ -76,9 +77,9 @@ abstract class FlameNetworkAssets<T> {
   /// by default.
   /// - [getAppDirectory] is an optional [GetAppDirectoryFunction], if omitted
   /// [getApplicationDocumentsDirectory] is used by default.
-  /// - [cacheInMemory] when false, will not cache assets in the memory,
+  /// - [cacheInMemory] will not cache assets in the memory when false,
   /// (true by default).
-  /// - [cacheInStorage] when false, will not cache assets in the file system,
+  /// - [cacheInStorage] will not cache assets in the file system when false,
   /// (true by default).
   FlameNetworkAssets({
     required DecodeAssetFunction<T> decodeAsset,
@@ -125,7 +126,7 @@ abstract class FlameNetworkAssets<T> {
     return base64.encode(bytes);
   }
 
-  /// Loads the given asset from the given url.
+  /// Loads the asset from the given url.
   Future<T> load(
     String url, {
     Map<String, String>? headers,
@@ -162,7 +163,7 @@ abstract class FlameNetworkAssets<T> {
       return image;
     } else {
       throw Exception(
-        'Error fetching asset $url, response return status code '
+        'Error fetching asset from $url, response return status code '
         '${response.statusCode}',
       );
     }

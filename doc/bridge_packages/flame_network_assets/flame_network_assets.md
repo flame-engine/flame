@@ -1,23 +1,23 @@
 # FlameNetworkAssets
 
-`FlameNetworkAssets` is bridge package focused in providing a solution to fetch, and cache assets
+`FlameNetworkAssets` is a bridge package focused on providing a solution to fetch, and cache assets
 from the network.
 
-`FlameNetworkAssets` class provides an abstraction that should be extended in order to create
+The `FlameNetworkAssets` class provides an abstraction that should be extended in order to create
 asset specific handler.
 
-By default, that package relies on the `http` package to make http requests, and `path_provider`
-to get the place to store the local cache, to use a different approach for those, check the
-optional arguments in constructor in order to customize that.
+By default, the package relies on the `http` package to make http requests, and `path_provider`
+to get the place to store the local cache, to use a different approach for those, use the
+optional arguments in the constructor.
 
-The package already bundles an specific asset handler class for images:
+This package bundles a specific asset handler class for images:
 
 ```dart
 final networkAssets = FlameNetworkImages();
-final charSprite = await networkAssets.load('https://url.com/image.png');
+final playerSprite = await networkAssets.load('https://url.com/image.png');
 ```
 
-To create an specific asset handler class, you just need to extend the `FlameNetworkAssets` class
+To create a specific asset handler class, you just need to extend the `FlameNetworkAssets` class
 and define the `decodeAsset` and `endcodeAsset` arguments:
 
 ```dart
