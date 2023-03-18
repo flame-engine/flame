@@ -82,7 +82,7 @@ const _highlight_flame = (node, addItems, text, className, index) => {
     node.childNodes.forEach((el) => _highlight_flame(el, addItems, text, className, index));
   }
 };
-const _highlightText_flames = (thisNode, text, className, index) => {
+const _highlightText_flame = (thisNode, text, className, index) => {
   let addItems = [];
   _highlight_flame(thisNode, addItems, text, className, index);
   addItems.forEach((obj) =>
@@ -152,7 +152,7 @@ const DocumentationFlames = {
     const hbox = $("#highlight-content");
     window.setTimeout(() => {
       terms.forEach((term, index) => {
-        _highlightText_flames(body, term, "highlighted", index);
+        _highlightText_flame(body, term, "highlighted", index);
         hbox.append($('<span>' + term + '</span>').click(function(){
           $(this).toggleClass("off");
           DocumentationFlames.toggleSearchWord(index);
