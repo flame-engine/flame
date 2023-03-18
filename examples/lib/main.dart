@@ -10,6 +10,7 @@ import 'package:examples/stories/bridge_libraries/forge2d/joints/constant_volume
 import 'package:examples/stories/bridge_libraries/forge2d/joints/distance_joint.dart';
 import 'package:examples/stories/bridge_libraries/forge2d/joints/friction_joint.dart';
 import 'package:examples/stories/bridge_libraries/forge2d/joints/motor_joint.dart';
+import 'package:examples/stories/bridge_libraries/forge2d/joints/mouse_joint.dart';
 import 'package:examples/stories/camera_and_viewport/camera_and_viewport.dart';
 import 'package:examples/stories/collision_detection/collision_detection.dart';
 import 'package:examples/stories/components/components.dart';
@@ -37,6 +38,7 @@ void main() {
     'distance_joint': DistanceJointExample.new,
     'friction_joint': FrictionJointExample.new,
     'motor_joint': MotorJointExample.new,
+    'mouse_joint': MouseJointExample.new,
   };
   final game = routes[page]?.call();
   if (game != null) {
