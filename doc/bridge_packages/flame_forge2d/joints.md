@@ -22,7 +22,7 @@ Currently, Forge2D supports the following joints:
 - [`FrictionJoint`](#frictionjoint)
 - GearJoint
 - [`MotorJoint`](#motorjoint)
-- MouseJoint
+- [`MouseJoint`](#mousejoint)
 - PrismaticJoint
 - PulleyJoint
 - RevoluteJoint
@@ -180,6 +180,13 @@ final motorJointDef = MotorJointDef()
   world.createJoint(MotorJoint(motorJointDef));
 ```
 
+```{flutter-app}
+:sources: ../../examples
+:page: motor_joint
+:subfolder: stories/bridge_libraries/forge2d/joints
+:show: code popup
+```
+
 A `MotorJointDef` has three optional parameters:
 
 - `maxForce`: the maximum translational force which will be applied to the joined body to reach the
@@ -211,3 +218,57 @@ void update(double dt) {
   joint.setAngularOffset(angularOffset);
 }
 ```
+
+
+### `MouseJoint`
+
+The `MouseJoint` is used to manipulate bodies with the mouse. It attempts to drive a point on a body
+towards the current position of the cursor. There is no restriction on rotation.
+
+The `MouseJoint` definition has a target point, maximum force, frequency, and damping ratio. The
+target point initially coincides with the body's anchor point. The maximum force is used to prevent
+violent reactions when multiple dynamic bodies interact. You can make this as large as you like.
+The frequency and damping ratio are used to create a spring/damper effect similar to the distance
+joint.
+
+```{warning}
+Many users have tried to adapt the mouse joint for game play. Users often want
+to achieve precisepositioning and instantaneous response. The mouse joint 
+doesn't work very well in that context. You may wish to consider using 
+kinematic bodies instead.
+```
+
+```dart
+final mouseJointDef = MouseJointDef()
+  ..maxForce = 3000 * ballBody.mass * 10
+  ..dampingRatio = 1
+  ..frequencyHz = 5
+  ..target.setFrom(ballBody.position)
+  ..collideConnected = false
+  ..bodyA = groundBody
+  ..bodyB = ballBody;
+
+  mouseJoint = MouseJoint(mouseJointDef);
+  world.createJoint(mouseJoint);
+}
+```
+
+```{flutter-app}
+:sources: ../../examples
+:page: mouse_joint
+:subfolder: stories/bridge_libraries/forge2d/joints
+:show: code popup
+```
+
+- `maxForce`: This parameter defines the maximum constraint force that can be exerted to move the
+  candidate body. Usually you will express as some multiple of the weight
+  (multiplier *mass* gravity).
+
+- `dampingRatio`: This parameter defines how quickly the oscillation comes to rest. It ranges from
+  0 to 1, where 0 means no damping and 1 indicates critical damping.
+
+- `frequencyHz`: This parameter defines the response speed of the body, i.e. how quickly it tries to
+  reach the target position
+
+- `target`: The initial world target point. This is assumed to coincide with the body anchor
+  initially.
