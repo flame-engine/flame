@@ -4,6 +4,11 @@ import 'package:flame/input.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 
 class DistanceJointExample extends Forge2DGame with TapDetector {
+  static const description = '''
+    This example shows how to use a `DistanceJoint`. Tap the screen to add a 
+    pair of balls joined with a `DistanceJoint`.
+  ''';
+
   @override
   Future<void> onLoad() async {
     super.onLoad();

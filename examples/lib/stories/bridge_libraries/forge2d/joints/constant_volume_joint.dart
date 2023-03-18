@@ -6,6 +6,11 @@ import 'package:flame/input.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 
 class ConstantVolumeJointExample extends Forge2DGame with TapDetector {
+  static const description = '''
+    This example shows how to use a `ConstantVolumeJoint`. Tap the screen to add 
+    a bunch off balls, that maintain a constant volume within them.
+  ''';
+
   @override
   Future<void> onLoad() async {
     super.onLoad();

@@ -31,9 +31,9 @@ void main() {
     setUp(() async {
       Flame.bundle = TestAssetBundle(
         imageNames: ['map-level1.png', 'image1.png'],
-        mapPath: 'test/assets/map.tmx',
+        stringNames: ['map.tmx'],
       );
-      tiled = await TiledComponent.load('x', Vector2.all(16));
+      tiled = await TiledComponent.load('map.tmx', Vector2.all(16));
     });
 
     test('correct loads the file', () async {
@@ -80,7 +80,7 @@ void main() {
     // odd errors if you're trying to debug.
     Flame.bundle = TestAssetBundle(
       imageNames: ['map-level1.png', 'image1.png'],
-      mapPath: 'test/assets/map.tmx',
+      stringNames: ['map.tmx', 'tiles/external_tileset_1.tsx'],
     );
 
     final tsxProvider =
@@ -110,7 +110,7 @@ void main() {
           'green_sprite.png',
           'red_sprite.png',
         ],
-        mapPath: 'test/assets/2_tiles-green_on_red.tmx',
+        stringNames: ['2_tiles-green_on_red.tmx'],
       );
       overlapMap = await RenderableTiledMap.fromFile(
         '2_tiles-green_on_red.tmx',
@@ -207,7 +207,7 @@ void main() {
         imageNames: [
           '4_color_sprite.png',
         ],
-        mapPath: 'test/assets/8_tiles-flips.tmx',
+        stringNames: ['8_tiles-flips.tmx'],
       );
       overlapMap = await RenderableTiledMap.fromFile(
         '8_tiles-flips.tmx',
@@ -300,7 +300,7 @@ void main() {
         imageNames: [
           '4_color_sprite.png',
         ],
-        mapPath: 'test/assets/8_tiles-flips.tmx',
+        stringNames: ['8_tiles-flips.tmx'],
       );
       final tiledComponent = TiledComponent(
         await RenderableTiledMap.fromFile(
@@ -344,7 +344,7 @@ void main() {
     setUp(() async {
       Flame.bundle = TestAssetBundle(
         imageNames: ['map-level1.png'],
-        mapPath: 'test/assets/layers_test.tmx',
+        stringNames: ['layers_test.tmx'],
       );
       _renderableTiledMap =
           await RenderableTiledMap.fromFile('layers_test.tmx', Vector2.all(32));
@@ -396,7 +396,7 @@ void main() {
           'image1.png',
           'map-level1.png',
         ],
-        mapPath: 'test/assets/map.tmx',
+        stringNames: ['map.tmx'],
       );
       component = await TiledComponent.load(
         'map.tmx',
@@ -432,7 +432,7 @@ void main() {
         imageNames: [
           'isometric_spritesheet.png',
         ],
-        mapPath: 'test/assets/test_isometric.tmx',
+        stringNames: ['test_isometric.tmx'],
       );
       component = await TiledComponent.load(
         'test_isometric.tmx',
@@ -466,7 +466,7 @@ void main() {
         imageNames: [
           imageFile,
         ],
-        mapPath: 'test/assets/$tmxFile',
+        stringNames: [tmxFile],
       );
       return component = await TiledComponent.load(
         tmxFile,
@@ -543,7 +543,7 @@ void main() {
         imageNames: [
           imageFile,
         ],
-        mapPath: 'test/assets/$tmxFile',
+        stringNames: [tmxFile],
       );
       return component = await TiledComponent.load(
         tmxFile,
@@ -631,10 +631,10 @@ void main() {
         imageNames: [
           'isometric_spritesheet.png',
         ],
-        mapPath: 'test/assets/test_shifted.tmx',
+        stringNames: ['test_shifted.tmx'],
       );
       component = await TiledComponent.load(
-        'test_isometric.tmx',
+        'test_shifted.tmx',
         destTileSize,
       );
     }
@@ -681,7 +681,7 @@ void main() {
         imageNames: [
           'isometric_spritesheet.png',
         ],
-        mapPath: 'test/assets/test_isometric.tmx',
+        stringNames: ['test_isometric.tmx'],
       );
       component = await TiledComponent.load('test_isometric.tmx', size);
     });
@@ -747,7 +747,7 @@ void main() {
             imageNames: [
               '0x72_DungeonTilesetII_v1.4.png',
             ],
-            mapPath: 'test/assets/dungeon_animation_$mapType.tmx',
+            stringNames: ['dungeon_animation_$mapType.tmx'],
           );
           component = await TiledComponent.load(
             'dungeon_animation_$mapType.tmx',

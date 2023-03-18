@@ -8,6 +8,9 @@ import 'package:meta/meta.dart';
 import 'package:tiled/tiled.dart';
 
 /// One image atlas for all Tiled image sets in a map.
+///
+/// Please note that [TiledAtlas] should not be reused without [clone] as it may
+/// have a different [batch] instance.
 class TiledAtlas {
   /// Single atlas for all renders.
   // Retain this as SpriteBatch can dispose of the original image for flips.
@@ -100,7 +103,11 @@ class TiledAtlas {
       // really boring map.
       final image = (await Flame.images.load(key)).clone();
 
-      return atlasMap[key] ??= TiledAtlas._(
+      // There could be a special case that a concurrent call to this method
+      // passes the check `if (atlasMap.containsKey(key))` due to the async call
+      // inside this block. So, instance should always be recreated within this
+      // block to prevent unintended reuse.
+      return atlasMap[key] = TiledAtlas._(
         atlas: image,
         offsets: {key: Offset.zero},
         key: key,

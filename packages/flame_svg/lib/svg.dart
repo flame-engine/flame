@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'dart:ui';
 
 import 'package:flame/cache.dart';
@@ -8,15 +9,15 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 /// A [Svg] to be rendered on a Flame [Game].
 class Svg {
-  /// The [DrawableRoot] that this [Svg] represents.
-  final DrawableRoot svgRoot;
+  /// The [PictureInfo] that this [Svg] represents.
+  final PictureInfo pictureInfo;
 
   /// The pixel ratio that this [Svg] is rendered based on.
   final double pixelRatio;
 
-  /// Creates an [Svg] with the received [svgRoot].
+  /// Creates an [Svg] with the received [pictureInfo].
   /// Default [pixelRatio] is the device pixel ratio.
-  Svg(this.svgRoot, {double? pixelRatio})
+  Svg(this.pictureInfo, {double? pixelRatio})
       : pixelRatio = pixelRatio ?? window.devicePixelRatio;
 
   final MemoryCache<Size, Image> _imageCache = MemoryCache();
@@ -34,8 +35,9 @@ class Svg {
   }) async {
     cache ??= Flame.assets;
     final svgString = await cache.readFile(fileName);
+    final pictureInfo = await vg.loadPicture(SvgStringLoader(svgString), null);
     return Svg(
-      await svg.fromSvgString(svgString, svgString),
+      pictureInfo,
       pixelRatio: pixelRatio,
     );
   }
@@ -96,8 +98,17 @@ class Svg {
 
   void _render(Canvas canvas, Size size) {
     canvas.scale(pixelRatio);
-    svgRoot.scaleCanvasToViewBox(canvas, size);
-    svgRoot.draw(canvas, svgRoot.viewport.viewBoxRect);
+
+    final scale = math.min(
+      size.width / pictureInfo.size.width,
+      size.height / pictureInfo.size.height,
+    );
+    canvas.translate(
+      (size.width - pictureInfo.size.width * scale) / 2,
+      (size.height - pictureInfo.size.height * scale) / 2,
+    );
+    canvas.scale(scale);
+    canvas.drawPicture(pictureInfo.picture);
   }
 
   /// Clear all the stored cache from this SVG, be sure to call

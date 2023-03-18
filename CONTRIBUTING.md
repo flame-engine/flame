@@ -87,7 +87,7 @@ Also, Flame uses [Melos] to manage the project and dependencies.
 To install Melos, run the following command from your terminal:
 
 ```bash
-flutter pub global activate melos 3.0.0-dev.0
+flutter pub global activate melos 3.0.0
 ```
 
 Next, at the root of your locally cloned repository bootstrap the projects dependencies:

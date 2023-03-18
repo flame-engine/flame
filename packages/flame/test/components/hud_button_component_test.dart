@@ -169,5 +169,23 @@ void main() {
       expect(releasedTimes, 1);
       expect(cancelledTimes, 1);
     });
+
+    testWithGame<GameWithTappables>(
+        'can set button and buttonDown in onLoad', GameWithTappables.new,
+        (game) async {
+      expect(
+        () => game.ensureAdd(_CustomHudButtonComponent()),
+        returnsNormally,
+      );
+    });
   });
+}
+
+class _CustomHudButtonComponent extends HudButtonComponent {
+  @override
+  Future<void> onLoad() async {
+    super.onLoad();
+    button = RectangleComponent(size: Vector2.all(10));
+    buttonDown = CircleComponent(radius: 10);
+  }
 }

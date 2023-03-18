@@ -23,17 +23,18 @@ class SvgPainter extends CustomPainter {
   }
 }
 
+Future<flame_svg.Svg> parseSvgFromTestFile(String path) async {
+  final svgString = File(path).readAsStringSync();
+  final pictureInfo = await vg.loadPicture(SvgStringLoader(svgString), null);
+  return flame_svg.Svg(pictureInfo);
+}
+
 void main() {
   group('Svg', () {
     late flame_svg.Svg svgInstance;
 
     setUp(() async {
-      svgInstance = flame_svg.Svg(
-        await svg.fromSvgString(
-          File('test/_resources/android.svg').readAsStringSync(),
-          'svg',
-        ),
-      );
+      svgInstance = await parseSvgFromTestFile('test/_resources/android.svg');
     });
 
     test('multiple calls to dispose should not throw error', () async {
@@ -46,11 +47,7 @@ void main() {
     testWidgets(
       'render sharply',
       (tester) async {
-        final svgRoot = await svg.fromSvgString(
-          File('test/_resources/hand.svg').readAsStringSync(),
-          'hand',
-        );
-        final flameSvg = flame_svg.Svg(svgRoot);
+        final flameSvg = await parseSvgFromTestFile('test/_resources/hand.svg');
         flameSvg.render(Canvas(PictureRecorder()), Vector2.all(300));
         await tester.binding.setSurfaceSize(const Size(800, 600));
         tester.binding.window.devicePixelRatioTestValue = 3;

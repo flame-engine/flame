@@ -16,6 +16,7 @@ dependencies:
   flame_forge2d: ^0.12.2
   flame_isolate: ^0.2.0
   flame_lottie: ^0.2.0
+  flame_noise: ^0.1.0
   flame_svg: ^1.7.1
   flame_tiled: ^1.9.1
   flutter:
@@ -25,6 +26,7 @@ dependencies:
   padracing: ^1.0.0
   provider: ^6.0.3
   rogue_shooter: ^0.1.0
+  test: ^1.23.1
   trex_game: ^0.1.0
 
 dev_dependencies:

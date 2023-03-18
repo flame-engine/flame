@@ -36,12 +36,13 @@ extensions = [
     'extensions.flutter_app',
     'extensions.package',
     'extensions.yarn_lexer',
+    'sphinxcontrib.jquery',
 ]
 
 # Configuration options for MyST:
 # https://myst-parser.readthedocs.io/en/latest/syntax/optional.html
 myst_enable_extensions = [
-    'attrs_image',
+    'attrs_inline',
     'colon_fence',
     'deflist',
     'dollarmath',
