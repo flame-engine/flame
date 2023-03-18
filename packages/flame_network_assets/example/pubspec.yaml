@@ -9,8 +9,7 @@ environment:
 
 dependencies:
   flame: ^1.6.0
-  flame_network_assets:
-    path: ../
+  flame_network_assets: ^0.1.0
   flutter:
     sdk: flutter
 
