@@ -93,11 +93,11 @@ const _highlightText_flames = (thisNode, text, className, index) => {
 /**
  * Small JavaScript module for the documentation.
  */
-const Documentation_flames = {
+const DocumentationFlames = {
   init: () => {
-    Documentation_flames.highlightSearchWords();
-    Documentation_flames.initDomainIndexTable();
-    Documentation_flames.initOnKeyListeners();
+    DocumentationFlames.highlightSearchWords();
+    DocumentationFlames.initDomainIndexTable();
+    DocumentationFlames.initOnKeyListeners();
   },
 
   /**
@@ -108,9 +108,9 @@ const Documentation_flames = {
   LOCALE: "unknown",
 
   // gettext and ngettext don't access this so that the functions
-  // can safely bound to a different name (_ = Documentation_flames.gettext)
+  // can safely bound to a different name (_ = DocumentationFlames.gettext)
   gettext: (string) => {
-    const translated = Documentation_flames.TRANSLATIONS[string];
+    const translated = DocumentationFlames.TRANSLATIONS[string];
     switch (typeof translated) {
       case "undefined":
         return string; // no translation
@@ -122,19 +122,19 @@ const Documentation_flames = {
   },
 
   ngettext: (singular, plural, n) => {
-    const translated = Documentation_flames.TRANSLATIONS[singular];
+    const translated = DocumentationFlames.TRANSLATIONS[singular];
     if (typeof translated !== "undefined")
-      return translated[Documentation_flames.PLURAL_EXPR(n)];
+      return translated[DocumentationFlames.PLURAL_EXPR(n)];
     return n === 1 ? singular : plural;
   },
 
   addTranslations: (catalog) => {
-    Object.assign(Documentation_flames.TRANSLATIONS, catalog.messages);
-    Documentation_flames.PLURAL_EXPR = new Function(
+    Object.assign(DocumentationFlames.TRANSLATIONS, catalog.messages);
+    DocumentationFlames.PLURAL_EXPR = new Function(
       "n",
       `return (${catalog.plural_expr})`
     );
-    Documentation_flames.LOCALE = catalog.locale;
+    DocumentationFlames.LOCALE = catalog.locale;
   },
 
   /**
@@ -155,13 +155,13 @@ const Documentation_flames = {
         _highlightText_flames(body, term, "highlighted", index);
         hbox.append($('<span>' + term + '</span>').click(function(){
           $(this).toggleClass("off");
-          Documentation_flames.toggleSearchWord(index);
+          DocumentationFlames.toggleSearchWord(index);
         }));
       });
     }, 10);
 
     $("div.highlight-box").show();
-    $("div.highlight-box button.close").click(Documentation_flames.hideSearchWords);
+    $("div.highlight-box button.close").click(DocumentationFlames.hideSearchWords);
     const searchBox = document.getElementById("searchbox");
     if (searchBox === null) return;
     searchBox.appendChild(
@@ -169,8 +169,8 @@ const Documentation_flames = {
         .createRange()
         .createContextualFragment(
           '<p class="highlight-link">' +
-            '<a href="javascript:Documentation_flames.hideSearchWords()">' +
-            Documentation_flames.gettext("Hide Search Matches") +
+            '<a href="javascript:DocumentationFlames.hideSearchWords()">' +
+            DocumentationFlames.gettext("Hide Search Matches") +
             "</a></p>"
         )
     );
@@ -261,7 +261,7 @@ const Documentation_flames = {
             break;
           case "Escape":
             if (!DOCUMENTATION_OPTIONS.ENABLE_SEARCH_SHORTCUTS) break;
-            Documentation_flames.hideSearchWords();
+            DocumentationFlames.hideSearchWords();
             event.preventDefault();
         }
       }
@@ -270,7 +270,7 @@ const Documentation_flames = {
       switch (event.key) {
         case "/":
           if (!DOCUMENTATION_OPTIONS.ENABLE_SEARCH_SHORTCUTS) break;
-          Documentation_flames.focusSearchBar();
+          DocumentationFlames.focusSearchBar();
           event.preventDefault();
       }
     });
@@ -278,6 +278,6 @@ const Documentation_flames = {
 };
 
 // quick alias for translations
-const _ = Documentation_flames.gettext;
+const _ = DocumentationFlames.gettext;
 
-_ready(Documentation_flames.init);
+_ready(DocumentationFlames.init);
