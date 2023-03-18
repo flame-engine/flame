@@ -32,3 +32,4 @@ class FlameNetworkCustomAsset extends FlameNetworkAssets<CustomAsset> {
           encodeAsset: (CustomAsset asset) => asset.encode(),
         );
 }
+```

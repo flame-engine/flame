@@ -13,11 +13,11 @@ void main() {
 
 class MyGame extends FlameGame with TapDetector {
   final networkImages = FlameNetworkImages();
-  late Image charSprite;
+  late Image playerSprite;
 
   @override
   Future<void> onLoad() async {
-    charSprite = await networkImages.load(
+    playerSprite = await networkImages.load(
       'https://examples.flame-engine.org/assets/assets/images/bomb_ptero.png',
     );
   }
@@ -26,7 +26,7 @@ class MyGame extends FlameGame with TapDetector {
   bool onTapUp(TapUpInfo info) {
     add(
       SpriteAnimationComponent.fromFrameData(
-        charSprite,
+        playerSprite,
         SpriteAnimationData.sequenced(
           textureSize: Vector2(48, 32),
           amount: 4,
