@@ -93,11 +93,11 @@ const _highlightText_flame = (thisNode, text, className, index) => {
 /**
  * Small JavaScript module for the documentation.
  */
-const DocumentationFlames = {
+const DocumentationFlame = {
   init: () => {
-    DocumentationFlames.highlightSearchWords();
-    DocumentationFlames.initDomainIndexTable();
-    DocumentationFlames.initOnKeyListeners();
+    DocumentationFlame.highlightSearchWords();
+    DocumentationFlame.initDomainIndexTable();
+    DocumentationFlame.initOnKeyListeners();
   },
 
   /**
@@ -108,9 +108,9 @@ const DocumentationFlames = {
   LOCALE: "unknown",
 
   // gettext and ngettext don't access this so that the functions
-  // can safely bound to a different name (_ = DocumentationFlames.gettext)
+  // can safely bound to a different name (_ = DocumentationFlame.gettext)
   gettext: (string) => {
-    const translated = DocumentationFlames.TRANSLATIONS[string];
+    const translated = DocumentationFlame.TRANSLATIONS[string];
     switch (typeof translated) {
       case "undefined":
         return string; // no translation
@@ -122,19 +122,19 @@ const DocumentationFlames = {
   },
 
   ngettext: (singular, plural, n) => {
-    const translated = DocumentationFlames.TRANSLATIONS[singular];
+    const translated = DocumentationFlame.TRANSLATIONS[singular];
     if (typeof translated !== "undefined")
-      return translated[DocumentationFlames.PLURAL_EXPR(n)];
+      return translated[DocumentationFlame.PLURAL_EXPR(n)];
     return n === 1 ? singular : plural;
   },
 
   addTranslations: (catalog) => {
-    Object.assign(DocumentationFlames.TRANSLATIONS, catalog.messages);
-    DocumentationFlames.PLURAL_EXPR = new Function(
+    Object.assign(DocumentationFlame.TRANSLATIONS, catalog.messages);
+    DocumentationFlame.PLURAL_EXPR = new Function(
       "n",
       `return (${catalog.plural_expr})`
     );
-    DocumentationFlames.LOCALE = catalog.locale;
+    DocumentationFlame.LOCALE = catalog.locale;
   },
 
   /**
@@ -155,13 +155,13 @@ const DocumentationFlames = {
         _highlightText_flame(body, term, "highlighted", index);
         hbox.append($('<span>' + term + '</span>').click(function(){
           $(this).toggleClass("off");
-          DocumentationFlames.toggleSearchWord(index);
+          DocumentationFlame.toggleSearchWord(index);
         }));
       });
     }, 10);
 
     $("div.highlight-box").show();
-    $("div.highlight-box button.close").click(DocumentationFlames.hideSearchWords);
+    $("div.highlight-box button.close").click(DocumentationFlame.hideSearchWords);
     const searchBox = document.getElementById("searchbox");
     if (searchBox === null) return;
     searchBox.appendChild(
@@ -169,8 +169,8 @@ const DocumentationFlames = {
         .createRange()
         .createContextualFragment(
           '<p class="highlight-link">' +
-            '<a href="javascript:DocumentationFlames.hideSearchWords()">' +
-            DocumentationFlames.gettext("Hide Search Matches") +
+            '<a href="javascript:DocumentationFlame.hideSearchWords()">' +
+            DocumentationFlame.gettext("Hide Search Matches") +
             "</a></p>"
         )
     );
@@ -261,7 +261,7 @@ const DocumentationFlames = {
             break;
           case "Escape":
             if (!DOCUMENTATION_OPTIONS.ENABLE_SEARCH_SHORTCUTS) break;
-            DocumentationFlames.hideSearchWords();
+            DocumentationFlame.hideSearchWords();
             event.preventDefault();
         }
       }
@@ -270,7 +270,7 @@ const DocumentationFlames = {
       switch (event.key) {
         case "/":
           if (!DOCUMENTATION_OPTIONS.ENABLE_SEARCH_SHORTCUTS) break;
-          DocumentationFlames.focusSearchBar();
+          DocumentationFlame.focusSearchBar();
           event.preventDefault();
       }
     });
@@ -278,6 +278,6 @@ const DocumentationFlames = {
 };
 
 // quick alias for translations
-const _ = DocumentationFlames.gettext;
+const _ = DocumentationFlame.gettext;
 
-_ready(DocumentationFlames.init);
+_ready(DocumentationFlame.init);
