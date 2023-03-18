@@ -32,7 +32,7 @@ const BLACKLISTED_KEY_CONTROL_ELEMENTS = new Set([
  * highlight a given string on a node by wrapping it in
  * span elements with the given class name.
  */
-const _highlight_flame = (node, addItems, text, className, index) => {
+const _highlightFlame = (node, addItems, text, className, index) => {
   if (node.nodeType === Node.TEXT_NODE) {
     const val = node.nodeValue;
     const parent = node.parentNode;
@@ -79,12 +79,12 @@ const _highlight_flame = (node, addItems, text, className, index) => {
       }
     }
   } else if (node.matches && !node.matches("button, select, textarea")) {
-    node.childNodes.forEach((el) => _highlight_flame(el, addItems, text, className, index));
+    node.childNodes.forEach((el) => _highlightFlame(el, addItems, text, className, index));
   }
 };
 const _highlightTextFlame = (thisNode, text, className, index) => {
   let addItems = [];
-  _highlight_flame(thisNode, addItems, text, className, index);
+  _highlightFlame(thisNode, addItems, text, className, index);
   addItems.forEach((obj) =>
     obj.parent.insertAdjacentElement("beforebegin", obj.target)
   );
