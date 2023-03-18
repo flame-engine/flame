@@ -31,6 +31,9 @@ pubspec.lock
 .pub/
 android/
 ios/
+macos/
+windows/
+linux/
 desktop/
 build/
 coverage/
