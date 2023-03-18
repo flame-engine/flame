@@ -22,4 +22,4 @@ Adds network images support to <a href="https://github.com/flame-engine/flame">F
 This package makes it easy to use and cache assets from the network inside a Flame game.
 
 For instructions on how to use this package to load images,
-check [Flame docs](https://docs.flame-engine.org/1.6.0/flame/rendering/images.html).
+check [Flame docs](https://docs.flame-engine.org/1.6.0/bridge_packages/flame_network_assets/flame_network_assets.html).
