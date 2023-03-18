@@ -90,4 +90,26 @@ extension ImageExtension on Image {
     }
     return fromPixels(newPixelData, width, height);
   }
+
+  /// Resizes this image to the given [newSize].
+  Future<Image> resize(Vector2 newSize) async {
+    final recorder = PictureRecorder();
+    Canvas(recorder).drawImageRect(
+      this,
+      Rect.fromLTWH(
+        0,
+        0,
+        width.toDouble(),
+        height.toDouble(),
+      ),
+      Rect.fromLTWH(0, 0, newSize.x, newSize.y),
+      Paint()..color = const Color(0xFFFFFFFF),
+    );
+    final picture = recorder.endRecording();
+    final resizedImage = await picture.toImage(
+      newSize.x.toInt(),
+      newSize.y.toInt(),
+    );
+    return resizedImage;
+  }
 }
