@@ -15,6 +15,7 @@ void main() {
       (game) async {
         await game.add(_DragCallbacksComponent());
         await game.ready();
+        expect(game.children.toList()[1], isA<MultiDragDispatcher>());
       },
     );
 
