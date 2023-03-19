@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flame/components.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
@@ -131,10 +133,69 @@ void main() {
         expect(component.dragCancelEvent, 0);
       },
     );
+
+    testWithGame(
+      'make sure the FlameGame can registers DragCallback on itself',
+      _DragCallbacksGame.new,
+      (game) async {
+        await game.ready();
+        expect(game.children.length, 1);
+        expect(game.children.first, isA<MultiDragDispatcher>());
+      },
+    );
+
+    testWidgets(
+      'drag correctly registered handled event directly on FlameGame',
+      (tester) async {
+        final game = _DragCallbacksGame()..onGameResize(Vector2.all(300));
+        await tester.pumpWidget(GameWidget(game: game));
+        await tester.pump();
+        await tester.pump();
+        expect(game.children.length, 1);
+        expect(game.isMounted, true);
+
+        await tester.dragFrom(const Offset(10, 10), const Offset(90, 90));
+        expect(game.dragStartEvent, 1);
+        expect(game.dragUpdateEvent > 0, true);
+        expect(game.dragEndEvent, 1);
+        expect(game.dragCancelEvent, 0);
+      },
+    );
   });
 }
 
 class _DragCallbacksComponent extends PositionComponent with DragCallbacks {
+  int dragStartEvent = 0;
+  int dragUpdateEvent = 0;
+  int dragEndEvent = 0;
+  int dragCancelEvent = 0;
+
+  @override
+  void onDragStart(DragStartEvent event) {
+    event.handled = true;
+    dragStartEvent++;
+  }
+
+  @override
+  void onDragUpdate(DragUpdateEvent event) {
+    event.handled = true;
+    dragUpdateEvent++;
+  }
+
+  @override
+  void onDragEnd(DragEndEvent event) {
+    event.handled = true;
+    dragEndEvent++;
+  }
+
+  @override
+  void onDragCancel(DragCancelEvent event) {
+    event.handled = true;
+    dragCancelEvent++;
+  }
+}
+
+class _DragCallbacksGame extends FlameGame with DragCallbacks {
   int dragStartEvent = 0;
   int dragUpdateEvent = 0;
   int dragEndEvent = 0;
