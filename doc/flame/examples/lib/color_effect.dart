@@ -6,7 +6,7 @@ import 'package:flame/game.dart';
 import 'package:flutter/animation.dart';
 import 'package:flutter/cupertino.dart';
 
-class ColorEffectExample extends FlameGame with HasTappableComponents {
+class ColorEffectExample extends FlameGame {
   bool reset = false;
 
   @override

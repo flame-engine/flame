@@ -3,7 +3,7 @@ import 'package:flame/effects.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
 
-class ScaleToEffectGame extends FlameGame with HasTappableComponents {
+class ScaleToEffectGame extends FlameGame {
   bool reverse = false;
   bool hold = false;
   @override

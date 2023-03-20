@@ -3,7 +3,7 @@ import 'package:flame/effects.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
 
-class AnchorByEffectGame extends FlameGame with HasTappableComponents {
+class AnchorByEffectGame extends FlameGame {
   bool reset = false;
   @override
   Future<void> onLoad() async {

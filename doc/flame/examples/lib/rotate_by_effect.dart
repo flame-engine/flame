@@ -3,7 +3,7 @@ import 'package:flame/effects.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
 
-class RotateByEffectGame extends FlameGame with HasTappableComponents {
+class RotateByEffectGame extends FlameGame {
   bool reset = false;
   @override
   Future<void> onLoad() async {

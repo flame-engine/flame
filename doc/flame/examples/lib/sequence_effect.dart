@@ -3,7 +3,7 @@ import 'package:flame/effects.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
 
-class SequenceEffectGame extends FlameGame with HasTappableComponents {
+class SequenceEffectGame extends FlameGame {
   @override
   Future<void> onLoad() async {
     final flower = Flower(

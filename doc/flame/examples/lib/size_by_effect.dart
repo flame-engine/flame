@@ -4,7 +4,7 @@ import 'package:flame/effects.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
 
-class SizeByEffectGame extends FlameGame with HasTappableComponents {
+class SizeByEffectGame extends FlameGame {
   bool reset = false;
   @override
   Future<void> onLoad() async {

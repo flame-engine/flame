@@ -3,7 +3,7 @@ import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
 import 'package:flame/rendering.dart';
 
-class DecoratorGrayscaleGame extends FlameGame with HasTappableComponents {
+class DecoratorGrayscaleGame extends FlameGame {
   @override
   Future<void> onLoad() async {
     var step = 0;

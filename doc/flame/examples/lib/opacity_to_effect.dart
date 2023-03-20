@@ -4,7 +4,7 @@ import 'package:flame/effects.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
 
-class OpacityToEffectGame extends FlameGame with HasTappableComponents {
+class OpacityToEffectGame extends FlameGame {
   bool reset = false;
 
   @override

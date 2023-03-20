@@ -6,7 +6,7 @@ import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
 import 'package:flame/rendering.dart';
 
-class DecoratorShadowGame extends FlameGame with HasTappableComponents {
+class DecoratorShadowGame extends FlameGame {
   @override
   Color backgroundColor() => const Color(0xFFC7C7C7);
 

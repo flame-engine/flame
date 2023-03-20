@@ -7,7 +7,7 @@ import 'package:flutter/rendering.dart';
 
 /// The main [FlameGame] class uses [HasTappableComponents] in order to enable
 /// tap events propagation.
-class TapEventsGame extends FlameGame with HasTappableComponents {
+class TapEventsGame extends FlameGame {
   @override
   Future<void> onLoad() async {
     add(TapTarget());

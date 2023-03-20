@@ -5,7 +5,7 @@ import 'package:flame/effects.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
 
-class MoveAlongPathEffectGame extends FlameGame with HasTappableComponents {
+class MoveAlongPathEffectGame extends FlameGame {
   bool reset = false;
   @override
   Future<void> onLoad() async {
