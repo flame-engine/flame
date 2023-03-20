@@ -31,9 +31,10 @@ export 'src/events/flame_game_mixins/has_draggable_components.dart'
 export 'src/events/flame_game_mixins/has_draggables_bridge.dart'
     show HasDraggablesBridge; // ignore: deprecated_member_use_from_same_package
 export 'src/events/flame_game_mixins/has_tappable_components.dart'
-    show HasTappableComponents;
+    show
+        HasTappableComponents; // ignore: deprecated_member_use_from_same_package
 export 'src/events/flame_game_mixins/has_tappables_bridge.dart'
-    show HasTappablesBridge;
+    show HasTappablesBridge; // ignore: deprecated_member_use_from_same_package
 export 'src/events/messages/double_tap_cancel_event.dart'
     show DoubleTapCancelEvent;
 export 'src/events/messages/double_tap_down_event.dart' show DoubleTapDownEvent;

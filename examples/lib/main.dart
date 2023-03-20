@@ -1,4 +1,6 @@
 import 'package:dashbook/dashbook.dart';
+import 'package:examples/platform/stub_provider.dart'
+    if (dart.library.html) 'platform/web_provider.dart';
 import 'package:examples/stories/animations/animations.dart';
 import 'package:examples/stories/bridge_libraries/audio/audio.dart';
 import 'package:examples/stories/bridge_libraries/flame_isolate/isolate.dart';
@@ -8,6 +10,7 @@ import 'package:examples/stories/bridge_libraries/forge2d/joints/constant_volume
 import 'package:examples/stories/bridge_libraries/forge2d/joints/distance_joint.dart';
 import 'package:examples/stories/bridge_libraries/forge2d/joints/friction_joint.dart';
 import 'package:examples/stories/bridge_libraries/forge2d/joints/motor_joint.dart';
+import 'package:examples/stories/bridge_libraries/forge2d/joints/mouse_joint.dart';
 import 'package:examples/stories/camera_and_viewport/camera_and_viewport.dart';
 import 'package:examples/stories/collision_detection/collision_detection.dart';
 import 'package:examples/stories/components/components.dart';
@@ -28,23 +31,21 @@ import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-  //var page = null;
-  //if (page.startsWith('?')) {
-  //  page = page.substring(1);
-  //}
+  final page = PageProviderImpl().getPage();
 
   final routes = <String, FlameGame Function()>{
     'constant_volume_joint': ConstantVolumeJointExample.new,
     'distance_joint': DistanceJointExample.new,
     'friction_joint': FrictionJointExample.new,
     'motor_joint': MotorJointExample.new,
+    'mouse_joint': MouseJointExample.new,
   };
-  //final game = null;
-  //if (game != null) {
-  //  runApp(GameWidget(game: game));
-  //} else {
-  runAsDashbook();
-  //}
+  final game = routes[page]?.call();
+  if (game != null) {
+    runApp(GameWidget(game: game));
+  } else {
+    runAsDashbook();
+  }
 }
 
 void runAsDashbook() {

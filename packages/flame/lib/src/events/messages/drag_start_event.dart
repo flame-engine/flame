@@ -6,6 +6,10 @@ import 'package:flame/src/game/flame_game.dart';
 import 'package:flame/src/gestures/events.dart';
 import 'package:flutter/gestures.dart';
 
+/// The event propagated through the Flame engine when the user starts a drag
+/// gesture on the game canvas.
+///
+/// This is a [PositionEvent], where the position is the point of touch.
 class DragStartEvent extends PositionEvent {
   DragStartEvent(this.pointerId, DragStartDetails details)
       : deviceKind = details.kind ?? PointerDeviceKind.unknown,

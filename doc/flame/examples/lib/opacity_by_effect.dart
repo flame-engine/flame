@@ -1,7 +1,6 @@
 import 'package:doc_flame_examples/ember.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
-import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
 
 class OpacityByEffectGame extends FlameGame {

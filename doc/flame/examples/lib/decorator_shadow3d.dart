@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import 'package:doc_flame_examples/flower.dart';
 import 'package:flame/components.dart';
-import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
 import 'package:flame/rendering.dart';
 

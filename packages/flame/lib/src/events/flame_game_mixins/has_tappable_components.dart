@@ -16,7 +16,7 @@ import 'package:meta/meta.dart';
 This mixin does no longer do anything since you can now add tappable
 components directly to a game without this mixin.
 ''')
-mixin HasTappableComponents on FlameGame implements MultiTapListener {}
+mixin HasTappableComponents on FlameGame {}
 
 @internal
 class MultiTapDispatcher extends Component implements MultiTapListener {
