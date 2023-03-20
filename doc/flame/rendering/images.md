@@ -120,6 +120,32 @@ class MyGame extends Game {
 ```
 
 
+## Loading images over the network
+
+The Flame core package doesn't offer a built in method to loading images from the network.
+
+The reason for that is that Flutter/Dart does not have a built in http client, which requires
+a package to be used and since there are a couple of packages available out there, we refrain
+from forcing the user to use a specific package.
+
+With that said, it is quite simple to load images from the network once a http client package
+is chosen by the user. The following snippet shows how an `Image` can be fetched from the web
+using the [http](https://pub.dev/packages/http) package.
+
+```dart
+import 'package:http/http.dart' as http;
+import 'package:flutter/painting.dart';
+
+final response = await http.get('https://url.com/image.png');
+final image = await decodeImageFromList(response.bytes);
+```
+
+```{note}
+Check [`flame_network_assets`](https://pub.dev/packages/flame_network_assets)
+for a ready to use network assets solution that provides a built in cache.
+```
+
+
 ## Sprite
 
 Flame offers a `Sprite` class that represents an image, or a region of an image.

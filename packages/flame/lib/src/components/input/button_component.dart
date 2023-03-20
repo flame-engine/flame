@@ -8,8 +8,8 @@ import 'package:meta/meta.dart';
 /// Note: You have to set the [button] in [onLoad] if you are not passing it in
 /// through the constructor.
 class ButtonComponent extends PositionComponent with Tappable {
-  late final PositionComponent? button;
-  late final PositionComponent? buttonDown;
+  PositionComponent? button;
+  PositionComponent? buttonDown;
 
   /// Callback for what should happen when the button is pressed.
   void Function()? onPressed;

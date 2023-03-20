@@ -1,0 +1,17 @@
+name: flame_network_assets_example
+description: A flame network assets example.
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=2.18.0 <3.0.0'
+
+dependencies:
+  flame: ^1.6.0
+  flame_network_assets: ^0.1.0
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flame_lint: ^0.1.3

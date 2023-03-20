@@ -36,6 +36,7 @@ extensions = [
     'extensions.flutter_app',
     'extensions.package',
     'extensions.yarn_lexer',
+    'sphinxcontrib.jquery',
 ]
 
 # Configuration options for MyST:

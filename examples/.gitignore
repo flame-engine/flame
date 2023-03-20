@@ -1,7 +1,6 @@
 linux/
 macos/
 windows/
-test/
 
 # Miscellaneous
 *.class
