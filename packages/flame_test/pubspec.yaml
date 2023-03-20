@@ -3,8 +3,9 @@ description: A package with classes to help testing applications using Flame
 version: 1.9.2
 homepage: https://github.com/flame-engine/flame/tree/main/packages/flame_test
 funding:
+  - https://opencollective.com/blue-fire
+  - https://github.com/sponsors/bluefireteam
   - https://patreon.com/bluefireoss
-  - https://www.buymeacoffee.com/bluefire
 
 environment:
   sdk: ">=2.18.0 <3.0.0"

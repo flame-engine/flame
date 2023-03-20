@@ -3,8 +3,9 @@ description: Forge2D (Box2D) support for the Flame game engine. This uses the fo
 version: 0.12.5
 homepage: https://github.com/flame-engine/flame/tree/main/packages/flame_forge2d
 funding:
+  - https://opencollective.com/blue-fire
+  - https://github.com/sponsors/bluefireteam
   - https://patreon.com/bluefireoss
-  - https://www.buymeacoffee.com/bluefire
 
 environment:
   sdk: ">=2.18.0 <3.0.0"
