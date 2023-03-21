@@ -159,7 +159,6 @@ void main() {
       }
     });
 
-
     test('errors', () {
       final controller = LinearEffectController(0);
       expect(
