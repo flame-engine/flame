@@ -25,10 +25,11 @@ class MotorJointExample extends Forge2DGame with TapDetector, HasDraggables {
     super.onLoad();
 
     final box = Box(
-        startPosition: size / 2,
-        width: 2,
-        height: 1,
-        bodyType: BodyType.static,);
+      startPosition: size / 2,
+      width: 2,
+      height: 1,
+      bodyType: BodyType.static,
+    );
     add(box);
 
     ball = Ball(Vector2(size.x / 2, size.y / 2 - 5));
