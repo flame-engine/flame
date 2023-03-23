@@ -24,7 +24,7 @@ Currently, Forge2D supports the following joints:
 - [`MotorJoint`](#motorjoint)
 - [`MouseJoint`](#mousejoint)
 - PrismaticJoint
-- PulleyJoint
+- [`PulleyJoint`](#pulleyjoint)
 - RevoluteJoint
 - RopeJoint
 - WeldJoint
@@ -272,3 +272,69 @@ final mouseJointDef = MouseJointDef()
 
 - `target`: The initial world target point. This is assumed to coincide with the body anchor
   initially.
+
+
+### `PulleyJoint`
+
+A `PulleyJoint` is used to create an idealized pulley. The pulley connects two bodies to the ground
+and to each other. As one body goes up, the other goes down. The total length of the pulley rope is
+conserved according to the initial configuration:
+
+```text
+length1 + length2 == constant
+```
+
+You can supply a ratio that simulates a block and tackle. This causes one side of the pulley to
+extend faster than the other. At the same time the constraint force is smaller on one side than the
+other. You can use this to create a mechanical leverage.
+
+```text
+length1 + ratio * length2 == constant
+```
+
+For example, if the ratio is 2, then `length1` will vary at twice the rate of `length2`. Also the
+force in the rope attached to the first body will have half the constraint force as the rope
+attached to the second body.
+
+```dart
+final pulleyJointDef = PulleyJointDef()
+  ..initialize(
+    firstBody,
+    secondBody,
+    firstPulley.worldCenter,
+    secondPulley.worldCenter,
+    firstBody.worldCenter,     
+    secondBody.worldCenter,
+    1,
+  );
+
+world.createJoint(PulleyJoint(pulleyJointDef));
+```
+
+```{flutter-app}
+:sources: ../../examples
+:page: pulley_joint
+:subfolder: stories/bridge_libraries/forge2d/joints
+:show: code popup
+```
+
+The `initialize` method of `PulleyJointDef` requires two ground anchors, two dynamic bodies and
+their anchor points, and a pulley ratio.
+
+- `b1`, `b2`: Two dynamic bodies connected with the joint
+- `ga1`, `ga2`: Two ground anchors
+- `anchor1`, `anchor2`: Anchors on the dynamic bodies the joint will be attached to
+- `r`: Pulley ratio to simulate a block and tackle
+
+`PulleyJoint` also provides the current lengths:
+
+```dart
+joint.getCurrentLengthA()
+joint.getCurrentLengthB()
+```
+
+```{warning}
+`PulleyJoint` can get a bit troublesome by itself. They often work better when
+combined with prismatic joints. You should also cover the the anchor points 
+with static shapes to prevent one side from going to zero length.
+```
