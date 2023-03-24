@@ -1,6 +1,6 @@
 linux/
 macos/
-test/
+windows/
 
 # Miscellaneous
 *.class
@@ -44,3 +44,4 @@ app.*.symbols
 # Obfuscation related
 app.*.map.json
 .vscode/
+pubspec.lock

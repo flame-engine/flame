@@ -1,5 +1,6 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
 import 'package:flame/image_composition.dart';
 import 'package:flame_test/flame_test.dart';
@@ -9,6 +10,8 @@ class HasCollidablesGame extends FlameGame with HasCollisionDetection {}
 
 class HasQuadTreeCollidablesGame extends FlameGame
     with HasQuadTreeCollisionDetection {}
+
+class CollisionDetectionWorld extends World with HasCollisionDetection {}
 
 @isTest
 Future<void> testCollisionDetectionGame(
