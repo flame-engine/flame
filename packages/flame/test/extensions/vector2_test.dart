@@ -326,13 +326,13 @@ void main() {
         current.moveToTarget(target, 0, efficientDiff: efficientDiff);
         expect(current, Vector2(10.0, 0.0));
 
-        current.moveToTarget(target, 1);
+        current.moveToTarget(target, 1, efficientDiff: efficientDiff);
         expect(current, Vector2(11.0, 0.0));
 
-        current.moveToTarget(target, 6);
+        current.moveToTarget(target, 6, efficientDiff: efficientDiff);
         expect(current, Vector2(17.0, 0.0));
 
-        current.moveToTarget(target, 5);
+        current.moveToTarget(target, 5, efficientDiff: efficientDiff);
         expect(current, Vector2(20.0, 0.0));
       });
 
@@ -342,16 +342,16 @@ void main() {
         final current = Vector2(10.0, 0.0);
         final target = Vector2(10.0, 100.0);
 
-        current.moveToTarget(target, 0);
+        current.moveToTarget(target, 0, efficientDiff: efficientDiff);
         expect(current, Vector2(10.0, 0.0));
 
-        current.moveToTarget(target, 1);
+        current.moveToTarget(target, 1, efficientDiff: efficientDiff);
         expect(current, Vector2(10.0, 1.0));
 
-        current.moveToTarget(target, 80);
+        current.moveToTarget(target, 80, efficientDiff: efficientDiff);
         expect(current, Vector2(10.0, 81.0));
 
-        current.moveToTarget(target, 19);
+        current.moveToTarget(target, 19, efficientDiff: efficientDiff);
         expect(current, Vector2(10.0, 100.0));
       });
 
@@ -361,13 +361,21 @@ void main() {
         final current = Vector2(2.0, 2.0);
         final target = Vector2(4.0, 6.0); // direction is 1,2
 
-        current.moveToTarget(target, 0);
+        current.moveToTarget(target, 0, efficientDiff: efficientDiff);
         expect(current, Vector2(2.0, 2.0));
 
-        current.moveToTarget(target, math.sqrt(5));
+        current.moveToTarget(
+          target,
+          math.sqrt(5),
+          efficientDiff: efficientDiff,
+        );
         expect(current, Vector2(3.0, 4.0));
 
-        current.moveToTarget(target, math.sqrt(5));
+        current.moveToTarget(
+          target,
+          math.sqrt(5),
+          efficientDiff: efficientDiff,
+        );
         expect(current, Vector2(4.0, 6.0));
       });
     });
