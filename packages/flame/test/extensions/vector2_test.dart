@@ -313,8 +313,8 @@ void main() {
         dynamic Function(Vector2?) testBody,
       ) {
         final efficientDiff = Vector2.all(0);
-        test('$desc - with efficient', () => testBody(efficientDiff));
-        test('$desc - without efficient', () => testBody(null));
+        test('$desc - with efficient diff', () => testBody(efficientDiff));
+        test('$desc - without efficient diff', () => testBody(null));
       }
 
       testWithAndWithoutEfficientDiff('moveToTarget - fully horizontal', (
