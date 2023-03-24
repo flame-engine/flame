@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:flame/extensions.dart';
 import 'package:flame_test/flame_test.dart';
+import 'package:meta/meta.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -306,11 +307,23 @@ void main() {
     });
 
     group('Moving', () {
-      test('moveToTarget - fully horizontal', () {
+      @isTestGroup
+      void testWithAndWithoutEfficientDiff(
+        String desc,
+        dynamic Function(Vector2?) testBody,
+      ) {
+        final efficientDiff = Vector2.all(0);
+        test('$desc - with efficient', () => testBody(efficientDiff));
+        test('$desc - without efficient', () => testBody(null));
+      }
+
+      testWithAndWithoutEfficientDiff('moveToTarget - fully horizontal', (
+        Vector2? efficientDiff,
+      ) {
         final current = Vector2(10.0, 0.0);
         final target = Vector2(20.0, 0.0);
 
-        current.moveToTarget(target, 0);
+        current.moveToTarget(target, 0, efficientDiff: efficientDiff);
         expect(current, Vector2(10.0, 0.0));
 
         current.moveToTarget(target, 1);
@@ -323,7 +336,9 @@ void main() {
         expect(current, Vector2(20.0, 0.0));
       });
 
-      test('moveToTarget - fully vertical', () {
+      testWithAndWithoutEfficientDiff('moveToTarget - fully vertical', (
+        Vector2? efficientDiff,
+      ) {
         final current = Vector2(10.0, 0.0);
         final target = Vector2(10.0, 100.0);
 
@@ -340,7 +355,9 @@ void main() {
         expect(current, Vector2(10.0, 100.0));
       });
 
-      test('moveToTarget - arbitrary direction', () {
+      testWithAndWithoutEfficientDiff('moveToTarget - arbitrary direction', (
+        Vector2? efficientDiff,
+      ) {
         final current = Vector2(2.0, 2.0);
         final target = Vector2(4.0, 6.0); // direction is 1,2
 
