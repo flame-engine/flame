@@ -125,10 +125,16 @@ extension Vector2Extension on Vector2 {
   /// **not** a percentage (relative value).
   void moveToTarget(
     Vector2 target,
-    double ds,
-  ) {
+    double ds, {
+    Vector2? efficientDiff,
+  }) {
     if (this != target) {
-      final diff = target - this;
+      var diff = efficientDiff
+        ?..setFrom(target)
+        ..sub(this);
+
+      diff ??= target - this;
+
       if (diff.length < ds) {
         setFrom(target);
       } else {
