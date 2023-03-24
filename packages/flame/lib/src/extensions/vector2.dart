@@ -123,6 +123,9 @@ extension Vector2Extension on Vector2 {
   ///
   /// Note: [ds] is the displacement vector in units of the vector space. It is
   /// **not** a percentage (relative value).
+  ///
+  /// The [efficientDiff] is an optional parameter that can be used to avoid
+  /// creating a new [Vector2] when calling this method multiple times.
   void moveToTarget(
     Vector2 target,
     double ds, {
