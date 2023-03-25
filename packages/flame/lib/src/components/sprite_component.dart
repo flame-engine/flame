@@ -22,8 +22,8 @@ class SpriteComponent extends PositionComponent
   /// Returns current value of auto resize flag.
   bool get autoResize => _autoResize;
 
-  /// Sets the given value of autoResize flag.
-  /// Will update the size if new value is true.
+  /// Sets the given value of autoResize flag. Will update the [size]
+  /// to fit srcSize of [sprite] if set to  true.
   set autoResize(bool value) {
     _autoResize = value;
     if (value) {
@@ -38,7 +38,7 @@ class SpriteComponent extends PositionComponent
   Sprite? get sprite => _sprite;
 
   /// Sets the given sprite as the new [sprite] of this component.
-  /// Will update the size is [autoResize] is set to true.
+  /// Will update the size if [autoResize] is set to true.
   set sprite(Sprite? value) {
     _sprite = value;
 
@@ -65,10 +65,9 @@ class SpriteComponent extends PositionComponent
     super.children,
     super.priority,
   })  : assert(
-          ((size == null) && (autoResize ?? true)) ||
-              ((size != null) && !(autoResize ?? false)),
-          '''If size is set, autoResize should be false and vice versa or
-          size should be null when autoResize is true''',
+          (size == null && (autoResize ?? true)) ||
+              (size != null && !(autoResize ?? false)),
+          '''If size is set, autoResize should be false or size should be null when autoResize is true.''',
         ),
         _autoResize = autoResize ?? size == null,
         _sprite = sprite,
