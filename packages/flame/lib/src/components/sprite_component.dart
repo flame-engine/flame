@@ -27,7 +27,11 @@ class SpriteComponent extends PositionComponent
   set autoResize(bool value) {
     _autoResize = value;
     if (value) {
-      size.setFrom(sprite?.srcSize ?? Vector2.zero());
+      if (_sprite != null) {
+        size.setFrom(_sprite!.srcSize);
+      } else {
+        size.setZero();
+      }
     }
   }
 
@@ -65,8 +69,7 @@ class SpriteComponent extends PositionComponent
     super.children,
     super.priority,
   })  : assert(
-          (size == null && (autoResize ?? true)) ||
-              (size != null && !(autoResize ?? false)),
+          (size == null) == (autoResize ?? size == null),
           '''If size is set, autoResize should be false or size should be null when autoResize is true.''',
         ),
         _autoResize = autoResize ?? size == null,
