@@ -37,7 +37,8 @@ Other useful links:
 - [Examples](https://examples.flame-engine.org/) of most features which can be tried out from your
   browser.
   - To access the code for each example, press the `< >` button in the top right corner.
-- [Tutorials](https://tutorials.flame-engine.org/) - A simple tutorial to get started.
+- [Tutorials](https://docs.flame-engine.org/main/tutorials/tutorials.html) - Some simple tutorials
+  to get started.
 - [API Reference](https://pub.dev/documentation/flame/latest/) - The generated dartdoc API
   reference.
 - [awesome-flame](https://github.com/flame-engine/awesome-flame) - A curated list of Tutorials,
@@ -105,20 +106,28 @@ The Flame Engine's top sponsors:
 
 [![Cypher Stack](https://raw.githubusercontent.com/flame-engine/flame/main/media/logo_cypherstack.png)](https://cypherstack.com/)
 
-Want to sponsor Flame? Check our Patreon on the section below, or contact us on Discord.
+Do you or your company want to sponsor Flame?
+Check out our [OpenCollective page](https://opencollective.com/blue-fire), which is also mentioned
+in the section below, or contact us on [Discord](https://discord.gg/pxrBmy4).
 
 
 ## Support
 
 The simplest way to show us your support is by giving the project a star.
 
-You can also support us by becoming a patron on Patreon:
+You can also support us monetarily by donating through OpenCollective:
+
+<a href="https://opencollective.com/blue-fire/donate" target="_blank">
+  <img src="https://opencollective.com/blue-fire/donate/button@2x.png?color=blue" width=300 />
+</a>
+
+Or through GitHub sponsors:
+
+[![GitHub Badge](https://img.shields.io/badge/Github%20Sponsor-blue?style=for-the-badge&logo=github&logoColor=white)](https://github.com/sponsors/bluefireteam)
+
+Or by becoming a patron on Patreon:
 
 [![Patreon](https://c5.patreon.com/external/logo/become_a_patron_button.png)](https://www.patreon.com/bluefireoss)
-
-Or by making a single donation by buying us a coffee:
-
-[![Buy Me A Coffee](https://user-images.githubusercontent.com/835641/60540201-fcd7fa00-9ce4-11e9-87ec-1e98568e9f58.png)](https://www.buymeacoffee.com/bluefire)
 
 You can also show on your repository that your game is made with Flame by using one of the following
 badges:
