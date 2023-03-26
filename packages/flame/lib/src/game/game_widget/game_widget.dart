@@ -56,8 +56,6 @@ class GameWidget<T extends Game> extends StatefulWidget {
     this.autofocus = true,
     this.mouseCursor,
     this.addRepaintBoundary = true,
-    this.onDidChangeDependencies,
-    this.onDidUpdateWidget,
     super.key,
   }) : gameFactory = null {
     _initializeGame(game!);
@@ -94,8 +92,6 @@ class GameWidget<T extends Game> extends StatefulWidget {
     this.autofocus = true,
     this.mouseCursor,
     this.addRepaintBoundary = true,
-    this.onDidChangeDependencies,
-    this.onDidUpdateWidget,
     super.key,
   }) : game = null;
 
@@ -166,10 +162,10 @@ class GameWidget<T extends Game> extends StatefulWidget {
   final bool addRepaintBoundary;
 
   /// This callback is called when [State.didChangeDependencies] is invoked.
-  final void Function()? onDidChangeDependencies;
+  void onDidChangeDependencies(BuildContext _) {}
 
   /// This callback is called when [State.didUpdateWidget] is invoked.
-  final void Function(GameWidget<T>)? onDidUpdateWidget;
+  void onDidUpdateWidget(GameWidget<T> _) {}
 
   /// Renders a [game] in a flutter widget tree alongside widgets overlays.
   ///
@@ -282,7 +278,7 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    widget.onDidChangeDependencies?.call();
+    widget.onDidChangeDependencies(context);
   }
 
   @override
@@ -293,7 +289,7 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
       disposeCurrentGame();
       initCurrentGame();
     }
-    widget.onDidUpdateWidget?.call(oldWidget);
+    widget.onDidUpdateWidget(oldWidget);
   }
 
   @override
