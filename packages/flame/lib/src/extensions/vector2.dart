@@ -38,7 +38,13 @@ extension Vector2Extension on Vector2 {
 
   /// Linearly interpolate towards another Vector2
   void lerp(Vector2 to, double t) {
-    setFrom(this + (to - this) * t);
+    setFrom(
+      _reusableVector
+        ..setFrom(to)
+        ..sub(this)
+        ..scale(t)
+        ..add(this),
+    );
   }
 
   /// Whether the [Vector2] is the zero vector or not
