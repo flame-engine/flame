@@ -1,6 +1,6 @@
 import 'package:flame/components.dart';
 import 'package:flame_test/flame_test.dart';
-import 'package:test/test.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 Future<void> main() async {
   final image = await generateImage();
@@ -35,6 +35,48 @@ Future<void> main() async {
 
       final component6 = SpriteComponent(sprite: sprite);
       expect(component6.size, Vector2(2, 2));
+    });
+  });
+
+  group('SpriteComponent.autoResize', () {
+    test('mutual exclusive with size while construction', () {
+      expect(
+        () => SpriteComponent(autoResize: true, size: Vector2.all(2)),
+        throwsAssertionError,
+      );
+
+      expect(() => SpriteComponent(autoResize: false), throwsAssertionError);
+    });
+
+    test('default value set correctly when not provided explicitly', () {
+      final component1 = SpriteComponent();
+      final component2 = SpriteComponent(size: Vector2.all(2));
+
+      expect(component1.autoResize, true);
+      expect(component2.autoResize, false);
+    });
+
+    test('resizes on sprite change', () {
+      final sprite1 = Sprite(image);
+      final sprite2 = Sprite(image, srcSize: Vector2.all(13));
+
+      final component = SpriteComponent()..sprite = sprite1;
+      expect(component.size, sprite1.srcSize);
+
+      component.sprite = sprite2;
+      expect(component.size, sprite2.srcSize);
+    });
+
+    test('resizes only when true', () {
+      final sprite1 = Sprite(image);
+      final sprite2 = Sprite(image, srcSize: Vector2.all(13));
+      final component = SpriteComponent(sprite: sprite1)..autoResize = false;
+
+      component.sprite = sprite2;
+      expect(component.size, sprite1.srcSize);
+
+      component.autoResize = true;
+      expect(component.size, sprite2.srcSize);
     });
   });
 }
