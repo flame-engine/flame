@@ -27,11 +27,11 @@ mixin HasTimeScale on Component {
 
   @override
   void update(double dt) {
-    super.update(dt * _timeScale);
+    super.update(dt * (parent == null ? _timeScale : 1.0));
   }
 
   @override
   void updateTree(double dt) {
-    super.updateTree(dt * _timeScale);
+    super.updateTree(dt * (parent != null ? _timeScale : 1.0));
   }
 }
