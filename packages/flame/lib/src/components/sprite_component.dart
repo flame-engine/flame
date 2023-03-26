@@ -15,12 +15,50 @@ export '../sprite.dart';
 class SpriteComponent extends PositionComponent
     with HasPaint
     implements SizeProvider {
+  /// When set to true, the component is auto-resized to match the
+  /// size of underlying sprite.
+  late bool _autoResize;
+
+  /// Returns current value of auto resize flag.
+  bool get autoResize => _autoResize;
+
+  /// Sets the given value of autoResize flag. Will update the [size]
+  /// to fit srcSize of [sprite] if set to  true.
+  set autoResize(bool value) {
+    _autoResize = value;
+    if (value) {
+      if (_sprite != null) {
+        size.setFrom(_sprite!.srcSize);
+      } else {
+        size.setZero();
+      }
+    }
+  }
+
   /// The [sprite] to be rendered by this component.
-  Sprite? sprite;
+  Sprite? _sprite;
+
+  /// Returns the current sprite rendered by this component.
+  Sprite? get sprite => _sprite;
+
+  /// Sets the given sprite as the new [sprite] of this component.
+  /// Will update the size if [autoResize] is set to true.
+  set sprite(Sprite? value) {
+    _sprite = value;
+
+    if (_autoResize) {
+      if (value != null) {
+        size.setFrom(value.srcSize);
+      } else {
+        size.setZero();
+      }
+    }
+  }
 
   /// Creates a component with an empty sprite which can be set later
   SpriteComponent({
-    this.sprite,
+    Sprite? sprite,
+    bool? autoResize,
     Paint? paint,
     super.position,
     Vector2? size,
@@ -30,9 +68,13 @@ class SpriteComponent extends PositionComponent
     super.anchor,
     super.children,
     super.priority,
-  }) : super(
-          size: size ?? sprite?.srcSize,
-        ) {
+  })  : assert(
+          (size == null) == (autoResize ?? size == null),
+          '''If size is set, autoResize should be false or size should be null when autoResize is true.''',
+        ),
+        _autoResize = autoResize ?? size == null,
+        _sprite = sprite,
+        super(size: size ?? sprite?.srcSize) {
     if (paint != null) {
       this.paint = paint;
     }
@@ -42,6 +84,7 @@ class SpriteComponent extends PositionComponent
     Image image, {
     Vector2? srcPosition,
     Vector2? srcSize,
+    bool? autoResize,
     Paint? paint,
     Vector2? position,
     Vector2? size,
@@ -56,6 +99,7 @@ class SpriteComponent extends PositionComponent
             srcPosition: srcPosition,
             srcSize: srcSize,
           ),
+          autoResize: autoResize,
           paint: paint,
           position: position,
           size: size ?? srcSize ?? image.size,
