@@ -66,5 +66,17 @@ Future<void> main() async {
       component.sprite = sprite2;
       expect(component.size, sprite2.srcSize);
     });
+
+    test('resizes only when true', () {
+      final sprite1 = Sprite(image);
+      final sprite2 = Sprite(image, srcSize: Vector2.all(13));
+      final component = SpriteComponent(sprite: sprite1)..autoResize = false;
+
+      component.sprite = sprite2;
+      expect(component.size, sprite1.srcSize);
+
+      component.autoResize = true;
+      expect(component.size, sprite2.srcSize);
+    });
   });
 }
