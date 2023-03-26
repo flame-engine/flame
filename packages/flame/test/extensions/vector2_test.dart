@@ -3,7 +3,6 @@ import 'dart:math';
 
 import 'package:flame/extensions.dart';
 import 'package:flame_test/flame_test.dart';
-import 'package:meta/meta.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -307,75 +306,51 @@ void main() {
     });
 
     group('Moving', () {
-      @isTestGroup
-      void testWithAndWithoutEfficientDiff(
-        String desc,
-        dynamic Function(Vector2?) testBody,
-      ) {
-        final efficientDiff = Vector2.all(0);
-        test('$desc - with efficient diff', () => testBody(efficientDiff));
-        test('$desc - without efficient diff', () => testBody(null));
-      }
-
-      testWithAndWithoutEfficientDiff('moveToTarget - fully horizontal', (
-        Vector2? efficientDiff,
-      ) {
+      test('moveToTarget - fully horizontal', () {
         final current = Vector2(10.0, 0.0);
         final target = Vector2(20.0, 0.0);
 
-        current.moveToTarget(target, 0, efficientDiff: efficientDiff);
+        current.moveToTarget(target, 0);
         expect(current, Vector2(10.0, 0.0));
 
-        current.moveToTarget(target, 1, efficientDiff: efficientDiff);
+        current.moveToTarget(target, 1);
         expect(current, Vector2(11.0, 0.0));
 
-        current.moveToTarget(target, 6, efficientDiff: efficientDiff);
+        current.moveToTarget(target, 6);
         expect(current, Vector2(17.0, 0.0));
 
-        current.moveToTarget(target, 5, efficientDiff: efficientDiff);
+        current.moveToTarget(target, 5);
         expect(current, Vector2(20.0, 0.0));
       });
 
-      testWithAndWithoutEfficientDiff('moveToTarget - fully vertical', (
-        Vector2? efficientDiff,
-      ) {
+      test('moveToTarget - fully vertical', () {
         final current = Vector2(10.0, 0.0);
         final target = Vector2(10.0, 100.0);
 
-        current.moveToTarget(target, 0, efficientDiff: efficientDiff);
+        current.moveToTarget(target, 0);
         expect(current, Vector2(10.0, 0.0));
 
-        current.moveToTarget(target, 1, efficientDiff: efficientDiff);
+        current.moveToTarget(target, 1);
         expect(current, Vector2(10.0, 1.0));
 
-        current.moveToTarget(target, 80, efficientDiff: efficientDiff);
+        current.moveToTarget(target, 80);
         expect(current, Vector2(10.0, 81.0));
 
-        current.moveToTarget(target, 19, efficientDiff: efficientDiff);
+        current.moveToTarget(target, 19);
         expect(current, Vector2(10.0, 100.0));
       });
 
-      testWithAndWithoutEfficientDiff('moveToTarget - arbitrary direction', (
-        Vector2? efficientDiff,
-      ) {
+      test('moveToTarget - arbitrary direction', () {
         final current = Vector2(2.0, 2.0);
         final target = Vector2(4.0, 6.0); // direction is 1,2
 
-        current.moveToTarget(target, 0, efficientDiff: efficientDiff);
+        current.moveToTarget(target, 0);
         expect(current, Vector2(2.0, 2.0));
 
-        current.moveToTarget(
-          target,
-          math.sqrt(5),
-          efficientDiff: efficientDiff,
-        );
+        current.moveToTarget(target, math.sqrt(5));
         expect(current, Vector2(3.0, 4.0));
 
-        current.moveToTarget(
-          target,
-          math.sqrt(5),
-          efficientDiff: efficientDiff,
-        );
+        current.moveToTarget(target, math.sqrt(5));
         expect(current, Vector2(4.0, 6.0));
       });
     });

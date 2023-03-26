@@ -6,6 +6,13 @@ import 'package:vector_math/vector_math_64.dart';
 export 'package:vector_math/vector_math_64.dart' hide Colors;
 
 extension Vector2Extension on Vector2 {
+  /// This is a reusable vector that can be used with the [Vector2Extension]
+  /// to avoid creation of new Vector2 instances.
+  ///
+  /// Avoid using this in async extension methods, as it can lead to race
+  /// conditions.
+  static final _reusableVector = Vector2.zero();
+
   /// Creates an [Offset] from the [Vector2]
   Offset toOffset() => Offset(x, y);
 
@@ -123,20 +130,14 @@ extension Vector2Extension on Vector2 {
   ///
   /// Note: [ds] is the displacement vector in units of the vector space. It is
   /// **not** a percentage (relative value).
-  ///
-  /// The [efficientDiff] is an optional parameter that can be used to avoid
-  /// creating a new [Vector2] when calling this method multiple times.
   void moveToTarget(
     Vector2 target,
-    double ds, {
-    Vector2? efficientDiff,
-  }) {
+    double ds,
+  ) {
     if (this != target) {
-      var diff = efficientDiff
-        ?..setFrom(target)
+      final diff = _reusableVector
+        ..setFrom(target)
         ..sub(this);
-
-      diff ??= target - this;
 
       if (diff.length < ds) {
         setFrom(target);
