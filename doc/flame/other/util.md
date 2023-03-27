@@ -148,7 +148,7 @@ class MyFlameGame extends FlameGame {
 
 ## Time Scale
 
-In many games it is often desirable to create  slow-motion or fast-forward effects based on some in  
+In many games it is often desirable to create  slow-motion or fast-forward effects based on some in
 game events. A very common approach to achieve these results is to manipulate the in game time or
 tick rate.
 
