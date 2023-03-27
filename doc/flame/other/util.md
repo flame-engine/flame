@@ -149,7 +149,7 @@ class MyFlameGame extends FlameGame {
 ## Time Scale
 
 In many game it is often desirable to create slow-motion or fast-forward effect based on some in  
-game events. A very common apporach to achieve these results is to manipulate the in game time or
+game events. A very common approach to achieve these results is to manipulate the in game time or
 tick rate.
 
 To make this manipulation easier, Flame provides a `HasTimeScale` mixin. This mixin can be attached
