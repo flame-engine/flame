@@ -9,6 +9,7 @@ import 'package:examples/stories/components/game_in_game_example.dart';
 import 'package:examples/stories/components/look_at_example.dart';
 import 'package:examples/stories/components/look_at_smooth_example.dart';
 import 'package:examples/stories/components/priority_example.dart';
+import 'package:examples/stories/components/time_scale_example.dart';
 import 'package:flame/game.dart';
 
 void addComponentsStories(Dashbook dashbook) {
@@ -67,5 +68,13 @@ void addComponentsStories(Dashbook dashbook) {
       codeLink:
           baseLink('components/components_notifier_provider_example.dart'),
       info: ComponentsNotifierProviderExampleWidget.description,
+    )
+    ..add(
+      'Time Scale',
+      (_) => const GameWidget.controlled(
+        gameFactory: TimeScaleExample.new,
+      ),
+      codeLink: baseLink('components/time_scale_example.dart'),
+      info: TimeScaleExample.description,
     );
 }
