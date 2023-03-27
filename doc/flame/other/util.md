@@ -161,6 +161,14 @@ it tick at half the speed as compared to real life time.
 Since `FlameGame` is a `Component` too, this mixin can be attached to the `FlameGame` as well. Doing
 so will allow controlling time scale for all the component of the game from a single place.
 
+```{flutter-app}
+:sources: ../flame/examples
+:page: time_scale
+:show: widget code infobox
+:width: 180
+:height: 160
+```
+
 ```dart
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
