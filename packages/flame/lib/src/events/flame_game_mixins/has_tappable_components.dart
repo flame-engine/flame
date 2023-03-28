@@ -48,8 +48,8 @@ class MultiTapDispatcher extends Component implements MultiTapListener {
     // ignore: deprecated_member_use_from_same_package
     if (game is HasTappablesBridge) {
       final info = event.asInfo(game)..handled = event.handled;
-      propagateToChildren(
-        (Tappable child) => child.handleTapDown(event.pointerId, info),
+      game.propagateToChildren<Tappable>(
+        (c) => c.handleTapDown(event.pointerId, info),
       );
       event.handled = info.handled;
     }
@@ -74,10 +74,10 @@ class MultiTapDispatcher extends Component implements MultiTapListener {
       deliverToAll: true,
     );
     // ignore: deprecated_member_use_from_same_package
-    if (this is HasTappablesBridge) {
+    if (game is HasTappablesBridge) {
       final info = event.asInfo(game)..handled = event.handled;
-      propagateToChildren(
-        (Tappable child) => child.handleLongTapDown(event.pointerId, info),
+      game.propagateToChildren<Tappable>(
+        (c) => c.handleLongTapDown(event.pointerId, info),
       );
       event.handled = info.handled;
     }
@@ -107,10 +107,10 @@ class MultiTapDispatcher extends Component implements MultiTapListener {
     );
     _tapCancelImpl(TapCancelEvent(event.pointerId));
     // ignore: deprecated_member_use_from_same_package
-    if (this is HasTappablesBridge) {
+    if (game is HasTappablesBridge) {
       final info = event.asInfo(game)..handled = event.handled;
-      propagateToChildren(
-        (Tappable child) => child.handleTapUp(event.pointerId, info),
+      game.propagateToChildren<Tappable>(
+        (c) => c.handleTapUp(event.pointerId, info),
       );
       event.handled = info.handled;
     }
@@ -128,9 +128,9 @@ class MultiTapDispatcher extends Component implements MultiTapListener {
   void onTapCancel(TapCancelEvent event) {
     _tapCancelImpl(event);
     // ignore: deprecated_member_use_from_same_package
-    if (this is HasTappablesBridge) {
-      propagateToChildren(
-        (Tappable child) => child.handleTapCancel(event.pointerId),
+    if (game is HasTappablesBridge) {
+      game.propagateToChildren<Tappable>(
+        (c) => c.handleTapCancel(event.pointerId),
       );
     }
   }
