@@ -186,15 +186,14 @@ class MultiTapDispatcher extends Component implements MultiTapListener {
       game.gestureDetectors.add<MultiTapGestureRecognizer>(
         MultiTapGestureRecognizer.new,
         (MultiTapGestureRecognizer instance) {
-          final g = game as MultiTapListener;
           instance.longTapDelay = Duration(
-            milliseconds: (g.longTapDelay * 1000).toInt(),
+            milliseconds: (longTapDelay * 1000).toInt(),
           );
-          instance.onTap = g.handleTap;
-          instance.onTapDown = g.handleTapDown;
-          instance.onTapUp = g.handleTapUp;
-          instance.onTapCancel = g.handleTapCancel;
-          instance.onLongTapDown = g.handleLongTapDown;
+          instance.onTap = handleTap;
+          instance.onTapDown = handleTapDown;
+          instance.onTapUp = handleTapUp;
+          instance.onTapCancel = handleTapCancel;
+          instance.onLongTapDown = handleLongTapDown;
         },
       );
       _eventHandlerRegistered = true;
