@@ -195,7 +195,7 @@ void main() {
         await tester.pumpWidget(GameWidget(game: game));
         await tester.pump();
         await tester.pump();
-        expect(game.children.length, 1);
+        expect(game.children.length, 2);
         expect(game.children.first.children.length, 1);
 
         await tester.tapAt(const Offset(200, 200));

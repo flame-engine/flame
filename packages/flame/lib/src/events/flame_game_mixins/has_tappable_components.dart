@@ -64,7 +64,7 @@ class MultiTapDispatcher extends Component implements MultiTapListener {
   @mustCallSuper
   void onLongTapDown(TapDownEvent event) {
     event.deliverAtPoint(
-      rootComponent: this,
+      rootComponent: game,
       eventHandler: (TapCallbacks component) {
         final record = TaggedComponent(event.pointerId, component);
         if (_record.contains(record)) {
@@ -97,7 +97,7 @@ class MultiTapDispatcher extends Component implements MultiTapListener {
   @mustCallSuper
   void onTapUp(TapUpEvent event) {
     event.deliverAtPoint(
-      rootComponent: this,
+      rootComponent: game,
       eventHandler: (TapCallbacks component) {
         if (_record.remove(TaggedComponent(event.pointerId, component))) {
           component.onTapUp(event);

@@ -163,7 +163,7 @@ void main() {
   });
 }
 
-class _DragCallbacksComponent extends PositionComponent with DragCallbacks {
+mixin _DragCounter on DragCallbacks {
   int dragStartEvent = 0;
   int dragUpdateEvent = 0;
   int dragEndEvent = 0;
@@ -194,33 +194,7 @@ class _DragCallbacksComponent extends PositionComponent with DragCallbacks {
   }
 }
 
-class _DragCallbacksGame extends FlameGame with DragCallbacks {
-  int dragStartEvent = 0;
-  int dragUpdateEvent = 0;
-  int dragEndEvent = 0;
-  int dragCancelEvent = 0;
+class _DragCallbacksComponent extends PositionComponent
+    with DragCallbacks, _DragCounter {}
 
-  @override
-  void onDragStart(DragStartEvent event) {
-    event.handled = true;
-    dragStartEvent++;
-  }
-
-  @override
-  void onDragUpdate(DragUpdateEvent event) {
-    event.handled = true;
-    dragUpdateEvent++;
-  }
-
-  @override
-  void onDragEnd(DragEndEvent event) {
-    event.handled = true;
-    dragEndEvent++;
-  }
-
-  @override
-  void onDragCancel(DragCancelEvent event) {
-    event.handled = true;
-    dragCancelEvent++;
-  }
-}
+class _DragCallbacksGame extends FlameGame with DragCallbacks, _DragCounter {}

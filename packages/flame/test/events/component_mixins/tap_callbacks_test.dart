@@ -122,6 +122,7 @@ void main() {
         expect(component.isMounted, true);
 
         await tester.tapAt(const Offset(10, 10));
+        await tester.pump(const Duration(seconds: 500));
         expect(component.tapDownEvent, 1);
         expect(component.tapUpEvent, 1);
         expect(component.tapCancelEvent, 0);
@@ -138,7 +139,8 @@ void main() {
         await tester.pump();
         expect(component.isMounted, true);
 
-        await tester.dragFrom(const Offset(110, 110), const Offset(120, 120));
+        await tester.tapAt(const Offset(110, 110));
+        await tester.pump(const Duration(milliseconds: 500));
         expect(component.tapDownEvent, 0);
         expect(component.tapUpEvent, 0);
         expect(component.longTapDownEvent, 0);
@@ -166,7 +168,8 @@ void main() {
         expect(game.children.length, 1);
         expect(game.isMounted, true);
 
-        await tester.dragFrom(const Offset(10, 10), const Offset(90, 90));
+        await tester.tapAt(const Offset(10, 10));
+        await tester.pump(const Duration(seconds: 500));
         expect(game.tapDownEvent, 1);
         expect(game.tapUpEvent, 1);
         expect(game.longTapDownEvent, 0);
@@ -176,7 +179,7 @@ void main() {
   });
 }
 
-class _TapCallbacksComponent extends PositionComponent with TapCallbacks {
+mixin _TapCounter on TapCallbacks {
   int tapDownEvent = 0;
   int tapUpEvent = 0;
   int longTapDownEvent = 0;
@@ -207,33 +210,7 @@ class _TapCallbacksComponent extends PositionComponent with TapCallbacks {
   }
 }
 
-class _TapCallbacksGame extends FlameGame with TapCallbacks {
-  int tapDownEvent = 0;
-  int tapUpEvent = 0;
-  int longTapDownEvent = 0;
-  int tapCancelEvent = 0;
+class _TapCallbacksComponent extends PositionComponent
+    with TapCallbacks, _TapCounter {}
 
-  @override
-  void onTapDown(TapDownEvent event) {
-    event.handled = true;
-    tapDownEvent++;
-  }
-
-  @override
-  void onLongTapDown(TapDownEvent event) {
-    event.handled = true;
-    longTapDownEvent++;
-  }
-
-  @override
-  void onTapUp(TapUpEvent event) {
-    event.handled = true;
-    tapUpEvent++;
-  }
-
-  @override
-  void onTapCancel(TapCancelEvent event) {
-    event.handled = true;
-    tapCancelEvent++;
-  }
-}
+class _TapCallbacksGame extends FlameGame with TapCallbacks, _TapCounter {}
