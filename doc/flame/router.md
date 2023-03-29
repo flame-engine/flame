@@ -57,7 +57,7 @@ class PauseRoute extends Route { ... }
 ```
 
 ```{note}
-Use `hide Route` if any of the imported packages have `Route()` in the same file.
+Use `hide Route` if any of your imported packages export another class called `Route`
 
 eg: `import 'package:flutter/material.dart' hide Route;`
 ```
