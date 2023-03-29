@@ -1,8 +1,8 @@
 # Tap Events
 
 ```{note}
-This document describes a new experimental API. The more traditional approach
-for handling tap events is described in [](gesture_input.md).
+This document describes the new ta events API. The old (legacy) approach,
+which is still supported, is described in [](gesture_input.md).
 ```
 
 **Tap events** are one of the most basic methods of interaction with a Flame game. These events
@@ -15,33 +15,24 @@ Multiple tap events can occur at the same time, especially if the user has multi
 cases will be handled correctly by Flame, and you can even keep track of the events by using their
 `pointerId` property.
 
-It takes only a few simple steps to enable these events for your game:
+For those components that you want to respond to taps, add the `TapCallbacks` mixin.
 
-1. Add the `HasTappableComponents` mixin to your main game class:
+- This mixin adds four overridable methods to your component: `onTapDown`, `onTapUp`,
+  `onTapCancel`, and `onLongTapDown`. By default, each of these methods does nothing, they need
+  to be overridden in order to perform any function.
+- In addition, the component must implement the `containsLocalPoint()` method -- this method
+  allows Flame to know whether the event occurred within the component or not.
 
-    ```dart
-    class MyGame extends FlameGame with HasTappableComponents {
-      // ...
-    }
-    ```
+```dart
+class MyComponent extends PositionComponent with TapCallbacks {
+  MyComponent() : super(size: Vector2(80, 60));
 
-2. For those components that you want to respond to taps, add the `TapCallbacks` mixin.
-    - This mixin adds four overridable methods to your component: `onTapDown`, `onTapUp`,
-      `onTapCancel`, and `onLongTapDown`. By default, each of these methods does nothing, they need
-      to be overridden in order to perform any function.
-    - In addition, the component must implement the `containsLocalPoint()` method -- this method
-      allows Flame to know whether the event occurred within the component or not.
-
-    ```dart
-    class MyComponent extends PositionComponent with TapCallbacks {
-      MyComponent() : super(size: Vector2(80, 60));
-
-      @override
-      void onTapUp(TapUpEvent event) {
-        // Do something in response to a tap
-      }
-    }
-    ```
+  @override
+  void onTapUp(TapUpEvent event) {
+    // Do something in response to a tap event
+  }
+}
+```
 
 
 ## Tap anatomy
@@ -128,30 +119,6 @@ you cause the `onTapCancel` event by moving the finger.
 This section describes in more details several mixins needed for tap event handling.
 
 
-### HasTappableComponents
-
-This mixin is used on a `FlameGame` in order to ensure that tap events coming from Flutter reach
-their target `Component`s. This mixin **must** be added if you have any components with the
-`TapCallbacks` mixin.
-
-The mixin adds methods `onTapDown`, `onLongTapDown`, `onTapUp`, and `onTapCancel` to the game. The
-default implementation will simply propagate these events to the component(s) that are at the point
-of touch; but you can override them if you also want to respond to those events at the global game
-level:
-
-```dart
-class MyGame extends FlameGame with HasTappableComponents {
-  @override
-  void onTapDown(TapDownEvent event) {
-    super.onTapDown(event);
-    if (!event.handled) {
-      print('Event $event was not handled by any component');
-    }
-  }
-}
-```
-
-
 ### TapCallbacks
 
 The `TapCallbacks` mixin can be added to any `Component` in order for that component to start
@@ -207,7 +174,7 @@ effect, every tap event will be propagated twice through the system: first tryin
 components with `TapCallbacks` mixin, and then components with `Tappable`.
 
 ```dart
-class MyGame extends FlameGame with HasTappableComponents, HasTappablesBridge {
+class MyGame extends FlameGame with HasTappablesBridge {
   // ...
 }
 ```
@@ -224,10 +191,10 @@ Use of this mixin for any new project is highly discouraged.
 If you have an existing game that uses `Tappable`/`HasTappables` mixins, then this section will
 describe how to transition to the new API described in this document. Here's what you need to do:
 
-1. Replace the `HasTappables` mixin on your game with the pair of mixins `HasTappableComponents,
-    HasTappablesBridge`. Verify that your game continues to run as before.
+1. Replace the `HasTappables` mixin with the `HasTappablesBridge` mixin on your game.
+   Verify that your game continues to run as before.
 
-2. Pick any of your components that uses `Tappable`, and replace that mixin with `TapCallbacks`.
+3. Pick any of your components that uses `Tappable`, and replace that mixin with `TapCallbacks`.
     The methods `onTapDown`, `onTapUp`, `onTapCancel` and `onLongTapDown` will need to be adjusted
     for the new API:
     - The argument pair such as `(int pointerId, TapDownDetails details)` was replaced with a single
@@ -244,8 +211,8 @@ describe how to transition to the new API described in this document. Here's wha
     - If the component is not attached to the root of the game, then make sure its ancestors also
       have correct size or implement `containsLocalPoint()`.
 
-3. Run the game to verify that it works as before.
+4. Run the game to verify that it works as before.
 
-4. Repeat step 2 until you have converted all `Tappable` mixins into `TapCallbacks`.
+5. Repeat step 2 until you have converted all `Tappable` mixins into `TapCallbacks`.
 
-5. Remove the `HasTappablesBridge` mixin from your top-level game.
+6. Remove the `HasTappablesBridge` mixin from your top-level game.

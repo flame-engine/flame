@@ -12,9 +12,8 @@ class TapEventsGame extends FlameGame {
   }
 }
 
-/// This component is the tappable blue-ish rectangle in the center of the
-/// game. It uses the [TapCallbacks] mixin in order to inform the game that it
-/// wants to receive tap events.
+/// This component is the tappable blue-ish rectangle in the center of the game.
+/// It uses the [TapCallbacks] mixin to receive tap events.
 class TapTarget extends PositionComponent with TapCallbacks {
   TapTarget() : super(anchor: Anchor.center);
 
