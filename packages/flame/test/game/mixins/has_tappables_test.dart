@@ -26,7 +26,7 @@ void main() {
           () => game.ensureAdd(_TappableComponent()),
           failsAssert(
             'Tappable components can only be added to a FlameGame with '
-            'HasTappables',
+            'HasTappables or HasTappablesBridge',
           ),
         );
       },
