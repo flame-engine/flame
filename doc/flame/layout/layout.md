@@ -1,5 +1,7 @@
 # Layout
 
+- [Align Component](align_component.md)
+
 ```{toctree}
 :hidden:
 
