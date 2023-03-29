@@ -112,37 +112,37 @@ void addJointsStories(Dashbook dashbook) {
       .add(
         'ConstantVolumeJoint',
         (DashbookContext ctx) => GameWidget(game: ConstantVolumeJointExample()),
-        codeLink: link('constant_volume_joint.dart'),
+        codeLink: link('joints/constant_volume_joint.dart'),
         info: ConstantVolumeJointExample.description,
       )
       .add(
         'DistanceJoint',
         (DashbookContext ctx) => GameWidget(game: DistanceJointExample()),
-        codeLink: link('distance_joint.dart'),
+        codeLink: link('joints/distance_joint.dart'),
         info: DistanceJointExample.description,
       )
       .add(
         'FrictionJoint',
         (DashbookContext ctx) => GameWidget(game: FrictionJointExample()),
-        codeLink: link('friction_joint.dart'),
+        codeLink: link('joints/friction_joint.dart'),
         info: FrictionJointExample.description,
       )
       .add(
         'MotorJoint',
         (DashbookContext ctx) => GameWidget(game: MotorJointExample()),
-        codeLink: link('motor_joint.dart'),
+        codeLink: link('joints/motor_joint.dart'),
         info: MotorJointExample.description,
       )
       .add(
         'MouseJoint',
         (DashbookContext ctx) => GameWidget(game: MouseJointExample()),
-        codeLink: link('mouse_joint.dart'),
+        codeLink: link('joints/mouse_joint.dart'),
         info: MouseJointExample.description,
       )
       .add(
         'PulleyJoint',
         (DashbookContext ctx) => GameWidget(game: PulleyJointExample()),
-        codeLink: link('pulley_joint.dart'),
+        codeLink: link('joints/pulley_joint.dart'),
         info: PulleyJointExample.description,
       );
 }
