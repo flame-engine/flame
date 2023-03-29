@@ -56,6 +56,13 @@ class MyGame extends FlameGame {
 class PauseRoute extends Route { ... }
 ```
 
+```{note}
+Use `hide Route` if any of the imported packages have `Route()` in the same file.
+
+eg: `import 'package:flutter/material.dart' hide Route;`
+```
+
+
 [Flutter Navigator]: https://api.flutter.dev/flutter/widgets/Navigator-class.html
 
 
