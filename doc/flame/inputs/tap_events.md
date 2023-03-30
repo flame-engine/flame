@@ -194,22 +194,23 @@ describe how to transition to the new API described in this document. Here's wha
 1. Replace the `HasTappables` mixin with the `HasTappablesBridge` mixin on your game.
    Verify that your game continues to run as before.
 
-3. Pick any of your components that uses `Tappable`, and replace that mixin with `TapCallbacks`.
-    The methods `onTapDown`, `onTapUp`, `onTapCancel` and `onLongTapDown` will need to be adjusted
-    for the new API:
-    - The argument pair such as `(int pointerId, TapDownDetails details)` was replaced with a single
-      event object `TapDownEvent event`.
-    - There is no return value anymore, but if you need to make a component to pass-through the taps
-      to the components below, then set `event.continuePropagation` to true. This is only needed for
-      `onTapDown` events -- all other events will pass-through automatically.
-    - If your component needs to know the coordinates of the point of touch, use
-      `event.localPosition` instead of computing it manually. Properties `event.canvasPosition` and
-      `event.devicePosition` are also available.
-    - If the component is a `PositionComponent`, then make sure its size is set correctly (for
-      example by turning on the debug mode). If the component does not derive from
-      `PositionComponent` then make sure it implements the method `containsLocalPoint()`.
-    - If the component is not attached to the root of the game, then make sure its ancestors also
-      have correct size or implement `containsLocalPoint()`.
+2. Pick any of your components that uses `Tappable`, and replace that mixin with `TapCallbacks`.
+   The methods `onTapDown`, `onTapUp`, `onTapCancel` and `onLongTapDown` will need to be adjusted
+   for the new API:
+
+   - The argument pair such as `(int pointerId, TapDownDetails details)` was replaced with a single
+     event object `TapDownEvent event`.
+   - There is no return value anymore, but if you need to make a component to pass-through the taps
+     to the components below, then set `event.continuePropagation` to true. This is only needed for
+     `onTapDown` events -- all other events will pass-through automatically.
+   - If your component needs to know the coordinates of the point of touch, use
+     `event.localPosition` instead of computing it manually. Properties `event.canvasPosition` and
+     `event.devicePosition` are also available.
+   - If the component is a `PositionComponent`, then make sure its size is set correctly (for
+     example by turning on the debug mode). If the component does not derive from
+     `PositionComponent` then make sure it implements the method `containsLocalPoint()`.
+   - If the component is not attached to the root of the game, then make sure its ancestors also
+     have correct size or implement `containsLocalPoint()`.
 
 4. Run the game to verify that it works as before.
 
