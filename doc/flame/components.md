@@ -389,7 +389,8 @@ that the `position`, `angle` and `scale` will be relative to the parents state.
 So if you, for example, wanted to position a child in the center of the parent you would do this:
 
 ```dart
-Future<void> onLoad() async {
+@override
+void onLoad() {
   final parent = PositionComponent(
     position: Vector2(100, 100),
     size: Vector2(100, 100),
@@ -463,6 +464,7 @@ This class is used to represent a Component that has sprites that run in a singl
 This will create a simple three frame animation using 3 different images:
 
 ```dart
+@override
 Future<void> onLoad() async {
   final sprites = [0, 1, 2]
       .map((i) => Sprite.load('player_$i.png'));
@@ -481,6 +483,7 @@ If you have a sprite sheet, you can use the `sequenced` constructor from the `Sp
 class (check more details on [Images &gt; Animation](rendering/images.md#animation)):
 
 ```dart
+@override
 Future<void> onLoad() async {
   final size = Vector2.all(64.0);
   final data = SpriteAnimationData.sequenced(
@@ -610,6 +613,7 @@ This component uses an instance of `Svg` class to represent a Component that has
 rendered in the game:
 
 ```dart
+@override
 Future<void> onLoad() async {
   final svg = await Svg.load('android.svg');
   final android = SvgComponent.fromSvg(
@@ -734,6 +738,7 @@ They simplest way is to set the named optional parameters `baseVelocity` and
 background images along the X-axis with a faster speed the "closer" the image is:
 
 ```dart
+@override
 Future<void> onLoad() async {
   final parallaxComponent = await loadParallaxComponent(
     _dataList,
@@ -747,7 +752,8 @@ You can set the baseSpeed and layerDelta at any time, for example if your charac
 game speeds up.
 
 ```dart
-Future<void> onLoad() async {
+@override
+void onLoad() {
   final parallax = parallaxComponent.parallax;
   parallax.baseSpeed = Vector2(100, 0);
   parallax.velocityMultiplierDelta = Vector2(2.0, 1.0);
