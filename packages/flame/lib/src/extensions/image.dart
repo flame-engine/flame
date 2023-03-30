@@ -92,17 +92,16 @@ extension ImageExtension on Image {
   }
 
   /// Resizes this image to the given [newSize].
+  ///
+  /// Keep in mind that is considered an expensive operation and should be
+  /// avoided being called in the game loop methods, prefferable using it
+  /// in the loading phase of the game or components.
   Future<Image> resize(Vector2 newSize) async {
     final recorder = PictureRecorder();
     Canvas(recorder).drawImageRect(
       this,
-      Rect.fromLTWH(
-        0,
-        0,
-        width.toDouble(),
-        height.toDouble(),
-      ),
-      Rect.fromLTWH(0, 0, newSize.x, newSize.y),
+      getBoundingRect(),
+      newSize.toRect(),
       Paint()..color = const Color(0xFFFFFFFF),
     );
     final picture = recorder.endRecording();

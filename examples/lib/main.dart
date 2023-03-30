@@ -17,6 +17,7 @@ import 'package:examples/stories/components/components.dart';
 import 'package:examples/stories/effects/effects.dart';
 import 'package:examples/stories/experimental/experimental.dart';
 import 'package:examples/stories/games/games.dart';
+import 'package:examples/stories/image/image.dart';
 import 'package:examples/stories/input/input.dart';
 import 'package:examples/stories/layout/layout.dart';
 import 'package:examples/stories/parallax/parallax.dart';
@@ -75,6 +76,7 @@ void runAsDashbook() {
   addSystemStories(dashbook);
   addUtilsStories(dashbook);
   addWidgetsStories(dashbook);
+  addImageStories(dashbook);
 
   // Bridge package examples
   addForge2DStories(dashbook);
