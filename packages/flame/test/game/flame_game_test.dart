@@ -1,6 +1,10 @@
+import 'dart:ui';
+
 import 'package:collection/collection.dart';
 import 'package:flame/components.dart';
+import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
+import 'package:flame/src/events/flame_game_mixins/has_tappable_components.dart';
 import 'package:flame/src/game/game_render_box.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter/rendering.dart';
@@ -57,9 +61,8 @@ void main() {
         },
       );
 
-      testWithGame<GameWithTappables>(
+      testWithFlameGame(
         'Add component with onLoad function',
-        GameWithTappables.new,
         (game) async {
           final component = _MyAsyncComponent();
           await game.ensureAdd(component);
@@ -81,15 +84,22 @@ void main() {
         },
       );
 
-      testWithGame<GameWithTappables>(
+      testWithFlameGame(
         'component can be tapped',
-        GameWithTappables.new,
         (game) async {
           final component = _MyTappableComponent();
           await game.ensureAdd(component);
-          game.onTapDown(1, createTapDownEvent(game));
+          final tapDispatcher = game.firstChild<MultiTapDispatcher>()!;
+          tapDispatcher.handleTapDown(
+            1,
+            TapDownDetails(
+              kind: PointerDeviceKind.touch,
+              globalPosition: const Offset(10, 10),
+              localPosition: const Offset(10, 10),
+            ),
+          );
 
-          expect(component.tapped, true);
+          expect(component.tapped, isTrue);
         },
       );
 
@@ -700,15 +710,13 @@ class _ConstructorChildrenGame extends FlameGame {
   }
 }
 
-class GameWithTappables extends FlameGame with HasTappables {}
-
-class _MyTappableComponent extends _MyComponent with Tappable {
+class _MyTappableComponent extends _MyComponent with TapCallbacks {
   bool tapped = false;
 
   @override
-  bool onTapDown(_) {
+  void onTapDown(TapDownEvent info) {
+    info.continuePropagation = true;
     tapped = true;
-    return true;
   }
 }
 
@@ -735,7 +743,7 @@ class _MyComponent extends PositionComponent with HasGameRef {
   }
 
   @override
-  bool containsPoint(Vector2 v) => true;
+  bool containsLocalPoint(_) => true;
 
   @override
   void onRemove() {

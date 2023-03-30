@@ -275,9 +275,8 @@ void main() {
 }
 
 class _GameWithDualTappableComponents extends FlameGame
-    // ignore: deprecated_member_use_from_same_package
-    with
-        HasTappablesBridge {
+    with HasTappablesBridge // ignore: deprecated_member_use_from_same_package
+{
   _GameWithDualTappableComponents({super.children});
 }
 

@@ -2,12 +2,13 @@ import 'dart:math';
 
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
+import 'package:flame/experimental.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame_isolate/flame_isolate.dart';
 import 'package:flutter/material.dart';
 
-class SimpleIsolateExample extends FlameGame with HasTappables {
+class SimpleIsolateExample extends FlameGame {
   static const String description = '''
     This example showcases a simple FlameIsolate example, making it easy to 
     continually run heavy load without stutter.
@@ -65,7 +66,7 @@ enum ComputeType {
 }
 
 class CalculatePrimeNumber extends PositionComponent
-    with Tappable, FlameIsolate {
+    with TapCallbacks, FlameIsolate {
   CalculatePrimeNumber({
     required super.position,
     required super.anchor,
@@ -134,10 +135,9 @@ class CalculatePrimeNumber extends PositionComponent
   }
 
   @override
-  bool onTapDown(_) {
+  void onTapDown(_) {
     computeType =
         ComputeType.values[(computeType.index + 1) % ComputeType.values.length];
-    return false;
   }
 
   final _paint = Paint()..color = const Color(0xa98d560d);

@@ -86,7 +86,10 @@ void main() {
         game.add(parent..add(child));
         await game.ready();
 
-        game.onTapDown(1, createTapDownEvent(game));
+        game.onTapDown(
+          1,
+          TapDownInfo.fromDetails(game, createTapDownDetails()),
+        );
         expect(child.gameSize, Vector2(800, 600));
         expect(child.tapped, true);
       },
@@ -109,9 +112,9 @@ void main() {
 
         game.onTapDown(
           1,
-          createTapDownEvent(
+          TapDownInfo.fromDetails(
             game,
-            globalPosition: const Offset(250, 250),
+            createTapDownDetails(globalPosition: const Offset(250, 250)),
           ),
         );
 
@@ -132,9 +135,9 @@ void main() {
         await game.ready();
         game.onTapDown(
           1,
-          createTapDownEvent(
+          TapDownInfo.fromDetails(
             game,
-            globalPosition: const Offset(50, 50),
+            createTapDownDetails(globalPosition: const Offset(50, 50)),
           ),
         );
 

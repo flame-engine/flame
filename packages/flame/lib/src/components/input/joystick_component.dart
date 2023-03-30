@@ -1,8 +1,8 @@
 import 'dart:math';
 
 import 'package:flame/components.dart';
+import 'package:flame/experimental.dart';
 import 'package:flame/src/components/input/hud_margin_component.dart';
-import 'package:flame/src/gestures/events.dart';
 import 'package:meta/meta.dart';
 
 enum JoystickDirection {
@@ -17,7 +17,7 @@ enum JoystickDirection {
   idle,
 }
 
-class JoystickComponent extends HudMarginComponent with Draggable {
+class JoystickComponent extends HudMarginComponent with DragCallbacks {
   late final PositionComponent? knob;
   late final PositionComponent? background;
 
@@ -105,26 +105,30 @@ class JoystickComponent extends HudMarginComponent with Draggable {
   }
 
   @override
-  bool onDragStart(DragStartInfo info) {
+  bool onDragStart(DragStartEvent info) {
     return false;
   }
 
   @override
-  bool onDragUpdate(DragUpdateInfo info) {
-    _unscaledDelta.add(info.delta.viewport);
+  bool onDragUpdate(DragUpdateEvent info) {
+    _unscaledDelta.add(info.delta);
     return false;
   }
 
   @override
   bool onDragEnd(_) {
-    onDragCancel();
+    onDragStop();
     return false;
   }
 
   @override
-  bool onDragCancel() {
-    _unscaledDelta.setZero();
+  bool onDragCancel(_) {
+    onDragStop();
     return false;
+  }
+
+  void onDragStop() {
+    _unscaledDelta.setZero();
   }
 
   static const double _eighthOfPi = pi / 8;

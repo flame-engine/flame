@@ -36,21 +36,18 @@ class TappableSquare extends PositionComponent with TapCallbacks {
   }
 
   @override
-  bool onTapUp(_) {
+  void onTapUp(_) {
     _beenPressed = false;
-    return true;
   }
 
   @override
-  bool onTapDown(_) {
+  void onTapDown(_) {
     _beenPressed = true;
     angle += 1.0;
-    return true;
   }
 
   @override
-  bool onTapCancel(_) {
+  void onTapCancel(_) {
     _beenPressed = false;
-    return true;
   }
 }
