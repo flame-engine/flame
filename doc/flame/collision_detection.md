@@ -125,7 +125,8 @@ hitboxes to just like any other component:
 
 ```dart
 class MyComponent extends PositionComponent {
-  Future<void> onLoad() async {
+  @override
+  void onLoad() {
     add(RectangleHitbox());
   }
 }
@@ -267,7 +268,8 @@ To do this, add the `HasQuadTreeCollisionDetection` mixin to your game instead o
 
 ```dart
 class MyGame extends FlameGame with HasQuadTreeCollisionDetection {
-  Future<void> onLoad() async {
+  @override
+  void onLoad() {
     initializeCollisionDetection(
       mapDimensions: const Rect.fromLTWH(0, 0, mapWidth, mapHeight),
       minimumDistance: 10,
