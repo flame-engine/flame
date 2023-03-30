@@ -30,6 +30,7 @@ or use the `SvgComponent` and add it to the component tree:
 
 ```dart
 class MyGame extends FlameGame {
+  @override
   Future<void> onLoad() async {
     final svgInstance = await Svg.load('android.svg');
     final size = Vector2.all(100);
