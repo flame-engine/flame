@@ -3,8 +3,9 @@ description: YarnSpinner equivalent for Dart.
 version: 1.0.0
 homepage: https://github.com/flame-engine/flame/tree/main/packages/flame_jenny/jenny
 funding:
+  - https://opencollective.com/blue-fire
+  - https://github.com/sponsors/bluefireteam
   - https://patreon.com/bluefireoss
-  - https://www.buymeacoffee.com/bluefire
 
 environment:
   sdk: ">=2.18.0 <3.0.0"

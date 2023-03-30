@@ -13,6 +13,7 @@ import 'package:examples/stories/bridge_libraries/forge2d/joints/distance_joint.
 import 'package:examples/stories/bridge_libraries/forge2d/joints/friction_joint.dart';
 import 'package:examples/stories/bridge_libraries/forge2d/joints/motor_joint.dart';
 import 'package:examples/stories/bridge_libraries/forge2d/joints/mouse_joint.dart';
+import 'package:examples/stories/bridge_libraries/forge2d/joints/pulley_joint.dart';
 import 'package:examples/stories/bridge_libraries/forge2d/raycast_example.dart';
 import 'package:examples/stories/bridge_libraries/forge2d/revolute_joint_example.dart';
 import 'package:examples/stories/bridge_libraries/forge2d/sprite_body_example.dart';
@@ -111,31 +112,37 @@ void addJointsStories(Dashbook dashbook) {
       .add(
         'ConstantVolumeJoint',
         (DashbookContext ctx) => GameWidget(game: ConstantVolumeJointExample()),
-        codeLink: link('constant_volume_joint.dart'),
+        codeLink: link('joints/constant_volume_joint.dart'),
         info: ConstantVolumeJointExample.description,
       )
       .add(
         'DistanceJoint',
         (DashbookContext ctx) => GameWidget(game: DistanceJointExample()),
-        codeLink: link('distance_joint.dart'),
+        codeLink: link('joints/distance_joint.dart'),
         info: DistanceJointExample.description,
       )
       .add(
         'FrictionJoint',
         (DashbookContext ctx) => GameWidget(game: FrictionJointExample()),
-        codeLink: link('friction_joint.dart'),
+        codeLink: link('joints/friction_joint.dart'),
         info: FrictionJointExample.description,
       )
       .add(
         'MotorJoint',
         (DashbookContext ctx) => GameWidget(game: MotorJointExample()),
-        codeLink: link('motor_joint.dart'),
+        codeLink: link('joints/motor_joint.dart'),
         info: MotorJointExample.description,
       )
       .add(
         'MouseJoint',
         (DashbookContext ctx) => GameWidget(game: MouseJointExample()),
-        codeLink: link('mouse_joint.dart'),
+        codeLink: link('joints/mouse_joint.dart'),
         info: MouseJointExample.description,
+      )
+      .add(
+        'PulleyJoint',
+        (DashbookContext ctx) => GameWidget(game: PulleyJointExample()),
+        codeLink: link('joints/pulley_joint.dart'),
+        info: PulleyJointExample.description,
       );
 }

@@ -3,8 +3,9 @@ description: Tiled support for the Flame game engine. This uses the tiled packag
 version: 1.9.1
 homepage: https://github.com/flame-engine/flame/tree/main/packages/flame_tiled
 funding:
+  - https://opencollective.com/blue-fire
+  - https://github.com/sponsors/bluefireteam
   - https://patreon.com/bluefireoss
-  - https://www.buymeacoffee.com/bluefire
 
 environment:
   sdk: ">=2.18.0 <3.0.0"

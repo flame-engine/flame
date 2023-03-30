@@ -396,12 +396,17 @@ div.nav-left li.current > ul {
  *----------------------------------------------------------------------------*/
 
 div.sidebar-right {
-  flex: 5;
+  flex: 5 1 auto;
   height: calc(100vh - 25px - var(--top-menu-height));
-  margin-right: 20px;
+  margin-right: -28px;
   max-width: var(--right-menu-width);
   position: sticky;
   top: calc(25px + var(--top-menu-height));
+  overflow: hidden;
+}
+
+div.sidebar-right:hover {
+  overflow-y: auto;
 }
 
 @media (max-width: 1200px) {
