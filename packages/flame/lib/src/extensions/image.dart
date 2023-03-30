@@ -94,7 +94,7 @@ extension ImageExtension on Image {
   /// Resizes this image to the given [newSize].
   ///
   /// Keep in mind that is considered an expensive operation and should be
-  /// avoided being called in the game loop methods, prefferable using it
+  /// avoided being called in the game loop methods, preferable using it
   /// in the loading phase of the game or components.
   Future<Image> resize(Vector2 newSize) async {
     final recorder = PictureRecorder();
