@@ -1,18 +1,13 @@
 import 'package:flame/components.dart';
-import 'package:flame/game.dart';
-import 'package:flame/input.dart';
 import 'package:flame/src/events/flame_game_mixins/has_draggable_components.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter/widgets.dart';
 import 'package:test/test.dart';
 
-class _GameHasDraggables extends FlameGame with HasDraggables {}
-
 void main() {
   group('JoystickDirection tests', () {
-    testWithGame<_GameHasDraggables>(
+    testWithFlameGame(
       'can convert angle to JoystickDirection',
-      _GameHasDraggables.new,
       (game) async {
         final joystick = JoystickComponent(
           knob: CircleComponent(radius: 5.0),
@@ -41,9 +36,8 @@ void main() {
       },
     );
 
-    testWithGame<_GameHasDraggables>(
+    testWithFlameGame(
       'properly re-positions onGameSize',
-      _GameHasDraggables.new,
       (game) async {
         game.onGameResize(Vector2(100, 200));
         final joystick = JoystickComponent(
