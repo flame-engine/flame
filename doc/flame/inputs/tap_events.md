@@ -212,8 +212,8 @@ describe how to transition to the new API described in this document. Here's wha
    - If the component is not attached to the root of the game, then make sure its ancestors also
      have correct size or implement `containsLocalPoint()`.
 
-4. Run the game to verify that it works as before.
+3. Run the game to verify that it works as before.
 
-5. Repeat step 2 until you have converted all `Tappable` mixins into `TapCallbacks`.
+4. Repeat step 2 until you have converted all `Tappable` mixins into `TapCallbacks`.
 
-6. Remove the `HasTappablesBridge` mixin from your top-level game.
+5. Remove the `HasTappablesBridge` mixin from your top-level game.
