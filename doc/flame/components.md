@@ -390,7 +390,7 @@ So if you, for example, wanted to position a child in the center of the parent y
 
 ```dart
 @override
-Future<void> onLoad() async {
+void onLoad() {
   final parent = PositionComponent(
     position: Vector2(100, 100),
     size: Vector2(100, 100),
@@ -753,7 +753,7 @@ game speeds up.
 
 ```dart
 @override
-Future<void> onLoad() async {
+void onLoad() {
   final parallax = parallaxComponent.parallax;
   parallax.baseSpeed = Vector2(100, 0);
   parallax.velocityMultiplierDelta = Vector2(2.0, 1.0);

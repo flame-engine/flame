@@ -77,7 +77,7 @@ class MyGame {
     // ...
   }
   @override
-  Future<void> onLoad() async {
+  void onLoad() {
     yarnProject = YarnProject()
       ..commands.addCommand2('StartQuest', startQuest);
   }
@@ -107,7 +107,7 @@ class MyGame {
   }
 
   @override
-  Future<void> onLoad() async {
+  void onLoad() {
     yarnProject
       ..variables.setVariable(r'$prompt', '')
       ..commands.addCommand1('prompt', prompt);

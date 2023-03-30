@@ -103,7 +103,7 @@ Example:
 class MyGame extends FlameGame {
   final someVector = Vector2(100, 100);
   @override
-  Future<void> onLoad() async {
+  void onLoad() {
      camera.followVector2(someVector);
   }
 }
