@@ -1,7 +1,6 @@
 # flame_audio
 
 ```{toctree}
-:hidden:
 
 General audio    <audio.md>
 Background music <bgm.md>
