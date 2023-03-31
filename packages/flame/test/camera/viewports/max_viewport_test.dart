@@ -43,7 +43,7 @@ void main() {
       expect(viewport, isA<_MyMaxViewport>());
       expect((viewport as _MyMaxViewport).onViewportResizeCalled, 3);
       game.onGameResize(Vector2(200, 200));
-      expect(viewport.onViewportResizeCalled, 3);
+      expect(viewport.onViewportResizeCalled, 4);
     });
   });
 }
