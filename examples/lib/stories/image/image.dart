@@ -18,9 +18,6 @@ void addImageStories(Dashbook dashbook) {
         ),
       ),
       codeLink: baseLink('image/resize.dart'),
-      info: '''
-        Shows how a dart:ui `Image` can be resized using Flame Image extensions.
-        Use the properties on the side to change the size of the image.
-      ''',
+      info: ImageResizeExample.description,
     );
 }

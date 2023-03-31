@@ -2,12 +2,14 @@ import 'dart:async';
 import 'dart:typed_data';
 import 'dart:ui';
 
-import 'package:flame/src/extensions/color.dart';
+import 'package:flame/palette.dart';
 import 'package:flame/src/extensions/vector2.dart';
 
 export 'dart:ui' show Image;
 
 extension ImageExtension on Image {
+  static final Paint _whitePaint = BasicPalette.white.paint();
+
   /// Converts a raw list of pixel values into an [Image] object.
   ///
   /// The pixels must be in the RGBA format, i.e. first 4 bytes encode the red,
@@ -102,7 +104,7 @@ extension ImageExtension on Image {
       this,
       getBoundingRect(),
       newSize.toRect(),
-      Paint()..color = const Color(0xFFFFFFFF),
+      _whitePaint,
     );
     final picture = recorder.endRecording();
     final resizedImage = await picture.toImage(
