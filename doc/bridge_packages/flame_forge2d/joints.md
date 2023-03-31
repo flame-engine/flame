@@ -345,9 +345,9 @@ with static shapes to prevent one side from going to zero length.
 A `RevoluteJoint` forces two bodies to share a common anchor point, often called a hinge point.
 The revolute joint has a single degree of freedom: the relative rotation of the two bodies.
 
-To create a `RevoluteJoint`, provide two bodies and a common point to the `initialize`method.
+To create a `RevoluteJoint`, provide two bodies and a common point to the `initialize` method.
 The definition uses local anchor points so that the initial configuration can violate the
-constraint slightly
+constraint slightly.
 
 ```dart
 final jointDef = RevoluteJointDef()
