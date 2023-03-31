@@ -281,7 +281,10 @@ Future<void> main() async {
         throwsAssertionError,
       );
 
-      expect(() => SpriteComponent(autoResize: false), throwsAssertionError);
+      expect(
+        () => SpriteAnimationComponent(autoResize: false),
+        throwsAssertionError,
+      );
     });
 
     test('default value set correctly when not provided explicitly', () {
