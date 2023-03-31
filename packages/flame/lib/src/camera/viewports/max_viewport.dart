@@ -10,6 +10,11 @@ class MaxViewport extends Viewport {
   MaxViewport({super.children});
 
   @override
+  void onLoad() {
+    size = findGame()!.canvasSize;
+  }
+
+  @override
   void onGameResize(Vector2 gameSize) {
     super.onGameResize(gameSize);
     size = gameSize;

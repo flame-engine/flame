@@ -22,9 +22,18 @@ class FixedAspectRatioViewport extends Viewport {
   Rect _clipRect = Rect.zero;
 
   @override
+  void onLoad() {
+    final canvasSize = findGame()!.canvasSize;
+    _handleResize(canvasSize);
+  }
+
+  @override
   void onGameResize(Vector2 canvasSize) {
     super.onGameResize(canvasSize);
+    _handleResize(canvasSize);
+  }
 
+  void _handleResize(Vector2 canvasSize) {
     final availableWidth = canvasSize.x;
     final availableHeight = canvasSize.y;
     size = (availableHeight * aspectRatio > availableWidth)
