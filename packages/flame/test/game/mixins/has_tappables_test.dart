@@ -5,6 +5,7 @@ import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flame_test/flame_test.dart';
+import 'package:flutter/gestures.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -88,7 +89,7 @@ void main() {
 
         game.onTapDown(
           1,
-          TapDownInfo.fromDetails(game, createTapDownDetails()),
+          TapDownInfo.fromDetails(game, TapDownDetails()),
         );
         expect(child.gameSize, Vector2(800, 600));
         expect(child.tapped, true);
@@ -114,7 +115,7 @@ void main() {
           1,
           TapDownInfo.fromDetails(
             game,
-            createTapDownDetails(globalPosition: const Offset(250, 250)),
+            TapDownDetails(globalPosition: const Offset(250, 250)),
           ),
         );
 
@@ -137,7 +138,7 @@ void main() {
           1,
           TapDownInfo.fromDetails(
             game,
-            createTapDownDetails(globalPosition: const Offset(50, 50)),
+            TapDownDetails(globalPosition: const Offset(50, 50)),
           ),
         );
 

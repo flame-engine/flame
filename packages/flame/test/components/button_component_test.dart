@@ -33,7 +33,7 @@ void main() {
       expect(cancelledTimes, 0);
       final tapDispatcher = game.firstChild<MultiTapDispatcher>()!;
 
-      tapDispatcher.handleTapDown(1, createTapDownDetails());
+      tapDispatcher.handleTapDown(1, TapDownDetails());
       expect(pressedTimes, 0);
       expect(releasedTimes, 0);
       expect(cancelledTimes, 0);
@@ -50,7 +50,7 @@ void main() {
 
       tapDispatcher.handleTapDown(
         1,
-        createTapDownDetails(globalPosition: buttonPosition.toOffset()),
+        TapDownDetails(globalPosition: buttonPosition.toOffset()),
       );
       expect(pressedTimes, 1);
       expect(releasedTimes, 0);
@@ -66,7 +66,7 @@ void main() {
 
       tapDispatcher.handleTapDown(
         1,
-        createTapDownDetails(globalPosition: buttonPosition.toOffset()),
+        TapDownDetails(globalPosition: buttonPosition.toOffset()),
       );
       tapDispatcher.handleTapCancel(1);
       expect(pressedTimes, 2);
@@ -100,7 +100,7 @@ void main() {
 
       tapDispatcher.handleTapDown(
         1,
-        createTapDownDetails(globalPosition: previousPosition),
+        TapDownDetails(globalPosition: previousPosition),
       );
       expect(pressedTimes, 1);
       expect(releasedTimes, 0);
@@ -116,7 +116,7 @@ void main() {
 
       tapDispatcher.handleTapDown(
         1,
-        createTapDownDetails(globalPosition: previousPosition),
+        TapDownDetails(globalPosition: previousPosition),
       );
       tapDispatcher.handleTapCancel(1);
       expect(pressedTimes, 2);

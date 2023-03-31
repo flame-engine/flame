@@ -33,7 +33,7 @@ void main() {
       expect(cancelledTimes, 0);
       final tapDispatcher = game.firstChild<MultiTapDispatcher>()!;
 
-      tapDispatcher.handleTapDown(1, createTapDownDetails());
+      tapDispatcher.handleTapDown(1, TapDownDetails());
       expect(pressedTimes, 0);
       expect(releasedTimes, 0);
       expect(cancelledTimes, 0);
@@ -50,7 +50,7 @@ void main() {
 
       tapDispatcher.handleTapDown(
         1,
-        createTapDownDetails(
+        TapDownDetails(
           globalPosition: initialGameSize.toOffset() +
               margin.bottomRight -
               const Offset(1, 1),
@@ -72,7 +72,7 @@ void main() {
 
       tapDispatcher.handleTapDown(
         1,
-        createTapDownDetails(
+        TapDownDetails(
           globalPosition: initialGameSize.toOffset() +
               margin.bottomRight -
               const Offset(1, 1),
@@ -110,7 +110,7 @@ void main() {
 
       tapDispatcher.handleTapDown(
         1,
-        createTapDownDetails(globalPosition: previousPosition),
+        TapDownDetails(globalPosition: previousPosition),
       );
       tapDispatcher.handleTapUp(
         1,
@@ -122,7 +122,7 @@ void main() {
 
       tapDispatcher.handleTapDown(
         1,
-        createTapDownDetails(
+        TapDownDetails(
           globalPosition:
               game.size.toOffset() + margin.bottomRight - const Offset(1, 1),
         ),
@@ -144,7 +144,7 @@ void main() {
 
       tapDispatcher.handleTapDown(
         1,
-        createTapDownDetails(
+        TapDownDetails(
           globalPosition:
               game.size.toOffset() + margin.bottomRight - const Offset(1, 1),
         ),

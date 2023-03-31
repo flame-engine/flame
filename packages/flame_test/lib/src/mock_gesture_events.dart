@@ -1,15 +1,5 @@
 import 'package:flutter/gestures.dart';
 
-TapDownDetails createTapDownDetails({
-  Offset? globalPosition,
-  Offset? localPosition,
-}) {
-  return TapDownDetails(
-    localPosition: localPosition,
-    globalPosition: globalPosition ?? Offset.zero,
-  );
-}
-
 TapUpDetails createTapUpDetails({
   Offset? globalPosition,
   Offset? localPosition,
