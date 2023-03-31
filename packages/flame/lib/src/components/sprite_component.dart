@@ -17,43 +17,10 @@ class SpriteComponent extends PositionComponent
     implements SizeProvider {
   /// When set to true, the component is auto-resized to match the
   /// size of underlying sprite.
-  late bool _autoResize;
-
-  /// Returns current value of auto resize flag.
-  bool get autoResize => _autoResize;
-
-  /// Sets the given value of autoResize flag. Will update the [size]
-  /// to fit srcSize of [sprite] if set to  true.
-  set autoResize(bool value) {
-    _autoResize = value;
-    if (value) {
-      if (_sprite != null) {
-        size.setFrom(_sprite!.srcSize);
-      } else {
-        size.setZero();
-      }
-    }
-  }
+  bool _autoResize;
 
   /// The [sprite] to be rendered by this component.
   Sprite? _sprite;
-
-  /// Returns the current sprite rendered by this component.
-  Sprite? get sprite => _sprite;
-
-  /// Sets the given sprite as the new [sprite] of this component.
-  /// Will update the size if [autoResize] is set to true.
-  set sprite(Sprite? value) {
-    _sprite = value;
-
-    if (_autoResize) {
-      if (value != null) {
-        size.setFrom(value.srcSize);
-      } else {
-        size.setZero();
-      }
-    }
-  }
 
   /// Creates a component with an empty sprite which can be set later
   SpriteComponent({
@@ -110,6 +77,26 @@ class SpriteComponent extends PositionComponent
           priority: priority,
         );
 
+  /// Returns current value of auto resize flag.
+  bool get autoResize => _autoResize;
+
+  /// Sets the given value of autoResize flag. Will update the [size]
+  /// to fit srcSize of [sprite] if set to  true.
+  set autoResize(bool value) {
+    _autoResize = value;
+    _resizeToSprite();
+  }
+
+  /// Returns the current sprite rendered by this component.
+  Sprite? get sprite => _sprite;
+
+  /// Sets the given sprite as the new [sprite] of this component.
+  /// Will update the size if [autoResize] is set to true.
+  set sprite(Sprite? value) {
+    _sprite = value;
+    _resizeToSprite();
+  }
+
   @override
   @mustCallSuper
   void onMount() {
@@ -127,5 +114,16 @@ class SpriteComponent extends PositionComponent
       size: size,
       overridePaint: paint,
     );
+  }
+
+  /// Updates the size [sprite]'s srcSize if [autoResize] is true.
+  void _resizeToSprite() {
+    if (_autoResize) {
+      if (_sprite != null) {
+        size.setFrom(_sprite!.srcSize);
+      } else {
+        size.setZero();
+      }
+    }
   }
 }
