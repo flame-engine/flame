@@ -11,11 +11,14 @@ export '../sprite_animation.dart';
 class SpriteGroupComponent<T> extends PositionComponent
     with HasPaint
     implements SizeProvider {
+  /// Key with the current playing animation
   T? _current;
 
   /// Map with the available states for this sprite group
   Map<T, Sprite>? sprites;
 
+  /// When set to true, the component is auto-resized to match the
+  /// size of current sprite.
   bool _autoResize;
 
   /// Creates a component with an empty animation which can be set later
