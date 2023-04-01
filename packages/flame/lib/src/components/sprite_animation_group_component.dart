@@ -30,8 +30,8 @@ class SpriteAnimationGroupComponent<T> extends PositionComponent
     this.animations,
     T? current,
     bool? autoResize,
-    bool? playing,
-    Map<T, bool>? removeOnFinish,
+    this.playing = true,
+    this.removeOnFinish = const {},
     Paint? paint,
     super.position,
     Vector2? size,
@@ -47,8 +47,6 @@ class SpriteAnimationGroupComponent<T> extends PositionComponent
         ),
         _current = current,
         _autoResize = autoResize ?? size == null,
-        playing = playing ?? true,
-        removeOnFinish = removeOnFinish ?? const {},
         super(size: size ?? animations?[current]?.getSprite().srcSize) {
     if (paint != null) {
       this.paint = paint;
@@ -66,8 +64,8 @@ class SpriteAnimationGroupComponent<T> extends PositionComponent
     Map<T, SpriteAnimationData> data, {
     T? current,
     bool? autoResize,
-    bool? playing,
-    Map<T, bool>? removeOnFinish,
+    bool playing = true,
+    Map<T, bool> removeOnFinish = const {},
     Paint? paint,
     Vector2? position,
     Vector2? size,
@@ -116,8 +114,8 @@ class SpriteAnimationGroupComponent<T> extends PositionComponent
 
   /// Sets the given value of autoResize flag.
   ///
-  /// Will update the [size] to fit srcSize of
-  /// current animation sprite if set to  true.
+  /// Will update the [size] to fit srcSize of current animation sprite if set
+  /// to  true.
   set autoResize(bool value) {
     _autoResize = value;
     _resizeToSprite();

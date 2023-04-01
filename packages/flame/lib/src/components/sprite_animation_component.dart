@@ -28,8 +28,8 @@ class SpriteAnimationComponent extends PositionComponent
   SpriteAnimationComponent({
     this.animation,
     bool? autoResize,
-    bool? removeOnFinish,
-    bool? playing,
+    this.removeOnFinish = false,
+    this.playing = true,
     Paint? paint,
     super.position,
     Vector2? size,
@@ -44,8 +44,6 @@ class SpriteAnimationComponent extends PositionComponent
           '''If size is set, autoResize should be false or size should be null when autoResize is true.''',
         ),
         _autoResize = autoResize ?? size == null,
-        removeOnFinish = removeOnFinish ?? false,
-        playing = playing ?? true,
         super(size: size ?? animation?.getSprite().srcSize) {
     if (paint != null) {
       this.paint = paint;
@@ -61,8 +59,8 @@ class SpriteAnimationComponent extends PositionComponent
     Image image,
     SpriteAnimationData data, {
     bool? autoResize,
-    bool? removeOnFinish,
-    bool? playing,
+    bool removeOnFinish = false,
+    bool playing = true,
     Paint? paint,
     Vector2? position,
     Vector2? size,
