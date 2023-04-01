@@ -20,22 +20,31 @@ class SpriteAnimationComponent extends PositionComponent
   /// Whether the animation is paused or playing.
   bool playing;
 
+  /// When set to true, the component is auto-resized to match the
+  /// size of current animation sprite.
+  bool _autoResize;
+
   /// Creates a component with an empty animation which can be set later
   SpriteAnimationComponent({
     this.animation,
-    bool? removeOnFinish,
-    bool? playing,
+    bool? autoResize,
+    this.removeOnFinish = false,
+    this.playing = true,
     Paint? paint,
     super.position,
-    super.size,
+    Vector2? size,
     super.scale,
     super.angle,
     super.nativeAngle,
     super.anchor,
     super.children,
     super.priority,
-  })  : removeOnFinish = removeOnFinish ?? false,
-        playing = playing ?? true {
+  })  : assert(
+          (size == null) == (autoResize ?? size == null),
+          '''If size is set, autoResize should be false or size should be null when autoResize is true.''',
+        ),
+        _autoResize = autoResize ?? size == null,
+        super(size: size ?? animation?.getSprite().srcSize) {
     if (paint != null) {
       this.paint = paint;
     }
@@ -49,8 +58,9 @@ class SpriteAnimationComponent extends PositionComponent
   SpriteAnimationComponent.fromFrameData(
     Image image,
     SpriteAnimationData data, {
-    bool? removeOnFinish,
-    bool? playing,
+    bool? autoResize,
+    bool removeOnFinish = false,
+    bool playing = true,
     Paint? paint,
     Vector2? position,
     Vector2? size,
@@ -60,6 +70,7 @@ class SpriteAnimationComponent extends PositionComponent
     int? priority,
   }) : this(
           animation: SpriteAnimation.fromFrameData(image, data),
+          autoResize: autoResize,
           removeOnFinish: removeOnFinish,
           playing: playing,
           paint: paint,
@@ -70,6 +81,16 @@ class SpriteAnimationComponent extends PositionComponent
           anchor: anchor,
           priority: priority,
         );
+
+  /// Returns current value of auto resize flag.
+  bool get autoResize => _autoResize;
+
+  /// Sets the given value of autoResize flag. Will update the [size]
+  /// to fit srcSize of current sprite if set to  true.
+  set autoResize(bool value) {
+    _autoResize = value;
+    _resizeToSprite();
+  }
 
   @mustCallSuper
   @override
@@ -86,9 +107,22 @@ class SpriteAnimationComponent extends PositionComponent
   void update(double dt) {
     if (playing) {
       animation?.update(dt);
+      _resizeToSprite();
     }
     if (removeOnFinish && (animation?.done() ?? false)) {
       removeFromParent();
+    }
+  }
+
+  /// Updates the size to current animation sprite's srcSize if
+  /// [autoResize] is true.
+  void _resizeToSprite() {
+    if (_autoResize) {
+      if (animation != null) {
+        size.setFrom(animation!.getSprite().srcSize);
+      } else {
+        size.setZero();
+      }
     }
   }
 }

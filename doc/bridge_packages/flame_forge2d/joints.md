@@ -25,7 +25,7 @@ Currently, Forge2D supports the following joints:
 - [`MouseJoint`](#mousejoint)
 - PrismaticJoint
 - [`PulleyJoint`](#pulleyjoint)
-- RevoluteJoint
+- [`RevoluteJoint`](#revolutejoint)
 - RopeJoint
 - WeldJoint
 - WheelJoint
@@ -337,4 +337,83 @@ joint.getCurrentLengthB()
 `PulleyJoint` can get a bit troublesome by itself. They often work better when
 combined with prismatic joints. You should also cover the the anchor points 
 with static shapes to prevent one side from going to zero length.
+```
+
+
+### `RevoluteJoint`
+
+A `RevoluteJoint` forces two bodies to share a common anchor point, often called a hinge point.
+The revolute joint has a single degree of freedom: the relative rotation of the two bodies.
+
+To create a `RevoluteJoint`, provide two bodies and a common point to the `initialize` method.
+The definition uses local anchor points so that the initial configuration can violate the
+constraint slightly.
+
+```dart
+final jointDef = RevoluteJointDef()
+  ..initialize(firstBody, secondBody, firstBody.position);
+world.createJoint(RevoluteJoint(jointDef));
+```
+
+```{flutter-app}
+:sources: ../../examples
+:page: revolute_joint
+:subfolder: stories/bridge_libraries/forge2d/joints
+:show: code popup
+```
+
+In some cases you might wish to control the joint angle. For this, the `RevoluteJointDef` has
+optional parameters that allow you to simulate a joint limit and/or a motor.
+
+
+#### Joint Limit
+
+You can limit the relative rotation with a joint limit that specifies a lower and upper angle.
+
+```dart
+jointDef
+  ..enableLimit = true
+  ..lowerAngle = 0
+  ..upperAngle = pi / 2;
+```
+
+- `enableLimit`: Set to true to enable angle limits
+- `lowerAngle`: The lower angle in radians
+- `upperAngle`: The upper angle in radians
+
+You change the limits after the joint was created with this method:
+
+```dart
+revoluteJoint.setLimits(0, pi);
+```
+
+
+#### Joint Motor
+
+You can use a motor to drive the relative rotation about the shared point. A maximum motor torque is
+provided so that infinite forces are not generated.
+
+```dart
+jointDef
+  ..enableMotor = true
+  ..motorSpeed = 5
+  ..maxMotorTorque = 100;
+```
+
+- `enableMotor`: Set to true to enable the motor
+- `motorSpeed`: The desired motor speed in radians per second
+- `maxMotorTorque`: The maximum motor torque used to achieve the desired motor speed in N-m.
+
+You change the motor's speed and torque after the joint was created using these methods:
+
+```dart
+revoluteJoint.setMotorSpeed(2);
+revoluteJoint.setMaxMotorTorque(200);
+```
+
+Also, you can get the joint angle and speed using the following methods:
+
+```dart
+revoluteJoint.jointAngle();
+revoluteJoint.jointSpeed();
 ```
