@@ -12,12 +12,14 @@ import 'package:examples/stories/bridge_libraries/forge2d/joints/friction_joint.
 import 'package:examples/stories/bridge_libraries/forge2d/joints/motor_joint.dart';
 import 'package:examples/stories/bridge_libraries/forge2d/joints/mouse_joint.dart';
 import 'package:examples/stories/bridge_libraries/forge2d/joints/pulley_joint.dart';
+import 'package:examples/stories/bridge_libraries/forge2d/joints/revolute_joint.dart';
 import 'package:examples/stories/camera_and_viewport/camera_and_viewport.dart';
 import 'package:examples/stories/collision_detection/collision_detection.dart';
 import 'package:examples/stories/components/components.dart';
 import 'package:examples/stories/effects/effects.dart';
 import 'package:examples/stories/experimental/experimental.dart';
 import 'package:examples/stories/games/games.dart';
+import 'package:examples/stories/image/image.dart';
 import 'package:examples/stories/input/input.dart';
 import 'package:examples/stories/layout/layout.dart';
 import 'package:examples/stories/parallax/parallax.dart';
@@ -41,6 +43,7 @@ void main() {
     'motor_joint': MotorJointExample.new,
     'mouse_joint': MouseJointExample.new,
     'pulley_joint': PulleyJointExample.new,
+    'revolute_joint': RevoluteJointExample.new,
   };
   final game = routes[page]?.call();
   if (game != null) {
@@ -77,6 +80,7 @@ void runAsDashbook() {
   addSystemStories(dashbook);
   addUtilsStories(dashbook);
   addWidgetsStories(dashbook);
+  addImageStories(dashbook);
 
   // Bridge package examples
   addForge2DStories(dashbook);

@@ -5,15 +5,15 @@ import 'package:examples/stories/bridge_libraries/forge2d/utils/boundaries.dart'
 import 'package:flame/input.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 
-class JointExample extends Forge2DGame with TapDetector {
+class RevoluteJointExample extends Forge2DGame with TapDetector {
   static const description = '''
     In this example we use a joint to keep a body with several fixtures stuck
     to another body.
-    
+
     Tap the screen to add more of these combined bodies.
   ''';
 
-  JointExample() : super(gravity: Vector2(0, 10.0));
+  RevoluteJointExample() : super(gravity: Vector2(0, 10.0));
 
   @override
   Future<void> onLoad() async {
