@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flame/src/camera/viewport.dart';
+import 'package:meta/meta.dart';
 import 'package:vector_math/vector_math_64.dart';
 
 /// [FixedAspectRatioViewport] is a rectangular viewport which auto-expands to
@@ -22,6 +23,7 @@ class FixedAspectRatioViewport extends Viewport {
   Rect _clipRect = Rect.zero;
 
   @override
+  @mustCallSuper
   void onLoad() {
     final canvasSize = findGame()!.canvasSize;
     _handleResize(canvasSize);
