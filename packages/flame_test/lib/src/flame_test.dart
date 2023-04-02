@@ -1,6 +1,5 @@
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
-import 'package:flutter_test/flutter_test.dart' as flutter_test show test;
 import 'package:flutter_test/flutter_test.dart' hide test;
 import 'package:meta/meta.dart';
 
