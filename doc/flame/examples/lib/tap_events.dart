@@ -5,18 +5,15 @@ import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/rendering.dart';
 
-/// The main [FlameGame] class uses [HasTappableComponents] in order to enable
-/// tap events propagation.
-class TapEventsGame extends FlameGame with HasTappableComponents {
+class TapEventsGame extends FlameGame {
   @override
   Future<void> onLoad() async {
     add(TapTarget());
   }
 }
 
-/// This component is the tappable blue-ish rectangle in the center of the
-/// game. It uses the [TapCallbacks] mixin in order to inform the game that it
-/// wants to receive tap events.
+/// This component is the tappable blue-ish rectangle in the center of the game.
+/// It uses the [TapCallbacks] mixin to receive tap events.
 class TapTarget extends PositionComponent with TapCallbacks {
   TapTarget() : super(anchor: Anchor.center);
 

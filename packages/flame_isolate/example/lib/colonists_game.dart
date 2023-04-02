@@ -14,7 +14,7 @@ import 'package:flutter_isolates_example/objects/colonists_object.dart';
 import 'package:flutter_isolates_example/terrain/terrain.dart';
 import 'package:flutter_isolates_example/units/worker.dart';
 
-class ColonistsGame extends FlameGame with HasTappables, KeyboardEvents {
+class ColonistsGame extends FlameGame with KeyboardEvents {
   final PositionComponent _cameraPos = PositionComponent();
   late final GameMap _currentMap;
   late final WorkerOvermind workerOvermind;

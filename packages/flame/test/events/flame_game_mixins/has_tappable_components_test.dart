@@ -2,6 +2,7 @@ import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
+import 'package:flame/src/events/flame_game_mixins/has_tappable_components.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -13,7 +14,7 @@ void main() {
         var nLongTapDown = 0;
         var nTapCancel = 0;
         var nTapUp = 0;
-        final game = _GameWithHasTappableComponents(
+        final game = FlameGame(
           children: [
             _TapCallbacksComponent(
               size: Vector2(200, 100),
@@ -28,7 +29,7 @@ void main() {
         await tester.pumpWidget(GameWidget(game: game));
         await tester.pump();
         await tester.pump(const Duration(milliseconds: 10));
-        expect(game.children.length, 1);
+        expect(game.children.length, 2);
 
         // regular tap
         await tester.tapAt(const Offset(100, 100));
@@ -73,7 +74,7 @@ void main() {
         var nTapCancelParent = 0;
         var nTapUpChild = 0;
         var nTapUpParent = 0;
-        final game = _GameWithHasTappableComponents(
+        final game = FlameGame(
           children: [
             _TapCallbacksComponent(
               size: Vector2.all(100),
@@ -99,7 +100,7 @@ void main() {
         await tester.pumpWidget(GameWidget(game: game));
         await tester.pump();
         await tester.pump();
-        expect(game.children.length, 1);
+        expect(game.children.length, 2);
         expect(game.children.first.children.length, 1);
 
         await tester.longPressAt(const Offset(50, 50));
@@ -130,7 +131,7 @@ void main() {
         var nTapDownParent = 0;
         var nTapCancelParent = 0;
         var nTapUpParent = 0;
-        final game = _GameWithHasTappableComponents(
+        final game = FlameGame(
           children: [
             _TapCallbacksComponent(
               size: Vector2.all(100),
@@ -147,7 +148,7 @@ void main() {
         await tester.pumpWidget(GameWidget(game: game));
         await tester.pump();
         await tester.pump();
-        expect(game.children.length, 1);
+        expect(game.children.length, 2);
         expect(game.children.first.children.length, 1);
 
         await tester.longPressAt(const Offset(50, 50));
@@ -170,7 +171,7 @@ void main() {
       'local coordinates during tap events',
       (tester) async {
         TapDownEvent? tapDownEvent;
-        final game = _GameWithHasTappableComponents(
+        final game = FlameGame(
           children: [
             PositionComponent(
               size: Vector2.all(400),
@@ -195,7 +196,7 @@ void main() {
         await tester.pumpWidget(GameWidget(game: game));
         await tester.pump();
         await tester.pump();
-        expect(game.children.length, 1);
+        expect(game.children.length, 2);
         expect(game.children.first.children.length, 1);
 
         await tester.tapAt(const Offset(200, 200));
@@ -215,7 +216,7 @@ void main() {
 
   group('HasTappablesBridge', () {
     testWidgets(
-      'taps are delivered to tappables of both kings',
+      'taps are delivered to tappables of both kinds',
       (tester) async {
         var nTappableDown = 0;
         var nTappableCancelled = 0;
@@ -226,8 +227,14 @@ void main() {
             _TapCallbacksComponent(
               size: Vector2(100, 100),
               position: Vector2(20, 20),
-              onTapDown: (e) => nTapCallbacksDown++,
-              onTapCancel: (e) => nTapCallbacksCancelled++,
+              onTapDown: (e) {
+                e.continuePropagation = true;
+                nTapCallbacksDown++;
+              },
+              onTapCancel: (e) {
+                e.continuePropagation = true;
+                nTapCallbacksCancelled++;
+              },
             ),
             _TappableComponent(
               size: Vector2(100, 100),
@@ -246,12 +253,13 @@ void main() {
         await tester.pumpWidget(GameWidget(game: game));
         await tester.pump();
         await tester.pump(const Duration(milliseconds: 10));
-        expect(game.children.length, 2);
+        expect(game.children.length, 3);
+        expect(game.children.last, isA<MultiTapDispatcher>());
 
-        await tester.longPressAt(const Offset(50, 50));
+        await tester.tapAt(const Offset(50, 50));
         await tester.pump(const Duration(seconds: 1));
-        expect(nTappableDown, 1);
         expect(nTapCallbacksDown, 1);
+        expect(nTappableDown, 1);
 
         // cancelled tap
         final gesture = await tester.startGesture(const Offset(100, 100));
@@ -266,13 +274,9 @@ void main() {
   });
 }
 
-class _GameWithHasTappableComponents extends FlameGame
-    with HasTappableComponents {
-  _GameWithHasTappableComponents({super.children});
-}
-
 class _GameWithDualTappableComponents extends FlameGame
-    with HasTappableComponents, HasTappablesBridge {
+    with HasTappablesBridge // ignore: deprecated_member_use_from_same_package
+{
   _GameWithDualTappableComponents({super.children});
 }
 

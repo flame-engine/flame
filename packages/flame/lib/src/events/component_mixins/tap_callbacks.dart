@@ -1,3 +1,4 @@
+import 'package:flame/game.dart';
 import 'package:flame/src/components/core/component.dart';
 import 'package:flame/src/components/mixins/tappable.dart';
 import 'package:flame/src/events/flame_game_mixins/has_tappable_components.dart';
@@ -12,9 +13,6 @@ import 'package:meta/meta.dart';
 /// [containsLocalPoint] method -- the component will only be considered
 /// "tapped" if the point where the tap has occurred is inside the component.
 ///
-/// When using this mixin, make sure to also add the [HasTappableComponents]
-/// mixin to your game.
-///
 /// This mixin is intended as a replacement of the [Tappable] mixin.
 mixin TapCallbacks on Component {
   void onTapDown(TapDownEvent event) {}
@@ -26,10 +24,9 @@ mixin TapCallbacks on Component {
   @mustCallSuper
   void onMount() {
     super.onMount();
-    assert(
-      findGame()! is HasTappableComponents,
-      'The components with TapCallbacks can only be added to a FlameGame with '
-      'the HasTappableComponents mixin',
-    );
+    final game = findGame()! as FlameGame;
+    if (game.firstChild<MultiTapDispatcher>() == null) {
+      game.add(MultiTapDispatcher());
+    }
   }
 }

@@ -160,6 +160,8 @@ class MultiDragDispatcher extends Component implements MultiDragListener {
     onDragCancel(DragCancelEvent(pointerId));
   }
 
+  //#endregion
+
   @override
   void onMount() {
     if (game.firstChild<MultiDragDispatcher>() == null) {
@@ -186,6 +188,4 @@ class MultiDragDispatcher extends Component implements MultiDragListener {
 
   @override
   GameRenderBox get renderBox => game.renderBox;
-
-  //#endregion
 }

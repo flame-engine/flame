@@ -6,7 +6,7 @@ import 'package:meta/meta.dart';
 /// [TaggedComponent] is a utility class that represents a pair of a component
 /// and a pointer id.
 ///
-/// This class is used by [HasTappableComponents] and [MultiDragDispatcher]
+/// This class is used by [MultiTapDispatcher] and [MultiDragDispatcher]
 /// to store information about which components were affected by which pointer
 /// event, so that subsequent events can be reliably delivered to the same
 /// components.

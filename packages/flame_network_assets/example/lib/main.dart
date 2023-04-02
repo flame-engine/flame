@@ -23,7 +23,7 @@ class MyGame extends FlameGame with TapDetector {
   }
 
   @override
-  bool onTapUp(TapUpInfo info) {
+  void onTapUp(TapUpInfo info) {
     add(
       SpriteAnimationComponent.fromFrameData(
         playerSprite,
@@ -37,7 +37,5 @@ class MyGame extends FlameGame with TapDetector {
         position: info.eventPosition.game,
       ),
     );
-
-    return true;
   }
 }

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flame/components.dart';
+import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
 import 'package:flame_rive/flame_rive.dart';
 import 'package:flame_test/flame_test.dart';
@@ -54,11 +55,10 @@ void main() {
         expect(riveComponent.parent, game);
       });
 
-      testWithGame<_RiveComponentHasTappable>(
+      testWithFlameGame(
         'Can Add with Tappable',
-        _RiveComponentHasTappable.new,
         (game) async {
-          final child = _RiveComponentWthTappable(
+          final child = _RiveComponentWithTappable(
             artboard: await loadArtboard(riveFile),
           );
           await game.ensureAdd(child);
@@ -169,8 +169,6 @@ class _RiveComponentWithAnimation extends RiveComponent {
   }
 }
 
-class _RiveComponentHasTappable extends FlameGame with HasTappables {}
-
-class _RiveComponentWthTappable extends RiveComponent with Tappable {
-  _RiveComponentWthTappable({required super.artboard});
+class _RiveComponentWithTappable extends RiveComponent with TapCallbacks {
+  _RiveComponentWithTappable({required super.artboard});
 }
