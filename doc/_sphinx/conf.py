@@ -37,6 +37,7 @@ extensions = [
     'extensions.package',
     'extensions.yarn_lexer',
     'sphinxcontrib.jquery',
+    'sphinx_copybutton'
 ]
 
 # Configuration options for MyST:
