@@ -614,11 +614,7 @@ class Component {
 
   /// Removes all the children for which the [test] function returns true.
   void removeWhere(bool Function(Component component) test) {
-    for (final component in children) {
-      if (test(component)) {
-        remove(component);
-      }
-    }
+    removeAll([...children.where(test)]);
   }
 
   void _removeChild(Component child) {
