@@ -96,52 +96,6 @@ class GameTester<T extends Game> {
     this.pumpWidget,
   });
 
-  @Deprecated('Will be removed in version 1.7.0')
-  Future<T> initializeGame() async {
-    final game = createGame();
-
-    final size = gameSize ?? Vector2.all(500);
-    game.onGameResize(size);
-
-    await game.onLoad();
-    // ignore: invalid_use_of_internal_member
-    game.mount();
-    if (game is FlameGame && makeReady) {
-      await game.ready();
-    }
-    return game;
-  }
-
-  /// Creates a [Game] specific test case with given [description].
-  ///
-  /// Use [verify] closure to make verifications/assertions.
-  @isTest
-  @Deprecated('Will be removed in version 1.6.0')
-  void test(
-    String description,
-    VerifyFunction<T> verify, {
-    String? skip,
-    String? testOn,
-    Timeout? timeout,
-    dynamic tags,
-    Map<String, dynamic>? onPlatform,
-    int? retry,
-  }) {
-    flutter_test.test(
-      description,
-      () async {
-        final game = await initializeGame();
-        await verify(game);
-      },
-      skip: skip,
-      testOn: testOn,
-      timeout: timeout,
-      tags: tags,
-      onPlatform: onPlatform,
-      retry: retry,
-    );
-  }
-
   /// Creates a [Game] specific test case with given [description]
   /// which runs inside the Flutter test environment.
   ///
