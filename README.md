@@ -113,21 +113,28 @@ in the section below, or contact us on [Discord](https://discord.gg/pxrBmy4).
 
 ## Support
 
-The simplest way to show us your support is by giving the project a star.
+The simplest way to show us your support is by giving the project a star! :star:
 
 You can also support us monetarily by donating through OpenCollective:
 
 <a href="https://opencollective.com/blue-fire/donate" target="_blank">
-  <img src="https://opencollective.com/blue-fire/donate/button@2x.png?color=blue" width=300 />
+  <img src="https://opencollective.com/blue-fire/donate/button@2x.png?color=blue" width=200 />
 </a>
 
-Or through GitHub sponsors:
+Through GitHub Sponsors:
 
-[![GitHub Badge](https://img.shields.io/badge/Github%20Sponsor-blue?style=for-the-badge&logo=github&logoColor=white)](https://github.com/sponsors/bluefireteam)
+<a href="https://github.com/sponsors/bluefireteam" target="_blank">
+  <img
+    src="https://img.shields.io/badge/Github%20Sponsor-blue?style=for-the-badge&logo=github&logoColor=white"
+    width=200
+  />
+</a>
 
 Or by becoming a patron on Patreon:
 
-[![Patreon](https://c5.patreon.com/external/logo/become_a_patron_button.png)](https://www.patreon.com/bluefireoss)
+<a href="https://www.patreon.com/bluefireoss" target="_blank">
+  <img src="https://c5.patreon.com/external/logo/become_a_patron_button.png" width=200 />
+</a>
 
 You can also show on your repository that your game is made with Flame by using one of the following
 badges:
