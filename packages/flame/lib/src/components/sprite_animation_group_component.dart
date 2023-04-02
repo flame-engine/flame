@@ -19,7 +19,7 @@ class SpriteAnimationGroupComponent<T> extends PositionComponent
   /// Map with the available states for this animation group
   Map<T, SpriteAnimation>? _animations;
 
-  /// Returns the map of animation status and their corresponding animations.
+  /// Returns the map of animation state and their corresponding animations.
   Map<T, SpriteAnimation>? get animations => _animations;
 
   /// Sets the given [value] as new animation state map.
@@ -27,9 +27,9 @@ class SpriteAnimationGroupComponent<T> extends PositionComponent
     if (_animations != value) {
       _animations = value;
 
-      _animationsTickers = animations != null
+      _animationTickers = _animations != null
           ? Map.fromEntries(
-              animations!.entries
+              _animations!.entries
                   .map((e) => MapEntry(e.key, e.value.ticker()))
                   .toList(),
             )
@@ -38,7 +38,10 @@ class SpriteAnimationGroupComponent<T> extends PositionComponent
   }
 
   /// Map containing animation tickers for each animation state.
-  Map<T, SpriteAnimationTicker>? _animationsTickers;
+  Map<T, SpriteAnimationTicker>? _animationTickers;
+
+  /// Returns a map containing [SpriteAnimationTicker] for each state.
+  Map<T, SpriteAnimationTicker>? get animationTickers => _animationTickers;
 
   /// Whether the animation is paused or playing.
   bool playing;
@@ -70,7 +73,7 @@ class SpriteAnimationGroupComponent<T> extends PositionComponent
         _current = current,
         _autoResize = autoResize ?? size == null,
         _animations = animations,
-        _animationsTickers = animations != null
+        _animationTickers = animations != null
             ? Map.fromEntries(
                 animations.entries
                     .map((e) => MapEntry(e.key, e.value.ticker()))
@@ -127,7 +130,7 @@ class SpriteAnimationGroupComponent<T> extends PositionComponent
         );
 
   SpriteAnimation? get animation => animations?[current];
-  SpriteAnimationTicker? get animationTicker => _animationsTickers?[current];
+  SpriteAnimationTicker? get animationTicker => _animationTickers?[current];
 
   /// Returns the current group state.
   T? get current => _current;
