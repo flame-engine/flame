@@ -30,8 +30,8 @@ class ImageBrightnessExample extends FlameGame {
 
     add(
       SpriteComponent(
-        sprite: Sprite(brightenImageimage),
-        position: (size / 2) + Vector2(0, brightenImageimage.height / 2),
+        sprite: Sprite(brightenedImage),
+        position: (size / 2) + Vector2(0, brightenedImage.height / 2),
         size: image.size,
         anchor: Anchor.center,
       ),
