@@ -40,7 +40,6 @@ extensions = [
     'sphinx_copybutton'
 ]
 
-
 # Configuration options for MyST:
 # https://myst-parser.readthedocs.io/en/latest/syntax/optional.html
 myst_enable_extensions = [
