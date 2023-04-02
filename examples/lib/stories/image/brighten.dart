@@ -17,7 +17,7 @@ class ImageBrightnessExample extends FlameGame {
   @override
   Future<void> onLoad() async {
     final image = await images.load('flame.png');
-    final brightenImageimage = await image.brighten(brightness / 100);
+    final brightenedImage = await image.brighten(brightness / 100);
 
     add(
       SpriteComponent(
