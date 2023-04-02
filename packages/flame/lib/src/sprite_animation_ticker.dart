@@ -4,17 +4,10 @@ import 'package:flame/components.dart';
 
 /// A helper class to make the [spriteAnimation] tick.
 class SpriteAnimationTicker {
+  SpriteAnimationTicker(this.spriteAnimation);
+
   // The current sprite animation.
-  late SpriteAnimation _spriteAnimation;
-
-  /// Returns the current sprite animation.
-  SpriteAnimation get spriteAnimation => _spriteAnimation;
-
-  /// Sets the given sprite animation as current.
-  set spriteAnimation(SpriteAnimation value) {
-    _spriteAnimation = value;
-    reset();
-  }
+  final SpriteAnimation spriteAnimation;
 
   /// Index of the current frame that should be displayed.
   int currentIndex = 0;
@@ -40,18 +33,17 @@ class SpriteAnimationTicker {
   Completer<void>? _completeCompleter;
 
   /// The current frame that should be displayed.
-  SpriteAnimationFrame get currentFrame =>
-      _spriteAnimation.frames[currentIndex];
+  SpriteAnimationFrame get currentFrame => spriteAnimation.frames[currentIndex];
 
   /// Returns whether the animation is on the first frame.
   bool get isFirstFrame => currentIndex == 0;
 
   /// Returns whether the animation is on the last frame.
-  bool get isLastFrame => currentIndex == _spriteAnimation.frames.length - 1;
+  bool get isLastFrame => currentIndex == spriteAnimation.frames.length - 1;
 
   /// Returns whether the animation has only a single frame (and is, thus, a
   /// still image).
-  bool get isSingleFrame => _spriteAnimation.frames.length == 1;
+  bool get isSingleFrame => spriteAnimation.frames.length == 1;
 
   /// A future that will complete when the animation completes.
   ///
@@ -78,8 +70,8 @@ class SpriteAnimationTicker {
 
   /// Sets this animation to be on the last frame.
   void setToLast() {
-    currentIndex = _spriteAnimation.frames.length - 1;
-    clock = _spriteAnimation.frames[currentIndex].stepTime;
+    currentIndex = spriteAnimation.frames.length - 1;
+    clock = spriteAnimation.frames[currentIndex].stepTime;
     elapsed = totalDuration();
     update(0);
   }
@@ -87,7 +79,7 @@ class SpriteAnimationTicker {
   /// Computes the total duration of this animation
   /// (before it's done or repeats).
   double totalDuration() {
-    return _spriteAnimation.frames
+    return spriteAnimation.frames
         .map((f) => f.stepTime)
         .reduce((a, b) => a + b);
   }
@@ -128,7 +120,7 @@ class SpriteAnimationTicker {
 
     while (clock >= currentFrame.stepTime) {
       if (isLastFrame) {
-        if (_spriteAnimation.loop) {
+        if (spriteAnimation.loop) {
           clock -= currentFrame.stepTime;
           currentIndex = 0;
           onFrame?.call(currentIndex);
