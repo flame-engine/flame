@@ -107,7 +107,7 @@ class EmberPlayer extends SpriteAnimationComponent
   }) : super(size: Vector2.all(64), anchor: Anchor.center);
 
   @override
-  Future<void> onLoad() async {
+  void onLoad() {
     animation = SpriteAnimation.fromFrameData(
       game.images.fromCache('ember.png'),
       SpriteAnimationData.sequenced(

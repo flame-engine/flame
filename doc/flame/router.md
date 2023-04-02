@@ -37,7 +37,7 @@ class MyGame extends FlameGame {
   late final RouterComponent router;
 
   @override
-  Future<void> onLoad() async {
+  void onLoad() {
     add(
       router = RouterComponent(
         routes: {

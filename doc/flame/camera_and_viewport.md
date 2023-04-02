@@ -156,7 +156,7 @@ class YourGame extends Game {
   Camera? camera;
 
   @override
-  Future<void> onLoad() async {}
+  void onLoad() {}
 
   @override
   void render(Canvas canvas) {}
@@ -170,7 +170,7 @@ We first create a new camera instance on load and assign our game as the referen
 
 ```dart
   @override
-  Future<void> onLoad() async {
+  void onLoad() {
     camera = Camera();
 
     // This is required for the camera to work.

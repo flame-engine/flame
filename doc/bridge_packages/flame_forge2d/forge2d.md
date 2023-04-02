@@ -71,7 +71,7 @@ Instead of `add(Bullet()))`, `parent?.add(Bullet())` should be used (as bellow).
 ```dart
 class Bullet extends BodyComponent  {
   @override
-  Future<void> onLoad() async {
+  void onLoad() {
     ...
     isBullet = true;
     ...
@@ -80,7 +80,7 @@ class Bullet extends BodyComponent  {
 
 class Player extends BodyComponent  {
   @override
-  Future<void> onLoad() async {
+  void onLoad() {
     parent?.add(Bullet());
   }
 }
