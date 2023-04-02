@@ -62,11 +62,11 @@ void main() {
         ),
       );
 
-      expect(game.containsLocalPoint(Vector2(9, 9)), true);
-      expect(component.dragUpdateEvent, 1);
+      expect(game.containsLocalPoint(Vector2(9, 9)), isTrue);
+      expect(component.dragUpdateEvent, equals(1));
 
       dispatcher.onDragEnd(DragEndEvent(1, DragEndDetails()));
-      expect(component.dragEndEvent, 1);
+      expect(component.dragEndEvent, equals(1));
     });
 
     testWithFlameGame(
@@ -79,8 +79,8 @@ void main() {
           ..height = 10;
         await game.ensureAdd(component);
         final dispatcher = game.firstChild<MultiDragDispatcher>()!;
-        expect(component.dragStartEvent, 0);
-        expect(component.dragUpdateEvent, 0);
+        expect(component.dragStartEvent, equals(0));
+        expect(component.dragUpdateEvent, equals(0));
 
         dispatcher.onDragUpdate(
           createDragUpdateEvents(
@@ -88,7 +88,7 @@ void main() {
             globalPosition: const Offset(15, 15),
           ),
         );
-        expect(component.dragUpdateEvent, 0);
+        expect(component.dragUpdateEvent, equals(0));
       },
     );
 
@@ -104,14 +104,14 @@ void main() {
         await tester.pumpWidget(GameWidget(game: game));
         await tester.pump();
         await tester.pump();
-        expect(game.children.length, 2);
-        expect(component.isMounted, true);
+        expect(game.children.length, equals(2));
+        expect(component.isMounted, isTrue);
 
         await tester.dragFrom(const Offset(10, 10), const Offset(90, 90));
-        expect(component.dragStartEvent, 1);
-        expect(component.dragUpdateEvent > 0, true);
-        expect(component.dragEndEvent, 1);
-        expect(component.dragCancelEvent, 0);
+        expect(component.dragStartEvent, equals(1));
+        expect(component.dragUpdateEvent, greaterThan(0));
+        expect(component.dragEndEvent, equals(1));
+        expect(component.dragCancelEvent, equals(0));
       },
     );
 
@@ -123,13 +123,13 @@ void main() {
         await tester.pumpWidget(GameWidget(game: game));
         await tester.pump();
         await tester.pump();
-        expect(component.isMounted, true);
+        expect(component.isMounted, isTrue);
 
         await tester.dragFrom(const Offset(110, 110), const Offset(120, 120));
-        expect(component.dragStartEvent, 0);
-        expect(component.dragUpdateEvent, 0);
-        expect(component.dragEndEvent, 0);
-        expect(component.dragCancelEvent, 0);
+        expect(component.dragStartEvent, equals(0));
+        expect(component.dragUpdateEvent, equals(0));
+        expect(component.dragEndEvent, equals(0));
+        expect(component.dragCancelEvent, equals(0));
       },
     );
 
@@ -138,7 +138,7 @@ void main() {
       _DragCallbacksGame.new,
       (game) async {
         await game.ready();
-        expect(game.children.length, 1);
+        expect(game.children.length, equals(1));
         expect(game.children.first, isA<MultiDragDispatcher>());
       },
     );
@@ -150,14 +150,14 @@ void main() {
         await tester.pumpWidget(GameWidget(game: game));
         await tester.pump();
         await tester.pump();
-        expect(game.children.length, 1);
-        expect(game.isMounted, true);
+        expect(game.children.length, equals(1));
+        expect(game.isMounted, isTrue);
 
         await tester.dragFrom(const Offset(10, 10), const Offset(90, 90));
-        expect(game.dragStartEvent, 1);
-        expect(game.dragUpdateEvent > 0, true);
-        expect(game.dragEndEvent, 1);
-        expect(game.dragCancelEvent, 0);
+        expect(game.dragStartEvent, equals(1));
+        expect(game.dragUpdateEvent, greaterThan(0));
+        expect(game.dragEndEvent, equals(1));
+        expect(game.dragCancelEvent, equals(0));
       },
     );
   });

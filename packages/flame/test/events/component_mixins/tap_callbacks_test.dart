@@ -24,7 +24,7 @@ void main() {
       game.add(component);
       await game.ready();
 
-      expect(game.children.whereType<MultiTapDispatcher>().length, 1);
+      expect(game.children.whereType<MultiTapDispatcher>().length, equals(1));
       game.firstChild<MultiTapDispatcher>()!.onTapDown(
             createTapDownEvents(
               localPosition: const Offset(12, 12),
@@ -52,9 +52,9 @@ void main() {
             globalPosition: const Offset(12, 12),
           ),
         );
-        expect(component.tapDownEvent, 1);
-        expect(component.tapUpEvent, 0);
-        expect(component.tapCancelEvent, 0);
+        expect(component.tapDownEvent, equals(1));
+        expect(component.tapUpEvent, equals(0));
+        expect(component.tapCancelEvent, equals(0));
 
         // [onTapUp] will call, if there was an [onTapDown] event before
         dispatcher.onTapUp(
@@ -64,7 +64,7 @@ void main() {
           ),
         );
 
-        expect(component.tapUpEvent, 1);
+        expect(component.tapUpEvent, equals(1));
       },
     );
 
@@ -86,9 +86,9 @@ void main() {
             globalPosition: const Offset(12, 12),
           ),
         );
-        expect(component.tapDownEvent, 1);
-        expect(component.tapUpEvent, 0);
-        expect(component.tapCancelEvent, 0);
+        expect(component.tapDownEvent, equals(1));
+        expect(component.tapUpEvent, equals(0));
+        expect(component.tapCancelEvent, equals(0));
 
         // [onTapUp] will call, if there was an [onTapDown] event before
         dispatcher.onLongTapDown(
@@ -97,12 +97,12 @@ void main() {
             globalPosition: const Offset(12, 12),
           ),
         );
-        expect(component.longTapDownEvent, 1);
+        expect(component.longTapDownEvent, equals(1));
 
         dispatcher.onTapCancel(
           TapCancelEvent(1),
         );
-        expect(component.tapCancelEvent, 1);
+        expect(component.tapCancelEvent, equals(1));
       },
     );
 
@@ -119,13 +119,13 @@ void main() {
         await tester.pump();
         await tester.pump();
         expect(game.children.length, 2);
-        expect(component.isMounted, true);
+        expect(component.isMounted, isTrue);
 
         await tester.tapAt(const Offset(10, 10));
         await tester.pump(const Duration(seconds: 500));
-        expect(component.tapDownEvent, 1);
-        expect(component.tapUpEvent, 1);
-        expect(component.tapCancelEvent, 0);
+        expect(component.tapDownEvent, equals(1));
+        expect(component.tapUpEvent, equals(1));
+        expect(component.tapCancelEvent, equals(0));
       },
     );
 
@@ -137,14 +137,14 @@ void main() {
         await tester.pumpWidget(GameWidget(game: game));
         await tester.pump();
         await tester.pump();
-        expect(component.isMounted, true);
+        expect(component.isMounted, isTrue);
 
         await tester.tapAt(const Offset(110, 110));
         await tester.pump(const Duration(milliseconds: 500));
-        expect(component.tapDownEvent, 0);
-        expect(component.tapUpEvent, 0);
-        expect(component.longTapDownEvent, 0);
-        expect(component.tapCancelEvent, 0);
+        expect(component.tapDownEvent, equals(0));
+        expect(component.tapUpEvent, equals(0));
+        expect(component.longTapDownEvent, equals(0));
+        expect(component.tapCancelEvent, equals(0));
       },
     );
 
@@ -153,7 +153,7 @@ void main() {
       _TapCallbacksGame.new,
       (game) async {
         await game.ready();
-        expect(game.children.length, 1);
+        expect(game.children.length, equals(1));
         expect(game.children.first, isA<MultiTapDispatcher>());
       },
     );
@@ -165,15 +165,15 @@ void main() {
         await tester.pumpWidget(GameWidget(game: game));
         await tester.pump();
         await tester.pump();
-        expect(game.children.length, 1);
-        expect(game.isMounted, true);
+        expect(game.children.length, equals(1));
+        expect(game.isMounted, isTrue);
 
         await tester.tapAt(const Offset(10, 10));
         await tester.pump(const Duration(seconds: 500));
-        expect(game.tapDownEvent, 1);
-        expect(game.tapUpEvent, 1);
-        expect(game.longTapDownEvent, 0);
-        expect(game.tapCancelEvent, 0);
+        expect(game.tapDownEvent, equals(1));
+        expect(game.tapUpEvent, equals(1));
+        expect(game.longTapDownEvent, equals(0));
+        expect(game.tapCancelEvent, equals(0));
       },
     );
   });
