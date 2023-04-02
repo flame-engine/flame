@@ -79,7 +79,8 @@ class InternalSpriteAnimationWidget extends StatefulWidget {
   /// The [SpriteAnimation] to be rendered
   final SpriteAnimation animation;
 
-  final SpriteAnimationTicker _spriteAnimationTicker = SpriteAnimationTicker();
+  /// The [SpriteAnimationTicker] use for updating the [animation].
+  final SpriteAnimationTicker _spriteAnimationTicker;
 
   /// The positioning [Anchor]
   final Anchor anchor;
@@ -92,9 +93,7 @@ class InternalSpriteAnimationWidget extends StatefulWidget {
     this.playing = true,
     this.anchor = Anchor.topLeft,
     super.key,
-  }) {
-    _spriteAnimationTicker.spriteAnimation = animation;
-  }
+  }) : _spriteAnimationTicker = animation.ticker();
 
   @override
   State createState() => _InternalSpriteAnimationWidgetState();
