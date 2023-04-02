@@ -5,6 +5,7 @@ import 'package:flame/src/cache/images.dart';
 import 'package:flame/src/extensions/vector2.dart';
 import 'package:flame/src/flame.dart';
 import 'package:flame/src/sprite.dart';
+import 'package:flame/src/sprite_animation_ticker.dart';
 
 export 'sprite.dart';
 
@@ -279,5 +280,10 @@ class SpriteAnimation {
   /// reversed order
   SpriteAnimation reversed() {
     return SpriteAnimation(frames.reversed.toList(), loop: loop);
+  }
+
+  /// Returns a new instance of [SpriteAnimationTicker].
+  SpriteAnimationTicker ticker() {
+    return SpriteAnimationTicker(this);
   }
 }
