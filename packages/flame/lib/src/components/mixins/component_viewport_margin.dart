@@ -1,4 +1,5 @@
 import 'package:flame/components.dart';
+import 'package:flame/experimental.dart' show CameraComponent;
 import 'package:flame/game.dart';
 import 'package:flutter/widgets.dart' show EdgeInsets;
 import 'package:meta/meta.dart';
@@ -13,6 +14,9 @@ import 'package:meta/meta.dart';
 /// If you set the position of the component instead of a margin when
 /// initializing the component, the margin to the edge of the screen from that
 /// position will be used.
+///
+/// Do note that this only works with the old style camera and not the
+/// [CameraComponent].
 mixin ComponentViewportMargin on PositionComponent, HasGameRef {
   @override
   PositionType positionType = PositionType.viewport;

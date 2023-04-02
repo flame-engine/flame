@@ -17,7 +17,7 @@ import 'package:examples/stories/bridge_libraries/forge2d/joints/revolute_joint.
 import 'package:examples/stories/bridge_libraries/forge2d/raycast_example.dart';
 import 'package:examples/stories/bridge_libraries/forge2d/revolute_joint_with_motor_example.dart';
 import 'package:examples/stories/bridge_libraries/forge2d/sprite_body_example.dart';
-import 'package:examples/stories/bridge_libraries/forge2d/tappable_example.dart';
+import 'package:examples/stories/bridge_libraries/forge2d/tap_callbacks_example.dart';
 import 'package:examples/stories/bridge_libraries/forge2d/widget_example.dart';
 import 'package:flame/game.dart';
 
@@ -71,7 +71,7 @@ void addForge2DStories(Dashbook dashbook) {
     ..add(
       'Tappable Body',
       (DashbookContext ctx) => GameWidget(game: TappableExample()),
-      codeLink: link('tappable_example.dart'),
+      codeLink: link('tap_callbacks_example.dart'),
       info: TappableExample.description,
     )
     ..add(

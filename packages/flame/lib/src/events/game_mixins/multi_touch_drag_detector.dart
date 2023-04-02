@@ -41,6 +41,8 @@ mixin MultiTouchDragDetector on Game implements MultiDragListener {
     onDragCancel(pointerId);
   }
 
+  //#endregion
+
   @override
   void mount() {
     gestureDetectors.add<ImmediateMultiDragGestureRecognizer>(
@@ -51,6 +53,4 @@ mixin MultiTouchDragDetector on Game implements MultiDragListener {
     );
     super.mount();
   }
-
-  //#endregion
 }

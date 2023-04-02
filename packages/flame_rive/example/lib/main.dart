@@ -1,6 +1,5 @@
-import 'package:flame/components.dart';
+import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
-import 'package:flame/input.dart';
 import 'package:flame_rive/flame_rive.dart';
 import 'package:flutter/material.dart';
 
@@ -26,7 +25,7 @@ class _MyAppState extends State<MyApp> {
   }
 }
 
-class RiveExampleGame extends FlameGame with HasTappables {
+class RiveExampleGame extends FlameGame {
   @override
   Color backgroundColor() {
     return const Color(0xFFFFFFFF);
@@ -40,7 +39,7 @@ class RiveExampleGame extends FlameGame with HasTappables {
   }
 }
 
-class SkillsAnimationComponent extends RiveComponent with Tappable {
+class SkillsAnimationComponent extends RiveComponent with TapCallbacks {
   SkillsAnimationComponent(Artboard artboard)
       : super(
           artboard: artboard,
@@ -63,12 +62,12 @@ class SkillsAnimationComponent extends RiveComponent with Tappable {
   }
 
   @override
-  bool onTapDown(TapDownInfo info) {
+  void onTapDown(TapDownEvent info) {
     final levelInput = _levelInput;
     if (levelInput == null) {
-      return false;
+      return;
     }
     levelInput.value = (levelInput.value + 1) % 3;
-    return true;
+    info.continuePropagation = true;
   }
 }

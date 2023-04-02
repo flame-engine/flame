@@ -1,6 +1,5 @@
 import 'package:flame/extensions.dart';
 import 'package:flame/src/events/component_mixins/tap_callbacks.dart';
-import 'package:flame/src/events/flame_game_mixins/has_tappable_components.dart';
 import 'package:flame/src/events/messages/position_event.dart';
 import 'package:flame/src/events/messages/tap_cancel_event.dart';
 import 'package:flame/src/events/messages/tap_up_event.dart';
@@ -14,8 +13,7 @@ import 'package:flutter/gestures.dart';
 /// This is a [PositionEvent], where the position is the point of touch.
 ///
 /// In order for a component to be eligible to receive this event, it must add
-/// the [TapCallbacks] mixin, and the game object should have the
-/// [HasTappableComponents] mixin.
+/// the [TapCallbacks] mixin.
 class TapDownEvent extends PositionEvent {
   TapDownEvent(this.pointerId, TapDownDetails details)
       : deviceKind = details.kind ?? PointerDeviceKind.unknown,

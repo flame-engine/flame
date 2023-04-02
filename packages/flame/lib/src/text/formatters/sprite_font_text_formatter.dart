@@ -1,8 +1,6 @@
 import 'dart:typed_data';
 import 'dart:ui' hide LineMetrics;
 
-import 'package:flame/src/text/common/glyph.dart';
-import 'package:flame/src/text/common/glyph_data.dart';
 import 'package:flame/src/text/common/line_metrics.dart';
 import 'package:flame/src/text/common/sprite_font.dart';
 import 'package:flame/src/text/elements/sprite_font_text_element.dart';
@@ -10,28 +8,6 @@ import 'package:flame/src/text/elements/text_element.dart';
 import 'package:flame/src/text/formatters/text_formatter.dart';
 
 class SpriteFontTextFormatter extends TextFormatter {
-  @Deprecated('Use SpriteFontTextFormatter.fromFont() instead; this '
-      'constructor will be removed in 1.6.0')
-  SpriteFontTextFormatter({
-    required Image source,
-    required double charWidth,
-    required double charHeight,
-    // ignore: deprecated_member_use_from_same_package
-    required Map<String, GlyphData> glyphs,
-    this.scale = 1,
-    this.letterSpacing = 0,
-  })  : font = SpriteFont(
-          source: source,
-          size: charHeight,
-          ascent: charHeight,
-          defaultCharWidth: charWidth,
-          glyphs: [
-            for (final kv in glyphs.entries)
-              Glyph.fromGlyphData(kv.key, kv.value)
-          ],
-        ),
-        paint = Paint();
-
   SpriteFontTextFormatter.fromFont(
     this.font, {
     this.scale = 1.0,

@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flame/experimental.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
@@ -9,7 +10,7 @@ import 'package:flame/input.dart';
 enum Shapes { circle, rectangle, polygon }
 
 class GestureHitboxesExample extends FlameGame
-    with HasTappables, HasHoverables {
+    with TapCallbacks, HasHoverables {
   static const description = '''
     Tap to create a PositionComponent with a randomly shaped hitbox.
     You can then hover over to shapes to see that they receive the hover events
@@ -49,17 +50,16 @@ class GestureHitboxesExample extends FlameGame
   }
 
   @override
-  bool onTapDown(int pointerId, TapDownInfo info) {
-    super.onTapDown(pointerId, info);
-    final tapPosition = info.eventPosition.game;
+  void onTapDown(TapDownEvent info) {
+    super.onTapDown(info);
+    final tapPosition = info.localPosition;
     final component = randomShape(tapPosition);
     add(component);
-    return true;
   }
 }
 
 class MyShapeComponent extends PositionComponent
-    with Tappable, Hoverable, GestureHitboxes {
+    with TapCallbacks, Hoverable, GestureHitboxes {
   final ShapeHitbox hitbox;
   late final Color baseColor;
   late final Color hoverColor;
@@ -69,9 +69,7 @@ class MyShapeComponent extends PositionComponent
     super.position,
     super.size,
     super.angle,
-  }) : super(
-          anchor: Anchor.center,
-        );
+  }) : super(anchor: Anchor.center);
 
   @override
   Future<void> onLoad() async {
@@ -83,9 +81,8 @@ class MyShapeComponent extends PositionComponent
   }
 
   @override
-  bool onTapDown(TapDownInfo _) {
+  void onTapDown(TapDownEvent _) {
     removeFromParent();
-    return true;
   }
 
   @override

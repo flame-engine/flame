@@ -691,6 +691,19 @@ void main() {
           );
         },
       );
+
+      testWithFlameGame(
+        'removeWhere works before all components are mounted',
+        (game) async {
+          game.add(_RemoveWhereComponent());
+          expect(
+            () async {
+              await game.ready();
+            },
+            returnsNormally,
+          );
+        },
+      );
     });
 
     group('Moving components', () {
@@ -1300,5 +1313,13 @@ class _OnChildrenChangedComponent extends PositionComponent {
   void onChildrenChanged(Component child, ChildrenChangeType type) {
     onChangedChildrenRuns++;
     lastChangeType = type;
+  }
+}
+
+class _RemoveWhereComponent extends Component {
+  @override
+  Future<void> onLoad() async {
+    add(Component());
+    removeWhere((_) => true);
   }
 }

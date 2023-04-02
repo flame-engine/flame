@@ -2,16 +2,15 @@ import 'dart:math';
 
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flame/experimental.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
-import 'package:flame/input.dart';
 import 'package:flame/palette.dart';
 import 'package:flutter/material.dart' hide Image, Draggable;
 
 enum Shapes { circle, rectangle, polygon }
 
-class MultipleShapesExample extends FlameGame
-    with HasCollisionDetection, HasDraggables {
+class MultipleShapesExample extends FlameGame with HasCollisionDetection {
   static const description = '''
     An example with many hitboxes that move around on the screen and during
     collisions they change color depending on what it is that they have collided
@@ -81,7 +80,7 @@ class MultipleShapesExample extends FlameGame
 }
 
 abstract class MyCollidable extends PositionComponent
-    with Draggable, CollisionCallbacks, GestureHitboxes {
+    with DragCallbacks, CollisionCallbacks, GestureHitboxes {
   double rotationSpeed = 0.0;
   final Vector2 velocity;
   final delta = Vector2.zero();
@@ -91,6 +90,7 @@ abstract class MyCollidable extends PositionComponent
   late final Paint _dragIndicatorPaint;
   final ScreenHitbox screenHitbox;
   ShapeHitbox? hitbox;
+  bool isDragged = false;
 
   MyCollidable(
     Vector2 position,
@@ -154,9 +154,14 @@ abstract class MyCollidable extends PositionComponent
   }
 
   @override
-  bool onDragEnd(DragEndInfo info) {
+  void onDragStart(DragStartEvent info) {
+    isDragged = true;
+  }
+
+  @override
+  void onDragEnd(DragEndEvent info) {
     velocity.setFrom(info.velocity / 10);
-    return true;
+    isDragged = false;
   }
 }
 

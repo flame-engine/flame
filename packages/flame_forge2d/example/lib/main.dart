@@ -1,4 +1,5 @@
 import 'package:flame/components.dart';
+import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flutter/widgets.dart';
@@ -7,7 +8,7 @@ void main() {
   runApp(GameWidget(game: Forge2DExample()));
 }
 
-class Forge2DExample extends Forge2DGame with HasTappables {
+class Forge2DExample extends Forge2DGame {
   @override
   Future<void> onLoad() async {
     add(Ball(size / 2));
@@ -31,7 +32,7 @@ class Forge2DExample extends Forge2DGame with HasTappables {
   }
 }
 
-class Ball extends BodyComponent with Tappable {
+class Ball extends BodyComponent with TapCallbacks {
   final Vector2 _position;
 
   Ball(this._position);
@@ -59,9 +60,8 @@ class Ball extends BodyComponent with Tappable {
   }
 
   @override
-  bool onTapDown(_) {
+  void onTapDown(_) {
     body.applyLinearImpulse(Vector2.random() * 5000);
-    return false;
   }
 }
 
