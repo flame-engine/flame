@@ -10,17 +10,17 @@ export '../sprite_animation.dart';
 class SpriteAnimationComponent extends PositionComponent
     with HasPaint
     implements SizeProvider {
-  /// The animation used by the component.
-  SpriteAnimation? _animation;
-
   /// Returns the current [SpriteAnimation].
-  SpriteAnimation? get animation => _animation;
+  SpriteAnimation? get animation => _animationTicker?.spriteAnimation;
 
   /// Sets the given [value] as current [animation].
   set animation(SpriteAnimation? value) {
-    if (_animation != value) {
-      _animation = value;
-      _animationTicker = _animation?.ticker();
+    if (animation != value) {
+      if (value != null) {
+        _animationTicker = value.ticker();
+      } else {
+        _animationTicker = null;
+      }
     }
   }
 

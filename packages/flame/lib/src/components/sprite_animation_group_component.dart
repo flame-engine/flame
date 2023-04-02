@@ -69,6 +69,7 @@ class SpriteAnimationGroupComponent<T> extends PositionComponent
         ),
         _current = current,
         _autoResize = autoResize ?? size == null,
+        _animations = animations,
         _animationsTickers = animations != null
             ? Map.fromEntries(
                 animations.entries
@@ -79,6 +80,7 @@ class SpriteAnimationGroupComponent<T> extends PositionComponent
     if (paint != null) {
       this.paint = paint;
     }
+    _resizeToSprite();
   }
 
   /// Creates a SpriteAnimationGroupComponent from a [size], an [image] and
