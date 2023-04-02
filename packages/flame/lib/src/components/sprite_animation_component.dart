@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flame/components.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
+import 'package:flame/src/sprite_animation_ticker.dart';
 import 'package:meta/meta.dart';
 
 export '../sprite_animation.dart';
@@ -10,7 +11,24 @@ class SpriteAnimationComponent extends PositionComponent
     with HasPaint
     implements SizeProvider {
   /// The animation used by the component.
-  SpriteAnimation? animation;
+  SpriteAnimation? _animation;
+
+  /// Returns the current [SpriteAnimation].
+  SpriteAnimation? get animation => _animation;
+
+  /// Sets the given [value] as current [animation].
+  set animation(SpriteAnimation? value) {
+    if (_animation != value) {
+      _animation = value;
+      _animationTicker = _animation?.ticker();
+    }
+  }
+
+  /// The animation ticker used for updating [animation].
+  SpriteAnimationTicker? _animationTicker;
+
+  /// Returns the animation ticker for current [animation].
+  SpriteAnimationTicker? get animationTicker => _animationTicker;
 
   /// If the component should be removed once the animation has finished.
   /// Needs the animation to have `loop = false` to ever remove the component,
@@ -26,13 +44,13 @@ class SpriteAnimationComponent extends PositionComponent
 
   /// Creates a component with an empty animation which can be set later
   SpriteAnimationComponent({
-    this.animation,
+    SpriteAnimation? animation,
     bool? autoResize,
     this.removeOnFinish = false,
     this.playing = true,
     Paint? paint,
     super.position,
-    Vector2? size,
+    super.size,
     super.scale,
     super.angle,
     super.nativeAngle,
@@ -44,10 +62,11 @@ class SpriteAnimationComponent extends PositionComponent
           '''If size is set, autoResize should be false or size should be null when autoResize is true.''',
         ),
         _autoResize = autoResize ?? size == null,
-        super(size: size ?? animation?.getSprite().srcSize) {
+        _animationTicker = animation?.ticker() {
     if (paint != null) {
       this.paint = paint;
     }
+    _resizeToSprite();
   }
 
   /// Creates a SpriteAnimationComponent from a [size], an [image] and [data].
@@ -95,7 +114,7 @@ class SpriteAnimationComponent extends PositionComponent
   @mustCallSuper
   @override
   void render(Canvas canvas) {
-    animation?.getSprite().render(
+    _animationTicker?.getSprite().render(
           canvas,
           size: size,
           overridePaint: paint,
@@ -106,10 +125,10 @@ class SpriteAnimationComponent extends PositionComponent
   @override
   void update(double dt) {
     if (playing) {
-      animation?.update(dt);
+      _animationTicker?.update(dt);
       _resizeToSprite();
     }
-    if (removeOnFinish && (animation?.done() ?? false)) {
+    if (removeOnFinish && (_animationTicker?.done() ?? false)) {
       removeFromParent();
     }
   }
@@ -118,8 +137,8 @@ class SpriteAnimationComponent extends PositionComponent
   /// [autoResize] is true.
   void _resizeToSprite() {
     if (_autoResize) {
-      if (animation != null) {
-        size.setFrom(animation!.getSprite().srcSize);
+      if (_animationTicker != null) {
+        size.setFrom(_animationTicker!.getSprite().srcSize);
       } else {
         size.setZero();
       }
