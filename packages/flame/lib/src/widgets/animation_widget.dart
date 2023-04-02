@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flame/src/anchor.dart';
 import 'package:flame/src/cache/images.dart';
 import 'package:flame/src/sprite_animation.dart';
+import 'package:flame/src/sprite_animation_ticker.dart';
 import 'package:flame/src/widgets/base_future_builder.dart';
 import 'package:flame/src/widgets/sprite_painter.dart';
 import 'package:flutter/material.dart' hide Animation;
@@ -78,18 +79,22 @@ class InternalSpriteAnimationWidget extends StatefulWidget {
   /// The [SpriteAnimation] to be rendered
   final SpriteAnimation animation;
 
+  final SpriteAnimationTicker _spriteAnimationTicker = SpriteAnimationTicker();
+
   /// The positioning [Anchor]
   final Anchor anchor;
 
   /// Should the [animation] be playing or not
   final bool playing;
 
-  const InternalSpriteAnimationWidget({
+  InternalSpriteAnimationWidget({
     required this.animation,
     this.playing = true,
     this.anchor = Anchor.topLeft,
     super.key,
-  });
+  }) {
+    _spriteAnimationTicker.spriteAnimation = animation;
+  }
 
   @override
   State createState() => _InternalSpriteAnimationWidgetState();
@@ -115,7 +120,7 @@ class _InternalSpriteAnimationWidgetState
     super.didUpdateWidget(oldWidget);
 
     if (oldWidget.animation != widget.animation) {
-      oldWidget.animation.onComplete = null;
+      oldWidget._spriteAnimationTicker.onComplete = null;
       _setupController();
     }
 
@@ -127,7 +132,7 @@ class _InternalSpriteAnimationWidgetState
   }
 
   void _initAnimation() {
-    widget.animation.reset();
+    widget._spriteAnimationTicker.reset();
     _lastUpdated = DateTime.now().microsecondsSinceEpoch.toDouble();
     _controller?.repeat(
       // Approximately 60 fps
@@ -136,7 +141,7 @@ class _InternalSpriteAnimationWidgetState
   }
 
   void _setupController() {
-    widget.animation.onComplete = _pauseAnimation;
+    widget._spriteAnimationTicker.onComplete = _pauseAnimation;
     _controller ??= AnimationController(vsync: this)
       ..addListener(_onAnimationValueChanged);
   }
@@ -148,9 +153,9 @@ class _InternalSpriteAnimationWidgetState
     final lastUpdated = _lastUpdated ??= now;
     final dt = (now - lastUpdated) * microSecond;
 
-    final frameIndexBeforeTick = widget.animation.currentIndex;
-    widget.animation.update(dt);
-    final frameIndexAfterTick = widget.animation.currentIndex;
+    final frameIndexBeforeTick = widget._spriteAnimationTicker.currentIndex;
+    widget._spriteAnimationTicker.update(dt);
+    final frameIndexAfterTick = widget._spriteAnimationTicker.currentIndex;
 
     if (frameIndexBeforeTick != frameIndexAfterTick) {
       setState(() {});
@@ -172,7 +177,7 @@ class _InternalSpriteAnimationWidgetState
   Widget build(BuildContext ctx) {
     return CustomPaint(
       painter: SpritePainter(
-        widget.animation.getSprite(),
+        widget._spriteAnimationTicker.getSprite(),
         widget.anchor,
       ),
     );
