@@ -19,6 +19,7 @@ class SpriteAnimationWidget extends StatelessWidget {
   final bool playing;
 
   final FutureOr<SpriteAnimation> _animationFuture;
+  final SpriteAnimationTicker? _animationTicker;
 
   /// A builder function that is called if the loading fails
   final WidgetBuilder? errorBuilder;
@@ -28,10 +29,12 @@ class SpriteAnimationWidget extends StatelessWidget {
 
   const SpriteAnimationWidget({
     required SpriteAnimation animation,
+    required SpriteAnimationTicker animationTicker,
     this.playing = true,
     this.anchor = Anchor.topLeft,
     super.key,
   })  : _animationFuture = animation,
+        _animationTicker = animationTicker,
         errorBuilder = null,
         loadingBuilder = null;
 
@@ -50,11 +53,8 @@ class SpriteAnimationWidget extends StatelessWidget {
     this.errorBuilder,
     this.loadingBuilder,
     super.key,
-  }) : _animationFuture = SpriteAnimation.load(
-          path,
-          data,
-          images: images,
-        );
+  })  : _animationFuture = SpriteAnimation.load(path, data, images: images),
+        _animationTicker = null;
 
   @override
   Widget build(BuildContext context) {
@@ -63,6 +63,7 @@ class SpriteAnimationWidget extends StatelessWidget {
       builder: (_, spriteAnimation) {
         return InternalSpriteAnimationWidget(
           animation: spriteAnimation,
+          animationTicker: _animationTicker ?? spriteAnimation.ticker(),
           anchor: anchor,
           playing: playing,
         );
@@ -80,7 +81,7 @@ class InternalSpriteAnimationWidget extends StatefulWidget {
   final SpriteAnimation animation;
 
   /// The [SpriteAnimationTicker] use for updating the [animation].
-  final SpriteAnimationTicker _spriteAnimationTicker;
+  final SpriteAnimationTicker animationTicker;
 
   /// The positioning [Anchor]
   final Anchor anchor;
@@ -88,12 +89,13 @@ class InternalSpriteAnimationWidget extends StatefulWidget {
   /// Should the [animation] be playing or not
   final bool playing;
 
-  InternalSpriteAnimationWidget({
+  const InternalSpriteAnimationWidget({
     required this.animation,
+    required this.animationTicker,
     this.playing = true,
     this.anchor = Anchor.topLeft,
     super.key,
-  }) : _spriteAnimationTicker = animation.ticker();
+  });
 
   @override
   State createState() => _InternalSpriteAnimationWidgetState();
@@ -119,7 +121,7 @@ class _InternalSpriteAnimationWidgetState
     super.didUpdateWidget(oldWidget);
 
     if (oldWidget.animation != widget.animation) {
-      oldWidget._spriteAnimationTicker.onComplete = null;
+      oldWidget.animationTicker.onComplete = null;
       _setupController();
     }
 
@@ -131,7 +133,7 @@ class _InternalSpriteAnimationWidgetState
   }
 
   void _initAnimation() {
-    widget._spriteAnimationTicker.reset();
+    widget.animationTicker.reset();
     _lastUpdated = DateTime.now().microsecondsSinceEpoch.toDouble();
     _controller?.repeat(
       // Approximately 60 fps
@@ -140,7 +142,7 @@ class _InternalSpriteAnimationWidgetState
   }
 
   void _setupController() {
-    widget._spriteAnimationTicker.onComplete = _pauseAnimation;
+    widget.animationTicker.onComplete = _pauseAnimation;
     _controller ??= AnimationController(vsync: this)
       ..addListener(_onAnimationValueChanged);
   }
@@ -152,9 +154,9 @@ class _InternalSpriteAnimationWidgetState
     final lastUpdated = _lastUpdated ??= now;
     final dt = (now - lastUpdated) * microSecond;
 
-    final frameIndexBeforeTick = widget._spriteAnimationTicker.currentIndex;
-    widget._spriteAnimationTicker.update(dt);
-    final frameIndexAfterTick = widget._spriteAnimationTicker.currentIndex;
+    final frameIndexBeforeTick = widget.animationTicker.currentIndex;
+    widget.animationTicker.update(dt);
+    final frameIndexAfterTick = widget.animationTicker.currentIndex;
 
     if (frameIndexBeforeTick != frameIndexAfterTick) {
       setState(() {});
@@ -176,7 +178,7 @@ class _InternalSpriteAnimationWidgetState
   Widget build(BuildContext ctx) {
     return CustomPaint(
       painter: SpritePainter(
-        widget._spriteAnimationTicker.getSprite(),
+        widget.animationTicker.getSprite(),
         widget.anchor,
       ),
     );
