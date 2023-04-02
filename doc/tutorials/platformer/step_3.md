@@ -334,7 +334,7 @@ class PlatformBlock extends SpriteComponent
   }) : super(size: Vector2.all(64), anchor: Anchor.bottomLeft);
 
   @override
-  Future<void> onLoad() async {
+  void onLoad() {
   }
 
   @override
@@ -395,7 +395,7 @@ Now we just need to finish the `onLoad` method.  So make your `onLoad` method lo
 
 ```dart
   @override
-  Future<void> onLoad() async {
+  void onLoad() {
     final platformImage = game.images.fromCache('block.png');
     sprite = Sprite(platformImage);
     position = Vector2((gridPosition.x * size.x) + _xOffset,
