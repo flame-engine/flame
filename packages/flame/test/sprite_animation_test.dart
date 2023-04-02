@@ -45,28 +45,30 @@ void main() {
     test('onStart called for single-frame animation', () {
       var counter = 0;
       final sprite = MockSprite();
-      final animation =
+      final animationTicker =
           SpriteAnimation.spriteList([sprite], stepTime: 1, loop: false)
+              .ticker()
             ..onStart = () => counter++;
       expect(counter, 0);
-      animation.update(0.5);
+      animationTicker.update(0.5);
       expect(counter, 1);
-      animation.update(1);
+      animationTicker.update(1);
       expect(counter, 1);
     });
 
     test('onComplete called for single-frame animation', () {
       var counter = 0;
       final sprite = MockSprite();
-      final animation =
+      final animationTicker =
           SpriteAnimation.spriteList([sprite], stepTime: 1, loop: false)
+              .ticker()
             ..onComplete = () => counter++;
       expect(counter, 0);
-      animation.update(0.5);
+      animationTicker.update(0.5);
       expect(counter, 0);
-      animation.update(0.5);
+      animationTicker.update(0.5);
       expect(counter, 1);
-      animation.update(1);
+      animationTicker.update(1);
       expect(counter, 1);
     });
 
@@ -78,15 +80,16 @@ void main() {
       var timesCalled = 0;
       final sprite = MockSprite();
       final spriteList = [sprite, sprite, sprite];
-      final animation =
-          SpriteAnimation.spriteList(spriteList, stepTime: 1, loop: false);
-      animation.onFrame = (index) {
+      final animationTicker =
+          SpriteAnimation.spriteList(spriteList, stepTime: 1, loop: false)
+              .ticker();
+      animationTicker.onFrame = (index) {
         expect(timePassed, closeTo(index * 1.0, dt));
         timesCalled++;
       };
       while (timePassed <= spriteList.length) {
         timePassed += dt;
-        animation.update(dt);
+        animationTicker.update(dt);
       }
       expect(timesCalled, spriteList.length);
     });
@@ -96,56 +99,56 @@ void main() {
       var animationRunning = false;
       var animationComplete = false;
       final sprite = MockSprite();
-      final animation =
-          SpriteAnimation.spriteList([sprite], stepTime: 1, loop: false);
-      animation.onStart = () {
+      final animationTicker =
+          SpriteAnimation.spriteList([sprite], stepTime: 1, loop: false)
+              .ticker();
+      animationTicker.onStart = () {
         expect(animationStarted, false);
         expect(animationRunning, false);
         expect(animationComplete, false);
         animationStarted = true;
         animationRunning = true;
       };
-      animation.onFrame = (index) {
+      animationTicker.onFrame = (index) {
         expect(animationStarted, true);
         expect(animationRunning, true);
         expect(animationComplete, false);
       };
-      animation.onComplete = () {
+      animationTicker.onComplete = () {
         expect(animationStarted, true);
         expect(animationRunning, true);
         expect(animationComplete, false);
         animationComplete = true;
       };
-      animation.update(1);
+      animationTicker.update(1);
       expect(animationComplete, true);
     });
 
     test('completed completes', () {
       final sprite = MockSprite();
-      final animation = SpriteAnimation.spriteList(
+      final animationTicker = SpriteAnimation.spriteList(
         [sprite],
         stepTime: 1,
         loop: false,
-      );
+      ).ticker();
 
-      expectLater(animation.completed, completes);
+      expectLater(animationTicker.completed, completes);
 
-      animation.update(1);
+      animationTicker.update(1);
     });
 
     test(
       'completed completes when the animation has already completed',
       () async {
         final sprite = MockSprite();
-        final animation = SpriteAnimation.spriteList(
+        final animationTicker = SpriteAnimation.spriteList(
           [sprite],
           stepTime: 1,
           loop: false,
-        );
+        ).ticker();
 
-        animation.update(1);
-
-        expectLater(animation.completed, completes);
+        animationTicker.update(1);
+        expectLater(animationTicker.completed, completes);
       },
     );
 
@@ -153,13 +156,13 @@ void main() {
       "completed doesn't complete when the animation is yet to complete",
       () async {
         final sprite = MockSprite();
-        final animation = SpriteAnimation.spriteList(
+        final animationTicker = SpriteAnimation.spriteList(
           [sprite],
           stepTime: 1,
           loop: false,
-        );
+        ).ticker();
 
-        expectLater(animation.completed, doesNotComplete);
+        expectLater(animationTicker.completed, doesNotComplete);
       },
     );
 
@@ -167,9 +170,10 @@ void main() {
       "completed doesn't complete when animation is looping",
       () async {
         final sprite = MockSprite();
-        final animation = SpriteAnimation.spriteList([sprite], stepTime: 1);
+        final animationTicker =
+            SpriteAnimation.spriteList([sprite], stepTime: 1).ticker();
 
-        expectLater(animation.completed, doesNotComplete);
+        expectLater(animationTicker.completed, doesNotComplete);
       },
     );
 
@@ -177,11 +181,11 @@ void main() {
       "completed doesn't complete when animation is looping and on last frame",
       () async {
         final sprite = MockSprite();
-        final animation = SpriteAnimation.spriteList([sprite], stepTime: 1);
+        final animationTicker =
+            SpriteAnimation.spriteList([sprite], stepTime: 1).ticker();
 
-        animation.update(1);
-
-        expectLater(animation.completed, doesNotComplete);
+        animationTicker.update(1);
+        expectLater(animationTicker.completed, doesNotComplete);
       },
     );
   });
