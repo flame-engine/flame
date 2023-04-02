@@ -11,13 +11,13 @@ class ImageDarknessExample extends FlameGame {
 
   static const String description = '''
      Shows how a dart:ui `Image` can be darkened using Flame Image extensions.
-     Use the properties on the side to change the darkeness of the image.
+     Use the properties on the side to change the darkness of the image.
   ''';
 
   @override
   Future<void> onLoad() async {
     final image = await images.load('flame.png');
-    final darkendImage = await image.darken(darkness / 100);
+    final darkenedImage = await image.darken(darkness / 100);
 
     add(
       SpriteComponent(
@@ -30,8 +30,8 @@ class ImageDarknessExample extends FlameGame {
 
     add(
       SpriteComponent(
-        sprite: Sprite(darkendImage),
-        position: (size / 2) + Vector2(0, darkendImage.height / 2),
+        sprite: Sprite(darkenedImage),
+        position: (size / 2) + Vector2(0, darkenedImage.height / 2),
         size: image.size,
         anchor: Anchor.center,
       ),
