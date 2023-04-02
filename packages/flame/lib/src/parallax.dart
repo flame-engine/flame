@@ -159,7 +159,6 @@ class ParallaxImage extends ParallaxRenderer {
 /// Specifications with a SpriteAnimation and how it should be drawn in
 /// relation to the device screen
 class ParallaxAnimation extends ParallaxRenderer {
-  final SpriteAnimation _animation;
   final SpriteAnimationTicker _animationTicker;
 
   /// The animation's frames pre-rendered into images so it can be used in the
@@ -167,12 +166,12 @@ class ParallaxAnimation extends ParallaxRenderer {
   final List<Image> _prerenderedFrames;
 
   ParallaxAnimation(
-    this._animation,
+    SpriteAnimation animation,
     this._prerenderedFrames, {
     super.repeat,
     super.alignment,
     super.fill,
-  }) : _animationTicker = _animation.ticker();
+  }) : _animationTicker = animation.ticker();
 
   /// Takes a path of an image, a SpriteAnimationData, and optionally arguments
   /// for how the image should repeat ([repeat]), which edge it should align
