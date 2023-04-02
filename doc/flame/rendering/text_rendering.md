@@ -82,7 +82,7 @@ final regular = TextPaint(style: style);
 
 class MyGame extends FlameGame {
   @override
-  Future<void> onLoad() async {
+  void onLoad() {
     add(TextComponent(text: 'Hello, Flame', textRenderer: regular)
       ..anchor = Anchor.topCenter
       ..x = size.width / 2 // size is a property from game

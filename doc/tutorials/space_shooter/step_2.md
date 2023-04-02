@@ -17,7 +17,7 @@ class SpaceShooterGame extends FlameGame with PanDetector {
   late Player player;
 
   @override
-  Future<void> onLoad() async {
+  void onLoad() {
     // omitted
   }
 
