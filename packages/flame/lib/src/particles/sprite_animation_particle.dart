@@ -4,12 +4,14 @@ import 'package:flame/src/anchor.dart';
 import 'package:flame/src/extensions/vector2.dart';
 import 'package:flame/src/particles/particle.dart';
 import 'package:flame/src/sprite_animation.dart';
+import 'package:flame/src/sprite_animation_ticker.dart';
 
 export '../sprite_animation.dart';
 
 /// A [Particle] which applies certain [SpriteAnimation].
 class SpriteAnimationParticle extends Particle {
   final SpriteAnimation animation;
+  final SpriteAnimationTicker animationTicker;
   final Vector2? position;
   final Vector2? size;
   final Anchor anchor;
@@ -24,7 +26,7 @@ class SpriteAnimationParticle extends Particle {
     this.overridePaint,
     super.lifespan,
     this.alignAnimationTime = true,
-  });
+  }) : animationTicker = animation.ticker();
 
   @override
   void setLifespan(double lifespan) {
@@ -32,13 +34,13 @@ class SpriteAnimationParticle extends Particle {
 
     if (alignAnimationTime) {
       animation.stepTime = lifespan / animation.frames.length;
-      animation.reset();
+      animationTicker.reset();
     }
   }
 
   @override
   void render(Canvas canvas) {
-    animation.getSprite().render(
+    animationTicker.getSprite().render(
           canvas,
           position: position,
           size: size,
@@ -50,6 +52,6 @@ class SpriteAnimationParticle extends Particle {
   @override
   void update(double dt) {
     super.update(dt);
-    animation.update(dt);
+    animationTicker.update(dt);
   }
 }

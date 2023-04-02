@@ -7,6 +7,7 @@ import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame/src/flame.dart';
 import 'package:flame/src/sprite_animation.dart';
+import 'package:flame/src/sprite_animation_ticker.dart';
 import 'package:flutter/painting.dart';
 
 extension ParallaxExtension on Game {
@@ -159,6 +160,7 @@ class ParallaxImage extends ParallaxRenderer {
 /// relation to the device screen
 class ParallaxAnimation extends ParallaxRenderer {
   final SpriteAnimation _animation;
+  final SpriteAnimationTicker _animationTicker;
 
   /// The animation's frames pre-rendered into images so it can be used in the
   /// parallax.
@@ -170,7 +172,7 @@ class ParallaxAnimation extends ParallaxRenderer {
     super.repeat,
     super.alignment,
     super.fill,
-  });
+  }) : _animationTicker = _animation.ticker();
 
   /// Takes a path of an image, a SpriteAnimationData, and optionally arguments
   /// for how the image should repeat ([repeat]), which edge it should align
@@ -209,11 +211,11 @@ class ParallaxAnimation extends ParallaxRenderer {
   }
 
   @override
-  Image get image => _prerenderedFrames[_animation.currentIndex];
+  Image get image => _prerenderedFrames[_animationTicker.currentIndex];
 
   @override
   void update(double dt) {
-    _animation.update(dt);
+    _animationTicker.update(dt);
   }
 }
 
