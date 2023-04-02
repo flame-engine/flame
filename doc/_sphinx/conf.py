@@ -40,9 +40,6 @@ extensions = [
     'sphinx_copybutton'
 ]
 
-# Configuration options for sphinx_copybutton.
-html_static_path = ["_static"]
-html_css_files = ["custom.css"]
 
 # Configuration options for MyST:
 # https://myst-parser.readthedocs.io/en/latest/syntax/optional.html
