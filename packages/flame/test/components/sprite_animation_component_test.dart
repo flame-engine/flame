@@ -351,8 +351,8 @@ Future<void> main() async {
       final component = SpriteAnimationComponent();
 
       // NOTE: Sequence of modifications is important here. Changing the size
-      // first disables the auto-resizing. So even if sprite is changed later,
-      // the component should still maintain testSize.
+      // first disables the auto-resizing. So even if animation is changed 
+      // later, the component should still maintain testSize.
       component
         ..size = testSize
         ..animation = animation;
