@@ -78,5 +78,21 @@ Future<void> main() async {
       component.autoResize = true;
       expect(component.size, sprite2.srcSize);
     });
+
+    test('stop autoResizing on external size modifications', () {
+      final testSize = Vector2(83, 100);
+      final sprite = Sprite(image, srcSize: Vector2.all(13));
+      final component = SpriteComponent();
+
+      // NOTE: Sequence of modifications is important here. Changing the size
+      // first disables the auto-resizing. So even if sprite is changed later,
+      // the component should still maintain testSize.
+      component
+        ..size = testSize
+        ..sprite = sprite;
+
+      expectDouble(component.size.x, testSize.x);
+      expectDouble(component.size.y, testSize.y);
+    });
   });
 }
