@@ -336,5 +336,29 @@ Future<void> main() async {
       component.autoResize = true;
       expect(component.size, spriteList[1].srcSize);
     });
+
+    test('stop autoResizing on external size modifications', () {
+      final spriteList = [
+        Sprite(image, srcSize: Vector2.all(1)),
+        Sprite(image, srcSize: Vector2.all(2)),
+      ];
+      final animation = SpriteAnimation.spriteList(
+        spriteList,
+        stepTime: 1,
+        loop: false,
+      );
+      final testSize = Vector2(83, 100);
+      final component = SpriteAnimationComponent();
+
+      // NOTE: Sequence of modifications is important here. Changing the size
+      // first disables the auto-resizing. So even if sprite is changed later,
+      // the component should still maintain testSize.
+      component
+        ..size = testSize
+        ..animation = animation;
+
+      expectDouble(component.size.x, testSize.x);
+      expectDouble(component.size.y, testSize.y);
+    });
   });
 }

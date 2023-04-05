@@ -10,7 +10,7 @@ class SpriteAnimationComponent extends PositionComponent
     with HasPaint
     implements SizeProvider {
   /// The animation used by the component.
-  SpriteAnimation? animation;
+  SpriteAnimation? _animation;
 
   /// If the component should be removed once the animation has finished.
   /// Needs the animation to have `loop = false` to ever remove the component,
@@ -26,7 +26,7 @@ class SpriteAnimationComponent extends PositionComponent
 
   /// Creates a component with an empty animation which can be set later
   SpriteAnimationComponent({
-    this.animation,
+    SpriteAnimation? animation,
     bool? autoResize,
     this.removeOnFinish = false,
     this.playing = true,
@@ -43,11 +43,16 @@ class SpriteAnimationComponent extends PositionComponent
           (size == null) == (autoResize ?? size == null),
           '''If size is set, autoResize should be false or size should be null when autoResize is true.''',
         ),
+        _animation = animation,
         _autoResize = autoResize ?? size == null,
         super(size: size ?? animation?.getSprite().srcSize) {
     if (paint != null) {
       this.paint = paint;
     }
+
+    /// Register a listener to differentiate between size modification done by
+    /// external calls v/s the ones done by [_resizeToSprite].
+    this.size.addListener(_handleAutoResizeState);
   }
 
   /// Creates a SpriteAnimationComponent from a [size], an [image] and [data].
@@ -92,10 +97,25 @@ class SpriteAnimationComponent extends PositionComponent
     _resizeToSprite();
   }
 
+  /// This flag helps in detecting if the size modification is done by
+  /// some external call vs [_autoResize]ing code from [_resizeToSprite].
+  bool _isAutoResizing = false;
+
+  /// Returns the [SpriteAnimation] used by this component.
+  SpriteAnimation? get animation => _animation;
+
+  /// Sets the given [value] as [SpriteAnimation] to be used.
+  set animation(SpriteAnimation? value) {
+    if (_animation != value) {
+      _animation = value;
+      _resizeToSprite();
+    }
+  }
+
   @mustCallSuper
   @override
   void render(Canvas canvas) {
-    animation?.getSprite().render(
+    _animation?.getSprite().render(
           canvas,
           size: size,
           overridePaint: paint,
@@ -106,23 +126,32 @@ class SpriteAnimationComponent extends PositionComponent
   @override
   void update(double dt) {
     if (playing) {
-      animation?.update(dt);
+      _animation?.update(dt);
       _resizeToSprite();
     }
-    if (removeOnFinish && (animation?.done() ?? false)) {
+    if (removeOnFinish && (_animation?.done() ?? false)) {
       removeFromParent();
     }
   }
 
-  /// Updates the size to current animation sprite's srcSize if
+  /// Updates the size to current [animation] sprite's srcSize if
   /// [autoResize] is true.
   void _resizeToSprite() {
     if (_autoResize) {
-      if (animation != null) {
-        size.setFrom(animation!.getSprite().srcSize);
+      _isAutoResizing = true;
+      if (_animation != null) {
+        size.setFrom(_animation!.getSprite().srcSize);
       } else {
         size.setZero();
       }
+      _isAutoResizing = false;
+    }
+  }
+
+  /// Turns off [_autoResize]ing if a size modification is  done by user.
+  void _handleAutoResizeState() {
+    if (autoResize && (!_isAutoResizing)) {
+      _autoResize = false;
     }
   }
 }
