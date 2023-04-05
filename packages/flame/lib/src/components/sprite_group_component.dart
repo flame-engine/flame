@@ -128,7 +128,7 @@ class SpriteGroupComponent<T> extends PositionComponent
     }
   }
 
-  /// Turns off [_autoResize]ing if a size modification is  done by user.
+  /// Turns off [_autoResize]ing if a size modification is done by user.
   void _handleAutoResizeState() {
     if (_autoResize && (!_isAutoResizing)) {
       _autoResize = false;
