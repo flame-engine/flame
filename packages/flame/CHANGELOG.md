@@ -1,3 +1,7 @@
+## 1.7.1
+
+ - **FIX**: Stop auto-resizing on external size change in sprite based components ([#2467](https://github.com/flame-engine/flame/issues/2467)). ([df236af4](https://github.com/flame-engine/flame/commit/df236af4f0164cc20b664ab973d91b4554b13b62))
+
 ## 1.7.0
 
 > Note: This release has breaking changes.
