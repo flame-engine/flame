@@ -15,7 +15,7 @@ class SpriteGroupComponent<T> extends PositionComponent
   T? _current;
 
   /// Map with the available states for this sprite group
-  Map<T, Sprite>? sprites;
+  Map<T, Sprite>? _sprites;
 
   /// When set to true, the component is auto-resized to match the
   /// size of current sprite.
@@ -23,7 +23,7 @@ class SpriteGroupComponent<T> extends PositionComponent
 
   /// Creates a component with an empty animation which can be set later
   SpriteGroupComponent({
-    this.sprites,
+    Map<T, Sprite>? sprites,
     T? current,
     bool? autoResize,
     Paint? paint,
@@ -40,14 +40,19 @@ class SpriteGroupComponent<T> extends PositionComponent
           '''If size is set, autoResize should be false or size should be null when autoResize is true.''',
         ),
         _current = current,
+        _sprites = sprites,
         _autoResize = autoResize ?? size == null,
         super(size: size ?? sprites?[current]?.srcSize) {
     if (paint != null) {
       this.paint = paint;
     }
+
+    /// Register a listener to differentiate between size modification done by
+    /// external calls v/s the ones done by [_resizeToSprite].
+    this.size.addListener(_handleAutoResizeState);
   }
 
-  Sprite? get sprite => sprites?[current];
+  Sprite? get sprite => _sprites?[current];
 
   /// Returns the current group state.
   T? get current => _current;
@@ -63,6 +68,17 @@ class SpriteGroupComponent<T> extends PositionComponent
   /// Returns current value of auto resize flag.
   bool get autoResize => _autoResize;
 
+  /// Returns the sprites map.
+  Map<T, Sprite>? get sprites => _sprites;
+
+  /// Sets the given [value] as sprites map.
+  set sprites(Map<T, Sprite>? value) {
+    if (_sprites != value) {
+      _sprites = value;
+      _resizeToSprite();
+    }
+  }
+
   /// Sets the given value of autoResize flag.
   ///
   /// Will update the [size] to fit srcSize of
@@ -72,15 +88,19 @@ class SpriteGroupComponent<T> extends PositionComponent
     _resizeToSprite();
   }
 
+  /// This flag helps in detecting if the size modification is done by
+  /// some external call vs [_autoResize]ing code from [_resizeToSprite].
+  bool _isAutoResizing = false;
+
   @override
   @mustCallSuper
   void onMount() {
     assert(
-      sprites != null,
+      _sprites != null,
       'You have to set the sprites in either the constructor or in onLoad',
     );
     assert(
-      current != null,
+      _current != null,
       'You have to set current in either the constructor or in onLoad',
     );
   }
@@ -98,11 +118,20 @@ class SpriteGroupComponent<T> extends PositionComponent
   /// Updates the size to current [sprite]'s srcSize if [autoResize] is true.
   void _resizeToSprite() {
     if (_autoResize) {
+      _isAutoResizing = true;
       if (sprite != null) {
         size.setFrom(sprite!.srcSize);
       } else {
         size.setZero();
       }
+      _isAutoResizing = false;
+    }
+  }
+
+  /// Turns off [_autoResize]ing if a size modification is done by user.
+  void _handleAutoResizeState() {
+    if (_autoResize && (!_isAutoResizing)) {
+      _autoResize = false;
     }
   }
 }

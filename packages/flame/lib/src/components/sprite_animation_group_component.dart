@@ -19,29 +19,8 @@ class SpriteAnimationGroupComponent<T> extends PositionComponent
   /// Map with the available states for this animation group
   Map<T, SpriteAnimation>? _animations;
 
-  /// Returns the map of animation state and their corresponding animations.
-  Map<T, SpriteAnimation>? get animations => _animations;
-
-  /// Sets the given [value] as new animation state map.
-  set animations(Map<T, SpriteAnimation>? value) {
-    if (_animations != value) {
-      _animations = value;
-
-      _animationTickers = _animations != null
-          ? Map.fromEntries(
-              _animations!.entries
-                  .map((e) => MapEntry(e.key, e.value.ticker()))
-                  .toList(),
-            )
-          : null;
-    }
-  }
-
   /// Map containing animation tickers for each animation state.
   Map<T, SpriteAnimationTicker>? _animationTickers;
-
-  /// Returns a map containing [SpriteAnimationTicker] for each state.
-  Map<T, SpriteAnimationTicker>? get animationTickers => _animationTickers;
 
   /// Whether the animation is paused or playing.
   bool playing;
@@ -71,8 +50,8 @@ class SpriteAnimationGroupComponent<T> extends PositionComponent
           '''If size is set, autoResize should be false or size should be null when autoResize is true.''',
         ),
         _current = current,
-        _autoResize = autoResize ?? size == null,
         _animations = animations,
+        _autoResize = autoResize ?? size == null,
         _animationTickers = animations != null
             ? Map.fromEntries(
                 animations.entries
@@ -83,6 +62,10 @@ class SpriteAnimationGroupComponent<T> extends PositionComponent
     if (paint != null) {
       this.paint = paint;
     }
+
+    /// Register a listener to differentiate between size modification done by
+    /// external calls v/s the ones done by [_resizeToSprite].
+    size.addListener(_handleAutoResizeState);
     _resizeToSprite();
   }
 
@@ -129,7 +112,7 @@ class SpriteAnimationGroupComponent<T> extends PositionComponent
           priority: priority,
         );
 
-  SpriteAnimation? get animation => animations?[current];
+  SpriteAnimation? get animation => _animations?[current];
   SpriteAnimationTicker? get animationTicker => _animationTickers?[current];
 
   /// Returns the current group state.
@@ -143,6 +126,28 @@ class SpriteAnimationGroupComponent<T> extends PositionComponent
     _resizeToSprite();
   }
 
+  /// Returns the map of animation state and their corresponding animations.
+  Map<T, SpriteAnimation>? get animations => _animations;
+
+  /// Sets the given [value] as new animation state map.
+  set animations(Map<T, SpriteAnimation>? value) {
+    if (_animations != value) {
+      _animations = value;
+
+      _animationTickers = _animations != null
+          ? Map.fromEntries(
+              _animations!.entries
+                  .map((e) => MapEntry(e.key, e.value.ticker()))
+                  .toList(),
+            )
+          : null;
+      _resizeToSprite();
+    }
+  }
+
+  /// Returns a map containing [SpriteAnimationTicker] for each state.
+  Map<T, SpriteAnimationTicker>? get animationTickers => _animationTickers;
+
   /// Returns current value of auto resize flag.
   bool get autoResize => _autoResize;
 
@@ -154,6 +159,10 @@ class SpriteAnimationGroupComponent<T> extends PositionComponent
     _autoResize = value;
     _resizeToSprite();
   }
+
+  /// This flag helps in detecting if the size modification is done by
+  /// some external call vs [_autoResize]ing code from [_resizeToSprite].
+  bool _isAutoResizing = false;
 
   @mustCallSuper
   @override
@@ -182,11 +191,20 @@ class SpriteAnimationGroupComponent<T> extends PositionComponent
   /// [autoResize] is true.
   void _resizeToSprite() {
     if (_autoResize) {
+      _isAutoResizing = true;
       if (animation != null) {
         size.setFrom(animationTicker!.getSprite().srcSize);
       } else {
         size.setZero();
       }
+      _isAutoResizing = true;
+    }
+  }
+
+  /// Turns off [_autoResize]ing if a size modification is done by user.
+  void _handleAutoResizeState() {
+    if (_autoResize && (!_isAutoResizing)) {
+      _autoResize = false;
     }
   }
 }

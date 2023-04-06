@@ -10,20 +10,6 @@ export '../sprite_animation.dart';
 class SpriteAnimationComponent extends PositionComponent
     with HasPaint
     implements SizeProvider {
-  /// Returns the current [SpriteAnimation].
-  SpriteAnimation? get animation => _animationTicker?.spriteAnimation;
-
-  /// Sets the given [value] as current [animation].
-  set animation(SpriteAnimation? value) {
-    if (animation != value) {
-      if (value != null) {
-        _animationTicker = value.ticker();
-      } else {
-        _animationTicker = null;
-      }
-    }
-  }
-
   /// The animation ticker used for updating [animation].
   SpriteAnimationTicker? _animationTicker;
 
@@ -66,6 +52,10 @@ class SpriteAnimationComponent extends PositionComponent
     if (paint != null) {
       this.paint = paint;
     }
+
+    /// Register a listener to differentiate between size modification done by
+    /// external calls v/s the ones done by [_resizeToSprite].
+    size.addListener(_handleAutoResizeState);
     _resizeToSprite();
   }
 
@@ -111,6 +101,25 @@ class SpriteAnimationComponent extends PositionComponent
     _resizeToSprite();
   }
 
+  /// This flag helps in detecting if the size modification is done by
+  /// some external call vs [_autoResize]ing code from [_resizeToSprite].
+  bool _isAutoResizing = false;
+
+  /// Returns the current [SpriteAnimation].
+  SpriteAnimation? get animation => _animationTicker?.spriteAnimation;
+
+  /// Sets the given [value] as current [animation].
+  set animation(SpriteAnimation? value) {
+    if (animation != value) {
+      if (value != null) {
+        _animationTicker = value.ticker();
+      } else {
+        _animationTicker = null;
+      }
+      _resizeToSprite();
+    }
+  }
+
   @mustCallSuper
   @override
   void render(Canvas canvas) {
@@ -133,15 +142,24 @@ class SpriteAnimationComponent extends PositionComponent
     }
   }
 
-  /// Updates the size to current animation sprite's srcSize if
+  /// Updates the size to current [animation] sprite's srcSize if
   /// [autoResize] is true.
   void _resizeToSprite() {
     if (_autoResize) {
+      _isAutoResizing = true;
       if (_animationTicker != null) {
         size.setFrom(_animationTicker!.getSprite().srcSize);
       } else {
         size.setZero();
       }
+      _isAutoResizing = false;
+    }
+  }
+
+  /// Turns off [_autoResize]ing if a size modification is done by user.
+  void _handleAutoResizeState() {
+    if (_autoResize && (!_isAutoResizing)) {
+      _autoResize = false;
     }
   }
 }

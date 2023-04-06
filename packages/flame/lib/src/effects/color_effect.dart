@@ -13,7 +13,7 @@ import 'package:flutter/material.dart';
 class ColorEffect extends ComponentEffect<HasPaint> {
   final String? paintId;
   final Color color;
-  late final ColorFilter? _original;
+  ColorFilter? _original;
   late final Tween<double> _tween;
 
   ColorEffect(
