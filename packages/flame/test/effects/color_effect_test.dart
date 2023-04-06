@@ -62,5 +62,28 @@ void main() {
         );
       },
     );
+
+    testWithFlameGame(
+      'can be re-added in the component tree',
+      (game) async {
+        final component = _PaintComponent();
+        await game.ensureAdd(component);
+
+        final effect = ColorEffect(
+          Colors.red,
+          const Offset(0, 1),
+          EffectController(duration: 1),
+        );
+        await component.ensureAdd(effect);
+        game.update(0.5);
+        effect.removeFromParent();
+        game.update(0.0);
+        component.add(effect);
+        expect(
+          () => game.update(0),
+          returnsNormally,
+        );
+      },
+    );
   });
 }
