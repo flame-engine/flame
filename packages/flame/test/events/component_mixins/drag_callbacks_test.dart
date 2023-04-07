@@ -171,6 +171,7 @@ mixin _DragCounter on DragCallbacks {
 
   @override
   void onDragStart(DragStartEvent event) {
+    super.onDragStart(event);
     event.handled = true;
     dragStartEvent++;
   }
@@ -183,12 +184,14 @@ mixin _DragCounter on DragCallbacks {
 
   @override
   void onDragEnd(DragEndEvent event) {
+    super.onDragEnd(event);
     event.handled = true;
     dragEndEvent++;
   }
 
   @override
   void onDragCancel(DragCancelEvent event) {
+    super.onDragCancel(event);
     event.handled = true;
     dragCancelEvent++;
   }
