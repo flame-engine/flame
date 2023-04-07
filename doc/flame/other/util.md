@@ -55,15 +55,16 @@ events.
 Countdown example:
 
 ```dart
-import 'dart:ui';
-
+import 'package:flame/components.dart';
 import 'package:flame/game.dart';
-import 'package:flame/text_config.dart';
-import 'package:flame/timer.dart';
-import 'package:flame/vector2.dart';
+import 'package:flame/input.dart';
+import 'package:flutter/material.dart';
 
 class MyGame extends Game {
-  final TextConfig textConfig = TextConfig(color: const Color(0xFFFFFFFF));
+  final TextPaint textPaint = TextPaint(
+    style: const TextStyle(color: Colors.white, fontSize: 20),
+  );
+
   final countdown = Timer(2);
 
   @override
@@ -76,7 +77,7 @@ class MyGame extends Game {
 
   @override
   void render(Canvas canvas) {
-    textConfig.render(
+    textPaint.render(
       canvas,
       "Countdown: ${countdown.current.toString()}",
       Vector2(10, 100),
@@ -89,15 +90,15 @@ class MyGame extends Game {
 Interval example:
 
 ```dart
-import 'dart:ui';
-
+import 'package:flame/components.dart';
 import 'package:flame/game.dart';
-import 'package:flame/text_config.dart';
-import 'package:flame/timer.dart';
-import 'package:flame/vector2.dart';
+import 'package:flame/input.dart';
+import 'package:flutter/material.dart';
 
 class MyGame extends Game {
-  final TextConfig textConfig = TextConfig(color: const Color(0xFFFFFFFF));
+  final TextPaint textPaint = TextPaint(
+    style: const TextStyle(color: Colors.white, fontSize: 20),
+  );
   Timer interval;
 
   int elapsedSecs = 0;
@@ -117,7 +118,7 @@ class MyGame extends Game {
 
   @override
   void render(Canvas canvas) {
-    textConfig.render(canvas, "Elapsed time: $elapsedSecs", Vector2(10, 150));
+    textPaint.render(canvas, "Elapsed time: $elapsedSecs", Vector2(10, 150));
   }
 }
 
