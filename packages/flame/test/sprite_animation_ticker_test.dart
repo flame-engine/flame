@@ -135,14 +135,15 @@ void main() {
     });
 
     test(
-        "completed doesn't complete when animation is looping and on last frame",
-        () async {
-      final sprite = MockSprite();
-      final animationTicker =
-          SpriteAnimation.spriteList([sprite], stepTime: 1).ticker();
+      "completed doesn't complete when animation is looping and on last frame",
+      () async {
+        final sprite = MockSprite();
+        final animationTicker =
+            SpriteAnimation.spriteList([sprite], stepTime: 1).ticker();
 
-      animationTicker.update(1);
-      expectLater(animationTicker.completed, doesNotComplete);
-    });
+        animationTicker.update(1);
+        expectLater(animationTicker.completed, doesNotComplete);
+      },
+    );
   });
 }
