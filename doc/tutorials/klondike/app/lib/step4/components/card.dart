@@ -222,6 +222,7 @@ class Card extends PositionComponent with DragCallbacks {
 
   @override
   void onDragStart(DragStartEvent event) {
+    super.onDragStart(event);
     if (pile?.canMoveCard(this) ?? false) {
       _isDragging = true;
       priority = 100;
@@ -252,6 +253,7 @@ class Card extends PositionComponent with DragCallbacks {
 
   @override
   void onDragEnd(DragEndEvent event) {
+    super.onDragEnd(event);
     if (!_isDragging) {
       return;
     }

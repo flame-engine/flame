@@ -297,11 +297,12 @@ Future<void> main() async {
       final component = SpriteAnimationGroupComponent<_AnimationState>();
 
       // NOTE: Sequence of modifications is important here. Changing the size
-      // first disables the auto-resizing. So even if animations map is changed
-      // later, the component should still maintain testSize.
+      // after changing the animations map will disable auto-resizing. So even
+      // if the current state is changed later, the component should still
+      // maintain testSize.
       component
-        ..size = testSize
         ..animations = animationsMap
+        ..size = testSize
         ..current = _AnimationState.running;
 
       expectDouble(component.size.x, testSize.x);

@@ -90,7 +90,6 @@ abstract class MyCollidable extends PositionComponent
   late final Paint _dragIndicatorPaint;
   final ScreenHitbox screenHitbox;
   ShapeHitbox? hitbox;
-  bool isDragged = false;
 
   MyCollidable(
     Vector2 position,
@@ -154,14 +153,9 @@ abstract class MyCollidable extends PositionComponent
   }
 
   @override
-  void onDragStart(DragStartEvent info) {
-    isDragged = true;
-  }
-
-  @override
-  void onDragEnd(DragEndEvent info) {
-    velocity.setFrom(info.velocity / 10);
-    isDragged = false;
+  void onDragEnd(DragEndEvent event) {
+    super.onDragEnd(event);
+    velocity.setFrom(event.velocity / 10);
   }
 }
 
