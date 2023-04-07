@@ -23,7 +23,7 @@ Currently, Forge2D supports the following joints:
 - GearJoint
 - [`MotorJoint`](#motorjoint)
 - [`MouseJoint`](#mousejoint)
-- PrismaticJoint
+- [`PrismaticJoint`] (#prismaticjoint)
 - [`PulleyJoint`](#pulleyjoint)
 - [`RevoluteJoint`](#revolutejoint)
 - RopeJoint
@@ -274,6 +274,103 @@ final mouseJointDef = MouseJointDef()
   initially.
 
 
+### `PrismaticJoint`
+
+The `PrismaticJoint` provides a single degree of freedom, allowing for a relative translation of two
+bodies along an axis fixed in bodyA. Relative rotation is prevented.
+
+`PrismaticJointDef` requires defining a line of motion using an axis and an anchor point.
+The definition uses local anchor points and a local axis so that the initial configuration
+can violate the constraint slightly.
+
+The joint translation is zero when the local anchor points coincide in world space.
+Using local anchors and a local axis helps when saving and loading a game.
+
+```{warning}
+At least one body should by dynamic with a non-fixed rotation.
+```
+
+The `PrismaticJoint` definition is similar to the [`RevoluteJoint`](#revolutejoint) definition, but
+instead of rotation, it uses translation.
+
+```{dart}
+final prismaticJointDef = PrismaticJointDef()
+  ..initialize(
+    dynamicBody,
+    groundBody,
+    dynamicBody.worldCenter,
+    Vector2(1, 0),
+  )
+```
+
+```{flutter-app}
+:sources: ../../examples
+:page: prismatic_joint
+:subfolder: stories/bridge_libraries/forge2d/joints
+:show: code popup
+```
+
+- `b1`, `b2`: Bodies connected by the joint.
+- `anchor`: World anchor point, to put the axis through. Usually the center of the first body.
+- `axis`: World translation axis, along which the translation will be fixed.
+
+In some cases you might wish to control the range of motion. For this, the `PrismaticJointDef` has
+optional parameters that allow you to simulate a joint limit and/or a motor.
+
+
+#### Prismatic Joint Limit
+
+You can limit the relative rotation with a joint limit that specifies a lower and upper translation.
+
+```dart
+jointDef
+  ..enableLimit = true
+  ..lowerTranslation = -20
+  ..upperTranslation = 20;
+```
+
+- `enableLimit`: Set to true to enable translation limits
+- `lowerTranslation`: The lower translation limit in meters
+- `upperTranslation`: The upper translation limit in meters
+
+You change the limits after the joint was created with this method:
+
+```dart
+prismaticJoint.setLimits(-10, 10);
+```
+
+
+#### Prismatic Joint Motor
+
+You can use a motor to drive the motion or to model joint friction. A maximum motor force is
+provided so that infinite forces are not generated.
+
+```dart
+jointDef
+  ..enableMotor = true
+  ..motorSpeed = 1
+  ..maxMotorForce = 100;
+```
+
+- `enableMotor`: Set to true to enable the motor
+- `motorSpeed`: The desired motor speed in radians per second
+- `maxMotorForce`: The maximum motor torque used to achieve the desired motor speed in N-m.
+
+You change the motor's speed and force after the joint was created using these methods:
+
+```dart
+prismaticJoint.setMotorSpeed(2);
+prismaticJoint.setMaxMotorForce(200);
+```
+
+Also, you can get the joint angle and speed using the following methods:
+
+```dart
+prismaticJoint.getJointTranslation();
+prismaticJoint.getJointSpeed();
+```
+
+
 ### `PulleyJoint`
 
 A `PulleyJoint` is used to create an idealized pulley. The pulley connects two bodies to the ground
@@ -366,7 +463,7 @@ In some cases you might wish to control the joint angle. For this, the `Revolute
 optional parameters that allow you to simulate a joint limit and/or a motor.
 
 
-#### Joint Limit
+#### Revolute Joint Limit
 
 You can limit the relative rotation with a joint limit that specifies a lower and upper angle.
 
@@ -388,7 +485,7 @@ revoluteJoint.setLimits(0, pi);
 ```
 
 
-#### Joint Motor
+#### Revolute Joint Motor
 
 You can use a motor to drive the relative rotation about the shared point. A maximum motor torque is
 provided so that infinite forces are not generated.
