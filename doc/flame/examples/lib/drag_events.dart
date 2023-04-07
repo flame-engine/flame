@@ -74,6 +74,7 @@ class DragTarget extends PositionComponent with DragCallbacks {
 
   @override
   void onDragStart(DragStartEvent event) {
+    super.onDragStart(event);
     final trail = Trail(event.localPosition);
     _trails[event.pointerId] = trail;
     add(trail);
@@ -86,11 +87,13 @@ class DragTarget extends PositionComponent with DragCallbacks {
 
   @override
   void onDragEnd(DragEndEvent event) {
+    super.onDragEnd(event);
     _trails.remove(event.pointerId)!.end();
   }
 
   @override
   void onDragCancel(DragCancelEvent event) {
+    super.onDragCancel(event);
     _trails.remove(event.pointerId)!.cancel();
   }
 }
@@ -203,7 +206,6 @@ class Star extends PositionComponent with DragCallbacks {
     ..color = const Color(0xFF000000)
     ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 4.0);
   late final Path _path;
-  bool _isDragged = false;
 
   @override
   bool containsLocalPoint(Vector2 point) {
@@ -212,7 +214,7 @@ class Star extends PositionComponent with DragCallbacks {
 
   @override
   void render(Canvas canvas) {
-    if (_isDragged) {
+    if (isDragged) {
       _paint.color = color.withOpacity(0.5);
       canvas.drawPath(_path, _paint);
       canvas.drawPath(_path, _borderPaint);
@@ -225,13 +227,13 @@ class Star extends PositionComponent with DragCallbacks {
 
   @override
   void onDragStart(DragStartEvent event) {
-    _isDragged = true;
+    super.onDragStart(event);
     priority = 10;
   }
 
   @override
   void onDragEnd(DragEndEvent event) {
-    _isDragged = false;
+    super.onDragEnd(event);
     priority = 0;
   }
 
