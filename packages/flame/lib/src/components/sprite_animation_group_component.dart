@@ -197,7 +197,7 @@ class SpriteAnimationGroupComponent<T> extends PositionComponent
       } else {
         size.setZero();
       }
-      _isAutoResizing = true;
+      _isAutoResizing = false;
     }
   }
 
