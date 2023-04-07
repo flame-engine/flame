@@ -3,6 +3,62 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2023-04-07
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`flame` - `v1.7.2`](#flame---v172)
+ - [`flame_isolate` - `v0.3.0+1`](#flame_isolate---v0301)
+ - [`flame_tiled` - `v1.10.1`](#flame_tiled---v1101)
+ - [`flame_audio` - `v1.4.2`](#flame_audio---v142)
+ - [`flame_svg` - `v1.7.3`](#flame_svg---v173)
+ - [`flame_test` - `v1.10.1`](#flame_test---v1101)
+ - [`flame_flare` - `v1.5.4`](#flame_flare---v154)
+ - [`flame_oxygen` - `v0.1.8+2`](#flame_oxygen---v0182)
+ - [`flame_bloc` - `v1.8.4`](#flame_bloc---v184)
+ - [`flame_fire_atlas` - `v1.3.5`](#flame_fire_atlas---v135)
+ - [`flame_forge2d` - `v0.13.0+1`](#flame_forge2d---v01301)
+ - [`flame_rive` - `v1.7.1`](#flame_rive---v171)
+ - [`flame_noise` - `v0.1.1+1`](#flame_noise---v0111)
+ - [`flame_network_assets` - `v0.2.0+1`](#flame_network_assets---v0201)
+ - [`flame_lottie` - `v0.2.0+2`](#flame_lottie---v0202)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `flame_isolate` - `v0.3.0+1`
+ - `flame_tiled` - `v1.10.1`
+ - `flame_audio` - `v1.4.2`
+ - `flame_svg` - `v1.7.3`
+ - `flame_test` - `v1.10.1`
+ - `flame_flare` - `v1.5.4`
+ - `flame_oxygen` - `v0.1.8+2`
+ - `flame_bloc` - `v1.8.4`
+ - `flame_fire_atlas` - `v1.3.5`
+ - `flame_forge2d` - `v0.13.0+1`
+ - `flame_rive` - `v1.7.1`
+ - `flame_noise` - `v0.1.1+1`
+ - `flame_network_assets` - `v0.2.0+1`
+ - `flame_lottie` - `v0.2.0+2`
+
+---
+
+#### `flame` - `v1.7.2`
+
+ - **FIX**: A mistake in auto-resizing disabling logic ([#2471](https://github.com/flame-engine/flame/issues/2471)). ([e7ebf8e5](https://github.com/flame-engine/flame/commit/e7ebf8e55a0ad7b0f3aaae769c0b8855fb1efd96))
+ - **FIX**: It should be possible to re-add `ColorEffect` ([#2469](https://github.com/flame-engine/flame/issues/2469)). ([6fa9e9d5](https://github.com/flame-engine/flame/commit/6fa9e9d5470eaf36c2db5f3b040e708615dbfcf1))
+ - **FEAT**: Add `isDragged` in `DragCallbacks` mixin ([#2472](https://github.com/flame-engine/flame/issues/2472)). ([de630a1c](https://github.com/flame-engine/flame/commit/de630a1c3a779cefe49a598b46e105f19aacebfb))
+
+
 ## 2023-04-05
 
 ### Changes
