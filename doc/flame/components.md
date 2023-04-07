@@ -498,47 +498,61 @@ Future<void> onLoad() async {
 }
 ```
 
-If you are not using `FlameGame`, don't forget this component needs to be updated, because the
-animation object needs to be ticked to move the frames.
-
-To listen when the animation is done (when it reaches the last frame and is not looping) you can
-use `animation.completed`.
+If you are not using `FlameGame`, don't forget this component needs to be updated, because a ticker
+object needs to the tick the animation to move the frames. All animation components internally maintains
+a `SpriteAnimationTicker` which does this. This means a sprite animation object can be ticked directly
+using a ticker. This allows sharing same animation object between multiple tickers.
 
 Example:
 
 ```dart
-await animation.completed;
+final sprites = [/*You sprite list here*/];
+final animation = SpriteAnimation.spriteList(sprites, stepTime: 0.01);
+
+final animationTicker = SpriteAnimationTicker(animation);
+
+// or alternatively
+
+final animationTicker = animation.ticker(); // creates a new ticker
+
+animationTicker.update(dt);
+```
+
+To listen when the animation is done (when it reaches the last frame and is not looping) you can
+use `animationTicker.completed`.
+
+Example:
+
+```dart
+await animationTicker.completed;
 
 doSomething();
 
 // or alternatively
 
-animation.completed.whenComplete(doSomething);
+animationTicker.completed.whenComplete(doSomething);
 ```
 
-Additionally, this component also has the following optional event callbacks:  `onStart`, `onFrame`,
+Additionally, `SpriteAnimationTicker` also has the following optional event callbacks:  `onStart`, `onFrame`,
 and `onComplete`. To listen to these events, you can do the following:
 
 ```dart
-final animation =
-    SpriteAnimation.spriteList([sprite], stepTime: 1, loop: false)
-      ..onStart = () {
-        // Do something on start.
-      };
+final animationTicker = SpriteAnimationTicker(animation)
+  ..onStart = () {
+    // Do something on start.
+  };
 
-final animation =
-    SpriteAnimation.spriteList([sprite], stepTime: 1, loop: false)
-      ..onComplete = () {
-        // Do something on completion.
-      };
+final animationTicker = SpriteAnimationTicker(animation)
+  ..onComplete = () {
+    // Do something on completion.
+  };
 
-final animation =
-    SpriteAnimation.spriteList([sprite], stepTime: 1, loop: false)
-      ..onFrame = (index) {
-        if (index == 1) {
-          // Do something for the second frame.
-        }
-      };
+final animationTicker = SpriteAnimationTicker(animation)
+  ..onFrame = (index) {
+    if (index == 1) {
+      // Do something for the second frame.
+    }
+  };
 ```
 
 
