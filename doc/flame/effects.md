@@ -84,9 +84,6 @@ functionality inherited by all other effects. This includes:
 - The ability to pause/resume the effect using `effect.pause()` and `effect.resume()`. You can
   check whether the effect is currently paused using `effect.isPaused`.
 
-- The ability to reverse the effect's time direction using `effect.reverse()`. Use
-  `effect.isReversed` to check if the effect is currently running back in time.
-
 - Property `removeOnFinish` (which is true by default) will cause the effect component to be
   removed from the game tree and garbage-collected once the effect completes. Set this to false
   if you plan to reuse the effect after it is finished.
