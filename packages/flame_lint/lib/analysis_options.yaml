@@ -12,6 +12,7 @@ linter:
   rules:
     - always_declare_return_types
     - always_put_control_body_on_new_line
+    - always_put_required_named_parameters_first
     - always_require_non_null_named_parameters
     - always_use_package_imports
     - annotate_overrides
@@ -26,17 +27,23 @@ linter:
     - avoid_final_parameters
     - avoid_init_to_null
     - avoid_js_rounded_ints
+    - avoid_multiple_declarations_per_line
     - avoid_null_checks_in_equality_operators
+    - avoid_positional_boolean_parameters
     - avoid_print
     - avoid_private_typedef_functions
     - avoid_redundant_argument_values
     - avoid_relative_lib_imports
+    - avoid_renaming_method_parameters
     - avoid_return_types_on_setters
+    - avoid_returning_null_for_void
+    - avoid_returning_this
     - avoid_shadowing_type_parameters
     - avoid_single_cascade_in_expression_statements
     - avoid_slow_async_io
     - avoid_type_to_string
     - avoid_types_as_parameter_names
+    - avoid_unnecessary_containers
     - avoid_unused_constructor_parameters
     - avoid_void_async
     - await_only_futures
@@ -45,6 +52,7 @@ linter:
     - cancel_subscriptions
     - cast_nullable_to_non_nullable
     - close_sinks
+    - collection_methods_unrelated_type
     - comment_references
     - constant_identifier_names
     - control_flow_in_finally
@@ -56,6 +64,7 @@ linter:
     - empty_catches
     - empty_constructor_bodies
     - empty_statements
+    - enable_null_safety
     - exhaustive_cases
     - file_names
     - flutter_style_todos
@@ -63,6 +72,7 @@ linter:
     - implementation_imports
     - iterable_contains_unrelated_type
     - join_return_with_assignment
+    - leading_newlines_in_multiline_strings
     - library_names
     - library_prefixes
     - lines_longer_than_80_chars
