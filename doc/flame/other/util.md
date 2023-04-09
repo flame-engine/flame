@@ -146,6 +146,45 @@ class MyFlameGame extends FlameGame {
 ```
 
 
+## Time Scale
+
+In many games it is often desirable to create  slow-motion or fast-forward effects based on some in
+game events. A very common approach to achieve these results is to manipulate the in game time or
+tick rate.
+
+To make this manipulation easier, Flame provides a `HasTimeScale` mixin. This mixin can be attached
+to any Flame `Component` and exposes a simple get/set API for `timeScale`. The default value of
+`timeScale` is `1`, implying in-game time of the component is running at the same speed as real life
+time. Setting it to `2` will make the component tick twice as fast and setting it to `0.5` will make
+it tick at half the speed as compared to real life time.
+
+Since `FlameGame` is a `Component` too, this mixin can be attached to the `FlameGame` as well. Doing
+so will allow controlling time scale for all the component of the game from a single place.
+
+```{flutter-app}
+:sources: ../flame/examples
+:page: time_scale
+:show: widget code infobox
+:width: 180
+:height: 160
+```
+
+```dart
+import 'package:flame/components.dart';
+import 'package:flame/game.dart';
+
+class MyFlameGame extends FlameGame with HasTimeScale {
+  void speedUp(){
+    timeScale = 2.0;
+  }
+
+  void slowDown(){
+    timeScale = 1.0;
+  }
+}
+```
+
+
 ## Extensions
 
 Flame bundles a collection of utility extensions, these extensions are meant to help the developer

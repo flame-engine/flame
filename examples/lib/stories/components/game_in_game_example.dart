@@ -3,7 +3,7 @@ import 'package:examples/stories/input/draggables_example.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 
-class GameInGameExample extends FlameGame with HasDraggables {
+class GameInGameExample extends FlameGame {
   static const String description = '''
     This example shows two games having another game as a parent.
     One game contains draggable components and the other is a rotating square

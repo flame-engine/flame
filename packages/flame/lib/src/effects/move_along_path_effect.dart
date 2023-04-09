@@ -78,20 +78,18 @@ class MoveAlongPathEffect extends MoveEffect {
   void onStart() {
     _lastOffset = Vector2.zero();
     _lastAngle = 0;
+    final start = _pathMetric.getTangentForOffset(0)!;
     if (_followDirection) {
       assert(
         target is AngleProvider,
         'An `oriented` MoveAlongPathEffect cannot be applied to a target that '
         'does not support rotation',
       );
+      (target as AngleProvider).angle = _lastAngle = -start.angle;
     }
     if (_isAbsolute) {
-      final start = _pathMetric.getTangentForOffset(0)!;
       target.position.x = _lastOffset.x = start.position.dx;
       target.position.y = _lastOffset.y = start.position.dy;
-      if (_followDirection) {
-        (target as AngleProvider).angle = _lastAngle = -start.angle;
-      }
     }
   }
 

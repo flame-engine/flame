@@ -6,7 +6,7 @@ import 'package:flame/components.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
 
-class ValueRouteExample extends FlameGame with HasTappableComponents {
+class ValueRouteExample extends FlameGame {
   late final RouterComponent router;
 
   @override

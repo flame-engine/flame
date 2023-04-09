@@ -1,3 +1,14 @@
+## 1.10.0
+
+ - **REFACTOR**: Divide TileLayer by its Layer type ([#2326](https://github.com/flame-engine/flame/issues/2326)). ([0c14d4cb](https://github.com/flame-engine/flame/commit/0c14d4cb87ba81957221695547bc06111a28617a))
+ - **FIX**: TiledComponent now can be safely loaded regardless of the order ([#2391](https://github.com/flame-engine/flame/issues/2391)). ([4ddc4bba](https://github.com/flame-engine/flame/commit/4ddc4bba2b67ebd8c9c0e9e761eee34d2a74f62b))
+ - **FEAT**: Use cached image when creating single source TiledAtlas if available ([#2348](https://github.com/flame-engine/flame/issues/2348)). ([73467c94](https://github.com/flame-engine/flame/commit/73467c941d89f68598c6dc297937af9d9896a949))
+ - **FEAT**: Add ability to opt-out flip ([#2316](https://github.com/flame-engine/flame/issues/2316)). ([34c3b6bd](https://github.com/flame-engine/flame/commit/34c3b6bdc4c570f4e8641b11b94efe19bdd1ef32))
+ - **DOCS**: Update funding links ([#2420](https://github.com/flame-engine/flame/issues/2420)). ([8294a2a1](https://github.com/flame-engine/flame/commit/8294a2a15638c504aa2b77f967f5963af1f23c2c))
+ - **DOCS**: Fix broken image link on flame_tiled pub ([#2407](https://github.com/flame-engine/flame/issues/2407)). ([0d24a6c8](https://github.com/flame-engine/flame/commit/0d24a6c8ed4a5d4de2e653a6430a635ef881ee2e))
+ - **DOCS**: Fix non-markdown section of README files ([#2406](https://github.com/flame-engine/flame/issues/2406)). ([426b3124](https://github.com/flame-engine/flame/commit/426b3124022e567633c76b80eb389ebce1772ca3))
+ - **DOCS**: Update all README files for the bridge packages to be consistent and not broken ([#2402](https://github.com/flame-engine/flame/issues/2402)). ([5e8ecf54](https://github.com/flame-engine/flame/commit/5e8ecf5450688b1287368b3fbc7b0e718a29fce4))
+
 ## 1.9.1
 
  - Update a dependency to the latest release.

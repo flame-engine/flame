@@ -4,6 +4,7 @@ import 'package:examples/commons/ember.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
+import 'package:flame/experimental.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
@@ -11,7 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class FollowComponentExample extends FlameGame
-    with HasCollisionDetection, HasTappables, HasKeyboardHandlerComponents {
+    with HasCollisionDetection, HasKeyboardHandlerComponents {
   static const String description = '''
     Move around with W, A, S, D and notice how the camera follows the ember 
     sprite.\n
@@ -167,7 +168,7 @@ class Map extends Component {
   }
 }
 
-class Rock extends SpriteComponent with HasGameRef, Tappable {
+class Rock extends SpriteComponent with HasGameRef, TapCallbacks {
   Rock(Vector2 position)
       : super(
           position: position,
@@ -183,13 +184,12 @@ class Rock extends SpriteComponent with HasGameRef, Tappable {
   }
 
   @override
-  bool onTapDown(_) {
+  void onTapDown(_) {
     add(
       ScaleEffect.by(
         Vector2.all(10),
         EffectController(duration: 0.3),
       ),
     );
-    return true;
   }
 }

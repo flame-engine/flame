@@ -1,6 +1,6 @@
 import 'package:flame/components.dart';
 import 'package:flame_test/flame_test.dart';
-import 'package:test/test.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 enum _AnimationState {
   idle,
@@ -191,6 +191,122 @@ Future<void> main() async {
       // runs a cycle to remove the component, but failed
       game.update(0.1);
       expect(game.children.length, 1);
+    });
+  });
+
+  group('SpriteAnimationGroupComponent.autoResize', () {
+    test('mutual exclusive with size while construction', () {
+      expect(
+        () => SpriteAnimationGroupComponent<_AnimationState>(
+          autoResize: true,
+          size: Vector2.all(2),
+        ),
+        throwsAssertionError,
+      );
+
+      expect(
+        () => SpriteAnimationGroupComponent<_AnimationState>(autoResize: false),
+        throwsAssertionError,
+      );
+    });
+
+    test('default value set correctly when not provided explicitly', () {
+      final component1 = SpriteAnimationGroupComponent<_AnimationState>();
+      final component2 = SpriteAnimationGroupComponent<_AnimationState>(
+        size: Vector2.all(2),
+      );
+
+      expect(component1.autoResize, true);
+      expect(component2.autoResize, false);
+    });
+
+    test('resizes on current state change', () {
+      final sprite1 = Sprite(image, srcSize: Vector2.all(76));
+      final sprite2 = Sprite(image, srcSize: Vector2.all(15));
+      final animation1 = SpriteAnimation.spriteList(
+        List.filled(5, sprite1),
+        stepTime: 0.1,
+        loop: false,
+      );
+      final animation2 = SpriteAnimation.spriteList(
+        List.filled(5, sprite2),
+        stepTime: 0.1,
+        loop: false,
+      );
+
+      final component = SpriteAnimationGroupComponent<_AnimationState>(
+        animations: {
+          _AnimationState.idle: animation1,
+          _AnimationState.running: animation2
+        },
+        current: _AnimationState.idle,
+      );
+      expect(component.size, sprite1.srcSize);
+
+      component.current = _AnimationState.running;
+      expect(component.size, sprite2.srcSize);
+    });
+
+    test('resizes only when true', () {
+      final sprite1 = Sprite(image, srcSize: Vector2.all(76));
+      final sprite2 = Sprite(image, srcSize: Vector2.all(15));
+      final animation1 = SpriteAnimation.spriteList(
+        List.filled(5, sprite1),
+        stepTime: 0.1,
+        loop: false,
+      );
+      final animation2 = SpriteAnimation.spriteList(
+        List.filled(5, sprite2),
+        stepTime: 0.1,
+        loop: false,
+      );
+
+      final component = SpriteAnimationGroupComponent<_AnimationState>(
+        animations: {
+          _AnimationState.idle: animation1,
+          _AnimationState.running: animation2
+        },
+        current: _AnimationState.idle,
+      )..autoResize = false;
+
+      component.current = _AnimationState.running;
+      expect(component.size, sprite1.srcSize);
+
+      component.autoResize = true;
+      expect(component.size, sprite2.srcSize);
+    });
+
+    test('stop autoResizing on external size modifications', () {
+      final testSize = Vector2(83, 100);
+      final sprite1 = Sprite(image, srcSize: Vector2.all(76));
+      final sprite2 = Sprite(image, srcSize: Vector2.all(15));
+      final animation1 = SpriteAnimation.spriteList(
+        List.filled(5, sprite1),
+        stepTime: 0.1,
+        loop: false,
+      );
+      final animation2 = SpriteAnimation.spriteList(
+        List.filled(5, sprite2),
+        stepTime: 0.1,
+        loop: false,
+      );
+      final animationsMap = {
+        _AnimationState.idle: animation1,
+        _AnimationState.running: animation2,
+      };
+      final component = SpriteAnimationGroupComponent<_AnimationState>();
+
+      // NOTE: Sequence of modifications is important here. Changing the size
+      // after changing the animations map will disable auto-resizing. So even
+      // if the current state is changed later, the component should still
+      // maintain testSize.
+      component
+        ..animations = animationsMap
+        ..size = testSize
+        ..current = _AnimationState.running;
+
+      expectDouble(component.size.x, testSize.x);
+      expectDouble(component.size.y, testSize.y);
     });
   });
 }

@@ -20,6 +20,7 @@ export 'src/components/mixins/has_ancestor.dart';
 export 'src/components/mixins/has_decorator.dart' show HasDecorator;
 export 'src/components/mixins/has_game_ref.dart' show HasGameRef;
 export 'src/components/mixins/has_paint.dart';
+export 'src/components/mixins/has_time_scale.dart';
 export 'src/components/mixins/hoverable.dart';
 export 'src/components/mixins/keyboard_handler.dart';
 export 'src/components/mixins/notifier.dart';

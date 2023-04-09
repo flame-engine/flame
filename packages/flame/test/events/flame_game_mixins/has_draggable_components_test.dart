@@ -181,13 +181,21 @@ class _DragCallbacksComponent extends PositionComponent with DragCallbacks {
   final void Function(DragEndEvent)? _onDragEnd;
 
   @override
-  void onDragStart(DragStartEvent event) => _onDragStart?.call(event);
+  void onDragStart(DragStartEvent event) {
+    super.onDragStart(event);
+    return _onDragStart?.call(event);
+  }
 
   @override
-  void onDragUpdate(DragUpdateEvent event) => _onDragUpdate?.call(event);
+  void onDragUpdate(DragUpdateEvent event) {
+    return _onDragUpdate?.call(event);
+  }
 
   @override
-  void onDragEnd(DragEndEvent event) => _onDragEnd?.call(event);
+  void onDragEnd(DragEndEvent event) {
+    super.onDragEnd(event);
+    return _onDragEnd?.call(event);
+  }
 }
 
 class _SimpleDragCallbacksComponent extends PositionComponent

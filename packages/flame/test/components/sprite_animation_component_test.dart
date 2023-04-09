@@ -1,6 +1,6 @@
 import 'package:flame/components.dart';
 import 'package:flame_test/flame_test.dart';
-import 'package:test/test.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 Future<void> main() async {
   // Generate an image
@@ -271,6 +271,94 @@ Future<void> main() async {
       expect(callbackInvoked, 1);
       expect(animation.currentIndex, 4);
       expect(animation.done(), true);
+    });
+  });
+
+  group('SpriteAnimationComponent.autoResize', () {
+    test('mutual exclusive with size while construction', () {
+      expect(
+        () => SpriteAnimationComponent(autoResize: true, size: Vector2.all(2)),
+        throwsAssertionError,
+      );
+
+      expect(
+        () => SpriteAnimationComponent(autoResize: false),
+        throwsAssertionError,
+      );
+    });
+
+    test('default value set correctly when not provided explicitly', () {
+      final component1 = SpriteAnimationComponent();
+      final component2 = SpriteAnimationComponent(size: Vector2.all(2));
+
+      expect(component1.autoResize, true);
+      expect(component2.autoResize, false);
+    });
+
+    test('resizes on animation update', () {
+      final spriteList = [
+        Sprite(image, srcSize: Vector2.all(1)),
+        Sprite(image, srcSize: Vector2.all(2)),
+        Sprite(image, srcSize: Vector2.all(3)),
+      ];
+      final animation = SpriteAnimation.spriteList(
+        spriteList,
+        stepTime: 1,
+        loop: false,
+      );
+
+      final component = SpriteAnimationComponent(animation: animation);
+      expect(component.size, spriteList[0].srcSize);
+
+      component.update(1);
+      expect(component.size, spriteList[1].srcSize);
+
+      component.update(1);
+      expect(component.size, spriteList[2].srcSize);
+    });
+
+    test('resizes only when true', () {
+      final spriteList = [
+        Sprite(image, srcSize: Vector2.all(1)),
+        Sprite(image, srcSize: Vector2.all(2)),
+      ];
+      final animation = SpriteAnimation.spriteList(
+        spriteList,
+        stepTime: 1,
+        loop: false,
+      );
+      final component = SpriteAnimationComponent(animation: animation)
+        ..autoResize = false;
+
+      component.update(1);
+      expect(component.size, spriteList[0].srcSize);
+
+      component.autoResize = true;
+      expect(component.size, spriteList[1].srcSize);
+    });
+
+    test('stop autoResizing on external size modifications', () {
+      final spriteList = [
+        Sprite(image, srcSize: Vector2.all(1)),
+        Sprite(image, srcSize: Vector2.all(2)),
+      ];
+      final animation = SpriteAnimation.spriteList(
+        spriteList,
+        stepTime: 1,
+        loop: false,
+      );
+      final testSize = Vector2(83, 100);
+      final component = SpriteAnimationComponent();
+
+      // NOTE: Sequence of modifications is important here. Changing the size
+      // first disables the auto-resizing. So even if animation is changed
+      // later, the component should still maintain testSize.
+      component
+        ..size = testSize
+        ..animation = animation;
+
+      expectDouble(component.size.x, testSize.x);
+      expectDouble(component.size.y, testSize.y);
     });
   });
 }

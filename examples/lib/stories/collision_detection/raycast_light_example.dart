@@ -87,12 +87,11 @@ with with mouse.
   }
 
   @override
-  bool onTapDown(TapDownInfo info) {
+  void onTapDown(TapDownInfo info) {
     super.onTapDown(info);
     final origin = info.eventPosition.game;
     isTapOriginCasted = origin == tapOrigin;
     tapOrigin = origin;
-    return false;
   }
 
   @override

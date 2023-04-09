@@ -1,43 +1,39 @@
 import 'package:flame/components.dart';
+import 'package:flame/experimental.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
+import 'package:flutter/material.dart';
 
-class OverlappingTappablesExample extends FlameGame with HasTappables {
+class OverlappingTappablesExample extends FlameGame {
   static const String description = '''
-    In this example we show how you can stop event propagation to the components
-    by returning `false` in the overridden event handler method. In this case we
-    use `onTapUp`, `onTapDown` and `onTapCancel` from the `Tappable mixin.
+    In this example we show you that events can choose to continue propagating
+    to underlying components. The middle green square continue to propagate the
+    events, meanwhile the others do not.
   ''';
 
   @override
   Future<void> onLoad() async {
     add(TappableSquare(position: Vector2(100, 100)));
-    add(TappableSquare(position: Vector2(150, 150)));
+    add(TappableSquare(position: Vector2(150, 150), continuePropagation: true));
     add(TappableSquare(position: Vector2(100, 200)));
   }
 }
 
-class TappableSquare extends RectangleComponent with Tappable {
-  TappableSquare({Vector2? position})
+class TappableSquare extends RectangleComponent with TapCallbacks {
+  TappableSquare({Vector2? position, this.continuePropagation = false})
       : super(
           position: position ?? Vector2.all(100),
           size: Vector2.all(100),
-          paint: PaintExtension.random(withAlpha: 0.9, base: 100),
+          paint: continuePropagation
+              ? (Paint()..color = Colors.green.withOpacity(0.9))
+              : PaintExtension.random(withAlpha: 0.9, base: 100),
         );
 
-  @override
-  bool onTapUp(_) {
-    return false;
-  }
+  final bool continuePropagation;
 
   @override
-  bool onTapDown(_) {
+  void onTapDown(TapDownEvent event) {
+    event.continuePropagation = continuePropagation;
     angle += 1.0;
-    return false;
-  }
-
-  @override
-  bool onTapCancel() {
-    return false;
   }
 }

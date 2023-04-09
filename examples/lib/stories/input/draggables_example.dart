@@ -1,10 +1,9 @@
 import 'package:examples/commons/ember.dart';
-import 'package:flame/components.dart';
+import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
-import 'package:flame/input.dart';
 import 'package:flutter/material.dart' show Colors;
 
-class DraggablesExample extends FlameGame with HasDraggables {
+class DraggablesExample extends FlameGame {
   static const String description = '''
     In this example we show you can use the `Draggable` mixin on
     `PositionComponent`s. Drag around the Embers and see their position
@@ -26,7 +25,7 @@ class DraggablesExample extends FlameGame with HasDraggables {
 
 // Note: this component does not consider the possibility of multiple
 // simultaneous drags with different pointerIds.
-class DraggableEmber extends Ember with Draggable {
+class DraggableEmber extends Ember with DragCallbacks {
   @override
   bool debugMode = true;
 
@@ -45,12 +44,13 @@ class DraggableEmber extends Ember with Draggable {
   }
 
   @override
-  bool onDragUpdate(DragUpdateInfo info) {
+  void onDragUpdate(DragUpdateEvent event) {
     if (parent is! DraggablesExample) {
-      return true;
+      event.continuePropagation = true;
+      return;
     }
 
-    position.add(info.delta.game);
-    return false;
+    position.add(event.localPosition);
+    event.continuePropagation = false;
   }
 }

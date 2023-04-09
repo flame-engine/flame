@@ -1,9 +1,10 @@
 import 'package:flame/components.dart';
+import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
 
 enum ButtonState { unpressed, pressed }
 
-class SpriteGroupExample extends FlameGame with HasTappables {
+class SpriteGroupExample extends FlameGame {
   static const String description = '''
     In this example we show how a `SpriteGroupComponent` can be used to create
     a button which displays different sprites depending on whether it is pressed
@@ -22,7 +23,7 @@ class SpriteGroupExample extends FlameGame with HasTappables {
 }
 
 class ButtonComponent extends SpriteGroupComponent<ButtonState>
-    with HasGameRef<SpriteGroupExample>, Tappable {
+    with HasGameRef<SpriteGroupExample>, TapCallbacks {
   @override
   Future<void> onLoad() async {
     final pressedSprite = await gameRef.loadSprite(
@@ -44,20 +45,17 @@ class ButtonComponent extends SpriteGroupComponent<ButtonState>
   }
 
   @override
-  bool onTapDown(_) {
+  void onTapDown(_) {
     current = ButtonState.pressed;
-    return true;
   }
 
   @override
-  bool onTapUp(_) {
+  void onTapUp(_) {
     current = ButtonState.unpressed;
-    return true;
   }
 
   @override
-  bool onTapCancel() {
+  void onTapCancel(_) {
     current = ButtonState.unpressed;
-    return true;
   }
 }

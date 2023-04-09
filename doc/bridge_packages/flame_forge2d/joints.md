@@ -22,10 +22,10 @@ Currently, Forge2D supports the following joints:
 - [`FrictionJoint`](#frictionjoint)
 - GearJoint
 - [`MotorJoint`](#motorjoint)
-- MouseJoint
-- PrismaticJoint
-- PulleyJoint
-- RevoluteJoint
+- [`MouseJoint`](#mousejoint)
+- [`PrismaticJoint`] (#prismaticjoint)
+- [`PulleyJoint`](#pulleyjoint)
+- [`RevoluteJoint`](#revolutejoint)
 - RopeJoint
 - WeldJoint
 - WheelJoint
@@ -180,6 +180,13 @@ final motorJointDef = MotorJointDef()
   world.createJoint(MotorJoint(motorJointDef));
 ```
 
+```{flutter-app}
+:sources: ../../examples
+:page: motor_joint
+:subfolder: stories/bridge_libraries/forge2d/joints
+:show: code popup
+```
+
 A `MotorJointDef` has three optional parameters:
 
 - `maxForce`: the maximum translational force which will be applied to the joined body to reach the
@@ -210,4 +217,300 @@ void update(double dt) {
   final angularOffset = joint.getAngularOffset() + motorSpeed * dt;
   joint.setAngularOffset(angularOffset);
 }
+```
+
+
+### `MouseJoint`
+
+The `MouseJoint` is used to manipulate bodies with the mouse. It attempts to drive a point on a body
+towards the current position of the cursor. There is no restriction on rotation.
+
+The `MouseJoint` definition has a target point, maximum force, frequency, and damping ratio. The
+target point initially coincides with the body's anchor point. The maximum force is used to prevent
+violent reactions when multiple dynamic bodies interact. You can make this as large as you like.
+The frequency and damping ratio are used to create a spring/damper effect similar to the distance
+joint.
+
+```{warning}
+Many users have tried to adapt the mouse joint for game play. Users often want
+to achieve precisepositioning and instantaneous response. The mouse joint 
+doesn't work very well in that context. You may wish to consider using 
+kinematic bodies instead.
+```
+
+```dart
+final mouseJointDef = MouseJointDef()
+  ..maxForce = 3000 * ballBody.mass * 10
+  ..dampingRatio = 1
+  ..frequencyHz = 5
+  ..target.setFrom(ballBody.position)
+  ..collideConnected = false
+  ..bodyA = groundBody
+  ..bodyB = ballBody;
+
+  mouseJoint = MouseJoint(mouseJointDef);
+  world.createJoint(mouseJoint);
+}
+```
+
+```{flutter-app}
+:sources: ../../examples
+:page: mouse_joint
+:subfolder: stories/bridge_libraries/forge2d/joints
+:show: code popup
+```
+
+- `maxForce`: This parameter defines the maximum constraint force that can be exerted to move the
+  candidate body. Usually you will express as some multiple of the weight
+  (multiplier *mass* gravity).
+
+- `dampingRatio`: This parameter defines how quickly the oscillation comes to rest. It ranges from
+  0 to 1, where 0 means no damping and 1 indicates critical damping.
+
+- `frequencyHz`: This parameter defines the response speed of the body, i.e. how quickly it tries to
+  reach the target position
+
+- `target`: The initial world target point. This is assumed to coincide with the body anchor
+  initially.
+
+
+### `PrismaticJoint`
+
+The `PrismaticJoint` provides a single degree of freedom, allowing for a relative translation of two
+bodies along an axis fixed in bodyA. Relative rotation is prevented.
+
+`PrismaticJointDef` requires defining a line of motion using an axis and an anchor point.
+The definition uses local anchor points and a local axis so that the initial configuration
+can violate the constraint slightly.
+
+The joint translation is zero when the local anchor points coincide in world space.
+Using local anchors and a local axis helps when saving and loading a game.
+
+```{warning}
+At least one body should by dynamic with a non-fixed rotation.
+```
+
+The `PrismaticJoint` definition is similar to the [`RevoluteJoint`](#revolutejoint) definition, but
+instead of rotation, it uses translation.
+
+```{dart}
+final prismaticJointDef = PrismaticJointDef()
+  ..initialize(
+    dynamicBody,
+    groundBody,
+    dynamicBody.worldCenter,
+    Vector2(1, 0),
+  )
+```
+
+```{flutter-app}
+:sources: ../../examples
+:page: prismatic_joint
+:subfolder: stories/bridge_libraries/forge2d/joints
+:show: code popup
+```
+
+- `b1`, `b2`: Bodies connected by the joint.
+- `anchor`: World anchor point, to put the axis through. Usually the center of the first body.
+- `axis`: World translation axis, along which the translation will be fixed.
+
+In some cases you might wish to control the range of motion. For this, the `PrismaticJointDef` has
+optional parameters that allow you to simulate a joint limit and/or a motor.
+
+
+#### Prismatic Joint Limit
+
+You can limit the relative rotation with a joint limit that specifies a lower and upper translation.
+
+```dart
+jointDef
+  ..enableLimit = true
+  ..lowerTranslation = -20
+  ..upperTranslation = 20;
+```
+
+- `enableLimit`: Set to true to enable translation limits
+- `lowerTranslation`: The lower translation limit in meters
+- `upperTranslation`: The upper translation limit in meters
+
+You change the limits after the joint was created with this method:
+
+```dart
+prismaticJoint.setLimits(-10, 10);
+```
+
+
+#### Prismatic Joint Motor
+
+You can use a motor to drive the motion or to model joint friction. A maximum motor force is
+provided so that infinite forces are not generated.
+
+```dart
+jointDef
+  ..enableMotor = true
+  ..motorSpeed = 1
+  ..maxMotorForce = 100;
+```
+
+- `enableMotor`: Set to true to enable the motor
+- `motorSpeed`: The desired motor speed in radians per second
+- `maxMotorForce`: The maximum motor torque used to achieve the desired motor speed in N-m.
+
+You change the motor's speed and force after the joint was created using these methods:
+
+```dart
+prismaticJoint.setMotorSpeed(2);
+prismaticJoint.setMaxMotorForce(200);
+```
+
+Also, you can get the joint angle and speed using the following methods:
+
+```dart
+prismaticJoint.getJointTranslation();
+prismaticJoint.getJointSpeed();
+```
+
+
+### `PulleyJoint`
+
+A `PulleyJoint` is used to create an idealized pulley. The pulley connects two bodies to the ground
+and to each other. As one body goes up, the other goes down. The total length of the pulley rope is
+conserved according to the initial configuration:
+
+```text
+length1 + length2 == constant
+```
+
+You can supply a ratio that simulates a block and tackle. This causes one side of the pulley to
+extend faster than the other. At the same time the constraint force is smaller on one side than the
+other. You can use this to create a mechanical leverage.
+
+```text
+length1 + ratio * length2 == constant
+```
+
+For example, if the ratio is 2, then `length1` will vary at twice the rate of `length2`. Also the
+force in the rope attached to the first body will have half the constraint force as the rope
+attached to the second body.
+
+```dart
+final pulleyJointDef = PulleyJointDef()
+  ..initialize(
+    firstBody,
+    secondBody,
+    firstPulley.worldCenter,
+    secondPulley.worldCenter,
+    firstBody.worldCenter,     
+    secondBody.worldCenter,
+    1,
+  );
+
+world.createJoint(PulleyJoint(pulleyJointDef));
+```
+
+```{flutter-app}
+:sources: ../../examples
+:page: pulley_joint
+:subfolder: stories/bridge_libraries/forge2d/joints
+:show: code popup
+```
+
+The `initialize` method of `PulleyJointDef` requires two ground anchors, two dynamic bodies and
+their anchor points, and a pulley ratio.
+
+- `b1`, `b2`: Two dynamic bodies connected with the joint
+- `ga1`, `ga2`: Two ground anchors
+- `anchor1`, `anchor2`: Anchors on the dynamic bodies the joint will be attached to
+- `r`: Pulley ratio to simulate a block and tackle
+
+`PulleyJoint` also provides the current lengths:
+
+```dart
+joint.getCurrentLengthA()
+joint.getCurrentLengthB()
+```
+
+```{warning}
+`PulleyJoint` can get a bit troublesome by itself. They often work better when
+combined with prismatic joints. You should also cover the the anchor points 
+with static shapes to prevent one side from going to zero length.
+```
+
+
+### `RevoluteJoint`
+
+A `RevoluteJoint` forces two bodies to share a common anchor point, often called a hinge point.
+The revolute joint has a single degree of freedom: the relative rotation of the two bodies.
+
+To create a `RevoluteJoint`, provide two bodies and a common point to the `initialize` method.
+The definition uses local anchor points so that the initial configuration can violate the
+constraint slightly.
+
+```dart
+final jointDef = RevoluteJointDef()
+  ..initialize(firstBody, secondBody, firstBody.position);
+world.createJoint(RevoluteJoint(jointDef));
+```
+
+```{flutter-app}
+:sources: ../../examples
+:page: revolute_joint
+:subfolder: stories/bridge_libraries/forge2d/joints
+:show: code popup
+```
+
+In some cases you might wish to control the joint angle. For this, the `RevoluteJointDef` has
+optional parameters that allow you to simulate a joint limit and/or a motor.
+
+
+#### Revolute Joint Limit
+
+You can limit the relative rotation with a joint limit that specifies a lower and upper angle.
+
+```dart
+jointDef
+  ..enableLimit = true
+  ..lowerAngle = 0
+  ..upperAngle = pi / 2;
+```
+
+- `enableLimit`: Set to true to enable angle limits
+- `lowerAngle`: The lower angle in radians
+- `upperAngle`: The upper angle in radians
+
+You change the limits after the joint was created with this method:
+
+```dart
+revoluteJoint.setLimits(0, pi);
+```
+
+
+#### Revolute Joint Motor
+
+You can use a motor to drive the relative rotation about the shared point. A maximum motor torque is
+provided so that infinite forces are not generated.
+
+```dart
+jointDef
+  ..enableMotor = true
+  ..motorSpeed = 5
+  ..maxMotorTorque = 100;
+```
+
+- `enableMotor`: Set to true to enable the motor
+- `motorSpeed`: The desired motor speed in radians per second
+- `maxMotorTorque`: The maximum motor torque used to achieve the desired motor speed in N-m.
+
+You change the motor's speed and torque after the joint was created using these methods:
+
+```dart
+revoluteJoint.setMotorSpeed(2);
+revoluteJoint.setMaxMotorTorque(200);
+```
+
+Also, you can get the joint angle and speed using the following methods:
+
+```dart
+revoluteJoint.jointAngle();
+revoluteJoint.jointSpeed();
 ```

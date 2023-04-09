@@ -1,6 +1,5 @@
 import 'dart:ui';
 
-import 'package:flame/src/text/common/glyph_data.dart';
 import 'package:flame/src/text/common/sprite_font.dart';
 import 'package:flame/src/text/formatter_text_renderer.dart';
 import 'package:flame/src/text/formatters/sprite_font_text_formatter.dart';
@@ -25,27 +24,6 @@ import 'package:flame/src/text/text_renderer.dart';
 /// the opacity of the paint's color will make the text semi-transparent.
 class SpriteFontRenderer
     extends FormatterTextRenderer<SpriteFontTextFormatter> {
-  @Deprecated('Use SpriteFontRenderer.fromFont() instead; this constructor '
-      'will be removed in 1.6.0')
-  SpriteFontRenderer({
-    required Image source,
-    required double charWidth,
-    required double charHeight,
-    // ignore: deprecated_member_use_from_same_package
-    required Map<String, GlyphData> glyphs,
-    double scale = 1,
-    double letterSpacing = 0,
-  }) : super(
-          SpriteFontTextFormatter(
-            source: source,
-            charWidth: charWidth,
-            charHeight: charHeight,
-            glyphs: glyphs,
-            scale: scale,
-            letterSpacing: letterSpacing,
-          ),
-        );
-
   SpriteFontRenderer.fromFont(
     SpriteFont font, {
     Color? color,
