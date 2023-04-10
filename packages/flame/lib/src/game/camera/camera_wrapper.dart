@@ -21,12 +21,12 @@ class CameraWrapper {
   }
 
   void render(Canvas canvas) {
-    PositionType? _previousType;
+    PositionType? previousType;
     canvas.save();
     world.forEach((component) {
-      final sameType = component.positionType == _previousType;
+      final sameType = component.positionType == previousType;
       if (!sameType) {
-        if (_previousType != null && _previousType != PositionType.widget) {
+        if (previousType != null && previousType != PositionType.widget) {
           canvas.restore();
           canvas.save();
         }
@@ -42,10 +42,10 @@ class CameraWrapper {
         }
       }
       component.renderTree(canvas);
-      _previousType = component.positionType;
+      previousType = component.positionType;
     });
 
-    if (_previousType != PositionType.widget) {
+    if (previousType != PositionType.widget) {
       canvas.restore();
     }
   }

@@ -320,8 +320,8 @@ void main() {
         final bottomLeftPoint = Vector2(topLeftPoint.x, bottomRightPoint.y);
         final epsilon = Vector2.all(0.0001);
         void checkOutsideCorners(
-          bool expectedResult, {
-          bool? topLeftResult,
+          {
+            required bool expectedResult, bool? topLeftResult,
           bool? bottomRightResult,
           bool? topRightResult,
           bool? bottomLeftResult,
@@ -352,20 +352,20 @@ void main() {
           );
         }
 
-        checkOutsideCorners(false);
+        checkOutsideCorners(expectedResult: false);
         component.scale = Vector2.all(1.0001);
-        checkOutsideCorners(true);
+        checkOutsideCorners(expectedResult: true);
         component.angle = 1;
-        checkOutsideCorners(false);
+        checkOutsideCorners(expectedResult: false);
         component.angle = 0;
         component.anchor = Anchor.topLeft;
-        checkOutsideCorners(false, bottomRightResult: true);
+        checkOutsideCorners(expectedResult: false, bottomRightResult: true);
         component.anchor = Anchor.bottomRight;
-        checkOutsideCorners(false, topLeftResult: true);
+        checkOutsideCorners(expectedResult: false, topLeftResult: true);
         component.anchor = Anchor.topRight;
-        checkOutsideCorners(false, bottomLeftResult: true);
+        checkOutsideCorners(expectedResult: false, bottomLeftResult: true);
         component.anchor = Anchor.bottomLeft;
-        checkOutsideCorners(false, topRightResult: true);
+        checkOutsideCorners(expectedResult: false, topRightResult: true);
       });
     });
 

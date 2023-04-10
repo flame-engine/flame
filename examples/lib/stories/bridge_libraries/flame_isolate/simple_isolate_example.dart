@@ -93,8 +93,8 @@ class CalculatePrimeNumber extends PositionComponent
   }
 
   @override
-  void update(double t) {
-    _interval.update(t);
+  void update(double dt) {
+    _interval.update(dt);
   }
 
   @override

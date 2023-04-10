@@ -50,9 +50,9 @@ class GestureHitboxesExample extends FlameGame
   }
 
   @override
-  void onTapDown(TapDownEvent info) {
-    super.onTapDown(info);
-    final tapPosition = info.localPosition;
+  void onTapDown(TapDownEvent event) {
+    super.onTapDown(event);
+    final tapPosition = event.localPosition;
     final component = randomShape(tapPosition);
     add(component);
   }

@@ -23,7 +23,8 @@ class FixedSizeViewport extends Viewport {
 
   @override
   bool containsLocalPoint(Vector2 point) {
-    final x = point.x, y = point.y;
+    final x = point.x;
+    final y = point.y;
     return x >= 0 && x <= size.x && y >= 0 && y <= size.y;
   }
 

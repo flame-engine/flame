@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 /// A widget that rebuilds every time the given [notifier] changes.
 class ComponentsNotifierBuilder<T extends Component> extends StatefulWidget {
   const ComponentsNotifierBuilder({
-    super.key,
     required this.notifier,
     required this.builder,
+    super.key,
   });
 
   final ComponentsNotifier<T> notifier;

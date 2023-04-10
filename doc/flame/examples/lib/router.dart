@@ -373,8 +373,8 @@ class PauseRoute extends Route {
   }
 
   @override
-  void onPop(Route previousRoute) {
-    previousRoute
+  void onPop(Route nextRoute) {
+    nextRoute
       ..resumeTime()
       ..removeRenderEffect();
   }

@@ -19,7 +19,7 @@ class Suit {
   final String label;
   final Sprite sprite;
 
-  static late final List<Suit> _singletons = [
+  static final List<Suit> _singletons = [
     Suit._(0, '♥', 1176, 17, 172, 183),
     Suit._(1, '♦', 973, 14, 177, 182),
     Suit._(2, '♣', 974, 226, 184, 172),

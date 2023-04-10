@@ -23,8 +23,11 @@ class AudioPool {
   /// The path of the sound of this pool.
   final String sound;
 
-  /// Max and min numbers of players.
-  final int minPlayers, maxPlayers;
+  /// Min numbers of players.
+  final int minPlayers;
+
+  /// Max numbers of players.
+  final int maxPlayers;
 
   final Lock _lock = Lock();
 
@@ -38,9 +41,9 @@ class AudioPool {
   /// Creates an [AudioPool] instance with the given parameters.
   static Future<AudioPool> create(
     String sound, {
+    required int maxPlayers,
     AudioCache? audioCache,
     int minPlayers = 1,
-    required int maxPlayers,
   }) async {
     final instance = AudioPool._(
       sound,

@@ -73,8 +73,8 @@ class ImageComposition {
         source,
         angle,
         anchor,
-        isAntiAlias,
         blendMode,
+        antiAlias: isAntiAlias,
       ),
     );
   }
@@ -94,7 +94,7 @@ class ImageComposition {
       final source = compose.source;
       final rotation = compose.angle;
       final anchor = compose.anchor;
-      final isAntiAlias = compose.isAntiAlias;
+      final isAntiAlias = compose.antiAlias;
       final blendMode = compose.blendMode;
       final destination = Rect.fromLTWH(0, 0, source.width, source.height);
       final realDest = destination.translate(position.x, position.y);
@@ -133,8 +133,10 @@ class _Fragment {
     this.source,
     this.angle,
     this.anchor,
-    this.isAntiAlias,
     this.blendMode,
+      {
+        required this.antiAlias,
+      }
   );
 
   /// The image that will be composed.
@@ -153,7 +155,7 @@ class _Fragment {
   /// (defaults to the centre of the [source]).
   final Vector2 anchor;
 
-  final bool isAntiAlias;
+  final bool antiAlias;
 
   /// The [BlendMode] that will be used when composing the [image].
   final BlendMode blendMode;

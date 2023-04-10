@@ -84,13 +84,13 @@ abstract class Shape {
   Vector2 support(Vector2 direction);
 
   /// Returns a point on the shape's boundary which is closest to the given
-  /// [externalPoint].
+  /// [point].
   ///
-  /// The [externalPoint] must lie outside of the shape. If there are multiple
-  /// nearest points, any one can be returned.
+  /// The [point] must lie outside of the shape. If there are multiple nearest
+  /// points, any one can be returned.
   ///
-  /// This method will not modify [externalPoint]. At the same time, the caller
-  /// does not get ownership of the returned object: they must treat it as an
+  /// This method will not modify [point]. At the same time, the caller does
+  /// not get ownership of the returned object: they must treat it as an
   /// immutable short-lived object.
-  Vector2 nearestPoint(Vector2 externalPoint);
+  Vector2 nearestPoint(Vector2 point);
 }

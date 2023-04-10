@@ -12,8 +12,8 @@ class FlareParticle extends Particle {
 
   FlareParticle({
     required this.flareAnimation,
-    super.lifespan,
     required this.size,
+    super.lifespan,
   }) {
     flareAnimation.init();
   }

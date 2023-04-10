@@ -152,16 +152,16 @@ class JoystickAdvancedExample extends FlameGame with HasCollisionDetection {
       ),
     );
 
-    final _regular = TextPaint(
+    final regular = TextPaint(
       style: TextStyle(color: BasicPalette.white.color),
     );
     speedText = TextComponent(
       text: 'Speed: 0',
-      textRenderer: _regular,
+      textRenderer: regular,
     )..positionType = PositionType.viewport;
     directionText = TextComponent(
       text: 'Direction: idle',
-      textRenderer: _regular,
+      textRenderer: regular,
     )..positionType = PositionType.viewport;
 
     final speedWithMargin = HudMarginComponent(
