@@ -75,12 +75,15 @@ linter:
     - leading_newlines_in_multiline_strings
     - library_names
     - library_prefixes
+    - library_private_types_in_public_api
     - lines_longer_than_80_chars
     - list_remove_unrelated_type
     - literal_only_boolean_expressions
     - missing_whitespace_between_adjacent_strings
     - no_adjacent_strings_in_list
     - no_duplicate_case_values
+    - no_leading_underscores_for_library_prefixes
+    - no_leading_underscores_for_local_identifiers
     - no_runtimeType_toString
     - non_constant_identifier_names
     - noop_primitive_operations
@@ -92,6 +95,7 @@ linter:
     - parameter_assignments
     - prefer_adjacent_string_concatenation
     - prefer_asserts_in_initializer_lists
+    - prefer_asserts_with_message
     - prefer_collection_literals
     - prefer_conditional_assignment
     - prefer_const_constructors
@@ -117,6 +121,7 @@ linter:
     - prefer_is_not_empty
     - prefer_is_not_operator
     - prefer_iterable_whereType
+    - prefer_null_aware_method_calls
     - prefer_null_aware_operators
     - prefer_single_quotes
     - prefer_spread_collections
@@ -131,6 +136,7 @@ linter:
     - sort_unnamed_constructors_first
     - test_types_in_equals
     - throw_in_finally
+    - tighten_type_of_initializing_formals
     - type_annotate_public_apis
     - type_init_formals
     - unnecessary_await_in_return
@@ -139,6 +145,7 @@ linter:
     - unnecessary_constructor_name
     - unnecessary_getters_setters
     - unnecessary_lambdas
+    - unnecessary_late
     - unnecessary_new
     - unnecessary_null_aware_assignments
     - unnecessary_null_checks
@@ -164,7 +171,9 @@ linter:
     - use_named_constants
     - use_raw_strings
     - use_rethrow_when_possible
+    - use_setters_to_change_properties
     - use_super_parameters
     - use_test_throws_matchers
+    - use_to_and_as_if_applicable
     - valid_regexps
     - void_checks
