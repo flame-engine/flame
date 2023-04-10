@@ -3,8 +3,8 @@
 Before you begin any kind of game project, you need to give it a **name**. For
 this tutorial the name will be simply `klondike`.
 
-Having this name in mind, please head over to the [](../bare_flame_game.md)
-tutorial and complete the necessary set up steps. When you come back, you should
+Having this name in mind, please head over to the [tutorial](../bare_flame_game.md)
+and complete the necessary set up steps. When you come back, you should
 already have the `main.dart` file with the following content:
 
 ```dart
