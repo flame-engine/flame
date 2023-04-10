@@ -133,11 +133,9 @@ class _Fragment {
     this.source,
     this.angle,
     this.anchor,
-    this.blendMode,
-      {
-        required this.antiAlias,
-      }
-  );
+    this.blendMode, {
+    required this.antiAlias,
+  });
 
   /// The image that will be composed.
   final Image image;

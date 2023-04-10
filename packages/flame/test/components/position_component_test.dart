@@ -319,9 +319,9 @@ void main() {
         final topRightPoint = Vector2(bottomRightPoint.x, topLeftPoint.y);
         final bottomLeftPoint = Vector2(topLeftPoint.x, bottomRightPoint.y);
         final epsilon = Vector2.all(0.0001);
-        void checkOutsideCorners(
-          {
-            required bool expectedResult, bool? topLeftResult,
+        void checkOutsideCorners({
+          required bool expectedResult,
+          bool? topLeftResult,
           bool? bottomRightResult,
           bool? topRightResult,
           bool? bottomLeftResult,

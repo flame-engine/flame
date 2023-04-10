@@ -193,8 +193,9 @@ class QuadTree<T extends Hitbox<T>> {
     final node = _hitboxAtNode.remove(hitbox);
     if (node != null) {
       node.hitboxes.remove(hitbox);
+      // TODO(Spydon): Shouldn't this if be negated?
       if (keepOldPosition) {
-        _oldPositionByItem.remove(node);
+        _oldPositionByItem.remove(hitbox);
       }
     }
   }

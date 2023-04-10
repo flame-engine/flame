@@ -234,17 +234,17 @@ void main() {
         EffectController duration(double t) => EffectController(duration: t);
         const dt = 0.01;
         const x0 = 0.0;
-const y0 = 0.0;
+        const y0 = 0.0;
         const x1 = 10.0;
-const y1 = 10.0;
+        const y1 = 10.0;
         const x2 = 20.0;
-const y2 = 0.0;
+        const y2 = 0.0;
         const x3 = 30.0;
-const y3 = 10.0;
+        const y3 = 10.0;
         const x4 = 10.0;
-const y4 = 30.0;
+        const y4 = 30.0;
         const dx5 = 1.6;
-const dy5 = 0.9;
+        const dy5 = 0.9;
 
         final effect = SequenceEffect(
           [
