@@ -38,6 +38,6 @@
     D-->E
     E-->D
     D-->F
-    F-. if Added new parent .->A
+    F-. If added to a new parent .->B
     
 ```
