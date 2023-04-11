@@ -3,8 +3,8 @@
   graph TD  
   
     %% Node Color %%
-    classDef yellow fill:#F6BE00,stroke:#F6BE00,stroke-width:4px,color:#000 ;
     classDef default fill:#282828,stroke:#F6BE00,stroke-width:2px;
+    classDef yellow fill:#F6BE00,color:#000;
  
     %% Nodes  %%
     
@@ -18,8 +18,8 @@
   graph BT  
 
     %% Node Color %%
-    classDef yellow fill:#F6BE00,stroke:#F6BE00,stroke-width:4px,color:#000 ;
     classDef default fill:#282828,stroke:#F6BE00,stroke-width:2px;
+    classDef yellow fill:#F6BE00,color:#000;
  
     %% Nodes  %%
     
@@ -33,14 +33,14 @@
 
     %% Flow  %%
 
-    A-- With .->B
-    A-- With .->C
-    G-- Wants .->C
-    C-- On .->B
-    E-- With .->B
+    A-- With -->B
+    A-- With -->C
+    G-- Wants -->C
+    C-- On -->B
+    E-- With -->B
 
-    D-- Extends .->E
-    F-- Extends .->E
+    D-- Extends -->E
+    F-- Extends -->E
 
-    D-- With .->C
+    D-- With -->C
  ```
