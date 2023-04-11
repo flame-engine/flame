@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2023-04-11
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - [`flame_audio` - `v2.0.0`](#flame_audio---v200)
+
+Packages with other changes:
+
+ - There are no other changes in this release.
+
+---
+
+#### `flame_audio` - `v2.0.0`
+
+ - **BREAKING** **FEAT**: Update AudioPlayers to ^4.0.0 ([#2482](https://github.com/flame-engine/flame/issues/2482)). ([47372087](https://github.com/flame-engine/flame/commit/47372087f218e9c00d0fec82084f6edc7cbee5af))
+
+
 ## 2023-04-07
 
 ### Changes
