@@ -4,8 +4,8 @@
   graph TD  
 
    %% Node Color %%
-   classDef yellow fill:#F6BE00,stroke:#F6BE00,stroke-width:4px,color:#000 ;
    classDef default fill:#282828,stroke:#F6BE00,stroke-width:2px;
+   classDef yellow fill:#F6BE00,color:#000;
 
    %% Nodes  %%
    x(Runs every time)
@@ -18,13 +18,13 @@
   graph LR
   
    %% Node Color %%
-   classDef yellow fill:#F6BE00,stroke:#F6BE00,stroke-width:4px,color:#000 ;
    classDef default fill:#282828,stroke:#F6BE00,stroke-width:2px;
+   classDef yellow fill:#F6BE00,color:#000;
 
     %% Nodes %%
     
-    A(onGameResize)
-    B(onLoad):::yellow
+    A(onLoad):::yellow
+    B(onGameResize)
     C(onMount)
     D(Update)
     E(Render)
@@ -38,6 +38,6 @@
     D-->E
     E-->D
     D-->F
-    F-- if Added new parent .->A
+    F-. If added to a new parent .->B
     
 ```

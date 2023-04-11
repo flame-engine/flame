@@ -3,8 +3,8 @@
   graph TD  
 
     %% Node Color %%
-    classDef yellow fill:#F6BE00,stroke:#F6BE00,stroke-width:4px,color:#AAA ;
     classDef default fill:#282828,stroke:#F6BE00;
+    classDef yellow fill:#F6BE00,color:#000;
     
     %% Nodes %%
 
@@ -17,8 +17,8 @@
 %%{init: { 'theme': 'dark'  } }%%
 graph TD
     %% Node Color %%
-    classDef yellow fill:#F6BE00,stroke:#F6BE00,stroke-width:4px,color:#AAA;
     classDef default fill:#282828,stroke:#F6BE00;
+    classDef yellow fill:#F6BE00,color:#000;
     
     %% Nodes %%
        
