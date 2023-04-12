@@ -97,10 +97,14 @@ class GearJointExample extends Forge2DGame with TapDetector, HasDraggables {
   void render(Canvas canvas) {
     super.render(canvas);
 
-    final p1 = worldToScreen(boxAnchor +
-        prismaticJoint.getLocalAxisA() * prismaticJoint.getLowerLimit(),);
-    final p2 = worldToScreen(boxAnchor +
-        prismaticJoint.getLocalAxisA() * prismaticJoint.getUpperLimit(),);
+    final p1 = worldToScreen(
+      boxAnchor +
+          prismaticJoint.getLocalAxisA() * prismaticJoint.getLowerLimit(),
+    );
+    final p2 = worldToScreen(
+      boxAnchor +
+          prismaticJoint.getLocalAxisA() * prismaticJoint.getUpperLimit(),
+    );
 
     canvas.drawLine(p1.toOffset(), p2.toOffset(), debugPaint);
   }
