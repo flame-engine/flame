@@ -67,7 +67,7 @@ void main() {
           await game.ready();
           final removed = child.removed;
 
-          child.changeParent(game);
+          child.parent = game;
           game.update(0);
           await expectLater(removed, completes);
 
@@ -104,7 +104,7 @@ void main() {
 
           await expectLater(mounted, completes);
 
-          child.changeParent(game);
+          child.parent = game;
           mounted = child.mounted;
           game.update(0);
           await game.ready();
@@ -123,7 +123,7 @@ void main() {
           final mounted = child.mounted;
           await game.ready();
 
-          child.changeParent(parent);
+          child.parent = parent;
           game.update(0);
           await game.ready();
 
@@ -179,7 +179,7 @@ void main() {
         parent.add(child);
         game.add(parent);
         await game.ready();
-        child.changeParent(game);
+        child.parent = game;
         game.update(0);
         await game.ready();
 
@@ -933,7 +933,7 @@ void main() {
           await game.ensureAdd(parent1);
           await game.ensureAdd(parent2);
           await parent1.ensureAdd(child);
-          child.changeParent(parent2);
+          child.parent = parent2;
           await game.ready();
           expect(parent1.onChangedChildrenRuns, 2);
           expect(parent1.lastChangeType, ChildrenChangeType.removed);

@@ -28,7 +28,6 @@ class DraggablesExample extends FlameGame {
 class DraggableEmber extends Ember with DragCallbacks {
   @override
   bool debugMode = true;
-  bool isDragged = false;
 
   DraggableEmber({Vector2? position})
       : super(
@@ -45,23 +44,13 @@ class DraggableEmber extends Ember with DragCallbacks {
   }
 
   @override
-  void onDragStart(_) {
-    isDragged = true;
-  }
-
-  @override
-  void onDragUpdate(DragUpdateEvent info) {
+  void onDragUpdate(DragUpdateEvent event) {
     if (parent is! DraggablesExample) {
-      info.continuePropagation = true;
+      event.continuePropagation = true;
       return;
     }
 
-    position.add(info.localPosition);
-    info.continuePropagation = false;
-  }
-
-  @override
-  void onDragEnd(_) {
-    isDragged = false;
+    position.add(event.localPosition);
+    event.continuePropagation = false;
   }
 }

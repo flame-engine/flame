@@ -262,8 +262,7 @@ class Component {
   /// This can be null if the component hasn't been added to the component tree
   /// yet, or if it is the root of component tree.
   ///
-  /// Setting this property is equivalent to the [changeParent] method, or to
-  /// [removeFromParent] if setting to null.
+  /// Setting this property to null is equivalent to [removeFromParent].
   Component? get parent => _parent;
   Component? _parent;
   set parent(Component? newParent) {
@@ -555,7 +554,7 @@ class Component {
   /// A component can only be added to one parent at a time. It is an error to
   /// try to add it to multiple parents, or even to the same parent multiple
   /// times. If you need to change the parent of a component, use the
-  /// [changeParent] method.
+  /// [parent] setter.
   FutureOr<void> add(Component component) => _addChild(component);
 
   /// Adds this component as a child of [parent] (see [add] for details).
@@ -646,6 +645,7 @@ class Component {
 
   /// Changes the current parent for another parent and prepares the tree under
   /// the new root.
+  @Deprecated('Will be removed in 1.9.0. Use the parent setter instead.')
   void changeParent(Component newParent) {
     parent = newParent;
   }

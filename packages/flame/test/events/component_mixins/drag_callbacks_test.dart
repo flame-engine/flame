@@ -160,6 +160,25 @@ void main() {
         expect(game.dragCancelEvent, equals(0));
       },
     );
+
+    testWidgets(
+      'isDragged is changed',
+      (tester) async {
+        final component = _DragCallbacksComponent()..size = Vector2.all(100);
+        final game = FlameGame(children: [component]);
+        await tester.pumpWidget(GameWidget(game: game));
+        await tester.pump();
+        await tester.pump();
+
+        // Inside component
+        await tester.dragFrom(const Offset(10, 10), const Offset(90, 90));
+        expect(component.isDraggedStateChange, equals(2));
+
+        // Outside component
+        await tester.dragFrom(const Offset(101, 101), const Offset(110, 110));
+        expect(component.isDraggedStateChange, equals(2));
+      },
+    );
   });
 }
 
@@ -168,11 +187,19 @@ mixin _DragCounter on DragCallbacks {
   int dragUpdateEvent = 0;
   int dragEndEvent = 0;
   int dragCancelEvent = 0;
+  int isDraggedStateChange = 0;
+
+  bool _wasDragged = false;
 
   @override
   void onDragStart(DragStartEvent event) {
+    super.onDragStart(event);
     event.handled = true;
     dragStartEvent++;
+    if (_wasDragged != isDragged) {
+      ++isDraggedStateChange;
+      _wasDragged = isDragged;
+    }
   }
 
   @override
@@ -183,12 +210,18 @@ mixin _DragCounter on DragCallbacks {
 
   @override
   void onDragEnd(DragEndEvent event) {
+    super.onDragEnd(event);
     event.handled = true;
     dragEndEvent++;
+    if (_wasDragged != isDragged) {
+      ++isDraggedStateChange;
+      _wasDragged = isDragged;
+    }
   }
 
   @override
   void onDragCancel(DragCancelEvent event) {
+    super.onDragCancel(event);
     event.handled = true;
     dragCancelEvent++;
   }
