@@ -9,6 +9,7 @@ import 'package:examples/stories/bridge_libraries/forge2d/flame_forge2d.dart';
 import 'package:examples/stories/bridge_libraries/forge2d/joints/constant_volume_joint.dart';
 import 'package:examples/stories/bridge_libraries/forge2d/joints/distance_joint.dart';
 import 'package:examples/stories/bridge_libraries/forge2d/joints/friction_joint.dart';
+import 'package:examples/stories/bridge_libraries/forge2d/joints/gear_joint.dart';
 import 'package:examples/stories/bridge_libraries/forge2d/joints/motor_joint.dart';
 import 'package:examples/stories/bridge_libraries/forge2d/joints/mouse_joint.dart';
 import 'package:examples/stories/bridge_libraries/forge2d/joints/prismatic_joint.dart';
@@ -41,6 +42,7 @@ void main() {
     'constant_volume_joint': ConstantVolumeJointExample.new,
     'distance_joint': DistanceJointExample.new,
     'friction_joint': FrictionJointExample.new,
+    'gear_joint': GearJointExample.new,
     'motor_joint': MotorJointExample.new,
     'mouse_joint': MouseJointExample.new,
     'pulley_joint': PulleyJointExample.new,
