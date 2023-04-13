@@ -24,6 +24,8 @@ import 'package:examples/stories/bridge_libraries/forge2d/tap_callbacks_example.
 import 'package:examples/stories/bridge_libraries/forge2d/widget_example.dart';
 import 'package:flame/game.dart';
 
+import 'joints/rope_joint.dart';
+
 String link(String example) => baseLink('bridge_libraries/forge2d/$example');
 
 void addForge2DStories(Dashbook dashbook) {
