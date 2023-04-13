@@ -24,7 +24,7 @@ class NineTileBox {
   /// (optionally used to scale the src image).
   late int destTileSize;
 
-  late final Rect _center;
+  late Rect _center;
   late final Rect _dst;
 
   /// Creates a nine-box instance.
@@ -43,6 +43,56 @@ class NineTileBox {
     final centerEdge = this.tileSize.toDouble();
     _center = Rect.fromLTWH(centerEdge, centerEdge, centerEdge, centerEdge);
     _dst = Rect.fromLTWH(0, 0, this.destTileSize * 3, this.destTileSize * 3);
+  }
+
+  /// Set different sizes for each of the fixed size rows and columns
+  void setGrid({int? leftCol, int? rightCol, int? topRow, int? bottomRow}) {
+    if (leftCol != null && rightCol != null) {
+      assert(
+        leftCol + rightCol <= sprite.src.width,
+        'The left and right columns ($leftCol + $rightCol) do not fit in the width of the sprite (${sprite.src.width.round()})',
+      );
+    } else if (leftCol != null) {
+      assert(
+        leftCol <= _center.right,
+        'The left column ($leftCol) is too large (max ${_center.right.round()})',
+      );
+    } else if (rightCol != null) {
+      assert(
+        rightCol + _center.left <= sprite.src.width,
+        'The right column ($rightCol) is too large (max ${(sprite.src.width - _center.left).round()})',
+      );
+    }
+    if (topRow != null && bottomRow != null) {
+      assert(
+        topRow + bottomRow <= sprite.src.height,
+        'The top and bottom rows ($topRow + $bottomRow) do not fit in the height of the sprite (${sprite.src.height.round()})',
+      );
+    } else if (topRow != null) {
+      assert(
+        topRow <= _center.bottom,
+        'The top row ($topRow) is too large (max ${_center.bottom.round()})',
+      );
+    } else if (bottomRow != null) {
+      assert(
+        bottomRow + _center.top <= sprite.src.height,
+        'The bottom row ($bottomRow) is too large (max ${(sprite.src.height - _center.top).round()})',
+      );
+    }
+
+    leftCol ??= _center.left.round();
+    topRow ??= _center.top.round();
+    if (rightCol == null) {
+      rightCol = _center.right.round();
+    } else {
+      rightCol = sprite.src.width.round() - rightCol;
+    }
+    if (bottomRow == null) {
+      bottomRow = _center.bottom.round();
+    } else {
+      bottomRow = sprite.src.height.round() - bottomRow;
+    }
+    _center = Rect.fromLTRB(leftCol.toDouble(), topRow.toDouble(), rightCol.toDouble(), bottomRow.toDouble());
   }
 
   /// Renders this nine box with the dimensions provided by [dst].
