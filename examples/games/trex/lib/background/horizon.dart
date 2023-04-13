@@ -50,12 +50,12 @@ class Horizon extends PositionComponent with HasGameRef<TRexGame> {
   }
 
   @override
-  void onGameResize(Vector2 gameSize) {
-    super.onGameResize(gameSize);
+  void onGameResize(Vector2 size) {
+    super.onGameResize(size);
     final newLines = _generateLines();
     groundLayers.addAll(newLines);
     addAll(newLines);
-    y = (gameSize.y / 2) + 21.0;
+    y = (size.y / 2) + 21.0;
   }
 
   void reset() {

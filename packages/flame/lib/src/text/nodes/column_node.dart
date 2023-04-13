@@ -56,9 +56,9 @@ abstract class ColumnNode extends BlockNode {
 
   @mustCallSuper
   @override
-  void fillStyles(DocumentStyle rootStyle, FlameTextStyle parentTextStyle) {
+  void fillStyles(DocumentStyle stylesheet, FlameTextStyle parentTextStyle) {
     for (final node in children) {
-      node.fillStyles(rootStyle, parentTextStyle);
+      node.fillStyles(stylesheet, parentTextStyle);
     }
   }
 }

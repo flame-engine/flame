@@ -41,8 +41,8 @@ class MotorJointExample extends Forge2DGame with TapDetector, HasDraggables {
   }
 
   @override
-  Future<void> onTapDown(TapDownInfo details) async {
-    super.onTapDown(details);
+  Future<void> onTapDown(TapDownInfo info) async {
+    super.onTapDown(info);
     clockWise = !clockWise;
   }
 

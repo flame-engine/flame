@@ -36,9 +36,9 @@ class AnimatedBodyExample extends Forge2DGame with TapDetector {
   }
 
   @override
-  void onTapDown(TapDownInfo details) {
-    super.onTapDown(details);
-    final position = details.eventPosition.game;
+  void onTapDown(TapDownInfo info) {
+    super.onTapDown(info);
+    final position = info.eventPosition.game;
     final spriteSize = Vector2.all(10);
     final animationComponent = SpriteAnimationComponent(
       animation: animation,

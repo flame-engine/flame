@@ -25,8 +25,8 @@ class PolygonHitbox extends PolygonComponent
   /// screen coordinate system)
   PolygonHitbox.relative(
     super.relation, {
-    super.position,
     required super.parentSize,
+    super.position,
     double super.angle = 0,
     super.anchor,
     bool isSolid = false,

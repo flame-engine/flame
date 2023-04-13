@@ -9,8 +9,11 @@ import 'package:meta/meta.dart';
 /// Represents a position in a matrix, or in this case, on the tilemap.
 @immutable
 class Block {
-  /// x and y coordinates on the matrix
-  final int x, y;
+  /// x coordinate in the matrix.
+  final int x;
+
+  /// y coordinate in the matrix.
+  final int y;
 
   const Block(this.x, this.y);
 
@@ -77,7 +80,7 @@ class IsometricTileMapComponent extends PositionComponent {
 
   Sprite _renderSprite;
   @override
-  void render(Canvas c) {
+  void render(Canvas canvas) {
     _renderSprite.image = tileset.image;
     final size = effectiveTileSize;
     for (var i = 0; i < matrix.length; i++) {
@@ -87,7 +90,7 @@ class IsometricTileMapComponent extends PositionComponent {
           _renderSprite = tileset.getSpriteById(element);
           final p = getBlockRenderPositionInts(j, i);
           _renderSprite.render(
-            c,
+            canvas,
             position: p,
             size: size,
           );

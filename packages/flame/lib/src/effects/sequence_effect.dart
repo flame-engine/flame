@@ -39,7 +39,10 @@ class SequenceEffect extends Effect {
       !(infinite && repeatCount != 1),
       'Parameters infinite and repeatCount cannot be specified simultaneously',
     );
-    EffectController ec = _SequenceEffectEffectController(effects, alternate);
+    EffectController ec = _SequenceEffectEffectController(
+      effects,
+      alternate: alternate,
+    );
     if (infinite) {
       ec = InfiniteEffectController(ec);
     } else if (repeatCount > 1) {
@@ -75,9 +78,9 @@ class SequenceEffect extends Effect {
 /// `SequenceEffect.apply()` is empty.
 class _SequenceEffectEffectController extends EffectController {
   _SequenceEffectEffectController(
-    this.effects,
-    this.alternate,
-  ) : super.empty();
+    this.effects, {
+    required this.alternate,
+  }) : super.empty();
 
   /// The list of children effects.
   final List<Effect> effects;

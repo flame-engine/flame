@@ -30,9 +30,9 @@ class FixedAspectRatioViewport extends Viewport {
   }
 
   @override
-  void onGameResize(Vector2 canvasSize) {
-    super.onGameResize(canvasSize);
-    _handleResize(canvasSize);
+  void onGameResize(Vector2 size) {
+    super.onGameResize(size);
+    _handleResize(size);
   }
 
   void _handleResize(Vector2 canvasSize) {

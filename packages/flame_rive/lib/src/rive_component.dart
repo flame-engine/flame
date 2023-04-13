@@ -100,7 +100,8 @@ class RiveArtboardRenderer {
         contentHeight / 2.0 -
         (alignment.y * contentHeight / 2.0);
 
-    var scaleX = 1.0, scaleY = 1.0;
+    var scaleX = 1.0;
+    var scaleY = 1.0;
 
     canvas.save();
     canvas.clipRect(position & size);

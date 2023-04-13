@@ -282,9 +282,9 @@ class _GameWithDualTappableComponents extends FlameGame
 
 class _TapCallbacksComponent extends PositionComponent with TapCallbacks {
   _TapCallbacksComponent({
-    super.children,
     required Vector2 super.position,
     required Vector2 super.size,
+    super.children,
     void Function(TapDownEvent)? onTapDown,
     void Function(TapDownEvent)? onLongTapDown,
     void Function(TapUpEvent)? onTapUp,

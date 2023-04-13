@@ -12,7 +12,7 @@ class OverlayManager {
 
   final Game _game;
   final List<String> _activeOverlays = [];
-  final Map<String, _OverlayBuilderFunction> _builders = {};
+  final Map<String, OverlayBuilderFunction> _builders = {};
 
   /// The names of all currently active overlays.
   UnmodifiableListView<String> get activeOverlays {
@@ -59,7 +59,7 @@ class OverlayManager {
   }
 
   /// Adds a named overlay builder
-  void addEntry(String name, _OverlayBuilderFunction builder) {
+  void addEntry(String name, OverlayBuilderFunction builder) {
     _builders[name] = builder;
   }
 
@@ -97,7 +97,7 @@ class OverlayManager {
   }
 }
 
-typedef _OverlayBuilderFunction = Widget Function(
+typedef OverlayBuilderFunction = Widget Function(
   BuildContext context,
   Game game,
 );

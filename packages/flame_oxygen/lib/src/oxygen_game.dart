@@ -19,9 +19,9 @@ abstract class OxygenGame extends Game {
 
   /// Create a new [Entity].
   Entity createEntity({
-    String? name,
     required Vector2 position,
     required Vector2 size,
+    String? name,
     double? angle,
     Anchor? anchor,
     bool flipX = false,
@@ -65,5 +65,5 @@ abstract class OxygenGame extends Game {
 
   @override
   @mustCallSuper
-  void update(double delta) => world.update(delta);
+  void update(double dt) => world.update(dt);
 }

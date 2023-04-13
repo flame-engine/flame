@@ -31,9 +31,9 @@ class BlobExample extends Forge2DGame with TapDetector {
   }
 
   @override
-  void onTapDown(TapDownInfo details) {
-    super.onTapDown(details);
-    add(FallingBox(details.eventPosition.game));
+  void onTapDown(TapDownInfo info) {
+    super.onTapDown(info);
+    add(FallingBox(info.eventPosition.game));
   }
 }
 

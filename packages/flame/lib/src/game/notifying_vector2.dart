@@ -23,14 +23,14 @@ class NotifyingVector2 extends Vector2 with ChangeNotifier {
       NotifyingVector2.zero()..setFrom(v);
 
   @override
-  void setValues(double x, double y) {
-    super.setValues(x, y);
+  void setValues(double x_, double y_) {
+    super.setValues(x_, y_);
     notifyListeners();
   }
 
   @override
-  void setFrom(Vector2 v) {
-    super.setFrom(v);
+  void setFrom(Vector2 other) {
+    super.setFrom(other);
     notifyListeners();
   }
 

@@ -38,8 +38,8 @@ class Sprite {
     Vector2? srcSize,
     Images? images,
   }) async {
-    final _images = images ?? Flame.images;
-    final image = await _images.load(src);
+    final imagesCache = images ?? Flame.images;
+    final image = await imagesCache.load(src);
     return Sprite(image, srcPosition: srcPosition, srcSize: srcSize);
   }
 

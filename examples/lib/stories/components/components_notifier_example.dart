@@ -60,9 +60,9 @@ class _ComponentsNotifierExampleWidgetState
 
 class GameHud extends StatelessWidget {
   const GameHud({
-    super.key,
     required this.remainingEnemies,
     required this.onReplay,
+    super.key,
   });
 
   final int remainingEnemies;

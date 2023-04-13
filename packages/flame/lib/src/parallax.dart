@@ -150,7 +150,7 @@ class ParallaxImage extends ParallaxRenderer {
   Image get image => _image;
 
   @override
-  void update(_) {
+  void update(double dt) {
     // noop
   }
 }
