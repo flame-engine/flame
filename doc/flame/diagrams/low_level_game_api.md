@@ -3,12 +3,12 @@
   graph TD  
   
     %% Node Color %%
-    classDef yellow fill:#F6BE00,stroke:#F6BE00,stroke-width:4px,color:#000 ;
     classDef default fill:#282828,stroke:#F6BE00,stroke-width:2px;
+    classDef yellow fill:#F6BE00,color:#000;
  
     %% Nodes  %%
     
-    z(Mixin):::yellow
+    z(Abstract Class):::yellow
     x(Normal Class)
 ```
 
@@ -18,29 +18,25 @@
   graph BT  
 
     %% Node Color %%
-    classDef yellow fill:#F6BE00,stroke:#F6BE00,stroke-width:4px,color:#000 ;
     classDef default fill:#282828,stroke:#F6BE00,stroke-width:2px;
+    classDef yellow fill:#F6BE00,color:#000;
  
     %% Nodes  %%
     
     A(OxygenGame)
-    B(Loadable):::yellow
-    C(Game):::yellow
-    D(FlameGame)
-    E(Component)
-    F(Other Components)
-    G(GameWidget)
+    B(Game):::yellow
+    C(FlameGame)
+    D(Component)
+    E(Other Components)
+    F(GameWidget)
 
     %% Flow  %%
 
-    A-- With .->B
-    A-- With .->C
-    G-- Wants .->C
-    C-- On .->B
-    E-- With .->B
+    A-- Extends -->B
+    F-- Wants -->B
 
-    D-- Extends .->E
-    F-- Extends .->E
+    C-- Extends -->D
+    E-- Extends -->D
 
-    D-- With .->C
+    C-- With -->B
  ```

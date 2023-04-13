@@ -1,8 +1,6 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/widgets.dart';
 
-//ignore_for_file: invalid_null_aware_operator
-
 /// {@template _bgm}
 /// The looping background music class.
 ///
@@ -34,7 +32,7 @@ class Bgm extends WidgetsBindingObserver {
       return;
     }
     _isRegistered = true;
-    _ambiguate(WidgetsBinding.instance)?.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
   }
 
   /// Dispose the [WidgetsBinding] observer.
@@ -43,7 +41,7 @@ class Bgm extends WidgetsBindingObserver {
     if (!_isRegistered) {
       return;
     }
-    _ambiguate(WidgetsBinding.instance)?.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
     _isRegistered = false;
   }
 
@@ -98,13 +96,3 @@ class Bgm extends WidgetsBindingObserver {
     }
   }
 }
-
-/// This allows a value of type T or T?
-/// to be treated as a value of type T?.
-///
-/// We use this so that APIs that have become
-/// non-nullable can still be used with `!` and `?`
-/// to support older versions of the API as well.
-///
-/// See more: https://docs.flutter.dev/development/tools/sdk/release-notes/release-notes-3.0.0
-T? _ambiguate<T>(T? value) => value;
