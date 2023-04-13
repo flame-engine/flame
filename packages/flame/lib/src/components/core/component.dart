@@ -646,6 +646,7 @@ class Component {
   /// Changes the current parent for another parent and prepares the tree under
   /// the new root.
   @Deprecated('Will be removed in 1.9.0. Use the parent setter instead.')
+  // ignore: use_setters_to_change_properties
   void changeParent(Component newParent) {
     parent = newParent;
   }
@@ -748,13 +749,14 @@ class Component {
   /// component list isn't re-ordered when it is called.
   /// See FlameGame.changePriority instead.
   @Deprecated('Will be removed in 1.8.0. Use priority setter instead.')
+  // ignore: use_setters_to_change_properties
   void changePriorityWithoutResorting(int priority) => _priority = priority;
 
   /// Call this if any of this component's children priorities have changed
   /// at runtime.
   ///
   /// This will call [ComponentSet.rebalanceAll] on the [children] ordered set.
-  @Deprecated('Will be removed in 1.8.0.')
+  @Deprecated('Will be removed in 1.8.0, it is now done automatically.')
   void reorderChildren() => _children?.rebalanceAll();
 
   //#endregion
