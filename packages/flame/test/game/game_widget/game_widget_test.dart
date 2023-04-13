@@ -82,7 +82,7 @@ class _MyGame extends FlameGame {
   }
 }
 
-FlameTester<_MyGame> myGame({required bool open}) {
+FlameTester<_MyGame> _myGame({required bool open}) {
   return FlameTester(
     _MyGame.new,
     pumpWidget: (gameWidget, tester) async {
@@ -92,7 +92,7 @@ FlameTester<_MyGame> myGame({required bool open}) {
 }
 
 void main() {
-  myGame(open: false).testGameWidget(
+  _myGame(open: false).testGameWidget(
     'calls onAttach when it enters the tree and onDetach and it leaves',
     verify: (game, tester) async {
       expect(game.onAttachCalled, isFalse);
@@ -113,7 +113,7 @@ void main() {
     },
   );
 
-  myGame(open: true).testGameWidget(
+  _myGame(open: true).testGameWidget(
     'size is kept on game after a detach',
     verify: (game, tester) async {
       expect(game.hasLayout, isTrue);

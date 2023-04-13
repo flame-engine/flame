@@ -92,16 +92,16 @@ class DefaultViewport extends Viewport {
   Vector2 get effectiveSize => canvasSize!;
 
   @override
-  Vector2 projectVector(Vector2 vector) => vector;
+  Vector2 projectVector(Vector2 worldCoordinates) => worldCoordinates;
 
   @override
-  Vector2 unprojectVector(Vector2 vector) => vector;
+  Vector2 unprojectVector(Vector2 screenCoordinates) => screenCoordinates;
 
   @override
-  Vector2 scaleVector(Vector2 vector) => vector;
+  Vector2 scaleVector(Vector2 worldCoordinates) => worldCoordinates;
 
   @override
-  Vector2 unscaleVector(Vector2 vector) => vector;
+  Vector2 unscaleVector(Vector2 screenCoordinates) => screenCoordinates;
 }
 
 /// This is the most common viewport if you want to have full control of what
@@ -183,6 +183,7 @@ class FixedResolutionViewport extends Viewport {
   }
 
   @override
+  // ignore: avoid_renaming_method_parameters
   Vector2 projectVector(Vector2 viewportCoordinates) {
     return (viewportCoordinates * _scale)..add(_resizeOffset);
   }
@@ -193,6 +194,7 @@ class FixedResolutionViewport extends Viewport {
   }
 
   @override
+  // ignore: avoid_renaming_method_parameters
   Vector2 scaleVector(Vector2 viewportCoordinates) {
     return viewportCoordinates * scale;
   }

@@ -218,18 +218,18 @@ class Polygon extends Shape {
   static final Vector2 _tmpResult = Vector2.zero();
 
   @override
-  Vector2 nearestPoint(Vector2 externalPoint) {
+  Vector2 nearestPoint(Vector2 point) {
     var shortestDistance2 = double.infinity;
     for (var i = 0; i < _vertices.length; i++) {
       final vertex = _vertices[i];
       final edge = _edges[i];
-      final dotProduct = (externalPoint.x - vertex.x) * edge.x +
-          (externalPoint.y - vertex.y) * edge.y;
+      final dotProduct =
+          (point.x - vertex.x) * edge.x + (point.y - vertex.y) * edge.y;
       final t = (dotProduct / edge.length2).clamp(-1.0, 0.0);
       final edgePointX = vertex.x + edge.x * t;
       final edgePointY = vertex.y + edge.y * t;
-      final dx = edgePointX - externalPoint.x;
-      final dy = edgePointY - externalPoint.y;
+      final dx = edgePointX - point.x;
+      final dy = edgePointY - point.y;
       final distance2 = dx * dx + dy * dy;
       if (distance2 < shortestDistance2) {
         shortestDistance2 = distance2;

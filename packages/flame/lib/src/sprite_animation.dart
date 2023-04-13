@@ -241,8 +241,8 @@ class SpriteAnimation {
     SpriteAnimationData data, {
     Images? images,
   }) async {
-    final _images = images ?? Flame.images;
-    final image = await _images.load(src);
+    final imagesCache = images ?? Flame.images;
+    final image = await imagesCache.load(src);
     return SpriteAnimation.fromFrameData(image, data);
   }
 

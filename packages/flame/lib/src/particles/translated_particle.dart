@@ -18,10 +18,10 @@ class TranslatedParticle extends Particle with SingleChildParticle {
   });
 
   @override
-  void render(Canvas c) {
-    c.save();
-    c.translateVector(offset);
-    super.render(c);
-    c.restore();
+  void render(Canvas canvas) {
+    canvas.save();
+    canvas.translateVector(offset);
+    super.render(canvas);
+    canvas.restore();
   }
 }

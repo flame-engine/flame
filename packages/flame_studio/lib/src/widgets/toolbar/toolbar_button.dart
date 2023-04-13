@@ -15,10 +15,10 @@ class ToolbarButton extends ConsumerStatefulWidget {
   final bool disabled;
 
   @override
-  _ToolbarButtonState createState() => _ToolbarButtonState();
+  ToolbarButtonState createState() => ToolbarButtonState();
 }
 
-class _ToolbarButtonState extends ConsumerState<ToolbarButton> {
+class ToolbarButtonState extends ConsumerState<ToolbarButton> {
   bool _isHovered = false;
   bool _isActive = false;
 
@@ -26,11 +26,11 @@ class _ToolbarButtonState extends ConsumerState<ToolbarButton> {
   Widget build(BuildContext context) {
     final painter = CustomPaint(
       painter: _ToolbarButtonPainter(
-        widget.disabled,
-        _isHovered,
-        _isActive,
         widget.icon,
         ref.watch(themeProvider),
+        isDisabled: widget.disabled,
+        isHovered: _isHovered,
+        isActive: _isActive,
       ),
     );
 
@@ -70,12 +70,12 @@ class _ToolbarButtonState extends ConsumerState<ToolbarButton> {
 
 class _ToolbarButtonPainter extends CustomPainter {
   _ToolbarButtonPainter(
-    this.isDisabled,
-    this.isHovered,
-    this.isActive,
     this.icon,
-    this.theme,
-  );
+    this.theme, {
+    required this.isDisabled,
+    required this.isHovered,
+    required this.isActive,
+  });
 
   final bool isDisabled;
   final bool isHovered;

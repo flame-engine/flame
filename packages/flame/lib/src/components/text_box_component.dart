@@ -183,10 +183,10 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
 
   int get currentLine {
     var totalCharCount = 0;
-    final _currentChar = currentChar;
+    final cachedCurrentChar = currentChar;
     for (var i = 0; i < lines.length; i++) {
       totalCharCount += lines[i].length;
-      if (totalCharCount > _currentChar) {
+      if (totalCharCount > cachedCurrentChar) {
         return i;
       }
     }
@@ -205,11 +205,12 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
     } else if (_boxConfig.growingBox) {
       var i = 0;
       var totalCharCount = 0;
-      final _currentChar = currentChar;
-      final _currentLine = currentLine;
-      final textWidth = lines.sublist(0, _currentLine + 1).map((line) {
-        final charCount =
-            (i < _currentLine) ? line.length : (_currentChar - totalCharCount);
+      final cachedCurrentChar = currentChar;
+      final cachedCurrentLine = currentLine;
+      final textWidth = lines.sublist(0, cachedCurrentLine + 1).map((line) {
+        final charCount = (i < cachedCurrentLine)
+            ? line.length
+            : (cachedCurrentChar - totalCharCount);
         totalCharCount += line.length;
         i++;
         return getLineWidth(line, charCount);
@@ -227,14 +228,14 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
   }
 
   @override
-  void render(Canvas c) {
+  void render(Canvas canvas) {
     if (cache == null) {
       return;
     }
-    c.save();
-    c.scale(1 / pixelRatio);
-    c.drawImage(cache!, Offset.zero, _imagePaint);
-    c.restore();
+    canvas.save();
+    canvas.scale(1 / pixelRatio);
+    canvas.drawImage(cache!, Offset.zero, _imagePaint);
+    canvas.restore();
   }
 
   Future<Image> _fullRenderAsImage(Vector2 size) {

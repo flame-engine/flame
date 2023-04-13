@@ -8,11 +8,11 @@ class DialogueChoice extends DialogueEntry {
   final List<DialogueOption> options;
 
   @override
-  Future<void> processInDialogueRunner(DialogueRunner runner) {
+  Future<void> processInDialogueRunner(DialogueRunner dialogueRunner) {
     for (final option in options) {
       option.evaluate();
     }
-    return runner.deliverChoices(this);
+    return dialogueRunner.deliverChoices(this);
   }
 
   @override

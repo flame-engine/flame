@@ -31,7 +31,7 @@ class HierarchyViewState extends ConsumerState<ConsumerStatefulWidget> {
   }
 
   void _buildList(ComponentTreeNode node, int depth, List<Widget> out) {
-    out.add(_ListItem(this, node, depth, out.isEmpty));
+    out.add(_ListItem(this, node, depth, isFirst: out.isEmpty));
     final isExpanded = expandedComponents.contains(node.component);
     if (isExpanded && node.hasChildren) {
       for (final childNode in node.children!) {
@@ -68,7 +68,7 @@ class HierarchyViewState extends ConsumerState<ConsumerStatefulWidget> {
 }
 
 class _ListItem extends StatelessWidget {
-  _ListItem(this.state, this.node, this.indent, this.isFirst)
+  _ListItem(this.state, this.node, this.indent, {required this.isFirst})
       : super(key: ObjectKey(node.component));
 
   final HierarchyViewState state;

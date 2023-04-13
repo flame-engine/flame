@@ -16,7 +16,7 @@ class CircleParticle extends Particle {
   });
 
   @override
-  void render(Canvas c) {
-    c.drawCircle(Offset.zero, radius, paint);
+  void render(Canvas canvas) {
+    canvas.drawCircle(Offset.zero, radius, paint);
   }
 }

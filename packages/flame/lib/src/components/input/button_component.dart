@@ -52,7 +52,7 @@ class ButtonComponent extends PositionComponent with TapCallbacks {
 
   @override
   @mustCallSuper
-  void onTapDown(TapDownEvent info) {
+  void onTapDown(TapDownEvent event) {
     if (buttonDown != null) {
       button!.removeFromParent();
       buttonDown!.parent = this;
@@ -62,7 +62,7 @@ class ButtonComponent extends PositionComponent with TapCallbacks {
 
   @override
   @mustCallSuper
-  void onTapUp(TapUpEvent info) {
+  void onTapUp(TapUpEvent event) {
     if (buttonDown != null) {
       buttonDown!.removeFromParent();
       button!.parent = this;
@@ -72,7 +72,7 @@ class ButtonComponent extends PositionComponent with TapCallbacks {
 
   @override
   @mustCallSuper
-  void onTapCancel(TapCancelEvent info) {
+  void onTapCancel(TapCancelEvent event) {
     if (buttonDown != null) {
       buttonDown!.removeFromParent();
       button!.parent = this;

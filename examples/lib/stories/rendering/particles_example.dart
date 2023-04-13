@@ -536,6 +536,7 @@ class TrafficLightComponent extends Component {
     Colors.orange,
     Colors.red,
   ];
+  final Paint _paint = Paint();
 
   @override
   void onMount() {
@@ -543,8 +544,8 @@ class TrafficLightComponent extends Component {
   }
 
   @override
-  void render(Canvas c) {
-    c.drawRect(rect, Paint()..color = currentColor);
+  void render(Canvas canvas) {
+    canvas.drawRect(rect, _paint..color = currentColor);
   }
 
   @override

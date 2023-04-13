@@ -111,7 +111,11 @@ void main() {
           await tester.pumpWidget(
             Builder(
               builder: (BuildContext context) {
-                renderBox = GameRenderBox(game, context, true);
+                renderBox = GameRenderBox(
+                  game,
+                  context,
+                  isRepaintBoundary: true,
+                );
                 return GameWidget(game: game);
               },
             ),

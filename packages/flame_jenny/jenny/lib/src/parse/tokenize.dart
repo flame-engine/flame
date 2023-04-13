@@ -1033,7 +1033,8 @@ class _Lexer {
   String _errorMessageAtPosition(int position) {
     final lineEnd = _findLineEnd(position);
     final lineStart = _findLineStart(position);
-    String lineFragment, markerIndent;
+    String lineFragment;
+    String markerIndent;
     if (lineEnd - lineStart <= 74) {
       lineFragment = text.substring(lineStart, lineEnd);
       markerIndent = ' ' * (position - lineStart);

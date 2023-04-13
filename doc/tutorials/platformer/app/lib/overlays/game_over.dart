@@ -5,7 +5,7 @@ import '../ember_quest.dart';
 class GameOver extends StatelessWidget {
   // Reference to parent game.
   final EmberQuestGame game;
-  const GameOver({super.key, required this.game});
+  const GameOver({required this.game, super.key});
 
   @override
   Widget build(BuildContext context) {

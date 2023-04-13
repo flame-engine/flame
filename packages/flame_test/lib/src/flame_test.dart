@@ -120,11 +120,11 @@ class GameTester<T extends Game> {
           final gameWidget =
               createGameWidget?.call(game) ?? GameWidget(game: game);
 
-          final _pump = pumpWidget ??
-              (GameWidget<T> _gameWidget, WidgetTester _tester) =>
-                  _tester.pumpWidget(_gameWidget);
+          final pump = pumpWidget ??
+              (GameWidget<T> pumpWidget, WidgetTester tester) =>
+                  tester.pumpWidget(pumpWidget);
 
-          await _pump(gameWidget, tester);
+          await pump(gameWidget, tester);
           await tester.pump();
 
           if (setUp != null) {

@@ -62,12 +62,12 @@ class SkillsAnimationComponent extends RiveComponent with TapCallbacks {
   }
 
   @override
-  void onTapDown(TapDownEvent info) {
+  void onTapDown(TapDownEvent event) {
     final levelInput = _levelInput;
     if (levelInput == null) {
       return;
     }
     levelInput.value = (levelInput.value + 1) % 3;
-    info.continuePropagation = true;
+    event.continuePropagation = true;
   }
 }
