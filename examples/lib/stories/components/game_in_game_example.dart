@@ -39,6 +39,6 @@ class GameChangeTimer extends TimerComponent
     final newParent = child.parent == gameRef.draggablesGame
         ? gameRef.composedGame.parentSquare as Component
         : gameRef.draggablesGame;
-    child.changeParent(newParent);
+    child.parent = newParent;
   }
 }

@@ -10,8 +10,10 @@ import 'package:examples/stories/bridge_libraries/forge2d/draggable_example.dart
 import 'package:examples/stories/bridge_libraries/forge2d/joints/constant_volume_joint.dart';
 import 'package:examples/stories/bridge_libraries/forge2d/joints/distance_joint.dart';
 import 'package:examples/stories/bridge_libraries/forge2d/joints/friction_joint.dart';
+import 'package:examples/stories/bridge_libraries/forge2d/joints/gear_joint.dart';
 import 'package:examples/stories/bridge_libraries/forge2d/joints/motor_joint.dart';
 import 'package:examples/stories/bridge_libraries/forge2d/joints/mouse_joint.dart';
+import 'package:examples/stories/bridge_libraries/forge2d/joints/prismatic_joint.dart';
 import 'package:examples/stories/bridge_libraries/forge2d/joints/pulley_joint.dart';
 import 'package:examples/stories/bridge_libraries/forge2d/joints/revolute_joint.dart';
 import 'package:examples/stories/bridge_libraries/forge2d/raycast_example.dart';
@@ -123,6 +125,12 @@ void addJointsStories(Dashbook dashbook) {
         info: FrictionJointExample.description,
       )
       .add(
+        'GearJoint',
+        (DashbookContext ctx) => GameWidget(game: GearJointExample()),
+        codeLink: link('joints/gear_joint.dart'),
+        info: GearJointExample.description,
+      )
+      .add(
         'MotorJoint',
         (DashbookContext ctx) => GameWidget(game: MotorJointExample()),
         codeLink: link('joints/motor_joint.dart'),
@@ -133,6 +141,12 @@ void addJointsStories(Dashbook dashbook) {
         (DashbookContext ctx) => GameWidget(game: MouseJointExample()),
         codeLink: link('joints/mouse_joint.dart'),
         info: MouseJointExample.description,
+      )
+      .add(
+        'PrismaticJoint',
+        (DashbookContext ctx) => GameWidget(game: PrismaticJointExample()),
+        codeLink: link('joints/prismatic_joint.dart'),
+        info: PrismaticJointExample.description,
       )
       .add(
         'PulleyJoint',

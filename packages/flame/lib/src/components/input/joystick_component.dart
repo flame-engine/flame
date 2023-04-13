@@ -106,6 +106,7 @@ class JoystickComponent extends HudMarginComponent with DragCallbacks {
 
   @override
   bool onDragStart(DragStartEvent info) {
+    super.onDragStart(info);
     return false;
   }
 
@@ -117,12 +118,14 @@ class JoystickComponent extends HudMarginComponent with DragCallbacks {
 
   @override
   bool onDragEnd(_) {
+    super.onDragEnd(_);
     onDragStop();
     return false;
   }
 
   @override
   bool onDragCancel(_) {
+    super.onDragCancel(_);
     onDragStop();
     return false;
   }

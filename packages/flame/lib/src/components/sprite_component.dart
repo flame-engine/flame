@@ -45,6 +45,10 @@ class SpriteComponent extends PositionComponent
     if (paint != null) {
       this.paint = paint;
     }
+
+    /// Register a listener to differentiate between size modification done by
+    /// external calls v/s the ones done by [_resizeToSprite].
+    this.size.addListener(_handleAutoResizeState);
   }
 
   SpriteComponent.fromImage(
@@ -87,6 +91,10 @@ class SpriteComponent extends PositionComponent
     _resizeToSprite();
   }
 
+  /// This flag helps in detecting if the size modification is done by
+  /// some external call vs [_autoResize]ing code from [_resizeToSprite].
+  bool _isAutoResizing = false;
+
   /// Returns the current sprite rendered by this component.
   Sprite? get sprite => _sprite;
 
@@ -119,11 +127,20 @@ class SpriteComponent extends PositionComponent
   /// Updates the size [sprite]'s srcSize if [autoResize] is true.
   void _resizeToSprite() {
     if (_autoResize) {
+      _isAutoResizing = true;
       if (_sprite != null) {
         size.setFrom(_sprite!.srcSize);
       } else {
         size.setZero();
       }
+      _isAutoResizing = false;
+    }
+  }
+
+  /// Turns off [_autoResize]ing if a size modification is done by user.
+  void _handleAutoResizeState() {
+    if (_autoResize && (!_isAutoResizing)) {
+      _autoResize = false;
     }
   }
 }
