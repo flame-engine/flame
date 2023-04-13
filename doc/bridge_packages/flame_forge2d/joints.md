@@ -23,10 +23,10 @@ Currently, Forge2D supports the following joints:
 - [`GearJoint`](#gearjoint)
 - [`MotorJoint`](#motorjoint)
 - [`MouseJoint`](#mousejoint)
-- [`PrismaticJoint`] (#prismaticjoint)
+- [`PrismaticJoint`](#prismaticjoint)
 - [`PulleyJoint`](#pulleyjoint)
 - [`RevoluteJoint`](#revolutejoint)
-- RopeJoint
+- [`RopeJoint`](#ropejoint)
 - WeldJoint
 - WheelJoint
 
@@ -564,3 +564,22 @@ Also, you can get the joint angle and speed using the following methods:
 revoluteJoint.jointAngle();
 revoluteJoint.jointSpeed();
 ```
+
+### `RopeJoint`
+
+
+/// A rope joint enforces a maximum distance between two points on two bodies. It has no other
+/// effect. Warning: if you attempt to change the maximum length during the simulation you will get
+/// some non-physical behavior. A model that would allow you to dynamically modify the length would
+/// have some sponginess, so I chose not to implement it that way. See DistanceJoint if you want to
+/// dynamically control length.
+
+The rope joint restricts the maximum distance between two points. This can be useful to prevent 
+chains of bodies from stretching, even under high load. See b2RopeJoint.h and rope_joint.cpp for details.
+
+/// Rope joint definition. This requires two body anchor points and a maximum lengths. Note: by
+/// default the connected objects will not collide. see collideConnected in b2JointDef.
+
+
+/// The maximum length of the rope. Warning: this must be larger than linearSlop or the joint
+/// will have no effect.
