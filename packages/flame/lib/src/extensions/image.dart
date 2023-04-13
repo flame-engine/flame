@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:typed_data';
 import 'dart:ui';
 
+import 'package:flame/extensions.dart';
 import 'package:flame/palette.dart';
 import 'package:flame/src/extensions/vector2.dart';
 
@@ -107,7 +108,7 @@ extension ImageExtension on Image {
       _whitePaint,
     );
     final picture = recorder.endRecording();
-    final resizedImage = await picture.toImage(
+    final resizedImage = await picture.toImageSafe(
       newSize.x.toInt(),
       newSize.y.toInt(),
     );

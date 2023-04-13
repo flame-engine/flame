@@ -82,14 +82,13 @@ class Svg {
       _render(canvas, size);
       final _picture = recorder.endRecording();
       _picture
-          .toImage(
+          .toImageSafe(
         (size.width * pixelRatio).ceil(),
         (size.height * pixelRatio).ceil(),
       )
           .then((image) {
         _imageCache.setValue(size, image);
         _lock.remove(size);
-        _picture.dispose();
       });
     }
 
