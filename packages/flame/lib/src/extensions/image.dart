@@ -4,7 +4,6 @@ import 'dart:ui';
 
 import 'package:flame/extensions.dart';
 import 'package:flame/palette.dart';
-import 'package:flame/src/extensions/vector2.dart';
 
 export 'dart:ui' show Image;
 
