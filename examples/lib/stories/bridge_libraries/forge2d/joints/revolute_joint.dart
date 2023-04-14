@@ -21,9 +21,9 @@ class RevoluteJointExample extends Forge2DGame with TapDetector {
   }
 
   @override
-  void onTapDown(TapDownInfo details) {
-    super.onTapDown(details);
-    final ball = Ball(details.eventPosition.game);
+  void onTapDown(TapDownInfo info) {
+    super.onTapDown(info);
+    final ball = Ball(info.eventPosition.game);
     add(ball);
     add(CircleShuffler(ball));
   }

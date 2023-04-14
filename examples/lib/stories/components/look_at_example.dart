@@ -83,7 +83,7 @@ class LookAtExample extends FlameGame with TapDetector {
 
   // Just displays some information. No functional contribution to the example.
   void _spawnInfoText() {
-    final _shaded = TextPaint(
+    final shaded = TextPaint(
       style: TextStyle(
         color: BasicPalette.white.color,
         fontSize: 20.0,
@@ -96,7 +96,7 @@ class LookAtExample extends FlameGame with TapDetector {
     add(
       TextComponent(
         text: 'nativeAngle = pi',
-        textRenderer: _shaded,
+        textRenderer: shaded,
         anchor: Anchor.center,
         position: _chopper1.absolutePosition + Vector2(0, -50),
       ),
@@ -105,7 +105,7 @@ class LookAtExample extends FlameGame with TapDetector {
     add(
       TextComponent(
         text: 'nativeAngle = 0',
-        textRenderer: _shaded,
+        textRenderer: shaded,
         anchor: Anchor.center,
         position: _chopper2.absolutePosition + Vector2(0, -50),
       ),

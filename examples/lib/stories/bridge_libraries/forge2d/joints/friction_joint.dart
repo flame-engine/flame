@@ -29,8 +29,8 @@ class FrictionJointExample extends Forge2DGame with TapDetector {
   }
 
   @override
-  Future<void> onTapDown(TapDownInfo details) async {
-    super.onTapDown(details);
+  Future<void> onTapDown(TapDownInfo info) async {
+    super.onTapDown(info);
     ball.body.applyLinearImpulse(Vector2.random() * 5000);
   }
 

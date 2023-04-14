@@ -35,7 +35,7 @@ class EmberQuestGame extends FlameGame
       'star.png',
       'water_enemy.png',
     ]);
-    initializeGame(true);
+    initializeGame(loadHud: true);
   }
 
   @override
@@ -90,7 +90,7 @@ class EmberQuestGame extends FlameGame
     }
   }
 
-  void initializeGame(bool loadHud) {
+  void initializeGame({required bool loadHud}) {
     // Assume that size.x < 3200
     final segmentsToLoad = (size.x / 640).ceil();
     segmentsToLoad.clamp(0, segments.length);
@@ -111,6 +111,6 @@ class EmberQuestGame extends FlameGame
   void reset() {
     starsCollected = 0;
     health = 3;
-    initializeGame(false);
+    initializeGame(loadHud: false);
   }
 }

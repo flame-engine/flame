@@ -77,9 +77,9 @@ class TiledComponent<T extends FlameGame> extends PositionComponent
   }
 
   @override
-  void onGameResize(Vector2 canvasSize) {
-    super.onGameResize(canvasSize);
-    tileMap.handleResize(canvasSize);
+  void onGameResize(Vector2 size) {
+    super.onGameResize(size);
+    tileMap.handleResize(size);
   }
 
   /// Loads a [TiledComponent] from a file.

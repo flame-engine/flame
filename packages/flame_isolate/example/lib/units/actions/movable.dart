@@ -31,6 +31,7 @@ enum MoveDirection {
     if (index >= 6 && index <= 8) {
       return MoveDirection.values[index - 3];
     }
+    // ignore: avoid_returning_this
     return this;
   }
 }

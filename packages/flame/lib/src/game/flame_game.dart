@@ -107,14 +107,14 @@ class FlameGame extends ComponentTreeRoot
   /// the coordinate system appropriately.
   @override
   @mustCallSuper
-  void onGameResize(Vector2 canvasSize) {
-    camera.handleResize(canvasSize);
-    super.onGameResize(canvasSize);
+  void onGameResize(Vector2 size) {
+    camera.handleResize(size);
+    super.onGameResize(size);
     // [onGameResize] is declared both in [Component] and in [Game]. Since
     // there is no way to explicitly call the [Component]'s implementation,
     // we propagate the event to [FlameGame]'s children manually.
-    handleResize(canvasSize);
-    children.forEach((child) => child.onParentResize(canvasSize));
+    handleResize(size);
+    children.forEach((child) => child.onParentResize(size));
   }
 
   /// Ensure that all pending tree operations finish.

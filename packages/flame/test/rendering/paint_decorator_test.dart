@@ -107,9 +107,9 @@ void main() {
 
 class _DecoratedSprite extends SpriteComponent {
   _DecoratedSprite({
+    required Decorator decorator,
     super.sprite,
     super.position,
-    required Decorator decorator,
   }) {
     this.decorator.addLast(decorator);
   }

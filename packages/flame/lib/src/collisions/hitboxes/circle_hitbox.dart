@@ -24,8 +24,8 @@ class CircleHitbox extends CircleComponent with ShapeHitbox {
   /// that fills half of the [parentSize].
   CircleHitbox.relative(
     super.relation, {
-    super.position,
     required super.parentSize,
+    super.position,
     super.angle,
     super.anchor,
     bool isSolid = false,
