@@ -6,7 +6,7 @@ class MainMenu extends StatelessWidget {
   // Reference to parent game.
   final EmberQuestGame game;
 
-  const MainMenu({super.key, required this.game});
+  const MainMenu({required this.game, super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -37,8 +37,8 @@ class BatchItem {
   BatchItem({
     required this.source,
     required this.transform,
-    this.flip = false,
     required this.color,
+    this.flip = false,
   })  : paint = Paint()..color = color,
         destination = Offset.zero & source.size;
 
@@ -116,14 +116,14 @@ class SpriteBatch {
     Images? images,
     bool useAtlas = true,
   }) async {
-    final _images = images ?? Flame.images;
+    final imagesCache = images ?? Flame.images;
     return SpriteBatch(
-      await _images.load(path),
+      await imagesCache.load(path),
       defaultColor: defaultColor,
       defaultTransform: defaultTransform ?? RSTransform(1, 0, 0, 0),
       defaultBlendMode: defaultBlendMode,
       useAtlas: useAtlas,
-      imageCache: _images,
+      imageCache: imagesCache,
       imageKey: path,
     );
   }
@@ -226,7 +226,6 @@ class SpriteBatch {
   Future<Image> _generateFlippedAtlas(Image image) {
     final recorder = PictureRecorder();
     final canvas = Canvas(recorder);
-    final _emptyPaint = Paint();
     canvas.drawImage(image, Offset.zero, _emptyPaint);
     canvas.scale(-1, 1);
     canvas.drawImage(image, Offset(-image.width * 2, 0), _emptyPaint);
@@ -346,7 +345,8 @@ class SpriteBatch {
     _batchItems.clear();
   }
 
-  // Used to not create new paint objects in [render] on every tick.
+  // Used to not create new Paint objects in [render] and
+  // [generateFlippedAtlas].
   final Paint _emptyPaint = Paint();
 
   void render(

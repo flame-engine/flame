@@ -20,7 +20,7 @@ Currently, Forge2D supports the following joints:
 - [`ConstantVolumeJoint`](#constantvolumejoint)
 - [`DistanceJoint`](#distancejoint)
 - [`FrictionJoint`](#frictionjoint)
-- GearJoint
+- [`GearJoint`](#gearjoint)
 - [`MotorJoint`](#motorjoint)
 - [`MouseJoint`](#mousejoint)
 - [`PrismaticJoint`] (#prismaticjoint)
@@ -157,6 +157,56 @@ values:
 
 In other words, the former simulates the friction, when the body is sliding and the latter simulates
 the friction when the body is spinning.
+
+
+### `GearJoint`
+
+The `GearJoint` is used to connect two joints together. Joints are required to be a
+[`RevoluteJoint`](#revolutejoint) or a [`PrismaticJoint`](#prismaticjoint) in any combination.
+
+```{warning}
+The connected joints must attach a dynamic body to a static body. 
+The static body is expected to be a bodyA on those joints
+```
+
+```dart
+final gearJointDef = GearJointDef()
+  ..bodyA = firstJoint.bodyA
+  ..bodyB = secondJoint.bodyA
+  ..joint1 = firstJoint
+  ..joint2 = secondJoint
+  ..ratio = 1;
+
+world.createJoint(GearJoint(gearJointDef));
+```
+
+```{flutter-app}
+:sources: ../../examples
+:page: gear_joint
+:subfolder: stories/bridge_libraries/forge2d/joints
+:show: code popup
+```
+
+- `joint1`, `joint2`: Connected revolute or prismatic joints
+- `bodyA`, `bodyB`: Any bodies form the connected joints, as long as they are not the same body.
+- `ratio`: Gear ratio
+
+Similarly to [`PulleyJoint`](#pulleyjoint), you can specify a gear ratio to bind the motions
+together:
+
+```text
+coordinate1 + ratio * coordinate2 == constant 
+```
+
+The ratio can be negative or positive. If one joint is a `RevoluteJoint` and the other joint is a
+`PrismaticJoint`, then the ratio will have units of length or units of 1/length.
+
+Since the `GearJoint` depends on two other joints, if these are destroyed, the `GearJoint` needs to
+be destroyed as well.
+
+```{warning}
+Manually destroy the `GearJoint` if joint1 or joint2 is destroyed
+```
 
 
 ### `MotorJoint`

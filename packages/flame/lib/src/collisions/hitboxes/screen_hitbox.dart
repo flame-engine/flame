@@ -22,8 +22,8 @@ class ScreenHitbox<T extends FlameGame> extends PositionComponent
   }
 
   @override
-  void onGameResize(Vector2 gameSize) {
-    super.onGameResize(gameSize);
-    size = gameSize;
+  void onGameResize(Vector2 size) {
+    super.onGameResize(size);
+    this.size = size;
   }
 }

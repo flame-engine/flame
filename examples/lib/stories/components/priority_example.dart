@@ -30,7 +30,7 @@ class Square extends RectangleComponent
         );
 
   @override
-  void onTapDown(TapDownEvent info) {
+  void onTapDown(TapDownEvent event) {
     final topComponent = gameRef.children.last;
     if (topComponent != this) {
       priority = topComponent.priority + 1;

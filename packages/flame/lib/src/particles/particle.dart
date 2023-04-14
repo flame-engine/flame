@@ -25,8 +25,8 @@ abstract class Particle {
   ///
   /// Useful for procedural particle generation.
   static Particle generate({
-    int count = 10,
     required ParticleGenerator generator,
+    int count = 10,
     double? lifespan,
     bool applyLifespanToChildren = true,
   }) {
@@ -111,8 +111,8 @@ abstract class Particle {
   ///
   /// Allowing it to move from one [Vector2] to another one.
   Particle moving({
-    Vector2? from,
     required Vector2 to,
+    Vector2? from,
     Curve curve = Curves.linear,
   }) {
     return MovingParticle(

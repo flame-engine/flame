@@ -44,10 +44,10 @@ class Ball extends BodyComponent with ContactCallbacks {
   }
 
   @override
-  void renderCircle(Canvas c, Offset center, double radius) {
-    super.renderCircle(c, center, radius);
+  void renderCircle(Canvas canvas, Offset center, double radius) {
+    super.renderCircle(canvas, center, radius);
     final lineRotation = Offset(0, radius);
-    c.drawLine(center, center + lineRotation, _blue);
+    canvas.drawLine(center, center + lineRotation, _blue);
   }
 
   @override

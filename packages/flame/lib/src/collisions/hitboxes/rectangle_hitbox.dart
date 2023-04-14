@@ -27,8 +27,8 @@ class RectangleHitbox extends RectangleComponent
   /// [parentSize].
   RectangleHitbox.relative(
     super.relation, {
-    super.position,
     required super.parentSize,
+    super.position,
     super.angle,
     super.anchor,
     bool isSolid = false,

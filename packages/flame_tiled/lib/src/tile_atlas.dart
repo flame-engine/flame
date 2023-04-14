@@ -117,7 +117,6 @@ class TiledAtlas {
     final bin = RectangleBinPacker();
     final recorder = PictureRecorder();
     final canvas = Canvas(recorder);
-    final _emptyPaint = Paint();
 
     final offsetMap = <String, Offset>{};
 
@@ -133,6 +132,7 @@ class TiledAtlas {
       ...imageList.map((tiledImage) => Flame.images.load(tiledImage.source!))
     ]);
 
+    final emptyPaint = Paint();
     for (final tiledImage in imageList) {
       final image = await Flame.images.load(tiledImage.source!);
       final rect = bin.pack(image.width.toDouble(), image.height.toDouble());
@@ -142,7 +142,7 @@ class TiledAtlas {
       final offset =
           offsetMap[tiledImage.source!] = Offset(rect.left, rect.top);
 
-      canvas.drawImage(image, offset, _emptyPaint);
+      canvas.drawImage(image, offset, emptyPaint);
     }
     final picture = recorder.endRecording();
     final image = await picture.toImageSafe(

@@ -39,9 +39,9 @@ class DominoExample extends Forge2DGame with TapDetector {
   }
 
   @override
-  void onTapDown(TapDownInfo details) {
-    super.onTapDown(details);
-    final position = details.eventPosition.game;
+  void onTapDown(TapDownInfo info) {
+    super.onTapDown(info);
+    final position = info.eventPosition.game;
     add(Pizza(position)..renderBody = true);
   }
 }

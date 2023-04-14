@@ -12,9 +12,9 @@ import 'package:test/test.dart';
 /// for convenience.
 @isTest
 Future<void> testScenario({
-  String? testName,
   required String input,
   required String testPlan,
+  String? testName,
   bool skip = false,
   List<String>? commands,
   YarnProject? yarn,
@@ -215,8 +215,8 @@ class _TestPlan extends DialogueView {
       } else if (match2 != null) {
         final name = match2.group(2);
         final text = match2.group(3)!;
-        final disabled = match2.group(4) != null;
-        _expected.add(_Option(name, text, !disabled));
+        final enabled = match2.group(4) == null;
+        _expected.add(_Option(name, text, enabled: enabled));
       } else if (match3 != null) {
         final index = int.parse(match3.group(1)!);
         final options = <_Option>[];
@@ -254,7 +254,7 @@ class _Choice {
 }
 
 class _Option {
-  const _Option(this.character, this.text, this.enabled);
+  const _Option(this.character, this.text, {required this.enabled});
   final String? character;
   final String text;
   final bool enabled;

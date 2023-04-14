@@ -33,10 +33,10 @@ class GameOverText extends SpriteComponent with HasGameRef<TRexGame> {
   }
 
   @override
-  void onGameResize(Vector2 gameSize) {
-    super.onGameResize(gameSize);
-    x = gameSize.x / 2;
-    y = gameSize.y * .25;
+  void onGameResize(Vector2 size) {
+    super.onGameResize(size);
+    x = size.x / 2;
+    y = size.y * .25;
   }
 }
 
@@ -53,9 +53,9 @@ class GameOverRestart extends SpriteComponent with HasGameRef<TRexGame> {
   }
 
   @override
-  void onGameResize(Vector2 gameSize) {
-    super.onGameResize(gameSize);
-    x = gameSize.x / 2;
-    y = gameSize.y * .75;
+  void onGameResize(Vector2 size) {
+    super.onGameResize(size);
+    x = size.x / 2;
+    y = size.y * .75;
   }
 }

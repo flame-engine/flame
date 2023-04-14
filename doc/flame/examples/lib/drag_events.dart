@@ -58,13 +58,13 @@ class DragTarget extends PositionComponent with DragCallbacks {
   final Map<int, Trail> _trails = {};
 
   @override
-  void onGameResize(Vector2 canvasSize) {
-    super.onGameResize(canvasSize);
-    size = canvasSize - Vector2(100, 75);
-    if (size.x < 100 || size.y < 100) {
-      size = canvasSize * 0.9;
+  void onGameResize(Vector2 size) {
+    super.onGameResize(size);
+    this.size = size - Vector2(100, 75);
+    if (this.size.x < 100 || this.size.y < 100) {
+      this.size = size * 0.9;
     }
-    position = canvasSize / 2;
+    position = size / 2;
   }
 
   @override

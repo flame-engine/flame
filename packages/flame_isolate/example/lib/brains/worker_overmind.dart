@@ -43,9 +43,9 @@ class WorkerOvermind extends Component
       _queuedTasks.add(Pair(objectToMove, destination));
 
   @override
-  void update(double t) {
-    _assignTaskInterval.update(t);
-    super.update(t);
+  void update(double dt) {
+    _assignTaskInterval.update(dt);
+    super.update(dt);
   }
 
   /// Set that keeps track of what workers are currently in queue to get a job.

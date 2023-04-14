@@ -52,8 +52,8 @@ class Cloud extends SpriteComponent
   }
 
   @override
-  void onGameResize(Vector2 gameSize) {
-    super.onGameResize(gameSize);
+  void onGameResize(Vector2 size) {
+    super.onGameResize(size);
     y = ((absolutePosition.y / 2 - (maxSkyLevel - minSkyLevel)) +
             random.fromRange(minSkyLevel, maxSkyLevel)) -
         absolutePositionOf(absoluteTopLeftPosition).y;

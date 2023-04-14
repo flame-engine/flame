@@ -74,8 +74,8 @@ class AudioGame extends FlameGame with TapDetector {
   }
 
   @override
-  void onTapDown(TapDownInfo details) {
-    if (button.containsPoint(details.eventPosition.game)) {
+  void onTapDown(TapDownInfo info) {
+    if (button.containsPoint(info.eventPosition.game)) {
       fireTwo();
     } else {
       fireOne();

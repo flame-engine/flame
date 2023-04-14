@@ -75,17 +75,17 @@ class MinionComponent extends FlareActorComponent {
         );
 
   @override
-  void render(Canvas c) {
+  void render(Canvas canvas) {
     final rect = Rect.fromLTWH(x, y, width, height);
     final paint = Paint()..color = const Color(0xFFfafbfc);
-    c.drawRect(rect, paint);
-    super.render(c);
+    canvas.drawRect(rect, paint);
+    super.render(canvas);
   }
 
   @override
-  void onGameResize(Vector2 gameSize) {
-    super.onGameResize(gameSize);
-    position = (gameSize - size) / 2;
+  void onGameResize(Vector2 size) {
+    super.onGameResize(size);
+    position = (size - this.size) / 2;
   }
 }
 
@@ -93,7 +93,7 @@ class BGComponent extends Component with HasGameRef {
   static final paint = BasicPalette.white.paint();
 
   @override
-  void render(Canvas c) {
-    c.drawRect(gameRef.size.toRect(), paint);
+  void render(Canvas canvas) {
+    canvas.drawRect(gameRef.size.toRect(), paint);
   }
 }

@@ -10,7 +10,7 @@ import 'package:padracing/car.dart';
 import 'package:padracing/game_colors.dart';
 
 class LapLine extends BodyComponent with ContactCallbacks {
-  LapLine(this.id, this.position, this.size, this.isFinish)
+  LapLine(this.id, this.position, this.size, {required this.isFinish})
       : super(priority: 1);
 
   final int id;
