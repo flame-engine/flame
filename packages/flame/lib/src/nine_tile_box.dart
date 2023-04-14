@@ -56,7 +56,6 @@ class NineTileBox {
       int rightColumnWidth = 0, int topRowHeight = 0,
       int bottomRowHeight = 0,}) : tileSize = sprite.src.width ~/ 3 {
     destTileSize = tileSize;
-    final centerEdge = tileSize.toDouble();
     center = Rect.fromLTWH(0, 0, sprite.src.width, sprite.src.height);
     _dst = Rect.fromLTWH(0, 0, sprite.src.width, sprite.src.height);
     setGrid(
@@ -77,33 +76,39 @@ class NineTileBox {
     if (leftColumnWidth != null && rightColumnWidth != null) {
       assert(
         leftColumnWidth + rightColumnWidth <= sprite.src.width,
-        'The left and right columns ($leftColumnWidth + $rightColumnWidth) do not fit in the width of the sprite (${sprite.src.width.round()})',
+        'The left and right columns ($leftColumnWidth + $rightColumnWidth) do '
+        'not fit in the width of the sprite (${sprite.src.width.round()})',
       );
     } else if (leftColumnWidth != null) {
       assert(
         leftColumnWidth <= center.right,
-        'The left column ($leftColumnWidth) is too large (max ${center.right.round()})',
+        'The left column ($leftColumnWidth) is too large '
+        '(max ${center.right.round()})',
       );
     } else if (rightColumnWidth != null) {
       assert(
         rightColumnWidth + center.left <= sprite.src.width,
-        'The right column ($rightColumnWidth) is too large (max ${(sprite.src.width - center.left).round()})',
+        'The right column ($rightColumnWidth) is too large '
+        '(max ${(sprite.src.width - center.left).round()})',
       );
     }
     if (topRowHeight != null && bottomRowHeight != null) {
       assert(
         topRowHeight + bottomRowHeight <= sprite.src.height,
-        'The top and bottom rows ($topRowHeight + $bottomRowHeight) do not fit in the height of the sprite (${sprite.src.height.round()})',
+        'The top and bottom rows ($topRowHeight + $bottomRowHeight) do not fit '
+        'in the height of the sprite (${sprite.src.height.round()})',
       );
     } else if (topRowHeight != null) {
       assert(
         topRowHeight <= center.bottom,
-        'The top row ($topRowHeight) is too large (max ${center.bottom.round()})',
+        'The top row ($topRowHeight) is too large '
+        '(max ${center.bottom.round()})',
       );
     } else if (bottomRowHeight != null) {
       assert(
         bottomRowHeight + center.top <= sprite.src.height,
-        'The bottom row ($bottomRowHeight) is too large (max ${(sprite.src.height - center.top).round()})',
+        'The bottom row ($bottomRowHeight) is too large '
+        '(max ${(sprite.src.height - center.top).round()})',
       );
     }
 
