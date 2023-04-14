@@ -12,16 +12,18 @@ void main() {
     testGolden(
       'Render with default grid',
       (game) async {
-        game.add(MyComponent1());
+        game.add(_MyComponent1());
       },
+      size: Vector2(300, 200),
       goldenFile: '_goldens/nine_tile_box_test_1.png',
     );
 
     testGolden(
       'Render with specified grid',
       (game) async {
-        game.add(MyComponent2());
+        game.add(_MyComponent2());
       },
+      size: Vector2(300, 200),
       goldenFile: '_goldens/nine_tile_box_test_2.png',
     );
 
@@ -59,10 +61,11 @@ void main() {
   });
 }
 
-class MyComponent1 extends PositionComponent {
-  MyComponent1() : super(size: Vector2(300, 200));
+class _MyComponent1 extends PositionComponent {
+  _MyComponent1() : super(size: Vector2(300, 200));
   late final Sprite sprite;
   late final NineTileBox nineTileBox;
+  final bgPaint = Paint()..color = const Color.fromARGB(255, 57, 113, 158);
 
   @override
   Future<void> onLoad() async {
@@ -74,16 +77,17 @@ class MyComponent1 extends PositionComponent {
   void render(Canvas canvas) {
     canvas.drawRect(
       size.toRect(),
-      Paint()..color = const Color.fromARGB(255, 57, 113, 158),
+      bgPaint,
     );
     nineTileBox.draw(canvas, Vector2(25, 25), Vector2(250, 150));
   }
 }
 
-class MyComponent2 extends PositionComponent {
-  MyComponent2() : super(size: Vector2(300, 200));
+class _MyComponent2 extends PositionComponent {
+  _MyComponent2() : super(size: Vector2(300, 200));
   late final Sprite sprite;
   late final NineTileBox nineTileBox;
+  final bgPaint = Paint()..color = const Color.fromARGB(255, 57, 113, 158);
 
   @override
   Future<void> onLoad() async {
@@ -101,7 +105,7 @@ class MyComponent2 extends PositionComponent {
   void render(Canvas canvas) {
     canvas.drawRect(
       size.toRect(),
-      Paint()..color = const Color.fromARGB(255, 57, 113, 158),
+      bgPaint,
     );
     nineTileBox.draw(canvas, Vector2(25, 25), Vector2(250, 150));
   }
