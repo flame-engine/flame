@@ -53,10 +53,10 @@ void main() {
         bottomRowHeight: 21,
       );
 
-      expect(nineTileBox.center.left, 31.0);
-      expect(nineTileBox.center.right, 34.0);
-      expect(nineTileBox.center.top, 5.0);
-      expect(nineTileBox.center.bottom, 18.0);
+      expect(nineTileBox.center.left, equals(31.0));
+      expect(nineTileBox.center.right, equals(34.0));
+      expect(nineTileBox.center.top, equals(5.0));
+      expect(nineTileBox.center.bottom, equals(18.0));
     });
   });
 }
