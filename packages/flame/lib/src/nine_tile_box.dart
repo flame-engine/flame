@@ -27,7 +27,7 @@ class NineTileBox {
 
   @visibleForTesting
   late Rect center;
-  
+
   late final Rect _dst;
 
   /// Creates a nine-box instance.
@@ -52,9 +52,13 @@ class NineTileBox {
   ///
   /// The outside columns and rows can be specified with fixed width or height.
   /// The center column and row take up the remaining space.
-  NineTileBox.withGrid(this.sprite, {int leftColumnWidth = 0,
-      int rightColumnWidth = 0, int topRowHeight = 0,
-      int bottomRowHeight = 0,}) : tileSize = sprite.src.width ~/ 3 {
+  NineTileBox.withGrid(
+    this.sprite, {
+    int leftColumnWidth = 0,
+    int rightColumnWidth = 0,
+    int topRowHeight = 0,
+    int bottomRowHeight = 0,
+  }) : tileSize = sprite.src.width ~/ 3 {
     destTileSize = tileSize;
     center = Rect.fromLTWH(0, 0, sprite.src.width, sprite.src.height);
     _dst = Rect.fromLTWH(0, 0, sprite.src.width, sprite.src.height);
@@ -71,8 +75,12 @@ class NineTileBox {
   /// The outside columns and rows can be specified with fixed width or height.
   /// The center column and row take up the remaining space. Any values that are
   /// not specified will remain unchanged.
-  void setGrid({int? leftColumnWidth, int? rightColumnWidth,
-      int? topRowHeight, int? bottomRowHeight,}) {
+  void setGrid({
+    int? leftColumnWidth,
+    int? rightColumnWidth,
+    int? topRowHeight,
+    int? bottomRowHeight,
+  }) {
     if (leftColumnWidth != null && rightColumnWidth != null) {
       assert(
         leftColumnWidth + rightColumnWidth <= sprite.src.width,

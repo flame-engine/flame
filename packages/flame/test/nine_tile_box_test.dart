@@ -74,8 +74,7 @@ class MyComponent1 extends PositionComponent {
   void render(Canvas canvas) {
     canvas.drawRect(
       size.toRect(),
-      Paint()
-        ..color = const Color.fromARGB(255, 57, 113, 158)
+      Paint()..color = const Color.fromARGB(255, 57, 113, 158),
     );
     nineTileBox.draw(canvas, Vector2(25, 25), Vector2(250, 150));
   }
@@ -102,8 +101,7 @@ class MyComponent2 extends PositionComponent {
   void render(Canvas canvas) {
     canvas.drawRect(
       size.toRect(),
-      Paint()
-        ..color = const Color.fromARGB(255, 57, 113, 158)
+      Paint()..color = const Color.fromARGB(255, 57, 113, 158),
     );
     nineTileBox.draw(canvas, Vector2(25, 25), Vector2(250, 150));
   }
