@@ -80,10 +80,10 @@ class BatchItem {
 
 @internal
 enum FlippedAtlasStatus {
-  /// There is no need to generate flipped atlas yet.
+  /// There is no need to generate a flipped atlas yet.
   none,
 
-  /// The flipped atlas image is currently generate in progress.
+  /// The flipped atlas generation is currently in progress.
   generating,
 
   /// The flipped atlas image has been generated.
