@@ -30,9 +30,7 @@ class PolygonHitbox extends PolygonComponent
     double super.angle = 0,
     super.anchor,
     bool isSolid = false,
-  }) : super.relative(
-          shrinkToBounds: true,
-        ) {
+  }) : super.relative(shrinkToBounds: true) {
     this.isSolid = isSolid;
   }
 

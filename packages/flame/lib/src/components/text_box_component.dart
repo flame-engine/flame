@@ -4,9 +4,9 @@ import 'dart:ui';
 
 import 'package:collection/collection.dart';
 import 'package:flame/components.dart';
-import 'package:flame/src/extensions/picture_extension.dart';
-import 'package:flame/src/palette.dart';
-import 'package:flame/src/text/text_renderer.dart';
+import 'package:flame/extensions.dart';
+import 'package:flame/palette.dart';
+import 'package:flame/text.dart';
 import 'package:flutter/widgets.dart' hide Image;
 import 'package:meta/meta.dart';
 

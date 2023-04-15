@@ -2,11 +2,10 @@ import 'dart:collection';
 import 'dart:math' show pi;
 import 'dart:ui';
 
+import 'package:flame/cache.dart';
+import 'package:flame/extensions.dart';
+import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
-import 'package:flame/src/cache/images.dart';
-import 'package:flame/src/extensions/image.dart';
-import 'package:flame/src/extensions/picture_extension.dart';
-import 'package:flame/src/flame.dart';
 import 'package:meta/meta.dart';
 
 extension SpriteBatchExtension on Game {
