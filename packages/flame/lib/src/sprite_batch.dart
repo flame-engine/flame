@@ -283,7 +283,8 @@ class SpriteBatch {
     _sources.add(
       flip
           ? Rect.fromLTWH(
-              (atlas.width * (!_flippedAtlasStatus.isGenerated ? 2 : 1)) -
+              // The atlas is twice as wide when the flipped atlas is generated.
+              (atlas.width * (_flippedAtlasStatus.isGenerated ? 1 : 2)) -
                   source.right,
               source.top,
               source.width,
