@@ -119,11 +119,15 @@ class SpriteGroupComponent<T> extends PositionComponent
   void _resizeToSprite() {
     if (_autoResize) {
       _isAutoResizing = true;
-      if (sprite != null) {
-        size.setFrom(sprite!.srcSize);
-      } else {
-        size.setZero();
+
+      final newX = sprite?.srcSize.x ?? 0;
+      final newY = sprite?.srcSize.y ?? 0;
+
+      // Modify only if changed.
+      if (size.x != newX || size.y != newY) {
+        size.setValues(newX, newY);
       }
+
       _isAutoResizing = false;
     }
   }
