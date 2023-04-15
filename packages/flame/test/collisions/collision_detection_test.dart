@@ -966,6 +966,49 @@ void main() {
         reason: "Should return the enclosed polygon's position",
       );
     });
+
+    testWithGame<_CollisionDetectionGame>(
+      'circle enclosed by solid polygon defined in clockwise (wrong) order',
+      _CollisionDetectionGame.new,
+      (game) async {
+        final polygonSize = Vector2.all(3);
+        final innerCircle = CircleHitbox();
+        final outerPolygon = PolygonHitbox.relative(
+          [
+            Vector2(0.5, 1.0),
+            Vector2(-0.5, 1.0),
+            Vector2(-1.0, 0.5),
+            Vector2(-1.0, -0.5),
+            Vector2(-0.5, -1.0),
+            Vector2(0.5, -1.0),
+            Vector2(1.0, -0.5),
+            Vector2(1.0, 0.5),
+          ],
+          parentSize: polygonSize,
+        )..isSolid = true;
+        await game.ensureAddAll([
+          PositionComponent(
+            position: Vector2.all(3),
+            size: Vector2.all(1),
+            anchor: Anchor.center,
+            children: [innerCircle],
+          ),
+          PositionComponent(
+            position: Vector2.all(3),
+            size: polygonSize,
+            anchor: Anchor.center,
+            children: [outerPolygon],
+          ),
+        ]);
+        final intersections =
+            game.collisionDetection.intersections(innerCircle, outerPolygon);
+        expect(
+          intersections.isNotEmpty,
+          isTrue,
+          reason: "Should return the enclosed circle's position",
+        );
+      },
+    );
   });
 
   group('Raycasting', () {
@@ -1684,3 +1727,5 @@ void main() {
     });
   });
 }
+
+class _CollisionDetectionGame extends FlameGame with HasCollisionDetection {}
