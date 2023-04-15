@@ -8,14 +8,14 @@ environment:
   flutter: ">=3.3.0"
 
 dependencies:
-  flame: ^1.7.0
-  flame_flare: ^1.5.3
+  flame: ^1.7.3
+  flame_flare: ^1.5.4
   flare_flutter: ^3.0.2
   flutter:
     sdk: flutter
 
 dev_dependencies:
-  flame_lint: ^0.2.0+1
+  flame_lint: ^0.2.0+2
 flutter:
   assets:
     - assets/Bob_Minion.flr
