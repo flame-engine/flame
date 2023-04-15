@@ -21,7 +21,7 @@ import 'dart:math';
 ///
 /// Internally, the queue is backed by a circular list.
 class RecycledQueue<T extends Disposable> extends IterableMixin<T>
-    implements Iterable<T>, Iterator<T> {
+    implements Iterator<T> {
   RecycledQueue(this.factory, {int initialCapacity = 8})
       : _elements = List.generate(initialCapacity, (i) => factory()),
         _startIndex = -1,

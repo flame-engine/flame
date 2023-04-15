@@ -128,11 +128,15 @@ class SpriteComponent extends PositionComponent
   void _resizeToSprite() {
     if (_autoResize) {
       _isAutoResizing = true;
-      if (_sprite != null) {
-        size.setFrom(_sprite!.srcSize);
-      } else {
-        size.setZero();
+
+      final newX = _sprite?.srcSize.x ?? 0;
+      final newY = _sprite?.srcSize.y ?? 0;
+
+      // Modify only if changed.
+      if (size.x != newX || size.y != newY) {
+        size.setValues(newX, newY);
       }
+
       _isAutoResizing = false;
     }
   }
