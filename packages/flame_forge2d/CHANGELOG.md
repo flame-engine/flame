@@ -1,3 +1,7 @@
+## 0.13.0+1
+
+ - **REFACTOR**: Add new lint rules ([#2477](https://github.com/flame-engine/flame/issues/2477)). ([dbda37b8](https://github.com/flame-engine/flame/commit/dbda37b81a9a7411559a6ba919ffbda6018b85c2))
+
 ## 0.13.0
 
 > Note: This release has breaking changes.
