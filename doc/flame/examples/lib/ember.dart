@@ -1,6 +1,6 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-import 'package:flame/experimental.dart';
+import 'package:flame/events.dart';
 import 'package:flame/flame.dart';
 
 class EmberPlayer extends SpriteAnimationComponent with TapCallbacks {

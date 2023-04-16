@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:collection/collection.dart';
 import 'package:flame/components.dart';
-import 'package:flame/experimental.dart';
+import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flame/src/events/flame_game_mixins/has_tappable_components.dart';
 import 'package:flame/src/game/game_render_box.dart';

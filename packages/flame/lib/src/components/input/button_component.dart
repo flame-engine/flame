@@ -1,5 +1,5 @@
 import 'package:flame/components.dart';
-import 'package:flame/experimental.dart';
+import 'package:flame/events.dart';
 import 'package:meta/meta.dart';
 
 /// The [ButtonComponent] bundles two [PositionComponent]s, one that shows while
