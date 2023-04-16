@@ -37,7 +37,7 @@ function convertVersionsToHtmlLinks(versionsList, currentVersion) {
     if (version === latestVersion) {
       out += `<a href="/latest/">
         <button class="${classes}">
-          <i class="fa fa-code-branch"></i> ${version}
+          <i class="fa fa-code-branch"></i> ${version} (latest)
         </button>
       </a>`;
     } else {
