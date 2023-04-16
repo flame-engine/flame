@@ -498,10 +498,8 @@ Future<void> onLoad() async {
 }
 ```
 
-If you are not using `FlameGame`, don't forget this component needs to be updated, because a ticker
-object needs to the tick the animation to move the frames. All animation components internally maintains
-a `SpriteAnimationTicker` which does this. This means a sprite animation object can be ticked directly
-using a ticker. This allows sharing same animation object between multiple tickers.
+All animation components internally maintains a `SpriteAnimationTicker` which ticks the `SpriteAnimation`.
+This allows multiple components to share the same animation object.
 
 Example:
 
@@ -1238,3 +1236,14 @@ can be used to animate some properties of your components, like position or dime
 You can check the list of those effects [here](effects.md).
 
 Examples of the running effects can be found [here](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/effects);
+
+
+## When not using `FlameGame`
+
+If you are not using `FlameGame`, don't forget that all components needs to be updated every time your
+game updates. This lets component perform their internal processing and update their state.
+
+For example, the `SpriteAnimationTicker` inside all the `SpriteAnimation` based components needs to tick
+the animation object to decide which animation frame will be displayed next. This can be done by manually
+calling `component.update()` when not using `FlameGame`. This also means, if you are implementing your
+own sprite animation based component, you can directly use a `SpriteAnimationTicker` to update the `SpriteAnimation`.
