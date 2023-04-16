@@ -33,7 +33,7 @@ function convertVersionsToHtmlLinks(versionsList, currentVersion) {
     if (version === currentVersion) {
       classes += ' selected';
     }
-    // link the 'latest/` HTML path if the latest version
+    // Link to the 'latest/` path if it is the latest version.
     if (version === latestVersion) {
       out += `<a href="/latest/">
         <button class="${classes}">
