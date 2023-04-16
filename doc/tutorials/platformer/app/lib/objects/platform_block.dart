@@ -22,7 +22,7 @@ class PlatformBlock extends SpriteComponent with HasGameRef<EmberQuestGame> {
       (gridPosition.x * size.x) + xOffset,
       game.size.y - (gridPosition.y * size.y),
     );
-    add(RectangleHitbox()..collisionType = CollisionType.passive);
+    add(RectangleHitbox(collisionType: CollisionType.passive));
   }
 
   @override

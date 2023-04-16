@@ -24,7 +24,7 @@ class Star extends SpriteComponent with HasGameRef<EmberQuestGame> {
       (gridPosition.x * size.x) + xOffset + (size.x / 2),
       game.size.y - (gridPosition.y * size.y) - (size.y / 2),
     );
-    add(RectangleHitbox()..collisionType = CollisionType.passive);
+    add(RectangleHitbox(collisionType: CollisionType.passive));
     add(
       SizeEffect.by(
         Vector2(-24, -24),

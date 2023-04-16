@@ -25,7 +25,7 @@ class EmberPlayer extends SpriteAnimationComponent with TapCallbacks {
       ),
     );
 
-    add(CircleHitbox()..collisionType = CollisionType.active);
+    add(CircleHitbox());
   }
 
   @override

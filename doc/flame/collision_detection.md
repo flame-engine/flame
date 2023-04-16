@@ -163,9 +163,9 @@ The `CollisionType` enum contains the following values:
 - `inactive` will not collide with any other `Collidable`s
 
 So if you have hitboxes that you don't need to check collisions against each other you can mark
-them as passive by setting `collisionType = CollisionType.passive`, this could for example be
-ground components or maybe your enemies don't need to check collisions between each other, then they
-could be marked as `passive` too.
+them as passive by setting `collisionType: CollisionType.passive` in the constructor, this could for
+example be ground components or maybe your enemies don't need to check collisions between each
+other, then they could be marked as `passive` too.
 
 Imagine a game where there are a lot of bullets, that can't collide with each other, flying towards
 the player, then the player would be set to `CollisionType.active` and the bullets would be set to
