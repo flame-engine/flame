@@ -5,6 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 enum _SpriteState {
   idle,
   running,
+  flying,
 }
 
 Future<void> main() async {
@@ -108,6 +109,27 @@ Future<void> main() async {
 
       expectDouble(component.size.x, testSize.x);
       expectDouble(component.size.y, testSize.y);
+    });
+
+    test('modify size only if changed while auto-resizing', () {
+      final spritesMap = {
+        _SpriteState.idle: Sprite(image, srcSize: Vector2.all(15)),
+        _SpriteState.running: Sprite(image, srcSize: Vector2.all(15)),
+        _SpriteState.flying: Sprite(image, srcSize: Vector2(15, 12)),
+      };
+      final component = SpriteGroupComponent<_SpriteState>(sprites: spritesMap);
+
+      var sizeChangeCounter = 0;
+      component.size.addListener(() => ++sizeChangeCounter);
+
+      component.current = _SpriteState.running;
+      expect(sizeChangeCounter, equals(1));
+
+      component.current = _SpriteState.idle;
+      expect(sizeChangeCounter, equals(1));
+
+      component.current = _SpriteState.flying;
+      expect(sizeChangeCounter, equals(2));
     });
   });
 }

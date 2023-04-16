@@ -1,3 +1,7 @@
+## 1.8.4
+
+ - **REFACTOR**: Add new lint rules ([#2477](https://github.com/flame-engine/flame/issues/2477)). ([dbda37b8](https://github.com/flame-engine/flame/commit/dbda37b81a9a7411559a6ba919ffbda6018b85c2))
+
 ## 1.8.3
 
  - **REFACTOR**: Remove unused event "ScoreEventCleared" from flame_block example ([#2380](https://github.com/flame-engine/flame/issues/2380)). ([a9db3f4c](https://github.com/flame-engine/flame/commit/a9db3f4ce5c7c11ddca511826bdf9ab72eb19dfe))

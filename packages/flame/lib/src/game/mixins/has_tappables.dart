@@ -79,7 +79,16 @@ mixin HasTappables on FlameGame implements MultiTapListener {
   void mount() {
     gestureDetectors.add<MultiTapGestureRecognizer>(
       MultiTapGestureRecognizer.new,
-      (MultiTapGestureRecognizer instance) {},
+      (MultiTapGestureRecognizer instance) {
+        instance.longTapDelay = Duration(
+          milliseconds: (longTapDelay * 1000).toInt(),
+        );
+        instance.onTap = handleTap;
+        instance.onTapDown = handleTapDown;
+        instance.onTapUp = handleTapUp;
+        instance.onTapCancel = handleTapCancel;
+        instance.onLongTapDown = handleLongTapDown;
+      },
     );
     super.mount();
   }

@@ -368,5 +368,35 @@ Future<void> main() async {
       expectDouble(component.size.x, testSize.x);
       expectDouble(component.size.y, testSize.y);
     });
+
+    test('modify size only if changed while auto-resizing', () {
+      final spriteList = [
+        Sprite(image, srcSize: Vector2.all(1)),
+        Sprite(image, srcSize: Vector2.all(1)),
+        Sprite(image, srcSize: Vector2(2, 1)),
+      ];
+      final animation = SpriteAnimation.spriteList(spriteList, stepTime: 1);
+      final component = SpriteAnimationComponent(animation: animation);
+
+      var sizeChangeCounter = 0;
+      component.size.addListener(() => ++sizeChangeCounter);
+
+      component.update(1);
+      expect(sizeChangeCounter, equals(0));
+
+      component.update(0.5);
+      expect(sizeChangeCounter, equals(0));
+
+      component.update(0.5);
+      expect(sizeChangeCounter, equals(1));
+
+      component.update(1);
+      expect(sizeChangeCounter, equals(2));
+
+      for (var i = 0; i < 15; ++i) {
+        component.update(1);
+      }
+      expect(sizeChangeCounter, equals(12));
+    });
   });
 }

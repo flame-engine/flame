@@ -192,11 +192,15 @@ class SpriteAnimationGroupComponent<T> extends PositionComponent
   void _resizeToSprite() {
     if (_autoResize) {
       _isAutoResizing = true;
-      if (animation != null) {
-        size.setFrom(animationTicker!.getSprite().srcSize);
-      } else {
-        size.setZero();
+
+      final newX = animationTicker?.getSprite().srcSize.x ?? 0;
+      final newY = animationTicker?.getSprite().srcSize.y ?? 0;
+
+      // Modify only if changed.
+      if (size.x != newX || size.y != newY) {
+        size.setValues(newX, newY);
       }
+
       _isAutoResizing = false;
     }
   }
