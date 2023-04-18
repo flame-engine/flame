@@ -5,8 +5,8 @@ import 'package:flame/geometry.dart';
 /// [CollisionDetection] is the foundation of the collision detection system in
 /// Flame.
 ///
-/// If the [HasCollisionDetection] mixin is added to the game, [run] is
-/// called every tick to check for collisions
+/// If the [HasCollisionDetection] mixin is added to the game, [run] is called
+/// every tick to check for collisions.
 abstract class CollisionDetection<T extends Hitbox<T>,
     B extends Broadphase<T>> {
   final B broadphase;
@@ -20,8 +20,8 @@ abstract class CollisionDetection<T extends Hitbox<T>,
 
   void addAll(Iterable<T> items) => items.forEach(add);
 
-  /// Removes the [item] from the collision detection, if you just want
-  /// to temporarily inactivate it you can set
+  /// Removes the [item] from the collision detection, if you just want to
+  /// temporarily inactivate it you can set
   /// `collisionType = CollisionType.inactive;` instead.
   void remove(T item) => broadphase.remove(item);
 
