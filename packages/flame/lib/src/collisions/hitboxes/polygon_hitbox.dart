@@ -12,8 +12,10 @@ class PolygonHitbox extends PolygonComponent
     super.angle,
     super.anchor,
     bool isSolid = false,
+    CollisionType collisionType = CollisionType.active,
   }) {
     this.isSolid = isSolid;
+    this.collisionType = collisionType;
   }
 
   /// With this constructor you define the [PolygonHitbox] in relation to the
@@ -30,8 +32,10 @@ class PolygonHitbox extends PolygonComponent
     double super.angle = 0,
     super.anchor,
     bool isSolid = false,
+    CollisionType collisionType = CollisionType.active,
   }) : super.relative(shrinkToBounds: true) {
     this.isSolid = isSolid;
+    this.collisionType = collisionType;
   }
 
   @override
