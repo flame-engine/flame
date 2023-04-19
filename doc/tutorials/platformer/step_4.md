@@ -36,7 +36,7 @@ class Star extends SpriteComponent
         (gridPosition.x * size.x) + xOffset + (size.x / 2),
         game.size.y - (gridPosition.y * size.y) - (size.y / 2),
     );
-    add(RectangleHitbox()..collisionType = CollisionType.passive);
+    add(RectangleHitbox(collisionType: CollisionType.passive));
     add(
       SizeEffect.by(
         Vector2(-24, -24),
@@ -132,7 +132,7 @@ class WaterEnemy extends SpriteAnimationComponent
         (gridPosition.x * size.x) + xOffset + (size.x / 2),
         game.size.y - (gridPosition.y * size.y) - (size.y / 2),
     );
-    add(RectangleHitbox()..collisionType = CollisionType.passive);
+    add(RectangleHitbox(collisionType: CollisionType.passive));
     add(
       MoveEffect.by(
         Vector2(-2 * size.x, 0),
@@ -220,7 +220,7 @@ class GroundBlock extends SpriteComponent with HasGameRef<EmberQuestGame> {
     position = Vector2((gridPosition.x * size.x) + xOffset,
         game.size.y - (gridPosition.y * size.y),
     );
-    add(RectangleHitbox()..collisionType = CollisionType.passive);
+    add(RectangleHitbox(collisionType: CollisionType.passive));
   }
 
   @override
@@ -348,7 +348,7 @@ class GroundBlock extends SpriteComponent with HasGameRef<EmberQuestGame> {
     position = Vector2((gridPosition.x * size.x) + xOffset,
         game.size.y - (gridPosition.y * size.y),
     );
-    add(RectangleHitbox()..collisionType = CollisionType.passive);
+    add(RectangleHitbox(collisionType: CollisionType.passive));
     if (gridPosition.x == 9 && position.x > game.lastBlockXPosition) {
       game.lastBlockKey = _blockKey;
       game.lastBlockXPosition = position.x + size.x;

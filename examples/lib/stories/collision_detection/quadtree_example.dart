@@ -337,7 +337,7 @@ class Water extends SpriteComponent
 
 mixin GameCollidable on PositionComponent {
   void initCollision() {
-    add(RectangleHitbox()..collisionType = CollisionType.passive);
+    add(RectangleHitbox(collisionType: CollisionType.passive));
   }
 
   void initCenter() {

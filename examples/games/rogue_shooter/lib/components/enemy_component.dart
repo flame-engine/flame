@@ -21,7 +21,7 @@ class EnemyComponent extends SpriteAnimationComponent
         textureSize: Vector2.all(16),
       ),
     );
-    add(CircleHitbox()..collisionType = CollisionType.passive);
+    add(CircleHitbox(collisionType: CollisionType.passive));
   }
 
   @override

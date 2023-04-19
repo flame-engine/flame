@@ -45,8 +45,9 @@ main() {
 ```{note}
 If you instantiate your game in a build method your game will be rebuilt every
 time the Flutter tree gets rebuilt, which usually is more often than you'd like.
-To avoid this, you can instead create an instance of your game first and
-reference it within your widget structure, like it is done in the example above.
+To avoid this, you can either create an instance of your game first and
+reference it within your widget structure or use the `GameWidget.controlled`
+constructor.
 ```
 
 To remove components from the list on a `FlameGame` the `remove` or `removeAll` methods can be used.
@@ -87,7 +88,7 @@ after the call to `super.onGameResize(canvasSize);`.
 ```
 
 When a game is first added to a Flutter widget tree the following lifecycle methods will be called
-in order: `onGameResize`, `onLoad` and `onMount`. After that, it goes on to call `update` and
+in order: `onLoad`, `onGameResize` and `onMount`. After that, it goes on to call `update` and
 `render` back and forth every tick, until the widget is removed from the tree.
 Once the `GameWidget` is removed from the tree, `onRemove` is called, just like when a normal
 component is removed from the component tree.
@@ -97,7 +98,7 @@ component is removed from the component tree.
 
 Flame's `FlameGame` class provides a variable called `debugMode`, which by default is `false`. It
 can, however, be set to `true` to enable debug features for the components of the game. **Be aware**
- that the value of this variable is passed through to its components when they are added to the
+that the value of this variable is passed through to its components when they are added to the
 game, so if you change the `debugMode` at runtime, it will not affect already added components by
 default.
 
@@ -151,7 +152,7 @@ The `Game` class is a low-level API that can be used when you want to implement 
 how the game engine should be structured. `Game` does not implement any `update` or
 `render` function for example.
 
-The `Loadable` mixin has the lifecycle methods `onLoad`, `onMount` and `onRemove` in it, which are
+The class also has the lifecycle methods `onLoad`, `onMount` and `onRemove` in it, which are
 called from the `GameWidget` (or another parent) when the game is loaded + mounted, or removed.
 `onLoad` is only called the first time the class is added to a parent, but `onMount` (which is
 called after `onLoad`) is called every time it is added to a new parent. `onRemove` is called when

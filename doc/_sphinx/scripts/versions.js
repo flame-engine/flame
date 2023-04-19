@@ -53,7 +53,7 @@ function convertVersionsToHtmlLinks(versionsList, currentVersion) {
 
 function maybeAddWarning(versions, currentVersion) {
   const latestVersion = getLatestVersion(versions);
-  const nonWarningVersions = [...specialVersions, latestVersion];
+  const nonWarningVersions = [...specialVersions, 'latest', latestVersion];
   const showWarning = !nonWarningVersions.includes(currentVersion);
   if (showWarning) {
     $('#version-warning')

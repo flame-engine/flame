@@ -1,6 +1,5 @@
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
-import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
 import 'package:flame/src/events/flame_game_mixins/has_draggable_components.dart';
 import 'package:flutter_test/flutter_test.dart';

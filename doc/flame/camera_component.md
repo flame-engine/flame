@@ -1,8 +1,9 @@
 # Camera component
 
 ```{note}
-This document describes a new experimental API. The more traditional approach
-for handling a camera is described in [](camera_and_viewport.md).
+This document describes a new camera API. The more traditional approach
+(which will be deprecated) for handling a camera is described in
+[](camera_and_viewport.md).
 ```
 
 Camera-as-a-component is an alternative way of structuring a game, an approach
