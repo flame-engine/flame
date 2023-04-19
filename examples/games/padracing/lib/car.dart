@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:flame/experimental.dart';
+import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame_forge2d/flame_forge2d.dart' hide Particle, World;
 import 'package:flutter/material.dart' hide Image, Gradient;

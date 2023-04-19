@@ -1,7 +1,8 @@
 import 'dart:ui';
 
+import 'package:flame/camera.dart';
 import 'package:flame/components.dart';
-import 'package:flame/experimental.dart';
+import 'package:flame/events.dart';
 import 'package:flame/game.dart' hide Viewport;
 
 class CameraComponentPropertiesExample extends FlameGame with TapCallbacks {

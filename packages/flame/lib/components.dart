@@ -1,5 +1,7 @@
 /// {@canonicalFor anchor.Anchor}
 export 'src/anchor.dart';
+export 'src/camera/camera_component.dart' show CameraComponent;
+export 'src/camera/world.dart' show World;
 export 'src/collisions/has_collision_detection.dart';
 export 'src/collisions/hitboxes/screen_hitbox.dart';
 export 'src/components/clip_component.dart';
