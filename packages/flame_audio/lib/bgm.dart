@@ -53,7 +53,7 @@ class Bgm extends WidgetsBindingObserver {
   /// It is safe to call this function even when a current BGM track is
   /// playing.
   Future<void> play(String fileName, {double volume = 1}) async {
-    await audioPlayer.dispose();
+    await audioPlayer.release();
     await audioPlayer.setReleaseMode(ReleaseMode.loop);
     await audioPlayer.setVolume(volume);
     await audioPlayer.setSource(AssetSource(fileName));
