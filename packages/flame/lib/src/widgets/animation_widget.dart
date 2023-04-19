@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flame/src/anchor.dart';
 import 'package:flame/src/cache/images.dart';
 import 'package:flame/src/sprite_animation.dart';
+import 'package:flame/src/sprite_animation_ticker.dart';
 import 'package:flame/src/widgets/base_future_builder.dart';
 import 'package:flame/src/widgets/sprite_painter.dart';
 import 'package:flutter/material.dart' hide Animation;
@@ -18,6 +19,7 @@ class SpriteAnimationWidget extends StatelessWidget {
   final bool playing;
 
   final FutureOr<SpriteAnimation> _animationFuture;
+  final SpriteAnimationTicker? _animationTicker;
 
   /// A builder function that is called if the loading fails
   final WidgetBuilder? errorBuilder;
@@ -27,10 +29,12 @@ class SpriteAnimationWidget extends StatelessWidget {
 
   const SpriteAnimationWidget({
     required SpriteAnimation animation,
+    required SpriteAnimationTicker animationTicker,
     this.playing = true,
     this.anchor = Anchor.topLeft,
     super.key,
   })  : _animationFuture = animation,
+        _animationTicker = animationTicker,
         errorBuilder = null,
         loadingBuilder = null;
 
@@ -49,11 +53,8 @@ class SpriteAnimationWidget extends StatelessWidget {
     this.errorBuilder,
     this.loadingBuilder,
     super.key,
-  }) : _animationFuture = SpriteAnimation.load(
-          path,
-          data,
-          images: images,
-        );
+  })  : _animationFuture = SpriteAnimation.load(path, data, images: images),
+        _animationTicker = null;
 
   @override
   Widget build(BuildContext context) {
@@ -62,6 +63,7 @@ class SpriteAnimationWidget extends StatelessWidget {
       builder: (_, spriteAnimation) {
         return InternalSpriteAnimationWidget(
           animation: spriteAnimation,
+          animationTicker: _animationTicker ?? spriteAnimation.ticker(),
           anchor: anchor,
           playing: playing,
         );
@@ -78,6 +80,9 @@ class InternalSpriteAnimationWidget extends StatefulWidget {
   /// The [SpriteAnimation] to be rendered
   final SpriteAnimation animation;
 
+  /// The [SpriteAnimationTicker] use for updating the [animation].
+  final SpriteAnimationTicker animationTicker;
+
   /// The positioning [Anchor]
   final Anchor anchor;
 
@@ -86,6 +91,7 @@ class InternalSpriteAnimationWidget extends StatefulWidget {
 
   const InternalSpriteAnimationWidget({
     required this.animation,
+    required this.animationTicker,
     this.playing = true,
     this.anchor = Anchor.topLeft,
     super.key,
@@ -115,7 +121,7 @@ class _InternalSpriteAnimationWidgetState
     super.didUpdateWidget(oldWidget);
 
     if (oldWidget.animation != widget.animation) {
-      oldWidget.animation.onComplete = null;
+      oldWidget.animationTicker.onComplete = null;
       _setupController();
     }
 
@@ -127,7 +133,7 @@ class _InternalSpriteAnimationWidgetState
   }
 
   void _initAnimation() {
-    widget.animation.reset();
+    widget.animationTicker.reset();
     _lastUpdated = DateTime.now().microsecondsSinceEpoch.toDouble();
     _controller?.repeat(
       // Approximately 60 fps
@@ -136,7 +142,7 @@ class _InternalSpriteAnimationWidgetState
   }
 
   void _setupController() {
-    widget.animation.onComplete = _pauseAnimation;
+    widget.animationTicker.onComplete = _pauseAnimation;
     _controller ??= AnimationController(vsync: this)
       ..addListener(_onAnimationValueChanged);
   }
@@ -148,9 +154,9 @@ class _InternalSpriteAnimationWidgetState
     final lastUpdated = _lastUpdated ??= now;
     final dt = (now - lastUpdated) * microSecond;
 
-    final frameIndexBeforeTick = widget.animation.currentIndex;
-    widget.animation.update(dt);
-    final frameIndexAfterTick = widget.animation.currentIndex;
+    final frameIndexBeforeTick = widget.animationTicker.currentIndex;
+    widget.animationTicker.update(dt);
+    final frameIndexAfterTick = widget.animationTicker.currentIndex;
 
     if (frameIndexBeforeTick != frameIndexAfterTick) {
       setState(() {});
@@ -172,7 +178,7 @@ class _InternalSpriteAnimationWidgetState
   Widget build(BuildContext ctx) {
     return CustomPaint(
       painter: SpritePainter(
-        widget.animation.getSprite(),
+        widget.animationTicker.getSprite(),
         widget.anchor,
       ),
     );

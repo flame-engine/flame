@@ -17,8 +17,10 @@ class RectangleHitbox extends RectangleComponent
     super.anchor,
     super.priority,
     bool isSolid = false,
+    CollisionType collisionType = CollisionType.active,
   }) : shouldFillParent = size == null && position == null {
     this.isSolid = isSolid;
+    this.collisionType = collisionType;
   }
 
   /// With this constructor you define the [RectangleHitbox] in relation to
@@ -32,11 +34,13 @@ class RectangleHitbox extends RectangleComponent
     super.angle,
     super.anchor,
     bool isSolid = false,
+    CollisionType collisionType = CollisionType.active,
   })  : shouldFillParent = false,
         super.relative(
           shrinkToBounds: true,
         ) {
     this.isSolid = isSolid;
+    this.collisionType = collisionType;
   }
 
   @override

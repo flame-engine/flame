@@ -1,7 +1,7 @@
 import 'dart:math';
 
+import 'package:flame/camera.dart';
 import 'package:flame/components.dart';
-import 'package:flame/experimental.dart';
 import 'package:flame/extensions.dart' show OffsetExtension;
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';

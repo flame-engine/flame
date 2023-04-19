@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flame/components.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
+import 'package:flame/src/sprite_animation_ticker.dart';
 import 'package:meta/meta.dart';
 
 export '../sprite_animation.dart';
@@ -17,6 +18,9 @@ class SpriteAnimationGroupComponent<T> extends PositionComponent
 
   /// Map with the available states for this animation group
   Map<T, SpriteAnimation>? _animations;
+
+  /// Map containing animation tickers for each animation state.
+  Map<T, SpriteAnimationTicker>? _animationTickers;
 
   /// Whether the animation is paused or playing.
   bool playing;
@@ -34,7 +38,7 @@ class SpriteAnimationGroupComponent<T> extends PositionComponent
     this.removeOnFinish = const {},
     Paint? paint,
     super.position,
-    Vector2? size,
+    super.size,
     super.scale,
     super.angle,
     super.nativeAngle,
@@ -48,14 +52,21 @@ class SpriteAnimationGroupComponent<T> extends PositionComponent
         _current = current,
         _animations = animations,
         _autoResize = autoResize ?? size == null,
-        super(size: size ?? animations?[current]?.getSprite().srcSize) {
+        _animationTickers = animations != null
+            ? Map.fromEntries(
+                animations.entries
+                    .map((e) => MapEntry(e.key, e.value.ticker()))
+                    .toList(),
+              )
+            : null {
     if (paint != null) {
       this.paint = paint;
     }
 
     /// Register a listener to differentiate between size modification done by
     /// external calls v/s the ones done by [_resizeToSprite].
-    this.size.addListener(_handleAutoResizeState);
+    size.addListener(_handleAutoResizeState);
+    _resizeToSprite();
   }
 
   /// Creates a SpriteAnimationGroupComponent from a [size], an [image] and
@@ -102,6 +113,7 @@ class SpriteAnimationGroupComponent<T> extends PositionComponent
         );
 
   SpriteAnimation? get animation => _animations?[current];
+  SpriteAnimationTicker? get animationTicker => _animationTickers?[current];
 
   /// Returns the current group state.
   T? get current => _current;
@@ -114,16 +126,27 @@ class SpriteAnimationGroupComponent<T> extends PositionComponent
     _resizeToSprite();
   }
 
-  /// Returns the animations state map.
+  /// Returns the map of animation state and their corresponding animations.
   Map<T, SpriteAnimation>? get animations => _animations;
 
-  /// Sets the given [value] as animation state map.
+  /// Sets the given [value] as new animation state map.
   set animations(Map<T, SpriteAnimation>? value) {
     if (_animations != value) {
       _animations = value;
+
+      _animationTickers = _animations != null
+          ? Map.fromEntries(
+              _animations!.entries
+                  .map((e) => MapEntry(e.key, e.value.ticker()))
+                  .toList(),
+            )
+          : null;
       _resizeToSprite();
     }
   }
+
+  /// Returns a map containing [SpriteAnimationTicker] for each state.
+  Map<T, SpriteAnimationTicker>? get animationTickers => _animationTickers;
 
   /// Returns current value of auto resize flag.
   bool get autoResize => _autoResize;
@@ -144,7 +167,7 @@ class SpriteAnimationGroupComponent<T> extends PositionComponent
   @mustCallSuper
   @override
   void render(Canvas canvas) {
-    animation?.getSprite().render(
+    animationTicker?.getSprite().render(
           canvas,
           size: size,
           overridePaint: paint,
@@ -155,10 +178,11 @@ class SpriteAnimationGroupComponent<T> extends PositionComponent
   @override
   void update(double dt) {
     if (playing) {
-      animation?.update(dt);
+      animationTicker?.update(dt);
       _resizeToSprite();
     }
-    if ((removeOnFinish[current] ?? false) && (animation?.done() ?? false)) {
+    if ((removeOnFinish[current] ?? false) &&
+        (animationTicker?.done() ?? false)) {
       removeFromParent();
     }
   }
@@ -168,11 +192,15 @@ class SpriteAnimationGroupComponent<T> extends PositionComponent
   void _resizeToSprite() {
     if (_autoResize) {
       _isAutoResizing = true;
-      if (animation != null) {
-        size.setFrom(animation!.getSprite().srcSize);
-      } else {
-        size.setZero();
+
+      final newX = animationTicker?.getSprite().srcSize.x ?? 0;
+      final newY = animationTicker?.getSprite().srcSize.y ?? 0;
+
+      // Modify only if changed.
+      if (size.x != newX || size.y != newY) {
+        size.setValues(newX, newY);
       }
+
       _isAutoResizing = false;
     }
   }

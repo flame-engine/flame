@@ -11,14 +11,14 @@ environment:
 
 dependencies:
   dashbook: 0.1.8
-  flame: ^1.7.0
-  flame_audio: ^2.0.0
-  flame_forge2d: ^0.13.0
-  flame_isolate: ^0.3.0
-  flame_lottie: ^0.2.0+1
-  flame_noise: ^0.1.1
-  flame_svg: ^1.7.2
-  flame_tiled: ^1.10.0
+  flame: ^1.7.3
+  flame_audio: ^2.0.1
+  flame_forge2d: ^0.13.0+1
+  flame_isolate: ^0.3.0+1
+  flame_lottie: ^0.2.0+2
+  flame_noise: ^0.1.1+1
+  flame_svg: ^1.7.3
+  flame_tiled: ^1.10.1
   flutter:
     sdk: flutter
   google_fonts: ^2.3.2
@@ -29,7 +29,7 @@ dependencies:
   trex_game: ^0.1.0
 
 dev_dependencies:
-  flame_lint: ^0.2.0+1
+  flame_lint: ^0.2.0+2
   test: any
 
 flutter:

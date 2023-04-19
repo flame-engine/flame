@@ -94,5 +94,24 @@ Future<void> main() async {
       expectDouble(component.size.x, testSize.x);
       expectDouble(component.size.y, testSize.y);
     });
+
+    test('modify size only if changed while auto-resizing', () {
+      final sprite1 = Sprite(image, srcSize: Vector2.all(13));
+      final sprite2 = Sprite(image, srcSize: Vector2.all(13));
+      final sprite3 = Sprite(image, srcSize: Vector2(13, 14));
+      final component = SpriteComponent();
+
+      var sizeChangeCounter = 0;
+      component.size.addListener(() => ++sizeChangeCounter);
+
+      component.sprite = sprite1;
+      expect(sizeChangeCounter, equals(1));
+
+      component.sprite = sprite2;
+      expect(sizeChangeCounter, equals(1));
+
+      component.sprite = sprite3;
+      expect(sizeChangeCounter, equals(2));
+    });
   });
 }

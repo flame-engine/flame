@@ -16,15 +16,18 @@ Future<void> main() async {
           loop: false,
         );
         final copy = animation.clone();
+        final ticker1 = animation.ticker();
+        final ticker2 = copy.ticker();
+
         expect(copy.loop, animation.loop);
 
-        animation.update(0.1);
-        expect(animation.currentIndex, 1);
-        expect(copy.currentIndex, 0);
+        ticker1.update(0.1);
+        expect(ticker1.currentIndex, 1);
+        expect(ticker2.currentIndex, 0);
 
-        copy.update(0.2);
-        expect(animation.currentIndex, 1);
-        expect(copy.currentIndex, 2);
+        ticker2.update(0.2);
+        expect(ticker1.currentIndex, 1);
+        expect(ticker2.currentIndex, 2);
       },
     );
     test(
@@ -36,15 +39,18 @@ Future<void> main() async {
           loop: false,
         );
         final copy = animation.reversed();
+        final ticker1 = animation.ticker();
+        final ticker2 = copy.ticker();
+
         expect(copy.loop, animation.loop);
 
-        animation.update(0.1);
-        expect(animation.currentIndex, 1);
-        expect(copy.currentIndex, 0);
+        ticker1.update(0.1);
+        expect(ticker1.currentIndex, 1);
+        expect(ticker2.currentIndex, 0);
 
-        copy.update(0.2);
-        expect(animation.currentIndex, 1);
-        expect(copy.currentIndex, 2);
+        ticker2.update(0.2);
+        expect(ticker1.currentIndex, 1);
+        expect(ticker2.currentIndex, 2);
       },
     );
   });
@@ -210,7 +216,7 @@ Future<void> main() async {
         List.filled(5, Sprite(image)),
         stepTime: 0.1,
         loop: false,
-      );
+      ).ticker();
       var callbackInvoked = 0;
       animation.onComplete = () {
         callbackInvoked++;
@@ -229,48 +235,50 @@ Future<void> main() async {
         stepTime: 0.1,
         loop: false,
       );
+      final component = SpriteAnimationComponent(animation: animation);
+      final ticker = component.animationTicker!;
       var callbackInvoked = 0;
-      animation.onComplete = () {
+      ticker.onComplete = () {
         callbackInvoked++;
       };
-      final component = SpriteAnimationComponent(animation: animation);
       await game.ensureAdd(component);
+
       game.update(0.01);
-      expect(animation.currentIndex, 0);
+      expect(ticker.currentIndex, 0);
       game.update(0.1);
-      expect(animation.currentIndex, 1);
+      expect(ticker.currentIndex, 1);
       game.update(0.3);
-      expect(animation.currentIndex, 4);
+      expect(ticker.currentIndex, 4);
       game.update(0.089);
       // At this point we're still on the last frame, which has
       // almost finished. Total clock time = 0.499 s
-      expect(animation.currentIndex, 4);
-      expect(animation.clock, closeTo(0.099, 1e-10));
-      expect(animation.done(), false);
+      expect(ticker.currentIndex, 4);
+      expect(ticker.clock, closeTo(0.099, 1e-10));
+      expect(ticker.done(), false);
       expect(callbackInvoked, 0);
       // This last tick moves the total clock to 0.5001 s,
       // completing the last animation frame.
       game.update(0.0011);
       expect(callbackInvoked, 1);
-      expect(animation.currentIndex, 4);
-      expect(animation.done(), true);
+      expect(ticker.currentIndex, 4);
+      expect(ticker.done(), true);
       // Now move the timer forward again, and verify that the callback won't be
       // invoked multiple times.
       for (var i = 0; i < 10; i++) {
         game.update(1);
       }
       expect(callbackInvoked, 1);
-      expect(animation.currentIndex, 4);
-      expect(animation.done(), true);
+      expect(ticker.currentIndex, 4);
+      expect(ticker.done(), true);
       // Lastly, let's reset the animation and see if it still works properly
       callbackInvoked = 0;
-      animation.reset();
-      expect(animation.currentIndex, 0);
-      expect(animation.done(), false);
+      ticker.reset();
+      expect(ticker.currentIndex, 0);
+      expect(ticker.done(), false);
       game.update(100);
       expect(callbackInvoked, 1);
-      expect(animation.currentIndex, 4);
-      expect(animation.done(), true);
+      expect(ticker.currentIndex, 4);
+      expect(ticker.done(), true);
     });
   });
 
@@ -359,6 +367,36 @@ Future<void> main() async {
 
       expectDouble(component.size.x, testSize.x);
       expectDouble(component.size.y, testSize.y);
+    });
+
+    test('modify size only if changed while auto-resizing', () {
+      final spriteList = [
+        Sprite(image, srcSize: Vector2.all(1)),
+        Sprite(image, srcSize: Vector2.all(1)),
+        Sprite(image, srcSize: Vector2(2, 1)),
+      ];
+      final animation = SpriteAnimation.spriteList(spriteList, stepTime: 1);
+      final component = SpriteAnimationComponent(animation: animation);
+
+      var sizeChangeCounter = 0;
+      component.size.addListener(() => ++sizeChangeCounter);
+
+      component.update(1);
+      expect(sizeChangeCounter, equals(0));
+
+      component.update(0.5);
+      expect(sizeChangeCounter, equals(0));
+
+      component.update(0.5);
+      expect(sizeChangeCounter, equals(1));
+
+      component.update(1);
+      expect(sizeChangeCounter, equals(2));
+
+      for (var i = 0; i < 15; ++i) {
+        component.update(1);
+      }
+      expect(sizeChangeCounter, equals(12));
     });
   });
 }
