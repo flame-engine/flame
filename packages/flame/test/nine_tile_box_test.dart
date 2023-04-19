@@ -31,26 +31,26 @@ void main() {
       final sprite = Sprite(await loadImage('speech-bubble-1.png'));
       final nineTileBox = NineTileBox(sprite);
 
-      expect(nineTileBox.tileSize, 30);
-      expect(nineTileBox.destTileSize, 30);
+      expect(nineTileBox.tileSize, equals(30));
+      expect(nineTileBox.destTileSize, equals(30));
     });
 
     test('tile sizes set correctly', () async {
       final sprite = Sprite(await loadImage('speech-bubble-1.png'));
       final nineTileBox = NineTileBox(sprite, tileSize: 20, destTileSize: 25);
 
-      expect(nineTileBox.tileSize, 20);
-      expect(nineTileBox.destTileSize, 25);
+      expect(nineTileBox.tileSize, equals(20));
+      expect(nineTileBox.destTileSize, equals(25));
     });
 
     test('grid sizes set correctly', () async {
       final sprite = Sprite(await loadImage('speech-bubble-2.png'));
       final nineTileBox = NineTileBox.withGrid(
         sprite,
-        leftColumnWidth: 31,
-        rightColumnWidth: 5,
-        topRowHeight: 5,
-        bottomRowHeight: 21,
+        leftWidth: 31,
+        rightWidth: 5,
+        topHeight: 5,
+        bottomHeight: 21,
       );
 
       expect(nineTileBox.center.left, equals(31.0));
@@ -94,10 +94,10 @@ class _MyComponent2 extends PositionComponent {
     sprite = Sprite(await loadImage('speech-bubble-2.png'));
     nineTileBox = NineTileBox.withGrid(
       sprite,
-      leftColumnWidth: 31,
-      rightColumnWidth: 5,
-      topRowHeight: 5,
-      bottomRowHeight: 21,
+      leftWidth: 31,
+      rightWidth: 5,
+      topHeight: 5,
+      bottomHeight: 21,
     );
   }
 

@@ -49,90 +49,101 @@ class NineTileBox {
   }
 
   /// Creates a nine-box instance with the specified grid size
-  ///
-  /// The outside columns and rows can be specified with fixed width or height.
-  /// The center column and row take up the remaining space.
+  /// 
+  /// A nine-box is a grid with 3 rows and 3 columns. The outer-most columns,
+  /// [leftWidth] and [rightWidth], are a fixed-width. As the nine-box is
+  /// resized, those columns remain fixed-width and the center column stretches
+  /// to take up the remaining space. In the same way, the outer-most rows,
+  /// [topHeight] and [bottomHeight], are a fixed-height. As the nine-box is
+  /// resized, those rows remain fixed-height and the center row stretches
+  /// to take up the remaining space.
   NineTileBox.withGrid(
     this.sprite, {
-    double leftColumnWidth = 0.0,
-    double rightColumnWidth = 0.0,
-    double topRowHeight = 0.0,
-    double bottomRowHeight = 0.0,
+    double leftWidth = 0.0,
+    double rightWidth = 0.0,
+    double topHeight = 0.0,
+    double bottomHeight = 0.0,
   }) : tileSize = sprite.src.width ~/ 3 {
     destTileSize = tileSize;
     center = Rect.fromLTWH(0, 0, sprite.src.width, sprite.src.height);
     _dst = Rect.fromLTWH(0, 0, sprite.src.width, sprite.src.height);
     setGrid(
-      leftColumnWidth: leftColumnWidth,
-      rightColumnWidth: rightColumnWidth,
-      topRowHeight: topRowHeight,
-      bottomRowHeight: bottomRowHeight,
+      leftWidth: leftWidth,
+      rightWidth: rightWidth,
+      topHeight: topHeight,
+      bottomHeight: bottomHeight,
     );
   }
 
   /// Set different sizes for each of the fixed size rows and columns
   ///
-  /// The outside columns and rows can be specified with fixed width or height.
-  /// The center column and row take up the remaining space. Any values that are
-  /// not specified will remain unchanged.
+  /// A nine-box is a grid with 3 rows and 3 columns. The outer-most columns,
+  /// [leftWidth] and [rightWidth], are a fixed-width. As the nine-box is
+  /// resized, those columns remain fixed-width and the center column stretches
+  /// to take up the remaining space. In the same way, the outer-most rows,
+  /// [topHeight] and [bottomHeight], are a fixed-height. As the nine-box is
+  /// resized, those rows remain fixed-height and the center row stretches
+  /// to take up the remaining space.
+  /// 
+  /// Any widths or heights that are not specified remain unchanged.
   void setGrid({
-    double? leftColumnWidth,
-    double? rightColumnWidth,
-    double? topRowHeight,
-    double? bottomRowHeight,
+    double? leftWidth,
+    double? rightWidth,
+    double? topHeight,
+    double? bottomHeight,
   }) {
-    if (leftColumnWidth != null && rightColumnWidth != null) {
+    if (leftWidth != null && rightWidth != null) {
       assert(
-        leftColumnWidth + rightColumnWidth <= sprite.src.width,
-        'The left and right columns ($leftColumnWidth + $rightColumnWidth) do '
+        leftWidth + rightWidth <= sprite.src.width,
+        'The left and right columns ($leftWidth + $rightWidth) do '
         'not fit in the width of the sprite (${sprite.src.width})',
       );
-    } else if (leftColumnWidth != null) {
+    } else if (leftWidth != null) {
       assert(
-        leftColumnWidth <= center.right,
-        'The left column ($leftColumnWidth) is too large '
+        leftWidth <= center.right,
+        'The left column ($leftWidth) is too large '
         '(max ${center.right})',
       );
-    } else if (rightColumnWidth != null) {
+    } else if (rightWidth != null) {
       assert(
-        rightColumnWidth + center.left <= sprite.src.width,
-        'The right column ($rightColumnWidth) is too large '
+        rightWidth + center.left <= sprite.src.width,
+        'The right column ($rightWidth) is too large '
         '(max ${sprite.src.width - center.left})',
       );
     }
-    if (topRowHeight != null && bottomRowHeight != null) {
+    if (topHeight != null && bottomHeight != null) {
       assert(
-        topRowHeight + bottomRowHeight <= sprite.src.height,
-        'The top and bottom rows ($topRowHeight + $bottomRowHeight) do not fit '
+        topHeight + bottomHeight <= sprite.src.height,
+        'The top and bottom rows ($topHeight + $bottomHeight) do not fit '
         'in the height of the sprite (${sprite.src.height})',
       );
-    } else if (topRowHeight != null) {
+    } else if (topHeight != null) {
       assert(
-        topRowHeight <= center.bottom,
-        'The top row ($topRowHeight) is too large '
+        topHeight <= center.bottom,
+        'The top row ($topHeight) is too large '
         '(max ${center.bottom})',
       );
-    } else if (bottomRowHeight != null) {
+    } else if (bottomHeight != null) {
       assert(
-        bottomRowHeight + center.top <= sprite.src.height,
-        'The bottom row ($bottomRowHeight) is too large '
+        bottomHeight + center.top <= sprite.src.height,
+        'The bottom row ($bottomHeight) is too large '
         '(max ${sprite.src.height - center.top})',
       );
     }
 
-    final left = leftColumnWidth ?? center.left;
-    final top = topRowHeight ?? center.top;
+    final left = leftWidth ?? center.left;
+    final top = topHeight ?? center.top;
     late final double right;
-    if (rightColumnWidth == null) {
+    if (rightWidth == null) {
       right = center.right;
     } else {
-      right = sprite.src.width - rightColumnWidth;
+      right = sprite.src.width - rightWidth;
     }
     late final double bottom;
-    if (bottomRowHeight == null) {
+    if (bottomHeight == null) {
       bottom = center.bottom;
     } else {
-      bottom = sprite.src.height - bottomRowHeight;
+      bottom = sprite.src.height - bottomHeight;
     }
     center = Rect.fromLTRB(
       left,

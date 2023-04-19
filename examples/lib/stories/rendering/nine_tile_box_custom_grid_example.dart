@@ -19,10 +19,10 @@ class NineTileBoxCustomGridExample extends FlameGame
     final boxSize = Vector2.all(300);
     final nineTileBox = NineTileBox.withGrid(
       sprite,
-      leftColumnWidth: 31,
-      rightColumnWidth: 5,
-      topRowHeight: 5,
-      bottomRowHeight: 21,
+      leftWidth: 31,
+      rightWidth: 5,
+      topHeight: 5,
+      bottomHeight: 21,
     );
     add(
       nineTileBoxComponent = NineTileBoxComponent(
