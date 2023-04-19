@@ -49,7 +49,7 @@ class NineTileBox {
   }
 
   /// Creates a nine-box instance with the specified grid size
-  /// 
+  ///
   /// A nine-box is a grid with 3 rows and 3 columns. The outer-most columns,
   /// [leftWidth] and [rightWidth], are a fixed-width. As the nine-box is
   /// resized, those columns remain fixed-width and the center column stretches
@@ -84,7 +84,7 @@ class NineTileBox {
   /// [topHeight] and [bottomHeight], are a fixed-height. As the nine-box is
   /// resized, those rows remain fixed-height and the center row stretches
   /// to take up the remaining space.
-  /// 
+  ///
   /// Any widths or heights that are not specified remain unchanged.
   void setGrid({
     double? leftWidth,
