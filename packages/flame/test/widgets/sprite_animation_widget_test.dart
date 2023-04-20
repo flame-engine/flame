@@ -123,7 +123,7 @@ Future<void> main() async {
     testWidgets(
       'onComplete callback is called when the animation is finished',
       (tester) async {
-        const imagePath = 'test_path';
+        const imagePath = 'test_image_path';
         Flame.images.add(imagePath, image);
         final spriteAnimationData = SpriteAnimationData.sequenced(
           amount: 1,
