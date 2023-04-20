@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2023-04-19
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`flame_audio` - `v2.0.2`](#flame_audio---v202)
+
+---
+
+#### `flame_audio` - `v2.0.2`
+
+ - **FIX**: Release instead of dispose audioplayer in play ([#2513](https://github.com/flame-engine/flame/issues/2513)). ([e699b259](https://github.com/flame-engine/flame/commit/e699b259e99619bb97fe370ce0679157e65eb42b))
+
+
 ## 2023-04-16
 
 ### Changes
