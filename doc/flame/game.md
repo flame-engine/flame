@@ -189,7 +189,7 @@ void main() {
 ```
 
 
-## Pause/Resuming game execution
+## Pause/Resuming/Stepping game execution
 
 A Flame `Game` can be paused and resumed in two ways:
 
@@ -198,3 +198,7 @@ A Flame `Game` can be paused and resumed in two ways:
 
 When pausing a Flame `Game`, the `GameLoop` is effectively paused, meaning that no updates or new
 renders will happen until it is resumed.
+
+While the game is paused, it is possible to advanced it frame by frame using the `stepEngine` method.
+It might not be much useful in the final game, but can be very helpful in inspecting game state step
+by step during the development cycle.
