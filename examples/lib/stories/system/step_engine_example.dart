@@ -45,8 +45,9 @@ class StepEngineExample extends FlameGame
       children: [
         ..._createCircularDetectors(),
         PositionComponent(children: [car, _rotateEffect]),
-      ]
+      ],
     );
+
     final cameraComponent = CameraComponent.withFixedResolution(
       world: world,
       width: _visibleSize.x,
