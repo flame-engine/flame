@@ -188,6 +188,33 @@ void main() {
       expect(sadPushCalled, 2);
     });
   });
+
+  testWithFlameGame('subscription is not same', (game) async {
+    final bloc = PlayerCubit();
+    final provider = FlameBlocProvider<PlayerCubit, PlayerState>.value(
+      value: bloc,
+    );
+    await game.ensureAdd(provider);
+
+    final parent_1 = Component();
+    final parent_2 = Component();
+    final listenable = PlayerListener();
+
+    await provider.ensureAddAll([parent_1, parent_2]);
+    await parent_1.ensureAdd(listenable);
+
+    final subscription_1 = listenable.subscription;
+
+    bloc.kill();
+    await pumpEventQueue();
+
+    listenable.parent = parent_2;
+    await game.ready();
+
+    final subscription_2 = listenable.subscription;
+
+    expect(subscription_1, isNot(same(subscription_2)));
+  });
 }
 
 class CustomBlocRoute extends Route {

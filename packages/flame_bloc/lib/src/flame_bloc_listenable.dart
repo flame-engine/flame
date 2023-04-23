@@ -12,6 +12,10 @@ mixin FlameBlocListenable<B extends BlocBase<S>, S> on Component {
   late B _bloc;
   B? _blocOverride;
 
+  @visibleForTesting
+  // ignore: public_member_api_docs
+  StreamSubscription<S>? get subscription => _subscription;
+
   /// Returns the bloc that this component is reading from once the component
   /// has been mounted.
   B get bloc {
@@ -50,7 +54,7 @@ mixin FlameBlocListenable<B extends BlocBase<S>, S> on Component {
     }
     _bloc = bloc;
     _state = bloc.state;
-    _subscription?.cancel();
+    // _subscription?.cancel();
     _subscription = bloc.stream.listen((newState) {
       if (_state != newState) {
         final callNewState = listenWhen(_state, newState);
