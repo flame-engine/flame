@@ -1,5 +1,9 @@
+import 'dart:ui';
+
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
+import 'package:flame/extensions.dart';
+import 'package:flame/palette.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 
 class Box extends BodyComponent {
@@ -13,7 +17,16 @@ class Box extends BodyComponent {
     required this.width,
     required this.height,
     this.bodyType = BodyType.dynamic,
-  });
+    Color? color,
+  }) {
+    if (color != null) {
+      paint = PaletteEntry(color).paint();
+    } else {
+      paint = randomPaint();
+    }
+  }
+
+  Paint randomPaint() => PaintExtension.random(withAlpha: 0.9, base: 100);
 
   @override
   Body createBody() {
