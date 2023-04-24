@@ -565,21 +565,37 @@ revoluteJoint.jointAngle();
 revoluteJoint.jointSpeed();
 ```
 
+
 ### `RopeJoint`
 
+A `RopeJoint` restricts the maximum distance between two points on two bodies.
 
-/// A rope joint enforces a maximum distance between two points on two bodies. It has no other
-/// effect. Warning: if you attempt to change the maximum length during the simulation you will get
-/// some non-physical behavior. A model that would allow you to dynamically modify the length would
-/// have some sponginess, so I chose not to implement it that way. See DistanceJoint if you want to
-/// dynamically control length.
+`RopeJointDef` requires two body anchor points and the maximum length.
 
-The rope joint restricts the maximum distance between two points. This can be useful to prevent 
-chains of bodies from stretching, even under high load. See b2RopeJoint.h and rope_joint.cpp for details.
+```dart
+final ropeJointDef = RopeJointDef()
+  ..bodyA = firstBody
+  ..localAnchorA.setFrom(firstBody.getLocalCenter())
+  ..bodyB = secondBody
+  ..localAnchorB.setFrom(secondBody.getLocalCenter())
+  ..maxLength = (secondBody.worldCenter - firstBody.worldCenter).length;
 
-/// Rope joint definition. This requires two body anchor points and a maximum lengths. Note: by
-/// default the connected objects will not collide. see collideConnected in b2JointDef.
+world.createJoint(RopeJoint(ropeJointDef));
+```
 
+```{flutter-app}
+:sources: ../../examples
+:page: rope_joint
+:subfolder: stories/bridge_libraries/forge2d/joints
+:show: code popup
+```
 
-/// The maximum length of the rope. Warning: this must be larger than linearSlop or the joint
-/// will have no effect.
+- `bodyA`, `bodyB`: Connected bodies
+- `localAnchorA`, `localAnchorB`: Optional parameter, anchor point relative to the body's origin.
+- `maxLength`: The maximum length of the rope. This must be larger than `linearSlop`, or the joint
+will have no effect.
+
+```{warning}
+The joint assumes that the maximum length doesn't change during simulation. 
+See `DistanceJoint` if you want to dynamically control length.
+```

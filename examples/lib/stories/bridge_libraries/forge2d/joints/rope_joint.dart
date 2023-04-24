@@ -1,12 +1,9 @@
-import 'dart:ui';
-
+import 'package:examples/stories/bridge_libraries/forge2d/utils/balls.dart';
 import 'package:examples/stories/bridge_libraries/forge2d/utils/boxes.dart';
 import 'package:flame/events.dart';
 import 'package:flame/input.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flutter/material.dart';
-
-import '../utils/balls.dart';
 
 class RopeJointExample extends Forge2DGame with TapDetector, HasDraggables {
   static const description = '''
@@ -72,9 +69,9 @@ class RopeJointExample extends Forge2DGame with TapDetector, HasDraggables {
   void createRopeJoint(Body first, Body second) {
     final ropeJointDef = RopeJointDef()
       ..bodyA = first
-      ..localAnchorA.setFrom(first.localPoint(first.worldCenter))
+      ..localAnchorA.setFrom(first.getLocalCenter())
       ..bodyB = second
-      ..localAnchorB.setFrom(second.localPoint(second.worldCenter))
+      ..localAnchorB.setFrom(second.getLocalCenter())
       ..maxLength = (second.worldCenter - first.worldCenter).length;
 
     world.createJoint(RopeJoint(ropeJointDef));
