@@ -657,6 +657,7 @@ pre {
   line-height: 125%;
   margin: 0;
   padding: 10px;
+  min-height: 25px;
 }
 
 div[class^="highlight-"] pre:before {
