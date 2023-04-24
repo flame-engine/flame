@@ -672,7 +672,7 @@ div[class^="highlight-"] pre:before {
 }
 
 div.highlight-console pre:before {
-  content: "bash";
+  content: "console";
   color: #666;
 }
 div.highlight-dart pre:before {

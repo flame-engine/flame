@@ -40,7 +40,7 @@ Here we will explain the easiest way to get your game hosted using GitHub pages.
 
 First thing, lets create the branch where your deployed files will live:
 
-```bash
+```console
 git checkout -b gh-pages
 ```
 
