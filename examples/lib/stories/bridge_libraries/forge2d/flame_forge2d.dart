@@ -16,14 +16,13 @@ import 'package:examples/stories/bridge_libraries/forge2d/joints/mouse_joint.dar
 import 'package:examples/stories/bridge_libraries/forge2d/joints/prismatic_joint.dart';
 import 'package:examples/stories/bridge_libraries/forge2d/joints/pulley_joint.dart';
 import 'package:examples/stories/bridge_libraries/forge2d/joints/revolute_joint.dart';
+import 'package:examples/stories/bridge_libraries/forge2d/joints/rope_joint.dart';
 import 'package:examples/stories/bridge_libraries/forge2d/raycast_example.dart';
 import 'package:examples/stories/bridge_libraries/forge2d/revolute_joint_with_motor_example.dart';
 import 'package:examples/stories/bridge_libraries/forge2d/sprite_body_example.dart';
 import 'package:examples/stories/bridge_libraries/forge2d/tap_callbacks_example.dart';
 import 'package:examples/stories/bridge_libraries/forge2d/widget_example.dart';
 import 'package:flame/game.dart';
-
-import 'joints/rope_joint.dart';
 
 String link(String example) => baseLink('bridge_libraries/forge2d/$example');
 
