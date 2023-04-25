@@ -16,6 +16,7 @@ import 'package:examples/stories/bridge_libraries/forge2d/joints/mouse_joint.dar
 import 'package:examples/stories/bridge_libraries/forge2d/joints/prismatic_joint.dart';
 import 'package:examples/stories/bridge_libraries/forge2d/joints/pulley_joint.dart';
 import 'package:examples/stories/bridge_libraries/forge2d/joints/revolute_joint.dart';
+import 'package:examples/stories/bridge_libraries/forge2d/joints/rope_joint.dart';
 import 'package:examples/stories/bridge_libraries/forge2d/raycast_example.dart';
 import 'package:examples/stories/bridge_libraries/forge2d/revolute_joint_with_motor_example.dart';
 import 'package:examples/stories/bridge_libraries/forge2d/sprite_body_example.dart';
@@ -159,5 +160,11 @@ void addJointsStories(Dashbook dashbook) {
         (DashbookContext ctx) => GameWidget(game: RevoluteJointExample()),
         codeLink: link('revolute_joint.dart'),
         info: RevoluteJointExample.description,
+      )
+      .add(
+        'RopeJoint',
+        (DashbookContext ctx) => GameWidget(game: RopeJointExample()),
+        codeLink: link('rope_joint.dart'),
+        info: RopeJointExample.description,
       );
 }
