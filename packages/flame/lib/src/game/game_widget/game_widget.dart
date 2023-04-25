@@ -122,7 +122,7 @@ class GameWidget<T extends Game> extends StatefulWidget {
   /// These widgets can be turned on-and-off dynamically from within the game
   /// via the [Game.overlays] property.
   ///
-  /// ```
+  /// ```dart
   /// void main() {
   ///   runApp(
   ///     GameWidget(
