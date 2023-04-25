@@ -14,8 +14,17 @@ class Ball extends BodyComponent with ContactCallbacks {
 
   final Paint _blue = BasicPalette.blue.paint();
 
-  Ball(this._position, {this.radius = 2, this.bodyType = BodyType.dynamic}) {
-    originalPaint = randomPaint();
+  Ball(
+    this._position, {
+    this.radius = 2,
+    this.bodyType = BodyType.dynamic,
+    Color? color,
+  }) {
+    if (color != null) {
+      originalPaint = PaletteEntry(color).paint();
+    } else {
+      originalPaint = randomPaint();
+    }
     paint = originalPaint;
   }
 

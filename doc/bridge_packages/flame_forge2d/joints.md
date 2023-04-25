@@ -23,10 +23,10 @@ Currently, Forge2D supports the following joints:
 - [`GearJoint`](#gearjoint)
 - [`MotorJoint`](#motorjoint)
 - [`MouseJoint`](#mousejoint)
-- [`PrismaticJoint`] (#prismaticjoint)
+- [`PrismaticJoint`](#prismaticjoint)
 - [`PulleyJoint`](#pulleyjoint)
 - [`RevoluteJoint`](#revolutejoint)
-- RopeJoint
+- [`RopeJoint`](#ropejoint)
 - WeldJoint
 - WheelJoint
 
@@ -563,4 +563,39 @@ Also, you can get the joint angle and speed using the following methods:
 ```dart
 revoluteJoint.jointAngle();
 revoluteJoint.jointSpeed();
+```
+
+
+### `RopeJoint`
+
+A `RopeJoint` restricts the maximum distance between two points on two bodies.
+
+`RopeJointDef` requires two body anchor points and the maximum length.
+
+```dart
+final ropeJointDef = RopeJointDef()
+  ..bodyA = firstBody
+  ..localAnchorA.setFrom(firstBody.getLocalCenter())
+  ..bodyB = secondBody
+  ..localAnchorB.setFrom(secondBody.getLocalCenter())
+  ..maxLength = (secondBody.worldCenter - firstBody.worldCenter).length;
+
+world.createJoint(RopeJoint(ropeJointDef));
+```
+
+```{flutter-app}
+:sources: ../../examples
+:page: rope_joint
+:subfolder: stories/bridge_libraries/forge2d/joints
+:show: code popup
+```
+
+- `bodyA`, `bodyB`: Connected bodies
+- `localAnchorA`, `localAnchorB`: Optional parameter, anchor point relative to the body's origin.
+- `maxLength`: The maximum length of the rope. This must be larger than `linearSlop`, or the joint
+will have no effect.
+
+```{warning}
+The joint assumes that the maximum length doesn't change during simulation. 
+See `DistanceJoint` if you want to dynamically control length.
 ```
