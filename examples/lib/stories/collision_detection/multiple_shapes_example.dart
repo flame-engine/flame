@@ -2,16 +2,15 @@ import 'dart:math';
 
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flame/events.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
-import 'package:flame/input.dart';
 import 'package:flame/palette.dart';
 import 'package:flutter/material.dart' hide Image, Draggable;
 
 enum Shapes { circle, rectangle, polygon }
 
-class MultipleShapesExample extends FlameGame
-    with HasCollisionDetection, HasDraggables {
+class MultipleShapesExample extends FlameGame with HasCollisionDetection {
   static const description = '''
     An example with many hitboxes that move around on the screen and during
     collisions they change color depending on what it is that they have collided
@@ -75,13 +74,13 @@ class MultipleShapesExample extends FlameGame
       collidableSize,
       velocity,
       screenHitbox,
-      rng: _rng,
+      random: _rng,
     );
   }
 }
 
 abstract class MyCollidable extends PositionComponent
-    with Draggable, CollisionCallbacks, GestureHitboxes {
+    with DragCallbacks, CollisionCallbacks, GestureHitboxes {
   double rotationSpeed = 0.0;
   final Vector2 velocity;
   final delta = Vector2.zero();
@@ -154,9 +153,9 @@ abstract class MyCollidable extends PositionComponent
   }
 
   @override
-  bool onDragEnd(DragEndInfo info) {
-    velocity.setFrom(info.velocity / 10);
-    return true;
+  void onDragEnd(DragEndEvent event) {
+    super.onDragEnd(event);
+    velocity.setFrom(event.velocity / 10);
   }
 }
 
@@ -274,11 +273,11 @@ MyCollidable randomCollidable(
   Vector2 size,
   Vector2 velocity,
   ScreenHitbox screenHitbox, {
-  Random? rng,
+  Random? random,
 }) {
-  final _rng = rng ?? Random();
-  final rotationSpeed = 0.5 - _rng.nextDouble();
-  final shapeType = Shapes.values[_rng.nextInt(Shapes.values.length)];
+  final rng = random ?? Random();
+  final rotationSpeed = 0.5 - rng.nextDouble();
+  final shapeType = Shapes.values[rng.nextInt(Shapes.values.length)];
   switch (shapeType) {
     case Shapes.circle:
       return CollidableCircle(position, size, velocity, screenHitbox)

@@ -7,8 +7,10 @@ void main() {
       expect('${Token.asType}', 'Token.asType');
       expect('${Token.closeMarkupTag}', 'Token.closeMarkupTag');
       expect('${Token.colon}', 'Token.colon');
+      expect('${Token.commandCharacter}', 'Token.commandCharacter');
       expect('${Token.commandEndif}', 'Token.commandEndif');
       expect('${Token.commandLocal}', 'Token.commandLocal');
+      expect('${Token.commandVisit}', 'Token.commandVisit');
       expect('${Token.constTrue}', 'Token.constTrue');
       expect('${Token.endIndent}', 'Token.endIndent');
       expect('${Token.endMarkupTag}', 'Token.endMarkupTag');

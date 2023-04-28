@@ -171,6 +171,29 @@ class RoundedRectangle extends Shape {
     return result;
   }
 
+  static final Vector2 _tmpResult = Vector2.zero();
+  static final Vector2 _tmpCenter = Vector2.zero();
+
+  @override
+  Vector2 nearestPoint(Vector2 point) {
+    _tmpResult.setValues(
+      (point.x).clamp(_left, _right),
+      (point.y).clamp(_top, _bottom),
+    );
+    if (containsPoint(_tmpResult)) {
+      return _tmpResult;
+    }
+    _tmpCenter.setValues(
+      _tmpResult.x <= _left + _radius ? _left + _radius : _right - _radius,
+      _tmpResult.y <= _top + _radius ? _top + _radius : _bottom - _radius,
+    );
+    return _tmpResult
+      ..setFrom(point)
+      ..sub(_tmpCenter)
+      ..length = _radius
+      ..add(_tmpCenter);
+  }
+
   @override
   String toString() =>
       'RoundedRectangle([$_left, $_top], [$_right, $_bottom], $_radius)';

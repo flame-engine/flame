@@ -1,5 +1,5 @@
 import 'package:jenny/src/structure/expressions/expression.dart';
-import 'package:jenny/src/structure/expressions/functions/_utils.dart';
+import 'package:jenny/src/structure/expressions/functions/_common.dart';
 import 'package:jenny/src/yarn_project.dart';
 
 /// Function `string(x)` converts a numeric or boolean `x` into a string.
@@ -24,5 +24,16 @@ class StringFn extends StringExpression {
   }
 
   @override
-  String get value => _arg.value.toString();
+  String get value {
+    final dynamic v = _arg.value;
+    if (v is double) {
+      final i = v.toInt();
+      if (v == i) {
+        // Make sure that double such as 3.0 stringifies as if it was
+        // an integer: "3"
+        return i.toString();
+      }
+    }
+    return v.toString();
+  }
 }

@@ -14,7 +14,7 @@ that document first, as it is sure to improve your skill in Dart programming.
 Most of the code formatting rules are enforced automatically via the linter. Run the following
 commands to ensure the code is conformant and to fix any easy formatting problems:
 
-```console
+```shell
 flutter analyze
 flutter format .
 ```
@@ -224,5 +224,5 @@ The following style rules generally apply when writing documentation:
 
 
 [effective dart]: https://dart.dev/guides/language/effective-dart
-[flutter documentation guide]: https://github.com/flutter/flutter/wiki/Style-guide-for-Flutter-repo#documentation-dartdocs-javadocs-etc
+[flutter documentation guide]: https://github.com/flutter/flutter/wiki/Style-guide-for-Flutter-repo#user-content-documentation-dartdocs-javadocs-etc
 [documentation]: documentation.md

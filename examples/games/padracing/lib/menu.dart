@@ -24,11 +24,11 @@ class Menu extends StatelessWidget {
                   children: [
                     Text(
                       'PadRacing',
-                      style: textTheme.headline1,
+                      style: textTheme.displayLarge,
                     ),
                     Text(
                       'First to 3 laps win',
-                      style: textTheme.bodyText1,
+                      style: textTheme.bodyLarge,
                     ),
                     const SizedBox(height: 10),
                     ElevatedButton(
@@ -39,7 +39,7 @@ class Menu extends StatelessWidget {
                     ),
                     Text(
                       'Arrow keys',
-                      style: textTheme.bodyText2,
+                      style: textTheme.bodyMedium,
                     ),
                     const SizedBox(height: 10),
                     ElevatedButton(
@@ -50,7 +50,7 @@ class Menu extends StatelessWidget {
                     ),
                     Text(
                       'WASD',
-                      style: textTheme.bodyText2,
+                      style: textTheme.bodyMedium,
                     ),
                   ],
                 ),
@@ -61,19 +61,19 @@ class Menu extends StatelessWidget {
                         children: [
                           TextSpan(
                             text: 'Made by ',
-                            style: textTheme.bodyText2,
+                            style: textTheme.bodyMedium,
                           ),
                           TextSpan(
                             text: 'Lukas Klingsbo (spydon)',
-                            style: textTheme.bodyText2?.copyWith(
+                            style: textTheme.bodyMedium?.copyWith(
                               color: GameColors.green.color,
                               decoration: TextDecoration.underline,
                             ),
                             recognizer: TapGestureRecognizer()
                               ..onTap = () {
-                                final _url =
-                                    Uri.parse('https://github.com/spydon');
-                                launchUrl(_url);
+                                launchUrl(
+                                  Uri.parse('https://github.com/spydon'),
+                                );
                               },
                           ),
                         ],

@@ -334,7 +334,7 @@ class PlatformBlock extends SpriteComponent
   }) : super(size: Vector2.all(64), anchor: Anchor.bottomLeft);
 
   @override
-  Future<void> onLoad() async {
+  void onLoad() {
   }
 
   @override
@@ -355,16 +355,16 @@ called.  This `dt` variable then allows you to calculate how far your component 
 on-screen.  
 
 All components in our game will need to move at the same speed, so to do this, open
-`lib/ember_quest.dart`, and let's define a global variable called `objectSpeed`.  At the top of your
-class, add:
+`lib/ember_quest.dart`, and let's define a global variable called `objectSpeed`.  At the top of the
+`EmberQuestGame` class, add:
 
 ```dart
   late EmberPlayer _ember;
 double objectSpeed = 0.0;
 ```
 
-So to implement that movement, declare a variable at the top of your class and make your `update`
-method look like this:
+So to implement that movement, declare a variable at the top of the `PlatformBlock` class and make
+your `update` method look like this:
 
 ```dart
 final Vector2 velocity = Vector2.zero();
@@ -395,13 +395,13 @@ Now we just need to finish the `onLoad` method.  So make your `onLoad` method lo
 
 ```dart
   @override
-  Future<void> onLoad() async {
+  void onLoad() {
     final platformImage = game.images.fromCache('block.png');
     sprite = Sprite(platformImage);
-    position = Vector2((_gridPosition.x * size.x) + _xOffset,
-        game.size.y - (_gridPosition.y * size.y),
+    position = Vector2((gridPosition.x * size.x) + _xOffset,
+        game.size.y - (gridPosition.y * size.y),
     );
-    add(RectangleHitbox()..collisionType = CollisionType.passive);
+    add(RectangleHitbox(collisionType: CollisionType.passive));
   }
 ```
 
@@ -422,7 +422,7 @@ with a `passive` `CollisionType`.  Collisions will be explained more in a later 
 #### Display the Platform
 
 In our `loadGameSegments` method from earlier, we will need to add the call to add our block.  We
-will need to define `gridPosition` and `xOffset` to be passed in.  `gridPostion` will be a
+will need to define `gridPosition` and `xOffset` to be passed in.  `gridPosition` will be a
 `Vector2` and `xOffset` is a double as that will be used to calculate the x-axis offset for
 the block in a `Vector2`.  So add the following to your `loadGameSegments` method:
 

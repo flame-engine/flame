@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flutter/material.dart';
@@ -29,6 +31,7 @@ enum MoveDirection {
     if (index >= 6 && index <= 8) {
       return MoveDirection.values[index - 3];
     }
+    // ignore: avoid_returning_this
     return this;
   }
 }
@@ -40,7 +43,7 @@ mixin Movable on PositionComponent, HasGameRef<ColonistsGame> {
 
   @override
   @mustCallSuper
-  Future<void>? onLoad() {
+  FutureOr<void> onLoad() {
     anchor = Anchor.center;
     return super.onLoad();
   }

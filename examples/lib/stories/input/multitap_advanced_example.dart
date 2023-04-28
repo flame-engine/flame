@@ -56,7 +56,8 @@ class MultitapAdvancedExample extends FlameGame
 
   @override
   void onDragEnd(int pointerId, _) {
-    final start = this.start, end = this.end;
+    final start = this.start;
+    final end = this.end;
     if (start != null && end != null) {
       panRect = start.toPositionedRect(end - start);
     }

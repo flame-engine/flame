@@ -1,3 +1,30 @@
+## 1.7.1
+
+ - **REFACTOR**: Add new lint rules ([#2477](https://github.com/flame-engine/flame/issues/2477)). ([dbda37b8](https://github.com/flame-engine/flame/commit/dbda37b81a9a7411559a6ba919ffbda6018b85c2))
+
+## 1.7.0
+
+> Note: This release has breaking changes.
+
+ - **FIX**: Added useArtboardSize functionality ([#2294](https://github.com/flame-engine/flame/issues/2294)). ([00b0dbef](https://github.com/flame-engine/flame/commit/00b0dbef0df80433eaa78fe3cc68de867d5ca4f5))
+ - **DOCS**: Update funding links ([#2420](https://github.com/flame-engine/flame/issues/2420)). ([8294a2a1](https://github.com/flame-engine/flame/commit/8294a2a15638c504aa2b77f967f5963af1f23c2c))
+ - **DOCS**: Fix non-markdown section of README files ([#2406](https://github.com/flame-engine/flame/issues/2406)). ([426b3124](https://github.com/flame-engine/flame/commit/426b3124022e567633c76b80eb389ebce1772ca3))
+ - **DOCS**: Update all README files for the bridge packages to be consistent and not broken ([#2402](https://github.com/flame-engine/flame/issues/2402)). ([5e8ecf54](https://github.com/flame-engine/flame/commit/5e8ecf5450688b1287368b3fbc7b0e718a29fce4))
+ - **BREAKING** **FEAT**: The `HasTappableComponents` mixin is no longer needed ([#2450](https://github.com/flame-engine/flame/issues/2450)). ([b5bdf4ec](https://github.com/flame-engine/flame/commit/b5bdf4ec173e87907a59a9f62fcdf35cc968af2a))
+
+## 1.6.0
+
+> Note: This release has breaking changes.
+
+ - **FIX**: Depend on test: any for flame_test ([#2207](https://github.com/flame-engine/flame/issues/2207)). ([acfd418d](https://github.com/flame-engine/flame/commit/acfd418d882ee6872f3aa9961c39680ec123c2e6))
+ - **BREAKING** **REFACTOR**: The method `onLoad()` now returns `FutureOr<void>` ([#2228](https://github.com/flame-engine/flame/issues/2228)). ([d898b539](https://github.com/flame-engine/flame/commit/d898b539f734d3e14c47990ef0727043a0e32efb))
+
+## 1.5.3
+
+ - **FIX**: Export rive from flame_rive ([#2130](https://github.com/flame-engine/flame/issues/2130)). ([d1833329](https://github.com/flame-engine/flame/commit/d1833329028d1d8483faa049c6e1ad478ba9ca49))
+ - **FIX**: antialiasing should change the artboard([#2076](https://github.com/flame-engine/flame/issues/2076)). ([47970224](https://github.com/flame-engine/flame/commit/47970224f8c9c90718c54301ee69d9cddcced87b))
+ - **FIX**: Fixed null exception when no artboard with specified name is exists ([#2069](https://github.com/flame-engine/flame/issues/2069)). ([a3a65f30](https://github.com/flame-engine/flame/commit/a3a65f30ab64c029da66f9ded08eaf730d760336))
+
 ## 1.5.2
 
  - Update a dependency to the latest release.

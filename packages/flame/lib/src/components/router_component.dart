@@ -31,7 +31,7 @@ class RouterComponent extends Component {
   RouterComponent({
     required this.initialRoute,
     required Map<String, Route> routes,
-    Map<String, _RouteFactory>? routeFactories,
+    Map<String, RouteFactory>? routeFactories,
     this.onUnknownRoute,
   })  : _routes = routes,
         _routeFactories = routeFactories ?? {} {
@@ -64,12 +64,12 @@ class RouterComponent extends Component {
   /// "prefix/arg". For such a name, we will call the factory "prefix" with the
   /// argument "arg". The produced route will be cached in the main [_routes]
   /// map, and then built and mounted normally.
-  final Map<String, _RouteFactory> _routeFactories;
+  final Map<String, RouteFactory> _routeFactories;
 
   /// Function that will be called to resolve any route names that couldn't be
   /// resolved via [_routes] or [_routeFactories]. Unlike with routeFactories,
   /// the route returned by this function will not be cached.
-  final _RouteFactory? onUnknownRoute;
+  final RouteFactory? onUnknownRoute;
 
   /// Returns the route that is currently at the top of the stack.
   Route get currentRoute => _routeStack.last;
@@ -88,10 +88,13 @@ class RouterComponent extends Component {
   ///
   /// The method calls the [Route.didPush] callback for the newly activated
   /// route.
-  void pushNamed(String name) {
+  void pushNamed(String name, {bool replace = false}) {
     final route = _resolveRoute(name);
+    final previousRouteArgument = currentRoute;
     if (route == currentRoute) {
       return;
+    } else if (replace) {
+      _removeTopRoute(route);
     }
     if (_routeStack.contains(route)) {
       _routeStack.remove(route);
@@ -100,8 +103,22 @@ class RouterComponent extends Component {
     }
     _routeStack.add(route);
     _adjustRoutesOrder();
-    route.didPush(previousRoute);
+    route.didPush(previousRouteArgument);
     _adjustRoutesVisibility();
+  }
+
+  /// Pops the current route and places the route with [name] on top of the
+  /// navigation stack.
+  ///
+  /// If the route is already in the stack, it will simply be moved to the top.
+  /// Otherwise the route will be mounted and added at the top. The route's
+  /// page will also start building if it hasn't been built before. If the
+  /// route is already on top of the stack, this method will do nothing.
+  ///
+  /// This method calls the [Route.didPush] callback for the newly activated
+  /// route and also calls the [Route.didPop] callback for the popped route.
+  void pushReplacementNamed(String name) {
+    pushNamed(name, replace: true);
   }
 
   /// Puts a new [route] on top of the navigation stack.
@@ -111,16 +128,33 @@ class RouterComponent extends Component {
   /// same name, it will be overwritten).
   ///
   /// The method calls [Route.didPush] for this new route after it is added.
-  void pushRoute(Route route, {String name = ''}) {
-    route.name = name;
-    if (name.isNotEmpty) {
+  void pushRoute(Route route, {String? name, bool replace = false}) {
+    final previousRouteArgument = currentRoute;
+    if (name != null) {
+      route.name = name;
       _routes[name] = route;
+    }
+    if (replace) {
+      _removeTopRoute(route);
     }
     add(route);
     _routeStack.add(route);
     _adjustRoutesOrder();
-    route.didPush(previousRoute);
+    route.didPush(previousRouteArgument);
     _adjustRoutesVisibility();
+  }
+
+  /// Pops the current route and puts a new [route] on top of the navigation
+  /// stack.
+  ///
+  /// The route may also be given a [name], in which case it will be cached in
+  /// the [routes] map under this name (if there was already a route with the
+  /// same name, it will be overwritten).
+  ///
+  /// The method calls [Route.didPush] for this new route after it is added and
+  /// also calls the [Route.didPop] callback for the popped route.
+  void pushReplacement(Route route, {String? name}) {
+    pushRoute(route, name: name, replace: true);
   }
 
   /// Puts the overlay route [name] on top of the navigation stack.
@@ -135,6 +169,22 @@ class RouterComponent extends Component {
       pushNamed(name);
     } else {
       pushRoute(OverlayRoute.existing(), name: name);
+    }
+  }
+
+  /// Pops the current route and puts the overlay route [name] on top of the
+  /// navigation stack.
+  ///
+  /// If [name] was already registered as a name of an overlay route, then this
+  /// method is equivalent to [pushNamed]. If not, then a new [OverlayRoute]
+  /// will be created based on the overlay with the same name within the root
+  /// game.
+  void pushReplacementOverlay(String name) {
+    if (_routes.containsKey(name)) {
+      assert(_routes[name] is OverlayRoute, '"$name" is not an overlay route');
+      pushReplacementNamed(name);
+    } else {
+      pushReplacement(OverlayRoute.existing(), name: name);
     }
   }
 
@@ -188,6 +238,13 @@ class RouterComponent extends Component {
     pop();
   }
 
+  /// Local method to bypass [pop]'s assert
+  void _removeTopRoute(Route nextRoute) {
+    final route = _routeStack.removeLast();
+    route.didPop(nextRoute);
+    route.removeFromParent();
+  }
+
   /// Attempts to resolve the route with the given [name] by searching in the
   /// [_routes] map, or invoking one of the [_routeFactories], or, lastly,
   /// falling back to the [onUnknownRoute] function. If none of these methods
@@ -216,9 +273,8 @@ class RouterComponent extends Component {
 
   void _adjustRoutesOrder() {
     for (var i = 0; i < _routeStack.length; i++) {
-      _routeStack[i].changePriorityWithoutResorting(i);
+      _routeStack[i].priority = i;
     }
-    reorderChildren();
   }
 
   void _adjustRoutesVisibility() {
@@ -239,4 +295,4 @@ class RouterComponent extends Component {
   }
 }
 
-typedef _RouteFactory = Route Function(String parameter);
+typedef RouteFactory = Route Function(String parameter);

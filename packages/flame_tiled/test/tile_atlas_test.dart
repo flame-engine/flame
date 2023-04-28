@@ -37,7 +37,10 @@ void main() {
             'images/orange.png',
             'images/peach.png',
           ],
-          mapPath: 'test/assets/isometric_plain.tmx',
+          stringNames: [
+            'isometric_plain.tmx',
+            'tiles/isometric_plain_1.tsx',
+          ],
         );
       });
 
@@ -81,6 +84,9 @@ void main() {
         expect(atlas.atlas, isNotNull);
         expect(atlas.atlas!.width, 128);
         expect(atlas.atlas!.height, 74);
+        expect(atlas.key, 'images/green.png');
+
+        expect(Flame.images.containsKey('images/green.png'), isTrue);
 
         expect(
           await imageToPng(atlas.atlas!),
@@ -113,6 +119,55 @@ void main() {
         expect(
           renderMapToPng(component),
           matchesGoldenFile('goldens/larger_atlas_component.png'),
+        );
+      });
+    });
+
+    group('Single tileset map', () {
+      setUp(() async {
+        TiledAtlas.atlasMap.clear();
+        Flame.bundle = TestAssetBundle(
+          imageNames: [
+            '4_color_sprite.png',
+          ],
+          stringNames: [
+            'single_tile_map_1.tmx',
+            'single_tile_map_2.tmx',
+          ],
+        );
+      });
+
+      test(
+          '''Two maps with a same tileset but different tile alignment should be rendered differently''',
+          () async {
+        final components = await Future.wait([
+          TiledComponent.load(
+            'single_tile_map_1.tmx',
+            Vector2(16, 16),
+          ),
+          TiledComponent.load(
+            'single_tile_map_2.tmx',
+            Vector2(16, 16),
+          )
+        ]);
+
+        final atlas = TiledAtlas.atlasMap.values.first;
+        final imageRendered_1 = renderMapToPng(components[0]);
+        final imageRendered_2 = renderMapToPng(components[1]);
+
+        expect(TiledAtlas.atlasMap.length, 1);
+        expect(
+          await imageToPng(atlas.atlas!),
+          matchesGoldenFile('goldens/single_tile_atlas.png'),
+        );
+        expect(imageRendered_1, isNot(same(imageRendered_2)));
+        expect(
+          imageRendered_1,
+          matchesGoldenFile('goldens/single_tile_map_1.png'),
+        );
+        expect(
+          imageRendered_2,
+          matchesGoldenFile('goldens/single_tile_map_2.png'),
         );
       });
     });

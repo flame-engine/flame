@@ -42,7 +42,173 @@ void main() {
       expect(router.currentRoute.children.length, 1);
       expect(router.currentRoute.children.first, isA<_ComponentD>());
       expect(router.stack.length, 2);
+
+      router.pushReplacementNamed('B');
+      await game.ready();
+      expect(router.routes.length, 4);
+      expect(router.currentRoute.name, 'B');
+      expect(router.currentRoute.children.length, 1);
+      expect(router.currentRoute.children.first, isA<_ComponentB>());
+
+      router.pushReplacement(Route(_ComponentE.new), name: 'E');
+      await game.ready();
+      expect(router.routes.length, 5);
+      expect(router.currentRoute.name, 'E');
+      expect(router.currentRoute.children.length, 1);
+      expect(router.currentRoute.children.first, isA<_ComponentE>());
+      expect(router.stack.length, 2);
     });
+
+    testWithFlameGame('replacing with 2 routes', (game) async {
+      final router = RouterComponent(
+        routes: {
+          'A': Route(_ComponentA.new),
+          'B': Route(_ComponentB.new),
+        },
+        initialRoute: 'A',
+      );
+      game.add(router);
+      await game.ready();
+
+      expect(router.routes.length, 2);
+      expect(router.currentRoute.name, 'A');
+      expect(router.currentRoute.children.length, 1);
+      expect(router.currentRoute.children.first, isA<_ComponentA>());
+
+      router.pushReplacementNamed('B');
+      await game.ready();
+      expect(router.currentRoute.name, 'B');
+      expect(router.currentRoute.children.length, 1);
+      expect(router.currentRoute.children.first, isA<_ComponentB>());
+      expect(router.stack.length, 1);
+    });
+
+    testWithFlameGame(
+      'didPop/onPop/didPush/onPush was called correctly',
+      (game) async {
+        const initialRouteName = 'A';
+        final router = RouterComponent(
+          routes: {
+            'A': _TestRoute(_ComponentA.new),
+            'B': _TestRoute(_ComponentB.new),
+            'C': _TestRoute(_ComponentC.new),
+          },
+          initialRoute: initialRouteName,
+        );
+        game.add(router);
+        await game.ready();
+
+        expect(
+          router.routes.values.whereType<_TestRoute>().every(
+                (e) =>
+                    e.onPopTimes == 0 &&
+                    e.didPopTimes == 0 &&
+                    (e.name == initialRouteName ||
+                        (e.onPushTimes == 0 && e.didPushTimes == 0)),
+              ),
+          isTrue,
+        );
+
+        final routeA = router.routes[initialRouteName]! as _TestRoute;
+        expect(routeA.onPushTimes, 1);
+        expect(routeA.didPushTimes, 1);
+        expect(routeA.lastDidPushPreviousRoute, isNull);
+        expect(routeA.lastOnPushPreviousRoute, isNull);
+        expect(routeA.lastDidPopNextRoute, isNull);
+        expect(routeA.lastOnPopNextRoute, isNull);
+
+        router.pushNamed('B');
+        await game.ready();
+
+        final routeB = router.routes['B']! as _TestRoute;
+        expect(routeB.onPopTimes, 0);
+        expect(routeB.didPopTimes, 0);
+        expect(routeB.onPushTimes, 1);
+        expect(routeB.didPushTimes, 1);
+
+        expect(routeA.lastDidPushPreviousRoute, isNull);
+        expect(routeA.lastOnPushPreviousRoute, isNull);
+        expect(routeA.lastDidPopNextRoute, isNull);
+        expect(routeA.lastOnPopNextRoute, isNull);
+
+        expect(routeB.lastDidPushPreviousRoute, routeA.name);
+        expect(routeB.lastOnPushPreviousRoute, routeA.name);
+        expect(routeB.lastDidPopNextRoute, isNull);
+        expect(routeB.lastOnPopNextRoute, isNull);
+
+        router.pop();
+        expect(routeB.onPopTimes, 1);
+        expect(routeB.didPopTimes, 1);
+        expect(routeB.onPushTimes, 1);
+        expect(routeB.didPushTimes, 1);
+
+        expect(routeB.lastDidPushPreviousRoute, routeA.name);
+        expect(routeB.lastOnPushPreviousRoute, routeA.name);
+        expect(routeB.lastDidPopNextRoute, routeA.name);
+        expect(routeB.lastOnPopNextRoute, routeA.name);
+
+        // Check that all other still hasn't been called.
+        expect(
+          router.routes.values
+              .whereType<_TestRoute>()
+              .where((e) => e.name != 'B')
+              .every(
+                (e) =>
+                    e.onPopTimes == 0 &&
+                    e.didPopTimes == 0 &&
+                    (e.name == initialRouteName ||
+                        (e.onPushTimes == 0 && e.didPushTimes == 0)),
+              ),
+          isTrue,
+        );
+        await game.ready();
+
+        final routeD = _TestRoute(_ComponentD.new);
+        router.pushReplacement(routeD, name: 'D');
+        expect(routeD.onPopTimes, 0);
+        expect(routeD.didPopTimes, 0);
+        expect(routeD.onPushTimes, 1);
+        expect(routeD.didPushTimes, 1);
+
+        expect(routeA.onPopTimes, 1);
+        expect(routeA.didPopTimes, 1);
+        expect(routeA.onPushTimes, 1);
+        expect(routeA.didPushTimes, 1);
+
+        expect(routeA.lastDidPushPreviousRoute, isNull);
+        expect(routeA.lastOnPushPreviousRoute, isNull);
+        expect(routeA.lastDidPopNextRoute, routeD.name);
+        expect(routeA.lastOnPopNextRoute, routeD.name);
+
+        expect(routeD.lastDidPushPreviousRoute, routeA.name);
+        expect(routeD.lastOnPushPreviousRoute, routeA.name);
+        expect(routeD.lastDidPopNextRoute, isNull);
+        expect(routeD.lastOnPopNextRoute, isNull);
+
+        await game.ready();
+
+        router.pushReplacementNamed('B');
+        expect(routeB.onPopTimes, 1);
+        expect(routeB.didPopTimes, 1);
+        expect(routeB.onPushTimes, 2);
+        expect(routeB.didPushTimes, 2);
+
+        expect(routeD.onPopTimes, 1);
+        expect(routeD.didPopTimes, 1);
+        expect(routeD.onPushTimes, 1);
+        expect(routeD.didPushTimes, 1);
+
+        expect(routeB.lastDidPushPreviousRoute, routeD.name);
+        expect(routeB.lastOnPushPreviousRoute, routeD.name);
+        expect(routeB.lastDidPopNextRoute, routeA.name);
+        expect(routeB.lastOnPopNextRoute, routeA.name);
+
+        expect(routeD.lastDidPushPreviousRoute, routeA.name);
+        expect(routeD.lastOnPushPreviousRoute, routeA.name);
+        expect(routeD.lastDidPopNextRoute, routeB.name);
+        expect(routeD.lastOnPopNextRoute, routeB.name);
+      },
+    );
 
     testWithFlameGame('Route factories', (game) async {
       final router = RouterComponent(
@@ -217,16 +383,26 @@ void main() {
         expect(game.overlays.activeOverlays, ['first!', 'second']);
         expect(find.byKey(key1), findsOneWidget);
         expect(find.byKey(key2), findsOneWidget);
+        router.pop();
+        await tester.pump();
+        expect(game.overlays.activeOverlays, ['first!']);
 
         router.pushRoute(
           OverlayRoute((ctx, game) => Container(key: key3)),
           name: 'new-route',
         );
         await tester.pump();
-        expect(game.overlays.activeOverlays, ['first!', 'second', 'new-route']);
+        expect(game.overlays.activeOverlays, ['first!', 'new-route']);
+        expect(find.byKey(key1), findsOneWidget);
+        expect(find.byKey(key2), findsNothing);
+        expect(find.byKey(key3), findsOneWidget);
+
+        router.pushReplacementOverlay('second');
+        await tester.pump();
+        expect(game.overlays.activeOverlays, ['first!', 'second']);
         expect(find.byKey(key1), findsOneWidget);
         expect(find.byKey(key2), findsOneWidget);
-        expect(find.byKey(key3), findsOneWidget);
+        expect(find.byKey(key3), findsNothing);
       },
     );
   });
@@ -239,3 +415,46 @@ class _ComponentB extends Component {}
 class _ComponentC extends Component {}
 
 class _ComponentD extends Component {}
+
+class _ComponentE extends Component {}
+
+class _TestRoute extends Route {
+  int onPopTimes = 0;
+  int onPushTimes = 0;
+  int didPopTimes = 0;
+  int didPushTimes = 0;
+  String? lastOnPopNextRoute;
+  String? lastOnPushPreviousRoute;
+  String? lastDidPopNextRoute;
+  String? lastDidPushPreviousRoute;
+
+  _TestRoute(super.builder);
+
+  @override
+  void onPop(Route nextRoute) {
+    super.onPop(nextRoute);
+    onPopTimes++;
+    lastOnPopNextRoute = nextRoute.name;
+  }
+
+  @override
+  void onPush(Route? previousRoute) {
+    super.onPush(previousRoute);
+    onPushTimes++;
+    lastOnPushPreviousRoute = previousRoute?.name;
+  }
+
+  @override
+  void didPop(Route nextRoute) {
+    super.didPop(nextRoute);
+    didPopTimes++;
+    lastDidPopNextRoute = nextRoute.name;
+  }
+
+  @override
+  void didPush(Route? previousRoute) {
+    super.didPush(previousRoute);
+    didPushTimes++;
+    lastDidPushPreviousRoute = previousRoute?.name;
+  }
+}

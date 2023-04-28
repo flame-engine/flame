@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
-
 import 'package:flame_tiled/src/renderable_tile_map.dart';
 import 'package:meta/meta.dart';
 import 'package:tiled/tiled.dart';
@@ -78,19 +77,27 @@ class TiledComponent<T extends FlameGame> extends PositionComponent
   }
 
   @override
-  void onGameResize(Vector2 canvasSize) {
-    super.onGameResize(canvasSize);
-    tileMap.handleResize(canvasSize);
+  void onGameResize(Vector2 size) {
+    super.onGameResize(size);
+    tileMap.handleResize(size);
   }
 
   /// Loads a [TiledComponent] from a file.
+  ///
+  /// By default, [RenderableTiledMap] renders flipped tiles if they exist.
+  /// You can disable it by passing [ignoreFlip] as `true`.
   static Future<TiledComponent> load(
     String fileName,
     Vector2 destTileSize, {
     int? priority,
+    bool? ignoreFlip,
   }) async {
     return TiledComponent(
-      await RenderableTiledMap.fromFile(fileName, destTileSize),
+      await RenderableTiledMap.fromFile(
+        fileName,
+        destTileSize,
+        ignoreFlip: ignoreFlip,
+      ),
       priority: priority,
     );
   }

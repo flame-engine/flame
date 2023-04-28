@@ -1,9 +1,9 @@
 import 'dart:ui';
 
 import 'package:canvas_test/canvas_test.dart';
+import 'package:flame/camera.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
-import 'package:flame/experimental.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -196,6 +196,29 @@ void main() {
         }
       },
     );
+
+    testWithFlameGame('can change visibleGameSize directly', (game) async {
+      final world = World()..addToParent(game);
+      final cameraComponent = CameraComponent(world: world)..addToParent(game);
+      expect(
+        () => cameraComponent.viewfinder.visibleGameSize = Vector2(100, 100),
+        returnsNormally,
+      );
+    });
+
+    testWithFlameGame(
+        'can change visibleGameSize directly with FixedAspectRatioViewport',
+        (game) async {
+      final world = World()..addToParent(game);
+      final cameraComponent = CameraComponent(
+        world: world,
+        viewport: FixedAspectRatioViewport(aspectRatio: 0.2),
+      )..addToParent(game);
+      expect(
+        () => cameraComponent.viewfinder.visibleGameSize = Vector2(100, 100),
+        returnsNormally,
+      );
+    });
   });
 }
 

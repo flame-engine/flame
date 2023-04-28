@@ -1,6 +1,8 @@
 import 'package:jenny/jenny.dart';
 import 'package:jenny/src/parse/token.dart';
 import 'package:jenny/src/parse/tokenize.dart';
+import 'package:jenny/src/structure/commands/declare_command.dart';
+import 'package:jenny/src/structure/expressions/expression.dart';
 import 'package:test/test.dart';
 
 import '../../utils.dart';
@@ -38,6 +40,17 @@ void main() {
           Token.endExpression,
           Token.endCommand,
         ],
+      );
+    });
+
+    test('declare command', () {
+      const command = DeclareCommand();
+      expect(command.name, 'declare');
+      expect(
+        () => command.execute(
+          DialogueRunner(yarnProject: YarnProject(), dialogueViews: []),
+        ),
+        throwsA(isA<AssertionError>()),
       );
     });
 

@@ -1,6 +1,5 @@
 import 'package:jenny/jenny.dart';
 import 'package:jenny/src/structure/line_content.dart';
-import 'package:jenny/src/structure/markup_attribute.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -17,12 +16,12 @@ void main() {
 
     test('line with meta information', () {
       final line = DialogueLine(
-        character: 'Bob',
+        character: Character('Bob'),
         content: LineContent('Hello!'),
         tags: ['#red', '#fast'],
       );
       expect(line.text, 'Hello!');
-      expect(line.character, 'Bob');
+      expect(line.character!.name, 'Bob');
       expect(line.tags, ['#red', '#fast']);
       expect('$line', 'DialogueLine(Bob: Hello!)');
     });
@@ -40,6 +39,21 @@ void main() {
       expect(line.tags, isEmpty);
       expect(line.attributes[0].name, 'i');
       expect(line.attributes[1].name, 'b');
+    });
+
+    test('line with inline expressions', () {
+      final yarn = YarnProject()
+        ..variables.setVariable(r'$value', 'ok')
+        ..parse(
+          'title: A\n'
+          '---\n'
+          'Test line: {\$value}\n'
+          '===\n',
+        );
+      final line = yarn.nodes['A']!.lines.first as DialogueLine;
+      expect('$line', 'DialogueLine(<unevaluated>)');
+      line.evaluate();
+      expect('$line', 'DialogueLine(Test line: ok)');
     });
 
     test('dynamic markup attributes', () {
@@ -62,6 +76,27 @@ void main() {
       expect(line.text, 'X Y Z');
       expect(line.attributes[0].name, 'box');
       expect(line.attributes[0].parameters['index'], 42);
+    });
+
+    test('space after markup attribute', () {
+      final yarn = YarnProject()
+        ..parse(
+          'title: A\n---\n'
+          'The price is 243[gp/] per item\n'
+          '[test attr=0/] ?\n'
+          '===\n',
+        );
+      final line1 = yarn.nodes['A']!.lines[0] as DialogueLine;
+      line1.evaluate();
+      expect(line1.text, 'The price is 243 per item');
+      expect(line1.attributes[0].name, 'gp');
+      expect(line1.attributes[0].length, 0);
+      expect(line1.attributes[0].start, 'The price is 243'.length);
+
+      final line2 = yarn.nodes['A']!.lines[1] as DialogueLine;
+      line2.evaluate();
+      expect(line2.text, ' ?');
+      expect(line2.attributes[0].name, 'test');
     });
   });
 }

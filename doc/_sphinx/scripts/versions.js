@@ -13,10 +13,19 @@ function getCurrentDocVersion() {
   return 'local';
 }
 
+// global constant - special versions from the docs
+const specialVersions = ['main', 'local'];
+
+// Given a list of versions (as plain strings), return the latest version.
+function getLatestVersion(versions) {
+  return versions.filter(e => !specialVersions.includes(e))[0];
+}
+
 // Given a list of versions (as plain strings), convert them into HTML <A/>
 // links, so that they can be placed into the menu.
 function convertVersionsToHtmlLinks(versionsList, currentVersion) {
   let out = '';
+  const latestVersion = getLatestVersion(versionsList);
   for (let version of versionsList) {
     version = version.trim();
     if (version === '') continue;
@@ -24,18 +33,39 @@ function convertVersionsToHtmlLinks(versionsList, currentVersion) {
     if (version === currentVersion) {
       classes += ' selected';
     }
-    out += `<a href="/${version}/">
-      <button class="${classes}">
-        <i class="fa fa-code-branch"></i> ${version}
-      </button>
-    </a>`;
+    // Link to the 'latest/` path if it is the latest version.
+    if (version === latestVersion) {
+      out += `<a href="/latest/">
+        <button class="${classes}">
+          <i class="fa fa-code-branch"></i> ${version} (latest)
+        </button>
+      </a>`;
+    } else {
+      out += `<a href="/${version}/">
+        <button class="${classes}">
+          <i class="fa fa-code-branch"></i> ${version}
+        </button>
+      </a>`;
+    }
   }
   return out;
 }
 
+function maybeAddWarning(versions, currentVersion) {
+  const latestVersion = getLatestVersion(versions);
+  const nonWarningVersions = [...specialVersions, 'latest', latestVersion];
+  const showWarning = !nonWarningVersions.includes(currentVersion);
+  if (showWarning) {
+    $('#version-warning')
+      .find('.version').text(currentVersion).end()
+      .removeClass('hidden');
+  }
+}
+
 function buildVersionsMenu(data) {
+  const versions = data.split('\n');
   const currentVersion = getCurrentDocVersion();
-  const versionButtons = convertVersionsToHtmlLinks(data.split('\n'), currentVersion);
+  const versionButtons = convertVersionsToHtmlLinks(versions, currentVersion);
   $('div.versions-placeholder').append(`
     <div id="versions-menu" tabindex="-1">
       <div class="btn">
@@ -54,6 +84,8 @@ function buildVersionsMenu(data) {
     // A timeout ensures that `click` can propagate to child <A/> elements.
     setTimeout(() => $(this).removeClass("active"), 200);
   });
+
+  maybeAddWarning(versions, currentVersion);
 }
 
 // Start loading the versions list as soon as possible, don't wait for DOM

@@ -13,6 +13,9 @@ import 'package:meta/meta.dart';
 /// If you set the position of the component instead of a margin when
 /// initializing the component, the margin to the edge of the screen from that
 /// position will be used.
+///
+/// Do note that this only works with the old style camera and not the
+/// [CameraComponent].
 mixin ComponentViewportMargin on PositionComponent, HasGameRef {
   @override
   PositionType positionType = PositionType.viewport;

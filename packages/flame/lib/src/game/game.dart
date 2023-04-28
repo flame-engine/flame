@@ -1,8 +1,11 @@
+import 'dart:async';
+
 import 'package:flame/cache.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/src/flame.dart';
 import 'package:flame/src/game/game_render_box.dart';
+import 'package:flame/src/game/game_widget/gesture_detector_builder.dart';
 import 'package:flame/src/game/overlay_manager.dart';
 import 'package:flame/src/game/projector.dart';
 import 'package:flutter/rendering.dart';
@@ -26,6 +29,11 @@ abstract class Game {
   /// the global [Flame.assets] cache, but you can replace this with another
   /// instance if needed.
   AssetsCache assets = Flame.assets;
+
+  /// Used internally by various mixins that need to use gesture detection
+  /// functionality in Flutter.
+  late final GestureDetectorBuilder gestureDetectors =
+      GestureDetectorBuilder(refreshWidget)..initializeGestures(this);
 
   /// This should update the state of the game.
   void update(double dt);
@@ -51,12 +59,12 @@ abstract class Game {
   Vector2? _size;
 
   /// This variable ensures that Game's [onLoad] is called no more than once.
-  late final Future<void>? _onLoadFuture = onLoad();
+  late final FutureOr<void> _onLoadFuture = onLoad();
 
   bool _debugOnLoadStarted = false;
 
   @internal
-  Future<void>? get onLoadFuture {
+  FutureOr<void> get onLoadFuture {
     assert(
       () {
         _debugOnLoadStarted = true;
@@ -69,13 +77,19 @@ abstract class Game {
   /// To be used for tests that needs to evaluate the game after it has been
   /// loaded by the game widget.
   @visibleForTesting
-  Future<void>? toBeLoaded() {
+  FutureOr<void> toBeLoaded() {
     assert(
       _debugOnLoadStarted,
       'Make sure the game has passed to a mounted '
       'GameWidget before calling toBeLoaded',
     );
     return _onLoadFuture;
+  }
+
+  @mustCallSuper
+  @internal
+  void mount() {
+    onMount();
   }
 
   /// Current game viewport size, updated every resize via the [onGameResize]
@@ -159,7 +173,7 @@ abstract class Game {
   ///
   /// The engine ensures that this method will be called exactly once during
   /// the lifetime of the [Game] instance. Do not call this method manually.
-  Future<void>? onLoad() => null;
+  FutureOr<void> onLoad() => null;
 
   void onMount() {}
 
@@ -269,31 +283,39 @@ abstract class Game {
 
   /// Pauses or resume the engine
   set paused(bool value) {
-    if (pauseEngineFn != null && resumeEngineFn != null) {
+    _paused = value;
+
+    final gameLoop = _gameRenderBox?.gameLoop;
+    if (gameLoop != null) {
       if (value) {
-        pauseEngine();
+        gameLoop.stop();
       } else {
-        resumeEngine();
+        gameLoop.start();
       }
-    } else {
-      _paused = value;
     }
   }
 
   /// Pauses the engine game loop execution.
   void pauseEngine() {
     _paused = true;
-    pauseEngineFn?.call();
+    _gameRenderBox?.gameLoop?.stop();
   }
 
   /// Resumes the engine game loop execution.
   void resumeEngine() {
     _paused = false;
-    resumeEngineFn?.call();
+    _gameRenderBox?.gameLoop?.start();
   }
 
-  VoidCallback? pauseEngineFn;
-  VoidCallback? resumeEngineFn;
+  /// Steps the engine game loop by one frame. Works only if the engine is in
+  /// paused state. By default step time is assumed to be 1/60th of a second.
+  void stepEngine({double stepTime = 1 / 60}) {
+    if (_paused) {
+      _paused = false;
+      _gameRenderBox?.gameLoop?.step(stepTime);
+      _paused = true;
+    }
+  }
 
   /// A property that stores an [OverlayManager]
   ///

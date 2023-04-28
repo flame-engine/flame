@@ -1,7 +1,9 @@
 import 'package:dashbook/dashbook.dart';
 import 'package:examples/commons/commons.dart';
+import 'package:examples/stories/input/double_tap_callbacks_example.dart';
 import 'package:examples/stories/input/draggables_example.dart';
 import 'package:examples/stories/input/gesture_hitboxes_example.dart';
+import 'package:examples/stories/input/hardware_keyboard_example.dart';
 import 'package:examples/stories/input/hoverables_example.dart';
 import 'package:examples/stories/input/joystick_advanced_example.dart';
 import 'package:examples/stories/input/joystick_example.dart';
@@ -14,7 +16,7 @@ import 'package:examples/stories/input/multitap_advanced_example.dart';
 import 'package:examples/stories/input/multitap_example.dart';
 import 'package:examples/stories/input/overlapping_tappables_example.dart';
 import 'package:examples/stories/input/scroll_example.dart';
-import 'package:examples/stories/input/tappables_example.dart';
+import 'package:examples/stories/input/tap_callbacks_example.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 
@@ -22,9 +24,9 @@ void addInputStories(Dashbook dashbook) {
   dashbook.storiesOf('Input')
     ..add(
       'Tappables',
-      (_) => GameWidget(game: TappablesExample()),
-      codeLink: baseLink('input/tappables_example.dart'),
-      info: TappablesExample.description,
+      (_) => GameWidget(game: TapCallbacksExample()),
+      codeLink: baseLink('input/tap_callbacks_example.dart'),
+      info: TapCallbacksExample.description,
     )
     ..add(
       'Draggables',
@@ -37,6 +39,16 @@ void addInputStories(Dashbook dashbook) {
       },
       codeLink: baseLink('input/draggables_example.dart'),
       info: DraggablesExample.description,
+    )
+    ..add(
+      'Double Tap (Component)',
+      (context) {
+        return GameWidget(
+          game: DoubleTapCallbacksExample(),
+        );
+      },
+      codeLink: baseLink('input/draggables_example.dart'),
+      info: DoubleTapCallbacksExample.description,
     )
     ..add(
       'Hoverables',
@@ -55,6 +67,12 @@ void addInputStories(Dashbook dashbook) {
       (_) => GameWidget(game: KeyboardListenerComponentExample()),
       codeLink: baseLink('input/keyboard_listener_component_example.dart'),
       info: KeyboardListenerComponentExample.description,
+    )
+    ..add(
+      'Hardware Keyboard',
+      (_) => GameWidget(game: HardwareKeyboardExample()),
+      codeLink: baseLink('input/hardware_keyboard_example.dart'),
+      info: HardwareKeyboardExample.description,
     )
     ..add(
       'Mouse Movement',

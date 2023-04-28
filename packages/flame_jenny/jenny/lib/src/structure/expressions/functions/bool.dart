@@ -1,6 +1,6 @@
 import 'package:jenny/src/errors.dart';
 import 'package:jenny/src/structure/expressions/expression.dart';
-import 'package:jenny/src/structure/expressions/functions/_utils.dart';
+import 'package:jenny/src/structure/expressions/functions/_common.dart';
 import 'package:jenny/src/yarn_project.dart';
 
 /// Function `bool(x)` converts its argument into a boolean.
@@ -34,11 +34,11 @@ class BoolFn extends BoolExpression {
       return x != 0;
     }
     if (x is String) {
-      final value = x.trim().toLowerCase();
-      if (value == 'true') {
+      final value = x.trim();
+      if (YarnProject.trueValues.contains(value)) {
         return true;
       }
-      if (value == 'false') {
+      if (YarnProject.falseValues.contains(value)) {
         return false;
       }
       throw DialogueError(

@@ -18,7 +18,9 @@ import 'package:vector_math/vector_math_64.dart';
 /// example, putting into a `MoveEffect.by` will create a shake motion, where
 /// the magnitude and the direction of shaking is controlled by the effect's
 /// `offset`.
+@Deprecated('Use flame_noise instead. Will be removed in Flame 1.8.0')
 class NoiseEffectController extends DurationEffectController {
+  @Deprecated('Use flame_noise instead. Will be removed in Flame 1.8.0')
   NoiseEffectController({
     required double duration,
     required this.frequency,

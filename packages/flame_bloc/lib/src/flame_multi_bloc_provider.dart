@@ -22,11 +22,11 @@ class FlameMultiBlocProvider extends Component {
   FlameBlocProvider? _lastProvider;
 
   Future<void> _addProviders() async {
-    final _list = [..._providers];
+    final list = [..._providers];
 
-    var current = _list.removeAt(0);
-    while (_list.isNotEmpty) {
-      final provider = _list.removeAt(0);
+    var current = list.removeAt(0);
+    while (list.isNotEmpty) {
+      final provider = list.removeAt(0);
       await current.add(provider);
       current = provider;
     }
@@ -43,5 +43,13 @@ class FlameMultiBlocProvider extends Component {
       await super.add(component);
     }
     await _lastProvider?.add(component);
+  }
+
+  @override
+  void remove(Component component) {
+    if (_lastProvider == null) {
+      super.remove(component);
+    }
+    _lastProvider?.remove(component);
   }
 }

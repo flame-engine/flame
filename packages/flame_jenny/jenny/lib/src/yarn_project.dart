@@ -1,7 +1,9 @@
 import 'dart:math';
 
+import 'package:jenny/src/character_storage.dart';
 import 'package:jenny/src/command_storage.dart';
 import 'package:jenny/src/errors.dart';
+import 'package:jenny/src/function_storage.dart';
 import 'package:jenny/src/localization.dart';
 import 'package:jenny/src/parse/parse.dart' as impl;
 import 'package:jenny/src/structure/node.dart';
@@ -20,7 +22,9 @@ class YarnProject {
   YarnProject()
       : nodes = <String, Node>{},
         variables = VariableStorage(),
+        functions = FunctionStorage(),
         commands = CommandStorage(),
+        characters = CharacterStorage(),
         random = Random() {
     locale = 'en';
   }
@@ -30,10 +34,24 @@ class YarnProject {
   /// All parsed [Node]s, keyed by their titles.
   final Map<String, Node> nodes;
 
+  /// All global variables accessible within the yarn scripts are stored here.
+  /// In addition, this also keeps information about node visit counts.
   final VariableStorage variables;
+
+  /// User-defined functions are stored here.
+  final FunctionStorage functions;
 
   /// Repository for user-defined commands.
   final CommandStorage commands;
+
+  final CharacterStorage characters;
+
+  bool strictCharacterNames = true;
+
+  /// Tokens that represent valid true/false values when converting an argument
+  /// into a boolean. These sets can be modified by the user.
+  static Set<String> trueValues = {'true', 'yes', 'on', '+', 'T', '1'};
+  static Set<String> falseValues = {'false', 'no', 'off', '-', 'F', '0'};
 
   /// Random number generator used by the dialogue whenever randomization is
   /// needed.
@@ -71,9 +89,5 @@ class YarnProject {
   /// scripts as necessary.
   void parse(String text) {
     impl.parse(text, this);
-  }
-
-  void setVariable(String name, dynamic value) {
-    variables.setVariable(name, value);
   }
 }

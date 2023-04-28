@@ -4,6 +4,7 @@ import 'package:examples/stories/collision_detection/bouncing_ball_example.dart'
 import 'package:examples/stories/collision_detection/circles_example.dart';
 import 'package:examples/stories/collision_detection/collidable_animation_example.dart';
 import 'package:examples/stories/collision_detection/multiple_shapes_example.dart';
+import 'package:examples/stories/collision_detection/multiple_worlds_example.dart';
 import 'package:examples/stories/collision_detection/quadtree_example.dart';
 import 'package:examples/stories/collision_detection/raycast_example.dart';
 import 'package:examples/stories/collision_detection/raycast_light_example.dart';
@@ -37,6 +38,12 @@ void addCollisionDetectionStories(Dashbook dashbook) {
       (_) => GameWidget(game: MultipleShapesExample()),
       codeLink: baseLink('collision_detection/multiple_shapes_example.dart'),
       info: MultipleShapesExample.description,
+    )
+    ..add(
+      'Multiple worlds',
+      (_) => GameWidget(game: MultipleWorldsExample()),
+      codeLink: baseLink('collision_detection/multiple_worlds_example.dart'),
+      info: MultipleWorldsExample.description,
     )
     ..add(
       'QuadTree collision',

@@ -13,19 +13,19 @@ class PadracingWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = ThemeData(
       textTheme: TextTheme(
-        headline1: GoogleFonts.vt323(
+        displayLarge: GoogleFonts.vt323(
           fontSize: 35,
           color: Colors.white,
         ),
-        button: GoogleFonts.vt323(
+        labelLarge: GoogleFonts.vt323(
           fontSize: 30,
           fontWeight: FontWeight.w500,
         ),
-        bodyText1: GoogleFonts.vt323(
+        bodyLarge: GoogleFonts.vt323(
           fontSize: 28,
           color: Colors.grey,
         ),
-        bodyText2: GoogleFonts.vt323(
+        bodyMedium: GoogleFonts.vt323(
           fontSize: 18,
           color: Colors.grey,
         ),
@@ -59,7 +59,7 @@ class PadracingWidget extends StatelessWidget {
         loadingBuilder: (context) => Center(
           child: Text(
             'Loading...',
-            style: Theme.of(context).textTheme.headline1,
+            style: Theme.of(context).textTheme.displayLarge,
           ),
         ),
         overlayBuilderMap: {

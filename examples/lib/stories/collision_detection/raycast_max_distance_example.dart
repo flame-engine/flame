@@ -30,7 +30,7 @@ This examples showcases how raycast APIs can be used to detect hits within certa
   )..positionType = PositionType.viewport;
 
   @override
-  Future<void>? onLoad() {
+  void onLoad() {
     camera.viewport = FixedResolutionViewport(Vector2(320, 180));
 
     _addMovingWall();
@@ -49,8 +49,6 @@ This examples showcases how raycast APIs can be used to detect hits within certa
       origin: _character.absolutePosition,
       direction: Vector2(1, 0),
     );
-
-    return super.onLoad();
   }
 
   void _addMovingWall() {

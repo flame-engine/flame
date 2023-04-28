@@ -63,6 +63,29 @@ useful if you want to add for example animations or other components on top of y
 The body that you create in `createBody` should be defined according to Flame's coordinate system,
 not according to the coordinate system of Forge2D (where the Y-axis is flipped).
 
+:exclamation: In Forge2D you shouldn't add any bodies as children to other components,
+since Forge2D doesn't have a concept of nested bodies.
+So bodies should live on the top level in the physics world.
+Instead of `add(Bullet()))`, `parent?.add(Bullet())` should be used (as bellow).
+
+```dart
+class Bullet extends BodyComponent  {
+  @override
+  void onLoad() {
+    ...
+    isBullet = true;
+    ...
+  }
+}
+
+class Player extends BodyComponent  {
+  @override
+  void onLoad() {
+    parent?.add(Bullet());
+  }
+}
+```
+
 
 ## Contact callbacks
 
@@ -122,5 +145,5 @@ example](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/br
 
 Just like with normal `PositionComponent`s you can make the `Forge2DCamera` follow `BodyComponent`s
 by calling `camera.followBodyComponent(...)` which works the same as
-[camera.followComponent](../flame/camera_and_viewport.md#camerafollowcomponent). When you want to
+[camera.followComponent](../../flame/camera_and_viewport.md#camerafollowcomponent). When you want to
 stop following a `BodyComponent` you should call `camera.unfollowBodyComponent`.

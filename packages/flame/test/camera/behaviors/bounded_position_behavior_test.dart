@@ -1,3 +1,4 @@
+import 'package:flame/camera.dart';
 import 'package:flame/components.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame_test/flame_test.dart';
@@ -26,7 +27,7 @@ void main() {
       expect(component.position, Vector2(0, 3));
       component.position = Vector2(-1, 2);
       game.update(0);
-      expect(component.position, Vector2(0, 3));
+      expect(component.position, Vector2(0, 2));
     });
 
     test('bad precision', () {

@@ -1,8 +1,8 @@
 import 'dart:math' as math;
 
 import 'package:flame/components.dart';
+import 'package:flame/events.dart';
 import 'package:flame/game.dart';
-import 'package:flame/input.dart';
 import 'package:flame/palette.dart';
 import 'package:flutter/material.dart';
 
@@ -17,38 +17,36 @@ void main() {
 /// This example simply adds a rotating white square on the screen.
 /// If you press on a square, it will be removed.
 /// If you press anywhere else, another square will be added.
-class MyGame extends FlameGame with HasTappables {
+class MyGame extends FlameGame with TapCallbacks {
   @override
   Future<void> onLoad() async {
-    add(Square(Vector2(100, 200)));
+    add(Square(size / 2));
   }
 
   @override
-  void onTapUp(int id, TapUpInfo info) {
-    super.onTapUp(id, info);
-    if (!info.handled) {
-      final touchPoint = info.eventPosition.game;
+  void onTapDown(TapDownEvent event) {
+    super.onTapDown(event);
+    if (!event.handled) {
+      final touchPoint = event.canvasPosition;
       add(Square(touchPoint));
     }
   }
 }
 
-class Square extends PositionComponent with Tappable {
-  static const speed = 0.25;
+class Square extends RectangleComponent with TapCallbacks {
+  static const speed = 3;
   static const squareSize = 128.0;
+  static const indicatorSize = 6.0;
 
-  static Paint white = BasicPalette.white.paint();
   static Paint red = BasicPalette.red.paint();
   static Paint blue = BasicPalette.blue.paint();
 
-  Square(Vector2 position) : super(position: position);
-
-  @override
-  void render(Canvas c) {
-    c.drawRect(size.toRect(), white);
-    c.drawRect(const Rect.fromLTWH(0, 0, 3, 3), red);
-    c.drawRect(Rect.fromLTWH(width / 2, height / 2, 3, 3), blue);
-  }
+  Square(Vector2 position)
+      : super(
+          position: position,
+          size: Vector2.all(squareSize),
+          anchor: Anchor.center,
+        );
 
   @override
   void update(double dt) {
@@ -60,14 +58,25 @@ class Square extends PositionComponent with Tappable {
   @override
   Future<void> onLoad() async {
     super.onLoad();
-    size.setValues(squareSize, squareSize);
-    anchor = Anchor.center;
+    add(
+      RectangleComponent(
+        size: Vector2.all(indicatorSize),
+        paint: blue,
+      ),
+    );
+    add(
+      RectangleComponent(
+        position: size / 2,
+        size: Vector2.all(indicatorSize),
+        anchor: Anchor.center,
+        paint: red,
+      ),
+    );
   }
 
   @override
-  bool onTapUp(TapUpInfo info) {
+  void onTapDown(TapDownEvent event) {
     removeFromParent();
-    info.handled = true;
-    return true;
+    event.handled = true;
   }
 }

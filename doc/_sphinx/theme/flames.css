@@ -40,6 +40,10 @@ a:hover {
   color: #ddbb99;
 }
 
+a:hover code {
+  color: white;
+}
+
 a.reference.external {
   word-wrap: break-word;
 }
@@ -63,6 +67,15 @@ code {
   padding: 2pt 3pt;
 }
 
+code.xref {
+  background: none;
+  color: #f75151;
+  padding: 0;
+}
+
+a.reference code.xref { color: #ffbb3e; }
+a.reference:hover code.xref { color: #ffffff; }
+
 p {
   margin-top: 0;
 }
@@ -75,7 +88,7 @@ div.expander {
   flex: 1;
 }
 
-p + ul {
+p + ul, p + ol {
   margin-top: -0.5em;
 }
 
@@ -87,6 +100,14 @@ ul ul.simple p {
   margin-bottom: 1em;
 }
 
+kbd {
+  background-color: #000;
+  border-radius: 4pt;
+  color: #fff;
+  font-family: var(--font-mono);
+  font-size: 85%;
+  padding: 2pt 5pt;
+}
 
 /*----------------------------------------------------------------------------*
  * Top navigation bar
@@ -313,7 +334,6 @@ div.nav-left ul {
   padding: 0 0 0 16px;
 }
 
-div.nav-left ul.current,
 div.nav-left > ul {
   display: block;
 }
@@ -376,12 +396,17 @@ div.nav-left li.current > ul {
  *----------------------------------------------------------------------------*/
 
 div.sidebar-right {
-  flex: 5;
+  flex: 5 1 auto;
   height: calc(100vh - 25px - var(--top-menu-height));
-  margin-right: 20px;
+  margin-right: -28px;
   max-width: var(--right-menu-width);
   position: sticky;
   top: calc(25px + var(--top-menu-height));
+  overflow: hidden;
+}
+
+div.sidebar-right:hover {
+  overflow-y: auto;
 }
 
 @media (max-width: 1200px) {
@@ -467,6 +492,24 @@ div.document-wrapper {
   margin-bottom: 25px;
   margin-left: var(--document-x-margin);
   margin-top: 25px;
+}
+
+div.warning {
+  background: #9b6814;
+  color: white;
+  border-radius: 2pt;
+  box-shadow: 2px 2px 3px #ffc43c;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+div.warning .version {
+  font-style: italic;
+  text-decoration: dashed underline;
+}
+
+.hidden {
+  display: none;
 }
 
 div.document {
@@ -614,6 +657,7 @@ pre {
   line-height: 125%;
   margin: 0;
   padding: 10px;
+  min-height: 25px;
 }
 
 div[class^="highlight-"] pre:before {
@@ -627,8 +671,8 @@ div[class^="highlight-"] pre:before {
   top: 0;
 }
 
-div.highlight-console pre:before {
-  content: "bash";
+div.highlight-shell pre:before {
+  content: "shell";
   color: #666;
 }
 div.highlight-dart pre:before {
@@ -637,6 +681,10 @@ div.highlight-dart pre:before {
 div.highlight-yaml pre:before {
   content: "yaml";
   color: #5f5;
+}
+div.highlight-yarn pre:before {
+  content: "yarn";
+  color: #a6e22e;
 }
 div.highlight-text pre:before {
   content: "text";
@@ -768,7 +816,7 @@ div.admonition.warning {
   --admonition-border-color: orange;
   --admonition-icon: '\f071';
   --admonition-icon-color: gold;
-  --admonition-title-background-color: #503e1a;
+  --admonition-title-background-color: #a16820;
 }
 
 div.admonition.error {
@@ -789,7 +837,7 @@ div.admonition.seealso {
   --admonition-border-color: #54d452;
   --admonition-icon: '\f064';
   --admonition-icon-color: #acfab6;
-  --admonition-title-background-color: #285131;
+  --admonition-title-background-color: #28513140;
 }
 
 div.admonition.admonition-deprecated {
@@ -806,4 +854,28 @@ pre, div[class*="highlight-"] {
 
 h2, h3, h4, h5, h6 {
   clear: both;
+}
+
+table.first-col-align-center tr td:first-child,
+table.first-col-align-center tr th:first-child {
+  text-align: center;
+}
+
+table.docutils td {
+  border-color: rgba(255, 255, 255, 0.125);
+  vertical-align: top;
+}
+
+table.docutils th {
+  color: #9d9175;
+}
+
+/* This ensures that when navigating to a link within a page, the link
+   will be visible and not obscured by the top-page header. */
+:target::before {
+  content: '';
+  display: block;
+  height: calc(25px + var(--top-menu-height));
+  margin-top: calc(-25px - var(--top-menu-height));
+  visibility: hidden;
 }

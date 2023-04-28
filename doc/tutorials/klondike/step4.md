@@ -193,9 +193,9 @@ Aces. This doesn't make a very exciting gameplay though, so add line
 in the `KlondikeGame` class right after the list of cards is created.
 
 
-```{seealso}
-For more information about tap functionality, see [](../../flame/inputs/tap-events.md).
-```
+:::{seealso}
+For more information about tap functionality, see [](../../flame/inputs/tap_events.md).
+:::
 
 
 ### Stock pile -- visual representation
@@ -419,6 +419,7 @@ into the `TableauPile`s at the beginning of the game. Modify the code at the end
 method so that it looks like this:
 
 ```dart
+  @override
   Future<void> onLoad() async {
     ...
 
@@ -469,17 +470,8 @@ it into several smaller steps:
 
 ### 1. Simple movement
 
-So, we want to be able to drag the cards on the screen. This is almost as simple as making the
-`StockPile` tappable: first, we add the `HasDraggableComponents` mixin to our game class:
-
-```dart
-class KlondikeGame extends FlameGame
-    with HasTappableComponents, HasDraggableComponents {
-  ...
-}
-```
-
-Now, head over into the `Card` class and add the `DragCallbacks` mixin:
+So, we want to be able to drag the cards on the screen. This is even simpler than making the
+`StockPile` tappable: just head over into the `Card` class and add the `DragCallbacks` mixin:
 
 ```dart
 class Card extends PositionComponent with DragCallbacks {

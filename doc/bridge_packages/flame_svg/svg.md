@@ -9,7 +9,7 @@ Svg support is provided by the `flame_svg` bridge package, be sure to put it in 
 to use it.
 
 If you want to know more about the installation visit
-[flame_svg on pubdev](https://pub.dev/packages/flame_svg/install).
+[flame_svg on pub.dev](https://pub.dev/packages/flame_svg/install).
 
 
 ## How to use flame_svg
@@ -18,7 +18,7 @@ To use it just import the `Svg` class from `'package:flame_svg/flame_svg.dart'`,
 following snippet to render it on the canvas:
 
 ```dart
-Svg svgInstance = Svg('android.svg');
+final svgInstance = await Svg.load('android.svg');
 
 final position = Vector2(100, 100);
 final size = Vector2(300, 300);
@@ -30,14 +30,15 @@ or use the `SvgComponent` and add it to the component tree:
 
 ```dart
 class MyGame extends FlameGame {
+  @override
   Future<void> onLoad() async {
     final svgInstance = await Svg.load('android.svg');
     final size = Vector2.all(100);
     final position = Vector2.all(100);
-    final svgComponent = SvgComponent.fromSvg(
-      size,
-      position,
-      svgInstance,
+    final svgComponent = SvgComponent(
+      size: size,
+      position: position,
+      svg: svgInstance,
     );
 
     add(svgComponent);

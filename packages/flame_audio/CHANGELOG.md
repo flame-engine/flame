@@ -1,3 +1,41 @@
+## 2.0.2
+
+ - **FIX**: Release instead of dispose audioplayer in play ([#2513](https://github.com/flame-engine/flame/issues/2513)). ([e699b259](https://github.com/flame-engine/flame/commit/e699b259e99619bb97fe370ce0679157e65eb42b))
+
+## 2.0.1
+
+ - **REFACTOR**: Add new lint rules ([#2477](https://github.com/flame-engine/flame/issues/2477)). ([dbda37b8](https://github.com/flame-engine/flame/commit/dbda37b81a9a7411559a6ba919ffbda6018b85c2))
+
+## 2.0.0
+
+> Note: This release has breaking changes.
+
+ - **BREAKING** **FEAT**: Update AudioPlayers to ^4.0.0 ([#2482](https://github.com/flame-engine/flame/issues/2482)). ([47372087](https://github.com/flame-engine/flame/commit/47372087f218e9c00d0fec82084f6edc7cbee5af))
+
+Migration instructions:
+
+AudioPool has moved to AudioPlayers, but we still export it from `flame_audio`,
+so the only thing you have to do if you import AudioPool directly is to
+change the import to:
+`import 'package:flame_audio/flame_audio.dart';`
+
+## 1.4.1
+
+ - **DOCS**: Update funding links ([#2420](https://github.com/flame-engine/flame/issues/2420)). ([8294a2a1](https://github.com/flame-engine/flame/commit/8294a2a15638c504aa2b77f967f5963af1f23c2c))
+ - **DOCS**: Update all README files for the bridge packages to be consistent and not broken ([#2402](https://github.com/flame-engine/flame/issues/2402)). ([5e8ecf54](https://github.com/flame-engine/flame/commit/5e8ecf5450688b1287368b3fbc7b0e718a29fce4))
+
+## 1.4.0
+
+ - Bump to audioplayers v3.0.0
+ 
+## 1.3.5
+
+ - Update a dependency to the latest release.
+
+## 1.3.4
+
+## 1.3.3
+
 ## 1.3.2
 
  - Update a dependency to the latest release.

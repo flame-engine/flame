@@ -1,4 +1,4 @@
-import 'package:flame/src/events/flame_game_mixins/has_draggable_components.dart';
+import 'package:flame/src/events/flame_drag_adapter.dart';
 import 'package:flame/src/events/interfaces/multi_drag_listener.dart';
 import 'package:flame/src/game/game.dart';
 import 'package:flame/src/gestures/events.dart';
@@ -12,11 +12,8 @@ import 'package:flutter/gestures.dart';
 ///  - [onDragEnd]
 ///  - [onDragCancel]
 /// in order to respond to each corresponding event. Those events whose methods
-/// are not overridden are ignored.
-///
-/// See [MultiDragListener] for the description of each individual event. If
-/// your game is derived from the FlameGame class, consider using the
-/// [HasDraggableComponents] mixin instead.
+/// are not overridden are ignored. See [MultiDragListener] for the description
+/// of each individual event.
 mixin MultiTouchDragDetector on Game implements MultiDragListener {
   void onDragStart(int pointerId, DragStartInfo info) {}
   void onDragUpdate(int pointerId, DragUpdateInfo info) {}
@@ -43,5 +40,17 @@ mixin MultiTouchDragDetector on Game implements MultiDragListener {
   void handleDragCancel(int pointerId) {
     onDragCancel(pointerId);
   }
+
   //#endregion
+
+  @override
+  void mount() {
+    gestureDetectors.add<ImmediateMultiDragGestureRecognizer>(
+      ImmediateMultiDragGestureRecognizer.new,
+      (ImmediateMultiDragGestureRecognizer instance) {
+        instance.onStart = (Offset point) => FlameDragAdapter(this, point);
+      },
+    );
+    super.mount();
+  }
 }

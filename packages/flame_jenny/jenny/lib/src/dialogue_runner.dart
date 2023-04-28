@@ -11,88 +11,86 @@ import 'package:jenny/src/structure/node.dart';
 import 'package:jenny/src/yarn_project.dart';
 import 'package:meta/meta.dart';
 
-/// [DialogueRunner] is a an engine in flame_yarn that runs a single dialogue.
+/// The **DialogueRunner** is the engine that executes Jenny's dialogue at
+/// runtime.
 ///
-/// If you think of [YarnProject] as a dialogue "program", consisting of
-/// multiple Nodes as "functions", then [DialogueRunner] is like a VM, capable
-/// of executing a single "function" in that "program".
+/// If you imagine [YarnProject] as a "program", consisting of multiple [Node]s
+/// as "functions", then `DialogueRunner` is a virtual machine, capable of
+/// executing a single "function" in that "program".
 ///
-/// A single [DialogueRunner] may only execute one dialogue Node at a time. It
-/// is an error to try to run another Node before the first one concludes.
-/// However, it is possible to create multiple [DialogueRunner]s for the same
-/// [YarnProject], and then they would be able to execute multiple dialogues at
-/// once (for example, in a crowded room there could be multiple dialogues
-/// occurring at once within different groups of people).
+/// A single `DialogueRunner` may only execute one dialogue node at a time. It
+/// is an error to try to run another node before the first one concludes.
+/// However, it is possible to create multiple `DialogueRunner`s for the same
+/// [YarnProject], and then they would be able to execute multiple dialogues
+/// simultaneously (for example, in a crowded room there could be multiple
+/// dialogues occurring at once within different groups of people).
 ///
-/// The job of a [DialogueRunner] is to fetch the dialogue lines in the correct
-/// order, and at the appropriate pace, to execute the logic in dialogue
+/// The job of a `DialogueRunner` is to fetch the dialogue lines in the correct
+/// order and at the appropriate pace, to execute the logic in dialogue
 /// scripts, and to branch according to user input in [DialogueChoice]s. The
-/// output of a [DialogueRunner], therefore, is a stream of dialogue statements
-/// that need to be presented to the player. Such presentation, however, is
-/// handled by the [DialogueView]s, not by the [DialogueRunner].
+/// output of a `DialogueRunner`, therefore, is a stream of dialogue statements
+/// that need to be presented to the player. Such presentation, is handled by
+/// [DialogueView]s.
 class DialogueRunner {
+  /// Creates a `DialogueRunner` for executing the [yarnProject]. The dialogue
+  /// will be delivered to all the provided [dialogueViews]. Each of these
+  /// dialogue views may only be assigned to a single `DialogueRunner` at a
+  /// time.
   DialogueRunner({
     required YarnProject yarnProject,
     required List<DialogueView> dialogueViews,
   })  : project = yarnProject,
-        _dialogueViews = dialogueViews,
-        _currentNodes = [],
-        _iterators = [];
+        _dialogueViews = dialogueViews;
 
-  final YarnProject project;
   final List<DialogueView> _dialogueViews;
-  final List<Node> _currentNodes;
-  final List<NodeIterator> _iterators;
   _LineDeliveryPipeline? _linePipeline;
+  Node? _currentNode;
+  NodeIterator? _currentIterator;
+  String? _initialNodeName;
+  String? _nextNode;
 
-  /// Executes the node with the given name, and returns a future that finishes
-  /// once the dialogue stops running.
-  Future<void> runNode(String nodeName) async {
-    if (_currentNodes.isNotEmpty) {
-      throw DialogueError(
-        'Cannot run node "$nodeName" because another node is '
-        'currently running: "${_currentNodes.last.title}"',
-      );
-    }
-    final newNode = project.nodes[nodeName];
-    if (newNode == null) {
-      throw NameError('Node "$nodeName" could not be found');
-    }
-    _currentNodes.add(newNode);
-    _iterators.add(newNode.iterator);
-    await _combineFutures(
-      [for (final view in _dialogueViews) view.onDialogueStart()],
-    );
-    await _combineFutures(
-      [for (final view in _dialogueViews) view.onNodeStart(newNode)],
-    );
+  /// The `YarnProject` that this dialogue runner is executing.
+  final YarnProject project;
 
-    while (_iterators.isNotEmpty) {
-      final iterator = _iterators.last;
-      if (iterator.moveNext()) {
-        final entry = iterator.current;
-        await entry.processInDialogueRunner(this);
-      } else {
-        _finishCurrentNode();
+  /// Starts the dialogue with the node [nodeName], and returns a future that
+  /// completes once the dialogue finishes running. While this future is
+  /// pending, the `DialogueRunner` cannot start any other dialogue.
+  Future<void> startDialogue(String nodeName) async {
+    try {
+      if (_initialNodeName != null) {
+        throw DialogueError(
+          'Cannot run node "$nodeName" because another node is '
+          'currently running: "$_initialNodeName"',
+        );
       }
+      _initialNodeName = nodeName;
+      _dialogueViews.forEach((view) {
+        if (view.dialogueRunner != null) {
+          throw DialogueError(
+            'DialogueView is currently attached to another DialogueRunner',
+          );
+        }
+        view.dialogueRunner = this;
+      });
+      await _event((view) => view.onDialogueStart());
+      await _runNode(nodeName);
+      await _event((view) => view.onDialogueFinish());
+    } finally {
+      _dialogueViews.forEach((dv) => dv.dialogueRunner = null);
+      _initialNodeName = null;
+      _nextNode = null;
+      _currentIterator = null;
+      _currentNode = null;
     }
-    await _combineFutures(
-      [for (final view in _dialogueViews) view.onDialogueFinish()],
-    );
   }
 
-  void _finishCurrentNode() {
-    // Increment visit count for the node
-    assert(_currentNodes.isNotEmpty);
-    final nodeVariable = '@${_currentNodes.last.title}';
-    project.variables.setVariable(
-      nodeVariable,
-      project.variables.getNumericValue(nodeVariable) + 1,
-    );
-    _currentNodes.removeLast();
-    _iterators.removeLast();
-  }
-
+  /// Delivers the given [signal] to all dialogue views, in the form of a
+  /// [DialogueView] method `onLineSignal(line, signal)`. This can be used, for
+  /// example, as a means of communication between the dialogue views.
+  ///
+  /// The [signal] object here is completely arbitrary, and it is up to the
+  /// implementations to decide which signals to send and to receive.
+  /// Implementations should ignore any signals they do not understand.
   void sendSignal(dynamic signal) {
     assert(_linePipeline != null);
     final line = _linePipeline!.line;
@@ -101,8 +99,44 @@ class DialogueRunner {
     }
   }
 
+  /// Requests (via `onLineStop()`) that the presentation of the current line
+  /// be finished as quickly as possible. The dialogue will then proceed
+  /// normally to the next line.
   void stopLine() {
     _linePipeline?.stop();
+  }
+
+  Future<void> _runNode(String nodeName) async {
+    _nextNode = nodeName;
+    while (_nextNode != null) {
+      final node = project.nodes[_nextNode!];
+      if (node == null) {
+        throw NameError('Node "$_nextNode" could not be found');
+      }
+
+      _nextNode = null;
+      _currentNode = node;
+      _currentIterator = node.iterator;
+
+      await _event((view) => view.onNodeStart(node));
+      while (_currentIterator?.moveNext() ?? false) {
+        final entry = _currentIterator!.current;
+        await entry.processInDialogueRunner(this);
+      }
+      _incrementNodeVisitCount();
+      await _event((view) => view.onNodeFinish(node));
+
+      _currentNode = null;
+      _currentIterator = null;
+    }
+  }
+
+  void _incrementNodeVisitCount() {
+    final nodeVariable = '@${_currentNode!.title}';
+    project.variables.setVariable(
+      nodeVariable,
+      project.variables.getNumericValue(nodeVariable) + 1,
+    );
   }
 
   @internal
@@ -116,23 +150,42 @@ class DialogueRunner {
 
   @internal
   Future<void> deliverChoices(DialogueChoice choice) async {
-    final futures = [
-      for (final view in _dialogueViews) view.onChoiceStart(choice)
-    ];
-    if (futures.every((future) => future == DialogueView.never)) {
-      _error('No dialogue views capable of making a dialogue choice');
+    final futures = <Future<int?>>[];
+    final choices = <int>[];
+    for (final view in _dialogueViews) {
+      final futureOrResult = view.onChoiceStart(choice);
+      if (futureOrResult != null) {
+        if (futureOrResult is int) {
+          choices.add(futureOrResult);
+        } else {
+          // ignore: cast_nullable_to_non_nullable
+          futures.add(futureOrResult as Future<int?>);
+        }
+      }
     }
-    final chosenIndex = await Future.any(futures);
+    for (final future in futures) {
+      final choice = await future;
+      if (choice != null) {
+        choices.add(choice);
+      }
+    }
+
+    if (choices.isEmpty) {
+      throw DialogueError('No option selected in a DialogueChoice');
+    }
+    final chosenIndex = choices.first;
     if (chosenIndex < 0 || chosenIndex >= choice.options.length) {
-      _error('Invalid option index chosen in a dialogue: $chosenIndex');
+      throw DialogueError(
+        'Invalid option index chosen in a dialogue: $chosenIndex',
+      );
     }
     final chosenOption = choice.options[chosenIndex];
-    if (!chosenOption.available) {
-      _error('A dialogue view selected a disabled option: $chosenOption');
+    if (!chosenOption.isAvailable) {
+      throw DialogueError(
+        'A dialogue view selected a disabled option: $chosenOption',
+      );
     }
-    await _combineFutures(
-      [for (final view in _dialogueViews) view.onChoiceFinish(chosenOption)],
-    );
+    await _event((view) => view.onChoiceFinish(chosenOption));
     enterBlock(chosenOption.block);
   }
 
@@ -147,37 +200,44 @@ class DialogueRunner {
 
   @internal
   void enterBlock(Block block) {
-    _iterators.last.diveInto(block);
+    _currentIterator!.diveInto(block);
+  }
+
+  /// Stops the current node, and then starts running [nodeName]. If [nodeName]
+  /// is null, then stops the dialogue completely.
+  ///
+  /// This command is synchronous, i.e. it does not wait for the node to
+  /// *actually* finish (which calls the `onNodeFinish` callback).
+  @internal
+  void jumpToNode(String? nodeName) {
+    _currentIterator = null;
+    _nextNode = nodeName;
   }
 
   @internal
-  Future<void> jumpToNode(String nodeName) async {
-    _finishCurrentNode();
-    return runNode(nodeName);
+  Future<void> visitNode(String nodeName) async {
+    final node = _currentNode;
+    final iterator = _currentIterator;
+    await _runNode(nodeName);
+    _currentNode = node;
+    _currentIterator = iterator;
   }
 
-  @internal
-  void stop() {
-    _currentNodes.clear();
-    _iterators.clear();
-  }
-
+  /// Similar to `Future.wait()`, but accepts `FutureOr`s.
   FutureOr<void> _combineFutures(List<FutureOr<void>> maybeFutures) {
-    final futures = <Future<void>>[
-      for (final maybeFuture in maybeFutures)
-        if (maybeFuture is Future) maybeFuture
-    ];
-    if (futures.length == 1) {
-      return futures[0];
-    } else if (futures.isNotEmpty) {
-      final Future<void> result = Future.wait<void>(futures);
-      return result;
+    final futures = maybeFutures.whereType<Future<void>>().toList();
+    if (futures.isNotEmpty) {
+      if (futures.length == 1) {
+        return futures[0];
+      } else {
+        final Future<void> result = Future.wait(futures);
+        return result;
+      }
     }
   }
 
-  Never _error(String message) {
-    stop();
-    throw DialogueError(message);
+  FutureOr<void> _event(FutureOr<void> Function(DialogueView) callback) {
+    return _combineFutures([for (final view in _dialogueViews) callback(view)]);
   }
 }
 
@@ -217,8 +277,15 @@ class _LineDeliveryPipeline {
     _interrupted = true;
     for (var i = 0; i < views.length; i++) {
       if (_futures[i] != null) {
-        _futures[i] = views[i].onLineStop(line);
+        final newFuture = views[i].onLineStop(line);
+        _futures[i] = newFuture;
+        if (newFuture == null) {
+          _numPendingFutures -= 1;
+        }
       }
+    }
+    if (_numPendingFutures == 0) {
+      finish();
     }
   }
 

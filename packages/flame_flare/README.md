@@ -1,16 +1,33 @@
-[![Pub](https://img.shields.io/pub/v/flame_flare.svg?style=popout)](https://pub.dartlang.org/packages/flame_flare)
-![Test](https://github.com/flame-engine/flame_flare/workflows/Test/badge.svg?branch=master&event=push)
-[![Discord](https://img.shields.io/discord/509714518008528896.svg)](https://discord.gg/pxrBmy4)
+<!-- markdownlint-disable MD013 -->
+<p align="center">
+  <a href="https://flame-engine.org">
+    <img alt="flame" width="200px" src="https://user-images.githubusercontent.com/6718144/101553774-3bc7b000-39ad-11eb-8a6a-de2daa31bd64.png">
+  </a>
+</p>
 
+<p align="center">
+Adds support for <a href="https://rive.app/explore/popular/trending/all">Flare animations</a> to your <a href="https://github.com/flame-engine/flame">Flame</a> games.
+</p>
 
-# Flame Flare
+<p align="center">
+  <a title="Pub" href="https://pub.dev/packages/flame_flare" ><img src="https://img.shields.io/pub/v/flame_flare.svg?style=popout" /></a>
+  <a title="Test" href="https://github.com/flame-engine/flame/actions?query=workflow%3Acicd+branch%3Amain"><img src="https://github.com/flame-engine/flame/workflows/cicd/badge.svg?branch=main&event=push"/></a>
+  <a title="Discord" href="https://discord.gg/pxrBmy4"><img src="https://img.shields.io/discord/509714518008528896.svg"/></a>
+  <a title="Melos" href="https://github.com/invertase/melos"><img src="https://img.shields.io/badge/maintained%20with-melos-f700ff.svg"/></a>
+</p>
+
+---
+<!-- markdownlint-enable MD013 -->
+
+<!-- markdownlint-disable-next-line MD002 -->
+
+# flame_flare
 
 Integrate awesome [Flare animations](https://rive.app/explore/popular/trending/all) to your [Flame](https://flame-engine.org/)
 game.
 
-```{warning}
-**Flare is deprecated and no longer supported.** Please consider upgrading to Rive.
-```
+> :warning: **Flare is deprecated and no longer supported.**
+> Please consider upgrading to Rive.
 
 
 ## Install
@@ -68,7 +85,7 @@ See the example app for a slightly more complex usage.
 The simplest way to show us your support is by giving the project a star.
 
 You can also support us by becoming a patron on Patreon:
-[![Patreon](https://c5.patreon.com/external/logo/become_a_patron_button.png)](https://www.patreon.com/fireslime)
+[![Patreon](https://c5.patreon.com/external/logo/become_a_patron_button.png)](https://www.patreon.com/bluefireoss)
 
 Or by making a single donation by buying us a coffee:
-[![Buy Me A Coffee](https://user-images.githubusercontent.com/835641/60540201-fcd7fa00-9ce4-11e9-87ec-1e98568e9f58.png)](https://www.buymeacoffee.com/fireslime)
+[![Buy Me A Coffee](https://user-images.githubusercontent.com/835641/60540201-fcd7fa00-9ce4-11e9-87ec-1e98568e9f58.png)](https://www.buymeacoffee.com/bluefire)

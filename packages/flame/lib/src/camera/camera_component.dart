@@ -10,6 +10,7 @@ import 'package:flame/src/camera/world.dart';
 import 'package:flame/src/components/core/component.dart';
 import 'package:flame/src/components/position_component.dart';
 import 'package:flame/src/effects/controllers/effect_controller.dart';
+import 'package:flame/src/effects/move_by_effect.dart';
 import 'package:flame/src/effects/move_effect.dart';
 import 'package:flame/src/effects/move_to_effect.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
@@ -97,6 +98,29 @@ class CameraComponent extends Component {
   /// The [world] component is generally mounted externally to the camera, and
   /// this variable is a mere reference to it.
   World world;
+
+  /// The axis-aligned bounding rectangle of a [world] region which is currently
+  /// visible through the viewport.
+  ///
+  /// This property can be useful in order to determine which components within
+  /// the game's world are currently visible to the player, and which aren't.
+  ///
+  /// If the viewport is non-rectangular, or if the world's view is rotated,
+  /// then the [visibleWorldRect] will be larger than the actual viewing area.
+  /// Thus, this property is "conservative": everything outside of this rect
+  /// is definitely not visible, while the points inside may or may not be
+  /// visible.
+  ///
+  /// This property is cached, and is recalculated whenever the camera moves
+  /// or the viewport is resized. At the same time, it may only be accessed
+  /// after the camera was fully mounted.
+  Rect get visibleWorldRect {
+    assert(
+      viewport.isMounted && viewfinder.isMounted,
+      'This property cannot be accessed before the camera is mounted',
+    );
+    return viewfinder.visibleWorldRect;
+  }
 
   @mustCallSuper
   @override
@@ -229,6 +253,12 @@ class CameraComponent extends Component {
     );
   }
 
+  /// Move the camera by the given [offset].
+  void moveBy(Vector2 offset, {double speed = double.infinity}) {
+    stop();
+    viewfinder.add(MoveByEffect(offset, EffectController(speed: speed)));
+  }
+
   /// Sets or clears the world bounds for the camera's viewfinder.
   ///
   /// The bound is a [Shape], given in the world coordinates. The viewfinder's
@@ -247,5 +277,10 @@ class CameraComponent extends Component {
     } else {
       boundedBehavior.bounds = bounds;
     }
+  }
+
+  /// Returns true if this camera is able to see the [component].
+  bool canSee(PositionComponent component) {
+    return visibleWorldRect.overlaps(component.toAbsoluteRect());
   }
 }

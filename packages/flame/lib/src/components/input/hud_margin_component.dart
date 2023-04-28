@@ -67,11 +67,9 @@ class HudMarginComponent<T extends FlameGame> extends PositionComponent
   }
 
   @override
-  void onGameResize(Vector2 gameSize) {
-    super.onGameResize(gameSize);
-    if (isMounted) {
-      _updateMargins();
-    }
+  void onGameResize(Vector2 size) {
+    super.onGameResize(size);
+    _updateMargins();
   }
 
   void _updateMargins() {

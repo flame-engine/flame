@@ -1,7 +1,7 @@
 # FlameIsolate
 
 The power of [integral_isolates](https://pub.dev/packages/integral_isolates) neatly packaged in
-[flame_isolates](https://pub.dev/packages/flame_isolates) for your Flame game.
+[flame_isolate](https://pub.dev/packages/flame_isolate) for your Flame game.
 
 If you've ever used the [compute](https://api.flutter.dev/flutter/foundation/compute-constant.html)
 function before, you will feel right at home. This mixin allows you to run CPU-intensive code in an

@@ -36,8 +36,11 @@ Every `Component` has a few methods that you can optionally implement, which are
 ```{include} diagrams/component_life_cycle.md
 ```
 
-The `onGameResize` method is called whenever the screen is resized, and once in the beginning when
-the component is added to the game via the `add` method.
+The `onGameResize` method is called whenever the screen is resized, and also when this component
+gets added into the component tree, before the `onMount`.
+
+The `onParentResize` method is similar: it is also called when the component is mounted into the
+component tree, and also whenever the parent of the current component changes its size.
 
 The `onRemove` method can be overridden to run code before the component is removed from the game,
 it is only run once even if the component is removed both by using the parents remove method and
@@ -88,7 +91,7 @@ Example:
 ```dart
 class MyGame extends FlameGame {
   @override
-  Future<void> onLoad() {
+  void onLoad() {
     final myComponent = PositionComponent(priority: 5);
     add(myComponent);
   }
@@ -96,9 +99,10 @@ class MyGame extends FlameGame {
 ```
 
 To update the priority of a component you have to set it to a new value, like
-`component.priority = 2`, and it will be updated in the next tick.
+`component.priority = 2`, and it will be updated in the current tick before the rendering stage.
 
-Example:
+In the following example we first initialize the component with priority 1, and then when the
+user taps the component we change its priority to 2:
 
 ```dart
 class MyComponent extends PositionComponent with Tappable {
@@ -111,9 +115,6 @@ class MyComponent extends PositionComponent with Tappable {
   }
 }
 ```
-
-In the example above we first initialize the component with priority 1, and then when the user taps
-the component we change the priority to 2.
 
 
 ### Composability of components
@@ -135,7 +136,7 @@ class GameOverPanel extends PositionComponent {
   GameOverPanel(this.spriteImage);
 
   @override
-  Future<void> onLoad() async {
+  void onLoad() {
     final gameOverText = GameOverText(spriteImage); // GameOverText is a Component
     final gameOverButton = GameOverButton(spriteImage); // GameOverRestart is a SpriteComponent
 
@@ -163,7 +164,7 @@ constructor. This approach more closely resembles the standard Flutter API:
 ```dart
 class MyGame extends FlameGame {
   @override
-  Future<void> onLoad() async {
+  void onLoad() {
     add(
       PositionComponent(
         position: Vector2(30, 0),
@@ -198,7 +199,7 @@ Example:
 ```dart
 class MyComponent extends Component with ParentIsA<MyParentComponent> {
   @override
-  Future<void> onLoad() async {
+  void onLoad() {
     // parent is of type MyParentComponent
     print(parent.myValue);
   }
@@ -221,7 +222,7 @@ Example:
 ```dart
 class MyComponent extends Component with HasAncestor<MyAncestorComponent> {
   @override
-  Future<void> onLoad() async {
+  void onLoad() {
     // ancestor is of type MyAncestorComponent.
     print(ancestor.myValue);
   }
@@ -247,7 +248,7 @@ Example:
 
 ```dart
 @override
-Future<void> onLoad() async {
+void onLoad() {
   children.register<PositionComponent>();
 }
 ```
@@ -385,18 +386,20 @@ as the point within the component by which Flame "grabs" it.
 
 All children of the `PositionComponent` will be transformed in relation to the parent, which means
 that the `position`, `angle` and `scale` will be relative to the parents state.
-So if you, for example, wanted to position a child 50 logical pixels above the center of the parent
-you would do this:
+So if you, for example, wanted to position a child in the center of the parent you would do this:
 
 ```dart
-Future<void> onLoad() async {
+@override
+void onLoad() {
   final parent = PositionComponent(
     position: Vector2(100, 100),
     size: Vector2(100, 100),
+  );
+  final child = PositionComponent(
+    position: parent.size / 2,
     anchor: Anchor.center,
   );
-  final child = PositionComponent(position: Vector2(0, -50));
-  await parent.add(child);
+  parent.add(child);
 }
 ```
 
@@ -442,10 +445,10 @@ class MyGame extends FlameGame {
     final player = SpriteComponent(size: size, sprite: sprite);
 
     // Vector2(0.0, 0.0) by default, can also be set in the constructor
-    player.position = ...
+    player.position = Vector2(10, 20);
 
     // 0 by default, can also be set in the constructor
-    player.angle = ...
+    player.angle = 0;
 
     // Adds the component
     add(player);
@@ -461,75 +464,93 @@ This class is used to represent a Component that has sprites that run in a singl
 This will create a simple three frame animation using 3 different images:
 
 ```dart
-final sprites = [0, 1, 2]
-    .map((i) => Sprite.load('player_$i.png'));
-final animation = SpriteAnimation.spriteList(
-  await Future.wait(sprites),
-  stepTime: 0.01,
-);
-this.player = SpriteAnimationComponent(
-  animation: animation,
-  size: Vector2.all(64.0),
-);
+@override
+Future<void> onLoad() async {
+  final sprites = [0, 1, 2]
+      .map((i) => Sprite.load('player_$i.png'));
+  final animation = SpriteAnimation.spriteList(
+    await Future.wait(sprites),
+    stepTime: 0.01,
+  );
+  this.player = SpriteAnimationComponent(
+    animation: animation,
+    size: Vector2.all(64.0),
+  );
+}
 ```
 
 If you have a sprite sheet, you can use the `sequenced` constructor from the `SpriteAnimationData`
 class (check more details on [Images &gt; Animation](rendering/images.md#animation)):
 
 ```dart
-final size = Vector2.all(64.0);
-final data = SpriteAnimationData.sequenced(
-  textureSize: size,
-  amount: 2,
-  stepTime: 0.1,
-);
-this.player = SpriteAnimationComponent.fromFrameData(
-  await images.load('player.png'),
-  data,
-);
+@override
+Future<void> onLoad() async {
+  final size = Vector2.all(64.0);
+  final data = SpriteAnimationData.sequenced(
+    textureSize: size,
+    amount: 2,
+    stepTime: 0.1,
+  );
+  this.player = SpriteAnimationComponent.fromFrameData(
+    await images.load('player.png'),
+    data,
+  );
+}
 ```
 
-If you are not using `FlameGame`, don't forget this component needs to be updated, because the
-animation object needs to be ticked to move the frames.
-
-To listen when the animation is done (when it reaches the last frame and is not looping) you can
-use `animation.completed`.
+All animation components internally maintains a `SpriteAnimationTicker` which ticks the `SpriteAnimation`.
+This allows multiple components to share the same animation object.
 
 Example:
 
 ```dart
-await animation.completed;
+final sprites = [/*You sprite list here*/];
+final animation = SpriteAnimation.spriteList(sprites, stepTime: 0.01);
+
+final animationTicker = SpriteAnimationTicker(animation);
+
+// or alternatively
+
+final animationTicker = animation.ticker(); // creates a new ticker
+
+animationTicker.update(dt);
+```
+
+To listen when the animation is done (when it reaches the last frame and is not looping) you can
+use `animationTicker.completed`.
+
+Example:
+
+```dart
+await animationTicker.completed;
 
 doSomething();
 
 // or alternatively
 
-animation.completed.whenComplete(doSomething);
+animationTicker.completed.whenComplete(doSomething);
 ```
 
-Additionally, this component also has the following optional event callbacks:  `onStart`, `onFrame`,
+Additionally, `SpriteAnimationTicker` also has the following optional event callbacks:  `onStart`, `onFrame`,
 and `onComplete`. To listen to these events, you can do the following:
 
 ```dart
-final animation =
-    SpriteAnimation.spriteList([sprite], stepTime: 1, loop: false)
-      ..onStart = () {
-        // Do something on start.
-      };
+final animationTicker = SpriteAnimationTicker(animation)
+  ..onStart = () {
+    // Do something on start.
+  };
 
-final animation =
-    SpriteAnimation.spriteList([sprite], stepTime: 1, loop: false)
-      ..onComplete = () {
-        // Do something on completion.
-      };
+final animationTicker = SpriteAnimationTicker(animation)
+  ..onComplete = () {
+    // Do something on completion.
+  };
 
-final animation =
-    SpriteAnimation.spriteList([sprite], stepTime: 1, loop: false)
-      ..onFrame = (index) {
-        if (index == 1) {
-          // Do something for the second frame.
-        }
-      };
+final animationTicker = SpriteAnimationTicker(animation)
+  ..onFrame = (index) {
+    if (index == 1) {
+      // Do something for the second frame.
+    }
+  };
 ```
 
 
@@ -580,7 +601,7 @@ class ButtonComponent extends SpriteGroupComponent<ButtonState>
   @override
   Future<void>? onLoad() async {
     final pressedSprite = await gameRef.loadSprite(/* omitted */);
-    final unpressedSprite = await gameRef.loadSprite(/* omitted /*);
+    final unpressedSprite = await gameRef.loadSprite(/* omitted */);
 
     sprites = {
       ButtonState.pressed: pressedSprite,
@@ -604,12 +625,15 @@ This component uses an instance of `Svg` class to represent a Component that has
 rendered in the game:
 
 ```dart
-final svg = await Svg.load('android.svg');
-final android = SvgComponent.fromSvg(
-  svg,
-  position: Vector2.all(100),
-  size: Vector2.all(100),
-);
+@override
+Future<void> onLoad() async {
+  final svg = await Svg.load('android.svg');
+  final android = SvgComponent.fromSvg(
+    svg,
+    position: Vector2.all(100),
+    size: Vector2.all(100),
+  );
+}
 ```
 
 
@@ -711,7 +735,7 @@ class MyParallaxComponent extends ParallaxComponent<MyGame> {
 
 class MyGame extends FlameGame {
   @override
-  Future<void> onLoad() async {
+  void onLoad() {
     add(MyParallaxComponent());
   }
 }
@@ -726,20 +750,26 @@ They simplest way is to set the named optional parameters `baseVelocity` and
 background images along the X-axis with a faster speed the "closer" the image is:
 
 ```dart
-final parallaxComponent = await loadParallaxComponent(
-  _dataList,
-  baseVelocity: Vector2(20, 0),
-  velocityMultiplierDelta: Vector2(1.8, 1.0),
-);
+@override
+Future<void> onLoad() async {
+  final parallaxComponent = await loadParallaxComponent(
+    _dataList,
+    baseVelocity: Vector2(20, 0),
+    velocityMultiplierDelta: Vector2(1.8, 1.0),
+  );
+}
 ```
 
 You can set the baseSpeed and layerDelta at any time, for example if your character jumps or your
 game speeds up.
 
 ```dart
-final parallax = parallaxComponent.parallax;
-parallax.baseSpeed = Vector2(100, 0);
-parallax.velocityMultiplierDelta = Vector2(2.0, 1.0);
+@override
+void onLoad() {
+  final parallax = parallaxComponent.parallax;
+  parallax.baseSpeed = Vector2(100, 0);
+  parallax.velocityMultiplierDelta = Vector2(2.0, 1.0);
+}
 ```
 
 By default, the images are aligned to the bottom left, repeated along the X-axis and scaled
@@ -997,20 +1027,23 @@ then add animation. Removing the stack will not remove the tiles from the map.
 > **Note**: This currently only supports position based effects.
 
 ```dart
-    final stack = map.tileMap.tileStack(4, 0, named: {'floor_under'});
-    stack.add(
-      SequenceEffect(
-        [
-          MoveEffect.by(
-            Vector2(5, 0),
-            NoiseEffectController(duration: 1, frequency: 20),
-          ),
-          MoveEffect.by(Vector2.zero(), LinearEffectController(2)),
-        ],
-        repeatCount: 3,
-      )..onComplete = () => stack.removeFromParent(),
-    );
-    map.add(stack);
+void onLoad() {
+  final stack = map.tileMap.tileStack(4, 0, named: {'floor_under'});
+  stack.add(
+    SequenceEffect(
+      [
+        MoveEffect.by(
+          Vector2(5, 0),
+          NoiseEffectController(duration: 1, frequency: 20),
+        ),
+        MoveEffect.by(Vector2.zero(), LinearEffectController(2)),
+      ],
+      repeatCount: 3,
+    )
+      ..onComplete = () => stack.removeFromParent(),
+  );
+  map.add(stack);
+}
 ```
 
 
@@ -1111,19 +1144,20 @@ be used:
 class MyGame extends FlameGame {
   int lives = 2;
 
-  Future<void> onLoad() {
-  final playerNotifier = componentsNotifier<Player>()
-    ..addListener(() {
-      final player = playerNotifier.single;
-      if (player == null) {
-        lives--;
-        if (lives == 0) {
-          add(GameOverComponent());
-        } else {
-          add(Player());
-        }
-      }
-    });
+  @override
+  void onLoad() {
+    final playerNotifier = componentsNotifier<Player>()
+        ..addListener(() {
+          final player = playerNotifier.single;
+          if (player == null) {
+            lives--;
+            if (lives == 0) {
+              add(GameOverComponent());
+            } else {
+              add(Player());
+            }
+          }
+        });
   }
 }
 ```
@@ -1152,16 +1186,17 @@ Then our hud component could look like:
 ```dart
 class Hud extends PositionComponent with HasGameRef {
 
-  Future<void> onLoad() {
-  final playerNotifier = gameRef.componentsNotifier<Player>()
-    ..addListener(() {
-      final player = playerNotifier.single;
-      if (player != null) {
-        if (player.health <= .5) {
-          add(BlinkEffect());
-        }
-      }
-    });
+  @override
+  void onLoad() {
+    final playerNotifier = gameRef.componentsNotifier<Player>()
+        ..addListener(() {
+          final player = playerNotifier.single;
+          if (player != null) {
+            if (player.health <= .5) {
+              add(BlinkEffect());
+            }
+          }
+        });
   }
 }
 ```
@@ -1170,7 +1205,7 @@ class Hud extends PositionComponent with HasGameRef {
 `FlameGame`, to help with that Flame provides a `ComponentsNotifierBuilder` widget.
 
 To see an example of its use check the running example
-[here](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/components/components_notifier_example.dart);
+[here](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/components/components_notifier_example.dart).
 
 
 ## ClipComponent
@@ -1201,3 +1236,14 @@ can be used to animate some properties of your components, like position or dime
 You can check the list of those effects [here](effects.md).
 
 Examples of the running effects can be found [here](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/effects);
+
+
+## When not using `FlameGame`
+
+If you are not using `FlameGame`, don't forget that all components needs to be updated every time your
+game updates. This lets component perform their internal processing and update their state.
+
+For example, the `SpriteAnimationTicker` inside all the `SpriteAnimation` based components needs to tick
+the animation object to decide which animation frame will be displayed next. This can be done by manually
+calling `component.update()` when not using `FlameGame`. This also means, if you are implementing your
+own sprite animation based component, you can directly use a `SpriteAnimationTicker` to update the `SpriteAnimation`.

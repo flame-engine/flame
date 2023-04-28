@@ -1,6 +1,8 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'dart:async';
 
-import 'package:jenny/src/errors.dart';
+import 'package:jenny/jenny.dart';
 import 'package:jenny/src/parse/ascii.dart';
 import 'package:meta/meta.dart';
 
@@ -8,18 +10,13 @@ import 'package:meta/meta.dart';
 /// YarnProject.
 ///
 /// This repository is populated by the user, using commands [addCommand0],
-/// [addCommand1], [addCommand2], [addCommand3], and [addDialogueCommand],
+/// [addCommand1], [addCommand2], [addCommand3], and [addOrphanedCommand],
 /// depending on the arity of the function that needs to be invoked. All user-
 /// defined commands need to be declared before parsing any Yarn scripts.
 class CommandStorage {
   CommandStorage() : _commands = {};
 
   final Map<String, _Cmd?> _commands;
-
-  /// Tokens that represent valid true/false values when converting an argument
-  /// into a boolean. These sets can be modified by the user.
-  static Set<String> trueValues = {'true', 'yes', 'on', '+', 'T', '1'};
-  static Set<String> falseValues = {'false', 'no', 'off', '-', 'F', '0'};
 
   /// Returns `true` if command with the given [name] has been registered.
   bool hasCommand(String name) => _commands.containsKey(name);
@@ -58,19 +55,20 @@ class CommandStorage {
 
   /// Registers a command [name] which is not backed by any Dart function.
   /// Instead, this command will be delivered directly to the dialogue views.
-  void addDialogueCommand(String name) {
+  void addOrphanedCommand(String name) {
     _commands[name] = null;
   }
 
-  /// Executes the command [name], passing it the arguments as a single string
-  /// [argString]. The caller should check beforehand that the command with
-  /// such a name exists.
+  /// Executes the user-defined [command], if it is defined, otherwise does
+  /// nothing.
   @internal
-  FutureOr<void> runCommand(String name, String argString) {
-    final cmd = _commands[name];
+  FutureOr<void> runCommand(UserDefinedCommand command) {
+    command.argumentString = command.content.evaluate();
+    final cmd = _commands[command.name];
     if (cmd != null) {
-      final stringArgs = ArgumentsLexer(argString).tokenize();
+      final stringArgs = ArgumentsLexer(command.argumentString).tokenize();
       final typedArgs = cmd.unpackArguments(stringArgs);
+      command.arguments = typedArgs;
       return cmd.run(typedArgs);
     }
   }
@@ -102,6 +100,7 @@ class CommandStorage {
     'set',
     'stop',
     'stop',
+    'visit',
     'wait',
     'while',
   ];
@@ -143,9 +142,9 @@ class _Cmd {
       final strValue = stringArguments[i];
       switch (_signature[i]) {
         case _Type.boolean:
-          if (CommandStorage.falseValues.contains(strValue)) {
+          if (YarnProject.falseValues.contains(strValue)) {
             _arguments[i] = false;
-          } else if (CommandStorage.trueValues.contains(strValue)) {
+          } else if (YarnProject.trueValues.contains(strValue)) {
             _arguments[i] = true;
           } else {
             throw TypeError(

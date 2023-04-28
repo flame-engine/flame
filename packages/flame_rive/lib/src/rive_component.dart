@@ -4,11 +4,8 @@ import 'dart:ui' as ui;
 
 import 'package:flame/components.dart';
 import 'package:flutter/rendering.dart';
+import 'package:rive/math.dart';
 import 'package:rive/rive.dart';
-// ignore_for_file: implementation_imports
-import 'package:rive/src/rive_core/math/aabb.dart';
-import 'package:rive/src/rive_core/math/mat2d.dart';
-import 'package:rive/src/rive_core/math/vec2d.dart';
 
 class RiveComponent extends PositionComponent {
   final Artboard artboard;
@@ -17,25 +14,32 @@ class RiveComponent extends PositionComponent {
   RiveComponent({
     required this.artboard,
     bool antialiasing = true,
-    bool useArtboardSize = true,
+    @Deprecated(
+      "Will be removed in v1.8.0, use size's default value for ArtboardSize",
+    )
+        bool useArtboardSize = true,
     BoxFit fit = BoxFit.contain,
     Alignment alignment = Alignment.center,
 
     // position component arguments
     super.position,
-    super.size,
+
+    /// The logical size of the component.
+    /// Default value is ArtboardSize
+    Vector2? size,
     super.scale,
     double super.angle = 0.0,
     Anchor super.anchor = Anchor.topLeft,
     super.children,
     super.priority,
-  }) : _renderer = RiveArtboardRenderer(
+  })  : _renderer = RiveArtboardRenderer(
           antialiasing: antialiasing,
           useArtboardSize: useArtboardSize,
           fit: fit,
           alignment: alignment,
           artboard: artboard,
-        );
+        ),
+        super(size: size ?? Vector2(artboard.width, artboard.height));
 
   @override
   void render(ui.Canvas canvas) {
@@ -96,7 +100,8 @@ class RiveArtboardRenderer {
         contentHeight / 2.0 -
         (alignment.y * contentHeight / 2.0);
 
-    var scaleX = 1.0, scaleY = 1.0;
+    var scaleX = 1.0;
+    var scaleY = 1.0;
 
     canvas.save();
     canvas.clipRect(position & size);

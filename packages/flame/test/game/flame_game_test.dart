@@ -1,6 +1,10 @@
+import 'dart:ui';
+
 import 'package:collection/collection.dart';
 import 'package:flame/components.dart';
+import 'package:flame/events.dart';
 import 'package:flame/game.dart';
+import 'package:flame/src/events/flame_game_mixins/has_tappable_components.dart';
 import 'package:flame/src/game/game_render_box.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter/rendering.dart';
@@ -21,13 +25,12 @@ void main() {
       },
     );
 
-    test('game resize in zoomed game', () async {
-      final game = FlameGame()
+    testWithFlameGame('game resize in zoomed game', (game) async {
+      game
         ..camera.zoom = 10
         ..onGameResize(Vector2(300, 200));
       final component = ComponentWithSizeHistory();
-      game.add(component);
-      await game.ready();
+      await game.ensureAdd(component);
 
       game.onGameResize(Vector2(400, 500));
       expect(
@@ -58,9 +61,8 @@ void main() {
         },
       );
 
-      testWithGame<GameWithTappables>(
+      testWithFlameGame(
         'Add component with onLoad function',
-        GameWithTappables.new,
         (game) async {
           final component = _MyAsyncComponent();
           await game.ensureAdd(component);
@@ -82,15 +84,22 @@ void main() {
         },
       );
 
-      testWithGame<GameWithTappables>(
+      testWithFlameGame(
         'component can be tapped',
-        GameWithTappables.new,
         (game) async {
           final component = _MyTappableComponent();
           await game.ensureAdd(component);
-          game.onTapDown(1, createTapDownEvent(game));
+          final tapDispatcher = game.firstChild<MultiTapDispatcher>()!;
+          tapDispatcher.handleTapDown(
+            1,
+            TapDownDetails(
+              kind: PointerDeviceKind.touch,
+              globalPosition: const Offset(10, 10),
+              localPosition: const Offset(10, 10),
+            ),
+          );
 
-          expect(component.tapped, true);
+          expect(component.tapped, isTrue);
         },
       );
 
@@ -102,15 +111,21 @@ void main() {
           await tester.pumpWidget(
             Builder(
               builder: (BuildContext context) {
-                renderBox = GameRenderBox(context, game);
+                renderBox = GameRenderBox(
+                  game,
+                  context,
+                  isRepaintBoundary: true,
+                );
                 return GameWidget(game: game);
               },
             ),
           );
           renderBox.attach(PipelineOwner());
-          final component = _MyComponent()..addToParent(game);
 
+          final component = _MyComponent();
+          await game.add(component);
           renderBox.gameLoopCallback(1.0);
+
           expect(component.isUpdateCalled, true);
           renderBox.paint(
             PaintingContext(ContainerLayer(), Rect.zero),
@@ -699,15 +714,13 @@ class _ConstructorChildrenGame extends FlameGame {
   }
 }
 
-class GameWithTappables extends FlameGame with HasTappables {}
-
-class _MyTappableComponent extends _MyComponent with Tappable {
+class _MyTappableComponent extends _MyComponent with TapCallbacks {
   bool tapped = false;
 
   @override
-  bool onTapDown(_) {
+  void onTapDown(TapDownEvent info) {
+    info.continuePropagation = true;
     tapped = true;
-    return true;
   }
 }
 
@@ -734,7 +747,7 @@ class _MyComponent extends PositionComponent with HasGameRef {
   }
 
   @override
-  bool containsPoint(Vector2 v) => true;
+  bool containsLocalPoint(_) => true;
 
   @override
   void onRemove() {

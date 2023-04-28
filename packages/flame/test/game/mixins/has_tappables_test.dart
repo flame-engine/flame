@@ -5,6 +5,7 @@ import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flame_test/flame_test.dart';
+import 'package:flutter/gestures.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -26,7 +27,7 @@ void main() {
           () => game.ensureAdd(_TappableComponent()),
           failsAssert(
             'Tappable components can only be added to a FlameGame with '
-            'HasTappables',
+            'HasTappables or HasTappablesBridge',
           ),
         );
       },
@@ -86,7 +87,10 @@ void main() {
         game.add(parent..add(child));
         await game.ready();
 
-        game.onTapDown(1, createTapDownEvent(game));
+        game.onTapDown(
+          1,
+          TapDownInfo.fromDetails(game, TapDownDetails()),
+        );
         expect(child.gameSize, Vector2(800, 600));
         expect(child.tapped, true);
       },
@@ -109,9 +113,9 @@ void main() {
 
         game.onTapDown(
           1,
-          createTapDownEvent(
+          TapDownInfo.fromDetails(
             game,
-            globalPosition: const Offset(250, 250),
+            TapDownDetails(globalPosition: const Offset(250, 250)),
           ),
         );
 
@@ -132,9 +136,9 @@ void main() {
         await game.ready();
         game.onTapDown(
           1,
-          createTapDownEvent(
+          TapDownInfo.fromDetails(
             game,
-            globalPosition: const Offset(50, 50),
+            TapDownDetails(globalPosition: const Offset(50, 50)),
           ),
         );
 

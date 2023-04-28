@@ -3,22 +3,16 @@ repository: https://github.com/flame-engine/flame
 
 packages:
   - packages/**
-  - examples/**
-  - tutorials/**
+  - examples/
+  - examples/games/**
   - doc/**
 
 command:
-  bootstrap:
-    # Uses the pubspec_overrides.yaml instead of having Melos modifying the lock file.
-    usePubspecOverrides: true
-
   version:
-    # Generate commit links in package changelogs.
-    linkToCommits: true
     # Only allow versioning to happen on main branch.
     branch: main
-    # Additionally build a changelog at the root of the workspace.
-    workspaceChangelog: true
+    # Generates a link to a prefilled GitHub release creation page.
+    releaseUrl: true
 
 scripts:
   lint:all:
@@ -32,12 +26,12 @@ scripts:
     description: Run `flutter analyze` for all packages.
 
   format:
-    run: melos exec flutter format . --fix
-    description: Run `flutter format` for all packages.
+    run: melos exec dart format . --fix
+    description: Run `dart format` for all packages.
 
   format-check:
-    run: melos exec flutter format . --set-exit-if-changed
-    description: Run `flutter format` checks for all packages.
+    run: melos exec dart format . --set-exit-if-changed
+    description: Run `dart format` checks for all packages.
 
   markdown-check:
     run: markdownlint . --ignore-path .markdownlintignore --config .markdownlint.yaml
@@ -51,13 +45,30 @@ scripts:
     run: melos exec flutter pub run dartdoc
     description: Run dartdoc checks for all packages.
 
+  doc-setup:
+    run: >
+      echo Checking python version: &&
+      python --version &&
+      (python -c "import sys; sys.exit(0 if sys.version_info >= (3,8) else 2)" ||
+      (echo  Error: Python 3.8+ is required && exit 1)) &&
+      echo Installing required python modules: &&
+      python -m pip install -r "$MELOS_ROOT_PATH/doc/_sphinx/requirements.txt" &&
+      echo Installing dartdoc_json: &&
+      dart pub global activate dartdoc_json &&
+      echo Done.
+    description: Prepares the environment for documentation development.
+
   doc-build:
     run: cd "$MELOS_ROOT_PATH/doc/_sphinx" && make html
     description: Create the sphinx html docs.
 
   doc-serve:
     run: cd "$MELOS_ROOT_PATH/doc/_sphinx" && make livehtml
-    description: Recompiles the docs enerytime there is a change in them and opens your browser.
+    description: Recompiles the docs every time there is a change in them and opens your browser.
+  
+  doc-kill:
+    run: cd "$MELOS_ROOT_PATH/doc/_sphinx" && python kill-server.py
+    description: Kills any TCP processes running on port 8000.
 
   doc-clean:
     run: cd "$MELOS_ROOT_PATH/doc/_sphinx" && make clean
@@ -69,9 +80,8 @@ scripts:
 
   test:select:
     run: melos exec -- flutter test
-    select-package:
-      dir-exists:
-        - test
+    packageFilters:
+      dirExists: test
     description: Run `flutter test` for selected packages.
 
   test:
@@ -82,12 +92,12 @@ scripts:
     run: |
       melos exec -- flutter test --coverage &&
       melos exec -- genhtml coverage/lcov.info --output-directory=coverage/
-    select-package:
-      dir-exists: test
+    packageFilters:
+      dirExists: test
     description: Generate coverage for the selected package.
 
   update-goldens:
     run: melos exec -- flutter test --update-goldens
-    select-package:
-      dir-exists: test
+    packageFilters:
+      dirExists: test
     description: Re-generate all golden test files

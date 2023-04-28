@@ -1,7 +1,6 @@
 import 'package:jenny/jenny.dart';
 import 'package:jenny/src/parse/parse.dart';
 import 'package:jenny/src/structure/commands/if_command.dart';
-import 'package:jenny/src/structure/commands/jump_command.dart';
 import 'package:jenny/src/structure/dialogue_entry.dart';
 import 'package:test/test.dart';
 
@@ -51,18 +50,18 @@ void main() {
     group('parseNodeHeader', () {
       test('node with tags', () {
         final yarn = YarnProject();
-        yarn.parse('title: Romeo v Juliette\n'
+        yarn.parse('title: Romeo_v_Juliette\n'
             'requires: Montagues and Capulets\n'
             '\n'
             '// comment\n'
             'location: fair Verona\n'
             '---\n===\n');
-        final node = yarn.nodes['Romeo v Juliette'];
+        final node = yarn.nodes['Romeo_v_Juliette'];
         expect(node, isNotNull);
-        expect(node!.title, 'Romeo v Juliette');
+        expect(node!.title, 'Romeo_v_Juliette');
         expect(node.tags, isNotNull);
-        expect(node.tags!['requires'], 'Montagues and Capulets');
-        expect(node.tags!['location'], 'fair Verona');
+        expect(node.tags['requires'], 'Montagues and Capulets');
+        expect(node.tags['location'], 'fair Verona');
       });
 
       test('multiple colons', () {
@@ -144,18 +143,18 @@ void main() {
           '''),
         );
         final node1 = yarn.nodes['EmptyTags']!;
-        expect(node1.tags, isNotNull);
-        expect(node1.tags!['tags'], '');
+        expect(node1.tags, isNotEmpty);
+        expect(node1.tags['tags'], '');
 
         final node2 = yarn.nodes['Tags']!;
-        expect(node2.tags!['tags'], 'one two three');
+        expect(node2.tags['tags'], 'one two three');
 
         final node3 = yarn.nodes['ArbitraryHeaderWithValue']!;
-        expect(node3.tags!['arbitraryHeader'], 'some-arbitrary-text');
+        expect(node3.tags['arbitraryHeader'], 'some-arbitrary-text');
 
         final node4 = yarn.nodes['Comments']!;
-        expect(node4.tags!['tags'], 'one two three');
-        expect(node4.tags!['metadata'], '');
+        expect(node4.tags['tags'], 'one two three');
+        expect(node4.tags['metadata'], '');
       });
 
       test(
@@ -191,11 +190,11 @@ void main() {
               'Saturn\n\n'
               'Uranus  // LOL\n'
               '===\n');
-        final block = yarn.nodes['test']!.content;
-        expect(block.lines.length, 3);
+        final lines = yarn.nodes['test']!.lines;
+        expect(lines.length, 3);
         for (var i = 0; i < 3; i++) {
-          expect(block.lines[i], isA<DialogueLine>());
-          final line = block.lines[i] as DialogueLine;
+          expect(lines[i], isA<DialogueLine>());
+          final line = lines[i] as DialogueLine;
           expect(line.character, isNull);
           expect(line.tags, isEmpty);
           expect(line.text, ['Jupyter', 'Saturn', 'Uranus'][i]);
@@ -206,10 +205,12 @@ void main() {
     group('parseDialogueLine', () {
       test('line with a speaker', () {
         final yarn = YarnProject()
+          ..strictCharacterNames = false
           ..parse('title:A\n---\nMrGoo: whatever\n===\n');
         expect(yarn.nodes['A']!.lines.first, isA<DialogueLine>());
         final line = yarn.nodes['A']!.lines[0] as DialogueLine;
-        expect(line.character, 'MrGoo');
+        expect(line.character, isA<Character>());
+        expect(line.character!.name, 'MrGoo');
         expect(line.text, 'whatever');
       });
 
@@ -283,7 +284,7 @@ void main() {
           final line = choiceSet.options[i];
           expect(line.character, isNull);
           expect(line.tags, isEmpty);
-          expect(line.condition, isNull);
+          expect(line.isAvailable, true);
           expect(line.block, isEmpty);
           expect(line.text, ['Alpha', 'Beta', 'Gamma'][i]);
         }
@@ -291,6 +292,7 @@ void main() {
 
       test('speakers in options', () {
         final yarn = YarnProject()
+          ..strictCharacterNames = false
           ..parse('title:A\n---\n'
               '-> Alice: Hello!\n'
               '-> Bob: Hi: there!\n'
@@ -299,8 +301,9 @@ void main() {
         final choice = node.lines[0] as DialogueChoice;
         final option0 = choice.options[0];
         final option1 = choice.options[1];
-        expect(option0.character, 'Alice');
-        expect(option1.character, 'Bob');
+        expect(option0.character, isA<Character>());
+        expect(option0.character!.name, 'Alice');
+        expect(option1.character!.name, 'Bob');
         expect(option0.text, 'Hello!');
         expect(option1.text, 'Hi: there!');
       });
@@ -391,171 +394,6 @@ void main() {
             .toList();
       }
 
-      test('unary minus', () {
-        final yarn = YarnProject()
-          ..setVariable(r'$x', 42)
-          ..parse('title: test\n---\n'
-              '{ -7 + 1 }\n'
-              '{ 2 * -7 }\n'
-              '{ -\$x }\n'
-              '{ -(3 + 111) }\n'
-              '===\n');
-        final texts = linesToText(yarn.nodes['test']!.lines);
-        expect(
-          texts.map(num.parse).toList(),
-          [-6, -14, -42, -114],
-        );
-        expect(
-          () => yarn.parse('title:E\n---\n{ -"banana" }\n===\n'),
-          hasTypeError(
-            'TypeError: unary minus can only be applied to numbers\n'
-            '>  at line 3 column 4:\n'
-            '>  { -"banana" }\n'
-            '>     ^\n',
-          ),
-        );
-      });
-
-      test('add', () {
-        final yarn = YarnProject()
-          ..setVariable(r'$world', 'world')
-          ..parse('title: test\n---\n'
-              '{ 2.16 + 4.6 + 9 }\n'
-              '{ "hello," + " " + \$world }\n'
-              '===\n');
-        expect(
-          linesToText(yarn.nodes['test']!.lines),
-          ['15.76', 'hello, world'],
-        );
-        expect(
-          () => yarn.parse('title:E\n---\n{ 3 + " swords" }\n===\n'),
-          hasTypeError(
-            'TypeError: both lhs and rhs of + must be numeric or strings\n'
-            '>  at line 3 column 5:\n'
-            '>  { 3 + " swords" }\n'
-            '>      ^\n',
-          ),
-        );
-        expect(
-          () => yarn.parse('title:E\n---\n{ 3 + true }\n===\n'),
-          hasTypeError(
-            'TypeError: both lhs and rhs of + must be numeric or strings\n'
-            '>  at line 3 column 5:\n'
-            '>  { 3 + true }\n'
-            '>      ^\n',
-          ),
-        );
-      });
-
-      test('subtract', () {
-        final yarn = YarnProject()
-          ..parse('title: test\n---\n'
-              '{ 22 - 7 - 1 }\n'
-              '{ "hello," - "hell" - "paradise" }\n'
-              '===\n');
-        expect(
-          linesToText(yarn.nodes['test']!.lines),
-          ['14', 'o,'],
-        );
-        expect(
-          () => yarn.parse('title:E\n---\n{ 3 - "zero" }\n===\n'),
-          hasTypeError(
-            'TypeError: both lhs and rhs of - must be numeric or strings\n'
-            '>  at line 3 column 5:\n'
-            '>  { 3 - "zero" }\n'
-            '>      ^\n',
-          ),
-        );
-      });
-
-      test('multiply', () {
-        final yarn = YarnProject()
-          ..parse('title: test\n---\n'
-              '{ 11 * 8 * 0.5 }\n'
-              '{ 2 * -3 }\n'
-              '===\n');
-        expect(
-          linesToText(yarn.nodes['test']!.lines),
-          ['44.0', '-6'],
-        );
-        expect(
-          () => yarn.parse('title:E\n---\n{ "x" * "zero" }\n===\n'),
-          hasTypeError(
-            'TypeError: both lhs and rhs of * must be numeric\n'
-            '>  at line 3 column 7:\n'
-            '>  { "x" * "zero" }\n'
-            '>        ^\n',
-          ),
-        );
-      });
-
-      test('divide', () {
-        final yarn = YarnProject()
-          ..parse('title: test\n---\n'
-              '{ 48 / 2 / 3 }\n'
-              '===\n');
-        expect(
-          linesToText(yarn.nodes['test']!.lines),
-          ['8.0'],
-        );
-        expect(
-          () => yarn.parse('title:E\n---\n{ "x" / "y" }\n===\n'),
-          hasTypeError(
-            'TypeError: both lhs and rhs of / must be numeric\n'
-            '>  at line 3 column 7:\n'
-            '>  { "x" / "y" }\n'
-            '>        ^\n',
-          ),
-        );
-      });
-
-      test('modulo', () {
-        final yarn = YarnProject()
-          ..parse('title:A\n---\n'
-              '{ 48 % 5 }\n'
-              '{ 4 % 1.2 }\n'
-              '===\n');
-        final texts = linesToText(yarn.nodes['A']!.lines);
-        expect(texts[0], '3');
-        expect(num.parse(texts[1]), closeTo(4 % 1.2, 1e-10));
-        expect(
-          () => yarn.parse('title:E\n---\n{ 17 % true }\n===\n'),
-          hasTypeError(
-            'TypeError: both lhs and rhs of % must be numeric\n'
-            '>  at line 3 column 6:\n'
-            '>  { 17 % true }\n'
-            '>       ^\n',
-          ),
-        );
-      });
-
-      test('equals', () {
-        final yarn = YarnProject()
-          ..setVariable(r'$famous', true)
-          ..setVariable(r'$name', 'Mr.Bronze')
-          ..parse('title: test\n---\n'
-              '{ \$famous == true }\n'
-              '{ 8 % 3 == 2 }\n'
-              '{ \$name == "monkey" }\n'
-              '===\n');
-        expect(
-          linesToText(yarn.nodes['test']!.lines),
-          ['true', 'true', 'false'],
-        );
-        expect(
-          () => yarn.parse('title:Error\n---\n'
-              '{ \$name == 9.99 }\n'
-              '===\n'),
-          hasTypeError(
-            'TypeError: equality operator between operands of unrelated '
-            'types string and numeric\n'
-            '>  at line 3 column 9:\n'
-            '>  { \$name == 9.99 }\n'
-            '>          ^\n',
-          ),
-        );
-      });
-
       test('complicated expressions', () {
         final yarn = YarnProject()
           ..parse('title: test\n---\n'
@@ -567,7 +405,7 @@ void main() {
         expect(node.lines.length, 3);
         expect(
           linesToText(yarn.nodes['test']!.lines),
-          ['-1', '22', '7.0'],
+          ['-1', '22', '7'],
         );
       });
 
@@ -597,9 +435,11 @@ void main() {
 
       test('invalid expression', () {
         expect(
-          () => YarnProject().parse('title:A\n---\n'
-              '{ 1 + * 5 }\n'
-              '===\n'),
+          () => YarnProject().parse(
+            'title:A\n---\n'
+            '{ 1 + * 5 }\n'
+            '===\n',
+          ),
           hasSyntaxError('SyntaxError: unexpected expression\n'
               '>  at line 3 column 7:\n'
               '>  { 1 + * 5 }\n'
@@ -609,13 +449,29 @@ void main() {
 
       test('mismatched parentheses', () {
         expect(
-          () => YarnProject().parse('title:A\n---\n'
-              '{ (12 }\n'
-              '===\n'),
+          () => YarnProject().parse(
+            'title:A\n---\n'
+            '{ (12 }\n'
+            '===\n',
+          ),
           hasSyntaxError('SyntaxError: missing closing ")"\n'
               '>  at line 3 column 7:\n'
               '>  { (12 }\n'
               '>        ^\n'),
+        );
+      });
+
+      test('invalid function expression', () {
+        expect(
+          () => YarnProject().parse(
+            'title:A\n---\n'
+            '{ random_range(1, 3 ()) }\n'
+            '===\n',
+          ),
+          hasSyntaxError('SyntaxError: unexpected token\n'
+              '>  at line 3 column 21:\n'
+              '>  { random_range(1, 3 ()) }\n'
+              '>                      ^\n'),
         );
       });
     });
@@ -744,35 +600,19 @@ void main() {
         );
       });
 
-      test('non-boolean condition in <<if>>', () {
+      test('double command on a line', () {
         expect(
           () => YarnProject()
-            ..parse('title:A\n---\n'
-                '<<if "true">>\n'
-                '    text\n'
-                '<<endif>>\n'
-                '===\n'),
-          hasTypeError(
-              'TypeError: expression in an <<if>> command must be boolean\n'
-              '>  at line 3 column 6:\n'
-              '>  <<if "true">>\n'
-              '>       ^\n'),
+            ..parse(
+              'title:A\n---\n'
+              '<<wait 1>> <<wait 2>>\n'
+              '===\n',
+            ),
+          hasSyntaxError('SyntaxError: expected end of line\n'
+              '>  at line 3 column 12:\n'
+              '>  <<wait 1>> <<wait 2>>\n'
+              '>             ^\n'),
         );
-      });
-
-      test('<<jump>>', () {
-        final yarn = YarnProject()
-          ..setVariable(r'$target', 'DOWN')
-          ..parse('title:A\n---\n'
-              '<<jump UP>>\n'
-              '<<jump {\$target}>>\n'
-              '===\n');
-        final node = yarn.nodes['A']!;
-        expect(node.lines.length, 2);
-        expect(node.lines[0], isA<JumpCommand>());
-        expect(node.lines[1], isA<JumpCommand>());
-        expect((node.lines[0] as JumpCommand).target.value, 'UP');
-        expect((node.lines[1] as JumpCommand).target.value, 'DOWN');
       });
     });
 
@@ -812,11 +652,13 @@ void main() {
 
       test('parse nested tags', () {
         final yarn = YarnProject()
+          ..strictCharacterNames = false
           ..parse('title: A\n---\n'
               'Warning: [a]Spinning [b][c]Je[/c]nny[/b][/a]\n'
               '===\n');
         final line = yarn.nodes['A']!.lines[0] as DialogueLine;
-        expect(line.character, 'Warning');
+        expect(line.character, isA<Character>());
+        expect(line.character!.name, 'Warning');
         expect(line.text, 'Spinning Jenny');
 
         expect(line.attributes.length, 3);

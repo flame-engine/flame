@@ -3,24 +3,21 @@ import 'dart:ui';
 
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
-import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('MoveAlongPathEffect', () {
-    test('relative path', () {
+    testWithFlameGame('relative path', (game) async {
       const tau = Transform2D.tau;
       const x0 = 32.5;
       const y0 = 14.88;
-      final game = FlameGame();
-      game.onGameResize(Vector2(100, 100));
-      final object = PositionComponent()..position = Vector2(x0, y0);
-      game.add(object);
+      final component = PositionComponent(position: Vector2(x0, y0));
+      game.add(component);
       game.update(0);
 
-      object.add(
+      component.add(
         MoveAlongPathEffect(
           Path()
             ..addOval(Rect.fromCircle(center: const Offset(6, 10), radius: 50)),
@@ -33,15 +30,14 @@ void main() {
         // Apparently, in Flutter circle paths are not truly circles, but only
         // appear circle-ish to an unsuspecting observer. Which is why the
         // precision in `closeTo()` is so low: only 0.1 pixels.
-        expect(object.position.x, closeTo(x0 + 6 + 50 * cos(a), 0.1));
-        expect(object.position.y, closeTo(y0 + 10 + 50 * sin(a), 0.1));
+        expect(component.position.x, closeTo(x0 + 6 + 50 * cos(a), 0.1));
+        expect(component.position.y, closeTo(y0 + 10 + 50 * sin(a), 0.1));
         game.update(0.01);
       }
     });
 
-    test('absolute path', () {
-      final game = FlameGame()..onGameResize(Vector2(100, 100));
-      final component = PositionComponent()..position = Vector2(17, -5);
+    testWithFlameGame('absolute path', (game) async {
+      final component = PositionComponent(position: Vector2(17, -5));
       game.add(component);
       game.update(0);
 
@@ -62,8 +58,7 @@ void main() {
       }
     });
 
-    test('absolute oriented path', () {
-      final game = FlameGame()..onGameResize(Vector2(100, 100));
+    testWithFlameGame('absolute oriented path', (game) async {
       final component = PositionComponent(
         position: Vector2(17, -5),
         angle: -30.5,
@@ -124,6 +119,44 @@ void main() {
         );
       },
     );
+
+    testWithFlameGame('non-absolute oriented path', (game) async {
+      final component = PositionComponent(
+        position: Vector2.zero(),
+        angle: -30.5,
+      );
+      game.add(component);
+      game.update(0);
+
+      component.add(
+        MoveAlongPathEffect(
+          Path() // pythagorean triangle, perimeter=600
+            ..moveTo(200, 200)
+            ..lineTo(290, 80)
+            ..lineTo(450, 200)
+            ..lineTo(200, 200),
+          EffectController(duration: 6),
+          oriented: true,
+        ),
+      );
+      game.update(0);
+      for (var i = 0; i < 60; i++) {
+        if (i <= 15) {
+          expect(component.position.x, closeTo(200 + 6 * i, 1e-10));
+          expect(component.position.y, closeTo(200 - 8 * i, 1e-10));
+          expect(component.angle, closeTo(-asin(0.8), 1e-7));
+        } else if (i <= 35) {
+          expect(component.position.x, closeTo(290 + 8 * (i - 15), 1e-10));
+          expect(component.position.y, closeTo(80 + 6 * (i - 15), 1e-10));
+          expect(component.angle, closeTo(asin(0.6), 1e-7));
+        } else {
+          expect(component.position.x, closeTo(450 - 10 * (i - 35), 1e-10));
+          expect(component.position.y, closeTo(200, 1e-10));
+          expect(component.angle, closeTo(pi, 1e-7));
+        }
+        game.update(0.1);
+      }
+    });
 
     test('errors', () {
       final controller = LinearEffectController(0);

@@ -90,6 +90,40 @@ void main() {
       expect(inventory.lastState, equals(InventoryState.bow));
     });
 
+    testWithFlameGame('Add and remove a child with two providers',
+        (game) async {
+      final inventoryCubit = InventoryCubit();
+      final playerCubit = PlayerCubit();
+
+      late FlameBlocProvider inventoryCubitProvider;
+      late FlameBlocProvider playerCubitProvider;
+
+      final provider = FlameMultiBlocProvider(
+        providers: [
+          inventoryCubitProvider =
+              FlameBlocProvider<InventoryCubit, InventoryState>.value(
+            value: inventoryCubit,
+          ),
+          playerCubitProvider =
+              FlameBlocProvider<PlayerCubit, PlayerState>.value(
+            value: playerCubit,
+          ),
+        ],
+      );
+      await game.ensureAdd(provider);
+
+      final myTestComponent = PositionComponent(position: Vector2.all(10));
+
+      await provider.ensureAdd(myTestComponent);
+      expect(inventoryCubitProvider.children.length, 1);
+      expect(inventoryCubitProvider.firstChild(), playerCubitProvider);
+      expect(myTestComponent.parent, equals(playerCubitProvider));
+      expect(playerCubitProvider.firstChild(), equals(myTestComponent));
+      await provider.ensureRemove(myTestComponent);
+      expect(myTestComponent.parent, null);
+      expect(playerCubitProvider.children.length, 0);
+    });
+
     group('when using children on constructor', () {
       testWithFlameGame('Provides multiple blocs down on the tree',
           (game) async {
@@ -149,6 +183,34 @@ void main() {
         expect(player.lastState, equals(PlayerState.sad));
         expect(inventory.lastState, equals(InventoryState.bow));
       });
+
+      testWithFlameGame(
+        'can listen to multiple subsequent state changes',
+        (game) async {
+          final playerCubit = PlayerCubit();
+          late PlayerListener player;
+
+          final provider = FlameMultiBlocProvider(
+            providers: [
+              FlameBlocProvider<PlayerCubit, PlayerState>.value(
+                value: playerCubit,
+              ),
+            ],
+            children: [
+              player = PlayerListener(),
+            ],
+          );
+          await game.ensureAdd(provider);
+
+          playerCubit.kill();
+          await Future<void>.microtask(() {});
+          expect(player.lastState, equals(PlayerState.dead));
+
+          playerCubit.riseFromTheDead();
+          await Future<void>.microtask(() {});
+          expect(player.lastState, equals(PlayerState.alive));
+        },
+      );
     });
   });
 }

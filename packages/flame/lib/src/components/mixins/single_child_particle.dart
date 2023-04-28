@@ -10,7 +10,7 @@ import 'package:flame/src/particles/particle.dart';
 ///   Particle child;
 ///
 ///   BehaviorParticle({
-///     @required this.child
+///     required this.child
 ///   });
 ///
 ///   @override
@@ -32,8 +32,8 @@ mixin SingleChildParticle on Particle {
   }
 
   @override
-  void render(Canvas c) {
-    child.render(c);
+  void render(Canvas canvas) {
+    child.render(canvas);
   }
 
   @override

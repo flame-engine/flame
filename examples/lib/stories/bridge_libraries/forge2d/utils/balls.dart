@@ -7,14 +7,24 @@ class Ball extends BodyComponent with ContactCallbacks {
   late Paint originalPaint;
   bool giveNudge = false;
   final double radius;
+  final BodyType bodyType;
   final Vector2 _position;
   double _timeSinceNudge = 0.0;
   static const double _minNudgeRest = 2.0;
 
   final Paint _blue = BasicPalette.blue.paint();
 
-  Ball(this._position, {this.radius = 2}) {
-    originalPaint = randomPaint();
+  Ball(
+    this._position, {
+    this.radius = 2,
+    this.bodyType = BodyType.dynamic,
+    Color? color,
+  }) {
+    if (color != null) {
+      originalPaint = PaletteEntry(color).paint();
+    } else {
+      originalPaint = randomPaint();
+    }
     paint = originalPaint;
   }
 
@@ -36,17 +46,17 @@ class Ball extends BodyComponent with ContactCallbacks {
       userData: this,
       angularDamping: 0.8,
       position: _position,
-      type: BodyType.dynamic,
+      type: bodyType,
     );
 
     return world.createBody(bodyDef)..createFixture(fixtureDef);
   }
 
   @override
-  void renderCircle(Canvas c, Offset center, double radius) {
-    super.renderCircle(c, center, radius);
+  void renderCircle(Canvas canvas, Offset center, double radius) {
+    super.renderCircle(canvas, center, radius);
     final lineRotation = Offset(0, radius);
-    c.drawLine(center, center + lineRotation, _blue);
+    canvas.drawLine(center, center + lineRotation, _blue);
   }
 
   @override

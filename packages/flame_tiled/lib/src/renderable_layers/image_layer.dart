@@ -13,13 +13,13 @@ class FlameImageLayer extends RenderableLayer<ImageLayer> {
   late final ImageRepeat _repeat;
   Rect _paintArea = Rect.zero;
 
-  FlameImageLayer(
-    super.layer,
-    super.parent,
-    this._image,
-    super.map,
-    super.destTileSize,
-  ) {
+  FlameImageLayer({
+    required super.layer,
+    required super.parent,
+    required super.map,
+    required super.destTileSize,
+    required Image image,
+  }) : _image = image {
     _initImageRepeat();
   }
 
@@ -62,19 +62,19 @@ class FlameImageLayer extends RenderableLayer<ImageLayer> {
     }
   }
 
-  static Future<FlameImageLayer> load(
-    ImageLayer layer,
-    GroupLayer? parent,
-    Camera? camera,
-    TiledMap map,
-    Vector2 destTileSize,
-  ) async {
+  static Future<FlameImageLayer> load({
+    required ImageLayer layer,
+    required GroupLayer? parent,
+    required Camera? camera,
+    required TiledMap map,
+    required Vector2 destTileSize,
+  }) async {
     return FlameImageLayer(
-      layer,
-      parent,
-      await Flame.images.load(layer.image.source!),
-      map,
-      destTileSize,
+      layer: layer,
+      parent: parent,
+      map: map,
+      destTileSize: destTileSize,
+      image: await Flame.images.load(layer.image.source!),
     );
   }
 

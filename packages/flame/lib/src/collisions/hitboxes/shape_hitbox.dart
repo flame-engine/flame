@@ -96,9 +96,9 @@ mixin ShapeHitbox on ShapeComponent implements Hitbox<ShapeHitbox> {
 
     // This should be placed after the hitbox parent listener
     // since the correct hitbox size is required by the QuadTree.
-    final parentGame = findParent<FlameGame>();
-    if (parentGame is HasCollisionDetection) {
-      _collisionDetection = parentGame.collisionDetection;
+    final parent = findParent<HasCollisionDetection>();
+    if (parent is HasCollisionDetection) {
+      _collisionDetection = parent.collisionDetection;
       _collisionDetection?.add(this);
     }
   }
@@ -213,16 +213,27 @@ mixin ShapeHitbox on ShapeComponent implements Hitbox<ShapeHitbox> {
     }
   }
 
+  /// Defines whether the [other] component should be able to collide with
+  /// this component.
+  ///
+  /// If the [hitboxParent] is not `CollisionCallbacks` but `PositionComponent`,
+  /// there is no [CollisionCallbacks.onComponentTypeCheck] in that component.
+  /// As a result, it will always be able to collide with all other types.
   @override
   @mustCallSuper
   bool onComponentTypeCheck(PositionComponent other) {
-    final myParent = parent;
-    final otherParent = other.parent;
-    if (myParent is CollisionCallbacks && otherParent is PositionComponent) {
-      return myParent.onComponentTypeCheck(otherParent);
-    }
+    final otherHitboxParent = (other as ShapeHitbox).hitboxParent;
 
-    return true;
+    final thisCanCollideWithOther = (hitboxParent is! CollisionCallbacks) ||
+        (hitboxParent as CollisionCallbacks)
+            .onComponentTypeCheck(otherHitboxParent);
+
+    final otherCanCollideWithThis =
+        (otherHitboxParent is! CollisionCallbacks) ||
+            (otherHitboxParent as CollisionCallbacks)
+                .onComponentTypeCheck(hitboxParent);
+
+    return thisCanCollideWithOther && otherCanCollideWithThis;
   }
 
   @override

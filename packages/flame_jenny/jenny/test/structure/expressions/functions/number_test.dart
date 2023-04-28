@@ -19,9 +19,11 @@ void main() {
           {number("1")}
           {number("123") - 1}
           {number("2e2")}
+          {number("3.11e-05")}
           {number("   2e-1  ")}
           {number("0x100")}
           {number("-72.001")}
+          {number(".5")} {number("5.")}
           ===
         ''',
         testPlan: '''
@@ -31,10 +33,12 @@ void main() {
           line: 0
           line: 1
           line: 122
-          line: 200.0
+          line: 200
+          line: 0.0000311
           line: 0.2
           line: 256
           line: -72.001
+          line: 0.5 5
         ''',
       );
     });
@@ -62,6 +66,7 @@ void main() {
       expectFails('1 + 2');
       expectFails('1.2.3');
       expectFails('--8');
+      expectFails('2,3');
     });
 
     test('too few arguments', () {

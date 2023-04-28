@@ -12,6 +12,8 @@ jobs:
       - uses: actions/checkout@v3
       - uses: subosito/flutter-action@v2
       - uses: bluefireteam/melos-action@main
+        with:
+          melos-version: '3.0.0-dev.0'
       - uses: bluefireteam/flutter-gh-pages@v8
         with:
           workingDir: examples
@@ -23,8 +25,8 @@ jobs:
     steps:
       - name: Trigger building the docs
         run: |
-          curl -XPOST -u "${{ secrets.GIT_CREDENTIALS }}" \
+          curl -XPOST -u "${{ secrets.DOCS_BUILD_DISPATCH }}" \
           -H "Accept:application/vnd.github" \
           -H "Content-Type:application/json" \
-          https://api.github.com/flame-engine/flame-docs-site/actions/workflows/gh-pages.yml/dispatches \
+          https://api.github.com/repos/flame-engine/flame-docs-site/actions/workflows/13757924/dispatches \
           --data '{"ref": "main" }'

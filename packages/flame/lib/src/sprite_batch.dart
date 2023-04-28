@@ -2,11 +2,11 @@ import 'dart:collection';
 import 'dart:math' show pi;
 import 'dart:ui';
 
+import 'package:flame/cache.dart';
+import 'package:flame/extensions.dart';
+import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
-import 'package:flame/src/cache/images.dart';
-import 'package:flame/src/extensions/image.dart';
-import 'package:flame/src/extensions/picture_extension.dart';
-import 'package:flame/src/flame.dart';
+import 'package:meta/meta.dart';
 
 extension SpriteBatchExtension on Game {
   /// Utility method to load and cache the image for a [SpriteBatch] based on
@@ -37,8 +37,8 @@ class BatchItem {
   BatchItem({
     required this.source,
     required this.transform,
-    this.flip = false,
     required this.color,
+    this.flip = false,
   })  : paint = Paint()..color = color,
         destination = Offset.zero & source.size;
 
@@ -75,6 +75,23 @@ class BatchItem {
 
   /// Paint object used for the web.
   final Paint paint;
+}
+
+@internal
+enum FlippedAtlasStatus {
+  /// There is no need to generate a flipped atlas yet.
+  none,
+
+  /// The flipped atlas generation is currently in progress.
+  generating,
+
+  /// The flipped atlas image has been generated.
+  generated,
+  ;
+
+  bool get isNone => this == FlippedAtlasStatus.none;
+  bool get isGenerating => this == FlippedAtlasStatus.generating;
+  bool get isGenerated => this == FlippedAtlasStatus.generated;
 }
 
 /// The SpriteBatch API allows for rendering multiple items at once.
@@ -116,17 +133,19 @@ class SpriteBatch {
     Images? images,
     bool useAtlas = true,
   }) async {
-    final _images = images ?? Flame.images;
+    final imagesCache = images ?? Flame.images;
     return SpriteBatch(
-      await _images.load(path),
+      await imagesCache.load(path),
       defaultColor: defaultColor,
       defaultTransform: defaultTransform ?? RSTransform(1, 0, 0, 0),
       defaultBlendMode: defaultBlendMode,
       useAtlas: useAtlas,
-      imageCache: _images,
+      imageCache: imagesCache,
       imageKey: path,
     );
   }
+
+  FlippedAtlasStatus _flippedAtlasStatus = FlippedAtlasStatus.none;
 
   /// List of all the existing batch items.
   final _batchItems = <BatchItem>[];
@@ -181,12 +200,6 @@ class SpriteBatch {
       imageCache.findKeyForImage(atlas) ??
       'image[${identityHashCode(atlas)}]';
 
-  /// Whether any [BatchItem]s needs a flippable atlas.
-  bool _hasFlips = false;
-
-  /// The status of the atlas image loading operations.
-  bool _atlasReady = true;
-
   /// The default color, used as a background color for a [BatchItem].
   final Color defaultColor;
 
@@ -213,20 +226,18 @@ class SpriteBatch {
   bool get isEmpty => _batchItems.isEmpty;
 
   Future<void> _makeFlippedAtlas() async {
-    _hasFlips = true;
-    _atlasReady = false;
+    _flippedAtlasStatus = FlippedAtlasStatus.generating;
     final key = '$imageKey#with-flips';
     atlas = await imageCache.fetchOrGenerate(
       key,
       () => _generateFlippedAtlas(atlas),
     );
-    _atlasReady = true;
+    _flippedAtlasStatus = FlippedAtlasStatus.generated;
   }
 
   Future<Image> _generateFlippedAtlas(Image image) {
     final recorder = PictureRecorder();
     final canvas = Canvas(recorder);
-    final _emptyPaint = Paint();
     canvas.drawImage(image, Offset.zero, _emptyPaint);
     canvas.scale(-1, 1);
     canvas.drawImage(image, Offset(-image.width * 2, 0), _emptyPaint);
@@ -263,16 +274,17 @@ class SpriteBatch {
       color: color ?? defaultColor,
     );
 
-    if (flip && useAtlas && !_hasFlips) {
+    if (flip && useAtlas && _flippedAtlasStatus.isNone) {
       _makeFlippedAtlas();
     }
 
     _batchItems.add(batchItem);
-
     _sources.add(
       flip
           ? Rect.fromLTWH(
-              (atlas.width * (!_atlasReady ? 2 : 1)) - source.right,
+              // The atlas is twice as wide when the flipped atlas is generated.
+              (atlas.width * (_flippedAtlasStatus.isGenerated ? 1 : 2)) -
+                  source.right,
               source.top,
               source.width,
               source.height,
@@ -347,7 +359,8 @@ class SpriteBatch {
     _batchItems.clear();
   }
 
-  // Used to not create new paint objects in [render] on every tick.
+  // Used to not create new Paint objects in [render] and
+  // [generateFlippedAtlas].
   final Paint _emptyPaint = Paint();
 
   void render(
@@ -362,7 +375,7 @@ class SpriteBatch {
 
     paint ??= _emptyPaint;
 
-    if (useAtlas && _atlasReady) {
+    if (useAtlas && !_flippedAtlasStatus.isGenerating) {
       canvas.drawAtlas(
         atlas,
         _transforms,

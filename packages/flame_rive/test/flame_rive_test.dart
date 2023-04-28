@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flame/components.dart';
+import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flame_rive/flame_rive.dart';
 import 'package:flame_test/flame_test.dart';
@@ -54,11 +55,10 @@ void main() {
         expect(riveComponent.parent, game);
       });
 
-      testWithGame<_RiveComponentHasTappable>(
+      testWithFlameGame(
         'Can Add with Tappable',
-        _RiveComponentHasTappable.new,
         (game) async {
-          final child = _RiveComponentWthTappable(
+          final child = _RiveComponentWithTappable(
             artboard: await loadArtboard(riveFile),
           );
           await game.ensureAdd(child);
@@ -79,7 +79,7 @@ void main() {
         await game.ready();
 
         // Check if the current artboard has animation
-        expect(riveComponent.artboard.hasAnimations, isTrue);
+        expect(riveComponent.artboard.animations.isNotEmpty, isTrue);
         // Check if this artboard is attach to any RiveAnimationController
         expect(riveComponent.artboard.animationControllers.isEmpty, isTrue);
       });
@@ -94,7 +94,7 @@ void main() {
         await game.ready();
 
         // Check if this artboard has animation
-        expect(riveComponent.artboard.hasAnimations, isTrue);
+        expect(riveComponent.artboard.animations.isNotEmpty, isTrue);
         // Check if this artboard is attach to any RiveAnimationController
         expect(riveComponent.artboard.animationControllers.isEmpty, isFalse);
         // Check if the attach RiveAnimationController is active
@@ -125,6 +125,28 @@ void main() {
         expect(riveComponent.artboard.antialiasing, isFalse);
       });
     });
+
+    group('Component size', () {
+      test('use specifiy size', () async {
+        final skillsArtboard = await loadArtboard(riveFile);
+        final riveComponent = RiveComponent(
+          artboard: skillsArtboard,
+          size: Vector2.all(250.0),
+        );
+
+        expect(riveComponent.size, Vector2.all(250.0));
+      });
+
+      test('deafult value (ArtboardSize)', () async {
+        final skillsArtboard = await loadArtboard(riveFile);
+        final riveComponent = RiveComponent(artboard: skillsArtboard);
+
+        expect(
+          riveComponent.size,
+          Vector2(skillsArtboard.width, skillsArtboard.height),
+        );
+      });
+    });
   });
 }
 
@@ -147,8 +169,6 @@ class _RiveComponentWithAnimation extends RiveComponent {
   }
 }
 
-class _RiveComponentHasTappable extends FlameGame with HasTappables {}
-
-class _RiveComponentWthTappable extends RiveComponent with Tappable {
-  _RiveComponentWthTappable({required super.artboard});
+class _RiveComponentWithTappable extends RiveComponent with TapCallbacks {
+  _RiveComponentWithTappable({required super.artboard});
 }

@@ -9,8 +9,7 @@ import 'package:flame/palette.dart';
 import 'package:flame/sprite.dart';
 import 'package:flutter/material.dart';
 
-class JoystickAdvancedExample extends FlameGame
-    with HasDraggables, HasTappables, HasCollisionDetection {
+class JoystickAdvancedExample extends FlameGame with HasCollisionDetection {
   static const String description = '''
     In this example we showcase how to use the joystick by creating 
     `SpriteComponent`s that serve as the joystick's knob and background.
@@ -153,16 +152,16 @@ class JoystickAdvancedExample extends FlameGame
       ),
     );
 
-    final _regular = TextPaint(
+    final regular = TextPaint(
       style: TextStyle(color: BasicPalette.white.color),
     );
     speedText = TextComponent(
       text: 'Speed: 0',
-      textRenderer: _regular,
+      textRenderer: regular,
     )..positionType = PositionType.viewport;
     directionText = TextComponent(
       text: 'Direction: idle',
-      textRenderer: _regular,
+      textRenderer: regular,
     )..positionType = PositionType.viewport;
 
     final speedWithMargin = HudMarginComponent(

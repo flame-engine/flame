@@ -168,28 +168,23 @@ building the project due to
 Building the documentation site on your own computer is fairly simple. All you need is the
 following:
 
-1. A working **Flutter** installation, accessible from the command line;
+1. A working **Flutter** installation, accessible from the command line.
 
-2. A **Python** environment, with python version 3.8+ or higher;
-    - You can verify this by running `python --version` from the command line;
-    - Having a dedicated python virtual environment is recommended but not required;
+2. **Melos** command-line tool, as per the [contributing] guide.
 
-3. A set of python **modules** listed in the `doc/_sphinx/requirements.txt` file;
-    - The easiest way to install these is to run
+3. A **Python** environment, with python version 3.8+ or higher. Having a dedicated python
+   virtual environment is recommended but not required.
 
-      ```console
-      pip install -r doc/_sphinx/requirements.txt
-      ```
+4. Install the remaining requirements using the command
 
-    - Verify that all packages were installed correctly, otherwise, an error may occur.
-
-4. Melos as per the [contributing](contributing.md#environment-setup) guide.
+   ```shell
+   melos run doc-setup
+   ```
 
 Once these prerequisites are met, you can build the documentation by using the built-in Melos
 target:
 
-
-```console
+```shell
 melos doc-build
 ```
 
@@ -202,7 +197,7 @@ If you want to automatically recompile the docs every time there is a change to 
 you can use the the built-in Melos target below, which will also serve and open your default
 browser with the docs.
 
-```console
+```shell
 melos doc-serve
 ```
 
@@ -216,6 +211,7 @@ There are other make commands that you may find occasionally useful too:
 - **melos doc-clean** removes all cached generated files (in case the system gets stuck in a bad
 state).
 - **melos doc-linkcheck** to check whether there are any broken links in the documentation.
+- **melos doc-kill** removes any orphaned TCP threads running on port 8000.
 
 The generated html files will be in the `doc/_build/html` directory, you can view them directly
 by opening the file `doc/_build/html/index.html` in your browser. The only drawback is that the
@@ -230,3 +226,6 @@ Avoid having spaces in the paths to the docs since that will keep you from
 building the project due to
 [this bug](https://github.com/ipython/ipython/pull/13765).
 ```
+
+
+[contributing]: contributing.md#environment-setup

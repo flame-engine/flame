@@ -1,8 +1,6 @@
-import 'package:flame/experimental.dart';
-import 'package:flame/src/components/core/component.dart';
+import 'package:flame/components.dart';
 import 'package:flame/src/events/messages/event.dart';
 import 'package:meta/meta.dart';
-import 'package:vector_math/vector_math_64.dart';
 
 /// Base class for events that originate at some point on the screen. These
 /// include: tap events, drag events, scale events, etc.

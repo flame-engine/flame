@@ -6,10 +6,8 @@ import 'package:flame/game.dart';
 import 'package:flame_tiled/src/flame_tsx_provider.dart';
 import 'package:flame_tiled/src/mutable_transform.dart';
 import 'package:flame_tiled/src/renderable_layers/group_layer.dart';
-import 'package:flame_tiled/src/renderable_layers/image_layer.dart';
-import 'package:flame_tiled/src/renderable_layers/object_layer.dart';
 import 'package:flame_tiled/src/renderable_layers/renderable_layer.dart';
-import 'package:flame_tiled/src/renderable_layers/tile_layer.dart';
+import 'package:flame_tiled/src/renderable_layers/tile_layers/tile_layer.dart';
 import 'package:flame_tiled/src/tile_animation.dart';
 import 'package:flame_tiled/src/tile_atlas.dart';
 import 'package:flame_tiled/src/tile_stack.dart';
@@ -73,9 +71,9 @@ class RenderableTiledMap {
   }
 
   /// Changes the visibility of the corresponding layer, if different
-  void setLayerVisibility(int layerId, bool visibility) {
-    if (map.layers[layerId].visible != visibility) {
-      map.layers[layerId].visible = visibility;
+  void setLayerVisibility(int layerId, {required bool visible}) {
+    if (map.layers[layerId].visible != visible) {
+      map.layers[layerId].visible = visible;
       _refreshCache();
     }
   }
@@ -181,8 +179,8 @@ class RenderableTiledMap {
           continue;
         }
 
-        if (layer.indexes[x][y] != null) {
-          tiles.add(layer.indexes[x][y]!);
+        if (layer.transforms[x][y] != null) {
+          tiles.add(layer.transforms[x][y]!);
         }
       }
     }
@@ -192,33 +190,55 @@ class RenderableTiledMap {
   /// Parses a file returning a [RenderableTiledMap].
   ///
   /// NOTE: this method looks for files under the path "assets/tiles/".
+  ///
+  /// {@template renderable_tile_map_factory}
+  /// By default, [FlameTileLayer] renders flipped tiles if they exist.
+  /// You can disable this by setting [ignoreFlip] to `true`.
+  /// {@endtemplate}
   static Future<RenderableTiledMap> fromFile(
     String fileName,
     Vector2 destTileSize, {
     Camera? camera,
+    bool? ignoreFlip,
   }) async {
     final contents = await Flame.bundle.loadString('assets/tiles/$fileName');
-    return fromString(contents, destTileSize, camera: camera);
+    return fromString(
+      contents,
+      destTileSize,
+      camera: camera,
+      ignoreFlip: ignoreFlip,
+    );
   }
 
   /// Parses a string returning a [RenderableTiledMap].
+  ///
+  /// {@macro renderable_tile_map_factory}
   static Future<RenderableTiledMap> fromString(
     String contents,
     Vector2 destTileSize, {
     Camera? camera,
+    bool? ignoreFlip,
   }) async {
     final map = await TiledMap.fromString(
       contents,
       FlameTsxProvider.parse,
     );
-    return fromTiledMap(map, destTileSize, camera: camera);
+    return fromTiledMap(
+      map,
+      destTileSize,
+      camera: camera,
+      ignoreFlip: ignoreFlip,
+    );
   }
 
   /// Parses a [TiledMap] returning a [RenderableTiledMap].
+  ///
+  /// {@macro renderable_tile_map_factory}
   static Future<RenderableTiledMap> fromTiledMap(
     TiledMap map,
     Vector2 destTileSize, {
     Camera? camera,
+    bool? ignoreFlip,
   }) async {
     // We're not going to load animation frames that are never referenced; but
     // we do supply the common cache for all layers in this map, and maintain
@@ -237,6 +257,7 @@ class RenderableTiledMap {
       camera,
       animationFrames,
       atlas: await TiledAtlas.fromTiledMap(map),
+      ignoreFlip: ignoreFlip,
     );
 
     return RenderableTiledMap(
@@ -256,73 +277,39 @@ class RenderableTiledMap {
     Camera? camera,
     Map<Tile, TileFrames> animationFrames, {
     required TiledAtlas atlas,
+    bool? ignoreFlip,
   }) async {
-    final renderLayers = <RenderableLayer<Layer>>[];
-    for (final layer in layers.where((layer) => layer.visible)) {
-      switch (layer.runtimeType) {
-        case TileLayer:
-          renderLayers.add(
-            await FlameTileLayer.load(
-              layer as TileLayer,
-              parent,
-              map,
-              destTileSize,
-              animationFrames,
-              atlas.clone(),
-            ),
-          );
-          break;
-        case ImageLayer:
-          renderLayers.add(
-            await FlameImageLayer.load(
-              layer as ImageLayer,
-              parent,
-              camera,
-              map,
-              destTileSize,
-            ),
-          );
-          break;
+    final visibleLayers = layers.where((layer) => layer.visible);
 
-        case Group:
-          final groupLayer = layer as Group;
-          final renderableGroup = GroupLayer(
-            groupLayer,
-            parent,
-            map,
-            destTileSize,
-          );
-          renderableGroup.children = await _renderableLayers(
-            groupLayer.layers,
-            renderableGroup,
-            map,
-            destTileSize,
-            camera,
-            animationFrames,
-            atlas: atlas,
-          );
-          renderLayers.add(renderableGroup);
-          break;
+    final layerLoaders = visibleLayers.map((layer) async {
+      final renderableLayer = await RenderableLayer.load(
+        layer: layer,
+        parent: parent,
+        map: map,
+        destTileSize: destTileSize,
+        camera: camera,
+        animationFrames: animationFrames,
+        atlas: atlas,
+        ignoreFlip: ignoreFlip,
+      );
 
-        case ObjectGroup:
-          renderLayers.add(
-            await ObjectLayer.load(
-              layer as ObjectGroup,
-              map,
-              destTileSize,
-            ),
-          );
-          break;
-
-        default:
-          assert(false, '$layer layer is unsupported.');
-          renderLayers.add(
-            UnsupportedLayer(layer, parent, map, destTileSize),
-          );
-          break;
+      if (layer is Group && renderableLayer is GroupLayer) {
+        renderableLayer.children = await _renderableLayers(
+          layer.layers,
+          renderableLayer,
+          map,
+          destTileSize,
+          camera,
+          animationFrames,
+          atlas: atlas,
+          ignoreFlip: ignoreFlip,
+        );
       }
-    }
-    return renderLayers;
+
+      return renderableLayer;
+    }).toList();
+
+    return Future.wait(layerLoaders);
   }
 
   /// Handle game resize and propagate it to renderable layers
