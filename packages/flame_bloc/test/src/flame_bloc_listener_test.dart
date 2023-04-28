@@ -23,7 +23,7 @@ void main() {
 
         bloc.kill();
         await Future.microtask(() {});
-        expect(states, equals([PlayerState.alive, PlayerState.dead]));
+        expect(states, equals([PlayerState.dead]));
       },
     );
 
@@ -45,7 +45,7 @@ void main() {
 
         bloc.kill();
         await Future.microtask(() {});
-        expect(states, [PlayerState.alive]);
+        expect(states, isEmpty);
       },
     );
 
@@ -62,7 +62,7 @@ void main() {
 
         bloc.kill();
         await Future.microtask(() {});
-        expect(states, equals([PlayerState.alive, PlayerState.dead]));
+        expect(states, equals([PlayerState.dead]));
       },
     );
   });

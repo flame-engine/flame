@@ -16,6 +16,13 @@ class PlayerListener extends Component
 
     last = state;
   }
+
+  @override
+  void onInitialState(PlayerState state) {
+    super.onInitialState(state);
+
+    last ??= state;
+  }
 }
 
 class SadPlayerListener extends Component
@@ -32,6 +39,13 @@ class SadPlayerListener extends Component
     super.onNewState(state);
 
     last = state;
+  }
+
+  @override
+  void onInitialState(PlayerState state) {
+    super.onInitialState(state);
+
+    last ??= state;
   }
 }
 

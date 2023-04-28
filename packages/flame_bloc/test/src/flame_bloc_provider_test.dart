@@ -17,6 +17,13 @@ class InventoryListener extends Component
     super.onNewState(state);
     lastState = state;
   }
+
+  @override
+  void onInitialState(InventoryState state) {
+    super.onInitialState(state);
+
+    lastState ??= state;
+  }
 }
 
 void main() {
@@ -67,7 +74,7 @@ void main() {
       });
 
       testWithFlameGame(
-        'initial state is wired as a state change',
+        'initial state is used to properly track last state',
         (game) async {
           final bloc = InventoryCubit();
           late InventoryListener component;
