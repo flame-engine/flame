@@ -85,9 +85,9 @@ class DialogueLine extends DialogueEntry {
   bool get isConst => _content.isConst;
 
   @override
-  Future<void> processInDialogueRunner(DialogueRunner runner) {
+  Future<void> processInDialogueRunner(DialogueRunner dialogueRunner) {
     evaluate();
-    return runner.deliverLine(this);
+    return dialogueRunner.deliverLine(this);
   }
 
   /// Computes the [text] of the line, substituting the current values of all

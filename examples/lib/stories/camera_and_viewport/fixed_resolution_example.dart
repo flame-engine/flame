@@ -55,7 +55,7 @@ class Background extends PositionComponent with HasGameRef {
   }
 
   @override
-  void render(Canvas c) {
-    c.drawRect(hugeRect, white);
+  void render(Canvas canvas) {
+    canvas.drawRect(hugeRect, white);
   }
 }

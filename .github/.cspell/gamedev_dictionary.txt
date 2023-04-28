@@ -85,6 +85,7 @@ overmind
 overridable
 pathfinding
 performant
+perlin # a type of noise-generating function
 platformer
 polyline
 positionable
@@ -153,3 +154,4 @@ viewport's
 viewports
 vsync
 widget's
+unawaited

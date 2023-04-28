@@ -136,7 +136,7 @@ simple:
 
 2. Run
 
-   ```console
+   ```shell
    flutter test --update-goldens
    ```
 

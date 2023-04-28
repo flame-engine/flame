@@ -36,12 +36,14 @@ extensions = [
     'extensions.flutter_app',
     'extensions.package',
     'extensions.yarn_lexer',
+    'sphinxcontrib.jquery',
+    'sphinx_copybutton'
 ]
 
 # Configuration options for MyST:
 # https://myst-parser.readthedocs.io/en/latest/syntax/optional.html
 myst_enable_extensions = [
-    'attrs_image',
+    'attrs_inline',
     'colon_fence',
     'deflist',
     'dollarmath',
@@ -91,6 +93,7 @@ pygments_style = 'monokai'
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['images', 'scripts', 'theme']
 html_js_files = ['versions.js', 'menu-expand.js']
+html_css_files = ["copy-button.css"]
 
 
 # -- Custom setup ------------------------------------------------------------

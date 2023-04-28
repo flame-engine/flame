@@ -29,14 +29,14 @@ class Star extends SpriteComponent
   }) : super(size: Vector2.all(64), anchor: Anchor.center);
 
   @override
-  Future<void> onLoad() async {
+  void onLoad() {
     final starImage = game.images.fromCache('star.png');
     sprite = Sprite(starImage);
     position = Vector2(
         (gridPosition.x * size.x) + xOffset + (size.x / 2),
         game.size.y - (gridPosition.y * size.y) - (size.y / 2),
     );
-    add(RectangleHitbox()..collisionType = CollisionType.passive);
+    add(RectangleHitbox(collisionType: CollisionType.passive));
     add(
       SizeEffect.by(
         Vector2(-24, -24),
@@ -119,7 +119,7 @@ class WaterEnemy extends SpriteAnimationComponent
   }) : super(size: Vector2.all(64), anchor: Anchor.bottomLeft);
 
   @override
-  Future<void> onLoad() async {
+  void onLoad() {
     animation = SpriteAnimation.fromFrameData(
       game.images.fromCache('water_enemy.png'),
       SpriteAnimationData.sequenced(
@@ -132,7 +132,7 @@ class WaterEnemy extends SpriteAnimationComponent
         (gridPosition.x * size.x) + xOffset + (size.x / 2),
         game.size.y - (gridPosition.y * size.y) - (size.y / 2),
     );
-    add(RectangleHitbox()..collisionType = CollisionType.passive);
+    add(RectangleHitbox(collisionType: CollisionType.passive));
     add(
       MoveEffect.by(
         Vector2(-2 * size.x, 0),
@@ -214,13 +214,13 @@ class GroundBlock extends SpriteComponent with HasGameRef<EmberQuestGame> {
   }) : super(size: Vector2.all(64), anchor: Anchor.bottomLeft);
 
   @override
-  Future<void> onLoad() async {
+  void onLoad() {
     final groundImage = game.images.fromCache('ground.png');
     sprite = Sprite(groundImage);
     position = Vector2((gridPosition.x * size.x) + xOffset,
         game.size.y - (gridPosition.y * size.y),
     );
-    add(RectangleHitbox()..collisionType = CollisionType.passive);
+    add(RectangleHitbox(collisionType: CollisionType.passive));
   }
 
   @override
@@ -342,13 +342,13 @@ class GroundBlock extends SpriteComponent with HasGameRef<EmberQuestGame> {
   }) : super(size: Vector2.all(64), anchor: Anchor.bottomLeft);
 
   @override
-  Future<void> onLoad() async {
+  void onLoad() {
     final groundImage = game.images.fromCache('ground.png');
     sprite = Sprite(groundImage);
     position = Vector2((gridPosition.x * size.x) + xOffset,
         game.size.y - (gridPosition.y * size.y),
     );
-    add(RectangleHitbox()..collisionType = CollisionType.passive);
+    add(RectangleHitbox(collisionType: CollisionType.passive));
     if (gridPosition.x == 9 && position.x > game.lastBlockXPosition) {
       game.lastBlockKey = _blockKey;
       game.lastBlockXPosition = position.x + size.x;

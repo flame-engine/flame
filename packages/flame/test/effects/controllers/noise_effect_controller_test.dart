@@ -1,3 +1,6 @@
+// TODO(spydon): Tracked in https://github.com/flame-engine/flame/issues/2329
+// ignore_for_file: deprecated_member_use_from_same_package
+
 import 'dart:math';
 
 import 'package:flame/effects.dart';

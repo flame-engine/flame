@@ -76,8 +76,8 @@ class MyGame {
     assert(quests[questId]!.name == questName);
     // ...
   }
-
-  Future<void> onLoad() async {
+  @override
+  void onLoad() {
     yarnProject = YarnProject()
       ..commands.addCommand2('StartQuest', startQuest);
   }
@@ -106,7 +106,8 @@ class MyGame {
     yarnProject.variables.setVariable(r'$prompt', name);
   }
 
-  Future<void> onLoad() async {
+  @override
+  void onLoad() {
     yarnProject
       ..variables.setVariable(r'$prompt', '')
       ..commands.addCommand1('prompt', prompt);

@@ -14,7 +14,6 @@ import 'package:meta/meta.dart';
 /// See [MultiTapGestureRecognizer] for the description of each individual
 /// event.
 mixin Tappable on Component {
-  // bool onTap() => true;
   bool onTapDown(TapDownInfo info) => true;
   bool onLongTapDown(TapDownInfo info) => true;
   bool onTapUp(TapUpInfo info) => true;
@@ -59,10 +58,14 @@ mixin Tappable on Component {
   @mustCallSuper
   void onMount() {
     super.onMount();
-    final game = findGame()!;
     assert(
-      game is HasTappables || game is HasTappablesBridge,
-      'Tappable components can only be added to a FlameGame with HasTappables',
+      (() {
+        final game = findGame()!;
+        // ignore: deprecated_member_use_from_same_package
+        return game is HasTappables || game is HasTappablesBridge;
+      })(),
+      'Tappable components can only be added to a FlameGame with HasTappables '
+      'or HasTappablesBridge',
     );
   }
 }

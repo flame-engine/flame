@@ -42,6 +42,23 @@ class MyGame extends FlameGame with HasCollisionDetection {
 Now when you add `ShapeHitbox`s to components that are then added to the game, they will
 automatically be checked for collisions.
 
+You can also add `HasCollisionDetection` directly to another `Component` instead of the `FlameGame`,
+for example to the `World` that is used for the `CameraComponent`.
+If that is done, hitboxes that are added in that component's tree will only be compared to other
+hitboxes in that subtree, which makes it possible to have several worlds with collision detection
+within one `FlameGame`.
+
+Example:
+
+```dart
+class CollisionDetectionWorld extends World with HasCollisionDetection {}
+```
+
+```{note}
+Hitboxes will only be connected to one collision detection system and that is
+the closest parent that has the `HasCollisionDetection` mixin.
+```
+
 
 ### CollisionCallbacks
 
@@ -108,7 +125,8 @@ hitboxes to just like any other component:
 
 ```dart
 class MyComponent extends PositionComponent {
-  Future<void> onLoad() async {
+  @override
+  void onLoad() {
     add(RectangleHitbox());
   }
 }
@@ -145,9 +163,9 @@ The `CollisionType` enum contains the following values:
 - `inactive` will not collide with any other `Collidable`s
 
 So if you have hitboxes that you don't need to check collisions against each other you can mark
-them as passive by setting `collisionType = CollisionType.passive`, this could for example be
-ground components or maybe your enemies don't need to check collisions between each other, then they
-could be marked as `passive` too.
+them as passive by setting `collisionType: CollisionType.passive` in the constructor, this could for
+example be ground components or maybe your enemies don't need to check collisions between each
+other, then they could be marked as `passive` too.
 
 Imagine a game where there are a lot of bullets, that can't collide with each other, flying towards
 the player, then the player would be set to `CollisionType.active` and the bullets would be set to
@@ -250,7 +268,8 @@ To do this, add the `HasQuadTreeCollisionDetection` mixin to your game instead o
 
 ```dart
 class MyGame extends FlameGame with HasQuadTreeCollisionDetection {
-  Future<void> onLoad() async {
+  @override
+  void onLoad() {
     initializeCollisionDetection(
       mapDimensions: const Rect.fromLTWH(0, 0, mapWidth, mapHeight),
       minimumDistance: 10,

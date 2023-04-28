@@ -8,6 +8,9 @@ import 'package:meta/meta.dart';
 import 'package:tiled/tiled.dart';
 
 /// One image atlas for all Tiled image sets in a map.
+///
+/// Please note that [TiledAtlas] should not be reused without [clone] as it may
+/// have a different [batch] instance.
 class TiledAtlas {
   /// Single atlas for all renders.
   // Retain this as SpriteBatch can dispose of the original image for flips.
@@ -100,7 +103,11 @@ class TiledAtlas {
       // really boring map.
       final image = (await Flame.images.load(key)).clone();
 
-      return atlasMap[key] ??= TiledAtlas._(
+      // There could be a special case that a concurrent call to this method
+      // passes the check `if (atlasMap.containsKey(key))` due to the async call
+      // inside this block. So, instance should always be recreated within this
+      // block to prevent unintended reuse.
+      return atlasMap[key] = TiledAtlas._(
         atlas: image,
         offsets: {key: Offset.zero},
         key: key,
@@ -110,7 +117,6 @@ class TiledAtlas {
     final bin = RectangleBinPacker();
     final recorder = PictureRecorder();
     final canvas = Canvas(recorder);
-    final _emptyPaint = Paint();
 
     final offsetMap = <String, Offset>{};
 
@@ -126,6 +132,7 @@ class TiledAtlas {
       ...imageList.map((tiledImage) => Flame.images.load(tiledImage.source!))
     ]);
 
+    final emptyPaint = Paint();
     for (final tiledImage in imageList) {
       final image = await Flame.images.load(tiledImage.source!);
       final rect = bin.pack(image.width.toDouble(), image.height.toDouble());
@@ -135,7 +142,7 @@ class TiledAtlas {
       final offset =
           offsetMap[tiledImage.source!] = Offset(rect.left, rect.top);
 
-      canvas.drawImage(image, offset, _emptyPaint);
+      canvas.drawImage(image, offset, emptyPaint);
     }
     final picture = recorder.endRecording();
     final image = await picture.toImageSafe(

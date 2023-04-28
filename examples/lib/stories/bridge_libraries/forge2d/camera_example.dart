@@ -11,8 +11,8 @@ class CameraExample extends DominoExample {
   ''';
 
   @override
-  void onTapDown(TapDownInfo details) {
-    final position = details.eventPosition.game;
+  void onTapDown(TapDownInfo info) {
+    final position = info.eventPosition.game;
     final pizza = Pizza(position);
     add(pizza);
     pizza.mounted.whenComplete(() => camera.followBodyComponent(pizza));

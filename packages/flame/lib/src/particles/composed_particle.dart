@@ -29,9 +29,9 @@ class ComposedParticle extends Particle {
   }
 
   @override
-  void render(Canvas c) {
+  void render(Canvas canvas) {
     for (final child in children) {
-      child.render(c);
+      child.render(canvas);
     }
   }
 

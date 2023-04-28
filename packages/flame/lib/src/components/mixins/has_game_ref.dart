@@ -3,7 +3,6 @@ import 'package:flame/src/experimental/has_game_reference.dart';
 import 'package:flame/src/game/flame_game.dart';
 import 'package:flame/src/game/game.dart';
 import 'package:flame/src/game/mixins/single_game_instance.dart';
-import 'package:meta/meta.dart';
 
 /// [HasGameRef] mixin provides property [game] (or [gameRef]), which is the
 /// cached accessor for the top-level game instance.
@@ -31,14 +30,6 @@ mixin HasGameRef<T extends FlameGame> on Component {
 
   /// Equivalent to the [game] property.
   T get gameRef => game;
-
-  /// Directly assigns (and override if one is already set) a [gameRef] to the
-  /// component.
-  ///
-  /// This is meant to be used only for testing purposes.
-  @visibleForTesting
-  @Deprecated('Use .game setter instead. Will be removed in 1.5.0')
-  void mockGameRef(T gameRef) => _game = gameRef;
 
   @override
   Game? findGame() => _game ?? super.findGame();

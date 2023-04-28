@@ -113,12 +113,12 @@ class QuadTreeBroadphase<T extends Hitbox<T>> extends Broadphase<T> {
   }
 
   @override
-  void add(T hitbox) {
-    tree.add(hitbox);
-    if (hitbox.collisionType == CollisionType.active) {
-      activeCollisions.add(hitbox);
+  void add(T item) {
+    tree.add(item);
+    if (item.collisionType == CollisionType.active) {
+      activeCollisions.add(item);
     }
-    _cacheCenterOfHitbox(hitbox as ShapeHitbox);
+    _cacheCenterOfHitbox(item as ShapeHitbox);
   }
 
   @override

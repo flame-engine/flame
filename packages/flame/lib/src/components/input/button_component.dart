@@ -1,5 +1,5 @@
 import 'package:flame/components.dart';
-import 'package:flame/input.dart';
+import 'package:flame/events.dart';
 import 'package:meta/meta.dart';
 
 /// The [ButtonComponent] bundles two [PositionComponent]s, one that shows while
@@ -7,9 +7,9 @@ import 'package:meta/meta.dart';
 ///
 /// Note: You have to set the [button] in [onLoad] if you are not passing it in
 /// through the constructor.
-class ButtonComponent extends PositionComponent with Tappable {
-  late final PositionComponent? button;
-  late final PositionComponent? buttonDown;
+class ButtonComponent extends PositionComponent with TapCallbacks {
+  PositionComponent? button;
+  PositionComponent? buttonDown;
 
   /// Callback for what should happen when the button is pressed.
   void Function()? onPressed;
@@ -52,34 +52,31 @@ class ButtonComponent extends PositionComponent with Tappable {
 
   @override
   @mustCallSuper
-  bool onTapDown(TapDownInfo info) {
+  void onTapDown(TapDownEvent event) {
     if (buttonDown != null) {
       button!.removeFromParent();
       buttonDown!.parent = this;
     }
     onPressed?.call();
-    return false;
   }
 
   @override
   @mustCallSuper
-  bool onTapUp(TapUpInfo info) {
+  void onTapUp(TapUpEvent event) {
     if (buttonDown != null) {
       buttonDown!.removeFromParent();
       button!.parent = this;
     }
     onReleased?.call();
-    return true;
   }
 
   @override
   @mustCallSuper
-  bool onTapCancel() {
+  void onTapCancel(TapCancelEvent event) {
     if (buttonDown != null) {
       buttonDown!.removeFromParent();
       button!.parent = this;
     }
     onCancelled?.call();
-    return false;
   }
 }

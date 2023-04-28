@@ -10,6 +10,8 @@ class HasCollidablesGame extends FlameGame with HasCollisionDetection {}
 class HasQuadTreeCollidablesGame extends FlameGame
     with HasQuadTreeCollisionDetection {}
 
+class CollisionDetectionWorld extends World with HasCollisionDetection {}
+
 @isTest
 Future<void> testCollisionDetectionGame(
   String testName,

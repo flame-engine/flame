@@ -28,12 +28,14 @@ class SimpleFlips {
   final bool flip;
 
   /// {@macro _simple_flips}
-  SimpleFlips(this.angle, this.cos, this.sin, this.flip);
+  SimpleFlips(this.angle, this.cos, this.sin, {required this.flip});
 
   /// This is the conversion from the truth table that I drew.
   factory SimpleFlips.fromFlips(Flips flips) {
-    int angle, cos, sin;
-    bool flip;
+    final int angle;
+    final int cos;
+    final int sin;
+    final bool flip;
 
     if (!flips.diagonally && !flips.vertically && !flips.horizontally) {
       angle = 0;
@@ -80,6 +82,6 @@ class SimpleFlips {
       throw 'Invalid combination of booleans: $flips';
     }
 
-    return SimpleFlips(angle, cos, sin, flip);
+    return SimpleFlips(angle, cos, sin, flip: flip);
   }
 }

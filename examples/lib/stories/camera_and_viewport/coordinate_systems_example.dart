@@ -40,21 +40,21 @@ class CoordinateSystemsExample extends FlameGame
   }
 
   @override
-  void render(Canvas c) {
-    c.drawRect(canvasSize.toRect(), _borderPaint);
+  void render(Canvas canvas) {
+    canvas.drawRect(canvasSize.toRect(), _borderPaint);
     _text.render(
-      c,
+      canvas,
       'Camera: WASD to move, QE to zoom',
       Vector2.all(5.0),
     );
     _text.render(
-      c,
+      canvas,
       'Camera: ${camera.position}, zoom: ${camera.zoom}',
       Vector2(canvasSize.x - 5, 5.0),
       anchor: Anchor.topRight,
     );
     _text.render(
-      c,
+      canvas,
       'This is your Flame game!',
       canvasSize - Vector2.all(5.0),
       anchor: Anchor.bottomRight,
@@ -62,22 +62,22 @@ class CoordinateSystemsExample extends FlameGame
     final lastEventDescription = this.lastEventDescription;
     if (lastEventDescription != null) {
       _text.render(
-        c,
+        canvas,
         lastEventDescription,
         canvasSize / 2,
         anchor: Anchor.center,
       );
     }
-    super.render(c);
+    super.render(canvas);
   }
 
   @override
-  void onTapUp(int pointer, TapUpInfo info) {
+  void onTapUp(int pointerId, TapUpInfo info) {
     lastEventDescription = _describe('TapUp', info);
   }
 
   @override
-  void onTapDown(int pointer, TapDownInfo info) {
+  void onTapDown(int pointerId, TapDownInfo info) {
     lastEventDescription = _describe('TapDown', info);
   }
 

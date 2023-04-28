@@ -29,7 +29,7 @@ class Rank {
   final Sprite redSprite;
   final Sprite blackSprite;
 
-  static late final List<Rank> _singletons = [
+  static final List<Rank> _singletons = [
     Rank._(1, 'A', 335, 164, 789, 161, 120, 129),
     Rank._(2, '2', 20, 19, 15, 322, 83, 125),
     Rank._(3, '3', 122, 19, 117, 322, 80, 127),

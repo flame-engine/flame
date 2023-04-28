@@ -61,8 +61,11 @@ class PlayerComponent extends SpriteAnimationComponent
   }
 
   @override
-  void onCollisionStart(Set<Vector2> points, PositionComponent other) {
-    super.onCollisionStart(points, other);
+  void onCollisionStart(
+    Set<Vector2> intersectionPoints,
+    PositionComponent other,
+  ) {
+    super.onCollisionStart(intersectionPoints, other);
     if (other is EnemyComponent) {
       other.takeHit();
     }

@@ -25,7 +25,7 @@ void main() {
       when(() => game.paused).thenReturn(true);
 
       final BuildContext context = _MockBuildContext();
-      final renderBox = GameRenderBox(game, context, false);
+      final renderBox = GameRenderBox(game, context, isRepaintBoundary: false);
       renderBox.attach(owner);
 
       verify(() => game.attach(owner, renderBox)).called(1);
@@ -47,7 +47,7 @@ void main() {
       when(() => game.paused).thenReturn(true);
 
       final BuildContext context = _MockBuildContext();
-      final renderBox = GameRenderBox(game, context, false);
+      final renderBox = GameRenderBox(game, context, isRepaintBoundary: false);
       renderBox.attach(owner);
 
       expect(renderBox.buildContext, context);
@@ -59,7 +59,7 @@ void main() {
       when(() => game.paused).thenReturn(true);
 
       final BuildContext context = _MockBuildContext();
-      final renderBox = GameRenderBox(game, context, false);
+      final renderBox = GameRenderBox(game, context, isRepaintBoundary: false);
       renderBox.attach(owner);
 
       expect(renderBox.isRepaintBoundary, false);

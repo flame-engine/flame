@@ -5,7 +5,7 @@ import 'package:examples/stories/bridge_libraries/forge2d/utils/boundaries.dart'
 import 'package:flame/input.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 
-class RevoluteJointExample extends Forge2DGame with TapDetector {
+class RevoluteJointWithMotorExample extends Forge2DGame with TapDetector {
   static const String description = '''
     This example showcases a revolute joint, which is the spinning balls in the
     center.
@@ -26,9 +26,9 @@ class RevoluteJointExample extends Forge2DGame with TapDetector {
   }
 
   @override
-  void onTapDown(TapDownInfo details) {
-    super.onTapDown(details);
-    final tapPosition = details.eventPosition.game;
+  void onTapDown(TapDownInfo info) {
+    super.onTapDown(info);
+    final tapPosition = info.eventPosition.game;
     final random = Random();
     List.generate(15, (i) {
       final randomVector = (Vector2.random() - Vector2.all(-0.5)).normalized();

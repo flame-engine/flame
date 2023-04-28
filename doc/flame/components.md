@@ -389,7 +389,8 @@ that the `position`, `angle` and `scale` will be relative to the parents state.
 So if you, for example, wanted to position a child in the center of the parent you would do this:
 
 ```dart
-Future<void> onLoad() async {
+@override
+void onLoad() {
   final parent = PositionComponent(
     position: Vector2(100, 100),
     size: Vector2(100, 100),
@@ -463,6 +464,7 @@ This class is used to represent a Component that has sprites that run in a singl
 This will create a simple three frame animation using 3 different images:
 
 ```dart
+@override
 Future<void> onLoad() async {
   final sprites = [0, 1, 2]
       .map((i) => Sprite.load('player_$i.png'));
@@ -481,6 +483,7 @@ If you have a sprite sheet, you can use the `sequenced` constructor from the `Sp
 class (check more details on [Images &gt; Animation](rendering/images.md#animation)):
 
 ```dart
+@override
 Future<void> onLoad() async {
   final size = Vector2.all(64.0);
   final data = SpriteAnimationData.sequenced(
@@ -495,47 +498,59 @@ Future<void> onLoad() async {
 }
 ```
 
-If you are not using `FlameGame`, don't forget this component needs to be updated, because the
-animation object needs to be ticked to move the frames.
-
-To listen when the animation is done (when it reaches the last frame and is not looping) you can
-use `animation.completed`.
+All animation components internally maintains a `SpriteAnimationTicker` which ticks the `SpriteAnimation`.
+This allows multiple components to share the same animation object.
 
 Example:
 
 ```dart
-await animation.completed;
+final sprites = [/*You sprite list here*/];
+final animation = SpriteAnimation.spriteList(sprites, stepTime: 0.01);
+
+final animationTicker = SpriteAnimationTicker(animation);
+
+// or alternatively
+
+final animationTicker = animation.ticker(); // creates a new ticker
+
+animationTicker.update(dt);
+```
+
+To listen when the animation is done (when it reaches the last frame and is not looping) you can
+use `animationTicker.completed`.
+
+Example:
+
+```dart
+await animationTicker.completed;
 
 doSomething();
 
 // or alternatively
 
-animation.completed.whenComplete(doSomething);
+animationTicker.completed.whenComplete(doSomething);
 ```
 
-Additionally, this component also has the following optional event callbacks:  `onStart`, `onFrame`,
+Additionally, `SpriteAnimationTicker` also has the following optional event callbacks:  `onStart`, `onFrame`,
 and `onComplete`. To listen to these events, you can do the following:
 
 ```dart
-final animation =
-    SpriteAnimation.spriteList([sprite], stepTime: 1, loop: false)
-      ..onStart = () {
-        // Do something on start.
-      };
+final animationTicker = SpriteAnimationTicker(animation)
+  ..onStart = () {
+    // Do something on start.
+  };
 
-final animation =
-    SpriteAnimation.spriteList([sprite], stepTime: 1, loop: false)
-      ..onComplete = () {
-        // Do something on completion.
-      };
+final animationTicker = SpriteAnimationTicker(animation)
+  ..onComplete = () {
+    // Do something on completion.
+  };
 
-final animation =
-    SpriteAnimation.spriteList([sprite], stepTime: 1, loop: false)
-      ..onFrame = (index) {
-        if (index == 1) {
-          // Do something for the second frame.
-        }
-      };
+final animationTicker = SpriteAnimationTicker(animation)
+  ..onFrame = (index) {
+    if (index == 1) {
+      // Do something for the second frame.
+    }
+  };
 ```
 
 
@@ -610,6 +625,7 @@ This component uses an instance of `Svg` class to represent a Component that has
 rendered in the game:
 
 ```dart
+@override
 Future<void> onLoad() async {
   final svg = await Svg.load('android.svg');
   final android = SvgComponent.fromSvg(
@@ -734,6 +750,7 @@ They simplest way is to set the named optional parameters `baseVelocity` and
 background images along the X-axis with a faster speed the "closer" the image is:
 
 ```dart
+@override
 Future<void> onLoad() async {
   final parallaxComponent = await loadParallaxComponent(
     _dataList,
@@ -747,7 +764,8 @@ You can set the baseSpeed and layerDelta at any time, for example if your charac
 game speeds up.
 
 ```dart
-Future<void> onLoad() async {
+@override
+void onLoad() {
   final parallax = parallaxComponent.parallax;
   parallax.baseSpeed = Vector2(100, 0);
   parallax.velocityMultiplierDelta = Vector2(2.0, 1.0);
@@ -1218,3 +1236,14 @@ can be used to animate some properties of your components, like position or dime
 You can check the list of those effects [here](effects.md).
 
 Examples of the running effects can be found [here](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/effects);
+
+
+## When not using `FlameGame`
+
+If you are not using `FlameGame`, don't forget that all components needs to be updated every time your
+game updates. This lets component perform their internal processing and update their state.
+
+For example, the `SpriteAnimationTicker` inside all the `SpriteAnimation` based components needs to tick
+the animation object to decide which animation frame will be displayed next. This can be done by manually
+calling `component.update()` when not using `FlameGame`. This also means, if you are implementing your
+own sprite animation based component, you can directly use a `SpriteAnimationTicker` to update the `SpriteAnimation`.

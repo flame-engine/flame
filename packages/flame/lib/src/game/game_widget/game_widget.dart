@@ -122,7 +122,7 @@ class GameWidget<T extends Game> extends StatefulWidget {
   /// These widgets can be turned on-and-off dynamically from within the game
   /// via the [Game.overlays] property.
   ///
-  /// ```
+  /// ```dart
   /// void main() {
   ///   runApp(
   ///     GameWidget(
@@ -165,7 +165,7 @@ class GameWidget<T extends Game> extends StatefulWidget {
   ///
   /// To use overlays, the game subclass has to be mixed with HasWidgetsOverlay.
   @override
-  _GameWidgetState<T> createState() => _GameWidgetState<T>();
+  GameWidgetState<T> createState() => GameWidgetState<T>();
 
   void _initializeGame(T game) {
     if (mouseCursor != null) {
@@ -185,7 +185,7 @@ class GameWidget<T extends Game> extends StatefulWidget {
   }
 }
 
-class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
+class GameWidgetState<T extends Game> extends State<GameWidget<T>> {
   late T currentGame;
 
   Future<void> get loaderFuture => _loaderFuture ??= (() async {

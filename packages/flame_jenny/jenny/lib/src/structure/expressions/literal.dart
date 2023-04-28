@@ -15,6 +15,7 @@ class StringLiteral extends StringExpression {
 }
 
 class BoolLiteral extends BoolExpression {
+  // ignore: avoid_positional_boolean_parameters
   const BoolLiteral(this.value);
 
   @override

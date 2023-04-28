@@ -71,9 +71,9 @@ class RenderableTiledMap {
   }
 
   /// Changes the visibility of the corresponding layer, if different
-  void setLayerVisibility(int layerId, bool visibility) {
-    if (map.layers[layerId].visible != visibility) {
-      map.layers[layerId].visible = visibility;
+  void setLayerVisibility(int layerId, {required bool visible}) {
+    if (map.layers[layerId].visible != visible) {
+      map.layers[layerId].visible = visible;
       _refreshCache();
     }
   }

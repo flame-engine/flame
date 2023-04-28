@@ -218,8 +218,8 @@ class FireAtlas {
     if (imageData == null) {
       throw 'Attempting on calling load on an already loaded Image';
     }
-    final _images = images ?? Flame.images;
-    _image = await _images.fromBase64(id, imageData!);
+    final imagesCache = images ?? Flame.images;
+    _image = await imagesCache.fromBase64(id, imageData!);
 
     // Clear memory
     if (clearImageData) {
@@ -275,9 +275,9 @@ class FireAtlas {
     AssetsCache? assets,
     Images? images,
   }) async {
-    final _assets = assets ?? Flame.assets;
+    final assetsCache = assets ?? Flame.assets;
 
-    final bytes = await _assets.readBinaryFile(fileName);
+    final bytes = await assetsCache.readBinaryFile(fileName);
     final atlas = FireAtlas.deserialize(bytes);
     await atlas.loadImage(images: images);
     return atlas;

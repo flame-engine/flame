@@ -21,11 +21,18 @@ const _ready = (callback) => {
   }
 };
 
+const BLACKLISTED_KEY_CONTROL_ELEMENTS = new Set([
+  "TEXTAREA",
+  "INPUT",
+  "SELECT",
+  "BUTTON",
+]);
+
 /**
  * highlight a given string on a node by wrapping it in
  * span elements with the given class name.
  */
-const _highlight = (node, addItems, text, className, index) => {
+const _highlightFlame = (node, addItems, text, className, index) => {
   if (node.nodeType === Node.TEXT_NODE) {
     const val = node.nodeValue;
     const parent = node.parentNode;
@@ -72,12 +79,12 @@ const _highlight = (node, addItems, text, className, index) => {
       }
     }
   } else if (node.matches && !node.matches("button, select, textarea")) {
-    node.childNodes.forEach((el) => _highlight(el, addItems, text, className, index));
+    node.childNodes.forEach((el) => _highlightFlame(el, addItems, text, className, index));
   }
 };
-const _highlightText = (thisNode, text, className, index) => {
+const _highlightTextFlame = (thisNode, text, className, index) => {
   let addItems = [];
-  _highlight(thisNode, addItems, text, className, index);
+  _highlightFlame(thisNode, addItems, text, className, index);
   addItems.forEach((obj) =>
     obj.parent.insertAdjacentElement("beforebegin", obj.target)
   );
@@ -86,11 +93,11 @@ const _highlightText = (thisNode, text, className, index) => {
 /**
  * Small JavaScript module for the documentation.
  */
-const Documentation = {
+const DocumentationFlame = {
   init: () => {
-    Documentation.highlightSearchWords();
-    Documentation.initDomainIndexTable();
-    Documentation.initOnKeyListeners();
+    DocumentationFlame.highlightSearchWords();
+    DocumentationFlame.initDomainIndexTable();
+    DocumentationFlame.initOnKeyListeners();
   },
 
   /**
@@ -101,9 +108,9 @@ const Documentation = {
   LOCALE: "unknown",
 
   // gettext and ngettext don't access this so that the functions
-  // can safely bound to a different name (_ = Documentation.gettext)
+  // can safely bound to a different name (_ = DocumentationFlame.gettext)
   gettext: (string) => {
-    const translated = Documentation.TRANSLATIONS[string];
+    const translated = DocumentationFlame.TRANSLATIONS[string];
     switch (typeof translated) {
       case "undefined":
         return string; // no translation
@@ -115,19 +122,19 @@ const Documentation = {
   },
 
   ngettext: (singular, plural, n) => {
-    const translated = Documentation.TRANSLATIONS[singular];
+    const translated = DocumentationFlame.TRANSLATIONS[singular];
     if (typeof translated !== "undefined")
-      return translated[Documentation.PLURAL_EXPR(n)];
+      return translated[DocumentationFlame.PLURAL_EXPR(n)];
     return n === 1 ? singular : plural;
   },
 
   addTranslations: (catalog) => {
-    Object.assign(Documentation.TRANSLATIONS, catalog.messages);
-    Documentation.PLURAL_EXPR = new Function(
+    Object.assign(DocumentationFlame.TRANSLATIONS, catalog.messages);
+    DocumentationFlame.PLURAL_EXPR = new Function(
       "n",
       `return (${catalog.plural_expr})`
     );
-    Documentation.LOCALE = catalog.locale;
+    DocumentationFlame.LOCALE = catalog.locale;
   },
 
   /**
@@ -145,16 +152,16 @@ const Documentation = {
     const hbox = $("#highlight-content");
     window.setTimeout(() => {
       terms.forEach((term, index) => {
-        _highlightText(body, term, "highlighted", index);
+        _highlightTextFlame(body, term, "highlighted", index);
         hbox.append($('<span>' + term + '</span>').click(function(){
           $(this).toggleClass("off");
-          Documentation.toggleSearchWord(index);
+          DocumentationFlame.toggleSearchWord(index);
         }));
       });
     }, 10);
 
     $("div.highlight-box").show();
-    $("div.highlight-box button.close").click(Documentation.hideSearchWords);
+    $("div.highlight-box button.close").click(DocumentationFlame.hideSearchWords);
     const searchBox = document.getElementById("searchbox");
     if (searchBox === null) return;
     searchBox.appendChild(
@@ -162,8 +169,8 @@ const Documentation = {
         .createRange()
         .createContextualFragment(
           '<p class="highlight-link">' +
-            '<a href="javascript:Documentation.hideSearchWords()">' +
-            Documentation.gettext("Hide Search Matches") +
+            '<a href="javascript:DocumentationFlame.hideSearchWords()">' +
+            DocumentationFlame.gettext("Hide Search Matches") +
             "</a></p>"
         )
     );
@@ -228,14 +235,8 @@ const Documentation = {
     )
       return;
 
-    const blacklistedElements = new Set([
-      "TEXTAREA",
-      "INPUT",
-      "SELECT",
-      "BUTTON",
-    ]);
     document.addEventListener("keydown", (event) => {
-      if (blacklistedElements.has(document.activeElement.tagName)) return; // bail for input elements
+      if (BLACKLISTED_KEY_CONTROL_ELEMENTS.has(document.activeElement.tagName)) return; // bail for input elements
       if (event.altKey || event.ctrlKey || event.metaKey) return; // bail with special keys
 
       if (!event.shiftKey) {
@@ -260,7 +261,7 @@ const Documentation = {
             break;
           case "Escape":
             if (!DOCUMENTATION_OPTIONS.ENABLE_SEARCH_SHORTCUTS) break;
-            Documentation.hideSearchWords();
+            DocumentationFlame.hideSearchWords();
             event.preventDefault();
         }
       }
@@ -269,7 +270,7 @@ const Documentation = {
       switch (event.key) {
         case "/":
           if (!DOCUMENTATION_OPTIONS.ENABLE_SEARCH_SHORTCUTS) break;
-          Documentation.focusSearchBar();
+          DocumentationFlame.focusSearchBar();
           event.preventDefault();
       }
     });
@@ -277,6 +278,6 @@ const Documentation = {
 };
 
 // quick alias for translations
-const _ = Documentation.gettext;
+const _ = DocumentationFlame.gettext;
 
-_ready(Documentation.init);
+_ready(DocumentationFlame.init);

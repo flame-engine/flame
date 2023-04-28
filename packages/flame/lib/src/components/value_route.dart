@@ -37,7 +37,7 @@ abstract class ValueRoute<T> extends Route {
 
   @mustCallSuper
   @override
-  void didPop(Route previousRoute) {
+  void didPop(Route nextRoute) {
     if (!_completer.isCompleted) {
       _completer.complete(_defaultValue);
     }

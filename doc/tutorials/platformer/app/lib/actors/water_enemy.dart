@@ -30,7 +30,7 @@ class WaterEnemy extends SpriteAnimationComponent
       (gridPosition.x * size.x) + xOffset,
       game.size.y - (gridPosition.y * size.y),
     );
-    add(RectangleHitbox()..collisionType = CollisionType.passive);
+    add(RectangleHitbox(collisionType: CollisionType.passive));
     add(
       MoveEffect.by(
         Vector2(-2 * size.x, 0),

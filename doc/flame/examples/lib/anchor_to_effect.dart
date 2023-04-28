@@ -1,10 +1,9 @@
 import 'package:doc_flame_examples/flower.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
-import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
 
-class AnchorToEffectGame extends FlameGame with HasTappableComponents {
+class AnchorToEffectGame extends FlameGame {
   @override
   Future<void> onLoad() async {
     final flower = Flower(
