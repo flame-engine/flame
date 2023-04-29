@@ -375,6 +375,13 @@ Right/East| pi/2         | 90
 
 ### Anchor
 
+```{flutter-app}
+:sources: ../flame/examples
+:page: anchor
+:show: widget code infobox
+This example shows effect of `anchor` on parent child relationship.
+```
+
 The `anchor` is where on the component that the position and rotation should be defined from (the
 default is `Anchor.topLeft`). So if you have the anchor set as `Anchor.center` the component's
 position on the screen will be in the center of the component and if an `angle` is applied, it is
@@ -387,22 +394,26 @@ of a component which is not actually the `anchor` of that component, you can use
 and `absolutePositionOfAnchor` method.
 
 ```dart
-final component = PositionComponent(
+final comp = PositionComponent(
   size: Vector2.all(20),
   anchor: Anchor.center,
 );
 
 // Returns (0,0)
-final centerPosition = component.position;
+final p1 = component.position;
 
 // Returns (10, 10)
-final bottomRightPosition = component.positionOfAnchor(Anchor.bottomRight);
+final p2 = component.positionOfAnchor(Anchor.bottomRight);
 ```
 
 A common fitfall when using `anchor` is confusing it for as being the attachment point for children
 components. For example, setting `anchor` to `Anchor.center` for a parent component does not mean
-that the children components will be placed w.r.t the center of parent. Local origin for a child is
-always the top-left corner of its parent.
+that the children components will be placed w.r.t the center of parent.
+
+```{note}
+Local origin for a child component is always the top-left corner of its parent component,
+irrespective of their `anchor` values.
+```
 
 
 ### PositionComponent children
