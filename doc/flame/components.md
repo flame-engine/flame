@@ -381,6 +381,29 @@ position on the screen will be in the center of the component and if an `angle` 
 rotated around the anchor, so in this case around the center of the component. You can think of it
 as the point within the component by which Flame "grabs" it.
 
+When `position` or `absolutePosition` of a component is queried, the return coordinates are that of
+the `anchor` of the component. In case if you want to find the position of a specific anchor point
+of a component which is not actually the `anchor` of that component, you can use the `positionOfAnchor`
+and `absolutePositionOfAnchor` method.
+
+```dart
+final component = PositionComponent(
+  size: Vector2.all(20),
+  anchor: Anchor.center,
+);
+
+// Returns (0,0)
+final centerPosition = component.position;
+
+// Returns (10, 10)
+final bottomRightPosition = component.positionOfAnchor(Anchor.bottomRight);
+```
+
+A common fitfall when using `anchor` is confusing it for as being the attachment point for children
+components. For example, setting `anchor` to `Anchor.center` for a parent component does not mean
+that the children components will be placed w.r.t the center of parent. Local origin for a child is
+always the top-left corner of its parent.
+
 
 ### PositionComponent children
 
