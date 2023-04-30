@@ -9,18 +9,18 @@ class AnchorGame extends FlameGame {
   final _parentAnchorText = TextComponent(position: Vector2.all(5));
   final _childAnchorText = TextComponent(position: Vector2(5, 30));
 
-  late _AnchorableRectangle _redComponent;
-  late _AnchorableRectangle _blueComponent;
+  late _AnchoredRectangle _redComponent;
+  late _AnchoredRectangle _blueComponent;
 
   @override
   Future<void> onLoad() async {
-    _redComponent = _AnchorableRectangle(
+    _redComponent = _AnchoredRectangle(
       size: size / 4,
       position: size / 2,
       paint: BasicPalette.red.paint(),
     );
 
-    _blueComponent = _AnchorableRectangle(
+    _blueComponent = _AnchoredRectangle(
       size: size / 8,
       paint: BasicPalette.blue.paint(),
     );
@@ -50,8 +50,8 @@ class AnchorGame extends FlameGame {
   }
 }
 
-class _AnchorableRectangle extends RectangleComponent with TapCallbacks {
-  _AnchorableRectangle({
+class _AnchoredRectangle extends RectangleComponent with TapCallbacks {
+  _AnchoredRectangle({
     super.position,
     super.size,
     super.paint,
