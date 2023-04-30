@@ -1,5 +1,4 @@
 import 'package:examples/stories/bridge_libraries/forge2d/utils/balls.dart';
-import 'package:examples/stories/bridge_libraries/forge2d/utils/boundaries.dart';
 import 'package:examples/stories/bridge_libraries/forge2d/utils/boxes.dart';
 import 'package:flame/input.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
@@ -15,19 +14,19 @@ class WeldJointExample extends Forge2DGame with TapDetector {
   Future<void> onLoad() async {
     super.onLoad();
 
-    double pillarHeight = 20;
+    const pillarHeight = 20.0;
     final leftPillar = Box(
         startPosition: Vector2(10, size.y - pillarHeight / 2),
         width: 5,
         height: pillarHeight,
         bodyType: BodyType.static,
-        color: Colors.white);
+        color: Colors.white,);
     final rightPillar = Box(
         startPosition: Vector2(size.x - 10, size.y - pillarHeight / 2),
         width: 5,
         height: pillarHeight,
         bodyType: BodyType.static,
-        color: Colors.white);
+        color: Colors.white,);
 
     addAll([leftPillar, rightPillar]);
 
@@ -41,14 +40,15 @@ class WeldJointExample extends Forge2DGame with TapDetector {
 
     for (var i = 0; i < sectionsCount; i++) {
       final section = Box(
-          startPosition: Vector2(sectionWidth * i, positionY),
-          width: sectionWidth,
-          height: 1);
+        startPosition: Vector2(sectionWidth * i, positionY),
+        width: sectionWidth,
+        height: 1,
+      );
       await add(section);
 
       if (prevSection != null) {
         createJoint(prevSection, section.body,
-            Vector2(sectionWidth * i + sectionWidth, positionY));
+            Vector2(sectionWidth * i + sectionWidth, positionY),);
       }
 
       prevSection = section.body;
