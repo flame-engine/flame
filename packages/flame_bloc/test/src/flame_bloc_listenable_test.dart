@@ -92,7 +92,7 @@ void main() {
 
         bloc.makeSad();
         await Future.microtask(() {});
-        expect(component.last, PlayerState.alive);
+        expect(component.last, equals(PlayerState.alive));
       },
     );
 
@@ -110,7 +110,7 @@ void main() {
 
         bloc.kill();
         await Future.microtask(() {});
-        expect(component.last, PlayerState.alive);
+        expect(component.last, equals(PlayerState.alive));
       },
     );
 
