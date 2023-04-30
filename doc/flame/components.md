@@ -407,7 +407,7 @@ final p1 = component.position;
 final p2 = component.positionOfAnchor(Anchor.bottomRight);
 ```
 
-A common fitfall when using `anchor` is confusing it for as being the attachment point for children
+A common pitfall when using `anchor` is confusing it for as being the attachment point for children
 components. For example, setting `anchor` to `Anchor.center` for a parent component does not mean
 that the children components will be placed w.r.t the center of parent.
 
