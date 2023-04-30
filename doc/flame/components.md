@@ -379,7 +379,8 @@ Right/East| pi/2         | 90
 :sources: ../flame/examples
 :page: anchor
 :show: widget code infobox
-This example shows effect of `anchor` on parent child relationship.
+This example shows effect of changing `anchor` point of parent (red) and child (blue)
+components. Tap on them to cycle through the anchor points.
 ```
 
 The `anchor` is where on the component that the position and rotation should be defined from (the
