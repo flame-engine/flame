@@ -630,7 +630,7 @@ world.createJoint(WeldJoint(weldJointDef));
 
 #### Breakable Bodies and WeldJoint
 
-Since the Box2D constraint solver is iterative, joints are somewhat flexible. This means that the
+Since the Forge2D constraint solver is iterative, joints are somewhat flexible. This means that the
 bodies connected by a WeldJoint may bend slightly. If you want to simulate a breakable body, it's
 better to create a single body with multiple fixtures. When the body breaks, you can destroy a
 fixture and recreate it on a new body instead of relying on a `WeldJoint`.
