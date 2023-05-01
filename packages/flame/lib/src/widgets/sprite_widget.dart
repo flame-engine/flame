@@ -39,10 +39,10 @@ class SpriteWidget extends StatelessWidget {
     this.angle = 0,
     this.srcPosition,
     this.srcSize,
+    this.errorBuilder,
+    this.loadingBuilder,
     super.key,
-  })  : _spriteFuture = sprite,
-        errorBuilder = null,
-        loadingBuilder = null;
+  }) : _spriteFuture = sprite;
 
   /// Load the image from the asset [path] and renders it as a widget.
   ///
