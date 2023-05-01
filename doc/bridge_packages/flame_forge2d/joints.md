@@ -27,7 +27,7 @@ Currently, Forge2D supports the following joints:
 - [`PulleyJoint`](#pulleyjoint)
 - [`RevoluteJoint`](#revolutejoint)
 - [`RopeJoint`](#ropejoint)
-- WeldJoint
+- [`WeldJoint`](#weldjoint)
 - WheelJoint
 
 
@@ -599,3 +599,38 @@ will have no effect.
 The joint assumes that the maximum length doesn't change during simulation. 
 See `DistanceJoint` if you want to dynamically control length.
 ```
+
+
+### `WeldJoint`
+
+A `WeldJoint` is used to restrict all relative motion between two bodies, effectively joining them
+together.
+
+`WeldJointDef` requires two bodies that will be connected, and a world anchor:
+
+```dart
+final weldJointDef = WeldJointDef()
+  ..initialize(bodyA, bodyB, anchor);
+
+world.createJoint(WeldJoint(weldJointDef));
+```
+
+```{flutter-app}
+:sources: ../../examples
+:page: weld_joint
+:subfolder: stories/bridge_libraries/forge2d/joints
+:show: code popup
+```
+
+- `bodyA`, `bodyB`: Two bodies that will be connected
+
+- `anchor`: Anchor point in world coordinates, at which two bodies will be welded together
+  to 0, the higher the value, the less springy the joint becomes.
+
+
+#### Breakable Bodies and WeldJoint
+
+Since the Forge2D constraint solver is iterative, joints are somewhat flexible. This means that the
+bodies connected by a WeldJoint may bend slightly. If you want to simulate a breakable body, it's
+better to create a single body with multiple fixtures. When the body breaks, you can destroy a
+fixture and recreate it on a new body instead of relying on a `WeldJoint`.
