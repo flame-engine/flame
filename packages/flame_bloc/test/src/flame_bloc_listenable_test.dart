@@ -16,6 +16,13 @@ class PlayerListener extends Component
 
     last = state;
   }
+
+  @override
+  void onInitialState(PlayerState state) {
+    super.onInitialState(state);
+
+    last ??= state;
+  }
 }
 
 class SadPlayerListener extends Component
@@ -32,6 +39,13 @@ class SadPlayerListener extends Component
     super.onNewState(state);
 
     last = state;
+  }
+
+  @override
+  void onInitialState(PlayerState state) {
+    super.onInitialState(state);
+
+    last ??= state;
   }
 }
 
@@ -78,7 +92,7 @@ void main() {
 
         bloc.makeSad();
         await Future.microtask(() {});
-        expect(component.last, isNull);
+        expect(component.last, equals(PlayerState.alive));
       },
     );
 
@@ -96,7 +110,7 @@ void main() {
 
         bloc.kill();
         await Future.microtask(() {});
-        expect(component.last, isNull);
+        expect(component.last, equals(PlayerState.alive));
       },
     );
 
