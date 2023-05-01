@@ -28,7 +28,7 @@ class SpriteAnimationWidget extends StatelessWidget {
   final WidgetBuilder? loadingBuilder;
 
   /// A callback that is called when the animation completes.
-  final VoidCallback? _onComplete;
+  final VoidCallback? onComplete;
 
   const SpriteAnimationWidget({
     required SpriteAnimation animation,
@@ -40,7 +40,7 @@ class SpriteAnimationWidget extends StatelessWidget {
         _animationTicker = animationTicker,
         errorBuilder = null,
         loadingBuilder = null,
-        _onComplete = null;
+        onComplete = null;
 
   /// Loads image from the asset [path] and renders it as a widget.
   ///
@@ -52,15 +52,14 @@ class SpriteAnimationWidget extends StatelessWidget {
     required String path,
     required SpriteAnimationData data,
     Images? images,
-    VoidCallback? onComplete,
     this.playing = true,
     this.anchor = Anchor.topLeft,
     this.errorBuilder,
     this.loadingBuilder,
+    this.onComplete,
     super.key,
   })  : _animationFuture = SpriteAnimation.load(path, data, images: images),
-        _animationTicker = null,
-        _onComplete = onComplete;
+        _animationTicker = null;
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +67,7 @@ class SpriteAnimationWidget extends StatelessWidget {
       future: _animationFuture,
       builder: (_, spriteAnimation) {
         final ticker = _animationTicker ?? spriteAnimation.ticker();
-        ticker.completed.then((_) => _onComplete?.call());
+        ticker.completed.then((_) => onComplete?.call());
 
         return InternalSpriteAnimationWidget(
           animation: spriteAnimation,
