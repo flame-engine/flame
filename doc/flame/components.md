@@ -381,7 +381,7 @@ Right/East| pi/2         | 90
 :show: widget code infobox
 This example shows effect of changing `anchor` point of parent (red) and child (blue)
 components. Tap on them to cycle through the anchor points. Note that the local
-position of child component is (0, 0) at all times.
+position of the child component is (0, 0) at all times.
 ```
 
 The `anchor` is where on the component that the position and rotation should be defined from (the
