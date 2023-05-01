@@ -390,7 +390,7 @@ position on the screen will be in the center of the component and if an `angle` 
 rotated around the anchor, so in this case around the center of the component. You can think of it
 as the point within the component by which Flame "grabs" it.
 
-When `position` or `absolutePosition` of a component is queried, the return coordinates are that of
+When `position` or `absolutePosition` of a component is queried, the returned coordinates are that of
 the `anchor` of the component. In case if you want to find the position of a specific anchor point
 of a component which is not actually the `anchor` of that component, you can use the `positionOfAnchor`
 and `absolutePositionOfAnchor` method.
