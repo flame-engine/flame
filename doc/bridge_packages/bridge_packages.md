@@ -47,7 +47,7 @@ Create interactive animations (bridge package for [Rive]).
 
 :::{package} flame_spine
 
-Use Spine skeletal animations (bridge package for [spine_flutter]).
+Use Spine skeletal animations (bridge package for [Spine]).
 :::
 
 :::{package} flame_splash_screen
