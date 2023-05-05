@@ -13,6 +13,7 @@
       "\\$\\w+",
       "\\{\\w+",
       "\\`\\w+",
+      "\\.\\w+",
       "\\:\\w+",
       "\\/\\w+",
       "\\#[\\w\\-]+"
@@ -39,14 +40,14 @@
           "addWords": true
       },
       {
-        "name": "gamedev_dictionary",
-        "path": "./.cspell/gamedev_dictionary.txt",
-        "addWords": true
+          "name": "gamedev_dictionary",
+          "path": "./.cspell/gamedev_dictionary.txt",
+          "addWords": true
       },
       {
-        "name": "sphinx_dictionary",
-        "path": "./.cspell/sphinx_dictionary.txt",
-        "addWords": true
+          "name": "sphinx_dictionary",
+          "path": "./.cspell/sphinx_dictionary.txt",
+          "addWords": true
       }
   ]
 }
