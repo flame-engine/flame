@@ -1,7 +1,8 @@
 import 'package:audioplayers/audioplayers.dart';
-import 'package:flame_audio/audio_pool.dart';
 
 import 'package:flame_audio/bgm.dart';
+
+export 'package:audioplayers/audioplayers.dart';
 
 /// This utility class holds static references to some global audio objects.
 ///
@@ -76,16 +77,16 @@ class FlameAudio {
   /// Access a shared instance of the [Bgm] class.
   ///
   /// This will use the same global audio cache from [FlameAudio].
-  static late final Bgm bgm = Bgm(audioCache: audioCache);
+  static final Bgm bgm = Bgm(audioCache: audioCache);
 
   /// Creates a new Audio Pool using Flame's global Audio Cache.
   static Future<AudioPool> createPool(
     String sound, {
-    int minPlayers = 1,
     required int maxPlayers,
+    int minPlayers = 1,
   }) {
     return AudioPool.create(
-      sound,
+      source: AssetSource(sound),
       audioCache: audioCache,
       minPlayers: minPlayers,
       maxPlayers: maxPlayers,

@@ -50,12 +50,13 @@ mixin FlameBlocListenable<B extends BlocBase<S>, S> on Component {
     }
     _bloc = bloc;
     _state = bloc.state;
+    onInitialState(_state);
     _subscription = bloc.stream.listen((newState) {
       if (_state != newState) {
-        final _callNewState = listenWhen(_state, newState);
+        final callNewState = listenWhen(_state, newState);
         _state = newState;
 
-        if (_callNewState) {
+        if (callNewState) {
           onNewState(newState);
         }
       }
@@ -72,6 +73,11 @@ mixin FlameBlocListenable<B extends BlocBase<S>, S> on Component {
   ///
   /// Default implementation is a no-op.
   void onNewState(S state) {}
+
+  /// Called only once with the initial state provided.
+  ///
+  /// Default implementation is a no-op.
+  void onInitialState(S state) {}
 
   @override
   @mustCallSuper

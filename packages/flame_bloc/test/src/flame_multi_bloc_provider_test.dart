@@ -95,7 +95,8 @@ void main() {
       final inventoryCubit = InventoryCubit();
       final playerCubit = PlayerCubit();
 
-      late FlameBlocProvider inventoryCubitProvider, playerCubitProvider;
+      late FlameBlocProvider inventoryCubitProvider;
+      late FlameBlocProvider playerCubitProvider;
 
       final provider = FlameMultiBlocProvider(
         providers: [

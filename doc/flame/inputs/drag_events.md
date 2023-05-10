@@ -17,7 +17,8 @@ For those components that you want to respond to drags, add the `DragCallbacks` 
 - This mixin adds four overridable methods to your component: `onDragStart`, `onDragUpdate`,
   `onDragEnd`, and `onDragCancel`. By default, these methods do nothing -- they need to be
   overridden in order to perform any function.
-- In addition, the component must implement the `containsLocalPoint()` method -- this method
+- In addition, the component must implement the `containsLocalPoint()` method (already implemented
+  in `PositionComponent`, so most of the time you don't need to do anything here) -- this method
   allows Flame to know whether the event occurred within the component or not.
 
 ```dart

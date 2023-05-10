@@ -307,6 +307,16 @@ abstract class Game {
     _gameRenderBox?.gameLoop?.start();
   }
 
+  /// Steps the engine game loop by one frame. Works only if the engine is in
+  /// paused state. By default step time is assumed to be 1/60th of a second.
+  void stepEngine({double stepTime = 1 / 60}) {
+    if (_paused) {
+      _paused = false;
+      _gameRenderBox?.gameLoop?.step(stepTime);
+      _paused = true;
+    }
+  }
+
   /// A property that stores an [OverlayManager]
   ///
   /// This is useful to render widgets on top of a game, such as a pause menu.

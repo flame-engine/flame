@@ -5,7 +5,6 @@ packages:
   - packages/**
   - examples/
   - examples/games/**
-  - tutorials/**
   - doc/**
 
 command:

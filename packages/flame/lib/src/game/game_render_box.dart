@@ -8,18 +8,18 @@ import 'package:flutter/widgets.dart' hide WidgetBuilder;
 /// This is the widget that is used by the [GameWidget] to ACTUALLY
 /// render the game.
 class RenderGameWidget extends LeafRenderObjectWidget {
+  const RenderGameWidget({
+    required this.game,
+    required this.addRepaintBoundary,
+    super.key,
+  });
+
   final Game game;
   final bool addRepaintBoundary;
 
-  const RenderGameWidget({
-    super.key,
-    required this.game,
-    required this.addRepaintBoundary,
-  });
-
   @override
   RenderBox createRenderObject(BuildContext context) {
-    return GameRenderBox(game, context, addRepaintBoundary);
+    return GameRenderBox(game, context, isRepaintBoundary: addRepaintBoundary);
   }
 
   @override
@@ -34,9 +34,9 @@ class RenderGameWidget extends LeafRenderObjectWidget {
 class GameRenderBox extends RenderBox with WidgetsBindingObserver {
   GameRenderBox(
     this._game,
-    this.buildContext,
-    this._isRepaintBoundary,
-  );
+    this.buildContext, {
+    required bool isRepaintBoundary,
+  }) : _isRepaintBoundary = isRepaintBoundary;
 
   GameLoop? gameLoop;
 
@@ -63,7 +63,7 @@ class GameRenderBox extends RenderBox with WidgetsBindingObserver {
     }
   }
 
-  bool _isRepaintBoundary = false;
+  bool _isRepaintBoundary;
 
   set isRepaintBoundary(bool value) {
     if (_isRepaintBoundary == value) {

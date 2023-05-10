@@ -1,4 +1,5 @@
 import 'package:flame/components.dart';
+import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flame/widgets.dart';
 import 'package:flutter/material.dart';
@@ -59,9 +60,9 @@ class _ComponentsNotifierExampleWidgetState
 
 class GameHud extends StatelessWidget {
   const GameHud({
-    super.key,
     required this.remainingEnemies,
     required this.onReplay,
+    super.key,
   });
 
   final int remainingEnemies;
@@ -83,7 +84,7 @@ class GameHud extends StatelessWidget {
   }
 }
 
-class Enemy extends CircleComponent with Tappable, Notifier {
+class Enemy extends CircleComponent with TapCallbacks, Notifier {
   Enemy({super.position})
       : super(
           radius: 20,
@@ -91,13 +92,12 @@ class Enemy extends CircleComponent with Tappable, Notifier {
         );
 
   @override
-  bool onTapUp(_) {
+  void onTapUp(_) {
     removeFromParent();
-    return true;
   }
 }
 
-class ComponentNotifierExample extends FlameGame with HasTappables {
+class ComponentNotifierExample extends FlameGame {
   @override
   Future<void> onLoad() async {
     replay();

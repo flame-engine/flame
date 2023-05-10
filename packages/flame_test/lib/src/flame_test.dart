@@ -1,6 +1,5 @@
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
-import 'package:flutter_test/flutter_test.dart' as flutter_test show test;
 import 'package:flutter_test/flutter_test.dart' hide test;
 import 'package:meta/meta.dart';
 
@@ -96,52 +95,6 @@ class GameTester<T extends Game> {
     this.pumpWidget,
   });
 
-  @Deprecated('Will be removed in version 1.7.0')
-  Future<T> initializeGame() async {
-    final game = createGame();
-
-    final size = gameSize ?? Vector2.all(500);
-    game.onGameResize(size);
-
-    await game.onLoad();
-    // ignore: invalid_use_of_internal_member
-    game.mount();
-    if (game is FlameGame && makeReady) {
-      await game.ready();
-    }
-    return game;
-  }
-
-  /// Creates a [Game] specific test case with given [description].
-  ///
-  /// Use [verify] closure to make verifications/assertions.
-  @isTest
-  @Deprecated('Will be removed in version 1.6.0')
-  void test(
-    String description,
-    VerifyFunction<T> verify, {
-    String? skip,
-    String? testOn,
-    Timeout? timeout,
-    dynamic tags,
-    Map<String, dynamic>? onPlatform,
-    int? retry,
-  }) {
-    flutter_test.test(
-      description,
-      () async {
-        final game = await initializeGame();
-        await verify(game);
-      },
-      skip: skip,
-      testOn: testOn,
-      timeout: timeout,
-      tags: tags,
-      onPlatform: onPlatform,
-      retry: retry,
-    );
-  }
-
   /// Creates a [Game] specific test case with given [description]
   /// which runs inside the Flutter test environment.
   ///
@@ -167,11 +120,11 @@ class GameTester<T extends Game> {
           final gameWidget =
               createGameWidget?.call(game) ?? GameWidget(game: game);
 
-          final _pump = pumpWidget ??
-              (GameWidget<T> _gameWidget, WidgetTester _tester) =>
-                  _tester.pumpWidget(_gameWidget);
+          final pump = pumpWidget ??
+              (GameWidget<T> pumpWidget, WidgetTester tester) =>
+                  tester.pumpWidget(pumpWidget);
 
-          await _pump(gameWidget, tester);
+          await pump(gameWidget, tester);
           await tester.pump();
 
           if (setUp != null) {

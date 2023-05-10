@@ -14,8 +14,17 @@ class Ball extends BodyComponent with ContactCallbacks {
 
   final Paint _blue = BasicPalette.blue.paint();
 
-  Ball(this._position, {this.radius = 2, this.bodyType = BodyType.dynamic}) {
-    originalPaint = randomPaint();
+  Ball(
+    this._position, {
+    this.radius = 2,
+    this.bodyType = BodyType.dynamic,
+    Color? color,
+  }) {
+    if (color != null) {
+      originalPaint = PaletteEntry(color).paint();
+    } else {
+      originalPaint = randomPaint();
+    }
     paint = originalPaint;
   }
 
@@ -44,10 +53,10 @@ class Ball extends BodyComponent with ContactCallbacks {
   }
 
   @override
-  void renderCircle(Canvas c, Offset center, double radius) {
-    super.renderCircle(c, center, radius);
+  void renderCircle(Canvas canvas, Offset center, double radius) {
+    super.renderCircle(canvas, center, radius);
     final lineRotation = Offset(0, radius);
-    c.drawLine(center, center + lineRotation, _blue);
+    canvas.drawLine(center, center + lineRotation, _blue);
   }
 
   @override

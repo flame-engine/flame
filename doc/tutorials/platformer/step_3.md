@@ -401,7 +401,7 @@ Now we just need to finish the `onLoad` method.  So make your `onLoad` method lo
     position = Vector2((gridPosition.x * size.x) + _xOffset,
         game.size.y - (gridPosition.y * size.y),
     );
-    add(RectangleHitbox()..collisionType = CollisionType.passive);
+    add(RectangleHitbox(collisionType: CollisionType.passive));
   }
 ```
 

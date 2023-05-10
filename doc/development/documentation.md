@@ -177,14 +177,14 @@ following:
 
 4. Install the remaining requirements using the command
 
-   ```console
+   ```shell
    melos run doc-setup
    ```
 
 Once these prerequisites are met, you can build the documentation by using the built-in Melos
 target:
 
-```console
+```shell
 melos doc-build
 ```
 
@@ -197,7 +197,7 @@ If you want to automatically recompile the docs every time there is a change to 
 you can use the the built-in Melos target below, which will also serve and open your default
 browser with the docs.
 
-```console
+```shell
 melos doc-serve
 ```
 

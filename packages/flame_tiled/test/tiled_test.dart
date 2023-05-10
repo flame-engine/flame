@@ -188,7 +188,8 @@ void main() {
   });
 
   group('Flipped and rotated tiles render correctly with sprite batch:', () {
-    late Uint8List pixelsBeforeFlipApplied, pixelsAfterFlipApplied;
+    late Uint8List pixelsBeforeFlipApplied;
+    late Uint8List pixelsAfterFlipApplied;
     late RenderableTiledMap overlapMap;
 
     Future<Uint8List> renderMap() async {
@@ -340,47 +341,47 @@ void main() {
   });
 
   group('Test getLayer:', () {
-    late RenderableTiledMap _renderableTiledMap;
+    late RenderableTiledMap renderableTiledMap;
     setUp(() async {
       Flame.bundle = TestAssetBundle(
         imageNames: ['map-level1.png'],
         stringNames: ['layers_test.tmx'],
       );
-      _renderableTiledMap =
+      renderableTiledMap =
           await RenderableTiledMap.fromFile('layers_test.tmx', Vector2.all(32));
     });
 
     test('Get Tile Layer', () {
       expect(
-        _renderableTiledMap.getLayer<TileLayer>('MyTileLayer'),
+        renderableTiledMap.getLayer<TileLayer>('MyTileLayer'),
         isNotNull,
       );
     });
 
     test('Get Object Layer', () {
       expect(
-        _renderableTiledMap.getLayer<ObjectGroup>('MyObjectLayer'),
+        renderableTiledMap.getLayer<ObjectGroup>('MyObjectLayer'),
         isNotNull,
       );
     });
 
     test('Get Image Layer', () {
       expect(
-        _renderableTiledMap.getLayer<ImageLayer>('MyImageLayer'),
+        renderableTiledMap.getLayer<ImageLayer>('MyImageLayer'),
         isNotNull,
       );
     });
 
     test('Get Group Layer', () {
       expect(
-        _renderableTiledMap.getLayer<Group>('MyGroupLayer'),
+        renderableTiledMap.getLayer<Group>('MyGroupLayer'),
         isNotNull,
       );
     });
 
     test('Get no layer', () {
       expect(
-        _renderableTiledMap.getLayer<TileLayer>('Nonexistent layer'),
+        renderableTiledMap.getLayer<TileLayer>('Nonexistent layer'),
         isNull,
       );
     });

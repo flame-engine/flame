@@ -275,5 +275,77 @@ Future<void> main() async {
       component.autoResize = true;
       expect(component.size, sprite2.srcSize);
     });
+
+    test('stop autoResizing on external size modifications', () {
+      final testSize = Vector2(83, 100);
+      final sprite1 = Sprite(image, srcSize: Vector2.all(76));
+      final sprite2 = Sprite(image, srcSize: Vector2.all(15));
+      final animation1 = SpriteAnimation.spriteList(
+        List.filled(5, sprite1),
+        stepTime: 0.1,
+        loop: false,
+      );
+      final animation2 = SpriteAnimation.spriteList(
+        List.filled(5, sprite2),
+        stepTime: 0.1,
+        loop: false,
+      );
+      final animationsMap = {
+        _AnimationState.idle: animation1,
+        _AnimationState.running: animation2,
+      };
+      final component = SpriteAnimationGroupComponent<_AnimationState>();
+
+      // NOTE: Sequence of modifications is important here. Changing the size
+      // after changing the animations map will disable auto-resizing. So even
+      // if the current state is changed later, the component should still
+      // maintain testSize.
+      component
+        ..animations = animationsMap
+        ..size = testSize
+        ..current = _AnimationState.running;
+
+      expectDouble(component.size.x, testSize.x);
+      expectDouble(component.size.y, testSize.y);
+    });
+
+    test('modify size only if changed while auto-resizing', () {
+      final sprite1 = Sprite(image, srcSize: Vector2.all(76));
+      final sprite2 = Sprite(image, srcSize: Vector2.all(15));
+      final animation1 = SpriteAnimation.spriteList(
+        List.filled(5, sprite1),
+        stepTime: 1,
+        loop: false,
+      );
+      final animation2 = SpriteAnimation.spriteList(
+        [sprite2, sprite1],
+        stepTime: 1,
+      );
+      final animationsMap = {
+        _AnimationState.idle: animation1,
+        _AnimationState.running: animation2,
+      };
+      final component = SpriteAnimationGroupComponent<_AnimationState>(
+        animations: animationsMap,
+      );
+
+      var sizeChangeCounter = 0;
+      component.size.addListener(() => ++sizeChangeCounter);
+
+      component.current = _AnimationState.running;
+      expect(sizeChangeCounter, equals(1));
+
+      component.current = _AnimationState.idle;
+      expect(sizeChangeCounter, equals(2));
+
+      component.update(1);
+      expect(sizeChangeCounter, equals(2));
+
+      component.current = _AnimationState.running;
+      expect(sizeChangeCounter, equals(3));
+
+      component.update(1);
+      expect(sizeChangeCounter, equals(4));
+    });
   });
 }

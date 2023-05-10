@@ -11,7 +11,7 @@ abstract class Command extends DialogueEntry {
   String get name;
 
   @override
-  Future<void> processInDialogueRunner(DialogueRunner runner) {
-    return runner.deliverCommand(this);
+  Future<void> processInDialogueRunner(DialogueRunner dialogueRunner) {
+    return dialogueRunner.deliverCommand(this);
   }
 }

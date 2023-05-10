@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flame/components.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
+import 'package:flame/src/sprite_animation_ticker.dart';
 import 'package:meta/meta.dart';
 
 export '../sprite_animation.dart';
@@ -9,8 +10,11 @@ export '../sprite_animation.dart';
 class SpriteAnimationComponent extends PositionComponent
     with HasPaint
     implements SizeProvider {
-  /// The animation used by the component.
-  SpriteAnimation? animation;
+  /// The animation ticker used for updating [animation].
+  SpriteAnimationTicker? _animationTicker;
+
+  /// Returns the animation ticker for current [animation].
+  SpriteAnimationTicker? get animationTicker => _animationTicker;
 
   /// If the component should be removed once the animation has finished.
   /// Needs the animation to have `loop = false` to ever remove the component,
@@ -26,13 +30,13 @@ class SpriteAnimationComponent extends PositionComponent
 
   /// Creates a component with an empty animation which can be set later
   SpriteAnimationComponent({
-    this.animation,
+    SpriteAnimation? animation,
     bool? autoResize,
     this.removeOnFinish = false,
     this.playing = true,
     Paint? paint,
     super.position,
-    Vector2? size,
+    super.size,
     super.scale,
     super.angle,
     super.nativeAngle,
@@ -44,10 +48,15 @@ class SpriteAnimationComponent extends PositionComponent
           '''If size is set, autoResize should be false or size should be null when autoResize is true.''',
         ),
         _autoResize = autoResize ?? size == null,
-        super(size: size ?? animation?.getSprite().srcSize) {
+        _animationTicker = animation?.ticker() {
     if (paint != null) {
       this.paint = paint;
     }
+
+    /// Register a listener to differentiate between size modification done by
+    /// external calls v/s the ones done by [_resizeToSprite].
+    size.addListener(_handleAutoResizeState);
+    _resizeToSprite();
   }
 
   /// Creates a SpriteAnimationComponent from a [size], an [image] and [data].
@@ -92,10 +101,29 @@ class SpriteAnimationComponent extends PositionComponent
     _resizeToSprite();
   }
 
+  /// This flag helps in detecting if the size modification is done by
+  /// some external call vs [_autoResize]ing code from [_resizeToSprite].
+  bool _isAutoResizing = false;
+
+  /// Returns the current [SpriteAnimation].
+  SpriteAnimation? get animation => _animationTicker?.spriteAnimation;
+
+  /// Sets the given [value] as current [animation].
+  set animation(SpriteAnimation? value) {
+    if (animation != value) {
+      if (value != null) {
+        _animationTicker = value.ticker();
+      } else {
+        _animationTicker = null;
+      }
+      _resizeToSprite();
+    }
+  }
+
   @mustCallSuper
   @override
   void render(Canvas canvas) {
-    animation?.getSprite().render(
+    _animationTicker?.getSprite().render(
           canvas,
           size: size,
           overridePaint: paint,
@@ -106,23 +134,36 @@ class SpriteAnimationComponent extends PositionComponent
   @override
   void update(double dt) {
     if (playing) {
-      animation?.update(dt);
+      _animationTicker?.update(dt);
       _resizeToSprite();
     }
-    if (removeOnFinish && (animation?.done() ?? false)) {
+    if (removeOnFinish && (_animationTicker?.done() ?? false)) {
       removeFromParent();
     }
   }
 
-  /// Updates the size to current animation sprite's srcSize if
+  /// Updates the size to current [animation] sprite's srcSize if
   /// [autoResize] is true.
   void _resizeToSprite() {
     if (_autoResize) {
-      if (animation != null) {
-        size.setFrom(animation!.getSprite().srcSize);
-      } else {
-        size.setZero();
+      _isAutoResizing = true;
+
+      final newX = _animationTicker?.getSprite().srcSize.x ?? 0;
+      final newY = _animationTicker?.getSprite().srcSize.y ?? 0;
+
+      // Modify only if changed.
+      if (size.x != newX || size.y != newY) {
+        size.setValues(newX, newY);
       }
+
+      _isAutoResizing = false;
+    }
+  }
+
+  /// Turns off [_autoResize]ing if a size modification is done by user.
+  void _handleAutoResizeState() {
+    if (_autoResize && (!_isAutoResizing)) {
+      _autoResize = false;
     }
   }
 }

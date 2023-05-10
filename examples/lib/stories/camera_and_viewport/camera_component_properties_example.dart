@@ -1,11 +1,11 @@
 import 'dart:ui';
 
+import 'package:flame/camera.dart';
 import 'package:flame/components.dart';
-import 'package:flame/experimental.dart';
+import 'package:flame/events.dart';
 import 'package:flame/game.dart' hide Viewport;
 
-class CameraComponentPropertiesExample extends FlameGame
-    with HasTappableComponents {
+class CameraComponentPropertiesExample extends FlameGame with TapCallbacks {
   static const description = '''
     This example uses FixedSizeViewport which is dynamically sized and 
     positioned based on the size of the game widget.

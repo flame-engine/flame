@@ -32,14 +32,12 @@ class JoystickPlayer extends SpriteComponent
   }
 
   @override
-  void onCollisionStart(Set<Vector2> _, PositionComponent __) {
-    super.onCollisionStart(_, __);
+  void onCollisionStart(
+    Set<Vector2> intersectionPoints,
+    PositionComponent other,
+  ) {
+    super.onCollisionStart(intersectionPoints, other);
     transform.setFrom(_lastTransform);
     size.setFrom(_lastSize);
-  }
-
-  @override
-  void onCollisionEnd(PositionComponent __) {
-    super.onCollisionEnd(__);
   }
 }

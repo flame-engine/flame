@@ -1,4 +1,3 @@
-import 'package:flame/src/text/common/glyph_data.dart';
 import 'package:flame/src/text/common/sprite_font.dart';
 import 'package:meta/meta.dart';
 
@@ -52,17 +51,6 @@ class Glyph {
         srcTop = srcTop ?? -1,
         srcRight = srcRight ?? -1,
         srcBottom = srcBottom ?? -1;
-
-  // ignore: deprecated_member_use_from_same_package
-  Glyph.fromGlyphData(this.char, GlyphData data)
-      : left = data.left,
-        top = data.top,
-        width = data.right == null ? -1 : data.right! - data.left,
-        height = data.bottom == null ? -1 : data.bottom! - data.top,
-        srcLeft = -1,
-        srcTop = -1,
-        srcRight = -1,
-        srcBottom = -1;
 
   final String char;
   final double left;

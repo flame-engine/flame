@@ -14,14 +14,10 @@ class TextPaint extends FormatterTextRenderer<TextPainterTextFormatter> {
   TextPaint({
     TextStyle? style,
     TextDirection? textDirection,
-    @Deprecated('Use DebugTextFormatter instead. Will be removed in 1.5.0')
-        bool? debugMode,
   }) : super(
           TextPainterTextFormatter(
             style: style ?? defaultTextStyle,
             textDirection: textDirection ?? TextDirection.ltr,
-            // ignore: deprecated_member_use_from_same_package
-            debugMode: debugMode ?? false,
           ),
         );
 
