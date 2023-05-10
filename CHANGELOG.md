@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2023-05-05
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`flame_spine` - `v0.1.0`](#flame_spine---v010)
+
+---
+
+#### `flame_spine` - `v0.1.0`
+
+ - **FEAT**: Spine bridge package ([#2530](https://github.com/flame-engine/flame/issues/2530)). ([5d1a6fd1](https://github.com/flame-engine/flame/commit/5d1a6fd1679c5690685e5a5f9b695a0ab6699bca))
+
+
 ## 2023-04-19
 
 ### Changes

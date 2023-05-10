@@ -17,7 +17,7 @@ dependencies:
   flame_isolate: ^0.3.0+1
   flame_lottie: ^0.2.0+2
   flame_noise: ^0.1.1+1
-  flame_spine: ^0.0.1
+  flame_spine: ^0.1.0
   flame_svg: ^1.7.3
   flame_tiled: ^1.10.1
   flutter:
