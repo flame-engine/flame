@@ -49,7 +49,7 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
   static final Paint _imagePaint = BasicPalette.white.paint()
     ..filterQuality = FilterQuality.high;
   final TextBoxConfig _boxConfig;
-  final double pixelRatio;
+  double? pixelRatio;
 
   @visibleForTesting
   final List<String> lines = [];
@@ -81,7 +81,8 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
   })  : _boxConfig = boxConfig ?? TextBoxConfig(),
         _fixedSize = size != null,
         align = align ?? Anchor.topLeft,
-        pixelRatio = pixelRatio ?? window.devicePixelRatio;
+        pixelRatio = pixelRatio ??
+            PlatformDispatcher.instance.views.first.devicePixelRatio;
 
   /// Alignment of the text within its bounding box.
   ///
@@ -125,6 +126,12 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
     if (cache == null) {
       redraw();
     }
+    final game = findGame();
+    final context = game?.buildContext;
+    if (pixelRatio == null && game != null && context != null) {
+      pixelRatio = View.of(context).devicePixelRatio;
+    }
+    pixelRatio ??= 1.0;
   }
 
   @override
@@ -233,7 +240,7 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
       return;
     }
     canvas.save();
-    canvas.scale(1 / pixelRatio);
+    canvas.scale(1 / pixelRatio!);
     canvas.drawImage(cache!, Offset.zero, _imagePaint);
     canvas.restore();
   }
@@ -241,11 +248,11 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
   Future<Image> _fullRenderAsImage(Vector2 size) {
     final recorder = PictureRecorder();
     final c = Canvas(recorder, size.toRect());
-    c.scale(pixelRatio);
+    c.scale(pixelRatio!);
     _fullRender(c);
     return recorder.endRecording().toImageSafe(
-          (width * pixelRatio).ceil(),
-          (height * pixelRatio).ceil(),
+          (width * pixelRatio!).ceil(),
+          (height * pixelRatio!).ceil(),
         );
   }
 

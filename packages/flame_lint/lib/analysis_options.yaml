@@ -2,11 +2,11 @@
 # https://dart-lang.github.io/linter/lints/options/options.html
 
 analyzer:
-  strong-mode:
-    implicit-casts: false
-    implicit-dynamic: false
   exclude:
     - "**/*.g.dart"
+  language:
+    strict-casts: true
+    strict-raw-types: false
 
 linter:
   rules:
