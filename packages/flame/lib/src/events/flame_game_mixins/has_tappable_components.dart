@@ -1,6 +1,5 @@
 import 'package:flame/components.dart';
 import 'package:flame/src/events/component_mixins/tap_callbacks.dart';
-import 'package:flame/src/events/flame_game_mixins/has_tappables_bridge.dart';
 import 'package:flame/src/events/interfaces/multi_tap_listener.dart';
 import 'package:flame/src/events/messages/tap_cancel_event.dart';
 import 'package:flame/src/events/messages/tap_down_event.dart';
@@ -10,13 +9,6 @@ import 'package:flame/src/game/flame_game.dart';
 import 'package:flame/src/game/game_render_box.dart';
 import 'package:flutter/gestures.dart';
 import 'package:meta/meta.dart';
-
-@Deprecated('''This mixin will be removed in 1.8.0
-
-This mixin does no longer do anything since you can now add tappable
-components directly to a game without this mixin.
-''')
-mixin HasTappableComponents on FlameGame {}
 
 @internal
 class MultiTapDispatcher extends Component implements MultiTapListener {
@@ -45,14 +37,6 @@ class MultiTapDispatcher extends Component implements MultiTapListener {
         component.onTapDown(event);
       },
     );
-    // ignore: deprecated_member_use_from_same_package
-    if (game is HasTappablesBridge) {
-      final info = event.asInfo(game)..handled = event.handled;
-      game.propagateToChildren<Tappable>(
-        (c) => c.handleTapDown(event.pointerId, info),
-      );
-      event.handled = info.handled;
-    }
   }
 
   /// Called after the user has been touching the screen for [longTapDelay]
@@ -73,14 +57,6 @@ class MultiTapDispatcher extends Component implements MultiTapListener {
       },
       deliverToAll: true,
     );
-    // ignore: deprecated_member_use_from_same_package
-    if (game is HasTappablesBridge) {
-      final info = event.asInfo(game)..handled = event.handled;
-      game.propagateToChildren<Tappable>(
-        (c) => c.handleLongTapDown(event.pointerId, info),
-      );
-      event.handled = info.handled;
-    }
   }
 
   /// Called when the user stops touching the device screen within the game
@@ -106,14 +82,6 @@ class MultiTapDispatcher extends Component implements MultiTapListener {
       deliverToAll: true,
     );
     _tapCancelImpl(TapCancelEvent(event.pointerId));
-    // ignore: deprecated_member_use_from_same_package
-    if (game is HasTappablesBridge) {
-      final info = event.asInfo(game)..handled = event.handled;
-      game.propagateToChildren<Tappable>(
-        (c) => c.handleTapUp(event.pointerId, info),
-      );
-      event.handled = info.handled;
-    }
   }
 
   /// Called when there was an [onTapDown] event previously, but the [onTapUp]
@@ -127,12 +95,6 @@ class MultiTapDispatcher extends Component implements MultiTapListener {
   @mustCallSuper
   void onTapCancel(TapCancelEvent event) {
     _tapCancelImpl(event);
-    // ignore: deprecated_member_use_from_same_package
-    if (game is HasTappablesBridge) {
-      game.propagateToChildren<Tappable>(
-        (c) => c.handleTapCancel(event.pointerId),
-      );
-    }
   }
 
   void _tapCancelImpl(TapCancelEvent event) {

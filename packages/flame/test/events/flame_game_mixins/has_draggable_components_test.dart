@@ -123,7 +123,7 @@ void main() {
       (tester) async {
         var nDragCallbackUpdates = 0;
         var nDraggableUpdates = 0;
-        final game = _GameWithDualDraggableComponents(
+        final game = FlameGame(
           children: [
             _DragCallbacksComponent(
               size: Vector2.all(100),
@@ -156,12 +156,6 @@ void main() {
       },
     );
   });
-}
-
-class _GameWithDualDraggableComponents extends FlameGame
-    with HasDraggablesBridge // ignore: deprecated_member_use_from_same_package
-{
-  _GameWithDualDraggableComponents({super.children});
 }
 
 class _DragCallbacksComponent extends PositionComponent with DragCallbacks {

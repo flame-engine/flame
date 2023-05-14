@@ -2,16 +2,6 @@ export 'src/events/component_mixins/double_tap_callbacks.dart'
     show DoubleTapCallbacks;
 export 'src/events/component_mixins/drag_callbacks.dart' show DragCallbacks;
 export 'src/events/component_mixins/tap_callbacks.dart' show TapCallbacks;
-export 'src/events/flame_game_mixins/has_draggable_components.dart'
-    show
-        HasDraggableComponents; // ignore: deprecated_member_use_from_same_package
-export 'src/events/flame_game_mixins/has_draggables_bridge.dart'
-    show HasDraggablesBridge; // ignore: deprecated_member_use_from_same_package
-export 'src/events/flame_game_mixins/has_tappable_components.dart'
-    show
-        HasTappableComponents; // ignore: deprecated_member_use_from_same_package
-export 'src/events/flame_game_mixins/has_tappables_bridge.dart'
-    show HasTappablesBridge; // ignore: deprecated_member_use_from_same_package
 export 'src/events/game_mixins/multi_touch_drag_detector.dart'
     show MultiTouchDragDetector;
 export 'src/events/game_mixins/multi_touch_tap_detector.dart'

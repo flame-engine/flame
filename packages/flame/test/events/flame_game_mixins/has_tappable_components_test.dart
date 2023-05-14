@@ -221,7 +221,7 @@ void main() {
         var nTappableCancelled = 0;
         var nTapCallbacksDown = 0;
         var nTapCallbacksCancelled = 0;
-        final game = _GameWithDualTappableComponents(
+        final game = FlameGame(
           children: [
             _TapCallbacksComponent(
               size: Vector2(100, 100),
@@ -271,12 +271,6 @@ void main() {
       },
     );
   });
-}
-
-class _GameWithDualTappableComponents extends FlameGame
-    with HasTappablesBridge // ignore: deprecated_member_use_from_same_package
-{
-  _GameWithDualTappableComponents({super.children});
 }
 
 class _TapCallbacksComponent extends PositionComponent with TapCallbacks {

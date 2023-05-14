@@ -1,5 +1,4 @@
 import 'package:flame/components.dart';
-import 'package:flame/src/events/flame_game_mixins/has_tappables_bridge.dart';
 import 'package:flame/src/game/mixins/has_tappables.dart';
 import 'package:flame/src/gestures/events.dart';
 import 'package:flutter/gestures.dart';
@@ -59,11 +58,7 @@ mixin Tappable on Component {
   void onMount() {
     super.onMount();
     assert(
-      (() {
-        final game = findGame()!;
-        // ignore: deprecated_member_use_from_same_package
-        return game is HasTappables || game is HasTappablesBridge;
-      })(),
+      findGame()! is HasTappables,
       'Tappable components can only be added to a FlameGame with HasTappables '
       'or HasTappablesBridge',
     );
