@@ -19,13 +19,13 @@ class WorkerOvermind extends Component
   late WorkerOvermindHud isolateHud;
 
   @override
-  Future onLoad() async {
+  Future<void> onLoad() async {
     gameRef.add(isolateHud = WorkerOvermindHud());
     super.onLoad();
   }
 
   @override
-  Future onMount() {
+  Future<void> onMount() {
     calculateTasks();
     _assignTaskInterval = Timer(0.2, repeat: true, onTick: _assignTasks)
       ..start();
@@ -57,7 +57,7 @@ class WorkerOvermind extends Component
   /// Function that pairs a job and a worker.
   ///
   /// Using an isolate for the actual calculation.
-  Future _assignTasks() async {
+  Future<void> _assignTasks() async {
     if (_queuedTasks.isEmpty) {
       return;
     }

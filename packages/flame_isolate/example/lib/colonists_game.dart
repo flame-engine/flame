@@ -20,7 +20,7 @@ class ColonistsGame extends FlameGame with KeyboardEvents {
   late final WorkerOvermind workerOvermind;
 
   @override
-  Future onLoad() async {
+  Future<void> onLoad() async {
     await Flame.images.load('bread.png');
     await Flame.images.load('worker.png');
     await Flame.images.load('cheese.png');

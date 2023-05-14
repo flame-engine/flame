@@ -26,7 +26,7 @@ class GameMap extends Component with HasGameRef<ColonistsGame> {
   static const double workerMaxSpeed = 75;
 
   @override
-  Future onLoad() async {
+  Future<void> onLoad() async {
     for (var x = 0; x < mapSizeX; x++) {
       for (var y = 0; y < mapSizeY; y++) {
         addTerrain(IntVector2(x, y), Grass());

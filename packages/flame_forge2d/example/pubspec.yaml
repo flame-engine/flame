@@ -6,11 +6,11 @@ publish_to: 'none'
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.18.0 <3.0.0"
+  sdk: ">=2.18.0 <4.0.0"
   flutter: ">=3.3.0"
 
 dependencies:
-  dashbook: ^0.1.6
+  dashbook: ^0.1.12
   flame: ^1.7.3
   flame_forge2d: ^0.13.0+1
   flutter:

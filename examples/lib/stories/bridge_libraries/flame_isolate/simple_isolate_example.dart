@@ -22,7 +22,7 @@ class SimpleIsolateExample extends FlameGame {
   ''';
 
   @override
-  Future onLoad() async {
+  Future<void> onLoad() async {
     camera.viewport = FixedResolutionViewport(Vector2(400, 600));
 
     const rect = Rect.fromLTRB(80, 230, 320, 470);
@@ -86,7 +86,7 @@ class CalculatePrimeNumber extends PositionComponent
   }
 
   @override
-  Future onMount() {
+  Future<void> onMount() {
     _interval = Timer(0.4, repeat: true, onTick: _checkNextAgainstPrime)
       ..start();
     return super.onMount();
@@ -113,7 +113,7 @@ class CalculatePrimeNumber extends PositionComponent
     _isPrime(_primeStartNumber),
   );
 
-  Future _checkNextAgainstPrime() async {
+  Future<void> _checkNextAgainstPrime() async {
     final nextInt = _primeData.key + 1;
 
     try {

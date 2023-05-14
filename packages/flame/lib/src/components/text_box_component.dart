@@ -81,7 +81,8 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
   })  : _boxConfig = boxConfig ?? TextBoxConfig(),
         _fixedSize = size != null,
         align = align ?? Anchor.topLeft,
-        pixelRatio = pixelRatio ?? window.devicePixelRatio;
+        pixelRatio = pixelRatio ??
+            PlatformDispatcher.instance.views.first.devicePixelRatio;
 
   /// Alignment of the text within its bounding box.
   ///
