@@ -224,7 +224,7 @@ class ParallaxLayer {
   final ParallaxRenderer parallaxRenderer;
   late Vector2 velocityMultiplier;
   late Rect _paintArea;
-  late final Vector2 _scroll;
+  final Vector2 _scroll = Vector2.zero();
   late Vector2 _imageSize;
   double _scale = 1.0;
 
@@ -270,7 +270,7 @@ class ParallaxLayer {
     final marginX = alignment.x * overflow.x / 2 + overflow.x / 2;
     final marginY = alignment.y * overflow.y / 2 + overflow.y / 2;
 
-    _scroll = Vector2(marginX, marginY);
+    _scroll.setValues(marginX, marginY);
 
     // Size of the area to paint the images on
     final paintSize = count..multiply(_imageSize);
