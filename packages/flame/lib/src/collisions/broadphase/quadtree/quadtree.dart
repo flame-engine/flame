@@ -79,7 +79,7 @@ class QuadTree<T extends Hitbox<T>> {
           childSize.dy,
         );
       default:
-        assert(false, 'Invalid child index');
+        assert(false, 'Invalid child index $box $zone');
         return Rect.zero;
     }
   }
