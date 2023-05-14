@@ -37,6 +37,10 @@ class FlameGame extends ComponentTreeRoot
   late final List<ComponentsNotifier> notifiers = [];
 
   /// The camera translates the coordinate space after the viewport is applied.
+  @Deprecated(
+    'In the future (maybe as early as v1.9.0) this camera will be removed, '
+    'please use the CameraComponent instead.',
+  )
   Camera get camera => _cameraWrapper.camera;
 
   /// This is overwritten to consider the viewport transformation.

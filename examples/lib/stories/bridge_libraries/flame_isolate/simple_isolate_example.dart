@@ -23,22 +23,22 @@ class SimpleIsolateExample extends FlameGame {
 
   @override
   Future<void> onLoad() async {
-    camera.viewport = FixedResolutionViewport(Vector2(400, 600));
-
-    const rect = Rect.fromLTRB(80, 230, 320, 470);
-
-    add(
-      CalculatePrimeNumber(
-        position: rect.center.toVector2(),
-        anchor: Anchor.center,
-      ),
+    final world = World();
+    final cameraComponent = CameraComponent.withFixedResolution(
+      world: world,
+      width: 400,
+      height: 600,
     );
+    addAll([world, cameraComponent]);
 
+    const rect = Rect.fromLTRB(-120, -120, 120, 120);
     final circle = Path()..addOval(rect);
+    final teal = Paint()..color = Colors.tealAccent;
+
     for (var i = 0; i < 20; i++) {
-      add(
+      world.add(
         RectangleComponent.square(size: 10)
-          ..paint = (Paint()..color = Colors.tealAccent)
+          ..paint = teal
           ..add(
             MoveAlongPathEffect(
               circle,
@@ -52,7 +52,8 @@ class SimpleIsolateExample extends FlameGame {
           ),
       );
     }
-    return super.onMount();
+
+    world.add(CalculatePrimeNumber());
   }
 }
 
@@ -67,10 +68,7 @@ enum ComputeType {
 
 class CalculatePrimeNumber extends PositionComponent
     with TapCallbacks, FlameIsolate {
-  CalculatePrimeNumber({
-    required super.position,
-    required super.anchor,
-  });
+  CalculatePrimeNumber() : super(anchor: Anchor.center);
 
   ComputeType computeType = ComputeType.isolate;
   late Timer _interval;
@@ -140,7 +138,7 @@ class CalculatePrimeNumber extends PositionComponent
         ComputeType.values[(computeType.index + 1) % ComputeType.values.length];
   }
 
-  final _paint = Paint()..color = const Color(0xa98d560d);
+  final _paint = Paint()..color = Colors.green;
 
   final _textPaint = TextPaint(
     style: const TextStyle(
@@ -149,7 +147,7 @@ class CalculatePrimeNumber extends PositionComponent
   );
 
   late final rect = Rect.fromLTWH(0, 0, width, height);
-  late final topLeftVector = rect.topLeft.toVector2();
+  late final topLeftVector = rect.topLeft.toVector2() + Vector2.all(4);
   late final centerVector = rect.center.toVector2();
 
   @override

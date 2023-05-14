@@ -5,6 +5,7 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/events.dart';
+import 'package:flame/experimental.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
@@ -22,25 +23,30 @@ class FollowComponentExample extends FlameGame
     respects the camera transformation.
   ''';
 
+  FollowComponentExample({required this.viewportResolution});
+
   late MovableEmber ember;
   final Vector2 viewportResolution;
-
-  FollowComponentExample({
-    required this.viewportResolution,
-  });
+  late final CameraComponent cameraComponent;
 
   @override
   Future<void> onLoad() async {
-    camera.viewport = FixedResolutionViewport(viewportResolution);
-    add(Map());
+    final world = World();
+    cameraComponent = CameraComponent.withFixedResolution(
+      width: viewportResolution.x,
+      height: viewportResolution.y,
+      world: world,
+    );
+    addAll([world, cameraComponent]);
 
-    add(ember = MovableEmber());
-    camera.speed = 1;
-    camera.followComponent(ember, worldBounds: Map.bounds);
+    world.add(Map());
+    world.add(ember = MovableEmber());
+    cameraComponent.setBounds(Map.bounds);
+    cameraComponent.follow(ember, maxSpeed: 250);
 
-    for (var i = 0; i < 30; i++) {
-      add(Rock(Vector2(Map.genCoord(), Map.genCoord())));
-    }
+    world.addAll(
+      List.generate(30, (_) => Rock(Map.generateCoordinates())),
+    );
   }
 }
 
@@ -78,18 +84,18 @@ class MovableEmber extends Ember<FollowComponentExample>
   }
 
   @override
-  void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
-    super.onCollision(intersectionPoints, other);
+  void onCollisionStart(
+    Set<Vector2> intersectionPoints,
+    PositionComponent other,
+  ) {
+    super.onCollisionStart(intersectionPoints, other);
     if (other is Rock) {
-      gameRef.camera.setRelativeOffset(Anchor.topCenter);
-    }
-  }
-
-  @override
-  void onCollisionEnd(PositionComponent other) {
-    super.onCollisionEnd(other);
-    if (other is Rock) {
-      gameRef.camera.setRelativeOffset(Anchor.center);
+      other.add(
+        ScaleEffect.to(
+          Vector2.all(1.5),
+          EffectController(duration: 0.2, alternate: true),
+        ),
+      );
     }
   }
 
@@ -125,7 +131,8 @@ class MovableEmber extends Ember<FollowComponentExample>
 
 class Map extends Component {
   static const double size = 1500;
-  static const Rect bounds = Rect.fromLTWH(-size, -size, 2 * size, 2 * size);
+  static const Rect _bounds = Rect.fromLTRB(-size, -size, size, size);
+  static Rectangle bounds = Rectangle.fromLTRB(-size, -size, size, size);
 
   static final Paint _paintBorder = Paint()
     ..color = Colors.white12
@@ -155,16 +162,18 @@ class Map extends Component {
 
   @override
   void render(Canvas canvas) {
-    canvas.drawRect(bounds, _paintBg);
-    canvas.drawRect(bounds, _paintBorder);
+    canvas.drawRect(_bounds, _paintBg);
+    canvas.drawRect(_bounds, _paintBorder);
     for (var i = 0; i < (size / 50).ceil(); i++) {
       canvas.drawCircle(Offset.zero, size - i * 50, _paintPool[i]);
       canvas.drawRect(_rectPool[i], _paintBorder);
     }
   }
 
-  static double genCoord() {
-    return -size + _rng.nextDouble() * (2 * size);
+  static Vector2 generateCoordinates() {
+    return Vector2.random()
+      ..scale(2 * size)
+      ..sub(Vector2.all(size));
   }
 }
 
@@ -174,6 +183,7 @@ class Rock extends SpriteComponent with HasGameRef, TapCallbacks {
           position: position,
           size: Vector2.all(50),
           priority: 1,
+          anchor: Anchor.center,
         );
 
   @override
@@ -186,8 +196,8 @@ class Rock extends SpriteComponent with HasGameRef, TapCallbacks {
   @override
   void onTapDown(_) {
     add(
-      ScaleEffect.by(
-        Vector2.all(10),
+      ScaleEffect.to(
+        Vector2.all(scale.x >= 2.0 ? 1 : 2),
         EffectController(duration: 0.3),
       ),
     );

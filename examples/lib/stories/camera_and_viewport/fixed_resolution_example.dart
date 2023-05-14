@@ -23,15 +23,17 @@ class FixedResolutionExample extends FlameGame
   @override
   Future<void> onLoad() async {
     final flameSprite = await loadSprite('layers/player.png');
+    final world = World();
+    final cameraComponent = CameraComponent.withFixedResolution(
+      width: viewportResolution.x,
+      height: viewportResolution.y,
+      world: world,
+    );
+    addAll([world, cameraComponent]);
 
-    camera.viewport = FixedResolutionViewport(viewportResolution);
-    camera.setRelativeOffset(Anchor.topLeft);
-    camera.speed = 1;
-
-    add(Background());
-    add(
+    world.add(Background());
+    world.add(
       SpriteComponent(
-        position: camera.viewport.effectiveSize / 2,
         sprite: flameSprite,
         size: Vector2(149, 211),
       )..anchor = Anchor.center,
@@ -46,7 +48,7 @@ class Background extends PositionComponent with HasGameRef {
   late Paint white;
   late final Rect hugeRect;
 
-  Background() : super(size: Vector2.all(100000));
+  Background() : super(size: Vector2.all(100000), anchor: Anchor.center);
 
   @override
   Future<void> onLoad() async {
