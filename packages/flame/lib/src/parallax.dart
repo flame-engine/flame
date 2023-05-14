@@ -224,7 +224,7 @@ class ParallaxLayer {
   final ParallaxRenderer parallaxRenderer;
   late Vector2 velocityMultiplier;
   late Rect _paintArea;
-  late Vector2 _scroll;
+  late final Vector2 _scroll;
   late Vector2 _imageSize;
   double _scale = 1.0;
 
@@ -277,28 +277,33 @@ class ParallaxLayer {
     _paintArea = paintSize.toRect();
   }
 
+  // Used to avoid creating new Vector2 objects in the update-loop.
+  final _delta = Vector2.zero();
+
   void update(Vector2 delta, double dt) {
     parallaxRenderer.update(dt);
     // Scale the delta so that images that are larger don't scroll faster
-    _scroll += delta.clone()..divide(_imageSize);
+    _delta
+      ..setFrom(delta)
+      ..divide(_imageSize);
+    _scroll.add(_delta);
     switch (parallaxRenderer.repeat) {
       case ImageRepeat.repeat:
-        _scroll = Vector2(_scroll.x % 1, _scroll.y % 1);
+        _scroll.setValues(_scroll.x % 1, _scroll.y % 1);
         break;
       case ImageRepeat.repeatX:
-        _scroll = Vector2(_scroll.x % 1, _scroll.y);
+        _scroll.setValues(_scroll.x % 1, _scroll.y);
         break;
       case ImageRepeat.repeatY:
-        _scroll = Vector2(_scroll.x, _scroll.y % 1);
+        _scroll.setValues(_scroll.x, _scroll.y % 1);
         break;
       case ImageRepeat.noRepeat:
         break;
     }
 
-    final scrollPosition = _scroll.clone()..multiply(_imageSize);
     _paintArea = Rect.fromLTWH(
-      -scrollPosition.x,
-      -scrollPosition.y,
+      -_scroll.x * _imageSize.x,
+      -_scroll.y * _imageSize.y,
       _paintArea.width,
       _paintArea.height,
     );
@@ -449,10 +454,16 @@ class Parallax {
     isSized |= true;
   }
 
+  // Used to avoid creating new Vector2 objects in the update-loop.
+  final _delta = Vector2.zero();
+
   void update(double dt) {
     layers.forEach((layer) {
       layer.update(
-        (baseVelocity.clone()..multiply(layer.velocityMultiplier)) * dt,
+        _delta
+          ..setFrom(baseVelocity)
+          ..multiply(layer.velocityMultiplier)
+          ..scale(dt),
         dt,
       );
     });
