@@ -18,6 +18,6 @@ dev_dependencies:
   flame_test: ^1.10.1
   flutter_test:
     sdk: flutter
-  lint: ^1.10.0
+  lint: ^2.1.2
   test: any
 

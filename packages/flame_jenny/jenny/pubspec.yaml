@@ -11,9 +11,9 @@ environment:
   sdk: ">=2.18.0 <4.0.0"
 
 dependencies:
-  meta: ^1.7.0
+  meta: ^1.9.1
 
 dev_dependencies:
-  dartdoc: ^6.0.1
+  dartdoc: ^6.2.2
   flame_lint: ^0.2.0+2
   test: any

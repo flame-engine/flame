@@ -16,6 +16,7 @@ dependencies:
 
 dev_dependencies:
   flame_lint: ^0.2.0+2
+
 flutter:
   uses-material-design: true
   assets:
