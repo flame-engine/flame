@@ -8,11 +8,11 @@ environment:
   flutter: ">=3.3.0"
 
 dependencies:
-  flame: ^1.7.3
+  flame: ^1.7.4
   flutter:
     sdk: flutter
 
 dev_dependencies:
-  flame_lint: ^0.2.0+2
+  flame_lint: ^0.2.0+3
   flutter_test:
     sdk: flutter

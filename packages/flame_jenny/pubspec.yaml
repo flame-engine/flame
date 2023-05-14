@@ -14,13 +14,13 @@ environment:
 
 dependencies:
   collection: ^1.17.1
-  flame: ^1.7.3
+  flame: ^1.7.4
   flutter:
     sdk: flutter
-  jenny: ^1.0.2
+  jenny: ^1.0.3
   meta: ^1.9.1
 
 dev_dependencies:
   dartdoc: ^6.2.2
-  flame_lint: ^0.2.0+2
+  flame_lint: ^0.2.0+3
   test: any
