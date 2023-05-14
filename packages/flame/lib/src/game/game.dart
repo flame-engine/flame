@@ -19,7 +19,7 @@ import 'package:meta/meta.dart';
 ///
 /// Methods [update] and [render] need to be implemented in order to connect
 /// your class with the internal game loop.
-abstract class Game {
+abstract mixin class Game {
   /// The cache of all images loaded into the game. This defaults to the global
   /// [Flame.images] cache, but you can replace it with a new cache instance if
   /// needed.

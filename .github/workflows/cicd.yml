@@ -19,8 +19,6 @@ jobs:
           channel: 'stable'
           cache: true
       - uses: bluefireteam/melos-action@main
-        with:
-          melos-version: '3.0.0-dev.0'
       - run: melos run format-check
 
   analyze:
@@ -32,8 +30,6 @@ jobs:
           flutter-version: '3.10.0'
           channel: 'stable'
       - uses: bluefireteam/melos-action@v2
-        with:
-          melos-version: '3.0.0-dev.0'
       - name: "Analyze"
         uses: invertase/github-action-dart-analyzer@v1
         with:
@@ -62,7 +58,5 @@ jobs:
           channel: 'stable'
           cache: true
       - uses: bluefireteam/melos-action@main
-        with:
-          melos-version: '3.0.0-dev.0'
       - uses: bluefireteam/spec-action@main
   # END TESTING STAGE
