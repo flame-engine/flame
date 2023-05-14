@@ -148,14 +148,8 @@ Now that the waste pile is ready, let's get back to the `StockPile`.
 The second item on our todo list is the first interactive functionality in the game: tap the stock
 pile to deal 3 cards onto the waste.
 
-Adding tap functionality to the components in Flame is quite simple: first, we add the mixin
-`HasTappableComponents` to our top-level game class:
-
-```dart
-class KlondikeGame extends FlameGame with HasTappableComponents { ... }
-```
-
-And second, we add the mixin `TapCallbacks` to the component that we want to be tappable:
+Adding tap functionality to the components in Flame is quite simple: we just add the mixin
+`TapCallbacks` to the component that we want to be tappable:
 
 ```dart
 class StockPile extends PositionComponent with TapCallbacks { ... }
