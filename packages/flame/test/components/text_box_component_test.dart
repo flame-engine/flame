@@ -148,6 +148,20 @@ void main() {
       goldenFile: '../_goldens/text_box_component_test_1.png',
     );
   });
+
+  testGolden(
+    'Big upscale',
+    (game) async {
+      game.addAll([
+        TextBoxComponent(
+          text: 'quickly',
+          pixelRatio: 8,
+        ),
+      ]);
+    },
+    size: Vector2(512, 64),
+    goldenFile: '../_goldens/text_box_component_test_2.png',
+  );
 }
 
 class _FramedTextBox extends TextBoxComponent {
