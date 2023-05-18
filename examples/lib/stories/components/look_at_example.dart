@@ -16,6 +16,9 @@ class LookAtExample extends FlameGame with TapDetector {
       'oriented in the desired direction if the image is not facing the '
       'correct direction.';
 
+  final world = World();
+  late final CameraComponent cameraComponent;
+
   late SpriteAnimationComponent _chopper1;
   late SpriteAnimationComponent _chopper2;
 
@@ -30,7 +33,13 @@ class LookAtExample extends FlameGame with TapDetector {
 
   @override
   Future<void>? onLoad() async {
-    camera.viewport = FixedResolutionViewport(Vector2(640, 360));
+    cameraComponent = CameraComponent.withFixedResolution(
+      world: world,
+      width: 640,
+      height: 360,
+    );
+    addAll([cameraComponent, world]);
+
     final spriteSheet = SpriteSheet(
       image: await images.load('animations/chopper.png'),
       srcSize: Vector2.all(48),
@@ -45,9 +54,11 @@ class LookAtExample extends FlameGame with TapDetector {
   @override
   void onTapDown(TapDownInfo info) {
     if (!_targetComponent.isMounted) {
-      add(_targetComponent);
+      world.add(_targetComponent);
     }
+    // TODO(Lukas): This needs to be fixed.
     _targetComponent.position = info.eventPosition.game;
+    print(_targetComponent.position);
 
     _chopper1.lookAt(_targetComponent.absolutePosition);
     _chopper2.lookAt(_targetComponent.absolutePosition);
@@ -58,25 +69,25 @@ class LookAtExample extends FlameGame with TapDetector {
   void _spawnChoppers(SpriteSheet spriteSheet) {
     // Notice now the nativeAngle is set to pi because the chopper
     // is facing in down/south direction in the original image.
-    add(
+    world.add(
       _chopper1 = SpriteAnimationComponent(
         nativeAngle: pi,
         size: Vector2.all(64),
         anchor: Anchor.center,
         animation: spriteSheet.createAnimation(row: 0, stepTime: 0.05),
-        position: Vector2(size.x * 0.3, size.y * 0.5),
+        //position: Vector2(size.x * 0.15, size.y * 0.25),
       ),
     );
 
     // This chopper does not use correct nativeAngle, hence using
     // lookAt on it results in the sprite pointing in incorrect
     // direction visually.
-    add(
+    world.add(
       _chopper2 = SpriteAnimationComponent(
         size: Vector2.all(64),
         anchor: Anchor.center,
         animation: spriteSheet.createAnimation(row: 0, stepTime: 0.05),
-        position: Vector2(size.x * 0.6, size.y * 0.5),
+        position: Vector2(0, 100),
       ),
     );
   }
@@ -93,7 +104,7 @@ class LookAtExample extends FlameGame with TapDetector {
       ),
     );
 
-    add(
+    world.add(
       TextComponent(
         text: 'nativeAngle = pi',
         textRenderer: shaded,
@@ -102,7 +113,7 @@ class LookAtExample extends FlameGame with TapDetector {
       ),
     );
 
-    add(
+    world.add(
       TextComponent(
         text: 'nativeAngle = 0',
         textRenderer: shaded,

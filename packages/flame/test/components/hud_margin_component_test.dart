@@ -44,6 +44,7 @@ void main() {
         // (800, 600) - size(20, 20) - position(10, 20) = (770, 560)
         expect(marginComponent.position, closeToVector(Vector2(770, 560)));
         game.update(0);
+        // ignore: deprecated_member_use_from_same_package
         game.camera.zoom = 2.0;
         game.onGameResize(Vector2.all(500));
         game.update(0);

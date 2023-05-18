@@ -17,6 +17,9 @@ class LookAtSmoothExample extends FlameGame with TapDetector {
       'oriented in the desired direction if the image is not facing the '
       'correct direction.';
 
+  final world = World();
+  late final CameraComponent cameraComponent;
+
   bool _isRotating = false;
   late SpriteAnimationComponent _chopper1;
   late SpriteAnimationComponent _chopper2;
@@ -32,7 +35,13 @@ class LookAtSmoothExample extends FlameGame with TapDetector {
 
   @override
   Future<void>? onLoad() async {
-    camera.viewport = FixedResolutionViewport(Vector2(640, 360));
+    cameraComponent = CameraComponent.withFixedResolution(
+      world: world,
+      width: 640,
+      height: 360,
+    );
+    addAll([cameraComponent, world]);
+
     final spriteSheet = SpriteSheet(
       image: await images.load('animations/chopper.png'),
       srcSize: Vector2.all(48),
@@ -47,7 +56,7 @@ class LookAtSmoothExample extends FlameGame with TapDetector {
   @override
   void onTapDown(TapDownInfo info) {
     if (!_targetComponent.isMounted) {
-      add(_targetComponent);
+      world.add(_targetComponent);
     }
 
     // Ignore if choppers are already rotating.
@@ -78,7 +87,7 @@ class LookAtSmoothExample extends FlameGame with TapDetector {
   void _spawnChoppers(SpriteSheet spriteSheet) {
     // Notice now the nativeAngle is set to pi because the chopper
     // is facing in down/south direction in the original image.
-    add(
+    world.add(
       _chopper1 = SpriteAnimationComponent(
         nativeAngle: pi,
         size: Vector2.all(64),
@@ -91,7 +100,7 @@ class LookAtSmoothExample extends FlameGame with TapDetector {
     // This chopper does not use correct nativeAngle, hence using
     // lookAt on it results in the sprite pointing in incorrect
     // direction visually.
-    add(
+    world.add(
       _chopper2 = SpriteAnimationComponent(
         size: Vector2.all(64),
         anchor: Anchor.center,
@@ -113,7 +122,7 @@ class LookAtSmoothExample extends FlameGame with TapDetector {
       ),
     );
 
-    add(
+    world.add(
       TextComponent(
         text: 'nativeAngle = pi',
         textRenderer: shaded,
@@ -122,7 +131,7 @@ class LookAtSmoothExample extends FlameGame with TapDetector {
       ),
     );
 
-    add(
+    world.add(
       TextComponent(
         text: 'nativeAngle = 0',
         textRenderer: shaded,

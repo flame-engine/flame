@@ -1,8 +1,8 @@
 import 'dart:math';
 
+import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/game.dart';
-import 'package:flame/geometry.dart';
 import 'package:flame_noise/flame_noise.dart';
 import 'package:flutter/material.dart';
 
@@ -21,10 +21,19 @@ class MoveEffectExample extends FlameGame {
     an arbitrary path using `MoveEffect.along`.
   ''';
 
+  final world = World();
+  late final CameraComponent cameraComponent;
+
   @override
-  void onMount() {
+  void onLoad() {
     const tau = Transform2D.tau;
-    camera.viewport = FixedResolutionViewport(Vector2(400, 600));
+    cameraComponent = CameraComponent.withFixedResolution(
+      world: world,
+      width: 400,
+      height: 600,
+    );
+    cameraComponent.viewfinder.anchor = Anchor.topLeft;
+    addAll([world, cameraComponent]);
 
     final paint1 = Paint()
       ..style = PaintingStyle.stroke
@@ -37,7 +46,7 @@ class MoveEffectExample extends FlameGame {
     final paint3 = Paint()..color = const Color(0xffb372dc);
 
     // Red square, moving back and forth
-    add(
+    world.add(
       RectangleComponent.square(
         position: Vector2(20, 50),
         size: 20,
@@ -56,7 +65,7 @@ class MoveEffectExample extends FlameGame {
     );
 
     // Green square, moving and jumping
-    add(
+    world.add(
       RectangleComponent.square(
         position: Vector2(20, 150),
         size: 20,
@@ -87,7 +96,7 @@ class MoveEffectExample extends FlameGame {
         ),
     );
 
-    add(
+    world.add(
       RectangleComponent.square(
         size: 15,
         position: Vector2(40, 240),
@@ -117,7 +126,7 @@ class MoveEffectExample extends FlameGame {
       path1.lineTo(x, y);
     }
     for (var i = 0; i < 40; i++) {
-      add(
+      world.add(
         CircleComponent(radius: 5)
           ..position = Vector2(0, -1000)
           ..add(
@@ -136,7 +145,7 @@ class MoveEffectExample extends FlameGame {
 
     final path2 = Path()..addOval(const Rect.fromLTRB(80, 230, 320, 470));
     for (var i = 0; i < 20; i++) {
-      add(
+      world.add(
         RectangleComponent.square(size: 10)
           ..paint = (Paint()..color = Colors.tealAccent)
           ..add(

@@ -130,7 +130,7 @@ Press T button to toggle player to collide with other objects.
     );
     world.add(water3);
 
-    add(QuadTreeDebugComponent(collisionDetection));
+    world.add(QuadTreeDebugComponent(collisionDetection));
     world.add(LayerComponent(staticLayer));
     cameraComponent.viewport.add(FpsTextComponent());
   }

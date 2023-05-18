@@ -89,6 +89,7 @@ void main() {
         await game.ensureAdd(c);
 
         // component is now at the corner of the screen
+        // ignore: deprecated_member_use_from_same_package
         game.camera.snapTo(Vector2(10, 20));
 
         _triggerMouseMove(game, 11, 21);

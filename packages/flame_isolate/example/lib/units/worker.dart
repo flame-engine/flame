@@ -1,4 +1,7 @@
+import 'dart:ui';
+
 import 'package:flame/components.dart';
+import 'package:flame/experimental.dart';
 import 'package:flame/flame.dart';
 import 'package:flutter_isolates_example/colonists_game.dart';
 import 'package:flutter_isolates_example/constants.dart';
@@ -8,11 +11,11 @@ import 'package:flutter_isolates_example/standard/pair.dart';
 import 'package:flutter_isolates_example/units/actions/movable.dart';
 
 class Worker extends SpriteAnimationGroupComponent<MoveDirection>
-    with ColonistsObject, HasGameRef<ColonistsGame>, Movable {
+    with ColonistsObject, HasGameReference<ColonistsGame>, Movable {
   @override
   final double speed;
 
-  Worker(double x, double y, {this.speed = 50}) {
+  Worker(num x, num y, {this.speed = 50}) {
     super.y = y * Constants.tileSize;
     super.x = x * Constants.tileSize;
     height = Constants.tileSize;
@@ -32,6 +35,12 @@ class Worker extends SpriteAnimationGroupComponent<MoveDirection>
       ),
       srcSize: Vector2.all(72 - _spritePadding * 2),
     );
+  }
+
+  @override
+  void render(Canvas c) {
+    super.render(c);
+    c.drawCircle(Offset.zero, 5, paint);
   }
 
   @override

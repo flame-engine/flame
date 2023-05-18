@@ -1,4 +1,3 @@
-import 'package:examples/stories/collision_detection/quadtree_example.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';

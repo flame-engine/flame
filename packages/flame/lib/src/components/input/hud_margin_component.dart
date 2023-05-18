@@ -15,6 +15,7 @@ import 'package:meta/meta.dart';
 /// position will be used.
 class HudMarginComponent<T extends FlameGame> extends PositionComponent
     with HasGameRef<T> {
+  // TODO(Lukas): Don't use PositionType here and use CameraComponent.
   @override
   PositionType positionType = PositionType.viewport;
 
@@ -74,6 +75,7 @@ class HudMarginComponent<T extends FlameGame> extends PositionComponent
 
   void _updateMargins() {
     final screenSize = positionType == PositionType.viewport
+        // ignore: deprecated_member_use_from_same_package
         ? gameRef.camera.viewport.effectiveSize
         : gameRef.canvasSize;
     final margin = this.margin!;
