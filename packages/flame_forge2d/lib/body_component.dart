@@ -163,8 +163,6 @@ abstract class BodyComponent<T extends Forge2DGame> extends Component
 
   @override
   bool containsPoint(Vector2 point) {
-    print(point);
-    print(body.position);
     return body.fixtures.any((fixture) => fixture.testPoint(point));
   }
 

@@ -1,14 +1,14 @@
 import 'dart:math';
 
 import 'package:flame/components.dart';
+import 'package:flame/events.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
-import 'package:flame/input.dart';
 import 'package:flame/palette.dart';
 import 'package:flame/sprite.dart';
 import 'package:flutter/material.dart';
 
-class LookAtExample extends FlameGame with TapDetector {
+class LookAtExample extends FlameGame {
   static const description = 'This example demonstrates how a component can be '
       'made to look at a specific target using the lookAt method. Tap anywhere '
       'to change the target point for both the choppers. '
@@ -16,28 +16,18 @@ class LookAtExample extends FlameGame with TapDetector {
       'oriented in the desired direction if the image is not facing the '
       'correct direction.';
 
-  final world = World();
+  final world = _TapWorld();
   late final CameraComponent cameraComponent;
 
   late SpriteAnimationComponent _chopper1;
   late SpriteAnimationComponent _chopper2;
 
-  final CircleComponent _targetComponent = CircleComponent(
-    radius: 5,
-    anchor: Anchor.center,
-    paint: BasicPalette.black.paint(),
-  );
-
   @override
   Color backgroundColor() => const Color.fromARGB(255, 96, 145, 112);
 
   @override
-  Future<void>? onLoad() async {
-    cameraComponent = CameraComponent.withFixedResolution(
-      world: world,
-      width: 640,
-      height: 360,
-    );
+  Future<void> onLoad() async {
+    cameraComponent = CameraComponent(world: world);
     addAll([cameraComponent, world]);
 
     final spriteSheet = SpriteSheet(
@@ -47,23 +37,6 @@ class LookAtExample extends FlameGame with TapDetector {
 
     _spawnChoppers(spriteSheet);
     _spawnInfoText();
-
-    return super.onLoad();
-  }
-
-  @override
-  void onTapDown(TapDownInfo info) {
-    if (!_targetComponent.isMounted) {
-      world.add(_targetComponent);
-    }
-    // TODO(Lukas): This needs to be fixed.
-    _targetComponent.position = info.eventPosition.game;
-    print(_targetComponent.position);
-
-    _chopper1.lookAt(_targetComponent.absolutePosition);
-    _chopper2.lookAt(_targetComponent.absolutePosition);
-
-    super.onTapDown(info);
   }
 
   void _spawnChoppers(SpriteSheet spriteSheet) {
@@ -72,10 +45,9 @@ class LookAtExample extends FlameGame with TapDetector {
     world.add(
       _chopper1 = SpriteAnimationComponent(
         nativeAngle: pi,
-        size: Vector2.all(64),
+        size: Vector2.all(128),
         anchor: Anchor.center,
         animation: spriteSheet.createAnimation(row: 0, stepTime: 0.05),
-        //position: Vector2(size.x * 0.15, size.y * 0.25),
       ),
     );
 
@@ -84,10 +56,10 @@ class LookAtExample extends FlameGame with TapDetector {
     // direction visually.
     world.add(
       _chopper2 = SpriteAnimationComponent(
-        size: Vector2.all(64),
+        size: Vector2.all(128),
         anchor: Anchor.center,
         animation: spriteSheet.createAnimation(row: 0, stepTime: 0.05),
-        position: Vector2(0, 100),
+        position: Vector2(0, 160),
       ),
     );
   }
@@ -97,7 +69,7 @@ class LookAtExample extends FlameGame with TapDetector {
     final shaded = TextPaint(
       style: TextStyle(
         color: BasicPalette.white.color,
-        fontSize: 20.0,
+        fontSize: 30.0,
         shadows: const [
           Shadow(offset: Offset(1, 1), blurRadius: 1),
         ],
@@ -109,7 +81,7 @@ class LookAtExample extends FlameGame with TapDetector {
         text: 'nativeAngle = pi',
         textRenderer: shaded,
         anchor: Anchor.center,
-        position: _chopper1.absolutePosition + Vector2(0, -50),
+        position: _chopper1.absolutePosition + Vector2(0, -70),
       ),
     );
 
@@ -118,8 +90,28 @@ class LookAtExample extends FlameGame with TapDetector {
         text: 'nativeAngle = 0',
         textRenderer: shaded,
         anchor: Anchor.center,
-        position: _chopper2.absolutePosition + Vector2(0, -50),
+        position: _chopper2.absolutePosition + Vector2(0, -70),
       ),
     );
+  }
+}
+
+class _TapWorld extends World with TapCallbacks {
+  final CircleComponent _targetComponent = CircleComponent(
+    radius: 5,
+    anchor: Anchor.center,
+    paint: BasicPalette.black.paint(),
+  );
+
+  @override
+  void onTapDown(TapDownEvent event) {
+    if (!_targetComponent.isMounted) {
+      add(_targetComponent);
+    }
+    _targetComponent.position = event.localPosition;
+    final choppers = children.query<SpriteAnimationComponent>();
+    for (final chopper in choppers) {
+      chopper.lookAt(event.localPosition);
+    }
   }
 }
