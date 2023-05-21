@@ -5,6 +5,7 @@ import 'package:flame/input.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flutter/material.dart';
 
+// ignore: deprecated_member_use
 class RopeJointExample extends Forge2DGame with TapDetector, HasDraggables {
   static const description = '''
     This example shows how to use a `RopeJoint`. 

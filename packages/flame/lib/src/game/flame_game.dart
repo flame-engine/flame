@@ -39,10 +39,35 @@ class FlameGame extends ComponentTreeRoot
   late final List<ComponentsNotifier> notifiers = [];
 
   /// The camera translates the coordinate space after the viewport is applied.
-  @Deprecated(
-    'In the future (maybe as early as v1.9.0) this camera will be removed, '
-    'please use the CameraComponent instead.',
-  )
+  @Deprecated('''
+    In the future (maybe as early as v1.9.0) this camera will be removed,
+    please use the CameraComponent instead.
+    
+    This is the simplest way of using the CameraComponent:
+    1. Add variables for a CameraComponent and a World to your game class
+    
+       final world = World();
+       late final CameraComponent cameraComponent;
+    
+    2. In your `onLoad` method, initialize the cameraComponent and add the world
+       to it.
+       
+       @override
+       void onLoad() {
+         cameraComponent = CameraComponent(world: world);
+         addAll([cameraComponent, world]);
+       }
+       
+    3. Instead of adding the root components directly to your game with `add`,
+       add them to the world.
+       
+       world.add(yourComponent);
+    
+    4. (Optional) If you want to add huds, instead of using PositionType, add
+       the component as a child of the viewport.
+       
+       cameraComponent.viewport.add(yourHudComponent);
+    ''')
   Camera get camera => _cameraWrapper.camera;
 
   /// This is overwritten to consider the viewport transformation.

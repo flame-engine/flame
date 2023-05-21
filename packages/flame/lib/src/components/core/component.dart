@@ -959,8 +959,14 @@ class Component {
   ///
   /// Do note that this currently only works if the component is added directly
   /// to the root `FlameGame`.
+  @Deprecated('''
+  Use the CameraComponent and add your component to the viewport with
+  cameraComponent.viewport.add(yourHudComponent) instead.
+  This will be removed in Flame v2.
+  ''')
   PositionType positionType = PositionType.game;
 
+  @Deprecated('To be removed in Flame v2')
   @protected
   Vector2 eventPosition(PositionInfo info) {
     switch (positionType) {

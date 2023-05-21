@@ -1,4 +1,6 @@
+import 'package:collection/collection.dart';
 import 'package:flame/components.dart';
+import 'package:flame/effects.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/widgets.dart' show EdgeInsets;
 import 'package:meta/meta.dart';
@@ -13,16 +15,7 @@ import 'package:meta/meta.dart';
 /// If you set the position of the component instead of a margin when
 /// initializing the component, the margin to the edge of the screen from that
 /// position will be used.
-class HudMarginComponent<T extends FlameGame> extends PositionComponent
-    with HasGameRef<T> {
-  // TODO(Lukas): Don't use PositionType here and use CameraComponent.
-  @override
-  PositionType positionType = PositionType.viewport;
-
-  /// Instead of setting a position of the [HudMarginComponent] a margin
-  /// from the edges of the viewport can be used instead.
-  EdgeInsets? margin;
-
+class HudMarginComponent extends PositionComponent {
   HudMarginComponent({
     this.margin,
     super.position,
@@ -37,19 +30,31 @@ class HudMarginComponent<T extends FlameGame> extends PositionComponent
           'Either margin or position must be defined',
         );
 
+  /// Instead of setting a position of the [HudMarginComponent] a margin
+  /// from the edges of the viewport can be used instead.
+  EdgeInsets? margin;
+
+  late SizeProvider _sizeProvider;
+
   @override
   @mustCallSuper
-  Future<void> onLoad() async {
-    super.onLoad();
+  void onMount() {
+    super.onMount();
+    final sizeProvider =
+        ancestors().firstWhereOrNull((c) => c is SizeProvider) as SizeProvider?;
+    assert(
+      sizeProvider != null,
+      'The parent of a HudMarginComponent needs to be a SizeProvider, for '
+      'example a PositionComponent.',
+    );
     // If margin is not null we will update the position `onGameResize` instead
     if (margin == null) {
-      final screenSize = gameRef.size;
       final topLeft = anchor.toOtherAnchorPosition(
         position,
         Anchor.topLeft,
         scaledSize,
       );
-      final bottomRight = screenSize -
+      final bottomRight = sizeProvider!.size -
           anchor.toOtherAnchorPosition(
             position,
             Anchor.bottomRight,
@@ -61,30 +66,23 @@ class HudMarginComponent<T extends FlameGame> extends PositionComponent
         bottomRight.x,
         bottomRight.y,
       );
+      if (sizeProvider.size is NotifyingVector2) {
+        (sizeProvider.size as NotifyingVector2).addListener(_updateMargins);
+      }
     } else {
       size.addListener(_updateMargins);
     }
     _updateMargins();
   }
 
-  @override
-  void onGameResize(Vector2 size) {
-    super.onGameResize(size);
-    _updateMargins();
-  }
-
   void _updateMargins() {
-    final screenSize = positionType == PositionType.viewport
-        // ignore: deprecated_member_use_from_same_package
-        ? gameRef.camera.viewport.effectiveSize
-        : gameRef.canvasSize;
     final margin = this.margin!;
     final x = margin.left != 0
         ? margin.left + scaledSize.x / 2
-        : screenSize.x - margin.right - scaledSize.x / 2;
+        : _sizeProvider.size.x - margin.right - scaledSize.x / 2;
     final y = margin.top != 0
         ? margin.top + scaledSize.y / 2
-        : screenSize.y - margin.bottom - scaledSize.y / 2;
+        : _sizeProvider.size.y - margin.bottom - scaledSize.y / 2;
     position.setValues(x, y);
     position = Anchor.center.toOtherAnchorPosition(
       position,

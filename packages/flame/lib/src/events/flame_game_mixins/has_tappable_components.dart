@@ -41,6 +41,7 @@ class MultiTapDispatcher extends Component implements MultiTapListener {
     // ignore: deprecated_member_use_from_same_package
     if (game is HasTappablesBridge) {
       final info = event.asInfo(game)..handled = event.handled;
+      // ignore: deprecated_member_use_from_same_package
       game.propagateToChildren<Tappable>(
         (c) => c.handleTapDown(event.pointerId, info),
       );
@@ -69,6 +70,7 @@ class MultiTapDispatcher extends Component implements MultiTapListener {
     // ignore: deprecated_member_use_from_same_package
     if (game is HasTappablesBridge) {
       final info = event.asInfo(game)..handled = event.handled;
+      // ignore: deprecated_member_use_from_same_package
       game.propagateToChildren<Tappable>(
         (c) => c.handleLongTapDown(event.pointerId, info),
       );
@@ -102,6 +104,7 @@ class MultiTapDispatcher extends Component implements MultiTapListener {
     // ignore: deprecated_member_use_from_same_package
     if (game is HasTappablesBridge) {
       final info = event.asInfo(game)..handled = event.handled;
+      // ignore: deprecated_member_use_from_same_package
       game.propagateToChildren<Tappable>(
         (c) => c.handleTapUp(event.pointerId, info),
       );
@@ -122,6 +125,7 @@ class MultiTapDispatcher extends Component implements MultiTapListener {
     _tapCancelImpl(event);
     // ignore: deprecated_member_use_from_same_package
     if (game is HasTappablesBridge) {
+      // ignore: deprecated_member_use_from_same_package
       game.propagateToChildren<Tappable>(
         (c) => c.handleTapCancel(event.pointerId),
       );

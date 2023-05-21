@@ -30,7 +30,7 @@ This examples showcases how raycast APIs can be used to detect hits within certa
         color: Colors.amber,
       ),
     ),
-  )..positionType = PositionType.viewport;
+  );
 
   @override
   void onLoad() {

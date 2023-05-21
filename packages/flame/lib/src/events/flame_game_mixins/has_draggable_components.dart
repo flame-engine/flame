@@ -48,6 +48,7 @@ class MultiDragDispatcher extends Component implements MultiDragListener {
     // ignore: deprecated_member_use_from_same_package
     if (game is HasDraggablesBridge) {
       final info = event.asInfo(game)..handled = event.handled;
+      // ignore: deprecated_member_use_from_same_package
       game.propagateToChildren<Draggable>(
         (c) => c.handleDragStart(event.pointerId, info),
       );
@@ -83,6 +84,7 @@ class MultiDragDispatcher extends Component implements MultiDragListener {
     // ignore: deprecated_member_use_from_same_package
     if (game is HasDraggablesBridge) {
       final info = event.asInfo(game)..handled = event.handled;
+      // ignore: deprecated_member_use_from_same_package
       game.propagateToChildren<Draggable>(
         (c) => c.handleDragUpdated(event.pointerId, info),
       );
@@ -107,6 +109,7 @@ class MultiDragDispatcher extends Component implements MultiDragListener {
     // ignore: deprecated_member_use_from_same_package
     if (game is HasDraggablesBridge) {
       final info = event.asInfo(game)..handled = event.handled;
+      // ignore: deprecated_member_use_from_same_package
       game.propagateToChildren<Draggable>(
         (c) => c.handleDragEnded(event.pointerId, info),
       );
@@ -125,6 +128,7 @@ class MultiDragDispatcher extends Component implements MultiDragListener {
     });
     // ignore: deprecated_member_use_from_same_package
     if (game is HasDraggablesBridge) {
+      // ignore: deprecated_member_use_from_same_package
       game.propagateToChildren<Draggable>(
         (c) => c.handleDragCanceled(event.pointerId),
       );
