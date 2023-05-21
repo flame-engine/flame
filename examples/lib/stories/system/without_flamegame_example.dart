@@ -8,7 +8,7 @@ class NoFlameGameExample extends Game with KeyboardEvents {
   static const String description = '''
     This example showcases how to create a game without the FlameGame.
     It also briefly showcases how to act on keyboard events.
-    Usage: Use A W S D to steer the rectangle.
+    Usage: Use W A S D to steer the rectangle.
   ''';
 
   static final Paint white = BasicPalette.white.paint();

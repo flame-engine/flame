@@ -96,6 +96,7 @@ class MoveEffectExample extends FlameGame {
         ),
     );
 
+    // Purple square, vibrating from two noise controllers.
     world.add(
       RectangleComponent.square(
         size: 15,
@@ -119,34 +120,12 @@ class MoveEffectExample extends FlameGame {
         ),
     );
 
-    final path1 = Path()..moveTo(200, 250);
-    for (var i = 1; i <= 5; i++) {
-      final x = 200 + 100 * sin(i * tau * 2 / 5);
-      final y = 350 - 100 * cos(i * tau * 2 / 5);
-      path1.lineTo(x, y);
-    }
-    for (var i = 0; i < 40; i++) {
-      world.add(
-        CircleComponent(radius: 5)
-          ..position = Vector2(0, -1000)
-          ..add(
-            MoveAlongPathEffect(
-              path1,
-              EffectController(
-                duration: 10,
-                startDelay: i * 0.2,
-                infinite: true,
-              ),
-              absolute: true,
-            ),
-          ),
-      );
-    }
-
+    // A circle of moving rectangles.
     final path2 = Path()..addOval(const Rect.fromLTRB(80, 230, 320, 470));
     for (var i = 0; i < 20; i++) {
       world.add(
         RectangleComponent.square(size: 10)
+          ..position = Vector2(i * 10, 0)
           ..paint = (Paint()..color = Colors.tealAccent)
           ..add(
             MoveAlongPathEffect(
@@ -156,7 +135,33 @@ class MoveEffectExample extends FlameGame {
                 startDelay: i * 0.3,
                 infinite: true,
               ),
+              absolute: true,
               oriented: true,
+            ),
+          ),
+      );
+    }
+
+    // A star of moving rectangles.
+    final path1 = Path()..moveTo(200, 250);
+    for (var i = 1; i <= 5; i++) {
+      final x = 200 + 100 * sin(i * tau * 2 / 5);
+      final y = 350 - 100 * cos(i * tau * 2 / 5);
+      path1.lineTo(x, y);
+    }
+    for (var i = 0; i < 40; i++) {
+      world.add(
+        CircleComponent(radius: 5)
+          ..position = Vector2(i * 10, 0)
+          ..add(
+            MoveAlongPathEffect(
+              path1,
+              EffectController(
+                duration: 10,
+                startDelay: i * 0.2,
+                infinite: true,
+              ),
+              absolute: true,
             ),
           ),
       );

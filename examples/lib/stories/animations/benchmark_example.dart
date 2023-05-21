@@ -42,21 +42,20 @@ starts to drop in FPS, this is without any sprite batching and such.
   @override
   void update(double dt) {
     super.update(dt);
-    emberCounter.text = '$counterPrefix ${children.query<Ember>().length}';
+    emberCounter.text =
+        '$counterPrefix ${world.children.query<Ember>().length}';
   }
 
   @override
   void onTapDown(TapDownInfo info) {
-    final halfWidth = emberSize.x / 2;
-    final halfHeight = emberSize.y / 2;
     world.addAll(
       List.generate(
         100,
         (_) => Ember(
           size: emberSize,
           position: Vector2(
-            halfWidth + (size.x - halfWidth) * random.nextDouble(),
-            halfHeight + (size.y - halfHeight) * random.nextDouble(),
+            (size.x / 2) * random.nextDouble() * (random.nextBool() ? 1 : -1),
+            (size.y / 2) * random.nextDouble() * (random.nextBool() ? 1 : -1),
           ),
         ),
       ),

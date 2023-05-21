@@ -142,11 +142,11 @@ class CoordinateSystemsExample extends FlameGame
   @override
   void update(double dt) {
     super.update(dt);
-    cameraPosition.add(cameraVelocity * dt * 10);
+    cameraPosition.add(cameraVelocity * dt * 30);
     // just make it look pretty
     cameraPosition.x = _roundDouble(cameraPosition.x, 5);
     cameraPosition.y = _roundDouble(cameraPosition.y, 5);
-    cameraComponent.viewfinder.position.setFrom(cameraPosition);
+    cameraComponent.viewfinder.position = cameraPosition;
   }
 
   /// Round [val] up to [places] decimal places.

@@ -1,7 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:flame/components.dart';
-import 'package:flame/effects.dart';
 import 'package:flame/game.dart';
+import 'package:flame/src/effects/provider_interfaces.dart';
 import 'package:flutter/widgets.dart' show EdgeInsets;
 import 'package:meta/meta.dart';
 
@@ -34,19 +34,21 @@ class HudMarginComponent extends PositionComponent {
   /// from the edges of the viewport can be used instead.
   EdgeInsets? margin;
 
-  late SizeProvider _sizeProvider;
+  late ReadonlySizeProvider? _sizeProvider;
 
   @override
   @mustCallSuper
   void onMount() {
     super.onMount();
-    final sizeProvider =
-        ancestors().firstWhereOrNull((c) => c is SizeProvider) as SizeProvider?;
+    _sizeProvider =
+        ancestors().firstWhereOrNull((c) => c is ReadonlySizeProvider)
+            as ReadonlySizeProvider?;
     assert(
-      sizeProvider != null,
-      'The parent of a HudMarginComponent needs to be a SizeProvider, for '
-      'example a PositionComponent.',
+      _sizeProvider != null,
+      'The parent of a HudMarginComponent needs to provide a size, for example '
+      'by being a PositionComponent.',
     );
+    final sizeProvider = _sizeProvider!;
     // If margin is not null we will update the position `onGameResize` instead
     if (margin == null) {
       final topLeft = anchor.toOtherAnchorPosition(
@@ -54,7 +56,7 @@ class HudMarginComponent extends PositionComponent {
         Anchor.topLeft,
         scaledSize,
       );
-      final bottomRight = sizeProvider!.size -
+      final bottomRight = sizeProvider.size -
           anchor.toOtherAnchorPosition(
             position,
             Anchor.bottomRight,
@@ -79,10 +81,10 @@ class HudMarginComponent extends PositionComponent {
     final margin = this.margin!;
     final x = margin.left != 0
         ? margin.left + scaledSize.x / 2
-        : _sizeProvider.size.x - margin.right - scaledSize.x / 2;
+        : _sizeProvider!.size.x - margin.right - scaledSize.x / 2;
     final y = margin.top != 0
         ? margin.top + scaledSize.y / 2
-        : _sizeProvider.size.y - margin.bottom - scaledSize.y / 2;
+        : _sizeProvider!.size.y - margin.bottom - scaledSize.y / 2;
     position.setValues(x, y);
     position = Anchor.center.toOtherAnchorPosition(
       position,
