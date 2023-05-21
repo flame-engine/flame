@@ -357,7 +357,7 @@ The secret to any gaming engine is the game loop. This is an infinite loop that 
 objects in your game so you can provide updates. The `update` method is the hook into this and it
 uses a `double dt` to pass to your method the amount of time in seconds since it was last
 called. This `dt` variable then allows you to calculate how far your component needs to move
-on-screen. 
+on-screen.
 
 All components in our game will need to move at the same speed, so to do this, open
 `lib/ember_quest.dart`, and let's define a global variable called `objectSpeed`. At the top of the
