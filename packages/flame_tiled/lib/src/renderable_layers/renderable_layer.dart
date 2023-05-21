@@ -1,5 +1,5 @@
+import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
-import 'package:flame/game.dart';
 import 'package:flame_tiled/src/renderable_layers/group_layer.dart';
 import 'package:flame_tiled/src/renderable_layers/image_layer.dart';
 import 'package:flame_tiled/src/renderable_layers/object_layer.dart';
@@ -31,7 +31,7 @@ abstract class RenderableLayer<T extends Layer> {
     required GroupLayer? parent,
     required TiledMap map,
     required Vector2 destTileSize,
-    required Camera? camera,
+    required CameraComponent? camera,
     required Map<Tile, TileFrames> animationFrames,
     required TiledAtlas atlas,
     bool? ignoreFlip,
@@ -80,7 +80,7 @@ abstract class RenderableLayer<T extends Layer> {
 
   bool get visible => layer.visible;
 
-  void render(Canvas canvas, Camera? camera);
+  void render(Canvas canvas, CameraComponent? camera);
 
   void handleResize(Vector2 canvasSize);
 
@@ -103,22 +103,23 @@ abstract class RenderableLayer<T extends Layer> {
 
   /// Calculates the offset we need to apply to the canvas to compensate for
   /// parallax positioning and scroll for the layer and the current camera
-  /// position
+  /// position.
   /// https://doc.mapeditor.org/en/latest/manual/layers/#parallax-scrolling-factor
-  void applyParallaxOffset(Canvas canvas, Camera camera) {
-    final cameraX = camera.position.x;
-    final cameraY = camera.position.y;
-    final vpCenterX = camera.viewport.effectiveSize.x / 2;
-    final vpCenterY = camera.viewport.effectiveSize.y / 2;
+  void applyParallaxOffset(Canvas canvas, CameraComponent camera) {
+    final anchor = camera.viewfinder.anchor;
+    final cameraX = camera.viewfinder.position.x;
+    final cameraY = camera.viewfinder.position.y;
+    final viewportCenterX = camera.viewport.size.x * anchor.x;
+    final viewportCenterY = camera.viewport.size.y * anchor.y;
 
     // Due to how Tiled treats the center of the view as the reference
     // point for parallax positioning (see Tiled docs), we need to offset the
     // entire layer
-    var x = (1 - parallaxX) * vpCenterX;
-    var y = (1 - parallaxY) * vpCenterY;
+    var x = (1 - parallaxX) * viewportCenterX;
+    var y = (1 - parallaxY) * viewportCenterY;
     // compensate the offset for zoom
-    x /= camera.zoom;
-    y /= camera.zoom;
+    x /= camera.viewfinder.zoom;
+    y /= camera.viewfinder.zoom;
 
     // Now add the scroll for the current camera position
     x += cameraX - (cameraX * parallaxX);
@@ -138,7 +139,7 @@ class UnsupportedLayer extends RenderableLayer {
   });
 
   @override
-  void render(Canvas canvas, Camera? camera) {}
+  void render(Canvas canvas, CameraComponent? camera) {}
 
   @override
   void handleResize(Vector2 canvasSize) {}

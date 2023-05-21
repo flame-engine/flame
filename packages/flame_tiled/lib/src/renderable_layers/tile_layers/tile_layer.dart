@@ -1,5 +1,5 @@
+import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
-import 'package:flame/game.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 import 'package:flame_tiled/src/mutable_rect.dart';
 import 'package:flame_tiled/src/mutable_transform.dart';
@@ -122,7 +122,7 @@ abstract class FlameTileLayer extends RenderableLayer<TileLayer> {
   }
 
   @override
-  void render(Canvas canvas, Camera? camera) {
+  void render(Canvas canvas, CameraComponent? camera) {
     if (tiledAtlas.batch == null) {
       return;
     }
