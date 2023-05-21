@@ -6,8 +6,8 @@ import 'package:flutter/widgets.dart' show EdgeInsets;
 import 'package:meta/meta.dart';
 
 /// The [HudMarginComponent] positions itself by a margin to the edge of the
-/// screen instead of by an absolute position on the screen or on the game, so
-/// if the game is resized the component will move to keep its margin.
+/// parent instead of by an absolute position on the screen or on the game, so
+/// if the parent is resized the component will move to keep its margin.
 ///
 /// Note that the margin is calculated to the [Anchor], not to the edge of the
 /// component.
@@ -49,7 +49,7 @@ class HudMarginComponent extends PositionComponent {
       'by being a PositionComponent.',
     );
     final sizeProvider = _sizeProvider!;
-    // If margin is not null we will update the position `onGameResize` instead
+
     if (margin == null) {
       final topLeft = anchor.toOtherAnchorPosition(
         position,
@@ -68,13 +68,23 @@ class HudMarginComponent extends PositionComponent {
         bottomRight.x,
         bottomRight.y,
       );
-      if (sizeProvider.size is NotifyingVector2) {
-        (sizeProvider.size as NotifyingVector2).addListener(_updateMargins);
-      }
     } else {
       size.addListener(_updateMargins);
     }
+    if (sizeProvider.size is NotifyingVector2) {
+      (sizeProvider.size as NotifyingVector2).addListener(_updateMargins);
+    }
     _updateMargins();
+  }
+
+  @override
+  void onGameResize(Vector2 size) {
+    super.onGameResize(size);
+    if (isMounted &&
+        (parent is FlameGame ||
+            (parent! as ReadonlySizeProvider).size is NotifyingVector2)) {
+      _updateMargins();
+    }
   }
 
   void _updateMargins() {
