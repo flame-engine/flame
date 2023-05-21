@@ -2,17 +2,17 @@ import 'dart:math';
 
 import 'package:flame/components.dart';
 import 'package:flame/experimental.dart';
-import 'package:flutter_isolates_example/brains/path_finder.dart';
-import 'package:flutter_isolates_example/colonists_game.dart';
-import 'package:flutter_isolates_example/constants.dart';
-import 'package:flutter_isolates_example/extensions/range_extensions.dart';
-import 'package:flutter_isolates_example/objects/bread.dart';
-import 'package:flutter_isolates_example/objects/cheese.dart';
-import 'package:flutter_isolates_example/objects/colonists_object.dart';
-import 'package:flutter_isolates_example/standard/int_vector2.dart';
-import 'package:flutter_isolates_example/terrain/grass.dart';
-import 'package:flutter_isolates_example/terrain/terrain.dart';
-import 'package:flutter_isolates_example/units/worker.dart';
+import 'package:flame_isolate_example/brains/path_finder.dart';
+import 'package:flame_isolate_example/colonists_game.dart';
+import 'package:flame_isolate_example/constants.dart';
+import 'package:flame_isolate_example/extensions/range_extensions.dart';
+import 'package:flame_isolate_example/objects/bread.dart';
+import 'package:flame_isolate_example/objects/cheese.dart';
+import 'package:flame_isolate_example/objects/colonists_object.dart';
+import 'package:flame_isolate_example/standard/int_vector2.dart';
+import 'package:flame_isolate_example/terrain/grass.dart';
+import 'package:flame_isolate_example/terrain/terrain.dart';
+import 'package:flame_isolate_example/units/worker.dart';
 
 class GameMap extends Component with HasGameReference<ColonistsGame> {
   static const mapSizeX = 50;

@@ -4,15 +4,15 @@ import 'package:flame/components.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
+import 'package:flame_isolate_example/brains/path_finder.dart';
+import 'package:flame_isolate_example/brains/worker_overmind.dart';
+import 'package:flame_isolate_example/constants.dart';
+import 'package:flame_isolate_example/game_map/game_map.dart';
+import 'package:flame_isolate_example/objects/colonists_object.dart';
+import 'package:flame_isolate_example/terrain/terrain.dart';
+import 'package:flame_isolate_example/units/worker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_isolates_example/brains/path_finder.dart';
-import 'package:flutter_isolates_example/brains/worker_overmind.dart';
-import 'package:flutter_isolates_example/constants.dart';
-import 'package:flutter_isolates_example/game_map/game_map.dart';
-import 'package:flutter_isolates_example/objects/colonists_object.dart';
-import 'package:flutter_isolates_example/terrain/terrain.dart';
-import 'package:flutter_isolates_example/units/worker.dart';
 
 class ColonistsGame extends FlameGame with KeyboardEvents {
   final PositionComponent _cameraPosition = PositionComponent();

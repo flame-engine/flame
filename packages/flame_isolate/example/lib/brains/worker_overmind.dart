@@ -3,15 +3,15 @@ import 'dart:math';
 import 'package:flame/components.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame_isolate/flame_isolate.dart';
+import 'package:flame_isolate_example/brains/path_finder.dart';
+import 'package:flame_isolate_example/brains/worker_overmind_hud.dart';
+import 'package:flame_isolate_example/colonists_game.dart';
+import 'package:flame_isolate_example/objects/bread.dart';
+import 'package:flame_isolate_example/objects/colonists_object.dart';
+import 'package:flame_isolate_example/standard/int_vector2.dart';
+import 'package:flame_isolate_example/standard/pair.dart';
+import 'package:flame_isolate_example/units/worker.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_isolates_example/brains/path_finder.dart';
-import 'package:flutter_isolates_example/brains/worker_overmind_hud.dart';
-import 'package:flutter_isolates_example/colonists_game.dart';
-import 'package:flutter_isolates_example/objects/bread.dart';
-import 'package:flutter_isolates_example/objects/colonists_object.dart';
-import 'package:flutter_isolates_example/standard/int_vector2.dart';
-import 'package:flutter_isolates_example/standard/pair.dart';
-import 'package:flutter_isolates_example/units/worker.dart';
 
 class WorkerOvermind extends Component
     with HasGameReference<ColonistsGame>, FlameIsolate {

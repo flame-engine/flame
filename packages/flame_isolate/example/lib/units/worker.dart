@@ -3,12 +3,12 @@ import 'dart:ui';
 import 'package:flame/components.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame/flame.dart';
-import 'package:flutter_isolates_example/colonists_game.dart';
-import 'package:flutter_isolates_example/constants.dart';
-import 'package:flutter_isolates_example/objects/colonists_object.dart';
-import 'package:flutter_isolates_example/standard/int_vector2.dart';
-import 'package:flutter_isolates_example/standard/pair.dart';
-import 'package:flutter_isolates_example/units/actions/movable.dart';
+import 'package:flame_isolate_example/colonists_game.dart';
+import 'package:flame_isolate_example/constants.dart';
+import 'package:flame_isolate_example/objects/colonists_object.dart';
+import 'package:flame_isolate_example/standard/int_vector2.dart';
+import 'package:flame_isolate_example/standard/pair.dart';
+import 'package:flame_isolate_example/units/actions/movable.dart';
 
 class Worker extends SpriteAnimationGroupComponent<MoveDirection>
     with ColonistsObject, HasGameReference<ColonistsGame>, Movable {
