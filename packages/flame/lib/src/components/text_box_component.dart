@@ -241,12 +241,13 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
 
   Future<Image> _fullRenderAsImage(Vector2 size) {
     final recorder = PictureRecorder();
-    final c = Canvas(recorder, size.toRect());
+    final scaledSize = size * pixelRatio;
+    final c = Canvas(recorder, scaledSize.toRect());
     c.scale(pixelRatio);
     _fullRender(c);
     return recorder.endRecording().toImageSafe(
-          (width * pixelRatio).ceil(),
-          (height * pixelRatio).ceil(),
+          scaledSize.x.ceil(),
+          scaledSize.y.ceil(),
         );
   }
 
