@@ -63,8 +63,8 @@ class FlameGame extends ComponentTreeRoot
        
        world.add(yourComponent);
     
-    4. (Optional) If you want to add huds, instead of using PositionType, add
-       the component as a child of the viewport.
+    4. (Optional) If you want to add a HUD component, instead of using
+       PositionType, add the component as a child of the viewport.
        
        cameraComponent.viewport.add(yourHudComponent);
     ''')
