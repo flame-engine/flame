@@ -419,7 +419,6 @@ class QuadTreeDebugComponent extends PositionComponent with HasPaint {
   @override
   void render(Canvas canvas) {
     final nodes = dbg.nodes;
-    //final nodes = <QuadTreeNodeDebugInfo>[]; //dbg.nodes;
     for (final node in nodes) {
       canvas.drawRect(node.rect, paint);
       final nodeElements = node.ownElements;
