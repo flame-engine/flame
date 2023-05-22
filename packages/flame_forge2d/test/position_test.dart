@@ -20,6 +20,7 @@ void main() {
     () {
       test('Camera should not modify the input vector while projecting it', () {
         final vec = Vector2(5, 6);
+        // ignore: deprecated_member_use
         TestGame().camera.projectVector(vec);
         expect(vec, Vector2(5, 6));
       });

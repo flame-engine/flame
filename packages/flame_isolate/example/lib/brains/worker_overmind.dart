@@ -1,26 +1,27 @@
 import 'dart:math';
 
 import 'package:flame/components.dart';
+import 'package:flame/experimental.dart';
 import 'package:flame_isolate/flame_isolate.dart';
+import 'package:flame_isolate_example/brains/path_finder.dart';
+import 'package:flame_isolate_example/brains/worker_overmind_hud.dart';
+import 'package:flame_isolate_example/colonists_game.dart';
+import 'package:flame_isolate_example/objects/bread.dart';
+import 'package:flame_isolate_example/objects/colonists_object.dart';
+import 'package:flame_isolate_example/standard/int_vector2.dart';
+import 'package:flame_isolate_example/standard/pair.dart';
+import 'package:flame_isolate_example/units/worker.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_isolates_example/brains/path_finder.dart';
-import 'package:flutter_isolates_example/brains/worker_overmind_hud.dart';
-import 'package:flutter_isolates_example/colonists_game.dart';
-import 'package:flutter_isolates_example/objects/bread.dart';
-import 'package:flutter_isolates_example/objects/colonists_object.dart';
-import 'package:flutter_isolates_example/standard/int_vector2.dart';
-import 'package:flutter_isolates_example/standard/pair.dart';
-import 'package:flutter_isolates_example/units/worker.dart';
 
 class WorkerOvermind extends Component
-    with HasGameRef<ColonistsGame>, FlameIsolate {
+    with HasGameReference<ColonistsGame>, FlameIsolate {
   final List<Pair<StaticColonistsObject, Vector2>> _queuedTasks = [];
   late Timer _assignTaskInterval;
   late WorkerOvermindHud isolateHud;
 
   @override
   Future<void> onLoad() async {
-    gameRef.add(isolateHud = WorkerOvermindHud());
+    game.cameraComponent.viewport.add(isolateHud = WorkerOvermindHud());
     super.onLoad();
   }
 
@@ -34,7 +35,7 @@ class WorkerOvermind extends Component
 
   // Note: This would, in reality, also be moved to isolate
   void calculateTasks() {
-    gameRef.worldObjects.whereType<Bread>().forEach((bread) {
+    game.worldObjects.whereType<Bread>().forEach((bread) {
       moveObject(bread, Vector2(8, 2));
     });
   }
@@ -62,7 +63,7 @@ class WorkerOvermind extends Component
       return;
     }
 
-    final idleWorkers = gameRef.workers
+    final idleWorkers = game.workers
         .where(
           (worker) =>
               worker.isIdle && !_workersBeingCalculated.contains(worker),
@@ -92,7 +93,7 @@ class WorkerOvermind extends Component
               .map((worker) => worker.tilePosition)
               .toList(growable: false),
           destinations: subQueue,
-          pathFinderData: gameRef.pathFinderData,
+          pathFinderData: game.pathFinderData,
         );
 
         final List<List<IntVector2>> paths;

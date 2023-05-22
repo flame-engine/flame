@@ -745,20 +745,6 @@ class Component {
     }
   }
 
-  /// Usually this is not something that the user would want to call since the
-  /// component list isn't re-ordered when it is called.
-  /// See FlameGame.changePriority instead.
-  @Deprecated('Will be removed in 1.8.0. Use priority setter instead.')
-  // ignore: use_setters_to_change_properties
-  void changePriorityWithoutResorting(int priority) => _priority = priority;
-
-  /// Call this if any of this component's children priorities have changed
-  /// at runtime.
-  ///
-  /// This will call [ComponentSet.rebalanceAll] on the [children] ordered set.
-  @Deprecated('Will be removed in 1.8.0, it is now done automatically.')
-  void reorderChildren() => _children?.rebalanceAll();
-
   //#endregion
 
   //#region Internal lifecycle management
@@ -973,8 +959,14 @@ class Component {
   ///
   /// Do note that this currently only works if the component is added directly
   /// to the root `FlameGame`.
+  @Deprecated('''
+  Use the CameraComponent and add your component to the viewport with
+  cameraComponent.viewport.add(yourHudComponent) instead.
+  This will be removed in Flame v2.
+  ''')
   PositionType positionType = PositionType.game;
 
+  @Deprecated('To be removed in Flame v2')
   @protected
   Vector2 eventPosition(PositionInfo info) {
     switch (positionType) {

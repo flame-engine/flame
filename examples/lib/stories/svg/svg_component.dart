@@ -50,7 +50,7 @@ class Background extends SvgComponent with HasGameRef<SvgComponentExample> {
 }
 
 class Balloons extends SvgComponent with HasGameRef<SvgComponentExample> {
-  Balloons()
+  Balloons({super.position})
       : super(
           priority: 2,
           size: Vector2(75, 125),
@@ -77,44 +77,29 @@ class SvgComponentExample extends FlameGame
   ''';
 
   late Player player;
+  final world = World();
+  late final CameraComponent cameraComponent;
 
   @override
   Future<void>? onLoad() async {
     await super.onLoad();
-    camera.followVector2(Vector2.zero());
-
-    add(player = Player());
-    add(Background());
-
-    add(
-      Balloons()
-        ..x = -10
-        ..y = -20,
+    cameraComponent = CameraComponent.withFixedResolution(
+      world: world,
+      width: 400,
+      height: 600,
     );
+    addAll([cameraComponent, world]);
 
-    add(
-      Balloons()
-        ..x = -100
-        ..y = -150,
-    );
+    world.add(player = Player());
+    world.add(Background());
 
-    add(
-      Balloons()
-        ..x = -200
-        ..y = -140,
-    );
-
-    add(
-      Balloons()
-        ..x = 100
-        ..y = 130,
-    );
-
-    add(
-      Balloons()
-        ..x = 50
-        ..y = -130,
-    );
+    world.addAll([
+      Balloons(position: Vector2(-10, -20)),
+      Balloons(position: Vector2(-100, -150)),
+      Balloons(position: Vector2(-200, -140)),
+      Balloons(position: Vector2(100, 130)),
+      Balloons(position: Vector2(50, -130)),
+    ]);
   }
 
   @override

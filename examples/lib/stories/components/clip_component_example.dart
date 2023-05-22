@@ -19,18 +19,9 @@ class _Rectangle extends RectangleComponent {
               [Colors.orange, Colors.blue],
             ),
           children: [
-            SequenceEffect(
-              [
-                RotateEffect.by(
-                  pi * 2,
-                  LinearEffectController(.4),
-                ),
-                RotateEffect.by(
-                  0,
-                  LinearEffectController(.4),
-                ),
-              ],
-              infinite: true,
+            RotateEffect.by(
+              pi * 2,
+              EffectController(duration: .4, infinite: true),
             ),
           ],
         );

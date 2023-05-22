@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use_from_same_package
+
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
@@ -274,8 +276,7 @@ void main() {
 }
 
 class _GameWithDualTappableComponents extends FlameGame
-    with HasTappablesBridge // ignore: deprecated_member_use_from_same_package
-{
+    with HasTappablesBridge {
   _GameWithDualTappableComponents({super.children});
 }
 

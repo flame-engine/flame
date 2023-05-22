@@ -54,6 +54,9 @@ class IsometricTileMapComponent extends PositionComponent {
   /// Note: this must be measured in the destination space.
   double? tileHeight;
 
+  /// Where the tileset's image is stored.
+  Sprite _renderSprite;
+
   IsometricTileMapComponent(
     this.tileset,
     this.matrix, {
@@ -78,10 +81,8 @@ class IsometricTileMapComponent extends PositionComponent {
   /// tile size.
   double get effectiveTileHeight => tileHeight ?? (effectiveTileSize.y / 2);
 
-  Sprite _renderSprite;
   @override
   void render(Canvas canvas) {
-    _renderSprite.image = tileset.image;
     final size = effectiveTileSize;
     for (var i = 0; i < matrix.length; i++) {
       for (var j = 0; j < matrix[i].length; j++) {
@@ -114,8 +115,9 @@ class IsometricTileMapComponent extends PositionComponent {
       effectiveTileSize.x / 2,
       (effectiveTileSize.y / 2) / scalingFactor,
     )..multiply(scale);
-    final pos = Vector2(i.toDouble(), j.toDouble())..multiply(halfTile);
-    return cartToIso(pos) - halfTile;
+    final cartesianPosition = Vector2(i.toDouble(), j.toDouble())
+      ..multiply(halfTile);
+    return cartToIso(cartesianPosition) - halfTile;
   }
 
   /// Get the position of the center of the surface of the isometric tile in

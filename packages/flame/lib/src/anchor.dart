@@ -54,6 +54,7 @@ class Anchor {
     if (this == otherAnchor) {
       return position;
     } else {
+      // TODO(Any): This should not be creating new Vector2 objects.
       return position +
           ((otherAnchor.toVector2() - toVector2())..multiply(size));
     }

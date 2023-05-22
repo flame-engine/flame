@@ -18,6 +18,9 @@ class ScreenHitbox<T extends FlameGame> extends PositionComponent
   @override
   void update(double dt) {
     super.update(dt);
+    // TODO(Lukas): Pass in a CameraComponent and use the position of the
+    // viewfinder, or only allow this to be attached to a viewport.
+    // ignore: deprecated_member_use_from_same_package
     position = gameRef.camera.unprojectVector(_zeroVector);
   }
 

@@ -43,6 +43,7 @@ class Box extends BodyComponent {
   }
 }
 
+// ignore: deprecated_member_use
 class DraggableBox extends Box with Draggable {
   MouseJoint? mouseJoint;
   late final groundBody = world.createBody(BodyDef());

@@ -13,6 +13,7 @@ import 'package:meta/meta.dart';
 ///
 /// See [MultiTapGestureRecognizer] for the description of each individual
 /// event.
+@Deprecated('Will be removed in Flame v2, use the TapCallbacks mixin instead.')
 mixin Tappable on Component {
   bool onTapDown(TapDownInfo info) => true;
   bool onLongTapDown(TapDownInfo info) => true;

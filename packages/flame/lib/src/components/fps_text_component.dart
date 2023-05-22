@@ -18,7 +18,6 @@ class FpsTextComponent<T extends TextRenderer> extends TextComponent {
         super(
           priority: priority ?? double.maxFinite.toInt(),
         ) {
-    positionType = PositionType.viewport;
     add(fpsComponent);
   }
 

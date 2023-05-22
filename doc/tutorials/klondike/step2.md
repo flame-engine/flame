@@ -166,12 +166,6 @@ KlondikeGame
  └─ CameraComponent
 ```
 
-```{note}
-The **Camera** system described in this tutorial is different from the
-"official" camera available as a property of the `FlameGame` class. The latter
-may become deprecated in the future.
-```
-
 For this game I've been drawing my image assets having in mind the dimension of
 a single card at 1000×1400 pixels. So, this will serve as the reference size for
 determining the overall layout. Another important measurement that affects the

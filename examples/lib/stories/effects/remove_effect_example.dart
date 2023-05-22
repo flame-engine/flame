@@ -12,13 +12,22 @@ class RemoveEffectExample extends FlameGame {
     disappear after a 0.5 second delay.
   ''';
 
+  final world = World();
+  late final CameraComponent cameraComponent;
+
   @override
-  void onMount() {
+  void onLoad() {
     super.onMount();
-    camera.viewport = FixedResolutionViewport(Vector2(400, 600));
+    cameraComponent = CameraComponent.withFixedResolution(
+      world: world,
+      width: 400,
+      height: 600,
+    );
+    cameraComponent.viewfinder.anchor = Anchor.topLeft;
+    addAll([cameraComponent, world]);
     final rng = Random();
     for (var i = 0; i < 20; i++) {
-      add(_RandomCircle.random(rng));
+      world.add(_RandomCircle.random(rng));
     }
   }
 }

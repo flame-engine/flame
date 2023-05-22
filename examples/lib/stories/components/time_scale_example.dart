@@ -31,25 +31,33 @@ class TimeScaleExample extends FlameGame
   @override
   Color backgroundColor() => const Color.fromARGB(255, 88, 114, 97);
 
+  final world = World();
+  late final CameraComponent cameraComponent;
+
   @override
   Future<void> onLoad() async {
-    camera.viewport = FixedResolutionViewport(Vector2(640, 360));
+    cameraComponent = CameraComponent.withFixedResolution(
+      world: world,
+      width: 640,
+      height: 360,
+    );
+    addAll([world, cameraComponent]);
     final spriteSheet = SpriteSheet(
       image: await images.load('animations/chopper.png'),
       srcSize: Vector2.all(48),
     );
     gameSpeedText.position = Vector2(size.x * 0.5, size.y * 0.8);
 
-    await addAll([
+    await world.addAll([
       _Chopper(
-        position: Vector2(size.x * 0.3, size.y * 0.45),
+        position: Vector2(-100, -10),
         size: Vector2.all(64),
         anchor: Anchor.center,
         angle: -pi / 2,
         animation: spriteSheet.createAnimation(row: 0, stepTime: 0.05),
       ),
       _Chopper(
-        position: Vector2(size.x * 0.6, size.y * 0.55),
+        position: Vector2(100, 10),
         size: Vector2.all(64),
         anchor: Anchor.center,
         angle: pi / 2,

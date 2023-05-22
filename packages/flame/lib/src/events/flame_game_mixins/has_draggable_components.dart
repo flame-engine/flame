@@ -14,9 +14,6 @@ import 'package:flame/src/game/game_render_box.dart';
 import 'package:flutter/gestures.dart';
 import 'package:meta/meta.dart';
 
-@Deprecated('This mixin will be removed in 1.8.0')
-mixin HasDraggableComponents on FlameGame {}
-
 /// **MultiDragDispatcher** facilitates dispatching of drag events to the
 /// [DragCallbacks] components in the component tree. It will be attached to
 /// the [FlameGame] instance automatically whenever any [DragCallbacks]
@@ -51,6 +48,7 @@ class MultiDragDispatcher extends Component implements MultiDragListener {
     // ignore: deprecated_member_use_from_same_package
     if (game is HasDraggablesBridge) {
       final info = event.asInfo(game)..handled = event.handled;
+      // ignore: deprecated_member_use_from_same_package
       game.propagateToChildren<Draggable>(
         (c) => c.handleDragStart(event.pointerId, info),
       );
@@ -86,6 +84,7 @@ class MultiDragDispatcher extends Component implements MultiDragListener {
     // ignore: deprecated_member_use_from_same_package
     if (game is HasDraggablesBridge) {
       final info = event.asInfo(game)..handled = event.handled;
+      // ignore: deprecated_member_use_from_same_package
       game.propagateToChildren<Draggable>(
         (c) => c.handleDragUpdated(event.pointerId, info),
       );
@@ -110,6 +109,7 @@ class MultiDragDispatcher extends Component implements MultiDragListener {
     // ignore: deprecated_member_use_from_same_package
     if (game is HasDraggablesBridge) {
       final info = event.asInfo(game)..handled = event.handled;
+      // ignore: deprecated_member_use_from_same_package
       game.propagateToChildren<Draggable>(
         (c) => c.handleDragEnded(event.pointerId, info),
       );
@@ -128,6 +128,7 @@ class MultiDragDispatcher extends Component implements MultiDragListener {
     });
     // ignore: deprecated_member_use_from_same_package
     if (game is HasDraggablesBridge) {
+      // ignore: deprecated_member_use_from_same_package
       game.propagateToChildren<Draggable>(
         (c) => c.handleDragCanceled(event.pointerId),
       );

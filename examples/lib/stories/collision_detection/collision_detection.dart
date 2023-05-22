@@ -11,6 +11,7 @@ import 'package:examples/stories/collision_detection/raycast_light_example.dart'
 import 'package:examples/stories/collision_detection/raycast_max_distance_example.dart';
 import 'package:examples/stories/collision_detection/raytrace_example.dart';
 import 'package:flame/game.dart';
+import 'package:flutter/widgets.dart';
 
 void addCollisionDetectionStories(Dashbook dashbook) {
   dashbook.storiesOf('Collision Detection')
@@ -35,7 +36,7 @@ void addCollisionDetectionStories(Dashbook dashbook) {
     )
     ..add(
       'Multiple shapes',
-      (_) => GameWidget(game: MultipleShapesExample()),
+      (_) => ClipRect(child: GameWidget(game: MultipleShapesExample())),
       codeLink: baseLink('collision_detection/multiple_shapes_example.dart'),
       info: MultipleShapesExample.description,
     )

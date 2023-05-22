@@ -14,10 +14,6 @@ class RiveComponent extends PositionComponent {
   RiveComponent({
     required this.artboard,
     bool antialiasing = true,
-    @Deprecated(
-      "Will be removed in v1.8.0, use size's default value for ArtboardSize",
-    )
-        bool useArtboardSize = true,
     BoxFit fit = BoxFit.contain,
     Alignment alignment = Alignment.center,
 
@@ -34,7 +30,6 @@ class RiveComponent extends PositionComponent {
     super.priority,
   })  : _renderer = RiveArtboardRenderer(
           antialiasing: antialiasing,
-          useArtboardSize: useArtboardSize,
           fit: fit,
           alignment: alignment,
           artboard: artboard,
@@ -55,13 +50,11 @@ class RiveComponent extends PositionComponent {
 class RiveArtboardRenderer {
   final Artboard artboard;
   final bool antialiasing;
-  final bool useArtboardSize;
   final BoxFit fit;
   final Alignment alignment;
 
   RiveArtboardRenderer({
     required this.antialiasing,
-    required this.useArtboardSize,
     required this.fit,
     required this.alignment,
     required this.artboard,
