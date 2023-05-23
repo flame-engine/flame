@@ -411,6 +411,7 @@ void main() {
       // Need to initialize a game and call `onLoad` and `onGameResize` to
       // get the camera and canvas sizes all initialized
       final game = FlameGame(children: [world, cameraComponent]);
+      component.onGameResize(mapSizePx);
       await game.ready();
       cameraComponent.viewfinder.position = Vector2(150, 20);
     });
@@ -420,7 +421,6 @@ void main() {
       expect(component.size, mapSizePx);
     });
 
-    // TODO(Erick): Don't skip when it is solved.
     test(
       'renders',
       () async {
@@ -428,7 +428,6 @@ void main() {
 
         expect(pngData, matchesGoldenFile('goldens/orthogonal.png'));
       },
-      skip: true,
     );
   });
 

@@ -66,6 +66,7 @@ class TiledComponent<T extends FlameGame> extends PositionComponent
     // Automatically use the first attached CameraComponent camera if it's not
     // already set..
     tileMap.camera ??= gameRef.children.query<CameraComponent>().firstOrNull;
+    tileMap.handleResize(size);
   }
 
   @override
