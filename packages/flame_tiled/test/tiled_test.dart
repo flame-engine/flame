@@ -412,8 +412,9 @@ void main() {
       // get the camera and canvas sizes all initialized
       final game = FlameGame(children: [world, cameraComponent]);
       component.onGameResize(mapSizePx);
-      await game.ready();
       cameraComponent.viewfinder.position = Vector2(150, 20);
+      await component.onLoad();
+      await game.ready();
     });
 
     test('component size', () {
