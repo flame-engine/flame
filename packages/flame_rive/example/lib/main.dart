@@ -4,33 +4,10 @@ import 'package:flame_rive/flame_rive.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatefulWidget {
-  const MyApp({super.key});
-
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  late final game = RiveExampleGame();
-
-  @override
-  Widget build(BuildContext context) {
-    return GameWidget(
-      game: game,
-    );
-  }
+  runApp(const GameWidget.controlled(gameFactory: RiveExampleGame.new));
 }
 
 class RiveExampleGame extends FlameGame {
-  @override
-  Color backgroundColor() {
-    return const Color(0xFFFFFFFF);
-  }
-
   @override
   Future<void> onLoad() async {
     final skillsArtboard =
@@ -40,13 +17,15 @@ class RiveExampleGame extends FlameGame {
 }
 
 class SkillsAnimationComponent extends RiveComponent with TapCallbacks {
-  SkillsAnimationComponent(Artboard artboard)
-      : super(
-          artboard: artboard,
-          size: Vector2.all(550),
-        );
+  SkillsAnimationComponent(Artboard artboard) : super(artboard: artboard);
 
   SMIInput<double>? _levelInput;
+
+  @override
+  void onGameResize(Vector2 size) {
+    super.onGameResize(size);
+    this.size = size;
+  }
 
   @override
   void onLoad() {
@@ -68,6 +47,5 @@ class SkillsAnimationComponent extends RiveComponent with TapCallbacks {
       return;
     }
     levelInput.value = (levelInput.value + 1) % 3;
-    event.continuePropagation = true;
   }
 }
