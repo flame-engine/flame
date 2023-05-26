@@ -412,6 +412,7 @@ void main() {
       final game = FlameGame(children: [world, cameraComponent]);
       cameraComponent.viewfinder.anchor = Anchor.topLeft;
       cameraComponent.viewfinder.position = Vector2(150, 20);
+      cameraComponent.viewport.size = mapSizePx.clone();
       game.onGameResize(mapSizePx);
       component.onGameResize(mapSizePx);
       await component.onLoad();

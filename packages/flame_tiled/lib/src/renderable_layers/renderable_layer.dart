@@ -109,8 +109,16 @@ abstract class RenderableLayer<T extends Layer> {
     final anchor = camera.viewfinder.anchor;
     final cameraX = camera.viewfinder.position.x;
     final cameraY = camera.viewfinder.position.y;
-    final viewportCenterX = camera.viewport.size.x * anchor.x;
-    final viewportCenterY = camera.viewport.size.y * anchor.y;
+    final viewportCenterX = camera.viewport.size.x / 2;
+    final viewportCenterY = camera.viewport.size.y / 2;
+
+    if (parent is GroupLayer) {
+      print(layer.name);
+      print(parallaxX);
+      print(parallaxY);
+      print(viewportCenterX);
+      print(viewportCenterY);
+    }
 
     // Due to how Tiled treats the center of the view as the reference
     // point for parallax positioning (see Tiled docs), we need to offset the
