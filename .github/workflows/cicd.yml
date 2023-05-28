@@ -31,7 +31,7 @@ jobs:
           channel: 'stable'
       - uses: bluefireteam/melos-action@v2
       - name: "Analyze"
-        uses: invertase/github-action-dart-analyzer@v2
+        uses: invertase/github-action-dart-analyzer@v2.0.0
 
   markdown-lint:
     runs-on: ubuntu-latest
