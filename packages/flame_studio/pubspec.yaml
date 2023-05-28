@@ -14,14 +14,14 @@ environment:
 
 dependencies:
   collection: ^1.17.1
-  flame: ^1.8.0
+  flame: ^1.7.3
   flutter:
     sdk: flutter
   flutter_riverpod: ^2.3.6
   meta: ^1.9.1
 
 dev_dependencies:
-  flame_lint: ^0.2.0+3
+  flame_lint: ^0.2.0+2
   flutter_test:
     sdk: flutter
   test: any
