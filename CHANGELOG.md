@@ -3,6 +3,140 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2023-05-28
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - [`flame` - `v1.8.0`](#flame---v180)
+ - [`flame_rive` - `v1.8.0`](#flame_rive---v180)
+ - [`flame_test` - `v1.11.0`](#flame_test---v1110)
+ - [`flame_forge2d` - `v0.14.0`](#flame_forge2d---v0140)
+ - [`flame_isolate` - `v0.4.0`](#flame_isolate---v040)
+
+Packages with other changes:
+
+ - [`flame_lint` - `v1.0.0`](#flame_lint---v100)
+ - [`flame_audio` - `v2.0.3`](#flame_audio---v203)
+ - [`flame_bloc` - `v1.9.0`](#flame_bloc---v190)
+ - [`flame_fire_atlas` - `v1.3.6`](#flame_fire_atlas---v136)
+ - [`flame_lottie` - `v0.2.0+3`](#flame_lottie---v0203)
+ - [`flame_network_assets` - `v0.2.0+2`](#flame_network_assets---v0202)
+ - [`flame_noise` - `v0.1.1+2`](#flame_noise---v0112)
+ - [`flame_oxygen` - `v0.1.8+3`](#flame_oxygen---v0183)
+ - [`flame_spine` - `v0.1.0+1`](#flame_spine---v0101)
+ - [`flame_svg` - `v1.7.4`](#flame_svg---v174)
+ - [`flame_tiled` - `v1.10.2`](#flame_tiled---v1102)
+ - [`jenny` - `v1.0.3`](#jenny---v103)
+
+---
+
+#### `flame` - `v1.8.0`
+
+ - **FIX**: Update sdk constraints to >=3.0.0 ([#2554](https://github.com/flame-engine/flame/issues/2554)). ([2f71e06e](https://github.com/flame-engine/flame/commit/2f71e06eb86ffc65cd459c4d722eee2470be13e5))
+ - **FIX**: Reduce the Vector2 creations in Anchor ([#2550](https://github.com/flame-engine/flame/issues/2550)). ([5a9434b0](https://github.com/flame-engine/flame/commit/5a9434b09a6fbe2c86db2d8192cd2d7ae0d5868c))
+ - **FIX**: Fix disappearing text on TextBoxComponent for larger pixelRatios ([#2540](https://github.com/flame-engine/flame/issues/2540)). ([6e1d5466](https://github.com/flame-engine/flame/commit/6e1d5466aadc59f90475b1a9e7658bb78ed60340))
+ - **FIX**: Avoid the creation of Vector2 objects in Parallax update ([#2536](https://github.com/flame-engine/flame/issues/2536)). ([3849f07d](https://github.com/flame-engine/flame/commit/3849f07d50870e4364caf9e115e869d8fed6aaed))
+ - **FIX**: Solve warnings from 3.10.0 analyzer ([#2532](https://github.com/flame-engine/flame/issues/2532)). ([b41622db](https://github.com/flame-engine/flame/commit/b41622db8faa7559328f83f8f1d93ec4c6386961))
+ - **FIX**: Move `errorBuilder` and `loadingBuilder` to constructors ([#2526](https://github.com/flame-engine/flame/issues/2526)). ([55ec0bc3](https://github.com/flame-engine/flame/commit/55ec0bc3cbebc0106dba2e0d4f3fd7693b9bc6d6))
+ - **FEAT**: Add onComplete callback to `AnimationWidget` ([#2515](https://github.com/flame-engine/flame/issues/2515)). ([0b68be8a](https://github.com/flame-engine/flame/commit/0b68be8a6f306b0102b3be980dec661909d2c1e0))
+ - **FEAT**: Add `stepEngine` to `Game` ([#2516](https://github.com/flame-engine/flame/issues/2516)). ([1ed2c5a2](https://github.com/flame-engine/flame/commit/1ed2c5a2974876a32f620d9dc9cb385e4e928c50))
+ - **FEAT**: Customise grid of NineTileBox ([#2495](https://github.com/flame-engine/flame/issues/2495)). ([a25b0a03](https://github.com/flame-engine/flame/commit/a25b0a03a56975e1de2e15747bc3e527ac232545))
+ - **FEAT**: Accept `CollisionType` in hitbox constructor ([#2509](https://github.com/flame-engine/flame/issues/2509)). ([89926227](https://github.com/flame-engine/flame/commit/89926227c5132455b971dece6ed313634d7ac873))
+ - **DOCS**: Update content types of sphinx code snippets ([#2519](https://github.com/flame-engine/flame/issues/2519)). ([306ad320](https://github.com/flame-engine/flame/commit/306ad32052cfba9c6b3ab38ebb7d0604742d2993))
+ - **BREAKING** **REFACTOR**: Move `CameraComponent` and events out of experimental ([#2505](https://github.com/flame-engine/flame/issues/2505)). ([87b8a067](https://github.com/flame-engine/flame/commit/87b8a067f3e0096cebff3db4f5767e68616928fd))
+ - **BREAKING** **FEAT**: Add `SpriteAnimationTicker` ([#2457](https://github.com/flame-engine/flame/issues/2457)). ([a50c80cf](https://github.com/flame-engine/flame/commit/a50c80cfa34c08463ab29efe4a1f546fb47da34e))
+
+#### `flame_rive` - `v1.8.0`
+
+ - **FIX**: Update sdk constraints to >=3.0.0 ([#2554](https://github.com/flame-engine/flame/issues/2554)). ([2f71e06e](https://github.com/flame-engine/flame/commit/2f71e06eb86ffc65cd459c4d722eee2470be13e5))
+ - **FIX**: Avoid creation of unnecessary objects for RiveComponent ([#2553](https://github.com/flame-engine/flame/issues/2553)). ([52b35fbf](https://github.com/flame-engine/flame/commit/52b35fbf56a551a7585c493e2de51473266bf759))
+ - **FIX**: Solve warnings from 3.10.0 analyzer ([#2532](https://github.com/flame-engine/flame/issues/2532)). ([b41622db](https://github.com/flame-engine/flame/commit/b41622db8faa7559328f83f8f1d93ec4c6386961))
+ - **BREAKING** **REFACTOR**: Move `CameraComponent` and events out of experimental ([#2505](https://github.com/flame-engine/flame/issues/2505)). ([87b8a067](https://github.com/flame-engine/flame/commit/87b8a067f3e0096cebff3db4f5767e68616928fd))
+
+#### `flame_test` - `v1.11.0`
+
+ - **FIX**: Update sdk constraints to >=3.0.0 ([#2554](https://github.com/flame-engine/flame/issues/2554)). ([2f71e06e](https://github.com/flame-engine/flame/commit/2f71e06eb86ffc65cd459c4d722eee2470be13e5))
+ - **FIX**: Solve warnings from 3.10.0 analyzer ([#2532](https://github.com/flame-engine/flame/issues/2532)). ([b41622db](https://github.com/flame-engine/flame/commit/b41622db8faa7559328f83f8f1d93ec4c6386961))
+ - **BREAKING** **REFACTOR**: Move `CameraComponent` and events out of experimental ([#2505](https://github.com/flame-engine/flame/issues/2505)). ([87b8a067](https://github.com/flame-engine/flame/commit/87b8a067f3e0096cebff3db4f5767e68616928fd))
+
+#### `flame_forge2d` - `v0.14.0`
+
+ - **FIX**: Update sdk constraints to >=3.0.0 ([#2554](https://github.com/flame-engine/flame/issues/2554)). ([2f71e06e](https://github.com/flame-engine/flame/commit/2f71e06eb86ffc65cd459c4d722eee2470be13e5))
+ - **FIX**: Solve warnings from 3.10.0 analyzer ([#2532](https://github.com/flame-engine/flame/issues/2532)). ([b41622db](https://github.com/flame-engine/flame/commit/b41622db8faa7559328f83f8f1d93ec4c6386961))
+ - **BREAKING** **REFACTOR**: Move `CameraComponent` and events out of experimental ([#2505](https://github.com/flame-engine/flame/issues/2505)). ([87b8a067](https://github.com/flame-engine/flame/commit/87b8a067f3e0096cebff3db4f5767e68616928fd))
+
+#### `flame_isolate` - `v0.4.0`
+
+ - **FIX**: Update sdk constraints to >=3.0.0 ([#2554](https://github.com/flame-engine/flame/issues/2554)). ([2f71e06e](https://github.com/flame-engine/flame/commit/2f71e06eb86ffc65cd459c4d722eee2470be13e5))
+ - **FIX**: Solve warnings from 3.10.0 analyzer ([#2532](https://github.com/flame-engine/flame/issues/2532)). ([b41622db](https://github.com/flame-engine/flame/commit/b41622db8faa7559328f83f8f1d93ec4c6386961))
+ - **BREAKING** **REFACTOR**: Move `CameraComponent` and events out of experimental ([#2505](https://github.com/flame-engine/flame/issues/2505)). ([87b8a067](https://github.com/flame-engine/flame/commit/87b8a067f3e0096cebff3db4f5767e68616928fd))
+
+#### `flame_lint` - `v1.0.0`
+
+ - **FIX**: Update sdk constraints to >=3.0.0 ([#2554](https://github.com/flame-engine/flame/issues/2554)). ([2f71e06e](https://github.com/flame-engine/flame/commit/2f71e06eb86ffc65cd459c4d722eee2470be13e5))
+ - **FIX**: Solve warnings from 3.10.0 analyzer ([#2532](https://github.com/flame-engine/flame/issues/2532)). ([b41622db](https://github.com/flame-engine/flame/commit/b41622db8faa7559328f83f8f1d93ec4c6386961))
+
+#### `flame_audio` - `v2.0.3`
+
+ - **FIX**: Update sdk constraints to >=3.0.0 ([#2554](https://github.com/flame-engine/flame/issues/2554)). ([2f71e06e](https://github.com/flame-engine/flame/commit/2f71e06eb86ffc65cd459c4d722eee2470be13e5))
+ - **FIX**: Solve warnings from 3.10.0 analyzer ([#2532](https://github.com/flame-engine/flame/issues/2532)). ([b41622db](https://github.com/flame-engine/flame/commit/b41622db8faa7559328f83f8f1d93ec4c6386961))
+
+#### `flame_bloc` - `v1.9.0`
+
+ - **FIX**: Update sdk constraints to >=3.0.0 ([#2554](https://github.com/flame-engine/flame/issues/2554)). ([2f71e06e](https://github.com/flame-engine/flame/commit/2f71e06eb86ffc65cd459c4d722eee2470be13e5))
+ - **FIX**: Solve warnings from 3.10.0 analyzer ([#2532](https://github.com/flame-engine/flame/issues/2532)). ([b41622db](https://github.com/flame-engine/flame/commit/b41622db8faa7559328f83f8f1d93ec4c6386961))
+ - **FEAT**: Add listener for initial state on flame_bloc ([#2382](https://github.com/flame-engine/flame/issues/2382)). ([01121c22](https://github.com/flame-engine/flame/commit/01121c220bec391e0242dfa9afc3d4a03bb3358b))
+ - **FEAT**: Accept `CollisionType` in hitbox constructor ([#2509](https://github.com/flame-engine/flame/issues/2509)). ([89926227](https://github.com/flame-engine/flame/commit/89926227c5132455b971dece6ed313634d7ac873))
+
+#### `flame_fire_atlas` - `v1.3.6`
+
+ - **FIX**: Update sdk constraints to >=3.0.0 ([#2554](https://github.com/flame-engine/flame/issues/2554)). ([2f71e06e](https://github.com/flame-engine/flame/commit/2f71e06eb86ffc65cd459c4d722eee2470be13e5))
+ - **FIX**: Solve warnings from 3.10.0 analyzer ([#2532](https://github.com/flame-engine/flame/issues/2532)). ([b41622db](https://github.com/flame-engine/flame/commit/b41622db8faa7559328f83f8f1d93ec4c6386961))
+
+#### `flame_lottie` - `v0.2.0+3`
+
+ - **FIX**: Update sdk constraints to >=3.0.0 ([#2554](https://github.com/flame-engine/flame/issues/2554)). ([2f71e06e](https://github.com/flame-engine/flame/commit/2f71e06eb86ffc65cd459c4d722eee2470be13e5))
+ - **FIX**: Solve warnings from 3.10.0 analyzer ([#2532](https://github.com/flame-engine/flame/issues/2532)). ([b41622db](https://github.com/flame-engine/flame/commit/b41622db8faa7559328f83f8f1d93ec4c6386961))
+
+#### `flame_network_assets` - `v0.2.0+2`
+
+ - **FIX**: Solve warnings from 3.10.0 analyzer ([#2532](https://github.com/flame-engine/flame/issues/2532)). ([b41622db](https://github.com/flame-engine/flame/commit/b41622db8faa7559328f83f8f1d93ec4c6386961))
+
+#### `flame_noise` - `v0.1.1+2`
+
+ - **FIX**: Update sdk constraints to >=3.0.0 ([#2554](https://github.com/flame-engine/flame/issues/2554)). ([2f71e06e](https://github.com/flame-engine/flame/commit/2f71e06eb86ffc65cd459c4d722eee2470be13e5))
+ - **FIX**: Solve warnings from 3.10.0 analyzer ([#2532](https://github.com/flame-engine/flame/issues/2532)). ([b41622db](https://github.com/flame-engine/flame/commit/b41622db8faa7559328f83f8f1d93ec4c6386961))
+
+#### `flame_oxygen` - `v0.1.8+3`
+
+ - **FIX**: Update sdk constraints to >=3.0.0 ([#2554](https://github.com/flame-engine/flame/issues/2554)). ([2f71e06e](https://github.com/flame-engine/flame/commit/2f71e06eb86ffc65cd459c4d722eee2470be13e5))
+ - **FIX**: Solve warnings from 3.10.0 analyzer ([#2532](https://github.com/flame-engine/flame/issues/2532)). ([b41622db](https://github.com/flame-engine/flame/commit/b41622db8faa7559328f83f8f1d93ec4c6386961))
+
+#### `flame_spine` - `v0.1.0+1`
+
+ - **FIX**: Update sdk constraints to >=3.0.0 ([#2554](https://github.com/flame-engine/flame/issues/2554)). ([2f71e06e](https://github.com/flame-engine/flame/commit/2f71e06eb86ffc65cd459c4d722eee2470be13e5))
+ - **FIX**: Solve warnings from 3.10.0 analyzer ([#2532](https://github.com/flame-engine/flame/issues/2532)). ([b41622db](https://github.com/flame-engine/flame/commit/b41622db8faa7559328f83f8f1d93ec4c6386961))
+
+#### `flame_svg` - `v1.7.4`
+
+ - **FIX**: Update sdk constraints to >=3.0.0 ([#2554](https://github.com/flame-engine/flame/issues/2554)). ([2f71e06e](https://github.com/flame-engine/flame/commit/2f71e06eb86ffc65cd459c4d722eee2470be13e5))
+ - **FIX**: Solve warnings from 3.10.0 analyzer ([#2532](https://github.com/flame-engine/flame/issues/2532)). ([b41622db](https://github.com/flame-engine/flame/commit/b41622db8faa7559328f83f8f1d93ec4c6386961))
+
+#### `flame_tiled` - `v1.10.2`
+
+ - **FIX**: Update sdk constraints to >=3.0.0 ([#2554](https://github.com/flame-engine/flame/issues/2554)). ([2f71e06e](https://github.com/flame-engine/flame/commit/2f71e06eb86ffc65cd459c4d722eee2470be13e5))
+ - **FIX**: Solve warnings from 3.10.0 analyzer ([#2532](https://github.com/flame-engine/flame/issues/2532)). ([b41622db](https://github.com/flame-engine/flame/commit/b41622db8faa7559328f83f8f1d93ec4c6386961))
+
+#### `jenny` - `v1.0.3`
+
+ - **FIX**: Update sdk constraints to >=3.0.0 ([#2554](https://github.com/flame-engine/flame/issues/2554)). ([2f71e06e](https://github.com/flame-engine/flame/commit/2f71e06eb86ffc65cd459c4d722eee2470be13e5))
+ - **FIX**: Solve warnings from 3.10.0 analyzer ([#2532](https://github.com/flame-engine/flame/issues/2532)). ([b41622db](https://github.com/flame-engine/flame/commit/b41622db8faa7559328f83f8f1d93ec4c6386961))
+
+
 ## 2023-05-05
 
 ### Changes
