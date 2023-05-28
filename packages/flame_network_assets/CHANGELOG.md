@@ -1,7 +1,3 @@
-## 0.2.0+2
-
- - **FIX**: Solve warnings from 3.10.0 analyzer ([#2532](https://github.com/flame-engine/flame/issues/2532)). ([b41622db](https://github.com/flame-engine/flame/commit/b41622db8faa7559328f83f8f1d93ec4c6386961))
-
 ## 0.2.0+1
 
  - Update a dependency to the latest release.
