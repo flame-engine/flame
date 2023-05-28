@@ -30,7 +30,7 @@ dependencies:
   trex_game: ^0.1.0
 
 dev_dependencies:
-  flame_lint: ^0.2.0+3
+  flame_lint: ^1.0.0
   test: any
 
 flutter:

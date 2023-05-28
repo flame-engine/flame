@@ -21,7 +21,7 @@ dependencies:
   meta: ^1.9.1
 
 dev_dependencies:
-  flame_lint: ^0.2.0+3
+  flame_lint: ^1.0.0
   flutter_test:
     sdk: flutter
   test: any

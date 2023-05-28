@@ -19,10 +19,10 @@ Packages with breaking changes:
 
 Packages with other changes:
 
+ - [`flame_lint` - `v1.0.0`](#flame_lint---v100)
  - [`flame_audio` - `v2.0.3`](#flame_audio---v203)
  - [`flame_bloc` - `v1.9.0`](#flame_bloc---v190)
  - [`flame_fire_atlas` - `v1.3.6`](#flame_fire_atlas---v136)
- - [`flame_lint` - `v0.2.0+3`](#flame_lint---v0203)
  - [`flame_lottie` - `v0.2.0+3`](#flame_lottie---v0203)
  - [`flame_network_assets` - `v0.2.0+2`](#flame_network_assets---v0202)
  - [`flame_noise` - `v0.1.1+2`](#flame_noise---v0112)
@@ -75,6 +75,11 @@ Packages with other changes:
  - **FIX**: Solve warnings from 3.10.0 analyzer ([#2532](https://github.com/flame-engine/flame/issues/2532)). ([b41622db](https://github.com/flame-engine/flame/commit/b41622db8faa7559328f83f8f1d93ec4c6386961))
  - **BREAKING** **REFACTOR**: Move `CameraComponent` and events out of experimental ([#2505](https://github.com/flame-engine/flame/issues/2505)). ([87b8a067](https://github.com/flame-engine/flame/commit/87b8a067f3e0096cebff3db4f5767e68616928fd))
 
+#### `flame_lint` - `v1.0.0`
+
+ - **FIX**: Update sdk constraints to >=3.0.0 ([#2554](https://github.com/flame-engine/flame/issues/2554)). ([2f71e06e](https://github.com/flame-engine/flame/commit/2f71e06eb86ffc65cd459c4d722eee2470be13e5))
+ - **FIX**: Solve warnings from 3.10.0 analyzer ([#2532](https://github.com/flame-engine/flame/issues/2532)). ([b41622db](https://github.com/flame-engine/flame/commit/b41622db8faa7559328f83f8f1d93ec4c6386961))
+
 #### `flame_audio` - `v2.0.3`
 
  - **FIX**: Update sdk constraints to >=3.0.0 ([#2554](https://github.com/flame-engine/flame/issues/2554)). ([2f71e06e](https://github.com/flame-engine/flame/commit/2f71e06eb86ffc65cd459c4d722eee2470be13e5))
@@ -88,11 +93,6 @@ Packages with other changes:
  - **FEAT**: Accept `CollisionType` in hitbox constructor ([#2509](https://github.com/flame-engine/flame/issues/2509)). ([89926227](https://github.com/flame-engine/flame/commit/89926227c5132455b971dece6ed313634d7ac873))
 
 #### `flame_fire_atlas` - `v1.3.6`
-
- - **FIX**: Update sdk constraints to >=3.0.0 ([#2554](https://github.com/flame-engine/flame/issues/2554)). ([2f71e06e](https://github.com/flame-engine/flame/commit/2f71e06eb86ffc65cd459c4d722eee2470be13e5))
- - **FIX**: Solve warnings from 3.10.0 analyzer ([#2532](https://github.com/flame-engine/flame/issues/2532)). ([b41622db](https://github.com/flame-engine/flame/commit/b41622db8faa7559328f83f8f1d93ec4c6386961))
-
-#### `flame_lint` - `v0.2.0+3`
 
  - **FIX**: Update sdk constraints to >=3.0.0 ([#2554](https://github.com/flame-engine/flame/issues/2554)). ([2f71e06e](https://github.com/flame-engine/flame/commit/2f71e06eb86ffc65cd459c4d722eee2470be13e5))
  - **FIX**: Solve warnings from 3.10.0 analyzer ([#2532](https://github.com/flame-engine/flame/issues/2532)). ([b41622db](https://github.com/flame-engine/flame/commit/b41622db8faa7559328f83f8f1d93ec4c6386961))

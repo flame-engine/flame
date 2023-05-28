@@ -14,7 +14,7 @@ dependencies:
   integral_isolates: ^0.3.0
 
 dev_dependencies:
-  flame_lint: ^0.2.0+3
+  flame_lint: ^1.0.0
   flame_test: ^1.11.0
   flutter_test:
     sdk: flutter

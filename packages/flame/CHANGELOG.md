@@ -44,13 +44,17 @@ This is the simplest way of using the CameraComponent:
 3. Instead of adding the root components directly to your game with `add`,
    add them to the world.
 
-   `world.add(yourComponent);`
+   ```dart
+   world.add(yourComponent);
+   ```
 
 4. (Optional) If you want to add a HUD component, instead of using
    PositionType, add the component as a child of the viewport.
 
-   `cameraComponent.viewport.add(yourHudComponent);`
- 
+   ```dart
+   cameraComponent.viewport.add(yourHudComponent);
+   ```
+
 
 ## 1.7.3
 
