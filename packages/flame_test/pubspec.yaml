@@ -18,7 +18,7 @@ dependencies:
   flutter_test:
     sdk: flutter
   meta: ^1.9.1
-  test: any
+  test: ^1.24.1
   vector_math: ^2.1.4
 
 dev_dependencies:
