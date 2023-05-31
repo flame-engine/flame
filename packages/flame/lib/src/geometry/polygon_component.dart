@@ -40,7 +40,7 @@ class PolygonComponent extends ShapeComponent {
     super.paintLayers,
     bool? shrinkToBounds,
   })  : assert(
-          _vertices.length > 2,
+          _vertices.length < 3,
           'Number of vertices are too few to create a polygon',
         ),
         shrinkToBounds = shrinkToBounds ?? size == null,
