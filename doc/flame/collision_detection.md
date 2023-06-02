@@ -302,8 +302,9 @@ class Bullet extends PositionComponent with CollisionCallbacks {
       // do NOT collide with Player or Water
       return false;
     }
-    // Just return true if you not interested in component parent's type check result.
-    // Or call super it component's parent should be able to override the result.
+    // Just return true if you're not interested in the parent's type check result.
+    // Or call super and you will be able to override the result with the parent's
+    // result.
     return super.onComponentTypeCheck(other);
   }
 
