@@ -295,7 +295,7 @@ collide with an enemy, Ember should blink.
 
 This is our last task with Ember. We need to restrict Ember's movement because as of now, Ember can
 go off-screen and we never move the map. So to implement this feature, we simply need to add the
-following to our `update` method:
+following to the end of our `update` method:
 
 ```dart
 game.objectSpeed = 0;
@@ -308,6 +308,9 @@ if (position.x + 64 >= game.size.x / 2 && horizontalDirection > 0) {
   velocity.x = 0;
   game.objectSpeed = -moveSpeed;
 }
+
+position += velocity * dt;
+super.update(dt);
 ```
 
 If you run the game now, Ember can't move off-screen to the left, and as Ember moves to the right,
