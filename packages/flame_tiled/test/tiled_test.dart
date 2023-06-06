@@ -406,13 +406,17 @@ void main() {
 
       final world = World(children: [component]);
       final cameraComponent = CameraComponent(world: world);
-      cameraComponent.viewfinder.anchor = Anchor.topLeft;
 
       // Need to initialize a game and call `onLoad` and `onGameResize` to
       // get the camera and canvas sizes all initialized
       final game = FlameGame(children: [world, cameraComponent]);
-      await game.ready();
+      cameraComponent.viewfinder.anchor = Anchor.center;
       cameraComponent.viewfinder.position = Vector2(150, 20);
+      cameraComponent.viewport.size = mapSizePx.clone();
+      game.onGameResize(mapSizePx);
+      component.onGameResize(mapSizePx);
+      await component.onLoad();
+      await game.ready();
     });
 
     test('component size', () {
@@ -420,7 +424,6 @@ void main() {
       expect(component.size, mapSizePx);
     });
 
-    // TODO(Erick): Don't skip when it is solved.
     test(
       'renders',
       () async {
@@ -428,7 +431,6 @@ void main() {
 
         expect(pngData, matchesGoldenFile('goldens/orthogonal.png'));
       },
-      skip: true,
     );
   });
 
