@@ -410,7 +410,7 @@ void main() {
       // Need to initialize a game and call `onLoad` and `onGameResize` to
       // get the camera and canvas sizes all initialized
       final game = FlameGame(children: [world, cameraComponent]);
-      cameraComponent.viewfinder.anchor = Anchor.topLeft;
+      cameraComponent.viewfinder.anchor = Anchor.center;
       cameraComponent.viewfinder.position = Vector2(150, 20);
       cameraComponent.viewport.size = mapSizePx.clone();
       game.onGameResize(mapSizePx);

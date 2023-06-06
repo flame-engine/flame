@@ -106,10 +106,11 @@ abstract class RenderableLayer<T extends Layer> {
   /// position.
   /// https://doc.mapeditor.org/en/latest/manual/layers/#parallax-scrolling-factor
   void applyParallaxOffset(Canvas canvas, CameraComponent camera) {
+    final anchor = camera.viewfinder.anchor;
     final cameraX = camera.viewfinder.position.x;
     final cameraY = camera.viewfinder.position.y;
-    final viewportCenterX = camera.viewport.size.x / 2;
-    final viewportCenterY = camera.viewport.size.y / 2;
+    final viewportCenterX = camera.viewport.size.x * anchor.x;
+    final viewportCenterY = camera.viewport.size.y * anchor.y;
 
     // Due to how Tiled treats the center of the view as the reference
     // point for parallax positioning (see Tiled docs), we need to offset the
