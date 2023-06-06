@@ -1,7 +1,3 @@
-linux/
-macos/
-windows/
-
 # Miscellaneous
 *.class
 *.log
@@ -12,6 +8,7 @@ windows/
 .buildlog/
 .history
 .svn/
+migrate_working_dir/
 
 # IntelliJ related
 *.iml
@@ -35,13 +32,13 @@ windows/
 .pub/
 /build/
 
-# Web related
-lib/generated_plugin_registrant.dart
-
 # Symbolication related
 app.*.symbols
 
 # Obfuscation related
 app.*.map.json
-.vscode/
-pubspec.lock
+
+# Android Studio will place build artifacts here
+/android/app/debug
+/android/app/profile
+/android/app/release

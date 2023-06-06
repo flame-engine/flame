@@ -79,7 +79,7 @@ class QuadTree<T extends Hitbox<T>> {
           childSize.dy,
         );
       default:
-        assert(false, 'Invalid child index');
+        assert(false, 'Invalid child index $box $zone');
         return Rect.zero;
     }
   }
@@ -316,9 +316,8 @@ class QuadTreeNodeDebugInfo {
 
   List<QuadTreeNodeDebugInfo> get nodes {
     final list = <QuadTreeNodeDebugInfo>[this];
-    var i = 0;
-    for (final node in this.node.children) {
-      i++;
+    for (var i = 0; i < node.children.length; i++) {
+      final node = this.node.children[i];
       if (node == null) {
         continue;
       }

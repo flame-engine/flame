@@ -29,12 +29,12 @@ class GameView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return const Column(
       children: [
-        const GameStat(),
+        GameStat(),
         Expanded(
           child: Stack(
-            children: const [
+            children: [
               Positioned.fill(child: Game()),
               Positioned(top: 50, right: 10, child: Inventory()),
             ],

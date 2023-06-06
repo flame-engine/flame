@@ -5,6 +5,7 @@ import 'package:examples/stories/animations/animations.dart';
 import 'package:examples/stories/bridge_libraries/audio/audio.dart';
 import 'package:examples/stories/bridge_libraries/flame_isolate/isolate.dart';
 import 'package:examples/stories/bridge_libraries/flame_lottie/lottie.dart';
+import 'package:examples/stories/bridge_libraries/flame_spine/flame_spine.dart';
 import 'package:examples/stories/bridge_libraries/forge2d/flame_forge2d.dart';
 import 'package:examples/stories/bridge_libraries/forge2d/joints/constant_volume_joint.dart';
 import 'package:examples/stories/bridge_libraries/forge2d/joints/distance_joint.dart';
@@ -16,6 +17,7 @@ import 'package:examples/stories/bridge_libraries/forge2d/joints/prismatic_joint
 import 'package:examples/stories/bridge_libraries/forge2d/joints/pulley_joint.dart';
 import 'package:examples/stories/bridge_libraries/forge2d/joints/revolute_joint.dart';
 import 'package:examples/stories/bridge_libraries/forge2d/joints/rope_joint.dart';
+import 'package:examples/stories/bridge_libraries/forge2d/joints/weld_joint.dart';
 import 'package:examples/stories/camera_and_viewport/camera_and_viewport.dart';
 import 'package:examples/stories/collision_detection/collision_detection.dart';
 import 'package:examples/stories/components/components.dart';
@@ -50,6 +52,7 @@ void main() {
     'prismatic_joint': PrismaticJointExample.new,
     'revolute_joint': RevoluteJointExample.new,
     'rope_joint': RopeJointExample.new,
+    'weld_joint': WeldJointExample.new,
   };
   final game = routes[page]?.call();
   if (game != null) {
@@ -92,6 +95,7 @@ void runAsDashbook() {
   addForge2DStories(dashbook);
   addFlameIsolateExample(dashbook);
   addFlameLottieExample(dashbook);
+  addFlameSpineExamples(dashbook);
 
   runApp(dashbook);
 }

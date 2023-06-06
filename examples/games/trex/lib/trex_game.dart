@@ -68,7 +68,7 @@ class TRexGame extends FlameGame
       scoreText = TextComponent(
         position: Vector2(20, 20),
         textRenderer: renderer,
-      )..positionType = PositionType.viewport,
+      ),
     );
     score = 0;
   }

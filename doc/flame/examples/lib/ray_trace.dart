@@ -29,7 +29,7 @@ class RayTraceExample extends FlameGame
   Future<void> onLoad() async {
     add(
       CircleComponent(
-        radius: min(camera.canvasSize.x, camera.canvasSize.y) / 2,
+        radius: min(size.x, size.y) / 2,
         paint: boxPaint,
         children: [CircleHitbox()],
       ),

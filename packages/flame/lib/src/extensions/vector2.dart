@@ -128,6 +128,17 @@ extension Vector2Extension on Vector2 {
   /// Returns the inverse of this vector.
   Vector2 inverted() => Vector2(-x, -y);
 
+  /// Translates this Vector2 by [x] and [y].
+  void translate(double x, double y) {
+    setValues(this.x + x, this.y + y);
+  }
+
+  /// Creates a new Vector2 that is the current Vector2 translated by
+  /// [x] and [y].
+  Vector2 translated(double x, double y) {
+    return Vector2(this.x + x, this.y + y);
+  }
+
   /// Smoothly moves this [Vector2] in the direction [target] by a displacement
   /// given by a distance [ds] in that direction.
   ///

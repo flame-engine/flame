@@ -1,6 +1,6 @@
 name: flame_lint
 description: Flame lint package
-version: 0.2.0+2
+version: 1.0.0
 homepage: https://github.com/flame-engine/flame/tree/main/packages/flame_lint
 funding:
   - https://opencollective.com/blue-fire
@@ -8,7 +8,7 @@ funding:
   - https://patreon.com/bluefireoss
 
 environment:
-  sdk: ">=2.16.0 <3.0.0"
+  sdk: ">=3.0.0 <4.0.0"
 
 dev_dependencies:
-  dartdoc: ^5.0.1
+  dartdoc: ^6.2.2

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
@@ -44,7 +45,7 @@ class RenderableTiledMap {
 
   /// Camera used for determining the current viewport for layer rendering.
   /// Optional, but required for parallax support
-  Camera? camera;
+  CameraComponent? camera;
 
   /// Paint for the map's background color, if there is one
   late final Paint? _backgroundPaint;
@@ -198,7 +199,7 @@ class RenderableTiledMap {
   static Future<RenderableTiledMap> fromFile(
     String fileName,
     Vector2 destTileSize, {
-    Camera? camera,
+    CameraComponent? camera,
     bool? ignoreFlip,
   }) async {
     final contents = await Flame.bundle.loadString('assets/tiles/$fileName');
@@ -216,7 +217,7 @@ class RenderableTiledMap {
   static Future<RenderableTiledMap> fromString(
     String contents,
     Vector2 destTileSize, {
-    Camera? camera,
+    CameraComponent? camera,
     bool? ignoreFlip,
   }) async {
     final map = await TiledMap.fromString(
@@ -237,7 +238,7 @@ class RenderableTiledMap {
   static Future<RenderableTiledMap> fromTiledMap(
     TiledMap map,
     Vector2 destTileSize, {
-    Camera? camera,
+    CameraComponent? camera,
     bool? ignoreFlip,
   }) async {
     // We're not going to load animation frames that are never referenced; but
@@ -274,7 +275,7 @@ class RenderableTiledMap {
     GroupLayer? parent,
     TiledMap map,
     Vector2 destTileSize,
-    Camera? camera,
+    CameraComponent? camera,
     Map<Tile, TileFrames> animationFrames, {
     required TiledAtlas atlas,
     bool? ignoreFlip,

@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'dart:math' as math;
 
 import 'package:examples/stories/bridge_libraries/forge2d/utils/boundaries.dart';
