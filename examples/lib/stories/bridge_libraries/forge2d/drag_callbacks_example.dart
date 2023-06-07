@@ -1,14 +1,13 @@
-// ignore_for_file: deprecated_member_use
-
 import 'package:examples/stories/bridge_libraries/forge2d/utils/balls.dart';
 import 'package:examples/stories/bridge_libraries/forge2d/utils/boundaries.dart';
 import 'package:flame/components.dart';
+import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flutter/material.dart' hide Draggable;
 
-class DraggableExample extends Forge2DGame with HasDraggables {
+class DraggableExample extends Forge2DGame {
   static const description = '''
     In this example we use Flame's normal `Draggable` mixin to give impulses to
     a ball when we are dragging it around. If you are interested in dragging
@@ -26,27 +25,26 @@ class DraggableExample extends Forge2DGame with HasDraggables {
   }
 }
 
-class DraggableBall extends Ball with Draggable {
+class DraggableBall extends Ball with DragCallbacks {
   DraggableBall(super.position) : super(radius: 5) {
     originalPaint = Paint()..color = Colors.amber;
     paint = originalPaint;
   }
 
   @override
-  bool onDragStart(DragStartInfo info) {
+  void onDragStart(DragStartEvent event) {
+    super.onDragStart(event);
     paint = randomPaint();
-    return true;
   }
 
   @override
-  bool onDragUpdate(DragUpdateInfo info) {
-    body.applyLinearImpulse(info.delta.game * 1000);
-    return true;
+  void onDragUpdate(DragUpdateEvent event) {
+    body.applyLinearImpulse(event.delta * 1000);
   }
 
   @override
-  bool onDragEnd(DragEndInfo info) {
+  void onDragEnd(DragEndEvent event) {
+    super.onDragEnd(event);
     paint = originalPaint;
-    return true;
   }
 }
