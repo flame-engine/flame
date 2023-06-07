@@ -78,6 +78,7 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
     super.anchor,
     super.children,
     super.priority,
+    super.key,
   })  : _boxConfig = boxConfig ?? TextBoxConfig(),
         _fixedSize = size != null,
         align = align ?? Anchor.topLeft,

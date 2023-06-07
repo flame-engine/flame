@@ -24,6 +24,7 @@ class NineTileBoxComponent extends PositionComponent implements SizeProvider {
     super.anchor,
     super.children,
     super.priority,
+    super.key,
   });
 
   @override

@@ -1119,13 +1119,55 @@ void main() {
           expect(component.children.first.children.length, 1);
         },
       );
+
+      testWithFlameGame(
+        'Components can be retrived via a named key',
+        (game) async {
+          final component = ComponentA(key: ComponentKey.named('A'));
+          game.add(component);
+          await game.ready();
+
+          expect(ComponentKey.named('A'), equals(ComponentKey.named('A')));
+
+          final retrieved = game.findByKey(ComponentKey.named('A'));
+          expect(retrieved, equals(component));
+        },
+      );
+
+      testWithFlameGame(
+        'Components can be retrived via an unique key',
+        (game) async {
+          final key1 = ComponentKey.unique();
+          final key2 = ComponentKey.unique();
+          final component1 = ComponentA(key: key1);
+          final component2 = ComponentA(key: key2);
+
+          game.add(component1);
+          game.add(component2);
+          await game.ready();
+
+          expect(key1, isNot(equals(key2)));
+
+          final retrieved1 = game.findByKey(key1);
+          expect(retrieved1, equals(component1));
+
+          final retrieved2 = game.findByKey(key2);
+          expect(retrieved2, equals(component2));
+
+          expect(retrieved1, isNot(equals(component2)));
+        },
+      );
     });
   });
 }
 
-class ComponentA extends Component {}
+class ComponentA extends Component {
+  ComponentA({super.key});
+}
 
-class ComponentB extends Component {}
+class ComponentB extends Component {
+  ComponentB({super.key});
+}
 
 class ComponentWithSizeHistory extends Component {
   List<Vector2> history = [];

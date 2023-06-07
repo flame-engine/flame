@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:collection/collection.dart';
+import 'package:flame/components.dart';
 import 'package:flame/src/cache/value_cache.dart';
 import 'package:flame/src/components/core/component_set.dart';
 import 'package:flame/src/components/core/component_tree_root.dart';
@@ -71,8 +72,11 @@ import 'package:vector_math/vector_math_64.dart';
 /// respond to tap events or similar; the [componentsAtPoint] may also need to
 /// be overridden if you have reimplemented [renderTree].
 class Component {
-  Component({Iterable<Component>? children, int? priority})
-      : _priority = priority ?? 0 {
+  Component({
+    Iterable<Component>? children,
+    int? priority,
+    ComponentKey? key,
+  }) : _priority = priority ?? 0, _key = key {
     if (children != null) {
       addAll(children);
     }
@@ -846,6 +850,13 @@ class Component {
     _reAddChildren();
     _parent!.onChildrenChanged(this, ChildrenChangeType.added);
     _clearMountingBit();
+
+    if (_key != null) {
+      final currentGame = findGame();
+      if (currentGame is FlameGame) {
+        currentGame.registerKey(_key!, this);
+      }
+    }
   }
 
   /// Used by [_reAddChildren].
@@ -896,6 +907,13 @@ class Component {
       },
       includeSelf: true,
     );
+
+    if (_key != null) {
+      final game = findGame();
+      if (game is FlameGame) {
+        game.unregisterKey(_key!);
+      }
+    }
   }
 
   //#endregion
@@ -917,6 +935,11 @@ class Component {
   /// debug mode. Setting this to null will suppress all coordinates from
   /// the output.
   int? get debugCoordinatesPrecision => 0;
+
+  /// A key that can be used to identify this component in the tree.
+  ///
+  /// It can be used to retrive this component from anywhere in the tree.
+  final ComponentKey? _key;
 
   /// The color that the debug output should be rendered with.
   Color debugColor = const Color(0xFFFF00FF);
