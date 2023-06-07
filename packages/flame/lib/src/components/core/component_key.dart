@@ -7,7 +7,6 @@ var _idx = 0;
 /// be retrieved from the its [FlameGame].
 @immutable
 class ComponentKey {
-
   /// Creates a key that is equal to keys with the same name.
   ComponentKey.named(String name) : _internalHash = name.hashCode;
 

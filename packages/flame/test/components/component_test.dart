@@ -1157,6 +1157,35 @@ void main() {
           expect(retrieved1, isNot(equals(component2)));
         },
       );
+
+      testWithFlameGame(
+        'findByKey returns null if no component is found',
+        (game) async {
+          await game.ready();
+
+          expect(game.findByKey(ComponentKey.unique()), isNull);
+        },
+      );
+
+      testWithFlameGame(
+        'findByKey returns null when the component is removed',
+        (game) async {
+          final key = ComponentKey.unique();
+          final component = ComponentA(key: key);
+
+          game.add(component);
+          await game.ready();
+
+          final retrieved1 = game.findByKey(key);
+          expect(retrieved1, equals(component));
+
+          component.removeFromParent();
+          await game.ready();
+
+          final retrieved2 = game.findByKey(key);
+          expect(retrieved2, isNull);
+        },
+      );
     });
   });
 }

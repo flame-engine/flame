@@ -3,19 +3,14 @@ import 'dart:async';
 import 'package:collection/collection.dart';
 import 'package:flame/components.dart';
 import 'package:flame/src/cache/value_cache.dart';
-import 'package:flame/src/components/core/component_set.dart';
 import 'package:flame/src/components/core/component_tree_root.dart';
-import 'package:flame/src/components/core/position_type.dart';
 import 'package:flame/src/components/mixins/coordinate_transform.dart';
-import 'package:flame/src/components/mixins/has_game_ref.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
 import 'package:flame/src/game/flame_game.dart';
 import 'package:flame/src/game/game.dart';
 import 'package:flame/src/gestures/events.dart';
-import 'package:flame/src/text/text_paint.dart';
 import 'package:flutter/painting.dart';
 import 'package:meta/meta.dart';
-import 'package:vector_math/vector_math_64.dart';
 
 /// [Component]s are the basic building blocks for a [FlameGame].
 ///
@@ -76,7 +71,8 @@ class Component {
     Iterable<Component>? children,
     int? priority,
     ComponentKey? key,
-  }) : _priority = priority ?? 0, _key = key {
+  })  : _priority = priority ?? 0,
+        _key = key {
     if (children != null) {
       addAll(children);
     }
@@ -891,6 +887,13 @@ class Component {
 
   void _remove() {
     assert(_parent != null, 'Trying to remove a component with no parent');
+
+    if (_key != null) {
+      final game = findGame();
+      if (game is FlameGame) {
+        game.unregisterKey(_key!);
+      }
+    }
     _parent!.children.remove(this);
     propagateToChildren(
       (Component component) {
@@ -907,13 +910,6 @@ class Component {
       },
       includeSelf: true,
     );
-
-    if (_key != null) {
-      final game = findGame();
-      if (game is FlameGame) {
-        game.unregisterKey(_key!);
-      }
-    }
   }
 
   //#endregion
