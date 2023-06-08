@@ -11,13 +11,6 @@ import 'package:flame/src/game/game_render_box.dart';
 import 'package:flutter/gestures.dart';
 import 'package:meta/meta.dart';
 
-@Deprecated('''This mixin will be removed in 1.8.0
-
-This mixin does no longer do anything since you can now add tappable
-components directly to a game without this mixin.
-''')
-mixin HasTappableComponents on FlameGame {}
-
 @internal
 class MultiTapDispatcher extends Component implements MultiTapListener {
   /// The record of all components currently being touched.
@@ -48,6 +41,7 @@ class MultiTapDispatcher extends Component implements MultiTapListener {
     // ignore: deprecated_member_use_from_same_package
     if (game is HasTappablesBridge) {
       final info = event.asInfo(game)..handled = event.handled;
+      // ignore: deprecated_member_use_from_same_package
       game.propagateToChildren<Tappable>(
         (c) => c.handleTapDown(event.pointerId, info),
       );
@@ -76,6 +70,7 @@ class MultiTapDispatcher extends Component implements MultiTapListener {
     // ignore: deprecated_member_use_from_same_package
     if (game is HasTappablesBridge) {
       final info = event.asInfo(game)..handled = event.handled;
+      // ignore: deprecated_member_use_from_same_package
       game.propagateToChildren<Tappable>(
         (c) => c.handleLongTapDown(event.pointerId, info),
       );
@@ -109,6 +104,7 @@ class MultiTapDispatcher extends Component implements MultiTapListener {
     // ignore: deprecated_member_use_from_same_package
     if (game is HasTappablesBridge) {
       final info = event.asInfo(game)..handled = event.handled;
+      // ignore: deprecated_member_use_from_same_package
       game.propagateToChildren<Tappable>(
         (c) => c.handleTapUp(event.pointerId, info),
       );
@@ -129,6 +125,7 @@ class MultiTapDispatcher extends Component implements MultiTapListener {
     _tapCancelImpl(event);
     // ignore: deprecated_member_use_from_same_package
     if (game is HasTappablesBridge) {
+      // ignore: deprecated_member_use_from_same_package
       game.propagateToChildren<Tappable>(
         (c) => c.handleTapCancel(event.pointerId),
       );

@@ -404,13 +404,19 @@ void main() {
         Vector2(16, 16),
       );
 
+      final world = World(children: [component]);
+      final cameraComponent = CameraComponent(world: world);
+
       // Need to initialize a game and call `onLoad` and `onGameResize` to
       // get the camera and canvas sizes all initialized
-      final game = FlameGame(children: [component]);
-      component.onLoad();
-      component.onGameResize(mapSizePx);
+      final game = FlameGame(children: [world, cameraComponent]);
+      cameraComponent.viewfinder.anchor = Anchor.center;
+      cameraComponent.viewfinder.position = Vector2(150, 20);
+      cameraComponent.viewport.size = mapSizePx.clone();
       game.onGameResize(mapSizePx);
-      game.camera.snapTo(Vector2(150, 20));
+      component.onGameResize(mapSizePx);
+      await component.onLoad();
+      await game.ready();
     });
 
     test('component size', () {
@@ -418,11 +424,14 @@ void main() {
       expect(component.size, mapSizePx);
     });
 
-    test('renders', () async {
-      final pngData = await renderMapToPng(component);
+    test(
+      'renders',
+      () async {
+        final pngData = await renderMapToPng(component);
 
-      expect(pngData, matchesGoldenFile('goldens/orthogonal.png'));
-    });
+        expect(pngData, matchesGoldenFile('goldens/orthogonal.png'));
+      },
+    );
   });
 
   group('isometric', () {

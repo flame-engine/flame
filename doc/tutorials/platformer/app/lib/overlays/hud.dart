@@ -13,9 +13,7 @@ class Hud extends PositionComponent with HasGameRef<EmberQuestGame> {
     super.anchor,
     super.children,
     super.priority = 5,
-  }) {
-    positionType = PositionType.viewport;
-  }
+  });
 
   late TextComponent _scoreTextComponent;
 

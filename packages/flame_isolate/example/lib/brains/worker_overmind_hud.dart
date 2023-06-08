@@ -22,7 +22,6 @@ class WorkerOvermindHud extends PositionComponent with TapCallbacks {
     y = 10;
     width = 210;
     height = 80;
-    positionType = PositionType.viewport;
   }
 
   @override

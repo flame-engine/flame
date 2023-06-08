@@ -73,7 +73,7 @@ class _GameController extends StateNotifier<_GameState> {
       }
     }
 
-    WidgetsBinding.instance.renderViewElement?.visitChildElements(visitor);
+    WidgetsBinding.instance.rootElement?.visitChildElements(visitor);
     return game;
   }
 }

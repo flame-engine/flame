@@ -18,7 +18,8 @@ class Svg {
   /// Creates an [Svg] with the received [pictureInfo].
   /// Default [pixelRatio] is the device pixel ratio.
   Svg(this.pictureInfo, {double? pixelRatio})
-      : pixelRatio = pixelRatio ?? window.devicePixelRatio;
+      : pixelRatio = pixelRatio ??
+            PlatformDispatcher.instance.views.first.devicePixelRatio;
 
   final MemoryCache<Size, Image> _imageCache = MemoryCache();
 

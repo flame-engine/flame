@@ -10,6 +10,7 @@ class Forge2DGame extends FlameGame {
     ContactListener? contactListener,
   })  : world = World(gravity ?? defaultGravity),
         super(camera: camera ?? Camera()) {
+    // ignore: deprecated_member_use
     this.camera.zoom = zoom;
     world.setContactListener(contactListener ?? WorldContactListener());
   }
