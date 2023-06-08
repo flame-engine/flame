@@ -934,7 +934,7 @@ class Component {
 
   /// A key that can be used to identify this component in the tree.
   ///
-  /// It can be used to retrive this component from anywhere in the tree.
+  /// It can be used to retrieve this component from anywhere in the tree.
   final ComponentKey? _key;
 
   /// The color that the debug output should be rendered with.
