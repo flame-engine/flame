@@ -1159,6 +1159,18 @@ void main() {
       );
 
       testWithFlameGame(
+        'Components can be retrived via their name',
+        (game) async {
+          final component = ComponentA(key: ComponentKey.named('A'));
+          game.add(component);
+          await game.ready();
+
+          final retrieved = game.findByKeyName('A');
+          expect(retrieved, equals(component));
+        },
+      );
+
+      testWithFlameGame(
         'findByKey returns null if no component is found',
         (game) async {
           await game.ready();
@@ -1184,6 +1196,28 @@ void main() {
 
           final retrieved2 = game.findByKey(key);
           expect(retrieved2, isNull);
+        },
+      );
+
+      testWithFlameGame(
+        'Throws assertion error when registering a component with the same key',
+        (game) async {
+          final component = ComponentA(key: ComponentKey.named('A'));
+          final component2 = ComponentA(key: ComponentKey.named('A'));
+
+          game.add(component);
+          game.add(component2);
+
+          await expectLater(
+            () => game.ready(),
+            throwsA(
+              isA<AssertionError>().having(
+                (e) => e.message,
+                'message',
+                'Key ${ComponentKey.named('A')} is already registered',
+              ),
+            ),
+          );
         },
       );
     });

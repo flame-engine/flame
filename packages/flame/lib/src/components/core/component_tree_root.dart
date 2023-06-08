@@ -131,6 +131,7 @@ class ComponentTreeRoot extends Component {
   @mustCallSuper
   @internal
   void registerKey(ComponentKey key, Component component) {
+    assert(!_index.containsKey(key), 'Key $key is already registered');
     _index[key] = component;
   }
 
@@ -143,6 +144,10 @@ class ComponentTreeRoot extends Component {
   T? findByKey<T extends Component>(ComponentKey key) {
     final component = _index[key];
     return component as T?;
+  }
+
+  T? findByKeyName<T extends Component>(String name) {
+    return findByKey(ComponentKey.named(name));
   }
 }
 
