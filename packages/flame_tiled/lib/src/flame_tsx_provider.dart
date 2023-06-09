@@ -1,10 +1,12 @@
 import 'package:flame/flame.dart';
+import 'package:flutter/services.dart';
 import 'package:tiled/tiled.dart';
 import 'package:xml/xml.dart';
 
 /// A implementation of [TsxProvider] use by RenderableTileMap.
 ///
-/// It uses [Flame.bundle] and has a built-in cache for the file read.
+/// It uses [Flame.bundle] or a custom asset bundle
+/// and has a built-in cache for the file read.
 class FlameTsxProvider implements TsxProvider {
   /// Parsed data for this tsx file.
   final String data;
@@ -34,8 +36,11 @@ class FlameTsxProvider implements TsxProvider {
   /// Parses a file returning a [FlameTsxProvider].
   ///
   /// NOTE: this method looks for files under the path "assets/tiles/".
-  static Future<FlameTsxProvider> parse(String key) async {
-    final data = await Flame.bundle.loadString('assets/tiles/$key');
+  static Future<FlameTsxProvider> parse(
+    String key, [
+    AssetBundle? bundle,
+  ]) async {
+    final data = await (bundle ?? Flame.bundle).loadString('assets/tiles/$key');
     return FlameTsxProvider._(data, key);
   }
 }

@@ -1,3 +1,4 @@
+import 'package:flame/cache.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame_tiled/src/renderable_layers/group_layer.dart';
@@ -35,6 +36,7 @@ abstract class RenderableLayer<T extends Layer> {
     required Map<Tile, TileFrames> animationFrames,
     required TiledAtlas atlas,
     bool? ignoreFlip,
+    Images? images,
   }) async {
     if (layer is TileLayer) {
       return FlameTileLayer.load(
@@ -53,6 +55,7 @@ abstract class RenderableLayer<T extends Layer> {
         camera: camera,
         map: map,
         destTileSize: destTileSize,
+        images: images,
       );
     } else if (layer is ObjectGroup) {
       return ObjectLayer.load(
