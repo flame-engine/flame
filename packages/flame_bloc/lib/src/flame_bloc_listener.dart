@@ -11,9 +11,11 @@ class FlameBlocListener<B extends BlocBase<S>, S> extends Component
   /// {@macro flame_bloc_listener}
   FlameBlocListener({
     required void Function(S state) onNewState,
+    void Function(S state)? onInitialState,
     B? bloc,
     bool Function(S previousState, S newState)? listenWhen,
   })  : _onNewState = onNewState,
+        _onInitialState = onInitialState,
         _listenWhen = listenWhen {
     if (bloc != null) {
       this.bloc = bloc;
@@ -21,10 +23,14 @@ class FlameBlocListener<B extends BlocBase<S>, S> extends Component
   }
 
   final void Function(S state) _onNewState;
+  final void Function(S state)? _onInitialState;
   final bool Function(S previousState, S newState)? _listenWhen;
 
   @override
   void onNewState(S state) => _onNewState(state);
+
+  @override
+  void onInitialState(S state) => _onInitialState?.call(state);
 
   @override
   bool listenWhen(S previousState, S newState) {

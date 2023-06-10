@@ -28,6 +28,28 @@ void main() {
     );
 
     testWithFlameGame(
+      'onInitialState is called when the initial state is received',
+      (game) async {
+        final bloc = PlayerCubit();
+        final provider = FlameBlocProvider<PlayerCubit, PlayerState>.value(
+          value: bloc,
+        );
+        final states = <PlayerState>[];
+        await game.ensureAdd(provider);
+
+        final component = FlameBlocListener<PlayerCubit, PlayerState>(
+          onNewState: (_) {},
+          onInitialState: states.add,
+        );
+        await provider.ensureAdd(component);
+
+        bloc.kill();
+        await Future.microtask(() {});
+        expect(states, equals([PlayerState.alive]));
+      },
+    );
+
+    testWithFlameGame(
       'onNewsState is not called when listenWhen returns false',
       (game) async {
         final bloc = PlayerCubit();
