@@ -43,8 +43,7 @@ class Box extends BodyComponent {
   }
 }
 
-// ignore: deprecated_member_use
-class DraggableBox extends Box with Draggable {
+class DraggableBox extends Box with DragCallbacks {
   MouseJoint? mouseJoint;
   late final groundBody = world.createBody(BodyDef());
 
@@ -55,12 +54,12 @@ class DraggableBox extends Box with Draggable {
   });
 
   @override
-  bool onDragUpdate(DragUpdateInfo info) {
+  bool onDragUpdate(DragUpdateEvent info) {
     final mouseJointDef = MouseJointDef()
       ..maxForce = 3000 * body.mass * 10
       ..dampingRatio = 0
       ..frequencyHz = 20
-      ..target.setFrom(info.eventPosition.game)
+      ..target.setFrom(info.localPosition)
       ..collideConnected = false
       ..bodyA = groundBody
       ..bodyB = body;
@@ -70,17 +69,18 @@ class DraggableBox extends Box with Draggable {
       world.createJoint(mouseJoint!);
     }
 
-    mouseJoint?.setTarget(info.eventPosition.game);
+    mouseJoint?.setTarget(info.localPosition);
     return false;
   }
 
   @override
-  bool onDragEnd(DragEndInfo info) {
+  void onDragEnd(DragEndEvent info) {
+    super.onDragEnd(info);
     if (mouseJoint == null) {
-      return true;
+      return;
     }
     world.destroyJoint(mouseJoint!);
     mouseJoint = null;
-    return false;
+    info.continuePropagation = false;
   }
 }

@@ -6,7 +6,7 @@ import 'package:examples/stories/bridge_libraries/forge2d/camera_example.dart';
 import 'package:examples/stories/bridge_libraries/forge2d/composition_example.dart';
 import 'package:examples/stories/bridge_libraries/forge2d/contact_callbacks_example.dart';
 import 'package:examples/stories/bridge_libraries/forge2d/domino_example.dart';
-import 'package:examples/stories/bridge_libraries/forge2d/draggable_example.dart';
+import 'package:examples/stories/bridge_libraries/forge2d/drag_callbacks_example.dart';
 import 'package:examples/stories/bridge_libraries/forge2d/joints/constant_volume_joint.dart';
 import 'package:examples/stories/bridge_libraries/forge2d/joints/distance_joint.dart';
 import 'package:examples/stories/bridge_libraries/forge2d/joints/friction_joint.dart';
