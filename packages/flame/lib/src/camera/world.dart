@@ -13,7 +13,7 @@ import 'package:vector_math/vector_math_64.dart';
 /// updates proceed through the world tree normally.
 ///
 /// The [priority] of the world by default is the maximum 32bit negative int
-/// value to ensure it will always be early in the component tree than a
+/// value to ensure it will always be earlier in the component tree than a
 /// [CameraComponent].
 class World extends Component implements CoordinateTransform {
   World({
