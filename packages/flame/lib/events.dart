@@ -25,7 +25,6 @@ export 'src/events/messages/drag_update_event.dart' show DragUpdateEvent;
 export 'src/events/messages/tap_cancel_event.dart' show TapCancelEvent;
 export 'src/events/messages/tap_down_event.dart' show TapDownEvent;
 export 'src/events/messages/tap_up_event.dart' show TapUpEvent;
-export 'src/game/mixins/cursor.dart' show HasCursorHandlerComponents;
 // ignore: deprecated_member_use_from_same_package
 export 'src/game/mixins/has_draggables.dart' show HasDraggables;
 // ignore: deprecated_member_use_from_same_package
