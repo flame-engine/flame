@@ -235,10 +235,10 @@ an assertion error will be thrown.
 
 ### Component Keys
 
-Components can have identification key that allows them to be retrieved from the component tree, from
+Components can have an identification key that allows them to be retrieved from the component tree, from
 any point of the tree.
 
-To register a component with a key, simply pass it to the `key` attribute on the component's
+To register a component with a key, simply pass a key to the `key` argument on the component's
 constructor:
 
 ```dart
