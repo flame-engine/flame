@@ -253,7 +253,7 @@ Then, to retrieve it in a different point of the component tree:
 flameGame.findByKey(ComponentKey.named('player'));
 ```
 
-There are two type of keys, `unique` and `named`. Unique keys are based on equality of the key
+There are two types of keys, `unique` and `named`. Unique keys are based on equality of the key
 instance, meaning that:
 
 ```dart
