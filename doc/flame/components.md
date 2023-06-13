@@ -235,7 +235,7 @@ an assertion error will be thrown.
 
 ### Component Keys
 
-Components can have identification key that allows them to be retrived from the component tree, from
+Components can have identification key that allows them to be retrieved from the component tree, from
 any point of the tree.
 
 To register a component with a key, simply pass it to the `key` attribute on the component's
@@ -247,7 +247,7 @@ final myComponent = Component(
 );
 ```
 
-Then, to retrive it in a different point of the component tree:
+Then, to retrieve it in a different point of the component tree:
 
 ```dart
 flameGame.findByKey(ComponentKey.named('player'));
