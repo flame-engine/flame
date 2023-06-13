@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flame/cache.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
@@ -13,6 +14,7 @@ import 'package:flame_tiled/src/tile_animation.dart';
 import 'package:flame_tiled/src/tile_atlas.dart';
 import 'package:flame_tiled/src/tile_stack.dart';
 import 'package:flutter/painting.dart';
+import 'package:flutter/services.dart';
 import 'package:tiled/tiled.dart';
 
 /// {@template _renderable_tiled_map}
@@ -201,6 +203,8 @@ class RenderableTiledMap {
     Vector2 destTileSize, {
     CameraComponent? camera,
     bool? ignoreFlip,
+    Images? images,
+    AssetBundle? bundle,
   }) async {
     final contents = await Flame.bundle.loadString('assets/tiles/$fileName');
     return fromString(
@@ -208,6 +212,8 @@ class RenderableTiledMap {
       destTileSize,
       camera: camera,
       ignoreFlip: ignoreFlip,
+      images: images,
+      bundle: bundle,
     );
   }
 
@@ -219,16 +225,20 @@ class RenderableTiledMap {
     Vector2 destTileSize, {
     CameraComponent? camera,
     bool? ignoreFlip,
+    Images? images,
+    AssetBundle? bundle,
   }) async {
     final map = await TiledMap.fromString(
       contents,
-      FlameTsxProvider.parse,
+      (key) => FlameTsxProvider.parse(key, bundle),
     );
     return fromTiledMap(
       map,
       destTileSize,
       camera: camera,
       ignoreFlip: ignoreFlip,
+      images: images,
+      bundle: bundle,
     );
   }
 
@@ -240,6 +250,8 @@ class RenderableTiledMap {
     Vector2 destTileSize, {
     CameraComponent? camera,
     bool? ignoreFlip,
+    Images? images,
+    AssetBundle? bundle,
   }) async {
     // We're not going to load animation frames that are never referenced; but
     // we do supply the common cache for all layers in this map, and maintain
@@ -259,6 +271,7 @@ class RenderableTiledMap {
       animationFrames,
       atlas: await TiledAtlas.fromTiledMap(map),
       ignoreFlip: ignoreFlip,
+      images: images,
     );
 
     return RenderableTiledMap(
@@ -279,6 +292,7 @@ class RenderableTiledMap {
     Map<Tile, TileFrames> animationFrames, {
     required TiledAtlas atlas,
     bool? ignoreFlip,
+    Images? images,
   }) async {
     final visibleLayers = layers.where((layer) => layer.visible);
 
@@ -292,6 +306,7 @@ class RenderableTiledMap {
         animationFrames: animationFrames,
         atlas: atlas,
         ignoreFlip: ignoreFlip,
+        images: images,
       );
 
       if (layer is Group && renderableLayer is GroupLayer) {
@@ -304,6 +319,7 @@ class RenderableTiledMap {
           animationFrames,
           atlas: atlas,
           ignoreFlip: ignoreFlip,
+          images: images,
         );
       }
 
