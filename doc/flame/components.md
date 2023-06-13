@@ -278,6 +278,7 @@ When named keys are used, the `findByKeyName` helper can also be used to retriev
 flameGame.findByKeyName('player');
 ```
 
+
 ### Querying child components
 
 The children that have been added to a component live in a `QueryableOrderedSet` called
