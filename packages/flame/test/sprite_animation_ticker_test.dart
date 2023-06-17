@@ -10,7 +10,7 @@ void main() {
       final sprite = MockSprite();
       final animationTicker =
           SpriteAnimation.spriteList([sprite], stepTime: 1, loop: false)
-              .ticker()
+              .createTicker()
             ..onStart = () => counter++;
 
       expect(counter, 0);
@@ -25,7 +25,7 @@ void main() {
       final sprite = MockSprite();
       final animationTicker =
           SpriteAnimation.spriteList([sprite], stepTime: 1, loop: false)
-              .ticker()
+              .createTicker()
             ..onComplete = () => counter++;
       expect(counter, 0);
       animationTicker.update(0.5);
@@ -46,7 +46,7 @@ void main() {
       final spriteList = [sprite, sprite, sprite];
       final animationTicker =
           SpriteAnimation.spriteList(spriteList, stepTime: 1, loop: false)
-              .ticker();
+              .createTicker();
       animationTicker.onFrame = (index) {
         expect(timePassed, closeTo(index * 1.0, dt));
         timesCalled++;
@@ -65,7 +65,7 @@ void main() {
       final sprite = MockSprite();
       final animationTicker =
           SpriteAnimation.spriteList([sprite], stepTime: 1, loop: false)
-              .ticker();
+              .createTicker();
       animationTicker.onStart = () {
         expect(animationStarted, false);
         expect(animationRunning, false);
@@ -94,7 +94,7 @@ void main() {
         [sprite],
         stepTime: 1,
         loop: false,
-      ).ticker();
+      ).createTicker();
 
       expectLater(animationTicker.completed, completes);
 
@@ -108,7 +108,7 @@ void main() {
         [sprite],
         stepTime: 1,
         loop: false,
-      ).ticker();
+      ).createTicker();
 
       animationTicker.update(1);
       expectLater(animationTicker.completed, completes);
@@ -121,7 +121,7 @@ void main() {
         [sprite],
         stepTime: 1,
         loop: false,
-      ).ticker();
+      ).createTicker();
 
       expectLater(animationTicker.completed, doesNotComplete);
     });
@@ -129,7 +129,7 @@ void main() {
     test("completed doesn't complete when animation is looping", () async {
       final sprite = MockSprite();
       final animationTicker =
-          SpriteAnimation.spriteList([sprite], stepTime: 1).ticker();
+          SpriteAnimation.spriteList([sprite], stepTime: 1).createTicker();
 
       expectLater(animationTicker.completed, doesNotComplete);
     });
@@ -139,7 +139,7 @@ void main() {
       () async {
         final sprite = MockSprite();
         final animationTicker =
-            SpriteAnimation.spriteList([sprite], stepTime: 1).ticker();
+            SpriteAnimation.spriteList([sprite], stepTime: 1).createTicker();
 
         animationTicker.update(1);
         expectLater(animationTicker.completed, doesNotComplete);

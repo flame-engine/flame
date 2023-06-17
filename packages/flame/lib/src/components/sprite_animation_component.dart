@@ -48,7 +48,7 @@ class SpriteAnimationComponent extends PositionComponent
           '''If size is set, autoResize should be false or size should be null when autoResize is true.''',
         ),
         _autoResize = autoResize ?? size == null,
-        _animationTicker = animation?.ticker() {
+        _animationTicker = animation?.createTicker() {
     if (paint != null) {
       this.paint = paint;
     }
@@ -112,7 +112,7 @@ class SpriteAnimationComponent extends PositionComponent
   set animation(SpriteAnimation? value) {
     if (animation != value) {
       if (value != null) {
-        _animationTicker = value.ticker();
+        _animationTicker = value.createTicker();
       } else {
         _animationTicker = null;
       }
