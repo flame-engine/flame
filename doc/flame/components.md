@@ -662,6 +662,7 @@ robot.animationTickers?[RobotState.idle]?.onFrame = (currentIndex) {
 };
 ```
 
+
 ## SpriteGroup
 
 `SpriteGroupComponent` is pretty similar to its animation counterpart, but especially for sprites.
