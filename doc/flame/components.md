@@ -545,9 +545,9 @@ final animation = SpriteAnimation.spriteList(sprites, stepTime: 0.01);
 
 final animationTicker = SpriteAnimationTicker(animation);
 
-// or alternatively
+// or alternatively, you can ask the animation object to create one for you.
 
-final animationTicker = animation.ticker(); // creates a new ticker
+final animationTicker = animation.createTicker(); // creates a new ticker
 
 animationTicker.update(dt);
 ```
@@ -590,7 +590,7 @@ final animationTicker = SpriteAnimationTicker(animation)
 ```
 
 
-## SpriteAnimationGroup
+## SpriteAnimationGroupComponent
 
 `SpriteAnimationGroupComponent` is a simple wrapper around `SpriteAnimationComponent` which enables
 your component to hold several animations and change the current playing animation at runtime. Since
@@ -622,6 +622,44 @@ final robot = SpriteAnimationGroupComponent<RobotState>(
 
 // Changes current animation to "running"
 robot.current = RobotState.running;
+```
+
+As this component works with multiple `SpriteAnimation`s, naturally it needs equal number of animation
+tickers to make all those animation tick. Use `animationsTickers` getter to access a map containing tickers
+for each animation state. This can be useful if you want to register callbacks for `onStart`, `onComplete`
+and `onFrame`.
+
+Example:
+
+```dart
+enum RobotState { idle, running, jump }
+
+final running = await loadSpriteAnimation(/* omitted */);
+final idle = await loadSpriteAnimation(/* omitted */);
+
+final robot = SpriteAnimationGroupComponent<RobotState>(
+  animations: {
+    RobotState.running: running,
+    RobotState.idle: idle,
+  },
+  current: RobotState.idle,
+);
+
+robot.animationTickers?[RobotState.running]?.onStart = () {
+  // Do something on start of running animation.
+};
+
+robot.animationTickers?[RobotState.jump]?.onStart = () {
+  // Do something on start of jump animation.
+};
+
+robot.animationTickers?[RobotState.jump]?.onComplete = () {
+  // Do something on complete of jump animation.
+};
+
+robot.animationTickers?[RobotState.idle]?.onFrame = (currentIndex) {
+  // Do something based on current frame index of idle animation.
+};
 ```
 
 

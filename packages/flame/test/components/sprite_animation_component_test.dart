@@ -16,8 +16,8 @@ Future<void> main() async {
           loop: false,
         );
         final copy = animation.clone();
-        final ticker1 = animation.ticker();
-        final ticker2 = copy.ticker();
+        final ticker1 = animation.createTicker();
+        final ticker2 = copy.createTicker();
 
         expect(copy.loop, animation.loop);
 
@@ -39,8 +39,8 @@ Future<void> main() async {
           loop: false,
         );
         final copy = animation.reversed();
-        final ticker1 = animation.ticker();
-        final ticker2 = copy.ticker();
+        final ticker1 = animation.createTicker();
+        final ticker2 = copy.createTicker();
 
         expect(copy.loop, animation.loop);
 
@@ -216,7 +216,7 @@ Future<void> main() async {
         List.filled(5, Sprite(image)),
         stepTime: 0.1,
         loop: false,
-      ).ticker();
+      ).createTicker();
       var callbackInvoked = 0;
       animation.onComplete = () {
         callbackInvoked++;

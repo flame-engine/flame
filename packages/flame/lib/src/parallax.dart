@@ -171,7 +171,7 @@ class ParallaxAnimation extends ParallaxRenderer {
     super.repeat,
     super.alignment,
     super.fill,
-  }) : _animationTicker = animation.ticker();
+  }) : _animationTicker = animation.createTicker();
 
   /// Takes a path of an image, a SpriteAnimationData, and optionally arguments
   /// for how the image should repeat ([repeat]), which edge it should align

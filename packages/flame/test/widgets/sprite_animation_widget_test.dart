@@ -24,7 +24,7 @@ Future<void> main() async {
       await tester.pumpWidget(
         SpriteAnimationWidget(
           animation: spriteAnimation,
-          animationTicker: spriteAnimation.ticker(),
+          animationTicker: spriteAnimation.createTicker(),
         ),
       );
 

@@ -32,7 +32,7 @@ void main() {
       final animationTicker = spriteSheet.createAnimationWithVariableStepTimes(
         row: 1,
         stepTimes: [2.0, 3.0],
-      ).ticker();
+      ).createTicker();
 
       expect(animationTicker.totalDuration(), 5.0);
     });

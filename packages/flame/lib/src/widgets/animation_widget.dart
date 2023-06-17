@@ -66,7 +66,7 @@ class SpriteAnimationWidget extends StatelessWidget {
     return BaseFutureBuilder<SpriteAnimation>(
       future: _animationFuture,
       builder: (_, spriteAnimation) {
-        final ticker = _animationTicker ?? spriteAnimation.ticker();
+        final ticker = _animationTicker ?? spriteAnimation.createTicker();
         ticker.completed.then((_) => onComplete?.call());
 
         return InternalSpriteAnimationWidget(
