@@ -67,5 +67,6 @@ class SharedDataSpineExample extends FlameGame with TapDetector {
     for (final spineboy in spineboys) {
       spineboy.dispose();
     }
+    return super.onDetach();
   }
 }
