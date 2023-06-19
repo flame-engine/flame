@@ -55,6 +55,5 @@ class SpineExample extends FlameGame with TapDetector {
   void onDetach() {
     // Dispose the native resources that have been loaded for spineboy.
     spineboy.dispose();
-    return super.onDetach();
   }
 }

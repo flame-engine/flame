@@ -126,15 +126,6 @@ class FlameGame extends ComponentTreeRoot
     processRebalanceEvents();
   }
 
-  /// In the event the FlameGame has been detached, this will guarantee that all
-  /// components get removed and their relevant methods called.  This will allow
-  /// a FlameGame to be added and removed from a Flutter widget tree at will.
-  @override
-  @mustCallSuper
-  void onDetach() {
-    children.forEach((c) => c.removeFromParent());
-  }
-
   /// This passes the new size along to every component in the tree via their
   /// [Component.onGameResize] method, enabling each one to make their decision
   /// of how to handle the resize event.

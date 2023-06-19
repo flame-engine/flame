@@ -580,7 +580,7 @@ class Component {
     );
     child._parent = this;
     final game = findGame();
-    if (isMounted) {
+    if (isMounted && !isLoaded) {
       (game! as FlameGame).enqueueAdd(child, this);
     } else {
       // This will be reconciled during the mounting stage
