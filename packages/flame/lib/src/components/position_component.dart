@@ -80,6 +80,7 @@ class PositionComponent extends Component
     Anchor? anchor,
     super.children,
     super.priority,
+    super.key,
   })  : transform = Transform2D(),
         _anchor = anchor ?? Anchor.topLeft,
         _size = NotifyingVector2.copy(size ?? Vector2.zero()) {

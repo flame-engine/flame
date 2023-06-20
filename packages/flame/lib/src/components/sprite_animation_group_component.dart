@@ -45,6 +45,7 @@ class SpriteAnimationGroupComponent<T> extends PositionComponent
     super.anchor,
     super.children,
     super.priority,
+    super.key,
   })  : assert(
           (size == null) == (autoResize ?? size == null),
           '''If size is set, autoResize should be false or size should be null when autoResize is true.''',
@@ -89,6 +90,7 @@ class SpriteAnimationGroupComponent<T> extends PositionComponent
     double? angle,
     Anchor? anchor,
     int? priority,
+    ComponentKey? key,
   }) : this(
           animations: data.map((key, value) {
             return MapEntry(
@@ -110,6 +112,7 @@ class SpriteAnimationGroupComponent<T> extends PositionComponent
           angle: angle,
           anchor: anchor,
           priority: priority,
+          key: key,
         );
 
   SpriteAnimation? get animation => _animations?[current];

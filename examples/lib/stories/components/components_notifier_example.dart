@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 class ComponentsNotifierExampleWidget extends StatefulWidget {
   const ComponentsNotifierExampleWidget({super.key});
 
-  static String description = '''
+  static const String description = '''
       Showcases how the components notifier can be used between
       a flame game instance and widgets.
 

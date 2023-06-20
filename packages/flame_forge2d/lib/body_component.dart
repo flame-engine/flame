@@ -17,6 +17,7 @@ abstract class BodyComponent<T extends Forge2DGame> extends Component
     super.children,
     super.priority,
     this.renderBody = true,
+    super.key,
   }) {
     this.paint = paint ?? (Paint()..color = defaultColor);
   }
