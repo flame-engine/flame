@@ -56,7 +56,7 @@ class SpriteAnimationGroupComponent<T> extends PositionComponent
         _animationTickers = animations != null
             ? Map.fromEntries(
                 animations.entries
-                    .map((e) => MapEntry(e.key, e.value.ticker()))
+                    .map((e) => MapEntry(e.key, e.value.createTicker()))
                     .toList(),
               )
             : null {
@@ -140,7 +140,7 @@ class SpriteAnimationGroupComponent<T> extends PositionComponent
       _animationTickers = _animations != null
           ? Map.fromEntries(
               _animations!.entries
-                  .map((e) => MapEntry(e.key, e.value.ticker()))
+                  .map((e) => MapEntry(e.key, e.value.createTicker()))
                   .toList(),
             )
           : null;
