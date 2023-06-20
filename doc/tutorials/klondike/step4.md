@@ -441,7 +441,7 @@ after that we put the remaining cards into the stock. Also, the `flipTopCard` me
 
 ```dart
   void flipTopCard() {
-    assert(_cards.last.!isFaceUp);
+    assert(!_cards.last.isFaceUp);
     _cards.last.flip();
   }
 ```
