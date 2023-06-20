@@ -4,7 +4,7 @@ import 'package:meta/meta.dart';
 var _idx = 0;
 
 /// A key that can be used to identify a component and later
-/// be retrieved from the its [FlameGame].
+/// retrieve it from its [FlameGame] ancestor.
 @immutable
 class ComponentKey {
   /// Creates a key that is equal to keys with the same name.
