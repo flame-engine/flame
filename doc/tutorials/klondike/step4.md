@@ -726,7 +726,7 @@ class TableauPile ... implements Pile {
     assert(_cards.contains(card) && card.isFaceUp);
     final index = _cards.indexOf(card);
     _cards.removeRange(index, _cards.length);
-    if (_cards.isNotEmpty && _cards.last.isFaceDown) {
+    if (_cards.isNotEmpty && !_cards.last.isFaceUp) {
       flipTopCard();
     }
   }
@@ -840,7 +840,7 @@ would be to ensure that all cards currently in the pile have the right positions
     for (var i = 1; i < _cards.length; i++) {
       _cards[i].position
         ..setFrom(_cards[i - 1].position)
-        ..add(_cards[i - 1].isFaceDown ? _fanOffset1 : _fanOffset2);
+        ..add(!_cards[i - 1].isFaceUp ? _fanOffset1 : _fanOffset2);
     }
   }
 ```
