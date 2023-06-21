@@ -48,6 +48,7 @@ class TiledComponent<T extends FlameGame> extends PositionComponent
     super.anchor,
     super.children,
     super.priority,
+    super.key,
   }) : super(
           size: computeSize(
             tileMap.map.orientation,

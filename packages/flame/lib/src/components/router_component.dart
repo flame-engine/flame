@@ -33,6 +33,7 @@ class RouterComponent extends Component {
     required Map<String, Route> routes,
     Map<String, RouteFactory>? routeFactories,
     this.onUnknownRoute,
+    super.key,
   })  : _routes = routes,
         _routeFactories = routeFactories ?? {} {
     routes.forEach((name, route) => route.name = name);

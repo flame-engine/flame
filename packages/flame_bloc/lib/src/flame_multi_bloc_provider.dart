@@ -11,6 +11,7 @@ class FlameMultiBlocProvider extends Component {
   FlameMultiBlocProvider({
     required List<FlameBlocProvider> providers,
     List<Component>? children,
+    super.key,
   })  : _providers = providers,
         _initialChildren = children,
         assert(providers.isNotEmpty, 'At least one provider must be given') {
