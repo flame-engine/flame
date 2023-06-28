@@ -40,6 +40,7 @@ final component = await TiledComponent.load(
 );
 ```
 
+
 ### Clearing images cache
 
 If you have called `Flame.images.clearCache()` you also need to call `TiledAtlas.clearCache()` to
