@@ -130,4 +130,14 @@ class Sprite {
       ..add(image, Vector2.zero(), source: src);
     return composition.compose();
   }
+
+  /// Return a new [Image] based on the [src] of the Sprite.
+  ///
+  /// A sync version of [toImage] function. Read [Picture.toImageSync] for
+  /// detailed description of possible benefits in performance
+  Image toImageSync() {
+    final composition = ImageComposition()
+      ..add(image, Vector2.zero(), source: src);
+    return composition.composeSync();
+  }
 }
