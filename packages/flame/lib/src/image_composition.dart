@@ -92,6 +92,10 @@ class ImageComposition {
     );
   }
 
+  /// Compose all the images into a single composition.
+  ///
+  /// A sync version of [compose] function. Read [Picture.toImageSync] for
+  /// detailed description of possible benefits in performance
   Image composeSync() {
     final result = _composeCore();
     return result.picture.toImageSync(result.width, result.height);

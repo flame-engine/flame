@@ -230,9 +230,14 @@ final composition = ImageComposition()
     Vector2(128, 0),
     source: Rect.fromLTWH(32, 32, 64, 64),
   );
-
+  
 Image image = await composition.compose();
+Image imageSync = composition.composeSync();
 ```
+
+As you can see, two versions of composing image are available. Use `ImageComposition.compose()` for
+old async approach. Or switch to new `ImageComposition.composeSync()` function to rasterize the
+image into GPU context using benefits of `Picture.toImageSync` function. 
 
 **Note:** Composing images is expensive, we do not recommend you run this every tick as it affect
 the performance badly. Instead we recommend to have your compositions pre-rendered so you can just
