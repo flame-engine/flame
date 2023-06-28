@@ -138,6 +138,42 @@ initiate hitboxes and it is with the normal constructor where you define the hit
 a size and a position etc. The other way is to use the `relative` constructor which defines the
 hitbox in relation to the size of its intended parent.
 
+In some specific cases you might want to handle collisions only between hitboxes, without
+propagating 'onCollision*' events to hitbox's parent component. For example, a vehicle could have
+body hitbox to control collisions and side hitboxes to check availability to turn left or right.
+So, colliding with body hitbox means a collision with component itself, whereas colliding with side
+hitbox does not mean a real collision and should not be propagated to hitbox's parent.
+For this case you can set `triggersParentCollision` variable to `false`:
+
+```dart
+class MyComponent extends PositionComponent {
+
+  late final MySpecialHitbox utilityHitbox;
+
+  @override
+  void onLoad() {
+    utilityHitbox = MySpecialHitbox();
+    add(utilityHitbox);
+  }
+
+  void update(double dt) {
+    if (utilityHitbox.isColliding) {
+      // do some specific things if hitbox is colliding
+    }
+  }
+// component's onCollision* functions, ignoring MySpecialHitbox collisions.
+}
+
+class MySpecialHitbox extends RectangleHitbox {
+  MySpecialHitbox() {
+    triggersParentCollision = false;
+  }
+
+// hitbox specific onCollision* functions
+
+}
+```
+
 You can read more about how the different shapes are defined in the
 [ShapeComponents](components.md#shapecomponents) section.
 

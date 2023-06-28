@@ -27,6 +27,10 @@ mixin ShapeHitbox on ShapeComponent implements Hitbox<ShapeHitbox> {
   /// added to the same parent.
   bool allowSiblingCollision = false;
 
+  /// Whether the hitbox collision with other hitbox should trigger
+  /// "onCollision" functions for hitbox's parent component.
+  bool triggersParentCollision = true;
+
   @override
   Aabb2 get aabb => _validAabb ? _aabb : _recalculateAabb();
   final Aabb2 _aabb = Aabb2();
@@ -182,7 +186,7 @@ mixin ShapeHitbox on ShapeComponent implements Hitbox<ShapeHitbox> {
   @mustCallSuper
   void onCollision(Set<Vector2> intersectionPoints, ShapeHitbox other) {
     onCollisionCallback?.call(intersectionPoints, other);
-    if (hitboxParent is CollisionCallbacks) {
+    if (hitboxParent is CollisionCallbacks && triggersParentCollision) {
       (hitboxParent as CollisionCallbacks).onCollision(
         intersectionPoints,
         other.hitboxParent,
@@ -195,7 +199,7 @@ mixin ShapeHitbox on ShapeComponent implements Hitbox<ShapeHitbox> {
   void onCollisionStart(Set<Vector2> intersectionPoints, ShapeHitbox other) {
     activeCollisions.add(other);
     onCollisionStartCallback?.call(intersectionPoints, other);
-    if (hitboxParent is CollisionCallbacks) {
+    if (hitboxParent is CollisionCallbacks && triggersParentCollision) {
       (hitboxParent as CollisionCallbacks).onCollisionStart(
         intersectionPoints,
         other.hitboxParent,
@@ -208,7 +212,7 @@ mixin ShapeHitbox on ShapeComponent implements Hitbox<ShapeHitbox> {
   void onCollisionEnd(ShapeHitbox other) {
     activeCollisions.remove(other);
     onCollisionEndCallback?.call(other);
-    if (hitboxParent is CollisionCallbacks) {
+    if (hitboxParent is CollisionCallbacks && triggersParentCollision) {
       (hitboxParent as CollisionCallbacks).onCollisionEnd(other.hitboxParent);
     }
   }
