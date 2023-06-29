@@ -156,4 +156,12 @@ class TiledAtlas {
       key: key,
     );
   }
+
+  /// Clears images cached in `TiledAtlas`
+  ///
+  /// If you called `Flame.images.clearCache()` you also need to call this
+  /// function to clear disposed images from tiled cache.
+  static void clearCache() {
+    atlasMap.clear();
+  }
 }

@@ -121,6 +121,18 @@ void main() {
           matchesGoldenFile('goldens/larger_atlas_component.png'),
         );
       });
+
+      test('clearing cache', () async {
+        await TiledAtlas.fromTiledMap(
+          simpleMap,
+        );
+
+        expect(TiledAtlas.atlasMap.isNotEmpty, true);
+
+        TiledAtlas.clearCache();
+
+        expect(TiledAtlas.atlasMap.isEmpty, true);
+      });
     });
 
     group('Single tileset map', () {
