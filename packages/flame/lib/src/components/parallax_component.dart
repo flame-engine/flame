@@ -22,6 +22,7 @@ extension ParallaxComponentExtension on FlameGame {
     double? angle,
     Anchor? anchor,
     int? priority,
+    FilterQuality? filterQuality,
     ComponentKey? key,
   }) async {
     return ParallaxComponent.load(
@@ -38,6 +39,7 @@ extension ParallaxComponentExtension on FlameGame {
       angle: angle,
       anchor: anchor,
       priority: priority,
+      filterQuality: filterQuality,
       key: key,
     );
   }
@@ -144,6 +146,7 @@ class ParallaxComponent<T extends FlameGame> extends PositionComponent
     double? angle,
     Anchor? anchor,
     int? priority,
+    FilterQuality? filterQuality,
     ComponentKey? key,
   }) async {
     return ParallaxComponent(
@@ -156,6 +159,7 @@ class ParallaxComponent<T extends FlameGame> extends PositionComponent
         alignment: alignment,
         fill: fill,
         images: images,
+        filterQuality: filterQuality,
       ),
       position: position,
       size: size,

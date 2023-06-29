@@ -19,6 +19,7 @@ extension ParallaxExtension on Game {
     ImageRepeat repeat = ImageRepeat.repeatX,
     Alignment alignment = Alignment.bottomLeft,
     LayerFill fill = LayerFill.height,
+    FilterQuality? filterQuality,
   }) {
     return Parallax.load(
       dataList,
@@ -29,6 +30,7 @@ extension ParallaxExtension on Game {
       alignment: alignment,
       fill: fill,
       images: images,
+      filterQuality: filterQuality,
     );
   }
 
@@ -55,6 +57,7 @@ extension ParallaxExtension on Game {
     ImageRepeat repeat = ImageRepeat.repeatX,
     Alignment alignment = Alignment.bottomLeft,
     LayerFill fill = LayerFill.height,
+    FilterQuality? filterQuality,
   }) {
     return ParallaxAnimation.load(
       path,
@@ -63,6 +66,7 @@ extension ParallaxExtension on Game {
       alignment: alignment,
       fill: fill,
       images: images,
+      filterQuality: filterQuality,
     );
   }
 
@@ -72,6 +76,7 @@ extension ParallaxExtension on Game {
     Alignment alignment = Alignment.bottomLeft,
     LayerFill fill = LayerFill.height,
     Vector2? velocityMultiplier,
+    FilterQuality? filterQuality,
   }) {
     return ParallaxLayer.load(
       data,
@@ -80,6 +85,7 @@ extension ParallaxExtension on Game {
       alignment: alignment,
       fill: fill,
       images: images,
+      filterQuality: filterQuality,
     );
   }
 }
@@ -172,6 +178,7 @@ class ParallaxAnimation extends ParallaxRenderer {
     super.repeat,
     super.alignment,
     super.fill,
+    super.filterQuality,
   }) : _animationTicker = animation.createTicker();
 
   /// Takes a path of an image, a SpriteAnimationData, and optionally arguments
@@ -192,6 +199,7 @@ class ParallaxAnimation extends ParallaxRenderer {
     Alignment alignment = Alignment.bottomLeft,
     LayerFill fill = LayerFill.height,
     Images? images,
+    FilterQuality? filterQuality,
   }) async {
     images ??= Flame.images;
 
@@ -206,6 +214,7 @@ class ParallaxAnimation extends ParallaxRenderer {
       repeat: repeat,
       alignment: alignment,
       fill: fill,
+      filterQuality: filterQuality,
     );
   }
 
@@ -336,6 +345,7 @@ class ParallaxLayer {
     Alignment alignment = Alignment.bottomLeft,
     LayerFill fill = LayerFill.height,
     Images? images,
+    FilterQuality? filterQuality,
   }) async {
     return ParallaxLayer(
       await data.load(
@@ -343,6 +353,7 @@ class ParallaxLayer {
         alignment,
         fill,
         images,
+        filterQuality,
       ),
       velocityMultiplier: velocityMultiplier,
     );
@@ -358,6 +369,7 @@ abstract class ParallaxData {
     Alignment alignment,
     LayerFill fill,
     Images? images,
+    FilterQuality? filterQuality,
   );
 }
 
@@ -373,6 +385,7 @@ class ParallaxImageData extends ParallaxData {
     Alignment alignment,
     LayerFill fill,
     Images? images,
+    FilterQuality? filterQuality,
   ) {
     return ParallaxImage.load(
       path,
@@ -380,6 +393,7 @@ class ParallaxImageData extends ParallaxData {
       alignment: alignment,
       fill: fill,
       images: images,
+      filterQuality: filterQuality,
     );
   }
 }
@@ -397,6 +411,7 @@ class ParallaxAnimationData extends ParallaxData {
     Alignment alignment,
     LayerFill fill,
     Images? images,
+    FilterQuality? filterQuality,
   ) {
     return ParallaxAnimation.load(
       path,
@@ -405,6 +420,7 @@ class ParallaxAnimationData extends ParallaxData {
       alignment: alignment,
       fill: fill,
       images: images,
+      filterQuality: filterQuality,
     );
   }
 }
@@ -496,6 +512,7 @@ class Parallax {
     Alignment alignment = Alignment.bottomLeft,
     LayerFill fill = LayerFill.height,
     Images? images,
+    FilterQuality? filterQuality,
   }) async {
     final velocityDelta = velocityMultiplierDelta ?? Vector2.all(1.0);
     final layers = await Future.wait<ParallaxLayer>(
@@ -510,6 +527,7 @@ class Parallax {
           alignment,
           fill,
           images,
+          filterQuality,
         );
         return ParallaxLayer(
           renderer,
