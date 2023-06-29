@@ -237,7 +237,7 @@ Image imageSync = composition.composeSync();
 
 As you can see, two versions of composing image are available. Use `ImageComposition.compose()` for
 the async approach. Or use the new `ImageComposition.composeSync()` function to rasterize the
-image into GPU context using the benefits of `Picture.toImageSync` function.
+image into GPU context using the benefits of the `Picture.toImageSync` function.
 
 **Note:** Composing images is expensive, we do not recommend you run this every tick as it affect
 the performance badly. Instead we recommend to have your compositions pre-rendered so you can just
