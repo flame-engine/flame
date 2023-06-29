@@ -403,6 +403,52 @@ void main() {
       expect(blockA.endCounter, 1);
       expect(blockB.endCounter, 1);
     },
+    'component collision callbacks are not called with hitbox '
+        'triggersParentCollision option': (game) async {
+      final utilityHitboxA = TestHitbox()..triggersParentCollision = false;
+      final blockA = TestBlock(
+        Vector2.all(10),
+        Vector2.all(10),
+      );
+      blockA.add(utilityHitboxA);
+
+      final utilityHitboxB = TestHitbox()..triggersParentCollision = false;
+      final blockB = TestBlock(
+        Vector2.all(15),
+        Vector2.all(10),
+      );
+      blockB.add(utilityHitboxB);
+      await game.ensureAddAll([blockA, blockB]);
+
+      game.update(0);
+      expect(blockA.startCounter, 1);
+      expect(blockB.startCounter, 1);
+      expect(blockA.onCollisionCounter, 1);
+      expect(blockB.onCollisionCounter, 1);
+      expect(blockA.endCounter, 0);
+      expect(blockB.endCounter, 0);
+      expect(utilityHitboxA.startCounter, 2);
+      expect(utilityHitboxB.startCounter, 2);
+      expect(utilityHitboxA.onCollisionCounter, 2);
+      expect(utilityHitboxB.onCollisionCounter, 2);
+      expect(utilityHitboxA.endCounter, 0);
+      expect(utilityHitboxB.endCounter, 0);
+
+      blockB.position = Vector2(30, 30);
+      game.update(0);
+      expect(blockA.startCounter, 1);
+      expect(blockB.startCounter, 1);
+      expect(blockA.onCollisionCounter, 1);
+      expect(blockB.onCollisionCounter, 1);
+      expect(blockA.endCounter, 1);
+      expect(blockB.endCounter, 1);
+      expect(utilityHitboxA.startCounter, 2);
+      expect(utilityHitboxB.startCounter, 2);
+      expect(utilityHitboxA.onCollisionCounter, 2);
+      expect(utilityHitboxB.onCollisionCounter, 2);
+      expect(utilityHitboxA.endCounter, 2);
+      expect(utilityHitboxB.endCounter, 2);
+    },
 
     // Reproduced #1478
     'collision callbacks with many hitboxes added': (game) async {

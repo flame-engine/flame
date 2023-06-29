@@ -65,6 +65,7 @@ mixin ShapeHitbox on ShapeComponent implements Hitbox<ShapeHitbox> {
   bool renderShape = false;
 
   late PositionComponent _hitboxParent;
+
   PositionComponent get hitboxParent => _hitboxParent;
   void Function()? _parentSizeListener;
   @protected
@@ -186,7 +187,9 @@ mixin ShapeHitbox on ShapeComponent implements Hitbox<ShapeHitbox> {
   @mustCallSuper
   void onCollision(Set<Vector2> intersectionPoints, ShapeHitbox other) {
     onCollisionCallback?.call(intersectionPoints, other);
-    if (hitboxParent is CollisionCallbacks && triggersParentCollision) {
+    if (hitboxParent is CollisionCallbacks &&
+        triggersParentCollision &&
+        other.triggersParentCollision) {
       (hitboxParent as CollisionCallbacks).onCollision(
         intersectionPoints,
         other.hitboxParent,
@@ -199,7 +202,9 @@ mixin ShapeHitbox on ShapeComponent implements Hitbox<ShapeHitbox> {
   void onCollisionStart(Set<Vector2> intersectionPoints, ShapeHitbox other) {
     activeCollisions.add(other);
     onCollisionStartCallback?.call(intersectionPoints, other);
-    if (hitboxParent is CollisionCallbacks && triggersParentCollision) {
+    if (hitboxParent is CollisionCallbacks &&
+        triggersParentCollision &&
+        other.triggersParentCollision) {
       (hitboxParent as CollisionCallbacks).onCollisionStart(
         intersectionPoints,
         other.hitboxParent,
@@ -212,7 +217,9 @@ mixin ShapeHitbox on ShapeComponent implements Hitbox<ShapeHitbox> {
   void onCollisionEnd(ShapeHitbox other) {
     activeCollisions.remove(other);
     onCollisionEndCallback?.call(other);
-    if (hitboxParent is CollisionCallbacks && triggersParentCollision) {
+    if (hitboxParent is CollisionCallbacks &&
+        triggersParentCollision &&
+        other.triggersParentCollision) {
       (hitboxParent as CollisionCallbacks).onCollisionEnd(other.hitboxParent);
     }
   }
@@ -249,5 +256,5 @@ mixin ShapeHitbox on ShapeComponent implements Hitbox<ShapeHitbox> {
   @override
   CollisionEndCallback<ShapeHitbox>? onCollisionEndCallback;
 
-  //#endregion
+//#endregion
 }
