@@ -107,6 +107,7 @@ abstract class ParallaxRenderer {
         filterQuality = filterQuality ?? FilterQuality.low;
 
   void update(double dt);
+
   Image get image;
 }
 
@@ -196,9 +197,8 @@ class ParallaxAnimation extends ParallaxRenderer {
 
     final animation =
         await SpriteAnimation.load(path, animationData, images: images);
-    final prerenderedFrames = await Future.wait(
-      animation.frames.map((frame) => frame.sprite.toImage()).toList(),
-    );
+    final prerenderedFrames =
+        animation.frames.map((frame) => frame.sprite.toImageSync()).toList();
 
     return ParallaxAnimation(
       animation,
@@ -421,6 +421,7 @@ class Parallax {
 
   /// Do not modify this directly, since the layers won't be resized if you do.
   Vector2 get size => _size;
+
   set size(Vector2 newSize) {
     resize(newSize);
   }
