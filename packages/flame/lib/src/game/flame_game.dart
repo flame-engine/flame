@@ -86,6 +86,13 @@ class FlameGame extends ComponentTreeRoot
     setMounted();
   }
 
+  @override
+  @internal
+  void detach() {
+    super.detach();
+    detached();
+  }
+
   /// This implementation of render renders each component, making sure the
   /// canvas is reset for each one.
   ///

@@ -477,6 +477,14 @@ class Component {
   /// [onMount] call before.
   void onRemove() {}
 
+  /// Called right after the component is removed from the widget tree.
+  ///
+  /// This method clears the mounted bit as the component is no longer attached
+  /// to the widget tree.
+  void detached() {
+    _clearMountedBit();
+  }
+
   /// Called whenever the parent of this component changes size; and also once
   /// before [onMount].
   ///

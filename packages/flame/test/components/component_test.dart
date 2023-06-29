@@ -1,6 +1,7 @@
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame_test/flame_test.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -275,6 +276,52 @@ void main() {
           expect(child.isMounted, true);
           expect(parent.parent, game);
           expect(child.parent, parent);
+        },
+      );
+
+      _myDetachableGame(open: false).testGameWidget(
+        'Confirm child component only loads once with game widget change',
+        verify: (game, tester) async {
+          final child = LifecycleComponent();
+          expect(game.onAttachCalled, false);
+          expect(game.isLoaded, false);
+          expect(game.isMounted, false);
+
+          await tester.tap(find.text('Toggle'));
+          // First will be the build of the wrapper
+          await tester.pump();
+          // Second will be the build of the game widget itself
+          await tester.pump();
+
+          expect(game.onAttachCalled, true);
+          expect(game.onDetachCalled, false);
+          expect(game.isLoaded, true);
+          expect(game.isMounted, true);
+          expect(child.isLoaded, false);
+          expect(child.isMounted, false);
+          await game.add(child);
+          expect(child.isLoaded, true);
+          await tester.pump();
+          expect(child.isMounted, true);
+          expect(game.children.length, 1);
+
+          await tester.tap(find.text('Toggle'));
+          await tester.pump();
+
+          expect(game.onDetachCalled, true);
+          expect(game.onRemoveCalled, true);
+          expect(game.children.length, 1);
+          game.resetValues();
+          expect(game.isMounted, false);
+          expect(child.isMounted, true);
+
+          await tester.tap(find.text('Toggle'));
+          await tester.pump();
+          await tester.pump();
+
+          expect(game.onAttachCalled, true);
+          expect(game.isMounted, true);
+          expect(child.isMounted, true);
         },
       );
     });
@@ -1322,4 +1369,86 @@ class _RemoveWhereComponent extends Component {
     add(Component());
     removeWhere((_) => true);
   }
+}
+
+class _Wrapper extends StatefulWidget {
+  const _Wrapper({
+    required this.child,
+    this.open = false,
+  });
+
+  final Widget child;
+  final bool open;
+
+  @override
+  State<_Wrapper> createState() => _WrapperState();
+}
+
+class _WrapperState extends State<_Wrapper> {
+  late bool _open;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _open = widget.open;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        body: Column(
+          children: [
+            if (_open) Expanded(child: widget.child),
+            ElevatedButton(
+              child: const Text('Toggle'),
+              onPressed: () {
+                setState(() => _open = !_open);
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _DetachableFlameGame extends FlameGame {
+  bool onAttachCalled = false;
+  bool onDetachCalled = false;
+  bool onRemoveCalled = false;
+
+  void resetValues() {
+    onAttachCalled = false;
+    onDetachCalled = false;
+    onRemoveCalled = false;
+  }
+
+  @override
+  void onAttach() {
+    super.onAttach();
+    onAttachCalled = true;
+  }
+
+  @override
+  void onDetach() {
+    super.onDetach();
+    onDetachCalled = true;
+  }
+
+  @override
+  void onRemove() {
+    super.onRemove();
+    onRemoveCalled = true;
+  }
+}
+
+FlameTester<_DetachableFlameGame> _myDetachableGame({required bool open}) {
+  return FlameTester(
+    _DetachableFlameGame.new,
+    pumpWidget: (gameWidget, tester) async {
+      await tester.pumpWidget(_Wrapper(open: open, child: gameWidget));
+    },
+  );
 }
