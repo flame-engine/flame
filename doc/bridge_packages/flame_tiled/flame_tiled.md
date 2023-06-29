@@ -45,7 +45,7 @@ final component = await TiledComponent.load(
 
 If you have called `Flame.images.clearCache()` you also need to call `TiledAtlas.clearCache()` to
 remove disposed images from the tiled cache. It might be useful if your next game map have completely
-different tiles than previous.
+different tiles than the previous.
 
 [Tiled]: https://www.mapeditor.org/
 
