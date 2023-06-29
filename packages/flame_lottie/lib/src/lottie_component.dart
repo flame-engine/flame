@@ -31,6 +31,7 @@ class LottieComponent extends PositionComponent with HasPaint {
     super.anchor,
     super.children,
     super.priority,
+    super.key,
   }) {
     _renderer = LottieRenderer(
       composition: composition,

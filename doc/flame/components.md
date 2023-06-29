@@ -233,6 +233,52 @@ If you try to add `MyComponent` to a tree that does not contain `MyAncestorCompo
 an assertion error will be thrown.
 
 
+### Component Keys
+
+Components can have an identification key that allows them to be retrieved from the component tree, from
+any point of the tree.
+
+To register a component with a key, simply pass a key to the `key` argument on the component's
+constructor:
+
+```dart
+final myComponent = Component(
+  key: ComponentKey.named('player'),
+);
+```
+
+Then, to retrieve it in a different point of the component tree:
+
+```dart
+flameGame.findByKey(ComponentKey.named('player'));
+```
+
+There are two types of keys, `unique` and `named`. Unique keys are based on equality of the key
+instance, meaning that:
+
+```dart
+final key = ComponentKey.unique();
+final key2 = key;
+print(key == key2); // true
+print(key == ComponentKey.unique()); // false
+```
+
+Named ones are based on the name that it receives, so:
+
+```dart
+final key1 = ComponentKey.named('player');
+final key2 = ComponentKey.named('player');
+print(key1 == key2); // true
+```
+
+When named keys are used, the `findByKeyName` helper can also be used to retrieve the component.
+
+
+```dart
+flameGame.findByKeyName('player');
+```
+
+
 ### Querying child components
 
 The children that have been added to a component live in a `QueryableOrderedSet` called

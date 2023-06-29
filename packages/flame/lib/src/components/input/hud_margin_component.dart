@@ -25,6 +25,7 @@ class HudMarginComponent extends PositionComponent {
     super.anchor,
     super.children,
     super.priority,
+    super.key,
   }) : assert(
           margin != null || position != null,
           'Either margin or position must be defined',

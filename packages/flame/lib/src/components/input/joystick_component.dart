@@ -53,6 +53,7 @@ class JoystickComponent extends HudMarginComponent with DragCallbacks {
     Anchor super.anchor = Anchor.center,
     super.children,
     super.priority,
+    super.key,
   })  : assert(
           size != null || background != null,
           'Either size or background must be defined',

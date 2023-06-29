@@ -1166,13 +1166,118 @@ void main() {
           expect(component.children.first.children.length, 1);
         },
       );
+
+      testWithFlameGame(
+        'Components can be retrived via a named key',
+        (game) async {
+          final component = ComponentA(key: ComponentKey.named('A'));
+          game.add(component);
+          await game.ready();
+
+          expect(ComponentKey.named('A'), equals(ComponentKey.named('A')));
+
+          final retrieved = game.findByKey(ComponentKey.named('A'));
+          expect(retrieved, equals(component));
+        },
+      );
+
+      testWithFlameGame(
+        'Components can be retrived via an unique key',
+        (game) async {
+          final key1 = ComponentKey.unique();
+          final key2 = ComponentKey.unique();
+          final component1 = ComponentA(key: key1);
+          final component2 = ComponentA(key: key2);
+
+          game.add(component1);
+          game.add(component2);
+          await game.ready();
+
+          expect(key1, isNot(equals(key2)));
+
+          final retrieved1 = game.findByKey(key1);
+          expect(retrieved1, equals(component1));
+
+          final retrieved2 = game.findByKey(key2);
+          expect(retrieved2, equals(component2));
+
+          expect(retrieved1, isNot(equals(component2)));
+        },
+      );
+
+      testWithFlameGame(
+        'Components can be retrived via their name',
+        (game) async {
+          final component = ComponentA(key: ComponentKey.named('A'));
+          game.add(component);
+          await game.ready();
+
+          final retrieved = game.findByKeyName('A');
+          expect(retrieved, equals(component));
+        },
+      );
+
+      testWithFlameGame(
+        'findByKey returns null if no component is found',
+        (game) async {
+          await game.ready();
+
+          expect(game.findByKey(ComponentKey.unique()), isNull);
+        },
+      );
+
+      testWithFlameGame(
+        'findByKey returns null when the component is removed',
+        (game) async {
+          final key = ComponentKey.unique();
+          final component = ComponentA(key: key);
+
+          game.add(component);
+          await game.ready();
+
+          final retrieved1 = game.findByKey(key);
+          expect(retrieved1, equals(component));
+
+          component.removeFromParent();
+          await game.ready();
+
+          final retrieved2 = game.findByKey(key);
+          expect(retrieved2, isNull);
+        },
+      );
+
+      testWithFlameGame(
+        'Throws assertion error when registering a component with the same key',
+        (game) async {
+          final component = ComponentA(key: ComponentKey.named('A'));
+          final component2 = ComponentA(key: ComponentKey.named('A'));
+
+          game.add(component);
+          game.add(component2);
+
+          await expectLater(
+            () => game.ready(),
+            throwsA(
+              isA<AssertionError>().having(
+                (e) => e.message,
+                'message',
+                'Key ${ComponentKey.named('A')} is already registered',
+              ),
+            ),
+          );
+        },
+      );
     });
   });
 }
 
-class ComponentA extends Component {}
+class ComponentA extends Component {
+  ComponentA({super.key});
+}
 
-class ComponentB extends Component {}
+class ComponentB extends Component {
+  ComponentB({super.key});
+}
 
 class ComponentWithSizeHistory extends Component {
   List<Vector2> history = [];
