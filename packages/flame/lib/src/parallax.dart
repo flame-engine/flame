@@ -55,7 +55,6 @@ extension ParallaxExtension on Game {
     ImageRepeat repeat = ImageRepeat.repeatX,
     Alignment alignment = Alignment.bottomLeft,
     LayerFill fill = LayerFill.height,
-    bool composeSync = false,
   }) {
     return ParallaxAnimation.load(
       path,
@@ -64,7 +63,6 @@ extension ParallaxExtension on Game {
       alignment: alignment,
       fill: fill,
       images: images,
-      composeSync: composeSync,
     );
   }
 
@@ -180,9 +178,7 @@ class ParallaxAnimation extends ParallaxRenderer {
   /// for how the image should repeat ([repeat]), which edge it should align
   /// with ([alignment]), which axis it should fill the image on ([fill]) and
   /// [images] which is the image cache that should be used. If no image cache
-  /// is set, the global flame cache is used. The [composeSync] option makes
-  /// parallax to be generated using [Picture.toImageSync] approach, which
-  /// might offer better performance, keeping generated image in GPU context.
+  /// is set, the global flame cache is used.
   ///
   /// _IMPORTANT_: This method pre render all the frames of the animation into
   /// image instances so it can be used inside the parallax. Just keep that in
@@ -196,21 +192,13 @@ class ParallaxAnimation extends ParallaxRenderer {
     Alignment alignment = Alignment.bottomLeft,
     LayerFill fill = LayerFill.height,
     Images? images,
-    bool composeSync = false,
   }) async {
     images ??= Flame.images;
 
     final animation =
         await SpriteAnimation.load(path, animationData, images: images);
-    final prerenderedFrames = <Image>[];
-    if (composeSync) {
-      prerenderedFrames
-          .addAll(animation.frames.map((frame) => frame.sprite.toImageSync()));
-    } else {
-      prerenderedFrames.addAll(await Future.wait(
-        animation.frames.map((frame) => frame.sprite.toImage()),
-      ));
-    }
+    final prerenderedFrames =
+        animation.frames.map((frame) => frame.sprite.toImageSync()).toList();
 
     return ParallaxAnimation(
       animation,
