@@ -16,7 +16,7 @@ void main() {
 
         expect(
           component.events,
-          ['onLoad', 'onGameResize [800.0,600.0]', 'onMount'],
+          ['onLoad', 'onMount', 'onGameResize [800.0,600.0]'],
         );
       });
 
