@@ -320,6 +320,7 @@ void main() {
           await tester.pump();
 
           expect(game.onAttachCalled, true);
+          expect(game.isAttached, true);
           expect(game.isMounted, true);
           expect(child.isMounted, true);
         },
