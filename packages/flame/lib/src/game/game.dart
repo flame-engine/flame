@@ -201,10 +201,9 @@ abstract mixin class Game {
   /// Marks game as no longer attached to any Flutter widget tree.
   ///
   /// Should not be called manually.
-  @mustCallSuper
-  @internal
   void detach() {
     _gameRenderBox = null;
+
     onDetach();
   }
 
