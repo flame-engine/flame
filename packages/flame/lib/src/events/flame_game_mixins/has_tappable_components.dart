@@ -160,19 +160,19 @@ class MultiTapDispatcher extends Component implements MultiTapListener {
   @internal
   @override
   void handleTapDown(int pointerId, TapDownDetails details) {
-    onTapDown(TapDownEvent(pointerId, details));
+    onTapDown(TapDownEvent(pointerId, game, details));
   }
 
   @internal
   @override
   void handleTapUp(int pointerId, TapUpDetails details) {
-    onTapUp(TapUpEvent(pointerId, details));
+    onTapUp(TapUpEvent(pointerId, game, details));
   }
 
   @internal
   @override
   void handleLongTapDown(int pointerId, TapDownDetails details) {
-    onLongTapDown(TapDownEvent(pointerId, details));
+    onLongTapDown(TapDownEvent(pointerId, game, details));
   }
 
   //#endregion
