@@ -171,6 +171,7 @@ public accessors and mutators for this variable:
 
 ```dart
   bool get isFaceUp => _faceUp;
+  bool get isFaceDown => !_faceUp;
   void flip() => _faceUp = !_faceUp;
 ```
 
