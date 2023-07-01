@@ -204,8 +204,8 @@ abstract mixin class Game {
   @mustCallSuper
   @internal
   void detach() {
+    onRemove();
     _gameRenderBox = null;
-
     onDetach();
   }
 

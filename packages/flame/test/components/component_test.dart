@@ -295,6 +295,7 @@ void main() {
 
           expect(game.onAttachCalled, true);
           expect(game.onDetachCalled, false);
+          expect(game.isAttached, true);
           expect(game.isLoaded, true);
           expect(game.isMounted, true);
           expect(child.isLoaded, false);
@@ -309,10 +310,10 @@ void main() {
           await tester.pump();
 
           expect(game.onDetachCalled, true);
-          expect(game.onRemoveCalled, true);
           expect(game.children.length, 1);
           game.resetValues();
-          expect(game.isMounted, false);
+          expect(game.isAttached, false);
+          expect(game.isMounted, true);
           expect(child.isMounted, true);
 
           await tester.tap(find.text('Toggle'));
@@ -1522,12 +1523,10 @@ class _WrapperState extends State<_Wrapper> {
 class _DetachableFlameGame extends FlameGame {
   bool onAttachCalled = false;
   bool onDetachCalled = false;
-  bool onRemoveCalled = false;
 
   void resetValues() {
     onAttachCalled = false;
     onDetachCalled = false;
-    onRemoveCalled = false;
   }
 
   @override
@@ -1540,12 +1539,6 @@ class _DetachableFlameGame extends FlameGame {
   void onDetach() {
     super.onDetach();
     onDetachCalled = true;
-  }
-
-  @override
-  void onRemove() {
-    super.onRemove();
-    onRemoveCalled = true;
   }
 }
 
