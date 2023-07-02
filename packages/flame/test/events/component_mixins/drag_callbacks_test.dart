@@ -29,6 +29,7 @@ void main() {
       expect(game.children.whereType<MultiDragDispatcher>().length, 1);
       game.firstChild<MultiDragDispatcher>()!.onDragStart(
             createDragStartEvents(
+              game: game,
               localPosition: const Offset(12, 12),
               globalPosition: const Offset(12, 12),
             ),
@@ -47,6 +48,7 @@ void main() {
 
       dispatcher.onDragStart(
         createDragStartEvents(
+          game: game,
           localPosition: const Offset(12, 12),
           globalPosition: const Offset(12, 12),
         ),
@@ -57,6 +59,7 @@ void main() {
 
       dispatcher.onDragUpdate(
         createDragUpdateEvents(
+          game: game,
           localPosition: const Offset(15, 15),
           globalPosition: const Offset(15, 15),
         ),
@@ -84,6 +87,7 @@ void main() {
 
         dispatcher.onDragUpdate(
           createDragUpdateEvents(
+            game: game,
             localPosition: const Offset(15, 15),
             globalPosition: const Offset(15, 15),
           ),

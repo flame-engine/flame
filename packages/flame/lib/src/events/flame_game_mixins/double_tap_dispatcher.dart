@@ -42,7 +42,7 @@ class DoubleTapDispatcher extends Component with HasGameRef<FlameGame> {
         DoubleTapGestureRecognizer.new,
         (DoubleTapGestureRecognizer instance) {
           instance.onDoubleTapDown =
-              (details) => _onDoubleTapDown(DoubleTapDownEvent(details));
+              (details) => _onDoubleTapDown(DoubleTapDownEvent(game, details));
           instance.onDoubleTapCancel =
               () => _onDoubleTapCancel(DoubleTapCancelEvent());
           instance.onDoubleTap = () => _onDoubleTapUp(DoubleTapEvent());
