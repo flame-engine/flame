@@ -84,6 +84,7 @@ class Sprite {
   // Used to avoid the creation of new Vector2 objects in render.
   static final _tmpRenderPosition = Vector2.zero();
   static final _tmpRenderSize = Vector2.zero();
+  static final _zeroPosition = Vector2.zero();
 
   /// Renders this sprite onto the [canvas].
   ///
@@ -127,7 +128,17 @@ class Sprite {
   /// aren't going to use it anymore.
   Future<Image> toImage() async {
     final composition = ImageComposition()
-      ..add(image, Vector2.zero(), source: src);
+      ..add(image, _zeroPosition, source: src);
     return composition.compose();
+  }
+
+  /// Return a new [Image] based on the [src] of the Sprite.
+  ///
+  /// A sync version of the [toImage] function. Read [Picture.toImageSync] for a
+  /// detailed description of possible benefits in performance.
+  Image toImageSync() {
+    final composition = ImageComposition()
+      ..add(image, _zeroPosition, source: src);
+    return composition.composeSync();
   }
 }
