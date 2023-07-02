@@ -10,8 +10,8 @@ environment:
 
 dependencies:
   equatable: ^2.0.5
-  flame: ^1.8.0
-  flame_bloc: ^1.9.0
+  flame: ^1.8.1
+  flame_bloc: ^1.10.0
   flutter:
     sdk: flutter
   flutter_bloc: ^8.1.2
