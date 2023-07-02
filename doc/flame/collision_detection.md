@@ -140,10 +140,11 @@ hitbox in relation to the size of its intended parent.
 
 
 In some specific cases you might want to handle collisions only between hitboxes, without
-propagating `onCollision*` events to the hitbox's parent component. For example, a vehicle could have a
-body hitbox to control collisions and side hitboxes to check the possibility to turn left or right.
-So, colliding with a body hitbox means colliding with the component itself, whereas colliding with a side
-hitbox does not mean a real collision and should not be propagated to hitbox's parent.
+propagating `onCollision*` events to the hitbox's parent component. For example, a vehicle could
+have a body hitbox to control collisions and side hitboxes to check the possibility to turn left
+or right.
+So, colliding with a body hitbox means colliding with the component itself, whereas colliding with
+a side hitbox does not mean a real collision and should not be propagated to hitbox's parent.
 For this case you can set `triggersParentCollision` variable to `false`:
 
 ```dart
