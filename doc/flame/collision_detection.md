@@ -139,9 +139,9 @@ a size and a position etc. The other way is to use the `relative` constructor wh
 hitbox in relation to the size of its intended parent.
 
 In some specific cases you might want to handle collisions only between hitboxes, without
-propagating 'onCollision*' events to hitbox's parent component. For example, a vehicle could have
-body hitbox to control collisions and side hitboxes to check availability to turn left or right.
-So, colliding with body hitbox means a collision with component itself, whereas colliding with side
+propagating `onCollision*` events to the hitbox's parent component. For example, a vehicle could have a
+body hitbox to control collisions and side hitboxes to check the possibility to turn left or right.
+So, colliding with a body hitbox means colliding with the component itself, whereas colliding with a side
 hitbox does not mean a real collision and should not be propagated to hitbox's parent.
 For this case you can set `triggersParentCollision` variable to `false`:
 

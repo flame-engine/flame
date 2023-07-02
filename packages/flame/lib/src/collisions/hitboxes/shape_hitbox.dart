@@ -27,8 +27,8 @@ mixin ShapeHitbox on ShapeComponent implements Hitbox<ShapeHitbox> {
   /// added to the same parent.
   bool allowSiblingCollision = false;
 
-  /// Whether the hitbox collision with other hitbox should trigger
-  /// "onCollision" functions for hitbox's parent component.
+  /// Whether hitbox collisions with other hitboxes should trigger the
+  /// "onCollision" functions for the hitbox's parent component.
   bool triggersParentCollision = true;
 
   @override
