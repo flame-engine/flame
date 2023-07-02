@@ -14,10 +14,10 @@ environment:
 
 dependencies:
   collection: ^1.17.1
-  flame: ^1.8.0
+  flame: ^1.8.1
   flutter:
     sdk: flutter
-  jenny: ^1.0.3
+  jenny: ^1.0.4
   meta: ^1.9.1
 
 dev_dependencies:
