@@ -138,6 +138,7 @@ initiate hitboxes and it is with the normal constructor where you define the hit
 a size and a position etc. The other way is to use the `relative` constructor which defines the
 hitbox in relation to the size of its intended parent.
 
+
 In some specific cases you might want to handle collisions only between hitboxes, without
 propagating `onCollision*` events to the hitbox's parent component. For example, a vehicle could have a
 body hitbox to control collisions and side hitboxes to check the possibility to turn left or right.
