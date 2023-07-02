@@ -5,11 +5,10 @@ import 'package:flame/src/game/flame_game.dart';
 import 'package:flutter/gestures.dart';
 
 class DragUpdateEvent extends PositionEvent {
-  DragUpdateEvent(this.pointerId, DragUpdateDetails details)
+  DragUpdateEvent(this.pointerId, super.game, DragUpdateDetails details)
       : timestamp = details.sourceTimeStamp ?? Duration.zero,
         delta = details.delta.toVector2(),
         super(
-          canvasPosition: details.localPosition.toVector2(),
           devicePosition: details.globalPosition.toVector2(),
         );
 
