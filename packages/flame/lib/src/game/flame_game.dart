@@ -86,6 +86,18 @@ class FlameGame extends ComponentTreeRoot
     setMounted();
   }
 
+  bool disposeAll = false;
+
+  @override
+  @mustCallSuper
+  void onRemove() {
+    if (disposeAll) {
+      removeAll(children);
+      processLifecycleEvents();
+    }
+    super.onRemove();
+  }
+
   /// This implementation of render renders each component, making sure the
   /// canvas is reset for each one.
   ///

@@ -256,7 +256,7 @@ class GameWidgetState<T extends Game> extends State<GameWidget<T>> {
 
   void disposeCurrentGame() {
     currentGame.removeGameStateListener(_onGameStateChange);
-    currentGame.onRemove();
+    //currentGame.onRemove();
   }
 
   @override
