@@ -178,5 +178,19 @@ void main() {
       expect(result1, isNotNull);
       expect(result2, Vector2(0, 0));
     });
+
+    test('fromPoints', () {
+      final p1 = Vector2.zero();
+      final p2 = Vector2(0, 1);
+      final p3 = Vector2(1, 0);
+
+      final circle = Circle.fromPoints(p1, p2, p3)!;
+      expect(circle.center, Vector2.all(0.5));
+      expectDouble(circle.radius, 1 / sqrt(2));
+
+      expect(circle.containsPoint(p1), true);
+      expect(circle.containsPoint(p2), true);
+      expect(circle.containsPoint(p3), true);
+    });
   });
 }
