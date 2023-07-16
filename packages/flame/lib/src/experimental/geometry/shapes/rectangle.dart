@@ -35,6 +35,9 @@ class Rectangle extends Shape {
     }
   }
 
+  Rectangle.fromLTWH(double left, double top, double width, double height)
+      : this.fromLTRB(left, top, left + width, top + height);
+
   /// Constructs a [Rectangle] from two opposite corners. The points can be in
   /// any disposition to each other.
   factory Rectangle.fromPoints(Vector2 a, Vector2 b) =>
