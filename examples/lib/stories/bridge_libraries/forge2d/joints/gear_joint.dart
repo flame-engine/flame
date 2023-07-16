@@ -5,7 +5,6 @@ import 'package:examples/stories/bridge_libraries/forge2d/utils/boxes.dart';
 import 'package:flame/input.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 
-// ignore: deprecated_member_use
 class GearJointExample extends Forge2DGame with TapDetector {
   static const description = '''
     This example shows how to use a `GearJoint`. 
@@ -27,15 +26,15 @@ class GearJointExample extends Forge2DGame with TapDetector {
 
     final box =
         DraggableBox(startPosition: boxAnchor, width: boxWidth, height: 20);
-    add(box);
+    world.add(box);
 
     final ball1Anchor = boxAnchor - Vector2(boxWidth / 2 + ball1Radius, 0);
     final ball1 = Ball(ball1Anchor, radius: ball1Radius);
-    add(ball1);
+    world.add(ball1);
 
     final ball2Anchor = ball1Anchor - Vector2(ball1Radius + ball2Radius, 0);
     final ball2 = Ball(ball2Anchor, radius: ball2Radius);
-    add(ball2);
+    world.add(ball2);
 
     await Future.wait([box.loaded, ball1.loaded, ball2.loaded]);
 

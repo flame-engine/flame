@@ -32,7 +32,7 @@ class PulleyJointExample extends Forge2DGame with TapDetector {
       width: 7,
       height: 10,
     );
-    addAll([firstBox, secondBox, firstPulley, secondPulley]);
+    world.addAll([firstBox, secondBox, firstPulley, secondPulley]);
 
     await Future.wait([
       firstBox.loaded,

@@ -20,6 +20,7 @@ class AnimatedBodyExample extends Forge2DGame with TapDetector {
 
   @override
   Future<void> onLoad() async {
+    super.onLoad();
     chopper = await images.load('animations/chopper.png');
 
     animation = SpriteAnimation.fromFrameData(
@@ -32,7 +33,7 @@ class AnimatedBodyExample extends Forge2DGame with TapDetector {
     );
 
     final boundaries = createBoundaries(this);
-    boundaries.forEach(add);
+    world.addAll(boundaries);
   }
 
   @override
@@ -45,7 +46,7 @@ class AnimatedBodyExample extends Forge2DGame with TapDetector {
       size: spriteSize,
       anchor: Anchor.center,
     );
-    add(ChopperBody(position, animationComponent));
+    world.add(ChopperBody(position, animationComponent));
   }
 }
 

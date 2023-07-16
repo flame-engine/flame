@@ -15,14 +15,15 @@ class SpriteBodyExample extends Forge2DGame with TapDetector {
 
   @override
   Future<void> onLoad() async {
-    addAll(createBoundaries(this));
+    super.onLoad();
+    world.addAll(createBoundaries(this));
   }
 
   @override
   void onTapDown(TapDownInfo info) {
     super.onTapDown(info);
     final position = info.eventPosition.game;
-    add(Pizza(position, size: Vector2(10, 15)));
+    world.add(Pizza(position, size: Vector2(10, 15)));
   }
 }
 

@@ -1,9 +1,6 @@
 import 'package:examples/stories/bridge_libraries/forge2d/utils/balls.dart';
 import 'package:examples/stories/bridge_libraries/forge2d/utils/boundaries.dart';
-import 'package:flame/components.dart';
 import 'package:flame/events.dart';
-import 'package:flame/game.dart';
-import 'package:flame/input.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flutter/material.dart' hide Draggable;
 
@@ -18,10 +15,10 @@ class DraggableExample extends Forge2DGame {
 
   @override
   Future<void> onLoad() async {
+    super.onLoad();
     final boundaries = createBoundaries(this);
-    boundaries.forEach(add);
-    final center = screenToWorld(camera.viewport.effectiveSize / 2);
-    add(DraggableBall(center));
+    boundaries.forEach(world.add);
+    world.add(DraggableBall(Vector2.zero()));
   }
 }
 

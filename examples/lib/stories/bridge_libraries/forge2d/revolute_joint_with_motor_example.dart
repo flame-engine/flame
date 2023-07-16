@@ -19,12 +19,13 @@ class RevoluteJointWithMotorExample extends Forge2DGame with TapDetector {
 
   @override
   Future<void> onLoad() async {
+    super.onLoad();
     final boundaries = createBoundaries(this);
-    boundaries.forEach(add);
-    final center = screenToWorld(camera.viewport.effectiveSize / 2);
-    add(CircleShuffler(center));
-    add(CornerRamp(center, isMirrored: true));
-    add(CornerRamp(center));
+    world.addAll(boundaries);
+    final center = Vector2.zero();
+    world.add(CircleShuffler(center));
+    world.add(CornerRamp(center, isMirrored: true));
+    world.add(CornerRamp(center));
   }
 
   @override
@@ -34,7 +35,7 @@ class RevoluteJointWithMotorExample extends Forge2DGame with TapDetector {
     final random = Random();
     List.generate(15, (i) {
       final randomVector = (Vector2.random() - Vector2.all(-0.5)).normalized();
-      add(Ball(tapPosition + randomVector, radius: random.nextDouble()));
+      world.add(Ball(tapPosition + randomVector, radius: random.nextDouble()));
     });
   }
 }

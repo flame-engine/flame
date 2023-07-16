@@ -275,10 +275,7 @@ void main() {
       flameTester.testGameWidget(
         'add and remove child to BodyComponent',
         setUp: (game, tester) async {
-          final worldCenter =
-              game.screenToWorld(game.size * game.camera.zoom / 2);
-
-          final bodyDef = BodyDef(position: worldCenter.clone());
+          final bodyDef = BodyDef();
           final body = game.world.createBody(bodyDef);
           final shape = PolygonShape()
             ..set(
@@ -294,18 +291,18 @@ void main() {
             ..body = body
             ..paint = testPaint;
 
-          component.addToParent(game);
+          game.world.add(component);
           await game.ready();
 
-          expect(game.contains(component), true);
+          expect(game.world.contains(component), true);
           expect(component.isMounted, true);
-          expect(game.children.length, 1);
+          expect(game.world.children.length, 1);
           component.removeFromParent();
           await game.ready();
 
           expect(component.isMounted, false);
           expect(component.isLoaded, true);
-          expect(game.children.length, 0);
+          expect(game.world.children.length, 0);
         },
       );
     });

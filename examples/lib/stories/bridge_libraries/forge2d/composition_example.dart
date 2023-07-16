@@ -3,8 +3,6 @@ import 'package:examples/stories/bridge_libraries/forge2d/utils/boundaries.dart'
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/events.dart';
-import 'package:flame/game.dart';
-import 'package:flame/input.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flutter/material.dart';
 
@@ -22,9 +20,8 @@ class CompositionExample extends Forge2DGame {
   Future<void> onLoad() async {
     final boundaries = createBoundaries(this);
     boundaries.forEach(add);
-    final viewportCenter = camera.viewport.effectiveSize / 2;
-    add(TappableText(screenToFlameWorld(viewportCenter)..y = 5));
-    add(TappableBall(screenToWorld(viewportCenter)));
+    add(TappableText(Vector2(0, 5)));
+    add(TappableBall(Vector2.zero()));
   }
 }
 

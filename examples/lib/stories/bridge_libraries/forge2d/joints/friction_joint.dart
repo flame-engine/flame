@@ -18,10 +18,10 @@ class FrictionJointExample extends Forge2DGame with TapDetector {
     super.onLoad();
     final boundaries = createBoundaries(this);
     border = boundaries.first;
-    addAll(boundaries);
+    world.addAll(boundaries);
 
     ball = Ball(size / 2, radius: 3);
-    add(ball);
+    world.add(ball);
 
     await Future.wait([ball.loaded, border.loaded]);
 

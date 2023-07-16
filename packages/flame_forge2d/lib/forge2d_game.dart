@@ -1,41 +1,43 @@
+import 'dart:async';
+
+import 'package:flame/camera.dart';
 import 'package:flame/game.dart';
-import 'package:flame_forge2d/world_contact_listener.dart';
+import 'package:flame_forge2d/forge2d_world.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:forge2d/forge2d.dart';
 
 class Forge2DGame extends FlameGame {
   Forge2DGame({
     Vector2? gravity,
-    double zoom = defaultZoom,
-    Camera? camera,
     ContactListener? contactListener,
-  })  : world = World(gravity ?? defaultGravity),
-        super(camera: camera ?? Camera()) {
-    // ignore: deprecated_member_use
-    this.camera.zoom = zoom;
-    world.setContactListener(contactListener ?? WorldContactListener());
-  }
+    double zoom = 10,
+  })  : world = Forge2DWorld(
+          gravity: gravity,
+          contactListener: contactListener,
+        ),
+        _initialZoom = zoom;
 
-  static final Vector2 defaultGravity = Vector2(0, 10.0);
-
-  static const double defaultZoom = 10.0;
-
-  final World world;
+  final Forge2DWorld world;
+  // TODO(spydon): Use a metersToPixels constant instead for rendering.
+  final double _initialZoom;
+  late CameraComponent cameraComponent;
 
   @override
-  void update(double dt) {
-    super.update(dt);
-    world.stepDt(dt);
+  @mustCallSuper
+  FutureOr<void> onLoad() async {
+    cameraComponent = CameraComponent(world: world)
+      ..viewfinder.zoom = _initialZoom;
+    add(cameraComponent);
+    add(world);
   }
 
   Vector2 worldToScreen(Vector2 position) {
-    return projector.projectVector(position);
+    return cameraComponent.viewfinder.position;
   }
 
   Vector2 screenToWorld(Vector2 position) {
-    return projector.unprojectVector(position);
-  }
-
-  Vector2 screenToFlameWorld(Vector2 position) {
-    return screenToWorld(position)..y *= -1;
+    return cameraComponent.viewfinder.position
+      ..clone()
+      ..scale(cameraComponent.viewfinder.zoom);
   }
 }

@@ -16,11 +16,11 @@ class BlobExample extends Forge2DGame with TapDetector {
 
   @override
   Future<void> onLoad() async {
-    final worldCenter = screenToWorld(size * camera.zoom / 2);
-    final blobCenter = worldCenter + Vector2(0, -30);
+    super.onLoad();
+    final blobCenter = Vector2(0, -30);
     final blobRadius = Vector2.all(6.0);
-    addAll(createBoundaries(this));
-    add(Ground(worldCenter));
+    world.addAll(createBoundaries(this));
+    world.add(Ground(Vector2.zero()));
     final jointDef = ConstantVolumeJointDef()
       ..frequencyHz = 20.0
       ..dampingRatio = 1.0
@@ -29,13 +29,13 @@ class BlobExample extends Forge2DGame with TapDetector {
     await addAll([
       for (var i = 0; i < 20; i++) BlobPart(i, jointDef, blobRadius, blobCenter)
     ]);
-    world.createJoint(ConstantVolumeJoint(world, jointDef));
+    world.createJoint(ConstantVolumeJoint(world.physicsWorld, jointDef));
   }
 
   @override
   void onTapDown(TapDownInfo info) {
     super.onTapDown(info);
-    add(FallingBox(info.eventPosition.game));
+    world.add(FallingBox(info.eventPosition.game));
   }
 }
 

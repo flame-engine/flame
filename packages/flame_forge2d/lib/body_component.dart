@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import 'package:flame/components.dart' hide World;
 import 'package:flame/extensions.dart';
-import 'package:flame/game.dart';
 import 'package:flame_forge2d/forge2d_game.dart';
 import 'package:flutter/foundation.dart';
 import 'package:forge2d/forge2d.dart' hide Timer, Vector2;
@@ -45,10 +44,8 @@ abstract class BodyComponent<T extends Forge2DGame> extends Component
     body = createBody();
   }
 
-  World get world => gameRef.world;
-  // TODO(Lukas): Use CameraComponent here instead.
-  // ignore: deprecated_member_use
-  Camera get camera => gameRef.camera;
+  World get world => gameRef.world.physicsWorld;
+  CameraComponent get camera => gameRef.cameraComponent;
   Vector2 get center => body.worldCenter;
   double get angle => body.angle;
 
@@ -97,10 +94,7 @@ abstract class BodyComponent<T extends Forge2DGame> extends Component
   ///
   /// **NOTE**: If [renderBody] is false, no fixtures will be rendered. Hence,
   /// [renderFixture] is not called when [render]ing.
-  void renderFixture(
-    Canvas canvas,
-    Fixture fixture,
-  ) {
+  void renderFixture(Canvas canvas, Fixture fixture) {
     canvas.save();
     switch (fixture.type) {
       case ShapeType.chain:

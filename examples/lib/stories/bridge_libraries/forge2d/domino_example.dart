@@ -20,22 +20,23 @@ class DominoExample extends Forge2DGame with TapDetector {
 
   @override
   Future<void> onLoad() async {
+    super.onLoad();
     final boundaries = createBoundaries(this);
     boundaries.forEach(add);
-    final center = screenToWorld(camera.viewport.effectiveSize / 2);
 
     const numberOfRows = 7;
     for (var i = 0; i < numberOfRows - 2; i++) {
-      final position = center + Vector2(0.0, 5.0 * i);
-      add(Platform(position));
+      world.add(Platform(Vector2(0.0, 5.0 * i)));
     }
 
     const numberPerRow = 25;
     for (var i = 0; i < numberOfRows; ++i) {
       for (var j = 0; j < numberPerRow; j++) {
-        final position = center +
-            Vector2(-14.75 + j * (29.5 / (numberPerRow - 1)), -12.7 + 5 * i);
-        add(DominoBrick(position));
+        final position = Vector2(
+          -14.75 + j * (29.5 / (numberPerRow - 1)),
+          -12.7 + 5 * i,
+        );
+        world.add(DominoBrick(position));
       }
     }
   }
@@ -44,7 +45,7 @@ class DominoExample extends Forge2DGame with TapDetector {
   void onTapDown(TapDownInfo info) {
     super.onTapDown(info);
     final position = info.eventPosition.game;
-    add(Pizza(position)..renderBody = true);
+    world.add(Pizza(position)..renderBody = true);
   }
 }
 

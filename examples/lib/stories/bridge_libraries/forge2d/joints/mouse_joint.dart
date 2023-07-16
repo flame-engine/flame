@@ -20,15 +20,16 @@ class MouseJointExample extends Forge2DGame with MultiTouchDragDetector {
 
   @override
   Future<void> onLoad() async {
+    super.onLoad();
     final boundaries = createBoundaries(this);
-    boundaries.forEach(add);
+    world.addAll(boundaries);
 
-    final center = screenToWorld(camera.viewport.effectiveSize / 2);
+    final center = Vector2.zero();
     groundBody = world.createBody(BodyDef());
     ball = Ball(center, radius: 5);
-    add(ball);
-    add(CornerRamp(center));
-    add(CornerRamp(center, isMirrored: true));
+    world.add(ball);
+    world.add(CornerRamp(center));
+    world.add(CornerRamp(center, isMirrored: true));
   }
 
   @override

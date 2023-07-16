@@ -17,15 +17,16 @@ class RevoluteJointExample extends Forge2DGame with TapDetector {
 
   @override
   Future<void> onLoad() async {
-    addAll(createBoundaries(this));
+    super.onLoad();
+    world.addAll(createBoundaries(this));
   }
 
   @override
   void onTapDown(TapDownInfo info) {
     super.onTapDown(info);
     final ball = Ball(info.eventPosition.game);
-    add(ball);
-    add(CircleShuffler(ball));
+    world.add(ball);
+    world.add(CircleShuffler(ball));
   }
 }
 

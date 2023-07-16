@@ -30,7 +30,7 @@ class WeldJointExample extends Forge2DGame with TapDetector {
       color: Colors.white,
     );
 
-    addAll([leftPillar, rightPillar]);
+    world.addAll([leftPillar, rightPillar]);
 
     createBridge(size.y - pillarHeight);
   }
@@ -70,6 +70,6 @@ class WeldJointExample extends Forge2DGame with TapDetector {
   Future<void> onTapDown(TapDownInfo info) async {
     super.onTapDown(info);
     final ball = Ball(info.eventPosition.game, radius: 5);
-    add(ball);
+    world.add(ball);
   }
 }

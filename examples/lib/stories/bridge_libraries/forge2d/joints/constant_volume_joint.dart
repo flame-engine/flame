@@ -32,7 +32,7 @@ class ConstantVolumeJointExample extends Forge2DGame with TapDetector {
 
       final ball = Ball(Vector2(x + center.x, y + center.y), radius: 0.5);
 
-      add(ball);
+      world.add(ball);
       balls.add(ball);
     }
 
@@ -50,6 +50,11 @@ class ConstantVolumeJointExample extends Forge2DGame with TapDetector {
       constantVolumeJoint.addBody(ball.body);
     });
 
-    world.createJoint(ConstantVolumeJoint(world, constantVolumeJoint));
+    world.createJoint(
+      ConstantVolumeJoint(
+        world.physicsWorld,
+        constantVolumeJoint,
+      ),
+    );
   }
 }

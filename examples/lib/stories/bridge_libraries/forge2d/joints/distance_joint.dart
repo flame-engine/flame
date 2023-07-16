@@ -12,7 +12,7 @@ class DistanceJointExample extends Forge2DGame with TapDetector {
   @override
   Future<void> onLoad() async {
     super.onLoad();
-    addAll(createBoundaries(this));
+    world.addAll(createBoundaries(this));
   }
 
   @override
@@ -22,7 +22,7 @@ class DistanceJointExample extends Forge2DGame with TapDetector {
 
     final first = Ball(tap);
     final second = Ball(Vector2(tap.x + 3, tap.y + 3));
-    addAll([first, second]);
+    world.addAll([first, second]);
 
     await Future.wait([first.loaded, second.loaded]);
 

@@ -21,7 +21,7 @@ class PrismaticJointExample extends Forge2DGame with TapDetector {
     super.onLoad();
 
     final box = DraggableBox(startPosition: anchor, width: 3, height: 3);
-    add(box);
+    world.add(box);
     await Future.wait([box.loaded]);
 
     createJoint(box.body, anchor);

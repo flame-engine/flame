@@ -17,10 +17,10 @@ class TappableExample extends Forge2DGame {
 
   @override
   Future<void> onLoad() async {
+    super.onLoad();
     final boundaries = createBoundaries(this);
-    boundaries.forEach(add);
-    final center = screenToWorld(camera.viewport.effectiveSize / 2);
-    add(TappableBall(center));
+    world.addAll(boundaries);
+    world.add(TappableBall(Vector2.zero()));
   }
 }
 

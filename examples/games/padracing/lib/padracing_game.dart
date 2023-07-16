@@ -58,6 +58,7 @@ class PadRacingGame extends Forge2DGame with KeyboardEvents {
 
   @override
   Future<void> onLoad() async {
+    // TODO(Spydon): Migrate to built-in camera component
     children.register<CameraComponent>();
     cameraWorld = World();
     add(cameraWorld);

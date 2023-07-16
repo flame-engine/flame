@@ -40,7 +40,7 @@ class RopeJointExample extends Forge2DGame with TapDetector {
     for (var i = 0; i < length; i++) {
       final newPosition = prevBody.worldCenter + Vector2(0, 1);
       final ball = Ball(newPosition, radius: 0.5, color: Colors.white);
-      await add(ball);
+      await world.add(ball);
 
       createRopeJoint(ball.body, prevBody);
       prevBody = ball.body;

@@ -27,16 +27,14 @@ class RaycastExample extends Forge2DGame
 
   @override
   Future<void> onLoad() async {
-    addAll(createBoundaries(this));
-
-    final worldCenter = screenToWorld(camera.viewport.effectiveSize / 2);
+    super.onLoad();
+    world.addAll(createBoundaries(this));
 
     const numberOfRows = 3;
     const numberOfBoxes = 4;
     for (var i = 0; i < numberOfBoxes; ++i) {
       for (var j = 0; j < numberOfRows; ++j) {
-        final position = worldCenter + Vector2(i * 10, j * 20 - 20);
-        add(Box(position));
+        world.add(Box(Vector2(i * 10, j * 20 - 20)));
       }
     }
   }
@@ -63,7 +61,7 @@ class RaycastExample extends Forge2DGame
     bluePoints.add(worldToScreen(rayStart));
 
     final farthestCallback = FarthestBoxRayCastCallback();
-    world.raycast(farthestCallback, rayStart, blueRayTarget);
+    world.physicsWorld.raycast(farthestCallback, rayStart, blueRayTarget);
 
     if (farthestCallback.farthestPoint != null) {
       bluePoints.add(worldToScreen(farthestCallback.farthestPoint!));
@@ -78,7 +76,7 @@ class RaycastExample extends Forge2DGame
     redPoints.add(worldToScreen(rayStart));
 
     final nearestCallback = NearestBoxRayCastCallback();
-    world.raycast(nearestCallback, rayStart, rayTarget);
+    world.physicsWorld.raycast(nearestCallback, rayStart, rayTarget);
 
     if (nearestCallback.nearestPoint != null) {
       redPoints.add(worldToScreen(nearestCallback.nearestPoint!));

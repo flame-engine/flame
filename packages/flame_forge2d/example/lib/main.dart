@@ -1,4 +1,3 @@
-import 'package:flame/camera.dart' as camera;
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
@@ -10,22 +9,18 @@ void main() {
 }
 
 class Forge2DExample extends Forge2DGame {
-  final cameraWorld = camera.World();
-  late final CameraComponent cameraComponent;
-
   @override
   Future<void> onLoad() async {
-    cameraComponent = CameraComponent(world: cameraWorld);
+    super.onLoad();
     cameraComponent.viewfinder.anchor = Anchor.topLeft;
-    addAll([cameraComponent, cameraWorld]);
 
-    cameraWorld.add(Ball(size / 2));
-    cameraWorld.addAll(createBoundaries());
+    world.add(Ball(size / 2));
+    world.addAll(createBoundaries());
   }
 
   List<Component> createBoundaries() {
     final topLeft = Vector2.zero();
-    final bottomRight = screenToWorld(cameraComponent.viewport.size);
+    final bottomRight = cameraComponent.viewport.size;
     final topRight = Vector2(bottomRight.x, topLeft.y);
     final bottomLeft = Vector2(topLeft.x, bottomRight.y);
 

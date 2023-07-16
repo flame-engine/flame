@@ -29,10 +29,10 @@ class MotorJointExample extends Forge2DGame with TapDetector {
       height: 1,
       bodyType: BodyType.static,
     );
-    add(box);
+    world.add(box);
 
     ball = Ball(Vector2(size.x / 2, size.y / 2 - 5));
-    add(ball);
+    world.add(ball);
 
     await Future.wait([ball.loaded, box.loaded]);
 

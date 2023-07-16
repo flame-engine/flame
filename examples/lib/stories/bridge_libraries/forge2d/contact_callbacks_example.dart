@@ -17,8 +17,9 @@ class ContactCallbacksExample extends Forge2DGame with TapDetector {
 
   @override
   Future<void> onLoad() async {
+    super.onLoad();
     final boundaries = createBoundaries(this);
-    boundaries.forEach(add);
+    world.addAll(boundaries);
   }
 
   @override
@@ -26,9 +27,9 @@ class ContactCallbacksExample extends Forge2DGame with TapDetector {
     super.onTapDown(info);
     final position = info.eventPosition.game;
     if (math.Random().nextInt(10) < 2) {
-      add(WhiteBall(position));
+      world.add(WhiteBall(position));
     } else {
-      add(Ball(position));
+      world.add(Ball(position));
     }
   }
 }
