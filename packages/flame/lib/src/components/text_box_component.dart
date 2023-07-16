@@ -296,7 +296,9 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
       // See issue #1618 for details.
       Future.delayed(const Duration(milliseconds: 100), () {
         cachedToRemove.remove(cachedImage);
-        cachedImage.dispose();
+        if (isMounted) {
+          cachedImage.dispose();
+        }
       });
     }
     cache = await _fullRenderAsImage(newSize);
