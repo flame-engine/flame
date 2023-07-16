@@ -174,7 +174,7 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
   double get totalCharTime => text.length * _boxConfig.timePerChar;
 
   bool get finished =>
-      _lifeTime > totalCharTime + (_boxConfig.dismissDelay ?? 0);
+      _lifeTime >= totalCharTime + (_boxConfig.dismissDelay ?? 0);
 
   int get _actualTextLength {
     return lines.map((e) => e.length).sum;
