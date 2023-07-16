@@ -11,7 +11,7 @@ class LineSegment {
 
   factory LineSegment.zero() => LineSegment(Vector2.zero(), Vector2.zero());
 
-  Vector2 get midpoint => (from + to) / 2;
+  Vector2 get midpoint => (from + to)..scale(0.5);
 
   /// Returns an empty list if there are no intersections between the segments
   /// If the segments are concurrent, the intersecting point is returned as a
