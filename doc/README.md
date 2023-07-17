@@ -42,7 +42,7 @@ dependencies:
 
 The latest version can be found on [pub.dev](https://pub.dev/packages/flame/install).
 
-then run `pub get` and you are ready to start using it!
+then run `flutter pub get` and you are ready to start using it!
 
 
 ## Getting started
