@@ -72,10 +72,11 @@ Flame doesn't bundle any network feature, which may be needed to write online mu
 
 If you are building a multiplayer game, here are some recommendations of packages/services:
 
-- [Nakama](https://github.com/Allan-Nava/nakama-flutter): Nakama is an open-source server designed
+- [Nakama](https://github.com/obrunsmann/flutter_nakama/): Nakama is an open-source server designed
  to power modern games and apps.
 - [Firebase](https://firebase.google.com/): Provides dozens of services that can be used to write
 simpler multiplayer experiences.
+- [Supabase](https://supabase.com/): A cheaper alternative to Firebase, based on Postgres.
 
 
 ### External assets
