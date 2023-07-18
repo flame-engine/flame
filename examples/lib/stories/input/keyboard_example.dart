@@ -1,4 +1,5 @@
 import 'package:examples/commons/ember.dart';
+import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flutter/services.dart';
@@ -17,19 +18,23 @@ class KeyboardExample extends FlameGame with KeyboardEvents {
   // Direction in which amber is moving.
   final Vector2 _direction = Vector2.zero();
 
-  late final Ember _ember;
-
   @override
   Future<void> onLoad() async {
-    _ember = Ember(position: size / 2, size: Vector2.all(100));
-    add(_ember);
+    add(
+      Ember(
+        key: ComponentKey.named('ember'),
+        position: size / 2,
+        size: Vector2.all(100),
+      ),
+    );
   }
 
   @override
   void update(double dt) {
     super.update(dt);
+    final ember = findByKeyName<Ember>('ember');
     final displacement = _direction.normalized() * _speed * dt;
-    _ember.position.add(displacement);
+    ember?.position.add(displacement);
   }
 
   @override

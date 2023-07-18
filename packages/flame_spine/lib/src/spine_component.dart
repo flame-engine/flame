@@ -20,6 +20,7 @@ class SpineComponent extends PositionComponent {
     Anchor super.anchor = Anchor.topLeft,
     super.children,
     super.priority,
+    super.key,
   })  : _ownsDrawable = ownsDrawable,
         _boundsProvider = boundsProvider {
     _drawable.update(0);

@@ -1,3 +1,21 @@
+## 1.8.1
+
+> Note: This release has breaking changes.
+
+ - **FIX**: Adds a check to confirm the component is not loaded ([#2579](https://github.com/flame-engine/flame/issues/2579)). ([985400f2](https://github.com/flame-engine/flame/commit/985400f2955f6bed14066660711d53c5b302ab09))
+ - **FIX**: Animation ticker readability improvements ([#2578](https://github.com/flame-engine/flame/issues/2578)). ([667a1698](https://github.com/flame-engine/flame/commit/667a1698115ed69cc11b2e5a598371e136c7e7f0))
+ - **FIX**: Remove `mustCallSuper` from `onComponentTypeCheck` ([#2561](https://github.com/flame-engine/flame/issues/2561)). ([bcae760c](https://github.com/flame-engine/flame/commit/bcae760c7138839fee203a1693e02fade753292c))
+ - **FIX**: Update sdk constraints to >=3.0.0 ([#2554](https://github.com/flame-engine/flame/issues/2554)). ([2f71e06e](https://github.com/flame-engine/flame/commit/2f71e06eb86ffc65cd459c4d722eee2470be13e5))
+ - **FIX**: Reduce the Vector2 creations in Anchor ([#2550](https://github.com/flame-engine/flame/issues/2550)). ([5a9434b0](https://github.com/flame-engine/flame/commit/5a9434b09a6fbe2c86db2d8192cd2d7ae0d5868c))
+ - **FIX**: Fix disappearing text on TextBoxComponent for larger pixelRatios ([#2540](https://github.com/flame-engine/flame/issues/2540)). ([6e1d5466](https://github.com/flame-engine/flame/commit/6e1d5466aadc59f90475b1a9e7658bb78ed60340))
+ - **FEAT**: Option to prevent propagating collision events from ShapeHitbox to _hitboxParent ([#2594](https://github.com/flame-engine/flame/issues/2594)). ([a58d7436](https://github.com/flame-engine/flame/commit/a58d7436c9b71a2358edc6c3732aeda56d980f64))
+ - **FEAT**: Adding filterQuality arguments to Parallax load methods ([#2596](https://github.com/flame-engine/flame/issues/2596)). ([ff3d9107](https://github.com/flame-engine/flame/commit/ff3d91075c49df8efb6130f8e8ac9b711a1a8a14))
+ - **FEAT**: Option to use toImageSync in ImageComposition class ([#2593](https://github.com/flame-engine/flame/issues/2593)). ([66d5f97d](https://github.com/flame-engine/flame/commit/66d5f97d303aa1712673b8ca7e1a889cf5e7270e))
+ - **FEAT**: ComponentKey API ([#2566](https://github.com/flame-engine/flame/issues/2566)). ([b3efb612](https://github.com/flame-engine/flame/commit/b3efb612cb3cb77f69bc030e9ba71516348035d2))
+ - **FEAT**(flame): Set a default negative priority on the world for general use ([#2572](https://github.com/flame-engine/flame/issues/2572)). ([390e9700](https://github.com/flame-engine/flame/commit/390e9700b4293e12b7d4212ce04f6b3d967a24e1))
+ - **FEAT**: Add useful methods to Rectangle class ([#2562](https://github.com/flame-engine/flame/issues/2562)). ([4710530b](https://github.com/flame-engine/flame/commit/4710530b420469794602bf4d8cfea98078e0d973))
+ - **BREAKING** **FIX**: Convert PositionEvent.canvasPosition to local coordinates ([#2598](https://github.com/flame-engine/flame/issues/2598)). ([87139c85](https://github.com/flame-engine/flame/commit/87139c854534782638fe1b0c24d2dc92f98a3e59))
+
 ## 1.8.0
 
 > Note: This release has breaking changes.

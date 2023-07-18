@@ -8,6 +8,7 @@ import 'package:flame/components.dart';
 class FpsComponent extends Component {
   FpsComponent({
     this.windowSize = 60,
+    super.key,
   });
 
   /// The sliding window size, i.e. the number of game ticks over which the fps

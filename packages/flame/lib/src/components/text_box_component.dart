@@ -26,9 +26,9 @@ class TextBoxConfig {
   /// between each character.
   final double timePerChar;
 
-  /// Defaults to 0. If not zero, this component will disappear after this many
-  /// seconds after being fully typed out.
-  final double dismissDelay;
+  /// Defaults to null. If not null, this component will disappear after this
+  /// many seconds after being fully typed out.
+  final double? dismissDelay;
 
   /// Only relevant if [timePerChar] is set. If true, the box will start with
   /// the size to fit the first character and grow as more lines are typed.
@@ -40,7 +40,7 @@ class TextBoxConfig {
     this.maxWidth = 200.0,
     this.margins = const EdgeInsets.all(8.0),
     this.timePerChar = 0.0,
-    this.dismissDelay = 0.0,
+    this.dismissDelay,
     this.growingBox = false,
   });
 }
@@ -78,6 +78,7 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
     super.anchor,
     super.children,
     super.priority,
+    super.key,
   })  : _boxConfig = boxConfig ?? TextBoxConfig(),
         _fixedSize = size != null,
         align = align ?? Anchor.topLeft,
@@ -172,7 +173,8 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
 
   double get totalCharTime => text.length * _boxConfig.timePerChar;
 
-  bool get finished => _lifeTime > totalCharTime + _boxConfig.dismissDelay;
+  bool get finished =>
+      _lifeTime >= totalCharTime + (_boxConfig.dismissDelay ?? 0);
 
   int get _actualTextLength {
     return lines.map((e) => e.length).sum;
@@ -294,7 +296,9 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
       // See issue #1618 for details.
       Future.delayed(const Duration(milliseconds: 100), () {
         cachedToRemove.remove(cachedImage);
-        cachedImage.dispose();
+        if (isMounted) {
+          cachedImage.dispose();
+        }
       });
     }
     cache = await _fullRenderAsImage(newSize);
@@ -308,6 +312,10 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
       redraw();
     }
     _previousChar = currentChar;
+
+    if (_boxConfig.dismissDelay != null && finished) {
+      removeFromParent();
+    }
   }
 
   @override

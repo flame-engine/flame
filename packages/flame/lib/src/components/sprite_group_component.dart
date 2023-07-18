@@ -35,6 +35,7 @@ class SpriteGroupComponent<T> extends PositionComponent
     super.anchor,
     super.children,
     super.priority,
+    super.key,
   })  : assert(
           (size == null) == (autoResize ?? size == null),
           '''If size is set, autoResize should be false or size should be null when autoResize is true.''',

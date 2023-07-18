@@ -13,10 +13,9 @@ import 'package:flutter/gestures.dart';
 ///
 /// The [TapUpEvent] will only occur if there was a previous [TapDownEvent].
 class TapUpEvent extends PositionEvent {
-  TapUpEvent(this.pointerId, TapUpDetails details)
+  TapUpEvent(this.pointerId, super.game, TapUpDetails details)
       : deviceKind = details.kind,
         super(
-          canvasPosition: details.localPosition.toVector2(),
           devicePosition: details.globalPosition.toVector2(),
         );
 

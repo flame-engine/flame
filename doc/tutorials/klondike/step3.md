@@ -98,7 +98,7 @@ import 'package:flutter/foundation.dart';
 
 @immutable
 class Rank {
-  factory Rank.of(int value) {
+  factory Rank.fromInt(int value) {
     assert(value >= 1 && value <= 13);
     return _singletons[value - 1];
   }
@@ -171,6 +171,7 @@ public accessors and mutators for this variable:
 
 ```dart
   bool get isFaceUp => _faceUp;
+  bool get isFaceDown => !_faceUp;
   void flip() => _faceUp = !_faceUp;
 ```
 

@@ -140,13 +140,13 @@ class MultiDragDispatcher extends Component implements MultiDragListener {
   @internal
   @override
   void handleDragStart(int pointerId, DragStartDetails details) {
-    onDragStart(DragStartEvent(pointerId, details));
+    onDragStart(DragStartEvent(pointerId, game, details));
   }
 
   @internal
   @override
   void handleDragUpdate(int pointerId, DragUpdateDetails details) {
-    onDragUpdate(DragUpdateEvent(pointerId, details));
+    onDragUpdate(DragUpdateEvent(pointerId, game, details));
   }
 
   @internal

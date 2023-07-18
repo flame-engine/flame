@@ -24,6 +24,16 @@ void main() {
       expect('$rectangle', 'Rectangle([4.0, 0.0], [9.0, 12.0])');
     });
 
+    test('simple rectangle from LTWH', () {
+      final rectangle = Rectangle.fromLTWH(2, 2, 5, 7);
+      expect(rectangle.left, 2);
+      expect(rectangle.top, 2);
+      expect(rectangle.right, 7);
+      expect(rectangle.bottom, 9);
+      expect(rectangle.width, 5);
+      expect(rectangle.height, 7);
+    });
+
     test('rectangle with inverted left-right edges', () {
       final rectangle = Rectangle.fromLTRB(3, 4, 0, 10);
       expect(rectangle.left, 0);

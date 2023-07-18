@@ -27,6 +27,7 @@ void main() {
       expect(game.children.whereType<MultiTapDispatcher>().length, equals(1));
       game.firstChild<MultiTapDispatcher>()!.onTapDown(
             createTapDownEvents(
+              game: game,
               localPosition: const Offset(12, 12),
               globalPosition: const Offset(12, 12),
             ),
@@ -48,6 +49,7 @@ void main() {
 
         dispatcher.onTapDown(
           createTapDownEvents(
+            game: game,
             localPosition: const Offset(12, 12),
             globalPosition: const Offset(12, 12),
           ),
@@ -59,6 +61,7 @@ void main() {
         // [onTapUp] will call, if there was an [onTapDown] event before
         dispatcher.onTapUp(
           createTapUpEvents(
+            game: game,
             localPosition: const Offset(12, 12),
             globalPosition: const Offset(12, 12),
           ),
@@ -82,6 +85,7 @@ void main() {
 
         dispatcher.onTapDown(
           createTapDownEvents(
+            game: game,
             localPosition: const Offset(12, 12),
             globalPosition: const Offset(12, 12),
           ),
@@ -93,6 +97,7 @@ void main() {
         // [onTapUp] will call, if there was an [onTapDown] event before
         dispatcher.onLongTapDown(
           createTapDownEvents(
+            game: game,
             localPosition: const Offset(12, 12),
             globalPosition: const Offset(12, 12),
           ),

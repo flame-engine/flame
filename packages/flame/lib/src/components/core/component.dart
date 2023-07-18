@@ -1,20 +1,16 @@
 import 'dart:async';
 
 import 'package:collection/collection.dart';
+import 'package:flame/components.dart';
 import 'package:flame/src/cache/value_cache.dart';
-import 'package:flame/src/components/core/component_set.dart';
 import 'package:flame/src/components/core/component_tree_root.dart';
-import 'package:flame/src/components/core/position_type.dart';
 import 'package:flame/src/components/mixins/coordinate_transform.dart';
-import 'package:flame/src/components/mixins/has_game_ref.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
 import 'package:flame/src/game/flame_game.dart';
 import 'package:flame/src/game/game.dart';
 import 'package:flame/src/gestures/events.dart';
-import 'package:flame/src/text/text_paint.dart';
 import 'package:flutter/painting.dart';
 import 'package:meta/meta.dart';
-import 'package:vector_math/vector_math_64.dart';
 
 /// [Component]s are the basic building blocks for a [FlameGame].
 ///
@@ -71,8 +67,12 @@ import 'package:vector_math/vector_math_64.dart';
 /// respond to tap events or similar; the [componentsAtPoint] may also need to
 /// be overridden if you have reimplemented [renderTree].
 class Component {
-  Component({Iterable<Component>? children, int? priority})
-      : _priority = priority ?? 0 {
+  Component({
+    Iterable<Component>? children,
+    int? priority,
+    ComponentKey? key,
+  })  : _priority = priority ?? 0,
+        _key = key {
     if (children != null) {
       addAll(children);
     }
@@ -580,7 +580,7 @@ class Component {
     );
     child._parent = this;
     final game = findGame();
-    if (isMounted) {
+    if (isMounted && !child.isMounted) {
       (game! as FlameGame).enqueueAdd(child, this);
     } else {
       // This will be reconciled during the mounting stage
@@ -846,6 +846,13 @@ class Component {
     _reAddChildren();
     _parent!.onChildrenChanged(this, ChildrenChangeType.added);
     _clearMountingBit();
+
+    if (_key != null) {
+      final currentGame = findGame();
+      if (currentGame is FlameGame) {
+        currentGame.registerKey(_key!, this);
+      }
+    }
   }
 
   /// Used by [_reAddChildren].
@@ -880,6 +887,13 @@ class Component {
 
   void _remove() {
     assert(_parent != null, 'Trying to remove a component with no parent');
+
+    if (_key != null) {
+      final game = findGame();
+      if (game is FlameGame) {
+        game.unregisterKey(_key!);
+      }
+    }
     _parent!.children.remove(this);
     propagateToChildren(
       (Component component) {
@@ -917,6 +931,11 @@ class Component {
   /// debug mode. Setting this to null will suppress all coordinates from
   /// the output.
   int? get debugCoordinatesPrecision => 0;
+
+  /// A key that can be used to identify this component in the tree.
+  ///
+  /// It can be used to retrieve this component from anywhere in the tree.
+  final ComponentKey? _key;
 
   /// The color that the debug output should be rendered with.
   Color debugColor = const Color(0xFFFF00FF);

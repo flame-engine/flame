@@ -28,6 +28,7 @@ class RiveComponent extends PositionComponent {
     super.anchor = Anchor.topLeft,
     super.children,
     super.priority,
+    super.key,
   })  : _renderer = RiveArtboardRenderer(
           antialiasing: antialiasing,
           fit: fit,

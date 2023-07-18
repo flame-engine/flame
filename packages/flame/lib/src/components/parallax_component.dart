@@ -22,6 +22,8 @@ extension ParallaxComponentExtension on FlameGame {
     double? angle,
     Anchor? anchor,
     int? priority,
+    FilterQuality? filterQuality,
+    ComponentKey? key,
   }) async {
     return ParallaxComponent.load(
       dataList,
@@ -37,6 +39,8 @@ extension ParallaxComponentExtension on FlameGame {
       angle: angle,
       anchor: anchor,
       priority: priority,
+      filterQuality: filterQuality,
+      key: key,
     );
   }
 }
@@ -67,6 +71,7 @@ class ParallaxComponent<T extends FlameGame> extends PositionComponent
     super.anchor,
     super.children,
     super.priority,
+    super.key,
   })  : _parallax = parallax,
         isFullscreen = size == null && !(parallax?.isSized ?? false),
         super(
@@ -141,6 +146,8 @@ class ParallaxComponent<T extends FlameGame> extends PositionComponent
     double? angle,
     Anchor? anchor,
     int? priority,
+    FilterQuality? filterQuality,
+    ComponentKey? key,
   }) async {
     return ParallaxComponent(
       parallax: await Parallax.load(
@@ -152,6 +159,7 @@ class ParallaxComponent<T extends FlameGame> extends PositionComponent
         alignment: alignment,
         fill: fill,
         images: images,
+        filterQuality: filterQuality,
       ),
       position: position,
       size: size,
@@ -159,6 +167,7 @@ class ParallaxComponent<T extends FlameGame> extends PositionComponent
       angle: angle,
       anchor: anchor,
       priority: priority,
+      key: key,
     );
   }
 }

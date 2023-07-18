@@ -1,3 +1,11 @@
+## 1.12.0
+
+> Note: This release has breaking changes.
+
+ - **FIX**: Set constraint for test dependency in flame_test ([#2558](https://github.com/flame-engine/flame/issues/2558)). ([aeef9464](https://github.com/flame-engine/flame/commit/aeef9464f6ca448e3aa2b578af8b3443cbbf6f71))
+ - **FIX**: Update sdk constraints to >=3.0.0 ([#2554](https://github.com/flame-engine/flame/issues/2554)). ([2f71e06e](https://github.com/flame-engine/flame/commit/2f71e06eb86ffc65cd459c4d722eee2470be13e5))
+ - **BREAKING** **FIX**: Convert PositionEvent.canvasPosition to local coordinates ([#2598](https://github.com/flame-engine/flame/issues/2598)). ([87139c85](https://github.com/flame-engine/flame/commit/87139c854534782638fe1b0c24d2dc92f98a3e59))
+
 ## 1.11.0
 
 > Note: This release has breaking changes.

@@ -1,3 +1,9 @@
+## 0.14.1
+
+ - **FIX**: Update sdk constraints to >=3.0.0 ([#2554](https://github.com/flame-engine/flame/issues/2554)). ([2f71e06e](https://github.com/flame-engine/flame/commit/2f71e06eb86ffc65cd459c4d722eee2470be13e5))
+ - **FEAT**: ComponentKey API ([#2566](https://github.com/flame-engine/flame/issues/2566)). ([b3efb612](https://github.com/flame-engine/flame/commit/b3efb612cb3cb77f69bc030e9ba71516348035d2))
+ - **DOCS**: Fix broken link on flame_forge2d readme ([#2588](https://github.com/flame-engine/flame/issues/2588)). ([45115bbf](https://github.com/flame-engine/flame/commit/45115bbff8539010f5d7bb7cf9479183b1a27cc8))
+
 ## 0.14.0
 
 > Note: This release has breaking changes.
