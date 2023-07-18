@@ -81,9 +81,7 @@ class HudMarginComponent extends PositionComponent {
   @override
   void onGameResize(Vector2 size) {
     super.onGameResize(size);
-    if (isMounted &&
-        (parent is FlameGame ||
-            (parent! as ReadonlySizeProvider).size is NotifyingVector2)) {
+    if (isMounted && _sizeProvider != null) {
       _updateMargins();
     }
   }
