@@ -41,7 +41,7 @@ import 'package:vector_math/vector_math_64.dart';
 /// That is, they will be affected both by the viewport and the viewfinder.
 class CameraComponent extends Component {
   CameraComponent({
-    required this.world,
+    this.world,
     Viewport? viewport,
     Viewfinder? viewfinder,
     List<Component>? hudComponents,
@@ -58,9 +58,9 @@ class CameraComponent extends Component {
   /// initially set up to show world coordinates (0, 0) at the center of the
   /// viewport.
   factory CameraComponent.withFixedResolution({
-    required World world,
     required double width,
     required double height,
+    World? world,
     List<Component>? hudComponents,
   }) {
     return CameraComponent(
@@ -97,7 +97,7 @@ class CameraComponent extends Component {
   ///
   /// The [world] component is generally mounted externally to the camera, and
   /// this variable is a mere reference to it.
-  World world;
+  World? world;
 
   /// The axis-aligned bounding rectangle of a [world] region which is currently
   /// visible through the viewport.
@@ -134,13 +134,14 @@ class CameraComponent extends Component {
       viewport.position.y - viewport.anchor.y * viewport.size.y,
     );
     // Render the world through the viewport
-    if (world.isMounted && currentCameras.length < maxCamerasDepth) {
+    if ((world?.isMounted ?? false) &&
+        currentCameras.length < maxCamerasDepth) {
       canvas.save();
       viewport.clip(canvas);
       try {
         currentCameras.add(this);
         canvas.transform(viewfinder.transform.transformMatrix.storage);
-        world.renderFromCamera(canvas);
+        world!.renderFromCamera(canvas);
         viewfinder.renderTree(canvas);
       } finally {
         currentCameras.removeLast();
@@ -163,11 +164,12 @@ class CameraComponent extends Component {
       point.x - viewport.position.x + viewport.anchor.x * viewport.size.x,
       point.y - viewport.position.y + viewport.anchor.y * viewport.size.y,
     );
-    if (world.isMounted && currentCameras.length < maxCamerasDepth) {
+    if ((world?.isMounted ?? false) &&
+        currentCameras.length < maxCamerasDepth) {
       if (viewport.containsLocalPoint(_viewportPoint)) {
         currentCameras.add(this);
         final worldPoint = viewfinder.transform.globalToLocal(_viewportPoint);
-        yield* world.componentsAtPoint(worldPoint, nestedPoints);
+        yield* world!.componentsAtPoint(worldPoint, nestedPoints);
         yield* viewfinder.componentsAtPoint(worldPoint, nestedPoints);
         currentCameras.removeLast();
       }
