@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flame/components.dart' hide World;
 import 'package:flame/extensions.dart';
+import 'package:flame/game.dart';
 import 'package:flame_forge2d/forge2d_game.dart';
 import 'package:flutter/foundation.dart';
 import 'package:forge2d/forge2d.dart' hide Timer, Vector2;
@@ -10,7 +11,8 @@ import 'package:forge2d/forge2d.dart' hide Timer, Vector2;
 /// it is a good idea to turn on [debugMode] for it so that the bodies can be
 /// seen
 abstract class BodyComponent<T extends Forge2DGame> extends Component
-    with HasGameRef<T>, HasPaint {
+    with HasGameRef<T>, HasPaint
+    implements CoordinateTransform {
   BodyComponent({
     Paint? paint,
     super.children,
@@ -34,7 +36,7 @@ abstract class BodyComponent<T extends Forge2DGame> extends Component
   bool renderBody;
 
   /// You should create the Forge2D [Body] in this method when you extend
-  /// the BodyComponent
+  /// the BodyComponent.
   Body createBody();
 
   @mustCallSuper
@@ -50,22 +52,24 @@ abstract class BodyComponent<T extends Forge2DGame> extends Component
   double get angle => body.angle;
 
   /// The matrix used for preparing the canvas
-  final Matrix4 _transform = Matrix4.identity();
+  final Transform2D _transform = Transform2D();
+  Matrix4 get _transformMatrix => _transform.transformMatrix;
   double? _lastAngle;
 
   @mustCallSuper
   @override
   void renderTree(Canvas canvas) {
-    if (_transform.m14 != body.position.x ||
-        _transform.m24 != body.position.y ||
+    final matrix = _transformMatrix;
+    if (matrix.m14 != body.position.x ||
+        matrix.m24 != body.position.y ||
         _lastAngle != angle) {
-      _transform.setIdentity();
-      _transform.translate(body.position.x, body.position.y);
-      _transform.rotateZ(angle);
+      matrix.setIdentity();
+      matrix.translate(body.position.x, body.position.y);
+      matrix.rotateZ(angle);
       _lastAngle = angle;
     }
     canvas.save();
-    canvas.transform(_transform.storage);
+    canvas.transform(matrix.storage);
     super.renderTree(canvas);
     canvas.restore();
   }
@@ -73,9 +77,9 @@ abstract class BodyComponent<T extends Forge2DGame> extends Component
   @override
   void render(Canvas canvas) {
     if (renderBody) {
-      body.fixtures.forEach(
-        (fixture) => renderFixture(canvas, fixture),
-      );
+      for (final fixture in body.fixtures) {
+        renderFixture(canvas, fixture);
+      }
     }
   }
 
@@ -142,8 +146,13 @@ abstract class BodyComponent<T extends Forge2DGame> extends Component
     );
   }
 
+  late final Path _path = Path();
+
   void renderPolygon(Canvas canvas, List<Offset> points) {
-    final path = Path()..addPolygon(points, true);
+    final path = _path
+      ..reset()
+      ..addPolygon(points, true);
+    // TODO(Spydon): Use drawVertices instead.
     canvas.drawPath(path, paint);
   }
 
@@ -154,6 +163,22 @@ abstract class BodyComponent<T extends Forge2DGame> extends Component
 
   void renderEdge(Canvas canvas, Offset p1, Offset p2) {
     canvas.drawLine(p1, p2, paint);
+  }
+
+  @override
+  Vector2 parentToLocal(Vector2 point) => _transform.globalToLocal(point);
+
+  @override
+  Vector2 localToParent(Vector2 point) => _transform.localToGlobal(point);
+
+  late final Vector2 _hitTestPoint = Vector2.zero();
+
+  @override
+  bool containsLocalPoint(Vector2 point) {
+    _hitTestPoint
+      ..setFrom(body.position)
+      ..add(point);
+    return body.fixtures.any((fixture) => fixture.testPoint(_hitTestPoint));
   }
 
   @override

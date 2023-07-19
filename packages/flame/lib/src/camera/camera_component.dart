@@ -114,13 +114,7 @@ class CameraComponent extends Component {
   /// This property is cached, and is recalculated whenever the camera moves
   /// or the viewport is resized. At the same time, it may only be accessed
   /// after the camera was fully mounted.
-  Rect get visibleWorldRect {
-    assert(
-      viewport.isMounted && viewfinder.isMounted,
-      'This property cannot be accessed before the camera is mounted',
-    );
-    return viewfinder.visibleWorldRect;
-  }
+  Rect get visibleWorldRect => viewfinder.visibleWorldRect;
 
   @mustCallSuper
   @override
@@ -158,25 +152,27 @@ class CameraComponent extends Component {
     canvas.restore();
   }
 
+  final _viewportPoint = Vector2.zero();
+
   @override
   Iterable<Component> componentsAtPoint(
     Vector2 point, [
     List<Vector2>? nestedPoints,
   ]) sync* {
-    final viewportPoint = Vector2(
+    _viewportPoint.setValues(
       point.x - viewport.position.x + viewport.anchor.x * viewport.size.x,
       point.y - viewport.position.y + viewport.anchor.y * viewport.size.y,
     );
     if (world.isMounted && currentCameras.length < maxCamerasDepth) {
-      if (viewport.containsLocalPoint(viewportPoint)) {
+      if (viewport.containsLocalPoint(_viewportPoint)) {
         currentCameras.add(this);
-        final worldPoint = viewfinder.transform.globalToLocal(viewportPoint);
+        final worldPoint = viewfinder.transform.globalToLocal(_viewportPoint);
         yield* world.componentsAtPoint(worldPoint, nestedPoints);
         yield* viewfinder.componentsAtPoint(worldPoint, nestedPoints);
         currentCameras.removeLast();
       }
     }
-    yield* viewport.componentsAtPoint(viewportPoint, nestedPoints);
+    yield* viewport.componentsAtPoint(_viewportPoint, nestedPoints);
   }
 
   /// A camera that currently performs rendering.

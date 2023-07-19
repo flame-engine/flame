@@ -4,15 +4,16 @@ import 'package:forge2d/forge2d.dart' as forge2d;
 import 'package:forge2d/forge2d.dart' hide World;
 
 class Forge2DWorld extends World {
-  final forge2d.World physicsWorld;
-
-  static final Vector2 defaultGravity = Vector2(0, 10.0);
-
   Forge2DWorld({
     Vector2? gravity,
     forge2d.ContactListener? contactListener,
+    super.children,
   }) : physicsWorld = forge2d.World(gravity ?? defaultGravity)
           ..setContactListener(contactListener ?? WorldContactListener());
+
+  static final Vector2 defaultGravity = Vector2(0, 10.0);
+
+  final forge2d.World physicsWorld;
 
   @override
   void update(double dt) {
