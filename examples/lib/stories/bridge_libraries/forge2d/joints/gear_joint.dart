@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:examples/stories/bridge_libraries/forge2d/utils/balls.dart';
 import 'package:examples/stories/bridge_libraries/forge2d/utils/boxes.dart';
+import 'package:flame/components.dart';
 import 'package:flame/input.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 
@@ -10,11 +11,11 @@ class GearJointExample extends Forge2DGame with TapDetector {
     This example shows how to use a `GearJoint`. 
         
     Drag the box along the specified axis and observe gears respond to the 
-    translation
+    translation.
   ''';
 
   late PrismaticJoint prismaticJoint;
-  late Vector2 boxAnchor = size / 2;
+  Vector2 boxAnchor = Vector2.zero();
 
   double boxWidth = 2;
   double ball1Radius = 4;
@@ -44,6 +45,7 @@ class GearJointExample extends Forge2DGame with TapDetector {
 
     createGearJoint(prismaticJoint, revoluteJoint1, 1);
     createGearJoint(revoluteJoint1, revoluteJoint2, 0.5);
+    world.add(JointRenderer(joint: prismaticJoint, anchor: boxAnchor));
   }
 
   PrismaticJoint createPrismaticJoint(Body box, Vector2 anchor) {
@@ -91,19 +93,26 @@ class GearJointExample extends Forge2DGame with TapDetector {
     final joint = GearJoint(gearJointDef);
     world.createJoint(joint);
   }
+}
+
+class JointRenderer extends Component {
+  JointRenderer({required this.joint, required this.anchor});
+
+  final PrismaticJoint joint;
+  final Vector2 anchor;
+  final Vector2 p1 = Vector2.zero();
+  final Vector2 p2 = Vector2.zero();
 
   @override
   void render(Canvas canvas) {
-    super.render(canvas);
-
-    final p1 = worldToScreen(
-      boxAnchor +
-          prismaticJoint.getLocalAxisA() * prismaticJoint.getLowerLimit(),
-    );
-    final p2 = worldToScreen(
-      boxAnchor +
-          prismaticJoint.getLocalAxisA() * prismaticJoint.getUpperLimit(),
-    );
+    p1
+      ..setFrom(joint.getLocalAxisA())
+      ..scale(joint.getLowerLimit())
+      ..add(anchor);
+    p2
+      ..setFrom(joint.getLocalAxisA())
+      ..scale(joint.getUpperLimit())
+      ..add(anchor);
 
     canvas.drawLine(p1.toOffset(), p2.toOffset(), debugPaint);
   }

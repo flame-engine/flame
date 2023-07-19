@@ -114,7 +114,13 @@ class CameraComponent extends Component {
   /// This property is cached, and is recalculated whenever the camera moves
   /// or the viewport is resized. At the same time, it may only be accessed
   /// after the camera was fully mounted.
-  Rect get visibleWorldRect => viewfinder.visibleWorldRect;
+  Rect get visibleWorldRect {
+    assert(
+      viewport.isLoaded && viewfinder.isLoaded,
+      'This property cannot be accessed before the camera is mounted',
+    );
+    return viewfinder.visibleWorldRect;
+  }
 
   @mustCallSuper
   @override
@@ -213,7 +219,7 @@ class CameraComponent extends Component {
   /// will move from its current position to the target's position at the given
   /// speed.
   void follow(
-    PositionProvider target, {
+    ReadonlyPositionProvider target, {
     double maxSpeed = double.infinity,
     bool horizontalOnly = false,
     bool verticalOnly = false,

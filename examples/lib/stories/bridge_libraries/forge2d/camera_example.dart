@@ -14,9 +14,9 @@ class CameraExample extends DominoExample {
 
   @override
   void onTapDown(TapDownInfo info) {
-    final position = info.eventPosition.game;
+    final position = screenToWorld(info.eventPosition.widget);
     final pizza = Pizza(position);
     world.add(pizza);
-    pizza.mounted.whenComplete(() => camera.followBodyComponent(pizza));
+    pizza.mounted.whenComplete(() => cameraComponent.follow(pizza));
   }
 }

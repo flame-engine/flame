@@ -35,8 +35,30 @@ class World extends Component implements CoordinateTransform {
   bool containsLocalPoint(Vector2 point) => true;
 
   @override
-  Vector2? localToParent(Vector2 point) => null;
+  Vector2? localToParent(Vector2 point, {CameraComponent? camera}) {
+    if (camera == null) {
+      return null;
+    }
+    final zoom = camera.viewfinder.zoom;
+    final viewfinderPosition = camera.viewfinder.position;
+    final parentPosition =
+        Vector2(camera.viewport.size.x / 2, camera.viewport.size.y / 2)
+          ..x += (point.x - viewfinderPosition.x) * zoom
+          ..y += (point.y - viewfinderPosition.y) * zoom;
+    return parentPosition;
+  }
 
   @override
-  Vector2? parentToLocal(Vector2 point) => null;
+  Vector2? parentToLocal(Vector2 point, {CameraComponent? camera}) {
+    if (camera == null) {
+      return null;
+    }
+    final zoom = camera.viewfinder.zoom;
+    final localPosition = camera.viewfinder.position.clone()
+      ..x -= camera.viewport.size.x / 2 / zoom
+      ..y -= camera.viewport.size.y / 2 / zoom
+      ..x += point.x / zoom
+      ..y += point.y / zoom;
+    return localPosition;
+  }
 }

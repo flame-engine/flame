@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:examples/stories/bridge_libraries/forge2d/utils/boxes.dart';
-import 'package:flame/events.dart';
+import 'package:flame/components.dart';
 import 'package:flame/input.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 
@@ -13,8 +13,7 @@ class PrismaticJointExample extends Forge2DGame with TapDetector {
     Also, there's a motor enabled that's pulling the box to the lower limit.
   ''';
 
-  late PrismaticJoint joint;
-  late Vector2 anchor = size / 2;
+  final Vector2 anchor = Vector2.zero();
 
   @override
   Future<void> onLoad() async {
@@ -24,10 +23,11 @@ class PrismaticJointExample extends Forge2DGame with TapDetector {
     world.add(box);
     await Future.wait([box.loaded]);
 
-    createJoint(box.body, anchor);
+    final joint = createJoint(box.body, anchor);
+    world.add(JointRenderer(joint: joint, anchor: anchor));
   }
 
-  void createJoint(Body box, Vector2 anchor) {
+  PrismaticJoint createJoint(Body box, Vector2 anchor) {
     final groundBody = world.createBody(BodyDef());
 
     final prismaticJointDef = PrismaticJointDef()
@@ -44,18 +44,30 @@ class PrismaticJointExample extends Forge2DGame with TapDetector {
       ..motorSpeed = 1
       ..maxMotorForce = 100;
 
-    joint = PrismaticJoint(prismaticJointDef);
+    final joint = PrismaticJoint(prismaticJointDef);
     world.createJoint(joint);
+    return joint;
   }
+}
+
+class JointRenderer extends Component {
+  JointRenderer({required this.joint, required this.anchor});
+
+  final PrismaticJoint joint;
+  final Vector2 anchor;
+  final Vector2 p1 = Vector2.zero();
+  final Vector2 p2 = Vector2.zero();
 
   @override
   void render(Canvas canvas) {
-    super.render(canvas);
-
-    final p1 =
-        worldToScreen(anchor + joint.getLocalAxisA() * joint.getLowerLimit());
-    final p2 =
-        worldToScreen(anchor + joint.getLocalAxisA() * joint.getUpperLimit());
+    p1
+      ..setFrom(joint.getLocalAxisA())
+      ..scale(joint.getLowerLimit())
+      ..add(anchor);
+    p2
+      ..setFrom(joint.getLocalAxisA())
+      ..scale(joint.getUpperLimit())
+      ..add(anchor);
 
     canvas.drawLine(p1.toOffset(), p2.toOffset(), debugPaint);
   }

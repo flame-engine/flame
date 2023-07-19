@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flame/components.dart' hide World;
+import 'package:flame/effects.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame_forge2d/forge2d_game.dart';
@@ -12,7 +13,7 @@ import 'package:forge2d/forge2d.dart' hide Timer, Vector2;
 /// seen
 abstract class BodyComponent<T extends Forge2DGame> extends Component
     with HasGameRef<T>, HasPaint
-    implements CoordinateTransform {
+    implements CoordinateTransform, ReadonlyPositionProvider {
   BodyComponent({
     Paint? paint,
     super.children,
@@ -25,6 +26,9 @@ abstract class BodyComponent<T extends Forge2DGame> extends Component
 
   static const defaultColor = Color.fromARGB(255, 255, 255, 255);
   late Body body;
+
+  @override
+  Vector2 get position => body.position;
 
   /// Specifies if the body's fixtures should be rendered.
   ///

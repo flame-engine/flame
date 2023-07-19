@@ -74,9 +74,9 @@ void addForge2DStories(Dashbook dashbook) {
     )
     ..add(
       'Tappable Body',
-      (DashbookContext ctx) => GameWidget(game: TappableExample()),
+      (DashbookContext ctx) => GameWidget(game: TapCallbacksExample()),
       codeLink: link('tap_callbacks_example.dart'),
-      info: TappableExample.description,
+      info: TapCallbacksExample.description,
     )
     ..add(
       'Draggable Body',

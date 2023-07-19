@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:examples/stories/bridge_libraries/forge2d/utils/balls.dart';
 import 'package:examples/stories/bridge_libraries/forge2d/utils/boxes.dart';
+import 'package:flame/components.dart';
 import 'package:flame/input.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 
@@ -37,6 +38,7 @@ class MotorJointExample extends Forge2DGame with TapDetector {
     await Future.wait([ball.loaded, box.loaded]);
 
     joint = createJoint(ball.body, box.body);
+    world.add(JointRenderer(joint: joint));
   }
 
   @override
@@ -74,13 +76,19 @@ class MotorJointExample extends Forge2DGame with TapDetector {
     joint.setLinearOffset(linearOffset);
     joint.setAngularOffset(angularOffset);
   }
+}
+
+class JointRenderer extends Component {
+  JointRenderer({required this.joint});
+
+  final MotorJoint joint;
 
   @override
   void render(Canvas canvas) {
-    super.render(canvas);
-
-    final p1 = worldToScreen(joint.anchorA);
-    final p2 = worldToScreen(joint.anchorB);
-    canvas.drawLine(p1.toOffset(), p2.toOffset(), debugPaint);
+    canvas.drawLine(
+      joint.anchorA.toOffset(),
+      joint.anchorB.toOffset(),
+      debugPaint,
+    );
   }
 }

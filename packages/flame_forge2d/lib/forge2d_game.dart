@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flame/camera.dart';
 import 'package:flame/game.dart';
 import 'package:flame_forge2d/forge2d_world.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:forge2d/forge2d.dart';
 
 class Forge2DGame extends FlameGame {
@@ -17,15 +18,28 @@ class Forge2DGame extends FlameGame {
         _initialZoom = zoom;
 
   Forge2DWorld world;
-  // TODO(spydon): Use a meterToPixels constant instead for rendering (see #
+  CameraComponent cameraComponent = CameraComponent();
+  // TODO(spydon): Use a meterToPixels constant instead for rendering.
+  // (see #2613)
   final double _initialZoom;
-  late CameraComponent cameraComponent;
 
   @override
+  @mustCallSuper
   FutureOr<void> onLoad() async {
-    cameraComponent = CameraComponent(world: world)
+    cameraComponent
+      ..world = world
       ..viewfinder.zoom = _initialZoom;
     add(world);
     add(cameraComponent);
+  }
+
+  // Should be removed later and use world.localToParent instead.
+  Vector2 worldToScreen(Vector2 position) {
+    return world.localToParent(position, camera: cameraComponent)!;
+  }
+
+  // Should be removed later and use world.parentToLocal instead.
+  Vector2 screenToWorld(Vector2 position) {
+    return world.parentToLocal(position, camera: cameraComponent)!;
   }
 }

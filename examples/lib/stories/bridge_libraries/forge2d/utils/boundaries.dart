@@ -1,18 +1,18 @@
-// ignore_for_file: deprecated_member_use
-
+import 'package:flame/extensions.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 
 List<Wall> createBoundaries(Forge2DGame game) {
-  final topLeft = Vector2.zero();
-  final bottomRight = game.screenToWorld(game.cameraComponent.viewport.size);
-  final topRight = Vector2(bottomRight.x, topLeft.y);
-  final bottomLeft = Vector2(topLeft.x, bottomRight.y);
+  final visibleRect = game.cameraComponent.visibleWorldRect;
+  final topLeft = visibleRect.topLeft.toVector2();
+  final topRight = visibleRect.topRight.toVector2();
+  final bottomRight = visibleRect.bottomRight.toVector2();
+  final bottomLeft = visibleRect.bottomLeft.toVector2();
 
   return [
     Wall(topLeft, topRight),
     Wall(topRight, bottomRight),
-    Wall(bottomRight, bottomLeft),
-    Wall(bottomLeft, topLeft),
+    Wall(bottomLeft, bottomRight),
+    Wall(topLeft, bottomLeft)
   ];
 }
 
@@ -30,6 +30,7 @@ class Wall extends BodyComponent {
       userData: this, // To be able to determine object in collision
       position: Vector2.zero(),
     );
+    paint.strokeWidth = 1;
 
     return world.createBody(bodyDef)..createFixture(fixtureDef);
   }

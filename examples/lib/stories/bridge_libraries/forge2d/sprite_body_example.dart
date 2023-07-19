@@ -22,17 +22,17 @@ class SpriteBodyExample extends Forge2DGame with TapDetector {
   @override
   void onTapDown(TapDownInfo info) {
     super.onTapDown(info);
-    final position = info.eventPosition.game;
+    final position = screenToWorld(info.eventPosition.widget);
     world.add(Pizza(position, size: Vector2(10, 15)));
   }
 }
 
 class Pizza extends BodyComponent {
-  final Vector2 position;
+  final Vector2 initialPosition;
   final Vector2 size;
 
   Pizza(
-    this.position, {
+    this.initialPosition, {
     Vector2? size,
   }) : size = size ?? Vector2(2, 3);
 
@@ -70,8 +70,8 @@ class Pizza extends BodyComponent {
     );
 
     final bodyDef = BodyDef(
-      position: position,
-      angle: (position.x + position.y) / 2 * pi,
+      position: initialPosition,
+      angle: (initialPosition.x + initialPosition.y) / 2 * pi,
       type: BodyType.dynamic,
     );
     return world.createBody(bodyDef)..createFixture(fixtureDef);

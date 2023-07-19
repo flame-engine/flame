@@ -22,7 +22,7 @@ class DominoExample extends Forge2DGame with TapDetector {
   Future<void> onLoad() async {
     super.onLoad();
     final boundaries = createBoundaries(this);
-    boundaries.forEach(add);
+    world.addAll(boundaries);
 
     const numberOfRows = 7;
     for (var i = 0; i < numberOfRows - 2; i++) {
@@ -43,9 +43,8 @@ class DominoExample extends Forge2DGame with TapDetector {
 
   @override
   void onTapDown(TapDownInfo info) {
-    super.onTapDown(info);
-    final position = info.eventPosition.game;
-    world.add(Pizza(position)..renderBody = true);
+    final position = screenToWorld(info.eventPosition.widget);
+    world.add(Pizza(position));
   }
 }
 

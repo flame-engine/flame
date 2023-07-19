@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:examples/stories/bridge_libraries/forge2d/utils/balls.dart';
 import 'package:examples/stories/bridge_libraries/forge2d/utils/boxes.dart';
+import 'package:flame/components.dart';
 import 'package:flame/input.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 
@@ -11,16 +12,18 @@ class PulleyJointExample extends Forge2DGame with TapDetector {
     how the other one gets moved by the pulley
   ''';
 
-  late final Ball firstPulley;
-  late final Ball secondPulley;
-  late final PulleyJoint joint;
-
   @override
   Future<void> onLoad() async {
     super.onLoad();
 
-    firstPulley = Ball(Vector2(size.x * 0.33, 10), bodyType: BodyType.static);
-    secondPulley = Ball(Vector2(size.x * 0.66, 10), bodyType: BodyType.static);
+    final firstPulley = Ball(
+      Vector2(size.x * 0.33, 10),
+      bodyType: BodyType.static,
+    );
+    final secondPulley = Ball(
+      Vector2(size.x * 0.66, 10),
+      bodyType: BodyType.static,
+    );
 
     final firstBox = DraggableBox(
       startPosition: Vector2(size.x * 0.33, size.y / 2),
@@ -41,38 +44,55 @@ class PulleyJointExample extends Forge2DGame with TapDetector {
       secondPulley.loaded
     ]);
 
-    createJoint(firstBox, secondBox);
+    final joint = createJoint(firstBox, secondBox, firstPulley, secondPulley);
+    world.add(PulleyRenderer(joint: joint));
   }
 
-  void createJoint(Box first, Box second) {
+  PulleyJoint createJoint(
+    Box firstBox,
+    Box secondBox,
+    Ball firstPulley,
+    Ball secondPulley,
+  ) {
     final pulleyJointDef = PulleyJointDef()
       ..initialize(
-        first.body,
-        second.body,
+        firstBox.body,
+        secondBox.body,
         firstPulley.center,
         secondPulley.center,
-        first.body.worldPoint(Vector2(0, -first.height / 2)),
-        second.body.worldPoint(Vector2(0, -second.height / 2)),
+        firstBox.body.worldPoint(Vector2(0, -firstBox.height / 2)),
+        secondBox.body.worldPoint(Vector2(0, -secondBox.height / 2)),
         1,
       );
-    joint = PulleyJoint(pulleyJointDef);
+    final joint = PulleyJoint(pulleyJointDef);
     world.createJoint(joint);
+    return joint;
   }
+}
+
+class PulleyRenderer extends Component {
+  PulleyRenderer({required this.joint});
+
+  final PulleyJoint joint;
 
   @override
   void render(Canvas canvas) {
-    super.render(canvas);
+    canvas.drawLine(
+      joint.anchorA.toOffset(),
+      joint.getGroundAnchorA().toOffset(),
+      debugPaint,
+    );
 
-    final firstBodyAnchor = worldToScreen(joint.anchorA).toOffset();
-    final firstPulleyAnchor =
-        worldToScreen(joint.getGroundAnchorA()).toOffset();
-    canvas.drawLine(firstBodyAnchor, firstPulleyAnchor, debugPaint);
+    canvas.drawLine(
+      joint.anchorB.toOffset(),
+      joint.getGroundAnchorB().toOffset(),
+      debugPaint,
+    );
 
-    final secondBodyAnchor = worldToScreen(joint.anchorB).toOffset();
-    final secondPulleyAnchor =
-        worldToScreen(joint.getGroundAnchorB()).toOffset();
-    canvas.drawLine(secondBodyAnchor, secondPulleyAnchor, debugPaint);
-
-    canvas.drawLine(firstPulleyAnchor, secondPulleyAnchor, debugPaint);
+    canvas.drawLine(
+      joint.getGroundAnchorA().toOffset(),
+      joint.getGroundAnchorB().toOffset(),
+      debugPaint,
+    );
   }
 }

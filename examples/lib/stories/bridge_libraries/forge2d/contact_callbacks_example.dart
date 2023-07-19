@@ -25,7 +25,7 @@ class ContactCallbacksExample extends Forge2DGame with TapDetector {
   @override
   void onTapDown(TapDownInfo info) {
     super.onTapDown(info);
-    final position = info.eventPosition.game;
+    final position = screenToWorld(info.eventPosition.widget);
     if (math.Random().nextInt(10) < 2) {
       world.add(WhiteBall(position));
     } else {

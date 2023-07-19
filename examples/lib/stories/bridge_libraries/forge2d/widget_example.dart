@@ -12,26 +12,23 @@ class WidgetExample extends Forge2DGame with TapDetector {
     of Flame.
   ''';
 
-  List<Function()> updateStates = [];
-  Map<int, Body> bodyIdMap = {};
-  List<int> addLaterIds = [];
-
-  Vector2 screenPosition(Body body) => worldToScreen(body.worldCenter);
+  final List<Function()> updateStates = [];
+  final Map<int, Body> bodyIdMap = {};
+  final List<int> addLaterIds = [];
 
   WidgetExample() : super(zoom: 20, gravity: Vector2(0, 10.0));
 
   @override
   Future<void> onLoad() async {
+    super.onLoad();
     final boundaries = createBoundaries(this);
-    addAll(boundaries);
+    world.addAll(boundaries);
   }
 
   Body createBody() {
     final bodyDef = BodyDef(
       angularVelocity: 3,
-      position: screenToWorld(
-        Vector2.random()..multiply(camera.viewport.effectiveSize),
-      ),
+      position: Vector2.zero(),
       type: BodyType.dynamic,
     );
     final body = world.createBody(bodyDef);
@@ -117,7 +114,7 @@ class _BodyButtonState extends State<BodyButtonWidget> {
     if (body == null) {
       return Container();
     } else {
-      final bodyPosition = _game.screenPosition(body);
+      final bodyPosition = _game.worldToScreen(body.position);
       return Positioned(
         top: bodyPosition.y - 18,
         left: bodyPosition.x - 90,

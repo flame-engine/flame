@@ -17,7 +17,7 @@ class DraggableExample extends Forge2DGame {
   Future<void> onLoad() async {
     super.onLoad();
     final boundaries = createBoundaries(this);
-    boundaries.forEach(world.add);
+    world.addAll(boundaries);
     world.add(DraggableBall(Vector2.zero()));
   }
 }

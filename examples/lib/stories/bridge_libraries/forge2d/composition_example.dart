@@ -18,10 +18,11 @@ class CompositionExample extends Forge2DGame {
 
   @override
   Future<void> onLoad() async {
+    super.onLoad();
     final boundaries = createBoundaries(this);
-    boundaries.forEach(add);
-    add(TappableText(Vector2(0, 5)));
-    add(TappableBall(Vector2.zero()));
+    world.addAll(boundaries);
+    world.add(TappableText(Vector2(0, 5)));
+    world.add(TappableBall(Vector2.zero()));
   }
 }
 
@@ -85,10 +86,6 @@ class TappableBall extends Ball with TapCallbacks {
   @override
   void update(double dt) {
     super.update(dt);
-    // This is unfortunately needed since [BodyComponent] will set all its
-    // children to `debugMode = true` currently, we should come up with a
-    // nicer solution to this.
-    textComponent.debugMode = false;
     textComponent.text = counter.toString();
   }
 

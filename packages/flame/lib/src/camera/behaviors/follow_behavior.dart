@@ -18,7 +18,7 @@ import 'package:flame/src/effects/provider_interfaces.dart';
 /// movement to the horizontal/vertical directions respectively.
 class FollowBehavior extends Component {
   FollowBehavior({
-    required PositionProvider target,
+    required ReadonlyPositionProvider target,
     PositionProvider? owner,
     double maxSpeed = double.infinity,
     this.horizontalOnly = false,
@@ -33,8 +33,8 @@ class FollowBehavior extends Component {
           'The behavior cannot be both horizontalOnly and verticalOnly',
         );
 
-  PositionProvider get target => _target;
-  final PositionProvider _target;
+  ReadonlyPositionProvider get target => _target;
+  final ReadonlyPositionProvider _target;
 
   PositionProvider get owner => _owner!;
   PositionProvider? _owner;
