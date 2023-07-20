@@ -96,7 +96,6 @@ class FlameGame extends ComponentTreeRoot
   /// You can override this for additional behavior, but for
   ///  [disposeAllOnRemove] to be triggered, you must call super.
   @override
-  @mustCallSuper
   void onRemove() {
     if (disposeAllOnRemove) {
       removeAll(children);
