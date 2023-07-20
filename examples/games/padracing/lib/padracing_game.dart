@@ -47,7 +47,6 @@ class PadRacingGame extends Forge2DGame with KeyboardEvents {
   static Vector2 trackSize = Vector2.all(500);
   static double playZoom = 8.0;
   static const int numberOfLaps = 3;
-  late final World cameraWorld;
   late CameraComponent startCamera;
   late List<Map<LogicalKeyboardKey, LogicalKeyboardKey>> activeKeyMaps;
   late List<Set<LogicalKeyboardKey>> pressedKeySets;
@@ -58,14 +57,13 @@ class PadRacingGame extends Forge2DGame with KeyboardEvents {
 
   @override
   Future<void> onLoad() async {
-    // TODO(Spydon): Migrate to built-in camera component
+    super.onLoad();
+    cameraComponent.removeFromParent();
     children.register<CameraComponent>();
-    cameraWorld = World();
-    add(cameraWorld);
 
     final walls = createWalls(trackSize);
-    final bigBall = Ball(position: Vector2(200, 245), isMovable: false);
-    cameraWorld.addAll([
+    final bigBall = Ball(initialPosition: Vector2(200, 245), isMovable: false);
+    world.addAll([
       LapLine(1, Vector2(25, 50), Vector2(50, 5), isFinish: false),
       LapLine(2, Vector2(25, 70), Vector2(50, 5), isFinish: false),
       LapLine(3, Vector2(52.5, 25), Vector2(5, 50), isFinish: true),
@@ -83,9 +81,7 @@ class PadRacingGame extends Forge2DGame with KeyboardEvents {
       canvasSize.x / trackSize.x,
       canvasSize.y / trackSize.y,
     );
-    startCamera = CameraComponent(
-      world: cameraWorld,
-    )
+    startCamera = CameraComponent(world: world)
       ..viewfinder.position = trackSize / 2
       ..viewfinder.anchor = Anchor.center
       ..viewfinder.zoom = zoomLevel - 0.2;
@@ -137,7 +133,7 @@ class PadRacingGame extends Forge2DGame with KeyboardEvents {
           ..paint.style = PaintingStyle.stroke;
     final cameras = List.generate(numberOfPlayers, (i) {
       return CameraComponent(
-        world: cameraWorld,
+        world: world,
         viewport: FixedSizeViewport(viewportSize.x, viewportSize.y)
           ..position = alignedVector(
             longMultiplier: i == 0 ? 0.0 : 1 / (i + 1),
@@ -153,7 +149,7 @@ class PadRacingGame extends Forge2DGame with KeyboardEvents {
     const mapCameraZoom = 0.5;
     final mapCameras = List.generate(numberOfPlayers, (i) {
       return CameraComponent(
-        world: cameraWorld,
+        world: world,
         viewport: FixedSizeViewport(mapCameraSize.x, mapCameraSize.y)
           ..position = Vector2(
             viewportSize.x - mapCameraSize.x * mapCameraZoom - 50,
@@ -194,7 +190,7 @@ class PadRacingGame extends Forge2DGame with KeyboardEvents {
         }
       });
       cars.add(car);
-      cameraWorld.add(car);
+      world.add(car);
       cameras[i].viewport.addAll([lapText, mapCameras[i]]);
     }
 

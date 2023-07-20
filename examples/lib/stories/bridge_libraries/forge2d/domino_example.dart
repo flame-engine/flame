@@ -49,25 +49,25 @@ class DominoExample extends Forge2DGame with TapDetector {
 }
 
 class Platform extends BodyComponent {
-  final Vector2 position;
+  final Vector2 _position;
 
-  Platform(this.position);
+  Platform(this._position);
 
   @override
   Body createBody() {
     final shape = PolygonShape()..setAsBoxXY(14.8, 0.125);
     final fixtureDef = FixtureDef(shape);
 
-    final bodyDef = BodyDef(position: position);
+    final bodyDef = BodyDef(position: _position);
     final body = world.createBody(bodyDef);
     return body..createFixture(fixtureDef);
   }
 }
 
 class DominoBrick extends BodyComponent {
-  final Vector2 position;
+  final Vector2 _position;
 
-  DominoBrick(this.position);
+  DominoBrick(this._position);
 
   @override
   Body createBody() {
@@ -79,7 +79,7 @@ class DominoBrick extends BodyComponent {
       friction: 0.5,
     );
 
-    final bodyDef = BodyDef(type: BodyType.dynamic, position: position);
+    final bodyDef = BodyDef(type: BodyType.dynamic, position: _position);
     return world.createBody(bodyDef)..createFixture(fixtureDef);
   }
 }

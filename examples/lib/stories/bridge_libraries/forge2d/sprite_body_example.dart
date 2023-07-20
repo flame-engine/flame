@@ -39,7 +39,7 @@ class Pizza extends BodyComponent {
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    final sprite = await gameRef.loadSprite('pizza.png');
+    final sprite = await game.loadSprite('pizza.png');
     renderBody = false;
     add(
       SpriteComponent(

@@ -105,15 +105,15 @@ class BlobPart extends BodyComponent {
 }
 
 class FallingBox extends BodyComponent {
-  final Vector2 position;
+  final Vector2 _position;
 
-  FallingBox(this.position);
+  FallingBox(this._position);
 
   @override
   Body createBody() {
     final bodyDef = BodyDef(
       type: BodyType.dynamic,
-      position: position,
+      position: _position,
     );
     final shape = PolygonShape()..setAsBoxXY(2, 4);
     final body = world.createBody(bodyDef);

@@ -60,7 +60,7 @@ class GestureHitboxesExample extends FlameGame with TapCallbacks {
 }
 
 class MyShapeComponent extends PositionComponent
-    with TapCallbacks, /*Hoverable,*/ GestureHitboxes {
+    with TapCallbacks, Hoverable, GestureHitboxes {
   final ShapeHitbox hitbox;
   late final Color baseColor;
   late final Color hoverColor;

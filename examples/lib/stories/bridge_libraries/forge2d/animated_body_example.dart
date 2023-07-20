@@ -51,11 +51,11 @@ class AnimatedBodyExample extends Forge2DGame with TapDetector {
 }
 
 class ChopperBody extends BodyComponent {
-  final Vector2 position;
+  final Vector2 _position;
   final Vector2 size;
 
   ChopperBody(
-    this.position,
+    this._position,
     PositionComponent component,
   ) : size = component.size {
     renderBody = false;
@@ -75,7 +75,7 @@ class ChopperBody extends BodyComponent {
 
     final velocity = (Vector2.random() - Vector2.random()) * 200;
     final bodyDef = BodyDef(
-      position: position,
+      position: _position,
       angle: velocity.angleTo(Vector2(1, 0)),
       linearVelocity: velocity,
       type: BodyType.dynamic,

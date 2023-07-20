@@ -1,6 +1,5 @@
 import 'dart:ui';
 
-import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/palette.dart';
@@ -46,6 +45,7 @@ class Box extends BodyComponent {
 class DraggableBox extends Box with DragCallbacks {
   MouseJoint? mouseJoint;
   late final groundBody = world.createBody(BodyDef());
+  bool _destroyJoint = false;
 
   DraggableBox({
     required super.startPosition,
@@ -54,12 +54,26 @@ class DraggableBox extends Box with DragCallbacks {
   });
 
   @override
+  void update(double dt) {
+    if (_destroyJoint && mouseJoint != null) {
+      world.destroyJoint(mouseJoint!);
+      mouseJoint = null;
+      _destroyJoint = false;
+      print('destroyed');
+    }
+  }
+
+  @override
   bool onDragUpdate(DragUpdateEvent info) {
+    final target = info.localPosition;
+    if (target.isNaN) {
+      return false;
+    }
     final mouseJointDef = MouseJointDef()
       ..maxForce = 3000 * body.mass * 10
       ..dampingRatio = 0
       ..frequencyHz = 20
-      ..target.setFrom(info.localPosition)
+      ..target.setFrom(target)
       ..collideConnected = false
       ..bodyA = groundBody
       ..bodyB = body;
@@ -67,9 +81,9 @@ class DraggableBox extends Box with DragCallbacks {
     if (mouseJoint == null) {
       mouseJoint = MouseJoint(mouseJointDef);
       world.createJoint(mouseJoint!);
+    } else {
+      mouseJoint?.setTarget(target);
     }
-
-    mouseJoint?.setTarget(info.localPosition);
     return false;
   }
 
@@ -79,8 +93,7 @@ class DraggableBox extends Box with DragCallbacks {
     if (mouseJoint == null) {
       return;
     }
-    world.destroyJoint(mouseJoint!);
-    mouseJoint = null;
+    _destroyJoint = true;
     info.continuePropagation = false;
   }
 }

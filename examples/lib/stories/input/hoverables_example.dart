@@ -24,7 +24,7 @@ class HoverablesExample extends FlameGame with TapDetector {
   }
 }
 
-class HoverableSquare extends PositionComponent /*with Hoverable */ {
+class HoverableSquare extends PositionComponent with Hoverable {
   static final Paint _white = Paint()..color = const Color(0xFFFFFFFF);
   static final Paint _grey = Paint()..color = const Color(0xFFA5A5A5);
 
@@ -35,7 +35,6 @@ class HoverableSquare extends PositionComponent /*with Hoverable */ {
 
   @override
   void render(Canvas canvas) {
-    final isHovered = true;
     canvas.drawRect(size.toRect(), isHovered ? _grey : _white);
   }
 }

@@ -48,7 +48,7 @@ class MouseJointExample extends Forge2DGame with MultiTouchDragDetector {
       world.createJoint(mouseJoint!);
     }
 
-    mouseJoint?.setTarget(info.eventPosition.game);
+    mouseJoint?.setTarget(screenToWorld(info.eventPosition.widget));
     return false;
   }
 

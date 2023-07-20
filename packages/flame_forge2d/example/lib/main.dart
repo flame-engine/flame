@@ -36,10 +36,10 @@ class Forge2DExample extends Forge2DGame {
 }
 
 class Ball extends BodyComponent with TapCallbacks {
-  final Vector2 position;
+  final Vector2 initialPosition;
 
   Ball({Vector2? initialPosition})
-      : position = initialPosition ?? Vector2.zero();
+      : initialPosition = initialPosition ?? Vector2.zero();
 
   @override
   Body createBody() {
@@ -56,7 +56,7 @@ class Ball extends BodyComponent with TapCallbacks {
     final bodyDef = BodyDef(
       userData: this,
       angularDamping: 0.8,
-      position: position,
+      position: initialPosition,
       type: BodyType.dynamic,
     );
 

@@ -25,14 +25,14 @@ class MotorJointExample extends Forge2DGame with TapDetector {
     super.onLoad();
 
     final box = Box(
-      startPosition: size / 2,
+      startPosition: Vector2.zero(),
       width: 2,
       height: 1,
       bodyType: BodyType.static,
     );
     world.add(box);
 
-    ball = Ball(Vector2(size.x / 2, size.y / 2 - 5));
+    ball = Ball(Vector2(0, -5));
     world.add(ball);
 
     await Future.wait([ball.loaded, box.loaded]);
@@ -59,6 +59,8 @@ class MotorJointExample extends Forge2DGame with TapDetector {
     return joint;
   }
 
+  final linearOffset = Vector2.zero();
+
   @override
   void update(double dt) {
     super.update(dt);
@@ -70,7 +72,7 @@ class MotorJointExample extends Forge2DGame with TapDetector {
 
     final linearOffsetX = joint.getLinearOffset().x + deltaOffset;
     final linearOffsetY = joint.getLinearOffset().y + deltaOffset;
-    final linearOffset = Vector2(linearOffsetX, linearOffsetY);
+    linearOffset.setValues(linearOffsetX, linearOffsetY);
     final angularOffset = joint.getAngularOffset() + deltaOffset;
 
     joint.setLinearOffset(linearOffset);

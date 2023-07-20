@@ -15,23 +15,24 @@ class PulleyJointExample extends Forge2DGame with TapDetector {
   @override
   Future<void> onLoad() async {
     super.onLoad();
+    final distanceFromCenter = cameraComponent.visibleWorldRect.width / 5;
 
     final firstPulley = Ball(
-      Vector2(size.x * 0.33, 10),
+      Vector2(-distanceFromCenter, -10),
       bodyType: BodyType.static,
     );
     final secondPulley = Ball(
-      Vector2(size.x * 0.66, 10),
+      Vector2(distanceFromCenter, -10),
       bodyType: BodyType.static,
     );
 
     final firstBox = DraggableBox(
-      startPosition: Vector2(size.x * 0.33, size.y / 2),
+      startPosition: Vector2(-distanceFromCenter, 0),
       width: 5,
       height: 10,
     );
     final secondBox = DraggableBox(
-      startPosition: Vector2(size.x * 0.66, size.y / 2),
+      startPosition: Vector2(distanceFromCenter, 0),
       width: 7,
       height: 10,
     );

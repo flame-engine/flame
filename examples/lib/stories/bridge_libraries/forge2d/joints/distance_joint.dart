@@ -18,7 +18,7 @@ class DistanceJointExample extends Forge2DGame with TapDetector {
   @override
   Future<void> onTapDown(TapDownInfo info) async {
     super.onTapDown(info);
-    final tap = info.eventPosition.game;
+    final tap = screenToWorld(info.eventPosition.widget);
 
     final first = Ball(tap);
     final second = Ball(Vector2(tap.x + 3, tap.y + 3));
