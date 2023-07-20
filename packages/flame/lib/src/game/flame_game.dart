@@ -88,17 +88,17 @@ class FlameGame extends ComponentTreeRoot
 
   /// Setting to true will remove all children and process any remaining life
   /// cycle events.
-  bool disposeAll = false;
+  bool disposeAllOnRemove = false;
 
   /// Called when the game is about to be removed from the Flutter widget tree,
   /// but before it is actually removed.
   ///
-  /// You can override this for additional behavior, but for [disposeAll] to be
-  /// triggered, you must call super.
+  /// You can override this for additional behavior, but for
+  ///  [disposeAllOnRemove] to be triggered, you must call super.
   @override
   @mustCallSuper
   void onRemove() {
-    if (disposeAll) {
+    if (disposeAllOnRemove) {
       removeAll(children);
       processLifecycleEvents();
     }

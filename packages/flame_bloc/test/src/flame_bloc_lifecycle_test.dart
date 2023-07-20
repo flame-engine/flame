@@ -167,7 +167,7 @@ class _MyGame extends FlameGame {
 
   @override
   void onRemove() {
-    disposeAll = true;
+    disposeAllOnRemove = true;
     super.onRemove();
   }
 }
