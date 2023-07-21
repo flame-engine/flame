@@ -8,8 +8,6 @@ import 'package:flame/src/camera/viewports/fixed_aspect_ratio_viewport.dart';
 import 'package:flame/src/camera/viewports/max_viewport.dart';
 import 'package:flame/src/camera/world.dart';
 import 'package:flame/src/components/core/component.dart';
-import 'package:flame/src/components/mixins/has_ancestor.dart';
-import 'package:flame/src/components/mixins/parent_is_a.dart';
 import 'package:flame/src/components/position_component.dart';
 import 'package:flame/src/effects/controllers/effect_controller.dart';
 import 'package:flame/src/effects/move_by_effect.dart';
@@ -284,18 +282,18 @@ class CameraComponent extends Component {
   }
 
   /// Returns true if this camera is able to see the [component].
-  /// 
+  ///
   /// Will always return false if
-  /// - [world] is null or 
+  /// - [world] is null or
   /// - [world] is not mounted or
   /// - [component] is not mounted or
   /// - [componentWorld] is non-null and does not match with [world]
-  /// 
+  ///
   /// If [componentWorld] is null, this method does not take into consideration
   /// the world to which the given [component] belongs (if any). This means, in
   /// such cases, any component overlapping the [visibleWorldRect] will be
   /// reported as visible, even if it is not part of the [world] this camera is
-  /// currently looking at. This can be changed by passing the the component's 
+  /// currently looking at. This can be changed by passing the the component's
   /// world as [componentWorld].
   bool canSee(PositionComponent component, {World? componentWorld}) {
     if (world == null ||
