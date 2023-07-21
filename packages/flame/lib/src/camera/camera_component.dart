@@ -296,8 +296,7 @@ class CameraComponent extends Component {
   /// currently looking at. This can be changed by passing the the component's
   /// world as [componentWorld].
   bool canSee(PositionComponent component, {World? componentWorld}) {
-    if (world == null ||
-        !world!.isMounted ||
+    if (!(world?.isMounted ?? false) ||
         !component.isMounted ||
         (componentWorld != null && componentWorld != world)) {
       return false;
