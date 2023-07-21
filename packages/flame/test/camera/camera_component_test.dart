@@ -280,18 +280,17 @@ void main() {
     });
 
     testWithFlameGame('component is in view for the camera', (game) async {
-      final world = World();
+      final component = PositionComponent(
+        size: Vector2(10, 10),
+        position: Vector2(0, 0),
+      );
+      final world = World(children: [component]);
       final camera = CameraComponent(
         world: world,
         viewport: FixedSizeViewport(60, 40),
       );
       game.addAll([world, camera]);
       await game.ready();
-
-      final component = PositionComponent(
-        size: Vector2(10, 10),
-        position: Vector2(0, 0),
-      );
 
       expect(camera.canSee(component), isTrue);
     });
