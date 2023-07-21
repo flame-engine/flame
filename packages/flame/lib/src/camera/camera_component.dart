@@ -8,6 +8,8 @@ import 'package:flame/src/camera/viewports/fixed_aspect_ratio_viewport.dart';
 import 'package:flame/src/camera/viewports/max_viewport.dart';
 import 'package:flame/src/camera/world.dart';
 import 'package:flame/src/components/core/component.dart';
+import 'package:flame/src/components/mixins/has_ancestor.dart';
+import 'package:flame/src/components/mixins/parent_is_a.dart';
 import 'package:flame/src/components/position_component.dart';
 import 'package:flame/src/effects/controllers/effect_controller.dart';
 import 'package:flame/src/effects/move_by_effect.dart';
@@ -282,7 +284,32 @@ class CameraComponent extends Component {
   }
 
   /// Returns true if this camera is able to see the [component].
+  ///
+  /// Will return false if the component does not belong to the [world] this
+  /// camera is looking at.
+  ///
+  /// For components deeply nested in the world, consider use the [HasAncestor]
+  /// or [ParentIsA] mixin with [World] type to make the world lookup faster.
   bool canSee(PositionComponent component) {
+    if (world == null || !component.isMounted) {
+      return false;
+    }
+
+    World? componentWorld;
+
+    // Try to find which world the given component belongs to.
+    if (component is ParentIsA<World>) {
+      componentWorld = (component as ParentIsA<World>).parent;
+    } else if (component is HasAncestor<World>) {
+      componentWorld = (component as HasAncestor<World>).ancestor;
+    } else {
+      componentWorld = component.findParent<World>();
+    }
+
+    if (world != componentWorld) {
+      return false;
+    }
+
     return visibleWorldRect.overlaps(component.toAbsoluteRect());
   }
 }

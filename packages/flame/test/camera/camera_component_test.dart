@@ -313,6 +313,62 @@ void main() {
       expect(camera.canSee(component), isFalse);
     });
   });
+
+  group('CameraComponent.canSee', () {
+    testWithFlameGame('null world', (game) async {
+      final player = PositionComponent();
+      final world = World(children: [player]);
+      final camera = CameraComponent();
+
+      await game.addAll([camera, world]);
+      await game.ready();
+      expect(camera.canSee(player), false);
+
+      camera.world = world;
+      expect(camera.canSee(player), true);
+    });
+
+    testWithFlameGame('unmounted component', (game) async {
+      final player = PositionComponent();
+      final world = World();
+      final camera = CameraComponent(world: world);
+
+      await game.addAll([camera, world]);
+      await game.ready();
+      expect(camera.canSee(player), false);
+
+      await world.add(player);
+      await game.ready();
+      expect(camera.canSee(player), true);
+    });
+
+    testWithFlameGame('component with parent world', (game) async {
+      final player = _ParentIsAWorld();
+      final world = World(children: [player]);
+      final camera = CameraComponent();
+
+      await game.addAll([camera, world]);
+      await game.ready();
+      expect(camera.canSee(player), false);
+
+      camera.world = world;
+      expect(camera.canSee(player), true);
+    });
+
+    testWithFlameGame('component with ancestor world', (game) async {
+      final player = _HasAncestorWorld();
+      final level = PositionComponent(children: [player]);
+      final world = World(children: [level]);
+      final camera = CameraComponent();
+
+      await game.addAll([camera, world]);
+      await game.ready();
+      expect(camera.canSee(player), false);
+
+      camera.world = world;
+      expect(camera.canSee(player), true);
+    });
+  });
 }
 
 class _SolidBackground extends Component with HasPaint {
@@ -321,3 +377,7 @@ class _SolidBackground extends Component with HasPaint {
   @override
   void render(Canvas canvas) => canvas.drawColor(color, BlendMode.src);
 }
+
+class _HasAncestorWorld extends PositionComponent with HasAncestor<World> {}
+
+class _ParentIsAWorld extends PositionComponent with ParentIsA<World> {}
