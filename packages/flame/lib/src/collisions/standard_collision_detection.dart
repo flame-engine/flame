@@ -89,8 +89,8 @@ class StandardCollisionDetection<B extends Broadphase<ShapeHitbox>>
       final possiblyFirstResult = !(finalResult?.isActive ?? false);
       if (currentResult != null &&
           (possiblyFirstResult ||
-              currentResult.distance! < finalResult!.distance!)) {
-        assert(currentResult.distance! <= (maxDistance ?? double.infinity));
+              currentResult.distance! < finalResult!.distance!) &&
+          currentResult.distance! <= (maxDistance ?? double.infinity)) {
         if (finalResult == null) {
           finalResult = currentResult.clone();
         } else {
