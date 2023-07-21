@@ -282,7 +282,6 @@ class CameraComponent extends Component {
   }
 
   /// Returns true if this camera is able to see the [component].
-  ///
   /// Will always return false if
   /// - [world] is null or
   /// - [world] is not mounted or
