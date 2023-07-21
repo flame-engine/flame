@@ -284,29 +284,24 @@ class CameraComponent extends Component {
   }
 
   /// Returns true if this camera is able to see the [component].
-  ///
-  /// Will return false if the component does not belong to the [world] this
-  /// camera is looking at.
-  ///
-  /// For components deeply nested in the world, consider use the [HasAncestor]
-  /// or [ParentIsA] mixin with [World] type to make the world lookup faster.
-  bool canSee(PositionComponent component) {
-    if (world == null || !component.isMounted) {
-      return false;
-    }
-
-    World? componentWorld;
-
-    // Try to find which world the given component belongs to.
-    if (component is ParentIsA<World>) {
-      componentWorld = (component as ParentIsA<World>).parent;
-    } else if (component is HasAncestor<World>) {
-      componentWorld = (component as HasAncestor<World>).ancestor;
-    } else {
-      componentWorld = component.findParent<World>();
-    }
-
-    if (world != componentWorld) {
+  /// 
+  /// Will always return false if
+  /// - [world] is null or 
+  /// - [world] is not mounted or
+  /// - [component] is not mounted or
+  /// - [componentWorld] is non-null and does not match with [world]
+  /// 
+  /// If [componentWorld] is null, this method does not take into consideration
+  /// the world to which the given [component] belongs (if any). This means, in
+  /// such cases, any component overlapping the [visibleWorldRect] will be
+  /// reported as visible, even if it is not part of the [world] this camera is
+  /// currently looking at. This can be changed by passing the the component's 
+  /// world as [componentWorld].
+  bool canSee(PositionComponent component, {World? componentWorld}) {
+    if (world == null ||
+        !world!.isMounted ||
+        !component.isMounted ||
+        (componentWorld != null && componentWorld != world)) {
       return false;
     }
 

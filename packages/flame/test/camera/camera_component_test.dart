@@ -326,6 +326,20 @@ void main() {
       expect(camera.canSee(player), true);
     });
 
+    testWithFlameGame('unmounted world', (game) async {
+      final player = PositionComponent();
+      final world = World(children: [player]);
+      final camera = CameraComponent(world: world);
+
+      await game.addAll([camera]);
+      await game.ready();
+      expect(camera.canSee(player), false);
+
+      await game.add(world);
+      await game.ready();
+      expect(camera.canSee(player), true);
+    });
+
     testWithFlameGame('unmounted component', (game) async {
       final player = PositionComponent();
       final world = World();
@@ -340,31 +354,20 @@ void main() {
       expect(camera.canSee(player), true);
     });
 
-    testWithFlameGame('component with parent world', (game) async {
-      final player = _ParentIsAWorld();
-      final world = World(children: [player]);
-      final camera = CameraComponent();
+    testWithFlameGame('component from another world', (game) async {
+      final player = PositionComponent();
+      final world1 = World(children: [player]);
+      final world2 = World();
+      final camera = CameraComponent(world: world2);
 
-      await game.addAll([camera, world]);
+      await game.addAll([camera, world1, world2]);
       await game.ready();
-      expect(camera.canSee(player), false);
 
-      camera.world = world;
+      // can see when player world is not known.
       expect(camera.canSee(player), true);
-    });
 
-    testWithFlameGame('component with ancestor world', (game) async {
-      final player = _HasAncestorWorld();
-      final level = PositionComponent(children: [player]);
-      final world = World(children: [level]);
-      final camera = CameraComponent();
-
-      await game.addAll([camera, world]);
-      await game.ready();
-      expect(camera.canSee(player), false);
-
-      camera.world = world;
-      expect(camera.canSee(player), true);
+      // can't see when the player world is known.
+      expect(camera.canSee(player, componentWorld: world1), false);
     });
   });
 }
@@ -375,7 +378,3 @@ class _SolidBackground extends Component with HasPaint {
   @override
   void render(Canvas canvas) => canvas.drawColor(color, BlendMode.src);
 }
-
-class _HasAncestorWorld extends PositionComponent with HasAncestor<World> {}
-
-class _ParentIsAWorld extends PositionComponent with ParentIsA<World> {}
