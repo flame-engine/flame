@@ -15,26 +15,50 @@ void main() {
         await tester.tap(find.text('Play'));
         await tester.pump();
         await tester.pump();
-        // Test is not working as FlameGame is not mounting.  This is not a
-        // Problem with the code, but a problem with me not knowing how to test
-        // bloc properly.
-/*         expect(game.myCubit.state, 0);
-        await tester.tap(find.text('Plus'));
-        await tester.pump();
-        await tester.pump();
-        expect(game.myCubit.state, 1);
-        await tester.tap(find.text('Home'));
-        await tester.pump();
-        await tester.pump();
-        expect(game.componentOnRemoveCalled, true);
-        await tester.tap(find.text('Play'));
-        await tester.pump();
-        await tester.pump();
         expect(game.myCubit.state, 0);
         await tester.tap(find.text('Plus'));
         await tester.pump();
         await tester.pump();
-        expect(game.myCubit.state, 1); */
+        print('Test1 ${game.myCubit.state}');
+        await tester.tap(find.text('Home'));
+        await tester.pump();
+        print('Test2 ${game.myCubit.state}');
+        await tester.pump();
+        print('Test3 ${game.myCubit.state}');
+        await tester.tap(find.text('Play'));
+        print('Test4 ${game.myCubit.state}');
+        await tester.pump();
+        print('Test5 ${game.myCubit.state}');
+        await tester.pump();
+        print('Test6 ${game.myCubit.state}');
+        //expect(game.myCubit.state, 0);
+        await tester.tap(find.text('Plus'));
+        print('Test7 ${game.myCubit.state}');
+        await tester.pump();
+        print('Test8 ${game.myCubit.state}');
+        await tester.pump();
+        print('Test9 ${game.myCubit.state}');
+
+        game.disposeAllOnRemove = true;
+        await tester.tap(find.text('Home'));
+        await tester.pump();
+        print('Test2 ${game.myCubit.state}');
+        await tester.pump();
+        print('Test3 ${game.myCubit.state}');
+        await tester.tap(find.text('Play'));
+        print('Test4 ${game.myCubit.state}');
+        await tester.pump();
+        print('Test5 ${game.myCubit.state}');
+        await tester.pump();
+        print('Test6 ${game.myCubit.state}');
+        //expect(game.myCubit.state, 0);
+        await tester.tap(find.text('Plus'));
+        print('Test7 ${game.myCubit.state}');
+        await tester.pump();
+        print('Test8 ${game.myCubit.state}');
+        await tester.pump();
+        print('Test9 ${game.myCubit.state}');
+        //expect(game.myCubit.state, 1);
       },
     );
   });
@@ -88,6 +112,7 @@ class _GamePageState extends State<GamePage> {
   @override
   void initState() {
     super.initState();
+    print('game init called');
     _myBlocGame = _MyGame(BlocProvider.of<MyCubit>(context));
   }
 
@@ -100,6 +125,7 @@ class _GamePageState extends State<GamePage> {
         children: [
           FloatingActionButton(
             onPressed: () {
+              print('button pressed');
               BlocProvider.of<MyCubit>(context).increase();
             },
             heroTag: null,
@@ -122,7 +148,15 @@ class MyCubit extends Cubit<int> {
   MyCubit() : super(0);
 
   void increase() {
+    print('increased');
     emit(state + 1);
+    print('state is ${state}');
+  }
+
+  void decrease() {
+    print('decreased');
+    emit(state - 1);
+    print('state is ${state}');
   }
 }
 
@@ -131,29 +165,21 @@ class _MyGame extends FlameGame {
 
   final MyCubit myCubit;
 
-  bool onAttachCalled = false;
-  bool onDetachCalled = false;
-  bool componentOnRemoveCalled = false;
-
-  void resetValues() {
-    onAttachCalled = false;
-    onDetachCalled = false;
-  }
-
   @override
   void onAttach() {
     super.onAttach();
-    onAttachCalled = true;
+    print('myCubitState ${myCubit.state}');
   }
 
   @override
   void onDetach() {
+    print('myCubitState ${myCubit.state}');
     super.onDetach();
-    onDetachCalled = true;
   }
 
   @override
   void onMount() {
+    print('fg mounted ${myCubit.state}');
     add(
       FlameBlocProvider<MyCubit, int>.value(
         value: myCubit,
@@ -167,7 +193,7 @@ class _MyGame extends FlameGame {
 
   @override
   void onRemove() {
-    disposeAllOnRemove = true;
+    print('fg onRemove called ${myCubit.state}');
     super.onRemove();
   }
 }
@@ -177,28 +203,13 @@ class LeakingCounterComponent extends TextComponent
   @override
   void onMount() {
     super.onMount();
-    mounted.then((value) {
-      text = bloc.state.toString();
-    });
-    textRenderer = TextPaint(
-      style: const TextStyle(
-        color: Colors.white,
-        fontSize: 80,
-      ),
-    );
-    position = game.size / 2;
-    anchor = Anchor.center;
-  }
-
-  @override
-  void onNewState(int state) {
-    text = state.toString();
-    super.onNewState(state);
+    print('lc mounted ${game.myCubit.state}');
   }
 
   @override
   void onRemove() {
-    game.componentOnRemoveCalled = true;
+    print('lc onRemove called  ${game.myCubit.state}');
+    game.myCubit.decrease();
     super.onRemove();
   }
 }
