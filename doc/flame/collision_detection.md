@@ -268,22 +268,22 @@ collisions to the whole hat, instead of for just each hitbox separately.
 
 ## Broad phase
 
-If your game field is small and do not have a lot of collidable components - you don't have to
+If your game field isn't huge and does not have a lot of collidable components - you don't have to
 worry about the broad phase system that is used, so if the standard implementation is performant
 enough for you, you probably don't have to read this section.
 
 A broad phase is the first step of collision detection where potential collisions are calculated.
-To calculate these potential collisions are a lot cheaper to calculate than to check the exact
-intersections directly and it removes the need to check all hitboxes against each other and
-therefore avoiding O(n²). The broad phase produces a set of potential collisions (a set of
-`CollisionProspect`s), this set is then used to check the exact intersections between hitboxes, this
-is sometimes called narrow phase.
+Calculating these potential collisions is faster than to checking the intersections exactly, and it removes the need to check all hitboxes against each other and
+therefore avoiding O(n²).
 
-By default Flame's collision detection is using a sweep and prune broadphase step, if your game
+The broad phase produces a set of potential collisions (a set of
+`CollisionProspect`s). This set is then used to check the exact intersections between hitboxes (sometimes called "narrow phase").
+
+By default, Flame's collision detection is using a sweep and prune broadphase step. If your game
 requires another type of broadphase you can write your own broadphase by extending `Broadphase` and
 manually setting the collision detection system that should be used.
 
-For example if you have implemented a broadphase built on a magic algorithm instead of the standard
+For example, if you have implemented a broadphase built on a magic algorithm instead of the standard
 sweep and prune, then you would do the following:
 
 ```dart
@@ -301,6 +301,7 @@ class MyGame extends FlameGame with HasCollisionDetection {
 If your game field is large and the game contains a lot of collidable
 components (more than a hundred), standard sweep and prune can
 become inefficient. If it does, you can try to use the quad tree broad phase.
+
 To do this, add the `HasQuadTreeCollisionDetection` mixin to your game instead of
 `HasCollisionDetection` and call the `initializeCollisionDetection` function on game load:
 
@@ -323,7 +324,7 @@ more efficient:
 - `minimumDistance`: minimum distance between objects to consider them as possibly colliding.
   If `null` - the check is disabled, it is default behavior
 - `maxObjects`: maximum objects count in one quadrant. Default to 25.
-- `maxDepth`: - maximum nesting levels inside quadrant. Default to 10
+- `maxDepth`: maximum nesting levels inside quadrant. Default to 10
 
 If you use the quad tree system, you can make it even more efficient by implementing the
 `onComponentTypeCheck` function of the `CollisionCallbacks` mixin in your components. It is useful if
@@ -381,6 +382,10 @@ class QuadTreeExample extends FlameGame
   }
 }
 
+```
+
+```{note}
+Always experiment with different collision detection approaches and check how they perform on your game. It is not unheard of that `QuadTreeBroadphase` is significantly _slower_ than the default. Don't assume that the more sophisticated approach is always faster.
 ```
 
 
