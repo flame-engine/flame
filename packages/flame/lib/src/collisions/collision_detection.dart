@@ -12,7 +12,7 @@ abstract class CollisionDetection<T extends Hitbox<T>,
   final B broadphase;
 
   List<T> get items => broadphase.items;
-  final Set<CollisionProspect<T>> _lastPotentials = {};
+  final _lastPotentials = <CollisionProspect<T>>[];
 
   CollisionDetection({required this.broadphase});
 
@@ -32,9 +32,11 @@ abstract class CollisionDetection<T extends Hitbox<T>,
   void run() {
     broadphase.update();
     final potentials = broadphase.query();
-    potentials.forEach((tuple) {
-      final itemA = tuple.a;
-      final itemB = tuple.b;
+    final hashes = Set.unmodifiable(potentials.map((p) => p.hash));
+
+    for (final potential in potentials) {
+      final itemA = potential.a;
+      final itemB = potential.b;
 
       if (itemA.possiblyIntersects(itemB)) {
         final intersectionPoints = intersections(itemA, itemB);
@@ -49,15 +51,16 @@ abstract class CollisionDetection<T extends Hitbox<T>,
       } else if (itemA.collidingWith(itemB)) {
         handleCollisionEnd(itemA, itemB);
       }
-    });
+    }
 
     // Handles callbacks for an ended collision that the broadphase didn't
-    // reports as a potential collision anymore.
-    _lastPotentials.difference(potentials).forEach((tuple) {
-      if (tuple.a.collidingWith(tuple.b)) {
-        handleCollisionEnd(tuple.a, tuple.b);
+    // report as a potential collision anymore.
+    for (final prospect in _lastPotentials) {
+      if (!hashes.contains(prospect.hash) &&
+          prospect.a.collidingWith(prospect.b)) {
+        handleCollisionEnd(prospect.a, prospect.b);
       }
-    });
+    }
     _lastPotentials
       ..clear()
       ..addAll(potentials);

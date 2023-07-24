@@ -1,5 +1,4 @@
 import 'package:flame/collisions.dart';
-import 'package:meta/meta.dart';
 
 /// The [Broadphase] class is used to make collision detection more efficient
 /// by doing a rough estimation of which hitboxes that can collide before their
@@ -27,33 +26,50 @@ abstract class Broadphase<T extends Hitbox<T>> {
   /// detection system.
   void add(T item);
 
-  void addAll(Iterable<T> items) => items.forEach(add);
+  void addAll(Iterable<T> items) {
+    for (final item in items) {
+      add(item);
+    }
+  }
 
   /// Removes an item from the broadphase. Should be called in a
   /// [CollisionDetection] class while removing a hitbox from its collision
   /// detection system.
   void remove(T item);
 
-  void removeAll(Iterable<T> items) => items.forEach(remove);
+  void removeAll(Iterable<T> items) {
+    for (final item in items) {
+      remove(item);
+    }
+  }
 
   /// Returns the potential hitbox collisions
-  Set<CollisionProspect<T>> query();
+  Iterable<CollisionProspect<T>> query();
 }
 
 /// A [CollisionProspect] is a tuple that is used to contain two potentially
 /// colliding hitboxes.
-@immutable
+
 class CollisionProspect<T> {
-  final T a;
-  final T b;
+  T _a;
+  T _b;
 
-  const CollisionProspect(this.a, this.b);
+  T get a => _a;
+  T get b => _b;
 
-  @override
-  bool operator ==(Object other) =>
-      other is CollisionProspect &&
-      ((other.a == a && other.b == b) || (other.a == b && other.b == a));
+  int get hash => _hash;
+  int _hash;
 
-  @override
-  int get hashCode => Object.hashAllUnordered([a, b]);
+  CollisionProspect(T a, T b)
+      : _a = a.hashCode < b.hashCode ? a : b,
+        _b = a.hashCode >= b.hashCode ? a : b,
+        _hash = a.hashCode ^ b.hashCode;
+
+  /// Sets the prospect to contain [a] and [b] instead of what it previously
+  /// contained.
+  void set(T a, T b) {
+    _a = a.hashCode < b.hashCode ? a : b;
+    _b = a.hashCode >= b.hashCode ? a : b;
+    _hash = a.hashCode ^ b.hashCode;
+  }
 }

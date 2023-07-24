@@ -6,7 +6,7 @@ import 'package:flutter/widgets.dart';
 /// Do not use standard [items] list for components. Instead adds all components
 /// into [QuadTreeBroadphase] class.
 class QuadTreeCollisionDetection
-    extends StandardCollisionDetection<QuadTreeBroadphase<ShapeHitbox>> {
+    extends StandardCollisionDetection<QuadTreeBroadphase> {
   QuadTreeCollisionDetection({
     required Rect mapDimensions,
     required ExternalBroadphaseCheck onComponentTypeCheck,
@@ -14,7 +14,7 @@ class QuadTreeCollisionDetection
     int maxObjects = 25,
     int maxDepth = 10,
   }) : super(
-          broadphase: QuadTreeBroadphase<ShapeHitbox>(
+          broadphase: QuadTreeBroadphase(
             mainBoxSize: mapDimensions,
             maxObjects: maxObjects,
             maxDepth: maxDepth,
