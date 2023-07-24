@@ -49,7 +49,6 @@ abstract class Broadphase<T extends Hitbox<T>> {
 
 /// A [CollisionProspect] is a tuple that is used to contain two potentially
 /// colliding hitboxes.
-
 class CollisionProspect<T> {
   T _a;
   T _b;
@@ -60,16 +59,23 @@ class CollisionProspect<T> {
   int get hash => _hash;
   int _hash;
 
-  CollisionProspect(T a, T b)
-      : _a = a.hashCode < b.hashCode ? a : b,
-        _b = a.hashCode >= b.hashCode ? a : b,
-        _hash = a.hashCode ^ b.hashCode;
+  CollisionProspect(this._a, this._b) : _hash = _a.hashCode ^ _b.hashCode;
 
   /// Sets the prospect to contain [a] and [b] instead of what it previously
   /// contained.
   void set(T a, T b) {
-    _a = a.hashCode < b.hashCode ? a : b;
-    _b = a.hashCode >= b.hashCode ? a : b;
+    _a = a;
+    _b = b;
     _hash = a.hashCode ^ b.hashCode;
   }
+
+  /// Sets the prospect to contain the content of [other].
+  void setFrom(CollisionProspect<T> other) {
+    _a = other._a;
+    _b = other._b;
+    _hash = other._hash;
+  }
+
+  /// Creates a new prospect object with the same content.
+  CollisionProspect<T> clone() => CollisionProspect(_a, _b);
 }

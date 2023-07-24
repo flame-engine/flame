@@ -53,7 +53,7 @@ class QuadTreeBroadphase extends Broadphase<ShapeHitbox> {
     _potentialsTmp.clear();
 
     for (final activeItem in activeCollisions) {
-      if (activeItem.isRemoving || activeItem.parent == null) {
+      if (activeItem.isRemoving || !activeItem.isMounted) {
         tree.remove(activeItem);
         continue;
       }
@@ -69,7 +69,9 @@ class QuadTreeBroadphase extends Broadphase<ShapeHitbox> {
           continue;
         }
 
-        if (potential.parent == activeItem.parent && potential.parent != null) {
+        if (!potential.allowSiblingCollision &&
+            potential.hitboxParent == activeItem.hitboxParent &&
+            potential.isMounted) {
           continue;
         }
 
