@@ -397,7 +397,8 @@ class QuadTreeExample extends FlameGame
 ```{note}
 Always experiment with different collision detection approaches
 and check how they perform on your game.
-It is not unheard of that `QuadTreeBroadphase` is significantly _slower_ than the default.
+It is not unheard of that `QuadTreeBroadphase` is significantly 
+_slower_ than the default.
 Don't assume that the more sophisticated approach is always faster.
 ```
 
