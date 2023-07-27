@@ -6,11 +6,16 @@ import 'package:meta/meta.dart';
 /// actual intersections are calculated.
 ///
 /// Currently there are two implementations of [Broadphase]:
-/// - [Sweep] is the simplest but slowest system, yet nice for small amounts of
-///   hitboxes.
-/// - [QuadTree] usually works faster, but requires additional setup and works
-///   only with fixed-size maps. See [HasQuadTreeCollisionDetection] for
-///   details.
+///
+/// - [Sweep] is the simplest system. It simply short-circuits potential
+///   collisions based on the horizontal (x) position of the components
+///   in question. It is the default implementation when you use
+///   `HasCollisionDetection`.
+/// - [QuadTree] works faster in some cases. It requires additional setup
+///   and works only with fixed-size maps. See [HasQuadTreeCollisionDetection]
+///   for details.
+///
+/// Always experiment to see which approach works best for your game.
 abstract class Broadphase<T extends Hitbox<T>> {
   Broadphase();
 
