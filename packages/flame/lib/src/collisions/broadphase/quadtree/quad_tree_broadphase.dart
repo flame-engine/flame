@@ -32,7 +32,7 @@ class QuadTreeBroadphase extends Broadphase<ShapeHitbox> {
 
   final QuadTree<ShapeHitbox> tree;
 
-  final activeCollisions = HashSet<ShapeHitbox>();
+  final activeHitboxes = HashSet<ShapeHitbox>();
 
   ExternalBroadphaseCheck broadphaseCheck;
   ExternalMinDistanceCheck minimumDistanceCheck;
@@ -52,7 +52,7 @@ class QuadTreeBroadphase extends Broadphase<ShapeHitbox> {
     _potentials.clear();
     _potentialsTmp.clear();
 
-    for (final activeItem in activeCollisions) {
+    for (final activeItem in activeHitboxes) {
       if (activeItem.isRemoving || !activeItem.isMounted) {
         tree.remove(activeItem);
         continue;
@@ -95,8 +95,8 @@ class QuadTreeBroadphase extends Broadphase<ShapeHitbox> {
         final item1 = _potentialsTmp[i + 1];
         if (broadphaseCheck(item0, item1)) {
           final CollisionProspect<ShapeHitbox> prospect;
-          if (_prospectPool.length > _potentials.length) {
-            prospect = _prospectPool[_potentials.length]..set(item0, item1);
+          if (_prospectPool.length > i) {
+            prospect = _prospectPool[i]..set(item0, item1);
           } else {
             prospect = CollisionProspect<ShapeHitbox>(item0, item1);
             _prospectPool.add(prospect);
@@ -123,7 +123,7 @@ class QuadTreeBroadphase extends Broadphase<ShapeHitbox> {
   void add(ShapeHitbox item) {
     tree.add(item);
     if (item.collisionType == CollisionType.active) {
-      activeCollisions.add(item);
+      activeHitboxes.add(item);
     }
     _cacheCenterOfHitbox(item);
   }
@@ -133,7 +133,7 @@ class QuadTreeBroadphase extends Broadphase<ShapeHitbox> {
     tree.remove(item);
     _cachedCenters.remove(item);
     if (item.collisionType == CollisionType.active) {
-      activeCollisions.remove(item);
+      activeHitboxes.remove(item);
     }
 
     final checkCache = _broadphaseCheckCache[item];
@@ -147,7 +147,7 @@ class QuadTreeBroadphase extends Broadphase<ShapeHitbox> {
 
   void clear() {
     tree.clear();
-    activeCollisions.clear();
+    activeHitboxes.clear();
     _broadphaseCheckCache.clear();
     _cachedCenters.clear();
   }

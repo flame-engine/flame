@@ -55,15 +55,9 @@ abstract class CollisionDetection<T extends Hitbox<T>,
 
     // Handles callbacks for an ended collision that the broadphase didn't
     // report as a potential collision anymore.
-    print('last: ${_lastPotentials.length}, hashes: ${hashes.length}');
-    print('potentials:\n ${potentials.map((p) => '${p.a} ${p.b}\n').toList()}');
-    print(
-        'last potentials:\n ${_lastPotentials.map((p) => '${p.a} ${p.b}\n').toList()}');
     for (final prospect in _lastPotentials) {
-      print('Trying ${prospect.a} and ${prospect.b}');
       if (!hashes.contains(prospect.hash) &&
           prospect.a.collidingWith(prospect.b)) {
-        print('Handle collision end between ${prospect.a} and ${prospect.b}');
         handleCollisionEnd(prospect.a, prospect.b);
       }
     }
