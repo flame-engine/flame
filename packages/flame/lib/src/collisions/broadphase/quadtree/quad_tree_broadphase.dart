@@ -2,6 +2,7 @@ import 'dart:collection';
 
 import 'package:flame/collisions.dart';
 import 'package:flame/extensions.dart';
+import 'package:flame/src/collisions/broadphase/prospect_pool.dart';
 
 typedef ExternalBroadphaseCheck = bool Function(
   ShapeHitbox first,
@@ -42,7 +43,7 @@ class QuadTreeBroadphase extends Broadphase<ShapeHitbox> {
 
   final _potentials = <int, CollisionProspect<ShapeHitbox>>{};
   final _potentialsTmp = <ShapeHitbox>[];
-  final _prospectPool = <CollisionProspect<ShapeHitbox>>[];
+  final _prospectPool = ProspectPool<ShapeHitbox>();
 
   @override
   List<ShapeHitbox> get items => tree.hitboxes;
@@ -95,12 +96,10 @@ class QuadTreeBroadphase extends Broadphase<ShapeHitbox> {
         final item1 = _potentialsTmp[i + 1];
         if (broadphaseCheck(item0, item1)) {
           final CollisionProspect<ShapeHitbox> prospect;
-          if (_prospectPool.length > i) {
-            prospect = _prospectPool[i]..set(item0, item1);
-          } else {
-            prospect = CollisionProspect<ShapeHitbox>(item0, item1);
-            _prospectPool.add(prospect);
+          if (_prospectPool.length <= i) {
+            _prospectPool.expand(item0);
           }
+          prospect = _prospectPool[i]..set(item0, item1);
           _potentials[prospect.hash] = prospect;
         } else {
           if (_broadphaseCheckCache[item0] == null) {

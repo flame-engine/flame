@@ -1,4 +1,5 @@
 import 'package:flame/collisions.dart';
+import 'package:flame/src/collisions/broadphase/prospect_pool.dart';
 
 class Sweep<T extends Hitbox<T>> extends Broadphase<T> {
   Sweep({List<T>? items}) : items = items ?? [];
@@ -8,7 +9,7 @@ class Sweep<T extends Hitbox<T>> extends Broadphase<T> {
 
   final _active = <T>[];
   final _potentials = <int, CollisionProspect<T>>{};
-  final _prospectPool = <CollisionProspect<T>>[];
+  final _prospectPool = ProspectPool<T>();
 
   @override
   void add(T item) => items.add(item);
@@ -43,7 +44,7 @@ class Sweep<T extends Hitbox<T>> extends Broadphase<T> {
           if (item.collisionType == CollisionType.active ||
               activeItem.collisionType == CollisionType.active) {
             if (_prospectPool.length <= _potentials.length) {
-              _increasePoolSize(item);
+              _prospectPool.expand(item);
             }
             final prospect = _prospectPool[_potentials.length]
               ..set(item, activeItem);
@@ -56,11 +57,5 @@ class Sweep<T extends Hitbox<T>> extends Broadphase<T> {
       _active.add(item);
     }
     return _potentials.values;
-  }
-
-  void _increasePoolSize(T dummyItem) {
-    for (var i = 0; i < 1000; i++) {
-      _prospectPool.add(CollisionProspect<T>(dummyItem, dummyItem));
-    }
   }
 }
