@@ -42,14 +42,11 @@ class Sweep<T extends Hitbox<T>> extends Broadphase<T> {
         if (activeBox.max.x >= currentMin) {
           if (item.collisionType == CollisionType.active ||
               activeItem.collisionType == CollisionType.active) {
-            final CollisionProspect<T> prospect;
-            if (_prospectPool.length > _potentials.length) {
-              prospect = _prospectPool[_potentials.length]
-                ..set(item, activeItem);
-            } else {
-              prospect = CollisionProspect<T>(item, activeItem);
-              _prospectPool.add(prospect);
+            if (_prospectPool.length <= _potentials.length) {
+              _increasePoolSize(item);
             }
+            final prospect = _prospectPool[_potentials.length]
+              ..set(item, activeItem);
             _potentials[prospect.hash] = prospect;
           }
         } else {
@@ -59,5 +56,11 @@ class Sweep<T extends Hitbox<T>> extends Broadphase<T> {
       _active.add(item);
     }
     return _potentials.values;
+  }
+
+  void _increasePoolSize(T dummyItem) {
+    for (var i = 0; i < 1000; i++) {
+      _prospectPool.add(CollisionProspect<T>(dummyItem, dummyItem));
+    }
   }
 }
