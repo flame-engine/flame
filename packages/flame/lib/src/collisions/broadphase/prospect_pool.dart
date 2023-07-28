@@ -1,6 +1,9 @@
 import 'package:flame/src/collisions/broadphase/broadphase.dart';
 import 'package:flame/src/collisions/hitboxes/hitbox.dart';
 
+/// This pool is used to not create unnecessary [CollisionProspect] objects
+/// during collision detection, but to re-use the ones that have already been
+/// created.
 class ProspectPool<T extends Hitbox<T>> {
   ProspectPool({this.incrementSize = 1000});
 

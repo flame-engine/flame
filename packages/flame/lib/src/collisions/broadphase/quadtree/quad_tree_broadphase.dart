@@ -2,7 +2,6 @@ import 'dart:collection';
 
 import 'package:flame/collisions.dart';
 import 'package:flame/extensions.dart';
-import 'package:flame/src/collisions/broadphase/prospect_pool.dart';
 
 typedef ExternalBroadphaseCheck = bool Function(
   ShapeHitbox first,

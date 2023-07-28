@@ -1,5 +1,4 @@
 import 'package:flame/collisions.dart';
-import 'package:flame/src/collisions/broadphase/prospect_pool.dart';
 
 class Sweep<T extends Hitbox<T>> extends Broadphase<T> {
   Sweep({List<T>? items}) : items = items ?? [];
