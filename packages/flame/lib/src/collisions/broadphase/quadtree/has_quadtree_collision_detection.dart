@@ -16,7 +16,7 @@ import 'package:flame/game.dart';
 /// [initializeCollisionDetection] should be called in the game's [onLoad]
 /// method.
 mixin HasQuadTreeCollisionDetection on FlameGame
-    implements HasCollisionDetection<QuadTreeBroadphase<ShapeHitbox>> {
+    implements HasCollisionDetection<QuadTreeBroadphase> {
   late QuadTreeCollisionDetection _collisionDetection;
 
   @override
@@ -24,7 +24,7 @@ mixin HasQuadTreeCollisionDetection on FlameGame
 
   @override
   set collisionDetection(
-    CollisionDetection<ShapeHitbox, QuadTreeBroadphase<ShapeHitbox>> cd,
+    CollisionDetection<ShapeHitbox, QuadTreeBroadphase> cd,
   ) {
     if (cd is! QuadTreeCollisionDetection) {
       throw 'Must be QuadTreeCollisionDetection!';
