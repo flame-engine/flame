@@ -181,6 +181,56 @@ void main() {
         expect(game.tapCancelEvent, equals(0));
       },
     );
+
+    testWithFlameGame(
+      'viewport components should get events before world',
+      (game) async {
+        final component = _TapCallbacksComponent()
+          ..x = 10
+          ..y = 10
+          ..width = 10
+          ..height = 10;
+        final hudComponent = _TapCallbacksComponent()
+          ..x = 11
+          ..y = 11
+          ..width = 10
+          ..height = 10;
+        final world = World();
+        final cameraComponent = CameraComponent(world: world)
+          ..viewfinder.anchor = Anchor.topLeft;
+
+        await game.ensureAddAll([world, cameraComponent]);
+        await world.ensureAdd(component);
+        await cameraComponent.viewport.add(hudComponent);
+        final dispatcher = game.firstChild<MultiTapDispatcher>()!;
+
+        dispatcher.onTapDown(
+          createTapDownEvents(
+            game: game,
+            localPosition: const Offset(12, 12),
+            globalPosition: const Offset(12, 12),
+          ),
+        );
+        expect(hudComponent.tapDownEvent, equals(1));
+        expect(hudComponent.tapUpEvent, equals(0));
+        expect(hudComponent.tapCancelEvent, equals(0));
+
+        expect(component.tapDownEvent, equals(0));
+        expect(component.tapUpEvent, equals(0));
+        expect(component.tapCancelEvent, equals(0));
+
+        dispatcher.onTapUp(
+          createTapUpEvents(
+            game: game,
+            localPosition: const Offset(12, 12),
+            globalPosition: const Offset(12, 12),
+          ),
+        );
+
+        expect(hudComponent.tapUpEvent, equals(1));
+        expect(component.tapUpEvent, equals(0));
+      },
+    );
   });
 }
 

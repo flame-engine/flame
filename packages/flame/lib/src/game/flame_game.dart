@@ -168,6 +168,16 @@ class FlameGame extends ComponentTreeRoot
     }
   }
 
+  /// Checks whether there exists a component of type <T> directly added as a
+  /// child or one that is queued to be added as a child.
+  ///
+  /// Used internally to check whether an event dispatcher has been added, or is
+  /// about to be added.
+  @internal
+  T? firstChildOrQueued<T extends Component>() {
+    return firstChild<T>() ?? queuedAdds<T>().firstOrNull;
+  }
+
   /// Whether a point is within the boundaries of the visible part of the game.
   @override
   bool containsLocalPoint(Vector2 p) {

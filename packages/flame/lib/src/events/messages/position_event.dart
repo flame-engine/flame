@@ -54,6 +54,12 @@ abstract class PositionEvent extends Event {
     required void Function(T component) eventHandler,
     bool deliverToAll = false,
   }) {
+    print(
+      rootComponent
+          .componentsAtPoint(canvasPosition, renderingTrace)
+          .whereType<T>()
+          .toList(),
+    );
     for (final child in rootComponent
         .componentsAtPoint(canvasPosition, renderingTrace)
         .whereType<T>()) {
