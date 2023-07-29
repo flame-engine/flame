@@ -582,8 +582,8 @@ it so that it would check whether the card is allowed to be moved before startin
   }
 ```
 
-We have also added a call to `super.onDragStart()` which sets an `_isDragged` variable to `true` 
-in the `DragCallbacks` mixin, we need to check this flag via the public `isDragged` getter in 
+We have also added a call to `super.onDragStart()` which sets an `_isDragged` variable to `true`
+in the `DragCallbacks` mixin, we need to check this flag via the public `isDragged` getter in
 the `onDragUpdate()` method and use `super.onDragEnd()` in `onDragEnd()` so the flag is set back
 to `false`:
 

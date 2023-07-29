@@ -55,10 +55,10 @@ symbol on the canvas. The sprite object is initialized using the
 ```
 
 Then comes the static list of all `Suit` objects in the game. Note that we
-define it as static variable so it is evaluated lazily (as if it was marked 
-with the `late` keyword) meaning that it will be only initialized the first 
-time it is needed. This is important: as we can see above, the constructor 
-tries to retrieve an image from the global cache, so it can only be invoked 
+define it as static variable so it is evaluated lazily (as if it was marked
+with the `late` keyword) meaning that it will be only initialized the first
+time it is needed. This is important: as we can see above, the constructor
+tries to retrieve an image from the global cache, so it can only be invoked
 after the image is loaded into the cache.
 
 ```dart
