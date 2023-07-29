@@ -34,7 +34,8 @@ import 'package:meta/meta.dart';
 /// {@endtemplate}
 @internal
 abstract class FlameTileLayer extends RenderableLayer<TileLayer> {
-  late final _layerPaint = Paint();
+  late final _layerPaint = Paint()
+    ..color = Color.fromRGBO(255, 255, 255, opacity);
   final TiledAtlas tiledAtlas;
   late List<List<MutableRSTransform?>> transforms;
   final animations = <TileAnimation>[];
@@ -50,11 +51,7 @@ abstract class FlameTileLayer extends RenderableLayer<TileLayer> {
     required this.animationFrames,
     required this.ignoreFlip,
     super.filterQuality,
-  }) {
-    _layerPaint
-      ..color = Color.fromRGBO(255, 255, 255, opacity)
-      ..filterQuality = filterQuality;
-  }
+  });
 
   /// {@macro flame_tile_layer}
   static FlameTileLayer load({
