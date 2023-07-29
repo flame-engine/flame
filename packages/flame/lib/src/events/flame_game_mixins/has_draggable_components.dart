@@ -15,7 +15,6 @@ import 'package:flame/src/game/game_render_box.dart';
 import 'package:flutter/gestures.dart';
 import 'package:meta/meta.dart';
 
-@internal
 class MultiDragDispatcherKey implements ComponentKey {
   const MultiDragDispatcherKey();
 
