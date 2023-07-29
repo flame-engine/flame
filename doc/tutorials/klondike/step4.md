@@ -576,19 +576,21 @@ it so that it would check whether the card is allowed to be moved before startin
 ```dart
   void onDragStart(DragStartEvent event) {
     if (pile?.canMoveCard(this) ?? false) {
-      _isDragging = true;
+      super.onDragStart(event);
       priority = 100;
     }
   }
 ```
 
-We have also added the boolean `_isDragging` variable here: make sure to define it, and then to
-check this flag in the `onDragUpdate()` method, and to set it back to false in the `onDragEnd()`:
+We have also added a call to `super.onDragStart()` which sets an `_isDragged` variable to `true`
+in the `DragCallbacks` mixin, we need to check this flag via the public `isDragged` getter in
+the `onDragUpdate()` method and use `super.onDragEnd()` in `onDragEnd()` so the flag is set back
+to `false`:
 
 ```dart
   @override
   void onDragUpdate(DragUpdateEvent event) {
-    if (!_isDragging) {
+    if (!isDragged) {
       return;
     }
     final cameraZoom = (findGame()! as FlameGame)
@@ -600,11 +602,11 @@ check this flag in the `onDragUpdate()` method, and to set it back to false in t
 
   @override
   void onDragEnd(DragEndEvent event) {
-    _isDragging = false;
+    super.onDragEnd(event);
   }
 ```
 
-Now the only the proper cards can be dragged, but they still drop at random positions on the table,
+Now only the proper cards can be dragged, but they still drop at random positions on the table,
 so let's work on that.
 
 
@@ -620,10 +622,10 @@ Thus, my first attempt at revising the `onDragEnd` callback looks like this:
 ```dart
   @override
   void onDragEnd(DragEndEvent event) {
-    if (!_isDragging) {
+    if (!isDragged) {
       return;
     }
-    _isDragging = false;
+    super.onDragEnd(event);
     final dropPiles = parent!
         .componentsAtPoint(position + size / 2)
         .whereType<Pile>()
@@ -790,10 +792,10 @@ Now, putting this all together, the `Card`'s `onDragEnd` method will look like t
 ```dart
   @override
   void onDragEnd(DragEndEvent event) {
-    if (!_isDragging) {
+    if (!isDragged) {
       return;
     }
-    _isDragging = false;
+    super.onDragEnd(event);
     final dropPiles = parent!
         .componentsAtPoint(position + size / 2)
         .whereType<Pile>()
@@ -898,7 +900,7 @@ Heading back into the `Card` class, we can use this method in order to populate 
   @override
   void onDragStart(DragStartEvent event) {
     if (pile?.canMoveCard(this) ?? false) {
-      _isDragging = true;
+      super.onDragStart();
       priority = 100;
       if (pile is TableauPile) {
         attachedCards.clear();
@@ -918,7 +920,7 @@ the `onDragUpdate` method:
 ```dart
   @override
   void onDragUpdate(DragUpdateEvent event) {
-    if (!_isDragging) {
+    if (!isDragged) {
       return;
     }
     final cameraZoom = (findGame()! as FlameGame)
@@ -952,10 +954,10 @@ attached cards into the pile, and the same when it comes to returning the cards 
 ```dart
   @override
   void onDragEnd(DragEndEvent event) {
-    if (!_isDragging) {
+    if (!isDragged) {
       return;
     }
-    _isDragging = false;
+    super.onDragEnd(event);
     final dropPiles = parent!
         .componentsAtPoint(position + size / 2)
         .whereType<Pile>()

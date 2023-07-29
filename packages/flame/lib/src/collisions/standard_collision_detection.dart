@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/geometry.dart';
@@ -64,6 +66,8 @@ class StandardCollisionDetection<B extends Broadphase<ShapeHitbox>>
 
   static final _temporaryRaycastResult = RaycastResult<ShapeHitbox>();
 
+  static final _temporaryRayAabb = Aabb2();
+
   @override
   RaycastResult<ShapeHitbox>? raycast(
     Ray2 ray, {
@@ -72,8 +76,12 @@ class StandardCollisionDetection<B extends Broadphase<ShapeHitbox>>
     RaycastResult<ShapeHitbox>? out,
   }) {
     var finalResult = out?..reset();
+    _updateRayAabb(ray, maxDistance);
     for (final item in items) {
       if (ignoreHitboxes?.contains(item) ?? false) {
+        continue;
+      }
+      if (!item.aabb.intersectsWithAabb2(_temporaryRayAabb)) {
         continue;
       }
       final currentResult =
@@ -82,7 +90,7 @@ class StandardCollisionDetection<B extends Broadphase<ShapeHitbox>>
       if (currentResult != null &&
           (possiblyFirstResult ||
               currentResult.distance! < finalResult!.distance!) &&
-          (currentResult.distance! <= (maxDistance ?? double.infinity))) {
+          currentResult.distance! <= (maxDistance ?? double.infinity)) {
         if (finalResult == null) {
           finalResult = currentResult.clone();
         } else {
@@ -171,5 +179,30 @@ class StandardCollisionDetection<B extends Broadphase<ShapeHitbox>>
         break;
       }
     }
+  }
+
+  /// Computes an axis-aligned bounding box for a [ray].
+  ///
+  /// When [maxDistance] is provided, this will be the bounding box around
+  /// the origin of the ray and its ending point. When [maxDistance]
+  /// is `null`, the bounding box will encompass the whole quadrant
+  /// of space, from the ray's origin to infinity.
+  void _updateRayAabb(Ray2 ray, double? maxDistance) {
+    final x1 = ray.origin.x;
+    final y1 = ray.origin.y;
+    double x2;
+    double y2;
+
+    if (maxDistance != null) {
+      x2 = ray.origin.x + ray.direction.x * maxDistance;
+      y2 = ray.origin.y + ray.direction.y * maxDistance;
+    } else {
+      x2 = ray.direction.x > 0 ? double.infinity : double.negativeInfinity;
+      y2 = ray.direction.y > 0 ? double.infinity : double.negativeInfinity;
+    }
+
+    _temporaryRayAabb
+      ..min.setValues(math.min(x1, x2), math.min(y1, y2))
+      ..max.setValues(math.max(x1, x2), math.max(y1, y2));
   }
 }

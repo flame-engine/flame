@@ -2,7 +2,9 @@ import 'dart:math';
 
 import 'package:flame/extensions.dart';
 
-/// This represents a line on the ax + by = c form
+/// An infinite line on the 2D Cartesian space, represented in the form
+/// of ax + by = c.
+///
 /// If you just want to represent a part of a line, look into LineSegment.
 class Line {
   final double a;

@@ -22,9 +22,21 @@ void main() {
       expect(vector.x, rect.width);
       expect(vector.y, rect.height);
     });
+
     test('test from ui Rect to math Rectangle', () {
       const r1 = Rect.fromLTWH(0, 10, 20, 30);
       final r2 = r1.toMathRectangle();
+      expect(r2.top, r1.top);
+      expect(r2.bottom, r1.bottom);
+      expect(r2.left, r1.left);
+      expect(r2.right, r1.right);
+      expect(r2.width, r1.width);
+      expect(r2.height, r1.height);
+    });
+
+    test('test from ui Rect to Flame Rectangle', () {
+      const r1 = Rect.fromLTWH(0, 10, 20, 30);
+      final r2 = r1.toFlameRectangle();
       expect(r2.top, r1.top);
       expect(r2.bottom, r1.bottom);
       expect(r2.left, r1.left);

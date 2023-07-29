@@ -2,6 +2,7 @@ import 'dart:math' show min, max;
 import 'dart:math' as math;
 import 'dart:ui';
 
+import 'package:flame/experimental.dart' as flame show Rectangle;
 import 'package:flame/geometry.dart';
 import 'package:flame/src/extensions/matrix4.dart';
 import 'package:flame/src/extensions/offset.dart';
@@ -18,6 +19,10 @@ extension RectExtension on Rect {
 
   /// Converts this [Rect] into a [math.Rectangle].
   math.Rectangle toMathRectangle() => math.Rectangle(left, top, width, height);
+
+  /// Converts this [Rect] into a [flame.Rectangle].
+  flame.Rectangle toFlameRectangle() =>
+      flame.Rectangle.fromLTWH(left, top, width, height);
 
   /// Converts this [Rect] into a [RectangleComponent].
   RectangleComponent toRectangleComponent() {
