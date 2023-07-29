@@ -1,10 +1,9 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 
 class JoystickPlayer extends SpriteComponent
-    with HasGameRef, CollisionCallbacks, TapCallbacks {
+    with HasGameRef, CollisionCallbacks {
   /// Pixels/s
   double maxSpeed = 300.0;
   late final Vector2 _lastSize = size.clone();
@@ -19,12 +18,6 @@ class JoystickPlayer extends SpriteComponent
   Future<void> onLoad() async {
     sprite = await gameRef.loadSprite('layers/player.png');
     add(RectangleHitbox());
-  }
-
-  @override
-  void onTapDown(TapDownEvent event) {
-    print('fuck a fuck');
-    event.continuePropagation = false;
   }
 
   @override

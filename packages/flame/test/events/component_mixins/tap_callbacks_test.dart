@@ -191,8 +191,8 @@ void main() {
           ..width = 10
           ..height = 10;
         final hudComponent = _TapCallbacksComponent()
-          ..x = 11
-          ..y = 11
+          ..x = 10
+          ..y = 10
           ..width = 10
           ..height = 10;
         final world = World();
@@ -201,7 +201,7 @@ void main() {
 
         await game.ensureAddAll([world, cameraComponent]);
         await world.ensureAdd(component);
-        await cameraComponent.viewport.add(hudComponent);
+        await cameraComponent.viewport.ensureAdd(hudComponent);
         final dispatcher = game.firstChild<MultiTapDispatcher>()!;
 
         dispatcher.onTapDown(
@@ -211,6 +211,7 @@ void main() {
             globalPosition: const Offset(12, 12),
           ),
         );
+
         expect(hudComponent.tapDownEvent, equals(1));
         expect(hudComponent.tapUpEvent, equals(0));
         expect(hudComponent.tapCancelEvent, equals(0));
