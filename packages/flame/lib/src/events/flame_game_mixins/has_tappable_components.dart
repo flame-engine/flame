@@ -27,7 +27,6 @@ class MultiTapDispatcherKey implements ComponentKey {
 class MultiTapDispatcher extends Component implements MultiTapListener {
   /// The record of all components currently being touched.
   final Set<TaggedComponent<TapCallbacks>> _record = {};
-  bool _eventHandlerRegistered = false;
 
   FlameGame get game => parent! as FlameGame;
 
@@ -204,16 +203,12 @@ class MultiTapDispatcher extends Component implements MultiTapListener {
         instance.onLongTapDown = handleLongTapDown;
       },
     );
-    _eventHandlerRegistered = true;
   }
 
   @override
   void onRemove() {
-    if (_eventHandlerRegistered) {
-      game.gestureDetectors.remove<MultiTapGestureRecognizer>();
-      game.unregisterKey(MultiTapDispatcherKey());
-      _eventHandlerRegistered = false;
-    }
+    game.gestureDetectors.remove<MultiTapGestureRecognizer>();
+    game.unregisterKey(const MultiTapDispatcherKey());
   }
 
   @override
