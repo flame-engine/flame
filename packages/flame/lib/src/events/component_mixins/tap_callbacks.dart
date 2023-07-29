@@ -24,7 +24,7 @@ mixin TapCallbacks on Component {
   void onMount() {
     super.onMount();
     final game = findGame()! as FlameGame;
-    if (game.firstChild<MultiTapDispatcher>() == null) {
+    if (game.firstChildOrQueued<MultiTapDispatcher>() == null) {
       game.add(MultiTapDispatcher());
     }
   }
