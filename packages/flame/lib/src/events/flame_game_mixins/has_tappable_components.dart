@@ -12,6 +12,18 @@ import 'package:flutter/gestures.dart';
 import 'package:meta/meta.dart';
 
 @internal
+class MultiTapDispatcherKey implements ComponentKey {
+  const MultiTapDispatcherKey();
+
+  @override
+  int get hashCode => 401913931; // 'MultiTapDispatcherKey' as hashCode
+
+  @override
+  bool operator ==(dynamic other) =>
+      other is MultiTapDispatcherKey && other.hashCode == hashCode;
+}
+
+@internal
 class MultiTapDispatcher extends Component implements MultiTapListener {
   /// The record of all components currently being touched.
   final Set<TaggedComponent<TapCallbacks>> _record = {};
@@ -199,6 +211,7 @@ class MultiTapDispatcher extends Component implements MultiTapListener {
   void onRemove() {
     if (_eventHandlerRegistered) {
       game.gestureDetectors.remove<MultiTapGestureRecognizer>();
+      game.unregisterKey(MultiTapDispatcherKey());
       _eventHandlerRegistered = false;
     }
   }

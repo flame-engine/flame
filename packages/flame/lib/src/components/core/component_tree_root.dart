@@ -63,16 +63,6 @@ class ComponentTreeRoot extends Component {
     _componentsToRebalance.add(parent);
   }
 
-  @internal
-  Iterable<T> queuedAdds<T extends Component>() sync* {
-    for (final event in _queue) {
-      final child = event.child;
-      if (event.kind == _LifecycleEventKind.add && child is T) {
-        yield child;
-      }
-    }
-  }
-
   bool get hasLifecycleEvents => _queue.isNotEmpty;
 
   void processLifecycleEvents() {
