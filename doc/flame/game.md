@@ -93,6 +93,20 @@ in order: `onLoad`, `onGameResize` and `onMount`. After that, it goes on to call
 Once the `GameWidget` is removed from the tree, `onRemove` is called, just like when a normal
 component is removed from the component tree.
 
+```{note}
+The `onRemove` can be used to clean up potential memory leaks by doing the following:
+```
+
+```dart
+  @override
+  void onRemove() {
+    removeAll(children);
+    processLifecycleEvents();
+    // Any other code necessary to remove references that will be orphaned when
+    // your game is removed.
+  }
+```
+
 
 ## Debug mode
 
