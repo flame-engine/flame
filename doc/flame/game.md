@@ -104,8 +104,7 @@ The `onRemove` can be used to clean up potential memory leaks by doing the follo
     processLifecycleEvents();
     Flame.images.clearCache();
     Flame.assets.clearCache();
-    // Any other code necessary to remove references that will be orphaned when
-    // your game is removed.
+    // Any other code that you want to run when the game is removed.
   }
 ```
 
