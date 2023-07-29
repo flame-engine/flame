@@ -49,8 +49,11 @@ abstract class FlameTileLayer extends RenderableLayer<TileLayer> {
     required this.tiledAtlas,
     required this.animationFrames,
     required this.ignoreFlip,
+    super.filterQuality,
   }) {
-    _layerPaint.color = Color.fromRGBO(255, 255, 255, opacity);
+    _layerPaint
+      ..color = Color.fromRGBO(255, 255, 255, opacity)
+      ..filterQuality = filterQuality;
   }
 
   /// {@macro flame_tile_layer}
@@ -61,10 +64,10 @@ abstract class FlameTileLayer extends RenderableLayer<TileLayer> {
     required Vector2 destTileSize,
     required Map<Tile, TileFrames> animationFrames,
     required TiledAtlas atlas,
+    FilterQuality? filterQuality,
     bool? ignoreFlip,
   }) {
     ignoreFlip ??= false;
-
     final mapOrientation = map.orientation;
     if (mapOrientation == null) {
       throw StateError('Map orientation should be present');
@@ -80,6 +83,7 @@ abstract class FlameTileLayer extends RenderableLayer<TileLayer> {
           tiledAtlas: atlas,
           animationFrames: animationFrames,
           ignoreFlip: ignoreFlip,
+          filterQuality: filterQuality,
         );
       case MapOrientation.staggered:
         return StaggeredTileLayer(
@@ -90,6 +94,7 @@ abstract class FlameTileLayer extends RenderableLayer<TileLayer> {
           tiledAtlas: atlas,
           animationFrames: animationFrames,
           ignoreFlip: ignoreFlip,
+          filterQuality: filterQuality,
         );
       case MapOrientation.hexagonal:
         return HexagonalTileLayer(
@@ -100,6 +105,7 @@ abstract class FlameTileLayer extends RenderableLayer<TileLayer> {
           tiledAtlas: atlas,
           animationFrames: animationFrames,
           ignoreFlip: ignoreFlip,
+          filterQuality: filterQuality,
         );
       case MapOrientation.orthogonal:
         return OrthogonalTileLayer(
@@ -110,6 +116,7 @@ abstract class FlameTileLayer extends RenderableLayer<TileLayer> {
           tiledAtlas: atlas,
           animationFrames: animationFrames,
           ignoreFlip: ignoreFlip,
+          filterQuality: filterQuality,
         );
     }
   }
