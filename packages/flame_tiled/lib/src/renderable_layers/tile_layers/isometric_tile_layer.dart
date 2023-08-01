@@ -60,7 +60,7 @@ class IsometricTileLayer extends FlameTileLayer {
               .translate(spriteOffset.dx, spriteOffset.dy),
         );
         final flips = SimpleFlips.fromFlips(tileGid.flips);
-        final scale = size.x / src.width;
+        final scale = size.x / map.tileWidth;
         final anchorX = src.width - halfMapTile.x;
         final anchorY = src.height - halfMapTile.y;
 
