@@ -66,6 +66,7 @@ class SpriteAnimationTicker {
     currentIndex = 0;
     _done = false;
     _started = false;
+    _completeCompleter = null;
   }
 
   /// Sets this animation to be on the last frame.
