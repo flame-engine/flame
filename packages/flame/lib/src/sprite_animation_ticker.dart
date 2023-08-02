@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flame/components.dart';
+import 'package:flutter/material.dart';
 
 /// A helper class to make the [spriteAnimation] tick.
 class SpriteAnimationTicker {
@@ -30,7 +31,8 @@ class SpriteAnimationTicker {
   /// Registered method to be triggered when the animation complete.
   void Function()? onComplete;
 
-  Completer<void>? _completeCompleter;
+  @visibleForTesting
+  Completer<void>? completeCompleter;
 
   /// The current frame that should be displayed.
   SpriteAnimationFrame get currentFrame => spriteAnimation.frames[currentIndex];
@@ -54,9 +56,9 @@ class SpriteAnimationTicker {
       return Future.value();
     }
 
-    _completeCompleter ??= Completer<void>();
+    completeCompleter ??= Completer<void>();
 
-    return _completeCompleter!.future;
+    return completeCompleter!.future;
   }
 
   /// Resets the animation, like it would just have been created.
@@ -66,7 +68,7 @@ class SpriteAnimationTicker {
     currentIndex = 0;
     _done = false;
     _started = false;
-    _completeCompleter = null;
+    completeCompleter = null;
   }
 
   /// Sets this animation to be on the last frame.
@@ -128,7 +130,7 @@ class SpriteAnimationTicker {
         } else {
           _done = true;
           onComplete?.call();
-          _completeCompleter?.complete();
+          completeCompleter?.complete();
           return;
         }
       } else {
