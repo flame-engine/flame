@@ -866,4 +866,39 @@ void main() {
       });
     }
   });
+
+  group('oversized tiles', () {
+    late TiledComponent component;
+    final size = Vector2(16, 16);
+
+    for (final mapType in [
+      'orthogonal',
+      'isometric',
+      'hexagonal',
+      'staggered'
+    ]) {
+      group(mapType, () {
+        setUp(() async {
+          Flame.bundle = TestAssetBundle(
+            imageNames: [
+              '0x72_DungeonTilesetII_v1.4.png',
+            ],
+            stringNames: ['oversized_tiles_$mapType.tmx'],
+          );
+          component = await TiledComponent.load(
+            'oversized_tiles_$mapType.tmx',
+            size,
+          );
+        });
+
+        test('renders ($mapType)', () async {
+          final pngData = await renderMapToPng(component);
+          await expectLater(
+            pngData,
+            matchesGoldenFile('goldens/oversized_tiles_$mapType.png'),
+          );
+        });
+      });
+    }
+  });
 }
