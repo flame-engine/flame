@@ -17,6 +17,7 @@ class OrthogonalTileLayer extends FlameTileLayer {
     required super.tiledAtlas,
     required super.animationFrames,
     required super.ignoreFlip,
+    super.filterQuality,
   });
 
   @override
