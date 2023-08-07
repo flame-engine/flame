@@ -30,7 +30,7 @@ abstract class RenderableLayer<T extends Layer> {
     required this.map,
     required this.destTileSize,
     FilterQuality? filterQuality,
-  }) : filterQuality = filterQuality ?? FilterQuality.low;
+  }) : filterQuality = filterQuality ?? FilterQuality.none;
 
   /// [load] is a factory method to create [RenderableLayer] by type of [layer].
   static Future<RenderableLayer> load({
