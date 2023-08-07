@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flame/cache.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
@@ -19,12 +21,16 @@ abstract class RenderableLayer<T extends Layer> {
   /// The parent [Group] layer (if it exists)
   final GroupLayer? parent;
 
+  /// The [FilterQuality] that should be used by all the layers.
+  final FilterQuality filterQuality;
+
   RenderableLayer({
     required this.layer,
     required this.parent,
     required this.map,
     required this.destTileSize,
-  });
+    FilterQuality? filterQuality,
+  }) : filterQuality = filterQuality ?? FilterQuality.none;
 
   /// [load] is a factory method to create [RenderableLayer] by type of [layer].
   static Future<RenderableLayer> load({
@@ -35,6 +41,7 @@ abstract class RenderableLayer<T extends Layer> {
     required CameraComponent? camera,
     required Map<Tile, TileFrames> animationFrames,
     required TiledAtlas atlas,
+    FilterQuality? filterQuality,
     bool? ignoreFlip,
     Images? images,
   }) async {
@@ -47,6 +54,7 @@ abstract class RenderableLayer<T extends Layer> {
         animationFrames: animationFrames,
         atlas: atlas.clone(),
         ignoreFlip: ignoreFlip,
+        filterQuality: filterQuality,
       );
     } else if (layer is ImageLayer) {
       return FlameImageLayer.load(
@@ -55,6 +63,7 @@ abstract class RenderableLayer<T extends Layer> {
         camera: camera,
         map: map,
         destTileSize: destTileSize,
+        filterQuality: filterQuality,
         images: images,
       );
     } else if (layer is ObjectGroup) {
@@ -62,6 +71,7 @@ abstract class RenderableLayer<T extends Layer> {
         layer,
         map,
         destTileSize,
+        filterQuality,
       );
     } else if (layer is Group) {
       final groupLayer = layer;
@@ -70,6 +80,7 @@ abstract class RenderableLayer<T extends Layer> {
         parent: parent,
         map: map,
         destTileSize: destTileSize,
+        filterQuality: filterQuality,
       );
     }
 

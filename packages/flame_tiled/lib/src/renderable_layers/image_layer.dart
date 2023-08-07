@@ -20,6 +20,7 @@ class FlameImageLayer extends RenderableLayer<ImageLayer> {
     required super.map,
     required super.destTileSize,
     required Image image,
+    super.filterQuality,
   }) : _image = image {
     _initImageRepeat();
   }
@@ -46,6 +47,7 @@ class FlameImageLayer extends RenderableLayer<ImageLayer> {
       opacity: opacity,
       alignment: Alignment.topLeft,
       repeat: _repeat,
+      filterQuality: filterQuality,
     );
 
     canvas.restore();
@@ -69,6 +71,7 @@ class FlameImageLayer extends RenderableLayer<ImageLayer> {
     required CameraComponent? camera,
     required TiledMap map,
     required Vector2 destTileSize,
+    FilterQuality? filterQuality,
     Images? images,
   }) async {
     return FlameImageLayer(
@@ -76,6 +79,7 @@ class FlameImageLayer extends RenderableLayer<ImageLayer> {
       parent: parent,
       map: map,
       destTileSize: destTileSize,
+      filterQuality: filterQuality,
       image: await (images ?? Flame.images).load(layer.image.source!),
     );
   }
