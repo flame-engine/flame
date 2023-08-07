@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flame/components.dart';
-import 'package:flutter/material.dart';
+import 'package:meta/meta.dart';
 
 /// A helper class to make the [spriteAnimation] tick.
 class SpriteAnimationTicker {
