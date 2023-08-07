@@ -95,15 +95,18 @@ void main() {
 
     testWithFlameGame('hit testing', (game) async {
       final world = _MyWorld();
+      final viewport = CircularViewport.ellipse(80, 20)
+        ..position = Vector2(20, 30);
       final camera = CameraComponent(
         world: world,
-        viewport: CircularViewport.ellipse(80, 20)..position = Vector2(20, 30),
+        viewport: viewport,
       );
       game.addAll([world, camera]);
       await game.ready();
 
       bool hit(double x, double y) {
-        return game.componentsAtPoint(Vector2(x, y)).first == world;
+        final components = game.componentsAtPoint(Vector2(x, y)).toList();
+        return components.first == viewport && components[1] == world;
       }
 
       expect(hit(10, 20), false);
@@ -118,6 +121,9 @@ void main() {
       final nestedPoints = <Vector2>[];
       final center = Vector2(100, 50);
       for (final component in game.componentsAtPoint(center, nestedPoints)) {
+        if (component == viewport) {
+          continue;
+        }
         expect(component, world);
         expect(nestedPoints.last, Vector2.zero());
         break;

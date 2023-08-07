@@ -39,7 +39,7 @@ class JoystickAdvancedExample extends FlameGame with HasCollisionDetection {
       columns: 6,
       rows: 1,
     );
-    add(ScreenHitbox());
+    world.add(ScreenHitbox()..anchor = cameraComponent.viewfinder.anchor);
     joystick = JoystickComponent(
       knob: SpriteComponent(
         sprite: sheet.getSpriteById(1),
@@ -184,13 +184,13 @@ class JoystickAdvancedExample extends FlameGame with HasCollisionDetection {
       ),
     )..add(directionText);
 
-    add(player);
-    add(joystick);
-    add(flipButton);
-    add(flopButton);
-    add(buttonComponent);
-    add(spriteButtonComponent);
-    add(shapeButton);
+    world.add(player);
+    cameraComponent.viewport.add(joystick);
+    cameraComponent.viewport.add(flipButton);
+    cameraComponent.viewport.add(flopButton);
+    cameraComponent.viewport.add(buttonComponent);
+    cameraComponent.viewport.add(spriteButtonComponent);
+    cameraComponent.viewport.add(shapeButton);
     cameraComponent.viewport.add(speedWithMargin);
     cameraComponent.viewport.add(directionWithMargin);
   }
