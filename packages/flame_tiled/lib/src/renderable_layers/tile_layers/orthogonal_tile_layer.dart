@@ -60,7 +60,7 @@ class OrthogonalTileLayer extends FlameTileLayer {
         );
 
         final flips = SimpleFlips.fromFlips(tileGid.flips);
-        final scale = size.x / src.width;
+        final scale = size.x / map.tileWidth;
         final anchorX = src.width - halfMapTile.x;
         final anchorY = src.height - halfMapTile.y;
 
