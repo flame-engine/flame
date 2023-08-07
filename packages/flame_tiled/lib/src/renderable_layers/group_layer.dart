@@ -17,6 +17,7 @@ class GroupLayer extends RenderableLayer<Group> {
     required super.parent,
     required super.map,
     required super.destTileSize,
+    super.filterQuality,
   });
 
   @override
