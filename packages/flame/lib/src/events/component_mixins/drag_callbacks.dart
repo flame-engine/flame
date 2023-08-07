@@ -67,8 +67,10 @@ mixin DragCallbacks on Component {
   void onMount() {
     super.onMount();
     final game = findGame()! as FlameGame;
-    if (game.firstChild<MultiDragDispatcher>() == null) {
-      game.add(MultiDragDispatcher());
+    if (game.findByKey(const MultiDragDispatcherKey()) == null) {
+      final dispatcher = MultiDragDispatcher();
+      game.registerKey(const MultiDragDispatcherKey(), dispatcher);
+      game.add(dispatcher);
     }
   }
 }
