@@ -698,6 +698,28 @@ void main() {
         });
       });
     });
+
+    group('pauseWhenBackgrounded:', () {
+      testWithFlameGame('true', (game) async {
+        game.pauseWhenBackgrounded = true;
+
+        game.lifecycleStateChange(AppLifecycleState.paused);
+        expect(game.paused, true);
+
+        game.lifecycleStateChange(AppLifecycleState.resumed);
+        expect(game.paused, false);
+      });
+
+      testWithFlameGame('false', (game) async {
+        game.pauseWhenBackgrounded = false;
+
+        game.lifecycleStateChange(AppLifecycleState.paused);
+        expect(game.paused, false);
+
+        game.lifecycleStateChange(AppLifecycleState.resumed);
+        expect(game.paused, false);
+      });
+    });
   });
 }
 

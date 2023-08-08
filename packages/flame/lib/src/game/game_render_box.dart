@@ -132,10 +132,14 @@ class GameRenderBox extends RenderBox with WidgetsBindingObserver {
 
   void _bindLifecycleListener() {
     WidgetsBinding.instance.addObserver(this);
+    didChangeAppLifecycleState(
+      WidgetsBinding.instance.lifecycleState ?? AppLifecycleState.resumed,
+    );
   }
 
   void _unbindLifecycleListener() {
     WidgetsBinding.instance.removeObserver(this);
+    didChangeAppLifecycleState(AppLifecycleState.paused);
   }
 
   @override
