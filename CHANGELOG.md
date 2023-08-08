@@ -3,6 +3,85 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2023-08-08
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - [`flame` - `v1.8.2`](#flame---v182)
+ - [`flame_lint` - `v1.1.0`](#flame_lint---v110)
+
+Packages with other changes:
+
+ - [`flame_rive` - `v1.9.1`](#flame_rive---v191)
+ - [`flame_tiled` - `v1.13.0`](#flame_tiled---v1130)
+ - [`flame_isolate` - `v0.4.0+2`](#flame_isolate---v0402)
+ - [`flame_audio` - `v2.0.5`](#flame_audio---v205)
+ - [`flame_spine` - `v0.1.1+1`](#flame_spine---v0111)
+ - [`flame_svg` - `v1.8.1`](#flame_svg---v181)
+ - [`flame_test` - `v1.12.1`](#flame_test---v1121)
+ - [`flame_oxygen` - `v0.1.8+5`](#flame_oxygen---v0185)
+ - [`flame_bloc` - `v1.10.1`](#flame_bloc---v1101)
+ - [`flame_fire_atlas` - `v1.3.8`](#flame_fire_atlas---v138)
+ - [`flame_forge2d` - `v0.14.1+1`](#flame_forge2d---v01411)
+ - [`flame_noise` - `v0.1.1+4`](#flame_noise---v0114)
+ - [`flame_network_assets` - `v0.2.0+4`](#flame_network_assets---v0204)
+ - [`flame_lottie` - `v0.2.1+1`](#flame_lottie---v0211)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `flame_isolate` - `v0.4.0+2`
+ - `flame_audio` - `v2.0.5`
+ - `flame_spine` - `v0.1.1+1`
+ - `flame_svg` - `v1.8.1`
+ - `flame_test` - `v1.12.1`
+ - `flame_oxygen` - `v0.1.8+5`
+ - `flame_bloc` - `v1.10.1`
+ - `flame_fire_atlas` - `v1.3.8`
+ - `flame_forge2d` - `v0.14.1+1`
+ - `flame_noise` - `v0.1.1+4`
+ - `flame_network_assets` - `v0.2.0+4`
+ - `flame_lottie` - `v0.2.1+1`
+
+---
+
+#### `flame` - `v1.8.2`
+
+ - **PERF**: Improve performance of raycasts ([#2617](https://github.com/flame-engine/flame/issues/2617)). ([8e0a7879](https://github.com/flame-engine/flame/commit/8e0a7879d7669e09efcbcee28d9f2038fe9014c0))
+ - **FIX**: Reset _completeCompleter in ticker ([#2636](https://github.com/flame-engine/flame/issues/2636)). ([a35d3a10](https://github.com/flame-engine/flame/commit/a35d3a10abfe9e5caab1a646e0980d03fbf585d1))
+ - **FIX**: Viewport should recieve events before the world  ([#2630](https://github.com/flame-engine/flame/issues/2630)). ([e852064e](https://github.com/flame-engine/flame/commit/e852064e494e58ea2be19a5b035e09ed2e465608))
+ - **FIX**: Use `ComponentKey`s to keep track of dispatchers ([#2629](https://github.com/flame-engine/flame/issues/2629)). ([ff59aa15](https://github.com/flame-engine/flame/commit/ff59aa152c5a2e0b360f980c78a8b3cc4fad7507))
+ - **FIX**: FlameGame onRemove fix to prevent memory leak ([#2602](https://github.com/flame-engine/flame/issues/2602)). ([dac2ebbf](https://github.com/flame-engine/flame/commit/dac2ebbf506ff48ca8f34d872bbc47cba3ad6c7b))
+ - **FIX**: Only use pre-set ReadonlySizeProvider for sizing in HudMarginComponent ([#2611](https://github.com/flame-engine/flame/issues/2611)). ([832c0510](https://github.com/flame-engine/flame/commit/832c051085e0fade8a7e4b262bf9941d279baef4))
+ - **FIX**: TextBoxConfig dismissDelay to not be ignored ([#2607](https://github.com/flame-engine/flame/issues/2607)). ([1567b389](https://github.com/flame-engine/flame/commit/1567b3891057e4ce168d76c920bd40403febd82a))
+ - **FEAT**: Adding key argument to shape components ([#2632](https://github.com/flame-engine/flame/issues/2632)). ([c542d3c3](https://github.com/flame-engine/flame/commit/c542d3c34bf911cec8332dcdeb65d0017e6cb576))
+ - **FEAT**: Add optional world input to `CameraComponent.canSee` ([#2616](https://github.com/flame-engine/flame/issues/2616)). ([1cad0b23](https://github.com/flame-engine/flame/commit/1cad0b23e18db8f352da5790c8ea5ec6053936da))
+ - **FEAT**: Add a Circle.fromPoints utility method ([#2603](https://github.com/flame-engine/flame/issues/2603)). ([a83f2815](https://github.com/flame-engine/flame/commit/a83f2815bbdaf9c176a34a325485a96b5a323575))
+ - **FEAT**: Add a midpoint getter to LineSegment ([#2605](https://github.com/flame-engine/flame/issues/2605)). ([1f9f3509](https://github.com/flame-engine/flame/commit/1f9f35093b3b90113e32a36e1103b87246212fa4))
+ - **FEAT**: Add Rectangle.fromLTWH and Rect.toFlameRectangle utility methods ([#2604](https://github.com/flame-engine/flame/issues/2604)). ([76271cee](https://github.com/flame-engine/flame/commit/76271ceef04264ec8fa5c39a23f43d638d731694))
+ - **DOCS**: Add more guidance to collision detection algorithm choices ([#2624](https://github.com/flame-engine/flame/issues/2624)). ([781e8983](https://github.com/flame-engine/flame/commit/781e898315a0162117a83bf62e2650ce7244503d))
+ - **BREAKING** **PERF**: Pool `CollisionProspect`s and remove some list creations from the collision detection ([#2625](https://github.com/flame-engine/flame/issues/2625)). ([e430b6cd](https://github.com/flame-engine/flame/commit/e430b6cdf2e6be52bf384efb3428bcb41ae13d30))
+ - **BREAKING** **FEAT**: Make world nullable in `CameraComponent` ([#2615](https://github.com/flame-engine/flame/issues/2615)). ([14f51635](https://github.com/flame-engine/flame/commit/14f51635421b8b30049ea287b7c472e54a269250))
+
+#### `flame_lint` - `v1.1.0`
+
+ - **BREAKING** **PERF**: Pool `CollisionProspect`s and remove some list creations from the collision detection ([#2625](https://github.com/flame-engine/flame/issues/2625)). ([e430b6cd](https://github.com/flame-engine/flame/commit/e430b6cdf2e6be52bf384efb3428bcb41ae13d30))
+
+#### `flame_rive` - `v1.9.1`
+
+ - **FIX**: Respect artboard clip value ([#2639](https://github.com/flame-engine/flame/issues/2639)). ([4e664245](https://github.com/flame-engine/flame/commit/4e6642458494b4d4544bcc03b568476faeb0a71f))
+
+#### `flame_tiled` - `v1.13.0`
+
+ - **FIX**: Compute scale in TileLayers based on native map tile size rather than image sizes to support oversized/undersized tiles. ([#2634](https://github.com/flame-engine/flame/issues/2634)). ([1c4d6cd0](https://github.com/flame-engine/flame/commit/1c4d6cd0654f133771a7af5795cc1de2343268c1))
+ - **FEAT**: Possiblity to pass in FilterQuality to tiled layers ([#2627](https://github.com/flame-engine/flame/issues/2627)). ([f3de6650](https://github.com/flame-engine/flame/commit/f3de66507e623e2fe0100cfd4d002dea14f72470))
+
+
 ## 2023-07-02
 
 ### Changes
