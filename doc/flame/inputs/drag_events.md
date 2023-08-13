@@ -4,11 +4,10 @@
 This document describes the new drag events API. It is important to note that 
 when the first draggable component is added to the game, `FlameGame` must 
 temporarily remove itself and run the `GestureDetectorBuilder` which will add a 
-gesture detector as the first child to `FlameGame`, and then re-add the 
-`FlameGame`.  As such, `FlameGame`'s `onRemove` event will be triggered.  A 
-simple boolean flag can be used to ignore this event if your game is using the 
-`onRemove` event.  The old (legacy) approach, which is still supported, is 
-described in [](gesture_input.md).
+gesture detector as the first child to `FlameGame`, and then re-add itelf.  As 
+such, `FlameGame`'s `onRemove` event will be triggered.  A simple boolean flag 
+can be used to ignore this event if your game is using the `onRemove` event.  
+The old (legacy) approach, which is still supported, is described in [](gesture_input.md).
 ```
 
 **Drag events** occur when the user moves their finger across the screen of the device, or when they

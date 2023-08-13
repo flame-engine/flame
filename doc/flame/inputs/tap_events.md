@@ -4,11 +4,10 @@
 This document describes the new tap events API. It is important to note that 
 when the first tappable component is added to the game, `FlameGame` must 
 temporarily remove itself and run the `GestureDetectorBuilder` which will add a 
-gesture detector as the first child to `FlameGame`, and then re-add the 
-`FlameGame`.  As such, `FlameGame`'s `onRemove` event will be triggered.  A 
-simple boolean flag can be used to ignore this event if your game is using the 
-`onRemove` event.  The old (legacy) approach, which is still supported, is 
-described in [](gesture_input.md).
+gesture detector as the first child to `FlameGame`, and then re-add itself.  As 
+such, `FlameGame`'s `onRemove` event will be triggered.  A simple boolean flag 
+can be used to ignore this event if your game is using the `onRemove` event.  
+The old (legacy) approach, which is still supported, is described in [](gesture_input.md).
 ```
 
 **Tap events** are one of the most basic methods of interaction with a Flame game. These events
