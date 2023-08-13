@@ -8,6 +8,7 @@ import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flame/sprite.dart';
+import 'package:path/path.dart' as path;
 
 /// Adds FireAtlas loading methods to Flame [Game].
 extension FireAtlasExtensions on Game {
@@ -270,15 +271,26 @@ class FireAtlas {
   }
 
   /// Loads the [FireAtlas] from an asset.
+  ///
+  /// Use [encoded] = false to load the asset from a json file.
   static Future<FireAtlas> loadAsset(
     String fileName, {
     AssetsCache? assets,
     Images? images,
+    bool encoded = true,
   }) async {
     final assetsCache = assets ?? Flame.assets;
-
-    final bytes = await assetsCache.readBinaryFile(fileName);
-    final atlas = FireAtlas.deserialize(bytes);
+    final FireAtlas atlas;
+    final fileExtension = path.extension(fileName);
+    if (encoded) {
+      assert(fileExtension == '.fa');
+      final bytes = await assetsCache.readBinaryFile(fileName);
+      atlas = FireAtlas.deserializeBytes(bytes);
+    } else {
+      assert(fileExtension == '.json');
+      final json = await assetsCache.readJson(fileName);
+      atlas = FireAtlas.deserializeJson(json);
+    }
     await atlas.loadImage(images: images);
     return atlas;
   }
@@ -296,11 +308,15 @@ class FireAtlas {
     return gzipBytes;
   }
 
+  /// Reads a [FireAtlas] instance from a json file.
+  factory FireAtlas.deserializeJson(Map<String, dynamic> rawJson) =>
+      FireAtlas._fromJson(rawJson);
+
   /// Reads a [FireAtlas] instance from a byte array.
-  factory FireAtlas.deserialize(List<int> bytes) {
+  factory FireAtlas.deserializeBytes(List<int> bytes) {
     final unzippedBytes = GZipDecoder().decodeBytes(bytes);
     final unzippedString = utf8.decode(unzippedBytes);
-    return FireAtlas._fromJson(
+    return FireAtlas.deserializeJson(
       jsonDecode(unzippedString) as Map<String, dynamic>,
     );
   }
