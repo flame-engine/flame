@@ -41,8 +41,11 @@ void main() {
     });
 
     test('correct loads the file, with different prefix', () async {
-      tiled = await TiledComponent.load('map_custom_path.tmx', Vector2.all(16),
-          prefix: 'assets/tiles/tiles_custom_path/');
+      tiled = await TiledComponent.load(
+        'map_custom_path.tmx',
+        Vector2.all(16),
+        prefix: 'assets/tiles/tiles_custom_path/',
+      );
 
       expect(tiled.tileMap.renderableLayers.length, equals(3));
     });
@@ -121,9 +124,10 @@ void main() {
 
     // TestAssetBundle strips assets/tiles/ from the prefix.
     final tsxProvider = await FlameTsxProvider.parse(
-        'external_tileset_custom_path.tsx',
-        null,
-        'assets/tiles/tiles_custom_path/');
+      'external_tileset_custom_path.tsx',
+      null,
+      'assets/tiles/tiles_custom_path/',
+    );
 
     expect(tsxProvider.getCachedSource() != null, true);
     final source = tsxProvider.getCachedSource()!;
