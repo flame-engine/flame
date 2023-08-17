@@ -27,7 +27,7 @@ import 'package:meta/meta.dart';
 /// be implemented either synchronously or asynchronously. In the latter case
 /// the dialogue runner will wait for the future to resolve before proceeding
 /// (futures from several dialogue views will be awaited simultaneously).
-abstract class DialogueView {
+mixin class DialogueView {
   DialogueRunner? _dialogueRunner;
 
   /// The owner of this `DialogueView`. This property will be `null` when the
