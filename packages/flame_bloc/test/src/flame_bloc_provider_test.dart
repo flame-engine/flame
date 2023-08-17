@@ -17,6 +17,13 @@ class InventoryListener extends Component
     super.onNewState(state);
     lastState = state;
   }
+
+  @override
+  void onInitialState(InventoryState state) {
+    super.onInitialState(state);
+
+    lastState ??= state;
+  }
 }
 
 void main() {
@@ -66,6 +73,22 @@ void main() {
         expect(component.bloc, bloc);
       });
 
+      testWithFlameGame(
+        'initial state is used to properly track last state',
+        (game) async {
+          final bloc = InventoryCubit();
+          late InventoryListener component;
+          final provider =
+              FlameBlocProvider<InventoryCubit, InventoryState>.value(
+            value: bloc,
+            children: [
+              component = InventoryListener(),
+            ],
+          );
+          await game.ensureAdd(provider);
+          expect(component.lastState, equals(InventoryState.sword));
+        },
+      );
       testWithFlameGame('can listen to new state changes', (game) async {
         final bloc = InventoryCubit();
         late InventoryListener component;
@@ -80,7 +103,11 @@ void main() {
 
         bloc.selectBow();
         await Future<void>.microtask(() {});
-        expect(component.lastState, equals(InventoryState.bow));
+
+        bloc.selectSword();
+        await Future<void>.microtask(() {});
+
+        expect(component.lastState, equals(InventoryState.sword));
       });
     });
 

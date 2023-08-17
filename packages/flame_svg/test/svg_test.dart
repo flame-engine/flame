@@ -50,7 +50,7 @@ void main() {
         final flameSvg = await parseSvgFromTestFile('test/_resources/hand.svg');
         flameSvg.render(Canvas(PictureRecorder()), Vector2.all(300));
         await tester.binding.setSurfaceSize(const Size(800, 600));
-        tester.binding.window.devicePixelRatioTestValue = 3;
+        tester.view.devicePixelRatio = 3;
         await tester.pumpWidget(
           MaterialApp(
             debugShowCheckedModeBanner: false,

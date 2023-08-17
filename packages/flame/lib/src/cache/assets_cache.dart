@@ -8,7 +8,7 @@ import 'package:flutter/services.dart' show rootBundle;
 /// It automatically looks for files in the `assets` directory.
 class AssetsCache {
   final String prefix;
-  final Map<String, _Asset> _files = {};
+  final Map<String, _Asset<dynamic>> _files = {};
 
   AssetsCache({this.prefix = 'assets/'});
 

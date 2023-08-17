@@ -24,7 +24,7 @@ Future<void> main() async {
       await tester.pumpWidget(
         SpriteAnimationWidget(
           animation: spriteAnimation,
-          animationTicker: spriteAnimation.ticker(),
+          animationTicker: spriteAnimation.createTicker(),
         ),
       );
 
@@ -117,6 +117,34 @@ Future<void> main() async {
           await tester.pump();
           expect(animation2Started, true);
         }
+      },
+    );
+
+    testWidgets(
+      'onComplete callback is called when the animation is finished',
+      (tester) async {
+        const imagePath = 'test_image_path';
+        Flame.images.add(imagePath, image);
+        final spriteAnimationData = SpriteAnimationData.sequenced(
+          amount: 1,
+          stepTime: 0.1,
+          textureSize: Vector2(16, 16),
+          loop: false,
+        );
+
+        var onCompleteCalled = false;
+
+        await tester.pumpWidget(
+          SpriteAnimationWidget.asset(
+            path: imagePath,
+            data: spriteAnimationData,
+            onComplete: () => onCompleteCalled = true,
+          ),
+        );
+
+        await tester.pumpAndSettle();
+
+        expect(onCompleteCalled, isTrue);
       },
     );
   });

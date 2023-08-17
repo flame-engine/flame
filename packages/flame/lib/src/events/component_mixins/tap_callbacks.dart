@@ -1,6 +1,5 @@
 import 'package:flame/game.dart';
 import 'package:flame/src/components/core/component.dart';
-import 'package:flame/src/components/mixins/tappable.dart';
 import 'package:flame/src/events/flame_game_mixins/has_tappable_components.dart';
 import 'package:flame/src/events/messages/tap_cancel_event.dart';
 import 'package:flame/src/events/messages/tap_down_event.dart';
@@ -13,7 +12,7 @@ import 'package:meta/meta.dart';
 /// [containsLocalPoint] method -- the component will only be considered
 /// "tapped" if the point where the tap has occurred is inside the component.
 ///
-/// This mixin is intended as a replacement of the [Tappable] mixin.
+/// This mixin is the replacement of the Tappable mixin.
 mixin TapCallbacks on Component {
   void onTapDown(TapDownEvent event) {}
   void onLongTapDown(TapDownEvent event) {}
@@ -25,8 +24,10 @@ mixin TapCallbacks on Component {
   void onMount() {
     super.onMount();
     final game = findGame()! as FlameGame;
-    if (game.firstChild<MultiTapDispatcher>() == null) {
-      game.add(MultiTapDispatcher());
+    if (game.findByKey(const MultiTapDispatcherKey()) == null) {
+      final dispatcher = MultiTapDispatcher();
+      game.registerKey(const MultiTapDispatcherKey(), dispatcher);
+      game.add(dispatcher);
     }
   }
 }

@@ -22,8 +22,11 @@ erayzesen
 padracing
 ptero
 riverpod
+spineboy
+spineboys
 spydon
 stpasha
+Supabase
 tavian
 trex
 Videon

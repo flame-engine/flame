@@ -26,7 +26,7 @@ class SpriteAnimationParticle extends Particle {
     this.overridePaint,
     super.lifespan,
     this.alignAnimationTime = true,
-  }) : animationTicker = animation.ticker();
+  }) : animationTicker = animation.createTicker();
 
   @override
   void setLifespan(double lifespan) {

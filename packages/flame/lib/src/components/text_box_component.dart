@@ -26,9 +26,9 @@ class TextBoxConfig {
   /// between each character.
   final double timePerChar;
 
-  /// Defaults to 0. If not zero, this component will disappear after this many
-  /// seconds after being fully typed out.
-  final double dismissDelay;
+  /// Defaults to null. If not null, this component will disappear after this
+  /// many seconds after being fully typed out.
+  final double? dismissDelay;
 
   /// Only relevant if [timePerChar] is set. If true, the box will start with
   /// the size to fit the first character and grow as more lines are typed.
@@ -40,7 +40,7 @@ class TextBoxConfig {
     this.maxWidth = 200.0,
     this.margins = const EdgeInsets.all(8.0),
     this.timePerChar = 0.0,
-    this.dismissDelay = 0.0,
+    this.dismissDelay,
     this.growingBox = false,
   });
 }
@@ -78,10 +78,12 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
     super.anchor,
     super.children,
     super.priority,
+    super.key,
   })  : _boxConfig = boxConfig ?? TextBoxConfig(),
         _fixedSize = size != null,
         align = align ?? Anchor.topLeft,
-        pixelRatio = pixelRatio ?? window.devicePixelRatio;
+        pixelRatio = pixelRatio ??
+            PlatformDispatcher.instance.views.first.devicePixelRatio;
 
   /// Alignment of the text within its bounding box.
   ///
@@ -171,7 +173,8 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
 
   double get totalCharTime => text.length * _boxConfig.timePerChar;
 
-  bool get finished => _lifeTime > totalCharTime + _boxConfig.dismissDelay;
+  bool get finished =>
+      _lifeTime >= totalCharTime + (_boxConfig.dismissDelay ?? 0);
 
   int get _actualTextLength {
     return lines.map((e) => e.length).sum;
@@ -240,12 +243,13 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
 
   Future<Image> _fullRenderAsImage(Vector2 size) {
     final recorder = PictureRecorder();
-    final c = Canvas(recorder, size.toRect());
+    final scaledSize = size * pixelRatio;
+    final c = Canvas(recorder, scaledSize.toRect());
     c.scale(pixelRatio);
     _fullRender(c);
     return recorder.endRecording().toImageSafe(
-          (width * pixelRatio).ceil(),
-          (height * pixelRatio).ceil(),
+          scaledSize.x.ceil(),
+          scaledSize.y.ceil(),
         );
   }
 
@@ -292,7 +296,9 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
       // See issue #1618 for details.
       Future.delayed(const Duration(milliseconds: 100), () {
         cachedToRemove.remove(cachedImage);
-        cachedImage.dispose();
+        if (isMounted) {
+          cachedImage.dispose();
+        }
       });
     }
     cache = await _fullRenderAsImage(newSize);
@@ -306,6 +312,10 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
       redraw();
     }
     _previousChar = currentChar;
+
+    if (_boxConfig.dismissDelay != null && finished) {
+      removeFromParent();
+    }
   }
 
   @override

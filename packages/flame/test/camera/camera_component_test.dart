@@ -200,14 +200,14 @@ void main() {
       final nested = <Vector2>[];
       final it = game.componentsAtPoint(Vector2(400, 300), nested).iterator;
       expect(it.moveNext(), true);
+      expect(it.current, camera.viewport);
+      expect(nested, [Vector2(400, 300), Vector2(300, 200)]);
+      expect(it.moveNext(), true);
       expect(it.current, component);
       expect(nested, [Vector2(400, 300), Vector2(100, 50), Vector2(50, 20)]);
       expect(it.moveNext(), true);
       expect(it.current, world);
       expect(nested, [Vector2(400, 300), Vector2(100, 50)]);
-      expect(it.moveNext(), true);
-      expect(it.current, camera.viewport);
-      expect(nested, [Vector2(400, 300), Vector2(300, 200)]);
       expect(it.moveNext(), true);
       expect(it.current, game);
       expect(nested, [Vector2(400, 300)]);
@@ -280,24 +280,27 @@ void main() {
     });
 
     testWithFlameGame('component is in view for the camera', (game) async {
-      final world = World();
+      final component = PositionComponent(
+        size: Vector2(10, 10),
+        position: Vector2(0, 0),
+      );
+      final world = World(children: [component]);
       final camera = CameraComponent(
         world: world,
         viewport: FixedSizeViewport(60, 40),
       );
       game.addAll([world, camera]);
       await game.ready();
-
-      final component = PositionComponent(
-        size: Vector2(10, 10),
-        position: Vector2(0, 0),
-      );
 
       expect(camera.canSee(component), isTrue);
     });
 
     testWithFlameGame('component is out of view for the camera', (game) async {
-      final world = World();
+      final component = PositionComponent(
+        size: Vector2(10, 10),
+        position: Vector2(100, 100),
+      );
+      final world = World(children: [component]);
       final camera = CameraComponent(
         world: world,
         viewport: FixedSizeViewport(60, 40),
@@ -305,12 +308,66 @@ void main() {
       game.addAll([world, camera]);
       await game.ready();
 
-      final component = PositionComponent(
-        size: Vector2(10, 10),
-        position: Vector2(100, 100),
-      );
-
       expect(camera.canSee(component), isFalse);
+    });
+  });
+
+  group('CameraComponent.canSee', () {
+    testWithFlameGame('null world', (game) async {
+      final player = PositionComponent();
+      final world = World(children: [player]);
+      final camera = CameraComponent();
+
+      await game.addAll([camera, world]);
+      await game.ready();
+      expect(camera.canSee(player), false);
+
+      camera.world = world;
+      expect(camera.canSee(player), true);
+    });
+
+    testWithFlameGame('unmounted world', (game) async {
+      final player = PositionComponent();
+      final world = World(children: [player]);
+      final camera = CameraComponent(world: world);
+
+      await game.addAll([camera]);
+      await game.ready();
+      expect(camera.canSee(player), false);
+
+      await game.add(world);
+      await game.ready();
+      expect(camera.canSee(player), true);
+    });
+
+    testWithFlameGame('unmounted component', (game) async {
+      final player = PositionComponent();
+      final world = World();
+      final camera = CameraComponent(world: world);
+
+      await game.addAll([camera, world]);
+      await game.ready();
+      expect(camera.canSee(player), false);
+
+      await world.add(player);
+      await game.ready();
+      expect(camera.canSee(player), true);
+    });
+
+    testWithFlameGame('component from another world', (game) async {
+      final player = PositionComponent();
+      final world1 = World(children: [player]);
+      final world2 = World();
+      final camera = CameraComponent(world: world2);
+
+      await game.addAll([camera, world1, world2]);
+      await game.ready();
+
+      // can see when player world is not known.
+      expect(camera.canSee(player), true);
+
+      // can't see when the player world is known.
+      expect(camera.canSee(player, componentWorld: world1), false);
     });
   });
 }

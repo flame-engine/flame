@@ -1,4 +1,5 @@
 import 'dart:math' as math;
+
 import 'dart:ui' hide Offset;
 
 import 'package:collection/collection.dart';
@@ -79,6 +80,7 @@ class PositionComponent extends Component
     Anchor? anchor,
     super.children,
     super.priority,
+    super.key,
   })  : transform = Transform2D(),
         _anchor = anchor ?? Anchor.topLeft,
         _size = NotifyingVector2.copy(size ?? Vector2.zero()) {

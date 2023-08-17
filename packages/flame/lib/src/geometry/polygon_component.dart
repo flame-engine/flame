@@ -38,6 +38,7 @@ class PolygonComponent extends ShapeComponent {
     super.priority,
     super.paint,
     super.paintLayers,
+    super.key,
     bool? shrinkToBounds,
   })  : assert(
           _vertices.length > 2,
@@ -78,6 +79,7 @@ class PolygonComponent extends ShapeComponent {
     Paint? paint,
     List<Paint>? paintLayers,
     bool? shrinkToBounds,
+    ComponentKey? key,
   }) : this(
           normalsToVertices(relation, parentSize),
           position: position,
@@ -88,6 +90,7 @@ class PolygonComponent extends ShapeComponent {
           paint: paint,
           paintLayers: paintLayers,
           shrinkToBounds: shrinkToBounds,
+          key: key,
         );
 
   @internal

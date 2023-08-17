@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:flame/extensions.dart';
+import 'package:flutter/foundation.dart';
 
 export '../extensions.dart';
 
@@ -83,8 +84,26 @@ class ImageComposition {
 
   /// Compose all the images into a single composition.
   Future<Image> compose() async {
+    final result = _composeCore();
+
+    return result.picture.toImageSafe(
+      result.width,
+      result.height,
+    );
+  }
+
+  /// Compose all the images into a single composition.
+  ///
+  /// A sync version of [compose] function. Read [Picture.toImageSync] for
+  /// detailed description of possible benefits in performance
+  Image composeSync() {
+    final result = _composeCore();
+    return result.picture.toImageSync(result.width, result.height);
+  }
+
+  _ComposeResult _composeCore() {
     // Rect used to determine how big the output image will be.
-    var output = Rect.zero;
+    var outputRect = Rect.zero;
     final recorder = PictureRecorder();
     final canvas = Canvas(recorder);
 
@@ -117,13 +136,29 @@ class ImageComposition {
 
       // Expand the output so it can be used later on when the output image gets
       // created.
-      output = output.expandToInclude(realDest);
+      outputRect = outputRect.expandToInclude(realDest);
     }
 
-    return recorder
-        .endRecording()
-        .toImageSafe(output.width.toInt(), output.height.toInt());
+    final picture = recorder.endRecording();
+    return _ComposeResult(
+      picture: picture,
+      width: outputRect.width.toInt(),
+      height: outputRect.height.toInt(),
+    );
   }
+}
+
+@immutable
+class _ComposeResult {
+  const _ComposeResult({
+    required this.picture,
+    required this.width,
+    required this.height,
+  });
+
+  final Picture picture;
+  final int width;
+  final int height;
 }
 
 class _Fragment {

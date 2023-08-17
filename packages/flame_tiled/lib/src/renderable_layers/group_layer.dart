@@ -1,5 +1,5 @@
+import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
-import 'package:flame/game.dart';
 import 'package:flame_tiled/src/renderable_layers/renderable_layer.dart';
 import 'package:meta/meta.dart';
 import 'package:tiled/tiled.dart';
@@ -17,6 +17,7 @@ class GroupLayer extends RenderableLayer<Group> {
     required super.parent,
     required super.map,
     required super.destTileSize,
+    super.filterQuality,
   });
 
   @override
@@ -34,7 +35,7 @@ class GroupLayer extends RenderableLayer<Group> {
   }
 
   @override
-  void render(Canvas canvas, Camera? camera) {
+  void render(Canvas canvas, CameraComponent? camera) {
     for (final child in children) {
       child.render(canvas, camera);
     }

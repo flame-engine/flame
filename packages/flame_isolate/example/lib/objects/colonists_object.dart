@@ -1,6 +1,6 @@
 import 'package:flame/components.dart';
-import 'package:flutter_isolates_example/constants.dart';
-import 'package:flutter_isolates_example/standard/int_vector2.dart';
+import 'package:flame_isolate_example/constants.dart';
+import 'package:flame_isolate_example/standard/int_vector2.dart';
 
 mixin ColonistsObject on PositionComponent {
   IntVector2 get tileSize;

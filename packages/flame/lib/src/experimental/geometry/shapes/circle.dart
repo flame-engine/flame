@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:flame/geometry.dart';
@@ -98,4 +99,24 @@ class Circle extends Shape {
 
   @override
   String toString() => 'Circle([${_center.x}, ${_center.y}], $_radius)';
+
+  /// Tries to create a Circle that intersects the 3 points, if it exists.
+  ///
+  /// As long as the points are not co-linear, there is always exactly one
+  /// circle intersecting all 3 points.
+  static Circle? fromPoints(Vector2 p1, Vector2 p2, Vector2 p3) {
+    final offset = p2.length2;
+    final bc = (p1.length2 - offset) / 2.0;
+    final cd = (offset - p3.length2) / 2.0;
+    final det = (p1.x - p2.x) * (p2.y - p3.y) - (p2.x - p3.x) * (p1.y - p2.y);
+    if (det == 0) {
+      return null;
+    }
+
+    final centerX = (bc * (p2.y - p3.y) - cd * (p1.y - p2.y)) / det;
+    final centerY = (cd * (p1.x - p2.x) - bc * (p2.x - p3.x)) / det;
+    final radius = sqrt(pow(p2.x - centerX, 2) + pow(p2.y - centerY, 2));
+
+    return Circle(Vector2(centerX, centerY), radius);
+  }
 }

@@ -11,18 +11,21 @@ import 'package:flame/src/game/game_render_box.dart';
 import 'package:flutter/gestures.dart';
 import 'package:meta/meta.dart';
 
-@Deprecated('''This mixin will be removed in 1.8.0
+class MultiTapDispatcherKey implements ComponentKey {
+  const MultiTapDispatcherKey();
 
-This mixin does no longer do anything since you can now add tappable
-components directly to a game without this mixin.
-''')
-mixin HasTappableComponents on FlameGame {}
+  @override
+  int get hashCode => 401913931; // 'MultiTapDispatcherKey' as hashCode
+
+  @override
+  bool operator ==(dynamic other) =>
+      other is MultiTapDispatcherKey && other.hashCode == hashCode;
+}
 
 @internal
 class MultiTapDispatcher extends Component implements MultiTapListener {
   /// The record of all components currently being touched.
   final Set<TaggedComponent<TapCallbacks>> _record = {};
-  bool _eventHandlerRegistered = false;
 
   FlameGame get game => parent! as FlameGame;
 
@@ -48,6 +51,7 @@ class MultiTapDispatcher extends Component implements MultiTapListener {
     // ignore: deprecated_member_use_from_same_package
     if (game is HasTappablesBridge) {
       final info = event.asInfo(game)..handled = event.handled;
+      // ignore: deprecated_member_use_from_same_package
       game.propagateToChildren<Tappable>(
         (c) => c.handleTapDown(event.pointerId, info),
       );
@@ -76,6 +80,7 @@ class MultiTapDispatcher extends Component implements MultiTapListener {
     // ignore: deprecated_member_use_from_same_package
     if (game is HasTappablesBridge) {
       final info = event.asInfo(game)..handled = event.handled;
+      // ignore: deprecated_member_use_from_same_package
       game.propagateToChildren<Tappable>(
         (c) => c.handleLongTapDown(event.pointerId, info),
       );
@@ -109,6 +114,7 @@ class MultiTapDispatcher extends Component implements MultiTapListener {
     // ignore: deprecated_member_use_from_same_package
     if (game is HasTappablesBridge) {
       final info = event.asInfo(game)..handled = event.handled;
+      // ignore: deprecated_member_use_from_same_package
       game.propagateToChildren<Tappable>(
         (c) => c.handleTapUp(event.pointerId, info),
       );
@@ -129,6 +135,7 @@ class MultiTapDispatcher extends Component implements MultiTapListener {
     _tapCancelImpl(event);
     // ignore: deprecated_member_use_from_same_package
     if (game is HasTappablesBridge) {
+      // ignore: deprecated_member_use_from_same_package
       game.propagateToChildren<Tappable>(
         (c) => c.handleTapCancel(event.pointerId),
       );
@@ -163,52 +170,44 @@ class MultiTapDispatcher extends Component implements MultiTapListener {
   @internal
   @override
   void handleTapDown(int pointerId, TapDownDetails details) {
-    onTapDown(TapDownEvent(pointerId, details));
+    onTapDown(TapDownEvent(pointerId, game, details));
   }
 
   @internal
   @override
   void handleTapUp(int pointerId, TapUpDetails details) {
-    onTapUp(TapUpEvent(pointerId, details));
+    onTapUp(TapUpEvent(pointerId, game, details));
   }
 
   @internal
   @override
   void handleLongTapDown(int pointerId, TapDownDetails details) {
-    onLongTapDown(TapDownEvent(pointerId, details));
+    onLongTapDown(TapDownEvent(pointerId, game, details));
   }
 
   //#endregion
 
   @override
   void onMount() {
-    if (game.firstChild<MultiTapDispatcher>() == null) {
-      game.gestureDetectors.add<MultiTapGestureRecognizer>(
-        MultiTapGestureRecognizer.new,
-        (MultiTapGestureRecognizer instance) {
-          instance.longTapDelay = Duration(
-            milliseconds: (longTapDelay * 1000).toInt(),
-          );
-          instance.onTap = handleTap;
-          instance.onTapDown = handleTapDown;
-          instance.onTapUp = handleTapUp;
-          instance.onTapCancel = handleTapCancel;
-          instance.onLongTapDown = handleLongTapDown;
-        },
-      );
-      _eventHandlerRegistered = true;
-    } else {
-      // Ensures that only one MultiTapDispatcher is attached to the Game.
-      removeFromParent();
-    }
+    game.gestureDetectors.add<MultiTapGestureRecognizer>(
+      MultiTapGestureRecognizer.new,
+      (MultiTapGestureRecognizer instance) {
+        instance.longTapDelay = Duration(
+          milliseconds: (longTapDelay * 1000).toInt(),
+        );
+        instance.onTap = handleTap;
+        instance.onTapDown = handleTapDown;
+        instance.onTapUp = handleTapUp;
+        instance.onTapCancel = handleTapCancel;
+        instance.onLongTapDown = handleLongTapDown;
+      },
+    );
   }
 
   @override
   void onRemove() {
-    if (_eventHandlerRegistered) {
-      game.gestureDetectors.remove<MultiTapGestureRecognizer>();
-      _eventHandlerRegistered = false;
-    }
+    game.gestureDetectors.remove<MultiTapGestureRecognizer>();
+    game.unregisterKey(const MultiTapDispatcherKey());
   }
 
   @override

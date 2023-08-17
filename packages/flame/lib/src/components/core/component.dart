@@ -1,20 +1,16 @@
 import 'dart:async';
 
 import 'package:collection/collection.dart';
+import 'package:flame/components.dart';
 import 'package:flame/src/cache/value_cache.dart';
-import 'package:flame/src/components/core/component_set.dart';
 import 'package:flame/src/components/core/component_tree_root.dart';
-import 'package:flame/src/components/core/position_type.dart';
 import 'package:flame/src/components/mixins/coordinate_transform.dart';
-import 'package:flame/src/components/mixins/has_game_ref.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
 import 'package:flame/src/game/flame_game.dart';
 import 'package:flame/src/game/game.dart';
 import 'package:flame/src/gestures/events.dart';
-import 'package:flame/src/text/text_paint.dart';
 import 'package:flutter/painting.dart';
 import 'package:meta/meta.dart';
-import 'package:vector_math/vector_math_64.dart';
 
 /// [Component]s are the basic building blocks for a [FlameGame].
 ///
@@ -71,8 +67,12 @@ import 'package:vector_math/vector_math_64.dart';
 /// respond to tap events or similar; the [componentsAtPoint] may also need to
 /// be overridden if you have reimplemented [renderTree].
 class Component {
-  Component({Iterable<Component>? children, int? priority})
-      : _priority = priority ?? 0 {
+  Component({
+    Iterable<Component>? children,
+    int? priority,
+    ComponentKey? key,
+  })  : _priority = priority ?? 0,
+        _key = key {
     if (children != null) {
       addAll(children);
     }
@@ -580,7 +580,7 @@ class Component {
     );
     child._parent = this;
     final game = findGame();
-    if (isMounted) {
+    if (isMounted && !child.isMounted) {
       (game! as FlameGame).enqueueAdd(child, this);
     } else {
       // This will be reconciled during the mounting stage
@@ -745,20 +745,6 @@ class Component {
     }
   }
 
-  /// Usually this is not something that the user would want to call since the
-  /// component list isn't re-ordered when it is called.
-  /// See FlameGame.changePriority instead.
-  @Deprecated('Will be removed in 1.8.0. Use priority setter instead.')
-  // ignore: use_setters_to_change_properties
-  void changePriorityWithoutResorting(int priority) => _priority = priority;
-
-  /// Call this if any of this component's children priorities have changed
-  /// at runtime.
-  ///
-  /// This will call [ComponentSet.rebalanceAll] on the [children] ordered set.
-  @Deprecated('Will be removed in 1.8.0, it is now done automatically.')
-  void reorderChildren() => _children?.rebalanceAll();
-
   //#endregion
 
   //#region Internal lifecycle management
@@ -860,6 +846,13 @@ class Component {
     _reAddChildren();
     _parent!.onChildrenChanged(this, ChildrenChangeType.added);
     _clearMountingBit();
+
+    if (_key != null) {
+      final currentGame = findGame();
+      if (currentGame is FlameGame) {
+        currentGame.registerKey(_key!, this);
+      }
+    }
   }
 
   /// Used by [_reAddChildren].
@@ -894,6 +887,13 @@ class Component {
 
   void _remove() {
     assert(_parent != null, 'Trying to remove a component with no parent');
+
+    if (_key != null) {
+      final game = findGame();
+      if (game is FlameGame) {
+        game.unregisterKey(_key!);
+      }
+    }
     _parent!.children.remove(this);
     propagateToChildren(
       (Component component) {
@@ -931,6 +931,11 @@ class Component {
   /// debug mode. Setting this to null will suppress all coordinates from
   /// the output.
   int? get debugCoordinatesPrecision => 0;
+
+  /// A key that can be used to identify this component in the tree.
+  ///
+  /// It can be used to retrieve this component from anywhere in the tree.
+  final ComponentKey? _key;
 
   /// The color that the debug output should be rendered with.
   Color debugColor = const Color(0xFFFF00FF);
@@ -973,8 +978,14 @@ class Component {
   ///
   /// Do note that this currently only works if the component is added directly
   /// to the root `FlameGame`.
+  @Deprecated('''
+  Use the CameraComponent and add your component to the viewport with
+  cameraComponent.viewport.add(yourHudComponent) instead.
+  This will be removed in Flame v2.
+  ''')
   PositionType positionType = PositionType.game;
 
+  @Deprecated('To be removed in Flame v2')
   @protected
   Vector2 eventPosition(PositionInfo info) {
     switch (positionType) {

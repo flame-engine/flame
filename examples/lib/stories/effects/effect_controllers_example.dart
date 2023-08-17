@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:flame/camera.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/game.dart';
 import 'package:flame/geometry.dart';
@@ -19,12 +20,21 @@ class EffectControllersExample extends FlameGame {
     delayed.
   ''';
 
+  final world = World();
+  late final CameraComponent cameraComponent;
+
   @override
-  void onMount() {
-    camera.viewport = FixedResolutionViewport(Vector2(400, 600));
-    add(
+  void onLoad() {
+    cameraComponent = CameraComponent.withFixedResolution(
+      world: world,
+      width: 400,
+      height: 600,
+    );
+    addAll([world, cameraComponent]);
+
+    world.add(
       RectangleComponent.square(
-        position: Vector2(20, 50),
+        position: Vector2(-140, 0),
         size: 20,
       )..add(
           MoveEffect.by(
@@ -33,9 +43,9 @@ class EffectControllersExample extends FlameGame {
           ),
         ),
     );
-    add(
+    world.add(
       RectangleComponent.square(
-        position: Vector2(70, 50),
+        position: Vector2(-50, 0),
         size: 20,
         paint: Paint()..color = const Color(0xffffbc63),
       )..addAll([
@@ -50,9 +60,9 @@ class EffectControllersExample extends FlameGame {
         ]),
     );
 
-    add(
+    world.add(
       RectangleComponent.square(
-        position: Vector2(140, 50),
+        position: Vector2(50, 0),
         size: 20,
         paint: Paint()..color = const Color(0xffbeff63),
       )..add(
@@ -62,9 +72,9 @@ class EffectControllersExample extends FlameGame {
           ),
         ),
     );
-    add(
+    world.add(
       RectangleComponent.square(
-        position: Vector2(190, 50),
+        position: Vector2(140, 0),
         size: 10,
         paint: Paint()..color = const Color(0xffb663ff),
       )..addAll([

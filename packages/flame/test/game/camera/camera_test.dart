@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use_from_same_package
+
 import 'dart:ui' show Paint;
 
 import 'package:canvas_test/canvas_test.dart';

@@ -1,5 +1,4 @@
 import 'package:flame/src/components/core/component.dart';
-import 'package:flame/src/components/mixins/draggable.dart';
 import 'package:flame/src/events/flame_game_mixins/has_draggable_components.dart';
 import 'package:flame/src/events/messages/drag_cancel_event.dart';
 import 'package:flame/src/events/messages/drag_end_event.dart';
@@ -15,7 +14,7 @@ import 'package:meta/meta.dart';
 /// a drag if the point where the initial touch event has occurred was inside
 /// the component.
 ///
-/// This mixin is intended as a replacement of the [Draggable] mixin.
+/// This mixin is the replacement of the Draggable mixin.
 mixin DragCallbacks on Component {
   bool _isDragged = false;
 
@@ -68,8 +67,10 @@ mixin DragCallbacks on Component {
   void onMount() {
     super.onMount();
     final game = findGame()! as FlameGame;
-    if (game.firstChild<MultiDragDispatcher>() == null) {
-      game.add(MultiDragDispatcher());
+    if (game.findByKey(const MultiDragDispatcherKey()) == null) {
+      final dispatcher = MultiDragDispatcher();
+      game.registerKey(const MultiDragDispatcherKey(), dispatcher);
+      game.add(dispatcher);
     }
   }
 }

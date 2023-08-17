@@ -66,6 +66,7 @@ hitbox
 hitboxes
 hoverable
 hoverables
+HUD
 ints
 jank
 janky

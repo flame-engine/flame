@@ -11,8 +11,15 @@ import 'package:vector_math/vector_math_64.dart';
 /// The primary feature of this component is that it disables regular rendering,
 /// and allows itself to be rendered through a [CameraComponent] only. The
 /// updates proceed through the world tree normally.
+///
+/// The [priority] of the world by default is the maximum 32bit negative int
+/// value to ensure it will always be earlier in the component tree than a
+/// [CameraComponent].
 class World extends Component implements CoordinateTransform {
-  World({super.children});
+  World({
+    super.children,
+    super.priority = -0x7fffffff,
+  });
 
   @override
   void renderTree(Canvas canvas) {}

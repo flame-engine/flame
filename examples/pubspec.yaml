@@ -6,30 +6,31 @@ publish_to: "none"
 version: 0.1.0
 
 environment:
-  sdk: ">=2.18.0 <3.0.0"
+  sdk: ">=3.0.0 <4.0.0"
   flutter: ">=3.3.0"
 
 dependencies:
-  dashbook: 0.1.8
-  flame: ^1.7.3
-  flame_audio: ^2.0.2
-  flame_forge2d: ^0.13.0+1
-  flame_isolate: ^0.3.0+1
-  flame_lottie: ^0.2.0+2
-  flame_noise: ^0.1.1+1
-  flame_svg: ^1.7.3
-  flame_tiled: ^1.10.1
+  dashbook: ^0.1.12
+  flame: ^1.8.2
+  flame_audio: ^2.0.5
+  flame_forge2d: ^0.14.1+1
+  flame_isolate: ^0.4.0+2
+  flame_lottie: ^0.2.1+1
+  flame_noise: ^0.1.1+4
+  flame_spine: ^0.1.1+1
+  flame_svg: ^1.8.1
+  flame_tiled: ^1.13.0
   flutter:
     sdk: flutter
-  google_fonts: ^2.3.2
+  google_fonts: ^4.0.4
   meta: ^1.8.0
   padracing: ^1.0.0
-  provider: ^6.0.3
+  provider: ^6.0.5
   rogue_shooter: ^0.1.0
   trex_game: ^0.1.0
 
 dev_dependencies:
-  flame_lint: ^0.2.0+2
+  flame_lint: ^1.1.0
   test: any
 
 flutter:
@@ -43,6 +44,7 @@ flutter:
     - assets/images/parallax/
     - assets/images/parallax/
     - assets/images/rogue_shooter/
+    - assets/spine/
     - assets/svgs/
     - assets/tiles/
     - assets/audio/music/

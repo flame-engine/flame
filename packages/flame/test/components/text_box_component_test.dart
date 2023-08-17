@@ -47,6 +47,28 @@ void main() {
       );
     });
 
+    testWithFlameGame(
+      'setting dismissDelay removes component when finished',
+      (game) async {
+        final component = TextBoxComponent(
+          text: 'foo bar',
+          boxConfig: TextBoxConfig(
+            dismissDelay: 10.0,
+            timePerChar: 1.0,
+          ),
+        );
+
+        await game.ensureAdd(component);
+        game.update(8);
+        expect(component.isMounted, isTrue);
+        game.update(9);
+        expect(component.finished, isTrue);
+        expect(component.isRemoving, isTrue);
+        game.update(0);
+        expect(component.isMounted, isFalse);
+      },
+    );
+
     testWithFlameGame('onLoad waits for cache to be done', (game) async {
       final c = TextBoxComponent(text: 'foo bar');
 
@@ -148,6 +170,20 @@ void main() {
       goldenFile: '../_goldens/text_box_component_test_1.png',
     );
   });
+
+  testGolden(
+    'Big upscale',
+    (game) async {
+      game.addAll([
+        TextBoxComponent(
+          text: 'quickly',
+          pixelRatio: 8,
+        ),
+      ]);
+    },
+    size: Vector2(512, 64),
+    goldenFile: '../_goldens/text_box_component_test_2.png',
+  );
 }
 
 class _FramedTextBox extends TextBoxComponent {

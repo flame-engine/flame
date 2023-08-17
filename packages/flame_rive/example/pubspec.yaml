@@ -1,20 +1,20 @@
 name: flame_rive_example
 description: A testbed for flame_rive
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: 'none'
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.18.0 <3.0.0"
+  sdk: ">=3.0.0 <4.0.0"
 
 dependencies:
-  flame: ^1.7.3
-  flame_rive: ^1.7.1
+  flame: ^1.8.2
+  flame_rive: ^1.9.1
   flutter:
     sdk: flutter
-  rive: 0.10.2
+  rive: ^0.11.1
 
 dev_dependencies:
-  flame_lint: ^0.2.0+2
+  flame_lint: ^1.1.0
   flutter_test:
     sdk: flutter
 

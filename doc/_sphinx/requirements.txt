@@ -1,6 +1,6 @@
 linkify-it-py==2.0.0
 myst-parser==1.0.0
-Pygments==2.14.0
+Pygments==2.15.0
 Sphinx==6.1.3
 sphinxcontrib-mermaid==0.8.1
 sphinxcontrib-jquery==4.0

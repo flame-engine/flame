@@ -16,6 +16,8 @@ class ParticlesInteractiveExample extends FlameGame with PanDetector {
   final Tween<double> noise = Tween(begin: -1, end: 1);
   final ColorTween colorTween;
   final double zoom;
+  final world = World();
+  late final CameraComponent cameraComponent;
 
   ParticlesInteractiveExample({
     required Color from,
@@ -25,9 +27,13 @@ class ParticlesInteractiveExample extends FlameGame with PanDetector {
 
   @override
   Future<void> onLoad() async {
-    camera.followVector2(Vector2.zero());
-
-    camera.zoom = zoom;
+    cameraComponent = CameraComponent.withFixedResolution(
+      world: world,
+      width: 400,
+      height: 600,
+    );
+    addAll([cameraComponent, world]);
+    cameraComponent.viewfinder.zoom = zoom;
   }
 
   @override

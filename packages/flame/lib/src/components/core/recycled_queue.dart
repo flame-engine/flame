@@ -1,4 +1,3 @@
-import 'dart:collection';
 import 'dart:math';
 
 /// [RecycledQueue] is a simple FIFO queue where the elements are recycled.
@@ -20,7 +19,7 @@ import 'dart:math';
 /// iterator is allowed at a time.
 ///
 /// Internally, the queue is backed by a circular list.
-class RecycledQueue<T extends Disposable> extends IterableMixin<T>
+class RecycledQueue<T extends Disposable> extends Iterable<T>
     implements Iterator<T> {
   RecycledQueue(this.factory, {int initialCapacity = 8})
       : _elements = List.generate(initialCapacity, (i) => factory()),

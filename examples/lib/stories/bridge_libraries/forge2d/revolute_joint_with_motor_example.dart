@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'dart:math';
 
 import 'package:examples/stories/bridge_libraries/forge2d/utils/balls.dart';

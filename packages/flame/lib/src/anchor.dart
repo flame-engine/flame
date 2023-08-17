@@ -54,8 +54,9 @@ class Anchor {
     if (this == otherAnchor) {
       return position;
     } else {
-      return position +
-          ((otherAnchor.toVector2() - toVector2())..multiply(size));
+      return Vector2(otherAnchor.x - x, otherAnchor.y - y)
+        ..multiply(size)
+        ..add(position);
     }
   }
 

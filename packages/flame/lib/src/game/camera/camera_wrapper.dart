@@ -9,8 +9,9 @@ import 'package:meta/meta.dart';
 /// using it in any code other than the FlameGame class is unsafe and
 /// not recommended.
 @internal
+@Deprecated('Will be removed in Flame v2')
 class CameraWrapper {
-  // TODO(st-pasha): extend from Component
+  @Deprecated('Will be removed in Flame v2')
   CameraWrapper(this.camera, this.world);
 
   final Camera camera;

@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:collection/collection.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame_tiled/src/renderable_tile_map.dart';
@@ -47,6 +48,7 @@ class TiledComponent<T extends FlameGame> extends PositionComponent
     super.anchor,
     super.children,
     super.priority,
+    super.key,
   }) : super(
           size: computeSize(
             tileMap.map.orientation,
@@ -62,8 +64,9 @@ class TiledComponent<T extends FlameGame> extends PositionComponent
   @override
   Future<void>? onLoad() async {
     super.onLoad();
-    // Automatically use the FlameGame camera if it's not already set.
-    tileMap.camera ??= gameRef.camera;
+    // Automatically use the first attached CameraComponent camera if it's not
+    // already set..
+    tileMap.camera ??= gameRef.children.query<CameraComponent>().firstOrNull;
   }
 
   @override
@@ -84,11 +87,14 @@ class TiledComponent<T extends FlameGame> extends PositionComponent
 
   /// Loads a [TiledComponent] from a file.
   ///
+  /// {@macro renderable_tile_prefix_path}
+  ///
   /// By default, [RenderableTiledMap] renders flipped tiles if they exist.
   /// You can disable it by passing [ignoreFlip] as `true`.
   static Future<TiledComponent> load(
     String fileName,
     Vector2 destTileSize, {
+    String prefix = 'assets/tiles/',
     int? priority,
     bool? ignoreFlip,
   }) async {
@@ -97,6 +103,7 @@ class TiledComponent<T extends FlameGame> extends PositionComponent
         fileName,
         destTileSize,
         ignoreFlip: ignoreFlip,
+        prefix: prefix,
       ),
       priority: priority,
     );

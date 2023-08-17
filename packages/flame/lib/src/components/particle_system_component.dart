@@ -20,6 +20,7 @@ class ParticleSystemComponent extends PositionComponent {
     super.angle,
     super.anchor,
     super.priority,
+    super.key,
   });
 
   /// Returns progress of the child [Particle].

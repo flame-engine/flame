@@ -19,7 +19,7 @@ import 'package:meta/meta.dart';
 ///
 /// Methods [update] and [render] need to be implemented in order to connect
 /// your class with the internal game loop.
-abstract class Game {
+abstract mixin class Game {
   /// The cache of all images loaded into the game. This defaults to the global
   /// [Flame.images] cache, but you can replace it with a new cache instance if
   /// needed.
@@ -202,13 +202,15 @@ abstract class Game {
   ///
   /// Should not be called manually.
   void detach() {
+    onRemove();
     _gameRenderBox = null;
 
     onDetach();
   }
 
   /// Called when the game is about to be removed from the Flutter widget tree,
-  /// but before it is actually removed.
+  /// but before it is actually removed.  See the docs for an example on how to
+  /// do cleanups to avoid memory leaks.
   void onRemove() {}
 
   /// Called after the game has left the widget tree.

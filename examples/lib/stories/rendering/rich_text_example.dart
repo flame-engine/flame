@@ -4,7 +4,8 @@ import 'package:flame/text.dart';
 import 'package:flutter/painting.dart';
 
 class RichTextExample extends FlameGame {
-  static String description = '';
+  static String description = 'A non-interactive example of how to render rich '
+      'text in Flame.';
 
   @override
   Color backgroundColor() => const Color(0xFF888888);
@@ -25,14 +26,14 @@ class MyTextComponent extends PositionComponent {
       height: 200,
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 14),
       background: BackgroundStyle(
-        color: const Color(0xFFFFFFEE),
+        color: const Color(0xFF4E322E),
         borderColor: const Color(0xFF000000),
         borderWidth: 2.0,
       ),
       paragraph: BlockStyle(
-        padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 6),
+        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
         background: BackgroundStyle(
-          color: const Color(0xFFFFF0CB),
+          color: const Color(0xFF004D40),
           borderColor: const Color(0xFFAAAAAA),
         ),
       ),

@@ -26,22 +26,27 @@ class SandboxLayerParallaxExample extends FlameGame {
   Future<void> onLoad() async {
     final bgLayer = await loadParallaxLayer(
       ParallaxImageData('parallax/bg.png'),
+      filterQuality: FilterQuality.none,
     );
     final mountainFarLayer = await loadParallaxLayer(
       ParallaxImageData('parallax/mountain-far.png'),
       velocityMultiplier: Vector2(1.8, 0),
+      filterQuality: FilterQuality.none,
     );
     final mountainLayer = await loadParallaxLayer(
       ParallaxImageData('parallax/mountains.png'),
       velocityMultiplier: Vector2(2.8, 0),
+      filterQuality: FilterQuality.none,
     );
     final treeLayer = await loadParallaxLayer(
       ParallaxImageData('parallax/trees.png'),
       velocityMultiplier: Vector2(3.8, 0),
+      filterQuality: FilterQuality.none,
     );
     final foregroundTreesLayer = await loadParallaxLayer(
       ParallaxImageData('parallax/foreground-trees.png'),
       velocityMultiplier: Vector2(4.8, 0),
+      filterQuality: FilterQuality.none,
     );
     final airplaneLayer = await loadParallaxLayer(
       ParallaxAnimationData(
@@ -56,6 +61,7 @@ class SandboxLayerParallaxExample extends FlameGame {
       velocityMultiplier: planeSpeed,
       fill: planeFill,
       alignment: planeAlignment,
+      filterQuality: FilterQuality.none,
     );
 
     final parallax = Parallax(

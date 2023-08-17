@@ -1,7 +1,7 @@
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame_test/flame_test.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../custom_component.dart';
@@ -275,6 +275,54 @@ void main() {
           expect(child.isMounted, true);
           expect(parent.parent, game);
           expect(child.parent, parent);
+        },
+      );
+
+      _myDetachableGame(open: false).testGameWidget(
+        'Confirm child component only loads once with game widget change',
+        verify: (game, tester) async {
+          final child = LifecycleComponent();
+          expect(game.onAttachCalled, false);
+          expect(game.isLoaded, false);
+          expect(game.isMounted, false);
+
+          await tester.tap(find.text('Toggle'));
+          // First will be the build of the wrapper
+          await tester.pump();
+          // Second will be the build of the game widget itself
+          await tester.pump();
+
+          expect(game.onAttachCalled, true);
+          expect(game.onDetachCalled, false);
+          expect(game.isAttached, true);
+          expect(game.isLoaded, true);
+          expect(game.isMounted, true);
+          expect(child.isLoaded, false);
+          expect(child.isMounted, false);
+          await game.add(child);
+          expect(child.isLoaded, true);
+          await tester.pump();
+          expect(child.isMounted, true);
+          expect(game.children.length, 1);
+
+          await tester.tap(find.text('Toggle'));
+          await tester.pump();
+
+          expect(game.onDetachCalled, true);
+          expect(game.children.length, 1);
+          game.resetValues();
+          expect(game.isAttached, false);
+          expect(game.isMounted, true);
+          expect(child.isMounted, true);
+
+          await tester.tap(find.text('Toggle'));
+          await tester.pump();
+          await tester.pump();
+
+          expect(game.onAttachCalled, true);
+          expect(game.isAttached, true);
+          expect(game.isMounted, true);
+          expect(child.isMounted, true);
         },
       );
     });
@@ -1119,13 +1167,118 @@ void main() {
           expect(component.children.first.children.length, 1);
         },
       );
+
+      testWithFlameGame(
+        'Components can be retrived via a named key',
+        (game) async {
+          final component = ComponentA(key: ComponentKey.named('A'));
+          game.add(component);
+          await game.ready();
+
+          expect(ComponentKey.named('A'), equals(ComponentKey.named('A')));
+
+          final retrieved = game.findByKey(ComponentKey.named('A'));
+          expect(retrieved, equals(component));
+        },
+      );
+
+      testWithFlameGame(
+        'Components can be retrived via an unique key',
+        (game) async {
+          final key1 = ComponentKey.unique();
+          final key2 = ComponentKey.unique();
+          final component1 = ComponentA(key: key1);
+          final component2 = ComponentA(key: key2);
+
+          game.add(component1);
+          game.add(component2);
+          await game.ready();
+
+          expect(key1, isNot(equals(key2)));
+
+          final retrieved1 = game.findByKey(key1);
+          expect(retrieved1, equals(component1));
+
+          final retrieved2 = game.findByKey(key2);
+          expect(retrieved2, equals(component2));
+
+          expect(retrieved1, isNot(equals(component2)));
+        },
+      );
+
+      testWithFlameGame(
+        'Components can be retrived via their name',
+        (game) async {
+          final component = ComponentA(key: ComponentKey.named('A'));
+          game.add(component);
+          await game.ready();
+
+          final retrieved = game.findByKeyName('A');
+          expect(retrieved, equals(component));
+        },
+      );
+
+      testWithFlameGame(
+        'findByKey returns null if no component is found',
+        (game) async {
+          await game.ready();
+
+          expect(game.findByKey(ComponentKey.unique()), isNull);
+        },
+      );
+
+      testWithFlameGame(
+        'findByKey returns null when the component is removed',
+        (game) async {
+          final key = ComponentKey.unique();
+          final component = ComponentA(key: key);
+
+          game.add(component);
+          await game.ready();
+
+          final retrieved1 = game.findByKey(key);
+          expect(retrieved1, equals(component));
+
+          component.removeFromParent();
+          await game.ready();
+
+          final retrieved2 = game.findByKey(key);
+          expect(retrieved2, isNull);
+        },
+      );
+
+      testWithFlameGame(
+        'Throws assertion error when registering a component with the same key',
+        (game) async {
+          final component = ComponentA(key: ComponentKey.named('A'));
+          final component2 = ComponentA(key: ComponentKey.named('A'));
+
+          game.add(component);
+          game.add(component2);
+
+          await expectLater(
+            () => game.ready(),
+            throwsA(
+              isA<AssertionError>().having(
+                (e) => e.message,
+                'message',
+                'Key ${ComponentKey.named('A')} is already registered',
+              ),
+            ),
+          );
+        },
+      );
     });
   });
 }
 
-class ComponentA extends Component {}
+class ComponentA extends Component {
+  ComponentA({super.key});
+}
 
-class ComponentB extends Component {}
+class ComponentB extends Component {
+  ComponentB({super.key});
+}
 
 class ComponentWithSizeHistory extends Component {
   List<Vector2> history = [];
@@ -1322,4 +1475,78 @@ class _RemoveWhereComponent extends Component {
     add(Component());
     removeWhere((_) => true);
   }
+}
+
+class _Wrapper extends StatefulWidget {
+  const _Wrapper({
+    required this.child,
+    this.open = false,
+  });
+
+  final Widget child;
+  final bool open;
+
+  @override
+  State<_Wrapper> createState() => _WrapperState();
+}
+
+class _WrapperState extends State<_Wrapper> {
+  late bool _open;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _open = widget.open;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        body: Column(
+          children: [
+            if (_open) Expanded(child: widget.child),
+            ElevatedButton(
+              child: const Text('Toggle'),
+              onPressed: () {
+                setState(() => _open = !_open);
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _DetachableFlameGame extends FlameGame {
+  bool onAttachCalled = false;
+  bool onDetachCalled = false;
+
+  void resetValues() {
+    onAttachCalled = false;
+    onDetachCalled = false;
+  }
+
+  @override
+  void onAttach() {
+    super.onAttach();
+    onAttachCalled = true;
+  }
+
+  @override
+  void onDetach() {
+    super.onDetach();
+    onDetachCalled = true;
+  }
+}
+
+FlameTester<_DetachableFlameGame> _myDetachableGame({required bool open}) {
+  return FlameTester(
+    _DetachableFlameGame.new,
+    pumpWidget: (gameWidget, tester) async {
+      await tester.pumpWidget(_Wrapper(open: open, child: gameWidget));
+    },
+  );
 }

@@ -1,4 +1,5 @@
 export 'src/collisions/broadphase/broadphase.dart';
+export 'src/collisions/broadphase/prospect_pool.dart';
 export 'src/collisions/broadphase/quadtree/has_quadtree_collision_detection.dart';
 export 'src/collisions/broadphase/quadtree/quad_tree_broadphase.dart';
 export 'src/collisions/broadphase/quadtree/quadtree.dart';

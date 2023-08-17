@@ -57,6 +57,10 @@ class _GameController extends StateNotifier<_GameState> {
     state = state.copyWith(paused: false);
   }
 
+  void stepGame() {
+    state.game!.stepEngine();
+  }
+
   static Game? _findGame() {
     Game? game;
     void visitor(Element element) {
@@ -69,7 +73,7 @@ class _GameController extends StateNotifier<_GameState> {
       }
     }
 
-    WidgetsBinding.instance.renderViewElement?.visitChildElements(visitor);
+    WidgetsBinding.instance.rootElement?.visitChildElements(visitor);
     return game;
   }
 }
