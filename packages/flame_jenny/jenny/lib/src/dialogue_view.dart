@@ -13,10 +13,15 @@ import 'package:meta/meta.dart';
 /// a game engine. This class describes how {ref}`line <DialogueLine>`s and
 /// {ref}`option <DialogueOption>`s are presented to the user.
 ///
-/// The class is abstract, which means you must create a concrete
-/// implementation in order to use Jenny's dialogue system. The concrete
-/// `DialogueView` objects will then be passed to a [DialogueRunner], which
-/// will orchestrate the dialogue's progression.
+/// There are two ways to use this class:
+/// 
+/// - Extending DialogueView
+/// - Adding DialogueView as a mixin
+/// 
+/// In both cases you will need to create concrete implementations of the
+/// abstract event handler methods in order to use Jenny's dialogue system.
+/// The concrete `DialogueView` objects will then be passed to a
+/// [DialogueRunner], which will orchestrate the dialogue's progression.
 ///
 /// The class defines a number of "event handler" methods, which can be
 /// overridden in subclasses in order to respond to the corresponding event.
