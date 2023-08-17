@@ -14,10 +14,10 @@ import 'package:meta/meta.dart';
 /// {ref}`option <DialogueOption>`s are presented to the user.
 ///
 /// There are two ways to use this class:
-/// 
+///
 /// - Extending DialogueView
 /// - Adding DialogueView as a mixin
-/// 
+///
 /// In both cases you will need to create concrete implementations of the
 /// abstract event handler methods in order to use Jenny's dialogue system.
 /// The concrete `DialogueView` objects will then be passed to a

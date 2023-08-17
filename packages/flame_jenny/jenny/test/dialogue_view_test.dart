@@ -279,7 +279,8 @@ class _RecordingDialogueView extends DialogueView {
 
 class _SomeOtherBaseClass {}
 
-class _RecordingDialogueViewAsMixin extends _SomeOtherBaseClass with DialogueView {
+class _RecordingDialogueViewAsMixin extends _SomeOtherBaseClass
+    with DialogueView {
   _RecordingDialogueViewAsMixin([this.waitDuration = Duration.zero]);
   final List<String> events = [];
   final Duration waitDuration;
