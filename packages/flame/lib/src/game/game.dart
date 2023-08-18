@@ -366,9 +366,9 @@ abstract mixin class Game {
 
   /// When a Game is attached to a `GameWidget`, this method will force that
   /// widget to be rebuilt. This can be used when updating any property which is
-  /// implemented within the Flutter tree.  [internalRefresh] as a named
-  /// parameter, when passed as false, will trigger the `onAttach` and
-  /// `onDetach` events; otherwise, those events will not be called.
+  /// implemented within the Flutter tree.  [internalRefresh] when passed as
+  /// false, will trigger the `onAttach` and `onDetach` events; otherwise, those
+  /// events will not be called.
   @internal
   void refreshWidget({bool internalRefresh = true}) {
     isInternalRefresh = internalRefresh;
