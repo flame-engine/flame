@@ -190,7 +190,10 @@ abstract mixin class Game {
       );
     }
     _gameRenderBox = gameRenderBox;
-    onAttach();
+    if (!isInternalRefresh) {
+      onAttach();
+    }
+    isInternalRefresh = false;
   }
 
   /// Called when the game has been attached. This can be overridden
@@ -202,7 +205,7 @@ abstract mixin class Game {
   ///
   /// Should not be called manually.
   void detach() {
-    if (_gameRenderBox?.isGestureDetectorAdding == false) {
+    if (!isInternalRefresh) {
       onDetach();
     }
     _gameRenderBox = null;
@@ -341,7 +344,7 @@ abstract mixin class Game {
 
   set mouseCursor(MouseCursor value) {
     _mouseCursor = value;
-    refreshWidget();
+    refreshWidget(internalRefresh: false);
   }
 
   @visibleForTesting
@@ -355,11 +358,17 @@ abstract mixin class Game {
     gameStateListeners.remove(callback);
   }
 
+  @internal
+  bool isInternalRefresh = false;
+
   /// When a Game is attached to a `GameWidget`, this method will force that
   /// widget to be rebuilt. This can be used when updating any property which is
-  /// implemented within the Flutter tree.
+  /// implemented within the Flutter tree.  [internalRefresh] as a named
+  /// parameter, when passed as false, will trigger the `onAttach` and
+  /// `onDetach` events; otherwise, those events will not be called.
   @internal
-  void refreshWidget() {
+  void refreshWidget({bool internalRefresh = true}) {
+    isInternalRefresh = internalRefresh;
     gameStateListeners.forEach((callback) => callback());
   }
 }

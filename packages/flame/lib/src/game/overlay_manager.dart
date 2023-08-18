@@ -25,14 +25,14 @@ class OverlayManager {
   /// Clears all active overlays.
   void clear() {
     _activeOverlays.clear();
-    _game.refreshWidget();
+    _game.refreshWidget(internalRefresh: false);
   }
 
   /// Marks the [overlayName] to be rendered.
   bool add(String overlayName) {
     final setChanged = _addImpl(overlayName);
     if (setChanged) {
-      _game.refreshWidget();
+      _game.refreshWidget(internalRefresh: false);
     }
     return setChanged;
   }
@@ -42,7 +42,7 @@ class OverlayManager {
     final initialCount = _activeOverlays.length;
     overlayNames.forEach(_addImpl);
     if (initialCount != _activeOverlays.length) {
-      _game.refreshWidget();
+      _game.refreshWidget(internalRefresh: false);
     }
   }
 
@@ -67,7 +67,7 @@ class OverlayManager {
   bool remove(String overlayName) {
     final hasRemoved = _activeOverlays.remove(overlayName);
     if (hasRemoved) {
-      _game.refreshWidget();
+      _game.refreshWidget(internalRefresh: false);
     }
     return hasRemoved;
   }
@@ -77,7 +77,7 @@ class OverlayManager {
     final initialCount = _activeOverlays.length;
     overlayNames.forEach(_activeOverlays.remove);
     if (_activeOverlays.length != initialCount) {
-      _game.refreshWidget();
+      _game.refreshWidget(internalRefresh: false);
     }
   }
 
