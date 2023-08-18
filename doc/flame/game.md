@@ -93,6 +93,21 @@ in order: `onLoad`, `onGameResize` and `onMount`. After that, it goes on to call
 Once the `GameWidget` is removed from the tree, `onRemove` is called, just like when a normal
 component is removed from the component tree.
 
+```{note}
+The `onRemove` can be used to clean up potential memory leaks by doing the following:
+```
+
+```dart
+  @override
+  void onRemove() {
+    removeAll(children);
+    processLifecycleEvents();
+    Flame.images.clearCache();
+    Flame.assets.clearCache();
+    // Any other code that you want to run when the game is removed.
+  }
+```
+
 
 ## Debug mode
 

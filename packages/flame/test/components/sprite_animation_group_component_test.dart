@@ -237,7 +237,7 @@ Future<void> main() async {
       final component = SpriteAnimationGroupComponent<_AnimationState>(
         animations: {
           _AnimationState.idle: animation1,
-          _AnimationState.running: animation2
+          _AnimationState.running: animation2,
         },
         current: _AnimationState.idle,
       );
@@ -264,7 +264,7 @@ Future<void> main() async {
       final component = SpriteAnimationGroupComponent<_AnimationState>(
         animations: {
           _AnimationState.idle: animation1,
-          _AnimationState.running: animation2
+          _AnimationState.running: animation2,
         },
         current: _AnimationState.idle,
       )..autoResize = false;

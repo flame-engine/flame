@@ -202,13 +202,15 @@ abstract mixin class Game {
   ///
   /// Should not be called manually.
   void detach() {
+    onRemove();
     _gameRenderBox = null;
 
     onDetach();
   }
 
   /// Called when the game is about to be removed from the Flutter widget tree,
-  /// but before it is actually removed.
+  /// but before it is actually removed.  See the docs for an example on how to
+  /// do cleanups to avoid memory leaks.
   void onRemove() {}
 
   /// Called after the game has left the widget tree.

@@ -42,7 +42,7 @@ class PulleyJointExample extends Forge2DGame with TapDetector {
       firstBox.loaded,
       secondBox.loaded,
       firstPulley.loaded,
-      secondPulley.loaded
+      secondPulley.loaded,
     ]);
 
     final joint = createJoint(firstBox, secondBox, firstPulley, secondPulley);

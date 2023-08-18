@@ -1,4 +1,5 @@
 import 'package:flame/src/components/core/component.dart';
+import 'package:flame/src/components/core/component_key.dart';
 import 'package:flame/src/components/mixins/draggable.dart';
 import 'package:flame/src/events/component_mixins/drag_callbacks.dart';
 import 'package:flame/src/events/flame_drag_adapter.dart';
@@ -14,6 +15,17 @@ import 'package:flame/src/game/game_render_box.dart';
 import 'package:flutter/gestures.dart';
 import 'package:meta/meta.dart';
 
+class MultiDragDispatcherKey implements ComponentKey {
+  const MultiDragDispatcherKey();
+
+  @override
+  int get hashCode => 91604879; // 'MultiDragDispatcherKey' as hashCode
+
+  @override
+  bool operator ==(dynamic other) =>
+      other is MultiDragDispatcherKey && other.hashCode == hashCode;
+}
+
 /// **MultiDragDispatcher** facilitates dispatching of drag events to the
 /// [DragCallbacks] components in the component tree. It will be attached to
 /// the [FlameGame] instance automatically whenever any [DragCallbacks]
@@ -22,7 +34,6 @@ import 'package:meta/meta.dart';
 class MultiDragDispatcher extends Component implements MultiDragListener {
   /// The record of all components currently being touched.
   final Set<TaggedComponent<DragCallbacks>> _records = {};
-  bool _eventHandlerRegistered = false;
 
   FlameGame get game => parent! as FlameGame;
 
@@ -165,26 +176,18 @@ class MultiDragDispatcher extends Component implements MultiDragListener {
 
   @override
   void onMount() {
-    if (game.firstChild<MultiDragDispatcher>() == null) {
-      game.gestureDetectors.add<ImmediateMultiDragGestureRecognizer>(
-        ImmediateMultiDragGestureRecognizer.new,
-        (ImmediateMultiDragGestureRecognizer instance) {
-          instance.onStart = (Offset point) => FlameDragAdapter(this, point);
-        },
-      );
-      _eventHandlerRegistered = true;
-    } else {
-      // Ensures that only one MultiDragDispatcher is attached to the Game.
-      removeFromParent();
-    }
+    game.gestureDetectors.add<ImmediateMultiDragGestureRecognizer>(
+      ImmediateMultiDragGestureRecognizer.new,
+      (ImmediateMultiDragGestureRecognizer instance) {
+        instance.onStart = (Offset point) => FlameDragAdapter(this, point);
+      },
+    );
   }
 
   @override
   void onRemove() {
-    if (_eventHandlerRegistered) {
-      game.gestureDetectors.remove<ImmediateMultiDragGestureRecognizer>();
-      _eventHandlerRegistered = false;
-    }
+    game.gestureDetectors.remove<ImmediateMultiDragGestureRecognizer>();
+    game.unregisterKey(const MultiDragDispatcherKey());
   }
 
   @override

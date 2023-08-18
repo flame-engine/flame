@@ -1723,7 +1723,7 @@ void main() {
         final reflectionRay2 = results[1].reflectionRay;
         expect(reflectionRay2?.origin, Vector2(50, 0));
         expect(reflectionRay2?.direction, Vector2(1, 1)..normalize());
-      }
+      },
     });
   });
 }
