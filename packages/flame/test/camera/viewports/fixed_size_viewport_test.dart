@@ -70,7 +70,7 @@ void main() {
               position: Vector2(i * 60.0 - i * i.abs() * 3, 0),
               radius: 25 - i.abs() * 3,
               anchor: Anchor.center,
-            )
+            ),
         ]);
         game.addAll([world, camera]);
       },
