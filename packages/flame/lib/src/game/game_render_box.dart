@@ -100,10 +100,6 @@ class GameRenderBox extends RenderBox with WidgetsBindingObserver {
     _bindLifecycleListener();
   }
 
-  /// [isGestureDetectorAdding] is a flag that prevents the onDetach event from
-  /// being called when a gesture detector is being added internally.
-  bool isGestureDetectorAdding = false;
-
   @override
   void detach() {
     super.detach();
@@ -112,9 +108,6 @@ class GameRenderBox extends RenderBox with WidgetsBindingObserver {
 
   void _detachGame() {
     game.detach();
-    // Anytime _detachGame is called, set to false as that should be its default
-    // state for GRB.
-    isGestureDetectorAdding = false;
     gameLoop?.dispose();
     gameLoop = null;
     _unbindLifecycleListener();

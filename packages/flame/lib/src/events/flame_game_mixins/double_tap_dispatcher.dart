@@ -48,9 +48,6 @@ class DoubleTapDispatcher extends Component with HasGameRef<FlameGame> {
 
   @override
   void onMount() {
-    if (game.isAttached) {
-      renderBox.isGestureDetectorAdding = true;
-    }
     game.gestureDetectors.add(
       DoubleTapGestureRecognizer.new,
       (DoubleTapGestureRecognizer instance) {

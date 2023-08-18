@@ -189,9 +189,6 @@ class MultiTapDispatcher extends Component implements MultiTapListener {
 
   @override
   void onMount() {
-    if (game.isAttached) {
-      renderBox.isGestureDetectorAdding = true;
-    }
     game.gestureDetectors.add<MultiTapGestureRecognizer>(
       MultiTapGestureRecognizer.new,
       (MultiTapGestureRecognizer instance) {

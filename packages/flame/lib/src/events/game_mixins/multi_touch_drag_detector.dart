@@ -45,9 +45,6 @@ mixin MultiTouchDragDetector on Game implements MultiDragListener {
 
   @override
   void mount() {
-    if (isAttached) {
-      renderBox.isGestureDetectorAdding = true;
-    }
     gestureDetectors.add<ImmediateMultiDragGestureRecognizer>(
       ImmediateMultiDragGestureRecognizer.new,
       (ImmediateMultiDragGestureRecognizer instance) {
