@@ -50,6 +50,9 @@ mixin MultiTouchTapDetector on Game implements MultiTapListener {
 
   @override
   void mount() {
+    if (isAttached) {
+      renderBox.isGestureDetectorAdding = true;
+    }
     gestureDetectors.add<MultiTapGestureRecognizer>(
       MultiTapGestureRecognizer.new,
       (MultiTapGestureRecognizer instance) {},

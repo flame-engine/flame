@@ -202,10 +202,10 @@ abstract mixin class Game {
   ///
   /// Should not be called manually.
   void detach() {
-    onRemove();
+    if (_gameRenderBox?.isGestureDetectorAdding == false) {
+      onDetach();
+    }
     _gameRenderBox = null;
-
-    onDetach();
   }
 
   /// Called when the game is about to be removed from the Flutter widget tree,

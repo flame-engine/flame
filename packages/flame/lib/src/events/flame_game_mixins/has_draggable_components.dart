@@ -176,6 +176,9 @@ class MultiDragDispatcher extends Component implements MultiDragListener {
 
   @override
   void onMount() {
+    if (game.isAttached) {
+      renderBox.isGestureDetectorAdding = true;
+    }
     game.gestureDetectors.add<ImmediateMultiDragGestureRecognizer>(
       ImmediateMultiDragGestureRecognizer.new,
       (ImmediateMultiDragGestureRecognizer instance) {
