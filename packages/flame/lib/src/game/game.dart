@@ -347,7 +347,7 @@ abstract mixin class Game {
 
   set mouseCursor(MouseCursor value) {
     _mouseCursor = value;
-    refreshWidget(internalRefresh: false);
+    refreshWidget();
   }
 
   @visibleForTesting
