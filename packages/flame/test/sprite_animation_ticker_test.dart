@@ -177,6 +177,7 @@ void main() {
       expect(animationTicker.currentIndex, 1);
       animationTicker.paused = true;
       expect(animationTicker.isPaused, true);
+      animationTicker.update(1);
       expect(animationTicker.currentIndex, 1);
       animationTicker.reset();
       expect(animationTicker.currentIndex, 0);
