@@ -160,7 +160,7 @@ void main() {
           TiledComponent.load(
             'single_tile_map_2.tmx',
             Vector2(16, 16),
-          )
+          ),
         ]);
 
         final atlas = TiledAtlas.atlasMap.values.first;

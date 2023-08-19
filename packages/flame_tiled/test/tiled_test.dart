@@ -118,7 +118,7 @@ void main() {
       imageNames: ['map-level1.png', 'image1.png'],
       stringNames: [
         'map.tmx',
-        'tiles_custom_path/external_tileset_custom_path.tsx'
+        'tiles_custom_path/external_tileset_custom_path.tsx',
       ],
     );
 
@@ -792,7 +792,7 @@ void main() {
       'orthogonal',
       'isometric',
       'hexagonal',
-      'staggered'
+      'staggered',
     ]) {
       group(mapType, () {
         setUp(() async {
@@ -918,7 +918,7 @@ void main() {
       'orthogonal',
       'isometric',
       'hexagonal',
-      'staggered'
+      'staggered',
     ]) {
       group(mapType, () {
         setUp(() async {
