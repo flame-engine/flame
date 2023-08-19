@@ -30,6 +30,12 @@ class _MyGame extends FlameGame {
     super.onRemove();
     events.add('onRemove');
   }
+
+  @override
+  void onDispose() {
+    super.onDispose();
+    events.add('onDispose');
+  }
 }
 
 class _TitlePage extends StatelessWidget {
