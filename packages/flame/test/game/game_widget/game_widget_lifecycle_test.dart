@@ -191,6 +191,11 @@ void main() {
         true,
         reason: 'onRemove was not called',
       );
+      expect(
+        events.contains('onDispose'),
+        true,
+        reason: 'onDispose was not called',
+      );
     });
 
     testWidgets('on resize, parents are kept', (tester) async {
@@ -235,6 +240,7 @@ void main() {
           'onLoad',
           'onMount',
           'onRemove',
+          'onDispose',
           'onGameResize',
           'onMount',
         ],
