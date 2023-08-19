@@ -300,7 +300,7 @@ void main() {
         expect(blockB.activeCollisions, {blockA, innerBlockA});
         expect(innerBlockA.activeCollisions, {blockB, innerBlockB});
         expect(innerBlockB.activeCollisions, {blockA, innerBlockA});
-      }
+      },
     });
   });
 }

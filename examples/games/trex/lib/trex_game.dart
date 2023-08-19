@@ -59,7 +59,7 @@ class TRexGame extends FlameGame
         ascent: 23,
         glyphs: [
           for (var i = 0; i < chars.length; i++)
-            Glyph(chars[i], left: 954.0 + 20 * i, top: 0, width: 20)
+            Glyph(chars[i], left: 954.0 + 20 * i, top: 0, width: 20),
         ],
       ),
       letterSpacing: 2,

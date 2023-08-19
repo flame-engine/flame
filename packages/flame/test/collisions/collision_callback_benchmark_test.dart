@@ -70,7 +70,7 @@ void main() {
           '${1000 / (totalTime / ticks)} runs per second\n'
           '${_TestBlock.collisionCounter}',
         );
-      }
+      },
     });
   });
 }

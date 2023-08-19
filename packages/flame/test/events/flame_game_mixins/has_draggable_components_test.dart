@@ -22,7 +22,7 @@ void main() {
               onDragStart: (e) => nDragStartCalled++,
               onDragUpdate: (e) => nDragUpdateCalled++,
               onDragEnd: (e) => nDragEndCalled++,
-            )
+            ),
           ],
         );
         await tester.pumpWidget(GameWidget(game: game));
