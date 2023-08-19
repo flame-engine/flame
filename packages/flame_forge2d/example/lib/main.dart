@@ -33,7 +33,7 @@ class Forge2DExample extends Forge2DGame {
       Wall(topLeft, topRight),
       Wall(topRight, bottomRight),
       Wall(bottomLeft, bottomRight),
-      Wall(topLeft, bottomLeft)
+      Wall(topLeft, bottomLeft),
     ];
   }
 }

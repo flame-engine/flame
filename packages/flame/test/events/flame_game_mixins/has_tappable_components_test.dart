@@ -24,7 +24,7 @@ void main() {
               onLongTapDown: (e) => nLongTapDown++,
               onTapCancel: (e) => nTapCancel++,
               onTapUp: (e) => nTapUp++,
-            )
+            ),
           ],
         );
         await tester.pumpWidget(GameWidget(game: game));
@@ -93,7 +93,7 @@ void main() {
                   },
                   onTapCancel: (e) => nTapCancelChild++,
                   onTapUp: (e) => nTapUpChild++,
-                )
+                ),
               ],
             ),
           ],
@@ -248,7 +248,7 @@ void main() {
                 nTappableCancelled++;
                 return true;
               },
-            )
+            ),
           ],
         );
         await tester.pumpWidget(GameWidget(game: game));

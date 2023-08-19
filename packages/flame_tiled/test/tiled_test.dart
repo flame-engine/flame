@@ -31,12 +31,22 @@ void main() {
     setUp(() async {
       Flame.bundle = TestAssetBundle(
         imageNames: ['map-level1.png', 'image1.png'],
-        stringNames: ['map.tmx'],
+        stringNames: ['map.tmx', 'tiles_custom_path/map_custom_path.tmx'],
       );
       tiled = await TiledComponent.load('map.tmx', Vector2.all(16));
     });
 
     test('correct loads the file', () async {
+      expect(tiled.tileMap.renderableLayers.length, equals(3));
+    });
+
+    test('correct loads the file, with different prefix', () async {
+      tiled = await TiledComponent.load(
+        'map_custom_path.tmx',
+        Vector2.all(16),
+        prefix: 'assets/tiles/tiles_custom_path/',
+      );
+
       expect(tiled.tileMap.renderableLayers.length, equals(3));
     });
 
@@ -97,6 +107,39 @@ void main() {
 
     expect(
       tsxProvider.filename == 'tiles/external_tileset_1.tsx',
+      true,
+    );
+  });
+
+  test('correctly loads external tileset with custom path', () async {
+    // Flame.bundle is a global static. Updating these in tests can lead to
+    // odd errors if you're trying to debug.
+    Flame.bundle = TestAssetBundle(
+      imageNames: ['map-level1.png', 'image1.png'],
+      stringNames: [
+        'map.tmx',
+        'tiles_custom_path/external_tileset_custom_path.tsx',
+      ],
+    );
+
+    // TestAssetBundle strips assets/tiles/ from the prefix.
+    final tsxProvider = await FlameTsxProvider.parse(
+      'external_tileset_custom_path.tsx',
+      null,
+      'assets/tiles/tiles_custom_path/',
+    );
+
+    expect(tsxProvider.getCachedSource() != null, true);
+    final source = tsxProvider.getCachedSource()!;
+    expect(source.getStringOrNull('name'), 'level1');
+    expect(source.getSingleChildOrNull('image'), isNotNull);
+    expect(
+      source.getSingleChildOrNull('image')!.getStringOrNull('width'),
+      '272',
+    );
+
+    expect(
+      tsxProvider.filename == 'external_tileset_custom_path.tsx',
       true,
     );
   });
@@ -749,7 +792,7 @@ void main() {
       'orthogonal',
       'isometric',
       'hexagonal',
-      'staggered'
+      'staggered',
     ]) {
       group(mapType, () {
         setUp(() async {
@@ -875,7 +918,7 @@ void main() {
       'orthogonal',
       'isometric',
       'hexagonal',
-      'staggered'
+      'staggered',
     ]) {
       group(mapType, () {
         setUp(() async {

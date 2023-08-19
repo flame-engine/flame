@@ -40,7 +40,7 @@ class PulleyJointExample extends Forge2DGame with TapDetector, HasDraggables {
       firstBox.loaded,
       secondBox.loaded,
       firstPulley.loaded,
-      secondPulley.loaded
+      secondPulley.loaded,
     ]);
 
     createJoint(firstBox, secondBox);
