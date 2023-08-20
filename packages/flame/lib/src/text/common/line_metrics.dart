@@ -1,5 +1,7 @@
 import 'dart:ui';
 
+import 'package:flame/extensions.dart';
+
 /// The [LineMetrics] object contains measurements of a text line.
 ///
 /// A line of text can be thought of as surrounded by a box (rect) that outlines
@@ -22,7 +24,9 @@ class LineMetrics {
         _width = width,
         _ascent = ascent ?? (height == null ? 0 : height - (descent ?? 0)),
         _descent =
-            descent ?? (height == null ? 0 : height - (ascent ?? height));
+            descent ?? (height == null ? 0 : height - (ascent ?? height)) {
+    _updateSize();
+  }
 
   /// X-coordinate of the left edge of the box.
   double get left => _left;
@@ -50,6 +54,9 @@ class LineMetrics {
   double get bottom => baseline + descent;
   double get height => ascent + descent;
 
+  late Vector2 _size = Vector2.zero();
+  Vector2 get size => _size;
+
   /// Moves the [LineMetrics] box by the specified offset [dx], [dy] leaving its
   /// width and height unmodified.
   void translate(double dx, double dy) {
@@ -69,6 +76,7 @@ class LineMetrics {
   void setLeftEdge(double x) {
     _width = right - x;
     _left = x;
+    _updateSize();
   }
 
   /// Appends another [LineMetrics] box that is adjacent to the current and on
@@ -86,6 +94,11 @@ class LineMetrics {
     if (_descent < other.descent) {
       _descent = other.descent;
     }
+    _updateSize();
+  }
+
+  void _updateSize() {
+    _size.setValues(width, height);
   }
 
   Rect toRect() => Rect.fromLTWH(left, top, width, height);
