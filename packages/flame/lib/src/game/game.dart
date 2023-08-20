@@ -213,8 +213,7 @@ abstract mixin class Game {
   /// do cleanups to avoid memory leaks.
   void onRemove() {}
 
-  /// Called when the game has been removed from the Flutter widget tree via
-  /// the Game Widget's Flutter dispose event.
+  /// Called when the GameWidget is disposed by Flutter.
   void onDispose() {}
 
   /// Called after the game has left the widget tree.
