@@ -254,9 +254,9 @@ class GameWidgetState<T extends Game> extends State<GameWidget<T>> {
     _loaderFuture = null;
   }
 
-  void disposeCurrentGame({bool isDispose = false}) {
+  void disposeCurrentGame({bool callGameOnDispose = false}) {
     currentGame.removeGameStateListener(_onGameStateChange);
-    if (isDispose) {
+    if (callGameOnDispose) {
       currentGame.onDispose();
     }
   }
@@ -284,7 +284,7 @@ class GameWidgetState<T extends Game> extends State<GameWidget<T>> {
   @override
   void dispose() {
     super.dispose();
-    disposeCurrentGame(isDispose: true);
+    disposeCurrentGame(callGameOnDispose: true);
     // If we received a focus node from the user, they are responsible
     // for disposing it
     if (widget.focusNode == null) {
