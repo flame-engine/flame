@@ -1046,7 +1046,7 @@ void main() {
         }
 
         matchComponentsAtPoint(Vector2(0, 0), [
-          _Pair(game, [Vector2(0, 0)])
+          _Pair(game, [Vector2(0, 0)]),
         ]);
         matchComponentsAtPoint(Vector2(400, 100), [
           _Pair(compA, [Vector2(400, 100), Vector2(25, 25)]),

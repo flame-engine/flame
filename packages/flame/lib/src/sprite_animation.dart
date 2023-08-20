@@ -175,7 +175,7 @@ class SpriteAnimation {
     return SpriteAnimation(
       [
         for (var i = 0; i < sprites.length; i++)
-          SpriteAnimationFrame(sprites[i], stepTimes[i])
+          SpriteAnimationFrame(sprites[i], stepTimes[i]),
       ],
       loop: loop,
     );
@@ -199,7 +199,7 @@ class SpriteAnimation {
               srcPosition: frameData.srcPosition,
             ),
             frameData.stepTime,
-          )
+          ),
       ],
       loop: data.loop,
     );
