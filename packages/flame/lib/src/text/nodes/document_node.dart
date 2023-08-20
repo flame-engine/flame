@@ -12,11 +12,12 @@ class DocumentNode {
 
   final List<BlockNode> children;
 
-  /// Applies [style] to this document, producing an object that can be rendered
-  /// on a canvas. Parameters [width] and [height] serve as the fallback values
-  /// if they were not specified in the style itself. However, they are ignored
-  /// if `style.width` and `style.height` are provided.
-  Element format(DocumentStyle style, {double? width, double? height}) {
+  /// Applies [style] to this document, producing an Element that can be
+  /// rendered on a canvas. Parameters [width] and [height] serve as the
+  /// fallback values if they were not specified in the style itself.
+  /// However, they are ignored if `style.width` and `style.height` are
+  /// provided.
+  GroupElement format(DocumentStyle style, {double? width, double? height}) {
     assert(
       style.width != null || width != null,
       'Width must be either provided explicitly or set in the stylesheet',
