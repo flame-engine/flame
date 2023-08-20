@@ -10,6 +10,10 @@ import 'package:flame/src/text/styles/flame_text_style.dart';
 /// the method [fillStyles], and then based on that style build the
 /// corresponding element in the [format] method. Both of these methods must be
 /// implemented by subclasses.
+///
+/// Implementations include:
+/// * ColumnNode
+/// * TextBlockNode (which itself can be a HeaderNode or ParagraphNode)
 abstract class BlockNode {
   /// The runtime style applied to this node, this will be set by [fillStyles].
   late BlockStyle style;
