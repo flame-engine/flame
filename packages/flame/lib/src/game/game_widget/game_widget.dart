@@ -254,6 +254,9 @@ class GameWidgetState<T extends Game> extends State<GameWidget<T>> {
     _loaderFuture = null;
   }
 
+  /// [disposeCurrentGame] is called by two flutter events - `didUpdateWidget`
+  /// and `dispose`.  When the parameter `callGameOnDispose` = true, the
+  /// `currentGame`'s `onDispose` method will be called; otherwise, it will not.
   void disposeCurrentGame({bool callGameOnDispose = false}) {
     currentGame.removeGameStateListener(_onGameStateChange);
     if (callGameOnDispose) {
