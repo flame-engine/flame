@@ -367,8 +367,8 @@ abstract mixin class Game {
   /// When [isInternalRefresh] is passed as false it will trigger the `onAttach`
   /// and `onDetach` events; otherwise, those events will not be called.
   @internal
-  void refreshWidget({bool internalRefresh = true}) {
-    _isInternalRefresh = internalRefresh;
+  void refreshWidget({bool isInternalRefresh = true}) {
+    _isInternalRefresh = isInternalRefresh;
     gameStateListeners.forEach((callback) => callback());
   }
 }
