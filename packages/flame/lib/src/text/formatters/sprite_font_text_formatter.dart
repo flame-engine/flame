@@ -4,9 +4,10 @@ import 'dart:ui' hide LineMetrics;
 import 'package:flame/src/text/common/line_metrics.dart';
 import 'package:flame/src/text/common/sprite_font.dart';
 import 'package:flame/src/text/elements/sprite_font_text_element.dart';
-import 'package:flame/src/text/elements/text_element.dart';
 import 'package:flame/src/text/formatters/text_formatter.dart';
 
+/// [SpriteFontTextFormatter] will render text using a [SpriteFont] font,
+/// creating a [SpriteFontTextElement].
 class SpriteFontTextFormatter extends TextFormatter {
   SpriteFontTextFormatter.fromFont(
     this.font, {
@@ -25,7 +26,7 @@ class SpriteFontTextFormatter extends TextFormatter {
   final Paint paint;
 
   @override
-  TextElement format(String text) {
+  SpriteFontTextElement format(String text) {
     var rects = Float32List(text.length * 4);
     var transforms = Float32List(text.length * 4);
     var j = 0;
