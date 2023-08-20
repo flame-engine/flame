@@ -61,7 +61,7 @@ class KlondikeGame extends FlameGame {
 
     final cards = [
       for (var rank = 1; rank <= 13; rank++)
-        for (var suit = 0; suit < 4; suit++) Card(rank, suit)
+        for (var suit = 0; suit < 4; suit++) Card(rank, suit),
     ];
     cards.shuffle();
     world.addAll(cards);

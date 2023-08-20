@@ -38,7 +38,7 @@ void main() {
         expect(hitboxParent.startCounter, 1);
         expect(hitboxParent.endCounter, 1);
         expect(hitboxParent.onCollisionCounter, 1);
-      }
+      },
     });
   });
 }

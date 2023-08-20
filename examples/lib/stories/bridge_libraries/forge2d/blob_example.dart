@@ -27,7 +27,8 @@ class BlobExample extends Forge2DGame with TapDetector {
       ..collideConnected = false;
 
     await addAll([
-      for (var i = 0; i < 20; i++) BlobPart(i, jointDef, blobRadius, blobCenter)
+      for (var i = 0; i < 20; i++)
+        BlobPart(i, jointDef, blobRadius, blobCenter),
     ]);
     world.createJoint(ConstantVolumeJoint(world, jointDef));
   }

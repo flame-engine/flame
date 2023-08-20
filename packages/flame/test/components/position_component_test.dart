@@ -798,7 +798,7 @@ void main() {
           Vector2(0, 1),
           Vector2.all(2),
           Vector2(-1, 0),
-          Vector2.all(-50)
+          Vector2.all(-50),
         ];
         final expectedAngles = [pi, (3 * pi / 4), (-pi / 2), (-pi / 4)];
 
@@ -824,7 +824,7 @@ void main() {
           Vector2(0, 1),
           Vector2.all(2),
           Vector2(-1, 0),
-          Vector2.all(-50)
+          Vector2.all(-50),
         ];
         final expectedAngles = [pi / 2, (pi / 4), -pi, (-3 * pi / 4)];
 
@@ -854,9 +854,9 @@ void main() {
               children: [
                 component = PositionComponent(
                   nativeAngle: -pi,
-                )
+                ),
               ],
-            )
+            ),
           ],
         );
 
@@ -864,7 +864,7 @@ void main() {
           Vector2(0, 1),
           Vector2.all(2),
           Vector2(-1, 0),
-          Vector2.all(-50)
+          Vector2.all(-50),
         ];
         final expectedAngles = [pi, (3 * pi / 4), -pi / 2, (-pi / 4)];
 

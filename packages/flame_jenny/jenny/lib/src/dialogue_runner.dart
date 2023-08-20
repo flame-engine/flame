@@ -194,7 +194,7 @@ class DialogueRunner {
     await _combineFutures([
       command.execute(this),
       if (command is UserDefinedCommand)
-        for (final view in _dialogueViews) view.onCommand(command)
+        for (final view in _dialogueViews) view.onCommand(command),
     ]);
   }
 

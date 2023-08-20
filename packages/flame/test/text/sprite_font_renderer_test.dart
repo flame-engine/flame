@@ -232,7 +232,7 @@ void main() {
           glyphs: [
             for (var j = 0; j < lines.length; j++)
               for (var i = 0; i < lines[j].length; i++)
-                Glyph(lines[j][i], left: i * 6, top: 1 + j * 6)
+                Glyph(lines[j][i], left: i * 6, top: 1 + j * 6),
           ],
         );
         const colors = [
@@ -303,7 +303,7 @@ Future<SpriteFontRenderer> createRenderer({
       glyphs: [
         for (var j = 0; j < lines.length; j++)
           for (var i = 0; i < lines[j].length; i++)
-            Glyph(lines[j][i], left: i * 6, top: 1 + j * 6)
+            Glyph(lines[j][i], left: i * 6, top: 1 + j * 6),
       ],
     ),
     scale: scale,
