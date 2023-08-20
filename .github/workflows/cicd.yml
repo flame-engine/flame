@@ -46,13 +46,12 @@ jobs:
   dcm:
     runs-on: ubuntu-latest
     steps:
-      - name: Setup
-        uses: actions/checkout@v3
-        uses: subosito/flutter-action@v2
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.13.0'
           channel: 'stable'
-        uses: bluefireteam/melos-action@v2
+      - uses: bluefireteam/melos-action@v2
 
       - name: Install DCM
         uses: CQLabs/setup-dcm@v1
