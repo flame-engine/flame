@@ -1,5 +1,4 @@
 import 'package:flame/src/text/common/utils.dart';
-import 'package:flame/src/text/elements/block_element.dart';
 import 'package:flame/src/text/elements/element.dart';
 import 'package:flame/src/text/elements/group_element.dart';
 import 'package:flame/src/text/nodes/block_node.dart';
@@ -18,7 +17,7 @@ abstract class ColumnNode extends BlockNode {
   final List<BlockNode> children;
 
   @override
-  BlockElement format(double availableWidth) {
+  GroupElement format(double availableWidth) {
     final out = <Element>[];
     final blockWidth = availableWidth;
     final padding = style.padding;
