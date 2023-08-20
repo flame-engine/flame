@@ -47,6 +47,16 @@ class SpriteAnimationTicker {
   /// still image).
   bool get isSingleFrame => spriteAnimation.frames.length == 1;
 
+  bool _paused = false;
+
+  /// Returns current value of paused flag.
+  bool get isPaused => _paused;
+
+  /// Sets the given value of paused flag.
+  set paused(bool value) {
+    _paused = value;
+  }
+
   /// A future that will complete when the animation completes.
   ///
   /// An animation is considered to be completed if it reaches its [isLastFrame]
@@ -68,6 +78,7 @@ class SpriteAnimationTicker {
     currentIndex = 0;
     _done = false;
     _started = false;
+    _paused = false;
 
     // Reset completeCompleter if it's already completed
     if (completeCompleter?.isCompleted ?? false) {
@@ -111,9 +122,12 @@ class SpriteAnimationTicker {
   /// calls to [onStart].
   bool _started = false;
 
-  /// Updates this animation, ticking the lifeTime by an amount [dt]
-  /// (in seconds).
+  /// Updates this animation, if not paused, ticking the lifeTime by an amount
+  /// [dt] (in seconds).
   void update(double dt) {
+    if (_paused) {
+      return;
+    }
     clock += dt;
     elapsed += dt;
     if (_done) {
