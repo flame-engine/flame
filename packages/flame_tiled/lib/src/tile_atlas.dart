@@ -129,7 +129,7 @@ class TiledAtlas {
 
     // parallelize the download of images.
     await Future.wait([
-      ...imageList.map((tiledImage) => Flame.images.load(tiledImage.source!))
+      ...imageList.map((tiledImage) => Flame.images.load(tiledImage.source!)),
     ]);
 
     final emptyPaint = Paint();
