@@ -254,8 +254,14 @@ class GameWidgetState<T extends Game> extends State<GameWidget<T>> {
     _loaderFuture = null;
   }
 
-  void disposeCurrentGame() {
+  /// [disposeCurrentGame] is called by two flutter events - `didUpdateWidget`
+  /// and `dispose`.  When the parameter [callGameOnDispose] is true, the
+  /// `currentGame`'s `onDispose` method will be called; otherwise, it will not.
+  void disposeCurrentGame({bool callGameOnDispose = false}) {
     currentGame.removeGameStateListener(_onGameStateChange);
+    if (callGameOnDispose) {
+      currentGame.onDispose();
+    }
   }
 
   @override
@@ -281,7 +287,7 @@ class GameWidgetState<T extends Game> extends State<GameWidget<T>> {
   @override
   void dispose() {
     super.dispose();
-    disposeCurrentGame();
+    disposeCurrentGame(callGameOnDispose: true);
     // If we received a focus node from the user, they are responsible
     // for disposing it
     if (widget.focusNode == null) {
