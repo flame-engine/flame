@@ -190,10 +190,10 @@ abstract mixin class Game {
       );
     }
     _gameRenderBox = gameRenderBox;
-    if (!isInternalRefresh) {
+    if (!_isInternalRefresh) {
       onAttach();
     }
-    isInternalRefresh = false;
+    _isInternalRefresh = false;
   }
 
   /// Called when the game has been attached. This can be overridden
@@ -205,7 +205,7 @@ abstract mixin class Game {
   ///
   /// Should not be called manually.
   void detach() {
-    if (!isInternalRefresh) {
+    if (!_isInternalRefresh) {
       onDetach();
     }
     _gameRenderBox = null;
@@ -358,8 +358,7 @@ abstract mixin class Game {
     gameStateListeners.remove(callback);
   }
 
-  @internal
-  bool isInternalRefresh = false;
+  bool _isInternalRefresh = false;
 
   /// When a Game is attached to a `GameWidget`, this method will force that
   /// widget to be rebuilt. This can be used when updating any property which is
@@ -368,7 +367,7 @@ abstract mixin class Game {
   /// events will not be called.
   @internal
   void refreshWidget({bool internalRefresh = true}) {
-    isInternalRefresh = internalRefresh;
+    _isInternalRefresh = internalRefresh;
     gameStateListeners.forEach((callback) => callback());
   }
 }
