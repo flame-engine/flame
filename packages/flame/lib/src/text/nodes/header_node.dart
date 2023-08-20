@@ -39,17 +39,14 @@ class HeaderNode extends TextBlockNode {
 
   @override
   void fillStyles(DocumentStyle stylesheet, FlameTextStyle parentTextStyle) {
-    style = level == 1
-        ? stylesheet.header1
-        : level == 2
-            ? stylesheet.header2
-            : level == 3
-                ? stylesheet.header3
-                : level == 4
-                    ? stylesheet.header4
-                    : level == 5
-                        ? stylesheet.header5
-                        : stylesheet.header6;
+    style = switch (level) {
+      1 => stylesheet.header1,
+      2 => stylesheet.header2,
+      3 => stylesheet.header3,
+      4 => stylesheet.header4,
+      5 => stylesheet.header5,
+      _ => stylesheet.header6,
+    };
     final textStyle = Style.merge(parentTextStyle, style.text)!;
     super.fillStyles(stylesheet, textStyle);
   }
