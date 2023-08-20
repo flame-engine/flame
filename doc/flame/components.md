@@ -757,65 +757,6 @@ Future<void> onLoad() async {
 ```
 
 
-## FlareActorComponent
-
-**Note**: The previous implementation of a Flare integration API using `FlareAnimation` and
-`FlareComponent` has been deprecated.
-
-To use Flare within Flame, use the [`flame_flare`](https://github.com/flame-engine/flame_flare)
-package.
-
-This is the interface for using a [flare animation](https://pub.dev/packages/flare_flutter) within
-flame. `FlareActorComponent` has almost the same API as of flare's `FlareActor` widget. It receives
-the animation filename (that is loaded by default with `Flame.bundle`), it can also receive a
-FlareController that can play multiple animations and control nodes.
-
-```dart
-import 'package:flame_flare/flame_flare.dart';
-
-class YourFlareController extends FlareControls {
-
-  late ActorNode rightHandNode;
-
-  void initialize(FlutterActorArtboard artboard) {
-    super.initialize(artboard);
-
-    // get flare node
-    rightHand = artboard.getNode('right_hand');
-  }
-}
-
-final fileName = 'assets/george_washington.flr';
-final size = Vector2(1776, 1804);
-final controller = YourFlareController();
-
-FlareActorComponent flareAnimation = FlareActorComponent(
-  fileName,
-  controller: controller,
-  width: 306,
-  height: 228,
-);
-
-flareAnimation.x = 50;
-flareAnimation.y = 240;
-add(flareAnimation);
-
-// to play an animation
-controller.play('rise_up');
-
-// you can add another animation to play at the same time
-controller.play('close_door_way_out');
-
-// also, you can get a flare node and modify it
-controller.rightHandNode.rotation = math.pi;
-```
-
-You can also change the current playing animation by using the `updateAnimation` method.
-
-For a working example, check the example in the
-[flame_flare repository](https://github.com/flame-engine/flame/tree/main/packages/flame_flare/example).
-
-
 ## ParallaxComponent
 
 This `Component` can be used to render backgrounds with a depth feeling by drawing several
