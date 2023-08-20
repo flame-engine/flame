@@ -42,6 +42,14 @@ jobs:
           node-version: 18
       - run: npm install -g markdownlint-cli
       - run: markdownlint . -p .markdownlintignore -c .markdownlint.yaml
+  dcm:
+    runs-on: ubuntu-latest
+    steps:
+      - run: wget -qO- https://dcm.dev/pgp-key.public | sudo gpg --dearmor -o /usr/share/keyrings/dcm.gpg
+      - run: echo 'deb [signed-by=/usr/share/keyrings/dcm.gpg arch=amd64] https://dcm.dev/debian stable main' | sudo tee /etc/apt/sources.list.d/dart_stable.list
+      - run: sudo apt-get update
+      - run: sudo apt-get install dcm
+      - run: dcm analyze .
   # END LINTING STAGE
 
   # BEGIN TESTING STAGE
