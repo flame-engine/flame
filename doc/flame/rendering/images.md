@@ -321,58 +321,6 @@ A complete example of using animations as widgets can be found
 [here](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/widgets/sprite_animation_widget_example.dart).
 
 
-## FlareAnimation
-
-Do note that Flare is discontinued and [Rive](https://github.com/flame-engine/flame/tree/main/packages/flame_rive)
-is preferred.
-
-Flame provides a simple wrapper of [Flare](https://flare.rive.app/) animations so you can use
-them in Flame games.
-
-Check the following snippet on how to use this wrapper:
-
-```dart
-class MyGame extends Game {
-  FlareAnimation flareAnimation;
-  bool loaded = false;
-
-  MyGame() {
-    _start();
-  }
-
-  void _start() async {
-    flareAnimation = await FlareAnimation.load("assets/FLARE_FILE.flr");
-    flareAnimation.updateAnimation("ANIMATION_NAME");
-
-    flareAnimation.width = 306;
-    flareAnimation.height = 228;
-
-    loaded = true;
-  }
-
-  @override
-  void render(Canvas canvas) {
-    if (loaded) {
-      flareAnimation.render(canvas, x: 50, y: 50);
-    }
-  }
-
-  @override
-  void update(double dt) {
-    if (loaded) {
-      flareAnimation.update(dt);
-    }
-  }
-}
-```
-
-FlareAnimations are normally used inside `FlareComponent`s, that way `FlameGame` will handle calling
-`render` and `update` automatically.
-
-You can see a full example of how to use Flare together with Flame in the example
-[here](https://github.com/flame-engine/flame/tree/main/packages/flame_flare/example).
-
-
 ## SpriteSheet
 
 Sprite sheets are big images with several frames of the same sprite on it and is a very good way to
