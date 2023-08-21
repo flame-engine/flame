@@ -9,6 +9,6 @@
 ///
 /// 2. Include the rules into your `analysis_options.yaml`
 /// ```yaml
-/// include: package:flame_lint/analysis_options_with_dcm.yaml
+/// include: package:flame_lint/analysis_options.yaml
 /// ```
 library flame_lint;
