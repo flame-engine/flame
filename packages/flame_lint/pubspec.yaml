@@ -12,3 +12,4 @@ environment:
 
 dev_dependencies:
   dartdoc: ^6.2.2
+  dart_code_metrics_presets: ^2.3.0
