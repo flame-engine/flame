@@ -405,14 +405,16 @@ void main() {
     },
     'component collision callbacks are not called with hitbox '
         'triggersParentCollision option': (game) async {
-      final utilityHitboxA = TestHitbox()..triggersParentCollision = false;
+      final utilityHitboxA = TestHitbox('hitboxA')
+        ..triggersParentCollision = false;
       final blockA = TestBlock(
         Vector2.all(10),
         Vector2.all(10),
       );
       blockA.add(utilityHitboxA);
 
-      final utilityHitboxB = TestHitbox()..triggersParentCollision = false;
+      final utilityHitboxB = TestHitbox('hitboxB')
+        ..triggersParentCollision = false;
       final blockB = TestBlock(
         Vector2.all(15),
         Vector2.all(10),

@@ -200,14 +200,14 @@ void main() {
       final nested = <Vector2>[];
       final it = game.componentsAtPoint(Vector2(400, 300), nested).iterator;
       expect(it.moveNext(), true);
+      expect(it.current, camera.viewport);
+      expect(nested, [Vector2(400, 300), Vector2(300, 200)]);
+      expect(it.moveNext(), true);
       expect(it.current, component);
       expect(nested, [Vector2(400, 300), Vector2(100, 50), Vector2(50, 20)]);
       expect(it.moveNext(), true);
       expect(it.current, world);
       expect(nested, [Vector2(400, 300), Vector2(100, 50)]);
-      expect(it.moveNext(), true);
-      expect(it.current, camera.viewport);
-      expect(nested, [Vector2(400, 300), Vector2(300, 200)]);
       expect(it.moveNext(), true);
       expect(it.current, game);
       expect(nested, [Vector2(400, 300)]);

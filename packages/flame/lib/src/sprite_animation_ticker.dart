@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flame/components.dart';
+import 'package:meta/meta.dart';
 
 /// A helper class to make the [spriteAnimation] tick.
 class SpriteAnimationTicker {
@@ -30,7 +31,8 @@ class SpriteAnimationTicker {
   /// Registered method to be triggered when the animation complete.
   void Function()? onComplete;
 
-  Completer<void>? _completeCompleter;
+  @visibleForTesting
+  Completer<void>? completeCompleter;
 
   /// The current frame that should be displayed.
   SpriteAnimationFrame get currentFrame => spriteAnimation.frames[currentIndex];
@@ -45,6 +47,16 @@ class SpriteAnimationTicker {
   /// still image).
   bool get isSingleFrame => spriteAnimation.frames.length == 1;
 
+  bool _paused = false;
+
+  /// Returns current value of paused flag.
+  bool get isPaused => _paused;
+
+  /// Sets the given value of paused flag.
+  set paused(bool value) {
+    _paused = value;
+  }
+
   /// A future that will complete when the animation completes.
   ///
   /// An animation is considered to be completed if it reaches its [isLastFrame]
@@ -54,9 +66,9 @@ class SpriteAnimationTicker {
       return Future.value();
     }
 
-    _completeCompleter ??= Completer<void>();
+    completeCompleter ??= Completer<void>();
 
-    return _completeCompleter!.future;
+    return completeCompleter!.future;
   }
 
   /// Resets the animation, like it would just have been created.
@@ -66,6 +78,12 @@ class SpriteAnimationTicker {
     currentIndex = 0;
     _done = false;
     _started = false;
+    _paused = false;
+
+    // Reset completeCompleter if it's already completed
+    if (completeCompleter?.isCompleted ?? false) {
+      completeCompleter = null;
+    }
   }
 
   /// Sets this animation to be on the last frame.
@@ -104,9 +122,12 @@ class SpriteAnimationTicker {
   /// calls to [onStart].
   bool _started = false;
 
-  /// Updates this animation, ticking the lifeTime by an amount [dt]
-  /// (in seconds).
+  /// Updates this animation, if not paused, ticking the lifeTime by an amount
+  /// [dt] (in seconds).
   void update(double dt) {
+    if (_paused) {
+      return;
+    }
     clock += dt;
     elapsed += dt;
     if (_done) {
@@ -127,7 +148,7 @@ class SpriteAnimationTicker {
         } else {
           _done = true;
           onComplete?.call();
-          _completeCompleter?.complete();
+          completeCompleter?.complete();
           return;
         }
       } else {

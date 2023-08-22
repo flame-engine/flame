@@ -17,44 +17,43 @@ typedef ExternalMinDistanceCheck = bool Function(
 ///
 /// See [HasQuadTreeCollisionDetection.initializeCollisionDetection] for a
 /// detailed description of its initialization parameters.
-class QuadTreeBroadphase<T extends Hitbox<T>> extends Broadphase<T> {
+class QuadTreeBroadphase extends Broadphase<ShapeHitbox> {
   QuadTreeBroadphase({
     required Rect mainBoxSize,
     required this.broadphaseCheck,
     required this.minimumDistanceCheck,
     int maxObjects = 25,
     int maxDepth = 10,
-  }) : tree = QuadTree<T>(
+  }) : tree = QuadTree<ShapeHitbox>(
           mainBoxSize: mainBoxSize,
           maxObjects: maxObjects,
           maxDepth: maxDepth,
         );
 
-  final QuadTree<T> tree;
+  final QuadTree<ShapeHitbox> tree;
 
-  final activeCollisions = HashSet<T>();
+  final activeHitboxes = HashSet<ShapeHitbox>();
 
   ExternalBroadphaseCheck broadphaseCheck;
   ExternalMinDistanceCheck minimumDistanceCheck;
-  final _broadphaseCheckCache = <T, Map<T, bool>>{};
+  final _broadphaseCheckCache = <ShapeHitbox, Map<ShapeHitbox, bool>>{};
 
   final _cachedCenters = <ShapeHitbox, Vector2>{};
 
-  final _potentials = HashSet<CollisionProspect<T>>();
-  final _potentialsTmp = <List<ShapeHitbox>>[];
+  final _potentials = <int, CollisionProspect<ShapeHitbox>>{};
+  final _potentialsTmp = <ShapeHitbox>[];
+  final _prospectPool = ProspectPool<ShapeHitbox>();
 
   @override
-  List<T> get items => tree.hitboxes;
+  List<ShapeHitbox> get items => tree.hitboxes;
 
   @override
-  HashSet<CollisionProspect<T>> query() {
+  Iterable<CollisionProspect<ShapeHitbox>> query() {
     _potentials.clear();
     _potentialsTmp.clear();
 
-    for (final activeItem in activeCollisions) {
-      final asShapeItem = activeItem as ShapeHitbox;
-
-      if (asShapeItem.isRemoving || asShapeItem.parent == null) {
+    for (final activeItem in activeHitboxes) {
+      if (activeItem.isRemoving || !activeItem.isMounted) {
         tree.remove(activeItem);
         continue;
       }
@@ -70,63 +69,69 @@ class QuadTreeBroadphase<T extends Hitbox<T>> extends Broadphase<T> {
           continue;
         }
 
-        final asShapePotential = potential as ShapeHitbox;
-
-        if (asShapePotential.parent == asShapeItem.parent &&
-            asShapeItem.parent != null) {
+        if (!potential.allowSiblingCollision &&
+            potential.hitboxParent == activeItem.hitboxParent &&
+            potential.isMounted) {
           continue;
         }
 
         final distanceCloseEnough = minimumDistanceCheck.call(
           itemCenter,
-          _cacheCenterOfHitbox(asShapePotential),
+          _cacheCenterOfHitbox(potential),
         );
         if (distanceCloseEnough == false) {
           continue;
         }
 
-        _potentialsTmp.add([asShapeItem, asShapePotential]);
+        _potentialsTmp
+          ..add(activeItem)
+          ..add(potential);
       }
     }
 
     if (_potentialsTmp.isNotEmpty) {
-      for (var i = 0; i < _potentialsTmp.length; i++) {
-        final item0 = _potentialsTmp[i].first;
-        final item1 = _potentialsTmp[i].last;
+      for (var i = 0; i < _potentialsTmp.length; i += 2) {
+        final item0 = _potentialsTmp[i];
+        final item1 = _potentialsTmp[i + 1];
         if (broadphaseCheck(item0, item1)) {
-          _potentials.add(CollisionProspect(item0 as T, item1 as T));
-        } else {
-          if (_broadphaseCheckCache[item0 as T] == null) {
-            _broadphaseCheckCache[item0 as T] = {};
+          final CollisionProspect<ShapeHitbox> prospect;
+          if (_prospectPool.length <= i) {
+            _prospectPool.expand(item0);
           }
-          _broadphaseCheckCache[item0 as T]![item1 as T] = false;
+          prospect = _prospectPool[i]..set(item0, item1);
+          _potentials[prospect.hash] = prospect;
+        } else {
+          if (_broadphaseCheckCache[item0] == null) {
+            _broadphaseCheckCache[item0] = {};
+          }
+          _broadphaseCheckCache[item0]![item1] = false;
         }
       }
     }
-    return _potentials;
+    return _potentials.values;
   }
 
-  void updateTransform(T item) {
+  void updateTransform(ShapeHitbox item) {
     tree.remove(item, keepOldPosition: true);
-    _cacheCenterOfHitbox(item as ShapeHitbox);
+    _cacheCenterOfHitbox(item);
     tree.add(item);
   }
 
   @override
-  void add(T item) {
+  void add(ShapeHitbox item) {
     tree.add(item);
     if (item.collisionType == CollisionType.active) {
-      activeCollisions.add(item);
+      activeHitboxes.add(item);
     }
-    _cacheCenterOfHitbox(item as ShapeHitbox);
+    _cacheCenterOfHitbox(item);
   }
 
   @override
-  void remove(T item) {
+  void remove(ShapeHitbox item) {
     tree.remove(item);
     _cachedCenters.remove(item);
     if (item.collisionType == CollisionType.active) {
-      activeCollisions.remove(item);
+      activeHitboxes.remove(item);
     }
 
     final checkCache = _broadphaseCheckCache[item];
@@ -140,7 +145,7 @@ class QuadTreeBroadphase<T extends Hitbox<T>> extends Broadphase<T> {
 
   void clear() {
     tree.clear();
-    activeCollisions.clear();
+    activeHitboxes.clear();
     _broadphaseCheckCache.clear();
     _cachedCenters.clear();
   }

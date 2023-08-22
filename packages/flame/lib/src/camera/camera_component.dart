@@ -168,17 +168,17 @@ class CameraComponent extends Component {
       point.x - viewport.position.x + viewport.anchor.x * viewport.size.x,
       point.y - viewport.position.y + viewport.anchor.y * viewport.size.y,
     );
+    yield* viewport.componentsAtPoint(viewportPoint, nestedPoints);
     if ((world?.isMounted ?? false) &&
         currentCameras.length < maxCamerasDepth) {
       if (viewport.containsLocalPoint(viewportPoint)) {
         currentCameras.add(this);
         final worldPoint = viewfinder.transform.globalToLocal(viewportPoint);
-        yield* world!.componentsAtPoint(worldPoint, nestedPoints);
         yield* viewfinder.componentsAtPoint(worldPoint, nestedPoints);
+        yield* world!.componentsAtPoint(worldPoint, nestedPoints);
         currentCameras.removeLast();
       }
     }
-    yield* viewport.componentsAtPoint(viewportPoint, nestedPoints);
   }
 
   /// A camera that currently performs rendering.

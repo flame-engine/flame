@@ -30,8 +30,10 @@ mixin DoubleTapCallbacks on Component {
   void onMount() {
     super.onMount();
     final game = findGame()! as FlameGame;
-    if (game.firstChild<DoubleTapDispatcher>() == null) {
-      game.add(DoubleTapDispatcher());
+    if (game.findByKey(const DoubleTapDispatcherKey()) == null) {
+      final dispatcher = DoubleTapDispatcher();
+      game.registerKey(const DoubleTapDispatcherKey(), dispatcher);
+      game.add(dispatcher);
     }
   }
 }
