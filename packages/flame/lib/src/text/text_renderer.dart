@@ -1,50 +1,61 @@
 import 'dart:ui';
 
 import 'package:flame/src/anchor.dart';
-import 'package:flame/src/components/text_box_component.dart';
-import 'package:flame/src/components/text_component.dart';
-import 'package:flame/src/text/sprite_font_renderer.dart';
-import 'package:flame/src/text/text_paint.dart';
+import 'package:flame/text.dart';
 import 'package:vector_math/vector_math_64.dart';
 
-/// [TextRenderer] is the abstract API for drawing text.
+/// [TextRenderer] is the most basic API for drawing text.
 ///
-/// A text renderer usually embodies a particular style for rendering text, such
-/// as font-family, color, size, and so on. At the same time, a text renderer
-/// is not tied to a specific string -- it can render any text fragment that
-/// you give it.
+/// A text renderer contains a [formatter] that embodies a particular style
+/// for rendering text, such as font-family, color, size, and so on.
+/// At the same time, nor the text renderer or the [formatter] are tied to a
+/// specific string -- it can render any text fragment that you give it.
 ///
 /// A text renderer object has two functions: to measure the size of a text
 /// string that it will have when rendered, and to actually render that string
 /// onto a canvas.
 ///
 /// [TextRenderer] is a low-level API that may be somewhat inconvenient to use
-/// directly. Instead, consider using components such as [TextComponent] or
-/// [TextBoxComponent].
+/// directly. Instead, consider using components such as TextComponent or
+/// TextBoxComponent.
 ///
-/// The following text renderers are available in Flame:
-///  - [TextPaint] which uses the standard Flutter's `TextPainter`;
-///  - [SpriteFontRenderer] which uses a spritesheet as a font file;
-abstract class TextRenderer {
-  /// Compute the dimensions of [text] when rendered.
-  Vector2 measureText(String text);
+/// See [TextFormatter] for more information about existing options.
+class TextRenderer<T extends TextFormatter> {
+  TextRenderer(this.formatter);
 
-  /// Compute the width of [text] when rendered.
-  double measureTextWidth(String text) => measureText(text).x;
+  final T formatter;
 
-  /// Compute the height of [text] when rendered.
-  double measureTextHeight(String text) => measureText(text).y;
+  TextElement format(String text) {
+    return formatter.format(text);
+  }
 
-  /// Renders [text] on the [canvas] at a given [position].
-  ///
-  /// For example, if [Anchor.center] is specified, it's going to be drawn
-  /// centered around [position].
+  LineMetrics getLineMetrics(String text) {
+    return format(text).metrics;
+  }
+
   void render(
     Canvas canvas,
     String text,
     Vector2 position, {
     Anchor anchor = Anchor.topLeft,
-  });
+  }) {
+    final element = format(text);
+    renderElement(canvas, element, position, anchor: anchor);
+  }
+
+  void renderElement(
+    Canvas canvas,
+    TextElement element,
+    Vector2 position, {
+    Anchor anchor = Anchor.topLeft,
+  }) {
+    final box = element.metrics;
+    element.translate(
+      position.x - box.width * anchor.x,
+      position.y - box.height * anchor.y - box.top,
+    );
+    element.render(canvas);
+  }
 
   /// A registry containing default providers for every [TextRenderer] subclass;
   /// used by [createDefault] to create default parameter values.

@@ -1,5 +1,4 @@
 import 'package:flame/src/cache/memory_cache.dart';
-import 'package:flame/src/text/formatter_text_renderer.dart';
 import 'package:flame/src/text/formatters/text_painter_text_formatter.dart';
 import 'package:flame/src/text/text_renderer.dart';
 import 'package:flutter/rendering.dart';
@@ -10,7 +9,7 @@ import 'package:flutter/rendering.dart';
 /// modified dynamically, if you need to change any attribute of the text at
 /// runtime, such as color, then create a new [TextPaint] object using
 /// [copyWith].
-class TextPaint extends FormatterTextRenderer<TextPainterTextFormatter> {
+class TextPaint extends TextRenderer<TextPainterTextFormatter> {
   TextPaint({
     TextStyle? style,
     TextDirection? textDirection,
