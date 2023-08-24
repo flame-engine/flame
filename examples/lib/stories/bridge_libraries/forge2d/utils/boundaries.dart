@@ -12,7 +12,7 @@ List<Wall> createBoundaries(Forge2DGame game) {
     Wall(topLeft, topRight),
     Wall(topRight, bottomRight),
     Wall(bottomLeft, bottomRight),
-    Wall(topLeft, bottomLeft)
+    Wall(topLeft, bottomLeft),
   ];
 }
 
