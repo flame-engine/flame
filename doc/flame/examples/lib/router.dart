@@ -397,7 +397,7 @@ class PausePage extends Component with TapCallbacks, HasGameRef<RouterGame> {
               alternate: true,
               infinite: true,
             ),
-          )
+          ),
         ],
       ),
     ]);

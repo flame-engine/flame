@@ -291,7 +291,7 @@ void main() {
                   autofocus: true,
                   child: const SizedBox.shrink(),
                 );
-              }
+              },
             },
           ),
         );
@@ -323,7 +323,7 @@ void main() {
                     focusNode: overlayFocusNode,
                     child: const SizedBox.shrink(),
                   );
-                }
+                },
               },
             ),
           );
@@ -368,7 +368,7 @@ void main() {
                   autofocus: true,
                   child: const SizedBox.shrink(),
                 );
-              }
+              },
             },
           ),
         );
@@ -463,7 +463,7 @@ void main() {
                 autofocus: true,
                 child: const SizedBox.shrink(),
               );
-            }
+            },
           },
         ),
       );

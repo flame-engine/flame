@@ -192,7 +192,10 @@ class RenderableTiledMap {
 
   /// Parses a file returning a [RenderableTiledMap].
   ///
-  /// NOTE: this method looks for files under the path "assets/tiles/".
+  /// {@template renderable_tile_prefix_path}
+  /// This method looks for files under the path "assets/tiles/" by default.
+  /// This can be changed by providing a different path to [prefix].
+  /// {@endtemplate}
   ///
   /// {@template renderable_tile_map_factory}
   /// By default, [FlameTileLayer] renders flipped tiles if they exist.
@@ -201,15 +204,17 @@ class RenderableTiledMap {
   static Future<RenderableTiledMap> fromFile(
     String fileName,
     Vector2 destTileSize, {
+    String prefix = 'assets/tiles/',
     CameraComponent? camera,
     bool? ignoreFlip,
     Images? images,
     AssetBundle? bundle,
   }) async {
-    final contents = await Flame.bundle.loadString('assets/tiles/$fileName');
+    final contents = await Flame.bundle.loadString('$prefix$fileName');
     return fromString(
       contents,
       destTileSize,
+      prefix: prefix,
       camera: camera,
       ignoreFlip: ignoreFlip,
       images: images,
@@ -219,10 +224,13 @@ class RenderableTiledMap {
 
   /// Parses a string returning a [RenderableTiledMap].
   ///
+  /// {@macro renderable_tile_prefix_path}
+  ///
   /// {@macro renderable_tile_map_factory}
   static Future<RenderableTiledMap> fromString(
     String contents,
     Vector2 destTileSize, {
+    String prefix = 'assets/tiles/',
     CameraComponent? camera,
     bool? ignoreFlip,
     Images? images,
@@ -230,7 +238,7 @@ class RenderableTiledMap {
   }) async {
     final map = await TiledMap.fromString(
       contents,
-      (key) => FlameTsxProvider.parse(key, bundle),
+      (key) => FlameTsxProvider.parse(key, bundle, prefix),
     );
     return fromTiledMap(
       map,
