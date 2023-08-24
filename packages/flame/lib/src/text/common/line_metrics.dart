@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flame/extensions.dart';
 
 /// The [LineMetrics] object contains measurements of a text line.
@@ -54,8 +52,8 @@ class LineMetrics {
   double get bottom => baseline + descent;
   double get height => ascent + descent;
 
-  late Vector2 _size = Vector2.zero();
-  Vector2 get size => _size;
+  final Vector2 _size = Vector2.zero();
+  Vector2 get size => _size.clone();
 
   /// Moves the [LineMetrics] box by the specified offset [dx], [dy] leaving its
   /// width and height unmodified.

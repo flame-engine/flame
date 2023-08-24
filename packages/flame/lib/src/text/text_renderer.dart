@@ -16,8 +16,8 @@ import 'package:vector_math/vector_math_64.dart';
 /// onto a canvas.
 ///
 /// [TextRenderer] is a low-level API that may be somewhat inconvenient to use
-/// directly. Instead, consider using components such as [TextComponent] or
-/// [TextBoxComponent].
+/// directly. Instead, consider using components such as TextComponent or
+/// TextBoxComponent.
 ///
 /// See [TextFormatter] for more information about existing options.
 class TextRenderer<T extends TextFormatter> {

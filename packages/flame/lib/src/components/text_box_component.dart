@@ -273,16 +273,16 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
         line = line.substring(0, nChars);
       }
 
-      final txt = textRenderer.formatter.format(line);
-      final metrics = txt.metrics;
+      final textElement = textRenderer.formatter.format(line);
+      final metrics = textElement.metrics;
 
-      final p = Vector2(
+      final position = Vector2(
         boxConfig.margins.left + (boxWidth - metrics.width) * align.x,
         boxConfig.margins.top +
             (boxHeight - nLines * _lineHeight) * align.y +
             i * _lineHeight,
       );
-      textRenderer.renderElement(canvas, txt, p, anchor: anchor);
+      textRenderer.renderElement(canvas, textElement, position, anchor: anchor);
 
       charCount += lines[i].length;
     }
