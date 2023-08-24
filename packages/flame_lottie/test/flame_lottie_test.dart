@@ -33,23 +33,17 @@ void main() {
 
       final mockAsset = FakeAssetBundle({'logo.json': logoData});
 
-      LottieComposition? composition;
-
       final asset = Lottie.asset(
         'logo.json',
         bundle: mockAsset,
-        onLoaded: (c) {
-          composition = c;
-        },
       );
 
-      composition = await loadLottie(asset);
+      final composition = await loadLottie(asset);
 
       await game.ready();
 
-      expect(composition, isNotNull);
       expect(
-        composition!.duration,
+        composition.duration,
         const Duration(seconds: 5, milliseconds: 966),
       );
     },
