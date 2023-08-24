@@ -1,6 +1,7 @@
 import 'package:doc_flame_examples/flower.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/game.dart';
+import 'package:flame/geometry.dart';
 
 class RotateByEffectGame extends FlameGame {
   bool reset = false;
