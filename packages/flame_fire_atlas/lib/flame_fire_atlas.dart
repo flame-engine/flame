@@ -296,10 +296,18 @@ class FireAtlas {
   }
 
   /// Serializes this instances into a byte array.
-  List<int> serialize() {
+  ///
+  /// If [encoded] is set to true,
+  /// it will return a gzip compressed byte array,
+  /// otherwise it will return a string byte array.
+  List<int> serialize({bool encoded = true}) {
     final raw = jsonEncode(toJson());
 
     final stringBytes = utf8.encode(raw);
+    if (!encoded) {
+      return stringBytes;
+    }
+
     final gzipBytes = GZipEncoder().encode(stringBytes);
 
     if (gzipBytes == null) {
