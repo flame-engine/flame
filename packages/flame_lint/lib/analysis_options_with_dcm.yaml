@@ -116,7 +116,6 @@ dart_code_metrics:
     - avoid-generics-shadowing
     - avoid-uncaught-future-errors
     - prefer-parentheses-with-if-null
-    - prefer-type-over-var
     - avoid-keywords-in-wildcard-pattern
     - avoid-misused-wildcard-pattern
     - avoid-mutating-parameters
@@ -134,7 +133,6 @@ dart_code_metrics:
     - missing-test-assertion
     - avoid-map-keys-contains
     - prefer-correct-json-casts
-    - avoid-async-call-in-sync-function
     - avoid-duplicate-mixins
     - avoid-nullable-interpolation
     - enum-constants-ordering
