@@ -6,7 +6,7 @@ dart_code_metrics:
   rules:
   # dart rules
     - avoid-substring
-    - arguments-ordering
+    # TODO(luan): enable arguments-ordering
     - avoid-banned-imports
     - avoid-cascade-after-if-null
     - avoid-collection-methods-with-unrelated-types
@@ -14,7 +14,6 @@ dart_code_metrics:
     - avoid-dynamic
     - avoid-global-state
     - avoid-ignoring-return-values
-    - avoid-late-keyword
     - avoid-missing-enum-constant-in-map
     - avoid-nested-conditional-expressions
     - avoid-non-ascii-symbols
@@ -31,13 +30,11 @@ dart_code_metrics:
     - binary-expression-operand-order
     - double-literal-format
     - format-comment
-    - member-ordering
     - newline-before-return
     - no-boolean-literal-compare
     - no-empty-block
     - no-equal-arguments
     - no-equal-then-else
-    - no-magic-number
     - no-object-declaration
     - prefer-async-await
     - prefer-commenting-analyzer-ignores
@@ -50,14 +47,13 @@ dart_code_metrics:
     - prefer-immediate-return
     - prefer-iterable-of
     - prefer-last
-    - prefer-match-file-name
+    # TODO(luan): enable prefer-match-file-name
     - prefer-moving-to-variable
     - prefer-static-class
     - prefer-trailing-comma
     - tag-name
     - avoid-long-parameter-list
     - avoid-long-functions
-    - unnecessary-trailing-comma
     - avoid-duplicate-named-imports
     - avoid-shadowing
     - prefer-return-await
@@ -67,7 +63,6 @@ dart_code_metrics:
     - avoid-redundant-else
     - avoid-self-assignment
     - avoid-self-compare
-    - avoid-similar-names
     - avoid-unnecessary-nullable-return-type
     - avoid-unrelated-type-casts
     - format-test-name
