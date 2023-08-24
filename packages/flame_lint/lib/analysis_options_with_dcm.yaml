@@ -5,7 +5,7 @@ include: analysis_options.yaml
 dart_code_metrics:
   rules:
   # dart rules
-    - avoid-substring
+    # TODO(luan): enable avoid-substring
     # TODO(luan): enable arguments-ordering
     - avoid-banned-imports
     - avoid-cascade-after-if-null
@@ -30,7 +30,7 @@ dart_code_metrics:
     - binary-expression-operand-order
     - double-literal-format
     - format-comment
-    - newline-before-return
+    # TODO(luan): enable newline-before-return
     - no-boolean-literal-compare
     - no-empty-block
     - no-equal-arguments
@@ -39,7 +39,6 @@ dart_code_metrics:
     - prefer-async-await
     - prefer-commenting-analyzer-ignores
     - prefer-conditional-expressions
-    - prefer-correct-identifier-length
     - prefer-correct-test-file-name
     - prefer-correct-type-name
     - prefer-enums-by-name
@@ -53,12 +52,11 @@ dart_code_metrics:
     - prefer-trailing-comma
     - tag-name
     - avoid-long-parameter-list
-    - avoid-long-functions
+    # TODO(luan): enable avoid-long-functions
     - avoid-duplicate-named-imports
     - avoid-shadowing
     - prefer-return-await
     - avoid-collapsible-if
-    - avoid-explicit-type-declaration
     - avoid-nested-switches
     - avoid-redundant-else
     - avoid-self-assignment
