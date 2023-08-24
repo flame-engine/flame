@@ -34,5 +34,5 @@ Package with the lint rules used in all Flame Engine and Blue Fire projects.
 - Then include it on your `analysis_options.yaml` file:
 
 ```yaml
-include: package:flame_lint/analysis_options_with_dcm.yaml
+include: package:flame_lint/analysis_options.yaml
 ```
