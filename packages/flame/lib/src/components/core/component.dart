@@ -826,8 +826,8 @@ class Component {
     assert(isLoaded && !isLoading);
     _setMountingBit();
     onGameResize(_parent!.findGame()!.canvasSize);
-    if (_parent is ReadonlySizeProvider) {
-      onParentResize((_parent! as ReadonlySizeProvider).size);
+    if (_parent is ReadOnlySizeProvider) {
+      onParentResize((_parent! as ReadOnlySizeProvider).size);
     }
     if (isRemoved) {
       _clearRemovedBit();
