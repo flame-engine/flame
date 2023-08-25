@@ -46,8 +46,10 @@ class SpriteButtonComponent extends SpriteGroupComponent<ButtonState>
       button != null,
       'The button sprite has to be set either in onLoad or in the constructor',
     );
-    sprites = {ButtonState.up: button!};
-    sprites![ButtonState.down] = buttonDown ?? button!;
+    sprites = {
+      ButtonState.up: button!,
+      ButtonState.down: buttonDown ?? button!,
+    };
     super.onMount();
   }
 
