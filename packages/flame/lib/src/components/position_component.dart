@@ -231,7 +231,7 @@ class PositionComponent extends Component
   double get absoluteAngle {
     // TODO(spydon): take scale into consideration
     return ancestors(includeSelf: true)
-        .whereType<PositionComponent>()
+        .whereType<ReadOnlyAngleProvider>()
         .map((c) => c.angle)
         .sum;
   }
