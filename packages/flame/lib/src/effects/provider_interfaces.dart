@@ -35,9 +35,13 @@ abstract class ScaleProvider {
 }
 
 /// Interface for a component that can be affected by rotation effects.
-abstract class AngleProvider {
-  double get angle;
+abstract class AngleProvider extends HasAngle {
   set angle(double value);
+}
+
+/// Interface for a component with a read-only angle property.
+abstract class HasAngle {
+  double get angle;
 }
 
 /// Interface for a component that can be affected by anchor effects.

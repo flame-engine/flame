@@ -30,6 +30,7 @@ export 'src/effects/provider_interfaces.dart'
     show
         AnchorProvider,
         AngleProvider,
+        HasAngle,
         PositionProvider,
         ScaleProvider,
         SizeProvider,
