@@ -1,7 +1,6 @@
 import 'dart:ui';
 
 import 'package:flame/src/text/common/sprite_font.dart';
-import 'package:flame/src/text/formatter_text_renderer.dart';
 import 'package:flame/src/text/formatters/sprite_font_text_formatter.dart';
 import 'package:flame/src/text/text_renderer.dart';
 
@@ -22,8 +21,7 @@ import 'package:flame/src/text/text_renderer.dart';
 /// The `paint` parameter is used to composite the character images onto the
 /// canvas. Its default value will draw the character images as-is. Changing
 /// the opacity of the paint's color will make the text semi-transparent.
-class SpriteFontRenderer
-    extends FormatterTextRenderer<SpriteFontTextFormatter> {
+class SpriteFontRenderer extends TextRenderer<SpriteFontTextFormatter> {
   SpriteFontRenderer.fromFont(
     SpriteFont font, {
     Color? color,
