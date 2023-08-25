@@ -36,12 +36,12 @@ abstract class ScaleProvider {
 
 /// Interface for a class that has [angle] property which can be read but not
 /// modified.
-abstract class ReadonlyAngleProvider {
+abstract class ReadOnlyAngleProvider {
   double get angle;
 }
 
 /// Interface for a component that can be affected by rotation effects.
-abstract class AngleProvider extends ReadonlyAngleProvider {
+abstract class AngleProvider extends ReadOnlyAngleProvider {
   set angle(double value);
 }
 
@@ -53,12 +53,12 @@ abstract class AnchorProvider {
 
 /// Interface for a class that has [size] property which can be read but not
 /// modified.
-abstract class ReadonlySizeProvider {
+abstract class ReadOnlySizeProvider {
   Vector2 get size;
 }
 
 /// Interface for a component that can be affected by size effects.
-abstract class SizeProvider extends ReadonlySizeProvider {
+abstract class SizeProvider extends ReadOnlySizeProvider {
   set size(Vector2 value);
 }
 
