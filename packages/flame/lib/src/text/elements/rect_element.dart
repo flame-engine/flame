@@ -15,7 +15,7 @@ class RectElement extends Element {
   }
 
   @override
-  void render(Canvas canvas) {
+  void draw(Canvas canvas) {
     canvas.drawRect(_rect, _paint);
   }
 }

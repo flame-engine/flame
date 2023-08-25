@@ -50,7 +50,7 @@ class TextElementsComponent extends PositionComponent {
   @override
   void render(Canvas canvas) {
     for (final element in elements) {
-      element.render(canvas);
+      element.draw(canvas);
     }
   }
 }

@@ -24,7 +24,7 @@ class TextPainterTextElement extends TextElement {
   void translate(double dx, double dy) => _box.translate(dx, dy);
 
   @override
-  void render(Canvas canvas) {
+  void draw(Canvas canvas) {
     _textPainter.paint(canvas, Offset(_box.left, _box.top));
   }
 }

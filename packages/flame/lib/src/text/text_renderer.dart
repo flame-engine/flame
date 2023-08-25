@@ -39,22 +39,7 @@ class TextRenderer<T extends TextFormatter> {
     Vector2 position, {
     Anchor anchor = Anchor.topLeft,
   }) {
-    final element = format(text);
-    renderElement(canvas, element, position, anchor: anchor);
-  }
-
-  void renderElement(
-    Canvas canvas,
-    TextElement element,
-    Vector2 position, {
-    Anchor anchor = Anchor.topLeft,
-  }) {
-    final box = element.metrics;
-    element.translate(
-      position.x - box.width * anchor.x,
-      position.y - box.height * anchor.y - box.top,
-    );
-    element.render(canvas);
+    format(text).render(canvas, position, anchor: anchor);
   }
 
   /// A registry containing default providers for every [TextRenderer] subclass;

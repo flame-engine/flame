@@ -20,5 +20,5 @@ abstract class Element {
   /// In order to render the element at a different location, consider either
   /// calling the [translate] method, or applying a translation transform to the
   /// canvas itself.
-  void render(Canvas canvas);
+  void draw(Canvas canvas);
 }

@@ -53,7 +53,7 @@ class _DebugTextElement extends TextElement {
   late final LineMetrics metrics;
 
   @override
-  void render(Canvas canvas) {
+  void draw(Canvas canvas) {
     canvas.save();
     if (style.fontStyle == FontStyle.italic) {
       canvas.skew(-0.25, 0);

@@ -73,6 +73,6 @@ class MyTextComponent extends PositionComponent {
 
   @override
   void render(Canvas canvas) {
-    element.render(canvas);
+    element.draw(canvas);
   }
 }

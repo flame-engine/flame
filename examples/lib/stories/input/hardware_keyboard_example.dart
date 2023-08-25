@@ -250,7 +250,7 @@ class KeyboardKey extends PositionComponent {
   void render(Canvas canvas) {
     if (visible) {
       canvas.drawRRect(rect, borderPaint);
-      textElement.render(canvas);
+      textElement.draw(canvas);
     }
   }
 }

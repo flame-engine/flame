@@ -17,7 +17,7 @@ class GroupElement extends BlockElement {
   }
 
   @override
-  void render(Canvas canvas) {
-    children.forEach((child) => child.render(canvas));
+  void draw(Canvas canvas) {
+    children.forEach((child) => child.draw(canvas));
   }
 }
