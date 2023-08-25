@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flame/components.dart' hide World;
+import 'package:flame/effects.dart' show HasAngle;
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame_forge2d/forge2d_game.dart';
@@ -11,7 +12,8 @@ import 'package:forge2d/forge2d.dart' hide Timer, Vector2;
 /// it is a good idea to turn on [debugMode] for it so that the bodies can be
 /// seen
 abstract class BodyComponent<T extends Forge2DGame> extends Component
-    with HasGameRef<T>, HasPaint {
+    with HasGameRef<T>, HasPaint
+    implements HasAngle {
   BodyComponent({
     Paint? paint,
     super.children,
@@ -46,10 +48,14 @@ abstract class BodyComponent<T extends Forge2DGame> extends Component
   }
 
   World get world => gameRef.world;
+
   // TODO(Lukas): Use CameraComponent here instead.
   // ignore: deprecated_member_use
   Camera get camera => gameRef.camera;
+
   Vector2 get center => body.worldCenter;
+
+  @override
   double get angle => body.angle;
 
   /// The matrix used for preparing the canvas
