@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:flame/components.dart' hide World;
-import 'package:flame/effects.dart' show HasAngle;
+import 'package:flame/effects.dart' show ReadonlyAngleProvider;
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame_forge2d/forge2d_game.dart';
@@ -13,7 +13,7 @@ import 'package:forge2d/forge2d.dart' hide Timer, Vector2;
 /// seen
 abstract class BodyComponent<T extends Forge2DGame> extends Component
     with HasGameRef<T>, HasPaint
-    implements HasAngle {
+    implements ReadonlyAngleProvider {
   BodyComponent({
     Paint? paint,
     super.children,
