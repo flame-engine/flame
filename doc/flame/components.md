@@ -410,9 +410,10 @@ myComponent.isVisible = false;
 The mixin only affects whether the component is rendered, and will not affect other behaviors.
 
 ```{note}
-Important! Even when the component is not visible, it is still in the tree and will continue to
-receive calls to 'update' and all other lifecycle events. It will still respond to input events,
-and will still interact with other components, such as collision detection for example.
+Important! Even when the component is not visible, it is still in the tree and
+will continue to receive calls to 'update' and all other lifecycle events. It
+will still respond to input events, and will still interact with other
+components, such as collision detection for example.
 ```
 
 The mixin works by preventing the `renderTree` method, therefore if `renderTree` is being
@@ -433,6 +434,7 @@ class MyComponent extends PositionComponent with HasVisibility {
   }
 }
 ```
+
 
 ## PositionComponent
 
