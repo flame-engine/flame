@@ -417,7 +417,7 @@ components, such as collision detection for example.
 ```
 
 The mixin works by preventing the `renderTree` method, therefore if `renderTree` is being
-implemented, a manual check for `isVisible` should be included to retain this functionality.
+overridden, a manual check for `isVisible` should be included to retain this functionality.
 
 ```dart
 class MyComponent extends PositionComponent with HasVisibility {
