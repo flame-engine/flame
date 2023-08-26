@@ -19,8 +19,7 @@ Future<void> testScenario({
   List<String>? commands,
   YarnProject? yarn,
 }) async {
-  final yarnProject = yarn ?? YarnProject()
-    ..strictCharacterNames = false;
+  final yarnProject = (yarn ?? YarnProject())..strictCharacterNames = false;
   commands?.forEach(yarnProject.commands.addOrphanedCommand);
 
   Future<void> testBody() async {
