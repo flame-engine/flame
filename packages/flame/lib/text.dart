@@ -34,3 +34,4 @@ export 'src/text/styles/flame_text_style.dart' show FlameTextStyle;
 export 'src/text/styles/style.dart' show Style;
 export 'src/text/text_paint.dart' show TextPaint;
 export 'src/text/text_renderer.dart' show TextRenderer;
+export 'src/text/text_renderer_factory.dart' show TextRendererFactory;

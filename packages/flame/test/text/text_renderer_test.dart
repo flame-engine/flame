@@ -6,11 +6,11 @@ import 'package:test/test.dart';
 void main() {
   group('TextRenderer', () {
     test('createDefault', () {
-      final tp = TextRenderer.createDefault<TextPaint>();
+      final tp = TextRendererFactory.createDefault<TextPaint>();
       expect(tp, isNotNull);
       expect(tp, isA<TextPaint>());
 
-      final tr = TextRenderer.createDefault();
+      final tr = TextRendererFactory.createDefault();
       expect(tr, isNotNull);
       expect(tr, isA<TextRenderer>());
     });
@@ -24,7 +24,7 @@ void main() {
     });
 
     test('custom renderer', () {
-      TextRenderer.defaultRenderersRegistry[_CustomTextRenderer] =
+      TextRendererFactory.defaultRegistry[_CustomTextRenderer] =
           _CustomTextRenderer.new;
       final tc = TextComponent<_CustomTextRenderer>(text: 'foo');
       expect(tc.textRenderer, isA<_CustomTextRenderer>());

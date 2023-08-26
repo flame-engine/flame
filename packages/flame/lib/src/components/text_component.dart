@@ -1,8 +1,7 @@
 import 'dart:ui';
 
 import 'package:flame/components.dart';
-import 'package:flame/src/text/elements/text_element.dart';
-import 'package:flame/src/text/text_renderer.dart';
+import 'package:flame/text.dart';
 import 'package:flutter/painting.dart';
 import 'package:meta/meta.dart';
 
@@ -19,7 +18,7 @@ class TextComponent<T extends TextRenderer> extends PositionComponent {
     super.priority,
     super.key,
   })  : _text = text ?? '',
-        _textRenderer = textRenderer ?? TextRenderer.createDefault<T>() {
+        _textRenderer = textRenderer ?? TextRendererFactory.createDefault<T>() {
     updateBounds();
   }
 
