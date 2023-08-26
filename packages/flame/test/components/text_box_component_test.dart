@@ -1,4 +1,4 @@
-import 'dart:ui' hide TextStyle;
+import 'dart:ui';
 
 import 'package:canvas_test/canvas_test.dart';
 import 'package:flame/components.dart';

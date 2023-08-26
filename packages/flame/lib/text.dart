@@ -1,3 +1,5 @@
+export 'package:flutter/painting.dart' show TextStyle;
+
 export 'src/text/common/glyph.dart' show Glyph;
 export 'src/text/common/line_metrics.dart' show LineMetrics;
 export 'src/text/common/sprite_font.dart' show SpriteFont;
