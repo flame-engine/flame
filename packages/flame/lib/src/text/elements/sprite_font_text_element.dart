@@ -32,7 +32,7 @@ class SpriteFontTextElement extends TextElement {
   }
 
   @override
-  void render(Canvas canvas) {
+  void draw(Canvas canvas) {
     canvas.drawRawAtlas(source, transforms, rects, null, null, null, paint);
   }
 }

@@ -69,9 +69,10 @@ class Tire extends BodyComponent<PadRacingGame> {
 
   @override
   Body createBody() {
-    final jointAnchor = isFrontTire
-        ? Vector2(isLeftTire ? -3.0 : 3.0, 3.5)
-        : Vector2(isLeftTire ? -3.0 : 3.0, -4.25);
+    final jointAnchor = Vector2(
+      isLeftTire ? -3.0 : 3.0,
+      isFrontTire ? 3.5 : -4.25,
+    );
 
     final def = BodyDef()
       ..type = BodyType.dynamic

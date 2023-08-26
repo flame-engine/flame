@@ -23,11 +23,11 @@ class RemoveEffectGame extends FlameGame with TapDetector {
 
   @override
   void onTap() {
-    if (!children.contains(ember)) {
+    if (children.contains(ember)) {
+      ember.add(effect);
+    } else {
       effect.reset();
       add(ember);
-    } else {
-      ember.add(effect);
     }
   }
 

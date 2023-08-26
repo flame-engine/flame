@@ -281,9 +281,8 @@ class _SomeOtherBaseClass {}
 
 class _RecordingDialogueViewAsMixin extends _SomeOtherBaseClass
     with DialogueView {
-  _RecordingDialogueViewAsMixin([this.waitDuration = Duration.zero]);
+  _RecordingDialogueViewAsMixin();
   final List<String> events = [];
-  final Duration waitDuration;
 
   @override
   FutureOr<void> onDialogueStart() {
@@ -303,9 +302,6 @@ class _RecordingDialogueViewAsMixin extends _SomeOtherBaseClass
   @override
   FutureOr<bool> onLineStart(DialogueLine line) async {
     events.add('onLineStart(${line.text})');
-    if (waitDuration != Duration.zero) {
-      await Future.delayed(waitDuration, () {});
-    }
     return true;
   }
 
