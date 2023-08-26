@@ -32,15 +32,24 @@ void main() {
   });
 }
 
-class _CustomTextRenderer extends TextRenderer {
+class _CustomTextRenderer extends TextRenderer<_CustomTextFormatter> {
+  _CustomTextRenderer() : super(_CustomTextFormatter());
+}
+
+class _CustomTextFormatter extends TextFormatter {
   @override
-  Vector2 measureText(String text) => Vector2.zero();
+  TextElement format(String text) {
+    return CustomTextElement();
+  }
+}
+
+class CustomTextElement extends TextElement {
+  @override
+  LineMetrics get metrics => LineMetrics();
 
   @override
-  void render(
-    Canvas canvas,
-    String text,
-    Vector2 position, {
-    Anchor anchor = Anchor.topLeft,
-  }) {}
+  void render(Canvas canvas) {}
+
+  @override
+  void translate(double dx, double dy) {}
 }

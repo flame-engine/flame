@@ -30,9 +30,11 @@ export 'src/effects/provider_interfaces.dart'
     show
         AnchorProvider,
         AngleProvider,
+        ReadOnlyAngleProvider,
         PositionProvider,
         ScaleProvider,
         SizeProvider,
+        ReadOnlySizeProvider,
         OpacityProvider;
 export 'src/effects/remove_effect.dart';
 export 'src/effects/rotate_effect.dart';
