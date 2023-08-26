@@ -13,11 +13,10 @@ class HasVisibilityExample extends FlameGame {
 
   @override
   Future<void> onLoad() async {
-    final flameLogoSprite = await loadSprite('flame.png');
-
-    final flameLogoComponent = LogoComponent(flameLogoSprite);
+    final flameLogoComponent = LogoComponent(await loadSprite('flame.png'));
     add(flameLogoComponent);
 
+    // Toggle visibility every second
     const oneSecDuration = Duration(seconds: 1);
     Timer.periodic(
         oneSecDuration,
