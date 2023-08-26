@@ -363,10 +363,84 @@ Do note that this setting is only respected if the component is added directly t
 `FlameGame` and not as a child component of another component.
 
 
+### Visibility of components
+
+The recommended way to hide or show a component is usually to add or remove it from the tree
+using the `add` and `remove` methods.
+
+However, adding and removing components from the tree will trigger lifecycle steps for that
+component (such as calling `onRemove` and `onMount`). It is also an asynchronous process and care
+needs to be taken to ensure the component has finished removing before it is added again if you
+are removing and adding a component in quick succession.
+
+```dart
+/// Example of handling the removal and adding of a child component
+/// in quick succession
+void show() async {
+  // Need to await the [removed] future first, just in case the
+  // component is still in the process of being removed.
+  await myChildComponent.removed;
+  add(myChildComponent);
+}
+
+void hide() {
+  remove(myChildComponent);
+}
+```
+
+These behaviors are not always desirable.
+
+An alternative method to show and hide a component is to use the `HasVisibility` mixin, which may
+be used on any class that inherits from `Component`. This mixin introduces the `isVisible` property.
+Simply set `isVisible` to `false` to hide the component, and `true` to show it again, without
+removing it from the tree. This affects the visibility of the component and all it's descendants
+(children).
+
+```dart
+/// Example that implements HasVisibility
+class MyComponent extends PositionComponent with HasVisibility {}
+
+/// Usage of the isVisible property 
+final myComponent = MyComponent();
+add(myComponent);
+
+myComponent.isVisible = false;
+```
+
+The mixin only affects whether the component is rendered, and will not affect other behaviors.
+
+```{note}
+Important! Even when the component is not visible, it is still in the tree and
+will continue to receive calls to 'update' and all other lifecycle events. It
+will still respond to input events, and will still interact with other
+components, such as collision detection for example.
+```
+
+The mixin works by preventing the `renderTree` method, therefore if `renderTree` is being
+overridden, a manual check for `isVisible` should be included to retain this functionality.
+
+```dart
+class MyComponent extends PositionComponent with HasVisibility {
+
+  @override
+  void renderTree(Canvas canvas) {
+    // Check for visibility
+    if (isVisible) {
+      // Custom code here
+
+      // Continue rendering the tree
+      super.renderTree(canvas);
+    }
+  }
+}
+```
+
+
 ## PositionComponent
 
-This class represent a positioned object on the screen, being a floating rectangle or a rotating
-sprite. It can also represent a group of positioned components if children are added to it.
+This class represents a positioned object on the screen, being a floating rectangle, a rotating
+sprite, or anything else with position and size. It can also represent a group of positioned
+components if children are added to it.
 
 The base of the `PositionComponent` is that it has a `position`, `size`, `scale`, `angle` and
 `anchor` which transforms how the component is rendered.

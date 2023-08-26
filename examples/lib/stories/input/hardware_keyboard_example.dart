@@ -7,7 +7,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 
 class HardwareKeyboardExample extends FlameGame {
-  static String description = '''
+  static const String description = '''
     This example uses the HardwareKeyboardDetector mixin in order to keep
     track of which keys on a keyboard are currently pressed.
 
@@ -67,7 +67,7 @@ class MyKeyboardDetector extends HardwareKeyboardDetector
   /// The names of keyboard keys (at least the most important ones). We can't
   /// rely on `key.debugName` because this property is not available in release
   /// builds.
-  static Map<PhysicalKeyboardKey, String> keyNames = {
+  static final Map<PhysicalKeyboardKey, String> keyNames = {
     PhysicalKeyboardKey.hyper: 'Hyper',
     PhysicalKeyboardKey.superKey: 'Super',
     PhysicalKeyboardKey.fn: 'Fn',
@@ -233,12 +233,12 @@ class KeyboardKey extends PositionComponent {
   /// they are waiting to be removed.
   bool visible = true;
 
-  static Vector2 padding = Vector2(24, 12);
-  static Paint borderPaint = Paint()
+  static final Vector2 padding = Vector2(24, 12);
+  static final Paint borderPaint = Paint()
     ..style = PaintingStyle.stroke
     ..strokeWidth = 3
     ..color = const Color(0xffb5ffd0);
-  static TextPaint textRenderer = TextPaint(
+  static final TextPaint textRenderer = TextPaint(
     style: const TextStyle(
       fontSize: 20,
       fontWeight: FontWeight.bold,
