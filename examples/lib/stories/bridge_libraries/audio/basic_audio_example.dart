@@ -17,9 +17,9 @@ class BasicAudioExample extends FlameGame with TapDetector {
     3. Uses the Bgm utility for background music.
   ''';
 
-  static Paint black = BasicPalette.black.paint();
-  static Paint gray = const PaletteEntry(Color(0xFFCCCCCC)).paint();
-  static TextPaint text = TextPaint(
+  static final Paint black = BasicPalette.black.paint();
+  static final Paint gray = const PaletteEntry(Color(0xFFCCCCCC)).paint();
+  static final TextPaint text = TextPaint(
     style: TextStyle(color: BasicPalette.white.color),
   );
 
