@@ -48,7 +48,7 @@ class CustomTextElement extends TextElement {
   LineMetrics get metrics => LineMetrics();
 
   @override
-  void render(Canvas canvas) {}
+  void draw(Canvas canvas) {}
 
   @override
   void translate(double dx, double dy) {}

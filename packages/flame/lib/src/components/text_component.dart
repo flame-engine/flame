@@ -50,6 +50,6 @@ class TextComponent<T extends TextRenderer> extends PositionComponent {
 
   @override
   void render(Canvas canvas) {
-    _textElement.render(canvas);
+    _textElement.draw(canvas);
   }
 }
