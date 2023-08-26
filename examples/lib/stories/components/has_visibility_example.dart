@@ -21,7 +21,7 @@ class HasVisibilityExample extends FlameGame {
     Timer.periodic(
         oneSecDuration,
         (Timer t) =>
-            flameLogoComponent.isVisible = !flameLogoComponent.isVisible);
+            flameLogoComponent.isVisible = !flameLogoComponent.isVisible,);
   }
 }
 
