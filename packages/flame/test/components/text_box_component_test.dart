@@ -3,7 +3,6 @@ import 'dart:ui' hide TextStyle;
 import 'package:canvas_test/canvas_test.dart';
 import 'package:flame/components.dart';
 import 'package:flame/palette.dart';
-import 'package:flame/text.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -193,7 +192,7 @@ class _FramedTextBox extends TextBoxComponent {
     super.position,
     super.size,
   }) : super(
-          textRenderer: TextRenderer(DebugTextFormatter(fontSize: 22)),
+          textRenderer: DebugTextRenderer(fontSize: 22),
         );
 
   final Paint _borderPaint = Paint()

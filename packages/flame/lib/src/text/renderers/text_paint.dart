@@ -1,28 +1,24 @@
-import 'package:flame/src/cache/memory_cache.dart';
-import 'package:flame/src/text/formatters/text_painter_text_formatter.dart';
-import 'package:flame/src/text/text_renderer.dart';
+import 'package:flame/cache.dart';
+import 'package:flame/src/text/elements/text_painter_text_element.dart';
+import 'package:flame/src/text/renderers/text_renderer.dart';
 import 'package:flutter/rendering.dart';
 
-/// [TextRenderer] implementation based on Flutter's [TextPainter].
-///
-/// This renderer uses a fixed [style] to draw the text. This style cannot be
-/// modified dynamically, if you need to change any attribute of the text at
-/// runtime, such as color, then create a new [TextPaint] object using
-/// [copyWith].
-class TextPaint extends TextRenderer<TextPainterTextFormatter> {
+/// [TextPaint] applies a Flutter [TextStyle] to a string of
+/// text, creating a [TextPainterTextElement].
+class TextPaint extends TextRenderer {
   TextPaint({
     TextStyle? style,
-    TextDirection? textDirection,
-  }) : super(
-          TextPainterTextFormatter(
-            style: style ?? defaultTextStyle,
-            textDirection: textDirection ?? TextDirection.ltr,
-          ),
-        );
+    this.textDirection = TextDirection.ltr,
+  }) : style = style ?? defaultTextStyle;
 
-  TextStyle get style => formatter.style;
+  final TextStyle style;
+  final TextDirection textDirection;
 
-  TextDirection get textDirection => formatter.textDirection;
+  @override
+  TextPainterTextElement format(String text) {
+    final tp = toTextPainter(text);
+    return TextPainterTextElement(tp);
+  }
 
   final MemoryCache<String, TextPainter> _textPainterCache = MemoryCache();
 
@@ -64,8 +60,8 @@ class TextPaint extends TextRenderer<TextPainterTextFormatter> {
     TextDirection? textDirection,
   }) {
     return TextPaint(
-      style: transform(formatter.style),
-      textDirection: textDirection ?? formatter.textDirection,
+      style: transform(style),
+      textDirection: textDirection ?? this.textDirection,
     );
   }
 }

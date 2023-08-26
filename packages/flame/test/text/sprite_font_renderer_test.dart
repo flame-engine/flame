@@ -12,10 +12,10 @@ void main() {
   group('SpriteFontRenderer', () {
     test('creating SpriteFontRenderer', () async {
       final renderer = await createRenderer();
-      expect(renderer.formatter.font.source, isA<Image>());
-      expect(renderer.formatter.font.size, 6);
-      expect(renderer.formatter.scale, 1.0);
-      expect(renderer.formatter.letterSpacing, 0);
+      expect(renderer.font.source, isA<Image>());
+      expect(renderer.font.size, 6);
+      expect(renderer.scale, 1.0);
+      expect(renderer.letterSpacing, 0);
 
       expect(
         () => renderer.render(MockCanvas(), 'Ї', Vector2.zero()),
@@ -48,7 +48,7 @@ void main() {
           TextComponent(
             text: 'FLAME',
             textRenderer: (await createRenderer(scale: 25))
-              ..formatter.paint.color = const Color(0x44000000),
+              ..paint.color = const Color(0x44000000),
             position: Vector2(400, 500),
             anchor: Anchor.center,
           ),

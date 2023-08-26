@@ -1,5 +1,5 @@
-import 'package:flame/src/text/formatters/text_formatter.dart';
-import 'package:flame/src/text/formatters/text_painter_text_formatter.dart';
+import 'package:flame/src/text/renderers/text_paint.dart';
+import 'package:flame/src/text/renderers/text_renderer.dart';
 import 'package:flame/src/text/styles/style.dart';
 import 'package:flutter/rendering.dart';
 import 'package:meta/meta.dart';
@@ -24,7 +24,7 @@ class FlameTextStyle extends Style {
   final FontStyle? fontStyle;
   final double? letterSpacing;
 
-  late final TextFormatter formatter = asTextFormatter();
+  late final TextRenderer renderer = asTextRenderer();
 
   @override
   FlameTextStyle copyWith(FlameTextStyle other) {
@@ -40,8 +40,8 @@ class FlameTextStyle extends Style {
   }
 
   @internal
-  TextPainterTextFormatter asTextFormatter() {
-    return TextPainterTextFormatter(
+  TextPaint asTextRenderer() {
+    return TextPaint(
       style: TextStyle(
         color: color,
         fontFamily: fontFamily,

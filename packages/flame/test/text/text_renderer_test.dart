@@ -32,11 +32,7 @@ void main() {
   });
 }
 
-class _CustomTextRenderer extends TextRenderer<_CustomTextFormatter> {
-  _CustomTextRenderer() : super(_CustomTextFormatter());
-}
-
-class _CustomTextFormatter extends TextFormatter {
+class _CustomTextRenderer extends TextRenderer {
   @override
   TextElement format(String text) {
     return CustomTextElement();
