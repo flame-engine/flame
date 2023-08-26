@@ -19,9 +19,9 @@ class HasVisibilityExample extends FlameGame {
     // Toggle visibility every second
     const oneSecDuration = Duration(seconds: 1);
     Timer.periodic(
-        oneSecDuration,
-        (Timer t) =>
-            flameLogoComponent.isVisible = !flameLogoComponent.isVisible,);
+      oneSecDuration,
+      (Timer t) => flameLogoComponent.isVisible = !flameLogoComponent.isVisible,
+    );
   }
 }
 
