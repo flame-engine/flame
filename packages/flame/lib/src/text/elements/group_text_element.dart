@@ -17,9 +17,9 @@ class GroupTextElement extends TextElement {
   LineMetrics get metrics => _metrics;
 
   @override
-  void render(Canvas canvas) {
+  void draw(Canvas canvas) {
     for (final child in _children) {
-      child.render(canvas);
+      child.draw(canvas);
     }
   }
 

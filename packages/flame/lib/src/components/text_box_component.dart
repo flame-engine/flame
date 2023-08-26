@@ -282,7 +282,7 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
             (boxHeight - nLines * _lineHeight) * align.y +
             i * _lineHeight,
       );
-      textRenderer.renderElement(canvas, textElement, position, anchor: anchor);
+      textElement.render(canvas, position, anchor: anchor);
 
       charCount += lines[i].length;
     }
