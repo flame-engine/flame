@@ -4,12 +4,12 @@ import 'dart:ui' hide LineMetrics;
 import 'package:flame/src/text/common/line_metrics.dart';
 import 'package:flame/src/text/common/sprite_font.dart';
 import 'package:flame/src/text/elements/sprite_font_text_element.dart';
-import 'package:flame/src/text/formatters/text_formatter.dart';
+import 'package:flame/src/text/renderers/text_renderer.dart';
 
-/// [SpriteFontTextFormatter] will render text using a [SpriteFont] font,
+/// [SpriteFontRenderer] will render text using a [SpriteFont] font,
 /// creating a [SpriteFontTextElement].
-class SpriteFontTextFormatter extends TextFormatter {
-  SpriteFontTextFormatter.fromFont(
+class SpriteFontRenderer extends TextRenderer {
+  SpriteFontRenderer.fromFont(
     this.font, {
     this.scale = 1.0,
     this.letterSpacing = 0.0,
