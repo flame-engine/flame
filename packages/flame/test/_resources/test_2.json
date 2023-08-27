@@ -1,0 +1,16 @@
+{
+    "int": 1,
+    "double": 2.0,
+    "bool": true,
+    "null": null,
+    "string": "Hello",
+    "object": {
+        "key": "value"
+    },
+    "array": [
+        1,
+        2.0,
+        "three",
+        false
+    ]
+}

@@ -1,0 +1,16 @@
+[
+    1,
+    2.0,
+    true,
+    null,
+    "Hello",
+    {
+        "key": "value"
+    },
+    [
+        1,
+        2.0,
+        "three",
+        false
+    ]
+]

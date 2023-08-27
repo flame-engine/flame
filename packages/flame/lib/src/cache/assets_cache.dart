@@ -47,9 +47,9 @@ class AssetsCache {
   }
 
   /// Reads a json file from the assets folder.
-  Future<Map<String, dynamic>> readJson(String fileName) async {
+  Future<dynamic> readJson(String fileName) async {
     final content = await readFile(fileName);
-    return jsonDecode(content) as Map<String, dynamic>;
+    return jsonDecode(content);
   }
 
   Future<_StringAsset> _readFile(String fileName) async {
