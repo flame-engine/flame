@@ -26,16 +26,16 @@ void main() {
       );
     });
 
-    test('readJson with object root', () async {
-      final assetsCache = AssetsCache(prefix: '');
-      final file = await assetsCache.readJson(fixture('test_1.json').path);
-      expect(file, isA<Map<String, dynamic>>());
-    });
-
     test('readJson with array root', () async {
       final assetsCache = AssetsCache(prefix: '');
-      final file = await assetsCache.readJson(fixture('test_2.json').path);
+      final file = await assetsCache.readJson(fixture('test_1.json').path);
       expect(file, isA<List<dynamic>>());
+    });
+
+    test('readJson with object root', () async {
+      final assetsCache = AssetsCache(prefix: '');
+      final file = await assetsCache.readJson(fixture('test_2.json').path);
+      expect(file, isA<Map<String, dynamic>>());
     });
 
     test('readBinaryFile', () async {
