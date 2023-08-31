@@ -9,8 +9,8 @@ import 'package:flame/components.dart';
 /// children do not change - i.e. they are not animated and they do not move
 /// around relative to each other.
 ///
-/// The [takeSnapshot] method can also be used to take one-off snapshots for
-/// screen-grabs or other purposes.
+/// The [takeSnapshot] and [snapshotAsImage] methods can also be used to take
+/// one-off snapshots for screen-grabs or other purposes.
 mixin Snapshot on PositionComponent {
   bool _renderSnapshot = true;
   Picture? _picture;
@@ -27,6 +27,9 @@ mixin Snapshot on PositionComponent {
       }
     }
   }
+
+  /// Check if a snapshot exists
+  bool get hasSnapshot => _picture != null;
 
   /// Grab the current snapshot. Check it exists first using [hasSnapshot]
   Picture get snapshot {
@@ -50,9 +53,6 @@ mixin Snapshot on PositionComponent {
       return picture.toImageSync(width, height);
     }
   }
-
-  /// Check if a snapshot exists
-  bool get hasSnapshot => _picture != null;
 
   /// Immediately take a snapshot and return it. If [renderSnapshot] is true,
   /// then the snapshot is also used for rendering. A snapshot is always taken

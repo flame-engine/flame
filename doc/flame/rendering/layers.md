@@ -233,7 +233,7 @@ The best way to deal with this is to ensure that your `Snapshot` component is al
 contain what you expect it to.
 
 However, this is not always possible. To move (or rotate, or scale etc) the snapshot before
-converting it to an image, pass a transformation matrix to `takeSnapshot`.
+converting it to an image, pass a transformation matrix to `snapshotToImage`.
 
 ```dart
 // Call something like this to take an image snapshot at any time
