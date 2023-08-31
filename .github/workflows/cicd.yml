@@ -64,7 +64,7 @@ jobs:
 
   # BEGIN TESTING STAGE
   test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v3
       - uses: subosito/flutter-action@v2
