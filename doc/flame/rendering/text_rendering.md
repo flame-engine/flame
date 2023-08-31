@@ -113,6 +113,63 @@ You can find all the options under [TextBoxComponent's
 API](https://pub.dev/documentation/flame/latest/components/TextBoxComponent-class.html).
 
 
+### TextElementComponent
+
+If you want to render an arbitrary TextElement, ranging from a single InlineTextElement to a
+formatted DocumentRoot, you can use the `TextElementComponent`.
+
+A simple example is to create a DocumentRoot to render a sequence of block elements (think of an
+HTML "div") containing rich text:
+
+```dart
+  final document = DocumentRoot([
+    HeaderNode.simple('1984', level: 1),
+    ParagraphNode.simple(
+      'Anything could be true. The so-called laws of nature were nonsense.',
+    ),
+    // ...
+  ]);
+  final element = TextElementComponent.fromDocument(
+    document: document,
+    position: Vector2(100, 50),
+    size: Vector2(400, 200),
+  );
+```
+
+Note that the size can be specified in two ways; either via:
+
+- the size property common to all `PositionComponents`; or
+- the width/height included within the `DocumentStyle` applied.
+
+An example applying a style to the document (which can include the size but other parameters as
+well):
+
+```dart
+  final style = DocumentStyle(
+    width: 400,
+    height: 200,
+    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 14),
+    background: BackgroundStyle(
+      color: const Color(0xFF4E322E),
+      borderColor: const Color(0xFF000000),
+      borderWidth: 2.0,
+    ),
+  );
+  final document = DocumentRoot([ ... ]);
+  final element = TextElementComponent.fromDocument(
+    document: document,
+    style: style,
+    position: Vector2(100, 50),
+  );
+```
+
+For a more elaborate example of rich-text, formatted text blocks rendering, check [this
+example](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/rendering/rich_text_example.dart).
+
+For more details about the underlying mechanics of the text rendering pipeline, see "Text Elements,
+Text Nodes, and Text Styles" below.
+
+
 ## Infrastructure
 
 If you are not using the Flame Component System, want to understand the infrastructure behind text
@@ -322,8 +379,8 @@ element is that it exposes a LineMetrics that can be used for advanced rendering
 elements only expose a simpler `draw` method which is unaware of sizing and positioning.
 
 However, the other types of Text Elements, Text Nodes, and Text Styles must be used if the intent is
-to create an entire document (multiple blocks or paragraphs), enriched with formatted text.
-Currently, these extra features of the system are not exposed through FCS; but can be used directly.
+to create an entire document (multiple blocks or paragraphs), enriched with formatted text. In order
+to render an arbitrary TextElement, you can alternatively use the `TextElementComponent` (see above).
 
 An example of such usages can be seen in [this
 example](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/rendering/rich_text_example.dart).
@@ -354,7 +411,7 @@ The actual nodes all inherit from `TextNode` and are broken down by the followin
 graph TD
     %% Config %%
     classDef default fill:#282828,stroke:#F6BE00;
-    
+
     %% Nodes %%
     TextNode("
         <big><strong>TextNode</strong></big>
@@ -436,7 +493,7 @@ classDiagram
 
     note for FlameTextStyle "Root for all styles.
     Not to be confused with Flutter's TextStyle."
-    
+
     class DocumentStyle {
         <<for the entire Document Root>>
         size
@@ -451,7 +508,7 @@ classDiagram
         background [BackgroundStyle]
         text [InlineTextStyle]
     }
-    
+
     class BackgroundStyle {
         <<for Block or Document>>
         color
