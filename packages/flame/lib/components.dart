@@ -30,6 +30,7 @@ export 'src/components/mixins/keyboard_handler.dart';
 export 'src/components/mixins/notifier.dart';
 export 'src/components/mixins/parent_is_a.dart';
 export 'src/components/mixins/single_child_particle.dart';
+export 'src/components/mixins/snapshot.dart';
 export 'src/components/mixins/tappable.dart';
 export 'src/components/nine_tile_box_component.dart';
 export 'src/components/parallax_component.dart';
