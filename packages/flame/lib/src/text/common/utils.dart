@@ -1,10 +1,7 @@
 import 'dart:math';
 
-import 'package:flame/src/text/elements/element.dart';
 import 'package:flame/src/text/elements/group_element.dart';
-import 'package:flame/src/text/elements/rect_element.dart';
-import 'package:flame/src/text/elements/rrect_element.dart';
-import 'package:flame/src/text/styles/background_style.dart';
+import 'package:flame/text.dart';
 import 'package:meta/meta.dart';
 
 @internal
@@ -17,11 +14,15 @@ double collapseMargin(double margin1, double margin2) {
 }
 
 @internal
-Element? makeBackground(BackgroundStyle? style, double width, double height) {
+TextElement? makeBackground(
+  BackgroundStyle? style,
+  double width,
+  double height,
+) {
   if (style == null) {
     return null;
   }
-  final out = <Element>[];
+  final out = <TextElement>[];
   final backgroundPaint = style.backgroundPaint;
   final borderPaint = style.borderPaint;
   final borders = style.borderWidths;

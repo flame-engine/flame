@@ -17,7 +17,7 @@ class RichTextExample extends FlameGame {
 }
 
 class MyTextComponent extends PositionComponent {
-  late final Element element;
+  late final TextElement element;
 
   @override
   Future<void> onLoad() async {
@@ -38,7 +38,7 @@ class MyTextComponent extends PositionComponent {
         ),
       ),
     );
-    final document = DocumentNode([
+    final document = DocumentRoot([
       HeaderNode.simple('1984', level: 1),
       ParagraphNode.simple(
         'Anything could be true. The so-called laws of nature were nonsense.',
