@@ -1,0 +1,17 @@
+name: flame_markdown_example
+description: Simple project to showcase the usage of flame_markdown
+publish_to: 'none'
+version: 0.1.0
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+dependencies:
+  flame: ^1.8.2
+  flame_markdown:
+    path: ../
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flame_lint: ^1.1.0
