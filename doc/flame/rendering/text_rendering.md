@@ -482,27 +482,22 @@ That is because an `InlineTextStyle` can be converted to a specific `TextRendere
 `asTextRenderer` method, which is then used to lay out each line of text into a unique
 `InlineTextElement`.
 
-When using the renderer directly, the entire layouting process is skipped, and a single
+When using the renderer directly, the entire layout process is skipped, and a single
 `TextPainterTextElement` or `SpriteFontTextElement` is returned.
 
-I urge you to convince yourself that both definitions of an Element are, essentially, equivalent,
-all things considered. The sooner the reader can internalize that fact, the merrier and more
-fulfilling their life will be.
+As you can see, both definitions of an Element are, essentially, equivalent, all things considered.
+But it still leaves us with two paths for rendering text. Which one to pick? How to solve this
+conundrum?
 
-But which path should one tread, which avenue should one follow, when all roads lead to the Kingdom
-of God (i.e. text rendering)?
+When in doubt, the following guidelines can help you picking the best path for you:
 
-Well, when in doubt, those who seek can always find help within these next few commandments:
-
-- if thou wantest the simplest way to render text, usest `TextPaint` (basic renderer
-  implementation), and giveth it a string;
-  - thou canst use the FCS provided component `TextComponent` for that.
-- if thou needest to render Sprite Fonts, thou must use `SpriteFontRenderer` (a renderer
-  implementation that accepts a `SpriteFont`);
-- if thou wantest to render multiple lines of text, with automatic line breaks, thou shalt have two
-  options:
-  - thou canst use the FCS `TextBoxComponent`, which uses any text renderer to draw each line of
-    text as an Element, and does its own layouting and line breaking;
-  - thou canst use the Text Node & Style system to create your pre-laid-out Elements. Doest note,
-    there is no current FCS component for it.
-- finally, if thou must have formatted (or rich) text, thou must use Text Nodes & Styles.
+- for the simplest way to render text, use `TextPaint` (basic renderer implementation)
+  - you can use the FCS provided component `TextComponent` for that.
+- for rendering Sprite Fonts, you must use `SpriteFontRenderer` (a renderer implementation that
+  accepts a `SpriteFont`);
+- for rendering multiple lines of text, with automatic line breaks, you have two options:
+  - use the FCS `TextBoxComponent`, which uses any text renderer to draw each line of text as an
+    Element, and does its own layout and line breaking;
+  - use the Text Node & Style system to create your pre-laid-out Elements. Note: there is no current
+    FCS component for it.
+- finally, in order to have formatted (or rich) text, you must use Text Nodes & Styles.
