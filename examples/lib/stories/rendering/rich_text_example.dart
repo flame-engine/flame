@@ -61,7 +61,7 @@ class RichTextExample extends FlameGame {
     ]);
 
     add(
-      ElementComponent.fromDocument(
+      TextElementComponent.fromDocument(
         document: document,
         style: style,
         position: Vector2(100, 50),

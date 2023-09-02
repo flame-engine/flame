@@ -3,10 +3,10 @@ import 'dart:ui';
 import 'package:flame/components.dart';
 import 'package:flame/text.dart';
 
-class ElementComponent extends PositionComponent {
-  Element element;
+class TextElementComponent extends PositionComponent {
+  TextElement element;
 
-  ElementComponent({
+  TextElementComponent({
     required this.element,
     super.position,
     super.size,
@@ -18,8 +18,8 @@ class ElementComponent extends PositionComponent {
     super.key,
   });
 
-  factory ElementComponent.fromDocument({
-    required DocumentNode document,
+  factory TextElementComponent.fromDocument({
+    required DocumentRoot document,
     DocumentStyle? style,
     Vector2? position,
     Vector2? size,
@@ -37,7 +37,7 @@ class ElementComponent extends PositionComponent {
       width: effectiveSize.x,
       height: effectiveSize.y,
     );
-    return ElementComponent(
+    return TextElementComponent(
       element: element,
       position: position,
       size: effectiveSize,
