@@ -15,3 +15,8 @@ dependencies:
 
 dev_dependencies:
   flame_lint: ^1.1.0
+
+flutter:
+  uses-material-design: false
+  assets:
+    - assets/
