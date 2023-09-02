@@ -186,7 +186,7 @@ import 'package:flame_markdown/flame_markdown.dart';
 // ...
 final component = await TextElementComponent.fromDocument(
   document: FlameMarkdown.toDocument(
-    '# Header\n',
+    '# Header\n'
     '\n'
     'This is a **bold** text, and this is *italic*.\n'
     '\n'
