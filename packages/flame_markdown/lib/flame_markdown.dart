@@ -4,13 +4,15 @@ import 'package:markdown/markdown.dart' as md;
 /// Helper to parse markdown strings into an AST structure provided by the
 /// `markdown` package, and convert that structure into an equivalent
 /// [DocumentRoot] from Flame.
-/// 
+///
 /// This allows for the creation of rich-text components on Flame using a
 /// very simple and easy-to-write markdown syntax.
+///
+/// Note more advanced markdown features are not supported, such as tables,
+/// code blocks, images, and inline HTML.
+/// It is also possible that some otherwise valid markdown nestings of
+/// block and inline-type elements are not currently supported.
 class FlameMarkdown {
-
-  // static TextElementComponent toComponent(String markdown) {}
-
   /// Converts a markdown string to a [DocumentRoot] from Flame.
   /// 
   /// This uses the `markdown` package to parse the markdown string
