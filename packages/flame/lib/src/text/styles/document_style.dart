@@ -1,12 +1,5 @@
-import 'package:flame/src/text/nodes/bold_text_node.dart';
-import 'package:flame/src/text/nodes/header_node.dart';
-import 'package:flame/src/text/nodes/italic_text_node.dart';
-import 'package:flame/src/text/nodes/paragraph_node.dart';
-import 'package:flame/src/text/styles/background_style.dart';
-import 'package:flame/src/text/styles/block_style.dart';
-import 'package:flame/src/text/styles/flame_text_style.dart';
 import 'package:flame/src/text/styles/overflow.dart';
-import 'package:flame/src/text/styles/style.dart';
+import 'package:flame/text.dart';
 import 'package:flutter/painting.dart' show EdgeInsets;
 
 /// [DocumentStyle] is a user-facing description of how to render an entire
@@ -18,15 +11,15 @@ import 'package:flutter/painting.dart' show EdgeInsets;
 ///
 /// All styles that collectively describe how to render text are organized into
 /// a tree, with [DocumentStyle] at the root.
-class DocumentStyle extends Style {
+class DocumentStyle extends FlameTextStyle {
   DocumentStyle({
     this.width,
     this.height,
     this.padding = EdgeInsets.zero,
     this.background,
-    FlameTextStyle? text,
-    FlameTextStyle? boldText,
-    FlameTextStyle? italicText,
+    InlineTextStyle? text,
+    InlineTextStyle? boldText,
+    InlineTextStyle? italicText,
     BlockStyle? paragraph,
     BlockStyle? header1,
     BlockStyle? header2,
@@ -34,20 +27,22 @@ class DocumentStyle extends Style {
     BlockStyle? header4,
     BlockStyle? header5,
     BlockStyle? header6,
-  })  : _text = Style.merge(text, DocumentStyle.defaultTextStyle),
-        _boldText = Style.merge(boldText, BoldTextNode.defaultStyle),
-        _italicText = Style.merge(italicText, ItalicTextNode.defaultStyle),
-        _paragraph = Style.merge(paragraph, ParagraphNode.defaultStyle),
-        _header1 = Style.merge(header1, HeaderNode.defaultStyleH1),
-        _header2 = Style.merge(header2, HeaderNode.defaultStyleH2),
-        _header3 = Style.merge(header3, HeaderNode.defaultStyleH3),
-        _header4 = Style.merge(header4, HeaderNode.defaultStyleH4),
-        _header5 = Style.merge(header5, HeaderNode.defaultStyleH5),
-        _header6 = Style.merge(header6, HeaderNode.defaultStyleH6);
+  })  : _text = FlameTextStyle.merge(text, DocumentStyle.defaultTextStyle),
+        _boldText = FlameTextStyle.merge(boldText, BoldTextNode.defaultStyle),
+        _italicText =
+            FlameTextStyle.merge(italicText, ItalicTextNode.defaultStyle),
+        _paragraph =
+            FlameTextStyle.merge(paragraph, ParagraphNode.defaultStyle),
+        _header1 = FlameTextStyle.merge(header1, HeaderNode.defaultStyleH1),
+        _header2 = FlameTextStyle.merge(header2, HeaderNode.defaultStyleH2),
+        _header3 = FlameTextStyle.merge(header3, HeaderNode.defaultStyleH3),
+        _header4 = FlameTextStyle.merge(header4, HeaderNode.defaultStyleH4),
+        _header5 = FlameTextStyle.merge(header5, HeaderNode.defaultStyleH5),
+        _header6 = FlameTextStyle.merge(header6, HeaderNode.defaultStyleH6);
 
-  final FlameTextStyle? _text;
-  final FlameTextStyle? _boldText;
-  final FlameTextStyle? _italicText;
+  final InlineTextStyle? _text;
+  final InlineTextStyle? _boldText;
+  final InlineTextStyle? _italicText;
   final BlockStyle? _paragraph;
   final BlockStyle? _header1;
   final BlockStyle? _header2;
@@ -96,9 +91,9 @@ class DocumentStyle extends Style {
   /// document page(s).
   final BackgroundStyle? background;
 
-  FlameTextStyle get text => _text!;
-  FlameTextStyle get boldText => _boldText!;
-  FlameTextStyle get italicText => _italicText!;
+  InlineTextStyle get text => _text!;
+  InlineTextStyle get boldText => _boldText!;
+  InlineTextStyle get italicText => _italicText!;
 
   /// Style for [ParagraphNode]s.
   BlockStyle get paragraph => _paragraph!;
@@ -111,7 +106,7 @@ class DocumentStyle extends Style {
   BlockStyle get header5 => _header5!;
   BlockStyle get header6 => _header6!;
 
-  static FlameTextStyle defaultTextStyle = FlameTextStyle(fontSize: 16.0);
+  static InlineTextStyle defaultTextStyle = InlineTextStyle(fontSize: 16.0);
 
   @override
   DocumentStyle copyWith(DocumentStyle other) {
@@ -130,8 +125,9 @@ class DocumentStyle extends Style {
     );
   }
 
-  final Map<Style, Map<Style, Style>> _mergedStylesCache = {};
-  Style? merge(Style? style1, Style? style2) {
+  final Map<FlameTextStyle, Map<FlameTextStyle, FlameTextStyle>>
+      _mergedStylesCache = {};
+  FlameTextStyle? merge(FlameTextStyle? style1, FlameTextStyle? style2) {
     if (style1 == null) {
       return style2;
     } else if (style2 == null) {

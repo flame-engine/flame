@@ -1,10 +1,7 @@
 import 'dart:typed_data';
 import 'dart:ui' hide LineMetrics;
 
-import 'package:flame/src/text/common/line_metrics.dart';
-import 'package:flame/src/text/common/sprite_font.dart';
-import 'package:flame/src/text/elements/sprite_font_text_element.dart';
-import 'package:flame/src/text/renderers/text_renderer.dart';
+import 'package:flame/text.dart';
 
 /// [SpriteFontRenderer] will render text using a [SpriteFont] font,
 /// creating a [SpriteFontTextElement].

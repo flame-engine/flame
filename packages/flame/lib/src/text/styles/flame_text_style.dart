@@ -1,55 +1,30 @@
-import 'package:flame/src/text/renderers/text_paint.dart';
-import 'package:flame/src/text/renderers/text_renderer.dart';
-import 'package:flame/src/text/styles/style.dart';
-import 'package:flutter/rendering.dart';
-import 'package:meta/meta.dart';
+import 'package:flame/text.dart';
 
-@immutable
-class FlameTextStyle extends Style {
-  FlameTextStyle({
-    this.color,
-    this.fontFamily,
-    this.fontSize,
-    this.fontScale,
-    this.fontWeight,
-    this.fontStyle,
-    this.letterSpacing,
-  });
+/// A [FlameTextStyle] is a base class for several classes that collectively
+/// describe the desired visual appearance of a "rich-text" document.
+///
+/// The style classes mostly are collections of properties that describe how a
+/// potential document should be formatted. However, they have little logic
+/// beyond that. The style classes are then passed to document `Node`s so that
+/// the content of a document can be formatted.
+///
+/// Various [FlameTextStyle] classes are organized into a tree, with
+/// [DocumentStyle] at the root.
+///
+/// The tree of [FlameTextStyle]s is roughly equivalent to a CSS stylesheet.
+abstract class FlameTextStyle {
+  const FlameTextStyle();
 
-  final Color? color;
-  final String? fontFamily;
-  final double? fontSize;
-  final double? fontScale;
-  final FontWeight? fontWeight;
-  final FontStyle? fontStyle;
-  final double? letterSpacing;
+  FlameTextStyle copyWith(covariant FlameTextStyle other);
 
-  late final TextRenderer renderer = asTextRenderer();
-
-  @override
-  FlameTextStyle copyWith(FlameTextStyle other) {
-    return FlameTextStyle(
-      color: color ?? other.color,
-      fontFamily: fontFamily ?? other.fontFamily,
-      fontSize: fontSize ?? other.fontSize,
-      fontScale: fontScale ?? other.fontScale,
-      fontWeight: fontWeight ?? other.fontWeight,
-      fontStyle: fontStyle ?? other.fontStyle,
-      letterSpacing: letterSpacing ?? other.letterSpacing,
-    );
-  }
-
-  @internal
-  TextPaint asTextRenderer() {
-    return TextPaint(
-      style: TextStyle(
-        color: color,
-        fontFamily: fontFamily,
-        fontSize: fontSize! * (fontScale ?? 1.0),
-        fontWeight: fontWeight,
-        fontStyle: fontStyle,
-        letterSpacing: letterSpacing,
-      ),
-    );
+  static T? merge<T extends FlameTextStyle>(T? style1, T? style2) {
+    if (style1 == null) {
+      return style2;
+    } else if (style2 == null) {
+      return style1;
+    } else {
+      assert(style1.runtimeType == style2.runtimeType);
+      return style1.copyWith(style2) as T;
+    }
   }
 }

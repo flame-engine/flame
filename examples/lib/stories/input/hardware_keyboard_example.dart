@@ -219,7 +219,7 @@ class KeyboardKey extends PositionComponent {
   }
 
   final String text;
-  late final TextElement textElement;
+  late final InlineTextElement textElement;
   late final RRect rect;
 
   /// The RawKeyEvents may occur very fast, and out of sync with the game loop.
