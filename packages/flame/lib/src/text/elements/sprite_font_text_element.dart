@@ -1,10 +1,9 @@
 import 'dart:typed_data';
 import 'dart:ui';
 
-import 'package:flame/src/text/common/line_metrics.dart';
-import 'package:flame/src/text/elements/text_element.dart';
+import 'package:flame/text.dart';
 
-class SpriteFontTextElement extends TextElement {
+class SpriteFontTextElement extends InlineTextElement {
   SpriteFontTextElement({
     required this.source,
     required this.transforms,

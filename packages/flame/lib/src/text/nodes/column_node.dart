@@ -1,9 +1,6 @@
 import 'package:flame/src/text/common/utils.dart';
-import 'package:flame/src/text/elements/element.dart';
 import 'package:flame/src/text/elements/group_element.dart';
-import 'package:flame/src/text/nodes/block_node.dart';
-import 'package:flame/src/text/styles/document_style.dart';
-import 'package:flame/src/text/styles/flame_text_style.dart';
+import 'package:flame/text.dart';
 import 'package:meta/meta.dart';
 
 /// [ColumnNode] is a block node containing other block nodes arranged as a
@@ -18,7 +15,7 @@ abstract class ColumnNode extends BlockNode {
 
   @override
   GroupElement format(double availableWidth) {
-    final out = <Element>[];
+    final out = <TextElement>[];
     final blockWidth = availableWidth;
     final padding = style.padding;
 
@@ -55,7 +52,7 @@ abstract class ColumnNode extends BlockNode {
 
   @mustCallSuper
   @override
-  void fillStyles(DocumentStyle stylesheet, FlameTextStyle parentTextStyle) {
+  void fillStyles(DocumentStyle stylesheet, InlineTextStyle parentTextStyle) {
     for (final node in children) {
       node.fillStyles(stylesheet, parentTextStyle);
     }

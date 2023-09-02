@@ -51,5 +51,5 @@ graph TD
     PositionComponent --> Sprites
     PositionComponent --> HudMarginComponent
     PositionComponent --> OtherPositionComponents
-    HudMarginComponent --> HudComponents    
+    HudMarginComponent --> HudComponents
 ```

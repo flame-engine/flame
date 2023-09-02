@@ -1,17 +1,14 @@
-import 'package:flame/src/text/elements/text_element.dart';
-import 'package:flame/src/text/nodes/text_node.dart';
-import 'package:flame/src/text/renderers/text_renderer.dart';
-import 'package:flame/src/text/styles/document_style.dart';
-import 'package:flame/src/text/styles/flame_text_style.dart';
+import 'package:flame/src/text/nodes/inline_text_node.dart';
+import 'package:flame/text.dart';
 
-class PlainTextNode extends TextNode {
+class PlainTextNode extends InlineTextNode {
   PlainTextNode(this.text);
 
   final String text;
 
   @override
-  void fillStyles(DocumentStyle stylesheet, FlameTextStyle parentTextStyle) {
-    textStyle = parentTextStyle;
+  void fillStyles(DocumentStyle stylesheet, InlineTextStyle parentTextStyle) {
+    style = parentTextStyle;
   }
 
   @override
@@ -20,7 +17,7 @@ class PlainTextNode extends TextNode {
 
 class _PlainTextLayoutBuilder extends TextNodeLayoutBuilder {
   _PlainTextLayoutBuilder(this.node)
-      : renderer = node.textStyle.asTextRenderer(),
+      : renderer = node.style.asTextRenderer(),
         words = node.text.split(' ');
 
   final PlainTextNode node;
@@ -33,8 +30,8 @@ class _PlainTextLayoutBuilder extends TextNodeLayoutBuilder {
   bool get isDone => index1 > words.length;
 
   @override
-  TextElement? layOutNextLine(double availableWidth) {
-    TextElement? tentativeLine;
+  InlineTextElement? layOutNextLine(double availableWidth) {
+    InlineTextElement? tentativeLine;
     int? tentativeIndex0;
     while (index1 <= words.length) {
       final textPiece = words.sublist(index0, index1).join(' ');

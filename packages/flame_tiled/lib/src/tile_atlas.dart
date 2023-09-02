@@ -4,7 +4,7 @@ import 'package:flame/flame.dart';
 import 'package:flame/image_composition.dart';
 import 'package:flame/sprite.dart';
 import 'package:flame_tiled/src/rectangle_bin_packer.dart';
-import 'package:meta/meta.dart';
+import 'package:flutter/foundation.dart';
 import 'package:tiled/tiled.dart';
 
 /// One image atlas for all Tiled image sets in a map.
@@ -81,7 +81,11 @@ class TiledAtlas {
   }
 
   /// Loads all the tileset images for the [map] into one [TiledAtlas].
-  static Future<TiledAtlas> fromTiledMap(TiledMap map) async {
+  static Future<TiledAtlas> fromTiledMap(
+    TiledMap map, {
+    double? maxX,
+    double? maxY,
+  }) async {
     final imageList = _onlyTileImages(map).toList();
 
     if (imageList.isEmpty) {
@@ -114,7 +118,13 @@ class TiledAtlas {
       );
     }
 
-    final bin = RectangleBinPacker();
+    /// Note: Chrome on Android has a maximum texture size of 4096x4096. kIsWeb
+    /// is used to select the smaller texture and might overflow. Consider using
+    /// smaller textures for web targets, or, pack your own atlas.
+    final bin = RectangleBinPacker(
+      maxX ?? (kIsWeb ? 4096 : 8192),
+      maxY ?? (kIsWeb ? 4096 : 8192),
+    );
     final recorder = PictureRecorder();
     final canvas = Canvas(recorder);
 
