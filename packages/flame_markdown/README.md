@@ -31,5 +31,5 @@ pipeline.
 
 Add this as a dependency to your Flame game if you want to easily apply simple inline formatting to
 text in your game (bold, italics), or if you want to create complex text documents with headings and
-paragraphs and have them formatted by Flame's text layouting system, without needing to manually
+paragraphs and have them formatted by Flame's text layout system, without needing to manually
 specify the `TextNode` tree structure.
