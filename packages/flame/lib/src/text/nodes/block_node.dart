@@ -1,7 +1,4 @@
-import 'package:flame/src/text/elements/block_element.dart';
-import 'package:flame/src/text/styles/block_style.dart';
-import 'package:flame/src/text/styles/document_style.dart';
-import 'package:flame/src/text/styles/flame_text_style.dart';
+import 'package:flame/text.dart';
 
 /// [BlockNode] is a base class for all nodes with "block" placement rules; it
 /// roughly corresponds to `<div/>` in HTML.
@@ -14,11 +11,13 @@ import 'package:flame/src/text/styles/flame_text_style.dart';
 /// Implementations include:
 /// * ColumnNode
 /// * TextBlockNode (which itself can be a HeaderNode or ParagraphNode)
-abstract class BlockNode {
+abstract class BlockNode implements TextNode<BlockStyle> {
   /// The runtime style applied to this node, this will be set by [fillStyles].
+  @override
   late BlockStyle style;
 
   BlockElement format(double availableWidth);
 
-  void fillStyles(DocumentStyle stylesheet, FlameTextStyle parentTextStyle);
+  @override
+  void fillStyles(DocumentStyle stylesheet, InlineTextStyle parentTextStyle);
 }

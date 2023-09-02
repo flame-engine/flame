@@ -113,6 +113,63 @@ You can find all the options under [TextBoxComponent's
 API](https://pub.dev/documentation/flame/latest/components/TextBoxComponent-class.html).
 
 
+### TextElementComponent
+
+If you want to render an arbitrary TextElement, ranging from a single InlineTextElement to a
+formatted DocumentRoot, you can use the `TextElementComponent`.
+
+A simple example is to create a DocumentRoot to render a sequence of block elements (think of an
+HTML "div") containing rich text:
+
+```dart
+  final document = DocumentRoot([
+    HeaderNode.simple('1984', level: 1),
+    ParagraphNode.simple(
+      'Anything could be true. The so-called laws of nature were nonsense.',
+    ),
+    // ...
+  ]);
+  final element = TextElementComponent.fromDocument(
+    document: document,
+    position: Vector2(100, 50),
+    size: Vector2(400, 200),
+  );
+```
+
+Note that the size can be specified in two ways; either via:
+
+- the size property common to all `PositionComponents`; or
+- the width/height included within the `DocumentStyle` applied.
+
+An example applying a style to the document (which can include the size but other parameters as
+well):
+
+```dart
+  final style = DocumentStyle(
+    width: 400,
+    height: 200,
+    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 14),
+    background: BackgroundStyle(
+      color: const Color(0xFF4E322E),
+      borderColor: const Color(0xFF000000),
+      borderWidth: 2.0,
+    ),
+  );
+  final document = DocumentRoot([ ... ]);
+  final element = TextElementComponent.fromDocument(
+    document: document,
+    style: style,
+    position: Vector2(100, 50),
+  );
+```
+
+For a more elaborate example of rich-text, formatted text blocks rendering, check [this
+example](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/rendering/rich_text_example.dart).
+
+For more details about the underlying mechanics of the text rendering pipeline, see "Text Elements,
+Text Nodes, and Text Styles" below.
+
+
 ## Infrastructure
 
 If you are not using the Flame Component System, want to understand the infrastructure behind text
@@ -127,6 +184,7 @@ this section is for you.
 The following diagram showcases the class and inheritance structure of the text rendering pipeline:
 
 ```mermaid
+%%{init: { 'theme': 'dark' } }%%
 classDiagram
     %% renderers
     note for TextRenderer "This just the style (how).
@@ -265,21 +323,21 @@ it possible to test the layout, positioning and sizing of the elements without h
 font-based rendering.
 
 
-## Text Elements
+## Inline Text Elements
 
-Text Elements are "pre-compiled", formatted and laid-out pieces of text with a specific styling
+A `TextElement` is a "pre-compiled", formatted and laid-out piece of text with a specific styling
 applied, ready to be rendered at any given position.
 
-`TextElement` implements the `Element` interface and must implement their two methods, one that
-teaches how to translate it around and another on how to draw it to the canvas:
+A `InlineTextElement` implements the `TextElement` interface and must implement their two methods,
+one that teaches how to translate it around and another on how to draw it to the canvas:
 
 ```dart
   void translate(double dx, double dy);
   void draw(Canvas canvas);
 ```
 
-These methods are intended to be overwritten by the implementations of `TextElement` but probably
-will not be called directly by users; because a convenient `render` method is provided:
+These methods are intended to be overwritten by the implementations of `InlineTextElement`, and
+probably will not be called directly by users; because a convenient `render` method is provided:
 
 ```dart
   void render(
@@ -291,37 +349,212 @@ will not be called directly by users; because a convenient `render` method is pr
 
 That allows the element to be rendered at a specific position, using a given anchor.
 
-The interface also mandates (and provides) a getter for the LineMetrics object associated with that
-`TextElement`, which allows you (and the `render` implementation) to access sizing information
-related to the element (width, height, ascend, etc).
+The interface also mandates (and provides) a getter for the `LineMetrics` object associated with
+that `InlineTextElement`, which allows you (and the `render` implementation) to access sizing
+information related to the element (width, height, ascend, etc).
 
 ```dart
   LineMetrics get metrics;
 ```
 
 
-## Elements, Nodes, and Styles
+## Text Elements, Text Nodes, and Text Styles
 
-While normal renderers always work with TextElements directly, there is a bigger underlying
+While normal renderers always work with a `InlineTextElement` directly, there is a bigger underlying
 infrastructure that can be used to render more rich or formatter text.
 
-Elements are a superset of TextElements that represent an arbitrary rendering block within a
-rich-text document. Essentially, they are concrete and "physical": they are objects that are ready
-to be rendered on a canvas.
+Text Elements are a superset of Inline Text Elements that represent an arbitrary rendering block
+within a rich-text document. Essentially, they are concrete and "physical": they are objects that
+are ready to be rendered on a canvas.
 
-This property distinguishes them from Nodes, which are structured pieces of text, and from Styles,
+This property distinguishes them from Text Nodes, which are structured pieces of text, and from Text
+Styles (called `FlameTextStyle` in code to make it easier to work alongside Flutter's `TextStyle`),
 which are descriptors for how arbitrary pieces of text ought to be rendered.
 
-So a user would use Node to describe a desired document of rich text; define Styles to apply to it;
-and use that to generate an Element. Depending on the type of rendering, the Element generated will
-be a TextElement, which brings us back to the normal flow of the rendering pipeline. The unique
-property of the Text-type element is that it exposes a LineMetrics that can be used for advanced
-rendering; while the other elements only expose a simpler `draw` method which is unaware of sizing
-and positioning.
+So, in the most general case, a user would use a `TextNode` to describe a desired piece of rich
+text; define a `FlameTextStyle` to apply to it; and use that to generate a `TextElement`. Depending
+on the type of rendering, the `TextElement` generated will be an `InlineTextElement`, which brings
+us back to the normal flow of the rendering pipeline. The unique property of the Inline-Text-type
+element is that it exposes a LineMetrics that can be used for advanced rendering; while the other
+elements only expose a simpler `draw` method which is unaware of sizing and positioning.
 
-However the other types of Elements, Nodes and Style must be used if the intent is to create an
-entire Document, enriched with formatted text. Currently these extra features of the system are not
-exposed through FCS, but can be used directly.
+However, the other types of Text Elements, Text Nodes, and Text Styles must be used if the intent is
+to create an entire document (multiple blocks or paragraphs), enriched with formatted text. In order
+to render an arbitrary TextElement, you can alternatively use the `TextElementComponent` (see above).
 
 An example of such usages can be seen in [this
 example](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/rendering/rich_text_example.dart).
+
+
+### Text Nodes and the Document Root
+
+A `DocumentRoot` is not a `TextNode` (inheritance-wise) in itself but represents a grouping of
+`BlockNodes` that layout a "page" or "document" of rich text laid out in multiple blocks or
+paragraphs. It represents the entire document and can receive a global Style.
+
+The first step to define your rich-text document is to create a Node, which will likely be a
+`DocumentRoot`.
+
+It will first contain the top-most list of Block Nodes that can define headers, paragraphs or
+columns.
+
+Then each of those blocks can contain other blocks or the Inline Text Nodes, either Plain Text Nodes
+or some rich-text with specific formatting.
+
+Note that the hierarchy defined by the node structure is also used for styling purposes as per
+defined in the `FlameTextStyle` class.
+
+The actual nodes all inherit from `TextNode` and are broken down by the following diagram:
+
+```mermaid
+%%{init: { 'theme': 'dark' } }%%
+graph TD
+    %% Config %%
+    classDef default fill:#282828,stroke:#F6BE00;
+
+    %% Nodes %%
+    TextNode("
+        <big><strong>TextNode</strong></big>
+        Can be thought of as an HTML DOM node;
+        each subclass can be thought of as a specific tag.
+    ")
+    BlockNode("
+        <big><strong>BlockNode</strong></big>
+        #quot;div#quot;
+    ")
+    InlineTextNode("
+        <big><strong>InlineTextNode</strong></big>
+        #quot;span#quot;
+    ")
+    ColumnNode("
+        <big><strong>ColumnNode</strong></big>
+        column-arranged group of other Block Nodes
+    ")
+    TextBlockNode("
+        <big><strong>TextBlockNode</strong></big>
+        a #quot;div#quot; with an InlineTextNode as a direct child
+    ")
+    HeaderNode("
+        <big><strong>HeaderNode</strong></big>
+        #quot;h1#quot; / #quot;h2#quot; / etc
+    ")
+    ParagraphNode("
+        <big><strong>ParagraphNode</strong></big>
+        #quot;p#quot;
+    ")
+    GroupTextNode("
+        <big><strong>GroupTextNode</strong></big>
+        groups other TextNodes in a single line
+    ")
+    PlainTextNode("
+        <big><strong>PlainTextNode</strong></big>
+        just plain text, unformatted
+    ")
+    ItalicTextNode("
+        <big><strong>ItalicTextNode</strong></big>
+        #quot;i#quot; / #quot;em#quot;
+    ")
+    BoldTextNode("
+        <big><strong>BoldTextNode</strong></big>
+        #quot;b#quot; / #quot;strong#quot;
+    ")
+    TextNode ----> BlockNode
+    TextNode --------> InlineTextNode
+    BlockNode --> ColumnNode
+    BlockNode --> TextBlockNode
+    TextBlockNode --> HeaderNode
+    TextBlockNode --> ParagraphNode
+    InlineTextNode --> GroupTextNode
+    InlineTextNode --> PlainTextNode
+    InlineTextNode --> BoldTextNode
+    InlineTextNode --> ItalicTextNode
+```
+
+
+### (Flame) Text Styles
+
+Text Styles can be applied to nodes to generate elements. They all inherit from `FlameTextStyle`
+abstract class (which is named as is to avoid confusion with Flutter's `TextStyle`).
+
+They follow a tree-like structure, always having `DocumentStyle` as the root; this structure is
+leveraged to apply cascading style to the analogous Node structure. In fact, they are pretty similar
+to, and can be thought of as, CSS definitions.
+
+The full inheritance chain can be seen on the following diagram:
+
+```mermaid
+%%{init: { 'theme': 'dark' } }%%
+classDiagram
+    %% Nodes %%
+    class FlameTextStyle {
+        copyWith()
+        merge()
+    }
+
+    note for FlameTextStyle "Root for all styles.
+    Not to be confused with Flutter's TextStyle."
+
+    class DocumentStyle {
+        <<for the entire Document Root>>
+        size
+        padding
+        background [BackgroundStyle]
+        specific styles [for blocks & inline]
+    }
+
+    class BlockStyle {
+        <<for Block Nodes>>
+        margin, padding
+        background [BackgroundStyle]
+        text [InlineTextStyle]
+    }
+
+    class BackgroundStyle {
+        <<for Block or Document>>
+        color
+        border
+    }
+
+    class InlineTextStyle {
+        <<for any nodes>>
+        font, color
+    }
+
+    FlameTextStyle <|-- DocumentStyle
+    FlameTextStyle <|-- BlockStyle
+    FlameTextStyle <|-- BackgroundStyle
+    FlameTextStyle <|-- InlineTextStyle
+```
+
+
+### Text Elements
+
+Finally, we have the elements, that represent a combination of a node ("what") with a style ("how"),
+and therefore represent a pre-compiled, laid-out piece of rich text to be rendered on the Canvas.
+
+Inline Text Elements specifically can alternatively be thought of as a combination of a
+`TextRenderer` (simplified "how") and a string (single line of "what").
+
+That is because an `InlineTextStyle` can be converted to a specific `TextRenderer` via the
+`asTextRenderer` method, which is then used to lay out each line of text into a unique
+`InlineTextElement`.
+
+When using the renderer directly, the entire layout process is skipped, and a single
+`TextPainterTextElement` or `SpriteFontTextElement` is returned.
+
+As you can see, both definitions of an Element are, essentially, equivalent, all things considered.
+But it still leaves us with two paths for rendering text. Which one to pick? How to solve this
+conundrum?
+
+When in doubt, the following guidelines can help you picking the best path for you:
+
+- for the simplest way to render text, use `TextPaint` (basic renderer implementation)
+  - you can use the FCS provided component `TextComponent` for that.
+- for rendering Sprite Fonts, you must use `SpriteFontRenderer` (a renderer implementation that
+  accepts a `SpriteFont`);
+- for rendering multiple lines of text, with automatic line breaks, you have two options:
+  - use the FCS `TextBoxComponent`, which uses any text renderer to draw each line of text as an
+    Element, and does its own layout and line breaking;
+  - use the Text Node & Style system to create your pre-laid-out Elements. Note: there is no current
+    FCS component for it.
+- finally, in order to have formatted (or rich) text, you must use Text Nodes & Styles.

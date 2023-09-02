@@ -24,10 +24,10 @@ class DebugTextRenderer extends TextRenderer {
   final FontStyle fontStyle;
 
   @override
-  TextElement format(String text) => _DebugTextElement(this, text);
+  InlineTextElement format(String text) => _DebugTextElement(this, text);
 }
 
-class _DebugTextElement extends TextElement {
+class _DebugTextElement extends InlineTextElement {
   _DebugTextElement(this.style, this.text) {
     final charWidth = style.fontSize * 1.0;
     final charHeight = style.fontSize;

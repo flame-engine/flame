@@ -1,19 +1,17 @@
 import 'package:flame/src/text/elements/group_text_element.dart';
-import 'package:flame/src/text/elements/text_element.dart';
-import 'package:flame/src/text/nodes/text_node.dart';
-import 'package:flame/src/text/styles/document_style.dart';
-import 'package:flame/src/text/styles/flame_text_style.dart';
+import 'package:flame/src/text/nodes/inline_text_node.dart';
+import 'package:flame/text.dart';
 
-class GroupTextNode extends TextNode {
+class GroupTextNode extends InlineTextNode {
   GroupTextNode(this.children);
 
-  final List<TextNode> children;
+  final List<InlineTextNode> children;
 
   @override
-  void fillStyles(DocumentStyle stylesheet, FlameTextStyle parentTextStyle) {
-    textStyle = parentTextStyle;
+  void fillStyles(DocumentStyle stylesheet, InlineTextStyle parentTextStyle) {
+    style = parentTextStyle;
     for (final node in children) {
-      node.fillStyles(stylesheet, textStyle);
+      node.fillStyles(stylesheet, style);
     }
   }
 
@@ -32,9 +30,9 @@ class _GroupTextLayoutBuilder extends TextNodeLayoutBuilder {
   bool get isDone => _currentChildIndex == node.children.length;
 
   @override
-  TextElement? layOutNextLine(double availableWidth) {
+  InlineTextElement? layOutNextLine(double availableWidth) {
     assert(!isDone);
-    final out = <TextElement>[];
+    final out = <InlineTextElement>[];
     var usedWidth = 0.0;
     while (true) {
       if (_currentChildBuilder?.isDone ?? false) {

@@ -1,8 +1,8 @@
 import 'dart:ui';
 
-import 'package:flame/src/text/elements/element.dart';
+import 'package:flame/text.dart';
 
-class RRectElement extends Element {
+class RRectElement extends TextElement {
   RRectElement(
     double width,
     double height,

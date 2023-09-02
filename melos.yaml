@@ -21,7 +21,7 @@ scripts:
 
   analyze:
     run: |
-      melos exec -c 10 -- \
+      melos exec -c 1 -- \
         flutter analyze --fatal-infos
     description: Run `flutter analyze` for all packages.
 

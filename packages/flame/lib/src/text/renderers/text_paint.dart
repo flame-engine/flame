@@ -1,6 +1,5 @@
 import 'package:flame/cache.dart';
-import 'package:flame/src/text/elements/text_painter_text_element.dart';
-import 'package:flame/src/text/renderers/text_renderer.dart';
+import 'package:flame/text.dart';
 import 'package:flutter/rendering.dart';
 
 /// [TextPaint] applies a Flutter [TextStyle] to a string of

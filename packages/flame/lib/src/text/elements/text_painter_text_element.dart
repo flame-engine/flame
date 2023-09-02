@@ -1,10 +1,9 @@
 import 'dart:ui';
 
-import 'package:flame/src/text/common/line_metrics.dart';
-import 'package:flame/src/text/elements/text_element.dart';
+import 'package:flame/text.dart';
 import 'package:flutter/rendering.dart' as flutter;
 
-class TextPainterTextElement extends TextElement {
+class TextPainterTextElement extends InlineTextElement {
   TextPainterTextElement(this._textPainter)
       : _box = LineMetrics(
           ascent: _textPainter.computeDistanceToActualBaseline(
