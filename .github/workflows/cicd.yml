@@ -73,6 +73,6 @@ jobs:
           channel: 'stable'
           cache: true
       - uses: bluefireteam/melos-action@main
-      - name: Run DCM
+      - name: Run tests
         run: melos test
   # END TESTING STAGE
