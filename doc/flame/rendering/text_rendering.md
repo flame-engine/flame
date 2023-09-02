@@ -169,6 +169,7 @@ example](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/re
 For more details about the underlying mechanics of the text rendering pipeline, see "Text Elements,
 Text Nodes, and Text Styles" below.
 
+
 ### Flame Markdown
 
 In order to more easily create rich-text-based DocumentRoots, from simple strings with bold/italics
@@ -196,6 +197,7 @@ final component = await TextElementComponent.fromDocument(
   size: ...,
 );
 ```
+
 
 ## Infrastructure
 

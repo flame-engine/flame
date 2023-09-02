@@ -14,18 +14,18 @@ import 'package:markdown/markdown.dart' as md;
 /// block and inline-type elements are not currently supported.
 class FlameMarkdown {
   /// Converts a markdown string to a [DocumentRoot] from Flame.
-  /// 
+  ///
   /// This uses the `markdown` package to parse the markdown string
   /// into an AST structure, and then converts that structure into
   /// a [DocumentRoot] from Flame.
-  static DocumentRoot toDocument(String markdown, { md.Document? document }) {
+  static DocumentRoot toDocument(String markdown, {md.Document? document}) {
     final nodes = _parse(markdown, document: document);
     return DocumentRoot(
       nodes.map(_convertNode).map(_castCheck<BlockNode>).toList(),
     );
   }
 
-  static List<md.Node> _parse(String markdown, { md.Document? document }) {
+  static List<md.Node> _parse(String markdown, {md.Document? document}) {
     return (document ?? md.Document()).parse(markdown);
   }
 
@@ -41,9 +41,9 @@ class FlameMarkdown {
 
   static TextNode _convertElement(md.Element element) {
     final children = (element.children ?? [])
-      .map(_convertNode)
-      .map(_castCheck<InlineTextNode>)
-      .toList();
+        .map(_convertNode)
+        .map(_castCheck<InlineTextNode>)
+        .toList();
     final child = _groupInlineChildren(children);
     switch (element.tag) {
       case 'h1':

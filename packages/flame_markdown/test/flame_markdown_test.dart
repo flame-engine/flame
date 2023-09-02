@@ -50,7 +50,8 @@ void main() {
     });
 
     test('several paragraphs with header', () {
-      final markdown = File('example/assets/fire_and_ice.md').readAsStringSync();
+      final markdown =
+          File('example/assets/fire_and_ice.md').readAsStringSync();
       final doc = FlameMarkdown.toDocument(markdown);
 
       _expectDocument(doc, [

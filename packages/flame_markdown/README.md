@@ -6,11 +6,11 @@
 </p>
 
 <p align="center">
-Adds audio support for <a href="https://github.com/flame-engine/flame">Flame</a> using the <a href="https://github.com/luanpotter/audioplayers">audioplayers</a> package.
+Adds markdown support for <a href="https://github.com/flame-engine/flame">Flame</a> using the <a href="https://github.com/dart-lang/markdown">markdown</a> package.
 </p>
 
 <p align="center">
-  <a title="Pub" href="https://pub.dev/packages/flame_audio" ><img src="https://img.shields.io/pub/v/flame_audio.svg?style=popout" /></a>
+  <a title="Pub" href="https://pub.dev/packages/flame_markdown" ><img src="https://img.shields.io/pub/v/flame_markdown.svg?style=popout" /></a>
   <a title="Test" href="https://github.com/flame-engine/flame/actions?query=workflow%3Acicd+branch%3Amain"><img src="https://github.com/flame-engine/flame/workflows/cicd/badge.svg?branch=main&event=push"/></a>
   <a title="Discord" href="https://discord.gg/pxrBmy4"><img src="https://img.shields.io/discord/509714518008528896.svg"/></a>
   <a title="Melos" href="https://github.com/invertase/melos"><img src="https://img.shields.io/badge/maintained%20with-melos-f700ff.svg"/></a>
@@ -20,11 +20,16 @@ Adds audio support for <a href="https://github.com/flame-engine/flame">Flame</a>
 <!-- markdownlint-enable MD013 -->
 
 <!-- markdownlint-disable-next-line MD002 -->
-# flame_audio
+# flame_markdown
 
-This package makes it easy to add audio capabilities to your games, integrating
-[Audioplayers](https://github.com/bluefireteam/audioplayers) features seamless into your Flame game
-code.
+This package facilitates the creation of Flame's TextNode hierarchies by leveraging markdown
+strings.
 
-Add this as a dependency to your Flame game if you want to play background music,
-ambient sounds, sound effects, etc.
+It integrates with the `markdown` package to parse markdown strings into an AST and uses that AST to
+create a `DocumentRoot` containing the equivalent list of nodes from Flame's text rendering
+pipeline.
+
+Add this as a dependency to your Flame game if you want to easily apply simple inline formatting to
+text in your game (bold, italics), or if you want to create complex text documents with headings and
+paragraphs and have them formatted by Flame's text layouting system, without needing to manually
+specify the `TextNode` tree structure.

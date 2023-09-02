@@ -2,7 +2,7 @@
 
 Some say the world will end in **fire**,
 
-Some say in _ice_.
+Some say in *ice*.
 
 From what I've tasted of desire
 
