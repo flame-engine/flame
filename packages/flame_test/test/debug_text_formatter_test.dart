@@ -45,7 +45,7 @@ void main() {
 class TextElementsComponent extends PositionComponent {
   TextElementsComponent(this.elements);
 
-  final List<TextElement> elements;
+  final List<InlineTextElement> elements;
 
   @override
   void render(Canvas canvas) {

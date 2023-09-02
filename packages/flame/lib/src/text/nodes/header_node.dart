@@ -1,11 +1,6 @@
 import 'dart:ui';
 
-import 'package:flame/src/text/nodes/plain_text_node.dart';
-import 'package:flame/src/text/nodes/text_block_node.dart';
-import 'package:flame/src/text/styles/block_style.dart';
-import 'package:flame/src/text/styles/document_style.dart';
-import 'package:flame/src/text/styles/flame_text_style.dart';
-import 'package:flame/src/text/styles/style.dart';
+import 'package:flame/text.dart';
 import 'package:flutter/rendering.dart' show EdgeInsets;
 
 class HeaderNode extends TextBlockNode {
@@ -17,28 +12,28 @@ class HeaderNode extends TextBlockNode {
   final int level;
 
   static BlockStyle defaultStyleH1 = BlockStyle(
-    text: FlameTextStyle(fontScale: 2.0, fontWeight: FontWeight.bold),
+    text: InlineTextStyle(fontScale: 2.0, fontWeight: FontWeight.bold),
     margin: const EdgeInsets.fromLTRB(0, 24, 0, 12),
   );
   static BlockStyle defaultStyleH2 = BlockStyle(
-    text: FlameTextStyle(fontScale: 1.5, fontWeight: FontWeight.bold),
+    text: InlineTextStyle(fontScale: 1.5, fontWeight: FontWeight.bold),
     margin: const EdgeInsets.fromLTRB(0, 24, 0, 8),
   );
   static BlockStyle defaultStyleH3 = BlockStyle(
-    text: FlameTextStyle(fontScale: 1.25, fontWeight: FontWeight.bold),
+    text: InlineTextStyle(fontScale: 1.25, fontWeight: FontWeight.bold),
   );
   static BlockStyle defaultStyleH4 = BlockStyle(
-    text: FlameTextStyle(fontScale: 1.0, fontWeight: FontWeight.bold),
+    text: InlineTextStyle(fontScale: 1.0, fontWeight: FontWeight.bold),
   );
   static BlockStyle defaultStyleH5 = BlockStyle(
-    text: FlameTextStyle(fontScale: 0.875, fontWeight: FontWeight.bold),
+    text: InlineTextStyle(fontScale: 0.875, fontWeight: FontWeight.bold),
   );
   static BlockStyle defaultStyleH6 = BlockStyle(
-    text: FlameTextStyle(fontScale: 0.85, fontWeight: FontWeight.bold),
+    text: InlineTextStyle(fontScale: 0.85, fontWeight: FontWeight.bold),
   );
 
   @override
-  void fillStyles(DocumentStyle stylesheet, FlameTextStyle parentTextStyle) {
+  void fillStyles(DocumentStyle stylesheet, InlineTextStyle parentTextStyle) {
     style = switch (level) {
       1 => stylesheet.header1,
       2 => stylesheet.header2,
@@ -47,7 +42,7 @@ class HeaderNode extends TextBlockNode {
       5 => stylesheet.header5,
       _ => stylesheet.header6,
     };
-    final textStyle = Style.merge(parentTextStyle, style.text)!;
+    final textStyle = FlameTextStyle.merge(parentTextStyle, style.text)!;
     super.fillStyles(stylesheet, textStyle);
   }
 }

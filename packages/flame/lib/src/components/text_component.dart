@@ -38,7 +38,7 @@ class TextComponent<T extends TextRenderer> extends PositionComponent {
     updateBounds();
   }
 
-  late TextElement _textElement;
+  late InlineTextElement _textElement;
 
   @internal
   void updateBounds() {

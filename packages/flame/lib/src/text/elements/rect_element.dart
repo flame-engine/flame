@@ -1,8 +1,8 @@
 import 'dart:ui';
 
-import 'package:flame/src/text/elements/element.dart';
+import 'package:flame/text.dart';
 
-class RectElement extends Element {
+class RectElement extends TextElement {
   RectElement(double width, double height, this._paint)
       : _rect = Rect.fromLTWH(0, 0, width, height);
 
