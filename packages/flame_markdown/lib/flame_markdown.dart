@@ -1,16 +1,33 @@
 import 'package:flame/text.dart';
 import 'package:markdown/markdown.dart' as md;
 
+/// Helper to parse markdown strings into an AST structure provided by the
+/// `markdown` package, and convert that structure into an equivalent
+/// [DocumentRoot] from Flame.
+/// 
+/// This allows for the creation of rich-text components on Flame using a
+/// very simple and easy-to-write markdown syntax.
 class FlameMarkdown {
-  static List<md.Node> parse(String text) {
-    return md.Document().parse(text);
+
+  // static TextElementComponent toComponent(String markdown) {}
+
+  /// Converts a markdown string to a [DocumentRoot] from Flame.
+  /// 
+  /// This uses the `markdown` package to parse the markdown string
+  /// into an AST structure, and then converts that structure into
+  /// a [DocumentRoot] from Flame.
+  static DocumentRoot toDocument(String markdown, { md.Document? document }) {
+    final nodes = _parse(markdown, document: document);
+    return DocumentRoot(
+      nodes.map(_convertNode).map(_castCheck<BlockNode>).toList(),
+    );
   }
 
-  static DocumentNode convert(List<md.Node> nodes) {
-    return DocumentNode(nodes.map(_convertNode).toList());
+  static List<md.Node> _parse(String markdown, { md.Document? document }) {
+    return (document ?? md.Document()).parse(markdown);
   }
-  
-  static BlockNode _convertNode(md.Node node) {
+
+  static TextNode _convertNode(md.Node node) {
     if (node is md.Element) {
       return _convertElement(node);
     } else if (node is md.Text) {
@@ -20,62 +37,33 @@ class FlameMarkdown {
     }
   }
 
-  static BlockNode _convertElement(md.Element element) {
-    final children = (element.children ?? []).map(_convertNode).toList();
+  static TextNode _convertElement(md.Element element) {
+    final children = (element.children ?? [])
+      .map(_convertNode)
+      .map(_castCheck<InlineTextNode>)
+      .toList();
+    final child = _groupInlineChildren(children);
     switch (element.tag) {
       case 'h1':
-        final singleChild = children.single as TextNode;
-        return HeaderNode(singleChild, level: 1);
+        return HeaderNode(child, level: 1);
       case 'h2':
-        return HeaderNode(children, level: 2);
+        return HeaderNode(child, level: 2);
       case 'h3':
-        return HeaderNode(children, level: 3);
+        return HeaderNode(child, level: 3);
       case 'h4':
-        return HeaderNode(children, level: 4);
+        return HeaderNode(child, level: 4);
       case 'h5':
-        return HeaderNode(children, level: 5);
+        return HeaderNode(child, level: 5);
       case 'h6':
-        return HeaderNode(children, level: 6);
+        return HeaderNode(child, level: 6);
       case 'p':
-        return ParagraphNode(children);
-      case 'ul':
-        return UnorderedListNode(children);
-      case 'ol':
-        return OrderedListNode(children);
-      case 'li':
-        return ListItemNode(children);
-      case 'a':
-        return AnchorNode(children, element.attributes['href']);
-      case 'img':
-        return ImageNode(element.attributes['src']);
-      case 'code':
-        return CodeNode(children);
-      case 'pre':
-        return PreNode(children);
-      case 'blockquote':
-        return BlockquoteNode(children);
-      case 'hr':
-        return HorizontalRuleNode();
+        return ParagraphNode(child);
       case 'em':
-        return EmphasisNode(children);
+      case 'i':
+        return ItalicTextNode(child);
       case 'strong':
-        return StrongNode(children);
-      case 'del':
-        return StrikethroughNode(children);
-      case 'br':
-        return LineBreakNode();
-      case 'table':
-        return TableNode(children);
-      case 'thead':
-        return TableHeadNode(children);
-      case 'tbody':
-        return TableBodyNode(children);
-      case 'tr':
-        return TableRowNode(children);
-      case 'th':
-        return TableHeaderNode(children);
-      case 'td':
-        return TableCellNode(children);
+      case 'b':
+        return BoldTextNode(child);
       default:
         throw Exception('Unknown element tag: ${element.tag}');
     }
@@ -83,5 +71,24 @@ class FlameMarkdown {
 
   static PlainTextNode _convertText(md.Text text) {
     return PlainTextNode(text.text);
+  }
+
+  static InlineTextNode _groupInlineChildren(List<InlineTextNode> children) {
+    if (children.isEmpty) {
+      throw 'Invalid markdown structure: Found block element with no children';
+    } else if (children.length == 1) {
+      return children.single;
+    } else {
+      return GroupTextNode(children);
+    }
+  }
+
+  static T _castCheck<T extends TextNode>(TextNode node) {
+    if (node is T) {
+      return node;
+    } else {
+      throw 'Invalid markdown structure: '
+          'Expected $T but got ${node.runtimeType}';
+    }
   }
 }
