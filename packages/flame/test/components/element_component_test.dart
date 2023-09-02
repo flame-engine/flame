@@ -1,7 +1,6 @@
-import 'package:flame/src/components/text_/element_component.dart';
+import 'package:flame/components.dart';
 import 'package:flame/text.dart';
 import 'package:test/test.dart';
-import 'package:vector_math/vector_math_64.dart';
 
 void main() {
   group('ElementComponent', () {
