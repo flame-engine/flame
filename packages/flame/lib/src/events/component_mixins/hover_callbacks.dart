@@ -10,8 +10,24 @@ import 'package:meta/meta.dart';
 ///
 /// This mixin is the replacement of the Hoverable mixin.
 mixin HoverCallbacks on Component {
-  void onHoverEnder() {}
+  bool _isHovered = false;
+
+  /// Returns true while the component is being dragged.
+  bool get isHovered => _isHovered;
+
+  void onHoverEnter() {}
+
   void onHoverExit() {}
+
+  void _doHoverEnter() {
+    _isHovered = true;
+    onHoverEnter();
+  }
+
+  void _doHoverExit() {
+    _isHovered = false;
+    onHoverExit();
+  }
 
   @override
   @mustCallSuper
