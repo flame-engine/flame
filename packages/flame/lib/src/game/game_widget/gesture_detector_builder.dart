@@ -11,13 +11,15 @@ class GestureDetectorBuilder {
   final void Function()? _onChange;
 
   void add<T extends GestureRecognizer>(
-    T Function() constructor,
-    void Function(T) initializer,
-  ) {
+    T Function() constructor, [
+    void Function(T)? initializer,
+  ]) {
     final count = _counters[T];
     if (count == null) {
-      _gestures[T] =
-          GestureRecognizerFactoryWithHandlers<T>(constructor, initializer);
+      _gestures[T] = GestureRecognizerFactoryWithHandlers<T>(
+        constructor,
+        initializer ?? (_) {},
+      );
       _onChange?.call();
     }
     _counters[T] = (count ?? 0) + 1;
