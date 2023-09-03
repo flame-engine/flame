@@ -1,6 +1,7 @@
 import 'package:flame/events.dart';
 import 'package:flame/src/components/core/component.dart';
 import 'package:flame/src/components/core/component_key.dart';
+import 'package:flame/src/events/tagged_component.dart';
 import 'package:flame/src/game/flame_game.dart';
 import 'package:flutter/gestures.dart' as flutter;
 import 'package:meta/meta.dart';
@@ -11,17 +12,35 @@ import 'package:meta/meta.dart';
 /// components are mounted into the component tree.
 @internal
 class PointerMoveDispatcher extends Component {
+  /// The record of all components currently being hovered.
+  final Set<TaggedComponent<PointerMoveCallbacks>> _records = {};
+
   FlameGame get game => parent! as FlameGame;
 
   @mustCallSuper
   void onMouseMove(PointerMoveEvent event) {
+    final updated = <TaggedComponent<PointerMoveCallbacks>>{};
+
     event.deliverAtPoint(
       rootComponent: game,
       deliverToAll: true,
       eventHandler: (PointerMoveCallbacks component) {
+        final tagged = TaggedComponent(event.pointerId, component);
+        _records.add(tagged);
+        updated.add(tagged);
         component.onPointerMoveEvent(event);
       },
     );
+
+    final toRemove = <TaggedComponent<PointerMoveCallbacks>>{};
+    for (final record in _records) {
+      if (record.pointerId == event.pointerId && !updated.contains(record)) {
+        // one last "exit" event
+        record.component.onPointerMoveStopEvent(event);
+        toRemove.add(record);
+      }
+    }
+    _records.removeAll(toRemove);
   }
 
   void _handlePointerMove(flutter.PointerMoveEvent event) {

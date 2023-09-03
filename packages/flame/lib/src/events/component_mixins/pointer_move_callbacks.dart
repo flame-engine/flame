@@ -9,6 +9,8 @@ import 'package:meta/meta.dart';
 mixin PointerMoveCallbacks on Component {
   void onPointerMoveEvent(PointerMoveEvent event) {}
 
+  void onPointerMoveStopEvent(PointerMoveEvent event) {}
+
   @override
   @mustCallSuper
   void onMount() {
