@@ -1,15 +1,12 @@
-// ignore_for_file: deprecated_member_use
-
 import 'package:flame/components.dart';
+import 'package:flame/events.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
-import 'package:flame/input.dart';
 import 'package:flutter/material.dart';
 
-@Deprecated('See HoverCallbacksExample instead')
-class HoverablesExample extends FlameGame with HasHoverables, TapDetector {
+class HoverCallbacksExample extends FlameGame with TapCallbacks {
   static const String description = '''
-    This example shows how to use `Hoverable`s.\n\n
+    This example shows how to use `HoverCallbacks`s.\n\n
     Add more squares by clicking and hover them to change their color.
   ''';
 
@@ -20,19 +17,22 @@ class HoverablesExample extends FlameGame with HasHoverables, TapDetector {
   }
 
   @override
-  void onTapDown(TapDownInfo info) {
-    add(HoverableSquare(info.eventPosition.game));
+  void onTapDown(TapDownEvent event) {
+    add(HoverableSquare(event.localPosition));
   }
 }
 
-class HoverableSquare extends PositionComponent with Hoverable {
+class HoverableSquare extends PositionComponent
+    with PointerMoveCallbacks, HoverCallbacks {
   static final Paint _white = Paint()..color = const Color(0xFFFFFFFF);
   static final Paint _grey = Paint()..color = const Color(0xFFA5A5A5);
 
   HoverableSquare(Vector2 position)
-      : super(position: position, size: Vector2.all(100)) {
-    anchor = Anchor.center;
-  }
+      : super(
+          position: position,
+          size: Vector2.all(100),
+          anchor: Anchor.center,
+        );
 
   @override
   void render(Canvas canvas) {
