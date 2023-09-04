@@ -52,8 +52,10 @@ void addInputStories(Dashbook dashbook) {
     )
     ..add(
       'Hoverables',
+      // ignore: deprecated_member_use_from_same_package
       (_) => GameWidget(game: HoverablesExample()),
       codeLink: baseLink('input/hoverables_example.dart'),
+      // ignore: deprecated_member_use_from_same_package
       info: HoverablesExample.description,
     )
     ..add(

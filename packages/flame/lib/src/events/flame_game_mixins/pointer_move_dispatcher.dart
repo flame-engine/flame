@@ -7,9 +7,9 @@ import 'package:flutter/gestures.dart' as flutter;
 import 'package:meta/meta.dart';
 
 /// **MouseMoveDispatcher** facilitates dispatching of mouse move events to the
-/// [PointerMoveCallbacks] components in the component tree. It will be attached to
-/// the [FlameGame] instance automatically whenever any [PointerMoveCallbacks]
-/// components are mounted into the component tree.
+/// [PointerMoveCallbacks] components in the component tree. It will be attached
+/// to the [FlameGame] instance automatically whenever any
+/// [PointerMoveCallbacks] components are mounted into the component tree.
 @internal
 class PointerMoveDispatcher extends Component {
   /// The record of all components currently being hovered.
