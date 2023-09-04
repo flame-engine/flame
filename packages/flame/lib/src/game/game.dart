@@ -35,7 +35,7 @@ abstract mixin class Game {
   /// functionality in Flutter.
   late final GestureDetectorBuilder gestureDetectors =
       GestureDetectorBuilder(refreshWidget)..initializeGestures(this);
-  
+
   /// Set by the PointerMoveDispatcher to receive mouse events from the
   /// game widget.
   void Function(PointerHoverEvent event)? mouseDetector;

@@ -24,7 +24,7 @@ export 'src/events/messages/drag_cancel_event.dart' show DragCancelEvent;
 export 'src/events/messages/drag_end_event.dart' show DragEndEvent;
 export 'src/events/messages/drag_start_event.dart' show DragStartEvent;
 export 'src/events/messages/drag_update_event.dart' show DragUpdateEvent;
-export 'src/events/messages/mouse_movement_event.dart'
+export 'src/events/messages/pointer_move_event.dart'
     show PointerMoveEvent;
 export 'src/events/messages/tap_cancel_event.dart' show TapCancelEvent;
 export 'src/events/messages/tap_down_event.dart' show TapDownEvent;
