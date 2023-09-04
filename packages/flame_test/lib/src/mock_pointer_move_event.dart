@@ -13,7 +13,7 @@ PointerMoveEvent createMouseMoveEvent({
   return PointerMoveEvent(
     pointerId ?? 1,
     game,
-    flutter.PointerMoveEvent(
+    flutter.PointerHoverEvent(
       timeStamp: timestamp ?? Duration.zero,
       position: position?.toOffset() ?? Offset.zero,
       delta: delta?.toOffset() ?? Offset.zero,

@@ -43,20 +43,18 @@ class PointerMoveDispatcher extends Component {
     _records.removeAll(toRemove);
   }
 
-  void _handlePointerMove(flutter.PointerMoveEvent event) {
-    onMouseMove(PointerMoveEvent.fromPointerMoveEvent(game, event));
+  void _handlePointerMove(flutter.PointerHoverEvent event) {
+    onMouseMove(PointerMoveEvent.fromPointerHoverEvent(game, event));
   }
 
   @override
   void onMount() {
-    game.gestureDetectors.add<MouseMovementGestureRecognizer>(
-      () => MouseMovementGestureRecognizer(onPointerMove: _handlePointerMove),
-    );
+    game.mouseDetector = _handlePointerMove;
   }
 
   @override
   void onRemove() {
-    game.gestureDetectors.remove<MouseMovementGestureRecognizer>();
+    game.mouseDetector = null;
     game.unregisterKey(const MouseMoveDispatcherKey());
   }
 }
@@ -70,37 +68,4 @@ class MouseMoveDispatcherKey implements ComponentKey {
   @override
   bool operator ==(dynamic other) =>
       other is MouseMoveDispatcherKey && other.hashCode == hashCode;
-}
-
-class MouseMovementGestureRecognizer
-    extends flutter.OneSequenceGestureRecognizer {
-  void Function(flutter.PointerMoveEvent) onPointerMove;
-
-  MouseMovementGestureRecognizer({required this.onPointerMove});
-
-  @override
-  void addPointer(flutter.PointerEvent event) {
-    startTrackingPointer(event.pointer);
-    _propagatePointerEvent(event);
-  }
-
-  @override
-  void handleEvent(flutter.PointerEvent event) => _propagatePointerEvent(event);
-
-  void _propagatePointerEvent(flutter.PointerEvent event) {
-    if (event is flutter.PointerMoveEvent) {
-      onPointerMove(event);
-    }
-  }
-
-  @override
-  String get debugDescription => 'mouseMovement';
-
-  @override
-  void stopTrackingPointer(int pointer) {
-    super.stopTrackingPointer(pointer);
-  }
-
-  @override
-  void didStopTrackingLastPointer(int pointer) {}
 }
