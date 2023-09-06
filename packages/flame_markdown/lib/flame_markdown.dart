@@ -1,5 +1,5 @@
 import 'package:flame/text.dart';
-import 'package:markdown/markdown.dart' as md;
+import 'package:markdown/markdown.dart';
 
 /// Helper to parse markdown strings into an AST structure provided by the
 /// `markdown` package, and convert that structure into an equivalent
@@ -18,28 +18,28 @@ class FlameMarkdown {
   /// This uses the `markdown` package to parse the markdown string
   /// into an AST structure, and then converts that structure into
   /// a [DocumentRoot] from Flame.
-  static DocumentRoot toDocument(String markdown, {md.Document? document}) {
+  static DocumentRoot toDocument(String markdown, {Document? document}) {
     final nodes = _parse(markdown, document: document);
     return DocumentRoot(
       nodes.map(_convertNode).map(_castCheck<BlockNode>).toList(),
     );
   }
 
-  static List<md.Node> _parse(String markdown, {md.Document? document}) {
-    return (document ?? md.Document()).parse(markdown);
+  static List<Node> _parse(String markdown, {Document? document}) {
+    return (document ?? Document()).parse(markdown);
   }
 
-  static TextNode _convertNode(md.Node node) {
-    if (node is md.Element) {
+  static TextNode _convertNode(Node node) {
+    if (node is Element) {
       return _convertElement(node);
-    } else if (node is md.Text) {
+    } else if (node is Text) {
       return _convertText(node);
     } else {
       throw Exception('Unknown node type: ${node.runtimeType}');
     }
   }
 
-  static TextNode _convertElement(md.Element element) {
+  static TextNode _convertElement(Element element) {
     final children = (element.children ?? [])
         .map(_convertNode)
         .map(_castCheck<InlineTextNode>)
@@ -71,7 +71,7 @@ class FlameMarkdown {
     }
   }
 
-  static PlainTextNode _convertText(md.Text text) {
+  static PlainTextNode _convertText(Text text) {
     return PlainTextNode(text.text);
   }
 
