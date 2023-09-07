@@ -341,8 +341,9 @@ void onDragUpdate(DragUpdateInfo info) {
 ### PositionType
 
 ```{note}
-If you are using the `CameraComponent` you should not use `PositionType`, but instead adding your
-components directly to the viewport for example if you want to use them as a HUD.
+If you are using the `CameraComponent` you should not use `PositionType`, but
+instead adding your components directly to the viewport for example if you
+want to use them as a HUD.
 ```
 
 If you want to create a HUD (Head-up display) or another component that isn't positioned in relation
@@ -814,6 +815,7 @@ class ButtonComponent extends SpriteGroupComponent<ButtonState>
 }
 ```
 
+
 ## SpawnComponent
 
 This component is a non-visual component that spawns other components inside of the parent of the
@@ -849,6 +851,7 @@ SpawnComponent(
   area: Circle(Vector2(100, 200), 150),
 );
 ```
+
 
 ## SvgComponent
 
