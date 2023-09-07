@@ -170,6 +170,35 @@ For more details about the underlying mechanics of the text rendering pipeline, 
 Text Nodes, and Text Styles" below.
 
 
+### Flame Markdown
+
+In order to more easily create rich-text-based DocumentRoots, from simple strings with bold/italics
+to complete structured documents, Flame provides the `flame_markdown` bridge package that connects
+the `markdown` library with Flame's text rendering infrastructure.
+
+Just use the `FlameMarkdown` helper class and the `toDocument` method to convert a markdown string
+into a DocumentRoot (which can then be used to create a `TextElementComponent`):
+
+```dart
+import 'package:flame/text.dart';
+import 'package:flame_markdown/flame_markdown.dart';
+
+// ...
+final component = await TextElementComponent.fromDocument(
+  document: FlameMarkdown.toDocument(
+    '# Header\n'
+    '\n'
+    'This is a **bold** text, and this is *italic*.\n'
+    '\n'
+    'This is a second paragraph.\n',
+  ),
+  style: ...,
+  position: ...,
+  size: ...,
+);
+```
+
+
 ## Infrastructure
 
 If you are not using the Flame Component System, want to understand the infrastructure behind text
