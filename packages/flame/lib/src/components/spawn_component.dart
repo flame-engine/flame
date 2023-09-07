@@ -4,31 +4,45 @@ import 'dart:math';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/experimental.dart';
+import 'package:flame/math.dart';
 
+/// {@template spawn_component}
 /// The [SpawnComponent] is a non-visual component which can spawn
 /// [PositionComponent]s randomly within a set [area]. If [area] is not set it
 /// will use the size of the nearest ancestor that provides a size.
-///
-/// If you want your components to spawn with a static period, just set [period]
-/// and if you want them to spawn within a random period set [minPeriod] and
-/// [maxPeriod].
+/// [period] will set the static time interval for when it will spawn new
+/// components.
+/// If you want to use a non static time interval, use the
+/// [SpawnComponent.periodRange] constructor.
+/// {@endremplate}
 class SpawnComponent extends Component {
+  /// {@macro spawn_component}
   SpawnComponent({
     required this.factory,
+    required double period,
     this.area,
     this.within = true,
-    double? period,
-    double? minPeriod,
-    double? maxPeriod,
     Random? random,
     super.key,
-  })  : _period = period ?? 0,
-        _random = random ?? _randomFallback,
-        assert(
-          period != null || (minPeriod != null && maxPeriod != null),
-          'Either the static period must be defined, or both minPeriod and '
-          'maxPeriod must be defined',
-        );
+  })  : _period = period,
+        _random = random ?? randomFallback;
+
+  /// Use this constructor if you want your components to spawn within an
+  /// interval time range.
+  /// [minPeriod] will be the minimum amount of time before the next component
+  /// spawns and [maxPeriod] will be the maximum amount of time before it
+  /// spawns.
+  SpawnComponent.periodRange({
+    required this.factory,
+    required double minPeriod,
+    required double maxPeriod,
+    this.area,
+    this.within = true,
+    Random? random,
+    super.key,
+  })  : _period = minPeriod +
+            (random ?? randomFallback).nextDouble() * (maxPeriod - minPeriod),
+        _random = random ?? randomFallback;
 
   /// The function used to create new components to spawn.
   ///
@@ -67,7 +81,6 @@ class SpawnComponent extends Component {
   bool get hasRandomPeriod => minPeriod != null;
 
   final Random _random;
-  static final Random _randomFallback = Random();
 
   /// The amount of spawned components.
   int amount = 0;
