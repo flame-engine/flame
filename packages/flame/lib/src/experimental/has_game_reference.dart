@@ -1,6 +1,5 @@
 import 'package:flame/src/components/core/component.dart';
 import 'package:flame/src/game/flame_game.dart';
-import 'package:flame/src/game/game.dart';
 import 'package:flame/src/game/mixins/single_game_instance.dart';
 
 /// [HasGameReference] mixin provides property [game], which is the cached
@@ -25,7 +24,7 @@ mixin HasGameReference<T extends FlameGame> on Component {
   set game(T? value) => _game = value;
 
   @override
-  Game? findGame() => _game ?? super.findGame();
+  FlameGame? findGame() => _game ?? super.findGame();
 
   T _findGameAndCheck() {
     final game = findGame();
