@@ -1,5 +1,6 @@
 import 'package:flame/src/components/core/component.dart';
 import 'package:flame/src/components/mixins/has_game_ref.dart';
+import 'package:flame/src/game/flame_game.dart';
 import 'package:flame/src/game/game.dart';
 import 'package:flame/src/game/mixins/single_game_instance.dart';
 
@@ -12,7 +13,7 @@ import 'package:flame/src/game/mixins/single_game_instance.dart';
 ///
 /// This class is equivalent to [HasGameRef] in all respects except that its
 /// generic parameter [T] can be any [Game], not just a "FlameGame".
-mixin HasGameReference<T extends Game> on Component {
+mixin HasGameReference<T extends FlameGame> on Component {
   T? _game;
 
   /// Reference to the top-level Game instance that owns this component.
