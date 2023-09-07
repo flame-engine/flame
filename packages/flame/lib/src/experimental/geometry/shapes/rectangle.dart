@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'dart:ui';
 
+import 'package:collection/collection.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/geometry.dart';
 import 'package:flame/src/experimental/geometry/shapes/shape.dart';
@@ -171,11 +172,31 @@ class Rectangle extends Shape {
         top + randomGenerator.nextDouble() * height,
       );
     } else {
-      final edge = randomGenerator.nextInt(4);
+      final verticesLengths2 = <double>[];
+      for (final (i, vertex) in vertices.indexed) {
+        if (i == 0) {
+          continue;
+        }
+        verticesLengths2.add(
+          pow(vertex.x - vertices[i - 1].x, 2).toDouble() +
+              pow(vertex.y - vertices[i - 1].y, 2).toDouble(),
+        );
+      }
+      final totalLength = verticesLengths2.sum;
+      final pointOnLines = randomGenerator.nextDouble() * totalLength;
+      var vertexIndex = 0;
+      var currentEndPoint = 0.0;
+      while (vertexIndex < verticesLengths2.length) {
+        currentEndPoint += verticesLengths2[vertexIndex];
+        if (currentEndPoint >= pointOnLines) {
+          break;
+        }
+        vertexIndex++;
+      }
 
       final double x;
       final double y;
-      switch (edge) {
+      switch (vertexIndex) {
         case 0: // Top edge
           x = randomGenerator.nextDouble() * width;
           y = 0.0;
