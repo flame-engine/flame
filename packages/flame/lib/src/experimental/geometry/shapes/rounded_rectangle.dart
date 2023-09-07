@@ -2,6 +2,7 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:flame/geometry.dart';
+import 'package:flame/math.dart';
 import 'package:flame/src/experimental/geometry/shapes/shape.dart';
 import 'package:flame/src/game/transform2d.dart';
 import 'package:vector_math/vector_math_64.dart';
@@ -200,6 +201,24 @@ class RoundedRectangle extends Shape {
 
   @override
   Vector2 randomPoint({Random? random, bool within = true}) {
-    throw UnimplementedError();
+    assert(
+      within,
+      'It is not possible to get a point only along the edges of a '
+      'rounded rectangle.',
+    );
+    final randomGenerator = random ?? randomFallback;
+    final result = Vector2.zero();
+    final min = aabb.min;
+    final max = aabb.max;
+
+    while (true) {
+      final randomX = min.x + randomGenerator.nextDouble() * (max.x - min.x);
+      final randomY = min.y + randomGenerator.nextDouble() * (max.y - min.y);
+      result.setValues(randomX, randomY);
+
+      if (containsPoint(result)) {
+        return result;
+      }
+    }
   }
 }
