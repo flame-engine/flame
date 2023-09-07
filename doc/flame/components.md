@@ -340,6 +340,11 @@ void onDragUpdate(DragUpdateInfo info) {
 
 ### PositionType
 
+```{note}
+If you are using the `CameraComponent` you should not use `PositionType`, but instead adding your
+components directly to the viewport for example if you want to use them as a HUD.
+```
+
 If you want to create a HUD (Head-up display) or another component that isn't positioned in relation
 to the game coordinates, you can change the `PositionType` of the component.
 The default `PositionType` is `positionType = PositionType.game` and that can be changed to
@@ -809,6 +814,41 @@ class ButtonComponent extends SpriteGroupComponent<ButtonState>
 }
 ```
 
+## SpawnComponent
+
+This component is a non-visual component that spawns other components inside of the parent of the
+`SpawnComponent`. It's great if you for example want to spawn enemies or power-ups randomly within
+an area.
+
+The `SpawnComponent` takes a factory function that it uses to create new components and an area
+where the components should be spawned within (or along the edges of).
+
+For the area, you can use the `Circle`, `Rectangle` or `Polygon` class, and if you want to only
+spawn components along the edges of the shape set the `within` argument to false (defaults to true).
+
+This would for example spawn new components of the type `MyComponent` every 0.5 seconds randomly
+within the defined circle:
+
+```dart
+SpawnComponent(
+  factory: () => MyComponent(size: Vector2(10, 20)),
+  period: 0.5,
+  area: Circle(Vector2(100, 200), 150),
+);
+```
+
+If you don't want the spawning rate to be static, you can use the `minPeriod` and `maxPeriod`
+instead. In the following example the component would be spawned randomly within the circle and the
+time between each new spawned component is between 0.5 to 10 seconds.
+
+```dart
+SpawnComponent(
+  factory: () => MyComponent(size: Vector2(10, 20)),
+  minPeriod: 0.5,
+  maxPeriod: 10,
+  area: Circle(Vector2(100, 200), 150),
+);
+```
 
 ## SvgComponent
 
