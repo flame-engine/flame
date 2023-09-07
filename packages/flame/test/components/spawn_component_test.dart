@@ -14,7 +14,7 @@ void main() {
         size: Vector2.all(200),
       );
       final spawn = SpawnComponent(
-        factory: PositionComponent.new,
+        factory: (_) => PositionComponent(),
         period: 1,
         area: shape,
         random: random,
@@ -45,7 +45,7 @@ void main() {
       final shape = Circle(Vector2(100, 200), 100);
       expect(shape.containsPoint(Vector2.all(200)), isTrue);
       final spawn = SpawnComponent(
-        factory: PositionComponent.new,
+        factory: (_) => PositionComponent(),
         period: 1,
         area: shape,
         random: random,
@@ -82,7 +82,7 @@ void main() {
       );
       expect(shape.containsPoint(Vector2.all(150)), isTrue);
       final spawn = SpawnComponent(
-        factory: PositionComponent.new,
+        factory: (_) => PositionComponent(),
         period: 1,
         area: shape,
         random: random,

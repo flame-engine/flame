@@ -31,7 +31,10 @@ class SpawnComponent extends Component {
         );
 
   /// The function used to create new components to spawn.
-  PositionComponent Function() factory;
+  ///
+  /// [amount] is the amount of components that the [SpawnComponent] has spawned
+  /// so far.
+  PositionComponent Function(int amount) factory;
 
   /// The area where the components should be spawned.
   Shape? area;
@@ -66,12 +69,23 @@ class SpawnComponent extends Component {
   final Random _random;
   static final Random _randomFallback = Random();
 
+  /// The amount of spawned components.
+  int amount = 0;
+
   @override
   FutureOr<void> onLoad() async {
     if (area == null) {
       final parentPosition =
-          findParent<PositionProvider>()?.position ?? Vector2.zero();
-      final parentSize = findParent<ReadOnlySizeProvider>()!.size;
+          ancestors().whereType<PositionProvider>().firstOrNull?.position ??
+              Vector2.zero();
+      final parentSize =
+          ancestors().whereType<ReadOnlySizeProvider>().firstOrNull?.size ??
+              Vector2.zero();
+      assert(
+        !parentSize.isZero(),
+        'The SpawnComponent needs an ancestor with a size if area is not '
+        'provided.',
+      );
       area = Rectangle.fromLTWH(
         parentPosition.x,
         parentPosition.y,
@@ -92,13 +106,14 @@ class SpawnComponent extends Component {
       period: _period,
       repeat: true,
       onTick: () {
-        final component = factory();
+        final component = factory(amount);
         component.position = area!.randomPoint(
           random: _random,
           within: within,
         );
         parent?.add(component);
         updatePeriod();
+        amount++;
       },
     );
     timer = timerComponent.timer;

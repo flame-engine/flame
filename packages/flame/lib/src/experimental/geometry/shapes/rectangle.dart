@@ -1,12 +1,13 @@
 import 'dart:math';
 import 'dart:ui';
 
-import 'package:collection/collection.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/geometry.dart';
+import 'package:flame/src/experimental/geometry/shapes/polygon.dart';
 import 'package:flame/src/experimental/geometry/shapes/shape.dart';
 import 'package:flame/src/game/transform2d.dart';
 import 'package:flame/src/math/random_fallback.dart';
+import 'package:flutter/cupertino.dart';
 
 /// An axis-aligned rectangle.
 ///
@@ -172,52 +173,7 @@ class Rectangle extends Shape {
         top + randomGenerator.nextDouble() * height,
       );
     } else {
-      final verticesLengths2 = <double>[];
-      for (final (i, vertex) in vertices.indexed) {
-        if (i == 0) {
-          continue;
-        }
-        verticesLengths2.add(
-          pow(vertex.x - vertices[i - 1].x, 2).toDouble() +
-              pow(vertex.y - vertices[i - 1].y, 2).toDouble(),
-        );
-      }
-      final totalLength = verticesLengths2.sum;
-      final pointOnLines = randomGenerator.nextDouble() * totalLength;
-      var vertexIndex = 0;
-      var currentEndPoint = 0.0;
-      while (vertexIndex < verticesLengths2.length) {
-        currentEndPoint += verticesLengths2[vertexIndex];
-        if (currentEndPoint >= pointOnLines) {
-          break;
-        }
-        vertexIndex++;
-      }
-
-      final double x;
-      final double y;
-      switch (vertexIndex) {
-        case 0: // Top edge
-          x = randomGenerator.nextDouble() * width;
-          y = 0.0;
-          break;
-        case 1: // Right edge
-          x = width;
-          y = randomGenerator.nextDouble() * height;
-          break;
-        case 2: // Bottom edge
-          x = randomGenerator.nextDouble() * width;
-          y = height;
-          break;
-        case 3: // Left edge
-          x = 0.0;
-          y = randomGenerator.nextDouble() * height;
-          break;
-        default:
-          throw Exception('Invalid edge value');
-      }
-
-      return Vector2(left + x, top + y);
+      return Polygon.randomPointAlongEdges(vertices, random: randomGenerator);
     }
   }
 

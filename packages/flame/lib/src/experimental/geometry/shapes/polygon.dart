@@ -2,10 +2,10 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:collection/collection.dart';
+import 'package:flame/components.dart';
 import 'package:flame/math.dart';
 import 'package:flame/src/experimental/geometry/shapes/shape.dart';
 import 'package:flame/src/game/transform2d.dart';
-import 'package:vector_math/vector_math_64.dart';
 
 /// An arbitrary polygon with 3 or more vertices.
 ///
@@ -262,16 +262,39 @@ class Polygon extends Shape {
         }
       }
     } else {
-      final edgeIndex = randomGenerator.nextInt(vertices.length);
-      final startPoint = vertices[edgeIndex];
-      final endPoint = vertices[(edgeIndex + 1) % vertices.length];
-
-      // Generate a random position along the chosen edge.
-      final t = randomGenerator.nextDouble();
-      final x = lerpDouble(startPoint.x, endPoint.x, t)!;
-      final y = lerpDouble(startPoint.y, endPoint.y, t)!;
-
-      return Vector2(x, y);
+      return Polygon.randomPointAlongEdges(_vertices, random: randomGenerator);
     }
+  }
+
+  /// Returns a random point on the [vertices].
+  static Vector2 randomPointAlongEdges(
+    List<Vector2> vertices, {
+    Random? random,
+  }) {
+    final randomGenerator = random ?? randomFallback;
+    final verticesLengths2 = <double>[];
+    var totalLength = 0.0;
+    for (final (i, startPoint) in vertices.indexed) {
+      final endPoint = vertices[(i + 1) % vertices.length];
+      final length2 = pow(endPoint.x - startPoint.x, 2).toDouble() +
+          pow(endPoint.y - startPoint.y, 2).toDouble();
+      verticesLengths2.add(length2);
+      totalLength += length2;
+    }
+    final pointOnEdges = randomGenerator.nextDouble() * totalLength;
+    var vertexIndex = 0;
+    var currentEndPoint = 0.0;
+    while (vertexIndex < verticesLengths2.length) {
+      currentEndPoint += verticesLengths2[vertexIndex];
+      if (currentEndPoint >= pointOnEdges) {
+        break;
+      }
+      vertexIndex++;
+    }
+    final startPoint = vertices[vertexIndex];
+    final endPoint = vertices[(vertexIndex + 1) % vertices.length];
+    final t = randomGenerator.nextDouble();
+
+    return startPoint.clone()..lerp(endPoint, t);
   }
 }

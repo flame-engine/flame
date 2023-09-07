@@ -302,7 +302,7 @@ class Component {
   ///
   /// If [includeSelf] is set to true (default is false) then the component
   /// which the call is made for is also included in the search.
-  T? findParent<T>({bool includeSelf = false}) {
+  T? findParent<T extends Component>({bool includeSelf = false}) {
     return ancestors(includeSelf: includeSelf).whereType<T>().firstOrNull;
   }
 
