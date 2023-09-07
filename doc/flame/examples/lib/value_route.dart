@@ -6,6 +6,7 @@ import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
+import 'package:flame/geometry.dart';
 
 class ValueRouteExample extends FlameGame {
   late final RouterComponent router;
@@ -130,5 +131,3 @@ class Star extends PositionComponent with TapCallbacks {
     }
   }
 }
-
-const tau = pi * 2;

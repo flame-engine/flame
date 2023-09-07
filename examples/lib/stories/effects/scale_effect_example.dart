@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/game.dart';
+import 'package:flame/geometry.dart';
 import 'package:flame/input.dart';
 import 'package:flame/palette.dart';
 import 'package:flutter/animation.dart';
@@ -76,7 +77,6 @@ class Star extends PositionComponent {
   Star() {
     const smallR = 15.0;
     const bigR = 30.0;
-    const tau = 2 * pi;
     shape = Path()..moveTo(bigR, 0);
     for (var i = 1; i < 10; i++) {
       final r = i.isEven ? bigR : smallR;

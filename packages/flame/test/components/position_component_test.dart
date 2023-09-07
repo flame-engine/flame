@@ -5,6 +5,7 @@ import 'package:canvas_test/canvas_test.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
+import 'package:flame/geometry.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:test/test.dart';
 
@@ -967,7 +968,7 @@ void main() {
         const h = 2.0;
         final component = PositionComponent(size: Vector2(w, h));
         for (var i = 0; i < 10; i++) {
-          final a = (i / 10) * Transform2D.tau / 4;
+          final a = (i / 10) * tau / 4;
           component.angle = a;
           expect(
             component.toRect(),

@@ -1,6 +1,8 @@
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:collection/collection.dart';
+import 'package:flame/math.dart';
 import 'package:flame/src/experimental/geometry/shapes/shape.dart';
 import 'package:flame/src/game/transform2d.dart';
 import 'package:vector_math/vector_math_64.dart';
@@ -241,4 +243,35 @@ class Polygon extends Shape {
 
   @override
   String toString() => 'Polygon($vertices)';
+
+  @override
+  Vector2 randomPoint({Random? random, bool within = true}) {
+    final randomGenerator = random ?? randomFallback;
+    if (within) {
+      final result = Vector2.zero();
+      final min = aabb.min;
+      final max = aabb.max;
+
+      while (true) {
+        final randomX = min.x + randomGenerator.nextDouble() * (max.x - min.x);
+        final randomY = min.y + randomGenerator.nextDouble() * (max.y - min.y);
+        result.setValues(randomX, randomY);
+
+        if (containsPoint(result)) {
+          return result;
+        }
+      }
+    } else {
+      final edgeIndex = randomGenerator.nextInt(vertices.length);
+      final startPoint = vertices[edgeIndex];
+      final endPoint = vertices[(edgeIndex + 1) % vertices.length];
+
+      // Generate a random position along the chosen edge.
+      final t = randomGenerator.nextDouble();
+      final x = lerpDouble(startPoint.x, endPoint.x, t)!;
+      final y = lerpDouble(startPoint.y, endPoint.y, t)!;
+
+      return Vector2(x, y);
+    }
+  }
 }

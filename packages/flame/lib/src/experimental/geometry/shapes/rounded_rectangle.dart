@@ -1,9 +1,9 @@
 import 'dart:math';
 import 'dart:ui';
 
+import 'package:flame/geometry.dart';
 import 'package:flame/src/experimental/geometry/shapes/shape.dart';
 import 'package:flame/src/game/transform2d.dart';
-import 'package:meta/meta.dart';
 import 'package:vector_math/vector_math_64.dart';
 
 /// An axis-aligned rectangle with rounded corners.
@@ -197,7 +197,9 @@ class RoundedRectangle extends Shape {
   @override
   String toString() =>
       'RoundedRectangle([$_left, $_top], [$_right, $_bottom], $_radius)';
-}
 
-@internal
-const tau = Transform2D.tau; // 2π
+  @override
+  Vector2 randomPoint({Random? random, bool within = true}) {
+    throw UnimplementedError();
+  }
+}

@@ -1,10 +1,11 @@
 import 'dart:math';
 import 'dart:ui';
 
+import 'package:flame/extensions.dart';
 import 'package:flame/geometry.dart';
 import 'package:flame/src/experimental/geometry/shapes/shape.dart';
 import 'package:flame/src/game/transform2d.dart';
-import 'package:vector_math/vector_math_64.dart';
+import 'package:flame/src/math/random_fallback.dart';
 
 /// An axis-aligned rectangle.
 ///
@@ -159,6 +160,44 @@ class Rectangle extends Shape {
   /// line segment.
   Set<Vector2> intersections(LineSegment line) {
     return edges.expand((e) => e.intersections(line)).toSet();
+  }
+
+  @override
+  Vector2 randomPoint({Random? random, bool within = true}) {
+    final randomGenerator = random ?? randomFallback;
+    if (within) {
+      return Vector2(
+        left + randomGenerator.nextDouble() * width,
+        top + randomGenerator.nextDouble() * height,
+      );
+    } else {
+      final edge = randomGenerator.nextInt(4);
+
+      final double x;
+      final double y;
+      switch (edge) {
+        case 0: // Top edge
+          x = randomGenerator.nextDouble() * width;
+          y = 0.0;
+          break;
+        case 1: // Right edge
+          x = width;
+          y = randomGenerator.nextDouble() * height;
+          break;
+        case 2: // Bottom edge
+          x = randomGenerator.nextDouble() * width;
+          y = height;
+          break;
+        case 3: // Left edge
+          x = 0.0;
+          y = randomGenerator.nextDouble() * height;
+          break;
+        default:
+          throw Exception('Invalid edge value');
+      }
+
+      return Vector2(left + x, top + y);
+    }
   }
 
   /// The 4 edges of this rectangle, returned in a clockwise fashion.

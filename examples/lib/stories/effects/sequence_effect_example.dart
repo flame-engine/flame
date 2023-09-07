@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/game.dart';
+import 'package:flame/geometry.dart';
 
 class SequenceEffectExample extends FlameGame {
   static const String description = '''
@@ -14,7 +15,6 @@ class SequenceEffectExample extends FlameGame {
 
   @override
   Future<void> onLoad() async {
-    const tau = Transform2D.tau;
     EffectController duration(double x) => EffectController(duration: x);
     add(
       Player()

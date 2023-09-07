@@ -4,7 +4,7 @@ import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/geometry.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
-import 'package:flame/src/utils/solve_quadratic.dart';
+import 'package:flame/src/math/solve_quadratic.dart';
 import 'package:meta/meta.dart';
 
 class CircleComponent extends ShapeComponent implements SizeProvider {
