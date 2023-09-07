@@ -839,12 +839,13 @@ SpawnComponent(
 );
 ```
 
-If you don't want the spawning rate to be static, you can use the `minPeriod` and `maxPeriod`
-instead. In the following example the component would be spawned randomly within the circle and the
-time between each new spawned component is between 0.5 to 10 seconds.
+If you don't want the spawning rate to be static, you can use the `SpawnComponent.periodRange`
+constructor with the `minPeriod` and `maxPeriod` arguments instead.
+In the following example the component would be spawned randomly within the circle and the time
+between each new spawned component is between 0.5 to 10 seconds.
 
 ```dart
-SpawnComponent(
+SpawnComponent.periodRange(
   factory: () => MyComponent(size: Vector2(10, 20)),
   minPeriod: 0.5,
   maxPeriod: 10,
