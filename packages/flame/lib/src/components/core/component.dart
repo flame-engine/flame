@@ -386,7 +386,7 @@ class Component {
   static Game? staticGameInstance;
   FlameGame? findGame() {
     assert(
-      staticGameInstance is FlameGame,
+      staticGameInstance is FlameGame || staticGameInstance == null,
       'A component needs to have a FlameGame as the root.',
     );
     final gameInstance = staticGameInstance is FlameGame
