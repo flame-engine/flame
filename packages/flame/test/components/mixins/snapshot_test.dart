@@ -50,13 +50,19 @@ void main() {
           }
 
           // Check that render tree has been called multiple times
-          expect(snapshotComponent.renderTreeCalled,
-              greaterThanOrEqualTo(framesToWait));
+          expect(
+            snapshotComponent.renderTreeCalled,
+            greaterThanOrEqualTo(framesToWait),
+          );
           // And that rendering is happening normally
-          expect(snapshotComponent.renderCalled,
-              greaterThanOrEqualTo(framesToWait));
-          expect(snapshotComponent.parentRenderTreeCalled,
-              greaterThanOrEqualTo(framesToWait));
+          expect(
+            snapshotComponent.renderCalled,
+            greaterThanOrEqualTo(framesToWait),
+          );
+          expect(
+            snapshotComponent.parentRenderTreeCalled,
+            greaterThanOrEqualTo(framesToWait),
+          );
           // And that a snapshot has not been generated
           expect(snapshotComponent.takeSnapshotCalled, equals(0));
           expect(snapshotComponent.hasSnapshot, equals(false));
