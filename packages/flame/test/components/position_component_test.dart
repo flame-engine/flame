@@ -920,7 +920,7 @@ void main() {
           ..position = Vector2(23, 17)
           ..size = Vector2.all(10)
           ..anchor = Anchor.center
-          ..precision = null;
+          ..debugCoordinatesPrecision = null;
         final canvas = MockCanvas();
         component.renderTree(canvas);
         expect(
@@ -930,6 +930,40 @@ void main() {
             ..drawRect(const Rect.fromLTWH(0, 0, 10, 10))
             ..drawLine(const Offset(5, 3), const Offset(5, 7))
             ..drawLine(const Offset(3, 5), const Offset(7, 5))
+            ..translate(0, 0), // canvas.restore
+        );
+      });
+
+      test('render without coordinates and then render with coordinates', () {
+        final component = _MyDebugComponent()
+          ..position = Vector2(23, 17)
+          ..size = Vector2.all(10)
+          ..anchor = Anchor.center
+          ..debugCoordinatesPrecision = null;
+        final withoutCoordinatesCanvas = MockCanvas();
+        component.renderTree(withoutCoordinatesCanvas);
+        expect(
+          withoutCoordinatesCanvas,
+          MockCanvas()
+            ..translate(18, 12)
+            ..drawRect(const Rect.fromLTWH(0, 0, 10, 10))
+            ..drawLine(const Offset(5, 3), const Offset(5, 7))
+            ..drawLine(const Offset(3, 5), const Offset(7, 5))
+            ..translate(0, 0), // canvas.restore
+        );
+
+        component.debugCoordinatesPrecision = 0;
+        final withCoordinatesCanvas = MockCanvas();
+        component.renderTree(withCoordinatesCanvas);
+        expect(
+          withCoordinatesCanvas,
+          MockCanvas()
+            ..translate(18, 12)
+            ..drawRect(const Rect.fromLTWH(0, 0, 10, 10))
+            ..drawLine(const Offset(5, 3), const Offset(5, 7))
+            ..drawLine(const Offset(3, 5), const Offset(7, 5))
+            ..drawParagraph(null, const Offset(-30, -15))
+            ..drawParagraph(null, const Offset(-20, 10))
             ..translate(0, 0), // canvas.restore
         );
       });
@@ -1004,11 +1038,6 @@ void main() {
 class _MyHitboxComponent extends PositionComponent with GestureHitboxes {}
 
 class _MyDebugComponent extends PositionComponent {
-  int? precision = 0;
-
   @override
   bool get debugMode => true;
-
-  @override
-  int? get debugCoordinatesPrecision => precision;
 }
