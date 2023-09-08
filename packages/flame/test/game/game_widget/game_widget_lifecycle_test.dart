@@ -26,6 +26,18 @@ class _MyGame extends FlameGame {
   }
 
   @override
+  void update(double dt) {
+    super.update(dt);
+    events.add('update');
+  }
+
+  @override
+  void render(Canvas canvas) {
+    super.render(canvas);
+    events.add('render');
+  }
+
+  @override
   void onRemove() {
     super.onRemove();
     events.add('onRemove');
@@ -239,10 +251,15 @@ void main() {
           'onGameResize',
           'onLoad',
           'onMount',
+          'update',
+          'render',
+          'update',
           'onRemove',
           'onDispose',
           'onGameResize',
           'onMount',
+          'update',
+          'render',
         ],
       );
     });

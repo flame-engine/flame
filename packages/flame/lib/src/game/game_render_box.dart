@@ -83,6 +83,12 @@ class GameRenderBox extends RenderBox with WidgetsBindingObserver {
   Size computeDryLayout(BoxConstraints constraints) => constraints.biggest;
 
   @override
+  void performLayout() {
+    game.update(0);
+    super.performLayout();
+  }
+
+  @override
   void attach(PipelineOwner owner) {
     super.attach(owner);
     _attachGame(owner);
