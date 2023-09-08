@@ -129,8 +129,7 @@ Snapshots are an alternative to layers. The `Snapshot` mixin can be applied to a
 class SnapshotComponent extends PositionComponent with Snapshot {}
 
 class MyGame extends FlameGame {
-  SnapshotComponent root;
-  Sprite player;
+  late final SnapshotComponent root;
 
   @override
   Future<void> onLoad() async {
@@ -153,7 +152,7 @@ during the game, like a background for example.
 class SnapshotComponent extends PositionComponent with Snapshot {}
 
 class MyGame extends FlameGame {
-  SnapshotComponent root;
+  late final SnapshotComponent root;
   late final SpriteComponent background1;
   late final SpriteComponent background2;
 
@@ -209,7 +208,7 @@ A snapshot is saved as a `Picture`, but it can be converted to an `Image` using 
 class SnapshotComponent extends PositionComponent with Snapshot {}
 
 class MyGame extends FlameGame {
-  SnapshotComponent root;
+  late final SnapshotComponent root;
 
   @override
   Future<void> onLoad() async {
