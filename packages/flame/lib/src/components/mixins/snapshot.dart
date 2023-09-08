@@ -2,10 +2,10 @@ import 'dart:ui';
 
 import 'package:flame/components.dart';
 
-/// A mixin that enables caching a component and all it's children. If
-/// [renderSnapshot] is set to `true`, the component and it's children will be
+/// A mixin that enables caching a component and all its children. If
+/// [renderSnapshot] is set to `true`, the component and its children will be
 /// rendered to a cache. Subsequent renders use the cache, dramatically
-/// improving performance. This is only effective if the component and it's
+/// improving performance. This is only effective if the component and its
 /// children do not change - i.e. they are not animated and they do not move
 /// around relative to each other.
 ///
@@ -15,7 +15,7 @@ mixin Snapshot on PositionComponent {
   bool _renderSnapshot = true;
   Picture? _picture;
 
-  /// If [renderSnapshot] is `true` then this component and all it's children
+  /// If [renderSnapshot] is `true` then this component and all its children
   /// will be rendered once and cached. If [renderSnapshot] is `false`
   /// then this component will render normally.
   bool get renderSnapshot => _renderSnapshot;
@@ -54,7 +54,7 @@ mixin Snapshot on PositionComponent {
     }
   }
 
-  /// Immediately take a snapshot and return it. If [renderSnapshot] is true,
+  /// Immediately take a snapshot and return it. If [renderSnapshot] is true
   /// then the snapshot is also used for rendering. A snapshot is always taken
   /// with no transformations (i.e. as if the Snapshot component is at position
   /// (0, 0) and has no scale or rotation applied).
