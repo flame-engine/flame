@@ -174,26 +174,34 @@ class _SnapshotTestGame extends FlameGame {
     add(snapshotComponent);
 
     // Also adds a child to the snapshot-enabled component tree
-    snapshotComponent.add(generateCircle(
-      const Color(0x99ff3300),
-      x: 50,
-      y: 100,
-    ));
-    snapshotComponent.add(generateCircle(
-      const Color(0x9933ff00),
-      x: 150,
-      y: 100,
-    ));
-    snapshotComponent.add(generateCircle(
-      const Color(0x990033ff),
-      x: 100,
-      y: 50,
-    ));
-    snapshotComponent.add(generateCircle(
-      const Color(0x99ff33ff),
-      x: 100,
-      y: 150,
-    ));
+    snapshotComponent.add(
+      generateCircle(
+        const Color(0x99ff3300),
+        x: 50,
+        y: 100,
+      ),
+    );
+    snapshotComponent.add(
+      generateCircle(
+        const Color(0x9933ff00),
+        x: 150,
+        y: 100,
+      ),
+    );
+    snapshotComponent.add(
+      generateCircle(
+        const Color(0x990033ff),
+        x: 100,
+        y: 50,
+      ),
+    );
+    snapshotComponent.add(
+      generateCircle(
+        const Color(0x99ff33ff),
+        x: 100,
+        y: 150,
+      ),
+    );
   }
 }
 

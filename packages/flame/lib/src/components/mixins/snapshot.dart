@@ -38,7 +38,7 @@ mixin Snapshot on PositionComponent {
   }
 
   /// Convert the snapshot to an image with the given [width] and [height].
-  /// Use [matrix] to position the snapshot in the image, or to apply other
+  /// Use [transform] to position the snapshot in the image, or to apply other
   /// transforms before the image is generated.
   Image snapshotAsImage(int width, int height, {Matrix4? transform}) {
     assert(_picture != null, 'No snapshot has been taken');
