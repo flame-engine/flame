@@ -36,6 +36,18 @@ class _MyGame extends FlameGame {
     super.onDispose();
     events.add('onDispose');
   }
+
+  @override
+  void update(double dt) {
+    super.update(dt);
+    events.add('update');
+  }
+
+  @override
+  void render(Canvas canvas) {
+    super.render(canvas);
+    events.add('render');
+  }
 }
 
 class _TitlePage extends StatelessWidget {
