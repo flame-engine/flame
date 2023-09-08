@@ -45,7 +45,7 @@ class GameLayer extends DynamicLayer {
   }
 }
 
-class MyGame extends FlameGame {
+class MyGame extends Flame {
   // Other methods omitted...
 
   @override
@@ -79,7 +79,7 @@ class BackgroundLayer extends PreRenderedLayer {
   }
 }
 
-class MyGame extends FlameGame {
+class MyGame extends Flame {
   // Other methods omitted...
 
   @override
