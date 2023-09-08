@@ -28,10 +28,10 @@ mixin Snapshot on PositionComponent {
     }
   }
 
-  /// Check if a snapshot exists
+  /// Check if a snapshot exists.
   bool get hasSnapshot => _picture != null;
 
-  /// Grab the current snapshot. Check it exists first using [hasSnapshot]
+  /// Grab the current snapshot. Check it exists first using [hasSnapshot].
   Picture get snapshot {
     assert(_picture != null, 'No snapshot has been taken');
     return _picture!;
@@ -61,9 +61,9 @@ mixin Snapshot on PositionComponent {
   Picture takeSnapshot() {
     final recorder = PictureRecorder();
     final canvas = Canvas(recorder);
-    final m = transformMatrix.clone();
-    m.invert();
-    canvas.transform(m.storage);
+    final matrix = transformMatrix.clone();
+    matrix.invert();
+    canvas.transform(matrix.storage);
     super.renderTree(canvas);
     _picture = recorder.endRecording();
     return _picture!;

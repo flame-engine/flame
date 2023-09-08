@@ -16,7 +16,7 @@ void main() {
         'Snapshot should be created once',
         _SnapshotTestGame.new,
         (game) async {
-          final sc = game.snapshotComponent;
+          final snapshotComponent = game.snapshotComponent;
           await game.ready();
 
           // Wait a few frames
@@ -26,12 +26,12 @@ void main() {
           }
 
           // Check that the rendering has only happened once
-          expect(sc.renderCalled, equals(1));
-          expect(sc.parentRenderTreeCalled, equals(1));
+          expect(snapshotComponent.renderCalled, equals(1));
+          expect(snapshotComponent.parentRenderTreeCalled, equals(1));
           // And that a snapshot has been generated
-          expect(sc.takeSnapshotCalled, equals(1));
-          expect(sc.hasSnapshot, equals(true));
-          expect(sc.snapshot, isA<Picture>());
+          expect(snapshotComponent.takeSnapshotCalled, equals(1));
+          expect(snapshotComponent.hasSnapshot, equals(true));
+          expect(snapshotComponent.snapshot, isA<Picture>());
         },
       );
 
@@ -39,7 +39,7 @@ void main() {
         'Should render normally when renderSnapshot is false',
         () => _SnapshotTestGame(renderSnapshot: false),
         (game) async {
-          final sc = game.snapshotComponent;
+          final snapshotComponent = game.snapshotComponent;
           await game.ready();
 
           // Wait a few frames
@@ -50,13 +50,16 @@ void main() {
           }
 
           // Check that render tree has been called multiple times
-          expect(sc.renderTreeCalled, greaterThanOrEqualTo(framesToWait));
+          expect(snapshotComponent.renderTreeCalled,
+              greaterThanOrEqualTo(framesToWait));
           // And that rendering is happening normally
-          expect(sc.renderCalled, greaterThanOrEqualTo(framesToWait));
-          expect(sc.parentRenderTreeCalled, greaterThanOrEqualTo(framesToWait));
+          expect(snapshotComponent.renderCalled,
+              greaterThanOrEqualTo(framesToWait));
+          expect(snapshotComponent.parentRenderTreeCalled,
+              greaterThanOrEqualTo(framesToWait));
           // And that a snapshot has not been generated
-          expect(sc.takeSnapshotCalled, equals(0));
-          expect(sc.hasSnapshot, equals(false));
+          expect(snapshotComponent.takeSnapshotCalled, equals(0));
+          expect(snapshotComponent.hasSnapshot, equals(false));
         },
       );
 
@@ -64,7 +67,7 @@ void main() {
         'Should generate a snapshot when takeSnapshot is called',
         (tester) async {
           final game = _SnapshotTestGame(renderSnapshot: false);
-          final sc = game.snapshotComponent;
+          final snapshotComponent = game.snapshotComponent;
           const framesToWait = 5;
 
           await tester.runAsync(() async {
@@ -81,7 +84,7 @@ void main() {
             }
 
             // Take snapshot
-            sc.takeSnapshot();
+            snapshotComponent.takeSnapshot();
 
             // Wait a few more frames
             for (var i = 0; i < framesToWait; i++) {
@@ -93,11 +96,11 @@ void main() {
           });
 
           // Check that a snapshot has been generated
-          expect(sc.takeSnapshotCalled, equals(1));
-          expect(sc.hasSnapshot, equals(true));
+          expect(snapshotComponent.takeSnapshotCalled, equals(1));
+          expect(snapshotComponent.hasSnapshot, equals(true));
           // Check golden
           await expectLater(
-            sc.snapshotAsImage(200, 200),
+            snapshotComponent.snapshotAsImage(200, 200),
             matchesGoldenFile('../../_goldens/snapshot_test_1.png'),
           );
         },
@@ -107,7 +110,7 @@ void main() {
         'Should generate a transformed image',
         (tester) async {
           final game = _SnapshotTestGame(renderSnapshot: false);
-          final sc = game.snapshotComponent;
+          final snapshotComponent = game.snapshotComponent;
 
           await tester.runAsync(() async {
             final widget = GameWidget(game: game);
@@ -120,7 +123,7 @@ void main() {
             game.render(canvas);
 
             // Take snapshot
-            sc.takeSnapshot();
+            snapshotComponent.takeSnapshot();
 
             await tester.pump();
           });
@@ -133,11 +136,11 @@ void main() {
           matrix.translate(-100.0, -100.0);
 
           // Check that a snapshot has been generated
-          expect(sc.takeSnapshotCalled, equals(1));
-          expect(sc.hasSnapshot, equals(true));
+          expect(snapshotComponent.takeSnapshotCalled, equals(1));
+          expect(snapshotComponent.hasSnapshot, equals(true));
           // Check transformed image against golden
           await expectLater(
-            sc.snapshotAsImage(200, 200, transform: matrix),
+            snapshotComponent.snapshotAsImage(200, 200, transform: matrix),
             matchesGoldenFile('../../_goldens/snapshot_test_2.png'),
           );
         },
@@ -148,12 +151,13 @@ void main() {
         game: _SnapshotTestGame(),
         size: Vector2(200, 200),
         (game) async {
-          final sc = (game as _SnapshotTestGame).snapshotComponent;
+          final snapshotComponent =
+              (game as _SnapshotTestGame).snapshotComponent;
 
           // Apply transforms
-          sc.scale = Vector2(0.75, 0.75);
-          sc.angle = pi / 4; // 45 degrees
-          sc.position += Vector2(-25, -25);
+          snapshotComponent.scale = Vector2(0.75, 0.75);
+          snapshotComponent.angle = pi / 4; // 45 degrees
+          snapshotComponent.position += Vector2(-25, -25);
         },
         goldenFile: '../../_goldens/snapshot_test_3.png',
       );
@@ -175,28 +179,28 @@ class _SnapshotTestGame extends FlameGame {
 
     // Also adds a child to the snapshot-enabled component tree
     snapshotComponent.add(
-      generateCircle(
+      _generateCircle(
         const Color(0x99ff3300),
         x: 50,
         y: 100,
       ),
     );
     snapshotComponent.add(
-      generateCircle(
+      _generateCircle(
         const Color(0x9933ff00),
         x: 150,
         y: 100,
       ),
     );
     snapshotComponent.add(
-      generateCircle(
+      _generateCircle(
         const Color(0x990033ff),
         x: 100,
         y: 50,
       ),
     );
     snapshotComponent.add(
-      generateCircle(
+      _generateCircle(
         const Color(0x99ff33ff),
         x: 100,
         y: 150,
@@ -242,8 +246,8 @@ class _MockComponentSuper extends PositionComponent {
 }
 
 /// Need a few circles, so this class helps
-CircleComponent generateCircle(
-  Color c, {
+CircleComponent _generateCircle(
+  Color color, {
   double radius = 50,
   double x = 0,
   double y = 0,
@@ -252,6 +256,6 @@ CircleComponent generateCircle(
     radius: radius,
     position: Vector2(x, y),
     anchor: Anchor.center,
-    paint: Paint()..color = c,
+    paint: Paint()..color = color,
   );
 }

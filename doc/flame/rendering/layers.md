@@ -1,4 +1,11 @@
-# Layers
+# Layers and Snapshots
+
+Layers and snapshots share some common features, including the ability to pre-render and cache
+objects for improved performance. However, they also have unique features which make them better
+suited for different use-cases.
+
+
+## Layers
 
 Layers allow you to group rendering by context, as well as allow you to pre-render things. This
 enables, for example, rendering parts of your game that don't change much in memory, like a
@@ -11,7 +18,7 @@ There are two types of layers on Flame:
 - `PreRenderedLayer`: For things that are static.
 
 
-## DynamicLayer
+### DynamicLayer
 
 Dynamic layers are layers that are rendered every time that they are drawn on the canvas. As the
 name suggests, it is meant for dynamic content and is most useful for grouping rendering of objects
@@ -38,7 +45,7 @@ class GameLayer extends DynamicLayer {
   }
 }
 
-class MyGame extends Game {
+class MyGame extends FlameGame {
   // Other methods omitted...
 
   @override
@@ -49,7 +56,7 @@ class MyGame extends Game {
 ```
 
 
-## PreRenderedLayer
+### PreRenderedLayer
 
 Pre-rendered layers are rendered only once, cached in memory and then just
 replicated on the game canvas afterwards. They are useful for caching content that doesn't change
@@ -72,7 +79,7 @@ class BackgroundLayer extends PreRenderedLayer {
   }
 }
 
-class MyGame extends Game {
+class MyGame extends FlameGame {
   // Other methods omitted...
 
   @override
@@ -84,7 +91,7 @@ class MyGame extends Game {
 ```
 
 
-## Layer Processors
+### Layer Processors
 
 Flame also provides a way to add processors on your layer, which are ways to add effects on the
 entire layer. At the moment, out of the box, only the `ShadowProcessor` is available, this processor
@@ -121,13 +128,13 @@ Snapshots are an alternative to layers. The `Snapshot` mixin can be applied to a
 ```dart
 class SnapshotComponent extends PositionComponent with Snapshot {}
 
-class MyGame extends Game {
+class MyGame extends FlameGame {
   SnapshotComponent root;
   Sprite player;
 
   @override
   Future<void> onLoad() async {
-    // Add a snapshot component
+    // Add a snapshot component.
     root = SnapshotComponent();
     add(root);
   }
@@ -145,26 +152,28 @@ during the game, like a background for example.
 ```dart
 class SnapshotComponent extends PositionComponent with Snapshot {}
 
-class MyGame extends Game {
+class MyGame extends FlameGame {
   SnapshotComponent root;
-  Sprite background1;
-  Sprite background2;
+  late final SpriteComponent background1;
+  late final SpriteComponent background2;
 
   @override
   Future<void> onLoad() async {
-    // Add a snapshot component
+    // Add a snapshot component.
     root = SnapshotComponent();
     add(root);
 
-    // Add some children
-    background1 = Sprite(await images.load('background1.png'));
+    // Add some children.
+    final background1Sprite = Sprite(await images.load('background1.png'));
+    background1 = SpriteComponent(sprite: background1Sprite);
     root.add(background1);
 
-    background2 = Sprite(await images.load('background2.png'));
+    final background2Sprite = Sprite(await images.load('background2.png'));
+    background2 = SpriteComponent(sprite: background2Sprite);
     root.add(background2);
 
-    // root will now render once (itself and all it's children) and then cache
-    // the result. On subsequent render calls, root itself, nor any of it's
+    // root will now render once (itself and all its children) and then cache
+    // the result. On subsequent render calls, root itself, nor any of its
     // children, will be rendered. The snapshot will be used instead for
     // improved performance.
   }
@@ -174,14 +183,14 @@ class MyGame extends Game {
 
 #### Regenerating a snapshot
 
-A snapshot-enabled component will generate a snapshot of it's entire tree, including it's children.
+A snapshot-enabled component will generate a snapshot of its entire tree, including its children.
 If any of the children change (for example, their position changes, or they are animated), call
 `takeSnapshot` to update the cached snapshot. If they are changing very frequently, it's best not
 to use a `Snapshot` because there will be no performance benefit.
 
 A component rendering a snapshot can still be transformed without incurring any performance cost.
 Once a snapshot has been taken, the component may still be scaled, moved and rotated. However, if
-the content of the component changes (what it is rendering) then the snapShot must be regenerated
+the content of the component changes (what it is rendering) then the snapshot must be regenerated
 by calling `takeSnapshot`.
 
 
@@ -199,19 +208,19 @@ A snapshot is saved as a `Picture`, but it can be converted to an `Image` using 
 ```dart
 class SnapshotComponent extends PositionComponent with Snapshot {}
 
-class MyGame extends Game {
+class MyGame extends FlameGame {
   SnapshotComponent root;
 
   @override
   Future<void> onLoad() async {
-    // Add a snapshot component, but don't use it's render mode
+    // Add a snapshot component, but don't use its render mode.
     root = SnapshotComponent()..renderSnapshot = false;
     add(root);
 
-    // Other code omitted
+    // Other code omitted.
   }
 
-  // Call something like this to take an image snapshot at any time
+  // Call something like this to take an image snapshot at any time.
   void takeSnapshot() {
     root.takeSnapshot();
     final image = root.snapshotToImage(200, 200);
@@ -236,9 +245,9 @@ However, this is not always possible. To move (or rotate, or scale etc) the snap
 converting it to an image, pass a transformation matrix to `snapshotToImage`.
 
 ```dart
-// Call something like this to take an image snapshot at any time
+// Call something like this to take an image snapshot at any time.
 void takeSnapshot() {
-  // Prepare a matrix to move the snapshot by 200,50
+  // Prepare a matrix to move the snapshot by 200,50.
   final matrix = Matrix4.identity()..translate(200.0,50.0);
 
   root.takeSnapshot();
