@@ -2,9 +2,11 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:flame/geometry.dart';
+import 'package:flame/math.dart';
 import 'package:flame/src/experimental/geometry/shapes/shape.dart';
 import 'package:flame/src/extensions/vector2.dart';
 import 'package:flame/src/game/transform2d.dart';
+import 'package:flame/src/math/random_fallback.dart';
 
 /// The circle with a given [center] and a [radius].
 ///
@@ -49,7 +51,11 @@ class Circle extends Shape {
 
   @override
   bool containsPoint(Vector2 point) {
-    return (point - _center).length2 <= _radius * _radius;
+    return (_tmpResult
+              ..setFrom(point)
+              ..sub(_center))
+            .length2 <=
+        _radius * _radius;
   }
 
   @override
@@ -95,6 +101,17 @@ class Circle extends Shape {
       ..sub(_center)
       ..length = _radius
       ..add(_center);
+  }
+
+  @override
+  Vector2 randomPoint({Random? random, bool within = true}) {
+    final randomGenerator = random ?? randomFallback;
+    final theta = randomGenerator.nextDouble() * tau;
+    final radius = within ? randomGenerator.nextDouble() * _radius : _radius;
+    final x = radius * cos(theta);
+    final y = radius * sin(theta);
+
+    return Vector2(_center.x + x, _center.y + y);
   }
 
   @override

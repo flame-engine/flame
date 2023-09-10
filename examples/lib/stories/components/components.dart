@@ -10,6 +10,7 @@ import 'package:examples/stories/components/keys_example.dart';
 import 'package:examples/stories/components/look_at_example.dart';
 import 'package:examples/stories/components/look_at_smooth_example.dart';
 import 'package:examples/stories/components/priority_example.dart';
+import 'package:examples/stories/components/spawn_component_example.dart';
 import 'package:examples/stories/components/time_scale_example.dart';
 import 'package:flame/game.dart';
 
@@ -63,6 +64,14 @@ void addComponentsStories(Dashbook dashbook) {
       codeLink:
           baseLink('components/components_notifier_provider_example.dart'),
       info: ComponentsNotifierProviderExampleWidget.description,
+    )
+    ..add(
+      'Spawn Component',
+      (_) => const GameWidget.controlled(
+        gameFactory: SpawnComponentExample.new,
+      ),
+      codeLink: baseLink('components/spawn_component_example.dart'),
+      info: SpawnComponentExample.description,
     )
     ..add(
       'Time Scale',

@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
-import 'package:flame/game.dart';
+import 'package:flame/geometry.dart';
 import 'package:flame/src/effects/measurable_effect.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -91,7 +91,6 @@ void main() {
       });
 
       testWithFlameGame('speed on RotateEffect', (game) async {
-        const tau = Transform2D.tau;
         final effect = RotateEffect.to(tau, EffectController(speed: 1));
         final component = PositionComponent(position: Vector2(5, 8));
         component.add(effect);
