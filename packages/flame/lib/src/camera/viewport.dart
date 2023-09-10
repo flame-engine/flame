@@ -112,6 +112,10 @@ abstract class Viewport extends Component
     );
   }
 
+  /// Converts a point from the global coordinate system to the local
+  /// coordinate system of the viewport.
+  ///
+  /// Opposite of [localToGlobal].
   Vector2 globalToLocal(Vector2 point) {
     return Vector2(
       point.x - position.x + anchor.x * size.x,
@@ -119,6 +123,10 @@ abstract class Viewport extends Component
     );
   }
 
+  /// Converts a point from the local coordinate system of the viewport to the
+  /// global coordinate system.
+  ///
+  /// Opposite of [globalToLocal].
   Vector2 localToGlobal(Vector2 point) {
     return Vector2(
       point.x + position.x - anchor.x * size.x,

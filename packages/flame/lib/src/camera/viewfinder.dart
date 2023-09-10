@@ -81,10 +81,18 @@ class Viewfinder extends Component
   /// Reference to the parent camera.
   CameraComponent get camera => parent! as CameraComponent;
 
+  /// Convert a point from the global coordinate system to the viewfinder's
+  /// coordinate system.
+  ///
+  /// Opposite of [localToGlobal].
   Vector2 globalToLocal(Vector2 point) {
     return _transform.globalToLocal(point);
   }
 
+  /// Convert a point from the viewfinder's coordinate system to the global
+  /// coordinate system.
+  ///
+  /// Opposite of [globalToLocal].
   Vector2 localToGlobal(Vector2 point) {
     return _transform.localToGlobal(point);
   }

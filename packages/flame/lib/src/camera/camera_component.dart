@@ -159,10 +159,18 @@ class CameraComponent extends Component {
     canvas.restore();
   }
 
+  /// Converts from the global (canvas) coordinate space to
+  /// local (camera = viewport + viewfinder).
+  ///
+  /// Opposite of [localToGlobal].
   Vector2 globalToLocal(Vector2 point) {
     return viewfinder.globalToLocal(viewport.globalToLocal(point));
   }
 
+  /// Converts from the local (camera = viewport + viewfinder) coordinate space
+  /// to global (canvas).
+  ///
+  /// Opposite of [globalToLocal].
   Vector2 localToGlobal(Vector2 position) {
     return viewport.localToGlobal(viewfinder.localToGlobal(position));
   }
