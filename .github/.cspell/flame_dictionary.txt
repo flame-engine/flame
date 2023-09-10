@@ -1,3 +1,4 @@
+# dictionary file for Flame-related words, including companies, tools, and libraries (and their associated concepts) mentioned on our codebase
 Artboard # What a project file is called within Rive
 Aseprite # Animated sprite editor and pixel art tool https://www.aseprite.org/
 Audioplayers # A Flutter plugin to play multiple simultaneously audio files https://github.com/bluefireteam/audioplayers
