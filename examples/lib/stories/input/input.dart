@@ -52,7 +52,7 @@ void addInputStories(Dashbook dashbook) {
     ..add(
       'HoverCallbacks',
       (_) => GameWidget(game: HoverCallbacksExample()),
-      codeLink: baseLink('input/hoverable_callbacks_example.dart'),
+      codeLink: baseLink('input/hover_callbacks_example.dart'),
       info: HoverCallbacksExample.description,
     )
     ..add(

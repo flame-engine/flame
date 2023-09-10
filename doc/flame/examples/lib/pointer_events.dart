@@ -19,8 +19,7 @@ class PointerEventsGame extends FlameGame with TapCallbacks {
   }
 }
 
-class HoverTarget extends PositionComponent
-    with PointerMoveCallbacks, HoverCallbacks {
+class HoverTarget extends PositionComponent with HoverCallbacks {
   static final Random _random = Random();
 
   HoverTarget(Vector2 position)

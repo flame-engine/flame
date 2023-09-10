@@ -1,5 +1,6 @@
 import 'package:flame/events.dart';
 import 'package:flame/src/components/core/component.dart';
+import 'package:meta/meta.dart';
 
 /// This mixin can be added to a [Component] allowing it to receive hover
 /// events.
@@ -10,7 +11,7 @@ import 'package:flame/src/components/core/component.dart';
 /// component.
 ///
 /// This mixin is the replacement of the Hoverable mixin.
-mixin HoverCallbacks on PointerMoveCallbacks {
+mixin HoverCallbacks on Component implements PointerMoveCallbacks {
   bool _isHovered = false;
 
   /// Returns true while the component is being dragged.
@@ -49,5 +50,12 @@ mixin HoverCallbacks on PointerMoveCallbacks {
     if (_isHovered) {
       _doHoverExit();
     }
+  }
+
+  @override
+  @mustCallSuper
+  void onMount() {
+    super.onMount();
+    PointerMoveCallbacks.onMountHandler(this);
   }
 }

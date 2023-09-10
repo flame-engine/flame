@@ -12,22 +12,21 @@ class HoverCallbacksExample extends FlameGame with TapCallbacks {
 
   @override
   Future<void> onLoad() async {
-    add(HoverableSquare(Vector2(200, 500)));
-    add(HoverableSquare(Vector2(700, 300)));
+    add(HoverSquare(Vector2(200, 500)));
+    add(HoverSquare(Vector2(700, 300)));
   }
 
   @override
   void onTapDown(TapDownEvent event) {
-    add(HoverableSquare(event.localPosition));
+    add(HoverSquare(event.localPosition));
   }
 }
 
-class HoverableSquare extends PositionComponent
-    with PointerMoveCallbacks, HoverCallbacks {
+class HoverSquare extends PositionComponent with HoverCallbacks {
   static final Paint _white = Paint()..color = const Color(0xFFFFFFFF);
   static final Paint _grey = Paint()..color = const Color(0xFFA5A5A5);
 
-  HoverableSquare(Vector2 position)
+  HoverSquare(Vector2 position)
       : super(
           position: position,
           size: Vector2.all(100),

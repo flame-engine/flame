@@ -1,11 +1,11 @@
 # Pointer Events
 
 ```{note}
-This document describes the new tap events API. The old (legacy) approach,
+This document describes the new events API. The old (legacy) approach,
 which is still supported, is described in [](gesture_input.md).
 ```
 
-**Pointer events** are Flutter's generalize "mouse-movement"-type events (for desktop or web).
+**Pointer events** are Flutter's generalized "mouse-movement"-type events (for desktop or web).
 
 If you want to interact with mouse movement events within your component or game, you can use the
 `PointerMoveCallbacks` mixin.
@@ -45,14 +45,10 @@ you can handle any exit conditions there.
 If you want to specifically know if your component is being hovered or not, or if you want to hook
 into hover enter and exist events, you can use a more dedicated mixin called `HoverCallbacks`.
 
-Since it "extends" `PointerMoveCallbacks`, you will need to add both to a component in order to use
-it.
-
 For example:
 
 ```dart
-class MyComponent extends PositionComponent
-    with PointerMoveCallbacks, HoverCallbacks {
+class MyComponent extends PositionComponent with HoverCallbacks {
 
   MyComponent() : super(size: Vector2(80, 60));
 
@@ -74,14 +70,12 @@ class MyComponent extends PositionComponent
 ```
 
 Note that you can still listen to the "raw" onPointerMove methods for additional functionality, just
-make sure to call the `super` version to enable the `HoverCallbacks` functionality.
+make sure to call the `super` version to enable the `HoverCallbacks` behavior.
 
 
 ### Demo
 
 Play with the demo below to see the pointer hover events in action.
-
-Explain
 
 ```{flutter-app}
 :sources: ../flame/examples

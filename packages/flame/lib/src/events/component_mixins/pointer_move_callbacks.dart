@@ -14,7 +14,11 @@ mixin PointerMoveCallbacks on Component {
   @mustCallSuper
   void onMount() {
     super.onMount();
-    final game = findGame()!;
+    onMountHandler(this);
+  }
+
+  static void onMountHandler(PointerMoveCallbacks instance) {
+    final game = instance.findGame()!;
     const key = MouseMoveDispatcherKey();
     if (game.findByKey(key) == null) {
       final dispatcher = PointerMoveDispatcher();
