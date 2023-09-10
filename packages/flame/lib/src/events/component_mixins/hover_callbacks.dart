@@ -6,7 +6,8 @@ import 'package:flame/src/components/core/component.dart';
 ///
 /// In addition to adding this mixin, the component must also implement the
 /// [containsLocalPoint] method -- the component will only be considered
-/// "hovered" if the point where the tap has occurred is inside the component.
+/// "hovered" if the point where the hover event occurred is inside the
+/// component.
 ///
 /// This mixin is the replacement of the Hoverable mixin.
 mixin HoverCallbacks on PointerMoveCallbacks {
