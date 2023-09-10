@@ -15,6 +15,7 @@ Prosser # A character from the book The Hitchhiker's Guide to the Galaxy
 skel # Extension for skeleton files from Spine https://en.esotericsoftware.com/spine-in-depth
 Skia # Skia is an open source 2D graphics library used by Flutter https://github.com/google/skia
 spineboy # Name of a famous character used as an example for Spine https://en.esotericsoftware.com/spine-examples-spineboy
+spineboys # Plural of spineboy
 Spritecow # A handy tool for locating sprites within a spritesheet http://www.spritecow.com/
 Tiled # An open source, easy to use, and flexible level editor https://www.mapeditor.org/
 Tilemap # What tile maps are called within Tiled
