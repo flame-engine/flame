@@ -5,7 +5,6 @@ import 'package:examples/stories/input/draggables_example.dart';
 import 'package:examples/stories/input/gesture_hitboxes_example.dart';
 import 'package:examples/stories/input/hardware_keyboard_example.dart';
 import 'package:examples/stories/input/hover_callbacks_example.dart';
-import 'package:examples/stories/input/hoverables_example.dart';
 import 'package:examples/stories/input/joystick_advanced_example.dart';
 import 'package:examples/stories/input/joystick_example.dart';
 import 'package:examples/stories/input/keyboard_example.dart';
@@ -49,14 +48,6 @@ void addInputStories(Dashbook dashbook) {
       },
       codeLink: baseLink('input/draggables_example.dart'),
       info: DoubleTapCallbacksExample.description,
-    )
-    ..add(
-      'Hoverables',
-      // ignore: deprecated_member_use_from_same_package
-      (_) => GameWidget(game: HoverablesExample()),
-      codeLink: baseLink('input/hoverables_example.dart'),
-      // ignore: deprecated_member_use_from_same_package
-      info: HoverablesExample.description,
     )
     ..add(
       'HoverCallbacks',
