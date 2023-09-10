@@ -18,6 +18,7 @@ import 'package:doc_flame_examples/move_to_effect.dart';
 import 'package:doc_flame_examples/opacity_by_effect.dart';
 import 'package:doc_flame_examples/opacity_effect_with_target.dart';
 import 'package:doc_flame_examples/opacity_to_effect.dart';
+import 'package:doc_flame_examples/pointer_events.dart';
 import 'package:doc_flame_examples/ray_cast.dart';
 import 'package:doc_flame_examples/ray_trace.dart';
 import 'package:doc_flame_examples/remove_effect.dart';
@@ -60,6 +61,7 @@ void main() {
     'opacity_by_effect': OpacityByEffectGame.new,
     'opacity_effect_with_target': OpacityEffectWithTargetGame.new,
     'opacity_to_effect': OpacityToEffectGame.new,
+    'pointer_events': PointerEventsGame.new,
     'ray_cast': RayCastExample.new,
     'ray_trace': RayTraceExample.new,
     'remove_effect': RemoveEffectGame.new,
