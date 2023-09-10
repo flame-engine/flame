@@ -14,7 +14,7 @@ import 'package:flame/math.dart';
 /// components.
 /// If you want to use a non static time interval, use the
 /// [SpawnComponent.periodRange] constructor.
-/// {@endremplate}
+/// {@endtemplate}
 class SpawnComponent extends Component {
   /// {@macro spawn_component}
   SpawnComponent({

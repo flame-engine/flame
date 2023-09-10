@@ -53,6 +53,7 @@ mutators # plural of mutator
 netcode # blanket term used to refer to networking in online games
 numpad # the numeric portion of a keyboard
 pathfinding # computer algorithm to find the best path through a world or maze
+perlin # Perlin Noise, a type of noise generating algorithm
 polyline # a connected series of line segments
 raycast # act of raycasting
 raycasting # same as raytracing
@@ -85,6 +86,7 @@ tileset # image with a collection of tiles. in games, tiles are small square spr
 tilesets # plural of tileset
 tween # a linear interpolation between a beginning and ending value.
 tweening # the process of tween
+unawaited # un-awaited, a future that is not associated with an "await" expression
 viewport # part of the game world that is visible in the camera
 viewports # plural of viewport
 vsync # vertical sync; a graphics technology that synchronizes the software's frame rate with the monitor's refresh rate
