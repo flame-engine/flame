@@ -5,13 +5,16 @@ import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
+class _GameReferenceGame extends FlameGame {}
+
 void main() {
   group('HasGameReference', () {
-    testWithFlameGame(
+    testWithGame(
       'component with default HasGameReference',
+      _GameReferenceGame.new,
       (game) async {
         final component1 = _Component<FlameGame>();
-        final component2 = _Component<Game>();
+        final component2 = _Component<_GameReferenceGame>();
         game.addAll([component1, component2]);
         expect(component1.game, game);
         expect(component2.game, game);
@@ -102,7 +105,8 @@ void main() {
   });
 }
 
-class _Component<T extends Game> extends Component with HasGameReference<T> {}
+class _Component<T extends FlameGame> extends Component
+    with HasGameReference<T> {}
 
 class _MyGame extends FlameGame {
   bool calledFoo = false;

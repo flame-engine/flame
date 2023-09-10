@@ -42,6 +42,24 @@ In order to register a function as a yarn command, the function must satisfy sev
 : Registers a command `name` which is not backed by any Dart function. Such command will still be
   delivered to [DialogueView]s via the `onCommand()` callback, but its arguments will not be parsed.
 
+**clear**
+: Removes all user-defined commands
+
+**remove**(`String name`)
+: Removes the user-defined command with the specified `name`.
+
+
+## Properties
+
+**length** → `int`
+: The number of user-defined commands registered so far.
+
+**isEmpty** → `bool`
+: Returns `true` if no user-defined commands were registered.
+
+**isNotEmpty** → `bool`
+: Returns `true` if any commands have been registered
+
 
 ## Examples
 
