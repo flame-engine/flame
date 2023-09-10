@@ -39,6 +39,7 @@ Note that only mouse events happening within your component will be proxied alon
 `onPointerMoveStop` will be fired once on the first mouse movement that leaves your component, so
 you can handle any exit conditions there.
 
+
 ## HoverCallbacks
 
 If you want to specifically know if your component is being hovered or not, or if you want to hook
@@ -50,7 +51,9 @@ it.
 For example:
 
 ```dart
-class MyComponent extends PositionComponent with PointerMoveCallbacks, HoverCallbacks {
+class MyComponent extends PositionComponent
+    with PointerMoveCallbacks, HoverCallbacks {
+
   MyComponent() : super(size: Vector2(80, 60));
 
   @override
@@ -72,6 +75,7 @@ class MyComponent extends PositionComponent with PointerMoveCallbacks, HoverCall
 
 Note that you can still listen to the "raw" onPointerMove methods for additional functionality, just
 make sure to call the `super` version to enable the `HoverCallbacks` functionality.
+
 
 ### Demo
 
