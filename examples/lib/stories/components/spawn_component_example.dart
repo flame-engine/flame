@@ -4,6 +4,7 @@ import 'package:flame/experimental.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
+import 'package:flame/math.dart';
 
 class SpawnComponentExample extends FlameGame with TapDetector {
   static String description =
@@ -46,7 +47,7 @@ class SpawnComponentExample extends FlameGame with TapDetector {
         factory: (_) => Ember(),
         period: 0.5,
         area: shape,
-        within: false,
+        within: randomFallback.nextBool(),
       ),
     );
   }
