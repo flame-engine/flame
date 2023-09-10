@@ -230,6 +230,32 @@ void main() {
           ),
         );
       });
+
+      test('Clear all commands', () {
+        final storage = CommandStorage();
+        storage.addCommand0('foo', () => null);
+        storage.addCommand1('bar', (int n) => n);
+
+        expect(storage.isEmpty, false);
+
+        storage.clear();
+
+        expect(storage.isEmpty, true);
+      });
+
+      test('Remove a command', () {
+        final storage = CommandStorage();
+        storage.addCommand0('foo', () => null);
+        storage.addCommand1('bar', (int n) => n);
+
+        expect(storage.hasCommand('foo'), true);
+        expect(storage.hasCommand('bar'), true);
+
+        storage.remove('foo');
+
+        expect(storage.hasCommand('foo'), false);
+        expect(storage.hasCommand('bar'), true);
+      });
     });
   });
 

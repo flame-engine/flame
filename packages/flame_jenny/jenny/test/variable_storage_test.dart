@@ -67,6 +67,37 @@ void main() {
         ),
       );
     });
+
+    test('remove a variable', () {
+      final storage = VariableStorage();
+      storage.setVariable('x', 42);
+      expect(storage.hasVariable('x'), true);
+
+      storage.remove('x');
+
+      expect(storage.hasVariable('x'), false);
+    });
+
+    test('clear variables except node visits', () {
+      final storage = VariableStorage();
+      storage.setVariable('x', 42);
+      storage.setVariable('@node_name1', 1);
+
+      storage.clear();
+
+      expect(storage.hasVariable('x'), false);
+      expect(storage.hasVariable('@node_name1'), true);
+    });
+
+    test('clear variables including node visits', () {
+      final storage = VariableStorage();
+      storage.setVariable('x', 42);
+      storage.setVariable('@node_name1', 1);
+
+      storage.clear(clearNodeVisits: true);
+
+      expect(storage.isEmpty, true);
+    });
   });
 }
 

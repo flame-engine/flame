@@ -1,4 +1,3 @@
-import 'package:flame/game.dart';
 import 'package:flame/src/components/core/component.dart';
 import 'package:flame/src/events/flame_game_mixins/has_tappable_components.dart';
 import 'package:flame/src/events/messages/tap_cancel_event.dart';
@@ -23,7 +22,7 @@ mixin TapCallbacks on Component {
   @mustCallSuper
   void onMount() {
     super.onMount();
-    final game = findGame()! as FlameGame;
+    final game = findGame()!;
     if (game.findByKey(const MultiTapDispatcherKey()) == null) {
       final dispatcher = MultiTapDispatcher();
       game.registerKey(const MultiTapDispatcherKey(), dispatcher);
