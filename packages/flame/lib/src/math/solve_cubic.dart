@@ -1,6 +1,7 @@
 import 'dart:math';
 
-import 'package:flame/src/utils/solve_quadratic.dart';
+import 'package:flame/geometry.dart';
+import 'package:flame/src/math/solve_quadratic.dart';
 
 /// Solves cubic equation `ax³ + bx² + cx + d == 0`.
 ///
@@ -56,4 +57,3 @@ double _cubicRoot(double x) {
 }
 
 const discriminantEpsilon = 1e-15;
-const tau = 2 * pi;

@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 
+import 'package:flame/geometry.dart' as geometry;
 import 'package:flame/src/game/notifying_vector2.dart';
 import 'package:flutter/foundation.dart';
 import 'package:vector_math/vector_math_64.dart';
@@ -34,6 +35,8 @@ class Transform2D extends ChangeNotifier {
   final NotifyingVector2 _position;
   final NotifyingVector2 _scale;
   final NotifyingVector2 _offset;
+  @Deprecated('Use tau from the package:flame/geometry.dart export instead, '
+      'this field will be removed in Flame v1.10.0')
   static const tau = 2 * math.pi;
 
   Transform2D()
@@ -73,9 +76,10 @@ class Transform2D extends ChangeNotifier {
   ///
   /// The [tolerance] parameter is in absolute units, not relative.
   bool closeTo(Transform2D other, {double tolerance = 1e-10}) {
-    final deltaAngle = (angle - other.angle) % tau;
+    final deltaAngle = (angle - other.angle) % geometry.tau;
     assert(deltaAngle >= 0);
-    return (deltaAngle <= tolerance || deltaAngle >= tau - tolerance) &&
+    return (deltaAngle <= tolerance ||
+            deltaAngle >= geometry.tau - tolerance) &&
         (position.x - other.position.x).abs() <= tolerance &&
         (position.y - other.position.y).abs() <= tolerance &&
         (scale.x - other.scale.x).abs() <= tolerance &&
@@ -110,9 +114,9 @@ class Transform2D extends ChangeNotifier {
   }
 
   /// Similar to [angle], but uses degrees instead of radians.
-  double get angleDegrees => _angle * (360 / tau);
+  double get angleDegrees => _angle * (360 / geometry.tau);
   set angleDegrees(double a) {
-    _angle = a * (tau / 360);
+    _angle = a * (geometry.tau / 360);
     _markAsModified();
   }
 

@@ -2,6 +2,7 @@ import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
+import 'package:flame/geometry.dart';
 import 'package:flame/rendering.dart';
 import 'package:flutter/rendering.dart';
 
@@ -355,7 +356,7 @@ class Orbit extends PositionComponent {
 
   @override
   void update(double dt) {
-    _angle += dt / revolutionPeriod * Transform2D.tau;
+    _angle += dt / revolutionPeriod * tau;
     planet.position = Vector2(radius, 0)..rotate(_angle);
   }
 }

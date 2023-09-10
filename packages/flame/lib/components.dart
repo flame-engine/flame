@@ -35,6 +35,7 @@ export 'src/components/nine_tile_box_component.dart';
 export 'src/components/parallax_component.dart';
 export 'src/components/particle_system_component.dart';
 export 'src/components/position_component.dart';
+export 'src/components/spawn_component.dart';
 export 'src/components/sprite_animation_component.dart';
 export 'src/components/sprite_animation_group_component.dart';
 export 'src/components/sprite_batch_component.dart';

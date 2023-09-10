@@ -1,10 +1,13 @@
 import 'dart:math';
 import 'dart:ui';
 
+import 'package:flame/extensions.dart';
 import 'package:flame/geometry.dart';
+import 'package:flame/src/experimental/geometry/shapes/polygon.dart';
 import 'package:flame/src/experimental/geometry/shapes/shape.dart';
 import 'package:flame/src/game/transform2d.dart';
-import 'package:vector_math/vector_math_64.dart';
+import 'package:flame/src/math/random_fallback.dart';
+import 'package:flutter/cupertino.dart';
 
 /// An axis-aligned rectangle.
 ///
@@ -159,6 +162,19 @@ class Rectangle extends Shape {
   /// line segment.
   Set<Vector2> intersections(LineSegment line) {
     return edges.expand((e) => e.intersections(line)).toSet();
+  }
+
+  @override
+  Vector2 randomPoint({Random? random, bool within = true}) {
+    final randomGenerator = random ?? randomFallback;
+    if (within) {
+      return Vector2(
+        left + randomGenerator.nextDouble() * width,
+        top + randomGenerator.nextDouble() * height,
+      );
+    } else {
+      return Polygon.randomPointAlongEdges(vertices, random: randomGenerator);
+    }
   }
 
   /// The 4 edges of this rectangle, returned in a clockwise fashion.
