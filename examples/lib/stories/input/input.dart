@@ -4,7 +4,7 @@ import 'package:examples/stories/input/double_tap_callbacks_example.dart';
 import 'package:examples/stories/input/draggables_example.dart';
 import 'package:examples/stories/input/gesture_hitboxes_example.dart';
 import 'package:examples/stories/input/hardware_keyboard_example.dart';
-import 'package:examples/stories/input/hoverables_example.dart';
+import 'package:examples/stories/input/hover_callbacks_example.dart';
 import 'package:examples/stories/input/joystick_advanced_example.dart';
 import 'package:examples/stories/input/joystick_example.dart';
 import 'package:examples/stories/input/keyboard_example.dart';
@@ -50,10 +50,10 @@ void addInputStories(Dashbook dashbook) {
       info: DoubleTapCallbacksExample.description,
     )
     ..add(
-      'Hoverables',
-      (_) => GameWidget(game: HoverablesExample()),
-      codeLink: baseLink('input/hoverables_example.dart'),
-      info: HoverablesExample.description,
+      'HoverCallbacks',
+      (_) => GameWidget(game: HoverCallbacksExample()),
+      codeLink: baseLink('input/hover_callbacks_example.dart'),
+      info: HoverCallbacksExample.description,
     )
     ..add(
       'Keyboard',
