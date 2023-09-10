@@ -22,8 +22,10 @@ grayscale
 highscore
 hoverable
 hoverables
+inactives
 lexer
 microtask
+orientable
 overridable
 performant
 platformer

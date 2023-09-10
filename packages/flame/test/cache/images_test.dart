@@ -110,7 +110,7 @@ void main() {
     test('throws when setting an invalid prefix', () {
       final images = Images();
       expect(
-        () => images.prefix = 'adasd',
+        () => images.prefix = 'foo',
         failsAssert('Prefix must be empty or end with a "/"'),
       );
     });

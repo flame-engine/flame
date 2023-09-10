@@ -97,7 +97,7 @@ void main() {
             position: Vector2(10, 10),
           ),
           TextComponent(
-            text: 'caffefe',
+            text: 'coffee',
             textRenderer: SpriteFontRenderer.fromFont(font, scale: 2),
             position: Vector2(10, 30),
           ),
@@ -203,12 +203,12 @@ void main() {
             paint: Paint()..color = const Color(0xffd8e1c4),
           ),
           TextComponent(
-            text: 'badface',
+            text: 'facade',
             textRenderer: SpriteFontRenderer.fromFont(font),
             position: Vector2(10, 10),
           ),
           TextComponent(
-            text: 'badface',
+            text: 'facade',
             textRenderer: SpriteFontRenderer.fromFont(font, letterSpacing: 11),
             position: Vector2(10, 40),
           ),

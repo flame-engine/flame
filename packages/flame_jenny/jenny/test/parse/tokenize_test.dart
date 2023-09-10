@@ -337,7 +337,7 @@ void main() {
         );
       });
 
-      test('dedents at end of body', () {
+      test('de-indents at end of body', () {
         expect(
           tokenize('---\n---\n'
               'one\n'
@@ -421,6 +421,7 @@ void main() {
       });
 
       test('line speakers', () {
+        // cSpell:ignore Пан_Голова, Ḟḷḁṃḙ
         expect(
           tokenize('---\n---\n'
               'Marge: Hello!\n'
@@ -788,6 +789,7 @@ void main() {
       });
 
       test('unicode variable names', () {
+        // cSpell:ignore эксперимент
         expect(
           () => tokenize('---\n---\n'
               '{ \$эксперимент }\n'
