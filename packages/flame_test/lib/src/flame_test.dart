@@ -17,28 +17,28 @@ extension FlameGameExtension on Component {
   /// returned future to resolve.
   Future<void> ensureAdd(Component component) async {
     await add(component);
-    await (component.findGame()! as FlameGame).ready();
+    await component.findGame()!.ready();
   }
 
   /// Makes sure that the [components] are added to the tree if you wait for the
   /// returned future to resolve.
   Future<void> ensureAddAll(Iterable<Component> components) async {
     await addAll(components);
-    await (components.first.findGame()! as FlameGame).ready();
+    await components.first.findGame()!.ready();
   }
 
   /// Makes sure that the [component] is removed from the tree if you wait for
   /// the returned future to resolve.
   Future<void> ensureRemove(Component component) async {
     remove(component);
-    await (component.findGame()! as FlameGame).ready();
+    await component.findGame()!.ready();
   }
 
   /// Makes sure that the [components] are removed from the tree if you wait for
   /// the returned future to resolve.
   Future<void> ensureRemoveAll(Iterable<Component> components) async {
     removeAll(components);
-    await (components.first.findGame()! as FlameGame).ready();
+    await components.first.findGame()!.ready();
   }
 }
 

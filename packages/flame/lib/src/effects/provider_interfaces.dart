@@ -3,13 +3,13 @@ import 'dart:ui';
 import 'package:flame/components.dart';
 
 /// Interface for a component that can be affected by move effects.
-abstract class PositionProvider implements ReadonlyPositionProvider {
+abstract class PositionProvider implements ReadOnlyPositionProvider {
   set position(Vector2 value);
 }
 
 /// Interface for a class that has [position] property which can be read but not
 /// modified.
-abstract class ReadonlyPositionProvider {
+abstract class ReadOnlyPositionProvider {
   Vector2 get position;
 }
 
@@ -39,9 +39,14 @@ abstract class ScaleProvider {
   set scale(Vector2 value);
 }
 
-/// Interface for a component that can be affected by rotation effects.
-abstract class AngleProvider {
+/// Interface for a class that has [angle] property which can be read but not
+/// modified.
+abstract class ReadOnlyAngleProvider {
   double get angle;
+}
+
+/// Interface for a component that can be affected by rotation effects.
+abstract class AngleProvider extends ReadOnlyAngleProvider {
   set angle(double value);
 }
 
@@ -53,12 +58,12 @@ abstract class AnchorProvider {
 
 /// Interface for a class that has [size] property which can be read but not
 /// modified.
-abstract class ReadonlySizeProvider {
+abstract class ReadOnlySizeProvider {
   Vector2 get size;
 }
 
 /// Interface for a component that can be affected by size effects.
-abstract class SizeProvider extends ReadonlySizeProvider {
+abstract class SizeProvider extends ReadOnlySizeProvider {
   set size(Vector2 value);
 }
 

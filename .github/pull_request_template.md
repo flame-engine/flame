@@ -33,16 +33,17 @@ Would your PR require Flame users to update their apps following your change?
 If yes, then the title of the PR should include "!" (for example, `feat!:`, `fix!:`). See
 [Conventional Commit] for details. Also, for a breaking PR uncomment and fill in the "Migration
 instructions" section below.
-
-### Migration instructions
-
-If the PR is breaking, uncomment this header and add instructions for how to migrate from the
-currently released version to the new proposed way.
 -->
 
 - [ ] Yes, this PR is a breaking change.
 - [ ] No, this PR is not a breaking change.
 
+<!--
+### Migration instructions
+
+If the PR is breaking, uncomment this header and add instructions for how to migrate from the
+currently released version to the new proposed way.
+-->
 
 ## Related Issues
 <!--

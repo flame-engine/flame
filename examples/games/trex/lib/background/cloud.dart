@@ -15,7 +15,7 @@ class Cloud extends SpriteComponent
           size: initialSize,
         );
 
-  static Vector2 initialSize = Vector2(92.0, 28.0);
+  static final Vector2 initialSize = Vector2(92.0, 28.0);
 
   static const double maxCloudGap = 400.0;
   static const double minCloudGap = 100.0;

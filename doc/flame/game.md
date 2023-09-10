@@ -94,12 +94,13 @@ Once the `GameWidget` is removed from the tree, `onRemove` is called, just like 
 component is removed from the component tree.
 
 ```{note}
-The `onRemove` can be used to clean up potential memory leaks by doing the following:
+The `onRemove` can be used to clean up potential memory leaks such as the following:
 ```
 
 ```dart
   @override
   void onRemove() {
+    // Optional based on your game needs.
     removeAll(children);
     processLifecycleEvents();
     Flame.images.clearCache();

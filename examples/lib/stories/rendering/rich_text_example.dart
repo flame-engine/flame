@@ -12,15 +12,6 @@ class RichTextExample extends FlameGame {
 
   @override
   Future<void> onLoad() async {
-    add(MyTextComponent()..position = Vector2(100, 50));
-  }
-}
-
-class MyTextComponent extends PositionComponent {
-  late final Element element;
-
-  @override
-  Future<void> onLoad() async {
     final style = DocumentStyle(
       width: 400,
       height: 200,
@@ -38,7 +29,7 @@ class MyTextComponent extends PositionComponent {
         ),
       ),
     );
-    final document = DocumentNode([
+    final document = DocumentRoot([
       HeaderNode.simple('1984', level: 1),
       ParagraphNode.simple(
         'Anything could be true. The so-called laws of nature were nonsense.',
@@ -68,11 +59,13 @@ class MyTextComponent extends PositionComponent {
         'minds, truly happens.',
       ),
     ]);
-    element = document.format(style);
-  }
 
-  @override
-  void render(Canvas canvas) {
-    element.render(canvas);
+    add(
+      TextElementComponent.fromDocument(
+        document: document,
+        style: style,
+        position: Vector2(100, 50),
+      ),
+    );
   }
 }

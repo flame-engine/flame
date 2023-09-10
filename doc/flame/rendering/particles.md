@@ -356,32 +356,6 @@ class RectComponent extends Component {
 ```
 
 
-## FlareParticle
-
-To use Flare within Flame, use the
-[`flame_flare`](https://github.com/flame-engine/flame/tree/main/packages/flame_flare) package.
-
-It will provide a class called `FlareParticle` that is a container for `FlareActorAnimation`, it
-propagates the `update` and `render` methods to its child.
-
-```dart
-import 'package:flame_flare/flame_flare.dart';
-
-// Within your game or component's `onLoad` method
-const flareSize = 32.0;
-final flareAnimation = FlareActorAnimation('assets/sparkle.flr');
-flareAnimation.width = flareSize;
-flareAnimation.height = flareSize;
-
-// Somewhere in game
-game.add(
-  ParticleSystemComponent(
-    particle: FlareParticle(flare: flareAnimation),
-  ),
-);
-```
-
-
 ## ComputedParticle
 
 A `Particle` which could help you when:

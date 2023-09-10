@@ -8,8 +8,8 @@ import 'package:flame/text.dart';
 /// Rendering regular text in golden tests is unreliable due to differences in
 /// font definitions across platforms and different algorithms used for anti-
 /// aliasing.
-class DebugTextFormatter extends TextFormatter {
-  DebugTextFormatter({
+class DebugTextRenderer extends TextRenderer {
+  DebugTextRenderer({
     this.color = const Color(0xFFFFFFFF),
     this.fontSize = 16.0,
     this.lineHeight = 1.2,
@@ -24,10 +24,10 @@ class DebugTextFormatter extends TextFormatter {
   final FontStyle fontStyle;
 
   @override
-  TextElement format(String text) => _DebugTextElement(this, text);
+  InlineTextElement format(String text) => _DebugTextElement(this, text);
 }
 
-class _DebugTextElement extends TextElement {
+class _DebugTextElement extends InlineTextElement {
   _DebugTextElement(this.style, this.text) {
     final charWidth = style.fontSize * 1.0;
     final charHeight = style.fontSize;
@@ -45,7 +45,7 @@ class _DebugTextElement extends TextElement {
     _initRects(charWidth, charHeight);
   }
 
-  final DebugTextFormatter style;
+  final DebugTextRenderer style;
   final String text;
   final List<Rect> rects = [];
   final Paint paint = Paint();
@@ -53,7 +53,7 @@ class _DebugTextElement extends TextElement {
   late final LineMetrics metrics;
 
   @override
-  void render(Canvas canvas) {
+  void draw(Canvas canvas) {
     canvas.save();
     if (style.fontStyle == FontStyle.italic) {
       canvas.skew(-0.25, 0);

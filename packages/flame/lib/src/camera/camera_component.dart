@@ -219,7 +219,7 @@ class CameraComponent extends Component {
   /// will move from its current position to the target's position at the given
   /// speed.
   void follow(
-    ReadonlyPositionProvider target, {
+    ReadOnlyPositionProvider target, {
     double maxSpeed = double.infinity,
     bool horizontalOnly = false,
     bool verticalOnly = false,

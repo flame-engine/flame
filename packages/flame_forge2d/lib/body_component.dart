@@ -14,7 +14,10 @@ import 'package:forge2d/forge2d.dart' hide Timer, Vector2;
 /// seen
 abstract class BodyComponent<T extends Forge2DGame> extends Component
     with HasGameReference<T>, HasPaint
-    implements CoordinateTransform, ReadonlyPositionProvider {
+    implements
+        CoordinateTransform,
+        ReadOnlyPositionProvider,
+        ReadOnlyAngleProvider {
   BodyComponent({
     Paint? paint,
     super.children,
@@ -54,6 +57,8 @@ abstract class BodyComponent<T extends Forge2DGame> extends Component
   World get world => game.world.physicsWorld;
   CameraComponent get camera => game.cameraComponent;
   Vector2 get center => body.worldCenter;
+
+  @override
   double get angle => body.angle;
 
   /// The matrix used for preparing the canvas

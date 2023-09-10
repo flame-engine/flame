@@ -44,8 +44,8 @@ class PadRacingGame extends Forge2DGame with KeyboardEvents {
   @override
   Color backgroundColor() => Colors.black;
 
-  static Vector2 trackSize = Vector2.all(500);
-  static double playZoom = 8.0;
+  static final Vector2 trackSize = Vector2.all(500);
+  static const double playZoom = 8.0;
   static const int numberOfLaps = 3;
   late CameraComponent startCamera;
   late List<Map<LogicalKeyboardKey, LogicalKeyboardKey>> activeKeyMaps;

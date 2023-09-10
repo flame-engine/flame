@@ -35,15 +35,15 @@ class HudMarginComponent extends PositionComponent {
   /// from the edges of the viewport can be used instead.
   EdgeInsets? margin;
 
-  late ReadonlySizeProvider? _sizeProvider;
+  late ReadOnlySizeProvider? _sizeProvider;
 
   @override
   @mustCallSuper
   void onMount() {
     super.onMount();
     _sizeProvider =
-        ancestors().firstWhereOrNull((c) => c is ReadonlySizeProvider)
-            as ReadonlySizeProvider?;
+        ancestors().firstWhereOrNull((c) => c is ReadOnlySizeProvider)
+            as ReadOnlySizeProvider?;
     assert(
       _sizeProvider != null,
       'The parent of a HudMarginComponent needs to provide a size, for example '

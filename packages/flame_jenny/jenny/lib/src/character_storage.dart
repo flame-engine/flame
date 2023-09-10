@@ -28,4 +28,27 @@ class CharacterStorage {
       _cache[alias] = character;
     }
   }
+
+  /// Clear all characters from storage.
+  ///
+  /// This could be used between scenes in preparation for loading a new
+  /// set of characters. It would not generally be used while a dialog is
+  /// in progress.
+  void clear() {
+    _cache.clear();
+  }
+
+  /// Remove a character by name. Its aliases will also be removed.
+  ///
+  /// This could be used if you are certain a character is no longer required.
+  /// It would not generally be used while a dialog is in progress.
+  void remove(String name) {
+    final character = _cache[name];
+    if (character != null) {
+      for (final alias in character.aliases) {
+        _cache.remove(alias);
+      }
+      _cache.remove(character.name);
+    }
+  }
 }

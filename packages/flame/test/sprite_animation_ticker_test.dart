@@ -162,5 +162,26 @@ void main() {
       animationTicker.completed;
       expect(animationTicker.completeCompleter!.isCompleted, false);
     });
+
+    test('paused pauses ticket', () async {
+      final sprite = MockSprite();
+      final animationTicker = SpriteAnimation.spriteList(
+        [sprite, sprite],
+        stepTime: 1,
+        loop: false,
+      ).createTicker();
+
+      expect(animationTicker.isPaused, false);
+      expect(animationTicker.currentIndex, 0);
+      animationTicker.update(1);
+      expect(animationTicker.currentIndex, 1);
+      animationTicker.paused = true;
+      expect(animationTicker.isPaused, true);
+      animationTicker.update(1);
+      expect(animationTicker.currentIndex, 1);
+      animationTicker.reset();
+      expect(animationTicker.currentIndex, 0);
+      expect(animationTicker.isPaused, false);
+    });
   });
 }

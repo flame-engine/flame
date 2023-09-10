@@ -1,4 +1,11 @@
 <!-- markdownlint-disable MD013 -->
+<p align="right">
+  <a href="https://docs.flutter.dev/packages-and-plugins/favorites">
+    <img alt="Flutter favorite" width="100px" src="https://github.com/flame-engine/flame/assets/744771/aa5d5acd-e82b-48bc-ad81-2ab146d72ecb">
+  </a>
+</p>
+
+<!-- markdownlint-disable MD013 -->
 <p align="center">
   <a href="https://flame-engine.org">
     <img alt="flame" width="200px" src="https://user-images.githubusercontent.com/6718144/101553774-3bc7b000-39ad-11eb-8a6a-de2daa31bd64.png">

@@ -1,27 +1,26 @@
 import 'dart:math';
 
 import 'package:flame/src/text/common/utils.dart';
-import 'package:flame/src/text/elements/element.dart';
 import 'package:flame/src/text/elements/group_element.dart';
-import 'package:flame/src/text/nodes/block_node.dart';
-import 'package:flame/src/text/styles/document_style.dart';
+import 'package:flame/text.dart';
 import 'package:flutter/painting.dart';
 
-class DocumentNode {
-  DocumentNode(this.children);
+class DocumentRoot {
+  DocumentRoot(this.children);
 
   final List<BlockNode> children;
 
-  /// Applies [style] to this document, producing an object that can be rendered
-  /// on a canvas. Parameters [width] and [height] serve as the fallback values
-  /// if they were not specified in the style itself. However, they are ignored
-  /// if `style.width` and `style.height` are provided.
-  Element format(DocumentStyle style, {double? width, double? height}) {
+  /// Applies [style] to this document, producing an Element that can be
+  /// rendered on a canvas. Parameters [width] and [height] serve as the
+  /// fallback values if they were not specified in the style itself.
+  /// However, they are ignored if `style.width` and `style.height` are
+  /// provided.
+  GroupElement format(DocumentStyle style, {double? width, double? height}) {
     assert(
       style.width != null || width != null,
       'Width must be either provided explicitly or set in the stylesheet',
     );
-    final out = <Element>[];
+    final out = <TextElement>[];
     final border = style.background?.borderWidths ?? EdgeInsets.zero;
     final padding = style.padding;
 

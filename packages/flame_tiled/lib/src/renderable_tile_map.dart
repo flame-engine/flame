@@ -204,6 +204,8 @@ class RenderableTiledMap {
   static Future<RenderableTiledMap> fromFile(
     String fileName,
     Vector2 destTileSize, {
+    double? atlasMaxX,
+    double? atlasMaxY,
     String prefix = 'assets/tiles/',
     CameraComponent? camera,
     bool? ignoreFlip,
@@ -214,6 +216,8 @@ class RenderableTiledMap {
     return fromString(
       contents,
       destTileSize,
+      atlasMaxX: atlasMaxX,
+      atlasMaxY: atlasMaxY,
       prefix: prefix,
       camera: camera,
       ignoreFlip: ignoreFlip,
@@ -230,6 +234,8 @@ class RenderableTiledMap {
   static Future<RenderableTiledMap> fromString(
     String contents,
     Vector2 destTileSize, {
+    double? atlasMaxX,
+    double? atlasMaxY,
     String prefix = 'assets/tiles/',
     CameraComponent? camera,
     bool? ignoreFlip,
@@ -243,6 +249,8 @@ class RenderableTiledMap {
     return fromTiledMap(
       map,
       destTileSize,
+      atlasMaxX: atlasMaxX,
+      atlasMaxY: atlasMaxY,
       camera: camera,
       ignoreFlip: ignoreFlip,
       images: images,
@@ -256,6 +264,8 @@ class RenderableTiledMap {
   static Future<RenderableTiledMap> fromTiledMap(
     TiledMap map,
     Vector2 destTileSize, {
+    double? atlasMaxX,
+    double? atlasMaxY,
     CameraComponent? camera,
     bool? ignoreFlip,
     Images? images,
@@ -277,7 +287,11 @@ class RenderableTiledMap {
       destTileSize,
       camera,
       animationFrames,
-      atlas: await TiledAtlas.fromTiledMap(map),
+      atlas: await TiledAtlas.fromTiledMap(
+        map,
+        maxX: atlasMaxX,
+        maxY: atlasMaxY,
+      ),
       ignoreFlip: ignoreFlip,
       images: images,
     );

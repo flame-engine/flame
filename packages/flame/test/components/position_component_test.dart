@@ -5,6 +5,7 @@ import 'package:canvas_test/canvas_test.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
+import 'package:flame/geometry.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:test/test.dart';
 
@@ -919,7 +920,7 @@ void main() {
           ..position = Vector2(23, 17)
           ..size = Vector2.all(10)
           ..anchor = Anchor.center
-          ..precision = null;
+          ..debugCoordinatesPrecision = null;
         final canvas = MockCanvas();
         component.renderTree(canvas);
         expect(
@@ -929,6 +930,40 @@ void main() {
             ..drawRect(const Rect.fromLTWH(0, 0, 10, 10))
             ..drawLine(const Offset(5, 3), const Offset(5, 7))
             ..drawLine(const Offset(3, 5), const Offset(7, 5))
+            ..translate(0, 0), // canvas.restore
+        );
+      });
+
+      test('render without coordinates and then render with coordinates', () {
+        final component = _MyDebugComponent()
+          ..position = Vector2(23, 17)
+          ..size = Vector2.all(10)
+          ..anchor = Anchor.center
+          ..debugCoordinatesPrecision = null;
+        final withoutCoordinatesCanvas = MockCanvas();
+        component.renderTree(withoutCoordinatesCanvas);
+        expect(
+          withoutCoordinatesCanvas,
+          MockCanvas()
+            ..translate(18, 12)
+            ..drawRect(const Rect.fromLTWH(0, 0, 10, 10))
+            ..drawLine(const Offset(5, 3), const Offset(5, 7))
+            ..drawLine(const Offset(3, 5), const Offset(7, 5))
+            ..translate(0, 0), // canvas.restore
+        );
+
+        component.debugCoordinatesPrecision = 0;
+        final withCoordinatesCanvas = MockCanvas();
+        component.renderTree(withCoordinatesCanvas);
+        expect(
+          withCoordinatesCanvas,
+          MockCanvas()
+            ..translate(18, 12)
+            ..drawRect(const Rect.fromLTWH(0, 0, 10, 10))
+            ..drawLine(const Offset(5, 3), const Offset(5, 7))
+            ..drawLine(const Offset(3, 5), const Offset(7, 5))
+            ..drawParagraph(null, const Offset(-30, -15))
+            ..drawParagraph(null, const Offset(-20, 10))
             ..translate(0, 0), // canvas.restore
         );
       });
@@ -967,7 +1002,7 @@ void main() {
         const h = 2.0;
         final component = PositionComponent(size: Vector2(w, h));
         for (var i = 0; i < 10; i++) {
-          final a = (i / 10) * Transform2D.tau / 4;
+          final a = (i / 10) * tau / 4;
           component.angle = a;
           expect(
             component.toRect(),
@@ -1003,11 +1038,6 @@ void main() {
 class _MyHitboxComponent extends PositionComponent with GestureHitboxes {}
 
 class _MyDebugComponent extends PositionComponent {
-  int? precision = 0;
-
   @override
   bool get debugMode => true;
-
-  @override
-  int? get debugCoordinatesPrecision => precision;
 }

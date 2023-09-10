@@ -108,7 +108,7 @@ class AlignComponent extends PositionComponent {
   @override
   void onMount() {
     assert(
-      parent is ReadonlySizeProvider,
+      parent is ReadOnlySizeProvider,
       "An AlignComponent's parent must have a size",
     );
   }

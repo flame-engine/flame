@@ -21,7 +21,7 @@ scripts:
 
   analyze:
     run: |
-      melos exec -c 10 -- \
+      melos exec -c 1 -- \
         flutter analyze --fatal-infos
     description: Run `flutter analyze` for all packages.
 
@@ -79,7 +79,7 @@ scripts:
     description: Checks whether there are any broken links in the docs.
 
   test:select:
-    run: melos exec -- flutter test
+    run: melos exec -c 1 -- flutter test
     packageFilters:
       dirExists: test
     description: Run `flutter test` for selected packages.

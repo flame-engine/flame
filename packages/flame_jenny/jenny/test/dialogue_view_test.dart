@@ -52,6 +52,50 @@ void main() {
       );
     });
 
+    test('run a sample dialogue using mixin', () async {
+      final yarn = YarnProject()
+        ..commands.addOrphanedCommand('myCommand')
+        ..parse(
+          dedent('''
+            title: Start
+            ---
+            First line
+            -> Option 1
+                Continuation line 1
+            -> Option 2
+                Continuation line 2
+            Last line
+            <<myCommand 123 boo>>
+            ===
+          '''),
+        );
+      final view1 = _DefaultDialogueView();
+      final view2 = _RecordingDialogueViewAsMixin();
+      final dialogueRunner = DialogueRunner(
+        yarnProject: yarn,
+        dialogueViews: [view1, view2],
+      );
+      await dialogueRunner.startDialogue('Start');
+      expect(
+        view2.events,
+        const [
+          'onDialogueStart',
+          'onNodeStart(Start)',
+          'onLineStart(First line)',
+          'onLineFinish(First line)',
+          'onChoiceStart([-> Option 1][-> Option 2])',
+          'onChoiceFinish(-> Option 2)',
+          'onLineStart(Continuation line 2)',
+          'onLineFinish(Continuation line 2)',
+          'onLineStart(Last line)',
+          'onLineFinish(Last line)',
+          'onCommand(<<Command(myCommand)>>)',
+          'onNodeFinish(Start)',
+          'onDialogueFinish()',
+        ],
+      );
+    });
+
     test('jumps and visits', () async {
       final yarn = YarnProject()
         ..parse(
@@ -189,6 +233,75 @@ class _RecordingDialogueView extends DialogueView {
     if (waitDuration != Duration.zero) {
       await Future.delayed(waitDuration, () {});
     }
+    return true;
+  }
+
+  @override
+  void onLineSignal(DialogueLine line, dynamic signal) {
+    super.onLineSignal(line, signal);
+    events.add('onLineSignal(line="${line.text}", signal=<$signal>)');
+  }
+
+  @override
+  FutureOr<void> onLineStop(DialogueLine line) {
+    super.onLineStop(line);
+    events.add('onLineStop(${line.text})');
+  }
+
+  @override
+  FutureOr<void> onLineFinish(DialogueLine line) {
+    events.add('onLineFinish(${line.text})');
+  }
+
+  @override
+  Future<int> onChoiceStart(DialogueChoice choice) async {
+    final options =
+        [for (final option in choice.options) '[-> ${option.text}]'].join();
+    events.add('onChoiceStart($options)');
+    return 1;
+  }
+
+  @override
+  FutureOr<void> onChoiceFinish(DialogueOption option) {
+    events.add('onChoiceFinish(-> ${option.text})');
+  }
+
+  @override
+  FutureOr<void> onCommand(UserDefinedCommand command) {
+    events.add('onCommand(<<$command>>)');
+  }
+
+  @override
+  FutureOr<void> onDialogueFinish() {
+    events.add('onDialogueFinish()');
+  }
+}
+
+class _SomeOtherBaseClass {}
+
+class _RecordingDialogueViewAsMixin extends _SomeOtherBaseClass
+    with DialogueView {
+  _RecordingDialogueViewAsMixin();
+  final List<String> events = [];
+
+  @override
+  FutureOr<void> onDialogueStart() {
+    events.add('onDialogueStart');
+  }
+
+  @override
+  FutureOr<void> onNodeStart(Node node) {
+    events.add('onNodeStart(${node.title})');
+  }
+
+  @override
+  FutureOr<void> onNodeFinish(Node node) {
+    events.add('onNodeFinish(${node.title})');
+  }
+
+  @override
+  FutureOr<bool> onLineStart(DialogueLine line) async {
+    events.add('onLineStart(${line.text})');
     return true;
   }
 

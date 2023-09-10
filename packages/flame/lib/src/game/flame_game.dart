@@ -20,7 +20,7 @@ import 'package:meta/meta.dart';
 /// It is based on the Flame Component System (also known as FCS).
 class FlameGame extends ComponentTreeRoot
     with Game
-    implements ReadonlySizeProvider {
+    implements ReadOnlySizeProvider {
   FlameGame({
     super.children,
     Camera? camera,

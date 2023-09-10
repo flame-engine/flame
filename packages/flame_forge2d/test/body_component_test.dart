@@ -1,5 +1,6 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:flame/components.dart' show PositionComponent;
 import 'package:flame/extensions.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flame_test/flame_test.dart';
@@ -321,6 +322,44 @@ void main() {
           () => contactCallback.beginContact(fixtureA.userData!, contact),
         ).called(1);
       });
+    });
+
+    group('PositionComponent parented by BodyComponent', () {
+      final flameTester = FlameTester(Forge2DGame.new);
+
+      flameTester.testGameWidget(
+        'absoluteAngle',
+        setUp: (game, tester) async {
+          // Creates a body with an angle of 2 radians
+          final body = game.world.createBody(BodyDef(angle: 2.0));
+          final shape = EdgeShape()
+            ..set(
+              Vector2.zero(),
+              Vector2.all(10),
+            );
+          body.createFixture(FixtureDef(shape));
+          final bodyComponent = _TestBodyComponent()..body = body;
+
+          // Creates a positional component with an angle of 1 radians
+          final positionComponent = PositionComponent(angle: 1.0);
+
+          // Creates a hierarchy: game > bodyComponent > positionComponent
+          bodyComponent.addToParent(game);
+          positionComponent.addToParent(bodyComponent);
+
+          await game.ready();
+
+          // Checks the hierarchy
+          expect(game.contains(bodyComponent), true);
+          expect(bodyComponent.contains(positionComponent), true);
+          expect(game.children.length, 1);
+          expect(bodyComponent.children.length, 1);
+          expect(positionComponent.children.length, 0);
+
+          // Expects the absolute angle to be (2 + 1) radians
+          expect(positionComponent.absoluteAngle, 3.0);
+        },
+      );
     });
   });
 }
