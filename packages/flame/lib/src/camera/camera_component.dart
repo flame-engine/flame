@@ -159,6 +159,14 @@ class CameraComponent extends Component {
     canvas.restore();
   }
 
+  Vector2 globalToLocal(Vector2 point) {
+    return viewfinder.globalToLocal(viewport.globalToLocal(point));
+  }
+
+  Vector2 localToGlobal(Vector2 position) {
+    return viewport.localToGlobal(viewfinder.localToGlobal(position));
+  }
+
   @override
   Iterable<Component> componentsAtPoint(
     Vector2 point, [

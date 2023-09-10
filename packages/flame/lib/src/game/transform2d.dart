@@ -195,7 +195,6 @@ class Transform2D extends ChangeNotifier {
   ///
   /// If the current transform is degenerate due to one of the scale
   /// factors being 0, then this method will return a zero vector.
-  ///
   Vector2 globalToLocal(Vector2 point) {
     // Here we rely on the fact that in the transform matrix only elements
     // `m[0]`, `m[1]`, `m[4]`, `m[5]`, `m[12]`, and `m[13]` are modified.

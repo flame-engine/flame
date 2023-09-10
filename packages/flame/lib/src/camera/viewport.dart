@@ -111,4 +111,18 @@ abstract class Viewport extends Component
       'A Viewport may only be attached to a CameraComponent',
     );
   }
+
+  Vector2 globalToLocal(Vector2 point) {
+    return Vector2(
+      point.x - position.x + anchor.x * size.x,
+      point.y - position.y + anchor.y * size.y,
+    );
+  }
+
+  Vector2 localToGlobal(Vector2 point) {
+    return Vector2(
+      point.x + position.x - anchor.x * size.x,
+      point.y + position.y - anchor.y * size.y,
+    );
+  }
 }

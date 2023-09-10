@@ -81,6 +81,14 @@ class Viewfinder extends Component
   /// Reference to the parent camera.
   CameraComponent get camera => parent! as CameraComponent;
 
+  Vector2 globalToLocal(Vector2 point) {
+    return _transform.globalToLocal(point);
+  }
+
+  Vector2 localToGlobal(Vector2 point) {
+    return _transform.localToGlobal(point);
+  }
+
   /// How much of a game world ought to be visible through the viewport.
   ///
   /// When this property is non-null, the viewfinder will automatically select
