@@ -308,6 +308,30 @@ void main() {
           ),
         );
       });
+
+      test('clear all functions', () {
+        final functions = FunctionStorage();
+        functions.addFunction0('t0', () => 0);
+        functions.addFunction1('add2', (int n) => n + 2);
+        expect(functions.isEmpty, false);
+
+        functions.clear();
+
+        expect(functions.isEmpty, true);
+      });
+
+      test('remove a function', () {
+        final functions = FunctionStorage();
+        functions.addFunction0('t0', () => 0);
+        functions.addFunction1('add2', (int n) => n + 2);
+        expect(functions.hasFunction('t0'), true);
+        expect(functions.hasFunction('add2'), true);
+
+        functions.remove('t0');
+
+        expect(functions.hasFunction('t0'), false);
+        expect(functions.hasFunction('add2'), true);
+      });
     });
   });
 }

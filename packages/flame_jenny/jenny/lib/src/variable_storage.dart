@@ -57,4 +57,24 @@ class VariableStorage {
     }
     variables[name] = value;
   }
+
+  /// Clear all variables. By default node visit counts will not be cleared.
+  /// To remove node visit counts as well, set [clearNodeVisits] to `true`.
+  ///
+  /// Note that node visit variable names are prefixed with an @ symbol.
+  /// If you have custom variables that start with an @ symbol these will
+  /// also be retained if [clearNodeVisits] is `false`. These will need to be
+  /// removed individually using [remove].
+  void clear({bool clearNodeVisits = false}) {
+    if (!clearNodeVisits) {
+      variables.removeWhere((key, _) => !key.startsWith('@'));
+    } else {
+      variables.clear();
+    }
+  }
+
+  /// Remove a variable by [name].
+  void remove(String name) {
+    variables.remove(name);
+  }
 }
