@@ -31,7 +31,7 @@ mixin HoverCallbacks on PointerMoveCallbacks {
   }
 
   @override
-  void onPointerMoveEvent(PointerMoveEvent event) {
+  void onPointerMove(PointerMoveEvent event) {
     final position = event.localPosition;
     if (containsLocalPoint(position)) {
       if (!_isHovered) {
@@ -45,7 +45,7 @@ mixin HoverCallbacks on PointerMoveCallbacks {
   }
 
   @override
-  void onPointerMoveStopEvent(PointerMoveEvent event) {
+  void onPointerMoveStop(PointerMoveEvent event) {
     if (_isHovered) {
       _doHoverExit();
     }

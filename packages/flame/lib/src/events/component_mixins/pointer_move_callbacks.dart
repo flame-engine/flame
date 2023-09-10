@@ -6,9 +6,9 @@ import 'package:meta/meta.dart';
 /// This mixin can be added to a [Component] allowing it to receive
 /// pointer movement events.
 mixin PointerMoveCallbacks on Component {
-  void onPointerMoveEvent(PointerMoveEvent event) {}
+  void onPointerMove(PointerMoveEvent event) {}
 
-  void onPointerMoveStopEvent(PointerMoveEvent event) {}
+  void onPointerMoveStop(PointerMoveEvent event) {}
 
   @override
   @mustCallSuper

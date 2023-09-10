@@ -28,7 +28,7 @@ class PointerMoveDispatcher extends Component {
         final tagged = TaggedComponent(event.pointerId, component);
         _records.add(tagged);
         updated.add(tagged);
-        component.onPointerMoveEvent(event);
+        component.onPointerMove(event);
       },
     );
 
@@ -36,7 +36,7 @@ class PointerMoveDispatcher extends Component {
     for (final record in _records) {
       if (record.pointerId == event.pointerId && !updated.contains(record)) {
         // one last "exit" event
-        record.component.onPointerMoveStopEvent(event);
+        record.component.onPointerMoveStop(event);
         toRemove.add(record);
       }
     }
