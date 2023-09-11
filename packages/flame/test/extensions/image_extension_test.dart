@@ -78,7 +78,8 @@ void main() {
 
       const darkenAmount = 0.5;
       final originalDarkenImage = await image.darken(darkenAmount);
-      final originalDarkenPixelsList = await originalDarkenImage.pixelsInUint8();
+      final originalDarkenPixelsList =
+          await originalDarkenImage.pixelsInUint8();
 
       final darkenColor = originalColor.darken(darkenAmount);
       final expectedDarkenPixels = Uint8List.fromList(
