@@ -60,7 +60,6 @@ class RectangleComponent extends PolygonComponent {
     super.paint,
     super.paintLayers,
     super.shrinkToBounds,
-    super.scale,
     super.key,
   }) : super.relative([
           relation.clone(),
