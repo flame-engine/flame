@@ -163,24 +163,29 @@ class CameraComponent extends Component {
   /// local (camera = viewport + viewfinder).
   ///
   /// Opposite of [localToGlobal].
-  Vector2 globalToLocal(Vector2 point) {
-    return viewfinder.globalToLocal(viewport.globalToLocal(point));
+  Vector2 globalToLocal(Vector2 point, {Vector2? output}) {
+    final viewportPosition = viewport.globalToLocal(point, output: output);
+    return viewfinder.globalToLocal(viewportPosition, output: output);
   }
 
   /// Converts from the local (camera = viewport + viewfinder) coordinate space
   /// to global (canvas).
   ///
   /// Opposite of [globalToLocal].
-  Vector2 localToGlobal(Vector2 position) {
-    return viewport.localToGlobal(viewfinder.localToGlobal(position));
+  Vector2 localToGlobal(Vector2 position, {Vector2? output}) {
+    final viewfinderPosition =
+        viewfinder.localToGlobal(position, output: output);
+    return viewport.localToGlobal(viewfinderPosition, output: output);
   }
+
+  final _viewportPoint = Vector2.zero();
 
   @override
   Iterable<Component> componentsAtPoint(
     Vector2 point, [
     List<Vector2>? nestedPoints,
   ]) sync* {
-    final viewportPoint = viewport.globalToLocal(point);
+    final viewportPoint = viewport.globalToLocal(point, output: _viewportPoint);
     yield* viewport.componentsAtPoint(viewportPoint, nestedPoints);
     if ((world?.isMounted ?? false) &&
         currentCameras.length < maxCamerasDepth) {
