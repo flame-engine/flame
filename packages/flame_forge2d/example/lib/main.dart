@@ -6,7 +6,7 @@ import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flutter/widgets.dart';
 
 void main() {
-  runApp(GameWidget(game: Forge2DExample()));
+  runApp(const GameWidget.controlled(gameFactory: Forge2DExample.new));
 }
 
 class Forge2DExample extends Forge2DGame {

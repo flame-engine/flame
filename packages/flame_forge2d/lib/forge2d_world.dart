@@ -1,8 +1,11 @@
 import 'package:flame/components.dart';
-import 'package:flame_forge2d/world_contact_listener.dart';
+import 'package:flame_forge2d/flame_forge2d.dart' hide World;
 import 'package:forge2d/forge2d.dart' as forge2d;
-import 'package:forge2d/forge2d.dart' hide World;
 
+/// The root component when using [Forge2DGame], can handle both
+/// [BodyComponent]s and normal Flame components.
+///
+/// Wraps the world class that comes from Forge2D ([forge2d.World]).
 class Forge2DWorld extends World {
   Forge2DWorld({
     Vector2? gravity,

@@ -7,6 +7,7 @@ import 'package:flame_forge2d/forge2d_world.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:forge2d/forge2d.dart';
 
+/// The base game class for creating games that uses the Forge2D physics engine.
 class Forge2DGame extends FlameGame {
   Forge2DGame({
     Vector2? gravity,
@@ -20,6 +21,7 @@ class Forge2DGame extends FlameGame {
 
   Forge2DWorld world;
   CameraComponent cameraComponent = CameraComponent();
+
   // TODO(spydon): Use a meterToPixels constant instead for rendering.
   // (see #2613)
   final double _initialZoom;
@@ -34,16 +36,13 @@ class Forge2DGame extends FlameGame {
     add(cameraComponent);
   }
 
-  //@override
-  //Vector2 get size => cameraComponent.visibleWorldRect.toVector2();
-
-  // Should be removed later and use world.localToParent instead.
+  /// Takes a point in world coordinates and returns it in screen coordinates.
   Vector2 worldToScreen(Vector2 position) {
-    return world.localToParent(position, camera: cameraComponent)!;
+    return cameraComponent.localToGlobal(position);
   }
 
-  // Should be removed later and use world.parentToLocal instead.
+  /// Takes a point in screen coordinates and returns it in world coordinates.
   Vector2 screenToWorld(Vector2 position) {
-    return world.parentToLocal(position, camera: cameraComponent)!;
+    return cameraComponent.globalToLocal(position);
   }
 }
