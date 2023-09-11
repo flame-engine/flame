@@ -50,7 +50,7 @@ class RoundedRectangle extends Shape {
   factory RoundedRectangle.fromPoints(Vector2 a, Vector2 b, double radius) =>
       RoundedRectangle.fromLTRBR(a.x, a.y, b.x, b.y, radius);
 
-  /// Constructs a [RoundedRectangle] from ui's [RRect].
+  /// Constructs a [RoundedRectangle] from ui [RRect].
   ///
   /// All corners of the `rrect` must have the same circular radii.
   factory RoundedRectangle.fromRRect(RRect rrect) {
