@@ -1,10 +1,9 @@
 import 'dart:async';
 
 import 'package:flame/camera.dart';
-import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame_forge2d/forge2d_world.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:forge2d/forge2d.dart';
 
 /// The base game class for creating games that uses the Forge2D physics engine.

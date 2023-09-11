@@ -3,9 +3,6 @@ import 'package:examples/platform/stub_provider.dart'
     if (dart.library.html) 'platform/web_provider.dart';
 import 'package:examples/stories/animations/animations.dart';
 import 'package:examples/stories/bridge_libraries/audio/audio.dart';
-import 'package:examples/stories/bridge_libraries/flame_isolate/isolate.dart';
-import 'package:examples/stories/bridge_libraries/flame_lottie/lottie.dart';
-import 'package:examples/stories/bridge_libraries/flame_spine/flame_spine.dart';
 import 'package:examples/stories/bridge_libraries/flame_forge2d/flame_forge2d.dart';
 import 'package:examples/stories/bridge_libraries/flame_forge2d/joints/constant_volume_joint.dart';
 import 'package:examples/stories/bridge_libraries/flame_forge2d/joints/distance_joint.dart';
@@ -18,6 +15,9 @@ import 'package:examples/stories/bridge_libraries/flame_forge2d/joints/pulley_jo
 import 'package:examples/stories/bridge_libraries/flame_forge2d/joints/revolute_joint.dart';
 import 'package:examples/stories/bridge_libraries/flame_forge2d/joints/rope_joint.dart';
 import 'package:examples/stories/bridge_libraries/flame_forge2d/joints/weld_joint.dart';
+import 'package:examples/stories/bridge_libraries/flame_isolate/isolate.dart';
+import 'package:examples/stories/bridge_libraries/flame_lottie/lottie.dart';
+import 'package:examples/stories/bridge_libraries/flame_spine/flame_spine.dart';
 import 'package:examples/stories/camera_and_viewport/camera_and_viewport.dart';
 import 'package:examples/stories/collision_detection/collision_detection.dart';
 import 'package:examples/stories/components/components.dart';
