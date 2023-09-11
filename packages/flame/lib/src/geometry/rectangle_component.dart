@@ -14,6 +14,7 @@ class RectangleComponent extends PolygonComponent {
     super.priority,
     super.paint,
     super.paintLayers,
+    super.scale,
     super.key,
   }) : super(sizeToVertices(size ?? Vector2.zero(), anchor)) {
     size.addListener(
@@ -33,6 +34,7 @@ class RectangleComponent extends PolygonComponent {
     super.paint,
     super.paintLayers,
     super.children,
+    super.scale,
     super.key,
   }) : super(sizeToVertices(Vector2.all(size), anchor)) {
     this.size.addListener(
@@ -58,6 +60,7 @@ class RectangleComponent extends PolygonComponent {
     super.paint,
     super.paintLayers,
     super.shrinkToBounds,
+    super.scale,
     super.key,
   }) : super.relative([
           relation.clone(),
@@ -81,6 +84,7 @@ class RectangleComponent extends PolygonComponent {
     int? priority,
     Paint? paint,
     List<Paint>? paintLayers,
+    Vector2? scale,
     ComponentKey? key,
   }) {
     return RectangleComponent(
@@ -97,6 +101,7 @@ class RectangleComponent extends PolygonComponent {
       priority: priority,
       paint: paint,
       paintLayers: paintLayers,
+      scale: scale,
       key: key,
     );
   }
