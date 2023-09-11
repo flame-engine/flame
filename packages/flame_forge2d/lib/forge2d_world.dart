@@ -38,4 +38,28 @@ class Forge2DWorld extends World {
   void destroyJoint(forge2d.Joint joint) {
     physicsWorld.destroyJoint(joint);
   }
+
+  void raycast(RayCastCallback callback, Vector2 point1, Vector2 point2) {
+    physicsWorld.raycast(callback, point1, point2);
+  }
+
+  void clearForces() {
+    physicsWorld.clearForces();
+  }
+
+  void queryAABB(forge2d.QueryCallback callback, AABB aabb) {
+    physicsWorld.queryAABB(callback, aabb);
+  }
+
+  void raycastParticle(
+    forge2d.ParticleRaycastCallback callback,
+    Vector2 point1,
+    Vector2 point2,
+  ) {
+    physicsWorld.particleSystem.raycast(callback, point1, point2);
+  }
+
+  void setGravity(Vector2 gravity) {
+    physicsWorld.setGravity(gravity);
+  }
 }

@@ -7,7 +7,9 @@ import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame_forge2d/forge2d_game.dart';
 import 'package:flutter/foundation.dart';
-import 'package:forge2d/forge2d.dart' hide Timer, Vector2;
+import 'package:forge2d/forge2d.dart' hide Timer, Vector2, World;
+
+import 'flame_forge2d.dart';
 
 /// Since a pure BodyComponent doesn't have anything drawn on top of it,
 /// it is a good idea to turn on [debugMode] for it so that the bodies can be
@@ -54,7 +56,7 @@ abstract class BodyComponent<T extends Forge2DGame> extends Component
     body = createBody();
   }
 
-  World get world => game.world.physicsWorld;
+  Forge2DWorld get world => game.world;
   CameraComponent get camera => game.cameraComponent;
   Vector2 get center => body.worldCenter;
 
