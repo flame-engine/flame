@@ -47,7 +47,7 @@ void main() {
         game.onGameResize(size);
         expect(
           game.worldToScreen(Vector2.zero()),
-          (size / 2) * game.cameraComponent.viewfinder.zoom,
+          size / 2,
         );
       });
 

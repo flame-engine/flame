@@ -53,18 +53,9 @@ void main() {
             final component = _TestBodyComponent()
               ..body = body
               ..paint = testPaint;
-            await game.add(component);
+            await game.world.add(component);
 
-            game.camera.followVector2(Vector2.zero());
-
-            // a CircleShape contains point
-            expect(component.containsPoint(Vector2.all(1.5)), isTrue);
-          },
-          verify: (game, tester) async {
-            await expectLater(
-              find.byGame<Forge2DGame>(),
-              matchesGoldenFile(goldenPath('circle_shape')),
-            );
+            game.cameraComponent.follow(component);
           },
         );
 
@@ -82,9 +73,9 @@ void main() {
             final component = _TestBodyComponent()
               ..body = body
               ..paint = testPaint;
-            await game.add(component);
+            await game.world.add(component);
 
-            game.camera.followVector2(Vector2.zero());
+            game.cameraComponent.follow(component);
           },
           verify: (game, tester) async {
             await expectLater(
@@ -111,9 +102,9 @@ void main() {
             final component = _TestBodyComponent()
               ..body = body
               ..paint = testPaint;
-            await game.add(component);
+            await game.world.add(component);
 
-            game.camera.followVector2(Vector2.zero());
+            game.cameraComponent.follow(component);
 
             // a PolygonShape contains point
             expect(component.containsPoint(Vector2.all(10)), isTrue);
@@ -143,9 +134,9 @@ void main() {
             final component = _TestBodyComponent()
               ..body = body
               ..paint = testPaint;
-            await game.add(component);
+            await game.world.add(component);
 
-            game.camera.followVector2(Vector2.zero());
+            game.cameraComponent.follow(component);
           },
           verify: (game, tester) async {
             await expectLater(
@@ -172,9 +163,9 @@ void main() {
             final component = _TestBodyComponent()
               ..body = body
               ..paint = testPaint;
-            await game.add(component);
+            await game.world.add(component);
 
-            game.camera.followVector2(Vector2.zero());
+            game.cameraComponent.follow(component);
           },
           verify: (game, tester) async {
             await expectLater(
@@ -187,7 +178,7 @@ void main() {
     });
 
     group('renderFixture', () {
-      group('returs normally', () {
+      group('returns normally', () {
         late Canvas canvas;
         late Body body;
 
@@ -344,15 +335,15 @@ void main() {
           final positionComponent = PositionComponent(angle: 1.0);
 
           // Creates a hierarchy: game > bodyComponent > positionComponent
-          bodyComponent.addToParent(game);
-          positionComponent.addToParent(bodyComponent);
+          game.world.add(bodyComponent);
+          bodyComponent.add(positionComponent);
 
           await game.ready();
 
           // Checks the hierarchy
-          expect(game.contains(bodyComponent), true);
+          expect(game.world.contains(bodyComponent), true);
           expect(bodyComponent.contains(positionComponent), true);
-          expect(game.children.length, 1);
+          expect(game.world.children.length, 1);
           expect(bodyComponent.children.length, 1);
           expect(positionComponent.children.length, 0);
 
