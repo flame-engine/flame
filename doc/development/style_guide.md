@@ -16,7 +16,7 @@ commands to ensure the code is conformant and to fix any easy formatting problem
 
 ```shell
 flutter analyze
-flutter format .
+dart format .
 ```
 
 
