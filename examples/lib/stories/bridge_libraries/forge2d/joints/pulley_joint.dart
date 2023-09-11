@@ -27,12 +27,12 @@ class PulleyJointExample extends Forge2DGame with TapDetector {
     );
 
     final firstBox = DraggableBox(
-      startPosition: Vector2(-distanceFromCenter, 0),
+      startPosition: Vector2(-distanceFromCenter, 20),
       width: 5,
       height: 10,
     );
     final secondBox = DraggableBox(
-      startPosition: Vector2(distanceFromCenter, 0),
+      startPosition: Vector2(distanceFromCenter, 20),
       width: 7,
       height: 10,
     );

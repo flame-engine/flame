@@ -10,49 +10,68 @@ class WeldJointExample extends Forge2DGame with TapDetector {
     ball to test the bridge built using a `WeldJoint`
   ''';
 
+  final pillarHeight = 20.0;
+  final pillarWidth = 5.0;
+
   @override
   Future<void> onLoad() async {
     super.onLoad();
 
-    const pillarHeight = 20.0;
     final leftPillar = Box(
-      startPosition: Vector2(10, size.y - pillarHeight / 2),
-      width: 5,
+      startPosition: screenToWorld(Vector2(50, size.y))..y -= pillarHeight / 2,
+      width: pillarWidth,
       height: pillarHeight,
       bodyType: BodyType.static,
       color: Colors.white,
     );
     final rightPillar = Box(
-      startPosition: Vector2(size.x - 10, size.y - pillarHeight / 2),
-      width: 5,
+      startPosition: screenToWorld(Vector2(size.x - 50, size.y))
+        ..y -= pillarHeight / 2,
+      width: pillarWidth,
       height: pillarHeight,
       bodyType: BodyType.static,
       color: Colors.white,
     );
 
-    world.addAll([leftPillar, rightPillar]);
+    await world.addAll([leftPillar, rightPillar]);
 
-    createBridge(size.y - pillarHeight);
+    createBridge(leftPillar, rightPillar);
   }
 
-  Future<void> createBridge(double positionY) async {
+  Future<void> createBridge(
+    Box leftPillar,
+    Box rightPillar,
+  ) async {
     const sectionsCount = 10;
-    final sectionWidth = (size.x / sectionsCount).ceilToDouble();
+    // Vector2.zero is used here since 0,0 is in the middle and 0,0 in the
+    // screen space then gives us the
+    final halfSize = screenToWorld(Vector2.zero())..absolute();
+    final sectionWidth = ((leftPillar.center.x.abs() +
+                rightPillar.center.x.abs() +
+                pillarWidth) /
+            sectionsCount)
+        .ceilToDouble();
     Body? prevSection;
 
     for (var i = 0; i < sectionsCount; i++) {
       final section = Box(
-        startPosition: Vector2(sectionWidth * i, positionY),
+        startPosition: Vector2(
+          sectionWidth * i - halfSize.x + sectionWidth / 2,
+          halfSize.y - pillarHeight,
+        ),
         width: sectionWidth,
         height: 1,
       );
-      await add(section);
+      await world.add(section);
 
       if (prevSection != null) {
         createJoint(
           prevSection,
           section.body,
-          Vector2(sectionWidth * i + sectionWidth, positionY),
+          Vector2(
+            sectionWidth * i - halfSize.x + sectionWidth,
+            halfSize.y - pillarHeight,
+          ),
         );
       }
 
@@ -69,7 +88,7 @@ class WeldJointExample extends Forge2DGame with TapDetector {
   @override
   Future<void> onTapDown(TapDownInfo info) async {
     super.onTapDown(info);
-    final ball = Ball(info.eventPosition.game, radius: 5);
+    final ball = Ball(screenToWorld(info.eventPosition.global), radius: 5);
     world.add(ball);
   }
 }

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flame/camera.dart';
+import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame_forge2d/forge2d_world.dart';
 import 'package:flutter/cupertino.dart';
@@ -32,6 +33,9 @@ class Forge2DGame extends FlameGame {
     add(world);
     add(cameraComponent);
   }
+
+  //@override
+  //Vector2 get size => cameraComponent.visibleWorldRect.toVector2();
 
   // Should be removed later and use world.localToParent instead.
   Vector2 worldToScreen(Vector2 position) {

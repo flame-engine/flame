@@ -59,6 +59,8 @@ class Ball extends BodyComponent with ContactCallbacks {
     canvas.drawLine(center, center + lineRotation, _blue);
   }
 
+  final _impulseForce = Vector2(0, 1000);
+
   @override
   @mustCallSuper
   void update(double dt) {
@@ -66,7 +68,7 @@ class Ball extends BodyComponent with ContactCallbacks {
     if (giveNudge) {
       giveNudge = false;
       if (_timeSinceNudge > _minNudgeRest) {
-        body.applyLinearImpulse(Vector2(0, 1000));
+        body.applyLinearImpulse(_impulseForce);
         _timeSinceNudge = 0.0;
       }
     }

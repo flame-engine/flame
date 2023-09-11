@@ -59,21 +59,20 @@ class DraggableBox extends Box with DragCallbacks {
       world.destroyJoint(mouseJoint!);
       mouseJoint = null;
       _destroyJoint = false;
-      print('destroyed');
     }
   }
 
   @override
   bool onDragUpdate(DragUpdateEvent info) {
-    final target = info.localPosition;
+    final target = game.screenToWorld(info.canvasPosition);
     if (target.isNaN) {
       return false;
     }
     final mouseJointDef = MouseJointDef()
-      ..maxForce = 3000 * body.mass * 10
+      ..maxForce = body.mass * 300
       ..dampingRatio = 0
       ..frequencyHz = 20
-      ..target.setFrom(target)
+      ..target.setFrom(body.position)
       ..collideConnected = false
       ..bodyA = groundBody
       ..bodyB = body;
