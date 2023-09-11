@@ -1,8 +1,8 @@
 // ignore_for_file: deprecated_member_use
 
-import 'package:examples/stories/bridge_libraries/forge2d/revolute_joint_with_motor_example.dart';
-import 'package:examples/stories/bridge_libraries/forge2d/utils/balls.dart';
-import 'package:examples/stories/bridge_libraries/forge2d/utils/boundaries.dart';
+import 'package:examples/stories/bridge_libraries/flame_forge2d/revolute_joint_with_motor_example.dart';
+import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/balls.dart';
+import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/boundaries.dart';
 import 'package:flame/input.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 

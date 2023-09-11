@@ -1,7 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
-import 'package:examples/stories/bridge_libraries/forge2d/domino_example.dart';
-import 'package:examples/stories/bridge_libraries/forge2d/sprite_body_example.dart';
+import 'package:examples/stories/bridge_libraries/flame_forge2d/domino_example.dart';
+import 'package:examples/stories/bridge_libraries/flame_forge2d/sprite_body_example.dart';
 import 'package:flame/input.dart';
 
 class CameraExample extends DominoExample {
