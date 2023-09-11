@@ -117,7 +117,7 @@ class CameraComponent extends Component {
   Rect get visibleWorldRect {
     assert(
       viewport.isLoaded && viewfinder.isLoaded,
-      'This property cannot be accessed before the camera is mounted',
+      'This property cannot be accessed before the camera is loaded',
     );
     return viewfinder.visibleWorldRect;
   }
@@ -159,6 +159,22 @@ class CameraComponent extends Component {
     canvas.restore();
   }
 
+  /// Converts from the global (canvas) coordinate space to
+  /// local (camera = viewport + viewfinder).
+  ///
+  /// Opposite of [localToGlobal].
+  Vector2 globalToLocal(Vector2 point) {
+    return viewfinder.globalToLocal(viewport.globalToLocal(point));
+  }
+
+  /// Converts from the local (camera = viewport + viewfinder) coordinate space
+  /// to global (canvas).
+  ///
+  /// Opposite of [globalToLocal].
+  Vector2 localToGlobal(Vector2 position) {
+    return viewport.localToGlobal(viewfinder.localToGlobal(position));
+  }
+
   final _viewportPoint = Vector2.zero();
 
   @override
@@ -171,6 +187,8 @@ class CameraComponent extends Component {
       point.y - viewport.position.y + viewport.anchor.y * viewport.size.y,
     );
     yield* viewport.componentsAtPoint(_viewportPoint, nestedPoints);
+    final viewportPoint = viewport.globalToLocal(point);
+    yield* viewport.componentsAtPoint(viewportPoint, nestedPoints);
     if ((world?.isMounted ?? false) &&
         currentCameras.length < maxCamerasDepth) {
       if (viewport.containsLocalPoint(_viewportPoint)) {
