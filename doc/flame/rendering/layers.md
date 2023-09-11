@@ -17,6 +17,7 @@ suited for different use-cases.
 - Grouping objects to form a complex scene, and then caching it (e.g. a background layer)
 - Processor support. Layers allow user-defined processors to run pre- and post- render.
 
+
 ## Layers
 
 Layers allow you to group rendering by context, as well as allow you to pre-render things. This
