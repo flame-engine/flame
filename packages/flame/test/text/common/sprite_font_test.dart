@@ -46,6 +46,8 @@ void main() {
           Glyph('r', left: 7, top: 0),
           Glyph('s', left: 8, top: 0),
           Glyph('l', left: 9, top: 0),
+          Glyph('i', left: 10, top: 0),
+          Glyph('n', left: 11, top: 0),
         ],
       );
       void check(String text, List<double> codes) {
@@ -57,7 +59,7 @@ void main() {
       check('lame', [5]);
       check('flames', [1, 8]);
       check('flamers', [1, 7, 8]);
-      check('inflame', [8, 2, 5]);
+      check('inflame', [10, 11, 1]);
       check('aflame', [2, 1]);
       check('flams', [4, 9, 6, 8]);
 
