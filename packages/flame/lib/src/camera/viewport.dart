@@ -115,22 +115,26 @@ abstract class Viewport extends Component
   /// Converts a point from the global coordinate system to the local
   /// coordinate system of the viewport.
   ///
+  /// Use [output] to send in a Vector2 object that will be used to avoid
+  /// creating a new Vector2 object in this method.
+  ///
   /// Opposite of [localToGlobal].
-  Vector2 globalToLocal(Vector2 point) {
-    return Vector2(
-      point.x - position.x + anchor.x * size.x,
-      point.y - position.y + anchor.y * size.y,
-    );
+  Vector2 globalToLocal(Vector2 point, {Vector2? output}) {
+    final x = point.x - position.x + anchor.x * size.x;
+    final y = point.y - position.y + anchor.y * size.y;
+    return (output?..setValues(x, y)) ?? Vector2(x, y);
   }
 
   /// Converts a point from the local coordinate system of the viewport to the
   /// global coordinate system.
   ///
+  /// Use [output] to send in a Vector2 object that will be used to avoid
+  /// creating a new Vector2 object in this method.
+  ///
   /// Opposite of [globalToLocal].
-  Vector2 localToGlobal(Vector2 point) {
-    return Vector2(
-      point.x + position.x - anchor.x * size.x,
-      point.y + position.y - anchor.y * size.y,
-    );
+  Vector2 localToGlobal(Vector2 point, {Vector2? output}) {
+    final x = point.x + position.x - anchor.x * size.x;
+    final y = point.y + position.y - anchor.y * size.y;
+    return (output?..setValues(x, y)) ?? Vector2(x, y);
   }
 }
