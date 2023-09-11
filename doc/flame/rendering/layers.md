@@ -4,6 +4,18 @@ Layers and snapshots share some common features, including the ability to pre-re
 objects for improved performance. However, they also have unique features which make them better
 suited for different use-cases.
 
+`Snapshot` is a Mixin that can be added to any `PositionComponent`. Use this for:
+
+- Mixing in to existing game objects (that are `PositionComponents`)
+- Caching game objects, such as sprites, that are complex to render
+- Drawing the same object many times without rendering it each time
+- Capturing an image snapshot to save as a screenshot (for example)
+
+`Layer` is a class. Use or extend this class for:
+
+- Structuring your game with logical layers (e.g. UI, foreground, main, background)
+- Grouping objects to form a complex scene, and then caching it (e.g. a background layer)
+- Processor support. Layers allow user-defined processors to run pre- and post- render.
 
 ## Layers
 
