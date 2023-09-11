@@ -50,7 +50,7 @@ please read these instructions carefully.
 For a contribution to be accepted:
 
 - Follow the [Style Guide] when writing the code;
-- Format the code using `flutter format .`;
+- Format the code using `dart format .`;
 - Lint the code with `melos run analyze`;
 - Check that all tests pass: `melos run test`;
 - Documentation should always be updated or added (if applicable);
