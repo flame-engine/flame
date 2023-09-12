@@ -1,6 +1,6 @@
 # Forge2D
 
-We (the Blue Fire organization) maintain a ported version of the Box2D physics engine and our
+Blue Fire maintains a ported version of the Box2D physics engine and our
 version is called Forge2D.
 
 If you want to use Forge2D specifically for Flame you should use our bridge library
