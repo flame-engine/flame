@@ -1,6 +1,6 @@
-import 'dart:math';
 import 'dart:ui';
 
+import 'package:flame/geometry.dart';
 import 'package:flame/src/rendering/decorator.dart';
 import 'package:vector_math/vector_math_64.dart';
 
@@ -46,7 +46,6 @@ class Rotate3DDecorator extends Decorator {
   /// "back" side is shows if the component is rotated 180º degree around either
   /// the X or Y axis.
   bool get isFlipped {
-    const tau = 2 * pi;
     final phaseX = (angleX / tau - 0.25) % 1.0;
     final phaseY = (angleY / tau - 0.25) % 1.0;
     return (phaseX > 0.5) ^ (phaseY > 0.5);

@@ -42,6 +42,7 @@ void main() {
 
     test('pl (Polish)', () {
       final plural = localizationInfo['pl']!.pluralFunction;
+      // cSpell:ignore głowa, głowy, głow
       expect(plural(0, ['głowa', 'głowy', 'głow']), 'głow');
       expect(plural(1, ['głowa', 'głowy', 'głow']), 'głowa');
       expect(plural(2, ['głowa', 'głowy', 'głow']), 'głowy');
@@ -54,6 +55,7 @@ void main() {
 
     test('uk (Ukrainian)', () {
       final plural = localizationInfo['uk']!.pluralFunction;
+      // cSpell:ignore хвиля, хвилі, хвиль
       expect(plural(0, ['хвиля', 'хвилі', 'хвиль']), 'хвиль');
       expect(plural(1, ['хвиля', 'хвилі', 'хвиль']), 'хвиля');
       expect(plural(2, ['хвиля', 'хвилі', 'хвиль']), 'хвилі');

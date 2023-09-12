@@ -1,4 +1,5 @@
 import 'dart:math' as math;
+import 'package:flame/geometry.dart';
 import 'package:flame/src/effects/controllers/duration_effect_controller.dart';
 import 'package:flame/src/effects/controllers/infinite_effect_controller.dart';
 import 'package:flame/src/effects/controllers/repeated_effect_controller.dart';
@@ -17,7 +18,6 @@ class SineEffectController extends DurationEffectController {
 
   @override
   double get progress {
-    const tau = math.pi * 2;
     return math.sin(tau * timer / duration);
   }
 }
