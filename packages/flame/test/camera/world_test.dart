@@ -20,8 +20,9 @@ void main() {
     testWithFlameGame(
       'with a custom priority putting it in front of the camera in the tree',
       (game) async {
-        final world = World(priority: 4)..addToParent(game);
-        final camera = CameraComponent(world: world)..addToParent(game);
+        final world = World(priority: 4);
+        final camera = CameraComponent(world: world)..priority = 0;
+        game.addAll([world, camera]);
         await game.ready();
 
         expect(world.priority, equals(4));
