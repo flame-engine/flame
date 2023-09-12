@@ -54,20 +54,20 @@ void main() {
     });
 
     test('darken colors each pixel darker', () async {
-      const orignalColor = Color.fromARGB(193, 135, 73, 73);
+      const originalColor = Color.fromARGB(193, 135, 73, 73);
       final pixels = Uint8List.fromList(
         List<int>.generate(
           100 * 4,
           (index) {
             switch (index % 4) {
               case 0:
-                return orignalColor.red;
+                return originalColor.red;
               case 1:
-                return orignalColor.green;
+                return originalColor.green;
               case 2:
-                return orignalColor.blue;
+                return originalColor.blue;
               case 3:
-                return orignalColor.alpha;
+                return originalColor.alpha;
               default:
                 throw 'No 4 in switch % 4';
             }
@@ -76,11 +76,12 @@ void main() {
       );
       final image = await ImageExtension.fromPixels(pixels, 10, 10);
 
-      const darkenAmout = 0.5;
-      final orignalDarkenImage = await image.darken(darkenAmout);
-      final orignalDarkenPixelsList = await orignalDarkenImage.pixelsInUint8();
+      const darkenAmount = 0.5;
+      final originalDarkenImage = await image.darken(darkenAmount);
+      final originalDarkenPixelsList =
+          await originalDarkenImage.pixelsInUint8();
 
-      final darkenColor = orignalColor.darken(darkenAmout);
+      final darkenColor = originalColor.darken(darkenAmount);
       final expectedDarkenPixels = Uint8List.fromList(
         List<int>.generate(
           100 * 4,
@@ -100,24 +101,24 @@ void main() {
           },
         ),
       );
-      expect(orignalDarkenPixelsList, expectedDarkenPixels);
+      expect(originalDarkenPixelsList, expectedDarkenPixels);
     });
 
     test('brighten colors each pixel brighter', () async {
-      const orignalColor = Color.fromARGB(193, 135, 73, 73);
+      const originalColor = Color.fromARGB(193, 135, 73, 73);
       final pixels = Uint8List.fromList(
         List<int>.generate(
           100 * 4,
           (index) {
             switch (index % 4) {
               case 0:
-                return orignalColor.red;
+                return originalColor.red;
               case 1:
-                return orignalColor.green;
+                return originalColor.green;
               case 2:
-                return orignalColor.blue;
+                return originalColor.blue;
               case 3:
-                return orignalColor.alpha;
+                return originalColor.alpha;
               default:
                 throw 'No 4 in switch % 4';
             }
@@ -126,12 +127,12 @@ void main() {
       );
       final image = await ImageExtension.fromPixels(pixels, 10, 10);
 
-      const brightenAmout = 0.5;
-      final orignalBrightenImage = await image.brighten(brightenAmout);
-      final orignalBrightenPixelsList =
-          await orignalBrightenImage.pixelsInUint8();
+      const brightenAmount = 0.5;
+      final originalBrightenImage = await image.brighten(brightenAmount);
+      final originalBrightenPixelsList =
+          await originalBrightenImage.pixelsInUint8();
 
-      final brightenColor = orignalColor.brighten(brightenAmout);
+      final brightenColor = originalColor.brighten(brightenAmount);
       final expectedBrightenPixels = Uint8List.fromList(
         List<int>.generate(
           100 * 4,
@@ -151,7 +152,7 @@ void main() {
           },
         ),
       );
-      expect(orignalBrightenPixelsList, expectedBrightenPixels);
+      expect(originalBrightenPixelsList, expectedBrightenPixels);
     });
 
     test('resize resizes the image', () async {

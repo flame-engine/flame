@@ -86,6 +86,7 @@ void main() {
             ),
           ],
         );
+        // cSpell:ignore caffefe, badface
         game.addAll([
           RectangleComponent(
             size: Vector2(200, 200),

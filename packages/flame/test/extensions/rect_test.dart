@@ -187,11 +187,11 @@ void main() {
         ),
       );
 
-      final boudingBox = RectExtension.getBounds(points);
+      final boundingBox = RectExtension.getBounds(points);
       final xList = points.map((e) => e.x);
       final yList = points.map((e) => e.y);
       expect(
-        boudingBox.topLeft,
+        boundingBox.topLeft,
         Offset(
           xList.reduce(min),
           yList.reduce(min),
@@ -199,7 +199,7 @@ void main() {
         reason: 'topLeft offset is not OK',
       );
       expect(
-        boudingBox.bottomRight,
+        boundingBox.bottomRight,
         Offset(
           xList.reduce(max),
           yList.reduce(max),

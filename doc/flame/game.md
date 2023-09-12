@@ -15,6 +15,10 @@ A simple `FlameGame` implementation that adds two components, one in `onLoad` an
 the constructor can look like this:
 
 ```dart
+import 'package:flame/components.dart';
+import 'package:flame/game.dart';
+import 'package:flutter/widgets.dart';
+
 /// A component that renders the crate sprite, with a 16 x 16 size.
 class MyCrate extends SpriteComponent {
   MyCrate() : super(size: Vector2.all(16));
@@ -32,8 +36,8 @@ class MyGame extends FlameGame {
   }
 }
 
-main() {
-  final myGame = MyGame(children: [MyCrate]);
+void main() {
+  final myGame = MyGame();
   runApp(
     GameWidget(
       game: myGame,
