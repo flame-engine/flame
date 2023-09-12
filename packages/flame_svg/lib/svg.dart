@@ -23,7 +23,7 @@ class Svg {
 
   final MemoryCache<Size, Image> _imageCache = MemoryCache();
 
-  final _paint = Paint()..filterQuality = FilterQuality.high;
+  final _paint = Paint()..filterQuality = FilterQuality.medium;
 
   final List<Size> _lock = [];
 
