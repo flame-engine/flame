@@ -46,7 +46,12 @@ class CameraComponent extends Component {
     Viewfinder? viewfinder,
     List<Component>? hudComponents,
   })  : viewport = (viewport ?? MaxViewport())..addAll(hudComponents ?? []),
-        viewfinder = viewfinder ?? Viewfinder();
+        viewfinder = viewfinder ?? Viewfinder(),
+        // The priority is set to the max here to avoid some bugs for the users,
+        // if they for example would add any components that modify positions
+        // before the CameraComponent, since it then will render the positions
+        // of the last tick each tick.
+        super(priority: 0x7fffffff);
 
   /// Create a camera that shows a portion of the game world of fixed size
   /// [width] x [height].
