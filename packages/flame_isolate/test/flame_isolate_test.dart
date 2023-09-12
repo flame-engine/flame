@@ -18,9 +18,9 @@ void main() {
     },
   );
 
-  group('Test isolate in subcomponent', () {
+  group('Test isolate in sub-component', () {
     testWithFlameGame(
-      'Running isolate in subcomponent',
+      'Running isolate in sub-component',
       (game) async {
         final isolateComponent = IsolateComponent();
         await game.add(isolateComponent);
