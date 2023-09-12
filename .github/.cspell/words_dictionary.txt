@@ -47,7 +47,6 @@ rescan
 tappable
 tappables
 toolset
-trex # short for tyrannosaurus rex
 underutilize
 unfollow
 unmount
