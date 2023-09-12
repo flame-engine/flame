@@ -14,8 +14,8 @@ void main() {
     check($percent, '%');
     check($ampersand, '&');
     check($singleQuote, "'");
-    check($leftParen, '(');
-    check($rightParen, ')');
+    check($leftParenthesis, '(');
+    check($rightParenthesis, ')');
     check($asterisk, '*');
     check($plus, '+');
     check($comma, ',');

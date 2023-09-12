@@ -210,7 +210,7 @@ Future<void> main() async {
   });
 
   group('SpriteAnimation timing of animation frames', () {
-    test('Can move to last frame programatically', () {
+    test('Can move to last frame programmatically', () {
       // Non-looping animation, with the expected total duration of 0.500 s
       final animation = SpriteAnimation.spriteList(
         List.filled(5, Sprite(image)),
