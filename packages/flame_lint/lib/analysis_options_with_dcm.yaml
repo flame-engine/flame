@@ -8,5 +8,7 @@ dart_code_metrics:
     - avoid-banned-imports
     - avoid-cascade-after-if-null
     - avoid-collection-methods-with-unrelated-types
+    - avoid-duplicate-exports
+    - avoid-unnecessary-type-casts
   # flutter rules
     - prefer-define-hero-tag
