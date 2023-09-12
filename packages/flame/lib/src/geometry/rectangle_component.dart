@@ -8,13 +8,13 @@ class RectangleComponent extends PolygonComponent {
   RectangleComponent({
     super.position,
     super.size,
+    super.scale,
     super.angle,
     super.anchor,
     super.children,
     super.priority,
     super.paint,
     super.paintLayers,
-    super.scale,
     super.key,
   }) : super(sizeToVertices(size ?? Vector2.zero(), anchor)) {
     size.addListener(
@@ -28,13 +28,13 @@ class RectangleComponent extends PolygonComponent {
   RectangleComponent.square({
     double size = 0,
     super.position,
+    super.scale,
     super.angle,
     super.anchor,
     super.priority,
     super.paint,
     super.paintLayers,
     super.children,
-    super.scale,
     super.key,
   }) : super(sizeToVertices(Vector2.all(size), anchor)) {
     this.size.addListener(
