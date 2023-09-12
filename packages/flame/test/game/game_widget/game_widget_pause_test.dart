@@ -53,10 +53,12 @@ class _WrapperState extends State<_Wrapper> {
 
 class _MyGame extends FlameGame {
   int callCount = 0;
+  double timePassed = 0;
 
   @override
   void update(double dt) {
     super.update(dt);
+    timePassed += dt;
 
     callCount++;
   }
@@ -148,6 +150,31 @@ void main() {
       await tester.pump();
 
       expect(game.callCount, equals(2));
+    },
+  );
+
+  myGame().testGameWidget(
+    'will not add time to dt when paused',
+    verify: (game, tester) async {
+      const frameLength = Duration(seconds: 1);
+      // Run two frames.
+      await tester.pump(frameLength);
+      await tester.pump(frameLength);
+
+      game.pauseEngine();
+
+      // Run two frames when the engine is paused.
+      await tester.pump(frameLength);
+      await tester.pump(frameLength);
+
+      game.resumeEngine();
+      // This time will be thrown away since the ticker hasn't received its
+      // first timestamp yet.
+      await tester.pump(const Duration(seconds: 100));
+      await tester.pump(frameLength);
+
+      expect(game.callCount, equals(4));
+      expect(game.timePassed, equals(3));
     },
   );
 }
