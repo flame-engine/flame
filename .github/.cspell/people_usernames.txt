@@ -3,6 +3,7 @@ spydon # github.com/spydon
 stpasha # github.com/stpasha
 wolfenrain # github.com/wolfenrain
 xaha # github.com/xvrh
+luan # github.com/luanpotter
 Lukas # github.com/spydon
 Klingsbo # github.com/spydon
 erayzesen # erayzesen.itch.io

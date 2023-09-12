@@ -8,7 +8,6 @@
   "ignorePaths": [
     "**/media/**",
     "**/assets/**",
-    "**/test/**",
     "**/CHANGELOG.md"
   ],
   "ignoreRegExpList": [

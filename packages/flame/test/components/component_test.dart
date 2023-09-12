@@ -959,8 +959,8 @@ void main() {
       );
 
       testWithFlameGame(
-        'after adding several childs using addAll the method onChildrenChanged '
-        'should be called list.length times',
+        'after adding several children using addAll the method '
+        'onChildrenChanged should be called list.length times',
         (game) async {
           final list = [Component(), Component()];
           final parent = _OnChildrenChangedComponent();
@@ -1169,7 +1169,7 @@ void main() {
       );
 
       testWithFlameGame(
-        'Components can be retrived via a named key',
+        'Components can be retrieved via a named key',
         (game) async {
           final component = ComponentA(key: ComponentKey.named('A'));
           game.add(component);
@@ -1183,7 +1183,7 @@ void main() {
       );
 
       testWithFlameGame(
-        'Components can be retrived via an unique key',
+        'Components can be retrieved via an unique key',
         (game) async {
           final key1 = ComponentKey.unique();
           final key2 = ComponentKey.unique();
@@ -1207,7 +1207,7 @@ void main() {
       );
 
       testWithFlameGame(
-        'Components can be retrived via their name',
+        'Components can be retrieved via their name',
         (game) async {
           final component = ComponentA(key: ComponentKey.named('A'));
           game.add(component);
