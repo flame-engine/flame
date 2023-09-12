@@ -11,7 +11,6 @@
     "**/CHANGELOG.md"
   ],
   "ignoreRegExpList": [
-    "\\$\\w+",
     "\\{\\w+",
     "\\`\\w+",
     "\\:\\w+",
