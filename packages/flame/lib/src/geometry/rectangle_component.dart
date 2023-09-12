@@ -8,6 +8,7 @@ class RectangleComponent extends PolygonComponent {
   RectangleComponent({
     super.position,
     super.size,
+    super.scale,
     super.angle,
     super.anchor,
     super.children,
@@ -27,6 +28,7 @@ class RectangleComponent extends PolygonComponent {
   RectangleComponent.square({
     double size = 0,
     super.position,
+    super.scale,
     super.angle,
     super.anchor,
     super.priority,
@@ -76,6 +78,7 @@ class RectangleComponent extends PolygonComponent {
   /// This factory will create a [RectangleComponent] from a positioned [Rect].
   factory RectangleComponent.fromRect(
     Rect rect, {
+    Vector2? scale,
     double? angle,
     Anchor anchor = Anchor.topLeft,
     int? priority,
@@ -92,6 +95,7 @@ class RectangleComponent extends PolygonComponent {
               rect.size.toVector2(),
             ),
       size: rect.size.toVector2(),
+      scale: scale,
       angle: angle,
       anchor: anchor,
       priority: priority,

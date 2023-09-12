@@ -14,6 +14,7 @@ class CircleComponent extends ShapeComponent implements SizeProvider {
   CircleComponent({
     double? radius,
     super.position,
+    super.scale,
     super.angle,
     super.anchor,
     super.children,
@@ -29,6 +30,7 @@ class CircleComponent extends ShapeComponent implements SizeProvider {
     double relation, {
     required Vector2 parentSize,
     super.position,
+    super.scale,
     super.angle,
     super.anchor,
     super.paint,
