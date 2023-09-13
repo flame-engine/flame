@@ -122,7 +122,10 @@ class CameraComponent extends Component {
   Rect get visibleWorldRect {
     assert(
       viewport.isLoaded && viewfinder.isLoaded,
-      'This property cannot be accessed before the camera is loaded',
+      'This property cannot be accessed before the camera is loaded. '
+      'If you are using visibleWorldRect from another component (for example '
+      'the World), make sure that the CameraComponent is added before that '
+      'Component.',
     );
     return viewfinder.visibleWorldRect;
   }

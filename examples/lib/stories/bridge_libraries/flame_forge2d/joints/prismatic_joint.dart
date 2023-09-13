@@ -2,10 +2,9 @@ import 'dart:ui';
 
 import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/boxes.dart';
 import 'package:flame/components.dart';
-import 'package:flame/input.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 
-class PrismaticJointExample extends Forge2DGame with TapDetector {
+class PrismaticJointExample extends Forge2DGame {
   static const description = '''
     This example shows how to use a `PrismaticJoint`. 
     

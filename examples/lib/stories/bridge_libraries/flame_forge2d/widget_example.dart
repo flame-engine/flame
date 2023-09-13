@@ -2,17 +2,16 @@
 
 import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/boundaries.dart';
 import 'package:flame/game.dart';
-import 'package:flame/input.dart';
 import 'package:flame_forge2d/flame_forge2d.dart' hide Transform;
 import 'package:flutter/material.dart';
 
-class WidgetExample extends Forge2DGame with TapDetector {
+class WidgetExample extends Forge2DGame {
   static const String description = '''
     This examples shows how to render a widget on top of a Forge2D body outside
     of Flame.
   ''';
 
-  final List<Function()> updateStates = [];
+  final List<void Function()> updateStates = [];
   final Map<int, Body> bodyIdMap = {};
   final List<int> addLaterIds = [];
 
@@ -21,7 +20,7 @@ class WidgetExample extends Forge2DGame with TapDetector {
   @override
   Future<void> onLoad() async {
     super.onLoad();
-    final boundaries = createBoundaries(this);
+    final boundaries = createBoundaries(this, strokeWidth: 0);
     world.addAll(boundaries);
   }
 
@@ -44,8 +43,7 @@ class WidgetExample extends Forge2DGame with TapDetector {
     return body;
   }
 
-  int createBodyId() {
-    final id = bodyIdMap.length + addLaterIds.length;
+  int createBodyId(int id) {
     addLaterIds.add(id);
     return id;
   }
@@ -53,7 +51,11 @@ class WidgetExample extends Forge2DGame with TapDetector {
   @override
   void update(double dt) {
     super.update(dt);
-    addLaterIds.forEach((id) => bodyIdMap[id] = createBody());
+    addLaterIds.forEach((id) {
+      if (!bodyIdMap.containsKey(id)) {
+        bodyIdMap[id] = createBody();
+      }
+    });
     addLaterIds.clear();
     updateStates.forEach((f) => f());
   }
@@ -68,10 +70,10 @@ class BodyWidgetExample extends StatelessWidget {
       game: WidgetExample(),
       overlayBuilderMap: {
         'button1': (ctx, game) {
-          return BodyButtonWidget(game, game.createBodyId());
+          return BodyButtonWidget(game, game.createBodyId(1));
         },
         'button2': (ctx, game) {
-          return BodyButtonWidget(game, game.createBodyId());
+          return BodyButtonWidget(game, game.createBodyId(2));
         },
       },
       initialActiveOverlays: const ['button1', 'button2'],

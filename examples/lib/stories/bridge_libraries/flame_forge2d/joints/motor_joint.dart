@@ -3,22 +3,25 @@ import 'dart:ui';
 import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/balls.dart';
 import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/boxes.dart';
 import 'package:flame/components.dart';
-import 'package:flame/input.dart';
+import 'package:flame/events.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 
-class MotorJointExample extends Forge2DGame with TapDetector {
+class MotorJointExample extends Forge2DGame {
   static const description = '''
     This example shows how to use a `MotorJoint`. The ball spins around the 
     center point. Tap the screen to change the direction.
   ''';
 
+  MotorJointExample()
+      : super(gravity: Vector2.zero(), world: MotorJointWorld());
+}
+
+class MotorJointWorld extends Forge2DWorld with TapCallbacks {
   late Ball ball;
   late MotorJoint joint;
   final motorSpeed = 1;
 
   bool clockWise = true;
-
-  MotorJointExample() : super(gravity: Vector2.zero());
 
   @override
   Future<void> onLoad() async {
@@ -30,24 +33,24 @@ class MotorJointExample extends Forge2DGame with TapDetector {
       height: 1,
       bodyType: BodyType.static,
     );
-    world.add(box);
+    add(box);
 
     ball = Ball(Vector2(0, -5));
-    world.add(ball);
+    add(ball);
 
     await Future.wait([ball.loaded, box.loaded]);
 
-    joint = createJoint(ball.body, box.body);
-    world.add(JointRenderer(joint: joint));
+    joint = createMotorJoint(ball.body, box.body);
+    add(JointRenderer(joint: joint));
   }
 
   @override
-  Future<void> onTapDown(TapDownInfo info) async {
+  void onTapDown(TapDownEvent info) {
     super.onTapDown(info);
     clockWise = !clockWise;
   }
 
-  MotorJoint createJoint(Body first, Body second) {
+  MotorJoint createMotorJoint(Body first, Body second) {
     final motorJointDef = MotorJointDef()
       ..initialize(first, second)
       ..maxForce = 1000
@@ -55,7 +58,7 @@ class MotorJointExample extends Forge2DGame with TapDetector {
       ..correctionFactor = 0.1;
 
     final joint = MotorJoint(motorJointDef);
-    world.createJoint(joint);
+    createJoint(joint);
     return joint;
   }
 

@@ -1,35 +1,37 @@
 import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/balls.dart';
 import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/boundaries.dart';
-import 'package:flame/input.dart';
+import 'package:flame/events.dart';
+import 'package:flame/experimental.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 
-class DistanceJointExample extends Forge2DGame with TapDetector {
+class DistanceJointExample extends Forge2DGame {
   static const description = '''
     This example shows how to use a `DistanceJoint`. Tap the screen to add a 
     pair of balls joined with a `DistanceJoint`.
   ''';
 
+  DistanceJointExample() : super(world: DistanceJointWorld());
+}
+
+class DistanceJointWorld extends Forge2DWorld
+    with TapCallbacks, HasGameReference<Forge2DGame> {
   @override
   Future<void> onLoad() async {
     super.onLoad();
-    world.addAll(createBoundaries(this));
+    addAll(createBoundaries(game));
   }
 
   @override
-  Future<void> onTapDown(TapDownInfo info) async {
+  Future<void> onTapDown(TapDownEvent info) async {
     super.onTapDown(info);
-    final tap = screenToWorld(info.eventPosition.widget);
+    final tap = info.localPosition;
 
     final first = Ball(tap);
     final second = Ball(Vector2(tap.x + 3, tap.y + 3));
-    world.addAll([first, second]);
+    addAll([first, second]);
 
     await Future.wait([first.loaded, second.loaded]);
 
-    createJoint(first, second);
-  }
-
-  void createJoint(Ball first, Ball second) {
     final distanceJointDef = DistanceJointDef()
       ..initialize(
         first.body,
@@ -41,6 +43,6 @@ class DistanceJointExample extends Forge2DGame with TapDetector {
       ..frequencyHz = 3
       ..dampingRatio = 0.2;
 
-    world.createJoint(DistanceJoint(distanceJointDef));
+    createJoint(DistanceJoint(distanceJointDef));
   }
 }

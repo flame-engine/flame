@@ -4,29 +4,34 @@ import 'dart:ui';
 
 import 'package:examples/stories/bridge_libraries/flame_forge2d/sprite_body_example.dart';
 import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/boundaries.dart';
-import 'package:flame/input.dart';
+import 'package:flame/events.dart';
+import 'package:flame/experimental.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 
-class DominoExample extends Forge2DGame with TapDetector {
+class DominoExample extends Forge2DGame {
   static const description = '''
     In this example we can see some domino tiles lined up.
     If you tap on the screen a pizza is added which can tip the tiles over and
     cause a chain reaction. 
   ''';
 
-  DominoExample() : super(gravity: Vector2(0, 10.0));
+  DominoExample()
+      : super(gravity: Vector2(0, 10.0), world: DominoExampleWorld());
+}
 
+class DominoExampleWorld extends Forge2DWorld
+    with TapCallbacks, HasGameReference<Forge2DGame> {
   late Image pizzaImage;
 
   @override
   Future<void> onLoad() async {
     super.onLoad();
-    final boundaries = createBoundaries(this);
-    world.addAll(boundaries);
+    final boundaries = createBoundaries(game);
+    addAll(boundaries);
 
     const numberOfRows = 7;
     for (var i = 0; i < numberOfRows - 2; i++) {
-      world.add(Platform(Vector2(0.0, 5.0 * i)));
+      add(Platform(Vector2(0.0, 5.0 * i)));
     }
 
     const numberPerRow = 25;
@@ -36,15 +41,15 @@ class DominoExample extends Forge2DGame with TapDetector {
           -14.75 + j * (29.5 / (numberPerRow - 1)),
           -12.7 + 5 * i,
         );
-        world.add(DominoBrick(position));
+        add(DominoBrick(position));
       }
     }
   }
 
   @override
-  void onTapDown(TapDownInfo info) {
-    final position = screenToWorld(info.eventPosition.widget);
-    world.add(Pizza(position));
+  void onTapDown(TapDownEvent info) {
+    final position = info.localPosition;
+    add(Pizza(position));
   }
 }
 

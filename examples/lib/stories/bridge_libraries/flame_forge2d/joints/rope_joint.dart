@@ -1,5 +1,7 @@
 import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/balls.dart';
 import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/boxes.dart';
+import 'package:flame/events.dart';
+import 'package:flame/experimental.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flutter/material.dart';
 
@@ -11,6 +13,11 @@ class RopeJointExample extends Forge2DGame {
     movement.
   ''';
 
+  RopeJointExample() : super(world: RopeJointWorld());
+}
+
+class RopeJointWorld extends Forge2DWorld
+    with DragCallbacks, HasGameReference<Forge2DGame> {
   double handleWidth = 6;
 
   @override
@@ -22,14 +29,14 @@ class RopeJointExample extends Forge2DGame {
   }
 
   Future<Body> createHandle() async {
-    final anchor = screenToWorld(Vector2(0, 100))..x = 0;
+    final anchor = game.screenToWorld(Vector2(0, 100))..x = 0;
 
     final box = DraggableBox(
       startPosition: anchor,
       width: handleWidth,
       height: 3,
     );
-    await world.add(box);
+    await add(box);
 
     createPrismaticJoint(box.body, anchor);
     return box.body;
@@ -42,7 +49,7 @@ class RopeJointExample extends Forge2DGame {
     for (var i = 0; i < length; i++) {
       final newPosition = prevBody.worldCenter + Vector2(0, 1);
       final ball = Ball(newPosition, radius: 0.5, color: Colors.white);
-      await world.add(ball);
+      await add(ball);
 
       createRopeJoint(ball.body, prevBody);
       prevBody = ball.body;
@@ -50,8 +57,8 @@ class RopeJointExample extends Forge2DGame {
   }
 
   void createPrismaticJoint(Body box, Vector2 anchor) {
-    final groundBody = world.createBody(BodyDef());
-    final halfWidth = screenToWorld(Vector2.zero()).x.abs();
+    final groundBody = createBody(BodyDef());
+    final halfWidth = game.screenToWorld(Vector2.zero()).x.abs();
 
     final prismaticJointDef = PrismaticJointDef()
       ..initialize(
@@ -65,7 +72,7 @@ class RopeJointExample extends Forge2DGame {
       ..upperTranslation = halfWidth - handleWidth / 2;
 
     final joint = PrismaticJoint(prismaticJointDef);
-    world.createJoint(joint);
+    createJoint(joint);
   }
 
   void createRopeJoint(Body first, Body second) {
@@ -76,6 +83,6 @@ class RopeJointExample extends Forge2DGame {
       ..localAnchorB.setFrom(second.getLocalCenter())
       ..maxLength = (second.worldCenter - first.worldCenter).length;
 
-    world.createJoint(RopeJoint(ropeJointDef));
+    createJoint(RopeJoint(ropeJointDef));
   }
 }

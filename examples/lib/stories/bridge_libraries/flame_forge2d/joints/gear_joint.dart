@@ -3,10 +3,10 @@ import 'dart:ui';
 import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/balls.dart';
 import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/boxes.dart';
 import 'package:flame/components.dart';
-import 'package:flame/input.dart';
+import 'package:flame/experimental.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 
-class GearJointExample extends Forge2DGame with TapDetector {
+class GearJointExample extends Forge2DGame {
   static const description = '''
     This example shows how to use a `GearJoint`. 
         
@@ -14,6 +14,10 @@ class GearJointExample extends Forge2DGame with TapDetector {
     translation.
   ''';
 
+  GearJointExample() : super(world: GearJointWorld());
+}
+
+class GearJointWorld extends Forge2DWorld with HasGameReference<Forge2DGame> {
   late PrismaticJoint prismaticJoint;
   Vector2 boxAnchor = Vector2.zero();
 
@@ -27,15 +31,15 @@ class GearJointExample extends Forge2DGame with TapDetector {
 
     final box =
         DraggableBox(startPosition: boxAnchor, width: boxWidth, height: 20);
-    world.add(box);
+    add(box);
 
     final ball1Anchor = boxAnchor - Vector2(boxWidth / 2 + ball1Radius, 0);
     final ball1 = Ball(ball1Anchor, radius: ball1Radius);
-    world.add(ball1);
+    add(ball1);
 
     final ball2Anchor = ball1Anchor - Vector2(ball1Radius + ball2Radius, 0);
     final ball2 = Ball(ball2Anchor, radius: ball2Radius);
-    world.add(ball2);
+    add(ball2);
 
     await Future.wait([box.loaded, ball1.loaded, ball2.loaded]);
 
@@ -45,11 +49,11 @@ class GearJointExample extends Forge2DGame with TapDetector {
 
     createGearJoint(prismaticJoint, revoluteJoint1, 1);
     createGearJoint(revoluteJoint1, revoluteJoint2, 0.5);
-    world.add(JointRenderer(joint: prismaticJoint, anchor: boxAnchor));
+    add(JointRenderer(joint: prismaticJoint, anchor: boxAnchor));
   }
 
   PrismaticJoint createPrismaticJoint(Body box, Vector2 anchor) {
-    final groundBody = world.createBody(BodyDef());
+    final groundBody = createBody(BodyDef());
 
     final prismaticJointDef = PrismaticJointDef()
       ..initialize(
@@ -63,12 +67,12 @@ class GearJointExample extends Forge2DGame with TapDetector {
       ..upperTranslation = 10;
 
     final joint = PrismaticJoint(prismaticJointDef);
-    world.createJoint(joint);
+    createJoint(joint);
     return joint;
   }
 
   RevoluteJoint createRevoluteJoint(Body ball, Vector2 anchor) {
-    final groundBody = world.createBody(BodyDef());
+    final groundBody = createBody(BodyDef());
 
     final revoluteJointDef = RevoluteJointDef()
       ..initialize(
@@ -78,7 +82,7 @@ class GearJointExample extends Forge2DGame with TapDetector {
       );
 
     final joint = RevoluteJoint(revoluteJointDef);
-    world.createJoint(joint);
+    createJoint(joint);
     return joint;
   }
 
@@ -91,7 +95,7 @@ class GearJointExample extends Forge2DGame with TapDetector {
       ..ratio = gearRatio;
 
     final joint = GearJoint(gearJointDef);
-    world.createJoint(joint);
+    createJoint(joint);
   }
 }
 

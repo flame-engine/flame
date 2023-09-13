@@ -3,42 +3,45 @@
 import 'dart:math' as math;
 
 import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/boundaries.dart';
-import 'package:flame/input.dart';
+import 'package:flame/events.dart';
+import 'package:flame/experimental.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 
-class BlobExample extends Forge2DGame with TapDetector {
+class BlobExample extends Forge2DGame {
   static const String description = '''
     In this example we show the power of joints by showing interactions between
     bodies tied together.
     
     Tap the screen to add boxes that will bounce on the "blob" in the center.
   ''';
+  BlobExample() : super(world: BlobWorld());
+}
 
+class BlobWorld extends Forge2DWorld
+    with TapCallbacks, HasGameReference<Forge2DGame> {
   @override
   Future<void> onLoad() async {
     super.onLoad();
     final blobCenter = Vector2(0, -30);
     final blobRadius = Vector2.all(6.0);
-    world.addAll(createBoundaries(this));
-    world.add(Ground(Vector2.zero()));
+    addAll(createBoundaries(game));
+    add(Ground(Vector2.zero()));
     final jointDef = ConstantVolumeJointDef()
       ..frequencyHz = 20.0
       ..dampingRatio = 1.0
       ..collideConnected = false;
 
-    await world.addAll([
+    await addAll([
       for (var i = 0; i < 20; i++)
         BlobPart(i, jointDef, blobRadius, blobCenter),
     ]);
-    world.createJoint(ConstantVolumeJoint(world.physicsWorld, jointDef));
+    createJoint(ConstantVolumeJoint(physicsWorld, jointDef));
   }
 
   @override
-  void onTapDown(TapDownInfo info) {
+  void onTapDown(TapDownEvent info) {
     super.onTapDown(info);
-    world.add(
-      FallingBox(screenToWorld(info.eventPosition.widget)),
-    );
+    add(FallingBox(info.localPosition));
   }
 }
 

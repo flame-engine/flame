@@ -12,13 +12,24 @@ class Forge2DGame extends FlameGame {
     Vector2? gravity,
     ContactListener? contactListener,
     double zoom = 10,
-  })  : world = Forge2DWorld(
-          gravity: gravity,
-          contactListener: contactListener,
-        ),
+    Forge2DWorld? world,
+  })  : _world = (world?..setGravity(gravity)) ??
+            Forge2DWorld(
+              gravity: gravity,
+              contactListener: contactListener,
+            ),
         _initialZoom = zoom;
 
-  Forge2DWorld world;
+  /// The [Forge2DWorld] that the [cameraComponent] is rendering.
+  /// Inside of this world is where all your components should be added.
+  Forge2DWorld get world => _world;
+  set world(Forge2DWorld newWorld) {
+    cameraComponent.world = newWorld;
+    _world = newWorld;
+  }
+
+  Forge2DWorld _world;
+
   CameraComponent cameraComponent = CameraComponent();
 
   // TODO(spydon): Use a meterToPixels constant instead for rendering.
@@ -31,8 +42,8 @@ class Forge2DGame extends FlameGame {
     cameraComponent
       ..world = world
       ..viewfinder.zoom = _initialZoom;
-    add(world);
     add(cameraComponent);
+    add(world);
   }
 
   /// Takes a point in world coordinates and returns it in screen coordinates.
@@ -41,6 +52,9 @@ class Forge2DGame extends FlameGame {
   }
 
   /// Takes a point in screen coordinates and returns it in world coordinates.
+  ///
+  /// Remember that if you are using this for your events you can most of the
+  /// time just use `event.localPosition` directly instead.
   Vector2 screenToWorld(Vector2 position) {
     return cameraComponent.globalToLocal(position);
   }

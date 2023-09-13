@@ -80,9 +80,9 @@ void addForge2DStories(Dashbook dashbook) {
     )
     ..add(
       'Draggable Body',
-      (DashbookContext ctx) => GameWidget(game: DraggableExample()),
-      codeLink: link('draggable_example.dart'),
-      info: DraggableExample.description,
+      (DashbookContext ctx) => GameWidget(game: DragCallbacksExample()),
+      codeLink: link('drag_callbacks_example.dart'),
+      info: DragCallbacksExample.description,
     )
     ..add(
       'Camera',

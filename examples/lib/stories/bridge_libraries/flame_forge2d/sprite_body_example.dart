@@ -2,28 +2,36 @@ import 'dart:math';
 
 import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/boundaries.dart';
 import 'package:flame/components.dart';
-import 'package:flame/input.dart';
+import 'package:flame/events.dart';
+import 'package:flame/experimental.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 
-class SpriteBodyExample extends Forge2DGame with TapDetector {
+class SpriteBodyExample extends Forge2DGame {
   static const String description = '''
     In this example we show how to add a sprite on top of a `BodyComponent`.
     Tap the screen to add more pizzas.
   ''';
 
-  SpriteBodyExample() : super(gravity: Vector2(0, 10.0));
+  SpriteBodyExample()
+      : super(
+          gravity: Vector2(0, 10.0),
+          world: SpriteBodyWorld(),
+        );
+}
 
+class SpriteBodyWorld extends Forge2DWorld
+    with TapCallbacks, HasGameReference<Forge2DGame> {
   @override
   Future<void> onLoad() async {
     super.onLoad();
-    world.addAll(createBoundaries(this));
+    addAll(createBoundaries(game));
   }
 
   @override
-  void onTapDown(TapDownInfo info) {
+  void onTapDown(TapDownEvent info) {
     super.onTapDown(info);
-    final position = screenToWorld(info.eventPosition.widget);
-    world.add(Pizza(position, size: Vector2(10, 15)));
+    final position = info.localPosition;
+    add(Pizza(position, size: Vector2(10, 15)));
   }
 }
 

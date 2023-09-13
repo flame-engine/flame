@@ -9,8 +9,7 @@ import 'package:flame/input.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flutter/material.dart' show Colors, Paint, Canvas;
 
-class RaycastExample extends Forge2DGame
-    with TapDetector, MouseMovementDetector {
+class RaycastExample extends Forge2DGame with MouseMovementDetector {
   static const String description = '''
     This example shows how raycasts can be used to find nearest and farthest
     fixtures.
@@ -81,7 +80,7 @@ class RaycastExample extends Forge2DGame
     bluePoints.add(rayStart);
 
     final farthestCallback = FarthestBoxRayCastCallback();
-    world.physicsWorld.raycast(farthestCallback, rayStart, rayTarget);
+    world.raycast(farthestCallback, rayStart, rayTarget);
 
     if (farthestCallback.farthestPoint != null) {
       bluePoints.add(farthestCallback.farthestPoint!);
@@ -96,7 +95,7 @@ class RaycastExample extends Forge2DGame
     redPoints.add(rayStart);
 
     final nearestCallback = NearestBoxRayCastCallback();
-    world.physicsWorld.raycast(nearestCallback, rayStart, rayTarget);
+    world.raycast(nearestCallback, rayStart, rayTarget);
 
     if (nearestCallback.nearestPoint != null) {
       redPoints.add(nearestCallback.nearestPoint!);

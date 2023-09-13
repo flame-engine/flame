@@ -64,7 +64,7 @@ class DraggableBox extends Box with DragCallbacks {
 
   @override
   bool onDragUpdate(DragUpdateEvent info) {
-    final target = game.screenToWorld(info.canvasPosition);
+    final target = info.localPosition;
     if (target.isNaN) {
       return false;
     }

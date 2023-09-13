@@ -2,10 +2,11 @@ import 'dart:math' as math;
 
 import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/balls.dart';
 import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/boundaries.dart';
-import 'package:flame/input.dart';
+import 'package:flame/events.dart';
+import 'package:flame/experimental.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 
-class ContactCallbacksExample extends Forge2DGame with TapDetector {
+class ContactCallbacksExample extends Forge2DGame {
   static const description = '''
     This example shows how `BodyComponent`s can react to collisions with other
     bodies.
@@ -13,23 +14,27 @@ class ContactCallbacksExample extends Forge2DGame with TapDetector {
     balls that it collides with.
   ''';
 
-  ContactCallbacksExample() : super(gravity: Vector2(0, 10.0));
+  ContactCallbacksExample()
+      : super(gravity: Vector2(0, 10.0), world: ContactCallbackWorld());
+}
 
+class ContactCallbackWorld extends Forge2DWorld
+    with TapCallbacks, HasGameReference<Forge2DGame> {
   @override
   Future<void> onLoad() async {
     super.onLoad();
-    final boundaries = createBoundaries(this);
-    world.addAll(boundaries);
+    final boundaries = createBoundaries(game);
+    addAll(boundaries);
   }
 
   @override
-  void onTapDown(TapDownInfo info) {
+  void onTapDown(TapDownEvent info) {
     super.onTapDown(info);
-    final position = screenToWorld(info.eventPosition.widget);
+    final position = info.localPosition;
     if (math.Random().nextInt(10) < 2) {
-      world.add(WhiteBall(position));
+      add(WhiteBall(position));
     } else {
-      world.add(Ball(position));
+      add(Ball(position));
     }
   }
 }

@@ -4,10 +4,11 @@ import 'dart:math';
 
 import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/balls.dart';
 import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/boundaries.dart';
-import 'package:flame/input.dart';
+import 'package:flame/events.dart';
+import 'package:flame/experimental.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 
-class RevoluteJointWithMotorExample extends Forge2DGame with TapDetector {
+class RevoluteJointWithMotorExample extends Forge2DGame {
   static const String description = '''
     This example showcases a revolute joint, which is the spinning balls in the
     center.
@@ -17,26 +18,31 @@ class RevoluteJointWithMotorExample extends Forge2DGame with TapDetector {
     down the funnel.
   ''';
 
+  RevoluteJointWithMotorExample() : super(world: RevoluteJointWithMotorWorld());
+}
+
+class RevoluteJointWithMotorWorld extends Forge2DWorld
+    with TapCallbacks, HasGameReference<Forge2DGame> {
   final random = Random();
 
   @override
   Future<void> onLoad() async {
     super.onLoad();
-    final boundaries = createBoundaries(this);
-    world.addAll(boundaries);
+    final boundaries = createBoundaries(game);
+    addAll(boundaries);
     final center = Vector2.zero();
-    world.add(CircleShuffler(center));
-    world.add(CornerRamp(center, isMirrored: true));
-    world.add(CornerRamp(center));
+    add(CircleShuffler(center));
+    add(CornerRamp(center, isMirrored: true));
+    add(CornerRamp(center));
   }
 
   @override
-  void onTapDown(TapDownInfo info) {
+  void onTapDown(TapDownEvent info) {
     super.onTapDown(info);
-    final tapPosition = screenToWorld(info.eventPosition.widget);
+    final tapPosition = info.localPosition;
     List.generate(15, (i) {
       final randomVector = (Vector2.random() - Vector2.all(-0.5)).normalized();
-      world.add(Ball(tapPosition + randomVector, radius: random.nextDouble()));
+      add(Ball(tapPosition + randomVector, radius: random.nextDouble()));
     });
   }
 }
