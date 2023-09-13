@@ -72,7 +72,7 @@ class Ball extends BodyComponent<PadRacingGame> with ContactCallbacks {
   }
 
   late Rect asRect = Rect.fromCircle(
-    center: position.toOffset(),
+    center: initialPosition.toOffset(),
     radius: radius,
   );
 }
@@ -86,8 +86,9 @@ List<Ball> createBalls(Vector2 trackSize, List<Wall> walls, Ball bigBall) {
       radius: 3.0 + rng.nextInt(5),
       rotation: (rng.nextBool() ? 1 : -1) * rng.nextInt(5).toDouble(),
     );
-    final touchesBall = ball.position.distanceTo(bigBall.position) <
-        ball.radius + bigBall.radius;
+    final touchesBall =
+        ball.initialPosition.distanceTo(bigBall.initialPosition) <
+            ball.radius + bigBall.radius;
     if (!touchesBall) {
       final touchesWall =
           walls.any((wall) => wall.asRect.overlaps(ball.asRect));

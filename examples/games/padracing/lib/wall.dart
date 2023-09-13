@@ -105,7 +105,7 @@ class Wall extends BodyComponent<PadRacingGame> {
   }
 
   late Rect asRect = Rect.fromCenter(
-    center: position.toOffset(),
+    center: _position.toOffset(),
     width: size.x,
     height: size.y,
   );
