@@ -7,7 +7,7 @@ import 'package:flame/particles.dart';
 /// A [PositionComponent] that renders a [Particle] at the designated
 /// position, scaled to have the designated size and rotated to the specified
 /// angle.
-/// {endtempalte}
+/// {@endtemplate}
 class ParticleSystemComponent extends PositionComponent {
   Particle? particle;
 
