@@ -92,8 +92,14 @@ Flame officially provides bridge libraries to the following packages:
   [FireAtlas](https://github.com/flame-engine/fire-atlas): Create texture atlases for games.
 - [flame_forge2d](https://github.com/flame-engine/flame/tree/main/packages/flame_forge2d) for
   [Forge2D](https://github.com/flame-engine/forge2d): A Box2D physics engine.
+- [flame_isolate](https://github.com/flame-engine/flame/tree/main/packages/flame_isolate) -
+  Makes it easy to use [Flutter Isolates](https://api.flutter.dev/flutter/dart-isolate/Isolate-class.html) in a Flame game.
 - [flame_lint](https://github.com/flame-engine/flame/tree/main/packages/flame_lint) -
   Our set of linting (`analysis_options.yaml`) rules.
+- [flame_lottie](https://github.com/flame-engine/flame/tree/main/packages/flame_lottie) -
+  Support for [Lottie](https://airbnb.design/lottie/) animation in Flame.
+- [flame_network_assets](https://github.com/flame-engine/flame/tree/main/packages/flame_network_assets) -
+  Helpers to load game assets from network.
 - [flame_oxygen](https://github.com/flame-engine/flame/tree/main/packages/flame_oxygen) for
   [Oxygen](https://github.com/flame-engine/oxygen): A lightweight Entity Component System (ECS)
   framework.
