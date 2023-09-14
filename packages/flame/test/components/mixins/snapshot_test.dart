@@ -16,8 +16,8 @@ void main() {
         'Snapshot should be created once',
         _SnapshotTestGame.new,
         (game) async {
-          final snapshotComponent = game.snapshotComponent;
           await game.ready();
+          final snapshotComponent = game.snapshotComponent;
 
           // Wait a few frames
           final canvas = Canvas(PictureRecorder());
@@ -39,8 +39,8 @@ void main() {
         'Should render normally when renderSnapshot is false',
         () => _SnapshotTestGame(renderSnapshot: false),
         (game) async {
-          final snapshotComponent = game.snapshotComponent;
           await game.ready();
+          final snapshotComponent = game.snapshotComponent;
 
           // Wait a few frames
           const framesToWait = 5;
@@ -73,14 +73,15 @@ void main() {
         'Should generate a snapshot when takeSnapshot is called',
         (tester) async {
           final game = _SnapshotTestGame(renderSnapshot: false);
-          final snapshotComponent = game.snapshotComponent;
           const framesToWait = 5;
+          late final _MockSnapshotComponent snapshotComponent;
 
           await tester.runAsync(() async {
             final widget = GameWidget(game: game);
             await tester.pumpWidget(widget);
             await tester.pump();
             await game.ready();
+            snapshotComponent = game.snapshotComponent;
 
             // Wait a few frames
             final recorder = PictureRecorder();
@@ -116,13 +117,14 @@ void main() {
         'Should generate a transformed image',
         (tester) async {
           final game = _SnapshotTestGame(renderSnapshot: false);
-          final snapshotComponent = game.snapshotComponent;
+          late final _MockSnapshotComponent snapshotComponent;
 
           await tester.runAsync(() async {
             final widget = GameWidget(game: game);
             await tester.pumpWidget(widget);
             await tester.pump();
             await game.ready();
+            snapshotComponent = game.snapshotComponent;
 
             // Force a frame
             final canvas = Canvas(PictureRecorder());
@@ -173,8 +175,12 @@ void main() {
 
 class _SnapshotTestGame extends FlameGame {
   late final _MockSnapshotComponent snapshotComponent;
+  bool renderSnapshot;
 
-  _SnapshotTestGame({bool renderSnapshot = true}) {
+  _SnapshotTestGame({this.renderSnapshot = true});
+
+  @override
+  Future<void> onLoad() async {
     // Add a snapshot-enabled component that has it's own rendered content
     snapshotComponent = _MockSnapshotComponent()
       ..size = Vector2(200, 200)
