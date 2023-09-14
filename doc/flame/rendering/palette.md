@@ -7,6 +7,7 @@ The `Color` class represents a ARGB color in a hexadecimal integer
 format. So to create a `Color` instance, you just need to pass the color as an integer in the ARGB
 format.
 
+<!--- cSpell:ignore AARRGGBB -->
 You can use Dart's hexadecimal notation to make it really easy; for instance: `0xFF00FF00` is fully
 opaque green (the "mask" would be `0xAARRGGBB`).
 
