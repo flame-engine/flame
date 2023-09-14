@@ -182,7 +182,8 @@ void main() {
       await tester.pump(const Duration(seconds: 100));
       await tester.pump(frameLength);
 
-      expect(game.updateCount, equals(4));
+      // Remember that there is one initial update(0) after mount
+      expect(game.updateCount, equals(5));
       expect(game.timePassed, equals(3));
     },
   );
