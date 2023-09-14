@@ -115,7 +115,7 @@ void main() {
     );
 
     testWithFlameGame(
-      'successfully retreive the bloc via getter',
+      'successfully retrieve the bloc via getter',
       (game) async {
         final bloc = PlayerCubit();
         final provider = FlameBlocProvider<PlayerCubit, PlayerState>.value(

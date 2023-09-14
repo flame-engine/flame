@@ -7,5 +7,6 @@ dart_code_metrics:
   # dart rules
     - avoid-banned-imports
     - avoid-cascade-after-if-null
+    - avoid-collection-methods-with-unrelated-types
   # flutter rules
     - prefer-define-hero-tag

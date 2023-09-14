@@ -1,7 +1,7 @@
 # Tap Events
 
 ```{note}
-This document describes the new tap events API. The old (legacy) approach,
+This document describes the new events API. The old (legacy) approach,
 which is still supported, is described in [](gesture_input.md).
 ```
 

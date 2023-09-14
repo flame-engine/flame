@@ -187,7 +187,7 @@ void main() {
     });
 
     group('renderFixture', () {
-      group('returs normally', () {
+      group('returns normally', () {
         late Canvas canvas;
         late Body body;
 

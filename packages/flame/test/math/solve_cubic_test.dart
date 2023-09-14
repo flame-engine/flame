@@ -1,4 +1,4 @@
-import 'package:flame/src/utils/solve_cubic.dart';
+import 'package:flame/math.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:test/test.dart';
 

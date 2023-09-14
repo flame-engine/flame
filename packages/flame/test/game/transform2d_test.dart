@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 
+import 'package:flame/geometry.dart';
 import 'package:flame/src/game/transform2d.dart';
 import 'package:test/test.dart';
 import 'package:vector_math/vector_math_64.dart';
@@ -90,7 +91,6 @@ void main() {
     });
 
     test('angle', () {
-      const tau = Transform2D.tau;
       final t = Transform2D();
       t.angle = tau / 6;
       expect(t.angleDegrees, closeTo(60, 1e-10));
@@ -176,7 +176,7 @@ void main() {
             closeTo(matrix4.storage[k], 1e-10),
           );
         }
-        // Check that converting between local and global is round-trippable
+        // Check round-trip conversion between local and global
         final point1 =
             Vector2((rnd.nextDouble() - 0.5) * 5, (rnd.nextDouble() - 0.5) * 5);
         final point2 =
