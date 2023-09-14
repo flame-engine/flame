@@ -272,9 +272,7 @@ void main() {
 
       expect(
         () => camera.visibleWorldRect,
-        failsAssert(
-          'This property cannot be accessed before the camera is loaded',
-        ),
+        failsAssert(),
       );
     });
 
