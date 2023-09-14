@@ -101,13 +101,6 @@ class GameRenderBox extends RenderBox with WidgetsBindingObserver {
   }
 
   @override
-  void performLayout() {
-    if (!game.paused) {
-      game.update(0);
-    }
-  }
-
-  @override
   void detach() {
     super.detach();
     _detachGame();
