@@ -51,7 +51,8 @@ class WeldJointWorld extends Forge2DWorld
   ) async {
     const sectionsCount = 10;
     // Vector2.zero is used here since 0,0 is in the middle and 0,0 in the
-    // screen space then gives us the
+    // screen space then gives us the coordinates of the upper left corner in
+    // world space.
     final halfSize = game.screenToWorld(Vector2.zero())..absolute();
     final sectionWidth = ((leftPillar.center.x.abs() +
                 rightPillar.center.x.abs() +
