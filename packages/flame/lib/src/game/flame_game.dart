@@ -40,10 +40,17 @@ class FlameGame<T extends World> extends ComponentTreeRoot
 
   /// The [World] that the [cameraComponent] is rendering.
   /// Inside of this world is where most of your components should be added.
+  ///
+  /// You don't have to add the world to the tree after setting it here, it is
+  /// done automatically.
   T get world => _world;
   set world(T newWorld) {
+    _world.removeFromParent();
     cameraComponent.world = newWorld;
     _world = newWorld;
+    if (_world.parent == null) {
+      add(_world);
+    }
   }
 
   T _world;
@@ -52,11 +59,16 @@ class FlameGame<T extends World> extends ComponentTreeRoot
   ///
   /// In this component you can set different viewports, viewfinders, follow
   /// components, set bounds for where the camera can move etc.
+  ///
+  /// You don't have to add the CameraComponent to the tree after setting it
+  /// here, it is done automatically.
   CameraComponent get cameraComponent => _cameraComponent;
   set cameraComponent(CameraComponent newCameraComponent) {
     _cameraComponent.removeFromParent();
     _cameraComponent = newCameraComponent;
-    add(_cameraComponent);
+    if (_cameraComponent.parent == null) {
+      add(_cameraComponent);
+    }
   }
 
   CameraComponent _cameraComponent;
