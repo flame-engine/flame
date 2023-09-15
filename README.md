@@ -83,32 +83,22 @@ helpers, in order to make integrations seamless.
 
 Flame officially provides bridge libraries to the following packages:
 
-- [flame_audio](https://github.com/flame-engine/flame/tree/main/packages/flame_audio) for
-  [AudioPlayers](https://github.com/bluefireteam/audioplayers): Play multiple audio files
-  simultaneously.
-- [flame_bloc](https://github.com/flame-engine/flame/tree/main/packages/flame_bloc) for
-  [Bloc](https://github.com/felangel/bloc): A predictable state management library.
-- [flame_fire_atlas](https://github.com/flame-engine/flame/tree/main/packages/flame_fire_atlas) for
-  [FireAtlas](https://github.com/flame-engine/fire-atlas): Create texture atlases for games.
-- [flame_forge2d](https://github.com/flame-engine/flame/tree/main/packages/flame_forge2d) for
-  [Forge2D](https://github.com/flame-engine/forge2d): A Box2D physics engine.
-- [flame_isolate](https://github.com/flame-engine/flame/tree/main/packages/flame_isolate) -
-  Makes it easy to use [Flutter Isolates](https://api.flutter.dev/flutter/dart-isolate/Isolate-class.html) in a Flame game.
-- [flame_lint](https://github.com/flame-engine/flame/tree/main/packages/flame_lint) -
-  Our set of linting (`analysis_options.yaml`) rules.
-- [flame_lottie](https://github.com/flame-engine/flame/tree/main/packages/flame_lottie) -
-  Support for [Lottie](https://airbnb.design/lottie/) animation in Flame.
-- [flame_network_assets](https://github.com/flame-engine/flame/tree/main/packages/flame_network_assets) -
-  Helpers to load game assets from network.
-- [flame_oxygen](https://github.com/flame-engine/flame/tree/main/packages/flame_oxygen) for
-  [Oxygen](https://github.com/flame-engine/oxygen): A lightweight Entity Component System (ECS)
-  framework.
-- [flame_rive](https://github.com/flame-engine/flame/tree/main/packages/flame_rive) for
-  [Rive](https://rive.app/): Create interactive animations.
-- [flame_svg](https://github.com/flame-engine/flame/tree/main/packages/flame_svg) for
-  [flutter_svg](https://github.com/dnfield/flutter_svg): Draw SVG files in Flutter.
-- [flame_tiled](https://github.com/flame-engine/flame/tree/main/packages/flame_tiled) for
-  [Tiled](https://www.mapeditor.org/): 2D tile map level editor.
+- [flame_audio][flame_audio] for [AudioPlayers][audioplayers]: Play multiple audio files
+simultaneously.
+- [flame_bloc][flame_bloc] for [Bloc][bloc]: A predictable state management library.
+- [flame_fire_atlas][flame_fire_atlas] for [FireAtlas][fireatlas]: Create texture atlases for games.
+- [flame_forge2d][flame_forge2d] for [Forge2D][forge2d]: A Box2D physics engine.
+- [flame_isolate][flame_isolate] - Makes it easy to use [Flutter Isolates][flutter_isolates] in
+a Flame game.
+- [flame_lint][flame_lint] - Our set of linting (`analysis_options.yaml`) rules.
+- [flame_lottie][flame_lottie] - Support for [Lottie][lottie] animation in Flame.
+- [flame_network_assets][flame_network_assets] - Helpers to load game assets from
+network.
+- [flame_oxygen][flame_oxygen] for [Oxygen][oxygen]: A lightweight Entity Component System (ECS)
+framework.
+- [flame_rive][flame_rive] for [Rive][rive]: Create interactive animations.
+- [flame_svg][flame_svg] for [flutter_svg][flutter_svg]: Draw SVG files in Flutter.
+- [flame_tiled][flame_tiled] for [Tiled][tiled]: 2D tile map level editor.
 
 
 ## Sponsors
@@ -182,3 +172,26 @@ via an issue, GitHub discussion, or reach out to the team either using the
 - The [Blue Fire team](https://github.com/orgs/bluefireteam/people), who are continuously
   working on maintaining and improving Flame and its ecosystem.
 - All the friendly contributors and people who are helping out in the community.
+
+[flame_audio]: https://github.com/flame-engine/flame/tree/main/packages/flame_audio
+[audioplayers]: https://github.com/bluefireteam/audioplayers
+[flame_bloc]: https://github.com/flame-engine/flame/tree/main/packages/flame_bloc
+[bloc]: https://github.com/felangel/bloc
+[flame_fire_atlas]: https://github.com/flame-engine/flame/tree/main/packages/flame_fire_atlas
+[fireatlas]: https://github.com/flame-engine/fire-atlas
+[flame_forge2d]: https://github.com/flame-engine/flame/tree/main/packages/flame_forge2d
+[forge2d]: https://github.com/flame-engine/forge2d
+[flame_isolate]: https://github.com/flame-engine/flame/tree/main/packages/flame_isolate
+[flutter_isolates]: https://api.flutter.dev/flutter/dart-isolate/Isolate-class.html
+[flame_lint]: https://github.com/flame-engine/flame/tree/main/packages/flame_lint
+[flame_lottie]: https://github.com/flame-engine/flame/tree/main/packages/flame_lottie
+[lottie]: https://airbnb.design/lottie/
+[flame_network_assets]: https://github.com/flame-engine/flame/tree/main/packages/flame_network_assets
+[flame_oxygen]: https://github.com/flame-engine/flame/tree/main/packages/flame_oxygen
+[oxygen]: https://github.com/flame-engine/oxygen
+[flame_rive]: https://github.com/flame-engine/flame/tree/main/packages/flame_rive
+[rive]: https://rive.app/
+[flame_svg]: https://github.com/flame-engine/flame/tree/main/packages/flame_svg
+[flutter_svg]: https://github.com/dnfield/flutter_svg
+[flame_tiled]: https://github.com/flame-engine/flame/tree/main/packages/flame_tiled
+[tiled]: https://www.mapeditor.org/
