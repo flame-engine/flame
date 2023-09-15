@@ -12,16 +12,16 @@ void main() {
 class TiledGame extends FlameGame {
   late TiledComponent mapComponent;
 
-  final world = World();
-  late final CameraComponent cameraComponent;
+  TiledGame()
+      : super(
+          cameraComponent: CameraComponent.withFixedResolution(
+            width: 16 * 28,
+            height: 16 * 14,
+          ),
+        );
 
   @override
   Future<void> onLoad() async {
-    cameraComponent = CameraComponent.withFixedResolution(
-      world: world,
-      width: 16 * 28,
-      height: 16 * 14,
-    );
     cameraComponent.viewfinder.zoom = 0.5;
     cameraComponent.viewfinder.anchor = Anchor.topLeft;
     cameraComponent.viewfinder.add(
@@ -34,8 +34,6 @@ class TiledGame extends FlameGame {
         ),
       ),
     );
-
-    addAll([cameraComponent, world]);
 
     mapComponent = await TiledComponent.load('map.tmx', Vector2.all(16));
     world.add(mapComponent);

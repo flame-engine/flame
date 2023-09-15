@@ -20,19 +20,20 @@ class EffectControllersExample extends FlameGame {
     delayed.
   ''';
 
-  final world = World();
-  late final CameraComponent cameraComponent;
+  EffectControllersExample()
+      : super(
+          cameraComponent: CameraComponent.withFixedResolution(
+            width: 400,
+            height: 600,
+          ),
+          world: _EffectControllerWorld(),
+        );
+}
 
+class _EffectControllerWorld extends World {
   @override
   void onLoad() {
-    cameraComponent = CameraComponent.withFixedResolution(
-      world: world,
-      width: 400,
-      height: 600,
-    );
-    addAll([world, cameraComponent]);
-
-    world.add(
+    add(
       RectangleComponent.square(
         position: Vector2(-140, 0),
         size: 20,
@@ -43,7 +44,7 @@ class EffectControllersExample extends FlameGame {
           ),
         ),
     );
-    world.add(
+    add(
       RectangleComponent.square(
         position: Vector2(-50, 0),
         size: 20,
@@ -60,7 +61,7 @@ class EffectControllersExample extends FlameGame {
         ]),
     );
 
-    world.add(
+    add(
       RectangleComponent.square(
         position: Vector2(50, 0),
         size: 20,
@@ -72,7 +73,7 @@ class EffectControllersExample extends FlameGame {
           ),
         ),
     );
-    world.add(
+    add(
       RectangleComponent.square(
         position: Vector2(140, 0),
         size: 10,

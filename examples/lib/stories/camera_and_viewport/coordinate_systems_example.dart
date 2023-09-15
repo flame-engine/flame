@@ -33,13 +33,9 @@ class CoordinateSystemsExample extends FlameGame
   String? lastEventDescription;
   final cameraPosition = Vector2.zero();
   final cameraVelocity = Vector2.zero();
-  late final CameraComponent cameraComponent;
-  final world = World();
 
   @override
   Future<void> onLoad() async {
-    cameraComponent = CameraComponent(world: world);
-    addAll([world, cameraComponent]);
     final rectanglePosition = canvasSize / 4;
     final rectangleSize = Vector2.all(20);
     final positions = [

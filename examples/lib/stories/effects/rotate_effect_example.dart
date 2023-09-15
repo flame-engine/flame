@@ -17,20 +17,21 @@ class RotateEffectExample extends FlameGame {
     add small amounts of wobble, creating quasi-chaotic movement.
   ''';
 
-  final world = World();
-  late final CameraComponent cameraComponent;
+  RotateEffectExample()
+      : super(
+          cameraComponent: CameraComponent.withFixedResolution(
+            width: 400,
+            height: 600,
+          )..viewfinder.anchor = Anchor.topLeft,
+          world: _RotateEffectWorld(),
+        );
+}
 
+class _RotateEffectWorld extends World {
   @override
   void onLoad() {
-    cameraComponent = CameraComponent.withFixedResolution(
-      world: world,
-      width: 400,
-      height: 600,
-    );
-    addAll([cameraComponent, world]);
-
     final compass = Compass(size: 200);
-    world.add(compass);
+    add(compass);
 
     compass.rim.add(
       RotateEffect.by(

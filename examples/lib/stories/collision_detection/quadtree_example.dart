@@ -39,14 +39,12 @@ Press T button to toggle player to collide with other objects.
 
   static const mapSize = 300;
   static const bricksCount = 8000;
-  late final CameraComponent cameraComponent;
   late final Player player;
   final staticLayer = StaticLayer();
 
   @override
   Future<void> onLoad() async {
     super.onLoad();
-    final world = World();
 
     const mapWidth = mapSize * tileSize;
     const mapHeight = mapSize * tileSize;
@@ -87,7 +85,6 @@ Press T button to toggle player to collide with other objects.
       width: 500,
       height: 250,
     );
-    addAll([world, cameraComponent]);
 
     player = Player(
       position: Vector2.all(mapSize * tileSize / 2),

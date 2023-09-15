@@ -17,8 +17,6 @@ This examples showcases how raycast APIs can be used to detect hits within certa
 
   late Ray2 _ray;
   late _Character _character;
-  late CameraComponent cameraComponent;
-  final world = World();
   final _result = RaycastResult<ShapeHitbox>();
 
   final _text = TextComponent(
@@ -39,7 +37,6 @@ This examples showcases how raycast APIs can be used to detect hits within certa
       width: 320,
       height: 180,
     );
-    addAll([cameraComponent, world]);
 
     _addMovingWall();
 

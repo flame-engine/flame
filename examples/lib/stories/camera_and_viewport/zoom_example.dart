@@ -14,19 +14,16 @@ class ZoomExample extends FlameGame with ScrollDetector, ScaleDetector {
 
   final Vector2 viewportResolution;
   late SpriteComponent flame;
-  late final CameraComponent cameraComponent;
 
   @override
   Future<void> onLoad() async {
     final flameSprite = await loadSprite('flame.png');
 
-    final world = World();
     cameraComponent = CameraComponent.withFixedResolution(
       world: world,
       width: viewportResolution.x,
       height: viewportResolution.y,
     );
-    addAll([world, cameraComponent]);
 
     world.add(
       flame = SpriteComponent(

@@ -18,20 +18,48 @@ import 'package:meta/meta.dart';
 ///
 /// This is the recommended base class to use for most games made with Flame.
 /// It is based on the Flame Component System (also known as FCS).
-class FlameGame extends ComponentTreeRoot
+class FlameGame<T extends World> extends ComponentTreeRoot
     with Game
     implements ReadOnlySizeProvider {
   FlameGame({
     super.children,
+    T? world,
+    CameraComponent? cameraComponent,
     Camera? camera,
-  }) {
+  })  : _world = world ?? World() as T,
+        _cameraComponent = cameraComponent ?? CameraComponent() {
     assert(
       Component.staticGameInstance == null,
       '$this instantiated, while another game ${Component.staticGameInstance} '
       'declares itself to be a singleton',
     );
     _cameraWrapper = CameraWrapper(camera ?? Camera(), children);
+    add(_cameraComponent..world = world);
+    add(_world);
   }
+
+  /// The [World] that the [cameraComponent] is rendering.
+  /// Inside of this world is where most of your components should be added.
+  T get world => _world;
+  set world(T newWorld) {
+    cameraComponent.world = newWorld;
+    _world = newWorld;
+  }
+
+  T _world;
+
+  /// The component that is responsible for rendering your [world].
+  ///
+  /// In this component you can set different viewports, viewfinders, follow
+  /// components, set bounds for where the camera can move etc.
+  CameraComponent get cameraComponent => _cameraComponent;
+  set cameraComponent(CameraComponent newCameraComponent) {
+    _cameraComponent.removeFromParent();
+    _cameraComponent = newCameraComponent;
+    add(_cameraComponent);
+  }
+
+  CameraComponent _cameraComponent;
 
   late final CameraWrapper _cameraWrapper;
 
@@ -40,30 +68,16 @@ class FlameGame extends ComponentTreeRoot
 
   /// The camera translates the coordinate space after the viewport is applied.
   @Deprecated('''
-    In the future (maybe as early as v1.9.0) this camera will be removed,
+    In the future (maybe as early as v1.10.0) this camera will be removed,
     please use the CameraComponent instead.
     
     This is the simplest way of using the CameraComponent:
-    1. Add variables for a CameraComponent and a World to your game class
-    
-       final world = World();
-       late final CameraComponent cameraComponent;
-    
-    2. In your `onLoad` method, initialize the cameraComponent and add the world
-       to it.
-       
-       @override
-       void onLoad() {
-         cameraComponent = CameraComponent(world: world);
-         addAll([cameraComponent, world]);
-       }
-       
-    3. Instead of adding the root components directly to your game with `add`,
+    1. Instead of adding the root components directly to your game with `add`,
        add them to the world.
        
        world.add(yourComponent);
     
-    4. (Optional) If you want to add a HUD component, instead of using
+    2. (Optional) If you want to add a HUD component, instead of using
        PositionType, add the component as a child of the viewport.
        
        cameraComponent.viewport.add(yourHudComponent);
@@ -193,14 +207,14 @@ class FlameGame extends ComponentTreeRoot
   /// This method handles duplications, so there will never be
   /// more than one [ComponentsNotifier] for a given type, meaning
   /// that this method can be called as many times as needed for a type.
-  ComponentsNotifier<T> componentsNotifier<T extends Component>() {
+  ComponentsNotifier<S> componentsNotifier<S extends Component>() {
     for (final notifier in notifiers) {
-      if (notifier is ComponentsNotifier<T>) {
+      if (notifier is ComponentsNotifier<S>) {
         return notifier;
       }
     }
-    final notifier = ComponentsNotifier<T>(
-      descendants().whereType<T>().toList(),
+    final notifier = ComponentsNotifier<S>(
+      descendants().whereType<S>().toList(),
     );
     notifiers.add(notifier);
     return notifier;

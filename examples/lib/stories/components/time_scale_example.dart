@@ -14,6 +14,14 @@ class TimeScaleExample extends FlameGame
   static const description =
       'This example shows how time scale can be used to control game speed.';
 
+  TimeScaleExample()
+      : super(
+          cameraComponent: CameraComponent.withFixedResolution(
+            width: 640,
+            height: 360,
+          ),
+        );
+
   final gameSpeedText = TextComponent(
     text: 'Time Scale: 1',
     textRenderer: TextPaint(
@@ -31,17 +39,8 @@ class TimeScaleExample extends FlameGame
   @override
   Color backgroundColor() => const Color.fromARGB(255, 88, 114, 97);
 
-  final world = World();
-  late final CameraComponent cameraComponent;
-
   @override
   Future<void> onLoad() async {
-    cameraComponent = CameraComponent.withFixedResolution(
-      world: world,
-      width: 640,
-      height: 360,
-    );
-    addAll([world, cameraComponent]);
     final spriteSheet = SpriteSheet(
       image: await images.load('animations/chopper.png'),
       srcSize: Vector2.all(48),

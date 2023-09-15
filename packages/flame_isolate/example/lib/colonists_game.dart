@@ -17,17 +17,17 @@ import 'package:flutter/services.dart';
 class ColonistsGame extends FlameGame with KeyboardEvents {
   final PositionComponent _cameraPosition = PositionComponent();
   late final GameMap _currentMap;
-  final world = World();
-  late final CameraComponent cameraComponent;
+  ColonistsGame()
+      : super(
+          cameraComponent: CameraComponent.withFixedResolution(
+            width: 400,
+            height: 600,
+          ),
+        );
 
   @override
   Future<void> onLoad() async {
-    cameraComponent = CameraComponent.withFixedResolution(
-      world: world,
-      width: 400,
-      height: 600,
-    );
-    addAll([cameraComponent, world]);
+    super.onLoad();
     cameraComponent.follow(_cameraPosition);
     cameraComponent.viewfinder.zoom = 0.4;
 

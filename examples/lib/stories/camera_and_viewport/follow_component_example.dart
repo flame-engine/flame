@@ -27,7 +27,6 @@ class FollowComponentExample extends FlameGame
 
   late MovableEmber ember;
   final Vector2 viewportResolution;
-  late final CameraComponent cameraComponent;
 
   @override
   Future<void> onLoad() async {
@@ -37,7 +36,6 @@ class FollowComponentExample extends FlameGame
       height: viewportResolution.y,
       world: world,
     );
-    addAll([world, cameraComponent]);
 
     world.add(Map());
     world.add(ember = MovableEmber());

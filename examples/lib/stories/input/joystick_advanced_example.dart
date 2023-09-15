@@ -25,14 +25,8 @@ class JoystickAdvancedExample extends FlameGame with HasCollisionDetection {
   late final TextComponent speedText;
   late final TextComponent directionText;
 
-  final world = World();
-  late final CameraComponent cameraComponent;
-
   @override
   Future<void> onLoad() async {
-    cameraComponent = CameraComponent(world: world);
-    addAll([cameraComponent, world]);
-
     final image = await images.load('joystick.png');
     final sheet = SpriteSheet.fromColumnsAndRows(
       image: image,

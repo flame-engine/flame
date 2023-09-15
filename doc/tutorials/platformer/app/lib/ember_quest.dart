@@ -24,9 +24,6 @@ class EmberQuestGame extends FlameGame
   double cloudSpeed = 0.0;
   double objectSpeed = 0.0;
 
-  final world = World();
-  late final CameraComponent cameraComponent;
-
   @override
   Future<void> onLoad() async {
     //debugMode = true; // Uncomment to see the bounding boxes
@@ -39,9 +36,7 @@ class EmberQuestGame extends FlameGame
       'star.png',
       'water_enemy.png',
     ]);
-    cameraComponent = CameraComponent(world: world);
     cameraComponent.viewfinder.anchor = Anchor.topLeft;
-    addAll([cameraComponent, world]);
 
     initializeGame(loadHud: true);
   }
