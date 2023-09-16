@@ -11,8 +11,7 @@ import 'package:flame/input.dart';
 
 enum Shapes { circle, rectangle, polygon }
 
-class GestureHitboxesExample extends FlameGame
-    with TapCallbacks, HasHoverables {
+class GestureHitboxesExample extends FlameGame with TapCallbacks {
   static const description = '''
     Tap to create a PositionComponent with a randomly shaped hitbox.
     You can then hover over to shapes to see that they receive the hover events

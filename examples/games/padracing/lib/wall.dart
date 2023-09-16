@@ -33,9 +33,9 @@ List<Wall> createWalls(Vector2 size) {
 }
 
 class Wall extends BodyComponent<PadRacingGame> {
-  Wall(this.position, this.size) : super(priority: 3);
+  Wall(this._position, this.size) : super(priority: 3);
 
-  final Vector2 position;
+  final Vector2 _position;
   final Vector2 size;
 
   final Random rng = Random();
@@ -94,7 +94,7 @@ class Wall extends BodyComponent<PadRacingGame> {
   Body createBody() {
     final def = BodyDef()
       ..type = BodyType.static
-      ..position = position;
+      ..position = _position;
     final body = world.createBody(def)
       ..userData = this
       ..angularDamping = 3.0;
@@ -105,7 +105,7 @@ class Wall extends BodyComponent<PadRacingGame> {
   }
 
   late Rect asRect = Rect.fromCenter(
-    center: position.toOffset(),
+    center: _position.toOffset(),
     width: size.x,
     height: size.y,
   );
