@@ -34,6 +34,7 @@ export 'src/effects/provider_interfaces.dart'
         PositionProvider,
         ScaleProvider,
         SizeProvider,
+        ReadOnlyPositionProvider,
         ReadOnlySizeProvider,
         OpacityProvider;
 export 'src/effects/remove_effect.dart';

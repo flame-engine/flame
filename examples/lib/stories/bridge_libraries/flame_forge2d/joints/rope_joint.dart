@@ -1,19 +1,23 @@
-import 'package:examples/stories/bridge_libraries/forge2d/utils/balls.dart';
-import 'package:examples/stories/bridge_libraries/forge2d/utils/boxes.dart';
+import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/balls.dart';
+import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/boxes.dart';
 import 'package:flame/events.dart';
-import 'package:flame/input.dart';
+import 'package:flame/experimental.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flutter/material.dart';
 
-// ignore: deprecated_member_use
-class RopeJointExample extends Forge2DGame with TapDetector, HasDraggables {
+class RopeJointExample extends Forge2DGame {
   static const description = '''
     This example shows how to use a `RopeJoint`. 
     
     Drag the box handle along the axis and observe the rope respond to the 
-    movement
+    movement.
   ''';
 
+  RopeJointExample() : super(world: RopeJointWorld());
+}
+
+class RopeJointWorld extends Forge2DWorld
+    with DragCallbacks, HasGameReference<Forge2DGame> {
   double handleWidth = 6;
 
   @override
@@ -25,10 +29,13 @@ class RopeJointExample extends Forge2DGame with TapDetector, HasDraggables {
   }
 
   Future<Body> createHandle() async {
-    final anchor = Vector2(size.x / 2, 5);
+    final anchor = game.screenToWorld(Vector2(0, 100))..x = 0;
 
-    final box =
-        DraggableBox(startPosition: anchor, width: handleWidth, height: 3);
+    final box = DraggableBox(
+      startPosition: anchor,
+      width: handleWidth,
+      height: 3,
+    );
     await add(box);
 
     createPrismaticJoint(box.body, anchor);
@@ -50,7 +57,8 @@ class RopeJointExample extends Forge2DGame with TapDetector, HasDraggables {
   }
 
   void createPrismaticJoint(Body box, Vector2 anchor) {
-    final groundBody = world.createBody(BodyDef());
+    final groundBody = createBody(BodyDef());
+    final halfWidth = game.screenToWorld(Vector2.zero()).x.abs();
 
     final prismaticJointDef = PrismaticJointDef()
       ..initialize(
@@ -60,11 +68,11 @@ class RopeJointExample extends Forge2DGame with TapDetector, HasDraggables {
         Vector2(1, 0),
       )
       ..enableLimit = true
-      ..lowerTranslation = -size.x / 2 + handleWidth / 2
-      ..upperTranslation = size.x / 2 - handleWidth / 2;
+      ..lowerTranslation = -halfWidth + handleWidth / 2
+      ..upperTranslation = halfWidth - handleWidth / 2;
 
     final joint = PrismaticJoint(prismaticJointDef);
-    world.createJoint(joint);
+    createJoint(joint);
   }
 
   void createRopeJoint(Body first, Body second) {
@@ -75,6 +83,6 @@ class RopeJointExample extends Forge2DGame with TapDetector, HasDraggables {
       ..localAnchorB.setFrom(second.getLocalCenter())
       ..maxLength = (second.worldCenter - first.worldCenter).length;
 
-    world.createJoint(RopeJoint(ropeJointDef));
+    createJoint(RopeJoint(ropeJointDef));
   }
 }

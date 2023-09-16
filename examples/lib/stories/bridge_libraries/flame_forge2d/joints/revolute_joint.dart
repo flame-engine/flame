@@ -1,11 +1,12 @@
 import 'dart:math';
 
-import 'package:examples/stories/bridge_libraries/forge2d/utils/balls.dart';
-import 'package:examples/stories/bridge_libraries/forge2d/utils/boundaries.dart';
-import 'package:flame/input.dart';
+import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/balls.dart';
+import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/boundaries.dart';
+import 'package:flame/events.dart';
+import 'package:flame/experimental.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 
-class RevoluteJointExample extends Forge2DGame with TapDetector {
+class RevoluteJointExample extends Forge2DGame {
   static const description = '''
     In this example we use a joint to keep a body with several fixtures stuck
     to another body.
@@ -13,17 +14,22 @@ class RevoluteJointExample extends Forge2DGame with TapDetector {
     Tap the screen to add more of these combined bodies.
   ''';
 
-  RevoluteJointExample() : super(gravity: Vector2(0, 10.0));
+  RevoluteJointExample()
+      : super(gravity: Vector2(0, 10.0), world: RevoluteJointWorld());
+}
 
+class RevoluteJointWorld extends Forge2DWorld
+    with TapCallbacks, HasGameReference<Forge2DGame> {
   @override
   Future<void> onLoad() async {
-    addAll(createBoundaries(this));
+    super.onLoad();
+    addAll(createBoundaries(game));
   }
 
   @override
-  void onTapDown(TapDownInfo info) {
+  void onTapDown(TapDownEvent info) {
     super.onTapDown(info);
-    final ball = Ball(info.eventPosition.game);
+    final ball = Ball(info.localPosition);
     add(ball);
     add(CircleShuffler(ball));
   }

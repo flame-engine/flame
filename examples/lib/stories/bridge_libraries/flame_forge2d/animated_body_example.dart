@@ -1,11 +1,13 @@
 import 'dart:ui';
 
-import 'package:examples/stories/bridge_libraries/forge2d/utils/boundaries.dart';
+import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/boundaries.dart';
 import 'package:flame/components.dart';
-import 'package:flame/input.dart';
+import 'package:flame/events.dart';
+import 'package:flame/experimental.dart';
+import 'package:flame/flame.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 
-class AnimatedBodyExample extends Forge2DGame with TapDetector {
+class AnimatedBodyExample extends Forge2DGame {
   static const String description = '''
     In this example we show how to add an animated chopper, which is created
     with a SpriteAnimationComponent, on top of a BodyComponent.
@@ -13,14 +15,22 @@ class AnimatedBodyExample extends Forge2DGame with TapDetector {
     Tap the screen to add more choppers.
   ''';
 
-  AnimatedBodyExample() : super(gravity: Vector2.zero());
+  AnimatedBodyExample()
+      : super(
+          gravity: Vector2.zero(),
+          world: AnimatedBodyWorld(),
+        );
+}
 
+class AnimatedBodyWorld extends Forge2DWorld
+    with TapCallbacks, HasGameReference<Forge2DGame> {
   late Image chopper;
   late SpriteAnimation animation;
 
   @override
   Future<void> onLoad() async {
-    chopper = await images.load('animations/chopper.png');
+    super.onLoad();
+    chopper = await Flame.images.load('animations/chopper.png');
 
     animation = SpriteAnimation.fromFrameData(
       chopper,
@@ -31,14 +41,14 @@ class AnimatedBodyExample extends Forge2DGame with TapDetector {
       ),
     );
 
-    final boundaries = createBoundaries(this);
-    boundaries.forEach(add);
+    final boundaries = createBoundaries(game);
+    addAll(boundaries);
   }
 
   @override
-  void onTapDown(TapDownInfo info) {
+  void onTapDown(TapDownEvent info) {
     super.onTapDown(info);
-    final position = info.eventPosition.game;
+    final position = info.localPosition;
     final spriteSize = Vector2.all(10);
     final animationComponent = SpriteAnimationComponent(
       animation: animation,
@@ -50,11 +60,11 @@ class AnimatedBodyExample extends Forge2DGame with TapDetector {
 }
 
 class ChopperBody extends BodyComponent {
-  final Vector2 position;
+  final Vector2 _position;
   final Vector2 size;
 
   ChopperBody(
-    this.position,
+    this._position,
     PositionComponent component,
   ) : size = component.size {
     renderBody = false;
@@ -74,7 +84,7 @@ class ChopperBody extends BodyComponent {
 
     final velocity = (Vector2.random() - Vector2.random()) * 200;
     final bodyDef = BodyDef(
-      position: position,
+      position: _position,
       angle: velocity.angleTo(Vector2(1, 0)),
       linearVelocity: velocity,
       type: BodyType.dynamic,

@@ -269,13 +269,10 @@ void main() {
         world: world,
         viewport: FixedSizeViewport(60, 40),
       );
-      game.addAll([world, camera]);
 
       expect(
         () => camera.visibleWorldRect,
-        failsAssert(
-          'This property cannot be accessed before the camera is mounted',
-        ),
+        failsAssert(),
       );
     });
 

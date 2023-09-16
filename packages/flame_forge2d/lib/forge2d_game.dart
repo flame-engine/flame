@@ -1,41 +1,61 @@
+import 'dart:async';
+
+import 'package:flame/camera.dart';
 import 'package:flame/game.dart';
-import 'package:flame_forge2d/world_contact_listener.dart';
+import 'package:flame_forge2d/forge2d_world.dart';
+import 'package:flutter/foundation.dart';
 import 'package:forge2d/forge2d.dart';
 
+/// The base game class for creating games that uses the Forge2D physics engine.
 class Forge2DGame extends FlameGame {
   Forge2DGame({
     Vector2? gravity,
-    double zoom = defaultZoom,
-    Camera? camera,
     ContactListener? contactListener,
-  })  : world = World(gravity ?? defaultGravity),
-        super(camera: camera ?? Camera()) {
-    // ignore: deprecated_member_use
-    this.camera.zoom = zoom;
-    world.setContactListener(contactListener ?? WorldContactListener());
+    double zoom = 10,
+    Forge2DWorld? world,
+  })  : _world = (world?..setGravity(gravity)) ??
+            Forge2DWorld(
+              gravity: gravity,
+              contactListener: contactListener,
+            ),
+        _initialZoom = zoom;
+
+  /// The [Forge2DWorld] that the [cameraComponent] is rendering.
+  /// Inside of this world is where all your components should be added.
+  Forge2DWorld get world => _world;
+  set world(Forge2DWorld newWorld) {
+    cameraComponent.world = newWorld;
+    _world = newWorld;
   }
 
-  static final Vector2 defaultGravity = Vector2(0, 10.0);
+  Forge2DWorld _world;
 
-  static const double defaultZoom = 10.0;
+  CameraComponent cameraComponent = CameraComponent();
 
-  final World world;
+  // TODO(spydon): Use a meterToPixels constant instead for rendering.
+  // (see #2613)
+  final double _initialZoom;
 
   @override
-  void update(double dt) {
-    super.update(dt);
-    world.stepDt(dt);
+  @mustCallSuper
+  FutureOr<void> onLoad() async {
+    cameraComponent
+      ..world = world
+      ..viewfinder.zoom = _initialZoom;
+    add(cameraComponent);
+    add(world);
   }
 
+  /// Takes a point in world coordinates and returns it in screen coordinates.
   Vector2 worldToScreen(Vector2 position) {
-    return projector.projectVector(position);
+    return cameraComponent.localToGlobal(position);
   }
 
+  /// Takes a point in screen coordinates and returns it in world coordinates.
+  ///
+  /// Remember that if you are using this for your events you can most of the
+  /// time just use `event.localPosition` directly instead.
   Vector2 screenToWorld(Vector2 position) {
-    return projector.unprojectVector(position);
-  }
-
-  Vector2 screenToFlameWorld(Vector2 position) {
-    return screenToWorld(position)..y *= -1;
+    return cameraComponent.globalToLocal(position);
   }
 }

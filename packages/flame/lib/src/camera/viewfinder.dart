@@ -186,7 +186,19 @@ class Viewfinder extends Component
 
   @mustCallSuper
   @override
+  void onLoad() {
+    // This has to be done here and on onMount so that it is available for
+    // the CameraComponent.visibleWorldRect calculation in onLoad of the game.
+    _initializeTransform();
+  }
+
+  @mustCallSuper
+  @override
   void onMount() {
+    _initializeTransform();
+  }
+
+  void _initializeTransform() {
     assert(
       parent! is CameraComponent,
       'Viewfinder can only be mounted to a CameraComponent',

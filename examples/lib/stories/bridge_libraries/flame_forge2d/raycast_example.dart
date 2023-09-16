@@ -1,14 +1,15 @@
 // ignore_for_file: deprecated_member_use
 
 import 'dart:math';
+import 'dart:ui';
 
-import 'package:examples/stories/bridge_libraries/forge2d/utils/boundaries.dart';
+import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/boundaries.dart';
+import 'package:flame/components.dart';
 import 'package:flame/input.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flutter/material.dart' show Colors, Paint, Canvas;
 
-class RaycastExample extends Forge2DGame
-    with TapDetector, MouseMovementDetector {
+class RaycastExample extends Forge2DGame with MouseMovementDetector {
   static const String description = '''
     This example shows how raycasts can be used to find nearest and farthest
     fixtures.
@@ -17,8 +18,8 @@ class RaycastExample extends Forge2DGame
 
   final random = Random();
 
-  final redPoints = List<Vector2>.empty(growable: true);
-  final bluePoints = List<Vector2>.empty(growable: true);
+  final redPoints = <Vector2>[];
+  final bluePoints = <Vector2>[];
 
   Box? nearestBox;
   Box? farthestBox;
@@ -27,69 +28,86 @@ class RaycastExample extends Forge2DGame
 
   @override
   Future<void> onLoad() async {
-    addAll(createBoundaries(this));
-
-    final worldCenter = screenToWorld(camera.viewport.effectiveSize / 2);
+    super.onLoad();
+    world.addAll(createBoundaries(this));
 
     const numberOfRows = 3;
     const numberOfBoxes = 4;
     for (var i = 0; i < numberOfBoxes; ++i) {
       for (var j = 0; j < numberOfRows; ++j) {
-        final position = worldCenter + Vector2(i * 10, j * 20 - 20);
-        add(Box(position));
+        world.add(Box(Vector2(i * 10, j * 20 - 20)));
       }
     }
+    world.add(
+      LineComponent(
+        redPoints,
+        Paint()
+          ..color = Colors.red
+          ..strokeWidth = 1,
+      ),
+    );
+    world.add(
+      LineComponent(
+        bluePoints,
+        Paint()
+          ..color = Colors.blue
+          ..strokeWidth = 1,
+      ),
+    );
   }
 
   @override
   void onMouseMove(PointerHoverInfo info) {
-    bluePoints.clear();
-
     final rayStart = screenToWorld(
-      camera.viewport.effectiveSize / 2 -
-          Vector2(camera.viewport.effectiveSize.x / 4, 0),
+      Vector2(
+        cameraComponent.viewport.size.x / 4,
+        cameraComponent.viewport.size.y / 2,
+      ),
     );
 
-    final redRayTarget = info.eventPosition.game + Vector2(0, 2);
+    final worldPosition = screenToWorld(info.eventPosition.widget);
+    final redRayTarget = worldPosition + Vector2(0, 2);
     fireRedRay(rayStart, redRayTarget);
 
-    final blueRayTarget = info.eventPosition.game - Vector2(0, 2);
+    final blueRayTarget = worldPosition - Vector2(0, 2);
     fireBlueRay(rayStart, blueRayTarget);
 
     super.onMouseMove(info);
   }
 
-  void fireBlueRay(Vector2 rayStart, Vector2 blueRayTarget) {
-    bluePoints.add(worldToScreen(rayStart));
+  void fireBlueRay(Vector2 rayStart, Vector2 rayTarget) {
+    bluePoints.clear();
+    bluePoints.add(rayStart);
 
     final farthestCallback = FarthestBoxRayCastCallback();
-    world.raycast(farthestCallback, rayStart, blueRayTarget);
+    world.raycast(farthestCallback, rayStart, rayTarget);
 
     if (farthestCallback.farthestPoint != null) {
-      bluePoints.add(worldToScreen(farthestCallback.farthestPoint!));
+      bluePoints.add(farthestCallback.farthestPoint!);
     } else {
-      bluePoints.add(worldToScreen(blueRayTarget));
+      bluePoints.add(rayTarget);
     }
     farthestBox = farthestCallback.box;
   }
 
   void fireRedRay(Vector2 rayStart, Vector2 rayTarget) {
     redPoints.clear();
-    redPoints.add(worldToScreen(rayStart));
+    redPoints.add(rayStart);
 
     final nearestCallback = NearestBoxRayCastCallback();
     world.raycast(nearestCallback, rayStart, rayTarget);
 
     if (nearestCallback.nearestPoint != null) {
-      redPoints.add(worldToScreen(nearestCallback.nearestPoint!));
+      redPoints.add(nearestCallback.nearestPoint!);
     } else {
-      redPoints.add(worldToScreen(rayTarget));
+      redPoints.add(rayTarget);
     }
     nearestBox = nearestCallback.box;
   }
 
   @override
   void update(double dt) {
+    super.update(dt);
     children.whereType<Box>().forEach((component) {
       if ((component == nearestBox) && (component == farthestBox)) {
         component.paint.color = Colors.yellow;
@@ -101,45 +119,48 @@ class RaycastExample extends Forge2DGame
         component.paint.color = Colors.white;
       }
     });
-    super.update(dt);
+  }
+}
+
+class LineComponent extends Component {
+  LineComponent(this.points, this.paint);
+
+  final List<Vector2> points;
+  final Paint paint;
+  final Path path = Path();
+
+  @override
+  void update(double dt) {
+    path
+      ..reset()
+      ..addPolygon(
+        points.map((p) => p.toOffset()).toList(growable: false),
+        false,
+      );
   }
 
   @override
   void render(Canvas canvas) {
-    super.render(canvas);
-
-    for (var i = 0; i < redPoints.length - 1; ++i) {
+    for (var i = 0; i < points.length - 1; ++i) {
       canvas.drawLine(
-        redPoints[i].toOffset(),
-        redPoints[i + 1].toOffset(),
-        Paint()
-          ..color = Colors.red
-          ..strokeWidth = 4,
-      );
-    }
-
-    for (var i = 0; i < bluePoints.length - 1; ++i) {
-      canvas.drawLine(
-        bluePoints[i].toOffset(),
-        bluePoints[i + 1].toOffset(),
-        Paint()
-          ..color = Colors.blue
-          ..strokeWidth = 4,
+        points[i].toOffset(),
+        points[i + 1].toOffset(),
+        paint,
       );
     }
   }
 }
 
 class Box extends BodyComponent {
-  final Vector2 position;
+  Box(this.initialPosition);
 
-  Box(this.position);
+  final Vector2 initialPosition;
 
   @override
   Body createBody() {
     final shape = PolygonShape()..setAsBoxXY(2.0, 4.0);
     final fixtureDef = FixtureDef(shape, userData: this);
-    final bodyDef = BodyDef(position: position);
+    final bodyDef = BodyDef(position: initialPosition);
     return world.createBody(bodyDef)..createFixture(fixtureDef);
   }
 }

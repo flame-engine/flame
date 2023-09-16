@@ -1,44 +1,53 @@
 import 'dart:math';
 
-import 'package:examples/stories/bridge_libraries/forge2d/utils/boundaries.dart';
+import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/boundaries.dart';
 import 'package:flame/components.dart';
-import 'package:flame/input.dart';
+import 'package:flame/events.dart';
+import 'package:flame/experimental.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 
-class SpriteBodyExample extends Forge2DGame with TapDetector {
+class SpriteBodyExample extends Forge2DGame {
   static const String description = '''
     In this example we show how to add a sprite on top of a `BodyComponent`.
     Tap the screen to add more pizzas.
   ''';
 
-  SpriteBodyExample() : super(gravity: Vector2(0, 10.0));
+  SpriteBodyExample()
+      : super(
+          gravity: Vector2(0, 10.0),
+          world: SpriteBodyWorld(),
+        );
+}
 
+class SpriteBodyWorld extends Forge2DWorld
+    with TapCallbacks, HasGameReference<Forge2DGame> {
   @override
   Future<void> onLoad() async {
-    addAll(createBoundaries(this));
+    super.onLoad();
+    addAll(createBoundaries(game));
   }
 
   @override
-  void onTapDown(TapDownInfo info) {
+  void onTapDown(TapDownEvent info) {
     super.onTapDown(info);
-    final position = info.eventPosition.game;
+    final position = info.localPosition;
     add(Pizza(position, size: Vector2(10, 15)));
   }
 }
 
 class Pizza extends BodyComponent {
-  final Vector2 position;
+  final Vector2 initialPosition;
   final Vector2 size;
 
   Pizza(
-    this.position, {
+    this.initialPosition, {
     Vector2? size,
   }) : size = size ?? Vector2(2, 3);
 
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    final sprite = await gameRef.loadSprite('pizza.png');
+    final sprite = await game.loadSprite('pizza.png');
     renderBody = false;
     add(
       SpriteComponent(
@@ -69,8 +78,8 @@ class Pizza extends BodyComponent {
     );
 
     final bodyDef = BodyDef(
-      position: position,
-      angle: (position.x + position.y) / 2 * pi,
+      position: initialPosition,
+      angle: (initialPosition.x + initialPosition.y) / 2 * pi,
       type: BodyType.dynamic,
     );
     return world.createBody(bodyDef)..createFixture(fixtureDef);

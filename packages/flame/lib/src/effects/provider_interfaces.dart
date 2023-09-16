@@ -3,9 +3,14 @@ import 'dart:ui';
 import 'package:flame/components.dart';
 
 /// Interface for a component that can be affected by move effects.
-abstract class PositionProvider {
-  Vector2 get position;
+abstract class PositionProvider implements ReadOnlyPositionProvider {
   set position(Vector2 value);
+}
+
+/// Interface for a class that has [position] property which can be read but not
+/// modified.
+abstract class ReadOnlyPositionProvider {
+  Vector2 get position;
 }
 
 /// This class allows constructing [PositionProvider]s on the fly, using the

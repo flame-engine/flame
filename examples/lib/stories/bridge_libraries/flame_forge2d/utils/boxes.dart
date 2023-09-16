@@ -1,6 +1,5 @@
 import 'dart:ui';
 
-import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/palette.dart';
@@ -43,10 +42,10 @@ class Box extends BodyComponent {
   }
 }
 
-// ignore: deprecated_member_use
-class DraggableBox extends Box with Draggable {
+class DraggableBox extends Box with DragCallbacks {
   MouseJoint? mouseJoint;
   late final groundBody = world.createBody(BodyDef());
+  bool _destroyJoint = false;
 
   DraggableBox({
     required super.startPosition,
@@ -55,12 +54,25 @@ class DraggableBox extends Box with Draggable {
   });
 
   @override
-  bool onDragUpdate(DragUpdateInfo info) {
+  void update(double dt) {
+    if (_destroyJoint && mouseJoint != null) {
+      world.destroyJoint(mouseJoint!);
+      mouseJoint = null;
+      _destroyJoint = false;
+    }
+  }
+
+  @override
+  bool onDragUpdate(DragUpdateEvent info) {
+    final target = info.localPosition;
+    if (target.isNaN) {
+      return false;
+    }
     final mouseJointDef = MouseJointDef()
-      ..maxForce = 3000 * body.mass * 10
+      ..maxForce = body.mass * 300
       ..dampingRatio = 0
       ..frequencyHz = 20
-      ..target.setFrom(info.eventPosition.game)
+      ..target.setFrom(body.position)
       ..collideConnected = false
       ..bodyA = groundBody
       ..bodyB = body;
@@ -68,19 +80,19 @@ class DraggableBox extends Box with Draggable {
     if (mouseJoint == null) {
       mouseJoint = MouseJoint(mouseJointDef);
       world.createJoint(mouseJoint!);
+    } else {
+      mouseJoint?.setTarget(target);
     }
-
-    mouseJoint?.setTarget(info.eventPosition.game);
     return false;
   }
 
   @override
-  bool onDragEnd(DragEndInfo info) {
+  void onDragEnd(DragEndEvent info) {
+    super.onDragEnd(info);
     if (mouseJoint == null) {
-      return true;
+      return;
     }
-    world.destroyJoint(mouseJoint!);
-    mouseJoint = null;
-    return false;
+    _destroyJoint = true;
+    info.continuePropagation = false;
   }
 }

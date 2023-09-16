@@ -2,25 +2,30 @@
 
 import 'dart:math' as math;
 
-import 'package:examples/stories/bridge_libraries/forge2d/utils/boundaries.dart';
-import 'package:flame/input.dart';
+import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/boundaries.dart';
+import 'package:flame/events.dart';
+import 'package:flame/experimental.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 
-class BlobExample extends Forge2DGame with TapDetector {
+class BlobExample extends Forge2DGame {
   static const String description = '''
     In this example we show the power of joints by showing interactions between
     bodies tied together.
     
     Tap the screen to add boxes that will bounce on the "blob" in the center.
   ''';
+  BlobExample() : super(world: BlobWorld());
+}
 
+class BlobWorld extends Forge2DWorld
+    with TapCallbacks, HasGameReference<Forge2DGame> {
   @override
   Future<void> onLoad() async {
-    final worldCenter = screenToWorld(size * camera.zoom / 2);
-    final blobCenter = worldCenter + Vector2(0, -30);
+    super.onLoad();
+    final blobCenter = Vector2(0, -30);
     final blobRadius = Vector2.all(6.0);
-    addAll(createBoundaries(this));
-    add(Ground(worldCenter));
+    addAll(createBoundaries(game));
+    add(Ground(Vector2.zero()));
     final jointDef = ConstantVolumeJointDef()
       ..frequencyHz = 20.0
       ..dampingRatio = 1.0
@@ -30,13 +35,13 @@ class BlobExample extends Forge2DGame with TapDetector {
       for (var i = 0; i < 20; i++)
         BlobPart(i, jointDef, blobRadius, blobCenter),
     ]);
-    world.createJoint(ConstantVolumeJoint(world, jointDef));
+    createJoint(ConstantVolumeJoint(physicsWorld, jointDef));
   }
 
   @override
-  void onTapDown(TapDownInfo info) {
+  void onTapDown(TapDownEvent info) {
     super.onTapDown(info);
-    add(FallingBox(info.eventPosition.game));
+    add(FallingBox(info.localPosition));
   }
 }
 
@@ -104,15 +109,15 @@ class BlobPart extends BodyComponent {
 }
 
 class FallingBox extends BodyComponent {
-  final Vector2 position;
+  final Vector2 _position;
 
-  FallingBox(this.position);
+  FallingBox(this._position);
 
   @override
   Body createBody() {
     final bodyDef = BodyDef(
       type: BodyType.dynamic,
-      position: position,
+      position: _position,
     );
     final shape = PolygonShape()..setAsBoxXY(2, 4);
     final body = world.createBody(bodyDef);

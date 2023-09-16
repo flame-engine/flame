@@ -1,37 +1,33 @@
 // ignore_for_file: deprecated_member_use
 
-import 'package:examples/stories/bridge_libraries/forge2d/utils/boundaries.dart';
+import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/boundaries.dart';
 import 'package:flame/game.dart';
-import 'package:flame/input.dart';
 import 'package:flame_forge2d/flame_forge2d.dart' hide Transform;
 import 'package:flutter/material.dart';
 
-class WidgetExample extends Forge2DGame with TapDetector {
+class WidgetExample extends Forge2DGame {
   static const String description = '''
     This examples shows how to render a widget on top of a Forge2D body outside
     of Flame.
   ''';
 
-  List<Function()> updateStates = [];
-  Map<int, Body> bodyIdMap = {};
-  List<int> addLaterIds = [];
-
-  Vector2 screenPosition(Body body) => worldToScreen(body.worldCenter);
+  final List<void Function()> updateStates = [];
+  final Map<int, Body> bodyIdMap = {};
+  final List<int> addLaterIds = [];
 
   WidgetExample() : super(zoom: 20, gravity: Vector2(0, 10.0));
 
   @override
   Future<void> onLoad() async {
-    final boundaries = createBoundaries(this);
-    addAll(boundaries);
+    super.onLoad();
+    final boundaries = createBoundaries(this, strokeWidth: 0);
+    world.addAll(boundaries);
   }
 
   Body createBody() {
     final bodyDef = BodyDef(
       angularVelocity: 3,
-      position: screenToWorld(
-        Vector2.random()..multiply(camera.viewport.effectiveSize),
-      ),
+      position: Vector2.zero(),
       type: BodyType.dynamic,
     );
     final body = world.createBody(bodyDef);
@@ -47,8 +43,7 @@ class WidgetExample extends Forge2DGame with TapDetector {
     return body;
   }
 
-  int createBodyId() {
-    final id = bodyIdMap.length + addLaterIds.length;
+  int createBodyId(int id) {
     addLaterIds.add(id);
     return id;
   }
@@ -56,7 +51,11 @@ class WidgetExample extends Forge2DGame with TapDetector {
   @override
   void update(double dt) {
     super.update(dt);
-    addLaterIds.forEach((id) => bodyIdMap[id] = createBody());
+    addLaterIds.forEach((id) {
+      if (!bodyIdMap.containsKey(id)) {
+        bodyIdMap[id] = createBody();
+      }
+    });
     addLaterIds.clear();
     updateStates.forEach((f) => f());
   }
@@ -71,10 +70,10 @@ class BodyWidgetExample extends StatelessWidget {
       game: WidgetExample(),
       overlayBuilderMap: {
         'button1': (ctx, game) {
-          return BodyButtonWidget(game, game.createBodyId());
+          return BodyButtonWidget(game, game.createBodyId(1));
         },
         'button2': (ctx, game) {
-          return BodyButtonWidget(game, game.createBodyId());
+          return BodyButtonWidget(game, game.createBodyId(2));
         },
       },
       initialActiveOverlays: const ['button1', 'button2'],
@@ -117,7 +116,7 @@ class _BodyButtonState extends State<BodyButtonWidget> {
     if (body == null) {
       return Container();
     } else {
-      final bodyPosition = _game.screenPosition(body);
+      final bodyPosition = _game.worldToScreen(body.position);
       return Positioned(
         top: bodyPosition.y - 18,
         left: bodyPosition.x - 90,

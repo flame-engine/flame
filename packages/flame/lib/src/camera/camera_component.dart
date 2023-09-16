@@ -121,8 +121,11 @@ class CameraComponent extends Component {
   /// after the camera was fully mounted.
   Rect get visibleWorldRect {
     assert(
-      viewport.isMounted && viewfinder.isMounted,
-      'This property cannot be accessed before the camera is mounted',
+      viewport.isLoaded && viewfinder.isLoaded,
+      'This property cannot be accessed before the camera is loaded. '
+      'If you are using visibleWorldRect from another component (for example '
+      'the World), make sure that the CameraComponent is added before that '
+      'Component.',
     );
     return viewfinder.visibleWorldRect;
   }
@@ -194,9 +197,9 @@ class CameraComponent extends Component {
     yield* viewport.componentsAtPoint(viewportPoint, nestedPoints);
     if ((world?.isMounted ?? false) &&
         currentCameras.length < maxCamerasDepth) {
-      if (viewport.containsLocalPoint(viewportPoint)) {
+      if (viewport.containsLocalPoint(_viewportPoint)) {
         currentCameras.add(this);
-        final worldPoint = viewfinder.transform.globalToLocal(viewportPoint);
+        final worldPoint = viewfinder.transform.globalToLocal(_viewportPoint);
         yield* viewfinder.componentsAtPoint(worldPoint, nestedPoints);
         yield* world!.componentsAtPoint(worldPoint, nestedPoints);
         currentCameras.removeLast();
@@ -240,7 +243,7 @@ class CameraComponent extends Component {
   /// will move from its current position to the target's position at the given
   /// speed.
   void follow(
-    PositionProvider target, {
+    ReadOnlyPositionProvider target, {
     double maxSpeed = double.infinity,
     bool horizontalOnly = false,
     bool verticalOnly = false,
