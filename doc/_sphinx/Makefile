@@ -1,5 +1,15 @@
 # Minimal makefile for Sphinx documentation
 
+#
+# To build the documentation you need to have Python3 installed
+# and working with pip, as well as Flutter of course. Then run
+# the following:
+#
+#     dart pub global activate melos
+#     dart pub global activate dartdoc_json
+#     pip install sphinx sphinxcontrib sphinxcontrib-mermaid sphinxcontrib-jquery myst_parser sphinx-autobuild sphinx-copybutton
+#
+
 # You can set these variables from the command line.
 # SPHINXOPTS and SPHINXBUILD can also be set from the environment.
 SOURCEDIR     = $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))/..

@@ -26,8 +26,8 @@
 
     %% Nodes %%
 
-    A(onLoad):::yellow
-    B(onGameResize):::lightYellow
+    A(onGameResize):::lightYellow
+    B(onLoad):::yellow
     C(onMount):::yellow
     D(update)
     E(render)
