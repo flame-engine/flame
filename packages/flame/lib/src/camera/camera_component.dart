@@ -15,7 +15,6 @@ import 'package:flame/src/effects/move_effect.dart';
 import 'package:flame/src/effects/move_to_effect.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
 import 'package:flame/src/experimental/geometry/shapes/shape.dart';
-import 'package:meta/meta.dart';
 import 'package:vector_math/vector_math_64.dart';
 
 /// [CameraComponent] is a component through which a [World] is observed.
@@ -45,14 +44,14 @@ class CameraComponent extends Component {
     Viewport? viewport,
     Viewfinder? viewfinder,
     List<Component>? hudComponents,
-  })  : viewport = (viewport ?? MaxViewport())..addAll(hudComponents ?? []),
-        viewfinder = viewfinder ?? Viewfinder(),
+  })  : _viewport = (viewport ?? MaxViewport())..addAll(hudComponents ?? []),
+        _viewfinder = viewfinder ?? Viewfinder(),
         // The priority is set to the max here to avoid some bugs for the users,
         // if they for example would add any components that modify positions
         // before the CameraComponent, since it then will render the positions
         // of the last tick each tick.
         super(priority: 0x7fffffff) {
-    addAll([this.viewport, this.viewfinder]);
+    addAll([_viewport, _viewfinder]);
   }
 
   /// Create a camera that shows a portion of the game world of fixed size
@@ -85,7 +84,15 @@ class CameraComponent extends Component {
   /// the world can be observed. The viewport's size is equal to or smaller
   /// than the size of the game canvas. If it is smaller, then the viewport's
   /// position specifies where exactly it is placed on the canvas.
-  final Viewport viewport;
+  Viewport get viewport => _viewport;
+  set viewport(Viewport newViewport) {
+    _viewport.removeFromParent();
+    _viewport = newViewport;
+    add(_viewport);
+    _viewfinder.updateTransform();
+  }
+
+  Viewport _viewport;
 
   /// The [viewfinder] controls which part of the world is seen through the
   /// viewport.
@@ -94,7 +101,14 @@ class CameraComponent extends Component {
   /// center of the viewport. In addition, viewfinder controls the zoom level
   /// (i.e. how much of the world is seen through the viewport), and,
   /// optionally, rotation.
-  final Viewfinder viewfinder;
+  Viewfinder get viewfinder => _viewfinder;
+  set viewfinder(Viewfinder newViewfinder) {
+    _viewfinder.removeFromParent();
+    _viewfinder = newViewfinder;
+    add(_viewfinder);
+  }
+
+  Viewfinder _viewfinder;
 
   /// Special component that is designed to be the root of a game world.
   ///
@@ -123,8 +137,8 @@ class CameraComponent extends Component {
   /// after the camera was fully mounted.
   Rect get visibleWorldRect {
     assert(
-      viewport.isLoaded && viewfinder.isLoaded,
-      'This property cannot be accessed before the camera is loaded. '
+      parent != null,
+      "This property can't be accessed before the camera is added to the game. "
       'If you are using visibleWorldRect from another component (for example '
       'the World), make sure that the CameraComponent is added before that '
       'Component.',
