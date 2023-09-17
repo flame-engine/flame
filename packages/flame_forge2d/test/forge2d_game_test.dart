@@ -13,6 +13,11 @@ void main() {
       testWithGame('Center positioned camera should be zero in world',
           _TestForge2dGame.new, (game) async {
         final size = Vector2.all(100);
+        game.update(0);
+        print(game.children.length);
+        print(game.children);
+        print(game.cameraComponent.parent);
+        print(game.cameraComponent.isLoading);
         game.onGameResize(size);
         expect(
           game.screenToWorld(size / 2),

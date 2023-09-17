@@ -34,7 +34,8 @@ class FlameGame<T extends World> extends ComponentTreeRoot
       'declares itself to be a singleton',
     );
     _cameraWrapper = CameraWrapper(camera ?? Camera(), children);
-    add(_cameraComponent..world = world);
+    _cameraComponent.world = world;
+    add(_cameraComponent);
     add(_world);
   }
 

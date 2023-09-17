@@ -11,7 +11,7 @@ void main() {
       'can load the game',
       MyGame.new,
       (game) async {
-        expect(game.children.length, 1);
+        expect(game.world.children.length, 1);
       },
     );
 

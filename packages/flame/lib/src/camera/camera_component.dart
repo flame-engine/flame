@@ -51,7 +51,9 @@ class CameraComponent extends Component {
         // if they for example would add any components that modify positions
         // before the CameraComponent, since it then will render the positions
         // of the last tick each tick.
-        super(priority: 0x7fffffff);
+        super(priority: 0x7fffffff) {
+    addAll([this.viewport, this.viewfinder]);
+  }
 
   /// Create a camera that shows a portion of the game world of fixed size
   /// [width] x [height].
@@ -128,12 +130,6 @@ class CameraComponent extends Component {
       'Component.',
     );
     return viewfinder.visibleWorldRect;
-  }
-
-  @mustCallSuper
-  @override
-  Future<void> onLoad() async {
-    await addAll([viewport, viewfinder]);
   }
 
   /// Renders the [world] as seen through this camera.

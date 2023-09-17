@@ -17,11 +17,11 @@ void main() {
 
       final lottieComponent = LottieComponent(composition);
 
-      await game.add(lottieComponent);
+      await game.world.add(lottieComponent);
       await game.ready();
 
-      expect(game.children, isNotEmpty);
-      expect(game.children, [lottieComponent]);
+      expect(game.world.children, isNotEmpty);
+      expect(game.world.children, [lottieComponent]);
     },
   );
 
