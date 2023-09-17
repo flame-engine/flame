@@ -31,8 +31,8 @@ void main() {
         final priorityComponents = List.generate(10, _PriorityComponent.new)
           ..add(firstComponent);
         priorityComponents.shuffle();
-        final components = game.children;
-        await game.ensureAddAll(priorityComponents);
+        final components = game.world.children;
+        await game.world.ensureAddAll(priorityComponents);
         componentsSorted(components);
         expect(components.first, firstComponent);
         firstComponent.priority = 11;
@@ -48,8 +48,8 @@ void main() {
         final priorityComponents = List.generate(10, _PriorityComponent.new)
           ..add(firstComponent);
         priorityComponents.shuffle();
-        final components = game.children;
-        await game.ensureAddAll(priorityComponents);
+        final components = game.world.children;
+        await game.world.ensureAddAll(priorityComponents);
         componentsSorted(components);
         expect(components.first, firstComponent);
         firstComponent.priority = 11;

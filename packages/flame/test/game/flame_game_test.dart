@@ -159,12 +159,13 @@ void main() {
       testWithFlameGame(
         'removes PositionComponent when removeFromParent is called',
         (game) async {
+          final world = game.world;
           final component = PositionComponent();
-          await game.ensureAdd(component);
-          expect(game.children.length, equals(1));
+          await world.ensureAdd(component);
+          expect(world.children.length, equals(1));
           component.removeFromParent();
           game.updateTree(0);
-          expect(game.children.isEmpty, equals(true));
+          expect(world.children.isEmpty, equals(true));
         },
       );
 
@@ -172,13 +173,14 @@ void main() {
         'can add a component to a game without a layout',
         (WidgetTester tester) async {
           final game = FlameGame();
-          final component = Component()..addToParent(game);
+          final world = game.world;
+          final component = Component()..addToParent(world);
           expect(game.hasLayout, false);
 
           await tester.pumpWidget(GameWidget(game: game));
           game.update(0);
-          expect(game.children.length, 1);
-          expect(game.children.first, component);
+          expect(world.children.length, 1);
+          expect(world.children.first, component);
         },
       );
     });
@@ -635,17 +637,20 @@ void main() {
         'children in the constructor',
         () {
           return FlameGame(
-            children: [_IndexedComponent(1), _IndexedComponent(2)],
+            world: World(
+              children: [_IndexedComponent(1), _IndexedComponent(2)],
+            ),
           );
         },
         (game) async {
-          game.add(_IndexedComponent(3));
-          game.add(_IndexedComponent(4));
+          final world = game.world;
+          world.add(_IndexedComponent(3));
+          world.add(_IndexedComponent(4));
           await game.ready();
 
-          expect(game.children.length, 4);
+          expect(world.children.length, 4);
           expect(
-            game.children
+            world.children
                 .whereType<_IndexedComponent>()
                 .map((c) => c.index)
                 .isSorted((a, b) => a.compareTo(b)),
@@ -667,7 +672,7 @@ void main() {
           game.add(_IndexedComponent(6));
           await game.ready();
 
-          expect(game.children.length, 6);
+          expect(game.children.whereType<_IndexedComponent>().length, 6);
           expect(
             game.children
                 .whereType<_IndexedComponent>()

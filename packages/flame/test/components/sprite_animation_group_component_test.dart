@@ -63,16 +63,17 @@ Future<void> main() async {
         removeOnFinish: {_AnimationState.idle: true},
       );
 
-      await game.ensureAdd(component);
-      expect(component.parent, game);
-      expect(game.children.length, 1);
+      final world = game.world;
+      await world.ensureAdd(component);
+      expect(component.parent, world);
+      expect(world.children.length, 1);
 
       game.update(2);
-      expect(component.parent, game);
+      expect(component.parent, world);
 
       // runs a cycle and the component should still be there
       game.update(0.1);
-      expect(game.children.length, 1);
+      expect(world.children.length, 1);
     });
 
     testWithFlameGame(
@@ -92,14 +93,15 @@ Future<void> main() async {
           current: _AnimationState.idle,
         );
 
-        await game.ensureAdd(component);
-        expect(game.children.length, 1);
+        final world = game.world;
+        await world.ensureAdd(component);
+        expect(world.children.length, 1);
 
         game.update(2);
 
         // runs a cycle to remove the component
         game.update(0.1);
-        expect(game.children.length, 0);
+        expect(world.children.length, 0);
       },
     );
 
@@ -121,16 +123,17 @@ Future<void> main() async {
         current: _AnimationState.idle,
       );
 
-      await game.ensureAdd(component);
-      expect(component.parent, game);
-      expect(game.children.length, 1);
+      final world = game.world;
+      await world.ensureAdd(component);
+      expect(component.parent, world);
+      expect(world.children.length, 1);
 
       game.update(2);
-      expect(component.parent, game);
+      expect(component.parent, world);
 
       // runs a cycle to remove the component, but failed
       game.update(0.1);
-      expect(game.children.length, 1);
+      expect(world.children.length, 1);
     });
 
     testWithFlameGame(
@@ -150,16 +153,17 @@ Future<void> main() async {
         // when omitted, removeOnFinish is false for all states
       );
 
-      await game.ensureAdd(component);
-      expect(component.parent, game);
-      expect(game.children.length, 1);
+      final world = game.world;
+      await world.ensureAdd(component);
+      expect(component.parent, world);
+      expect(world.children.length, 1);
 
       game.update(2);
-      expect(component.parent, game);
+      expect(component.parent, world);
 
       // runs a cycle to remove the component, but failed
       game.update(0.1);
-      expect(game.children.length, 1);
+      expect(world.children.length, 1);
     });
 
     testWithFlameGame(
@@ -180,17 +184,18 @@ Future<void> main() async {
         current: _AnimationState.idle,
       );
 
-      await game.ensureAdd(component);
+      final world = game.world;
+      await world.ensureAdd(component);
 
-      expect(component.parent, game);
-      expect(game.children.length, 1);
+      expect(component.parent, world);
+      expect(world.children.length, 1);
 
       game.update(2);
-      expect(component.parent, game);
+      expect(component.parent, world);
 
       // runs a cycle to remove the component, but failed
       game.update(0.1);
-      expect(game.children.length, 1);
+      expect(world.children.length, 1);
     });
   });
 

@@ -40,6 +40,7 @@ void main() {
     testWithFlameGame(
       'PositionType.viewport',
       (game) async {
+        game.removeAll([game.world, game.cameraComponent]);
         await game.ensureAddAll([
           _MyComponent(4, positionType: PositionType.viewport),
           _MyComponent(1, positionType: PositionType.viewport),
@@ -63,6 +64,7 @@ void main() {
       testWithFlameGame(
         'viewport does not affect component with PositionType.widget',
         (game) async {
+          game.removeAll([game.world, game.cameraComponent]);
           game.camera.viewport = FixedResolutionViewport(Vector2.all(50));
           game.onGameResize(Vector2.all(200.0));
           await game.ensureAdd(
@@ -81,6 +83,7 @@ void main() {
       testWithFlameGame(
         'camera does not affect component with PositionType.widget',
         (game) async {
+          game.removeAll([game.world, game.cameraComponent]);
           await game.ensureAdd(
             _MyComponent(0, positionType: PositionType.widget),
           );
@@ -98,6 +101,7 @@ void main() {
       testWithFlameGame(
         'Several static components',
         (game) async {
+          game.removeAll([game.world, game.cameraComponent]);
           await game.ensureAddAll([
             _MyComponent(5, positionType: PositionType.widget),
             _MyComponent(1, positionType: PositionType.widget),
@@ -122,6 +126,7 @@ void main() {
     testWithFlameGame(
       'mixed',
       (game) async {
+        game.removeAll([game.world, game.cameraComponent]);
         await game.ensureAddAll([
           _MyComponent(4),
           _MyComponent(1),

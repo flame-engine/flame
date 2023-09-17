@@ -19,21 +19,22 @@ void main() {
         area: shape,
         random: random,
       );
-      await game.ensureAdd(spawn);
+      final world = game.world;
+      await world.ensureAdd(spawn);
       game.update(0.5);
-      expect(game.children.length, 1);
+      expect(world.children.length, 1);
       game.update(0.5);
       game.update(0.0);
-      expect(game.children.length, 2);
+      expect(world.children.length, 2);
       game.update(1.0);
       game.update(0.0);
-      expect(game.children.length, 3);
+      expect(world.children.length, 3);
 
       for (var i = 0; i < 1000; i++) {
         game.update(random.nextDouble());
       }
       expect(
-        game.children
+        world.children
             .query<PositionComponent>()
             .every((c) => shape.containsPoint(c.position)),
         isTrue,
@@ -50,21 +51,22 @@ void main() {
         area: shape,
         random: random,
       );
-      await game.ensureAdd(spawn);
+      final world = game.world;
+      await world.ensureAdd(spawn);
       game.update(0.5);
-      expect(game.children.length, 1);
+      expect(world.children.length, 1);
       game.update(0.5);
       game.update(0.0);
-      expect(game.children.length, 2);
+      expect(world.children.length, 2);
       game.update(1.0);
       game.update(0.0);
-      expect(game.children.length, 3);
+      expect(world.children.length, 3);
 
       for (var i = 0; i < 1000; i++) {
         game.update(random.nextDouble());
       }
       expect(
-        game.children
+        world.children
             .query<PositionComponent>()
             .every((c) => shape.containsPoint(c.position)),
         isTrue,
@@ -87,21 +89,22 @@ void main() {
         area: shape,
         random: random,
       );
-      await game.ensureAdd(spawn);
+      final world = game.world;
+      await world.ensureAdd(spawn);
       game.update(0.5);
-      expect(game.children.length, 1);
+      expect(world.children.length, 1);
       game.update(0.5);
       game.update(0.0);
-      expect(game.children.length, 2);
+      expect(world.children.length, 2);
       game.update(1.0);
       game.update(0.0);
-      expect(game.children.length, 3);
+      expect(world.children.length, 3);
 
       for (var i = 0; i < 1000; i++) {
         game.update(random.nextDouble());
       }
       expect(
-        game.children
+        world.children
             .query<PositionComponent>()
             .every((c) => shape.containsPoint(c.position)),
         isTrue,

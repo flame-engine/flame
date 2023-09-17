@@ -13,7 +13,7 @@ void main() {
       (game) async {
         await game.add(_DragCallbacksComponent());
         await game.ready();
-        expect(game.children.toList()[1], isA<MultiDragDispatcher>());
+        expect(game.children.toList()[2], isA<MultiDragDispatcher>());
       },
     );
 
@@ -108,7 +108,7 @@ void main() {
         await tester.pumpWidget(GameWidget(game: game));
         await tester.pump();
         await tester.pump();
-        expect(game.children.length, equals(2));
+        expect(game.children.length, equals(4));
         expect(component.isMounted, isTrue);
 
         await tester.dragFrom(const Offset(10, 10), const Offset(90, 90));
@@ -142,8 +142,8 @@ void main() {
       _DragCallbacksGame.new,
       (game) async {
         await game.ready();
-        expect(game.children.length, equals(1));
-        expect(game.children.first, isA<MultiDragDispatcher>());
+        expect(game.children.length, equals(3));
+        expect(game.children.elementAt(1), isA<MultiDragDispatcher>());
       },
     );
 
@@ -154,7 +154,7 @@ void main() {
         await tester.pumpWidget(GameWidget(game: game));
         await tester.pump();
         await tester.pump();
-        expect(game.children.length, equals(1));
+        expect(game.children.length, equals(3));
         expect(game.isMounted, isTrue);
 
         await tester.dragFrom(const Offset(10, 10), const Offset(90, 90));

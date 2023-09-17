@@ -30,7 +30,7 @@ void main() {
         await tester.pumpWidget(GameWidget(game: game));
         await tester.pump();
         await tester.pump(const Duration(milliseconds: 10));
-        expect(game.children.length, 2);
+        expect(game.children.length, 4);
 
         // regular tap
         await tester.tapAt(const Offset(100, 100));
@@ -101,8 +101,8 @@ void main() {
         await tester.pumpWidget(GameWidget(game: game));
         await tester.pump();
         await tester.pump();
-        expect(game.children.length, 2);
-        expect(game.children.first.children.length, 1);
+        expect(game.children.length, 4);
+        expect(game.children.elementAt(1).children.length, 1);
 
         await tester.longPressAt(const Offset(50, 50));
         await tester.pump(const Duration(seconds: 1));
@@ -149,8 +149,8 @@ void main() {
         await tester.pumpWidget(GameWidget(game: game));
         await tester.pump();
         await tester.pump();
-        expect(game.children.length, 2);
-        expect(game.children.first.children.length, 1);
+        expect(game.children.length, 4);
+        expect(game.children.elementAt(1).children.length, 1);
 
         await tester.longPressAt(const Offset(50, 50));
         await tester.pump(const Duration(seconds: 1));
@@ -197,8 +197,8 @@ void main() {
         await tester.pumpWidget(GameWidget(game: game));
         await tester.pump();
         await tester.pump();
-        expect(game.children.length, 2);
-        expect(game.children.first.children.length, 1);
+        expect(game.children.length, 4);
+        expect(game.children.elementAt(1).children.length, 1);
 
         await tester.tapAt(const Offset(200, 200));
         await tester.pump(const Duration(seconds: 1));
@@ -254,8 +254,8 @@ void main() {
         await tester.pumpWidget(GameWidget(game: game));
         await tester.pump();
         await tester.pump(const Duration(milliseconds: 10));
-        expect(game.children.length, 3);
-        expect(game.children.last, isA<MultiTapDispatcher>());
+        expect(game.children.length, 5);
+        expect(game.children.elementAt(3), isA<MultiTapDispatcher>());
 
         await tester.tapAt(const Offset(50, 50));
         await tester.pump(const Duration(seconds: 1));

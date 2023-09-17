@@ -1,5 +1,6 @@
 // ignore_for_file: deprecated_member_use_from_same_package
 
+import 'dart:async';
 import 'dart:ui';
 
 import 'package:flame/components.dart';
@@ -34,7 +35,7 @@ class FlameGame<T extends World> extends ComponentTreeRoot
       'declares itself to be a singleton',
     );
     _cameraWrapper = CameraWrapper(camera ?? Camera(), children);
-    _cameraComponent.world = world;
+    _cameraComponent.world = _world;
     add(_cameraComponent);
     add(_world);
   }
