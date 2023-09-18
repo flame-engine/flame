@@ -29,7 +29,6 @@ void main() {
       'render the background correctly',
       setUp: (game, _) async {
         await game.ready();
-        await game.ensureAdd(Background());
       },
       verify: (game, tester) async {
         await expectLater(
