@@ -13,15 +13,14 @@ environment:
   flutter: ">=3.3.0"
 
 dependencies:
-  archive: ^3.3.7
+  archive: ^3.3.9
   flame: ^1.8.2
   flutter:
     sdk: flutter
-  path: ^1.8.3
 
 dev_dependencies:
-  dartdoc: ^6.2.2
+  dartdoc: ^6.3.0
   flame_lint: ^1.1.0
   flutter_test:
     sdk: flutter
-  mocktail: ^0.3.0
+  mocktail: ^1.0.0
