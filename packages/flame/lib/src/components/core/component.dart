@@ -649,14 +649,6 @@ class Component {
     }
   }
 
-  /// Changes the current parent for another parent and prepares the tree under
-  /// the new root.
-  @Deprecated('Will be removed in 1.9.0. Use the parent setter instead.')
-  // ignore: use_setters_to_change_properties
-  void changeParent(Component newParent) {
-    parent = newParent;
-  }
-
   //#endregion
 
   //#region Hit Testing
@@ -987,11 +979,11 @@ class Component {
   @Deprecated('''
   Use the CameraComponent and add your component to the viewport with
   cameraComponent.viewport.add(yourHudComponent) instead.
-  This will be removed in Flame v2.
+  This will be removed in Flame v1.10.0.
   ''')
   PositionType positionType = PositionType.game;
 
-  @Deprecated('To be removed in Flame v2')
+  @Deprecated('To be removed in Flame v1.10.0')
   @protected
   Vector2 eventPosition(PositionInfo info) {
     switch (positionType) {

@@ -1,5 +1,3 @@
-// ignore_for_file: deprecated_member_use
-
 import 'package:flame/components.dart' show PositionComponent;
 import 'package:flame/extensions.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';

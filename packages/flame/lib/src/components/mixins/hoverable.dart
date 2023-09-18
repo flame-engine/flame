@@ -3,10 +3,9 @@ import 'package:flame/src/game/mixins/has_hoverables.dart';
 import 'package:flame/src/gestures/events.dart';
 import 'package:meta/meta.dart';
 
-@Deprecated('''
-  Will be removed in Flame v2, use the HoverCallbacks mixin instead.
-  https://github.com/flame-engine/flame/issues/2142
-  ''')
+@Deprecated(
+  'Will be removed in Flame v1.10.0, use the HoverCallbacks mixin instead.',
+)
 mixin Hoverable on Component {
   bool _isHovered = false;
   bool get isHovered => _isHovered;

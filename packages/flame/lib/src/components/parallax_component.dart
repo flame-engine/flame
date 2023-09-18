@@ -85,9 +85,7 @@ class ParallaxComponent<T extends FlameGame> extends PositionComponent
     if (!isFullscreen) {
       return;
     }
-    // TODO(Lukas): Use CameraComponent here instead.
-    // ignore: deprecated_member_use_from_same_package
-    final newSize = gameRef.oldCamera.viewport.effectiveSize;
+    final newSize = gameRef.camera.viewport.size;
     this.size.setFrom(newSize);
     parallax?.resize(newSize);
   }

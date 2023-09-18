@@ -5,7 +5,6 @@ import 'package:flame_test/flame_test.dart';
 import 'package:test/test.dart';
 
 import '../custom_component.dart';
-// ignore_for_file: deprecated_member_use_from_same_package
 
 void main() {
   void componentsSorted(Iterable<Component> components) {
