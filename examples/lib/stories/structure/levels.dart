@@ -12,10 +12,10 @@ class LevelsExample extends FlameGame {
     In this example we showcase how you can utilize World components as levels.
     Press the different buttons in the bottom to change levels and press in the
     center to add new Ember's. You can see how level 1-3 keeps their state,
-    meanwhile the one called Resetable always resets.
+    meanwhile the one called Resettable always resets.
   ''';
 
-  LevelsExample() : super(world: ResetableLevel());
+  LevelsExample() : super(world: ResettableLevel());
 
   late final TextComponent header;
 
@@ -50,8 +50,8 @@ class LevelsExample extends FlameGame {
           position: Vector2(size.x / 2 + 70, size.y - 50),
         ),
         LevelButton(
-          'Resetable',
-          onPressed: () => world = ResetableLevel(),
+          'Resettable',
+          onPressed: () => world = ResettableLevel(),
           position: Vector2(size.x / 2 + 210, size.y - 50),
         ),
       ],
@@ -59,7 +59,7 @@ class LevelsExample extends FlameGame {
   }
 }
 
-class ResetableLevel extends Level {
+class ResettableLevel extends Level {
   @override
   Future<void> onLoad() async {
     add(
@@ -71,7 +71,7 @@ class ResetableLevel extends Level {
           ),
         ),
     );
-    game.header.text = 'Resetable';
+    game.header.text = 'Resettable';
   }
 }
 
