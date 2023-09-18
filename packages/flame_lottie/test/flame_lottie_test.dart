@@ -20,7 +20,6 @@ void main() {
       await game.world.add(lottieComponent);
       await game.ready();
 
-      expect(game.world.children, isNotEmpty);
       expect(game.world.children, [lottieComponent]);
     },
   );
