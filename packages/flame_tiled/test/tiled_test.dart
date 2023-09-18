@@ -453,7 +453,6 @@ void main() {
       game.onGameResize(Vector2.all(100));
       final camera = game.cameraComponent;
       game.world.add(component);
-      camera.viewfinder.anchor = Anchor.center;
       camera.viewfinder.position = Vector2(150, 20);
       camera.viewport.size = mapSizePx.clone();
       game.onGameResize(mapSizePx);
