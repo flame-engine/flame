@@ -27,7 +27,12 @@ class FlameGame<W extends World> extends ComponentTreeRoot
     W? world,
     CameraComponent? camera,
     Camera? oldCamera,
-  })  : _world = world ?? World() as W,
+  })  : assert(
+          world is W || (world == null && W is World),
+          'The generics type $W does not conform to the type of '
+          '${world?.runtimeType ?? 'World'}.',
+        ),
+        _world = world ?? World() as W,
         _camera = camera ?? CameraComponent() {
     assert(
       Component.staticGameInstance == null,
