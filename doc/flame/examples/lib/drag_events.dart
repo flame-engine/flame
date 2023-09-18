@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
+import 'package:flame/geometry.dart';
 import 'package:flutter/rendering.dart';
 
 class DragEventsGame extends FlameGame {
@@ -242,5 +243,3 @@ class Star extends PositionComponent with DragCallbacks {
     position += event.delta;
   }
 }
-
-const tau = 2 * pi;

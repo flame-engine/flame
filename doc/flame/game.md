@@ -15,6 +15,10 @@ A simple `FlameGame` implementation that adds two components, one in `onLoad` an
 the constructor can look like this:
 
 ```dart
+import 'package:flame/components.dart';
+import 'package:flame/game.dart';
+import 'package:flutter/widgets.dart';
+
 /// A component that renders the crate sprite, with a 16 x 16 size.
 class MyCrate extends SpriteComponent {
   MyCrate() : super(size: Vector2.all(16));
@@ -32,8 +36,8 @@ class MyGame extends FlameGame {
   }
 }
 
-main() {
-  final myGame = MyGame(children: [MyCrate]);
+void main() {
+  final myGame = MyGame();
   runApp(
     GameWidget(
       game: myGame,
@@ -84,18 +88,23 @@ after the call to `super.onGameResize(canvasSize);`.
 
 ## Lifecycle
 
-```{include} diagrams/component_life_cycle.md
+The `FlameGame` lifecycle callbacks, `onLoad`, `render`, etc. are called in the following sequence:
+
+```{include} diagrams/flame_game_life_cycle.md
 ```
 
-When a game is first added to a Flutter widget tree the following lifecycle methods will be called
-in order: `onLoad`, `onGameResize` and `onMount`. After that, it goes on to call `update` and
-`render` back and forth every tick, until the widget is removed from the tree.
-Once the `GameWidget` is removed from the tree, `onRemove` is called, just like when a normal
-component is removed from the component tree.
+When a `FlameGame` is first added to a `GameWidget` the lifecycle methods `onGameResize`, `onLoad`
+and `onMount` will be called in that order. Then `update` and `render` are called in sequence for
+every game tick.  If the `FlameGame` is removed from the `GameWidget`  then `onRemove` is called.
+If the `FlameGame` is added to a new `GameWidget` the sequence repeats from `onGameResize`.
 
 ```{note}
-The `onRemove` can be used to clean up potential memory leaks such as the following:
+The order of `onGameResize`and `onLoad` are reversed from that of other
+`Component`s. This is to allow game element sizes to be calculated before
+resources are loaded or generated.
 ```
+
+The `onRemove` callback can be used to clean up children and cached data:
 
 ```dart
   @override
@@ -107,6 +116,11 @@ The `onRemove` can be used to clean up potential memory leaks such as the follow
     Flame.assets.clearCache();
     // Any other code that you want to run when the game is removed.
   }
+```
+
+```{note}
+Clean-up of children and resources in a `FlameGame` is not done automatically
+and must be explicitly added to the `onRemove` call.
 ```
 
 

@@ -6,6 +6,9 @@ import 'package:test/test.dart';
 import 'test_scenario.dart';
 import 'utils.dart';
 
+// disable cspell as this file contains character dialogue
+// cSpell:disable
+
 void main() {
   group('DialogueRunner', () {
     test('plain dialogue', () async {

@@ -46,7 +46,12 @@ class CameraComponent extends Component {
     Viewfinder? viewfinder,
     List<Component>? hudComponents,
   })  : viewport = (viewport ?? MaxViewport())..addAll(hudComponents ?? []),
-        viewfinder = viewfinder ?? Viewfinder();
+        viewfinder = viewfinder ?? Viewfinder(),
+        // The priority is set to the max here to avoid some bugs for the users,
+        // if they for example would add any components that modify positions
+        // before the CameraComponent, since it then will render the positions
+        // of the last tick each tick.
+        super(priority: 0x7fffffff);
 
   /// Create a camera that shows a portion of the game world of fixed size
   /// [width] x [height].
@@ -116,8 +121,11 @@ class CameraComponent extends Component {
   /// after the camera was fully mounted.
   Rect get visibleWorldRect {
     assert(
-      viewport.isMounted && viewfinder.isMounted,
-      'This property cannot be accessed before the camera is mounted',
+      viewport.isLoaded && viewfinder.isLoaded,
+      'This property cannot be accessed before the camera is loaded. '
+      'If you are using visibleWorldRect from another component (for example '
+      'the World), make sure that the CameraComponent is added before that '
+      'Component.',
     );
     return viewfinder.visibleWorldRect;
   }
@@ -159,21 +167,39 @@ class CameraComponent extends Component {
     canvas.restore();
   }
 
+  /// Converts from the global (canvas) coordinate space to
+  /// local (camera = viewport + viewfinder).
+  ///
+  /// Opposite of [localToGlobal].
+  Vector2 globalToLocal(Vector2 point, {Vector2? output}) {
+    final viewportPosition = viewport.globalToLocal(point, output: output);
+    return viewfinder.globalToLocal(viewportPosition, output: output);
+  }
+
+  /// Converts from the local (camera = viewport + viewfinder) coordinate space
+  /// to global (canvas).
+  ///
+  /// Opposite of [globalToLocal].
+  Vector2 localToGlobal(Vector2 position, {Vector2? output}) {
+    final viewfinderPosition =
+        viewfinder.localToGlobal(position, output: output);
+    return viewport.localToGlobal(viewfinderPosition, output: output);
+  }
+
+  final _viewportPoint = Vector2.zero();
+
   @override
   Iterable<Component> componentsAtPoint(
     Vector2 point, [
     List<Vector2>? nestedPoints,
   ]) sync* {
-    final viewportPoint = Vector2(
-      point.x - viewport.position.x + viewport.anchor.x * viewport.size.x,
-      point.y - viewport.position.y + viewport.anchor.y * viewport.size.y,
-    );
+    final viewportPoint = viewport.globalToLocal(point, output: _viewportPoint);
     yield* viewport.componentsAtPoint(viewportPoint, nestedPoints);
     if ((world?.isMounted ?? false) &&
         currentCameras.length < maxCamerasDepth) {
-      if (viewport.containsLocalPoint(viewportPoint)) {
+      if (viewport.containsLocalPoint(_viewportPoint)) {
         currentCameras.add(this);
-        final worldPoint = viewfinder.transform.globalToLocal(viewportPoint);
+        final worldPoint = viewfinder.transform.globalToLocal(_viewportPoint);
         yield* viewfinder.componentsAtPoint(worldPoint, nestedPoints);
         yield* world!.componentsAtPoint(worldPoint, nestedPoints);
         currentCameras.removeLast();
@@ -217,7 +243,7 @@ class CameraComponent extends Component {
   /// will move from its current position to the target's position at the given
   /// speed.
   void follow(
-    PositionProvider target, {
+    ReadOnlyPositionProvider target, {
     double maxSpeed = double.infinity,
     bool horizontalOnly = false,
     bool verticalOnly = false,

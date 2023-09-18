@@ -269,13 +269,10 @@ void main() {
         world: world,
         viewport: FixedSizeViewport(60, 40),
       );
-      game.addAll([world, camera]);
 
       expect(
         () => camera.visibleWorldRect,
-        failsAssert(
-          'This property cannot be accessed before the camera is mounted',
-        ),
+        failsAssert(),
       );
     });
 
@@ -368,6 +365,34 @@ void main() {
 
       // can't see when the player world is known.
       expect(camera.canSee(player, componentWorld: world1), false);
+    });
+
+    testWithFlameGame('coordinate transformations', (game) async {
+      game.onGameResize(Vector2.all(1000.0));
+
+      final size = Vector2.all(100.0);
+      final world = World();
+      final camera = CameraComponent.withFixedResolution(
+        width: size.x,
+        height: size.y,
+        world: world,
+      );
+
+      await game.addAll([camera, world]);
+      await game.ready();
+
+      camera.moveBy(size / 2);
+      game.update(0);
+
+      expect(camera.globalToLocal(Vector2.zero()), Vector2.zero());
+      expect(camera.globalToLocal(Vector2.all(100.0)), Vector2.all(10.0));
+      expect(camera.globalToLocal(Vector2.all(500.0)), Vector2.all(50.0));
+      expect(camera.globalToLocal(Vector2.all(1000.0)), Vector2.all(100.0));
+
+      expect(camera.localToGlobal(Vector2.zero()), Vector2.zero());
+      expect(camera.localToGlobal(Vector2.all(10.0)), Vector2.all(100.0));
+      expect(camera.localToGlobal(Vector2.all(50.0)), Vector2.all(500.0));
+      expect(camera.localToGlobal(Vector2.all(100.0)), Vector2.all(1000.0));
     });
   });
 }

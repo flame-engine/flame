@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/game.dart';
+import 'package:flame/geometry.dart';
 import 'package:flame_noise/flame_noise.dart';
 import 'package:flutter/material.dart';
 
@@ -26,7 +27,6 @@ class MoveEffectExample extends FlameGame {
 
   @override
   void onLoad() {
-    const tau = Transform2D.tau;
     cameraComponent = CameraComponent.withFixedResolution(
       world: world,
       width: 400,

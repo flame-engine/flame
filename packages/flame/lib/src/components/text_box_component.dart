@@ -48,7 +48,7 @@ class TextBoxConfig {
 
 class TextBoxComponent<T extends TextRenderer> extends TextComponent {
   static final Paint _imagePaint = BasicPalette.white.paint()
-    ..filterQuality = FilterQuality.high;
+    ..filterQuality = FilterQuality.medium;
   final TextBoxConfig _boxConfig;
   final double pixelRatio;
 
@@ -273,7 +273,7 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
         line = line.substring(0, nChars);
       }
 
-      final textElement = textRenderer.formatter.format(line);
+      final textElement = textRenderer.format(line);
       final metrics = textElement.metrics;
 
       final position = Vector2(

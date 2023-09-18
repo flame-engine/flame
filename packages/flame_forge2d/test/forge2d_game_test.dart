@@ -1,4 +1,5 @@
 import 'package:flame_forge2d/flame_forge2d.dart';
+import 'package:flame_test/flame_test.dart';
 import 'package:test/test.dart';
 
 class _TestForge2dGame extends Forge2DGame {
@@ -9,44 +10,72 @@ void main() {
   group(
     'Test corresponding position on screen and in the Forge2D world',
     () {
-      test('Zero positioned camera should be zero in world', () {
+      testWithGame('Center positioned camera should be zero in world',
+          _TestForge2dGame.new, (game) async {
+        final size = Vector2.all(100);
+        game.onGameResize(size);
         expect(
-          _TestForge2dGame().screenToWorld(Vector2.zero()),
+          game.screenToWorld(size / 2),
           Vector2.zero(),
         );
       });
 
-      test('Zero positioned camera should be zero in FlameWorld', () {
+      testWithGame('Top left position should be converted correctly to world',
+          _TestForge2dGame.new, (game) async {
+        final size = Vector2.all(100);
+        game.onGameResize(size);
         expect(
-          _TestForge2dGame().screenToFlameWorld(Vector2.zero()),
-          Vector2.zero(),
+          game.screenToWorld(Vector2.zero()),
+          -(size / 2) / game.cameraComponent.viewfinder.zoom,
         );
       });
 
-      test('Converts a vector in the world space to the screen space', () {
+      testWithGame('Non-zero position should be converted correctly to world',
+          _TestForge2dGame.new, (game) async {
+        final size = Vector2.all(100);
+        final screenPosition = Vector2(10, 20);
+        game.onGameResize(size);
         expect(
-          _TestForge2dGame().worldToScreen(Vector2(5, 6)),
-          Vector2(20.0, 24.0),
+          game.screenToWorld(screenPosition),
+          (-size / 2 + screenPosition) / game.cameraComponent.viewfinder.zoom,
         );
       });
 
-      test('Converts a vector in the screen space to the world space', () {
+      testWithGame('Converts a vector in the world space to the screen space',
+          _TestForge2dGame.new, (game) async {
+        final size = Vector2.all(100);
+        game.onGameResize(size);
         expect(
-          _TestForge2dGame().screenToFlameWorld(Vector2(5, 6)),
-          Vector2(1.25, -1.5),
+          game.worldToScreen(Vector2.zero()),
+          size / 2,
         );
       });
-    },
-  );
 
-  group(
-    'Test input vector does not get modified while function call',
-    () {
-      test('Camera should not modify the input vector while projecting it', () {
-        final vec = Vector2(5, 6);
-        // ignore: deprecated_member_use
-        _TestForge2dGame().camera.projectVector(vec);
-        expect(vec, Vector2(5, 6));
+      testWithGame(
+          'Converts a non-zero vector in the world space to the screen space',
+          _TestForge2dGame.new, (game) async {
+        final size = Vector2.all(100);
+        final worldPosition = Vector2.all(10);
+        game.onGameResize(size);
+        expect(
+          game.worldToScreen(worldPosition),
+          (size / 2) + worldPosition * game.cameraComponent.viewfinder.zoom,
+        );
+      });
+
+      testWithGame('Converts worldToScreen correctly with moved viewfinder',
+          _TestForge2dGame.new, (game) async {
+        final size = Vector2.all(100);
+        final worldPosition = Vector2(10, 30);
+        final viewfinderPosition = Vector2(20, 10);
+        game.onGameResize(size);
+        game.cameraComponent.viewfinder.position = viewfinderPosition;
+        expect(
+          game.worldToScreen(worldPosition),
+          (size / 2) +
+              (worldPosition - viewfinderPosition) *
+                  game.cameraComponent.viewfinder.zoom,
+        );
       });
     },
   );

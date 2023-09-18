@@ -208,7 +208,7 @@ class MyKeyboardDetector extends HardwareKeyboardDetector
 
 class KeyboardKey extends PositionComponent {
   KeyboardKey({required this.text, super.position}) {
-    textElement = textRenderer.formatter.format(text);
+    textElement = textRenderer.format(text);
     width = textElement.metrics.width + padding.x;
     height = textElement.metrics.height + padding.y;
     textElement.translate(
@@ -219,7 +219,7 @@ class KeyboardKey extends PositionComponent {
   }
 
   final String text;
-  late final TextElement textElement;
+  late final InlineTextElement textElement;
   late final RRect rect;
 
   /// The RawKeyEvents may occur very fast, and out of sync with the game loop.

@@ -32,18 +32,14 @@ void main() {
   });
 }
 
-class _CustomTextRenderer extends TextRenderer<_CustomTextFormatter> {
-  _CustomTextRenderer() : super(_CustomTextFormatter());
-}
-
-class _CustomTextFormatter extends TextFormatter {
+class _CustomTextRenderer extends TextRenderer {
   @override
-  TextElement format(String text) {
+  InlineTextElement format(String text) {
     return CustomTextElement();
   }
 }
 
-class CustomTextElement extends TextElement {
+class CustomTextElement extends InlineTextElement {
   @override
   LineMetrics get metrics => LineMetrics();
 

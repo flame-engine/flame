@@ -26,7 +26,7 @@ void main() {
       expect(fpsComponent.fps, closeTo(60, diff));
     });
 
-    testWithFlameGame('reports correct FPS with slided window', (game) async {
+    testWithFlameGame('reports correct FPS with slid window', (game) async {
       const windowSize = 30;
       final fpsComponent = FpsComponent(windowSize: windowSize);
       await game.ensureAdd(fpsComponent);

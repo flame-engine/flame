@@ -3,14 +3,13 @@ import 'dart:ui';
 
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
-import 'package:flame/game.dart';
+import 'package:flame/geometry.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('MoveAlongPathEffect', () {
     testWithFlameGame('relative path', (game) async {
-      const tau = Transform2D.tau;
       const x0 = 32.5;
       const y0 = 14.88;
       final component = PositionComponent(position: Vector2(x0, y0));

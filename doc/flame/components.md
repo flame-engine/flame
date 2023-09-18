@@ -340,6 +340,12 @@ void onDragUpdate(DragUpdateInfo info) {
 
 ### PositionType
 
+```{note}
+If you are using the `CameraComponent` you should not use `PositionType`, but
+instead adding your components directly to the viewport for example if you
+want to use them as a HUD.
+```
+
 If you want to create a HUD (Head-up display) or another component that isn't positioned in relation
 to the game coordinates, you can change the `PositionType` of the component.
 The default `PositionType` is `positionType = PositionType.game` and that can be changed to
@@ -810,6 +816,44 @@ class ButtonComponent extends SpriteGroupComponent<ButtonState>
 ```
 
 
+## SpawnComponent
+
+This component is a non-visual component that spawns other components inside of the parent of the
+`SpawnComponent`. It's great if you for example want to spawn enemies or power-ups randomly within
+an area.
+
+The `SpawnComponent` takes a factory function that it uses to create new components and an area
+where the components should be spawned within (or along the edges of).
+
+For the area, you can use the `Circle`, `Rectangle` or `Polygon` class, and if you want to only
+spawn components along the edges of the shape set the `within` argument to false (defaults to true).
+
+This would for example spawn new components of the type `MyComponent` every 0.5 seconds randomly
+within the defined circle:
+
+```dart
+SpawnComponent(
+  factory: () => MyComponent(size: Vector2(10, 20)),
+  period: 0.5,
+  area: Circle(Vector2(100, 200), 150),
+);
+```
+
+If you don't want the spawning rate to be static, you can use the `SpawnComponent.periodRange`
+constructor with the `minPeriod` and `maxPeriod` arguments instead.
+In the following example the component would be spawned randomly within the circle and the time
+between each new spawned component is between 0.5 to 10 seconds.
+
+```dart
+SpawnComponent.periodRange(
+  factory: () => MyComponent(size: Vector2(10, 20)),
+  minPeriod: 0.5,
+  maxPeriod: 10,
+  area: Circle(Vector2(100, 200), 150),
+);
+```
+
+
 ## SvgComponent
 
 **Note**: To use SVG with Flame, use the [`flame_svg`](https://github.com/flame-engine/flame_svg)
@@ -1133,51 +1177,6 @@ The following example would result in a `CircleComponent` that defines a circle 
 ```dart
 void main() {
   CircleComponent.relative(0.8, size: Vector2.all(100));
-}
-```
-
-
-## TiledComponent
-
-Tiled is a free and open source, full-featured level and map editor for your platformer or
-RPG game. Currently we have an "in progress" implementation of a Tiled component. This API
-uses the lib [tiled.dart](https://github.com/flame-engine/tiled.dart) to parse map files and
-render visible layers using the performant `SpriteBatch` for each layer.
-
-Supported map types include: Orthogonal, Isometric, Hexagonal, and Staggered.
-
-Orthogonal | Hexagonal             |  Isomorphic
-:--:|:-------------------------:|:-------------------------:
-![An example of an orthogonal map](../images/orthogonal.png)|![An example of hexagonal map](../images/pointy_hex_even.png) |  ![An example of isomorphic map](../images/tile_stack_single_move.png)
-
-An example of how to use the API can be found
-[here](https://github.com/flame-engine/flame_tiled/tree/main/example).
-
-
-### TileStack
-
-Once a `TiledComponent` is loaded, you can select any column of (x,y) tiles in a `tileStack` to
-then add animation. Removing the stack will not remove the tiles from the map.
-
-> **Note**: This currently only supports position based effects.
-
-```dart
-void onLoad() {
-  final stack = map.tileMap.tileStack(4, 0, named: {'floor_under'});
-  stack.add(
-    SequenceEffect(
-      [
-        MoveEffect.by(
-          Vector2(5, 0),
-          NoiseEffectController(duration: 1, frequency: 20),
-        ),
-        MoveEffect.by(Vector2.zero(), LinearEffectController(2)),
-      ],
-      repeatCount: 3,
-    )
-      ..onComplete = () => stack.removeFromParent(),
-  );
-  map.add(stack);
 }
 ```
 

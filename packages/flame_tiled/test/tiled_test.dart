@@ -527,7 +527,7 @@ void main() {
       );
     }
 
-    test('flat + even staggerd', () async {
+    test('flat + even staggered', () async {
       await setupMap(
         'flat_hex_even.tmx',
         'Tileset_Hexagonal_FlatTop_60x39_60x60.png',
@@ -541,7 +541,7 @@ void main() {
       expect(pngData, matchesGoldenFile('goldens/flat_hex_even.png'));
     });
 
-    test('flat + odd staggerd', () async {
+    test('flat + odd staggered', () async {
       await setupMap(
         'flat_hex_odd.tmx',
         'Tileset_Hexagonal_FlatTop_60x39_60x60.png',
@@ -555,7 +555,7 @@ void main() {
       expect(pngData, matchesGoldenFile('goldens/flat_hex_odd.png'));
     });
 
-    test('pointy + even staggerd', () async {
+    test('pointy + even staggered', () async {
       await setupMap(
         'pointy_hex_even.tmx',
         'Tileset_Hexagonal_PointyTop_60x52_60x80.png',
@@ -569,7 +569,7 @@ void main() {
       expect(pngData, matchesGoldenFile('goldens/pointy_hex_even.png'));
     });
 
-    test('pointy + odd staggerd', () async {
+    test('pointy + odd staggered', () async {
       await setupMap(
         'pointy_hex_odd.tmx',
         'Tileset_Hexagonal_PointyTop_60x52_60x80.png',

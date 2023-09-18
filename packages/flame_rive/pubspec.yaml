@@ -15,7 +15,7 @@ dependencies:
   flame: ^1.8.2
   flutter:
     sdk: flutter
-  rive: ^0.11.1
+  rive: ^0.11.16
 
 dev_dependencies:
   dartdoc: ^6.2.2

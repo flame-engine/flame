@@ -1,0 +1,9 @@
+# keywords/terms specific to the Dart/Flutter ecosystem
+dartdoc # documentation tool for dart
+dartdocs # plural of dartdoc
+endtemplate # Use @endtemplate to close a @template block in dartdoc
+pubspec # dependency and configuration file of every Dart project
+typedef # an instruction in Dart to define a type as an alias
+typedefs # plural of typedef
+mixin # a type of class composition supported by Dart
+mixins # plural of mixin

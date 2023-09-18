@@ -4,7 +4,6 @@ import 'package:collection/collection.dart';
 import 'package:flame/components.dart';
 import 'package:flame/src/cache/value_cache.dart';
 import 'package:flame/src/components/core/component_tree_root.dart';
-import 'package:flame/src/components/mixins/coordinate_transform.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
 import 'package:flame/src/game/flame_game.dart';
 import 'package:flame/src/game/game.dart';
@@ -273,7 +272,7 @@ class Component {
     } else if (_parent == null) {
       addToParent(newParent);
     } else {
-      final root = findGame()! as ComponentTreeRoot;
+      final root = findGame()!;
       root.enqueueMove(this, newParent);
     }
   }
@@ -384,9 +383,16 @@ class Component {
 
   @internal
   static Game? staticGameInstance;
-  Game? findGame() {
-    return staticGameInstance ??
-        ((this is Game) ? (this as Game) : _parent?.findGame());
+  FlameGame? findGame() {
+    assert(
+      staticGameInstance is FlameGame || staticGameInstance == null,
+      'A component needs to have a FlameGame as the root.',
+    );
+    final gameInstance = staticGameInstance is FlameGame
+        ? staticGameInstance! as FlameGame
+        : null;
+    return gameInstance ??
+        ((this is FlameGame) ? (this as FlameGame) : _parent?.findGame());
   }
 
   /// Whether the children list contains the given component.
@@ -581,7 +587,7 @@ class Component {
     child._parent = this;
     final game = findGame();
     if (isMounted && !child.isMounted) {
-      (game! as FlameGame).enqueueAdd(child, this);
+      game!.enqueueAdd(child, this);
     } else {
       // This will be reconciled during the mounting stage
       children.add(child);
@@ -627,7 +633,7 @@ class Component {
       "$this, component's parent = ${child._parent}",
     );
     if (isMounted) {
-      final root = findGame()! as ComponentTreeRoot;
+      final root = findGame()!;
       if (child.isMounted || child.isMounting) {
         if (!child.isRemoving) {
           root.enqueueRemove(child, this);
@@ -740,7 +746,7 @@ class Component {
       _priority = newPriority;
       final game = findGame();
       if (game != null && _parent != null) {
-        (game as FlameGame).enqueueRebalance(_parent!);
+        game.enqueueRebalance(_parent!);
       }
     }
   }
@@ -930,7 +936,7 @@ class Component {
   /// How many decimal digits to print when displaying coordinates in the
   /// debug mode. Setting this to null will suppress all coordinates from
   /// the output.
-  int? get debugCoordinatesPrecision => 0;
+  int? debugCoordinatesPrecision = 0;
 
   /// A key that can be used to identify this component in the tree.
   ///

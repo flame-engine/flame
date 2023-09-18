@@ -1,9 +1,10 @@
 import 'dart:math';
 import 'dart:ui';
 
+import 'package:flame/geometry.dart';
+import 'package:flame/math.dart';
 import 'package:flame/src/experimental/geometry/shapes/shape.dart';
 import 'package:flame/src/game/transform2d.dart';
-import 'package:meta/meta.dart';
 import 'package:vector_math/vector_math_64.dart';
 
 /// An axis-aligned rectangle with rounded corners.
@@ -49,7 +50,7 @@ class RoundedRectangle extends Shape {
   factory RoundedRectangle.fromPoints(Vector2 a, Vector2 b, double radius) =>
       RoundedRectangle.fromLTRBR(a.x, a.y, b.x, b.y, radius);
 
-  /// Constructs a [RoundedRectangle] from ui's [RRect].
+  /// Constructs a [RoundedRectangle] from ui [RRect].
   ///
   /// All corners of the `rrect` must have the same circular radii.
   factory RoundedRectangle.fromRRect(RRect rrect) {
@@ -197,7 +198,27 @@ class RoundedRectangle extends Shape {
   @override
   String toString() =>
       'RoundedRectangle([$_left, $_top], [$_right, $_bottom], $_radius)';
-}
 
-@internal
-const tau = Transform2D.tau; // 2π
+  @override
+  Vector2 randomPoint({Random? random, bool within = true}) {
+    assert(
+      within,
+      'It is not possible to get a point only along the edges of a '
+      'rounded rectangle.',
+    );
+    final randomGenerator = random ?? randomFallback;
+    final result = Vector2.zero();
+    final min = aabb.min;
+    final max = aabb.max;
+
+    while (true) {
+      final randomX = min.x + randomGenerator.nextDouble() * (max.x - min.x);
+      final randomY = min.y + randomGenerator.nextDouble() * (max.y - min.y);
+      result.setValues(randomX, randomY);
+
+      if (containsPoint(result)) {
+        return result;
+      }
+    }
+  }
+}

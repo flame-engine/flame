@@ -9,7 +9,7 @@ import 'package:flame/components.dart';
 /// classes that has [HasCollisionDetection].
 ///
 /// You can experiment with non-standard collision detection methods, such
-/// as `HasQuadtreeCollisionDetection`. This can sometimes bring better
+/// as `HasQuadTreeCollisionDetection`. This can sometimes bring better
 /// performance, but it's not guaranteed.
 mixin HasCollisionDetection<B extends Broadphase<ShapeHitbox>> on Component {
   CollisionDetection<ShapeHitbox, B> _collisionDetection =

@@ -18,6 +18,11 @@ class CommandStorage {
 
   final Map<String, _Cmd?> _commands;
 
+  /// Number of commands that have been registered.
+  int get length => _commands.length;
+  bool get isEmpty => _commands.isEmpty;
+  bool get isNotEmpty => _commands.isNotEmpty;
+
   /// Returns `true` if command with the given [name] has been registered.
   bool hasCommand(String name) => _commands.containsKey(name);
 
@@ -81,6 +86,16 @@ class CommandStorage {
       _rxId.firstMatch(name) != null,
       'Command name "$name" is not an identifier',
     );
+  }
+
+  /// Clear all commands from storage.
+  void clear() {
+    _commands.clear();
+  }
+
+  /// Remove a command by [name].
+  void remove(String name) {
+    _commands.remove(name);
   }
 
   static final _rxId = RegExp(r'^[a-zA-Z_]\w*$');

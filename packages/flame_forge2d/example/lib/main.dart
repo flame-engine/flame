@@ -1,33 +1,30 @@
-import 'package:flame/camera.dart' as camera;
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
+import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flutter/widgets.dart';
 
 void main() {
-  runApp(GameWidget(game: Forge2DExample()));
+  runApp(const GameWidget.controlled(gameFactory: Forge2DExample.new));
 }
 
 class Forge2DExample extends Forge2DGame {
-  final cameraWorld = camera.World();
-  late final CameraComponent cameraComponent;
-
   @override
   Future<void> onLoad() async {
-    cameraComponent = CameraComponent(world: cameraWorld);
-    cameraComponent.viewfinder.anchor = Anchor.topLeft;
-    addAll([cameraComponent, cameraWorld]);
+    await super.onLoad();
 
-    cameraWorld.add(Ball(size / 2));
-    cameraWorld.addAll(createBoundaries());
+    cameraComponent.viewport.add(FpsTextComponent());
+    world.add(Ball());
+    world.addAll(createBoundaries());
   }
 
   List<Component> createBoundaries() {
-    final topLeft = Vector2.zero();
-    final bottomRight = screenToWorld(cameraComponent.viewport.size);
-    final topRight = Vector2(bottomRight.x, topLeft.y);
-    final bottomLeft = Vector2(topLeft.x, bottomRight.y);
+    final visibleRect = cameraComponent.visibleWorldRect;
+    final topLeft = visibleRect.topLeft.toVector2();
+    final topRight = visibleRect.topRight.toVector2();
+    final bottomRight = visibleRect.bottomRight.toVector2();
+    final bottomLeft = visibleRect.bottomLeft.toVector2();
 
     return [
       Wall(topLeft, topRight),
@@ -39,9 +36,10 @@ class Forge2DExample extends Forge2DGame {
 }
 
 class Ball extends BodyComponent with TapCallbacks {
-  final Vector2 _position;
+  final Vector2 initialPosition;
 
-  Ball(this._position);
+  Ball({Vector2? initialPosition})
+      : initialPosition = initialPosition ?? Vector2.zero();
 
   @override
   Body createBody() {
@@ -58,7 +56,7 @@ class Ball extends BodyComponent with TapCallbacks {
     final bodyDef = BodyDef(
       userData: this,
       angularDamping: 0.8,
-      position: _position,
+      position: initialPosition,
       type: BodyType.dynamic,
     );
 

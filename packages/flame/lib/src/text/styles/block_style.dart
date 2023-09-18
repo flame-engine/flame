@@ -1,13 +1,11 @@
-import 'package:flame/src/text/styles/background_style.dart';
-import 'package:flame/src/text/styles/flame_text_style.dart';
-import 'package:flame/src/text/styles/style.dart';
+import 'package:flame/text.dart';
 import 'package:flutter/painting.dart' hide TextStyle;
 import 'package:meta/meta.dart';
 
 /// [BlockStyle] is a generic descriptor for a visual appearance of a block-
 /// level element.
 @immutable
-class BlockStyle extends Style {
+class BlockStyle extends FlameTextStyle {
   const BlockStyle({
     EdgeInsets? margin,
     EdgeInsets? padding,
@@ -19,7 +17,7 @@ class BlockStyle extends Style {
   final EdgeInsets? _margin;
   final EdgeInsets? _padding;
   final BackgroundStyle? background;
-  final FlameTextStyle? text;
+  final InlineTextStyle? text;
 
   EdgeInsets get margin => _margin ?? EdgeInsets.zero;
   EdgeInsets get padding => _padding ?? EdgeInsets.zero;
@@ -30,7 +28,7 @@ class BlockStyle extends Style {
       margin: other._margin ?? _margin,
       padding: other._padding ?? _padding,
       background: other.background ?? background,
-      text: Style.merge(text, other.text),
+      text: FlameTextStyle.merge(text, other.text),
     );
   }
 }

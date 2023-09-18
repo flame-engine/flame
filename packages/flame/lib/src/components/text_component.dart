@@ -38,11 +38,11 @@ class TextComponent<T extends TextRenderer> extends PositionComponent {
     updateBounds();
   }
 
-  late TextElement _textElement;
+  late InlineTextElement _textElement;
 
   @internal
   void updateBounds() {
-    _textElement = _textRenderer.formatter.format(_text);
+    _textElement = _textRenderer.format(_text);
     final measurements = _textElement.metrics;
     _textElement.translate(0, measurements.ascent);
     size.setValues(measurements.width, measurements.height);

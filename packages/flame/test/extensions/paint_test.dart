@@ -118,8 +118,11 @@ void main() {
     });
 
     testRandom(
-        'usign fromARGBHexString returns a new Paint with the right Color',
+        'using fromARGBHexString returns a new Paint with the right Color',
         (Random r) {
+      // used as an example hex color code on the tests below
+      // cSpell:ignore fccc
+
       // As documentation says
       // valid inputs are : fccc, FCCC, #fccc, #FCCC, #ffc1c1c1, #FFC1C1C1,
       // ffc1c1c1, FFC1C1C1

@@ -1,158 +1,96 @@
-AABB # axis-aligned bounding box
-AHSL
-AHSV
-ARGB
-Bezier
-Euclidian
-LTRB
-LTRBR
-LTWH
-NPC
-NPCs
-RGBA
-RGBO
-SVGs
-WASD
-WBMP
-WebP
-abelian
-ambiguate
-antialiasing
-arial
-arities
-arity
-autofocus
-backpressure
-backquote
-backtick
-backticks
-bitfield
-blockquote
-bloodlust
-broadphase
-cathetus
-clusterize
-clusterized
-collidable
-collidables
-composability
-conformant
-coord
-coords
-dartdoc
-dartdocs
-deduplication
-deletable
-discoverability
-draggable
-draggables
-drawable
-drawables
-easings
-flippable
-focusable
-fullscreen
-gamepad
-gamepads
-gameplay
-gapless
-glyph
-glyph's
-grayscale
-goldens
-hardcoding
-highscore
-hitbox
-hitboxes
-hoverable
-hoverables
-HUD
-ints
-jank
-janky
-lerp
-lexer
-lexer's
-microtask
-mixin
-mixins
-monospace
-multitap
-mutator
-mutators
-netcode
-numpad
-overmind
-overridable
-pathfinding
-performant
-perlin # a type of noise-generating function
-platformer
-polyline
-positionable
-postmultiply
-preload
-preorder
-prerender
-prerendered
-pressable
-proxying
-pubspec
-queryable
-raycast
-raycasting
-raycasts
-raytrace
-raytraces
-raytracing
-rebalance
-rect
-rects
-redeclaration
-refactor
-refactoring
-refactorings
-refreshable
-reimplement
-reimplemented
-renderable
-rescan
-respawn
-respawned
-rrect
-rrects
-scos
-serializable
-socio
-spritesheet
-spritesheets
-ssin
-strikethrough
-stylesheet
-subfolder
-subfolders
-sublist
-sublists
-subrange
-tappable
-tappables
-tileset
-tilesets
-toolset
-tween
-tweening
-typedef
-typedefs
-ui's
-underutilize
-unfollow
-unmount
-unproject
-unscale
-vantablack
-viewport
-viewport's
-viewports
-vsync
-widget's
-unawaited
+# general development-adjacent terms and expressions
+AABB # axis aligned bounding box
+AHSL # alpha hue saturation lightness
+AHSV # alpha hue saturation value
+ARGB # alpha red green blue
+bimedian # line segment joining the midpoints of opposite sides of a shape
+Bezier # Bézier curves are parametric curves used in computer graphics
+Euclidian # Euclidean space is the fundamental space of geometry
+LTRB # left top right bottom
+LTRBR # left top right bottom radius
+LTWH # left top width height
+NPC # non playable character
+NPCs # plural of NPC
+RGBA # red green blue alpha
+RGBO # red green blue opacity
+SVG # scalable vector graphics
+SVGs # plural of SVG
+WASD # movement keys on a keyboard
+WBMP # wireless bitmap image format
+WebP # WebP image format
+abelian # Abelian Group, also known as commutative group
+antialiasing # set of techniques to combat the problems of aliasing
+arial # name of a typeface
+arities # plural of arity
+arity # number of parameters a function takes
+autofocus # auto focus event
+backpressure # strategy to deal with excess flow of data
+backquote # another word for backtick
+backtick # the back tick character "`"
+backticks # plural of backtick
+bitfield # data structure consisting of adjacent bits
+blockquote # HTML tag
+broadphase # common division of collision detection between broad and narrow phases
+cathetus # the non-hypotenuse sides of a right triangle
+clusterize # organize in clusters
+clusterized # past tense of clusterize
+consts # plural of const (constant)
+coord # coordinate
+coords # plural of coord
+deduplication # removal of duplicates
+easings # Easing functions specify the rate of change of a parameter over time
+fullscreen # mode in which a program or app occupies the entire screen with no borders
+goldens # test files used as reference for Golden Tests
+hardcoding # putting a value as a literal instead of computing it
+hitbox # the collision box around objects for the purposes of collision detection
+hitboxes # plural of hitbox
+ints # short for integers
+jank # stutter or inconsistent gap or timing
+janky # quality of expressing jank
+lerp # short for linear interpolation
+monospace # a font in which each character has the same width
+Minkowski # Minkowski sum, a sum of two sets of vectors, A and B, where the result is the sum of each vector pair
+multitap # support from a device to recognize many taps at the same time
+mutator # a method that changes the state within an object
+mutators # plural of mutator
+netcode # blanket term used to refer to networking in online games
+numpad # the numeric portion of a keyboard
+orientable # can be oriented
+pathfinding # computer algorithm to find the best path through a world or maze
+perlin # Perlin Noise, a type of noise generating algorithm
+polyline # a connected series of line segments
+raycast # act of raycasting
+raycasting # same as raytracing
+raycasts # plural of raycast
+raytrace # act of raytracing
+raytraces # plural of raytrace
+raytracing # rendering techniques that calculates light rays as straight lines
+rect # short for rectangle
+rects # plural of rect
+refactor # act of improving the quality of the code without changing the outcome
+refactoring # the process of refactor
+refactorings # plural of refactoring
+respawn # when the player character dies and is brought back after some time and penalties
+respawned # past tense of respawn
+rrect # rounded rect
+rrects # plural of rrect
+scos # cosine of a rotation multiplied by the scale factor
+serializable # can be serialized
+spritesheet # a single image packing multiple sprites, normally in a grid
+spritesheets # plural of spritesheet
+ssin # sine of a rotation multiplied by the scale factor
+strikethrough # text style with a horizontal like through the center
+stylesheet # name of a CSS style file
+subfolder # any folders inside a given folder (often recursively)
+subfolders # plural of subfolders
+sublist # any sub-set of elements of a given list
+sublists # plural of sublist
+subrange # a range entirely contained on a given range
+tileset # image with a collection of tiles. in games, tiles are small square sprites laid out in a grid to form the game map
+tilesets # plural of tileset
+tween # a linear interpolation between a beginning and ending value.
+tweening # the process of tween
+unawaited # un-awaited, a future that is not associated with an "await" expression
+viewport # part of the game world that is visible in the camera
+viewports # plural of viewport
+vsync # vertical sync; a graphics technology that synchronizes the software's frame rate with the monitor's refresh rate
