@@ -23,7 +23,6 @@ import 'package:examples/stories/collision_detection/collision_detection.dart';
 import 'package:examples/stories/components/components.dart';
 import 'package:examples/stories/effects/effects.dart';
 import 'package:examples/stories/experimental/experimental.dart';
-import 'package:examples/stories/flame_game/flame_game.dart';
 import 'package:examples/stories/games/games.dart';
 import 'package:examples/stories/image/image.dart';
 import 'package:examples/stories/input/input.dart';
@@ -84,7 +83,6 @@ void runAsDashbook() {
   addComponentsStories(dashbook);
   addEffectsStories(dashbook);
   addExperimentalStories(dashbook);
-  addFlameGameStories(dashbook);
   addInputStories(dashbook);
   addLayoutStories(dashbook);
   addParallaxStories(dashbook);
