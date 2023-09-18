@@ -21,7 +21,7 @@ class BlobWorld extends Forge2DWorld
     with TapCallbacks, HasGameReference<Forge2DGame> {
   @override
   Future<void> onLoad() async {
-    super.onLoad();
+    await super.onLoad();
     final blobCenter = Vector2(0, -30);
     final blobRadius = Vector2.all(6.0);
     addAll(createBoundaries(game));

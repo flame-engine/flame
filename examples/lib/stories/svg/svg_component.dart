@@ -1,8 +1,8 @@
 import 'dart:math';
 
 import 'package:flame/components.dart';
+import 'package:flame/events.dart';
 import 'package:flame/game.dart';
-import 'package:flame/input.dart';
 import 'package:flame_svg/flame_svg.dart';
 
 class Player extends SvgComponent with HasGameRef<SvgComponentExample> {
@@ -67,8 +67,7 @@ class Balloons extends SvgComponent with HasGameRef<SvgComponentExample> {
   }
 }
 
-class SvgComponentExample extends FlameGame
-    with TapDetector, DoubleTapDetector {
+class SvgComponentExample extends FlameGame {
   static const description = '''
       Simple game showcasing how to use SVGs inside a flame game. This game 
       uses several SVGs for its graphics. Click or touch the screen to make the 
@@ -76,24 +75,27 @@ class SvgComponentExample extends FlameGame
       clicked position.
   ''';
 
+  SvgComponentExample()
+      : super(
+          camera: CameraComponent.withFixedResolution(
+            width: 400,
+            height: 600,
+          ),
+          world: _SvgComponentWorld(),
+        );
+}
+
+class _SvgComponentWorld extends World with TapCallbacks, DoubleTapCallbacks {
   late Player player;
-  final world = World();
-  late final CameraComponent cameraComponent;
 
   @override
   Future<void>? onLoad() async {
     await super.onLoad();
-    cameraComponent = CameraComponent.withFixedResolution(
-      world: world,
-      width: 400,
-      height: 600,
-    );
-    addAll([cameraComponent, world]);
 
-    world.add(player = Player());
-    world.add(Background());
+    add(player = Player());
+    add(Background());
 
-    world.addAll([
+    addAll([
       Balloons(position: Vector2(-10, -20)),
       Balloons(position: Vector2(-100, -150)),
       Balloons(position: Vector2(-200, -140)),
@@ -103,12 +105,12 @@ class SvgComponentExample extends FlameGame
   }
 
   @override
-  void onTapUp(TapUpInfo info) {
-    player.destination = info.eventPosition.game;
+  void onTapUp(TapUpEvent info) {
+    player.destination = info.localPosition;
   }
 
   @override
-  void onDoubleTapDown(TapDownInfo info) {
-    add(Balloons()..position = info.eventPosition.game);
+  void onDoubleTapDown(DoubleTapDownEvent info) {
+    add(Balloons()..position = info.localPosition);
   }
 }

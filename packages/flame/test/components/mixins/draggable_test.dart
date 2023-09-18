@@ -67,7 +67,7 @@ void main() {
           ..height = 10;
 
         await game.ensureAdd(component);
-        game.camera.zoom = 1.5;
+        game.oldCamera.zoom = 1.5;
         game.onDragStart(
           1,
           DragStartInfo.fromDetails(
@@ -93,8 +93,8 @@ void main() {
           ..height = 10;
 
         await game.ensureAdd(component);
-        game.camera.zoom = 1.5;
-        game.camera.snapTo(Vector2.all(50));
+        game.oldCamera.zoom = 1.5;
+        game.oldCamera.snapTo(Vector2.all(50));
         game.onDragStart(
           1,
           DragStartInfo.fromDetails(

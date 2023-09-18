@@ -14,7 +14,7 @@ class PulleyJointExample extends Forge2DGame {
   @override
   Future<void> onLoad() async {
     super.onLoad();
-    final distanceFromCenter = cameraComponent.visibleWorldRect.width / 5;
+    final distanceFromCenter = camera.visibleWorldRect.width / 5;
 
     final firstPulley = Ball(
       Vector2(-distanceFromCenter, -10),

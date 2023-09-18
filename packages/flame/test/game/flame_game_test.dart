@@ -6,7 +6,7 @@ import 'package:collection/collection.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
-import 'package:flame/src/events/flame_game_mixins/has_tappable_components.dart';
+import 'package:flame/src/events/flame_game_mixins/multi_tap_dispatcher.dart';
 import 'package:flame/src/game/game_render_box.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter/rendering.dart';
@@ -29,7 +29,7 @@ void main() {
 
     testWithFlameGame('game resize in zoomed game', (game) async {
       game
-        ..camera.zoom = 10
+        ..oldCamera.zoom = 10
         ..onGameResize(Vector2(300, 200));
       final component = ComponentWithSizeHistory();
       await game.ensureAdd(component);
@@ -159,12 +159,13 @@ void main() {
       testWithFlameGame(
         'removes PositionComponent when removeFromParent is called',
         (game) async {
+          final world = game.world;
           final component = PositionComponent();
-          await game.ensureAdd(component);
-          expect(game.children.length, equals(1));
+          await world.ensureAdd(component);
+          expect(world.children.length, equals(1));
           component.removeFromParent();
           game.updateTree(0);
-          expect(game.children.isEmpty, equals(true));
+          expect(world.children.isEmpty, equals(true));
         },
       );
 
@@ -172,13 +173,14 @@ void main() {
         'can add a component to a game without a layout',
         (WidgetTester tester) async {
           final game = FlameGame();
-          final component = Component()..addToParent(game);
+          final world = game.world;
+          final component = Component()..addToParent(world);
           expect(game.hasLayout, false);
 
           await tester.pumpWidget(GameWidget(game: game));
           game.update(0);
-          expect(game.children.length, 1);
-          expect(game.children.first, component);
+          expect(world.children.length, 1);
+          expect(world.children.first, component);
         },
       );
     });
@@ -199,7 +201,7 @@ void main() {
         'viewport only with scale projection (no camera)',
         (game) async {
           final viewport = FixedResolutionViewport(Vector2.all(100));
-          game.camera.viewport = viewport;
+          game.oldCamera.viewport = viewport;
           game.onGameResize(Vector2(200, 200));
           expect(viewport.scale, 2);
           expect(viewport.resizeOffset, Vector2.zero()); // no translation
@@ -233,7 +235,7 @@ void main() {
         'viewport only with translation projection (no camera)',
         (game) async {
           final viewport = FixedResolutionViewport(Vector2.all(100));
-          game.camera.viewport = viewport;
+          game.oldCamera.viewport = viewport;
           game.onGameResize(Vector2(200, 100));
           expect(viewport.scale, 1); // no scale
           expect(viewport.resizeOffset, Vector2(50, 0)); // y is unchanged
@@ -281,7 +283,7 @@ void main() {
         'viewport only with both scale and translation (no camera)',
         (game) async {
           final viewport = FixedResolutionViewport(Vector2.all(100));
-          game.camera.viewport = viewport;
+          game.oldCamera.viewport = viewport;
           game.onGameResize(Vector2(200, 400));
           expect(viewport.scale, 2);
           expect(viewport.resizeOffset, Vector2(0, 100)); // x is unchanged
@@ -312,7 +314,7 @@ void main() {
         (game) async {
           game.onGameResize(Vector2.all(1));
 
-          game.camera.zoom = 3; // 3x zoom
+          game.oldCamera.zoom = 3; // 3x zoom
           checkProjectorReversibility(game.projector);
 
           expect(
@@ -342,7 +344,7 @@ void main() {
           game.onGameResize(Vector2.all(1));
 
           // Top left corner of the screen is (50, 100).
-          game.camera.snapTo(Vector2(50, 100));
+          game.oldCamera.snapTo(Vector2(50, 100));
           checkProjectorReversibility(game.projector);
 
           expect(
@@ -369,11 +371,11 @@ void main() {
           game.onGameResize(Vector2.all(10));
 
           // No-op because the default is already top left.
-          game.camera.setRelativeOffset(Anchor.topLeft);
+          game.oldCamera.setRelativeOffset(Anchor.topLeft);
           // Top left corner of the screen is (-100, -100).
-          game.camera.snapTo(Vector2.all(-100));
+          game.oldCamera.snapTo(Vector2.all(-100));
           // Zoom is 2x, meaning every 1 unit you walk away of (-100, -100).
-          game.camera.zoom = 2;
+          game.oldCamera.zoom = 2;
           checkProjectorReversibility(game.projector);
 
           expect(
@@ -395,8 +397,8 @@ void main() {
           // Note: in the current implementation, if we change the relative
           // position the zoom is still applied w.r.t. the top left of the
           // screen.
-          game.camera.setRelativeOffset(Anchor.center);
-          game.camera.snap();
+          game.oldCamera.setRelativeOffset(Anchor.center);
+          game.oldCamera.snap();
 
           // That means that the center would be -100, -100 if the zoom was 1
           // meaning the topLeft will be (-105, -105) (regardless of zoom),
@@ -423,9 +425,9 @@ void main() {
 
       testWithFlameGame('camera & viewport - two translations', (game) async {
         final viewport = FixedResolutionViewport(Vector2.all(100));
-        game.camera.viewport = viewport; // default camera
+        game.oldCamera.viewport = viewport; // default camera
         game.onGameResize(Vector2(200, 100));
-        game.camera.snapTo(Vector2(10, 100));
+        game.oldCamera.snapTo(Vector2(10, 100));
         expect(viewport.scale, 1); // no scale
         expect(viewport.resizeOffset, Vector2(50, 0)); // y is unchanged
         checkProjectorReversibility(game.projector);
@@ -458,10 +460,10 @@ void main() {
 
       testWithFlameGame('camera zoom & viewport translation', (game) async {
         final viewport = FixedResolutionViewport(Vector2.all(100));
-        game.camera.viewport = viewport;
+        game.oldCamera.viewport = viewport;
         game.onGameResize(Vector2(200, 100));
-        game.camera.zoom = 2;
-        game.camera.snap();
+        game.oldCamera.zoom = 2;
+        game.oldCamera.snap();
         expect(viewport.scale, 1); // no scale
         expect(viewport.resizeOffset, Vector2(50, 0)); // y is unchanged
         checkProjectorReversibility(game.projector);
@@ -492,14 +494,14 @@ void main() {
         'camera translation & viewport scale+translation',
         (game) async {
           final viewport = FixedResolutionViewport(Vector2.all(100));
-          game.camera.viewport = viewport;
+          game.oldCamera.viewport = viewport;
           game.onGameResize(Vector2(200, 400));
           expect(viewport.scale, 2);
           expect(viewport.resizeOffset, Vector2(0, 100)); // x is unchanged
 
           // The camera should apply a (10, 10) translation on top of the
           // viewport.
-          game.camera.snapTo(Vector2.all(10));
+          game.oldCamera.snapTo(Vector2.all(10));
 
           checkProjectorReversibility(game.projector);
 
@@ -528,15 +530,15 @@ void main() {
         'camera & viewport scale/zoom + translation (cancel out scaling)',
         (game) async {
           final viewport = FixedResolutionViewport(Vector2.all(100));
-          game.camera.viewport = viewport;
+          game.oldCamera.viewport = viewport;
           game.onGameResize(Vector2(200, 400));
           expect(viewport.scale, 2);
           expect(viewport.resizeOffset, Vector2(0, 100)); // x is unchanged
 
           // The camera should apply a (10, 10) translation + a 0.5x zoom on top
           // of the viewport coordinate system.
-          game.camera.zoom = 0.5;
-          game.camera.snapTo(Vector2.all(10));
+          game.oldCamera.zoom = 0.5;
+          game.oldCamera.snapTo(Vector2.all(10));
 
           checkProjectorReversibility(game.projector);
 
@@ -582,15 +584,15 @@ void main() {
         'camera & viewport scale/zoom + translation',
         (game) async {
           final viewport = FixedResolutionViewport(Vector2.all(100));
-          game.camera.viewport = viewport;
+          game.oldCamera.viewport = viewport;
           game.onGameResize(Vector2(200, 400));
           expect(viewport.scale, 2);
           expect(viewport.resizeOffset, Vector2(0, 100)); // x is unchanged
 
           // The camera should apply a (50, 0) translation + 4x zoom on top of
           // the viewport coordinate system.
-          game.camera.zoom = 4;
-          game.camera.snapTo(Vector2(50, 0));
+          game.oldCamera.zoom = 4;
+          game.oldCamera.snapTo(Vector2(50, 0));
 
           checkProjectorReversibility(game.projector);
 
@@ -635,17 +637,20 @@ void main() {
         'children in the constructor',
         () {
           return FlameGame(
-            children: [_IndexedComponent(1), _IndexedComponent(2)],
+            world: World(
+              children: [_IndexedComponent(1), _IndexedComponent(2)],
+            ),
           );
         },
         (game) async {
-          game.add(_IndexedComponent(3));
-          game.add(_IndexedComponent(4));
+          final world = game.world;
+          world.add(_IndexedComponent(3));
+          world.add(_IndexedComponent(4));
           await game.ready();
 
-          expect(game.children.length, 4);
+          expect(world.children.length, 4);
           expect(
-            game.children
+            world.children
                 .whereType<_IndexedComponent>()
                 .map((c) => c.index)
                 .isSorted((a, b) => a.compareTo(b)),
@@ -667,7 +672,7 @@ void main() {
           game.add(_IndexedComponent(6));
           await game.ready();
 
-          expect(game.children.length, 6);
+          expect(game.children.whereType<_IndexedComponent>().length, 6);
           expect(
             game.children
                 .whereType<_IndexedComponent>()

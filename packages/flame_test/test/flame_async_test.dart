@@ -11,24 +11,25 @@ void main() {
   testWithFlameGame(
     'runs all the async tests',
     (game) async {
-      await game.ensureAdd(Component());
+      final world = game.world;
+      await world.ensureAdd(Component());
       instructions++;
-      await game.ensureAdd(Component());
+      await world.ensureAdd(Component());
       instructions++;
-      await game.ensureAdd(Component());
+      await world.ensureAdd(Component());
       instructions++;
-      await game.ensureAdd(Component());
+      await world.ensureAdd(Component());
       instructions++;
-      await game.ensureAdd(Component());
+      await world.ensureAdd(Component());
       instructions++;
-      await game.ensureAdd(Component());
+      await world.ensureAdd(Component());
       instructions++;
-      await game.ensureAdd(Component());
+      await world.ensureAdd(Component());
       instructions++;
-      await game.ensureAdd(Component());
+      await world.ensureAdd(Component());
       instructions++;
 
-      expect(game.children.length, equals(8));
+      expect(world.children.length, equals(8));
       instructions++;
     },
   );

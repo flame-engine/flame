@@ -54,7 +54,7 @@ abstract class BodyComponent<T extends Forge2DGame> extends Component
   }
 
   Forge2DWorld get world => game.world;
-  CameraComponent get camera => game.cameraComponent;
+  CameraComponent get camera => game.camera;
   Vector2 get center => body.worldCenter;
 
   @override

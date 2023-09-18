@@ -1,5 +1,4 @@
 import 'package:examples/commons/ember.dart';
-import 'package:flame/camera.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart' show Colors;
@@ -13,17 +12,12 @@ class DraggablesExample extends FlameGame {
 
   DraggablesExample({required this.zoom});
 
-  final world = World();
-  late final CameraComponent cameraComponent;
   final double zoom;
   late final DraggableEmber square;
 
   @override
   Future<void> onLoad() async {
-    cameraComponent = CameraComponent(world: world);
-    cameraComponent.viewfinder.zoom = zoom;
-    addAll([cameraComponent, world]);
-
+    camera.viewfinder.zoom = zoom;
     world.add(square = DraggableEmber());
     world.add(DraggableEmber()..y = 350);
   }

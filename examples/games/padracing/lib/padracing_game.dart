@@ -58,7 +58,7 @@ class PadRacingGame extends Forge2DGame with KeyboardEvents {
   @override
   Future<void> onLoad() async {
     super.onLoad();
-    cameraComponent.removeFromParent();
+    camera.removeFromParent();
     children.register<CameraComponent>();
 
     final walls = createWalls(trackSize);

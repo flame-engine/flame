@@ -68,7 +68,7 @@ mixin ComponentViewportMargin on PositionComponent, HasGameRef {
   void _updateMargins() {
     final screenSize = positionType == PositionType.viewport
         // ignore: deprecated_member_use_from_same_package
-        ? gameRef.camera.viewport.effectiveSize
+        ? gameRef.oldCamera.viewport.effectiveSize
         : gameRef.canvasSize;
     final margin = this.margin!;
     final x = margin.left != 0

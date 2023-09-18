@@ -53,7 +53,8 @@ void main() {
         expect(
           () => component.game,
           failsAssert(
-            'Found game of type FlameGame, while type _MyGame was expected',
+            'Found game of type FlameGame<World>, while type _MyGame was '
+            'expected',
           ),
         );
       },

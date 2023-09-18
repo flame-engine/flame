@@ -1,5 +1,6 @@
 // ignore_for_file: deprecated_member_use_from_same_package
 
+import 'dart:async';
 import 'dart:ui';
 
 import 'package:flame/components.dart';
@@ -18,20 +19,69 @@ import 'package:meta/meta.dart';
 ///
 /// This is the recommended base class to use for most games made with Flame.
 /// It is based on the Flame Component System (also known as FCS).
-class FlameGame extends ComponentTreeRoot
+class FlameGame<W extends World> extends ComponentTreeRoot
     with Game
     implements ReadOnlySizeProvider {
   FlameGame({
     super.children,
-    Camera? camera,
-  }) {
+    W? world,
+    CameraComponent? camera,
+    Camera? oldCamera,
+  })  : assert(
+          world != null || W == World,
+          'The generics type $W does not conform to the type of '
+          '${world?.runtimeType ?? 'World'}.',
+        ),
+        _world = world ?? World() as W,
+        _camera = camera ?? CameraComponent() {
     assert(
       Component.staticGameInstance == null,
       '$this instantiated, while another game ${Component.staticGameInstance} '
       'declares itself to be a singleton',
     );
-    _cameraWrapper = CameraWrapper(camera ?? Camera(), children);
+    _cameraWrapper = CameraWrapper(oldCamera ?? Camera(), children);
+    _camera.world = _world;
+    add(_camera);
+    add(_world);
   }
+
+  /// The [World] that the [camera] is rendering.
+  /// Inside of this world is where most of your components should be added.
+  ///
+  /// You don't have to add the world to the tree after setting it here, it is
+  /// done automatically.
+  W get world => _world;
+  set world(W newWorld) {
+    if (newWorld == _world) {
+      return;
+    }
+    _world.removeFromParent();
+    camera.world = newWorld;
+    _world = newWorld;
+    if (_world.parent == null) {
+      add(_world);
+    }
+  }
+
+  W _world;
+
+  /// The component that is responsible for rendering your [world].
+  ///
+  /// In this component you can set different viewports, viewfinders, follow
+  /// components, set bounds for where the camera can move etc.
+  ///
+  /// You don't have to add the CameraComponent to the tree after setting it
+  /// here, it is done automatically.
+  CameraComponent get camera => _camera;
+  set camera(CameraComponent newCameraComponent) {
+    _camera.removeFromParent();
+    _camera = newCameraComponent;
+    if (_camera.parent == null) {
+      add(_camera);
+    }
+  }
+
+  CameraComponent _camera;
 
   late final CameraWrapper _cameraWrapper;
 
@@ -40,35 +90,22 @@ class FlameGame extends ComponentTreeRoot
 
   /// The camera translates the coordinate space after the viewport is applied.
   @Deprecated('''
-    In the future (maybe as early as v1.9.0) this camera will be removed,
-    please use the CameraComponent instead.
+    In the future (maybe as early as v1.10.0) this camera will be removed,
+    please use the CameraComponent instead, which has a default camera at 
+    `FlameGame.camera`.
     
     This is the simplest way of using the CameraComponent:
-    1. Add variables for a CameraComponent and a World to your game class
-    
-       final world = World();
-       late final CameraComponent cameraComponent;
-    
-    2. In your `onLoad` method, initialize the cameraComponent and add the world
-       to it.
-       
-       @override
-       void onLoad() {
-         cameraComponent = CameraComponent(world: world);
-         addAll([cameraComponent, world]);
-       }
-       
-    3. Instead of adding the root components directly to your game with `add`,
+    1. Instead of adding the root components directly to your game with `add`,
        add them to the world.
        
        world.add(yourComponent);
     
-    4. (Optional) If you want to add a HUD component, instead of using
+    2. (Optional) If you want to add a HUD component, instead of using
        PositionType, add the component as a child of the viewport.
        
-       cameraComponent.viewport.add(yourHudComponent);
+       camera.viewport.add(yourHudComponent);
     ''')
-  Camera get camera => _cameraWrapper.camera;
+  Camera get oldCamera => _cameraWrapper.camera;
 
   /// This is overwritten to consider the viewport transformation.
   ///
@@ -77,7 +114,7 @@ class FlameGame extends ComponentTreeRoot
   ///
   /// This does not match the Flutter widget size; for that see [canvasSize].
   @override
-  Vector2 get size => camera.gameSize;
+  Vector2 get size => oldCamera.gameSize;
 
   @override
   @internal
@@ -134,12 +171,13 @@ class FlameGame extends ComponentTreeRoot
   /// components and other methods.
   /// You can override it further to add more custom behavior, but you should
   /// seriously consider calling the super implementation as well.
-  /// This implementation also uses the current [camera] in order to transform
-  /// the coordinate system appropriately.
+  /// This implementation also uses the current [oldCamera] in order to
+  /// transform the coordinate system appropriately for those using the old
+  /// camera.
   @override
   @mustCallSuper
   void onGameResize(Vector2 size) {
-    camera.handleResize(size);
+    oldCamera.handleResize(size);
     super.onGameResize(size);
     // [onGameResize] is declared both in [Component] and in [Game]. Since
     // there is no way to explicitly call the [Component]'s implementation,
@@ -183,12 +221,12 @@ class FlameGame extends ComponentTreeRoot
   }
 
   @override
-  Projector get viewportProjector => camera.viewport;
+  Projector get viewportProjector => oldCamera.viewport;
 
   @override
-  Projector get projector => camera.combinedProjector;
+  Projector get projector => oldCamera.combinedProjector;
 
-  /// Returns a [ComponentsNotifier] for the given type [T].
+  /// Returns a [ComponentsNotifier] for the given type [W].
   ///
   /// This method handles duplications, so there will never be
   /// more than one [ComponentsNotifier] for a given type, meaning
