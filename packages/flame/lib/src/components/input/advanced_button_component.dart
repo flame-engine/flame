@@ -31,7 +31,7 @@ class AdvancedButtonComponent extends PositionComponent
     this.hoverAndSelectedSkin = hoverAndSelectedSkin;
     this.disabledSkin = disabledSkin;
     this.disabledAndSelectedSkin = disabledAndSelectedSkin;
-    setIsSelectable(isSelectable);
+    setIsSelectable(isSelectable: isSelectable);
   }
 
   @override
@@ -40,7 +40,8 @@ class AdvancedButtonComponent extends PositionComponent
     super.onMount();
     assert(
       defaultSkin != null,
-      'The defaultSkin has to either be passed in as an argument or set in onLoad',
+      'The defaultSkin has to either be passed '
+      'in as an argument or set in onLoad',
     );
     if (_state.isDefault && !contains(defaultSkin!)) {
       add(defaultSkin!);
@@ -73,7 +74,7 @@ class AdvancedButtonComponent extends PositionComponent
   void onTapUp(TapUpEvent event) {
     _hasTap = false;
     if (_isSelectable) {
-      setSelected(!_isSelected);
+      setSelected(isSelected: !_isSelected);
       return;
     }
     _defineState();
@@ -150,11 +151,11 @@ class AdvancedButtonComponent extends PositionComponent
 
   bool get isDisabled => _isDisabled;
 
-  void setDisabled(bool value) {
-    if (_isDisabled == value) {
+  void setDisabled({required bool isDisabled}) {
+    if (_isDisabled == isDisabled) {
       return;
     }
-    _isDisabled = value;
+    _isDisabled = isDisabled;
     _defineState();
   }
 
@@ -162,11 +163,11 @@ class AdvancedButtonComponent extends PositionComponent
 
   bool get isSelectable => _isSelectable;
 
-  void setIsSelectable(bool value) {
-    if (_isSelectable == value) {
+  void setIsSelectable({required bool isSelectable}) {
+    if (_isSelectable == isSelectable) {
       return;
     }
-    _isSelectable = value;
+    _isSelectable = isSelectable;
     _defineState();
   }
 
@@ -174,11 +175,11 @@ class AdvancedButtonComponent extends PositionComponent
 
   bool get isSelected => _isSelected;
 
-  void setSelected(bool value) {
-    if (_isSelected == value) {
+  void setSelected({required bool isSelected}) {
+    if (_isSelected == isSelected) {
       return;
     }
-    _isSelected = value;
+    _isSelected = isSelected;
     _defineState();
   }
 
