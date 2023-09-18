@@ -19,15 +19,15 @@ import 'package:meta/meta.dart';
 ///
 /// This is the recommended base class to use for most games made with Flame.
 /// It is based on the Flame Component System (also known as FCS).
-class FlameGame<T extends World> extends ComponentTreeRoot
+class FlameGame<W extends World> extends ComponentTreeRoot
     with Game
     implements ReadOnlySizeProvider {
   FlameGame({
     super.children,
-    T? world,
+    W? world,
     CameraComponent? cameraComponent,
     Camera? camera,
-  })  : _world = world ?? World() as T,
+  })  : _world = world ?? World() as W,
         _cameraComponent = cameraComponent ?? CameraComponent() {
     assert(
       Component.staticGameInstance == null,
@@ -45,8 +45,8 @@ class FlameGame<T extends World> extends ComponentTreeRoot
   ///
   /// You don't have to add the world to the tree after setting it here, it is
   /// done automatically.
-  T get world => _world;
-  set world(T newWorld) {
+  W get world => _world;
+  set world(W newWorld) {
     _world.removeFromParent();
     cameraComponent.world = newWorld;
     _world = newWorld;
@@ -55,7 +55,7 @@ class FlameGame<T extends World> extends ComponentTreeRoot
     }
   }
 
-  T _world;
+  W _world;
 
   /// The component that is responsible for rendering your [world].
   ///
@@ -216,19 +216,19 @@ class FlameGame<T extends World> extends ComponentTreeRoot
   @override
   Projector get projector => camera.combinedProjector;
 
-  /// Returns a [ComponentsNotifier] for the given type [T].
+  /// Returns a [ComponentsNotifier] for the given type [W].
   ///
   /// This method handles duplications, so there will never be
   /// more than one [ComponentsNotifier] for a given type, meaning
   /// that this method can be called as many times as needed for a type.
-  ComponentsNotifier<S> componentsNotifier<S extends Component>() {
+  ComponentsNotifier<T> componentsNotifier<T extends Component>() {
     for (final notifier in notifiers) {
-      if (notifier is ComponentsNotifier<S>) {
+      if (notifier is ComponentsNotifier<T>) {
         return notifier;
       }
     }
-    final notifier = ComponentsNotifier<S>(
-      descendants().whereType<S>().toList(),
+    final notifier = ComponentsNotifier<T>(
+      descendants().whereType<T>().toList(),
     );
     notifiers.add(notifier);
     return notifier;
