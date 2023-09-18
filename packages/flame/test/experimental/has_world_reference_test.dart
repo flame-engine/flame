@@ -1,4 +1,5 @@
 import 'package:flame/components.dart';
+import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -49,31 +50,13 @@ void main() {
     testWithFlameGame(
       'game reference of wrong type',
       (game) async {
-        final component = _Component<_MyGame>();
+        final component = _Component<_WorldReferenceWorld>();
         game.add(component);
         expect(
-          () => component.game,
+          () => component.world,
           failsAssert(
             'Found game of type FlameGame<World>, while type _MyGame was '
             'expected',
-          ),
-        );
-      },
-    );
-
-    testWithFlameGame(
-      'game reference can be set explicitly',
-      (game) async {
-        final component = _Component<FlameGame>();
-        component.game = game;
-        expect(component.game, game);
-
-        component.game = null;
-        expect(
-          () => component.game,
-          failsAssert(
-            'Could not find Game instance: the component is detached from the '
-            'component tree',
           ),
         );
       },
@@ -85,7 +68,7 @@ void main() {
         final component1 = _Component()..addToParent(game);
         final component2 = _Component()..addToParent(component1);
         final component3 = _Component()..addToParent(component2);
-        expect(component3.game, game);
+        expect(component3.world, game.world);
       },
     );
 
@@ -100,9 +83,9 @@ void main() {
       final component = _BarComponent();
       await game.ensureAdd(component);
 
-      component.game = MockFlameGame();
+      component.world = MockWorld();
 
-      expect(component.game, isA<MockFlameGame>());
+      expect(component.world, isA<MockWorld>());
     });
   });
 }
@@ -126,4 +109,4 @@ class _FooComponent extends Component
 class _BarComponent extends Component
     with HasWorldReference<_WorldReferenceWorld> {}
 
-class MockFlameGame extends Mock implements _MyGame {}
+class MockWorld extends Mock implements _WorldReferenceWorld {}

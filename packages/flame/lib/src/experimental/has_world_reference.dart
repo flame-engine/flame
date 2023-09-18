@@ -1,6 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:flame/camera.dart';
 import 'package:flame/src/components/core/component.dart';
+import 'package:meta/meta.dart';
 
 /// [HasWorldReference] mixin provides the [world] property, which is the cached
 /// accessor for the world instance that this component belongs to.
@@ -14,8 +15,9 @@ mixin HasWorldReference<T extends World> on Component {
   /// Reference to the [World] instance that this component belongs to.
   T get world => _world ??= _findWorldAndCheck();
 
-  /// Allows you to set the world instance explicitly. This may be useful in
-  /// tests, or if you're planning to move the component to another world.
+  /// Allows you to set the world instance explicitly.
+  /// This may be useful in tests.
+  @visibleForTesting
   set world(T? value) => _world = value;
 
   T? findWorld() {
@@ -30,5 +32,10 @@ mixin HasWorldReference<T extends World> on Component {
       'Could not find a World instance of type $T',
     );
     return world!;
+  }
+
+  @override
+  void onRemove() {
+    _world = null;
   }
 }
