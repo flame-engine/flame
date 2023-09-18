@@ -12,13 +12,14 @@ class HoverCallbacksExample extends FlameGame with TapCallbacks {
 
   @override
   Future<void> onLoad() async {
-    add(HoverSquare(Vector2(200, 500)));
-    add(HoverSquare(Vector2(700, 300)));
+    camera.viewfinder.anchor = Anchor.topLeft;
+    world.add(HoverSquare(Vector2(200, 500)));
+    world.add(HoverSquare(Vector2(700, 300)));
   }
 
   @override
   void onTapDown(TapDownEvent event) {
-    add(HoverSquare(event.localPosition));
+    world.add(HoverSquare(event.localPosition));
   }
 }
 

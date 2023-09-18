@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
+import 'package:flame/experimental.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame/palette.dart';
@@ -24,9 +25,17 @@ class MultipleShapesExample extends FlameGame with HasCollisionDetection {
     any direction.
   ''';
 
+  MultipleShapesExample()
+      : super(
+          world: MultiShapesWorld(),
+          camera: CameraComponent()..viewfinder.anchor = Anchor.topLeft,
+        );
+}
+
+class MultiShapesWorld extends World with HasGameReference {
   @override
   Future<void> onLoad() async {
-    add(FpsTextComponent(position: Vector2(0, size.y - 24)));
+    add(FpsTextComponent(position: Vector2(0, game.size.y - 24)));
     final screenHitbox = ScreenHitbox();
     final snowman = CollidableSnowman(
       Vector2.all(150),
@@ -41,7 +50,8 @@ class MultipleShapesExample extends FlameGame with HasCollisionDetection {
     while (totalAdded < 1000) {
       lastToAdd = nextRandomCollidable(lastToAdd, screenHitbox);
       final lastBottomRight = lastToAdd.toAbsoluteRect().bottomRight;
-      if (lastBottomRight.dx < size.x && lastBottomRight.dy < size.y) {
+      if (lastBottomRight.dx < game.size.x &&
+          lastBottomRight.dy < game.size.y) {
         add(lastToAdd);
         totalAdded++;
       } else {
@@ -62,7 +72,7 @@ class MultipleShapesExample extends FlameGame with HasCollisionDetection {
             lastCollidable.size.x / 2 +
             _distance.x +
             collidableSize.x >
-        size.x;
+        game.size.x;
     var position = _distance + Vector2(0, lastCollidable.position.y + 200);
     if (!isXOverflow) {
       position = (lastCollidable.position + _distance)
