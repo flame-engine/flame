@@ -6,7 +6,10 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
 class _WorldReferenceWorld extends World {
-  void foo() {}
+  bool calledFoo = false;
+  void foo() {
+    calledFoo = true;
+  }
 }
 
 void main() {
@@ -17,7 +20,7 @@ void main() {
       (game) async {
         final component1 = _Component<World>();
         final component2 = _Component<_WorldReferenceWorld>();
-        game.addAll([component1, component2]);
+        game.world.addAll([component1, component2]);
         expect(component1.world, game.world);
         expect(component2.world, game.world);
       },
@@ -28,21 +31,18 @@ void main() {
       _MyGame.new,
       (game) async {
         final component = _Component<_WorldReferenceWorld>();
-        game.add(component);
+        game.world.ensureAdd(component);
         expect(component.world, game.world);
       },
     );
 
     testWithFlameGame(
-      'game reference accessed too early',
+      'world reference accessed too early',
       (game) async {
         final component = _Component();
         expect(
           () => component.world,
-          failsAssert(
-            'Could not find Game instance: the component is detached from the '
-            'component tree',
-          ),
+          failsAssert('Could not find a World instance of type World'),
         );
       },
     );
@@ -51,12 +51,11 @@ void main() {
       'game reference of wrong type',
       (game) async {
         final component = _Component<_WorldReferenceWorld>();
-        game.add(component);
+        game.world.add(component);
         expect(
           () => component.world,
           failsAssert(
-            'Found game of type FlameGame<World>, while type _MyGame was '
-            'expected',
+            'Could not find a World instance of type _WorldReferenceWorld',
           ),
         );
       },
@@ -65,7 +64,7 @@ void main() {
     testWithFlameGame(
       'game reference propagates quickly',
       (game) async {
-        final component1 = _Component()..addToParent(game);
+        final component1 = _Component()..addToParent(game.world);
         final component2 = _Component()..addToParent(component1);
         final component3 = _Component()..addToParent(component2);
         expect(component3.world, game.world);
@@ -74,14 +73,14 @@ void main() {
 
     testWithGame<_MyGame>('simple test', _MyGame.new, (game) async {
       final c = _FooComponent();
-      game.add(c);
+      game.world.add(c);
       c.foo();
-      expect(game.calledFoo, true);
+      expect(c.world.calledFoo, isTrue);
     });
 
     testWithGame<_MyGame>('gameRef can be mocked', _MyGame.new, (game) async {
       final component = _BarComponent();
-      await game.ensureAdd(component);
+      await game.world.ensureAdd(component);
 
       component.world = MockWorld();
 
@@ -93,10 +92,7 @@ void main() {
 class _Component<T extends World> extends Component with HasWorldReference<T> {}
 
 class _MyGame extends FlameGame {
-  bool calledFoo = false;
-  void foo() {
-    calledFoo = true;
-  }
+  _MyGame() : super(world: _WorldReferenceWorld());
 }
 
 class _FooComponent extends Component
