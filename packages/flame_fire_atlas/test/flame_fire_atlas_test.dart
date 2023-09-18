@@ -147,7 +147,7 @@ void main() {
 
       final bytes = atlas.serialize();
 
-      final copy = FireAtlas.deserialize(bytes);
+      final copy = FireAtlas.deserializeBytes(bytes);
       expect(copy.id, atlas.id);
     });
 
