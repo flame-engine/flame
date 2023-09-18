@@ -18,4 +18,3 @@ export 'src/experimental/geometry/shapes/rounded_rectangle.dart'
     show RoundedRectangle;
 export 'src/experimental/geometry/shapes/shape.dart' show Shape;
 export 'src/experimental/has_game_reference.dart' show HasGameReference;
-export 'src/experimental/has_world_reference.dart' show HasWorldReference;

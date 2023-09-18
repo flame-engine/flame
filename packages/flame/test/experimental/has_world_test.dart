@@ -1,5 +1,4 @@
 import 'package:flame/components.dart';
-import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -13,9 +12,9 @@ class _WorldReferenceWorld extends World {
 }
 
 void main() {
-  group('HasWorldReference', () {
+  group('HasWorld', () {
     testWithGame(
-      'component with default HasWorldReference',
+      'component with default HasWorld',
       () => FlameGame(world: _WorldReferenceWorld()),
       (game) async {
         final component1 = _Component<World>();
@@ -27,7 +26,7 @@ void main() {
     );
 
     testWithGame<_MyGame>(
-      'component with typed HasWorldReference',
+      'component with typed HasWorld',
       _MyGame.new,
       (game) async {
         final component = _Component<_WorldReferenceWorld>();
@@ -89,20 +88,18 @@ void main() {
   });
 }
 
-class _Component<T extends World> extends Component with HasWorldReference<T> {}
+class _Component<T extends World> extends Component with HasWorld<T> {}
 
 class _MyGame extends FlameGame {
   _MyGame() : super(world: _WorldReferenceWorld());
 }
 
-class _FooComponent extends Component
-    with HasWorldReference<_WorldReferenceWorld> {
+class _FooComponent extends Component with HasWorld<_WorldReferenceWorld> {
   void foo() {
     world.foo();
   }
 }
 
-class _BarComponent extends Component
-    with HasWorldReference<_WorldReferenceWorld> {}
+class _BarComponent extends Component with HasWorld<_WorldReferenceWorld> {}
 
 class MockWorld extends Mock implements _WorldReferenceWorld {}
