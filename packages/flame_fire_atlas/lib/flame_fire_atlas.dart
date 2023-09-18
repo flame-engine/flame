@@ -8,7 +8,6 @@ import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flame/sprite.dart';
-import 'package:path/path.dart' as path;
 
 /// Adds FireAtlas loading methods to Flame [Game].
 extension FireAtlasExtensions on Game {
@@ -281,13 +280,10 @@ class FireAtlas {
   }) async {
     final assetsCache = assets ?? Flame.assets;
     final FireAtlas atlas;
-    final fileExtension = path.extension(fileName);
     if (encoded) {
-      assert(fileExtension == '.fa');
       final bytes = await assetsCache.readBinaryFile(fileName);
       atlas = FireAtlas.deserializeBytes(bytes);
     } else {
-      assert(fileExtension == '.json');
       final json = await assetsCache.readJson(fileName);
       atlas = FireAtlas.deserializeJson(json);
     }
