@@ -23,6 +23,7 @@ class AdvancedButtonComponent extends PositionComponent
     super.children,
     super.priority,
   }) {
+    size.addListener(_updateSizes);
     this.defaultSkin = defaultSkin;
     this.downSkin = downSkin;
     this.hoverSkin = hoverSkin;
@@ -32,7 +33,6 @@ class AdvancedButtonComponent extends PositionComponent
     this.disabledSkin = disabledSkin;
     this.disabledAndSelectedSkin = disabledAndSelectedSkin;
     setIsSelectable(isSelectable: isSelectable);
-    size.addListener(_updateSizes);
   }
 
   @override
