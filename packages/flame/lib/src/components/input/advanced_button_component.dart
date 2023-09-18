@@ -40,9 +40,9 @@ class AdvancedButtonComponent extends PositionComponent
   void onMount() {
     super.onMount();
     assert(
-    defaultSkin != null,
-    'The defaultSkin has to either be passed '
-        'in as an argument or set in onLoad',
+      defaultSkin != null,
+      'The defaultSkin has to either be passed '
+      'in as an argument or set in onLoad',
     );
     if (_state.isDefault && !contains(defaultSkin!)) {
       add(defaultSkin!);
@@ -188,7 +188,7 @@ class AdvancedButtonComponent extends PositionComponent
     if (_isDisabled) {
       _setState(
         isSelectableAndSelected &&
-            _hasSkinForState(ButtonState.disabledAndSelected)
+                _hasSkinForState(ButtonState.disabledAndSelected)
             ? ButtonState.disabledAndSelected
             : ButtonState.disabled,
       );
