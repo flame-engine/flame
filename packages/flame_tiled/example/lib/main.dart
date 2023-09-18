@@ -22,18 +22,19 @@ class TiledGame extends FlameGame {
 
   @override
   Future<void> onLoad() async {
-    camera.viewfinder.zoom = 0.5;
-    camera.viewfinder.anchor = Anchor.topLeft;
-    camera.viewfinder.add(
-      MoveToEffect(
-        Vector2(1000, 0),
-        EffectController(
-          duration: 10,
-          alternate: true,
-          infinite: true,
+    camera.viewfinder
+      ..zoom = 0.5
+      ..anchor = Anchor.topLeft
+      ..add(
+        MoveToEffect(
+          Vector2(1000, 0),
+          EffectController(
+            duration: 10,
+            alternate: true,
+            infinite: true,
+          ),
         ),
-      ),
-    );
+      );
 
     mapComponent = await TiledComponent.load('map.tmx', Vector2.all(16));
     world.add(mapComponent);
