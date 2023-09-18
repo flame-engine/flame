@@ -1,15 +1,15 @@
 # FlameGame
 
-`FlameGame` is the most commonly used `Game` class in Flame.
-
 The `FlameGame` class implements a `Component` based `Game`. It has a tree of components
 and calls the `update` and `render` methods of all components that have been added to the game.
 
-We refer to this component-based system as the Flame Component System (FCS).  Throughout the
+We refer to this component-based system as the Flame Component System (FCS). Throughout the
 documentation, FCS is used to reference this system.
 
 Components can be added to the `FlameGame` directly in the constructor with the named `children`
-argument, or from anywhere else with the `add`/`addAll` methods.
+argument, or from anywhere else with the `add`/`addAll` methods. Most of the time however, you want
+to add your children to a `World`, the default world exist under `FlameGame.world` and you add
+components to it just like you would to any other component.
 
 A simple `FlameGame` implementation that adds two components, one in `onLoad` and one directly in
 the constructor can look like this:
@@ -29,7 +29,7 @@ class MyCrate extends SpriteComponent {
   }
 }
 
-class MyGame extends FlameGame {
+class MyWorld extends World {
   @override
   Future<void> onLoad() async {
     await add(MyCrate());
@@ -37,11 +37,9 @@ class MyGame extends FlameGame {
 }
 
 void main() {
-  final myGame = MyGame();
+  final myGame = FlameGame(world: MyWorld());
   runApp(
-    GameWidget(
-      game: myGame,
-    ),
+    GameWidget(game: myGame),
   );
 }
 ```
@@ -56,7 +54,7 @@ constructor.
 
 To remove components from the list on a `FlameGame` the `remove` or `removeAll` methods can be used.
 The first can be used if you just want to remove one component, and the second can be used when you
-want to remove a list of components.
+want to remove a list of components. These methods exist on all `Component`s, including the world.
 
 
 ## Game Loop
@@ -77,13 +75,8 @@ Every time the game needs to be resized, for example when the orientation is cha
 will call all of the `Component`s `onGameResize` methods and it will also pass this information to
 the camera and viewport.
 
-The `FlameGame.camera` controls which point in the coordinate space should be the top-left of the
-screen (it defaults to [0,0] like a regular `Canvas`).
-
-```{note}
-Utilizing `FlameGame.camera.gameSize` in the `onGameResize` event should be done
-after the call to `super.onGameResize(canvasSize);`.
-```
+The `FlameGame.camera` controls which point in the coordinate space that should be at the anchor of
+your viewfinder, [0,0] is in the center (`Anchor.center`) of the viewport by default.
 
 
 ## Lifecycle
@@ -178,8 +171,8 @@ class MyGame extends FlameGame with SingleGameInstance {
 ```{include} diagrams/low_level_game_api.md
 ```
 
-The `Game` class is a low-level API that can be used when you want to implement the functionality of
-how the game engine should be structured. `Game` does not implement any `update` or
+The abstract `Game` class is a low-level API that can be used when you want to implement the
+functionality of how the game engine should be structured. `Game` does not implement any `update` or
 `render` function for example.
 
 The class also has the lifecycle methods `onLoad`, `onMount` and `onRemove` in it, which are
@@ -226,9 +219,10 @@ A Flame `Game` can be paused and resumed in two ways:
 - With the use of the `pauseEngine` and `resumeEngine` methods.
 - By changing the `paused` attribute.
 
-When pausing a Flame `Game`, the `GameLoop` is effectively paused, meaning that no updates or new
-renders will happen until it is resumed.
+When pausing a `Game`, the `GameLoop` is effectively paused, meaning that no updates or new renders 
+will happen until it is resumed.
 
-While the game is paused, it is possible to advanced it frame by frame using the `stepEngine` method.
+While the game is paused, it is possible to advanced it frame by frame using the `stepEngine`
+method.
 It might not be much useful in the final game, but can be very helpful in inspecting game state step
 by step during the development cycle.

@@ -1,4 +1,9 @@
-# Camera and Viewport
+# Camera and Viewport (Deprecated)
+
+```{note}
+This document describes the deprecated Camera API. The new `CameraComponent` approach
+is described in [](camera_component.md).
+```
 
 When rendering on Flutter, the regular coordinate space used are logical pixels. That means one
 pixel for Flutter is already not necessarily one real pixel on the device, because of the [device's
@@ -104,7 +109,7 @@ class MyGame extends FlameGame {
   final someVector = Vector2(100, 100);
   @override
   void onLoad() {
-     camera.followVector2(someVector);
+     oldCamera.followVector2(someVector);
   }
 }
 
