@@ -15,6 +15,7 @@ import 'package:flame/src/effects/move_effect.dart';
 import 'package:flame/src/effects/move_to_effect.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
 import 'package:flame/src/experimental/geometry/shapes/shape.dart';
+import 'package:flame/src/game/flame_game.dart';
 import 'package:vector_math/vector_math_64.dart';
 
 /// [CameraComponent] is a component through which a [World] is observed.
@@ -29,7 +30,8 @@ import 'package:vector_math/vector_math_64.dart';
 /// main game world. However, additional cameras may also be used for some
 /// special effects. These extra cameras may be placed either in parallel with
 /// the main camera, or within the world. It is even possible to create a camera
-/// that looks at itself.
+/// that looks at itself. [FlameGame] has one [CameraComponent] added by default
+/// which is called just [FlameGame.camera].
 ///
 /// Since [CameraComponent] is a [Component], it is possible to attach other
 /// components to it. In particular, adding components directly to the camera is
