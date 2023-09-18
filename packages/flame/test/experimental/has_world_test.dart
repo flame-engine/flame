@@ -4,21 +4,14 @@ import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
-class _WorldReferenceWorld extends World {
-  bool calledFoo = false;
-  void foo() {
-    calledFoo = true;
-  }
-}
-
 void main() {
   group('HasWorld', () {
     testWithGame(
       'component with default HasWorld',
-      () => FlameGame(world: _WorldReferenceWorld()),
+      () => FlameGame(world: _ReferenceWorld()),
       (game) async {
         final component1 = _Component<World>();
-        final component2 = _Component<_WorldReferenceWorld>();
+        final component2 = _Component<_ReferenceWorld>();
         game.world.addAll([component1, component2]);
         expect(component1.world, game.world);
         expect(component2.world, game.world);
@@ -29,7 +22,7 @@ void main() {
       'component with typed HasWorld',
       _MyGame.new,
       (game) async {
-        final component = _Component<_WorldReferenceWorld>();
+        final component = _Component<_ReferenceWorld>();
         game.world.ensureAdd(component);
         expect(component.world, game.world);
       },
@@ -49,7 +42,7 @@ void main() {
     testWithFlameGame(
       'game reference of wrong type',
       (game) async {
-        final component = _Component<_WorldReferenceWorld>();
+        final component = _Component<_ReferenceWorld>();
         game.world.add(component);
         expect(
           () => component.world,
@@ -88,18 +81,23 @@ void main() {
   });
 }
 
+class _ReferenceWorld extends World {
+  bool calledFoo = false;
+  void foo() => calledFoo = true;
+}
+
 class _Component<T extends World> extends Component with HasWorld<T> {}
 
 class _MyGame extends FlameGame {
-  _MyGame() : super(world: _WorldReferenceWorld());
+  _MyGame() : super(world: _ReferenceWorld());
 }
 
-class _FooComponent extends Component with HasWorld<_WorldReferenceWorld> {
+class _FooComponent extends Component with HasWorld<_ReferenceWorld> {
   void foo() {
     world.foo();
   }
 }
 
-class _BarComponent extends Component with HasWorld<_WorldReferenceWorld> {}
+class _BarComponent extends Component with HasWorld<_ReferenceWorld> {}
 
-class MockWorld extends Mock implements _WorldReferenceWorld {}
+class MockWorld extends Mock implements _ReferenceWorld {}
