@@ -1,5 +1,7 @@
 import 'package:examples/commons/ember.dart';
 import 'package:flame/components.dart';
+import 'package:flame/effects.dart';
+import 'package:flame/events.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
@@ -8,10 +10,12 @@ import 'package:flutter/material.dart';
 class LevelsExample extends FlameGame {
   static const String description = '''
     In this example we showcase how you can utilize World components as levels.
-    Press the different buttons in the bottom to change levels.
+    Press the different buttons in the bottom to change levels and press in the
+    center to add new Ember's. You can see how level 1-3 keeps their state,
+    meanwhile the one called Resetable always resets.
   ''';
 
-  LevelsExample() : super(world: Level1());
+  LevelsExample() : super(world: ResetableLevel());
 
   late final TextComponent header;
 
@@ -27,29 +31,51 @@ class LevelsExample extends FlameGame {
     // game.cameraComponent.viewport = Level1Viewport();
     final viewport = camera.viewport;
     viewport.add(header);
+    final levels = [Level1(), Level2(), Level3()];
     viewport.addAll(
       [
         LevelButton(
           'Level 1',
-          onPressed: () => world = Level1(),
-          position: Vector2(size.x / 2 - 120, size.y - 50),
+          onPressed: () => world = levels[0],
+          position: Vector2(size.x / 2 - 210, size.y - 50),
         ),
         LevelButton(
           'Level 2',
-          onPressed: () => world = Level2(),
-          position: Vector2(size.x / 2, size.y - 50),
+          onPressed: () => world = levels[1],
+          position: Vector2(size.x / 2 - 70, size.y - 50),
         ),
         LevelButton(
           'Level 3',
-          onPressed: () => world = Level3(),
-          position: Vector2(size.x / 2 + 120, size.y - 50),
+          onPressed: () => world = levels[2],
+          position: Vector2(size.x / 2 + 70, size.y - 50),
+        ),
+        LevelButton(
+          'Resetable',
+          onPressed: () => world = ResetableLevel(),
+          position: Vector2(size.x / 2 + 210, size.y - 50),
         ),
       ],
     );
   }
 }
 
-class Level1 extends World with HasGameReference<LevelsExample> {
+class ResetableLevel extends Level {
+  @override
+  Future<void> onLoad() async {
+    add(
+      Ember()
+        ..add(
+          ScaleEffect.by(
+            Vector2.all(3),
+            EffectController(duration: 1, alternate: true, infinite: true),
+          ),
+        ),
+    );
+    game.header.text = 'Resetable';
+  }
+}
+
+class Level1 extends Level {
   @override
   Future<void> onLoad() async {
     add(Ember());
@@ -57,7 +83,7 @@ class Level1 extends World with HasGameReference<LevelsExample> {
   }
 }
 
-class Level2 extends World with HasGameReference<LevelsExample> {
+class Level2 extends Level {
   @override
   Future<void> onLoad() async {
     add(Ember(position: Vector2(-100, 0)));
@@ -66,13 +92,20 @@ class Level2 extends World with HasGameReference<LevelsExample> {
   }
 }
 
-class Level3 extends World with HasGameReference<LevelsExample> {
+class Level3 extends Level {
   @override
   Future<void> onLoad() async {
     add(Ember(position: Vector2(-100, -50)));
     add(Ember(position: Vector2(100, -50)));
     add(Ember(position: Vector2(0, 50)));
     game.header.text = 'Level 3';
+  }
+}
+
+class Level extends World with HasGameReference<LevelsExample>, TapCallbacks {
+  @override
+  void onTapDown(TapDownEvent event) {
+    add(Ember(position: event.localPosition));
   }
 }
 
@@ -84,18 +117,24 @@ class LevelButton extends ButtonComponent {
           children: [
             TextComponent(
               text: text,
-              position: Vector2(50, 20),
+              position: Vector2(60, 20),
               anchor: Anchor.center,
             ),
           ],
-          size: Vector2(100, 40),
+          size: Vector2(120, 40),
           anchor: Anchor.center,
         );
 }
 
-class ButtonBackground extends PositionComponent {
-  ButtonBackground(Color color) : super(size: Vector2(100, 40)) {
+class ButtonBackground extends PositionComponent with HasAncestor<LevelButton> {
+  ButtonBackground(Color color) {
     _paint.color = color;
+  }
+
+  @override
+  void onMount() {
+    super.onMount();
+    size = ancestor.size;
   }
 
   late final _background = RRect.fromRectAndRadius(

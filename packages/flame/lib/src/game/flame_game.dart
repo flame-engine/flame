@@ -52,6 +52,9 @@ class FlameGame<W extends World> extends ComponentTreeRoot
   /// done automatically.
   W get world => _world;
   set world(W newWorld) {
+    if (newWorld == _world) {
+      return;
+    }
     _world.removeFromParent();
     camera.world = newWorld;
     _world = newWorld;

@@ -4,7 +4,7 @@ import 'package:examples/stories/structure/levels.dart';
 import 'package:flame/game.dart';
 
 void addStructureStories(Dashbook dashbook) {
-  dashbook.storiesOf('FlameGame').add(
+  dashbook.storiesOf('Structure').add(
         'Levels',
         (_) => GameWidget(game: LevelsExample()),
         info: LevelsExample.description,
