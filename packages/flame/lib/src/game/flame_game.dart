@@ -28,7 +28,7 @@ class FlameGame<W extends World> extends ComponentTreeRoot
     CameraComponent? camera,
     Camera? oldCamera,
   })  : assert(
-          world is W || (world == null && W is World),
+          world != null || W == World,
           'The generics type $W does not conform to the type of '
           '${world?.runtimeType ?? 'World'}.',
         ),
@@ -52,6 +52,9 @@ class FlameGame<W extends World> extends ComponentTreeRoot
   /// done automatically.
   W get world => _world;
   set world(W newWorld) {
+    if (newWorld == _world) {
+      return;
+    }
     _world.removeFromParent();
     camera.world = newWorld;
     _world = newWorld;
