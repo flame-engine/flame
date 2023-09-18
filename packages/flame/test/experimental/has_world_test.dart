@@ -47,7 +47,7 @@ void main() {
         expect(
           () => component.world,
           failsAssert(
-            'Could not find a World instance of type _WorldReferenceWorld',
+            'Could not find a World instance of type _ReferenceWorld',
           ),
         );
       },
