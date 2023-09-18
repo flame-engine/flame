@@ -113,7 +113,7 @@ void main() {
           size: componentSize,
         ),
       );
-      button.setDisabled(isDisabled: false);
+      button.setDisabled(isDisabled: true);
       final previousPosition =
           button.positionOfAnchor(Anchor.center).toOffset();
       game.onGameResize(initialGameSize * 2);
@@ -123,13 +123,13 @@ void main() {
         1,
         TapDownDetails(globalPosition: previousPosition),
       );
-      expect(pressedTimes, 1);
+      expect(pressedTimes, 0);
 
       tapDispatcher.handleTapUp(
         1,
         createTapUpDetails(globalPosition: previousPosition),
       );
-      expect(pressedTimes, 1);
+      expect(pressedTimes, 0);
 
       tapDispatcher.handleTapDown(
         1,
