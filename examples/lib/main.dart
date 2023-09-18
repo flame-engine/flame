@@ -23,7 +23,6 @@ import 'package:examples/stories/collision_detection/collision_detection.dart';
 import 'package:examples/stories/components/components.dart';
 import 'package:examples/stories/effects/effects.dart';
 import 'package:examples/stories/experimental/experimental.dart';
-import 'package:examples/stories/flame_game/flame_game.dart';
 import 'package:examples/stories/games/games.dart';
 import 'package:examples/stories/image/image.dart';
 import 'package:examples/stories/input/input.dart';
@@ -31,6 +30,7 @@ import 'package:examples/stories/layout/layout.dart';
 import 'package:examples/stories/parallax/parallax.dart';
 import 'package:examples/stories/rendering/rendering.dart';
 import 'package:examples/stories/sprites/sprites.dart';
+import 'package:examples/stories/structure/structure.dart';
 import 'package:examples/stories/svg/svg.dart';
 import 'package:examples/stories/system/system.dart';
 import 'package:examples/stories/tiled/tiled.dart';
@@ -72,6 +72,9 @@ void runAsDashbook() {
   // Some small sample games
   addGameStories(dashbook);
 
+  // Show some different ways of structuring games
+  addStructureStories(dashbook);
+
   // Feature examples
   addAudioStories(dashbook);
   addAnimationStories(dashbook);
@@ -80,7 +83,6 @@ void runAsDashbook() {
   addComponentsStories(dashbook);
   addEffectsStories(dashbook);
   addExperimentalStories(dashbook);
-  addFlameGameStories(dashbook);
   addInputStories(dashbook);
   addLayoutStories(dashbook);
   addParallaxStories(dashbook);
