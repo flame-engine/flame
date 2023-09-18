@@ -27,7 +27,7 @@ void main() {
         game.onGameResize(size);
         expect(
           game.screenToWorld(Vector2.zero()),
-          -(size / 2) / game.cameraComponent.viewfinder.zoom,
+          -(size / 2) / game.camera.viewfinder.zoom,
         );
       });
 
@@ -38,7 +38,7 @@ void main() {
         game.onGameResize(size);
         expect(
           game.screenToWorld(screenPosition),
-          (-size / 2 + screenPosition) / game.cameraComponent.viewfinder.zoom,
+          (-size / 2 + screenPosition) / game.camera.viewfinder.zoom,
         );
       });
 
@@ -60,7 +60,7 @@ void main() {
         game.onGameResize(size);
         expect(
           game.worldToScreen(worldPosition),
-          (size / 2) + worldPosition * game.cameraComponent.viewfinder.zoom,
+          (size / 2) + worldPosition * game.camera.viewfinder.zoom,
         );
       });
 
@@ -70,12 +70,12 @@ void main() {
         final worldPosition = Vector2(10, 30);
         final viewfinderPosition = Vector2(20, 10);
         game.onGameResize(size);
-        game.cameraComponent.viewfinder.position = viewfinderPosition;
+        game.camera.viewfinder.position = viewfinderPosition;
         expect(
           game.worldToScreen(worldPosition),
           (size / 2) +
               (worldPosition - viewfinderPosition) *
-                  game.cameraComponent.viewfinder.zoom,
+                  game.camera.viewfinder.zoom,
         );
       });
     },

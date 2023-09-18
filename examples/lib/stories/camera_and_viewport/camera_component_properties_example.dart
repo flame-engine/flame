@@ -21,7 +21,15 @@ class CameraComponentPropertiesExample extends FlameGame {
     Click at any point within the viewport to create a circle there.
   ''';
 
-  CameraComponent? _camera;
+  CameraComponentPropertiesExample()
+      : super(
+          camera: CameraComponent(
+            viewport: FixedSizeViewport(200, 200)..add(ViewportFrame()),
+          )
+            ..viewfinder.zoom = 5
+            ..viewfinder.anchor = const Anchor(0.25, 0.75),
+        );
+
   late RectangleComponent _cullRect;
 
   @override
@@ -29,14 +37,7 @@ class CameraComponentPropertiesExample extends FlameGame {
 
   @override
   Future<void> onLoad() async {
-    final world = World();
     world.add(Background());
-    _camera = CameraComponent(
-      world: world,
-      viewport: FixedSizeViewport(200, 200)..add(ViewportFrame()),
-    )
-      ..viewfinder.zoom = 5
-      ..viewfinder.anchor = const Anchor(0.25, 0.75);
     _cullRect = RectangleComponent.fromRect(
       Rect.zero,
       paint: Paint()
@@ -44,10 +45,8 @@ class CameraComponentPropertiesExample extends FlameGame {
         ..strokeWidth = 0.25
         ..color = const Color(0xaaffff00),
     );
-    await add(world);
-    await add(_camera!);
     await world.add(_cullRect);
-    _camera!.mounted.then((_) {
+    camera.mounted.then((_) {
       updateSize(canvasSize);
     });
   }
@@ -55,13 +54,12 @@ class CameraComponentPropertiesExample extends FlameGame {
   @override
   void onGameResize(Vector2 size) {
     super.onGameResize(size);
-    if (_camera != null) {
+    if (camera.isMounted) {
       updateSize(size);
     }
   }
 
   void updateSize(Vector2 size) {
-    final camera = _camera!;
     camera.viewport.anchor = Anchor.center;
     camera.viewport.size = size * 0.7;
     camera.viewport.position = size * 0.6;

@@ -55,7 +55,7 @@ void main() {
               ..paint = testPaint;
             await game.world.add(component);
 
-            game.cameraComponent.follow(component);
+            game.camera.follow(component);
           },
         );
 
@@ -75,7 +75,7 @@ void main() {
               ..paint = testPaint;
             await game.world.add(component);
 
-            game.cameraComponent.follow(component);
+            game.camera.follow(component);
           },
           verify: (game, tester) async {
             await expectLater(
@@ -104,7 +104,7 @@ void main() {
               ..paint = testPaint;
             await game.world.add(component);
 
-            game.cameraComponent.follow(component);
+            game.camera.follow(component);
 
             // a PolygonShape contains point
             expect(component.containsPoint(Vector2.all(10)), isTrue);
@@ -136,7 +136,7 @@ void main() {
               ..paint = testPaint;
             await game.world.add(component);
 
-            game.cameraComponent.follow(component);
+            game.camera.follow(component);
           },
           verify: (game, tester) async {
             await expectLater(
@@ -165,7 +165,7 @@ void main() {
               ..paint = testPaint;
             await game.world.add(component);
 
-            game.cameraComponent.follow(component);
+            game.camera.follow(component);
           },
           verify: (game, tester) async {
             await expectLater(

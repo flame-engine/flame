@@ -16,7 +16,7 @@ class TimeScaleExample extends FlameGame
 
   TimeScaleExample()
       : super(
-          cameraComponent: CameraComponent.withFixedResolution(
+          camera: CameraComponent.withFixedResolution(
             width: 640,
             height: 360,
           ),

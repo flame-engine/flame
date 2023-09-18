@@ -21,7 +21,7 @@ class CameraFollowAndWorldBoundsExample extends FlameGame
   @override
   Future<void> onLoad() async {
     final player = Player()..position = Vector2(250, 0);
-    cameraComponent
+    camera
       ..viewfinder.visibleGameSize = Vector2(400, 100)
       ..follow(player, horizontalOnly: true)
       ..setBounds(Rectangle.fromLTRB(190, -50, 810, 50));

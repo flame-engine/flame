@@ -21,7 +21,7 @@ class WorkerOvermind extends Component
 
   @override
   Future<void> onLoad() async {
-    game.cameraComponent.viewport.add(isolateHud = WorkerOvermindHud());
+    game.camera.viewport.add(isolateHud = WorkerOvermindHud());
     super.onLoad();
   }
 

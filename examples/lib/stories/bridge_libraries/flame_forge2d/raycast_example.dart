@@ -60,8 +60,8 @@ class RaycastExample extends Forge2DGame with MouseMovementDetector {
   void onMouseMove(PointerHoverInfo info) {
     final rayStart = screenToWorld(
       Vector2(
-        cameraComponent.viewport.size.x / 4,
-        cameraComponent.viewport.size.y / 2,
+        camera.viewport.size.x / 4,
+        camera.viewport.size.y / 2,
       ),
     );
 

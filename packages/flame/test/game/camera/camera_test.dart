@@ -14,7 +14,7 @@ void main() {
     testWithFlameGame(
       'default camera applies no translation',
       (game) async {
-        expect(game.camera.position, Vector2.zero());
+        expect(game.oldCamera.position, Vector2.zero());
 
         await game.ensureAdd(_TestComponent(Vector2.all(10.0)));
 
@@ -33,15 +33,15 @@ void main() {
     testWithFlameGame(
       'camera snap movement',
       (game) async {
-        expect(game.camera.position, Vector2.zero());
+        expect(game.oldCamera.position, Vector2.zero());
 
         await game.ensureAdd(_TestComponent(Vector2.all(10.0)));
 
         // this puts the top left of the screen on (4,4)
-        game.camera.moveTo(Vector2.all(4.0));
-        game.camera.snap();
+        game.oldCamera.moveTo(Vector2.all(4.0));
+        game.oldCamera.snap();
         // the component will now be at 10 - 4 = (6, 6)
-        expect(game.camera.position, Vector2.all(4.0));
+        expect(game.oldCamera.position, Vector2.all(4.0));
 
         final canvas = MockCanvas();
         game.render(canvas);
@@ -59,17 +59,17 @@ void main() {
     testWithFlameGame(
       'camera smooth movement',
       (game) async {
-        game.camera.speed = 1; // 1 pixel per second
-        game.camera.moveTo(Vector2(0.0, 10.0));
+        game.oldCamera.speed = 1; // 1 pixel per second
+        game.oldCamera.moveTo(Vector2(0.0, 10.0));
 
         // nothing should change yet
-        expect(game.camera.position, Vector2.all(0.0));
+        expect(game.oldCamera.position, Vector2.all(0.0));
         game.update(2.0); // 2s
-        expect(game.camera.position, Vector2(0.0, 2.0));
+        expect(game.oldCamera.position, Vector2(0.0, 2.0));
         game.update(5.0); // 5s
-        expect(game.camera.position, Vector2(0.0, 7.0));
+        expect(game.oldCamera.position, Vector2(0.0, 7.0));
         game.update(100.0); // more than needed at once
-        expect(game.camera.position, Vector2(0.0, 10.0));
+        expect(game.oldCamera.position, Vector2(0.0, 10.0));
       },
     );
 
@@ -80,15 +80,15 @@ void main() {
 
         final p = _TestComponent(Vector2.all(10.0))..anchor = Anchor.center;
         await game.ensureAdd(p);
-        game.camera.followComponent(p);
+        game.oldCamera.followComponent(p);
 
-        expect(game.camera.position, Vector2.all(0.0));
+        expect(game.oldCamera.position, Vector2.all(0.0));
         p.position.setValues(10.0, 20.0);
         // follow happens immediately because the object's movement is assumed
         // to be smooth.
         game.update(0);
         // (10,20) - half screen (50,50).
-        expect(game.camera.position, Vector2(-40, -30));
+        expect(game.oldCamera.position, Vector2(-40, -30));
 
         final canvas = MockCanvas();
         game.render(canvas);
@@ -112,15 +112,16 @@ void main() {
         final p = _TestComponent(Vector2.all(10.0))..anchor = Anchor.center;
         await game.ensureAdd(p);
         // this would be a typical vertical shoot-em-up
-        game.camera.followComponent(p, relativeOffset: const Anchor(0.5, 0.8));
+        game.oldCamera
+            .followComponent(p, relativeOffset: const Anchor(0.5, 0.8));
 
-        expect(game.camera.position, Vector2.all(0.0));
+        expect(game.oldCamera.position, Vector2.all(0.0));
         p.position.setValues(600.0, 2000.0);
         // follow happens immediately because the object's movement is assumed
         // to be smooth.
         game.update(0);
         // (600,2000) - fractional screen (50,80)
-        expect(game.camera.position, Vector2(550, 1920));
+        expect(game.oldCamera.position, Vector2(550, 1920));
 
         final canvas = MockCanvas();
         game.render(canvas);
@@ -142,31 +143,31 @@ void main() {
 
         final p = _TestComponent(Vector2.all(10.0))..anchor = Anchor.center;
         await game.ensureAdd(p);
-        game.camera.followComponent(
+        game.oldCamera.followComponent(
           p,
           worldBounds: const Rect.fromLTWH(-1000, -1000, 2000, 2000),
         );
 
         p.position.setValues(600.0, 700.0); // well within bounds
         game.update(0);
-        expect(game.camera.position, Vector2(550, 650));
+        expect(game.oldCamera.position, Vector2(550, 650));
 
         // x ok, y starts to get to bounds
         p.position.setValues(600.0, 950.0); // right on the edge
         game.update(0);
-        expect(game.camera.position, Vector2(550, 900));
+        expect(game.oldCamera.position, Vector2(550, 900));
 
         p.position.setValues(600.0, 950.0); // stop advancing
         game.update(0);
-        expect(game.camera.position, Vector2(550, 900));
+        expect(game.oldCamera.position, Vector2(550, 900));
 
         p.position.setValues(-1100.0, 950.0);
         game.update(0);
-        expect(game.camera.position, Vector2(-1000, 900));
+        expect(game.oldCamera.position, Vector2(-1000, 900));
 
         p.position.setValues(1000.0, 1000.0);
         game.update(0);
-        expect(game.camera.position, Vector2(900, 900));
+        expect(game.oldCamera.position, Vector2(900, 900));
       },
     );
 
@@ -177,7 +178,7 @@ void main() {
 
         final p = _TestComponent(Vector2.all(10.0))..anchor = Anchor.center;
         await game.ensureAdd(p);
-        game.camera.followComponent(
+        game.oldCamera.followComponent(
           p,
           worldBounds: const Rect.fromLTWH(0, 0, 100, 100),
         );
@@ -185,15 +186,15 @@ void main() {
         // In this case the camera will just center the world, no matter the
         // player position.
         game.update(0);
-        expect(game.camera.position, Vector2(50, 50));
+        expect(game.oldCamera.position, Vector2(50, 50));
 
         p.position.setValues(60.0, 50.0);
         game.update(0);
-        expect(game.camera.position, Vector2(50, 50));
+        expect(game.oldCamera.position, Vector2(50, 50));
 
         p.position.setValues(-10.0, -20.0);
         game.update(0);
-        expect(game.camera.position, Vector2(50, 50));
+        expect(game.oldCamera.position, Vector2(50, 50));
       },
     );
 
@@ -201,29 +202,29 @@ void main() {
       'camera follow with zoom',
       (game) async {
         game.onGameResize(Vector2.all(100.0));
-        game.camera.zoom = 2;
+        game.oldCamera.zoom = 2;
 
         final p = _TestComponent(Vector2.all(10.0))..anchor = Anchor.center;
         await game.ensureAdd(p);
-        game.camera.followComponent(
+        game.oldCamera.followComponent(
           p,
           worldBounds: const Rect.fromLTWH(0, 0, 100, 100),
         );
 
         game.update(0);
-        expect(game.camera.position, Vector2(0, 0));
+        expect(game.oldCamera.position, Vector2(0, 0));
 
         p.position.setValues(50.0, 60.0);
         game.update(0);
-        expect(game.camera.position, Vector2(25, 35));
+        expect(game.oldCamera.position, Vector2(25, 35));
 
         p.position.setValues(80.0, 90.0);
         game.update(0);
-        expect(game.camera.position, Vector2(50, 50));
+        expect(game.oldCamera.position, Vector2(50, 50));
 
         p.position.setValues(-10.0, -20.0);
         game.update(0);
-        expect(game.camera.position, Vector2(0, 0));
+        expect(game.oldCamera.position, Vector2(0, 0));
       },
     );
 
@@ -232,20 +233,20 @@ void main() {
       (game) async {
         game.onGameResize(Vector2.all(200.0));
 
-        game.camera.setRelativeOffset(Anchor.center);
+        game.oldCamera.setRelativeOffset(Anchor.center);
 
         game.update(0);
-        expect(game.camera.position, Vector2.zero());
+        expect(game.oldCamera.position, Vector2.zero());
 
         game.update(10000);
-        expect(game.camera.position, Vector2.all(-100.0));
+        expect(game.oldCamera.position, Vector2.all(-100.0));
       },
     );
 
     testWithFlameGame(
       'camera zoom',
       (game) async {
-        game.camera.zoom = 2;
+        game.oldCamera.zoom = 2;
 
         final p = _TestComponent(Vector2.all(100.0))..anchor = Anchor.center;
         await game.ensureAdd(p);
@@ -267,8 +268,8 @@ void main() {
       'camera zoom with setRelativeOffset',
       (game) async {
         game.onGameResize(Vector2.all(200.0));
-        game.camera.zoom = 2;
-        game.camera.setRelativeOffset(Anchor.center);
+        game.oldCamera.zoom = 2;
+        game.oldCamera.setRelativeOffset(Anchor.center);
 
         final p = _TestComponent(Vector2.all(100.0))..anchor = Anchor.center;
         game.add(p);
@@ -285,14 +286,14 @@ void main() {
             ..drawRect(const Rect.fromLTWH(0, 0, 1, 1))
             ..translate(0, 0), // reset camera
         );
-        expect(game.camera.position, Vector2.all(-50.0));
+        expect(game.oldCamera.position, Vector2.all(-50.0));
       },
     );
 
     testWithFlameGame(
       'camera shake should return to where it started',
       (game) async {
-        final camera = game.camera;
+        final camera = game.oldCamera;
         expect(camera.position, Vector2.zero());
         camera.shake(duration: 9000);
         game.update(5000);
@@ -305,14 +306,14 @@ void main() {
     testWithFlameGame(
       'default ratio viewport + camera with world boundaries',
       (game) async {
-        game.camera.viewport = FixedResolutionViewport(Vector2.all(100));
+        game.oldCamera.viewport = FixedResolutionViewport(Vector2.all(100));
         game.onGameResize(Vector2.all(200.0));
         expect(game.canvasSize, Vector2.all(200.00));
         expect(game.size, Vector2.all(100.00));
 
         final p = _TestComponent(Vector2.all(10.0))..anchor = Anchor.center;
         await game.ensureAdd(p);
-        game.camera.followComponent(
+        game.oldCamera.followComponent(
           p,
           // this could be a typical mario-like platformer, where the player is
           // more on the bottom left to allow the level to be seen
@@ -321,23 +322,23 @@ void main() {
         );
 
         game.update(0);
-        expect(game.camera.position, Vector2(0, 0));
+        expect(game.oldCamera.position, Vector2(0, 0));
 
         p.position.setValues(30.0, 0.0);
         game.update(0);
-        expect(game.camera.position, Vector2(5, 0));
+        expect(game.oldCamera.position, Vector2(5, 0));
 
         p.position.setValues(30.0, 100.0);
         game.update(0);
-        expect(game.camera.position, Vector2(5, 75));
+        expect(game.oldCamera.position, Vector2(5, 75));
 
         p.position.setValues(30.0, 1000.0);
         game.update(0);
-        expect(game.camera.position, Vector2(5, 900));
+        expect(game.oldCamera.position, Vector2(5, 900));
 
         p.position.setValues(950.0, 20.0);
         game.update(0);
-        expect(game.camera.position, Vector2(900, 0));
+        expect(game.oldCamera.position, Vector2(900, 0));
       },
     );
   });

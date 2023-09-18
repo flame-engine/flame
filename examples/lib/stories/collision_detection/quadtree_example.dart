@@ -80,7 +80,7 @@ Press T button to toggle player to collide with other objects.
     }
 
     staticLayer.reRender();
-    cameraComponent = CameraComponent.withFixedResolution(
+    camera = CameraComponent.withFixedResolution(
       world: world,
       width: 500,
       height: 250,
@@ -92,7 +92,7 @@ Press T button to toggle player to collide with other objects.
       priority: 2,
     );
     world.add(player);
-    cameraComponent.follow(player);
+    camera.follow(player);
 
     final brick = Brick(
       position: player.position.translated(0, -tileSize * 2),
@@ -129,7 +129,7 @@ Press T button to toggle player to collide with other objects.
 
     world.add(QuadTreeDebugComponent(collisionDetection));
     world.add(LayerComponent(staticLayer));
-    cameraComponent.viewport.add(FpsTextComponent());
+    camera.viewport.add(FpsTextComponent());
   }
 
   final elapsedMicroseconds = <double>[];
@@ -191,9 +191,8 @@ Press T button to toggle player to collide with other objects.
 
   @override
   void onScroll(PointerScrollInfo info) {
-    cameraComponent.viewfinder.zoom += info.scrollDelta.game.y.sign * 0.08;
-    cameraComponent.viewfinder.zoom =
-        cameraComponent.viewfinder.zoom.clamp(0.05, 5.0);
+    camera.viewfinder.zoom += info.scrollDelta.game.y.sign * 0.08;
+    camera.viewfinder.zoom = camera.viewfinder.zoom.clamp(0.05, 5.0);
   }
 }
 

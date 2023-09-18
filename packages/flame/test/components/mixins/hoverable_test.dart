@@ -91,7 +91,7 @@ void main() {
         await game.ensureAdd(c);
 
         // component is now at the corner of the screen
-        game.camera.snapTo(Vector2(10, 20));
+        game.oldCamera.snapTo(Vector2(10, 20));
 
         _triggerMouseMove(game, 11, 21);
         expect(c.isHovered, false);

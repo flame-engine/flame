@@ -451,7 +451,7 @@ void main() {
       // get the camera and canvas sizes all initialized
       final game = FlameGame();
       game.onGameResize(Vector2.all(100));
-      final camera = game.cameraComponent;
+      final camera = game.camera;
       game.world.add(component);
       camera.viewfinder.position = Vector2(150, 20);
       camera.viewport.size = mapSizePx.clone();

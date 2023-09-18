@@ -31,7 +31,7 @@ class FollowComponentExample extends FlameGame
   @override
   Future<void> onLoad() async {
     final world = World();
-    cameraComponent = CameraComponent.withFixedResolution(
+    camera = CameraComponent.withFixedResolution(
       width: viewportResolution.x,
       height: viewportResolution.y,
       world: world,
@@ -39,8 +39,8 @@ class FollowComponentExample extends FlameGame
 
     world.add(Map());
     world.add(ember = MovableEmber());
-    cameraComponent.setBounds(Map.bounds);
-    cameraComponent.follow(ember, maxSpeed: 250);
+    camera.setBounds(Map.bounds);
+    camera.follow(ember, maxSpeed: 250);
 
     world.addAll(
       List.generate(30, (_) => Rock(Map.generateCoordinates())),

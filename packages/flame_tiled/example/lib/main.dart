@@ -14,7 +14,7 @@ class TiledGame extends FlameGame {
 
   TiledGame()
       : super(
-          cameraComponent: CameraComponent.withFixedResolution(
+          camera: CameraComponent.withFixedResolution(
             width: 16 * 28,
             height: 16 * 14,
           ),
@@ -22,9 +22,9 @@ class TiledGame extends FlameGame {
 
   @override
   Future<void> onLoad() async {
-    cameraComponent.viewfinder.zoom = 0.5;
-    cameraComponent.viewfinder.anchor = Anchor.topLeft;
-    cameraComponent.viewfinder.add(
+    camera.viewfinder.zoom = 0.5;
+    camera.viewfinder.anchor = Anchor.topLeft;
+    camera.viewfinder.add(
       MoveToEffect(
         Vector2(1000, 0),
         EffectController(

@@ -25,7 +25,7 @@ class LevelsExample extends FlameGame {
     // If you have a lot of HUDs you could also create separate viewports for
     // each level and then just change them from within the world's onLoad with:
     // game.cameraComponent.viewport = Level1Viewport();
-    final viewport = cameraComponent.viewport;
+    final viewport = camera.viewport;
     viewport.add(header);
     viewport.addAll(
       [

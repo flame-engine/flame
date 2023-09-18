@@ -14,13 +14,13 @@ class Forge2DExample extends Forge2DGame {
   Future<void> onLoad() async {
     await super.onLoad();
 
-    cameraComponent.viewport.add(FpsTextComponent());
+    camera.viewport.add(FpsTextComponent());
     world.add(Ball());
     world.addAll(createBoundaries());
   }
 
   List<Component> createBoundaries() {
-    final visibleRect = cameraComponent.visibleWorldRect;
+    final visibleRect = camera.visibleWorldRect;
     final topLeft = visibleRect.topLeft.toVector2();
     final topRight = visibleRect.topRight.toVector2();
     final bottomRight = visibleRect.bottomRight.toVector2();

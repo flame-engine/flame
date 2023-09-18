@@ -181,17 +181,17 @@ void main() {
     });
 
     testWithFlameGame('componentsAtPoint', (game) async {
-      game.cameraComponent.viewport = FixedSizeViewport(600, 400)
+      game.camera.viewport = FixedSizeViewport(600, 400)
         ..anchor = Anchor.center
         ..position = Vector2(400, 300)
         ..priority = -1;
-      game.cameraComponent.viewfinder.position = Vector2(100, 50);
+      game.camera.viewfinder.position = Vector2(100, 50);
       final component = PositionComponent(
         size: Vector2(300, 100),
         position: Vector2(50, 30),
       );
       final world = game.world;
-      final camera = game.cameraComponent;
+      final camera = game.camera;
       world.add(component);
       await game.ready();
 

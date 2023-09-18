@@ -49,10 +49,10 @@ void main() {
     testWithGame(
         'check that onViewportResize is called with game CameraComponent', () {
       return FlameGame(
-        cameraComponent: CameraComponent(viewport: _MyMaxViewport()),
+        camera: CameraComponent(viewport: _MyMaxViewport()),
       );
     }, (game) async {
-      final viewport = game.cameraComponent.viewport;
+      final viewport = game.camera.viewport;
       expect(viewport, isA<_MyMaxViewport>());
       expect((viewport as _MyMaxViewport).onViewportResizeCalled, 2);
       game.onGameResize(Vector2(200, 200));

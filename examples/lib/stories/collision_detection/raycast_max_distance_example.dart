@@ -32,7 +32,7 @@ This examples showcases how raycast APIs can be used to detect hits within certa
 
   @override
   void onLoad() {
-    cameraComponent = CameraComponent.withFixedResolution(
+    camera = CameraComponent.withFixedResolution(
       world: world,
       width: 320,
       height: 180,
@@ -81,8 +81,8 @@ This examples showcases how raycast APIs can be used to detect hits within certa
   void update(double dt) {
     collisionDetection.raycast(_ray, maxDistance: _maxDistance, out: _result);
     if (_result.isActive) {
-      if (cameraComponent.viewfinder.children.query<Effect>().isEmpty) {
-        cameraComponent.viewfinder.add(
+      if (camera.viewfinder.children.query<Effect>().isEmpty) {
+        camera.viewfinder.add(
           MoveEffect.by(
             Vector2(5, 5),
             PerlinNoiseEffectController(duration: 0.2, frequency: 400),

@@ -25,22 +25,22 @@ class FlameGame<W extends World> extends ComponentTreeRoot
   FlameGame({
     super.children,
     W? world,
-    CameraComponent? cameraComponent,
-    Camera? camera,
+    CameraComponent? camera,
+    Camera? oldCamera,
   })  : _world = world ?? World() as W,
-        _cameraComponent = cameraComponent ?? CameraComponent() {
+        _camera = camera ?? CameraComponent() {
     assert(
       Component.staticGameInstance == null,
       '$this instantiated, while another game ${Component.staticGameInstance} '
       'declares itself to be a singleton',
     );
-    _cameraWrapper = CameraWrapper(camera ?? Camera(), children);
-    _cameraComponent.world = _world;
-    add(_cameraComponent);
+    _cameraWrapper = CameraWrapper(oldCamera ?? Camera(), children);
+    _camera.world = _world;
+    add(_camera);
     add(_world);
   }
 
-  /// The [World] that the [cameraComponent] is rendering.
+  /// The [World] that the [camera] is rendering.
   /// Inside of this world is where most of your components should be added.
   ///
   /// You don't have to add the world to the tree after setting it here, it is
@@ -48,7 +48,7 @@ class FlameGame<W extends World> extends ComponentTreeRoot
   W get world => _world;
   set world(W newWorld) {
     _world.removeFromParent();
-    cameraComponent.world = newWorld;
+    camera.world = newWorld;
     _world = newWorld;
     if (_world.parent == null) {
       add(_world);
@@ -64,16 +64,16 @@ class FlameGame<W extends World> extends ComponentTreeRoot
   ///
   /// You don't have to add the CameraComponent to the tree after setting it
   /// here, it is done automatically.
-  CameraComponent get cameraComponent => _cameraComponent;
-  set cameraComponent(CameraComponent newCameraComponent) {
-    _cameraComponent.removeFromParent();
-    _cameraComponent = newCameraComponent;
-    if (_cameraComponent.parent == null) {
-      add(_cameraComponent);
+  CameraComponent get camera => _camera;
+  set camera(CameraComponent newCameraComponent) {
+    _camera.removeFromParent();
+    _camera = newCameraComponent;
+    if (_camera.parent == null) {
+      add(_camera);
     }
   }
 
-  CameraComponent _cameraComponent;
+  CameraComponent _camera;
 
   late final CameraWrapper _cameraWrapper;
 
@@ -83,7 +83,8 @@ class FlameGame<W extends World> extends ComponentTreeRoot
   /// The camera translates the coordinate space after the viewport is applied.
   @Deprecated('''
     In the future (maybe as early as v1.10.0) this camera will be removed,
-    please use the CameraComponent instead.
+    please use the CameraComponent instead, which has a default camera at 
+    `FlameGame.camera`.
     
     This is the simplest way of using the CameraComponent:
     1. Instead of adding the root components directly to your game with `add`,
@@ -94,9 +95,9 @@ class FlameGame<W extends World> extends ComponentTreeRoot
     2. (Optional) If you want to add a HUD component, instead of using
        PositionType, add the component as a child of the viewport.
        
-       cameraComponent.viewport.add(yourHudComponent);
+       camera.viewport.add(yourHudComponent);
     ''')
-  Camera get camera => _cameraWrapper.camera;
+  Camera get oldCamera => _cameraWrapper.camera;
 
   /// This is overwritten to consider the viewport transformation.
   ///
@@ -105,7 +106,7 @@ class FlameGame<W extends World> extends ComponentTreeRoot
   ///
   /// This does not match the Flutter widget size; for that see [canvasSize].
   @override
-  Vector2 get size => camera.gameSize;
+  Vector2 get size => oldCamera.gameSize;
 
   @override
   @internal
@@ -162,12 +163,12 @@ class FlameGame<W extends World> extends ComponentTreeRoot
   /// components and other methods.
   /// You can override it further to add more custom behavior, but you should
   /// seriously consider calling the super implementation as well.
-  /// This implementation also uses the current [camera] in order to transform
+  /// This implementation also uses the current [oldCamera] in order to transform
   /// the coordinate system appropriately.
   @override
   @mustCallSuper
   void onGameResize(Vector2 size) {
-    camera.handleResize(size);
+    oldCamera.handleResize(size);
     super.onGameResize(size);
     // [onGameResize] is declared both in [Component] and in [Game]. Since
     // there is no way to explicitly call the [Component]'s implementation,
@@ -211,10 +212,10 @@ class FlameGame<W extends World> extends ComponentTreeRoot
   }
 
   @override
-  Projector get viewportProjector => camera.viewport;
+  Projector get viewportProjector => oldCamera.viewport;
 
   @override
-  Projector get projector => camera.combinedProjector;
+  Projector get projector => oldCamera.combinedProjector;
 
   /// Returns a [ComponentsNotifier] for the given type [W].
   ///

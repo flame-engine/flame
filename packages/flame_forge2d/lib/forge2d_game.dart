@@ -17,13 +17,13 @@ class Forge2DGame<T extends Forge2DWorld> extends FlameGame<T> {
                 gravity: gravity,
                 contactListener: contactListener,
               )) as T,
-          cameraComponent: (cameraComponent ?? CameraComponent())
+          camera: (cameraComponent ?? CameraComponent())
             ..viewfinder.zoom = zoom,
         );
 
   /// Takes a point in world coordinates and returns it in screen coordinates.
   Vector2 worldToScreen(Vector2 position) {
-    return cameraComponent.localToGlobal(position);
+    return camera.localToGlobal(position);
   }
 
   /// Takes a point in screen coordinates and returns it in world coordinates.
@@ -31,6 +31,6 @@ class Forge2DGame<T extends Forge2DWorld> extends FlameGame<T> {
   /// Remember that if you are using this for your events you can most of the
   /// time just use `event.localPosition` directly instead.
   Vector2 screenToWorld(Vector2 position) {
-    return cameraComponent.globalToLocal(position);
+    return camera.globalToLocal(position);
   }
 }

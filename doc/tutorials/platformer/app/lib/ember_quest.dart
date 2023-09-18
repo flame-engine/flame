@@ -36,7 +36,7 @@ class EmberQuestGame extends FlameGame
       'star.png',
       'water_enemy.png',
     ]);
-    cameraComponent.viewfinder.anchor = Anchor.topLeft;
+    camera.viewfinder.anchor = Anchor.topLeft;
 
     initializeGame(loadHud: true);
   }
@@ -107,7 +107,7 @@ class EmberQuestGame extends FlameGame
     );
     world.add(_ember);
     if (loadHud) {
-      cameraComponent.viewport.add(Hud());
+      camera.viewport.add(Hud());
     }
   }
 

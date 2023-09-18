@@ -17,7 +17,7 @@ class DraggablesExample extends FlameGame {
 
   @override
   Future<void> onLoad() async {
-    cameraComponent.viewfinder.zoom = zoom;
+    camera.viewfinder.zoom = zoom;
     world.add(square = DraggableEmber());
     world.add(DraggableEmber()..y = 350);
   }

@@ -25,7 +25,7 @@ class ParticlesInteractiveExample extends FlameGame with PanDetector {
 
   @override
   Future<void> onLoad() async {
-    cameraComponent.viewfinder.zoom = zoom;
+    camera.viewfinder.zoom = zoom;
   }
 
   @override

@@ -24,7 +24,7 @@ class MoveEffectExample extends FlameGame {
 
   MoveEffectExample()
       : super(
-          cameraComponent: CameraComponent.withFixedResolution(
+          camera: CameraComponent.withFixedResolution(
             width: 400,
             height: 600,
           )..viewfinder.anchor = Anchor.topLeft,

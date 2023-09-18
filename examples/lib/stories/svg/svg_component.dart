@@ -77,7 +77,7 @@ class SvgComponentExample extends FlameGame {
 
   SvgComponentExample()
       : super(
-          cameraComponent: CameraComponent.withFixedResolution(
+          camera: CameraComponent.withFixedResolution(
             width: 400,
             height: 600,
           ),
