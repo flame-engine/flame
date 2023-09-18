@@ -1,5 +1,5 @@
 import 'package:flame/components.dart';
-import 'package:flame/src/events/flame_game_mixins/has_draggable_components.dart';
+import 'package:flame/src/events/flame_game_mixins/multi_drag_dispatcher.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter/widgets.dart';
 import 'package:test/test.dart';

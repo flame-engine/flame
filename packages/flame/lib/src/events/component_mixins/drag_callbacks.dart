@@ -1,5 +1,5 @@
 import 'package:flame/src/components/core/component.dart';
-import 'package:flame/src/events/flame_game_mixins/has_draggable_components.dart';
+import 'package:flame/src/events/flame_game_mixins/multi_drag_dispatcher.dart';
 import 'package:flame/src/events/messages/drag_cancel_event.dart';
 import 'package:flame/src/events/messages/drag_end_event.dart';
 import 'package:flame/src/events/messages/drag_start_event.dart';
