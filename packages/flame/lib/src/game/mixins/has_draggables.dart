@@ -7,7 +7,8 @@ import 'package:flutter/gestures.dart';
 import 'package:meta/meta.dart';
 
 @Deprecated(
-  'Will be removed in Flame v2, use DragCallbacks without a game mixin instead',
+  'Will be removed in Flame v1.10.0, use DragCallbacks without a game mixin '
+  'instead',
 )
 mixin HasDraggables on FlameGame implements MultiDragListener {
   @mustCallSuper

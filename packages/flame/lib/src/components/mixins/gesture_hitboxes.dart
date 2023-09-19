@@ -18,4 +18,9 @@ mixin GestureHitboxes on Component {
   bool containsPoint(Vector2 point) {
     return hitboxes.any((hitbox) => hitbox.containsPoint(point));
   }
+
+  @override
+  bool containsLocalPoint(Vector2 point) {
+    return hitboxes.any((hitbox) => hitbox.containsLocalPoint(point));
+  }
 }

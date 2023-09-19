@@ -71,18 +71,18 @@ void main() {
 
           expect(game.children.contains(component), true);
           expect(component.gameSize, game.size);
-          expect(component.gameRef, game);
+          expect(component.game, game);
         },
       );
 
       testWithFlameGame(
-        'prepare adds gameRef and calls onGameResize',
+        'prepare adds game and calls onGameResize',
         (game) async {
           final component = _MyComponent();
           await game.ensureAdd(component);
 
           expect(component.gameSize, game.size);
-          expect(component.gameRef, game);
+          expect(component.game, game);
         },
       );
 

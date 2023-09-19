@@ -34,16 +34,12 @@ void main() {
     testWithFlameGame(
       'position is still correct after a game resize',
       (game) async {
-        final world = World();
-        final cameraComponent = CameraComponent(world: world);
-        game.ensureAddAll([world, cameraComponent]);
-
         final marginComponent = HudMarginComponent(
           margin: const EdgeInsets.only(right: 10, bottom: 20),
           size: Vector2.all(20),
         );
 
-        await cameraComponent.viewport.ensureAdd(marginComponent);
+        await game.camera.viewport.ensureAdd(marginComponent);
         // The position should be (770, 560) since the game size is (800, 600)
         // and the component has its anchor in the top left corner (which then
         // is were the margin will be calculated from).
@@ -52,7 +48,7 @@ void main() {
         game.update(0);
         game.onGameResize(Vector2.all(500));
         game.update(0);
-        expect(marginComponent.position, closeToVector(Vector2(770, 560)));
+        expect(marginComponent.position, closeToVector(Vector2(470, 460)));
       },
     );
 

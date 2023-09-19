@@ -1,7 +1,6 @@
 import 'dart:ui';
 
 import 'package:flame/components.dart';
-import 'package:flame/experimental.dart';
 import 'package:flame/flame.dart';
 import 'package:flame_isolate_example/colonists_game.dart';
 import 'package:flame_isolate_example/constants.dart';

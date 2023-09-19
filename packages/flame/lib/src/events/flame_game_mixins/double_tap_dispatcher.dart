@@ -23,7 +23,7 @@ class DoubleTapDispatcherKey implements ComponentKey {
 /// attached to the [FlameGame] instance automatically whenever any
 /// [DoubleTapCallbacks] are mounted into the component tree.
 @internal
-class DoubleTapDispatcher extends Component with HasGameRef<FlameGame> {
+class DoubleTapDispatcher extends Component with HasGameReference<FlameGame> {
   final _components = <DoubleTapCallbacks>{};
 
   void _onDoubleTapDown(DoubleTapDownEvent event) {

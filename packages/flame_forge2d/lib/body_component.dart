@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import 'package:flame/components.dart' hide World;
 import 'package:flame/effects.dart';
-import 'package:flame/experimental.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
