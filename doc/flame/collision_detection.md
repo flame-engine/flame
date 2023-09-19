@@ -591,34 +591,6 @@ need some of the following things (since it is simpler to not involve Forge2D):
 - Hitboxes that can tell what part of a component that collided with something
 
 
-## Migration from the collision detection system in v1.0
-
-The collision detection system introduced in v1.1 is easier to use,
-and much more efficient than the one that was in v1.0,
-but while making these improvements some breaking changes had to be made.
-
-There is no longer a `Collidable` mixin, instead your game automatically knows when a hitbox has
-been added to one of your components when the `HasCollisionDetection` mixin is added to your game.
-
-To receive the callbacks from collisions that your component is involved in you should add the
-`CollisionCallbacks` mixin to your component, and then override the same methods as you did
-previously.
-
-Since the hitboxes now are `Component`s you add them to your component with `add` instead of
-`addHitbox` which was used previously.
-
-
-### Name changes
-
-- `ScreenCollidable` -> `ScreenHitbox`
-- `HitboxCircle` -> `CircleHitbox`
-- `HitboxRectangle` -> `RectangleHitbox`
-- `HitboxPolygon` -> `PolygonHitbox`
-- `Collidable` -> `CollisionCallbacks` (Only needed when you want to receive the callbacks)
-- `HasHitboxes` -> `GestureHitboxes` (Only when you need hitboxes for gestures)
-- `CollidableType` -> `CollisionType`
-
-
 ## Examples
 
 - [https://examples.flame-engine.org/#/Collision%20Detection_Collidable%20AnimationComponent]

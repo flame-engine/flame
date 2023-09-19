@@ -516,13 +516,16 @@ void main() {
       final game = collisionSystem as FlameGame;
       final block = TestBlock(Vector2.all(20), Vector2.all(10))
         ..anchor = Anchor.center;
-      await game.ensureAddAll([ScreenHitbox(), block]);
+      final screenHitbox = ScreenHitbox();
+      game.world.addAll([block, screenHitbox]);
+      await game.ready();
+      game.world.update(0);
 
       game.update(0);
       expect(block.startCounter, 0);
       expect(block.onCollisionCounter, 0);
       expect(block.endCounter, 0);
-      block.position.x = game.size.x;
+      block.position.x = game.size.x / 2;
 
       game.update(0);
       expect(block.startCounter, 1);
@@ -534,7 +537,7 @@ void main() {
       expect(block.startCounter, 1);
       expect(block.onCollisionCounter, 1);
       expect(block.endCounter, 1);
-      block.position.y = game.size.y;
+      block.position.y = game.size.y / 2;
 
       game.update(0);
       expect(block.startCounter, 2);
