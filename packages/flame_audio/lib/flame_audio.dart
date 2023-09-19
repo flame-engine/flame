@@ -5,10 +5,10 @@ import 'package:flame_audio/bgm.dart';
 export 'package:audioplayers/audioplayers.dart';
 
 /// A typedef for a function that creates an [AudioCache] instance.
-typedef AudioCacheFatory = AudioCache Function({required String prefix});
+typedef AudioCacheFactory = AudioCache Function({required String prefix});
 
 /// A typedef for a function that creates a [Bgm] instance.
-typedef BgmFatory = Bgm Function({required AudioCache audioCache});
+typedef BgmFactory = Bgm Function({required AudioCache audioCache});
 
 /// This utility class holds static references to some global audio objects.
 ///
@@ -20,14 +20,14 @@ class FlameAudio {
   /// Useful to override the default [AudioCache] constructor in testing
   /// or edge cases where the developer needs control on how [AudioCache]
   /// are created.
-  static AudioCacheFatory audioCacheFactory = AudioCache.new;
+  static AudioCacheFactory audioCacheFactory = AudioCache.new;
 
   /// The factory used to create the global [Bgm] instance.
   ///
   /// Useful to override the default [Bgm] constructor in testing
   /// or edge cases where the developer needs control on how [Bgm]
   /// are created.
-  static BgmFatory bgmFactory = Bgm.new;
+  static BgmFactory bgmFactory = Bgm.new;
 
   /// Access a shared instance of the [AudioCache] class.
   static late AudioCache audioCache = audioCacheFactory(
