@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 import '../ember_quest.dart';
 
-class Star extends SpriteComponent with HasGameRef<EmberQuestGame> {
+class Star extends SpriteComponent with HasGameReference<EmberQuestGame> {
   final Vector2 gridPosition;
   double xOffset;
 
