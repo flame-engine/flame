@@ -32,7 +32,7 @@ void main() {
 
         FlameAudio.bgmFactory = ({required AudioCache audioCache}) => bgm;
 
-        final newPrefix = 'newPrefix/';
+        const newPrefix = 'newPrefix/';
         FlameAudio.updatePrefix(newPrefix);
 
         verify(() => audioCache.prefix = newPrefix).called(1);

@@ -30,14 +30,14 @@ class FlameAudio {
   static BgmFactory bgmFactory = Bgm.new;
 
   /// Access a shared instance of the [AudioCache] class.
-  static late AudioCache audioCache = audioCacheFactory(
+  static AudioCache audioCache = audioCacheFactory(
     prefix: 'assets/audio/',
   );
 
   /// Access a shared instance of the [Bgm] class.
   ///
   /// This will use the same global audio cache from [FlameAudio].
-  static late final Bgm bgm = bgmFactory(audioCache: audioCache);
+  static final Bgm bgm = bgmFactory(audioCache: audioCache);
 
   /// Updates the prefix in the global [AudioCache] and [bgm] instances.
   static void updatePrefix(String prefix) {
