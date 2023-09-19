@@ -22,3 +22,6 @@ dependencies:
 dev_dependencies:
   dartdoc: ^6.2.2
   flame_lint: ^1.1.0
+  flutter_test:
+    sdk: flutter
+  mocktail: ^1.0.0
