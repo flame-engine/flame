@@ -8,7 +8,7 @@ enum HeartState {
 }
 
 class HeartHealthComponent extends SpriteGroupComponent<HeartState>
-    with HasGameRef<EmberQuestGame> {
+    with HasGameReference<EmberQuestGame> {
   final int heartNumber;
 
   HeartHealthComponent({

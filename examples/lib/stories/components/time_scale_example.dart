@@ -75,7 +75,7 @@ class TimeScaleExample extends FlameGame
 }
 
 class _Chopper extends SpriteAnimationComponent
-    with HasGameRef<TimeScaleExample>, CollisionCallbacks {
+    with HasGameReference<TimeScaleExample>, CollisionCallbacks {
   _Chopper({
     super.animation,
     super.position,
@@ -110,7 +110,7 @@ class _Chopper extends SpriteAnimationComponent
   @override
   void onCollisionStart(Set<Vector2> _, PositionComponent other) {
     if (other is _Chopper) {
-      gameRef.timeScale = 0.25;
+      game.timeScale = 0.25;
     }
     super.onCollisionStart(_, other);
   }
@@ -118,7 +118,7 @@ class _Chopper extends SpriteAnimationComponent
   @override
   void onCollisionEnd(PositionComponent other) {
     if (other is _Chopper) {
-      gameRef.timeScale = 1.0;
+      game.timeScale = 1.0;
       _timer.timer.start();
     }
     super.onCollisionEnd(other);
