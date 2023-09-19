@@ -142,3 +142,19 @@ else which isn't a pure sprite.
 
 Flame has a separate plugin to support external game controllers (gamepads), check
 [here](https://github.com/flame-engine/flame_gamepad) for more information.
+
+
+## AdvancedButtonComponent
+
+A `AdvancedButtonComponent` have separate states for each of the different pointer phases. The skin can be customized for each state. Each skin is a `PositionComponent`.
+
+These are the fields that should be used to know the state of the `AdvancedButtonComponent`:
+
+- `defaultSkin`: Component that will be displayed on the button by default.
+- `downSkin`: Component displayed when button clicked (or touch).
+- `hoverSkin`: Hover component (desktop and web).
+- `defaultSelectedSkin`: The component to display when the button is selected. The button property must be IsSelectable = true. In this case, the button will have two toggle states (looks like a switch component).
+- `downAndSelectedSkin`: A component that displays when the selectable button is selected and pressed.
+- `hoverAndSelectedSkin`: Hover on selectable and selected button (desktop and web).
+
+The component also supports two skins - `disabledSkin` and `disabledAndSelectedSkin` for disabled state. Achieved by setDisabled.
