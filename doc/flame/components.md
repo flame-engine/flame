@@ -191,7 +191,7 @@ scheduled for addition.
 
 ### Access to the World from a Component
 
-When a component requires access to the `World` that it is attached to one can
+If a component that has a `World` as an ancestor and requires access to that `World` object, one can
 use the `HasWorldReference` mixin.
 
 Example:
