@@ -27,6 +27,7 @@ export 'src/components/mixins/has_game_reference.dart' show HasGameReference;
 export 'src/components/mixins/has_paint.dart';
 export 'src/components/mixins/has_time_scale.dart';
 export 'src/components/mixins/has_visibility.dart';
+export 'src/components/mixins/has_world.dart';
 export 'src/components/mixins/hoverable.dart';
 export 'src/components/mixins/keyboard_handler.dart';
 export 'src/components/mixins/notifier.dart';

@@ -189,6 +189,28 @@ that they will appear in the children list in the same order as they were
 scheduled for addition.
 
 
+### Access to the World from a Component
+
+If a component that has a `World` as an ancestor and requires access to that `World` object, one can
+use the `HasWorldReference` mixin.
+
+Example:
+
+```dart
+class MyComponent extends Component with HasWorldReference<MyWorld>,
+    TapCallbacks {
+  @override
+  void onTapDown(TapDownEvent info) {
+    // world is of type MyWorld
+    world.add(AnotherComponent());
+  }
+}
+```
+
+If you try to access `world` from a component that doesn't have a `World`
+ancestor of the correct type an assertion error will be thrown.
+
+
 ### Ensuring a component has a given parent
 
 When a component requires to be added to a specific parent type the
