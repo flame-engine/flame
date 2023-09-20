@@ -192,12 +192,12 @@ scheduled for addition.
 ### Access to the World from a Component
 
 When a component requires access to the `World` that it is attached to one can
-use the `HasWorld` mixin.
+use the `HasWorldReference` mixin.
 
 Example:
 
 ```dart
-class MyComponent extends Component with HasWorld<MyWorld>,
+class MyComponent extends Component with HasWorldReference<MyWorld>,
     TapCallbacks {
   @override
   void onTapDown(TapDownEvent info) {

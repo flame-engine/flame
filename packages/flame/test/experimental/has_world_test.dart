@@ -5,9 +5,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
 void main() {
-  group('HasWorld', () {
+  group('HasWorldReference', () {
     testWithGame(
-      'component with default HasWorld',
+      'component with default HasWorldReference',
       () => FlameGame(world: _ReferenceWorld()),
       (game) async {
         final component1 = _Component<World>();
@@ -19,7 +19,7 @@ void main() {
     );
 
     testWithGame<_MyGame>(
-      'component with typed HasWorld',
+      'component with typed HasWorldReference',
       _MyGame.new,
       (game) async {
         final component = _Component<_ReferenceWorld>();
@@ -86,18 +86,18 @@ class _ReferenceWorld extends World {
   void foo() => calledFoo = true;
 }
 
-class _Component<T extends World> extends Component with HasWorld<T> {}
+class _Component<T extends World> extends Component with HasWorldReference<T> {}
 
 class _MyGame extends FlameGame {
   _MyGame() : super(world: _ReferenceWorld());
 }
 
-class _FooComponent extends Component with HasWorld<_ReferenceWorld> {
+class _FooComponent extends Component with HasWorldReference<_ReferenceWorld> {
   void foo() {
     world.foo();
   }
 }
 
-class _BarComponent extends Component with HasWorld<_ReferenceWorld> {}
+class _BarComponent extends Component with HasWorldReference<_ReferenceWorld> {}
 
 class MockWorld extends Mock implements _ReferenceWorld {}

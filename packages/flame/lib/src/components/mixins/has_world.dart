@@ -3,13 +3,13 @@ import 'package:flame/camera.dart';
 import 'package:flame/src/components/core/component.dart';
 import 'package:meta/meta.dart';
 
-/// [HasWorld] mixin provides the [world] property, which is the cached accessor
-/// for the world instance that this component belongs to.
+/// [HasWorldReference] mixin provides the [world] property, which is the cached
+/// accessor for the world instance that this component belongs to.
 ///
 /// The type [T] on the mixin is the type of your world class. This type will be
 /// the type of the [world] reference, and the mixin will check at runtime that
 /// the actual type matches the expectation.
-mixin HasWorld<T extends World> on Component {
+mixin HasWorldReference<T extends World> on Component {
   T? _world;
 
   /// Reference to the [World] instance that this component belongs to.
