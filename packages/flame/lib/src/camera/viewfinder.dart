@@ -169,8 +169,8 @@ class Viewfinder extends Component
 
   @override
   void onGameResize(Vector2 size) {
-    super.onGameResize(size);
     _initZoom();
+    super.onGameResize(size);
   }
 
   /// Called by the viewport when its size changes.

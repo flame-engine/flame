@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:flame/components.dart';
-import 'package:flame/experimental.dart';
 import 'package:flame_isolate/flame_isolate.dart';
 import 'package:flame_isolate_example/brains/path_finder.dart';
 import 'package:flame_isolate_example/brains/worker_overmind_hud.dart';

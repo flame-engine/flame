@@ -8,12 +8,11 @@ import 'package:meta/meta.dart';
 /// Mixin that can be added to any [Component] allowing it to receive tap
 /// events.
 ///
-/// When using this mixin, also add [HasTappables] to your game, which handles
-/// propagation of tap events from the root game to individual components.
-///
 /// See [MultiTapGestureRecognizer] for the description of each individual
 /// event.
-@Deprecated('Will be removed in Flame v2, use the TapCallbacks mixin instead.')
+@Deprecated(
+  'Will be removed in Flame v1.10.0, use the TapCallbacks mixin instead.',
+)
 mixin Tappable on Component {
   bool onTapDown(TapDownInfo info) => true;
   bool onLongTapDown(TapDownInfo info) => true;

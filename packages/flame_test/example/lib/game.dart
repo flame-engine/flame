@@ -11,10 +11,10 @@ class MyGameWidget extends StatelessWidget {
   }
 }
 
-class Background extends SpriteComponent with HasGameRef<MyGame> {
+class Background extends SpriteComponent with HasGameReference<MyGame> {
   @override
   Future<void> onLoad() async {
-    sprite = await gameRef.loadSprite('city.png');
+    sprite = await game.loadSprite('city.png');
     size = Vector2.all(200);
     position = Vector2.all(100);
   }
