@@ -46,7 +46,7 @@ class Background extends SvgComponent
   Future<void>? onLoad() async {
     await super.onLoad();
 
-    svg = await game.loadSvg('svgs/checkboard.svg');
+    svg = await game.loadSvg('svgs/checkerboard.svg');
   }
 }
 
