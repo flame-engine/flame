@@ -8,15 +8,15 @@ environment:
 
 dependencies:
   collection: ^1.17.1
-  flame: ^1.8.2
-  flame_forge2d: ^0.14.1+1
+  flame: ^1.9.0
+  flame_forge2d: ^0.15.0
   flutter:
     sdk: flutter
   google_fonts: ^4.0.4
   url_launcher: ^6.1.11
 
 dev_dependencies:
-  flame_lint: ^1.1.0
+  flame_lint: ^1.1.1
   flutter_test:
     sdk: flutter
 
