@@ -23,20 +23,19 @@ class FollowComponentExample extends FlameGame
     respects the camera transformation.
   ''';
 
-  FollowComponentExample({required this.viewportResolution});
+  FollowComponentExample({required this.viewportResolution})
+      : super(
+          camera: CameraComponent.withFixedResolution(
+            width: viewportResolution.x,
+            height: viewportResolution.y,
+          ),
+        );
 
   late MovableEmber ember;
   final Vector2 viewportResolution;
 
   @override
   Future<void> onLoad() async {
-    final world = World();
-    camera = CameraComponent.withFixedResolution(
-      width: viewportResolution.x,
-      height: viewportResolution.y,
-      world: world,
-    );
-
     world.add(Map());
     world.add(ember = MovableEmber());
     camera.setBounds(Map.bounds);
@@ -58,6 +57,8 @@ class MovableEmber extends Ember<FollowComponentExample>
   final Vector2 velocity = Vector2.zero();
   late final TextComponent positionText;
   late final Vector2 textPosition;
+  late final maxPosition = Vector2.all(Map.size - size.x / 2);
+  late final minPosition = -maxPosition;
 
   MovableEmber() : super(priority: 2);
 
@@ -78,6 +79,7 @@ class MovableEmber extends Ember<FollowComponentExample>
     super.update(dt);
     final deltaPosition = velocity * (speed * dt);
     position.add(deltaPosition);
+    position.clamp(minPosition, maxPosition);
     positionText.text = '(${x.toInt()}, ${y.toInt()})';
   }
 

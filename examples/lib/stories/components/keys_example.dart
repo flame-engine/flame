@@ -36,9 +36,9 @@ class _KeysExampleWidgetState extends State<KeysExampleWidget> {
           child: GameWidget(game: game),
         ),
         Positioned(
-          left: 0,
+          left: 20,
           top: 222,
-          width: 340,
+          width: 300,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

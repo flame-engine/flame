@@ -25,7 +25,7 @@ class JoystickExample extends FlameGame {
     );
     player = JoystickPlayer(joystick);
 
-    add(player);
-    add(joystick);
+    world.add(player);
+    camera.viewport.add(joystick);
   }
 }

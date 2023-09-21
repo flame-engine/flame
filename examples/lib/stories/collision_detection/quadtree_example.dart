@@ -204,23 +204,24 @@ class Player extends SpriteComponent
     required super.position,
     required super.size,
     required super.priority,
-  }) {
-    Sprite.load(
-      'retro_tiles.png',
-      srcSize: Vector2.all(tileSize),
-      srcPosition: Vector2(tileSize * 3, tileSize),
-    ).then((value) {
-      sprite = value;
-    });
+  });
 
-    add(hitbox);
-  }
-
-  final hitbox = RectangleHitbox();
   bool canMoveLeft = true;
   bool canMoveRight = true;
   bool canMoveTop = true;
   bool canMoveBottom = true;
+  final hitbox = RectangleHitbox();
+
+  @override
+  Future<void> onLoad() async {
+    sprite = await Sprite.load(
+      'retro_tiles.png',
+      srcSize: Vector2.all(tileSize),
+      srcPosition: Vector2(tileSize * 3, tileSize),
+    );
+
+    add(hitbox);
+  }
 
   @override
   void onCollisionStart(

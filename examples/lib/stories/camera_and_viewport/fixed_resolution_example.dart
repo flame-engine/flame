@@ -14,22 +14,18 @@ class FixedResolutionExample extends FlameGame
     Resize the window or change device orientation to see the difference.
   ''';
 
-  final Vector2 viewportResolution;
-
   FixedResolutionExample({
-    required this.viewportResolution,
-  });
+    required Vector2 viewportResolution,
+  }) : super(
+          camera: CameraComponent.withFixedResolution(
+            width: viewportResolution.x,
+            height: viewportResolution.y,
+          ),
+        );
 
   @override
   Future<void> onLoad() async {
     final flameSprite = await loadSprite('layers/player.png');
-    final world = World();
-    final cameraComponent = CameraComponent.withFixedResolution(
-      width: viewportResolution.x,
-      height: viewportResolution.y,
-      world: world,
-    );
-    addAll([world, cameraComponent]);
 
     world.add(Background());
     world.add(
