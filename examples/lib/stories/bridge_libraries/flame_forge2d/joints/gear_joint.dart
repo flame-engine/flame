@@ -3,7 +3,6 @@ import 'dart:ui';
 import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/balls.dart';
 import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/boxes.dart';
 import 'package:flame/components.dart';
-import 'package:flame/experimental.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 
 class GearJointExample extends Forge2DGame {

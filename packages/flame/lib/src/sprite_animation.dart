@@ -282,12 +282,6 @@ class SpriteAnimation {
     return SpriteAnimation(frames.reversed.toList(), loop: loop);
   }
 
-  /// Returns a new instance of [SpriteAnimationTicker].
-  @Deprecated('Will be removed in Flame v1.9, use createTicker() instead.')
-  SpriteAnimationTicker ticker() {
-    return SpriteAnimationTicker(this);
-  }
-
   /// Creates and returns a new [SpriteAnimationTicker].
   SpriteAnimationTicker createTicker() => SpriteAnimationTicker(this);
 }

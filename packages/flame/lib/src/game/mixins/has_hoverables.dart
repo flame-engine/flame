@@ -4,10 +4,8 @@ import 'package:flame/src/gestures/events.dart';
 import 'package:meta/meta.dart';
 
 @Deprecated(
-  '''
-  Will be removed in Flame v2, use HoverCallbacks without a game mixin instead.
-  https://github.com/flame-engine/flame/issues/2142
-  ''',
+  'Will be removed in Flame v1.10.0, use HoverCallbacks without a game mixin '
+  'instead.',
 )
 mixin HasHoverables on FlameGame {
   @mustCallSuper

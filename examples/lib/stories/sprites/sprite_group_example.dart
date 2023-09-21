@@ -23,15 +23,15 @@ class SpriteGroupExample extends FlameGame {
 }
 
 class ButtonComponent extends SpriteGroupComponent<ButtonState>
-    with HasGameRef<SpriteGroupExample>, TapCallbacks {
+    with HasGameReference<SpriteGroupExample>, TapCallbacks {
   @override
   Future<void> onLoad() async {
-    final pressedSprite = await gameRef.loadSprite(
+    final pressedSprite = await game.loadSprite(
       'buttons.png',
       srcPosition: Vector2(0, 20),
       srcSize: Vector2(60, 20),
     );
-    final unpressedSprite = await gameRef.loadSprite(
+    final unpressedSprite = await game.loadSprite(
       'buttons.png',
       srcSize: Vector2(60, 20),
     );

@@ -3,7 +3,7 @@ import 'package:flame/game.dart';
 import 'package:meta/meta.dart';
 
 class Ember<T extends FlameGame> extends SpriteAnimationComponent
-    with HasGameRef<T> {
+    with HasGameReference<T> {
   Ember({super.position, Vector2? size, super.priority, super.key})
       : super(
           size: size ?? Vector2.all(50),
@@ -13,7 +13,7 @@ class Ember<T extends FlameGame> extends SpriteAnimationComponent
   @mustCallSuper
   @override
   Future<void> onLoad() async {
-    animation = await gameRef.loadSpriteAnimation(
+    animation = await game.loadSpriteAnimation(
       'animations/ember.png',
       SpriteAnimationData.sequenced(
         amount: 3,

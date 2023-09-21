@@ -15,7 +15,7 @@ import 'package:tiled/tiled.dart';
 /// Sprite Batches.
 /// {@endtemplate}
 class TiledComponent<T extends FlameGame> extends PositionComponent
-    with HasGameRef<T> {
+    with HasGameReference<T> {
   /// Map instance of this component.
   RenderableTiledMap tileMap;
 
@@ -67,7 +67,7 @@ class TiledComponent<T extends FlameGame> extends PositionComponent
     super.onLoad();
     // Automatically use the first attached CameraComponent camera if it's not
     // already set..
-    tileMap.camera ??= gameRef.children.query<CameraComponent>().firstOrNull;
+    tileMap.camera ??= game.children.query<CameraComponent>().firstOrNull;
   }
 
   @override

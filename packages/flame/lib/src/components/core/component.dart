@@ -265,11 +265,9 @@ class Component {
   Component? get parent => _parent;
   Component? _parent;
   set parent(Component? newParent) {
-    if (newParent == _parent) {
-      return;
-    } else if (newParent == null) {
+    if (newParent == null) {
       removeFromParent();
-    } else if (_parent == null) {
+    } else if (_parent == null || isRemoving) {
       addToParent(newParent);
     } else {
       final root = findGame()!;
@@ -580,13 +578,13 @@ class Component {
 
   FutureOr<void> _addChild(Component child) {
     assert(
-      child._parent == null,
+      child._parent == null || child.isRemoving,
       '$child cannot be added to $this because it already has a parent: '
       '${child._parent}',
     );
-    child._parent = this;
     final game = findGame();
-    if (isMounted && !child.isMounted) {
+    child._parent = this;
+    if (isMounted && (!child.isMounted || child.isRemoving)) {
       game!.enqueueAdd(child, this);
     } else {
       // This will be reconciled during the mounting stage
@@ -647,14 +645,6 @@ class Component {
       _children?.remove(child);
       child._parent = null;
     }
-  }
-
-  /// Changes the current parent for another parent and prepares the tree under
-  /// the new root.
-  @Deprecated('Will be removed in 1.9.0. Use the parent setter instead.')
-  // ignore: use_setters_to_change_properties
-  void changeParent(Component newParent) {
-    parent = newParent;
   }
 
   //#endregion
@@ -987,11 +977,11 @@ class Component {
   @Deprecated('''
   Use the CameraComponent and add your component to the viewport with
   cameraComponent.viewport.add(yourHudComponent) instead.
-  This will be removed in Flame v2.
+  This will be removed in Flame v1.10.0.
   ''')
   PositionType positionType = PositionType.game;
 
-  @Deprecated('To be removed in Flame v2')
+  @Deprecated('To be removed in Flame v1.10.0')
   @protected
   Vector2 eventPosition(PositionInfo info) {
     switch (positionType) {
