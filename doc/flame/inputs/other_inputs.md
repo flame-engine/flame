@@ -161,5 +161,5 @@ to toggle between (imagine a switch component).
 pressed.
 - `hoverAndSelectedSkin`: Hover on selectable and selected button (desktop and web).
 
-The component also supports two skins, `disabledSkin` and `disabledAndSelectedSkin`, for the disabled
-state. This state is achieved by using `setDisabled`.
+The component also supports two skins, `disabledSkin` and `disabledAndSelectedSkin`, for the
+disabled state. This state is achieved by using `setDisabled`.
