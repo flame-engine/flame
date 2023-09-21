@@ -146,15 +146,20 @@ Flame has a separate plugin to support external game controllers (gamepads), che
 
 ## AdvancedButtonComponent
 
-A `AdvancedButtonComponent` have separate states for each of the different pointer phases. The skin can be customized for each state. Each skin is a `PositionComponent`.
+The `AdvancedButtonComponent` have separate states for each of the different pointer phases.
+The skin can be customized for each state and each skin is represented by a `PositionComponent`.
 
 These are the fields that should be used to know the state of the `AdvancedButtonComponent`:
 
-- `defaultSkin`: Component that will be displayed on the button by default.
-- `downSkin`: Component displayed when button clicked (or touch).
-- `hoverSkin`: Hover component (desktop and web).
-- `defaultSelectedSkin`: The component to display when the button is selected. The button property must be IsSelectable = true. In this case, the button will have two toggle states (looks like a switch component).
-- `downAndSelectedSkin`: A component that displays when the selectable button is selected and pressed.
+- `defaultSkin`: Component that will be displayed by default on the button.
+- `downSkin`: Component displayed when the button is clicked or tapped.
+- `hoverSkin`: Component displayed when the button is hovered. (desktop and web).
+- `defaultSelectedSkin`: The component to display when the button is selected.
+The button property must be IsSelectable = true. In this case, the button will have two states
+to toggle between (imagine a switch component).
+- `downAndSelectedSkin`: The component that is displayed when the selectable button is selected and
+pressed.
 - `hoverAndSelectedSkin`: Hover on selectable and selected button (desktop and web).
 
-The component also supports two skins - `disabledSkin` and `disabledAndSelectedSkin` for disabled state. Achieved by setDisabled.
+The component also supports two skins, `disabledSkin` and `disabledAndSelectedSkin`, for the disabled
+state. This state is achieved by using `setDisabled`.
