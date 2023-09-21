@@ -24,6 +24,8 @@ arial # name of a typeface
 arities # plural of arity
 arity # number of parameters a function takes
 autofocus # auto focus event
+backgrounded # moving the app to the background
+backgrounding # moving the app to the background
 backpressure # strategy to deal with excess flow of data
 backquote # another word for backtick
 backtick # the back tick character "`"
@@ -39,6 +41,7 @@ coord # coordinate
 coords # plural of coord
 deduplication # removal of duplicates
 easings # Easing functions specify the rate of change of a parameter over time
+foregrounded # moving the app to the foreground
 fullscreen # mode in which a program or app occupies the entire screen with no borders
 goldens # test files used as reference for Golden Tests
 hardcoding # putting a value as a literal instead of computing it
