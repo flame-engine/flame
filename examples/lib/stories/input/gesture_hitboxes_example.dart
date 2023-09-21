@@ -84,21 +84,12 @@ class MyShapeComponent extends PositionComponent
   }
 
   @override
-  void update(double dt) {
-    if (isHovered) {
-      print('hovered');
-    }
-  }
-
-  @override
   void onHoverEnter() {
-    print('dooo something');
     hitbox.paint.color = hitbox.paint.color.darken(0.5);
   }
 
   @override
   void onHoverExit() {
-    print('naaaoww');
     hitbox.paint.color = baseColor;
   }
 }

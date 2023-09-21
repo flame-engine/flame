@@ -2,13 +2,12 @@ import 'package:dashbook/dashbook.dart';
 import 'package:examples/commons/commons.dart';
 import 'package:examples/stories/camera_and_viewport/camera_component_example.dart';
 import 'package:examples/stories/camera_and_viewport/camera_component_properties_example.dart';
+import 'package:examples/stories/camera_and_viewport/camera_follow_and_world_bounds.dart';
 import 'package:examples/stories/camera_and_viewport/coordinate_systems_example.dart';
 import 'package:examples/stories/camera_and_viewport/fixed_resolution_example.dart';
 import 'package:examples/stories/camera_and_viewport/follow_component_example.dart';
 import 'package:examples/stories/camera_and_viewport/zoom_example.dart';
 import 'package:flame/game.dart';
-
-import 'package:examples/stories/camera_and_viewport/camera_follow_and_world_bounds.dart';
 
 void addCameraAndViewportStories(Dashbook dashbook) {
   dashbook.storiesOf('Camera & Viewport')
