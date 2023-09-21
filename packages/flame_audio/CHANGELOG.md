@@ -1,3 +1,8 @@
+## 2.1.0
+
+ - **REFACTOR**: Enable DCM linting ([#2667](https://github.com/flame-engine/flame/issues/2667)). ([27a8fd61](https://github.com/flame-engine/flame/commit/27a8fd61cb7f62513e07a93ff61cf03b426353f2))
+ - **FEAT**(flame_audio): Adding an easy way of updating the prefix from FlameAudio ([#2751](https://github.com/flame-engine/flame/issues/2751)). ([d2c9dcec](https://github.com/flame-engine/flame/commit/d2c9dcecbe661896ba8c84d81b9500cdfa8c78c8))
+
 ## 2.0.5
 
  - Update a dependency to the latest release.

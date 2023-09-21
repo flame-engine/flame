@@ -1,3 +1,15 @@
+## 1.13.0
+
+> Note: This release has breaking changes.
+
+ - **REFACTOR**: Enable DCM linting ([#2667](https://github.com/flame-engine/flame/issues/2667)). ([27a8fd61](https://github.com/flame-engine/flame/commit/27a8fd61cb7f62513e07a93ff61cf03b426353f2))
+ - **FIX**: HasGameReference should default to FlameGame ([#2710](https://github.com/flame-engine/flame/issues/2710)). ([93dcb3a1](https://github.com/flame-engine/flame/commit/93dcb3a117c365767e3f20569b2d82abc8a7b152))
+ - **FEAT**: Add HoverCallbacks ([#2706](https://github.com/flame-engine/flame/issues/2706)). ([d460b846](https://github.com/flame-engine/flame/commit/d460b846c23fb1f67041469c99c81e4c78b89c2e))
+ - **BREAKING** **REFACTOR**: Rename (Text) Elements, Nodes and Styles for clarity, add docs ([#2700](https://github.com/flame-engine/flame/issues/2700)). ([4b420b79](https://github.com/flame-engine/flame/commit/4b420b7952ab8d675140b9d8d132015ff2780f92))
+ - **BREAKING** **REFACTOR**: Kill TextRenderer, Long Live TextRenderer ([#2683](https://github.com/flame-engine/flame/issues/2683)). ([a1cb9a06](https://github.com/flame-engine/flame/commit/a1cb9a06ada6f87bf22bc20e3c190ccd53517389))
+ - **BREAKING** **REFACTOR**: Make TextElement more usable on its own ([#2679](https://github.com/flame-engine/flame/issues/2679)). ([1a64443c](https://github.com/flame-engine/flame/commit/1a64443ccaae32e71fe7d016ad1e8f18a75c93da))
+ - **BREAKING** **FEAT**: Add CameraComponent to FlameGame ([#2740](https://github.com/flame-engine/flame/issues/2740)). ([7c2f4000](https://github.com/flame-engine/flame/commit/7c2f4000761580dbabb5d73b27f64d5819b34e8d))
+
 ## 1.12.1
 
  - Update a dependency to the latest release.
