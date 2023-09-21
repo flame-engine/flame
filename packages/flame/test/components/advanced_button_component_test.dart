@@ -1,7 +1,7 @@
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/src/components/input/advanced_button_component.dart';
-import 'package:flame/src/events/flame_game_mixins/has_tappable_components.dart';
+import 'package:flame/src/events/flame_game_mixins/multi_tap_dispatcher.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
