@@ -7,13 +7,13 @@ environment:
   sdk: ">=3.0.0 <4.0.0"
 
 dependencies:
-  flame: ^1.8.2
-  flame_markdown: ^0.1.0
+  flame: ^1.9.0
+  flame_markdown: ^0.1.1
   flutter:
     sdk: flutter
 
 dev_dependencies:
-  flame_lint: ^1.1.0
+  flame_lint: ^1.1.1
 
 flutter:
   uses-material-design: false
