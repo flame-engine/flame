@@ -265,11 +265,9 @@ class Component {
   Component? get parent => _parent;
   Component? _parent;
   set parent(Component? newParent) {
-    if (newParent == _parent) {
-      return;
-    } else if (newParent == null) {
+    if (newParent == null) {
       removeFromParent();
-    } else if (_parent == null) {
+    } else if (_parent == null || isRemoving) {
       addToParent(newParent);
     } else {
       final root = findGame()!;
@@ -580,13 +578,13 @@ class Component {
 
   FutureOr<void> _addChild(Component child) {
     assert(
-      child._parent == null,
+      child._parent == null || child.isRemoving,
       '$child cannot be added to $this because it already has a parent: '
       '${child._parent}',
     );
-    child._parent = this;
     final game = findGame();
-    if (isMounted && !child.isMounted) {
+    child._parent = this;
+    if (isMounted && (!child.isMounted || child.isRemoving)) {
       game!.enqueueAdd(child, this);
     } else {
       // This will be reconciled during the mounting stage
