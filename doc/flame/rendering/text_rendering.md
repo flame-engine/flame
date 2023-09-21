@@ -261,7 +261,7 @@ generate a `TextElement`.
 Flame provides two concrete implementations:
 
 - `TextPaint`: most used, uses Flutter `TextPainter` to render regular text
-- `SpriteFontRenderer`: uses a `SpriteFont` (a spritesheet-based font) to render bitmap text
+- `SpriteFontRenderer`: uses a `SpriteFont` (a sprite sheet-based font) to render bitmap text
 - `DebugTextRenderer`: only intended to be used for Golden Tests
 
 But you can also provide your own if you want to extend to other customized forms of text rendering.
@@ -340,7 +340,7 @@ Palette](palette.md) guide.
 #### SpriteFontRenderer
 
 The other renderer option provided out of the box is `SpriteFontRenderer`, which allows you to
-provide a `SpriteFont` based off of a spritesheet. TODO
+provide a `SpriteFont` based off of a sprite sheet. TODO
 
 
 #### DebugTextRenderer

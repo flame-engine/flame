@@ -71,9 +71,9 @@ after the image is loaded into the cache.
 ```
 
 The last four numbers in the constructor are the coordinates of the sprite
-image within the spritesheet `klondike-sprites.png`. If you're wondering how I
+image within the sprite sheet `klondike-sprites.png`. If you're wondering how I
 obtained these numbers, the answer is that I used a free online service
-[spritecow.com] -- it's a handy tool for locating sprites within a spritesheet.
+[spritecow.com] -- it's a handy tool for locating sprites within a sprite sheet.
 
 Lastly, I have simple getters to determine the "color" of a suit. This will be
 needed later when we need to enforce the rule that cards can only be placed
