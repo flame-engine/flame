@@ -108,6 +108,13 @@ extension Vector2Extension on Vector2 {
     }
   }
 
+  /// Clamps this vector so that it is within or equals to the bounds defined by
+  /// [min] and [max].
+  void clamp(Vector2 min, Vector2 max) {
+    x = x.clamp(min.x, max.x);
+    y = y.clamp(min.y, max.y);
+  }
+
   /// Project this onto [other].
   ///
   /// [other] needs to have a length > 0;

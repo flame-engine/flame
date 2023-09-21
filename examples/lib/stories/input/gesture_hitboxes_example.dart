@@ -27,22 +27,21 @@ class _GestureHitboxesWorld extends World with TapCallbacks {
     final shapeSize =
         Vector2.all(100) + Vector2.all(50.0).scaled(_rng.nextDouble());
     final shapeAngle = _rng.nextDouble() * 6;
-    final hitbox = () {
-      switch (shapeType) {
-        case Shapes.circle:
-          return CircleHitbox();
-        case Shapes.rectangle:
-          return RectangleHitbox();
-        case Shapes.polygon:
-          final points = [
-            -Vector2.random(_rng),
-            Vector2.random(_rng)..x *= -1,
-            Vector2.random(_rng),
-            Vector2.random(_rng)..y *= -1,
-          ];
-          return PolygonHitbox.relative(points, parentSize: shapeSize);
-      }
-    }();
+    ShapeHitbox hitbox;
+    switch (shapeType) {
+      case Shapes.circle:
+        hitbox = CircleHitbox();
+      case Shapes.rectangle:
+        hitbox = RectangleHitbox();
+      case Shapes.polygon:
+        final points = [
+          -Vector2.random(_rng),
+          Vector2.random(_rng)..x *= -1,
+          Vector2.random(_rng),
+          Vector2.random(_rng)..y *= -1,
+        ];
+        hitbox = PolygonHitbox.relative(points, parentSize: shapeSize);
+    }
     return MyShapeComponent(
       hitbox: hitbox,
       position: position,
@@ -85,12 +84,21 @@ class MyShapeComponent extends PositionComponent
   }
 
   @override
+  void update(double dt) {
+    if (isHovered) {
+      print('hovered');
+    }
+  }
+
+  @override
   void onHoverEnter() {
+    print('dooo something');
     hitbox.paint.color = hitbox.paint.color.darken(0.5);
   }
 
   @override
   void onHoverExit() {
+    print('naaaoww');
     hitbox.paint.color = baseColor;
   }
 }

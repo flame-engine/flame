@@ -8,6 +8,8 @@ import 'package:examples/stories/camera_and_viewport/follow_component_example.da
 import 'package:examples/stories/camera_and_viewport/zoom_example.dart';
 import 'package:flame/game.dart';
 
+import 'package:examples/stories/camera_and_viewport/camera_follow_and_world_bounds.dart';
+
 void addCameraAndViewportStories(Dashbook dashbook) {
   dashbook.storiesOf('Camera & Viewport')
     ..add(
@@ -74,5 +76,12 @@ void addCameraAndViewportStories(Dashbook dashbook) {
         'camera_and_viewport/camera_component_properties_example.dart',
       ),
       info: CameraComponentPropertiesExample.description,
+    )
+    ..add(
+      'Follow and World bounds',
+      (_) => GameWidget(game: CameraFollowAndWorldBoundsExample()),
+      codeLink:
+          baseLink('camera_and_viewport/camera_follow_and_world_bounds.dart'),
+      info: CameraFollowAndWorldBoundsExample.description,
     );
 }
