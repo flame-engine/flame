@@ -22,7 +22,7 @@ mixin TapCallbacks on Component {
   @mustCallSuper
   void onMount() {
     super.onMount();
-    final game = findGame()!;
+    final game = findRootGame()!;
     if (game.findByKey(const MultiTapDispatcherKey()) == null) {
       final dispatcher = MultiTapDispatcher();
       game.registerKey(const MultiTapDispatcherKey(), dispatcher);

@@ -1121,6 +1121,28 @@ void main() {
       });
     });
 
+    group('findRootGame()', () {
+      testWithFlameGame('finds root game in nested game structure',
+          (game) async {
+        final component = Component();
+        await game.ensureAdd(
+          FlameGame(
+            children: [
+              Component(children: [component]),
+            ],
+          ),
+        );
+        expect(component.findRootGame(), game);
+      });
+
+      testWithFlameGame('finds root game in non-nested game structure',
+          (game) async {
+        final component = Component();
+        await game.ensureAdd(component);
+        expect(component.findRootGame(), game);
+      });
+    });
+
     group('miscellaneous', () {
       testWithFlameGame('childrenFactory', (game) async {
         final component0 = Component();

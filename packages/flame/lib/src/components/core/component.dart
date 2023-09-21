@@ -381,6 +381,8 @@ class Component {
 
   @internal
   static Game? staticGameInstance;
+
+  /// Fetches the nearest [FlameGame] ancestor to the component.
   FlameGame? findGame() {
     assert(
       staticGameInstance is FlameGame || staticGameInstance == null,
@@ -391,6 +393,15 @@ class Component {
         : null;
     return gameInstance ??
         ((this is FlameGame) ? (this as FlameGame) : _parent?.findGame());
+  }
+
+  /// Fetches the root [FlameGame] ancestor to the component.
+  FlameGame? findRootGame() {
+    var game = findGame();
+    while (game?.parent != null) {
+      game = game!.parent!.findGame();
+    }
+    return game;
   }
 
   /// Whether the children list contains the given component.
