@@ -5,7 +5,7 @@ import 'package:examples/stories/sprites/basic_sprite_example.dart';
 import 'package:examples/stories/sprites/sprite_batch_example.dart';
 import 'package:examples/stories/sprites/sprite_batch_load_example.dart';
 import 'package:examples/stories/sprites/sprite_group_example.dart';
-import 'package:examples/stories/sprites/spritesheet_example.dart';
+import 'package:examples/stories/sprites/sprite_sheet_example.dart';
 import 'package:flame/game.dart';
 
 void addSpritesStories(Dashbook dashbook) {
@@ -23,10 +23,10 @@ void addSpritesStories(Dashbook dashbook) {
       info: Base64SpriteExample.description,
     )
     ..add(
-      'Spritesheet',
-      (_) => GameWidget(game: SpritesheetExample()),
-      codeLink: baseLink('sprites/spritesheet_example.dart'),
-      info: SpritesheetExample.description,
+      'SpriteSheet',
+      (_) => GameWidget(game: SpriteSheetExample()),
+      codeLink: baseLink('sprites/sprite_sheet_example.dart'),
+      info: SpriteSheetExample.description,
     )
     ..add(
       'SpriteBatch',

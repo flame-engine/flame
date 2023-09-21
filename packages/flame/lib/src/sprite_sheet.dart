@@ -68,6 +68,34 @@ class SpriteSheet {
     return _spriteCache[spriteId] ??= _computeSprite(spriteId);
   }
 
+  /// Create a [SpriteAnimationFrameData] for the sprite in the position
+  /// (row, column) on the sprite sheet grid.
+  SpriteAnimationFrameData createFrameData(
+    int row,
+    int column, {
+    required double stepTime,
+  }) {
+    return createFrameDataFromId(row * columns + column, stepTime: stepTime);
+  }
+
+  /// Create a [SpriteAnimationFrameData] for the sprite with id [spriteId]
+  /// from the grid.
+  ///
+  /// The ids are defined as starting at 0 on the top left and going
+  /// sequentially on each row.
+  SpriteAnimationFrameData createFrameDataFromId(
+    int spriteId, {
+    required double stepTime,
+  }) {
+    final i = spriteId % columns;
+    final j = spriteId ~/ columns;
+    return SpriteAnimationFrameData(
+      srcPosition: Vector2Extension.fromInts(i, j)..multiply(srcSize),
+      srcSize: srcSize,
+      stepTime: stepTime,
+    );
+  }
+
   Sprite _computeSprite(int spriteId) {
     final i = spriteId % columns;
     final j = spriteId ~/ columns;

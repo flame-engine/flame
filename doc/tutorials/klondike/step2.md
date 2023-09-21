@@ -39,9 +39,9 @@ have been more difficult to access that image from other classes.
 
 Also note that I am `await`ing the image to finish loading before initializing
 anything else in the game. This is for convenience: it means that by the time
-all other components are initialized, they can assume the spritesheet is already
+all other components are initialized, they can assume the sprite sheet is already
 loaded. We can even add a helper function to extract a sprite from the common
-spritesheet:
+sprite sheet:
 
 ```dart
 Sprite klondikeSprite(double x, double y, double width, double height) {
@@ -193,7 +193,7 @@ not planning to change these values during the game:
 Next, we will create a `Stock` component, the `Waste`, four `Foundation`s and
 seven `Pile`s, setting their sizes and positions in the world. The positions
 are calculated using simple arithmetics. This should all happen inside the
-`onLoad` method, after loading the spritesheet:
+`onLoad` method, after loading the sprite sheet:
 
 ```dart
     final stock = Stock()
