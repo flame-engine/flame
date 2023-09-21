@@ -65,7 +65,7 @@ mixin DragCallbacks on Component {
   @mustCallSuper
   void onMount() {
     super.onMount();
-    final game = findGame()!;
+    final game = findRootGame()!;
     if (game.findByKey(const MultiDragDispatcherKey()) == null) {
       final dispatcher = MultiDragDispatcher();
       game.registerKey(const MultiDragDispatcherKey(), dispatcher);
