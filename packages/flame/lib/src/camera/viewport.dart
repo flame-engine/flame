@@ -1,11 +1,11 @@
 import 'dart:ui';
 
+import 'package:flame/game.dart';
 import 'package:flame/src/anchor.dart';
 import 'package:flame/src/camera/camera_component.dart';
 import 'package:flame/src/components/core/component.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
 import 'package:meta/meta.dart';
-import 'package:vector_math/vector_math_64.dart';
 
 /// [Viewport] is a part of a [CameraComponent] system.
 ///
@@ -25,6 +25,7 @@ abstract class Viewport extends Component
   Viewport({super.children});
 
   final Vector2 _size = Vector2.zero();
+  bool _isInitialized = false;
 
   /// Position of the viewport's anchor in the parent's coordinate frame.
   ///
@@ -54,7 +55,15 @@ abstract class Viewport extends Component
   /// Changing the size at runtime triggers the [onViewportResize] event. The
   /// size cannot be negative.
   @override
-  Vector2 get size => _size;
+  Vector2 get size {
+    if (!_isInitialized && camera.parent is FlameGame) {
+      // This is so that the size can be accessed before the viewport is fully
+      // mounted.
+      onGameResize((camera.parent! as FlameGame).canvasSize);
+    }
+    return _size;
+  }
+
   @override
   set size(Vector2 value) {
     assert(
@@ -62,7 +71,8 @@ abstract class Viewport extends Component
       "Viewport's size cannot be negative: $value",
     );
     _size.setFrom(value);
-    if (isMounted) {
+    _isInitialized = true;
+    if (parent != null) {
       camera.viewfinder.onViewportResize();
     }
     onViewportResize();

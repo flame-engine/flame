@@ -13,12 +13,12 @@ void main() {
     testWithFlameGame(
       'fixed ratio viewport has perfect ratio',
       (game) async {
-        game.camera.viewport = FixedResolutionViewport(Vector2.all(50));
+        game.oldCamera.viewport = FixedResolutionViewport(Vector2.all(50));
         game.onGameResize(Vector2.all(200.0));
         expect(game.canvasSize, Vector2.all(200.00));
         expect(game.size, Vector2.all(50.00));
 
-        final viewport = game.camera.viewport as FixedResolutionViewport;
+        final viewport = game.oldCamera.viewport as FixedResolutionViewport;
         expect(viewport.resizeOffset, Vector2.zero());
         expect(viewport.scaledSize, Vector2(200.0, 200.0));
         expect(viewport.scale, 4.0);
@@ -41,12 +41,12 @@ void main() {
     testWithFlameGame(
       'fixed ratio viewport maxes width',
       (game) async {
-        game.camera.viewport = FixedResolutionViewport(Vector2.all(50));
+        game.oldCamera.viewport = FixedResolutionViewport(Vector2.all(50));
         game.onGameResize(Vector2(100.0, 200.0));
         expect(game.canvasSize, Vector2(100.0, 200.00));
         expect(game.size, Vector2.all(50.00));
 
-        final viewport = game.camera.viewport as FixedResolutionViewport;
+        final viewport = game.oldCamera.viewport as FixedResolutionViewport;
         expect(viewport.resizeOffset, Vector2(0, 50.0));
         expect(viewport.scaledSize, Vector2(100.0, 100.0));
         expect(viewport.scale, 2.0);
@@ -70,12 +70,13 @@ void main() {
     testWithFlameGame(
       'fixed ratio viewport maxes height',
       (game) async {
-        game.camera.viewport = FixedResolutionViewport(Vector2(100.0, 400.0));
+        game.oldCamera.viewport =
+            FixedResolutionViewport(Vector2(100.0, 400.0));
         game.onGameResize(Vector2(100.0, 200.0));
         expect(game.canvasSize, Vector2(100.0, 200.00));
         expect(game.size, Vector2(100.00, 400.0));
 
-        final viewport = game.camera.viewport as FixedResolutionViewport;
+        final viewport = game.oldCamera.viewport as FixedResolutionViewport;
         expect(viewport.resizeOffset, Vector2(25.0, 0));
         expect(viewport.scaledSize, Vector2(50.0, 200.0));
         expect(viewport.scale, 0.5);

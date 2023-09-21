@@ -22,7 +22,7 @@ void main() {
         ]);
 
         final canvas = MockCanvas();
-        game.camera.snapTo(Vector2(12.0, 18.0));
+        game.oldCamera.snapTo(Vector2(12.0, 18.0));
         game.render(canvas);
 
         expect(
@@ -40,13 +40,14 @@ void main() {
     testWithFlameGame(
       'PositionType.viewport',
       (game) async {
+        game.removeAll([game.world, game.camera]);
         await game.ensureAddAll([
           _MyComponent(4, positionType: PositionType.viewport),
           _MyComponent(1, positionType: PositionType.viewport),
           _MyComponent(2, positionType: PositionType.viewport),
         ]);
         final canvas = MockCanvas();
-        game.camera.snapTo(Vector2(12.0, 18.0));
+        game.oldCamera.snapTo(Vector2(12.0, 18.0));
         game.render(canvas);
 
         expect(
@@ -63,7 +64,8 @@ void main() {
       testWithFlameGame(
         'viewport does not affect component with PositionType.widget',
         (game) async {
-          game.camera.viewport = FixedResolutionViewport(Vector2.all(50));
+          game.removeAll([game.world, game.camera]);
+          game.oldCamera.viewport = FixedResolutionViewport(Vector2.all(50));
           game.onGameResize(Vector2.all(200.0));
           await game.ensureAdd(
             _MyComponent(0, positionType: PositionType.widget),
@@ -81,10 +83,11 @@ void main() {
       testWithFlameGame(
         'camera does not affect component with PositionType.widget',
         (game) async {
+          game.removeAll([game.world, game.camera]);
           await game.ensureAdd(
             _MyComponent(0, positionType: PositionType.widget),
           );
-          game.camera.snapTo(Vector2(100, 100));
+          game.oldCamera.snapTo(Vector2(100, 100));
 
           final canvas = MockCanvas();
           game.render(canvas);
@@ -98,6 +101,7 @@ void main() {
       testWithFlameGame(
         'Several static components',
         (game) async {
+          game.removeAll([game.world, game.camera]);
           await game.ensureAddAll([
             _MyComponent(5, positionType: PositionType.widget),
             _MyComponent(1, positionType: PositionType.widget),
@@ -105,7 +109,7 @@ void main() {
           ]);
 
           final canvas = MockCanvas();
-          game.camera.snapTo(Vector2(12.0, 18.0));
+          game.oldCamera.snapTo(Vector2(12.0, 18.0));
           game.render(canvas);
 
           expect(
@@ -122,6 +126,7 @@ void main() {
     testWithFlameGame(
       'mixed',
       (game) async {
+        game.removeAll([game.world, game.camera]);
         await game.ensureAddAll([
           _MyComponent(4),
           _MyComponent(1),
@@ -134,7 +139,7 @@ void main() {
         ]);
 
         final canvas = MockCanvas();
-        game.camera.snapTo(Vector2(12.0, 18.0));
+        game.oldCamera.snapTo(Vector2(12.0, 18.0));
         game.render(canvas);
 
         expect(

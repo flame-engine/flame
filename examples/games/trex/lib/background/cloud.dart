@@ -4,7 +4,7 @@ import 'package:trex_game/random_extension.dart';
 import 'package:trex_game/trex_game.dart';
 
 class Cloud extends SpriteComponent
-    with ParentIsA<CloudManager>, HasGameRef<TRexGame> {
+    with ParentIsA<CloudManager>, HasGameReference<TRexGame> {
   Cloud({required Vector2 position})
       : cloudGap = random.fromRange(
           minCloudGap,
@@ -28,7 +28,7 @@ class Cloud extends SpriteComponent
   @override
   Future<void> onLoad() async {
     sprite = Sprite(
-      gameRef.spriteImage,
+      game.spriteImage,
       srcPosition: Vector2(166.0, 2.0),
       srcSize: initialSize,
     );

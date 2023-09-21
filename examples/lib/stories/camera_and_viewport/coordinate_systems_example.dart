@@ -33,13 +33,9 @@ class CoordinateSystemsExample extends FlameGame
   String? lastEventDescription;
   final cameraPosition = Vector2.zero();
   final cameraVelocity = Vector2.zero();
-  late final CameraComponent cameraComponent;
-  final world = World();
 
   @override
   Future<void> onLoad() async {
-    cameraComponent = CameraComponent(world: world);
-    addAll([world, cameraComponent]);
     final rectanglePosition = canvasSize / 4;
     final rectangleSize = Vector2.all(20);
     final positions = [
@@ -69,8 +65,8 @@ class CoordinateSystemsExample extends FlameGame
     );
     _text.render(
       canvas,
-      'Camera: ${cameraComponent.viewfinder.position}, '
-      'zoom: ${cameraComponent.viewfinder.zoom}',
+      'Camera: ${camera.viewfinder.position}, '
+      'zoom: ${camera.viewfinder.zoom}',
       Vector2(canvasSize.x - 5, 5.0),
       anchor: Anchor.topRight,
     );
@@ -125,7 +121,7 @@ class CoordinateSystemsExample extends FlameGame
       'Global: ${info.eventPosition.global}',
       'Widget: ${info.eventPosition.widget}',
       'Game: ${info.eventPosition.game}',
-      'Camera: ${cameraComponent.viewfinder.position}',
+      'Camera: ${camera.viewfinder.position}',
       if (info is DragUpdateInfo) ...[
         'Delta',
         'Global: ${info.delta.global}',
@@ -146,7 +142,7 @@ class CoordinateSystemsExample extends FlameGame
     // just make it look pretty
     cameraPosition.x = _roundDouble(cameraPosition.x, 5);
     cameraPosition.y = _roundDouble(cameraPosition.y, 5);
-    cameraComponent.viewfinder.position = cameraPosition;
+    camera.viewfinder.position = cameraPosition;
   }
 
   /// Round [val] up to [places] decimal places.
@@ -173,9 +169,9 @@ class CoordinateSystemsExample extends FlameGame
       cameraVelocity.y = isKeyDown ? 1 : 0;
     } else if (isKeyDown) {
       if (event.logicalKey == LogicalKeyboardKey.keyQ) {
-        cameraComponent.viewfinder.zoom *= 2;
+        camera.viewfinder.zoom *= 2;
       } else if (event.logicalKey == LogicalKeyboardKey.keyE) {
-        cameraComponent.viewfinder.zoom /= 2;
+        camera.viewfinder.zoom /= 2;
       }
     }
 

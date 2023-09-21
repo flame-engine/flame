@@ -1,10 +1,8 @@
-// ignore_for_file: deprecated_member_use
-
 import 'dart:math' as math;
 
 import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/boundaries.dart';
+import 'package:flame/components.dart';
 import 'package:flame/events.dart';
-import 'package:flame/experimental.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 
 class BlobExample extends Forge2DGame {
@@ -21,7 +19,7 @@ class BlobWorld extends Forge2DWorld
     with TapCallbacks, HasGameReference<Forge2DGame> {
   @override
   Future<void> onLoad() async {
-    super.onLoad();
+    await super.onLoad();
     final blobCenter = Vector2(0, -30);
     final blobRadius = Vector2.all(6.0);
     addAll(createBoundaries(game));

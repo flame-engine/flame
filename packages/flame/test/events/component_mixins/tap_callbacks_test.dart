@@ -1,7 +1,7 @@
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
-import 'package:flame/src/events/flame_game_mixins/has_tappable_components.dart';
+import 'package:flame/src/events/flame_game_mixins/multi_tap_dispatcher.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -12,7 +12,7 @@ void main() {
         (game) async {
       await game.ensureAdd(_TapCallbacksComponent());
       await game.ready();
-      expect(game.children.toList()[1], isA<MultiTapDispatcher>());
+      expect(game.children.toList()[2], isA<MultiTapDispatcher>());
     });
 
     testWithFlameGame('tap event start', (game) async {
@@ -123,7 +123,7 @@ void main() {
         await tester.pumpWidget(GameWidget(game: game));
         await tester.pump();
         await tester.pump();
-        expect(game.children.length, 2);
+        expect(game.children.length, 4);
         expect(component.isMounted, isTrue);
 
         await tester.tapAt(const Offset(10, 10));
@@ -158,8 +158,8 @@ void main() {
       _TapCallbacksGame.new,
       (game) async {
         await game.ready();
-        expect(game.children.length, equals(1));
-        expect(game.children.first, isA<MultiTapDispatcher>());
+        expect(game.children.length, equals(3));
+        expect(game.children.elementAt(1), isA<MultiTapDispatcher>());
       },
     );
 
@@ -170,7 +170,7 @@ void main() {
         await tester.pumpWidget(GameWidget(game: game));
         await tester.pump();
         await tester.pump();
-        expect(game.children.length, equals(1));
+        expect(game.children.length, equals(3));
         expect(game.isMounted, isTrue);
 
         await tester.tapAt(const Offset(10, 10));

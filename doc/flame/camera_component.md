@@ -2,13 +2,13 @@
 
 ```{note}
 This document describes a new camera API. The more traditional approach
-(which will be deprecated) for handling a camera is described in
+(which is deprecated) for handling a camera is described in
 [](camera_and_viewport.md).
 ```
 
-Camera-as-a-component is an alternative way of structuring a game, an approach
-that allows more flexibility in placing the camera, or even having more than
-one camera simultaneously.
+Camera-as-a-component is the new way of structuring a game, an approach that
+allows more flexibility in placing the camera, or even having more than one
+camera simultaneously.
 
 In order to understand how this approach works, imagine that your game world is
 an entity that exists *somewhere* independently from your application. Imagine
@@ -33,8 +33,10 @@ the viewing location and angle.
 
 This component should be used to host all other components that comprise your
 game world. The main property of the `World` class is that it does not render
-through traditional means -- instead, create one or more [](#cameracomponent)s
-to "look at" the world.
+through traditional means -- instead it is rendered by one or more
+[](#cameracomponent)s to "look at" the world. In the `FlameGame` class there is
+one `World` called `world` which is added by default and paired together with
+the default `CameraComponent` called `camera`.
 
 A game can have multiple `World` instances that can be rendered either at the
 same time, or at different times. For example, if you have two worlds A and B
@@ -46,6 +48,23 @@ Just like with most `Component`s, children can be added to `World` by using the
 `children` argument in its constructor, or by using the `add` or `addAll`
 methods.
 
+For many games you want to extend the world and create your logic in there,
+such a game structure could look like this:
+
+```dart
+void main() {
+  runApp(GameWidget(FlameGame(world: MyWorld())));
+}
+
+class MyWorld extends World {
+  @override
+  Future<void> onLoad() async {
+    // Load all the assets that are needed in this world
+    // and add components etc.
+  }
+}
+```
+
 
 ## CameraComponent
 
@@ -53,6 +72,10 @@ This is a component through which a `World` is rendered. It requires a
 reference to a `World` instance during construction; however later the target
 world can be replaced with another one. Multiple cameras can observe the same
 world at the same time.
+
+There is a default `CameraComponent` called `camera` on the `FlameGame` class
+which is paired together with the default `world`, so you don't need to create
+or add your own `CameraComponent` if your game doesn't need to.
 
 A `CameraComponent` has two other components inside: a [](#viewport) and a
 [](#viewfinder). Unlike the `World` object, the camera owns the viewport and
@@ -64,6 +87,21 @@ currently performs rendering. This is needed only for certain advanced use
 cases where the rendering of a component depends on the camera settings. For
 example, some components may decide to skip rendering themselves and their
 children if they are outside of the camera's viewport.
+
+The `FlameGame` class has a `camera` field in its constructor, so you can set
+what type of default camera that you want like this for example:
+
+```dart
+void main() {
+  runApp(
+    GameWidget(
+      FlameGame(
+        camera: CameraComponent.withFixedResolution(width: 800, height: 600),
+      ),
+    ),
+  );
+}
+```
 
 
 ### CameraComponent.withFixedResolution()
@@ -191,9 +229,9 @@ if (!camera.canSee(component)) {
 ```
 
 
-## Comparison to the traditional camera
+## Comparison to the deprecated camera
 
-Compared to the normal [Camera](camera_and_viewport.md), the `CameraComponent`
+Compared to the deprecated [Camera](camera_and_viewport.md), the `CameraComponent`
 has several advantages:
 
 - Multiple cameras can be added to the game at the same time;

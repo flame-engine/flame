@@ -21,7 +21,7 @@ class PriorityExample extends FlameGame {
 }
 
 class Square extends RectangleComponent
-    with HasGameRef<PriorityExample>, TapCallbacks {
+    with HasGameReference<PriorityExample>, TapCallbacks {
   Square(Vector2 position)
       : super(
           position: position,
@@ -31,7 +31,7 @@ class Square extends RectangleComponent
 
   @override
   void onTapDown(TapDownEvent event) {
-    final topComponent = gameRef.children.last;
+    final topComponent = game.children.last;
     if (topComponent != this) {
       priority = topComponent.priority + 1;
     }

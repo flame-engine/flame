@@ -3,14 +3,14 @@ import 'package:trex_game/background/cloud.dart';
 import 'package:trex_game/random_extension.dart';
 import 'package:trex_game/trex_game.dart';
 
-class CloudManager extends PositionComponent with HasGameRef<TRexGame> {
+class CloudManager extends PositionComponent with HasGameReference<TRexGame> {
   final double cloudFrequency = 0.5;
   final int maxClouds = 20;
   final double bgCloudSpeed = 0.2;
 
   void addCloud() {
     final cloudPosition = Vector2(
-      gameRef.size.x + Cloud.initialSize.x + 10,
+      game.size.x + Cloud.initialSize.x + 10,
       ((absolutePosition.y / 2 - (Cloud.maxSkyLevel - Cloud.minSkyLevel)) +
               random.fromRange(Cloud.minSkyLevel, Cloud.maxSkyLevel)) -
           absolutePosition.y,
@@ -18,7 +18,7 @@ class CloudManager extends PositionComponent with HasGameRef<TRexGame> {
     add(Cloud(position: cloudPosition));
   }
 
-  double get cloudSpeed => bgCloudSpeed / 1000 * gameRef.currentSpeed;
+  double get cloudSpeed => bgCloudSpeed / 1000 * game.currentSpeed;
 
   @override
   void update(double dt) {
@@ -27,7 +27,7 @@ class CloudManager extends PositionComponent with HasGameRef<TRexGame> {
     if (numClouds > 0) {
       final lastCloud = children.last as Cloud;
       if (numClouds < maxClouds &&
-          (gameRef.size.x / 2 - lastCloud.x) > lastCloud.cloudGap) {
+          (game.size.x / 2 - lastCloud.x) > lastCloud.cloudGap) {
         addCloud();
       }
     } else {

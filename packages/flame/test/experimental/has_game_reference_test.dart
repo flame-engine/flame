@@ -1,5 +1,4 @@
 import 'package:flame/components.dart';
-import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -53,7 +52,8 @@ void main() {
         expect(
           () => component.game,
           failsAssert(
-            'Found game of type FlameGame, while type _MyGame was expected',
+            'Found game of type FlameGame<World>, while type _MyGame was '
+            'expected',
           ),
         );
       },

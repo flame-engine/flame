@@ -27,22 +27,20 @@ class FollowComponentExample extends FlameGame
 
   late MovableEmber ember;
   final Vector2 viewportResolution;
-  late final CameraComponent cameraComponent;
 
   @override
   Future<void> onLoad() async {
     final world = World();
-    cameraComponent = CameraComponent.withFixedResolution(
+    camera = CameraComponent.withFixedResolution(
       width: viewportResolution.x,
       height: viewportResolution.y,
       world: world,
     );
-    addAll([world, cameraComponent]);
 
     world.add(Map());
     world.add(ember = MovableEmber());
-    cameraComponent.setBounds(Map.bounds);
-    cameraComponent.follow(ember, maxSpeed: 250);
+    camera.setBounds(Map.bounds);
+    camera.follow(ember, maxSpeed: 250);
 
     world.addAll(
       List.generate(30, (_) => Rock(Map.generateCoordinates())),
@@ -188,7 +186,7 @@ class Rock extends SpriteComponent with HasGameRef, TapCallbacks {
 
   @override
   Future<void> onLoad() async {
-    sprite = await gameRef.loadSprite('nine-box.png');
+    sprite = await game.loadSprite('nine-box.png');
     paint = Paint()..color = Colors.white;
     add(RectangleHitbox());
   }

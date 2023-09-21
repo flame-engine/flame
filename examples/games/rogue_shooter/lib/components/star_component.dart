@@ -10,7 +10,7 @@ class StarComponent extends SpriteAnimationComponent with HasGameRef {
   void update(double dt) {
     super.update(dt);
     y += dt * speed;
-    if (y >= gameRef.size.y) {
+    if (y >= game.size.y) {
       removeFromParent();
     }
   }

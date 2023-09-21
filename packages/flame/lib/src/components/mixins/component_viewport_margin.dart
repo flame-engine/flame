@@ -32,7 +32,7 @@ mixin ComponentViewportMargin on PositionComponent, HasGameRef {
     super.onLoad();
     // If margin is not null we will update the position `onGameResize` instead
     if (margin == null) {
-      final screenSize = gameRef.size;
+      final screenSize = game.size;
       final topLeft = anchor.toOtherAnchorPosition(
         position,
         Anchor.topLeft,
@@ -68,8 +68,8 @@ mixin ComponentViewportMargin on PositionComponent, HasGameRef {
   void _updateMargins() {
     final screenSize = positionType == PositionType.viewport
         // ignore: deprecated_member_use_from_same_package
-        ? gameRef.camera.viewport.effectiveSize
-        : gameRef.canvasSize;
+        ? game.oldCamera.viewport.effectiveSize
+        : game.canvasSize;
     final margin = this.margin!;
     final x = margin.left != 0
         ? margin.left + scaledSize.x / 2

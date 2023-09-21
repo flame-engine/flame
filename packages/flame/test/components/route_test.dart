@@ -416,14 +416,16 @@ void main() {
     );
 
     testWithFlameGame('componentsAtPoint for opaque route', (game) async {
+      final initialComponent = PositionComponent(size: Vector2.all(100));
+      final newComponent = PositionComponent(size: Vector2.all(100));
       final router = RouterComponent(
         initialRoute: 'initial',
         routes: {
           'initial': Route(
-            () => PositionComponent(size: Vector2.all(100)),
+            () => initialComponent,
           ),
           'new': Route(
-            () => PositionComponent(size: Vector2.all(100)),
+            () => newComponent,
           ),
         },
       )..addToParent(game);
@@ -432,20 +434,26 @@ void main() {
       router.pushNamed('new');
       await game.ready();
       expect(
-        game.componentsAtPoint(Vector2(50, 50)).toList(),
-        [router.currentRoute.children.first, game],
+        game.componentsAtPoint(Vector2(50, 50)).contains(newComponent),
+        isTrue,
+      );
+      expect(
+        game.componentsAtPoint(Vector2(50, 50)).contains(initialComponent),
+        isFalse,
       );
     });
 
     testWithFlameGame('componentsAtPoint for transparent route', (game) async {
+      final initialComponent = PositionComponent(size: Vector2.all(100));
+      final newComponent = PositionComponent(size: Vector2.all(100));
       final router = RouterComponent(
         initialRoute: 'initial',
         routes: {
           'initial': Route(
-            () => PositionComponent(size: Vector2.all(100)),
+            () => initialComponent,
           ),
           'new': Route(
-            () => PositionComponent(size: Vector2.all(100)),
+            () => newComponent,
             transparent: true,
           ),
         },
@@ -455,12 +463,12 @@ void main() {
       router.pushNamed('new');
       await game.ready();
       expect(
-        game.componentsAtPoint(Vector2(50, 50)).toList(),
-        [
-          router.currentRoute.children.first,
-          router.previousRoute!.children.first,
-          game,
-        ],
+        game.componentsAtPoint(Vector2(50, 50)).contains(newComponent),
+        isTrue,
+      );
+      expect(
+        game.componentsAtPoint(Vector2(50, 50)).contains(initialComponent),
+        isTrue,
       );
     });
   });

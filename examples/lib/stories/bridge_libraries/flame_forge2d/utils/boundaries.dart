@@ -2,7 +2,7 @@ import 'package:flame/extensions.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 
 List<Wall> createBoundaries(Forge2DGame game, {double? strokeWidth}) {
-  final visibleRect = game.cameraComponent.visibleWorldRect;
+  final visibleRect = game.camera.visibleWorldRect;
   final topLeft = visibleRect.topLeft.toVector2();
   final topRight = visibleRect.topRight.toVector2();
   final bottomRight = visibleRect.bottomRight.toVector2();

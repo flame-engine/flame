@@ -2,7 +2,9 @@ import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:meta/meta.dart';
 
-@Deprecated('Will be removed in Flame v2, use the DragCallbacks mixin instead.')
+@Deprecated(
+  'Will be removed in Flame v1.10.0, use the DragCallbacks mixin instead.',
+)
 mixin Draggable on Component {
   bool _isDragged = false;
   bool get isDragged => _isDragged;

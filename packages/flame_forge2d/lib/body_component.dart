@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import 'package:flame/components.dart' hide World;
 import 'package:flame/effects.dart';
-import 'package:flame/experimental.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
@@ -54,7 +53,7 @@ abstract class BodyComponent<T extends Forge2DGame> extends Component
   }
 
   Forge2DWorld get world => game.world;
-  CameraComponent get camera => game.cameraComponent;
+  CameraComponent get camera => game.camera;
   Vector2 get center => body.worldCenter;
 
   @override
