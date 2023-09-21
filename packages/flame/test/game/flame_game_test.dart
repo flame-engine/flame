@@ -11,7 +11,6 @@ import 'package:flame/src/game/game_render_box.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../components/component_test.dart';
@@ -742,11 +741,7 @@ void main() {
         (tester) async {
           final game = FlameGame();
 
-          await tester.pumpWidget(
-            MaterialApp(
-              home: GameWidget(game: game),
-            ),
-          );
+          await tester.pumpWidget(GameWidget(game: game));
 
           await game.toBeLoaded();
           await tester.pump();
