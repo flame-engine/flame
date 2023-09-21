@@ -11,8 +11,6 @@
     "**/CHANGELOG.md"
   ],
   "ignoreRegExpList": [
-    "\\:\\w+",
-    "\\/\\w+",
     "\\#[\\w\\-]+"
   ],
   "dictionaries": [
