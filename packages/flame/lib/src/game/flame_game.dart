@@ -255,4 +255,44 @@ class FlameGame<W extends World> extends ComponentTreeRoot
       }
     }
   }
+
+  /// Whether the game should pause when the app is backgrounded.
+  ///
+  /// On the latest Flutter stable at the time of writing (3.13),
+  /// this is only working on Android and iOS.
+  ///
+  /// Defaults to true.
+  bool pauseWhenBackgrounded = true;
+  bool _pausedBecauseBackgrounded = false;
+
+  @override
+  @mustCallSuper
+  void lifecycleStateChange(AppLifecycleState state) {
+    switch (state) {
+      case AppLifecycleState.resumed:
+      case AppLifecycleState.inactive:
+        if (_pausedBecauseBackgrounded) {
+          resumeEngine();
+        }
+      case AppLifecycleState.paused:
+      case AppLifecycleState.detached:
+      case AppLifecycleState.hidden:
+        if (pauseWhenBackgrounded && !paused) {
+          pauseEngine();
+          _pausedBecauseBackgrounded = true;
+        }
+    }
+  }
+
+  @override
+  void pauseEngine() {
+    _pausedBecauseBackgrounded = false;
+    super.pauseEngine();
+  }
+
+  @override
+  void resumeEngine() {
+    _pausedBecauseBackgrounded = false;
+    super.resumeEngine();
+  }
 }
