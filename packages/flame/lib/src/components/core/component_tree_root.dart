@@ -21,6 +21,14 @@ class ComponentTreeRoot extends Component {
 
   @internal
   void enqueueAdd(Component child, Component parent) {
+    if (child.isRemoving) {
+      // If the child is going to be added to the same parent as it previously
+      // had we need to remove it from the previous remove event from the queue.
+      final wasRemoved = dequeueRemove(child, parent);
+      if (wasRemoved) {
+        return;
+      }
+    }
     _queue.addLast()
       ..kind = _LifecycleEventKind.add
       ..child = child
@@ -48,6 +56,19 @@ class ComponentTreeRoot extends Component {
       ..kind = _LifecycleEventKind.remove
       ..child = child
       ..parent = parent;
+  }
+
+  @internal
+  bool dequeueRemove(Component child, Component parent) {
+    for (final event in _queue) {
+      if (event.kind == _LifecycleEventKind.remove &&
+          event.child == child &&
+          event.parent == parent) {
+        event.kind = _LifecycleEventKind.unknown;
+        return true;
+      }
+    }
+    return false;
   }
 
   @internal

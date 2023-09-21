@@ -400,6 +400,36 @@ void main() {
         expect(parent.children.length, children.length);
       });
 
+      testWithFlameGame(
+        'removing a component and re-adding it to the same parent in the '
+        'same tick',
+        (game) async {
+          final child = Component();
+          final parent = Component(children: [child]);
+          await game.ensureAdd(parent);
+          child.removeFromParent();
+          parent.add(child);
+          game.update(0);
+          expect(child.parent, parent);
+          expect(parent.children, [child]);
+        },
+      );
+
+      testWithFlameGame(
+        'removing a component and re-adding it to the same parent in the '
+        'same tick with setter',
+        (game) async {
+          final child = Component();
+          final parent = Component(children: [child]);
+          await game.ensureAdd(parent);
+          child.removeFromParent();
+          child.parent = parent;
+          game.update(0);
+          expect(child.parent, parent);
+          expect(parent.children, [child]);
+        },
+      );
+
       testWithFlameGame('children in constructor and onLoad', (game) async {
         final component = TwoChildrenComponent(
           children: [ComponentA(), ComponentB()],
