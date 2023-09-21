@@ -339,9 +339,9 @@ final spriteSheet = SpriteSheet(
 final animation = spriteSheet.createAnimation(0, stepTime: 0.1);
 ```
 
-Now you can use the animation directly or use it in an animation component. 
+Now you can use the animation directly or use it in an animation component.
 
-You can also create a custom animation by retrieving individual `SpriteAnimationFrameData` using 
+You can also create a custom animation by retrieving individual `SpriteAnimationFrameData` using
 either `SpriteSheet.createFrameData` or `SpriteSheet.createFrameDataFromId`:
 
 ```dart
@@ -355,7 +355,7 @@ final animation = SpriteAnimation.fromFrameData(
 );
 ```
 
-If you don't need any kind of animation and instead only want an instance of a `Sprite` on the 
+If you don't need any kind of animation and instead only want an instance of a `Sprite` on the
 `SpriteSheet` you can use the `getSprite` or `getSpriteById` methods:
 
 ```dart
