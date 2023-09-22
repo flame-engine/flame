@@ -38,7 +38,12 @@ abstract mixin class Game {
 
   /// Set by the PointerMoveDispatcher to receive mouse events from the
   /// game widget.
-  void Function(PointerHoverEvent event)? mouseDetector;
+  void Function(PointerHoverEvent event)? get mouseDetector => _mouseDetector;
+  void Function(PointerHoverEvent event)? _mouseDetector;
+  set mouseDetector(void Function(PointerHoverEvent event)? newMouseDetector) {
+    _mouseDetector = newMouseDetector;
+    refreshWidget();
+  }
 
   /// This should update the state of the game.
   void update(double dt);
