@@ -412,6 +412,8 @@ void main() {
           game.update(0);
           expect(child.parent, parent);
           expect(parent.children, [child]);
+          expect(child.isMounted, isTrue);
+          expect(child.isRemoving, isFalse);
         },
       );
 
@@ -427,6 +429,46 @@ void main() {
           game.update(0);
           expect(child.parent, parent);
           expect(parent.children, [child]);
+          expect(child.isMounted, isTrue);
+          expect(child.isRemoving, isFalse);
+        },
+      );
+
+      testWithFlameGame(
+        'removing a component and adding it to another parent in the same tick',
+        (game) async {
+          final child = Component();
+          final parent = Component(children: [child]);
+          final otherParent = Component();
+          await game.ensureAddAll([parent, otherParent]);
+          child.removeFromParent();
+          otherParent.add(child);
+          game.update(0);
+          expect(child.parent, otherParent);
+          expect(parent.children, []);
+          expect(otherParent.children, [child]);
+          expect(child.isMounted, isTrue);
+        },
+      );
+
+      testWithFlameGame(
+        'swapping between multiple parents in the same tick',
+        (game) async {
+          final child = Component();
+          final parents = [
+            Component(children: [child]),
+            Component(),
+            Component(),
+          ];
+          await game.ensureAddAll(parents);
+          child.parent = parents[1];
+          child.parent = parents[2];
+          game.update(0);
+          expect(child.parent, parents[2]);
+          expect(parents[0].children, []);
+          expect(parents[1].children, []);
+          expect(parents[2].children, [child]);
+          expect(child.isMounted, isTrue);
         },
       );
 
