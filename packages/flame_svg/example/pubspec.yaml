@@ -9,8 +9,8 @@ environment:
   sdk: ">=3.0.0 <4.0.0"
 
 dependencies:
-  flame: ^1.9.0
-  flame_svg: ^1.8.2
+  flame: ^1.9.1
+  flame_svg: ^1.8.3
   flutter:
     sdk: flutter
 

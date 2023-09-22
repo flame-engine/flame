@@ -3,6 +3,64 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2023-09-22
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`flame` - `v1.9.1`](#flame---v191)
+ - [`flame_isolate` - `v0.5.0+1`](#flame_isolate---v0501)
+ - [`flame_tiled` - `v1.14.1`](#flame_tiled---v1141)
+ - [`flame_audio` - `v2.1.1`](#flame_audio---v211)
+ - [`flame_spine` - `v0.1.1+3`](#flame_spine---v0113)
+ - [`flame_svg` - `v1.8.3`](#flame_svg---v183)
+ - [`flame_test` - `v1.13.1`](#flame_test---v1131)
+ - [`flame_oxygen` - `v0.1.9+1`](#flame_oxygen---v0191)
+ - [`flame_bloc` - `v1.10.3`](#flame_bloc---v1103)
+ - [`flame_fire_atlas` - `v1.4.1`](#flame_fire_atlas---v141)
+ - [`flame_markdown` - `v0.1.1+1`](#flame_markdown---v0111)
+ - [`flame_forge2d` - `v0.15.0+1`](#flame_forge2d---v01501)
+ - [`flame_rive` - `v1.9.3`](#flame_rive---v193)
+ - [`flame_noise` - `v0.1.1+6`](#flame_noise---v0116)
+ - [`flame_network_assets` - `v0.2.0+6`](#flame_network_assets---v0206)
+ - [`flame_lottie` - `v0.3.0+1`](#flame_lottie---v0301)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `flame_isolate` - `v0.5.0+1`
+ - `flame_tiled` - `v1.14.1`
+ - `flame_audio` - `v2.1.1`
+ - `flame_spine` - `v0.1.1+3`
+ - `flame_svg` - `v1.8.3`
+ - `flame_test` - `v1.13.1`
+ - `flame_oxygen` - `v0.1.9+1`
+ - `flame_bloc` - `v1.10.3`
+ - `flame_fire_atlas` - `v1.4.1`
+ - `flame_markdown` - `v0.1.1+1`
+ - `flame_forge2d` - `v0.15.0+1`
+ - `flame_rive` - `v1.9.3`
+ - `flame_noise` - `v0.1.1+6`
+ - `flame_network_assets` - `v0.2.0+6`
+ - `flame_lottie` - `v0.3.0+1`
+
+---
+
+#### `flame` - `v1.9.1`
+
+ - **FIX**: Add necessary generics on mixins on FlameGame ([#2763](https://github.com/flame-engine/flame/issues/2763)). ([b1f5ff26](https://github.com/flame-engine/flame/commit/b1f5ff269441d55b09ce12d5ce99656f2d88a978))
+ - **FIX**: Correctly refreshes the widget after new mouse detector ([#2765](https://github.com/flame-engine/flame/issues/2765)). ([64330022](https://github.com/flame-engine/flame/commit/643300222f8bf0545abdd1d8608202f388f8693f))
+ - **FIX**: Allow moving to a new parent in the same tick ([#2762](https://github.com/flame-engine/flame/issues/2762)). ([313650ea](https://github.com/flame-engine/flame/commit/313650eafadca4427421ddd355fa5b373966b8d1))
+
+
 ## 2023-09-21
 
 ### Changes
