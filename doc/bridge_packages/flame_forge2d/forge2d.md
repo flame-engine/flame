@@ -142,4 +142,4 @@ Every time `Ball` and `Wall` begin to come in contact `beginContact` will be cal
 fixtures cease being in contact, `endContact` will be called.
 
 An implementation example can be seen in the [Flame Forge2D
-example](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/bridge_libraries/forge2d/utils/balls.dart).
+example](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/bridge_libraries/flame_forge2d/utils/balls.dart).
