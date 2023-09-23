@@ -6,6 +6,7 @@ class AdvancedButtonComponent extends PositionComponent
     with HoverCallbacks, TapCallbacks {
   AdvancedButtonComponent({
     this.onPressed,
+    this.onChangeState,
     PositionComponent? defaultSkin,
     PositionComponent? downSkin,
     PositionComponent? hoverSkin,
@@ -25,17 +26,29 @@ class AdvancedButtonComponent extends PositionComponent
     size.addListener(_updateSizes);
   }
 
+  void Function()? onPressed;
+  void Function(ButtonState state)? onChangeState;
+
+  @mustCallSuper
+  @override
+  Future<void> onLoad() async {
+    super.onLoad();
+    add(skinContainer);
+  }
+
+  final skinContainer = PositionComponent();
+
   @override
   @mustCallSuper
   void onMount() {
     super.onMount();
     assert(
-    defaultSkin != null,
-    'The defaultSkin has to either be passed '
-        'in as an argument or set in onLoad',
+      defaultSkin != null,
+      'The defaultSkin has to either be passed '
+      'in as an argument or set in onLoad',
     );
     if (_state.isDefault && !contains(defaultSkin!)) {
-      add(defaultSkin!);
+      defaultSkin!.parent = skinContainer;
     }
   }
 
@@ -52,8 +65,6 @@ class AdvancedButtonComponent extends PositionComponent
     isPressed = true;
     updateState();
   }
-
-  void Function()? onPressed;
 
   @override
   void onTapUp(TapUpEvent event) {
@@ -102,7 +113,7 @@ class AdvancedButtonComponent extends PositionComponent
   @protected
   void invalidateSkins() {
     _updateSizes();
-    updateState();
+    _updateSkin();
   }
 
   bool _isDisabled = false;
@@ -134,10 +145,8 @@ class AdvancedButtonComponent extends PositionComponent
       return;
     }
     if (isHovered) {
-      if (hasSkinForState(ButtonState.hover)) {
-        setState(ButtonState.hover);
-        return;
-      }
+      setState(ButtonState.hover);
+      return;
     }
     setState(ButtonState.up);
   }
@@ -150,12 +159,18 @@ class AdvancedButtonComponent extends PositionComponent
       return;
     }
     _state = value;
-    _removeSkins();
-    _addSkin(_state);
+    _updateSkin();
+    onChangeState?.call(_state);
   }
 
-  void _addSkin(ButtonState state) {
-    (skinsMap[state] ?? defaultSkin)?.parent = this;
+  void _updateSkin() {
+    _removeSkins();
+    addSkin(_state);
+  }
+
+  @protected
+  void addSkin(ButtonState state) {
+    (skinsMap[state] ?? defaultSkin)?.parent = skinContainer;
   }
 
   void _removeSkins() {
@@ -194,7 +209,39 @@ enum ButtonState {
     return this == ButtonState.up;
   }
 
+  bool get isDefaultSelected {
+    return this == ButtonState.upAndSelected;
+  }
+
   bool get isNotDefault {
     return !isDefault;
+  }
+
+  bool get isDown {
+    return this == ButtonState.down;
+  }
+
+  bool get isDownAndSelected {
+    return this == ButtonState.downAndSelected;
+  }
+
+  bool get isHover {
+    return this == ButtonState.hover;
+  }
+
+  bool get isHoverAndSelected {
+    return this == ButtonState.hoverAndSelected;
+  }
+
+  bool get isHoverOrHoverAndSelected {
+    return isHover || isHoverAndSelected;
+  }
+
+  bool get isDisabled {
+    return this == ButtonState.disabled;
+  }
+
+  bool get isDisabledAndSelected {
+    return this == ButtonState.disabledAndSelected;
   }
 }
