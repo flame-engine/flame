@@ -138,12 +138,53 @@ void main() {
       expect(pressedTimes, 0);
     });
 
+    testWithFlameGame('correctly toggle work', (game) async {
+      var pressedTimes = 0;
+      final initialGameSize = Vector2.all(100);
+      final componentSize = Vector2.all(10);
+      final buttonPosition = Vector2.all(100);
+      late final ToggleButtonComponent button;
+      game.onGameResize(initialGameSize);
+      await game.ensureAdd(
+        button = ToggleButtonComponent(
+          defaultSkin: RectangleComponent(size: componentSize),
+          defaultSelectedSkin: RectangleComponent(size: componentSize),
+          onPressed: () => pressedTimes++,
+          position: buttonPosition,
+          size: componentSize,
+        ),
+      );
+      final previousPosition =
+          button.positionOfAnchor(Anchor.center).toOffset();
+      game.onGameResize(initialGameSize * 2);
+      final tapDispatcher = game.firstChild<MultiTapDispatcher>()!;
+
+      tapDispatcher.handleTapDown(
+        1,
+        TapDownDetails(globalPosition: previousPosition),
+      );
+      expect(button.isSelected, true);
+
+      tapDispatcher.handleTapUp(
+        1,
+        createTapUpDetails(globalPosition: previousPosition),
+      );
+      expect(button.isSelected, false);
+
+      tapDispatcher.handleTapDown(
+        1,
+        TapDownDetails(globalPosition: previousPosition),
+      );
+      tapDispatcher.handleTapCancel(1);
+      expect(button.isSelected, true);
+    });
+
     testWidgets(
       '[#1723] can be pressed while the engine is paused',
       (tester) async {
         final game = FlameGame();
         game.add(
-          AdvancedButtonComponent(
+          ToggleButtonComponent(
             defaultSkin: CircleComponent(radius: 40),
             position: Vector2(400, 300),
             anchor: Anchor.center,

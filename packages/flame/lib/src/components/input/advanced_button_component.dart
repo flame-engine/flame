@@ -5,16 +5,11 @@ import 'package:flutter/foundation.dart';
 class AdvancedButtonComponent extends PositionComponent
     with HoverCallbacks, TapCallbacks {
   AdvancedButtonComponent({
+    this.onPressed,
     PositionComponent? defaultSkin,
     PositionComponent? downSkin,
     PositionComponent? hoverSkin,
-    this.onPressed,
-    bool isSelectable = false,
-    PositionComponent? defaultSelectedSkin,
-    PositionComponent? downAndSelectedSkin,
-    PositionComponent? hoverAndSelectedSkin,
     PositionComponent? disabledSkin,
-    PositionComponent? disabledAndSelectedSkin,
     super.size,
     super.position,
     super.scale,
@@ -23,16 +18,11 @@ class AdvancedButtonComponent extends PositionComponent
     super.children,
     super.priority,
   }) {
-    size.addListener(_updateSizes);
     this.defaultSkin = defaultSkin;
     this.downSkin = downSkin;
     this.hoverSkin = hoverSkin;
-    this.defaultSelectedSkin = defaultSelectedSkin;
-    this.downAndSelectedSkin = downAndSelectedSkin;
-    this.hoverAndSelectedSkin = hoverAndSelectedSkin;
     this.disabledSkin = disabledSkin;
-    this.disabledAndSelectedSkin = disabledAndSelectedSkin;
-    setIsSelectable(isSelectable: isSelectable);
+    size.addListener(_updateSizes);
   }
 
   @override
@@ -40,16 +30,17 @@ class AdvancedButtonComponent extends PositionComponent
   void onMount() {
     super.onMount();
     assert(
-      defaultSkin != null,
-      'The defaultSkin has to either be passed '
-      'in as an argument or set in onLoad',
+    defaultSkin != null,
+    'The defaultSkin has to either be passed '
+        'in as an argument or set in onLoad',
     );
     if (_state.isDefault && !contains(defaultSkin!)) {
       add(defaultSkin!);
     }
   }
 
-  bool _isPressed = false;
+  @protected
+  bool isPressed = false;
 
   @override
   @mustCallSuper
@@ -58,35 +49,27 @@ class AdvancedButtonComponent extends PositionComponent
       return;
     }
     onPressed?.call();
-    _isPressed = true;
-    _updateState();
+    isPressed = true;
+    updateState();
   }
 
   void Function()? onPressed;
 
   @override
   void onTapUp(TapUpEvent event) {
-    _isPressed = false;
-    if (_isSelectable) {
-      setSelected(isSelected: !_isSelected);
-      return;
-    }
-    _updateState();
+    isPressed = false;
+    updateState();
   }
-
-  bool _isHovered = false;
 
   @override
   void onHoverEnter() {
-    _isHovered = true;
-    _updateState();
+    updateState();
   }
 
   @override
   void onHoverExit() {
-    _isHovered = false;
-    _isPressed = false;
-    _updateState();
+    isPressed = false;
+    updateState();
   }
 
   Map<ButtonState, PositionComponent?> skinsMap = {};
@@ -98,83 +81,40 @@ class AdvancedButtonComponent extends PositionComponent
     if (size.isZero()) {
       size = skinsMap[ButtonState.up]?.size ?? Vector2.zero();
     }
-    _invalidateSkins();
+    invalidateSkins();
   }
 
   set downSkin(PositionComponent? value) {
     skinsMap[ButtonState.down] = value;
-    _invalidateSkins();
-  }
-
-  set defaultSelectedSkin(PositionComponent? value) {
-    skinsMap[ButtonState.upAndSelected] = value;
-    _invalidateSkins();
-  }
-
-  set downAndSelectedSkin(PositionComponent? value) {
-    skinsMap[ButtonState.downAndSelected] = value;
-    _invalidateSkins();
+    invalidateSkins();
   }
 
   set hoverSkin(PositionComponent? value) {
     skinsMap[ButtonState.hover] = value;
-    _invalidateSkins();
-  }
-
-  set hoverAndSelectedSkin(PositionComponent? value) {
-    skinsMap[ButtonState.hoverAndSelected] = value;
-    _invalidateSkins();
+    invalidateSkins();
   }
 
   set disabledSkin(PositionComponent? value) {
     skinsMap[ButtonState.disabled] = value;
-    _invalidateSkins();
+    invalidateSkins();
   }
 
-  set disabledAndSelectedSkin(PositionComponent? value) {
-    skinsMap[ButtonState.disabledAndSelected] = value;
-    _invalidateSkins();
-  }
-
-  void _invalidateSkins() {
+  @protected
+  void invalidateSkins() {
     _updateSizes();
-    _updateState();
+    updateState();
   }
 
   bool _isDisabled = false;
 
   bool get isDisabled => _isDisabled;
 
-  void setDisabled({required bool isDisabled}) {
-    if (_isDisabled == isDisabled) {
+  set isDisabled(bool value) {
+    if (_isDisabled == value) {
       return;
     }
-    _isDisabled = isDisabled;
-    _updateState();
-  }
-
-  bool _isSelectable = false;
-
-  bool get isSelectable => _isSelectable;
-
-  void setIsSelectable({required bool isSelectable}) {
-    if (_isSelectable == isSelectable) {
-      return;
-    }
-    _isSelectable = isSelectable;
-    _updateState();
-  }
-
-  bool _isSelected = false;
-
-  bool get isSelected => _isSelected;
-
-  void setSelected({required bool isSelected}) {
-    if (_isSelected == isSelected) {
-      return;
-    }
-    _isSelected = isSelected;
-    _updateState();
+    _isDisabled = value;
+    updateState();
   }
 
   void _updateSizes() {
@@ -183,44 +123,29 @@ class AdvancedButtonComponent extends PositionComponent
     }
   }
 
-  void _updateState() {
-    final isSelectableAndSelected = _isSelectable && _isSelected;
-    if (_isDisabled) {
-      _setState(
-        isSelectableAndSelected &&
-                _hasSkinForState(ButtonState.disabledAndSelected)
-            ? ButtonState.disabledAndSelected
-            : ButtonState.disabled,
-      );
+  @protected
+  void updateState() {
+    if (isDisabled) {
+      setState(ButtonState.disabled);
       return;
     }
-    if (_isPressed) {
-      _setState(
-        isSelectableAndSelected && _hasSkinForState(ButtonState.downAndSelected)
-            ? ButtonState.downAndSelected
-            : ButtonState.down,
-      );
+    if (isPressed) {
+      setState(ButtonState.down);
       return;
     }
-    if (_isHovered) {
-      final hoverState = isSelectableAndSelected
-          ? ButtonState.hoverAndSelected
-          : ButtonState.hover;
-      if (_hasSkinForState(hoverState)) {
-        _setState(hoverState);
+    if (isHovered) {
+      if (hasSkinForState(ButtonState.hover)) {
+        setState(ButtonState.hover);
         return;
       }
     }
-    _setState(
-      isSelectableAndSelected && _hasSkinForState(ButtonState.upAndSelected)
-          ? ButtonState.upAndSelected
-          : ButtonState.up,
-    );
+    setState(ButtonState.up);
   }
 
   ButtonState _state = ButtonState.up;
 
-  void _setState(ButtonState value) {
+  @protected
+  void setState(ButtonState value) {
     if (_state == value) {
       return;
     }
@@ -247,7 +172,8 @@ class AdvancedButtonComponent extends PositionComponent
     }
   }
 
-  bool _hasSkinForState(ButtonState state) {
+  @protected
+  bool hasSkinForState(ButtonState state) {
     return skinsMap[state] != null;
   }
 }
@@ -266,5 +192,9 @@ enum ButtonState {
 
   bool get isDefault {
     return this == ButtonState.up;
+  }
+
+  bool get isNotDefault {
+    return !isDefault;
   }
 }

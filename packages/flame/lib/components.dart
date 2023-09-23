@@ -13,6 +13,8 @@ export 'src/components/core/position_type.dart';
 export 'src/components/custom_painter_component.dart';
 export 'src/components/fps_component.dart';
 export 'src/components/fps_text_component.dart';
+export 'src/components/input/advanced_button_component.dart';
+export 'src/components/input/toggle_button_component.dart';
 export 'src/components/input/joystick_component.dart';
 export 'src/components/input/keyboard_listener_component.dart';
 export 'src/components/isometric_tile_map_component.dart';
