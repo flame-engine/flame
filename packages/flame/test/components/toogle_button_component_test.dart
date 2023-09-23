@@ -6,17 +6,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  group('AdvancedButtonComponent', () {
+  group('ToggleButtonComponent', () {
     testWithFlameGame('correctly registers taps', (game) async {
       var pressedTimes = 0;
       final initialGameSize = Vector2.all(200);
       final componentSize = Vector2.all(10);
       final buttonPosition = Vector2.all(100);
-      late final AdvancedButtonComponent button;
+      late final ToggleButtonComponent button;
       game.onGameResize(initialGameSize);
       await game.ensureAdd(
-        button = AdvancedButtonComponent(
+        button = ToggleButtonComponent(
           defaultSkin: RectangleComponent(size: componentSize),
+          defaultSelectedSkin: RectangleComponent(size: componentSize),
           onPressed: () => pressedTimes++,
           position: buttonPosition,
           size: componentSize,
@@ -62,11 +63,12 @@ void main() {
       final initialGameSize = Vector2.all(100);
       final componentSize = Vector2.all(10);
       final buttonPosition = Vector2.all(100);
-      late final AdvancedButtonComponent button;
+      late final ToggleButtonComponent button;
       game.onGameResize(initialGameSize);
       await game.ensureAdd(
-        button = AdvancedButtonComponent(
+        button = ToggleButtonComponent(
           defaultSkin: RectangleComponent(size: componentSize),
+          defaultSelectedSkin: RectangleComponent(size: componentSize),
           onPressed: () => pressedTimes++,
           position: buttonPosition,
           size: componentSize,
@@ -102,11 +104,12 @@ void main() {
       final initialGameSize = Vector2.all(100);
       final componentSize = Vector2.all(10);
       final buttonPosition = Vector2.all(100);
-      late final AdvancedButtonComponent button;
+      late final ToggleButtonComponent button;
       game.onGameResize(initialGameSize);
       await game.ensureAdd(
-        button = AdvancedButtonComponent(
+        button = ToggleButtonComponent(
           defaultSkin: RectangleComponent(size: componentSize),
+          defaultSelectedSkin: RectangleComponent(size: componentSize),
           onPressed: () => pressedTimes++,
           position: buttonPosition,
           size: componentSize,
@@ -163,13 +166,13 @@ void main() {
         1,
         TapDownDetails(globalPosition: previousPosition),
       );
-      expect(button.isSelected, true);
+      expect(button.isSelected, false);
 
       tapDispatcher.handleTapUp(
         1,
         createTapUpDetails(globalPosition: previousPosition),
       );
-      expect(button.isSelected, false);
+      expect(button.isSelected, true);
 
       tapDispatcher.handleTapDown(
         1,
@@ -177,6 +180,12 @@ void main() {
       );
       tapDispatcher.handleTapCancel(1);
       expect(button.isSelected, true);
+
+      tapDispatcher.handleTapUp(
+        1,
+        createTapUpDetails(globalPosition: previousPosition),
+      );
+      expect(button.isSelected, false);
     });
 
     testWidgets(
@@ -186,6 +195,8 @@ void main() {
         game.add(
           ToggleButtonComponent(
             defaultSkin: CircleComponent(radius: 40),
+            downSkin: CircleComponent(radius: 40),
+            defaultSelectedSkin: CircleComponent(radius: 40),
             position: Vector2(400, 300),
             anchor: Anchor.center,
             onPressed: () {

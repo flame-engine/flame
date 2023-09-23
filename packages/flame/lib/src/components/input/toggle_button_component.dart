@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 class ToggleButtonComponent extends AdvancedButtonComponent {
   ToggleButtonComponent({
     super.onPressed,
+    this.onChange,
     super.defaultSkin,
     super.downSkin,
     super.hoverSkin,
@@ -27,13 +28,15 @@ class ToggleButtonComponent extends AdvancedButtonComponent {
     this.disabledAndSelectedSkin = disabledAndSelectedSkin;
   }
 
+  void Function(bool isSelected)? onChange;
+
   @override
   @mustCallSuper
   void onMount() {
     assert(
-      defaultSelectedSkin != null,
-      'The defaultSelectedSkin has to either be passed '
-      'in as an argument or set in onLoad',
+    defaultSelectedSkin != null,
+    'The defaultSelectedSkin has to either be passed '
+        'in as an argument or set in onLoad',
     );
     super.onMount();
   }
@@ -77,6 +80,7 @@ class ToggleButtonComponent extends AdvancedButtonComponent {
     }
     _isSelected = value;
     updateState();
+    onChange?.call(_isSelected);
   }
 
   @mustCallSuper
@@ -93,15 +97,17 @@ class ToggleButtonComponent extends AdvancedButtonComponent {
     }
     if (isPressed) {
       setState(
-        _isSelected && hasSkinForState(ButtonState.downAndSelected)
+        _isSelected
+            ? hasSkinForState(ButtonState.downAndSelected)
             ? ButtonState.downAndSelected
+            : ButtonState.upAndSelected
             : ButtonState.down,
       );
       return;
     }
     if (isHovered) {
       final hoverState =
-          _isSelected ? ButtonState.hoverAndSelected : ButtonState.hover;
+      _isSelected ? ButtonState.hoverAndSelected : ButtonState.hover;
       if (hasSkinForState(hoverState)) {
         setState(hoverState);
         return;

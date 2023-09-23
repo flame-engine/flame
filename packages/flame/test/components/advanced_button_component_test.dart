@@ -145,6 +145,7 @@ void main() {
         game.add(
           AdvancedButtonComponent(
             defaultSkin: CircleComponent(radius: 40),
+            downSkin: CircleComponent(radius: 40),
             position: Vector2(400, 300),
             anchor: Anchor.center,
             onPressed: () {
