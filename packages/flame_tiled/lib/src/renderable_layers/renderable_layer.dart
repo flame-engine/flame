@@ -131,9 +131,12 @@ abstract class RenderableLayer<T extends Layer> {
     // entire layer
     var x = (1 - parallaxX) * viewportCenterX;
     var y = (1 - parallaxY) * viewportCenterY;
-    // compensate the offset for zoom
-    x /= camera.viewfinder.zoom * destTileSize.x;
-    y /= camera.viewfinder.zoom * destTileSize.y;
+    // Compensate the offset for zoom.
+    x /= camera.viewfinder.zoom;
+    y /= camera.viewfinder.zoom;
+    // Scale to tile space.
+    x /= destTileSize.x;
+    y /= destTileSize.y;
 
     // Now add the scroll for the current camera position
     x += cameraX - (cameraX * parallaxX);
