@@ -95,6 +95,9 @@ class AlignComponent extends PositionComponent {
   Anchor get alignment => _alignment;
 
   set alignment(Anchor value) {
+    if (_alignment == value) {
+      return;
+    }
     _alignment = value;
     if (!keepChildAnchor) {
       _updateChildAnchor();
