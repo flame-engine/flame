@@ -29,7 +29,7 @@ class ToggleButtonComponent extends AdvancedButtonComponent {
     this.disabledAndSelectedSkin = disabledAndSelectedSkin;
   }
 
-  void Function(bool isSelected)? onChangeSelected;
+  void Function({required bool isSelected})? onChangeSelected;
 
   @override
   @mustCallSuper
@@ -81,7 +81,7 @@ class ToggleButtonComponent extends AdvancedButtonComponent {
     }
     _isSelected = value;
     updateState();
-    onChangeSelected?.call(_isSelected);
+    onChangeSelected?.call(isSelected: _isSelected);
   }
 
   @override
