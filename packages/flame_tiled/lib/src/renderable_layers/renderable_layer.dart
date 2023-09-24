@@ -132,8 +132,8 @@ abstract class RenderableLayer<T extends Layer> {
     var x = (1 - parallaxX) * viewportCenterX;
     var y = (1 - parallaxY) * viewportCenterY;
     // compensate the offset for zoom
-    x /= camera.viewfinder.zoom;
-    y /= camera.viewfinder.zoom;
+    x /= camera.viewfinder.zoom * destTileSize.x;
+    y /= camera.viewfinder.zoom * destTileSize.y;
 
     // Now add the scroll for the current camera position
     x += cameraX - (cameraX * parallaxX);
