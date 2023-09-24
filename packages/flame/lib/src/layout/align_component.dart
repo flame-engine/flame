@@ -5,9 +5,9 @@ import 'package:flutter/widgets.dart';
 /// **AlignComponent** is a layout component that positions its child within
 /// itself using relative placement. It is similar to Flutter's [Align] widget.
 ///
-/// The component requires a single [_child], which will be the target of this
+/// The component requires a single [child], which will be the target of this
 /// component's alignment. Of course, other children can be added to this
-/// component too, but only the initial [_child] will be aligned.
+/// component too, but only the initial [child] will be aligned.
 ///
 /// The [alignment] parameter describes where the child should be placed within
 /// the current component. For example, if the [alignment] is `Anchor.center`,
@@ -46,7 +46,7 @@ import 'package:flutter/widgets.dart';
 /// );
 /// ```
 class AlignComponent extends PositionComponent {
-  /// Creates a component that keeps its [_child] positioned according to the
+  /// Creates a component that keeps its [child] positioned according to the
   /// [alignment] within this component's bounding box.
   ///
   /// More precisely, the child will be placed at [alignment] relative position
@@ -63,7 +63,7 @@ class AlignComponent extends PositionComponent {
     this.child = child;
   }
 
-  /// The component that will be positioned by this component. The [_child] will
+  /// The component that will be positioned by this component. The [child] will
   /// be automatically mounted to the current component.
   PositionComponent? _child;
 
@@ -84,7 +84,7 @@ class AlignComponent extends PositionComponent {
 
   late Anchor _alignment;
 
-  /// How the [_child] will be positioned within the current component.
+  /// How the [child] will be positioned within the current component.
   ///
   /// Note: unlike Flutter's [Alignment], the top-left corner of the component
   /// has relative coordinates `(0, 0)`, while the bottom-right corner has
@@ -108,7 +108,7 @@ class AlignComponent extends PositionComponent {
   final double? heightFactor;
 
   /// If `false` (default), then the child's `anchor` will be kept equal to the
-  /// [alignment] value. If `true`, then the [_child] will be allowed to have
+  /// [alignment] value. If `true`, then the [child] will be allowed to have
   /// its own `anchor` value independent from the parent.
   final bool keepChildAnchor;
 
@@ -136,6 +136,7 @@ class AlignComponent extends PositionComponent {
     _updateChildPosition();
   }
 
+  @mustCallSuper
   @override
   void onChildrenChanged(Component child, ChildrenChangeType type) {
     if (_child?.parent != this) {
