@@ -1,8 +1,6 @@
-import 'package:flame/src/anchor.dart';
-import 'package:flame/src/components/position_component.dart';
+import 'package:flame/components.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
 import 'package:flutter/widgets.dart';
-import 'package:vector_math/vector_math_64.dart';
 
 /// **AlignComponent** is a layout component that positions its child within
 /// itself using relative placement. It is similar to Flutter's [Align] widget.
@@ -136,6 +134,13 @@ class AlignComponent extends PositionComponent {
       );
     }
     _updateChildPosition();
+  }
+
+  @override
+  void onChildrenChanged(Component child, ChildrenChangeType type) {
+    if (_child?.parent != this) {
+      this.child = null;
+    }
   }
 
   void _updateChildPosition() {
