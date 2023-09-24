@@ -116,8 +116,8 @@ class AlignComponent extends PositionComponent {
   final double? heightFactor;
 
   /// If `false` (default), then the child's `anchor` will be kept equal to the
-  /// [alignment] value. If `true`, then the [_child] will be allowed to have its
-  /// own `anchor` value independent from the parent.
+  /// [alignment] value. If `true`, then the [_child] will be allowed to have
+  /// its own `anchor` value independent from the parent.
   final bool keepChildAnchor;
 
   @override
