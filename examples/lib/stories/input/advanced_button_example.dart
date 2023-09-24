@@ -1,4 +1,3 @@
-import 'package:examples/stories/input/joystick_player.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/layout.dart';
@@ -8,26 +7,55 @@ class AdvancedButtonExample extends FlameGame {
   static const String description =
       '''The example shows how you can use a button with different states''';
 
-  late final JoystickPlayer player;
-  late final JoystickComponent joystick;
-
   @override
   Future<void> onLoad() async {
     final defaultButton = DefaultButton();
-    defaultButton.position = Vector2(100, 100);
-    defaultButton.size = Vector2(100, 50);
+    defaultButton.position = Vector2(50, 50);
+    defaultButton.size = Vector2(250, 50);
     add(defaultButton);
-
-    defaultButton.add(AlignComponent(
-      child: TextComponent(text: 'Defa'),
-      alignment: Anchor.center,
-    ));
 
     final disableButton = DisableButton();
     disableButton.isDisabled = true;
-    disableButton.position = Vector2(300, 100);
-    disableButton.size = Vector2(100, 50);
+    disableButton.position = Vector2(400, 50);
+    disableButton.size = defaultButton.size;
     add(disableButton);
+
+    final toggleButton = ToggleButton();
+    toggleButton.position = Vector2(50, 150);
+    toggleButton.size = defaultButton.size;
+    add(toggleButton);
+  }
+}
+
+class ToggleButton extends ToggleButtonComponent {
+  @override
+  Future<void> onLoad() async {
+    super.onLoad();
+
+    defaultSkin = RoundedRectComponent()
+      ..setColor(const Color.fromRGBO(0, 200, 0, 1));
+
+    hoverSkin = RoundedRectComponent()
+      ..setColor(const Color.fromRGBO(0, 180, 0, 1));
+
+    downSkin = RoundedRectComponent()
+      ..setColor(const Color.fromRGBO(0, 100, 0, 1));
+
+    defaultSelectedSkin = RoundedRectComponent()
+      ..setColor(const Color.fromRGBO(0, 0, 200, 1));
+
+    hoverAndSelectedSkin = RoundedRectComponent()
+      ..setColor(const Color.fromRGBO(0, 0, 180, 1));
+
+    downAndSelectedSkin = RoundedRectComponent()
+      ..setColor(const Color.fromRGBO(0, 0, 100, 1));
+
+    add(
+      AlignComponent(
+        child: TextComponent(text: 'Toggle button'),
+        alignment: Anchor.center,
+      ),
+    );
   }
 }
 
@@ -37,10 +65,20 @@ class DefaultButton extends AdvancedButtonComponent {
     super.onLoad();
 
     defaultSkin = RoundedRectComponent()
-      ..setColor(const Color.fromRGBO(0, 255, 0, 1));
+      ..setColor(const Color.fromRGBO(0, 200, 0, 1));
+
+    hoverSkin = RoundedRectComponent()
+      ..setColor(const Color.fromRGBO(0, 180, 0, 1));
 
     downSkin = RoundedRectComponent()
-      ..setColor(const Color.fromRGBO(255, 255, 0, 1));
+      ..setColor(const Color.fromRGBO(0, 100, 0, 1));
+
+    add(
+      AlignComponent(
+        child: TextComponent(text: 'Default button'),
+        alignment: Anchor.center,
+      ),
+    );
   }
 }
 
@@ -54,6 +92,13 @@ class DisableButton extends AdvancedButtonComponent {
 
     disabledSkin = RoundedRectComponent()
       ..setColor(const Color.fromRGBO(100, 100, 100, 1));
+
+    add(
+      AlignComponent(
+        child: TextComponent(text: 'Disabled button'),
+        alignment: Anchor.center,
+      ),
+    );
   }
 }
 
