@@ -5,7 +5,8 @@ import 'package:flutter/foundation.dart';
 class ToggleButtonComponent extends AdvancedButtonComponent {
   ToggleButtonComponent({
     super.onPressed,
-    this.onChange,
+    this.onChangeSelected,
+    super.onChangeState,
     super.defaultSkin,
     super.downSkin,
     super.hoverSkin,
@@ -28,15 +29,15 @@ class ToggleButtonComponent extends AdvancedButtonComponent {
     this.disabledAndSelectedSkin = disabledAndSelectedSkin;
   }
 
-  void Function(bool isSelected)? onChange;
+  void Function(bool isSelected)? onChangeSelected;
 
   @override
   @mustCallSuper
   void onMount() {
     assert(
-      defaultSelectedSkin != null,
-      'The defaultSelectedSkin has to either be passed '
-      'in as an argument or set in onLoad',
+    defaultSelectedSkin != null,
+    'The defaultSelectedSkin has to either be passed '
+        'in as an argument or set in onLoad',
     );
     super.onMount();
   }
@@ -80,7 +81,27 @@ class ToggleButtonComponent extends AdvancedButtonComponent {
     }
     _isSelected = value;
     updateState();
-    onChange?.call(_isSelected);
+    onChangeSelected?.call(_isSelected);
+  }
+
+  @override
+  @protected
+  void addSkin(ButtonState currentState) {
+    var skin = skinsMap[currentState];
+    if (currentState.isDisabledAndSelected && !hasSkinForState(currentState)) {
+      skin = skinsMap[ButtonState.disabled];
+    }
+    if (currentState.isDownAndSelected && !hasSkinForState(currentState)) {
+      skin = skinsMap[ButtonState.down];
+    }
+    if (currentState.isHoverAndSelected && !hasSkinForState(currentState)) {
+      skin = skinsMap[ButtonState.hover];
+    }
+    if (currentState.isDownAndSelected && !hasSkinForState(currentState)) {
+      skin = skinsMap[ButtonState.down];
+    }
+    skin = skin ?? (isSelected ? defaultSelectedSkin : defaultSkin);
+    skin?.parent = skinContainer;
   }
 
   @mustCallSuper
@@ -89,34 +110,24 @@ class ToggleButtonComponent extends AdvancedButtonComponent {
   void updateState() {
     if (isDisabled) {
       setState(
-        _isSelected && hasSkinForState(ButtonState.disabledAndSelected)
-            ? ButtonState.disabledAndSelected
-            : ButtonState.disabled,
+        _isSelected ? ButtonState.disabledAndSelected : ButtonState.disabled,
       );
       return;
     }
     if (isPressed) {
       setState(
-        _isSelected
-            ? hasSkinForState(ButtonState.downAndSelected)
-                ? ButtonState.downAndSelected
-                : ButtonState.upAndSelected
-            : ButtonState.down,
+        _isSelected ? ButtonState.downAndSelected : ButtonState.down,
       );
       return;
     }
     if (isHovered) {
-      final hoverState =
-          _isSelected ? ButtonState.hoverAndSelected : ButtonState.hover;
-      if (hasSkinForState(hoverState)) {
-        setState(hoverState);
-        return;
-      }
+      setState(
+        _isSelected ? ButtonState.hoverAndSelected : ButtonState.hover,
+      );
+      return;
     }
     setState(
-      _isSelected && hasSkinForState(ButtonState.upAndSelected)
-          ? ButtonState.upAndSelected
-          : ButtonState.up,
+      _isSelected ? ButtonState.upAndSelected : ButtonState.up,
     );
   }
 }
