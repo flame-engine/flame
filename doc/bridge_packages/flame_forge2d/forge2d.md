@@ -51,8 +51,13 @@ A simple `Forge2DGame` implementation example can be seen in the
 ## BodyComponent
 
 The `BodyComponent` is a wrapper for the `Forge2D` body, which is the body that the physics engine
-is interacting with. To create a `BodyComponent` you need to override `createBody()` and create and
-return your created body.
+is interacting with. To create a `BodyComponent` you can either:
+
+- override `createBody()` and create and return your created body;
+- use the default `createBody()` implementation: pass a `BodyDef` instance (and optionally a list
+of `FixtureDef` instances) to BodyComponent' constructor' `bodyDef` (and `fixtureDefs`) arguments;
+- use the default `createBody()` implementation: assign a `BodyDef` instance to `this.bodyDef`, and
+optionally a list of `FixtureDef` instances to `this.fixtureDefs`.
 
 The `BodyComponent` is by default having `renderBody = true`, since otherwise, it wouldn't show
 anything after you have created a `Body` and added the `BodyComponent` to the game. If you want to
@@ -61,7 +66,7 @@ turn it off you can just set (or override) `renderBody` to false.
 Just like any other Flame component you can add children to the `BodyComponent`, which can be very
 useful if you want to add for example animations or other components on top of your body.
 
-The body that you create in `createBody` should be defined according to Flame's coordinate system,
+The body that you create should be defined according to Flame's coordinate system,
 not according to the coordinate system of Forge2D (where the Y-axis is flipped).
 
 :exclamation: In Forge2D you shouldn't add any bodies as children to other components,

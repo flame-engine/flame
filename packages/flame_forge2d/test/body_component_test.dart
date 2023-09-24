@@ -1,4 +1,4 @@
-import 'package:flame/components.dart' show PositionComponent;
+import 'package:flame/components.dart' show ComponentKey, PositionComponent;
 import 'package:flame/extensions.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flame_test/flame_test.dart';
@@ -349,6 +349,55 @@ void main() {
           expect(positionComponent.absoluteAngle, 3.0);
         },
       );
+    });
+    group('createBody', () {
+      test('should throw an error if bodyDef is null', () {
+        final bodyComponent = BodyComponent();
+        expect(bodyComponent.createBody, throwsAssertionError);
+      });
+
+      group('should create body', () {
+        final flameTester = FlameTester(Forge2DGame.new);
+
+        flameTester.testGameWidget(
+          'with no fixtures',
+          setUp: (game, tester) async {
+            final bodyComponent = BodyComponent(
+              bodyDef: BodyDef(position: Vector2(33, 44)),
+              key: ComponentKey.named('tested'),
+            );
+            game.world.add(bodyComponent);
+          },
+          verify: (game, tester) async {
+            expect(
+              game.findByKeyName<BodyComponent>('tested')!.body.position,
+              Vector2(33, 44),
+            );
+          },
+        );
+
+        flameTester.testGameWidget(
+          'with a set of fixtures',
+          setUp: (game, tester) async {
+            final bodyComponent = BodyComponent(
+              bodyDef: BodyDef(),
+              fixtureDefs: [
+                FixtureDef(CircleShape()..radius = 10),
+                FixtureDef(CircleShape()..radius = 20),
+                FixtureDef(CircleShape()..radius = 30),
+              ],
+              key: ComponentKey.named('tested'),
+            );
+            game.world.add(bodyComponent);
+          },
+          verify: (game, tester) async {
+            final bodyComponent = game.findByKeyName<BodyComponent>('tested')!;
+            expect(bodyComponent.body.fixtures[0].shape.radius, 10);
+            expect(bodyComponent.body.fixtures[1].shape.radius, 20);
+            expect(bodyComponent.body.fixtures[2].shape.radius, 30);
+          },
+        );
+      });
     });
   });
 }
