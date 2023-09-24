@@ -141,7 +141,7 @@ void main() {
       expect(pressedTimes, 0);
     });
 
-    testWithFlameGame('correctly toggle work', (game) async {
+    testWithFlameGame('toggle works correctly', (game) async {
       var pressedTimes = 0;
       final initialGameSize = Vector2.all(100);
       final componentSize = Vector2.all(10);
@@ -178,7 +178,6 @@ void main() {
         1,
         TapDownDetails(globalPosition: previousPosition),
       );
-      tapDispatcher.handleTapCancel(1);
       expect(button.isSelected, true);
 
       tapDispatcher.handleTapUp(

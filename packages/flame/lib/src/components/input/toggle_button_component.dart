@@ -34,9 +34,9 @@ class ToggleButtonComponent extends AdvancedButtonComponent {
   @mustCallSuper
   void onMount() {
     assert(
-    defaultSelectedSkin != null,
-    'The defaultSelectedSkin has to either be passed '
-        'in as an argument or set in onLoad',
+      defaultSelectedSkin != null,
+      'The defaultSelectedSkin has to either be passed '
+      'in as an argument or set in onLoad',
     );
     super.onMount();
   }
@@ -99,15 +99,15 @@ class ToggleButtonComponent extends AdvancedButtonComponent {
       setState(
         _isSelected
             ? hasSkinForState(ButtonState.downAndSelected)
-            ? ButtonState.downAndSelected
-            : ButtonState.upAndSelected
+                ? ButtonState.downAndSelected
+                : ButtonState.upAndSelected
             : ButtonState.down,
       );
       return;
     }
     if (isHovered) {
       final hoverState =
-      _isSelected ? ButtonState.hoverAndSelected : ButtonState.hover;
+          _isSelected ? ButtonState.hoverAndSelected : ButtonState.hover;
       if (hasSkinForState(hoverState)) {
         setState(hoverState);
         return;
