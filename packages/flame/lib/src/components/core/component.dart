@@ -585,19 +585,20 @@ class Component {
   }
 
   FutureOr<void> _addChild(Component child) {
-    final game = findGame();
-    if (child._parent != null) {
+    final game = findGame() ?? child.findGame();
+    if ((!isMounted && !child.isMounted) || game == null) {
+      child.parent?.children.remove(child);
+      child._parent = this;
+      children.add(child);
+    } else if (child._parent != null) {
       if (child.isRemoving) {
-        // If the child is going to be added to the same parent as it previously
-        // had we need to remove it from the previous remove event from the
-        // queue.
-        game!.dequeueRemove(child);
+        game.dequeueRemove(child);
         _clearRemovingBit();
       }
-      game!.enqueueMove(child, this);
+      game.enqueueMove(child, this);
     } else if (isMounted && !child.isMounted) {
       child._parent = this;
-      game!.enqueueAdd(child, this);
+      game.enqueueAdd(child, this);
     } else {
       child._parent = this;
       // This will be reconciled during the mounting stage
