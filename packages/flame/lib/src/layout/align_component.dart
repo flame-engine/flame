@@ -7,9 +7,9 @@ import 'package:vector_math/vector_math_64.dart';
 /// **AlignComponent** is a layout component that positions its child within
 /// itself using relative placement. It is similar to Flutter's [Align] widget.
 ///
-/// The component requires a single [child], which will be the target of this
+/// The component requires a single [_child], which will be the target of this
 /// component's alignment. Of course, other children can be added to this
-/// component too, but only the initial [child] will be aligned.
+/// component too, but only the initial [_child] will be aligned.
 ///
 /// The [alignment] parameter describes where the child should be placed within
 /// the current component. For example, if the [alignment] is `Anchor.center`,
@@ -48,41 +48,58 @@ import 'package:vector_math/vector_math_64.dart';
 /// );
 /// ```
 class AlignComponent extends PositionComponent {
-  /// Creates a component that keeps its [child] positioned according to the
+  /// Creates a component that keeps its [_child] positioned according to the
   /// [alignment] within this component's bounding box.
   ///
   /// More precisely, the child will be placed at [alignment] relative position
   /// within the current component's bounding box. The child's anchor will also
   /// be set to the [alignment], unless [keepChildAnchor] parameter is true.
   AlignComponent({
-    required this.child,
-    required Anchor alignment,
+    PositionComponent? child,
+    Anchor alignment = Anchor.center,
     this.widthFactor,
     this.heightFactor,
     this.keepChildAnchor = false,
-  }) {
+  }) : _child = child {
     this.alignment = alignment;
-    add(child);
+    this.child = child;
+  }
+
+  /// The component that will be positioned by this component. The [_child] will
+  /// be automatically mounted to the current component.
+  PositionComponent? _child;
+
+  set child(PositionComponent? value) {
+    if (_child == value) {
+      return;
+    }
+    final previousChild = _child;
+    if (previousChild?.parent == this) {
+      previousChild?.removeFromParent();
+    }
+    _child = value;
+    _child?.parent = this;
+    if (!keepChildAnchor) {
+      _updateChildAnchor();
+    }
+    _updateChildPosition();
   }
 
   late Anchor _alignment;
 
-  /// The component that will be positioned by this component. The [child] will
-  /// be automatically mounted to the current component.
-  final PositionComponent child;
-
-  /// How the [child] will be positioned within the current component.
+  /// How the [_child] will be positioned within the current component.
   ///
   /// Note: unlike Flutter's [Alignment], the top-left corner of the component
   /// has relative coordinates `(0, 0)`, while the bottom-right corner has
   /// coordinates `(1, 1)`.
   Anchor get alignment => _alignment;
+
   set alignment(Anchor value) {
     _alignment = value;
     if (!keepChildAnchor) {
-      child.anchor = value;
+      _updateChildAnchor();
     }
-    child.position = Vector2(size.x * alignment.x, size.y * alignment.y);
+    _updateChildPosition();
   }
 
   /// If `null`, then the component's width will be equal to the width of the
@@ -96,7 +113,7 @@ class AlignComponent extends PositionComponent {
   final double? heightFactor;
 
   /// If `false` (default), then the child's `anchor` will be kept equal to the
-  /// [alignment] value. If `true`, then the [child] will be allowed to have its
+  /// [alignment] value. If `true`, then the [_child] will be allowed to have its
   /// own `anchor` value independent from the parent.
   final bool keepChildAnchor;
 
@@ -115,10 +132,19 @@ class AlignComponent extends PositionComponent {
 
   @override
   void onParentResize(Vector2 maxSize) {
-    super.size = Vector2(
-      widthFactor == null ? maxSize.x : child.size.x * widthFactor!,
-      heightFactor == null ? maxSize.y : child.size.y * heightFactor!,
-    );
-    child.position = Vector2(size.x * alignment.x, size.y * alignment.y);
+    if (_child != null) {
+      super.size = Vector2(
+        widthFactor == null ? maxSize.x : _child!.size.x * widthFactor!,
+        heightFactor == null ? maxSize.y : _child!.size.y * heightFactor!,
+      );
+    }
+  }
+
+  void _updateChildAnchor() {
+    _child?.anchor = _alignment;
+  }
+
+  void _updateChildPosition() {
+    _child?.position = Vector2(size.x * alignment.x, size.y * alignment.y);
   }
 }
