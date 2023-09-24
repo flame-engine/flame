@@ -56,11 +56,11 @@ class AlignComponent extends PositionComponent {
   /// be set to the [alignment], unless [keepChildAnchor] parameter is true.
   AlignComponent({
     PositionComponent? child,
-    Anchor alignment = Anchor.center,
+    Anchor alignment = Anchor.topLeft,
     this.widthFactor,
     this.heightFactor,
     this.keepChildAnchor = false,
-  }) : _child = child {
+  }) {
     this.alignment = alignment;
     this.child = child;
   }
@@ -69,21 +69,16 @@ class AlignComponent extends PositionComponent {
   /// be automatically mounted to the current component.
   PositionComponent? _child;
 
-  PositionComponent? get child => _child;
-
   set child(PositionComponent? value) {
     if (_child == value) {
       return;
     }
-    final previousChild = _child;
-    if (previousChild?.parent == this) {
-      previousChild?.removeFromParent();
+    if (_child?.parent == this) {
+      _child?.removeFromParent();
     }
     _child = value;
     _child?.parent = this;
-    if (!keepChildAnchor) {
-      _updateChildAnchor();
-    }
+    _updateChildAnchor();
     _updateChildPosition();
   }
 
@@ -97,13 +92,8 @@ class AlignComponent extends PositionComponent {
   Anchor get alignment => _alignment;
 
   set alignment(Anchor value) {
-    if (_alignment == value) {
-      return;
-    }
     _alignment = value;
-    if (!keepChildAnchor) {
-      _updateChildAnchor();
-    }
+    _updateChildAnchor();
     _updateChildPosition();
   }
 
@@ -143,13 +133,16 @@ class AlignComponent extends PositionComponent {
         heightFactor == null ? maxSize.y : _child!.size.y * heightFactor!,
       );
     }
-  }
-
-  void _updateChildAnchor() {
-    _child?.anchor = _alignment;
+    _updateChildPosition();
   }
 
   void _updateChildPosition() {
     _child?.position = Vector2(size.x * alignment.x, size.y * alignment.y);
+  }
+
+  void _updateChildAnchor() {
+    if (!keepChildAnchor) {
+      _child?.anchor = _alignment;
+    }
   }
 }
