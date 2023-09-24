@@ -5,7 +5,7 @@ import 'package:flutter/foundation.dart';
 class ToggleButtonComponent extends AdvancedButtonComponent {
   ToggleButtonComponent({
     super.onPressed,
-    this.onSelected,
+    this.onSelectedChanged,
     super.onChangeState,
     super.defaultSkin,
     super.downSkin,
@@ -29,7 +29,7 @@ class ToggleButtonComponent extends AdvancedButtonComponent {
     this.disabledAndSelectedSkin = disabledAndSelectedSkin;
   }
 
-  ValueChanged<bool>? onSelected;
+  ValueChanged<bool>? onSelectedChanged;
 
   @override
   @mustCallSuper
@@ -81,7 +81,7 @@ class ToggleButtonComponent extends AdvancedButtonComponent {
     }
     _isSelected = value;
     updateState();
-    onSelected?.call(_isSelected);
+    onSelectedChanged?.call(_isSelected);
   }
 
   @override
