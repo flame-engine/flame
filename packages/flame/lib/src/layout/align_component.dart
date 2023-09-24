@@ -69,6 +69,8 @@ class AlignComponent extends PositionComponent {
   /// be automatically mounted to the current component.
   PositionComponent? _child;
 
+  PositionComponent? get child => _child;
+
   set child(PositionComponent? value) {
     if (_child == value) {
       return;
