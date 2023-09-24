@@ -254,6 +254,9 @@ class GameWidgetState<T extends Game> extends State<GameWidget<T>> {
       currentGame = widget.game!;
     }
     currentGame.addGameStateListener(_onGameStateChange);
+    currentGame.lifecycleStateChange(
+      WidgetsBinding.instance.lifecycleState ?? AppLifecycleState.resumed,
+    );
     _loaderFuture = null;
   }
 
@@ -262,6 +265,7 @@ class GameWidgetState<T extends Game> extends State<GameWidget<T>> {
   /// `currentGame`'s `onDispose` method will be called; otherwise, it will not.
   void disposeCurrentGame({bool callGameOnDispose = false}) {
     currentGame.removeGameStateListener(_onGameStateChange);
+    currentGame.lifecycleStateChange(AppLifecycleState.paused);
     currentGame.onRemove();
     if (callGameOnDispose) {
       currentGame.onDispose();

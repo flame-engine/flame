@@ -9,8 +9,8 @@ import 'package:flame/game.dart';
 import 'package:flame/src/events/flame_game_mixins/multi_tap_dispatcher.dart';
 import 'package:flame/src/game/game_render_box.dart';
 import 'package:flame_test/flame_test.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../components/component_test.dart';
@@ -47,8 +47,8 @@ void main() {
       await game.ready();
 
       expect(innerGame.canvasSize, closeToVector(Vector2(800, 600)));
-      expect(innerGame.isLoaded, true);
-      expect(innerGame.isMounted, true);
+      expect(innerGame.isLoaded, isTrue);
+      expect(innerGame.isMounted, isTrue);
     });
 
     group('components', () {
@@ -58,8 +58,8 @@ void main() {
           final component = Component();
           await game.ensureAdd(component);
 
-          expect(component.isMounted, true);
-          expect(game.children.contains(component), true);
+          expect(component.isMounted, isTrue);
+          expect(game.children.contains(component), isTrue);
         },
       );
 
@@ -69,7 +69,7 @@ void main() {
           final component = _MyAsyncComponent();
           await game.ensureAdd(component);
 
-          expect(game.children.contains(component), true);
+          expect(game.children.contains(component), isTrue);
           expect(component.gameSize, game.size);
           expect(component.game, game);
         },
@@ -128,12 +128,12 @@ void main() {
           await game.add(component);
           renderBox.gameLoopCallback(1.0);
 
-          expect(component.isUpdateCalled, true);
+          expect(component.isUpdateCalled, isTrue);
           renderBox.paint(
             PaintingContext(ContainerLayer(), Rect.zero),
             Offset.zero,
           );
-          expect(component.isRenderCalled, true);
+          expect(component.isRenderCalled, isTrue);
           renderBox.detach();
         },
       );
@@ -165,7 +165,7 @@ void main() {
           expect(world.children.length, equals(1));
           component.removeFromParent();
           game.updateTree(0);
-          expect(world.children.isEmpty, equals(true));
+          expect(world.children.isEmpty, equals(isTrue));
         },
       );
 
@@ -175,7 +175,7 @@ void main() {
           final game = FlameGame();
           final world = game.world;
           final component = Component()..addToParent(world);
-          expect(game.hasLayout, false);
+          expect(game.hasLayout, isFalse);
 
           await tester.pumpWidget(GameWidget(game: game));
           game.update(0);
@@ -697,6 +697,66 @@ void main() {
           expect(hasAttached, isTrue);
         });
       });
+    });
+
+    group('pauseWhenBackgrounded:', () {
+      testWithFlameGame('true', (game) async {
+        game.pauseWhenBackgrounded = true;
+
+        game.lifecycleStateChange(AppLifecycleState.paused);
+        expect(game.paused, isTrue);
+
+        game.lifecycleStateChange(AppLifecycleState.resumed);
+        expect(game.paused, isFalse);
+      });
+
+      testWithFlameGame('false', (game) async {
+        game.pauseWhenBackgrounded = false;
+
+        game.lifecycleStateChange(AppLifecycleState.paused);
+        expect(game.paused, isFalse);
+
+        game.lifecycleStateChange(AppLifecycleState.resumed);
+        expect(game.paused, isFalse);
+      });
+
+      testWidgets(
+        'game is not paused on start',
+        (tester) async {
+          final game = FlameGame();
+
+          await tester.pumpWidget(
+            GameWidget(game: game),
+          );
+
+          await game.toBeLoaded();
+          await tester.pump();
+
+          expect(game.paused, isFalse);
+        },
+      );
+
+      testWidgets(
+        'game is paused when app is backgrounded',
+        (tester) async {
+          final game = FlameGame();
+
+          await tester.pumpWidget(GameWidget(game: game));
+
+          await game.toBeLoaded();
+          await tester.pump();
+
+          expect(game.paused, isFalse);
+          WidgetsBinding.instance.handleAppLifecycleStateChanged(
+            AppLifecycleState.paused,
+          );
+          expect(game.paused, isTrue);
+          WidgetsBinding.instance.handleAppLifecycleStateChanged(
+            AppLifecycleState.resumed,
+          );
+          expect(game.paused, isFalse);
+        },
+      );
     });
   });
 }

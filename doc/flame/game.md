@@ -226,3 +226,21 @@ While the game is paused, it is possible to advanced it frame by frame using the
 method.
 It might not be much useful in the final game, but can be very helpful in inspecting game state step
 by step during the development cycle.
+
+
+### Backgrounding
+
+The game will be automatically paused when the app is sent to the background,
+and resumed when it comes back to the foreground. This behavior can be disabled by setting
+`pauseWhenBackgrounded` to `false`.
+
+```dart
+class MyGame extends FlameGame {
+  MyGame() {
+    pauseWhenBackgrounded = false;
+  }
+}
+```
+
+On the current Flutter stable (3.13), this flag is effectively ignored on
+non-mobile platforms including the web.

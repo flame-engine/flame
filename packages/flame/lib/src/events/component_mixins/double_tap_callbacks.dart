@@ -28,7 +28,7 @@ mixin DoubleTapCallbacks on Component {
   @override
   void onMount() {
     super.onMount();
-    final game = findGame()!;
+    final game = findRootGame()!;
     if (game.findByKey(const DoubleTapDispatcherKey()) == null) {
       final dispatcher = DoubleTapDispatcher();
       game.registerKey(const DoubleTapDispatcherKey(), dispatcher);

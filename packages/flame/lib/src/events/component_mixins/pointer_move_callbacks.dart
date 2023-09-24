@@ -18,7 +18,7 @@ mixin PointerMoveCallbacks on Component {
   }
 
   static void onMountHandler(PointerMoveCallbacks instance) {
-    final game = instance.findGame()!;
+    final game = instance.findRootGame()!;
     const key = MouseMoveDispatcherKey();
     if (game.findByKey(key) == null) {
       final dispatcher = PointerMoveDispatcher();

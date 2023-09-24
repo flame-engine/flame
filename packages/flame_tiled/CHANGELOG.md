@@ -1,3 +1,17 @@
+## 1.14.1
+
+ - Update a dependency to the latest release.
+
+## 1.14.0
+
+> Note: This release has breaking changes.
+
+ - **REFACTOR**: Enable DCM linting ([#2667](https://github.com/flame-engine/flame/issues/2667)). ([27a8fd61](https://github.com/flame-engine/flame/commit/27a8fd61cb7f62513e07a93ff61cf03b426353f2))
+ - **FEAT**: Expose atlas limits for `TiledComponent` ([#2701](https://github.com/flame-engine/flame/issues/2701)). ([99a1016f](https://github.com/flame-engine/flame/commit/99a1016f72d02f4a989986f224e0e77cddd0dfa8))
+ - **FEAT**: Added prefix parameter to TiledComponent.load to specify assets folder for tiled maps ([#2651](https://github.com/flame-engine/flame/issues/2651)). ([d08284dd](https://github.com/flame-engine/flame/commit/d08284ddcaf5d2ad6e5312336a71a113702dc241))
+ - **DOCS**: Enable CSpell on tests ([#2723](https://github.com/flame-engine/flame/issues/2723)). ([e051298c](https://github.com/flame-engine/flame/commit/e051298cba76550229780438b1a589557c7b488d))
+ - **BREAKING** **FEAT**: Add CameraComponent to FlameGame ([#2740](https://github.com/flame-engine/flame/issues/2740)). ([7c2f4000](https://github.com/flame-engine/flame/commit/7c2f4000761580dbabb5d73b27f64d5819b34e8d))
+
 ## 1.13.0
 
  - **FIX**: Compute scale in TileLayers based on native map tile size rather than image sizes to support oversized/undersized tiles. ([#2634](https://github.com/flame-engine/flame/issues/2634)). ([1c4d6cd0](https://github.com/flame-engine/flame/commit/1c4d6cd0654f133771a7af5795cc1de2343268c1))

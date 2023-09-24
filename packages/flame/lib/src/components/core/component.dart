@@ -267,11 +267,8 @@ class Component {
   set parent(Component? newParent) {
     if (newParent == null) {
       removeFromParent();
-    } else if (_parent == null || isRemoving) {
-      addToParent(newParent);
     } else {
-      final root = findGame()!;
-      root.enqueueMove(this, newParent);
+      addToParent(newParent);
     }
   }
 
@@ -381,6 +378,8 @@ class Component {
 
   @internal
   static Game? staticGameInstance;
+
+  /// Fetches the nearest [FlameGame] ancestor to the component.
   FlameGame? findGame() {
     assert(
       staticGameInstance is FlameGame || staticGameInstance == null,
@@ -391,6 +390,15 @@ class Component {
         : null;
     return gameInstance ??
         ((this is FlameGame) ? (this as FlameGame) : _parent?.findGame());
+  }
+
+  /// Fetches the root [FlameGame] ancestor to the component.
+  FlameGame? findRootGame() {
+    var game = findGame();
+    while (game?.parent != null) {
+      game = game!.parent!.findGame();
+    }
+    return game;
   }
 
   /// Whether the children list contains the given component.
@@ -577,16 +585,22 @@ class Component {
   }
 
   FutureOr<void> _addChild(Component child) {
-    assert(
-      child._parent == null || child.isRemoving,
-      '$child cannot be added to $this because it already has a parent: '
-      '${child._parent}',
-    );
-    final game = findGame();
-    child._parent = this;
-    if (isMounted && (!child.isMounted || child.isRemoving)) {
-      game!.enqueueAdd(child, this);
+    final game = findGame() ?? child.findGame();
+    if ((!isMounted && !child.isMounted) || game == null) {
+      child._parent?.children.remove(child);
+      child._parent = this;
+      children.add(child);
+    } else if (child._parent != null) {
+      if (child.isRemoving) {
+        game.dequeueRemove(child);
+        _clearRemovingBit();
+      }
+      game.enqueueMove(child, this);
+    } else if (isMounted && !child.isMounted) {
+      child._parent = this;
+      game.enqueueAdd(child, this);
     } else {
+      child._parent = this;
       // This will be reconciled during the mounting stage
       children.add(child);
     }

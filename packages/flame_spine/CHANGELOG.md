@@ -1,3 +1,11 @@
+## 0.1.1+3
+
+ - Update a dependency to the latest release.
+
+## 0.1.1+2
+
+ - **REFACTOR**: Enable DCM linting ([#2667](https://github.com/flame-engine/flame/issues/2667)). ([27a8fd61](https://github.com/flame-engine/flame/commit/27a8fd61cb7f62513e07a93ff61cf03b426353f2))
+
 ## 0.1.1+1
 
  - Update a dependency to the latest release.

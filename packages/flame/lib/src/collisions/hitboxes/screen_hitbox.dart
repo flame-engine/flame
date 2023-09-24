@@ -7,12 +7,16 @@ import 'package:flame/src/collisions/hitboxes/rectangle_hitbox.dart';
 /// viewport of the game.
 class ScreenHitbox<T extends FlameGame> extends PositionComponent
     with CollisionCallbacks, HasGameReference<T> {
+  bool _hasWorldAncestor = false;
   @override
   Future<void> onLoad() async {
     await super.onLoad();
     add(RectangleHitbox());
-    game.camera.viewfinder.transform.addListener(_updatePosition);
-    _updatePosition();
+    _hasWorldAncestor = findParent<World>() != null;
+    if (_hasWorldAncestor) {
+      game.camera.viewfinder.transform.addListener(_updatePosition);
+      _updatePosition();
+    }
   }
 
   void _updatePosition() {
@@ -26,6 +30,8 @@ class ScreenHitbox<T extends FlameGame> extends PositionComponent
   void onGameResize(Vector2 size) {
     super.onGameResize(size);
     this.size = size;
-    _updatePosition();
+    if (_hasWorldAncestor) {
+      _updatePosition();
+    }
   }
 }

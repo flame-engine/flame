@@ -412,6 +412,8 @@ void main() {
           game.update(0);
           expect(child.parent, parent);
           expect(parent.children, [child]);
+          expect(child.isMounted, isTrue);
+          expect(child.isRemoving, isFalse);
         },
       );
 
@@ -427,6 +429,64 @@ void main() {
           game.update(0);
           expect(child.parent, parent);
           expect(parent.children, [child]);
+          expect(child.isMounted, isTrue);
+          expect(child.isRemoving, isFalse);
+        },
+      );
+
+      testWithFlameGame(
+        'removing a component and adding it to another parent in the same tick',
+        (game) async {
+          final child = Component();
+          final parent = Component(children: [child]);
+          final otherParent = Component();
+          await game.ensureAddAll([parent, otherParent]);
+          child.removeFromParent();
+          otherParent.add(child);
+          game.update(0);
+          expect(child.parent, otherParent);
+          expect(parent.children, []);
+          expect(otherParent.children, [child]);
+          expect(child.isMounted, isTrue);
+        },
+      );
+
+      testWithFlameGame(
+        'move a component from a mounted parent to an unmounted one',
+        (game) async {
+          final child = Component();
+          final mountedParent = Component(children: [child]);
+          final unmountedParent = Component();
+          await game.ensureAdd(mountedParent);
+          unmountedParent.add(child);
+          game.update(0);
+          expect(child.parent, unmountedParent);
+          expect(mountedParent.children, []);
+          expect(unmountedParent.children, [child]);
+          expect(child.isMounted, isFalse);
+          await game.ensureAdd(unmountedParent);
+          expect(child.isMounted, isTrue);
+        },
+      );
+
+      testWithFlameGame(
+        'swapping between multiple parents in the same tick',
+        (game) async {
+          final child = Component();
+          final parents = [
+            Component(children: [child]),
+            Component(),
+            Component(),
+          ];
+          await game.ensureAddAll(parents);
+          child.parent = parents[1];
+          child.parent = parents[2];
+          game.update(0);
+          expect(child.parent, parents[2]);
+          expect(parents[0].children, []);
+          expect(parents[1].children, []);
+          expect(parents[2].children, [child]);
+          expect(child.isMounted, isTrue);
         },
       );
 
@@ -1118,6 +1178,28 @@ void main() {
           _Pair(componentA, [Vector2(664, 216), Vector2(157, 83)]),
           _Pair(world, [Vector2(664, 216)]),
         ]);
+      });
+    });
+
+    group('findRootGame()', () {
+      testWithFlameGame('finds root game in nested game structure',
+          (game) async {
+        final component = Component();
+        await game.ensureAdd(
+          FlameGame(
+            children: [
+              Component(children: [component]),
+            ],
+          ),
+        );
+        expect(component.findRootGame(), game);
+      });
+
+      testWithFlameGame('finds root game in non-nested game structure',
+          (game) async {
+        final component = Component();
+        await game.ensureAdd(component);
+        expect(component.findRootGame(), game);
       });
     });
 
