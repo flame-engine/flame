@@ -587,7 +587,7 @@ class Component {
   FutureOr<void> _addChild(Component child) {
     final game = findGame() ?? child.findGame();
     if ((!isMounted && !child.isMounted) || game == null) {
-      child.parent?.children.remove(child);
+      child._parent?.children.remove(child);
       child._parent = this;
       children.add(child);
     } else if (child._parent != null) {
