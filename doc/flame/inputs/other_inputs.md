@@ -157,6 +157,7 @@ These are the fields that should be used to know the state of the `AdvancedButto
 
 The component also support `disabledSkin`, for the disabled state. This state is achieved by using `setDisabled`.
 
+
 ## ToggleButtonComponent
 
 The [ToggleButtonComponent] is a [AdvancedButtonComponent] with state switching: selected and not selected
