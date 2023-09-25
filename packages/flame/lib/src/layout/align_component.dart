@@ -1,8 +1,6 @@
-import 'package:flame/src/anchor.dart';
-import 'package:flame/src/components/position_component.dart';
+import 'package:flame/components.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
 import 'package:flutter/widgets.dart';
-import 'package:vector_math/vector_math_64.dart';
 
 /// **AlignComponent** is a layout component that positions its child within
 /// itself using relative placement. It is similar to Flutter's [Align] widget.
@@ -55,21 +53,36 @@ class AlignComponent extends PositionComponent {
   /// within the current component's bounding box. The child's anchor will also
   /// be set to the [alignment], unless [keepChildAnchor] parameter is true.
   AlignComponent({
-    required this.child,
-    required Anchor alignment,
+    PositionComponent? child,
+    Anchor alignment = Anchor.topLeft,
     this.widthFactor,
     this.heightFactor,
     this.keepChildAnchor = false,
   }) {
     this.alignment = alignment;
-    add(child);
+    this.child = child;
   }
 
-  late Anchor _alignment;
+  PositionComponent? _child;
 
   /// The component that will be positioned by this component. The [child] will
   /// be automatically mounted to the current component.
-  final PositionComponent child;
+  PositionComponent? get child => _child;
+
+  set child(PositionComponent? value) {
+    if (_child == value) {
+      return;
+    }
+    if (_child?.parent == this) {
+      _child?.removeFromParent();
+    }
+    _child = value;
+    _child?.parent = this;
+    _updateChildAnchor();
+    _updateChildPosition();
+  }
+
+  late Anchor _alignment;
 
   /// How the [child] will be positioned within the current component.
   ///
@@ -77,12 +90,11 @@ class AlignComponent extends PositionComponent {
   /// has relative coordinates `(0, 0)`, while the bottom-right corner has
   /// coordinates `(1, 1)`.
   Anchor get alignment => _alignment;
+
   set alignment(Anchor value) {
     _alignment = value;
-    if (!keepChildAnchor) {
-      child.anchor = value;
-    }
-    child.position = Vector2(size.x * alignment.x, size.y * alignment.y);
+    _updateChildAnchor();
+    _updateChildPosition();
   }
 
   /// If `null`, then the component's width will be equal to the width of the
@@ -96,8 +108,8 @@ class AlignComponent extends PositionComponent {
   final double? heightFactor;
 
   /// If `false` (default), then the child's `anchor` will be kept equal to the
-  /// [alignment] value. If `true`, then the [child] will be allowed to have its
-  /// own `anchor` value independent from the parent.
+  /// [alignment] value. If `true`, then the [child] will be allowed to have
+  /// its own `anchor` value independent from the parent.
   final bool keepChildAnchor;
 
   @override
@@ -115,10 +127,30 @@ class AlignComponent extends PositionComponent {
 
   @override
   void onParentResize(Vector2 maxSize) {
-    super.size = Vector2(
-      widthFactor == null ? maxSize.x : child.size.x * widthFactor!,
-      heightFactor == null ? maxSize.y : child.size.y * heightFactor!,
-    );
-    child.position = Vector2(size.x * alignment.x, size.y * alignment.y);
+    if (_child != null) {
+      super.size = Vector2(
+        widthFactor == null ? maxSize.x : _child!.size.x * widthFactor!,
+        heightFactor == null ? maxSize.y : _child!.size.y * heightFactor!,
+      );
+    }
+    _updateChildPosition();
+  }
+
+  @mustCallSuper
+  @override
+  void onChildrenChanged(Component child, ChildrenChangeType type) {
+    if (_child?.parent != this) {
+      this.child = null;
+    }
+  }
+
+  void _updateChildPosition() {
+    _child?.position = Vector2(size.x * alignment.x, size.y * alignment.y);
+  }
+
+  void _updateChildAnchor() {
+    if (!keepChildAnchor) {
+      _child?.anchor = _alignment;
+    }
   }
 }
