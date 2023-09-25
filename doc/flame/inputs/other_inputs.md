@@ -154,12 +154,19 @@ These are the fields that should be used to know the state of the `AdvancedButto
 - `defaultSkin`: Component that will be displayed by default on the button.
 - `downSkin`: Component displayed when the button is clicked or tapped.
 - `hoverSkin`: Component displayed when the button is hovered. (desktop and web).
-- `defaultSelectedSkin`: The component to display when the button is selected.
-The button property must be IsSelectable = true. In this case, the button will have two states
-to toggle between (imagine a switch component).
-- `downAndSelectedSkin`: The component that is displayed when the selectable button is selected and
-pressed.
-- `hoverAndSelectedSkin`: Hover on selectable and selected button (desktop and web).
 
-The component also supports two skins, `disabledSkin` and `disabledAndSelectedSkin`, for the
-disabled state. This state is achieved by using `setDisabled`.
+The component also support `disabledSkin`, for the disabled state. This state is achieved by using `setDisabled`.
+
+## ToggleButtonComponent
+
+The [ToggleButtonComponent] is a [AdvancedButtonComponent] with state switching: selected and not selected
+
+In addition to the already existing skins, the [ToggleButtonComponent] contains the following skins:
+
+- `defaultSelectedSkin`: The component to display when the button is selected.
+  The button property must be IsSelectable = true. In this case, the button will have two states
+  to toggle between (imagine a switch component).
+- `downAndSelectedSkin`: The component that is displayed when the selectable button is selected and
+  pressed.
+- `hoverAndSelectedSkin`: Hover on selectable and selected button (desktop and web).
+- `disabledAndSelectedSkin`: For selected and disabled state.
