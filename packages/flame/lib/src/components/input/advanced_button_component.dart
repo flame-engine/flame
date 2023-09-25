@@ -2,6 +2,12 @@ import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flutter/foundation.dart';
 
+/// The [AdvancedButtonComponent] has different skins for
+/// different button states.
+///
+/// Note: You have to set the [defaultSkin],[downSkin],[hoverSkin]
+/// [disabledSkin] in [onLoad] if you are not passing it in through
+/// the constructor
 class AdvancedButtonComponent extends PositionComponent
     with HoverCallbacks, TapCallbacks {
   AdvancedButtonComponent({
@@ -26,7 +32,10 @@ class AdvancedButtonComponent extends PositionComponent
     size.addListener(_updateSizes);
   }
 
+  /// Callback for what should happen when the button is pressed.
   void Function()? onPressed;
+
+  /// Callback when button state changes
   void Function(ButtonState state)? onChangeState;
 
   @mustCallSuper
@@ -36,6 +45,7 @@ class AdvancedButtonComponent extends PositionComponent
     add(skinContainer);
   }
 
+  @protected
   final skinContainer = PositionComponent();
 
   @override
