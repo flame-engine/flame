@@ -8,6 +8,7 @@ import 'package:flutter/foundation.dart';
 /// Note: You have to set the [defaultSkin],[downSkin],[hoverSkin]
 /// [disabledSkin] in [onLoad] if you are not passing it in through
 /// the constructor
+
 class AdvancedButtonComponent extends PositionComponent
     with HoverCallbacks, TapCallbacks {
   AdvancedButtonComponent({
