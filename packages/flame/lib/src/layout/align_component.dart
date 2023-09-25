@@ -63,10 +63,10 @@ class AlignComponent extends PositionComponent {
     this.child = child;
   }
 
-  /// The component that will be positioned by this component. The [child] will
-  /// be automatically mounted to the current component.
   PositionComponent? _child;
 
+  /// The component that will be positioned by this component. The [child] will
+  /// be automatically mounted to the current component.
   PositionComponent? get child => _child;
 
   set child(PositionComponent? value) {
