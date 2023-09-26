@@ -144,11 +144,6 @@ class AdvancedButtonComponent extends PositionComponent
     updateLabel();
   }
 
-  set downLabel(PositionComponent? value) {
-    labelsMap[ButtonState.down] = value;
-    updateLabel();
-  }
-
   set disabledLabel(PositionComponent? value) {
     labelsMap[ButtonState.disabled] = value;
     updateLabel();
@@ -246,10 +241,6 @@ class AdvancedButtonComponent extends PositionComponent
     return skinsMap[state] != null;
   }
 
-  @protected
-  bool hasLabelForState(ButtonState state) {
-    return labelsMap[state] != null;
-  }
 }
 
 enum ButtonState {
