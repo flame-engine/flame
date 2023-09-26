@@ -254,9 +254,7 @@ class GameWidgetState<T extends Game> extends State<GameWidget<T>> {
       currentGame = widget.game!;
     }
     currentGame.addGameStateListener(_onGameStateChange);
-    currentGame.lifecycleStateChange(
-      WidgetsBinding.instance.lifecycleState ?? AppLifecycleState.resumed,
-    );
+    currentGame.lifecycleStateChange(AppLifecycleState.resumed);
     _loaderFuture = null;
   }
 
