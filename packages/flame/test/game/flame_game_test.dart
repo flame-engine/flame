@@ -720,21 +720,45 @@ void main() {
         expect(game.paused, isFalse);
       });
 
-      testWidgets(
-        'game is not paused on start',
-        (tester) async {
-          final game = FlameGame();
+      for (final startingLifecycleState in AppLifecycleState.values) {
+        testWidgets(
+          'game is not paused on start even if app is $startingLifecycleState',
+          (tester) async {
+            WidgetsBinding.instance.handleAppLifecycleStateChanged(
+              startingLifecycleState,
+            );
+            addTearDown(() {
+              // Don't use [WidgetsBinding.instance.resetLifecycleState()]
+              // because it sets the lifecycle to null which prevents
+              // [game.onLoad] from running in other tests.
+              WidgetsBinding.instance.handleAppLifecycleStateChanged(
+                AppLifecycleState.resumed,
+              );
+            });
+            expect(
+              WidgetsBinding.instance.lifecycleState,
+              startingLifecycleState,
+            );
 
-          await tester.pumpWidget(
-            GameWidget(game: game),
-          );
+            final game = FlameGame();
 
-          await game.toBeLoaded();
-          await tester.pump();
+            await tester.pumpWidget(
+              GameWidget(game: game),
+            );
+            
+            // onLoad isn't usually called if the lifecycle state
+            // isn't foregrounded.
+            // Since we only care about when the lifecycle state
+            // is backgrounded initially but updates basically immediately
+            // after, we can just await [game.onLoadFuture]
+            // instead of [game.toBeLoaded()]
+            await game.onLoadFuture;
+            await tester.pump();
 
-          expect(game.paused, isFalse);
-        },
-      );
+            expect(game.paused, isFalse);
+          },
+        );
+      }
 
       testWidgets(
         'game is paused when app is backgrounded',
