@@ -721,9 +721,9 @@ void main() {
       });
 
       for (final startingLifecycleState in AppLifecycleState.values) {
-        testWidgets(
-          'game is not paused on start even if app is $startingLifecycleState',
-          (tester) async {
+        test(
+          'game is not paused on start when initially $startingLifecycleState',
+          () async {
             WidgetsBinding.instance.handleAppLifecycleStateChanged(
               startingLifecycleState,
             );
@@ -741,20 +741,7 @@ void main() {
             );
 
             final game = FlameGame();
-
-            await tester.pumpWidget(
-              GameWidget(game: game),
-            );
-            
-            // onLoad isn't usually called if the lifecycle state
-            // isn't foregrounded.
-            // Since we only care about when the lifecycle state
-            // is backgrounded initially but updates basically immediately
-            // after, we can just await [game.onLoadFuture]
-            // instead of [game.toBeLoaded()]
-            await game.onLoadFuture;
-            await tester.pump();
-
+            game.initLifecycleState();
             expect(game.paused, isFalse);
           },
         );

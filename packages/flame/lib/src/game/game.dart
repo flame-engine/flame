@@ -151,6 +151,17 @@ abstract mixin class Game {
   /// Check [AppLifecycleState] for details about the events received.
   void lifecycleStateChange(AppLifecycleState state) {}
 
+  @internal
+  void initLifecycleState() {
+    // See https://github.com/flame-engine/flame/issues/2771
+    // for why we aren't using [WidgetsBinding.instance.lifecycleState].
+    lifecycleStateChange(AppLifecycleState.resumed);
+  }
+  @internal
+  void disposeLifecycleState() {
+    lifecycleStateChange(AppLifecycleState.paused);
+  }
+
   /// Method to perform late initialization of the [Game] class.
   ///
   /// Usually, this method is the main place where you initialize your [Game]
