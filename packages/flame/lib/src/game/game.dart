@@ -157,6 +157,7 @@ abstract mixin class Game {
     // for why we aren't using [WidgetsBinding.instance.lifecycleState].
     lifecycleStateChange(AppLifecycleState.resumed);
   }
+
   @internal
   void disposeLifecycleState() {
     lifecycleStateChange(AppLifecycleState.paused);
