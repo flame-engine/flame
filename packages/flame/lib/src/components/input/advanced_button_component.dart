@@ -240,7 +240,6 @@ class AdvancedButtonComponent extends PositionComponent
   bool hasSkinForState(ButtonState state) {
     return skinsMap[state] != null;
   }
-
 }
 
 enum ButtonState {
