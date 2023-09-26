@@ -22,6 +22,10 @@ class ToggleButtonComponent extends AdvancedButtonComponent {
     PositionComponent? downAndSelectedSkin,
     PositionComponent? hoverAndSelectedSkin,
     PositionComponent? disabledAndSelectedSkin,
+    super.defaultLabel,
+    super.disabledLabel,
+    PositionComponent? defaultSelectedLabel,
+    PositionComponent? disabledAndSelectedLabel,
     super.size,
     super.position,
     super.scale,
@@ -34,6 +38,8 @@ class ToggleButtonComponent extends AdvancedButtonComponent {
     this.downAndSelectedSkin = downAndSelectedSkin;
     this.hoverAndSelectedSkin = hoverAndSelectedSkin;
     this.disabledAndSelectedSkin = disabledAndSelectedSkin;
+    this.defaultSelectedLabel = defaultSelectedLabel;
+    this.disabledAndSelectedLabel = disabledAndSelectedLabel;
   }
 
   /// Callback when button selected changed
@@ -73,10 +79,23 @@ class ToggleButtonComponent extends AdvancedButtonComponent {
     invalidateSkins();
   }
 
+  PositionComponent? get defaultSelectedLabel =>
+      labelsMap[ButtonState.upAndSelected];
+
+  set defaultSelectedLabel(PositionComponent? value) {
+    labelsMap[ButtonState.upAndSelected] = value;
+    updateLabel();
+  }
+
+  set disabledAndSelectedLabel(PositionComponent? value) {
+    labelsMap[ButtonState.disabledAndSelected] = value;
+    updateLabel();
+  }
+
   @override
   void onTapUp(TapUpEvent event) {
-    super.onTapUp(event);
     isSelected = !_isSelected;
+    super.onTapUp(event);
   }
 
   bool _isSelected = false;
@@ -94,22 +113,29 @@ class ToggleButtonComponent extends AdvancedButtonComponent {
 
   @override
   @protected
-  void addSkin(ButtonState currentState) {
-    var skin = skinsMap[currentState];
-    if (currentState.isDisabledAndSelected && !hasSkinForState(currentState)) {
+  void addSkin(ButtonState state) {
+    var skin = skinsMap[state];
+    if (state.isDisabledAndSelected && !hasSkinForState(state)) {
       skin = skinsMap[ButtonState.disabled];
     }
-    if (currentState.isDownAndSelected && !hasSkinForState(currentState)) {
+    if (state.isDownAndSelected && !hasSkinForState(state)) {
       skin = skinsMap[ButtonState.down];
     }
-    if (currentState.isHoverAndSelected && !hasSkinForState(currentState)) {
+    if (state.isHoverAndSelected && !hasSkinForState(state)) {
       skin = skinsMap[ButtonState.hover];
     }
-    if (currentState.isDownAndSelected && !hasSkinForState(currentState)) {
+    if (state.isDownAndSelected && !hasSkinForState(state)) {
       skin = skinsMap[ButtonState.down];
     }
     skin = skin ?? (isSelected ? defaultSelectedSkin : defaultSkin);
     skin?.parent = skinContainer;
+  }
+
+  @override
+  @protected
+  void addLabel(ButtonState state) {
+    labelAlignContainer.child =
+        labelsMap[state] ?? (isSelected ? defaultSelectedLabel : defaultLabel);
   }
 
   @mustCallSuper

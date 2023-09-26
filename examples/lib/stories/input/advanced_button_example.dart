@@ -1,6 +1,6 @@
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
-import 'package:flame/layout.dart';
+import 'package:flame/palette.dart';
 import 'package:flutter/painting.dart';
 
 class AdvancedButtonExample extends FlameGame {
@@ -32,6 +32,26 @@ class ToggleButton extends ToggleButtonComponent {
   Future<void> onLoad() async {
     super.onLoad();
 
+    defaultLabel = TextComponent(
+      text: 'Toggle button',
+      textRenderer: TextPaint(
+        style: TextStyle(
+          fontSize: 24,
+          color: BasicPalette.white.color,
+        ),
+      ),
+    );
+
+    defaultSelectedLabel = TextComponent(
+      text: 'Toggle button',
+      textRenderer: TextPaint(
+        style: TextStyle(
+          fontSize: 24,
+          color: BasicPalette.red.color,
+        ),
+      ),
+    );
+
     defaultSkin = RoundedRectComponent()
       ..setColor(const Color.fromRGBO(0, 200, 0, 1));
 
@@ -49,13 +69,6 @@ class ToggleButton extends ToggleButtonComponent {
 
     downAndSelectedSkin = RoundedRectComponent()
       ..setColor(const Color.fromRGBO(0, 0, 100, 1));
-
-    add(
-      AlignComponent(
-        child: TextComponent(text: 'Toggle button'),
-        alignment: Anchor.center,
-      ),
-    );
   }
 }
 
@@ -63,6 +76,8 @@ class DefaultButton extends AdvancedButtonComponent {
   @override
   Future<void> onLoad() async {
     super.onLoad();
+
+    defaultLabel = TextComponent(text: 'Default button');
 
     defaultSkin = RoundedRectComponent()
       ..setColor(const Color.fromRGBO(0, 200, 0, 1));
@@ -72,13 +87,6 @@ class DefaultButton extends AdvancedButtonComponent {
 
     downSkin = RoundedRectComponent()
       ..setColor(const Color.fromRGBO(0, 100, 0, 1));
-
-    add(
-      AlignComponent(
-        child: TextComponent(text: 'Default button'),
-        alignment: Anchor.center,
-      ),
-    );
   }
 }
 
@@ -87,18 +95,13 @@ class DisableButton extends AdvancedButtonComponent {
   Future<void> onLoad() async {
     super.onLoad();
 
+    disabledLabel = TextComponent(text: 'Disabled button');
+
     defaultSkin = RoundedRectComponent()
       ..setColor(const Color.fromRGBO(0, 255, 0, 1));
 
     disabledSkin = RoundedRectComponent()
       ..setColor(const Color.fromRGBO(100, 100, 100, 1));
-
-    add(
-      AlignComponent(
-        child: TextComponent(text: 'Disabled button'),
-        alignment: Anchor.center,
-      ),
-    );
   }
 }
 

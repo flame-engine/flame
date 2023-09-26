@@ -1,13 +1,19 @@
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
+import 'package:flame/layout.dart';
 import 'package:flutter/foundation.dart';
 
 /// The [AdvancedButtonComponent] has different skins for
 /// different button states.
+/// The defaultSkin must be added to the constructor or
+/// if you are inheriting - defined in the onLod method
+///
+///The label is a [PositionComponent] and is added
+///to the foreground of the button. The label is aligned to the center.
 ///
 /// Note: You have to set the [defaultSkin],[downSkin],[hoverSkin]
-/// [disabledSkin] in [onLoad] if you are not passing it in through
-/// the constructor
+/// [disabledSkin], [defaultLabel] in [onLoad] if you are
+/// not passing it in through the constructor
 
 class AdvancedButtonComponent extends PositionComponent
     with HoverCallbacks, TapCallbacks {
@@ -18,6 +24,8 @@ class AdvancedButtonComponent extends PositionComponent
     PositionComponent? downSkin,
     PositionComponent? hoverSkin,
     PositionComponent? disabledSkin,
+    PositionComponent? defaultLabel,
+    PositionComponent? disabledLabel,
     super.size,
     super.position,
     super.scale,
@@ -30,6 +38,8 @@ class AdvancedButtonComponent extends PositionComponent
     this.downSkin = downSkin;
     this.hoverSkin = hoverSkin;
     this.disabledSkin = disabledSkin;
+    this.defaultLabel = defaultLabel;
+    this.disabledLabel = disabledLabel;
     size.addListener(_updateSizes);
   }
 
@@ -44,10 +54,14 @@ class AdvancedButtonComponent extends PositionComponent
   Future<void> onLoad() async {
     super.onLoad();
     add(skinContainer);
+    add(labelAlignContainer);
   }
 
   @protected
   final skinContainer = PositionComponent();
+
+  @protected
+  AlignComponent labelAlignContainer = AlignComponent(alignment: Anchor.center);
 
   @override
   @mustCallSuper
@@ -121,6 +135,25 @@ class AdvancedButtonComponent extends PositionComponent
     invalidateSkins();
   }
 
+  Map<ButtonState, PositionComponent?> labelsMap = {};
+
+  PositionComponent? get defaultLabel => labelsMap[ButtonState.up];
+
+  set defaultLabel(PositionComponent? value) {
+    labelsMap[ButtonState.up] = value;
+    updateLabel();
+  }
+
+  set downLabel(PositionComponent? value) {
+    labelsMap[ButtonState.down] = value;
+    updateLabel();
+  }
+
+  set disabledLabel(PositionComponent? value) {
+    labelsMap[ButtonState.disabled] = value;
+    updateLabel();
+  }
+
   @protected
   void invalidateSkins() {
     _updateSizes();
@@ -171,6 +204,7 @@ class AdvancedButtonComponent extends PositionComponent
     }
     _state = value;
     _updateSkin();
+    updateLabel();
     onChangeState?.call(_state);
   }
 
@@ -185,22 +219,36 @@ class AdvancedButtonComponent extends PositionComponent
   }
 
   void _removeSkins() {
-    for (final state in ButtonState.values) {
-      if (state != _state) {
-        _removeSkin(state);
-      }
+    for (final skins in skinsMap.values) {
+      skins?.parent = null;
     }
   }
 
-  void _removeSkin(ButtonState state) {
-    if (skinsMap[state]?.parent != null) {
-      skinsMap[state]?.removeFromParent();
+  @protected
+  void updateLabel() {
+    _removeLabels();
+    addLabel(_state);
+  }
+
+  @protected
+  void addLabel(ButtonState state) {
+    labelAlignContainer.child = labelsMap[state] ?? defaultLabel;
+  }
+
+  void _removeLabels() {
+    for (final label in labelsMap.values) {
+      label?.parent = null;
     }
   }
 
   @protected
   bool hasSkinForState(ButtonState state) {
     return skinsMap[state] != null;
+  }
+
+  @protected
+  bool hasLabelForState(ButtonState state) {
+    return labelsMap[state] != null;
   }
 }
 
@@ -242,10 +290,6 @@ enum ButtonState {
 
   bool get isHoverAndSelected {
     return this == ButtonState.hoverAndSelected;
-  }
-
-  bool get isHoverOrHoverAndSelected {
-    return isHover || isHoverAndSelected;
   }
 
   bool get isDisabled {

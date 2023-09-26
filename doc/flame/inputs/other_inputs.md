@@ -154,6 +154,8 @@ These are the fields that should be used to know the state of the `AdvancedButto
 - `defaultSkin`: Component that will be displayed by default on the button.
 - `downSkin`: Component displayed when the button is clicked or tapped.
 - `hoverSkin`: Component displayed when the button is hovered. (desktop and web).
+- `defaultLabel`: Component shown on top of skins. Automatically aligned to center.
+- `disabledLabel`: Component shown on top of skins when button is disabled.
 
 The component also support `disabledSkin`, for the disabled state. This state is achieved by using `setDisabled`.
 
@@ -171,3 +173,4 @@ In addition to the already existing skins, the [ToggleButtonComponent] contains 
   pressed.
 - `hoverAndSelectedSkin`: Hover on selectable and selected button (desktop and web).
 - `disabledAndSelectedSkin`: For selected and disabled state.
+- `defaultSelectedLabel`: Component shown on top of skins when button is selected.
