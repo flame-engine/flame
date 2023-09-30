@@ -103,6 +103,26 @@ command once.
 
 > You do not need to run `flutter pub get` once bootstrap has been completed.
 
+
+#### CSpell
+
+If you want to lint the spellchecker locally, you will have to install
+[cspell](https://github.com/streetsidesoftware/cspell/tree/main/packages/cspell);
+you can do so using npm or yarn:
+
+```bash
+npm install -g cspell
+```
+
+Then you can run it with the following arguments:
+
+```bash
+cspell --no-progress -c .github/cspell.json "**/*.{md,dart}"
+```
+
+
+#### Markdown Lint
+
 If you want to lint the markdown files you have to install
 [markdownlint-cli](https://github.com/igorshubovych/markdownlint-cli) and once that is installed you
 can run `melos markdown-check` to check if the markdown follows the rules. Some markdown linting
