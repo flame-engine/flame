@@ -21,3 +21,5 @@ jobs:
           files: "**/*.{md,dart}"
           incremental_files_only: false
           config: .github/cspell.json
+      # verifies there are no orphaned words and that files are sorted
+      - run: ./scripts/cspell-verify.sh
