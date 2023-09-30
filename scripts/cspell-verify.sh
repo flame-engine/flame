@@ -48,12 +48,14 @@ cspell --dot --no-progress --unique --words-only "**/*.{md,dart}" | sort -f | lo
 rm -r "$dictionary_dir"
 mv "$tmp_dir" "$dictionary_dir"
 
+error=0
 for file in .github/.cspell/*.txt; do
     echo "Processing dictionary '$file'..."
 
     violation=$(awk '!/^#/' "$file" | sort -c 2>&1 || true)
     if [ -n "$violation" ]; then
         echo "Error: The dictionary '$file' is not in alphabetical order. First violation: '$violation'" >&2
+        error=1
         if $fix; then
             echo "Fixing the dictionary '$file'"
             sort_dictionary "$file"
@@ -67,6 +69,7 @@ for file in .github/.cspell/*.txt; do
         # Check if the word exists in the project
         if [[ -n "$word" ]] && ! grep -wxF "$word" "$word_list" >/dev/null; then
             echo "Error: The word '$word' in the dictionary '$file' is not needed." >&2
+            error=1
             if $fix; then
                 echo "Fixing the dictionary '$file' with excess word $word"
                 delete_unused "$file" "$word"
@@ -76,3 +79,4 @@ for file in .github/.cspell/*.txt; do
 done
 
 rm $word_list
+exit $error
