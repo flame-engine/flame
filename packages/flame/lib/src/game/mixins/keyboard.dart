@@ -1,6 +1,5 @@
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
-import 'package:flame/src/components/mixins/keyboard_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -9,7 +8,8 @@ import 'package:flutter/services.dart';
 ///
 /// Attention: should not be used alongside [KeyboardEvents] in a game subclass.
 /// Using this mixin remove the necessity of [KeyboardEvents].
-mixin HasKeyboardHandlerComponents on FlameGame implements KeyboardEvents {
+mixin HasKeyboardHandlerComponents<W extends World> on FlameGame<W>
+    implements KeyboardEvents {
   @override
   @mustCallSuper
   KeyEventResult onKeyEvent(

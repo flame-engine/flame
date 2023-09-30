@@ -2,6 +2,7 @@ import 'package:dashbook/dashbook.dart';
 import 'package:examples/commons/commons.dart';
 import 'package:examples/stories/camera_and_viewport/camera_component_example.dart';
 import 'package:examples/stories/camera_and_viewport/camera_component_properties_example.dart';
+import 'package:examples/stories/camera_and_viewport/camera_follow_and_world_bounds.dart';
 import 'package:examples/stories/camera_and_viewport/coordinate_systems_example.dart';
 import 'package:examples/stories/camera_and_viewport/fixed_resolution_example.dart';
 import 'package:examples/stories/camera_and_viewport/follow_component_example.dart';
@@ -74,5 +75,12 @@ void addCameraAndViewportStories(Dashbook dashbook) {
         'camera_and_viewport/camera_component_properties_example.dart',
       ),
       info: CameraComponentPropertiesExample.description,
+    )
+    ..add(
+      'Follow and World bounds',
+      (_) => GameWidget(game: CameraFollowAndWorldBoundsExample()),
+      codeLink:
+          baseLink('camera_and_viewport/camera_follow_and_world_bounds.dart'),
+      info: CameraFollowAndWorldBoundsExample.description,
     );
 }

@@ -17,8 +17,7 @@ class LookAtSmoothExample extends FlameGame {
       'oriented in the desired direction if the image is not facing the '
       'correct direction.';
 
-  final world = _TapWorld();
-  late final CameraComponent cameraComponent;
+  LookAtSmoothExample() : super(world: _TapWorld());
 
   late SpriteAnimationComponent _chopper1;
   late SpriteAnimationComponent _chopper2;
@@ -28,9 +27,6 @@ class LookAtSmoothExample extends FlameGame {
 
   @override
   Future<void> onLoad() async {
-    cameraComponent = CameraComponent(world: world);
-    addAll([cameraComponent, world]);
-
     final spriteSheet = SpriteSheet(
       image: await images.load('animations/chopper.png'),
       srcSize: Vector2.all(48),

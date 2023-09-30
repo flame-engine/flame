@@ -1,5 +1,5 @@
 import 'package:flame/src/components/core/component.dart';
-import 'package:flame/src/experimental/has_game_reference.dart';
+import 'package:flame/src/components/mixins/has_game_reference.dart';
 import 'package:flame/src/game/flame_game.dart';
 import 'package:flame/src/game/mixins/single_game_instance.dart';
 

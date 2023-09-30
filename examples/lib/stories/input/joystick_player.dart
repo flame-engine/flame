@@ -16,7 +16,7 @@ class JoystickPlayer extends SpriteComponent
 
   @override
   Future<void> onLoad() async {
-    sprite = await gameRef.loadSprite('layers/player.png');
+    sprite = await game.loadSprite('layers/player.png');
     add(RectangleHitbox());
   }
 

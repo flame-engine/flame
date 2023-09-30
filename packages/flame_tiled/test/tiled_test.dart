@@ -447,15 +447,14 @@ void main() {
         Vector2(16, 16),
       );
 
-      final world = World(children: [component]);
-      final cameraComponent = CameraComponent(world: world);
-
       // Need to initialize a game and call `onLoad` and `onGameResize` to
       // get the camera and canvas sizes all initialized
-      final game = FlameGame(children: [world, cameraComponent]);
-      cameraComponent.viewfinder.anchor = Anchor.center;
-      cameraComponent.viewfinder.position = Vector2(150, 20);
-      cameraComponent.viewport.size = mapSizePx.clone();
+      final game = FlameGame();
+      game.onGameResize(mapSizePx);
+      final camera = game.camera;
+      game.world.add(component);
+      camera.viewfinder.position = Vector2(150, 20);
+      camera.viewport.size = mapSizePx.clone();
       game.onGameResize(mapSizePx);
       component.onGameResize(mapSizePx);
       await component.onLoad();
@@ -527,7 +526,7 @@ void main() {
       );
     }
 
-    test('flat + even staggerd', () async {
+    test('flat + even staggered', () async {
       await setupMap(
         'flat_hex_even.tmx',
         'Tileset_Hexagonal_FlatTop_60x39_60x60.png',
@@ -541,7 +540,7 @@ void main() {
       expect(pngData, matchesGoldenFile('goldens/flat_hex_even.png'));
     });
 
-    test('flat + odd staggerd', () async {
+    test('flat + odd staggered', () async {
       await setupMap(
         'flat_hex_odd.tmx',
         'Tileset_Hexagonal_FlatTop_60x39_60x60.png',
@@ -555,7 +554,7 @@ void main() {
       expect(pngData, matchesGoldenFile('goldens/flat_hex_odd.png'));
     });
 
-    test('pointy + even staggerd', () async {
+    test('pointy + even staggered', () async {
       await setupMap(
         'pointy_hex_even.tmx',
         'Tileset_Hexagonal_PointyTop_60x52_60x80.png',
@@ -569,7 +568,7 @@ void main() {
       expect(pngData, matchesGoldenFile('goldens/pointy_hex_even.png'));
     });
 
-    test('pointy + odd staggerd', () async {
+    test('pointy + odd staggered', () async {
       await setupMap(
         'pointy_hex_odd.tmx',
         'Tileset_Hexagonal_PointyTop_60x52_60x80.png',

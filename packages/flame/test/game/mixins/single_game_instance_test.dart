@@ -20,7 +20,7 @@ void main() {
       expect(
         FlameGame.new,
         failsAssert(
-          "Instance of 'FlameGame' instantiated, while another game "
+          "Instance of 'FlameGame<World>' instantiated, while another game "
           "Instance of 'SingletonGame' declares itself to be a singleton",
         ),
       );

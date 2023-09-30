@@ -18,7 +18,7 @@ final playerSprite = await networkAssets.load('https://url.com/image.png');
 ```
 
 To create a specific asset handler class, you just need to extend the `FlameNetworkAssets` class
-and define the `decodeAsset` and `endcodeAsset` arguments:
+and define the `decodeAsset` and `encodeAsset` arguments:
 
 ```dart
 class FlameNetworkCustomAsset extends FlameNetworkAssets<CustomAsset> {

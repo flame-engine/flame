@@ -4,7 +4,6 @@ import 'package:collection/collection.dart';
 import 'package:flame/components.dart';
 import 'package:flame/src/cache/value_cache.dart';
 import 'package:flame/src/components/core/component_tree_root.dart';
-import 'package:flame/src/components/mixins/coordinate_transform.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
 import 'package:flame/src/game/flame_game.dart';
 import 'package:flame/src/game/game.dart';
@@ -266,15 +265,10 @@ class Component {
   Component? get parent => _parent;
   Component? _parent;
   set parent(Component? newParent) {
-    if (newParent == _parent) {
-      return;
-    } else if (newParent == null) {
+    if (newParent == null) {
       removeFromParent();
-    } else if (_parent == null) {
-      addToParent(newParent);
     } else {
-      final root = findGame()!;
-      root.enqueueMove(this, newParent);
+      addToParent(newParent);
     }
   }
 
@@ -384,6 +378,8 @@ class Component {
 
   @internal
   static Game? staticGameInstance;
+
+  /// Fetches the nearest [FlameGame] ancestor to the component.
   FlameGame? findGame() {
     assert(
       staticGameInstance is FlameGame || staticGameInstance == null,
@@ -394,6 +390,15 @@ class Component {
         : null;
     return gameInstance ??
         ((this is FlameGame) ? (this as FlameGame) : _parent?.findGame());
+  }
+
+  /// Fetches the root [FlameGame] ancestor to the component.
+  FlameGame? findRootGame() {
+    var game = findGame();
+    while (game?.parent != null) {
+      game = game!.parent!.findGame();
+    }
+    return game;
   }
 
   /// Whether the children list contains the given component.
@@ -580,16 +585,22 @@ class Component {
   }
 
   FutureOr<void> _addChild(Component child) {
-    assert(
-      child._parent == null,
-      '$child cannot be added to $this because it already has a parent: '
-      '${child._parent}',
-    );
-    child._parent = this;
-    final game = findGame();
-    if (isMounted && !child.isMounted) {
-      game!.enqueueAdd(child, this);
+    final game = findGame() ?? child.findGame();
+    if ((!isMounted && !child.isMounted) || game == null) {
+      child._parent?.children.remove(child);
+      child._parent = this;
+      children.add(child);
+    } else if (child._parent != null) {
+      if (child.isRemoving) {
+        game.dequeueRemove(child);
+        _clearRemovingBit();
+      }
+      game.enqueueMove(child, this);
+    } else if (isMounted && !child.isMounted) {
+      child._parent = this;
+      game.enqueueAdd(child, this);
     } else {
+      child._parent = this;
       // This will be reconciled during the mounting stage
       children.add(child);
     }
@@ -610,13 +621,11 @@ class Component {
   void remove(Component component) => _removeChild(component);
 
   /// Remove the component from its parent in the next tick.
-  void removeFromParent() => _parent?._removeChild(this);
+  void removeFromParent() => _parent?.remove(this);
 
   /// Removes all the children in the list and calls [onRemove] for all of them
   /// and their children.
-  void removeAll(Iterable<Component> components) {
-    components.forEach(remove);
-  }
+  void removeAll(Iterable<Component> components) => components.forEach(remove);
 
   /// Removes all the children for which the [test] function returns true.
   void removeWhere(bool Function(Component component) test) {
@@ -648,14 +657,6 @@ class Component {
       _children?.remove(child);
       child._parent = null;
     }
-  }
-
-  /// Changes the current parent for another parent and prepares the tree under
-  /// the new root.
-  @Deprecated('Will be removed in 1.9.0. Use the parent setter instead.')
-  // ignore: use_setters_to_change_properties
-  void changeParent(Component newParent) {
-    parent = newParent;
   }
 
   //#endregion
@@ -988,11 +989,11 @@ class Component {
   @Deprecated('''
   Use the CameraComponent and add your component to the viewport with
   cameraComponent.viewport.add(yourHudComponent) instead.
-  This will be removed in Flame v2.
+  This will be removed in Flame v1.10.0.
   ''')
   PositionType positionType = PositionType.game;
 
-  @Deprecated('To be removed in Flame v2')
+  @Deprecated('To be removed in Flame v1.10.0')
   @protected
   Vector2 eventPosition(PositionInfo info) {
     switch (positionType) {

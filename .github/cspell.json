@@ -8,15 +8,9 @@
   "ignorePaths": [
     "**/media/**",
     "**/assets/**",
-    "**/test/**",
     "**/CHANGELOG.md"
   ],
   "ignoreRegExpList": [
-    "\\$\\w+",
-    "\\{\\w+",
-    "\\`\\w+",
-    "\\:\\w+",
-    "\\/\\w+",
     "\\#[\\w\\-]+"
   ],
   "dictionaries": [

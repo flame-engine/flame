@@ -169,8 +169,8 @@ class Viewfinder extends Component
 
   @override
   void onGameResize(Vector2 size) {
-    super.onGameResize(size);
     _initZoom();
+    super.onGameResize(size);
   }
 
   /// Called by the viewport when its size changes.
@@ -186,7 +186,20 @@ class Viewfinder extends Component
 
   @mustCallSuper
   @override
+  void onLoad() {
+    // This has to be done here and on onMount so that it is available for
+    // the CameraComponent.visibleWorldRect calculation in onLoad of the game.
+    updateTransform();
+  }
+
+  @mustCallSuper
+  @override
   void onMount() {
+    updateTransform();
+  }
+
+  @internal
+  void updateTransform() {
     assert(
       parent! is CameraComponent,
       'Viewfinder can only be mounted to a CameraComponent',

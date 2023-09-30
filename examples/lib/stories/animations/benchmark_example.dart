@@ -17,25 +17,20 @@ starts to drop in FPS, this is without any sprite batching and such.
   final counterPrefix = 'Animations: ';
   final Random random = Random();
 
-  final world = World();
-  late final CameraComponent cameraComponent;
-
   @override
   Future<void> onLoad() async {
-    cameraComponent = CameraComponent(world: world);
-    addAll([cameraComponent, world]);
-    await cameraComponent.viewport.addAll([
+    await camera.viewport.addAll([
       FpsTextComponent(
-        position: size - Vector2(0, 50),
+        position: size - Vector2(10, 50),
         anchor: Anchor.bottomRight,
       ),
       emberCounter = TextComponent(
-        position: size - Vector2(0, 25),
+        position: size - Vector2(10, 25),
         anchor: Anchor.bottomRight,
         priority: 1,
       ),
     ]);
-    world.add(Ember(size: emberSize, position: size / 2));
+    world.add(Ember(size: emberSize));
     children.register<Ember>();
   }
 

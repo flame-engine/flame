@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
-import 'package:flame/experimental.dart';
 import 'package:flame_isolate_example/colonists_game.dart';
 import 'package:flame_isolate_example/standard/int_vector2.dart';
 import 'package:flutter/material.dart';

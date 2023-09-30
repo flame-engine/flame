@@ -7,7 +7,8 @@ import 'package:flutter/material.dart';
 import '../ember_quest.dart';
 import '../managers/segment_manager.dart';
 
-class GroundBlock extends SpriteComponent with HasGameRef<EmberQuestGame> {
+class GroundBlock extends SpriteComponent
+    with HasGameReference<EmberQuestGame> {
   final Vector2 gridPosition;
   double xOffset;
 

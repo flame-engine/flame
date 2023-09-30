@@ -15,12 +15,12 @@ class StarBackGroundCreator extends Component with HasGameRef {
   @override
   Future<void> onLoad() async {
     spriteSheet = SpriteSheet.fromColumnsAndRows(
-      image: await gameRef.images.load('rogue_shooter/stars.png'),
+      image: await game.images.load('rogue_shooter/stars.png'),
       rows: 4,
       columns: 4,
     );
 
-    final starGapTime = (gameRef.size.y / gapSize) / StarComponent.speed;
+    final starGapTime = (game.size.y / gapSize) / StarComponent.speed;
 
     add(
       TimerComponent(
@@ -40,12 +40,12 @@ class StarBackGroundCreator extends Component with HasGameRef {
       stepTime: 0.1,
     )..variableStepTimes = [max(20, 100 * random.nextDouble()), 0.1, 0.1, 0.1];
 
-    gameRef.add(StarComponent(animation: animation, position: Vector2(x, y)));
+    game.add(StarComponent(animation: animation, position: Vector2(x, y)));
   }
 
   void _createRowOfStars(double y) {
     const gapSize = 6;
-    final starGap = gameRef.size.x / gapSize;
+    final starGap = game.size.x / gapSize;
 
     for (var i = 0; i < gapSize; i++) {
       _createStarAt(
@@ -56,7 +56,7 @@ class StarBackGroundCreator extends Component with HasGameRef {
   }
 
   void _createInitialStars() {
-    final rows = gameRef.size.y / gapSize;
+    final rows = game.size.y / gapSize;
 
     for (var i = 0; i < gapSize; i++) {
       _createRowOfStars(i * rows);

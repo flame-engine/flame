@@ -3,6 +3,7 @@ AABB # axis aligned bounding box
 AHSL # alpha hue saturation lightness
 AHSV # alpha hue saturation value
 ARGB # alpha red green blue
+bimedian # line segment joining the midpoints of opposite sides of a shape
 Bezier # Bézier curves are parametric curves used in computer graphics
 Euclidian # Euclidean space is the fundamental space of geometry
 LTRB # left top right bottom
@@ -23,6 +24,8 @@ arial # name of a typeface
 arities # plural of arity
 arity # number of parameters a function takes
 autofocus # auto focus event
+backgrounded # moving the app to the background
+backgrounding # moving the app to the background
 backpressure # strategy to deal with excess flow of data
 backquote # another word for backtick
 backtick # the back tick character "`"
@@ -33,10 +36,12 @@ broadphase # common division of collision detection between broad and narrow pha
 cathetus # the non-hypotenuse sides of a right triangle
 clusterize # organize in clusters
 clusterized # past tense of clusterize
+consts # plural of const (constant)
 coord # coordinate
 coords # plural of coord
 deduplication # removal of duplicates
 easings # Easing functions specify the rate of change of a parameter over time
+foregrounded # moving the app to the foreground
 fullscreen # mode in which a program or app occupies the entire screen with no borders
 goldens # test files used as reference for Golden Tests
 hardcoding # putting a value as a literal instead of computing it
@@ -47,14 +52,17 @@ jank # stutter or inconsistent gap or timing
 janky # quality of expressing jank
 lerp # short for linear interpolation
 monospace # a font in which each character has the same width
+Minkowski # Minkowski sum, a sum of two sets of vectors, A and B, where the result is the sum of each vector pair
 multitap # support from a device to recognize many taps at the same time
 mutator # a method that changes the state within an object
 mutators # plural of mutator
 netcode # blanket term used to refer to networking in online games
 numpad # the numeric portion of a keyboard
+orientable # can be oriented
 pathfinding # computer algorithm to find the best path through a world or maze
 perlin # Perlin Noise, a type of noise generating algorithm
 polyline # a connected series of line segments
+quadtree # a tree-based data structure where each node has exactly 4 children
 raycast # act of raycasting
 raycasting # same as raytracing
 raycasts # plural of raycast

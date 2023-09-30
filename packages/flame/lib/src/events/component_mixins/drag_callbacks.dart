@@ -1,5 +1,5 @@
 import 'package:flame/src/components/core/component.dart';
-import 'package:flame/src/events/flame_game_mixins/has_draggable_components.dart';
+import 'package:flame/src/events/flame_game_mixins/multi_drag_dispatcher.dart';
 import 'package:flame/src/events/messages/drag_cancel_event.dart';
 import 'package:flame/src/events/messages/drag_end_event.dart';
 import 'package:flame/src/events/messages/drag_start_event.dart';
@@ -65,7 +65,7 @@ mixin DragCallbacks on Component {
   @mustCallSuper
   void onMount() {
     super.onMount();
-    final game = findGame()!;
+    final game = findRootGame()!;
     if (game.findByKey(const MultiDragDispatcherKey()) == null) {
       final dispatcher = MultiDragDispatcher();
       game.registerKey(const MultiDragDispatcherKey(), dispatcher);

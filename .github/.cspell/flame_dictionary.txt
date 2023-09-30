@@ -8,11 +8,13 @@ Cypher # CypherStack, one of our sponsors https://cypherstack.com/
 Dashbook # UI development tool for Flutter https://github.com/bluefireteam/dashbook
 Hermione # A character from the book Harry Potter
 Kawabunga # Word expressing exhilaration, of unclear origins but popularized by the show Teenage Mutant Ninja Turtles
+Mocktail # A library for Dart that automatically creates mocks for tests https://github.com/felangel/mocktail
 Nakama # An open-source server designed to power modern games and apps https://github.com/Allan-Nava/nakama-flutter
 Overmind # A character in the game StarCraft
 padracing # A pad racing game by BlueFire https://github.com/flame-engine/flame/tree/main/examples/games/padracing
 Patreon # A membership platform that provides tools for content creators to run a subscription service https://patreon.com
 Prosser # A character from the book The Hitchhiker's Guide to the Galaxy
+riverpod # A state management library for Flutter https://github.com/rrousselGit/riverpod
 skel # Extension for skeleton files from Spine https://en.esotericsoftware.com/spine-in-depth
 Skia # Skia is an open source 2D graphics library used by Flutter https://github.com/google/skia
 spineboy # Name of a famous character used as an example for Spine https://en.esotericsoftware.com/spine-examples-spineboy
@@ -22,5 +24,6 @@ Supabase # Supabase, one of our sponsors https://supabase.com/
 Tiled # An open source, easy to use, and flexible level editor https://www.mapeditor.org/
 Tilemap # What tile maps are called within Tiled
 vantablack # brand name for a famous super-black ink known as the darkest ever made
+Weasley # Ron Weasley, a character from the book Harry Potter
 Wyrmsun # An open-source real-time strategy game https://www.indiedb.com/games/wyrmsun
 yarnspinner # A tool for building branching narrative and dialogue in games # https://yarnspinner.dev/

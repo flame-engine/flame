@@ -1,6 +1,7 @@
 # keywords used on the sphinx language
 deflist
 dollarmath
+infobox
 linkcheck
 markdownlint
 seealso

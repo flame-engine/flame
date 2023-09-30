@@ -1,3 +1,12 @@
+## 1.4.1
+
+ - Update a dependency to the latest release.
+
+## 1.4.0
+
+ - **REFACTOR**: Enable DCM linting ([#2667](https://github.com/flame-engine/flame/issues/2667)). ([27a8fd61](https://github.com/flame-engine/flame/commit/27a8fd61cb7f62513e07a93ff61cf03b426353f2))
+ - **FEAT**(fire_atlas): Encoded option to load json instead of .fa ([#2649](https://github.com/flame-engine/flame/issues/2649)). ([5be6fc8c](https://github.com/flame-engine/flame/commit/5be6fc8caea138b577bf91244165c0a61659b4c5))
+
 ## 1.3.8
 
  - Update a dependency to the latest release.

@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:flame/components.dart';
-import 'package:flame/src/spritesheet.dart';
+import 'package:flame/src/sprite_sheet.dart';
 import 'package:meta/meta.dart';
 
 /// This is just a pair of <int, int>.

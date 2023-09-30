@@ -1,3 +1,4 @@
+import 'package:flame/camera.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
@@ -15,7 +16,7 @@ import 'package:flame/game.dart';
 ///
 /// [initializeCollisionDetection] should be called in the game's [onLoad]
 /// method.
-mixin HasQuadTreeCollisionDetection on FlameGame
+mixin HasQuadTreeCollisionDetection<W extends World> on FlameGame<W>
     implements HasCollisionDetection<QuadTreeBroadphase> {
   late QuadTreeCollisionDetection _collisionDetection;
 

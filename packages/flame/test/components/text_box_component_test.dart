@@ -6,6 +6,9 @@ import 'package:flame/palette.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+// disable cspell as this file contains character dialogue
+// cSpell:disable
+
 void main() {
   group('TextBoxComponent', () {
     test('size is properly computed', () async {

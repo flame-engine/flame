@@ -176,7 +176,7 @@ void main() {
             closeTo(matrix4.storage[k], 1e-10),
           );
         }
-        // Check that converting between local and global is round-trippable
+        // Check round-trip conversion between local and global
         final point1 =
             Vector2((rnd.nextDouble() - 0.5) * 5, (rnd.nextDouble() - 0.5) * 5);
         final point2 =

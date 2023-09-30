@@ -196,6 +196,9 @@ class GameWidgetState<T extends Game> extends State<GameWidget<T>> {
           await onLoad;
         }
         game.mount();
+        if (!game.paused) {
+          game.update(0);
+        }
       })();
 
   Future<void>? _loaderFuture;
@@ -251,6 +254,9 @@ class GameWidgetState<T extends Game> extends State<GameWidget<T>> {
       currentGame = widget.game!;
     }
     currentGame.addGameStateListener(_onGameStateChange);
+    currentGame.lifecycleStateChange(
+      WidgetsBinding.instance.lifecycleState ?? AppLifecycleState.resumed,
+    );
     _loaderFuture = null;
   }
 
@@ -259,6 +265,7 @@ class GameWidgetState<T extends Game> extends State<GameWidget<T>> {
   /// `currentGame`'s `onDispose` method will be called; otherwise, it will not.
   void disposeCurrentGame({bool callGameOnDispose = false}) {
     currentGame.removeGameStateListener(_onGameStateChange);
+    currentGame.lifecycleStateChange(AppLifecycleState.paused);
     currentGame.onRemove();
     if (callGameOnDispose) {
       currentGame.onDispose();
@@ -362,6 +369,12 @@ class GameWidgetState<T extends Game> extends State<GameWidget<T>> {
                             Container();
                       }
                       currentGame.onGameResize(size);
+                      // This should only be called if the game has already been
+                      // loaded (in the case of resizing for example), since
+                      // update otherwise should be called after onMount.
+                      if (!currentGame.paused && currentGame.isAttached) {
+                        currentGame.update(0);
+                      }
                       return FutureBuilder(
                         future: loaderFuture,
                         builder: (_, snapshot) {

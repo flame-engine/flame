@@ -52,15 +52,21 @@ class _WrapperState extends State<_Wrapper> {
 }
 
 class _MyGame extends FlameGame {
-  int callCount = 0;
+  int updateCount = 0;
+  int renderCount = 0;
   double timePassed = 0;
 
   @override
   void update(double dt) {
     super.update(dt);
     timePassed += dt;
+    updateCount++;
+  }
 
-    callCount++;
+  @override
+  void render(Canvas canvas) {
+    super.render(canvas);
+    renderCount++;
   }
 }
 
@@ -86,7 +92,8 @@ void main() {
       // shouldn't run another frame on the game
       await tester.pump();
 
-      expect(game.callCount, equals(2));
+      // Remember that there is one initial update(0) called.
+      expect(game.updateCount, equals(3));
     },
   );
 
@@ -105,7 +112,8 @@ void main() {
       game.resumeEngine();
       await tester.pump();
 
-      expect(game.callCount, equals(3));
+      // Remember that there is one initial update(0) called.
+      expect(game.updateCount, equals(4));
     },
   );
 
@@ -121,7 +129,8 @@ void main() {
       await tester.tap(find.text('Toggle'));
       await tester.pumpAndSettle();
 
-      expect(game.callCount, equals(2));
+      // Remember that there is one initial update(0) called.
+      expect(game.updateCount, equals(3));
     },
   );
 
@@ -132,7 +141,7 @@ void main() {
       await tester.pump();
       await tester.pump();
 
-      expect(game.callCount, equals(0));
+      expect(game.updateCount, equals(0));
     },
   );
 
@@ -149,7 +158,7 @@ void main() {
       await tester.pump();
       await tester.pump();
 
-      expect(game.callCount, equals(2));
+      expect(game.updateCount, equals(2));
     },
   );
 
@@ -173,7 +182,8 @@ void main() {
       await tester.pump(const Duration(seconds: 100));
       await tester.pump(frameLength);
 
-      expect(game.callCount, equals(4));
+      // Remember that there is one initial update(0) after mount
+      expect(game.updateCount, equals(5));
       expect(game.timePassed, equals(3));
     },
   );

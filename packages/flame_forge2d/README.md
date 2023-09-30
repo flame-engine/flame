@@ -37,7 +37,7 @@ remember to add the latest version of [Flame](https://pub.dev/packages/flame/ins
 ## Examples
 
 In the example folder of this directory you can find some
-[examples](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/bridge_libraries/forge2d),
+[examples](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/bridge_libraries/flame_forge2d),
 and you can also find some examples in the
 [Forge2D repository](https://github.com/flame-engine/forge2d/tree/main/packages/forge2d/example).
 
@@ -45,5 +45,5 @@ and you can also find some examples in the
 ## Documentation
 
 Some more documentation can be found
-[here](https://docs.flame-engine.org/main/other_modules/forge2d.html).
+[here](https://docs.flame-engine.org/main/bridge_packages/flame_forge2d/flame_forge2d.html).
 

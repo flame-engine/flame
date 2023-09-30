@@ -23,26 +23,23 @@ class FollowComponentExample extends FlameGame
     respects the camera transformation.
   ''';
 
-  FollowComponentExample({required this.viewportResolution});
+  FollowComponentExample({required this.viewportResolution})
+      : super(
+          camera: CameraComponent.withFixedResolution(
+            width: viewportResolution.x,
+            height: viewportResolution.y,
+          ),
+        );
 
   late MovableEmber ember;
   final Vector2 viewportResolution;
-  late final CameraComponent cameraComponent;
 
   @override
   Future<void> onLoad() async {
-    final world = World();
-    cameraComponent = CameraComponent.withFixedResolution(
-      width: viewportResolution.x,
-      height: viewportResolution.y,
-      world: world,
-    );
-    addAll([world, cameraComponent]);
-
     world.add(Map());
     world.add(ember = MovableEmber());
-    cameraComponent.setBounds(Map.bounds);
-    cameraComponent.follow(ember, maxSpeed: 250);
+    camera.setBounds(Map.bounds);
+    camera.follow(ember, maxSpeed: 250);
 
     world.addAll(
       List.generate(30, (_) => Rock(Map.generateCoordinates())),
@@ -60,6 +57,8 @@ class MovableEmber extends Ember<FollowComponentExample>
   final Vector2 velocity = Vector2.zero();
   late final TextComponent positionText;
   late final Vector2 textPosition;
+  late final maxPosition = Vector2.all(Map.size - size.x / 2);
+  late final minPosition = -maxPosition;
 
   MovableEmber() : super(priority: 2);
 
@@ -80,6 +79,7 @@ class MovableEmber extends Ember<FollowComponentExample>
     super.update(dt);
     final deltaPosition = velocity * (speed * dt);
     position.add(deltaPosition);
+    position.clamp(minPosition, maxPosition);
     positionText.text = '(${x.toInt()}, ${y.toInt()})';
   }
 
@@ -188,7 +188,7 @@ class Rock extends SpriteComponent with HasGameRef, TapCallbacks {
 
   @override
   Future<void> onLoad() async {
-    sprite = await gameRef.loadSprite('nine-box.png');
+    sprite = await game.loadSprite('nine-box.png');
     paint = Paint()..color = Colors.white;
     add(RectangleHitbox());
   }
