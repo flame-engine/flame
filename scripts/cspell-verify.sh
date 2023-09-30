@@ -1,23 +1,13 @@
 #!/bin/bash
 
-fix=false
-
-for arg in "$@"; do
-    case "$arg" in
-        --fix)
-            fix=true
-            ;;
-        *)
-            ;;
-    esac
-done
+fix=$([[ "$*" == *--fix* ]] && echo true || echo false)
 
 function sort_dictionary() {
     local file="$1"
     local tmp_file=$(mktemp)
 
     head -n 1 "$file" > "$tmp_file"
-    tail -n +2 "$file" | sort >> "$tmp_file"
+    tail -n +2 "$file" | sort --ignore-case >> "$tmp_file"
     mv "$tmp_file" "$file"
 }
 
@@ -25,7 +15,7 @@ function delete_unused() {
     local file="$1"
     local word="$2"
 
-    sed -i '' -e "/^$word$/d" -e "/^$word #.*$/d" "$file"
+    perl -i -ne "print unless /^\s*${word}\s*([# ].*)?$/i" "$file"
 }
 
 function lowercase() {
@@ -44,7 +34,7 @@ for file in "$tmp_dir"/*; do
         touch "$dictionary_dir/$(basename "$file")"
     fi
 done
-cspell --dot --no-progress --unique --words-only "**/*.{md,dart}" | sort -f | lowercase > $word_list  || exit 1
+cspell --dot --no-progress --unique --words-only "**/*.{md,dart}" | lowercase | sort -f > $word_list  || exit 1
 rm -r "$dictionary_dir"
 mv "$tmp_dir" "$dictionary_dir"
 
@@ -52,7 +42,7 @@ error=0
 for file in .github/.cspell/*.txt; do
     echo "Processing dictionary '$file'..."
 
-    violation=$(awk '!/^#/' "$file" | sort -c 2>&1 || true)
+    violation=$(awk '!/^#/' "$file" | sort --ignore-case -c 2>&1 || true)
     if [ -n "$violation" ]; then
         echo "Error: The dictionary '$file' is not in alphabetical order. First violation: '$violation'" >&2
         error=1
@@ -63,10 +53,10 @@ for file in .github/.cspell/*.txt; do
     fi
 
     while IFS= read -r line; do
-        # Split the line by # to remove comments
+        # split the line by # to remove comments
         word=$(echo "$line" | cut -d '#' -f 1 | xargs | lowercase) # xargs trims whitespace
 
-        # Check if the word exists in the project
+        # check if the word exists in the project
         if [[ -n "$word" ]] && ! grep -wxF "$word" "$word_list" >/dev/null; then
             echo "Error: The word '$word' in the dictionary '$file' is not needed." >&2
             error=1
