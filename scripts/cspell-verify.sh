@@ -2,12 +2,16 @@
 
 fix=$([[ "$*" == *--fix* ]] && echo true || echo false)
 
+function sort_fn() {
+    sort --ignore-case -C
+}
+
 function sort_dictionary() {
     local file="$1"
     local tmp_file=$(mktemp)
 
     head -n 1 "$file" > "$tmp_file"
-    tail -n +2 "$file" | sort --ignore-case >> "$tmp_file"
+    tail -n +2 "$file" | sort_fn >> "$tmp_file"
     mv "$tmp_file" "$file"
 }
 
@@ -42,7 +46,7 @@ error=0
 for file in .github/.cspell/*.txt; do
     echo "Processing dictionary '$file'..."
 
-    violation=$(awk '!/^#/' "$file" | sort --ignore-case -c 2>&1 || true)
+    violation=$(awk '!/^#/' "$file" | sort_fn 2>&1 || true)
     if [ -n "$violation" ]; then
         echo "Error: The dictionary '$file' is not in alphabetical order. First violation: '$violation'" >&2
         error=1

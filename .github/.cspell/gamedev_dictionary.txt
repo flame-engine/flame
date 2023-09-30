@@ -23,8 +23,8 @@ consts # plural of const (constant)
 easings # Easing functions specify the rate of change of a parameter over time
 fullscreen # mode in which a program or app occupies the entire screen with no borders
 goldens # test files used as reference for Golden Tests
-hitboxes # plural of hitbox
 hitbox # the collision box around objects for the purposes of collision detection
+hitboxes # plural of hitbox
 ints # short for integers
 jank # stutter or inconsistent gap or timing
 janky # quality of expressing jank
