@@ -1,16 +1,16 @@
 # specific people's names and/or usernames
-spydon # github.com/spydon
-stpasha # github.com/stpasha
-wolfenrain # github.com/wolfenrain
-xaha # github.com/xvrh
-luan # github.com/luanpotter
-Lukas # github.com/spydon
 Klingsbo # github.com/spydon
-erayzesen # erayzesen.itch.io
-tavian # tavianator.com
-feroult # github.com/feroult 
-erickzanardo # github.com/erickzanardo 
+Lukas # github.com/spydon
 Schnurber # github.com/schnurber 
 akida # github.com/akida 
-pgainullin # github.com/pgainullin 
+erayzesen # erayzesen.itch.io
+erickzanardo # github.com/erickzanardo 
+feroult # github.com/feroult 
+luan # github.com/luanpotter
 luanpotter # github.com/luanpotter 
+pgainullin # github.com/pgainullin 
+spydon # github.com/spydon
+stpasha # github.com/stpasha
+tavian # tavianator.com
+wolfenrain # github.com/wolfenrain
+xaha # github.com/xvrh
