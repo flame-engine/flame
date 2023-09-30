@@ -1,14 +1,14 @@
 # specific people's names and/or usernames
-Klingsbo # github.com/spydon
-Lukas # github.com/spydon
-Schnurber # github.com/schnurber 
 akida # github.com/akida 
 erayzesen # erayzesen.itch.io
 erickzanardo # github.com/erickzanardo 
 feroult # github.com/feroult 
+Klingsbo # github.com/spydon
 luan # github.com/luanpotter
 luanpotter # github.com/luanpotter 
+Lukas # github.com/spydon
 pgainullin # github.com/pgainullin 
+Schnurber # github.com/schnurber 
 spydon # github.com/spydon
 stpasha # github.com/stpasha
 tavian # tavianator.com
