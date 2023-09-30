@@ -163,9 +163,10 @@ void main() {
           _FramedTextBox(
             text: 'That shows thee a weak slave; for the weakest goes to the '
                 'wall.',
-            position: Vector2(410, 320),
+            position: Vector2(410, 320) + Vector2(380, 270),
             size: Vector2(380, 270),
             align: Anchor.centerRight,
+            anchor: Anchor.bottomRight,
           ),
         ]);
       },
@@ -194,6 +195,7 @@ class _FramedTextBox extends TextBoxComponent {
     super.align,
     super.position,
     super.size,
+    super.anchor,
   }) : super(
           textRenderer: DebugTextRenderer(fontSize: 22),
         );
