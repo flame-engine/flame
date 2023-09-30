@@ -721,9 +721,9 @@ void main() {
       });
 
       for (final startingLifecycleState in AppLifecycleState.values) {
-        test(
+        testWidgets(
           'game is not paused on start when initially $startingLifecycleState',
-          () async {
+          (tester) async {
             WidgetsBinding.instance.handleAppLifecycleStateChanged(
               startingLifecycleState,
             );
@@ -741,7 +741,12 @@ void main() {
             );
 
             final game = FlameGame();
-            game.initLifecycleState();
+
+            final gameWidget = GameWidget(game: game);
+            await tester.pumpWidget(gameWidget);
+
+            GameWidgetState.initGameStateListener(game, () {});
+
             expect(game.paused, isFalse);
           },
         );

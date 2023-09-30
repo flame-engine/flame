@@ -253,9 +253,22 @@ class GameWidgetState<T extends Game> extends State<GameWidget<T>> {
     } else {
       currentGame = widget.game!;
     }
-    currentGame.addGameStateListener(_onGameStateChange);
-    currentGame.initLifecycleState();
+    initGameStateListener(currentGame, _onGameStateChange);
     _loaderFuture = null;
+  }
+
+  /// Visible for testing for
+  /// https://github.com/flame-engine/flame/issues/2771.
+  @visibleForTesting
+  static void initGameStateListener(
+    Game currentGame,
+    void Function() onGameStateChange,
+  ) {
+    currentGame.addGameStateListener(onGameStateChange);
+
+    // See https://github.com/flame-engine/flame/issues/2771
+    // for why we aren't using [WidgetsBinding.instance.lifecycleState].
+    currentGame.lifecycleStateChange(AppLifecycleState.resumed);
   }
 
   /// [disposeCurrentGame] is called by two flutter events - `didUpdateWidget`
@@ -263,7 +276,7 @@ class GameWidgetState<T extends Game> extends State<GameWidget<T>> {
   /// `currentGame`'s `onDispose` method will be called; otherwise, it will not.
   void disposeCurrentGame({bool callGameOnDispose = false}) {
     currentGame.removeGameStateListener(_onGameStateChange);
-    currentGame.disposeLifecycleState();
+    currentGame.lifecycleStateChange(AppLifecycleState.paused);
     currentGame.onRemove();
     if (callGameOnDispose) {
       currentGame.onDispose();
