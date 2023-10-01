@@ -720,21 +720,37 @@ void main() {
         expect(game.paused, isFalse);
       });
 
-      testWidgets(
-        'game is not paused on start',
-        (tester) async {
-          final game = FlameGame();
+      for (final startingLifecycleState in AppLifecycleState.values) {
+        testWidgets(
+          'game is not paused on start when initially $startingLifecycleState',
+          (tester) async {
+            WidgetsBinding.instance.handleAppLifecycleStateChanged(
+              startingLifecycleState,
+            );
+            addTearDown(() {
+              // Don't use [WidgetsBinding.instance.resetLifecycleState()]
+              // because it sets the lifecycle to null which prevents
+              // [game.onLoad] from running in other tests.
+              WidgetsBinding.instance.handleAppLifecycleStateChanged(
+                AppLifecycleState.resumed,
+              );
+            });
+            expect(
+              WidgetsBinding.instance.lifecycleState,
+              startingLifecycleState,
+            );
 
-          await tester.pumpWidget(
-            GameWidget(game: game),
-          );
+            final game = FlameGame();
 
-          await game.toBeLoaded();
-          await tester.pump();
+            final gameWidget = GameWidget(game: game);
+            await tester.pumpWidget(gameWidget);
 
-          expect(game.paused, isFalse);
-        },
-      );
+            GameWidgetState.initGameStateListener(game, () {});
+
+            expect(game.paused, isFalse);
+          },
+        );
+      }
 
       testWidgets(
         'game is paused when app is backgrounded',
