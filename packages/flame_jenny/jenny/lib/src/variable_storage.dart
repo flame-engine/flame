@@ -18,25 +18,25 @@ class VariableStorage {
 
   Expression getVariableAsExpression(String name) {
     final dynamic value = variables[name];
-    if (value is String) {
-      return StringVariable(name, this);
-    }
-    if (value is num) {
-      return NumericVariable(name, this);
-    }
-    assert(value is bool);
-    return BooleanVariable(name, this);
+    return switch (value) {
+      String() => StringVariable(name, this),
+      num() => NumericVariable(name, this),
+      bool() => BooleanVariable(name, this),
+      _ => throw DialogueError(
+          'Cannot convert variable $name with type ${value.runtimeType} to '
+          'an expression',
+        ),
+    };
   }
 
   ExpressionType getVariableType(String name) {
     final dynamic value = variables[name];
-    return value is String
-        ? ExpressionType.string
-        : value is num
-            ? ExpressionType.numeric
-            : value is bool
-                ? ExpressionType.boolean
-                : ExpressionType.unknown;
+    return switch (value) {
+      String() => ExpressionType.string,
+      num() => ExpressionType.numeric,
+      bool() => ExpressionType.boolean,
+      _ => ExpressionType.unknown,
+    };
   }
 
   void setVariable(String name, dynamic value) {
