@@ -106,7 +106,7 @@ command once.
 
 #### CSpell
 
-If you want to lint the spellchecker locally, you will have to install
+If you want to run the spellchecker locally, you will have to install
 [cspell](https://github.com/streetsidesoftware/cspell/tree/main/packages/cspell);
 you can do so using npm or yarn:
 
