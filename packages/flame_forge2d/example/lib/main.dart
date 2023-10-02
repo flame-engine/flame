@@ -36,32 +36,22 @@ class Forge2DExample extends Forge2DGame {
 }
 
 class Ball extends BodyComponent with TapCallbacks {
-  final Vector2 initialPosition;
-
   Ball({Vector2? initialPosition})
-      : initialPosition = initialPosition ?? Vector2.zero();
-
-  @override
-  Body createBody() {
-    final shape = CircleShape();
-    shape.radius = 5;
-
-    final fixtureDef = FixtureDef(
-      shape,
-      restitution: 0.8,
-      density: 1.0,
-      friction: 0.4,
-    );
-
-    final bodyDef = BodyDef(
-      userData: this,
-      angularDamping: 0.8,
-      position: initialPosition,
-      type: BodyType.dynamic,
-    );
-
-    return world.createBody(bodyDef)..createFixture(fixtureDef);
-  }
+      : super(
+          fixtureDefs: [
+            FixtureDef(
+              CircleShape()..radius = 5,
+              restitution: 0.8,
+              density: 1.0,
+              friction: 0.4,
+            ),
+          ],
+          bodyDef: BodyDef(
+            angularDamping: 0.8,
+            position: initialPosition ?? Vector2.zero(),
+            type: BodyType.dynamic,
+          ),
+        );
 
   @override
   void onTapDown(_) {
@@ -80,7 +70,6 @@ class Wall extends BodyComponent {
     final shape = EdgeShape()..set(_start, _end);
     final fixtureDef = FixtureDef(shape, friction: 0.3);
     final bodyDef = BodyDef(
-      userData: this,
       position: Vector2.zero(),
     );
 
