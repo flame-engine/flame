@@ -18,9 +18,9 @@ class GameMap extends Component with HasGameReference<ColonistsGame> {
   static const mapSizeY = 50;
   static const totalPositions = mapSizeX * mapSizeY;
 
-  static int cheeseSpread = (0.03 * totalPositions).toInt();
-  static int breadSpread = (0.05 * totalPositions).toInt();
-  static int workerSpread = (0.1 * totalPositions).toInt();
+  static final int cheeseSpread = (0.03 * totalPositions).toInt();
+  static final int breadSpread = (0.05 * totalPositions).toInt();
+  static final int workerSpread = (0.1 * totalPositions).toInt();
 
   static const double workerMinSpeed = 25;
   static const double workerMaxSpeed = 75;
