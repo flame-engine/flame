@@ -54,10 +54,10 @@ The `BodyComponent` is a wrapper for the `Forge2D` body, which is the body that 
 is interacting with. To create a `BodyComponent` you can either:
 
 - override `createBody()` and create and return your created body;
-- use the default `createBody()` implementation: pass a `BodyDef` instance (and optionally a list
-of `FixtureDef` instances) to BodyComponent' constructor' `bodyDef` (and `fixtureDefs`) arguments;
-- use the default `createBody()` implementation: assign a `BodyDef` instance to `this.bodyDef`, and
-optionally a list of `FixtureDef` instances to `this.fixtureDefs`.
+- use the default `createBody()` implementation by passing a `BodyDef` instance (and optionally a
+list of `FixtureDef` instances) to the BodyComponent's constructor;
+- use the default `createBody()` implementation and assign a `BodyDef` instance to `this.bodyDef`,
+and optionally a list of `FixtureDef` instances to `this.fixtureDefs`.
 
 The `BodyComponent` is by default having `renderBody = true`, since otherwise, it wouldn't show
 anything after you have created a `Body` and added the `BodyComponent` to the game. If you want to

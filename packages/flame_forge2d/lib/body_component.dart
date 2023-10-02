@@ -12,7 +12,7 @@ import 'package:flutter/foundation.dart';
 /// seen
 ///
 /// You can use the optional [bodyDef] and [fixtureDefs] arguments to create
-/// the [BodyComponent]' body without having to create the definitions within
+/// the [BodyComponent]'s body without having to create the definitions within
 /// the component.
 class BodyComponent<T extends Forge2DGame> extends Component
     with HasGameReference<T>, HasPaint
@@ -35,13 +35,14 @@ class BodyComponent<T extends Forge2DGame> extends Component
   static const defaultColor = Color.fromARGB(255, 255, 255, 255);
   late Body body;
 
-  /// Default implementation of [createBody] will use this value, if provided.
+  /// The default implementation of [createBody] will use this value to create the [Body],
+  /// if it is provided.
   ///
-  /// If you do not provide a BodyDef here, you must override [createBody].
+  /// If you do not provide a [BodyDef] here, you must override [createBody].
   BodyDef? bodyDef;
 
-  /// Default implementation of [createBody] adds these fixtures to the body
-  /// that it creates from [bodyDef].
+  /// The default implementation of [createBody] will add these fixtures to the [Body] that it
+  /// creates from [bodyDef].
   List<FixtureDef>? fixtureDefs;
 
   @override
