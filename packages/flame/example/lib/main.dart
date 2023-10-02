@@ -38,8 +38,8 @@ class Square extends RectangleComponent with TapCallbacks {
   static const squareSize = 128.0;
   static const indicatorSize = 6.0;
 
-  static Paint red = BasicPalette.red.paint();
-  static Paint blue = BasicPalette.blue.paint();
+  static final Paint red = BasicPalette.red.paint();
+  static final Paint blue = BasicPalette.blue.paint();
 
   Square(Vector2 position)
       : super(
