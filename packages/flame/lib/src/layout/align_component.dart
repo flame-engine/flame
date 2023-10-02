@@ -70,9 +70,6 @@ class AlignComponent extends PositionComponent {
   PositionComponent? get child => _child;
 
   set child(PositionComponent? value) {
-    if (_child == value) {
-      return;
-    }
     if (_child?.parent == this) {
       _child?.removeFromParent();
     }
