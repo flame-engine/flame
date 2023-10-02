@@ -46,8 +46,8 @@ class CameraComponent extends Component {
     Viewport? viewport,
     Viewfinder? viewfinder,
     List<Component>? hudComponents,
-  })  : _viewport = viewport ?? MaxViewport(),
-        _viewfinder = (viewfinder ?? Viewfinder())..addAll(hudComponents ?? []),
+  })  : _viewport = (viewport ?? MaxViewport())..addAll(hudComponents ?? []),
+        _viewfinder = viewfinder ?? Viewfinder(),
         // The priority is set to the max here to avoid some bugs for the users,
         // if they for example would add any components that modify positions
         // before the CameraComponent, since it then will render the positions
@@ -73,10 +73,9 @@ class CameraComponent extends Component {
   }) {
     return CameraComponent(
       world: world,
-      viewport: FixedAspectRatioViewport(aspectRatio: width / height),
-      viewfinder: Viewfinder()
-        ..visibleGameSize = Vector2(width, height)
+      viewport: FixedAspectRatioViewport(aspectRatio: width / height)
         ..addAll(hudComponents ?? []),
+      viewfinder: Viewfinder()..visibleGameSize = Vector2(width, height),
     );
   }
 
