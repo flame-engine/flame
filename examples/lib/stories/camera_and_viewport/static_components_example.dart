@@ -40,7 +40,7 @@ class StaticComponentsExample extends FlameGame
         anchor: Anchor.bottomRight,
       ),
     ]);
-    camera.viewfinder.addAll(
+    camera.viewport.addAll(
       [
         TextComponent(
           text: 'My Corner HUD Component',

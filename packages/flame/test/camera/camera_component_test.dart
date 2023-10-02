@@ -6,7 +6,10 @@ import 'package:flame/components.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame_test/flame_test.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+
+import 'camera_test_helpers.dart';
 
 void main() {
   group('CameraComponent', () {
@@ -305,6 +308,35 @@ void main() {
 
       expect(camera.canSee(component), isFalse);
     });
+
+    testGolden(
+      'Correct order of rendering',
+      (game) async {
+        final world = World();
+        final camera = CameraComponent(world: world);
+        game.addAll([world, camera]);
+        camera.viewfinder.position = Vector2.all(4);
+        camera.viewfinder.add(
+          CrossHair(
+            size: Vector2.all(20),
+            position: camera.viewport.size / 2,
+            color: Colors.white,
+          ),
+        );
+        world.add(
+          CrossHair(size: Vector2.all(14), color: Colors.green),
+        );
+        camera.viewport.add(
+          CrossHair(
+            size: Vector2.all(8),
+            position: camera.viewport.size / 2,
+            color: Colors.red,
+          ),
+        );
+      },
+      goldenFile: '../_goldens/camera_component_order_test.png',
+      size: Vector2(50, 50),
+    );
   });
 
   group('CameraComponent.canSee', () {

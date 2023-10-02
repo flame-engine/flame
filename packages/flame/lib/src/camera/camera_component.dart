@@ -160,8 +160,8 @@ class CameraComponent extends Component {
       viewport.position.x - viewport.anchor.x * viewport.size.x,
       viewport.position.y - viewport.anchor.y * viewport.size.y,
     );
-    // Render the viewport elements, which will be below the world.
-    viewport.renderTree(canvas);
+    // Render the viewfinder elements, which will be below the world.
+    viewfinder.renderTree(canvas);
     // Render the world through the viewport
     if ((world?.isMounted ?? false) &&
         currentCameras.length < maxCamerasDepth) {
@@ -176,8 +176,8 @@ class CameraComponent extends Component {
       }
       canvas.restore();
     }
-    // Render the viewfinder elements, which will be above the world.
-    viewfinder.renderTree(canvas);
+    // Render the viewport elements, which will be above the world.
+    viewport.renderTree(canvas);
     canvas.restore();
   }
 
