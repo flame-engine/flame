@@ -46,8 +46,8 @@ class CameraComponent extends Component {
     Viewport? viewport,
     Viewfinder? viewfinder,
     List<Component>? hudComponents,
-  })  : _viewport = (viewport ?? MaxViewport())..addAll(hudComponents ?? []),
-        _viewfinder = viewfinder ?? Viewfinder(),
+  })  : _viewport = viewport ?? MaxViewport(),
+        _viewfinder = (viewfinder ?? Viewfinder())..addAll(hudComponents ?? []),
         // The priority is set to the max here to avoid some bugs for the users,
         // if they for example would add any components that modify positions
         // before the CameraComponent, since it then will render the positions
@@ -73,9 +73,10 @@ class CameraComponent extends Component {
   }) {
     return CameraComponent(
       world: world,
-      viewport: FixedAspectRatioViewport(aspectRatio: width / height)
+      viewport: FixedAspectRatioViewport(aspectRatio: width / height),
+      viewfinder: Viewfinder()
+        ..visibleGameSize = Vector2(width, height)
         ..addAll(hudComponents ?? []),
-      viewfinder: Viewfinder()..visibleGameSize = Vector2(width, height),
     );
   }
 
@@ -150,8 +151,8 @@ class CameraComponent extends Component {
 
   /// Renders the [world] as seen through this camera.
   ///
-  /// If the world is not mounted yet, only the viewport HUD elements will be
-  /// rendered.
+  /// If the world is not mounted yet, only the viewport and viewfinder elements
+  /// will be rendered.
   @override
   void renderTree(Canvas canvas) {
     canvas.save();
@@ -159,6 +160,8 @@ class CameraComponent extends Component {
       viewport.position.x - viewport.anchor.x * viewport.size.x,
       viewport.position.y - viewport.anchor.y * viewport.size.y,
     );
+    // Render the viewport elements, which will be below the world.
+    viewport.renderTree(canvas);
     // Render the world through the viewport
     if ((world?.isMounted ?? false) &&
         currentCameras.length < maxCamerasDepth) {
@@ -168,14 +171,13 @@ class CameraComponent extends Component {
         currentCameras.add(this);
         canvas.transform(viewfinder.transform.transformMatrix.storage);
         world!.renderFromCamera(canvas);
-        viewfinder.renderTree(canvas);
       } finally {
         currentCameras.removeLast();
       }
       canvas.restore();
     }
-    // Now render the HUD elements
-    viewport.renderTree(canvas);
+    // Render the viewfinder elements, which will be above the world.
+    viewfinder.renderTree(canvas);
     canvas.restore();
   }
 

@@ -31,7 +31,9 @@ class FixedAspectRatioViewport extends Viewport {
 
   @override
   void onGameResize(Vector2 size) {
-    super.onGameResize(size);
+    if (isLoaded) {
+      super.onGameResize(size);
+    }
     _handleResize(size);
   }
 
