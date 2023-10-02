@@ -132,7 +132,7 @@ class MovableEmber extends Ember<FollowComponentExample>
 class Map extends Component {
   static const double size = 1500;
   static const Rect _bounds = Rect.fromLTRB(-size, -size, size, size);
-  static Rectangle bounds = Rectangle.fromLTRB(-size, -size, size, size);
+  static final Rectangle bounds = Rectangle.fromLTRB(-size, -size, size, size);
 
   static final Paint _paintBorder = Paint()
     ..color = Colors.white12
