@@ -179,10 +179,12 @@ bool hasMouseDetectors(Game game) {
 }
 
 Widget applyMouseDetectors(Game game, Widget child) {
-  final mouseMoveFn = game is MouseMovementDetector
-      ? game.onMouseMove
-      // ignore: deprecated_member_use_from_same_package
-      : (game is HasHoverables ? game.onMouseMove : null);
+  final mouseMoveFn = switch (game) {
+    MouseMovementDetector() => game.onMouseMove,
+    // ignore: deprecated_member_use_from_same_package
+    HasHoverables() => game.onMouseMove,
+    _ => null,
+  };
   final mouseDetector = game.mouseDetector;
   return Listener(
     child: MouseRegion(
