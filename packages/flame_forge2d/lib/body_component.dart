@@ -35,14 +35,14 @@ class BodyComponent<T extends Forge2DGame> extends Component
   static const defaultColor = Color.fromARGB(255, 255, 255, 255);
   late Body body;
 
-  /// The default implementation of [createBody] will use this value to create the [Body],
-  /// if it is provided.
+  /// The default implementation of [createBody] will use this value to create
+  /// the [Body], if it is provided.
   ///
   /// If you do not provide a [BodyDef] here, you must override [createBody].
   BodyDef? bodyDef;
 
-  /// The default implementation of [createBody] will add these fixtures to the [Body] that it
-  /// creates from [bodyDef].
+  /// The default implementation of [createBody] will add these fixtures to the
+  /// [Body] that it creates from [bodyDef].
   List<FixtureDef>? fixtureDefs;
 
   @override
