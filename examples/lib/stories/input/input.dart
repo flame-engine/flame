@@ -16,6 +16,7 @@ import 'package:examples/stories/input/multitap_example.dart';
 import 'package:examples/stories/input/overlapping_tappables_example.dart';
 import 'package:examples/stories/input/scroll_example.dart';
 import 'package:examples/stories/input/tap_callbacks_example.dart';
+import 'package:examples/stories/input/tap_callbacks_multiple_example.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 
@@ -26,6 +27,12 @@ void addInputStories(Dashbook dashbook) {
       (_) => GameWidget(game: TapCallbacksExample()),
       codeLink: baseLink('input/tap_callbacks_example.dart'),
       info: TapCallbacksExample.description,
+    )
+    ..add(
+      'Tappables - optimize for many items',
+      (_) => GameWidget(game: TapCallbacksMultipleExample()),
+      codeLink: baseLink('input/tap_callbacks_multiple_example.dart'),
+      info: TapCallbacksMultipleExample.description,
     )
     ..add(
       'Draggables',

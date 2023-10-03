@@ -87,6 +87,7 @@ class CameraComponent extends Component {
   /// than the size of the game canvas. If it is smaller, then the viewport's
   /// position specifies where exactly it is placed on the canvas.
   Viewport get viewport => _viewport;
+
   set viewport(Viewport newViewport) {
     _viewport.removeFromParent();
     _viewport = newViewport;
@@ -104,6 +105,7 @@ class CameraComponent extends Component {
   /// (i.e. how much of the world is seen through the viewport), and,
   /// optionally, rotation.
   Viewfinder get viewfinder => _viewfinder;
+
   set viewfinder(Viewfinder newViewfinder) {
     _viewfinder.removeFromParent();
     _viewfinder = newViewfinder;
@@ -204,17 +206,50 @@ class CameraComponent extends Component {
   Iterable<Component> componentsAtPoint(
     Vector2 point, [
     List<Vector2>? nestedPoints,
+    List<Component>? ancestors,
   ]) sync* {
     final viewportPoint = viewport.globalToLocal(point, output: _viewportPoint);
-    yield* viewport.componentsAtPoint(viewportPoint, nestedPoints);
-    if ((world?.isMounted ?? false) &&
-        currentCameras.length < maxCamerasDepth) {
-      if (viewport.containsLocalPoint(_viewportPoint)) {
+
+    if (ancestors != null && ancestors.isNotEmpty) {
+      final currentAncestor = ancestors.removeLast();
+      if (currentAncestor == viewport) {
+        yield* viewport.componentsAtPoint(
+          viewportPoint,
+          nestedPoints,
+          ancestors,
+        );
+      } else if ((currentAncestor == world || currentAncestor == viewfinder) &&
+          (world?.isMounted ?? false) &&
+          currentCameras.length < maxCamerasDepth &&
+          viewport.containsLocalPoint(_viewportPoint)) {
         currentCameras.add(this);
         final worldPoint = viewfinder.transform.globalToLocal(_viewportPoint);
-        yield* viewfinder.componentsAtPoint(worldPoint, nestedPoints);
-        yield* world!.componentsAtPoint(worldPoint, nestedPoints);
+        if (currentAncestor == viewfinder) {
+          yield* viewfinder.componentsAtPoint(
+            worldPoint,
+            nestedPoints,
+            ancestors,
+          );
+        } else {
+          yield* world!.componentsAtPoint(
+            worldPoint,
+            nestedPoints,
+            ancestors,
+          );
+        }
         currentCameras.removeLast();
+      }
+    } else {
+      yield* viewport.componentsAtPoint(viewportPoint, nestedPoints);
+      if ((world?.isMounted ?? false) &&
+          currentCameras.length < maxCamerasDepth) {
+        if (viewport.containsLocalPoint(_viewportPoint)) {
+          currentCameras.add(this);
+          final worldPoint = viewfinder.transform.globalToLocal(_viewportPoint);
+          yield* viewfinder.componentsAtPoint(worldPoint, nestedPoints);
+          yield* world!.componentsAtPoint(worldPoint, nestedPoints);
+          currentCameras.removeLast();
+        }
       }
     }
   }

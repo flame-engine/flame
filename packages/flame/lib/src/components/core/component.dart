@@ -188,26 +188,35 @@ class Component {
 
   /// Whether the component is currently executing its [onLoad] step.
   bool get isLoading => (_state & _loading) != 0;
+
   void _setLoadingBit() => _state |= _loading;
+
   void _clearLoadingBit() => _state &= ~_loading;
 
   /// Whether this component has completed its [onLoad] step.
   bool get isLoaded => (_state & _loaded) != 0;
+
   void _setLoadedBit() => _state |= _loaded;
 
   @internal
   bool get isMounting => (_state & _mounting) != 0;
+
   void _setMountingBit() => _state |= _mounting;
+
   void _clearMountingBit() => _state &= ~_mounting;
 
   /// Whether this component is currently added to a component tree.
   bool get isMounted => (_state & _mounted) != 0;
+
   void _setMountedBit() => _state |= _mounted;
+
   void _clearMountedBit() => _state &= ~_mounted;
 
   /// Whether the component is scheduled to be removed.
   bool get isRemoving => (_state & _removing) != 0;
+
   void _setRemovingBit() => _state |= _removing;
+
   void _clearRemovingBit() => _state &= ~_removing;
 
   /// Whether the component has been removed. Originally this flag is `false`,
@@ -215,7 +224,9 @@ class Component {
   /// from its parent. The flag becomes `false` again when the component is
   /// mounted to a new parent.
   bool get isRemoved => (_state & _removed) != 0;
+
   void _setRemovedBit() => _state |= _removed;
+
   void _clearRemovedBit() => _state &= ~_removed;
 
   Completer<void>? _loadCompleter;
@@ -264,6 +275,7 @@ class Component {
   /// Setting this property to null is equivalent to [removeFromParent].
   Component? get parent => _parent;
   Component? _parent;
+
   set parent(Component? newParent) {
     if (newParent == null) {
       removeFromParent();
@@ -278,6 +290,7 @@ class Component {
   /// the current object if it didn't exist before. Check the [hasChildren]
   /// property in order to avoid instantiating the children container.
   ComponentSet get children => _children ??= createComponentSet();
+
   bool get hasChildren => _children?.isNotEmpty ?? false;
   ComponentSet? _children;
 
@@ -704,16 +717,32 @@ class Component {
   Iterable<Component> componentsAtPoint(
     Vector2 point, [
     List<Vector2>? nestedPoints,
+    List<Component>? ancestors,
   ]) sync* {
     nestedPoints?.add(point);
     if (_children != null) {
-      for (final child in _children!.reversed()) {
+      if (ancestors != null && ancestors.isNotEmpty) {
+        final ancestor = ancestors.removeLast();
         Vector2? childPoint = point;
-        if (child is CoordinateTransform) {
-          childPoint = (child as CoordinateTransform).parentToLocal(point);
+        if (ancestor is CoordinateTransform) {
+          childPoint = (ancestor as CoordinateTransform).parentToLocal(point);
         }
         if (childPoint != null) {
-          yield* child.componentsAtPoint(childPoint, nestedPoints);
+          yield* ancestor.componentsAtPoint(
+            childPoint,
+            nestedPoints,
+            ancestors,
+          );
+        }
+      } else {
+        for (final child in _children!.reversed()) {
+          Vector2? childPoint = point;
+          if (child is CoordinateTransform) {
+            childPoint = (child as CoordinateTransform).parentToLocal(point);
+          }
+          if (childPoint != null) {
+            yield* child.componentsAtPoint(childPoint, nestedPoints);
+          }
         }
       }
     }
@@ -743,6 +772,7 @@ class Component {
   /// to the parent.
   int get priority => _priority;
   int _priority;
+
   set priority(int newPriority) {
     if (_priority != newPriority) {
       _priority = newPriority;
@@ -1006,7 +1036,7 @@ class Component {
     }
   }
 
-  //#endregion
+//#endregion
 }
 
 typedef ComponentSetFactory = ComponentSet Function();

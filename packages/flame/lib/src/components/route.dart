@@ -47,6 +47,7 @@ class Route extends PositionComponent with ParentIsA<RouterComponent> {
   /// The name of the route (set by the [RouterComponent]).
   String? get name => _name;
   String? _name;
+
   @internal
   set name(String? value) => _name = value;
 
@@ -169,13 +170,14 @@ class Route extends PositionComponent with ParentIsA<RouterComponent> {
   Iterable<Component> componentsAtPoint(
     Vector2 point, [
     List<Vector2>? nestedPoints,
+    List<Component>? ancestors,
   ]) {
     if (isRendered) {
-      return super.componentsAtPoint(point, nestedPoints);
+      return super.componentsAtPoint(point, nestedPoints, ancestors);
     } else {
       return const Iterable<Component>.empty();
     }
   }
 
-  //#endregion
+//#endregion
 }

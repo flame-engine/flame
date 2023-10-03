@@ -51,6 +51,7 @@ class FlameGame<W extends World> extends ComponentTreeRoot
   /// You don't have to add the world to the tree after setting it here, it is
   /// done automatically.
   W get world => _world;
+
   set world(W newWorld) {
     if (newWorld == _world) {
       return;
@@ -73,6 +74,7 @@ class FlameGame<W extends World> extends ComponentTreeRoot
   /// You don't have to add the CameraComponent to the tree after setting it
   /// here, it is done automatically.
   CameraComponent get camera => _camera;
+
   set camera(CameraComponent newCameraComponent) {
     _camera.removeFromParent();
     _camera = newCameraComponent;
@@ -294,5 +296,32 @@ class FlameGame<W extends World> extends ComponentTreeRoot
   void resumeEngine() {
     _pausedBecauseBackgrounded = false;
     super.resumeEngine();
+  }
+
+  Component? componentsAtPointRoot;
+
+  @override
+  Iterable<Component> componentsAtPoint(
+    Vector2 point, [
+    List<Vector2>? nestedPoints,
+    List<Component>? ancestors,
+  ]) sync* {
+    if (componentsAtPointRoot != null && componentsAtPointRoot!.isMounted) {
+      final ancestorsOfRoot =
+          componentsAtPointRoot!.ancestors(includeSelf: true).toList();
+      ancestorsOfRoot.removeLast(); // remove game component
+      for (final child in children.reversed()) {
+        Vector2? childPoint = point;
+        if (child is CoordinateTransform) {
+          childPoint = (child as CoordinateTransform).parentToLocal(point);
+        }
+        if (childPoint != null) {
+          yield* child.componentsAtPoint(
+              childPoint, nestedPoints, ancestorsOfRoot);
+        }
+      }
+    } else {
+      yield* super.componentsAtPoint(point, nestedPoints, ancestors);
+    }
   }
 }
