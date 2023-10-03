@@ -896,17 +896,13 @@ class Component {
   void _remove() {
     assert(_parent != null, 'Trying to remove a component with no parent');
 
-    if (_key != null) {
-      final game = findGame();
-      if (game is FlameGame) {
-        game.unregisterKey(_key!);
-      }
-    }
+    _nukeKey();
     _parent!.children.remove(this);
     propagateToChildren(
       (Component component) {
         component
           ..onRemove()
+          .._nukeKey()
           .._clearMountedBit()
           .._clearRemovingBit()
           .._setRemovedBit()
@@ -918,6 +914,15 @@ class Component {
       },
       includeSelf: true,
     );
+  }
+
+  void _nukeKey() {
+    if (_key != null) {
+      final game = findGame();
+      if (game is FlameGame) {
+        game.unregisterKey(_key!);
+      }
+    }
   }
 
   //#endregion
