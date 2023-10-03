@@ -9,7 +9,8 @@ void addFlameLottieExample(Dashbook dashbook) {
         (_) => GameWidget(
           game: LottieAnimationExample(),
         ),
-        codeLink: baseLink('flame_lottie/lottie_animation_example.dart'),
+        codeLink: baseLink(
+            'bridge_libraries/flame_lottie/lottie_animation_example.dart'),
         info: LottieAnimationExample.description,
       );
 }
