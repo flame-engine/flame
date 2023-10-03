@@ -45,15 +45,17 @@ class CameraComponent extends Component {
     this.world,
     Viewport? viewport,
     Viewfinder? viewfinder,
+    Component? backdrop,
     List<Component>? hudComponents,
   })  : _viewport = (viewport ?? MaxViewport())..addAll(hudComponents ?? []),
         _viewfinder = viewfinder ?? Viewfinder(),
+        _backdrop = backdrop ?? Component(),
         // The priority is set to the max here to avoid some bugs for the users,
         // if they for example would add any components that modify positions
         // before the CameraComponent, since it then will render the positions
         // of the last tick each tick.
         super(priority: 0x7fffffff) {
-    addAll([_viewport, _viewfinder]);
+    addAll([_backdrop, _viewport, _viewfinder]);
   }
 
   /// Create a camera that shows a portion of the game world of fixed size
@@ -69,6 +71,7 @@ class CameraComponent extends Component {
     required double width,
     required double height,
     World? world,
+    Component? backdrop,
     List<Component>? hudComponents,
   }) {
     return CameraComponent(
@@ -76,6 +79,7 @@ class CameraComponent extends Component {
       viewport: FixedAspectRatioViewport(aspectRatio: width / height)
         ..addAll(hudComponents ?? []),
       viewfinder: Viewfinder()..visibleGameSize = Vector2(width, height),
+      backdrop: backdrop,
     );
   }
 
@@ -122,6 +126,18 @@ class CameraComponent extends Component {
   /// this variable is a mere reference to it.
   World? world;
 
+  /// The [backdrop] component is rendered statically behind the world.
+  ///
+  /// Here you can add things like the parallax component which should be static
+  /// when the camera moves around.
+  Component get backdrop => _backdrop;
+  Component _backdrop;
+  set backdrop(Component newBackdrop) {
+    _backdrop.removeFromParent();
+    add(newBackdrop);
+    _backdrop = newBackdrop;
+  }
+
   /// The axis-aligned bounding rectangle of a [world] region which is currently
   /// visible through the viewport.
   ///
@@ -159,8 +175,7 @@ class CameraComponent extends Component {
       viewport.position.x - viewport.anchor.x * viewport.size.x,
       viewport.position.y - viewport.anchor.y * viewport.size.y,
     );
-    // Render the viewfinder elements, which will be below the world.
-    viewfinder.renderTree(canvas);
+    backdrop.renderTree(canvas);
     // Render the world through the viewport
     if ((world?.isMounted ?? false) &&
         currentCameras.length < maxCamerasDepth) {
@@ -175,8 +190,10 @@ class CameraComponent extends Component {
       }
       canvas.restore();
     }
-    // Render the viewport elements, which will be above the world.
+    // Render the viewport elements, which will be in front of the world.
     viewport.renderTree(canvas);
+    // Render the viewfinder elements, which will be in front of the viewport.
+    viewfinder.renderTree(canvas);
     canvas.restore();
   }
 

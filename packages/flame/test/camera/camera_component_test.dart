@@ -315,10 +315,17 @@ void main() {
         final camera = CameraComponent(world: world);
         game.addAll([world, camera]);
         camera.viewfinder.position = Vector2.all(4);
+        camera.backdrop.add(
+          CrossHair(
+            size: Vector2.all(28),
+            position: camera.viewport.size / 2 + Vector2.all(4),
+            color: Colors.teal,
+          ),
+        );
         camera.viewfinder.add(
           CrossHair(
             size: Vector2.all(20),
-            position: camera.viewport.size / 2,
+            position: camera.viewport.size / 2 + Vector2(-6, 0),
             color: Colors.white,
           ),
         );
@@ -328,7 +335,7 @@ void main() {
         camera.viewport.add(
           CrossHair(
             size: Vector2.all(8),
-            position: camera.viewport.size / 2,
+            position: camera.viewport.size / 2 + Vector2(4, -4),
             color: Colors.red,
           ),
         );

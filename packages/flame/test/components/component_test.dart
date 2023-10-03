@@ -936,9 +936,9 @@ void main() {
 
           expect(game.hasLifecycleEvents, true);
           expect(game.world.descendants().length, 3);
-          // Remember that CameraComponent, Viewport, Viewfinder and World are
-          // added by default.
-          expect(game.descendants().length, 7);
+          // Remember that CameraComponent, Viewport, Viewfinder, Backdrop and
+          // World are added by default.
+          expect(game.descendants().length, 8);
         },
       );
 

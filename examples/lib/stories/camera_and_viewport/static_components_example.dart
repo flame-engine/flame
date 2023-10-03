@@ -32,27 +32,29 @@ class StaticComponentsExample extends FlameGame
   @override
   Future<void> onLoad() async {
     myParallax = MyParallaxComponent()..parallax?.baseVelocity.setZero();
-    camera.viewfinder.addAll([
+    camera.backdrop.addAll([
       myParallax,
       TextComponent(
-        text: 'My Corner Viewport Component',
-        position: camera.viewport.size - Vector2.all(10),
-        anchor: Anchor.bottomRight,
-      ),
-      TextComponent(
-        text: 'My Center Viewport Component',
+        text: 'Center backdrop Component',
         position: camera.viewport.size / 2 + Vector2(0, 30),
         anchor: Anchor.center,
+      ),
+    ]);
+    camera.viewfinder.addAll([
+      TextComponent(
+        text: 'Corner Viewfinder Component',
+        position: camera.viewport.size - Vector2.all(10),
+        anchor: Anchor.bottomRight,
       ),
     ]);
     camera.viewport.addAll(
       [
         TextComponent(
-          text: 'My Corner HUD Component',
+          text: 'Corner Viewport Component',
           position: Vector2.all(10),
         ),
         TextComponent(
-          text: 'My HUD Viewport Component',
+          text: 'Center Viewport Component',
           position: camera.viewport.size / 2,
           anchor: Anchor.center,
         ),
