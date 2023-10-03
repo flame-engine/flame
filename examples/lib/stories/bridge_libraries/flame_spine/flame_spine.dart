@@ -21,7 +21,8 @@ void addFlameSpineExamples(Dashbook dashbook) {
         game: SharedDataSpineExample(),
       ),
       codeLink: baseLink(
-          'bridge_libraries/flame_spine/shared_data_spine_example.dart'),
+        'bridge_libraries/flame_spine/shared_data_spine_example.dart',
+      ),
       info: SharedDataSpineExample.description,
     );
 }
