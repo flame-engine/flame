@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:flame/src/camera/behaviors/bounded_position_behavior.dart';
@@ -14,6 +15,9 @@ import 'package:flame/src/effects/move_by_effect.dart';
 import 'package:flame/src/effects/move_effect.dart';
 import 'package:flame/src/effects/move_to_effect.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
+import 'package:flame/src/experimental/geometry/shapes/circle.dart';
+import 'package:flame/src/experimental/geometry/shapes/rectangle.dart';
+import 'package:flame/src/experimental/geometry/shapes/rounded_rectangle.dart';
 import 'package:flame/src/experimental/geometry/shapes/shape.dart';
 import 'package:flame/src/game/flame_game.dart';
 import 'package:vector_math/vector_math_64.dart';
@@ -87,6 +91,7 @@ class CameraComponent extends Component {
   /// than the size of the game canvas. If it is smaller, then the viewport's
   /// position specifies where exactly it is placed on the canvas.
   Viewport get viewport => _viewport;
+
   set viewport(Viewport newViewport) {
     _viewport.removeFromParent();
     _viewport = newViewport;
@@ -104,6 +109,7 @@ class CameraComponent extends Component {
   /// (i.e. how much of the world is seen through the viewport), and,
   /// optionally, rotation.
   Viewfinder get viewfinder => _viewfinder;
+
   set viewfinder(Viewfinder newViewfinder) {
     _viewfinder.removeFromParent();
     _viewfinder = newViewfinder;
@@ -306,13 +312,11 @@ class CameraComponent extends Component {
   ///
   /// When [considerViewport] is true none of the viewport can go outside
   /// of the bounds, when it is false only the viewfinder anchor is considered.
+  /// Note that this option only works with [Rectangle], [RoundedRectangle] and
+  /// [Circle] shapes.
   void setBounds(Shape? bounds, {bool considerViewport = false}) {
     if (considerViewport && bounds != null) {
-      final halfViewportSize = viewport.size / 2;
-      bounds = Rectangle.fromCenter(
-        center: bounds.center,
-        size: Vector2(bounds.support(Vector2(1, 0)), bounds.support(Vector2(0, 1))) - halfViewportSize,
-      );
+      bounds = _calculateViewportAwareBounds(bounds) ?? bounds;
     }
     final boundedBehavior = viewfinder.firstChild<BoundedPositionBehavior>();
     if (bounds == null) {
@@ -324,6 +328,36 @@ class CameraComponent extends Component {
     } else {
       boundedBehavior.bounds = bounds;
     }
+  }
+
+  /// This method calculates adapts the [originalBounds] so that none
+  /// of the viewport can go outside of the bounds.
+  /// It returns `null` if it fails to calculates new bounds.
+  Shape? _calculateViewportAwareBounds(Shape originalBounds) {
+    final worldSize = Vector2(
+      originalBounds.support(Vector2(1, 0)).x,
+      originalBounds.support(Vector2(0, 1)).y,
+    );
+    final halfViewportSize = viewport.size / 2;
+    if (originalBounds is Rectangle) {
+      return Rectangle.fromCenter(
+        center: originalBounds.center,
+        size: worldSize - halfViewportSize,
+      );
+    } else if (originalBounds is RoundedRectangle) {
+      final halfSize = (worldSize - halfViewportSize) / 2;
+      return RoundedRectangle.fromPoints(
+        originalBounds.center - halfSize,
+        originalBounds.center + halfSize,
+        originalBounds.radius,
+      );
+    } else if (originalBounds is Circle) {
+      return Circle(
+        originalBounds.center,
+        worldSize.x - max(halfViewportSize.x, halfViewportSize.y),
+      );
+    }
+    return null;
   }
 
   /// Returns true if this camera is able to see the [component].
