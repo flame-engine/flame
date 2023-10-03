@@ -28,6 +28,15 @@ Then, a [](#cameracomponent) class that "looks at" the `World`. The
 flexibility of rendering the world at any place on the screen, and also control
 the viewing location and angle.
 
+If you add children to the `Viewport` they will appear as static HUDs in
+front of the world and if you add children to the `Viewfinder` they will appear
+statically in front of the viewport.
+
+To add static components behind the world you can add them to the `backdrop`
+component, or replace the `backdrop` component. This is for example useful if
+you want to have a static `ParallaxComponent` beneath a world that you can move
+around it.
+
 
 ## World
 

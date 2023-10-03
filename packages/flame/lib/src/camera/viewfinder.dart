@@ -15,6 +15,9 @@ import 'package:vector_math/vector_math_64.dart';
 /// The viewfinder contains the game point that is currently at the
 /// "cross-hairs" of the viewport ([position]), the [zoom] level, and the
 /// [angle] of rotation of the camera.
+///
+/// If you add children to the [Viewfinder] they will appear like HUDs i.e.
+/// statically in front of the world.
 class Viewfinder extends Component
     implements AnchorProvider, AngleProvider, PositionProvider, ScaleProvider {
   /// Internal transform matrix used by the viewfinder.
