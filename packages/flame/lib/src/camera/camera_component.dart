@@ -299,26 +299,21 @@ class CameraComponent extends Component {
     viewfinder.add(MoveByEffect(offset, EffectController(speed: speed)));
   }
 
-  /// Allows to set the bounds of the camera component according to your world
-  /// component so that no empty space is displayed.
-  void adaptBoundsToWorld(SizeProvider world) {
-    final halfViewportSize = viewport.size / 2;
-    final worldSize = world.size; // Size from the center in each direction.
-    setBounds(
-      Rectangle.fromCenter(
-        center: Vector2.zero(),
-        size: worldSize - halfViewportSize,
-      ),
-    );
-  }
-
   /// Sets or clears the world bounds for the camera's viewfinder.
   ///
   /// The bound is a [Shape], given in the world coordinates. The viewfinder's
-  /// position will be restricted to always remain inside this region. Note that
-  /// if you want the camera to never see the empty space outside of the world's
-  /// rendering area, then you should call [adaptBoundsToWorld].
-  void setBounds(Shape? bounds) {
+  /// position will be restricted to always remain inside this region.
+  ///
+  /// When [considerViewport] is true none of the viewport can go outside
+  /// of the bounds, when it is false only the viewfinder anchor is considered.
+  void setBounds(Shape? bounds, {bool considerViewport = false}) {
+    if (considerViewport && bounds != null) {
+      final halfViewportSize = viewport.size / 2;
+      bounds = Rectangle.fromCenter(
+        center: bounds.center,
+        size: Vector2(bounds.support(Vector2(1, 0)), bounds.support(Vector2(0, 1))) - halfViewportSize,
+      );
+    }
     final boundedBehavior = viewfinder.firstChild<BoundedPositionBehavior>();
     if (bounds == null) {
       boundedBehavior?.removeFromParent();
