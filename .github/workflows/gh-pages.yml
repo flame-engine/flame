@@ -11,9 +11,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: subosito/flutter-action@v2
-      - uses: bluefireteam/melos-action@main
-        with:
-          melos-version: '3.0.0-dev.0'
+      - uses: bluefireteam/melos-action@v2
       - uses: bluefireteam/flutter-gh-pages@v8
         with:
           workingDir: examples

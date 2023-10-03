@@ -24,10 +24,10 @@ class ZigzagEffectController extends DurationEffectController {
     // are 3 linear segments: at first it's y = x, for 0 ≤ x ≤ 1, then it's
     // y = -x + 2, for 1 ≤ x ≤ 3, and finally it's y = x + (-4), for 3 ≤ x ≤ 4.
     final x = timer / _quarterPeriod;
-    return x <= 1
-        ? x
-        : x >= 3
-            ? x - 4
-            : 2 - x;
+    return switch (x) {
+      <= 1 => x,
+      >= 3 => x - 4,
+      _ => 2 - x,
+    };
   }
 }

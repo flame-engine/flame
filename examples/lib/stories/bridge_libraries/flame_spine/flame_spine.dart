@@ -11,7 +11,8 @@ void addFlameSpineExamples(Dashbook dashbook) {
       (_) => GameWidget(
         game: FlameSpineExample(),
       ),
-      codeLink: baseLink('flame_spine/basic_spine_example.dart'),
+      codeLink:
+          baseLink('bridge_libraries/flame_spine/basic_spine_example.dart'),
       info: FlameSpineExample.description,
     )
     ..add(
@@ -19,7 +20,9 @@ void addFlameSpineExamples(Dashbook dashbook) {
       (_) => GameWidget(
         game: SharedDataSpineExample(),
       ),
-      codeLink: baseLink('flame_spine/shared_data_spine_example.dart'),
+      codeLink: baseLink(
+        'bridge_libraries/flame_spine/shared_data_spine_example.dart',
+      ),
       info: SharedDataSpineExample.description,
     );
 }

@@ -452,6 +452,24 @@ void main() {
       );
 
       testWithFlameGame(
+        'move a component from a mounted parent to an unmounted one',
+        (game) async {
+          final child = Component();
+          final mountedParent = Component(children: [child]);
+          final unmountedParent = Component();
+          await game.ensureAdd(mountedParent);
+          unmountedParent.add(child);
+          game.update(0);
+          expect(child.parent, unmountedParent);
+          expect(mountedParent.children, []);
+          expect(unmountedParent.children, [child]);
+          expect(child.isMounted, isFalse);
+          await game.ensureAdd(unmountedParent);
+          expect(child.isMounted, isTrue);
+        },
+      );
+
+      testWithFlameGame(
         'swapping between multiple parents in the same tick',
         (game) async {
           final child = Component();
@@ -918,9 +936,9 @@ void main() {
 
           expect(game.hasLifecycleEvents, true);
           expect(game.world.descendants().length, 3);
-          // Remember that CameraComponent, Viewport, Viewfinder and World are
-          // added by default.
-          expect(game.descendants().length, 7);
+          // Remember that CameraComponent, Viewport, Viewfinder, Backdrop and
+          // World are added by default.
+          expect(game.descendants().length, 8);
         },
       );
 

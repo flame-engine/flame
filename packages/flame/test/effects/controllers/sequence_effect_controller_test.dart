@@ -54,11 +54,11 @@ void main() {
         expect(
           ec.progress,
           closeTo(
-            totalTime <= 1
-                ? totalTime
-                : totalTime <= 3
-                    ? (totalTime - 1) / 2
-                    : (totalTime - 3) / 3,
+            switch (totalTime) {
+              <= 1 => totalTime,
+              <= 3 => (totalTime - 1) / 2,
+              _ => (totalTime - 3) / 3,
+            },
             1e-15,
           ),
         );
@@ -84,11 +84,11 @@ void main() {
         expect(
           ec.progress,
           closeTo(
-            totalTime <= 1
-                ? totalTime
-                : totalTime <= 3
-                    ? (totalTime - 1) / 2
-                    : (totalTime - 3) / 3,
+            switch (totalTime) {
+              <= 1 => totalTime,
+              <= 3 => (totalTime - 1) / 2,
+              _ => (totalTime - 3) / 3,
+            },
             1e-14,
           ),
         );

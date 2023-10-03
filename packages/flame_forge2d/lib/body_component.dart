@@ -10,7 +10,11 @@ import 'package:flutter/foundation.dart';
 /// Since a pure BodyComponent doesn't have anything drawn on top of it,
 /// it is a good idea to turn on [debugMode] for it so that the bodies can be
 /// seen
-abstract class BodyComponent<T extends Forge2DGame> extends Component
+///
+/// You can use the optional [bodyDef] and [fixtureDefs] arguments to create
+/// the [BodyComponent]'s body without having to create the definitions within
+/// the component.
+class BodyComponent<T extends Forge2DGame> extends Component
     with HasGameReference<T>, HasPaint
     implements
         CoordinateTransform,
@@ -21,6 +25,8 @@ abstract class BodyComponent<T extends Forge2DGame> extends Component
     super.children,
     super.priority,
     this.renderBody = true,
+    this.bodyDef,
+    this.fixtureDefs,
     super.key,
   }) {
     this.paint = paint ?? (Paint()..color = defaultColor);
@@ -28,6 +34,16 @@ abstract class BodyComponent<T extends Forge2DGame> extends Component
 
   static const defaultColor = Color.fromARGB(255, 255, 255, 255);
   late Body body;
+
+  /// The default implementation of [createBody] will use this value to create
+  /// the [Body], if it is provided.
+  ///
+  /// If you do not provide a [BodyDef] here, you must override [createBody].
+  BodyDef? bodyDef;
+
+  /// The default implementation of [createBody] will add these fixtures to the
+  /// [Body] that it creates from [bodyDef].
+  List<FixtureDef>? fixtureDefs;
 
   @override
   Vector2 get position => body.position;
@@ -43,7 +59,15 @@ abstract class BodyComponent<T extends Forge2DGame> extends Component
 
   /// You should create the Forge2D [Body] in this method when you extend
   /// the BodyComponent.
-  Body createBody();
+  Body createBody() {
+    assert(
+      bodyDef != null,
+      'Ensure this.bodyDef is not null or override createBody',
+    );
+    final body = world.createBody(bodyDef!);
+    fixtureDefs?.forEach(body.createFixture);
+    return body;
+  }
 
   @mustCallSuper
   @override
