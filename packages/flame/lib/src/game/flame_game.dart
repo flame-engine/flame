@@ -118,6 +118,20 @@ class FlameGame<W extends World> extends ComponentTreeRoot
   @override
   Vector2 get size => oldCamera.gameSize;
 
+  /// Grouping component which contains all interactive components, that should
+  /// react on tap events, drag events and so on.
+  ///
+  /// The component prevents `componentsAtPoint` looping over whole components
+  /// tree. Instead, only  `componentsAtPointRoot` subtree will be scanned.
+  /// This helps framework to react on touch events faster by excluding
+  /// unnecessary components from process.
+  ///
+  /// The component can be changed at any time. It should be mounted to make
+  /// thinks work, otherwise `componentsAtPoint` behavior will fallback to
+  /// scanning whole components tree. This also will happen if component is
+  /// null, and this is default behavior.
+  Component? componentsAtPointRoot;
+
   @override
   @internal
   void mount() {
@@ -297,8 +311,6 @@ class FlameGame<W extends World> extends ComponentTreeRoot
     _pausedBecauseBackgrounded = false;
     super.resumeEngine();
   }
-
-  Component? componentsAtPointRoot;
 
   @override
   Iterable<Component> componentsAtPoint(

@@ -2,6 +2,7 @@ import 'package:dashbook/dashbook.dart';
 import 'package:examples/commons/commons.dart';
 import 'package:examples/stories/input/double_tap_callbacks_example.dart';
 import 'package:examples/stories/input/draggables_example.dart';
+import 'package:examples/stories/input/draggables_multiple_example.dart';
 import 'package:examples/stories/input/gesture_hitboxes_example.dart';
 import 'package:examples/stories/input/hardware_keyboard_example.dart';
 import 'package:examples/stories/input/hover_callbacks_example.dart';
@@ -29,7 +30,7 @@ void addInputStories(Dashbook dashbook) {
       info: TapCallbacksExample.description,
     )
     ..add(
-      'Tappables - optimize for many items',
+      'Tappables with many components',
       (_) => GameWidget(game: TapCallbacksMultipleExample()),
       codeLink: baseLink('input/tap_callbacks_multiple_example.dart'),
       info: TapCallbacksMultipleExample.description,
@@ -45,6 +46,18 @@ void addInputStories(Dashbook dashbook) {
       },
       codeLink: baseLink('input/draggables_example.dart'),
       info: DraggablesExample.description,
+    )
+    ..add(
+      'Draggables with many components',
+      (context) {
+        return GameWidget(
+          game: DraggablesMultipleExample(
+            zoom: context.listProperty('zoom', 1, [0.5, 1, 1.5]),
+          ),
+        );
+      },
+      codeLink: baseLink('input/draggables_example.dart'),
+      info: DraggablesMultipleExample.description,
     )
     ..add(
       'Double Tap (Component)',

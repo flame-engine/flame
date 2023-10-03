@@ -8,25 +8,35 @@ import 'package:flutter/material.dart';
 
 class TapCallbacksMultipleExample extends FlameGame {
   static const String description = '''
-    In this example we show the `Tappable` mixin functionality. You can add the
-    `Tappable` mixin to any `PositionComponent`.\n\n
-    Tap the squares to see them change their angle around their anchor.
+    This example do the same thing as tap_callbacks_example, but with big count
+    of non-interactive components at background. In such cause you will 
+    experience a freeze while tapping anywhere on screen because of scanning
+    all component tree.
+    The example shows a way to avoid this freeze: 
+    1. Place all components into game's world or camera's viewport or 
+       viewfinder. This is important requirement!
+    2. Place all interactive components into special grouping component.
+    3. Assign this component to `componentsAtPointRoot` variable of FlameGame.
+    4. Place all other components anywhere you want
+    This steps makes `componentsAtPoint` function to search only 
+    `componentsAtPointRoot` children and skip looping over other tree branches.
   ''';
 
   static const int maxItems = 1000000;
-  final tappableRootComponent = Component(priority: 1);
 
   @override
   Future<void> onLoad() async {
-    tappableRootComponent.add(TappableSquare(active: true)
+    final interactiveComponents = Component();
+    interactiveComponents.add(TappableSquare(active: true)
       ..anchor = Anchor.center
-      ..x = 500);
+      ..x = 1000
+      ..y = 500);
 
     final bottomSquare = TappableSquare(active: true)
-      ..x = 500
-      ..y = 350;
-    tappableRootComponent.add(bottomSquare);
-    world.add(tappableRootComponent);
+      ..x = 1000
+      ..y = 750;
+    interactiveComponents.add(bottomSquare);
+    world.add(interactiveComponents);
 
     final random = Random();
     for (var i = 1; i < maxItems + 1; i++) {
@@ -41,7 +51,7 @@ class TapCallbacksMultipleExample extends FlameGame {
 
     camera.follow(bottomSquare);
 
-    componentsAtPointRoot = tappableRootComponent;
+    componentsAtPointRoot = interactiveComponents;
   }
 }
 
