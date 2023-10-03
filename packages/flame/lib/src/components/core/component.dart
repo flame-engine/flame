@@ -896,7 +896,6 @@ class Component {
   void _remove() {
     assert(_parent != null, 'Trying to remove a component with no parent');
 
-    _nukeKey();
     _parent!.children.remove(this);
     propagateToChildren(
       (Component component) {
