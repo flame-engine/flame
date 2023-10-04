@@ -901,7 +901,7 @@ class Component {
       (Component component) {
         component
           ..onRemove()
-          .._nukeKey()
+          .._unregisterKey()
           .._clearMountedBit()
           .._clearRemovingBit()
           .._setRemovedBit()
@@ -915,7 +915,7 @@ class Component {
     );
   }
 
-  void _nukeKey() {
+  void _unregisterKey() {
     if (_key != null) {
       final game = findGame();
       if (game is FlameGame) {
