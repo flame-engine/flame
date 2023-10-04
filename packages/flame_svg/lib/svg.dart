@@ -54,7 +54,6 @@ class Svg {
 
     if (image != null) {
       canvas.save();
-      canvas.scale(1 / pixelRatio);
       final drawPaint = overridePaint ?? _paint;
       canvas.drawImage(image, Offset.zero, drawPaint);
       canvas.restore();
@@ -81,6 +80,7 @@ class Svg {
       final recorder = PictureRecorder();
       final canvas = Canvas(recorder);
       _render(canvas, size);
+
       final picture = recorder.endRecording();
       picture
           .toImageSafe(
@@ -100,12 +100,8 @@ class Svg {
     canvas.scale(pixelRatio);
 
     final scale = math.min(
-      size.width / pictureInfo.size.width,
-      size.height / pictureInfo.size.height,
-    );
-    canvas.translate(
-      (size.width - pictureInfo.size.width * scale) / 2,
-      (size.height - pictureInfo.size.height * scale) / 2,
+      size.width / pictureInfo.size.width / pixelRatio,
+      size.height / pictureInfo.size.height / pixelRatio,
     );
     canvas.scale(scale);
     canvas.drawPicture(pictureInfo.picture);
