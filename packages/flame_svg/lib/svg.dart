@@ -105,8 +105,8 @@ class Svg {
     );
 
     canvas.translate(
-      -(pictureInfo.size.width * scale - size.width / pixelRatio) / 2,
-      -(pictureInfo.size.height * scale - size.height / pixelRatio) / 2,
+      (size.width / pixelRatio - pictureInfo.size.width * scale) / 2,
+      (size.height / pixelRatio - pictureInfo.size.height * scale) / 2,
     );
 
     canvas.scale(scale);
