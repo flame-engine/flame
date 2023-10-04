@@ -13,6 +13,9 @@ class FixedResolutionExample extends FlameGame
     It is useful when you want the visible part of the game to be the same on
     all devices no matter the actual screen size of the device.
     Resize the window or change device orientation to see the difference.
+    
+    If you tap once you will set the zoom to 2 and if you tap again it goes back
+    to 1, so that you can test how it works with a zoom level.
   ''';
 
   FixedResolutionExample({required Vector2 viewportResolution})
