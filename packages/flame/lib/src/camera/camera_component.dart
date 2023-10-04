@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flame/src/camera/behaviors/bounded_position_behavior.dart';
 import 'package:flame/src/camera/behaviors/follow_behavior.dart';
 import 'package:flame/src/camera/viewfinder.dart';
+import 'package:flame/src/camera/viewfinders/fixed_resolution_viewfinder.dart';
 import 'package:flame/src/camera/viewport.dart';
 import 'package:flame/src/camera/viewports/fixed_aspect_ratio_viewport.dart';
 import 'package:flame/src/camera/viewports/max_viewport.dart';
@@ -78,7 +79,7 @@ class CameraComponent extends Component {
       world: world,
       viewport: FixedAspectRatioViewport(aspectRatio: width / height)
         ..addAll(hudComponents ?? []),
-      viewfinder: Viewfinder()..visibleGameSize = Vector2(width, height),
+      viewfinder: FixedResolutionViewfinder(width: width, height: height),
       backdrop: backdrop,
     );
   }
@@ -185,6 +186,9 @@ class CameraComponent extends Component {
         currentCameras.add(this);
         canvas.transform(viewfinder.transform.transformMatrix.storage);
         world!.renderFromCamera(canvas);
+        // Render the viewfinder elements, which will be in front of the world,
+        // but with the same base transform applied to them.
+        viewfinder.renderTree(canvas);
       } finally {
         currentCameras.removeLast();
       }
@@ -192,8 +196,6 @@ class CameraComponent extends Component {
     }
     // Render the viewport elements, which will be in front of the world.
     viewport.renderTree(canvas);
-    // Render the viewfinder elements, which will be in front of the viewport.
-    viewfinder.renderTree(canvas);
     canvas.restore();
   }
 

@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flame/components.dart';
+import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flame/palette.dart';
@@ -14,30 +15,38 @@ class FixedResolutionExample extends FlameGame
     Resize the window or change device orientation to see the difference.
   ''';
 
-  FixedResolutionExample({
-    required Vector2 viewportResolution,
-  }) : super(
+  FixedResolutionExample({required Vector2 viewportResolution})
+      : super(
           camera: CameraComponent.withFixedResolution(
             width: viewportResolution.x,
             height: viewportResolution.y,
           ),
+          world: FixedResolutionWorld(),
         );
+}
 
+class FixedResolutionWorld extends World with HasGameReference, TapCallbacks {
   @override
   Future<void> onLoad() async {
-    final flameSprite = await loadSprite('layers/player.png');
+    final flameSprite = await game.loadSprite('layers/player.png');
 
-    world.add(Background());
-    world.add(
+    add(Background());
+    add(
       SpriteComponent(
         sprite: flameSprite,
         size: Vector2(149, 211),
       )..anchor = Anchor.center,
     );
   }
+
+  @override
+  void onTapDown(TapDownEvent event) {
+    final currentZoom = game.camera.viewfinder.zoom;
+    game.camera.viewfinder.zoom = currentZoom > 1 ? 1 : 2;
+  }
 }
 
-class Background extends PositionComponent with HasGameRef {
+class Background extends PositionComponent {
   @override
   int priority = -1;
 

@@ -1,13 +1,12 @@
 import 'dart:math';
-import 'dart:ui';
 
+import 'package:flame/extensions.dart';
 import 'package:flame/src/anchor.dart';
 import 'package:flame/src/camera/camera_component.dart';
 import 'package:flame/src/components/core/component.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
 import 'package:flame/src/game/transform2d.dart';
 import 'package:meta/meta.dart';
-import 'package:vector_math/vector_math_64.dart';
 
 /// [Viewfinder] is a part of a [CameraComponent] system that controls which
 /// part of the game world is currently visible through a viewport.
@@ -33,7 +32,7 @@ class Viewfinder extends Component
   @override
   set position(Vector2 value) {
     _transform.offset = -value;
-    _visibleRect = null;
+    visibleRect = null;
   }
 
   /// Zoom level of the game.
@@ -49,7 +48,7 @@ class Viewfinder extends Component
   set zoom(double value) {
     assert(value > 0, 'zoom level must be positive: $value');
     _transform.scale = Vector2.all(value);
-    _visibleRect = null;
+    visibleRect = null;
   }
 
   /// Rotation angle of the game world, in radians.
@@ -60,7 +59,7 @@ class Viewfinder extends Component
   @override
   set angle(double value) {
     _transform.angle = -value;
-    _visibleRect = null;
+    visibleRect = null;
   }
 
   /// The point within the viewport that is considered the "logical center" of
@@ -122,6 +121,9 @@ class Viewfinder extends Component
   /// This property is an alternative way to set the [zoom] level for the
   /// viewfinder. It is persistent too: if the game size changes, the zoom
   /// will be recalculated to fit the constraint.
+  ///
+  /// If you set the [visibleGameSize] you will remove any fixed resolution
+  /// constraints that you might have previously put.
   Vector2? get visibleGameSize => _visibleGameSize;
   Vector2? _visibleGameSize;
   set visibleGameSize(Vector2? value) {
@@ -133,25 +135,30 @@ class Viewfinder extends Component
         'visibleGameSize cannot be negative: $value',
       );
       _visibleGameSize = value;
-      _initZoom();
+      _updateZoom();
     }
   }
 
   /// See [CameraComponent.visibleWorldRect].
   @internal
-  Rect get visibleWorldRect => _visibleRect ??= _computeVisibleRect();
-  Rect? _visibleRect;
-  Rect _computeVisibleRect() {
+  Rect get visibleWorldRect => visibleRect ??= computeVisibleRect();
+  @protected
+  Rect? visibleRect;
+  @protected
+  Rect computeVisibleRect() {
     final viewportSize = camera.viewport.size;
-    final topLeft = _transform.globalToLocal(Vector2.zero());
-    final bottomRight = _transform.globalToLocal(viewportSize);
+    final currentTransform = transform;
+    final topLeft = currentTransform.globalToLocal(Vector2.zero());
+    final bottomRight = currentTransform.globalToLocal(viewportSize);
     var minX = min(topLeft.x, bottomRight.x);
     var minY = min(topLeft.y, bottomRight.y);
     var maxX = max(topLeft.x, bottomRight.x);
     var maxY = max(topLeft.y, bottomRight.y);
     if (angle != 0) {
-      final topRight = _transform.globalToLocal(Vector2(viewportSize.x, 0));
-      final bottomLeft = _transform.globalToLocal(Vector2(0, viewportSize.y));
+      final topRight =
+          currentTransform.globalToLocal(Vector2(viewportSize.x, 0));
+      final bottomLeft =
+          currentTransform.globalToLocal(Vector2(0, viewportSize.y));
       minX = min(minX, min(topRight.x, bottomLeft.x));
       minY = min(minY, min(topRight.y, bottomLeft.y));
       maxX = max(maxX, max(topRight.x, bottomLeft.x));
@@ -161,7 +168,7 @@ class Viewfinder extends Component
   }
 
   /// Set [zoom] level based on the [_visibleGameSize].
-  void _initZoom() {
+  void _updateZoom() {
     if (parent != null && _visibleGameSize != null) {
       final viewportSize = camera.viewport.size;
       final zoomX = viewportSize.x / _visibleGameSize!.x;
@@ -172,7 +179,7 @@ class Viewfinder extends Component
 
   @override
   void onGameResize(Vector2 size) {
-    _initZoom();
+    _updateZoom();
     super.onGameResize(size);
   }
 
@@ -183,7 +190,7 @@ class Viewfinder extends Component
       final viewportSize = camera.viewport.size;
       _transform.position.x = viewportSize.x * _anchor.x;
       _transform.position.y = viewportSize.y * _anchor.y;
-      _visibleRect = null;
+      visibleRect = null;
     }
   }
 
@@ -207,7 +214,7 @@ class Viewfinder extends Component
       parent! is CameraComponent,
       'Viewfinder can only be mounted to a CameraComponent',
     );
-    _initZoom();
+    _updateZoom();
     onViewportResize();
   }
 
@@ -224,6 +231,6 @@ class Viewfinder extends Component
     );
     assert(value.x > 0, 'Zoom must be positive: ${value.x}');
     _transform.scale = value;
-    _visibleRect = null;
+    visibleRect = null;
   }
 }

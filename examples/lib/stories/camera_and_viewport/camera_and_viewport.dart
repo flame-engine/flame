@@ -45,8 +45,8 @@ void addCameraAndViewportStories(Dashbook dashbook) {
     ..add(
       'Fixed Resolution viewport',
       (context) {
-        return GameWidget(
-          game: FixedResolutionExample(
+        return GameWidget.controlled(
+          gameFactory: () => FixedResolutionExample(
             viewportResolution: Vector2(
               context.numberProperty('viewport width', 600),
               context.numberProperty('viewport height', 1024),
