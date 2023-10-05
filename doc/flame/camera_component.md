@@ -188,6 +188,7 @@ you want to have a static `ParallaxComponent` beneath a world that you can move
 around it.
 
 Example:
+
 ```dart
 camera.backdrop.add(MyStaticBackground());
 ```

@@ -345,6 +345,89 @@ void main() {
     );
   });
 
+  testGolden(
+    'Correct scale of rendering',
+    (game) async {
+      final world = World();
+      final resolution = Vector2(40, 60);
+      final camera = CameraComponent.withFixedResolution(
+        world: world,
+        width: resolution.x,
+        height: resolution.y,
+      );
+      game.addAll([world, camera]);
+      camera.viewfinder.position = Vector2.all(4);
+      camera.backdrop.add(
+        CrossHair(
+          size: Vector2.all(28),
+          position: resolution / 2 + Vector2.all(4),
+          color: Colors.teal,
+        ),
+      );
+      camera.viewfinder.add(
+        CrossHair(
+          size: Vector2.all(20),
+          position: resolution / 2 + Vector2(-6, 0),
+          color: Colors.white,
+        ),
+      );
+      world.add(
+        CrossHair(size: Vector2.all(14), color: Colors.green),
+      );
+      camera.viewport.add(
+        CrossHair(
+          size: Vector2.all(8),
+          position: resolution / 2 + Vector2(4, -4),
+          color: Colors.red,
+        ),
+      );
+    },
+    goldenFile: '../_goldens/camera_component_prescale_test.png',
+    size: Vector2(50, 50),
+  );
+
+  testGolden(
+    'Correct scale of rendering after zoom',
+    (game) async {
+      final world = World();
+      final resolution = Vector2(40, 60);
+      final camera = CameraComponent.withFixedResolution(
+        world: world,
+        width: resolution.x,
+        height: resolution.y,
+      );
+      game.addAll([world, camera]);
+      camera.viewfinder.position = Vector2.all(4);
+      camera.viewfinder.zoom = 1.5;
+      camera.backdrop.add(
+        CrossHair(
+          size: Vector2.all(28),
+          position: resolution / 2 + Vector2.all(4),
+          color: Colors.teal,
+        ),
+      );
+      camera.viewfinder.add(
+        CrossHair(
+          size: Vector2.all(20),
+          position: resolution / 2 + Vector2(-6, 0),
+          color: Colors.white,
+        ),
+      );
+      world.add(
+        CrossHair(size: Vector2.all(14), color: Colors.green),
+      );
+      camera.viewport.add(
+        CrossHair(
+          size: Vector2.all(8),
+          position: resolution / 2 + Vector2(4, -4),
+          color: Colors.red,
+        ),
+      );
+    },
+    goldenFile: '../_goldens/camera_component_prescale_zoom_test.png',
+    size: Vector2(50, 50),
+  );
+
   group('CameraComponent.canSee', () {
     testWithFlameGame('null world', (game) async {
       final player = PositionComponent();
