@@ -325,7 +325,7 @@ void main() {
         camera.viewfinder.add(
           CrossHair(
             size: Vector2.all(20),
-            position: Vector2(-2, 4),
+            position: camera.viewport.size / 2 + Vector2(-6, 0),
             color: Colors.white,
           ),
         );
