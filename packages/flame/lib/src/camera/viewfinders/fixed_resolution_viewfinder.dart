@@ -40,6 +40,7 @@ class FixedResolutionViewfinder extends Viewfinder {
 
   /// The extra scaling that is being done to achieve the fixed resolution
   /// requested by the user.
+  @override
   double get preScale => _preScale;
   double _preScale = 1.0;
 

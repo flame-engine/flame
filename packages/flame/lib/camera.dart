@@ -2,7 +2,9 @@ export 'src/camera/behaviors/bounded_position_behavior.dart'
     show BoundedPositionBehavior;
 export 'src/camera/behaviors/follow_behavior.dart' show FollowBehavior;
 export 'src/camera/camera_component.dart' show CameraComponent;
-export 'src/camera/viewfinder.dart' show Viewfinder;
+export 'src/camera/viewfinders/fixed_resolution_viewfinder.dart'
+    show FixedResolutionViewfinder;
+export 'src/camera/viewfinders/viewfinder.dart' show Viewfinder;
 export 'src/camera/viewport.dart' show Viewport;
 export 'src/camera/viewports/circular_viewport.dart' show CircularViewport;
 export 'src/camera/viewports/fixed_aspect_ratio_viewport.dart'

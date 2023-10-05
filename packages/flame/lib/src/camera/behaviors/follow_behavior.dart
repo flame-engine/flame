@@ -1,4 +1,4 @@
-import 'package:flame/src/camera/viewfinder.dart';
+import 'package:flame/src/camera/viewfinders/viewfinder.dart';
 import 'package:flame/src/camera/viewport.dart';
 import 'package:flame/src/components/core/component.dart';
 import 'package:flame/src/components/position_component.dart';

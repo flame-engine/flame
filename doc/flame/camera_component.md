@@ -21,23 +21,14 @@ With this mindset, we can now understand how camera-as-a-component works.
 
 First, there is the [](#world) class, which contains all components that are
 inside your game world. The `World` component can be mounted anywhere, for
-example at the root of your game class.
+example at the root of your game class, like the built-in `World` is.
 
-Then, a [](#cameracomponent) class that "looks at" the `World`. The
-`CameraComponent` has a `Viewport` and a `Viewfinder` inside, allowing both the
-flexibility of rendering the world at any place on the screen, and also control
-the viewing location and angle.
-
-If you add children to the `Viewport` they will appear as static HUDs in
-front of the world. If you on the other hand add children to the `Viewfinder`
-they will appear non-statically, with the same camera transformations as are
-applied to the children in the `World`. The `Viewfinder`'s children will
-appear in front of the world, but behind the viewport.
-
-To add static components behind the world you can add them to the `backdrop`
-component, or replace the `backdrop` component. This is for example useful if
-you want to have a static `ParallaxComponent` beneath a world that you can move
-around it.
+Then, a [](#cameracomponent) class that "looks at" the [](#world). The
+`CameraComponent` has a [](#viewport) and a [](#viewfinder) inside, allowing
+both the flexibility of rendering the world at any place on the screen, and
+also control the viewing location and angle. The `CameraComponent` also
+contains a [](#backdrop) component which is statically rendered below the
+world.
 
 
 ## World
@@ -160,6 +151,12 @@ The following viewports are available:
 - `CircularViewport` -- a viewport in the shape of a circle, fixed size.
 
 
+If you add children to the `Viewport` they will also appear as static HUDs in
+front of the world, but they won't have the `Viewfinder`'s pre-scaling applied
+to it, which is used to size the HUDs according to the fixed resolution that
+has been specified in `CameraComponent.withFixedResolution`, if any.
+
+
 ## Viewfinder
 
 This part of the camera is responsible for knowing which location in the
@@ -173,9 +170,33 @@ main character who is displayed not in the center of the screen but closer to
 the lower-left corner. This off-center position would be the "logical center"
 of the camera, controlled by the viewfinder's `anchor`.
 
-Components added to the `Viewfinder` as children will be rendered as if they
-were part of the world (but on top). It is more useful to add behavioral
-components to the viewfinder, for example [](effects.md) or other controllers.
+If you on add children to the `Viewfinder` they will appear will
+appear in front of the world, but behind the viewport and with any scaling that
+needs to be done to fulfill the fixed resolution specified in
+`CameraComponent.withFixedResolution`, if any.
+
+You can also add behavioral components as children to the viewfinder, for
+example [](effects.md) or other controllers. If you for example would add a
+`ScaleEffect` you would be able to achieve a smooth zoom in your game.
+
+
+## Backdrop
+
+To add static components behind the world you can add them to the `backdrop`
+component, or replace the `backdrop` component. This is for example useful if
+you want to have a static `ParallaxComponent` beneath a world that you can move
+around it.
+
+Example:
+```dart
+camera.backdrop.add(MyStaticBackground());
+```
+
+or
+
+```dart
+camera.backdrop = MyStaticBackground();
+```
 
 
 ## Camera controls

@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flame/extensions.dart';
 import 'package:flame/src/anchor.dart';
 import 'package:flame/src/camera/camera_component.dart';
+import 'package:flame/src/camera/viewfinders/fixed_resolution_viewfinder.dart';
 import 'package:flame/src/components/core/component.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
 import 'package:flame/src/game/transform2d.dart';
@@ -24,6 +25,11 @@ class Viewfinder extends Component
 
   @internal
   Transform2D get transform => _transform;
+
+  /// The [preScale] is used if the viewfinder should do some scaling before the
+  /// [zoom] is applied, for example if you are using something like the
+  /// [FixedResolutionViewfinder].
+  double get preScale => 1.0;
 
   /// The game coordinates of a point that is to be positioned at the center
   /// of the viewport.

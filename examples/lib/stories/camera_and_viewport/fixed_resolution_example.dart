@@ -1,10 +1,11 @@
-import 'dart:ui';
+import 'dart:ui' hide TextStyle;
 
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flame/palette.dart';
+import 'package:flame/text.dart';
 
 class FixedResolutionExample extends FlameGame
     with ScrollDetector, ScaleDetector {
@@ -17,8 +18,9 @@ class FixedResolutionExample extends FlameGame
     If you tap once you will set the zoom to 2 and if you tap again it goes back
     to 1, so that you can test how it works with a zoom level.
   ''';
+  Vector2 viewportResolution;
 
-  FixedResolutionExample({required Vector2 viewportResolution})
+  FixedResolutionExample({required this.viewportResolution})
       : super(
           camera: CameraComponent.withFixedResolution(
             width: viewportResolution.x,
@@ -26,6 +28,28 @@ class FixedResolutionExample extends FlameGame
           ),
           world: FixedResolutionWorld(),
         );
+
+  @override
+  Future<void> onLoad() async {
+    final textRenderer = TextPaint(
+      style: TextStyle(fontSize: 25, color: BasicPalette.black.color),
+    );
+    camera.viewport.add(
+      TextComponent(
+        text: 'Viewport component\n(always same size)',
+        position: Vector2.all(10),
+        textRenderer: textRenderer,
+      ),
+    );
+    camera.viewfinder.add(
+      TextComponent(
+        text: 'Viewfinder component\n(scales with fixed resolution)',
+        position: viewportResolution - Vector2.all(10),
+        textRenderer: textRenderer,
+        anchor: Anchor.bottomRight,
+      ),
+    );
+  }
 }
 
 class FixedResolutionWorld extends World with HasGameReference, TapCallbacks {
