@@ -11,6 +11,7 @@ Mocktail # A library for Dart that automatically creates mocks for tests https:/
 Nakama # An open-source server designed to power modern games and apps https://github.com/Allan-Nava/nakama-flutter
 Overmind # A character in the game StarCraft
 padracing # A pad racing game by BlueFire https://github.com/flame-engine/flame/tree/main/examples/games/padracing
+prescale # The scaling taken from the viewfinder that is applied before the zoom
 Prosser # A character from the book The Hitchhiker's Guide to the Galaxy
 riverpod # A state management library for Flutter https://github.com/rrousselGit/riverpod
 skel # Extension for skeleton files from Spine https://en.esotericsoftware.com/spine-in-depth
