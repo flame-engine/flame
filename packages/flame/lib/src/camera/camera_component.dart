@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:flame/extensions.dart';
@@ -225,6 +226,9 @@ class CameraComponent extends Component {
       // Render the viewfinder elements in front of the world and only with the
       // pre-scaling applied, so that the viewfinder components are resized
       // according to the fixed resolution that has been set.
+      canvas.translateVector(
+        (viewport.size / 2) - (viewport.size / 2 / lens.scale.x),
+      );
       lens.renderTree(canvas);
       canvas
           .restore(); //------------------------------------------------------- RESTORE 3

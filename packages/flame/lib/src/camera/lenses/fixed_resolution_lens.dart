@@ -19,10 +19,10 @@ class FixedResolutionLens extends Lens {
   @override
   void onViewportResize() {
     final viewportSize = camera.viewport.size;
-    final preScaleX = viewportSize.x / _fixedResolution.x;
-    final preScaleY = viewportSize.y / _fixedResolution.y;
+    final scaleX = viewportSize.x / _fixedResolution.x;
+    final scaleY = viewportSize.y / _fixedResolution.y;
     _scaleVector.setAll(
-      min(preScaleX, preScaleY),
+      min(scaleX, scaleY),
     );
     transform.scale = _scaleVector;
     camera.viewfinder.visibleRect = null;

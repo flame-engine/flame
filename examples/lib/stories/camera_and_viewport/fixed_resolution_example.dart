@@ -6,6 +6,7 @@ import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flame/palette.dart';
 import 'package:flame/text.dart';
+import 'package:flutter/material.dart';
 
 class FixedResolutionExample extends FlameGame
     with ScrollDetector, ScaleDetector {
@@ -35,14 +36,14 @@ class FixedResolutionExample extends FlameGame
       style: TextStyle(fontSize: 25, color: BasicPalette.black.color),
     );
     camera.viewport.add(
-      TextComponent(
+      TextButton(
         text: 'Viewport component\n(always same size)',
         position: Vector2.all(10),
         textRenderer: textRenderer,
       ),
     );
     camera.viewfinder.add(
-      TextComponent(
+      TextButton(
         text: 'Viewfinder component\n(scales with fixed resolution)',
         position: viewportResolution - Vector2.all(10),
         textRenderer: textRenderer,
@@ -50,7 +51,7 @@ class FixedResolutionExample extends FlameGame
       ),
     );
     camera.lens.add(
-      TextComponent(
+      TextButton(
         text: 'Lens component\n(scales with fixed resolution)',
         position: viewportResolution - Vector2.all(10),
         textRenderer: textRenderer,
@@ -100,4 +101,28 @@ class Background extends PositionComponent {
   void render(Canvas canvas) {
     canvas.drawRect(hugeRect, white);
   }
+}
+
+class TextButton extends ButtonComponent {
+  TextButton({
+    required String text,
+    required super.position,
+    super.anchor,
+    TextRenderer? textRenderer,
+  }) : super(
+          button: RectangleComponent(
+            size: Vector2(200, 100),
+            paint: Paint()
+              ..color = Colors.orange
+              ..style = PaintingStyle.stroke,
+          ),
+          buttonDown: RectangleComponent(
+            size: Vector2(200, 100),
+            paint: BasicPalette.magenta.paint(),
+          ),
+          children: [TextComponent(text: text, textRenderer: textRenderer)],
+          onPressed: () {
+            print('I am pressed.');
+          },
+        );
 }
