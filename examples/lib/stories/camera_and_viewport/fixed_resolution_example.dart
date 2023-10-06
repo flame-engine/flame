@@ -49,6 +49,14 @@ class FixedResolutionExample extends FlameGame
         anchor: Anchor.bottomRight,
       ),
     );
+    camera.lens.add(
+      TextComponent(
+        text: 'Lens component\n(scales with fixed resolution)',
+        position: viewportResolution - Vector2.all(10),
+        textRenderer: textRenderer,
+        anchor: Anchor.bottomRight,
+      ),
+    );
   }
 }
 

@@ -3,8 +3,8 @@ import 'dart:math';
 import 'package:flame/extensions.dart';
 import 'package:flame/src/anchor.dart';
 import 'package:flame/src/camera/camera_component.dart';
-import 'package:flame/src/camera/viewfinders/fixed_resolution_viewfinder.dart';
 import 'package:flame/src/components/core/component.dart';
+import 'package:flame/src/components/mixins/parent_is_a.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
 import 'package:flame/src/game/transform2d.dart';
 import 'package:meta/meta.dart';
@@ -19,17 +19,13 @@ import 'package:meta/meta.dart';
 /// If you add children to the [Viewfinder] they will appear like HUDs i.e.
 /// statically in front of the world.
 class Viewfinder extends Component
+    with ParentIsA<CameraComponent>
     implements AnchorProvider, AngleProvider, PositionProvider, ScaleProvider {
   /// Internal transform matrix used by the viewfinder.
   final Transform2D _transform = Transform2D();
 
   @internal
   Transform2D get transform => _transform;
-
-  /// The [preScale] is used if the viewfinder should do some scaling before the
-  /// [zoom] is applied, for example if you are using something like the
-  /// [FixedResolutionViewfinder].
-  double get preScale => 1.0;
 
   /// The game coordinates of a point that is to be positioned at the center
   /// of the viewport.
@@ -87,7 +83,7 @@ class Viewfinder extends Component
   }
 
   /// Reference to the parent camera.
-  CameraComponent get camera => parent! as CameraComponent;
+  CameraComponent get camera => parent;
 
   /// Convert a point from the global coordinate system to the viewfinder's
   /// coordinate system.
@@ -148,7 +144,7 @@ class Viewfinder extends Component
   /// See [CameraComponent.visibleWorldRect].
   @internal
   Rect get visibleWorldRect => visibleRect ??= computeVisibleRect();
-  @protected
+  @internal
   Rect? visibleRect;
   @protected
   Rect computeVisibleRect() {
@@ -175,7 +171,7 @@ class Viewfinder extends Component
 
   /// Set [zoom] level based on the [_visibleGameSize].
   void _updateZoom() {
-    if (parent != null && _visibleGameSize != null) {
+    if (_visibleGameSize != null) {
       final viewportSize = camera.viewport.size;
       final zoomX = viewportSize.x / _visibleGameSize!.x;
       final zoomY = viewportSize.y / _visibleGameSize!.y;
@@ -192,12 +188,10 @@ class Viewfinder extends Component
   /// Called by the viewport when its size changes.
   @internal
   void onViewportResize() {
-    if (parent != null) {
-      final viewportSize = camera.viewport.size;
-      _transform.position.x = viewportSize.x * _anchor.x;
-      _transform.position.y = viewportSize.y * _anchor.y;
-      visibleRect = null;
-    }
+    final viewportSize = camera.viewport.size;
+    _transform.position.x = viewportSize.x * _anchor.x;
+    _transform.position.y = viewportSize.y * _anchor.y;
+    visibleRect = null;
   }
 
   @mustCallSuper
@@ -211,15 +205,12 @@ class Viewfinder extends Component
   @mustCallSuper
   @override
   void onMount() {
+    super.onMount();
     updateTransform();
   }
 
   @internal
   void updateTransform() {
-    assert(
-      parent! is CameraComponent,
-      'Viewfinder can only be mounted to a CameraComponent',
-    );
     _updateZoom();
     onViewportResize();
   }

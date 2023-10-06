@@ -4,6 +4,7 @@ import 'package:flame/game.dart';
 import 'package:flame/src/anchor.dart';
 import 'package:flame/src/camera/camera_component.dart';
 import 'package:flame/src/components/core/component.dart';
+import 'package:flame/src/components/mixins/parent_is_a.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
 import 'package:meta/meta.dart';
 
@@ -21,6 +22,7 @@ import 'package:meta/meta.dart';
 /// A viewport establishes its own local coordinate system, with the origin at
 /// the top left corner of the viewport's bounding box.
 abstract class Viewport extends Component
+    with ParentIsA<CameraComponent>
     implements AnchorProvider, PositionProvider, SizeProvider {
   Viewport({super.children});
 
@@ -72,9 +74,8 @@ abstract class Viewport extends Component
     );
     _size.setFrom(value);
     _isInitialized = true;
-    if (parent != null) {
-      camera.viewfinder.onViewportResize();
-    }
+    camera.lens.onViewportResize();
+    camera.viewfinder.onViewportResize();
     onViewportResize();
     if (hasChildren) {
       children.forEach((child) => child.onParentResize(_size));
@@ -82,7 +83,7 @@ abstract class Viewport extends Component
   }
 
   /// Reference to the parent camera.
-  CameraComponent get camera => parent! as CameraComponent;
+  CameraComponent get camera => parent;
 
   /// Apply clip mask to the [canvas].
   ///
@@ -112,15 +113,6 @@ abstract class Viewport extends Component
   /// match the new size.
   @protected
   void onViewportResize();
-
-  @mustCallSuper
-  @override
-  void onMount() {
-    assert(
-      parent! is CameraComponent,
-      'A Viewport may only be attached to a CameraComponent',
-    );
-  }
 
   /// Converts a point from the global coordinate system to the local
   /// coordinate system of the viewport.
