@@ -1,9 +1,3 @@
-## [Next]
-
-- Updated deps
-- Improved README
-- Add linter and fixed violations
-
 ## [0.1.0] - Refresh
 
 Added:
