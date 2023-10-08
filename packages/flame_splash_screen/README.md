@@ -1,4 +1,4 @@
-# Flame Splash Screen 
+# Flame Splash Screen
 
 <!-- markdownlint-disable MD013 -->
 <p align="center">
@@ -36,12 +36,13 @@ import 'package:flame_splash_screen/flame_splash_screen.dart';
 
 ## Usage
 
-The splash screen is a widget that can be used to show the splash screen. 
+The splash screen is a widget that can be used to show the splash screen.
 
 
 ### Simple usage
 
 There is just two required params:
+
 - `onFinish`, a callback that is executed when all animations from the splash screen is over.
 - `theme`, than can be either `FlameSplashTheme.dark` or `FlameSplashTheme.white`.
 
